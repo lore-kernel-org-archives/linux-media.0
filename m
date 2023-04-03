@@ -2,50 +2,46 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83BB7C761AF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2853C77B6C
 	for <linux-media@archiver.kernel.org>; Mon,  3 Apr 2023 15:40:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232948AbjDCPk1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 3 Apr 2023 11:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44824 "EHLO
+        id S232950AbjDCPk2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 Apr 2023 11:40:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232929AbjDCPk0 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Apr 2023 11:40:26 -0400
+        with ESMTP id S229866AbjDCPk1 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Apr 2023 11:40:27 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A4326B9
-        for <linux-media@vger.kernel.org>; Mon,  3 Apr 2023 08:40:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBA226AF
+        for <linux-media@vger.kernel.org>; Mon,  3 Apr 2023 08:40:26 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pjMI8-0004cF-Pm; Mon, 03 Apr 2023 17:40:20 +0200
+        id 1pjMIB-0004fG-6D; Mon, 03 Apr 2023 17:40:23 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pjMI7-008ibA-U6; Mon, 03 Apr 2023 17:40:19 +0200
+        id 1pjMI8-008ibL-GH; Mon, 03 Apr 2023 17:40:20 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pjMI7-00AHxC-6k; Mon, 03 Apr 2023 17:40:19 +0200
+        id 1pjMI7-00AHxK-HR; Mon, 03 Apr 2023 17:40:19 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>
-Cc:     Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de
-Subject: [PATCH 12/24] staging: media: meson: vdec: Convert to platform remove callback returning void
-Date:   Mon,  3 Apr 2023 17:40:02 +0200
-Message-Id: <20230403154014.2564054-13-u.kleine-koenig@pengutronix.de>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev, kernel@pengutronix.de
+Subject: [PATCH 14/24] staging: media: rkvdec: Convert to platform remove callback returning void
+Date:   Mon,  3 Apr 2023 17:40:04 +0200
+Message-Id: <20230403154014.2564054-15-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230403154014.2564054-1-u.kleine-koenig@pengutronix.de>
 References: <20230403154014.2564054-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1583; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=P35Ck+M/VCEEhMxrFcldV2WJMFcTdpa/K3Pjr50rJgY=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkKvNC+Co7HXuwCgK9dynbHKEeaG/SrHOkFUjJf PSTTykY77WJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCrzQgAKCRCPgPtYfRL+ Tq8iB/9x4510NGqWNWqDe3F7xIdKw4MHr48k3D6ErVInKJ8cbY2e9hxwfh+QDDN2NrfyEORhugN dAVuUglboK+yBgqO2sRgzqPeiCe4YxZ0DSE8qz+ZWFeja9SnkRipTWUYSlvA/j79DeEK6qkp+z6 1U1iy14P7YzLKp53mlAYIzl3dRTWwjzsNGPfjxMBxBmDPkztxADjGiTbtewobyMMP6ciUNY0atm D2kYwZNSDgy5gX00iy1hHAj69rYE9VGYUgikPMjRT3vifLU5IiaHa0CL0d2nb1PZNTCa4hqxXt1 Q7+vQd/NqegyuVe3qIBq99mNdpZje2hyLylux42jeV10bvTj
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1703; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=aYW8yQnBrMkMM77Xam+1yHywljoTQ6r3WzFLmSM8zHo=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkKvNFHj+rVqhEcmHGr+5GVmb/w2GoHnRBwVd0l EQflEQSGxqJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCrzRQAKCRCPgPtYfRL+ Tor+B/9aiLVMyDmNRvI39fdjAvqB99aUsPoL2ns6k0IdyGNhJZsa/VB/3bcOZJIKLG+q7KTZA3Y VOhuzpRAzuLGUDcSz8VKLO9wr17bwM7rGjOA4jHFwgDUf0FCdf629s5l+GinjNKEJwoirx8fXOY Ca8ETjl3uI7nNA36R2Tb67iSyU5GWXm3DblCSQJbT7Q3VkBk5qHPQreaCgd+FMceqqS3Y4yuY1R uni9mOF1vu1RdzRe65jqwpRFPQflADqX61/KWpbBM+AjDrawAFLEek0NgwPB0LdQUEf/MMILvrD l2w3j6sJO82LkdtdsEjBMViNFWATJFAZvNw7yXwPnxiaWW7D
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -69,35 +65,38 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/staging/media/meson/vdec/vdec.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/staging/media/rkvdec/rkvdec.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/staging/media/meson/vdec/vdec.c b/drivers/staging/media/meson/vdec/vdec.c
-index 52f224d8def1..5ca4b1200831 100644
---- a/drivers/staging/media/meson/vdec/vdec.c
-+++ b/drivers/staging/media/meson/vdec/vdec.c
-@@ -1106,19 +1106,17 @@ static int vdec_probe(struct platform_device *pdev)
+diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
+index 7bab7586918c..3df977653ba5 100644
+--- a/drivers/staging/media/rkvdec/rkvdec.c
++++ b/drivers/staging/media/rkvdec/rkvdec.c
+@@ -1062,14 +1062,13 @@ static int rkvdec_probe(struct platform_device *pdev)
  	return ret;
  }
  
--static int vdec_remove(struct platform_device *pdev)
-+static void vdec_remove(struct platform_device *pdev)
+-static int rkvdec_remove(struct platform_device *pdev)
++static void rkvdec_remove(struct platform_device *pdev)
  {
- 	struct amvdec_core *core = platform_get_drvdata(pdev);
+ 	struct rkvdec_dev *rkvdec = platform_get_drvdata(pdev);
  
- 	video_unregister_device(core->vdev_dec);
- 	v4l2_device_unregister(&core->v4l2_dev);
--
+ 	rkvdec_v4l2_cleanup(rkvdec);
+ 	pm_runtime_disable(&pdev->dev);
+ 	pm_runtime_dont_use_autosuspend(&pdev->dev);
 -	return 0;
  }
  
- static struct platform_driver meson_vdec_driver = {
- 	.probe = vdec_probe,
--	.remove = vdec_remove,
-+	.remove_new = vdec_remove,
+ #ifdef CONFIG_PM
+@@ -1099,7 +1098,7 @@ static const struct dev_pm_ops rkvdec_pm_ops = {
+ 
+ static struct platform_driver rkvdec_driver = {
+ 	.probe = rkvdec_probe,
+-	.remove = rkvdec_remove,
++	.remove_new = rkvdec_remove,
  	.driver = {
- 		.name = "meson-vdec",
- 		.of_match_table = vdec_dt_match,
+ 		   .name = "rkvdec",
+ 		   .of_match_table = of_rkvdec_match,
 -- 
 2.39.2
 
