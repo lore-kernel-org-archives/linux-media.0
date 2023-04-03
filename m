@@ -2,151 +2,130 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF952C761A6
-	for <linux-media@archiver.kernel.org>; Mon,  3 Apr 2023 09:16:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11110C77B60
+	for <linux-media@archiver.kernel.org>; Mon,  3 Apr 2023 09:17:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231935AbjDCJQp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 3 Apr 2023 05:16:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37768 "EHLO
+        id S229659AbjDCJRS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 Apr 2023 05:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231906AbjDCJQj (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Apr 2023 05:16:39 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC26C10A81
-        for <linux-media@vger.kernel.org>; Mon,  3 Apr 2023 02:16:12 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id l12so28539442wrm.10
-        for <linux-media@vger.kernel.org>; Mon, 03 Apr 2023 02:16:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680513369; x=1683105369;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CgiUgoMbQalvGxGNUyeqmJVel41Q5UZD43id4O4KUIY=;
-        b=LTlww1TaDWlvt+fItUXvrutapoP2NQDnuv5sTlH3l1Z6LKKkWUVtSK82i1HzEnibae
-         rrEq6W3DbMT/CrBpbtIQOKzEelBUt5rsULWEpcNleiz8JcPiFvZlcn+0cLXBGXNAKuWb
-         lCR43Eb9tMjwTvuv8VUH+p4MtR6ZSAXhns+enhWX/75s1CUh/kou2y22qhOpBRPUT+3m
-         LqadmCxQv4jCJc5QMrAye3JFZdf2YJZPlKHND0R7DUs3R/9TLc8CoKkKNT2g24pJYQTG
-         8k4voHY8zdz7c6BMRi+X8nRRAAALNlmKdJdr4P0emhMZXYggK1PGjbCZW1nAQVRzpENa
-         AHXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680513369; x=1683105369;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CgiUgoMbQalvGxGNUyeqmJVel41Q5UZD43id4O4KUIY=;
-        b=GS0+mY+dKZgqASBkfEBgpdM406sjDq2nhpK+HATIBWYSSoUQjDhp4frBiAEB8kaO0N
-         dAFd3XOSB54jXD6T8HmwNquGIQ/JxRnfYzsQokHM2FNuvqmr48d7Rjb05ut/tixTR0eH
-         ERZsTEqIqbu+hmItE3LANydruXhUCoI7ZBzfukk2NBjT5PAEJt/+648Ku9CMV8J+k/5N
-         F2uMx1szG1Rna18HmFTwQ1p8J7+Trd9IIRxsFXVB4O4xKEA8N0XDEo6JLS0gV8vd7e3r
-         itA5CGW23wfkW0tU7zhG50Q8JRpwMnXk/lunUTP3+cBdGr9WUp5VDxvTDsPewEaX7Oqs
-         6SrQ==
-X-Gm-Message-State: AAQBX9dIGYw6GegoaYhnhMaFZwbkG/EFitbuCSdkHiPjYt/n5dX0JNuW
-        hN3495MThcV5u6fvbzkJbl1AXg==
-X-Google-Smtp-Source: AKy350Z1ox3GvJMY5UNjXwR984hUj4F7ACc0TaiFWN+DZooA/dwB9mBqLcPN16f8mNEzC2CYdpYY3A==
-X-Received: by 2002:a5d:4603:0:b0:2d0:8ed9:5ab4 with SMTP id t3-20020a5d4603000000b002d08ed95ab4mr27601427wrq.60.1680513369587;
-        Mon, 03 Apr 2023 02:16:09 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id m17-20020adfe0d1000000b002d1e49cff35sm9227233wri.40.2023.04.03.02.16.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 02:16:09 -0700 (PDT)
-Message-ID: <d500c5bb-7aca-ae0d-f23e-495cd049e422@linaro.org>
-Date:   Mon, 3 Apr 2023 10:16:07 +0100
+        with ESMTP id S231971AbjDCJQx (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Apr 2023 05:16:53 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB56CEC62;
+        Mon,  3 Apr 2023 02:16:37 -0700 (PDT)
+X-UUID: 2a2430b0d20011edb6b9f13eb10bd0fe-20230403
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=R0k5lQHHRLml/ji++14oXkm9cmht5KGHr7AnrObcMd4=;
+        b=OWpMCCMu1qm2QJMrv6B1T3W1LZr7KQT3iwWXZBGLRj2F/q26I99foHWKgUpuLhGPCaJ3NEvqrsfj+byXLrozPC7rAydpJhtDFz8lAXVsavpDqFRcnhdtNoUgcSrU5lP1Oze/s0EGRoKDXGLn+cZ7UMT/wZJWgdIs1ohyVqNP8hg=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.22,REQID:a3e1b705-73c2-4ae5-91b7-89727741ba37,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:-25
+X-CID-META: VersionHash:120426c,CLOUDID:d8dd23b5-beed-4dfc-bd9c-e1b22fa6ccc4,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-UUID: 2a2430b0d20011edb6b9f13eb10bd0fe-20230403
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 456951951; Mon, 03 Apr 2023 17:16:06 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Mon, 3 Apr 2023 17:16:05 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Mon, 3 Apr 2023 17:16:04 +0800
+From:   Yong Wu <yong.wu@mediatek.com>
+To:     Joerg Roedel <joro@8bytes.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>, <nfraprado@collabora.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        <mingyuan.ma@mediatek.com>, <yf.wang@mediatek.com>,
+        <jianjiao.zeng@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>,
+        <chengci.xu@mediatek.com>, <youlin.pei@mediatek.com>,
+        <anan.sun@mediatek.com>, Yong Wu <yong.wu@mediatek.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        irui wang <irui.wang@mediatek.com>
+Subject: [PATCH v6 11/14] media: mediatek: vcodec: Remove the setting for dma_mask
+Date:   Mon, 3 Apr 2023 17:13:34 +0800
+Message-ID: <20230403091337.26745-12-yong.wu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230403091337.26745-1-yong.wu@mediatek.com>
+References: <20230403091337.26745-1-yong.wu@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v7 0/4] media: camss: sm8250: Virtual channels support for
- SM8250
-Content-Language: en-US
-To:     "Milen Mitkov (Consultant)" <quic_mmitkov@quicinc.com>,
-        Azam Sadiq Pasha Kapatrala Syed <akapatra@quicinc.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        Jigarkumar Zala <jzala@quicinc.com>,
-        "todor.too@gmail.com" <todor.too@gmail.com>,
-        "nicolas.dechesne@linaro.org" <nicolas.dechesne@linaro.org>
-Cc:     "agross@kernel.org" <agross@kernel.org>,
-        "konrad.dybcio@somainline.org" <konrad.dybcio@somainline.org>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        Chandan Gera <cgera@qti.qualcomm.com>,
-        Guru Chinnabhandar <gchinnab@quicinc.com>,
-        Alireza Yasan <ayasan@qti.qualcomm.com>,
-        "laurent.pinchart@ideasonboard.com" 
-        <laurent.pinchart@ideasonboard.com>
-References: <20221209094037.1148-1-quic_mmitkov@quicinc.com>
- <662d68f7-6160-263d-6e4d-e3687d5cf8eb@quicinc.com>
- <7565d38c-d8f4-39e0-8547-fbb511f6d649@quicinc.com>
- <894e3ce6-0f2b-608b-ec4e-09083704f429@linaro.org>
- <8243cc42-236c-20e3-74dc-1f130ab1dcf6@quicinc.com>
- <BYAPR02MB557503013F05BF1EA1E1300CC28F9@BYAPR02MB5575.namprd02.prod.outlook.com>
- <f26174aa-a6ca-151c-2602-2f39b40bb7da@linaro.org>
- <7b3cb8a6-8306-f001-5701-af3b482421e9@quicinc.com>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <7b3cb8a6-8306-f001-5701-af3b482421e9@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 03/04/2023 09:38, Milen Mitkov (Consultant) wrote:
-> On 31/03/2023 11:07, Bryan O'Donoghue wrote:
->> On 31/03/2023 07:20, Azam Sadiq Pasha Kapatrala Syed wrote:
->>> + Nico (Linaro)
->>> Hi Team
->>>
->>> Would like to know if anything is pending form our end as we want to 
->>> get the patches mainlined?
->>>
->>> Thanks,
->>> Azam
->>
->> I'd like to get a clearer picture on this
->>
->> [   90.535909] qcom-camss ac6a000.camss: VFE HW Version = 2.0.1
->> [   90.545756] qcom-camss ac6a000.camss: CSIPHY 3PH HW Version = 
->> 0x40010000
->> [   90.546358] qcom-camss ac6a000.camss: CSID HW Version = 2.0.1
->> [   90.546365] qcom-camss ac6a000.camss: csid_link_setup: Enabled CSID 
->> virtual channels mask 0x1
->> [   90.547675] qcom-camss ac6a000.camss: csid_link_setup: Enabled CSID 
->> virtual channels mask 0x0
->>
->> Using the IMX577 sensor on the RB5 we get his pretty odd virtual 
->> channels mask.
->>
->> If userspace is sending this in, the question I have is why. Surely 
->> with a sensor that doesn't have a VC there should be no impact on 
->> user-space.
->>
->> ---
->> bod
-> 
-> Hey Bryan,
-> 
-> what media-ctl commands are you using? I can't recreate this on my side. 
-> I am using this set of commands to test (with the default imx577 driver 
-> without any multiple virtual channels outputs) and am getting only the 
-> first message (virtual channels mask 0x1):
-> 
-> media-ctl --reset
-> media-ctl -v -d /dev/media0 -V '"imx577 
-> '22-001a'":0[fmt:SRGGB10/4056x3040 field:none]'
-> media-ctl -V '"msm_csiphy2":0[fmt:SRGGB10/4056x3040]'
-> media-ctl -V '"msm_csid0":0[fmt:SRGGB10/4056x3040]'
-> media-ctl -V '"msm_vfe0_rdi0":0[fmt:SRGGB10/4056x3040]'
-> media-ctl -l '"msm_csiphy2":1->"msm_csid0":0[1]'
-> media-ctl -l '"msm_csid0":1->"msm_vfe0_rdi0":0[1]'
-> 
-> yavta -B capture-mplane -c -I -n 5 -f SRGGB10P -s 4056x3040 -F /dev/video0
-> 
-> 
-> Thanks,
-> 
-> Milen
+In order to simplify the masters to set their respective dma masks, MTK
+IOMMU helps to centralize the processing. Because all the dma ranges is
+set in IOMMU, IOMMU knows well the dma mask requirements of masters. After
+this patch, the masters(codec here) code does not need care
+dma-ranges/dma_mask related information.
 
-Its a dev_dbg() so "#define DEBUG 1" in 
-drivers/media/platform/qcom/camss/camss-csid.c
-
+Cc: Tiffany Lin <tiffany.lin@mediatek.com>
+Cc: Andrew-CT Chen <andrew-ct.chen@mediatek.com>
+Cc: Yunfei Dong <yunfei.dong@mediatek.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: irui wang <irui.wang@mediatek.com>
+Signed-off-by: Yong Wu <yong.wu@mediatek.com>
 ---
-bod
+ .../media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c   | 8 --------
+ .../media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c   | 3 ---
+ 2 files changed, 11 deletions(-)
+
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
+index 174a6eec2f54..11583405cf61 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
+@@ -321,14 +321,6 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
+-	if (of_get_property(pdev->dev.of_node, "dma-ranges", NULL)) {
+-		ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(34));
+-		if (ret) {
+-			mtk_v4l2_err("Failed to set mask");
+-			goto err_core_workq;
+-		}
+-	}
+-
+ 	for (i = 0; i < MTK_VDEC_HW_MAX; i++)
+ 		mutex_init(&dev->dec_mutex[i]);
+ 	mutex_init(&dev->dev_mutex);
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
+index 9095186d5495..50e5571608cd 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
+@@ -344,9 +344,6 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+ 		goto err_event_workq;
+ 	}
+ 
+-	if (of_get_property(pdev->dev.of_node, "dma-ranges", NULL))
+-		dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(34));
+-
+ 	ret = video_register_device(vfd_enc, VFL_TYPE_VIDEO, -1);
+ 	if (ret) {
+ 		mtk_v4l2_err("Failed to register video device");
+-- 
+2.25.1
 
