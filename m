@@ -2,141 +2,120 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6203C761A6
-	for <linux-media@archiver.kernel.org>; Tue,  4 Apr 2023 19:05:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D136C761A6
+	for <linux-media@archiver.kernel.org>; Tue,  4 Apr 2023 19:28:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232004AbjDDTFr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 4 Apr 2023 15:05:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40040 "EHLO
+        id S235706AbjDDT2N (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 4 Apr 2023 15:28:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235574AbjDDTFl (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Apr 2023 15:05:41 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D0546B5
-        for <linux-media@vger.kernel.org>; Tue,  4 Apr 2023 12:05:07 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id j11so43586303lfg.13
-        for <linux-media@vger.kernel.org>; Tue, 04 Apr 2023 12:05:07 -0700 (PDT)
+        with ESMTP id S235912AbjDDT2N (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Apr 2023 15:28:13 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653884EE5
+        for <linux-media@vger.kernel.org>; Tue,  4 Apr 2023 12:27:52 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id er13so93975651edb.9
+        for <linux-media@vger.kernel.org>; Tue, 04 Apr 2023 12:27:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680635104;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=b5dgMuodeZyHzVT6FAH17HFaS4nHaYRdl9cH8QECjHA=;
-        b=PNK48df4b81vGypDdYK41csF7ttvhDtcCM36t2Rf9srpmo6sWIaTkikR70C+xjmQwY
-         HDdkLrvZoMeUdOfWQx+Kki6hp4deeHR+RAcu+jD3t7PESXxSJHtHsp88mPpvu5VLJUt7
-         bGVODPHVLvxQYnzwJCVNBtqGywiLz0O/TyTMMK96AO5FiSvDWOr0ySpXFlma52Szu6+z
-         C0tWn2pnb7WKrgE2PJFTfxalZFWbnr7wN0xYeVcyeWulOakmFDI0m+8o+Ffl5W4oiCxt
-         pTmo68/Kb9tMkL1hVes1MgcRjxFmECX+wkAvLLAK91ji9LyWQwc8LFjSh1VcgoOf1ghq
-         py1w==
+        d=gmail.com; s=20210112; t=1680636470; x=1683228470;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=F03oG8jUYYM1rIzkP2R4TyKC3eM1ZwtjJC/2sKTjK6g=;
+        b=UwAW6DTVWYXRmbMn8iLUmerQM2BkgFrNASJy8oTUfFceHYhuFpeLWB7Rp9BPi0uRmi
+         Dsnd3Vul61iQr0LOkOGLasEspRkbmczN7x8qsyBdE5afY3YehF9JlzjQhUJkhUxhD8AF
+         FG+W8ok7bgmQx/IbmLtx0hDb9GIDRo1tJaNvgrXu0aWoFqpWG0xu2sEDhqpKCquNN8Fz
+         9d7sc4poFVNGoCjbXubjL637fdWZRUYOXk1eRNZ9Ja4v8PEaIE8m3qfY0HmlbKMccQgV
+         4aoHjaAD3YFOkcf2Mvjf7ES5LkVE0KxOXeApuyodZElLWMxY4DZLwq6VielqHs8OhPbc
+         CPwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680635104;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b5dgMuodeZyHzVT6FAH17HFaS4nHaYRdl9cH8QECjHA=;
-        b=wP/XqjLe51e/uQHD8bQKViZZXVGpyByQzkt0WA2Y4YyuvNqbiHb+JIzfc16bItAkbe
-         R19LlAen2kZSd3X3z/R9PHJ2GboX5g0aqdy9W5mEaH/3SFdLt1bTop62wrd0AqbnDzFf
-         xHsTabfq8YHjaUrUNPRQ7rNKx4hTAkasOHolxpjw5ntcGlz0ZwdcrJ/UQW1qfVzQszPW
-         yOlgiHpt7hWseHIoRi4qyeNVDM7UrneOBhw5B1tIWjkywZxKhVcnO4/OrhuzdHXGHm0v
-         Q9AiSnERho/qknOHd4rymgRMH+if3SHiXqbBVw0pkt+qy4ycfeUc5SdJgnFKA6b3ZXXb
-         j7FQ==
-X-Gm-Message-State: AAQBX9fFGo5yIu0TeJnTAy6XkgRljpQM1HQqVlqJeB+tggbNt/ILKbfG
-        EIxqJV/ZQ4/0VEbmoMZT2xbHKw==
-X-Google-Smtp-Source: AKy350ZJm7DCWcawFstZhDR/T62LoyF1dMnhZc8JIB9o1LYekSdv0olD4QHgqYZPKKmJfDgn2RcvxA==
-X-Received: by 2002:ac2:561b:0:b0:4eb:2a26:babf with SMTP id v27-20020ac2561b000000b004eb2a26babfmr89283lfd.0.1680635104208;
-        Tue, 04 Apr 2023 12:05:04 -0700 (PDT)
-Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
-        by smtp.gmail.com with ESMTPSA id v16-20020ac25610000000b004caf992bba9sm2467420lfd.268.2023.04.04.12.05.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Apr 2023 12:05:03 -0700 (PDT)
-Message-ID: <2c3a823c-4620-1557-39ff-1db169aeb7aa@linaro.org>
-Date:   Tue, 4 Apr 2023 21:05:02 +0200
+        d=1e100.net; s=20210112; t=1680636470; x=1683228470;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=F03oG8jUYYM1rIzkP2R4TyKC3eM1ZwtjJC/2sKTjK6g=;
+        b=LwJmfJ1Evh+dMfKTGw7BFnQgrGHVLYIb2a2RFspqVuWA4O8PYRus3bXhXETjqv3R3k
+         mKNDDlyrb4X+8+FOnxZtixQy08cQhqoTZCLFwA2RIXBu/L09aEbn+Ue9dZiS0RE/dePo
+         f9yPaeu+ybltAMiRpCJ31+A4ay59GqVxQSaHnLldMFZQVCvQD++HtvV8mmU9HEhToOO8
+         AtOh5EzCWos0TXsKMEbEXWe6PTBml+EpjI74tW4Byf6KYUtKPrYoaBvgmlL1d6vYtMDJ
+         Y2hBLmaBMMzUStrGf1pXmRlQ4+nzTMpRVoLjBRENJvRH71GXbpmj0KEqOsy3NoA1k98z
+         TKtw==
+X-Gm-Message-State: AAQBX9fvDmiu4/VxLFtCIPkSklzpnZqsxAQxkx9Dwph3SDj3TQTSfM5M
+        E1+wKOdApcTRNcWW+T8xU1vWfbJ36vz7/g==
+X-Google-Smtp-Source: AKy350ZBXjx9jdNq8H8A0WCwZPg9BLjXsNNXxdSt/1M0Ee3ezAvHtwc1VHU6S6+gGlnwlH062Hn35w==
+X-Received: by 2002:a17:906:b350:b0:93b:62f:82a3 with SMTP id cd16-20020a170906b35000b0093b062f82a3mr644225ejb.6.1680636470591;
+        Tue, 04 Apr 2023 12:27:50 -0700 (PDT)
+Received: from aero-laptop.. (hst-221-33.medicom.bg. [84.238.221.33])
+        by smtp.gmail.com with ESMTPSA id b10-20020a1709065e4a00b0093dbb008281sm6357865eju.130.2023.04.04.12.27.49
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 12:27:50 -0700 (PDT)
+From:   Stanimir Varbanov <stanimir.k.varbanov@gmail.com>
+To:     linux-media@vger.kernel.org
+Subject: [GIT PULL FOR v6.4 v2] Venus updates
+Date:   Tue,  4 Apr 2023 22:27:22 +0300
+Message-Id: <20230404192722.144496-1-stanimir.k.varbanov@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 2/3] venus: enable sufficient sequence change support for
- vp9
-Content-Language: en-US
-To:     Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        linux-media@vger.kernel.org, stanimir.k.varbanov@gmail.com,
-        quic_vgarodia@quicinc.com, agross@kernel.org, andersson@kernel.org,
-        mchehab@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Viswanath Boma <quic_vboma@quicinc.com>
-References: <1680589032-26046-1-git-send-email-quic_dikshita@quicinc.com>
- <1680589032-26046-3-git-send-email-quic_dikshita@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <1680589032-26046-3-git-send-email-quic_dikshita@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Hi Mauro,
 
+This time Venus updates includes:
 
-On 4.04.2023 08:17, Dikshita Agarwal wrote:
-> VP9 supports resolution change at interframe.
-> Currenlty, if sequence change is detected at interframe and
-> resources are sufficient, sequence change event is not raised
-> by firmware to driver until the next keyframe.
-> This change add the HFI to notify the sequence change in this
-> case to driver.
-> 
-> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
-> Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
-> Signed-off-by: Viswanath Boma <quic_vboma@quicinc.com>
-> Tested-by: Nathan Hebert <nhebert@chromium.org>
-> ---
->  drivers/media/platform/qcom/venus/hfi_cmds.c   | 1 +
->  drivers/media/platform/qcom/venus/hfi_helper.h | 2 ++
->  drivers/media/platform/qcom/venus/vdec.c       | 8 ++++++++
->  3 files changed, 11 insertions(+)
-> 
-> diff --git a/drivers/media/platform/qcom/venus/hfi_cmds.c b/drivers/media/platform/qcom/venus/hfi_cmds.c
-> index 930b743..e2539b5 100644
-> --- a/drivers/media/platform/qcom/venus/hfi_cmds.c
-> +++ b/drivers/media/platform/qcom/venus/hfi_cmds.c
-> @@ -521,6 +521,7 @@ static int pkt_session_set_property_1x(struct hfi_session_set_property_pkt *pkt,
->  		pkt->shdr.hdr.size += sizeof(u32) + sizeof(*en);
->  		break;
->  	}
-> +	case HFI_PROPERTY_PARAM_VDEC_ENABLE_SUFFICIENT_SEQCHANGE_EVENT:
->  	case HFI_PROPERTY_CONFIG_VDEC_POST_LOOP_DEBLOCKER: {
->  		struct hfi_enable *in = pdata;
->  		struct hfi_enable *en = prop_data;
-> diff --git a/drivers/media/platform/qcom/venus/hfi_helper.h b/drivers/media/platform/qcom/venus/hfi_helper.h
-> index d2d6719..20516b4 100644
-> --- a/drivers/media/platform/qcom/venus/hfi_helper.h
-> +++ b/drivers/media/platform/qcom/venus/hfi_helper.h
-> @@ -469,6 +469,8 @@
->  #define HFI_PROPERTY_PARAM_VDEC_PIXEL_BITDEPTH			0x1003007
->  #define HFI_PROPERTY_PARAM_VDEC_PIC_STRUCT			0x1003009
->  #define HFI_PROPERTY_PARAM_VDEC_COLOUR_SPACE			0x100300a
-> +#define HFI_PROPERTY_PARAM_VDEC_ENABLE_SUFFICIENT_SEQCHANGE_EVENT \
-> +								0x0100300b
-Also, nit: this one has a leading zero, whereas other properties don't
+ - A fix for capture format enumeration.
+ - A fix for handling decoder start cmd.
+ - A fix for H265 decoder failure.
+ - Adds encoder commands support.
+ - Adds support for QP range for HFI versions 4xx and 6xx.
 
-Konrad
->  
->  /*
->   * HFI_PROPERTY_CONFIG_VDEC_COMMON_START
-> diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-> index 4ceaba3..f0394b9 100644
-> --- a/drivers/media/platform/qcom/venus/vdec.c
-> +++ b/drivers/media/platform/qcom/venus/vdec.c
-> @@ -671,6 +671,14 @@ static int vdec_set_properties(struct venus_inst *inst)
->  			return ret;
->  	}
->  
-> +	/* Enabling sufficient sequence change support for VP9 */
-> +	if (is_fw_rev_or_newer(inst->core, 5, 4, 51)) {
-> +		ptype = HFI_PROPERTY_PARAM_VDEC_ENABLE_SUFFICIENT_SEQCHANGE_EVENT;
-> +		ret = hfi_session_set_property(inst, ptype, &en);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
->  	ptype = HFI_PROPERTY_PARAM_VDEC_CONCEAL_COLOR;
->  	conceal = ctr->conceal_color & 0xffff;
->  	conceal |= ((ctr->conceal_color >> 16) & 0xffff) << 10;
+In this v2 pull request the DT-binding re-organizations and cleanup
+patchset from Krzysztof has been dropped, it is already part of
+Sakari's dt-binding pull request.
+
+Please pull.
+
+regards,
+Stan
+
+The following changes since commit eeac8ede17557680855031c6f305ece2378af326:
+
+  Linux 6.3-rc2 (2023-03-12 16:36:44 -0700)
+
+are available in the Git repository at:
+
+  git://linuxtv.org/svarbanov/media_tree.git tags/tag-venus-for-v6.4-v2
+
+for you to fetch changes up to 9a5293fd19d1de0ed09324f7158769ca5d8ec16d:
+
+  venus: Add support for min/max qp range. (2023-04-03 23:40:57 +0300)
+
+----------------------------------------------------------------
+Venus updates for v6.4 v2
+
+----------------------------------------------------------------
+Dikshita Agarwal (1):
+      venus: venc: add handling for VIDIOC_ENCODER_CMD
+
+Javier Martinez Canillas (1):
+      media: venus: dec: Fix capture formats enumeration order
+
+Krzysztof Kozlowski (1):
+      media: venus: drop unused opp_table field documentation
+
+Michał Krawczyk (1):
+      media: venus: dec: Fix handling of the start cmd
+
+Viswanath Boma (2):
+      venus: Fix for H265 decoding failure.
+      venus: Add support for min/max qp range.
+
+ drivers/media/platform/qcom/venus/core.h           |  10 +-
+ drivers/media/platform/qcom/venus/hfi_cmds.c       |  23 +++++
+ drivers/media/platform/qcom/venus/hfi_helper.h     |  18 ++++
+ .../media/platform/qcom/venus/hfi_plat_bufs_v6.c   |   4 +-
+ drivers/media/platform/qcom/venus/vdec.c           |  16 ++-
+ drivers/media/platform/qcom/venus/venc.c           | 107 +++++++++++++++++++--
+ 6 files changed, 163 insertions(+), 15 deletions(-)
