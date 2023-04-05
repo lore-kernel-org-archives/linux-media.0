@@ -2,81 +2,103 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5100AC77B6E
-	for <linux-media@archiver.kernel.org>; Tue,  4 Apr 2023 19:33:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B326BC761A6
+	for <linux-media@archiver.kernel.org>; Wed,  5 Apr 2023 00:33:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236087AbjDDTdU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 4 Apr 2023 15:33:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33256 "EHLO
+        id S236595AbjDEAdp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 4 Apr 2023 20:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236048AbjDDTdQ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Apr 2023 15:33:16 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A45F468F
-        for <linux-media@vger.kernel.org>; Tue,  4 Apr 2023 12:33:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680636795; x=1712172795;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=tuh2U1V60gLfcIqfEnMvA+rLklUo7l0V/ArXG6BYHY8=;
-  b=Iv0arGGSAUV8RtL7YvwaZoTdqy6aopT5Id61CErTachmZmxiS1ISgOPL
-   r9aU9Rnd9DCCkJwLWQwg5iFcFCmPf/0jzryDdgW567jIVc8BPJZEWIwza
-   SDKDPdpv6Ft8HaNVKHwKis7yxcfI5YYu/XOC28xvTwdhHSzQI6fzTI2l6
-   om7R+gdCSvzwFJfFsWODyj6JDD3iOBG41z5aumM/l4gxlzBT54ckm4SP9
-   WUGPK6ggg4yuJBwaoPoIq34/nBark6EPnateOsgkKkU+sAKIJYDKtvmg8
-   Qz/1BkCekPMHkOD3sAyou+0cv3PhsD2Q0bDbRwerfhC5g6WLNO/lA9pJD
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="370104300"
-X-IronPort-AV: E=Sophos;i="5.98,318,1673942400"; 
-   d="scan'208";a="370104300"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 12:33:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="689009508"
-X-IronPort-AV: E=Sophos;i="5.98,318,1673942400"; 
-   d="scan'208";a="689009508"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 12:33:12 -0700
-Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id 1BA0B121399;
-        Tue,  4 Apr 2023 22:23:47 +0300 (EEST)
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Cc:     jacopo.mondi@ideasonboard.com
-Subject: [PATCH v2 0/2] Align CCS driver behaviour regarding flipping and rotation
-Date:   Tue,  4 Apr 2023 22:23:45 +0300
-Message-Id: <20230404192347.1798323-1-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S235609AbjDEAdo (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Apr 2023 20:33:44 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C982040FB;
+        Tue,  4 Apr 2023 17:33:42 -0700 (PDT)
+Received: from [192.168.2.153] (109-252-119-170.nat.spd-mgts.ru [109.252.119.170])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 28F00660315A;
+        Wed,  5 Apr 2023 01:33:28 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680654820;
+        bh=via3dJkBW0Q8Yv2lNNPhM1xz+EXuwPR73o7cexB8slY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=aDnntxld9l5U1838pxs7NIC4zlfcPtaKCwF2NGov7MOFh4qL466qI5WvAOWi6K/p+
+         ZkhfEgrvEKpMEAEWNeA7+GiBxa7JYxR6fyecM+semPnPuQACmYxaGCmugo9Vqkyj3n
+         TQAGZC8fpSAaeF3FJbLOWfw3N1n5vgRXhihKtWuKAGqn5BtzqJ0qQUiTihANTbojgg
+         DHjAQGEVYOV2cTUTTPSllrvfZEYWoAokSc+lIt5KXU7UGGB6hiyPdXEn5ssBoxrSVS
+         RQ8UUiSIQrVm2QmeQgmDwrKAXz4J2Gt2o2A//CeZjkd23tpyvvZJfu3pHQ/4RTUZZw
+         nnt2kzHwFxcGA==
+Message-ID: <91788325-5050-9cf8-9246-5496d9db4df3@collabora.com>
+Date:   Wed, 5 Apr 2023 03:33:22 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v1 5/7] Revert "drm: Assert held reservation lock for
+ dma-buf mmapping"
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Liam Mark <lmark@codeaurora.org>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <jstultz@google.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>
+Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        kernel@collabora.com
+References: <20230402164826.752842-1-dmitry.osipenko@collabora.com>
+ <20230402164826.752842-6-dmitry.osipenko@collabora.com>
+ <7854897f-67f8-e82c-3edf-e8ef923d2474@amd.com>
+Content-Language: en-US
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <7854897f-67f8-e82c-3edf-e8ef923d2474@amd.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+On 4/3/23 18:17, Christian König wrote:
+> Am 02.04.23 um 18:48 schrieb Dmitry Osipenko:
+>> Don't assert held dma-buf reservation lock on memory mapping of exported
+>> buffer.
+>>
+>> We're going to change dma-buf mmap() locking policy such that exporters
+>> will have to handle the lock. The previous locking policy caused deadlock
+>> problem for DRM drivers in a case of self-imported dma-bufs, it's solved
+>> by moving the lock down to exporters.
+> 
+> I only checked the TTM code path and think that at least that one should
+> work fine.
+> 
+>> Fixes: 39ce25291871 ("drm: Assert held reservation lock for dma-buf
+>> mmapping")
+> 
+> This here is not really a "fix" for the previous patch. We just found
+> that we didn't like the behavior and so reverted the original patch.
+> 
+> A "Reverts..." comment in the commit message would be more appropriate I
+> think.
 
-This set aligns the behaviour of flipping controls with other drivers and
-adds CAMERA_SENSOR_ROTATION and CAMERA_SENSOR_ORIENTATION controls to the
-CCS driver.
-
-The changes to flipping are that the flipping controls are no longer
-inverted if the sensor is mounted upside down. The flipping control still
-default enabled if the sensor is so mounted.
-
-since v1:
-
-- Default is always no flip. Rotation isn't enabled in current DTS, and
-  this is a better option going forward.
-
-Sakari Ailus (2):
-  media: ccs: Align flipping behaviour with other drivers
-  media: ccs: Add V4L2 controls from properties
-
- drivers/media/i2c/ccs/ccs-core.c | 52 +++++++-------------------------
- drivers/media/i2c/ccs/ccs.h      | 14 ---------
- 2 files changed, 11 insertions(+), 55 deletions(-)
+Ack, will drop the fixes tag in v2. Thank you and Emil for the review.
 
 -- 
-2.30.2
+Best regards,
+Dmitry
 
