@@ -2,50 +2,50 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EDBC5C7618D
-	for <linux-media@archiver.kernel.org>; Thu,  6 Apr 2023 17:36:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DDD25C77B6C
+	for <linux-media@archiver.kernel.org>; Thu,  6 Apr 2023 17:36:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239393AbjDFRgD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Apr 2023 13:36:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55894 "EHLO
+        id S238761AbjDFRgF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Apr 2023 13:36:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbjDFRf7 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Apr 2023 13:35:59 -0400
+        with ESMTP id S238941AbjDFRgA (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Apr 2023 13:36:00 -0400
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 010D19768
-        for <linux-media@vger.kernel.org>; Thu,  6 Apr 2023 10:35:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52A6AF34
+        for <linux-media@vger.kernel.org>; Thu,  6 Apr 2023 10:35:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680802537; x=1712338537;
+  t=1680802539; x=1712338539;
   h=from:to:subject:date:message-id:in-reply-to:references:
    mime-version:content-transfer-encoding;
-  bh=EGAnERw9wu6igTvBuTfIcoLxjvuZfNqDfYfVy72b5KY=;
-  b=eXosQZXreLE0X3LK+WPTqpxVn8q4V9i3XVmoIJ3EpyNy+/Rk6SYLB3Mq
-   txlnxu+M4sP6a8FqVpIgf1hhWdgCrmm5f1uCe0nnuCEZGqeDEljoBS/gX
-   Py9LVk0WCzootu0E1jPnj3dhH+LpsPZKCqOIVsNdMDWzIISIc/dstLjpK
-   UaYY86XIHFGB749LsAitWojmAloFsJBYPOI8dgoSdV16KCxytYqpgekEA
-   wjpBDLjgNCuvjAxHuOcAftugrmw1GamIIwS06kLh6x2cPU+YycR9eHA42
-   T1hfb4Y0VAQrLSy7Xi0jUvWs9ZJSQhxzSScc5tX/aXE+2LGAsvDU0qukx
+  bh=zvXshHIa3YjXSGNNCAC9emMeIMc0az5Ire1m5X/tLaI=;
+  b=XjrV6dn5eBPe5DXT3sbJCZPlAwY1gDmjlbdbmdX57CSDVHB4oZx3GeDJ
+   bdo+r8JGpfnETsEqzODhzcDX3Ys/6OBFUoEjDXbZlFTGAUdAU5t0IfJcg
+   xpEiAXAlzGTGr8SOYABXY43IkyEqbU0+6V7ebMa10tXnKPmR6dVzdaNgI
+   xK5q2yGOG/RPgQKeqoijaX/5Mr6F5k5V83eAKH3FjHbqtCMBVjA2yHkvN
+   tHUVyi59IeVgOIDBuipeH5jgEM+7pBKrfSPN16032aSpoU94y7lNZ0dl5
+   BjpBzmkTyoBSbXLRmsMuuVpCxDnFqOT0B5Dhn4s3Evw/UHghAPTd2zcm8
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="370629616"
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="370629625"
 X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="370629616"
+   d="scan'208";a="370629625"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 10:34:35 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 10:34:37 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="664558668"
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="664558678"
 X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="664558668"
+   d="scan'208";a="664558678"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 10:34:33 -0700
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 10:34:35 -0700
 Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id AB42D122C27
-        for <linux-media@vger.kernel.org>; Thu,  6 Apr 2023 20:34:31 +0300 (EEST)
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id D6C56122DD4
+        for <linux-media@vger.kernel.org>; Thu,  6 Apr 2023 20:34:33 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH 2/4] media: ccs: Apply module manufacturer hack on non-CCS devices only
-Date:   Thu,  6 Apr 2023 20:34:26 +0300
-Message-Id: <20230406173428.19855-3-sakari.ailus@linux.intel.com>
+Subject: [PATCH 4/4] media: ccs: Document CCS static data file names
+Date:   Thu,  6 Apr 2023 20:34:28 +0300
+Message-Id: <20230406173428.19855-5-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230406173428.19855-1-sakari.ailus@linux.intel.com>
 References: <20230406173428.19855-1-sakari.ailus@linux.intel.com>
@@ -55,52 +55,47 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Some modules don't have any model identification information in the
-register address space. The driver as a SMIA++ driver attempted to use
-sensor information in this case. This workaround is definitely not for CCS
-devices.
+Document the firmware file names for CCS static data for CCS, SMIA++ and
+SMIA devices.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 25 ++++++++++++-------------
- 1 file changed, 12 insertions(+), 13 deletions(-)
+ .../driver-api/media/drivers/ccs/ccs.rst      | 22 +++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 4adb2da34066..20c3974f5ac7 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -2894,19 +2894,18 @@ static int ccs_identify_module(struct ccs_sensor *sensor)
- 			"smia version %2.2d smiapp version %2.2d\n",
- 			minfo->smia_version, minfo->smiapp_version);
- 		minfo->name = SMIAPP_NAME;
--	}
--
--	/*
--	 * Some modules have bad data in the lvalues below. Hope the
--	 * rvalues have better stuff. The lvalues are module
--	 * parameters whereas the rvalues are sensor parameters.
--	 */
--	if (minfo->sensor_smia_manufacturer_id &&
--	    !minfo->smia_manufacturer_id && !minfo->model_id) {
--		minfo->smia_manufacturer_id =
--			minfo->sensor_smia_manufacturer_id;
--		minfo->model_id = minfo->sensor_model_id;
--		minfo->revision_number = minfo->sensor_revision_number;
-+		/*
-+		 * Some modules have bad data in the lvalues below. Hope the
-+		 * rvalues have better stuff. The lvalues are module
-+		 * parameters whereas the rvalues are sensor parameters.
-+		 */
-+		if (minfo->sensor_smia_manufacturer_id &&
-+		    !minfo->smia_manufacturer_id && !minfo->model_id) {
-+			minfo->smia_manufacturer_id =
-+				minfo->sensor_smia_manufacturer_id;
-+			minfo->model_id = minfo->sensor_model_id;
-+			minfo->revision_number = minfo->sensor_revision_number;
-+		}
- 	}
+diff --git a/Documentation/driver-api/media/drivers/ccs/ccs.rst b/Documentation/driver-api/media/drivers/ccs/ccs.rst
+index b461c8aa2a16..7389204afcb8 100644
+--- a/Documentation/driver-api/media/drivers/ccs/ccs.rst
++++ b/Documentation/driver-api/media/drivers/ccs/ccs.rst
+@@ -56,6 +56,28 @@ analogue data is never read from the pixel matrix that are outside the
+ configured selection rectangle that designates crop. The difference has an
+ effect in device timing and likely also in power consumption.
  
- 	for (i = 0; i < ARRAY_SIZE(ccs_module_idents); i++) {
++CCS static data
++---------------
++
++The MIPI CCS driver supports CCS static data for all compliant devices,
++including not just those compliant with CCS 1.1 but also CCS 1.0 and SMIA(++).
++For CCS the file names are formed as
++
++	ccs/ccs-sensor-vvvv-mmmm-rrrr.fw (sensor) and
++	ccs/ccs-module-vvvv-mmmm-rrrr.fw (module).
++
++For SMIA++ compliant devices the corresponding file names are
++
++	ccs/smiapp-sensor-vv-mmmm-rr.fw (sensor) and
++	ccs/smiapp-module-vv-mmmm-rrrr.fw (module).
++
++For SMIA (non-++) compliant devices the static data file name is
++
++	ccs/smia-sensor-vv-mmmm-rr.fw (sensor).
++
++vvvv or vv denotes MIPI and SMIA manufacturer IDs respectively, mmmm model ID
++and rrrr or rr revision number.
++
+ Register definition generator
+ -----------------------------
+ 
 -- 
 2.30.2
 
