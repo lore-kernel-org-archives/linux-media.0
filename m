@@ -2,50 +2,49 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BDFCC7618D
-	for <linux-media@archiver.kernel.org>; Thu,  6 Apr 2023 14:35:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37C1EC761A6
+	for <linux-media@archiver.kernel.org>; Thu,  6 Apr 2023 14:35:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239343AbjDFOf2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Apr 2023 10:35:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52612 "EHLO
+        id S239042AbjDFOfa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Apr 2023 10:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237171AbjDFOfN (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Apr 2023 10:35:13 -0400
+        with ESMTP id S238863AbjDFOfO (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Apr 2023 10:35:14 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61C5C17B;
-        Thu,  6 Apr 2023 07:32:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9C5C641;
+        Thu,  6 Apr 2023 07:32:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE76A648A7;
-        Thu,  6 Apr 2023 14:31:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4E99EC433EF;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C2EC64731;
+        Thu,  6 Apr 2023 14:31:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9B624C433A0;
         Thu,  6 Apr 2023 14:31:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1680791500;
-        bh=OJh4zaYpUGmBGJnTjRe4Hscxo/UtXSa7youeXVGyH7A=;
-        h=From:Subject:Date:To:Cc:Reply-To:From;
-        b=G7/UhM9cEX9Za3QvbGgTPXOvOjIGcfMCjLue5/uYMJ+G5P90iTGM0dVm/J5P8g518
-         chLyN+8N3CvTfp7898/skBl048pW06ruR+9MNHp8feRxZX8t7MEmg6jETIgQLULPLa
-         wHMHA62pDNMH5bGsPWVzyY5rNXflfwC2m6aW/OLM01cKX8lAA61BhtuefUJGcr0uyv
-         Xo7uvBgQCrWJM2Nn2SF95X9iWtyQTpIpUTcbWtezTJq+PGMWBQzZrou0pfiTAozpsq
-         vmdolafEqNZNH4gQ/c/kvHyLx24v0SYqC9akMzL1blGYPa/x/WJNoKbHaio65LvpPx
-         F1lIXnHYpTyJg==
+        bh=Chz1OqqLSVy8hSOfoQxWdgPg+hj1qsjj6Kdgplr7Wcw=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+        b=q6a/eLlk91wrlBS2Ho+y1ivSXltxc8nXogOh1aiPKxuGClK50sWFVrI6wd2xzwnX4
+         0KAD50dHYLj/Rz7ytbcorigYbIlbZ4duBXDh4iP4embrKZq183Z983tNk/2sqmGwQf
+         1HI0bH2v2CVbECbOAJUvvqfeeEMDoUxlzaDiG2mALwWCrEH9wP7ntqDqMbTMcoMgXI
+         mMA7sWKcRK0OmcPu5SkY5xAr9Yxa9GT5hIJDQ9BgY5PehIxYBnMJQk9+QwfRVb3A5w
+         fTMSlAG9/bxuo3eiZaTBnfFcPMcEC8B9pPuHBUSyBumzQp77VlhRKQkrSYaQoAZDt2
+         Hc+eb7mQKV6TQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by smtp.lore.kernel.org (Postfix) with ESMTP id EFCA6C77B6F;
-        Thu,  6 Apr 2023 14:31:39 +0000 (UTC)
+        by smtp.lore.kernel.org (Postfix) with ESMTP id 793BAC77B7C;
+        Thu,  6 Apr 2023 14:31:40 +0000 (UTC)
 From:   Michael Riesch via B4 Relay 
         <devnull+michael.riesch.wolfvision.net@kernel.org>
-Subject: [PATCH RFC 0/4] media: v4l2-ctrls: add controls for complex lens
- controller devices
-Date:   Thu, 06 Apr 2023 16:31:09 +0200
-Message-Id: <20230406-feature-controls-lens-v1-0-543189a680de@wolfvision.net>
+Date:   Thu, 06 Apr 2023 16:31:11 +0200
+Subject: [PATCH RFC 2/4] media: v4l2-ctrls: add lens group speed controls
+ for zoom and focus
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAK3XLmQC/1XNQQrCMBCF4auUWTsYm0TFreAB3IqLJJ3aQEnKT
- C2F0rubihuXP7yPt4AQRxK4VAswTVFiTiUOuwpC59KLMDaloVa1VkYdsSU3vpkw5DRy7gV7SoL
- +bO3JNtoY7aBY74TQs0uh2/QP7f/QthuY2jh//x9wv13hua4fXIphSJQAAAA=
+Message-Id: <20230406-feature-controls-lens-v1-2-543189a680de@wolfvision.net>
+References: <20230406-feature-controls-lens-v1-0-543189a680de@wolfvision.net>
+In-Reply-To: <20230406-feature-controls-lens-v1-0-543189a680de@wolfvision.net>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     libcamera-devel@lists.libcamera.org,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -54,11 +53,11 @@ Cc:     libcamera-devel@lists.libcamera.org,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Michael Riesch <michael.riesch@wolfvision.net>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680791498; l=3101;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680791498; l=3216;
  i=michael.riesch@wolfvision.net; s=20230406; h=from:subject:message-id;
- bh=OJh4zaYpUGmBGJnTjRe4Hscxo/UtXSa7youeXVGyH7A=;
- b=6fXSMiSHAibecfHaIrXad2RhBLfWutwmqZTdnbta4uPO56oUCRTsDHvu1zXs4G8HVvItbgfTB
- rR/pb1r9qehDeEVBAjQrMlQ8BFuiowDdBdmHHo7YYKhWXdXYOiA9T/n
+ bh=b4YZSmV5OSkcANw6i4qtO28ABjbGRhtxIpQPQN9ckB4=;
+ b=xFNDz6axwjBG+xovNgY7mhVeYp78O/FABWR7nJ0us5zRPKrzF8b16IMVDdHUF5xbRzkC44/IV
+ PXcB7I0DjV+DTflx2oZTqzwinj34zhn4dpu8VV81rOlpmLYlymiYWFk
 X-Developer-Key: i=michael.riesch@wolfvision.net; a=ed25519;
  pk=G03kuYHL670EcdsWaNfVA7KnHWmkSpj98XziQm/hjbk=
 X-Endpoint-Received: by B4 Relay for michael.riesch@wolfvision.net/20230406 with auth_id=38
@@ -68,69 +67,73 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi all,
+From: Michael Riesch <michael.riesch@wolfvision.net>
 
-This patch series aims to add support for complex lens controllers in V4L2.
-Complex lens controllers usually feature one focus lens and one (or more)
-zoom lens(es), which are driven by stepper motors. As a consequence, a few
-crucial differences to simple lens controllers (such as voice coil motor
-(VCM) drivers, which are already well supported in V4L2) arise:
+Add the controls V4L2_CID_FOCUS_SPEED and V4L2_CID_ZOOM_SPEED that set
+the speed of the zoom lens group and focus lens group, respectively.
 
- - Focus and zoom are slow.
-
-Compared to a simple VCM driver, which reacts almost instantaneously, the
-stepper motors that control the lens groups may require some time to reach
-their target position. Therefore, the control process in user space needs
-to receive feedback on the current status of each lens group, such as the
-current position and whether or not the lens group is moving. Patch 1/4
-adds volatile and read-only status controls for each lens group.
-
- - The velocity of focus and zoom can be selected.
-
-In contrast to a simple VCM driver, the stepper motors can move at
-different velocities. Since the produced noise depends on the velocity, the
-control process may want to optimize the chosen velocity. Also, some auto
-focus algorithms use different velocities in different phases (e.g., a
-coarse and fast scan vs. a slow and precise scan). Patch 2/4 adds speed
-controls for the focus lens group and the zoom lens group.
-
- - Calibration may be required.
-
-Since moving mechanical parts are involved, calibration is most likely
-necessary. Patch 3/4 introduces controls to control calibration procedures.
-
-In the scope of calibration, the relation between the lens positions may be
-fine-tuned. This requires the ability to control the individual lenses and
-gather feedback on their current status. Patch 4/4 introduces a pair of
-controls for five zoom lenses. (Five is a placeholder here. The most
-complex objective we had at hand happened to feature five zoom lenses.)
-
-On the user space side, it is envisaged that libcamera operates the newly
-introduced controls. Please note that no tests with libcamera have been
-carried out yet, the integration will be discussed after the first round of
-feedback to this RFC.
-
-Looking forward to your comments!
-
+Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
 ---
-Michael Riesch (4):
-      media: v4l2-ctrls: add lens group status controls for zoom and focus
-      media: v4l2-ctrls: add lens group speed controls for zoom and focus
-      media: v4l2-ctrls: add lens calibration controls
-      media: v4l2-ctrls: add controls for individual zoom lenses
+ Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst | 10 ++++++++++
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c                  |  2 ++
+ include/uapi/linux/v4l2-controls.h                         |  2 ++
+ 3 files changed, 14 insertions(+)
 
- .../userspace-api/media/v4l/ext-ctrls-camera.rst   | 105 +++++++++++++++++++++
- drivers/media/v4l2-core/v4l2-ctrls-core.c          |   9 ++
- drivers/media/v4l2-core/v4l2-ctrls-defs.c          |  30 ++++++
- include/media/v4l2-ctrls.h                         |   2 +
- include/uapi/linux/v4l2-controls.h                 |  39 ++++++++
- include/uapi/linux/videodev2.h                     |   2 +
- 6 files changed, 187 insertions(+)
----
-base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
-change-id: 20230406-feature-controls-lens-b85575d3443a
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
+index 3a270bc63f1a..5e34515024bd 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
+@@ -173,6 +173,11 @@ enum v4l2_exposure_metering -
+ 	will not transition from this state until another action is performed
+ 	by an application.
+ 
++``V4L2_CID_FOCUS_SPEED (integer)``
++    Set the speed with which the focus lens group of the camera is moved
++    (V4L2_CID_FOCUS_ABSOLUTE and V4L2_CID_FOCUS_RELATIVE). The unit is
++    driver-specific. The value should be a positive integer.
++
+ ``V4L2_CID_FOCUS_AUTO (boolean)``
+     Enables continuous automatic focus adjustments. The effect of manual
+     focus adjustments while this feature is enabled is undefined,
+@@ -287,6 +292,11 @@ enum v4l2_auto_focus_range -
+ 	not transition from this state until another action is performed by an
+ 	application.
+ 
++``V4L2_CID_ZOOM_SPEED (integer)``
++    Set the speed with which the zoom lens group of the camera is moved
++    (V4L2_CID_ZOOM_ABSOLUTE and V4L2_CID_ZOOM_RELATIVE). The unit is
++    driver-specific. The value should be a positive integer.
++
+ ``V4L2_CID_IRIS_ABSOLUTE (integer)``
+     This control sets the camera's aperture to the specified value. The
+     unit is undefined. Larger values open the iris wider, smaller values
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+index 9b26a3aa9e9c..2c21bcccc6ee 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+@@ -1046,6 +1046,8 @@ const char *v4l2_ctrl_get_name(u32 id)
+ 	case V4L2_CID_HDR_SENSOR_MODE:		return "HDR Sensor Mode";
+ 	case V4L2_CID_FOCUS_STATUS:		return "Focus, Status";
+ 	case V4L2_CID_ZOOM_STATUS:		return "Zoom, Status";
++	case V4L2_CID_FOCUS_SPEED:		return "Focus, Speed";
++	case V4L2_CID_ZOOM_SPEED:		return "Zoom, Speed";
+ 
+ 	/* FM Radio Modulator controls */
+ 	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index 8b037467ba9a..fecce641d0d8 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -1005,6 +1005,8 @@ struct v4l2_ctrl_lens_status {
+ 
+ #define V4L2_CID_FOCUS_STATUS			(V4L2_CID_CAMERA_CLASS_BASE + 37)
+ #define V4L2_CID_ZOOM_STATUS			(V4L2_CID_CAMERA_CLASS_BASE + 38)
++#define V4L2_CID_FOCUS_SPEED			(V4L2_CID_CAMERA_CLASS_BASE + 39)
++#define V4L2_CID_ZOOM_SPEED			(V4L2_CID_CAMERA_CLASS_BASE + 40)
+ 
+ /* FM Modulator class control IDs */
+ 
 
-Best regards,
 -- 
-Michael Riesch <michael.riesch@wolfvision.net>
+2.30.2
 
