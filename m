@@ -2,44 +2,44 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FB41C77B6C
-	for <linux-media@archiver.kernel.org>; Thu,  6 Apr 2023 21:58:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 142F2C77B73
+	for <linux-media@archiver.kernel.org>; Thu,  6 Apr 2023 21:58:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbjDFV6J (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Apr 2023 17:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44922 "EHLO
+        id S232471AbjDFV6N (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Apr 2023 17:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239070AbjDFV5U (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Apr 2023 17:57:20 -0400
+        with ESMTP id S239167AbjDFV5W (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Apr 2023 17:57:22 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06AC0C662;
-        Thu,  6 Apr 2023 14:56:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1863AF3A;
+        Thu,  6 Apr 2023 14:56:46 -0700 (PDT)
 Received: from localhost.localdomain (unknown [IPv6:2804:14d:72b4:8284:32a8:8167:f815:2895])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: dwlsalmeida)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BC9F266031E5;
-        Thu,  6 Apr 2023 22:56:36 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id EF76666031F2;
+        Thu,  6 Apr 2023 22:56:42 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680818199;
-        bh=C96CX0gBykPcUYmkODcP4UC2eE4vLS/sM/+9ysNemDA=;
+        s=mail; t=1680818205;
+        bh=GNp7AViZIGE3DK9wiwiWUEJC1nCGATb7ALyHIa7a9B0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=asalYTtqDCip3hexE6lvQt+gOkLosY1QGopaolMtbfe37nTCszZafYOZGJDLmmeib
-         Tgy1h2Wr17gU+xdNQlQJBqSiZPHTpstc7SfTZdo4VULy8HSJGFMq6Yf046juhiqbH+
-         yXqacDzybyDX+KcI2SXuWsmEIn/PfAawCqoogtQzZ3NdFMMWfeQ+S5GdBqwVXZhhXv
-         pftxSVvbRrmsiMKLOVpGmo3mrTh1iA/+u9N/H2W9BF0kLrFQOjVf0qkVQAJm4fijL5
-         tn1jWOWFPhCvGUJG27w8NdcDqpF6rI7wf5vpxkk/o6rG6ILpyAy9gQFkX+AnDLjGIG
-         952lc2lpvU4cg==
+        b=bpIGYfCsaJRyOC8eRp5YeEPoPe/m0+JQp4xIuVbCmbz3cDkoATTSuzVyjASAmxw98
+         NhD1w/cu5YVIII8bjiu3pmrDKGfe0pKgvNZ/Mo7/M7HspPpC8AIBkOlZNTM6tqcpUj
+         b+rdSCZnQ7Lo/N8l/5u7ZxMWt8/qU6N6KyhuFvtBbpg3OUbeiMZxdVDLjuqDe0BYP5
+         +Mx5LEzM2NfCuQ64U3S79QvlaJtifHrRunS6UyMoYftG6MqZsksV29HIKm2tAbbyx5
+         kp0LOD3NNbtQ8vGmZAMQBXTKdvlWZogvvcUV9jlGMOoDjqpoabCbvYSWr9Imp05SOR
+         /FZM5IbtatfvQ==
 From:   Daniel Almeida <daniel.almeida@collabora.com>
 To:     wedsonaf@gmail.com, ojeda@kernel.org, mchehab@kernel.org,
         hverkuil@xs4all.nl
 Cc:     Daniel Almeida <daniel.almeida@collabora.com>,
         rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org, kernel@collabora.com
-Subject: [PATCH 4/6] rust: media: videobuf2: add a videobuf2 abstraction
-Date:   Thu,  6 Apr 2023 18:56:13 -0300
-Message-Id: <20230406215615.122099-5-daniel.almeida@collabora.com>
+Subject: [PATCH 6/6] rust: media: add v4l2 rust sample
+Date:   Thu,  6 Apr 2023 18:56:15 -0300
+Message-Id: <20230406215615.122099-7-daniel.almeida@collabora.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230406215615.122099-1-daniel.almeida@collabora.com>
 References: <20230406215615.122099-1-daniel.almeida@collabora.com>
@@ -49,611 +49,459 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a videobuf2 abstraction. Notably, only vb2_v4l2_buffer is supported
-as the subsystem-specific struct.
+Add a v4l2 rust sample. The sample driver showcases the current support
+available in the media module. It also proves that the device will
+indeed probe by printing a message to the terminal indicating that
+no error took place.
 
 Signed-off-by: Daniel Almeida <daniel.almeida@collabora.com>
 ---
- rust/bindings/bindings_helper.h     |   3 +
- rust/kernel/media/mod.rs            |   1 +
- rust/kernel/media/videobuf2/core.rs | 552 ++++++++++++++++++++++++++++
- rust/kernel/media/videobuf2/mod.rs  |   5 +
- 4 files changed, 561 insertions(+)
- create mode 100644 rust/kernel/media/videobuf2/core.rs
- create mode 100644 rust/kernel/media/videobuf2/mod.rs
+ samples/rust/Kconfig      |  11 ++
+ samples/rust/Makefile     |   1 +
+ samples/rust/rust_v4l2.rs | 403 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 415 insertions(+)
+ create mode 100644 samples/rust/rust_v4l2.rs
 
-diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
-index 3b3d6fcf110f..3153894f426b 100644
---- a/rust/bindings/bindings_helper.h
-+++ b/rust/bindings/bindings_helper.h
-@@ -36,6 +36,9 @@
- #include <linux/uaccess.h>
- #include <linux/uio.h>
- #include <linux/videodev2.h>
-+#include <media/videobuf2-core.h>
-+#include <media/videobuf2-v4l2.h>
-+#include <media/videobuf2-dma-sg.h>
+diff --git a/samples/rust/Kconfig b/samples/rust/Kconfig
+index 189c10ced6d4..4bdea8210ae0 100644
+--- a/samples/rust/Kconfig
++++ b/samples/rust/Kconfig
+@@ -163,4 +163,15 @@ config SAMPLE_RUST_SELFTESTS
  
- /* `bindgen` gets confused at certain things. */
- const gfp_t BINDINGS_GFP_KERNEL = GFP_KERNEL;
-diff --git a/rust/kernel/media/mod.rs b/rust/kernel/media/mod.rs
-index 342e66382719..95b11544af8d 100644
---- a/rust/kernel/media/mod.rs
-+++ b/rust/kernel/media/mod.rs
-@@ -3,3 +3,4 @@
- //! Media subsystem
+ 	  If unsure, say N.
  
- pub mod v4l2;
-+pub mod videobuf2;
-diff --git a/rust/kernel/media/videobuf2/core.rs b/rust/kernel/media/videobuf2/core.rs
++config SAMPLE_RUST_V4L2
++	tristate "V4L2 driver"
++	depends on V4L_PLATFORM_DRIVERS
++	depends on VIDEO_DEV
++	select VIDEOBUF2_DMA_SG
++
++	help
++	  This option builds the V4L2 example.
++
++	  If unsure, say N.
++
+ endif # SAMPLES_RUST
+diff --git a/samples/rust/Makefile b/samples/rust/Makefile
+index 420bcefeb082..5ffa621f3968 100644
+--- a/samples/rust/Makefile
++++ b/samples/rust/Makefile
+@@ -15,5 +15,6 @@ obj-$(CONFIG_SAMPLE_RUST_NETFILTER)		+= rust_netfilter.o
+ obj-$(CONFIG_SAMPLE_RUST_ECHO_SERVER)		+= rust_echo_server.o
+ obj-$(CONFIG_SAMPLE_RUST_FS)			+= rust_fs.o
+ obj-$(CONFIG_SAMPLE_RUST_SELFTESTS)		+= rust_selftests.o
++obj-$(CONFIG_SAMPLE_RUST_V4L2)		+= rust_v4l2.o
+ 
+ subdir-$(CONFIG_SAMPLE_RUST_HOSTPROGS)		+= hostprogs
+diff --git a/samples/rust/rust_v4l2.rs b/samples/rust/rust_v4l2.rs
 new file mode 100644
-index 000000000000..40ab06475a8e
+index 000000000000..6742af36ac0a
 --- /dev/null
-+++ b/rust/kernel/media/videobuf2/core.rs
-@@ -0,0 +1,552 @@
++++ b/samples/rust/rust_v4l2.rs
+@@ -0,0 +1,403 @@
 +// SPDX-License-Identifier: GPL-2.0
 +
-+//! Video Buffer 2 Core Framework
-+//!
-+//! C header: [`include/media/videobuf2-core.h`](../../../../include/media/videobuf2-core.h)
++//! Rust V4L2 sample.
 +
 +use core::cell::UnsafeCell;
-+use core::marker::PhantomData;
-+use core::ops::Deref;
++use core::clone::Clone;
 +
-+use alloc::slice;
++use kernel::bindings;
++use kernel::error;
++use kernel::media::v4l2;
++use kernel::media::videobuf2;
++use kernel::platform;
++use kernel::prelude::*;
++use kernel::sync::smutex::Mutex;
++use kernel::sync::Arc;
 +
-+use crate::device::RawDevice;
-+use crate::error::from_kernel_result;
-+use crate::media::v4l2::{enums, mmap};
-+use crate::prelude::*;
-+use crate::sync::ffi_mutex::FfiMutex;
-+use crate::sync::Arc;
-+use crate::ForeignOwnable;
++pub(crate) struct Driver {
++    _reg: Pin<Box<kernel::driver::Registration<kernel::platform::Adapter<Self>>>>,
++    _pdev: Pin<Box<PlatformDevice>>,
++}
 +
-+/// The queue operations to be implemented by drivers.
++impl v4l2::dev::Driver for Driver {
++    type DriverData = Arc<DeviceData>;
++}
++
++pub(crate) struct Registrations {
++    video: Pin<Box<v4l2::dev::VideoRegistration<Driver>>>,
++    v4l2: Pin<Box<v4l2::device::V4l2Registration>>,
++}
++
++type DeviceData = kernel::device::Data<Registrations, (), V4l2Data>;
++
++pub(crate) struct V4l2Data {
++    pub(crate) _device: Arc<kernel::device::Device>,
++    _vb2_queue: Mutex<videobuf2::core::Queue<Driver>>,
++}
++
 +#[vtable]
-+pub trait QueueOperations {
-+    /// The subsystem-specific data, usually bindings::vb2_v4l2_buffer.
-+    type SubsystemSpecificData = bindings::vb2_v4l2_buffer;
-+    /// The driver specific data.
-+    type DriverSpecificData;
-+    /// The private data held in the queue.
-+    type PrivateData: ForeignOwnable
-+        + Deref<Target = PrivateData<Self::SubsystemSpecificData, Self::DriverSpecificData>>;
++impl videobuf2::core::QueueOperations for Driver {
++    type DriverSpecificData = Vb2QueueData;
 +
-+    // Note: alloc_devs is TODO
++    type PrivateData = Box<videobuf2::core::PrivateData<bindings::vb2_v4l2_buffer, Vb2QueueData>>;
 +
-+    /// Called as part of the queue_setup() queue operation.
 +    fn queue_setup(
-+        queue: &QueueRef,
-+        private_data: &mut Self::PrivateData,
-+        num_buffers: &mut u32,
-+        num_planes: &mut u32,
-+        sizes: &mut [u32],
-+    ) -> Result;
-+
-+    /// Called as part of the wait_prepare() queue operation.
-+    fn wait_prepare(_queue: &QueueRef, _private_data: &mut Self::PrivateData) {}
-+
-+    /// Called as part of the wait_finish() queue operation.
-+    fn wait_finish(_queue: &QueueRef, _private_data: &mut Self::PrivateData) {}
-+
-+    /// Optional. Called as part of the buf_out_validate() queue operation.
-+    fn buf_out_validate(_buffer: &Buffer, _private_data: &mut Self::PrivateData) -> Result {
++        _queue: &videobuf2::core::QueueRef,
++        _private_data: &mut Self::PrivateData,
++        _num_buffers: &mut u32,
++        _num_planes: &mut u32,
++        _sizes: &mut [u32],
++    ) -> Result {
++        let _vb2_queue_data = _private_data.driver_specific_mut();
++        pr_debug!("queue_setup called.\n");
 +        Ok(())
 +    }
 +
-+    /// Called as part of the buf_init() queue operation.
-+    fn buf_init(_buffer: &Buffer, _private_data: &mut Self::PrivateData) -> Result;
-+    /// Called as part of the buf_prepare() queue operation.
-+    fn buf_prepare(_buffer: &Buffer, _private_data: &mut Self::PrivateData) -> Result;
-+    /// Called as part of the buf_finish() queue operation.
-+    fn buf_finish(_buffer: &Buffer, _private_data: &mut Self::PrivateData) {}
-+    /// Called as part of the buf_cleanup() queue operation.
-+    fn buf_cleanup(_buffer: &Buffer, _private_data: &mut Self::PrivateData);
-+
-+    /// Called as part of the prepare_streaming() queue operation.
-+    fn prepare_streaming(_queue: &QueueRef, _private_data: &mut Self::PrivateData) -> Result {
-+        Ok(())
-+    }
-+    /// Called as part of the start_streaming() queue operation.
 +    fn start_streaming(
-+        _queue: &QueueRef,
++        _queue: &videobuf2::core::QueueRef,
 +        _private_data: &mut Self::PrivateData,
 +        _count: u32,
-+    ) -> Result;
-+
-+    /// Called as part of the unprepare_streaming() queue operation.
-+    fn unprepare_streaming(_queue: &QueueRef, _private_data: &mut Self::PrivateData) {}
-+    /// Called as part of the stop_streaming() queue operation.
-+    fn stop_streaming(_queue: &QueueRef, _private_data: &mut Self::PrivateData);
-+    /// Called as part of the buf_queue() queue operation.
-+    fn buf_queue(_buffer: &Buffer, _private_data: &mut Self::PrivateData);
-+    /// Called as part of the buf_request_complete() queue operation.
-+    fn buf_request_complete(_buffer: &Buffer, _private_data: &mut Self::PrivateData) {}
-+}
-+
-+type AsPrivateData<T> = <T as QueueOperations>::PrivateData;
-+
-+struct Vb2OperationsVtable<T: QueueOperations>(PhantomData<T>);
-+
-+impl<T: QueueOperations> Vb2OperationsVtable<T> {
-+    unsafe extern "C" fn queue_setup_callback(
-+        q: *mut bindings::vb2_queue,
-+        num_buffers: *mut core::ffi::c_uint,
-+        num_planes: *mut core::ffi::c_uint,
-+        sizes: *mut core::ffi::c_uint,
-+        _alloc_devs: *mut *mut bindings::device,
-+    ) -> core::ffi::c_int {
-+        from_kernel_result! {
-+            // SAFETY: `q` is a pointer returned by the kernel and outlives the
-+            // QueueRef as QueueRef is dropped by the end of this function
-+            let queue = unsafe { QueueRef::from_ptr(q) };
-+
-+            // SAFETY: into_foreign() was called in Queue::new() and this
-+            // function is called because we set the ops during Queue::new().
-+            // Furthermore, from_pointer() is only called when Queue is dropped,
-+            // at which point we cannot be called anymore because we will have
-+            // called vb2_queue_release. There are no other concurrent uses of
-+            // the pointer until the guard is dropped.
-+            let mut private_data = unsafe { T::PrivateData::borrow_mut((*q).drv_priv) };
-+
-+            // SAFETY: sizes is known to be of size bindings::VB2_MAX_PLANES as
-+            // per videobuf2-core.c::vb2_core_reqbufs()
-+            let sizes = unsafe { slice::from_raw_parts_mut(sizes as _, bindings::VB2_MAX_PLANES as usize) };
-+
-+            // SAFETY: these are both safe, since they're initialized in
-+            // videobuf2-core.c::vb2_core_reqbufs() and they are not read from any
-+            // other pointer while the reference exists, since they live in the
-+            // stack of vb2_core_reqbufs().
-+            let num_buffers = unsafe { num_buffers.as_mut().ok_or(EINVAL) }?;
-+            let num_planes = unsafe { num_planes.as_mut().ok_or(EINVAL) }?;
-+
-+            T::queue_setup(&queue, &mut private_data, num_buffers, num_planes, sizes)?;
-+            Ok(0)
-+        }
++    ) -> Result {
++        pr_info!("start_streaming called.\n");
++        Ok(())
 +    }
 +
-+    unsafe extern "C" fn wait_prepare_callback(q: *mut bindings::vb2_queue) {
-+        // SAFETY: QueueRef has a shorter lifetime if compared to the lifetime
-+        // of q. The pointer is passed in by the kernel and thus it is assumed
-+        // valid.
-+        let queue = unsafe { QueueRef::from_ptr(q) };
-+        // Same safety comments from queue_setup_callback apply.
-+        let mut private_data = unsafe { T::PrivateData::borrow_mut((*q).drv_priv) };
-+        T::wait_prepare(&queue, &mut private_data);
++    fn stop_streaming(_queue: &videobuf2::core::QueueRef, _private_data: &mut Self::PrivateData) {
++        pr_info!("stop_streaming called.\n");
 +    }
 +
-+    unsafe extern "C" fn wait_finish_callback(q: *mut bindings::vb2_queue) {
-+        // Same safety comment from wait_prepare_callback applies.
-+        let queue = unsafe { QueueRef::from_ptr(q) };
-+        // Same safety comments from queue_setup_callback apply.
-+        let mut private_data = unsafe { T::PrivateData::borrow_mut((*q).drv_priv) };
-+        T::wait_finish(&queue, &mut private_data);
++    fn buf_init(
++        _buffer: &videobuf2::core::Buffer,
++        _private_data: &mut Self::PrivateData,
++    ) -> Result {
++        pr_info!("buf_init called.\n");
++        Ok(())
 +    }
 +
-+    unsafe extern "C" fn buf_out_validate_callback(
-+        vb: *mut bindings::vb2_buffer,
-+    ) -> core::ffi::c_int {
-+        from_kernel_result! {
-+            // SAFETY: Buffer has a shorter lifetime if compared to the lifetime
-+            // of vb. The pointer is passed in by the kernel and thus it is assumed
-+            // valid.
-+            let buf = unsafe { Buffer::from_ptr(vb) };
-+            let queue_ptr = buf.queue_ptr();
-+
-+            // Same safety comments from queue_setup_callback apply.
-+            let mut private_data = unsafe { T::PrivateData::borrow_mut((*queue_ptr).drv_priv) };
-+
-+            T::buf_out_validate(&buf, &mut private_data)?;
-+            Ok(0)
-+        }
++    fn buf_prepare(
++        _buffer: &videobuf2::core::Buffer,
++        _private_data: &mut Self::PrivateData,
++    ) -> Result {
++        pr_info!("buf_prepare called.\n");
++        Ok(())
 +    }
 +
-+    unsafe extern "C" fn buf_init_callback(vb: *mut bindings::vb2_buffer) -> core::ffi::c_int {
-+        from_kernel_result! {
-+            // SAFETY: Buffer has a shorter lifetime if compared to the lifetime
-+            // of vb. The pointer is passed in by the kernel and thus it is assumed
-+            // valid.
-+            let buf = unsafe { Buffer::from_ptr(vb) };
-+            let queue_ptr = buf.queue_ptr();
-+
-+            // Same safety comments from queue_setup_callback apply.
-+            let mut private_data = unsafe { T::PrivateData::borrow_mut((*queue_ptr).drv_priv) };
-+
-+            T::buf_init(&buf, &mut private_data)?;
-+            Ok(0)
-+        }
++    fn buf_cleanup(_buffer: &videobuf2::core::Buffer, _private_data: &mut Self::PrivateData) {
++        pr_info!("buf_cleanup called.\n");
 +    }
 +
-+    unsafe extern "C" fn buf_prepare_callback(vb: *mut bindings::vb2_buffer) -> core::ffi::c_int {
-+        from_kernel_result! {
-+            // SAFETY: Buffer has a shorter lifetime if compared to the lifetime
-+            // of vb. The pointer is passed in by the kernel and thus it is assumed
-+            // valid.
-+            let buf = unsafe { Buffer::from_ptr(vb) };
-+            let queue_ptr = buf.queue_ptr();
-+
-+            // Same safety comments from queue_setup_callback apply.
-+            let mut private_data = unsafe { T::PrivateData::borrow_mut((*queue_ptr).drv_priv) };
-+
-+            T::buf_prepare(&buf, &mut private_data)?;
-+            Ok(0)
-+        }
-+    }
-+
-+    unsafe extern "C" fn buf_finish_callback(vb: *mut bindings::vb2_buffer) {
-+        // SAFETY: Buffer has a shorter lifetime if compared to the lifetime
-+        // of vb. The pointer is passed in by the kernel and thus it is assumed
-+        // valid.
-+        let buf = unsafe { Buffer::from_ptr(vb) };
-+        let queue_ptr = buf.queue_ptr();
-+
-+        // Same safety comments from queue_setup_callback apply.
-+        let mut private_data = unsafe { T::PrivateData::borrow_mut((*queue_ptr).drv_priv) };
-+
-+        T::buf_finish(&buf, &mut private_data);
-+    }
-+
-+    unsafe extern "C" fn buf_cleanup_callback(vb: *mut bindings::vb2_buffer) {
-+        // SAFETY: Buffer has a shorter lifetime if compared to the lifetime
-+        // of vb. The pointer is passed in by the kernel and thus it is assumed
-+        // valid.
-+        let buf = unsafe { Buffer::from_ptr(vb) };
-+        let queue_ptr = buf.queue_ptr();
-+
-+        // Same safety comments from queue_setup_callback apply.
-+        let mut private_data = unsafe { T::PrivateData::borrow_mut((*queue_ptr).drv_priv) };
-+
-+        T::buf_cleanup(&buf, &mut private_data);
-+    }
-+
-+    unsafe extern "C" fn prepare_streaming_callback(
-+        q: *mut bindings::vb2_queue,
-+    ) -> core::ffi::c_int {
-+        from_kernel_result! {
-+            // SAFETY: QueueRef has a shorter lifetime if compared to the lifetime
-+            // of q. The pointer is passed in by the kernel and thus it is assumed
-+            // valid.
-+            let queue = unsafe { QueueRef::from_ptr(q) };
-+            // Same safety comments from queue_setup_callback apply.
-+            let mut private_data = unsafe { T::PrivateData::borrow_mut((*q).drv_priv) };
-+            T::prepare_streaming(&queue, &mut private_data)?;
-+            Ok(0)
-+        }
-+    }
-+
-+    unsafe extern "C" fn start_streaming_callback(
-+        q: *mut bindings::vb2_queue,
-+        count: core::ffi::c_uint,
-+    ) -> core::ffi::c_int {
-+        from_kernel_result! {
-+            // Same safety comments from queue_setup() apply.
-+            let queue = unsafe { QueueRef::from_ptr(q) };
-+        let mut private_data = unsafe { T::PrivateData::borrow_mut((*q).drv_priv) };
-+            T::start_streaming(&queue, &mut private_data, count)?;
-+            Ok(0)
-+        }
-+    }
-+
-+    unsafe extern "C" fn stop_streaming_callback(q: *mut bindings::vb2_queue) {
-+        // Same safety comments from queue_setup() apply.
-+        let queue = unsafe { QueueRef::from_ptr(q) };
-+        let mut private_data = unsafe { T::PrivateData::borrow_mut((*q).drv_priv) };
-+        T::stop_streaming(&queue, &mut private_data);
-+    }
-+
-+    unsafe extern "C" fn unprepare_streaming_callback(q: *mut bindings::vb2_queue) {
-+        // SAFETY: QueueRef has a shorter lifetime if compared to the lifetime
-+        // of q. The pointer is passed in by the kernel and thus it is assumed
-+        // valid.
-+        let queue = unsafe { QueueRef::from_ptr(q) };
-+        // Same safety comments from queue_setup_callback apply.
-+        let mut private_data = unsafe { T::PrivateData::borrow_mut((*q).drv_priv) };
-+        T::unprepare_streaming(&queue, &mut private_data);
-+    }
-+
-+    unsafe extern "C" fn buf_queue_callback(vb: *mut bindings::vb2_buffer) {
-+        // SAFETY: Buffer has a shorter lifetime if compared to the lifetime
-+        // of vb. The pointer is passed in by the kernel and thus it is assumed
-+        // valid.
-+        let buf = unsafe { Buffer::from_ptr(vb) };
-+        let queue_ptr = buf.queue_ptr();
-+
-+        // Same safety comments from queue_setup_callback apply.
-+        let mut private_data = unsafe { T::PrivateData::borrow_mut((*queue_ptr).drv_priv) };
-+
-+        T::buf_queue(&buf, &mut private_data);
-+    }
-+
-+    unsafe extern "C" fn buf_request_complete_callback(vb: *mut bindings::vb2_buffer) {
-+        // SAFETY: Buffer has a shorter lifetime if compared to the lifetime
-+        // of vb. The pointer is passed in by the kernel and thus it is assumed
-+        // valid.
-+        let buf = unsafe { Buffer::from_ptr(vb) };
-+        let queue_ptr = buf.queue_ptr();
-+
-+        // Same safety comments from queue_setup_callback apply.
-+        let mut private_data = unsafe { T::PrivateData::borrow_mut((*queue_ptr).drv_priv) };
-+
-+        T::buf_request_complete(&buf, &mut private_data);
-+    }
-+
-+    const VTABLE: bindings::vb2_ops = bindings::vb2_ops {
-+        queue_setup: Some(Self::queue_setup_callback),
-+        wait_prepare: if T::HAS_WAIT_PREPARE {
-+            Some(Self::wait_prepare_callback)
-+        } else {
-+            None
-+        },
-+        wait_finish: if T::HAS_WAIT_FINISH {
-+            Some(Self::wait_finish_callback)
-+        } else {
-+            None
-+        },
-+        buf_out_validate: if T::HAS_BUF_OUT_VALIDATE {
-+            Some(Self::buf_out_validate_callback)
-+        } else {
-+            None
-+        },
-+        buf_init: Some(Self::buf_init_callback),
-+        buf_prepare: Some(Self::buf_prepare_callback),
-+        buf_finish: if T::HAS_BUF_FINISH {
-+            Some(Self::buf_finish_callback)
-+        } else {
-+            None
-+        },
-+        buf_cleanup: Some(Self::buf_cleanup_callback),
-+        start_streaming: Some(Self::start_streaming_callback),
-+        stop_streaming: Some(Self::stop_streaming_callback),
-+        buf_queue: Some(Self::buf_queue_callback),
-+        buf_request_complete: if T::HAS_BUF_REQUEST_COMPLETE {
-+            Some(Self::buf_request_complete_callback)
-+        } else {
-+            None
-+        },
-+        prepare_streaming: if T::HAS_PREPARE_STREAMING {
-+            Some(Self::prepare_streaming_callback)
-+        } else {
-+            None
-+        },
-+        unprepare_streaming: if T::HAS_UNPREPARE_STREAMING {
-+            Some(Self::unprepare_streaming_callback)
-+        } else {
-+            None
-+        },
-+    };
-+
-+    fn build() -> &'static bindings::vb2_ops {
-+        &Self::VTABLE
++    fn buf_queue(_buffer: &videobuf2::core::Buffer, _private_data: &mut Self::PrivateData) {
++        pr_info!("buf_queue called.\n");
 +    }
 +}
 +
-+/// The IO modes as defined by `struct vb2_io_mode::VB2_*`.
-+#[allow(missing_docs)]
-+#[derive(Copy, Clone, Debug, PartialEq, PartialOrd)]
-+pub enum IoModes {
-+    Mmap = bindings::vb2_io_modes_VB2_MMAP as isize,
-+    UserPtr = bindings::vb2_io_modes_VB2_USERPTR as isize,
-+    Read = bindings::vb2_io_modes_VB2_READ as isize,
-+    Write = bindings::vb2_io_modes_VB2_WRITE as isize,
-+    DmaBuf = bindings::vb2_io_modes_VB2_DMABUF as isize,
-+}
++pub(crate) struct Vb2QueueData {}
 +
-+/// Controls the value assigned to the `mem_ops` member.
-+#[derive(Copy, Clone, Debug, PartialEq, PartialOrd)]
-+pub enum MemOps {
-+    /// Sets `bindings::vb2_dma_sg_memops`.
-+    DmaSg,
-+}
++impl platform::Driver for Driver {
++    type Data = Arc<DeviceData>;
 +
-+/// Represents the driver-specific buffer structure. This must contain the
-+/// subsystem-specific structure as its first member. For now, only `struct
-+/// vb2_v4l2_buffer` is supported as the subsystem-specific structure.
-+#[repr(C)]
-+pub struct PrivateData<T, U> {
-+    subsystem_specific: T,
-+    driver_specific: U,
-+}
++    kernel::define_of_id_table! {(), [
++         (kernel::of::DeviceId::Compatible(b"v4l2"), None),
++    ]}
 +
-+impl<T, U> PrivateData<T, U> {
-+    /// Returns the size of the driver-specific struct.
-+    pub fn driver_data_size(&self) -> usize {
-+        core::mem::size_of_val(&self.driver_specific)
-+    }
++    fn probe(
++        pdev: &mut platform::Device,
++        _: core::option::Option<&Self::IdInfo>,
++    ) -> Result<Self::Data> {
++        let dev = kernel::device::Device::from_dev(pdev);
 +
-+    /// Returns the subsystem-specific struct.
-+    pub fn subsystem_specific(&self) -> &T {
-+        &self.subsystem_specific
-+    }
++        pr_debug!("V4L2 Rust Sample Probing!\n");
 +
-+    /// Returns the driver-specific struct.
-+    pub fn driver_specific_mut(&mut self) -> &mut U {
-+        &mut self.driver_specific
-+    }
-+}
++        let v4l2_reg = v4l2::device::V4l2Registration::new()?;
 +
-+impl<U> PrivateData<bindings::vb2_v4l2_buffer, U> {
-+    /// Creates a new instance.
-+    pub fn new(data: U) -> Self {
-+        Self {
-+            subsystem_specific: Default::default(),
-+            driver_specific: data,
-+        }
-+    }
-+}
-+
-+/// A struct containing the parameters for queue creation.
-+#[allow(missing_docs)]
-+pub struct QueueCreateInfo<'a, T: QueueOperations, U: RawDevice> {
-+    pub buf_type: enums::BufType,
-+    pub io_modes: &'a [IoModes],
-+    pub dev: Arc<U>,
-+    pub timestamp_flags: &'a [mmap::BufferFlag],
-+    pub lock: Option<Pin<Box<FfiMutex>>>,
-+    pub min_buffers_needed: usize,
-+    pub gfp_flags: u32,
-+    pub mem_ops: MemOps,
-+    pub requires_requests: bool,
-+    pub supports_requests: bool,
-+    pub private_data: Option<T::PrivateData>,
-+}
-+
-+/// An owned wrapper over `struct vb2_queue`.
-+pub struct Queue<T: QueueOperations> {
-+    inner: UnsafeCell<bindings::vb2_queue>,
-+    has_private_data: bool,
-+    _lock: Option<Pin<Box<FfiMutex>>>,
-+    _p1: PhantomData<T>,
-+}
-+
-+impl<T: QueueOperations> Queue<T> {
-+    /// Creates a new queue.
-+    pub fn new<U: RawDevice>(create_info: QueueCreateInfo<'_, T, U>) -> Result<Self> {
-+        let QueueCreateInfo {
-+            buf_type,
-+            io_modes,
-+            dev,
-+            timestamp_flags,
-+            mut lock,
-+            min_buffers_needed,
-+            gfp_flags,
-+            mem_ops,
-+            requires_requests,
-+            supports_requests,
-+            private_data,
-+        } = create_info;
-+
-+        let mut io_modes_val = 0;
-+        for io_mode in io_modes {
-+            io_modes_val |= *io_mode as u32;
-+        }
-+
-+        let mut timestamp_flags_val = 0;
-+        for timestamp_flag in timestamp_flags {
-+            timestamp_flags_val |= *timestamp_flag as u32;
-+        }
-+
-+        let (buf_struct_size, drv_priv, has_private_data) = if let Some(private_data) = private_data
-+        {
-+            (
-+                private_data.driver_data_size(),
-+                private_data.into_foreign() as *mut _,
-+                true,
-+            )
-+        } else {
-+            (0, core::ptr::null_mut(), false)
++        let fops = v4l2::dev::V4l2FileOperations {
++            open: Some(bindings::v4l2_fh_open),
++            poll: Some(bindings::vb2_fop_poll),
++            mmap: Some(bindings::vb2_fop_mmap),
++            read: Some(bindings::vb2_fop_read),
 +        };
 +
-+        let mut inner = bindings::vb2_queue {
-+            type_: buf_type as _,
-+            io_modes: io_modes_val,
-+            dev: dev.raw_device(),
-+            ..Default::default()
++        let ioctls = v4l2::dev::V4l2IoctlOperations {
++            reqbufs: Some(bindings::vb2_ioctl_reqbufs),
++            querybuf: Some(bindings::vb2_ioctl_querybuf),
++            qbuf: Some(bindings::vb2_ioctl_qbuf),
++            expbuf: Some(bindings::vb2_ioctl_expbuf),
++            dqbuf: Some(bindings::vb2_ioctl_dqbuf),
++            create_bufs: Some(bindings::vb2_ioctl_create_bufs),
++            prepare_buf: Some(bindings::vb2_ioctl_prepare_buf),
++            streamon: Some(bindings::vb2_ioctl_streamon),
++            streamoff: Some(bindings::vb2_ioctl_streamoff),
++            // prepare_streaming: None,
++            // unprepare_streaming: None,
 +        };
 +
-+        if let Some(ref mut lock) = lock {
-+            let raw_lock = unsafe { lock.as_mut().raw() };
-+            inner.lock = raw_lock;
-+        }
++        let video_reg =
++            v4l2::dev::VideoRegistration::<Driver>::new(&dev, v4l2_reg.device(), fops, ioctls)?;
 +
-+        inner.drv_priv = drv_priv;
-+        inner.buf_struct_size = buf_struct_size as u32;
-+        inner.timestamp_flags = timestamp_flags_val;
-+        inner.gfp_flags = gfp_flags;
-+        inner.min_buffers_needed = min_buffers_needed as u32;
++        let dev = Arc::try_new(dev)?;
 +
-+        inner.set_requires_requests(requires_requests as u32);
-+        inner.set_supports_requests(supports_requests as u32);
++        let io_modes = [
++            videobuf2::core::IoModes::Mmap,
++            videobuf2::core::IoModes::DmaBuf,
++        ];
 +
-+        inner.ops = Vb2OperationsVtable::<T>::build();
++        let timestamp_flags = [v4l2::mmap::BufferFlag::TimestampMonotonic];
 +
-+        inner.mem_ops = match mem_ops {
-+            // SAFETY: this will be called by the C code.
-+            MemOps::DmaSg => unsafe { &bindings::vb2_dma_sg_memops as _ },
++        let queue_data = Vb2QueueData {};
++
++        let queue_data = Box::try_new(videobuf2::core::PrivateData::new(queue_data))?;
++        let queue_data = Some(queue_data);
++
++        let vb2_mutex = unsafe { kernel::sync::ffi_mutex::FfiMutex::new() };
++        let mut vb2_mutex = Pin::from(Box::try_new(vb2_mutex)?);
++        kernel::ffi_mutex_init!(vb2_mutex.as_mut(), "Vb2Queue::lock");
++
++        let create_info = videobuf2::core::QueueCreateInfo {
++            buf_type: v4l2::enums::BufType::VideoCapture,
++            io_modes: &io_modes,
++            dev: dev.clone(),
++            timestamp_flags: &timestamp_flags,
++            lock: Some(vb2_mutex),
++            min_buffers_needed: 1,
++            gfp_flags: bindings::___GFP_DMA32,
++            mem_ops: videobuf2::core::MemOps::DmaSg,
++            requires_requests: false,
++            supports_requests: false,
++            private_data: queue_data,
 +        };
 +
-+        // SAFETY: just a FFI call and we have just initialized `inner`.
-+        unsafe {
-+            bindings::vb2_queue_init(&mut inner as _);
-+        }
++        let vb2_queue = videobuf2::core::Queue::<Self>::new(create_info)?;
 +
-+        let inner = UnsafeCell::new(inner);
++        let data = kernel::new_device_data!(
++            Registrations {
++                video: Pin::new(Box::try_new(video_reg).unwrap()),
++                v4l2: Pin::new(Box::try_new(v4l2_reg).unwrap()),
++            },
++            (),
++            V4l2Data {
++                _device: dev,
++                _vb2_queue: kernel::sync::smutex::Mutex::new(vb2_queue),
++            },
++            "V4l2::Registrations"
++        )?;
++
++        let data = Arc::<DeviceData>::from(data);
++        let capabilities = [
++            v4l2::capabilities::Capabilities::VideoCapture,
++            v4l2::capabilities::Capabilities::Streaming,
++        ];
++
++        let mut pinned_regs = data.registrations().ok_or(ENXIO)?;
++        let mut pinned_regs_mut = pinned_regs.as_pinned_mut();
++
++        let dev = kernel::device::Device::from_dev(pdev);
++        kernel::v4l2_device_register!(pinned_regs_mut.v4l2.as_mut(), &dev)?;
++        pr_debug!("Sucessfully registered v4l2 device");
++
++        kernel::video_device_register!(
++            pinned_regs_mut.video.as_mut(),
++            data.clone(),
++            v4l2::dev::VflDevNodeType::Video,
++            -1,
++            &capabilities,
++        )?;
++
++        pr_info!("V4L2 Rust Sample Probed!\n");
++        drop(pinned_regs);
++        Ok(data)
++    }
++}
++
++#[vtable]
++impl v4l2::ioctls::Operations for Driver {
++    type PrivateData = Arc<DeviceData>;
++
++    fn vidioc_querycap(
++        _private_data: &mut Self::PrivateData,
++        _cap: v4l2::capabilities::CapabilitiesRef,
++    ) -> Result {
++        pr_info!("vidioc_querycap called");
++        core::result::Result::Ok(())
++    }
++
++    fn vidioc_enum_fmt_vid_cap(
++        _private_data: &mut Self::PrivateData,
++        mut f: v4l2::format::FormatDescRef,
++    ) -> Result {
++        pr_info!("vidioc_enum_fmt_vid_cap called");
++        // Set NV12 to avoid spam by some apps when this module is loaded.
++        f.set_pixel_format(842094158);
++        core::result::Result::Ok(())
++    }
++
++    fn vidioc_enum_framesizes(
++        _private_data: &mut Self::PrivateData,
++        _fsize: v4l2::framesize::FrameSizeRef,
++    ) -> Result {
++        pr_info!("vidioc_enum_framesizes called");
++        core::result::Result::Ok(())
++    }
++
++    fn vidioc_g_fmt_vid_cap(
++        _private_data: &mut Self::PrivateData,
++        _f: v4l2::format::FormatRef,
++    ) -> Result {
++        pr_info!("vidioc_g_fmt_vid_cap called");
++        core::result::Result::Ok(())
++    }
++
++    fn vidioc_s_fmt_vid_cap(
++        _private_data: &mut Self::PrivateData,
++        _f: v4l2::format::FormatRef,
++    ) -> Result {
++        pr_info!("vidioc_s_fmt_vid_cap called");
++        core::result::Result::Ok(())
++    }
++
++    fn vidioc_try_fmt_vid_cap(
++        _private_data: &mut Self::PrivateData,
++        _f: v4l2::format::FormatRef,
++    ) -> Result {
++        pr_info!("vidioc_try_fmt_vid_cap called");
++        core::result::Result::Ok(())
++    }
++
++    fn vidioc_reqbufs(
++        _private_data: &mut Self::PrivateData,
++        _b: v4l2::mmap::RequestBuffersRef,
++    ) -> Result {
++        pr_info!("vidioc_reqbufs called");
++        core::result::Result::Ok(())
++    }
++
++    fn vidioc_querybuf(_private_data: &mut Self::PrivateData, _b: v4l2::mmap::BufferRef) -> Result {
++        pr_info!("vidioc_querybuf called");
++        core::result::Result::Ok(())
++    }
++
++    fn vidioc_qbuf(_private_data: &mut Self::PrivateData, _b: v4l2::mmap::BufferRef) -> Result {
++        pr_info!("vidioc_qbuf called");
++        core::result::Result::Ok(())
++    }
++
++    fn vidioc_expbuf(
++        _private_data: &mut Self::PrivateData,
++        _e: v4l2::mmap::ExportBufferRef,
++    ) -> Result {
++        pr_info!("vidioc_expbuf called");
++        core::result::Result::Ok(())
++    }
++
++    fn vidioc_dqbuf(_private_data: &mut Self::PrivateData, _b: v4l2::mmap::BufferRef) -> Result {
++        pr_info!("vidioc_dqbuf called");
++        core::result::Result::Ok(())
++    }
++
++    fn vidioc_create_bufs(
++        _private_data: &mut Self::PrivateData,
++        _b: v4l2::mmap::CreateBuffersRef,
++    ) -> Result {
++        pr_info!("vidioc_create_bufs called");
++        core::result::Result::Ok(())
++    }
++
++    fn vidioc_prepare_buf(
++        _private_data: &mut Self::PrivateData,
++        _b: v4l2::mmap::BufferRef,
++    ) -> Result {
++        pr_info!("vidioc_prepare_buf called");
++        core::result::Result::Ok(())
++    }
++
++    fn vidioc_streamon(_private_data: &mut Self::PrivateData, _i: v4l2::enums::BufType) -> Result {
++        pr_info!("vidioc_streamon called");
++        core::result::Result::Ok(())
++    }
++
++    fn vidioc_streamoff(_private_data: &mut Self::PrivateData, _i: v4l2::enums::BufType) -> Result {
++        pr_info!("vidioc_streamoff called");
++        core::result::Result::Ok(())
++    }
++
++    fn vidioc_enum_input(
++        _private_data: &mut Self::PrivateData,
++        _inp: v4l2::inputs::InputRef,
++    ) -> Result {
++        pr_info!("vidioc_enum_input called");
++        core::result::Result::Ok(())
++    }
++
++    fn vidioc_g_input(_private_data: &mut Self::PrivateData, _i: &mut u32) -> Result {
++        pr_info!("vidioc_g_input called");
++        core::result::Result::Ok(())
++    }
++
++    fn vidioc_s_input(_private_data: &mut Self::PrivateData, _i: u32) -> Result {
++        pr_info!("vidioc_s_input called");
++        core::result::Result::Ok(())
++    }
++}
++
++/// An owned platform device registered by a driver. This is useful for virtual
++/// drivers, such as this one, since they will not be probed by matching against
++/// the device tree.
++struct PlatformDevice(core::cell::UnsafeCell<bindings::platform_device>);
++
++// SAFETY: I assume _all_ devices should be OK to be moved to any thread.
++unsafe impl Send for PlatformDevice {}
++// SAFETY: Platform device does not expose its inner FFI type.
++unsafe impl Sync for PlatformDevice {}
++
++impl Drop for PlatformDevice {
++    fn drop(&mut self) {
++        // SAFETY: no references to this type are alive here.
++        let platform_device = self.0.get();
++        // SAFETY: an FFI call to a previously registered device.
++        unsafe { bindings::platform_device_unregister(platform_device) }
++    }
++}
++
++unsafe impl kernel::device::RawDevice for PlatformDevice {
++    fn raw_device(&self) -> *mut bindings::device {
++        // SAFETY: no references to this type are alive here.
++        let platform_device = self.0.get();
++        // SAFETY: pointer is valid since it was previously registered when the
++        // module was registered.
++        unsafe { &mut (*platform_device).dev as _ }
++    }
++}
++
++impl kernel::Module for Driver {
++    fn init(name: &'static CStr, module: &'static ThisModule) -> Result<Self> {
++        // Register as platform driver
++        let reg: Pin<Box<kernel::driver::Registration<kernel::platform::Adapter<Self>>>> =
++            kernel::platform::Registration::new_pinned(name, module)?;
++
++        let mut platform_device = kernel::bindings::platform_device::default();
++        let name = kernel::c_str!("rust_v4l2");
++        platform_device.name = name.as_char_ptr();
++
++        let platform_device = Box::try_new(PlatformDevice(UnsafeCell::new(platform_device)))?;
++        let mut platform_device = Pin::from(platform_device);
++
++        let platform_device = unsafe {
++            let res = bindings::platform_device_register(platform_device.as_mut().0.get());
++
++            error::to_result(res)?;
++            platform_device
++        };
 +
 +        Ok(Self {
-+            inner,
-+            has_private_data,
-+            _p1: PhantomData,
-+            _lock: lock,
++            _reg: reg,
++            _pdev: platform_device, /* This obviously must be kept alive as well, otherwise massive faults will ensure */
 +        })
 +    }
 +}
 +
-+impl<T: QueueOperations> Drop for Queue<T> {
-+    fn drop(&mut self) {
-+        if self.has_private_data {
-+            // SAFETY: into_pointer() was previously called during new() and
-+            // `self.has_private_data` was set accordingly.
-+            unsafe {
-+                AsPrivateData::<T>::from_foreign(self.inner.get_mut().drv_priv);
-+            }
-+        }
-+
-+        // SAFETY: just a FFI call and we have initialized `inner` during new().
-+        unsafe {
-+            bindings::vb2_queue_release(self.inner.get());
-+        }
-+    }
++module! {
++    type: Driver,
++    name: "rust_v4l2",
++    author: "Daniel Almeida",
++    description: "Minimal Rust V4L2 example driver",
++    license: "GPL",
 +}
-+
-+// SAFETY: This is a wrapper over the `struct vb2_queue` C type, which can be
-+// used from any thread.
-+unsafe impl<T: QueueOperations> Send for Queue<T> {}
-+
-+/// A wrapper over a pointer to `struct vb2_queue`.
-+pub struct QueueRef {
-+    _ptr: *mut bindings::vb2_queue,
-+}
-+
-+impl QueueRef {
-+    /// # Safety
-+    /// The caller must ensure that `ptr` is valid and remains valid for the lifetime of the
-+    /// returned [`QueueRef`] instance.
-+    unsafe fn from_ptr(ptr: *mut bindings::vb2_queue) -> Self {
-+        Self { _ptr: ptr }
-+    }
-+}
-+
-+/// A wrapper over a pointer to `struct vb2_buffer`.
-+pub struct Buffer {
-+    ptr: *mut bindings::vb2_buffer,
-+}
-+
-+impl Buffer {
-+    /// # Safety
-+    /// The caller must ensure that `ptr` is valid and remains valid for the lifetime of the
-+    /// returned [`Buffer`] instance.
-+    pub(crate) unsafe fn from_ptr(ptr: *mut bindings::vb2_buffer) -> Self {
-+        Self { ptr }
-+    }
-+
-+    pub(crate) fn queue_ptr(&self) -> *mut bindings::vb2_queue {
-+        // SAFETY: self.ptr should be valid according to the safety requirements in `from_raw()`.
-+        unsafe { (*self.ptr).vb2_queue }
-+    }
-+}
-diff --git a/rust/kernel/media/videobuf2/mod.rs b/rust/kernel/media/videobuf2/mod.rs
-new file mode 100644
-index 000000000000..6b0be2c7a14d
---- /dev/null
-+++ b/rust/kernel/media/videobuf2/mod.rs
-@@ -0,0 +1,5 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+//! Videobuf2 Framework
-+
-+pub mod core;
 -- 
 2.40.0
 
