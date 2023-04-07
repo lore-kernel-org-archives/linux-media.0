@@ -2,60 +2,61 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D0F2C77B61
-	for <linux-media@archiver.kernel.org>; Fri,  7 Apr 2023 13:28:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C92AC77B70
+	for <linux-media@archiver.kernel.org>; Fri,  7 Apr 2023 13:28:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240845AbjDGN2s (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 7 Apr 2023 09:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35974 "EHLO
+        id S240846AbjDGN2u (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 7 Apr 2023 09:28:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240818AbjDGN2l (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 7 Apr 2023 09:28:41 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A2983F8
-        for <linux-media@vger.kernel.org>; Fri,  7 Apr 2023 06:28:39 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id a44so24899151ljr.10
-        for <linux-media@vger.kernel.org>; Fri, 07 Apr 2023 06:28:39 -0700 (PDT)
+        with ESMTP id S231293AbjDGN2i (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 7 Apr 2023 09:28:38 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8ABF8A6B
+        for <linux-media@vger.kernel.org>; Fri,  7 Apr 2023 06:28:35 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id x20so43531748ljq.9
+        for <linux-media@vger.kernel.org>; Fri, 07 Apr 2023 06:28:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680874119;
+        d=linaro.org; s=google; t=1680874114;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=k0IfW2c7yHYEw+7My0/Z0HZx/BNSO/stFk2dfA3BGq0=;
-        b=Ro0Vd5ko7vTTIJf8sPurw4gyNC9dktQtfFJJl77SMkhAyBP/pGEqpZZrfkq9zQdxen
-         QeNFSfzVP6fKnCXK705/jnJaWfZLdgruEkF/WVCiDDaxQ4ySU9ehYsHiPe+r/Qc0lPZn
-         EokASAgN41BXeNYBcaDHOMxar1uBU09BRlUzAQKJwjLTUL+uhrDoYiIglqvYKboSjlLn
-         QbNjaKhLY+GS7st+gBqJBxuhQ+KfPOYo3FZs9eRJm4aaZm8kdnupDwBHXgnjjeuPxW0V
-         S2P9lkFrRAJ1dr77dnsAMlAVhS+Vgw8ZU8FcCJFPCozDIJoAnciVDnC2yT22pK3t20jj
-         t7Mw==
+        bh=OgDPlYdeyBN5Ce+XKNF10sW0zXkUfnHdpMsUaHXHsmA=;
+        b=wirQaUgP7v7X9GkaF1EOA3FI0ORRUf7xGwFC1cy6YoAraBNvAlvmvGjhnAJDkkJB2r
+         uEpoM7BlqdARZP4E6zm0ElxaniNBG8TUOQgyBgLlH9oyG/GkUot7bkSOhfKu4kg2PIfW
+         MC/5dtto7NIM9pfMMlFuPz37CEFYSdwQi4MWsMHhDai9CdJ4wbZXgD4m9nC9QOAF+c9F
+         6bhwD9YSE2tyQ1lvJ1G0g9OulLfzd1vGicOsdEoFI62iMU8FefVZFML8E17BgTaSlW0k
+         ZslYXcOhRvkKdwkSB1k4ifDjqKiYZDatJGNaX/tUDAeFB6uPmSo617/LKO8eZ/wQ8C1L
+         E9Mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680874119;
+        d=1e100.net; s=20210112; t=1680874114;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=k0IfW2c7yHYEw+7My0/Z0HZx/BNSO/stFk2dfA3BGq0=;
-        b=3bDF+jxL49v+MuWDhdByKdWzrgzB3dzgpfRdGMupCAwdrshpwxTQt86irGkPeqXNrk
-         9b+0a+68BPmwxO8hVyKM3IHpCHNDXIbhIA/PvMVJ5GJY/7YAYTBM4IUsxjykZH+12BcZ
-         BsYjWcvK9NtXKvt1u8NWGl3i8uy/0TtphCjzmqdHXUg+OqIWS8ccZuKGTNs8ZwiPDnEC
-         fUrnlrwBGiKRRcUfmZBCZHu8m7IdGRrEK4Uxgqi+SMpDJJREpSmZIBGTpvJBFlMJ17Ux
-         TtA4VKU+7umnW1OXe9ATe8/Liiebf1c2ax3KF0VWY/eb0reB7Zqkw8i3nl+K4gh17Qq5
-         AIYg==
-X-Gm-Message-State: AAQBX9eZWZS/xGCU1v5KLSm0ok4Y4aW0PF2ORZ91ug3zJMPfTiPJ8c/9
-        IjIhu+9HvA4FAxQf61c+WJ5n9g==
-X-Google-Smtp-Source: AKy350ZQ30yshVINhFaemYrdT+8iOMgt3F15JZRLYN0ujn/iGtjiu2jaTgtCX9DBh7jQJj5JhlA8EQ==
-X-Received: by 2002:a2e:9a90:0:b0:295:ba22:360 with SMTP id p16-20020a2e9a90000000b00295ba220360mr718548lji.42.1680874118910;
-        Fri, 07 Apr 2023 06:28:38 -0700 (PDT)
+        bh=OgDPlYdeyBN5Ce+XKNF10sW0zXkUfnHdpMsUaHXHsmA=;
+        b=SuoUO4hrtyLSgZjj+yMt2HX+ki7QvfmWlWSAkxNrnPpGDoLuLqzO2G5lFSrg7jmQ8n
+         8uHSKsKVPSPfrWgOCauLfkdZrcX3asJ/PeH/60XxQCvvoFKQ4giu/gZ/yAA4lyDXMSEc
+         +ynNIeqifqdVorysQQd2slKBflhRsbJWyJ9jJAMcbZB24mzS2LdWl2fAM9FGFe3zAQwQ
+         UfmRnJQMbfqHZzCPQvDzl4g49ey1MOWaRFMqfjuA2LmHadGQn4MRQSOB+uwHm9sRrcvA
+         CIPmh62lmIo8qvqMa0GiFVV9IbtzDQO2tYQtEIQdeLuvX0D16EXl1Wfeli7Lol5VZuD6
+         AfFA==
+X-Gm-Message-State: AAQBX9fEPmlT9LaiWHutmFWxD5P3agl/H6I+15Auc2ztasXX9pPkVD6o
+        8kVwid71vPzn2KlPCtiB2TU3cA==
+X-Google-Smtp-Source: AKy350bNk4BbC2iWXByZtDbKjEm7psxi4oI5hkztB0J+/AmIB7wZjpS7vBo0MXMRy4vW3Ihhy0bUag==
+X-Received: by 2002:a2e:a232:0:b0:295:9517:b98f with SMTP id i18-20020a2ea232000000b002959517b98fmr520908ljm.15.1680874113953;
+        Fri, 07 Apr 2023 06:28:33 -0700 (PDT)
 Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
-        by smtp.gmail.com with ESMTPSA id h2-20020a2e3a02000000b002a618eb72b1sm811031lja.98.2023.04.07.06.28.37
+        by smtp.gmail.com with ESMTPSA id h2-20020a2e3a02000000b002a618eb72b1sm811031lja.98.2023.04.07.06.28.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 06:28:38 -0700 (PDT)
+        Fri, 07 Apr 2023 06:28:33 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Fri, 07 Apr 2023 15:28:34 +0200
-Subject: [PATCH 4/6] arm64: dts: qcom: sc7280: Fix up the gic node
+Date:   Fri, 07 Apr 2023 15:28:31 +0200
+Subject: [PATCH 1/6] dt-bindings: media: qcom,sdm845-venus-v2: Allow
+ interconnect properties
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230407-topic-msm_dtb-v1-4-6efb4196f51f@linaro.org>
+Message-Id: <20230407-topic-msm_dtb-v1-1-6efb4196f51f@linaro.org>
 References: <20230407-topic-msm_dtb-v1-0-6efb4196f51f@linaro.org>
 In-Reply-To: <20230407-topic-msm_dtb-v1-0-6efb4196f51f@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -76,62 +77,43 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         linux-media@vger.kernel.org, linux-remoteproc@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680874110; l=1494;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680874110; l=861;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=gHkzosUqi4bzAs9dpyelWGTDvy9GQH7llzRSHl6mEos=;
- b=vqvoGg7o3fTzGx7vo2BEYDCXp5lvFkui2hVK5Zlj/spa9/z9GyvocahhSArwYxz23Agovl07UXC+
- zft2HNhADd3ZtyJKEv7cFmxO2Z6+RnmniJonP8w9Z7VA7RmgPy76
+ bh=x0byFv9Tpffmv4tOybuaTsG0ZSBjTbBYI411ExiSp0g=;
+ b=EC0ulUC65d17dKo7Frq3qvRwtteTFJ96VnOc/0CNt8p2Q4VjwS1FYzNm0SXw46wcRgHOjaIbmIgv
+ Kj4//+sjBJiJGMl+QYDIACI6Jj3QJUxsi1yT/0yTAj8lHjuSa1KO
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fix the following schema warning:
-
-gic-its@17a40000: False schema does not allow {'compatible':
-['arm,gic-v3-its'], 'msi-controller': True, '#msi-cells': [[1]],
-'reg': [[0, 396623872, 0, 131072]], 'status': ['disabled']}
-
-And reorder the properties to be more in order with all other nodes.
+Allow the interconnect properties, which have been in use for ages.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ Documentation/devicetree/bindings/media/qcom,sdm845-venus-v2.yaml | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 0cdb16316021..3292b046a8d3 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -5182,20 +5182,20 @@ apps_smmu: iommu@15000000 {
+diff --git a/Documentation/devicetree/bindings/media/qcom,sdm845-venus-v2.yaml b/Documentation/devicetree/bindings/media/qcom,sdm845-venus-v2.yaml
+index d5f80976f4cf..6228fd2b3246 100644
+--- a/Documentation/devicetree/bindings/media/qcom,sdm845-venus-v2.yaml
++++ b/Documentation/devicetree/bindings/media/qcom,sdm845-venus-v2.yaml
+@@ -48,6 +48,14 @@ properties:
+   iommus:
+     maxItems: 2
  
- 		intc: interrupt-controller@17a00000 {
- 			compatible = "arm,gic-v3";
--			#address-cells = <2>;
--			#size-cells = <2>;
--			ranges;
--			#interrupt-cells = <3>;
--			interrupt-controller;
- 			reg = <0 0x17a00000 0 0x10000>,     /* GICD */
- 			      <0 0x17a60000 0 0x100000>;    /* GICR * 8 */
- 			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_LOW>;
-+			#interrupt-cells = <3>;
-+			interrupt-controller;
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			ranges;
- 
--			gic-its@17a40000 {
-+			msi-controller@17a40000 {
- 				compatible = "arm,gic-v3-its";
-+				reg = <0 0x17a40000 0 0x20000>;
- 				msi-controller;
- 				#msi-cells = <1>;
--				reg = <0 0x17a40000 0 0x20000>;
- 				status = "disabled";
- 			};
- 		};
++  interconnects:
++    maxItems: 2
++
++  interconnect-names:
++    items:
++      - const: video-mem
++      - const: cpu-cfg
++
+   operating-points-v2: true
+   opp-table:
+     type: object
 
 -- 
 2.40.0
