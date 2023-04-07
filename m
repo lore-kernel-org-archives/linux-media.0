@@ -2,119 +2,80 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2B2EC6FD1D
-	for <linux-media@archiver.kernel.org>; Fri,  7 Apr 2023 18:28:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5235AC77B6F
+	for <linux-media@archiver.kernel.org>; Fri,  7 Apr 2023 18:34:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbjDGS2G (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 7 Apr 2023 14:28:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41998 "EHLO
+        id S231854AbjDGSeC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 7 Apr 2023 14:34:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230206AbjDGS2F (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 7 Apr 2023 14:28:05 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD82A24F
-        for <linux-media@vger.kernel.org>; Fri,  7 Apr 2023 11:28:04 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id iw3so40623714plb.6
-        for <linux-media@vger.kernel.org>; Fri, 07 Apr 2023 11:28:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680892083; x=1683484083;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=racKSQFJw6htxGvl8wL9wTMwQ/BfxK72fBbPH3jrfzo=;
-        b=q7Wm05yAXnSdYgLlHZrk+vSMJLG7IwbD5WNTN2nFku16vITT4ZPAtf5KS9mPxIa99m
-         KDfOJdihPQ1164fFyY3YqTPPOWuusIcdkUrKaRuyIq7PR0uMFQBh3Y0e82P0CbvR0cNa
-         KsKhHw81I8FMbcib5C6wFXXhdaqoihXftB7DHPg/TV3vKbqI5kNriwt7bhPm2Sj6sIOO
-         j5tKKaoWBl0+mLS5lpixAw92WKEsDItL7rhFvwYIbeFIrG9/qNe2cwuoFq9RyOZJX+MU
-         0N2hu+SHtyJBxahfkPydyCZ1eGhSoRYIct9meRQa2GdsQZ1nwN9pPjlJ+LuXihUPB/Hv
-         aVAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680892083; x=1683484083;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=racKSQFJw6htxGvl8wL9wTMwQ/BfxK72fBbPH3jrfzo=;
-        b=Hi/J4j52lbZtxCtA9Vnonja2TZK0/g7RSDoN4fnoYS0CZCdwHlT8bSZHQXhth3t1dN
-         eqLIL/S+dRthhfp6tRzZJ/yGG0kxkPjdTMZhRDfyzWzjSc6tLEKDCOUy/4xHvH74wX8o
-         71rCV5dPAd9yyVPToUWjakarovF9dagK3R5GHF004ttS9yCSFOyf9viObTgjOh4TIoK0
-         9vSFUR1GMqtUfXmUwzBbkuhimPQWkz8gTHlgY93uJbYDzNPXO926fhGfcV2K48M2Zu3b
-         SUZ24gFgLC0+s3FdLMRJsWVMP/9oKh593609R0rt4hI6tWi48KBwSozjYo74nBLGlHJ3
-         HkMA==
-X-Gm-Message-State: AAQBX9fHsDdRy3lgqos6pfsLyejFqNJFFyG5J0lD9TlJDH3ti/yPKkpm
-        8l2qcJIEehWKVhzNe3dOYNECYKhD3u7DiG1WGqoL40mZl+t3IV1q73W+6w==
-X-Google-Smtp-Source: AKy350aRREn50bpQ7xCS9LErMRNVeVNQfFgxRLmHVwVs/Hhc6bXBF8o0SRAxqojHcFOrhX1MsA8ejh9JM3OYefgOccs=
-X-Received: by 2002:a17:902:da85:b0:19f:2aa4:b1e5 with SMTP id
- j5-20020a170902da8500b0019f2aa4b1e5mr1216879plx.2.1680892083395; Fri, 07 Apr
- 2023 11:28:03 -0700 (PDT)
+        with ESMTP id S231814AbjDGSeA (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 7 Apr 2023 14:34:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03940E7E;
+        Fri,  7 Apr 2023 11:33:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90B856538A;
+        Fri,  7 Apr 2023 18:33:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6744C433A0;
+        Fri,  7 Apr 2023 18:33:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680892439;
+        bh=PXMOpaltz4o+8o5QOdDy4+68BOF+8URXJgGf+pc+C10=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=d61Se7vBo98mnHAAxSm8h0W0Ms/nmQmn8nZCFUe4FNYDa1PhaHObhKpwGPWMAiwxB
+         D9wQGsr0KFUbY4+Hr3SE3QNWfD99Ofi/NIdNh9Kndx5qBKsdRsHZQxbF3kKNn/dQ/1
+         NELBlMKpZwDk67GHpq9PQjsWRRpaSmt9u7kvqoeOEKzH/FLY+nsRTgePymTOWI/xKL
+         V5Ie8we7l6Xv4PmVM0J2hwH74yy/iMLsWpeQSEIj9WGMw3vhUDs7CwHgw3XLAftgFv
+         /l912AxSr/SKEvNU9bW3InVU0bzbFTetTa+82L5Dnq4fWGHa0d9z0QY8Jws3SvCygd
+         6KH11jWa7NyPw==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-media@vger.kernel.org,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: (subset) [PATCH 0/6] Couple of bindings / dt fixes
+Date:   Fri,  7 Apr 2023 11:36:44 -0700
+Message-Id: <168089260338.2666024.8372927418104597434.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230407-topic-msm_dtb-v1-0-6efb4196f51f@linaro.org>
+References: <20230407-topic-msm_dtb-v1-0-6efb4196f51f@linaro.org>
 MIME-Version: 1.0
-References: <20230401010456.1866555-1-trix@redhat.com>
-In-Reply-To: <20230401010456.1866555-1-trix@redhat.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 7 Apr 2023 11:27:52 -0700
-Message-ID: <CAKwvOdkzW41CXskgY8h6V321kQyDv8DjvYC02YdK71QKEB2g=Q@mail.gmail.com>
-Subject: Re: [PATCH] [media] mb86a20s: remove unused active_layers variable
-To:     Tom Rix <trix@redhat.com>
-Cc:     mchehab@kernel.org, nathan@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 6:05=E2=80=AFPM Tom Rix <trix@redhat.com> wrote:
->
-> clang with W=3D1 reports
-> drivers/media/dvb-frontends/mb86a20s.c:1572:6: error: variable
->   'active_layers' set but not used [-Werror,-Wunused-but-set-variable]
->         int active_layers =3D 0, pre_ber_layers =3D 0, post_ber_layers =
-=3D 0;
->             ^
-> This variable is not used so remove it.
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
+On Fri, 07 Apr 2023 15:28:30 +0200, Konrad Dybcio wrote:
+> Couple of trivial fixes to make dtbs_check happy (happier).
+> 
+> 
 
-Thanks for the patch!
-Fixes: 149d518ad0fd ("[media] mb86a20s: add BER measurement")
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Applied, thanks!
 
-> ---
->  drivers/media/dvb-frontends/mb86a20s.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
->
-> diff --git a/drivers/media/dvb-frontends/mb86a20s.c b/drivers/media/dvb-f=
-rontends/mb86a20s.c
-> index b74b9afed9a2..125fed4891ba 100644
-> --- a/drivers/media/dvb-frontends/mb86a20s.c
-> +++ b/drivers/media/dvb-frontends/mb86a20s.c
-> @@ -1569,7 +1569,7 @@ static int mb86a20s_get_stats(struct dvb_frontend *=
-fe, int status_nr)
->         u32 t_post_bit_error =3D 0, t_post_bit_count =3D 0;
->         u32 block_error =3D 0, block_count =3D 0;
->         u32 t_block_error =3D 0, t_block_count =3D 0;
-> -       int active_layers =3D 0, pre_ber_layers =3D 0, post_ber_layers =
-=3D 0;
-> +       int pre_ber_layers =3D 0, post_ber_layers =3D 0;
->         int per_layers =3D 0;
->
->         dev_dbg(&state->i2c->dev, "%s called.\n", __func__);
-> @@ -1589,9 +1589,6 @@ static int mb86a20s_get_stats(struct dvb_frontend *=
-fe, int status_nr)
->
->         for (layer =3D 0; layer < NUM_LAYERS; layer++) {
->                 if (c->isdbt_layer_enabled & (1 << layer)) {
-> -                       /* Layer is active and has rc segments */
-> -                       active_layers++;
-> -
->                         /* Handle BER before vterbi */
->                         rc =3D mb86a20s_get_pre_ber(fe, layer,
->                                                   &bit_error, &bit_count)=
-;
-> --
-> 2.27.0
->
+[4/6] arm64: dts: qcom: sc7280: Fix up the gic node
+      commit: 04b5840664822cefff61deb727f497b59c341e0e
+[5/6] arm64: dts: qcom: pm8916: Fix pm8941-misc node name
+      commit: 7891372d6c5b3d73c304e26fa1e3b17c022281a1
+[6/6] arm64: dts: qcom: sdm845-oneplus: Fix speaker GPIO node
+      commit: 149959d0b18113881cb0a47ad8f8d36b60ff6f9f
 
-
---=20
-Thanks,
-~Nick Desaulniers
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
