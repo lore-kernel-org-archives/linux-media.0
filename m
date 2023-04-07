@@ -2,177 +2,119 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52EB9C6FD1D
-	for <linux-media@archiver.kernel.org>; Fri,  7 Apr 2023 08:09:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7232C6FD1D
+	for <linux-media@archiver.kernel.org>; Fri,  7 Apr 2023 13:28:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239104AbjDGIJt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 7 Apr 2023 04:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49368 "EHLO
+        id S240811AbjDGN2k (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 7 Apr 2023 09:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232454AbjDGIJs (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 7 Apr 2023 04:09:48 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 061C58A6D
-        for <linux-media@vger.kernel.org>; Fri,  7 Apr 2023 01:09:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680854987; x=1712390987;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ra6iSt46DPX2UwTRNeNw9qtbvs8JFWB109/C4A+Nz94=;
-  b=b7M8MfRXFjnl+MC0EaMdk7npiS7NaYqp9RSEnLM4/mVEt6Z+COpBhZcc
-   3P/PcS2GU95yEkhEn4aDWxA8THKbR+xGJ1d1GmaUMneNz7lmLVpjaj+44
-   c91e4tcz4zUpEvhWc8K/DJkHDmai/DpnPHOw7oLIOVPo4MeeP6w/Djui8
-   7o3DgZfwIyIURDLWsvSOGaUsIRf1krvR46iihs+uYmeR6M+89uMYFAqr4
-   WkwEGHIJKvYkXihCPtyj58CGb/d0RzTJyDezfEzoH42fln+NvDDhKw1yZ
-   MuEaVlfaCgtJFF6Nwof/kBolvlDJ7qDEJvnKjs1VuVtzPS3zROHDXcnJ9
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="331592897"
-X-IronPort-AV: E=Sophos;i="5.98,326,1673942400"; 
-   d="scan'208";a="331592897"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 01:09:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="637636444"
-X-IronPort-AV: E=Sophos;i="5.98,326,1673942400"; 
-   d="scan'208";a="637636444"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 07 Apr 2023 01:09:35 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pkhA6-000SFK-0F;
-        Fri, 07 Apr 2023 08:09:34 +0000
-Date:   Fri, 07 Apr 2023 16:09:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-media@vger.kernel.org
-Subject: [sailus-media-tree:master] BUILD SUCCESS
- c6997aabde315cc2507c6306f854ebce417c6b0e
-Message-ID: <642fcfb2.i3NtrjmrouH1MiSa%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S240804AbjDGN2j (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 7 Apr 2023 09:28:39 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C630902D
+        for <linux-media@vger.kernel.org>; Fri,  7 Apr 2023 06:28:37 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id bx10so25219299ljb.8
+        for <linux-media@vger.kernel.org>; Fri, 07 Apr 2023 06:28:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680874115;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=llePgOmhGh4IWb8LWhk+RajPlS7CDIy7UmsGMTBqzaA=;
+        b=cO5lYLU5ym4dGfjzsNgK5ZlP8ePOHNfsRx9h+f8eHM/HC7LyE529BTqTknOrvQlJ+g
+         ZAkrgOb5Z4e26L3cntz7DBdNcUm0MJmkG6l5MEIEOFHY6K7sm3KW++34p3p8gzcuidV9
+         HEpV4gj7Hw7jKgF+cKhSFUK+WQDGeMGSAEEKLGl3BOOOj5eWouTZWawpiENhZ9aOHS4G
+         y8EQB/5AOT19+OoT5XKdPYjcm+q+qvQYz8S8hzUlnF1Wej7hrfrLEZosqKUwhino+Mkp
+         boVxM/H8EQx0UjZtv93ATw+qXKWPKAQ22LIQ8mOtTlYLsQ+Od9p04+JWUXnnDmcqobKh
+         TB7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680874115;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=llePgOmhGh4IWb8LWhk+RajPlS7CDIy7UmsGMTBqzaA=;
+        b=wFAM8UmY/Ynu6Pf2c1WVteuGqJTrjE5/f7byFy3ti0Ua6zrFAaSai1U3NmKcuSmyN7
+         3IVn0xlvTqq1MIN23pTCoYpADDh5t02GCgOsK4mpf095RFAZWHPz9Q9tHoVZx4ZBIXq4
+         rzC3+PAvO7z2Fr4UNICp6bP/KV/nMZLQs0GHPS1A/gseoPX7e9a53yz7tKqwWtRb7qx3
+         AH2z8ZN/Qoj9WeaFKh1/vVVgMPQcqFYlah0Hms1sDrdRx2kbgKjpZQ6cwFAMehOUnEqR
+         u50xx3fKcU6FLGvEJ8xdTec/gW7/+kuD9XE69Y8Ezwjdx1I9t8sWGpkG/goNTMkV3JjE
+         z9Xg==
+X-Gm-Message-State: AAQBX9e+6arafX6sBuzmzwK4ZbIkcEehVMBxBp/VNYPer530sbJfWX9v
+        vOwsr1hBO0grDnQzjMMmUHq1sQ==
+X-Google-Smtp-Source: AKy350ZBU2+IVi4EkhIGy4Up7yOAsxRsnKvkuQMm67ALbuKqLn0D4GUuOG3n3GgoleU/9qzFInWv+A==
+X-Received: by 2002:a2e:3607:0:b0:295:a16f:c893 with SMTP id d7-20020a2e3607000000b00295a16fc893mr613024lja.18.1680874115534;
+        Fri, 07 Apr 2023 06:28:35 -0700 (PDT)
+Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
+        by smtp.gmail.com with ESMTPSA id h2-20020a2e3a02000000b002a618eb72b1sm811031lja.98.2023.04.07.06.28.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Apr 2023 06:28:35 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Date:   Fri, 07 Apr 2023 15:28:32 +0200
+Subject: [PATCH 2/6] dt-bindings: remoteproc: qcom: adsp: Allow
+ firmware-name
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20230407-topic-msm_dtb-v1-2-6efb4196f51f@linaro.org>
+References: <20230407-topic-msm_dtb-v1-0-6efb4196f51f@linaro.org>
+In-Reply-To: <20230407-topic-msm_dtb-v1-0-6efb4196f51f@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        linux-media@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680874110; l=1008;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=dWnjAZMJzqjimRi8bQ9g3R4fQYhXM8ZgJZOOjsidZPo=;
+ b=ZQ8LDsV8IFCj7oNIKdE4Wf/XjVIGpWft9setIb/PWvyNs02B1LepgKLs5g40HQi1fh9+DtmdRNQT
+ VsMDX0bxDcq+DhkC6P7f2SLCCWNKlpVc/en0jMqXufIW1K02/jFi
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-tree/branch: git://linuxtv.org/sailus/media_tree.git master
-branch HEAD: c6997aabde315cc2507c6306f854ebce417c6b0e  media: i2c: imx290: Add missing \n on dev_err_probe() message
+firmware-name has been with us for a long long time. Allow it to fix
+warnings like this:
 
-elapsed time: 725m
+qcom/sdm845-oneplus-enchilada.dtb: remoteproc-cdsp: Unevaluated properties
+are not allowed ('firmware-name' was unexpected)
 
-configs tested: 103
-configs skipped: 3
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r005-20230403   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r034-20230403   gcc  
-arc                  randconfig-r043-20230403   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm          buildonly-randconfig-r001-20230403   clang
-arm                                 defconfig   gcc  
-arm                  randconfig-r021-20230403   clang
-arm                  randconfig-r046-20230403   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r025-20230403   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r011-20230403   gcc  
-hexagon              randconfig-r041-20230403   clang
-hexagon              randconfig-r045-20230403   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230403   clang
-i386                 randconfig-a002-20230403   clang
-i386                 randconfig-a003-20230403   clang
-i386                 randconfig-a004-20230403   clang
-i386                 randconfig-a005-20230403   clang
-i386                 randconfig-a006-20230403   clang
-i386                 randconfig-a011-20230403   gcc  
-i386                 randconfig-a012-20230403   gcc  
-i386                 randconfig-a013-20230403   gcc  
-i386                 randconfig-a014-20230403   gcc  
-i386                 randconfig-a015-20230403   gcc  
-i386                 randconfig-a016-20230403   gcc  
-i386                 randconfig-r035-20230403   clang
-i386                 randconfig-r036-20230403   clang
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r002-20230403   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k         buildonly-randconfig-r002-20230403   gcc  
-m68k         buildonly-randconfig-r006-20230403   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r033-20230403   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                 randconfig-r005-20230403   gcc  
-mips                 randconfig-r024-20230403   clang
-mips                 randconfig-r026-20230403   clang
-nios2                               defconfig   gcc  
-nios2                randconfig-r014-20230403   gcc  
-nios2                randconfig-r032-20230403   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r001-20230403   gcc  
-parisc               randconfig-r013-20230403   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc              randconfig-r016-20230403   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r042-20230403   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r004-20230403   clang
-s390                 randconfig-r015-20230403   gcc  
-s390                 randconfig-r044-20230403   gcc  
-sh                               allmodconfig   gcc  
-sparc        buildonly-randconfig-r004-20230403   gcc  
-sparc                               defconfig   gcc  
-sparc64              randconfig-r003-20230403   gcc  
-sparc64              randconfig-r012-20230403   gcc  
-sparc64              randconfig-r022-20230403   gcc  
-sparc64              randconfig-r023-20230403   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230403   clang
-x86_64               randconfig-a002-20230403   clang
-x86_64               randconfig-a003-20230403   clang
-x86_64               randconfig-a004-20230403   clang
-x86_64               randconfig-a005-20230403   clang
-x86_64               randconfig-a006-20230403   clang
-x86_64               randconfig-a011-20230403   gcc  
-x86_64               randconfig-a012-20230403   gcc  
-x86_64               randconfig-a013-20230403   gcc  
-x86_64               randconfig-a014-20230403   gcc  
-x86_64               randconfig-a015-20230403   gcc  
-x86_64               randconfig-a016-20230403   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa       buildonly-randconfig-r003-20230403   gcc  
-xtensa               randconfig-r006-20230403   gcc  
-xtensa               randconfig-r031-20230403   gcc  
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
+index 643ee787a81f..d99618a9ca2e 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
+@@ -44,6 +44,10 @@ properties:
+     maxItems: 1
+     description: Reference to the reserved-memory for the Hexagon core
+ 
++  firmware-name:
++    $ref: /schemas/types.yaml#/definitions/string
++    description: Relative path to the DSP firmware binary
++
+ required:
+   - compatible
+ 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.40.0
+
