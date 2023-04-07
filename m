@@ -2,183 +2,98 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EA39C77B6C
-	for <linux-media@archiver.kernel.org>; Fri,  7 Apr 2023 17:19:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC96BC6FD1D
+	for <linux-media@archiver.kernel.org>; Fri,  7 Apr 2023 17:19:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbjDGRTZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 7 Apr 2023 13:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53540 "EHLO
+        id S230010AbjDGRT6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 7 Apr 2023 13:19:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbjDGRTA (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 7 Apr 2023 13:19:00 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 483071FCE
-        for <linux-media@vger.kernel.org>; Fri,  7 Apr 2023 10:18:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680887939; x=1712423939;
-  h=from:to:subject:date:message-id:in-reply-to:references:
-   mime-version:content-transfer-encoding;
-  bh=ZRseBZj3UyC7tgET+dhQlNS3UluBgxnXY1AY2y+2ARY=;
-  b=NcMORCaBFIep1dF5wyi98U4BLYkkv+BIuBi7dGrNNwbhbvvMBbdbD2kS
-   2K/OXQviLzwdybqsi6BxLU0kVtlMHm9u+hXaJ487v5eKx17iSYLrsPaoz
-   xYobbhOnR4NCsTeHWQUXqone2wj0Hc0lMQ571QzOIh10EMJx55YxX3vOl
-   xDmbpqVjKgNA09ZyMnP5bzZQtaSy4dncxP0u3u2WViujmrT21JMZ19PKq
-   I4qKmp2dCQcXAyhhjxH6oErN1fUM3Wn7v00/3dGUBBMKy0GuFbjcRUb1f
-   sV6V2LfX6oRp1nxFM/Qeoo6dS6qWhpPAnUeCH5XRj2Ozj/s6kcSM6cQXh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="341782438"
-X-IronPort-AV: E=Sophos;i="5.98,327,1673942400"; 
-   d="scan'208";a="341782438"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 10:18:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="752103585"
-X-IronPort-AV: E=Sophos;i="5.98,327,1673942400"; 
-   d="scan'208";a="752103585"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 10:18:48 -0700
-Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id 1743F120D46
-        for <linux-media@vger.kernel.org>; Fri,  7 Apr 2023 20:09:34 +0300 (EEST)
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Subject: [PATCH v2 3/4] media: ccs: Differentiate SMIA and MIPI vendors in static data
-Date:   Fri,  7 Apr 2023 20:09:30 +0300
-Message-Id: <20230407170931.30842-4-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230407170931.30842-1-sakari.ailus@linux.intel.com>
-References: <20230407170931.30842-1-sakari.ailus@linux.intel.com>
+        with ESMTP id S230255AbjDGRTo (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 7 Apr 2023 13:19:44 -0400
+Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA7DCA03;
+        Fri,  7 Apr 2023 10:19:23 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (82-181-192-243.bb.dnainternet.fi [82.181.192.243])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by meesny.iki.fi (Postfix) with ESMTPSA id 4PtQ8Q1TtMzyR8;
+        Fri,  7 Apr 2023 20:19:17 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1680887960;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Sx/v6v02tkhyVSJIxoR5pZtA5d+qnL+HKABd0KsDWkk=;
+        b=be7boNoSaCauKSf5nx7KUm+r6UvnLMDwHpf0Qa1a9fuciGNUun+OK1SRSGeD8T5v5fFGw5
+        aTLNE1hacjHpkBakgCN+euY2G497WLc7L7SLEE8F9vDdpu7AwIRmn8RhaFpRcQER5UliSe
+        ijDS2ZLYe2MH/Z+EjJu5J2Du+MqFot8=
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1680887960; a=rsa-sha256; cv=none;
+        b=T/CuPIfgtU/10f0gPBOap2JMhmhN1T1u/2qju0MziBT/3Vr4nrzcG8p2NEmQJXH1mNglmb
+        l+cDsGWgIGEVeXP0xI/hnT/jC/w3SxRxQnjqApJmrXbLr88PHNmlIBa65KfWgIeGVLPvN+
+        YWCR/PhsGIdLlCcIdbUQNUpXog/96QI=
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1680887960;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Sx/v6v02tkhyVSJIxoR5pZtA5d+qnL+HKABd0KsDWkk=;
+        b=TjfAYh/Fj8WFUjFOKnXU8hsAdoOF0mZs31+RQteSR9hvHGQ5zwPGmuZVTNzFsV0e4pmRa8
+        hdxXGyn2O/tXhz6Dt6g9ytC0xBluqypq9KOIOlrlY22uMfRuNhhXonGd5dgkRgqifIKvY0
+        sE0oX5FaJ5LSrXBQlXSjeEGVAkukOnI=
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id B46D1634C91;
+        Fri,  7 Apr 2023 20:16:30 +0300 (EEST)
+Date:   Fri, 7 Apr 2023 20:16:30 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Matt Ranostay <matt.ranostay@konsulko.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] media: i2c: video: constify pointers to
+ hwmon_channel_info
+Message-ID: <ZDBP7vG498h2FQ7N@valkosipuli.retiisi.eu>
+References: <20230407150015.79715-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230407150015.79715-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-MIPI CCS uses a 16-bit MIPI manufacturer identifier for firmware filenames
-compared to older 8-bit identifier used by SMIA. The requested firmware
-files used the MIPI manufacturer ID even for SMIA compliant devices,
-effectively making the manufacturer ID 0.
+Hi Krzysztof,
 
-While CCS static data is a feature of CCS 1.1, it has no hardware
-dependencies. Making this feature available for SMIA devices helps adding
-support for them and avoids requesting ill-generated CCS static data file
-names. The files are named as:
+On Fri, Apr 07, 2023 at 05:00:15PM +0200, Krzysztof Kozlowski wrote:
+> Statically allocated array of pointed to hwmon_channel_info can be made
+> const for safety.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> This depends on hwmon core patch:
+> https://lore.kernel.org/all/20230406203103.3011503-2-krzysztof.kozlowski@linaro.org/
+> 
+> Therefore I propose this should also go via hwmon tree.
 
-	ccs/smiapp-module-vv-mmmm-rrrr.fw,
-	ccs/smiapp-sensor-vv-mmmm-rr.fw and
-	ccs/smia-sensor-vv-mmmm-rr.fw
+Works for me. Please add:
 
-where vv is the manufacturer ID, mmmm is the model ID and rr or rrrr is
-the revision number.
+Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- drivers/media/i2c/ccs/ccs-core.c | 74 ++++++++++++++++++++++++--------
- 1 file changed, 55 insertions(+), 19 deletions(-)
+Thanks!
 
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 20c3974f5ac7..559a415fd827 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -3271,8 +3271,47 @@ static int ccs_get_hwconfig(struct ccs_sensor *sensor, struct device *dev)
- 	return rval;
- }
- 
-+static int ccs_firmware_name(struct i2c_client *client,
-+			     struct ccs_sensor *sensor, char *filename,
-+			     size_t filename_size, bool is_module)
-+{
-+	const struct ccs_device *ccsdev = device_get_match_data(&client->dev);
-+	bool is_ccs = !(ccsdev->flags & CCS_DEVICE_FLAG_IS_SMIA);
-+	bool is_smiapp = sensor->minfo.smiapp_version;
-+	u16 manufacturer_id;
-+	u16 model_id;
-+	u16 revision_number;
-+
-+	/*
-+	 * Old SMIA is module-agnostic. Its sensor identification is based on
-+	 * what now are those of the module.
-+	 */
-+	if (is_module || (!is_ccs && !is_smiapp)) {
-+		manufacturer_id = is_ccs ?
-+			sensor->minfo.mipi_manufacturer_id :
-+			sensor->minfo.smia_manufacturer_id;
-+		model_id = sensor->minfo.model_id;
-+		revision_number = sensor->minfo.revision_number;
-+	} else {
-+		manufacturer_id = is_ccs ?
-+			sensor->minfo.sensor_mipi_manufacturer_id :
-+			sensor->minfo.sensor_smia_manufacturer_id;
-+		model_id = sensor->minfo.sensor_model_id;
-+		revision_number = sensor->minfo.sensor_revision_number;
-+	}
-+
-+	return snprintf(filename, filename_size,
-+			"ccs/%s-%s-%0*x-%4.4x-%0*x.fw",
-+			is_ccs ? "ccs" : is_smiapp ? "smiapp" : "smia",
-+			is_module || (!is_ccs && !is_smiapp) ?
-+				"module" : "sensor",
-+			is_ccs ? 4 : 2, manufacturer_id, model_id,
-+			!is_ccs && !is_module ? 2 : 4, revision_number);
-+}
-+
- static int ccs_probe(struct i2c_client *client)
- {
-+	const struct ccs_device *ccsdev = device_get_match_data(&client->dev);
- 	struct ccs_sensor *sensor;
- 	const struct firmware *fw;
- 	char filename[40];
-@@ -3381,11 +3420,8 @@ static int ccs_probe(struct i2c_client *client)
- 		goto out_power_off;
- 	}
- 
--	rval = snprintf(filename, sizeof(filename),
--			"ccs/ccs-sensor-%4.4x-%4.4x-%4.4x.fw",
--			sensor->minfo.sensor_mipi_manufacturer_id,
--			sensor->minfo.sensor_model_id,
--			sensor->minfo.sensor_revision_number);
-+	rval = ccs_firmware_name(client, sensor, filename, sizeof(filename),
-+				 false);
- 	if (rval >= sizeof(filename)) {
- 		rval = -ENOMEM;
- 		goto out_power_off;
-@@ -3398,21 +3434,21 @@ static int ccs_probe(struct i2c_client *client)
- 		release_firmware(fw);
- 	}
- 
--	rval = snprintf(filename, sizeof(filename),
--			"ccs/ccs-module-%4.4x-%4.4x-%4.4x.fw",
--			sensor->minfo.mipi_manufacturer_id,
--			sensor->minfo.model_id,
--			sensor->minfo.revision_number);
--	if (rval >= sizeof(filename)) {
--		rval = -ENOMEM;
--		goto out_release_sdata;
--	}
-+	if (!(ccsdev->flags & CCS_DEVICE_FLAG_IS_SMIA) ||
-+	    sensor->minfo.smiapp_version) {
-+		rval = ccs_firmware_name(client, sensor, filename,
-+					 sizeof(filename), true);
-+		if (rval >= sizeof(filename)) {
-+			rval = -ENOMEM;
-+			goto out_release_sdata;
-+		}
- 
--	rval = request_firmware(&fw, filename, &client->dev);
--	if (!rval) {
--		ccs_data_parse(&sensor->mdata, fw->data, fw->size, &client->dev,
--			       true);
--		release_firmware(fw);
-+		rval = request_firmware(&fw, filename, &client->dev);
-+		if (!rval) {
-+			ccs_data_parse(&sensor->mdata, fw->data, fw->size,
-+				       &client->dev, true);
-+			release_firmware(fw);
-+		}
- 	}
- 
- 	rval = ccs_read_all_limits(sensor);
 -- 
-2.30.2
+Kind regards,
 
+Sakari Ailus
