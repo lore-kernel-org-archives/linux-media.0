@@ -2,94 +2,123 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 213B5C6FD1D
-	for <linux-media@archiver.kernel.org>; Fri,  7 Apr 2023 18:36:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EA14C76196
+	for <linux-media@archiver.kernel.org>; Fri,  7 Apr 2023 18:40:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbjDGSgC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 7 Apr 2023 14:36:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50700 "EHLO
+        id S229617AbjDGSkw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 7 Apr 2023 14:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbjDGSgB (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 7 Apr 2023 14:36:01 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6AA1E7E
-        for <linux-media@vger.kernel.org>; Fri,  7 Apr 2023 11:35:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680892556; x=1712428556;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tkqFfqadCCrZqzAjk1D0qe9eEATF70GKMdRMrEdQMLg=;
-  b=UiXTK777ngsmnzPEgJXT2kTSejwMrtsH7rxlnBqYoBEzxvgF2or5CTfy
-   aSxe2f3C6eCLntC+8O/ERJvjj50von+AJvMuqZHfjMve8285jvwkmHB30
-   Y7Siwg46gFhCnVarpUpN8aap1cY2D0wMINnMGrSZ3L/HOtG89jEvziDJj
-   WEw0l7WZperTxeRnRirFSQB+9c/fcCevMnKKMmrvvOEe9eG5/0geP8JNn
-   yJ6DZ5SBMINbo8fYiNv+w6rFqysuqTiTuVUf+CJrFwIFNCxLtBJmLLrBi
-   CVIthRAermXmflLKJR+dIntAtGy8DwrMhZKsNhXbQX8MW3wNVjj0pw31G
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="408179964"
-X-IronPort-AV: E=Sophos;i="5.98,327,1673942400"; 
-   d="scan'208";a="408179964"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 11:35:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="811480581"
-X-IronPort-AV: E=Sophos;i="5.98,327,1673942400"; 
-   d="scan'208";a="811480581"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 11:35:51 -0700
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id 657351207D2;
-        Fri,  7 Apr 2023 21:35:48 +0300 (EEST)
-Date:   Fri, 7 Apr 2023 21:35:48 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH 1/1] media: i2c: imx290: Add missing \n on
- dev_err_probe() message
-Message-ID: <ZDBihOhzZInuHM42@kekkonen.localdomain>
-References: <20230406095551.952091-1-alexander.stein@ew.tq-group.com>
- <20230407014407.GC31272@pendragon.ideasonboard.com>
+        with ESMTP id S229523AbjDGSkt (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 7 Apr 2023 14:40:49 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A49BA27B;
+        Fri,  7 Apr 2023 11:40:47 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (82-181-192-243.bb.dnainternet.fi [82.181.192.243])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4PtRyN3GXLz49Q31;
+        Fri,  7 Apr 2023 21:40:43 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1680892844;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=llMZG6Cdrj65bb8EHwDmL5EqSwP3QUX8jIynIyXHYas=;
+        b=WLS4pKRDEY7h9Pa6gvv56KsPQJmvx4dNOOPpGL1HmsTz2yGpZJ+cJbo/aFeq9OPjrDQ09d
+        uC02+JqZaysNx+zAOQQ/D5X9i3ubsO903AuUf3TUOOXLrHHIYzAuK+vBgnIxHd/RUwkvex
+        RbAJXaV39pYftDaS4RCrknY6A6lyyq+2Y9dVGD53ZH6+Tl1bJVa6Q1YmFxDlgucqIZj5Oj
+        fafZ3wJEZguZwNE/ZDVkEBH3oexD8PYZQ+AoakhCY2/pCy2sjGPQKYDjn40oceFT5/ZqVX
+        a5qZ+DaWhY2I7Esguwd+RimlyvWtjeyY9oximz4qXiaxLX1RJqx+gpDNW4A/bA==
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1680892844; a=rsa-sha256;
+        cv=none;
+        b=VCYX4w2gyVr27eZHRjga5u5Jz8LcScEXIhd6AHZBgDRzntGUnrSuK323cV5wOXE/Q8a6pS
+        bSVrh1L4Y1G/GcN4xZQC0B4lWFSJnqP4b3hHhVV5FA94DozFBpmqRc8p+QoqOkvh/o9fT1
+        k0TfVP7dZy1FcPMkSUFTNEwDrGnsqwUZ3fGPW7+ODbu4/Z+GSrY/AF0Zm2c4oPIbSIGnvM
+        c1SPq/8BbH7ynC+cOJx+fXSvn1wktZrCFq2u7C93K4n5hfBOXn+HXQynclwmBYJHRG+MIg
+        myASDdVa9THfsQfmn0i9+xmyFm3IOs3V8AGASVert+/QnUQNoOjuIogxV8nmoA==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1680892844;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=llMZG6Cdrj65bb8EHwDmL5EqSwP3QUX8jIynIyXHYas=;
+        b=BeSwG9Ys3zxCEL6i8U1Hpg+ltCtMaaKvGY8ycCQCym59+4pm+bGzDkcUG0uYisyl68Oqs+
+        9V5gq4UGzAwLEobwM9gVbUuP/VMFQ5WSlIllgRacllu64Q+QmIrOwg6MD9JVdth5d6G0/1
+        VjCeD6msSxaVPtHKJpBc8XL9ZFBdtwgtQDB4FaToDvE4oU3E6/k6hvyIlrCEYqV7clxnSD
+        i6I4zUAr/nLfCILmLcDsbvaNgAWArwLm81Y9z+UwcQ6dF6CzlxDQ0kO05OY1xNkXJvYe35
+        t//5oTNslhDQCNiKw3Elq9OOOX34oLgW5EFw5rTL2rxwKti6fF4B3Ye+MPKxWQ==
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id E32C1634C91;
+        Fri,  7 Apr 2023 21:37:56 +0300 (EEST)
+Date:   Fri, 7 Apr 2023 21:37:56 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     mchehab@kernel.org, laurent.pinchart@ideasonboard.com,
+        kernel@puri.sm, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] media: hi846: fix usage of
+ pm_runtime_get_if_in_use()
+Message-ID: <ZDBjBNu6UXksVSwQ@valkosipuli.retiisi.eu>
+References: <20230405092904.1129395-1-martin.kepplinger@puri.sm>
+ <20230405092904.1129395-2-martin.kepplinger@puri.sm>
+ <ZC1vJNIGeEu+xi+i@valkosipuli.retiisi.eu>
+ <cb0c1ad7e00523a43ce6ad73a79e7e396c4b52aa.camel@puri.sm>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230407014407.GC31272@pendragon.ideasonboard.com>
+In-Reply-To: <cb0c1ad7e00523a43ce6ad73a79e7e396c4b52aa.camel@puri.sm>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 04:44:07AM +0300, Laurent Pinchart wrote:
-> Hi Alexander,
-> 
-> Thank you for the patch.
-> 
-> On Thu, Apr 06, 2023 at 11:55:51AM +0200, Alexander Stein wrote:
-> > Also dev_err_probe message require a trailing \n.
-> 
-> There should be a blank line here.
-> 
-> > Fixes: 63127235bebd ("media: i2c: imx290: Use dev_err_probe()")
+Hi Martin,
+
+On Fri, Apr 07, 2023 at 03:31:02PM +0200, Martin Kepplinger wrote:
+> Am Mittwoch, dem 05.04.2023 um 15:52 +0300 schrieb Sakari Ailus:
+> > Hi Martin,
 > > 
+> > On Wed, Apr 05, 2023 at 11:29:03AM +0200, Martin Kepplinger wrote:
+> > > pm_runtime_get_if_in_use() does not only return nonzero values when
+> > > the device is in use, it can return a negative errno too.
+> > > 
+> > > And especially during resuming from system suspend, when runtime pm
+> > > is not yet up again, this can very well happen. And in such a case
+> > > the subsequent pm_runtime_put() call would result in a refcount
+> > > underflow!
+> > 
+> > I think this issue should have a more generic solution, it's very
+> > difficult
+> > to address this in drivers only with the current APIs.
+> > 
+> > pm_runtime_get_if_in_use() will also return an error if runtime PM is
+> > disabled, so this patch will break the driver for that configuration.
 > 
-> And none here.
+> ok but the driver is currently broken for any *other* error returned by
+> pm_runtime_get_if_in_use() (than the runtime-PM disabled error).
 > 
-> But the bug wasn't introduced in the above commit, the \n was missing
-> before that, right from the start when the driver was merged in commit
-> 828dbc299278 ("media: i2c: Add IMX290 CMOS image sensor driver"). I
-> would use that commit in the Fixes tag, or drop the Fixes tag
-> altogether.
+> The execution-path during system-resume I'm interested in gets -EAGAIN
+> here. Would it be ok for you if I'd return early only for that one
+> error only here?
 
-I dropped it. This is not a grave problem.
+I guess... but I think to address this in a way that's reasonable to
+drivers, we'll need improvements to runtime PM API. A largish number of
+drivers need changes and before doing that we should figure out exactly
+what should be done.
 
-> 
-> > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> 
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-Thanks!
+I thought you could effectively trigger this issue by calling runtime PM
+resume/suspend functions before enabling runtime PM, but this seems to be a
+different case.
 
 -- 
+Kind regards,
+
 Sakari Ailus
