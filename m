@@ -2,171 +2,146 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A270C77B61
-	for <linux-media@archiver.kernel.org>; Mon, 10 Apr 2023 18:59:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C0F5C76196
+	for <linux-media@archiver.kernel.org>; Mon, 10 Apr 2023 22:46:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbjDJS7M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 10 Apr 2023 14:59:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37886 "EHLO
+        id S229727AbjDJWq2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 10 Apr 2023 18:46:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjDJS7L (ORCPT
+        with ESMTP id S229693AbjDJWq1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 10 Apr 2023 14:59:11 -0400
-Received: from mail.turbocat.net (turbocat.net [IPv6:2a01:4f8:c17:6c4b::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C86F10C7;
-        Mon, 10 Apr 2023 11:59:09 -0700 (PDT)
-Received: from [10.36.2.154] (unknown [46.212.121.255])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 10 Apr 2023 18:46:27 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B021BDB;
+        Mon, 10 Apr 2023 15:46:26 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2001:569:beb1:1500:c96f:992f:7c34:9ff])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.turbocat.net (Postfix) with ESMTPSA id F37982601F3;
-        Mon, 10 Apr 2023 20:59:04 +0200 (CEST)
-Message-ID: <6fc0a0c6-a7c9-5350-9b9e-1ea9dab568d0@selasky.org>
-Date:   Mon, 10 Apr 2023 20:59:05 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; FreeBSD amd64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
+        (Authenticated sender: dbrouwer)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2D46F6603085;
+        Mon, 10 Apr 2023 23:46:22 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1681166783;
+        bh=9c4iluAe1XdyJtOZMymDhLS/AIaO/Q70FhnFi5leiec=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LbH8Nb8XBTgz2eveAwcbCXjuqnrQFv4M/8nsYMmyus/G0NRk+AhZZNgaKU8cmXQjf
+         gjmDdxX0yT3mRuLsJjJmInQJ9D8aniu0vwxiI4wakMCp1VOvH9kYKCdFnWp1gMDjiy
+         Is/zCj8eOreZabG0ospwUdYCUEQQXLeYQVYSA453f9AHYWmYcMxOrDWF70yKp9t6gK
+         +ZLu8JbtgUktuUxjHl8bWWnmfrRjxvwlLWSbmu6JdVG1lF7RSbKeTl/L26Tih5CmbZ
+         C+KfysLHNx6GNxK0h4DJd7KydBbHmHdkNKtI0dzSa/RUczyzc7ON01Q5G4BgxMI5ex
+         k8Zv19l+uHaZQ==
+Date:   Mon, 10 Apr 2023 15:46:03 -0700
+From:   Deborah Brouwer <deborah.brouwer@collabora.com>
+To:     Daniel Almeida <daniel.almeida@collabora.com>
+Cc:     wedsonaf@gmail.com, ojeda@kernel.org, mchehab@kernel.org,
+        hverkuil@xs4all.nl, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        kernel@collabora.com
 Subject: Re: [PATCH 0/6] Initial Rust V4L2 support
-Content-Language: en-US
-To:     Daniel Almeida <daniel.almeida@collabora.com>, wedsonaf@gmail.com,
-        ojeda@kernel.org, mchehab@kernel.org, hverkuil@xs4all.nl
-Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, kernel@collabora.com
+Message-ID: <ZDSRSWhWsN34MghQ@xps>
 References: <20230406215615.122099-1-daniel.almeida@collabora.com>
- <441a96cb-7dd1-0885-df64-933ebdb55e9e@selasky.org>
- <0ec4becd05c49e8f0bf214fbd62208ea67c2b4c3.camel@collabora.com>
-From:   Hans Petter Selasky <hps@selasky.org>
-In-Reply-To: <0ec4becd05c49e8f0bf214fbd62208ea67c2b4c3.camel@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230406215615.122099-1-daniel.almeida@collabora.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Daniel,
-
-On 4/9/23 16:10, Daniel Almeida wrote:
-> Hi Hans! Thank you for chiming in!
+On Thu, Apr 06, 2023 at 06:56:09PM -0300, Daniel Almeida wrote:
+> Hi all, this is my first attempt at adding Rust support to the
+> media subsystem.
 > 
-> There's a few things in your email that I disagree with and that I'd
-> like to
-> address.
+> It adds just enough support to write a clone of the virtio-camera
+> prototype written by my colleague, Dmitry Osipenko, available at [0].
 > 
->> I think V4L2 should be written in primarily one language.
+> Basically, there's support for video_device_register,
+> v4l2_device_register and for some ioctls in v4l2_ioctl_ops. There is
+> also some initial vb2 support, alongside some wrappers for some types
+> found in videodev2.h.
 > 
-> It is, in C. This series is about adding *bindings* to write *drivers*
-> in Rust
-> *for those interested*. The v4l2 core remains untouched, and I don't
-> think there
-> are any plans to introduce Rust outside of drivers in the kernel at
-> all, last I
-> heard.
-
-I see your point, but still I think it is better to have good examples, 
-than to say, there is a room for everything, just come here :-)
-
-Adding a dependency to build the Rust compiler even to build one or two 
-V4L2 device drivers, would mean a lot to my small hselasky/webcamd 
-project. It already has to fetch a copy of the Linux kernel, and now has 
-to bootstrap Rust from stage0 to stageN. I personally say no. It's like 
-XCode unfortunately. I download 100's of GBytes of upgrades to XCode, 
-and barely upload one millionth worth of code back to Apple. It's not 
-good. Software developers shouldn't have to download more stuff than 
-they upload?
-
+> I wrote a sample Rust driver just to prove that this probes, and
+> that you get a message on dmesg whenever an ioctl is called.
 > 
->> You assume that all code is running inside the kernel and needs to be
-> perfect.
+> As there is no actual implementation for any of the ioctls, this module
+> can misbehave with some programs. I can work around this in a future
+> submission.
 > 
-> No I do not assume that. In fact, Rust code is absolutely not
-> guaranteed to be
-> bug free and definitely not "perfect".
+> Note that this is based on the rust branch, as opposed to rust-next. The
+> reasoning is simple: I expect this series to just kickstart some
+> discussion around the subject. Actual upstreaming can come up much
+> later, at which point I can rebase on the rust branch.
 
-The definition of "bugs" may vary of course. I was thinking more like 
-stack exploits, missing validation of arrays and so on.
+Hi Daniel - I don't know if the 'rust branch' is common knowledge but
+it helped me to know it was this:
+https://github.com/Rust-for-Linux/linux
 
-> On the other hand, I would take Rust over C any day. Thus I am
-> contributing some
-> of the infrastructure to make this possible for me and for others.
-I must admit I'm not a Rust guy and don't see the advantages of Rust 
-like you do.
+For what it's worth, I was able to get the V4L2 Rust sample probed
+pretty easily following the quick start instructions
+https://docs.kernel.org/rust/quick-start.html
 
-> IMHO I think you're approaching this from the wrong angle. It isn't
-> that Linux
-> *needs* Rust. It's more about providing a new and safer choice with
-> modern ergonomics for developers, is all.
-
-Why not move Linux-V4L2 drivers to user-space? In my opinion Rust is 
-much more easy to get going there than at the kernel level.
+Cool to see this working!
+Deb
 
 > 
->> I would rather like more drive on that, than flowing down the Rust
-> stream.
+> Lastly, the origins of this series trace back to a v4l2 virtIO driver I
+> was writing in Rust. As the project was eventually shelved for other
+> reasons, I picked both the virtIO and the v4l2 bindings into their own
+> patches which I am now in the process of submitting. This is to say that
+> I tested this code with said driver and CrosVM in the past, and it
+> worked ok.
 > 
-> These two things are not mutually exclusive :)
+> Please let me know your thoughts.
 > 
->> Rust is cool, Java is cool, VM's are cool.
+> [0]: https://gitlab.collabora.com/dmitry.osipenko/linux-kernel-rd/-/commit/055a2c322e931a8b388f864f1db81bbdfd525602
 > 
-> I don't see why Java and virtual machines are being brought into the
-> discussion
-> for this patchset here. And compilation times are a part of life,
-> sadly. Also,
-> can you substantiate your claim that Rust is slow?
-
-Rust is slow based on my observations building Firefox from sources. The 
-Rust compiler spends a significant amount of time per source file.
-
->> Engineering energy would be much more focused, if hardware vendors
-> could agree
-> more about what binary formats to use for their device protocols,
+> Daniel Almeida (6):
+>   rust: media: add the media module
+>   rust: media: add initial videodev2.h abstractions
+>   rust: sync: introduce FfiMutex
+>   rust: media: videobuf2: add a videobuf2 abstraction
+>   rust: media: add {video|v4l2}_device_register support
+>   rust: media: add v4l2 rust sample
 > 
-> I understand, but my patchset is not to blame here. In fact, I have no
-> say at
-> all over these things.
+>  rust/bindings/bindings_helper.h        |   8 +
+>  rust/kernel/lib.rs                     |   2 +
+>  rust/kernel/media/mod.rs               |   6 +
+>  rust/kernel/media/v4l2/capabilities.rs |  80 ++++
+>  rust/kernel/media/v4l2/dev.rs          | 369 +++++++++++++++
+>  rust/kernel/media/v4l2/device.rs       | 115 +++++
+>  rust/kernel/media/v4l2/enums.rs        | 135 ++++++
+>  rust/kernel/media/v4l2/format.rs       | 178 ++++++++
+>  rust/kernel/media/v4l2/framesize.rs    | 176 +++++++
+>  rust/kernel/media/v4l2/inputs.rs       | 104 +++++
+>  rust/kernel/media/v4l2/ioctls.rs       | 608 +++++++++++++++++++++++++
+>  rust/kernel/media/v4l2/mmap.rs         |  81 ++++
+>  rust/kernel/media/v4l2/mod.rs          |  13 +
+>  rust/kernel/media/videobuf2/core.rs    | 552 ++++++++++++++++++++++
+>  rust/kernel/media/videobuf2/mod.rs     |   5 +
+>  rust/kernel/sync.rs                    |   1 +
+>  rust/kernel/sync/ffi_mutex.rs          |  70 +++
+>  samples/rust/Kconfig                   |  11 +
+>  samples/rust/Makefile                  |   1 +
+>  samples/rust/rust_v4l2.rs              | 403 ++++++++++++++++
+>  20 files changed, 2918 insertions(+)
+>  create mode 100644 rust/kernel/media/mod.rs
+>  create mode 100644 rust/kernel/media/v4l2/capabilities.rs
+>  create mode 100644 rust/kernel/media/v4l2/dev.rs
+>  create mode 100644 rust/kernel/media/v4l2/device.rs
+>  create mode 100644 rust/kernel/media/v4l2/enums.rs
+>  create mode 100644 rust/kernel/media/v4l2/format.rs
+>  create mode 100644 rust/kernel/media/v4l2/framesize.rs
+>  create mode 100644 rust/kernel/media/v4l2/inputs.rs
+>  create mode 100644 rust/kernel/media/v4l2/ioctls.rs
+>  create mode 100644 rust/kernel/media/v4l2/mmap.rs
+>  create mode 100644 rust/kernel/media/v4l2/mod.rs
+>  create mode 100644 rust/kernel/media/videobuf2/core.rs
+>  create mode 100644 rust/kernel/media/videobuf2/mod.rs
+>  create mode 100644 rust/kernel/sync/ffi_mutex.rs
+>  create mode 100644 samples/rust/rust_v4l2.rs
 > 
->> than changing the coding language
+> -- 
+> 2.40.0
 > 
-> This simply is not what is happening here. Again this is about giving
-> kernel
-> developers another *option* of programming language, not about ditching
-> C.
-
-I think this option belongs in user-space and not Linux (the kernel). 
-More stuff should be moved there, that is my view.
-
-> 
->> that now anyone can be let loose to program in the Linux kernel
-> without
-> risking any damage
-> 
-> Who's "anyone"? Plus the review process stays in place, so hardly any
-> changes to
-> code quality here.
-
-Maybe the word "anyone" was a bit unclear in this regard. I take that 
-back for now.
-
->> I'm glad if not everyone out there can do my job writing C-code for
-> device
-> drivers. We don't need more people to mess around there  simply.
-> 
-> Ok we differ strongly here. In particular, I am totally neutral to your
-> first
-> statement.
-> 
-> The reality is that it isn't up to anyone to say who should or
-> shouldn't become
-> a kernel developer. The resources are out there for anyone to try, and
-> if
-> maintainers take in their patches, then that's the end of the story.
-The GPLv2 license should not be the only reason behind Linux developers 
-putting drivers in the kernel-space. I think moving more stuff to 
-user-space would benefit a greater purpose.
-
-Summed up:
-
-My main objection is Rust compiler support for _kernel_ V4L2 drivers. My 
-opinion it belongs to user-space for now and why not do something there 
-instead?
-
---HPS
