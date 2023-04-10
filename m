@@ -2,98 +2,181 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E3F7C76196
-	for <linux-media@archiver.kernel.org>; Mon, 10 Apr 2023 09:39:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE90EC77B70
+	for <linux-media@archiver.kernel.org>; Mon, 10 Apr 2023 14:23:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbjDJJj6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 10 Apr 2023 05:39:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59114 "EHLO
+        id S229727AbjDJOXc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 10 Apr 2023 10:23:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbjDJJj4 (ORCPT
+        with ESMTP id S229592AbjDJOXb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 10 Apr 2023 05:39:56 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAFB41FDD
-        for <linux-media@vger.kernel.org>; Mon, 10 Apr 2023 02:39:55 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id a23so1834014qtj.8
-        for <linux-media@vger.kernel.org>; Mon, 10 Apr 2023 02:39:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681119595;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6I6hXg7RWCwulMV0yHvWMgd43aePZg6bbcgwgcjMizk=;
-        b=WgPTe4BZo/hCISDLBprIVQ8b/PDKqWkcYUjUUSIswUbyPNQ8ieiQ1hcI55FiahVyr2
-         +5UH3Lf+xngimCbbm//VUIVJxeE/TdhVv2eIUfGapWrSayJmo/oz1ObXCgXpEsaTgOFc
-         Wuh7G2ipdNTL4+JjYdLlSchgop3uNWtN/LN+9vo1jETgSKcYiL+0fZ9LcetWwCBxgJnL
-         ATPb+Rd7UnS3w+Lu11t42vbRi9+dA03lzMBaPYrWB8skMMl5BnB4Y97Tl+iuhtt6AGxy
-         rCTqU7eHFc7Tr/eSjVIQiA1SdA87hf1fx2MxVbaeOQu1PPgp7xVmEAS0FACJc9z5lSuH
-         zqbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681119595;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6I6hXg7RWCwulMV0yHvWMgd43aePZg6bbcgwgcjMizk=;
-        b=liJ6Z5mRcVyaCzleP2fY14GdrB64okatf47gOr0hrfCWydxPe9YZtin1rhXubVFPrP
-         82OHdxsyEyzye2MuxukfQfiZ0qXH3NTKKMVoGVkAQtzI+tXnEeiqwMClokT2lLAg8Db1
-         SsuCurbNvNAL0sAPPxwa0V7V7ihy+5P/5yz3oQegtEQCLJj8I1wSpY8f/xkFCnqI08NX
-         lxsRV1JyWiijVtyzEg6bzCdWhLe6AJuCxohapWxw/ZmjMlINZH345Sf/kdLr6xfhOX5e
-         zbJSKIMHPKuxo278ifgXcnQjQq+9Vd4DJPHq9HICgZoA/G3080EgWuvcUFqubEzZVNNE
-         lWnA==
-X-Gm-Message-State: AAQBX9cYqjruYpY3ZmAjsNbkNsSUBc4jp5nYfyuYchfB33upfUk7OgBP
-        TqlC9ftM8iHEMXJ4hqVbODrXQFQBu8AThYO6Whx/rS9lI7A=
-X-Google-Smtp-Source: AKy350YctdRl3MORz6dRiJYAJzeuWY+WjYBvQ0nv5cKhv8ZDzQiRymyUIGdkPOBQjqHdDa3T2QYBAegNny5nkFKTBG4=
-X-Received: by 2002:a05:622a:152:b0:3de:d15a:847f with SMTP id
- v18-20020a05622a015200b003ded15a847fmr3753837qtw.0.1681119595000; Mon, 10 Apr
- 2023 02:39:55 -0700 (PDT)
+        Mon, 10 Apr 2023 10:23:31 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D924690;
+        Mon, 10 Apr 2023 07:23:30 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33ABf7NM031205;
+        Mon, 10 Apr 2023 14:23:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=+13TaMI1yd6yDlN1Ssi/u/pjS/aVveiB8fR5X2qpncI=;
+ b=BgKqp0CfeaOQO5lJfMvnHHXNG/3olLmyLZ3/EyDoA6bQpv6/+caTpd1t9p2SGFuBclBR
+ 5On6o3zntobIGJfH50aEWQbarKxmIl77sdd+ZqCAewD7G+FY9ii+uUfT1qil7lXgUVZM
+ B3JnduyTFxHl6bAW8iZSzyOTGcsKygAMl1Cg8EYcqfJKarnKFpPPpT3sVICsbIqw2oJ7
+ 2EVtV1avLwfth14mBhZBtVwc/07SLP6+N3j7D7mrRscSvdZIsIEBHWuDmLK115f375jn
+ snbZwBXLUK2HmqCdTFro6JFAZFBFrtGE5wJv/Wgj3oZpza+ffhAuMRo4yoNYh5ar4l9P LA== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pvgmerfjt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Apr 2023 14:23:20 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33AENJqr021605
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Apr 2023 14:23:19 GMT
+Received: from mmitkov.eu.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Mon, 10 Apr 2023 07:23:16 -0700
+From:   <quic_mmitkov@quicinc.com>
+To:     <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <hverkuil-cisco@xs4all.nl>, <bryan.odonoghue@linaro.org>,
+        <akapatra@quicinc.com>, <jzala@quicinc.com>, <todor.too@gmail.com>
+CC:     <agross@kernel.org>, <konrad.dybcio@somainline.org>,
+        <mchehab@kernel.org>, <cgera@qti.qualcomm.com>,
+        <gchinnab@quicinc.com>, <ayasan@qti.qualcomm.com>,
+        <laurent.pinchart@ideasonboard.com>,
+        Milen Mitkov <quic_mmitkov@quicinc.com>
+Subject: [PATCH v8 0/4] media: camss: sm8250: Virtual channels support for SM8250
+Date:   Mon, 10 Apr 2023 17:22:28 +0300
+Message-ID: <20230410142232.2135-1-quic_mmitkov@quicinc.com>
+X-Mailer: git-send-email 2.37.3.windows.1
 MIME-Version: 1.0
-References: <20230401145926.596216-1-hdegoede@redhat.com> <CAHp75Vd8kcr0YCU7_oCSc8YqW5ZarP4RpQLexGV10A-auZi=Fg@mail.gmail.com>
- <ada1cc14-3607-a48b-cdea-7d72ba4db3d1@redhat.com>
-In-Reply-To: <ada1cc14-3607-a48b-cdea-7d72ba4db3d1@redhat.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 10 Apr 2023 12:39:19 +0300
-Message-ID: <CAHp75VfHsh9-ZUagxRCRfRs1+QF1eJjWggy5PLgLj1sWproksA@mail.gmail.com>
-Subject: Re: [PATCH 00/28] media: atomisp: Further sensor rework + exotic
- features removal
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Kate Hsuan <hpa@redhat.com>, Tsuchiya Yuto <kitakar@gmail.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Yury Luneff <yury.lunev@gmail.com>,
-        Nable <nable.maininbox@googlemail.com>,
-        andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: zRhux4pp8denDiBCBtalXnGR6-1jS08A
+X-Proofpoint-ORIG-GUID: zRhux4pp8denDiBCBtalXnGR6-1jS08A
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-10_10,2023-04-06_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 phishscore=0 priorityscore=1501 mlxlogscore=999
+ impostorscore=0 adultscore=0 mlxscore=0 malwarescore=0 clxscore=1011
+ bulkscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304100122
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sun, Apr 9, 2023 at 4:09=E2=80=AFPM Hans de Goede <hdegoede@redhat.com> =
-wrote:
-> On 4/2/23 21:13, Andy Shevchenko wrote:
+From: Milen Mitkov <quic_mmitkov@quicinc.com>
 
-...
+For v8:
+- Series acked-by Bryan O'Donoghue.
 
-> Thank you for all the reviews. I've pushed a new version
-> addressing all your comments and adding your Reviewd-by to:
+For v7:
+- Fix an issue with output state for different versions of the IFE
+  hardware (for platforms different from QRB5, e.g. QRB3).
 
-Reviewed-by?
+For v6:
+- Fix for a potential race condition in csid
+- More detailed description on how to use/test this feature in
+  user-space in the last patch.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/hansg/linux.git/log/?h=3D=
-media-atomisp
+For v5:
+- Use entity->use_count instead of s_stream subdev call ret code to
+  check if another instance of the pipeline is running. Prevents an
+  error on 6.1 and up, when stopping one of several simultaneous
+  instances.
+- flush buffers instead of just returning if the pipeline didn't start.
 
-This is what answers my question in the reply to patch 28 I think.
-I'll refer to this branch for AtomISP latest code.
+For v4:
+- fixes the warning reported by the kernel test robot
+- tiny code change to enable the vc functionality with the partially-applied
+  multistream patches on linux-next (tested on tag:next-20221010)
 
+For v3:
+- setting the sink pad format on the CSID entity will now propagate the
+  format to the source pads to keep the subdev in a valid internal state.
+- code syntax improvements
 
-> I'll send out a pull-req to Mauro for this, wrapping up
-> the atomisp changes for this cycle.
+For v2:
+- code syntax improvements
+- The info print for the enabled VCs was demoted to a dbg print. Can be
+  enabled with dynamic debug, e.g.:
+echo "file drivers/media/platform/qcom/camss/* +p" > /sys/kernel/debug/dynamic_debug/control
 
-ACK.
+NOTE: These changes depend on the multistream series, that as of yet
+is still not merged upstream. However, part of the
+multistream patches are merged in linux-next (tested on
+tag:next-20221010), including the patch that introduces the
+video_device_pipeline_alloc_start() functionality. This allows 
+applying and using this series on linux-next without applying the
+complete multistream set.
 
---=20
-With Best Regards,
-Andy Shevchenko
+The CSID hardware on SM8250 can demux the input data stream into
+maximum of 4 multiple streams depending on virtual channel (vc)
+or data type (dt) configuration.
+
+Situations in which demuxing is useful:
+- HDR sensors that produce a 2-frame HDR output, e.g. a light and a dark frame
+  (the setup we used for testing, with the imx412 sensor),
+  or a 3-frame HDR output - light, medium-lit, dark frame.
+- sensors with additional metadata that is streamed over a different
+  virtual channel/datatype.
+- sensors that produce frames with multiple resolutions in the same pixel
+  data stream
+
+With these changes, the CSID entity has, as it did previously, a single
+sink port (0), and always exposes 4 source ports (1, 2,3, 4). The
+virtual channel configuration is determined by which of the source ports
+are linked to an output VFE line. For example, the link below will
+configure the CSID driver to enable vc 0 and vc 1:
+
+media-ctl -l '"msm_csid0":1->"msm_vfe0_rdi0":0[1]'
+media-ctl -l '"msm_csid0":2->"msm_vfe0_rdi1":0[1]'
+
+which will be demuxed and propagated into /dev/video0
+and /dev/video1 respectively. With this, the userspace can use
+any normal V4L2 client app to start/stop/queue/dequeue from these
+video nodes. Tested with the yavta app.
+
+The format of each RDI channel of the used VFE(s) (msm_vfe0_rdi0,
+msm_vfe0_rdi1,...) must also be configured explicitly.
+
+Note that in order to keep a valid internal subdevice state,
+setting the sink pad format of the CSID subdevice will propagate
+this format to the source pads. However, since the CSID hardware
+can demux the input stream into several streams each of which can 
+be a different format, in that case each source pad's 
+format must be set individually, e.g.:
+
+media-ctl -V '"msm_csid0":1[fmt:SRGGB10/3840x2160]'
+media-ctl -V '"msm_csid0":2[fmt:SRGGB10/960x540]'
+
+Milen Mitkov (4):
+  media: camss: sm8250: Virtual channels for CSID
+  media: camss: vfe: Reserve VFE lines on stream start and link to CSID
+  media: camss: vfe-480: Multiple outputs support for SM8250
+  media: camss: sm8250: Pipeline starting and stopping for multiple
+    virtual channels
+
+ .../platform/qcom/camss/camss-csid-gen2.c     | 54 ++++++++++------
+ .../media/platform/qcom/camss/camss-csid.c    | 44 +++++++++----
+ .../media/platform/qcom/camss/camss-csid.h    | 11 +++-
+ .../media/platform/qcom/camss/camss-vfe-170.c |  4 +-
+ .../media/platform/qcom/camss/camss-vfe-480.c | 61 ++++++++++++-------
+ .../platform/qcom/camss/camss-vfe-gen1.c      |  4 +-
+ drivers/media/platform/qcom/camss/camss-vfe.c |  1 +
+ .../media/platform/qcom/camss/camss-video.c   | 21 ++++++-
+ drivers/media/platform/qcom/camss/camss.c     |  2 +-
+ 9 files changed, 138 insertions(+), 64 deletions(-)
+
+-- 
+2.37.3
+
