@@ -2,26 +2,26 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4571C77B77
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E04A5C77B79
 	for <linux-media@archiver.kernel.org>; Tue, 11 Apr 2023 10:05:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbjDKKEc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 11 Apr 2023 06:04:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52576 "EHLO
+        id S229578AbjDKKEd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 11 Apr 2023 06:04:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjDKKEN (ORCPT
+        with ESMTP id S229510AbjDKKEE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 11 Apr 2023 06:04:13 -0400
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 686AC30FE;
-        Tue, 11 Apr 2023 03:04:11 -0700 (PDT)
+        Tue, 11 Apr 2023 06:04:04 -0400
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 31E203C2A;
+        Tue, 11 Apr 2023 03:04:02 -0700 (PDT)
 X-IronPort-AV: E=Sophos;i="5.98,336,1673881200"; 
-   d="scan'208";a="159035220"
+   d="scan'208";a="155587911"
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 11 Apr 2023 19:04:10 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 11 Apr 2023 19:04:02 +0900
 Received: from localhost.localdomain (unknown [10.226.93.123])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 3C1554009F88;
-        Tue, 11 Apr 2023 19:04:06 +0900 (JST)
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id E79C3400F2DF;
+        Tue, 11 Apr 2023 19:03:58 +0900 (JST)
 From:   Biju Das <biju.das.jz@bp.renesas.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -33,9 +33,9 @@ Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
         linux-renesas-soc@vger.kernel.org, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v2 4/8] arm64: dts: renesas: r9a07g054: Add vspd node
-Date:   Tue, 11 Apr 2023 11:03:42 +0100
-Message-Id: <20230411100346.299768-5-biju.das.jz@bp.renesas.com>
+Subject: [PATCH v2 2/8] arm64: dts: renesas: r9a07g054: Add fcpvd node
+Date:   Tue, 11 Apr 2023 11:03:40 +0100
+Message-Id: <20230411100346.299768-3-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230411100346.299768-1-biju.das.jz@bp.renesas.com>
 References: <20230411100346.299768-1-biju.das.jz@bp.renesas.com>
@@ -45,7 +45,7 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add vspd node to RZ/V2L SoC DTSI.
+Add fcpvd node to RZ/V2L SoC DTSI.
 
 Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
@@ -55,34 +55,32 @@ v1->v2:
  * Reorder the patch based on the module fcpvd, vspd and then DSI
    for both RZ/G2L and RZ/V2L.
 ---
- arch/arm64/boot/dts/renesas/r9a07g054.dtsi | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ arch/arm64/boot/dts/renesas/r9a07g054.dtsi | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/renesas/r9a07g054.dtsi b/arch/arm64/boot/dts/renesas/r9a07g054.dtsi
-index 9001673a9e3c..cc085be7a0d8 100644
+index 304ade54425b..9001673a9e3c 100644
 --- a/arch/arm64/boot/dts/renesas/r9a07g054.dtsi
 +++ b/arch/arm64/boot/dts/renesas/r9a07g054.dtsi
-@@ -623,6 +623,20 @@ sbc: spi@10060000 {
+@@ -623,6 +623,18 @@ sbc: spi@10060000 {
  			status = "disabled";
  		};
  
-+		vspd: vsp@10870000 {
-+			compatible = "renesas,r9a07g054-vsp2",
-+				     "renesas,r9a07g044-vsp2";
-+			reg = <0 0x10870000 0 0x10000>;
-+			interrupts = <GIC_SPI 149 IRQ_TYPE_LEVEL_HIGH>;
++		fcpvd: fcp@10880000 {
++			compatible = "renesas,r9a07g054-fcpvd",
++				     "renesas,fcpv";
++			reg = <0 0x10880000 0 0x10000>;
 +			clocks = <&cpg CPG_MOD R9A07G054_LCDC_CLK_A>,
 +				 <&cpg CPG_MOD R9A07G054_LCDC_CLK_P>,
 +				 <&cpg CPG_MOD R9A07G054_LCDC_CLK_D>;
 +			clock-names = "aclk", "pclk", "vclk";
 +			power-domains = <&cpg>;
 +			resets = <&cpg R9A07G054_LCDC_RESET_N>;
-+			renesas,fcp = <&fcpvd>;
 +		};
 +
- 		fcpvd: fcp@10880000 {
- 			compatible = "renesas,r9a07g054-fcpvd",
- 				     "renesas,fcpv";
+ 		cpg: clock-controller@11010000 {
+ 			compatible = "renesas,r9a07g054-cpg";
+ 			reg = <0 0x11010000 0 0x10000>;
 -- 
 2.25.1
 
