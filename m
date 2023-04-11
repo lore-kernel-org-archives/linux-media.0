@@ -2,26 +2,26 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F411C77B78
-	for <linux-media@archiver.kernel.org>; Tue, 11 Apr 2023 12:08:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F181BC77B74
+	for <linux-media@archiver.kernel.org>; Tue, 11 Apr 2023 12:08:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbjDKMIk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 11 Apr 2023 08:08:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55938 "EHLO
+        id S230059AbjDKMIp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 11 Apr 2023 08:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbjDKMIi (ORCPT
+        with ESMTP id S229901AbjDKMIm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 11 Apr 2023 08:08:38 -0400
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 37913127;
-        Tue, 11 Apr 2023 05:08:27 -0700 (PDT)
+        Tue, 11 Apr 2023 08:08:42 -0400
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B3FE4272A;
+        Tue, 11 Apr 2023 05:08:36 -0700 (PDT)
 X-IronPort-AV: E=Sophos;i="5.98,336,1673881200"; 
-   d="scan'208";a="159048194"
+   d="scan'208";a="155600386"
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 11 Apr 2023 21:08:26 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 11 Apr 2023 21:08:36 +0900
 Received: from localhost.localdomain (unknown [10.226.93.123])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 6973D40065A3;
-        Tue, 11 Apr 2023 21:08:22 +0900 (JST)
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 2368A40065A3;
+        Tue, 11 Apr 2023 21:08:31 +0900 (JST)
 From:   Biju Das <biju.das.jz@bp.renesas.com>
 To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -35,9 +35,9 @@ Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
         Chris Paterson <Chris.Paterson2@renesas.com>,
         Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v7 2/8] dt-bindings: display: renesas,rzg2l-du: Document RZ/V2L DU bindings
-Date:   Tue, 11 Apr 2023 13:08:04 +0100
-Message-Id: <20230411120810.368437-3-biju.das.jz@bp.renesas.com>
+Subject: [PATCH v7 4/8] drm: rzg2l-du: Add RZ/V2L DU Support
+Date:   Tue, 11 Apr 2023 13:08:06 +0100
+Message-Id: <20230411120810.368437-5-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230411120810.368437-1-biju.das.jz@bp.renesas.com>
 References: <20230411120810.368437-1-biju.das.jz@bp.renesas.com>
@@ -47,37 +47,29 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Document DU found in RZ/V2L SoC. The DU block is identical to RZ/G2L
-SoC and therefore use RZ/G2L fallback to avoid any driver changes.
+Add support for RZ/V2L DU. The RZ/V2L DU block is identical to
+RZ/G2L SoC.
 
 Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 ---
 v7:
  * New patch.
 ---
- .../devicetree/bindings/display/renesas,rzg2l-du.yaml    | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/rcar-du/rzg2l_du_drv.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/display/renesas,rzg2l-du.yaml b/Documentation/devicetree/bindings/display/renesas,rzg2l-du.yaml
-index 7626043debd8..e29ba0145f89 100644
---- a/Documentation/devicetree/bindings/display/renesas,rzg2l-du.yaml
-+++ b/Documentation/devicetree/bindings/display/renesas,rzg2l-du.yaml
-@@ -16,8 +16,13 @@ description: |
+diff --git a/drivers/gpu/drm/rcar-du/rzg2l_du_drv.c b/drivers/gpu/drm/rcar-du/rzg2l_du_drv.c
+index be9aeccbfdc7..6d7f20e3af39 100644
+--- a/drivers/gpu/drm/rcar-du/rzg2l_du_drv.c
++++ b/drivers/gpu/drm/rcar-du/rzg2l_du_drv.c
+@@ -53,6 +53,7 @@ static const struct rcar_du_device_info rzg2l_du_r9a07g044_info = {
  
- properties:
-   compatible:
--    enum:
--      - renesas,r9a07g044-du # RZ/G2{L,LC}
-+    oneOf:
-+      - enum:
-+          - renesas,r9a07g044-du # RZ/G2{L,LC}
-+      - items:
-+          - enum:
-+              - renesas,r9a07g054-vsp2    # RZ/V2L
-+          - const: renesas,r9a07g044-vsp2 # RZ/G2L fallback
+ static const struct of_device_id rzg2l_du_of_table[] = {
+ 	{ .compatible = "renesas,r9a07g044-du", .data = &rzg2l_du_r9a07g044_info },
++	{ .compatible = "renesas,r9a07g054-du", .data = &rzg2l_du_r9a07g044_info },
+ 	{ /* sentinel */ }
+ };
  
-   reg:
-     maxItems: 1
 -- 
 2.25.1
 
