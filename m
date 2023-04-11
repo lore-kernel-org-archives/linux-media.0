@@ -2,26 +2,26 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A718C7EE20
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50116C7EE24
 	for <linux-media@archiver.kernel.org>; Tue, 11 Apr 2023 10:05:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbjDKKEg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 11 Apr 2023 06:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52808 "EHLO
+        id S229649AbjDKKEh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 11 Apr 2023 06:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbjDKKEZ (ORCPT
+        with ESMTP id S229621AbjDKKEJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 11 Apr 2023 06:04:25 -0400
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ADE5E26B8;
-        Tue, 11 Apr 2023 03:04:23 -0700 (PDT)
+        Tue, 11 Apr 2023 06:04:09 -0400
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 55F0430FA;
+        Tue, 11 Apr 2023 03:04:07 -0700 (PDT)
 X-IronPort-AV: E=Sophos;i="5.98,336,1673881200"; 
-   d="scan'208";a="155587973"
+   d="scan'208";a="159035205"
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 11 Apr 2023 19:04:23 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 11 Apr 2023 19:04:06 +0900
 Received: from localhost.localdomain (unknown [10.226.93.123])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id C39FE400F2DA;
-        Tue, 11 Apr 2023 19:04:19 +0900 (JST)
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 1768B400F2DF;
+        Tue, 11 Apr 2023 19:04:02 +0900 (JST)
 From:   Biju Das <biju.das.jz@bp.renesas.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -33,9 +33,9 @@ Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
         linux-renesas-soc@vger.kernel.org, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v2 7/8] arm64: dts: renesas: rzg2l-smarc: Link DSI with ADV7535
-Date:   Tue, 11 Apr 2023 11:03:45 +0100
-Message-Id: <20230411100346.299768-8-biju.das.jz@bp.renesas.com>
+Subject: [PATCH v2 3/8] arm64: dts: renesas: r9a07g044: Add vspd node
+Date:   Tue, 11 Apr 2023 11:03:41 +0100
+Message-Id: <20230411100346.299768-4-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230411100346.299768-1-biju.das.jz@bp.renesas.com>
 References: <20230411100346.299768-1-biju.das.jz@bp.renesas.com>
@@ -45,116 +45,43 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Enable DSI and ADV7535 and link DSI with ADV7535 on RZ/G2L SMARC EVK.
+Add vspd node to RZ/G2L SoC DTSI.
 
 Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
 v1->v2:
- * Linked DSI with ADV7535.
- * Added CEC clock and clock names
- * Added hotplug detection interrupt.
- * Removed pinctrl properties as it is defined in common.
- * Removed Rb tag from Geert as there are too many changes.
+ * Added Rb tag from Geert.
+ * Reorder the patch based on the module fcpvd, vspd and then DSI
+   for both RZ/G2L and RZ/V2L.
 ---
- arch/arm64/boot/dts/renesas/rzg2l-smarc.dtsi | 79 ++++++++++++++++++++
- 1 file changed, 79 insertions(+)
+ arch/arm64/boot/dts/renesas/r9a07g044.dtsi | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/renesas/rzg2l-smarc.dtsi b/arch/arm64/boot/dts/renesas/rzg2l-smarc.dtsi
-index e180a955b6ac..2a158a954b2f 100644
---- a/arch/arm64/boot/dts/renesas/rzg2l-smarc.dtsi
-+++ b/arch/arm64/boot/dts/renesas/rzg2l-smarc.dtsi
-@@ -16,12 +16,91 @@ aliases {
- 		serial1 = &scif2;
- 		i2c3 = &i2c3;
- 	};
-+
-+	osc1: cec-clock {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <12000000>;
-+	};
-+
-+	hdmi-out {
-+		compatible = "hdmi-connector";
-+		type = "d";
-+
-+		port {
-+			hdmi_con_out: endpoint {
-+				remote-endpoint = <&adv7535_out>;
-+			};
-+		};
-+	};
- };
+diff --git a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
+index e90c517077ab..7698752742df 100644
+--- a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
++++ b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
+@@ -618,6 +618,19 @@ sbc: spi@10060000 {
+ 			status = "disabled";
+ 		};
  
- &cpu_dai {
- 	sound-dai = <&ssi0>;
- };
- 
-+&dsi {
-+	status = "okay";
-+
-+	ports {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		port@0 {
-+			reg = <0>;
-+			dsi0_in: endpoint {
-+			};
++		vspd: vsp@10870000 {
++			compatible = "renesas,r9a07g044-vsp2";
++			reg = <0 0x10870000 0 0x10000>;
++			interrupts = <GIC_SPI 149 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&cpg CPG_MOD R9A07G044_LCDC_CLK_A>,
++				 <&cpg CPG_MOD R9A07G044_LCDC_CLK_P>,
++				 <&cpg CPG_MOD R9A07G044_LCDC_CLK_D>;
++			clock-names = "aclk", "pclk", "vclk";
++			power-domains = <&cpg>;
++			resets = <&cpg R9A07G044_LCDC_RESET_N>;
++			renesas,fcp = <&fcpvd>;
 +		};
 +
-+		port@1 {
-+			reg = <1>;
-+			dsi0_out: endpoint {
-+				data-lanes = <1 2 3 4>;
-+				remote-endpoint = <&adv7535_in>;
-+			};
-+		};
-+	};
-+};
-+
-+&i2c1 {
-+	adv7535: hdmi@3d {
-+		compatible = "adi,adv7535";
-+		reg = <0x3d>;
-+
-+		interrupt-parent = <&pinctrl>;
-+		interrupts = <RZG2L_GPIO(2, 1) IRQ_TYPE_EDGE_FALLING>;
-+		clocks = <&osc1>;
-+		clock-names = "cec";
-+		avdd-supply = <&reg_1p8v>;
-+		dvdd-supply = <&reg_1p8v>;
-+		pvdd-supply = <&reg_1p8v>;
-+		a2vdd-supply = <&reg_1p8v>;
-+		v3p3-supply = <&reg_3p3v>;
-+		v1p2-supply = <&reg_1p8v>;
-+
-+		adi,dsi-lanes = <4>;
-+
-+		ports {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			port@0 {
-+				reg = <0>;
-+				adv7535_in: endpoint {
-+					remote-endpoint = <&dsi0_out>;
-+				};
-+			};
-+
-+			port@1 {
-+				reg = <1>;
-+				adv7535_out: endpoint {
-+					remote-endpoint = <&hdmi_con_out>;
-+				};
-+			};
-+		};
-+	};
-+};
-+
- &i2c3 {
- 	pinctrl-0 = <&i2c3_pins>;
- 	pinctrl-names = "default";
+ 		fcpvd: fcp@10880000 {
+ 			compatible = "renesas,r9a07g044-fcpvd",
+ 				     "renesas,fcpv";
 -- 
 2.25.1
 
