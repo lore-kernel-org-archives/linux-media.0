@@ -2,156 +2,111 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D2FCC76196
-	for <linux-media@archiver.kernel.org>; Tue, 11 Apr 2023 05:39:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8D98C76196
+	for <linux-media@archiver.kernel.org>; Tue, 11 Apr 2023 05:54:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbjDKFjR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 11 Apr 2023 01:39:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49460 "EHLO
+        id S229794AbjDKFyb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 11 Apr 2023 01:54:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjDKFjP (ORCPT
+        with ESMTP id S229640AbjDKFya (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 11 Apr 2023 01:39:15 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C5AE02D41;
-        Mon, 10 Apr 2023 22:39:12 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.43:59606.589911955
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id 6BC8C1002F6;
-        Tue, 11 Apr 2023 13:39:08 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-7b48884fd-tj646 with ESMTP id f7efde40c6bc459b9f649b6547f1e147 for emil.l.velikov@gmail.com;
-        Tue, 11 Apr 2023 13:39:11 CST
-X-Transaction-ID: f7efde40c6bc459b9f649b6547f1e147
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <c29da6cf-98be-42fc-c415-28732f6b6b1f@189.cn>
-Date:   Tue, 11 Apr 2023 13:39:07 +0800
+        Tue, 11 Apr 2023 01:54:30 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E621CE6A;
+        Mon, 10 Apr 2023 22:54:22 -0700 (PDT)
+X-UUID: 4bdcb97ed82d11edb6b9f13eb10bd0fe-20230411
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=hlzUNXvIMOQc13xK9X1uYOOly8rXvrRJ86fD7YnDQ/U=;
+        b=Sg1Bfe8zvipETD43TMa8G9cAc0DlLJyY3dihZkmO8efWTESUiqQCDYD36MIZ9XhyZD6I+kK16feJpBIHHRlpYkueSJRl6BR0L5zzSNrn1MtaFJQLd3BNewIMNRbcUb+8u4IZMPvN70nBMxmlBTg6Yp4QrUzkGIXA5Ijuu2uMZzI=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.22,REQID:37fdfbfb-d691-4357-9921-2041b2a9c00f,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:-5
+X-CID-META: VersionHash:120426c,CLOUDID:fe30a683-cd9c-45f5-8134-710979e3df0e,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-UUID: 4bdcb97ed82d11edb6b9f13eb10bd0fe-20230411
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <irui.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 120522778; Tue, 11 Apr 2023 13:54:17 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Tue, 11 Apr 2023 13:54:16 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Tue, 11 Apr 2023 13:54:15 +0800
+From:   Irui Wang <irui.wang@mediatek.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <maoguang.meng@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        Irui Wang <irui.wang@mediatek.com>
+Subject: [PATCH v2, 1/2] media: mediatek: vcodec: make sure array index is in valid range
+Date:   Tue, 11 Apr 2023 13:54:12 +0800
+Message-ID: <20230411055413.539-2-irui.wang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230411055413.539-1-irui.wang@mediatek.com>
+References: <20230411055413.539-1-irui.wang@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v10 2/2] drm: add kms driver for loongson display
- controller
-Content-Language: en-US
-To:     Emil Velikov <emil.l.velikov@gmail.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian Koenig <christian.koenig@amd.com>,
-        linaro-mm-sig@lists.linaro.org, Li Yi <liyi@loongson.cn>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        nathan@kernel.org, linux-media@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-References: <20230403171304.2157326-1-suijingfeng@loongson.cn>
- <20230403171304.2157326-3-suijingfeng@loongson.cn>
- <CACvgo53h+X26wngVmxpn3oVb9kbJezTHx61p3rZDR7sw1AQrWQ@mail.gmail.com>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <CACvgo53h+X26wngVmxpn3oVb9kbJezTHx61p3rZDR7sw1AQrWQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+CERT-C Characters and Strings:
+dev->reg_base[dev->venc_pdata->core_id] evaluates to an address
+that could be at negative offset of an array, check core id is
+in valid range.
 
-On 2023/4/4 22:10, Emil Velikov wrote:
->> +static void lsdc_crtc_reset(struct drm_crtc *crtc)
->> +{
->> +       struct lsdc_display_pipe *dispipe = crtc_to_display_pipe(crtc);
->> +       struct drm_device *ddev = crtc->dev;
->> +       struct lsdc_device *ldev = to_lsdc(ddev);
->> +       struct lsdc_crtc_state *priv_crtc_state;
->> +       unsigned int index = dispipe->index;
->> +       u32 val;
->> +
->> +       val = LSDC_PF_XRGB8888 | CFG_RESET_N;
->> +       if (ldev->descp->chip == CHIP_LS7A2000)
->> +               val |= LSDC_DMA_STEP_64_BYTES;
->> +
->> +       lsdc_crtc_wreg32(ldev, LSDC_CRTC0_CFG_REG, index, val);
->> +
->> +       if (ldev->descp->chip == CHIP_LS7A2000) {
->> +               val = PHY_CLOCK_EN | PHY_DATA_EN;
->> +               lsdc_crtc_wreg32(ldev, LSDC_CRTC0_PANEL_CONF_REG, index, val);
->> +       }
->> +
-> AFAICT no other driver touches the HW in their reset callback. Should
-> the above be moved to another callback?
->
-You may correct in the 95% of all cases.
+Signed-off-by: Irui Wang <irui.wang@mediatek.com>
+---
+ .../mediatek/vcodec/mtk_vcodec_enc_drv.c         | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
-After reading the comments of the reset callback of struct 
-drm_crtc_funcs in drm_crtc.h,
-
-It seems that it does not prohibit us to touches the hardware.
-
-I copy that comments and paste into here for easier to read,as below:
-
-
-     /*
-      * @reset:
-      *
-      * Reset CRTC hardware and software state to off. This function isn't
-      * called by the core directly, only through drm_mode_config_reset().
-      * It's not a helper hook only for historical reasons.
-      *
-      * Atomic drivers can use drm_atomic_helper_crtc_reset() to reset
-      * atomic state using this hook.
-      */
-
-
-It seem allowable to reset CRTC hardware in this callback, did it cue us?
-
-What we know is that this reset callback (and others, such as encoder's 
-reset)
-
-is called by drm_mode_config_reset(). It is the first set of functions 
-get called
-
-before other hardware related callbacks.
-
-
-I don't not see how other drivers implement this callback, after you 
-mention this
-
-I skim over a few, I found tilcdc also writing the hardware in their 
-tilcdc_crtc_reset()
-
-function. See it in drm/tildc/tilclc_crtc.c
-
-
-In addition, Loongson platform support efifb,  in order to light up the 
-monitor in
-
-firmware stage and the booting stage, the firmware touch the display 
-hardware
-
-register directly. After efifb get kick out, when drm/loongson driver 
-taken over the
-
-hardware, the register setting state still remain in the hardware 
-register. Those
-
-register setting may no longer correct for the subsequent operationd. 
-What we
-
-doing here is to giving the hardware a basic healthy state prepare to be 
-update
-
-further. As the reset callback is call very early, we found that it's 
-the best fit.
-
-The reset will also get called when resume(S3).
-
-
-The problem is that we don't find a good to place to move those setting 
-currently.
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
+index 9095186d5495..125d5722d07b 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
+@@ -89,16 +89,24 @@ static irqreturn_t mtk_vcodec_enc_irq_handler(int irq, void *priv)
+ 	struct mtk_vcodec_ctx *ctx;
+ 	unsigned long flags;
+ 	void __iomem *addr;
++	int core_id;
+ 
+ 	spin_lock_irqsave(&dev->irqlock, flags);
+ 	ctx = dev->curr_ctx;
+ 	spin_unlock_irqrestore(&dev->irqlock, flags);
+ 
+-	mtk_v4l2_debug(1, "id=%d coreid:%d", ctx->id, dev->venc_pdata->core_id);
+-	addr = dev->reg_base[dev->venc_pdata->core_id] +
+-				MTK_VENC_IRQ_ACK_OFFSET;
++	core_id = dev->venc_pdata->core_id;
++	if (core_id < 0 || core_id >= NUM_MAX_VCODEC_REG_BASE) {
++		mtk_v4l2_err("Invalid core id: %d, ctx id: %d",
++			     core_id, ctx->id);
++		return IRQ_HANDLED;
++	}
++
++	mtk_v4l2_debug(1, "id: %d, core id: %d", ctx->id, core_id);
++
++	addr = dev->reg_base[core_id] + MTK_VENC_IRQ_ACK_OFFSET;
+ 
+-	ctx->irq_status = readl(dev->reg_base[dev->venc_pdata->core_id] +
++	ctx->irq_status = readl(dev->reg_base[core_id] +
+ 				(MTK_VENC_IRQ_STATUS_OFFSET));
+ 
+ 	clean_irq_status(ctx->irq_status, addr);
+-- 
+2.18.0
 
