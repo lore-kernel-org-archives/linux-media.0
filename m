@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4876CC77B78
-	for <linux-media@archiver.kernel.org>; Wed, 12 Apr 2023 11:57:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1687EC77B6E
+	for <linux-media@archiver.kernel.org>; Wed, 12 Apr 2023 11:57:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231465AbjDLL5J (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 12 Apr 2023 07:57:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38192 "EHLO
+        id S231532AbjDLL5M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 12 Apr 2023 07:57:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231426AbjDLL5H (ORCPT
+        with ESMTP id S231410AbjDLL5I (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 12 Apr 2023 07:57:07 -0400
+        Wed, 12 Apr 2023 07:57:08 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160F5122;
-        Wed, 12 Apr 2023 04:57:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC5CEA;
+        Wed, 12 Apr 2023 04:57:07 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:c2e:89bd:4b8e:9e98])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 84E266603216;
-        Wed, 12 Apr 2023 12:57:04 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E77BC660326B;
+        Wed, 12 Apr 2023 12:57:05 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681300624;
-        bh=7bTQ885Lf7fJe0LhySXOychmfiOBST4o2pY/rZ1W8Qk=;
+        s=mail; t=1681300626;
+        bh=g41XyyHBmbMssUN5c7ZvMN8gUuqx7OSKT4P6IGFh8Fw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Biu6xNX8ak8hTu1MQB+uTsePEPlYxmKvP2f54GSbyMjUgt8zxGNJ1s3sPFe9kqFts
-         IZjluMjTWwiCA1+7FUO58gRDVF3ngQG0UKGbEZ+4JElO+RI2X1yuj1zmevBTvuHfxk
-         rQrMNqVE1NWnlhb14k7AqXgg4eBsSZO5Fo+tz1PSxIpaUNJmpcvAypkyDn6Xk2zbtQ
-         aNK/b0OQk91magqhr5v3sSTb+d0RAhfTOSEJoHsZGX4u/bBhkRBOFtR4KlYjyy28GU
-         Od/7jUK5FxyG/fXqw/TceeOHPjBE6ulUzNhwq969/Er2t3S8GNQ6pBl4iKQ28OgqQO
-         yiRlB+ROnCqCg==
+        b=KllQBzg7XRRIbLQbrPYlMyUjiVCXtV94oPZMkV+6s4RRUKnzgGqSlyneCj5GESOLl
+         F+agXHvWPHWDSeCoq5wGDYGEc1d2ZhJjRwuqGReNCU0E+gEsqHOVkDeR9nwGoRRMoS
+         jqK1AkaBDJg5tbeGSqP0tebBk5rp/ov01nVWnn4owzmBZq8tnIzFlNaezQwRIaWSkE
+         l4M5aNNd8xMZkicV3Iisq5216o0EbeUr/a5QGItfjYh7XDVpW2x8At9ttgjEi9LYmg
+         zGJemjqOK3pUMyLp8qg7voTUNvsJ4AYw3wptl22rf2bDx+PD3Pbhak1516ajhoSX0U
+         51eCXgbUAt0Ng==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
         mchehab@kernel.org, robh+dt@kernel.org,
@@ -41,9 +41,9 @@ Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v6 02/13] media: AV1: Make sure that bit depth in correctly initialize
-Date:   Wed, 12 Apr 2023 13:56:41 +0200
-Message-Id: <20230412115652.403949-3-benjamin.gaignard@collabora.com>
+Subject: [PATCH v6 05/13] media: verisilicon: Get bit depth for V4L2_PIX_FMT_NV15_4L4
+Date:   Wed, 12 Apr 2023 13:56:44 +0200
+Message-Id: <20230412115652.403949-6-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230412115652.403949-1-benjamin.gaignard@collabora.com>
 References: <20230412115652.403949-1-benjamin.gaignard@collabora.com>
@@ -53,38 +53,30 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Make sure that bit_depth field of V4L2_CTRL_TYPE_AV1_SEQUENCE
-is initialized correctly before using it.
+Let's the driver knows that V4L2_PIX_FMT_NV15_4L4 is a 10bits
+pixel format.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 ---
- drivers/media/v4l2-core/v4l2-ctrls-core.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Changes in v6:
+- Rename NV12_10LE40_4L4 pixel format into NV15_4L4.
 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-index 9fd37e94db17..a662fb60f73f 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-@@ -111,6 +111,7 @@ static void std_init_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- 	struct v4l2_ctrl_vp9_frame *p_vp9_frame;
- 	struct v4l2_ctrl_fwht_params *p_fwht_params;
- 	struct v4l2_ctrl_h264_scaling_matrix *p_h264_scaling_matrix;
-+	struct v4l2_ctrl_av1_sequence *p_av1_sequence;
- 	void *p = ptr.p + idx * ctrl->elem_size;
- 
- 	if (ctrl->p_def.p_const)
-@@ -157,6 +158,10 @@ static void std_init_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- 		p_vp9_frame->flags |= V4L2_VP9_FRAME_FLAG_X_SUBSAMPLING |
- 			V4L2_VP9_FRAME_FLAG_Y_SUBSAMPLING;
- 		break;
-+	case V4L2_CTRL_TYPE_AV1_SEQUENCE:
-+		p_av1_sequence = p;
-+		p_av1_sequence->bit_depth = 8;
-+		break;
- 	case V4L2_CTRL_TYPE_FWHT_PARAMS:
- 		p_fwht_params = p;
- 		p_fwht_params->version = V4L2_FWHT_VERSION;
+ drivers/media/platform/verisilicon/hantro_v4l2.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
+index d238d407f986..4445dec630cb 100644
+--- a/drivers/media/platform/verisilicon/hantro_v4l2.c
++++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
+@@ -71,6 +71,7 @@ int hantro_get_format_depth(u32 fourcc)
+ 	switch (fourcc) {
+ 	case V4L2_PIX_FMT_P010:
+ 	case V4L2_PIX_FMT_P010_4L4:
++	case V4L2_PIX_FMT_NV15_4L4:
+ 		return 10;
+ 	default:
+ 		return 8;
 -- 
 2.34.1
 
