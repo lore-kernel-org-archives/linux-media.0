@@ -2,136 +2,120 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 470AEC77B6F
-	for <linux-media@archiver.kernel.org>; Wed, 12 Apr 2023 14:36:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 607FDC7619A
+	for <linux-media@archiver.kernel.org>; Wed, 12 Apr 2023 14:37:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230170AbjDLOg0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 12 Apr 2023 10:36:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36404 "EHLO
+        id S231601AbjDLOg7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 12 Apr 2023 10:36:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231691AbjDLOgT (ORCPT
+        with ESMTP id S229612AbjDLOg4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 12 Apr 2023 10:36:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7AC9745;
-        Wed, 12 Apr 2023 07:35:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 12 Apr 2023 10:36:56 -0400
+X-Greylist: delayed 3583 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 12 Apr 2023 07:36:27 PDT
+Received: from linderud.pw (linderud.dev [163.172.10.146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20269126;
+        Wed, 12 Apr 2023 07:36:27 -0700 (PDT)
+Received: from linderud.pw (localhost [127.0.0.1])
+        by linderud.pw (Postfix) with ESMTP id 25C0FC0293;
+        Wed, 12 Apr 2023 14:38:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linderud.pw;
+        s=linderud; t=1681303107;
+        bh=O8aSdXpTVrDXIG6KsH5yZYXrkaTdUzwYMD1SqhEYBaQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=dM88oRf1u+qblbhjh1UNixkaXpk2+2DmnsIoD65HqxxNZ3rNWS61Xoi8Y+aizFgRk
+         xzJcyCacbnDKV7l+SFXyTQ+V8m7GeNay5buHPp7Vtohvazqpq3319vmS7QG9PrhwkX
+         rpoGZ4LtL57TzLg0Et5Z/+Hbr7S8I6y5QBtnpNIM4RIJuU90ik0C4Q1vitu+M8dr8i
+         0YhC5po9jcm5RDyxzzENj+KYTWVi1H08u5ulK0XGISUPfLxqn8UsYWS2S/ZeTV1t5w
+         rWvajDfILar9vprpgkP8sDd590e4p/oQNcmmE3CcW5HoHDhyO0ZMPFFfv/GpId8JZV
+         WilHMdDKOhRvodUXMa2x3mrQk+54DPbfeVkKGWn9Yn29uohLOO4ps1nw3DoXnkNTuu
+         ZscqaAUNi+TrcbFVF9vJRxZ+9tZ+lUuFNAhix4GISjacggjSNCzP/vv/jRrny81Y4c
+         MrmNS8AOebCgjVjXfO7ChmvWkX3t2OOHDa6EjVMu93lQNlm956GoPaVySQX/iRJgSH
+         XdY/vlo8i5E3fm+cOmTlv9vXNlYCP8296+SvRhKhX6mhS+zyU5fsOe1bwFHMzrkKaW
+         PxIFUiBKyFBlapzPojkHWkPHncLnllqCzuDb+1oXWyeRfb1d5M4Nk6wA1snx6thvNY
+         eEzVFpzTfm5muJySAFnXYLLE=
+Received: from localhost (unknown [85.252.93.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7229562D9C;
-        Wed, 12 Apr 2023 14:35:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3B94C433EF;
-        Wed, 12 Apr 2023 14:35:46 +0000 (UTC)
-Message-ID: <2c3105d4-2e60-e77a-df5d-e2a7e37c6f4a@xs4all.nl>
-Date:   Wed, 12 Apr 2023 16:35:45 +0200
+        (Authenticated sender: morten)
+        by linderud.pw (Postfix) with ESMTPSA id DD86AC018B;
+        Wed, 12 Apr 2023 14:38:26 +0200 (CEST)
+Date:   Wed, 12 Apr 2023 14:38:25 +0200
+From:   Morten Linderud <morten@linderud.pw>
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Deborah Brouwer <deborah.brouwer@collabora.com>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        wedsonaf@gmail.com, ojeda@kernel.org, mchehab@kernel.org,
+        hverkuil@xs4all.nl, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        kernel@collabora.com
+Subject: Re: [PATCH 0/6] Initial Rust V4L2 support
+Message-ID: <ipjch2egqg43r6h3drwmmm5s3lbidknke42gz7d6w2digskp2e@o4hzg6zrtli3>
+References: <20230406215615.122099-1-daniel.almeida@collabora.com>
+ <ZDSRSWhWsN34MghQ@xps>
+ <CANiq72=n1b=fJ2XZZx_MLKkbKMTmnmTBMgA3GJ_hqyARPtwEiQ@mail.gmail.com>
+ <20230412025834.GA301301@mit.edu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v7 00/14] Adjust the dma-ranges for MTK IOMMU
-Content-Language: en-US
-To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        nfraprado@collabora.com, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        mingyuan.ma@mediatek.com, yf.wang@mediatek.com,
-        jianjiao.zeng@mediatek.com, Yunfei Dong <yunfei.dong@mediatek.com>,
-        kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>,
-        chengci.xu@mediatek.com, youlin.pei@mediatek.com,
-        anan.sun@mediatek.com
-References: <20230411093144.2690-1-yong.wu@mediatek.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20230411093144.2690-1-yong.wu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="p6d65wvmwi2vphxp"
+Content-Disposition: inline
+In-Reply-To: <20230412025834.GA301301@mit.edu>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 11/04/2023 11:31, Yong Wu wrote:
-> After commit f1ad5338a4d5 ("of: Fix "dma-ranges" handling for bus
-> controllers"), the dma-ranges is not allowed for dts leaf node.
-> but we still would like to separate the different masters into
-> different iova regions. Thus we adjust the internal flow, separate
-> the 16GB iova range by the master HW larbid/portid and add the
-> dma-ranges property in the parent "soc" node. This also could avoid
-> the users forget/abuse the iova regions.
-> 
-> The commit f1ad5338a4d5 did affect the mt8195 venc, But it is not
-> a fatal issue, it could also work well at 0-4GB iova. thus I don't
-> add "Fixes:" tag.
-> 
-> In this series, I add functions for mt8192/mt8195/mt8186, mt8188 will
-> be in its special patchset. and the previous mt8173/mt8183...support
-> 0-4GB only, no need this function.
 
-I've Acked patches 10 and 11 as well. I assume this series will be merged
-through the iommu subsystem? If not, and I need to take the media patches,
-then please let me know!
+--p6d65wvmwi2vphxp
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Regards,
+On Tue, Apr 11, 2023 at 10:58:34PM -0400, Theodore Ts'o wrote:
+> On Tue, Apr 11, 2023 at 04:22:56PM +0200, Miguel Ojeda wrote:
+> >=20
+> > Thanks, it is great to hear that the guide helped! :)
+> >=20
+> > On resources: nowadays we have a webpage, too. Still to be completed,
+> > but you may find it useful already: https://rust-for-linux.com
+>=20
+> Something that would perhaps be useful is to document (a) what
+> versions of Rust is available for various distributions, or pointers
+> to how to get that information for various distributions.  For
+> example, you can get that information from Debian using [1].  It
+> appears that Fedora isn't distributing rustc at *all*, at least
+> according to [2], so apparently for Fedora people will need to install
+> it from source.
 
-	Hans
+You can get a list here:
+https://repology.org/project/rust/versions
 
-> 
-> Change note:
-> v7: Remove the change about mediatek,vcodec-subdev-decoder.yaml since
->     this was merged at:
->     https://lore.kernel.org/all/98c48690-631d-1086-9b7c-004c61cc8dbb@xs4all.nl/
-> 
-> v6: https://lore.kernel.org/linux-mediatek/20230403091337.26745-1-yong.wu@mediatek.com/
->    Add three patches for set dma-mask for iommu master devices.
-> 
-> v5: Nothing change. Just rebase on v6.3-rc1.
-> 
-> v4: https://lore.kernel.org/linux-mediatek/20230215062544.8677-1-yong.wu@mediatek.com/
->     Improve the comment in the code from AngeloGioacchino.
-> 
-> v3: https://lore.kernel.org/linux-mediatek/20230214031114.926-1-yong.wu@mediatek.com/
->    Add a new patch only for comment more in the code.
-> 
-> v2: https://lore.kernel.org/linux-mediatek/20230208053643.28249-1-yong.wu@mediatek.com/
->    a) Base on next-20230206 since mt8195 jpeg node is applied which affect
->       this patch.
->    b) Reword the commit message [1/10][2/10] to explain effect.
-> 
-> v1: https://lore.kernel.org/linux-mediatek/20230113060133.9394-1-yong.wu@mediatek.com/
->    Base on v6.2-rc3.
-> 
-> Yong Wu (14):
->   dt-bindings: media: mediatek,vcodec: Remove dma-ranges property
->   dt-bindings: media: mediatek,jpeg: Remove dma-ranges property
->   iommu/mediatek: Improve comment for the current region/bank
->   iommu/mediatek: Get regionid from larb/port id
->   iommu/mediatek: mt8192: Add iova_region_larb_msk
->   iommu/mediatek: mt8195: Add iova_region_larb_msk
->   iommu/mediatek: mt8186: Add iova_region_larb_msk
->   iommu/mediatek: Add a gap for the iova regions
->   iommu/mediatek: Set dma_mask for the master devices
->   media: mtk-jpegdec: Remove the setting for dma_mask
->   media: mediatek: vcodec: Remove the setting for dma_mask
->   arm64: dts: mt8195: Remove the unnecessary dma-ranges
->   arm64: dts: mt8195: Add dma-ranges for the parent "soc" node
->   arm64: dts: mt8186: Add dma-ranges for the parent "soc" node
-> 
->  .../media/mediatek,mt8195-jpegdec.yaml        |   7 -
->  .../media/mediatek,mt8195-jpegenc.yaml        |   7 -
->  .../media/mediatek,vcodec-decoder.yaml        |   5 -
->  .../media/mediatek,vcodec-encoder.yaml        |   5 -
->  .../bindings/media/mediatek-jpeg-encoder.yaml |   5 -
->  arch/arm64/boot/dts/mediatek/mt8186.dtsi      |   1 +
->  arch/arm64/boot/dts/mediatek/mt8195.dtsi      |   4 +-
->  drivers/iommu/mtk_iommu.c                     | 145 ++++++++++++++----
->  .../platform/mediatek/jpeg/mtk_jpeg_core.c    |   3 -
->  .../mediatek/vcodec/mtk_vcodec_dec_drv.c      |   8 -
->  .../mediatek/vcodec/mtk_vcodec_enc_drv.c      |   3 -
->  11 files changed, 117 insertions(+), 76 deletions(-)
-> 
+Another alternative is this webpage:
+https://pkgs.org/download/rust
 
+--=20
+Morten Linderud
+PGP: 9C02FF419FECBE16
+
+--p6d65wvmwi2vphxp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEwQA0ZnZjToDJQPuenAL/QZ/svhYFAmQ2pkAACgkQnAL/QZ/s
+vha0pw//fecghEK5I9RyfAQ2BiwDSVkPaOhflT7Fcfzdt01nYS++SsyxxnOVRYfc
+1txshNmNbUzTIRpbJ5AlDAGfBMpL882FTtfpJ9bZxAqSMa/OziYdVKAzcEFDWLja
+OWXk0YJpuAwD7mRlMVuXTnn5CkujhcbCsuOLDOfopP1MCkjW20tGW4sLlJuyG94b
+NowjEMiVSBhERIAqXNG6wq33GNALClt1NgFtLerbUShikMwSTnkzB0z8T+quJKc2
+3NRn8DCfPHtleuuu1V+oRjeoaYcxpxodIArX8yT0inshvC+HSrvTLEbrhr1DJUhJ
+x4lN3SEyL60qtPjw1WSN2iTTWoLH0iWm/i8NDJpRXH86nL7StgNgOZGnN0YxN2Ku
+OFr+nRIpRt+kmdOvqDBkY3VR0pM13GXPX0crGOJpTgwmUAWVEznpdylaDK3eXRI3
+BghkDNi4xdiRDV92wRnyq96/wxfT+yjWlIQZnl9C9/m0JXrmSJmQJZw4vRs6gcdA
+Zn5davlN+0Q0KQqpXDTRMn7af7iQVOOrLqJDiqd7QkEI1qXzfKwyD99epsbIpxvH
+S+N52+frr7Jpk6BuSwn1JNpAWL1tOHGG2cwPn3jdOR26T6v2RNFnD29QObHLGsxc
+PfOh7CkLDC+LD8klTenmwu0+KrrvVHcUQKtGn4f5ht82OEmIS0E=
+=p1yX
+-----END PGP SIGNATURE-----
+
+--p6d65wvmwi2vphxp--
