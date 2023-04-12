@@ -2,120 +2,123 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 607FDC7619A
-	for <linux-media@archiver.kernel.org>; Wed, 12 Apr 2023 14:37:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C683FC7619A
+	for <linux-media@archiver.kernel.org>; Wed, 12 Apr 2023 14:39:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231601AbjDLOg7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 12 Apr 2023 10:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37274 "EHLO
+        id S231708AbjDLOjp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 12 Apr 2023 10:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbjDLOg4 (ORCPT
+        with ESMTP id S230310AbjDLOjh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 12 Apr 2023 10:36:56 -0400
-X-Greylist: delayed 3583 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 12 Apr 2023 07:36:27 PDT
-Received: from linderud.pw (linderud.dev [163.172.10.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20269126;
-        Wed, 12 Apr 2023 07:36:27 -0700 (PDT)
-Received: from linderud.pw (localhost [127.0.0.1])
-        by linderud.pw (Postfix) with ESMTP id 25C0FC0293;
-        Wed, 12 Apr 2023 14:38:27 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linderud.pw;
-        s=linderud; t=1681303107;
-        bh=O8aSdXpTVrDXIG6KsH5yZYXrkaTdUzwYMD1SqhEYBaQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=dM88oRf1u+qblbhjh1UNixkaXpk2+2DmnsIoD65HqxxNZ3rNWS61Xoi8Y+aizFgRk
-         xzJcyCacbnDKV7l+SFXyTQ+V8m7GeNay5buHPp7Vtohvazqpq3319vmS7QG9PrhwkX
-         rpoGZ4LtL57TzLg0Et5Z/+Hbr7S8I6y5QBtnpNIM4RIJuU90ik0C4Q1vitu+M8dr8i
-         0YhC5po9jcm5RDyxzzENj+KYTWVi1H08u5ulK0XGISUPfLxqn8UsYWS2S/ZeTV1t5w
-         rWvajDfILar9vprpgkP8sDd590e4p/oQNcmmE3CcW5HoHDhyO0ZMPFFfv/GpId8JZV
-         WilHMdDKOhRvodUXMa2x3mrQk+54DPbfeVkKGWn9Yn29uohLOO4ps1nw3DoXnkNTuu
-         ZscqaAUNi+TrcbFVF9vJRxZ+9tZ+lUuFNAhix4GISjacggjSNCzP/vv/jRrny81Y4c
-         MrmNS8AOebCgjVjXfO7ChmvWkX3t2OOHDa6EjVMu93lQNlm956GoPaVySQX/iRJgSH
-         XdY/vlo8i5E3fm+cOmTlv9vXNlYCP8296+SvRhKhX6mhS+zyU5fsOe1bwFHMzrkKaW
-         PxIFUiBKyFBlapzPojkHWkPHncLnllqCzuDb+1oXWyeRfb1d5M4Nk6wA1snx6thvNY
-         eEzVFpzTfm5muJySAFnXYLLE=
-Received: from localhost (unknown [85.252.93.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: morten)
-        by linderud.pw (Postfix) with ESMTPSA id DD86AC018B;
-        Wed, 12 Apr 2023 14:38:26 +0200 (CEST)
-Date:   Wed, 12 Apr 2023 14:38:25 +0200
-From:   Morten Linderud <morten@linderud.pw>
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Deborah Brouwer <deborah.brouwer@collabora.com>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        wedsonaf@gmail.com, ojeda@kernel.org, mchehab@kernel.org,
-        hverkuil@xs4all.nl, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        kernel@collabora.com
-Subject: Re: [PATCH 0/6] Initial Rust V4L2 support
-Message-ID: <ipjch2egqg43r6h3drwmmm5s3lbidknke42gz7d6w2digskp2e@o4hzg6zrtli3>
-References: <20230406215615.122099-1-daniel.almeida@collabora.com>
- <ZDSRSWhWsN34MghQ@xps>
- <CANiq72=n1b=fJ2XZZx_MLKkbKMTmnmTBMgA3GJ_hqyARPtwEiQ@mail.gmail.com>
- <20230412025834.GA301301@mit.edu>
+        Wed, 12 Apr 2023 10:39:37 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8C59775;
+        Wed, 12 Apr 2023 07:39:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681310349; x=1712846349;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DZ+4bqcOwGArNUff5c6q4WqLlSztJS1TSKOKE8pP2P4=;
+  b=NFbU0lN+kFFYJzZWK1MCEbKb2no7YqwKEIWRwS7KDi53b2LPGdu8FctW
+   l2xKHCT5iidqRjo9WKgGC1iRerBI2hx50nUVC/HTDH1Rg+/IziP8dfnBN
+   A+ZqsSWKbmlZuWkup7Tm677S8V0+fL1dH3tt6fZdSRKLpAkgyAM8An4CI
+   fBfLoZbm0VaGoqfhMvKz445dxpuxiJuhV5Hmh7TYCcX6bHh8uL23sXDQd
+   DM7VuRZOl7XH+AYTb2MEBe+YEVtwDYcbTNLGKJOvaOmiMqQ5ukl5n2V//
+   TAwm50863EWsDVxRa6ikkYhTdiLpKc+QjWcvTq3Bymj+Y+2snqeitP0L8
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="324277258"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="324277258"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 07:39:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="639258064"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="639258064"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 07:39:05 -0700
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id 7EF49120D2E;
+        Wed, 12 Apr 2023 17:39:02 +0300 (EEST)
+Date:   Wed, 12 Apr 2023 17:39:02 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Michael Riesch <michael.riesch@wolfvision.net>
+Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Riesch via B4 Relay 
+        <devnull+michael.riesch.wolfvision.net@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Matthias Fend <Matthias.Fend@wolfvision.net>,
+        libcamera-devel@lists.libcamera.org, linux-media@vger.kernel.org,
+        hverkuil@xs4all.nl
+Subject: Re: [libcamera-devel] [PATCH RFC 1/4] media: v4l2-ctrls: add lens
+ group status controls for zoom and focus
+Message-ID: <ZDbChgZJHVaaX3/x@kekkonen.localdomain>
+References: <20230406-feature-controls-lens-v1-0-543189a680de@wolfvision.net>
+ <20230406-feature-controls-lens-v1-1-543189a680de@wolfvision.net>
+ <CAPY8ntArOOqPQzvkJrQEyuVFfb6j8x6WODTMHOn1qHPU588mbQ@mail.gmail.com>
+ <0f1baf5e-2ff6-e10b-5c3e-0a82c71d0ce6@wolfvision.net>
+ <CAPY8ntAjBEFfeV6nnQs34Y22QM-irT13ALDv4ksP8AYK=jWsKg@mail.gmail.com>
+ <3ab7bfc4-aaae-2e39-b420-40ad8d71dda4@wolfvision.net>
+ <ZDaa+qhoZxZ5ymxL@kekkonen.localdomain>
+ <8fe5c9c5-6eb0-86ae-9e5d-fbaa72be25fe@wolfvision.net>
+ <ZDaemghP0HQSw3Fo@kekkonen.localdomain>
+ <77d91964-de0a-8bd4-12d9-bc16110cfa7c@wolfvision.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="p6d65wvmwi2vphxp"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230412025834.GA301301@mit.edu>
+In-Reply-To: <77d91964-de0a-8bd4-12d9-bc16110cfa7c@wolfvision.net>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Hi Michael,
 
---p6d65wvmwi2vphxp
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed, Apr 12, 2023 at 03:43:26PM +0200, Michael Riesch wrote:
+> Hi Sakari,
+> 
+> On 4/12/23 14:05, Sakari Ailus wrote:
+> > Hi Michael,
+> > 
+> > On Wed, Apr 12, 2023 at 01:57:36PM +0200, Michael Riesch wrote:
+> >> Hi Sakari,
+> >>
+> >> On 4/12/23 13:50, Sakari Ailus wrote:
+> >>> Hi Michael,
+> >>>
+> >>> On Wed, Apr 12, 2023 at 10:00:26AM +0200, Michael Riesch wrote:
+> >>>>  - Different controls: If moving = (V4L2_CID_FOCUS_ABSOLUTE == current),
+> >>>>    then what happens if the application performs a
+> >>>>    V4L2_CID_FOCUS_RELATIVE with -3? current should reach 39,
+> >>>>    V4L2_CID_FOCUS_ABSOLUTE is still at 42, the lens is still moving from
+> >>>>    the application's point of view.
+> >>>
+> >>> Would there be a reason to implement both of these controls in a single
+> >>> driver? AFAIU, the relative one should be used if there absolute value
+> >>> isn't known to the driver.
+> >>
+> >> Probably not, but on the other hand there is nothing the prevents a
+> >> driver developer from doing so, right? Point is that should there be a
+> >> driver which does implement both controls, we are in trouble AFAIU.
+> > 
+> > I think the documentation should be improved in this regard.
+> 
+> The documentation of which control exactly? And what items should be added?
 
-On Tue, Apr 11, 2023 at 10:58:34PM -0400, Theodore Ts'o wrote:
-> On Tue, Apr 11, 2023 at 04:22:56PM +0200, Miguel Ojeda wrote:
-> >=20
-> > Thanks, it is great to hear that the guide helped! :)
-> >=20
-> > On resources: nowadays we have a webpage, too. Still to be completed,
-> > but you may find it useful already: https://rust-for-linux.com
->=20
-> Something that would perhaps be useful is to document (a) what
-> versions of Rust is available for various distributions, or pointers
-> to how to get that information for various distributions.  For
-> example, you can get that information from Debian using [1].  It
-> appears that Fedora isn't distributing rustc at *all*, at least
-> according to [2], so apparently for Fedora people will need to install
-> it from source.
+Both V4L2_CID_FOCUS_ABSOLUTE and V4L2_CID_FOCUS_RELATIVE. For the former,
+the sentence "Positive values set the focus closer to the camera, negative
+values towards infinity." doesn't make much sense in the context. For the
+latter, what I mentioned earlier, i.e. this should be only implemented if
+the absolute value isn't known. It's not a driver's job to do simple
+arithmetics for the user space.
 
-You can get a list here:
-https://repology.org/project/rust/versions
+In fact, it appears that no driver is using V4L2_CID_FOCUS_RELATIVE at the
+moment. So we could as well deprecate it (or remove from documentation
+altogether).
 
-Another alternative is this webpage:
-https://pkgs.org/download/rust
+-- 
+Kind regards,
 
---=20
-Morten Linderud
-PGP: 9C02FF419FECBE16
-
---p6d65wvmwi2vphxp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEwQA0ZnZjToDJQPuenAL/QZ/svhYFAmQ2pkAACgkQnAL/QZ/s
-vha0pw//fecghEK5I9RyfAQ2BiwDSVkPaOhflT7Fcfzdt01nYS++SsyxxnOVRYfc
-1txshNmNbUzTIRpbJ5AlDAGfBMpL882FTtfpJ9bZxAqSMa/OziYdVKAzcEFDWLja
-OWXk0YJpuAwD7mRlMVuXTnn5CkujhcbCsuOLDOfopP1MCkjW20tGW4sLlJuyG94b
-NowjEMiVSBhERIAqXNG6wq33GNALClt1NgFtLerbUShikMwSTnkzB0z8T+quJKc2
-3NRn8DCfPHtleuuu1V+oRjeoaYcxpxodIArX8yT0inshvC+HSrvTLEbrhr1DJUhJ
-x4lN3SEyL60qtPjw1WSN2iTTWoLH0iWm/i8NDJpRXH86nL7StgNgOZGnN0YxN2Ku
-OFr+nRIpRt+kmdOvqDBkY3VR0pM13GXPX0crGOJpTgwmUAWVEznpdylaDK3eXRI3
-BghkDNi4xdiRDV92wRnyq96/wxfT+yjWlIQZnl9C9/m0JXrmSJmQJZw4vRs6gcdA
-Zn5davlN+0Q0KQqpXDTRMn7af7iQVOOrLqJDiqd7QkEI1qXzfKwyD99epsbIpxvH
-S+N52+frr7Jpk6BuSwn1JNpAWL1tOHGG2cwPn3jdOR26T6v2RNFnD29QObHLGsxc
-PfOh7CkLDC+LD8klTenmwu0+KrrvVHcUQKtGn4f5ht82OEmIS0E=
-=p1yX
------END PGP SIGNATURE-----
-
---p6d65wvmwi2vphxp--
+Sakari Ailus
