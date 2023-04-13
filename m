@@ -2,43 +2,43 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CBB59C77B61
-	for <linux-media@archiver.kernel.org>; Thu, 13 Apr 2023 09:16:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9362AC77B76
+	for <linux-media@archiver.kernel.org>; Thu, 13 Apr 2023 09:16:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbjDMJQf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 13 Apr 2023 05:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41412 "EHLO
+        id S230071AbjDMJQj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 13 Apr 2023 05:16:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjDMJQe (ORCPT
+        with ESMTP id S230027AbjDMJQi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 13 Apr 2023 05:16:34 -0400
+        Thu, 13 Apr 2023 05:16:38 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F9C9EC6;
-        Thu, 13 Apr 2023 02:16:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE27993ED;
+        Thu, 13 Apr 2023 02:16:13 -0700 (PDT)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8D14A6603207;
-        Thu, 13 Apr 2023 10:15:59 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 686856603214;
+        Thu, 13 Apr 2023 10:16:04 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681377360;
-        bh=Wt9eQea6Ljg+YXnJ8eD/gvOlKDFcwoBLOrVG37MEhnI=;
+        s=mail; t=1681377365;
+        bh=qah/T196BBIHxHtwXK40dRiVKbEiqh7RkQIU3gbUUsM=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=NxnKfE3lF95+Q80F4uOtnJx/PctJKJP14ZNpTb7X2SaIKLgdyvBrecyljqmSEXXMR
-         KiIqKbYXa+JMIMaFhMWjWuPlSyUiC0JQ7eF2Ju1mRpruw6d++1D9NIcl6XznYMVH+c
-         hjuK9iDsW0VJKoCNAGv9tFoDZreqbJJHby/MKyKbg+4GFK+6X54LrEOv7lR6iA3BFC
-         KcS2DJyZjk7DEeRRM0cGO+oyteSRgqTWjCT8YGnF2wDFAoY8MDqyEvXN+qZqBMlEp6
-         AfGsuYuq4znHxfjyd8Dvp6UsRYl2jBXx6AXqZapbKqXbPXw7nIDa5B3lRcZNkh3mrm
-         iYaIs1lPmfDRQ==
-Message-ID: <f70e622c-9202-b0da-fa62-fda6db5b5173@collabora.com>
-Date:   Thu, 13 Apr 2023 11:15:56 +0200
+        b=Jc1+AQBL2TvYa0Qw4gP+JH+WlYX8F85rIMRgmuIDaHiPogKRrsnjuzp+KDjghSt4W
+         6Uo5CDIsoGkLwEeYUMxOBZF4CkGPt8v7/xe2zJ9y2ALgkGAQ3TyyOvFy1Jo6QCne+r
+         FSDDWAj42ApXQq/Rfc3hlnf2Ku9ioOh1fBf/A7NznDr2EOcAXyXrHYTZ9DLU6N03mj
+         egDDO8IJDViAzItFMFbrtOt02jUrknP9r6pw5h0dxsjy3uKHjo5sdoaC7n8KED3IOa
+         zf/q3DpjWWwDVAFDRNb4FI0tPchaboIXvUFUKLYNyQCtg0S6nRX+n3Us+c0+Cvh/jt
+         2x3Y3vH8HBcPg==
+Message-ID: <a4811a5e-704f-6b66-9f1c-3e40f54a462b@collabora.com>
+Date:   Thu, 13 Apr 2023 11:16:01 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
-Subject: Re: [PATCH v6 08/13] media: verisilicon: Compute motion vectors size
- for AV1 frames
+Subject: Re: [PATCH v6 07/13] media: verisilicon: Check AV1 bitstreams bit
+ depth
 Content-Language: en-US
 To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
         ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
@@ -49,10 +49,10 @@ Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, kernel@collabora.com
 References: <20230412115652.403949-1-benjamin.gaignard@collabora.com>
- <20230412115652.403949-9-benjamin.gaignard@collabora.com>
+ <20230412115652.403949-8-benjamin.gaignard@collabora.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230412115652.403949-9-benjamin.gaignard@collabora.com>
+In-Reply-To: <20230412115652.403949-8-benjamin.gaignard@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -60,8 +60,11 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 Il 12/04/23 13:56, Benjamin Gaignard ha scritto:
-> Compute the additional space required to store motion vectors at
-> the end of the frames buffers.
+> The driver supports 8 and 10 bits bitstreams, make sure to discard
+> other cases.
+> It could happens that userland test if V4L2_CID_STATELESS_AV1_SEQUENCE
+> exists without setting bit_depth field in this case use
+> HANTRO_DEFAULT_BIT_DEPTH value.
 > 
 > Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 > Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
