@@ -2,90 +2,92 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AB85C77B71
-	for <linux-media@archiver.kernel.org>; Thu, 13 Apr 2023 02:52:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2149AC77B6C
+	for <linux-media@archiver.kernel.org>; Thu, 13 Apr 2023 03:44:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbjDMCwr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 12 Apr 2023 22:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
+        id S229484AbjDMDot (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 12 Apr 2023 23:44:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229833AbjDMCwo (ORCPT
+        with ESMTP id S229742AbjDMDoq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 12 Apr 2023 22:52:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2EC26B8
-        for <linux-media@vger.kernel.org>; Wed, 12 Apr 2023 19:52:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3435663A8C
-        for <linux-media@vger.kernel.org>; Thu, 13 Apr 2023 02:39:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49080C433EF
-        for <linux-media@vger.kernel.org>; Thu, 13 Apr 2023 02:39:11 +0000 (UTC)
-Date:   Thu, 13 Apr 2023 04:39:09 +0200
-Message-ID: <cfea089efeadd5649e94fe78c2b800c9.hverkuil@xs4all.nl>
-From:   "Hans Verkuil" <hverkuil-cisco@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
+        Wed, 12 Apr 2023 23:44:46 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.216])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73F824EE5;
+        Wed, 12 Apr 2023 20:44:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=H3yhF
+        Avyem7KDnFlCyJY7TE1lpzbuiAFzAh4R+WP3vc=; b=OmXjSMzZAcLSWJjrO0K6n
+        99GE4FRsIuCiQcmAwg5q0ppzOqfKJaGZ36k8ayMHG6DiAjoHaGQvBw7I6anqHlYw
+        aPAnaz0HLbEgLqekAdBYYHlTkmEtpYP7CZgDEzLmnibMr5b8RU9g5hzJLHEfx65b
+        560AvmpQXT0927I3B3CPYo=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g1-2 (Coremail) with SMTP id _____wCXt2eGejdkzWFfBQ--.36620S2;
+        Thu, 13 Apr 2023 11:44:06 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     mchehab@kernel.org
+Cc:     laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alex000young@gmail.com, hackerzheng666@gmail.com,
+        security@kernel.org, hdanton@sina.com,
+        Zheng Wang <zyytlz.wz@163.com>
+Subject: [RESEND PATCH v2] media: bttv: fix use after free error due to btv->timeout  timer
+Date:   Thu, 13 Apr 2023 11:44:05 +0800
+Message-Id: <20230413034405.36037-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wCXt2eGejdkzWFfBQ--.36620S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ZFy7GF43Zr1xXFykur43Awb_yoW8Jw1kpa
+        ySka43CFy8Xr4UtFyUAF4kZFy3A398XrWFg34xG3ZavF4fZF92vF4jyFWqvF17XF92qrya
+        qa4Fqr13J3WkCFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zinjjPUUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbBzgFQU2I0Yp2FlgABs3
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+There may be some a race condition between timer function
+bttv_irq_timeout and bttv_remove. The timer is setup in
+probe and there is no timer_delete operation in remove
+function. When it hit kfree btv, the function might still be
+invoked, which will cause use after free bug.
 
-Results of the daily build of media_tree:
+This bug is found by static analysis, it may be false positive.
 
-date:			Thu Apr 13 03:00:09 CEST 2023
-media-tree git hash:	e18a7e9a2d34a32482e4069fcedf30a7bc9e9ef5
-media_build git hash:	0fe857b86addf382f6fd383948bd7736a3201403
-v4l-utils git hash:	399d70f1e69cecd924bbdc4cf64d3cb96b358475
-edid-decode git hash:	2d44e1b01c7ed7d65b20ecdce62d354841832201
-gcc version:		i686-linux-gcc (GCC) 12.2.0
-sparse repo:            git://git.kernel.org/pub/scm/devel/sparse/sparse.git
-sparse version:		v0.6.4-39-gce1a6720-dirty
-smatch repo:            git://repo.or.cz/smatch.git
-smatch version:		v0.5.0-8305-g2fad699a-dirty
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: 0dbf1648c48132531ac7524d00c4136b530e8d82
-host hardware:		x86_64
-host os:		6.1.0-5-amd64
+Fix it by adding del_timer_sync invoking to the remove function.
 
-linux-git-sh: OK
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-arm-stm32: OK
-linux-git-arm-pxa: OK
-linux-git-mips: OK
-linux-git-arm-multi: WARNINGS
-linux-git-powerpc64: OK
-linux-git-arm64: OK
-linux-git-i686: WARNINGS
-linux-git-x86_64: WARNINGS
-Check COMPILE_TEST: WARNINGS: VIDEOBUF_VMALLOC VIDEOBUF_DMA_CONTIG
-Check for strcpy/strncpy/strlcpy: OK
-apps: WARNINGS
-spec-git: OK
-virtme: OK: Final Summary: 3080, Succeeded: 3080, Failed: 0, Warnings: 0
-virtme-32: OK: Final Summary: 3193, Succeeded: 3193, Failed: 0, Warnings: 0
-sparse: WARNINGS
-smatch: WARNINGS
-kerneldoc: WARNINGS
+cpu0                cpu1
+                  bttv_probe
+                    ->timer_setup
+                      ->bttv_set_dma
+                        ->mod_timer;
+bttv_remove
+  ->kfree(btv);
+                  ->bttv_irq_timeout
+                    ->USE btv
 
-Detailed results are available here:
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+---
+v2:
+- stop replacing del_timer with del_timer_sync suggested by Hillf Danton
+---
+ drivers/media/pci/bt8xx/bttv-driver.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-https://hverkuil.home.xs4all.nl/logs/Thursday.log
+diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
+index d40b537f4e98..24ba5729969d 100644
+--- a/drivers/media/pci/bt8xx/bttv-driver.c
++++ b/drivers/media/pci/bt8xx/bttv-driver.c
+@@ -4248,6 +4248,7 @@ static void bttv_remove(struct pci_dev *pci_dev)
+ 
+ 	/* free resources */
+ 	free_irq(btv->c.pci->irq,btv);
++	del_timer_sync(&btv->timeout);
+ 	iounmap(btv->bt848_mmio);
+ 	release_mem_region(pci_resource_start(btv->c.pci,0),
+ 			   pci_resource_len(btv->c.pci,0));
+-- 
+2.25.1
 
-Detailed regression test results are available here:
-
-https://hverkuil.home.xs4all.nl/logs/Thursday-test-media.log
-https://hverkuil.home.xs4all.nl/logs/Thursday-test-media-32.log
-https://hverkuil.home.xs4all.nl/logs/Thursday-test-media-dmesg.log
-
-Full logs are available here:
-
-https://hverkuil.home.xs4all.nl/logs/Thursday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-https://hverkuil.home.xs4all.nl/spec/index.html
