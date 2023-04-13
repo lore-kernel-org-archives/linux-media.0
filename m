@@ -2,31 +2,31 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A7ADC77B73
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7630CC77B77
 	for <linux-media@archiver.kernel.org>; Thu, 13 Apr 2023 03:55:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbjDMDzy convert rfc822-to-8bit (ORCPT
+        id S229841AbjDMDz4 convert rfc822-to-8bit (ORCPT
         <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 12 Apr 2023 23:55:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58628 "EHLO
+        Wed, 12 Apr 2023 23:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjDMDzu (ORCPT
+        with ESMTP id S229596AbjDMDzu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 12 Apr 2023 23:55:50 -0400
 Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D9559F0;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56AB59C6;
         Wed, 12 Apr 2023 20:55:46 -0700 (PDT)
 Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
         (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 416DA24E1B3;
-        Thu, 13 Apr 2023 11:55:43 +0800 (CST)
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 4516824E227;
+        Thu, 13 Apr 2023 11:55:45 +0800 (CST)
 Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX166.cuchost.com
  (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 13 Apr
- 2023 11:55:43 +0800
+ 2023 11:55:45 +0800
 Received: from xiaofei.localdomain (180.164.60.184) by EXMBX073.cuchost.com
  (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 13 Apr
- 2023 11:55:42 +0800
+ 2023 11:55:44 +0800
 From:   Jack Zhu <jack.zhu@starfivetech.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Maxime Ripard <mripard@kernel.org>,
@@ -42,9 +42,9 @@ To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
 CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <jack.zhu@starfivetech.com>,
         <changhuang.liang@starfivetech.com>
-Subject: [PATCH v4 2/8] media: dt-bindings: cadence-csi2rx: Add resets property
-Date:   Thu, 13 Apr 2023 11:55:35 +0800
-Message-ID: <20230413035541.62129-3-jack.zhu@starfivetech.com>
+Subject: [PATCH v4 6/8] media: dt-bindings: Add bindings for JH7110 Camera Subsystem
+Date:   Thu, 13 Apr 2023 11:55:39 +0800
+Message-ID: <20230413035541.62129-7-jack.zhu@starfivetech.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230413035541.62129-1-jack.zhu@starfivetech.com>
 References: <20230413035541.62129-1-jack.zhu@starfivetech.com>
@@ -59,57 +59,204 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add resets property for Cadence MIPI-CSI2 RX controller
+Add the bindings documentation for Starfive JH7110 Camera Subsystem
+which is used for handing image sensor data.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
 ---
- .../bindings/media/cdns,csi2rx.yaml           | 24 +++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ .../bindings/media/starfive,jh7110-camss.yaml | 164 ++++++++++++++++++
+ MAINTAINERS                                   |   7 +
+ 2 files changed, 171 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
 
-diff --git a/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml b/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
-index aba1191b3e77..30a335b10762 100644
---- a/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
-+++ b/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
-@@ -41,6 +41,24 @@ properties:
-       - const: pixel_if2_clk
-       - const: pixel_if3_clk
- 
-+  resets:
+diff --git a/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml b/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+new file mode 100644
+index 000000000000..4cd144f1b845
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+@@ -0,0 +1,164 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/starfive,jh7110-camss.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Starfive SoC CAMSS ISP
++
++maintainers:
++  - Jack Zhu <jack.zhu@starfivetech.com>
++  - Changhuang Liang <changhuang.liang@starfivetech.com>
++
++description:
++  The Starfive CAMSS ISP is a Camera interface for Starfive JH7110 SoC. It
++  consists of a VIN controller (Video In Controller, a top-level control until)
++  and an ISP.
++
++properties:
++  compatible:
++    const: starfive,jh7110-camss
++
++  reg:
++    maxItems: 2
++
++  reg-names:
 +    items:
-+      - description: CSI2Rx system reset
-+      - description: Gated Register bank reset for APB interface
-+      - description: pixel reset for Stream interface 0
-+      - description: pixel reset for Stream interface 1
-+      - description: pixel reset for Stream interface 2
-+      - description: pixel reset for Stream interface 3
++      - const: syscon
++      - const: isp
++
++  clocks:
++    maxItems: 7
++
++  clock-names:
++    items:
++      - const: apb_func
++      - const: wrapper_clk_c
++      - const: dvp_inv
++      - const: axiwr
++      - const: mipi_rx0_pxl
++      - const: ispcore_2x
++      - const: isp_axi
++
++  resets:
++    maxItems: 6
 +
 +  reset-names:
 +    items:
-+      - const: sys
-+      - const: reg_bank
-+      - const: pixel_if0
-+      - const: pixel_if1
-+      - const: pixel_if2
-+      - const: pixel_if3
++      - const: wrapper_p
++      - const: wrapper_c
++      - const: axird
++      - const: axiwr
++      - const: isp_top_n
++      - const: isp_top_axi
 +
-   phys:
-     maxItems: 1
-     description: MIPI D-PHY
-@@ -123,6 +141,12 @@ examples:
-         clock-names = "sys_clk", "p_clk",
-                       "pixel_if0_clk", "pixel_if1_clk",
-                       "pixel_if2_clk", "pixel_if3_clk";
-+        resets = <&bytereset 9>, <&bytereset 4>,
-+                 <&corereset 5>, <&corereset 6>,
-+                 <&corereset 7>, <&corereset 8>;
-+        reset-names = "sys", "reg_bank",
-+                      "pixel_if0", "pixel_if1",
-+                      "pixel_if2", "pixel_if3";
-         phys = <&csi_phy>;
-         phy-names = "dphy";
++  power-domains:
++    items:
++      - description: JH7110 ISP Power Domain Switch Controller.
++
++  interrupts:
++    maxItems: 4
++
++  ports:
++    $ref: /schemas/graph.yaml#/properties/ports
++
++    properties:
++      port@0:
++        $ref: /schemas/graph.yaml#/$defs/port-base
++        unevaluatedProperties: false
++        description: Input port for receiving DVP data.
++
++        properties:
++          endpoint:
++            $ref: video-interfaces.yaml#
++            unevaluatedProperties: false
++
++            properties:
++              bus-width:
++                const: 8
++
++              data-shift:
++                const: 2
++
++      port@1:
++        $ref: /schemas/graph.yaml#/properties/port
++        description: Input port for receiving CSI data.
++
++    required:
++      - port@0
++      - port@1
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - clocks
++  - clock-names
++  - resets
++  - reset-names
++  - power-domains
++  - interrupts
++  - ports
++
++additionalProperties: false
++
++examples:
++  - |
++    isp@19840000 {
++        compatible = "starfive,jh7110-camss";
++        reg = <0x19840000 0x10000>,
++              <0x19870000 0x30000>;
++        reg-names = "syscon", "isp";
++        clocks = <&ispcrg 0>,
++                 <&ispcrg 13>,
++                 <&ispcrg 2>,
++                 <&ispcrg 12>,
++                 <&ispcrg 1>,
++                 <&syscrg 51>,
++                 <&syscrg 52>;
++        clock-names = "apb_func",
++                      "wrapper_clk_c",
++                      "dvp_inv",
++                      "axiwr",
++                      "mipi_rx0_pxl",
++                      "ispcore_2x",
++                      "isp_axi";
++        resets = <&ispcrg 0>,
++                 <&ispcrg 1>,
++                 <&ispcrg 10>,
++                 <&ispcrg 11>,
++                 <&syscrg 41>,
++                 <&syscrg 42>;
++        reset-names = "wrapper_p",
++                      "wrapper_c",
++                      "axird",
++                      "axiwr",
++                      "isp_top_n",
++                      "isp_top_axi";
++        power-domains = <&pwrc 5>;
++        interrupts = <92>, <87>, <88>, <90>;
++
++        ports {
++            #address-cells = <1>;
++            #size-cells = <0>;
++            port@0 {
++                reg = <0>;
++                vin_from_sc2235: endpoint {
++                    remote-endpoint = <&sc2235_to_vin>;
++                    bus-width = <8>;
++                    data-shift = <2>;
++                    hsync-active = <1>;
++                    vsync-active = <0>;
++                    pclk-sample = <1>;
++                };
++            };
++
++            port@1 {
++                reg = <1>;
++                vin_from_csi2rx: endpoint {
++                    remote-endpoint = <&csi2rx_to_vin>;
++                };
++            };
++        };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index bbb8b5c0187b..b8c76b0d7eb3 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -19909,6 +19909,13 @@ M:	Ion Badulescu <ionut@badula.org>
+ S:	Odd Fixes
+ F:	drivers/net/ethernet/adaptec/starfire*
  
++STARFIVE CAMERA SUBSYSTEM DRIVER
++M:	Jack Zhu <jack.zhu@starfivetech.com>
++M:	Changhuang Liang <changhuang.liang@starfivetech.com>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
++
+ STARFIVE DEVICETREES
+ M:	Emil Renner Berthing <kernel@esmil.dk>
+ S:	Maintained
 -- 
 2.34.1
 
