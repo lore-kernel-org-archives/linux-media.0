@@ -2,95 +2,189 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3ECD6C77B61
-	for <linux-media@archiver.kernel.org>; Thu, 13 Apr 2023 03:50:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBA0FC77B71
+	for <linux-media@archiver.kernel.org>; Thu, 13 Apr 2023 03:55:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbjDMDuT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 12 Apr 2023 23:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57228 "EHLO
+        id S229696AbjDMDzu convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 12 Apr 2023 23:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjDMDuR (ORCPT
+        with ESMTP id S229506AbjDMDzt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 12 Apr 2023 23:50:17 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1737610EB;
-        Wed, 12 Apr 2023 20:50:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=p7a8t
-        xy1BJ4nm/iFKntdPMWHPe8SSuw9rmT+BpB8/qQ=; b=UbKAb1QmIiulzv/HeAq6J
-        wYe1Mzhfh8H5XdMiq7ADF2jGzoy270y/sQKgJUnkf2V9K4j07Q6KNtfQMl6pvhZx
-        GizW0aBqQDwJWID1SJM0Ml0fiRenyr9wzOpZN9frVX5slC+sc7PvdpIMM1gKXKkz
-        pCUMx8XWCHztFlibR9vzZ0=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g5-3 (Coremail) with SMTP id _____wDHzRbXezdkJthZBQ--.61026S2;
-        Thu, 13 Apr 2023 11:49:43 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     mchehab@kernel.org
-Cc:     laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alex000young@gmail.com, hackerzheng666@gmail.com,
-        security@kernel.org, hdanton@sina.com,
-        Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH v3] media: bttv: fix use after free error due to btv->timeout  timer
-Date:   Thu, 13 Apr 2023 11:49:42 +0800
-Message-Id: <20230413034942.40831-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 12 Apr 2023 23:55:49 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 180C1527E;
+        Wed, 12 Apr 2023 20:55:46 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id A454524E171;
+        Thu, 13 Apr 2023 11:55:43 +0800 (CST)
+Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 13 Apr
+ 2023 11:55:43 +0800
+Received: from xiaofei.localdomain (180.164.60.184) by EXMBX073.cuchost.com
+ (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 13 Apr
+ 2023 11:55:43 +0800
+From:   Jack Zhu <jack.zhu@starfivetech.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        "Todor Tomov" <todor.too@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Laurent Pinchart" <laurent.pinchart@ideasonboard.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Eugen Hristev <eugen.hristev@collabora.com>
+CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <jack.zhu@starfivetech.com>,
+        <changhuang.liang@starfivetech.com>
+Subject: [PATCH v4 3/8] media: cadence: Add operation on reset
+Date:   Thu, 13 Apr 2023 11:55:36 +0800
+Message-ID: <20230413035541.62129-4-jack.zhu@starfivetech.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230413035541.62129-1-jack.zhu@starfivetech.com>
+References: <20230413035541.62129-1-jack.zhu@starfivetech.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wDHzRbXezdkJthZBQ--.61026S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7ZFy7GF43Zr1xXFykur43Awb_yoW8GFyfpa
-        yIkFy3Cry8Xr4UtryUAF4kWFW3A398XrWUKr97WanavF4fAr92vF4jvFyqyF17JryqqrWa
-        qa4Fqw13Ja4DCFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zinjjPUUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXBtQU1Xl6PMRVAAAsq
+Content-Type: text/plain
+X-Originating-IP: [180.164.60.184]
+X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX073.cuchost.com
+ (172.16.6.83)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There may be some a race condition between timer function
-bttv_irq_timeout and bttv_remove. The timer is setup in
-probe and there is no timer_delete operation in remove
-function. When it hit kfree btv, the function might still be
-invoked, which will cause use after free bug.
+Add operation on reset for Cadence MIPI-CSI2 RX Controller.
 
-This bug is found by static analysis, it may be false positive.
-
-Fix it by adding del_timer_sync invoking to the remove function.
-
-cpu0                cpu1
-                  bttv_probe
-                    ->timer_setup
-                      ->bttv_set_dma
-                        ->mod_timer;
-bttv_remove
-  ->kfree(btv);
-                  ->bttv_irq_timeout
-                    ->USE btv
-
-Fixes: 162e6376ac58 ("media: pci: Convert timers to use timer_setup()")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
 ---
-v3:
-- Add Fix label
-v2:
-- stop replacing del_timer with del_timer_sync suggested by Hillf Danton
----
- drivers/media/pci/bt8xx/bttv-driver.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/platform/cadence/cdns-csi2rx.c | 40 +++++++++++++++++---
+ 1 file changed, 35 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
-index d40b537f4e98..24ba5729969d 100644
---- a/drivers/media/pci/bt8xx/bttv-driver.c
-+++ b/drivers/media/pci/bt8xx/bttv-driver.c
-@@ -4248,6 +4248,7 @@ static void bttv_remove(struct pci_dev *pci_dev)
+diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
+index cc3ebb0d96f6..c5bc40491bf8 100644
+--- a/drivers/media/platform/cadence/cdns-csi2rx.c
++++ b/drivers/media/platform/cadence/cdns-csi2rx.c
+@@ -13,6 +13,7 @@
+ #include <linux/of_graph.h>
+ #include <linux/phy/phy.h>
+ #include <linux/platform_device.h>
++#include <linux/reset.h>
+ #include <linux/slab.h>
  
- 	/* free resources */
- 	free_irq(btv->c.pci->irq,btv);
-+	del_timer_sync(&btv->timeout);
- 	iounmap(btv->bt848_mmio);
- 	release_mem_region(pci_resource_start(btv->c.pci,0),
- 			   pci_resource_len(btv->c.pci,0));
+ #include <media/v4l2-ctrls.h>
+@@ -68,6 +69,9 @@ struct csi2rx_priv {
+ 	struct clk			*sys_clk;
+ 	struct clk			*p_clk;
+ 	struct clk			*pixel_clk[CSI2RX_STREAMS_MAX];
++	struct reset_control		*sys_rst;
++	struct reset_control		*p_rst;
++	struct reset_control		*pixel_rst[CSI2RX_STREAMS_MAX];
+ 	struct phy			*dphy;
+ 
+ 	u8				lanes[CSI2RX_LANES_MAX];
+@@ -112,6 +116,7 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+ 	if (ret)
+ 		return ret;
+ 
++	reset_control_deassert(csi2rx->p_rst);
+ 	csi2rx_reset(csi2rx);
+ 
+ 	reg = csi2rx->num_lanes << 8;
+@@ -154,6 +159,8 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+ 		if (ret)
+ 			goto err_disable_pixclk;
+ 
++		reset_control_deassert(csi2rx->pixel_rst[i]);
++
+ 		writel(CSI2RX_STREAM_CFG_FIFO_MODE_LARGE_BUF,
+ 		       csi2rx->base + CSI2RX_STREAM_CFG_REG(i));
+ 
+@@ -169,13 +176,16 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+ 	if (ret)
+ 		goto err_disable_pixclk;
+ 
++	reset_control_deassert(csi2rx->sys_rst);
+ 	clk_disable_unprepare(csi2rx->p_clk);
+ 
+ 	return 0;
+ 
+ err_disable_pixclk:
+-	for (; i > 0; i--)
++	for (; i > 0; i--) {
++		reset_control_assert(csi2rx->pixel_rst[i - 1]);
+ 		clk_disable_unprepare(csi2rx->pixel_clk[i - 1]);
++	}
+ 
+ err_disable_pclk:
+ 	clk_disable_unprepare(csi2rx->p_clk);
+@@ -188,14 +198,17 @@ static void csi2rx_stop(struct csi2rx_priv *csi2rx)
+ 	unsigned int i;
+ 
+ 	clk_prepare_enable(csi2rx->p_clk);
++	reset_control_assert(csi2rx->sys_rst);
+ 	clk_disable_unprepare(csi2rx->sys_clk);
+ 
+ 	for (i = 0; i < csi2rx->max_streams; i++) {
+ 		writel(0, csi2rx->base + CSI2RX_STREAM_CTRL_REG(i));
+ 
++		reset_control_assert(csi2rx->pixel_rst[i]);
+ 		clk_disable_unprepare(csi2rx->pixel_clk[i]);
+ 	}
+ 
++	reset_control_assert(csi2rx->p_rst);
+ 	clk_disable_unprepare(csi2rx->p_clk);
+ 
+ 	if (v4l2_subdev_call(csi2rx->source_subdev, video, s_stream, false))
+@@ -299,6 +312,16 @@ static int csi2rx_get_resources(struct csi2rx_priv *csi2rx,
+ 		return PTR_ERR(csi2rx->p_clk);
+ 	}
+ 
++	csi2rx->sys_rst = devm_reset_control_get_optional_exclusive(&pdev->dev,
++								    "sys_rst");
++	if (IS_ERR(csi2rx->sys_rst))
++		return PTR_ERR(csi2rx->sys_rst);
++
++	csi2rx->p_rst = devm_reset_control_get_optional_exclusive(&pdev->dev,
++								  "p_rst");
++	if (IS_ERR(csi2rx->p_rst))
++		return PTR_ERR(csi2rx->p_rst);
++
+ 	csi2rx->dphy = devm_phy_optional_get(&pdev->dev, "dphy");
+ 	if (IS_ERR(csi2rx->dphy)) {
+ 		dev_err(&pdev->dev, "Couldn't get external D-PHY\n");
+@@ -349,14 +372,21 @@ static int csi2rx_get_resources(struct csi2rx_priv *csi2rx,
+ 	}
+ 
+ 	for (i = 0; i < csi2rx->max_streams; i++) {
+-		char clk_name[16];
++		char name[16];
+ 
+-		snprintf(clk_name, sizeof(clk_name), "pixel_if%u_clk", i);
+-		csi2rx->pixel_clk[i] = devm_clk_get(&pdev->dev, clk_name);
++		snprintf(name, sizeof(name), "pixel_if%u_clk", i);
++		csi2rx->pixel_clk[i] = devm_clk_get(&pdev->dev, name);
+ 		if (IS_ERR(csi2rx->pixel_clk[i])) {
+-			dev_err(&pdev->dev, "Couldn't get clock %s\n", clk_name);
++			dev_err(&pdev->dev, "Couldn't get clock %s\n", name);
+ 			return PTR_ERR(csi2rx->pixel_clk[i]);
+ 		}
++
++		snprintf(name, sizeof(name), "pixel_if%u_rst", i);
++		csi2rx->pixel_rst[i] =
++			devm_reset_control_get_optional_exclusive(&pdev->dev,
++								  name);
++		if (IS_ERR(csi2rx->pixel_rst[i]))
++			return PTR_ERR(csi2rx->pixel_rst[i]);
+ 	}
+ 
+ 	return 0;
 -- 
-2.25.1
+2.34.1
 
