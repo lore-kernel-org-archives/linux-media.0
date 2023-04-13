@@ -2,70 +2,102 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B31EC77B6E
-	for <linux-media@archiver.kernel.org>; Thu, 13 Apr 2023 09:17:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0599C77B6C
+	for <linux-media@archiver.kernel.org>; Thu, 13 Apr 2023 09:19:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbjDMJQ6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 13 Apr 2023 05:16:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41968 "EHLO
+        id S229711AbjDMJTG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 13 Apr 2023 05:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230331AbjDMJQr (ORCPT
+        with ESMTP id S229526AbjDMJS5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 13 Apr 2023 05:16:47 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B36975A;
-        Thu, 13 Apr 2023 02:16:30 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Thu, 13 Apr 2023 05:18:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008E59753;
+        Thu, 13 Apr 2023 02:18:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0F3806603213;
-        Thu, 13 Apr 2023 10:16:12 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681377373;
-        bh=AXEfHAa50hQFsZ9kp0B4+Ld46KMnIp44AJm1OzVM7qY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=CGAb7Wqr8RckiqJJ7CBFkyaO2Aq4tSuL4pCcPa922OxrFIlSkbmUsj0C7vxJILYH9
-         a/D4xDkasxzWCXQmy50QTKjy7uJIBBFuxNIipffvIZdNuVyZVv8FrcA6i1ARmC94G6
-         Do2KBU/Wi7lbqmUO1LARKx/pWqcl1xyxpOAwvTMmTutUm249E+swQnVHdbGXndFX9B
-         TwoZfZYwXEBJuq4sB8w/OwoFmGd7kGDWRVyJWDH/LZW9Y4VMWPyKJi/4YLHklC9hF0
-         yE8FlD0ukInzK2gykqQdJ4y9Qe52HuxUz5pDt+gvZGImjtmXfZPmSp7RxNWGI7Mkdi
-         KqA4l7MY4NN7w==
-Message-ID: <3d1db73e-2c9c-57e0-742a-34aefdad596c@collabora.com>
-Date:   Thu, 13 Apr 2023 11:16:09 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C43563C90;
+        Thu, 13 Apr 2023 09:18:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3618C433D2;
+        Thu, 13 Apr 2023 09:18:29 +0000 (UTC)
+Message-ID: <078e3a48-acdb-e6e4-8963-84ecf1c1429d@xs4all.nl>
+Date:   Thu, 13 Apr 2023 11:18:28 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v6 02/13] media: AV1: Make sure that bit depth in
- correctly initialize
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-References: <20230412115652.403949-1-benjamin.gaignard@collabora.com>
- <20230412115652.403949-3-benjamin.gaignard@collabora.com>
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3] media: bttv: fix use after free error due to
+ btv->timeout timer
 Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230412115652.403949-3-benjamin.gaignard@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Zheng Wang <zyytlz.wz@163.com>,
+        Deborah Brouwer <deborahbrouwer3563@gmail.com>
+Cc:     laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alex000young@gmail.com, hackerzheng666@gmail.com,
+        security@kernel.org, hdanton@sina.com, mchehab@kernel.org
+References: <20230413034942.40831-1-zyytlz.wz@163.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20230413034942.40831-1-zyytlz.wz@163.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Il 12/04/23 13:56, Benjamin Gaignard ha scritto:
-> Make sure that bit_depth field of V4L2_CTRL_TYPE_AV1_SEQUENCE
-> is initialized correctly before using it.
+Hi Zheng,
+
+Deb Brouwer is working on converting bttv to the vb2 framework, so I want to
+wait for that to finish before taking other bttv patches.
+
+I suspect this is still valid post-vb2 conversion, but I'm not certain.
+
+Regards,
+
+	Hans
+
+On 13/04/2023 05:49, Zheng Wang wrote:
+> There may be some a race condition between timer function
+> bttv_irq_timeout and bttv_remove. The timer is setup in
+> probe and there is no timer_delete operation in remove
+> function. When it hit kfree btv, the function might still be
+> invoked, which will cause use after free bug.
 > 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
+> This bug is found by static analysis, it may be false positive.
+> 
+> Fix it by adding del_timer_sync invoking to the remove function.
+> 
+> cpu0                cpu1
+>                   bttv_probe
+>                     ->timer_setup
+>                       ->bttv_set_dma
+>                         ->mod_timer;
+> bttv_remove
+>   ->kfree(btv);
+>                   ->bttv_irq_timeout
+>                     ->USE btv
+> 
+> Fixes: 162e6376ac58 ("media: pci: Convert timers to use timer_setup()")
+> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> ---
+> v3:
+> - Add Fix label
+> v2:
+> - stop replacing del_timer with del_timer_sync suggested by Hillf Danton
+> ---
+>  drivers/media/pci/bt8xx/bttv-driver.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
+> index d40b537f4e98..24ba5729969d 100644
+> --- a/drivers/media/pci/bt8xx/bttv-driver.c
+> +++ b/drivers/media/pci/bt8xx/bttv-driver.c
+> @@ -4248,6 +4248,7 @@ static void bttv_remove(struct pci_dev *pci_dev)
+>  
+>  	/* free resources */
+>  	free_irq(btv->c.pci->irq,btv);
+> +	del_timer_sync(&btv->timeout);
+>  	iounmap(btv->bt848_mmio);
+>  	release_mem_region(pci_resource_start(btv->c.pci,0),
+>  			   pci_resource_len(btv->c.pci,0));
 
