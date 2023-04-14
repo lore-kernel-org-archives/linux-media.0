@@ -2,32 +2,32 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CAC2C77B78
-	for <linux-media@archiver.kernel.org>; Fri, 14 Apr 2023 11:27:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C75EC77B76
+	for <linux-media@archiver.kernel.org>; Fri, 14 Apr 2023 11:28:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjDNL15 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 14 Apr 2023 07:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58416 "EHLO
+        id S229820AbjDNL16 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 14 Apr 2023 07:27:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbjDNL1x (ORCPT
+        with ESMTP id S230004AbjDNL1y (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 14 Apr 2023 07:27:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77CD90
-        for <linux-media@vger.kernel.org>; Fri, 14 Apr 2023 04:27:50 -0700 (PDT)
+        Fri, 14 Apr 2023 07:27:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F652136
+        for <linux-media@vger.kernel.org>; Fri, 14 Apr 2023 04:27:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98F31646E1
-        for <linux-media@vger.kernel.org>; Fri, 14 Apr 2023 11:27:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75C46C4339E;
-        Fri, 14 Apr 2023 11:27:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 97AF364708
+        for <linux-media@vger.kernel.org>; Fri, 14 Apr 2023 11:27:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 720C5C4339B;
+        Fri, 14 Apr 2023 11:27:51 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCHv3 05/18] media: common: saa7146: drop 'fmt' from struct saa7146_buf
-Date:   Fri, 14 Apr 2023 13:27:29 +0200
-Message-Id: <20230414112742.27749-6-hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv3 07/18] staging: media: av7110: replace BUG_ON by WARN_ON
+Date:   Fri, 14 Apr 2023 13:27:31 +0200
+Message-Id: <20230414112742.27749-8-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230414112742.27749-1-hverkuil-cisco@xs4all.nl>
 References: <20230414112742.27749-1-hverkuil-cisco@xs4all.nl>
@@ -37,168 +37,46 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use the video_fmt in saa7146_vv instead of having a pointer
-to it in struct saa7146_buf.
+No need for BUG_ON, WARN_ON is a lot friendlier.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/common/saa7146/saa7146_hlp.c   | 37 +++++++++++---------
- drivers/media/common/saa7146/saa7146_video.c | 12 +++----
- include/media/drv-intf/saa7146_vv.h          |  1 -
- 3 files changed, 26 insertions(+), 24 deletions(-)
+ drivers/staging/media/av7110/av7110.c    | 6 ++++--
+ drivers/staging/media/av7110/av7110_hw.c | 3 ++-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/common/saa7146/saa7146_hlp.c b/drivers/media/common/saa7146/saa7146_hlp.c
-index cb8fc326c0a7..98c339c33afa 100644
---- a/drivers/media/common/saa7146/saa7146_hlp.c
-+++ b/drivers/media/common/saa7146/saa7146_hlp.c
-@@ -407,14 +407,14 @@ void saa7146_write_out_dma(struct saa7146_dev* dev, int which, struct saa7146_vi
- static int calculate_video_dma_grab_packed(struct saa7146_dev* dev, struct saa7146_buf *buf)
- {
- 	struct saa7146_vv *vv = dev->vv_data;
-+	struct v4l2_pix_format *pix = &vv->video_fmt;
- 	struct saa7146_video_dma vdma1;
-+	struct saa7146_format *sfmt = saa7146_format_by_fourcc(dev, pix->pixelformat);
+diff --git a/drivers/staging/media/av7110/av7110.c b/drivers/staging/media/av7110/av7110.c
+index df81a9b744c2..a5a431c14ea7 100644
+--- a/drivers/staging/media/av7110/av7110.c
++++ b/drivers/staging/media/av7110/av7110.c
+@@ -1106,9 +1106,11 @@ static int dvb_get_stc(struct dmx_demux *demux, unsigned int num,
+ 	struct av7110 *av7110;
  
--	struct saa7146_format *sfmt = saa7146_format_by_fourcc(dev,buf->fmt->pixelformat);
--
--	int width = buf->fmt->width;
--	int height = buf->fmt->height;
--	int bytesperline = buf->fmt->bytesperline;
--	enum v4l2_field field = buf->fmt->field;
-+	int width = pix->width;
-+	int height = pix->height;
-+	int bytesperline = pix->bytesperline;
-+	enum v4l2_field field = pix->field;
+ 	/* pointer casting paranoia... */
+-	BUG_ON(!demux);
++	if (WARN_ON(!demux))
++		return -EIO;
+ 	dvbdemux = demux->priv;
+-	BUG_ON(!dvbdemux);
++	if (WARN_ON(!dvbdemux))
++		return -EIO;
+ 	av7110 = dvbdemux->priv;
  
- 	int depth = sfmt->depth;
+ 	dprintk(4, "%p\n", av7110);
+diff --git a/drivers/staging/media/av7110/av7110_hw.c b/drivers/staging/media/av7110/av7110_hw.c
+index 93ca31e38ddd..a0be37717259 100644
+--- a/drivers/staging/media/av7110/av7110_hw.c
++++ b/drivers/staging/media/av7110/av7110_hw.c
+@@ -1007,7 +1007,8 @@ static int OSDSetBlock(struct av7110 *av7110, int x0, int y0,
  
-@@ -469,8 +469,9 @@ static int calculate_video_dma_grab_packed(struct saa7146_dev* dev, struct saa71
- 
- static int calc_planar_422(struct saa7146_vv *vv, struct saa7146_buf *buf, struct saa7146_video_dma *vdma2, struct saa7146_video_dma *vdma3)
- {
--	int height = buf->fmt->height;
--	int width = buf->fmt->width;
-+	struct v4l2_pix_format *pix = &vv->video_fmt;
-+	int height = pix->height;
-+	int width = pix->width;
- 
- 	vdma2->pitch	= width;
- 	vdma3->pitch	= width;
-@@ -500,8 +501,9 @@ static int calc_planar_422(struct saa7146_vv *vv, struct saa7146_buf *buf, struc
- 
- static int calc_planar_420(struct saa7146_vv *vv, struct saa7146_buf *buf, struct saa7146_video_dma *vdma2, struct saa7146_video_dma *vdma3)
- {
--	int height = buf->fmt->height;
--	int width = buf->fmt->width;
-+	struct v4l2_pix_format *pix = &vv->video_fmt;
-+	int height = pix->height;
-+	int width = pix->width;
- 
- 	vdma2->pitch	= width/2;
- 	vdma3->pitch	= width/2;
-@@ -530,15 +532,15 @@ static int calc_planar_420(struct saa7146_vv *vv, struct saa7146_buf *buf, struc
- static int calculate_video_dma_grab_planar(struct saa7146_dev* dev, struct saa7146_buf *buf)
- {
- 	struct saa7146_vv *vv = dev->vv_data;
-+	struct v4l2_pix_format *pix = &vv->video_fmt;
- 	struct saa7146_video_dma vdma1;
- 	struct saa7146_video_dma vdma2;
- 	struct saa7146_video_dma vdma3;
-+	struct saa7146_format *sfmt = saa7146_format_by_fourcc(dev, pix->pixelformat);
- 
--	struct saa7146_format *sfmt = saa7146_format_by_fourcc(dev,buf->fmt->pixelformat);
--
--	int width = buf->fmt->width;
--	int height = buf->fmt->height;
--	enum v4l2_field field = buf->fmt->field;
-+	int width = pix->width;
-+	int height = pix->height;
-+	enum v4l2_field field = pix->field;
- 
- 	BUG_ON(0 == buf->pt[0].dma);
- 	BUG_ON(0 == buf->pt[1].dma);
-@@ -717,8 +719,9 @@ static void saa7146_disable_clipping(struct saa7146_dev *dev)
- 
- void saa7146_set_capture(struct saa7146_dev *dev, struct saa7146_buf *buf, struct saa7146_buf *next)
- {
--	struct saa7146_format *sfmt = saa7146_format_by_fourcc(dev,buf->fmt->pixelformat);
- 	struct saa7146_vv *vv = dev->vv_data;
-+	struct v4l2_pix_format *pix = &vv->video_fmt;
-+	struct saa7146_format *sfmt = saa7146_format_by_fourcc(dev, pix->pixelformat);
- 	u32 vdma1_prot_addr;
- 
- 	DEB_CAP("buf:%p, next:%p\n", buf, next);
-@@ -730,7 +733,7 @@ void saa7146_set_capture(struct saa7146_dev *dev, struct saa7146_buf *buf, struc
- 		saa7146_write(dev, MC2, MASK_27 );
- 	}
- 
--	saa7146_set_window(dev, buf->fmt->width, buf->fmt->height, buf->fmt->field);
-+	saa7146_set_window(dev, pix->width, pix->height, pix->field);
- 	saa7146_set_output_format(dev, sfmt->trans);
- 	saa7146_disable_clipping(dev);
- 
-diff --git a/drivers/media/common/saa7146/saa7146_video.c b/drivers/media/common/saa7146/saa7146_video.c
-index 58f39cf64a1c..dd0d803c38cd 100644
---- a/drivers/media/common/saa7146/saa7146_video.c
-+++ b/drivers/media/common/saa7146/saa7146_video.c
-@@ -93,11 +93,13 @@ struct saa7146_format* saa7146_format_by_fourcc(struct saa7146_dev *dev, int fou
- 
- static int saa7146_pgtable_build(struct saa7146_dev *dev, struct saa7146_buf *buf)
- {
-+	struct saa7146_vv *vv = dev->vv_data;
- 	struct pci_dev *pci = dev->pci;
- 	struct videobuf_dmabuf *dma=videobuf_to_dma(&buf->vb);
- 	struct scatterlist *list = dma->sglist;
- 	int length = dma->sglen;
--	struct saa7146_format *sfmt = saa7146_format_by_fourcc(dev,buf->fmt->pixelformat);
-+	struct v4l2_pix_format *pix = &vv->video_fmt;
-+	struct saa7146_format *sfmt = saa7146_format_by_fourcc(dev, pix->pixelformat);
- 
- 	DEB_EE("dev:%p, buf:%p, sg_len:%d\n", dev, buf, length);
- 
-@@ -108,7 +110,7 @@ static int saa7146_pgtable_build(struct saa7146_dev *dev, struct saa7146_buf *bu
- 		__le32  *ptr1, *ptr2, *ptr3;
- 		__le32 fill;
- 
--		int size = buf->fmt->width*buf->fmt->height;
-+		int size = pix->width * pix->height;
- 		int i,p,m1,m2,m3,o1,o2;
- 
- 		switch( sfmt->depth ) {
-@@ -757,8 +759,7 @@ static int buffer_prepare(struct videobuf_queue *q,
- 	    buf->vb.height != vv->video_fmt.height ||
- 	    buf->vb.size   != size ||
- 	    buf->vb.field  != field      ||
--	    buf->vb.field  != vv->video_fmt.field  ||
--	    buf->fmt       != &vv->video_fmt) {
-+	    buf->vb.field  != vv->video_fmt.field) {
- 		saa7146_dma_free(dev,q,buf);
- 	}
- 
-@@ -770,10 +771,9 @@ static int buffer_prepare(struct videobuf_queue *q,
- 		buf->vb.height = vv->video_fmt.height;
- 		buf->vb.size   = size;
- 		buf->vb.field  = field;
--		buf->fmt       = &vv->video_fmt;
- 		buf->vb.field  = vv->video_fmt.field;
- 
--		sfmt = saa7146_format_by_fourcc(dev,buf->fmt->pixelformat);
-+		sfmt = saa7146_format_by_fourcc(dev, vv->video_fmt.pixelformat);
- 
- 		release_all_pagetables(dev, buf);
- 		if( 0 != IS_PLANAR(sfmt->trans)) {
-diff --git a/include/media/drv-intf/saa7146_vv.h b/include/media/drv-intf/saa7146_vv.h
-index fee861670ddb..80463fdd30eb 100644
---- a/include/media/drv-intf/saa7146_vv.h
-+++ b/include/media/drv-intf/saa7146_vv.h
-@@ -60,7 +60,6 @@ struct saa7146_buf {
- 	struct videobuf_buffer vb;
- 
- 	/* saa7146 specific */
--	struct v4l2_pix_format  *fmt;
- 	int (*activate)(struct saa7146_dev *dev,
- 			struct saa7146_buf *buf,
- 			struct saa7146_buf *next);
+ 	if (av7110->bmp_state == BMP_LOADING) {
+ 		/* possible if syscall is repeated by -ERESTARTSYS and if firmware cannot abort */
+-		BUG_ON (FW_VERSION(av7110->arm_app) >= 0x261e);
++		if (WARN_ON(FW_VERSION(av7110->arm_app) >= 0x261e))
++			return -EIO;
+ 		rc = WaitUntilBmpLoaded(av7110);
+ 		if (rc)
+ 			return rc;
 -- 
 2.39.2
 
