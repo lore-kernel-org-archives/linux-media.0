@@ -2,32 +2,32 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90660C77B72
-	for <linux-media@archiver.kernel.org>; Fri, 14 Apr 2023 11:28:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56FEBC77B77
+	for <linux-media@archiver.kernel.org>; Fri, 14 Apr 2023 11:28:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230194AbjDNL2A (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 14 Apr 2023 07:28:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58452 "EHLO
+        id S230134AbjDNL2B (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 14 Apr 2023 07:28:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjDNL14 (ORCPT
+        with ESMTP id S230115AbjDNL16 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 14 Apr 2023 07:27:56 -0400
+        Fri, 14 Apr 2023 07:27:58 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D931FDA
-        for <linux-media@vger.kernel.org>; Fri, 14 Apr 2023 04:27:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2908986AF
+        for <linux-media@vger.kernel.org>; Fri, 14 Apr 2023 04:27:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9027C646D9
-        for <linux-media@vger.kernel.org>; Fri, 14 Apr 2023 11:27:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DBFCC433EF;
-        Fri, 14 Apr 2023 11:27:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B9239612F2
+        for <linux-media@vger.kernel.org>; Fri, 14 Apr 2023 11:27:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93049C433EF;
+        Fri, 14 Apr 2023 11:27:55 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCHv3 09/18] media: common: saa7146: use for_each_sg_dma_page
-Date:   Fri, 14 Apr 2023 13:27:33 +0200
-Message-Id: <20230414112742.27749-10-hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv3 11/18] media: common: saa7146: fix compliance problems with field handling
+Date:   Fri, 14 Apr 2023 13:27:35 +0200
+Message-Id: <20230414112742.27749-12-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230414112742.27749-1-hverkuil-cisco@xs4all.nl>
 References: <20230414112742.27749-1-hverkuil-cisco@xs4all.nl>
@@ -37,198 +37,76 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When building the pgtables, use for_each_sg_dma_page.
+The initial field value of the format is ANY, which isn't allowed.
+Change to INTERLACED.
 
-Also clean up the code a bit.
+VIDIOC_TRY_FMT will overwrite vv->last_field, which is an
+unwanted side-effect, so drop this.
+
+And finally vidioc_s_fmt_vid_cap didn't initialize vv->last_field
+correctly.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/common/saa7146/saa7146_core.c  | 29 ++------
- drivers/media/common/saa7146/saa7146_video.c | 76 +++++++-------------
- 2 files changed, 32 insertions(+), 73 deletions(-)
+ drivers/media/common/saa7146/saa7146_fops.c  |  2 +-
+ drivers/media/common/saa7146/saa7146_video.c | 19 ++++++++++---------
+ 2 files changed, 11 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/media/common/saa7146/saa7146_core.c b/drivers/media/common/saa7146/saa7146_core.c
-index f15caf54771b..bcb957883044 100644
---- a/drivers/media/common/saa7146/saa7146_core.c
-+++ b/drivers/media/common/saa7146/saa7146_core.c
-@@ -235,11 +235,12 @@ int saa7146_pgtable_alloc(struct pci_dev *pci, struct saa7146_pgtable *pt)
- }
- 
- int saa7146_pgtable_build_single(struct pci_dev *pci, struct saa7146_pgtable *pt,
--	struct scatterlist *list, int sglen  )
-+				 struct scatterlist *list, int sglen)
- {
-+	struct sg_dma_page_iter dma_iter;
- 	__le32 *ptr, fill;
- 	int nr_pages = 0;
--	int i,p;
-+	int i;
- 
- 	if (WARN_ON(!sglen) ||
- 	    WARN_ON(list->offset > PAGE_SIZE))
-@@ -250,32 +251,16 @@ int saa7146_pgtable_build_single(struct pci_dev *pci, struct saa7146_pgtable *pt
- 	pt->offset = list->offset;
- 
- 	ptr = pt->cpu;
--	for (i = 0; i < sglen; i++, list++) {
--/*
--		pr_debug("i:%d, adr:0x%08x, len:%d, offset:%d\n",
--			 i, sg_dma_address(list), sg_dma_len(list),
--			 list->offset);
--*/
--		for (p = 0; p * 4096 < sg_dma_len(list); p++, ptr++) {
--			*ptr = cpu_to_le32(sg_dma_address(list) + p * 4096);
--			nr_pages++;
--		}
-+	for_each_sg_dma_page(list, &dma_iter, sglen, 0) {
-+		*ptr++ = cpu_to_le32(sg_page_iter_dma_address(&dma_iter));
-+		nr_pages++;
- 	}
- 
- 
- 	/* safety; fill the page table up with the last valid page */
- 	fill = *(ptr-1);
--	for(i=nr_pages;i<1024;i++) {
-+	for (i = nr_pages; i < 1024; i++)
- 		*ptr++ = fill;
--	}
--
--/*
--	ptr = pt->cpu;
--	pr_debug("offset: %d\n", pt->offset);
--	for(i=0;i<5;i++) {
--		pr_debug("ptr1 %d: 0x%08x\n", i, ptr[i]);
--	}
--*/
- 	return 0;
- }
- 
+diff --git a/drivers/media/common/saa7146/saa7146_fops.c b/drivers/media/common/saa7146/saa7146_fops.c
+index 1adfffc987b6..79214459387a 100644
+--- a/drivers/media/common/saa7146/saa7146_fops.c
++++ b/drivers/media/common/saa7146/saa7146_fops.c
+@@ -298,7 +298,7 @@ int saa7146_vv_init(struct saa7146_dev* dev, struct saa7146_ext_vv *ext_vv)
+ 	fmt->width = 384;
+ 	fmt->height = 288;
+ 	fmt->pixelformat = V4L2_PIX_FMT_BGR24;
+-	fmt->field = V4L2_FIELD_ANY;
++	fmt->field = V4L2_FIELD_INTERLACED;
+ 	fmt->colorspace = V4L2_COLORSPACE_SMPTE170M;
+ 	fmt->bytesperline = 3 * fmt->width;
+ 	fmt->sizeimage = fmt->bytesperline * fmt->height;
 diff --git a/drivers/media/common/saa7146/saa7146_video.c b/drivers/media/common/saa7146/saa7146_video.c
-index bc4e8d12873b..6af30fece176 100644
+index 5d580b5e61fe..8306860e9e8a 100644
 --- a/drivers/media/common/saa7146/saa7146_video.c
 +++ b/drivers/media/common/saa7146/saa7146_video.c
-@@ -107,31 +107,32 @@ static int saa7146_pgtable_build(struct saa7146_dev *dev, struct saa7146_buf *bu
- 		struct saa7146_pgtable *pt1 = &buf->pt[0];
- 		struct saa7146_pgtable *pt2 = &buf->pt[1];
- 		struct saa7146_pgtable *pt3 = &buf->pt[2];
-+		struct sg_dma_page_iter dma_iter;
- 		__le32  *ptr1, *ptr2, *ptr3;
- 		__le32 fill;
- 
- 		int size = pix->width * pix->height;
--		int i,p,m1,m2,m3,o1,o2;
-+		int i, m1, m2, m3, o1, o2;
- 
- 		switch( sfmt->depth ) {
- 			case 12: {
- 				/* create some offsets inside the page table */
--				m1 = ((size+PAGE_SIZE)/PAGE_SIZE)-1;
--				m2 = ((size+(size/4)+PAGE_SIZE)/PAGE_SIZE)-1;
--				m3 = ((size+(size/2)+PAGE_SIZE)/PAGE_SIZE)-1;
--				o1 = size%PAGE_SIZE;
--				o2 = (size+(size/4))%PAGE_SIZE;
-+				m1 = ((size + PAGE_SIZE) / PAGE_SIZE) - 1;
-+				m2 = ((size + (size / 4) + PAGE_SIZE) / PAGE_SIZE) - 1;
-+				m3 = ((size + (size / 2) + PAGE_SIZE) / PAGE_SIZE) - 1;
-+				o1 = size % PAGE_SIZE;
-+				o2 = (size + (size / 4)) % PAGE_SIZE;
- 				DEB_CAP("size:%d, m1:%d, m2:%d, m3:%d, o1:%d, o2:%d\n",
- 					size, m1, m2, m3, o1, o2);
- 				break;
- 			}
- 			case 16: {
- 				/* create some offsets inside the page table */
--				m1 = ((size+PAGE_SIZE)/PAGE_SIZE)-1;
--				m2 = ((size+(size/2)+PAGE_SIZE)/PAGE_SIZE)-1;
--				m3 = ((2*size+PAGE_SIZE)/PAGE_SIZE)-1;
--				o1 = size%PAGE_SIZE;
--				o2 = (size+(size/2))%PAGE_SIZE;
-+				m1 = ((size + PAGE_SIZE) / PAGE_SIZE) - 1;
-+				m2 = ((size + (size / 2) + PAGE_SIZE) / PAGE_SIZE) - 1;
-+				m3 = ((2 * size + PAGE_SIZE) / PAGE_SIZE) - 1;
-+				o1 = size % PAGE_SIZE;
-+				o2 = (size + (size / 2)) % PAGE_SIZE;
- 				DEB_CAP("size:%d, m1:%d, m2:%d, m3:%d, o1:%d, o2:%d\n",
- 					size, m1, m2, m3, o1, o2);
- 				break;
-@@ -145,64 +146,37 @@ static int saa7146_pgtable_build(struct saa7146_dev *dev, struct saa7146_buf *bu
- 		ptr2 = pt2->cpu;
- 		ptr3 = pt3->cpu;
- 
--		/* walk all pages, copy all page addresses to ptr1 */
--		for (i = 0; i < length; i++, list++) {
--			for (p = 0; p * 4096 < sg_dma_len(list); p++, ptr1++)
--				*ptr1 = cpu_to_le32(sg_dma_address(list) - list->offset);
--		}
--/*
--		ptr1 = pt1->cpu;
--		for(j=0;j<40;j++) {
--			printk("ptr1 %d: 0x%08x\n",j,ptr1[j]);
--		}
--*/
-+		for_each_sg_dma_page(list, &dma_iter, length, 0)
-+			*ptr1++ = cpu_to_le32(sg_page_iter_dma_address(&dma_iter) - list->offset);
- 
- 		/* if we have a user buffer, the first page may not be
- 		   aligned to a page boundary. */
- 		pt1->offset = dma->sglist->offset;
--		pt2->offset = pt1->offset+o1;
--		pt3->offset = pt1->offset+o2;
-+		pt2->offset = pt1->offset + o1;
-+		pt3->offset = pt1->offset + o2;
- 
- 		/* create video-dma2 page table */
- 		ptr1 = pt1->cpu;
--		for(i = m1; i <= m2 ; i++, ptr2++) {
-+		for (i = m1; i <= m2; i++, ptr2++)
- 			*ptr2 = ptr1[i];
--		}
--		fill = *(ptr2-1);
--		for(;i<1024;i++,ptr2++) {
-+		fill = *(ptr2 - 1);
-+		for (; i < 1024; i++, ptr2++)
- 			*ptr2 = fill;
--		}
- 		/* create video-dma3 page table */
- 		ptr1 = pt1->cpu;
--		for(i = m2; i <= m3; i++,ptr3++) {
-+		for (i = m2; i <= m3; i++, ptr3++)
- 			*ptr3 = ptr1[i];
--		}
--		fill = *(ptr3-1);
--		for(;i<1024;i++,ptr3++) {
-+		fill = *(ptr3 - 1);
-+		for (; i < 1024; i++, ptr3++)
- 			*ptr3 = fill;
--		}
- 		/* finally: finish up video-dma1 page table */
--		ptr1 = pt1->cpu+m1;
-+		ptr1 = pt1->cpu + m1;
- 		fill = pt1->cpu[m1];
--		for(i=m1;i<1024;i++,ptr1++) {
-+		for (i = m1; i < 1024; i++, ptr1++)
- 			*ptr1 = fill;
--		}
--/*
--		ptr1 = pt1->cpu;
--		ptr2 = pt2->cpu;
--		ptr3 = pt3->cpu;
--		for(j=0;j<40;j++) {
--			printk("ptr1 %d: 0x%08x\n",j,ptr1[j]);
--		}
--		for(j=0;j<40;j++) {
--			printk("ptr2 %d: 0x%08x\n",j,ptr2[j]);
--		}
--		for(j=0;j<40;j++) {
--			printk("ptr3 %d: 0x%08x\n",j,ptr3[j]);
--		}
--*/
- 	} else {
- 		struct saa7146_pgtable *pt = &buf->pt[0];
-+
- 		return saa7146_pgtable_build_single(pci, pt, list, length);
+@@ -381,20 +381,13 @@ static int vidioc_try_fmt_vid_cap(struct file *file, void *fh, struct v4l2_forma
+ 	}
+ 	switch (field) {
+ 	case V4L2_FIELD_ALTERNATE:
+-		vv->last_field = V4L2_FIELD_TOP;
+-		maxh = maxh / 2;
+-		break;
+ 	case V4L2_FIELD_TOP:
+ 	case V4L2_FIELD_BOTTOM:
+-		vv->last_field = V4L2_FIELD_INTERLACED;
+ 		maxh = maxh / 2;
+ 		break;
+-	case V4L2_FIELD_INTERLACED:
+-		vv->last_field = V4L2_FIELD_INTERLACED;
+-		break;
+ 	default:
+-		DEB_D("no known field mode '%d'\n", field);
+-		return -EINVAL;
++		field = V4L2_FIELD_INTERLACED;
++		break;
  	}
  
+ 	f->fmt.pix.field = field;
+@@ -434,6 +427,14 @@ static int vidioc_s_fmt_vid_cap(struct file *file, void *fh, struct v4l2_format
+ 	err = vidioc_try_fmt_vid_cap(file, fh, f);
+ 	if (0 != err)
+ 		return err;
++	switch (f->fmt.pix.field) {
++	case V4L2_FIELD_ALTERNATE:
++		vv->last_field = V4L2_FIELD_TOP;
++		break;
++	default:
++		vv->last_field = V4L2_FIELD_INTERLACED;
++		break;
++	}
+ 	vv->video_fmt = f->fmt.pix;
+ 	DEB_EE("set to pixelformat '%4.4s'\n",
+ 	       (char *)&vv->video_fmt.pixelformat);
 -- 
 2.39.2
 
