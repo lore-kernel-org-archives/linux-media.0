@@ -2,124 +2,97 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65ADCC77B70
-	for <linux-media@archiver.kernel.org>; Sat, 15 Apr 2023 14:44:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F582C77B70
+	for <linux-media@archiver.kernel.org>; Sat, 15 Apr 2023 15:56:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbjDOOoX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 15 Apr 2023 10:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51302 "EHLO
+        id S229720AbjDOP40 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 15 Apr 2023 11:56:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbjDOOoV (ORCPT
+        with ESMTP id S229678AbjDOP4Z (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 15 Apr 2023 10:44:21 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F18630FA;
-        Sat, 15 Apr 2023 07:43:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681569829; x=1713105829;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XGrjEAwHGogSmqv9y4dhxxlnsoxI/zzyEK67wxnNBWs=;
-  b=INKPkbYCp1+W7TAtYBcy3/vNCtZmQ1o/Woqx92JPUKRg+3Fb6PNqfEr2
-   gLraizNjVjCFNU1Q8tUk7xptWHkAS8PdmVEyhVHcsjwChOnMCI+M4LD3Y
-   Ou18okDgQ9NXrgWSvy0c1bb/PkDcDcbE3RZjYKHI9Q95EQnkRl1EzMkLB
-   DufMgrTrYLg0havxF8Kg/k2Wq2DfhF+SZa1sqT5kZ6KOgDKmT0KONooPn
-   gYmsSPwtkjRfu3RB4mQsF2ywBY+Fh6Ul1yeP/ZhDYPvcdgBauE+PJsDBx
-   YtYRVCcIW1Wk5hyixf+ixQcmrBhRZOaCxyUYNmTJvgztZFZYfQWBMO+YW
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="343407693"
-X-IronPort-AV: E=Sophos;i="5.99,199,1677571200"; 
-   d="scan'208";a="343407693"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2023 07:43:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="814269801"
-X-IronPort-AV: E=Sophos;i="5.99,199,1677571200"; 
-   d="scan'208";a="814269801"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 15 Apr 2023 07:43:44 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pnh7v-000b7o-1z;
-        Sat, 15 Apr 2023 14:43:43 +0000
-Date:   Sat, 15 Apr 2023 22:43:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: drivers/media/platform/renesas/rcar_jpu.c:77:9: warning: 'RST' macro
- redefined
-Message-ID: <202304152222.ciOWuViG-lkp@intel.com>
+        Sat, 15 Apr 2023 11:56:25 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CAAA30E3
+        for <linux-media@vger.kernel.org>; Sat, 15 Apr 2023 08:56:24 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (133-32-181-51.west.xps.vectant.ne.jp [133.32.181.51])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D73E59C;
+        Sat, 15 Apr 2023 17:56:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1681574177;
+        bh=u1FKRFePmYTBCprAvt80AlE4NYu89QhD+CS8A8K6W+g=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Bkr57XVF0SpPpUp6og1hgsmqGPTA+p2bzXo3MD1la2nPFL++ARcEjzU9ojZek069E
+         wtAP+M6tDEaIX9/Mst64YRr37wqbWMzCo4Hxe+Ro1BLZsTlwM1SKjrtmPCewDEbn4Z
+         N8ogpDNlvbS7ORkXLYIiJxWEWPS9H1OD7Vg+rPWQ=
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     linux-media@vger.kernel.org
+Cc:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
+        linux-imx@nxp.com, kernel@pengutronix.de,
+        Adam Ford <aford173@gmail.com>
+Subject: [PATCH v5 0/5] media: nxp: i.MX8 ISI driver
+Date:   Sat, 15 Apr 2023 18:56:25 +0300
+Message-Id: <20230415155630.7492-1-laurent.pinchart@ideasonboard.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+Hello,
 
-First bad commit (maybe != root cause):
+This patch series adds a new driver for the Imaging Sensor Interface,
+an IP core found in various NXP i.MX8 SoCs, including the i.MX8MN and
+the i.MX8MP.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   7a934f4bd7d6f9da84c8812da3ba42ee10f5778e
-commit: ee4a77a32b39064fdab0aa2b36bbd35ebf57e077 media: platform: place Renesas drivers on a separate dir
-date:   1 year, 1 month ago
-config: mips-buildonly-randconfig-r006-20230415 (https://download.01.org/0day-ci/archive/20230415/202304152222.ciOWuViG-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ee4a77a32b39064fdab0aa2b36bbd35ebf57e077
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout ee4a77a32b39064fdab0aa2b36bbd35ebf57e077
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/media/platform/
+This v5 adds three patches on top of the previous version to address
+small issues. Patches 1/5 and 2/5 are unchanged compared to v4.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304152222.ciOWuViG-lkp@intel.com/
+Jacopo Mondi (1):
+  media: nxp: imx8-isi: Remove 300ms sleep after enabling channel
 
-All warnings (new ones prefixed by >>):
+Laurent Pinchart (4):
+  dt-bindings: media: Add i.MX8 ISI DT bindings
+  media: nxp: Add i.MX8 ISI driver
+  media: nxp: imx8-isi: Drop partial support for i.MX8QM and i.MX8QXP
+  media: nxp: imx8-isi: Replace udelay() with fsleep()
 
->> drivers/media/platform/renesas/rcar_jpu.c:77:9: warning: 'RST' macro redefined [-Wmacro-redefined]
-   #define RST     0xd0
-           ^
-   arch/mips/include/asm/mach-rc32434/rb.h:13:9: note: previous definition is here
-   #define RST             (1 << 15)
-           ^
-   1 warning generated.
+ .../bindings/media/nxp,imx8-isi.yaml          |  173 ++
+ MAINTAINERS                                   |    7 +
+ drivers/media/platform/nxp/Kconfig            |    2 +
+ drivers/media/platform/nxp/Makefile           |    1 +
+ drivers/media/platform/nxp/imx8-isi/Kconfig   |   22 +
+ drivers/media/platform/nxp/imx8-isi/Makefile  |    8 +
+ .../platform/nxp/imx8-isi/imx8-isi-core.c     |  539 ++++++
+ .../platform/nxp/imx8-isi/imx8-isi-core.h     |  394 +++++
+ .../platform/nxp/imx8-isi/imx8-isi-crossbar.c |  529 ++++++
+ .../platform/nxp/imx8-isi/imx8-isi-debug.c    |  109 ++
+ .../media/platform/nxp/imx8-isi/imx8-isi-hw.c |  650 +++++++
+ .../platform/nxp/imx8-isi/imx8-isi-m2m.c      |  858 ++++++++++
+ .../platform/nxp/imx8-isi/imx8-isi-pipe.c     |  867 ++++++++++
+ .../platform/nxp/imx8-isi/imx8-isi-regs.h     |  418 +++++
+ .../platform/nxp/imx8-isi/imx8-isi-video.c    | 1512 +++++++++++++++++
+ 15 files changed, 6089 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml
+ create mode 100644 drivers/media/platform/nxp/imx8-isi/Kconfig
+ create mode 100644 drivers/media/platform/nxp/imx8-isi/Makefile
+ create mode 100644 drivers/media/platform/nxp/imx8-isi/imx8-isi-core.c
+ create mode 100644 drivers/media/platform/nxp/imx8-isi/imx8-isi-core.h
+ create mode 100644 drivers/media/platform/nxp/imx8-isi/imx8-isi-crossbar.c
+ create mode 100644 drivers/media/platform/nxp/imx8-isi/imx8-isi-debug.c
+ create mode 100644 drivers/media/platform/nxp/imx8-isi/imx8-isi-hw.c
+ create mode 100644 drivers/media/platform/nxp/imx8-isi/imx8-isi-m2m.c
+ create mode 100644 drivers/media/platform/nxp/imx8-isi/imx8-isi-pipe.c
+ create mode 100644 drivers/media/platform/nxp/imx8-isi/imx8-isi-regs.h
+ create mode 100644 drivers/media/platform/nxp/imx8-isi/imx8-isi-video.c
 
 
-vim +/RST +77 drivers/media/platform/renesas/rcar_jpu.c
-
-2c42cdbaec56a9 drivers/media/platform/rcar_jpu.c Mikhail Ulyanov 2015-07-22  73  
-2c42cdbaec56a9 drivers/media/platform/rcar_jpu.c Mikhail Ulyanov 2015-07-22  74  /* JPEG markers */
-2c42cdbaec56a9 drivers/media/platform/rcar_jpu.c Mikhail Ulyanov 2015-07-22  75  #define TEM	0x01
-2c42cdbaec56a9 drivers/media/platform/rcar_jpu.c Mikhail Ulyanov 2015-07-22  76  #define SOF0	0xc0
-2c42cdbaec56a9 drivers/media/platform/rcar_jpu.c Mikhail Ulyanov 2015-07-22 @77  #define RST	0xd0
-2c42cdbaec56a9 drivers/media/platform/rcar_jpu.c Mikhail Ulyanov 2015-07-22  78  #define SOI	0xd8
-2c42cdbaec56a9 drivers/media/platform/rcar_jpu.c Mikhail Ulyanov 2015-07-22  79  #define EOI	0xd9
-2c42cdbaec56a9 drivers/media/platform/rcar_jpu.c Mikhail Ulyanov 2015-07-22  80  #define DHP	0xde
-2c42cdbaec56a9 drivers/media/platform/rcar_jpu.c Mikhail Ulyanov 2015-07-22  81  #define DHT	0xc4
-2c42cdbaec56a9 drivers/media/platform/rcar_jpu.c Mikhail Ulyanov 2015-07-22  82  #define COM	0xfe
-2c42cdbaec56a9 drivers/media/platform/rcar_jpu.c Mikhail Ulyanov 2015-07-22  83  #define DQT	0xdb
-2c42cdbaec56a9 drivers/media/platform/rcar_jpu.c Mikhail Ulyanov 2015-07-22  84  #define DRI	0xdd
-2c42cdbaec56a9 drivers/media/platform/rcar_jpu.c Mikhail Ulyanov 2015-07-22  85  #define APP0	0xe0
-2c42cdbaec56a9 drivers/media/platform/rcar_jpu.c Mikhail Ulyanov 2015-07-22  86  
-
-:::::: The code at line 77 was first introduced by commit
-:::::: 2c42cdbaec56a9565a2717b450506150c9c55103 [media] V4L2: platform: Add Renesas R-Car JPEG codec driver
-
-:::::: TO: Mikhail Ulyanov <mikhail.ulyanov@cogentembedded.com>
-:::::: CC: Mauro Carvalho Chehab <mchehab@osg.samsung.com>
-
+base-commit: 7e364e56293bb98cae1b55fd835f5991c4e96e7d
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Regards,
+
+Laurent Pinchart
+
