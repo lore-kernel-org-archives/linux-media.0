@@ -2,116 +2,75 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF985C7619A
-	for <linux-media@archiver.kernel.org>; Sat, 15 Apr 2023 15:56:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5358AC77B71
+	for <linux-media@archiver.kernel.org>; Sat, 15 Apr 2023 16:29:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbjDOP4w (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 15 Apr 2023 11:56:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37686 "EHLO
+        id S229999AbjDOQ3F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 15 Apr 2023 12:29:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbjDOP4u (ORCPT
+        with ESMTP id S229628AbjDOQ3D (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 15 Apr 2023 11:56:50 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0FB49DA;
-        Sat, 15 Apr 2023 08:56:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681574209; x=1713110209;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LF7pkJzFUPufb5UHCdtq03mmFNCFglmxj96MbHLvqV0=;
-  b=Yu2miJVr7fpI57sjJoqhaAYyEQ2hUYd2//YkFM4YshVRJcJE6i1K+FhH
-   O5ofqmlC9Kscg9l7J53MkV/YZ+uNT9tiRiH/Rb3eyuyWzrPvB5f4Ksi4f
-   3oBMcZ9qLxNP/HL9AIlH50mD5U1k0l51ciwkuD/3+le5Is1LoTop9M7OO
-   jCRufpL5Wg7kxh90X7vVj16VP93tk6vuuN8NqXrzFZzpqtMGbgeK6lauv
-   oifeE5d6VFJ3KzHdzRFF0fTT3pyXnb0fhdDSRPBJVaDVGXzmU3QcOtVWq
-   RaxNcw4RXAddXF0viKdwg3Fo0xUB/uYW5YDh6zDf4ltncm2KJ6CkGTZ4k
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="346500837"
-X-IronPort-AV: E=Sophos;i="5.99,200,1677571200"; 
-   d="scan'208";a="346500837"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2023 08:56:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="667647552"
-X-IronPort-AV: E=Sophos;i="5.99,200,1677571200"; 
-   d="scan'208";a="667647552"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 15 Apr 2023 08:56:47 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pniGc-000bBP-1H;
-        Sat, 15 Apr 2023 15:56:46 +0000
-Date:   Sat, 15 Apr 2023 23:56:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_parse.c:15:9:
- warning: 'RST' macro redefined
-Message-ID: <202304152346.hJOPxPRh-lkp@intel.com>
+        Sat, 15 Apr 2023 12:29:03 -0400
+Received: from smtp.smtpout.orange.fr (smtp-15.smtpout.orange.fr [80.12.242.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2100D3C28
+        for <linux-media@vger.kernel.org>; Sat, 15 Apr 2023 09:29:01 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id nilnpmo5muZFDnilnpv4vy; Sat, 15 Apr 2023 18:29:00 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orange.fr;
+        s=t20230301; t=1681576140;
+        bh=YsiWv6bqCCOxDwt4FovLlKlpgNUCDzr+TCLIp5uyNw0=;
+        h=From:To:Cc:Subject:Date;
+        b=GAVwofU1F+a6cmdEitjtAipdJku2R+oAahfLTu7vabqbm/q2LPX9MKr2CMwU/jNwR
+         /Ia55aBwxSTRQFLF9aESomYpnQyn+y4rNYvyz2wbZ8nKbGDE04hLFMnqXw7eDLeXfR
+         sRmr5z5M4QM3Dx86XWNuvFtIuWL/FnH+Lo00rT3mnt7mfEnPzxxsZ+eFjUPSwvsb3R
+         L///3xfGzxAonw74NTwHO51DvST7KfgthCzF9A5E1ZnL4f6boqmoMyE6f0ohOVbkNh
+         KCbHTbFv+TXmXWZ8SSzqEhSRM8zdadxx8LooDqPMKTotkcrBKGDhnFAZfzaOSRAbVW
+         nTp/ljV2z65/g==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 15 Apr 2023 18:29:00 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Daniel Scally <djrscally@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-media@vger.kernel.org
+Subject: [PATCH] media: ov5693: Simplify an error message
+Date:   Sat, 15 Apr 2023 18:28:58 +0200
+Message-Id: <928f2f70de241d0fa66801b46d736ad0f881eb72.1681576102.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+dev_err_probe() already display the error code. There is no need to
+duplicate it explicitly in the error message.
 
-First bad commit (maybe != root cause):
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/media/i2c/ov5693.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   7a934f4bd7d6f9da84c8812da3ba42ee10f5778e
-commit: 2023a99811110aebba9eee4aa09ef7bd21a8a249 media: platform: rename mediatek/mtk-jpeg/ to mediatek/jpeg/
-date:   1 year, 1 month ago
-config: mips-buildonly-randconfig-r006-20230415 (https://download.01.org/0day-ci/archive/20230415/202304152346.hJOPxPRh-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2023a99811110aebba9eee4aa09ef7bd21a8a249
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 2023a99811110aebba9eee4aa09ef7bd21a8a249
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/media/platform/mediatek/jpeg/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304152346.hJOPxPRh-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_parse.c:15:9: warning: 'RST' macro redefined [-Wmacro-redefined]
-   #define RST     0xd0
-           ^
-   arch/mips/include/asm/mach-rc32434/rb.h:13:9: note: previous definition is here
-   #define RST             (1 << 15)
-           ^
-   1 warning generated.
-
-
-vim +/RST +15 drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_parse.c
-
-b2f0d2724ba477d drivers/media/platform/mtk-jpeg/mtk_jpeg_parse.c Rick Chang 2016-12-14  12  
-b2f0d2724ba477d drivers/media/platform/mtk-jpeg/mtk_jpeg_parse.c Rick Chang 2016-12-14  13  #define TEM	0x01
-b2f0d2724ba477d drivers/media/platform/mtk-jpeg/mtk_jpeg_parse.c Rick Chang 2016-12-14  14  #define SOF0	0xc0
-b2f0d2724ba477d drivers/media/platform/mtk-jpeg/mtk_jpeg_parse.c Rick Chang 2016-12-14 @15  #define RST	0xd0
-b2f0d2724ba477d drivers/media/platform/mtk-jpeg/mtk_jpeg_parse.c Rick Chang 2016-12-14  16  #define SOI	0xd8
-b2f0d2724ba477d drivers/media/platform/mtk-jpeg/mtk_jpeg_parse.c Rick Chang 2016-12-14  17  #define EOI	0xd9
-b2f0d2724ba477d drivers/media/platform/mtk-jpeg/mtk_jpeg_parse.c Rick Chang 2016-12-14  18  
-
-:::::: The code at line 15 was first introduced by commit
-:::::: b2f0d2724ba477d326e9d654d4db1c93e98f8b93 [media] vcodec: mediatek: Add Mediatek JPEG Decoder Driver
-
-:::::: TO: Rick Chang <rick.chang@mediatek.com>
-:::::: CC: Mauro Carvalho Chehab <mchehab@s-opensource.com>
-
+diff --git a/drivers/media/i2c/ov5693.c b/drivers/media/i2c/ov5693.c
+index e3c3bed69ad6..d23786afd754 100644
+--- a/drivers/media/i2c/ov5693.c
++++ b/drivers/media/i2c/ov5693.c
+@@ -404,8 +404,8 @@ static int ov5693_read_reg(struct ov5693_device *ov5693, u32 addr, u32 *value)
+ 	ret = i2c_transfer(client->adapter, msg, 2);
+ 	if (ret < 0)
+ 		return dev_err_probe(&client->dev, ret,
+-				     "Failed to read register 0x%04x: %d\n",
+-				     addr & OV5693_REG_ADDR_MASK, ret);
++				     "Failed to read register 0x%04x\n",
++				     addr & OV5693_REG_ADDR_MASK);
+ 
+ 	*value = 0;
+ 	for (i = 0; i < len; ++i) {
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.34.1
+
