@@ -2,133 +2,95 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 08AF3C77B72
-	for <linux-media@archiver.kernel.org>; Sat, 15 Apr 2023 03:36:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0970C77B73
+	for <linux-media@archiver.kernel.org>; Sat, 15 Apr 2023 08:00:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbjDODgS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 14 Apr 2023 23:36:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38016 "EHLO
+        id S229623AbjDOIAL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 15 Apr 2023 04:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbjDODgQ (ORCPT
+        with ESMTP id S229468AbjDOIAJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 14 Apr 2023 23:36:16 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754831A4
-        for <linux-media@vger.kernel.org>; Fri, 14 Apr 2023 20:36:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681529775; x=1713065775;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=h+5+vSauQRw9nQb3e7cdSwxR7G/Ys+Zu3Lbn9J6Avv0=;
-  b=GnG/JXyLIZtqkaE0P0L3agz19euG8jDhD6oWScLcgCCsKDLeQnI4IKry
-   ngbwSOau9wB2XkuwcMQzkIcwd2LlfHIkHpus9GY0Cbs5hsAvFf+50rKtB
-   Wg5oz3TAP9eXbXLpUAxDM60ZUzKBzgdoKEzfAO/7GbcfMMYkVQQL/xrAD
-   uZ0iIMbxhD4y2oYsDBLDb10DrabR4ieZHvBNgmGzg1IfjMAE/ZwW+Ux7m
-   JWsV4N6qpZAf0z+Yb1BQoX5Z2TrjRQ0BCZfso+ezv2ppLrA9SziS3tvE3
-   57Q4WuUO7GBD8oRhgDqPOIt5pcjEaodyWOUY9hFjJ6g/owkY4OA3SzvB9
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="342103889"
-X-IronPort-AV: E=Sophos;i="5.99,199,1677571200"; 
-   d="scan'208";a="342103889"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 20:36:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="833759063"
-X-IronPort-AV: E=Sophos;i="5.99,199,1677571200"; 
-   d="scan'208";a="833759063"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 14 Apr 2023 20:36:14 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pnWhs-000aNf-1B;
-        Sat, 15 Apr 2023 03:36:08 +0000
-Date:   Sat, 15 Apr 2023 11:35:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-media@vger.kernel.org
-Subject: [sailus-media-tree:master] BUILD SUCCESS
- a5d12986401acdb56ff9199d49c6ee2e031c6052
-Message-ID: <643a1b97.kCx/EctBSXozKcfy%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 15 Apr 2023 04:00:09 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8683649D9
+        for <linux-media@vger.kernel.org>; Sat, 15 Apr 2023 01:00:06 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4ec816c9d03so316656e87.2
+        for <linux-media@vger.kernel.org>; Sat, 15 Apr 2023 01:00:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ragnatech-se.20221208.gappssmtp.com; s=20221208; t=1681545605; x=1684137605;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=y8V9UEeMy1E80f0QyvsmwRX2aJeEK3DaiJIy8QuDNYE=;
+        b=OjvOVM7xuTHHgZE50/SfEHkC6Bkb9nQoDPR2bl72ml9aoBeRH2H3U1EVs8WgaeAQLX
+         UUINEDj/OHDW9Hwh+mCgmqgBrGVFznSHwRqK0Gkmb+gad1MYMlSqpTT1SY+n6mOhrekh
+         v8TaDND/QyeKOmc1fUfT54854fJimc9XvMz80lkxj5eMTdkr8WjRzr0nU53m8K53eqbq
+         OdYXEoAqRVBxJgLE90RhSaHDw5Toj/9tIaNhbQokAgz/wTUieWe7oPBkEx8XoK+xTFsp
+         Hhw/otllJK4yJLJ11fpfp3e8F/sKzO8k5RmRAgmsSK3G5x3TlD7wxIFfhkJHyyZsoVUt
+         Z76Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681545605; x=1684137605;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=y8V9UEeMy1E80f0QyvsmwRX2aJeEK3DaiJIy8QuDNYE=;
+        b=ZrklmEyearMY7CM+2s1llIQmUfY7toIqWkVoy26HRNUilBLXvB0cufGXFkzD2U+IpA
+         7okDp8TSh6SJneqQAhxfwCas5gmYy3KdWrN/hkuYuQeslonvFoyWVZ3+nICbuX1JWZEo
+         Q+p0UjcCYOSkSu9FQXuvkT4R48ZVyThNYO2HIxprlvBzw66eJtIrMBp3VIQBEWZsdzDd
+         0rUyd0T00kz17tMzC0YsuAhTCeitvHH+10U4LjdKpPN/ZNaPwIhG8Afx5gGFzZduSXXV
+         xK9PKhkGoIGCUfaJbNARLd2fZycDizlTK16Ji0UnwuouCUVAxrlb808uBaB708n9AU2/
+         B4kg==
+X-Gm-Message-State: AAQBX9eHN3EQVXOGqJ3sWgxKZ39X/rwuzTG5X8vxIYcn/RvRLeWcmndg
+        xxNwF11EQZO8hVa6pWUhLhxyXdd/WXFQUVyD/ww=
+X-Google-Smtp-Source: AKy350bvy781GXVJXJwimyXuEVdRRizrotTy/BpNevk3rNTOObwboY7YvFwYGCY960u0d/GkYSFLoA==
+X-Received: by 2002:a19:520d:0:b0:4ec:5648:70e4 with SMTP id m13-20020a19520d000000b004ec564870e4mr257585lfb.12.1681545604846;
+        Sat, 15 Apr 2023 01:00:04 -0700 (PDT)
+Received: from localhost (h-46-59-89-207.A463.priv.bahnhof.se. [46.59.89.207])
+        by smtp.gmail.com with ESMTPSA id j6-20020ac24546000000b004ed88fe62ffsm990862lfm.170.2023.04.15.01.00.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 Apr 2023 01:00:04 -0700 (PDT)
+Date:   Sat, 15 Apr 2023 10:00:03 +0200
+From:   Niklas =?utf-8?Q?S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+To:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH 0/2] media: rcar-vin: Fix issues with NV12 on Gen3
+Message-ID: <ZDpZg24vDax6/92O@oden.dyn.berto.se>
+References: <20230211205432.493102-1-niklas.soderlund+renesas@ragnatech.se>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230211205432.493102-1-niklas.soderlund+renesas@ragnatech.se>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-tree/branch: git://linuxtv.org/sailus/media_tree.git master
-branch HEAD: a5d12986401acdb56ff9199d49c6ee2e031c6052  media: admin-guide: Update rkisp1.rst
+Hi all,
 
-elapsed time: 728m
+A gentle ping on this series.
 
-configs tested: 58
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                                defconfig   gcc  
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230410   clang
-i386                 randconfig-a002-20230410   clang
-i386                 randconfig-a003-20230410   clang
-i386                 randconfig-a004-20230410   clang
-i386                 randconfig-a005-20230410   clang
-i386                 randconfig-a006-20230410   clang
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                               defconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-sh                               allmodconfig   gcc  
-sparc                               defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                        randconfig-a001   clang
-x86_64                        randconfig-a003   clang
-x86_64                        randconfig-a005   clang
-x86_64               randconfig-a011-20230410   gcc  
-x86_64               randconfig-a012-20230410   gcc  
-x86_64               randconfig-a013-20230410   gcc  
-x86_64               randconfig-a014-20230410   gcc  
-x86_64               randconfig-a015-20230410   gcc  
-x86_64               randconfig-a016-20230410   gcc  
-x86_64                               rhel-8.3   gcc  
+On 2023-02-11 21:54:30 +0100, Niklas Söderlund wrote:
+> Hello,
+> 
+> This series fixes two small issues around NV12. Patch 1/2 forbids the 
+> use of the scaler on Gen3 if the output format is NV12. While patch 2/2 
+> fixes the size alignment for NV12.
+> 
+> Work tested on both Gen2 and Gen3 without regressions.
+> 
+> Niklas Söderlund (2):
+>   media: rcar-vin: Gen3 can not scale NV12
+>   media: rcar-vin: Fix NV12 size alignment
+> 
+>  .../media/platform/renesas/rcar-vin/rcar-dma.c  | 17 ++++++++++++++---
+>  1 file changed, 14 insertions(+), 3 deletions(-)
+> 
+> -- 
+> 2.39.1
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Kind Regards,
+Niklas Söderlund
