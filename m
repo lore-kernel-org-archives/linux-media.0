@@ -2,87 +2,82 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 564D7C77B70
-	for <linux-media@archiver.kernel.org>; Mon, 17 Apr 2023 09:37:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3137BC77B70
+	for <linux-media@archiver.kernel.org>; Mon, 17 Apr 2023 09:39:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbjDQJhO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Apr 2023 05:37:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37094 "EHLO
+        id S230034AbjDQJio (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Apr 2023 05:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230513AbjDQJgx (ORCPT
+        with ESMTP id S230471AbjDQJhz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 17 Apr 2023 05:36:53 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201263AA1
-        for <linux-media@vger.kernel.org>; Mon, 17 Apr 2023 02:36:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681724185; x=1713260185;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=BO+0/OblhrWzXRgNE44YC4DeSUI3qFYSbtiSH0s9cWo=;
-  b=UmH13v4xkUuIKIjiCBcBDzLGy4Znblp8RPpAi1U123S5dkayPiiUaUIu
-   qQXLLU4rRUHVyOBGlPNPkTpaMBkdFQ3uK5Fk468z4o+/+m0sSjOz3JLfT
-   zxlO+XXhEtz32SrM2TObc/JfLftIqgb6J6HyYMhlo+hn1D3Lfuk3k6kHD
-   wcXLnyk4QHKdBYtXs4Ff/9If/3OSQsflm0rbYV10MHn3aO8YBvsY3pkA1
-   I6BPD+qf+jaeDhaDZUY4WmolU1v6sOV6/0rbH8zAIaD8OQgnA8Ag4fIrO
-   XFdPlGw2dq9jT9jmlbm7TLasRA2YeXrvCwiiEw4R3Hg7DPS1iGYcZRV/p
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="333643566"
-X-IronPort-AV: E=Sophos;i="5.99,203,1677571200"; 
-   d="scan'208";a="333643566"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 02:31:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="640898784"
-X-IronPort-AV: E=Sophos;i="5.99,203,1677571200"; 
-   d="scan'208";a="640898784"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 02:31:53 -0700
-Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id A910612227A;
-        Mon, 17 Apr 2023 12:31:50 +0300 (EEST)
-Received: from sailus by punajuuri.localdomain with local (Exim 4.94.2)
-        (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1poLBZ-00Ez4W-L9; Mon, 17 Apr 2023 12:30:09 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Cc:     bingbu.cao@intel.com
-Subject: [PATCH 1/1] media: ipu3-cio2: Fix container_of() macro wrapper arguments
-Date:   Mon, 17 Apr 2023 12:29:59 +0300
-Message-Id: <20230417092959.3571307-1-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
+        Mon, 17 Apr 2023 05:37:55 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1CE659D;
+        Mon, 17 Apr 2023 02:37:24 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D032F66030BF;
+        Mon, 17 Apr 2023 10:35:53 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1681724154;
+        bh=2ela0OE3EzNbVcej6d6Wb6FQs6kE2UzvgK4k9tO5HZE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=gKKxXKWq2YTjMOxBZqZoQVdZ6AYtfX6HoOa/p48i2UL9jPXOpqrB2mX2F/wq8FWWU
+         PsaAK0O1E0SPtQ9kP+NppDYxglNsUgSw1VcIdyfS/BmF/oyifBP39g86P1gNyGMNsF
+         Wf17/y0+0sKLIP5ZErZrXgycCe7XKQ+G0lbWEp8G5ykF8kwkIrPy+SV3WZplJ9iHGP
+         WW8EeZHPHDRL4fyOb1F8Nh+zmcFtg2R+E5e1CbZIuBJVJXgzcbPopUv+CGEu/tHeZl
+         rk53Kqoi2CCPMii78chkcps4iq91BrEYfKV5hep1DJh1dKwTKDsYrq3gw879OoC2fq
+         UgH+4Fcj1HCfA==
+Message-ID: <4b58c2a9-0861-e79a-c740-954cdc193599@collabora.com>
+Date:   Mon, 17 Apr 2023 11:35:50 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 4/6] media: mediatek: vcodec: add one empty lat buffer as
+ the last one to decode
+Content-Language: en-US
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
+        <nfraprado@collabora.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20230417054816.17097-1-yunfei.dong@mediatek.com>
+ <20230417054816.17097-5-yunfei.dong@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230417054816.17097-5-yunfei.dong@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The argument of the to_sensor_asd() is called the same as the field name
-for the container_of() macro, so it only works if the argument name is
-"asd". Fix it.
+Il 17/04/23 07:48, Yunfei Dong ha scritto:
+> Adding one empty lat buffer with the parameter 'is_empty_flag = true' used
+> to flush core work queue decode.
+> 
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 
-Also switch to container_of_const().
+Since commit [6/6] depends on this one, you should either squash this with [6/6]
+or add the same Fixes tag to this.
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- drivers/media/pci/intel/ipu3/ipu3-cio2-main.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+I think that the most sensible option is to squash it.
 
-diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c b/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
-index fa53d0835c89c..39ad1309a61b5 100644
---- a/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
-+++ b/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
-@@ -1374,7 +1374,8 @@ struct sensor_async_subdev {
- 	struct csi2_bus_info csi2;
- };
- 
--#define to_sensor_asd(asd)	container_of(asd, struct sensor_async_subdev, asd)
-+#define to_sensor_asd(__asd)	\
-+	container_of_const(__asd, struct sensor_async_subdev, asd)
- 
- /* The .bound() notifier callback when a match is found */
- static int cio2_notifier_bound(struct v4l2_async_notifier *notifier,
--- 
-2.30.2
 
+Regards,
+Angelo
