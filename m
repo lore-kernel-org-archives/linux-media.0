@@ -2,43 +2,43 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C87BC77B76
-	for <linux-media@archiver.kernel.org>; Mon, 17 Apr 2023 09:26:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1975C77B70
+	for <linux-media@archiver.kernel.org>; Mon, 17 Apr 2023 09:36:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbjDQJ0l (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Apr 2023 05:26:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55246 "EHLO
+        id S230440AbjDQJge (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Apr 2023 05:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbjDQJ0j (ORCPT
+        with ESMTP id S230370AbjDQJgQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 17 Apr 2023 05:26:39 -0400
+        Mon, 17 Apr 2023 05:36:16 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF801FE5;
-        Mon, 17 Apr 2023 02:26:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B21526D;
+        Mon, 17 Apr 2023 02:35:39 -0700 (PDT)
 Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9F0B76600013;
-        Mon, 17 Apr 2023 10:26:31 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B68B16603050;
+        Mon, 17 Apr 2023 10:35:36 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681723592;
-        bh=wrJ4ynBY1xVL3ge4ZihlSbCn5HYxZm48w8kZO/CHf+w=;
+        s=mail; t=1681724137;
+        bh=QbaAg8NSbQhZf+R83qw59tCN5hywaWcaUrmWKWZXTyU=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Aon1cpdXhDBwX7d5ZvMHQBNmf4nWFCvOaIxNEnw392rCQ8N+QAUUappXpnjNH/spS
-         c+2/Qtt1hFum+eIiX7R/R6B4AXnd2sNM1XytdBijLYZJwb3ZU3Iy2cJyVOxqZYMiXe
-         DqSHOPzoamHthEhVteDANAotRsWQaYLYcYy1kPFhrwk+Brznct9PLZywJ1fxqk56Fa
-         luZ7b6V4Mzih+0yvJdtrM2yR4IAW99mM1Xohue5d/pPWb8yK5a+han9oNPGMY5+NWF
-         j1+OUulcc1SE89UbxURoCD/UclEnepBQ69132uNsy+s0FZUx57UT41z4nmI/rcEuRY
-         K5SU1TR5I9AWQ==
-Message-ID: <26ac9fbc-cc7a-7f25-0db5-30ede1068501@collabora.com>
-Date:   Mon, 17 Apr 2023 11:26:29 +0200
+        b=HVjqv50rUaQjAKGVeiL4GIggSCWrywwXkSBKv4hPhGrFXDt+vIPS+IfPfzAVz9naa
+         DNGl31fkP2Pu0NAaB9QS6GV9HxZfbvhsWrEzVD24UVeWUvcmg1LQejIhWi4+kzJ4Rb
+         6IDUpwIEvmbsr0t5A+gwU5LMNhG3xX0+LYumN/7wcg9zGCPdwY2ShdlTq0yo0cShMU
+         9aMeRmhaUy7zEazoIuicOn1T+pQUbrML12lyttXfyRzoDPSB7REkmVqdhjKGtGyXvd
+         BXg3Pk75kpM6PPGu/Ec+I4kTMmHTt/m2UzNXAqUCFP1R1/uPvuIjkIVc8+qqbPZuAN
+         44K0Jvb5n0MLA==
+Message-ID: <c1533e76-b8a2-70e6-d144-d53b26c9b952@collabora.com>
+Date:   Mon, 17 Apr 2023 11:35:34 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
-Subject: Re: [PATCH 2/6] media: mediatek: vcodec: add the definition of
- decoder status
+Subject: Re: [PATCH 5/6] media: mediatek: vcodec: move core context from
+ device to each instance
 Content-Language: en-US
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Chen-Yu Tsai <wenst@chromium.org>,
@@ -57,10 +57,10 @@ Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
         linux-mediatek@lists.infradead.org,
         Project_Global_Chrome_Upstream_Group@mediatek.com
 References: <20230417054816.17097-1-yunfei.dong@mediatek.com>
- <20230417054816.17097-3-yunfei.dong@mediatek.com>
+ <20230417054816.17097-6-yunfei.dong@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230417054816.17097-3-yunfei.dong@mediatek.com>
+In-Reply-To: <20230417054816.17097-6-yunfei.dong@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -68,46 +68,55 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 Il 17/04/23 07:48, Yunfei Dong ha scritto:
-> Adding the status used to separate different decoder period for
-> core hardware.
+> There are so many lat buffer in core context list, some instances
+> maybe be scheduled for a very long time. Moving the core context to
+> each instance, it only be used to control lat buffer of each instance.
+> And the core work queue of each instance is scheduled by system.
 > 
+> Fixes: 2cfca6c1bf80 ("media: mediatek: vcodec: move lat_buf to the top of core list")
 > Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 > ---
->   drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h | 7 +++++++
->   1 file changed, 7 insertions(+)
+>   .../mediatek/vcodec/mtk_vcodec_dec_drv.c      |  1 -
+>   .../platform/mediatek/vcodec/mtk_vcodec_drv.h |  2 -
+>   .../vcodec/vdec/vdec_h264_req_multi_if.c      |  4 +-
+>   .../vcodec/vdec/vdec_vp9_req_lat_if.c         |  2 +-
+>   .../platform/mediatek/vcodec/vdec_msg_queue.c | 53 +++++++------------
+>   .../platform/mediatek/vcodec/vdec_msg_queue.h |  6 ++-
+>   6 files changed, 25 insertions(+), 43 deletions(-)
 > 
+
+..snip..
+
 > diff --git a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h
-> index a5d44bc97c16..19508be08566 100644
+> index a80b9853cec9..ae37d020a1bd 100644
 > --- a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h
 > +++ b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h
-> @@ -21,6 +21,13 @@ struct mtk_vcodec_ctx;
->   struct mtk_vcodec_dev;
->   typedef int (*core_decode_cb_t)(struct vdec_lat_buf *lat_buf);
+> @@ -83,10 +83,11 @@ struct vdec_lat_buf {
+>    * @wdma_wptr_addr: ube write point
+>    * @core_work: core hardware work
+>    * @lat_ctx: used to store lat buffer list
+> - * @ctx: point to mtk_vcodec_ctx
+> + * @core_ctx: used to store core buffer list
+>    *
+>    * @lat_list_cnt: used to record each instance lat list count
+>    * @core_list_cnt: used to record each instance core list count
+> + * @flush_done: core flush done status
+>    * @empty_lat_buf: the last lat buf used to flush decode
+>    * @core_dec_done: core work queue decode done event
+>    * @status: current context decode status for core hardware
+> @@ -100,10 +101,11 @@ struct vdec_msg_queue {
 >   
-> +/* current context isn't work */
-> +#define CONTEXT_LIST_EMPTY           (0)
-> +/* queued to the core work list */
-> +#define CONTEXT_LIST_QUEUED          (1)
-> +/* context decode done */
-> +#define CONTEXT_LIST_DEC_DONE        (2)
+>   	struct work_struct core_work;
+>   	struct vdec_msg_queue_ctx lat_ctx;
+> -	struct mtk_vcodec_ctx *ctx;
+> +	struct vdec_msg_queue_ctx core_ctx;
+>   
+>   	atomic_t lat_list_cnt;
+>   	atomic_t core_list_cnt;
+> +	bool flush_done;
 
-I would prefer an enumeration instead; you can keep the documentation for those
-status signals with kerneldoc on the new enum.
+flush_done is used in patch [6/6]: this does not belong to this patch,
+please move the addition of this member in the same patch where you use it.
 
-/**
-  * enum core_ctx_status - Context decode status for core hardware
-  * @CONTEXT_LIST_EMPTY:    No buffer queued on Core HW (must always be 0)
-  * @CONTEXT_LIST_QUEUED:   Buffer queued to the core work list
-  * @CONTEXT_LIST_DEC_DONE: Context decode done
-  */
-enum core_ctx_status {
-	CONTEXT_LIST_EMPTY = 0,
-	CONTEXT_LIST_QUEUED,
-	CONTEXT_LIST_DEC_DONE,
-}
-
-Moreover, since this is a rather simple addition, please squash this commit with
-patch [3/6] where you actually also introduce the actual usage of the new enum.
-
-Cheers,
+Regards,
 Angelo
