@@ -2,147 +2,158 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2C9DC77B75
-	for <linux-media@archiver.kernel.org>; Tue, 18 Apr 2023 04:51:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61EA2C77B71
+	for <linux-media@archiver.kernel.org>; Tue, 18 Apr 2023 06:12:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230120AbjDREv0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 18 Apr 2023 00:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45856 "EHLO
+        id S229751AbjDRGMF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 18 Apr 2023 02:12:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjDREvZ (ORCPT
+        with ESMTP id S229518AbjDRGME (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 18 Apr 2023 00:51:25 -0400
-X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 17 Apr 2023 21:51:23 PDT
-Received: from mx-lax3-2.ucr.edu (mx-lax3-2.ucr.edu [169.235.156.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D1D30DC
-        for <linux-media@vger.kernel.org>; Mon, 17 Apr 2023 21:51:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=ucr.edu; i=@ucr.edu; q=dns/txt; s=selector3;
-  t=1681793483; x=1713329483;
-  h=mime-version:from:date:message-id:subject:to;
-  bh=exqRgkdkSA1PfDIxy/IwknTenS8IWnfSSg0a09RURMo=;
-  b=VZzXGE3cTRk261llR5ENehDKHRdvNwo1XDJC2uhNb5hT+OkGCp7e341/
-   VhwAScIg0aTNX1FEX6Fj5Rx0aL+ZrbNmRWz2dz/CB7VNxaB2lXvO22ucy
-   mQRBqg4WntCsIfM6RYyMuKGThBRi/I2QPhXkdkx5PrDTqIGDFC+mIT0sY
-   McORcknj6JNUTiuv7cEq97i4fszZ9k9yhPdFVb1I4NXB5D2XCg8ywxP3Q
-   kpiszMph1h0pDbh8WFM+hcq9st7atRwWSYwq583ooi8Qj567LZZ8kJ8l+
-   c2RVPH2euBv3hjaKvW7YoRkuJQY+4kKtlMRSlOEh27GvlabP1eDoAYqUI
-   w==;
-Received: from mail-wm1-f70.google.com ([209.85.128.70])
-  by smtp-lax3-2.ucr.edu with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 17 Apr 2023 21:50:20 -0700
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3f16ef3be6eso9901125e9.3
-        for <linux-media@vger.kernel.org>; Mon, 17 Apr 2023 21:50:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ucr.edu; s=rmail; t=1681793418; x=1684385418;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=HpyqnahZ0dBtoFysZJW/vJkY2sBhJEsRqq8ZhFGwOjI=;
-        b=QIBh8AZCfAo6mr+kt8fYn9MIl6Sn0AQNnIT9l7RcKAk+zUcS0eh2a2AjOnvb7/aUXa
-         tVdkMqLIvsscwsah+Ste7AH5HoY5wOx4Vf+e5NMPiQ3/Tf6Runi1iKfaxbi9S/uKO8np
-         t3SGO4fxxsu08hDkrHjxiVzVBxv5j0nruZj6Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681793418; x=1684385418;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HpyqnahZ0dBtoFysZJW/vJkY2sBhJEsRqq8ZhFGwOjI=;
-        b=lyRqA5r5JnqXx1K6n9gmTryjgR5qQxCKnWEEBO4yKewhqcZnG7608BCyb5rd5CSP1C
-         sg8FzMKD7/KE1T6zjh3GP1t5lGq5D1/FFWN38AL5mcrAcEePBriWuCLu6uaElN9+1Lk8
-         tDQunKPrm3ZLg9ZQGQxZ2YnWcDrxWU+A3kCIaClHwjlPZAC+SdYUIfK6h7XzCaKEw6xR
-         4+ruK2VC5Ueft/8EAnNy1rlViSw97fdleymXadF6FJHFbPOS3+MepY4ymI8baykDlVJs
-         HMM5kiH2cAg3I8MhSnGq0wbU0Y+xyZpYMIxkh67UfKeRMNyMhI+GcKKB5lfJ8GDJqe3T
-         6O/Q==
-X-Gm-Message-State: AAQBX9fPQo+SsS8r2O+0QR+p7RZ9f7y97SMlhANJQ/74pMLZySlC9Yr2
-        k7iHpCWXLXqWOsgrHxgahuNAXQNYfvfdcBKGXtGonLA9V2I/GwP7mGnPKogYUsSnmQ01eY2zq4s
-        GrgX4KT9CdUq1uLa+2vBRJVw04l7Z7D0gMm0cPayLFKlbwdhvu/Y=
-X-Received: by 2002:a5d:60c3:0:b0:2e3:99d3:7a5 with SMTP id x3-20020a5d60c3000000b002e399d307a5mr658025wrt.24.1681793418097;
-        Mon, 17 Apr 2023 21:50:18 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bt+E4+5aYFJhzoP/eIld+GGePEmOqnh3yrE8Vw7ps59ymnbJkqulV2j2WnJG8R5W9ILDuMhbIodC9lbkhgOgE=
-X-Received: by 2002:a5d:60c3:0:b0:2e3:99d3:7a5 with SMTP id
- x3-20020a5d60c3000000b002e399d307a5mr658015wrt.24.1681793417813; Mon, 17 Apr
- 2023 21:50:17 -0700 (PDT)
+        Tue, 18 Apr 2023 02:12:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4472D4C;
+        Mon, 17 Apr 2023 23:12:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ED05B62BA1;
+        Tue, 18 Apr 2023 06:12:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EFFBC433D2;
+        Tue, 18 Apr 2023 06:11:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681798322;
+        bh=gfIXkP7NX6aOSWCtAs3mr4eUk+uPCJUjwRerCetq8ro=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QQwFYzkzNiHP0daAEQPaACLpA1lkB0xUUHj3vQtvWWBsr4s1Mcjo1n20ZdwPTwq6i
+         fz/KZc5IqLJdqkjSS7sE9jeRjoJ+Jq7474lkF7Eqe8bARQW6+fVYKzhjhK4JhHQYk5
+         4Wps7uGj1BUg/eBNyseCm6MqJHCOcO2uMf+smXvApV1iR4BQSImtW7xbWSmTyer9Pt
+         s9D9lJvTpxl6tNglXDyVUtWh6wi0BOp2GdRHSHkhjP7ySXnwsb+RnqiU/OuNF8MZHM
+         ZXLdy8mthWVjTtMVQlwe3w2SDH2F0ULcgmpdRD87fLKkTL0zeXEbmS7/mVd6RWY2er
+         ijPQu5RDWT7+w==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Guoniu Zhou <guoniu.zhou@nxp.com>,
+        Christian Hemp <c.hemp@phytec.de>, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] [v2] media: nxp: imx8-isi: fix buiding on 32-bit
+Date:   Tue, 18 Apr 2023 08:11:43 +0200
+Message-Id: <20230418061155.2923515-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-From:   Yu Hao <yhao016@ucr.edu>
-Date:   Mon, 17 Apr 2023 21:50:07 -0700
-Message-ID: <CA+UBctCu7fXn4q41O_3=id1+OdyQ85tZY1x+TkT-6OVBL6KAUw@mail.gmail.com>
-Subject: BUG: WARNING in dvb_frontend_get_event
-To:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+From: Arnd Bergmann <arnd@arndb.de>
 
-We found the following issue using syzkaller on Linux v6.2.0.
+The #if check is wrong, leading to a build failure:
 
-In the function `dvb_frontend_get_event`, function
-`wait_event_interruptible` is called
-and the condition is `dvb_frontend_test_event(fepriv, events)`.
-In the function `dvb_frontend_test_event`, function
-`down(&fepriv->sem);` is called.
-However, function `wait_event_interruptible` would put the process to sleep.
-And function `down(&fepriv->sem);` may block the process.
-So there is the issue with "do not call blocking ops when !TASK_RUNNING".
+drivers/media/platform/nxp/imx8-isi/imx8-isi-hw.c: In function 'mxc_isi_channel_set_inbuf':
+drivers/media/platform/nxp/imx8-isi/imx8-isi-hw.c:33:5: error: "CONFIG_ARCH_DMA_ADDR_T_64BIT" is not defined, evaluates to 0 [-Werror=undef]
+   33 | #if CONFIG_ARCH_DMA_ADDR_T_64BIT
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The full report including the Syzkaller reproducer & C reproducer:
-https://gist.github.com/ZHYfeng/4c5f8be6adc63b73dba68230d15ece2c
+This could just be an #ifdef, but it seems nicer to just remove
+the check entirely. Apparently the only reason for the #ifdef
+is to avoid another warning:
 
-The brief report is below:
+drivers/media/platform/nxp/imx8-isi/imx8-isi-hw.c:55:24: error: right shift count >= width of type [-Werror=shift-count-overflow]
 
-Syzkaller hit 'WARNING in dvb_frontend_get_event' bug.
+But this is best avoided by using the lower_32_bits()/upper_32_bits()
+helpers.
 
-------------[ cut here ]------------
-do not call blocking ops when !TASK_RUNNING; state=1 set at
-[<ffffffff8161186d>] prepare_to_wait_event+0x6d/0x690
-kernel/sched/wait.c:333
-WARNING: CPU: 0 PID: 8017 at kernel/sched/core.c:9968
-__might_sleep+0x10a/0x160 kernel/sched/core.c:9968
-Modules linked in:
-CPU: 0 PID: 8017 Comm: syz-executor303 Not tainted 6.2.0 #1
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-1.13.0-1ubuntu1.1 04/01/2014
-RIP: 0010:__might_sleep+0x10a/0x160 kernel/sched/core.c:9968
-Code: 9d 03 00 48 8d bb d8 16 00 00 48 89 fa 48 c1 ea 03 80 3c 02 00
-75 34 48 8b 93 d8 16 00 00 48 c7 c7 e0 68 4c 8a e8 38 55 72 08 <0f> 0b
-e9 75 ff ff ff e8 1a 7b 7f 00 e9 26 ff ff ff 89 34 24 e8 1d
-RSP: 0018:ffffc9000e537ac8 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: ffff888018bdba80 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffff888018bdba80 RDI: fffff52001ca6f4b
-RBP: ffffffff8a4cd200 R08: 0000000000000000 R09: ffffed1005944f32
-R10: ffff88802ca2798b R11: ffffed1005944f31 R12: 000000000000003a
-R13: 0000000000000000 R14: 0000000000000000 R15: ffff888044057260
-FS:  0000555555995880(0000) GS:ffff88802ca00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fd34db66000 CR3: 000000001f479000 CR4: 0000000000350ef0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- down+0x1e/0xa0 kernel/locking/semaphore.c:58
- dvb_frontend_test_event drivers/media/dvb-core/dvb_frontend.c:277 [inline]
- dvb_frontend_get_event.isra.0+0x528/0x670
-drivers/media/dvb-core/dvb_frontend.c:301
- dvb_frontend_handle_ioctl+0x1953/0x2ea0
-drivers/media/dvb-core/dvb_frontend.c:2726
- dvb_frontend_do_ioctl+0x1c5/0x2f0 drivers/media/dvb-core/dvb_frontend.c:2097
- dvb_usercopy+0xbe/0x280 drivers/media/dvb-core/dvbdev.c:961
- dvb_frontend_ioctl+0x5a/0x80 drivers/media/dvb-core/dvb_frontend.c:2111
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x198/0x210 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f569e9f4a7d
-Code: 28 c3 e8 36 29 00 00 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48
-89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
-01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff77694948 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f569e9f4a7d
-RDX: 0000000020000000 RSI: 0000000080286f4e RDI: 0000000000000003
-RBP: 00007f569e9ae440 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f569e9ae4e0
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
+Fixes: cf21f328fcaf ("media: nxp: Add i.MX8 ISI driver")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+v2: whitespace fixup
+---
+ .../media/platform/nxp/imx8-isi/imx8-isi-hw.c | 41 ++++++++++---------
+ 1 file changed, 21 insertions(+), 20 deletions(-)
+
+diff --git a/drivers/media/platform/nxp/imx8-isi/imx8-isi-hw.c b/drivers/media/platform/nxp/imx8-isi/imx8-isi-hw.c
+index db538f3d88ec..19e80b95ffea 100644
+--- a/drivers/media/platform/nxp/imx8-isi/imx8-isi-hw.c
++++ b/drivers/media/platform/nxp/imx8-isi/imx8-isi-hw.c
+@@ -29,11 +29,10 @@ static inline void mxc_isi_write(struct mxc_isi_pipe *pipe, u32 reg, u32 val)
+ 
+ void mxc_isi_channel_set_inbuf(struct mxc_isi_pipe *pipe, dma_addr_t dma_addr)
+ {
+-	mxc_isi_write(pipe, CHNL_IN_BUF_ADDR, dma_addr);
+-#if CONFIG_ARCH_DMA_ADDR_T_64BIT
++	mxc_isi_write(pipe, CHNL_IN_BUF_ADDR, lower_32_bits(dma_addr));
+ 	if (pipe->isi->pdata->has_36bit_dma)
+-		mxc_isi_write(pipe, CHNL_IN_BUF_XTND_ADDR, dma_addr >> 32);
+-#endif
++		mxc_isi_write(pipe, CHNL_IN_BUF_XTND_ADDR,
++			      upper_32_bits(dma_addr));
+ }
+ 
+ void mxc_isi_channel_set_outbuf(struct mxc_isi_pipe *pipe,
+@@ -45,34 +44,36 @@ void mxc_isi_channel_set_outbuf(struct mxc_isi_pipe *pipe,
+ 	val = mxc_isi_read(pipe, CHNL_OUT_BUF_CTRL);
+ 
+ 	if (buf_id == MXC_ISI_BUF1) {
+-		mxc_isi_write(pipe, CHNL_OUT_BUF1_ADDR_Y, dma_addrs[0]);
+-		mxc_isi_write(pipe, CHNL_OUT_BUF1_ADDR_U, dma_addrs[1]);
+-		mxc_isi_write(pipe, CHNL_OUT_BUF1_ADDR_V, dma_addrs[2]);
+-#if CONFIG_ARCH_DMA_ADDR_T_64BIT
++		mxc_isi_write(pipe, CHNL_OUT_BUF1_ADDR_Y,
++			      lower_32_bits(dma_addrs[0]));
++		mxc_isi_write(pipe, CHNL_OUT_BUF1_ADDR_U,
++			      lower_32_bits(dma_addrs[1]));
++		mxc_isi_write(pipe, CHNL_OUT_BUF1_ADDR_V,
++			      lower_32_bits(dma_addrs[2]));
+ 		if (pipe->isi->pdata->has_36bit_dma) {
+ 			mxc_isi_write(pipe, CHNL_Y_BUF1_XTND_ADDR,
+-				      dma_addrs[0] >> 32);
++				      upper_32_bits(dma_addrs[0]));
+ 			mxc_isi_write(pipe, CHNL_U_BUF1_XTND_ADDR,
+-				      dma_addrs[1] >> 32);
++				      upper_32_bits(dma_addrs[1]));
+ 			mxc_isi_write(pipe, CHNL_V_BUF1_XTND_ADDR,
+-				      dma_addrs[2] >> 32);
++				      upper_32_bits(dma_addrs[2]));
+ 		}
+-#endif
+ 		val ^= CHNL_OUT_BUF_CTRL_LOAD_BUF1_ADDR;
+ 	} else  {
+-		mxc_isi_write(pipe, CHNL_OUT_BUF2_ADDR_Y, dma_addrs[0]);
+-		mxc_isi_write(pipe, CHNL_OUT_BUF2_ADDR_U, dma_addrs[1]);
+-		mxc_isi_write(pipe, CHNL_OUT_BUF2_ADDR_V, dma_addrs[2]);
+-#if CONFIG_ARCH_DMA_ADDR_T_64BIT
++		mxc_isi_write(pipe, CHNL_OUT_BUF2_ADDR_Y,
++			      lower_32_bits(dma_addrs[0]));
++		mxc_isi_write(pipe, CHNL_OUT_BUF2_ADDR_U,
++			      lower_32_bits(dma_addrs[1]));
++		mxc_isi_write(pipe, CHNL_OUT_BUF2_ADDR_V,
++			      lower_32_bits(dma_addrs[2]));
+ 		if (pipe->isi->pdata->has_36bit_dma) {
+ 			mxc_isi_write(pipe, CHNL_Y_BUF2_XTND_ADDR,
+-				      dma_addrs[0] >> 32);
++				      upper_32_bits(dma_addrs[0]));
+ 			mxc_isi_write(pipe, CHNL_U_BUF2_XTND_ADDR,
+-				      dma_addrs[1] >> 32);
++				      upper_32_bits(dma_addrs[1]));
+ 			mxc_isi_write(pipe, CHNL_V_BUF2_XTND_ADDR,
+-				      dma_addrs[2] >> 32);
++				      upper_32_bits(dma_addrs[2]));
+ 		}
+-#endif
+ 		val ^= CHNL_OUT_BUF_CTRL_LOAD_BUF2_ADDR;
+ 	}
+ 
+-- 
+2.39.2
+
