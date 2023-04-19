@@ -2,138 +2,236 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF73CC77B73
-	for <linux-media@archiver.kernel.org>; Wed, 19 Apr 2023 20:10:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6B5EC6FD18
+	for <linux-media@archiver.kernel.org>; Wed, 19 Apr 2023 20:32:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbjDSUKw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 19 Apr 2023 16:10:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35114 "EHLO
+        id S229830AbjDSUc2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 19 Apr 2023 16:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231500AbjDSUKv (ORCPT
+        with ESMTP id S229738AbjDSUc0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 19 Apr 2023 16:10:51 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 790D14C33;
-        Wed, 19 Apr 2023 13:10:49 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (unknown [IPv6:2606:6d00:15:199e::580])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nicolas)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7137B6603247;
-        Wed, 19 Apr 2023 21:10:47 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681935048;
-        bh=p6Bh6e7Qjn7BRm0mOG9dNdfJlWO9r4yzoXFJ/eJ0NLA=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=StBvdoqAOlrplsSJyWzXdLylHd8PoDk0WZX0t7NOZfSaPPlvSygbXsF/lg2S+aCUl
-         EjZRlkrCSC5KYrsaH/StH7w0yFe1Ixcjrpq62C52CQ5VeJtlJT/Pa28mv4Idy45jt1
-         ySjCHuTDKukocIt+tMOF+6QYcGeVRpihONrUFnLGbVVQGM0d7dnsUFPFXfnzypCGKz
-         cHD40EKWsTuDuNqLRKq3zjobxJh3Gu6Qr6zmJwMFcmviN+rYmCiAIHgpt9e87AGahn
-         a9EPRJ+4vQZdzBysAvWRYmm3ByeJefq+O2NwlXX8q+m6F1bZY687sIlULnvti/645f
-         ifTx9G6gq8BBw==
-Message-ID: <511c900070050a5cac317279ee4208cdc1d8d1af.camel@collabora.com>
-Subject: Re: [PATCH] media: uapi: HEVC: Add num_delta_pocs_of_ref_rps_idx
- field
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-Date:   Wed, 19 Apr 2023 16:10:38 -0400
-In-Reply-To: <20230418160717.743517-1-benjamin.gaignard@collabora.com>
-References: <20230418160717.743517-1-benjamin.gaignard@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Wed, 19 Apr 2023 16:32:26 -0400
+X-Greylist: delayed 478 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 19 Apr 2023 13:32:20 PDT
+Received: from out-30.mta0.migadu.com (out-30.mta0.migadu.com [IPv6:2001:41d0:1004:224b::1e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22A1B270E
+        for <linux-media@vger.kernel.org>; Wed, 19 Apr 2023 13:32:19 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 22:24:16 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=grimler.se; s=key1;
+        t=1681935859;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=V20VJv1TvezaAhFXg1TxVwCOql54YGFqOYPkGP8pazQ=;
+        b=cT8c6lY/bJVW3tUmDsyOXCpLyLqQnkGWUJhsaPyDTQDN+T0llTayhLrryh//uChH+//JHo
+        x17+hr5gXmgXXv214KbPtSXg1i5+Whi6AkB87RxbFU1t5mpoZ5++enCMNkSEDLKNkmnQb6
+        3IMIQH5r+ho1nDTvIw+DjYAL79D8v9M=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Henrik Grimler <henrik@grimler.se>
+To:     Artur Weber <aweber.kernel@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-phy@lists.infradead.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH v2 03/12] ARM: exynos: Re-introduce Exynos4212 support
+Message-ID: <ZEBN8ImTp/tRdej+@L14.lan>
+References: <20230416133422.1949-1-aweber.kernel@gmail.com>
+ <20230416133422.1949-4-aweber.kernel@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230416133422.1949-4-aweber.kernel@gmail.com>
+X-Migadu-Flow: FLOW_OUT
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Le mardi 18 avril 2023 =C3=A0 18:07 +0200, Benjamin Gaignard a =C3=A9crit=
-=C2=A0:
-> Some drivers firmwares parse by themselves slice header and need
-> num_delta_pocs_of_ref_rps_idx value to parse slice header
-> short_term_ref_pic_set().
-> Use one of the 4 reserved bytes to store this value without
-> changing the v4l2_ctrl_hevc_decode_params structure size and padding.
->=20
-> This value also exist in DXVA API.
->=20
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->=20
+Hi Artur,
 
-Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-
-For the info, this is in preparation for MTK VCODEC HEVC driver. It makes o=
-ur
-API (hopefully) on par with DXVA, which has always been the goal, we simply
-missed it during review.
-
-regards,
-Nicolas
-
+On Sun, Apr 16, 2023 at 03:34:13PM +0200, Artur Weber wrote:
+> The platform was originally dropped in commit bca9085e0ae9 ("ARM:
+> dts: exynos: remove Exynos4212 support (dead code)"), as there were
+> no boards using it.
+> 
+> We will be adding a device that uses it, so add it back.
+> 
+> This effectively reverts commit 9e43eca3c874 ("ARM: EXYNOS: Remove
+> Exynos4212 related dead code").
+> 
+> Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
 > ---
->  .../userspace-api/media/v4l/ext-ctrls-codec-stateless.rst  | 7 +++++++
->  include/uapi/linux/v4l2-controls.h                         | 6 +++++-
->  2 files changed, 12 insertions(+), 1 deletion(-)
->=20
-> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec-statel=
-ess.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.r=
-st
-> index 3d8411acd5b8..92ce3e126929 100644
-> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
-> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
-> @@ -2923,6 +2923,13 @@ This structure contains all loop filter related pa=
-rameters. See sections
->        - ``poc_lt_curr[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
->        - PocLtCurr as described in section 8.3.2 "Decoding process for re=
-ference
->          picture set": provides the index of the long term references in =
-DPB array.
-> +    * - __u8
-> +      - ``num_delta_pocs_of_ref_rps_idx``
-> +      - When the short_term_ref_pic_set_sps_flag in the slice header is =
-equal to 0,
-> +        it is the same than derived value NumDeltaPocs[RefRpsIdx]. It ca=
-n be used to parse
-> +        the RPS data in slice headers instead of skipping it with @short=
-_term_ref_pic_set_size.
-> +        When the value of short_term_ref_pic_set_sps_flag in the slice h=
-eader is
-> +        equal to 1, num_delta_pocs_of_ref_rps_idx shall be set to 0.
->      * - struct :c:type:`v4l2_hevc_dpb_entry`
->        - ``dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
->        - The decoded picture buffer, for meta-data about reference frames=
-.
-> diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2=
--controls.h
-> index 5e80daa4ffe0..7bf59a87a1bf 100644
-> --- a/include/uapi/linux/v4l2-controls.h
-> +++ b/include/uapi/linux/v4l2-controls.h
-> @@ -2385,6 +2385,9 @@ struct v4l2_ctrl_hevc_slice_params {
->   * @poc_st_curr_after: provides the index of the short term after refere=
-nces
->   *		       in DPB array
->   * @poc_lt_curr: provides the index of the long term references in DPB a=
-rray
-> + * @num_delta_pocs_of_ref_rps_idx: same as the derived value NumDeltaPoc=
-s[RefRpsIdx],
-> + *				   can be used to parse the RPS data in slice headers
-> + *				   instead of skipping it with @short_term_ref_pic_set_size.
->   * @reserved: padding field. Should be zeroed by applications.
->   * @dpb: the decoded picture buffer, for meta-data about reference frame=
-s
->   * @flags: see V4L2_HEVC_DECODE_PARAM_FLAG_{}
-> @@ -2400,7 +2403,8 @@ struct v4l2_ctrl_hevc_decode_params {
->  	__u8	poc_st_curr_before[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
->  	__u8	poc_st_curr_after[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
->  	__u8	poc_lt_curr[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
-> -	__u8	reserved[4];
-> +	__u8	num_delta_pocs_of_ref_rps_idx;
-> +	__u8	reserved[3];
->  	struct	v4l2_hevc_dpb_entry dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
->  	__u64	flags;
->  };
+>  arch/arm/mach-exynos/Kconfig    | 5 +++++
+>  arch/arm/mach-exynos/common.h   | 8 ++++++++
+>  arch/arm/mach-exynos/exynos.c   | 2 ++
+>  arch/arm/mach-exynos/firmware.c | 8 +++++++-
+>  arch/arm/mach-exynos/pm.c       | 2 +-
+>  arch/arm/mach-exynos/suspend.c  | 4 ++++
+>  6 files changed, 27 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm/mach-exynos/Kconfig b/arch/arm/mach-exynos/Kconfig
+> index 4d3b40e4049a..b3d5df5225fe 100644
+> --- a/arch/arm/mach-exynos/Kconfig
+> +++ b/arch/arm/mach-exynos/Kconfig
+> @@ -78,6 +78,11 @@ config CPU_EXYNOS4210
+>  	default y
+>  	depends on ARCH_EXYNOS4
+>  
+> +config SOC_EXYNOS4212
+> +	bool "Samsung Exynos4212"
+> +	default y
+> +	depends on ARCH_EXYNOS4
+> +
+>  config SOC_EXYNOS4412
+>  	bool "Samsung Exynos4412"
+>  	default y
+> diff --git a/arch/arm/mach-exynos/common.h b/arch/arm/mach-exynos/common.h
+> index 29eb075b24a4..c9e85d33c309 100644
+> --- a/arch/arm/mach-exynos/common.h
+> +++ b/arch/arm/mach-exynos/common.h
+> @@ -15,6 +15,7 @@
+>  #define EXYNOS3_SOC_MASK	0xFFFFF000
+>  
+>  #define EXYNOS4210_CPU_ID	0x43210000
+> +#define EXYNOS4212_CPU_ID	0x43220000
+>  #define EXYNOS4412_CPU_ID	0xE4412200
+>  #define EXYNOS4_CPU_MASK	0xFFFE0000
+>  
+> @@ -34,6 +35,7 @@ static inline int is_samsung_##name(void)	\
+>  
+>  IS_SAMSUNG_CPU(exynos3250, EXYNOS3250_SOC_ID, EXYNOS3_SOC_MASK)
+>  IS_SAMSUNG_CPU(exynos4210, EXYNOS4210_CPU_ID, EXYNOS4_CPU_MASK)
+> +IS_SAMSUNG_CPU(exynos4212, EXYNOS4212_CPU_ID, EXYNOS4_CPU_MASK)
+>  IS_SAMSUNG_CPU(exynos4412, EXYNOS4412_CPU_ID, EXYNOS4_CPU_MASK)
+>  IS_SAMSUNG_CPU(exynos5250, EXYNOS5250_SOC_ID, EXYNOS5_SOC_MASK)
+>  IS_SAMSUNG_CPU(exynos5410, EXYNOS5410_SOC_ID, EXYNOS5_SOC_MASK)
+> @@ -52,6 +54,12 @@ IS_SAMSUNG_CPU(exynos5800, EXYNOS5800_SOC_ID, EXYNOS5_SOC_MASK)
+>  # define soc_is_exynos4210()	0
+>  #endif
+>  
+> +#if defined(CONFIG_SOC_EXYNOS4212)
+> +# define soc_is_exynos4212()	is_samsung_exynos4212()
+> +#else
+> +# define soc_is_exynos4212()	0
+> +#endif
+> +
+>  #if defined(CONFIG_SOC_EXYNOS4412)
+>  # define soc_is_exynos4412()	is_samsung_exynos4412()
+>  #else
+> diff --git a/arch/arm/mach-exynos/exynos.c b/arch/arm/mach-exynos/exynos.c
+> index 51a247ca4da8..5671621f1661 100644
+> --- a/arch/arm/mach-exynos/exynos.c
+> +++ b/arch/arm/mach-exynos/exynos.c
+> @@ -178,6 +178,7 @@ static void __init exynos_dt_machine_init(void)
+>  		exynos_cpuidle.dev.platform_data = &cpuidle_coupled_exynos_data;
+>  #endif
+>  	if (of_machine_is_compatible("samsung,exynos4210") ||
+> +	    of_machine_is_compatible("samsung,exynos4212") ||
+>  	    (of_machine_is_compatible("samsung,exynos4412") &&
+>  	     (of_machine_is_compatible("samsung,trats2") ||
+>  		  of_machine_is_compatible("samsung,midas") ||
+> @@ -192,6 +193,7 @@ static char const *const exynos_dt_compat[] __initconst = {
+>  	"samsung,exynos3250",
+>  	"samsung,exynos4",
+>  	"samsung,exynos4210",
+> +	"samsung,exynos4212",
+>  	"samsung,exynos4412",
+>  	"samsung,exynos5",
+>  	"samsung,exynos5250",
+> diff --git a/arch/arm/mach-exynos/firmware.c b/arch/arm/mach-exynos/firmware.c
+> index 2da5b60b59e2..110c8064ee64 100644
+> --- a/arch/arm/mach-exynos/firmware.c
+> +++ b/arch/arm/mach-exynos/firmware.c
+> @@ -63,12 +63,18 @@ static int exynos_cpu_boot(int cpu)
+>  	 *
+>  	 * On Exynos5 devices the call is ignored by trustzone firmware.
+>  	 */
+> -	if (!soc_is_exynos4210() && !soc_is_exynos4412())
+> +	if (!soc_is_exynos4210() && !soc_is_exynos4412() &&
+> +	    !soc_is_exynos4212())
 
+Seems more logical to have 4212 before 4412 here.
+
+>  		return 0;
+>  
+>  	/*
+>  	 * The second parameter of SMC_CMD_CPU1BOOT command means CPU id.
+> +	 * But, Exynos4212 has only one secondary CPU so second parameter
+> +	 * isn't used for informing secure firmware about CPU id.
+>  	 */
+> +	if (soc_is_exynos4212())
+> +		cpu = 0;
+
+Is it necessary to set cpu = 0?  Are there any obvious issues without
+it (like second cpu not being brought up)?  It seems vendor kernel
+does this for both exynos4210 and exynos4212 [1], but mainline has not
+done this for exynos4210 and there has been no reported issues on for
+that platform as far as I know.
+
+The assembly that handles SMC_CMD_CPU1BOOT in sboot.bin from firmware
+version T310XXSBQB2 is identical to what is found in sboot.bin from
+exynos4412-galaxy-s3, and it uses the cpu arg in both cases, so seems
+likely that we need this and I am mostly asking out of curiosity.
+
+[1] https://github.com/krzk/linux-vendor-backup/blob/mokee/android-3.4-samsung-galaxy-tab-s-10.5-sm-t805-exynos5420/arch/arm/mach-exynos/platsmp.c#L225-L229
+
+Best regards,
+Henrik Grimler
+
+>  	exynos_smc(SMC_CMD_CPU1BOOT, cpu, 0, 0);
+>  	return 0;
+>  }
+> diff --git a/arch/arm/mach-exynos/pm.c b/arch/arm/mach-exynos/pm.c
+> index 30f4e55bf39e..9b6db04e4e34 100644
+> --- a/arch/arm/mach-exynos/pm.c
+> +++ b/arch/arm/mach-exynos/pm.c
+> @@ -161,7 +161,7 @@ void exynos_enter_aftr(void)
+>  
+>  	exynos_pm_central_suspend();
+>  
+> -	if (soc_is_exynos4412()) {
+> +	if (soc_is_exynos4412() || soc_is_exynos4212()) {
+>  		/* Setting SEQ_OPTION register */
+>  		pmu_raw_writel(S5P_USE_STANDBY_WFI0 | S5P_USE_STANDBY_WFE0,
+>  			       S5P_CENTRAL_SEQ_OPTION);
+> diff --git a/arch/arm/mach-exynos/suspend.c b/arch/arm/mach-exynos/suspend.c
+> index 3bf14ca78b62..df1e10033f90 100644
+> --- a/arch/arm/mach-exynos/suspend.c
+> +++ b/arch/arm/mach-exynos/suspend.c
+> @@ -231,6 +231,7 @@ static int __init exynos_pmu_irq_init(struct device_node *node,
+>  
+>  EXYNOS_PMU_IRQ(exynos3250_pmu_irq, "samsung,exynos3250-pmu");
+>  EXYNOS_PMU_IRQ(exynos4210_pmu_irq, "samsung,exynos4210-pmu");
+> +EXYNOS_PMU_IRQ(exynos4212_pmu_irq, "samsung,exynos4212-pmu");
+>  EXYNOS_PMU_IRQ(exynos4412_pmu_irq, "samsung,exynos4412-pmu");
+>  EXYNOS_PMU_IRQ(exynos5250_pmu_irq, "samsung,exynos5250-pmu");
+>  EXYNOS_PMU_IRQ(exynos5420_pmu_irq, "samsung,exynos5420-pmu");
+> @@ -640,6 +641,9 @@ static const struct of_device_id exynos_pmu_of_device_ids[] __initconst = {
+>  	}, {
+>  		.compatible = "samsung,exynos4210-pmu",
+>  		.data = &exynos4_pm_data,
+> +	}, {
+> +		.compatible = "samsung,exynos4212-pmu",
+> +		.data = &exynos4_pm_data,
+>  	}, {
+>  		.compatible = "samsung,exynos4412-pmu",
+>  		.data = &exynos4_pm_data,
+> -- 
+> 2.40.0
+> 
