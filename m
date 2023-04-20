@@ -2,89 +2,162 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 347E1C77B72
-	for <linux-media@archiver.kernel.org>; Thu, 20 Apr 2023 13:29:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 386F7C77B72
+	for <linux-media@archiver.kernel.org>; Thu, 20 Apr 2023 14:23:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231259AbjDTN30 convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 20 Apr 2023 09:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40470 "EHLO
+        id S231451AbjDTOXu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 20 Apr 2023 10:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjDTN3Y (ORCPT
+        with ESMTP id S231329AbjDTOXt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 20 Apr 2023 09:29:24 -0400
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1EA44BB;
-        Thu, 20 Apr 2023 06:29:23 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id n17so2214986ybq.2;
-        Thu, 20 Apr 2023 06:29:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681997362; x=1684589362;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SwYnTl+Plx0PSrLU1IU0gj4WvioW389t1+c4+HFYYy8=;
-        b=aMuaIBESkhd6cIqKp/fUvPBHTl9zYc2UsO5fhhQlZTudA8e2eojbh6/xi70ASvHJ9K
-         yj2X5OPDY5LFDHRu3k/0jrflMxMoAZrZqOBlNkvlf3ovhsyWpz+zg5b7CdkJax5ZKqUx
-         oiqNYR6HNW1AgQjBIx0ewPxPU6RQK9+ZV1+2YKrzglbGMgsNZRXTpw9Bz9H/Tk8/zj0J
-         BnF//Icr3/rYhdBCKbgXqJaAPOoLyARhwONENLg3p423ZJ5+Q0xcleRrtgloajeYuCjB
-         hjGmkuTYp4hARvtjK7vmL6K4wD4+wA5rgSJwHDmIBuQmlchU4xiqVQMZDg92qfuLGG3u
-         rGpQ==
-X-Gm-Message-State: AAQBX9eWcey0svecW4gR6Wz4izjmk4BEYIMP7zuiS6aNxiqCQVltp1l0
-        E+OkZMsLLvdnJFNkM4ZtMJRC97Ou52ZFddOM
-X-Google-Smtp-Source: AKy350ZObBBjrEaGjs6J/nRBACRz90Tm63SgDNyyAOgOpPqPJ7UYPFqP/iwu9wLmV6crB5Lu3FuvnA==
-X-Received: by 2002:a25:a047:0:b0:b92:588e:7360 with SMTP id x65-20020a25a047000000b00b92588e7360mr1209438ybh.50.1681997362639;
-        Thu, 20 Apr 2023 06:29:22 -0700 (PDT)
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
-        by smtp.gmail.com with ESMTPSA id a3-20020a256603000000b00b8ed4bee6absm293468ybc.48.2023.04.20.06.29.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 06:29:22 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-54fa9da5e5bso41922437b3.1;
-        Thu, 20 Apr 2023 06:29:22 -0700 (PDT)
-X-Received: by 2002:a0d:d146:0:b0:54f:d7f7:9d61 with SMTP id
- t67-20020a0dd146000000b0054fd7f79d61mr815807ywd.14.1681997362050; Thu, 20 Apr
- 2023 06:29:22 -0700 (PDT)
+        Thu, 20 Apr 2023 10:23:49 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E00F40FE
+        for <linux-media@vger.kernel.org>; Thu, 20 Apr 2023 07:23:13 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (133-32-181-51.west.xps.vectant.ne.jp [133.32.181.51])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7C62E9DE;
+        Thu, 20 Apr 2023 16:23:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1682000581;
+        bh=QOpG3hCZpxihFB7roLb/FtYu3nkiDzNsEuElvYYd0KQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ldSKJNbTj9ZROxj5uphId/SxQHui5CwYIp2na5MjD4PwDPrE0QHkK2ksbt5RlTLyz
+         2RFa9Qod3r+03X6C5JenCTl3D9CAj+uMUVs31kSqWS2tqZL6fSU1ub//QG+DtmBiOx
+         lWzp/DuW6nYBMELdcCqPtRdOajzrA729n3cA5U1w=
+Date:   Thu, 20 Apr 2023 17:23:20 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     bingbu.cao@intel.com
+Cc:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
+        ilpo.jarvinen@linux.intel.com, tfiga@chromium.org,
+        senozhatsky@chromium.org, hdegoede@redhat.com,
+        bingbu.cao@linux.intel.com, tian.shu.qiu@intel.com,
+        hongju.wang@intel.com, daniel.h.kang@intel.com
+Subject: Re: [RFC PATCH 12/14] media: add Kconfig and Makefile for IPU6
+Message-ID: <20230420142320.GB17497@pendragon.ideasonboard.com>
+References: <20230413100429.919622-1-bingbu.cao@intel.com>
+ <20230413100429.919622-13-bingbu.cao@intel.com>
 MIME-Version: 1.0
-References: <20230411100346.299768-1-biju.das.jz@bp.renesas.com> <20230411100346.299768-9-biju.das.jz@bp.renesas.com>
-In-Reply-To: <20230411100346.299768-9-biju.das.jz@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 20 Apr 2023 15:29:10 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV7p0BZEp4NCZCRKkxuRCYDHHEN+udwb5wuRgT+tMWxBw@mail.gmail.com>
-Message-ID: <CAMuHMdV7p0BZEp4NCZCRKkxuRCYDHHEN+udwb5wuRgT+tMWxBw@mail.gmail.com>
-Subject: Re: [PATCH v2 8/8] arm64: dts: renesas: rzg2lc-smarc: Link DSI with ADV7535
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        linux-renesas-soc@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230413100429.919622-13-bingbu.cao@intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 12:04 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> Enable DSI and ADV7535 and link DSI with ADV7535 on RZ/G2LC SMARC EVK.
->
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+Hi Bingbu,
+
+Thank you for the patch. I'm happy to see this series landing on the
+mailing list. I'm starting the review with the easy pieces :-)
+
+On Thu, Apr 13, 2023 at 06:04:27PM +0800, bingbu.cao@intel.com wrote:
+> From: Bingbu Cao <bingbu.cao@intel.com>
+> 
+> Add IPU6 support in Kconfig and Makefile, with this patch you can
+> build the Intel IPU6 and input system modules by select the
+> CONFIG_VIDEO_INTEL_IPU6 in config.
+> 
+> Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
 > ---
-> v2:
->  * New patch
+>  drivers/media/pci/Kconfig             |  1 +
+>  drivers/media/pci/intel/Makefile      |  3 ++-
+>  drivers/media/pci/intel/ipu6/Kconfig  | 15 +++++++++++++++
+>  drivers/media/pci/intel/ipu6/Makefile | 23 +++++++++++++++++++++++
+>  4 files changed, 41 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/media/pci/intel/ipu6/Kconfig
+>  create mode 100644 drivers/media/pci/intel/ipu6/Makefile
+> 
+> diff --git a/drivers/media/pci/Kconfig b/drivers/media/pci/Kconfig
+> index 480194543d05..38fb484f5c8e 100644
+> --- a/drivers/media/pci/Kconfig
+> +++ b/drivers/media/pci/Kconfig
+> @@ -74,6 +74,7 @@ config VIDEO_PCI_SKELETON
+>  	  when developing new drivers.
+>  
+>  source "drivers/media/pci/intel/ipu3/Kconfig"
+> +source "drivers/media/pci/intel/ipu6/Kconfig"
+>  
+>  endif #MEDIA_PCI_SUPPORT
+>  endif #PCI
+> diff --git a/drivers/media/pci/intel/Makefile b/drivers/media/pci/intel/Makefile
+> index 0b4236c4db49..de2b73fef890 100644
+> --- a/drivers/media/pci/intel/Makefile
+> +++ b/drivers/media/pci/intel/Makefile
+> @@ -1,6 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  #
+> -# Makefile for the IPU3 cio2 and ImGU drivers
+> +# Makefile for the Intel IPU drivers
+>  #
+>  
+>  obj-y	+= ipu3/
+> +obj-$(CONFIG_VIDEO_INTEL_IPU6)	+= ipu6/
+> diff --git a/drivers/media/pci/intel/ipu6/Kconfig b/drivers/media/pci/intel/ipu6/Kconfig
+> new file mode 100644
+> index 000000000000..c88ef2f40f6d
+> --- /dev/null
+> +++ b/drivers/media/pci/intel/ipu6/Kconfig
+> @@ -0,0 +1,15 @@
+> +config VIDEO_INTEL_IPU6
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v6.5.
+As there will (hopefully) be a driver for the processing system in the
+future, should this Kconfig symbol be named with a reference to the
+input system already (and the help text be updated accordingly) ? The
+name "IPU6" covers both. Or do you envision that we would have a single
+Kconfig symbol to select both drivers ?
 
-Gr{oetje,eeting}s,
+> +	tristate "Intel IPU6 driver"
+> +	depends on ACPI || COMPILE_TEST
+> +	depends on MEDIA_SUPPORT
+> +	depends on MEDIA_PCI_SUPPORT
+> +	depends on X86_64
 
-                        Geert
+Do you use any x86-64 API, or could this be
+
+	depends on X86_64 || COMPILE_TEST
+
+?
+
+> +	select IOMMU_IOVA
+> +	select VIDEOBUF2_DMA_CONTIG
+> +	select V4L2_FWNODE
+> +	help
+> +	  This is the 6th Gen Intel Image Processing Unit, found in Intel SoCs
+> +	  and used for capturing images and video from camera sensors.
+> +
+> +	  To compile this driver, say Y here! It contains 2 modules -
+> +	  intel_ipu6 and intel_ipu6_isys.
+> diff --git a/drivers/media/pci/intel/ipu6/Makefile b/drivers/media/pci/intel/ipu6/Makefile
+> new file mode 100644
+> index 000000000000..6a6339c84ef4
+> --- /dev/null
+> +++ b/drivers/media/pci/intel/ipu6/Makefile
+> @@ -0,0 +1,23 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +
+> +intel-ipu6-objs				+= ipu6.o \
+> +					ipu6-bus.o \
+> +					ipu6-dma.o \
+> +					ipu6-mmu.o \
+> +					ipu6-buttress.o \
+> +					ipu6-cpd.o \
+> +					ipu6-fw-com.o
+> +
+> +obj-$(CONFIG_VIDEO_INTEL_IPU6)		+= intel-ipu6.o
+> +
+> +intel-ipu6-isys-objs			+= ipu6-isys.o \
+> +					ipu6-isys-csi2.o \
+> +					ipu6-fw-isys.o \
+> +					ipu6-isys-video.o \
+> +					ipu6-isys-queue.o \
+> +					ipu6-isys-subdev.o \
+> +					ipu6-isys-mcd-phy.o \
+> +					ipu6-isys-jsl-phy.o \
+> +					ipu6-isys-dwc-phy.o
+> +
+> +obj-$(CONFIG_VIDEO_INTEL_IPU6)		+= intel-ipu6-isys.o
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Regards,
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Laurent Pinchart
