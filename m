@@ -2,82 +2,156 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4AE6C77B7A
-	for <linux-media@archiver.kernel.org>; Thu, 20 Apr 2023 17:00:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64025C77B7C
+	for <linux-media@archiver.kernel.org>; Thu, 20 Apr 2023 18:47:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230427AbjDTRAh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 20 Apr 2023 13:00:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40670 "EHLO
+        id S230463AbjDTSr1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 20 Apr 2023 14:47:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230398AbjDTRAd (ORCPT
+        with ESMTP id S231704AbjDTSrY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 20 Apr 2023 13:00:33 -0400
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9328107;
-        Thu, 20 Apr 2023 10:00:14 -0700 (PDT)
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-1879fc89f5eso434162fac.0;
-        Thu, 20 Apr 2023 10:00:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682010014; x=1684602014;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eC1knULcd6KabTMiS4cXiXXe6gVupFzizQt47kvZr1Q=;
-        b=dF1FwIJ0ou0d3ayYVplx992dWBMKLoq4Tvt/QlVT0RCutuwKfSNFygxfBj+GssEop1
-         SnxMYQO4EncJqYyd4pHDSJt1I0cRBW5g5ZTx+7PivlrMork/InSPfmFmZKzS9qen+wdY
-         KDsGGepgKgicw9JnLrVgs0i6EgpK/UuNgX/N1yxUFYuUU/c8Tj4iMx/pz3wbd8N/hTtw
-         v2w2JKlJlezAxL9LzwhIDmf/EbXcQeQaJmJPkuJ5OrToIrEWlF198Au/YtkCzjagGZQr
-         TYVGIXcORZRkMGXyYrsK2CFHiLTKRVXiQefZ55N/75YpUfi0Qkn3COOBZXHTNGJhzgZT
-         p8Lw==
-X-Gm-Message-State: AAQBX9fnD1iR00FC9MOHGNlA9XZkPJMSAZhp4QUfVv65aexL0U0+sYL2
-        Eec2nQYv0XKv0ChQMP3mxA==
-X-Google-Smtp-Source: AKy350Zkid3K7ZYXAj8/cAuJgUzeJWjBOQsOyR+U1IzfGcxYXk7UsPEh6YBKe1O+NLZ/IWAzO5RuQQ==
-X-Received: by 2002:a05:6871:297:b0:187:7b68:2521 with SMTP id i23-20020a056871029700b001877b682521mr1930680oae.36.1682010013960;
-        Thu, 20 Apr 2023 10:00:13 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id c19-20020a05687093d300b0018b12e3a392sm892173oal.42.2023.04.20.10.00.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 10:00:13 -0700 (PDT)
-Received: (nullmailer pid 3015906 invoked by uid 1000);
-        Thu, 20 Apr 2023 17:00:12 -0000
-Date:   Thu, 20 Apr 2023 12:00:12 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Todor Tomov <todor.too@gmail.com>,
+        Thu, 20 Apr 2023 14:47:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E55C30C5;
+        Thu, 20 Apr 2023 11:47:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 251D664B47;
+        Thu, 20 Apr 2023 18:47:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACA34C433D2;
+        Thu, 20 Apr 2023 18:47:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682016442;
+        bh=gIDrAb2DLZxHW/UfFYvFg8ZkNoELTe4cNyI1YhHhsUc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qc+6ooEQtzPf4HhwXsVsY5wZMyL8TlT4I4maWGru69JSD+ChHQZATlXR2f+XdVQan
+         eobkKFtfxAgi/DnoXUt3pRJerjXWRpc3k2jC2jhV6Kn9Ka757+APzQAuikfZC13LYM
+         zmPdSARFhZC4GX8iKVUTb6ILSy1f/psLW3JeOElO0+c6aBQH1xHYfXIkriUegRURXd
+         6gGkNZfw9f2k0oIQauZteFrauOYWiS1oVzkpQXjKi7jsU0mv9qNce1GdPdBaVXeZc+
+         FCvPX5O/9imZKrZInVHCejqUYHTUdKtIYYRKQy4yrptyeYSpou9z8R1f8/nbSo8hWV
+         njLrbmk4WGM7Q==
+Date:   Thu, 20 Apr 2023 20:47:16 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Del Regno <angelogioacchino.delregno@somainline.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Robert Foss <rfoss@kernel.org>
-Subject: Re: [PATCH] media: dt-bindings: qcom: camss: correct unit address
-Message-ID: <168201000524.3015737.5862969014939069811.robh@kernel.org>
-References: <20230420072442.36308-1-krzysztof.kozlowski@linaro.org>
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>,
+        Rob Herring <robh@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: Re: [PATCH v10 5/8] dt-bindings: media: add TI DS90UB960 FPD-Link
+ III Deserializer
+Message-ID: <ZEGItAqsvNGQm1l+@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>, Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>,
+        Rob Herring <robh@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+References: <20230222132907.594690-1-tomi.valkeinen@ideasonboard.com>
+ <20230222132907.594690-6-tomi.valkeinen@ideasonboard.com>
+ <ZD6VwpRya6SGBAt5@shikoro>
+ <b85a2198-dffd-6c1e-53ea-61bc4d14ce2a@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="DLSvPqhBVl0l+K0b"
 Content-Disposition: inline
-In-Reply-To: <20230420072442.36308-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <b85a2198-dffd-6c1e-53ea-61bc4d14ce2a@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 
-On Thu, 20 Apr 2023 09:24:42 +0200, Krzysztof Kozlowski wrote:
-> Match unit-address to first reg entry.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  Documentation/devicetree/bindings/media/qcom,msm8916-camss.yaml | 2 +-
->  Documentation/devicetree/bindings/media/qcom,msm8996-camss.yaml | 2 +-
->  Documentation/devicetree/bindings/media/qcom,sdm660-camss.yaml  | 2 +-
->  Documentation/devicetree/bindings/media/qcom,sdm845-camss.yaml  | 2 +-
->  4 files changed, 4 insertions(+), 4 deletions(-)
-> 
+--DLSvPqhBVl0l+K0b
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Rob Herring <robh@kernel.org>
+Hi Tomi,
 
+> How does this sound:
+>=20
+> - If "i2c-alias-pool" is present in the DT data of the device passed to
+> i2c_atr_new(), i2c_atr_new() will parse the property. i2c-atr.c will expo=
+rt
+> functions to get a new alias and to release a previously reserved alias. =
+The
+> driver can use those functions in attach/detach_client() callbacks. In ot=
+her
+> words, the alias pool management wouldn't be fully automatic inside the
+> i2c-atr, but it would provide helpers for the driver to do the common wor=
+k.
+>=20
+> - If "i2c-alias-pool" is not present, i2c-atr.c will behave as it does no=
+w,
+> and expects the driver to manage the aliases.
+
+So, how does a driver manage the aliases without a pool of available
+addresses? I can't imagine another way right now.
+
+In general, your above proposal sounds good to me. With my lack of
+imagination regarding a different alias handling, I could also see that
+i2c-atr already provides the alias to the attach callback. But if you
+teach me another way of alias handling, then I could agree that your
+proposal makes sense as is.
+
+And yes, the "i2c-alias-pool" is definately optional.
+
+Happy hacking,
+
+   Wolfram
+
+
+--DLSvPqhBVl0l+K0b
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmRBiLAACgkQFA3kzBSg
+KbYJ1A/7BDFTBE8y9ItDYSASswnWFWHIO5wp/eXJwlpgBYacveFxf/APz0H9A34I
+BKLFU2j5vsI4sPZgaJRo9rsju5/wEQlokVgMcOaFXEeiNf6LJ2CtVUrVa7TaBTkX
+zb8eMQ5EmPQwX9d4/XJ/Jc8bPGiLMhQ0SrNW21g3ZVA++ZFzrRqAZQDicPAuT3c8
+li159KDrPg4X5bhIAfOf2zgqr+1eBFQdlY11zDZ5bMBSbJHUb4vjX2Zogtzl7Xx/
+8CziRiUJmSiNtSUTpBACic4X8rbU/rCn5lgr+811389JvnOPZtcmfg1fLqL4Wj9i
+29Wxyc0+mGs8Hg74aDuAn6kpeT7VLzLUuH2EhcrpqY4B8lP2pCKQmMnVt0ZXrdBc
+J24ia/JEQ7+Ua3lqFn4pni7Pk34/juwq0LS2hqF9vKM2r5Z4/KZ5izZxxyU9c3Xe
+FWSRP8xWwA+H7ewtmFPrcGVRV9EVrZj/twpJn8KxvvFdFqJjHYdCUIkkcpuFN3MF
+yo0qVBp4aOvyQkzn+eyRNvFXkL0xGYJxeU1OouuUDMM3k75hUflAN9JUZfrTaMNP
+RPFhsTBcEgELPM7LLJqV9UqSsG/oAbC1eFV9fMoGRzcWNrd21XDb/TfPz11uGM6v
+R0a8dVjmmZU9OJMOcYYp9HebKFHBJrTQZoNE1syC7Kxj6+lg1xc=
+=qWqp
+-----END PGP SIGNATURE-----
+
+--DLSvPqhBVl0l+K0b--
