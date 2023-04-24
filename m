@@ -2,44 +2,48 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89EF9C7618E
-	for <linux-media@archiver.kernel.org>; Mon, 24 Apr 2023 06:03:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37A30C77B61
+	for <linux-media@archiver.kernel.org>; Mon, 24 Apr 2023 06:03:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230437AbjDXGDE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 Apr 2023 02:03:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59160 "EHLO
+        id S231469AbjDXGDH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 Apr 2023 02:03:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231327AbjDXGC0 (ORCPT
+        with ESMTP id S231345AbjDXGC3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 Apr 2023 02:02:26 -0400
+        Mon, 24 Apr 2023 02:02:29 -0400
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E86F40FF;
-        Sun, 23 Apr 2023 23:01:41 -0700 (PDT)
-X-UUID: 78161322e26511eda9a90f0bb45854f4-20230424
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC5846B1;
+        Sun, 23 Apr 2023 23:01:42 -0700 (PDT)
+X-UUID: 794975a4e26511eda9a90f0bb45854f4-20230424
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=EXYJiSXFWszC60VW1Mpl7DVaCUrm9+G5TpFWnV5gHa8=;
-        b=fZM9gcnyKCciIqneFyeC08MD9TSd5cY8/U54QHXiQnNgPxt49V9SWvmfV7FquQ4BHuIWDUn16VK/OPn2jpEKxUsitmLdznE9+wE1zIY1bONf/O/cDmgkgVV4PDFjecMgAj5/pX1PrXq1AvD7aPLKfJ2NRrniksoxCwcfBLAixvc=;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=WoL64s5ABGC3JLRHKg1Y7d5gunkiamjG91kHfOR9t2s=;
+        b=uYFe9Yl3jTbnK9K9Mpz572rqLwRtyxHxG3BVnXDbqvMx7Qg1v5f7C8rStAwchF8+YsQUZNG+9F2twjKh4VNGaLuICZZEDtmeGeB13YGxXQPvpbBKb+nIcJ1RgwCK7xbP8cWASce/GGP8BQ/1//Z0xbY2wa3rLnEpSeBeYoDBFTc=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:b324fbb1-64fb-42bd-afee-c0f7c3125802,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:120426c,CLOUDID:2f69ebeb-db6f-41fe-8b83-13fe7ed1ef52,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-O-INFO: VERSION:1.1.22,REQID:7d2f8565-424f-410d-8660-dde958f46a2e,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.22,REQID:7d2f8565-424f-410d-8660-dde958f46a2e,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:120426c,CLOUDID:bb9d49a2-8fcb-430b-954a-ba3f00fa94a5,B
+        ulkID:230424140139O6K56AXB,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+        ,OSI:0,OSA:0,AV:0
 X-CID-BVR: 0,NGT
 X-CID-BAS: 0,NGT,0,_
-X-UUID: 78161322e26511eda9a90f0bb45854f4-20230424
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+X-UUID: 794975a4e26511eda9a90f0bb45854f4-20230424
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1448842543; Mon, 24 Apr 2023 14:01:35 +0800
+        with ESMTP id 1640590661; Mon, 24 Apr 2023 14:01:37 +0800
 Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 24 Apr 2023 14:01:34 +0800
+ 15.2.1118.26; Mon, 24 Apr 2023 14:01:36 +0800
 Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
  mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Mon, 24 Apr 2023 14:01:33 +0800
+ 15.2.1118.26 via Frontend Transport; Mon, 24 Apr 2023 14:01:35 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Chen-Yu Tsai <wenst@chromium.org>,
         Nicolas Dufresne <nicolas@ndufresne.ca>,
@@ -60,9 +64,9 @@ CC:     Matthias Brugger <matthias.bgg@gmail.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v3,2/4] media: mediatek: vcodec: using decoder status instead of core work count
-Date:   Mon, 24 Apr 2023 14:01:28 +0800
-Message-ID: <20230424060130.18395-3-yunfei.dong@mediatek.com>
+Subject: [PATCH v3,4/4] media: mediatek: vcodec: using empty lat buffer as the last one
+Date:   Mon, 24 Apr 2023 14:01:30 +0800
+Message-ID: <20230424060130.18395-5-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230424060130.18395-1-yunfei.dong@mediatek.com>
 References: <20230424060130.18395-1-yunfei.dong@mediatek.com>
@@ -74,141 +78,136 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Adding the definition of decoder status to separate different decoder
-period for core hardware.
+Adding one empty lat buffer with parameter 'is_empty_flag = true'
+used to flush core work queue decode.
 
-core_work_cnt is the number of core work queued to work queue, the control
-is very complex, leading to some unreasonable test result.
+Queue the empty lat buffer to core list when driver need to flush decode.
+It's mean core already decode all existed lat buffer when get empty lat
+buffer, then wake up core decode done event, the driver will exit when getting
+core dec done event.
 
-Using parameter status to indicate whether queue core work to work queue.
-
-Fixes: 2e0ef56d81cb ("media: mediatek: vcodec: making sure queue_work successfully")
+Fixes: d227af847ac2 ("media: mediatek: vcodec: add core decode done event")
 Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 ---
- .../platform/mediatek/vcodec/vdec_msg_queue.c | 33 ++++++++-----------
- .../platform/mediatek/vcodec/vdec_msg_queue.h | 16 +++++++--
- 2 files changed, 28 insertions(+), 21 deletions(-)
+ .../platform/mediatek/vcodec/vdec_msg_queue.c | 35 +++++++++++--------
+ .../platform/mediatek/vcodec/vdec_msg_queue.h |  8 +++++
+ 2 files changed, 28 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
-index f3073d1e7f42..03f8d7cd8edd 100644
+index 08c720c9760e..66b4175601e3 100644
 --- a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
 +++ b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
-@@ -71,7 +71,6 @@ static void vdec_msg_queue_dec(struct vdec_msg_queue *msg_queue, int hardware_in
- int vdec_msg_queue_qbuf(struct vdec_msg_queue_ctx *msg_ctx, struct vdec_lat_buf *buf)
+@@ -177,9 +177,6 @@ void vdec_msg_queue_update_ube_wptr(struct vdec_msg_queue *msg_queue, uint64_t u
+ 
+ bool vdec_msg_queue_wait_lat_buf_full(struct vdec_msg_queue *msg_queue)
  {
- 	struct list_head *head;
--	int status;
- 
- 	head = vdec_get_buf_list(msg_ctx->hardware_index, buf);
- 	if (!head) {
-@@ -87,12 +86,9 @@ int vdec_msg_queue_qbuf(struct vdec_msg_queue_ctx *msg_ctx, struct vdec_lat_buf
- 	if (msg_ctx->hardware_index != MTK_VDEC_CORE) {
- 		wake_up_all(&msg_ctx->ready_to_use);
- 	} else {
--		if (buf->ctx->msg_queue.core_work_cnt <
--			atomic_read(&buf->ctx->msg_queue.core_list_cnt)) {
--			status = queue_work(buf->ctx->dev->core_workqueue,
--					    &buf->ctx->msg_queue.core_work);
--			if (status)
--				buf->ctx->msg_queue.core_work_cnt++;
-+		if (!(buf->ctx->msg_queue.status & CONTEXT_LIST_QUEUED)) {
-+			queue_work(buf->ctx->dev->core_workqueue, &buf->ctx->msg_queue.core_work);
-+			buf->ctx->msg_queue.status |= CONTEXT_LIST_QUEUED;
- 		}
- 	}
- 
-@@ -261,7 +257,10 @@ static void vdec_msg_queue_core_work(struct work_struct *work)
- 		container_of(msg_queue, struct mtk_vcodec_ctx, msg_queue);
- 	struct mtk_vcodec_dev *dev = ctx->dev;
- 	struct vdec_lat_buf *lat_buf;
--	int status;
-+
-+	spin_lock(&ctx->dev->msg_queue_core_ctx.ready_lock);
-+	ctx->msg_queue.status &= ~CONTEXT_LIST_QUEUED;
-+	spin_unlock(&ctx->dev->msg_queue_core_ctx.ready_lock);
- 
- 	lat_buf = vdec_msg_queue_dqbuf(&dev->msg_queue_core_ctx);
- 	if (!lat_buf)
-@@ -278,17 +277,13 @@ static void vdec_msg_queue_core_work(struct work_struct *work)
- 	vdec_msg_queue_qbuf(&ctx->msg_queue.lat_ctx, lat_buf);
- 
- 	wake_up_all(&ctx->msg_queue.core_dec_done);
--	spin_lock(&dev->msg_queue_core_ctx.ready_lock);
--	lat_buf->ctx->msg_queue.core_work_cnt--;
+-	int ret;
+-	long timeout_jiff;
 -
--	if (lat_buf->ctx->msg_queue.core_work_cnt <
--		atomic_read(&lat_buf->ctx->msg_queue.core_list_cnt)) {
--		status = queue_work(lat_buf->ctx->dev->core_workqueue,
--				    &lat_buf->ctx->msg_queue.core_work);
--		if (status)
--			lat_buf->ctx->msg_queue.core_work_cnt++;
-+	if (!(ctx->msg_queue.status & CONTEXT_LIST_QUEUED) &&
-+	    atomic_read(&msg_queue->core_list_cnt)) {
-+		spin_lock(&ctx->dev->msg_queue_core_ctx.ready_lock);
-+		ctx->msg_queue.status |= CONTEXT_LIST_QUEUED;
-+		spin_unlock(&ctx->dev->msg_queue_core_ctx.ready_lock);
-+		queue_work(ctx->dev->core_workqueue, &msg_queue->core_work);
+ 	if (atomic_read(&msg_queue->lat_list_cnt) == NUM_BUFFER_COUNT) {
+ 		mtk_v4l2_debug(3, "wait buf full: list(%d %d) ready_num:%d status:%d",
+ 			       atomic_read(&msg_queue->lat_list_cnt),
+@@ -189,19 +186,14 @@ bool vdec_msg_queue_wait_lat_buf_full(struct vdec_msg_queue *msg_queue)
+ 		return true;
  	}
--	spin_unlock(&dev->msg_queue_core_ctx.ready_lock);
+ 
+-	timeout_jiff = msecs_to_jiffies(1000 * (NUM_BUFFER_COUNT + 2));
+-	ret = wait_event_timeout(msg_queue->ctx->msg_queue.core_dec_done,
+-				 msg_queue->lat_ctx.ready_num == NUM_BUFFER_COUNT,
+-				 timeout_jiff);
+-	if (ret) {
+-		mtk_v4l2_debug(3, "success to get lat buf: %d",
+-			       msg_queue->lat_ctx.ready_num);
+-		return true;
+-	}
++	msg_queue->flush_done = false;
++	vdec_msg_queue_qbuf(&msg_queue->core_ctx, &msg_queue->empty_lat_buf);
++	wait_event(msg_queue->core_dec_done, msg_queue->flush_done);
+ 
+-	mtk_v4l2_err("failed with lat buf isn't full: list(%d %d)",
+-		     atomic_read(&msg_queue->lat_list_cnt),
+-		     atomic_read(&msg_queue->core_list_cnt));
++	mtk_v4l2_debug(3, "flush done => ready_num:%d status:%d list(%d %d)",
++		       msg_queue->lat_ctx.ready_num, msg_queue->status,
++		       atomic_read(&msg_queue->lat_list_cnt),
++		       atomic_read(&msg_queue->core_list_cnt));
+ 
+ 	return false;
  }
+@@ -250,6 +242,14 @@ static void vdec_msg_queue_core_work(struct work_struct *work)
+ 	if (!lat_buf)
+ 		return;
  
- int vdec_msg_queue_init(struct vdec_msg_queue *msg_queue,
-@@ -303,13 +298,13 @@ int vdec_msg_queue_init(struct vdec_msg_queue *msg_queue,
- 		return 0;
++	if (lat_buf->is_last_frame) {
++		ctx->msg_queue.status = CONTEXT_LIST_DEC_DONE;
++		msg_queue->flush_done = true;
++		wake_up(&ctx->msg_queue.core_dec_done);
++
++		return;
++	}
++
+ 	ctx = lat_buf->ctx;
+ 	mtk_vcodec_dec_enable_hardware(ctx, MTK_VDEC_CORE);
+ 	mtk_vcodec_set_curr_ctx(dev, ctx, MTK_VDEC_CORE);
+@@ -300,6 +300,10 @@ int vdec_msg_queue_init(struct vdec_msg_queue *msg_queue,
+ 	msg_queue->wdma_rptr_addr = msg_queue->wdma_addr.dma_addr;
+ 	msg_queue->wdma_wptr_addr = msg_queue->wdma_addr.dma_addr;
  
- 	msg_queue->ctx = ctx;
--	msg_queue->core_work_cnt = 0;
- 	vdec_msg_queue_init_ctx(&msg_queue->lat_ctx, MTK_VDEC_LAT0);
- 	INIT_WORK(&msg_queue->core_work, vdec_msg_queue_core_work);
++	msg_queue->empty_lat_buf.ctx = ctx;
++	msg_queue->empty_lat_buf.core_decode = NULL;
++	msg_queue->empty_lat_buf.is_last_frame = true;
++
+ 	for (i = 0; i < NUM_BUFFER_COUNT; i++) {
+ 		lat_buf = &msg_queue->lat_buf[i];
  
- 	atomic_set(&msg_queue->lat_list_cnt, 0);
- 	atomic_set(&msg_queue->core_list_cnt, 0);
- 	init_waitqueue_head(&msg_queue->core_dec_done);
-+	msg_queue->status = CONTEXT_LIST_EMPTY;
+@@ -325,6 +329,7 @@ int vdec_msg_queue_init(struct vdec_msg_queue *msg_queue,
  
- 	msg_queue->wdma_addr.size =
- 		vde_msg_queue_get_trans_size(ctx->picinfo.buf_w,
+ 		lat_buf->ctx = ctx;
+ 		lat_buf->core_decode = core_decode;
++		lat_buf->is_last_frame = false;
+ 		err = vdec_msg_queue_qbuf(&msg_queue->lat_ctx, lat_buf);
+ 		if (err) {
+ 			mtk_v4l2_err("failed to qbuf buf[%d]", i);
 diff --git a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h
-index a5d44bc97c16..8f82d1484772 100644
+index efc94165e016..8f771874f8e6 100644
 --- a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h
 +++ b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h
-@@ -21,6 +21,18 @@ struct mtk_vcodec_ctx;
- struct mtk_vcodec_dev;
- typedef int (*core_decode_cb_t)(struct vdec_lat_buf *lat_buf);
- 
-+/**
-+ * enum core_ctx_status - Context decode status for core hardwre.
-+ * @CONTEXT_LIST_EMPTY: No buffer queued on core hardware(must always be 0)
-+ * @CONTEXT_LIST_QUEUED: Buffer queued to core work list
-+ * @CONTEXT_LIST_DEC_DONE: context decode done
-+ */
-+enum core_ctx_status {
-+	CONTEXT_LIST_EMPTY = 0,
-+	CONTEXT_LIST_QUEUED,
-+	CONTEXT_LIST_DEC_DONE,
-+};
-+
- /**
-  * struct vdec_msg_queue_ctx - represents a queue for buffers ready to be processed
-  * @ready_to_use: ready used queue used to signalize when get a job queue
-@@ -77,7 +89,7 @@ struct vdec_lat_buf {
-  * @lat_list_cnt: used to record each instance lat list count
-  * @core_list_cnt: used to record each instance core list count
-  * @core_dec_done: core work queue decode done event
-- * @core_work_cnt: the number of core work in work queue
-+ * @status: current context decode status for core hardware
+@@ -62,6 +62,8 @@ struct vdec_msg_queue_ctx {
+  * @core_decode: different codec use different decode callback function
+  * @lat_list: add lat buffer to lat head list
+  * @core_list: add lat buffer to core head list
++ *
++ * @is_last_frame: meaning this buffer is the last frame
   */
- struct vdec_msg_queue {
- 	struct vdec_lat_buf lat_buf[NUM_BUFFER_COUNT];
-@@ -93,7 +105,7 @@ struct vdec_msg_queue {
- 	atomic_t lat_list_cnt;
- 	atomic_t core_list_cnt;
- 	wait_queue_head_t core_dec_done;
--	int core_work_cnt;
-+	int status;
+ struct vdec_lat_buf {
+ 	struct mtk_vcodec_mem wdma_err_addr;
+@@ -74,6 +76,8 @@ struct vdec_lat_buf {
+ 	core_decode_cb_t core_decode;
+ 	struct list_head lat_list;
+ 	struct list_head core_list;
++
++	bool is_last_frame;
  };
  
  /**
+@@ -88,6 +92,8 @@ struct vdec_lat_buf {
+  *
+  * @lat_list_cnt: used to record each instance lat list count
+  * @core_list_cnt: used to record each instance core list count
++ * @flush_done: core flush done status
++ * @empty_lat_buf: the last lat buf used to flush decode
+  * @core_dec_done: core work queue decode done event
+  * @status: current context decode status for core hardware
+  */
+@@ -104,6 +110,8 @@ struct vdec_msg_queue {
+ 
+ 	atomic_t lat_list_cnt;
+ 	atomic_t core_list_cnt;
++	bool flush_done;
++	struct vdec_lat_buf empty_lat_buf;
+ 	wait_queue_head_t core_dec_done;
+ 	int status;
+ };
 -- 
 2.18.0
 
