@@ -2,93 +2,143 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A711DC6FD18
-	for <linux-media@archiver.kernel.org>; Tue, 25 Apr 2023 15:15:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F4136C6FD18
+	for <linux-media@archiver.kernel.org>; Tue, 25 Apr 2023 17:11:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234494AbjDYPPa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 25 Apr 2023 11:15:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43786 "EHLO
+        id S234365AbjDYRLR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 25 Apr 2023 13:11:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234493AbjDYPPV (ORCPT
+        with ESMTP id S231337AbjDYRLQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 25 Apr 2023 11:15:21 -0400
-Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC8715455
-        for <linux-media@vger.kernel.org>; Tue, 25 Apr 2023 08:15:15 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:d35a:e0ed:cfef:fc57])
-        by laurent.telenet-ops.be with bizsmtp
-        id p3F92900l1uNCps013F9BA; Tue, 25 Apr 2023 17:15:10 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1prKNo-000RvE-0B;
-        Tue, 25 Apr 2023 17:15:09 +0200
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1prKNp-004xjO-Gu;
-        Tue, 25 Apr 2023 17:15:09 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Tue, 25 Apr 2023 13:11:16 -0400
+Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 803FC10EF;
+        Tue, 25 Apr 2023 10:11:15 -0700 (PDT)
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-541b60e0a7fso3275841eaf.1;
+        Tue, 25 Apr 2023 10:11:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682442675; x=1685034675;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JznrFddSiXYl35RQkX1Ob+FXcZh2odFUGHhxyWsmz3U=;
+        b=RbMplnaojXWnzlmjJYqOYUdqzNFq7JKF1tyDGGKvg8O7O6+LkyapAo2NdKZuEx96yR
+         pcu1FHLmDXSUvPwXsqrskS4TX3y5aeTmr62FPscV8bNH6npJ35uuBIYk6N0HLUO6UMS2
+         Zn/9yiBA2fMrLZbIK0XMWSdn5d9ExrK8AZjkoxV9ToVOc0+GCqoz2771XzKL2SqJJpbt
+         BDqqipXyBBNExZHywnTZbta90Od4KWnbVH+OvIWk+pYrbZQom9ArchcwwWOCiAEff8OT
+         ie69Yy5bH7Ze4u7zKqR8csgM7fsxI9gt3h3xGqzOHMA+hSFW530Yr0MLt07zab/lvxyN
+         MsCg==
+X-Gm-Message-State: AAQBX9dX6wAfrI4BGedfZoVCk63bxAhBPKou0uP5bfxH1QzgE+yyih1O
+        /r2pOmc0it1CSrRAZJld4g==
+X-Google-Smtp-Source: AKy350bgOPl+oy4SaF+mpNjV5TrXeqbf2NPWQoPRYCoX+lQDmvJLqcdERM7wdTosZkSr2nyPqt/LgA==
+X-Received: by 2002:a05:6820:553:b0:545:2420:2a77 with SMTP id n19-20020a056820055300b0054524202a77mr6961340ooj.6.1682442674596;
+        Tue, 25 Apr 2023 10:11:14 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id dk10-20020a0568303b0a00b006a60606de62sm5888288otb.52.2023.04.25.10.11.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Apr 2023 10:11:14 -0700 (PDT)
+Received: (nullmailer pid 1963762 invoked by uid 1000);
+        Tue, 25 Apr 2023 17:11:13 -0000
+Date:   Tue, 25 Apr 2023 12:11:13 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
         Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] media: renesas: fdp1: Identify R-Car Gen2 versions
-Date:   Tue, 25 Apr 2023 17:15:02 +0200
-Message-Id: <453e34f0eda526f79b0297952937dc0a0b5aacf8.1682435583.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: Re: [PATCH v11 4/7] dt-bindings: media: add TI DS90UB960 FPD-Link
+ III Deserializer
+Message-ID: <20230425171113.GA1957523-robh@kernel.org>
+References: <20230421101833.345984-1-tomi.valkeinen@ideasonboard.com>
+ <20230421101833.345984-5-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230421101833.345984-5-tomi.valkeinen@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On R-Car M2-W:
+On Fri, Apr 21, 2023 at 01:18:30PM +0300, Tomi Valkeinen wrote:
+> Add DT bindings for TI DS90UB960 FPD-Link III Deserializer.
+> 
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> ---
+>  .../bindings/media/i2c/ti,ds90ub960.yaml      | 423 ++++++++++++++++++
+>  1 file changed, 423 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
+> new file mode 100644
+> index 000000000000..1d5362bea09a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
+> @@ -0,0 +1,423 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/i2c/ti,ds90ub960.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Texas Instruments DS90UB9XX Family FPD-Link Deserializer Hubs
+> +
+> +maintainers:
+> +  - Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> +
+> +description:
+> +  The TI DS90UB9XX devices are FPD-Link video deserializers with I2C and GPIO
+> +  forwarding.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ti,ds90ub960-q1
+> +      - ti,ds90ub9702-q1
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +    description:
+> +      Reference clock connected to the REFCLK pin.
+> +
+> +  clock-names:
+> +    items:
+> +      - const: refclk
+> +
+> +  powerdown-gpios:
+> +    maxItems: 1
+> +    description:
+> +      Specifier for the GPIO connected to the PDB pin.
+> +
+> +  i2c-alias-pool:
+> +    $ref: /schemas/i2c/i2c-atr.yaml#/properties/i2c-alias-pool
 
-    rcar_fdp1 fe940000.fdp1: FDP1 Unidentifiable (0x02010101)
-    rcar_fdp1 fe944000.fdp1: FDP1 Unidentifiable (0x02010101)
+This is not how we handle common properties (usually). Just reference 
+'/schemas/i2c/i2c-atr.yaml#' at the top level and use 
+unevaluatedProperties.
 
-Although the IP Internal Data Register on R-Car Gen2 is documented to
-contain all zeros, the actual register contents seem to match the FDP1
-version ID of R-Car H3 ES1.*, which has just been removed.
-Fortunately this version is not used for any other purposes yet.
+Is there a limit to the number of entries for this device? If so, add 
+that here.
 
-Fix this by re-adding the ID, now using an R-Car Gen2-specific name.
-
-Fixes: af4273b43f2bd9ee ("media: renesas: fdp1: remove R-Car H3 ES1.* handling")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-Version register contents verified on R-Car H2 ES1.0, R-Car M2-W ES1.0 &
-ES3.0, and R-Car E2 ES1.0.  I couldn't get hold of an R-Car M2-N.
----
- drivers/media/platform/renesas/rcar_fdp1.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/media/platform/renesas/rcar_fdp1.c b/drivers/media/platform/renesas/rcar_fdp1.c
-index 99af68fddc9249f5..b0a694f9245cc2c6 100644
---- a/drivers/media/platform/renesas/rcar_fdp1.c
-+++ b/drivers/media/platform/renesas/rcar_fdp1.c
-@@ -254,6 +254,7 @@ MODULE_PARM_DESC(debug, "activate debug info");
- 
- /* Internal Data (HW Version) */
- #define FD1_IP_INTDATA			0x0800
-+#define FD1_IP_GEN2			0x02010101
- #define FD1_IP_M3W			0x02010202
- #define FD1_IP_H3			0x02010203
- #define FD1_IP_M3N			0x02010204
-@@ -2360,6 +2361,9 @@ static int fdp1_probe(struct platform_device *pdev)
- 
- 	hw_version = fdp1_read(fdp1, FD1_IP_INTDATA);
- 	switch (hw_version) {
-+	case FD1_IP_GEN2:
-+		dprintk(fdp1, "FDP1 Version R-Car Gen2\n");
-+		break;
- 	case FD1_IP_M3W:
- 		dprintk(fdp1, "FDP1 Version R-Car M3-W\n");
- 		break;
--- 
-2.34.1
-
+Rob
