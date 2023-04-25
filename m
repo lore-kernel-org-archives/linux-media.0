@@ -2,52 +2,52 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A786BC6FD18
-	for <linux-media@archiver.kernel.org>; Tue, 25 Apr 2023 09:45:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20147C77B7F
+	for <linux-media@archiver.kernel.org>; Tue, 25 Apr 2023 09:45:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233595AbjDYJpd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 25 Apr 2023 05:45:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41976 "EHLO
+        id S233695AbjDYJpk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 25 Apr 2023 05:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233645AbjDYJp3 (ORCPT
+        with ESMTP id S233713AbjDYJpg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 25 Apr 2023 05:45:29 -0400
+        Tue, 25 Apr 2023 05:45:36 -0400
 Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2078.outbound.protection.outlook.com [40.107.21.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A489349E1;
-        Tue, 25 Apr 2023 02:45:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F65C15E;
+        Tue, 25 Apr 2023 02:45:32 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Px6aa72kGdAp7UhacPENjxbt8MTL1DnfYGMHC7m2hejWf67/U9WAKw4fzTfDThmGB5wpzIsK+1DKSlWr8LuyKK5jx/OPPXTv1la3PjsffbZVTQnbmj3aBaRWzRrzNYTMVOGnYJCVAZTexozLZSoFa1ixCZArYJnEqINvn7v1d3P3loFOGIrSRfbcpHOZhMWThgFMGHDCuJGUHLaZ53Nb8PENRjNMK2d2YT94j6WfUht4Iv+6a+8X7rmdjauozZ1x1iluP8W+anIMNpjM98ERRzPi6KG68knUu3bEbrq3fLAbpYlgiqX703NieXb2GxMKEI1ti28tghSEuasDbDQwgg==
+ b=gdJfWUJamBHEzqqzWnYt4XpKtzL5MDYgF+9ydAA5N4bf4eSqvJpL62JmWWKYjNml+FDmsDP7/KH0B6wIghCO5+gflNEuOekYjWvKaGBJ4P969/q9kwNgqNo5NzPZolrzF5q6KA8yloHVydUyMzHW+ammKImtT9haAZOqruL3cuBLXxfIkIVr3R6rCbWtpS+gIQJqVPN+QJwPyv8pE/LHcUg5ZsUmqqtDyLa8lX+m9/1of3pJfZrOIiT5gzKW6vUMtnx3z2uhyLCwTEHJfiRxQu4Mk8Nq5hcsMRiyNBw1mpNHYTaQf84iuIRCI5vdmg/8bEl5nDMQN3C1Se8GjB5csw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XxXCNgexyIvBtPa5jGHwEJC7cJJJcsFJu/5pNRqjkZA=;
- b=Oeq4P9gkcM1aQyJqlNQ12FVlPuFSsYAveW7fI7pjR3a5hSitezeZfQW5SbSgESvtS2Bj8L8Lm7EzsQkvIVgBP5g9m0iq8E6x7+2oJIqqCKSAMhJst34gfOXUgbh8ngB+Wn0iJkDvSi46vTIYYQv3AcRTQvQ07mEUeClJcBQFbPSOj0DDDafGH7Xi8hDo3Pscopnx4KXvq7SIag3gtnSFQtqCBwoxEisrsypFNhJF5OQ9oxTfxHVvG6SmatKTkNwqnjpdT1T2pwfrUd0+W/TkPTLr0PgNriFMVkkKV12zfsz93Nk5lO+4HWMHpOGokAklR9200OASHgx4EJcqP7kUXQ==
+ bh=TQrDJvOM/69KPMgS9CzR0tv6l6Kk/FgdIf0NDXzqS9o=;
+ b=nmWs6dPydYgDFO7jmKiUUuT9zZZRGz3k9DOEJ+jdNLft5UHqj/EpHrwP9zpean0DvxU1R+bPWTTaARHmgIlNamloprvghLZCn4B2BsehMN8GoPY7khFtdkDQmhrbzhRWoIPOxBlGnQfFfYQjztXCVRUeeyyg9vCWVnXW4+dKIpEOTOTvncDiAiNV6X01fC6J265BZf/GExkdW50r1pU8x9yA7RSnt60ktO9M85px3xGA233DY16FVuYgwTzzncCgh+8CffS63+M8RZEtI8pDwQbhT1BNTl4lVtSj96LK1TCswH0gm5P20HJiJBY8V0Jr37njhZ/WblUp6akvBidZ3A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=wolfvision.net; dmarc=pass action=none
  header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XxXCNgexyIvBtPa5jGHwEJC7cJJJcsFJu/5pNRqjkZA=;
- b=2KIhX28FNfHyIL/cMlg1QHhQ837QNIvxMrAQgJlSrihUjHPFdFOppTuiw07CJDeAoK3LCqd6TvQS2JGDqfXBwRl7/nTskLrHRyX/NF90E5EQtd4Xi1x6R4dyNConoofTWr679kVgrNuCj/6Z6nNWRwDiQ7cxRMndtBIgpD6JRuo=
+ bh=TQrDJvOM/69KPMgS9CzR0tv6l6Kk/FgdIf0NDXzqS9o=;
+ b=kmt1j1fbhlj+T8jn1r+/bbqM/g6CpYDcnOsKTQjCEDfEdMRdtmND7LOsktXd8ei2BuirNzSEe2pu57+jlzP7+iYx32OzFtbQFmDCrG00/HjZTiVTQFPw/P+WXboPNsHksWgMRc9UdfO2fPDmEefc7WuCvvFYZoJjnrznfzJW2sI=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=wolfvision.net;
 Received: from GV1SPRMB0046.eurprd08.prod.outlook.com (2603:10a6:150:84::17)
  by DU0PR08MB7995.eurprd08.prod.outlook.com (2603:10a6:10:3e2::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.33; Tue, 25 Apr
- 2023 09:45:24 +0000
+ 2023 09:45:26 +0000
 Received: from GV1SPRMB0046.eurprd08.prod.outlook.com
  ([fe80::3734:409a:8031:4f54]) by GV1SPRMB0046.eurprd08.prod.outlook.com
  ([fe80::3734:409a:8031:4f54%3]) with mapi id 15.20.6319.034; Tue, 25 Apr 2023
- 09:45:24 +0000
+ 09:45:26 +0000
 From:   Michael Riesch <michael.riesch@wolfvision.net>
-Date:   Tue, 25 Apr 2023 11:45:12 +0200
-Subject: [PATCH RFC v2 2/6] media: v4l2-ctrls: clarify documentation of
- V4L2_CID_FOCUS_RELATIVE
+Date:   Tue, 25 Apr 2023 11:45:14 +0200
+Subject: [PATCH RFC v2 4/6] media: v4l2-ctrls: add lens group speed
+ controls for zoom and focus
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230406-feature-controls-lens-v2-2-faa8ad2bc404@wolfvision.net>
+Message-Id: <20230406-feature-controls-lens-v2-4-faa8ad2bc404@wolfvision.net>
 References: <20230406-feature-controls-lens-v2-0-faa8ad2bc404@wolfvision.net>
 In-Reply-To: <20230406-feature-controls-lens-v2-0-faa8ad2bc404@wolfvision.net>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -60,11 +60,11 @@ Cc:     libcamera-devel@lists.libcamera.org,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Michael Riesch <michael.riesch@wolfvision.net>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1682415922; l=1208;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1682415922; l=3264;
  i=michael.riesch@wolfvision.net; s=20230425; h=from:subject:message-id;
- bh=Z5D1yuiiYZHSN2KVN2mlLolGJK2gmtMfF0hmHJGrfto=;
- b=LXHawEo9oQqtbQzGztJgNDH3WWhhFRCI1ryQdpx7BYRlB4Ex+hx6H4F4zByuXAuutYY+Jz20t
- SHOy2Mxq74kA/GN+0gKGai1ajvg4u8fTcsmKY5gNUSrPVKwT9eICMHn
+ bh=B6OiJRa47o14LtJJ73V2E+VFtxvPLWW9YHiaI+U9DCE=;
+ b=JtypR8MO8CEbYK0b+q55Wzuz0OY62YDr3AARmuBx0AF9uIg5IbZwZ8S57w/DXaxkykw2d5KJI
+ VLue5UZQOq0DHIWfSvqtvLD+7Zrn6KwjslShkZGLCNLDlRFVQdYK5dR
 X-Developer-Key: i=michael.riesch@wolfvision.net; a=ed25519;
  pk=1QQdXA2QbwdxaQn/VQK0hz04C8IBYhDowbK0hlNU4Ng=
 X-ClientProxiedBy: VI1PR0802CA0032.eurprd08.prod.outlook.com
@@ -73,89 +73,129 @@ X-ClientProxiedBy: VI1PR0802CA0032.eurprd08.prod.outlook.com
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: GV1SPRMB0046:EE_|DU0PR08MB7995:EE_
-X-MS-Office365-Filtering-Correlation-Id: 52afc636-975a-4fe1-09f8-08db4571cb2c
+X-MS-Office365-Filtering-Correlation-Id: 977200d2-c61d-427b-c89f-08db4571cc3b
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8EP7+qKIwGaLmqg7mcJGMBj4naK+R9JsR0NxMDfvrfauRXGfKBZ7kcBUwOFMqOxuzct7hlfU3i/xHzMO7cq7OTmE1iRcRjU6bAwhcu7uF9IfSveYoWJHD4xu1+gj+E34FGyZgCJ2dx2XLTsap01jEfaW0JetB2iWXcLoTjBzp4WYTjf5kKN8c5EZn3lpP+ea5kd7ljdMjRw/kdZdY0kUOlS1oRa0cjRTXc6l+wTHKVpAt5KdruLoUlx7ro29KbEnjJin0v+yEbzw/iaHVv9Yh9ASVztluKBSghDeYjiN38GdIrWIdDhJzNX0TbWDtUfqbGJXu5B+SP9tqza00wbsk/NAONiKc4B3DcEgHWYc3xQXNcCNxdkz5Xq5D1TwmBjOgHGUkbkiaSDFMlOqGS9JRVT/DovUlN8DhomyYADAtYg7aOUPpJYgbUR2xzf5AArTvrjaYvmA1Qu+zzN3kpPZq2e74XOCU4T/O68rnsxSjo1Q8np9gpQmADBhrXFGlkCBqScwCUxYDPzY0HVgbFJzqfi0UmuEYLzRKxjqqI8VSSfEUnTyMw6iRQZ9KeHlzyUrkj/4K576kaER+Y9taMNwFPj/krso+En8LqIkZfoZJZrjv5t5+tEqRHxHPlaja0yY
+X-Microsoft-Antispam-Message-Info: hv1M7+ibVKiYX3nC/eM2IrwaIgG6SvaTOfVyvAdlq3E3aSI4euUwYkVFeyT6xCWrOCFLDd/vQO37CSdjPg7rBMKFskDHc+/BhS/o0loIaFVHZWxkRLnWWrAUdYlZsqgrCEWB4LdjQXUwH6mOLKHpdFQTl7IFyE5A9xMEP7OxFY3opYoOngCTGrbu7GPCsQQXptjBQNFqGWcEk5YlOsvCF60dK4K3YLeMcpIqYFe1JH4UOV2OnBk6LJei/aYA2hE9Ygd9psM+n2jXew7CWTgQZT8nRq+qCEIseuh1QJ3ez0J7LeJ07mFbCLbivn8wMU33UTo2/pj6NxUqJ6pr1fPhVSame0z4v2r8qyLYK41/2bTii61WwhllxKN/kYOQLabVu2dHpt+80w9yKntm3qzis01B6RVSNfkd0OIFXRt8RZymNBqNq2z6y/V1zyHWlNKG9N7Bob2olGjnG4biuvqRvzd0gHxihIh59dae8ZyIUfCR545X3n9e8ue9EGYkAu8E6CBM/XE+Oilyjet08SISe5ewH7CciuLc7infsOC1zisJQMzgDS2DigLo2TQMRadwkcqic1wq/Gx6a57POqKI5QIG8CVYwbWxbxdp8xFEYfL5Q0LJsMdJSF8WPYaLfGy4
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV1SPRMB0046.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(396003)(366004)(39850400004)(346002)(451199021)(38350700002)(38100700002)(6506007)(6512007)(26005)(186003)(8936002)(2616005)(83380400001)(107886003)(44832011)(2906002)(8676002)(5660300002)(36756003)(478600001)(54906003)(6486002)(52116002)(316002)(6666004)(4326008)(6916009)(66556008)(41300700001)(66946007)(86362001)(66476007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K2MyakpCRUJOWWJSV0xZT1BuVlowV0UyTzkzMS9UZk8wVS9DdG92VFdQWVlP?=
- =?utf-8?B?Vnp0c2VzMm9uakRDOVl4YXdwN1dOTmR6WTRkVUsxNjJiQ2lmMWE0T3BIdTV2?=
- =?utf-8?B?NzcwUXRHb204Q1BaN3pHL3JEWnVHakhHMDJnWWpsOEphdjFKdUNyTFVRZEsr?=
- =?utf-8?B?UXhnK3FOMDIyOFYvMUh0anJrUXVmb3hBWGZtUW1XR1Z5a0xpQ3B1T1JNRGpj?=
- =?utf-8?B?RVF3bzlGWUhyd3JrVkt4aWpta2cyS0RBK21acWRZUm5QK1prUlF3ODlLYXJT?=
- =?utf-8?B?bkQ1YXlPWWUxWWd4eU5CNStiVENuOEQrY0hXL0hRbm95ZWYwSUFrNDhPY2FP?=
- =?utf-8?B?SnV5Z1djQmNRNXE0T2VuZ3NHYmxkZ01LaDNENy83czlZbnVoNW8rWHI5aEIx?=
- =?utf-8?B?MDcrNVN1MWMrZFE1cHVWUXZ3UEZBT0h6SVRlQ20yamt4SVpvY1lUWGpWcmw0?=
- =?utf-8?B?cnRQa3pmU1c2blBIbTd6bmVBNHV6NTZrOUEySlhDUDlRdGhTdEdsRERSZFdn?=
- =?utf-8?B?eDhlc2VONmp6UVFrS00vTEw1bEFqTzcvdC9leUtZQUtGWmRHSzRlUjVpNDFJ?=
- =?utf-8?B?aVhmQW9VTGR2Ymo5QjV1QzdTTTlHYThlUG5zRWM1U2xVUnB4djlpSFo5QnB0?=
- =?utf-8?B?RUhwcjlHWHF3SmljaFdIdHk2djhGNzhyVWtWNU8wTUU1OVhoblQwUHByaXp1?=
- =?utf-8?B?T3ZlT1NUcnFnYXVhQm9HVmtDRTVyTm1NZXNlYzh2SHFnM0JoWHROb1JyZU9q?=
- =?utf-8?B?TmZ5eUdRNW92SmhuZXhld0ZPYjQxdjhTU0hqajJVWk5QZ1RuUzhqWW5Zb0Iw?=
- =?utf-8?B?ZnVIY1pKeEdnZGJKdmE0L0JQdUtHMWkvSXdpTGVVSWppbTBobDd3OG5La3Ba?=
- =?utf-8?B?NFNuT25qVjR2Z2pLakh4eVBadWZ3T3I1UGVEcE1JN3ROcUtWRUxvTGVqazBx?=
- =?utf-8?B?S3I4NmtHYjY4N1JQTUU2TVlUS3RRQXhXVGkzUytZcVdiMGpjTTFFcnZRemlK?=
- =?utf-8?B?MGlXUzhJQk5ub0VYekNFSWdwZ1doZVVLQk95V2M1bWZybG9EcFlGZm42L2JU?=
- =?utf-8?B?RXNzbTVDSTNXd2hZUExyUzMrQ1FobHoxNVNpTDArZlJoSU5JdmwxMmdGOWNz?=
- =?utf-8?B?QmZ0UmJDNXlzZUUrWm1jbkNKTGMzYnBoVTF6Um11RUdCSGw3aTgwV2JoOUpZ?=
- =?utf-8?B?L3NaRDIxWTNrVWt5bXJ2Vlk2WWhaNy9pWWp1Z21ReldyLzVCM2RKU25RVzA1?=
- =?utf-8?B?WXpnbU15ZUZPU1ZFTmpvaEdSN1pJZkYrQks3YlhSMmkwb1AyaG9BT0hONE1O?=
- =?utf-8?B?dlRQL3NhQ1lYRGdnL09VbGJicWI0a2JiL3FtenFVRmM0QlBuOTlCMEZ2K1hT?=
- =?utf-8?B?UzhKS1JORlNXL2JOeFdWQjdvUzJtb1M5cjhjYnljK1owdnJ4TS9ZUUZKWHNj?=
- =?utf-8?B?SEZzQy91RWIycW5WU0xTRjdvNzFudjIrQ1NkUDVWYStzK2xpRjE1N1ZpVFVP?=
- =?utf-8?B?cjdESU9sMkdDWmdYdVFLb2h3WTJkRDRoSFVGaE5VWkpBUUc2T0R6U0pWemFj?=
- =?utf-8?B?K0lZWEc1N0dYTWZrdElEaStiVDNqQnVPMlY2UGlSWlRtU0o3SGd4aFpDb1pa?=
- =?utf-8?B?cHV3QXNRTm5oRVNDMTAyN1huWllmbEZVYkIxTFlEVFk3NnRmT1JIZWxXQi9Z?=
- =?utf-8?B?T1Y3VWhxUnp3cDJmWDljSEhsUGgxWDhGeVBOMXJieG1SMTBqNE5iOXNGVlJY?=
- =?utf-8?B?RkdEMytwWkVPdW5CZEtudUp1bEhtbHBsRXFRWUc3MFovY2xxSWtWcFJyQVg3?=
- =?utf-8?B?MVhRWXVtdlY4b2l0cWdzditvekkzclZJeERoeGtmU04vcUYwS1FCODBrMEN6?=
- =?utf-8?B?cGdpSmM2YXIwR2Vaa2kwZFhlS0x1cHN4blN2RHJ0QkNONi9TYStNbnNMZ1d6?=
- =?utf-8?B?ZFpGWVl0UkpORG8zc01waUxOSWx0R25pcFZ2YktBUHB3ZXRpSHNYd3d3VXFm?=
- =?utf-8?B?d0dEL25NbS8zd3MvdmhDaFRPUnBZRVZyZlJPVyt3bjlpU0R1TTBYYWtJWWNx?=
- =?utf-8?B?ODNza0g2RERzK0lLMVVuQnZjQWtyM1BYOEJkeGVqL0w3WW5MQ3R3MzdpMHpZ?=
- =?utf-8?B?MDRwT0NrR1hueW5VU0RrVlJWUFk5emNDY2pDVmRQSVIxTmxVRnpSejd2aG9a?=
- =?utf-8?B?K1E9PQ==?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TFJJY08rTGVoU1BLUVZrS3J4OUtxemxZaGFQN3NEYnUxcHhJV0JpNERDRS9S?=
+ =?utf-8?B?TEF0TkZvbzRBSXRCZTBkWGF3WjByZ0tkV21nQ2lDYUxyN0tzaHN3cnRob1l1?=
+ =?utf-8?B?V3ZaaWpZMHoyMkI1cm5XQkkrcVpoQStzMmpJYTU1b1BiQVNpSmd6QnlWOE5n?=
+ =?utf-8?B?NkdSQkcxUWlqQ0RCSTduM1FmVzN0NnV3YlVvakROT0FMVWh3aklpNURod1k4?=
+ =?utf-8?B?QTlyb29JWllTWHNXT1hxV0dWelZiNkE4d3lrMmF0UllVY003cEtQZjFJYllX?=
+ =?utf-8?B?VGVEUFNrZWJWblozQUFUMFNXZks4c0h1MkFRZSthRmd2a2VnKzV5QmhwMThG?=
+ =?utf-8?B?eTArcUtDUnhpNW5nM2g3MHBxRWQ0Y3IvY0lQVmVSUG1scjg0TXYraXlmb2VV?=
+ =?utf-8?B?U0tSQ3RrSWtjd0lVdHo4dVBNTnFmV0JlSHZVVHVxSkFpMkMwVEVQazBSczFR?=
+ =?utf-8?B?OUw3d0FZQkVLUVNzVzNRVmZ0NGd1dmhuMEMxb3RheHBUZVNvYjVVRitvOS8v?=
+ =?utf-8?B?TnU4aXhmcVRTUkMybUZmcXl4K1ZDdTI3cnoyWUF2K1lvUHJ4MUo5Z1Y4eVhq?=
+ =?utf-8?B?aXg2SFByMGpvcklRVWxTdGU1Z2hUT29VQzhTeUVzTS9wUVRidTl4T0QzSG9Z?=
+ =?utf-8?B?ckQza2RjWHRlZDI1UmJFdlJPSDMrTnIwTVFJYVM2SWxFellEV3RhZFU1a0o4?=
+ =?utf-8?B?a0FxTTRGR3FqV3FBalNUU2hNQlVjVGxwUmIxZzYzYVAwY3phMnBVdnR5V0xh?=
+ =?utf-8?B?RXBEWElYSG9LTjNrbU5pTVF3YUMwVUpvc1B4UjVUY1BDaHBta1REdk45Q3pj?=
+ =?utf-8?B?RGw1MXlyVkpHUW9nMEw1SnpPUTZxK0FUWml2YkpoZU44czN3aTdLSy9OUVp2?=
+ =?utf-8?B?TzUxYWpyRTZVbGFodFF2NytyclFsQXRzZkJGcmtSRTNSNGZpdkJGUHNsT0JJ?=
+ =?utf-8?B?c2x1V0VaLzRUWVFKejBNd0UrMFBoRWFpSXdsOEduUEY3Unc2eVM0N0Z1ODZV?=
+ =?utf-8?B?TXRJMkY2dE04OExWNk5zbC9yZzIyb2xMelhONFFTbUkxMjIvRzB6S25xQ1dl?=
+ =?utf-8?B?S2NYQUlTNDAwNUZFYnBuV2x1VDdqeWtWV1lUYjEwNkZpeFk4RzhOdVpRMWJL?=
+ =?utf-8?B?RmYyaDMrU1MvMnR0aUp2dEZ2U0lGcEYwcmVzeVhHckFrejh1Zm1JdGhtMUw1?=
+ =?utf-8?B?NFJFWkdVREZHNzZwMEtucTVBeTAxckNMVWdoeXZaYWJzZmpYNEZHdGVWNXE0?=
+ =?utf-8?B?NEEwc3NQcFZYa3IvQVkwU2xudzJiWTlpL2kvYjJXYmZzMldodFZPYlJZaFIw?=
+ =?utf-8?B?bXRiZG5tVGlYZFNFQ2Q5TCtOWE9zOGV2UktNTE1xNldxSDJ1eFN0Mk9QVDUx?=
+ =?utf-8?B?dlBQaWcrMkhobmprOEZ1MnVNNGJhSFZOQ2RuMzQ3RE5pclVtZDBIMUxRTzY3?=
+ =?utf-8?B?UEhlM2pQVW15UERKWkJESXZZME1pU3dXZkVlR2Faa2pUQVhocmJmd0xHbkpD?=
+ =?utf-8?B?Vkl1YW5pNW94MVJZR1JtSWtnWERINUFNUGVuem1LcnBBQ3RBRVdaR05WajdM?=
+ =?utf-8?B?U0FCV3pNcVR2NU9yTldDUzlOSHdtSHFNdVgrWDRDUnJRelFGQ2ttK3lFSGlS?=
+ =?utf-8?B?TEtxQkM4d21nWC8xa1FodTFUdHg0OTNIUncyZXdTdGpDdndDeERqZDlLS1pE?=
+ =?utf-8?B?VFplRG5QYjhKRGhMTGV1Yk4xbElMNFlxOXg1djk1ZTBoUzczdElxRi8yMVVH?=
+ =?utf-8?B?NFBBVXU4c1ZydFc5MnlpdG9LSmRxWDdCd29IV0V4VTVJbEdON3pQcS83QnIy?=
+ =?utf-8?B?SzdpUExDei9oWFZ6MCt4eE1kcmYzU1hyQnllQ0x3YURFc1QxQjZWUnlZeHh3?=
+ =?utf-8?B?dXVDRGFML3d6YTNQWVJKMVBRZ1hEaEJPVnN3N1RlY05FZ01SbmR3US9HRjMx?=
+ =?utf-8?B?NzNmMGw0c3BXc0J4dDUvYkFPcHRzeCtkWTJEdHp4VmNVUTJObnlEM1pwK0RM?=
+ =?utf-8?B?UmRIZzdyMHM4MnNFZmRwWndTU1AvUTJYNUxzMEVnQ1prRDd4cmUxbnZiV0xo?=
+ =?utf-8?B?cnFtZWFHZ1U5ZHRjaU53ZjFTWXppK09IaDFZN2k2YkJNM3Z1bUxWUEo1Zlc0?=
+ =?utf-8?B?QTFDL1BwY29sYy9KcURkdkExTTVRNzBWMVlhR2RxK3ZieHlWamFqeWVaanQ2?=
+ =?utf-8?B?dXc9PQ==?=
 X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 52afc636-975a-4fe1-09f8-08db4571cb2c
+X-MS-Exchange-CrossTenant-Network-Message-Id: 977200d2-c61d-427b-c89f-08db4571cc3b
 X-MS-Exchange-CrossTenant-AuthSource: GV1SPRMB0046.eurprd08.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2023 09:45:24.6776
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2023 09:45:26.4582
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 867sJcN4MPM4n9lfWSdRdGjcNWjYwgSZDN2ejMkliwmeqecv4QLnUULHMxI1QfS11pdZOXJF47xooZ0OfgQshNFXL9ZWKFxLwBcvJle/KTk=
+X-MS-Exchange-CrossTenant-UserPrincipalName: ic03Ri6QJsvjZMGyqp9jYpF2ZNO+BSdAVsqESARqVlQfY/J3uSdVBezToOgCBjDcm7NPxZUD2ByBa+8mgT713uaszDJmybSoHseu8lmJeQk=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR08MB7995
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The control V4L2_CID_FOCUS_RELATIVE only makes sense if the device cannot
-handle absolute focal point positioning with V4L2_CID_FOCUS_ABSOLUTE.
-Clarify this in the documentation.
+Add the controls V4L2_CID_FOCUS_SPEED and V4L2_CID_ZOOM_SPEED that set
+the speed of the zoom lens group and focus lens group, respectively.
 
 Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
 ---
- Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst | 10 ++++++++++
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c                  |  2 ++
+ include/uapi/linux/v4l2-controls.h                         |  2 ++
+ 3 files changed, 14 insertions(+)
 
 diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-index df29150dce7b..42cf4c3cda0c 100644
+index 3ea4175f9619..a17620ab03b9 100644
 --- a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
 +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-@@ -147,7 +147,9 @@ enum v4l2_exposure_metering -
-     This control moves the focal point of the camera by the specified
-     amount. The unit is undefined. Positive values move the focus closer
-     to the camera, negative values towards infinity. This is a
--    write-only control.
-+    write-only control. It should be implemented only if the device cannot
-+    handle absolute values.
-+
+@@ -174,6 +174,11 @@ enum v4l2_exposure_metering -
+ 	will not transition from this state until another action is performed
+ 	by an application.
  
++``V4L2_CID_FOCUS_SPEED (integer)``
++    Set the speed with which the focus lens group of the camera is moved
++    (V4L2_CID_FOCUS_ABSOLUTE and V4L2_CID_FOCUS_RELATIVE). The unit is
++    driver-specific. The value should be a positive integer.
++
  ``V4L2_CID_FOCUS_AUTO (boolean)``
      Enables continuous automatic focus adjustments. The effect of manual
+     focus adjustments while this feature is enabled is undefined,
+@@ -287,6 +292,11 @@ enum v4l2_auto_focus_range -
+ 	not transition from this state until another action is performed by an
+ 	application.
+ 
++``V4L2_CID_ZOOM_SPEED (integer)``
++    Set the speed with which the zoom lens group of the camera is moved
++    (V4L2_CID_ZOOM_ABSOLUTE and V4L2_CID_ZOOM_RELATIVE). The unit is
++    driver-specific. The value should be a positive integer.
++
+ ``V4L2_CID_IRIS_ABSOLUTE (integer)``
+     This control sets the camera's aperture to the specified value. The
+     unit is undefined. Larger values open the iris wider, smaller values
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+index 794ef3ab0c02..3ef465ba73bd 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+@@ -1048,6 +1048,8 @@ const char *v4l2_ctrl_get_name(u32 id)
+ 	case V4L2_CID_FOCUS_STATUS:		return "Focus, Status";
+ 	case V4L2_CID_ZOOM_CURRENT:		return "Zoom, Current";
+ 	case V4L2_CID_ZOOM_STATUS:		return "Zoom, Status";
++	case V4L2_CID_FOCUS_SPEED:		return "Focus, Speed";
++	case V4L2_CID_ZOOM_SPEED:		return "Zoom, Speed";
+ 
+ 	/* FM Radio Modulator controls */
+ 	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index 793ee8c65e87..8d84508d4db8 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -1001,6 +1001,8 @@ enum v4l2_auto_focus_range {
+ #define V4L2_CID_FOCUS_STATUS			(V4L2_CID_CAMERA_CLASS_BASE+38)
+ #define V4L2_CID_ZOOM_CURRENT			(V4L2_CID_CAMERA_CLASS_BASE+39)
+ #define V4L2_CID_ZOOM_STATUS			(V4L2_CID_CAMERA_CLASS_BASE+40)
++#define V4L2_CID_FOCUS_SPEED			(V4L2_CID_CAMERA_CLASS_BASE+41)
++#define V4L2_CID_ZOOM_SPEED			(V4L2_CID_CAMERA_CLASS_BASE+42)
+ 
+ /* FM Modulator class control IDs */
+ 
 
 -- 
 2.37.2
