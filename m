@@ -2,52 +2,52 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24E72C77B78
-	for <linux-media@archiver.kernel.org>; Wed, 26 Apr 2023 18:54:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 233ECC7EE20
+	for <linux-media@archiver.kernel.org>; Wed, 26 Apr 2023 18:55:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238386AbjDZSyx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 26 Apr 2023 14:54:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60776 "EHLO
+        id S239060AbjDZSzR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 26 Apr 2023 14:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236239AbjDZSyv (ORCPT
+        with ESMTP id S231331AbjDZSzE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 26 Apr 2023 14:54:51 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77997EF4;
-        Wed, 26 Apr 2023 11:54:49 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-63b5ce4f069so9136789b3a.1;
-        Wed, 26 Apr 2023 11:54:49 -0700 (PDT)
+        Wed, 26 Apr 2023 14:55:04 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1682086B6;
+        Wed, 26 Apr 2023 11:54:56 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-63b5465fc13so5951772b3a.3;
+        Wed, 26 Apr 2023 11:54:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682535289; x=1685127289;
+        d=gmail.com; s=20221208; t=1682535295; x=1685127295;
         h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=iM7yHvskaolGftzNm95k8IypdA4jTvJQMSV2F9l/cTA=;
-        b=o2FFatoUcP8+xgxqGj+c8PIW6Js+DXt84udPry/z1iaYiwKDBufs1id2aPvGoG2bWb
-         MojkF2qaAc9GRI5t7JzWVAwEW4gAiTFKTMhNU0cnemH931eJvww8JpDhLNJ9So6xGPG3
-         oTSwdTJQCmCMzC7dQjHTbtG/fVKBX8Cu4MTBSwZlEkGfAX5OWjwU9ueo5eQLLrUjaZA1
-         fxzuHtC5iiV+oz8uTenZOVJkV5vOp4Sg47dS4DNNhhoLmLJqdqfyoN36z3MDbmRl1pLt
-         qhbHXa8QS2eEkXE8RYdHB00SXHeaz4JRpeBgx3gJ0c4hlHdh4bUR8PXYT4w7KtNvaf6K
-         ROFQ==
+        bh=/ltBIeGTYyg79oc/ZiZiDTqh37bCSEcDIezVzdk5HLU=;
+        b=YH3upLfK3z4YdSraod17XRacklyLaG5drH5GqlW/GAWaZbl51/j8shNBZ4OYmj4WbW
+         mLG8klPqQ3OcGwRTlhj+rc9sq0NFbNkwOcpbXEsuo0z2G1rIiBA/A/sOTDVBbqmq4r7Z
+         aod5EEJNNe1+KOqqMVBrAUsVPgiGsJmwjfWO+lLcnWhwRqqRqpOAV1sXd4nRLVLnqB9K
+         1zlwa/TYrAzhTmZZygJqpGoWTKunDcPr1lTVVUR7dv+tlMtDwfcpDkw3wGcGhjFcbUSP
+         rASIFuuc2Xy3oS79yAw8K9qIIkQ3qMILGXDwGwinEvSobmRR4oSO+SeM88Xx7Xi1c+bR
+         eWeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682535289; x=1685127289;
+        d=1e100.net; s=20221208; t=1682535295; x=1685127295;
         h=references:in-reply-to:message-id:date:subject:cc:to:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iM7yHvskaolGftzNm95k8IypdA4jTvJQMSV2F9l/cTA=;
-        b=CAjoix+639FCcU0bZAvode5KQ7IgFmCAtpuJdwlOkh2Xw2K2RDU3qe/oCRqH+cj6f1
-         MTfK3foWcLxKJSQ8mlNO0Qq3mWpFIFejQfG6zGTqNKJL9qGj6J41hWtrXPr1DAA5NhIz
-         koZ4vCXdOwBoUsXiJABnZSVCXrhAUJPI0TdHEPK3cnpu6yqlUIerwijxMv9WVhPNjI67
-         MH6IFmHMlGY/I9441kH6x/iQ2+wTYhYbDOrXoDuVhJAGYuPImE37oFGCkfyVBofdQ4R2
-         HqAA/OcZDjRVKFdeB8WDdHzkMjISwNwcp9CYm9DoNSyTGt9D/fWxkj94DxP1ugS6y6fE
-         IhvQ==
-X-Gm-Message-State: AAQBX9f3Rv12dDDQnZRkO/2ynJQC4I9G6qF3n5CGLUzgDAV8OAjRShuN
-        X+yBMU4LX7OhNLqKDUKaLpbXTXf4LuG3Ig==
-X-Google-Smtp-Source: AKy350ZYLKm1bNzUe0VmzPx17UI4K/U+ouMYqOszjyIJHUEhOFP9wOtjYG3TD9hmCgJsPHIG6nInxw==
-X-Received: by 2002:a05:6a00:b51:b0:628:1b3:d499 with SMTP id p17-20020a056a000b5100b0062801b3d499mr30210734pfo.21.1682535289077;
-        Wed, 26 Apr 2023 11:54:49 -0700 (PDT)
+        bh=/ltBIeGTYyg79oc/ZiZiDTqh37bCSEcDIezVzdk5HLU=;
+        b=kZMWhhcHMs1pYVomfKaTdaLhzxOoVmyMOYt9ZcsJn8ldSH4PRHKd9wDycQhrUSv8Kf
+         DsV1fbTwh7ROUNMmHxnqwgfibetzof7hjKX8DJKRoDhJmvVNq1RfgGp7j/m41s4/Zyo/
+         AHwVkWGqKWwi9QfrwOSPGALjFSqtW8EW5T8ZNLVXJvV659ORJjWZcDiLHKYFEzaUi24h
+         AaNVtmKwr+ggNx/ugUcP2zBhApXi52Nr7f39ISTPSHicsEvzTxBG/8udDqY3mHOuCYJr
+         V76jkpQ6+TKvhc1StM1RD325DsfoDaAxaW/R0RF78vv3mj7ZOycxEkeKxgVt9j6mcsVR
+         9+Ag==
+X-Gm-Message-State: AAQBX9f0ix2k7ya7ArpGJXsXr0UFbk8PZRsRS97ffC+MKg6fzZ6tSwJD
+        mh4LGAekDhs1WfCYAWczN6AafcF4khnJsw==
+X-Google-Smtp-Source: AKy350bSuikIcIqojWr8teMubcHLwpy10Bmo+SkE51TpE3wpfmcxjp9cVN+PRNV31Rq7zLFgDVVYRQ==
+X-Received: by 2002:a05:6a00:13aa:b0:637:f447:9916 with SMTP id t42-20020a056a0013aa00b00637f4479916mr31430352pfg.16.1682535295177;
+        Wed, 26 Apr 2023 11:54:55 -0700 (PDT)
 Received: from stbirv-lnx-2.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id y72-20020a62644b000000b006372791d708sm11639254pfb.104.2023.04.26.11.54.47
+        by smtp.gmail.com with ESMTPSA id y72-20020a62644b000000b006372791d708sm11639254pfb.104.2023.04.26.11.54.53
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 26 Apr 2023 11:54:48 -0700 (PDT)
+        Wed, 26 Apr 2023 11:54:54 -0700 (PDT)
 From:   Justin Chen <justinpopo6@gmail.com>
 To:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
@@ -60,9 +60,9 @@ Cc:     justinpopo6@gmail.com, justin.chen@broadcom.com,
         andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
         richardcochran@gmail.com, sumit.semwal@linaro.org,
         christian.koenig@amd.com
-Subject: [PATCH v2 net-next 2/6] dt-bindings: net: Brcm ASP 2.0 Ethernet controller
-Date:   Wed, 26 Apr 2023 11:54:28 -0700
-Message-Id: <1682535272-32249-3-git-send-email-justinpopo6@gmail.com>
+Subject: [PATCH v2 net-next 4/6] net: phy: mdio-bcm-unimac: Add asp v2.0 support
+Date:   Wed, 26 Apr 2023 11:54:30 -0700
+Message-Id: <1682535272-32249-5-git-send-email-justinpopo6@gmail.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1682535272-32249-1-git-send-email-justinpopo6@gmail.com>
 References: <1682535272-32249-1-git-send-email-justinpopo6@gmail.com>
@@ -70,169 +70,28 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Florian Fainelli <f.fainelli@gmail.com>
-
-Add a binding document for the Broadcom ASP 2.0 Ethernet
-controller.
+Add mdio compat string for ASP 2.0 ethernet driver.
 
 Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 Signed-off-by: Justin Chen <justinpopo6@gmail.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 ---
- .../devicetree/bindings/net/brcm,asp-v2.0.yaml     | 145 +++++++++++++++++++++
- 1 file changed, 145 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
+ drivers/net/mdio/mdio-bcm-unimac.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml b/Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
-new file mode 100644
-index 000000000000..818d91692e6e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
-@@ -0,0 +1,145 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/net/brcm,asp-v2.0.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Broadcom ASP 2.0 Ethernet controller
-+
-+maintainers:
-+  - Justin Chen <justinpopo6@gmail.com>
-+  - Florian Fainelli <f.fainelli@gmail.com>
-+
-+description: Broadcom Ethernet controller first introduced with 72165
-+
-+properties:
-+  '#address-cells':
-+    const: 1
-+  '#size-cells':
-+    const: 1
-+
-+  compatible:
-+    enum:
-+      - brcm,asp-v2.0
-+      - brcm,bcm72165-asp-v2.0
-+      - brcm,asp-v2.1
-+      - brcm,bcm74165-asp-v2.1
-+
-+  reg:
-+    maxItems: 1
-+
-+  ranges: true
-+
-+  interrupts:
-+    minItems: 1
-+    items:
-+      - description: RX/TX interrupt
-+      - description: Port 0 Wake-on-LAN
-+      - description: Port 1 Wake-on-LAN
-+
-+  clocks:
-+    maxItems: 1
-+
-+  ethernet-ports:
-+    type: object
-+    properties:
-+      '#address-cells':
-+        const: 1
-+      '#size-cells':
-+        const: 0
-+
-+    patternProperties:
-+      "^port@[0-9]+$":
-+        type: object
-+
-+        $ref: ethernet-controller.yaml#
-+
-+        properties:
-+          reg:
-+            maxItems: 1
-+            description: Port number
-+
-+          channel:
-+            maxItems: 1
-+            description: ASP channel number
-+
-+        required:
-+          - reg
-+          - channel
-+
-+    additionalProperties: false
-+
-+patternProperties:
-+  "^mdio@[0-9a-f]+$":
-+    type: object
-+    $ref: "brcm,unimac-mdio.yaml"
-+
-+    description:
-+      ASP internal UniMAC MDIO bus
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - ranges
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    ethernet@9c00000 {
-+        compatible = "brcm,asp-v2.0";
-+        reg = <0x9c00000 0x1fff14>;
-+        interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_HIGH>;
-+        ranges;
-+        clocks = <&scmi 14>;
-+        #address-cells = <1>;
-+        #size-cells = <1>;
-+
-+        mdio@c614 {
-+            compatible = "brcm,asp-v2.0-mdio";
-+            reg = <0xc614 0x8>;
-+            reg-names = "mdio";
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            phy0: ethernet-phy@1 {
-+                reg = <1>;
-+            };
-+       };
-+
-+        mdio@ce14 {
-+            compatible = "brcm,asp-v2.0-mdio";
-+            reg = <0xce14 0x8>;
-+            reg-names = "mdio";
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            phy1: ethernet-phy@1 {
-+                reg = <1>;
-+            };
-+        };
-+
-+        ethernet-ports {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            port@0 {
-+                reg = <0>;
-+                channel = <8>;
-+                phy-mode = "rgmii";
-+                phy-handle = <&phy0>;
-+            };
-+
-+            port@1 {
-+                reg = <1>;
-+                channel = <9>;
-+                phy-mode = "rgmii";
-+                phy-handle = <&phy1>;
-+            };
-+        };
-+    };
+diff --git a/drivers/net/mdio/mdio-bcm-unimac.c b/drivers/net/mdio/mdio-bcm-unimac.c
+index bfc9be23c973..6b26a0803696 100644
+--- a/drivers/net/mdio/mdio-bcm-unimac.c
++++ b/drivers/net/mdio/mdio-bcm-unimac.c
+@@ -334,6 +334,8 @@ static SIMPLE_DEV_PM_OPS(unimac_mdio_pm_ops,
+ 			 unimac_mdio_suspend, unimac_mdio_resume);
+ 
+ static const struct of_device_id unimac_mdio_ids[] = {
++	{ .compatible = "brcm,asp-v2.1-mdio", },
++	{ .compatible = "brcm,asp-v2.0-mdio", },
+ 	{ .compatible = "brcm,genet-mdio-v5", },
+ 	{ .compatible = "brcm,genet-mdio-v4", },
+ 	{ .compatible = "brcm,genet-mdio-v3", },
 -- 
 2.7.4
 
