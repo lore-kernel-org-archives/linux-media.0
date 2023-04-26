@@ -2,200 +2,345 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 166C1C77B78
-	for <linux-media@archiver.kernel.org>; Wed, 26 Apr 2023 13:07:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5843C77B60
+	for <linux-media@archiver.kernel.org>; Wed, 26 Apr 2023 13:17:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241014AbjDZNG7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 26 Apr 2023 09:06:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40328 "EHLO
+        id S241119AbjDZNRR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 26 Apr 2023 09:17:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241053AbjDZNGu (ORCPT
+        with ESMTP id S240855AbjDZNRP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 26 Apr 2023 09:06:50 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E91A6A7F;
-        Wed, 26 Apr 2023 06:06:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682514398; x=1714050398;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=oVxuTR4A/wrlt9G6C/zKK3j09fIf1TBLj219Iy+IWg4=;
-  b=cZ1CJFmmJ8Tt1hKvS6cEQc1IySVLcvIP8wh6e41qv/0X4X/pgeThcTz3
-   cAl+qwWKE4AuVCW8PPHQVhgfRKMZqSZeACKslaB4RN8Z5x64l7dso3zoQ
-   r7rv6ov9YiWvOP0SDb3QF34n1Zs8xnF9Tq5pcZBo1Pf8EMGhMb6EoEIyZ
-   h6mufUH3JtMTZu/lpkxZFxaXLA1M0VIrILq4ZIk081Em7rzgVdxbSoJna
-   23x+i1Z3yNpjc9r2CNmQrsdnEbkAfddTQ3kVD3hV8nCu/ycfYIdH6vQmR
-   cMXTumocwcVs/+eIl800bI7Zo0Gg6d/da+fv1kDmcUalWcW+h+T2uKfz3
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="349033774"
-X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
-   d="scan'208";a="349033774"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 06:06:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="783323577"
-X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
-   d="scan'208";a="783323577"
-Received: from lkp-server01.sh.intel.com (HELO 041f065c1b1b) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 26 Apr 2023 06:06:33 -0700
-Received: from kbuild by 041f065c1b1b with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1preqv-0000AU-0U;
-        Wed, 26 Apr 2023 13:06:33 +0000
-Date:   Wed, 26 Apr 2023 21:06:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        oxffffaa@gmail.com, kernel@sberdevices.ru,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH v1] mtd: rawnand: macronix: OTP access for MX30LFxG18AC
-Message-ID: <202304262003.Lzpyh2BA-lkp@intel.com>
-References: <20230426072455.3887717-1-AVKrasnov@sberdevices.ru>
+        Wed, 26 Apr 2023 09:17:15 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37ED459FB
+        for <linux-media@vger.kernel.org>; Wed, 26 Apr 2023 06:17:02 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (unknown [IPv6:2606:6d00:15:199e::580])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nicolas)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 02CEE660324E;
+        Wed, 26 Apr 2023 14:16:59 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1682515020;
+        bh=TiR3s8FGekO6kLjb89Lnk7X9Isxbe8alqNgVA2k1RMs=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=W+xU/vj9HPQHFtjTrVm7qb+wNksqU2TfKWwIlGPlY6qPLxHl7rTAVcnE9e4MQxhFz
+         WQJN/S9W3Ba44E2Cgo0WwPKlUodNNe4988oKQMArqhwI6og1pQ70y+CqLGg1IZdfy1
+         Hg55k7S35m63mgkshuKApjpcelcoYpjSWhKu7liFo/t0KznZPPgAqoy+3nfEuPOp9T
+         BDueRUKH58rp1jghd2c1hKKYVQ41FYlwSIB7tdq1cD7PtJop2w/aM2y7MtdOW+xUMy
+         f1VFeCs4+z/ncdef4I5Mt3Rbc7MzQGoqmv/yZBX0BhE3dzrZmw3aIxNR/dpmIUkwJC
+         LUJAEXqGQ5dVw==
+Message-ID: <41855f8402d9ff783c15a8bef8e3ddcd028190ea.camel@collabora.com>
+Subject: Re: [PATCH v11 0/6] Wave5 codec driver
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Sebastian Fricke <sebastian.fricke@collabora.com>,
+        linux-media@vger.kernel.org
+Cc:     kernel@collabora.com, bob.beckett@collabora.com,
+        hverkuil-cisco@xs4all.nl, nas.chung@chipsnmedia.com
+Date:   Wed, 26 Apr 2023 09:16:51 -0400
+In-Reply-To: <20221207121350.66217-1-sebastian.fricke@collabora.com>
+References: <20221207121350.66217-1-sebastian.fricke@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.0 (3.48.0-1.fc38) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230426072455.3887717-1-AVKrasnov@sberdevices.ru>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Arseniy,
+Hi Sebastien and all,
 
-kernel test robot noticed the following build errors:
+quick disclosure that I have started to work with Sebastien on reworking th=
+is
+driver. But to ease the work, I'll start with  code review, trying to ident=
+ify
+as many of the found issues as possible.
 
-[auto build test ERROR on mtd/nand/next]
-[also build test ERROR on linus/master v6.3 next-20230425]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Le mercredi 07 d=C3=A9cembre 2022 =C3=A0 13:13 +0100, Sebastian Fricke a =
+=C3=A9crit=C2=A0:
+> The Wave5 codec driver is a stateful encoder/decoder.
+> It is found on the J721S2 SoC, JH7100 SoC, and ssd202d SoC. etc.
+> But the current test report is based on J721S2 SoC and pre-silicon FPGA.
+>=20
+> The driver currently supports V4L2_PIX_FMT_HEVC and V4L2_PIX_FMT_H264.
+>=20
+> This driver has so far been tested on the J721S2 EVM board and
+> pre-silicon FPGA.
+>=20
+> Testing on the J721S2 EVM board in combination with the GStreamer v4l2
+> good plugin shows the decoder is working correctly, it has been tested
+> with H264 & HEVC video clips with multiple different dimensions (4k,
+> 1080p, 720p, 540p, 360p, 270p) and various lengths. Additionally,
+> Fluster conformance tests have been run for both supported codecs.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Arseniy-Krasnov/mtd-rawnand-macronix-OTP-access-for-MX30LFxG18AC/20230426-153143
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next
-patch link:    https://lore.kernel.org/r/20230426072455.3887717-1-AVKrasnov%40sberdevices.ru
-patch subject: [PATCH v1] mtd: rawnand: macronix: OTP access for MX30LFxG18AC
-config: i386-randconfig-a001-20230424 (https://download.01.org/0day-ci/archive/20230426/202304262003.Lzpyh2BA-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/3529f3465e99379489b59c035a8a0506c3756ef4
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Arseniy-Krasnov/mtd-rawnand-macronix-OTP-access-for-MX30LFxG18AC/20230426-153143
-        git checkout 3529f3465e99379489b59c035a8a0506c3756ef4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/mtd/nand/raw/
+This comment is missing which GStreamer version has been tested. What was
+reported to me is that GStreamer 1.16 from TI BSP was the only tested softw=
+are
+version. As a consequence, the SOURCE_CHANGE implementation in this series =
+is
+largely untested. In order to make 1.16 to work with streams that needs lar=
+ger
+DPB, some synchronous operation (can be in streamon(output), QBUF or even G=
+_FMT
+like Samsung MFC do (for legacy support reason) must exist in this driver. =
+This
+is not quite acceptable for a newly written driver. Newly written driver sh=
+ould
+follow the spec, and application needs to be modernized to work appropriate=
+ly.
+In short, we don't do forward compatibility.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304262003.Lzpyh2BA-lkp@intel.com/
+For those that would ask why CODA960 driver works (in most cases) without
+SOURCE_CHANGE, this is because that driver does not expose its reference fr=
+ames
+as the display frames. As a side effect, the DPB count is managed internall=
+y.
+The delivered frames are transformed copies, hence we don't need to match t=
+he
+DPB size when allocating these in the applicaiton.
 
-All error/warnings (new ones prefixed by >>):
+>=20
+> The encoder can encode various videos but still has some issues causing
+> it to fail occassionally.
+>=20
+> V4L2 compliance:
+>=20
+> Total for wave5-dec device /dev/video0: 44, Succeeded: 44, Failed: 0, War=
+nings: 0
+>=20
+> Buffer ioctls:
+> 		fail: ../../../v4l-utils-1.18.1/utils/v4l2-compliance/v4l2-test-buffers=
+.cpp(610): q.reqbufs(node, 1)
+> 	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: FAIL
+> 		fail: ../../../v4l-utils-1.18.1/utils/v4l2-compliance/v4l2-test-buffers=
+.cpp(753): q.reqbufs(node, 2)
+> 	test VIDIOC_EXPBUF: FAIL
+> 	test Requests: OK (Not Supported)
+>=20
+> Total for wave5-enc device /dev/video1: 44, Succeeded: 42, Failed: 2, War=
+nings: 2
+>=20
+> changes since v10:
+>=20
+> * Remove structure member from the encoder and decoder output info
+>   structs, that have assigned values from the registers but aren't used
+>   in the driver, add comments to describe the register values in the
+>   register definitions
+> * Fix issue with decoding videos with a dimension where the height is
+>   not a multiple of 16 (270, 360, 540, 1024 etc.)
+> * Fix incorrect variable format identifiers in printks
+> * Use debug logs in loops to avoid flooding the message log
+> * Use the swap() function instead of manual swapping of two values
+> * Add extended controls for the encoder
+> * Fix control flow issue while handling bitstream buffers, where an
+>   error while writing the source buffer into the hardware ring buffer
+>   would result in skipping the problematic buffer, which in turn causes
+>   a reordering of source buffers
+> * Use the rectangle format as described by the hardware, the hardware
+>   uses for rectangles like the display rectangle 4 offsets (top, bottom,
+>   left, right), which depict the offset from the respective edge. Use
+>   this format instead of implicitly converting the bottom and right
+>   attributes to width and height attributes.
+> * Return an error upon reading the sequence header while STREAMON
+> * Squash the VDI and the VPUAPI layer commits as they had circular
+>   dependencies
+>=20
+> changes since v9:
+>=20
+> * Move from staging to the media directory
+>   * Move coda driver to sub-directory
+>=20
+> * Fixes:
+>   * Use platform_get_irq instead of platform_get_resource to fetch the IR=
+Q
+>=20
+> * General cleanups:
+>   * Add missing error messages to error conditions
+>   * Improve messages/variable names/comments, align parameter names acros=
+s the driver
+>   * Use macros instead of magic numbers in multiple occassions
+>   * Reduce code duplication in multiple places
+>   * Fix whitespace, newline and tab alignment issues
+>   * Remove unused struct fields & commented out code
+>   * Convert signed integers to unsigned if signed is not necessary
+>   * Convert int/unsigned int to s32/u32, when the variable is assigned to=
+ the
+>     return of a register read or provided as a parameter for a register w=
+rite
+>     (and vice versa)
+>   * Fix incorrect bitwise operators where logical operators are appropria=
+te
+>   * Multiple smaller changes
+>=20
+> * Generalization:
+>   * Add new helper file providing generalized routines for vpu-dec & vpu-=
+enc
+>   * Generalize luma & chroma table size calculation and stride calculatio=
+n
+>=20
+> * Resource cleanup and error handling:
+>   * Add error handling to all calls with ignored return codes
+>   * Handle DMA resource cleanup properly
+>   * Fix insufficient instance cleanup while opening dec/enc
+>=20
+> changes since v8:
+>=20
+> * add 'wave5' to DEV_NAME
+> * update to support Multi-stream
+> * update to support loop test/dynamic resolution change
+> * remove unnecessary memset, g_volatile, old version option
+>=20
+> changes since v7:
+>=20
+> * update v4l2-compliance test report
+> * fix build error on linux-kernel 5.18.0-rc4
+>=20
+> changes since v6:
+>=20
+> * update TODO file
+> * get sram info from device tree
+>=20
+> changes since v5:
+>=20
+> * support NV12/NV21 pixelformat for encoder and decoder
+> * handle adnormal exit and EOS
+>=20
+> changes since v4:
+>=20
+> * refactor functions in wave5-hw and fix bug reported by Daniel Palmer
+> * rename functions and variables to better names
+> * change variable types such as replacing s32 with u32 and int with bool
+> * as appropriate
+>=20
+> changes since v3:
+>=20
+> * Fixing all issues commented by Dan Carpenter
+> * Change file names to have wave5- prefix
+> * In wave5_vpu_probe, enable the clocks before reading registers, as
+> * commented from Daniel Palmer
+> * Add more to the TODO list,
+>=20
+> changes since v2:
+>=20
+> Main fixes includes:
+> * change the yaml and dirver code to support up to 4 clks (instead of
+> * one)
+> * fix Kconfig format
+> * remove unneeded cast,
+> * change var types
+> * change var names, func names
+> * checkpatch fixes
+>=20
+> changes since v1:
+>=20
+> Fix changes due to comments from Ezequiel and Dan Carpenter. Main fixes
+> inclueds:
+> * move all files to one dir 'wave5'
+> * replace private error codes with standard error codes
+> * fix extra spaces
+> * various checkpatch fixes
+> * replace private 'DPRINTK' macro with standard 'dev_err/dbg ..'
+> * fix error handling
+> * add more possible fixes to the TODO file
+>=20
+> Nas Chung (3):
+>   media: chips-media: wave5: Add vpuapi layer
+>   media: chips-media: wave5: Add the v4l2 layer
+>   media: chips-media: wave5: Add TODO file
+>=20
+> Robert Beckett (2):
+>   dt-bindings: media: wave5: add yaml devicetree bindings
+>   media: chips-media: wave5: Add wave5 driver to maintainers file
+>=20
+> Sebastian Fricke (1):
+>   media: platform: chips-media: Move Coda to separate folder
+>=20
+>  .../devicetree/bindings/cnm,wave5.yml         |   72 +
+>  MAINTAINERS                                   |   11 +-
+>  drivers/media/platform/chips-media/Kconfig    |   18 +-
+>  drivers/media/platform/chips-media/Makefile   |    6 +-
+>  .../media/platform/chips-media/coda/Kconfig   |   18 +
+>  .../media/platform/chips-media/coda/Makefile  |    6 +
+>  .../chips-media/{ =3D> coda}/coda-bit.c         |    0
+>  .../chips-media/{ =3D> coda}/coda-common.c      |    0
+>  .../chips-media/{ =3D> coda}/coda-gdi.c         |    0
+>  .../chips-media/{ =3D> coda}/coda-h264.c        |    0
+>  .../chips-media/{ =3D> coda}/coda-jpeg.c        |    0
+>  .../chips-media/{ =3D> coda}/coda-mpeg2.c       |    0
+>  .../chips-media/{ =3D> coda}/coda-mpeg4.c       |    0
+>  .../platform/chips-media/{ =3D> coda}/coda.h    |    0
+>  .../chips-media/{ =3D> coda}/coda_regs.h        |    0
+>  .../chips-media/{ =3D> coda}/imx-vdoa.c         |    0
+>  .../chips-media/{ =3D> coda}/imx-vdoa.h         |    0
+>  .../platform/chips-media/{ =3D> coda}/trace.h   |    0
+>  .../media/platform/chips-media/wave5/Kconfig  |   12 +
+>  .../media/platform/chips-media/wave5/Makefile |   10 +
+>  drivers/media/platform/chips-media/wave5/TODO |   18 +
+>  .../platform/chips-media/wave5/wave5-helper.c |  175 +
+>  .../platform/chips-media/wave5/wave5-helper.h |   28 +
+>  .../platform/chips-media/wave5/wave5-hw.c     | 3359 +++++++++++++++++
+>  .../chips-media/wave5/wave5-regdefine.h       |  743 ++++
+>  .../platform/chips-media/wave5/wave5-vdi.c    |  245 ++
+>  .../platform/chips-media/wave5/wave5-vdi.h    |   67 +
+>  .../chips-media/wave5/wave5-vpu-dec.c         | 1429 +++++++
+>  .../chips-media/wave5/wave5-vpu-enc.c         | 1746 +++++++++
+>  .../platform/chips-media/wave5/wave5-vpu.c    |  362 ++
+>  .../platform/chips-media/wave5/wave5-vpu.h    |   72 +
+>  .../platform/chips-media/wave5/wave5-vpuapi.c | 1040 +++++
+>  .../platform/chips-media/wave5/wave5-vpuapi.h | 1136 ++++++
+>  .../chips-media/wave5/wave5-vpuconfig.h       |   90 +
+>  .../chips-media/wave5/wave5-vpuerror.h        |  454 +++
+>  .../media/platform/chips-media/wave5/wave5.h  |   94 +
+>  36 files changed, 11190 insertions(+), 21 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/cnm,wave5.yml
+>  create mode 100644 drivers/media/platform/chips-media/coda/Kconfig
+>  create mode 100644 drivers/media/platform/chips-media/coda/Makefile
+>  rename drivers/media/platform/chips-media/{ =3D> coda}/coda-bit.c (100%)
+>  rename drivers/media/platform/chips-media/{ =3D> coda}/coda-common.c (10=
+0%)
+>  rename drivers/media/platform/chips-media/{ =3D> coda}/coda-gdi.c (100%)
+>  rename drivers/media/platform/chips-media/{ =3D> coda}/coda-h264.c (100%=
+)
+>  rename drivers/media/platform/chips-media/{ =3D> coda}/coda-jpeg.c (100%=
+)
+>  rename drivers/media/platform/chips-media/{ =3D> coda}/coda-mpeg2.c (100=
+%)
+>  rename drivers/media/platform/chips-media/{ =3D> coda}/coda-mpeg4.c (100=
+%)
+>  rename drivers/media/platform/chips-media/{ =3D> coda}/coda.h (100%)
+>  rename drivers/media/platform/chips-media/{ =3D> coda}/coda_regs.h (100%=
+)
+>  rename drivers/media/platform/chips-media/{ =3D> coda}/imx-vdoa.c (100%)
+>  rename drivers/media/platform/chips-media/{ =3D> coda}/imx-vdoa.h (100%)
+>  rename drivers/media/platform/chips-media/{ =3D> coda}/trace.h (100%)
+>  create mode 100644 drivers/media/platform/chips-media/wave5/Kconfig
+>  create mode 100644 drivers/media/platform/chips-media/wave5/Makefile
+>  create mode 100644 drivers/media/platform/chips-media/wave5/TODO
+>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-helper=
+.c
+>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-helper=
+.h
+>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-hw.c
+>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-regdef=
+ine.h
+>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vdi.c
+>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vdi.h
+>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vpu-de=
+c.c
+>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vpu-en=
+c.c
+>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vpu.c
+>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vpu.h
+>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vpuapi=
+.c
+>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vpuapi=
+.h
+>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vpucon=
+fig.h
+>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vpuerr=
+or.h
+>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5.h
+>=20
 
->> drivers/mtd/nand/raw/nand_macronix.c:384:12: error: implicit declaration of function 'kmalloc' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           dma_buf = kmalloc(MACRONIX_30LFXG18AC_OTP_PAGE_SIZE, GFP_KERNEL);
-                     ^
-   drivers/mtd/nand/raw/nand_macronix.c:384:12: note: did you mean 'mm_alloc'?
-   include/linux/sched/mm.h:16:26: note: 'mm_alloc' declared here
-   extern struct mm_struct *mm_alloc(void);
-                            ^
->> drivers/mtd/nand/raw/nand_macronix.c:384:10: warning: incompatible integer to pointer conversion assigning to 'void *' from 'int' [-Wint-conversion]
-           dma_buf = kmalloc(MACRONIX_30LFXG18AC_OTP_PAGE_SIZE, GFP_KERNEL);
-                   ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/mtd/nand/raw/nand_macronix.c:437:2: error: implicit declaration of function 'kfree' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           kfree(dma_buf);
-           ^
-   1 warning and 2 errors generated.
-
-
-vim +/kmalloc +384 drivers/mtd/nand/raw/nand_macronix.c
-
-   366	
-   367	static int __macronix_30lfxg18ac_rw_otp(struct mtd_info *mtd,
-   368						loff_t offs_in_flash,
-   369						size_t len, size_t *retlen,
-   370						u_char *buf, bool write)
-   371	{
-   372		struct nand_chip *nand;
-   373		size_t bytes_handled;
-   374		unsigned long page;
-   375		off_t offs_in_page;
-   376		void *dma_buf;
-   377		int ret;
-   378	
-   379		/* 'nand_prog/read_page_op()' may use 'buf' as DMA buffer,
-   380		 * so allocate properly aligned memory for it. This is
-   381		 * needed because cross page accesses may lead to unaligned
-   382		 * buffer address for DMA.
-   383		 */
- > 384		dma_buf = kmalloc(MACRONIX_30LFXG18AC_OTP_PAGE_SIZE, GFP_KERNEL);
-   385		if (!dma_buf)
-   386			return -ENOMEM;
-   387	
-   388		nand = mtd_to_nand(mtd);
-   389		nand_select_target(nand, 0);
-   390	
-   391		ret = macronix_30lfxg18ac_otp_enable(nand);
-   392		if (ret)
-   393			goto out_otp;
-   394	
-   395		page = offs_in_flash;
-   396		/* 'page' will be result of division. */
-   397		offs_in_page = do_div(page, MACRONIX_30LFXG18AC_OTP_PAGE_SIZE);
-   398		bytes_handled = 0;
-   399	
-   400		while (bytes_handled < len &&
-   401		       page < MACRONIX_30LFXG18AC_OTP_PAGES) {
-   402			size_t bytes_to_handle;
-   403	
-   404			bytes_to_handle = min_t(size_t, len - bytes_handled,
-   405						MACRONIX_30LFXG18AC_OTP_PAGE_SIZE -
-   406						offs_in_page);
-   407	
-   408			if (write) {
-   409				memcpy(dma_buf, &buf[bytes_handled], bytes_to_handle);
-   410				ret = nand_prog_page_op(nand, page, offs_in_page,
-   411							dma_buf, bytes_to_handle);
-   412			} else {
-   413				ret = nand_read_page_op(nand, page, offs_in_page,
-   414							dma_buf, bytes_to_handle);
-   415				if (!ret)
-   416					memcpy(&buf[bytes_handled], dma_buf,
-   417					       bytes_to_handle);
-   418			}
-   419			if (ret)
-   420				goto out_otp;
-   421	
-   422			bytes_handled += bytes_to_handle;
-   423			offs_in_page = 0;
-   424			page++;
-   425		}
-   426	
-   427		*retlen = bytes_handled;
-   428	
-   429	out_otp:
-   430		if (ret)
-   431			dev_err(&mtd->dev, "failed to perform OTP IO: %i\n", ret);
-   432	
-   433		ret = macronix_30lfxg18ac_otp_disable(nand);
-   434		WARN(ret, "failed to leave OTP mode after %s\n",
-   435		     write ? "write" : "read");
-   436		nand_deselect_target(nand);
- > 437		kfree(dma_buf);
-   438	
-   439		return ret;
-   440	}
-   441	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
