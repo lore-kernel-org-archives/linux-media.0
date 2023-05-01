@@ -2,52 +2,49 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25C6CC77B73
-	for <linux-media@archiver.kernel.org>; Mon,  1 May 2023 03:06:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C0B5C77B7F
+	for <linux-media@archiver.kernel.org>; Mon,  1 May 2023 03:09:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232605AbjEADGj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 30 Apr 2023 23:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57876 "EHLO
+        id S232852AbjEADJB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 30 Apr 2023 23:09:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232520AbjEADEK (ORCPT
+        with ESMTP id S232774AbjEADHx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 30 Apr 2023 23:04:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2300D19BD;
-        Sun, 30 Apr 2023 20:01:29 -0700 (PDT)
+        Sun, 30 Apr 2023 23:07:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF44C40F5;
+        Sun, 30 Apr 2023 20:03:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48107616DD;
-        Mon,  1 May 2023 02:59:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70184C433EF;
-        Mon,  1 May 2023 02:59:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE9B4617BB;
+        Mon,  1 May 2023 03:03:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6598DC433EF;
+        Mon,  1 May 2023 03:03:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682909980;
-        bh=YKojEJiiV1QvwHI5f0ezVGrRBJg+sS7nU5ba/bX9Vb8=;
+        s=k20201202; t=1682910191;
+        bh=sOFCupPmco37yPY4TQcRSbwtpvyDHpYMv3Rmg9UkMo0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p9AzbP/kx+wSby7ytTnMivAm3jk1V+SGZZXz941qqCeaVX9eCs+7ZYNfAiDa/v+iJ
-         ThW+a+ZicUbSPKwJ5lWDqFIrytV1nZbsaktsHB8dSFAsOOidhwUoYo8RRSXr/xtLCg
-         npqYgTaCz5kS32kTyZe1s5mmErZHrztaoXsIZvPEbt8WlC+L8LZ0xMuBla+UUVx4IV
-         34NQQAGU7ZG4GRT4dLDIt5vb/JohOqqbgaMhz/4O2oV8j+HFjzysaPpCyPPnR03w43
-         EHsSUa/0J5X0mqRagA/PpqpgFG5M2UeIeqqLSKmcUZu30dFnq6ls7z/NbryxePF58T
-         hlQ3fAX5fzhPA==
+        b=sfojtkqRdcqAimKVfoBS2ufnPFh/AJW9zh1CiTmGqrS3OBN3qJmJqJeIdtFDLZ1bv
+         DJfVzDVLsFF3VfCnRMImAxBXTSnj2TcMQOrYmY4bhOdX67ZgKOf6X1apXH1EIosDY3
+         /Lou2S36+pppplD5xi6CWp5Bl8qNBnCVweScP3zFJ9nuMCXPRpjg/kxzLMX37/Lhgg
+         TjU8MM0V1oAMdUiWcTX4Yr4oo3OHqif7KV0Mmvldy6m9kwy+wcUOk7EZzuI0t9gknb
+         TSHyZDGVSM6XMoiQkoAAon4Obf5Mizy1MEdqwGBUkZ/9AtUxecZF989v1WYOm9UWSv
+         yBDtN3n4EG0Aw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Wei Chen <harperchen1110@gmail.com>,
+Cc:     harperchen <harperchen1110@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, tiffany.lin@mediatek.com,
-        andrew-ct.chen@mediatek.com, yunfei.dong@mediatek.com,
-        matthias.bgg@gmail.com, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.3 42/44] media: mediatek: vcodec: Fix potential array out-of-bounds in decoder queue_setup
-Date:   Sun, 30 Apr 2023 22:56:30 -0400
-Message-Id: <20230501025632.3253067-42-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, hverkuil@xs4all.nl,
+        linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 11/33] media: pci: tw68: Fix null-ptr-deref bug in buf prepare and finish
+Date:   Sun, 30 Apr 2023 23:02:05 -0400
+Message-Id: <20230501030227.3254266-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230501025632.3253067-1-sashal@kernel.org>
-References: <20230501025632.3253067-1-sashal@kernel.org>
+In-Reply-To: <20230501030227.3254266-1-sashal@kernel.org>
+References: <20230501030227.3254266-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -56,43 +53,89 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Wei Chen <harperchen1110@gmail.com>
+From: harperchen <harperchen1110@gmail.com>
 
-[ Upstream commit 8fbcf730cb89c3647f3365226fe7014118fa93c7 ]
+[ Upstream commit 1634b7adcc5bef645b3666fdd564e5952a9e24e0 ]
 
-variable *nplanes is provided by user via system call argument. The
-possible value of q_data->fmt->num_planes is 1-3, while the value
-of *nplanes can be 1-8. The array access by index i can cause array
-out-of-bounds.
+When the driver calls tw68_risc_buffer() to prepare the buffer, the
+function call dma_alloc_coherent may fail, resulting in a empty buffer
+buf->cpu. Later when we free the buffer or access the buffer, null ptr
+deref is triggered.
 
-Fix this bug by checking *nplanes against the array size.
+This bug is similar to the following one:
+https://git.linuxtv.org/media_stage.git/commit/?id=2b064d91440b33fba5b452f2d1b31f13ae911d71.
 
-Signed-off-by: Wei Chen <harperchen1110@gmail.com>
+We believe the bug can be also dynamically triggered from user side.
+Similarly, we fix this by checking the return value of tw68_risc_buffer()
+and the value of buf->cpu before buffer free.
+
+Signed-off-by: harperchen <harperchen1110@gmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/media/pci/tw68/tw68-video.c | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-index 641f533c417fd..173407664cf42 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-@@ -753,6 +753,13 @@ int vb2ops_vdec_queue_setup(struct vb2_queue *vq, unsigned int *nbuffers,
+diff --git a/drivers/media/pci/tw68/tw68-video.c b/drivers/media/pci/tw68/tw68-video.c
+index 0cbc5b038073b..773a18702d369 100644
+--- a/drivers/media/pci/tw68/tw68-video.c
++++ b/drivers/media/pci/tw68/tw68-video.c
+@@ -437,6 +437,7 @@ static void tw68_buf_queue(struct vb2_buffer *vb)
+  */
+ static int tw68_buf_prepare(struct vb2_buffer *vb)
+ {
++	int ret;
+ 	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
+ 	struct vb2_queue *vq = vb->vb2_queue;
+ 	struct tw68_dev *dev = vb2_get_drv_priv(vq);
+@@ -452,30 +453,30 @@ static int tw68_buf_prepare(struct vb2_buffer *vb)
+ 	bpl = (dev->width * dev->fmt->depth) >> 3;
+ 	switch (dev->field) {
+ 	case V4L2_FIELD_TOP:
+-		tw68_risc_buffer(dev->pci, buf, dma->sgl,
++		ret = tw68_risc_buffer(dev->pci, buf, dma->sgl,
+ 				 0, UNSET, bpl, 0, dev->height);
+ 		break;
+ 	case V4L2_FIELD_BOTTOM:
+-		tw68_risc_buffer(dev->pci, buf, dma->sgl,
++		ret = tw68_risc_buffer(dev->pci, buf, dma->sgl,
+ 				 UNSET, 0, bpl, 0, dev->height);
+ 		break;
+ 	case V4L2_FIELD_SEQ_TB:
+-		tw68_risc_buffer(dev->pci, buf, dma->sgl,
++		ret = tw68_risc_buffer(dev->pci, buf, dma->sgl,
+ 				 0, bpl * (dev->height >> 1),
+ 				 bpl, 0, dev->height >> 1);
+ 		break;
+ 	case V4L2_FIELD_SEQ_BT:
+-		tw68_risc_buffer(dev->pci, buf, dma->sgl,
++		ret = tw68_risc_buffer(dev->pci, buf, dma->sgl,
+ 				 bpl * (dev->height >> 1), 0,
+ 				 bpl, 0, dev->height >> 1);
+ 		break;
+ 	case V4L2_FIELD_INTERLACED:
+ 	default:
+-		tw68_risc_buffer(dev->pci, buf, dma->sgl,
++		ret = tw68_risc_buffer(dev->pci, buf, dma->sgl,
+ 				 0, bpl, bpl, bpl, dev->height >> 1);
+ 		break;
  	}
+-	return 0;
++	return ret;
+ }
  
- 	if (*nplanes) {
-+		if (vq->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE) {
-+			if (*nplanes != q_data->fmt->num_planes)
-+				return -EINVAL;
-+		} else {
-+			if (*nplanes != 1)
-+				return -EINVAL;
-+		}
- 		for (i = 0; i < *nplanes; i++) {
- 			if (sizes[i] < q_data->sizeimage[i])
- 				return -EINVAL;
+ static void tw68_buf_finish(struct vb2_buffer *vb)
+@@ -485,7 +486,8 @@ static void tw68_buf_finish(struct vb2_buffer *vb)
+ 	struct tw68_dev *dev = vb2_get_drv_priv(vq);
+ 	struct tw68_buf *buf = container_of(vbuf, struct tw68_buf, vb);
+ 
+-	dma_free_coherent(&dev->pci->dev, buf->size, buf->cpu, buf->dma);
++	if (buf->cpu)
++		dma_free_coherent(&dev->pci->dev, buf->size, buf->cpu, buf->dma);
+ }
+ 
+ static int tw68_start_streaming(struct vb2_queue *q, unsigned int count)
 -- 
 2.39.2
 
