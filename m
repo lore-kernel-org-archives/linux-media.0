@@ -2,52 +2,45 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9306C7EE23
-	for <linux-media@archiver.kernel.org>; Mon,  1 May 2023 02:58:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA144C77B7F
+	for <linux-media@archiver.kernel.org>; Mon,  1 May 2023 02:58:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232202AbjEAC6Y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 30 Apr 2023 22:58:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48538 "EHLO
+        id S232288AbjEAC6f (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 30 Apr 2023 22:58:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232192AbjEAC6U (ORCPT
+        with ESMTP id S232238AbjEAC60 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 30 Apr 2023 22:58:20 -0400
+        Sun, 30 Apr 2023 22:58:26 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B8EE5C;
-        Sun, 30 Apr 2023 19:57:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460C419B9;
+        Sun, 30 Apr 2023 19:57:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E1D0D615CC;
-        Mon,  1 May 2023 02:57:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA1A9C4339B;
-        Mon,  1 May 2023 02:57:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 767F760E93;
+        Mon,  1 May 2023 02:57:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD4A5C433A0;
+        Mon,  1 May 2023 02:57:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682909864;
-        bh=3RQ3NpkUvKvMX1Q9TThOfZqbeNUdpgUUkq+Yf3PtgjM=;
+        s=k20201202; t=1682909874;
+        bh=0FgOAeLWITfHqxmvydovCvhdnSidBbTih1SuweCVZcc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Mu8J4lgATEE3YhooCJV9LmzpLj7kc/BbZngHRRxCrjcqG8HzboUGk2qjG4Ok4jtc5
-         6eZhOSoRn7IjzytWkVOtk3gV/0WklpW3H1wlq4R/ybFyZrX7Wro7qyMVXeXt0Oz9BY
-         gIaP2pDfJuQ7m7pZTGcfI5/UTy1a1PN2K9XMAkwk9KXqna4pAQ625ri28tQTBSLgYl
-         BUTtOPLq5cbDRihhc4vNATY33odA6b9j5h9sOZHyhlvH7rssLomH8veCINXm1fGtSp
-         Hdt8dQQethKvsNUg2N/E56FFiPL1xmAp780Jp3wGHDManoNNuM633zksdMEr9Hr/SG
-         X7PmODWMuDTgw==
+        b=iFYac7n2BCJGwBIZuv6RrXOOu/JhyQfH2Gf5ZJ2TgSuSrfZ3GyLHPW3UOBu/hMFZ6
+         6u7KWBc/5ZluQ9fLg69NAfd8ya3qDXw5vg6WQWhaxQCteyNcxW1GgEfRckZUbZLVY8
+         lbQQo/U2cB+dEBskxktNlhxwY0jAjM7zQDxvp0Tnd8FCssuJW1eKRr5aAqQyRfRiCX
+         kFXlBywKlbTLNJH6O6KfpzMrHo+C500EtR1aDttLUcJ7AzGMOX1vs4gkt9kivraofM
+         sCNkKzr2hQZItr4r/TSspraF9LezObDg/cwxETPMAWCC/o0tZsC3720yXEcTWO42mu
+         hKkq1wDBg/jlg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Tom Rix <trix@redhat.com>, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 13/44] media: imx-jpeg: Bounds check sizeimage access
-Date:   Sun, 30 Apr 2023 22:56:01 -0400
-Message-Id: <20230501025632.3253067-13-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, isely@pobox.com,
+        linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 16/44] media: pvrusb2: VIDEO_PVRUSB2 depends on DVB_CORE to use dvb_* symbols
+Date:   Sun, 30 Apr 2023 22:56:04 -0400
+Message-Id: <20230501025632.3253067-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230501025632.3253067-1-sashal@kernel.org>
 References: <20230501025632.3253067-1-sashal@kernel.org>
@@ -59,74 +52,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+From: Tom Rix <trix@redhat.com>
 
-[ Upstream commit 474acc639fc8671fa4c1919d9e03253c82b6d321 ]
+[ Upstream commit 1107283b3351bef138cd12dbda1f999891cab7db ]
 
-The call of mxc_jpeg_get_plane_size() from mxc_jpeg_dec_irq() sets
-plane_no argument to 1. The compiler sees that it's possible to end up
-with an access beyond the bounds of sizeimage, if mem_planes was too
-large:
+A rand config causes this link error
+vmlinux.o: In function `pvr2_dvb_create':
+(.text+0x8af1d2): undefined reference to `dvb_register_adapter'
 
-        if (plane_no >= fmt->mem_planes)        // mem_planes = 2+
-                return 0;
+The rand config has
+CONFIG_VIDEO_PVRUSB2=y
+CONFIG_VIDEO_DEV=y
+CONFIG_DVB_CORE=m
 
-        if (fmt->mem_planes == fmt->comp_planes) // comp_planes != mem_planes
-                return q_data->sizeimage[plane_no];
+VIDEO_PVRUSB2 should also depend on DVB_CORE.
 
-        if (plane_no < fmt->mem_planes - 1)     // mem_planes = 2
-                return q_data->sizeimage[plane_no];
-
-comp_planes == 0 or 1 is safe. comp_planes > 2 would be out of bounds.
-
-(This isn't currently possible given the contents of mxc_formats, though.)
-
-Silence the warning by bounds checking comp_planes for future
-robustness. Seen with GCC 13:
-
-In function 'mxc_jpeg_get_plane_size',
-    inlined from 'mxc_jpeg_dec_irq' at ../drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c:729:14:
-../drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c:641:42: warning: array subscript 2 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} [-Warray-bounds=]
-  641 |                 size += q_data->sizeimage[i];
-      |                         ~~~~~~~~~~~~~~~~~^~~
-In file included from ../drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h:112,
-                 from ../drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c:63:
-../drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h: In function 'mxc_jpeg_dec_irq':
-../drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h:84:41: note: while referencing 'sizeimage'
-   84 |         u32                             sizeimage[MXC_JPEG_MAX_PLANES];
-      |                                         ^~~~~~~~~
-
-Cc: Mirela Rabulea <mirela.rabulea@nxp.com>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Tom Rix <trix@redhat.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/media/usb/pvrusb2/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-index f085f14d676ad..c898116b763a2 100644
---- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-+++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-@@ -637,6 +637,11 @@ static u32 mxc_jpeg_get_plane_size(struct mxc_jpeg_q_data *q_data, u32 plane_no)
- 		return q_data->sizeimage[plane_no];
- 
- 	size = q_data->sizeimage[fmt->mem_planes - 1];
-+
-+	/* Should be impossible given mxc_formats. */
-+	if (WARN_ON_ONCE(fmt->comp_planes > ARRAY_SIZE(q_data->sizeimage)))
-+		return size;
-+
- 	for (i = fmt->mem_planes; i < fmt->comp_planes; i++)
- 		size += q_data->sizeimage[i];
- 
+diff --git a/drivers/media/usb/pvrusb2/Kconfig b/drivers/media/usb/pvrusb2/Kconfig
+index f2b64e49c5a20..9501b10b31aa5 100644
+--- a/drivers/media/usb/pvrusb2/Kconfig
++++ b/drivers/media/usb/pvrusb2/Kconfig
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ config VIDEO_PVRUSB2
+ 	tristate "Hauppauge WinTV-PVR USB2 support"
+-	depends on VIDEO_DEV && I2C
++	depends on VIDEO_DEV && I2C && DVB_CORE
+ 	select VIDEO_TUNER
+ 	select VIDEO_TVEEPROM
+ 	select VIDEO_CX2341X
 -- 
 2.39.2
 
