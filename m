@@ -2,50 +2,56 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 087DBC77B7F
-	for <linux-media@archiver.kernel.org>; Mon,  1 May 2023 02:59:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C41C1C77B60
+	for <linux-media@archiver.kernel.org>; Mon,  1 May 2023 03:00:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232269AbjEAC7R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 30 Apr 2023 22:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49464 "EHLO
+        id S232101AbjEADAd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 30 Apr 2023 23:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232267AbjEAC6s (ORCPT
+        with ESMTP id S232376AbjEAC72 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 30 Apr 2023 22:58:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4561715;
-        Sun, 30 Apr 2023 19:58:21 -0700 (PDT)
+        Sun, 30 Apr 2023 22:59:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A6C1BE5;
+        Sun, 30 Apr 2023 19:58:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 797A360ED1;
-        Mon,  1 May 2023 02:57:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A289C433D2;
-        Mon,  1 May 2023 02:57:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C6322616F8;
+        Mon,  1 May 2023 02:58:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF9D5C4339B;
+        Mon,  1 May 2023 02:58:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682909869;
-        bh=F3Wiov1pCS4WKo5KfIAZ+ApsN7GR7v4FG6BtkmgA1Zk=;
+        s=k20201202; t=1682909931;
+        bh=hTYh1gt/OQMw4LzPSSg9pQwVxqfv+9i5wbpULGqbev8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZpMPyCq09vDkYfYG4DI1nHZIRK2sN7BJaBili1iiu0ZVNoKN7+rLM3TDhW0jCAsFQ
-         haQotsXVQYpaoKZCxfCUK0TzY9i2+2WG5N/ShXvGkisHG2WzhuwuphcGANLglPHcKe
-         NcuSF2Lu4nkpoRwaOklntpzGItEVTgI7CDex1covyKhFMTNUe2dD5HCX+mQYcZDhmJ
-         37c/ncmYrPD8Y4eZ1/J/HZXee3TFyzpYw8Lysseytk4RFYZ5AcZ1QUx/OmPerOdfRg
-         RH5/NQjgoRrOtzNW8beuOG/LrFWbpGOwmPmghsqP0zDz21dVUvsUZzoHE5/eikumaF
-         UHLzuW7qxjKaA==
+        b=rxBtjN9j9fABt/HNcd6rft58KvziDrJ7jL27//AsZJPQSl6nj72AO3Jdw5oyvs2GE
+         AcG2gN/Old7fvCMOQC2QwPayyR/fFYFZz7dBfbVL20EHSMCKv5fJ74s+WBjD0LOXwK
+         c2DS6rONMY6d3BQlwrAZoM2VTy9/Do9el4FxYyC7wKsh4myvsmalB1pSq+vOflEMi3
+         vZCgpd00CvzvVRr6692b4Da5oU8t3Irg+NF0SAaKA6h797xqxsRXePdLEB0ag2rK3f
+         Hl/U8ixmZ+KWHhfAfEpK85wfv6uOjane0pAFBKqEevgxmAtOBTCX52Zm/N+mz8oUsg
+         X6Xi23eV5xggQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     harperchen <harperchen1110@gmail.com>,
+Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, daniel.lee.kruse@proton.me,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 14/44] media: cx23885: Fix a null-ptr-deref bug in buffer_prepare() and buffer_finish()
-Date:   Sun, 30 Apr 2023 22:56:02 -0400
-Message-Id: <20230501025632.3253067-14-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, mchehab@kernel.org,
+        bleung@chromium.org, groeck@chromium.org,
+        kevin.chiu.17802@gmail.com,
+        scott_chao@wistron.corp-partner.google.com,
+        zoey_wu@wistron.corp-partner.google.com,
+        hellojacky0226@hotmail.com, linux-media@vger.kernel.org,
+        chrome-platform@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.3 34/44] media: cros-ec-cec: Don't exit early in .remove() callback
+Date:   Sun, 30 Apr 2023 22:56:22 -0400
+Message-Id: <20230501025632.3253067-34-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230501025632.3253067-1-sashal@kernel.org>
 References: <20230501025632.3253067-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -53,107 +59,51 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: harperchen <harperchen1110@gmail.com>
+From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-[ Upstream commit 47e8b73bc35d7c54642f78e498697692f6358996 ]
+[ Upstream commit 0ff7aee24e47beb4306ce050824b54147f2fabfa ]
 
-When the driver calls cx23885_risc_buffer() to prepare the buffer, the
-function call dma_alloc_coherent may fail, resulting in a empty buffer
-risc->cpu. Later when we free the buffer or access the buffer, null ptr
-deref is triggered.
+Exiting early in remove without releasing all acquired resources yields
+leaks. Note that e.g. memory allocated with devm_zalloc() is freed after
+.remove() returns, even if the return code was negative.
 
-This bug is similar to the following one:
-https://git.linuxtv.org/media_stage.git/commit/?id=2b064d91440b33fba5b452f2d1b31f13ae911d71.
+While blocking_notifier_chain_unregister() won't fail and so the
+change is somewhat cosmetic, platform driver's .remove callbacks are
+about to be converted to return void. To prepare that, keep the error
+message but don't return early.
 
-We believe the bug can be also dynamically triggered from user side.
-Similarly, we fix this by checking the return value of cx23885_risc_buffer()
-and the value of risc->cpu before buffer free.
-
-Signed-off-by: harperchen <harperchen1110@gmail.com>
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/cx23885/cx23885-core.c  |  4 +++-
- drivers/media/pci/cx23885/cx23885-video.c | 13 +++++++------
- 2 files changed, 10 insertions(+), 7 deletions(-)
+ drivers/media/cec/platform/cros-ec/cros-ec-cec.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/pci/cx23885/cx23885-core.c b/drivers/media/pci/cx23885/cx23885-core.c
-index 9232a966bcabb..2ce2914576cf2 100644
---- a/drivers/media/pci/cx23885/cx23885-core.c
-+++ b/drivers/media/pci/cx23885/cx23885-core.c
-@@ -1325,7 +1325,9 @@ void cx23885_free_buffer(struct cx23885_dev *dev, struct cx23885_buffer *buf)
- {
- 	struct cx23885_riscmem *risc = &buf->risc;
+diff --git a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+index 6ebedc71d67d4..960432230bbf1 100644
+--- a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
++++ b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+@@ -332,14 +332,16 @@ static int cros_ec_cec_remove(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	int ret;
  
--	dma_free_coherent(&dev->pci->dev, risc->size, risc->cpu, risc->dma);
-+	if (risc->cpu)
-+		dma_free_coherent(&dev->pci->dev, risc->size, risc->cpu, risc->dma);
-+	memset(risc, 0, sizeof(*risc));
- }
++	/*
++	 * blocking_notifier_chain_unregister() only fails if the notifier isn't
++	 * in the list. We know it was added to it by .probe(), so there should
++	 * be no need for error checking. Be cautious and still check.
++	 */
+ 	ret = blocking_notifier_chain_unregister(
+ 			&cros_ec_cec->cros_ec->event_notifier,
+ 			&cros_ec_cec->notifier);
+-
+-	if (ret) {
++	if (ret)
+ 		dev_err(dev, "failed to unregister notifier\n");
+-		return ret;
+-	}
  
- static void cx23885_tsport_reg_dump(struct cx23885_tsport *port)
-diff --git a/drivers/media/pci/cx23885/cx23885-video.c b/drivers/media/pci/cx23885/cx23885-video.c
-index 3d03f5e95786a..671fc0588e431 100644
---- a/drivers/media/pci/cx23885/cx23885-video.c
-+++ b/drivers/media/pci/cx23885/cx23885-video.c
-@@ -342,6 +342,7 @@ static int queue_setup(struct vb2_queue *q,
- 
- static int buffer_prepare(struct vb2_buffer *vb)
- {
-+	int ret;
- 	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
- 	struct cx23885_dev *dev = vb->vb2_queue->drv_priv;
- 	struct cx23885_buffer *buf =
-@@ -358,12 +359,12 @@ static int buffer_prepare(struct vb2_buffer *vb)
- 
- 	switch (dev->field) {
- 	case V4L2_FIELD_TOP:
--		cx23885_risc_buffer(dev->pci, &buf->risc,
-+		ret = cx23885_risc_buffer(dev->pci, &buf->risc,
- 				sgt->sgl, 0, UNSET,
- 				buf->bpl, 0, dev->height);
- 		break;
- 	case V4L2_FIELD_BOTTOM:
--		cx23885_risc_buffer(dev->pci, &buf->risc,
-+		ret = cx23885_risc_buffer(dev->pci, &buf->risc,
- 				sgt->sgl, UNSET, 0,
- 				buf->bpl, 0, dev->height);
- 		break;
-@@ -391,21 +392,21 @@ static int buffer_prepare(struct vb2_buffer *vb)
- 			line0_offset = 0;
- 			line1_offset = buf->bpl;
- 		}
--		cx23885_risc_buffer(dev->pci, &buf->risc,
-+		ret = cx23885_risc_buffer(dev->pci, &buf->risc,
- 				sgt->sgl, line0_offset,
- 				line1_offset,
- 				buf->bpl, buf->bpl,
- 				dev->height >> 1);
- 		break;
- 	case V4L2_FIELD_SEQ_TB:
--		cx23885_risc_buffer(dev->pci, &buf->risc,
-+		ret = cx23885_risc_buffer(dev->pci, &buf->risc,
- 				sgt->sgl,
- 				0, buf->bpl * (dev->height >> 1),
- 				buf->bpl, 0,
- 				dev->height >> 1);
- 		break;
- 	case V4L2_FIELD_SEQ_BT:
--		cx23885_risc_buffer(dev->pci, &buf->risc,
-+		ret = cx23885_risc_buffer(dev->pci, &buf->risc,
- 				sgt->sgl,
- 				buf->bpl * (dev->height >> 1), 0,
- 				buf->bpl, 0,
-@@ -418,7 +419,7 @@ static int buffer_prepare(struct vb2_buffer *vb)
- 		buf, buf->vb.vb2_buf.index,
- 		dev->width, dev->height, dev->fmt->depth, dev->fmt->fourcc,
- 		(unsigned long)buf->risc.dma);
--	return 0;
-+	return ret;
- }
- 
- static void buffer_finish(struct vb2_buffer *vb)
+ 	cec_notifier_cec_adap_unregister(cros_ec_cec->notify,
+ 					 cros_ec_cec->adap);
 -- 
 2.39.2
 
