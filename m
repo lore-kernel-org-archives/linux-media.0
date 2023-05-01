@@ -2,54 +2,50 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B513C77B7F
-	for <linux-media@archiver.kernel.org>; Mon,  1 May 2023 03:16:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BEC83C77B73
+	for <linux-media@archiver.kernel.org>; Mon,  1 May 2023 03:17:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233077AbjEADQy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 30 Apr 2023 23:16:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43964 "EHLO
+        id S233226AbjEADRM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 30 Apr 2023 23:17:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233509AbjEADPq (ORCPT
+        with ESMTP id S233979AbjEADQc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 30 Apr 2023 23:15:46 -0400
+        Sun, 30 Apr 2023 23:16:32 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5454A4EF8;
-        Sun, 30 Apr 2023 20:06:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1D33A92;
+        Sun, 30 Apr 2023 20:07:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4ACBC61768;
-        Mon,  1 May 2023 03:05:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57C2BC4339E;
-        Mon,  1 May 2023 03:05:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DF25617E8;
+        Mon,  1 May 2023 03:06:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5927C433D2;
+        Mon,  1 May 2023 03:06:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682910319;
-        bh=pFbDP6UlpYSrP0iKGq40NRahiU810/SYBYS0pTCxdBE=;
+        s=k20201202; t=1682910390;
+        bh=bP+Ris4in6Qv35KSOOnZpF99B3j71RWkrhDcpRyx4f0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y11Yr3v4bseks03Us4/1fFTfH++5UiN1zXP5C2Tfaly8MAhkddKUSbiGpxPUUkV9c
-         qhP1GQ19+r+0Uug6ccs+iADlYDUuls2UemUzpxEWTGOQLkSnA9JCJlSUZKD/3miFC/
-         pRV6RYPvD8iNCB5i+YNMKIimfA6k8hr6dPWBqAahA515wLfT8ACG+uAwOXuKoDyM4n
-         2cTvJT73xo4wDQB00bUMq4PFmYy//uyZ77vCHMNAoag6vy2qGD0eU/YuEI9yQacMcc
-         bJhzdxkHHNe7d/gf/gGa4SyAbbDrkwguRCoz8mCPzhXJ5YsTtUzMqlsvyrtFMYHzBq
-         +OkyX8I1iy+Bg==
+        b=MoWnSTBTBfoqvfbAIvuv0j4HbeyFG0mL6EFWb/kCZ/UA1ElPJ+hC0VuNwxuL/CIFs
+         8DRfU31enOt2H3w+8gliZ0b+MvcgKAdI+O5BaXlABpCurrrqOc9PluPPIXjPG19muF
+         UOMSgUzvN6/6aK2aWwMKW8/IKuiPQlXapf4s7QtaIRnPq4BW5JeD9tBQLNnBUHl7vC
+         tbZrs2xchpp1chqlF7GWQ5WXuXejcpvIWojHuxEhHNPvkyuHS8l/eyyWg7a43gvPKZ
+         VaDPWmyKLM22eqIJx0A//8AvkJ7NpA0+76cMp0JHHPuQ8TUz6P+3wa1IMW5NlMi6aC
+         1xC/AHqxzFxmQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Sasha Levin <sashal@kernel.org>, mchehab@kernel.org,
-        bleung@chromium.org, groeck@chromium.org,
-        kevin.chiu.17802@gmail.com,
-        zoey_wu@wistron.corp-partner.google.com,
-        scott_chao@wistron.corp-partner.google.com,
-        ajye_huang@compal.corp-partner.google.com,
-        linux-media@vger.kernel.org, chrome-platform@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.15 15/17] media: cros-ec-cec: Don't exit early in .remove() callback
-Date:   Sun, 30 Apr 2023 23:04:32 -0400
-Message-Id: <20230501030435.3254695-15-sashal@kernel.org>
+        bleung@chromium.org, linux-media@vger.kernel.org,
+        chrome-platform@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.4 9/9] media: cros-ec-cec: Don't exit early in .remove() callback
+Date:   Sun, 30 Apr 2023 23:06:09 -0400
+Message-Id: <20230501030611.3255082-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230501030435.3254695-1-sashal@kernel.org>
-References: <20230501030435.3254695-1-sashal@kernel.org>
+In-Reply-To: <20230501030611.3255082-1-sashal@kernel.org>
+References: <20230501030611.3255082-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
@@ -76,13 +72,13 @@ Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/cec/platform/cros-ec/cros-ec-cec.c | 10 ++++++----
+ drivers/media/platform/cros-ec-cec/cros-ec-cec.c | 10 ++++++----
  1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-index f66699d5dc66e..8bf34620db5fe 100644
---- a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-+++ b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+diff --git a/drivers/media/platform/cros-ec-cec/cros-ec-cec.c b/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
+index ae274a7aa3a94..dbdb57aea7457 100644
+--- a/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
++++ b/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
 @@ -324,14 +324,16 @@ static int cros_ec_cec_remove(struct platform_device *pdev)
  	struct device *dev = &pdev->dev;
  	int ret;
@@ -102,8 +98,8 @@ index f66699d5dc66e..8bf34620db5fe 100644
 -		return ret;
 -	}
  
- 	cec_notifier_cec_adap_unregister(cros_ec_cec->notify,
- 					 cros_ec_cec->adap);
+ 	cec_notifier_cec_adap_unregister(cros_ec_cec->notify);
+ 	cec_unregister_adapter(cros_ec_cec->adap);
 -- 
 2.39.2
 
