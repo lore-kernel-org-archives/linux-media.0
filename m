@@ -2,48 +2,52 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E06FC77B73
-	for <linux-media@archiver.kernel.org>; Mon,  1 May 2023 03:10:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 896D1C77B73
+	for <linux-media@archiver.kernel.org>; Mon,  1 May 2023 03:10:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232609AbjEADKV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 30 Apr 2023 23:10:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36774 "EHLO
+        id S232800AbjEADKs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 30 Apr 2023 23:10:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232883AbjEADJt (ORCPT
+        with ESMTP id S232804AbjEADIA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 30 Apr 2023 23:09:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDCE1FD0;
-        Sun, 30 Apr 2023 20:03:53 -0700 (PDT)
+        Sun, 30 Apr 2023 23:08:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAE34206;
+        Sun, 30 Apr 2023 20:03:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 42791617A2;
-        Mon,  1 May 2023 03:03:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEBD4C4339B;
-        Mon,  1 May 2023 03:03:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 401C461628;
+        Mon,  1 May 2023 03:02:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72949C4339B;
+        Mon,  1 May 2023 03:02:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682910192;
-        bh=0FgOAeLWITfHqxmvydovCvhdnSidBbTih1SuweCVZcc=;
+        s=k20201202; t=1682910145;
+        bh=YKojEJiiV1QvwHI5f0ezVGrRBJg+sS7nU5ba/bX9Vb8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S+HrDWdY9cDxQ0y/aBbDk9Q7idpZ3hzAK/7hEuFqs+Rof41NWwrMNMrvW6XDC1AY8
-         UgG6a8QbnYiIE8XTCBeHJexPaTeIaXBY7o0vpaEfc0ttw627NplvpIwBatPLliR08A
-         kz9w32GzrtZ4yZ+mm1Ccd7rYiVkP4P0qc852RF89VNBCkoRCRnU9vYxbbfM7SUWr0b
-         mMaKowUViTE2n96twkSO4MEsRzBg8IMvHjvn30qg8UMVKW0PKD3C401Ab/99WQf7kA
-         KgWHpY2MYYURYvj2nmUE2l6yRU8lqfsnf6ZkRks+HCSUAMUP+e+Gn3qVvOSOK4zixH
-         sxbvcO0hX3X4A==
+        b=E7lzNj8z3Ur2TBcpTKvLZaWGFplvtk0nM/amsC4EOBooycfCfIf42Kt3GmW7OMPpB
+         xWlN9YPGhBFcWpnDLvSRNBuvetW3kQ/RIm95pfeYTxaxjtrHJ6B/qxuDn63pWNsY52
+         BBjkgwsvOKsZFocxCEsUIqdMpITRx52grEYL01CREyW1RMIusMG37jLQynH85FTtvv
+         MFNsCepp6zHrbXiuEIi3ZTcmDQTzJazzjJYdFm38yNr4DPt9rKZv+M2ePTq+gw2cuW
+         7pdmnzLdLpl/GhrwJm54uPZ9ftd338I0NG/xD4Ql+1KbLUrGOViiSU0uy+fNNkPMcp
+         j1Udy1MI0VkWw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tom Rix <trix@redhat.com>, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Wei Chen <harperchen1110@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, isely@pobox.com,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 12/33] media: pvrusb2: VIDEO_PVRUSB2 depends on DVB_CORE to use dvb_* symbols
-Date:   Sun, 30 Apr 2023 23:02:06 -0400
-Message-Id: <20230501030227.3254266-12-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, tiffany.lin@mediatek.com,
+        andrew-ct.chen@mediatek.com, yunfei.dong@mediatek.com,
+        matthias.bgg@gmail.com, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.2 37/37] media: mediatek: vcodec: Fix potential array out-of-bounds in decoder queue_setup
+Date:   Sun, 30 Apr 2023 22:59:45 -0400
+Message-Id: <20230501025945.3253774-37-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230501030227.3254266-1-sashal@kernel.org>
-References: <20230501030227.3254266-1-sashal@kernel.org>
+In-Reply-To: <20230501025945.3253774-1-sashal@kernel.org>
+References: <20230501025945.3253774-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -52,42 +56,43 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+From: Wei Chen <harperchen1110@gmail.com>
 
-[ Upstream commit 1107283b3351bef138cd12dbda1f999891cab7db ]
+[ Upstream commit 8fbcf730cb89c3647f3365226fe7014118fa93c7 ]
 
-A rand config causes this link error
-vmlinux.o: In function `pvr2_dvb_create':
-(.text+0x8af1d2): undefined reference to `dvb_register_adapter'
+variable *nplanes is provided by user via system call argument. The
+possible value of q_data->fmt->num_planes is 1-3, while the value
+of *nplanes can be 1-8. The array access by index i can cause array
+out-of-bounds.
 
-The rand config has
-CONFIG_VIDEO_PVRUSB2=y
-CONFIG_VIDEO_DEV=y
-CONFIG_DVB_CORE=m
+Fix this bug by checking *nplanes against the array size.
 
-VIDEO_PVRUSB2 should also depend on DVB_CORE.
-
-Signed-off-by: Tom Rix <trix@redhat.com>
+Signed-off-by: Wei Chen <harperchen1110@gmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/pvrusb2/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/media/usb/pvrusb2/Kconfig b/drivers/media/usb/pvrusb2/Kconfig
-index f2b64e49c5a20..9501b10b31aa5 100644
---- a/drivers/media/usb/pvrusb2/Kconfig
-+++ b/drivers/media/usb/pvrusb2/Kconfig
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- config VIDEO_PVRUSB2
- 	tristate "Hauppauge WinTV-PVR USB2 support"
--	depends on VIDEO_DEV && I2C
-+	depends on VIDEO_DEV && I2C && DVB_CORE
- 	select VIDEO_TUNER
- 	select VIDEO_TVEEPROM
- 	select VIDEO_CX2341X
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
+index 641f533c417fd..173407664cf42 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
+@@ -753,6 +753,13 @@ int vb2ops_vdec_queue_setup(struct vb2_queue *vq, unsigned int *nbuffers,
+ 	}
+ 
+ 	if (*nplanes) {
++		if (vq->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE) {
++			if (*nplanes != q_data->fmt->num_planes)
++				return -EINVAL;
++		} else {
++			if (*nplanes != 1)
++				return -EINVAL;
++		}
+ 		for (i = 0; i < *nplanes; i++) {
+ 			if (sizes[i] < q_data->sizeimage[i])
+ 				return -EINVAL;
 -- 
 2.39.2
 
