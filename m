@@ -2,168 +2,117 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D80B9C77B60
-	for <linux-media@archiver.kernel.org>; Wed, 26 Apr 2023 14:31:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BEBBC7EE21
+	for <linux-media@archiver.kernel.org>; Thu,  4 May 2023 13:50:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241176AbjDZObr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 26 Apr 2023 10:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40228 "EHLO
+        id S231236AbjEDNuK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 4 May 2023 09:50:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240902AbjDZObp (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 26 Apr 2023 10:31:45 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7EE64EE6;
-        Wed, 26 Apr 2023 07:31:43 -0700 (PDT)
-Received: from [192.168.1.43] ([77.7.2.190]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MlfL0-1qaKbV2V0s-00inbM; Wed, 26 Apr 2023 16:31:35 +0200
-Message-ID: <9c11af81-cc30-dcc0-33cf-058d74080f1c@metux.net>
-Date:   Wed, 26 Apr 2023 16:31:34 +0200
+        with ESMTP id S231146AbjEDNuH (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 4 May 2023 09:50:07 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845D77DA1
+        for <linux-media@vger.kernel.org>; Thu,  4 May 2023 06:49:54 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f1e2555b5aso4224835e9.0
+        for <linux-media@vger.kernel.org>; Thu, 04 May 2023 06:49:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683208193; x=1685800193;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=j2X8b+BROLb0l/VBCzn6Vje7GJpf2io4XYFX9tdubz8=;
+        b=xI5mweAXgPJ5ZneC2In+CIz/9gJ/jXfDImYzvinOtc0FVfry41QaS7UB54IebENhET
+         PV5Kt6eplwujbVoK7a/bOaKRnpDP2YI3xLa8th9AQm/tAEXpp8DVM4sgHGISUbSPz5LD
+         Wk/l53UA2T9u4Q1V3yZnUuEo79jb5px76IRpjtl3/GEII7fvHNcdLYa1LPyuViFTp06a
+         nOZHRj0gkopEhk/KIm7qF906YzeMY32h19kcTJs71LCkDUdE6eyzqdHYH8KZ3ZCUn3AG
+         md61h5czSGCMp297+PwroWXe/lB/6IwDkNQfNUkKiM67DPl5nqPw/+4nlzjAB3M8Gvya
+         sdZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683208193; x=1685800193;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=j2X8b+BROLb0l/VBCzn6Vje7GJpf2io4XYFX9tdubz8=;
+        b=jaA0n0gPjP7RAB/Ou9ue8FE0muxXKZPXUDlkWVUdbExDBYqh+MthFGW2ze58q6kLfT
+         aa+OqaMPlDcF/ecj71tmQxv5iuTeV7xExPXEuoryLcY2t8HD1l5R2MLaIdZHfyefc9Hn
+         IwaePdld8Nax65J+NgtU5tZipbJo/R+Dt4kOsUGX6YaeqPrIxCotZwINqNyX6JPw+Zol
+         mD+ZPjUAa1rL/Vhc/x9i8AqXF/xcOOnM3tFZydtYdgBwtbftCTJrk9UdO0o//h2rEa6d
+         Nxbn5L+dQK1bwGDjK5sH71DNctCaDAsDT0NH42TbBBgjKsrZR3ZWxbnbiafmjYr/UkMT
+         c16A==
+X-Gm-Message-State: AC+VfDyzLC699q2ImMssQlKN5lEbaKl3H5J9rZLBTzgC/oe6yAy6Ld6A
+        6iWwPh+PsOrxsGsTtqE74/OZFA==
+X-Google-Smtp-Source: ACHHUZ7aqyaWyrvs1VipqgPBXmyd2QsycmpeRQCTGJiilXe6vVjB8PxxJutHkzce+dAbuj/rmE3ncw==
+X-Received: by 2002:a1c:7c19:0:b0:3f1:8c5f:dfc5 with SMTP id x25-20020a1c7c19000000b003f18c5fdfc5mr17534214wmc.39.1683208192899;
+        Thu, 04 May 2023 06:49:52 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id l9-20020a7bc449000000b003f2390bdd0csm4979526wmi.32.2023.05.04.06.49.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 May 2023 06:49:52 -0700 (PDT)
+Message-ID: <8df7f24b-9dbe-4491-bcb1-f53021bb482f@linaro.org>
+Date:   Thu, 4 May 2023 14:49:51 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 0/6] Initial Rust V4L2 support
-Content-Language: tl
-To:     Hans Petter Selasky <hps@selasky.org>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        wedsonaf@gmail.com, ojeda@kernel.org, mchehab@kernel.org,
-        hverkuil@xs4all.nl
-Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, kernel@collabora.com
-References: <20230406215615.122099-1-daniel.almeida@collabora.com>
- <441a96cb-7dd1-0885-df64-933ebdb55e9e@selasky.org>
-From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
-In-Reply-To: <441a96cb-7dd1-0885-df64-933ebdb55e9e@selasky.org>
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 0/4] venus: add support for 10 bit decoding
+Content-Language: en-US
+To:     Dikshita Agarwal <quic_dikshita@quicinc.com>,
+        linux-media@vger.kernel.org, stanimir.k.varbanov@gmail.com,
+        quic_vgarodia@quicinc.com, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, mchehab@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <1683196599-3730-1-git-send-email-quic_dikshita@quicinc.com>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <1683196599-3730-1-git-send-email-quic_dikshita@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:Ow8I91kmxMh/ASGHlIt0oFQKmCEOyR3w3fqp/P6Qz4ZUIz/H16b
- NJGi5boB95K44w9Kwc3RqLJqeOe3tkSQgK5GehEpaVqbt25AUrssVyhdsvp/lxhymleTgzw
- ImtXEMiej4B6dh2UgQQCpdjUQNK6K8Vz1A4cmcGcKBMwlS2FpVpKBVtiy0xgRWXfrb6dl5D
- RDM1NB3U+qvP2uOr0Ronw==
-UI-OutboundReport: notjunk:1;M01:P0:kDmh3DcH/z8=;EFi6kEKyvxwGd7krUNNdmsxKACj
- RSDjpoQ0OaQVQkaS8bRMJJS9FUygLdSg+VxkE3OjlMjNPmLVgzavkDRqvMK7Qge9aJ0882vnQ
- Iaklm8gkHnEUxeODuEQ/hqwVvMv2dMQSs+CLwz9zcBMgqV51KdcQCUBYt6UN7MXnLJ+IEYa+0
- +/FqjwPgn4X5lefKjqbzW3DXrTNeLJHY66FtBKhKN47Bc0MOTW8XZ11IaqdcbI1QNbz0waP/E
- M6VaJOQ/sRa6xnL5/kOmmfMB+rvZYpX22wJHgrWkx2lTRIHYRz6orUBLoeBymfb0OqyVgQeB5
- sHpVxflbGLyqmIYqkA+FoAW25DS9g5+9KEKTlza4ErbOHKtI2APp3JpD4PKU26pa0zHX1B4Tb
- iyC+cyteAhFy+OhWr260tQUtcU1Ha2g7urclstxIL3XobvWAmgny4xscWvp7x1m1D/VrbQIr7
- QOZJDaPwh3m1QcCeULQzFA+BxigFC3koHbyqjmgHOst2z0yizFhBhK60OSDeXVoRxcIKyU2tr
- wjyM/mUaOC3c2+AFPA7JcVomqxHkcd4epCRiob3AUp9D2pG/Eg9Zj3loqiY8jUE0QI9LvLhql
- wJ6FxLJPWIaPvWkOg5VYgIfDzU7k27Jj9fdjWVJuG0+I/Wc2TK0xdwQzkeDHwFHZ8gV3FICPR
- exBOiMBfXTTtAmSM030Q4ZOaHUrWC82jgtfo0t7TJQ==
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 08.04.23 21:43, Hans Petter Selasky wrote:
+On 04/05/2023 11:36, Dikshita Agarwal wrote:
+> This series includes the changes to
+>    - add V4L2_PIX_FMT_P010 as supported decoder format.
+>    - consider dpb color format while calculating buffer
+>      size for dpb buffers.
+>    - update dpb and opb color format when bit depth
+>      changes is detected, also update preferred color
+>      format to P010 in this case.
+> 
+> With this series, divided the previous version [1] into
+> multiple patches as suggested in review comments.
+> 
+> [1] https://patchwork.linuxtv.org/project/linux-media/list/?series=10376
+> 
+> Dikshita Agarwal (4):
+>    venus: add support for V4L2_PIX_FMT_P010 color format
+>    venus: update calculation for dpb buffers
+>    venus: add handling of bit depth change from firmwar
+>    venus: return P010 as preferred format for 10 bit decode
+> 
+>   drivers/media/platform/qcom/venus/helpers.c        | 24 ++++++++++++++++++++++
+>   drivers/media/platform/qcom/venus/hfi_plat_bufs.h  |  3 +++
+>   .../media/platform/qcom/venus/hfi_plat_bufs_v6.c   |  8 +++++++-
+>   drivers/media/platform/qcom/venus/vdec.c           | 16 +++++++++++++--
+>   4 files changed, 48 insertions(+), 3 deletions(-)
+> 
 
-> You assume that all 
-> code is running inside the kernel and needs to be perfect. 
+For future reference a series like this should:
 
-Yes, of course. It's kernel code.
+1. Include a log of what changed between the last series and this
+2. Describe which comments you addressed
+    I generally try to say
+    "Added newline to dts - Konrad"
+    "Sent the series as a -v3 - Bryan"
+    etc
+3. Ideally provide a link to the previous series in
+ 
+https://lore.kernel.org/linux-arm-msm/1682492417-20496-1-git-send-email-quic_dikshita@quicinc.com/
+4. Use versioning
+    This set should be prefixed with "v2-0000-cover-letter" 
+"v2-0001-add-support" etc
 
-If you're borrowing kernel code for your userland stuff, than it's up
-to you to take care of it.
+"git format-patch mybase..targettip --cover-letter -v2"
 
-There is no such thing like stable/fixed in-kernel APIs - it always has
-been this way.
-
-> But I think 
-> you could just aswell implement the next USB webcam V4L2 driver in Perl 
-> for that sake.
-
-That would't be v4l anymore.
-
-> The reason for my point of view, is that I think most of the drivers in 
-> media/ should run in user-space, and not inside the kernel.
-
-Feel free to provide fully userspace drivers for those devices, but
-that's totally unrelated to kernel development (no matter whether you're
-copying over kernel code into your userland project).
-
-> The example of secure V4L2 programming is already here:
-> https://github.com/hselasky/webcamd
-
-BSD code is not in scope of the LKML.
-
-> I would rather like more drive on that, than flowing down the Rust 
-> stream.
-
-Orthogonal topic.
-
-> Rust is cool, Java is cool, VM's are cool. The only bad about 
-> cool things, is that they are so slow. For many years I completely 
-> avoided C++ code for the sake it is very slow to compile, compared to 
-> bare C code. And when looking at how Firefox is building using Rust, I 
-> am a little worried, why we need so much code in there!
-
-Yes, compiling Rust is slow, compared to C. That's the price for
-sophisticated optimizations. How often do you have to do a full
-recompile ?
-
-> Engineering energy would be much more focused, if hardware vendors could 
-> agree more about what binary formats to use for their device protocols, 
-
-Indeed. But we (kernel folks) have no influence on that. If we could,
-we'd already standardized HW interfaces for lots of things and so only
-a small percentage of the drivers we currently have, while still
-supporting the same number of HW (or even more). But unfortunately thats
-not under our control. Therefore offtopic.
-
-> than changing the coding language, so that now anyone can be let loose 
-> to program in the Linux kernel without risking any damage.
-
-AFAIK, this discussion isn't about changing the kernel's programming
-language, but just adding language bindings, so some new drivers could
-be written in that language. If this really happens and you really want
-a C implementation, feel free to send patches.
-
-> The goal for Linux driver development should be fewer drivers and not 
-> more. 
-
-Depends on specific case. We already have lots of drivers that support
-wide range of devices. But it doesn't make sense having monster drivers
-for entirely different devices.
-
-> I don't want Linux to become the next Microsoft, with gigabytes 
-> of drivers which are never used for anything.
-
-Actually, we're doing a pretty good job of generalizing things that can
-be generalized (if you find room for more improvements, feel free to
-send patches). Nobody here seriously intents dropping the subsystem and
-lib architectures in favour of monolithic monster drivers like in
-Windows world.
-
-> The webcamd daemon already is close to 6 MBytes big on amd64 on FreeBSD. 
-> Inside there is support for 510 drivers (counting =y keywords), built 
-> straight off Linus Torvalds:
-
-You have ~500 drivers in one 6MB binary and blame us for writing too
-much code ? Maybe you should think about modularization (which we do
-have in the kernel).
-
-And, btw, FreeBSD is completely off-topic here.
-
-> The USB video class is great, instead of tons of GSPCA devices, then 
-> yeah, we don't need to drag around so much legacy binaries, just to make 
-> everyone happy. What did Apple do? Custom PCI webcam devices? Why can't 
-> they just stick with virtual USB devices, and then have a dual 
-> configured device, one config for their own HD codec, and one config for 
-> people like me, just needing the framebuffer.
-
-Well, they just could have an USB device layered on-top of a tiny PCI-
-USB bridge. We're the wrong to blame - talk to Apple.
-
-
---mtx
-
--- 
 ---
-Hinweis: unverschlüsselte E-Mails können leicht abgehört und manipuliert
-werden ! Für eine vertrauliche Kommunikation senden Sie bitte ihren
-GPG/PGP-Schlüssel zu.
----
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info@metux.net -- +49-151-27565287
+bod
