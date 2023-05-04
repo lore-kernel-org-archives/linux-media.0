@@ -2,61 +2,61 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E042C7EE23
-	for <linux-media@archiver.kernel.org>; Thu,  4 May 2023 08:01:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AB3AC7EE25
+	for <linux-media@archiver.kernel.org>; Thu,  4 May 2023 08:01:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbjEDIBy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 4 May 2023 04:01:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43510 "EHLO
+        id S230059AbjEDIB5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 4 May 2023 04:01:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229941AbjEDIBk (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 4 May 2023 04:01:40 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E483C1D
-        for <linux-media@vger.kernel.org>; Thu,  4 May 2023 01:01:36 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f13c577e36so185085e87.1
-        for <linux-media@vger.kernel.org>; Thu, 04 May 2023 01:01:36 -0700 (PDT)
+        with ESMTP id S230055AbjEDIBu (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 4 May 2023 04:01:50 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC6F7421B
+        for <linux-media@vger.kernel.org>; Thu,  4 May 2023 01:01:40 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f00d41df22so8585513e87.1
+        for <linux-media@vger.kernel.org>; Thu, 04 May 2023 01:01:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683187295; x=1685779295;
+        d=linaro.org; s=google; t=1683187299; x=1685779299;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pHuJqh6clnMhDFgSRdYKRfsY4OFox3kTZVS9qASymWE=;
-        b=zUipfNWaazL6ADynZcrfI01DUbRNogvA6LUhNvy2poxcQQzU2Jpsb0ktYJC/nSpVFf
-         DkqZSLSzujw/tun5InCQmu35+nV9qnAWVgoGQlOzqQqBMgpw//jzw2E/3xRqDvQ0W91y
-         KaEuNlbZYNYmCO+QChSO4QTI36SicJPWc33Z01H57/lVqzQNH90zBipn4cfencFclMqz
-         KkhcRtp4zyHBFgl3MlqCvU5dvDQ9C8rrbPMR7aHzZaUvUhg48RwhHcK5CcYfG3UdvHuY
-         FNyXAMDHDisRWW2jQifShPgdk61CGuq17aL9bRnNk1V5QX8nlnvsBPlzJ+gJtH80ixOz
-         wPwQ==
+        bh=tGZfzDtDtbp7luOgtk5iRa02ZQGrQVsSDa0gZJuVtLo=;
+        b=w3BJtmBXcJXJRwjtG4nutFaMmClGQ4CYwe0KrY7MKGyHrO0K94hQvAEEMr6d1UtzOM
+         /pvVqwMW+xZKloMnDFFFp8USqSH1UTzKwS0LRXKeQDJvAklxiHDFjsgKGngrCc+TfpUa
+         cXCayqpjXo7RwJ4Bh+h3XqzklV7gvVoEHUv5IDyLfYzTXUa4ZST3t1QjjUN3ZzlVmdKq
+         H+Ow9hEBZFbsdJtFiqui1t9QFksbbufSlnYd1Slqy5h2f0vkViO5/4FcOt7rom/toOMq
+         tSbklD81Wb39+TBVQs6hF/7qy7fGyjC+pGbB3X0fI6IthV57ejmjkG0zf97dFO5frJUd
+         C9WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683187295; x=1685779295;
+        d=1e100.net; s=20221208; t=1683187299; x=1685779299;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pHuJqh6clnMhDFgSRdYKRfsY4OFox3kTZVS9qASymWE=;
-        b=lZBYuQWsjo4scASrR6UMcn1XhpYOgM2BY4ZUEXFZJbr1TMJ2VDjkp7U+0Y6TluMJHI
-         j4uw9l14WApqFSe8T3NrIiC2cUourYHoPlzd7To2ETby09sK6vm3AhdIwK+f0xWSJsw/
-         nPeIU5oRgsoTf8QDdoE+F0tvDEeUF4EXVTn4jcVs1eY6TdVKX1gtKOh85u1PVKSo3+3U
-         QzSycbT+H1j2Avq9m+QDPHXhB45LhZiuASsx582dJPFkSWiwFOMe5J6zE9XkHEv4niZf
-         Yg7DyDOGzXPYEXTfSKacdfXvNADCTXgrkC3emtMGb7z8KAq1wh6+pSCNRIev1npz/FpJ
-         ZM0g==
-X-Gm-Message-State: AC+VfDzJIs+zsuh60s+TS9rrqmgF6EgU45uwQE7BOqQVvhSyU4lvep+v
-        WliMJdjmBu9md1s/o0Xxupn2Ow==
-X-Google-Smtp-Source: ACHHUZ4jXpNAXiNQ+8fkcQL4xLCnog3hMv3MDLsB0HYPtmUb77QHwSrtkX4hvj4cHiv5ONLcRZrciA==
-X-Received: by 2002:a19:7503:0:b0:4f0:4b:538f with SMTP id y3-20020a197503000000b004f0004b538fmr1601126lfe.29.1683187295132;
-        Thu, 04 May 2023 01:01:35 -0700 (PDT)
+        bh=tGZfzDtDtbp7luOgtk5iRa02ZQGrQVsSDa0gZJuVtLo=;
+        b=fx/iAF7qi0U0Wq4/w9WONseYmzZEi/FuAQ0LYIFYdfF+krKqss6j/SGDD2Ow/TceRh
+         ew53w0Sj44wBJsoWCM8ekVH6ikSy4RyxVpED+bq94boeq7TMMygbyuK4BOkY9IIht44V
+         9u/EMt6qfi8/39UqKqp+SuyW9aQhW3K9NMVORLqzMLIkLjduHvyRXBxDcTFss6vBMgHQ
+         iH+K0D3cyECq+VFGgQO9e528JG+hvhdVIvvfzh5s8UBdkOcMkxHG+W9+yH5VWuhLUiGc
+         q21RwsgtKP9jMkit29ifYSTiCSrJlWwrHytCuAPw8jmBytUhRfWbQw3LnDHv9fwqHFGW
+         88rw==
+X-Gm-Message-State: AC+VfDwtbTyG+q7PdnpZiPunLN8Pu9We3myX0iYO6+ziEaN45K0uFMOT
+        PNPH2Kf0Kkg40JnJpUsyFcCwgw==
+X-Google-Smtp-Source: ACHHUZ4SgSbZzRe+Cbjm53ZX1wv37cfpnxLas5HwxtmwYK+qMBrQ//pZ87lVL6eLlSNm18gnE/VEKg==
+X-Received: by 2002:ac2:5690:0:b0:4f1:4074:b4fd with SMTP id 16-20020ac25690000000b004f14074b4fdmr491615lfr.29.1683187298830;
+        Thu, 04 May 2023 01:01:38 -0700 (PDT)
 Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
-        by smtp.gmail.com with ESMTPSA id n26-20020ac2491a000000b004edc512515fsm917165lfi.47.2023.05.04.01.01.33
+        by smtp.gmail.com with ESMTPSA id n26-20020ac2491a000000b004edc512515fsm917165lfi.47.2023.05.04.01.01.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 01:01:34 -0700 (PDT)
+        Thu, 04 May 2023 01:01:38 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Thu, 04 May 2023 10:01:02 +0200
-Subject: [PATCH v2 06/18] media: venus: firmware: Leave a clue for
- homegrown porters
+Date:   Thu, 04 May 2023 10:01:04 +0200
+Subject: [PATCH v2 08/18] media: venus: core: Assign registers based on VPU
+ version
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230228-topic-venus-v2-6-d95d14949c79@linaro.org>
+Message-Id: <20230228-topic-venus-v2-8-d95d14949c79@linaro.org>
 References: <20230228-topic-venus-v2-0-d95d14949c79@linaro.org>
 In-Reply-To: <20230228-topic-venus-v2-0-d95d14949c79@linaro.org>
 To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
@@ -78,44 +78,48 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
         Vikash Garodia <quic_vgarodia@quicinc.com>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1683187284; l=1135;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1683187284; l=1460;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=EgjRQOY12/YgIbWH62eZ5y8nBX3H3pJik8G0F4SYRFY=;
- b=nQEw2k9F74MAxmf470Mil8wFjXEeWKtb4BAhs5r6xj+O8SHhrmSmWKpItUFOnSd0pmnBcqWBf
- EfAAgrecd0rDMOpthvvcK/aABUI8hm23nzqEXoXqbALT36JM+Qmn8SL
+ bh=m2Osp2Xf2pUATOq+7urWFmKXQd2Ed5bGWf9T651mWII=;
+ b=1Tkmqz2YbLpV0808lxCYKvHKCyO6BlreCh4HSpHw5yOUcSKTUVoZOggBR2sMnjj3Pjnsrc9zG
+ 2L32SF9lguJD1MZ7utfeL6JvH66cU0YdtMYj8QTo09aWzIA0og6EwmZ
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Leave a clue about where the seemingly magic values come from, as it
-is not obvious and requires some digging downstream..
+IRIS2(_1) has a different register map compared to other HFI6XX-
+using VPUs. AR50L uses the same offsets, but doesn't feature vbif_base
+and aon_base. Take care of it.
 
-Reviewed-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/media/platform/qcom/venus/firmware.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/media/platform/qcom/venus/core.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/firmware.c b/drivers/media/platform/qcom/venus/firmware.c
-index cfb11c551167..a4cd919e1dbe 100644
---- a/drivers/media/platform/qcom/venus/firmware.c
-+++ b/drivers/media/platform/qcom/venus/firmware.c
-@@ -241,6 +241,13 @@ int venus_boot(struct venus_core *core)
- 		return ret;
+diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
+index 01671dd23888..51cead91571d 100644
+--- a/drivers/media/platform/qcom/venus/core.c
++++ b/drivers/media/platform/qcom/venus/core.c
+@@ -246,14 +246,14 @@ static int venus_enumerate_codecs(struct venus_core *core, u32 type)
  
- 	if (core->use_tz && res->cp_size) {
-+		/*
-+		 * Clues for porting using downstream data:
-+		 * cp_start = 0
-+		 * cp_size = venus_ns/virtual-addr-pool[0] (yes, addr not size)
-+		 * cp_nonpixel_start = venus_sec_non_pixel/virtual-addr-pool[0]
-+		 * cp_nonpixel_size = venus_sec_non_pixel/virtual-addr-pool[1]
-+		 */
- 		ret = qcom_scm_mem_protect_video_var(res->cp_start,
- 						     res->cp_size,
- 						     res->cp_nonpixel_start,
+ static void venus_assign_register_offsets(struct venus_core *core)
+ {
+-	if (IS_V6(core)) {
+-		core->vbif_base = core->base + VBIF_BASE;
++	if (IS_AR50_LITE(core) || IS_IRIS2(core) || IS_IRIS2_1(core)) {
++		core->vbif_base = IS_AR50_LITE(core) ? NULL : core->base + VBIF_BASE;
+ 		core->cpu_base = core->base + CPU_BASE_V6;
+ 		core->cpu_cs_base = core->base + CPU_CS_BASE_V6;
+ 		core->cpu_ic_base = core->base + CPU_IC_BASE_V6;
+ 		core->wrapper_base = core->base + WRAPPER_BASE_V6;
+ 		core->wrapper_tz_base = core->base + WRAPPER_TZ_BASE_V6;
+-		core->aon_base = core->base + AON_BASE_V6;
++		core->aon_base = IS_AR50_LITE(core) ? NULL : core->base + AON_BASE_V6;
+ 	} else {
+ 		core->vbif_base = core->base + VBIF_BASE;
+ 		core->cpu_base = core->base + CPU_BASE;
 
 -- 
 2.40.1
