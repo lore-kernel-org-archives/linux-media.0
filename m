@@ -2,105 +2,75 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CACFC77B7D
-	for <linux-media@archiver.kernel.org>; Fri,  5 May 2023 06:46:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 924FDC77B7C
+	for <linux-media@archiver.kernel.org>; Fri,  5 May 2023 07:16:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbjEEGqG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 May 2023 02:46:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33124 "EHLO
+        id S230486AbjEEHQx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 5 May 2023 03:16:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231157AbjEEGqC (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 5 May 2023 02:46:02 -0400
+        with ESMTP id S230317AbjEEHQw (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 5 May 2023 03:16:52 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9AB04C12
-        for <linux-media@vger.kernel.org>; Thu,  4 May 2023 23:46:00 -0700 (PDT)
-Received: from ideasonboard.com (93-61-96-190.ip145.fastwebnet.it [93.61.96.190])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2CA046D6;
-        Fri,  5 May 2023 08:45:55 +0200 (CEST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F281609B
+        for <linux-media@vger.kernel.org>; Fri,  5 May 2023 00:16:50 -0700 (PDT)
+Received: from uno.LocalDomain (93-61-96-190.ip145.fastwebnet.it [93.61.96.190])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7B2247FC;
+        Fri,  5 May 2023 09:16:45 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1683269155;
-        bh=yoEkGtVbuBsc7IP5fV6h/nSW8zTJT+ua+JJ12N6E0cQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mFJ6W30QxYj6LsxM3qlHpx42CIn8JoLj1wpQusFC/wvZlZSTAe/HTY8CyVoLcJLU4
-         8GJ65yrKuk9h0zq7m10z0EAanMzKHMV/SWoxv9vxtgglyleqB+p+ZvKXW3RqDbqZeG
-         3EWWs/1XumDraHoy3pSwGS5/zPNg7VkcM6onm5rk=
-Date:   Fri, 5 May 2023 08:45:55 +0200
+        s=mail; t=1683271005;
+        bh=Z0DLyAQeWXzkOj8s0UWteNNulJvyxlF5ckKLl8Mnk20=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=CpF3RXTHan0MOZUuYCVVmf7+GkH8wadxm5dOu49v0DSjI2g2vdUIFeqlvVvqDQAJO
+         ZLhkosdya+apvm3GUH3PCL0Vbif47iz/VlmqwnG01RYvzj42mDVqyTWMdHIKnDbn5v
+         ZFMs0jq1IwwMMS2sSG+CsTKKgL2ey6YRGmBqEebE=
 From:   Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-To:     "G.N. Zhou (OSS)" <guoniu.zhou@oss.nxp.com>
-Cc:     linux-media@vger.kernel.org, mchehab@kernel.org,
-        jacopo.mondi@ideasonboard.com, slongerbeam@gmail.com,
-        laurent.pinchart@ideasonboard.com
-Subject: Re: [PATCH v2] media: ov5640: fix incorrect frame frate issue for
- defulat VGA
-Message-ID: <qrwnkofoyf5utyh7kepihb7vp5wqb657dbak4m7ecjej357i6v@swbdvakgtaby>
-References: <20230505020114.764715-1-guoniu.zhou@oss.nxp.com>
+To:     "Guoniu . zhou" <guoniu.zhou@nxp.com>
+Cc:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        slongerbeam@gmail.com, linux-media@vger.kernel.org,
+        mchehab@kernel.org
+Subject: [PATCH 1/2] media: ov5640: Remove unused 'framerate' parameter
+Date:   Fri,  5 May 2023 09:16:18 +0200
+Message-Id: <20230505071619.63229-2-jacopo.mondi@ideasonboard.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230505071619.63229-1-jacopo.mondi@ideasonboard.com>
+References: <20230505071619.63229-1-jacopo.mondi@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230505020114.764715-1-guoniu.zhou@oss.nxp.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello Guoniu Zhou
+The 'current framerate' parameter passed to ov5640_try_fmt_internal() is
+unsued. Drop it.
 
-On Fri, May 05, 2023 at 10:01:14AM +0800, G.N. Zhou (OSS) wrote:
-> From: "Guoniu.zhou" <guoniu.zhou@nxp.com>
->
-> If run OV5640 with default setting after power up, the real frame
-> rate for it is 60, not 30. The reason is default frame interval
-> parameter initialized in probe is 30 but default link frequency
-> is to generate 60 frame rate, so correct it.
->
-> Signed-off-by: Guoniu.zhou <guoniu.zhou@nxp.com>
-> Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+---
+ drivers/media/i2c/ov5640.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-I don't recall having given a tag :)
+diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+index 1536649b9e90..9bba3b0f8981 100644
+--- a/drivers/media/i2c/ov5640.c
++++ b/drivers/media/i2c/ov5640.c
+@@ -2815,7 +2815,6 @@ static int ov5640_get_fmt(struct v4l2_subdev *sd,
+ 
+ static int ov5640_try_fmt_internal(struct v4l2_subdev *sd,
+ 				   struct v4l2_mbus_framefmt *fmt,
+-				   enum ov5640_frame_rate fr,
+ 				   const struct ov5640_mode_info **new_mode)
+ {
+ 	struct ov5640_dev *sensor = to_ov5640_dev(sd);
+@@ -2975,8 +2974,7 @@ static int ov5640_set_fmt(struct v4l2_subdev *sd,
+ 		goto out;
+ 	}
+ 
+-	ret = ov5640_try_fmt_internal(sd, mbus_fmt,
+-				      sensor->current_fr, &new_mode);
++	ret = ov5640_try_fmt_internal(sd, mbus_fmt, &new_mode);
+ 	if (ret)
+ 		goto out;
+ 
+-- 
+2.40.1
 
-> ---
-> v1->v2:
->   1) fix typo issue(s/runn/run)
->   2) keep original OV5640 default link frequency
->   3) correct comments and frame_interval parameters to match actual
->      frame rate
-> ---
->  drivers/media/i2c/ov5640.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-> index 1536649b9e90..5c01bb9414c9 100644
-> --- a/drivers/media/i2c/ov5640.c
-> +++ b/drivers/media/i2c/ov5640.c
-> @@ -3851,11 +3851,11 @@ static int ov5640_probe(struct i2c_client *client)
->
->  	/*
->  	 * default init sequence initialize sensor to
-> -	 * YUV422 UYVY VGA@30fps
-> +	 * YUV422 UYVY VGA@60fps
->  	 */
->  	sensor->frame_interval.numerator = 1;
-> -	sensor->frame_interval.denominator = ov5640_framerates[OV5640_30_FPS];
-> -	sensor->current_fr = OV5640_30_FPS;
-> +	sensor->frame_interval.denominator = ov5640_framerates[OV5640_60_FPS];
-> +	sensor->current_fr = OV5640_60_FPS;
-
-If you want to change also the frame_interval setting (which is again
-used in parallel mode only) should you also change the .def_fps value
-in the ov5640_mode_data[VGA] entry ?
-
-To be honest I would leave parallel on 30FPS, unless you really want
-to and have a setup to test.
-
-We could simply update the comment with
-
-+	 * YUV422 UYVY VGA (30FPS in parallel mode, 60 in MIPI CSI-2  mode)
-
-What do you think ?
-
-
->  	sensor->current_mode =
->  		&ov5640_mode_data[OV5640_MODE_VGA_640_480];
->  	sensor->last_mode = sensor->current_mode;
-> --
-> 2.37.1
->
