@@ -2,52 +2,52 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61F10C77B7C
-	for <linux-media@archiver.kernel.org>; Fri,  5 May 2023 21:53:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31741C77B75
+	for <linux-media@archiver.kernel.org>; Fri,  5 May 2023 21:53:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233577AbjEEVxL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 May 2023 17:53:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52566 "EHLO
+        id S233666AbjEEVxN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 5 May 2023 17:53:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233505AbjEEVxI (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 5 May 2023 17:53:08 -0400
+        with ESMTP id S233627AbjEEVxK (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 5 May 2023 17:53:10 -0400
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A2D4C37
-        for <linux-media@vger.kernel.org>; Fri,  5 May 2023 14:53:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 034984ECF
+        for <linux-media@vger.kernel.org>; Fri,  5 May 2023 14:53:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683323587; x=1714859587;
+  t=1683323588; x=1714859588;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=xDj0tJLUEPW8cSNaxQvpW6xpEtqbvA5sN/gZkh5ZYpE=;
-  b=ekDkUZozbnxz0K0wRfVybnB9fVTktongwZhtM/uH1I/XzdCJUJmMN3Ug
-   I95ephM0NcqBJNcVQN1Jan5TcfPYzGjIf0M/U6thfea1wMmGSI/TEp6DE
-   4HLZHbfaxksDHRqNoIOfWH/NqaQuNqGYsjyD+BLFD2dZusq5UgqM90sXX
-   fNhNkPHXFq82sUuBcSRQjZsTD4GIBIXgFUIk+7VGeV/1x05ODRSfT0RYC
-   Ze3xFCSbDXxGipaJFrvZG4hw/IUdovjf1K8UhlYnyIqOBYmfpbOTyQzei
-   PX+UJlQv+EiE6baEGRu6yCjLXiSxn85litpEs82o83z7QS3NIqli+dS8k
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="328925844"
+  bh=PuBUFxBezyIHCdrKqd1+uqhhvDLY//GiI77j0EPWuxo=;
+  b=JXSni1FqptfXaixav7uJzC4mM9mUF33dfM6kkttdDknDaaiFpiQJqbWG
+   QxK/UKGWxz9i2I2Mh8xy+k9w4IGxBQdHAvyZ+yng5KZgu5kustbVxB7Zl
+   e+vhEbmHgvWFT8IMc4XX36aHRCfm9b4BZXB7PTvE2V5bkiUZ/6MbJ2RoP
+   h2PpoJZ2nS9DcyMf9vhlNKTKHiDMRnm7iMKUs0s16wxCxab1i/xBlgJht
+   dl2fD6ldkrzJb+1KVbLu7nAcNym+cTtvARzY5O05JKXK0AQzXcIXBYXAS
+   cmGZpZW1biGftZSWOYMNYnmxG4Akg+vyp+H1j4K/ffJNqrzu/jgS5lC7Y
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="328925850"
 X-IronPort-AV: E=Sophos;i="5.99,253,1677571200"; 
-   d="scan'208";a="328925844"
+   d="scan'208";a="328925850"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 14:53:07 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 14:53:08 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="700626145"
+X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="700626155"
 X-IronPort-AV: E=Sophos;i="5.99,253,1677571200"; 
-   d="scan'208";a="700626145"
+   d="scan'208";a="700626155"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 14:53:05 -0700
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 14:53:07 -0700
 Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id 27F8C1227C1;
-        Sat,  6 May 2023 00:53:03 +0300 (EEST)
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id C2B3212244C;
+        Sat,  6 May 2023 00:53:04 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com, tomi.valkeinen@ideasonboard.com,
         bingbu.cao@intel.com, hongju.wang@intel.com
-Subject: [RFC 5/7] media: uapi: Add generic serial metadata mbus formats
-Date:   Sat,  6 May 2023 00:52:55 +0300
-Message-Id: <20230505215257.60704-6-sakari.ailus@linux.intel.com>
+Subject: [RFC 7/7] media: v4l: Support line-based metadata capture
+Date:   Sat,  6 May 2023 00:52:57 +0300
+Message-Id: <20230505215257.60704-8-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230505215257.60704-1-sakari.ailus@linux.intel.com>
 References: <20230505215257.60704-1-sakari.ailus@linux.intel.com>
@@ -57,303 +57,100 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add generic serial metadata mbus formats. These formats describe data
-width and packing but not the content itself. The reason for specifying
-such formats is that the formats as such are fairly device specific but
-they are still handled by CSI-2 receiver drivers that should not be aware
-of device specific formats. What makes generic metadata formats possible
-is that these formats are parsed by software only, after capturing the
-data to system memory.
+many camera sensors, among other devices, transmit embedded data and image
+data for each CSI-2 frame. This embedded data typically contains register
+configuration of the sensor that has been used to capture the image data
+of the same frame.
+
+The embedded data is received by the CSI-2 receiver and has the same
+properties as the image data, including that it is line based: it has
+width, height and bytesperline (stride).
+
+Add these fields to struct v4l2_meta_format and document them.
+
+Also add V4L2_FMT_FLAG_META_LINE_BASED to tell a given format is
+line-based i.e. these fields of struct v4l2_meta_format are valid for it.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- .../media/v4l/subdev-formats.rst              | 257 ++++++++++++++++++
- include/uapi/linux/media-bus-format.h         |   9 +
- 2 files changed, 266 insertions(+)
+ .../userspace-api/media/v4l/dev-meta.rst          | 15 +++++++++++++++
+ .../userspace-api/media/v4l/vidioc-enum-fmt.rst   |  7 +++++++
+ include/uapi/linux/videodev2.h                    | 10 ++++++++++
+ 3 files changed, 32 insertions(+)
 
-diff --git a/Documentation/userspace-api/media/v4l/subdev-formats.rst b/Documentation/userspace-api/media/v4l/subdev-formats.rst
-index a3a35eeed708..1492fff58426 100644
---- a/Documentation/userspace-api/media/v4l/subdev-formats.rst
-+++ b/Documentation/userspace-api/media/v4l/subdev-formats.rst
-@@ -8234,3 +8234,260 @@ The following table lists the existing metadata formats.
- 	both sides of the link and the bus format is a fixed
- 	metadata format that is not configurable from userspace.
- 	Width and height will be set to 0 for this format.
-+
-+Generic Serial Metadata Formats
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-+
-+Generic serial metadata formats are used on serial busses where the actual data
-+content is more or less device specific but the data is transmitted and received
-+by multiple devices that do not process the data in any way, simply writing
-+it to system memory for processing in software at the end of the pipeline.
-+
-+The more specific variant describing the actual data is used on the internal
-+source pad of the originating sub-device.
-+
-+"b" in an array cell signifies a byte of data, followed by the number of byte
-+and finally the bit number in subscript. "p" indicates a padding bit.
-+
-+.. _media-bus-format-generic-meta:
-+
-+.. cssclass: longtable
-+
-+.. flat-table:: Generic Serial Metadata Formats
-+    :header-rows:  2
-+    :stub-columns: 0
-+
-+    * - Identifier
-+      - Code
-+      -
-+      - :cspan:`23` Data organization
-+    * -
-+      -
-+      - Bit
-+      - 23
-+      - 22
-+      - 21
-+      - 20
-+      - 19
-+      - 18
-+      - 17
-+      - 16
-+      - 15
-+      - 14
-+      - 13
-+      - 12
-+      - 11
-+      - 10
-+      - 9
-+      - 8
-+      - 7
-+      - 6
-+      - 5
-+      - 4
-+      - 3
-+      - 2
-+      - 1
-+      - 0
-+    * .. _MEDIA-BUS-FMT-META-1X8-8:
-+
-+      - MEDIA_BUS_FMT_META_1X8_8
-+      - 0x8001
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      - b0\ :sub:`7`
-+      - b0\ :sub:`6`
-+      - b0\ :sub:`5`
-+      - b0\ :sub:`4`
-+      - b0\ :sub:`3`
-+      - b0\ :sub:`2`
-+      - b0\ :sub:`1`
-+      - b0\ :sub:`0`
-+    * .. _MEDIA-BUS-FMT-META-1X8-10:
-+
-+      - MEDIA_BUS_FMT_META_1X8_10
-+      - 0x8002
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      - b0\ :sub:`7`
-+      - b0\ :sub:`6`
-+      - b0\ :sub:`5`
-+      - b0\ :sub:`4`
-+      - b0\ :sub:`3`
-+      - b0\ :sub:`2`
-+      - b0\ :sub:`1`
-+      - b0\ :sub:`0`
-+      - p
-+      - p
-+    * .. _MEDIA-BUS-FMT-META-1X8-12:
-+
-+      - MEDIA_BUS_FMT_META_1X8_12
-+      - 0x8003
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      - b0\ :sub:`7`
-+      - b0\ :sub:`6`
-+      - b0\ :sub:`5`
-+      - b0\ :sub:`4`
-+      - b0\ :sub:`3`
-+      - b0\ :sub:`2`
-+      - b0\ :sub:`1`
-+      - b0\ :sub:`0`
-+      - p
-+      - p
-+      - p
-+      - p
-+    * .. _MEDIA-BUS-FMT-META-1X8-14:
-+
-+      - MEDIA_BUS_FMT_META_1X8_14
-+      - 0x8004
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      - b0\ :sub:`7`
-+      - b0\ :sub:`6`
-+      - b0\ :sub:`5`
-+      - b0\ :sub:`4`
-+      - b0\ :sub:`3`
-+      - b0\ :sub:`2`
-+      - b0\ :sub:`1`
-+      - b0\ :sub:`0`
-+      - p
-+      - p
-+      - p
-+      - p
-+      - p
-+      - p
-+    * .. _MEDIA-BUS-FMT-META-1X8-16:
-+
-+      - MEDIA_BUS_FMT_META_1X8_16
-+      - 0x8005
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      -
-+      - b0\ :sub:`7`
-+      - b0\ :sub:`6`
-+      - b0\ :sub:`5`
-+      - b0\ :sub:`4`
-+      - b0\ :sub:`3`
-+      - b0\ :sub:`2`
-+      - b0\ :sub:`1`
-+      - b0\ :sub:`0`
-+      - p
-+      - p
-+      - p
-+      - p
-+      - p
-+      - p
-+      - p
-+      - p
-+    * .. _MEDIA-BUS-FMT-META-1X8-20:
-+
-+      - MEDIA_BUS_FMT_META_1X8_20
-+      - 0x8007
-+      -
-+      -
-+      -
-+      -
-+      -
-+      - b0\ :sub:`7`
-+      - b0\ :sub:`6`
-+      - b0\ :sub:`5`
-+      - b0\ :sub:`4`
-+      - b0\ :sub:`3`
-+      - b0\ :sub:`2`
-+      - b0\ :sub:`1`
-+      - b0\ :sub:`0`
-+      - p
-+      - p
-+      - p
-+      - p
-+      - p
-+      - p
-+      - p
-+      - p
-+      - p
-+      - p
-+      - p
-+      - p
-+    * .. _MEDIA-BUS-FMT-META-1X8-24:
-+
-+      - MEDIA_BUS_FMT_META_1X8_24
-+      - 0x8009
-+      -
-+      - b0\ :sub:`7`
-+      - b0\ :sub:`6`
-+      - b0\ :sub:`5`
-+      - b0\ :sub:`4`
-+      - b0\ :sub:`3`
-+      - b0\ :sub:`2`
-+      - b0\ :sub:`1`
-+      - b0\ :sub:`0`
-+      - p
-+      - p
-+      - p
-+      - p
-+      - p
-+      - p
-+      - p
-+      - p
-+      - p
-+      - p
-+      - p
-+      - p
-+      - p
-+      - p
-+      - p
-+      - p
-diff --git a/include/uapi/linux/media-bus-format.h b/include/uapi/linux/media-bus-format.h
-index a03c543cb072..722463523bbd 100644
---- a/include/uapi/linux/media-bus-format.h
-+++ b/include/uapi/linux/media-bus-format.h
-@@ -173,4 +173,13 @@
-  */
- #define MEDIA_BUS_FMT_METADATA_FIXED		0x7001
+diff --git a/Documentation/userspace-api/media/v4l/dev-meta.rst b/Documentation/userspace-api/media/v4l/dev-meta.rst
+index 0e7e1ee1471a..7d3a64514db0 100644
+--- a/Documentation/userspace-api/media/v4l/dev-meta.rst
++++ b/Documentation/userspace-api/media/v4l/dev-meta.rst
+@@ -65,3 +65,18 @@ to 0.
+       - ``buffersize``
+       - Maximum buffer size in bytes required for data. The value is set by the
+         driver.
++    * - __u32
++      - ``width``
++      - Width of a line of metadata in bytes. Valid when :c:type`v4l2_fmtdesc`
++	flag ``V4L2_FMT_FLAG_META_LINE_BASED`` is set, otherwise zero. See
++	:c:func:`VIDIOC_ENUM_FMT`.
++    * - __u32
++      - ``height``
++      - Height of a line of metadata in bytes. Valid when :c:type`v4l2_fmtdesc`
++	flag ``V4L2_FMT_FLAG_META_LINE_BASED`` is set, otherwise zero. See
++	:c:func:`VIDIOC_ENUM_FMT`.
++    * - __u32
++      - ``bytesperlines``
++      - Offset in bytes between the beginning of two consecutive lines. Valid
++	when :c:type`v4l2_fmtdesc` flag ``V4L2_FMT_FLAG_META_LINE_BASED`` is
++	set, otherwise zero. See :c:func:`VIDIOC_ENUM_FMT`.
+diff --git a/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst b/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
+index 000c154b0f98..6d7664345a4e 100644
+--- a/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
++++ b/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
+@@ -227,6 +227,13 @@ the ``mbus_code`` field is handled differently:
+ 	The application can ask to configure the quantization of the capture
+ 	device when calling the :ref:`VIDIOC_S_FMT <VIDIOC_G_FMT>` ioctl with
+ 	:ref:`V4L2_PIX_FMT_FLAG_SET_CSC <v4l2-pix-fmt-flag-set-csc>` set.
++    * - ``V4L2_FMT_FLAG_META_LINE_BASED``
++      - 0x0200
++      - The metadata format is line-based. In this case the ``width``,
++	``height`` and ``bytesperline`` fields of :c:type:`v4l2_meta_format` are
++	valid. The buffer consists of ``height`` lines, each having ``width``
++	bytes of data and offset between the beginning of each two consecutive
++	lines is ``bytesperline``.
  
-+/* Generic line based metadata formats for serial buses. Next is 0x800b. */
-+#define MEDIA_BUS_FMT_META_1X8_8		0x8001
-+#define MEDIA_BUS_FMT_META_1X8_10		0x8002
-+#define MEDIA_BUS_FMT_META_1X8_12		0x8003
-+#define MEDIA_BUS_FMT_META_1X8_14		0x8004
-+#define MEDIA_BUS_FMT_META_1X8_16		0x8005
-+#define MEDIA_BUS_FMT_META_1X8_20		0x8007
-+#define MEDIA_BUS_FMT_META_1X8_24		0x8009
-+
- #endif /* __LINUX_MEDIA_BUS_FORMAT_H */
+ Return Value
+ ============
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index adcbdc15dcdb..3681b2c15901 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -873,6 +873,7 @@ struct v4l2_fmtdesc {
+ #define V4L2_FMT_FLAG_CSC_YCBCR_ENC		0x0080
+ #define V4L2_FMT_FLAG_CSC_HSV_ENC		V4L2_FMT_FLAG_CSC_YCBCR_ENC
+ #define V4L2_FMT_FLAG_CSC_QUANTIZATION		0x0100
++#define V4L2_FMT_FLAG_META_LINE_BASED		0x0200
+ 
+ 	/* Frame Size and frame rate enumeration */
+ /*
+@@ -2407,10 +2408,19 @@ struct v4l2_sdr_format {
+  * struct v4l2_meta_format - metadata format definition
+  * @dataformat:		little endian four character code (fourcc)
+  * @buffersize:		maximum size in bytes required for data
++ * @width:		number of bytes of data per line (valid for line based
++ *			formats only, see format documentation)
++ * @height:		number of lines of data per buffer (valid for line based
++ *			formats only)
++ * @bytesperline:	offset between the beginnings of two adjacent lines in
++ *			bytes (valid for line based formats only)
+  */
+ struct v4l2_meta_format {
+ 	__u32				dataformat;
+ 	__u32				buffersize;
++	__u32				width;
++	__u32				height;
++	__u32				bytesperline;
+ } __attribute__ ((packed));
+ 
+ /**
 -- 
 2.30.2
 
