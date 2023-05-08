@@ -2,70 +2,99 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E0D6C77B7F
-	for <linux-media@archiver.kernel.org>; Mon,  8 May 2023 09:20:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 615D1C77B73
+	for <linux-media@archiver.kernel.org>; Mon,  8 May 2023 09:28:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233223AbjEHJUT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 May 2023 05:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
+        id S233098AbjEHJ2E (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 May 2023 05:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232854AbjEHJUS (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 8 May 2023 05:20:18 -0400
-Received: from meesny.iki.fi (meesny.iki.fi [195.140.195.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6B39ED0
-        for <linux-media@vger.kernel.org>; Mon,  8 May 2023 02:20:17 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (dkzdf0gkyyyyyyyyyyyyt-3.rev.dnainternet.fi [IPv6:2001:14ba:4506:4f15::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by meesny.iki.fi (Postfix) with ESMTPSA id 4QFG3L14xBzyVR;
-        Mon,  8 May 2023 12:20:13 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1683537615;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=3r5qm0pjmIPtNFgLGq2IBvBt0ihvgT4nbOaE3XK8zLg=;
-        b=JtyqtTZcuwCXcGrvE0xFS3zyfEPWP3oPpCYHG88BU68o9EQ1hZeBxm9il8rQacBNFH96lm
-        c/FF6xbPGA0W9h/kG6tB2UHa9kgSux5V9l5vvZn6KAAlGXaujHV0AQ76PenTFqmCDOHHyX
-        TXGd8AgI93nBNjPNuAFYxu/QcdLmFag=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1683537615;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=3r5qm0pjmIPtNFgLGq2IBvBt0ihvgT4nbOaE3XK8zLg=;
-        b=sB6ZFzddy6TN1fPXPiROE54zcy1N3QIjGeaJOppcqCO/pkzfsJyIndueLe+4xxy53YK1yP
-        82+ElI5cfPUdY/9qHghYaze+RU+DVLhxC0Xyx3LAzYk1Xcwd8GWjwSxLjAHWGHOxjLCbw4
-        YRVjSitYWA18xX2lAtCIsvDgqe4Tznw=
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1683537615; a=rsa-sha256; cv=none;
-        b=mL/NS/hwdCPAWnHNJ4R3XhOZIofvA/PcHzSqyubJHS30JCzpZHLWSlDjNCmb5ZZqdSfJYq
-        Km3IrVOjgmfiEd+g42joKBx2bnqiMgSK7lBVv1bmnbrj6Aip/oEsAeiff7VQjIaV9f91+z
-        j1c4+zG0PS5D1++29uJ+nS1XcVdtsF4=
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 60997634C91;
-        Mon,  8 May 2023 12:20:13 +0300 (EEST)
-Date:   Mon, 8 May 2023 12:20:13 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com,
-        bingbu.cao@intel.com, tomi.valkeinen@ideasonboard.com
-Subject: Re: [PATCH 0/3] Random cleanups
-Message-ID: <ZFi+zWx9VytoJSCl@valkosipuli.retiisi.eu>
+        with ESMTP id S232753AbjEHJ2B (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 8 May 2023 05:28:01 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA563FD
+        for <linux-media@vger.kernel.org>; Mon,  8 May 2023 02:27:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683538064; x=1715074064;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/DH1tNXODE5JyGXdPwyv8eF6C5DiOTbrw+x1Km7ohXA=;
+  b=KynGiIe9ShOSalWeTCcTAC63AroC/y1bVAM7+JOooyvirT3kvAIf6SiY
+   4a33/kXowdL11X5HzHvzENh2D9zvPTYcdmD0b4VxmpwoUzpVyobKmBO0w
+   yx1D7fDRzPWokbQNcgXZl8Lv+iU9iVQQ97oL1CdjUAaqseqlkNrseJ4yo
+   rCKxheOzpLROdfiNSsibcXAeoEhfiIi+9g4FZVedsg8NHvdjbji8hSM7m
+   Ol13Rx2tJ7jOueI6SAXznIbMUjLFEq5A6u9Omlpre4MI30SCdncO8KN3e
+   QByTrnzVyf+Fw045LJ7ifN+Fpt+diUC7diYtHBvli63u5g9ZNM5joR+wW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="415159362"
+X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
+   d="scan'208";a="415159362"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 02:27:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="810191832"
+X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
+   d="scan'208";a="810191832"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 02:27:42 -0700
+Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id CFCAA1203DA;
+        Mon,  8 May 2023 12:17:53 +0300 (EEST)
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     laurent.pinchart@ideasonboard.com, bingbu.cao@intel.com
+Subject: [PATCH v2 0/3] Random cleanups
+Date:   Mon,  8 May 2023 12:17:50 +0300
+Message-Id: <20230508091753.80803-1-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230508091753.80803-1-sakari.ailus@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This was meant to be v2.
+Hi all,
+
+These three patches are seemingly random cleanups but are a pre-requisite
+for another set for supporting generic metadata formats. I'll post that
+set separately. These three should be merged independently though.
+
+since v1:
+
+- Use _BITUL macro instead.
+
+- Also add U after 0.
+
+Sakari Ailus (3):
+  media: mc: Make media_get_pad_index() use pad type flag
+  media: Documentation: Rename meta format files
+  media: uapi: Use _BITUL macro for assigning bits in u32 fields
+
+ .../userspace-api/media/v4l/meta-formats.rst  | 14 +++----
+ ...{pixfmt-meta-d4xx.rst => metafmt-d4xx.rst} |  0
+ ...-intel-ipu3.rst => metafmt-intel-ipu3.rst} |  0
+ ...fmt-meta-rkisp1.rst => metafmt-rkisp1.rst} |  0
+ .../{pixfmt-meta-uvc.rst => metafmt-uvc.rst}  |  0
+ ...ixfmt-meta-vivid.rst => metafmt-vivid.rst} |  0
+ ...meta-vsp1-hgo.rst => metafmt-vsp1-hgo.rst} |  0
+ ...meta-vsp1-hgt.rst => metafmt-vsp1-hgt.rst} |  0
+ MAINTAINERS                                   |  4 +-
+ drivers/media/dvb-core/dvbdev.c               |  4 +-
+ drivers/media/mc/mc-entity.c                  | 16 +++-----
+ drivers/media/usb/au0828/au0828-core.c        |  2 +-
+ drivers/media/v4l2-core/v4l2-mc.c             | 38 ++++++++++++-------
+ include/media/media-entity.h                  |  4 +-
+ include/uapi/linux/media.h                    | 30 +++++++--------
+ 15 files changed, 59 insertions(+), 53 deletions(-)
+ rename Documentation/userspace-api/media/v4l/{pixfmt-meta-d4xx.rst => metafmt-d4xx.rst} (100%)
+ rename Documentation/userspace-api/media/v4l/{pixfmt-meta-intel-ipu3.rst => metafmt-intel-ipu3.rst} (100%)
+ rename Documentation/userspace-api/media/v4l/{pixfmt-meta-rkisp1.rst => metafmt-rkisp1.rst} (100%)
+ rename Documentation/userspace-api/media/v4l/{pixfmt-meta-uvc.rst => metafmt-uvc.rst} (100%)
+ rename Documentation/userspace-api/media/v4l/{pixfmt-meta-vivid.rst => metafmt-vivid.rst} (100%)
+ rename Documentation/userspace-api/media/v4l/{pixfmt-meta-vsp1-hgo.rst => metafmt-vsp1-hgo.rst} (100%)
+ rename Documentation/userspace-api/media/v4l/{pixfmt-meta-vsp1-hgt.rst => metafmt-vsp1-hgt.rst} (100%)
 
 -- 
-Sakari Ailus
+2.30.2
+
