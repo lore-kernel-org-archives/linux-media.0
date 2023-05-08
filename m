@@ -2,276 +2,155 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46015C7EE22
-	for <linux-media@archiver.kernel.org>; Mon,  8 May 2023 09:28:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3888C77B75
+	for <linux-media@archiver.kernel.org>; Mon,  8 May 2023 09:41:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233695AbjEHJ2X (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 May 2023 05:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59718 "EHLO
+        id S233120AbjEHJlG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 May 2023 05:41:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233725AbjEHJ2S (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 8 May 2023 05:28:18 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB1922F64
-        for <linux-media@vger.kernel.org>; Mon,  8 May 2023 02:28:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683538096; x=1715074096;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ayxhnRIeh+yLoEVgha/DBkkn2S1YgpSzN+HcXyFzzLA=;
-  b=eRJi7gkV1h9D38N0XirvYM+X2X8tVm4PS+JaUhY+PaFwWiFrAgaI8vvs
-   FS2QQybO54aMby8auXih6Eu4qUpxOmPOoNAdV1TybfDrKJH8UZSRIBEwQ
-   bGV8eLWbUNtND0DEfYQBZnGakv/9ezmP6KLvdnLxf2XTXBvnhinqueH6d
-   zQ4UXv6t7As5yPEXFvK0hi9H6j6ILv4hJVQqiRGC+BSPwWpAwedqnFnMN
-   Wqwe8rnaYIs6SqEs7FqJqGL5Kb4t45VRAYyn67AoVfCZzDg3NBLfYS1vD
-   egs1l7OgEJ0EP/vqu68nalXsRWV/NWQd4INHOUj0O1LQ5VEeh8oYFzoMd
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="415159369"
-X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
-   d="scan'208";a="415159369"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 02:27:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="810191835"
-X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
-   d="scan'208";a="810191835"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 02:27:42 -0700
-Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id 9616F120C31;
-        Mon,  8 May 2023 12:17:54 +0300 (EEST)
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Cc:     laurent.pinchart@ideasonboard.com, bingbu.cao@intel.com
-Subject: [PATCH 1/3] media: mc: Make media_get_pad_index() use pad type flag
-Date:   Mon,  8 May 2023 12:17:51 +0300
-Message-Id: <20230508091753.80803-2-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230508091753.80803-1-sakari.ailus@linux.intel.com>
+        with ESMTP id S233076AbjEHJlD (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 8 May 2023 05:41:03 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE294233
+        for <linux-media@vger.kernel.org>; Mon,  8 May 2023 02:40:53 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (softbank126090219015.bbtec.net [126.90.219.15])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9A07C755;
+        Mon,  8 May 2023 11:40:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1683538844;
+        bh=QG+h8Y9Pn/m4QMEq33jnPrUsaIQR09h6DWjTcdanGoY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u4om92YdZ0UBeNUMAXmlS5T1BcykokrER24lFilcQlnZujIK1z53O6FikT4OqZOR+
+         KY8WXLJM93E+frK3AxndLgbQyeZoR1FjVmNSjsGQL6YmzoeNBAkHe2TGnVqzD5oy7C
+         yXZXCdDFe+wb6ynhAXKoSiJFmGsO0QpwEzAxjbEM=
+Date:   Mon, 8 May 2023 12:41:02 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-media@vger.kernel.org, bingbu.cao@intel.com
+Subject: Re: [PATCH 3/3] media: uapi: Use _BITUL macro for assigning bits in
+ u32 fields
+Message-ID: <20230508094102.GW23514@pendragon.ideasonboard.com>
 References: <20230508091753.80803-1-sakari.ailus@linux.intel.com>
+ <20230508091753.80803-4-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230508091753.80803-4-sakari.ailus@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use the pad flag specifying the pad type instead of a boolean in
-preparation for internal source pads.
+Hi Sakari,
 
-Also make the loop variable unsigned.
+Thank you for the patch.
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
----
- drivers/media/dvb-core/dvbdev.c        |  4 +--
- drivers/media/mc/mc-entity.c           | 16 ++++-------
- drivers/media/usb/au0828/au0828-core.c |  2 +-
- drivers/media/v4l2-core/v4l2-mc.c      | 38 +++++++++++++++++---------
- include/media/media-entity.h           |  4 +--
- 5 files changed, 35 insertions(+), 29 deletions(-)
+On Mon, May 08, 2023 at 12:17:53PM +0300, Sakari Ailus wrote:
+> Use _BITUL macro for assigning bits in u32 fields. While this is a good
+> practice, there doesn't appear to be a bug that this patch would fix. For
+> multi-bit fields, use U notation (for unsigned int).
+> 
+> The patch has been generated using the following command:
+> 
+> 	perl -i -pe 's/\([0-9]+\K <</U <</g;
+> 		s/\(1U\s*<<\s*([0-9]+)\)$/_BITUL($1)/
+> 			if ! /MEDIA_LNK_FL_INTERFACE_LINK/
+> 		s/\|\s*0\K\)/U\)/' --
+> 		include/uapi/linux/media.h
+> 
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-diff --git a/drivers/media/dvb-core/dvbdev.c b/drivers/media/dvb-core/dvbdev.c
-index 0ed087caf7f3..0091b5375e45 100644
---- a/drivers/media/dvb-core/dvbdev.c
-+++ b/drivers/media/dvb-core/dvbdev.c
-@@ -707,7 +707,7 @@ int dvb_create_media_graph(struct dvb_adapter *adap,
- 						     MEDIA_LNK_FL_ENABLED,
- 						     false);
- 		} else {
--			pad_sink = media_get_pad_index(tuner, true,
-+			pad_sink = media_get_pad_index(tuner, MEDIA_PAD_FL_SINK,
- 						       PAD_SIGNAL_ANALOG);
- 			if (pad_sink < 0)
- 				return -EINVAL;
-@@ -725,7 +725,7 @@ int dvb_create_media_graph(struct dvb_adapter *adap,
- 
- 	if (ntuner && ndemod) {
- 		/* NOTE: first found tuner source pad presumed correct */
--		pad_source = media_get_pad_index(tuner, false,
-+		pad_source = media_get_pad_index(tuner, MEDIA_PAD_FL_SOURCE,
- 						 PAD_SIGNAL_ANALOG);
- 		if (pad_source < 0)
- 			return -EINVAL;
-diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
-index e7216a985ba6..ef34ddd715c9 100644
---- a/drivers/media/mc/mc-entity.c
-+++ b/drivers/media/mc/mc-entity.c
-@@ -1052,25 +1052,19 @@ static void __media_entity_remove_link(struct media_entity *entity,
- 	kfree(link);
- }
- 
--int media_get_pad_index(struct media_entity *entity, bool is_sink,
-+int media_get_pad_index(struct media_entity *entity, u32 pad_type,
- 			enum media_pad_signal_type sig_type)
- {
--	int i;
--	bool pad_is_sink;
-+	unsigned int i;
- 
- 	if (!entity)
- 		return -EINVAL;
- 
- 	for (i = 0; i < entity->num_pads; i++) {
--		if (entity->pads[i].flags & MEDIA_PAD_FL_SINK)
--			pad_is_sink = true;
--		else if (entity->pads[i].flags & MEDIA_PAD_FL_SOURCE)
--			pad_is_sink = false;
--		else
--			continue;	/* This is an error! */
--
--		if (pad_is_sink != is_sink)
-+		if ((entity->pads[i].flags &
-+		     (MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_SOURCE)) != pad_type)
- 			continue;
-+
- 		if (entity->pads[i].sig_type == sig_type)
- 			return i;
- 	}
-diff --git a/drivers/media/usb/au0828/au0828-core.c b/drivers/media/usb/au0828/au0828-core.c
-index b3a09d3ac7d2..1e246b47766d 100644
---- a/drivers/media/usb/au0828/au0828-core.c
-+++ b/drivers/media/usb/au0828/au0828-core.c
-@@ -250,7 +250,7 @@ static void au0828_media_graph_notify(struct media_entity *new,
- 
- create_link:
- 	if (decoder && mixer) {
--		ret = media_get_pad_index(decoder, false,
-+		ret = media_get_pad_index(decoder, MEDIA_PAD_FL_SOURCE,
- 					  PAD_SIGNAL_AUDIO);
- 		if (ret >= 0)
- 			ret = media_create_pad_link(decoder, ret,
-diff --git a/drivers/media/v4l2-core/v4l2-mc.c b/drivers/media/v4l2-core/v4l2-mc.c
-index bf0c18100664..209a7efd08fe 100644
---- a/drivers/media/v4l2-core/v4l2-mc.c
-+++ b/drivers/media/v4l2-core/v4l2-mc.c
-@@ -105,9 +105,11 @@ int v4l2_mc_create_media_graph(struct media_device *mdev)
- 	/* Link the tuner and IF video output pads */
- 	if (tuner) {
- 		if (if_vid) {
--			pad_source = media_get_pad_index(tuner, false,
-+			pad_source = media_get_pad_index(tuner,
-+							 MEDIA_PAD_FL_SOURCE,
- 							 PAD_SIGNAL_ANALOG);
--			pad_sink = media_get_pad_index(if_vid, true,
-+			pad_sink = media_get_pad_index(if_vid,
-+						       MEDIA_PAD_FL_SINK,
- 						       PAD_SIGNAL_ANALOG);
- 			if (pad_source < 0 || pad_sink < 0) {
- 				dev_warn(mdev->dev, "Couldn't get tuner and/or PLL pad(s): (%d, %d)\n",
-@@ -122,9 +124,11 @@ int v4l2_mc_create_media_graph(struct media_device *mdev)
- 				return ret;
- 			}
- 
--			pad_source = media_get_pad_index(if_vid, false,
-+			pad_source = media_get_pad_index(if_vid,
-+							 MEDIA_PAD_FL_SOURCE,
- 							 PAD_SIGNAL_ANALOG);
--			pad_sink = media_get_pad_index(decoder, true,
-+			pad_sink = media_get_pad_index(decoder,
-+						       MEDIA_PAD_FL_SINK,
- 						       PAD_SIGNAL_ANALOG);
- 			if (pad_source < 0 || pad_sink < 0) {
- 				dev_warn(mdev->dev, "get decoder and/or PLL pad(s): (%d, %d)\n",
-@@ -139,9 +143,11 @@ int v4l2_mc_create_media_graph(struct media_device *mdev)
- 				return ret;
- 			}
- 		} else {
--			pad_source = media_get_pad_index(tuner, false,
-+			pad_source = media_get_pad_index(tuner,
-+							 MEDIA_PAD_FL_SOURCE,
- 							 PAD_SIGNAL_ANALOG);
--			pad_sink = media_get_pad_index(decoder, true,
-+			pad_sink = media_get_pad_index(decoder,
-+						       MEDIA_PAD_FL_SINK,
- 						       PAD_SIGNAL_ANALOG);
- 			if (pad_source < 0 || pad_sink < 0) {
- 				dev_warn(mdev->dev, "couldn't get tuner and/or decoder pad(s): (%d, %d)\n",
-@@ -156,9 +162,11 @@ int v4l2_mc_create_media_graph(struct media_device *mdev)
- 		}
- 
- 		if (if_aud) {
--			pad_source = media_get_pad_index(tuner, false,
-+			pad_source = media_get_pad_index(tuner,
-+							 MEDIA_PAD_FL_SOURCE,
- 							 PAD_SIGNAL_AUDIO);
--			pad_sink = media_get_pad_index(if_aud, true,
-+			pad_sink = media_get_pad_index(if_aud,
-+						       MEDIA_PAD_FL_SINK,
- 						       PAD_SIGNAL_AUDIO);
- 			if (pad_source < 0 || pad_sink < 0) {
- 				dev_warn(mdev->dev, "couldn't get tuner and/or decoder pad(s) for audio: (%d, %d)\n",
-@@ -180,7 +188,8 @@ int v4l2_mc_create_media_graph(struct media_device *mdev)
- 
- 	/* Create demod to V4L, VBI and SDR radio links */
- 	if (io_v4l) {
--		pad_source = media_get_pad_index(decoder, false, PAD_SIGNAL_DV);
-+		pad_source = media_get_pad_index(decoder, MEDIA_PAD_FL_SOURCE,
-+						 PAD_SIGNAL_DV);
- 		if (pad_source < 0) {
- 			dev_warn(mdev->dev, "couldn't get decoder output pad for V4L I/O\n");
- 			return -EINVAL;
-@@ -195,7 +204,8 @@ int v4l2_mc_create_media_graph(struct media_device *mdev)
- 	}
- 
- 	if (io_swradio) {
--		pad_source = media_get_pad_index(decoder, false, PAD_SIGNAL_DV);
-+		pad_source = media_get_pad_index(decoder, MEDIA_PAD_FL_SOURCE,
-+						 PAD_SIGNAL_DV);
- 		if (pad_source < 0) {
- 			dev_warn(mdev->dev, "couldn't get decoder output pad for SDR\n");
- 			return -EINVAL;
-@@ -210,7 +220,8 @@ int v4l2_mc_create_media_graph(struct media_device *mdev)
- 	}
- 
- 	if (io_vbi) {
--		pad_source = media_get_pad_index(decoder, false, PAD_SIGNAL_DV);
-+		pad_source = media_get_pad_index(decoder, MEDIA_PAD_FL_SOURCE,
-+						 PAD_SIGNAL_DV);
- 		if (pad_source < 0) {
- 			dev_warn(mdev->dev, "couldn't get decoder output pad for VBI\n");
- 			return -EINVAL;
-@@ -231,7 +242,7 @@ int v4l2_mc_create_media_graph(struct media_device *mdev)
- 		case MEDIA_ENT_F_CONN_RF:
- 			if (!tuner)
- 				continue;
--			pad_sink = media_get_pad_index(tuner, true,
-+			pad_sink = media_get_pad_index(tuner, MEDIA_PAD_FL_SINK,
- 						       PAD_SIGNAL_ANALOG);
- 			if (pad_sink < 0) {
- 				dev_warn(mdev->dev, "couldn't get tuner analog pad sink\n");
-@@ -243,7 +254,8 @@ int v4l2_mc_create_media_graph(struct media_device *mdev)
- 			break;
- 		case MEDIA_ENT_F_CONN_SVIDEO:
- 		case MEDIA_ENT_F_CONN_COMPOSITE:
--			pad_sink = media_get_pad_index(decoder, true,
-+			pad_sink = media_get_pad_index(decoder,
-+						       MEDIA_PAD_FL_SINK,
- 						       PAD_SIGNAL_ANALOG);
- 			if (pad_sink < 0) {
- 				dev_warn(mdev->dev, "couldn't get decoder analog pad sink\n");
-diff --git a/include/media/media-entity.h b/include/media/media-entity.h
-index 741f9c629c6f..e4f556911c3f 100644
---- a/include/media/media-entity.h
-+++ b/include/media/media-entity.h
-@@ -741,7 +741,7 @@ static inline void media_entity_cleanup(struct media_entity *entity) {}
-  * media_get_pad_index() - retrieves a pad index from an entity
-  *
-  * @entity:	entity where the pads belong
-- * @is_sink:	true if the pad is a sink, false if it is a source
-+ * @pad_type:	the type of the pad, one of MEDIA_PAD_FL_* pad types
-  * @sig_type:	type of signal of the pad to be search
-  *
-  * This helper function finds the first pad index inside an entity that
-@@ -752,7 +752,7 @@ static inline void media_entity_cleanup(struct media_entity *entity) {}
-  * On success, return the pad number. If the pad was not found or the media
-  * entity is a NULL pointer, return -EINVAL.
-  */
--int media_get_pad_index(struct media_entity *entity, bool is_sink,
-+int media_get_pad_index(struct media_entity *entity, u32 pad_type,
- 			enum media_pad_signal_type sig_type);
- 
- /**
+This could have been two patches are you make two unrelated
+modifications, but I don't mind much.
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> ---
+>  include/uapi/linux/media.h | 30 +++++++++++++++---------------
+>  1 file changed, 15 insertions(+), 15 deletions(-)
+> 
+> diff --git a/include/uapi/linux/media.h b/include/uapi/linux/media.h
+> index 3ddadaea849f..370d0135780a 100644
+> --- a/include/uapi/linux/media.h
+> +++ b/include/uapi/linux/media.h
+> @@ -140,11 +140,11 @@ struct media_device_info {
+>  #define MEDIA_ENT_F_DV_ENCODER			(MEDIA_ENT_F_BASE + 0x6002)
+>  
+>  /* Entity flags */
+> -#define MEDIA_ENT_FL_DEFAULT			(1 << 0)
+> -#define MEDIA_ENT_FL_CONNECTOR			(1 << 1)
+> +#define MEDIA_ENT_FL_DEFAULT			_BITUL(0)
+> +#define MEDIA_ENT_FL_CONNECTOR			_BITUL(1)
+>  
+>  /* OR with the entity id value to find the next entity */
+> -#define MEDIA_ENT_ID_FLAG_NEXT			(1U << 31)
+> +#define MEDIA_ENT_ID_FLAG_NEXT			_BITUL(31)
+>  
+>  struct media_entity_desc {
+>  	__u32 id;
+> @@ -205,9 +205,9 @@ struct media_entity_desc {
+>  	};
+>  };
+>  
+> -#define MEDIA_PAD_FL_SINK			(1 << 0)
+> -#define MEDIA_PAD_FL_SOURCE			(1 << 1)
+> -#define MEDIA_PAD_FL_MUST_CONNECT		(1 << 2)
+> +#define MEDIA_PAD_FL_SINK			_BITUL(0)
+> +#define MEDIA_PAD_FL_SOURCE			_BITUL(1)
+> +#define MEDIA_PAD_FL_MUST_CONNECT		_BITUL(2)
+>  
+>  struct media_pad_desc {
+>  	__u32 entity;		/* entity ID */
+> @@ -216,14 +216,14 @@ struct media_pad_desc {
+>  	__u32 reserved[2];
+>  };
+>  
+> -#define MEDIA_LNK_FL_ENABLED			(1 << 0)
+> -#define MEDIA_LNK_FL_IMMUTABLE			(1 << 1)
+> -#define MEDIA_LNK_FL_DYNAMIC			(1 << 2)
+> +#define MEDIA_LNK_FL_ENABLED			_BITUL(0)
+> +#define MEDIA_LNK_FL_IMMUTABLE			_BITUL(1)
+> +#define MEDIA_LNK_FL_DYNAMIC			_BITUL(2)
+>  
+>  #define MEDIA_LNK_FL_LINK_TYPE			(0xf << 28)
+> -#  define MEDIA_LNK_FL_DATA_LINK		(0 << 28)
+> -#  define MEDIA_LNK_FL_INTERFACE_LINK		(1 << 28)
+> -#  define MEDIA_LNK_FL_ANCILLARY_LINK		(2 << 28)
+> +#  define MEDIA_LNK_FL_DATA_LINK		(0U << 28)
+> +#  define MEDIA_LNK_FL_INTERFACE_LINK		(1U << 28)
+> +#  define MEDIA_LNK_FL_ANCILLARY_LINK		(2U << 28)
+>  
+>  struct media_link_desc {
+>  	struct media_pad_desc source;
+> @@ -293,7 +293,7 @@ struct media_links_enum {
+>   * struct media_device_info.
+>   */
+>  #define MEDIA_V2_ENTITY_HAS_FLAGS(media_version) \
+> -	((media_version) >= ((4 << 16) | (19 << 8) | 0))
+> +	((media_version) >= ((4U << 16) | (19U << 8) | 0U))
+>  
+>  struct media_v2_entity {
+>  	__u32 id;
+> @@ -328,7 +328,7 @@ struct media_v2_interface {
+>   * struct media_device_info.
+>   */
+>  #define MEDIA_V2_PAD_HAS_INDEX(media_version) \
+> -	((media_version) >= ((4 << 16) | (19 << 8) | 0))
+> +	((media_version) >= ((4U << 16) | (19U << 8) | 0U))
+>  
+>  struct media_v2_pad {
+>  	__u32 id;
+> @@ -432,7 +432,7 @@ struct media_v2_topology {
+>  #define MEDIA_INTF_T_ALSA_TIMER                (MEDIA_INTF_T_ALSA_BASE + 7)
+>  
+>  /* Obsolete symbol for media_version, no longer used in the kernel */
+> -#define MEDIA_API_VERSION			((0 << 16) | (1 << 8) | 0)
+> +#define MEDIA_API_VERSION			((0U << 16) | (1U << 8) | 0U)
+>  
+>  #endif
+>  
+
 -- 
-2.30.2
+Regards,
 
+Laurent Pinchart
