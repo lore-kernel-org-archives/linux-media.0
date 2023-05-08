@@ -2,34 +2,34 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14890C77B7F
-	for <linux-media@archiver.kernel.org>; Mon,  8 May 2023 07:34:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E35ACC7EE24
+	for <linux-media@archiver.kernel.org>; Mon,  8 May 2023 07:50:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233098AbjEHHeD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 May 2023 03:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45756 "EHLO
+        id S233043AbjEHHuB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 May 2023 03:50:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjEHHeB (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 8 May 2023 03:34:01 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68B0C272A;
-        Mon,  8 May 2023 00:33:58 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.31:48392.2047955144
+        with ESMTP id S232167AbjEHHuA (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 8 May 2023 03:50:00 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD027172C;
+        Mon,  8 May 2023 00:49:56 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.31:41372.133817782
 HMM_ATTACHE_NUM: 0000
 HMM_SOURCE_TYPE: SMTP
 Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
-        by 189.cn (HERMES) with SMTP id BA7B910023D;
-        Mon,  8 May 2023 15:33:53 +0800 (CST)
+        by 189.cn (HERMES) with SMTP id 834981002DD;
+        Mon,  8 May 2023 15:49:51 +0800 (CST)
 Received: from  ([114.242.206.180])
-        by gateway-151646-dep-85667d6c59-6qwzn with ESMTP id 0bbb1b79ff9a4e41bf60092d3c6a1e39 for maarten.lankhorst@linux.intel.com;
-        Mon, 08 May 2023 15:33:57 CST
-X-Transaction-ID: 0bbb1b79ff9a4e41bf60092d3c6a1e39
+        by gateway-151646-dep-85667d6c59-6qwzn with ESMTP id 86c9f492acfe4995a64d529f7b37622c for maarten.lankhorst@linux.intel.com;
+        Mon, 08 May 2023 15:49:55 CST
+X-Transaction-ID: 86c9f492acfe4995a64d529f7b37622c
 X-Real-From: 15330273260@189.cn
 X-Receive-IP: 114.242.206.180
 X-MEDUSA-Status: 0
 Sender: 15330273260@189.cn
-Message-ID: <c704eaae-e0b6-262c-4a2b-80e80062532b@189.cn>
-Date:   Mon, 8 May 2023 15:33:52 +0800
+Message-ID: <4691501a-d555-d693-6ab6-16c29391245f@189.cn>
+Date:   Mon, 8 May 2023 15:49:47 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
@@ -57,66 +57,61 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch is tested against IGT,
+kms_flip test simple of IGT run finished,  a few tail lines of the full 
+log is pasted here.
+
+as following:
 
 
-1) fbdev test passed
+Dynamic subtest AB-HDMI-A1-HDMI-A2: FAIL (0.771s)
+Subtest 2x-modeset-vs-vblank-race-interruptible: FAIL (0.771s)
+Starting subtest: bo-too-big-interruptible
+Starting dynamic subtest: A-HDMI-A1
+Test requirement not met in function __run_test_on_crtc_set, file 
+../tests/kms_flip.c:1356:
+Test requirement: !(!is_i915_device(drm_fd))
+Dynamic subtest A-HDMI-A1: SKIP (0.000s)
+Starting dynamic subtest: B-HDMI-A2
+Test requirement not met in function __run_test_on_crtc_set, file 
+../tests/kms_flip.c:1356:
+Test requirement: !(!is_i915_device(drm_fd))
+Dynamic subtest B-HDMI-A2: SKIP (0.000s)
+No dynamic tests executed.
+Subtest bo-too-big-interruptible: SKIP (0.001s)
+Starting subtest: flip-vs-suspend-interruptible
+Starting dynamic subtest: A-HDMI-A1
+   1920x1080 60 1920 2008 2052 2200 1080 1084 1089 1125 0x5 0x48 148500
+[cmd] rtcwake: wakeup from "mem" using /dev/rtc0 at Mon May  8 03:20:16 2023
+[cmd] rtcwake: wakeup from "mem" using /dev/rtc0 at Mon May  8 03:20:45 2023
+Dynamic subtest A-HDMI-A1: SUCCESS (12.293s)
+Starting dynamic subtest: B-HDMI-A2
+   1920x1080 60 1920 2008 2052 2100 1080 1084 1089 1125 0x5 0x48 141750
+[cmd] rtcwake: wakeup from "mem" using /dev/rtc0 at Mon May  8 03:21:14 2023
+[cmd] rtcwake: wakeup from "mem" using /dev/rtc0 at Mon May  8 03:21:43 2023
+[cmd] rtcwake: wakeup from "mem" using /dev/rtc0 at Mon May  8 03:22:12 2023
+Dynamic subtest B-HDMI-A2: SUCCESS (7.487s)
+Subtest flip-vs-suspend-interruptible: SUCCESS (19.781s)
+Starting subtest: 2x-flip-vs-suspend-interruptible
+Starting dynamic subtest: AB-HDMI-A1-HDMI-A2
+   1920x1080 60 1920 2008 2052 2200 1080 1084 1089 1125 0x5 0x48 148500
+   1920x1080 60 1920 2008 2052 2100 1080 1084 1089 1125 0x5 0x48 141750
+[cmd] rtcwake: wakeup from "mem" using /dev/rtc0 at Mon May  8 03:22:41 2023
+[cmd] rtcwake: wakeup from "mem" using /dev/rtc0 at Mon May  8 03:23:10 2023
+[cmd] rtcwake: wakeup from "mem" using /dev/rtc0 at Mon May  8 03:23:39 2023
+[cmd] rtcwake: wakeup from "mem" using /dev/rtc0 at Mon May  8 03:24:08 2023
+[cmd] rtcwake: wakeup from "mem" using /dev/rtc0 at Mon May  8 03:24:37 2023
+Dynamic subtest AB-HDMI-A1-HDMI-A2: SUCCESS (12.605s)
+Subtest 2x-flip-vs-suspend-interruptible: SUCCESS (12.605s)
 
 
-IGT-Version: 1.27.1-gce91d123 (loongarch64) (Linux: 6.3.0+ loongarch64)
-Starting subtest: info
-Subtest info: SUCCESS (0.000s)
-Starting subtest: pan
-Subtest pan: SUCCESS (0.042s)
-Starting subtest: read
-Subtest read: SUCCESS (0.012s)
-Starting subtest: unaligned-read
-Subtest unaligned-read: SUCCESS (0.003s)
-Starting subtest: write
-Subtest write: SUCCESS (0.024s)
-Starting subtest: unaligned-write
-Subtest unaligned-write: SUCCESS (0.003s)
-Starting subtest: eof
-Subtest eof: SUCCESS (0.000s)
-Starting subtest: nullptr
-Subtest nullptr: SUCCESS (0.000s)
+Compared with V10, No hang, no vblank wait timeout call trace happen.
 
+suspend and resume is always successful, thus, V12 is far better than V10,
 
-2) fbtest from geert also show good results:
+there still some test case failed,  but it seem that it is not relevant.
 
-
-Using drawops cfb32 (32 bpp packed pixels)
-Available visuals:
-   Monochrome
-   Grayscale 256
-   Truecolor 8:8:8:0
-Using visops truecolor
-Running all tests
-test001: PASSED
-test002: PASSED
-test003: PASSED
-test004: PASSED
-test005: PASSED
-test006: PASSED
-test008: PASSED
-test009: PASSED
-test010: PASSED
-Benchmarking... 10x10 squares: 461.49 Mpixels/s
-Benchmarking... 20x20 squares: 984.74 Mpixels/s
-Benchmarking... 50x50 squares: 2253.04 Mpixels/s
-Benchmarking... 100x100 squares: 2218.78 Mpixels/s
-Benchmarking... 200x200 squares: 2880.41 Mpixels/s
-Benchmarking... 500x500 squares: 3642.36 Mpixels/s
-Benchmarking... 1000x1000 squares: 3931.25 Mpixels/s
-test012: PASSED
-Benchmarking... R5 circles: 258.73 Mpixels/s
-Benchmarking... R10 circles: 605.78 Mpixels/s
-Benchmarking... R25 circles: 1513.02 Mpixels/s
-Benchmarking... R50 circles: 1970.00 Mpixels/s
-Benchmarking... R100 circles: 2481.70 Mpixels/s
-Benchmarking... R250 circles: 3274.97 Mpixels/s
-Benchmarking... R500 circles: 3722.24 Mpixels/s
-test013: PASSED
+May I fix those problem after this patch landed?  the tests simple of 
+IGT is heavy.
 
 
 On 2023/5/4 16:04, Sui Jingfeng wrote:
