@@ -2,99 +2,157 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 615D1C77B73
-	for <linux-media@archiver.kernel.org>; Mon,  8 May 2023 09:28:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B974C77B7F
+	for <linux-media@archiver.kernel.org>; Mon,  8 May 2023 09:28:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233098AbjEHJ2E (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 May 2023 05:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59494 "EHLO
+        id S233721AbjEHJ2R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 May 2023 05:28:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232753AbjEHJ2B (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 8 May 2023 05:28:01 -0400
+        with ESMTP id S233626AbjEHJ2M (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 8 May 2023 05:28:12 -0400
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA563FD
-        for <linux-media@vger.kernel.org>; Mon,  8 May 2023 02:27:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B625111562
+        for <linux-media@vger.kernel.org>; Mon,  8 May 2023 02:28:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683538064; x=1715074064;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=/DH1tNXODE5JyGXdPwyv8eF6C5DiOTbrw+x1Km7ohXA=;
-  b=KynGiIe9ShOSalWeTCcTAC63AroC/y1bVAM7+JOooyvirT3kvAIf6SiY
-   4a33/kXowdL11X5HzHvzENh2D9zvPTYcdmD0b4VxmpwoUzpVyobKmBO0w
-   yx1D7fDRzPWokbQNcgXZl8Lv+iU9iVQQ97oL1CdjUAaqseqlkNrseJ4yo
-   rCKxheOzpLROdfiNSsibcXAeoEhfiIi+9g4FZVedsg8NHvdjbji8hSM7m
-   Ol13Rx2tJ7jOueI6SAXznIbMUjLFEq5A6u9Omlpre4MI30SCdncO8KN3e
-   QByTrnzVyf+Fw045LJ7ifN+Fpt+diUC7diYtHBvli63u5g9ZNM5joR+wW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="415159362"
+  t=1683538088; x=1715074088;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=UUqE6G2kpWZPcZkz28x2wm9MIxvFtFdeYp//8b6ZwTU=;
+  b=dwntCSvY1DBsinX9WRNEwyod+eut2/Dbg1VKlNR4jOLQ7CbDR9A2LZhv
+   43KxhbXX66ZQJKJb22q/Taz3AwcvircGKW7KuOQVTRyI4qBLIzoKLbttL
+   //86m7VSbTL8HCstPHmdGvTikgjARM2PTMj8sil+ub4VycpirGGxvwZqM
+   uMhrfcfnRZJo9rprYmPBFziy33wpD716A5W6Vk0rnvNL9lyALDR9L3+RW
+   Gw1HUHKm+9Up7pfWxSCYIH++0LUL96aA18ZCwMVa6wrbPA6xS6BdMNUb8
+   eIG7iGwBB1/GPxcYAHOPqp9gSgnU2i6a8GASaKY2shqO8qz4q3nNFsjD0
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="415159365"
 X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
-   d="scan'208";a="415159362"
+   d="scan'208";a="415159365"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
   by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 02:27:44 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="810191832"
+X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="810191833"
 X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
-   d="scan'208";a="810191832"
+   d="scan'208";a="810191833"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
   by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 02:27:42 -0700
 Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id CFCAA1203DA;
-        Mon,  8 May 2023 12:17:53 +0300 (EEST)
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 3B3461228CF;
+        Mon,  8 May 2023 12:17:56 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com, bingbu.cao@intel.com
-Subject: [PATCH v2 0/3] Random cleanups
-Date:   Mon,  8 May 2023 12:17:50 +0300
-Message-Id: <20230508091753.80803-1-sakari.ailus@linux.intel.com>
+Subject: [PATCH 3/3] media: uapi: Use _BITUL macro for assigning bits in u32 fields
+Date:   Mon,  8 May 2023 12:17:53 +0300
+Message-Id: <20230508091753.80803-4-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230508091753.80803-1-sakari.ailus@linux.intel.com>
+References: <20230508091753.80803-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi all,
+Use _BITUL macro for assigning bits in u32 fields. While this is a good
+practice, there doesn't appear to be a bug that this patch would fix. For
+multi-bit fields, use U notation (for unsigned int).
 
-These three patches are seemingly random cleanups but are a pre-requisite
-for another set for supporting generic metadata formats. I'll post that
-set separately. These three should be merged independently though.
+The patch has been generated using the following command:
 
-since v1:
+	perl -i -pe 's/\([0-9]+\K <</U <</g;
+		s/\(1U\s*<<\s*([0-9]+)\)$/_BITUL($1)/
+			if ! /MEDIA_LNK_FL_INTERFACE_LINK/
+		s/\|\s*0\K\)/U\)/' --
+		include/uapi/linux/media.h
 
-- Use _BITUL macro instead.
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ include/uapi/linux/media.h | 30 +++++++++++++++---------------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
-- Also add U after 0.
-
-Sakari Ailus (3):
-  media: mc: Make media_get_pad_index() use pad type flag
-  media: Documentation: Rename meta format files
-  media: uapi: Use _BITUL macro for assigning bits in u32 fields
-
- .../userspace-api/media/v4l/meta-formats.rst  | 14 +++----
- ...{pixfmt-meta-d4xx.rst => metafmt-d4xx.rst} |  0
- ...-intel-ipu3.rst => metafmt-intel-ipu3.rst} |  0
- ...fmt-meta-rkisp1.rst => metafmt-rkisp1.rst} |  0
- .../{pixfmt-meta-uvc.rst => metafmt-uvc.rst}  |  0
- ...ixfmt-meta-vivid.rst => metafmt-vivid.rst} |  0
- ...meta-vsp1-hgo.rst => metafmt-vsp1-hgo.rst} |  0
- ...meta-vsp1-hgt.rst => metafmt-vsp1-hgt.rst} |  0
- MAINTAINERS                                   |  4 +-
- drivers/media/dvb-core/dvbdev.c               |  4 +-
- drivers/media/mc/mc-entity.c                  | 16 +++-----
- drivers/media/usb/au0828/au0828-core.c        |  2 +-
- drivers/media/v4l2-core/v4l2-mc.c             | 38 ++++++++++++-------
- include/media/media-entity.h                  |  4 +-
- include/uapi/linux/media.h                    | 30 +++++++--------
- 15 files changed, 59 insertions(+), 53 deletions(-)
- rename Documentation/userspace-api/media/v4l/{pixfmt-meta-d4xx.rst => metafmt-d4xx.rst} (100%)
- rename Documentation/userspace-api/media/v4l/{pixfmt-meta-intel-ipu3.rst => metafmt-intel-ipu3.rst} (100%)
- rename Documentation/userspace-api/media/v4l/{pixfmt-meta-rkisp1.rst => metafmt-rkisp1.rst} (100%)
- rename Documentation/userspace-api/media/v4l/{pixfmt-meta-uvc.rst => metafmt-uvc.rst} (100%)
- rename Documentation/userspace-api/media/v4l/{pixfmt-meta-vivid.rst => metafmt-vivid.rst} (100%)
- rename Documentation/userspace-api/media/v4l/{pixfmt-meta-vsp1-hgo.rst => metafmt-vsp1-hgo.rst} (100%)
- rename Documentation/userspace-api/media/v4l/{pixfmt-meta-vsp1-hgt.rst => metafmt-vsp1-hgt.rst} (100%)
-
+diff --git a/include/uapi/linux/media.h b/include/uapi/linux/media.h
+index 3ddadaea849f..370d0135780a 100644
+--- a/include/uapi/linux/media.h
++++ b/include/uapi/linux/media.h
+@@ -140,11 +140,11 @@ struct media_device_info {
+ #define MEDIA_ENT_F_DV_ENCODER			(MEDIA_ENT_F_BASE + 0x6002)
+ 
+ /* Entity flags */
+-#define MEDIA_ENT_FL_DEFAULT			(1 << 0)
+-#define MEDIA_ENT_FL_CONNECTOR			(1 << 1)
++#define MEDIA_ENT_FL_DEFAULT			_BITUL(0)
++#define MEDIA_ENT_FL_CONNECTOR			_BITUL(1)
+ 
+ /* OR with the entity id value to find the next entity */
+-#define MEDIA_ENT_ID_FLAG_NEXT			(1U << 31)
++#define MEDIA_ENT_ID_FLAG_NEXT			_BITUL(31)
+ 
+ struct media_entity_desc {
+ 	__u32 id;
+@@ -205,9 +205,9 @@ struct media_entity_desc {
+ 	};
+ };
+ 
+-#define MEDIA_PAD_FL_SINK			(1 << 0)
+-#define MEDIA_PAD_FL_SOURCE			(1 << 1)
+-#define MEDIA_PAD_FL_MUST_CONNECT		(1 << 2)
++#define MEDIA_PAD_FL_SINK			_BITUL(0)
++#define MEDIA_PAD_FL_SOURCE			_BITUL(1)
++#define MEDIA_PAD_FL_MUST_CONNECT		_BITUL(2)
+ 
+ struct media_pad_desc {
+ 	__u32 entity;		/* entity ID */
+@@ -216,14 +216,14 @@ struct media_pad_desc {
+ 	__u32 reserved[2];
+ };
+ 
+-#define MEDIA_LNK_FL_ENABLED			(1 << 0)
+-#define MEDIA_LNK_FL_IMMUTABLE			(1 << 1)
+-#define MEDIA_LNK_FL_DYNAMIC			(1 << 2)
++#define MEDIA_LNK_FL_ENABLED			_BITUL(0)
++#define MEDIA_LNK_FL_IMMUTABLE			_BITUL(1)
++#define MEDIA_LNK_FL_DYNAMIC			_BITUL(2)
+ 
+ #define MEDIA_LNK_FL_LINK_TYPE			(0xf << 28)
+-#  define MEDIA_LNK_FL_DATA_LINK		(0 << 28)
+-#  define MEDIA_LNK_FL_INTERFACE_LINK		(1 << 28)
+-#  define MEDIA_LNK_FL_ANCILLARY_LINK		(2 << 28)
++#  define MEDIA_LNK_FL_DATA_LINK		(0U << 28)
++#  define MEDIA_LNK_FL_INTERFACE_LINK		(1U << 28)
++#  define MEDIA_LNK_FL_ANCILLARY_LINK		(2U << 28)
+ 
+ struct media_link_desc {
+ 	struct media_pad_desc source;
+@@ -293,7 +293,7 @@ struct media_links_enum {
+  * struct media_device_info.
+  */
+ #define MEDIA_V2_ENTITY_HAS_FLAGS(media_version) \
+-	((media_version) >= ((4 << 16) | (19 << 8) | 0))
++	((media_version) >= ((4U << 16) | (19U << 8) | 0U))
+ 
+ struct media_v2_entity {
+ 	__u32 id;
+@@ -328,7 +328,7 @@ struct media_v2_interface {
+  * struct media_device_info.
+  */
+ #define MEDIA_V2_PAD_HAS_INDEX(media_version) \
+-	((media_version) >= ((4 << 16) | (19 << 8) | 0))
++	((media_version) >= ((4U << 16) | (19U << 8) | 0U))
+ 
+ struct media_v2_pad {
+ 	__u32 id;
+@@ -432,7 +432,7 @@ struct media_v2_topology {
+ #define MEDIA_INTF_T_ALSA_TIMER                (MEDIA_INTF_T_ALSA_BASE + 7)
+ 
+ /* Obsolete symbol for media_version, no longer used in the kernel */
+-#define MEDIA_API_VERSION			((0 << 16) | (1 << 8) | 0)
++#define MEDIA_API_VERSION			((0U << 16) | (1U << 8) | 0U)
+ 
+ #endif
+ 
 -- 
 2.30.2
 
