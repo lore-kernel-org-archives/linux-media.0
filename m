@@ -2,113 +2,70 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E7FDC77B73
-	for <linux-media@archiver.kernel.org>; Mon,  8 May 2023 08:34:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E0D6C77B7F
+	for <linux-media@archiver.kernel.org>; Mon,  8 May 2023 09:20:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233153AbjEHIed (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 May 2023 04:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
+        id S233223AbjEHJUT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 May 2023 05:20:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233117AbjEHIea (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 8 May 2023 04:34:30 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27E41FAAE
-        for <linux-media@vger.kernel.org>; Mon,  8 May 2023 01:34:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683534849; x=1715070849;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lwDShBkjtYDdKVUVgn//99hSA1dkRE1vOx/jEVzLi3I=;
-  b=CJeqitYH9JWpwLkQrvMQ2py2f391cacTC6SVdMmDa01RDApts/twtf7o
-   QJkyswiIIQSOoNtewhks4Ok6ewgE6Wr535tCGVmU/Nvd5RJyS2f8y2U5m
-   88E78u9v2Fd46/B8UjP3afqHKZr9zz5eiUg22UAFwexc5V7DRRW5h2l25
-   nebBkyVFXFF+mNicfK/Kg+AUf18LvVVSO/4UxcIL5XxFKihZql+iYOGVh
-   VlWGkJO6ezRv+HS7pY9N0IBdX7K6CDvrQ0mrtsvtP3KA/CQlgwg0GAF28
-   H7G6nLJLqs4AusT+kxjVW2f1k9WnEtmYzQzlNYBXdyP31MyYdQAoUoJF8
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="347057561"
-X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
-   d="scan'208";a="347057561"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 01:34:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="648794501"
-X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
-   d="scan'208";a="648794501"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 01:34:07 -0700
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id 325351203DA;
-        Mon,  8 May 2023 11:34:05 +0300 (EEST)
-Date:   Mon, 8 May 2023 11:34:05 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, tomi.valkeinen@ideasonboard.com,
-        bingbu.cao@intel.com
-Subject: Re: [PATCH 3/3] media: uapi: Use unsigned int values for assigning
- bits in u32 fields
-Message-ID: <ZFiz/WqSUc7bNom8@kekkonen.localdomain>
-References: <20230505205101.54569-1-sakari.ailus@linux.intel.com>
- <20230505205101.54569-4-sakari.ailus@linux.intel.com>
- <20230506113223.GC17474@pendragon.ideasonboard.com>
- <ZFiUbA8xRIsR6KHV@kekkonen.localdomain>
- <20230508063023.GU23514@pendragon.ideasonboard.com>
- <ZFidqGx5Kl/moD6h@kekkonen.localdomain>
- <20230508075209.GV23514@pendragon.ideasonboard.com>
+        with ESMTP id S232854AbjEHJUS (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 8 May 2023 05:20:18 -0400
+Received: from meesny.iki.fi (meesny.iki.fi [195.140.195.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6B39ED0
+        for <linux-media@vger.kernel.org>; Mon,  8 May 2023 02:20:17 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (dkzdf0gkyyyyyyyyyyyyt-3.rev.dnainternet.fi [IPv6:2001:14ba:4506:4f15::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by meesny.iki.fi (Postfix) with ESMTPSA id 4QFG3L14xBzyVR;
+        Mon,  8 May 2023 12:20:13 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1683537615;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to; bh=3r5qm0pjmIPtNFgLGq2IBvBt0ihvgT4nbOaE3XK8zLg=;
+        b=JtyqtTZcuwCXcGrvE0xFS3zyfEPWP3oPpCYHG88BU68o9EQ1hZeBxm9il8rQacBNFH96lm
+        c/FF6xbPGA0W9h/kG6tB2UHa9kgSux5V9l5vvZn6KAAlGXaujHV0AQ76PenTFqmCDOHHyX
+        TXGd8AgI93nBNjPNuAFYxu/QcdLmFag=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1683537615;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to; bh=3r5qm0pjmIPtNFgLGq2IBvBt0ihvgT4nbOaE3XK8zLg=;
+        b=sB6ZFzddy6TN1fPXPiROE54zcy1N3QIjGeaJOppcqCO/pkzfsJyIndueLe+4xxy53YK1yP
+        82+ElI5cfPUdY/9qHghYaze+RU+DVLhxC0Xyx3LAzYk1Xcwd8GWjwSxLjAHWGHOxjLCbw4
+        YRVjSitYWA18xX2lAtCIsvDgqe4Tznw=
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1683537615; a=rsa-sha256; cv=none;
+        b=mL/NS/hwdCPAWnHNJ4R3XhOZIofvA/PcHzSqyubJHS30JCzpZHLWSlDjNCmb5ZZqdSfJYq
+        Km3IrVOjgmfiEd+g42joKBx2bnqiMgSK7lBVv1bmnbrj6Aip/oEsAeiff7VQjIaV9f91+z
+        j1c4+zG0PS5D1++29uJ+nS1XcVdtsF4=
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 60997634C91;
+        Mon,  8 May 2023 12:20:13 +0300 (EEST)
+Date:   Mon, 8 May 2023 12:20:13 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com,
+        bingbu.cao@intel.com, tomi.valkeinen@ideasonboard.com
+Subject: Re: [PATCH 0/3] Random cleanups
+Message-ID: <ZFi+zWx9VytoJSCl@valkosipuli.retiisi.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230508075209.GV23514@pendragon.ideasonboard.com>
+In-Reply-To: <20230508091753.80803-1-sakari.ailus@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, May 08, 2023 at 10:52:09AM +0300, Laurent Pinchart wrote:
-> Hi Sakari,
-> 
-> On Mon, May 08, 2023 at 09:58:48AM +0300, Sakari Ailus wrote:
-> > On Mon, May 08, 2023 at 09:30:23AM +0300, Laurent Pinchart wrote:
-> > > On Mon, May 08, 2023 at 09:19:24AM +0300, Sakari Ailus wrote:
-> > > > On Sat, May 06, 2023 at 02:32:23PM +0300, Laurent Pinchart wrote:
-> > > > > On Fri, May 05, 2023 at 11:51:01PM +0300, Sakari Ailus wrote:
-> > > > > > Use unsigned int values annoted by "U" for u32 fields. While this is a
-> > > > > > good practice, there doesn't appear to be a bug that this patch would fix.
-> > > > > > 
-> > > > > > The patch has been generated using the following command:
-> > > > > > 
-> > > > > > 	perl -i -pe 's/\([0-9]+\K <</U <</g' -- include/uapi/linux/media.h
-> > > > > 
-> > > > > How about using the _BITUL() macro from include/uapi/linux/const.h ?
-> > > > 
-> > > > These are u32 whereas _BITUL makes an unsigned long. Int (as in U) is 32
-> > > > bits on all platforms where Linux is used AFAIK.
-> > > 
-> > > I know, but is it a problem ?
-> > 
-> > If we have a u32 field, unsigned int is the right type for that (from
-> > non-fixed length C types), not unsigned long. In practice it would work, I
-> > have no doubts about that. The compiler could still do different decisions
-> > due to this, promoting values to a 64-bits for instance.
-> > 
-> > If we had _BITU(), I'd be happy to use that. :-)
-> 
-> Note how BIT() is defined in include/vdso/bits.h:
-> 
-> #include <vdso/const.h>
-> 
-> #define BIT(nr)                 (UL(1) << (nr))
-> 
-> And in include/vdso/const.h:
-> 
-> #include <uapi/linux/const.h>
-> 
-> #define UL(x)           (_UL(x))
-> 
-> BIT() is thus essentially identical to _BITUL(). As we use the former
-> everywhere without any trouble, I wouldn't expect issue with the latter.
-
-Fair enough. I'll switch to _BITUL() in v2.
+This was meant to be v2.
 
 -- 
 Sakari Ailus
