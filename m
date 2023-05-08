@@ -2,97 +2,61 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DBE3C77B73
-	for <linux-media@archiver.kernel.org>; Mon,  8 May 2023 07:52:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3206FC77B73
+	for <linux-media@archiver.kernel.org>; Mon,  8 May 2023 07:52:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233569AbjEHHwC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 May 2023 03:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58466 "EHLO
+        id S233327AbjEHHwO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 May 2023 03:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233559AbjEHHwB (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 8 May 2023 03:52:01 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8F51BCF
-        for <linux-media@vger.kernel.org>; Mon,  8 May 2023 00:51:59 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (softbank126090219015.bbtec.net [126.90.219.15])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7F076755;
-        Mon,  8 May 2023 09:51:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1683532312;
-        bh=/56sBcX4Tra9Zrkd7Anc8XmIKFkyYhUvUPrS+1n7hXk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZsiVpM3ZDQs2T5n8na/MXG6w9KpI3N4pe4emCVxj8q9YLjpNBTqnMFD6pdnVXb1Ny
-         yciEjmygUR2hWlnIYm/fHEujFOI7oUvU6XD1yw+R+xehkWodfLgRTBjNrHxQfNwo8L
-         f7yxIqu0REnyIxPGEUlz+eef6ndiZgPdHkQ+8tt4=
-Date:   Mon, 8 May 2023 10:52:09 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-media@vger.kernel.org, tomi.valkeinen@ideasonboard.com,
-        bingbu.cao@intel.com
-Subject: Re: [PATCH 3/3] media: uapi: Use unsigned int values for assigning
- bits in u32 fields
-Message-ID: <20230508075209.GV23514@pendragon.ideasonboard.com>
-References: <20230505205101.54569-1-sakari.ailus@linux.intel.com>
- <20230505205101.54569-4-sakari.ailus@linux.intel.com>
- <20230506113223.GC17474@pendragon.ideasonboard.com>
- <ZFiUbA8xRIsR6KHV@kekkonen.localdomain>
- <20230508063023.GU23514@pendragon.ideasonboard.com>
- <ZFidqGx5Kl/moD6h@kekkonen.localdomain>
+        with ESMTP id S233595AbjEHHwL (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 8 May 2023 03:52:11 -0400
+X-Greylist: delayed 605 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 08 May 2023 00:52:07 PDT
+Received: from mail.rawlinsfis.com (mail.rawlinsfis.com [89.40.118.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1C81BFB
+        for <linux-media@vger.kernel.org>; Mon,  8 May 2023 00:52:07 -0700 (PDT)
+Received: by mail.rawlinsfis.com (Postfix, from userid 1001)
+        id 2591E81B73; Mon,  8 May 2023 08:36:19 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rawlinsfis.com;
+        s=mail; t=1683531382;
+        bh=lDo1OjfzzJ3sOfR9tSDg5RMmT4aDyBP45hIVJCLtIrE=;
+        h=Date:From:To:Subject:From;
+        b=b4MwT5BAgdnghs/vuml7fMH5dr2B3EIL9IDeJCuzuLxl1gwmvrH9DTqUu7Ap4xmoh
+         /tAHd5DJE0RsTITEboN392wRFysDh/wkVc1fWicSj4xyLFN23KkXd2XT+VfkIeNzQz
+         rZjznLCGTY3OFNCn5mH7jc6Ja6XkmNu/0cvYpQ0WjrrbYdu/sUt6PIbTPtsFQ+WH/1
+         QfNhMpzZMOKHaoczGd74eibg0vG3Lngu9whD5MlcyPe504RN5HkFOyvYrhG3KCeVrT
+         mBCV32lcSk/EGn08aWGhRdecEM54P9MkgctJA4ryeAr2/7t6VE7oQbxhTkOEHE16hp
+         t/D9zH2FOsoJw==
+Received: by mail.rawlinsfis.com for <linux-media@vger.kernel.org>; Mon,  8 May 2023 07:36:07 GMT
+Message-ID: <20230508074500-0.1.3d.5lxn.0.pg1zgj00dh@rawlinsfis.com>
+Date:   Mon,  8 May 2023 07:36:07 GMT
+From:   "Damian Hordych" <damian.hordych@rawlinsfis.com>
+To:     <linux-media@vger.kernel.org>
+Subject: =?UTF-8?Q?Pompy_ciep=C5=82a_-_nowe_warunki_?=
+X-Mailer: mail.rawlinsfis.com
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZFidqGx5Kl/moD6h@kekkonen.localdomain>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sakari,
+Dzie=C5=84 dobry,
 
-On Mon, May 08, 2023 at 09:58:48AM +0300, Sakari Ailus wrote:
-> On Mon, May 08, 2023 at 09:30:23AM +0300, Laurent Pinchart wrote:
-> > On Mon, May 08, 2023 at 09:19:24AM +0300, Sakari Ailus wrote:
-> > > On Sat, May 06, 2023 at 02:32:23PM +0300, Laurent Pinchart wrote:
-> > > > On Fri, May 05, 2023 at 11:51:01PM +0300, Sakari Ailus wrote:
-> > > > > Use unsigned int values annoted by "U" for u32 fields. While this is a
-> > > > > good practice, there doesn't appear to be a bug that this patch would fix.
-> > > > > 
-> > > > > The patch has been generated using the following command:
-> > > > > 
-> > > > > 	perl -i -pe 's/\([0-9]+\K <</U <</g' -- include/uapi/linux/media.h
-> > > > 
-> > > > How about using the _BITUL() macro from include/uapi/linux/const.h ?
-> > > 
-> > > These are u32 whereas _BITUL makes an unsigned long. Int (as in U) is 32
-> > > bits on all platforms where Linux is used AFAIK.
-> > 
-> > I know, but is it a problem ?
-> 
-> If we have a u32 field, unsigned int is the right type for that (from
-> non-fixed length C types), not unsigned long. In practice it would work, I
-> have no doubts about that. The compiler could still do different decisions
-> due to this, promoting values to a 64-bits for instance.
-> 
-> If we had _BITU(), I'd be happy to use that. :-)
+w ramach nowej edycji programu Czyste Powietrze dla klient=C3=B3w indywid=
+ualnych mog=C4=85 otrzyma=C4=87 Pa=C5=84stwo do 135 tys. z=C5=82 wsparcia=
+ na zakup pompy ciep=C5=82a.
 
-Note how BIT() is defined in include/vdso/bits.h:
+Pr=C3=B3cz wy=C5=BCszego dofinansowania program zak=C5=82ada m.in. podwy=C5=
+=BCszenie prog=C3=B3w dochodowych oraz mo=C5=BCliwo=C5=9B=C4=87 z=C5=82o=C5=
+=BCenia kolejnego wniosku o dofinansowanie dla tych, kt=C3=B3rzy ju=C5=BC=
+ wcze=C5=9Bniej skorzystali z Programu.
 
-#include <vdso/const.h>
+Jako firma specjalizuj=C4=85ca si=C4=99 w dostawie, monta=C5=BCu i serwis=
+ie pomp ciep=C5=82a pomo=C5=BCemy Pa=C5=84stwu w uzyskaniu dofinansowania=
+ wraz z kompleksow=C4=85 realizacj=C4=85 ca=C5=82ego projektu.
 
-#define BIT(nr)                 (UL(1) << (nr))
+S=C4=85 Pa=C5=84stwo zainteresowani?
 
-And in include/vdso/const.h:
-
-#include <uapi/linux/const.h>
-
-#define UL(x)           (_UL(x))
-
-BIT() is thus essentially identical to _BITUL(). As we use the former
-everywhere without any trouble, I wouldn't expect issue with the latter.
-
-> How about this: let's merge this patch and then see how a _BITU() macro
-> would fare.
-
--- 
-Regards,
-
-Laurent Pinchart
+Pozdrawiam
+Damian Hordych
