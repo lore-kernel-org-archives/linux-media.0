@@ -2,170 +2,111 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A315C77B7D
-	for <linux-media@archiver.kernel.org>; Wed, 10 May 2023 14:25:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92717C7EE22
+	for <linux-media@archiver.kernel.org>; Wed, 10 May 2023 15:32:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237447AbjEJOZw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 10 May 2023 10:25:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57540 "EHLO
+        id S237441AbjEJPcI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 10 May 2023 11:32:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237445AbjEJOZs (ORCPT
+        with ESMTP id S229727AbjEJPcH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 10 May 2023 10:25:48 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4EA949F7
-        for <linux-media@vger.kernel.org>; Wed, 10 May 2023 07:25:16 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1pwkkh-0006JQ-Mn; Wed, 10 May 2023 16:25:11 +0200
-Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1pwkkf-0001aC-Qi; Wed, 10 May 2023 16:25:09 +0200
-Date:   Wed, 10 May 2023 16:25:09 +0200
-From:   Michael Grzeschik <mgr@pengutronix.de>
-To:     Tomasz Figa <tfiga@chromium.org>
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
-        m.szyprowski@samsung.com, kernel@pengutronix.de,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Subject: Re: [PATCH] media: videobuf2-dma-sg: use v{un,}map instead of
- vm_{un,}map_ram
-Message-ID: <20230510142509.GA14356@pengutronix.de>
-References: <20221120234441.550908-1-m.grzeschik@pengutronix.de>
- <5e585a78-15c8-fd17-bc34-96f7ed18f592@xs4all.nl>
- <CAAFQd5Aicurw-pjYpWJK_qNemy1qszvN4rL=TfAuxhOdAOTGNg@mail.gmail.com>
+        Wed, 10 May 2023 11:32:07 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B0F2D66
+        for <linux-media@vger.kernel.org>; Wed, 10 May 2023 08:32:04 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-6436dfa15b3so4972421b3a.1
+        for <linux-media@vger.kernel.org>; Wed, 10 May 2023 08:32:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1683732724; x=1686324724;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=juWcyeSBe03nI7TSodOkq9zFpeZ4gErVFi+Ebwz3Ux8=;
+        b=bH/rifR2+9qrvGxj7TGq/T7hSFeNNm8MW8DaYbysKrlNYXI5LR0Q61vXSzKVOX3W5B
+         SHCCJhYLlyXR9pxGi++ZILCd2enTcwsaL8oDkHLgOgamlJgrF9mxYAKBxJk8Gv4L5BTs
+         G0tGHCfpEqXhjee9B+2Qe71/0+qn3cDmiOBLc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683732724; x=1686324724;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=juWcyeSBe03nI7TSodOkq9zFpeZ4gErVFi+Ebwz3Ux8=;
+        b=IGt4PhU/INt2D66PwmOVu+dUyhXSkMyjYfIezWvQeKM4xaDwVqs5YDyVX+fNDrHwnb
+         7z8zhijz4NzYCwf/lXly0mtUJnp8ZwRXV6GbdEUUzTSaEJqQTPmzhdvyhy8q4K7SDQeD
+         +3lkZxgj9rpW1f+L/yWcriFWoaQwcEHcxQYqOkF4sEChZMU/PIxIKqqtKtW03lAOA6pb
+         5qYXroih7JR5pBBffUuq/7dMwJnlHwxCuJHKgpUiWhvEJsmbMFVq9lQP3R9W68OTLM2x
+         fbXHc2zfNVUogMl1ojXvBtBH/CBiYxiPadZTcXqLdD7uYZwLl0kDvEneTfbOsJaUcGYr
+         uPiQ==
+X-Gm-Message-State: AC+VfDycuOMtG22aHdp/00Stzi/A9zEmWcqqWPPVIq1N6ohnu2LE1pJ5
+        u01L91zgem9LoOWYCVNfarX6+g==
+X-Google-Smtp-Source: ACHHUZ4covKpZINnEbCbA63hw2wkSQsa8YuVFl+q+NfVOLrvs4TpM1hHNJVz6obDsAcae18eoOtPEA==
+X-Received: by 2002:a05:6a20:9187:b0:dd:e6f5:a798 with SMTP id v7-20020a056a20918700b000dde6f5a798mr23115371pzd.6.1683732724336;
+        Wed, 10 May 2023 08:32:04 -0700 (PDT)
+Received: from fshao-glinux.tpe.corp.google.com ([2401:fa00:1:10:d50a:c03e:3f7a:7e5f])
+        by smtp.gmail.com with ESMTPSA id y10-20020a62b50a000000b00643b04b515fsm3643210pfe.160.2023.05.10.08.32.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 May 2023 08:32:03 -0700 (PDT)
+From:   Fei Shao <fshao@chromium.org>
+To:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Fei Shao <fshao@chromium.org>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: [PATCH] media: mediatek: vcodec: Convert mtk_vcodec_dec_hw platform remove callback
+Date:   Wed, 10 May 2023 23:31:35 +0800
+Message-ID: <20230510233117.1.I7047714f92ef7569bd21f118ae6aee20b3175a92@changeid>
+X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8-goog
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="sdtB3X0nJg68CQEu"
-Content-Disposition: inline
-In-Reply-To: <CAAFQd5Aicurw-pjYpWJK_qNemy1qszvN4rL=TfAuxhOdAOTGNg@mail.gmail.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+This aligns with [1] and converts the platform remove callback to
+.remove_new(), which returns void.
 
---sdtB3X0nJg68CQEu
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[1]: commit a3afc5b10661 ("media: mtk_vcodec_dec_drv: Convert to
+     platform remove callback returning void")
 
-Sorry for the late comeback, however here are some thoughts.
+Signed-off-by: Fei Shao <fshao@chromium.org>
 
-On Fri, Dec 02, 2022 at 06:01:02PM +0900, Tomasz Figa wrote:
->On Thu, Nov 24, 2022 at 10:35 PM Hans Verkuil <hverkuil@xs4all.nl> wrote:
->>
->> On 21/11/2022 00:44, Michael Grzeschik wrote:
->> > The comments before the vm_map_ram function state that it should be us=
-ed
->> > for up to 256 KB only, and video buffers are definitely much larger. It
->> > recommends using vmap in that case.
->> >
->> > Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->> > ---
->> >  drivers/media/common/videobuf2/videobuf2-dma-sg.c | 7 ++++---
->>
->> drivers/media/common/videobuf2/videobuf2-vmalloc.c uses it as well,
->> probably also incorrectly. It makes sense to change that one as well.
->
->Comparing vm_map_ram() and vmap(..., VM_MAP, PAGE_KERNEL), for blocks
->bigger than VMAP_MAX_ALLOC they're equivalent and for smaller blocks
->the former should be faster, so I don't see what's wrong with the
->current code.
+---
 
-I got another comment on this from Andrzej Pietrasiewicz
-where he expands the comment on the use of vmap over vm_map_ram.
+ drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-https://lore.kernel.org/linux-media/64375ff4-dbbb-3d5b-eaf6-32d6780fd496@co=
-llabora.com
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
+index b753bf54ebd9..bd5743723da6 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
+@@ -193,16 +193,14 @@ static int mtk_vdec_hw_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static int mtk_vdec_hw_remove(struct platform_device *pdev)
++static void mtk_vdec_hw_remove(struct platform_device *pdev)
+ {
+ 	pm_runtime_disable(&pdev->dev);
+-
+-	return 0;
+ }
+ 
+ static struct platform_driver mtk_vdec_driver = {
+ 	.probe	= mtk_vdec_hw_probe,
+-	.remove = mtk_vdec_hw_remove,
++	.remove_new = mtk_vdec_hw_remove,
+ 	.driver	= {
+ 		.name	= "mtk-vdec-comp",
+ 		.of_match_table = mtk_vdec_hw_match,
+-- 
+2.40.1.521.gf1e218fcd8-goog
 
-As I understand this, we should probably update the vm_map_ram to vmap,
-due to the expectation that video buffers are long-living objects.
-
-Since there are some more places that would probably need to be updated
-if we should decide to use vmap over vm_map_ram in the whole
-videbuf2-* users, I would like to clarify on this before making
-a series.
-
-Regards,
-Michael
-
->> >  1 file changed, 4 insertions(+), 3 deletions(-)
->> >
->> > diff --git a/drivers/media/common/videobuf2/videobuf2-dma-sg.c b/drive=
-rs/media/common/videobuf2/videobuf2-dma-sg.c
->> > index dcb8de5ab3e84a..e86621fba350f3 100644
->> > --- a/drivers/media/common/videobuf2/videobuf2-dma-sg.c
->> > +++ b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
->> > @@ -188,7 +188,7 @@ static void vb2_dma_sg_put(void *buf_priv)
->> >               dma_unmap_sgtable(buf->dev, sgt, buf->dma_dir,
->> >                                 DMA_ATTR_SKIP_CPU_SYNC);
->> >               if (buf->vaddr)
->> > -                     vm_unmap_ram(buf->vaddr, buf->num_pages);
->> > +                     vunmap(buf->vaddr);
->> >               sg_free_table(buf->dma_sgt);
->> >               while (--i >=3D 0)
->> >                       __free_page(buf->pages[i]);
->> > @@ -289,7 +289,7 @@ static void vb2_dma_sg_put_userptr(void *buf_priv)
->> >              __func__, buf->num_pages);
->> >       dma_unmap_sgtable(buf->dev, sgt, buf->dma_dir, DMA_ATTR_SKIP_CPU=
-_SYNC);
->> >       if (buf->vaddr)
->> > -             vm_unmap_ram(buf->vaddr, buf->num_pages);
->> > +             vunmap(buf->vaddr);
->> >       sg_free_table(buf->dma_sgt);
->> >       if (buf->dma_dir =3D=3D DMA_FROM_DEVICE ||
->> >           buf->dma_dir =3D=3D DMA_BIDIRECTIONAL)
->> > @@ -312,7 +312,8 @@ static void *vb2_dma_sg_vaddr(struct vb2_buffer *v=
-b, void *buf_priv)
->> >                       ret =3D dma_buf_vmap(buf->db_attach->dmabuf, &ma=
-p);
->> >                       buf->vaddr =3D ret ? NULL : map.vaddr;
->> >               } else {
->> > -                     buf->vaddr =3D vm_map_ram(buf->pages, buf->num_p=
-ages, -1);
->> > +                     buf->vaddr =3D vmap(buf->pages, buf->num_pages, =
-VM_MAP,
->> > +                                       PAGE_KERNEL);
->> >               }
->> >       }
->> >
->>
->
-
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---sdtB3X0nJg68CQEu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmRbqUIACgkQC+njFXoe
-LGQdJRAAwPrIEAQ/PU5Lp14o7hRfUXZQsFECknFBKTb2EtBn6MVrEVDr9kO5lmeA
-/ZW4g1t/+TY30B+cRyeifVsNJfaarXz5Wf8R/P3CUTtvsr1jksUniIqNaRp9Kz/y
-9TdFdF9xujajTGrp/Fc7qfsMenB1QcfXyDQ9kH7c+krSEvj1tqBrXVmVbtEbeYg7
-k9Vd8y3OF/RwqaRKiq2hzMFV0IXmuTTeQsTQ2BecRcBaR6ltRBk9zitNJOF7av5B
-9DMCwzbJvBNhoVo+u3fGb9fuPTVMy9B5RRCFKEFSe/aBwPzJHRmS08H4AgDzEkwg
-B1CNrlGijLwONa306TFP2d6ARfJc1HlOqGqxEm97i1iKsclBGupI3UBAo5HWcDxQ
-HnDSrbmdJccTqTTpb4pON7oBiokKj3sZ5Ku9rFldy7Lsbn3CCSJYdonJb8MLUifS
-THXm0magV6AFChZWk1290MgCbKIaypbIJ9YUqFtgKQ9UaEJtaBl+jXtVW0/7PBEo
-pKprfwvsd+g8sVWCdSapoxYPUwP/6XBqp5F8Y0AfJanedLMkQZimEQg3Ii+Smc5T
-HYO9vTDe5Yv0MOkoMmcqlrHNhWXmd1i7h+BZwURiSjG817psYOxTBVW+nM5eK3KL
-0OTH9w9AEGLDgxaeuTYnanC58oG2Ho3ucn+F0UWqMnZ1Qe5l5Hk=
-=UL6W
------END PGP SIGNATURE-----
-
---sdtB3X0nJg68CQEu--
