@@ -2,66 +2,107 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72EEDC77B7F
-	for <linux-media@archiver.kernel.org>; Thu, 11 May 2023 06:14:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6DE1C77B7C
+	for <linux-media@archiver.kernel.org>; Thu, 11 May 2023 06:41:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231621AbjEKGOy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 May 2023 02:14:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39568 "EHLO
+        id S236438AbjEKGlI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 May 2023 02:41:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236759AbjEKGOx (ORCPT
+        with ESMTP id S229609AbjEKGlI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 May 2023 02:14:53 -0400
-Received: from www.linuxtv.org (www.linuxtv.org [130.149.80.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA2219AB
-        for <linux-media@vger.kernel.org>; Wed, 10 May 2023 23:14:52 -0700 (PDT)
-Received: from builder.linuxtv.org ([140.211.167.10] helo=slave0)
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1pwzZj-001TBw-0E; Thu, 11 May 2023 06:14:51 +0000
-Received: from ip6-localhost ([::1] helo=localhost.localdomain)
-        by slave0 with esmtp (Exim 4.94.2)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1pwzZg-00DYXz-J0; Thu, 11 May 2023 06:14:48 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL for v6.4-rc2] media fixes (#91758)
-Date:   Thu, 11 May 2023 06:14:48 +0000
-Message-Id: <20230511061448.3231017-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230511070103.263505ba@sal.lan>
-References: 
+        Thu, 11 May 2023 02:41:08 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC39103;
+        Wed, 10 May 2023 23:41:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=RtWxN7e4QjgKeMqyRm8+weDfqFq3jfnkuzd3W1qjtiM=; b=jw/mMH9qT+/rpGk7mfI4YGlPGe
+        uWTb2lZmqfZIuwVdgWuQnLtmQkWFasYr7kqa7CUIFVCLKRFtUvi1n8Qd+6fMBYIIAbvrl/GdFxv2J
+        lqAmLygNJHA+XCTSh+mldXiQG+o7dI8T8FS5MrntPj1B3P2ekHWFpwYFdC4tjvXb2QUArkaE0igA9
+        oZtyK6diEXw40KxwmYst51pwkoEifoIuQGmWWNdXLmKJ3cCOtTTeK1EclD5jXQT9bgdhOYp/vs0Fz
+        UBoWWTUbFlQsarbW1h9IC4EJZW1ubTxAV15CCwSdzwFvYrZWcxDjqD9Lezep+zRrsTgNjjVxyMM2m
+        zJpZGunw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pwzyw-001dzq-0x;
+        Thu, 11 May 2023 06:40:54 +0000
+Date:   Thu, 11 May 2023 07:40:54 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc:     ye.xingchen@zte.com.cn, sumit.semwal@linaro.org,
+        gustavo@padovan.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dma-buf/sync_file: Use fdget()
+Message-ID: <20230511064054.GM3390869@ZenIV>
+References: <202305051103396748797@zte.com.cn>
+ <b9ceed26-bf64-6314-3ec5-562542b2b1c6@amd.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <b9ceed26-bf64-6314-3ec5-562542b2b1c6@amd.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+On Fri, May 05, 2023 at 10:22:09AM +0200, Christian König wrote:
+> Am 05.05.23 um 05:03 schrieb ye.xingchen@zte.com.cn:
+> > From: Ye Xingchen <ye.xingchen@zte.com.cn>
+> > 
+> > convert the fget() use to fdget().
+> 
+> Well the rational is missing. Why should we do that?
 
-Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/20230511070103.263505ba@sal.lan/
-Build log: https://builder.linuxtv.org/job/patchwork/305313/
-Build time: 00:00:00
-Link: https://lore.kernel.org/linux-media/20230511070103.263505ba@sal.lan
+We very definitely should not.  The series appears to be
+pure cargo-culting and it's completely wrong.
 
-gpg: Signature made Thu 11 May 2023 05:56:24 AM UTC
-gpg:                using RSA key F909AE68FC11DF09C1755C00085F3EBD8EE4E115
-gpg: Good signature from "Mauro Carvalho Chehab <mchehab+huawei@kernel.org>" [ultimate]
-gpg:                 aka "Mauro Carvalho Chehab <mchehab@kernel.org>" [ultimate]
-gpg:                 aka "Mauro Carvalho Chehab <m.chehab@samsung.com>" [ultimate]
-gpg:                 aka "Mauro Carvalho Chehab <mchehab@osg.samsung.com>" [ultimate]
-gpg:                 aka "Mauro Carvalho Chehab <mchehab@s-opensource.com>" [ultimate]
-gpg:                 aka "Mauro Carvalho Chehab <mchehab+samsung@kernel.org>" [ultimate]
-gpg:                 aka "[jpeg image of size 3594]" [ultimate]
+There is such thing as unwarranted use of fget().  Under some
+conditions converting to fdget() is legitimate *and* is an
+improvement.  HOWEVER, those conditions are not met in this case.
 
+Background: references in descriptor table do contribute to
+struct file refcount.  fget() finds the reference by descriptor
+and returns it, having bumped the refcount.  In case when
+descriptor table is shared, we must do that - otherwise e.g.
+close() or dup2() from another thread could very well have
+destroyed the struct file we'd just found.  However, if
+descriptor table is *NOT* shared, there's no need to mess
+with refcount at all.  Provided that
+	* we are not grabbing the reference to keep it (stash
+into some data structure, etc.); as soon as we return from
+syscall, the reference in descriptor table is fair game for
+e.g. close(2).  Or exit(2), for that matter.
+	* we remember whether it was shared or not - we can't
+just recheck that when we are done with the file; after all,
+descriptor table might have been shared when we looked the file up,
+but another thread might've died since then and left it not
+shared anymore.
+	* we do not rip the same reference out of our descriptor
+table ourselves - not without seriously convoluted precautions.
+Very few places in the kernel can lead to closing descriptors,
+so in practice it only becomes a problem when a particularly
+ugly ioctl decides that it would be neat to close some descriptor(s).
+Example of such convolutions: binder_deferred_fd_close().
 
-Build aborted due to a fatal error:
-FAILED: patch patch patches/0001-media-rcar-vin-Gen3-can-not-scale-NV12.patch doesn't apply:
-Applying patch patches/0001-media-rcar-vin-Gen3-can-not-scale-NV12.patch
-patching file drivers/media/platform/renesas/rcar-vin/rcar-dma.c
-Hunk #1 FAILED at 1312.
-1 out of 1 hunk FAILED -- rejects in file drivers/media/platform/renesas/rcar-vin/rcar-dma.c
-Patch patches/0001-media-rcar-vin-Gen3-can-not-scale-NV12.patch can be reverse-applied
+fdget() returns a pair that consists of struct file reference
+*AND* indication whether we have grabbed a reference.  fdput()
+takes such pair.
 
+Both are inlined, and compiler is smart enough to split the
+pair into two separate local variables.  The underlying
+primitive actually stashes the "have grabbed the refcount"
+into the LSB of returned word; see __to_fd() in include/linux/file.h
+for details.  It really generates a decent code and a plenty of
+places where we want a file by descriptor are just fine with it.
+
+This patch is flat-out broken, since it loses the "have we bumped
+the refcount" information - the callers do not get it.
+
+It might be possible to massage the calling conventions to enable
+the conversion to fdget(), but it's not obvious that result would
+be cleaner and in any case, the patch in question doesn't even
+try that.
