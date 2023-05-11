@@ -2,224 +2,186 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70E55C7EE22
-	for <linux-media@archiver.kernel.org>; Thu, 11 May 2023 11:19:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E3B6C7EE22
+	for <linux-media@archiver.kernel.org>; Thu, 11 May 2023 11:31:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237867AbjEKLTU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 May 2023 07:19:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50688 "EHLO
+        id S237729AbjEKLbB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 May 2023 07:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237874AbjEKLTT (ORCPT
+        with ESMTP id S232333AbjEKLbA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 May 2023 07:19:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254A56A79
-        for <linux-media@vger.kernel.org>; Thu, 11 May 2023 04:18:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683803911;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Uh7FfgfYAQZQJkeLx1lJ/e68IQ6SK/qzygHnfuKMTrg=;
-        b=FiovhSwNky8I9AlhV2NJT2iNc0HRJ6zJwtW9/Q8eX222ZEQuBetMx1pacDua94cK4tmUOB
-        gOmEQgDRNHFoWf+y2OTmobVRAIjGNRp06svG7NHB2g8c3y939OezYz0Sl01Xqj91ZTxQgA
-        DxHG3gPrK5Mvk3sB3gXUdiPfveDbp4s=
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
- [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-621-adzyXorkO-u4d97WOGxIXQ-1; Thu, 11 May 2023 07:18:30 -0400
-X-MC-Unique: adzyXorkO-u4d97WOGxIXQ-1
-Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-1aadd0a7cf2so84795505ad.3
-        for <linux-media@vger.kernel.org>; Thu, 11 May 2023 04:18:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683803909; x=1686395909;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Uh7FfgfYAQZQJkeLx1lJ/e68IQ6SK/qzygHnfuKMTrg=;
-        b=FgIUv7U+Om0JhHtDxUqRW6eBfbuOrr1e7vHZkJA9pqE0S2ogIElohD+6TURZaTHMWK
-         sOdJQoHKExvN5IrV8Lb/aYm7P0rLzNPMOX64VxADLeqXIuRSMdLU0GSCQXYuiCvYBodn
-         /6WsSEpE4TWcCiS7P5zQCR+SNpmMIKUUmA7WO9UShDFipogHs2pituOudsVKgWsVR8Xz
-         dZbL0bYooeZJU3UN10V23iTqxKpu0dSvGnKvo6IvRQCSg2nPstyoMWcr7TETKNmvGt0N
-         Bg3bvOjiDPog9hw9r6BOFCyNCWIEsQD9SNeLpyMFjcMyP6FpNS7AKDjivXWKlSs9CL40
-         kdDA==
-X-Gm-Message-State: AC+VfDyZtfjnh0X1ooWhdPb1vxyYx2Y+sHXFyWrZhCSi7/x0D0BCfLmo
-        8IbOTiZO4P+kYhxongQftA5vlNa07AHmq9jNrJiHTCIomTdhavZXUF0kwunJXyXE68CcLGMuvzO
-        p56e2Pc8RDYyVVHI3rzOGZcVZs96KrBgniu9JqieAJfwB7qU=
-X-Received: by 2002:a17:902:d48d:b0:1ac:8835:b89b with SMTP id c13-20020a170902d48d00b001ac8835b89bmr14381148plg.5.1683803908558;
-        Thu, 11 May 2023 04:18:28 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6Ja4ir5O4k+WlQPJShFsjIJrccV/8GOpyGJzuT/1F6Ed6hKLMMCDA7G4j8JX/EryADiUyCHg1rsWFyHnnDxZg=
-X-Received: by 2002:a17:902:d48d:b0:1ac:8835:b89b with SMTP id
- c13-20020a170902d48d00b001ac8835b89bmr14381119plg.5.1683803908160; Thu, 11
- May 2023 04:18:28 -0700 (PDT)
+        Thu, 11 May 2023 07:31:00 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1206C6E87
+        for <linux-media@vger.kernel.org>; Thu, 11 May 2023 04:30:57 -0700 (PDT)
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230511113053epoutp0180b4eb957f9cb1dda3350dd35f8ea578~eE2lJEGQh0767207672epoutp01W
+        for <linux-media@vger.kernel.org>; Thu, 11 May 2023 11:30:53 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230511113053epoutp0180b4eb957f9cb1dda3350dd35f8ea578~eE2lJEGQh0767207672epoutp01W
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1683804653;
+        bh=hxadvZ90jQwN3sY5u5NG5YSwP+69MHqwcLLQTKMC4no=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=eCNByOUC0ZT6Q/T2mQtLJIVF5ws6nURlIax+pu8hAusHU8Y+s32yQghcOrpJp6iga
+         ghra7+0qrWpt2ozIO4DB4xtEPvUIjc9SKBLFmU7PjcxS9Kwoupx9+eGO2AzM2aH5KS
+         EvKB9SiEXwNbtF68BVN6zf+usBoAvp5hXp2C7mUo=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+        20230511113052epcas5p14977f5362f2296b6e3f3697cb1079f76~eE2kUmQQe1700717007epcas5p16;
+        Thu, 11 May 2023 11:30:52 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.178]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4QH8pf689dz4x9Q1; Thu, 11 May
+        2023 11:30:50 +0000 (GMT)
+Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        33.23.55646.AE1DC546; Thu, 11 May 2023 20:30:50 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230511093509epcas5p19661fe238eb92ac71d23546b02debd1a~eDRhznWR82856128561epcas5p1c;
+        Thu, 11 May 2023 09:35:09 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230511093509epsmtrp1f67f27b028b9d302e9ee2d83d0c52cf9~eDRhyoYwX1004110041epsmtrp1-;
+        Thu, 11 May 2023 09:35:09 +0000 (GMT)
+X-AuditID: b6c32a4b-913ff7000001d95e-ea-645cd1ea2b85
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        55.4C.27706.DC6BC546; Thu, 11 May 2023 18:35:09 +0900 (KST)
+Received: from FDSFTE308 (unknown [107.122.81.79]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20230511093506epsmtip2aa18a3df1915c916ae028b27f9a005d8~eDResfpW_2787127871epsmtip2d;
+        Thu, 11 May 2023 09:35:05 +0000 (GMT)
+From:   "Aakarsh Jain" <aakarsh.jain@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+Cc:     <m.szyprowski@samsung.com>, <andrzej.hajda@intel.com>,
+        <mchehab@kernel.org>, <hverkuil-cisco@xs4all.nl>,
+        <ezequiel@vanguardiasur.com.ar>, <jernej.skrabec@gmail.com>,
+        <benjamin.gaignard@collabora.com>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <stanimir.varbanov@linaro.org>, <dillon.minfei@gmail.com>,
+        <david.plowman@raspberrypi.com>, <mark.rutland@arm.com>,
+        <robh+dt@kernel.org>, <krzk+dt@kernel.org>, <andi@etezian.org>,
+        <alim.akhtar@samsung.com>, <aswani.reddy@samsung.com>,
+        <pankaj.dubey@samsung.com>
+In-Reply-To: <ad96f28a-7b2d-a58b-50fb-648063ed0b18@linaro.org>
+Subject: RE: [Patch v7] dt-bindings: media: s5p-mfc: convert bindings to
+ json-schema
+Date:   Thu, 11 May 2023 15:04:57 +0530
+Message-ID: <000001d983eb$e0692280$a13b6780$@samsung.com>
 MIME-Version: 1.0
-References: <20230508062632.34537-1-hpa@redhat.com> <20230508062632.34537-5-hpa@redhat.com>
- <b718122b-7935-d0e2-4e1d-a09e0943a84b@redhat.com>
-In-Reply-To: <b718122b-7935-d0e2-4e1d-a09e0943a84b@redhat.com>
-From:   Kate Hsuan <hpa@redhat.com>
-Date:   Thu, 11 May 2023 19:18:16 +0800
-Message-ID: <CAEth8oGtNoC2R6NPzbwyVuB2LCbWPnboqhaOFOoMRgsZw=ampg@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] staging: media: atomisp: sh_css_mipi: Remove
- #ifdef 2041
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQH2qCSoqzmQPtjJ4D91uRJfLAIcDAIowXKcAjqO7m2u92w9wA==
+Content-Language: en-in
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0xbVRzHPffePkBZ7jpIzwjOeg0aYDwKpV5mO5fJ8JqajIRk7ikr7Q0g
+        faUPpmgCOBgbYRUWwdAxNqCgII+uwKgrHa+yZWhmmATMpIMBC9BZnYDupZmlLcp/n9/je76/
+        3zk5bJRTzQpn56r0tFYlVRDMYOzKSFRUrHv8qDzB0hJPztZfYZJNjxcRcqZpFSOHu3tZZM/E
+        eZT8+sYgg7zovMUg+4bmMPLykrc6XuvCyMWLnYBcNt1lksaleyjpeOBVWOcnGeRPV+uYZIWl
+        l0F2OF0ssnlqHCFbrH8jZGPvGossdThZZMkpJ7KHS7XXtwPK5jIDasq8glLfmVwsqql/GaGs
+        bWeY1PRkP5PqNhdSpaNPMcrY0waocucUk1q17qDG/lxlpYcczhPl0FI5reXRKplanqvKFhOS
+        jMx3MpOFCfxYfgr5JsFTSZW0mEh9Pz02LVfh3Z7g5UsVBm8qXarTEfG7RVq1QU/zctQ6vZig
+        NXKFRqCJ00mVOoMqO05F63fxExISk72Nx/NyakpnUI2Z83GNu5FVBE7j5SCIDXEBbJjtZJSD
+        YDYHtwM4XGXD/MEKgPaGKsQf/AVgmbWMsSEpnZ4JFBwADtUVB/SLALoXrrHWu5h4PJwZq/AV
+        QvFRAGd77qHrAYqXYbDqdhFY7wrCd8Pi82Z0nbfhB+DahXM+xvBIaP+9wXdSCJ4CL9U4ED9v
+        hTdrF7B1RvEY2NLwAPXPxINP7rf45gvF90JnwyrL38OFo08qfMYQHwmCXd1ull+QCu///CjA
+        26D7Rk+Aw+HyF6cCLIPzjcsBAwXs6v8S8/PbcHCizstsr0EU7Loa70+/DKvHOhG/7xZ49tkC
+        4s+HQFv9Br8O66YfB+4xAo582wwqAWHatJpp02qmTSuY/ne7BLA2sJ3W6JTZtC5Zk6SiT/z3
+        5jK10gp8/yNaYgNzsw/jhgHCBsMAslEiNMRjPiLnhMilnxTQWnWm1qCgdcMg2XvfVWh4mEzt
+        /WAqfSZfkJIgEAqFgpQkIZ/ghrwhvinj4NlSPZ1H0xpau6FD2EHhRUjPwWs7t4TdWnn47Kv9
+        rVnGfYU7pZJv8l+YZPcZ96fFjLcXAOTQoKfM9BpQCIqXPNdtOzyap7JzBw4bhBa7+FU0y2iP
+        T6yOvfMj4A7ILvwQt7Xk+30ljtTLMWFg4vpItft2hkf4Xgf3D9R2VzKYP7ndkmYxyzh3XHtR
+        yCx2/0Y9l2h+nX838uzRyIiFrFXHwCRr5ZcPZz89MaFsbRYRnaPPK+fWuC8dYT6K7jgjRjtC
+        S1zBGVSl7WSrJ7MiIjlO9Hl3bWF1DG/Opn8ldPDQfMbAsQ/Gk+zK46KuqZNvfcZolhQYwOJ0
+        n3Don4/27JorajoWGdslSnTW2Y2nLVEHhS8SmC5Hyo9GtTrpv3EkZ+OoBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrLIsWRmVeSWpSXmKPExsWy7bCSvO7ZbTEpBj9n8lk8mLeNzWLxj+dM
+        FvcXf2axOLR5K7vFliuzmS2WHz/AajH/yDlWi+0HH7FYbHwBlL048y6LxfP56xgtXs66x2bR
+        9+Ihs8Xe10Admx5fY7W4vGsOm0XPhq2sFmuP3GW3WHr9IpPFsk1/mCwWbf3CbtG69wi7RUvb
+        ESYHcY8189Yweuy4u4TR4/qST8weO2fdZfdYvOclk8emVZ1sHneu7WHz2Lyk3qP16C8Wj74t
+        qxg9uo5cZ/P4vEnO49TXz+wBvFFcNimpOZllqUX6dglcGe23n7EWzBesuNh8jL2B8SlfFyMn
+        h4SAiUTrnftMXYxcHEICuxklDn6ayQaRkJH433aMHcIWllj57zk7RNFTRokJBy6BFbEJ6Evc
+        P9XDCpIQETjJKNF/pgXMYRaYySJxdcIxqLkHGSUervvFBNLCKWAn0Th7CTOILSwQInF95ikW
+        EJtFQFVi9/uFYPt4BSwlFkzbywRhC0qcnPkErIZZQFvi6c2ncPayha+ZIe5TkPj5dBkriC0i
+        4CRxZOFndogacYmjP3uYJzAKz0IyahaSUbOQjJqFpGUBI8sqRsnUguLc9NxiwwLDvNRyveLE
+        3OLSvHS95PzcTYzgFKKluYNx+6oPeocYmTgYDzFKcDArifC+XRKdIsSbklhZlVqUH19UmpNa
+        fIhRmoNFSZz3QtfJeCGB9MSS1OzU1ILUIpgsEwenVANTxGOvjsNyIVWpCosE1uwpnG6dXHHB
+        4bl1ZajBwb86AW0Xd+f6qR9/nXt7drXkmXXrsgIm7Irq+JBmuHHdj6XO7RqmC7czMads7w57
+        f0j1ybkCH5U/LXO+u6yaGPjStOrDkk8PNT/pb9RYUXblQn6z/uOtdT6yE9rPKxp0VbkybXh8
+        8csaJgXef+KSp90XLJKUjvv9PTVQLGX9/KlXM9J4Cqaqv5T3nb3skayjK99qP15l+ZrEKsa4
+        4twwb9G+U1p3tt+6dK0zoebPhVlNdz8wPBKLfCTKmSLFmhfhOoup0CbuxtVa/fN9mzL7tqe0
+        JDQHcnUm+V3+o7bkQdqqdZnOJhXNM1c5rjbcL+8YVaPEUpyRaKjFXFScCABdDv9OkAMAAA==
+X-CMS-MailID: 20230511093509epcas5p19661fe238eb92ac71d23546b02debd1a
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230328114738epcas5p475b8fa1d1e86bbb86d004afe365e0259
+References: <CGME20230328114738epcas5p475b8fa1d1e86bbb86d004afe365e0259@epcas5p4.samsung.com>
+        <20230328114729.61436-1-aakarsh.jain@samsung.com>
+        <ad96f28a-7b2d-a58b-50fb-648063ed0b18@linaro.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans,
 
-On Thu, May 11, 2023 at 2:34=E2=80=AFAM Hans de Goede <hdegoede@redhat.com>=
- wrote:
->
-> Hi Kate,
->
-> On 5/8/23 08:26, Kate Hsuan wrote:
-> > The actions of ISP2401 and 2400 are determined at the runtime.
+
+> -----Original Message-----
+> From: Krzysztof Kozlowski =5Bmailto:krzysztof.kozlowski=40linaro.org=5D
+> Sent: 28 March 2023 20:06
+> To: Aakarsh Jain <aakarsh.jain=40samsung.com>; linux-arm-
+> kernel=40lists.infradead.org; linux-media=40vger.kernel.org; linux-
+> kernel=40vger.kernel.org; devicetree=40vger.kernel.org
+> Cc: m.szyprowski=40samsung.com; andrzej.hajda=40intel.com;
+> mchehab=40kernel.org; hverkuil-cisco=40xs4all.nl;
+> ezequiel=40vanguardiasur.com.ar; jernej.skrabec=40gmail.com;
+> benjamin.gaignard=40collabora.com; krzysztof.kozlowski+dt=40linaro.org;
+> stanimir.varbanov=40linaro.org; dillon.minfei=40gmail.com;
+> david.plowman=40raspberrypi.com; mark.rutland=40arm.com;
+> robh+dt=40kernel.org; krzk+dt=40kernel.org; andi=40etezian.org;
+> alim.akhtar=40samsung.com; aswani.reddy=40samsung.com;
+> pankaj.dubey=40samsung.com
+> Subject: Re: =5BPatch v7=5D dt-bindings: media: s5p-mfc: convert bindings=
+ to json-
+> schema
+>=20
+> On 28/03/2023 13:47, Aakarsh Jain wrote:
+> > Convert s5p-mfc bindings to DT schema format using json-schema.
 > >
-> > Signed-off-by: Kate Hsuan <hpa@redhat.com>
+> > Signed-off-by: Aakarsh Jain <aakarsh.jain=40samsung.com>
 > > ---
-> >  .../staging/media/atomisp/pci/sh_css_mipi.c   | 65 ++++++-------------
-> >  1 file changed, 20 insertions(+), 45 deletions(-)
-> >
-> > diff --git a/drivers/staging/media/atomisp/pci/sh_css_mipi.c b/drivers/=
-staging/media/atomisp/pci/sh_css_mipi.c
-> > index bc6e8598a776..52a1ed63e9a5 100644
-> > --- a/drivers/staging/media/atomisp/pci/sh_css_mipi.c
-> > +++ b/drivers/staging/media/atomisp/pci/sh_css_mipi.c
-> > @@ -386,30 +381,22 @@ allocate_mipi_frames(struct ia_css_pipe *pipe,
-> >               return -EINVAL;
-> >       }
-> >
-> > -#ifdef ISP2401
-> > -     err =3D calculate_mipi_buff_size(&pipe->stream->config,
-> > -                                    &my_css.mipi_frame_size[port]);
->
-> Before you changes this code always run ISP2401, now it only runs
-> when (ref_count_mipi_allocation[port] !=3D 0) is not true.
->
-> So this statement should stay here in the code, just prefixed
-> with a if (IS_ISP2401) condition.
->
-> > -     /*
-> > -      * 2401 system allows multiple streams to use same physical port.=
- This is not
-> > -      * true for 2400 system. Currently 2401 uses MIPI buffers as a te=
-mporary solution.
-> > -      * TODO AM: Once that is changed (removed) this code should be re=
-moved as well.
-> > -      * In that case only 2400 related code should remain.
-> > -      */
-> > -     if (ref_count_mipi_allocation[port] !=3D 0) {
-> > -             ref_count_mipi_allocation[port]++;
-> > -             ia_css_debug_dtrace(IA_CSS_DEBUG_TRACE_PRIVATE,
-> > -                                 "allocate_mipi_frames(%p) leave: noth=
-ing to do, already allocated for this port (port=3D%d).\n",
-> > -                                 pipe, port);
-> > -             return 0;
-> > -     }
-> > -#else
-> >       if (ref_count_mipi_allocation[port] !=3D 0) {
-> >               ia_css_debug_dtrace(IA_CSS_DEBUG_TRACE_PRIVATE,
-> >                                   "allocate_mipi_frames(%p) exit: alrea=
-dy allocated for this port (port=3D%d).\n",
-> >                                   pipe, port);
-> >               return 0;
-> > +     } else {
-> > +             /*
-> > +              * 2401 system allows multiple streams to use same physic=
-al port. This is not
-> > +              * true for 2400 system. Currently 2401 uses MIPI buffers=
- as a temporary solution.
-> > +              * TODO AM: Once that is changed (removed) this code shou=
-ld be removed as well.
-> > +              * In that case only 2400 related code should remain.
-> > +              */
->
-> This comment block actually belongs to the if (ref_count_mipi_allocation[=
-port] !=3D 0)
-> check, the code executed if that check passes was actually different betw=
-een
-> the ISP2400 and ISP2401 (my bad, sorry). The ISP2401 case did an extra:
->
->                 ref_count_mipi_allocation[port]++;
->
-> when (ref_count_mipi_allocation[port] !=3D 0), so we need to add:
->
->                 if (IS_ISP2401)
->                         ref_count_mipi_allocation[port]++;
->
-> above the return 0 above.
->
-> > +             if (IS_ISP2401)
-> > +                     err =3D calculate_mipi_buff_size(&pipe->stream->c=
-onfig,
-> > +                                                    &my_css.mipi_frame=
-_size[port]);
->
-> I have fixed this all up while merging your series and the new
-> diff for this code-block now looks like this:
->
-> @@ -386,9 +381,10 @@ allocate_mipi_frames(struct ia_css_pipe *pipe,
->                 return -EINVAL;
->         }
->
-> -#ifdef ISP2401
-> -       err =3D calculate_mipi_buff_size(&pipe->stream->config,
-> -                                      &my_css.mipi_frame_size[port]);
-> +       if (IS_ISP2401)
-> +               err =3D calculate_mipi_buff_size(&pipe->stream->config,
-> +                                              &my_css.mipi_frame_size[po=
-rt]);
-> +
->         /*
->          * 2401 system allows multiple streams to use same physical port.=
- This is not
->          * true for 2400 system. Currently 2401 uses MIPI buffers as a te=
-mporary solution.
-> @@ -396,20 +392,14 @@ allocate_mipi_frames(struct ia_css_pipe *pipe,
->          * In that case only 2400 related code should remain.
->          */
->         if (ref_count_mipi_allocation[port] !=3D 0) {
-> -               ref_count_mipi_allocation[port]++;
-> +               if (IS_ISP2401)
-> +                       ref_count_mipi_allocation[port]++;
-> +
->                 ia_css_debug_dtrace(IA_CSS_DEBUG_TRACE_PRIVATE,
->                                     "allocate_mipi_frames(%p) leave: noth=
-ing to do, already allocated for this port (port=3D%d).\n",
->                                     pipe, port);
->                 return 0;
->         }
-> -#else
-> -       if (ref_count_mipi_allocation[port] !=3D 0) {
-> -               ia_css_debug_dtrace(IA_CSS_DEBUG_TRACE_PRIVATE,
-> -                                   "allocate_mipi_frames(%p) exit: alrea=
-dy allocated for this port (port=3D%d).\n",
-> -                                   pipe, port);
-> -               return 0;
-> -       }
-> -#endif
->
->         ref_count_mipi_allocation[port]++;
->
->
->
-> Regards,
->
-> Hans
->
+> > changes since v6:
+>=20
+> This is a friendly reminder during the review process.
+>=20
+> It looks like you received a tag and forgot to add it.
+>=20
+> If you do not know the process, here is a short explanation:
+> Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+> versions. However, there's no need to repost patches *only* to add the
+> tags. The upstream maintainer will do that for acks received on the versi=
+on
+> they apply.
+>=20
+> https://protect2.fireeye.com/v1/url?k=3D03601d03-62eb0848-0361964c-
+> 74fe485fb305-ca0023b5279dd925&q=3D1&e=3D9490b51d-9547-4566-bb76-
+> 8c1401745ae1&u=3Dhttps%3A%2F%2Felixir.bootlin.com%2Flinux%2Fv5.17%2Fs
+> ource%2FDocumentation%2Fprocess%2Fsubmitting-patches.rst%23L540
+>=20
+> If a tag was not added on purpose, please state why and what changed.
+>=20
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski=40linaro.org>
+>=20
+> Best regards,
+> Krzysztof
 
-It's my bad when trying to simplify the if expressions.
-Thank you for fixing this. :)
 
---=20
-BR,
-Kate
+Hi Krzysztof,
 
+I don=E2=80=99t=20see=20this=20patch=20in=20linux-next.=20It's=20been=20mor=
+e=20than=20a=20month=20now.=20=0D=0APlease=20let=20me=20know=20if=20any=20o=
+ther=20changes=20required.=0D=0A=0D=0A=0D=0AThanks,=0D=0AAakarsh=0D=0A=0D=0A
