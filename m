@@ -2,175 +2,197 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85EB6C7EE22
-	for <linux-media@archiver.kernel.org>; Thu, 11 May 2023 06:43:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54E92C7EE22
+	for <linux-media@archiver.kernel.org>; Thu, 11 May 2023 06:46:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232224AbjEKGnC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 May 2023 02:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50840 "EHLO
+        id S236884AbjEKGqR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 May 2023 02:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjEKGm7 (ORCPT
+        with ESMTP id S236549AbjEKGqP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 May 2023 02:42:59 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AFD046A6
-        for <linux-media@vger.kernel.org>; Wed, 10 May 2023 23:42:57 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-559e317eef1so121408127b3.0
-        for <linux-media@vger.kernel.org>; Wed, 10 May 2023 23:42:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1683787376; x=1686379376;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pPmMK/vjZZrn+75oLPGLVOkpQXhNBYzPy7ovkiUarXQ=;
-        b=kYziRZEGFkdIAkSnHevawmmAZe12fcrq0m0m+OhpQjK7no2ZH2UKvi4P5fh6lvezMH
-         KNRWgZs2dl8m/vtZeo3Z5aWoFDEaSZAq03PHFheSjloBNuKphB8ZLN80AX4sFmSFdM7C
-         iJatjmeeEQN3GyBDLwXmZIWlFcx//nb6wRMjQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683787376; x=1686379376;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pPmMK/vjZZrn+75oLPGLVOkpQXhNBYzPy7ovkiUarXQ=;
-        b=dH1IgWjx+Ce/t9VqoGQf9hcW3wW58K+h8bXUqgmcxbJezT2guiAX265LTBpDDY3tJg
-         lItTbGNNkoYuP18SS+jEl7aSpyLwHVqwT+M8nVefrzSLq/PCLQVIQD8HPlQl9guZ7Tt7
-         ORlq490Cdw+PZ5E/ZUHsRZLQICvWWWABFpmZ0afH9/SzE7CDIF9Pc9JEH8EMUwKsCw4Z
-         zJtKK8onVlNmxB4VpUFmYfWOfrppqSCAPgiYfnNXhvVN9aScEkfiNNNJDwoQbBcYHpnl
-         aJN/vtOSffvJ9WIpuShG05mCbPakiyAmuCuNs4U9Ypyq6txSJRhD8HjNnAR2o4Qw9cgn
-         g3kA==
-X-Gm-Message-State: AC+VfDzFRbUZZ6tCUrnymjehnZq8MQFkae/nKxrrAfu0HLnwcfVxwnTq
-        GwD9XMH4y2BKEq4HcGZ9AU+5B1CG5y5lP5dZlG3v8Q==
-X-Google-Smtp-Source: ACHHUZ7Cgla6fclCQUcGb3zaJ14PmcFlIgc73/kyF1iGduj6PrCtoLXAN4+kHbrCuo1qamJkwkJZnQ==
-X-Received: by 2002:a25:641:0:b0:b9e:d6ac:6941 with SMTP id 62-20020a250641000000b00b9ed6ac6941mr19346472ybg.8.1683787376510;
-        Wed, 10 May 2023 23:42:56 -0700 (PDT)
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
-        by smtp.gmail.com with ESMTPSA id t204-20020a0dead5000000b0055a1069886fsm4645720ywe.129.2023.05.10.23.42.56
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 May 2023 23:42:56 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-559e317eef1so121407877b3.0
-        for <linux-media@vger.kernel.org>; Wed, 10 May 2023 23:42:56 -0700 (PDT)
-X-Received: by 2002:a5e:8e07:0:b0:760:ea63:3385 with SMTP id
- a7-20020a5e8e07000000b00760ea633385mr13727151ion.19.1683786980560; Wed, 10
- May 2023 23:36:20 -0700 (PDT)
+        Thu, 11 May 2023 02:46:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6C64C13;
+        Wed, 10 May 2023 23:46:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C71B763F35;
+        Thu, 11 May 2023 06:46:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39502C433D2;
+        Thu, 11 May 2023 06:46:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683787573;
+        bh=IVpbV+z9YGskfzW19j0+bVKEYWgiU3nQ/4t5bI4Ex9Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JN4WBZ9UViPjCxYnQfYCefKlJ1XQX1q9CxTPb2vznnv2P2LSHUsvJ9et0CD6Yb6uJ
+         pXVEEIvSv8+cG5Xkz2kKMI1pG4chJn9D+WpBcPLSpm9zE1+NJU+RxOrjNnVI3d3+9X
+         XBIm0wNq5tY5FpwsAfyg3cb3KoBHzk+VwmEMvh//gP7kJHps8jF0oO/KfHa9uQvFKZ
+         t8U3faC4xVOVX+AXCs3jkxudLRLYG2VvHvLtJgEq1SWMbOq41Amr/ywFlfnm8OebEc
+         wYa0ym67nUKgcc1p7V7Ikd0QGAy1GXdmJ9x1b32G2QLMT1nZDXes53rEQifvcC4jS3
+         k+fVVzWcfsOjw==
+Date:   Thu, 11 May 2023 07:46:06 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
+Subject: Re: mainline build failure due to cf21f328fcaf ("media: nxp: Add
+ i.MX8 ISI driver")
+Message-ID: <20230511074606.0349fc69@sal.lan>
+In-Reply-To: <742856c0-ab93-1a6c-4fc8-9451c0908930@leemhuis.info>
+References: <ZElaVmxDsOkZj2DK@debian>
+        <51cff63a-3a04-acf5-8264-bb19b0bee8a3@leemhuis.info>
+        <CAHk-=wgzU8_dGn0Yg+DyX7ammTkDUCyEJ4C=NvnHRhxKWC7Wpw@mail.gmail.com>
+        <20230510090527.25e26127@sal.lan>
+        <742856c0-ab93-1a6c-4fc8-9451c0908930@leemhuis.info>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20230510233117.1.I7047714f92ef7569bd21f118ae6aee20b3175a92@changeid>
- <20230510164330.z2ygkl7vws6fci75@pengutronix.de> <CAGXv+5HBM+eksJaxL2GqLfqSmK8vsQx5NXHfhe075HkOK3vjHw@mail.gmail.com>
-In-Reply-To: <CAGXv+5HBM+eksJaxL2GqLfqSmK8vsQx5NXHfhe075HkOK3vjHw@mail.gmail.com>
-From:   Fei Shao <fshao@chromium.org>
-Date:   Thu, 11 May 2023 14:35:43 +0800
-X-Gmail-Original-Message-ID: <CAC=S1niad5qa-rGFSqqRQX=DZN9f4U=WWoP8-A0LQ-UyF31OnA@mail.gmail.com>
-Message-ID: <CAC=S1niad5qa-rGFSqqRQX=DZN9f4U=WWoP8-A0LQ-UyF31OnA@mail.gmail.com>
-Subject: Re: [PATCH] media: mediatek: vcodec: Convert mtk_vcodec_dec_hw
- platform remove callback
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+Em Wed, 10 May 2023 11:02:57 +0200
+"Linux regression tracking (Thorsten Leemhuis)" <regressions@leemhuis.info>=
+ escreveu:
 
-On Thu, May 11, 2023 at 1:50=E2=80=AFPM Chen-Yu Tsai <wenst@chromium.org> w=
-rote:
->
-> On Thu, May 11, 2023 at 12:43=E2=80=AFAM Uwe Kleine-K=C3=B6nig
-> <u.kleine-koenig@pengutronix.de> wrote:
+> On 10.05.23 10:05, Mauro Carvalho Chehab wrote:
+> > Em Mon, 8 May 2023 09:27:28 -0700
+> > Linus Torvalds <torvalds@linux-foundation.org> escreveu: =20
+> >> On Mon, May 8, 2023 at 3:55=E2=80=AFAM Linux regression tracking #addi=
+ng
+> >> (Thorsten Leemhuis) <regressions@leemhuis.info> wrote: =20
+> >>>
+> >>> Thanks for the report. The fixes (see the mail from Laurent) apparent=
+ly
+> >>> are still not mainlined (or am I missing something?), so let me add t=
+his
+> >>> report to the tracking to ensure this is not forgotten:   =20
+> >>
+> >> Gaah. I was intending to apply the patch directly before rc1, but then
+> >> I forgot about this issue.
+> >>
+> >> Mauro: I'm currently really *really* fed up with the media tree. This
+> >> exact same thing happened last merge window, where the media tree
+> >> caused pointless build errors, and it took way too long to get the
+> >> fixes the proper ways. =20
+> > [...]
 > >
-> > [expanding the audience a bit for more expertise]
-> >
-> > Hello,
-> >
-> > On Wed, May 10, 2023 at 11:31:35PM +0800, Fei Shao wrote:
-> > > This aligns with [1] and converts the platform remove callback to
-> > > .remove_new(), which returns void.
-> > >
-> > > [1]: commit a3afc5b10661 ("media: mtk_vcodec_dec_drv: Convert to
-> > >      platform remove callback returning void")
-> > >
-> > > Signed-off-by: Fei Shao <fshao@chromium.org>
-> > >
-> > > ---
-> > >
-> > >  drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c | 6 ++---=
--
-> > >  1 file changed, 2 insertions(+), 4 deletions(-)
-> > >
-> > > diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw=
-.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
-> > > index b753bf54ebd9..bd5743723da6 100644
-> > > --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
-> > > +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
-> > > @@ -193,16 +193,14 @@ static int mtk_vdec_hw_probe(struct platform_de=
-vice *pdev)
-> > >       return ret;
-> > >  }
-> > >
-> > > -static int mtk_vdec_hw_remove(struct platform_device *pdev)
-> > > +static void mtk_vdec_hw_remove(struct platform_device *pdev)
-> > >  {
-> > >       pm_runtime_disable(&pdev->dev);
-> > > -
-> > > -     return 0;
-> > >  }
-> > >
-> > >  static struct platform_driver mtk_vdec_driver =3D {
-> > >       .probe  =3D mtk_vdec_hw_probe,
-> > > -     .remove =3D mtk_vdec_hw_remove,
-> > > +     .remove_new =3D mtk_vdec_hw_remove,
-> > >       .driver =3D {
-> > >               .name   =3D "mtk-vdec-comp",
-> > >               .of_match_table =3D mtk_vdec_hw_match,
-> >
-> > While the patch looks fine, I wonder if having a remove callback just t=
-o
-> > do pm_runtime_disable() is worth keeping it. Doesn't the core care for
-> > things like that? I grepped a bit around, device_unbind_cleanup() is
-> > called after device_remove() which calls pm_runtime_reinit(). Does that
-> > mean calling pm_runtime_disable in .remove() is useless? In that case,
-> > you could just drop the .remove() callback.
+> > In the specific case of this fixup patch, I didn't identify it as a bui=
+ld
+> > issue, so it followed the usual workflow. We have a huge number of patc=
+hes
+> > for media, and it usually takes some time to handle all of them. This o=
+ne
+> > just followed the normal flow, as it didn't break Jenkins builds nor the
+> > subject mentioned anything about build breakage. =20
+>=20
+> Makes me wonder again if we should start adding
+>=20
+>  CC: regressions@lists.linux.dev
+>=20
+> to any patches that fix regressions, that way maintainers and reviewers
+> would have something to filter for -- and I would become aware of all
+> regression fixes in the work, too.
 
-Thanks for the feedback.
+Having some way that could be parsed by e-mail filters would be
+nice.=20
 
-I wonder if the core would handle that for drivers... if I understand
-it correctly, pm_runtime_reinit() does not disable runtime PM for a
-device, otherwise pm_runtime_remove() wouldn't need to bother
-calling __pm_runtime_disable() before pm_runtime_reinit().
+>=20
+> Ciao, Thorsten
+>=20
+> P.S.: BTW, let me tell regzbot that Linus merged the fix for the build
+> failure.
+>=20
+> #regzbot fix: ba0ad6ed89f
+>=20
+> FWIW, the one for the gcc warnings[1] Laurent mentioned elsewhere in
+> this thread is not merged yet afaics.
+>=20
+> [1] https://lore.kernel.org/all/20230418092007.2902984-1-arnd@kernel.org/
 
-In fact, from the runtime_pm documentation [1] I read the following:
-"Drivers in ->remove() callback should undo the runtime PM changes
-done in ->probe(). Usually this means calling pm_runtime_disable(),
-pm_runtime_dont_use_autosuspend() etc."
+Just sent a pull request.
 
-Based on the above I assume it's still necessary given pm_runtime_enable()
-was called in ->probe().
+Btw, I did some changes at linux-media Jenkins instance to help early
+track some extra build issues. They're all against
+https://git.linuxtv.org/media_stage.git/, which is the tree where we place
+media patches that are ready. We move them later, after a couple of days
+to https://git.linuxtv.org/media_tree.git/. So, if something bad happens,
+we have a chance to fix before setting them into a stone. With such
+changes, we now have:
 
-[1]: https://www.kernel.org/doc/Documentation/power/runtime_pm.txt
+1. https://builder.linuxtv.org/job/patchwork/
 
->
-> Maybe just switch to devm_pm_runtime_enable() on the enable side?
+   This is a pre-merge test. It tests patch per patch the PRs with patch
+   sets ready to be merged, with W=3D1, allyesconfig/almodconfig[1] on x86_=
+64.=20
+   Builds drivers/media and drivers/staging/media.=20
+   This is there already for a long time;
 
-That sounds like a good alternative, I'll revise and send a new patch, than=
-ks.
+2. https://builder.linuxtv.org/job/media_stage_clang/
+
+   Checks build with clang-12 on x86_64 with W=3D1. Builds drivers/media
+   and drivers/staging/media with allyesconfig[1].
+
+   It was building with WERROR disabled, as some core macros were
+   producing errors at the time I created it (and for a while).
+   It was modified to enable WERROR as well.=20
+
+3. https://builder.linuxtv.org/job/media_stage_gcc-pipeline/=20
+
+   It replaces another job that was just doing builds for x86_64
+   with W=3D1. Builds drivers/media and drivers/staging/media with
+   different configurations[1]:
+      x86_64: allyesconfig, allmodconfig, almodconfig with PM disabled;
+      arm32: allyesconfig
+      arm64: allyesconfig
+
+4. https://builder.linuxtv.org/job/linux-media/
+
+   Does full builds with different configurations[1]:
+      x86_64: allyesconfig, allmodconfig, almodconfig with PM disabled;
+      arm32: allyesconfig
+      arm64: allyesconfig
+      docs: htmldocs and pdfdocs
+
+I hope this will help avoiding future build regressions from our side.
+Feel free to suggest a couple of other configs that we might add to
+jobs (3) and (4).
+
+I'm still adjusting the pipeline for (4), but currently, it is failing
+on an issue that seems unrelated with the media subsystem with gcc 10.2.1:
+
+	  AR      drivers/built-in.a
+	  AR      built-in.a
+	  AR      vmlinux.a
+	  LD      vmlinux.o
+	vmlinux.o: warning: objtool: vmx_vcpu_enter_exit+0x2d8: call to vmread_err=
+or_trampoline() leaves .noinstr.text section
+	vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xe1: relocation to !ENDBR: =
+native_write_cr4+0x40
+     =20
+Is this a known regression? The media-stage tree is on the top of
+Kernel 6.4-rc1.
 
 Regards,
-Fei
+Mauro
 
->
-> ChenYu
+-
+
+[1] On all builds, the jobs disable some symbols that should not affect
+    media subsystem, to speedup the builds:
+
+   scripts/config -d MODULE_SIG -d KEYS -d IMA -d CONFIG_DEBUG_INFO -d SYST=
+EM_TRUSTED_KEYRING -d MODVERSIONS
