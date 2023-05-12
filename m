@@ -2,118 +2,185 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5CC7C77B7C
-	for <linux-media@archiver.kernel.org>; Fri, 12 May 2023 03:01:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06D40C77B7F
+	for <linux-media@archiver.kernel.org>; Fri, 12 May 2023 10:28:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239813AbjELDB2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 May 2023 23:01:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45354 "EHLO
+        id S240716AbjELK2l convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 12 May 2023 06:28:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239487AbjELDBZ (ORCPT
+        with ESMTP id S240428AbjELK2N (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 May 2023 23:01:25 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08C9B1B4
-        for <linux-media@vger.kernel.org>; Thu, 11 May 2023 20:01:23 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f42c86543bso27628835e9.3
-        for <linux-media@vger.kernel.org>; Thu, 11 May 2023 20:01:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683860481; x=1686452481;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wNH+qT+d278L8EuW7+gJj57wNou4ngN3N+y41xL0bJg=;
-        b=bsfwLbTBcF81MZeJ5Eya6UvNOwMn6NFXp1BWVwwh6WeMzLswrcetweYtitBfRV1LJp
-         kqX1FbImeeNtFUS04GbjkFfj/YrFVwqRF22Cyq/SdOkfCAGbnve4GGykWMnzo47LnOdm
-         QvCC2CjXm+ApHY7cqpoa+x4BDadq1gxPbpKZ9g9/6EEUnO4eZ+EbAr68dvWhfyEIWhnF
-         pkCRdkTN03AuRWSyXUi540JrbEbX+n5fQ4tYV+ZClNXxeloLqkJ5vRHPjCWzExCU3Lda
-         uhi0Ezs/upGKHHkPNC1JGdxg58qYjfkQGIweMuDMJF2hL387Ypfxq8HN5yvW1aAq9hnv
-         QI0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683860481; x=1686452481;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wNH+qT+d278L8EuW7+gJj57wNou4ngN3N+y41xL0bJg=;
-        b=Ts0I9EgUJsFqmzjg1IPvPXbiZNmRDgYigkHJaE2XXWo6gegjLQyaKcOekF8N/Q3561
-         iqI0oxkrSMakPjYUPbAaI/2gEh9TMULvbCZ11sJLI7Z2c3y1ix9t2PQqDd7gY4bNe8+f
-         s365b8miDbZ/o0kVgVrXckF+cQ3UdJnc6BiFDX6xinhsJ5h9vqzNQXZHicd0ptcokGK/
-         hOT9uEBOwnV5tic790Fg+jIsbC9lDG5RwSC8a0E6z4aD3If5hak1CbbMBFVUCesNXjRE
-         n1l1bBHsdVjg46p9s9Sx5qICctI+J/GFHLljbIgUOuZrF0Hahc6quV8I4UZjmawzN+FR
-         B4Vg==
-X-Gm-Message-State: AC+VfDy+yOeSifNH3tiOkdDTer45/D9im9s4AG7wUHuJaCKU9JHSRlup
-        /07Yl6biUiwgPn+HWs/swD/zJQ==
-X-Google-Smtp-Source: ACHHUZ44za2uY/t0ZeDVI7Cub+JKSvmiDla/DY0bj3D5erE9BCthF8KD3B45b2eRZNuru7kPL/TL5Q==
-X-Received: by 2002:a5d:6149:0:b0:306:2fd1:a929 with SMTP id y9-20020a5d6149000000b003062fd1a929mr15785049wrt.7.1683860481429;
-        Thu, 11 May 2023 20:01:21 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id w12-20020a05600c474c00b003f07ef4e3e0sm14458610wmo.0.2023.05.11.20.01.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 May 2023 20:01:20 -0700 (PDT)
-Message-ID: <f9904e82-4756-2add-3c7e-e019ce966515@linaro.org>
-Date:   Fri, 12 May 2023 04:01:19 +0100
+        Fri, 12 May 2023 06:28:13 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92843120B8;
+        Fri, 12 May 2023 03:27:17 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 9B3D680CF;
+        Fri, 12 May 2023 18:26:52 +0800 (CST)
+Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 12 May
+ 2023 18:26:39 +0800
+Received: from xiaofei.localdomain (180.164.60.184) by EXMBX073.cuchost.com
+ (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 12 May
+ 2023 18:26:38 +0800
+From:   Jack Zhu <jack.zhu@starfivetech.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <jack.zhu@starfivetech.com>,
+        <changhuang.liang@starfivetech.com>
+Subject: [PATCH v1 3/5] media: cadence: Add operation on reset
+Date:   Fri, 12 May 2023 18:26:35 +0800
+Message-ID: <20230512102637.50917-4-jack.zhu@starfivetech.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230512102637.50917-1-jack.zhu@starfivetech.com>
+References: <20230512102637.50917-1-jack.zhu@starfivetech.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 00/18] Venus QoL / maintainability fixes
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dikshita Agarwal <dikshita@qti.qualcomm.com>,
-        Mansur Alisha Shaik <mansur@codeaurora.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        stable@vger.kernel.org
-References: <20230228-topic-venus-v2-0-d95d14949c79@linaro.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20230228-topic-venus-v2-0-d95d14949c79@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [180.164.60.184]
+X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX073.cuchost.com
+ (172.16.6.83)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 04/05/2023 09:00, Konrad Dybcio wrote:
-> Tested on 8250, but pretty please test it on your boards too!
+Add operation on reset for Cadence MIPI-CSI2 RX Controller.
 
-What's the definition of test here ?
-
-I ran this
-
-ffplay -codec:video h264_v4l2m2m FantasticFour-ROTSS.mp4
-
-and this
-
-ffplay -codec:video vp8_v4l2m2m /mnt/big-buck-bunny_trailer.webm
-
-on db410c with no errors. Then again I applied and disapplied the 8x8 
-264 fix to that branch and saw no discernable difference so I'm not very 
-confident we have good coverage.
-
-@Stan @Vikash could you give some suggested tests for coverage here ?
-
-@Konrad - get a db410c !
-
-My superficial first-pass on this series looks good but, before giving a 
-Tested-by here, I think we should define a set of coverage tests, run 
-them - the upper end on sm8250 and lower end msm8916 "makes sense to me"
-
-20? different gstreamer tests at different formats and different sizes 
-on our selected platforms db410c, rb5, rb3 I have - also an 820 I 
-haven't booted and an enforce sdm660.
-
-Which tests will we use to validate this series and subsequent series to 
-ensure we don't have more regressions ?
-
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
 ---
-bod
+ drivers/media/platform/cadence/cdns-csi2rx.c | 40 +++++++++++++++++---
+ 1 file changed, 35 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
+index 9755d1c8ceb9..bb78f54e944e 100644
+--- a/drivers/media/platform/cadence/cdns-csi2rx.c
++++ b/drivers/media/platform/cadence/cdns-csi2rx.c
+@@ -13,6 +13,7 @@
+ #include <linux/of_graph.h>
+ #include <linux/phy/phy.h>
+ #include <linux/platform_device.h>
++#include <linux/reset.h>
+ #include <linux/slab.h>
+ 
+ #include <media/v4l2-ctrls.h>
+@@ -68,6 +69,9 @@ struct csi2rx_priv {
+ 	struct clk			*sys_clk;
+ 	struct clk			*p_clk;
+ 	struct clk			*pixel_clk[CSI2RX_STREAMS_MAX];
++	struct reset_control		*sys_rst;
++	struct reset_control		*p_rst;
++	struct reset_control		*pixel_rst[CSI2RX_STREAMS_MAX];
+ 	struct phy			*dphy;
+ 
+ 	u8				lanes[CSI2RX_LANES_MAX];
+@@ -112,6 +116,7 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+ 	if (ret)
+ 		return ret;
+ 
++	reset_control_deassert(csi2rx->p_rst);
+ 	csi2rx_reset(csi2rx);
+ 
+ 	reg = csi2rx->num_lanes << 8;
+@@ -154,6 +159,8 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+ 		if (ret)
+ 			goto err_disable_pixclk;
+ 
++		reset_control_deassert(csi2rx->pixel_rst[i]);
++
+ 		writel(CSI2RX_STREAM_CFG_FIFO_MODE_LARGE_BUF,
+ 		       csi2rx->base + CSI2RX_STREAM_CFG_REG(i));
+ 
+@@ -169,13 +176,16 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+ 	if (ret)
+ 		goto err_disable_pixclk;
+ 
++	reset_control_deassert(csi2rx->sys_rst);
+ 	clk_disable_unprepare(csi2rx->p_clk);
+ 
+ 	return 0;
+ 
+ err_disable_pixclk:
+-	for (; i > 0; i--)
++	for (; i > 0; i--) {
++		reset_control_assert(csi2rx->pixel_rst[i - 1]);
+ 		clk_disable_unprepare(csi2rx->pixel_clk[i - 1]);
++	}
+ 
+ err_disable_pclk:
+ 	clk_disable_unprepare(csi2rx->p_clk);
+@@ -188,14 +198,17 @@ static void csi2rx_stop(struct csi2rx_priv *csi2rx)
+ 	unsigned int i;
+ 
+ 	clk_prepare_enable(csi2rx->p_clk);
++	reset_control_assert(csi2rx->sys_rst);
+ 	clk_disable_unprepare(csi2rx->sys_clk);
+ 
+ 	for (i = 0; i < csi2rx->max_streams; i++) {
+ 		writel(0, csi2rx->base + CSI2RX_STREAM_CTRL_REG(i));
+ 
++		reset_control_assert(csi2rx->pixel_rst[i]);
+ 		clk_disable_unprepare(csi2rx->pixel_clk[i]);
+ 	}
+ 
++	reset_control_assert(csi2rx->p_rst);
+ 	clk_disable_unprepare(csi2rx->p_clk);
+ 
+ 	if (v4l2_subdev_call(csi2rx->source_subdev, video, s_stream, false))
+@@ -299,6 +312,16 @@ static int csi2rx_get_resources(struct csi2rx_priv *csi2rx,
+ 		return PTR_ERR(csi2rx->p_clk);
+ 	}
+ 
++	csi2rx->sys_rst = devm_reset_control_get_optional_exclusive(&pdev->dev,
++								    "sys_rst");
++	if (IS_ERR(csi2rx->sys_rst))
++		return PTR_ERR(csi2rx->sys_rst);
++
++	csi2rx->p_rst = devm_reset_control_get_optional_exclusive(&pdev->dev,
++								  "p_rst");
++	if (IS_ERR(csi2rx->p_rst))
++		return PTR_ERR(csi2rx->p_rst);
++
+ 	csi2rx->dphy = devm_phy_optional_get(&pdev->dev, "dphy");
+ 	if (IS_ERR(csi2rx->dphy)) {
+ 		dev_err(&pdev->dev, "Couldn't get external D-PHY\n");
+@@ -349,14 +372,21 @@ static int csi2rx_get_resources(struct csi2rx_priv *csi2rx,
+ 	}
+ 
+ 	for (i = 0; i < csi2rx->max_streams; i++) {
+-		char clk_name[16];
++		char name[16];
+ 
+-		snprintf(clk_name, sizeof(clk_name), "pixel_if%u_clk", i);
+-		csi2rx->pixel_clk[i] = devm_clk_get(&pdev->dev, clk_name);
++		snprintf(name, sizeof(name), "pixel_if%u_clk", i);
++		csi2rx->pixel_clk[i] = devm_clk_get(&pdev->dev, name);
+ 		if (IS_ERR(csi2rx->pixel_clk[i])) {
+-			dev_err(&pdev->dev, "Couldn't get clock %s\n", clk_name);
++			dev_err(&pdev->dev, "Couldn't get clock %s\n", name);
+ 			return PTR_ERR(csi2rx->pixel_clk[i]);
+ 		}
++
++		snprintf(name, sizeof(name), "pixel_if%u_rst", i);
++		csi2rx->pixel_rst[i] =
++			devm_reset_control_get_optional_exclusive(&pdev->dev,
++								  name);
++		if (IS_ERR(csi2rx->pixel_rst[i]))
++			return PTR_ERR(csi2rx->pixel_rst[i]);
+ 	}
+ 
+ 	return 0;
+-- 
+2.34.1
+
