@@ -2,42 +2,41 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47BC3C77B7D
-	for <linux-media@archiver.kernel.org>; Sat, 13 May 2023 12:33:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1AC8C77B7F
+	for <linux-media@archiver.kernel.org>; Sat, 13 May 2023 12:33:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238046AbjEMMc7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 13 May 2023 08:32:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41314 "EHLO
+        id S238195AbjEMMdB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 13 May 2023 08:33:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbjEMMc6 (ORCPT
+        with ESMTP id S229910AbjEMMdA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 13 May 2023 08:32:58 -0400
+        Sat, 13 May 2023 08:33:00 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7FE2D62
-        for <linux-media@vger.kernel.org>; Sat, 13 May 2023 05:32:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71B22D69
+        for <linux-media@vger.kernel.org>; Sat, 13 May 2023 05:32:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683981129;
+        s=mimecast20190719; t=1683981133;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=q4JPZZs8QoS0IAP91TjsoQvkx4xlW5UcQSUCa1N2bAU=;
-        b=Oixx83fd9XHgThdaz1epPTpPnbgs0MZAnPDmr180O4zowswU5mP3rGEKhsTIiqTujm73qJ
-        ARZpXiTu3USKrdWzxigA/PJO06jciV9E1G/pG/cttBgnp4Nf/SJ54Hgi6/VgNunNAWJaWI
-        /tafBrgqxQnGZn06ynk/6TdxWyyCvnU=
+         content-transfer-encoding:content-transfer-encoding;
+        bh=YsbJ7qSNvpq2XigXMR+ACHOqZQpsDFBJl45yzFLRe6o=;
+        b=MeZtLPed8sSYnnqhdEuo9q8jOzvwQi/2yvkyIek3eTcO2CM8b0oyBN2gFqBgxw98BLbZRO
+        l4JrcLq5wLCLw3HTk1skftd3APhM2zstoNVga0tij2twCj9kjzQWiFxsoPIQptNmI/N9U+
+        6f9TCIQGKr36+maTWGpB6BJR6mrygrk=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-302-mYcZIg5uOc6jQmnYh-ob-g-1; Sat, 13 May 2023 08:32:05 -0400
-X-MC-Unique: mYcZIg5uOc6jQmnYh-ob-g-1
+ us-mta-558-7T8HJ010OA-1PHSzt5y4-g-1; Sat, 13 May 2023 08:32:02 -0400
+X-MC-Unique: 7T8HJ010OA-1PHSzt5y4-g-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 266243C0D858;
-        Sat, 13 May 2023 12:32:05 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 96E0A380673E;
+        Sat, 13 May 2023 12:32:01 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.192.46])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 91A3E40C2076;
-        Sat, 13 May 2023 12:32:03 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E624140C2076;
+        Sat, 13 May 2023 12:31:59 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -48,11 +47,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>, Kate Hsuan <hpa@redhat.com>,
         Nable <nable.maininbox@googlemail.com>,
         andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 02/30] media: atomisp: Remove Continuous capture and SDV run-modes
-Date:   Sat, 13 May 2023 14:31:31 +0200
-Message-Id: <20230513123159.33234-3-hdegoede@redhat.com>
-In-Reply-To: <20230513123159.33234-1-hdegoede@redhat.com>
-References: <20230513123159.33234-1-hdegoede@redhat.com>
+Subject: [PATCH 00/30] media: atomisp: Register only 1 /dev/video# node + cleanups
+Date:   Sat, 13 May 2023 14:31:29 +0200
+Message-Id: <20230513123159.33234-1-hdegoede@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
@@ -60,296 +57,79 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Since we no longer support Continuous mode, setting the run_mode to
-ATOMISP_RUN_MODE_CONTINUOUS_CAPTURE no longer make sense, so remove
-this.
+Hi All,
 
-While at it also remove ATOMISP_RUN_MODE_SDV, which was never exposed
-to userspace in the first place.
+Here is an atomisp patch-series to continue the simplification /
+exotic feature removal of atomisp. Specifically this series
+makes atomisp register only 1 /dev/video# node.
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- .../media/atomisp/include/linux/atomisp.h     |  5 +-
- .../media/atomisp/pci/atomisp_compat_css20.c  | 12 ---
- .../staging/media/atomisp/pci/atomisp_ioctl.c |  3 -
- .../media/atomisp/pci/atomisp_subdev.c        |  5 +-
- .../staging/media/atomisp/pci/atomisp_v4l2.c  | 91 -------------------
- 5 files changed, 3 insertions(+), 113 deletions(-)
+The other patches are some preparation + follow-up work for
+this change, as well as a whole bunch of folow-up clean-ups.
 
-diff --git a/drivers/staging/media/atomisp/include/linux/atomisp.h b/drivers/staging/media/atomisp/include/linux/atomisp.h
-index c7ec56a1c064..2a94fb7b4073 100644
---- a/drivers/staging/media/atomisp/include/linux/atomisp.h
-+++ b/drivers/staging/media/atomisp/include/linux/atomisp.h
-@@ -38,7 +38,6 @@
- #define CI_MODE_PREVIEW		0x8000
- #define CI_MODE_VIDEO		0x4000
- #define CI_MODE_STILL_CAPTURE	0x2000
--#define CI_MODE_CONTINUOUS	0x1000
- #define CI_MODE_NONE		0x0000
- 
- #define OUTPUT_MODE_FILE 0x0100
-@@ -1059,9 +1058,7 @@ struct atomisp_sensor_ae_bracketing_lut {
- #define V4L2_CID_RUN_MODE			(V4L2_CID_CAMERA_LASTP1 + 20)
- #define ATOMISP_RUN_MODE_VIDEO			1
- #define ATOMISP_RUN_MODE_STILL_CAPTURE		2
--#define ATOMISP_RUN_MODE_CONTINUOUS_CAPTURE	3
--#define ATOMISP_RUN_MODE_PREVIEW		4
--#define ATOMISP_RUN_MODE_SDV			5
-+#define ATOMISP_RUN_MODE_PREVIEW		3
- 
- #define V4L2_CID_ENABLE_VFPP			(V4L2_CID_CAMERA_LASTP1 + 21)
- #define V4L2_CID_ATOMISP_CONTINUOUS_MODE	(V4L2_CID_CAMERA_LASTP1 + 22)
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
-index 1dae2a7cfdd9..e8c26e66ae7e 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
-@@ -649,23 +649,11 @@ static bool is_pipe_valid_to_current_run_mode(struct atomisp_sub_device *asd,
- 		if (pipe_id == IA_CSS_PIPE_ID_PREVIEW)
- 			return true;
- 
--		return false;
--	case ATOMISP_RUN_MODE_CONTINUOUS_CAPTURE:
--		if (pipe_id == IA_CSS_PIPE_ID_CAPTURE ||
--		    pipe_id == IA_CSS_PIPE_ID_PREVIEW)
--			return true;
--
- 		return false;
- 	case ATOMISP_RUN_MODE_VIDEO:
- 		if (pipe_id == IA_CSS_PIPE_ID_VIDEO || pipe_id == IA_CSS_PIPE_ID_YUVPP)
- 			return true;
- 
--		return false;
--	case ATOMISP_RUN_MODE_SDV:
--		if (pipe_id == IA_CSS_PIPE_ID_CAPTURE ||
--		    pipe_id == IA_CSS_PIPE_ID_VIDEO)
--			return true;
--
- 		return false;
- 	}
- 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-index 4d927799f53b..7f031db28476 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-@@ -1902,9 +1902,6 @@ static int atomisp_s_parm(struct file *file, void *fh,
- 	case CI_MODE_STILL_CAPTURE:
- 		mode = ATOMISP_RUN_MODE_STILL_CAPTURE;
- 		break;
--	case CI_MODE_CONTINUOUS:
--		mode = ATOMISP_RUN_MODE_CONTINUOUS_CAPTURE;
--		break;
- 	case CI_MODE_PREVIEW:
- 		mode = ATOMISP_RUN_MODE_PREVIEW;
- 		break;
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_subdev.c b/drivers/staging/media/atomisp/pci/atomisp_subdev.c
-index a0acfdb87177..cb8ab0e47d1a 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_subdev.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_subdev.c
-@@ -758,7 +758,6 @@ static const char *const ctrl_run_mode_menu[] = {
- 	NULL,
- 	"Video",
- 	"Still capture",
--	"Continuous capture",
- 	"Preview",
- };
- 
-@@ -769,7 +768,7 @@ static const struct v4l2_ctrl_config ctrl_run_mode = {
- 	.type = V4L2_CTRL_TYPE_MENU,
- 	.min = 1,
- 	.def = 1,
--	.max = 4,
-+	.max = 3,
- 	.qmenu = ctrl_run_mode_menu,
- };
- 
-@@ -971,7 +970,7 @@ static int isp_subdev_init_entities(struct atomisp_sub_device *asd)
- 		return ret;
- 
- 	ret = atomisp_video_init(&asd->video_out_vf, "VIEWFINDER",
--				 ATOMISP_RUN_MODE_CONTINUOUS_CAPTURE);
-+				 ATOMISP_RUN_MODE_STILL_CAPTURE);
- 	if (ret < 0)
- 		return ret;
- 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-index 3f315dabbeeb..4370d560308e 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-@@ -119,13 +119,6 @@ static const struct atomisp_freq_scaling_rule dfs_rules_merr[] = {
- 		.isp_freq = ISP_FREQ_400MHZ,
- 		.run_mode = ATOMISP_RUN_MODE_STILL_CAPTURE,
- 	},
--	{
--		.width = ISP_FREQ_RULE_ANY,
--		.height = ISP_FREQ_RULE_ANY,
--		.fps = ISP_FREQ_RULE_ANY,
--		.isp_freq = ISP_FREQ_400MHZ,
--		.run_mode = ATOMISP_RUN_MODE_CONTINUOUS_CAPTURE,
--	},
- 	{
- 		.width = ISP_FREQ_RULE_ANY,
- 		.height = ISP_FREQ_RULE_ANY,
-@@ -133,13 +126,6 @@ static const struct atomisp_freq_scaling_rule dfs_rules_merr[] = {
- 		.isp_freq = ISP_FREQ_400MHZ,
- 		.run_mode = ATOMISP_RUN_MODE_PREVIEW,
- 	},
--	{
--		.width = ISP_FREQ_RULE_ANY,
--		.height = ISP_FREQ_RULE_ANY,
--		.fps = ISP_FREQ_RULE_ANY,
--		.isp_freq = ISP_FREQ_457MHZ,
--		.run_mode = ATOMISP_RUN_MODE_SDV,
--	},
- };
- 
- /* Merrifield and Moorefield DFS rules */
-@@ -166,13 +152,6 @@ static const struct atomisp_freq_scaling_rule dfs_rules_merr_1179[] = {
- 		.isp_freq = ISP_FREQ_400MHZ,
- 		.run_mode = ATOMISP_RUN_MODE_STILL_CAPTURE,
- 	},
--	{
--		.width = ISP_FREQ_RULE_ANY,
--		.height = ISP_FREQ_RULE_ANY,
--		.fps = ISP_FREQ_RULE_ANY,
--		.isp_freq = ISP_FREQ_400MHZ,
--		.run_mode = ATOMISP_RUN_MODE_CONTINUOUS_CAPTURE,
--	},
- 	{
- 		.width = ISP_FREQ_RULE_ANY,
- 		.height = ISP_FREQ_RULE_ANY,
-@@ -180,13 +159,6 @@ static const struct atomisp_freq_scaling_rule dfs_rules_merr_1179[] = {
- 		.isp_freq = ISP_FREQ_400MHZ,
- 		.run_mode = ATOMISP_RUN_MODE_PREVIEW,
- 	},
--	{
--		.width = ISP_FREQ_RULE_ANY,
--		.height = ISP_FREQ_RULE_ANY,
--		.fps = ISP_FREQ_RULE_ANY,
--		.isp_freq = ISP_FREQ_400MHZ,
--		.run_mode = ATOMISP_RUN_MODE_SDV,
--	},
- };
- 
- static const struct atomisp_dfs_config dfs_config_merr_1179 = {
-@@ -247,13 +219,6 @@ static const struct atomisp_freq_scaling_rule dfs_rules_merr_117a[] = {
- 		.isp_freq = ISP_FREQ_400MHZ,
- 		.run_mode = ATOMISP_RUN_MODE_STILL_CAPTURE,
- 	},
--	{
--		.width = ISP_FREQ_RULE_ANY,
--		.height = ISP_FREQ_RULE_ANY,
--		.fps = ISP_FREQ_RULE_ANY,
--		.isp_freq = ISP_FREQ_400MHZ,
--		.run_mode = ATOMISP_RUN_MODE_CONTINUOUS_CAPTURE,
--	},
- 	{
- 		.width = ISP_FREQ_RULE_ANY,
- 		.height = ISP_FREQ_RULE_ANY,
-@@ -261,13 +226,6 @@ static const struct atomisp_freq_scaling_rule dfs_rules_merr_117a[] = {
- 		.isp_freq = ISP_FREQ_200MHZ,
- 		.run_mode = ATOMISP_RUN_MODE_PREVIEW,
- 	},
--	{
--		.width = ISP_FREQ_RULE_ANY,
--		.height = ISP_FREQ_RULE_ANY,
--		.fps = ISP_FREQ_RULE_ANY,
--		.isp_freq = ISP_FREQ_400MHZ,
--		.run_mode = ATOMISP_RUN_MODE_SDV,
--	},
- };
- 
- static struct atomisp_dfs_config dfs_config_merr_117a = {
-@@ -293,13 +251,6 @@ static const struct atomisp_freq_scaling_rule dfs_rules_byt[] = {
- 		.isp_freq = ISP_FREQ_400MHZ,
- 		.run_mode = ATOMISP_RUN_MODE_STILL_CAPTURE,
- 	},
--	{
--		.width = ISP_FREQ_RULE_ANY,
--		.height = ISP_FREQ_RULE_ANY,
--		.fps = ISP_FREQ_RULE_ANY,
--		.isp_freq = ISP_FREQ_400MHZ,
--		.run_mode = ATOMISP_RUN_MODE_CONTINUOUS_CAPTURE,
--	},
- 	{
- 		.width = ISP_FREQ_RULE_ANY,
- 		.height = ISP_FREQ_RULE_ANY,
-@@ -307,13 +258,6 @@ static const struct atomisp_freq_scaling_rule dfs_rules_byt[] = {
- 		.isp_freq = ISP_FREQ_400MHZ,
- 		.run_mode = ATOMISP_RUN_MODE_PREVIEW,
- 	},
--	{
--		.width = ISP_FREQ_RULE_ANY,
--		.height = ISP_FREQ_RULE_ANY,
--		.fps = ISP_FREQ_RULE_ANY,
--		.isp_freq = ISP_FREQ_400MHZ,
--		.run_mode = ATOMISP_RUN_MODE_SDV,
--	},
- };
- 
- static const struct atomisp_dfs_config dfs_config_byt = {
-@@ -339,13 +283,6 @@ static const struct atomisp_freq_scaling_rule dfs_rules_cht[] = {
- 		.isp_freq = ISP_FREQ_356MHZ,
- 		.run_mode = ATOMISP_RUN_MODE_STILL_CAPTURE,
- 	},
--	{
--		.width = ISP_FREQ_RULE_ANY,
--		.height = ISP_FREQ_RULE_ANY,
--		.fps = ISP_FREQ_RULE_ANY,
--		.isp_freq = ISP_FREQ_320MHZ,
--		.run_mode = ATOMISP_RUN_MODE_CONTINUOUS_CAPTURE,
--	},
- 	{
- 		.width = ISP_FREQ_RULE_ANY,
- 		.height = ISP_FREQ_RULE_ANY,
-@@ -353,20 +290,6 @@ static const struct atomisp_freq_scaling_rule dfs_rules_cht[] = {
- 		.isp_freq = ISP_FREQ_320MHZ,
- 		.run_mode = ATOMISP_RUN_MODE_PREVIEW,
- 	},
--	{
--		.width = 1280,
--		.height = 720,
--		.fps = ISP_FREQ_RULE_ANY,
--		.isp_freq = ISP_FREQ_320MHZ,
--		.run_mode = ATOMISP_RUN_MODE_SDV,
--	},
--	{
--		.width = ISP_FREQ_RULE_ANY,
--		.height = ISP_FREQ_RULE_ANY,
--		.fps = ISP_FREQ_RULE_ANY,
--		.isp_freq = ISP_FREQ_356MHZ,
--		.run_mode = ATOMISP_RUN_MODE_SDV,
--	},
- };
- 
- static const struct atomisp_freq_scaling_rule dfs_rules_cht_soc[] = {
-@@ -384,13 +307,6 @@ static const struct atomisp_freq_scaling_rule dfs_rules_cht_soc[] = {
- 		.isp_freq = ISP_FREQ_356MHZ,
- 		.run_mode = ATOMISP_RUN_MODE_STILL_CAPTURE,
- 	},
--	{
--		.width = ISP_FREQ_RULE_ANY,
--		.height = ISP_FREQ_RULE_ANY,
--		.fps = ISP_FREQ_RULE_ANY,
--		.isp_freq = ISP_FREQ_320MHZ,
--		.run_mode = ATOMISP_RUN_MODE_CONTINUOUS_CAPTURE,
--	},
- 	{
- 		.width = ISP_FREQ_RULE_ANY,
- 		.height = ISP_FREQ_RULE_ANY,
-@@ -398,13 +314,6 @@ static const struct atomisp_freq_scaling_rule dfs_rules_cht_soc[] = {
- 		.isp_freq = ISP_FREQ_320MHZ,
- 		.run_mode = ATOMISP_RUN_MODE_PREVIEW,
- 	},
--	{
--		.width = ISP_FREQ_RULE_ANY,
--		.height = ISP_FREQ_RULE_ANY,
--		.fps = ISP_FREQ_RULE_ANY,
--		.isp_freq = ISP_FREQ_356MHZ,
--		.run_mode = ATOMISP_RUN_MODE_SDV,
--	},
- };
- 
- static const struct atomisp_dfs_config dfs_config_cht = {
+The cleanups focus on removing the various count / users functions
+which atomisp used before when there were multiple nodes. This
+is preparation work for eventually allowing opening the same
+node multipe-times, as is normal for standard v4l2 /dev/video#
+nodes.
+
+Regards,
+
+Hans
+
+
+Hans de Goede (30):
+  media: atomisp: Remove res_overflow parameter from atomisp_try_fmt()
+  media: atomisp: Remove Continuous capture and SDV run-modes
+  media: atomisp: Remove isp->need_gfx_throttle field
+  media: atomisp: Drop atomisp_get_css_buf_type()
+  media: atomisp: Replace source-pad checks with run-mode checks
+  media: atomisp: Register only 1 /dev/video# node
+  media: atomisp: Drop atomisp_is_vf_pipe()
+  media: atomisp: Rename video_out_preview to video_out
+  media: atomisp: Remove source_pad parameter from functions and structs
+  media: atomisp: Remove 1 line atomisp_flush_bufs_and_wakeup() helper
+  media: atomisp: Remove atomisp_subdev_register_video_nodes() helper
+  media: atomisp: Remove a bunch of unused atomisp_css_*() functions
+  media: atomisp: Remove unused mipi_frame_size field from
+    atomisp_[sub_]device
+  media: atomisp: Remove isp_timeout flag
+  media: atomisp: Remove atomisp_sensor_start_stream()
+  media: atomisp: Simplify atomisp_[start|stop]_streaming()
+  media: atomisp: Simplify atomisp_css_[start|stop]()
+  media: atomisp: Simplify atomisp_open() and atomisp_release()
+  media: atomisp: Simplify atomisp_pipe_check()
+  media: atomisp: Turn asd->streaming state tracker into a bool
+  media: atomisp: Remove no longer used atomisp_css_flush()
+  media: atomisp: Remove atomisp_streaming_count()
+  media: atomisp: Simplify atomisp_isr() and recovery_work()
+  media: atomisp: Rename atomisp_destroy_pipes_stream_force() to
+    atomisp_destroy_pipes_stream()
+  media: atomisp: Allow system suspend to continue with open /dev/video#
+    nodes
+  media: atomisp: Remove atomisp_[sub]dev_users()
+  media: atomisp: Remove unused css_pipe_id argument from
+    atomisp_css_[start|stop]()
+  media: atomisp: Remove unused atomisp_get_css_pipe_id() function
+  media: atomisp: Remove in_reset argument from atomisp_css_start()
+  media: atomisp: Set asd.subdev.devnode once from
+    isp_subdev_init_entities()
+
+ .../media/atomisp/include/linux/atomisp.h     |   5 +-
+ .../staging/media/atomisp/pci/atomisp_cmd.c   | 371 ++++++------------
+ .../staging/media/atomisp/pci/atomisp_cmd.h   |   8 +-
+ .../media/atomisp/pci/atomisp_compat.h        |  41 +-
+ .../media/atomisp/pci/atomisp_compat_css20.c  | 283 ++-----------
+ .../staging/media/atomisp/pci/atomisp_drvfs.c |   2 +-
+ .../staging/media/atomisp/pci/atomisp_fops.c  | 176 +--------
+ .../staging/media/atomisp/pci/atomisp_fops.h  |   3 -
+ .../media/atomisp/pci/atomisp_internal.h      |   9 -
+ .../staging/media/atomisp/pci/atomisp_ioctl.c | 212 ++--------
+ .../staging/media/atomisp/pci/atomisp_ioctl.h |   5 -
+ .../media/atomisp/pci/atomisp_subdev.c        | 198 ++--------
+ .../media/atomisp/pci/atomisp_subdev.h        |  30 +-
+ .../staging/media/atomisp/pci/atomisp_v4l2.c  | 120 +-----
+ 14 files changed, 254 insertions(+), 1209 deletions(-)
+
 -- 
 2.40.1
 
