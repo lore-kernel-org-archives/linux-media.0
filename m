@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B60D4C77B7F
-	for <linux-media@archiver.kernel.org>; Sat, 13 May 2023 12:33:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF3C2C7EE23
+	for <linux-media@archiver.kernel.org>; Sat, 13 May 2023 12:33:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238623AbjEMMds (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 13 May 2023 08:33:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41522 "EHLO
+        id S238496AbjEMMdu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 13 May 2023 08:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238348AbjEMMdq (ORCPT
+        with ESMTP id S238374AbjEMMdq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sat, 13 May 2023 08:33:46 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 589473A89
-        for <linux-media@vger.kernel.org>; Sat, 13 May 2023 05:32:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1233A8E
+        for <linux-media@vger.kernel.org>; Sat, 13 May 2023 05:32:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683981147;
+        s=mimecast20190719; t=1683981149;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=sWXGSa0z5CFwYizucVe2FkHyOf8pOSXomUvLZFl67kY=;
-        b=K8PFLt/WZPjXFFuBEHssQsRN8ozXx+jeqa3uIUl7fLR4VHog+hjl5lkQCemnS+dJLxSGNC
-        f3MJ6CvwNKj8x2SmGaO3e/Yh5eQdz8gRoAPz37Fkt1ThaH6rOJ9/ZDeew9mrf4jYqYdljJ
-        qG7IDqWixemqcbZJUkJsFlobuDsBrvM=
+        bh=Y2pdsMkQtZiydY64bbIRar2WBol6/oWQ5LxtqS2y+w4=;
+        b=ApF5mwzVi0PwcxRiah1onYUEp3iniXX3BHaSr7ri3SpjdNbe2Nncvdc8+AvJ8Pg8r8eoa+
+        IcCdQbQXDxd1ham+DL6dHv/GWZydCfaR3vM85bzsC9xch8ebvMJ6uRzW4I0VCX50gB3kX1
+        QJpZD6WUovO1Oo6ONUWGOlECSm7x0IY=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-176-lmN8cbe8OP-dVY1aTNeJ0A-1; Sat, 13 May 2023 08:32:22 -0400
-X-MC-Unique: lmN8cbe8OP-dVY1aTNeJ0A-1
+ us-mta-426-3YrEQhzYMSGX7XCF5nY8QQ-1; Sat, 13 May 2023 08:32:25 -0400
+X-MC-Unique: 3YrEQhzYMSGX7XCF5nY8QQ-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BFFFC857E60;
-        Sat, 13 May 2023 12:32:21 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 494EA88B767;
+        Sat, 13 May 2023 12:32:25 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.192.46])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3AE0240C2076;
-        Sat, 13 May 2023 12:32:20 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B91BD40C2076;
+        Sat, 13 May 2023 12:32:23 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -48,9 +48,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>, Kate Hsuan <hpa@redhat.com>,
         Nable <nable.maininbox@googlemail.com>,
         andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 11/30] media: atomisp: Remove atomisp_subdev_register_video_nodes() helper
-Date:   Sat, 13 May 2023 14:31:40 +0200
-Message-Id: <20230513123159.33234-12-hdegoede@redhat.com>
+Subject: [PATCH 13/30] media: atomisp: Remove unused mipi_frame_size field from atomisp_[sub_]device
+Date:   Sat, 13 May 2023 14:31:42 +0200
+Message-Id: <20230513123159.33234-14-hdegoede@redhat.com>
 In-Reply-To: <20230513123159.33234-1-hdegoede@redhat.com>
 References: <20230513123159.33234-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,74 +60,61 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Now that there is only 1 /dev/video# node left there is no need to
-do this in a helper. Just make atomisp_register_device_nodes()
-call ideo_register_device() directly.
+Both the atomisp_device and the atomisp_sub_device structs have
+an used mipi_frame_size field, remove the field from both.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- .../staging/media/atomisp/pci/atomisp_subdev.c | 18 ------------------
- .../staging/media/atomisp/pci/atomisp_subdev.h |  2 --
- .../staging/media/atomisp/pci/atomisp_v4l2.c   |  4 +++-
- 3 files changed, 3 insertions(+), 21 deletions(-)
+ drivers/staging/media/atomisp/pci/atomisp_fops.c     | 2 --
+ drivers/staging/media/atomisp/pci/atomisp_internal.h | 1 -
+ drivers/staging/media/atomisp/pci/atomisp_subdev.h   | 2 --
+ 3 files changed, 5 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_subdev.c b/drivers/staging/media/atomisp/pci/atomisp_subdev.c
-index 1c5e489b4405..98292530e330 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_subdev.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_subdev.c
-@@ -1002,24 +1002,6 @@ int atomisp_subdev_register_subdev(struct atomisp_sub_device *asd,
- 	return v4l2_device_register_subdev(vdev, &asd->subdev);
- }
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_fops.c b/drivers/staging/media/atomisp/pci/atomisp_fops.c
+index 39eba99feee0..37d8c8af3e8c 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_fops.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_fops.c
+@@ -448,7 +448,6 @@ static void atomisp_dev_init_struct(struct atomisp_device *isp)
+ 	unsigned int i;
  
--int atomisp_subdev_register_video_nodes(struct atomisp_sub_device *asd,
--					struct v4l2_device *vdev)
--{
--	int ret;
--
--	asd->video_out.vdev.v4l2_dev = vdev;
--	asd->video_out.vdev.device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
--	ret = video_register_device(&asd->video_out.vdev, VFL_TYPE_VIDEO, -1);
--	if (ret < 0)
--		goto error;
--
--	return 0;
--
--error:
--	atomisp_subdev_unregister_entities(asd);
--	return ret;
--}
--
- /*
-  * atomisp_subdev_init - ISP Subdevice  initialization.
-  * @dev: Device pointer specific to the ATOM ISP.
+ 	isp->isp_fatal_error = false;
+-	isp->mipi_frame_size = 0;
+ 
+ 	for (i = 0; i < isp->input_cnt; i++)
+ 		isp->inputs[i].asd = NULL;
+@@ -478,7 +477,6 @@ static void atomisp_subdev_init_struct(struct atomisp_sub_device *asd)
+ 	/* Add for channel */
+ 	asd->input_curr = 0;
+ 
+-	asd->mipi_frame_size = 0;
+ 	asd->copy_mode = false;
+ 
+ 	asd->stream_prepared = false;
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_internal.h b/drivers/staging/media/atomisp/pci/atomisp_internal.h
+index e531f0c71a15..cec0ac92726e 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_internal.h
++++ b/drivers/staging/media/atomisp/pci/atomisp_internal.h
+@@ -211,7 +211,6 @@ struct atomisp_device {
+ 
+ 	spinlock_t lock; /* Protects asd.streaming */
+ 
+-	unsigned int mipi_frame_size;
+ 	const struct atomisp_dfs_config *dfs;
+ 	unsigned int hpll_freq;
+ 	unsigned int running_freq;
 diff --git a/drivers/staging/media/atomisp/pci/atomisp_subdev.h b/drivers/staging/media/atomisp/pci/atomisp_subdev.h
-index ee7d0ee5d6e4..28afcdd41ef3 100644
+index 28afcdd41ef3..a702890003f9 100644
 --- a/drivers/staging/media/atomisp/pci/atomisp_subdev.h
 +++ b/drivers/staging/media/atomisp/pci/atomisp_subdev.h
-@@ -367,8 +367,6 @@ void atomisp_subdev_cleanup_pending_events(struct atomisp_sub_device *asd);
- void atomisp_subdev_unregister_entities(struct atomisp_sub_device *asd);
- int atomisp_subdev_register_subdev(struct atomisp_sub_device *asd,
- 				   struct v4l2_device *vdev);
--int atomisp_subdev_register_video_nodes(struct atomisp_sub_device *asd,
--					struct v4l2_device *vdev);
- int atomisp_subdev_init(struct atomisp_device *isp);
- void atomisp_subdev_cleanup(struct atomisp_device *isp);
- int atomisp_create_pads_links(struct atomisp_device *isp);
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-index 4370d560308e..f914ab9068c1 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-@@ -1016,7 +1016,9 @@ static int atomisp_register_device_nodes(struct atomisp_device *isp)
- {
- 	int err;
+@@ -304,8 +304,6 @@ struct atomisp_sub_device {
  
--	err = atomisp_subdev_register_video_nodes(&isp->asd, &isp->v4l2_dev);
-+	isp->asd.video_out.vdev.v4l2_dev = &isp->v4l2_dev;
-+	isp->asd.video_out.vdev.device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
-+	err = video_register_device(&isp->asd.video_out.vdev, VFL_TYPE_VIDEO, -1);
- 	if (err)
- 		return err;
+ 	unsigned int latest_preview_exp_id; /* CSS ZSL/SDV raw buffer id */
  
+-	unsigned int mipi_frame_size;
+-
+ 	bool copy_mode; /* CSI2+ use copy mode */
+ 
+ 	int raw_buffer_bitmap[ATOMISP_MAX_EXP_ID / 32 +
 -- 
 2.40.1
 
