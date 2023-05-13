@@ -2,50 +2,51 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 511E4C77B7A
-	for <linux-media@archiver.kernel.org>; Sat, 13 May 2023 17:57:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44E50C7EE26
+	for <linux-media@archiver.kernel.org>; Sat, 13 May 2023 17:58:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234163AbjEMR55 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 13 May 2023 13:57:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36074 "EHLO
+        id S234752AbjEMR57 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 13 May 2023 13:57:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232990AbjEMR5t (ORCPT
+        with ESMTP id S233461AbjEMR5u (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 13 May 2023 13:57:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4827C2125;
-        Sat, 13 May 2023 10:57:47 -0700 (PDT)
+        Sat, 13 May 2023 13:57:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A95DE273F;
+        Sat, 13 May 2023 10:57:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CFEFA61B86;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D49461C28;
+        Sat, 13 May 2023 17:57:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3696BC433A8;
         Sat, 13 May 2023 17:57:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15BE8C433EF;
-        Sat, 13 May 2023 17:57:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1684000666;
-        bh=c6woXOkPTNb3xhZya6YGx5eYYf5xdfTlpr93ZKM/zE8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QkovVvpv5xz93urGKjjc7mHNxj5nsU+noiJ+1XHWxWFRsXK5iNKckcvyfauH3MVai
-         r3ZCGvOB4ua1ez7gV9SALLHWRE7TtAAZ0sqGur5V7ycK7kpMiBF5RexAXv1UmopzS+
-         GPGGSGR9aERYaEvX4PCt2bcSLFAkNmfE9qr5Mbtu5AlVRmkiwSUSS80/dp9gAsusxx
-         PX+igp7eoPcEiE2J6cZnHPYlLCCz0bWffNFRpCbbH7mOqjjFFHm/HVNTT0W94IjUaP
-         8TitpBS8eCd9OHi1JIQNJpe1PM/6YrTQOwJs7pJqzbIf1ycayoaQY8lN4/4at/DiYT
-         V9M1KphuqHp4w==
+        bh=1qTBZIy/0s0rnJPtyTEqiDh0a/SvnY8Eo2eM/Rkf/i0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dR/m4fFTbTZvr+QfxNN98GnzkeguwI3JEAJWtSOMPjk6Lm1NO4KHMb7PSYsiP2EWs
+         KF1hrEZzjMtl349HfMlFJtQQ8eSI80uZp7ehJkmcvV2R+5e1h0rrkrSQM1Qogfafh/
+         S7oG/jFyShwI87BCxRkOSgefHEHg+39hDwwIKee32IsY/KXjJZi8ztPKn/vR32b2vQ
+         MNma0NGsc4DSqvLUHDlpdHw6268DTH/Z+H2/J42cxVtC1xDCiYnfN2W6Crmwtt+gHP
+         yUd7/nSNtfjyQH0ZgrIf3tOZdvHNC1i2+xWFwvN0uyA7GAGnbYI+RBXcjqKk5Q05e+
+         gYjQolSHSNipA==
 Received: from mchehab by mail.kernel.org with local (Exim 4.96)
         (envelope-from <mchehab@kernel.org>)
-        id 1pxtV1-001txw-1Q;
+        id 1pxtV1-001txS-0k;
         Sat, 13 May 2023 18:57:43 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     YongSu Yoo <yongsuyoo0215@gmail.com>,
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Lecopzer Chen <lecopzer.chen@mediatek.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 11/24] media: dvb_ca_en50221: fix a size write bug
-Date:   Sat, 13 May 2023 18:57:28 +0100
-Message-Id: <9548a43e8934564309ae22d35c501073358776b4.1684000646.git.mchehab@kernel.org>
+        Mike Isely <isely@pobox.com>, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH 01/24] media: pvrusb2: fix DVB_CORE dependency
+Date:   Sat, 13 May 2023 18:57:18 +0100
+Message-Id: <53558de2b5c4f4ee6bfcfbe34e27071c2d0073d5.1684000646.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <53558de2b5c4f4ee6bfcfbe34e27071c2d0073d5.1684000646.git.mchehab@kernel.org>
-References: <53558de2b5c4f4ee6bfcfbe34e27071c2d0073d5.1684000646.git.mchehab@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 To:     unlisted-recipients:; (no To-header on input)
@@ -53,113 +54,40 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: YongSu Yoo <yongsuyoo0215@gmail.com>
+From: Arnd Bergmann <arnd@arndb.de>
 
-The function of "dvb_ca_en50221_write_data" at source/drivers/media
-/dvb-core/dvb_ca_en50221.c is used for two cases.
-The first case is for writing APDU data in the function of
-"dvb_ca_en50221_io_write" at source/drivers/media/dvb-core/
-dvb_ca_en50221.c.
-The second case is for writing the host link buf size on the
-Command Register in the function of "dvb_ca_en50221_link_init"
-at source/drivers/media/dvb-core/dvb_ca_en50221.c.
-In the second case, there exists a bug like followings.
-In the function of the "dvb_ca_en50221_link_init",
-after a TV host calculates the host link buf_size,
-the TV host writes the calculated host link buf_size on the
-Size Register.
-Accroding to the en50221 Spec (the page 60 of
-https://dvb.org/wp-content/uploads/2020/02/En50221.V1.pdf),
-before this writing operation, the "SW(CMDREG_SW)" flag in the
-Command Register should be set. We can see this setting operation
-in the function of the "dvb_ca_en50221_link_init" like below.
-...
-	if ((ret = ca->pub->write_cam_control(ca->pub, slot,
-CTRLIF_COMMAND, IRQEN | CMDREG_SW)) != 0)
-		return ret;
-...
-But, after that, the real writing operation is implemented using
-the function of the "dvb_ca_en50221_write_data" in the function of
-"dvb_ca_en50221_link_init", and the "dvb_ca_en50221_write_data"
-includes the function of "ca->pub->write_cam_control",
-and the function of the "ca->pub->write_cam_control" in the
-function of the "dvb_ca_en50221_wrte_data" does not include
-"CMDREG_SW" flag like below.
-...
-	if ((status = ca->pub->write_cam_control(ca->pub, slot,
-CTRLIF_COMMAND, IRQEN | CMDREG_HC)) != 0)
-...
-In the above source code, we can see only the "IRQEN | CMDREG_HC",
-but we cannot see the "CMDREG_SW".
-The "CMDREG_SW" flag which was set in the function of the
-"dvb_ca_en50221_link_init" was rollbacked by the follwoing function
-of the "dvb_ca_en50221_write_data".
-This is a bug. and this bug causes that the calculated host link buf_size
-is not properly written in the CI module.
-Through this patch, we fix this bug.
+Now that DVB_CORE can be a loadable module, pvrusb2 can run into
+a link error:
 
-Link: https://lore.kernel.org/linux-media/20220818125027.1131-1-yongsuyoo0215@gmail.com
-Signed-off-by: YongSu Yoo <yongsuyoo0215@gmail.com>
+ld.lld: error: undefined symbol: dvb_module_probe
+>>> referenced by pvrusb2-devattr.c
+>>>               drivers/media/usb/pvrusb2/pvrusb2-devattr.o:(pvr2_lgdt3306a_attach) in archive vmlinux.a
+ld.lld: error: undefined symbol: dvb_module_release
+>>> referenced by pvrusb2-devattr.c
+>>>               drivers/media/usb/pvrusb2/pvrusb2-devattr.o:(pvr2_dual_fe_attach) in archive vmlinux.a
+
+Refine the Kconfig dependencies to avoid this case.
+
+Link: https://lore.kernel.org/linux-media/20230117171055.2714621-1-arnd@kernel.org
+Fixes: 7655c342dbc4 ("media: Kconfig: Make DVB_CORE=m possible when MEDIA_SUPPORT=y")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
- drivers/media/dvb-core/dvb_ca_en50221.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ drivers/media/usb/pvrusb2/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/dvb-core/dvb_ca_en50221.c b/drivers/media/dvb-core/dvb_ca_en50221.c
-index c2d2792227f8..b6ca29dfb184 100644
---- a/drivers/media/dvb-core/dvb_ca_en50221.c
-+++ b/drivers/media/dvb-core/dvb_ca_en50221.c
-@@ -187,7 +187,7 @@ static void dvb_ca_en50221_thread_wakeup(struct dvb_ca_private *ca);
- static int dvb_ca_en50221_read_data(struct dvb_ca_private *ca, int slot,
- 				    u8 *ebuf, int ecount);
- static int dvb_ca_en50221_write_data(struct dvb_ca_private *ca, int slot,
--				     u8 *ebuf, int ecount);
-+				     u8 *ebuf, int ecount, int size_write_flag);
- 
- /**
-  * findstr - Safely find needle in haystack.
-@@ -370,7 +370,7 @@ static int dvb_ca_en50221_link_init(struct dvb_ca_private *ca, int slot)
- 	ret = dvb_ca_en50221_wait_if_status(ca, slot, STATUSREG_FR, HZ / 10);
- 	if (ret)
- 		return ret;
--	ret = dvb_ca_en50221_write_data(ca, slot, buf, 2);
-+	ret = dvb_ca_en50221_write_data(ca, slot, buf, 2, CMDREG_SW);
- 	if (ret != 2)
- 		return -EIO;
- 	ret = ca->pub->write_cam_control(ca->pub, slot, CTRLIF_COMMAND, IRQEN);
-@@ -778,11 +778,13 @@ static int dvb_ca_en50221_read_data(struct dvb_ca_private *ca, int slot,
-  * @buf: The data in this buffer is treated as a complete link-level packet to
-  *	 be written.
-  * @bytes_write: Size of ebuf.
-+ * @size_write_flag: A flag on Command Register which says whether the link size
-+ * information will be writen or not.
-  *
-  * return: Number of bytes written, or < 0 on error.
-  */
- static int dvb_ca_en50221_write_data(struct dvb_ca_private *ca, int slot,
--				     u8 *buf, int bytes_write)
-+				     u8 *buf, int bytes_write, int size_write_flag)
- {
- 	struct dvb_ca_slot *sl = &ca->slot_info[slot];
- 	int status;
-@@ -817,7 +819,7 @@ static int dvb_ca_en50221_write_data(struct dvb_ca_private *ca, int slot,
- 
- 	/* OK, set HC bit */
- 	status = ca->pub->write_cam_control(ca->pub, slot, CTRLIF_COMMAND,
--					    IRQEN | CMDREG_HC);
-+					    IRQEN | CMDREG_HC | size_write_flag);
- 	if (status)
- 		goto exit;
- 
-@@ -1508,7 +1510,7 @@ static ssize_t dvb_ca_en50221_io_write(struct file *file,
- 
- 			mutex_lock(&sl->slot_lock);
- 			status = dvb_ca_en50221_write_data(ca, slot, fragbuf,
--							   fraglen + 2);
-+							   fraglen + 2, 0);
- 			mutex_unlock(&sl->slot_lock);
- 			if (status == (fraglen + 2)) {
- 				written = 1;
+diff --git a/drivers/media/usb/pvrusb2/Kconfig b/drivers/media/usb/pvrusb2/Kconfig
+index 9501b10b31aa..0df10270dbdf 100644
+--- a/drivers/media/usb/pvrusb2/Kconfig
++++ b/drivers/media/usb/pvrusb2/Kconfig
+@@ -37,6 +37,7 @@ config VIDEO_PVRUSB2_DVB
+ 	bool "pvrusb2 ATSC/DVB support"
+ 	default y
+ 	depends on VIDEO_PVRUSB2 && DVB_CORE
++	depends on VIDEO_PVRUSB2=m || DVB_CORE=y
+ 	select DVB_LGDT330X if MEDIA_SUBDRV_AUTOSELECT
+ 	select DVB_S5H1409 if MEDIA_SUBDRV_AUTOSELECT
+ 	select DVB_S5H1411 if MEDIA_SUBDRV_AUTOSELECT
 -- 
 2.40.1
 
