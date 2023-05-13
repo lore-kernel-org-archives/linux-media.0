@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C02D2C77B7F
-	for <linux-media@archiver.kernel.org>; Sat, 13 May 2023 12:34:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B40D8C7EE23
+	for <linux-media@archiver.kernel.org>; Sat, 13 May 2023 12:34:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238477AbjEMMd6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 13 May 2023 08:33:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41584 "EHLO
+        id S238790AbjEMMd7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 13 May 2023 08:33:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238406AbjEMMdv (ORCPT
+        with ESMTP id S238348AbjEMMdu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 13 May 2023 08:33:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27D63A92
-        for <linux-media@vger.kernel.org>; Sat, 13 May 2023 05:32:33 -0700 (PDT)
+        Sat, 13 May 2023 08:33:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77D03A9B
+        for <linux-media@vger.kernel.org>; Sat, 13 May 2023 05:32:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683981152;
+        s=mimecast20190719; t=1683981151;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dDAdEGhZl31KpOpCLRgNBxJqgfL/YFPj8BUQ7ExtQHI=;
-        b=WfcbeTpNae7rUpqdRatNY2wFrOEmrLjNJyOtDKEFO9CvMK+TCaxdW9nJWI+ByhqGne6r7v
-        1PUwTUPTGfW86AiutM3Z/Q1xy98ndQkz9ijIoUz5gI9nIS1pdeCyBkRQ/KbokYy4TttoIl
-        B0rSE6+81KHRSLOWUxnCINp0yWStQeA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=heqcN4jTMo6yfHmwFTyUUf1HPQ6qbBteOI7JTQsqDpA=;
+        b=ipVcB+EMG4SXU39LlUAI6q/6KllWScZdrRhMHyQ/r7SR3EOAN2k9l5byqea1dS720q2Qnf
+        17j9uL4xLoRxlq845fEOWXrfK749pTiLzAlgmfIlJ+DCqSbUVMjlE6plFrGyQ3Mqo17mbB
+        Lts7CNPV3qqX2mQvxs7cHTmSMnhJZ6Y=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-477-VI83qs2zO7e7giOB5-JCIw-1; Sat, 13 May 2023 08:32:29 -0400
-X-MC-Unique: VI83qs2zO7e7giOB5-JCIw-1
+ us-mta-424-H8Y3IY0ZOIGnodFoV6pxXA-1; Sat, 13 May 2023 08:32:27 -0400
+X-MC-Unique: H8Y3IY0ZOIGnodFoV6pxXA-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CF0C988B767;
-        Sat, 13 May 2023 12:32:28 +0000 (UTC)
-Received: from shalem.redhat.com (unknown [10.39.192.46])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 415B740C2076;
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0E43E3C025CC;
         Sat, 13 May 2023 12:32:27 +0000 (UTC)
+Received: from shalem.redhat.com (unknown [10.39.192.46])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7D57740C2076;
+        Sat, 13 May 2023 12:32:25 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -48,9 +48,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>, Kate Hsuan <hpa@redhat.com>,
         Nable <nable.maininbox@googlemail.com>,
         andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 15/30] media: atomisp: Remove atomisp_sensor_start_stream()
-Date:   Sat, 13 May 2023 14:31:44 +0200
-Message-Id: <20230513123159.33234-16-hdegoede@redhat.com>
+Subject: [PATCH 14/30] media: atomisp: Remove isp_timeout flag
+Date:   Sat, 13 May 2023 14:31:43 +0200
+Message-Id: <20230513123159.33234-15-hdegoede@redhat.com>
 In-Reply-To: <20230513123159.33234-1-hdegoede@redhat.com>
 References: <20230513123159.33234-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,94 +60,103 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Now that we no longer have continuous mode we always want to
-start the sensor on the first atomisp_start_streaming() call
-and stop it on the first atomisp_stop_streaming() call.
+isp_timeout only ever gets set in __atomisp_css_recover() and then
+immediately gets cleared again after calling atomisp_reset().
 
-Remove atomisp_sensor_start_stream() which returned the number
-of streams which should be active before starting the sensor
-and always start/stop the sensor directly.
+All this happens with isp->mutex held.
+
+The only consumer of isp->isp_timeout is atomisp_stop_streaming(), which
+also holds isp->mutex and which is *not* called by atomisp_reset().
+
+Since both hold isp->mutex and since __atomisp_css_recover() clears
+isp_timeout before releasing the mutex, atomisp_stop_streaming() can
+never see isp_timeout being true, so just remove the flag.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- .../staging/media/atomisp/pci/atomisp_ioctl.c | 36 -------------------
- 1 file changed, 36 deletions(-)
+ drivers/staging/media/atomisp/pci/atomisp_cmd.c      | 8 +++-----
+ drivers/staging/media/atomisp/pci/atomisp_internal.h | 2 --
+ drivers/staging/media/atomisp/pci/atomisp_ioctl.c    | 7 +------
+ 3 files changed, 4 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-index e0a8616ecf05..13e00a2af8e1 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-@@ -1123,20 +1123,6 @@ enum ia_css_pipe_id atomisp_get_css_pipe_id(struct atomisp_sub_device *asd)
- 	}
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_cmd.c b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
+index 42a2a8f0da06..ea07ddcdd7f1 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_cmd.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
+@@ -935,7 +935,7 @@ void atomisp_buf_done(struct atomisp_sub_device *asd, int error,
+ 		atomisp_qbuffers_to_css(asd);
  }
  
--static unsigned int atomisp_sensor_start_stream(struct atomisp_sub_device *asd)
--{
--	if (asd->vfpp->val != ATOMISP_VFPP_ENABLE ||
--	    asd->copy_mode)
--		return 1;
--
--	if (asd->run_mode->val == ATOMISP_RUN_MODE_VIDEO ||
--	    (asd->run_mode->val == ATOMISP_RUN_MODE_STILL_CAPTURE &&
--	     !atomisp_is_mbuscode_raw(asd->fmt[ATOMISP_SUBDEV_PAD_SOURCE].fmt.code)))
--		return 2;
--	else
--		return 1;
--}
--
- /* Input system HW workaround */
- /* Input system address translation corrupts burst during */
- /* invalidate. SW workaround for this is to set burst length */
-@@ -1162,7 +1148,6 @@ int atomisp_start_streaming(struct vb2_queue *vq, unsigned int count)
- 	struct atomisp_device *isp = asd->isp;
+-static void __atomisp_css_recover(struct atomisp_device *isp, bool isp_timeout)
++static void __atomisp_css_recover(struct atomisp_device *isp)
+ {
  	struct pci_dev *pdev = to_pci_dev(isp->dev);
  	enum ia_css_pipe_id css_pipe_id;
--	unsigned int sensor_start_stream;
- 	unsigned long irqflags;
- 	int ret;
+@@ -992,9 +992,7 @@ static void __atomisp_css_recover(struct atomisp_device *isp, bool isp_timeout)
+ 			       isp->saved_regs.i_control | MRFLD_PCI_I_CONTROL_SRSE_RESET_MASK);
  
-@@ -1177,18 +1162,6 @@ int atomisp_start_streaming(struct vb2_queue *vq, unsigned int count)
- 	/* Input system HW workaround */
- 	atomisp_dma_burst_len_cfg(asd);
+ 	/* reset ISP and restore its state */
+-	isp->isp_timeout = true;
+ 	atomisp_reset(isp);
+-	isp->isp_timeout = false;
  
--	/*
--	 * The number of streaming video nodes is based on which
--	 * binary is going to be run.
+ 	if (stream_restart) {
+ 		atomisp_css_input_set_mode(&isp->asd, IA_CSS_INPUT_MODE_BUFFERED_SENSOR);
+@@ -1043,14 +1041,14 @@ void atomisp_assert_recovery_work(struct work_struct *work)
+ 						  assert_recovery_work);
+ 
+ 	mutex_lock(&isp->mutex);
+-	__atomisp_css_recover(isp, true);
++	__atomisp_css_recover(isp);
+ 	mutex_unlock(&isp->mutex);
+ }
+ 
+ void atomisp_css_flush(struct atomisp_device *isp)
+ {
+ 	/* Start recover */
+-	__atomisp_css_recover(isp, false);
++	__atomisp_css_recover(isp);
+ 
+ 	dev_dbg(isp->dev, "atomisp css flush done\n");
+ }
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_internal.h b/drivers/staging/media/atomisp/pci/atomisp_internal.h
+index cec0ac92726e..3d4f0f632f44 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_internal.h
++++ b/drivers/staging/media/atomisp/pci/atomisp_internal.h
+@@ -204,8 +204,6 @@ struct atomisp_device {
+ 	struct atomisp_regs saved_regs;
+ 	struct atomisp_css_env css_env;
+ 
+-	/* isp timeout status flag */
+-	bool isp_timeout;
+ 	bool isp_fatal_error;
+ 	struct work_struct assert_recovery_work;
+ 
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
+index 8e2b5b647670..e0a8616ecf05 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
+@@ -1369,11 +1369,7 @@ void atomisp_stop_streaming(struct vb2_queue *vq)
+ 	/*
+ 	 * ISP work around, need to reset isp
+ 	 * Is it correct time to reset ISP when first node does streamoff?
 -	 */
--	sensor_start_stream = atomisp_sensor_start_stream(asd);
--
--	if (atomisp_subdev_streaming_count(asd) > sensor_start_stream) {
--		atomisp_qbuffers_to_css(asd);
--		ret = 0;
--		goto out_unlock;
--	}
--
- 	if (asd->streaming == ATOMISP_DEVICE_STREAMING_ENABLED) {
- 		atomisp_qbuffers_to_css(asd);
- 		goto start_sensor;
-@@ -1233,12 +1206,6 @@ int atomisp_start_streaming(struct vb2_queue *vq, unsigned int count)
+-	if (isp->isp_timeout)
+-		dev_err(isp->dev, "%s: Resetting with WA activated",
+-			__func__);
+-	/*
++	 *
+ 	 * It is possible that the other asd stream is in the stage
+ 	 * that v4l2_setfmt is just get called on it, which will
+ 	 * create css stream on that stream. But at this point, there
+@@ -1403,7 +1399,6 @@ void atomisp_stop_streaming(struct vb2_queue *vq)
+ 		}
+ 	}
  
- 	atomisp_qbuffers_to_css(asd);
- 
--	/* Only start sensor when the last streaming instance started */
--	if (atomisp_subdev_streaming_count(asd) < sensor_start_stream) {
--		ret = 0;
--		goto out_unlock;
--	}
--
- start_sensor:
- 	if (isp->flash) {
- 		asd->params.num_flash_frames = 0;
-@@ -1340,9 +1307,6 @@ void atomisp_stop_streaming(struct vb2_queue *vq)
- 
- 	atomisp_subdev_cleanup_pending_events(asd);
- stopsensor:
--	if (atomisp_subdev_streaming_count(asd) != atomisp_sensor_start_stream(asd))
--		goto out_unlock;
--
- 	ret = v4l2_subdev_call(isp->inputs[asd->input_curr].camera,
- 			       video, s_stream, 0);
- 
+-	isp->isp_timeout = false;
+ out_unlock:
+ 	mutex_unlock(&isp->mutex);
+ }
 -- 
 2.40.1
 
