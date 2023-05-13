@@ -2,92 +2,86 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44AD7C77B7D
-	for <linux-media@archiver.kernel.org>; Sat, 13 May 2023 17:42:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BFC1C77B7A
+	for <linux-media@archiver.kernel.org>; Sat, 13 May 2023 17:57:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232322AbjEMRmQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 13 May 2023 13:42:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59004 "EHLO
+        id S233033AbjEMR5t (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 13 May 2023 13:57:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231504AbjEMRmO (ORCPT
+        with ESMTP id S229473AbjEMR5r (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 13 May 2023 13:42:14 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149EA26AD
-        for <linux-media@vger.kernel.org>; Sat, 13 May 2023 10:42:13 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-96ab81aa68dso305922366b.3
-        for <linux-media@vger.kernel.org>; Sat, 13 May 2023 10:42:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683999731; x=1686591731;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1EPLQBB2GBeM0JhJNupUXh7QXE7qM2moBT4BpqtzLKg=;
-        b=oODy6h5jG9SUBf+aIIvWE97lvjJakoMZ+QZqPXqefm5+lvTscoIdfzXZW+IWkJ0ek/
-         /l/bRdbtu/PN5lDTB6VZaHZdry0DM6vdmagDg0hSk3Kilcxg8m2HxIdo5vjNYlYOdKkY
-         j6LMeS1t6+vlUyJYkxiDaiq9ZqtHYP8MscQWXhMWyC5zN8+L1rhZaxxSufvyM8kT+pZu
-         f+m3Kdqd3RK06IBI1mo529GxyBhcrWPmX9eqrXMK60tkOrJMb8YwjlFhCFrhyBmX/fZk
-         Gw6ykEa4bXdpmtvAtpvHNh+zwJ10DnKN0QVnGgjKU/IIOkZ6VmICvufj9scuBcP5vO1w
-         ox4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683999731; x=1686591731;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1EPLQBB2GBeM0JhJNupUXh7QXE7qM2moBT4BpqtzLKg=;
-        b=ZxH3L25G6jpCcrCyPxPTsQsY0Y5Y/w+SVEUbqK3i2GkL0W66L4morkLh2Bs3YGo/eQ
-         WVniMTbybKT6TEty9eQhNV7ix88sqaogh1LffjAVk+DPyLL7cb2Bm5H1s1xNbzWdF4vH
-         xAVSrH9bbOl9a0OkO5Nuge4yZyQ0RrJjoDO/56AZDex96nTMpb1rQHjI+EN5sW/IcwM/
-         Y32KXL/iZeL1PogJUEoH0rJMg7YJ2eGwj4WHWLd3sYkTlbvXib9rIHtTPseubQvinhv8
-         Tg7C2/dvWR+8UiMt/1oYyyM3rbnFCpAUf5+V1Cl0hFWnIi8IkEV+EMUsxAHS/6k5x8QX
-         OO0g==
-X-Gm-Message-State: AC+VfDxItQQ+dtTreSwHz/+v+jIDOw3D/n9zpHckYY1cvhN3lTRjgdYC
-        28nkUp+dyzsR1TZQoBWg7HqcBw==
-X-Google-Smtp-Source: ACHHUZ4KckdzIN9YVVpYV11NF6S3LYjc2DL/mCzjw1npS3Buhdnr5DUezOv6AibXv0XhTS/+UcSrTA==
-X-Received: by 2002:a17:906:974b:b0:957:943e:7416 with SMTP id o11-20020a170906974b00b00957943e7416mr29305305ejy.15.1683999731473;
-        Sat, 13 May 2023 10:42:11 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:bc2d:23f8:43c2:2aed])
-        by smtp.gmail.com with ESMTPSA id hy25-20020a1709068a7900b0096607baaf19sm7032021ejc.101.2023.05.13.10.42.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 May 2023 10:42:10 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Aakarsh Jain <aakarsh.jain@samsung.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        m.szyprowski@samsung.com, andrzej.hajda@intel.com,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
-        benjamin.gaignard@collabora.com, krzysztof.kozlowski+dt@linaro.org,
-        stanimir.varbanov@linaro.org, dillon.minfei@gmail.com,
-        david.plowman@raspberrypi.com, mark.rutland@arm.com,
-        robh+dt@kernel.org, krzk+dt@kernel.org, andi@etezian.org,
-        alim.akhtar@samsung.com, aswani.reddy@samsung.com,
-        pankaj.dubey@samsung.com
-Subject: Re: [Patch v7] dt-bindings: media: s5p-mfc: convert bindings to json-schema
-Date:   Sat, 13 May 2023 19:42:06 +0200
-Message-Id: <168399972073.5154.5669328924762682011.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230328114729.61436-1-aakarsh.jain@samsung.com>
-References: <CGME20230328114738epcas5p475b8fa1d1e86bbb86d004afe365e0259@epcas5p4.samsung.com> <20230328114729.61436-1-aakarsh.jain@samsung.com>
+        Sat, 13 May 2023 13:57:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA94171E;
+        Sat, 13 May 2023 10:57:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6BC261B63;
+        Sat, 13 May 2023 17:57:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECB52C433D2;
+        Sat, 13 May 2023 17:57:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684000666;
+        bh=4ClBQusFX5qbjQJdkZxV7kXoxd/BNCXo2EIL6LRfVUs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=XsaTnx9umsYFitFXysEcek55CQeQ2z0EWmkTpKI+7Kjfwyn7ni62AfUOOXA2uKnkU
+         V5gprOVVqyi4wMTkdpLCOvgmF4cHu4RSl2yguauMUYiGSUqk8FsODiUb+jgWKfrEXT
+         RYLhE/n4wFQcfIfsIN4nGX2gfbiuKO3SbxhLHv3+sjIc/+FhkOZ+h3ynIXg+drkhQw
+         Mpnsgfuculsd6HgDPMRSp7Zq+PEsI9ykyLk8BFk1UoAqhI0PsjzEPu9Qvm1bbI3xG6
+         8TFHEEcgert5XqJodMeEPvFl4LZIZC2nEWZZIbZBnShKeKGiVHmP5PtYiQ5gJadZzp
+         Rc4Ue6Oo/TH9Q==
+Received: from mchehab by mail.kernel.org with local (Exim 4.96)
+        (envelope-from <mchehab@kernel.org>)
+        id 1pxtV1-001txq-1J;
+        Sat, 13 May 2023 18:57:43 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Wei Chen <harperchen1110@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH 09/24] media: dvb-usb: dw2102: fix uninit-value in su3000_read_mac_address
+Date:   Sat, 13 May 2023 18:57:26 +0100
+Message-Id: <949b355d0b9233a30bfaf94f43437a14cba495ae.1684000646.git.mchehab@kernel.org>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <53558de2b5c4f4ee6bfcfbe34e27071c2d0073d5.1684000646.git.mchehab@kernel.org>
+References: <53558de2b5c4f4ee6bfcfbe34e27071c2d0073d5.1684000646.git.mchehab@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+From: Wei Chen <harperchen1110@gmail.com>
 
-On Tue, 28 Mar 2023 17:17:29 +0530, Aakarsh Jain wrote:
-> Convert s5p-mfc bindings to DT schema format using json-schema.
-> 
-> 
+In su3000_read_mac_address, if i2c_transfer fails to execute two
+messages, array mac address will not be initialized. Without handling
+such error, later in function dvb_usb_adapter_dvb_init, proposed_mac
+is accessed before initialization.
 
-Applied, thanks!
+Fix this error by returning a negative value if message execution fails.
 
-[1/1] dt-bindings: media: s5p-mfc: convert bindings to json-schema
-      https://git.kernel.org/krzk/linux/c/538af6e5856b1aa971975c747a2974a74db48928
+Link: https://lore.kernel.org/linux-media/20230328124416.560889-1-harperchen1110@gmail.com
+Signed-off-by: Wei Chen <harperchen1110@gmail.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
+ drivers/media/usb/dvb-usb/dw2102.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
+diff --git a/drivers/media/usb/dvb-usb/dw2102.c b/drivers/media/usb/dvb-usb/dw2102.c
+index 0ca764282c76..8747960e6146 100644
+--- a/drivers/media/usb/dvb-usb/dw2102.c
++++ b/drivers/media/usb/dvb-usb/dw2102.c
+@@ -946,7 +946,7 @@ static int su3000_read_mac_address(struct dvb_usb_device *d, u8 mac[6])
+ 	for (i = 0; i < 6; i++) {
+ 		obuf[1] = 0xf0 + i;
+ 		if (i2c_transfer(&d->i2c_adap, msg, 2) != 2)
+-			break;
++			return -1;
+ 		else
+ 			mac[i] = ibuf[0];
+ 	}
 -- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+2.40.1
+
