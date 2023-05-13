@@ -2,48 +2,47 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A0B4C77B7A
-	for <linux-media@archiver.kernel.org>; Sat, 13 May 2023 17:58:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58F38C7EE26
+	for <linux-media@archiver.kernel.org>; Sat, 13 May 2023 17:58:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236786AbjEMR6G (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 13 May 2023 13:58:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36096 "EHLO
+        id S236807AbjEMR6I (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 13 May 2023 13:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233538AbjEMR5v (ORCPT
+        with ESMTP id S233552AbjEMR5v (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sat, 13 May 2023 13:57:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 114232D55;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B12D2D52;
         Sat, 13 May 2023 10:57:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F85661CB6;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 856F061CB1;
         Sat, 13 May 2023 17:57:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A15AC4331F;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4577BC433B4;
         Sat, 13 May 2023 17:57:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1684000666;
-        bh=eGtNYpD/XyyRkJDa/Og4mUl11WDE9M+dRjzmaPlkuV4=;
+        bh=6CuqLMQiacBTAI5w3xjsfm0X5Hpovbdiy3/b17aiww8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KuIA5/cO9Tm+H+/t6AZ8omfIsBFLtHlrJWRzUKGbr+bPEFMJ56WP2poDE9Ppj03Dv
-         Tydbuyn5mqtIsJuzAESckgd8lfFFnF30RGrh4kIMHoTlvsewGbzt8TyVp7qWyCTmMc
-         AexQK9OR6+Sb1IJRCAaDph5QRqtKA4aUxDlF7MJxdjvR2S73lvZzJbsJ+6gcfXef7p
-         rgOrvg0hxogtYqAEdAH5xbvEBBJOvP5XqVcKlxuS6cJ3LmWwWHTmtolANovoU6cY1W
-         nmDaW4NliCgozrwvjTyDyY8ckBrAvDbQCPm4VSbkLOyA3U++SyaPoa8KIIQs7le3/f
-         UKfOeKsNU5Baw==
+        b=m4JXMw+HBStUnuVsn29oAAHAlFH2iZPow7WevxUXMPEvj2oJofU6Q2pHucRcllGGG
+         aRsNa+pB2MsfMONwmvzMJjt+tLzEgdNsqhNdLd0Hya8ZCA0lEvuMQ6ilbcJuK8fXtH
+         7gT4vEb52pi7HVgbB8gpJmsha3sdPval9L9ItggPyjU9p99LSKFkuQSnprxbrSFMYw
+         Znwy/MrrPnIKrL5d0FzvU4H1SiELBhLxNB9PnKtvt0WMar8ohRwEuWVv0xz+4hWA8m
+         Uml5eeh93jbsGG4EzO5SVKtaOFo1bTC5u2ZMcs9vbWJLMstCiz15ZNVHtHk1UmU2KX
+         CQltketXd3ztA==
 Received: from mchehab by mail.kernel.org with local (Exim 4.96)
         (envelope-from <mchehab@kernel.org>)
-        id 1pxtV1-001tya-28;
+        id 1pxtV1-001tyK-1r;
         Sat, 13 May 2023 18:57:43 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Athanasios Oikonomou <athoik@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Robert Schlabbach <robert_s@gmx.net>
-Subject: [PATCH 24/24] media: dvb: bump DVB API version
-Date:   Sat, 13 May 2023 18:57:41 +0100
-Message-Id: <1a18c0512de2f4002e8b0084ad28cce662bb57e7.1684000646.git.mchehab@kernel.org>
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH 19/24] media: dvbdev.h: do some kernel-doc cleanups
+Date:   Sat, 13 May 2023 18:57:36 +0100
+Message-Id: <09c80cb59d5f9f45714bec8e0d0b1254c7846d83.1684000646.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <53558de2b5c4f4ee6bfcfbe34e27071c2d0073d5.1684000646.git.mchehab@kernel.org>
 References: <53558de2b5c4f4ee6bfcfbe34e27071c2d0073d5.1684000646.git.mchehab@kernel.org>
@@ -54,33 +53,48 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Athanasios Oikonomou <athoik@gmail.com>
+Some kernel-doc warnings in <media/dvbdev.h> were introduced. A fixup
+patch addressed them was already merged, but Randy's approach from:
+https://lore.kernel.org/linux-media/20221203060931.19953-1-rdunlap@infradead.org
 
-Bump the DVB API version in order userspace to be aware of the changes
-recently implemented in enumerations for DVB-S2(X) and DVB-C2.
+Had some advantages, as it moves the @dvbdev to the right place inside
+dvb_remove_device() documentation and it makes clearer about what
+refcounter struct dvb_device refers to.
 
-Related: commit 6508a50fe84f ("media: dvb: add DVB-C2 and DVB-S2X parameter values")
+So, apply the changes suggested by Randy.
 
-Link: https://lore.kernel.org/linux-media/20230110071421.31498-1-athoik@gmail.com
-Cc: Robert Schlabbach <robert_s@gmx.net>
-Signed-off-by: Athanasios Oikonomou <athoik@gmail.com>
+Suggested-by: Randy Dunlap <rdunlap@infradead.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
- include/uapi/linux/dvb/version.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/media/dvbdev.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/include/uapi/linux/dvb/version.h b/include/uapi/linux/dvb/version.h
-index 1a8cd038aa0b..20bc874de321 100644
---- a/include/uapi/linux/dvb/version.h
-+++ b/include/uapi/linux/dvb/version.h
-@@ -10,6 +10,6 @@
- #define _DVBVERSION_H_
+diff --git a/include/media/dvbdev.h b/include/media/dvbdev.h
+index 8958e5e2fc5b..e5a00d126612 100644
+--- a/include/media/dvbdev.h
++++ b/include/media/dvbdev.h
+@@ -130,7 +130,7 @@ struct dvb_adapter {
+  * struct dvb_device - represents a DVB device node
+  *
+  * @list_head:	List head with all DVB devices
+- * @ref:	reference counter
++ * @ref:	reference count for this device
+  * @fops:	pointer to struct file_operations
+  * @adapter:	pointer to the adapter that holds this device node
+  * @type:	type of the device, as defined by &enum dvb_device_type.
+@@ -266,10 +266,10 @@ int dvb_register_device(struct dvb_adapter *adap,
+ /**
+  * dvb_remove_device - Remove a registered DVB device
+  *
++ * @dvbdev:	pointer to struct dvb_device
++ *
+  * This does not free memory. dvb_free_device() will do that when
+  * reference counter is empty
+- *
+- * @dvbdev:	pointer to struct dvb_device
+  */
+ void dvb_remove_device(struct dvb_device *dvbdev);
  
- #define DVB_API_VERSION 5
--#define DVB_API_VERSION_MINOR 11
-+#define DVB_API_VERSION_MINOR 12
- 
- #endif /*_DVBVERSION_H_*/
 -- 
 2.40.1
 
