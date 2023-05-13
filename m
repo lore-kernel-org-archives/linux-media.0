@@ -2,47 +2,48 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F6D3C77B7D
-	for <linux-media@archiver.kernel.org>; Sat, 13 May 2023 17:58:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB542C7EE24
+	for <linux-media@archiver.kernel.org>; Sat, 13 May 2023 17:58:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236997AbjEMR6M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 13 May 2023 13:58:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36092 "EHLO
+        id S230205AbjEMR6O (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 13 May 2023 13:58:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233655AbjEMR5w (ORCPT
+        with ESMTP id S233605AbjEMR5v (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 13 May 2023 13:57:52 -0400
+        Sat, 13 May 2023 13:57:51 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515F7171E;
-        Sat, 13 May 2023 10:57:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD8C2D51;
+        Sat, 13 May 2023 10:57:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D592761D18;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 76CD161C7B;
         Sat, 13 May 2023 17:57:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A555C43321;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41287C433AA;
         Sat, 13 May 2023 17:57:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1684000666;
-        bh=PXB8g8OwRVp5vTtA+di89yda0JZvQHWqqIcZtmTI8Cs=;
+        bh=h+o86lYY6wYE6F/X5RXOjriZlUayPYV89Y5aQCR8DXg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=csGG/ewUYTt9aedR/ML62VAPd2h9WyQnXTnYgQTfBw5QoJtR/u2cA4SmkfKZbm00i
-         2Gi8UH6YigeS9I8r4rrK+kM6wwRMRAIEBL1SDqfWpdPBMSk+/mPZhe/9tSax0YDQcL
-         NcJoW+567qPtMJx/ObJXB7pixDObMGdfYcw+b7q5Bs0axkg1RKTq7pTWugeeRwA9KO
-         h7IXTC9VPeQulLgmKQP8K1q83kB7aKbpBXddgvzZIlm7Iv7hn5KXThRpxRSUF37mMq
-         Zcg6lRbkYJ4c/nkNY0gMVeDx8Tspa7m6SndqUZgN0WalqdqT7oRJZu+toW+Bo5+RvW
-         nPIhEvemRFEgQ==
+        b=WfAh0T3wyDbyj4r2sqFXHZUdf/gOi/wRXDcJ6WLUns/SgLlhOTiERjWa9XUYk63SF
+         ++Vlzb2X1bOpNat2Relb+G9w4qp3KxLpCGMSHMLn2yDpwvi4fw7YKJsbqlEz/R0MsL
+         FB2v75bydLO7R5VsNWgGhAjCgc1HcFwS2IzpCju078uIMR9dOFGTKZGOk19SUwRNZQ
+         3OlbX11SEydMzCfwCWRDJdWtNu4ErzS/rD087xuKtdR4+GB0V9jRGFaEAlHCmUy+xC
+         7VpCL2GGgYNFmzqYyQXTtAFfjy+U4eNPENSramrxX5u8J5CoH2zjiu7GElpUIpCbDd
+         SpOjaYEYuyzbA==
 Received: from mchehab by mail.kernel.org with local (Exim 4.96)
         (envelope-from <mchehab@kernel.org>)
-        id 1pxtV1-001ty8-1e;
+        id 1pxtV1-001txk-1C;
         Sat, 13 May 2023 18:57:43 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Hyunwoo Kim <imv4bel@gmail.com>,
+Cc:     Zhang Shurong <zhang_shurong@foxmail.com>,
+        Antti Palosaari <crope@iki.fi>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 15/24] media: dvb-core: Fix use-after-free due to race condition occurring in dvb_net
-Date:   Sat, 13 May 2023 18:57:32 +0100
-Message-Id: <1ae42fd55196b955283f6884f87d77607f588d45.1684000646.git.mchehab@kernel.org>
+Subject: [PATCH 07/24] media: dvb-usb-v2: rtl28xxu: fix null-ptr-deref in rtl28xxu_i2c_xfer
+Date:   Sat, 13 May 2023 18:57:24 +0100
+Message-Id: <77c81598e4c5abbc444844108f71cabc562a50d7.1684000646.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <53558de2b5c4f4ee6bfcfbe34e27071c2d0073d5.1684000646.git.mchehab@kernel.org>
 References: <53558de2b5c4f4ee6bfcfbe34e27071c2d0073d5.1684000646.git.mchehab@kernel.org>
@@ -53,133 +54,79 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hyunwoo Kim <imv4bel@gmail.com>
+From: Zhang Shurong <zhang_shurong@foxmail.com>
 
-A race condition may occur between the .disconnect function, which
-is called when the device is disconnected, and the dvb_device_open()
-function, which is called when the device node is open()ed.
-This results in several types of UAFs.
+In rtl28xxu_i2c_xfer, msg is controlled by user. When msg[i].buf
+is null and msg[i].len is zero, former checks on msg[i].buf would be
+passed. Malicious data finally reach rtl28xxu_i2c_xfer. If accessing
+msg[i].buf[0] without sanity check, null ptr deref would happen.
+We add check on msg[i].len to prevent crash.
 
-The root cause of this is that you use the dvb_device_open() function,
-which does not implement a conditional statement
-that checks 'dvbnet->exit'.
+Similar commit:
+commit 0ed554fd769a
+("media: dvb-usb: az6027: fix null-ptr-deref in az6027_i2c_xfer()")
 
-So, add 'remove_mutex` to protect 'dvbnet->exit' and use
-locked_dvb_net_open() function to check 'dvbnet->exit'.
-
-[mchehab: fix a checkpatch warning]
-
-Link: https://lore.kernel.org/linux-media/20221117045925.14297-3-imv4bel@gmail.com
-Signed-off-by: Hyunwoo Kim <imv4bel@gmail.com>
+Link: https://lore.kernel.org/linux-media/tencent_3623572106754AC2F266B316798B0F6CCA05@qq.com
+Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
- drivers/media/dvb-core/dvb_net.c | 38 +++++++++++++++++++++++++++++---
- include/media/dvb_net.h          |  4 ++++
- 2 files changed, 39 insertions(+), 3 deletions(-)
+ drivers/media/usb/dvb-usb-v2/rtl28xxu.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/drivers/media/dvb-core/dvb_net.c b/drivers/media/dvb-core/dvb_net.c
-index 8a2febf33ce2..8bb8dd34c223 100644
---- a/drivers/media/dvb-core/dvb_net.c
-+++ b/drivers/media/dvb-core/dvb_net.c
-@@ -1564,15 +1564,43 @@ static long dvb_net_ioctl(struct file *file,
- 	return dvb_usercopy(file, cmd, arg, dvb_net_do_ioctl);
- }
- 
-+static int locked_dvb_net_open(struct inode *inode, struct file *file)
-+{
-+	struct dvb_device *dvbdev = file->private_data;
-+	struct dvb_net *dvbnet = dvbdev->priv;
-+	int ret;
-+
-+	if (mutex_lock_interruptible(&dvbnet->remove_mutex))
-+		return -ERESTARTSYS;
-+
-+	if (dvbnet->exit) {
-+		mutex_unlock(&dvbnet->remove_mutex);
-+		return -ENODEV;
-+	}
-+
-+	ret = dvb_generic_open(inode, file);
-+
-+	mutex_unlock(&dvbnet->remove_mutex);
-+
-+	return ret;
-+}
-+
- static int dvb_net_close(struct inode *inode, struct file *file)
- {
- 	struct dvb_device *dvbdev = file->private_data;
- 	struct dvb_net *dvbnet = dvbdev->priv;
- 
-+	mutex_lock(&dvbnet->remove_mutex);
-+
- 	dvb_generic_release(inode, file);
- 
--	if(dvbdev->users == 1 && dvbnet->exit == 1)
-+	if (dvbdev->users == 1 && dvbnet->exit == 1) {
-+		mutex_unlock(&dvbnet->remove_mutex);
- 		wake_up(&dvbdev->wait_queue);
-+	} else {
-+		mutex_unlock(&dvbnet->remove_mutex);
-+	}
-+
- 	return 0;
- }
- 
-@@ -1580,7 +1608,7 @@ static int dvb_net_close(struct inode *inode, struct file *file)
- static const struct file_operations dvb_net_fops = {
- 	.owner = THIS_MODULE,
- 	.unlocked_ioctl = dvb_net_ioctl,
--	.open =	dvb_generic_open,
-+	.open =	locked_dvb_net_open,
- 	.release = dvb_net_close,
- 	.llseek = noop_llseek,
- };
-@@ -1599,10 +1627,13 @@ void dvb_net_release (struct dvb_net *dvbnet)
- {
- 	int i;
- 
-+	mutex_lock(&dvbnet->remove_mutex);
- 	dvbnet->exit = 1;
-+	mutex_unlock(&dvbnet->remove_mutex);
-+
- 	if (dvbnet->dvbdev->users < 1)
- 		wait_event(dvbnet->dvbdev->wait_queue,
--				dvbnet->dvbdev->users==1);
-+				dvbnet->dvbdev->users == 1);
- 
- 	dvb_unregister_device(dvbnet->dvbdev);
- 
-@@ -1621,6 +1652,7 @@ int dvb_net_init (struct dvb_adapter *adap, struct dvb_net *dvbnet,
- 	int i;
- 
- 	mutex_init(&dvbnet->ioctl_mutex);
-+	mutex_init(&dvbnet->remove_mutex);
- 	dvbnet->demux = dmx;
- 
- 	for (i=0; i<DVB_NET_DEVICES_MAX; i++)
-diff --git a/include/media/dvb_net.h b/include/media/dvb_net.h
-index 9980b1dd750b..4a921ea96091 100644
---- a/include/media/dvb_net.h
-+++ b/include/media/dvb_net.h
-@@ -39,6 +39,9 @@ struct net_device;
-  * @exit:		flag to indicate when the device is being removed.
-  * @demux:		pointer to &struct dmx_demux.
-  * @ioctl_mutex:	protect access to this struct.
-+ * @remove_mutex:	mutex that avoids a race condition between a callback
-+ *			called when the hardware is disconnected and the
-+ *			file_operations of dvb_net.
-  *
-  * Currently, the core supports up to %DVB_NET_DEVICES_MAX (10) network
-  * devices.
-@@ -51,6 +54,7 @@ struct dvb_net {
- 	unsigned int exit:1;
- 	struct dmx_demux *demux;
- 	struct mutex ioctl_mutex;
-+	struct mutex remove_mutex;
- };
- 
- /**
+diff --git a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
+index 795a012d4020..f7884bb56fcc 100644
+--- a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
++++ b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
+@@ -176,6 +176,10 @@ static int rtl28xxu_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
+ 			ret = -EOPNOTSUPP;
+ 			goto err_mutex_unlock;
+ 		} else if (msg[0].addr == 0x10) {
++			if (msg[0].len < 1 || msg[1].len < 1) {
++				ret = -EOPNOTSUPP;
++				goto err_mutex_unlock;
++			}
+ 			/* method 1 - integrated demod */
+ 			if (msg[0].buf[0] == 0x00) {
+ 				/* return demod page from driver cache */
+@@ -189,6 +193,10 @@ static int rtl28xxu_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
+ 				ret = rtl28xxu_ctrl_msg(d, &req);
+ 			}
+ 		} else if (msg[0].len < 2) {
++			if (msg[0].len < 1) {
++				ret = -EOPNOTSUPP;
++				goto err_mutex_unlock;
++			}
+ 			/* method 2 - old I2C */
+ 			req.value = (msg[0].buf[0] << 8) | (msg[0].addr << 1);
+ 			req.index = CMD_I2C_RD;
+@@ -217,8 +225,16 @@ static int rtl28xxu_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
+ 			ret = -EOPNOTSUPP;
+ 			goto err_mutex_unlock;
+ 		} else if (msg[0].addr == 0x10) {
++			if (msg[0].len < 1) {
++				ret = -EOPNOTSUPP;
++				goto err_mutex_unlock;
++			}
+ 			/* method 1 - integrated demod */
+ 			if (msg[0].buf[0] == 0x00) {
++				if (msg[0].len < 2) {
++					ret = -EOPNOTSUPP;
++					goto err_mutex_unlock;
++				}
+ 				/* save demod page for later demod access */
+ 				dev->page = msg[0].buf[1];
+ 				ret = 0;
+@@ -231,6 +247,10 @@ static int rtl28xxu_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
+ 				ret = rtl28xxu_ctrl_msg(d, &req);
+ 			}
+ 		} else if ((msg[0].len < 23) && (!dev->new_i2c_write)) {
++			if (msg[0].len < 1) {
++				ret = -EOPNOTSUPP;
++				goto err_mutex_unlock;
++			}
+ 			/* method 2 - old I2C */
+ 			req.value = (msg[0].buf[0] << 8) | (msg[0].addr << 1);
+ 			req.index = CMD_I2C_WR;
 -- 
 2.40.1
 
