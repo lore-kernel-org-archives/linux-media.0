@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E05EEC77B7D
-	for <linux-media@archiver.kernel.org>; Sat, 13 May 2023 12:32:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CFD04C77B7D
+	for <linux-media@archiver.kernel.org>; Sat, 13 May 2023 12:32:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237370AbjEMMcw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 13 May 2023 08:32:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41308 "EHLO
+        id S237639AbjEMMc4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 13 May 2023 08:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbjEMMcv (ORCPT
+        with ESMTP id S229910AbjEMMcz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 13 May 2023 08:32:51 -0400
+        Sat, 13 May 2023 08:32:55 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 575462D55
-        for <linux-media@vger.kernel.org>; Sat, 13 May 2023 05:32:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DADF1BF2
+        for <linux-media@vger.kernel.org>; Sat, 13 May 2023 05:32:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683981127;
+        s=mimecast20190719; t=1683981131;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=NUjOxKsRzoghVLKQSrbyPsItrY8cDwJ2gxRv9vBWoqs=;
-        b=i+Fpdt9byCIfDoTg26dyMkpQNbeaRZuUQ0QnulmKSrHgedlgw2rfpUVFmjpWtyFtR2xFiB
-        7zr897fH+9V/ySVW6NjzFzZoGEpKJHCho8+UeHq0SYPMMW15FAsxZREbqFQk3x69q69Ayz
-        HXg9Qyiz4JpcXgYmafN/j8NPxn3HKOU=
+        bh=oH0GAqqmVpNU4oIRWmkkVKyuUl5Lvi3T95PMgNYG9CU=;
+        b=Br2pnLvYvDqsJJvfIjtQIAKMzpLYI2QZn7b/ADfPt90uSyNbnMGeaiSKRGbhn/j7fpQd4m
+        W5NmUN1E+jjwbl9hR30V1RKusXzq8dlS9L7p7VTIIxQetw6cuxuwZ3DrgamZRwYxiIMD8+
+        PM1Sq9kqGimoKz8hHwaAJFqQ/8zGHfQ=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-564-6yyOzg09NgGwiThzemGavg-1; Sat, 13 May 2023 08:32:04 -0400
-X-MC-Unique: 6yyOzg09NgGwiThzemGavg-1
+ us-mta-444-onVfNsQ0NT-5ZDPHu7ghFA-1; Sat, 13 May 2023 08:32:09 -0400
+X-MC-Unique: onVfNsQ0NT-5ZDPHu7ghFA-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5D802101A54F;
-        Sat, 13 May 2023 12:32:03 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4E5E388B767;
+        Sat, 13 May 2023 12:32:09 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.192.46])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CB1B940C2077;
-        Sat, 13 May 2023 12:32:01 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BA1C540C2077;
+        Sat, 13 May 2023 12:32:07 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -48,9 +48,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>, Kate Hsuan <hpa@redhat.com>,
         Nable <nable.maininbox@googlemail.com>,
         andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 01/30] media: atomisp: Remove res_overflow parameter from atomisp_try_fmt()
-Date:   Sat, 13 May 2023 14:31:30 +0200
-Message-Id: <20230513123159.33234-2-hdegoede@redhat.com>
+Subject: [PATCH 04/30] media: atomisp: Drop atomisp_get_css_buf_type()
+Date:   Sat, 13 May 2023 14:31:33 +0200
+Message-Id: <20230513123159.33234-5-hdegoede@redhat.com>
 In-Reply-To: <20230513123159.33234-1-hdegoede@redhat.com>
 References: <20230513123159.33234-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,90 +60,89 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The only remaining caller of atomisp_try_fmt() always passes NULL
-for the res_overflow parameter. Drop it and simplify atomisp_try_fmt().
+Since continuous mode has been removed, there no longer is the option for
+separate capture output + viewfinder output streams at the same time.
+
+So all buffers queued by userspace are now for the normal output stream,
+remove atomisp_get_css_buf_type() and always use
+IA_CSS_BUFFER_TYPE_OUTPUT_FRAME for buffers queued by userspace.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- .../staging/media/atomisp/pci/atomisp_cmd.c   | 21 ++++---------------
- .../staging/media/atomisp/pci/atomisp_cmd.h   |  3 +--
- .../staging/media/atomisp/pci/atomisp_ioctl.c |  2 +-
- 3 files changed, 6 insertions(+), 20 deletions(-)
+ .../staging/media/atomisp/pci/atomisp_fops.c  | 29 +------------------
+ 1 file changed, 1 insertion(+), 28 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_cmd.c b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-index aa790ae746f3..bb49d6f2e67f 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-@@ -3881,8 +3881,7 @@ static void __atomisp_init_stream_info(u16 stream_index,
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_fops.c b/drivers/staging/media/atomisp/pci/atomisp_fops.c
+index a95c41d084c2..143ab78b003b 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_fops.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_fops.c
+@@ -342,24 +342,10 @@ static int atomisp_q_video_buffers_to_css(struct atomisp_sub_device *asd,
+ 	return 0;
  }
  
- /* This function looks up the closest available resolution. */
--int atomisp_try_fmt(struct video_device *vdev, struct v4l2_pix_format *f,
--		    bool *res_overflow)
-+int atomisp_try_fmt(struct video_device *vdev, struct v4l2_pix_format *f)
+-static int atomisp_get_css_buf_type(struct atomisp_sub_device *asd,
+-				    enum ia_css_pipe_id pipe_id,
+-				    uint16_t source_pad)
+-{
+-	if (pipe_id == IA_CSS_PIPE_ID_COPY ||
+-	    source_pad == ATOMISP_SUBDEV_PAD_SOURCE_CAPTURE ||
+-	    source_pad == ATOMISP_SUBDEV_PAD_SOURCE_VIDEO ||
+-	    (source_pad == ATOMISP_SUBDEV_PAD_SOURCE_PREVIEW &&
+-	     asd->run_mode->val != ATOMISP_RUN_MODE_VIDEO))
+-		return IA_CSS_BUFFER_TYPE_OUTPUT_FRAME;
+-	else
+-		return IA_CSS_BUFFER_TYPE_VF_OUTPUT_FRAME;
+-}
+-
+ /* queue all available buffers to css */
+ int atomisp_qbuffers_to_css(struct atomisp_sub_device *asd)
  {
- 	struct atomisp_device *isp = video_get_drvdata(vdev);
- 	struct atomisp_sub_device *asd = atomisp_to_video_pipe(vdev)->asd;
-@@ -3940,6 +3939,8 @@ int atomisp_try_fmt(struct video_device *vdev, struct v4l2_pix_format *f,
+-	enum ia_css_buffer_type buf_type;
++	const enum ia_css_buffer_type buf_type = IA_CSS_BUFFER_TYPE_OUTPUT_FRAME;
+ 	enum ia_css_pipe_id css_capture_pipe_id = IA_CSS_PIPE_ID_NUM;
+ 	enum ia_css_pipe_id css_preview_pipe_id = IA_CSS_PIPE_ID_NUM;
+ 	enum ia_css_pipe_id css_video_pipe_id = IA_CSS_PIPE_ID_NUM;
+@@ -400,9 +386,6 @@ int atomisp_qbuffers_to_css(struct atomisp_sub_device *asd)
  	}
  
- 	f->pixelformat = fmt->pixelformat;
-+	f->width = format.format.width;
-+	f->height = format.format.height;
+ 	if (capture_pipe) {
+-		buf_type = atomisp_get_css_buf_type(
+-			       asd, css_capture_pipe_id,
+-			       atomisp_subdev_source_pad(&capture_pipe->vdev));
+ 		input_stream_id = ATOMISP_INPUT_STREAM_GENERAL;
  
- 	/*
- 	 * If the format is jpeg or custom RAW, then the width and height will
-@@ -3948,22 +3949,8 @@ int atomisp_try_fmt(struct video_device *vdev, struct v4l2_pix_format *f,
- 	 * the sensor driver.
- 	 */
- 	if (f->pixelformat == V4L2_PIX_FMT_JPEG ||
--	    f->pixelformat == V4L2_PIX_FMT_CUSTOM_M10MO_RAW) {
--		f->width = format.format.width;
--		f->height = format.format.height;
-+	    f->pixelformat == V4L2_PIX_FMT_CUSTOM_M10MO_RAW)
- 		return 0;
--	}
+ 		atomisp_q_video_buffers_to_css(asd, capture_pipe,
+@@ -411,9 +394,6 @@ int atomisp_qbuffers_to_css(struct atomisp_sub_device *asd)
+ 	}
+ 
+ 	if (vf_pipe) {
+-		buf_type = atomisp_get_css_buf_type(
+-			       asd, css_capture_pipe_id,
+-			       atomisp_subdev_source_pad(&vf_pipe->vdev));
+ 		if (asd->stream_env[ATOMISP_INPUT_STREAM_POSTVIEW].stream)
+ 			input_stream_id = ATOMISP_INPUT_STREAM_POSTVIEW;
+ 		else
+@@ -425,10 +405,6 @@ int atomisp_qbuffers_to_css(struct atomisp_sub_device *asd)
+ 	}
+ 
+ 	if (preview_pipe) {
+-		buf_type = atomisp_get_css_buf_type(
+-			       asd, css_preview_pipe_id,
+-			       atomisp_subdev_source_pad(&preview_pipe->vdev));
 -
--	if (!res_overflow || (format.format.width < f->width &&
--			      format.format.height < f->height)) {
--		f->width = format.format.width;
--		f->height = format.format.height;
--		/* Set the flag when resolution requested is
--		 * beyond the max value supported by sensor
--		 */
--		if (res_overflow)
--			*res_overflow = true;
--	}
+ 		if (css_preview_pipe_id == IA_CSS_PIPE_ID_YUVPP)
+ 			input_stream_id = ATOMISP_INPUT_STREAM_VIDEO;
+ 		else if (asd->stream_env[ATOMISP_INPUT_STREAM_PREVIEW].stream)
+@@ -442,9 +418,6 @@ int atomisp_qbuffers_to_css(struct atomisp_sub_device *asd)
+ 	}
  
- 	/* app vs isp */
- 	f->width = rounddown(clamp_t(u32, f->width, ATOM_ISP_MIN_WIDTH,
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_cmd.h b/drivers/staging/media/atomisp/pci/atomisp_cmd.h
-index 399b549bcf83..3cf086eba06d 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_cmd.h
-+++ b/drivers/staging/media/atomisp/pci/atomisp_cmd.h
-@@ -259,8 +259,7 @@ int atomisp_compare_grid(struct atomisp_sub_device *asd,
- 			 struct atomisp_grid_info *atomgrid);
- 
- /* This function looks up the closest available resolution. */
--int atomisp_try_fmt(struct video_device *vdev, struct v4l2_pix_format *f,
--		    bool *res_overflow);
-+int atomisp_try_fmt(struct video_device *vdev, struct v4l2_pix_format *f);
- 
- int atomisp_set_fmt(struct video_device *vdev, struct v4l2_format *f);
- 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-index 384f31fc66c5..4d927799f53b 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-@@ -896,7 +896,7 @@ static int atomisp_try_fmt_cap(struct file *file, void *fh,
- 	f->fmt.pix.width += pad_w;
- 	f->fmt.pix.height += pad_h;
- 
--	ret = atomisp_try_fmt(vdev, &f->fmt.pix, NULL);
-+	ret = atomisp_try_fmt(vdev, &f->fmt.pix);
- 	if (ret)
- 		return ret;
- 
+ 	if (video_pipe) {
+-		buf_type = atomisp_get_css_buf_type(
+-			       asd, css_video_pipe_id,
+-			       atomisp_subdev_source_pad(&video_pipe->vdev));
+ 		if (asd->stream_env[ATOMISP_INPUT_STREAM_VIDEO].stream)
+ 			input_stream_id = ATOMISP_INPUT_STREAM_VIDEO;
+ 		else
 -- 
 2.40.1
 
