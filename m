@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1A5FC7EE23
-	for <linux-media@archiver.kernel.org>; Sat, 13 May 2023 12:34:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16E04C7EE24
+	for <linux-media@archiver.kernel.org>; Sat, 13 May 2023 12:34:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238456AbjEMMe2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 13 May 2023 08:34:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41706 "EHLO
+        id S238862AbjEMMea (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 13 May 2023 08:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232564AbjEMMe0 (ORCPT
+        with ESMTP id S238375AbjEMMe0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sat, 13 May 2023 08:34:26 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC8F3AB8
-        for <linux-media@vger.kernel.org>; Sat, 13 May 2023 05:32:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7C63AAC
+        for <linux-media@vger.kernel.org>; Sat, 13 May 2023 05:32:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1683981163;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=LT444Or55/pPp7e4nc1tqkdx10ZLZpYhdvaoJXXOSUA=;
-        b=FR5n8EoE+eFa+RhWiJATQWdrxzFPOiN5yP+qdp6+aEeVBNJP2Iyp4iGYG8BDzxfzUhaYLh
-        6vArJNoHnVu6JMCDP0ORz6iXNppHSb4/63khO1fPlJUj+PKk/jOyv+Rlw186gZzT/sbZkD
-        Nl2zCb6xu9GCjRa4l5b8+Te6722MCq0=
+        bh=4HkEplNlc2fK+7LvqaNXv7APsTheUIvNpX+DSOhAxqI=;
+        b=QmxMUywxZ7Z+vOPXdwdtsTH6V7awELHWumsaBfU3iA3vY03ezR2DXPW8VqDVH0CteYBc0y
+        foZEJ8ZBMaW995HNchHpAbjMoJjdTBAH+xw2lelF9g5fkgC/qBf0t//cKt47UrlkkQ4s4o
+        Wb8W7efZ0fE4Adrgn7P6BRDf709RBY4=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-638-ZfqbSyv8M6yVP5MLkBhS-Q-1; Sat, 13 May 2023 08:32:40 -0400
-X-MC-Unique: ZfqbSyv8M6yVP5MLkBhS-Q-1
+ us-mta-588-UD96skoxMKeUyfKlIH-pEg-1; Sat, 13 May 2023 08:32:37 -0400
+X-MC-Unique: UD96skoxMKeUyfKlIH-pEg-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6BBC3802A95;
-        Sat, 13 May 2023 12:32:39 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DD9A6857E60;
+        Sat, 13 May 2023 12:32:35 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.192.46])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D746F40C2076;
-        Sat, 13 May 2023 12:32:37 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5698040C2076;
+        Sat, 13 May 2023 12:32:34 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -48,9 +48,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>, Kate Hsuan <hpa@redhat.com>,
         Nable <nable.maininbox@googlemail.com>,
         andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 21/30] media: atomisp: Remove no longer used atomisp_css_flush()
-Date:   Sat, 13 May 2023 14:31:50 +0200
-Message-Id: <20230513123159.33234-22-hdegoede@redhat.com>
+Subject: [PATCH 19/30] media: atomisp: Simplify atomisp_pipe_check()
+Date:   Sat, 13 May 2023 14:31:48 +0200
+Message-Id: <20230513123159.33234-20-hdegoede@redhat.com>
 In-Reply-To: <20230513123159.33234-1-hdegoede@redhat.com>
 References: <20230513123159.33234-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,84 +60,55 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Remove the no longer used atomisp_css_flush() function and merge
-atomisp_assert_recovery_work() and __atomisp_css_recover() into
-a single function.
+All switch (pipe->asd->streaming) cases in atomisp_pipe_check()
+are either no-ops or never happen:
+
+1. ATOMISP_DEVICE_STREAMING_DISABLED already is a no-op
+
+2. The videobuf2 core guarantees that when we are streaming
+vb2_is_busy() returns true. So the ATOMISP_DEVICE_STREAMING_ENABLED case
+is already handled by the if above the switch (pipe->asd->streaming).
+
+3. After recent changes pipe->asd->streaming is only ever set to
+ATOMISP_DEVICE_STREAMING_STOPPING in atomisp_assert_recovery_work() and
+that function holds isp->mutex and always transitions the streaming state
+to ATOMISP_DEVICE_STREAMING_DISABLED or ATOMISP_DEVICE_STREAMING_ENABLED
+before releasing the mutex. So atomisp_pipe_check() never sees
+ATOMISP_DEVICE_STREAMING_STOPPING.
+
+Remove the entire switch-case.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- .../staging/media/atomisp/pci/atomisp_cmd.c   | 25 +++++--------------
- .../staging/media/atomisp/pci/atomisp_cmd.h   |  2 --
- 2 files changed, 6 insertions(+), 21 deletions(-)
+ .../staging/media/atomisp/pci/atomisp_ioctl.c    | 16 ----------------
+ 1 file changed, 16 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_cmd.c b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-index 26a194251a76..1482184a9ea5 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-@@ -935,18 +935,20 @@ void atomisp_buf_done(struct atomisp_sub_device *asd, int error,
- 		atomisp_qbuffers_to_css(asd);
- }
- 
--static void __atomisp_css_recover(struct atomisp_device *isp)
-+void atomisp_assert_recovery_work(struct work_struct *work)
- {
-+	struct atomisp_device *isp = container_of(work, struct atomisp_device,
-+						  assert_recovery_work);
- 	struct pci_dev *pdev = to_pci_dev(isp->dev);
- 	enum ia_css_pipe_id css_pipe_id;
- 	bool stream_restart = false;
- 	unsigned long flags;
- 	int ret;
- 
--	lockdep_assert_held(&isp->mutex);
-+	mutex_lock(&isp->mutex);
- 
- 	if (!atomisp_streaming_count(isp))
--		return;
-+		goto out_unlock;
- 
- 	atomisp_css_irq_enable(isp, IA_CSS_IRQ_INFO_CSS_RECEIVER_SOF, false);
- 
-@@ -1028,26 +1030,11 @@ static void __atomisp_css_recover(struct atomisp_device *isp)
- 			dev_warn(isp->dev,
- 				 "can't start streaming on sensor!\n");
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
+index 087ec5120bce..08a3d98794df 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
+@@ -528,22 +528,6 @@ int atomisp_pipe_check(struct atomisp_video_pipe *pipe, bool settings_change)
+ 		return -EBUSY;
  	}
--}
  
--void atomisp_assert_recovery_work(struct work_struct *work)
--{
--	struct atomisp_device *isp = container_of(work, struct atomisp_device,
--						  assert_recovery_work);
+-	switch (pipe->asd->streaming) {
+-	case ATOMISP_DEVICE_STREAMING_DISABLED:
+-		break;
+-	case ATOMISP_DEVICE_STREAMING_ENABLED:
+-		if (settings_change) {
+-			dev_err(pipe->isp->dev, "Set fmt/input IOCTL while streaming\n");
+-			return -EBUSY;
+-		}
+-		break;
+-	case ATOMISP_DEVICE_STREAMING_STOPPING:
+-		dev_err(pipe->isp->dev, "IOCTL issued while stopping\n");
+-		return -EBUSY;
+-	default:
+-		return -EINVAL;
+-	}
 -
--	mutex_lock(&isp->mutex);
--	__atomisp_css_recover(isp);
-+out_unlock:
- 	mutex_unlock(&isp->mutex);
+ 	return 0;
  }
- 
--void atomisp_css_flush(struct atomisp_device *isp)
--{
--	/* Start recover */
--	__atomisp_css_recover(isp);
--
--	dev_dbg(isp->dev, "atomisp css flush done\n");
--}
--
- void atomisp_setup_flash(struct atomisp_sub_device *asd)
- {
- 	struct atomisp_device *isp = asd->isp;
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_cmd.h b/drivers/staging/media/atomisp/pci/atomisp_cmd.h
-index 1cb973ddf2dc..783fb1e6f4f9 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_cmd.h
-+++ b/drivers/staging/media/atomisp/pci/atomisp_cmd.h
-@@ -282,8 +282,6 @@ void atomisp_buf_done(struct atomisp_sub_device *asd, int error,
- 		      enum ia_css_pipe_id css_pipe_id,
- 		      bool q_buffers, enum atomisp_input_stream_id stream_id);
- 
--void atomisp_css_flush(struct atomisp_device *isp);
--
- /* Events. Only one event has to be exported for now. */
- void atomisp_eof_event(struct atomisp_sub_device *asd, uint8_t exp_id);
  
 -- 
 2.40.1
