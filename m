@@ -2,51 +2,51 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44E50C7EE26
-	for <linux-media@archiver.kernel.org>; Sat, 13 May 2023 17:58:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CDB9C77B7A
+	for <linux-media@archiver.kernel.org>; Sat, 13 May 2023 17:58:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234752AbjEMR57 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 13 May 2023 13:57:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36094 "EHLO
+        id S235216AbjEMR6A (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 13 May 2023 13:58:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233461AbjEMR5u (ORCPT
+        with ESMTP id S233374AbjEMR5u (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sat, 13 May 2023 13:57:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A95DE273F;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9272D4A;
         Sat, 13 May 2023 10:57:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D49461C28;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 731F661C77;
         Sat, 13 May 2023 17:57:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3696BC433A8;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E801C433AF;
         Sat, 13 May 2023 17:57:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1684000666;
-        bh=1qTBZIy/0s0rnJPtyTEqiDh0a/SvnY8Eo2eM/Rkf/i0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=dR/m4fFTbTZvr+QfxNN98GnzkeguwI3JEAJWtSOMPjk6Lm1NO4KHMb7PSYsiP2EWs
-         KF1hrEZzjMtl349HfMlFJtQQ8eSI80uZp7ehJkmcvV2R+5e1h0rrkrSQM1Qogfafh/
-         S7oG/jFyShwI87BCxRkOSgefHEHg+39hDwwIKee32IsY/KXjJZi8ztPKn/vR32b2vQ
-         MNma0NGsc4DSqvLUHDlpdHw6268DTH/Z+H2/J42cxVtC1xDCiYnfN2W6Crmwtt+gHP
-         yUd7/nSNtfjyQH0ZgrIf3tOZdvHNC1i2+xWFwvN0uyA7GAGnbYI+RBXcjqKk5Q05e+
-         gYjQolSHSNipA==
+        bh=CTfRhQWQn7pm6EUBrySW+mwubKxnJtOio7Fb/AJ6iKM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=kboJz1TEgai/9EZySh70l5D9V/kejQeCLlgt4nrnfXRjvxPfg3usiRyd9LSrs2GHU
+         Uj2cLKKPvrusPuYTieqDNXLaroDjqEnYR1RX2n9KdLrx82Cuwg4q5i5bo4ykkBIdAS
+         r6PZKdQDNXqpxUrYhyK7jWVSBLrQBQYXH1oWxBO3ufNcj9Ma1WBMmnfdtKq6bFAaBr
+         e59p36M8Zmfy84DHhDlVU5FFchglvaDA4HtZPtrQJwmHTg+ryaBx21zRdm00A1YNSG
+         iyCMhROx5Asd/2VpMBJQ/qULgHJw3o60FEcO6TRE/rJxr6P/srCGJN4GxRUutCc6KN
+         k8P0BIb4W00hA==
 Received: from mchehab by mail.kernel.org with local (Exim 4.96)
         (envelope-from <mchehab@kernel.org>)
-        id 1pxtV1-001txS-0k;
+        id 1pxtV1-001txe-16;
         Sat, 13 May 2023 18:57:43 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Lecopzer Chen <lecopzer.chen@mediatek.com>,
+Cc:     Wei Chen <harperchen1110@gmail.com>,
+        Antti Palosaari <crope@iki.fi>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Mike Isely <isely@pobox.com>, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH 01/24] media: pvrusb2: fix DVB_CORE dependency
-Date:   Sat, 13 May 2023 18:57:18 +0100
-Message-Id: <53558de2b5c4f4ee6bfcfbe34e27071c2d0073d5.1684000646.git.mchehab@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH 05/24] media: dvb-usb-v2: ec168: fix null-ptr-deref in ec168_i2c_xfer()
+Date:   Sat, 13 May 2023 18:57:22 +0100
+Message-Id: <7ced9f219d36cb0d3319b556dc0b0f4f81247fa6.1684000646.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <53558de2b5c4f4ee6bfcfbe34e27071c2d0073d5.1684000646.git.mchehab@kernel.org>
+References: <53558de2b5c4f4ee6bfcfbe34e27071c2d0073d5.1684000646.git.mchehab@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 To:     unlisted-recipients:; (no To-header on input)
@@ -54,40 +54,60 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+From: Wei Chen <harperchen1110@gmail.com>
 
-Now that DVB_CORE can be a loadable module, pvrusb2 can run into
-a link error:
+In ec168_i2c_xfer, msg is controlled by user. When msg[i].buf is null
+and msg[i].len is zero, former checks on msg[i].buf would be passed.
+If accessing msg[i].buf[0] without sanity check, null pointer deref
+would happen. We add check on msg[i].len to prevent crash.
 
-ld.lld: error: undefined symbol: dvb_module_probe
->>> referenced by pvrusb2-devattr.c
->>>               drivers/media/usb/pvrusb2/pvrusb2-devattr.o:(pvr2_lgdt3306a_attach) in archive vmlinux.a
-ld.lld: error: undefined symbol: dvb_module_release
->>> referenced by pvrusb2-devattr.c
->>>               drivers/media/usb/pvrusb2/pvrusb2-devattr.o:(pvr2_dual_fe_attach) in archive vmlinux.a
+Similar commit:
+commit 0ed554fd769a ("media: dvb-usb: az6027: fix null-ptr-deref in az6027_i2c_xfer()")
 
-Refine the Kconfig dependencies to avoid this case.
-
-Link: https://lore.kernel.org/linux-media/20230117171055.2714621-1-arnd@kernel.org
-Fixes: 7655c342dbc4 ("media: Kconfig: Make DVB_CORE=m possible when MEDIA_SUPPORT=y")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Link: https://lore.kernel.org/linux-media/20230313085853.3252349-1-harperchen1110@gmail.com
+Signed-off-by: Wei Chen <harperchen1110@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
- drivers/media/usb/pvrusb2/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/usb/dvb-usb-v2/ec168.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/drivers/media/usb/pvrusb2/Kconfig b/drivers/media/usb/pvrusb2/Kconfig
-index 9501b10b31aa..0df10270dbdf 100644
---- a/drivers/media/usb/pvrusb2/Kconfig
-+++ b/drivers/media/usb/pvrusb2/Kconfig
-@@ -37,6 +37,7 @@ config VIDEO_PVRUSB2_DVB
- 	bool "pvrusb2 ATSC/DVB support"
- 	default y
- 	depends on VIDEO_PVRUSB2 && DVB_CORE
-+	depends on VIDEO_PVRUSB2=m || DVB_CORE=y
- 	select DVB_LGDT330X if MEDIA_SUBDRV_AUTOSELECT
- 	select DVB_S5H1409 if MEDIA_SUBDRV_AUTOSELECT
- 	select DVB_S5H1411 if MEDIA_SUBDRV_AUTOSELECT
+diff --git a/drivers/media/usb/dvb-usb-v2/ec168.c b/drivers/media/usb/dvb-usb-v2/ec168.c
+index 7ed0ab9e429b..0e4773fc025c 100644
+--- a/drivers/media/usb/dvb-usb-v2/ec168.c
++++ b/drivers/media/usb/dvb-usb-v2/ec168.c
+@@ -115,6 +115,10 @@ static int ec168_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
+ 	while (i < num) {
+ 		if (num > i + 1 && (msg[i+1].flags & I2C_M_RD)) {
+ 			if (msg[i].addr == ec168_ec100_config.demod_address) {
++				if (msg[i].len < 1) {
++					i = -EOPNOTSUPP;
++					break;
++				}
+ 				req.cmd = READ_DEMOD;
+ 				req.value = 0;
+ 				req.index = 0xff00 + msg[i].buf[0]; /* reg */
+@@ -131,6 +135,10 @@ static int ec168_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
+ 			}
+ 		} else {
+ 			if (msg[i].addr == ec168_ec100_config.demod_address) {
++				if (msg[i].len < 1) {
++					i = -EOPNOTSUPP;
++					break;
++				}
+ 				req.cmd = WRITE_DEMOD;
+ 				req.value = msg[i].buf[1]; /* val */
+ 				req.index = 0xff00 + msg[i].buf[0]; /* reg */
+@@ -139,6 +147,10 @@ static int ec168_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
+ 				ret = ec168_ctrl_msg(d, &req);
+ 				i += 1;
+ 			} else {
++				if (msg[i].len < 1) {
++					i = -EOPNOTSUPP;
++					break;
++				}
+ 				req.cmd = WRITE_I2C;
+ 				req.value = msg[i].buf[0]; /* val */
+ 				req.index = 0x0100 + msg[i].addr; /* I2C addr */
 -- 
 2.40.1
 
