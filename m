@@ -2,47 +2,46 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58F38C7EE26
-	for <linux-media@archiver.kernel.org>; Sat, 13 May 2023 17:58:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55550C7EE24
+	for <linux-media@archiver.kernel.org>; Sat, 13 May 2023 17:58:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236807AbjEMR6I (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 13 May 2023 13:58:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36092 "EHLO
+        id S229624AbjEMR6K (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 13 May 2023 13:58:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233552AbjEMR5v (ORCPT
+        with ESMTP id S233621AbjEMR5v (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sat, 13 May 2023 13:57:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B12D2D52;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E04A2133;
         Sat, 13 May 2023 10:57:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 856F061CB1;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 89DE861CAE;
         Sat, 13 May 2023 17:57:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4577BC433B4;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44B0BC433B0;
         Sat, 13 May 2023 17:57:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1684000666;
-        bh=6CuqLMQiacBTAI5w3xjsfm0X5Hpovbdiy3/b17aiww8=;
+        bh=2fRqwV2foJ6Q8LqJQ6YyRlrbT2AHforZWBmSS4FXU48=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m4JXMw+HBStUnuVsn29oAAHAlFH2iZPow7WevxUXMPEvj2oJofU6Q2pHucRcllGGG
-         aRsNa+pB2MsfMONwmvzMJjt+tLzEgdNsqhNdLd0Hya8ZCA0lEvuMQ6ilbcJuK8fXtH
-         7gT4vEb52pi7HVgbB8gpJmsha3sdPval9L9ItggPyjU9p99LSKFkuQSnprxbrSFMYw
-         Znwy/MrrPnIKrL5d0FzvU4H1SiELBhLxNB9PnKtvt0WMar8ohRwEuWVv0xz+4hWA8m
-         Uml5eeh93jbsGG4EzO5SVKtaOFo1bTC5u2ZMcs9vbWJLMstCiz15ZNVHtHk1UmU2KX
-         CQltketXd3ztA==
+        b=bjAAUFrJkuIB3s8CX6Mj989yLIQjYixjIi9Q7wFneImPFc7hF8g7ZpmWVaMORVdYn
+         HB9gJ6jNzvpFkWDOV7jQsj4wPEpR9+tYZus1tf6PTH7US9pScv9h0tsbKKKdGTWgBI
+         FKB4AZEh7RmY1qXFRtW8WSe7u3nin7rFxh6xEX2EK23JkzAjESxjau6tWKLSQ7kXtQ
+         Eg9/dlGZhNDGpYdbNjZSOv2gTZ6z6uzCBxHrkRfM8rv2rcTfHxJIZCpdGw99sGc07E
+         /wFDmDU5UQppGCSHXtsLiW9/8abFHLZVpXx56LP3MDtaC/zUYQ2wHSBMUSZjjHhBab
+         camKcsOee+rpw==
 Received: from mchehab by mail.kernel.org with local (Exim 4.96)
         (envelope-from <mchehab@kernel.org>)
-        id 1pxtV1-001tyK-1r;
+        id 1pxtV1-001tyT-21;
         Sat, 13 May 2023 18:57:43 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH 19/24] media: dvbdev.h: do some kernel-doc cleanups
-Date:   Sat, 13 May 2023 18:57:36 +0100
-Message-Id: <09c80cb59d5f9f45714bec8e0d0b1254c7846d83.1684000646.git.mchehab@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH 22/24] media: dw2102: return -EIO instead of -1 for mac address read errors
+Date:   Sat, 13 May 2023 18:57:39 +0100
+Message-Id: <af920cd5eb144a10f7bf3baf9dc7dd8558707ff9.1684000646.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <53558de2b5c4f4ee6bfcfbe34e27071c2d0073d5.1684000646.git.mchehab@kernel.org>
 References: <53558de2b5c4f4ee6bfcfbe34e27071c2d0073d5.1684000646.git.mchehab@kernel.org>
@@ -53,48 +52,47 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Some kernel-doc warnings in <media/dvbdev.h> were introduced. A fixup
-patch addressed them was already merged, but Randy's approach from:
-https://lore.kernel.org/linux-media/20221203060931.19953-1-rdunlap@infradead.org
+The dvb-usb core function only checks if the returned value is
+zero, so it doesn't actually matter the error code. Still, returning
+-1 as an error condition is something that we don't do upstream. So,
+change the logic to return -EIO in case of I2C transfer failures.
 
-Had some advantages, as it moves the @dvbdev to the right place inside
-dvb_remove_device() documentation and it makes clearer about what
-refcounter struct dvb_device refers to.
-
-So, apply the changes suggested by Randy.
-
-Suggested-by: Randy Dunlap <rdunlap@infradead.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
- include/media/dvbdev.h | 6 +++---
+ drivers/media/usb/dvb-usb/dw2102.c | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/include/media/dvbdev.h b/include/media/dvbdev.h
-index 8958e5e2fc5b..e5a00d126612 100644
---- a/include/media/dvbdev.h
-+++ b/include/media/dvbdev.h
-@@ -130,7 +130,7 @@ struct dvb_adapter {
-  * struct dvb_device - represents a DVB device node
-  *
-  * @list_head:	List head with all DVB devices
-- * @ref:	reference counter
-+ * @ref:	reference count for this device
-  * @fops:	pointer to struct file_operations
-  * @adapter:	pointer to the adapter that holds this device node
-  * @type:	type of the device, as defined by &enum dvb_device_type.
-@@ -266,10 +266,10 @@ int dvb_register_device(struct dvb_adapter *adap,
- /**
-  * dvb_remove_device - Remove a registered DVB device
-  *
-+ * @dvbdev:	pointer to struct dvb_device
-+ *
-  * This does not free memory. dvb_free_device() will do that when
-  * reference counter is empty
-- *
-- * @dvbdev:	pointer to struct dvb_device
-  */
- void dvb_remove_device(struct dvb_device *dvbdev);
- 
+diff --git a/drivers/media/usb/dvb-usb/dw2102.c b/drivers/media/usb/dvb-usb/dw2102.c
+index 2a048499468b..970b84c3f0b5 100644
+--- a/drivers/media/usb/dvb-usb/dw2102.c
++++ b/drivers/media/usb/dvb-usb/dw2102.c
+@@ -830,7 +830,7 @@ static int dw210x_read_mac_address(struct dvb_usb_device *d, u8 mac[6])
+ 	for (i = 0; i < 256; i++) {
+ 		if (dw210x_op_rw(d->udev, 0xb6, 0xa0 , i, ibuf, 2, DW210X_READ_MSG) < 0) {
+ 			err("read eeprom failed.");
+-			return -1;
++			return -EIO;
+ 		} else {
+ 			eepromline[i%16] = ibuf[0];
+ 			eeprom[i] = ibuf[0];
+@@ -869,7 +869,7 @@ static int s6x0_read_mac_address(struct dvb_usb_device *d, u8 mac[6])
+ 		ret = s6x0_i2c_transfer(&d->i2c_adap, msg, 2);
+ 		if (ret != 2) {
+ 			err("read eeprom failed.");
+-			return -1;
++			return -EIO;
+ 		} else {
+ 			eepromline[i % 16] = ibuf[0];
+ 			eeprom[i] = ibuf[0];
+@@ -946,7 +946,7 @@ static int su3000_read_mac_address(struct dvb_usb_device *d, u8 mac[6])
+ 	for (i = 0; i < 6; i++) {
+ 		obuf[1] = 0xf0 + i;
+ 		if (i2c_transfer(&d->i2c_adap, msg, 2) != 2)
+-			return -1;
++			return -EIO;
+ 		else
+ 			mac[i] = ibuf[0];
+ 	}
 -- 
 2.40.1
 
