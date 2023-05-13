@@ -2,47 +2,47 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27050C77B7D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A03A6C77B7A
 	for <linux-media@archiver.kernel.org>; Sat, 13 May 2023 17:57:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233528AbjEMR5u (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 13 May 2023 13:57:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36052 "EHLO
+        id S233677AbjEMR5x (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 13 May 2023 13:57:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjEMR5s (ORCPT
+        with ESMTP id S232868AbjEMR5t (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 13 May 2023 13:57:48 -0400
+        Sat, 13 May 2023 13:57:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 431591727;
-        Sat, 13 May 2023 10:57:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8EC2D47;
+        Sat, 13 May 2023 10:57:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C821A61BC5;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4387561BD4;
+        Sat, 13 May 2023 17:57:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31992C433A7;
         Sat, 13 May 2023 17:57:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F940C4339B;
-        Sat, 13 May 2023 17:57:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1684000666;
-        bh=CMDkEplk7SwUbCVMsf6DA2exjxBJ4jdP0rE7gAI0KQE=;
+        bh=J1xoW9gW0spcZlEaPWtrphQr2z//OomZ0xML5nO1YK0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o6TQx+CtcfUS5lhy76YLTxbGgBg1XLqLr7mHpR+r1daC0tqTcCRDuIHR5Wec1n8XE
-         pW4zncwIT0yFjUNyLqklxkSUU327YpKQ4VR/vKIfwdf7N+HMf4m3koUUJOc7nKjGWr
-         1EabB5SZvLDktSRZq19KHKybvyHypT8zvAbsWpvgPmpucTwiq5esjkiWAVD9AgN5PA
-         vPzQ31XzDo9DeBGbKNFsPXUrhgTMAHL1otGxT5YEQ1cFSDN+cZ2PKLk18uVazwQ96t
-         cnavQROP72STzUrgHRc6sDuMP8H5KGUmzZvBLiRtkbWTrnVdZs5/6jJ/3Sc2W7AOIw
-         1pF9YYx5Ub5ZQ==
+        b=raff74dCv9qtXOKIad6sxVVbphnmh3fiAjDaMlT7px1upF5vwUl+g4cBd2kdpDCtD
+         LgDe9/mbg4/3UJt/MTz+Y33ZoORcye+jrvhIrPWoNmxf7EXV2/CdFJp6anMHt9p3Jc
+         /JggJ8JJnF6D/cD/E7R2AbJAbB+Tds/eGJVOUiheqT2el2UJy06mMwkeKpjh5uHJVH
+         7Hx2l2ktiFCq/EbPUJoiplvBBu3NjWZWZwdwVrRoRGCZwg1uYk8xrIJOmnscbBjC4p
+         YbDMJST5zP2vZlhGs4C0VPkbx18kJ2ArFXdLuwVVHt85xy/3ZMSJ1b+yq6ZlyQw3GZ
+         i5Ly+Af/c0fOw==
 Received: from mchehab by mail.kernel.org with local (Exim 4.96)
         (envelope-from <mchehab@kernel.org>)
-        id 1pxtV1-001txn-1G;
+        id 1pxtV1-001txz-1T;
         Sat, 13 May 2023 18:57:43 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Wei Chen <harperchen1110@gmail.com>,
+Cc:     Hyunwoo Kim <imv4bel@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 08/24] media: dvb-usb: digitv: fix null-ptr-deref in digitv_i2c_xfer()
-Date:   Sat, 13 May 2023 18:57:25 +0100
-Message-Id: <a882b5f523e5063b6c111d5d7c70fb3569eb4e54.1684000646.git.mchehab@kernel.org>
+Subject: [PATCH 12/24] media: ttusb-dec: fix memory leak in ttusb_dec_exit_dvb()
+Date:   Sat, 13 May 2023 18:57:29 +0100
+Message-Id: <e17bdefa7cb067127338a655a0ba6d972926c667.1684000646.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <53558de2b5c4f4ee6bfcfbe34e27071c2d0073d5.1684000646.git.mchehab@kernel.org>
 References: <53558de2b5c4f4ee6bfcfbe34e27071c2d0073d5.1684000646.git.mchehab@kernel.org>
@@ -53,39 +53,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Wei Chen <harperchen1110@gmail.com>
+From: Hyunwoo Kim <imv4bel@gmail.com>
 
-In digitv_i2c_xfer, msg is controlled by user. When msg[i].buf
-is null and msg[i].len is zero, former checks on msg[i].buf would be
-passed. Malicious data finally reach digitv_i2c_xfer. If accessing
-msg[i].buf[0] without sanity check, null ptr deref would happen. We add
-check on msg[i].len to prevent crash.
+Since dvb_frontend_detach() is not called in ttusb_dec_exit_dvb(),
+which is called when the device is disconnected, dvb_frontend_free()
+is not finally called.
 
-Similar commit:
-commit 0ed554fd769a ("media: dvb-usb: az6027: fix null-ptr-deref in az6027_i2c_xfer()")
+This causes a memory leak just by repeatedly plugging and
+unplugging the device.
 
-Link: https://lore.kernel.org/linux-media/20230313095008.1039689-1-harperchen1110@gmail.com
-Signed-off-by: Wei Chen <harperchen1110@gmail.com>
+Fix this issue by adding dvb_frontend_detach() to ttusb_dec_exit_dvb().
+
+Link: https://lore.kernel.org/linux-media/20221117045925.14297-5-imv4bel@gmail.com
+Signed-off-by: Hyunwoo Kim <imv4bel@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
- drivers/media/usb/dvb-usb/digitv.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/media/usb/ttusb-dec/ttusb_dec.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/media/usb/dvb-usb/digitv.c b/drivers/media/usb/dvb-usb/digitv.c
-index 2756815a780b..32134be16914 100644
---- a/drivers/media/usb/dvb-usb/digitv.c
-+++ b/drivers/media/usb/dvb-usb/digitv.c
-@@ -63,6 +63,10 @@ static int digitv_i2c_xfer(struct i2c_adapter *adap,struct i2c_msg msg[],int num
- 		warn("more than 2 i2c messages at a time is not handled yet. TODO.");
- 
- 	for (i = 0; i < num; i++) {
-+		if (msg[i].len < 1) {
-+			i = -EOPNOTSUPP;
-+			break;
-+		}
- 		/* write/read request */
- 		if (i+1 < num && (msg[i+1].flags & I2C_M_RD)) {
- 			if (digitv_ctrl_msg(d, USB_READ_COFDM, msg[i].buf[0], NULL, 0,
+diff --git a/drivers/media/usb/ttusb-dec/ttusb_dec.c b/drivers/media/usb/ttusb-dec/ttusb_dec.c
+index 38822cedd93a..c4474d4c44e2 100644
+--- a/drivers/media/usb/ttusb-dec/ttusb_dec.c
++++ b/drivers/media/usb/ttusb-dec/ttusb_dec.c
+@@ -1544,8 +1544,7 @@ static void ttusb_dec_exit_dvb(struct ttusb_dec *dec)
+ 	dvb_dmx_release(&dec->demux);
+ 	if (dec->fe) {
+ 		dvb_unregister_frontend(dec->fe);
+-		if (dec->fe->ops.release)
+-			dec->fe->ops.release(dec->fe);
++		dvb_frontend_detach(dec->fe);
+ 	}
+ 	dvb_unregister_adapter(&dec->adapter);
+ }
 -- 
 2.40.1
 
