@@ -2,132 +2,97 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29E48C7EE23
-	for <linux-media@archiver.kernel.org>; Mon, 15 May 2023 15:36:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A51AFC7EE22
+	for <linux-media@archiver.kernel.org>; Mon, 15 May 2023 15:57:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242364AbjEOPgt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 May 2023 11:36:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46326 "EHLO
+        id S242141AbjEOP5o (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 May 2023 11:57:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242240AbjEOPgo (ORCPT
+        with ESMTP id S234401AbjEOP5m (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 May 2023 11:36:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27CC619BC
-        for <linux-media@vger.kernel.org>; Mon, 15 May 2023 08:36:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B36CB62093
-        for <linux-media@vger.kernel.org>; Mon, 15 May 2023 15:36:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D733DC4339B
-        for <linux-media@vger.kernel.org>; Mon, 15 May 2023 15:36:40 +0000 (UTC)
-Message-ID: <31a7735b-ef7b-da92-fe17-871ef21ef6b6@xs4all.nl>
-Date:   Mon, 15 May 2023 17:36:38 +0200
+        Mon, 15 May 2023 11:57:42 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CB620C3;
+        Mon, 15 May 2023 08:57:40 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8AxV+lzVmJk_d0IAA--.15137S3;
+        Mon, 15 May 2023 23:57:39 +0800 (CST)
+Received: from openarena.loongson.cn (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxBMVuVmJkr6lgAA--.36828S4;
+        Mon, 15 May 2023 23:57:37 +0800 (CST)
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sui Jingfeng <suijingfeng@loongson.cn>,
+        suijingfeng <15330273260@189.cn>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        loongson-kernel@lists.loongnix.cn
+Subject: [PATCH v13 2/2] MAINTAINERS: add maintainers for DRM LOONGSON driver
+Date:   Mon, 15 May 2023 23:57:34 +0800
+Message-Id: <20230515155734.2954149-3-suijingfeng@loongson.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230515155734.2954149-1-suijingfeng@loongson.cn>
+References: <20230515155734.2954149-1-suijingfeng@loongson.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [ANN] Media Summit June 26th: Draft Agenda
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxBMVuVmJkr6lgAA--.36828S4
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvdXoW7XF1rAFWDWF43urW3uF4UJwb_yoWfJrb_Ga
+        yUJ393Zr1UWF9FkaykZFsrGryayrW3tF4Sg3Zrtan5Aa4qyryDJrZrK347KFy5Ar1xK3Z8
+        tayrGrySkFs3WjkaLaAFLSUrUUUUOb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        X7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
+        AFIxvE14AKwVWUAVWUZwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
+        6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
+        xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAaw2AF
+        wI0_Jw0_GFyle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
+        Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Wrv_ZF1lYx0Ex4A2jsIE
+        14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7
+        AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C2
+        67AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI
+        8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW5JVW7
+        JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r
+        1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
+        daVFxhVjvjDU0xZFpf9x07jP_-9UUUUU=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi all,
+This patch add Li Yi and Sui Jingfeng as maintainer to drm/loongson driver
 
-Here is my initial stab at a agenda for the media summit. As always, it
-is subject to change and all times are guesstimates!
+Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+---
+ MAINTAINERS | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-8:45-9:15: get settled :-)
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 402e26d0cdbc..8cdb75f653bc 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -6945,6 +6945,14 @@ T:	git git://anongit.freedesktop.org/drm/drm-misc
+ F:	drivers/gpu/drm/lima/
+ F:	include/uapi/drm/lima_drm.h
+ 
++DRM DRIVERS FOR LOONGSON
++M:	Li Yi <liyi@loongson.cn>
++M:	Sui Jingfeng <suijingfeng@loongson.cn>
++L:	dri-devel@lists.freedesktop.org
++S:	Supported
++T:	git git://anongit.freedesktop.org/drm/drm-misc
++F:	drivers/gpu/drm/loongson/
++
+ DRM DRIVERS FOR MEDIATEK
+ M:	Chun-Kuang Hu <chunkuang.hu@kernel.org>
+ M:	Philipp Zabel <p.zabel@pengutronix.de>
+-- 
+2.25.1
 
-9:15-9:25: Hans: Quick introduction
-
-9:25-10:15: Daniel Almeida: Rust V4L2 support
-
-    Discuss the potential blockers as well as the roadmap and priorities for
-    bindings. Present what is currently supported and what isn't in the Rust
-    code for V4L2. Identify potential candidates for new drivers that can be
-    written in Rust. Discuss about maintainership issues related to Rust in V4L2.
-
-10:15-10:30: Break
-
-10:30-11:15 Hans & Hsia-Jun Li: "Add extended fmt and buffer" patch series
-
-    https://patchwork.linuxtv.org/project/linux-media/cover/20230206043308.28365-1-ayaka@soulik.info/
-
-    We've been postponing the work on this, but I think we need to decide how to
-    proceed since pixel formats and single vs multi planar is getting to be a nightmare.
-
-    More details from Hsia-Jun Li:
-
-    1. v4l2 header would only maintain the codec format and pixel format in bus.
-    2. the pixel formats would be maintained by the DirectRender, those M
-       variant would not be supported in the new extend pixel format API.
-    3. The number of plane for a pixel format would also responds for its data
-       layout. Ex. NV12 = 2 planes(luma, chroma), I420 = 3 planes(Y, U, V).
-    4. Userspace that supports new extend API could access those driver didn't
-       adapt the new API, kernel would have a backward compatible layer. While
-       the opposite backward compatible is not offered (old API userspace can't
-       access the driver support the new API).
-
-    [optional part]
-    5. An alloc flag would be introduced for allocating those M variant buf.
-       https://lore.kernel.org/lkml/20230322105226.122467-1-randy.li@synaptics.com/
-    6. Stateless codec format would be a modifier to the stateful codec format.
-       We could support different packing mode here.
-
-11:15-11:30: Break
-
-11:30-12:15: Andrzej Pietrasiewicz: Stateless Encoders: VP8
-
-    - Introduction to stateless encoders and previous work in this area
-
-    https://github.com/bootlin/linux/tree/hantro/h264-encoding-v5.11
-
-    https://lore.kernel.org/linux-arm-kernel/20230309125651.23911-1-andrzej.p@collabora.com/T/
-
-    - High level decisions
-    - Rate control
-    - VP8 uAPI
-    - Challenges
-
-12:15-13:30: lunch
-
-13:30-14:00: Ricardo Ribalda Delgado: KCAM update
-
-    I would like to share the progress on KCAM from our end.
-
-    I am also trying to collect all the requirements that we are getting
-    from vendors regarding V4L2.
-
-14:00-14:??: Sakari: generic line-based metadata formats:
-
-    https://lore.kernel.org/linux-media/20230505215257.60704-1-sakari.ailus@linux.intel.com/T/#t
-
-14:??-??:??: Hans et al: Subsystem development process
-
-    How to improve it? How do we get more maintainers? It's not working very
-    well at the moment. Present what currently maintainers do w.r.t. tooling.
-    How to harmonize that?
-
-Final short topic: Hans: Should we keep the media summit together with the ELCE conference?
-    Or organize it separately, and ask a company like Cisco, Intel or Collabora
-    to organize a room. What would work best? Anything to improve on this?
-
-We have the room until 18:30, but (fingers crossed) I hope to finish before that.
-
-The "Add extended fmt and buffer" and the "Subsystem development process" are
-*very* hard to predict. I want to limit the initial discussion of the that first
-topic to 45-60 minutes, and continue (if needed) in the afternoon after the discussion
-about the subsystem development process. We will have see how it goes.
-
-Please reply with corrections, questions, etc. to this email. I'll update the agenda
-over time.
-
-Regards,
-
-	Hans
