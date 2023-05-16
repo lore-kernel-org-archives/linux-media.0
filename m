@@ -2,49 +2,49 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F208EC77B7F
-	for <linux-media@archiver.kernel.org>; Tue, 16 May 2023 09:56:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44C4FC7EE26
+	for <linux-media@archiver.kernel.org>; Tue, 16 May 2023 09:56:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232209AbjEPJ4I (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 May 2023 05:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60600 "EHLO
+        id S232212AbjEPJ4K (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 16 May 2023 05:56:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232201AbjEPJ4G (ORCPT
+        with ESMTP id S232202AbjEPJ4I (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 16 May 2023 05:56:06 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D977B49EB
-        for <linux-media@vger.kernel.org>; Tue, 16 May 2023 02:56:02 -0700 (PDT)
+        Tue, 16 May 2023 05:56:08 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1603F2D6B
+        for <linux-media@vger.kernel.org>; Tue, 16 May 2023 02:56:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684230962; x=1715766962;
+  t=1684230967; x=1715766967;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=H6szkz+b/Y1mnD82wbXv00UXSbh8DH/dRYrv3EX9gSY=;
-  b=MNRH3VEicir1ylen7yLciHQGNHhHnKVcW+q3dntjgznPshO9LXENU37S
-   7P3teIt0+Em6JLpFtCGBrSDqSAaGeG0ZQnzyn/VYbyr9YbC49mE3TybIv
-   15T2wk9cVije/8bb+5ZDU1/cDxcycfu7RG0g/PQDCckz+oSHuZ3NXdO4H
-   0V/5cUVBd1bKkuQgePOc6d0/rV/2QJNKANxxTvFL5sXD4OVbYsBp8KOyI
-   1g/B767z1V2m6VZzXC0ACC01D4qeYnc3Aomoeo3ysV7FX/5+ECBLBkRht
-   XEq5kIWsrO8sFMRs4hb4O9GqfxL541BrEYDz2GtgwV9wZ9VKGXoplA1dc
+  bh=+dk9h//KsCkpwmgAVr/VyMNvfmCPUrjKyXECXKPbLGI=;
+  b=KD6B00IGgemEBAidxfNoFNoH9Ob9dlp6T022pwu3a30pOVkneuUaTUz0
+   4KLPHzNV5EvDnGW7wlbtv6zS4yp+K7MA0PZBXzf5Hqt4YmteJdY5s2qn3
+   mW5ggQ5Ho3s/Ah6y+/DIgFgTspqYD5fBC5q/Z+kKicVs0sGwiFjMPQvtL
+   4zYj5kVI6QSUZU6wMmzoRYuSnQke1uuV+2dWJJmHySHJql8/DWVQvr4xK
+   Jkwg9hSS+iSN6u+tLhMWMdn1Oi9sJN7U1LX/my2KsXso7+fTcX+NjXVbo
+   n07R4FJsyY33GxlpP2beCkNYyo1LJ8heD8h++6NbNLPjcqo+7WMVYzMGJ
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="353715198"
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="354601392"
 X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
-   d="scan'208";a="353715198"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 02:55:41 -0700
+   d="scan'208";a="354601392"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 02:55:46 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="678791315"
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="731931801"
 X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
-   d="scan'208";a="678791315"
+   d="scan'208";a="731931801"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 02:55:38 -0700
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 02:55:43 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id E23781214C7;
-        Tue, 16 May 2023 12:55:35 +0300 (EEST)
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 00428122901;
+        Tue, 16 May 2023 12:55:36 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.94.2)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1pyrOx-002Z9j-TY; Tue, 16 May 2023 12:55:27 +0300
+        id 1pyrOx-002Z9t-Vz; Tue, 16 May 2023 12:55:27 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com,
@@ -53,9 +53,9 @@ Cc:     laurent.pinchart@ideasonboard.com,
         aishwarya.kothari@toradex.com, Robert Foss <rfoss@kernel.org>,
         Todor Tomov <todor.too@gmail.com>,
         Hyun Kwon <hyun.kwon@xilinx.com>, bingbu.cao@intel.com
-Subject: [PATCH v2 03/31] media: xilinx-vipp: Clean up bound async notifier callback
-Date:   Tue, 16 May 2023 12:54:49 +0300
-Message-Id: <20230516095517.611711-4-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 06/31] media: v4l: async: Drop unneeded list entry initialisation
+Date:   Tue, 16 May 2023 12:54:52 +0300
+Message-Id: <20230516095517.611711-7-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230516095517.611711-1-sakari.ailus@linux.intel.com>
 References: <20230516095517.611711-1-sakari.ailus@linux.intel.com>
@@ -65,62 +65,28 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The async notifier bound callback does a lot of checks that have probably
-been always unnecessary. Remove the lookup of the async connection that we
-already have, as well as the debug print that is already printed by the
-framework.
+The list entry is initialised as a head in v4l2_async_register_subdev()
+just before being added to the list. This isn't needed, drop the
+initialisation.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/platform/xilinx/xilinx-vipp.c | 32 ++++-----------------
- 1 file changed, 5 insertions(+), 27 deletions(-)
+ drivers/media/v4l2-core/v4l2-async.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/media/platform/xilinx/xilinx-vipp.c b/drivers/media/platform/xilinx/xilinx-vipp.c
-index 3123216b3f70e..b309af0c83749 100644
---- a/drivers/media/platform/xilinx/xilinx-vipp.c
-+++ b/drivers/media/platform/xilinx/xilinx-vipp.c
-@@ -312,36 +312,14 @@ static int xvip_graph_notify_complete(struct v4l2_async_notifier *notifier)
+diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
+index 22c8c8a2a69dd..c2f1ab11cbcff 100644
+--- a/drivers/media/v4l2-core/v4l2-async.c
++++ b/drivers/media/v4l2-core/v4l2-async.c
+@@ -823,8 +823,6 @@ int v4l2_async_register_subdev(struct v4l2_subdev *sd)
  
- static int xvip_graph_notify_bound(struct v4l2_async_notifier *notifier,
- 				   struct v4l2_subdev *subdev,
--				   struct v4l2_async_subdev *unused)
-+				   struct v4l2_async_subdev *asd)
- {
--	struct xvip_composite_device *xdev =
--		container_of(notifier, struct xvip_composite_device, notifier);
--	struct xvip_graph_entity *entity;
--	struct v4l2_async_subdev *asd;
-+	struct xvip_graph_entity *entity = to_xvip_entity(asd);
+ 	mutex_lock(&list_lock);
  
--	/* Locate the entity corresponding to the bound subdev and store the
--	 * subdev pointer.
--	 */
--	list_for_each_entry(asd, &xdev->notifier.asd_list, asd_list) {
--		entity = to_xvip_entity(asd);
-+	entity->entity = &subdev->entity;
-+	entity->subdev = subdev;
- 
--		if (entity->asd.match.fwnode != subdev->fwnode)
--			continue;
+-	INIT_LIST_HEAD(&sd->async_list);
 -
--		if (entity->subdev) {
--			dev_err(xdev->dev, "duplicate subdev for node %p\n",
--				entity->asd.match.fwnode);
--			return -EINVAL;
--		}
--
--		dev_dbg(xdev->dev, "subdev %s bound\n", subdev->name);
--		entity->entity = &subdev->entity;
--		entity->subdev = subdev;
--		return 0;
--	}
--
--	dev_err(xdev->dev, "no entity for subdev %s\n", subdev->name);
--	return -EINVAL;
-+	return 0;
- }
- 
- static const struct v4l2_async_notifier_operations xvip_graph_notify_ops = {
+ 	list_for_each_entry(notifier, &notifier_list, list) {
+ 		struct v4l2_device *v4l2_dev =
+ 			v4l2_async_nf_find_v4l2_dev(notifier);
 -- 
 2.30.2
 
