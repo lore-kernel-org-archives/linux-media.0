@@ -2,162 +2,167 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 634D7C77B7F
-	for <linux-media@archiver.kernel.org>; Tue, 16 May 2023 19:34:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 366F6C77B7F
+	for <linux-media@archiver.kernel.org>; Tue, 16 May 2023 20:16:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbjEPTem (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 May 2023 15:34:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54434 "EHLO
+        id S230142AbjEPUQ5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 16 May 2023 16:16:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjEPTel (ORCPT
+        with ESMTP id S229568AbjEPUQx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 16 May 2023 15:34:41 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31673C14;
-        Tue, 16 May 2023 12:34:37 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (aztw-30-b2-v4wan-166917-cust845.vm26.cable.virginm.net [82.37.23.78])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4EEF14A9;
-        Tue, 16 May 2023 21:34:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1684265664;
-        bh=vD80TzppvxoCyqd+8/aeybtXUwrrIB5HylIddF58t+w=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=h5nxgy0YpdoD6W48hvSi0nTbiAsy+NTIckedqI8fvnsOWng7sjJYfKwdforRtG5tO
-         WF172v862NgT2z4VEh0meU2begVV5fCOUWwqjSItNpD0lE3gWhhtdj0nDbAOQ91SIp
-         AHvcbhZ8evkkVagBEwTBPhYDrldkL0TZc9q3dmE4=
-Content-Type: text/plain; charset="utf-8"
+        Tue, 16 May 2023 16:16:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60EFE1BE;
+        Tue, 16 May 2023 13:16:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E9BD763D86;
+        Tue, 16 May 2023 20:16:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F241FC433D2;
+        Tue, 16 May 2023 20:16:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684268205;
+        bh=TX21/LnZTnFYt/KzhqOgAcDna4xbf0dO5gIfq+6X2d0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=CPkZpwmAyljr5hYRCZp41+IlxyJGnUUUY2PFiF8wDiKwZlCtSQKCOXwYYENGVaQOc
+         kvHM0N4e7sd4jRj4SgVz4Or7IWVEZSpj3dKPvEBPPbqIRMKkapVb/VK6dVHdir8CGJ
+         Tape4j6t+vE1wKyXLHUPVZaF4P574p+OSCURexJrpvkzU0lqOp6hlJ1WXcBJW4rJig
+         MqsWP57fV+6O+HUmAoW5JTGb2UtsyCIXdQDqZdQY8/Q0THfo8oQj5vvCq2WmKognTY
+         inkeYx7MhkBfJZYpqb1EfecGvUzuYE2cpc16bIEGu5FMyouEuCR/PZNwdrxc+TsgDf
+         lXKzkYBdIN+8Q==
+Date:   Tue, 16 May 2023 14:17:32 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] media: venus: Replace one-element arrays with
+ flexible-array members
+Message-ID: <ZGPk3PpvYzjD1+0/@work>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230406-feature-controls-lens-v2-0-faa8ad2bc404@wolfvision.net>
-References: <20230406-feature-controls-lens-v2-0-faa8ad2bc404@wolfvision.net>
-Subject: Re: [PATCH RFC v2 0/6] media: v4l2-ctrls: add controls for complex lens controller devices
-From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc:     libcamera-devel@lists.libcamera.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Matthias Fend <Matthias.Fend@wolfvision.net>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michael Riesch <michael.riesch@wolfvision.net>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Riesch <michael.riesch@wolfvision.net>
-Date:   Tue, 16 May 2023 20:34:32 +0100
-Message-ID: <168426567274.727956.12078149879172832940@Monstersaurus>
-User-Agent: alot/0.10
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Michael
+One-element arrays are deprecated, and we are replacing them with flexible
+array members instead. So, replace one-element arrays with flexible-array
+members in multiple structures, and refactor the rest of the code,
+accordingly.
 
-Quoting Michael Riesch (2023-04-25 10:45:10)
-> Hi all,
->=20
-> This patch series aims to add support for complex lens controllers in V4L=
-2.
-> Complex lens controllers usually feature one focus lens and one (or more)
-> zoom lens(es), which are driven by motors (e.g., stepper motors). As a
-> consequence, a few crucial differences to simple lens controllers (such as
-> voice coil motor (VCM) drivers, which are already well supported in V4L2)
-> arise:
->=20
->  - Focus and zoom are slow.
->=20
-> Compared to a simple VCM driver, which reacts almost instantaneously, the
-> motors that control the lens groups may require some time to reach their
-> target position. Therefore, the control process in user space needs
-> to receive feedback on the current status of each lens group, such as the
-> current position and whether or not the lens group is moving. Patch 3/6
-> adds volatile and read-only status controls for each lens group.
->=20
->  - The velocity of focus and zoom can be selected.
->=20
-> In contrast to a simple VCM driver, the motors can move at different
-> velocities. Since the produced noise depends on the velocity, the
-> control process may want to optimize the chosen velocity. Also, some auto
-> focus algorithms use different velocities in different phases (e.g., a
-> coarse and fast scan vs. a slow and precise scan). Patch 4/6 adds speed
-> controls for the focus lens group and the zoom lens group.
->=20
->  - Calibration may be required.
->=20
-> Since moving mechanical parts are involved, calibration is most likely
-> necessary. Patch 5/6 introduces controls to control calibration procedure=
-s.
->=20
-> In the scope of calibration, the relation between the lens positions may =
-be
-> fine-tuned. This requires the ability to control the individual lenses and
-> gather feedback on their current status. Patch 6/6 introduces a pair of
-> controls for five zoom lenses. (Five is a placeholder here. The most
-> complex objective we had at hand happened to feature five zoom lenses.)
+This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+routines on memcpy() and help us make progress towards globally
+enabling -fstrict-flex-arrays=3 [1].
 
-I realise the 'five' is a bit arbitrary at the moment. Have you looked
-at if it's possible to expose each lens as a distinct subdevice?
+This results in no differences in binary output.
 
-That would give full control over each one at least. I'm not sure yet
-what the implications are with the 'group' though. I would expect then
-the media graph could show links/connections sequentially between each
-lens portraying the path that light travels through them. Are they
-always linear? (or maybe the better word is sequential?) or do they
-arrange in different orders ... I hope there's not something as complex
-as:
+Link: https://github.com/KSPP/linux/issues/79
+Link: https://github.com/KSPP/linux/issues/291
+Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ drivers/media/platform/qcom/venus/hfi_msgs.c |  4 ++--
+ drivers/media/platform/qcom/venus/hfi_msgs.h | 14 +++++++-------
+ 2 files changed, 9 insertions(+), 9 deletions(-)
 
-  1 -> 2 \
-          6
-  4 -> 5 /=20
- =20
+diff --git a/drivers/media/platform/qcom/venus/hfi_msgs.c b/drivers/media/platform/qcom/venus/hfi_msgs.c
+index df96db3761a7..6efd78606d9b 100644
+--- a/drivers/media/platform/qcom/venus/hfi_msgs.c
++++ b/drivers/media/platform/qcom/venus/hfi_msgs.c
+@@ -233,7 +233,7 @@ static void hfi_sys_init_done(struct venus_core *core, struct venus_inst *inst,
+ 		goto done;
+ 	}
+ 
+-	rem_bytes = pkt->hdr.size - sizeof(*pkt) + sizeof(u32);
++	rem_bytes = pkt->hdr.size - sizeof(*pkt);
+ 	if (rem_bytes <= 0) {
+ 		/* missing property data */
+ 		error = HFI_ERR_SYS_INSUFFICIENT_RESOURCES;
+@@ -434,7 +434,7 @@ static void hfi_session_init_done(struct venus_core *core,
+ 	if (!IS_V1(core))
+ 		goto done;
+ 
+-	rem_bytes = pkt->shdr.hdr.size - sizeof(*pkt) + sizeof(u32);
++	rem_bytes = pkt->shdr.hdr.size - sizeof(*pkt);
+ 	if (rem_bytes <= 0) {
+ 		error = HFI_ERR_SESSION_INSUFFICIENT_RESOURCES;
+ 		goto done;
+diff --git a/drivers/media/platform/qcom/venus/hfi_msgs.h b/drivers/media/platform/qcom/venus/hfi_msgs.h
+index 510513697335..8c2e17b0d36f 100644
+--- a/drivers/media/platform/qcom/venus/hfi_msgs.h
++++ b/drivers/media/platform/qcom/venus/hfi_msgs.h
+@@ -50,7 +50,7 @@ struct hfi_msg_event_notify_pkt {
+ 	u32 event_id;
+ 	u32 event_data1;
+ 	u32 event_data2;
+-	u32 ext_event_data[1];
++	u32 ext_event_data[];
+ };
+ 
+ struct hfi_msg_event_release_buffer_ref_pkt {
+@@ -63,7 +63,7 @@ struct hfi_msg_sys_init_done_pkt {
+ 	struct hfi_pkt_hdr hdr;
+ 	u32 error_type;
+ 	u32 num_properties;
+-	u32 data[1];
++	u32 data[];
+ };
+ 
+ struct hfi_msg_sys_pc_prep_done_pkt {
+@@ -81,7 +81,7 @@ struct hfi_msg_session_init_done_pkt {
+ 	struct hfi_session_hdr_pkt shdr;
+ 	u32 error_type;
+ 	u32 num_properties;
+-	u32 data[1];
++	u32 data[];
+ };
+ 
+ struct hfi_msg_session_end_done_pkt {
+@@ -228,7 +228,7 @@ struct hfi_msg_session_parse_sequence_header_done_pkt {
+ 	struct hfi_session_hdr_pkt shdr;
+ 	u32 error_type;
+ 	u32 num_properties;
+-	u32 data[1];
++	u32 data[];
+ };
+ 
+ struct hfi_msg_session_property_info_pkt {
+@@ -247,7 +247,7 @@ struct hfi_msg_session_release_buffers_done_pkt {
+ 	struct hfi_session_hdr_pkt shdr;
+ 	u32 error_type;
+ 	u32 num_buffers;
+-	u32 buffer_info[1];
++	u32 buffer_info[];
+ };
+ 
+ struct hfi_msg_sys_debug_pkt {
+@@ -256,7 +256,7 @@ struct hfi_msg_sys_debug_pkt {
+ 	u32 msg_size;
+ 	u32 time_stamp_hi;
+ 	u32 time_stamp_lo;
+-	u8 msg_data[1];
++	u8 msg_data[];
+ };
+ 
+ struct hfi_msg_sys_coverage_pkt {
+@@ -264,7 +264,7 @@ struct hfi_msg_sys_coverage_pkt {
+ 	u32 msg_size;
+ 	u32 time_stamp_hi;
+ 	u32 time_stamp_lo;
+-	u8 msg_data[1];
++	u8 msg_data[];
+ };
+ 
+ struct venus_core;
+-- 
+2.34.1
 
->=20
-> On the user space side, it is envisaged that libcamera operates the newly
-> introduced controls. Please note that no tests with libcamera have been
-> carried out yet, the integration will be discussed after the first round =
-of
-> feedback to this RFC.
-
-If they are split into individual components then at least libcamera can
-identify the arrangement from the media graph?
-
-Will you expect applications to manage each lens manually? or would this
-all be handled within libcamera (perhaps in some custom IPA?)
-
-
-> Version 2 of this series include two new patches that fix mistakes in the
-> documentation of existing controls. These mistakes have been pointed out
-> during the review phase of the first iteration of this series.
->=20
-> Looking forward to your comments!
->=20
-> ---
-> Changes in v2:
-> - add patch 1/6 that fixes unit description of V4L2_CID_FOCUS_ABSOLUTE
-> - add patch 2/6 that clarifies when to implement V4L2_CID_FOCUS_RELATIVE
-> - remove compound controls _STATUS (struct) and add controls _STATUS
->   (bitmask) and _CURRENT (integer) instead
-> - fix V4L2_CID_LENS_CALIB_STATUS documentation
-> - Link to v1: https://lore.kernel.org/r/20230406-feature-controls-lens-v1=
--0-543189a680de@wolfvision.net
->=20
-> ---
-> Michael Riesch (6):
->       media: v4l2-ctrls: fix documentation of V4L2_CID_FOCUS_ABSOLUTE unit
->       media: v4l2-ctrls: clarify documentation of V4L2_CID_FOCUS_RELATIVE
->       media: v4l2-ctrls: add lens group status controls for zoom and focus
->       media: v4l2-ctrls: add lens group speed controls for zoom and focus
->       media: v4l2-ctrls: add lens calibration controls
->       media: v4l2-ctrls: add controls for individual zoom lenses
->=20
->  .../userspace-api/media/v4l/ext-ctrls-camera.rst   | 129 +++++++++++++++=
-+++++-
->  drivers/media/v4l2-core/v4l2-ctrls-defs.c          |  41 +++++++
->  include/uapi/linux/v4l2-controls.h                 |  41 +++++++
->  3 files changed, 208 insertions(+), 3 deletions(-)
-> ---
-> base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
-> change-id: 20230406-feature-controls-lens-b85575d3443a
->=20
-> Best regards,
-> --=20
-> Michael Riesch <michael.riesch@wolfvision.net>
->
