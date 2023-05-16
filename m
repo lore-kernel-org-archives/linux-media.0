@@ -2,49 +2,49 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED592C7EE24
-	for <linux-media@archiver.kernel.org>; Tue, 16 May 2023 09:56:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36CE7C7EE26
+	for <linux-media@archiver.kernel.org>; Tue, 16 May 2023 09:56:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232255AbjEPJ4b (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S232250AbjEPJ4b (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 16 May 2023 05:56:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32872 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232228AbjEPJ42 (ORCPT
+        with ESMTP id S232243AbjEPJ42 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 16 May 2023 05:56:28 -0400
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40FF930C1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C3F359D
         for <linux-media@vger.kernel.org>; Tue, 16 May 2023 02:56:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1684230983; x=1715766983;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=hx9Y/3ZHGLMDYmc0w44PzlFD44KxlGR39l+QKDUCr1k=;
-  b=cyk05BtjwOExXX+104wMV6Mx5cuJqsI0yi6rof1IwrAqVPVp7FwSl3Dd
-   5OIXEJFhV4JfBDiivC9bwcpBOkNla5/tNle29Ro4aF20p+7EVjAJ0DzSB
-   Af3zxmE9hhzD+x9Nop2ZYgWoRT/MFuF12s4F7msAO2J++JFxOg9wPCmpx
-   nzbomCGN92lsw9smCOrnzJ5qpAt+HTyvq+x55cM2aOfxxSrmfipOuAPB1
-   E8kjG8mGQQLQJShjEmMgmF+E7hEPLoG3xBbwl9mzYosWJ6Mrt70WZdF2z
-   z472gvR0STfyP7cLfvS68/9n0ceXraf1lzX3UxRX2o4P2AQVRni2jmyZ2
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="354601527"
+  bh=z9c6nR/qh3lnsxsX4H+3unb1l3Ji7vf3jzsMz0a4rdg=;
+  b=A0a6S/p77SSp2I18K+TQrOd3EpT6HFDVc8tlQtG8+R2SETdTz3Wd1jJa
+   9S8Rj00NVDij1Ym+DWH/VeRvoiqeDBqdByfAc/mKU+ekUmWA5JuftQ5K0
+   Ewe3kimA6xvBrngJXixUDozHI3xOxKlwihQkEbABnZAsrNK0m74H0Xjoy
+   hn5yZkDDIA8Jl7IIOvvaLKrS00r+FkfegQefhpO3m9L0BUpHwuATUeO4J
+   LzQhzphLG9j6Ls2vM3c/QCSdV5EDekCffIsQW8CVzeh4Y0getFjl8KIg/
+   jsdTGwwTgji5hS198C7PcStyIdkOnd25fZLbZwoWfidajJn6KvVFGlG/J
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="354601552"
 X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
-   d="scan'208";a="354601527"
+   d="scan'208";a="354601552"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
   by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 02:55:51 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="731931866"
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="731931875"
 X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
-   d="scan'208";a="731931866"
+   d="scan'208";a="731931875"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
   by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 02:55:48 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id 761D7122FB4;
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 81F1B122FB7;
         Tue, 16 May 2023 12:55:36 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.94.2)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1pyrOy-002ZB4-Fi; Tue, 16 May 2023 12:55:28 +0300
+        id 1pyrOy-002ZBC-H3; Tue, 16 May 2023 12:55:28 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com,
@@ -53,9 +53,9 @@ Cc:     laurent.pinchart@ideasonboard.com,
         aishwarya.kothari@toradex.com, Robert Foss <rfoss@kernel.org>,
         Todor Tomov <todor.too@gmail.com>,
         Hyun Kwon <hyun.kwon@xilinx.com>, bingbu.cao@intel.com
-Subject: [PATCH v2 26/31] media: omap3isp: Initialise V4L2 async notifier later
-Date:   Tue, 16 May 2023 12:55:12 +0300
-Message-Id: <20230516095517.611711-27-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 28/31] media: davinci: Init async notifier after registering V4L2 device
+Date:   Tue, 16 May 2023 12:55:14 +0300
+Message-Id: <20230516095517.611711-29-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230516095517.611711-1-sakari.ailus@linux.intel.com>
 References: <20230516095517.611711-1-sakari.ailus@linux.intel.com>
@@ -65,79 +65,69 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Initialise V4L2 async notifier and parse DT for async sub-devices later,
-just before registering the notifier. This way the V4L2 device has been
-registered before initialising the notifier which makes it possible to
-use it for debug prints.
+Initialise the V4L2 async notifier after registering the V4L2 device, just
+before parsing DT for async sub-devices. This way struct device is
+available to the notifier right from the beginning which makes it possible
+to use it for debug prints.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/platform/ti/omap3isp/isp.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+ .../media/platform/ti/davinci/vpif_capture.c    | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/media/platform/ti/omap3isp/isp.c b/drivers/media/platform/ti/omap3isp/isp.c
-index 73d5084dce8b9..39768684a6455 100644
---- a/drivers/media/platform/ti/omap3isp/isp.c
-+++ b/drivers/media/platform/ti/omap3isp/isp.c
-@@ -2002,6 +2002,7 @@ static void isp_remove(struct platform_device *pdev)
- 	struct isp_device *isp = platform_get_drvdata(pdev);
+diff --git a/drivers/media/platform/ti/davinci/vpif_capture.c b/drivers/media/platform/ti/davinci/vpif_capture.c
+index a63c9e51dac41..9b97e26be0892 100644
+--- a/drivers/media/platform/ti/davinci/vpif_capture.c
++++ b/drivers/media/platform/ti/davinci/vpif_capture.c
+@@ -1608,18 +1608,12 @@ static __init int vpif_probe(struct platform_device *pdev)
+ 	int res_idx = 0;
+ 	int i, err;
  
- 	v4l2_async_nf_unregister(&isp->notifier);
-+	v4l2_async_nf_cleanup(&isp->notifier);
- 	isp_unregister_entities(isp);
- 	isp_cleanup_modules(isp);
- 	isp_xclk_cleanup(isp);
-@@ -2011,7 +2012,6 @@ static void isp_remove(struct platform_device *pdev)
- 	__omap3isp_put(isp, false);
- 
- 	media_entity_enum_cleanup(&isp->crashed);
--	v4l2_async_nf_cleanup(&isp->notifier);
- 
- 	kfree(isp);
- }
-@@ -2295,13 +2295,8 @@ static int isp_probe(struct platform_device *pdev)
- 
- 	mutex_init(&isp->isp_mutex);
- 	spin_lock_init(&isp->stat_lock);
--	v4l2_async_nf_init(&isp->notifier);
- 	isp->dev = &pdev->dev;
- 
--	ret = isp_parse_of_endpoints(isp);
--	if (ret < 0)
--		goto error;
+-	pdev->dev.platform_data = vpif_capture_get_pdata(pdev);
+-	if (!pdev->dev.platform_data) {
+-		dev_warn(&pdev->dev, "Missing platform data.  Giving up.\n");
+-		return -EINVAL;
+-	}
 -
- 	isp->ref_count = 0;
+ 	vpif_dev = &pdev->dev;
  
- 	ret = dma_coerce_mask_and_coherent(isp->dev, DMA_BIT_MASK(32));
-@@ -2433,6 +2428,12 @@ static int isp_probe(struct platform_device *pdev)
+ 	err = initialize_vpif();
+ 	if (err) {
+ 		v4l2_err(vpif_dev->driver, "Error initializing vpif\n");
+-		goto cleanup;
++		return err;
+ 	}
  
- 	isp->notifier.ops = &isp_subdev_notifier_ops;
+ 	err = v4l2_device_register(vpif_dev, &vpif_obj.v4l2_dev);
+@@ -1655,6 +1649,12 @@ static __init int vpif_probe(struct platform_device *pdev)
+ 		goto vpif_unregister;
+ 	}
  
-+	v4l2_async_nf_init(&isp->notifier);
++	pdev->dev.platform_data = vpif_capture_get_pdata(pdev);
++	if (!pdev->dev.platform_data) {
++		dev_warn(&pdev->dev, "Missing platform data.  Giving up.\n");
++		goto probe_subdev_out;
++	}
 +
-+	ret = isp_parse_of_endpoints(isp);
-+	if (ret < 0)
-+		goto error_register_entities;
-+
- 	ret = v4l2_async_nf_register(&isp->v4l2_dev, &isp->notifier);
- 	if (ret)
- 		goto error_register_entities;
-@@ -2443,6 +2444,7 @@ static int isp_probe(struct platform_device *pdev)
+ 	if (!vpif_obj.config->asd_sizes[0]) {
+ 		int i2c_id = vpif_obj.config->i2c_adapter_id;
+ 
+@@ -1695,14 +1695,13 @@ static __init int vpif_probe(struct platform_device *pdev)
  	return 0;
  
- error_register_entities:
-+	v4l2_async_nf_cleanup(&isp->notifier);
- 	isp_unregister_entities(isp);
- error_modules:
- 	isp_cleanup_modules(isp);
-@@ -2452,7 +2454,6 @@ static int isp_probe(struct platform_device *pdev)
- 	isp_xclk_cleanup(isp);
- 	__omap3isp_put(isp, false);
- error:
--	v4l2_async_nf_cleanup(&isp->notifier);
- 	mutex_destroy(&isp->isp_mutex);
- error_release_isp:
- 	kfree(isp);
+ probe_subdev_out:
++	v4l2_async_nf_cleanup(&vpif_obj.notifier);
+ 	/* free sub devices memory */
+ 	kfree(vpif_obj.sd);
+ vpif_unregister:
+ 	v4l2_device_unregister(&vpif_obj.v4l2_dev);
+ vpif_free:
+ 	free_vpif_objs();
+-cleanup:
+-	v4l2_async_nf_cleanup(&vpif_obj.notifier);
+ 
+ 	return err;
+ }
 -- 
 2.30.2
 
