@@ -2,54 +2,54 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24A8CC7EE2D
-	for <linux-media@archiver.kernel.org>; Wed, 17 May 2023 14:52:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2F60C7EE2F
+	for <linux-media@archiver.kernel.org>; Wed, 17 May 2023 14:52:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231946AbjEQOw4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 May 2023 10:52:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44640 "EHLO
+        id S232212AbjEQOw6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 May 2023 10:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232071AbjEQOwy (ORCPT
+        with ESMTP id S232192AbjEQOw4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 May 2023 10:52:54 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CFF159EE
-        for <linux-media@vger.kernel.org>; Wed, 17 May 2023 07:52:47 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-30626f4d74aso632464f8f.0
-        for <linux-media@vger.kernel.org>; Wed, 17 May 2023 07:52:47 -0700 (PDT)
+        Wed, 17 May 2023 10:52:56 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFF453A9F
+        for <linux-media@vger.kernel.org>; Wed, 17 May 2023 07:52:48 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-309438004a6so451864f8f.2
+        for <linux-media@vger.kernel.org>; Wed, 17 May 2023 07:52:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684335165; x=1686927165;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684335167; x=1686927167;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=53yQ5WAlsgSKbKfPAJNRS0Vf8Mhg/M9EmPqqwDtVX7Y=;
-        b=uP94VE8FRaeKi54S5wqD9ZoflKuQ97i4LxQN2rLaTlvpXkjiHzQZvTiILoc945VCvG
-         EkvSyXfYBdYIbxrcK6Er6nXn9Rzhu53yIjnCpySHYihhSORMT2hkYMUNZZ8EBGzUlIsG
-         jbbp5H2bZz2x/PTZpzW7GvEBJEClwCzasxSck2jBqjY8l8rWfMD2OQ7+ddDlM87K0vZZ
-         AmBzb9YNhiP2MlNHEYbVnXbx0ZuTHT0qr+VdBkKYOCk6Z5SyxuvSH10wt7KxFYR9dB0X
-         kyeu8l0gqKeO/If723w61vT9W8TFQvgaohDAscMVAslU/H4PFjpigrFC+5ffLqZI2xm5
-         465g==
+        bh=Nr7mrK+6tSYd8YQg8OUgoKT303dzmLPmQg+9F+7XGpw=;
+        b=LzLDbCdcTBYtSEhd2l/0x+6iblcvk8LvzFbXOer3dStbScQfSb3AuwfX9ADL5SfoVx
+         pNwu/FyIyTdKo5Y/nGSeJ6oIMO5SVb1fwjeTOz7WZH7dpFqcevDNsr7DO9F0ajlqtStV
+         aOiDluo/V3mcJ3O294/tKHQOT4ksz4xkkM/+40IC0+wdldzn4e4TakwirwGaglzuMJiH
+         wMd3cAteZqah/0CaQfSmGjvXbQgTga3WVxjUS4VtghXDsNIJWLb1azMix3Y5R9g/eaFv
+         2TqANN3iwPyqD7KktB4CknbHn25Gr+kQga/PRZkcemKLIZQJCn1YNt7smLzS4EeDy8IK
+         E9dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684335165; x=1686927165;
+        d=1e100.net; s=20221208; t=1684335167; x=1686927167;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=53yQ5WAlsgSKbKfPAJNRS0Vf8Mhg/M9EmPqqwDtVX7Y=;
-        b=N5KSMvdtVsxwIP+M2ErwwQrMVvt7tK0EtvmpM4eYVkAEsnVu3xZ9rj6WScnwe95DHF
-         jq3SUDzL5VXjIkkESIKge/tNm74h8PBauW5KzRsyfOxzD2q6/7OBrhyZ64hh9R8ANJva
-         EiZvo/7KfQYcckUT31XUDzf8S53OjGBPQFLaafQDrUc9JtfP+tlpwgfl2jJR0f/2Llgb
-         wNxe0nI8cg8OvPQ2MLtf/NQH1cxyypaWyTHQdtbuowtDeDCpFSw87msgUl9ff2N1yJEB
-         XgONDN+/x1e2H/U5xzB3MWajaEHkDT7NHDMDhNR7+3c1LwtvGaV9hc51HXBR6R9wG3Oi
-         uDbg==
-X-Gm-Message-State: AC+VfDxC1ueYSC/Fg9gpcCFMd4CkXJLli31paglsjS6ESwI/PB3eDepE
-        DOjnvTcolBHh7pnPq35wcR6Q5A==
-X-Google-Smtp-Source: ACHHUZ7m6fs008rRX4GnYew3Bs5IbiZ+LTVWrGeG8VJEU+HTH+tD3errRQp3lrkI3GLvMjQRVqqLFA==
-X-Received: by 2002:a5d:591a:0:b0:309:3df3:8e0f with SMTP id v26-20020a5d591a000000b003093df38e0fmr997547wrd.51.1684335165200;
-        Wed, 17 May 2023 07:52:45 -0700 (PDT)
+        bh=Nr7mrK+6tSYd8YQg8OUgoKT303dzmLPmQg+9F+7XGpw=;
+        b=VOgXFuQNE6tysOStUgOdBDxfg0NFev4rTi3UxAo0+YqdO9hkO4LuXspd+aRZHFoSJ7
+         coRNg2cKKVqM669IJNPdL+LphbMwKZqIEUQ+0Z3D4qsr8yN4h2tJCKk95K8/sZ5R4FcC
+         tI2p/xck6aq2/oUAo9xAUfA6p6mrhahMXrROrnU1VkK9tUeRwaH22kM2OEHC/qI52KGq
+         ktQf3fFXAS+VyTHSlRqZdaPn9P7dhFbTSIu03jYqLnAXU5zVYhe4/2im10iwKAVRjWA5
+         PDVm9rxf+a/Sr09PtGDrgDs+pbyn0005JkeKSfqr8Chzy6Q1x1DXDN0M4NpdxNaHDH28
+         xL/Q==
+X-Gm-Message-State: AC+VfDxpXLGDASnSj2ETQgDeWj9lZyMMUMR+f4uhRtjy8mpKfGsdTFje
+        HrI9H1wFT7+zhCPwdolt3YyGLg==
+X-Google-Smtp-Source: ACHHUZ6E9PDxwNASjWneyPfqsNbUMzas8Fc4Vnk/HvhbHQcmj7121Shzz9bplamcC/BeRNWcybflUw==
+X-Received: by 2002:a5d:63c3:0:b0:306:321c:995b with SMTP id c3-20020a5d63c3000000b00306321c995bmr966382wrw.41.1684335167157;
+        Wed, 17 May 2023 07:52:47 -0700 (PDT)
 Received: from blaptop.baylibre (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id v11-20020a5d678b000000b002f7780eee10sm2979098wru.59.2023.05.17.07.52.44
+        by smtp.gmail.com with ESMTPSA id v11-20020a5d678b000000b002f7780eee10sm2979098wru.59.2023.05.17.07.52.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 07:52:44 -0700 (PDT)
+        Wed, 17 May 2023 07:52:46 -0700 (PDT)
 From:   Alexandre Bailon <abailon@baylibre.com>
 To:     airlied@gmail.com, daniel@ffwll.ch,
         maarten.lankhorst@linux.intel.com, mripard@kernel.org,
@@ -64,9 +64,9 @@ Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         linaro-mm-sig@lists.linaro.org, khilman@baylibre.com,
         nbelin@baylibre.com, bero@baylibre.com,
         Alexandre Bailon <abailon@baylibre.com>
-Subject: [PATCH 1/7] drm: Add support of AI Processor Unit (APU)
-Date:   Wed, 17 May 2023 16:52:31 +0200
-Message-Id: <20230517145237.295461-2-abailon@baylibre.com>
+Subject: [PATCH 3/7] drm/apu: Add support of requests
+Date:   Wed, 17 May 2023 16:52:33 +0200
+Message-Id: <20230517145237.295461-4-abailon@baylibre.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230517145237.295461-1-abailon@baylibre.com>
 References: <20230517145237.295461-1-abailon@baylibre.com>
@@ -76,323 +76,686 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Many AI Processur Unit (APU) have a similar architecture.
-This driver intends helping supporting them.
-This relies on DRM and provides some abstractions useful
-for AI accelerators.
-Currently, this provides the infrastructure to alloc an APU
-device and register one or many cores.
-The driver will takes care to register itself to DRM.
+This updates the APU driver to with two new ioctls
+to queue and dequeue requests.
+This uses DRM scheduler to manage the requests.
+The requests allocation and send and receive operations
+are platform specifics and must be implemented as callback.
 
 Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
 Reviewed-by: Julien Stephan <jstephan@baylibre.com>
 ---
- drivers/gpu/drm/Kconfig            |   2 +
- drivers/gpu/drm/Makefile           |   1 +
- drivers/gpu/drm/apu/Kconfig        |  12 ++
- drivers/gpu/drm/apu/Makefile       |   5 +
- drivers/gpu/drm/apu/apu_drv.c      | 272 +++++++++++++++++++++++++++++
- drivers/gpu/drm/apu/apu_internal.h |  68 ++++++++
- include/uapi/drm/apu_drm.h         |  28 +++
- 7 files changed, 388 insertions(+)
- create mode 100644 drivers/gpu/drm/apu/Kconfig
- create mode 100644 drivers/gpu/drm/apu/Makefile
- create mode 100644 drivers/gpu/drm/apu/apu_drv.c
- create mode 100644 drivers/gpu/drm/apu/apu_internal.h
- create mode 100644 include/uapi/drm/apu_drm.h
+ drivers/gpu/drm/apu/Kconfig        |   1 +
+ drivers/gpu/drm/apu/Makefile       |   1 +
+ drivers/gpu/drm/apu/apu_drv.c      |  52 +--
+ drivers/gpu/drm/apu/apu_internal.h |  93 ++++-
+ drivers/gpu/drm/apu/apu_sched.c    | 564 +++++++++++++++++++++++++++++
+ include/uapi/drm/apu_drm.h         |  31 +-
+ 6 files changed, 697 insertions(+), 45 deletions(-)
+ create mode 100644 drivers/gpu/drm/apu/apu_sched.c
 
-diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
-index ba3fb04bb691..32ffa66a8b54 100644
---- a/drivers/gpu/drm/Kconfig
-+++ b/drivers/gpu/drm/Kconfig
-@@ -371,6 +371,8 @@ source "drivers/gpu/drm/solomon/Kconfig"
- 
- source "drivers/gpu/drm/sprd/Kconfig"
- 
-+source "drivers/gpu/drm/apu/Kconfig"
-+
- config DRM_HYPERV
- 	tristate "DRM Support for Hyper-V synthetic video device"
- 	depends on DRM && PCI && MMU && HYPERV
-diff --git a/drivers/gpu/drm/Makefile b/drivers/gpu/drm/Makefile
-index a33257d2bc7f..7cd8c0f3936a 100644
---- a/drivers/gpu/drm/Makefile
-+++ b/drivers/gpu/drm/Makefile
-@@ -191,6 +191,7 @@ obj-$(CONFIG_DRM_MCDE) += mcde/
- obj-$(CONFIG_DRM_TIDSS) += tidss/
- obj-y			+= xlnx/
- obj-y			+= gud/
-+obj-$(CONFIG_DRM_APU) += apu/
- obj-$(CONFIG_DRM_HYPERV) += hyperv/
- obj-y			+= solomon/
- obj-$(CONFIG_DRM_SPRD) += sprd/
 diff --git a/drivers/gpu/drm/apu/Kconfig b/drivers/gpu/drm/apu/Kconfig
-new file mode 100644
-index 000000000000..226dcf072115
---- /dev/null
+index 226dcf072115..a769df42091c 100644
+--- a/drivers/gpu/drm/apu/Kconfig
 +++ b/drivers/gpu/drm/apu/Kconfig
-@@ -0,0 +1,12 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+
-+config DRM_APU
-+	tristate "APU (AI Processor Unit)"
-+	select DRM_GEM_DMA_HELPER
-+	select DRM_KMS_HELPER
-+	help
-+	  This provides a DRM driver that provides some facilities to
-+	  communicate with an AI Processor Unit (APU).
-+	  The driver intends to provide a common infrastructure that may be
-+	  used to support many different APU.
+@@ -5,6 +5,7 @@ config DRM_APU
+ 	tristate "APU (AI Processor Unit)"
+ 	select DRM_GEM_DMA_HELPER
+ 	select DRM_KMS_HELPER
++	select DRM_SCHED
+ 	help
+ 	  This provides a DRM driver that provides some facilities to
+ 	  communicate with an AI Processor Unit (APU).
 diff --git a/drivers/gpu/drm/apu/Makefile b/drivers/gpu/drm/apu/Makefile
-new file mode 100644
-index 000000000000..ad85b88a8b52
---- /dev/null
+index 91894250d4c1..fc8d6380fc38 100644
+--- a/drivers/gpu/drm/apu/Makefile
 +++ b/drivers/gpu/drm/apu/Makefile
-@@ -0,0 +1,5 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+drm_apu-y += apu_drv.o
-+
-+obj-$(CONFIG_DRM_APU) += drm_apu.o
+@@ -2,5 +2,6 @@
+ 
+ drm_apu-y += apu_drv.o
+ drm_apu-y += apu_gem.o
++drm_apu-y += apu_sched.o
+ 
+ obj-$(CONFIG_DRM_APU) += drm_apu.o
 diff --git a/drivers/gpu/drm/apu/apu_drv.c b/drivers/gpu/drm/apu/apu_drv.c
-new file mode 100644
-index 000000000000..b420b13a9ffd
---- /dev/null
+index 323e267b0f53..b6bd340b2bc8 100644
+--- a/drivers/gpu/drm/apu/apu_drv.c
 +++ b/drivers/gpu/drm/apu/apu_drv.c
-@@ -0,0 +1,272 @@
+@@ -14,14 +14,15 @@
+ 
+ static LIST_HEAD(apu_devices);
+ 
+-static int ioctl_apu_state(struct drm_device *dev, void *data,
+-			   struct drm_file *file_priv);
+-
+ static const struct drm_ioctl_desc ioctls[] = {
+ 	DRM_IOCTL_DEF_DRV(APU_STATE, ioctl_apu_state,
+ 			  DRM_RENDER_ALLOW),
+ 	DRM_IOCTL_DEF_DRV(APU_GEM_NEW, ioctl_gem_new,
+ 			  DRM_RENDER_ALLOW),
++	DRM_IOCTL_DEF_DRV(APU_GEM_QUEUE, ioctl_gem_queue,
++			  DRM_RENDER_ALLOW),
++	DRM_IOCTL_DEF_DRV(APU_GEM_DEQUEUE, ioctl_gem_dequeue,
++			  DRM_RENDER_ALLOW),
+ };
+ 
+ DEFINE_DRM_GEM_DMA_FOPS(apu_drm_ops);
+@@ -134,7 +135,8 @@ struct apu_core *apu_core_alloc(struct apu_drm *apu, struct apu_core_ops *ops,
+ {
+ 	struct apu_core *core;
+ 
+-	if (!ops || !ops->is_ready)
++	if (!ops || !ops->alloc_prepare_request || !ops->send_request
++		|| !ops->handle_request || !ops->is_ready)
+ 		return NULL;
+ 
+ 	core = devm_kzalloc(apu->dev, sizeof(*core), GFP_KERNEL);
+@@ -148,6 +150,8 @@ struct apu_core *apu_core_alloc(struct apu_drm *apu, struct apu_core_ops *ops,
+ 	core->apu = apu;
+ 	core->priv = priv;
+ 	core->ops = ops;
++	spin_lock_init(&core->ctx_lock);
++	INIT_LIST_HEAD(&core->requests);
+ 
+ 	list_add(&core->node, &apu->cores);
+ 
+@@ -192,7 +196,7 @@ int apu_core_register(struct device *dev, struct apu_core *core, void *priv)
+ 			return ret;
+ 	}
+ 
+-	return 0;
++	return apu_drm_job_init(core);
+ }
+ EXPORT_SYMBOL_GPL(apu_core_register);
+ 
+@@ -203,6 +207,7 @@ EXPORT_SYMBOL_GPL(apu_core_register);
+  */
+ void apu_core_remove(struct apu_core *core)
+ {
++	apu_sched_fini(core);
+ 	core->dev_priv = NULL;
+ }
+ EXPORT_SYMBOL_GPL(apu_core_remove);
+@@ -233,42 +238,5 @@ struct apu_core *apu_find_core_by_priv(void *priv)
+ }
+ EXPORT_SYMBOL_GPL(apu_find_core_by_priv);
+ 
+-static struct apu_core *get_apu_core(struct apu_drm *apu, int device_id)
+-{
+-	struct apu_core *core;
+-
+-	list_for_each_entry(core, &apu->cores, node) {
+-		if (core->device_id == device_id)
+-			return core;
+-	}
+-
+-	return NULL;
+-}
+-
+-static void apu_core_update_state(struct apu_core *core)
+-{
+-	if (!core->ops->is_ready(core))
+-		core->flags &= ~APU_ONLINE;
+-}
+-
+-static int ioctl_apu_state(struct drm_device *dev, void *data,
+-			   struct drm_file *file_priv)
+-{
+-	struct apu_drm *apu = dev->dev_private;
+-	struct drm_apu_state *args = data;
+-	struct apu_core *core;
+-
+-	args->flags = 0;
+-
+-	core = get_apu_core(apu, args->device);
+-	if (!core)
+-		return -ENODEV;
+-
+-	apu_core_update_state(core);
+-	args->flags |= core->flags;
+-
+-	return 0;
+-}
+-
+ MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("Alexandre Bailon");
+diff --git a/drivers/gpu/drm/apu/apu_internal.h b/drivers/gpu/drm/apu/apu_internal.h
+index 203aadc58b72..021a3efdedf2 100644
+--- a/drivers/gpu/drm/apu/apu_internal.h
++++ b/drivers/gpu/drm/apu/apu_internal.h
+@@ -4,6 +4,7 @@
+ 
+ #include <drm/drm_drv.h>
+ #include <drm/drm_gem_dma_helper.h>
++#include <drm/gpu_scheduler.h>
+ 
+ struct apu_gem_object {
+ 	struct drm_gem_dma_object base;
+@@ -12,16 +13,21 @@ struct apu_gem_object {
+ 	u32 offset;
+ };
+ 
++struct apu_sched;
+ struct apu_core {
+ 	int device_id;
+ 	struct device *dev;
+ 	struct apu_core_ops *ops;
+ 	struct apu_drm *apu;
+ 
++	spinlock_t ctx_lock;
++	struct list_head requests;
++
+ 	struct list_head node;
+ 	void *priv;
+ 	void *dev_priv;
+ 
++	struct apu_sched *sched;
+ 	u32 flags;
+ };
+ 
+@@ -35,6 +41,43 @@ struct apu_drm {
+ 	struct ida ida;
+ };
+ 
++struct apu_job {
++	struct drm_sched_job base;
++
++	struct kref refcount;
++
++	struct apu_core *core;
++	struct apu_drm *apu;
++
++	/* Fence to be signaled by IRQ handler when the job is complete. */
++	struct dma_fence *done_fence;
++
++	__u32 cmd;
++
++	/* Exclusive fences we have taken from the BOs to wait for */
++	struct dma_fence **implicit_fences;
++	struct drm_gem_object **bos;
++	u32 bo_count;
++
++	/* Fence to be signaled by drm-sched once its done with the job */
++	struct dma_fence *render_done_fence;
++
++	void *data_in;
++	uint16_t size_in;
++	void *data_out;
++	uint16_t size_out;
++	uint16_t result;
++	uint16_t id;
++
++	struct list_head node;
++	struct drm_syncobj *sync_out;
++
++	struct apu_event *event;
++
++	void *request_data;
++	int request_len;
++};
++
+ /**
+  * @apu_core_ops: Provides platform specific callbacks
+  */
+@@ -46,6 +89,40 @@ struct apu_core_ops {
+ 	 */
+ 	int (*register_core)(struct apu_core *core);
+ 
++	/**
++	 * @alloc_prepare_request:
++	 *
++	 * Allocate and initialize the data to be sent to the APU.
++	 * Basically, this must convert the job object to something
++	 * that could be understand by the hardware accelerator.
++	 *
++	 * Returns:
++	 *
++	 * Zero on success, non-zero value on failure.
++	 */
++	int (*alloc_prepare_request)(struct apu_job *job);
++
++	/**
++	 * @send_data:
++	 *
++	 * Implements platform specific code to send the data previously
++	 * allocated using @alloc_data.
++	 *
++	 * Returns:
++	 *
++	 * Zero on success, non-zero value on failure.
++	 */
++	int (*send_request)(struct apu_job *job);
++
++	/**
++	 * @handle_request:
++	 *
++	 * Implements platform specific code to handle incoming request.
++	 * This must decode the data encoded using platform specific format
++	 * and convert it to generic format.
++	 */
++	int (*handle_request)(struct apu_job *job, void *data, int len);
++
+ 	/**
+ 	 * @is_ready:
+ 	 *
+@@ -68,9 +145,9 @@ static inline struct apu_gem_object *to_apu_bo(struct drm_gem_object *obj)
+ 			    base);
+ }
+ 
+-static inline void *apu_drm_priv(struct apu_core *apu_core)
++static inline void *apu_drm_priv(struct apu_core *core)
+ {
+-	return apu_core->dev_priv;
++	return core->dev_priv;
+ }
+ 
+ struct apu_drm *apu_dev_alloc(struct device *dev);
+@@ -94,5 +171,17 @@ int ioctl_gem_user_new(struct drm_device *dev, void *data,
+ 		       struct drm_file *file_priv);
+ struct dma_buf *apu_gem_prime_export(struct drm_gem_object *gem,
+ 				     int flags);
++int ioctl_gem_queue(struct drm_device *dev, void *data,
++		    struct drm_file *file_priv);
++int ioctl_gem_dequeue(struct drm_device *dev, void *data,
++		      struct drm_file *file_priv);
++int ioctl_apu_state(struct drm_device *dev, void *data,
++		    struct drm_file *file_priv);
++int apu_drm_callback(struct apu_core *core, uint16_t job_id, void *data, int len);
++
++struct apu_job;
++
++int apu_drm_job_init(struct apu_core *core);
++void apu_sched_fini(struct apu_core *core);
+ 
+ #endif /* __APU_INTERNAL_H__ */
+diff --git a/drivers/gpu/drm/apu/apu_sched.c b/drivers/gpu/drm/apu/apu_sched.c
+new file mode 100644
+index 000000000000..13b6fbd00bd8
+--- /dev/null
++++ b/drivers/gpu/drm/apu/apu_sched.c
+@@ -0,0 +1,564 @@
 +// SPDX-License-Identifier: GPL-2.0
 +//
 +// Copyright 2020 BayLibre SAS
 +
-+#include <linux/list.h>
-+#include <linux/module.h>
-+
 +#include <drm/apu_drm.h>
-+#include <drm/drm_drv.h>
-+#include <drm/drm_gem_dma_helper.h>
-+#include <drm/drm_probe_helper.h>
++#include <drm/drm_syncobj.h>
++#include <drm/gpu_scheduler.h>
 +
 +#include "apu_internal.h"
 +
-+static LIST_HEAD(apu_devices);
-+
-+static int ioctl_apu_state(struct drm_device *dev, void *data,
-+			   struct drm_file *file_priv);
-+
-+static const struct drm_ioctl_desc ioctls[] = {
-+	DRM_IOCTL_DEF_DRV(APU_STATE, ioctl_apu_state,
-+			  DRM_RENDER_ALLOW),
++struct apu_queue_state {
++	struct drm_gpu_scheduler sched;
++	u64 fence_context;
++	u64 seqno;
 +};
 +
-+DEFINE_DRM_GEM_DMA_FOPS(apu_drm_ops);
-+
-+static struct drm_driver apu_drm_driver = {
-+	.driver_features = DRIVER_GEM | DRIVER_SYNCOBJ,
-+	.name = "drm_apu",
-+	.desc = "APU DRM driver",
-+	.date = "20210319",
-+	.major = 1,
-+	.minor = 0,
-+	.patchlevel = 0,
-+	.ioctls = ioctls,
-+	.num_ioctls = ARRAY_SIZE(ioctls),
-+	.fops = &apu_drm_ops,
-+	DRM_GEM_DMA_DRIVER_OPS_WITH_DUMB_CREATE(drm_gem_dma_dumb_create),
++struct apu_request {
++	struct list_head node;
++	struct apu_job *job;
 +};
 +
-+/**
-+ * apu_dev_alloc() - Allocate a new APU device
-+ *
-+ * @dev: Pointer to the device instance.
++struct apu_sched {
++	struct apu_queue_state apu_queue;
++	spinlock_t job_lock;
++	struct drm_sched_entity sched_entity;
++};
 +
-+ * This allocate an APU device.
-+ * The APU describe a hardware accelerator that may have one or more
-+ * core (or unit).
-+ *
-+ * Returns: A pointer or NULL in case of failure.
-+ */
-+struct apu_drm *apu_dev_alloc(struct device *dev)
++struct apu_event {
++	struct drm_pending_event pending_event;
++	union {
++		struct drm_event base;
++		struct apu_job_event job_event;
++	};
++};
++
++static DEFINE_IDA(req_ida);
++static LIST_HEAD(complete_node);
++
++static void apu_core_update_state(struct apu_core *core)
 +{
-+	struct drm_device *drm;
-+	struct apu_drm *apu;
-+
-+	apu = devm_drm_dev_alloc(dev, &apu_drm_driver, typeof(*apu), base);
-+	if (IS_ERR(apu))
-+		return NULL;
-+	INIT_LIST_HEAD(&apu->cores);
-+
-+	apu->dev = dev;
-+	ida_init(&apu->ida);
-+	drm = &apu->base;
-+	drm->dev_private = apu;
-+
-+	dev_set_drvdata(dev, drm);
-+
-+	return apu;
++	if (!core->ops->is_ready(core))
++		core->flags &= ~APU_ONLINE;
 +}
-+EXPORT_SYMBOL_GPL(apu_dev_alloc);
 +
-+/**
-+ * apu_dev_register() - Register the APU to DRM
++static int apu_core_is_running(struct apu_core *core)
++{
++	apu_core_update_state(core);
++
++	return core->flags & APU_ONLINE;
++}
++
++static void apu_set_online(struct apu_core *core)
++{
++	core->flags |= APU_ONLINE;
++}
++
++static void apu_set_offline(struct apu_core *core)
++{
++	core->flags &= ~APU_ONLINE;
++}
++
++/*
++ * apu_drm_callback() - Handle the data coming from accelerator
 + *
-+ * @apu: Pointer to APU device
-+ *
-+ * Register an APU device to DRM.
-+ * On success, this creates everything required to use the APU.
-+ * Note that at this step, the cores (or units) have not been
-+ * registered so we can't yet perform any operations.
++ * @core: The pointer to the APU core
++ * @job_id: The job id
++ * @data: The data coming from the accelerator
++ * @len: The size of the data
 + *
 + * Returns: Zero on success, non-zero value on failure.
 + */
-+int apu_dev_register(struct apu_drm *apu)
++int apu_drm_callback(struct apu_core *core, uint16_t job_id, void *data, int len)
 +{
-+	struct drm_device *drm = &apu->base;
-+	int ret;
++	struct apu_request *apu_req, *tmp;
++	unsigned long flags;
++	int ret = -EINVAL;
 +
-+	ret = drm_dev_register(drm, 0);
++	spin_lock_irqsave(&core->ctx_lock, flags);
++	list_for_each_entry_safe(apu_req, tmp, &core->requests, node) {
++		struct apu_job *job = apu_req->job;
++
++		if (job && job_id == job->id) {
++			kref_get(&job->refcount);
++			ret = core->ops->handle_request(job, data, len);
++			list_add(&job->node, &complete_node);
++			list_del(&apu_req->node);
++			ida_simple_remove(&req_ida, job->id);
++			kfree(apu_req);
++			drm_send_event(&job->apu->base,
++				       &job->event->pending_event);
++			dma_fence_signal_locked(job->done_fence);
++			break;
++		}
++	}
++	spin_unlock_irqrestore(&core->ctx_lock, flags);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(apu_drm_callback);
++
++static void apu_job_cleanup(struct kref *ref)
++{
++	struct apu_job *job = container_of(ref, struct apu_job,
++					   refcount);
++	unsigned int i;
++
++	if (job->implicit_fences) {
++		for (i = 0; i < job->bo_count; i++)
++			dma_fence_put(job->implicit_fences[i]);
++		kvfree(job->implicit_fences);
++	}
++	dma_fence_put(job->done_fence);
++	dma_fence_put(job->render_done_fence);
++
++	if (job->bos) {
++		for (i = 0; i < job->bo_count; i++) {
++			struct apu_gem_object *apu_obj;
++
++			apu_obj = to_apu_bo(job->bos[i]);
++			drm_gem_object_put(job->bos[i]);
++		}
++
++		kvfree(job->bos);
++	}
++
++	kfree(job->data_out);
++	kfree(job->data_in);
++	kfree(job);
++}
++
++static void apu_job_put(struct apu_job *job)
++{
++	kref_put(&job->refcount, apu_job_cleanup);
++}
++
++static void apu_acquire_object_fences(struct drm_gem_object **bos,
++				      int bo_count,
++				      struct dma_fence **implicit_fences)
++{
++	int i;
++
++	for (i = 0; i < bo_count; i++)
++		dma_resv_get_singleton(bos[i]->resv, DMA_RESV_USAGE_KERNEL,
++				       &implicit_fences[i]);
++}
++
++static void apu_attach_object_fences(struct drm_gem_object **bos,
++				     int bo_count, struct dma_fence *fence)
++{
++	int i;
++
++	for (i = 0; i < bo_count; i++) {
++		dma_resv_reserve_fences(bos[i]->resv, 1);
++		dma_resv_add_fence(bos[i]->resv, fence, DMA_RESV_USAGE_KERNEL);
++	}
++}
++
++static int apu_job_push(struct apu_job *job)
++{
++	struct drm_sched_entity *entity = &job->core->sched->sched_entity;
++	struct ww_acquire_ctx acquire_ctx;
++	int ret = 0;
++	int i;
++
++	ret = drm_gem_lock_reservations(job->bos, job->bo_count, &acquire_ctx);
 +	if (ret)
 +		return ret;
 +
-+	list_add(&apu->node, &apu_devices);
++	ret = drm_sched_job_init(&job->base, entity, NULL);
++	if (ret)
++		goto unlock;
 +
-+	return 0;
++	drm_sched_job_arm(&job->base);
++	job->render_done_fence = dma_fence_get(&job->base.s_fence->finished);
++
++	kref_get(&job->refcount);	/* put by scheduler job completion */
++	apu_acquire_object_fences(job->bos, job->bo_count,
++				  job->implicit_fences);
++
++	drm_sched_entity_push_job(&job->base);
++
++	apu_attach_object_fences(job->bos, job->bo_count,
++				 job->render_done_fence);
++
++	for (i = 0; i < job->bo_count; i++)
++		ret = drm_sched_job_add_implicit_dependencies(&job->base, job->bos[i],
++							      true);
++unlock:
++	drm_gem_unlock_reservations(job->bos, job->bo_count, &acquire_ctx);
++
++	return ret;
 +}
-+EXPORT_SYMBOL_GPL(apu_dev_register);
 +
-+/**
-+ * apu_dev_unregister() - Unregister the APU
-+ *
-+ * @apu: Pointer to APU device
-+ *
-+ * This undo what has been done by apu_dev_register();
-+ */
-+void apu_dev_unregister(struct apu_drm *apu)
++static const char *apu_fence_get_driver_name(struct dma_fence *fence)
 +{
-+	struct drm_device *drm = &apu->base;
-+
-+	list_del(&apu->node);
-+	drm_dev_unregister(drm);
++	return "apu";
 +}
-+EXPORT_SYMBOL_GPL(apu_dev_unregister);
 +
-+/**
-+ * apu_core_alloc() - Allocate an APU core
-+ *
-+ * @apu: Pointer to APU device
-+ * @ops: The operation callbacks to use for this core
-+ * @priv:
-+ *
-+ * Allocate an APU core. This represents a computing unit that could
-+ * execute a job. The APU may be composed of different units that doesn't
-+ * accept same kind of jobs so we may to use differents callbacks for each
-+ * core.
-+ *
-+ * Returns: A pointer or NULL in case of failure.
-+ */
-+struct apu_core *apu_core_alloc(struct apu_drm *apu, struct apu_core_ops *ops,
-+				void *priv)
++static const char *apu_fence_get_timeline_name(struct dma_fence *fence)
 +{
-+	struct apu_core *core;
-+
-+	if (!ops || !ops->is_ready)
-+		return NULL;
-+
-+	core = devm_kzalloc(apu->dev, sizeof(*core), GFP_KERNEL);
-+	if (!core)
-+		return NULL;
-+
-+	core->device_id = ida_alloc(&apu->ida, GFP_KERNEL);
-+	if (core->device_id < 0)
-+		return NULL;
-+
-+	core->apu = apu;
-+	core->priv = priv;
-+	core->ops = ops;
-+
-+	list_add(&core->node, &apu->cores);
-+
-+	return core;
++	return "apu-0";
 +}
-+EXPORT_SYMBOL_GPL(apu_core_alloc);
 +
-+/**
-+ * apu_core_free() - Free an APU core allocated using apu_core_alloc()
-+ *
-+ * @core: The APU core to release
-+ */
-+void apu_core_free(struct apu_core *core)
++static void apu_fence_release(struct dma_fence *f)
 +{
-+	ida_free(&core->apu->ida, core->device_id);
-+	list_del(&core->node);
++	kfree(f);
 +}
-+EXPORT_SYMBOL_GPL(apu_core_free);
 +
-+/**
-+ * apu_core_register() - Register a core to APU device
-+ *
-+ * @dev: Pointer to APU device
-+ * @core: Pointer to APU core to register
-+ * @priv: Private data attached to this core
-+ *
-+ * Register an APU core and make it available for computing.
-+ * On success, userspace can start using this core.
-+ *
-+ * Returns: Zero on success, non-zero value on failure.
-+ */
-+int apu_core_register(struct device *dev, struct apu_core *core, void *priv)
++static const struct dma_fence_ops apu_fence_ops = {
++	.get_driver_name = apu_fence_get_driver_name,
++	.get_timeline_name = apu_fence_get_timeline_name,
++	.release = apu_fence_release,
++};
++
++static struct dma_fence *apu_fence_create(struct apu_sched *sched)
++{
++	struct dma_fence *fence;
++	struct apu_queue_state *apu_queue = &sched->apu_queue;
++
++	fence = kzalloc(sizeof(*fence), GFP_KERNEL);
++	if (!fence)
++		return ERR_PTR(-ENOMEM);
++
++	dma_fence_init(fence, &apu_fence_ops, &sched->job_lock,
++		       apu_queue->fence_context, apu_queue->seqno++);
++
++	return fence;
++}
++
++static struct apu_job *to_apu_job(struct drm_sched_job *sched_job)
++{
++	return container_of(sched_job, struct apu_job, base);
++}
++
++static int apu_job_hw_submit(struct apu_job *job)
 +{
 +	int ret;
++	struct apu_core *core = job->core;
++	struct apu_request *apu_req;
++	unsigned long flags;
 +
-+	core->dev_priv = priv;
-+	core->dev = dev;
++	ret = ida_simple_get(&req_ida, 0, 0xffff, GFP_KERNEL);
++	if (ret < 0)
++		return ret;
++	job->id = ret;
 +
-+	if (core->ops->register_core) {
-+		ret = core->ops->register_core(core);
-+		if (ret)
-+			return ret;
++	ret = core->ops->alloc_prepare_request(job);
++	if (ret || !job->request_data || !job->request_len) {
++		ret = -ENOMEM;
++		goto err_ida_remove;
 +	}
 +
++	apu_req = kzalloc(sizeof(*apu_req), GFP_KERNEL);
++	if (!apu_req) {
++		ret = -ENOMEM;
++		goto err_free_data;
++	}
++
++	apu_req->job = job;
++	spin_lock_irqsave(&core->ctx_lock, flags);
++	list_add(&apu_req->node, &core->requests);
++	spin_unlock_irqrestore(&core->ctx_lock, flags);
++	ret = core->ops->send_request(job);
++	if (ret < 0)
++		goto err;
++	kfree(job->request_data);
++
 +	return 0;
++
++err:
++	list_del(&apu_req->node);
++	kfree(apu_req);
++err_free_data:
++	kfree(job->request_data);
++err_ida_remove:
++	ida_simple_remove(&req_ida, job->id);
++
++	return ret;
 +}
-+EXPORT_SYMBOL_GPL(apu_core_register);
 +
-+/**
-+ * apu_core_remove() - Remove a core from the APU device
-+ *
-+ * @core: Pointer to APU core to remove
-+ */
-+void apu_core_remove(struct apu_core *core)
++static struct dma_fence *apu_job_run(struct drm_sched_job *sched_job)
 +{
-+	core->dev_priv = NULL;
++	struct apu_job *job = to_apu_job(sched_job);
++	struct dma_fence *fence = NULL;
++
++	if (unlikely(job->base.s_fence->finished.error))
++		return NULL;
++
++	fence = apu_fence_create(job->core->sched);
++	if (IS_ERR(fence))
++		return NULL;
++
++	job->done_fence = dma_fence_get(fence);
++
++	apu_job_hw_submit(job);
++
++	return fence;
 +}
-+EXPORT_SYMBOL_GPL(apu_core_remove);
 +
-+/**
-+ * apu_find_core_by_priv() - Find a core allocated by apu_core_alloc()
-+ *
-+ * @priv: The pointer used to allocate the core
-+ *
-+ * All core allocated using apu_core_alloc() is registered to a list.
-+ * This goes through the list to find the core using the @priv field.
-+ *
-+ * Returns: A pointer or NULL if no core has been found.
-+ */
-+struct apu_core *apu_find_core_by_priv(void *priv)
++static enum drm_gpu_sched_stat apu_job_timedout(struct drm_sched_job *sched_job)
 +{
-+	struct apu_drm *apu;
-+	struct apu_core *core;
++	struct apu_request *apu_req, *tmp;
++	struct apu_job *job = to_apu_job(sched_job);
 +
-+	list_for_each_entry(apu, &apu_devices, node) {
-+		list_for_each_entry(core, &apu->cores, node) {
-+			if (core->priv == priv)
-+				return core;
++	if (dma_fence_is_signaled(job->done_fence))
++		return DRM_GPU_SCHED_STAT_NOMINAL;
++
++	list_for_each_entry_safe(apu_req, tmp, &job->core->requests, node) {
++		/* Remove the request and notify user about timeout */
++		if (apu_req->job == job) {
++			kref_get(&job->refcount);
++			job->result = ETIMEDOUT;
++			list_add(&job->node, &complete_node);
++			list_del(&apu_req->node);
++			ida_simple_remove(&req_ida, job->id);
++			kfree(apu_req);
++			drm_send_event(&job->apu->base,
++				       &job->event->pending_event);
++			dma_fence_signal_locked(job->done_fence);
 +		}
 +	}
 +
-+	return NULL;
++	return DRM_GPU_SCHED_STAT_NOMINAL;
 +}
-+EXPORT_SYMBOL_GPL(apu_find_core_by_priv);
++
++static void apu_job_free(struct drm_sched_job *sched_job)
++{
++	struct apu_job *job = to_apu_job(sched_job);
++
++	drm_sched_job_cleanup(sched_job);
++
++	apu_job_put(job);
++}
++
++static const struct drm_sched_backend_ops apu_sched_ops = {
++	.run_job = apu_job_run,
++	.timedout_job = apu_job_timedout,
++	.free_job = apu_job_free
++};
++
++int apu_drm_job_init(struct apu_core *core)
++{
++	int ret;
++	struct apu_sched *apu_sched;
++	struct drm_gpu_scheduler *sched;
++
++	apu_sched = devm_kzalloc(core->dev, sizeof(*apu_sched), GFP_KERNEL);
++	if (!apu_sched)
++		return -ENOMEM;
++
++	sched = &apu_sched->apu_queue.sched;
++	apu_sched->apu_queue.fence_context = dma_fence_context_alloc(1);
++	ret = drm_sched_init(sched, &apu_sched_ops,
++			     1, 0, msecs_to_jiffies(500),
++			     NULL, NULL, "apu_js", core->dev);
++	if (ret) {
++		dev_err(core->dev, "Failed to create scheduler");
++		return ret;
++	}
++
++	ret = drm_sched_entity_init(&apu_sched->sched_entity,
++				    DRM_SCHED_PRIORITY_NORMAL,
++				    &sched, 1, NULL);
++	if (ret) {
++		dev_err(core->dev, "Failed to initialize scheduler entity");
++		drm_sched_fini(&core->sched->apu_queue.sched);
++		return ret;
++	}
++
++	core->sched = apu_sched;
++	apu_set_online(core);
++
++	return 0;
++}
++
++void apu_sched_fini(struct apu_core *core)
++{
++	apu_set_offline(core);
++	drm_sched_fini(&core->sched->apu_queue.sched);
++	devm_kfree(core->dev, core->sched);
++	core->sched = NULL;
++}
 +
 +static struct apu_core *get_apu_core(struct apu_drm *apu, int device_id)
 +{
@@ -406,13 +769,158 @@ index 000000000000..b420b13a9ffd
 +	return NULL;
 +}
 +
-+static void apu_core_update_state(struct apu_core *core)
++static int apu_lookup_bos(struct drm_device *dev, struct drm_file *file_priv,
++			  struct drm_apu_gem_queue *args, struct apu_job *job)
 +{
-+	if (!core->ops->is_ready(core))
-+		core->flags &= ~APU_ONLINE;
++	void __user *bo_handles;
++	int ret;
++
++	job->bo_count = args->bo_handle_count;
++
++	if (!job->bo_count)
++		return 0;
++
++	job->implicit_fences = kvmalloc_array(job->bo_count,
++					      sizeof(struct dma_fence *),
++					      GFP_KERNEL | __GFP_ZERO);
++	if (!job->implicit_fences)
++		return -ENOMEM;
++
++	bo_handles = (void __user *)(uintptr_t) args->bo_handles;
++	ret = drm_gem_objects_lookup(file_priv, bo_handles,
++				     job->bo_count, &job->bos);
++
++	return ret;
 +}
 +
-+static int ioctl_apu_state(struct drm_device *dev, void *data,
++int ioctl_gem_queue(struct drm_device *dev, void *data,
++		    struct drm_file *file_priv)
++{
++	struct apu_drm *apu = dev->dev_private;
++	struct drm_apu_gem_queue *args = data;
++	struct apu_event *event;
++	struct apu_core *core;
++	struct drm_syncobj *sync_out = NULL;
++	struct apu_job *job;
++	int ret = 0;
++
++	core = get_apu_core(apu, args->device);
++	if (!apu_core_is_running(core))
++		return -ENODEV;
++
++	if (args->out_sync > 0) {
++		sync_out = drm_syncobj_find(file_priv, args->out_sync);
++		if (!sync_out)
++			return -ENODEV;
++	}
++
++	job = kzalloc(sizeof(*job), GFP_KERNEL);
++	if (!job) {
++		ret = -ENOMEM;
++		goto fail_out_sync;
++	}
++
++	kref_init(&job->refcount);
++
++	job->apu = apu;
++	job->core = core;
++	job->cmd = args->cmd;
++	job->size_in = args->size_in;
++	job->size_out = args->size_out;
++	job->sync_out = sync_out;
++	if (job->size_in) {
++		job->data_in = kmalloc(job->size_in, GFP_KERNEL);
++		if (!job->data_in) {
++			ret = -ENOMEM;
++			goto fail_job;
++		}
++
++		ret =
++		    copy_from_user(job->data_in,
++				   (void __user *)(uintptr_t) args->data,
++				   job->size_in);
++		if (ret)
++			goto fail_job;
++	}
++
++	if (job->size_out) {
++		job->data_out = kmalloc(job->size_out, GFP_KERNEL);
++		if (!job->data_out) {
++			ret = -ENOMEM;
++			goto fail_job;
++		}
++	}
++
++	ret = apu_lookup_bos(dev, file_priv, args, job);
++	if (ret)
++		goto fail_job;
++
++	event = kzalloc(sizeof(*event), GFP_KERNEL);
++	event->base.length = sizeof(struct apu_job_event);
++	event->base.type = APU_JOB_COMPLETED;
++	event->job_event.out_sync = args->out_sync;
++	job->event = event;
++	ret = drm_event_reserve_init(dev, file_priv, &job->event->pending_event,
++				     &job->event->base);
++	if (ret)
++		goto fail_job;
++
++	ret = apu_job_push(job);
++	if (ret) {
++		drm_event_cancel_free(dev, &job->event->pending_event);
++		goto fail_job;
++	}
++
++	if (sync_out)
++		drm_syncobj_replace_fence(sync_out, job->render_done_fence);
++
++fail_job:
++	apu_job_put(job);
++fail_out_sync:
++	if (sync_out)
++		drm_syncobj_put(sync_out);
++
++	return ret;
++}
++
++int ioctl_gem_dequeue(struct drm_device *dev, void *data,
++		      struct drm_file *file_priv)
++{
++	struct drm_apu_gem_dequeue *args = data;
++	struct drm_syncobj *sync_out = NULL;
++	struct apu_job *job;
++	int ret = 0;
++
++	if (args->out_sync > 0) {
++		sync_out = drm_syncobj_find(file_priv, args->out_sync);
++		if (!sync_out)
++			return -ENODEV;
++	}
++
++	list_for_each_entry(job, &complete_node, node) {
++		if (job->sync_out == sync_out) {
++			if (job->data_out) {
++				ret = copy_to_user((void __user *)(uintptr_t)
++						   args->data, job->data_out,
++						   job->size_out);
++				args->size = job->size_out;
++			}
++			args->result = job->result;
++			list_del(&job->node);
++			apu_job_put(job);
++			drm_syncobj_put(sync_out);
++
++			return ret;
++		}
++	}
++
++	if (sync_out)
++		drm_syncobj_put(sync_out);
++
++	return 0;
++}
++
++int ioctl_apu_state(struct drm_device *dev, void *data,
 +			   struct drm_file *file_priv)
 +{
 +	struct apu_drm *apu = dev->dev_private;
@@ -430,117 +938,65 @@ index 000000000000..b420b13a9ffd
 +
 +	return 0;
 +}
-+
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Alexandre Bailon");
-diff --git a/drivers/gpu/drm/apu/apu_internal.h b/drivers/gpu/drm/apu/apu_internal.h
-new file mode 100644
-index 000000000000..58d93a16c68f
---- /dev/null
-+++ b/drivers/gpu/drm/apu/apu_internal.h
-@@ -0,0 +1,68 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __APU_INTERNAL_H__
-+#define __APU_INTERNAL_H__
-+
-+#include <drm/drm_drv.h>
-+
-+struct apu_core {
-+	int device_id;
-+	struct device *dev;
-+	struct apu_core_ops *ops;
-+	struct apu_drm *apu;
-+
-+	struct list_head node;
-+	void *priv;
-+	void *dev_priv;
-+
-+	u32 flags;
-+};
-+
-+struct apu_drm {
-+	struct drm_device base;
-+	struct device *dev;
-+
-+	struct list_head cores;
-+	struct list_head node;
-+
-+	struct ida ida;
-+};
-+
-+/**
-+ * @apu_core_ops: Provides platform specific callbacks
-+ */
-+struct apu_core_ops {
-+	/**
-+	 * @register_core:
-+	 *
-+	 * Optional. Platform specific APU core registration.
-+	 */
-+	int (*register_core)(struct apu_core *core);
-+
-+	/**
-+	 * @is_ready:
-+	 *
-+	 * Implements platform specific code to test if APU is ready to receive
-+	 * commands.
-+	 * Basically, an APU core may be running but not be ready to handle
-+	 * commands. This allows checking if APU is ready and start executing
-+	 * requests.
-+	 *
-+	 * Returns:
-+	 *
-+	 * One if the APU is ready or zero.
-+	 */
-+	int (*is_ready)(struct apu_core *core);
-+};
-+
-+struct apu_drm *apu_dev_alloc(struct device *dev);
-+int apu_dev_register(struct apu_drm *apu);
-+void apu_dev_unregister(struct apu_drm *apu);
-+
-+struct apu_core *apu_core_alloc(struct apu_drm *apu, struct apu_core_ops *ops,
-+				void *priv);
-+void apu_core_free(struct apu_core *core);
-+int apu_core_register(struct device *dev, struct apu_core *core, void *priv);
-+void apu_core_remove(struct apu_core *core);
-+struct apu_core *apu_find_core_by_priv(void *priv);
-+
-+#endif /* __APU_INTERNAL_H__ */
 diff --git a/include/uapi/drm/apu_drm.h b/include/uapi/drm/apu_drm.h
-new file mode 100644
-index 000000000000..d50c63d1b813
---- /dev/null
+index 14fc478f45dc..c47000097040 100644
+--- a/include/uapi/drm/apu_drm.h
 +++ b/include/uapi/drm/apu_drm.h
-@@ -0,0 +1,28 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note*/
+@@ -9,6 +9,8 @@
+ extern "C" {
+ #endif
+ 
++#define APU_JOB_COMPLETED 0x80000000
 +
-+#ifndef __UAPI_APU_DRM_H__
-+#define __UAPI_APU_DRM_H__
-+
-+#include "drm.h"
-+
-+#if defined(__cplusplus)
-+extern "C" {
-+#endif
-+
-+#define APU_ONLINE		BIT(0)
-+
-+struct drm_apu_state {
+ /*
+  * Please note that modifications to all structs defined here are
+  * subject to backwards-compatibility constraints.
+@@ -21,6 +23,29 @@ struct drm_apu_gem_new {
+ 	__u64 offset;			/* out */
+ };
+ 
++struct drm_apu_gem_queue {
 +	__u32 device;
-+	__u32 flags;
++	__u32 cmd;
++	__u32 out_sync;
++	__u64 bo_handles;
++	__u32 bo_handle_count;
++	__u16 size_in;
++	__u16 size_out;
++	__u64 data;
 +};
 +
-+#define DRM_APU_STATE			0x00
-+#define DRM_APU_NUM_IOCTLS		0x01
++struct drm_apu_gem_dequeue {
++	__u32 out_sync;
++	__u16 result;
++	__u16 size;
++	__u64 data;
++};
 +
-+#define DRM_IOCTL_APU_STATE		DRM_IOWR(DRM_COMMAND_BASE + DRM_APU_STATE, struct drm_apu_state)
++struct apu_job_event {
++	struct drm_event base;
++	__u32 out_sync;
++};
 +
-+#if defined(__cplusplus)
-+}
-+#endif
-+
-+#endif /* __UAPI_APU_DRM_H__ */
+ #define APU_ONLINE		BIT(0)
+ 
+ struct drm_apu_state {
+@@ -30,10 +55,14 @@ struct drm_apu_state {
+ 
+ #define DRM_APU_STATE			0x00
+ #define DRM_APU_GEM_NEW			0x01
+-#define DRM_APU_NUM_IOCTLS		0x02
++#define DRM_APU_GEM_QUEUE		0x02
++#define DRM_APU_GEM_DEQUEUE		0x03
++#define DRM_APU_NUM_IOCTLS		0x04
+ 
+ #define DRM_IOCTL_APU_STATE		DRM_IOWR(DRM_COMMAND_BASE + DRM_APU_STATE, struct drm_apu_state)
+ #define DRM_IOCTL_APU_GEM_NEW		DRM_IOWR(DRM_COMMAND_BASE + DRM_APU_GEM_NEW, struct drm_apu_gem_new)
++#define DRM_IOCTL_APU_GEM_QUEUE		DRM_IOWR(DRM_COMMAND_BASE + DRM_APU_GEM_QUEUE, struct drm_apu_gem_queue)
++#define DRM_IOCTL_APU_GEM_DEQUEUE	DRM_IOWR(DRM_COMMAND_BASE + DRM_APU_GEM_DEQUEUE, struct drm_apu_gem_dequeue)
+ 
+ #if defined(__cplusplus)
+ }
 -- 
 2.39.2
 
