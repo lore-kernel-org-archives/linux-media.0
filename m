@@ -2,124 +2,80 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B97C6C77B75
-	for <linux-media@archiver.kernel.org>; Wed, 17 May 2023 11:57:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CC65C77B7A
+	for <linux-media@archiver.kernel.org>; Wed, 17 May 2023 12:08:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231400AbjEQL5i (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 May 2023 07:57:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42456 "EHLO
+        id S231235AbjEQMI3 convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 May 2023 08:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231322AbjEQL5g (ORCPT
+        with ESMTP id S231542AbjEQMIM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 May 2023 07:57:36 -0400
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9EEC359E
-        for <linux-media@vger.kernel.org>; Wed, 17 May 2023 04:56:50 -0700 (PDT)
-Received: from droid10-sz.amlogic.com (10.28.11.69) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server id 15.1.2507.13; Wed, 17 May 2023
- 19:56:39 +0800
-From:   zelong dong <zelong.dong@amlogic.com>
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-CC:     <linux-media@vger.kernel.org>, <linux-amlogic@lists.infradead.org>,
-        <Qianggui.Song@amlogic.com>, <Yonghui.Yu@amlogic.com>,
-        <kelvin.zhang@amlogic.com>, Zelong Dong <zelong.dong@amlogic.com>
-Subject: [PATCH v2 1/3] media: rc: meson-ir: sort Meson IR Controller register macros
-Date:   Wed, 17 May 2023 19:56:33 +0800
-Message-ID: <20230517115635.31565-2-zelong.dong@amlogic.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230517115635.31565-1-zelong.dong@amlogic.com>
-References: <20230517115635.31565-1-zelong.dong@amlogic.com>
+        Wed, 17 May 2023 08:08:12 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E312F83D0
+        for <linux-media@vger.kernel.org>; Wed, 17 May 2023 05:06:17 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1pzFv3-0000ip-8A; Wed, 17 May 2023 14:06:13 +0200
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1pzFv0-000pZf-Cg; Wed, 17 May 2023 14:06:10 +0200
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1pzFuz-0007Kp-Et; Wed, 17 May 2023 14:06:09 +0200
+Message-ID: <7e124c395996217c6d5fa85ee82264ec85e6818d.camel@pengutronix.de>
+Subject: Re: [PATCH v2 00/31] Separate links and async sub-devices
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Marcel Ziswiler <marcel@ziswiler.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org
+Cc:     laurent.pinchart@ideasonboard.com, hverkuil@xs4all.nl,
+        Francesco Dolcini <francesco@dolcini.it>,
+        aishwarya.kothari@toradex.com, Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Hyun Kwon <hyun.kwon@xilinx.com>, bingbu.cao@intel.com
+Date:   Wed, 17 May 2023 14:06:09 +0200
+In-Reply-To: <7b015114450646f6ead6bdfbe9301e3bbf596d05.camel@ziswiler.com>
+References: <20230516095517.611711-1-sakari.ailus@linux.intel.com>
+         <2234496be65fd2a5aeccac278f6c37ddf104514e.camel@pengutronix.de>
+         <7b015114450646f6ead6bdfbe9301e3bbf596d05.camel@ziswiler.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1+deb11u2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.28.11.69]
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Zelong Dong <zelong.dong@amlogic.com>
+Hi Marcel,
 
-There are more registers to come in the next Meson IR Controller.
-For defining clearly, sort register macros and let address and bit
-macros as a set.
+On Mi, 2023-05-17 at 13:24 +0200, Marcel Ziswiler wrote:
+> Hi Philipp
+> 
+> On Wed, 2023-05-17 at 11:43 +0200, Philipp Zabel wrote:
+> > Hi Sakari,
+> > 
+> > On Di, 2023-05-16 at 12:54 +0300, Sakari Ailus wrote:
+> > > Hi all,
+> > > 
+> > > This set adds support for multiple downstream links in an async
+> > > sub-device, by separating the sub-device registration from the link
+> > > creation.
+> > 
+> > thank you, capture works again on i.MX6QP (tested with TC358764).
+> 
+> You probably meant TC358743 being HDMI/CSI as TC358764 is DSI/LVDS, right?
 
-Signed-off-by: Zelong Dong <zelong.dong@amlogic.com>
----
- drivers/media/rc/meson-ir.c | 35 +++++++++++++++++------------------
- 1 file changed, 17 insertions(+), 18 deletions(-)
+Yes, muscle memory auto-completion failure. Thanks!
 
-diff --git a/drivers/media/rc/meson-ir.c b/drivers/media/rc/meson-ir.c
-index 4b769111f78e..a32d034b33aa 100644
---- a/drivers/media/rc/meson-ir.c
-+++ b/drivers/media/rc/meson-ir.c
-@@ -19,44 +19,43 @@
- 
- #define DRIVER_NAME		"meson-ir"
- 
--/* valid on all Meson platforms */
- #define IR_DEC_LDR_ACTIVE	0x00
-+
- #define IR_DEC_LDR_IDLE		0x04
-+
- #define IR_DEC_LDR_REPEAT	0x08
-+
- #define IR_DEC_BIT_0		0x0c
--#define IR_DEC_REG0		0x10
--#define IR_DEC_FRAME		0x14
--#define IR_DEC_STATUS		0x18
--#define IR_DEC_REG1		0x1c
--/* only available on Meson 8b and newer */
--#define IR_DEC_REG2		0x20
- 
-+#define IR_DEC_REG0		0x10
- #define REG0_RATE_MASK		GENMASK(11, 0)
- 
--#define DECODE_MODE_NEC		0x0
--#define DECODE_MODE_RAW		0x2
-+#define IR_DEC_FRAME		0x14
-+
-+#define IR_DEC_STATUS		0x18
-+#define STATUS_IR_DEC_IN	BIT(8)
- 
--/* Meson 6b uses REG1 to configure the mode */
-+#define IR_DEC_REG1		0x1c
-+#define REG1_TIME_IV_MASK	GENMASK(28, 16)
-+#define REG1_ENABLE		BIT(15)
- #define REG1_MODE_MASK		GENMASK(8, 7)
- #define REG1_MODE_SHIFT		7
-+#define REG1_IRQSEL_MASK	GENMASK(3, 2)
-+#define REG1_RESET		BIT(0)
- 
--/* Meson 8b / GXBB use REG2 to configure the mode */
-+/* The following regs are only available on Meson 8b and newer */
-+#define IR_DEC_REG2		0x20
- #define REG2_MODE_MASK		GENMASK(3, 0)
- #define REG2_MODE_SHIFT		0
- 
--#define REG1_TIME_IV_MASK	GENMASK(28, 16)
-+#define DECODE_MODE_NEC		0x0
-+#define DECODE_MODE_RAW		0x2
- 
--#define REG1_IRQSEL_MASK	GENMASK(3, 2)
- #define REG1_IRQSEL_NEC_MODE	0
- #define REG1_IRQSEL_RISE_FALL	1
- #define REG1_IRQSEL_FALL	2
- #define REG1_IRQSEL_RISE	3
- 
--#define REG1_RESET		BIT(0)
--#define REG1_ENABLE		BIT(15)
--
--#define STATUS_IR_DEC_IN	BIT(8)
--
- #define MESON_TRATE		10	/* us */
- 
- struct meson_ir {
--- 
-2.35.1
-
+regards
+Philipp
