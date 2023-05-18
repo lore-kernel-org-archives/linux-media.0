@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9F40C77B7D
-	for <linux-media@archiver.kernel.org>; Thu, 18 May 2023 15:42:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03BB9C77B7D
+	for <linux-media@archiver.kernel.org>; Thu, 18 May 2023 15:49:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231738AbjERPmV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 May 2023 11:42:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60330 "EHLO
+        id S230211AbjERPtC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 May 2023 11:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231136AbjERPmU (ORCPT
+        with ESMTP id S230031AbjERPtB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 May 2023 11:42:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C128B119
-        for <linux-media@vger.kernel.org>; Thu, 18 May 2023 08:41:36 -0700 (PDT)
+        Thu, 18 May 2023 11:49:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C413E51
+        for <linux-media@vger.kernel.org>; Thu, 18 May 2023 08:47:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684424490;
+        s=mimecast20190719; t=1684424856;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fsBx2IUJo1FJJuPZ7Jw4/EiwOzCRMMmI9x+UKyPNyr4=;
-        b=fsJZWhX8tZSfLmDTPiD+p77hOJvRN6Rhv9GZgBRWygQ4oc1bSO3QSvmTr4WVB6XpazzcXA
-        isI81VS2+FxnmVyTiNyf3Ri6TSJs+3CUQf/C3wAtHdhnj1q8UvaMln47NneoDhvO6gzX25
-        h23rb+o9NmVyQnz5EE6xQKofH9vWtsg=
+        bh=X83KgGZcT792lART6KF/8JJuuBwRSZih54spn3pR8+o=;
+        b=FZ3pDdob1ii5bPKIGJNe82qXJd/YqXNkN4InMiZahdx3m32cPG3LfXNnxG++1XzcRGU6Nz
+        RpN7S/pkmMcHpZVbfF0Qs0QCC6ptctxLEC9wkZ+aXAQkVGwUuztmiOjlqymG35+sk7WkV/
+        lIDqx3gd0FhnaLgu/GaOrvzgKqu5HBE=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-616-KFPsuMxfNSa07lhyg4JtGQ-1; Thu, 18 May 2023 11:37:41 -0400
-X-MC-Unique: KFPsuMxfNSa07lhyg4JtGQ-1
+ us-mta-498-VX0c6g4yNWm-hQcEF_-HnA-1; Thu, 18 May 2023 11:37:48 -0400
+X-MC-Unique: VX0c6g4yNWm-hQcEF_-HnA-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 33311282CCBD;
-        Thu, 18 May 2023 15:37:41 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3EA28282CCB0;
+        Thu, 18 May 2023 15:37:48 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.192.133])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A8C8663F5F;
-        Thu, 18 May 2023 15:37:39 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B205563F8F;
+        Thu, 18 May 2023 15:37:46 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -48,9 +48,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>, Kate Hsuan <hpa@redhat.com>,
         Nable <nable.maininbox@googlemail.com>,
         andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 3/9] media: atomisp: Remove atomisp_video_init() parametrization
-Date:   Thu, 18 May 2023 17:37:27 +0200
-Message-Id: <20230518153733.195306-4-hdegoede@redhat.com>
+Subject: [PATCH 7/9] media: atomisp: Move pad linking to atomisp_register_device_nodes()
+Date:   Thu, 18 May 2023 17:37:31 +0200
+Message-Id: <20230518153733.195306-8-hdegoede@redhat.com>
 In-Reply-To: <20230518153733.195306-1-hdegoede@redhat.com>
 References: <20230518153733.195306-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,120 +60,119 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Now that we only have a single /dev/video# node it is no longer
-necessary for atomisp_video_init() to be parametrized.
+atomisp_register_device_nodes() already iterates over the ports/sensors
+in a loop and that loop already does not include the TPG input.
 
-Remove its parameters and while at it also change the name
-from the single /dev/video# node from "ATOMISP ISP PREVIEW output"
-to "ATOMISP video output".
+So we can simply setup the CSI2-port <-> ISP and sensor <-> CSI2-port
+mediactl-pad links there instead of repeating the loop in
+atomisp_create_pads_links(), which atomisp_register_device_nodes()
+used to call later on.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- .../staging/media/atomisp/pci/atomisp_fops.c  |  2 +-
- .../media/atomisp/pci/atomisp_subdev.c        |  2 +-
- .../media/atomisp/pci/atomisp_subdev.h        |  2 --
- .../staging/media/atomisp/pci/atomisp_v4l2.c  | 24 +++++--------------
- .../staging/media/atomisp/pci/atomisp_v4l2.h  |  3 +--
- 5 files changed, 9 insertions(+), 24 deletions(-)
+ .../media/atomisp/pci/atomisp_subdev.c        | 35 -------------------
+ .../media/atomisp/pci/atomisp_subdev.h        |  1 -
+ .../staging/media/atomisp/pci/atomisp_v4l2.c  | 16 ++++++++-
+ 3 files changed, 15 insertions(+), 37 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_fops.c b/drivers/staging/media/atomisp/pci/atomisp_fops.c
-index fb42c2710795..36e441dce7d5 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_fops.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_fops.c
-@@ -537,7 +537,7 @@ static int atomisp_open(struct file *file)
- 
- 	atomisp_subdev_init_struct(asd);
- 	/* Ensure that a mode is set */
--	v4l2_ctrl_s_ctrl(asd->run_mode, pipe->default_run_mode);
-+	v4l2_ctrl_s_ctrl(asd->run_mode, ATOMISP_RUN_MODE_PREVIEW);
- 
- 	pipe->users++;
- 	mutex_unlock(&isp->mutex);
 diff --git a/drivers/staging/media/atomisp/pci/atomisp_subdev.c b/drivers/staging/media/atomisp/pci/atomisp_subdev.c
-index 8b99805bcc77..c2ae77cd77a7 100644
+index c2ae77cd77a7..7985a0319a39 100644
 --- a/drivers/staging/media/atomisp/pci/atomisp_subdev.c
 +++ b/drivers/staging/media/atomisp/pci/atomisp_subdev.c
-@@ -898,7 +898,7 @@ static int isp_subdev_init_entities(struct atomisp_sub_device *asd)
- 	if (ret)
- 		return ret;
+@@ -933,41 +933,6 @@ static int isp_subdev_init_entities(struct atomisp_sub_device *asd)
+ 	return asd->ctrl_handler.error;
+ }
  
--	ret = atomisp_video_init(&asd->video_out, "PREVIEW", ATOMISP_RUN_MODE_PREVIEW);
-+	ret = atomisp_video_init(&asd->video_out);
- 	if (ret < 0)
- 		return ret;
- 
+-int atomisp_create_pads_links(struct atomisp_device *isp)
+-{
+-	int i, ret;
+-
+-	for (i = 0; i < ATOMISP_CAMERA_NR_PORTS; i++) {
+-		ret = media_create_pad_link(&isp->csi2_port[i].subdev.entity,
+-					    CSI2_PAD_SOURCE, &isp->asd.subdev.entity,
+-					    ATOMISP_SUBDEV_PAD_SINK, 0);
+-		if (ret < 0)
+-			return ret;
+-	}
+-
+-	for (i = 0; i < isp->input_cnt; i++) {
+-		/* Don't create links for the test-pattern-generator */
+-		if (isp->inputs[i].type == TEST_PATTERN)
+-			continue;
+-
+-		ret = media_create_pad_link(&isp->inputs[i].camera->entity, 0,
+-					    &isp->csi2_port[isp->inputs[i].
+-						    port].subdev.entity,
+-					    CSI2_PAD_SINK,
+-					    MEDIA_LNK_FL_ENABLED |
+-					    MEDIA_LNK_FL_IMMUTABLE);
+-		if (ret < 0)
+-			return ret;
+-	}
+-
+-	ret = media_create_pad_link(&isp->asd.subdev.entity, ATOMISP_SUBDEV_PAD_SOURCE,
+-				    &isp->asd.video_out.vdev.entity, 0, 0);
+-	if (ret < 0)
+-		return ret;
+-
+-	return 0;
+-}
+-
+ static void atomisp_subdev_cleanup_entities(struct atomisp_sub_device *asd)
+ {
+ 	v4l2_ctrl_handler_free(&asd->ctrl_handler);
 diff --git a/drivers/staging/media/atomisp/pci/atomisp_subdev.h b/drivers/staging/media/atomisp/pci/atomisp_subdev.h
-index dc6970b48633..cd82554d5f65 100644
+index cd82554d5f65..c9f6561dbcb6 100644
 --- a/drivers/staging/media/atomisp/pci/atomisp_subdev.h
 +++ b/drivers/staging/media/atomisp/pci/atomisp_subdev.h
-@@ -67,8 +67,6 @@ struct atomisp_video_pipe {
- 	/* Filled through atomisp_get_css_frame_info() on queue setup */
- 	struct ia_css_frame_info frame_info;
+@@ -366,6 +366,5 @@ int atomisp_subdev_register_subdev(struct atomisp_sub_device *asd,
+ 				   struct v4l2_device *vdev);
+ int atomisp_subdev_init(struct atomisp_device *isp);
+ void atomisp_subdev_cleanup(struct atomisp_device *isp);
+-int atomisp_create_pads_links(struct atomisp_device *isp);
  
--	/* Store here the initial run mode */
--	unsigned int default_run_mode;
- 	/* Set from streamoff to disallow queuing further buffers in CSS */
- 	bool stopping;
- 
+ #endif /* __ATOMISP_SUBDEV_H__ */
 diff --git a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-index a2440f270ffe..94b9908139ab 100644
+index c668375e04ae..ef04effc66bf 100644
 --- a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
 +++ b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-@@ -333,34 +333,22 @@ const struct atomisp_dfs_config dfs_config_cht_soc = {
- 	.dfs_table_size = ARRAY_SIZE(dfs_rules_cht_soc),
- };
+@@ -943,6 +943,12 @@ static int atomisp_register_device_nodes(struct atomisp_device *isp)
+ 	int i, err;
  
--int atomisp_video_init(struct atomisp_video_pipe *video, const char *name,
--		       unsigned int run_mode)
-+int atomisp_video_init(struct atomisp_video_pipe *video)
- {
- 	int ret;
--	const char *direction;
--
--	switch (video->type) {
--	case V4L2_BUF_TYPE_VIDEO_CAPTURE:
--		direction = "output";
--		video->pad.flags = MEDIA_PAD_FL_SINK;
--		video->vdev.fops = &atomisp_fops;
--		video->vdev.ioctl_ops = &atomisp_ioctl_ops;
--		video->vdev.lock = &video->isp->mutex;
--		break;
--	default:
--		return -EINVAL;
--	}
+ 	for (i = 0; i < ATOMISP_CAMERA_NR_PORTS; i++) {
++		err = media_create_pad_link(&isp->csi2_port[i].subdev.entity,
++					    CSI2_PAD_SOURCE, &isp->asd.subdev.entity,
++					    ATOMISP_SUBDEV_PAD_SINK, 0);
++		if (err)
++			return err;
++
+ 		if (!isp->sensor_subdevs[i])
+ 			continue;
  
-+	video->pad.flags = MEDIA_PAD_FL_SINK;
- 	ret = media_entity_pads_init(&video->vdev.entity, 1, &video->pad);
- 	if (ret < 0)
- 		return ret;
+@@ -960,6 +966,13 @@ static int atomisp_register_device_nodes(struct atomisp_device *isp)
+ 		if (i == ATOMISP_CAMERA_PORT_PRIMARY)
+ 			input->motor = isp->motor;
  
- 	/* Initialize the video device. */
--	snprintf(video->vdev.name, sizeof(video->vdev.name),
--		 "ATOMISP ISP %s %s", name, direction);
-+	strscpy(video->vdev.name, "ATOMISP video output", sizeof(video->vdev.name));
-+	video->vdev.fops = &atomisp_fops;
-+	video->vdev.ioctl_ops = &atomisp_ioctl_ops;
-+	video->vdev.lock = &video->isp->mutex;
- 	video->vdev.release = video_device_release_empty;
- 	video_set_drvdata(&video->vdev, video->isp);
--	video->default_run_mode = run_mode;
++		err = media_create_pad_link(&input->camera->entity, 0,
++					    &isp->csi2_port[i].subdev.entity,
++					    CSI2_PAD_SINK,
++					    MEDIA_LNK_FL_ENABLED | MEDIA_LNK_FL_IMMUTABLE);
++		if (err)
++			return err;
++
+ 		isp->input_cnt++;
+ 	}
  
- 	return 0;
- }
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_v4l2.h b/drivers/staging/media/atomisp/pci/atomisp_v4l2.h
-index ccf1c0ac17b2..c8ee3ad83320 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_v4l2.h
-+++ b/drivers/staging/media/atomisp/pci/atomisp_v4l2.h
-@@ -26,8 +26,7 @@ struct v4l2_device;
- struct atomisp_device;
- struct firmware;
+@@ -983,7 +996,8 @@ static int atomisp_register_device_nodes(struct atomisp_device *isp)
+ 	if (err)
+ 		return err;
  
--int atomisp_video_init(struct atomisp_video_pipe *video, const char *name,
--		       unsigned int run_mode);
-+int atomisp_video_init(struct atomisp_video_pipe *video);
- void atomisp_video_unregister(struct atomisp_video_pipe *video);
- const struct firmware *atomisp_load_firmware(struct atomisp_device *isp);
- int atomisp_csi_lane_config(struct atomisp_device *isp);
+-	err = atomisp_create_pads_links(isp);
++	err = media_create_pad_link(&isp->asd.subdev.entity, ATOMISP_SUBDEV_PAD_SOURCE,
++				    &isp->asd.video_out.vdev.entity, 0, 0);
+ 	if (err)
+ 		return err;
+ 
 -- 
 2.40.1
 
