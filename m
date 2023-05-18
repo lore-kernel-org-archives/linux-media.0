@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03BB9C77B7D
-	for <linux-media@archiver.kernel.org>; Thu, 18 May 2023 15:49:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C432FC77B7A
+	for <linux-media@archiver.kernel.org>; Thu, 18 May 2023 15:49:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbjERPtC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 May 2023 11:49:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34586 "EHLO
+        id S230300AbjERPtG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 May 2023 11:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230031AbjERPtB (ORCPT
+        with ESMTP id S230031AbjERPtF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 May 2023 11:49:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C413E51
-        for <linux-media@vger.kernel.org>; Thu, 18 May 2023 08:47:40 -0700 (PDT)
+        Thu, 18 May 2023 11:49:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4DF1717
+        for <linux-media@vger.kernel.org>; Thu, 18 May 2023 08:47:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684424856;
+        s=mimecast20190719; t=1684424874;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=X83KgGZcT792lART6KF/8JJuuBwRSZih54spn3pR8+o=;
-        b=FZ3pDdob1ii5bPKIGJNe82qXJd/YqXNkN4InMiZahdx3m32cPG3LfXNnxG++1XzcRGU6Nz
-        RpN7S/pkmMcHpZVbfF0Qs0QCC6ptctxLEC9wkZ+aXAQkVGwUuztmiOjlqymG35+sk7WkV/
-        lIDqx3gd0FhnaLgu/GaOrvzgKqu5HBE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=BNOXaScYcAYGxBfdlGiH9IysKg5HHgXclCsqicNBvlc=;
+        b=ZEr8VCGQ9GY1WQ4ZuKkusn7Oo1Wr7ky+wJ+AwH+dKMBCLv39M+Jz0DmmgcKsLTGNRQim+9
+        Va/O7AzS1qG0OzesXbPLXc7j1PdI33Kjd8B0Mph4EqFRkhzKYnmkbjmWxJdPB/IgFfOyfN
+        pKh7yRa8BJkjXk9+zT9K5bMH3/ohR8k=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-498-VX0c6g4yNWm-hQcEF_-HnA-1; Thu, 18 May 2023 11:37:48 -0400
-X-MC-Unique: VX0c6g4yNWm-hQcEF_-HnA-1
+ us-mta-166-mvgqh3JiP_mOMQzW2Q7spw-1; Thu, 18 May 2023 11:37:43 -0400
+X-MC-Unique: mvgqh3JiP_mOMQzW2Q7spw-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3EA28282CCB0;
-        Thu, 18 May 2023 15:37:48 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0D14710146E1;
+        Thu, 18 May 2023 15:37:43 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.192.133])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B205563F8F;
-        Thu, 18 May 2023 15:37:46 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 663E063F8F;
+        Thu, 18 May 2023 15:37:41 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -48,9 +48,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>, Kate Hsuan <hpa@redhat.com>,
         Nable <nable.maininbox@googlemail.com>,
         andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 7/9] media: atomisp: Move pad linking to atomisp_register_device_nodes()
-Date:   Thu, 18 May 2023 17:37:31 +0200
-Message-Id: <20230518153733.195306-8-hdegoede@redhat.com>
+Subject: [PATCH 4/9] media: atomisp: Rename __get_mipi_port() to atomisp_port_to_mipi_port()
+Date:   Thu, 18 May 2023 17:37:28 +0200
+Message-Id: <20230518153733.195306-5-hdegoede@redhat.com>
 In-Reply-To: <20230518153733.195306-1-hdegoede@redhat.com>
 References: <20230518153733.195306-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,119 +60,70 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-atomisp_register_device_nodes() already iterates over the ports/sensors
-in a loop and that loop already does not include the TPG input.
+Rename __get_mipi_port() to atomisp_port_to_mipi_port(), this is not a
+private (not static) function so its name should be properly prefixed.
 
-So we can simply setup the CSI2-port <-> ISP and sensor <-> CSI2-port
-mediactl-pad links there instead of repeating the loop in
-atomisp_create_pads_links(), which atomisp_register_device_nodes()
-used to call later on.
+While at is also cleanup the weird handling of ATOMISP_CAMERA_PORT_TERTIARY
+this seems to be a left over from when the driver also supported CSI
+receivers with only 2 ports, but those are not supported by the current
+code base, so this can be cleaned up now.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- .../media/atomisp/pci/atomisp_subdev.c        | 35 -------------------
- .../media/atomisp/pci/atomisp_subdev.h        |  1 -
- .../staging/media/atomisp/pci/atomisp_v4l2.c  | 16 ++++++++-
- 3 files changed, 15 insertions(+), 37 deletions(-)
+ drivers/staging/media/atomisp/pci/atomisp_cmd.c | 10 ++++------
+ drivers/staging/media/atomisp/pci/atomisp_cmd.h |  4 ++--
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_subdev.c b/drivers/staging/media/atomisp/pci/atomisp_subdev.c
-index c2ae77cd77a7..7985a0319a39 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_subdev.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_subdev.c
-@@ -933,41 +933,6 @@ static int isp_subdev_init_entities(struct atomisp_sub_device *asd)
- 	return asd->ctrl_handler.error;
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_cmd.c b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
+index 9c44ffba2828..f4a0341d1f8d 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_cmd.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
+@@ -3893,8 +3893,8 @@ int atomisp_try_fmt(struct video_device *vdev, struct v4l2_pix_format *f)
+ 	return 0;
  }
  
--int atomisp_create_pads_links(struct atomisp_device *isp)
--{
--	int i, ret;
--
--	for (i = 0; i < ATOMISP_CAMERA_NR_PORTS; i++) {
--		ret = media_create_pad_link(&isp->csi2_port[i].subdev.entity,
--					    CSI2_PAD_SOURCE, &isp->asd.subdev.entity,
--					    ATOMISP_SUBDEV_PAD_SINK, 0);
--		if (ret < 0)
--			return ret;
--	}
--
--	for (i = 0; i < isp->input_cnt; i++) {
--		/* Don't create links for the test-pattern-generator */
--		if (isp->inputs[i].type == TEST_PATTERN)
--			continue;
--
--		ret = media_create_pad_link(&isp->inputs[i].camera->entity, 0,
--					    &isp->csi2_port[isp->inputs[i].
--						    port].subdev.entity,
--					    CSI2_PAD_SINK,
--					    MEDIA_LNK_FL_ENABLED |
--					    MEDIA_LNK_FL_IMMUTABLE);
--		if (ret < 0)
--			return ret;
--	}
--
--	ret = media_create_pad_link(&isp->asd.subdev.entity, ATOMISP_SUBDEV_PAD_SOURCE,
--				    &isp->asd.video_out.vdev.entity, 0, 0);
--	if (ret < 0)
--		return ret;
--
--	return 0;
--}
--
- static void atomisp_subdev_cleanup_entities(struct atomisp_sub_device *asd)
+-enum mipi_port_id __get_mipi_port(struct atomisp_device *isp,
+-				  enum atomisp_camera_port port)
++enum mipi_port_id atomisp_port_to_mipi_port(struct atomisp_device *isp,
++					    enum atomisp_camera_port port)
  {
- 	v4l2_ctrl_handler_free(&asd->ctrl_handler);
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_subdev.h b/drivers/staging/media/atomisp/pci/atomisp_subdev.h
-index cd82554d5f65..c9f6561dbcb6 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_subdev.h
-+++ b/drivers/staging/media/atomisp/pci/atomisp_subdev.h
-@@ -366,6 +366,5 @@ int atomisp_subdev_register_subdev(struct atomisp_sub_device *asd,
- 				   struct v4l2_device *vdev);
- int atomisp_subdev_init(struct atomisp_device *isp);
- void atomisp_subdev_cleanup(struct atomisp_device *isp);
--int atomisp_create_pads_links(struct atomisp_device *isp);
+ 	switch (port) {
+ 	case ATOMISP_CAMERA_PORT_PRIMARY:
+@@ -3902,9 +3902,7 @@ enum mipi_port_id __get_mipi_port(struct atomisp_device *isp,
+ 	case ATOMISP_CAMERA_PORT_SECONDARY:
+ 		return MIPI_PORT1_ID;
+ 	case ATOMISP_CAMERA_PORT_TERTIARY:
+-		if (MIPI_PORT1_ID + 1 != N_MIPI_PORT_ID)
+-			return MIPI_PORT1_ID + 1;
+-		fallthrough;
++		return MIPI_PORT2_ID;
+ 	default:
+ 		dev_err(isp->dev, "unsupported port: %d\n", port);
+ 		return MIPI_PORT0_ID;
+@@ -3980,7 +3978,7 @@ static inline int atomisp_set_sensor_mipi_to_isp(
+ 		return -EINVAL;
+ 	input_format = fc->atomisp_in_fmt;
+ 	atomisp_css_input_configure_port(asd,
+-					 __get_mipi_port(asd->isp, mipi_info->port),
++					 atomisp_port_to_mipi_port(asd->isp, mipi_info->port),
+ 					 mipi_info->num_lanes,
+ 					 0xffff4, mipi_freq,
+ 					 input_format,
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_cmd.h b/drivers/staging/media/atomisp/pci/atomisp_cmd.h
+index 783fb1e6f4f9..5270c370e463 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_cmd.h
++++ b/drivers/staging/media/atomisp/pci/atomisp_cmd.h
+@@ -285,8 +285,8 @@ void atomisp_buf_done(struct atomisp_sub_device *asd, int error,
+ /* Events. Only one event has to be exported for now. */
+ void atomisp_eof_event(struct atomisp_sub_device *asd, uint8_t exp_id);
  
- #endif /* __ATOMISP_SUBDEV_H__ */
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-index c668375e04ae..ef04effc66bf 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-@@ -943,6 +943,12 @@ static int atomisp_register_device_nodes(struct atomisp_device *isp)
- 	int i, err;
+-enum mipi_port_id __get_mipi_port(struct atomisp_device *isp,
+-				  enum atomisp_camera_port port);
++enum mipi_port_id atomisp_port_to_mipi_port(struct atomisp_device *isp,
++					    enum atomisp_camera_port port);
  
- 	for (i = 0; i < ATOMISP_CAMERA_NR_PORTS; i++) {
-+		err = media_create_pad_link(&isp->csi2_port[i].subdev.entity,
-+					    CSI2_PAD_SOURCE, &isp->asd.subdev.entity,
-+					    ATOMISP_SUBDEV_PAD_SINK, 0);
-+		if (err)
-+			return err;
-+
- 		if (!isp->sensor_subdevs[i])
- 			continue;
- 
-@@ -960,6 +966,13 @@ static int atomisp_register_device_nodes(struct atomisp_device *isp)
- 		if (i == ATOMISP_CAMERA_PORT_PRIMARY)
- 			input->motor = isp->motor;
- 
-+		err = media_create_pad_link(&input->camera->entity, 0,
-+					    &isp->csi2_port[i].subdev.entity,
-+					    CSI2_PAD_SINK,
-+					    MEDIA_LNK_FL_ENABLED | MEDIA_LNK_FL_IMMUTABLE);
-+		if (err)
-+			return err;
-+
- 		isp->input_cnt++;
- 	}
- 
-@@ -983,7 +996,8 @@ static int atomisp_register_device_nodes(struct atomisp_device *isp)
- 	if (err)
- 		return err;
- 
--	err = atomisp_create_pads_links(isp);
-+	err = media_create_pad_link(&isp->asd.subdev.entity, ATOMISP_SUBDEV_PAD_SOURCE,
-+				    &isp->asd.video_out.vdev.entity, 0, 0);
- 	if (err)
- 		return err;
- 
+ void atomisp_apply_css_parameters(
+     struct atomisp_sub_device *asd,
 -- 
 2.40.1
 
