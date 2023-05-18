@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C57BC7EE23
-	for <linux-media@archiver.kernel.org>; Thu, 18 May 2023 15:33:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 861B9C7EE23
+	for <linux-media@archiver.kernel.org>; Thu, 18 May 2023 15:33:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231409AbjERPdU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 May 2023 11:33:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55258 "EHLO
+        id S231441AbjERPdZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 May 2023 11:33:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231361AbjERPdS (ORCPT
+        with ESMTP id S231218AbjERPdY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 May 2023 11:33:18 -0400
+        Thu, 18 May 2023 11:33:24 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D423611D
-        for <linux-media@vger.kernel.org>; Thu, 18 May 2023 08:32:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74CA5121
+        for <linux-media@vger.kernel.org>; Thu, 18 May 2023 08:32:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684423948;
+        s=mimecast20190719; t=1684423953;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gxV8KVIKHlEgmg3dCfW2L8bUk1uiBPvCDIyn7VgJ5O4=;
-        b=eVJbqHa09xNPoEcZoUYfBkRdiuAIDTVI6cFjMsW6zVI/wTPknc8a2Wg5ntRHm+YCnDwjdR
-        PB9FoOac24G/QOGFeVNDM7/fEaKwzKVJV/A3PV5X93TWIObaHZ2o7zyeLzfvJ0/Fj3DrKb
-        7LedAt2tx/X1V866oeG17n9yMaj8GP8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=aQpbnMptJb6odDEC/or4lzJKM409r5z1A+o7C2M7BWM=;
+        b=Vrs9nrr2RigvEIFKBy0aTYgZqIevjtd6rMgZ/ng2HX0ZAy1yD6yMzS6QIplZ2cLTB5ep4a
+        mND1MdykW45MIVDL28sVCRVhZZW2EKqBBbTov+9EqErO2XsyPB0U2id8nraT9Ku3jcmMZI
+        VUlvzKhO6SbJl+eA0PaZG+g76kVg9xQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-156-KTKkyC18OS6YyHLg6QyG2Q-1; Thu, 18 May 2023 11:32:22 -0400
-X-MC-Unique: KTKkyC18OS6YyHLg6QyG2Q-1
+ us-mta-380-ijVm0HdYOlmn4drJFiqYhg-1; Thu, 18 May 2023 11:32:30 -0400
+X-MC-Unique: ijVm0HdYOlmn4drJFiqYhg-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F04EF3801F4D;
-        Thu, 18 May 2023 15:32:21 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E4856867959;
+        Thu, 18 May 2023 15:32:28 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.192.133])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7339B407890A;
-        Thu, 18 May 2023 15:32:20 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 66AF14078908;
+        Thu, 18 May 2023 15:32:27 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -48,9 +48,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>, Kate Hsuan <hpa@redhat.com>,
         Nable <nable.maininbox@googlemail.com>,
         andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 3/9] media: atomisp: gc0310: Turn into standard v4l2 sensor driver
-Date:   Thu, 18 May 2023 17:32:08 +0200
-Message-Id: <20230518153214.194976-4-hdegoede@redhat.com>
+Subject: [PATCH 7/9] media: atomisp: gc0310: Remove gc0310_s_config() function
+Date:   Thu, 18 May 2023 17:32:12 +0200
+Message-Id: <20230518153214.194976-8-hdegoede@redhat.com>
 In-Reply-To: <20230518153214.194976-1-hdegoede@redhat.com>
 References: <20230518153214.194976-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,62 +60,63 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Switch the atomisp-gc0310 driver to v4l2 async device registration.
+gc0310_s_config() used to call camera_sensor_platform_data.csi_cfg() back
+when the gc0310 driver was still using the atomisp_gmin_platform code
+for power-management.
 
-After this change this driver no longer depends on
-atomisp_gmin_platform and all atomisp-isms are gone.
+Now it is just a weirdly named wrapper around gc0310_detect(), drop
+gc0310_s_config() and make probe() call gc0310_detect() directly.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/staging/media/atomisp/i2c/atomisp-gc0310.c | 7 ++-----
- drivers/staging/media/atomisp/i2c/gc0310.h         | 2 --
- 2 files changed, 2 insertions(+), 7 deletions(-)
+ .../media/atomisp/i2c/atomisp-gc0310.c        | 20 +++++--------------
+ 1 file changed, 5 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/staging/media/atomisp/i2c/atomisp-gc0310.c b/drivers/staging/media/atomisp/i2c/atomisp-gc0310.c
-index de7de1765e6b..1db9580fca78 100644
+index 35367d6efd2c..486ea7979c57 100644
 --- a/drivers/staging/media/atomisp/i2c/atomisp-gc0310.c
 +++ b/drivers/staging/media/atomisp/i2c/atomisp-gc0310.c
-@@ -35,7 +35,6 @@
- #include <media/v4l2-acpi.h>
- #include <media/v4l2-device.h>
- #include <linux/io.h>
--#include "../include/linux/atomisp_gmin_platform.h"
+@@ -172,7 +172,10 @@ static int gc0310_detect(struct i2c_client *client)
+ 	if (!i2c_check_functionality(adapter, I2C_FUNC_I2C))
+ 		return -ENODEV;
  
- #include "gc0310.h"
+-	ret = i2c_smbus_read_word_swapped(client, GC0310_SC_CMMN_CHIP_ID_H);
++	ret = pm_runtime_get_sync(&client->dev);
++	if (ret >= 0)
++		ret = i2c_smbus_read_word_swapped(client, GC0310_SC_CMMN_CHIP_ID_H);
++	pm_runtime_put(&client->dev);
+ 	if (ret < 0) {
+ 		dev_err(&client->dev, "read sensor_id failed: %d\n", ret);
+ 		return -ENODEV;
+@@ -261,19 +264,6 @@ static int gc0310_s_stream(struct v4l2_subdev *sd, int enable)
+ 	return ret;
+ }
  
-@@ -374,8 +373,7 @@ static void gc0310_remove(struct i2c_client *client)
+-static int gc0310_s_config(struct v4l2_subdev *sd)
+-{
+-	struct i2c_client *client = v4l2_get_subdevdata(sd);
+-	int ret;
+-
+-	ret = pm_runtime_get_sync(&client->dev);
+-	if (ret >= 0)
+-		ret = gc0310_detect(client);
+-
+-	pm_runtime_put(&client->dev);
+-	return ret;
+-}
+-
+ static int gc0310_g_frame_interval(struct v4l2_subdev *sd,
+ 				   struct v4l2_subdev_frame_interval *interval)
+ {
+@@ -403,7 +393,7 @@ static int gc0310_probe(struct i2c_client *client)
+ 	pm_runtime_set_autosuspend_delay(&client->dev, 1000);
+ 	pm_runtime_use_autosuspend(&client->dev);
  
- 	dev_dbg(&client->dev, "gc0310_remove...\n");
- 
--	atomisp_unregister_subdev(sd);
--	v4l2_device_unregister_subdev(sd);
-+	v4l2_async_unregister_subdev(sd);
- 	media_entity_cleanup(&dev->sd.entity);
- 	v4l2_ctrl_handler_free(&dev->ctrls.handler);
- 	pm_runtime_disable(&client->dev);
-@@ -434,8 +432,7 @@ static int gc0310_probe(struct i2c_client *client)
- 		return ret;
- 	}
- 
--	ret = atomisp_register_sensor_no_gmin(&dev->sd, 1, ATOMISP_INPUT_FORMAT_RAW_8,
--					      atomisp_bayer_order_grbg);
-+	ret = v4l2_async_register_subdev_sensor(&dev->sd);
+-	ret = gc0310_s_config(&dev->sd);
++	ret = gc0310_detect(client);
  	if (ret) {
  		gc0310_remove(client);
  		return ret;
-diff --git a/drivers/staging/media/atomisp/i2c/gc0310.h b/drivers/staging/media/atomisp/i2c/gc0310.h
-index d40406289598..b5200a9c08a2 100644
---- a/drivers/staging/media/atomisp/i2c/gc0310.h
-+++ b/drivers/staging/media/atomisp/i2c/gc0310.h
-@@ -31,8 +31,6 @@
- #include <linux/v4l2-mediabus.h>
- #include <media/media-entity.h>
- 
--#include "../include/linux/atomisp_platform.h"
--
- #define GC0310_NATIVE_WIDTH			656
- #define GC0310_NATIVE_HEIGHT			496
- 
 -- 
 2.40.1
 
