@@ -2,62 +2,62 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5677CC77B75
-	for <linux-media@archiver.kernel.org>; Fri, 19 May 2023 10:19:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52D3EC77B7F
+	for <linux-media@archiver.kernel.org>; Fri, 19 May 2023 10:22:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231776AbjESKTx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 19 May 2023 06:19:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46202 "EHLO
+        id S231847AbjESKW3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 19 May 2023 06:22:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231855AbjESKTr (ORCPT
+        with ESMTP id S231854AbjESKW2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 19 May 2023 06:19:47 -0400
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC0B10DF
-        for <linux-media@vger.kernel.org>; Fri, 19 May 2023 03:19:42 -0700 (PDT)
-Received: by mail-qv1-xf33.google.com with SMTP id 6a1803df08f44-623852980dfso14167426d6.0
-        for <linux-media@vger.kernel.org>; Fri, 19 May 2023 03:19:42 -0700 (PDT)
+        Fri, 19 May 2023 06:22:28 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE5B10C3
+        for <linux-media@vger.kernel.org>; Fri, 19 May 2023 03:22:24 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id 6a1803df08f44-623836551f5so14014366d6.1
+        for <linux-media@vger.kernel.org>; Fri, 19 May 2023 03:22:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684491581; x=1687083581;
+        d=gmail.com; s=20221208; t=1684491743; x=1687083743;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6TOOnGY6/7gbApavboZs3pH4Q/1VjbXN7/OaowXsj4E=;
-        b=saKCCx6itui34N6KgF9b+gu5YY8tKBMEVp/tI7MobXPz67zSWkf5ekD7kU0GIAtjfS
-         dGI/fGInZgBvhjpDmbesWrok0cjuXCfTppaota/SPoKqeATxwTOaJbwLT+zR6Kb0v+w4
-         2XEcSR+ofx3FDAe3gYKZLkOqhxbnqNZ00J+dqF6K7KgNMT24sP1Sad88ctbRpsPUSC08
-         LbuByaYoB7PmbAz6VhQXs2OyVhRflAJSa0alMzvff9EsQgjWPPovqpqp7SbPEnZ3H+fM
-         L522JGMhpB2uiFxWUvysJ4O9TdyGUzYIv38MglKWO9AWBfSnNKxFwW3EWyPwkea3TzCR
-         +TKA==
+        bh=GtpbF2tXZUjlQDCpCAkUtufwtzGeJXDTY4JTRH+Iw2M=;
+        b=E/YwHjpl1qYGPpGxLSzw0wb2VqIy7VIX+wKx+ahQgZ8egNd3byKgpaulAKmKe2pcas
+         +AhHbtPRpOAigd+9SrK48SeNLfYhX9LdHI8p/gF8FHM8Gr00I+XceSmIpN1z4UuyjCdF
+         H/3Ly/GIeSj50sGVLp8S+asXWsUx4j7pvPNRwJlJVznL8E05801sQjH8BT9FF624xnc9
+         rAbrsrQrA5Ovs5Prj9xbnQbQnm9uKvlwh53q+0v9oHD/BX6RlNQnzYdqSIKKbCHBfinU
+         UimCASxpDRGEBpLog6NQ2wilRIrqu0D07JYEKzk+4tcLylSZ+MxGL06L/jZH1Pbaiomr
+         mbdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684491581; x=1687083581;
+        d=1e100.net; s=20221208; t=1684491743; x=1687083743;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6TOOnGY6/7gbApavboZs3pH4Q/1VjbXN7/OaowXsj4E=;
-        b=cRVUbZbFtAWofg8NYI6wEmQ6FmZ8aqrSpAT0XtrcqjicDJkXeToATJRb8EKOyG2IKD
-         SMCECKQE8OUnJT3AUpf8MXT8WpJm1wE/85NvJTD1KvvUx3TK/dG9FB5TBlJ0mZb9q1dh
-         JHg67Ng1quvnvnCwJ2m2YtBaZgAnmbZ0eky0dNMuutMvIcsddvbw++xpTzEfqFpfg1O3
-         +P4lcP5xdPd3DvihxTb2vifIctpkKp/k25Cl5TTSTnIQmvoGp0V9mX5cOeXYYUwA1VGH
-         GBXqcYvaLPEPh2j625dYEqU5kJKtv+JV9nnha0LWdwMIyLUfpDQowUSmHRHq4JtIT0wx
-         S8aQ==
-X-Gm-Message-State: AC+VfDxga3OFe4yNINilonwIoRv20uvzCPTid/2qQTdRxeyGJG2UHHpS
-        g0A+O1ShREcgvVkstkysjWqwiDU+u2kQt6oyD1c=
-X-Google-Smtp-Source: ACHHUZ6FdAfyykBTWjU6riNW5GDcE69Mx2AOv4HrLva5VO13HnaSRr4tZ0rpwldlJSjEBE18cv5+YmvDMVWYtMOiXCk=
-X-Received: by 2002:ad4:5b81:0:b0:615:a787:6d2a with SMTP id
- 1-20020ad45b81000000b00615a7876d2amr3364150qvp.3.1684491581435; Fri, 19 May
- 2023 03:19:41 -0700 (PDT)
+        bh=GtpbF2tXZUjlQDCpCAkUtufwtzGeJXDTY4JTRH+Iw2M=;
+        b=D/0z1Ma6sNvCMjhj85KsNoSETYR/4cLC/xLDuHIvDAjcyIMP5PPfsIFxPSg3gNYg2L
+         7pSkw76IDVvXwG7Ut5h36oyOYlvrCtOLUbcXPfKiQEcNnMQwiQDm1JgRq4K8Bs+iEbFV
+         QPvnmwoiTIWIUwtO/T/vZJjhMsagDwse+oaJWwg/XFRS04e1PJ3yNffbNmhiOGGvIfOI
+         WSOJbyF/IQDs+UX/a2p4Q0R0RgozTCTXh7G2QuTWxH87nBSZAb70YK5F/lfO9HU4Jfu7
+         xrAjYXdEA2cEJXV8/nzG40XtBZeCDlsgCcQQ226RfrG5KHsCxCfyRv+/OaeHvBC+7JXk
+         8CbQ==
+X-Gm-Message-State: AC+VfDweDyVm8mwkmgZ4qcJ6rpj5ypX9y6C1gzIpl7QuAFHrGfTEg7Gf
+        oA9zdhNAm3GqrXDMIdZwz3mraGySWJZoRf2RmAg=
+X-Google-Smtp-Source: ACHHUZ4t6E8dc6ID1cRXLGrV7UctxFtyj7367GxYtrr6TL81HddZiVacCWbw+MgjcB7tTQ5Of6u8+tpkOcxOwWMKN+M=
+X-Received: by 2002:ad4:5ced:0:b0:5c8:403a:22f8 with SMTP id
+ iv13-20020ad45ced000000b005c8403a22f8mr3500950qvb.5.1684491743577; Fri, 19
+ May 2023 03:22:23 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230518153214.194976-1-hdegoede@redhat.com> <20230518153214.194976-2-hdegoede@redhat.com>
- <CAHp75Vf6t302XpVKKgm1uyHQ5LsuqSEE+B3AGc1-ODoev77ENA@mail.gmail.com> <9375a528-8e39-304e-9b60-99ea43e16ec0@redhat.com>
-In-Reply-To: <9375a528-8e39-304e-9b60-99ea43e16ec0@redhat.com>
+ <ZGcl7+cKu0/h43YC@kekkonen.localdomain> <cb4e56fd-0745-6040-6d93-bd8eb1d23ce1@redhat.com>
+In-Reply-To: <cb4e56fd-0745-6040-6d93-bd8eb1d23ce1@redhat.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 19 May 2023 13:19:05 +0300
-Message-ID: <CAHp75VfbmhTkNz6zQNN_+ehwJXFSoy2xV3HH0mHwN00ojOZGwg@mail.gmail.com>
+Date:   Fri, 19 May 2023 13:21:47 +0300
+Message-ID: <CAHp75VddE8Z4KxuOVT2_YbNrzCz5_oVmVs6RaqjffJtaT6xabA@mail.gmail.com>
 Subject: Re: [PATCH 1/9] media: v4l: Add v4l2_acpi_parse_sensor_gpios() helper function
 To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Andy Shevchenko <andy@kernel.org>, Kate Hsuan <hpa@redhat.com>,
         Tsuchiya Yuto <kitakar@gmail.com>,
         Yury Luneff <yury.lunev@gmail.com>,
@@ -70,56 +70,19 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, May 18, 2023 at 7:57=E2=80=AFPM Hans de Goede <hdegoede@redhat.com>=
- wrote:
-> On 5/18/23 18:36, Andy Shevchenko wrote:
-> > On Thu, May 18, 2023 at 6:32=E2=80=AFPM Hans de Goede <hdegoede@redhat.=
-com> wrote:
+On Fri, May 19, 2023 at 11:55=E2=80=AFAM Hans de Goede <hdegoede@redhat.com=
+> wrote:
+> On 5/19/23 09:31, Sakari Ailus wrote:
 
 ...
 
-> >> + * Note this code uses the same DSM GUID as the INT3472 discrete.c co=
-de
-> >> + * and there is some overlap, but there are enough differences that i=
-t is
-> >> + * difficult to share the code.
-> >
-> > Can you add the name of the variable in that file, so likely the
-> > source code indexing tool might add a link?
->
-> You mean change the comment something like this:
->
->  * Note this code uses the same DSM GUID as the int3472_gpio_guid in
->  * the INT3472 discrete.c code and there is some overlap, but there are
->  * enough differences that it is difficult to share the code.
->
-> I guess, where int3472_gpio_guid comes from:
->
-> drivers/platform/x86/intel/int3472/discrete.c:
->
-> static const guid_t int3472_gpio_guid =3D
->         GUID_INIT(0x79234640, 0x9e10, 0x4fea,
->                   0xa5, 0xc1, 0xb5, 0xaa, 0x8b, 0x19, 0x75, 0x6f);
->
->
-> ?
+> And if we need some changes anyways just adding the single line call
+> to the new helper seems both the least invasive and the easiest.
 
-Yes!
-
-...
-
-> >> +       devm_acpi_dev_add_driver_gpios(dev, data.map->mapping);
-> >
-> > Won't we print a warning here as well in case of error?
->
-> The only way this can fail is with -ENOMEM (we already know dev
-> has an ACPI companion) and generally speaking the rule is to
-> not log errors for ENOMEM since when we hit that the kernel
-> already complains loudly before returning from the alloc call.
-
-But this is based on the information about internal implementation of
-the above mentioned API. Strictly speaking it might return, in the
-future, another error code as well.
+I'm on Hans' side here. And yes, many drivers (mostly in the ASoC
+area, i.e. audio codecs) nowadays have GPIO ACPI mapping tables due to
+lack of _DSD in ACPI. It's a problem of firmware which we can't avoid
+if we really want to support this hardware in Linux.
 
 --=20
 With Best Regards,
