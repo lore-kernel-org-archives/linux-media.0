@@ -2,50 +2,49 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73086C77B7F
-	for <linux-media@archiver.kernel.org>; Sat, 20 May 2023 18:21:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41DF5C7EE2D
+	for <linux-media@archiver.kernel.org>; Sat, 20 May 2023 18:24:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231946AbjETSV5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 20 May 2023 14:21:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43162 "EHLO
+        id S232168AbjETSYm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 20 May 2023 14:24:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231774AbjETSVs (ORCPT
+        with ESMTP id S232138AbjETSYU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 20 May 2023 14:21:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30700E52;
-        Sat, 20 May 2023 11:21:23 -0700 (PDT)
+        Sat, 20 May 2023 14:24:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0EFE65;
+        Sat, 20 May 2023 11:23:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB5DF60C07;
-        Sat, 20 May 2023 18:21:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58D60C433D2;
-        Sat, 20 May 2023 18:21:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F4C360EFA;
+        Sat, 20 May 2023 18:22:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D6C8C433EF;
+        Sat, 20 May 2023 18:22:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684606873;
-        bh=kXan3NraEurdaWBq41zYwmJFzrEv8zVPeN6RH9hcA5k=;
+        s=k20201202; t=1684606960;
+        bh=Mip34RvG9ribw15vv+HvANns6hbCklfrI7lJ12dbLhs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cY93oyEZ86npAUHWmnGOuC7KobLL1wr5Jez2r6S8kBxFa4ceBX3fpJ6Lissb51YM/
-         2IwK4kuFS2lQPqzTWW4T7tFAiGC7g3ygI/0yvCSaeoc2QhWAqOAxUT5jjJUneDXMQ0
-         JrirXw4MWeAQInCalhfdElFJyPB48mOqPlhKZfpnSamRfEmkqb+U0gy1AMofuQB2sB
-         6kqcTJBHuyvQhk3gqJEhK3ZlAIF/WUe/1t5Qb0wF2u5+QsyO+nUav8U3etNKVQXgex
-         h4UM47FASxQ4jphOJGusDvpOj8ycb4HEDiyrdFp4jrWh5qa/yFaJ1w2JEWRHySXEmf
-         oKPJbKy/LX8XQ==
+        b=fixDS5D6mffbw6Qu9dqwCidYvjJdwb1kVDHY/AqEv1sxUuN09EwlXBX5r9JsUCzWx
+         Vk5z8OU74x54KhVOi7br6pfIYZhjZwonj7oWsvUVnzCc8BvJyPRZqss5y7Z7cub4g/
+         L1D941jeHBn+NHoc47ItTRZwT0MGvniPBX7mqPpmVita4laQG0yCtcaDdH2YMp/2t9
+         D0M/pvrSHG7ggdR+6/44TBedfnVHkAEGvZL5y6v+Qet2B7iraiO9Iu9TpaMJKpgwsl
+         gedKfANrE2qF9bkCvUkrD9ds8pZr+d/yyMzXRrmw2NLX61ddXvdENEpD7/yIJ4wUII
+         jsXINq5Tmuo4A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sasha Levin <sashal@kernel.org>, niklas.soderlund@ragnatech.se,
-        mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 05/14] media: rcar-vin: Select correct interrupt mode for V4L2_FIELD_ALTERNATE
-Date:   Sat, 20 May 2023 14:20:33 -0400
-Message-Id: <20230520182044.836702-5-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, mchehab@kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 04/11] media: rcar-vin: Select correct interrupt mode for V4L2_FIELD_ALTERNATE
+Date:   Sat, 20 May 2023 14:22:07 -0400
+Message-Id: <20230520182215.845131-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230520182044.836702-1-sashal@kernel.org>
-References: <20230520182044.836702-1-sashal@kernel.org>
+In-Reply-To: <20230520182215.845131-1-sashal@kernel.org>
+References: <20230520182215.845131-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
@@ -72,14 +71,14 @@ Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/renesas/rcar-vin/rcar-dma.c | 4 +---
+ drivers/media/platform/rcar-vin/rcar-dma.c | 4 +---
  1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/renesas/rcar-vin/rcar-dma.c b/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
-index 3aea96d85165a..ef5adffae1972 100644
---- a/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
-+++ b/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
-@@ -651,11 +651,9 @@ static int rvin_setup(struct rvin_dev *vin)
+diff --git a/drivers/media/platform/rcar-vin/rcar-dma.c b/drivers/media/platform/rcar-vin/rcar-dma.c
+index 520d044bfb8d5..efebae935720a 100644
+--- a/drivers/media/platform/rcar-vin/rcar-dma.c
++++ b/drivers/media/platform/rcar-vin/rcar-dma.c
+@@ -644,11 +644,9 @@ static int rvin_setup(struct rvin_dev *vin)
  	case V4L2_FIELD_SEQ_TB:
  	case V4L2_FIELD_SEQ_BT:
  	case V4L2_FIELD_NONE:
