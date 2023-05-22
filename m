@@ -2,106 +2,113 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2C0AC7EE23
-	for <linux-media@archiver.kernel.org>; Mon, 22 May 2023 06:03:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D46FEC7EE29
+	for <linux-media@archiver.kernel.org>; Mon, 22 May 2023 06:03:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230435AbjEVGDL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 May 2023 02:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39324 "EHLO
+        id S229559AbjEVGDP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 May 2023 02:03:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbjEVGDG (ORCPT
+        with ESMTP id S230288AbjEVGDG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 22 May 2023 02:03:06 -0400
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697DFFE;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1093FF;
         Sun, 21 May 2023 23:03:05 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34M5Fa0w023085;
-        Mon, 22 May 2023 06:03:02 GMT
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34M5S3Ge021961;
+        Mon, 22 May 2023 06:03:01 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=9Rpfvi2imEznh7+DvUUNzkzDufqKjlVr6K7nCgU9kaM=;
- b=TbOnYP+cDcqTYDSw7VGq2q2sbtvU7NttaWD9bq+jkhRdXkSy2eQwdzivYzPsf2U1grwg
- /McMsxDHeO4VOFk1TYgt7CUIfl8IIg/7lqd8Sv1ZUMpqLghEpypkQP/cA8l3KOWcJx4r
- P3X7YZsN4Jngb4d7J4Nvz9eBsryvoZoliAeV1b2CY34hLo5t5V4uJ2Tao40rFNEyAyLn
- JC9J42rNjgLN/sgLy1BKeYap8F4j9p9e9hBYkfDhHrN46FfWVX57yadqZTUCmRhdnf50
- I2ERTS7o71odL0yEfZfZigqph/HtSurvd7RC69bwLwUce1SFepSvXZUDO5Mo6MaxBrHe /w== 
+ subject : date : message-id; s=qcppdkim1;
+ bh=sN0Gaby648b2sjqaoHFHk8KlSoaWNOt9AxJuRmL1Mo0=;
+ b=eeQURXfaPADJyYep8Dgt5xM/aR73v14V60s7MYDWcoklXo71mnFvLZVaqX90Lm67gWOn
+ ENE2k/IH4S/Xdb6TAG0TCmk5tx5bM9/NDFz4ExwC0+3GswbchDQQek1uJOE81Zbl9NE6
+ AitJbxJBJe2VPxFUhPbeMFWEnT5Jc6v7PQQ1sOlLYzWWtJES5r4l1Dzn6HjgZK+Pf8xG
+ eqGuMM6oU33PGUSIub9qML9VP+DQ6HfJroo6CM96jWCoi+Uxc9/yEthBF3PVc32cdcHw
+ neeDPt4MMsudqkkPEm8ERSCs/VxnxQobiM80qP+xAIfTpX76p5xiOs9JyUGABm72htE8 QA== 
 Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qpqgf2q43-1
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qpkwmtyb6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 06:03:02 +0000
+        Mon, 22 May 2023 06:03:00 +0000
 Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 34M62w1D032334;
-        Mon, 22 May 2023 06:02:58 GMT
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 34M62u87032292;
+        Mon, 22 May 2023 06:02:56 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3qpq9keer2-1
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3qpq9keeqg-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 22 May 2023 06:02:58 +0000
+        Mon, 22 May 2023 06:02:56 +0000
 Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34M62vc6032318;
-        Mon, 22 May 2023 06:02:58 GMT
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34M62uIs032151;
+        Mon, 22 May 2023 06:02:56 GMT
 Received: from hu-sgudaval-hyd.qualcomm.com (hu-dikshita-hyd.qualcomm.com [10.213.110.13])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 34M62vOs032308;
-        Mon, 22 May 2023 06:02:58 +0000
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 34M62tsb032093;
+        Mon, 22 May 2023 06:02:56 +0000
 Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 347544)
-        id 8C69C3F5E; Mon, 22 May 2023 11:32:57 +0530 (+0530)
+        id 1255E33B6; Mon, 22 May 2023 11:32:55 +0530 (+0530)
 From:   Dikshita Agarwal <quic_dikshita@quicinc.com>
 To:     linux-media@vger.kernel.org, stanimir.k.varbanov@gmail.com,
         quic_vgarodia@quicinc.com, agross@kernel.org, andersson@kernel.org,
         konrad.dybcio@linaro.org, mchehab@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        Viswanath Boma <quic_vboma@quicinc.com>
-Subject: [PATCH v4 3/3] venus: fix EOS handling in decoder stop command
-Date:   Mon, 22 May 2023 11:32:52 +0530
-Message-Id: <1684735372-10075-4-git-send-email-quic_dikshita@quicinc.com>
+        Dikshita Agarwal <quic_dikshita@quicinc.com>
+Subject: [PATCH v4 0/3] fix decoder issues with firmware version check
+Date:   Mon, 22 May 2023 11:32:49 +0530
+Message-Id: <1684735372-10075-1-git-send-email-quic_dikshita@quicinc.com>
 X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1684735372-10075-1-git-send-email-quic_dikshita@quicinc.com>
-References: <1684735372-10075-1-git-send-email-quic_dikshita@quicinc.com>
 X-QCInternal: smtphost
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: GN2mtvPvhQtfjUzwlMCWzB9ZAQmZ8j6b
-X-Proofpoint-GUID: GN2mtvPvhQtfjUzwlMCWzB9ZAQmZ8j6b
+X-Proofpoint-GUID: KOlKLH5r-olYjjQpZ2_Zb3t8suSXz2Ko
+X-Proofpoint-ORIG-GUID: KOlKLH5r-olYjjQpZ2_Zb3t8suSXz2Ko
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-22_03,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
- suspectscore=0 malwarescore=0 priorityscore=1501 impostorscore=0
- phishscore=0 mlxscore=0 bulkscore=0 mlxlogscore=999 lowpriorityscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
+ spamscore=0 impostorscore=0 mlxscore=0 adultscore=0 suspectscore=0
+ priorityscore=1501 phishscore=0 mlxlogscore=936 lowpriorityscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2304280000 definitions=main-2305220050
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use firmware version based check to assign correct
-device address for EOS buffer to fix the EOS handling
-with different firmware version.
+This series includes the changes to
+  - add firmware version based check to enable/disable some feature.
+  - add support of new HFI to notify sequence change event to
+    driver during resolution change at interframe.
+  - use firmware version based check to fix EOS handling for different
+    firmware versions.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Tested-by: Nathan Hebert <nhebert@chromium.org>
-Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
-Signed-off-by: Viswanath Boma <quic_vboma@quicinc.com>
-Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
----
- drivers/media/platform/qcom/venus/vdec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+With this series, divided the previous version [1] into
+multiple patches as suggested in review comments.
 
-diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-index f0394b9..c59b34f 100644
---- a/drivers/media/platform/qcom/venus/vdec.c
-+++ b/drivers/media/platform/qcom/venus/vdec.c
-@@ -545,7 +545,7 @@ vdec_decoder_cmd(struct file *file, void *fh, struct v4l2_decoder_cmd *cmd)
- 
- 		fdata.buffer_type = HFI_BUFFER_INPUT;
- 		fdata.flags |= HFI_BUFFERFLAG_EOS;
--		if (IS_V6(inst->core))
-+		if (IS_V6(inst->core) && is_fw_rev_or_older(inst->core, 1, 0, 87))
- 			fdata.device_addr = 0;
- 		else
- 			fdata.device_addr = 0xdeadb000;
+[1] https://patchwork.kernel.org/project/linux-media/list/?series=733169
+
+changes since v3:
+  Improved design for reading firmware version for all supported
+  firmwares (Konrad)
+
+change since v2:
+  added firmware version based check for all supported firmwares.
+  added return value check of scanf. 
+  addressed other review comments.
+
+change since v1:
+  addressed coding comments.
+
+Dikshita Agarwal (3):
+  venus: add firmware version based check
+  venus: enable sufficient sequence change support for vp9
+  venus: fix EOS handling in decoder stop command
+
+ drivers/media/platform/qcom/venus/core.h       | 20 +++++++++++++++++
+ drivers/media/platform/qcom/venus/hfi_cmds.c   |  1 +
+ drivers/media/platform/qcom/venus/hfi_helper.h |  2 ++
+ drivers/media/platform/qcom/venus/hfi_msgs.c   | 30 +++++++++++++++++++++++---
+ drivers/media/platform/qcom/venus/vdec.c       | 10 ++++++++-
+ 5 files changed, 59 insertions(+), 4 deletions(-)
+
 -- 
 2.7.4
 
