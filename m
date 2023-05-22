@@ -2,58 +2,58 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AD45C7EE30
-	for <linux-media@archiver.kernel.org>; Mon, 22 May 2023 06:52:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50111C7EE31
+	for <linux-media@archiver.kernel.org>; Mon, 22 May 2023 06:52:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232222AbjEVGww (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 May 2023 02:52:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56142 "EHLO
+        id S232227AbjEVGwx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 May 2023 02:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232026AbjEVGwU (ORCPT
+        with ESMTP id S230295AbjEVGwV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 May 2023 02:52:20 -0400
+        Mon, 22 May 2023 02:52:21 -0400
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E62172A;
-        Sun, 21 May 2023 23:49:55 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34M4fM94008241;
-        Mon, 22 May 2023 06:48:29 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5150CE4C;
+        Sun, 21 May 2023 23:49:58 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34M6T3VO002771;
+        Mon, 22 May 2023 06:48:32 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=SNn8f4hLF+a1WlR8DDfHSRY2Av+F8To99R9bfShkG5U=;
- b=HHNhYEB5AZtKD7+KxGhpINiT6PdwhRGVi/LB1AtL8+iTCUSMDk5BbK4yBa3H31SipDVl
- WN3msi9jqkE1ksB/h4kAQw08OgGe3uKsy7xjPZMDowlbj8haNJr2L+IrGJc/uvZBOzO/
- lkTiCSmXQl5Fo9gOWaELYW1jiu9QgzqokuRYEDd0qfElSLV+i+ETGWW55Svug2M8GXk6
- icCM3btprQW16LWCxZacLI2jxb/R3+7McNjakfCJt03Pt7BdoXJ5tQuPieLX4cuuyI4p
- EPaZRKCXu3zlxj8SpSKyR0c0aG5JPzNRoOO/3hxX0lJa3N7xqagd6pGG0l1wsn0Bw8nE WA== 
+ bh=97C7E/ruo2fQ6WsXwzNHXyAX/tYTuB0c8MXBnXS5uTY=;
+ b=SdI0Su3Dl0RpB1SLkW1RXWdHELddFagi3RLkehuHUoDaAAq32K9+iZ+x9QUfvA4Q6dqe
+ yKbOGJ4n8S661prXwtqIkEIRzryoszqPFdvc9WKrrUFyV9zhTICWUL5wtt8Pd27O1hMs
+ xbjRwUrq1/wCOAqzh0gLzcCskwv4ZSKbLhVUJeZzL5sE/DKlj4iv2zL7okYMMLlF3FZs
+ 2Se566flmowuIidOQIr1tnBTGzZNtg4BsmuGqOuHWQJN9LEhMsHKfkH7MPEoJ5emWFY7
+ Eo5RLLcQ6xyzfnbHOq4z6MLQ7f1heE7q2Z1ZVbNKtUuJZdiK9Rcy07CHgMp4YKsTLysK yQ== 
 Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qppypasc9-1
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qpqgf2s98-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 06:48:29 +0000
+        Mon, 22 May 2023 06:48:31 +0000
 Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 34M6mPM8009773;
-        Mon, 22 May 2023 06:48:25 GMT
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 34M6mRaE009797;
+        Mon, 22 May 2023 06:48:28 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3qpq9kej00-1
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3qpq9kej0h-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 22 May 2023 06:48:25 +0000
+        Mon, 22 May 2023 06:48:28 +0000
 Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34M6mPUV009767;
-        Mon, 22 May 2023 06:48:25 GMT
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34M6mR85009791;
+        Mon, 22 May 2023 06:48:28 GMT
 Received: from hu-sgudaval-hyd.qualcomm.com (hu-dikshita-hyd.qualcomm.com [10.213.110.13])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 34M6mPSV009766;
-        Mon, 22 May 2023 06:48:25 +0000
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 34M6mRpt009802;
+        Mon, 22 May 2023 06:48:28 +0000
 Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 347544)
-        id 8E3973F5C; Mon, 22 May 2023 12:18:24 +0530 (+0530)
+        id 373CE3F5C; Mon, 22 May 2023 12:18:27 +0530 (+0530)
 From:   Dikshita Agarwal <quic_dikshita@quicinc.com>
 To:     linux-media@vger.kernel.org, stanimir.k.varbanov@gmail.com,
         quic_vgarodia@quicinc.com, agross@kernel.org, andersson@kernel.org,
         konrad.dybcio@linaro.org, mchehab@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         Dikshita Agarwal <quic_dikshita@quicinc.com>
-Subject: [PATCH v2 1/4] venus: add support for V4L2_PIX_FMT_P010 color format
-Date:   Mon, 22 May 2023 12:18:15 +0530
-Message-Id: <1684738098-17372-2-git-send-email-quic_dikshita@quicinc.com>
+Subject: [PATCH v2 4/4] venus: return P010 as preferred format for 10 bit decode
+Date:   Mon, 22 May 2023 12:18:18 +0530
+Message-Id: <1684738098-17372-5-git-send-email-quic_dikshita@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1684738098-17372-1-git-send-email-quic_dikshita@quicinc.com>
 References: <1684738098-17372-1-git-send-email-quic_dikshita@quicinc.com>
@@ -61,91 +61,47 @@ X-QCInternal: smtphost
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: pi1ai2hbdUSTPvmvZkkJOOUrLSXLRLOf
-X-Proofpoint-GUID: pi1ai2hbdUSTPvmvZkkJOOUrLSXLRLOf
+X-Proofpoint-ORIG-GUID: g-8ZQpjSNxMT2_E4YoXx7Yqx8ZITgbkR
+X-Proofpoint-GUID: g-8ZQpjSNxMT2_E4YoXx7Yqx8ZITgbkR
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-22_04,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- clxscore=1015 mlxlogscore=993 phishscore=0 impostorscore=0
- lowpriorityscore=0 bulkscore=0 suspectscore=0 malwarescore=0 spamscore=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
+ suspectscore=0 malwarescore=0 priorityscore=1501 impostorscore=0
+ phishscore=0 mlxscore=0 bulkscore=0 mlxlogscore=868 lowpriorityscore=0
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2304280000 definitions=main-2305220057
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-add V4L2_PIX_FMT_P010 as supported color format for decoder.
+If bit depth is detected as 10 bit by firmware, return
+P010 as preferred decoder format to the client.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
 ---
- drivers/media/platform/qcom/venus/core.h    | 21 +++++++++++----------
- drivers/media/platform/qcom/venus/helpers.c |  2 ++
- drivers/media/platform/qcom/venus/vdec.c    |  5 +++++
- 3 files changed, 18 insertions(+), 10 deletions(-)
+ drivers/media/platform/qcom/venus/vdec.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
-index e988ed4..250342d 100644
---- a/drivers/media/platform/qcom/venus/core.h
-+++ b/drivers/media/platform/qcom/venus/core.h
-@@ -87,16 +87,17 @@ enum venus_fmt {
- 	VENUS_FMT_NV12			= 0,
- 	VENUS_FMT_QC08C			= 1,
- 	VENUS_FMT_QC10C			= 2,
--	VENUS_FMT_H264			= 3,
--	VENUS_FMT_VP8			= 4,
--	VENUS_FMT_VP9			= 5,
--	VENUS_FMT_HEVC			= 6,
--	VENUS_FMT_VC1_ANNEX_G		= 7,
--	VENUS_FMT_VC1_ANNEX_L		= 8,
--	VENUS_FMT_MPEG4			= 9,
--	VENUS_FMT_MPEG2			= 10,
--	VENUS_FMT_H263			= 11,
--	VENUS_FMT_XVID			= 12,
-+	VENUS_FMT_P010			= 3,
-+	VENUS_FMT_H264			= 4,
-+	VENUS_FMT_VP8			= 5,
-+	VENUS_FMT_VP9			= 6,
-+	VENUS_FMT_HEVC			= 7,
-+	VENUS_FMT_VC1_ANNEX_G		= 8,
-+	VENUS_FMT_VC1_ANNEX_L		= 9,
-+	VENUS_FMT_MPEG4			= 10,
-+	VENUS_FMT_MPEG2			= 11,
-+	VENUS_FMT_H263			= 12,
-+	VENUS_FMT_XVID			= 13,
- };
- 
- struct venus_format {
-diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
-index a2ceab7..9a38b36 100644
---- a/drivers/media/platform/qcom/venus/helpers.c
-+++ b/drivers/media/platform/qcom/venus/helpers.c
-@@ -612,6 +612,8 @@ static u32 to_hfi_raw_fmt(u32 v4l2_fmt)
- 		return HFI_COLOR_FORMAT_NV12_UBWC;
- 	case V4L2_PIX_FMT_QC10C:
- 		return HFI_COLOR_FORMAT_YUV420_TP10_UBWC;
-+	case V4L2_PIX_FMT_P010:
-+		return HFI_COLOR_FORMAT_P010;
- 	default:
- 		break;
- 	}
 diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-index bab985b..7aeaf77 100644
+index 96eceda..12a2e99 100644
 --- a/drivers/media/platform/qcom/venus/vdec.c
 +++ b/drivers/media/platform/qcom/venus/vdec.c
-@@ -45,6 +45,11 @@ static const struct venus_format vdec_formats[] = {
- 		.num_planes = 1,
- 		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
- 	},
-+	[VENUS_FMT_P010] = {
-+		.pixfmt = V4L2_PIX_FMT_P010,
-+		.num_planes = 1,
-+		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
-+	},
- 	[VENUS_FMT_H264] = {
- 		.pixfmt = V4L2_PIX_FMT_H264,
- 		.num_planes = 1,
+@@ -1503,8 +1503,13 @@ static void vdec_event_change(struct venus_inst *inst,
+ 	inst->out_width = ev_data->width;
+ 	inst->out_height = ev_data->height;
+ 
+-	if (inst->bit_depth != ev_data->bit_depth)
++	if (inst->bit_depth != ev_data->bit_depth) {
+ 		inst->bit_depth = ev_data->bit_depth;
++		if (inst->bit_depth == VIDC_BITDEPTH_10)
++			inst->fmt_cap = &vdec_formats[VENUS_FMT_P010];
++		else
++			inst->fmt_cap = &vdec_formats[VENUS_FMT_NV12];
++	}
+ 
+ 	if (inst->pic_struct != ev_data->pic_struct)
+ 		inst->pic_struct = ev_data->pic_struct;
 -- 
 2.7.4
 
