@@ -2,139 +2,164 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7186EC77B73
-	for <linux-media@archiver.kernel.org>; Mon, 22 May 2023 06:53:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BEBAFC77B75
+	for <linux-media@archiver.kernel.org>; Mon, 22 May 2023 07:28:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232127AbjEVGxN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 May 2023 02:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56042 "EHLO
+        id S232627AbjEVH2E (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 May 2023 03:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232125AbjEVGwc (ORCPT
+        with ESMTP id S232653AbjEVH1v (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 May 2023 02:52:32 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E1D2690;
-        Sun, 21 May 2023 23:50:13 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34M6hYHO024392;
-        Mon, 22 May 2023 06:48:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=laguvSuvD4TNDIsQCj7PU68pDJD0i4k1RzP7nL7SgP4=;
- b=dneuuB6P8B8l3ayyo71yTGRr/lB3hNtVLq/pnc5W2g9CgLOAcrd53jwkfyLZnLuWTHJo
- 3RLQu0FCl/H5r113/U1QGXtiu7NdN9escmPCru0xYwcGSUfxx/b9Mhi0fyDcU5riOD9N
- mf+FURxt4F7rhc4pEuA/6olbPthm33ZLCTGQswh2CxHgokxJxvjwUTUb+vQPsc60Z4ox
- ti5/fSRZjG/rvtGugU8BWyeQiGo/LfvWqNlrw90PraeGYDFmvmbfcSmepZt2Wydk7HZ6
- h5uz4NZHEFzOYue2mZNUsmcOn+LCjpzAINBe5dWNM0gZhejFPaEUQXudSj9p6tAvuqSy ng== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qpnt62vss-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 06:48:30 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 34M6mRaD009797;
-        Mon, 22 May 2023 06:48:27 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3qpq9kej0a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 22 May 2023 06:48:27 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34M6mR83009791;
-        Mon, 22 May 2023 06:48:27 GMT
-Received: from hu-sgudaval-hyd.qualcomm.com (hu-dikshita-hyd.qualcomm.com [10.213.110.13])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 34M6mRQp009786;
-        Mon, 22 May 2023 06:48:27 +0000
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 347544)
-        id 702473F7E; Mon, 22 May 2023 12:18:26 +0530 (+0530)
-From:   Dikshita Agarwal <quic_dikshita@quicinc.com>
-To:     linux-media@vger.kernel.org, stanimir.k.varbanov@gmail.com,
-        quic_vgarodia@quicinc.com, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, mchehab@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>
-Subject: [PATCH v2 3/4] venus: add handling of bit depth change from firmwar
-Date:   Mon, 22 May 2023 12:18:17 +0530
-Message-Id: <1684738098-17372-4-git-send-email-quic_dikshita@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1684738098-17372-1-git-send-email-quic_dikshita@quicinc.com>
-References: <1684738098-17372-1-git-send-email-quic_dikshita@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: EXevUrK1-Dyspudgh59ot-LvkJGeWQKB
-X-Proofpoint-GUID: EXevUrK1-Dyspudgh59ot-LvkJGeWQKB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-22_04,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
- priorityscore=1501 clxscore=1011 mlxlogscore=744 adultscore=0
- lowpriorityscore=0 impostorscore=0 suspectscore=0 mlxscore=0 phishscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305220057
+        Mon, 22 May 2023 03:27:51 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 618031B0;
+        Mon, 22 May 2023 00:27:37 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.31:33128.1682002454
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
+        by 189.cn (HERMES) with SMTP id B866E100300;
+        Mon, 22 May 2023 15:27:32 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-75648544bd-xp9j7 with ESMTP id abbe5cda707343189d29c65c97453682 for kernel@xen0n.name;
+        Mon, 22 May 2023 15:27:35 CST
+X-Transaction-ID: abbe5cda707343189d29c65c97453682
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <b54d8f78-9d7c-8441-20f7-a4f3a2393081@189.cn>
+Date:   Mon, 22 May 2023 15:27:31 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v14 1/2] drm: add kms driver for loongson display
+ controller
+Content-Language: en-US
+To:     WANG Xuerui <kernel@xen0n.name>, Sui Jingfeng <15330273260@189.cn>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>
+Cc:     linaro-mm-sig@lists.linaro.org, loongson-kernel@lists.loongnix.cn,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Liu Peibao <liupeibao@loongson.cn>, linux-media@vger.kernel.org
+References: <20230520105718.325819-1-15330273260@189.cn>
+ <20230520105718.325819-2-15330273260@189.cn>
+ <26fd78b9-c074-8341-c99c-4e3b38cd861a@xen0n.name>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <26fd78b9-c074-8341-c99c-4e3b38cd861a@xen0n.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Set opb format to TP10_UWC and dpb to client set format
-when bit depth change to 10 bit is detecting by firmware.
+Hi,
 
-Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
----
- drivers/media/platform/qcom/venus/helpers.c | 16 ++++++++++++++++
- drivers/media/platform/qcom/venus/vdec.c    |  5 ++++-
- 2 files changed, 20 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
-index 7dbaa38..b543b65 100644
---- a/drivers/media/platform/qcom/venus/helpers.c
-+++ b/drivers/media/platform/qcom/venus/helpers.c
-@@ -1770,6 +1770,22 @@ int venus_helper_get_out_fmts(struct venus_inst *inst, u32 v4l2_fmt,
- 	if (!caps)
- 		return -EINVAL;
- 
-+	if (inst->bit_depth == VIDC_BITDEPTH_10 && inst->session_type == VIDC_SESSION_TYPE_DEC) {
-+		found_ubwc = find_fmt_from_caps(caps, HFI_BUFFER_OUTPUT,
-+						HFI_COLOR_FORMAT_YUV420_TP10_UBWC);
-+		found = find_fmt_from_caps(caps, HFI_BUFFER_OUTPUT2, fmt);
-+		if (found_ubwc && found) {
-+			/*
-+			 * Hard-code DPB buffers to be 10bit UBWC
-+			 * until V4L2 is able to expose compressed/tiled
-+			 * formats to applications.
-+			 */
-+			*out_fmt = HFI_COLOR_FORMAT_YUV420_TP10_UBWC;
-+			*out2_fmt = fmt;
-+			return 0;
-+		}
-+	}
-+
- 	if (ubwc) {
- 		ubwc_fmt = fmt | HFI_COLOR_FORMAT_UBWC_BASE;
- 		found_ubwc = find_fmt_from_caps(caps, HFI_BUFFER_OUTPUT,
-diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-index 7aeaf77..96eceda 100644
---- a/drivers/media/platform/qcom/venus/vdec.c
-+++ b/drivers/media/platform/qcom/venus/vdec.c
-@@ -736,6 +736,9 @@ static int vdec_set_work_route(struct venus_inst *inst)
- }
- 
- #define is_ubwc_fmt(fmt) (!!((fmt) & HFI_COLOR_FORMAT_UBWC_BASE))
-+#define is_10bit_ubwc_fmt(fmt) (!!((fmt) & HFI_COLOR_FORMAT_10_BIT_BASE & \
-+				 HFI_COLOR_FORMAT_UBWC_BASE))
-+
- 
- static int vdec_output_conf(struct venus_inst *inst)
- {
-@@ -783,7 +786,7 @@ static int vdec_output_conf(struct venus_inst *inst)
- 		inst->opb_fmt = out2_fmt;
- 		inst->dpb_buftype = HFI_BUFFER_OUTPUT;
- 		inst->dpb_fmt = out_fmt;
--	} else if (is_ubwc_fmt(out2_fmt)) {
-+	} else if (is_ubwc_fmt(out2_fmt) || is_10bit_ubwc_fmt(out_fmt)) {
- 		inst->opb_buftype = HFI_BUFFER_OUTPUT;
- 		inst->opb_fmt = out_fmt;
- 		inst->dpb_buftype = HFI_BUFFER_OUTPUT2;
--- 
-2.7.4
+I love your reviews,
+
+
+On 2023/5/21 20:21, WANG Xuerui wrote:
+> Hi,
+>
+> Someone else in a discussion group brought my attention to this 
+> series, that I've neglected for a long time because 
+> loongarch@lists.linux.dev isn't on the Cc list and I'm not subscribed 
+> to dri-devel.
+>
+> While I'm reasonably familiar with LoongArch internals and Linux in 
+> general, I don't regularly tinker with the graphics things, so I'm 
+> mainly focusing on the natural language usage and general code smells 
+> for my reviews below. Pardon me if some of the questions seem silly.
+>
+> (After going through the entirety of this: *please* spell-check your 
+> comment blocks, and correct obvious grammatical nits as best as you 
+> can. From my first impression, although a reader not familiar with 
+> LoongArch nor Chinese could go a long way in understanding this, some 
+> of the rest would be misunderstood, or don't make sense at all. And 
+> like 90% of the sentences are grammatically incorrect, i.e. are 
+> obvious "Chinglish". Maybe something like those ChatGPT-based services 
+> or someone in your company would help.)
+>
+OK, I didn't realize that grammar problem could up to 90%.
+
+I'm focus on feature development previously,  I will do the grammar 
+check before send the next version.
+
+>
+>
+[...]
+>
+> On 2023/5/20 18:57, Sui Jingfeng wrote:
+>> From: Sui Jingfeng <suijingfeng@loongson.cn>
+>>
+>> Loongson display controller IP has been integrated in both Loongson 
+>> north
+>> bridge chipset(ls7a1000/ls7a2000) and Loongson 
+>> SoCs(ls2k1000/ls2k2000), it
+>> has been even included in Loongson self-made BMC products.
+>>
+>> This display controller is a PCI device. It has two display pipes and 
+>> each
+>> display pipe support a primary plane and a cursor plane. For the DC 
+>> in the
+>
+> "supports"
+Ok, you are correct here.
+>
+>> ls7a1000 and ls2k1000, each display pipe has a DVO output interface 
+>> which
+>> provide RGB888 signals, vertical & horizontal synchronisations and pixel
+>
+> "synchronisation"
+>
+Ok, you are correct here.
+>> clock. Each CRTC is able to support 1920x1080@60Hz, the maximum 
+>> resolution
+>
+> "is capable of" sounds more natural?
+>
+I think they are equivalent, I can't perceive the difference.
+>> of each display pipe is 2048x2048 according to the hardware spec.
+>>
+>> For the DC in LS7A2000, each display pipe is equipped with a built-in 
+>> HDMI
+>> encoder which is compliant with the HDMI 1.4 specification, thus it 
+>> support
+>
+> "supporting up to 3840x2160@30Hz"
+>
+acceptable
+>> 3840x2160@30Hz. The first display pipe is also equipped with a 
+>> transparent
+>> vga encoder which is parallel with the HDMI encoder. The DC in 
+>> LS7A2000 is
+>
+> "The first display pipe additionally has a transparent VGA encoder"?
+>
+The first display pipe(pipe 0) also has a transparent VGA encoder.
+
+>> more complete compare with the one in old chips, besides above 
+>> feature, it
+>> has two hardware cursors, two hardware vblank counter and two scanout
+>> position recorders unit. It also support tiled framebuffer format which
+>> can be scanout the tiled framebuffer rendered by the LoongGPU directly.
+>
+> "The DC in LS7A2000 is more feature-complete compared with the older 
+> revision: in addition to the above, it also has two hardware cursors, 
+> two hardware vblank counters and two scanout position recorders. It 
+> also supports tiled framebuffer format so the tiled output from the 
+> LoongGPU can be scanned out directly."
+
+OK, acceptable.
 
