@@ -2,28 +2,28 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59E42C7EE29
-	for <linux-media@archiver.kernel.org>; Tue, 23 May 2023 08:56:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41E7EC7EE2E
+	for <linux-media@archiver.kernel.org>; Tue, 23 May 2023 08:56:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236190AbjEWI4g convert rfc822-to-8bit (ORCPT
+        id S236205AbjEWI4h convert rfc822-to-8bit (ORCPT
         <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 May 2023 04:56:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59580 "EHLO
+        Tue, 23 May 2023 04:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236148AbjEWI4c (ORCPT
+        with ESMTP id S236153AbjEWI4c (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 23 May 2023 04:56:32 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A687D119;
-        Tue, 23 May 2023 01:56:29 -0700 (PDT)
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD83120;
+        Tue, 23 May 2023 01:56:30 -0700 (PDT)
 Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
         (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 6BF78846B;
-        Tue, 23 May 2023 16:56:27 +0800 (CST)
+        by ex01.ufhost.com (Postfix) with ESMTP id 3799F24E257;
+        Tue, 23 May 2023 16:56:28 +0800 (CST)
 Received: from EXMBX173.cuchost.com (172.16.6.93) by EXMBX165.cuchost.com
  (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 23 May
- 2023 16:56:27 +0800
+ 2023 16:56:28 +0800
 Received: from xiaofei.localdomain (180.164.60.184) by EXMBX173.cuchost.com
  (172.16.6.93) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 23 May
  2023 16:56:27 +0800
@@ -38,10 +38,12 @@ To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
 CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <jack.zhu@starfivetech.com>,
         <changhuang.liang@starfivetech.com>
-Subject: [PATCH v2 0/5] Add support for external dphy
-Date:   Tue, 23 May 2023 16:56:21 +0800
-Message-ID: <20230523085626.3295-1-jack.zhu@starfivetech.com>
+Subject: [PATCH v2 2/5] media: dt-bindings: cadence-csi2rx: Add resets property
+Date:   Tue, 23 May 2023 16:56:23 +0800
+Message-ID: <20230523085626.3295-3-jack.zhu@starfivetech.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230523085626.3295-1-jack.zhu@starfivetech.com>
+References: <20230523085626.3295-1-jack.zhu@starfivetech.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [180.164.60.184]
@@ -53,49 +55,57 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series adds support for external D-PHY and JH7110 SoC which has a Cadence
-MIPI-CSI2 RX controller. The driver is tested on VisionFive V2 board.
+Add resets property for Cadence MIPI-CSI2 RX controller
 
-PLEASE NOTE: this patch series was spun off from the v4 of another series that
-included CSI and ISP driver. You can check the comments for earlier version in
-the link below. I'm sorry that the first version link has been lost.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
+---
+ .../bindings/media/cdns,csi2rx.yaml           | 24 +++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-v4 link: https://lore.kernel.org/all/20230413035541.62129-1-jack.zhu@starfivetech.com/
-v3 link: https://lore.kernel.org/all/20230331121826.96973-1-jack.zhu@starfivetech.com/
-v2 link: https://lore.kernel.org/all/20230310120553.60586-1-jack.zhu@starfivetech.com/
-
-Current review status:
-  - cdns,csi2rx.yaml:
-      Reviewed by: Krzysztof Kozlowski
-      Reviewed by: Laurent Pinchart
-  - cdns-csi2rx.c
-      Reviewed by: Laurent Pinchart
-  - MAINTAINERS
-      Reviewed by: Krzysztof Kozlowski
-      Reviewed by: Laurent Pinchart
-
-Thanks to everyone who reviewed my work !
-
-Changes in v2:
-- Matched reset names in bindings.
-
-v1 link: https://lore.kernel.org/all/20230512102637.50917-1-jack.zhu@starfivetech.com/
-
-Jack Zhu (5):
-  media: dt-bindings: cadence-csi2rx: Convert to DT schema
-  media: dt-bindings: cadence-csi2rx: Add resets property
-  media: cadence: Add operation on reset
-  media: cadence: Add support for external dphy
-  media: cadence: Add support for JH7110 SoC
-
- .../devicetree/bindings/media/cdns,csi2rx.txt | 100 ---------
- .../bindings/media/cdns,csi2rx.yaml           | 201 ++++++++++++++++++
- MAINTAINERS                                   |   1 +
- drivers/media/platform/cadence/cdns-csi2rx.c  | 107 ++++++++--
- 4 files changed, 294 insertions(+), 115 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.txt
- create mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
-
+diff --git a/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml b/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
+index aba1191b3e77..30a335b10762 100644
+--- a/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
++++ b/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
+@@ -41,6 +41,24 @@ properties:
+       - const: pixel_if2_clk
+       - const: pixel_if3_clk
+ 
++  resets:
++    items:
++      - description: CSI2Rx system reset
++      - description: Gated Register bank reset for APB interface
++      - description: pixel reset for Stream interface 0
++      - description: pixel reset for Stream interface 1
++      - description: pixel reset for Stream interface 2
++      - description: pixel reset for Stream interface 3
++
++  reset-names:
++    items:
++      - const: sys
++      - const: reg_bank
++      - const: pixel_if0
++      - const: pixel_if1
++      - const: pixel_if2
++      - const: pixel_if3
++
+   phys:
+     maxItems: 1
+     description: MIPI D-PHY
+@@ -123,6 +141,12 @@ examples:
+         clock-names = "sys_clk", "p_clk",
+                       "pixel_if0_clk", "pixel_if1_clk",
+                       "pixel_if2_clk", "pixel_if3_clk";
++        resets = <&bytereset 9>, <&bytereset 4>,
++                 <&corereset 5>, <&corereset 6>,
++                 <&corereset 7>, <&corereset 8>;
++        reset-names = "sys", "reg_bank",
++                      "pixel_if0", "pixel_if1",
++                      "pixel_if2", "pixel_if3";
+         phys = <&csi_phy>;
+         phy-names = "dphy";
+ 
 -- 
 2.34.1
 
