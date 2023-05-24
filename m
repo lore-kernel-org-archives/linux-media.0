@@ -2,116 +2,138 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A49FC7EE2C
-	for <linux-media@archiver.kernel.org>; Wed, 24 May 2023 09:28:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7596C7EE23
+	for <linux-media@archiver.kernel.org>; Wed, 24 May 2023 09:40:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231422AbjEXJ2L (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 May 2023 05:28:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
+        id S229491AbjEXJkO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 May 2023 05:40:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240717AbjEXJ2J (ORCPT
+        with ESMTP id S231534AbjEXJju (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 May 2023 05:28:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61873130;
-        Wed, 24 May 2023 02:28:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB94763B4B;
-        Wed, 24 May 2023 09:28:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD8B2C433D2;
-        Wed, 24 May 2023 09:28:00 +0000 (UTC)
-Message-ID: <b5c45ac7-64ad-ddc1-a7a2-99d9d1c27ca7@xs4all.nl>
-Date:   Wed, 24 May 2023 11:27:59 +0200
+        Wed, 24 May 2023 05:39:50 -0400
+Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E33A412E;
+        Wed, 24 May 2023 02:39:42 -0700 (PDT)
+Received: from mgb4.digiteq.red (unknown [62.77.71.229])
+        by mx.gpxsee.org (Postfix) with ESMTPSA id A651345B34;
+        Wed, 24 May 2023 11:21:28 +0200 (CEST)
+From:   tumic@gpxsee.org
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Martin=20T=C5=AFma?= <martin.tuma@digiteqautomotive.com>
+Subject: [RESEND PATCH v6 0/1] Digiteq Automotive MGB4 driver
+Date:   Wed, 24 May 2023 13:21:25 +0200
+Message-Id: <20230524112126.2242-1-tumic@gpxsee.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v7,0/2] media: mediatek: vcodec: add hevc stateless
- decoder driver in MT8195
-Content-Language: en-US
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
-        <nfraprado@collabora.com>, Nathan Hebert <nhebert@chromium.org>
-Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20230524080739.17264-1-yunfei.dong@mediatek.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20230524080739.17264-1-yunfei.dong@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Yunfei,
+From: Martin Tůma <martin.tuma@digiteqautomotive.com>
 
-On 24/05/2023 10:07, Yunfei Dong wrote:
-> Add hevc stateless decoder driver to support hardware decode in MT8195, and the driver
-> need num_delta_pocs_of_ref_rps_idx value to parse slice header short_term_ref_pic_set().
-> 
-> patch 1 add num_delta_pocs_of_ref_rps_idx field.
-> patch 2 add hevc stateless decoder driver.
+Hi,
+This patch adds a driver for the Digiteq Automotive MGB4 grabber card.
+MGB4 is a modular frame grabber PCIe card for automotive video interfaces
+(FPD-Link and GMSL for now). It is based on a Xilinx FPGA and uses their
+XDMA IP core for DMA transfers. Additionally, Xilinx I2C and SPI IP cores
+which already have drivers in linux are used in the design.
 
-This series clashes with this older series from you:
+The driver is a quite standard v4l2 driver, with one exception - there are
+a lot of sysfs options that may/must be set before opening the v4l2 device
+to adapt the card on a specific signal (see mgb4.rst for details)
+as the card must be able to work with various signal sources (or displays)
+that can not be auto-detected.
 
-https://patchwork.linuxtv.org/project/linux-media/cover/20230424060130.18395-1-yunfei.dong@mediatek.com/
+I have run the driver through the v4l2-compliance test suite for both the
+input and the output and the results look fine to me (I can provide the
+output if required).
 
-Can you post a v8 that sits on top of that older series?
+Changes in v6:
+* Rebased to current master that includes the Xilinx XDMA driver.
 
-Regards,
+Changes in v5:
+* Removed unused <linux/version.h> includes
 
-	Hans
+Changes in v4:
+* Redesigned the signal change handling logic. Now using the propper timings
+  API in the video input driver and a propper open() syscall check/logic in
+  the video output driver.
+* Fixed all minor issues from v3 review.
+* 'checkpatch.pl --strict' used for checking the code.
 
-> ---
-> Changed from v6:
-> - fix AngeloGioacchino's suggestion.
-> 
-> Changed from v5:
-> - checkpatch/kernel-doc pass/build pass.
-> - fix warning: struct vdec_av1_slice_fb -> struct vdec_hevc_slice_fb.
-> - fix warning: remove unused comment for param "trans_start" and "trans_end"
-> 
-> Changed from v4:
-> - fix some comments according to Nathan's suggestion.
-> 
-> Changed from v3:
-> - add the dependency patch to this patch series for patch 1.
-> 
-> Changed from v2:
-> - fix one build warning.
-> - add the dependency patch link.
-> 
-> Changed from v1:
-> - fix build error when build 32bit system.
-> - hevc fluster test result: 132/147 (not support: 10bit => 11 and resolution => 4).
-> ---
-> Benjamin Gaignard (1):
->   media: uapi: HEVC: Add num_delta_pocs_of_ref_rps_idx field
-> 
-> Yunfei Dong (1):
->   media: mediatek: vcodec: support stateless hevc decoder
-> 
->  .../media/v4l/ext-ctrls-codec-stateless.rst   |    7 +
->  .../media/platform/mediatek/vcodec/Makefile   |    1 +
->  .../vcodec/mtk_vcodec_dec_stateless.c         |   59 +-
->  .../platform/mediatek/vcodec/mtk_vcodec_drv.h |    1 +
->  .../vcodec/vdec/vdec_hevc_req_multi_if.c      | 1097 +++++++++++++++++
->  .../platform/mediatek/vcodec/vdec_drv_if.c    |    4 +
->  .../platform/mediatek/vcodec/vdec_drv_if.h    |    1 +
->  include/uapi/linux/v4l2-controls.h            |    6 +-
->  8 files changed, 1174 insertions(+), 2 deletions(-)
->  create mode 100644 drivers/media/platform/mediatek/vcodec/vdec/vdec_hevc_req_multi_if.c
-> 
+Changes in v3:
+* Rebased the DMA transfers part to use the new XDMA driver from Xilinx/AMD
+
+Changes in v2:
+* Completely rewritten the original Xilinx's XDMA driver to meet kernel code
+  standards.
+* Added all required "to" and "cc" mail addresses.
+
+Martin Tůma (1):
+  Added Digiteq Automotive MGB4 driver
+
+ Documentation/admin-guide/media/mgb4.rst      | 352 ++++++++
+ .../admin-guide/media/pci-cardlist.rst        |   1 +
+ .../admin-guide/media/v4l-drivers.rst         |   1 +
+ MAINTAINERS                                   |   7 +
+ drivers/media/pci/Kconfig                     |   1 +
+ drivers/media/pci/Makefile                    |   1 +
+ drivers/media/pci/mgb4/Kconfig                |  17 +
+ drivers/media/pci/mgb4/Makefile               |   6 +
+ drivers/media/pci/mgb4/mgb4_cmt.c             | 247 ++++++
+ drivers/media/pci/mgb4/mgb4_cmt.h             |  16 +
+ drivers/media/pci/mgb4/mgb4_core.c            | 641 ++++++++++++++
+ drivers/media/pci/mgb4/mgb4_core.h            |  65 ++
+ drivers/media/pci/mgb4/mgb4_dma.c             | 123 +++
+ drivers/media/pci/mgb4/mgb4_dma.h             |  18 +
+ drivers/media/pci/mgb4/mgb4_i2c.c             | 140 +++
+ drivers/media/pci/mgb4/mgb4_i2c.h             |  35 +
+ drivers/media/pci/mgb4/mgb4_io.h              |  39 +
+ drivers/media/pci/mgb4/mgb4_regs.c            |  30 +
+ drivers/media/pci/mgb4/mgb4_regs.h            |  35 +
+ drivers/media/pci/mgb4/mgb4_sysfs.h           |  18 +
+ drivers/media/pci/mgb4/mgb4_sysfs_in.c        | 780 ++++++++++++++++
+ drivers/media/pci/mgb4/mgb4_sysfs_out.c       | 732 +++++++++++++++
+ drivers/media/pci/mgb4/mgb4_sysfs_pci.c       |  86 ++
+ drivers/media/pci/mgb4/mgb4_trigger.c         | 208 +++++
+ drivers/media/pci/mgb4/mgb4_trigger.h         |   8 +
+ drivers/media/pci/mgb4/mgb4_vin.c             | 830 ++++++++++++++++++
+ drivers/media/pci/mgb4/mgb4_vin.h             |  63 ++
+ drivers/media/pci/mgb4/mgb4_vout.c            | 501 +++++++++++
+ drivers/media/pci/mgb4/mgb4_vout.h            |  58 ++
+ 29 files changed, 5059 insertions(+)
+ create mode 100644 Documentation/admin-guide/media/mgb4.rst
+ create mode 100644 drivers/media/pci/mgb4/Kconfig
+ create mode 100644 drivers/media/pci/mgb4/Makefile
+ create mode 100644 drivers/media/pci/mgb4/mgb4_cmt.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_cmt.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_core.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_core.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_dma.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_dma.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_i2c.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_i2c.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_io.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_regs.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_regs.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_in.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_out.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_pci.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_trigger.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_trigger.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vin.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vin.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vout.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vout.h
+
+
+base-commit: ae8373a5add4ea39f032563cf12a02946d1e3546
+-- 
+2.40.1
 
