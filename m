@@ -2,146 +2,137 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8AFEC77B7A
-	for <linux-media@archiver.kernel.org>; Wed, 24 May 2023 06:01:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 275AAC77B7A
+	for <linux-media@archiver.kernel.org>; Wed, 24 May 2023 06:04:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239428AbjEXGBp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 May 2023 02:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43994 "EHLO
+        id S239590AbjEXGEj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 May 2023 02:04:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232365AbjEXGBo (ORCPT
+        with ESMTP id S239563AbjEXGEi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 May 2023 02:01:44 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D06186
-        for <linux-media@vger.kernel.org>; Tue, 23 May 2023 23:01:39 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q1hYi-00073O-TF; Wed, 24 May 2023 08:01:16 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q1hYX-002PqH-1c; Wed, 24 May 2023 08:01:05 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q1hYW-007SK3-Am; Wed, 24 May 2023 08:01:04 +0200
-Date:   Wed, 24 May 2023 08:01:04 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Crt Mori <cmo@melexis.com>, linux-iio@vger.kernel.org,
-        Tom Rix <trix@redhat.com>,
-        Jon Nettleton <jon.nettleton@gmail.com>,
-        Peter Senna Tschudin <peter.senna@gmail.com>,
-        Christian Gromm <christian.gromm@microchip.com>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Jean Delvare <jdelvare@suse.de>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Haowen Bai <baihaowen@meizu.com>,
-        Jens Frederich <jfrederich@gmail.com>,
-        linux-staging@lists.linux.dev,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Adrien Grassein <adrien.grassein@gmail.com>,
-        linux-media@vger.kernel.org,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Parthiban Veerasooran <parthiban.veerasooran@microchip.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        kernel@pengutronix.de, Wolfram Sang <wsa@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Wed, 24 May 2023 02:04:38 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C70AC18C;
+        Tue, 23 May 2023 23:04:31 -0700 (PDT)
+X-UUID: d67f020cf9f811ed9cb5633481061a41-20230524
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=BvH+eHnwwHPlF9AE7MZRrQpAo6ey10Th6FmdCXrmjdY=;
+        b=cDL+h1qQIscfkhgj3VKj6bd9dzGdTm8ZZAuXX0xrdXmdIWkiMxm0o4/28c8WJfIct890J8N9ZCzzzXTs+8UUiNkDCf4IkVOD+Ix7pGlj7QpxvBfkfG3Qtj7NvZSlC3S8rto+dxpWmUM0jkAGlz1yb8Ma/2FPunRTIor0oZ+J1FY=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.25,REQID:929a6902-1d45-473c-ad3d-2b8d14bcc5d0,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:d5b0ae3,CLOUDID:e09fdac1-e32c-4c97-918d-fbb3fc224d4e,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-UUID: d67f020cf9f811ed9cb5633481061a41-20230524
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1756032212; Wed, 24 May 2023 14:04:26 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Wed, 24 May 2023 14:04:26 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Wed, 24 May 2023 14:04:25 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Chen-Yu Tsai <wenst@chromium.org>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Peter Rosin <peda@axentia.se>,
-        Jonathan Cameron <jic23@kernel.org>
-Subject: Re: [PATCH] staging: Switch i2c drivers back to use .probe()
-Message-ID: <20230524060104.wljjqi2ep2ag2245@pengutronix.de>
-References: <20230523200036.465180-1-u.kleine-koenig@pengutronix.de>
- <b9954a28-1ab2-468d-beb5-2fa2e0f2c069@redhat.com>
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
+        <nfraprado@collabora.com>, Nathan Hebert <nhebert@chromium.org>
+CC:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v6,1/2] media: uapi: HEVC: Add num_delta_pocs_of_ref_rps_idx field
+Date:   Wed, 24 May 2023 14:04:22 +0800
+Message-ID: <20230524060423.15388-2-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230524060423.15388-1-yunfei.dong@mediatek.com>
+References: <20230524060423.15388-1-yunfei.dong@mediatek.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zqy6b2uvxwwx5uuf"
-Content-Disposition: inline
-In-Reply-To: <b9954a28-1ab2-468d-beb5-2fa2e0f2c069@redhat.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 
---zqy6b2uvxwwx5uuf
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Some drivers firmwares parse by themselves slice header and need
+num_delta_pocs_of_ref_rps_idx value to parse slice header
+short_term_ref_pic_set().
+Use one of the 4 reserved bytes to store this value without
+changing the v4l2_ctrl_hevc_decode_params structure size and padding.
 
-Hello Hans,
+This value also exist in DXVA API.
 
-On Tue, May 23, 2023 at 10:40:43PM +0200, Hans de Goede wrote:
-> On 5/23/23 22:00, Uwe Kleine-K=F6nig wrote:
-> > After commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
-> > call-back type"), all drivers being converted to .probe_new() and then
-> > 03c835f498b5 ("i2c: Switch .probe() to not take an id parameter") conve=
-rt
-> > back to (the new) .probe() to be able to eventually drop .probe_new() f=
-rom
-> > struct i2c_driver.
-> >=20
-> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> > ---
-> > Hello,
-> >=20
-> > this patch was generated using coccinelle.
-> >=20
-> > I chose to convert all drivers below drivers/staging in a single
-> > patch, but if you prefer I can split by driver.
->=20
-> I'm currently doing a lot of cleanup work on the atomisp code
-> including the sensor drivers. Specifically I'm working on
-> removing drivers which are duplicate with the standard v4l2
-> sensor drivers under drivers/media/i2c . So this patch is
-> likely to cause conflicts.
->=20
-> I have my own branch for my atomisp work from which I send
-> pull-reqs directly to Mauro Chehab:
->=20
-> https://git.kernel.org/pub/scm/linux/kernel/git/hansg/linux.git/log/?h=3D=
-media-atomisp
->=20
-> As such I think for the atomisp drivers it would be best if I directly
-> apply the atomisp bits of this patch (no need for a resend) to my
-> media-atomisp branch, is that ok with you ?
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+---
+ .../userspace-api/media/v4l/ext-ctrls-codec-stateless.rst  | 7 +++++++
+ include/uapi/linux/v4l2-controls.h                         | 6 +++++-
+ 2 files changed, 12 insertions(+), 1 deletion(-)
 
-For me that would be fine, it's mostly Greg who has to cope. As Jonathan
-also suggested to split, I suggest I do this. Then everyone can pickup
-the usual bits without too much conflicts.
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
+index 3d8411acd5b8..92ce3e126929 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
+@@ -2923,6 +2923,13 @@ This structure contains all loop filter related parameters. See sections
+       - ``poc_lt_curr[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
+       - PocLtCurr as described in section 8.3.2 "Decoding process for reference
+         picture set": provides the index of the long term references in DPB array.
++    * - __u8
++      - ``num_delta_pocs_of_ref_rps_idx``
++      - When the short_term_ref_pic_set_sps_flag in the slice header is equal to 0,
++        it is the same than derived value NumDeltaPocs[RefRpsIdx]. It can be used to parse
++        the RPS data in slice headers instead of skipping it with @short_term_ref_pic_set_size.
++        When the value of short_term_ref_pic_set_sps_flag in the slice header is
++        equal to 1, num_delta_pocs_of_ref_rps_idx shall be set to 0.
+     * - struct :c:type:`v4l2_hevc_dpb_entry`
+       - ``dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
+       - The decoded picture buffer, for meta-data about reference frames.
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index 5e80daa4ffe0..7bf59a87a1bf 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -2385,6 +2385,9 @@ struct v4l2_ctrl_hevc_slice_params {
+  * @poc_st_curr_after: provides the index of the short term after references
+  *		       in DPB array
+  * @poc_lt_curr: provides the index of the long term references in DPB array
++ * @num_delta_pocs_of_ref_rps_idx: same as the derived value NumDeltaPocs[RefRpsIdx],
++ *				   can be used to parse the RPS data in slice headers
++ *				   instead of skipping it with @short_term_ref_pic_set_size.
+  * @reserved: padding field. Should be zeroed by applications.
+  * @dpb: the decoded picture buffer, for meta-data about reference frames
+  * @flags: see V4L2_HEVC_DECODE_PARAM_FLAG_{}
+@@ -2400,7 +2403,8 @@ struct v4l2_ctrl_hevc_decode_params {
+ 	__u8	poc_st_curr_before[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+ 	__u8	poc_st_curr_after[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+ 	__u8	poc_lt_curr[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+-	__u8	reserved[4];
++	__u8	num_delta_pocs_of_ref_rps_idx;
++	__u8	reserved[3];
+ 	struct	v4l2_hevc_dpb_entry dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+ 	__u64	flags;
+ };
+-- 
+2.18.0
 
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---zqy6b2uvxwwx5uuf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmRtqB8ACgkQj4D7WH0S
-/k5jcAf/WFlyFOsuQCHCP7XhhLma9YjYqV09mCEayg0z2IjJ+7vSN3WRkhwspkEO
-ti62GhVpzLcGAMaZiPoB/4hZtJJfkjJrzfnOC0nhM7GnpBOorLWm0uV/Rih1O0pw
-dgXIp56Nk946bR2kjK4jFsezU5R8Be7iLRqF67E2ASL5HcI0ifC/kzyC3bIz3RXv
-HS6sE9oH2VO/Tumqt/D7DZCa3+JHwvkSY4tasd9/D1c1b0dvA+DPOh/DtfpGua5I
-WyTiA5R2KrzryD7aJUEuD4C8D66HiTahycCkemMtHwViEGTuTUvpkrStwAbC7rYB
-HwHePXvE1xRpNG0x3yAUWrd4Gs/gKg==
-=gQyv
------END PGP SIGNATURE-----
-
---zqy6b2uvxwwx5uuf--
