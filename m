@@ -2,105 +2,102 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC81EC7EE2C
-	for <linux-media@archiver.kernel.org>; Wed, 24 May 2023 08:50:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1608BC77B73
+	for <linux-media@archiver.kernel.org>; Wed, 24 May 2023 08:59:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240319AbjEXIu3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 May 2023 04:50:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57296 "EHLO
+        id S240472AbjEXI7I (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 May 2023 04:59:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240326AbjEXIu2 (ORCPT
+        with ESMTP id S240176AbjEXI7H (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 May 2023 04:50:28 -0400
-X-Greylist: delayed 1579 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 24 May 2023 01:50:24 PDT
-Received: from smtp.tom.com (smtprz25.163.net [106.38.219.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C57F97
-        for <linux-media@vger.kernel.org>; Wed, 24 May 2023 01:50:24 -0700 (PDT)
-Received: from my-app02.tom.com (my-app02.tom.com [127.0.0.1])
-        by freemail02.tom.com (Postfix) with ESMTP id 82992B00D40
-        for <linux-media@vger.kernel.org>; Wed, 24 May 2023 16:24:01 +0800 (CST)
-Received: from my-app02.tom.com (HELO smtp.tom.com) ([127.0.0.1])
-          by my-app02 (TOM SMTP Server) with SMTP ID 1746217146
-          for <linux-media@vger.kernel.org>;
-          Wed, 24 May 2023 16:24:01 +0800 (CST)
-Received: from antispam1.tom.com (unknown [172.25.16.55])
-        by freemail02.tom.com (Postfix) with ESMTP id 72149B00D38
-        for <linux-media@vger.kernel.org>; Wed, 24 May 2023 16:24:01 +0800 (CST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=201807;
-        t=1684916641; bh=pK9utf2+TTB2BqTHLR4D+VpjAz3YXX/EvXNU8ORYyBA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=GCud4YdqwTMexDSYQqxCH8FlFCFY1dorSiB2ryCn9qCth6ORu8ATRqnXN9M5u6H4K
-         AwoIsVGUBm3huzLaXHKErGXzmY6tBLwP6JyxTNjJG5/xGrknPvlmUodmsZhNg7v751
-         jB/DuAKjmDD4WPAXm611b8F6Zmhld0R0aU6qYePg=
-Received: from antispam1.tom.com (antispam1.tom.com [127.0.0.1])
-        by antispam1.tom.com (Postfix) with ESMTP id 43D26D41AD7
-        for <linux-media@vger.kernel.org>; Wed, 24 May 2023 16:24:01 +0800 (CST)
-X-Virus-Scanned: Debian amavisd-new at antispam1.tom.com
-Received: from antispam1.tom.com ([127.0.0.1])
-        by antispam1.tom.com (antispam1.tom.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 2OMvlzMJVzMw for <linux-media@vger.kernel.org>;
-        Wed, 24 May 2023 16:24:00 +0800 (CST)
-Received: from [172.30.38.103] (unknown [180.167.10.98])
-        by antispam1.tom.com (Postfix) with ESMTPA id 99329D416F1;
-        Wed, 24 May 2023 16:23:57 +0800 (CST)
-Message-ID: <5e03a89f-726d-9351-6235-9b610e8a9389@tom.com>
-Date:   Wed, 24 May 2023 16:23:57 +0800
+        Wed, 24 May 2023 04:59:07 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601D697
+        for <linux-media@vger.kernel.org>; Wed, 24 May 2023 01:59:05 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-309550263e0so497600f8f.2
+        for <linux-media@vger.kernel.org>; Wed, 24 May 2023 01:59:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684918744; x=1687510744;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=a+NNgDfjXqNbCR6ZTH9NtQnIsCEDyqhPkRlx6UouGpI=;
+        b=gsp3KAeCTbi/++G3054Rh9bBsXtnri3PIC+w9z1RLzGdfE1ZGgVh/XdpfcGaexS85T
+         YT+YbJnEnb+uZSPMdpJhQyl7ABCNBwApVqgkdkz9QhonTbWpx+rZ4lwZxBTAG+2nLuzT
+         RG7LwtF1BjJNyRQMfejHochkP0xIsEdd3PS0bZ6we5bweWGI/kEiR1RRVfvz3pn0fPd/
+         9EE+cDEMDkXXlPoGgXVWIZVNSresKsJnYrJr5Nmh8Mtw8V+qarDAHK68BLu/JtOtjTR9
+         g3Y2Jqk/xiCz/oF7PeTr797rBMTiaJUQjjUhXz4FBQK45XjkfqJPArgnA7BrD4gIoNbQ
+         GhvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684918744; x=1687510744;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a+NNgDfjXqNbCR6ZTH9NtQnIsCEDyqhPkRlx6UouGpI=;
+        b=GDQcu5YMJZt1lajd7fsVQJw9QVj9MVWyzsKTxxfTGrTfptOK8VHcMqq+N1WC1eMLta
+         QDt4/YA1Dr3Yae6MSFArTownymrcF+7iF5qrZrfKWLTE0yxraMKbT4PxB8wa3YUWb7qk
+         EjBXPYlSQr6dVSIhb2SprvGALAL/JjVRNSni4Zg1ORz+tyl/qonBWWaX+/JFaNKYrKwA
+         xQ7HwSJhggzHDLY3E3iDn7hBnGzhitErz76wMI2CBwmOImnCpkpqdEVttC66Lb50z1zY
+         2MLkPzMTc5uMx3hCl6rmS8dMxs6HW1CrxCSJ6zASWGs09lmsKBleEb/IxG0BC68Pd8zy
+         3a7w==
+X-Gm-Message-State: AC+VfDzG8I3o9aiHphaMbufdTPcmRHS+nMY4lmKIEAbsw8U0x+OB/Ppp
+        VMzhTeKVpj4FIB7n3HFc5dcWMg==
+X-Google-Smtp-Source: ACHHUZ5UvzXRjhvxMTPp8npClzFqPd2UV9YpdOx0Uvx3cAODPV6uS8yavwTZmTD25fBWjmNEeD48MQ==
+X-Received: by 2002:a5d:4646:0:b0:306:4273:9efc with SMTP id j6-20020a5d4646000000b0030642739efcmr12400699wrs.40.1684918743807;
+        Wed, 24 May 2023 01:59:03 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id b10-20020adfde0a000000b003021288a56dsm13925650wrm.115.2023.05.24.01.59.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 May 2023 01:59:03 -0700 (PDT)
+Message-ID: <c48ff175-4c89-833a-c1cf-496ab26f7e6b@linaro.org>
+Date:   Wed, 24 May 2023 09:59:02 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] media: dvb_ringbuffer: Return -EFAULT if copy fails
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] qcom/camss: use 1X16 formats instead of 2X8
 Content-Language: en-US
-To:     Dan Carpenter <dan.carpenter@linaro.org>,
-        Su Hui <suhui@nfschina.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        YongSu Yoo <yongsuyoo0215@gmail.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-References: <41a9c6a6-4b9a-4d84-9e32-09bf64c65b6c@kili.mountain>
- <aab14cc4-0400-c114-f180-6db943fd7e32@nfschina.com>
- <7466fead-1b99-4a78-86cb-5dd8a9baec19@kili.mountain>
-From:   Longsuhui <Jack_sun@tom.com>
-In-Reply-To: <7466fead-1b99-4a78-86cb-5dd8a9baec19@kili.mountain>
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        =?UTF-8?Q?Martin_D=c3=b8rum?= <dorum@noisolation.com>,
+        rfoss@kernel.org, todor.too@gmail.com
+Cc:     linux-media@vger.kernel.org
+References: <B15AD941-B2E4-4C65-9D84-C58D3E34EBCE@noisolation.com>
+ <a4b188b8-afb1-df2b-5237-026650279f10@xs4all.nl>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <a4b188b8-afb1-df2b-5237-026650279f10@xs4all.nl>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 2023/5/24 15:20, Dan Carpenter wrote:
-> On Wed, May 24, 2023 at 01:20:27PM +0800, Su Hui wrote:
->> It's confusing about the comment on function declaration.
+On 24/05/2023 09:48, Hans Verkuil wrote:
+> On 13/04/2023 12:54, Martin Dørum wrote:
+>> Platforms with qcom-camss use CSI-2, which means 1X16 is more correct
+>> than 2X8. The fact that qcom-camss supported only 2X8 meant it was
+>> incompatible with camera sensors it should have been compatible with.
 >>
->>      /**
->>       * dvb_ringbuffer_write_user - Writes a buffer received via a user
->> pointer
+>> For example, the ov5645 driver (correctly) reports that its format is
+>> UYVY8_1X16 (after ba449bb56203aedc4530a82b0f3f83358808b7f2).
+>> Since qcom-camss only supports 2X8, the qcom-camss system is
+>> incompatible with the ov5645 driver, even though they should be
+>> compatible.
 >>
->>      ..........
+>> This patch replaces all uses of UYVY8_2X8/VYUY8_2X8/YUYV8_2X8/YVYU8_2X8
+>> with the equivalent 1X16 formats.
 >>
->>       * Return: number of bytes transferred or -EFAULT
->>
->> But the function Only returns  the number of bytes transferred.
->>
->> Maybe the comment should be modified because it never returns -EFAULT.
-> To be honest, I think that -EFAULT is probably a better return.  But
-> there is no way we could apply the patch with that commit message.  The
-> commit message doesn't explain the problem for the user or why returning
-> the number of bytes copied is not correct in this case.
->
-> I think that maybe it's not too late to change this to return -EFAULT,
-> but it would have been easier to make the change in 2014 before there
-> were many users.  Also it would be easier if you were testing this on
-> real hardware.
->
-> Possibly other people think the current behavior is correct or that it
-> is too late to change it.  That's also fine.  I'm not a domain expert
-> here.
-I understand it.
-Thanks a lot!
+>> Signed-off-by: Martin Dørum <dorum@noisolation.com  <mailto:dorum@noisolation.com>>
+> Can one of the driver maintainers review this?
+> 
+> It sounds reasonable, but I wonder if this can break existing setups where
+> the sensor only supports 2X8 and not 1X16.
+> 
+> Regards,
+> 
+> 	Hans
+> 
 
-Su Hui
+This hasn't hit my inbox but, I'll give it a test sometime this week.
 
->
-> regards,
-> dan carpenter
->
+---
+bod
