@@ -2,49 +2,49 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF1C1C77B7A
-	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 09:17:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EE88C77B7E
+	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 09:17:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240124AbjEYJRG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 May 2023 05:17:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52196 "EHLO
+        id S240130AbjEYJRO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 May 2023 05:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239698AbjEYJRD (ORCPT
+        with ESMTP id S240200AbjEYJRM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 May 2023 05:17:03 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D661A4
-        for <linux-media@vger.kernel.org>; Thu, 25 May 2023 02:17:01 -0700 (PDT)
+        Thu, 25 May 2023 05:17:12 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA73A1A1
+        for <linux-media@vger.kernel.org>; Thu, 25 May 2023 02:17:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685006221; x=1716542221;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=PDBw8MwvjfZYu4PUQYT8L2tzJx8DQ9vJTL/mT4jX590=;
-  b=k+A6P97W3n4nWhW6bFD8btji6PgBdNjM12WTeo7OoHBmuqAUvPPROyrH
-   I8WyNRWzO2yeWjTAc8ll4Pdw35ZkQT1F1SzEif/hHmqwK29WG7MtsFySW
-   3Bo1pGkYiVmWVkfPu6QSq3+unXjwuCdfgIPQvmQj0Bn71SjfuAHH8vcQr
-   S+28c8mQ1NOmtWXRREe1IHtmRkDoMzsZ965Wvq90HtJ2WosyWJCdd1dQ1
-   mN4EZg+DI/C8IYmCEYufO6Oup5Gysx7R0cexPUFmmsVPAu0bxe8x3w+VT
-   IsjjoaZxv5xifVhlODvcfkg5AxxubuI0JuD/UBKA13PKQlHNSpfK0vhXT
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="343307780"
+  t=1685006229; x=1716542229;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=r6OzYaHwbIBCyjYRA4K5AvsYuo/ctV0Y5RCZqQ874+0=;
+  b=PoJsXVQhmsXdQNvJAOg8T+4AccgXP+qwqLCTbd3usq0GnwMfydhuM/+9
+   lDG6TPKg4bS+kRfXk8WqkmH0Jkz8XRflsv75k+Q65mqpBA+HU1VAdK3i4
+   e5Rr3fNuIHdWBdV+VV31aouVXgR3e/A5k6HD9abHiju8tnBIyAqYJPZ9A
+   NM5NUP+WkUUKtS3zxqdO9LP3kyxiP6Y2yJr83h+G4XqFgM4A5hcTJZaz7
+   GT1jNTpPH1C32p3zWbO6rIr7ifkD99Y6i8uKw52yjThyOvRiohVBaznhl
+   ldHc4OUVCGvOKTzjuDN03XKs4MYpjXydyDYn/FMLgJJyLL2sWr0g3MMyQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="333455637"
 X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
-   d="scan'208";a="343307780"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 02:16:59 -0700
+   d="scan'208";a="333455637"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 02:17:08 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="794590863"
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="879029084"
 X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
-   d="scan'208";a="794590863"
+   d="scan'208";a="879029084"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 02:16:51 -0700
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 02:17:01 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id 075BB120E86;
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 531F4122FEA;
         Thu, 25 May 2023 12:16:49 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.94.2)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1q2757-009koT-R8; Thu, 25 May 2023 12:16:25 +0300
+        id 1q2758-009kp7-60; Thu, 25 May 2023 12:16:26 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com,
@@ -75,266 +75,362 @@ Cc:     laurent.pinchart@ideasonboard.com,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Sowjanya Komatineni <skomatineni@nvidia.com>,
         Marco Felsch <m.felsch@pengutronix.de>
-Subject: [RESEND PATCH v3 00/32] Separate links and async sub-devices
-Date:   Thu, 25 May 2023 12:15:43 +0300
-Message-Id: <20230525091615.2324824-1-sakari.ailus@linux.intel.com>
+Subject: [RESEND PATCH v3 13/32] media: v4l: async: Simplify async sub-device fwnode matching
+Date:   Thu, 25 May 2023 12:15:56 +0300
+Message-Id: <20230525091615.2324824-14-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230525091615.2324824-1-sakari.ailus@linux.intel.com>
+References: <20230525091615.2324824-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi all,
+V4L2 async sub-device matching originally used the device nodes only.
+Endpoint nodes were taken into use instead as using the device nodes was
+problematic for it was in some cases ambiguous which link might have been
+in question.
 
-(Resending v3, with a wider distribution. This set just touches so many
-drivers. It would be nice to have this tested with as much hardware as
-possible. I wouldn't mind reviews either.)
+There is however no need to use endpoint nodes on both sides, as the async
+sub-device's fwnode can always be trivially obtained using
+fwnode_graph_get_remote_endpoint() when needed while what counts is
+whether or not the link is between two device nodes, i.e. the device nodes
+match.
 
-This set adds support for multiple downstream links in an async
-sub-device, by separating the sub-device registration from the link
-creation.
+This will briefly break the adv748x driver but it will be fixed later in
+the set, by patch "media: adv748x: Return to endpoint matching".
 
-A new concept, V4L2 async connection is added. A connection later on
-translates to an MC ancillary or data link. Generally async notifiers have
-a number of connections but at that level there is no knowledge of how
-many sub-devices they will connect to. The bound and unbound callbacks now
-work on connections. For the existing drivers there's only one connection
-so I do not expect regressions because of that.
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ drivers/media/i2c/adv748x/adv748x-csi2.c   |  5 +-
+ drivers/media/i2c/max9286.c                | 14 +---
+ drivers/media/i2c/rdacm20.c                | 16 +---
+ drivers/media/i2c/rdacm21.c                | 15 +---
+ drivers/media/i2c/tc358746.c               |  5 --
+ drivers/media/platform/nxp/imx-mipi-csis.c |  7 --
+ drivers/media/v4l2-core/v4l2-async.c       | 88 ++++++----------------
+ 7 files changed, 26 insertions(+), 124 deletions(-)
 
-Async sub-device fwnode matching will now take place between the device
-(the dev field of struct v4l2_subdev) and a struct v4l2_async_connection
-(an endpoint for devices that have endpoints or the device for those that
-do not). This is because the graph data structure only describes
-point-to-point connections so therefore defining one end of the connection
-defines the entire connection.
-
-This set is unlikely to address all needs people have related to the async
-framework but I think that beyond what it does, it paves some way for
-addressing more of those additional needs.
-
-To be frank, I'd like to get rid of the entire V4L2 async framework, but
-it would require allowing much more dynamic driver initialisation,
-including sub-devices and device nodes popping up in the system in the
-order and extent there is successfully probed hardware. Until that, and
-this may well be the entire foreseeable future, we have at least some of
-this complexity.
-
-I didn't add the Tested-by: tags I got for v2 as there are significant
-changes, albeit only for better I hope. :-) Niklas has also tested this on
-rcar-vin + adv746x, it works now while on v2 it did not. So having also
-this version validated on i.MX6 would be nice.
-
-The code also can be found in my async-multi branch, on media tree master.
-
-since v2:
-
-- Drop the sub-devices (struct v4l2_async_subdev) earlier re-introduced in
-  this patchset. They aren't necessary, instead we can use struct
-  v4l2_subdev to store the information. This simplifies the code quite a
-  bit, including removal of one of the global lists: only the sub-device
-  and notifier lists are left now. The sub-device is assigned to the
-  connection at the bound time: information on which sub-devices are
-  connected via async connections is only actually available at the time
-  of binding.
-
-- Address issues related to sub-device handling in the rcar-vin driver.
-  Also other fixes to the rcar-vin driver (bugs introduced in v2).
-
-- Remove sub-device's notifier field, including an omap3isp patch removing
-  an unnecessary test.
-
-- Drop support for async sub-device side endpoint matching. Convert
-  NXP imx-mipi-csis.
-
-since v1:
-
-- Fixed object relation issues. The set has now been tested on an
-  async sub-device with two pads connected by data links to sub-devices on
-  a notifier (struct) device. (Multiple notifiers should work, too, but
-  has not been tested.)
-
-- Add a function to obtain an async connection based on the sub-device.
-  This is useful for drivers for accessing their own link specific data.
-
-- Improved documentation. Include a patch documenting
-  v4l2_async_nf_add_fwnode().
-
-- Return endpoint matching and address adv748x driver breakage in v1. It's
-  a special case so other drivers can remain simpler.
-
-- Swap notifier initialisation arguments, by making the notifier the first
-  argument.
-
-- Remove extra fwnode_handle_put() in max9286_v4l2_unregister().
-
-- Make struct device available before notifier initialisation for
-  consistent debug messages.
-
-- Simplify notifier and async sub-device linked lists. Consistent list
-  head and list entry naming.
-
-- Drop leftovers from an early experimenation work in rkisp1 and omap3isp
-  drivers.
-
-- Simplify xilinx-vipp sub-device binding.
-
-- Use if()s in notifier_dev() of v4l2-async.c.
-
-- Improved debug messages in v4l2-async.c, use v4l2-async prefix and
-  generally with notifier device.
-
-- Call match types with macros V4L2_ASYNC_MATCH_TYPE_* (was
-  V4L2_ASYNC_MATCH_*).
-
-- Create ancillary links only when the sub-device is registered, not when
-  a connection is bound (which can take place more than once for a
-  sub-device).
-
-- Rename struct v4l2_async_match as v4l2_async_match_desc.
-
-- Perform list initialisation in notifier init rather than registration.
-
-- Get rid of the "readd" parameter for v4l2_async_nf_unbind_all_subdevs().
-
-- Check async sub-device validity on a notifier only when the notifier is
-  registered. This removes extra list traversal and simplifies the code.
-
-- Remove extra list initialisation in v4l2_async_register_subdev().
-
-- Drop v4l2_async_cleanup(). It was no longer useful, called from a single
-  place.
-
-- Lots of kerneldoc fixes (mostly changed argument names).
-
-since RFC v1:
-
-- Address missing API usage changes in a lot of drivers.
-
-- Fix compilation problems in intermediate patches.
-
-- Move V4L2 device registration earlier or move notifier initialisation
-  and fwnode endpoint parsing past the current V4L2 device registration
-  (patches 11--16).
-
-Jacopo Mondi (1):
-  media: v4l: async: Drop v4l2_async_nf_parse_fwnode_endpoints()
-
-Sakari Ailus (31):
-  media: Documentation: v4l: Document missing async subdev function
-  media: xilinx-vipp: Clean up bound async notifier callback
-  media: omap3isp: Don't check for the sub-device's notifier
-  media: v4l: async: Add some debug prints
-  media: v4l: async: Clean up testing for duplicate async subdevs
-  media: v4l: async: Drop unneeded list entry initialisation
-  media: v4l: async: Don't check whether asd is NULL in validity check
-  media: v4l: async: Make V4L2 async match information a struct
-  media: v4l: async: Rename V4L2_ASYNC_MATCH_ macros, add TYPE_
-  media: v4l: async: Only pass match information for async subdev
-    validation
-  media: v4l: async: Clean up list heads and entries
-  media: v4l: async: Simplify async sub-device fwnode matching
-  media: v4l: async: Rename v4l2_async_subdev as v4l2_async_connection
-  media: v4l: async: Clean up error handling in v4l2_async_match_notify
-  media: v4l: async: Drop duplicate handling when adding connections
-  media: v4l: async: Rework internal lists
-  media: v4l: async: Obtain async connection based on sub-device
-  media: v4l: async: Allow multiple connections between entities
-  media: v4l: async: Try more connections
-  media: v4l: async: Support fwnode endpoint list matching for subdevs
-  media: adv748x: Return to endpoint matching
-  media: pxa_camera: Fix probe error handling
-  media: pxa_camera: Register V4L2 device early
-  media: marvell: cafe: Register V4L2 device earlier
-  media: am437x-vpfe: Register V4L2 device early
-  media: omap3isp: Initialise V4L2 async notifier later
-  media: xilinx-vipp: Init async notifier after registering V4L2 device
-  media: davinci: Init async notifier after registering V4L2 device
-  media: qcom: Initialise V4L2 async notifier later
-  media: v4l: async: Set v4l2_device in async notifier init
-  media: Documentation: v4l: Document sub-device notifiers
-
- .../driver-api/media/v4l2-subdev.rst          |  28 +-
- drivers/media/i2c/adv748x/adv748x-csi2.c      |  13 +-
- drivers/media/i2c/max9286.c                   |  27 +-
- drivers/media/i2c/rdacm20.c                   |  16 +-
- drivers/media/i2c/rdacm21.c                   |  15 +-
- drivers/media/i2c/st-mipid02.c                |  12 +-
- drivers/media/i2c/tc358746.c                  |  15 +-
- drivers/media/pci/intel/ipu3/ipu3-cio2-main.c |  14 +-
- drivers/media/platform/atmel/atmel-isi.c      |  12 +-
- drivers/media/platform/atmel/atmel-isi.h      |   2 +-
- drivers/media/platform/cadence/cdns-csi2rx.c  |  10 +-
- drivers/media/platform/intel/pxa_camera.c     |  77 +-
- drivers/media/platform/marvell/cafe-driver.c  |  18 +-
- drivers/media/platform/marvell/mcam-core.c    |  12 +-
- drivers/media/platform/marvell/mmp-driver.c   |   6 +-
- .../platform/microchip/microchip-csi2dc.c     |  11 +-
- .../platform/microchip/microchip-isc-base.c   |   4 +-
- .../media/platform/microchip/microchip-isc.h  |   2 +-
- .../microchip/microchip-sama5d2-isc.c         |   9 +-
- .../microchip/microchip-sama7g5-isc.c         |   9 +-
- drivers/media/platform/nxp/imx-mipi-csis.c    |  17 +-
- drivers/media/platform/nxp/imx7-media-csi.c   |  10 +-
- .../platform/nxp/imx8-isi/imx8-isi-core.c     |  12 +-
- drivers/media/platform/qcom/camss/camss.c     |  26 +-
- drivers/media/platform/qcom/camss/camss.h     |   2 +-
- drivers/media/platform/renesas/rcar-isp.c     |  12 +-
- .../platform/renesas/rcar-vin/rcar-core.c     |  52 +-
- .../platform/renesas/rcar-vin/rcar-csi2.c     |  20 +-
- .../platform/renesas/rcar-vin/rcar-vin.h      |   8 +-
- drivers/media/platform/renesas/rcar_drif.c    |  12 +-
- drivers/media/platform/renesas/renesas-ceu.c  |  10 +-
- .../platform/renesas/rzg2l-cru/rzg2l-core.c   |  14 +-
- .../platform/renesas/rzg2l-cru/rzg2l-cru.h    |   2 +-
- .../platform/renesas/rzg2l-cru/rzg2l-csi2.c   |  12 +-
- .../platform/rockchip/rkisp1/rkisp1-common.h  |   2 +-
- .../platform/rockchip/rkisp1/rkisp1-csi.c     |   7 +-
- .../platform/rockchip/rkisp1/rkisp1-dev.c     |  12 +-
- .../platform/rockchip/rkisp1/rkisp1-isp.c     |   8 +-
- .../platform/samsung/exynos4-is/media-dev.c   |  11 +-
- .../platform/samsung/exynos4-is/media-dev.h   |   2 +-
- drivers/media/platform/st/stm32/stm32-dcmi.c  |  12 +-
- .../platform/sunxi/sun4i-csi/sun4i_csi.c      |  10 +-
- .../sunxi/sun6i-csi/sun6i_csi_bridge.c        |   8 +-
- .../sunxi/sun6i-csi/sun6i_csi_bridge.h        |   2 +-
- .../sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c   |  10 +-
- .../sun8i_a83t_mipi_csi2.c                    |  10 +-
- .../media/platform/ti/am437x/am437x-vpfe.c    |  36 +-
- .../media/platform/ti/am437x/am437x-vpfe.h    |   2 +-
- drivers/media/platform/ti/cal/cal.c           |  10 +-
- .../media/platform/ti/davinci/vpif_capture.c  |  33 +-
- drivers/media/platform/ti/omap3isp/isp.c      |  29 +-
- drivers/media/platform/ti/omap3isp/isp.h      |  15 +-
- drivers/media/platform/ti/omap3isp/ispccdc.c  |  13 +-
- drivers/media/platform/ti/omap3isp/ispccp2.c  |   2 +
- drivers/media/platform/ti/omap3isp/ispcsi2.c  |   2 +
- .../media/platform/ti/omap3isp/ispcsiphy.c    |  15 +-
- drivers/media/platform/video-mux.c            |  10 +-
- drivers/media/platform/xilinx/xilinx-vipp.c   |  55 +-
- drivers/media/v4l2-core/v4l2-async.c          | 685 ++++++++++--------
- drivers/media/v4l2-core/v4l2-fwnode.c         | 109 +--
- drivers/media/v4l2-core/v4l2-subdev.c         |  13 +
- .../media/deprecated/atmel/atmel-isc-base.c   |   4 +-
- .../media/deprecated/atmel/atmel-isc.h        |   2 +-
- .../deprecated/atmel/atmel-sama5d2-isc.c      |   9 +-
- .../deprecated/atmel/atmel-sama7g5-isc.c      |   9 +-
- drivers/staging/media/imx/imx-media-csi.c     |  10 +-
- .../staging/media/imx/imx-media-dev-common.c  |   6 +-
- drivers/staging/media/imx/imx-media-dev.c     |   2 +-
- drivers/staging/media/imx/imx-media-of.c      |   4 +-
- drivers/staging/media/imx/imx6-mipi-csi2.c    |  12 +-
- drivers/staging/media/imx/imx8mq-mipi-csi2.c  |  10 +-
- .../media/sunxi/sun6i-isp/sun6i_isp_proc.c    |   6 +-
- .../media/sunxi/sun6i-isp/sun6i_isp_proc.h    |   2 +-
- drivers/staging/media/tegra-video/vi.c        |  18 +-
- drivers/staging/media/tegra-video/vi.h        |   2 +-
- include/media/davinci/vpif_types.h            |   2 +-
- include/media/v4l2-async.h                    | 218 +++---
- include/media/v4l2-fwnode.h                   |  68 +-
- include/media/v4l2-subdev.h                   |  17 +-
- 79 files changed, 973 insertions(+), 1072 deletions(-)
-
+diff --git a/drivers/media/i2c/adv748x/adv748x-csi2.c b/drivers/media/i2c/adv748x/adv748x-csi2.c
+index bd4f3fe0e3096..b6f93c1db3d2a 100644
+--- a/drivers/media/i2c/adv748x/adv748x-csi2.c
++++ b/drivers/media/i2c/adv748x/adv748x-csi2.c
+@@ -296,13 +296,12 @@ int adv748x_csi2_init(struct adv748x_state *state, struct adv748x_csi2 *tx)
+ 	if (!is_tx_enabled(tx))
+ 		return 0;
+ 
++	/* FIXME: Do endpoint matching again! */
++
+ 	adv748x_subdev_init(&tx->sd, state, &adv748x_csi2_ops,
+ 			    MEDIA_ENT_F_VID_IF_BRIDGE,
+ 			    is_txa(tx) ? "txa" : "txb");
+ 
+-	/* Ensure that matching is based upon the endpoint fwnodes */
+-	tx->sd.fwnode = of_fwnode_handle(state->endpoints[tx->port]);
+-
+ 	/* Register internal ops for incremental subdev registration */
+ 	tx->sd.internal_ops = &adv748x_csi2_internal_ops;
+ 
+diff --git a/drivers/media/i2c/max9286.c b/drivers/media/i2c/max9286.c
+index 13a986b885889..64f5c49cae776 100644
+--- a/drivers/media/i2c/max9286.c
++++ b/drivers/media/i2c/max9286.c
+@@ -1051,7 +1051,6 @@ static const struct v4l2_ctrl_ops max9286_ctrl_ops = {
+ static int max9286_v4l2_register(struct max9286_priv *priv)
+ {
+ 	struct device *dev = &priv->client->dev;
+-	struct fwnode_handle *ep;
+ 	int ret;
+ 	int i;
+ 
+@@ -1093,25 +1092,14 @@ static int max9286_v4l2_register(struct max9286_priv *priv)
+ 	if (ret)
+ 		goto err_async;
+ 
+-	ep = fwnode_graph_get_endpoint_by_id(dev_fwnode(dev), MAX9286_SRC_PAD,
+-					     0, 0);
+-	if (!ep) {
+-		dev_err(dev, "Unable to retrieve endpoint on \"port@4\"\n");
+-		ret = -ENOENT;
+-		goto err_async;
+-	}
+-	priv->sd.fwnode = ep;
+-
+ 	ret = v4l2_async_register_subdev(&priv->sd);
+ 	if (ret < 0) {
+ 		dev_err(dev, "Unable to register subdevice\n");
+-		goto err_put_node;
++		goto err_async;
+ 	}
+ 
+ 	return 0;
+ 
+-err_put_node:
+-	fwnode_handle_put(ep);
+ err_async:
+ 	v4l2_ctrl_handler_free(&priv->ctrls);
+ 	max9286_v4l2_notifier_unregister(priv);
+diff --git a/drivers/media/i2c/rdacm20.c b/drivers/media/i2c/rdacm20.c
+index a2263fa825b59..9d8a8f9efd835 100644
+--- a/drivers/media/i2c/rdacm20.c
++++ b/drivers/media/i2c/rdacm20.c
+@@ -567,7 +567,6 @@ static int rdacm20_initialize(struct rdacm20_device *dev)
+ static int rdacm20_probe(struct i2c_client *client)
+ {
+ 	struct rdacm20_device *dev;
+-	struct fwnode_handle *ep;
+ 	int ret;
+ 
+ 	dev = devm_kzalloc(&client->dev, sizeof(*dev), GFP_KERNEL);
+@@ -616,24 +615,12 @@ static int rdacm20_probe(struct i2c_client *client)
+ 	if (ret < 0)
+ 		goto error_free_ctrls;
+ 
+-	ep = fwnode_graph_get_next_endpoint(dev_fwnode(&client->dev), NULL);
+-	if (!ep) {
+-		dev_err(&client->dev,
+-			"Unable to get endpoint in node %pOF\n",
+-			client->dev.of_node);
+-		ret = -ENOENT;
+-		goto error_free_ctrls;
+-	}
+-	dev->sd.fwnode = ep;
+-
+ 	ret = v4l2_async_register_subdev(&dev->sd);
+ 	if (ret)
+-		goto error_put_node;
++		goto error_free_ctrls;
+ 
+ 	return 0;
+ 
+-error_put_node:
+-	fwnode_handle_put(ep);
+ error_free_ctrls:
+ 	v4l2_ctrl_handler_free(&dev->ctrls);
+ error:
+@@ -650,7 +637,6 @@ static void rdacm20_remove(struct i2c_client *client)
+ {
+ 	struct rdacm20_device *dev = i2c_to_rdacm20(client);
+ 
+-	fwnode_handle_put(dev->sd.fwnode);
+ 	v4l2_async_unregister_subdev(&dev->sd);
+ 	v4l2_ctrl_handler_free(&dev->ctrls);
+ 	media_entity_cleanup(&dev->sd.entity);
+diff --git a/drivers/media/i2c/rdacm21.c b/drivers/media/i2c/rdacm21.c
+index 9ccc56c30d3b0..d67cfcb2e05a4 100644
+--- a/drivers/media/i2c/rdacm21.c
++++ b/drivers/media/i2c/rdacm21.c
+@@ -543,7 +543,6 @@ static int rdacm21_initialize(struct rdacm21_device *dev)
+ static int rdacm21_probe(struct i2c_client *client)
+ {
+ 	struct rdacm21_device *dev;
+-	struct fwnode_handle *ep;
+ 	int ret;
+ 
+ 	dev = devm_kzalloc(&client->dev, sizeof(*dev), GFP_KERNEL);
+@@ -588,24 +587,12 @@ static int rdacm21_probe(struct i2c_client *client)
+ 	if (ret < 0)
+ 		goto error_free_ctrls;
+ 
+-	ep = fwnode_graph_get_next_endpoint(dev_fwnode(&client->dev), NULL);
+-	if (!ep) {
+-		dev_err(&client->dev,
+-			"Unable to get endpoint in node %pOF\n",
+-			client->dev.of_node);
+-		ret = -ENOENT;
+-		goto error_free_ctrls;
+-	}
+-	dev->sd.fwnode = ep;
+-
+ 	ret = v4l2_async_register_subdev(&dev->sd);
+ 	if (ret)
+-		goto error_put_node;
++		goto error_free_ctrls;
+ 
+ 	return 0;
+ 
+-error_put_node:
+-	fwnode_handle_put(dev->sd.fwnode);
+ error_free_ctrls:
+ 	v4l2_ctrl_handler_free(&dev->ctrls);
+ error:
+diff --git a/drivers/media/i2c/tc358746.c b/drivers/media/i2c/tc358746.c
+index ec1a193ba161a..b37a9ff73f6ad 100644
+--- a/drivers/media/i2c/tc358746.c
++++ b/drivers/media/i2c/tc358746.c
+@@ -1476,9 +1476,6 @@ static int tc358746_async_register(struct tc358746 *tc358746)
+ 	if (err)
+ 		goto err_cleanup;
+ 
+-	tc358746->sd.fwnode = fwnode_graph_get_endpoint_by_id(
+-		dev_fwnode(tc358746->sd.dev), TC358746_SOURCE, 0, 0);
+-
+ 	err = v4l2_async_register_subdev(&tc358746->sd);
+ 	if (err)
+ 		goto err_unregister;
+@@ -1486,7 +1483,6 @@ static int tc358746_async_register(struct tc358746 *tc358746)
+ 	return 0;
+ 
+ err_unregister:
+-	fwnode_handle_put(tc358746->sd.fwnode);
+ 	v4l2_async_nf_unregister(&tc358746->notifier);
+ err_cleanup:
+ 	v4l2_async_nf_cleanup(&tc358746->notifier);
+@@ -1605,7 +1601,6 @@ static void tc358746_remove(struct i2c_client *client)
+ 	v4l2_fwnode_endpoint_free(&tc358746->csi_vep);
+ 	v4l2_async_nf_unregister(&tc358746->notifier);
+ 	v4l2_async_nf_cleanup(&tc358746->notifier);
+-	fwnode_handle_put(sd->fwnode);
+ 	v4l2_async_unregister_subdev(sd);
+ 	media_entity_cleanup(&sd->entity);
+ 
+diff --git a/drivers/media/platform/nxp/imx-mipi-csis.c b/drivers/media/platform/nxp/imx-mipi-csis.c
+index 05d52762e7926..d0dc30187775d 100644
+--- a/drivers/media/platform/nxp/imx-mipi-csis.c
++++ b/drivers/media/platform/nxp/imx-mipi-csis.c
+@@ -1365,13 +1365,6 @@ static int mipi_csis_subdev_init(struct mipi_csis_device *csis)
+ 
+ 	sd->dev = csis->dev;
+ 
+-	sd->fwnode = fwnode_graph_get_endpoint_by_id(dev_fwnode(csis->dev),
+-						     1, 0, 0);
+-	if (!sd->fwnode) {
+-		dev_err(csis->dev, "Unable to retrieve endpoint for port@1\n");
+-		return -ENOENT;
+-	}
+-
+ 	csis->pads[CSIS_PAD_SINK].flags = MEDIA_PAD_FL_SINK
+ 					 | MEDIA_PAD_FL_MUST_CONNECT;
+ 	csis->pads[CSIS_PAD_SOURCE].flags = MEDIA_PAD_FL_SOURCE
+diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
+index 06b1e1a1a5f87..335597889f365 100644
+--- a/drivers/media/v4l2-core/v4l2-async.c
++++ b/drivers/media/v4l2-core/v4l2-async.c
+@@ -94,89 +94,36 @@ match_fwnode_one(struct v4l2_async_notifier *notifier,
+ 		 struct v4l2_subdev *sd, struct fwnode_handle *sd_fwnode,
+ 		 struct v4l2_async_match_desc *match)
+ {
+-	struct fwnode_handle *other_fwnode;
+-	struct fwnode_handle *dev_fwnode;
+-	bool asd_fwnode_is_ep;
+-	bool sd_fwnode_is_ep;
+-	struct device *dev;
++	struct fwnode_handle *asd_dev_fwnode;
++	bool ret;
+ 
+ 	dev_dbg(notifier_dev(notifier),
+ 		"v4l2-async: fwnode match: need %pfw, trying %pfw\n",
+ 		sd_fwnode, match->fwnode);
+ 
+-	/*
+-	 * Both the subdev and the async subdev can provide either an endpoint
+-	 * fwnode or a device fwnode. Start with the simple case of direct
+-	 * fwnode matching.
+-	 */
+ 	if (sd_fwnode == match->fwnode) {
+ 		dev_dbg(notifier_dev(notifier),
+ 			"v4l2-async: direct match found\n");
+ 		return true;
+ 	}
+ 
+-	/*
+-	 * Otherwise, check if the sd fwnode and the asd fwnode refer to an
+-	 * endpoint or a device. If they're of the same type, there's no match.
+-	 * Technically speaking this checks if the nodes refer to a connected
+-	 * endpoint, which is the simplest check that works for both OF and
+-	 * ACPI. This won't make a difference, as drivers should not try to
+-	 * match unconnected endpoints.
+-	 */
+-	sd_fwnode_is_ep = fwnode_graph_is_endpoint(sd_fwnode);
+-	asd_fwnode_is_ep = fwnode_graph_is_endpoint(match->fwnode);
+-
+-	if (sd_fwnode_is_ep == asd_fwnode_is_ep) {
++	if (!fwnode_graph_is_endpoint(match->fwnode)) {
+ 		dev_dbg(notifier_dev(notifier),
+ 			"v4l2-async: direct match not found\n");
+ 		return false;
+ 	}
+ 
+-	/*
+-	 * The sd and asd fwnodes are of different types. Get the device fwnode
+-	 * parent of the endpoint fwnode, and compare it with the other fwnode.
+-	 */
+-	if (sd_fwnode_is_ep) {
+-		dev_fwnode = fwnode_graph_get_port_parent(sd_fwnode);
+-		other_fwnode = match->fwnode;
+-	} else {
+-		dev_fwnode = fwnode_graph_get_port_parent(match->fwnode);
+-		other_fwnode = sd_fwnode;
+-	}
++	asd_dev_fwnode = fwnode_graph_get_port_parent(match->fwnode);
+ 
+-	dev_dbg(notifier_dev(notifier),
+-		"v4l2-async: fwnode compat match: need %pfw, trying %pfw\n",
+-		dev_fwnode, other_fwnode);
++	ret = sd_fwnode == asd_dev_fwnode;
+ 
+-	fwnode_handle_put(dev_fwnode);
++	fwnode_handle_put(asd_dev_fwnode);
+ 
+-	if (dev_fwnode != other_fwnode) {
+-		dev_dbg(notifier_dev(notifier),
+-			"v4l2-async: compat match not found\n");
+-		return false;
+-	}
+-
+-	/*
+-	 * We have a heterogeneous match. Retrieve the struct device of the side
+-	 * that matched on a device fwnode to print its driver name.
+-	 */
+-	if (sd_fwnode_is_ep)
+-		dev = notifier->v4l2_dev ? notifier->v4l2_dev->dev
+-		    : notifier->sd->dev;
+-	else
+-		dev = sd->dev;
+-
+-	if (dev && dev->driver) {
+-		if (sd_fwnode_is_ep)
+-			dev_warn(dev, "Driver %s uses device fwnode, incorrect match may occur\n",
+-				 dev->driver->name);
+-		dev_notice(dev, "Consider updating driver %s to match on endpoints\n",
+-			   dev->driver->name);
+-	}
+-
+-	dev_dbg(notifier_dev(notifier), "v4l2-async: compat match found\n");
++	dev_dbg(notifier_dev(notifier),
++		"v4l2-async: device--endpoint match %sfound\n",
++		ret ? "" : "not ");
+ 
+-	return true;
++	return ret;
+ }
+ 
+ static bool match_fwnode(struct v4l2_async_notifier *notifier,
+@@ -814,12 +761,19 @@ int v4l2_async_register_subdev(struct v4l2_subdev *sd)
+ 	int ret;
+ 
+ 	/*
+-	 * No reference taken. The reference is held by the device
+-	 * (struct v4l2_subdev.dev), and async sub-device does not
+-	 * exist independently of the device at any point of time.
++	 * No reference taken. The reference is held by the device (struct
++	 * v4l2_subdev.dev), and async sub-device does not exist independently
++	 * of the device at any point of time.
++	 *
++	 * The async sub-device shall always be registered for its device node,
++	 * not the endpoint node.
+ 	 */
+-	if (!sd->fwnode && sd->dev)
++	if (!sd->fwnode && sd->dev) {
+ 		sd->fwnode = dev_fwnode(sd->dev);
++	} else if (fwnode_graph_is_endpoint(sd->fwnode)) {
++		dev_warn(sd->dev, "sub-device fwnode is an endpoint!\n");
++		return -EINVAL;
++	}
+ 
+ 	mutex_lock(&list_lock);
+ 
 -- 
 2.30.2
 
