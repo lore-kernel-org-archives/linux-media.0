@@ -2,47 +2,48 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4059C7EE2C
-	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 19:26:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38CD3C77B7E
+	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 19:43:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242063AbjEYT0x (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 May 2023 15:26:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42866 "EHLO
+        id S241952AbjEYTny (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 May 2023 15:43:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241928AbjEYT02 (ORCPT
+        with ESMTP id S241857AbjEYTnv (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 May 2023 15:26:28 -0400
+        Thu, 25 May 2023 15:43:51 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7491410F9;
-        Thu, 25 May 2023 12:25:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F7E4E77;
+        Thu, 25 May 2023 12:43:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D875864983;
-        Thu, 25 May 2023 18:43:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3AAFC433AE;
-        Thu, 25 May 2023 18:43:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A545D60F88;
+        Thu, 25 May 2023 18:45:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40BE7C4339B;
+        Thu, 25 May 2023 18:45:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685040194;
-        bh=sAhyqlYuCB+oGx6YX9g5EwECWXRNU1vkB79FUjM+5A8=;
+        s=k20201202; t=1685040342;
+        bh=WkuFBKzaG+lRRfe+3R6jFvN5GUfMfXhYOimvzJNqXUM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G4KJZ7++ztLoBpjQaw/lPue9IRLIqEgtsd5P7TErrelaLCFy+Yb8oDi0RGCrGEwZ7
-         nr9nqnN+BkP5bYnlF7KyQgljU+g7qgOtlffzT9s8sBa2VHGtrGxKzUGNrydM1MB/8D
-         6dmXshzIn49y34ydy1R/phTrCgjmbuE42iXZ+KaVQz+S4rhewI91s75Jf/0MlfZLDj
-         HhjLvEVIu5XbaE9GPmWjjwzeWBsY/Lv/DZp4xrejGfMDoBgMfsuioyE2U+qYgej3V2
-         fkARwga+KE1+4X5lUfHkjyQQAdVuzulp180WksGhwN7nox5Aoj6k/sZ+loHZ+pedJ7
-         gry02Y+O7Lsbg==
+        b=HO0UbdR0kJCq1RvNBQF8njM1oM2YUFRvRgsJN1l/36w4gfbzjXNJv9tdciqxyzLkn
+         oUIlQANlztE0FHrKP9SqY9WoJbxp76wsusTJeOG8zH0+cCm1uUoE+pNyHihqhC+nou
+         9fGeHe75a8JWfFTtVK/gvx4ElcBcbe1rW3YUq5fuGPvNotTVDMnfGlfBVyH2nr8o0k
+         JjvhEj3FsoOkDksmfmG70RMDiG/RmE+orvfK2PC1jqjbu+K8bVgkHENvHEMEoqFAHq
+         ZJGzXgEBjhW82k+3T+8eDZsvP7ReXL50IKtCs3pv4KNBzBHyPEq3GTpf6teZ711OAN
+         npjThfzocmFLQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hyunwoo Kim <imv4bel@gmail.com>,
+Cc:     Wei Chen <harperchen1110@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 13/27] media: ttusb-dec: fix memory leak in ttusb_dec_exit_dvb()
-Date:   Thu, 25 May 2023 14:42:22 -0400
-Message-Id: <20230525184238.1943072-13-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, serjk@netup.ru,
+        aospan@netup.ru, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 09/20] media: netup_unidvb: fix irq init by register it at the end of probe
+Date:   Thu, 25 May 2023 14:45:05 -0400
+Message-Id: <20230525184520.2004878-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230525184238.1943072-1-sashal@kernel.org>
-References: <20230525184238.1943072-1-sashal@kernel.org>
+In-Reply-To: <20230525184520.2004878-1-sashal@kernel.org>
+References: <20230525184520.2004878-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -51,41 +52,68 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hyunwoo Kim <imv4bel@gmail.com>
+From: Wei Chen <harperchen1110@gmail.com>
 
-[ Upstream commit 517a281338322ff8293f988771c98aaa7205e457 ]
+[ Upstream commit e6ad6233592593079db5c8fa592c298e51bc1356 ]
 
-Since dvb_frontend_detach() is not called in ttusb_dec_exit_dvb(),
-which is called when the device is disconnected, dvb_frontend_free()
-is not finally called.
+IRQ handler netup_spi_interrupt() takes spinlock spi->lock. The lock
+is initialized in netup_spi_init(). However, irq handler is registered
+before initializing the lock.
 
-This causes a memory leak just by repeatedly plugging and
-unplugging the device.
+Spinlock dma->lock and i2c->lock suffer from the same problem.
 
-Fix this issue by adding dvb_frontend_detach() to ttusb_dec_exit_dvb().
+Fix this by registering the irq at the end of probe.
 
-Link: https://lore.kernel.org/linux-media/20221117045925.14297-5-imv4bel@gmail.com
-Signed-off-by: Hyunwoo Kim <imv4bel@gmail.com>
+Link: https://lore.kernel.org/linux-media/20230315134518.1074497-1-harperchen1110@gmail.com
+Signed-off-by: Wei Chen <harperchen1110@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/ttusb-dec/ttusb_dec.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ .../media/pci/netup_unidvb/netup_unidvb_core.c  | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/usb/ttusb-dec/ttusb_dec.c b/drivers/media/usb/ttusb-dec/ttusb_dec.c
-index 3198f9624b7c0..46bb0ccaafc1f 100644
---- a/drivers/media/usb/ttusb-dec/ttusb_dec.c
-+++ b/drivers/media/usb/ttusb-dec/ttusb_dec.c
-@@ -1551,8 +1551,7 @@ static void ttusb_dec_exit_dvb(struct ttusb_dec *dec)
- 	dvb_dmx_release(&dec->demux);
- 	if (dec->fe) {
- 		dvb_unregister_frontend(dec->fe);
--		if (dec->fe->ops.release)
--			dec->fe->ops.release(dec->fe);
-+		dvb_frontend_detach(dec->fe);
+diff --git a/drivers/media/pci/netup_unidvb/netup_unidvb_core.c b/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
+index 03239fba87bf2..0da29f085c10f 100644
+--- a/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
++++ b/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
+@@ -897,12 +897,7 @@ static int netup_unidvb_initdev(struct pci_dev *pci_dev,
+ 		ndev->lmmio0, (u32)pci_resource_len(pci_dev, 0),
+ 		ndev->lmmio1, (u32)pci_resource_len(pci_dev, 1),
+ 		pci_dev->irq);
+-	if (request_irq(pci_dev->irq, netup_unidvb_isr, IRQF_SHARED,
+-			"netup_unidvb", pci_dev) < 0) {
+-		dev_err(&pci_dev->dev,
+-			"%s(): can't get IRQ %d\n", __func__, pci_dev->irq);
+-		goto irq_request_err;
+-	}
++
+ 	ndev->dma_size = 2 * 188 *
+ 		NETUP_DMA_BLOCKS_COUNT * NETUP_DMA_PACKETS_COUNT;
+ 	ndev->dma_virt = dma_alloc_coherent(&pci_dev->dev,
+@@ -943,6 +938,14 @@ static int netup_unidvb_initdev(struct pci_dev *pci_dev,
+ 		dev_err(&pci_dev->dev, "netup_unidvb: DMA setup failed\n");
+ 		goto dma_setup_err;
  	}
- 	dvb_unregister_adapter(&dec->adapter);
- }
++
++	if (request_irq(pci_dev->irq, netup_unidvb_isr, IRQF_SHARED,
++			"netup_unidvb", pci_dev) < 0) {
++		dev_err(&pci_dev->dev,
++			"%s(): can't get IRQ %d\n", __func__, pci_dev->irq);
++		goto dma_setup_err;
++	}
++
+ 	dev_info(&pci_dev->dev,
+ 		"netup_unidvb: device has been initialized\n");
+ 	return 0;
+@@ -961,8 +964,6 @@ static int netup_unidvb_initdev(struct pci_dev *pci_dev,
+ 	dma_free_coherent(&pci_dev->dev, ndev->dma_size,
+ 			ndev->dma_virt, ndev->dma_phys);
+ dma_alloc_err:
+-	free_irq(pci_dev->irq, pci_dev);
+-irq_request_err:
+ 	iounmap(ndev->lmmio1);
+ pci_bar1_error:
+ 	iounmap(ndev->lmmio0);
 -- 
 2.39.2
 
