@@ -2,182 +2,112 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 584CCC77B7A
-	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 00:53:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC9C9C7EE23
+	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 01:40:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbjEYAxU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 May 2023 20:53:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44592 "EHLO
+        id S233719AbjEYBkZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 May 2023 21:40:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbjEYAxT (ORCPT
+        with ESMTP id S229733AbjEYBkY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 May 2023 20:53:19 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59349119
-        for <linux-media@vger.kernel.org>; Wed, 24 May 2023 17:53:18 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1ae8ecb4f9aso6717585ad.1
-        for <linux-media@vger.kernel.org>; Wed, 24 May 2023 17:53:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684975998; x=1687567998;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FUvMPTBA49tNIIepIZR4oNBjuNfKgUVXvOLcX8khE8M=;
-        b=W2UjZt7xXNaPeh18Rot0pJP8kt7jDb1X4nnRAQ5Srl/FEom6b5LEmxbxqdIzGPa66O
-         bJWsXKewY7BBUbcf0L9HR2jfVXcxzerNtb9m6G7a/tL53j0be+O7Azcai3o9ZeYvdVf3
-         qxt4l/XxdKnfu0odskR1IHytfH1KM59yif948=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684975998; x=1687567998;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FUvMPTBA49tNIIepIZR4oNBjuNfKgUVXvOLcX8khE8M=;
-        b=DGU5GiU+D9uzTSt9/TC8jgXVnxlOJ89bO67Cih03Oq/mV83HDXC1Q1Ja90Jp/Ye14V
-         j8eBn15XhVqamYGVZabQzokJIczq0Q4xpgcTkou196I/Mcne53TAYrWW1VuFL1FuGg/V
-         xHhrk1jcxXe6ZQOPYp5ZbWssscLQrvaeFcll0wUlHJRvIPPBWAr2UDwaXgM9F5k3mzsy
-         PtWADpKcJf8ss8vhMk9S+wJlWArnE6fY0KMfKtBXgzlQ+4qoh9uFVRhvmqgt/LAJFwXS
-         Zn7YgGwvZVW2aIcl4Pz/MyQZeNLMRxEXpPE56abwd1BS0KebS3txrk1lVuYrwFckPdkN
-         P0FA==
-X-Gm-Message-State: AC+VfDxs4u+zLHL/iwilC7NNv8vMRIsZ7ycYSxsHMj1Dvia+BHitsV7G
-        eCWXvO8WiEAz8/N0yIlBdgxLOA==
-X-Google-Smtp-Source: ACHHUZ6BPJrTMmE6q+3KwyvgvqUoCdmn2pOb0V2mUV/yq9VWTvL9ZaWdx8qqDZktiSGiZf9u3mKihg==
-X-Received: by 2002:a17:903:1208:b0:1aa:feca:b616 with SMTP id l8-20020a170903120800b001aafecab616mr20911966plh.65.1684975997791;
-        Wed, 24 May 2023 17:53:17 -0700 (PDT)
-Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
-        by smtp.gmail.com with ESMTPSA id j4-20020a170902c08400b001ac2f98e953sm60563pld.216.2023.05.24.17.53.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 17:53:16 -0700 (PDT)
-Date:   Thu, 25 May 2023 09:53:12 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Vikash Garodia <quic_vgarodia@quicinc.com>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Tomasz Figa <tfiga@chromium.org>, linux-media@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCHv3] media: venus: provide video device lock
-Message-ID: <20230525005312.GC30543@google.com>
-References: <20230524135737.2557837-1-senozhatsky@chromium.org>
- <20230524141312.2558810-1-senozhatsky@chromium.org>
- <2c732d80-1a18-7a34-03a8-16afb0de5ea2@linaro.org>
- <f9219cb0-2cac-bace-20f7-27005cd0e6f1@xs4all.nl>
- <83cd3dc7-455d-0f26-d2a8-3ebe92d9e33f@quicinc.com>
+        Wed, 24 May 2023 21:40:24 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D087D12B;
+        Wed, 24 May 2023 18:40:18 -0700 (PDT)
+X-UUID: 1786e0a4fa9d11edb20a276fd37b9834-20230525
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=0/SjOfKS0RJghE7tHsn2QoAKeD2KyPO3CaFHVaU0PTk=;
+        b=nGJ7O/fAJfxEQo2DQWp98NxNb6JOkoveol66r2Eb2reYwr/K6gvo/xAUMKZexhRtqD+Qte8KfdU1dXs22i1lQIZg458l2OVcWN8S++1c07M/GSxHu8CJDaWWxijKyX51PLbpqrCUve2MtIP90s0Wr0wFg7xjGnJ3mxVYuqECK8M=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.25,REQID:a22c903d-522f-4e05-9f03-fc55ec48bc88,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:-5
+X-CID-META: VersionHash:d5b0ae3,CLOUDID:2e47f2c1-e32c-4c97-918d-fbb3fc224d4e,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-UUID: 1786e0a4fa9d11edb20a276fd37b9834-20230525
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 848641127; Thu, 25 May 2023 09:40:12 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 25 May 2023 09:40:11 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Thu, 25 May 2023 09:40:10 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Chen-Yu Tsai <wenst@chromium.org>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
+        <nfraprado@collabora.com>, Nathan Hebert <nhebert@chromium.org>
+CC:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v4,0/4] media: mediatek: vcodec: Fix decoder under flow and plt test fails randomly 
+Date:   Thu, 25 May 2023 09:40:05 +0800
+Message-ID: <20230525014009.23345-1-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <83cd3dc7-455d-0f26-d2a8-3ebe92d9e33f@quicinc.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On (23/05/24 22:06), Vikash Garodia wrote:
-> > Instead the struct v4l2_m2m_ctx q_lock pointer, if set, will use that
-> > mutex for all vb2 operations.
-> > 
-> > I think you can set it to the 'lock' mutex in struct venus_inst.
-> 
-> IIUC, the suggestion is to use the 'lock' in struct venus_inst while
-> initializing the queue. This might lead to deadlock as the same lock is used
-> during vb2 operations in driver. Might be introducing a new lock for this
-> purpose in struct venus_inst would do, unless we are trying to serialize at
-> video device (or core) context.
+1: Getting decoder under flow error randomly when do stress test with youtube;
+2: Video display black when do plt test with one night.
 
-Something like this?
-
-Video device has to provide a lock so that __video_do_ioctl()
-can serialize IOCTL calls. Introduce a dedicated venus_inst
-mutex (which is set a ctx ->q_lock) for the purpose of vb2
-operations synchronization.
-
-Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+patch 1 avoid unneeded error logging.
+patch 2 using decoder status instead of core work count.
+patch 3 move core context from device to each instance.
+patch 4 using empty lat buffer as the last one to flush decoder.
 ---
- drivers/media/platform/qcom/venus/core.h | 2 ++
- drivers/media/platform/qcom/venus/vdec.c | 4 ++++
- drivers/media/platform/qcom/venus/venc.c | 3 +++
- 3 files changed, 9 insertions(+)
+changed with v3:
+- rebase to the top of hevc patch and fix patch 3 build error.
 
-diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
-index 4f81669986ba..6ac5236d6888 100644
---- a/drivers/media/platform/qcom/venus/core.h
-+++ b/drivers/media/platform/qcom/venus/core.h
-@@ -389,6 +389,7 @@ enum venus_inst_modes {
-  * @sequence_out:	a sequence counter for output queue
-  * @m2m_dev:	a reference to m2m device structure
-  * @m2m_ctx:	a reference to m2m context structure
-+ * @ctx_queue_lock:	a lock to serialize video device ioctl calls
-  * @state:	current state of the instance
-  * @done:	a completion for sync HFI operation
-  * @error:	an error returned during last HFI sync operation
-@@ -460,6 +461,7 @@ struct venus_inst {
- 	u32 sequence_out;
- 	struct v4l2_m2m_dev *m2m_dev;
- 	struct v4l2_m2m_ctx *m2m_ctx;
-+	struct mutex ctx_queue_lock;
- 	unsigned int state;
- 	struct completion done;
- 	unsigned int error;
-diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-index 51a53bf82bd3..2caeba5b6378 100644
---- a/drivers/media/platform/qcom/venus/vdec.c
-+++ b/drivers/media/platform/qcom/venus/vdec.c
-@@ -1641,6 +1641,7 @@ static int vdec_open(struct file *file)
- 	INIT_LIST_HEAD(&inst->internalbufs);
- 	INIT_LIST_HEAD(&inst->list);
- 	mutex_init(&inst->lock);
-+	mutex_init(&inst->ctx_queue_lock);
- 
- 	inst->core = core;
- 	inst->session_type = VIDC_SESSION_TYPE_DEC;
-@@ -1684,8 +1685,10 @@ static int vdec_open(struct file *file)
- 		goto err_m2m_release;
- 	}
- 
-+
- 	v4l2_fh_init(&inst->fh, core->vdev_dec);
- 
-+	inst->m2m_ctx->q_lock = &inst->ctx_queue_lock;
- 	inst->fh.ctrl_handler = &inst->ctrl_handler;
- 	v4l2_fh_add(&inst->fh);
- 	inst->fh.m2m_ctx = inst->m2m_ctx;
-@@ -1716,6 +1719,7 @@ static int vdec_close(struct file *file)
- 	ida_destroy(&inst->dpb_ids);
- 	hfi_session_destroy(inst);
- 	mutex_destroy(&inst->lock);
-+	mutex_destroy(&inst->ctx_queue_lock);
- 	v4l2_fh_del(&inst->fh);
- 	v4l2_fh_exit(&inst->fh);
- 
-diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
-index 4666f42feea3..4292b299f014 100644
---- a/drivers/media/platform/qcom/venus/venc.c
-+++ b/drivers/media/platform/qcom/venus/venc.c
-@@ -1443,6 +1443,7 @@ static int venc_open(struct file *file)
- 	INIT_LIST_HEAD(&inst->internalbufs);
- 	INIT_LIST_HEAD(&inst->list);
- 	mutex_init(&inst->lock);
-+	mutex_init(&inst->ctx_queue_lock);
- 
- 	inst->core = core;
- 	inst->session_type = VIDC_SESSION_TYPE_ENC;
-@@ -1483,6 +1484,7 @@ static int venc_open(struct file *file)
- 
- 	v4l2_fh_init(&inst->fh, core->vdev_enc);
- 
-+	inst->m2m_ctx->q_lock = &inst->ctx_queue_lock;
- 	inst->fh.ctrl_handler = &inst->ctrl_handler;
- 	v4l2_fh_add(&inst->fh);
- 	inst->fh.m2m_ctx = inst->m2m_ctx;
-@@ -1512,6 +1514,7 @@ static int venc_close(struct file *file)
- 	venc_ctrl_deinit(inst);
- 	hfi_session_destroy(inst);
- 	mutex_destroy(&inst->lock);
-+	mutex_destroy(&inst->ctx_queue_lock);
- 	v4l2_fh_del(&inst->fh);
- 	v4l2_fh_exit(&inst->fh);
- 
+changed with v2:
+- fix build error for patch 4
+
+changed with v1:
+- re-write commit messgage for patch 1
+- squash v1 patch 2 to v1 patch 3 for patch 2
+- squash v1 patch 4 to v1 patch 6 for patch 4
+---
+Yunfei Dong (4):
+  media: mediatek: vcodec: Avoid unneeded error logging
+  media: mediatek: vcodec: using decoder status instead of core work
+    count
+  media: mediatek: vcodec: move core context from device to each
+    instance
+  media: mediatek: vcodec: using empty lat buffer as the last one
+
+ .../mediatek/vcodec/mtk_vcodec_dec_drv.c      |   1 -
+ .../vcodec/mtk_vcodec_dec_stateless.c         |   2 +-
+ .../platform/mediatek/vcodec/mtk_vcodec_drv.h |   2 -
+ .../vcodec/vdec/vdec_h264_req_multi_if.c      |   6 +-
+ .../vcodec/vdec/vdec_hevc_req_multi_if.c      |   4 +-
+ .../vcodec/vdec/vdec_vp9_req_lat_if.c         |   4 +-
+ .../platform/mediatek/vcodec/vdec_msg_queue.c | 105 ++++++++----------
+ .../platform/mediatek/vcodec/vdec_msg_queue.h |  28 ++++-
+ 8 files changed, 76 insertions(+), 76 deletions(-)
+
 -- 
-2.40.1.698.g37aff9b760-goog
+2.18.0
 
