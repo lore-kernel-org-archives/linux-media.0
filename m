@@ -2,45 +2,46 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B9B0C7EE2F
-	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:56:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C23DDC7EE2C
+	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:56:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243344AbjEYS4d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 May 2023 14:56:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45190 "EHLO
+        id S243357AbjEYS4f (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 May 2023 14:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243355AbjEYSzJ (ORCPT
+        with ESMTP id S243387AbjEYSzM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 May 2023 14:55:09 -0400
+        Thu, 25 May 2023 14:55:12 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FCEE46AA;
-        Thu, 25 May 2023 11:46:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3903C3F;
+        Thu, 25 May 2023 11:46:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E22364978;
-        Thu, 25 May 2023 18:44:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB67BC433D2;
-        Thu, 25 May 2023 18:44:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A702560EFA;
+        Thu, 25 May 2023 18:44:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06FF4C433EF;
+        Thu, 25 May 2023 18:44:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685040263;
-        bh=Vm71oXVp63NjOF1+kV8YDv3P0tmfCFwWves5mvALmPk=;
+        s=k20201202; t=1685040285;
+        bh=USWvMG6K95bH8Ye3dm5Xgr+N8toc3ooXk0X6kC2Hjl4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MrlbSqnuEUhoS+YS/dI/vSVtTHrUCYSNkkw02Okj9Q5Xvin5PnjXH3cqIPSIIPMEw
-         QRM6Zv+iaOEOE3Dsl3W973Vh8lPP7yFVkf6lQhyOefiUgscNHsRp5GiE+hb2Nfn1Fj
-         lGSJM7yx5GnXd/DfXDpVY5BHA2iyvfXHXlsaeaELKE0Tlh47XtIeaCnNx2jhhBtbrQ
-         H2xQBKfX01VklH2AuFV9ruqSfZMJuHYYaklETCdSMXaZHeWEIOtqvYFvZTjS3wq24g
-         kzJNJdJQJos0DrBYB1DzZf9nQyhulOrTlHyq3L31U+kHzbXKHDwp4r+oKgySEnsBt3
-         vom9KDywEtvGA==
+        b=kfmUkvCdULkx6DADHKbUR9mkNfYcgtkn14FT6F5q02cCnUyZi+iP8ec+ZUXPB4l6j
+         5kUbasBR9a1ymxhNCsHbTF6uR0hAV6N88ez0t+Z4FzyW92PMbJRZHFKvvNYy0LETq1
+         bQb89StJznC/z0BS7yZimDev8AktY3rDclJhuy41VfiYVoHDyXmzgC93+qGAZb2s9a
+         lIoQ8sv1F0NYfict8R2LzHgebSFAzfGf3NkJ3azLbf4hxlYdaSzDu4S6rP9aXHXF82
+         Xnw7tkxBLhAm2rNhPgDeSwwKJO9JFLQYwruSJgzVA76QKIg4ovVtwJRnfJ1x+OKXp3
+         espCcgaMBnRtA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Wei Chen <harperchen1110@gmail.com>,
+Cc:     Takashi Iwai <tiwai@suse.de>, Yu Hao <yhao016@ucr.edu>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, serjk@netup.ru,
-        aospan@netup.ru, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 11/27] media: netup_unidvb: fix irq init by register it at the end of probe
-Date:   Thu, 25 May 2023 14:43:37 -0400
-Message-Id: <20230525184356.1974216-11-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, robert_s@gmx.net,
+        imv4bel@gmail.com, chenzhongjin@huawei.com, linma@zju.edu.cn,
+        linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 16/27] media: dvb-core: Fix kernel WARNING for blocking operation in wait_event*()
+Date:   Thu, 25 May 2023 14:43:42 -0400
+Message-Id: <20230525184356.1974216-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230525184356.1974216-1-sashal@kernel.org>
 References: <20230525184356.1974216-1-sashal@kernel.org>
@@ -52,68 +53,64 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Wei Chen <harperchen1110@gmail.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit e6ad6233592593079db5c8fa592c298e51bc1356 ]
+[ Upstream commit b8c75e4a1b325ea0a9433fa8834be97b5836b946 ]
 
-IRQ handler netup_spi_interrupt() takes spinlock spi->lock. The lock
-is initialized in netup_spi_init(). However, irq handler is registered
-before initializing the lock.
+Using a semaphore in the wait_event*() condition is no good idea.
+It hits a kernel WARN_ON() at prepare_to_wait_event() like:
+  do not call blocking ops when !TASK_RUNNING; state=1 set at
+  prepare_to_wait_event+0x6d/0x690
 
-Spinlock dma->lock and i2c->lock suffer from the same problem.
+For avoiding the potential deadlock, rewrite to an open-coded loop
+instead.  Unlike the loop in wait_event*(), this uses wait_woken()
+after the condition check, hence the task state stays consistent.
 
-Fix this by registering the irq at the end of probe.
+CVE-2023-31084 was assigned to this bug.
 
-Link: https://lore.kernel.org/linux-media/20230315134518.1074497-1-harperchen1110@gmail.com
-Signed-off-by: Wei Chen <harperchen1110@gmail.com>
+Link: https://lore.kernel.org/r/CA+UBctCu7fXn4q41O_3=id1+OdyQ85tZY1x+TkT-6OVBL6KAUw@mail.gmail.com/
+
+Link: https://lore.kernel.org/linux-media/20230512151800.1874-1-tiwai@suse.de
+Reported-by: Yu Hao <yhao016@ucr.edu>
+Closes: https://nvd.nist.gov/vuln/detail/CVE-2023-31084
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../media/pci/netup_unidvb/netup_unidvb_core.c  | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+ drivers/media/dvb-core/dvb_frontend.c | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/pci/netup_unidvb/netup_unidvb_core.c b/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
-index de3fc62810e6c..bd49cdb32f545 100644
---- a/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
-+++ b/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
-@@ -896,12 +896,7 @@ static int netup_unidvb_initdev(struct pci_dev *pci_dev,
- 		ndev->lmmio0, (u32)pci_resource_len(pci_dev, 0),
- 		ndev->lmmio1, (u32)pci_resource_len(pci_dev, 1),
- 		pci_dev->irq);
--	if (request_irq(pci_dev->irq, netup_unidvb_isr, IRQF_SHARED,
--			"netup_unidvb", pci_dev) < 0) {
--		dev_err(&pci_dev->dev,
--			"%s(): can't get IRQ %d\n", __func__, pci_dev->irq);
--		goto irq_request_err;
--	}
-+
- 	ndev->dma_size = 2 * 188 *
- 		NETUP_DMA_BLOCKS_COUNT * NETUP_DMA_PACKETS_COUNT;
- 	ndev->dma_virt = dma_alloc_coherent(&pci_dev->dev,
-@@ -942,6 +937,14 @@ static int netup_unidvb_initdev(struct pci_dev *pci_dev,
- 		dev_err(&pci_dev->dev, "netup_unidvb: DMA setup failed\n");
- 		goto dma_setup_err;
+diff --git a/drivers/media/dvb-core/dvb_frontend.c b/drivers/media/dvb-core/dvb_frontend.c
+index e0650bc2df613..90acf52cc253c 100644
+--- a/drivers/media/dvb-core/dvb_frontend.c
++++ b/drivers/media/dvb-core/dvb_frontend.c
+@@ -304,14 +304,22 @@ static int dvb_frontend_get_event(struct dvb_frontend *fe,
  	}
-+
-+	if (request_irq(pci_dev->irq, netup_unidvb_isr, IRQF_SHARED,
-+			"netup_unidvb", pci_dev) < 0) {
-+		dev_err(&pci_dev->dev,
-+			"%s(): can't get IRQ %d\n", __func__, pci_dev->irq);
-+		goto dma_setup_err;
-+	}
-+
- 	dev_info(&pci_dev->dev,
- 		"netup_unidvb: device has been initialized\n");
- 	return 0;
-@@ -960,8 +963,6 @@ static int netup_unidvb_initdev(struct pci_dev *pci_dev,
- 	dma_free_coherent(&pci_dev->dev, ndev->dma_size,
- 			ndev->dma_virt, ndev->dma_phys);
- dma_alloc_err:
--	free_irq(pci_dev->irq, pci_dev);
--irq_request_err:
- 	iounmap(ndev->lmmio1);
- pci_bar1_error:
- 	iounmap(ndev->lmmio0);
+ 
+ 	if (events->eventw == events->eventr) {
+-		int ret;
++		struct wait_queue_entry wait;
++		int ret = 0;
+ 
+ 		if (flags & O_NONBLOCK)
+ 			return -EWOULDBLOCK;
+ 
+-		ret = wait_event_interruptible(events->wait_queue,
+-					       dvb_frontend_test_event(fepriv, events));
+-
++		init_waitqueue_entry(&wait, current);
++		add_wait_queue(&events->wait_queue, &wait);
++		while (!dvb_frontend_test_event(fepriv, events)) {
++			wait_woken(&wait, TASK_INTERRUPTIBLE, 0);
++			if (signal_pending(current)) {
++				ret = -ERESTARTSYS;
++				break;
++			}
++		}
++		remove_wait_queue(&events->wait_queue, &wait);
+ 		if (ret < 0)
+ 			return ret;
+ 	}
 -- 
 2.39.2
 
