@@ -2,31 +2,31 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65020C7EE45
-	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 08:32:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7FE8C7EE37
+	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 08:32:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240004AbjEYIcS convert rfc822-to-8bit (ORCPT
+        id S240003AbjEYIcR convert rfc822-to-8bit (ORCPT
         <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 May 2023 04:32:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56136 "EHLO
+        Thu, 25 May 2023 04:32:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230424AbjEYIcN (ORCPT
+        with ESMTP id S239698AbjEYIcN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 25 May 2023 04:32:13 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88F5122;
-        Thu, 25 May 2023 01:32:05 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 616ED195;
+        Thu, 25 May 2023 01:32:07 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 6373A24E1FF;
-        Thu, 25 May 2023 16:32:04 +0800 (CST)
-Received: from EXMBX173.cuchost.com (172.16.6.93) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 25 May
- 2023 16:32:04 +0800
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 2A41C83E7;
+        Thu, 25 May 2023 16:32:05 +0800 (CST)
+Received: from EXMBX173.cuchost.com (172.16.6.93) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 25 May
+ 2023 16:32:05 +0800
 Received: from xiaofei.localdomain (180.164.60.184) by EXMBX173.cuchost.com
  (172.16.6.93) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 25 May
- 2023 16:32:03 +0800
+ 2023 16:32:04 +0800
 From:   Jack Zhu <jack.zhu@starfivetech.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Robert Foss <rfoss@kernel.org>,
@@ -42,12 +42,14 @@ To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
 CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <jack.zhu@starfivetech.com>,
         <changhuang.liang@starfivetech.com>
-Subject: [PATCH v6 0/6] Add StarFive Camera Subsystem driver
-Date:   Thu, 25 May 2023 16:31:56 +0800
-Message-ID: <20230525083202.67933-1-jack.zhu@starfivetech.com>
+Subject: [PATCH v6 3/6] media: starfive: Add basic driver
+Date:   Thu, 25 May 2023 16:31:59 +0800
+Message-ID: <20230525083202.67933-4-jack.zhu@starfivetech.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230525083202.67933-1-jack.zhu@starfivetech.com>
+References: <20230525083202.67933-1-jack.zhu@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 X-Originating-IP: [180.164.60.184]
 X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX173.cuchost.com
  (172.16.6.93)
@@ -57,170 +59,663 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+Add basic platform driver for StarFive Camera Subsystem.
 
-This series is the v6 series that attempts to support the Camera Subsystem
-found on StarFive JH7110 SoC.
-
-Changes in v6:
-- Added 'bus-type' in bindings example.
-- Corrected spelling errors.
-- As reviewed by Bryan, used 'nclks' and 'nrsts' variables.
-- Added lccf config for ISP.
-
-v5 link: https://lore.kernel.org/all/20230512102844.51084-1-jack.zhu@starfivetech.com/
-
-Changes in v5:
-- Rebased on v6.4-rc1.
-- Added new patch.
-- Modified ISP driver.
-
-v4 link: https://lore.kernel.org/all/20230413035541.62129-1-jack.zhu@starfivetech.com/
-
-Previous cover letter from v4:
-
-This patch series adds support for the StarFive Camera Subsystem
-found on StarFive JH7110 SoC.
-
-The driver implements V4L2, Media controller and V4L2 subdev interfaces.
-Camera sensor using V4L2 subdev interface in the kernel is supported.
-
-The driver is tested on VisionFive V2 board with IMX219 camera sensor.
-GStreamer 1.18.5 with v4l2src plugin is supported.
-
-Changes since v3:
-Patch 1:
-- Modified port@0 and port@1 properties.
-- Extended the port@0 example with appropriate properties.
-- Added 'port@0' for 'required'
-Patch 2:
-- Modified spelling errors.
-Patch 3:
-- Merged patch 5 into the patch with an explanation for compatible in
-  commit msg.
-Patch 6:
-- Asserted pixel_rst[i] reset in the loop after the err_disable_pixclk
-  label.
-- Modified Code Style for getting sys_rst and p_rst.
-- Renamed clk_name to name and modified the relevant code.
-Patch 9:
-- Added static for stfcamss_get_mem_res function.
-- Added static for isp_close function.
-- Fixed implicit conversion warning for stf_vin_map_isp_pad function.
-- Dropped unused variables.
-
-  v3: https://lore.kernel.org/all/20230331121826.96973-1-jack.zhu@starfivetech.com/
-
-Changes since v2:
-- Rebased on v6.3-rc1.
-Patch 1:
-- Modified spelling errors.
-- Added port@0.
-- Modified '$ref' of port.
-- Added 'ports' to 'required'.
-- Dropped 'stfcamss' label in example.
-- Added port@0 in example.
-- Added MAINTAINERS file.
-Patch 2:
-- Split this patch into three new patches.
-- Modified compatible property.
-- Replaced clock names with the existing names.
-- Modified 'bus-type' and 'clock-lanes'
-- Added port@2 - port@4
-- Dropped 'csi2rx' label in example.
-Patch 3:
-- Updated rst and dot file as three pipelines were deleted.
-Patch 4:
-- Split this patch into three new patches.
-- Dropped .s_power() and .get_fmt().
-- Dropped CSI-2 DT support.
-- Dropped v4l2_device_register_subdev_nodes().
-- Used assigned-clock-rates in DT to set clk value.
-- Modified 'compatible' field.
-Patch 5:
-- Deleted three pipelines. 
-- Modified 'stfcamss_clocks'/'stfcamss_resets' struct.
-- Dropped stfcamss_find_sensor() function.
-- Removed redundant code from stfcamss_of_parse_endpoint_node().
-- Modified spelling errors.
-- Rewrote stfcamss_reg_media_subdev_node() function.
-- Modified stfcamss_subdev_notifier_bound().
-- Modified stfcamss_probe() function.
-- Dropped stfcamss_suspend() and stfcamss_resume().
-- Dropped dev_info() in stfcamss_remove() function.
-- Added 'stf_' prefix for enum subdev_type.
-- Moved all includes to the top in stf_camss.h file.
-- Dropped unused fields in stfcamss struct.
-- Replaced Custom logging macros with regular macros.
-- Rewrote register read and write functions.
-- Used lowercase for all hex constants.
-- Used macro to name registers.
-- Dropped unused ioctl and stf_isp_ioctl.h file.
-
-  v2: https://lore.kernel.org/all/20230310120553.60586-1-jack.zhu@starfivetech.com/
-
-Changes since v1:
-- Deleted starfive,jh7110-mipi-csi2.yaml.
-- Converted cdns,csi2rx.txt to cdns,csi2rx.yaml and added ‘resets’
-  properties.
-- Added ‘cdns,csi2rx.yaml’ in ‘CADENCE MIPI-CSI2 BRIDGES’ entry.
-- The following contents were modified in starfive,jh7110-camss.yaml:
-  dropped quotes from ’id’ and ‘schema’; dropped ‘|’ for ‘description’;
-  corrected the wrong or redundant words: ‘a ISP’, ‘PD ISP’;
-  dropped ‘minItems’ for ‘reg’, ‘clocks’, ‘resets’ and ‘interrupts’;
-  dropped the '_clk' and 'rst_' prefix about the 'clock-names' and
-  'reset-names';
-  changed ‘endpoint@1’ to ‘endpoint’; updated examples;
-- Updated Subject for some patches.
-- Merged patch 6, 7, 8, 9, 10, 11 into one patch.
-
-Jack Zhu (6):
-  media: dt-bindings: Add JH7110 Camera Subsystem
-  media: admin-guide: Add starfive_camss.rst for Starfive Camera
-    Subsystem
-  media: starfive: Add basic driver
-  media: starfive: Add video driver
-  media: starfive: Add ISP driver
-  media: starfive: Add VIN driver
-
- .../admin-guide/media/starfive_camss.rst      |   57 +
- .../media/starfive_camss_graph.dot            |   16 +
- .../admin-guide/media/v4l-drivers.rst         |    1 +
- .../bindings/media/starfive,jh7110-camss.yaml |  180 +++
- MAINTAINERS                                   |    9 +
- drivers/media/platform/Kconfig                |    1 +
- drivers/media/platform/Makefile               |    1 +
- drivers/media/platform/starfive/Kconfig       |   19 +
- drivers/media/platform/starfive/Makefile      |   14 +
- drivers/media/platform/starfive/stf_camss.c   |  476 +++++++
- drivers/media/platform/starfive/stf_camss.h   |  157 +++
- drivers/media/platform/starfive/stf_common.h  |   18 +
- drivers/media/platform/starfive/stf_isp.c     |  550 ++++++++
- drivers/media/platform/starfive/stf_isp.h     |  483 +++++++
- .../media/platform/starfive/stf_isp_hw_ops.c  |  468 +++++++
- drivers/media/platform/starfive/stf_video.c   |  864 +++++++++++++
- drivers/media/platform/starfive/stf_video.h   |   95 ++
- drivers/media/platform/starfive/stf_vin.c     | 1134 +++++++++++++++++
- drivers/media/platform/starfive/stf_vin.h     |  180 +++
- .../media/platform/starfive/stf_vin_hw_ops.c  |  241 ++++
- 20 files changed, 4964 insertions(+)
- create mode 100644 Documentation/admin-guide/media/starfive_camss.rst
- create mode 100644 Documentation/admin-guide/media/starfive_camss_graph.dot
- create mode 100644 Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
+---
+ MAINTAINERS                                  |   1 +
+ drivers/media/platform/Kconfig               |   1 +
+ drivers/media/platform/Makefile              |   1 +
+ drivers/media/platform/starfive/Kconfig      |  19 +
+ drivers/media/platform/starfive/Makefile     |   9 +
+ drivers/media/platform/starfive/stf_camss.c  | 372 +++++++++++++++++++
+ drivers/media/platform/starfive/stf_camss.h  | 153 ++++++++
+ drivers/media/platform/starfive/stf_common.h |  18 +
+ 8 files changed, 574 insertions(+)
  create mode 100644 drivers/media/platform/starfive/Kconfig
  create mode 100644 drivers/media/platform/starfive/Makefile
  create mode 100644 drivers/media/platform/starfive/stf_camss.c
  create mode 100644 drivers/media/platform/starfive/stf_camss.h
  create mode 100644 drivers/media/platform/starfive/stf_common.h
- create mode 100644 drivers/media/platform/starfive/stf_isp.c
- create mode 100644 drivers/media/platform/starfive/stf_isp.h
- create mode 100644 drivers/media/platform/starfive/stf_isp_hw_ops.c
- create mode 100644 drivers/media/platform/starfive/stf_video.c
- create mode 100644 drivers/media/platform/starfive/stf_video.h
- create mode 100644 drivers/media/platform/starfive/stf_vin.c
- create mode 100644 drivers/media/platform/starfive/stf_vin.h
- create mode 100644 drivers/media/platform/starfive/stf_vin_hw_ops.c
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 71291dc58671..33a752569942 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -20077,6 +20077,7 @@ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/admin-guide/media/starfive_camss.rst
+ F:	Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
++F:	drivers/media/platform/starfive/
+ 
+ STARFIVE DEVICETREES
+ M:	Emil Renner Berthing <kernel@esmil.dk>
+diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
+index ee579916f874..627eaa0ab3ee 100644
+--- a/drivers/media/platform/Kconfig
++++ b/drivers/media/platform/Kconfig
+@@ -80,6 +80,7 @@ source "drivers/media/platform/renesas/Kconfig"
+ source "drivers/media/platform/rockchip/Kconfig"
+ source "drivers/media/platform/samsung/Kconfig"
+ source "drivers/media/platform/st/Kconfig"
++source "drivers/media/platform/starfive/Kconfig"
+ source "drivers/media/platform/sunxi/Kconfig"
+ source "drivers/media/platform/ti/Kconfig"
+ source "drivers/media/platform/verisilicon/Kconfig"
+diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
+index 5453bb868e67..5a038498a370 100644
+--- a/drivers/media/platform/Makefile
++++ b/drivers/media/platform/Makefile
+@@ -23,6 +23,7 @@ obj-y += renesas/
+ obj-y += rockchip/
+ obj-y += samsung/
+ obj-y += st/
++obj-y += starfive/
+ obj-y += sunxi/
+ obj-y += ti/
+ obj-y += verisilicon/
+diff --git a/drivers/media/platform/starfive/Kconfig b/drivers/media/platform/starfive/Kconfig
+new file mode 100644
+index 000000000000..1a2293475bd2
+--- /dev/null
++++ b/drivers/media/platform/starfive/Kconfig
+@@ -0,0 +1,19 @@
++# SPDX-License-Identifier: GPL-2.0-only
++
++comment "Starfive media platform drivers"
++
++config VIDEO_STARFIVE_CAMSS
++	tristate "Starfive Camera Subsystem driver"
++	depends on V4L_PLATFORM_DRIVERS
++	depends on VIDEO_DEV && OF
++	depends on DMA_CMA
++	select MEDIA_CONTROLLER
++	select VIDEO_V4L2_SUBDEV_API
++	select VIDEOBUF2_DMA_CONTIG
++	select V4L2_FWNODE
++	help
++	   Enable this to support for the Starfive Camera subsystem
++	   found on Starfive JH7110 SoC.
++
++	   To compile this driver as a module, choose M here: the
++	   module will be called stf-camss.
+diff --git a/drivers/media/platform/starfive/Makefile b/drivers/media/platform/starfive/Makefile
+new file mode 100644
+index 000000000000..796775fa52f4
+--- /dev/null
++++ b/drivers/media/platform/starfive/Makefile
+@@ -0,0 +1,9 @@
++# SPDX-License-Identifier: GPL-2.0
++#
++# Makefile for StarFive camera subsystem driver.
++#
++
++starfive-camss-objs += \
++		stf_camss.o
++
++obj-$(CONFIG_VIDEO_STARFIVE_CAMSS) += starfive-camss.o \
+diff --git a/drivers/media/platform/starfive/stf_camss.c b/drivers/media/platform/starfive/stf_camss.c
+new file mode 100644
+index 000000000000..cb2b62d49416
+--- /dev/null
++++ b/drivers/media/platform/starfive/stf_camss.c
+@@ -0,0 +1,372 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * stf_camss.c
++ *
++ * Starfive Camera Subsystem driver
++ *
++ * Copyright (C) 2021-2023 StarFive Technology Co., Ltd.
++ */
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/of_graph.h>
++#include <linux/platform_device.h>
++#include <linux/pm_runtime.h>
++#include <linux/videodev2.h>
++#include <media/media-device.h>
++#include <media/v4l2-async.h>
++#include <media/v4l2-fwnode.h>
++#include <media/v4l2-mc.h>
++
++#include "stf_camss.h"
++
++static const char * const stfcamss_clocks[] = {
++	"clk_apb_func",
++	"clk_wrapper_clk_c",
++	"clk_dvp_inv",
++	"clk_axiwr",
++	"clk_mipi_rx0_pxl",
++	"clk_ispcore_2x",
++	"clk_isp_axi",
++};
++
++static const char * const stfcamss_resets[] = {
++	"rst_wrapper_p",
++	"rst_wrapper_c",
++	"rst_axird",
++	"rst_axiwr",
++	"rst_isp_top_n",
++	"rst_isp_top_axi",
++};
++
++static int stfcamss_get_mem_res(struct platform_device *pdev,
++				struct stfcamss *stfcamss)
++{
++	stfcamss->syscon_base =
++		devm_platform_ioremap_resource_byname(pdev, "syscon");
++	if (IS_ERR(stfcamss->syscon_base))
++		return PTR_ERR(stfcamss->syscon_base);
++
++	stfcamss->isp_base =
++		devm_platform_ioremap_resource_byname(pdev, "isp");
++	if (IS_ERR(stfcamss->isp_base))
++		return PTR_ERR(stfcamss->isp_base);
++
++	return 0;
++}
++
++/*
++ * stfcamss_of_parse_endpoint_node - Parse port endpoint node
++ * @dev: Device
++ * @node: Device node to be parsed
++ * @csd: Parsed data from port endpoint node
++ *
++ * Return 0 on success or a negative error code on failure
++ */
++static int stfcamss_of_parse_endpoint_node(struct device *dev,
++					   struct device_node *node,
++					   struct stfcamss_async_subdev *csd)
++{
++	struct v4l2_fwnode_endpoint vep = { { 0 } };
++
++	v4l2_fwnode_endpoint_parse(of_fwnode_handle(node), &vep);
++	dev_dbg(dev, "vep.base.port = 0x%x, id = 0x%x\n",
++		vep.base.port, vep.base.id);
++
++	csd->port = vep.base.port;
++
++	return 0;
++}
++
++/*
++ * stfcamss_of_parse_ports - Parse ports node
++ * @stfcamss: STFCAMSS device
++ *
++ * Return number of "port" nodes found in "ports" node
++ */
++static int stfcamss_of_parse_ports(struct stfcamss *stfcamss)
++{
++	struct device *dev = stfcamss->dev;
++	struct device_node *node = NULL;
++	struct device_node *remote = NULL;
++	int ret, num_subdevs = 0;
++
++	for_each_endpoint_of_node(dev->of_node, node) {
++		struct stfcamss_async_subdev *csd;
++
++		if (!of_device_is_available(node))
++			continue;
++
++		remote = of_graph_get_remote_port_parent(node);
++		if (!remote) {
++			dev_err(dev, "Cannot get remote parent\n");
++			ret = -EINVAL;
++			goto err_cleanup;
++		}
++
++		csd = v4l2_async_nf_add_fwnode(&stfcamss->notifier,
++					       of_fwnode_handle(remote),
++					       struct stfcamss_async_subdev);
++		of_node_put(remote);
++		if (IS_ERR(csd)) {
++			ret = PTR_ERR(csd);
++			goto err_cleanup;
++		}
++
++		ret = stfcamss_of_parse_endpoint_node(dev, node, csd);
++		if (ret < 0)
++			goto err_cleanup;
++
++		num_subdevs++;
++	}
++
++	return num_subdevs;
++
++err_cleanup:
++	of_node_put(node);
++	return ret;
++}
++
++static int stfcamss_subdev_notifier_bound(struct v4l2_async_notifier *async,
++					  struct v4l2_subdev *subdev,
++					  struct v4l2_async_subdev *asd)
++{
++	struct stfcamss *stfcamss =
++		container_of(async, struct stfcamss, notifier);
++	struct host_data *host_data = &stfcamss->host_data;
++	struct media_entity *source;
++	int i, j;
++
++	source = &subdev->entity;
++
++	for (i = 0; i < source->num_pads; i++) {
++		if (source->pads[i].flags & MEDIA_PAD_FL_SOURCE)
++			break;
++	}
++
++	if (i == source->num_pads) {
++		dev_err(stfcamss->dev, "No source pad in external entity\n");
++		return -EINVAL;
++	}
++
++	for (j = 0; host_data->host_entity[j] && (j < HOST_ENTITY_MAX); j++) {
++		struct media_entity *input;
++		int ret;
++
++		input = host_data->host_entity[j];
++
++		ret = media_create_pad_link(
++			source,
++			i,
++			input,
++			STF_PAD_SINK,
++			source->function == MEDIA_ENT_F_CAM_SENSOR ?
++			MEDIA_LNK_FL_IMMUTABLE | MEDIA_LNK_FL_ENABLED :
++			0);
++		if (ret < 0) {
++			dev_err(stfcamss->dev,
++				"Failed to link %s->%s entities: %d\n",
++				source->name, input->name, ret);
++			return ret;
++		}
++	}
++
++	return 0;
++}
++
++static int stfcamss_subdev_notifier_complete(struct v4l2_async_notifier *ntf)
++{
++	struct stfcamss *stfcamss =
++		container_of(ntf, struct stfcamss, notifier);
++
++	return v4l2_device_register_subdev_nodes(&stfcamss->v4l2_dev);
++}
++
++static const struct v4l2_async_notifier_operations
++stfcamss_subdev_notifier_ops = {
++	.bound = stfcamss_subdev_notifier_bound,
++	.complete = stfcamss_subdev_notifier_complete,
++};
++
++static const struct media_device_ops stfcamss_media_ops = {
++	.link_notify = v4l2_pipeline_link_notify,
++};
++
++static void stfcamss_mc_init(struct platform_device *pdev,
++			     struct stfcamss *stfcamss)
++{
++	stfcamss->media_dev.dev = stfcamss->dev;
++	strscpy(stfcamss->media_dev.model, "Starfive Camera Subsystem",
++		sizeof(stfcamss->media_dev.model));
++	snprintf(stfcamss->media_dev.bus_info,
++		 sizeof(stfcamss->media_dev.bus_info),
++		 "%s:%s", dev_bus_name(&pdev->dev), pdev->name);
++	stfcamss->media_dev.hw_revision = 0x01;
++	stfcamss->media_dev.ops = &stfcamss_media_ops;
++	media_device_init(&stfcamss->media_dev);
++
++	stfcamss->v4l2_dev.mdev = &stfcamss->media_dev;
++}
++
++/*
++ * stfcamss_probe - Probe STFCAMSS platform device
++ * @pdev: Pointer to STFCAMSS platform device
++ *
++ * Return 0 on success or a negative error code on failure
++ */
++static int stfcamss_probe(struct platform_device *pdev)
++{
++	struct stfcamss *stfcamss;
++	struct device *dev = &pdev->dev;
++	int ret = 0, i, num_subdevs;
++
++	stfcamss = devm_kzalloc(dev, sizeof(*stfcamss), GFP_KERNEL);
++	if (!stfcamss)
++		return -ENOMEM;
++
++	for (i = 0; i < ARRAY_SIZE(stfcamss->irq); ++i) {
++		stfcamss->irq[i] = platform_get_irq(pdev, i);
++		if (stfcamss->irq[i] < 0)
++			return dev_err_probe(&pdev->dev, stfcamss->irq[i],
++					     "Failed to get clock%d", i);
++	}
++
++	stfcamss->nclks = ARRAY_SIZE(stfcamss->sys_clk);
++	for (i = 0; i < stfcamss->nclks; ++i)
++		stfcamss->sys_clk[i].id = stfcamss_clocks[i];
++	ret = devm_clk_bulk_get(dev, stfcamss->nclks, stfcamss->sys_clk);
++	if (ret) {
++		dev_err(dev, "Failed to get clk controls\n");
++		return ret;
++	}
++
++	stfcamss->nrsts = ARRAY_SIZE(stfcamss->sys_rst);
++	for (i = 0; i < stfcamss->nrsts; ++i)
++		stfcamss->sys_rst[i].id = stfcamss_resets[i];
++	ret = devm_reset_control_bulk_get_shared(dev, stfcamss->nrsts,
++						 stfcamss->sys_rst);
++	if (ret) {
++		dev_err(dev, "Failed to get reset controls\n");
++		return ret;
++	}
++
++	ret = stfcamss_get_mem_res(pdev, stfcamss);
++	if (ret) {
++		dev_err(dev, "Could not map registers\n");
++		return ret;
++	}
++
++	stfcamss->dev = dev;
++	platform_set_drvdata(pdev, stfcamss);
++
++	v4l2_async_nf_init(&stfcamss->notifier);
++
++	num_subdevs = stfcamss_of_parse_ports(stfcamss);
++	if (num_subdevs < 0) {
++		dev_err(dev, "Failed to find subdevices\n");
++		return -ENODEV;
++	}
++
++	stfcamss_mc_init(pdev, stfcamss);
++
++	ret = v4l2_device_register(stfcamss->dev, &stfcamss->v4l2_dev);
++	if (ret < 0) {
++		dev_err(dev, "Failed to register V4L2 device: %d\n", ret);
++		goto err_cleanup_notifier;
++	}
++
++	ret = media_device_register(&stfcamss->media_dev);
++	if (ret) {
++		dev_err(dev, "Failed to register media device: %d\n", ret);
++		goto err_unregister_device;
++	}
++
++	stfcamss->notifier.ops = &stfcamss_subdev_notifier_ops;
++	ret = v4l2_async_nf_register(&stfcamss->v4l2_dev, &stfcamss->notifier);
++	if (ret) {
++		dev_err(dev, "Failed to register async subdev nodes: %d\n",
++			ret);
++		goto err_unregister_media_dev;
++	}
++
++	pm_runtime_enable(dev);
++
++	return 0;
++
++err_unregister_media_dev:
++	media_device_unregister(&stfcamss->media_dev);
++err_unregister_device:
++	v4l2_device_unregister(&stfcamss->v4l2_dev);
++err_cleanup_notifier:
++	v4l2_async_nf_cleanup(&stfcamss->notifier);
++	return ret;
++}
++
++/*
++ * stfcamss_remove - Remove STFCAMSS platform device
++ * @pdev: Pointer to STFCAMSS platform device
++ *
++ * Always returns 0.
++ */
++static int stfcamss_remove(struct platform_device *pdev)
++{
++	struct stfcamss *stfcamss = platform_get_drvdata(pdev);
++
++	v4l2_device_unregister(&stfcamss->v4l2_dev);
++	media_device_cleanup(&stfcamss->media_dev);
++	pm_runtime_disable(&pdev->dev);
++
++	return 0;
++}
++
++static const struct of_device_id stfcamss_of_match[] = {
++	{ .compatible = "starfive,jh7110-camss" },
++	{ /* sentinel */ },
++};
++
++MODULE_DEVICE_TABLE(of, stfcamss_of_match);
++
++static int __maybe_unused stfcamss_runtime_suspend(struct device *dev)
++{
++	struct stfcamss *stfcamss = dev_get_drvdata(dev);
++
++	reset_control_assert(stfcamss->sys_rst[STF_RST_ISP_TOP_AXI].rstc);
++	reset_control_assert(stfcamss->sys_rst[STF_RST_ISP_TOP_N].rstc);
++	clk_disable_unprepare(stfcamss->sys_clk[STF_CLK_ISP_AXI].clk);
++	clk_disable_unprepare(stfcamss->sys_clk[STF_CLK_ISPCORE_2X].clk);
++
++	return 0;
++}
++
++static int __maybe_unused stfcamss_runtime_resume(struct device *dev)
++{
++	struct stfcamss *stfcamss = dev_get_drvdata(dev);
++
++	clk_prepare_enable(stfcamss->sys_clk[STF_CLK_ISPCORE_2X].clk);
++	clk_prepare_enable(stfcamss->sys_clk[STF_CLK_ISP_AXI].clk);
++	reset_control_deassert(stfcamss->sys_rst[STF_RST_ISP_TOP_N].rstc);
++	reset_control_deassert(stfcamss->sys_rst[STF_RST_ISP_TOP_AXI].rstc);
++
++	return 0;
++}
++
++static const struct dev_pm_ops stfcamss_pm_ops = {
++	SET_RUNTIME_PM_OPS(stfcamss_runtime_suspend,
++			   stfcamss_runtime_resume,
++			   NULL)
++};
++
++static struct platform_driver stfcamss_driver = {
++	.probe = stfcamss_probe,
++	.remove = stfcamss_remove,
++	.driver = {
++		.name = DRV_NAME,
++		.pm = &stfcamss_pm_ops,
++		.of_match_table = of_match_ptr(stfcamss_of_match),
++	},
++};
++
++module_platform_driver(stfcamss_driver);
++
++MODULE_AUTHOR("StarFive Corporation");
++MODULE_DESCRIPTION("StarFive Camera Subsystem driver");
++MODULE_LICENSE("GPL");
+diff --git a/drivers/media/platform/starfive/stf_camss.h b/drivers/media/platform/starfive/stf_camss.h
+new file mode 100644
+index 000000000000..8f39cd65950c
+--- /dev/null
++++ b/drivers/media/platform/starfive/stf_camss.h
+@@ -0,0 +1,153 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * stf_camss.h
++ *
++ * Starfive Camera Subsystem driver
++ *
++ * Copyright (C) 2021-2023 StarFive Technology Co., Ltd.
++ */
++
++#ifndef STF_CAMSS_H
++#define STF_CAMSS_H
++
++#include <linux/clk.h>
++#include <linux/delay.h>
++#include <linux/reset.h>
++#include <media/v4l2-device.h>
++
++#include "stf_common.h"
++
++#define DRV_NAME     "starfive-camss"
++#define STF_DVP_NAME "stf_dvp"
++#define STF_CSI_NAME "cdns_csi2rx"
++#define STF_ISP_NAME "stf_isp"
++#define STF_VIN_NAME "stf_vin"
++
++#define STF_PAD_SINK   0
++#define STF_PAD_SRC    1
++#define STF_PADS_NUM   2
++
++enum port_num {
++	PORT_NUMBER_DVP_SENSOR = 0,
++	PORT_NUMBER_CSI2RX
++};
++
++enum stf_clk {
++	STF_CLK_APB_FUNC = 0,
++	STF_CLK_WRAPPER_CLK_C,
++	STF_CLK_DVP_INV,
++	STF_CLK_AXIWR,
++	STF_CLK_MIPI_RX0_PXL,
++	STF_CLK_ISPCORE_2X,
++	STF_CLK_ISP_AXI,
++	STF_CLK_NUM
++};
++
++enum stf_rst {
++	STF_RST_WRAPPER_P = 0,
++	STF_RST_WRAPPER_C,
++	STF_RST_AXIRD,
++	STF_RST_AXIWR,
++	STF_RST_ISP_TOP_N,
++	STF_RST_ISP_TOP_AXI,
++	STF_RST_NUM
++};
++
++enum stf_irq {
++	STF_IRQ_VINWR = 0,
++	STF_IRQ_ISP,
++	STF_IRQ_ISPCSIL,
++	STF_IRQ_NUM
++};
++
++#define HOST_ENTITY_MAX		2
++
++struct host_data {
++	struct media_entity *host_entity[HOST_ENTITY_MAX];
++};
++
++struct stfcamss {
++	struct v4l2_device v4l2_dev;
++	struct media_device media_dev;
++	struct media_pipeline pipe;
++	struct device *dev;
++	struct v4l2_async_notifier notifier;
++	struct host_data host_data;
++	void __iomem *syscon_base;
++	void __iomem *isp_base;
++	int irq[STF_IRQ_NUM];
++	struct clk_bulk_data sys_clk[STF_CLK_NUM];
++	int nclks;
++	struct reset_control_bulk_data sys_rst[STF_RST_NUM];
++	int nrsts;
++};
++
++struct stfcamss_async_subdev {
++	struct v4l2_async_subdev asd;  /* must be first */
++	enum port_num port;
++};
++
++static inline u32 stf_isp_reg_read(struct stfcamss *stfcamss, u32 reg)
++{
++	return ioread32(stfcamss->isp_base + reg);
++}
++
++static inline void stf_isp_reg_write(struct stfcamss *stfcamss,
++				     u32 reg, u32 val)
++{
++	iowrite32(val, stfcamss->isp_base + reg);
++}
++
++static inline void stf_isp_reg_write_delay(struct stfcamss *stfcamss,
++					   u32 reg, u32 val, u32 delay)
++{
++	iowrite32(val, stfcamss->isp_base + reg);
++	usleep_range(1000 * delay, 1000 * delay + 100);
++}
++
++static inline void stf_isp_reg_set_bit(struct stfcamss *stfcamss,
++				       u32 reg, u32 mask, u32 val)
++{
++	u32 value;
++
++	value = ioread32(stfcamss->isp_base + reg) & ~mask;
++	val &= mask;
++	val |= value;
++	iowrite32(val, stfcamss->isp_base + reg);
++}
++
++static inline void stf_isp_reg_set(struct stfcamss *stfcamss, u32 reg, u32 mask)
++{
++	iowrite32(ioread32(stfcamss->isp_base + reg) | mask,
++		  stfcamss->isp_base + reg);
++}
++
++static inline u32 stf_syscon_reg_read(struct stfcamss *stfcamss, u32 reg)
++{
++	return ioread32(stfcamss->syscon_base + reg);
++}
++
++static inline void stf_syscon_reg_write(struct stfcamss *stfcamss,
++					u32 reg, u32 val)
++{
++	iowrite32(val, stfcamss->syscon_base + reg);
++}
++
++static inline void stf_syscon_reg_set_bit(struct stfcamss *stfcamss,
++					  u32 reg, u32 bit_mask)
++{
++	u32 value;
++
++	value = ioread32(stfcamss->syscon_base + reg);
++	iowrite32(value | bit_mask, stfcamss->syscon_base + reg);
++}
++
++static inline void stf_syscon_reg_clear_bit(struct stfcamss *stfcamss,
++					    u32 reg, u32 bit_mask)
++{
++	u32 value;
++
++	value = ioread32(stfcamss->syscon_base + reg);
++	iowrite32(value & ~bit_mask, stfcamss->syscon_base + reg);
++}
++#endif /* STF_CAMSS_H */
+diff --git a/drivers/media/platform/starfive/stf_common.h b/drivers/media/platform/starfive/stf_common.h
+new file mode 100644
+index 000000000000..e04fca2d9cd4
+--- /dev/null
++++ b/drivers/media/platform/starfive/stf_common.h
+@@ -0,0 +1,18 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * stf_common.h
++ *
++ * StarFive Camera Subsystem - Common definitions
++ *
++ * Copyright (C) 2021-2023 StarFive Technology Co., Ltd.
++ */
++
++#ifndef STF_COMMON_H
++#define STF_COMMON_H
++
++enum stf_subdev_type {
++	STF_SUBDEV_TYPE_VIN,
++	STF_SUBDEV_TYPE_ISP,
++};
++
++#endif /* STF_COMMON_H */
 -- 
 2.34.1
 
