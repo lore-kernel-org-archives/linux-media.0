@@ -2,46 +2,44 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D356C7EE29
-	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:56:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE562C7EE31
+	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:56:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243382AbjEYS4l (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 May 2023 14:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45314 "EHLO
+        id S243394AbjEYS4n (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 May 2023 14:56:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243658AbjEYSzr (ORCPT
+        with ESMTP id S243615AbjEYSzl (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 May 2023 14:55:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8BCC4C22;
-        Thu, 25 May 2023 11:47:45 -0700 (PDT)
+        Thu, 25 May 2023 14:55:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB8DB4212;
+        Thu, 25 May 2023 11:47:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2221564948;
-        Thu, 25 May 2023 18:45:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75DE0C433D2;
-        Thu, 25 May 2023 18:45:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 575D360F93;
+        Thu, 25 May 2023 18:45:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27F3DC433EF;
+        Thu, 25 May 2023 18:45:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685040351;
-        bh=qMRcSdvdlL7u0cXsG0jvEgWnyTSYqEfuDBXqGxxxQhI=;
+        s=k20201202; t=1685040340;
+        bh=IxDhtpyDUegf/FfkyjsBsGiprobcaU9JFRQbV95QVNs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rGirm8IqkaBHFxd1RGllLOHoebtXYAG8t5dRPER2hkx63+Fuyk9K1qBDnTrFHlpLj
-         /8mqi4a+vO6QEQEavrGRL/RpGNeuYUqgcZiZFTP7DvovlO9pSqlFUDLNpLM3YH1fp1
-         QU++xwzDZpqhE/R6HLOlwRZPJRvrni43ZKBvPuFlh/EQTpmYWhBX6NHIr6Ez0dA0kH
-         r0jYWvXN8uJXpAmZxTVyQ+H+Ve2LZcPygNgWDYnm3nMxpwv26x6FdgAUoVe0ML36N0
-         6JT++0Mh+8bXYt1XiciPI8NwPyIwrjMo82U095vroIP9L1BllCPmFhtVtf8n4VHJnD
-         A62TfN0u0fX3A==
+        b=C5ZYoE/ajNXBlSHDbRP3Ldyj3kHESpg03/VBAitCXunW4GzmvlbSQUFvQoZTNCea3
+         1Nlpf6dT9m7WL7cw1m8rdDRes+U2GbZ0oXQykqeBKWh4ejU3AULL798NPM6Dp8VNnc
+         7HlGTP+PoxVVWUBrGysowaDYF2ypO9nRdb76vyemM4DKuVoDz1on03VNtFTyOjxlS5
+         Ef72fyRH4uPaAKSXOjHaFLHaZC7ffAhd6dYGx6i//b0qizNE/k3EOwSETO5DiXJIQW
+         q9691o6Dk4pj531m2aYgqReOc/JWjsnOtghJACcEPDfocnAVn4M1CkB0wL+A2xqj6H
+         xqlfLP2fFZSpQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Takashi Iwai <tiwai@suse.de>, Yu Hao <yhao016@ucr.edu>,
+Cc:     Wei Chen <harperchen1110@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, robert_s@gmx.net,
-        chenzhongjin@huawei.com, linma@zju.edu.cn, imv4bel@gmail.com,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 11/20] media: dvb-core: Fix kernel WARNING for blocking operation in wait_event*()
-Date:   Thu, 25 May 2023 14:45:07 -0400
-Message-Id: <20230525184520.2004878-11-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 08/20] media: dvb-usb: dw2102: fix uninit-value in su3000_read_mac_address
+Date:   Thu, 25 May 2023 14:45:04 -0400
+Message-Id: <20230525184520.2004878-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230525184520.2004878-1-sashal@kernel.org>
 References: <20230525184520.2004878-1-sashal@kernel.org>
@@ -53,63 +51,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Wei Chen <harperchen1110@gmail.com>
 
-[ Upstream commit b8c75e4a1b325ea0a9433fa8834be97b5836b946 ]
+[ Upstream commit a3fd1ef27aa686d871cefe207bd6168c4b0cd29e ]
 
-Using a semaphore in the wait_event*() condition is no good idea.
-It hits a kernel WARN_ON() at prepare_to_wait_event() like:
-  do not call blocking ops when !TASK_RUNNING; state=1 set at
-  prepare_to_wait_event+0x6d/0x690
+In su3000_read_mac_address, if i2c_transfer fails to execute two
+messages, array mac address will not be initialized. Without handling
+such error, later in function dvb_usb_adapter_dvb_init, proposed_mac
+is accessed before initialization.
 
-For avoiding the potential deadlock, rewrite to an open-coded loop
-instead.  Unlike the loop in wait_event*(), this uses wait_woken()
-after the condition check, hence the task state stays consistent.
+Fix this error by returning a negative value if message execution fails.
 
-CVE-2023-31084 was assigned to this bug.
-
-Link: https://lore.kernel.org/r/CA+UBctCu7fXn4q41O_3=id1+OdyQ85tZY1x+TkT-6OVBL6KAUw@mail.gmail.com/
-
-Link: https://lore.kernel.org/linux-media/20230512151800.1874-1-tiwai@suse.de
-Reported-by: Yu Hao <yhao016@ucr.edu>
-Closes: https://nvd.nist.gov/vuln/detail/CVE-2023-31084
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Link: https://lore.kernel.org/linux-media/20230328124416.560889-1-harperchen1110@gmail.com
+Signed-off-by: Wei Chen <harperchen1110@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/dvb-core/dvb_frontend.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+ drivers/media/usb/dvb-usb/dw2102.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/dvb-core/dvb_frontend.c b/drivers/media/dvb-core/dvb_frontend.c
-index e3a4a4688c2ec..651234584eb2c 100644
---- a/drivers/media/dvb-core/dvb_frontend.c
-+++ b/drivers/media/dvb-core/dvb_frontend.c
-@@ -301,14 +301,22 @@ static int dvb_frontend_get_event(struct dvb_frontend *fe,
- 	}
- 
- 	if (events->eventw == events->eventr) {
--		int ret;
-+		struct wait_queue_entry wait;
-+		int ret = 0;
- 
- 		if (flags & O_NONBLOCK)
- 			return -EWOULDBLOCK;
- 
--		ret = wait_event_interruptible(events->wait_queue,
--					       dvb_frontend_test_event(fepriv, events));
--
-+		init_waitqueue_entry(&wait, current);
-+		add_wait_queue(&events->wait_queue, &wait);
-+		while (!dvb_frontend_test_event(fepriv, events)) {
-+			wait_woken(&wait, TASK_INTERRUPTIBLE, 0);
-+			if (signal_pending(current)) {
-+				ret = -ERESTARTSYS;
-+				break;
-+			}
-+		}
-+		remove_wait_queue(&events->wait_queue, &wait);
- 		if (ret < 0)
- 			return ret;
+diff --git a/drivers/media/usb/dvb-usb/dw2102.c b/drivers/media/usb/dvb-usb/dw2102.c
+index 98770a95721b9..2c9c4432a0e65 100644
+--- a/drivers/media/usb/dvb-usb/dw2102.c
++++ b/drivers/media/usb/dvb-usb/dw2102.c
+@@ -951,7 +951,7 @@ static int su3000_read_mac_address(struct dvb_usb_device *d, u8 mac[6])
+ 	for (i = 0; i < 6; i++) {
+ 		obuf[1] = 0xf0 + i;
+ 		if (i2c_transfer(&d->i2c_adap, msg, 2) != 2)
+-			break;
++			return -1;
+ 		else
+ 			mac[i] = ibuf[0];
  	}
 -- 
 2.39.2
