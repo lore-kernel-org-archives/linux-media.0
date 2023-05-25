@@ -2,45 +2,45 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 518A8C7EE39
-	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:41:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B05AC7EE3A
+	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:41:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242077AbjEYSk7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 May 2023 14:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58036 "EHLO
+        id S242109AbjEYSlA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 May 2023 14:41:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242405AbjEYSk2 (ORCPT
+        with ESMTP id S242135AbjEYSj2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 May 2023 14:40:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416F019A6;
-        Thu, 25 May 2023 11:38:00 -0700 (PDT)
+        Thu, 25 May 2023 14:39:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358D41FD2;
+        Thu, 25 May 2023 11:37:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C008648E6;
-        Thu, 25 May 2023 18:37:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 175B0C433EF;
-        Thu, 25 May 2023 18:37:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 15D89648DF;
+        Thu, 25 May 2023 18:37:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE542C4339B;
+        Thu, 25 May 2023 18:37:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685039822;
-        bh=r/6fecBU06f8kGCswx/Qa+Cl/y1woDWpYc+7gapLdcs=;
+        s=k20201202; t=1685039834;
+        bh=K4YcD6dswcLwvVVRAb/LMSzwarNi1nA2TqBIrwoBs0c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eVsub7bB2UXT9J0AJl2+ha8/S6IKX27YN1g1+o98PMd7Uu9lcZglzJE5yZorPU2Kp
-         BgSBaFJqwbL3G9NowJQczs8ERUcZTNmMHeLCHL7/8FnXXsxJwAUbwAAVIrxBygO84L
-         YnsAI3SK2kLnHwwdmsv01M3IyBspbC2U98RW3nKtuezUe6eEzwtBVYIQ4asITw6Ddl
-         li+XIjaQ91wtoyE+ZA4dq9AjgwFTiNFdfDJIMssR1z1U06AQWqwjZQcBIQeVeETuur
-         kknlu5B7K7pM+HJBWu9KcdCC2joWEclcQh53lpDgtsQQ63UtJfNH5C2x3m2pViTVqN
-         zR7/zzasJxQ/w==
+        b=BgpP5KW2BjCg3TbQTHHgY+JFpujjh8W+ImNQFuNCE5ZvaQJ+EhW9uIFp+qTlgG4ei
+         us29foCrGdkiBNZMdgDHg1AsAtlO5qwHyOJw5mvABZgyi7uYJGI1dlqSAMLAzqUw3q
+         qXsheO7dXGD/i1fBaEfCDHzcSEDYR9THhIxhu59K94MRPjTgp7BJlxSspwxKwRYjUw
+         XH4dt3P8kVpuuBQE2usa5yDZbhOqUK00lGrkj/xA8FxFN16uLVEMu63OlCGi9ZLOjf
+         HkaSTLbhErJ4+Ze78F3OgeoyD9f+0uQlxvBThVBtADFVXhXQVFCt2ifAnxP/yPslld
+         iSgdyZfv1NxfQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Wei Chen <harperchen1110@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, zhongbaisong@huawei.com,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 12/57] media: dvb-usb: az6027: fix three null-ptr-deref in az6027_i2c_xfer()
-Date:   Thu, 25 May 2023 14:35:22 -0400
-Message-Id: <20230525183607.1793983-12-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, serjk@netup.ru,
+        aospan@netup.ru, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 18/57] media: netup_unidvb: fix irq init by register it at the end of probe
+Date:   Thu, 25 May 2023 14:35:28 -0400
+Message-Id: <20230525183607.1793983-18-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230525183607.1793983-1-sashal@kernel.org>
 References: <20230525183607.1793983-1-sashal@kernel.org>
@@ -54,59 +54,66 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Wei Chen <harperchen1110@gmail.com>
 
-[ Upstream commit 858e97d7956d17a2cb56a9413468704a4d5abfe1 ]
+[ Upstream commit e6ad6233592593079db5c8fa592c298e51bc1356 ]
 
-In az6027_i2c_xfer, msg is controlled by user. When msg[i].buf is null,
-commit 0ed554fd769a ("media: dvb-usb: az6027: fix null-ptr-deref in
-az6027_i2c_xfer()") fix the null-ptr-deref bug when msg[i].addr is 0x99.
-However, null-ptr-deref also happens when msg[i].addr is 0xd0 and 0xc0.
-We add check on msg[i].len to prevent null-ptr-deref.
+IRQ handler netup_spi_interrupt() takes spinlock spi->lock. The lock
+is initialized in netup_spi_init(). However, irq handler is registered
+before initializing the lock.
 
-Link: https://lore.kernel.org/linux-media/20230310165604.3093483-1-harperchen1110@gmail.com
+Spinlock dma->lock and i2c->lock suffer from the same problem.
+
+Fix this by registering the irq at the end of probe.
+
+Link: https://lore.kernel.org/linux-media/20230315134518.1074497-1-harperchen1110@gmail.com
 Signed-off-by: Wei Chen <harperchen1110@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/dvb-usb/az6027.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ .../media/pci/netup_unidvb/netup_unidvb_core.c  | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/usb/dvb-usb/az6027.c b/drivers/media/usb/dvb-usb/az6027.c
-index 7d78ee09be5e1..a31c6f82f4e90 100644
---- a/drivers/media/usb/dvb-usb/az6027.c
-+++ b/drivers/media/usb/dvb-usb/az6027.c
-@@ -988,6 +988,10 @@ static int az6027_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[], int n
- 			/* write/read request */
- 			if (i + 1 < num && (msg[i + 1].flags & I2C_M_RD)) {
- 				req = 0xB9;
-+				if (msg[i].len < 1) {
-+					i = -EOPNOTSUPP;
-+					break;
-+				}
- 				index = (((msg[i].buf[0] << 8) & 0xff00) | (msg[i].buf[1] & 0x00ff));
- 				value = msg[i].addr + (msg[i].len << 8);
- 				length = msg[i + 1].len + 6;
-@@ -1001,6 +1005,10 @@ static int az6027_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[], int n
- 
- 				/* demod 16bit addr */
- 				req = 0xBD;
-+				if (msg[i].len < 1) {
-+					i = -EOPNOTSUPP;
-+					break;
-+				}
- 				index = (((msg[i].buf[0] << 8) & 0xff00) | (msg[i].buf[1] & 0x00ff));
- 				value = msg[i].addr + (2 << 8);
- 				length = msg[i].len - 2;
-@@ -1026,6 +1034,10 @@ static int az6027_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[], int n
- 			} else {
- 
- 				req = 0xBD;
-+				if (msg[i].len < 1) {
-+					i = -EOPNOTSUPP;
-+					break;
-+				}
- 				index = msg[i].buf[0] & 0x00FF;
- 				value = msg[i].addr + (1 << 8);
- 				length = msg[i].len - 1;
+diff --git a/drivers/media/pci/netup_unidvb/netup_unidvb_core.c b/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
+index 8287851b5ffdc..751a954baf651 100644
+--- a/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
++++ b/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
+@@ -887,12 +887,7 @@ static int netup_unidvb_initdev(struct pci_dev *pci_dev,
+ 		ndev->lmmio0, (u32)pci_resource_len(pci_dev, 0),
+ 		ndev->lmmio1, (u32)pci_resource_len(pci_dev, 1),
+ 		pci_dev->irq);
+-	if (request_irq(pci_dev->irq, netup_unidvb_isr, IRQF_SHARED,
+-			"netup_unidvb", pci_dev) < 0) {
+-		dev_err(&pci_dev->dev,
+-			"%s(): can't get IRQ %d\n", __func__, pci_dev->irq);
+-		goto irq_request_err;
+-	}
++
+ 	ndev->dma_size = 2 * 188 *
+ 		NETUP_DMA_BLOCKS_COUNT * NETUP_DMA_PACKETS_COUNT;
+ 	ndev->dma_virt = dma_alloc_coherent(&pci_dev->dev,
+@@ -933,6 +928,14 @@ static int netup_unidvb_initdev(struct pci_dev *pci_dev,
+ 		dev_err(&pci_dev->dev, "netup_unidvb: DMA setup failed\n");
+ 		goto dma_setup_err;
+ 	}
++
++	if (request_irq(pci_dev->irq, netup_unidvb_isr, IRQF_SHARED,
++			"netup_unidvb", pci_dev) < 0) {
++		dev_err(&pci_dev->dev,
++			"%s(): can't get IRQ %d\n", __func__, pci_dev->irq);
++		goto dma_setup_err;
++	}
++
+ 	dev_info(&pci_dev->dev,
+ 		"netup_unidvb: device has been initialized\n");
+ 	return 0;
+@@ -951,8 +954,6 @@ static int netup_unidvb_initdev(struct pci_dev *pci_dev,
+ 	dma_free_coherent(&pci_dev->dev, ndev->dma_size,
+ 			ndev->dma_virt, ndev->dma_phys);
+ dma_alloc_err:
+-	free_irq(pci_dev->irq, pci_dev);
+-irq_request_err:
+ 	iounmap(ndev->lmmio1);
+ pci_bar1_error:
+ 	iounmap(ndev->lmmio0);
 -- 
 2.39.2
 
