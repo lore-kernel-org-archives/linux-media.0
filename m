@@ -2,49 +2,49 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 834E0C7EE2F
-	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 09:17:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EEE1DC77B7E
+	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 09:17:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240595AbjEYJR3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 May 2023 05:17:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52436 "EHLO
+        id S240605AbjEYJRb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 May 2023 05:17:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240453AbjEYJRW (ORCPT
+        with ESMTP id S240210AbjEYJRX (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 May 2023 05:17:22 -0400
+        Thu, 25 May 2023 05:17:23 -0400
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0530AA9
-        for <linux-media@vger.kernel.org>; Thu, 25 May 2023 02:17:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2416B195
+        for <linux-media@vger.kernel.org>; Thu, 25 May 2023 02:17:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685006241; x=1716542241;
+  t=1685006242; x=1716542242;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=X9CXNIfu7g52kWQW8CC+7Mtud54D6sd05ABI8z/1AIg=;
-  b=R8qkBrvzGPSCqlZyb0sW7kKmuhdt+l/X2RQ4b5mtteYw2OGjBCS0NHKc
-   gmHXQs4Ua7NUl5YSsxJkZTOrRWVA8nRfWRFz2b/CX0hEL8orL6R1SQMY1
-   894Mr0IPWomFc9piE6ZHveQfGTNCP04esZVmCq2BhL9wu6FIe5zwY3sKX
-   +zrw4oRShkjc7RuWnNbYSu5qGCC68vS5RiIRuZ8n2gqn7w23+Vu/9UZUh
-   WtlIIlXwLZ6O60pA8/YkHURo1TE7mANjyJS+CIVnk8oSOY597YBfoRMXT
-   Qttfjr9pYjdFgGMBr8J5Va4qgd0l0b2zUqc2X0OD4xuIsL4XCBUpgQmpb
+  bh=CT3qkHQFn1isd83r1CHe3VmFBB4yoqvfy+LNLXqrF4Y=;
+  b=dNF0YieLMw4dQfLUwqn9+UmfL+ZcZQgN/2N9hz6ksuCyOJCXQCDTMBLi
+   /7ITAWOyAE/xknuEvAWYSNJMQb2E5MojMWYZxLuvXdOsQ7RCyVqRCDIrE
+   U6ZE9ZM1IiMYW28sazTmdGmwkFJO3+lprHJZIbowdHbS8grttN98Z1qxW
+   roxx9rrdN6rkELStO2xb1bk5DUXujQrG9xrJFTVklnHiOcVNSlbt9PHMb
+   kT5j151xaIGqHO/0w/1VZ+kBvU+ugX6EfgDVaIotbSRY7zVeq65yBwu2J
+   31pYy7IxUt6E3GPmZprjYkxyQhor6XaBxqeLKYXnVzklNJX7aqpX0LCuN
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="333455932"
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="333455973"
 X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
-   d="scan'208";a="333455932"
+   d="scan'208";a="333455973"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
   by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 02:17:18 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="879029141"
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="879029148"
 X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
-   d="scan'208";a="879029141"
+   d="scan'208";a="879029148"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
   by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 02:17:10 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id 985C3122FF9;
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 71734122FF2;
         Thu, 25 May 2023 12:16:49 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.94.2)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1q2758-009kpk-FH; Thu, 25 May 2023 12:16:26 +0300
+        id 1q2758-009kpM-AT; Thu, 25 May 2023 12:16:26 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com,
@@ -75,9 +75,9 @@ Cc:     laurent.pinchart@ideasonboard.com,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Sowjanya Komatineni <skomatineni@nvidia.com>,
         Marco Felsch <m.felsch@pengutronix.de>
-Subject: [RESEND PATCH v3 22/32] media: adv748x: Return to endpoint matching
-Date:   Thu, 25 May 2023 12:16:05 +0300
-Message-Id: <20230525091615.2324824-23-sakari.ailus@linux.intel.com>
+Subject: [RESEND PATCH v3 16/32] media: v4l: async: Drop duplicate handling when adding connections
+Date:   Thu, 25 May 2023 12:15:59 +0300
+Message-Id: <20230525091615.2324824-17-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230525091615.2324824-1-sakari.ailus@linux.intel.com>
 References: <20230525091615.2324824-1-sakari.ailus@linux.intel.com>
@@ -87,60 +87,90 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Return the two CSI-2 transmitters of adv748x to endpoint matching. This
-should make the driver work again as expected.
+The connections are checked for duplicates already when the notifier is
+registered. This is effectively a sanity check for driver (and possibly
+obscure firmware) bugs. Don't do this when adding the connection.
 
-Fixes: ("media: v4l: async: Simplify async sub-device fwnode matching")
+Retain the int return type for now. It'll be needed very soon again.
+
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/adv748x/adv748x-csi2.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ drivers/media/v4l2-core/v4l2-async.c | 23 +++++++----------------
+ 1 file changed, 7 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/media/i2c/adv748x/adv748x-csi2.c b/drivers/media/i2c/adv748x/adv748x-csi2.c
-index b6f93c1db3d2a..a5a7cb228896b 100644
---- a/drivers/media/i2c/adv748x/adv748x-csi2.c
-+++ b/drivers/media/i2c/adv748x/adv748x-csi2.c
-@@ -296,8 +296,6 @@ int adv748x_csi2_init(struct adv748x_state *state, struct adv748x_csi2 *tx)
- 	if (!is_tx_enabled(tx))
- 		return 0;
+diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
+index f51f0c37210c9..5dfc6d5f6a7c3 100644
+--- a/drivers/media/v4l2-core/v4l2-async.c
++++ b/drivers/media/v4l2-core/v4l2-async.c
+@@ -475,8 +475,7 @@ v4l2_async_nf_has_async_match_entry(struct v4l2_async_notifier *notifier,
+  */
+ static bool
+ v4l2_async_nf_has_async_match(struct v4l2_async_notifier *notifier,
+-			      struct v4l2_async_match_desc *match,
+-			      bool skip_self)
++			      struct v4l2_async_match_desc *match)
+ {
+ 	struct v4l2_async_connection *asc;
  
--	/* FIXME: Do endpoint matching again! */
--
- 	adv748x_subdev_init(&tx->sd, state, &adv748x_csi2_ops,
- 			    MEDIA_ENT_F_VID_IF_BRIDGE,
- 			    is_txa(tx) ? "txa" : "txb");
-@@ -313,10 +311,15 @@ int adv748x_csi2_init(struct adv748x_state *state, struct adv748x_csi2 *tx)
- 	if (ret)
- 		return ret;
+@@ -484,7 +483,7 @@ v4l2_async_nf_has_async_match(struct v4l2_async_notifier *notifier,
  
--	ret = adv748x_csi2_init_controls(tx);
-+	ret = v4l2_async_subdev_endpoint_add(&tx->sd,
-+					     of_fwnode_handle(state->endpoints[tx->port]));
- 	if (ret)
- 		goto err_free_media;
- 
-+	ret = adv748x_csi2_init_controls(tx);
-+	if (ret)
-+		goto err_cleanup_subdev;
-+
- 	ret = v4l2_async_register_subdev(&tx->sd);
- 	if (ret)
- 		goto err_free_ctrl;
-@@ -325,6 +328,8 @@ int adv748x_csi2_init(struct adv748x_state *state, struct adv748x_csi2 *tx)
- 
- err_free_ctrl:
- 	v4l2_ctrl_handler_free(&tx->ctrl_hdl);
-+err_cleanup_subdev:
-+	v4l2_subdev_cleanup(&tx->sd);
- err_free_media:
- 	media_entity_cleanup(&tx->sd.entity);
- 
-@@ -339,4 +344,5 @@ void adv748x_csi2_cleanup(struct adv748x_csi2 *tx)
- 	v4l2_async_unregister_subdev(&tx->sd);
- 	media_entity_cleanup(&tx->sd.entity);
- 	v4l2_ctrl_handler_free(&tx->ctrl_hdl);
-+	v4l2_subdev_cleanup(&tx->sd);
+ 	/* Check that an asd is not being added more than once. */
+ 	list_for_each_entry(asc, &notifier->asc_list, asc_entry) {
+-		if (skip_self && &asc->match == match)
++		if (&asc->match == match)
+ 			break;
+ 		if (v4l2_async_match_equal(&asc->match, match))
+ 			return true;
+@@ -499,16 +498,14 @@ v4l2_async_nf_has_async_match(struct v4l2_async_notifier *notifier,
  }
+ 
+ static int v4l2_async_nf_match_valid(struct v4l2_async_notifier *notifier,
+-				     struct v4l2_async_match_desc *match,
+-				     bool skip_self)
++				     struct v4l2_async_match_desc *match)
+ {
+ 	struct device *dev = notifier_dev(notifier);
+ 
+ 	switch (match->type) {
+ 	case V4L2_ASYNC_MATCH_TYPE_I2C:
+ 	case V4L2_ASYNC_MATCH_TYPE_FWNODE:
+-		if (v4l2_async_nf_has_async_match(notifier, match,
+-						  skip_self)) {
++		if (v4l2_async_nf_has_async_match(notifier, match)) {
+ 			dev_dbg(dev, "v4l2-async: match descriptor already listed in a notifier\n");
+ 			return -EEXIST;
+ 		}
+@@ -539,7 +536,7 @@ static int __v4l2_async_nf_register(struct v4l2_async_notifier *notifier)
+ 	mutex_lock(&list_lock);
+ 
+ 	list_for_each_entry(asc, &notifier->asc_list, asc_entry) {
+-		ret = v4l2_async_nf_match_valid(notifier, &asc->match, true);
++		ret = v4l2_async_nf_match_valid(notifier, &asc->match);
+ 		if (ret)
+ 			goto err_unlock;
+ 
+@@ -668,19 +665,13 @@ EXPORT_SYMBOL_GPL(v4l2_async_nf_cleanup);
+ static int __v4l2_async_nf_add_connection(struct v4l2_async_notifier *notifier,
+ 					  struct v4l2_async_connection *asc)
+ {
+-	int ret;
+-
+ 	mutex_lock(&list_lock);
+ 
+-	ret = v4l2_async_nf_match_valid(notifier, &asc->match, false);
+-	if (ret)
+-		goto unlock;
+-
+ 	list_add_tail(&asc->asc_entry, &notifier->asc_list);
+ 
+-unlock:
+ 	mutex_unlock(&list_lock);
+-	return ret;
++
++	return 0;
+ }
+ 
+ struct v4l2_async_connection *
 -- 
 2.30.2
 
