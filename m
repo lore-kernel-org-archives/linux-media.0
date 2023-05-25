@@ -2,223 +2,118 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11417C7EE29
-	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 19:54:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58E78C7EE29
+	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 19:56:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242369AbjEYTyZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 May 2023 15:54:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42622 "EHLO
+        id S234662AbjEYT43 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 May 2023 15:56:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242135AbjEYTyQ (ORCPT
+        with ESMTP id S229589AbjEYT42 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 May 2023 15:54:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7471CE6C
-        for <linux-media@vger.kernel.org>; Thu, 25 May 2023 12:53:08 -0700 (PDT)
+        Thu, 25 May 2023 15:56:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73BE0122
+        for <linux-media@vger.kernel.org>; Thu, 25 May 2023 12:55:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685044356;
+        s=mimecast20190719; t=1685044533;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dQyZVLGcIos4Q5rdj2JfKFvYrJKyNEx1iio1SMT+FqE=;
-        b=NM5BnnZWJnNBiwILl1h42agxZLHojRCX073Go00/8ntIrYDWLwnfSn9YzCYpxK+jm7xCgd
-        rvI9VuEgZCCpHQzbJsRhLKHnwxvirYbK1kyxhLPyY/8krawydfUNxAQJiXd1ObC++efPcb
-        uO6yy4QIlp/XQMRl3tE1gVLNt/aTstk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-54-q5eFJrKJP724v9RfYTXXaw-1; Thu, 25 May 2023 15:01:09 -0400
-X-MC-Unique: q5eFJrKJP724v9RfYTXXaw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5094B1C08DB8;
-        Thu, 25 May 2023 19:01:08 +0000 (UTC)
-Received: from shalem.redhat.com (unknown [10.39.192.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A872A40D1B68;
-        Thu, 25 May 2023 19:01:06 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>, Kate Hsuan <hpa@redhat.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        Yury Luneff <yury.lunev@gmail.com>,
-        Nable <nable.maininbox@googlemail.com>,
-        andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
-        Dan Scally <djrscally@gmail.com>, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: [PATCH v2 2/5] media: atomisp: ov2680: Turn into standard v4l2 sensor driver
-Date:   Thu, 25 May 2023 21:00:57 +0200
-Message-Id: <20230525190100.130010-3-hdegoede@redhat.com>
-In-Reply-To: <20230525190100.130010-1-hdegoede@redhat.com>
-References: <20230525190100.130010-1-hdegoede@redhat.com>
+        bh=zVbOTVecVYKoMsVv2+y0oYPZF/OrujTxGhEgP9zW7aA=;
+        b=ArbhV6jLD6XLROgplFLFapNM1oJyS+T9Yiuje9ayN6n0qs77paJnZtMcklydEivSGabw93
+        wkcrrzood85+8Takb2Qi3QdLyZ6oXZ//B4NcpIwLy4m7+KDEqsUr9AwxOrfwT4XuSOr7aW
+        X3qmVgdrlOxu2QkMLdtdM7hwMziETWM=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-377-6oKWMzKWMkuooHE65TK2dw-1; Thu, 25 May 2023 14:40:49 -0400
+X-MC-Unique: 6oKWMzKWMkuooHE65TK2dw-1
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-94a341efd9aso117168466b.0
+        for <linux-media@vger.kernel.org>; Thu, 25 May 2023 11:40:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685040048; x=1687632048;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zVbOTVecVYKoMsVv2+y0oYPZF/OrujTxGhEgP9zW7aA=;
+        b=GuBQvUAI381Aub0uwjApB736w78BSgHQKPWUOSHob5SEAzHx5II4O86LDuNlCcDNCg
+         QtAtfz8X6I6UVNRy4n+wctOdt47GiUvPiT6QMjw2D0UaPb7SMsYlQ5kp7eLNTfxFf9mF
+         0rMtVklN/ubOLQheiPoVP4vvKsFVVBeV4Vm8IR7mMPwDZ4DCRhYmmtiyy1im1mOUaQ3j
+         s6S25NoeV4qotCkjqB85yCYJseK3+igr7oXfXFZTEavW1PDJyYqXOin/Sg+qbq3J5eBg
+         1cRDzHp1eBkye0XNnEYQbEZ60vm5vuneRNPEntcWKAx4zzyv6hVUpW9Y+ioGOd9AE0go
+         9b/w==
+X-Gm-Message-State: AC+VfDy08MMSchDuZfldM7rT61ztx1aiqvcAmzRuzPKF0+40qCF/ZMJi
+        Tql2tzOSUN/Q7K5tAVkul42pyd/a/zGLMzY0itdBX13ScDfEKc7KHQAWjEWxNuBjXAg/MDE5zXV
+        gX9MBQrDgoJWQ1FNa/QQW6qqRr2a+GbY=
+X-Received: by 2002:a17:906:ef07:b0:966:53b1:b32a with SMTP id f7-20020a170906ef0700b0096653b1b32amr2355225ejs.53.1685040047916;
+        Thu, 25 May 2023 11:40:47 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5gkK/wTpTJ3CVYRrJpQFJ0ucU91Y1Vree4XMrNsOdAkcUDQCXMwAlLH7RrdlcrGgrHVbpTJA==
+X-Received: by 2002:a17:906:ef07:b0:966:53b1:b32a with SMTP id f7-20020a170906ef0700b0096653b1b32amr2355211ejs.53.1685040047581;
+        Thu, 25 May 2023 11:40:47 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id n11-20020a170906378b00b0096b4ec45e10sm1149605ejc.139.2023.05.25.11.40.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 May 2023 11:40:42 -0700 (PDT)
+Message-ID: <745f5335-b849-52da-f3e2-52cb1f4d1bd6@redhat.com>
+Date:   Thu, 25 May 2023 20:40:42 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 3/3] platform/x86: int3472: Add ov13b10 (09B13) sensor
+ module support
+To:     bingbu.cao@intel.com, djrscally@gmail.com,
+        dan.scally@ideasonboard.com, hao.yao@intel.com
+Cc:     markgross@kernel.org, linux-media@vger.kernel.org,
+        sakari.ailus@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        bingbu.cao@linux.intel.com
+References: <20230524035135.90315-1-bingbu.cao@intel.com>
+ <20230524035135.90315-3-bingbu.cao@intel.com>
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230524035135.90315-3-bingbu.cao@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Turn the atomisp-ov2680 driver into a standard v4l2 sensor driver:
+Hi all,
 
-1. Stop filling camera_mipi_info
-2. Stop calling v4l2_get_acpi_sensor_info() this will be done by
-   atomisp_csi2_bridge_parse_firmware() now
-3. Switch to v4l2 async device registration
+On 5/24/23 05:51, bingbu.cao@intel.com wrote:
+> From: Hao Yao <hao.yao@intel.com>
+> 
+> Add a new sensor support in INT3472 driver which module name is '09B13'.
+> 
+> Signed-off-by: Hao Yao <hao.yao@intel.com>
+> Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
+> ---
+>  drivers/platform/x86/intel/int3472/discrete.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/platform/x86/intel/int3472/discrete.c b/drivers/platform/x86/intel/int3472/discrete.c
+> index d5d5c650d6d2..63acb48bf8df 100644
+> --- a/drivers/platform/x86/intel/int3472/discrete.c
+> +++ b/drivers/platform/x86/intel/int3472/discrete.c
+> @@ -60,6 +60,8 @@ static const struct int3472_sensor_config int3472_sensor_configs[] = {
+>  	{ "GEFF150023R", REGULATOR_SUPPLY("avdd", NULL), NULL },
+>  	/* Surface Go 1&2 - OV5693, Front */
+>  	{ "YHCU", REGULATOR_SUPPLY("avdd", NULL), NULL },
+> +	/* OV13B10 */
+> +	{ "09B13", REGULATOR_SUPPLY("vcc", NULL), NULL },
 
-After this change this driver no longer depends on
-atomisp_gmin_platform and all atomisp-isms are gone.
+"vcc" is not really a useful supply name. All the existing sensor drivers in drivers/media/i2c typically check for both "avdd" and "dvdd". Can you verify if this is supplying digital or analog power using the schematics of the laptop ?
 
-While at it, also add missing mutex_destroy() to ov2680_remove().
+And then use one of the standard "avdd" or "dvdd" supply names ?
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
-Changes in v2:
-- Drop v4l2_get_acpi_sensor_info() call in this patch
-- Wait for fwnode graph endpoint so that the bridge's ACPI
-  parsing gets a chance to register the GPIO mappings
-  before probing the sensor
-- Switch to endpoint matching
----
- .../media/atomisp/i2c/atomisp-ov2680.c        | 38 ++++++++-----------
- drivers/staging/media/atomisp/i2c/ov2680.h    |  3 +-
- .../media/atomisp/pci/atomisp_csi2_bridge.c   |  2 +
- 3 files changed, 18 insertions(+), 25 deletions(-)
+I would like to try and get rid of this table and sofar all the sensors which have a regulator GPIO are listed as sing it for "avdd" so I was hoping to be able to just always use "avdd".
 
-diff --git a/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c b/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
-index b5d93a96d588..b35ddf611e2b 100644
---- a/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
-+++ b/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
-@@ -28,17 +28,8 @@
- #include <media/ov_16bit_addr_reg_helpers.h>
- #include <media/v4l2-device.h>
- 
--#include "../include/linux/atomisp_gmin_platform.h"
--
- #include "ov2680.h"
- 
--static enum atomisp_bayer_order ov2680_bayer_order_mapping[] = {
--	atomisp_bayer_order_bggr,
--	atomisp_bayer_order_grbg,
--	atomisp_bayer_order_gbrg,
--	atomisp_bayer_order_rggb,
--};
--
- static int ov2680_write_reg_array(struct i2c_client *client,
- 				  const struct ov2680_reg *reglist)
- {
-@@ -62,7 +53,6 @@ static void ov2680_set_bayer_order(struct ov2680_device *sensor, struct v4l2_mbu
- 		MEDIA_BUS_FMT_SGBRG10_1X10,
- 		MEDIA_BUS_FMT_SRGGB10_1X10,
- 	};
--	struct camera_mipi_info *ov2680_info;
- 	int hv_flip = 0;
- 
- 	if (sensor->ctrls.vflip->val)
-@@ -72,11 +62,6 @@ static void ov2680_set_bayer_order(struct ov2680_device *sensor, struct v4l2_mbu
- 		hv_flip += 2;
- 
- 	fmt->code = ov2680_hv_flip_bayer_order[hv_flip];
--
--	/* TODO atomisp specific custom API, should be removed */
--	ov2680_info = v4l2_get_subdev_hostdata(&sensor->sd);
--	if (ov2680_info)
--		ov2680_info->raw_bayer_order = ov2680_bayer_order_mapping[hv_flip];
- }
- 
- static int ov2680_set_vflip(struct ov2680_device *sensor, s32 val)
-@@ -609,10 +594,11 @@ static void ov2680_remove(struct i2c_client *client)
- 
- 	dev_dbg(&client->dev, "ov2680_remove...\n");
- 
--	atomisp_unregister_subdev(sd);
--	v4l2_device_unregister_subdev(sd);
-+	v4l2_async_unregister_subdev(&sensor->sd);
- 	media_entity_cleanup(&sensor->sd.entity);
- 	v4l2_ctrl_handler_free(&sensor->ctrls.handler);
-+	mutex_destroy(&sensor->input_lock);
-+	fwnode_handle_put(sensor->ep_fwnode);
- 	pm_runtime_disable(&client->dev);
- }
- 
-@@ -631,13 +617,19 @@ static int ov2680_probe(struct i2c_client *client)
- 	sensor->client = client;
- 	v4l2_i2c_subdev_init(&sensor->sd, client, &ov2680_ops);
- 
--	ret = v4l2_get_acpi_sensor_info(dev, NULL);
--	if (ret)
--		return ret;
-+	/*
-+	 * Sometimes the fwnode graph is initialized by the bridge driver.
-+	 * Bridge drivers doing this may also add GPIO mappings, wait for this.
-+	 */
-+	sensor->ep_fwnode = fwnode_graph_get_next_endpoint(dev_fwnode(dev), NULL);
-+	if (!sensor->ep_fwnode)
-+		return dev_err_probe(dev, -EPROBE_DEFER, "waiting for fwnode graph endpoint\n");
- 
- 	sensor->powerdown = devm_gpiod_get_optional(dev, "powerdown", GPIOD_OUT_HIGH);
--	if (IS_ERR(sensor->powerdown))
-+	if (IS_ERR(sensor->powerdown)) {
-+		fwnode_handle_put(sensor->ep_fwnode);
- 		return dev_err_probe(dev, PTR_ERR(sensor->powerdown), "getting powerdown GPIO\n");
-+	}
- 
- 	pm_runtime_set_suspended(dev);
- 	pm_runtime_enable(dev);
-@@ -653,6 +645,7 @@ static int ov2680_probe(struct i2c_client *client)
- 	sensor->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
- 	sensor->pad.flags = MEDIA_PAD_FL_SOURCE;
- 	sensor->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
-+	sensor->sd.fwnode = sensor->ep_fwnode;
- 
- 	ret = ov2680_init_controls(sensor);
- 	if (ret) {
-@@ -668,8 +661,7 @@ static int ov2680_probe(struct i2c_client *client)
- 
- 	ov2680_fill_format(sensor, &sensor->mode.fmt, OV2680_NATIVE_WIDTH, OV2680_NATIVE_HEIGHT);
- 
--	ret = atomisp_register_sensor_no_gmin(&sensor->sd, 1, ATOMISP_INPUT_FORMAT_RAW_10,
--					      atomisp_bayer_order_bggr);
-+	ret = v4l2_async_register_subdev_sensor(&sensor->sd);
- 	if (ret) {
- 		ov2680_remove(client);
- 		return ret;
-diff --git a/drivers/staging/media/atomisp/i2c/ov2680.h b/drivers/staging/media/atomisp/i2c/ov2680.h
-index baf49eb0659e..a3eeb0c2de5c 100644
---- a/drivers/staging/media/atomisp/i2c/ov2680.h
-+++ b/drivers/staging/media/atomisp/i2c/ov2680.h
-@@ -30,8 +30,6 @@
- #include <linux/v4l2-mediabus.h>
- #include <media/media-entity.h>
- 
--#include "../include/linux/atomisp_platform.h"
--
- #define OV2680_NATIVE_WIDTH			1616
- #define OV2680_NATIVE_HEIGHT			1216
- 
-@@ -114,6 +112,7 @@ struct ov2680_device {
- 	struct mutex input_lock;
- 	struct i2c_client *client;
- 	struct gpio_desc *powerdown;
-+	struct fwnode_handle *ep_fwnode;
- 	bool is_streaming;
- 
- 	struct ov2680_mode {
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_csi2_bridge.c b/drivers/staging/media/atomisp/pci/atomisp_csi2_bridge.c
-index c80754755d9e..d7d9cac2c3b8 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_csi2_bridge.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_csi2_bridge.c
-@@ -89,6 +89,8 @@ static const guid_t atomisp_dsm_guid =
-  * power-management and with v4l2-async probing.
-  */
- static const struct atomisp_csi2_sensor_config supported_sensors[] = {
-+	/* Omnivision OV2680 */
-+	{ "OVTI2680", 1 },
- };
- 
- /*
--- 
-2.40.1
+At least I would like us to come up with some default fallback for the supply-name in case a sensor-module is not listed in this table and "avdd" seems to be the best fallback.
+
+Note that if your current sensor driver expects "vcc" that that is not a good reason to go with "vcc" here. It would be better to adjust the sensor driver to use the standard "avdd" and "dvdd" supply names (using the bulk regulator api), like all the other sensor drivers do.
+
+Regards,
+
+Hans
 
