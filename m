@@ -2,52 +2,67 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25BA0C7EE2E
-	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 09:17:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84EA2C77B7A
+	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 09:22:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240630AbjEYJRq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 May 2023 05:17:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52576 "EHLO
+        id S240379AbjEYJW4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 May 2023 05:22:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240631AbjEYJRf (ORCPT
+        with ESMTP id S240682AbjEYJWg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 May 2023 05:17:35 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9DB31B1
-        for <linux-media@vger.kernel.org>; Thu, 25 May 2023 02:17:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685006252; x=1716542252;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=5rW8DK32Hyv8FwdY9xWNQn2lY3oKeRhHTHoKPj3mXUI=;
-  b=n0Nz9pQsKVrqtpyOQlF+m3R7jy3nzbh85DfnPN5g9Bjl8rHfTUnEUI5/
-   zC/dO3LxauTj4P2SeChO7soFcAyndyZU4gCCX0JOnI5U/3hxoNSy4Rm4a
-   v5KlcyadYV7RaL7s7LiApSLzN3PurJUTUYvj0F1iy3ao/kH9QGazqHYy0
-   qzhBX4YY4alhz5GRBTyz6WCJgN9zlcorPhWzcPDYlNzn6+QiyylQb1IwR
-   mPA0adVrKGvTL6/i/MeWB3bh7yDoA3rR8Ta83v1iESqYrnRSdJVryCOYj
-   2c9BOdR/93Fmr5sZVS7iUQTy7uLkDNOGdBYrlcYDDVBv59YjyGwUDSy6k
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="333456108"
-X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
-   d="scan'208";a="333456108"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 02:17:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="879029156"
-X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
-   d="scan'208";a="879029156"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 02:17:11 -0700
-Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id A0376123002;
-        Thu, 25 May 2023 12:16:49 +0300 (EEST)
-Received: from sailus by punajuuri.localdomain with local (Exim 4.94.2)
-        (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1q2758-009kpn-GA; Thu, 25 May 2023 12:16:26 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Cc:     laurent.pinchart@ideasonboard.com,
+        Thu, 25 May 2023 05:22:36 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E104E4D
+        for <linux-media@vger.kernel.org>; Thu, 25 May 2023 02:22:30 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (dkzdf0gkyyyyyyyyyyyyt-3.rev.dnainternet.fi [IPv6:2001:14ba:4506:4f15::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4QRjJ04LNNz49Q1p;
+        Thu, 25 May 2023 12:22:24 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1685006547;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FvA4Nepuwsl/NmNtrb1OkKkx/TKchmbg6up4Kys0PKE=;
+        b=Pi2z+sHhqn/pj5fOfBCNtfrXlYSGVaLnmnDjRw5IzJZQwSbzOPSQuC1KU/Kjg5F0exyi6b
+        RqyaJkCvIU+lmlSy+Fx/D2RlATYVYP62ats1kZ+AXs3FKT5iNQ9FAajsIORHh64imxJAR3
+        uaU7jH31/zS53Hz17sU582Ig7u0ghoOfoYjKyz2wq5iN3cvlKF74Eeyamy/a1xD6TW+AvG
+        FZIevQy3FGV0o6AdoU5WNV2bC97xyrHX74PA54edCOYcArErvCY65IykUIixa2Ot2EGglf
+        lya8B5QxkFQEjDKHfSrW9uDig/2nBW6U2FOfC61MSjA3ExohEIs1cSJuEnzMkQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1685006547;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FvA4Nepuwsl/NmNtrb1OkKkx/TKchmbg6up4Kys0PKE=;
+        b=eJa8DOJtynf+VZJE3qwnQBzaDBOWfB7qejHm0rnPihOnG1m8mIHgsCk0jnst06ntTaM2GZ
+        6hF/jjJP1YfnRIBPrl/79BVs18iYRXkwWiRk0FZAuNtI6G9J67t1LDSHtn5tjXquykvziE
+        We2vYP+EioWk34fveb0orHuZb/YwIiMgEX8WXbULEuP657MCfzZ79KtQWMfojccLxUO4Ep
+        TMIXNeSZ5z2WrWPF0fDUhHzbmz2vnJl1F4dQrn/IA/yJPGbSNYB0l4zXDEQIMrg8CIlPFN
+        ajucvgh8oIWCC3Coz0hN5hbUjUqFHjDe/tLvAt22+acnSE6CKeul8P2SZQlsCQ==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1685006547; a=rsa-sha256;
+        cv=none;
+        b=ohhGrvK2JVXNEAmbnRgn+z4BbRjGXYm4EAs0z2dTflZElLqbwgtiBjwHlf+mH853dOJ/G5
+        HgjbfZ7MZW2H1VjIJzfMVANt8mbkxHxAsplbuHaRH+FqdJjG4+xxW09O6+Wwvk1R0Ecz2V
+        fCIEI6Tgw8o0R3ZInwBAaw7l0IqNG4owv821EqNBpfrR1ePyk00egVN8461PMIZ8MdHkxu
+        F3wb8bPOhLgcuVCXJllLH84a4er5P3jMCAJ6mWkh7qr+HP9w7PqPgMJSvqgZJ4HqhZsuL3
+        w2BJNCwdMeKOapQPqK2wyk2uF0h/zygLPUqrZL3CExUTMOaQXbzskUcdaaVl7Q==
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id D35F6634C92;
+        Thu, 25 May 2023 12:22:23 +0300 (EEST)
+Date:   Thu, 25 May 2023 12:22:23 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+Cc:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com,
         Philipp Zabel <p.zabel@pengutronix.de>, hverkuil@xs4all.nl,
         Francesco Dolcini <francesco@dolcini.it>,
         aishwarya.kothari@toradex.com, Robert Foss <rfoss@kernel.org>,
@@ -62,7 +77,7 @@ Cc:     laurent.pinchart@ideasonboard.com,
         Maxime Ripard <mripard@kernel.org>,
         Rui Miguel Silva <rmfrfs@gmail.com>,
         Fabio Estevam <festevam@gmail.com>,
-        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
         Sylwester Nawrocki <s.nawrocki@samsung.com>,
         Dafna Hirschfeld <dafna@fastmail.com>,
         Hugues Fruchet <hugues.fruchet@foss.st.com>,
@@ -75,124 +90,24 @@ Cc:     laurent.pinchart@ideasonboard.com,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Sowjanya Komatineni <skomatineni@nvidia.com>,
         Marco Felsch <m.felsch@pengutronix.de>
-Subject: [RESEND PATCH v3 23/32] media: pxa_camera: Fix probe error handling
-Date:   Thu, 25 May 2023 12:16:06 +0300
-Message-Id: <20230525091615.2324824-24-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230525091615.2324824-1-sakari.ailus@linux.intel.com>
+Subject: Re: [RESEND PATCH v3 00/32] Separate links and async sub-devices
+Message-ID: <ZG8ozymtuT0B3OT5@valkosipuli.retiisi.eu>
 References: <20230525091615.2324824-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230525091615.2324824-1-sakari.ailus@linux.intel.com>
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fix and simplify error handling in pxa_camera probe, by moving devm_*()
-functions early in the probe function and then tearing down what was set
-up on error patch.
+On Thu, May 25, 2023 at 12:15:43PM +0300, Sakari Ailus wrote:
+> The code also can be found in my async-multi branch, on media tree master.
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- drivers/media/platform/intel/pxa_camera.c | 48 ++++++++++++-----------
- 1 file changed, 25 insertions(+), 23 deletions(-)
+I meant to say "on my linuxtv.org tree":
 
-diff --git a/drivers/media/platform/intel/pxa_camera.c b/drivers/media/platform/intel/pxa_camera.c
-index f0d316d5fe27c..dad5e8d97683e 100644
---- a/drivers/media/platform/intel/pxa_camera.c
-+++ b/drivers/media/platform/intel/pxa_camera.c
-@@ -2289,6 +2289,24 @@ static int pxa_camera_probe(struct platform_device *pdev)
- 	if (IS_ERR(pcdev->clk))
- 		return PTR_ERR(pcdev->clk);
- 
-+	/*
-+	 * Request the regions.
-+	 */
-+	base = devm_ioremap_resource(&pdev->dev, res);
-+	if (IS_ERR(base))
-+		return PTR_ERR(base);
-+
-+	pcdev->irq = irq;
-+	pcdev->base = base;
-+
-+	/* request irq */
-+	err = devm_request_irq(&pdev->dev, pcdev->irq, pxa_camera_irq, 0,
-+			       PXA_CAM_DRV_NAME, pcdev);
-+	if (err) {
-+		dev_err(&pdev->dev, "Camera interrupt register failed\n");
-+		return err;
-+	}
-+
- 	v4l2_async_nf_init(&pcdev->notifier);
- 	pcdev->res = res;
- 	pcdev->pdata = pdev->dev.platform_data;
-@@ -2338,21 +2356,12 @@ static int pxa_camera_probe(struct platform_device *pdev)
- 	spin_lock_init(&pcdev->lock);
- 	mutex_init(&pcdev->mlock);
- 
--	/*
--	 * Request the regions.
--	 */
--	base = devm_ioremap_resource(&pdev->dev, res);
--	if (IS_ERR(base))
--		return PTR_ERR(base);
--
--	pcdev->irq = irq;
--	pcdev->base = base;
--
- 	/* request dma */
- 	pcdev->dma_chans[0] = dma_request_chan(&pdev->dev, "CI_Y");
- 	if (IS_ERR(pcdev->dma_chans[0])) {
- 		dev_err(&pdev->dev, "Can't request DMA for Y\n");
--		return PTR_ERR(pcdev->dma_chans[0]);
-+		err = PTR_ERR(pcdev->dma_chans[0]);
-+		goto exit_notifier_cleanup;
- 	}
- 
- 	pcdev->dma_chans[1] = dma_request_chan(&pdev->dev, "CI_U");
-@@ -2379,14 +2388,6 @@ static int pxa_camera_probe(struct platform_device *pdev)
- 		}
- 	}
- 
--	/* request irq */
--	err = devm_request_irq(&pdev->dev, pcdev->irq, pxa_camera_irq, 0,
--			       PXA_CAM_DRV_NAME, pcdev);
--	if (err) {
--		dev_err(&pdev->dev, "Camera interrupt register failed\n");
--		goto exit_free_dma;
--	}
--
- 	tasklet_setup(&pcdev->task_eof, pxa_camera_eof);
- 
- 	pxa_camera_activate(pcdev);
-@@ -2398,16 +2399,15 @@ static int pxa_camera_probe(struct platform_device *pdev)
- 
- 	err = pxa_camera_init_videobuf2(pcdev);
- 	if (err)
--		goto exit_notifier_cleanup;
-+		goto exit_v4l2_device_unregister;
- 
- 	pcdev->notifier.ops = &pxa_camera_sensor_ops;
- 	err = v4l2_async_nf_register(&pcdev->v4l2_dev, &pcdev->notifier);
- 	if (err)
--		goto exit_notifier_cleanup;
-+		goto exit_v4l2_device_unregister;
- 
- 	return 0;
--exit_notifier_cleanup:
--	v4l2_async_nf_cleanup(&pcdev->notifier);
-+exit_v4l2_device_unregister:
- 	v4l2_device_unregister(&pcdev->v4l2_dev);
- exit_deactivate:
- 	pxa_camera_deactivate(pcdev);
-@@ -2418,6 +2418,8 @@ static int pxa_camera_probe(struct platform_device *pdev)
- 	dma_release_channel(pcdev->dma_chans[1]);
- exit_free_dma_y:
- 	dma_release_channel(pcdev->dma_chans[0]);
-+exit_notifier_cleanup:
-+	v4l2_async_nf_cleanup(&pcdev->notifier);
- 	return err;
- }
- 
+<URL:https://git.linuxtv.org/sailus/media_tree.git/log/?h=async-multi>
+
 -- 
-2.30.2
-
+Sakari Ailus
