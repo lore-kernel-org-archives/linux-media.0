@@ -2,47 +2,47 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E4C2C77B7A
-	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 19:26:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4059C7EE2C
+	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 19:26:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242543AbjEYT0Q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 May 2023 15:26:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43162 "EHLO
+        id S242063AbjEYT0x (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 May 2023 15:26:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242527AbjEYT0C (ORCPT
+        with ESMTP id S241928AbjEYT02 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 May 2023 15:26:02 -0400
+        Thu, 25 May 2023 15:26:28 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C982701;
-        Thu, 25 May 2023 12:24:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7491410F9;
+        Thu, 25 May 2023 12:25:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E4F160F97;
-        Thu, 25 May 2023 18:45:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E0A9C433EF;
-        Thu, 25 May 2023 18:45:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D875864983;
+        Thu, 25 May 2023 18:43:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3AAFC433AE;
+        Thu, 25 May 2023 18:43:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685040346;
-        bh=VgJujuEt515rc2+IhSJ0rRHVEVk7DVjTwiT/xFqdMrM=;
+        s=k20201202; t=1685040194;
+        bh=sAhyqlYuCB+oGx6YX9g5EwECWXRNU1vkB79FUjM+5A8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fbGP+XMEA4YmAftAEXJ00jJsxrV7xRR2pqx3BgO+tJNEHYvHHV5AIlkzE45UHTQbe
-         nyQLRSIY44GbL+/xsLrThA38SXlao+xx0zpWLzYiTfKy4qKKYMjqNxiSK7xhy/fJtZ
-         w1Dd++LvGb2Qqj4V4N3HVvZVX89sdscygdIFyfmiUnziSeKIpKQjexurF+nMJv3qJx
-         LJH/NWSCybs7oAbd0eoNEnTkQWQYVY5z/8qmkF9J3BNsGshxWFg9qkQGDZCGHqAorM
-         HxsnNzeq+2wslutXc1i+BSRg5kf2JcY+0loG2QX7x9qnh4QCEEPYQY3RPYf8ItkeG9
-         RByeYNOREh9sQ==
+        b=G4KJZ7++ztLoBpjQaw/lPue9IRLIqEgtsd5P7TErrelaLCFy+Yb8oDi0RGCrGEwZ7
+         nr9nqnN+BkP5bYnlF7KyQgljU+g7qgOtlffzT9s8sBa2VHGtrGxKzUGNrydM1MB/8D
+         6dmXshzIn49y34ydy1R/phTrCgjmbuE42iXZ+KaVQz+S4rhewI91s75Jf/0MlfZLDj
+         HhjLvEVIu5XbaE9GPmWjjwzeWBsY/Lv/DZp4xrejGfMDoBgMfsuioyE2U+qYgej3V2
+         fkARwga+KE1+4X5lUfHkjyQQAdVuzulp180WksGhwN7nox5Aoj6k/sZ+loHZ+pedJ7
+         gry02Y+O7Lsbg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Hyunwoo Kim <imv4bel@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 10/20] media: ttusb-dec: fix memory leak in ttusb_dec_exit_dvb()
-Date:   Thu, 25 May 2023 14:45:06 -0400
-Message-Id: <20230525184520.2004878-10-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 13/27] media: ttusb-dec: fix memory leak in ttusb_dec_exit_dvb()
+Date:   Thu, 25 May 2023 14:42:22 -0400
+Message-Id: <20230525184238.1943072-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230525184520.2004878-1-sashal@kernel.org>
-References: <20230525184520.2004878-1-sashal@kernel.org>
+In-Reply-To: <20230525184238.1943072-1-sashal@kernel.org>
+References: <20230525184238.1943072-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -73,10 +73,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/drivers/media/usb/ttusb-dec/ttusb_dec.c b/drivers/media/usb/ttusb-dec/ttusb_dec.c
-index cad2746158160..d41ba80881759 100644
+index 3198f9624b7c0..46bb0ccaafc1f 100644
 --- a/drivers/media/usb/ttusb-dec/ttusb_dec.c
 +++ b/drivers/media/usb/ttusb-dec/ttusb_dec.c
-@@ -1571,8 +1571,7 @@ static void ttusb_dec_exit_dvb(struct ttusb_dec *dec)
+@@ -1551,8 +1551,7 @@ static void ttusb_dec_exit_dvb(struct ttusb_dec *dec)
  	dvb_dmx_release(&dec->demux);
  	if (dec->fe) {
  		dvb_unregister_frontend(dec->fe);
