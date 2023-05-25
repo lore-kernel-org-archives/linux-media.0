@@ -2,48 +2,48 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E43C7C77B7E
-	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:56:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4002BC7EE2C
+	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:56:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243090AbjEYS4H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 May 2023 14:56:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45100 "EHLO
+        id S243135AbjEYS4K (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 May 2023 14:56:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243572AbjEYSzf (ORCPT
+        with ESMTP id S243367AbjEYSzK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 May 2023 14:55:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA49349F5;
-        Thu, 25 May 2023 11:47:29 -0700 (PDT)
+        Thu, 25 May 2023 14:55:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F4C1BD9;
+        Thu, 25 May 2023 11:46:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EF4D616E3;
-        Thu, 25 May 2023 18:45:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C721DC4339B;
-        Thu, 25 May 2023 18:45:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2287961B13;
+        Thu, 25 May 2023 18:44:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6155C433EF;
+        Thu, 25 May 2023 18:44:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685040330;
-        bh=I2fEuViLv0iCPYHPncitlmI2TWtLE4P2wiIBqFAKqNA=;
+        s=k20201202; t=1685040267;
+        bh=gtVAtcsloKGLxWTwu09fR9w1OdO8Jv8IF8FgZQaUUf8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mla6BrBW7bxpNIJvF84kAQqSBbSVJjuv9WHxx3+XuezK2QEjlD3iF/MxBwjANvb/u
-         ltsSwT5qeuOsD9jIRUsRdA0SH5wz+/yQBxxlKFNDvuAXO80StiwaPDTsNtlZ5l20xP
-         Mk1kfx8xpjl/UgIQGsFAgcopeMkeMeRAjlJIdP50IW9QXsI9VWfm6kAQEFzAuyV3jY
-         aJMyFL3bX5RarX87uk9jIh1TNELRnz0/MCfBO8UGQsRMgcpQ+lhFfWRFMnLA3We65G
-         tbZ4kmo836aZjTyWLtl6spmgm+4133tWgI01bvSX9fgpNJE5iL4aWdV51U898Vd+Wr
-         eZgoQHf8tvn0g==
+        b=R+wHVPRLzGbV7y2XVVyk1B/MyeKsLHoJX1lqXi4BSCcwGHx+nHD6MVezfHjS8bjqu
+         2CAt1znv/PYGYHZPtbyl3E31l9AucRflKwjUtMePZKc+BQaHeHPSWIykuBVQUg0JdW
+         XSHu3uOp1JQmRiza2Vg8ENH1XY4b+vW7MUOuUuPGAMbVPHJP/7sv98tOcBQU+bfyOY
+         og9KWaSBbwemXyIVBnYWI6g3EZ/2SLitZsog8gU8S49Dkzyyg4FGj/O1XL79kjbOAC
+         WuIki1Csiouz/eWGmHdlL1vM5+OJOtnls8bYd2YXxQKT/3+v0wtrdGIeltOrT0cKQG
+         6+dW6k1qrtwLg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Wei Chen <harperchen1110@gmail.com>,
+Cc:     YongSu Yoo <yongsuyoo0215@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, crope@iki.fi,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 04/20] media: dvb-usb-v2: ec168: fix null-ptr-deref in ec168_i2c_xfer()
-Date:   Thu, 25 May 2023 14:45:00 -0400
-Message-Id: <20230525184520.2004878-4-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, v4bel@theori.io,
+        linma@zju.edu.cn, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 12/27] media: dvb_ca_en50221: fix a size write bug
+Date:   Thu, 25 May 2023 14:43:38 -0400
+Message-Id: <20230525184356.1974216-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230525184520.2004878-1-sashal@kernel.org>
-References: <20230525184520.2004878-1-sashal@kernel.org>
+In-Reply-To: <20230525184356.1974216-1-sashal@kernel.org>
+References: <20230525184356.1974216-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -52,63 +52,116 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Wei Chen <harperchen1110@gmail.com>
+From: YongSu Yoo <yongsuyoo0215@gmail.com>
 
-[ Upstream commit a6dcefcc08eca1bf4e3d213c97c3cfb75f377935 ]
+[ Upstream commit a4315e5be7020aac9b24a8151caf4bb85224cd0e ]
 
-In ec168_i2c_xfer, msg is controlled by user. When msg[i].buf is null
-and msg[i].len is zero, former checks on msg[i].buf would be passed.
-If accessing msg[i].buf[0] without sanity check, null pointer deref
-would happen. We add check on msg[i].len to prevent crash.
+The function of "dvb_ca_en50221_write_data" at source/drivers/media
+/dvb-core/dvb_ca_en50221.c is used for two cases.
+The first case is for writing APDU data in the function of
+"dvb_ca_en50221_io_write" at source/drivers/media/dvb-core/
+dvb_ca_en50221.c.
+The second case is for writing the host link buf size on the
+Command Register in the function of "dvb_ca_en50221_link_init"
+at source/drivers/media/dvb-core/dvb_ca_en50221.c.
+In the second case, there exists a bug like following.
+In the function of the "dvb_ca_en50221_link_init",
+after a TV host calculates the host link buf_size,
+the TV host writes the calculated host link buf_size on the
+Size Register.
+Accroding to the en50221 Spec (the page 60 of
+https://dvb.org/wp-content/uploads/2020/02/En50221.V1.pdf),
+before this writing operation, the "SW(CMDREG_SW)" flag in the
+Command Register should be set. We can see this setting operation
+in the function of the "dvb_ca_en50221_link_init" like below.
+...
+	if ((ret = ca->pub->write_cam_control(ca->pub, slot,
+CTRLIF_COMMAND, IRQEN | CMDREG_SW)) != 0)
+		return ret;
+...
+But, after that, the real writing operation is implemented using
+the function of the "dvb_ca_en50221_write_data" in the function of
+"dvb_ca_en50221_link_init", and the "dvb_ca_en50221_write_data"
+includes the function of "ca->pub->write_cam_control",
+and the function of the "ca->pub->write_cam_control" in the
+function of the "dvb_ca_en50221_wrte_data" does not include
+"CMDREG_SW" flag like below.
+...
+	if ((status = ca->pub->write_cam_control(ca->pub, slot,
+CTRLIF_COMMAND, IRQEN | CMDREG_HC)) != 0)
+...
+In the above source code, we can see only the "IRQEN | CMDREG_HC",
+but we cannot see the "CMDREG_SW".
+The "CMDREG_SW" flag which was set in the function of the
+"dvb_ca_en50221_link_init" was rollbacked by the follwoing function
+of the "dvb_ca_en50221_write_data".
+This is a bug. and this bug causes that the calculated host link buf_size
+is not properly written in the CI module.
+Through this patch, we fix this bug.
 
-Similar commit:
-commit 0ed554fd769a ("media: dvb-usb: az6027: fix null-ptr-deref in az6027_i2c_xfer()")
-
-Link: https://lore.kernel.org/linux-media/20230313085853.3252349-1-harperchen1110@gmail.com
-Signed-off-by: Wei Chen <harperchen1110@gmail.com>
+Link: https://lore.kernel.org/linux-media/20220818125027.1131-1-yongsuyoo0215@gmail.com
+Signed-off-by: YongSu Yoo <yongsuyoo0215@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/dvb-usb-v2/ec168.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/media/dvb-core/dvb_ca_en50221.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/usb/dvb-usb-v2/ec168.c b/drivers/media/usb/dvb-usb-v2/ec168.c
-index 1db8aeef36553..19605958501e1 100644
---- a/drivers/media/usb/dvb-usb-v2/ec168.c
-+++ b/drivers/media/usb/dvb-usb-v2/ec168.c
-@@ -125,6 +125,10 @@ static int ec168_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
- 	while (i < num) {
- 		if (num > i + 1 && (msg[i+1].flags & I2C_M_RD)) {
- 			if (msg[i].addr == ec168_ec100_config.demod_address) {
-+				if (msg[i].len < 1) {
-+					i = -EOPNOTSUPP;
-+					break;
-+				}
- 				req.cmd = READ_DEMOD;
- 				req.value = 0;
- 				req.index = 0xff00 + msg[i].buf[0]; /* reg */
-@@ -141,6 +145,10 @@ static int ec168_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
- 			}
- 		} else {
- 			if (msg[i].addr == ec168_ec100_config.demod_address) {
-+				if (msg[i].len < 1) {
-+					i = -EOPNOTSUPP;
-+					break;
-+				}
- 				req.cmd = WRITE_DEMOD;
- 				req.value = msg[i].buf[1]; /* val */
- 				req.index = 0xff00 + msg[i].buf[0]; /* reg */
-@@ -149,6 +157,10 @@ static int ec168_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
- 				ret = ec168_ctrl_msg(d, &req);
- 				i += 1;
- 			} else {
-+				if (msg[i].len < 1) {
-+					i = -EOPNOTSUPP;
-+					break;
-+				}
- 				req.cmd = WRITE_I2C;
- 				req.value = msg[i].buf[0]; /* val */
- 				req.index = 0x0100 + msg[i].addr; /* I2C addr */
+diff --git a/drivers/media/dvb-core/dvb_ca_en50221.c b/drivers/media/dvb-core/dvb_ca_en50221.c
+index 36afcea709a75..1e08466ba0c6c 100644
+--- a/drivers/media/dvb-core/dvb_ca_en50221.c
++++ b/drivers/media/dvb-core/dvb_ca_en50221.c
+@@ -198,7 +198,7 @@ static void dvb_ca_en50221_thread_wakeup(struct dvb_ca_private *ca);
+ static int dvb_ca_en50221_read_data(struct dvb_ca_private *ca, int slot,
+ 				    u8 *ebuf, int ecount);
+ static int dvb_ca_en50221_write_data(struct dvb_ca_private *ca, int slot,
+-				     u8 *ebuf, int ecount);
++				     u8 *ebuf, int ecount, int size_write_flag);
+ 
+ /**
+  * Safely find needle in haystack.
+@@ -381,7 +381,7 @@ static int dvb_ca_en50221_link_init(struct dvb_ca_private *ca, int slot)
+ 	ret = dvb_ca_en50221_wait_if_status(ca, slot, STATUSREG_FR, HZ / 10);
+ 	if (ret)
+ 		return ret;
+-	ret = dvb_ca_en50221_write_data(ca, slot, buf, 2);
++	ret = dvb_ca_en50221_write_data(ca, slot, buf, 2, CMDREG_SW);
+ 	if (ret != 2)
+ 		return -EIO;
+ 	ret = ca->pub->write_cam_control(ca->pub, slot, CTRLIF_COMMAND, IRQEN);
+@@ -789,11 +789,13 @@ static int dvb_ca_en50221_read_data(struct dvb_ca_private *ca, int slot,
+  * @buf: The data in this buffer is treated as a complete link-level packet to
+  *	 be written.
+  * @bytes_write: Size of ebuf.
++ * @size_write_flag: A flag on Command Register which says whether the link size
++ * information will be writen or not.
+  *
+  * return: Number of bytes written, or < 0 on error.
+  */
+ static int dvb_ca_en50221_write_data(struct dvb_ca_private *ca, int slot,
+-				     u8 *buf, int bytes_write)
++				     u8 *buf, int bytes_write, int size_write_flag)
+ {
+ 	struct dvb_ca_slot *sl = &ca->slot_info[slot];
+ 	int status;
+@@ -828,7 +830,7 @@ static int dvb_ca_en50221_write_data(struct dvb_ca_private *ca, int slot,
+ 
+ 	/* OK, set HC bit */
+ 	status = ca->pub->write_cam_control(ca->pub, slot, CTRLIF_COMMAND,
+-					    IRQEN | CMDREG_HC);
++					    IRQEN | CMDREG_HC | size_write_flag);
+ 	if (status)
+ 		goto exit;
+ 
+@@ -1516,7 +1518,7 @@ static ssize_t dvb_ca_en50221_io_write(struct file *file,
+ 
+ 			mutex_lock(&sl->slot_lock);
+ 			status = dvb_ca_en50221_write_data(ca, slot, fragbuf,
+-							   fraglen + 2);
++							   fraglen + 2, 0);
+ 			mutex_unlock(&sl->slot_lock);
+ 			if (status == (fraglen + 2)) {
+ 				written = 1;
 -- 
 2.39.2
 
