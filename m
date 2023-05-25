@@ -2,48 +2,49 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71B57C83003
-	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:45:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CBA9C7EE31
+	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:46:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242380AbjEYSp6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 May 2023 14:45:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33608 "EHLO
+        id S242620AbjEYSqH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 May 2023 14:46:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242496AbjEYSoc (ORCPT
+        with ESMTP id S242872AbjEYSpg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 May 2023 14:44:32 -0400
+        Thu, 25 May 2023 14:45:36 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0792C19B6;
-        Thu, 25 May 2023 11:40:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236651B5;
+        Thu, 25 May 2023 11:41:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 39D3361CBB;
-        Thu, 25 May 2023 18:39:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB50EC4339C;
-        Thu, 25 May 2023 18:39:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C47B96491B;
+        Thu, 25 May 2023 18:41:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FB0DC433D2;
+        Thu, 25 May 2023 18:41:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685039977;
-        bh=grmV5ECNjfhpFqaQa+XnCtRocR2jGhVqdQsXK4lL7gM=;
+        s=k20201202; t=1685040082;
+        bh=/aQHJrkPZV+ML/j/omdPFfLwhiWitT9bbB2gtn71rlc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IytHkL0ljb4+bXHNRQhizGzEW+SEy+5Hmiy5CKfnlj4rruZIBT6UqB7Zk3iiUT8Dq
-         PpxUmepO+dr3oKsuRUjupx7hdQmK4J75sV9NspOaElwIV/15rWH84NJ9bD8kOvp/pX
-         NydRVmQxjzuK8ON5OCeLbAT9dt6Qn7tVKCohd4HrDKd9O27GqGsdYBjIkeREBy8lBG
-         TzebmQu0TmxXdqxvGj1cQ0X6IrbH03n0cSt3OZPOgIIVillTxfFd+MW/fIAHO45Kwt
-         7XVuJWMbG2bIbxl9fTw89TdwrV0SYf8M9adCOA4kNFi5NEVM6BYj1Ndd0Vo8GhutD5
-         Q3EXpUlgLkStA==
+        b=VPsVXesTjBKSh6KOmkDMvGjZ6bJO04X2ZEiy3xBa0o+5ocmkLf2monCr/eEYwY4QE
+         aPHcmnXvSBE9+AEGPNuPVGGHeNWbMkpJ4rmq3yhAY/PEPbCOgwe2ysii+fzdc1RCM5
+         cxg+6mRELC2yp4ogpG2NndSOJAXpPosneji+LSAdVV3bESmgpA9rzlkzJUKj50TZuv
+         rTUVBWzXA0uPkoz1wkz0M84veBYSqoObLB0HZNkrulaDBuOsNOdyIkC8ZN1rI0zes2
+         7ZkUuzX9CtnNq4K5Nkr61heOy+iDzetypzAV6vH6zDpYEUOI3cJDqWk7GAcdGifExT
+         Swsg+Xl2DoEKw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Wei Chen <harperchen1110@gmail.com>,
+Cc:     YongSu Yoo <yongsuyoo0215@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, crope@iki.fi,
+        Sasha Levin <sashal@kernel.org>, hverkuil-cisco@xs4all.nl,
+        tommaso.merciai@amarulasolutions.com, colin.i.king@gmail.com,
         linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 11/43] media: dvb-usb-v2: ec168: fix null-ptr-deref in ec168_i2c_xfer()
-Date:   Thu, 25 May 2023 14:38:22 -0400
-Message-Id: <20230525183854.1855431-11-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 06/31] media: dvb_demux: fix a bug for the continuity counter
+Date:   Thu, 25 May 2023 14:40:37 -0400
+Message-Id: <20230525184105.1909399-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230525183854.1855431-1-sashal@kernel.org>
-References: <20230525183854.1855431-1-sashal@kernel.org>
+In-Reply-To: <20230525184105.1909399-1-sashal@kernel.org>
+References: <20230525184105.1909399-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -52,63 +53,63 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Wei Chen <harperchen1110@gmail.com>
+From: YongSu Yoo <yongsuyoo0215@gmail.com>
 
-[ Upstream commit a6dcefcc08eca1bf4e3d213c97c3cfb75f377935 ]
+[ Upstream commit 7efb10d8dc70ea3000cc70dca53407c52488acd1 ]
 
-In ec168_i2c_xfer, msg is controlled by user. When msg[i].buf is null
-and msg[i].len is zero, former checks on msg[i].buf would be passed.
-If accessing msg[i].buf[0] without sanity check, null pointer deref
-would happen. We add check on msg[i].len to prevent crash.
+In dvb_demux.c, some logics exist which compare the expected
+continuity counter and the real continuity counter. If they
+are not matched each other, both of the expected continuity
+counter and the real continuity counter should be printed.
+But there exists a bug that the expected continuity counter
+is not correctly printed. The expected continuity counter is
+replaced with the real countinuity counter + 1 so that
+the epected continuity counter is not correclty printed.
+This is wrong. This bug is fixed.
 
-Similar commit:
-commit 0ed554fd769a ("media: dvb-usb: az6027: fix null-ptr-deref in az6027_i2c_xfer()")
+Link: https://lore.kernel.org/linux-media/20230305212519.499-1-yongsuyoo0215@gmail.com
 
-Link: https://lore.kernel.org/linux-media/20230313085853.3252349-1-harperchen1110@gmail.com
-Signed-off-by: Wei Chen <harperchen1110@gmail.com>
+Signed-off-by: YongSu Yoo <yongsuyoo0215@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/dvb-usb-v2/ec168.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/media/dvb-core/dvb_demux.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/usb/dvb-usb-v2/ec168.c b/drivers/media/usb/dvb-usb-v2/ec168.c
-index 7ed0ab9e429b1..0e4773fc025c9 100644
---- a/drivers/media/usb/dvb-usb-v2/ec168.c
-+++ b/drivers/media/usb/dvb-usb-v2/ec168.c
-@@ -115,6 +115,10 @@ static int ec168_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
- 	while (i < num) {
- 		if (num > i + 1 && (msg[i+1].flags & I2C_M_RD)) {
- 			if (msg[i].addr == ec168_ec100_config.demod_address) {
-+				if (msg[i].len < 1) {
-+					i = -EOPNOTSUPP;
-+					break;
-+				}
- 				req.cmd = READ_DEMOD;
- 				req.value = 0;
- 				req.index = 0xff00 + msg[i].buf[0]; /* reg */
-@@ -131,6 +135,10 @@ static int ec168_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
- 			}
- 		} else {
- 			if (msg[i].addr == ec168_ec100_config.demod_address) {
-+				if (msg[i].len < 1) {
-+					i = -EOPNOTSUPP;
-+					break;
-+				}
- 				req.cmd = WRITE_DEMOD;
- 				req.value = msg[i].buf[1]; /* val */
- 				req.index = 0xff00 + msg[i].buf[0]; /* reg */
-@@ -139,6 +147,10 @@ static int ec168_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
- 				ret = ec168_ctrl_msg(d, &req);
- 				i += 1;
- 			} else {
-+				if (msg[i].len < 1) {
-+					i = -EOPNOTSUPP;
-+					break;
-+				}
- 				req.cmd = WRITE_I2C;
- 				req.value = msg[i].buf[0]; /* val */
- 				req.index = 0x0100 + msg[i].addr; /* I2C addr */
+diff --git a/drivers/media/dvb-core/dvb_demux.c b/drivers/media/dvb-core/dvb_demux.c
+index 5fde1d38b3e34..80b495982f63c 100644
+--- a/drivers/media/dvb-core/dvb_demux.c
++++ b/drivers/media/dvb-core/dvb_demux.c
+@@ -125,12 +125,12 @@ static inline int dvb_dmx_swfilter_payload(struct dvb_demux_feed *feed,
+ 
+ 	cc = buf[3] & 0x0f;
+ 	ccok = ((feed->cc + 1) & 0x0f) == cc;
+-	feed->cc = cc;
+ 	if (!ccok) {
+ 		set_buf_flags(feed, DMX_BUFFER_FLAG_DISCONTINUITY_DETECTED);
+ 		dprintk_sect_loss("missed packet: %d instead of %d!\n",
+ 				  cc, (feed->cc + 1) & 0x0f);
+ 	}
++	feed->cc = cc;
+ 
+ 	if (buf[1] & 0x40)	// PUSI ?
+ 		feed->peslen = 0xfffa;
+@@ -310,7 +310,6 @@ static int dvb_dmx_swfilter_section_packet(struct dvb_demux_feed *feed,
+ 
+ 	cc = buf[3] & 0x0f;
+ 	ccok = ((feed->cc + 1) & 0x0f) == cc;
+-	feed->cc = cc;
+ 
+ 	if (buf[3] & 0x20) {
+ 		/* adaption field present, check for discontinuity_indicator */
+@@ -346,6 +345,7 @@ static int dvb_dmx_swfilter_section_packet(struct dvb_demux_feed *feed,
+ 		feed->pusi_seen = false;
+ 		dvb_dmx_swfilter_section_new(feed);
+ 	}
++	feed->cc = cc;
+ 
+ 	if (buf[1] & 0x40) {
+ 		/* PUSI=1 (is set), section boundary is here */
 -- 
 2.39.2
 
