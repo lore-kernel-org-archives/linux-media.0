@@ -2,45 +2,44 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B561C7EE29
-	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:42:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2394C7EE2C
+	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:42:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242355AbjEYSmR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 May 2023 14:42:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57388 "EHLO
+        id S241149AbjEYSmf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 May 2023 14:42:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242304AbjEYSls (ORCPT
+        with ESMTP id S242259AbjEYSmB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 May 2023 14:41:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BFD72115;
-        Thu, 25 May 2023 11:38:46 -0700 (PDT)
+        Thu, 25 May 2023 14:42:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A19B2D69;
+        Thu, 25 May 2023 11:38:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D849D64900;
-        Thu, 25 May 2023 18:37:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48593C433EF;
-        Thu, 25 May 2023 18:37:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 83FD5648FA;
+        Thu, 25 May 2023 18:37:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5582AC433D2;
+        Thu, 25 May 2023 18:37:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685039859;
-        bh=Ob3qJWVV0UzBiL0Q4d/OmDcvpBKUL55xRXXAWm7zHZg=;
+        s=k20201202; t=1685039840;
+        bh=hi5dmpvzZ6hPDaZM340f1LPKK0RprWO/fz+DCnQsZiY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AKpCGzMlRDvy6H3L+JGU3iNUrcptVUnUzAF7hh8xOHzlLkRXGpypixmteHQoYhL+h
-         H48iQMeplLXs+D2k/rk3DRGAjG1/p3ncQMAXdHqlEj/atuzaE6avztuy8eEH3b7/mj
-         77fPpqkBtSGkZa6arIQnpfZqX5ZVHeI7LOZRvqIgezcAH4sh/Iao8HPGp8YAJjJwYK
-         ru4WJL7Zik6LmxGP14PIyyDWPmyg+l9vIr7lKt7XeDtXPUKBPqKW89kb5M8MVzB2R7
-         IveNJnqJ6qRp935+nGMkiEbA/YKqx24jit1HGsuHkKcyX8c7wbu9hyMKSdo1C1Yg5V
-         pGJbaPmN/WfWw==
+        b=PPPkCxjR2NC5ZplyiOOr5ioog7ZCh1tYVL/KH33ndIfGsC+IeQAxQr68C2X/V3dRQ
+         pEATufLWJEXPGK26VVnfy/3h0jc5WYXKv4gW+7h2pFOrkBUGV/uiQb0bEKjvy2qEX/
+         BHY17IDvkr6SDWUcOcCwB7HA6sfPt2WoK2IjSrZBdLO5NV5RZgfc7G6t8uZszdATaQ
+         +/P98Z5LZzfbILCKJDM5JpGeE8r2q2hNx7ZeldT/yITwu9SK3XOx9zUpxQKfhVdn7u
+         qMxNaDZUkG/onVH6LhlNDY8KYPFMN6AZnyvrDTHieZcJt7FNREYpiK5qHK/lqPbsFr
+         swneAfQ8abPYw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hyunwoo Kim <v4bel@theori.io>,
+Cc:     Hyunwoo Kim <imv4bel@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, yongsuyoo0215@gmail.com,
-        linma@zju.edu.cn, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 25/57] media: dvb-core: Fix use-after-free due to race condition at dvb_ca_en50221
-Date:   Thu, 25 May 2023 14:35:35 -0400
-Message-Id: <20230525183607.1793983-25-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 20/57] media: ttusb-dec: fix memory leak in ttusb_dec_exit_dvb()
+Date:   Thu, 25 May 2023 14:35:30 -0400
+Message-Id: <20230525183607.1793983-20-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230525183607.1793983-1-sashal@kernel.org>
 References: <20230525183607.1793983-1-sashal@kernel.org>
@@ -52,126 +51,41 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hyunwoo Kim <v4bel@theori.io>
+From: Hyunwoo Kim <imv4bel@gmail.com>
 
-[ Upstream commit 280a8ab81733da8bc442253c700a52c4c0886ffd ]
+[ Upstream commit 517a281338322ff8293f988771c98aaa7205e457 ]
 
-If the device node of dvb_ca_en50221 is open() and the
-device is disconnected, a UAF may occur when calling
-close() on the device node.
+Since dvb_frontend_detach() is not called in ttusb_dec_exit_dvb(),
+which is called when the device is disconnected, dvb_frontend_free()
+is not finally called.
 
-The root cause is that wake_up() and wait_event() for
-dvbdev->wait_queue are not implemented.
+This causes a memory leak just by repeatedly plugging and
+unplugging the device.
 
-So implement wait_event() function in dvb_ca_en50221_release()
-and add 'remove_mutex' which prevents race condition
-for 'ca->exit'.
+Fix this issue by adding dvb_frontend_detach() to ttusb_dec_exit_dvb().
 
-[mchehab: fix a checkpatch warning]
-
-Link: https://lore.kernel.org/linux-media/20221121063308.GA33821@ubuntu
-Signed-off-by: Hyunwoo Kim <v4bel@theori.io>
+Link: https://lore.kernel.org/linux-media/20221117045925.14297-5-imv4bel@gmail.com
+Signed-off-by: Hyunwoo Kim <imv4bel@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/dvb-core/dvb_ca_en50221.c | 37 ++++++++++++++++++++++++-
- 1 file changed, 36 insertions(+), 1 deletion(-)
+ drivers/media/usb/ttusb-dec/ttusb_dec.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/media/dvb-core/dvb_ca_en50221.c b/drivers/media/dvb-core/dvb_ca_en50221.c
-index b6ca29dfb184a..baf64540dc00a 100644
---- a/drivers/media/dvb-core/dvb_ca_en50221.c
-+++ b/drivers/media/dvb-core/dvb_ca_en50221.c
-@@ -151,6 +151,12 @@ struct dvb_ca_private {
- 
- 	/* mutex serializing ioctls */
- 	struct mutex ioctl_mutex;
-+
-+	/* A mutex used when a device is disconnected */
-+	struct mutex remove_mutex;
-+
-+	/* Whether the device is disconnected */
-+	int exit;
- };
- 
- static void dvb_ca_private_free(struct dvb_ca_private *ca)
-@@ -1711,12 +1717,22 @@ static int dvb_ca_en50221_io_open(struct inode *inode, struct file *file)
- 
- 	dprintk("%s\n", __func__);
- 
--	if (!try_module_get(ca->pub->owner))
-+	mutex_lock(&ca->remove_mutex);
-+
-+	if (ca->exit) {
-+		mutex_unlock(&ca->remove_mutex);
-+		return -ENODEV;
-+	}
-+
-+	if (!try_module_get(ca->pub->owner)) {
-+		mutex_unlock(&ca->remove_mutex);
- 		return -EIO;
-+	}
- 
- 	err = dvb_generic_open(inode, file);
- 	if (err < 0) {
- 		module_put(ca->pub->owner);
-+		mutex_unlock(&ca->remove_mutex);
- 		return err;
+diff --git a/drivers/media/usb/ttusb-dec/ttusb_dec.c b/drivers/media/usb/ttusb-dec/ttusb_dec.c
+index 38822cedd93a9..c4474d4c44e28 100644
+--- a/drivers/media/usb/ttusb-dec/ttusb_dec.c
++++ b/drivers/media/usb/ttusb-dec/ttusb_dec.c
+@@ -1544,8 +1544,7 @@ static void ttusb_dec_exit_dvb(struct ttusb_dec *dec)
+ 	dvb_dmx_release(&dec->demux);
+ 	if (dec->fe) {
+ 		dvb_unregister_frontend(dec->fe);
+-		if (dec->fe->ops.release)
+-			dec->fe->ops.release(dec->fe);
++		dvb_frontend_detach(dec->fe);
  	}
- 
-@@ -1741,6 +1757,7 @@ static int dvb_ca_en50221_io_open(struct inode *inode, struct file *file)
- 
- 	dvb_ca_private_get(ca);
- 
-+	mutex_unlock(&ca->remove_mutex);
- 	return 0;
+ 	dvb_unregister_adapter(&dec->adapter);
  }
- 
-@@ -1760,6 +1777,8 @@ static int dvb_ca_en50221_io_release(struct inode *inode, struct file *file)
- 
- 	dprintk("%s\n", __func__);
- 
-+	mutex_lock(&ca->remove_mutex);
-+
- 	/* mark the CA device as closed */
- 	ca->open = 0;
- 	dvb_ca_en50221_thread_update_delay(ca);
-@@ -1770,6 +1789,13 @@ static int dvb_ca_en50221_io_release(struct inode *inode, struct file *file)
- 
- 	dvb_ca_private_put(ca);
- 
-+	if (dvbdev->users == 1 && ca->exit == 1) {
-+		mutex_unlock(&ca->remove_mutex);
-+		wake_up(&dvbdev->wait_queue);
-+	} else {
-+		mutex_unlock(&ca->remove_mutex);
-+	}
-+
- 	return err;
- }
- 
-@@ -1893,6 +1919,7 @@ int dvb_ca_en50221_init(struct dvb_adapter *dvb_adapter,
- 	}
- 
- 	mutex_init(&ca->ioctl_mutex);
-+	mutex_init(&ca->remove_mutex);
- 
- 	if (signal_pending(current)) {
- 		ret = -EINTR;
-@@ -1935,6 +1962,14 @@ void dvb_ca_en50221_release(struct dvb_ca_en50221 *pubca)
- 
- 	dprintk("%s\n", __func__);
- 
-+	mutex_lock(&ca->remove_mutex);
-+	ca->exit = 1;
-+	mutex_unlock(&ca->remove_mutex);
-+
-+	if (ca->dvbdev->users < 1)
-+		wait_event(ca->dvbdev->wait_queue,
-+				ca->dvbdev->users == 1);
-+
- 	/* shutdown the thread if there was one */
- 	kthread_stop(ca->thread);
- 
 -- 
 2.39.2
 
