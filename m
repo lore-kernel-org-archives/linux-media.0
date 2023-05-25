@@ -2,49 +2,51 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2B06C7EE31
-	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:52:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3639BC7EE2C
+	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:52:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242930AbjEYSwZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 May 2023 14:52:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39768 "EHLO
+        id S243037AbjEYSwo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 May 2023 14:52:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243524AbjEYSu4 (ORCPT
+        with ESMTP id S243807AbjEYSvp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 May 2023 14:50:56 -0400
+        Thu, 25 May 2023 14:51:45 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473081FFC;
-        Thu, 25 May 2023 11:44:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5882C44A0;
+        Thu, 25 May 2023 11:45:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AE0E564971;
-        Thu, 25 May 2023 18:42:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67080C4339C;
-        Thu, 25 May 2023 18:42:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 78BDD60FA2;
+        Thu, 25 May 2023 18:43:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6B32C433EF;
+        Thu, 25 May 2023 18:43:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685040176;
-        bh=7cAly7DcdgfqYX85ezVGq42ONFyTzMCckcBCyWirnak=;
+        s=k20201202; t=1685040197;
+        bh=AEgLpSXR2JytEFrd0+1cvpNsE8QXoxiVVhkuzKyF3J4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eRqLtu427BJJUf9Tmi99sJcG/2SmZ7RWtRmjGvyRj60Vik6NWRTW+LD36O2khKx8D
-         R2vHfJcfyA7sTY7KVqq7jcN+nrCOp5a88bMmsaqKW+/lf8NHufj1CaVmAU4YAMNby2
-         kyvBgwS+MSNpeT6f+ib5YzEMOVP99d6YhBRMW8XNUnYmISJ4yVU5YMezhid6YJRHJ5
-         IrK4IH5hgd2txnSvSfRkt5nLu7KRFmgkq5Lb0kboPIMg1hQYOLm/hj/x8UkXQfaYe1
-         L7TYzjNqLVRkx5EUZrrdW2f4JFPdgXHgqlqgujtxzZfLioP08kUTcj3+63GFIK9UNr
-         X+FdBuSaevxaA==
+        b=NBdFtn1TSjWNLQRvwXAp3VcW7nrA3va0bOYdZN6cUogniPTWRdfgk7pFtft8/iEbv
+         jOIVAtaQOtVwyxyo6mlEkI25ArcSIpW7ei6xaPONrWR7qTpe6ltKBZN0FWe5DPHIxr
+         naPXtesocCwZjLEmF4yJTh/fTK6OiPsShcCZXBtzgwLUNr3kGcaAZZeUIb6laZ5mTE
+         ETS1f3MyuMQPMD2RotexqhjR//cG52XvnkMH01+COZJSYN/oxZ6iQF9JDROWk6nzXJ
+         G9ITwIZxb2IuI6aHvfcVghAFcLcSM5MmnuGXKjzZ1FHlETVJ9QPcjd4WnArjVIxFMf
+         1SxSpyULTYnrQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Zhang Shurong <zhang_shurong@foxmail.com>,
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, crope@iki.fi,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 08/27] media: dvb-usb-v2: rtl28xxu: fix null-ptr-deref in rtl28xxu_i2c_xfer
-Date:   Thu, 25 May 2023 14:42:17 -0400
-Message-Id: <20230525184238.1943072-8-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, hverkuil-cisco@xs4all.nl,
+        u.kleine-koenig@pengutronix.de, luzmaximilian@gmail.com,
+        heikki.krogerus@linux.intel.com, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 14/27] media: mn88443x: fix !CONFIG_OF error by drop of_match_ptr from ID table
+Date:   Thu, 25 May 2023 14:42:23 -0400
+Message-Id: <20230525184238.1943072-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230525184238.1943072-1-sashal@kernel.org>
 References: <20230525184238.1943072-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -52,82 +54,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Zhang Shurong <zhang_shurong@foxmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-[ Upstream commit aa4a447b81b84f69c1a89ad899df157f386d7636 ]
+[ Upstream commit ae11c0efaec32fb45130ee9886689f467232eebc ]
 
-In rtl28xxu_i2c_xfer, msg is controlled by user. When msg[i].buf
-is null and msg[i].len is zero, former checks on msg[i].buf would be
-passed. Malicious data finally reach rtl28xxu_i2c_xfer. If accessing
-msg[i].buf[0] without sanity check, null ptr deref would happen.
-We add check on msg[i].len to prevent crash.
+The driver will match mostly by DT table (even thought there is regular
+ID table) so there is little benefit in of_match_ptr (this also allows
+ACPI matching via PRP0001, even though it might not be relevant here).
+This also fixes !CONFIG_OF error:
 
-Similar commit:
-commit 0ed554fd769a
-("media: dvb-usb: az6027: fix null-ptr-deref in az6027_i2c_xfer()")
+  drivers/media/dvb-frontends/mn88443x.c:782:34: error: ‘mn88443x_of_match’ defined but not used [-Werror=unused-const-variable=]
 
-Link: https://lore.kernel.org/linux-media/tencent_3623572106754AC2F266B316798B0F6CCA05@qq.com
-Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
+Link: https://lore.kernel.org/linux-media/20230312131318.351173-28-krzysztof.kozlowski@linaro.org
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/dvb-usb-v2/rtl28xxu.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ drivers/media/dvb-frontends/mn88443x.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
-index 0fe71437601e7..ec9bbd8c89ad3 100644
---- a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
-+++ b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
-@@ -176,6 +176,10 @@ static int rtl28xxu_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
- 			ret = -EOPNOTSUPP;
- 			goto err_mutex_unlock;
- 		} else if (msg[0].addr == 0x10) {
-+			if (msg[0].len < 1 || msg[1].len < 1) {
-+				ret = -EOPNOTSUPP;
-+				goto err_mutex_unlock;
-+			}
- 			/* method 1 - integrated demod */
- 			if (msg[0].buf[0] == 0x00) {
- 				/* return demod page from driver cache */
-@@ -189,6 +193,10 @@ static int rtl28xxu_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
- 				ret = rtl28xxu_ctrl_msg(d, &req);
- 			}
- 		} else if (msg[0].len < 2) {
-+			if (msg[0].len < 1) {
-+				ret = -EOPNOTSUPP;
-+				goto err_mutex_unlock;
-+			}
- 			/* method 2 - old I2C */
- 			req.value = (msg[0].buf[0] << 8) | (msg[0].addr << 1);
- 			req.index = CMD_I2C_RD;
-@@ -217,8 +225,16 @@ static int rtl28xxu_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
- 			ret = -EOPNOTSUPP;
- 			goto err_mutex_unlock;
- 		} else if (msg[0].addr == 0x10) {
-+			if (msg[0].len < 1) {
-+				ret = -EOPNOTSUPP;
-+				goto err_mutex_unlock;
-+			}
- 			/* method 1 - integrated demod */
- 			if (msg[0].buf[0] == 0x00) {
-+				if (msg[0].len < 2) {
-+					ret = -EOPNOTSUPP;
-+					goto err_mutex_unlock;
-+				}
- 				/* save demod page for later demod access */
- 				dev->page = msg[0].buf[1];
- 				ret = 0;
-@@ -231,6 +247,10 @@ static int rtl28xxu_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
- 				ret = rtl28xxu_ctrl_msg(d, &req);
- 			}
- 		} else if ((msg[0].len < 23) && (!dev->new_i2c_write)) {
-+			if (msg[0].len < 1) {
-+				ret = -EOPNOTSUPP;
-+				goto err_mutex_unlock;
-+			}
- 			/* method 2 - old I2C */
- 			req.value = (msg[0].buf[0] << 8) | (msg[0].addr << 1);
- 			req.index = CMD_I2C_WR;
+diff --git a/drivers/media/dvb-frontends/mn88443x.c b/drivers/media/dvb-frontends/mn88443x.c
+index fff212c0bf3b5..05894deb8a19a 100644
+--- a/drivers/media/dvb-frontends/mn88443x.c
++++ b/drivers/media/dvb-frontends/mn88443x.c
+@@ -800,7 +800,7 @@ MODULE_DEVICE_TABLE(i2c, mn88443x_i2c_id);
+ static struct i2c_driver mn88443x_driver = {
+ 	.driver = {
+ 		.name = "mn88443x",
+-		.of_match_table = of_match_ptr(mn88443x_of_match),
++		.of_match_table = mn88443x_of_match,
+ 	},
+ 	.probe    = mn88443x_probe,
+ 	.remove   = mn88443x_remove,
 -- 
 2.39.2
 
