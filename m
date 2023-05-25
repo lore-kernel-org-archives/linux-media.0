@@ -2,48 +2,48 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F64EC7EE31
-	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:46:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37E91C7EE33
+	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:46:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242569AbjEYSqp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 May 2023 14:46:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33672 "EHLO
+        id S242688AbjEYSqq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 May 2023 14:46:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242630AbjEYSo4 (ORCPT
+        with ESMTP id S242881AbjEYSph (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 May 2023 14:44:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C76A3A87;
-        Thu, 25 May 2023 11:41:11 -0700 (PDT)
+        Thu, 25 May 2023 14:45:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD3E9B;
+        Thu, 25 May 2023 11:41:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E50660C15;
-        Thu, 25 May 2023 18:40:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBF02C433EF;
-        Thu, 25 May 2023 18:40:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E3E8D60B2D;
+        Thu, 25 May 2023 18:41:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0116C4339B;
+        Thu, 25 May 2023 18:41:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685040015;
-        bh=Ob3qJWVV0UzBiL0Q4d/OmDcvpBKUL55xRXXAWm7zHZg=;
+        s=k20201202; t=1685040089;
+        bh=grmV5ECNjfhpFqaQa+XnCtRocR2jGhVqdQsXK4lL7gM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QwdHgM4l9R8mHJgyZrIms35fAX4o0/smkutNsq/4ELccxk4+rTARLMo3cJOtXOAE8
-         xYCi/JXqvF/uhb5LqvK4HBhXf1jo4j7bJrvQJjVzzLtNZK/eFIGCUhlQdhMJzfPdmj
-         Vp33HKbyWD4KqFevrWJtLaKngfo2297Xcgc3yf8l4bCW4hvW4pDbpS5UIwHIeZV5x6
-         lIKkGpx2N2oHRv09kV5+D4TPi/umtrLPpZ6MqfJWi+aVuiK0b1i1LzDVf22O8/cCKH
-         I19Y6dLA8wcmquIA98Dz/WbcgEuKx8ZkPVRJ4uoGmAALMgIF6DH96nb3+2NZaWPAr8
-         wmkEZkzew5CZQ==
+        b=tWlX+G6pXn/1rbgC1TX44Bxt5qWwUewqnWlYdEpaGHPItuiWIwJarhks4MNS1cPmf
+         V66L5agrDvlK5qnOmOQFLaAEisJ4uqDu6B6RGZCqyWq57WXBYsIeH795wQK6jJO3QK
+         dd3TsNABmRCRKQB7irmNNDInQ9P0vdbBW/DM3L2NPLYcOm+ITmkUcTbgBuwRL7ytVO
+         b3KoRcxkVlhNEM3KKg8Pq6atbLpLylO4UeAsuq2oH/smK84s5Ddw2PCF/KRUipfC1W
+         vB4Cv8bZ+Ba5zflIMhzMdsVz66hxMXIRQX3et6956uA+f2uQXNOLkNqnIyC0QpffCa
+         HO9bQMi0QR5tA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hyunwoo Kim <v4bel@theori.io>,
+Cc:     Wei Chen <harperchen1110@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, yongsuyoo0215@gmail.com,
-        linma@zju.edu.cn, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 23/43] media: dvb-core: Fix use-after-free due to race condition at dvb_ca_en50221
-Date:   Thu, 25 May 2023 14:38:34 -0400
-Message-Id: <20230525183854.1855431-23-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, crope@iki.fi,
+        linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 08/31] media: dvb-usb-v2: ec168: fix null-ptr-deref in ec168_i2c_xfer()
+Date:   Thu, 25 May 2023 14:40:39 -0400
+Message-Id: <20230525184105.1909399-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230525183854.1855431-1-sashal@kernel.org>
-References: <20230525183854.1855431-1-sashal@kernel.org>
+In-Reply-To: <20230525184105.1909399-1-sashal@kernel.org>
+References: <20230525184105.1909399-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -52,126 +52,63 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hyunwoo Kim <v4bel@theori.io>
+From: Wei Chen <harperchen1110@gmail.com>
 
-[ Upstream commit 280a8ab81733da8bc442253c700a52c4c0886ffd ]
+[ Upstream commit a6dcefcc08eca1bf4e3d213c97c3cfb75f377935 ]
 
-If the device node of dvb_ca_en50221 is open() and the
-device is disconnected, a UAF may occur when calling
-close() on the device node.
+In ec168_i2c_xfer, msg is controlled by user. When msg[i].buf is null
+and msg[i].len is zero, former checks on msg[i].buf would be passed.
+If accessing msg[i].buf[0] without sanity check, null pointer deref
+would happen. We add check on msg[i].len to prevent crash.
 
-The root cause is that wake_up() and wait_event() for
-dvbdev->wait_queue are not implemented.
+Similar commit:
+commit 0ed554fd769a ("media: dvb-usb: az6027: fix null-ptr-deref in az6027_i2c_xfer()")
 
-So implement wait_event() function in dvb_ca_en50221_release()
-and add 'remove_mutex' which prevents race condition
-for 'ca->exit'.
-
-[mchehab: fix a checkpatch warning]
-
-Link: https://lore.kernel.org/linux-media/20221121063308.GA33821@ubuntu
-Signed-off-by: Hyunwoo Kim <v4bel@theori.io>
+Link: https://lore.kernel.org/linux-media/20230313085853.3252349-1-harperchen1110@gmail.com
+Signed-off-by: Wei Chen <harperchen1110@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/dvb-core/dvb_ca_en50221.c | 37 ++++++++++++++++++++++++-
- 1 file changed, 36 insertions(+), 1 deletion(-)
+ drivers/media/usb/dvb-usb-v2/ec168.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/drivers/media/dvb-core/dvb_ca_en50221.c b/drivers/media/dvb-core/dvb_ca_en50221.c
-index b6ca29dfb184a..baf64540dc00a 100644
---- a/drivers/media/dvb-core/dvb_ca_en50221.c
-+++ b/drivers/media/dvb-core/dvb_ca_en50221.c
-@@ -151,6 +151,12 @@ struct dvb_ca_private {
- 
- 	/* mutex serializing ioctls */
- 	struct mutex ioctl_mutex;
-+
-+	/* A mutex used when a device is disconnected */
-+	struct mutex remove_mutex;
-+
-+	/* Whether the device is disconnected */
-+	int exit;
- };
- 
- static void dvb_ca_private_free(struct dvb_ca_private *ca)
-@@ -1711,12 +1717,22 @@ static int dvb_ca_en50221_io_open(struct inode *inode, struct file *file)
- 
- 	dprintk("%s\n", __func__);
- 
--	if (!try_module_get(ca->pub->owner))
-+	mutex_lock(&ca->remove_mutex);
-+
-+	if (ca->exit) {
-+		mutex_unlock(&ca->remove_mutex);
-+		return -ENODEV;
-+	}
-+
-+	if (!try_module_get(ca->pub->owner)) {
-+		mutex_unlock(&ca->remove_mutex);
- 		return -EIO;
-+	}
- 
- 	err = dvb_generic_open(inode, file);
- 	if (err < 0) {
- 		module_put(ca->pub->owner);
-+		mutex_unlock(&ca->remove_mutex);
- 		return err;
- 	}
- 
-@@ -1741,6 +1757,7 @@ static int dvb_ca_en50221_io_open(struct inode *inode, struct file *file)
- 
- 	dvb_ca_private_get(ca);
- 
-+	mutex_unlock(&ca->remove_mutex);
- 	return 0;
- }
- 
-@@ -1760,6 +1777,8 @@ static int dvb_ca_en50221_io_release(struct inode *inode, struct file *file)
- 
- 	dprintk("%s\n", __func__);
- 
-+	mutex_lock(&ca->remove_mutex);
-+
- 	/* mark the CA device as closed */
- 	ca->open = 0;
- 	dvb_ca_en50221_thread_update_delay(ca);
-@@ -1770,6 +1789,13 @@ static int dvb_ca_en50221_io_release(struct inode *inode, struct file *file)
- 
- 	dvb_ca_private_put(ca);
- 
-+	if (dvbdev->users == 1 && ca->exit == 1) {
-+		mutex_unlock(&ca->remove_mutex);
-+		wake_up(&dvbdev->wait_queue);
-+	} else {
-+		mutex_unlock(&ca->remove_mutex);
-+	}
-+
- 	return err;
- }
- 
-@@ -1893,6 +1919,7 @@ int dvb_ca_en50221_init(struct dvb_adapter *dvb_adapter,
- 	}
- 
- 	mutex_init(&ca->ioctl_mutex);
-+	mutex_init(&ca->remove_mutex);
- 
- 	if (signal_pending(current)) {
- 		ret = -EINTR;
-@@ -1935,6 +1962,14 @@ void dvb_ca_en50221_release(struct dvb_ca_en50221 *pubca)
- 
- 	dprintk("%s\n", __func__);
- 
-+	mutex_lock(&ca->remove_mutex);
-+	ca->exit = 1;
-+	mutex_unlock(&ca->remove_mutex);
-+
-+	if (ca->dvbdev->users < 1)
-+		wait_event(ca->dvbdev->wait_queue,
-+				ca->dvbdev->users == 1);
-+
- 	/* shutdown the thread if there was one */
- 	kthread_stop(ca->thread);
- 
+diff --git a/drivers/media/usb/dvb-usb-v2/ec168.c b/drivers/media/usb/dvb-usb-v2/ec168.c
+index 7ed0ab9e429b1..0e4773fc025c9 100644
+--- a/drivers/media/usb/dvb-usb-v2/ec168.c
++++ b/drivers/media/usb/dvb-usb-v2/ec168.c
+@@ -115,6 +115,10 @@ static int ec168_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
+ 	while (i < num) {
+ 		if (num > i + 1 && (msg[i+1].flags & I2C_M_RD)) {
+ 			if (msg[i].addr == ec168_ec100_config.demod_address) {
++				if (msg[i].len < 1) {
++					i = -EOPNOTSUPP;
++					break;
++				}
+ 				req.cmd = READ_DEMOD;
+ 				req.value = 0;
+ 				req.index = 0xff00 + msg[i].buf[0]; /* reg */
+@@ -131,6 +135,10 @@ static int ec168_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
+ 			}
+ 		} else {
+ 			if (msg[i].addr == ec168_ec100_config.demod_address) {
++				if (msg[i].len < 1) {
++					i = -EOPNOTSUPP;
++					break;
++				}
+ 				req.cmd = WRITE_DEMOD;
+ 				req.value = msg[i].buf[1]; /* val */
+ 				req.index = 0xff00 + msg[i].buf[0]; /* reg */
+@@ -139,6 +147,10 @@ static int ec168_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
+ 				ret = ec168_ctrl_msg(d, &req);
+ 				i += 1;
+ 			} else {
++				if (msg[i].len < 1) {
++					i = -EOPNOTSUPP;
++					break;
++				}
+ 				req.cmd = WRITE_I2C;
+ 				req.value = msg[i].buf[0]; /* val */
+ 				req.index = 0x0100 + msg[i].addr; /* I2C addr */
 -- 
 2.39.2
 
