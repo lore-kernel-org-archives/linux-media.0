@@ -2,49 +2,49 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7302AC77B7A
-	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 09:17:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71CBFC7EE2E
+	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 09:17:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239810AbjEYJRD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 May 2023 05:17:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52170 "EHLO
+        id S239604AbjEYJRE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 May 2023 05:17:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239861AbjEYJRB (ORCPT
+        with ESMTP id S239955AbjEYJRB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 25 May 2023 05:17:01 -0400
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 621861A2
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6219199
         for <linux-media@vger.kernel.org>; Thu, 25 May 2023 02:17:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1685006220; x=1716542220;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=yhpKYjGoEwHsGjTCPG/ehbdB8TieQ36KdaSQjZ4ez64=;
-  b=RVmoLsfHpjb+Dhdbh4rpW0LQ/BnI90OYnpLfHZw/yAmv6vPKCHVW79tX
-   eqkkJFbf7SEZ1vp7BziG9lBzxgHQnjuBcpBCfhiKpeSRnYpet+omjAvEK
-   WH+usvpAEbVPy4m1z8rAQT10QS8uq/I/SAo8HNTPTwQ+M48uVgkm0TQ8f
-   ZTdyoyzKeVcBskD0ckeDk9dSZU/TNrcDvDMU1aaOv5fvbA35yx5acG3CC
-   HvbwQdiUEVBxyyU/S82YaR1F+0FkOXBcIr7K1nMmhO5HUGCS5iOUwZuug
-   oYZUGbNZn23RL/uy1axX8B8BNC1VONfbuuh0/fbjBwdtDyx7EtIROr3XI
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="343307725"
+  bh=fitF0OE2reffd1zg4bv7IWDlVqhJmA9YDWbTx3hcc8M=;
+  b=LHqa5ioi6t4TVbhWt+mRDs5dzOZ6xMIDOAomiPATpw7+3ZlPBkifQcRO
+   SAOSxNmfMa9Emw8CMdYgqnDDnarmCcPOLkV/zfcMGgQoLEvGoK96ufT1j
+   BAK3x8RrVaGw21CCtZS+saxfUad8LLm5n2B3wZXY00MxCBfGGCEkJojVo
+   +uoRBu6mPQIcyosvSlCDFd12hPymFnmdb8TYm3Vm4ksxeWHSDdalHiFT8
+   QrLmx2TxMCrx8bGdyVLVzC5xBCVJBrChFt0pAXyuvY+SKwUVZlnyAMoqT
+   8fp2P+rR8WtQvDJ1jWPG+9+9BZCuEHwCx3iYvVzDMY2B8sj+oMnYmzQ4X
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="343307740"
 X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
-   d="scan'208";a="343307725"
+   d="scan'208";a="343307740"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 02:16:58 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 02:16:59 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="794590860"
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="794590859"
 X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
-   d="scan'208";a="794590860"
+   d="scan'208";a="794590859"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
   by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 02:16:51 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id 1DA1D12190B;
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 12A92121399;
         Thu, 25 May 2023 12:16:49 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.94.2)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1q2757-009koe-VL; Thu, 25 May 2023 12:16:25 +0300
+        id 1q2757-009koY-Tr; Thu, 25 May 2023 12:16:25 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com,
@@ -75,9 +75,9 @@ Cc:     laurent.pinchart@ideasonboard.com,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Sowjanya Komatineni <skomatineni@nvidia.com>,
         Marco Felsch <m.felsch@pengutronix.de>
-Subject: [RESEND PATCH v3 04/32] media: omap3isp: Don't check for the sub-device's notifier
-Date:   Thu, 25 May 2023 12:15:47 +0300
-Message-Id: <20230525091615.2324824-5-sakari.ailus@linux.intel.com>
+Subject: [RESEND PATCH v3 02/32] media: Documentation: v4l: Document missing async subdev function
+Date:   Thu, 25 May 2023 12:15:45 +0300
+Message-Id: <20230525091615.2324824-3-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230525091615.2324824-1-sakari.ailus@linux.intel.com>
 References: <20230525091615.2324824-1-sakari.ailus@linux.intel.com>
@@ -87,29 +87,31 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There's no need to check for a sub-device's notifier as we only register
-one notifier (and one V4L2 device). Remove this check and prepare for
-removing this field in struct v4l2_subdev.
+Also v4l2_async_nf_add_fwnode() may be used to add an async sub-device
+descriptor to a notifier. Document this.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/platform/ti/omap3isp/isp.c | 3 ---
- 1 file changed, 3 deletions(-)
+ Documentation/driver-api/media/v4l2-subdev.rst | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/ti/omap3isp/isp.c b/drivers/media/platform/ti/omap3isp/isp.c
-index f3aaa9e76492e..c2b222f7df892 100644
---- a/drivers/media/platform/ti/omap3isp/isp.c
-+++ b/drivers/media/platform/ti/omap3isp/isp.c
-@@ -2039,9 +2039,6 @@ static int isp_subdev_notifier_complete(struct v4l2_async_notifier *async)
- 	}
+diff --git a/Documentation/driver-api/media/v4l2-subdev.rst b/Documentation/driver-api/media/v4l2-subdev.rst
+index 602dadaa81d86..ce8e9d0a332bc 100644
+--- a/Documentation/driver-api/media/v4l2-subdev.rst
++++ b/Documentation/driver-api/media/v4l2-subdev.rst
+@@ -204,9 +204,9 @@ that the bridge device needs for its operation. Several functions are available
+ to add subdevice descriptors to a notifier, depending on the type of device and
+ the needs of the driver.
  
- 	list_for_each_entry(sd, &v4l2_dev->subdevs, list) {
--		if (sd->notifier != &isp->notifier)
--			continue;
--
- 		ret = isp_link_entity(isp, &sd->entity,
- 				      v4l2_subdev_to_bus_cfg(sd)->interface);
- 		if (ret < 0) {
+-:c:func:`v4l2_async_nf_add_fwnode_remote` and
+-:c:func:`v4l2_async_nf_add_i2c` are for bridge and ISP drivers for
+-registering their async sub-devices with the notifier.
++:c:func:`v4l2_async_nf_add_fwnode`, :c:func:`v4l2_async_nf_add_fwnode_remote`
++:c:and func:`v4l2_async_nf_add_i2c` are for registering their async sub-devices
++:c:with the notifier.
+ 
+ :c:func:`v4l2_async_register_subdev_sensor` is a helper function for
+ sensor drivers registering their own async sub-device, but it also registers a
 -- 
 2.30.2
 
