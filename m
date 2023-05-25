@@ -2,50 +2,48 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9F3EC7EE32
-	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:43:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71B57C83003
+	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:45:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242407AbjEYSnJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 May 2023 14:43:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57988 "EHLO
+        id S242380AbjEYSp6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 May 2023 14:45:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241303AbjEYSmq (ORCPT
+        with ESMTP id S242496AbjEYSoc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 May 2023 14:42:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580BC30E4;
-        Thu, 25 May 2023 11:39:26 -0700 (PDT)
+        Thu, 25 May 2023 14:44:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0792C19B6;
+        Thu, 25 May 2023 11:40:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 681F4648CF;
-        Thu, 25 May 2023 18:37:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93AEFC433D2;
-        Thu, 25 May 2023 18:37:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 39D3361CBB;
+        Thu, 25 May 2023 18:39:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB50EC4339C;
+        Thu, 25 May 2023 18:39:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685039851;
-        bh=2epqTjnseSXfXY9JUw+xEz6x37qjoOPeXV+HoOapnGA=;
+        s=k20201202; t=1685039977;
+        bh=grmV5ECNjfhpFqaQa+XnCtRocR2jGhVqdQsXK4lL7gM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=emAUEDe40PzEtwG4LbcXUineAZ46jSZXX77eBuxeg++oBdGya10vqvEvILuQKQtXm
-         GCtj0ubeF/z0nZInmG50PtFYw24yZqISi6w/7CZchptNpVoIpUYEBULGGlF7Q5xS85
-         da+/73Q/HfQfH/iOI9mC3GzfOtK+1w8EHsas35GJnLSoAJVaxnwcQG6d1VnFmqBqsL
-         IDQtzSGWIRPhK1ukTRh3TfuC/ZC93G3bAHEKNcrgqodiKnwI/WncZZd6el0mnOvK5z
-         kCJy2+xZvgX5VXtHKOJXDPuOApOMCUiXTSo2gQGeZMh6Yo1WCJYwb5OiJn3NBGB9iN
-         HN1ODahzZPaVg==
+        b=IytHkL0ljb4+bXHNRQhizGzEW+SEy+5Hmiy5CKfnlj4rruZIBT6UqB7Zk3iiUT8Dq
+         PpxUmepO+dr3oKsuRUjupx7hdQmK4J75sV9NspOaElwIV/15rWH84NJ9bD8kOvp/pX
+         NydRVmQxjzuK8ON5OCeLbAT9dt6Qn7tVKCohd4HrDKd9O27GqGsdYBjIkeREBy8lBG
+         TzebmQu0TmxXdqxvGj1cQ0X6IrbH03n0cSt3OZPOgIIVillTxfFd+MW/fIAHO45Kwt
+         7XVuJWMbG2bIbxl9fTw89TdwrV0SYf8M9adCOA4kNFi5NEVM6BYj1Ndd0Vo8GhutD5
+         Q3EXpUlgLkStA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hyunwoo Kim <imv4bel@gmail.com>, kernel test robot <lkp@intel.com>,
-        Dan Carpenter <error27@gmail.com>,
+Cc:     Wei Chen <harperchen1110@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, gregkh@linuxfoundation.org,
-        linma@zju.edu.cn, keitasuzuki.park@sslab.ics.keio.ac.jp,
-        colin.i.king@gmail.com, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 23/57] media: dvb-core: Fix use-after-free due to race at dvb_register_device()
-Date:   Thu, 25 May 2023 14:35:33 -0400
-Message-Id: <20230525183607.1793983-23-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, crope@iki.fi,
+        linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 11/43] media: dvb-usb-v2: ec168: fix null-ptr-deref in ec168_i2c_xfer()
+Date:   Thu, 25 May 2023 14:38:22 -0400
+Message-Id: <20230525183854.1855431-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230525183607.1793983-1-sashal@kernel.org>
-References: <20230525183607.1793983-1-sashal@kernel.org>
+In-Reply-To: <20230525183854.1855431-1-sashal@kernel.org>
+References: <20230525183854.1855431-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -54,252 +52,63 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hyunwoo Kim <imv4bel@gmail.com>
+From: Wei Chen <harperchen1110@gmail.com>
 
-[ Upstream commit 627bb528b086b4136315c25d6a447a98ea9448d3 ]
+[ Upstream commit a6dcefcc08eca1bf4e3d213c97c3cfb75f377935 ]
 
-dvb_register_device() dynamically allocates fops with kmemdup()
-to set the fops->owner.
-And these fops are registered in 'file->f_ops' using replace_fops()
-in the dvb_device_open() process, and kfree()d in dvb_free_device().
+In ec168_i2c_xfer, msg is controlled by user. When msg[i].buf is null
+and msg[i].len is zero, former checks on msg[i].buf would be passed.
+If accessing msg[i].buf[0] without sanity check, null pointer deref
+would happen. We add check on msg[i].len to prevent crash.
 
-However, it is not common to use dynamically allocated fops instead
-of 'static const' fops as an argument of replace_fops(),
-and UAF may occur.
-These UAFs can occur on any dvb type using dvb_register_device(),
-such as dvb_dvr, dvb_demux, dvb_frontend, dvb_net, etc.
+Similar commit:
+commit 0ed554fd769a ("media: dvb-usb: az6027: fix null-ptr-deref in az6027_i2c_xfer()")
 
-So, instead of kfree() the fops dynamically allocated in
-dvb_register_device() in dvb_free_device() called during the
-.disconnect() process, kfree() it collectively in exit_dvbdev()
-called when the dvbdev.c module is removed.
-
-Link: https://lore.kernel.org/linux-media/20221117045925.14297-4-imv4bel@gmail.com
-Signed-off-by: Hyunwoo Kim <imv4bel@gmail.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <error27@gmail.com>
+Link: https://lore.kernel.org/linux-media/20230313085853.3252349-1-harperchen1110@gmail.com
+Signed-off-by: Wei Chen <harperchen1110@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/dvb-core/dvbdev.c | 84 ++++++++++++++++++++++++---------
- include/media/dvbdev.h          | 15 ++++++
- 2 files changed, 78 insertions(+), 21 deletions(-)
+ drivers/media/usb/dvb-usb-v2/ec168.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/drivers/media/dvb-core/dvbdev.c b/drivers/media/dvb-core/dvbdev.c
-index a31d52cb6d62c..9f9a976527080 100644
---- a/drivers/media/dvb-core/dvbdev.c
-+++ b/drivers/media/dvb-core/dvbdev.c
-@@ -27,6 +27,7 @@
- #include <media/tuner.h>
- 
- static DEFINE_MUTEX(dvbdev_mutex);
-+static LIST_HEAD(dvbdevfops_list);
- static int dvbdev_debug;
- 
- module_param(dvbdev_debug, int, 0644);
-@@ -452,14 +453,15 @@ int dvb_register_device(struct dvb_adapter *adap, struct dvb_device **pdvbdev,
- 			enum dvb_device_type type, int demux_sink_pads)
- {
- 	struct dvb_device *dvbdev;
--	struct file_operations *dvbdevfops;
-+	struct file_operations *dvbdevfops = NULL;
-+	struct dvbdevfops_node *node = NULL, *new_node = NULL;
- 	struct device *clsdev;
- 	int minor;
- 	int id, ret;
- 
- 	mutex_lock(&dvbdev_register_lock);
- 
--	if ((id = dvbdev_get_free_id (adap, type)) < 0){
-+	if ((id = dvbdev_get_free_id (adap, type)) < 0) {
- 		mutex_unlock(&dvbdev_register_lock);
- 		*pdvbdev = NULL;
- 		pr_err("%s: couldn't find free device id\n", __func__);
-@@ -467,18 +469,45 @@ int dvb_register_device(struct dvb_adapter *adap, struct dvb_device **pdvbdev,
- 	}
- 
- 	*pdvbdev = dvbdev = kzalloc(sizeof(*dvbdev), GFP_KERNEL);
--
- 	if (!dvbdev){
- 		mutex_unlock(&dvbdev_register_lock);
- 		return -ENOMEM;
- 	}
- 
--	dvbdevfops = kmemdup(template->fops, sizeof(*dvbdevfops), GFP_KERNEL);
-+	/*
-+	 * When a device of the same type is probe()d more than once,
-+	 * the first allocated fops are used. This prevents memory leaks
-+	 * that can occur when the same device is probe()d repeatedly.
-+	 */
-+	list_for_each_entry(node, &dvbdevfops_list, list_head) {
-+		if (node->fops->owner == adap->module &&
-+				node->type == type &&
-+				node->template == template) {
-+			dvbdevfops = node->fops;
-+			break;
-+		}
-+	}
- 
--	if (!dvbdevfops){
--		kfree (dvbdev);
--		mutex_unlock(&dvbdev_register_lock);
--		return -ENOMEM;
-+	if (dvbdevfops == NULL) {
-+		dvbdevfops = kmemdup(template->fops, sizeof(*dvbdevfops), GFP_KERNEL);
-+		if (!dvbdevfops) {
-+			kfree(dvbdev);
-+			mutex_unlock(&dvbdev_register_lock);
-+			return -ENOMEM;
-+		}
-+
-+		new_node = kzalloc(sizeof(struct dvbdevfops_node), GFP_KERNEL);
-+		if (!new_node) {
-+			kfree(dvbdevfops);
-+			kfree(dvbdev);
-+			mutex_unlock(&dvbdev_register_lock);
-+			return -ENOMEM;
-+		}
-+
-+		new_node->fops = dvbdevfops;
-+		new_node->type = type;
-+		new_node->template = template;
-+		list_add_tail (&new_node->list_head, &dvbdevfops_list);
- 	}
- 
- 	memcpy(dvbdev, template, sizeof(struct dvb_device));
-@@ -489,20 +518,20 @@ int dvb_register_device(struct dvb_adapter *adap, struct dvb_device **pdvbdev,
- 	dvbdev->priv = priv;
- 	dvbdev->fops = dvbdevfops;
- 	init_waitqueue_head (&dvbdev->wait_queue);
--
- 	dvbdevfops->owner = adap->module;
--
- 	list_add_tail (&dvbdev->list_head, &adap->device_list);
--
- 	down_write(&minor_rwsem);
- #ifdef CONFIG_DVB_DYNAMIC_MINORS
- 	for (minor = 0; minor < MAX_DVB_MINORS; minor++)
- 		if (dvb_minors[minor] == NULL)
- 			break;
--
- 	if (minor == MAX_DVB_MINORS) {
-+		if (new_node) {
-+			list_del (&new_node->list_head);
-+			kfree(dvbdevfops);
-+			kfree(new_node);
-+		}
- 		list_del (&dvbdev->list_head);
--		kfree(dvbdevfops);
- 		kfree(dvbdev);
- 		up_write(&minor_rwsem);
- 		mutex_unlock(&dvbdev_register_lock);
-@@ -511,41 +540,47 @@ int dvb_register_device(struct dvb_adapter *adap, struct dvb_device **pdvbdev,
- #else
- 	minor = nums2minor(adap->num, type, id);
- #endif
--
- 	dvbdev->minor = minor;
- 	dvb_minors[minor] = dvb_device_get(dvbdev);
- 	up_write(&minor_rwsem);
--
- 	ret = dvb_register_media_device(dvbdev, type, minor, demux_sink_pads);
- 	if (ret) {
- 		pr_err("%s: dvb_register_media_device failed to create the mediagraph\n",
- 		      __func__);
--
-+		if (new_node) {
-+			list_del (&new_node->list_head);
-+			kfree(dvbdevfops);
-+			kfree(new_node);
-+		}
- 		dvb_media_device_free(dvbdev);
- 		list_del (&dvbdev->list_head);
--		kfree(dvbdevfops);
- 		kfree(dvbdev);
- 		mutex_unlock(&dvbdev_register_lock);
- 		return ret;
- 	}
- 
--	mutex_unlock(&dvbdev_register_lock);
--
- 	clsdev = device_create(dvb_class, adap->device,
- 			       MKDEV(DVB_MAJOR, minor),
- 			       dvbdev, "dvb%d.%s%d", adap->num, dnames[type], id);
- 	if (IS_ERR(clsdev)) {
- 		pr_err("%s: failed to create device dvb%d.%s%d (%ld)\n",
- 		       __func__, adap->num, dnames[type], id, PTR_ERR(clsdev));
-+		if (new_node) {
-+			list_del (&new_node->list_head);
-+			kfree(dvbdevfops);
-+			kfree(new_node);
-+		}
- 		dvb_media_device_free(dvbdev);
- 		list_del (&dvbdev->list_head);
--		kfree(dvbdevfops);
- 		kfree(dvbdev);
-+		mutex_unlock(&dvbdev_register_lock);
- 		return PTR_ERR(clsdev);
- 	}
-+
- 	dprintk("DVB: register adapter%d/%s%d @ minor: %i (0x%02x)\n",
- 		adap->num, dnames[type], id, minor, minor);
- 
-+	mutex_unlock(&dvbdev_register_lock);
- 	return 0;
- }
- EXPORT_SYMBOL(dvb_register_device);
-@@ -574,7 +609,6 @@ static void dvb_free_device(struct kref *ref)
- {
- 	struct dvb_device *dvbdev = container_of(ref, struct dvb_device, ref);
- 
--	kfree (dvbdev->fops);
- 	kfree (dvbdev);
- }
- 
-@@ -1080,9 +1114,17 @@ static int __init init_dvbdev(void)
- 
- static void __exit exit_dvbdev(void)
- {
-+	struct dvbdevfops_node *node, *next;
-+
- 	class_destroy(dvb_class);
- 	cdev_del(&dvb_device_cdev);
- 	unregister_chrdev_region(MKDEV(DVB_MAJOR, 0), MAX_DVB_MINORS);
-+
-+	list_for_each_entry_safe(node, next, &dvbdevfops_list, list_head) {
-+		list_del (&node->list_head);
-+		kfree(node->fops);
-+		kfree(node);
-+	}
- }
- 
- subsys_initcall(init_dvbdev);
-diff --git a/include/media/dvbdev.h b/include/media/dvbdev.h
-index ac60c9fcfe9a6..34b01ebf32828 100644
---- a/include/media/dvbdev.h
-+++ b/include/media/dvbdev.h
-@@ -189,6 +189,21 @@ struct dvb_device {
- 	void *priv;
- };
- 
-+/**
-+ * struct dvbdevfops_node - fops nodes registered in dvbdevfops_list
-+ *
-+ * @fops:		Dynamically allocated fops for ->owner registration
-+ * @type:		type of dvb_device
-+ * @template:		dvb_device used for registration
-+ * @list_head:		list_head for dvbdevfops_list
-+ */
-+struct dvbdevfops_node {
-+	struct file_operations *fops;
-+	enum dvb_device_type type;
-+	const struct dvb_device *template;
-+	struct list_head list_head;
-+};
-+
- /**
-  * dvb_device_get - Increase dvb_device reference
-  *
+diff --git a/drivers/media/usb/dvb-usb-v2/ec168.c b/drivers/media/usb/dvb-usb-v2/ec168.c
+index 7ed0ab9e429b1..0e4773fc025c9 100644
+--- a/drivers/media/usb/dvb-usb-v2/ec168.c
++++ b/drivers/media/usb/dvb-usb-v2/ec168.c
+@@ -115,6 +115,10 @@ static int ec168_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
+ 	while (i < num) {
+ 		if (num > i + 1 && (msg[i+1].flags & I2C_M_RD)) {
+ 			if (msg[i].addr == ec168_ec100_config.demod_address) {
++				if (msg[i].len < 1) {
++					i = -EOPNOTSUPP;
++					break;
++				}
+ 				req.cmd = READ_DEMOD;
+ 				req.value = 0;
+ 				req.index = 0xff00 + msg[i].buf[0]; /* reg */
+@@ -131,6 +135,10 @@ static int ec168_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
+ 			}
+ 		} else {
+ 			if (msg[i].addr == ec168_ec100_config.demod_address) {
++				if (msg[i].len < 1) {
++					i = -EOPNOTSUPP;
++					break;
++				}
+ 				req.cmd = WRITE_DEMOD;
+ 				req.value = msg[i].buf[1]; /* val */
+ 				req.index = 0xff00 + msg[i].buf[0]; /* reg */
+@@ -139,6 +147,10 @@ static int ec168_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
+ 				ret = ec168_ctrl_msg(d, &req);
+ 				i += 1;
+ 			} else {
++				if (msg[i].len < 1) {
++					i = -EOPNOTSUPP;
++					break;
++				}
+ 				req.cmd = WRITE_I2C;
+ 				req.value = msg[i].buf[0]; /* val */
+ 				req.index = 0x0100 + msg[i].addr; /* I2C addr */
 -- 
 2.39.2
 
