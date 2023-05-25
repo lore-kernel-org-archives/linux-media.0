@@ -2,44 +2,45 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2789CC7EE32
-	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:56:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45F8CC7EE2C
+	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:56:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243309AbjEYS4Z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 May 2023 14:56:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45256 "EHLO
+        id S243318AbjEYS41 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 May 2023 14:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243376AbjEYSzL (ORCPT
+        with ESMTP id S243288AbjEYSzB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 May 2023 14:55:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DB246B1;
-        Thu, 25 May 2023 11:46:57 -0700 (PDT)
+        Thu, 25 May 2023 14:55:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38FF1BDB;
+        Thu, 25 May 2023 11:46:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5561864984;
-        Thu, 25 May 2023 18:44:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E475C433D2;
-        Thu, 25 May 2023 18:44:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AB925649A0;
+        Thu, 25 May 2023 18:44:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67183C433A4;
+        Thu, 25 May 2023 18:44:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685040272;
-        bh=ZkvU5hdkKNo/JRI0K7PSraH3Ns56rSaCQAKgMTRCbEY=;
+        s=k20201202; t=1685040252;
+        bh=I2fEuViLv0iCPYHPncitlmI2TWtLE4P2wiIBqFAKqNA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kzyvTNImHqARrKKp34IsWii8WnhcvBY8HHtMsdYU+aTsZCSpI0c+6cQT49ecbXEcG
-         BYU8H2ONCmAgYANa921zQlknIoUv77bVHyQwZF2MgjZ2ba6l0hq1altSTLFrj4mZ5s
-         JHcYAt0jcqHGUj7M4f7pXiB192vmISXLYPEWhLq4C6/LCjqw5MNu0OHsq0h7GrDTvV
-         oWY5Vq1ast1ZbQ2wDqYF3UeBTV6CShZOGRvDhRNQD+hgTqtAM1YDuIyWvf+YN3i+9Z
-         LvnimsMxkuIbDxYwaFwpLOEKUpqJfeZMwkCmY62mv8CLdbmCWJgEE25p5Nj9HgJ9IS
-         QqnI1o8xcq97Q==
+        b=lgBIRLQMFz9IDiL9KFiqlgdXnlmTeOSrJkeHQdYeyfAE5snrI5NkPfjMIEWJUAfDh
+         xT+XyIoa2x055COBQ8MDFsLaKNRqcZDLCBrqz0WjCLo1vjHE8IJ/6EAc/8CrvuD8sW
+         OwWOK+YCKpScqnnOCG0A62DJVyTnoKilz2cWPmemJUffNJbCl61xg/UD3tpbZCTAPj
+         OyYUl3vPDk7qrHzMufsjuobyqrHiqCDVJs32Vcvt/3MzDBVbIaTwXo57Ktaoc+3BAb
+         GExJ0oYPxNYDO1jQZrhWQX/z/vJD2z7FgmHGIepl0bpMKDGX6BFTy8bQoUvU3jufpt
+         OLJlopFSkt4Lw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hyunwoo Kim <imv4bel@gmail.com>,
+Cc:     Wei Chen <harperchen1110@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 13/27] media: ttusb-dec: fix memory leak in ttusb_dec_exit_dvb()
-Date:   Thu, 25 May 2023 14:43:39 -0400
-Message-Id: <20230525184356.1974216-13-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, crope@iki.fi,
+        linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 06/27] media: dvb-usb-v2: ec168: fix null-ptr-deref in ec168_i2c_xfer()
+Date:   Thu, 25 May 2023 14:43:32 -0400
+Message-Id: <20230525184356.1974216-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230525184356.1974216-1-sashal@kernel.org>
 References: <20230525184356.1974216-1-sashal@kernel.org>
@@ -51,41 +52,63 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hyunwoo Kim <imv4bel@gmail.com>
+From: Wei Chen <harperchen1110@gmail.com>
 
-[ Upstream commit 517a281338322ff8293f988771c98aaa7205e457 ]
+[ Upstream commit a6dcefcc08eca1bf4e3d213c97c3cfb75f377935 ]
 
-Since dvb_frontend_detach() is not called in ttusb_dec_exit_dvb(),
-which is called when the device is disconnected, dvb_frontend_free()
-is not finally called.
+In ec168_i2c_xfer, msg is controlled by user. When msg[i].buf is null
+and msg[i].len is zero, former checks on msg[i].buf would be passed.
+If accessing msg[i].buf[0] without sanity check, null pointer deref
+would happen. We add check on msg[i].len to prevent crash.
 
-This causes a memory leak just by repeatedly plugging and
-unplugging the device.
+Similar commit:
+commit 0ed554fd769a ("media: dvb-usb: az6027: fix null-ptr-deref in az6027_i2c_xfer()")
 
-Fix this issue by adding dvb_frontend_detach() to ttusb_dec_exit_dvb().
-
-Link: https://lore.kernel.org/linux-media/20221117045925.14297-5-imv4bel@gmail.com
-Signed-off-by: Hyunwoo Kim <imv4bel@gmail.com>
+Link: https://lore.kernel.org/linux-media/20230313085853.3252349-1-harperchen1110@gmail.com
+Signed-off-by: Wei Chen <harperchen1110@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/ttusb-dec/ttusb_dec.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/media/usb/dvb-usb-v2/ec168.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/drivers/media/usb/ttusb-dec/ttusb_dec.c b/drivers/media/usb/ttusb-dec/ttusb_dec.c
-index f34efa7c61b40..c915e555897ba 100644
---- a/drivers/media/usb/ttusb-dec/ttusb_dec.c
-+++ b/drivers/media/usb/ttusb-dec/ttusb_dec.c
-@@ -1561,8 +1561,7 @@ static void ttusb_dec_exit_dvb(struct ttusb_dec *dec)
- 	dvb_dmx_release(&dec->demux);
- 	if (dec->fe) {
- 		dvb_unregister_frontend(dec->fe);
--		if (dec->fe->ops.release)
--			dec->fe->ops.release(dec->fe);
-+		dvb_frontend_detach(dec->fe);
- 	}
- 	dvb_unregister_adapter(&dec->adapter);
- }
+diff --git a/drivers/media/usb/dvb-usb-v2/ec168.c b/drivers/media/usb/dvb-usb-v2/ec168.c
+index 1db8aeef36553..19605958501e1 100644
+--- a/drivers/media/usb/dvb-usb-v2/ec168.c
++++ b/drivers/media/usb/dvb-usb-v2/ec168.c
+@@ -125,6 +125,10 @@ static int ec168_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
+ 	while (i < num) {
+ 		if (num > i + 1 && (msg[i+1].flags & I2C_M_RD)) {
+ 			if (msg[i].addr == ec168_ec100_config.demod_address) {
++				if (msg[i].len < 1) {
++					i = -EOPNOTSUPP;
++					break;
++				}
+ 				req.cmd = READ_DEMOD;
+ 				req.value = 0;
+ 				req.index = 0xff00 + msg[i].buf[0]; /* reg */
+@@ -141,6 +145,10 @@ static int ec168_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
+ 			}
+ 		} else {
+ 			if (msg[i].addr == ec168_ec100_config.demod_address) {
++				if (msg[i].len < 1) {
++					i = -EOPNOTSUPP;
++					break;
++				}
+ 				req.cmd = WRITE_DEMOD;
+ 				req.value = msg[i].buf[1]; /* val */
+ 				req.index = 0xff00 + msg[i].buf[0]; /* reg */
+@@ -149,6 +157,10 @@ static int ec168_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
+ 				ret = ec168_ctrl_msg(d, &req);
+ 				i += 1;
+ 			} else {
++				if (msg[i].len < 1) {
++					i = -EOPNOTSUPP;
++					break;
++				}
+ 				req.cmd = WRITE_I2C;
+ 				req.value = msg[i].buf[0]; /* val */
+ 				req.index = 0x0100 + msg[i].addr; /* I2C addr */
 -- 
 2.39.2
 
