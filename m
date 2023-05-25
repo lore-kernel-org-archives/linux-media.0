@@ -2,48 +2,49 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AABBBC7EE2F
-	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:56:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D356C7EE29
+	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:56:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243375AbjEYS4i (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 May 2023 14:56:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45654 "EHLO
+        id S243382AbjEYS4l (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 May 2023 14:56:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243292AbjEYSzC (ORCPT
+        with ESMTP id S243658AbjEYSzr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 May 2023 14:55:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29EA1BD5;
-        Thu, 25 May 2023 11:46:42 -0700 (PDT)
+        Thu, 25 May 2023 14:55:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8BCC4C22;
+        Thu, 25 May 2023 11:47:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7AE8F64990;
-        Thu, 25 May 2023 18:44:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36CCDC4339B;
-        Thu, 25 May 2023 18:44:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2221564948;
+        Thu, 25 May 2023 18:45:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75DE0C433D2;
+        Thu, 25 May 2023 18:45:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685040250;
-        bh=qpilShCwED7f0bXYutKGopJXm9f9b0FCMRyNydBedBc=;
+        s=k20201202; t=1685040351;
+        bh=qMRcSdvdlL7u0cXsG0jvEgWnyTSYqEfuDBXqGxxxQhI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ur7dwq305FnT8FKWb9Rt7v9tQ/ixqrJstNtxcswVZaEtISPIeTFr3UAoXmxnYOdSP
-         LeoVUNO3XUao1H81HUKBJ52F/lr17Rme4S4iowr8bJZOzavISXvIlQ3kGG7Ti8dz4s
-         hdrhKfxId3zj/P8oZ4ayQON58I+lXVlE2MPqUPc1mUKG05VXtCLszFxxisxoWmhepb
-         UxdPbfvWRa+9cVF1znatR72HGE+tv6JqkZJxRCbxF1brPuYZw6MeYfP4yg9Z+YJQlo
-         OZkG+lEzKfzNH1S5fxm6eU9yg83qVS0Z2kWyFFmzsiLHSJrgBFVeQthhrIVu74qqbY
-         KvhBsKI9J3j1w==
+        b=rGirm8IqkaBHFxd1RGllLOHoebtXYAG8t5dRPER2hkx63+Fuyk9K1qBDnTrFHlpLj
+         /8mqi4a+vO6QEQEavrGRL/RpGNeuYUqgcZiZFTP7DvovlO9pSqlFUDLNpLM3YH1fp1
+         QU++xwzDZpqhE/R6HLOlwRZPJRvrni43ZKBvPuFlh/EQTpmYWhBX6NHIr6Ez0dA0kH
+         r0jYWvXN8uJXpAmZxTVyQ+H+Ve2LZcPygNgWDYnm3nMxpwv26x6FdgAUoVe0ML36N0
+         6JT++0Mh+8bXYt1XiciPI8NwPyIwrjMo82U095vroIP9L1BllCPmFhtVtf8n4VHJnD
+         A62TfN0u0fX3A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Wei Chen <harperchen1110@gmail.com>,
+Cc:     Takashi Iwai <tiwai@suse.de>, Yu Hao <yhao016@ucr.edu>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, zhongbaisong@huawei.com,
+        Sasha Levin <sashal@kernel.org>, robert_s@gmx.net,
+        chenzhongjin@huawei.com, linma@zju.edu.cn, imv4bel@gmail.com,
         linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 05/27] media: dvb-usb: az6027: fix three null-ptr-deref in az6027_i2c_xfer()
-Date:   Thu, 25 May 2023 14:43:31 -0400
-Message-Id: <20230525184356.1974216-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 11/20] media: dvb-core: Fix kernel WARNING for blocking operation in wait_event*()
+Date:   Thu, 25 May 2023 14:45:07 -0400
+Message-Id: <20230525184520.2004878-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230525184356.1974216-1-sashal@kernel.org>
-References: <20230525184356.1974216-1-sashal@kernel.org>
+In-Reply-To: <20230525184520.2004878-1-sashal@kernel.org>
+References: <20230525184520.2004878-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -52,61 +53,64 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Wei Chen <harperchen1110@gmail.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit 858e97d7956d17a2cb56a9413468704a4d5abfe1 ]
+[ Upstream commit b8c75e4a1b325ea0a9433fa8834be97b5836b946 ]
 
-In az6027_i2c_xfer, msg is controlled by user. When msg[i].buf is null,
-commit 0ed554fd769a ("media: dvb-usb: az6027: fix null-ptr-deref in
-az6027_i2c_xfer()") fix the null-ptr-deref bug when msg[i].addr is 0x99.
-However, null-ptr-deref also happens when msg[i].addr is 0xd0 and 0xc0.
-We add check on msg[i].len to prevent null-ptr-deref.
+Using a semaphore in the wait_event*() condition is no good idea.
+It hits a kernel WARN_ON() at prepare_to_wait_event() like:
+  do not call blocking ops when !TASK_RUNNING; state=1 set at
+  prepare_to_wait_event+0x6d/0x690
 
-Link: https://lore.kernel.org/linux-media/20230310165604.3093483-1-harperchen1110@gmail.com
-Signed-off-by: Wei Chen <harperchen1110@gmail.com>
+For avoiding the potential deadlock, rewrite to an open-coded loop
+instead.  Unlike the loop in wait_event*(), this uses wait_woken()
+after the condition check, hence the task state stays consistent.
+
+CVE-2023-31084 was assigned to this bug.
+
+Link: https://lore.kernel.org/r/CA+UBctCu7fXn4q41O_3=id1+OdyQ85tZY1x+TkT-6OVBL6KAUw@mail.gmail.com/
+
+Link: https://lore.kernel.org/linux-media/20230512151800.1874-1-tiwai@suse.de
+Reported-by: Yu Hao <yhao016@ucr.edu>
+Closes: https://nvd.nist.gov/vuln/detail/CVE-2023-31084
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/dvb-usb/az6027.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/media/dvb-core/dvb_frontend.c | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/usb/dvb-usb/az6027.c b/drivers/media/usb/dvb-usb/az6027.c
-index 7d71ac7811ebd..fdd57d84cfa42 100644
---- a/drivers/media/usb/dvb-usb/az6027.c
-+++ b/drivers/media/usb/dvb-usb/az6027.c
-@@ -991,6 +991,10 @@ static int az6027_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[], int n
- 			/* write/read request */
- 			if (i + 1 < num && (msg[i + 1].flags & I2C_M_RD)) {
- 				req = 0xB9;
-+				if (msg[i].len < 1) {
-+					i = -EOPNOTSUPP;
-+					break;
-+				}
- 				index = (((msg[i].buf[0] << 8) & 0xff00) | (msg[i].buf[1] & 0x00ff));
- 				value = msg[i].addr + (msg[i].len << 8);
- 				length = msg[i + 1].len + 6;
-@@ -1004,6 +1008,10 @@ static int az6027_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[], int n
+diff --git a/drivers/media/dvb-core/dvb_frontend.c b/drivers/media/dvb-core/dvb_frontend.c
+index e3a4a4688c2ec..651234584eb2c 100644
+--- a/drivers/media/dvb-core/dvb_frontend.c
++++ b/drivers/media/dvb-core/dvb_frontend.c
+@@ -301,14 +301,22 @@ static int dvb_frontend_get_event(struct dvb_frontend *fe,
+ 	}
  
- 				/* demod 16bit addr */
- 				req = 0xBD;
-+				if (msg[i].len < 1) {
-+					i = -EOPNOTSUPP;
-+					break;
-+				}
- 				index = (((msg[i].buf[0] << 8) & 0xff00) | (msg[i].buf[1] & 0x00ff));
- 				value = msg[i].addr + (2 << 8);
- 				length = msg[i].len - 2;
-@@ -1029,6 +1037,10 @@ static int az6027_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[], int n
- 			} else {
+ 	if (events->eventw == events->eventr) {
+-		int ret;
++		struct wait_queue_entry wait;
++		int ret = 0;
  
- 				req = 0xBD;
-+				if (msg[i].len < 1) {
-+					i = -EOPNOTSUPP;
-+					break;
-+				}
- 				index = msg[i].buf[0] & 0x00FF;
- 				value = msg[i].addr + (1 << 8);
- 				length = msg[i].len - 1;
+ 		if (flags & O_NONBLOCK)
+ 			return -EWOULDBLOCK;
+ 
+-		ret = wait_event_interruptible(events->wait_queue,
+-					       dvb_frontend_test_event(fepriv, events));
+-
++		init_waitqueue_entry(&wait, current);
++		add_wait_queue(&events->wait_queue, &wait);
++		while (!dvb_frontend_test_event(fepriv, events)) {
++			wait_woken(&wait, TASK_INTERRUPTIBLE, 0);
++			if (signal_pending(current)) {
++				ret = -ERESTARTSYS;
++				break;
++			}
++		}
++		remove_wait_queue(&events->wait_queue, &wait);
+ 		if (ret < 0)
+ 			return ret;
+ 	}
 -- 
 2.39.2
 
