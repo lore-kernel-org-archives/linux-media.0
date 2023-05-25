@@ -2,51 +2,48 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A407EC7EE32
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2BDAC7EE33
 	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:46:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242500AbjEYSqA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 May 2023 14:46:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34340 "EHLO
+        id S242467AbjEYSp7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 May 2023 14:45:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242585AbjEYSow (ORCPT
+        with ESMTP id S242537AbjEYSoo (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 May 2023 14:44:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A28B26B6;
-        Thu, 25 May 2023 11:41:03 -0700 (PDT)
+        Thu, 25 May 2023 14:44:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F152698;
+        Thu, 25 May 2023 11:40:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5DC760F7A;
-        Thu, 25 May 2023 18:40:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CD8CC4339B;
-        Thu, 25 May 2023 18:40:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ADF8F609AD;
+        Thu, 25 May 2023 18:39:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80E72C433EF;
+        Thu, 25 May 2023 18:39:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685040001;
-        bh=AEgLpSXR2JytEFrd0+1cvpNsE8QXoxiVVhkuzKyF3J4=;
+        s=k20201202; t=1685039988;
+        bh=6oEfyY97q+QA+6vM8N0IC3MT3ZTwummQY1+kbjQmf0Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NoUFMrrGEKjQEiJAf+FATI7mhZ5xmt01IzUfg5hz/I7sdkQmUra+ieo8Wt+5i9RbX
-         4+x7gikosMMGp5isztECa6wI/UrpWmGWCDXjHiNahnoKWCeIFFOdG1aqcaQk/gAjb9
-         7XWrziXeiQlWmt9A2T8OVyGGwrawbNLeHuSzCGDQ+lFuZW/K7+iTkoKtjbCw9cmd48
-         5ybIX2QaqXAQ0pLkawVBbkNvliBULF7+XngAkocYsz8kXj/3/80W2nLKhuRIVdKdWo
-         a6MEOAVu3sxCRMoGm1fDFjNDC2QAXkWcRMAeHpVOEENegfdeE3BlBIGKk3f0ZOtB+R
-         GvtEe2Wjzfiwg==
+        b=VzfahcpO2XnMTnON1pynQkHA7SrUriHV9Rhf0nNBo2hlW5hW2nCHz8lDj57v4rxtm
+         GPZ/nq7YDuX4nsA6KdrbQbBjABF2c4XD6QBsTnS1HF5TLu9gr9eQm0+r4bldBacPgt
+         moxNkXiuVv3tn1wVx5V8yCOeWZcegXFddDzDB+cim0t211SZOFWYO5dOBYOOPczRkt
+         Hofj2REsO2DBqZC/52/DOYhGhmDJZuTzuoW/RTf0FTVhQBHi5sRo/mDp7pQ2J8o3rY
+         iIWc6DNca34hszDrOvAFslNDnlXUebSPh6ETNxjzkFBRJyrpq1Yolg0PP92KGQI2vW
+         uLZo/wMgaDyRA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+Cc:     Wei Chen <harperchen1110@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        u.kleine-koenig@pengutronix.de, hverkuil-cisco@xs4all.nl,
-        cminyard@mvista.com, khalasa@piap.pl, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 19/43] media: mn88443x: fix !CONFIG_OF error by drop of_match_ptr from ID table
-Date:   Thu, 25 May 2023 14:38:30 -0400
-Message-Id: <20230525183854.1855431-19-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 15/43] media: dvb-usb: dw2102: fix uninit-value in su3000_read_mac_address
+Date:   Thu, 25 May 2023 14:38:26 -0400
+Message-Id: <20230525183854.1855431-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230525183854.1855431-1-sashal@kernel.org>
 References: <20230525183854.1855431-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -54,38 +51,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+From: Wei Chen <harperchen1110@gmail.com>
 
-[ Upstream commit ae11c0efaec32fb45130ee9886689f467232eebc ]
+[ Upstream commit a3fd1ef27aa686d871cefe207bd6168c4b0cd29e ]
 
-The driver will match mostly by DT table (even thought there is regular
-ID table) so there is little benefit in of_match_ptr (this also allows
-ACPI matching via PRP0001, even though it might not be relevant here).
-This also fixes !CONFIG_OF error:
+In su3000_read_mac_address, if i2c_transfer fails to execute two
+messages, array mac address will not be initialized. Without handling
+such error, later in function dvb_usb_adapter_dvb_init, proposed_mac
+is accessed before initialization.
 
-  drivers/media/dvb-frontends/mn88443x.c:782:34: error: ‘mn88443x_of_match’ defined but not used [-Werror=unused-const-variable=]
+Fix this error by returning a negative value if message execution fails.
 
-Link: https://lore.kernel.org/linux-media/20230312131318.351173-28-krzysztof.kozlowski@linaro.org
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Link: https://lore.kernel.org/linux-media/20230328124416.560889-1-harperchen1110@gmail.com
+Signed-off-by: Wei Chen <harperchen1110@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/dvb-frontends/mn88443x.c | 2 +-
+ drivers/media/usb/dvb-usb/dw2102.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/dvb-frontends/mn88443x.c b/drivers/media/dvb-frontends/mn88443x.c
-index fff212c0bf3b5..05894deb8a19a 100644
---- a/drivers/media/dvb-frontends/mn88443x.c
-+++ b/drivers/media/dvb-frontends/mn88443x.c
-@@ -800,7 +800,7 @@ MODULE_DEVICE_TABLE(i2c, mn88443x_i2c_id);
- static struct i2c_driver mn88443x_driver = {
- 	.driver = {
- 		.name = "mn88443x",
--		.of_match_table = of_match_ptr(mn88443x_of_match),
-+		.of_match_table = mn88443x_of_match,
- 	},
- 	.probe    = mn88443x_probe,
- 	.remove   = mn88443x_remove,
+diff --git a/drivers/media/usb/dvb-usb/dw2102.c b/drivers/media/usb/dvb-usb/dw2102.c
+index ca75ebdc10b37..1ed62a80067c6 100644
+--- a/drivers/media/usb/dvb-usb/dw2102.c
++++ b/drivers/media/usb/dvb-usb/dw2102.c
+@@ -946,7 +946,7 @@ static int su3000_read_mac_address(struct dvb_usb_device *d, u8 mac[6])
+ 	for (i = 0; i < 6; i++) {
+ 		obuf[1] = 0xf0 + i;
+ 		if (i2c_transfer(&d->i2c_adap, msg, 2) != 2)
+-			break;
++			return -1;
+ 		else
+ 			mac[i] = ibuf[0];
+ 	}
 -- 
 2.39.2
 
