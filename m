@@ -2,44 +2,46 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3A2DC7EE29
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 002BAC7EE2F
 	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:56:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243277AbjEYS4X (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 May 2023 14:56:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45170 "EHLO
+        id S243294AbjEYS4Y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 May 2023 14:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243348AbjEYSzJ (ORCPT
+        with ESMTP id S243272AbjEYSzA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 May 2023 14:55:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD15A46A6;
-        Thu, 25 May 2023 11:46:52 -0700 (PDT)
+        Thu, 25 May 2023 14:55:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E3F4681;
+        Thu, 25 May 2023 11:46:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E1725648D2;
-        Thu, 25 May 2023 18:44:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5BD3C4339B;
-        Thu, 25 May 2023 18:44:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FB4D648FE;
+        Thu, 25 May 2023 18:44:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED8CFC4339C;
+        Thu, 25 May 2023 18:44:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685040262;
-        bh=uj879TXgVdpswPbW4om4D1RVeuUOuKBA4Mz97/6MR98=;
+        s=k20201202; t=1685040246;
+        bh=TSrvxkW0g7+kGk+o09yxOWdyShj/7aqCd5YMFvMX98Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gRH198bncSdygPdMsAtRQjpmYZwy2kmdvyRnRSb7aIdHH21PNI9yv2BkUcsNl1/wI
-         oxcrVKTAPmg/NY73rdhz+uZcgHtJOQDCLsja+PehQTJkcFWTE8QyzCBIPZz4xRNl0J
-         Lxn+amuVbtRcSm/AfLmLyXMbLqnwUcvYoti9/+XW/KX1EYaJMPI2WcDte8+rkDFGVu
-         cfxSjQfHMtMLb7VROJ95TtZ0Qs9+aIPjJVc0KIbEchE/ECJFJyl19y7f9HuBN1vfJG
-         1QUEeFQtpwNZdgZKnrc2+jhYjqgD+Ts3Do+bkJWFhE09w0/moaxEo5pfpHcndRCE7Y
-         MiSWKS/nrTSyw==
+        b=UlI9KLq1i1l7klzKZBAj0O4IivCWA4lKTHURZ4yBhNeEksD4odTZS56rUMtBhCifS
+         Tb/HKigzTn1uLc75CLzTo7SCqfvG9G86bDwd9n3WIxYRwEZilzzM1+j9Nq3W+87kq7
+         oW5v+aqndr9cUzGxh0SxGUxyv9kxUXz46GsslEEwmdxLwHka2IgLtQQsYvxZ2cf3uh
+         EK53l3jhSSaIOUh3oIaTL/tc5rirubfrvOZKsFRT37ny1WZ0R6SWCsKyu2+dYTiH+s
+         rPmdoWCXvaSGTYo9uIPZb/uT5yWFRaNh5gfVE6x1WiyjD88+8Ij7ISrXR5/GVkFH1e
+         3n/DlWF5FzApg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Wei Chen <harperchen1110@gmail.com>,
+Cc:     YongSu Yoo <yongsuyoo0215@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 10/27] media: dvb-usb: dw2102: fix uninit-value in su3000_read_mac_address
-Date:   Thu, 25 May 2023 14:43:36 -0400
-Message-Id: <20230525184356.1974216-10-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, colin.i.king@gmail.com,
+        tommaso.merciai@amarulasolutions.com, hverkuil-cisco@xs4all.nl,
+        linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 04/27] media: dvb_demux: fix a bug for the continuity counter
+Date:   Thu, 25 May 2023 14:43:30 -0400
+Message-Id: <20230525184356.1974216-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230525184356.1974216-1-sashal@kernel.org>
 References: <20230525184356.1974216-1-sashal@kernel.org>
@@ -51,38 +53,63 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Wei Chen <harperchen1110@gmail.com>
+From: YongSu Yoo <yongsuyoo0215@gmail.com>
 
-[ Upstream commit a3fd1ef27aa686d871cefe207bd6168c4b0cd29e ]
+[ Upstream commit 7efb10d8dc70ea3000cc70dca53407c52488acd1 ]
 
-In su3000_read_mac_address, if i2c_transfer fails to execute two
-messages, array mac address will not be initialized. Without handling
-such error, later in function dvb_usb_adapter_dvb_init, proposed_mac
-is accessed before initialization.
+In dvb_demux.c, some logics exist which compare the expected
+continuity counter and the real continuity counter. If they
+are not matched each other, both of the expected continuity
+counter and the real continuity counter should be printed.
+But there exists a bug that the expected continuity counter
+is not correctly printed. The expected continuity counter is
+replaced with the real countinuity counter + 1 so that
+the epected continuity counter is not correclty printed.
+This is wrong. This bug is fixed.
 
-Fix this error by returning a negative value if message execution fails.
+Link: https://lore.kernel.org/linux-media/20230305212519.499-1-yongsuyoo0215@gmail.com
 
-Link: https://lore.kernel.org/linux-media/20230328124416.560889-1-harperchen1110@gmail.com
-Signed-off-by: Wei Chen <harperchen1110@gmail.com>
+Signed-off-by: YongSu Yoo <yongsuyoo0215@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/dvb-usb/dw2102.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/dvb-core/dvb_demux.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/usb/dvb-usb/dw2102.c b/drivers/media/usb/dvb-usb/dw2102.c
-index ebb0c982a6f21..cd0566c0b3de7 100644
---- a/drivers/media/usb/dvb-usb/dw2102.c
-+++ b/drivers/media/usb/dvb-usb/dw2102.c
-@@ -949,7 +949,7 @@ static int su3000_read_mac_address(struct dvb_usb_device *d, u8 mac[6])
- 	for (i = 0; i < 6; i++) {
- 		obuf[1] = 0xf0 + i;
- 		if (i2c_transfer(&d->i2c_adap, msg, 2) != 2)
--			break;
-+			return -1;
- 		else
- 			mac[i] = ibuf[0];
+diff --git a/drivers/media/dvb-core/dvb_demux.c b/drivers/media/dvb-core/dvb_demux.c
+index 39a2c6ccf31d7..9904a170faeff 100644
+--- a/drivers/media/dvb-core/dvb_demux.c
++++ b/drivers/media/dvb-core/dvb_demux.c
+@@ -125,12 +125,12 @@ static inline int dvb_dmx_swfilter_payload(struct dvb_demux_feed *feed,
+ 
+ 	cc = buf[3] & 0x0f;
+ 	ccok = ((feed->cc + 1) & 0x0f) == cc;
+-	feed->cc = cc;
+ 	if (!ccok) {
+ 		set_buf_flags(feed, DMX_BUFFER_FLAG_DISCONTINUITY_DETECTED);
+ 		dprintk_sect_loss("missed packet: %d instead of %d!\n",
+ 				  cc, (feed->cc + 1) & 0x0f);
  	}
++	feed->cc = cc;
+ 
+ 	if (buf[1] & 0x40)	// PUSI ?
+ 		feed->peslen = 0xfffa;
+@@ -310,7 +310,6 @@ static int dvb_dmx_swfilter_section_packet(struct dvb_demux_feed *feed,
+ 
+ 	cc = buf[3] & 0x0f;
+ 	ccok = ((feed->cc + 1) & 0x0f) == cc;
+-	feed->cc = cc;
+ 
+ 	if (buf[3] & 0x20) {
+ 		/* adaption field present, check for discontinuity_indicator */
+@@ -346,6 +345,7 @@ static int dvb_dmx_swfilter_section_packet(struct dvb_demux_feed *feed,
+ 		feed->pusi_seen = false;
+ 		dvb_dmx_swfilter_section_new(feed);
+ 	}
++	feed->cc = cc;
+ 
+ 	if (buf[1] & 0x40) {
+ 		/* PUSI=1 (is set), section boundary is here */
 -- 
 2.39.2
 
