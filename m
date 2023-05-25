@@ -2,51 +2,49 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9D42C77B7A
-	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:34:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42744C7EE2F
+	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:34:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237766AbjEYSek (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 May 2023 14:34:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52566 "EHLO
+        id S241782AbjEYSem (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 May 2023 14:34:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239099AbjEYSeG (ORCPT
+        with ESMTP id S241670AbjEYSeF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 May 2023 14:34:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2811716;
+        Thu, 25 May 2023 14:34:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD0D1715;
         Thu, 25 May 2023 11:33:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D82D648B9;
-        Thu, 25 May 2023 18:33:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD91FC4339B;
-        Thu, 25 May 2023 18:33:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 14F57648B0;
+        Thu, 25 May 2023 18:33:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77BC8C433D2;
+        Thu, 25 May 2023 18:33:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685039616;
-        bh=bnFLljnx2cW5hQwv4RQxX8dckHTft4UKaFCHMTLoLe0=;
+        s=k20201202; t=1685039604;
+        bh=K4YcD6dswcLwvVVRAb/LMSzwarNi1nA2TqBIrwoBs0c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=slkyCBlrTbj46yONH0qNLLIxRZSjgSfDhTOqdGKKlrgKeegPOA4xSakN79Clb6Og8
-         1UajsODc7GY+0YR9iY9CXwXn3BkUpVZ/IUiOfI+HemuCrOeTFw7xsFJI7GwYioHiJL
-         xYWWtrjFSrJpTqZ2Ciqorba2ezk3xptOTPlzln2TKxCGJZREEi96CrGZP5x8PjwUmb
-         YkTT0tP/ALc5iZQdxts27T8R/MCw/uUXGYD1q3T3qgxsiPY6nhVcuWUDLy5ySj7zbo
-         OqEDqkhNjnHQ21tTsgrhRUuYA+ecZw/wa7YZh2s3a38TW2HxfI0L1o2twqGewiLB6R
-         T/i2jluCje91g==
+        b=iHUtf7VMvJ8adl+2+6HhPbLvHwyvyWtonL2d4hpqtD6aEZYPCVL2Myo3SRrgHG+vm
+         uodzQa85BWeaiuAjEtU+j9rNQmlAQWdR9WcpLWk7X5KcsrVLzYmxqJacpaZGLJ2pqn
+         kVJxwnhMcLCbUsHnSI44vOM6uw3RvMirB8s+RJvy087zj9VFT1JOCpMJsPAreaLQ/U
+         Cfs1oetPWbwUi8VVBrKkZopDJRvUQJITU8SR/tJkMOR1vHARNzW4Vj2ql3PKPR3v6B
+         yQNlji53umFgdp5qD3frV1iDmwsthe80J1Ux9MbOjlBF4W//fHcne5c8SiQmjxNyAW
+         yDg8zUt7robGA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+Cc:     Wei Chen <harperchen1110@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        u.kleine-koenig@pengutronix.de, hverkuil-cisco@xs4all.nl,
-        peda@axentia.se, kabel@kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 25/67] media: mn88443x: fix !CONFIG_OF error by drop of_match_ptr from ID table
-Date:   Thu, 25 May 2023 14:31:02 -0400
-Message-Id: <20230525183144.1717540-25-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, serjk@netup.ru,
+        aospan@netup.ru, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 22/67] media: netup_unidvb: fix irq init by register it at the end of probe
+Date:   Thu, 25 May 2023 14:30:59 -0400
+Message-Id: <20230525183144.1717540-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230525183144.1717540-1-sashal@kernel.org>
 References: <20230525183144.1717540-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -54,38 +52,68 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+From: Wei Chen <harperchen1110@gmail.com>
 
-[ Upstream commit ae11c0efaec32fb45130ee9886689f467232eebc ]
+[ Upstream commit e6ad6233592593079db5c8fa592c298e51bc1356 ]
 
-The driver will match mostly by DT table (even thought there is regular
-ID table) so there is little benefit in of_match_ptr (this also allows
-ACPI matching via PRP0001, even though it might not be relevant here).
-This also fixes !CONFIG_OF error:
+IRQ handler netup_spi_interrupt() takes spinlock spi->lock. The lock
+is initialized in netup_spi_init(). However, irq handler is registered
+before initializing the lock.
 
-  drivers/media/dvb-frontends/mn88443x.c:782:34: error: ‘mn88443x_of_match’ defined but not used [-Werror=unused-const-variable=]
+Spinlock dma->lock and i2c->lock suffer from the same problem.
 
-Link: https://lore.kernel.org/linux-media/20230312131318.351173-28-krzysztof.kozlowski@linaro.org
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Fix this by registering the irq at the end of probe.
+
+Link: https://lore.kernel.org/linux-media/20230315134518.1074497-1-harperchen1110@gmail.com
+Signed-off-by: Wei Chen <harperchen1110@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/dvb-frontends/mn88443x.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../media/pci/netup_unidvb/netup_unidvb_core.c  | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/dvb-frontends/mn88443x.c b/drivers/media/dvb-frontends/mn88443x.c
-index 1f1753f2ab1a3..0782f8377eb2f 100644
---- a/drivers/media/dvb-frontends/mn88443x.c
-+++ b/drivers/media/dvb-frontends/mn88443x.c
-@@ -798,7 +798,7 @@ MODULE_DEVICE_TABLE(i2c, mn88443x_i2c_id);
- static struct i2c_driver mn88443x_driver = {
- 	.driver = {
- 		.name = "mn88443x",
--		.of_match_table = of_match_ptr(mn88443x_of_match),
-+		.of_match_table = mn88443x_of_match,
- 	},
- 	.probe_new = mn88443x_probe,
- 	.remove   = mn88443x_remove,
+diff --git a/drivers/media/pci/netup_unidvb/netup_unidvb_core.c b/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
+index 8287851b5ffdc..751a954baf651 100644
+--- a/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
++++ b/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
+@@ -887,12 +887,7 @@ static int netup_unidvb_initdev(struct pci_dev *pci_dev,
+ 		ndev->lmmio0, (u32)pci_resource_len(pci_dev, 0),
+ 		ndev->lmmio1, (u32)pci_resource_len(pci_dev, 1),
+ 		pci_dev->irq);
+-	if (request_irq(pci_dev->irq, netup_unidvb_isr, IRQF_SHARED,
+-			"netup_unidvb", pci_dev) < 0) {
+-		dev_err(&pci_dev->dev,
+-			"%s(): can't get IRQ %d\n", __func__, pci_dev->irq);
+-		goto irq_request_err;
+-	}
++
+ 	ndev->dma_size = 2 * 188 *
+ 		NETUP_DMA_BLOCKS_COUNT * NETUP_DMA_PACKETS_COUNT;
+ 	ndev->dma_virt = dma_alloc_coherent(&pci_dev->dev,
+@@ -933,6 +928,14 @@ static int netup_unidvb_initdev(struct pci_dev *pci_dev,
+ 		dev_err(&pci_dev->dev, "netup_unidvb: DMA setup failed\n");
+ 		goto dma_setup_err;
+ 	}
++
++	if (request_irq(pci_dev->irq, netup_unidvb_isr, IRQF_SHARED,
++			"netup_unidvb", pci_dev) < 0) {
++		dev_err(&pci_dev->dev,
++			"%s(): can't get IRQ %d\n", __func__, pci_dev->irq);
++		goto dma_setup_err;
++	}
++
+ 	dev_info(&pci_dev->dev,
+ 		"netup_unidvb: device has been initialized\n");
+ 	return 0;
+@@ -951,8 +954,6 @@ static int netup_unidvb_initdev(struct pci_dev *pci_dev,
+ 	dma_free_coherent(&pci_dev->dev, ndev->dma_size,
+ 			ndev->dma_virt, ndev->dma_phys);
+ dma_alloc_err:
+-	free_irq(pci_dev->irq, pci_dev);
+-irq_request_err:
+ 	iounmap(ndev->lmmio1);
+ pci_bar1_error:
+ 	iounmap(ndev->lmmio0);
 -- 
 2.39.2
 
