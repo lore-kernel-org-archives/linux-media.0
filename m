@@ -2,48 +2,49 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9004AC7EE33
-	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:56:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A169C7EE39
+	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:56:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243165AbjEYS4O (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 May 2023 14:56:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45316 "EHLO
+        id S243182AbjEYS4Q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 May 2023 14:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243401AbjEYSzN (ORCPT
+        with ESMTP id S243153AbjEYSyi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 May 2023 14:55:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2A21BE4;
-        Thu, 25 May 2023 11:47:00 -0700 (PDT)
+        Thu, 25 May 2023 14:54:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F232D51;
+        Thu, 25 May 2023 11:46:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 920506499C;
-        Thu, 25 May 2023 18:44:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 377A1C433D2;
-        Thu, 25 May 2023 18:44:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F0EE061119;
+        Thu, 25 May 2023 18:43:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56A64C433D2;
+        Thu, 25 May 2023 18:43:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685040289;
-        bh=UCqqfrK5kBGkFOadn1dCKSSwzIi+36D6UffuMhQOcFc=;
+        s=k20201202; t=1685040206;
+        bh=V6Qe5K1QN9D8bDEoRk94m8xGFrxEn6EKWIgVEI2ErEM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X4O0wJi8xSCONA102azHfQCnTx171u9nCyVZrzxK1kXfobfcVJy1PXd8Zf4cDWisp
-         UIroYBql1fUoDz+L6HbC2IxQh/9hAPOlw2Cc1aStfXnrC3gghaNZBs4xAKQ7pL13in
-         2xvNZAB1kjQmX0oJLDWZ88bZeeOn3cbNZxKGRHv+fWa/wU34TM08IwQ8WhI4r9rarg
-         prFo9XuPIlTYcacopJdAOI6u084x8oOI/OxQ1NS3lzM9pahWN4cQSDpt5Jj+lRpeN7
-         EgOCcM1IQ2Milm0XvXkRe7RqfvTonV94gs7YIusrTwK7qpxJ73LaLdZmLWfnsJf5Fy
-         4p8mFIdNlA05g==
+        b=DNjunqtnlkgUH95X+OI9eN7eOhUdVu8gMnM1bF6A8cjp5l44tEf+StVnou3KVFnag
+         uh/mhkNYZI/GN6mG3aWQW2nOT213je/Tst57E6O9smqxn94qOV8LAqhkSKtySEHVsk
+         7YtXo1ZS+62pJQB/Oh1X2BLrZR62w+aC1yQ03HZ9f1zHgjtzLznER9h8bqGGcJKIqU
+         VZqI3DgsxpqxJIL3E/b1YKnFCk/woTQ4yKLUtcvWx2mazBEKCzGsrhaqVWmU9ajkB4
+         haSdi7sxzlWmIgdWLnRF09KSc4YTflW7Z1DbMN9vPa5rS2Mph0f8fuKPcVpVHGZkdn
+         LkqAF4Y1uZgPA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hyunwoo Kim <v4bel@theori.io>,
+Cc:     Takashi Iwai <tiwai@suse.de>, Yu Hao <yhao016@ucr.edu>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linma@zju.edu.cn,
-        yongsuyoo0215@gmail.com, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 17/27] media: dvb-core: Fix use-after-free due to race condition at dvb_ca_en50221
-Date:   Thu, 25 May 2023 14:43:43 -0400
-Message-Id: <20230525184356.1974216-17-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, robert_s@gmx.net,
+        chenzhongjin@huawei.com, imv4bel@gmail.com, linma@zju.edu.cn,
+        linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 16/27] media: dvb-core: Fix kernel WARNING for blocking operation in wait_event*()
+Date:   Thu, 25 May 2023 14:42:25 -0400
+Message-Id: <20230525184238.1943072-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230525184356.1974216-1-sashal@kernel.org>
-References: <20230525184356.1974216-1-sashal@kernel.org>
+In-Reply-To: <20230525184238.1943072-1-sashal@kernel.org>
+References: <20230525184238.1943072-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -52,126 +53,64 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hyunwoo Kim <v4bel@theori.io>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit 280a8ab81733da8bc442253c700a52c4c0886ffd ]
+[ Upstream commit b8c75e4a1b325ea0a9433fa8834be97b5836b946 ]
 
-If the device node of dvb_ca_en50221 is open() and the
-device is disconnected, a UAF may occur when calling
-close() on the device node.
+Using a semaphore in the wait_event*() condition is no good idea.
+It hits a kernel WARN_ON() at prepare_to_wait_event() like:
+  do not call blocking ops when !TASK_RUNNING; state=1 set at
+  prepare_to_wait_event+0x6d/0x690
 
-The root cause is that wake_up() and wait_event() for
-dvbdev->wait_queue are not implemented.
+For avoiding the potential deadlock, rewrite to an open-coded loop
+instead.  Unlike the loop in wait_event*(), this uses wait_woken()
+after the condition check, hence the task state stays consistent.
 
-So implement wait_event() function in dvb_ca_en50221_release()
-and add 'remove_mutex' which prevents race condition
-for 'ca->exit'.
+CVE-2023-31084 was assigned to this bug.
 
-[mchehab: fix a checkpatch warning]
+Link: https://lore.kernel.org/r/CA+UBctCu7fXn4q41O_3=id1+OdyQ85tZY1x+TkT-6OVBL6KAUw@mail.gmail.com/
 
-Link: https://lore.kernel.org/linux-media/20221121063308.GA33821@ubuntu
-Signed-off-by: Hyunwoo Kim <v4bel@theori.io>
+Link: https://lore.kernel.org/linux-media/20230512151800.1874-1-tiwai@suse.de
+Reported-by: Yu Hao <yhao016@ucr.edu>
+Closes: https://nvd.nist.gov/vuln/detail/CVE-2023-31084
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/dvb-core/dvb_ca_en50221.c | 37 ++++++++++++++++++++++++-
- 1 file changed, 36 insertions(+), 1 deletion(-)
+ drivers/media/dvb-core/dvb_frontend.c | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/dvb-core/dvb_ca_en50221.c b/drivers/media/dvb-core/dvb_ca_en50221.c
-index 1e08466ba0c6c..3647196c2f519 100644
---- a/drivers/media/dvb-core/dvb_ca_en50221.c
-+++ b/drivers/media/dvb-core/dvb_ca_en50221.c
-@@ -162,6 +162,12 @@ struct dvb_ca_private {
- 
- 	/* mutex serializing ioctls */
- 	struct mutex ioctl_mutex;
-+
-+	/* A mutex used when a device is disconnected */
-+	struct mutex remove_mutex;
-+
-+	/* Whether the device is disconnected */
-+	int exit;
- };
- 
- static void dvb_ca_private_free(struct dvb_ca_private *ca)
-@@ -1719,12 +1725,22 @@ static int dvb_ca_en50221_io_open(struct inode *inode, struct file *file)
- 
- 	dprintk("%s\n", __func__);
- 
--	if (!try_module_get(ca->pub->owner))
-+	mutex_lock(&ca->remove_mutex);
-+
-+	if (ca->exit) {
-+		mutex_unlock(&ca->remove_mutex);
-+		return -ENODEV;
-+	}
-+
-+	if (!try_module_get(ca->pub->owner)) {
-+		mutex_unlock(&ca->remove_mutex);
- 		return -EIO;
-+	}
- 
- 	err = dvb_generic_open(inode, file);
- 	if (err < 0) {
- 		module_put(ca->pub->owner);
-+		mutex_unlock(&ca->remove_mutex);
- 		return err;
+diff --git a/drivers/media/dvb-core/dvb_frontend.c b/drivers/media/dvb-core/dvb_frontend.c
+index b04638321b75b..ad3e42a4eaf73 100644
+--- a/drivers/media/dvb-core/dvb_frontend.c
++++ b/drivers/media/dvb-core/dvb_frontend.c
+@@ -292,14 +292,22 @@ static int dvb_frontend_get_event(struct dvb_frontend *fe,
  	}
  
-@@ -1749,6 +1765,7 @@ static int dvb_ca_en50221_io_open(struct inode *inode, struct file *file)
+ 	if (events->eventw == events->eventr) {
+-		int ret;
++		struct wait_queue_entry wait;
++		int ret = 0;
  
- 	dvb_ca_private_get(ca);
+ 		if (flags & O_NONBLOCK)
+ 			return -EWOULDBLOCK;
  
-+	mutex_unlock(&ca->remove_mutex);
- 	return 0;
- }
- 
-@@ -1768,6 +1785,8 @@ static int dvb_ca_en50221_io_release(struct inode *inode, struct file *file)
- 
- 	dprintk("%s\n", __func__);
- 
-+	mutex_lock(&ca->remove_mutex);
-+
- 	/* mark the CA device as closed */
- 	ca->open = 0;
- 	dvb_ca_en50221_thread_update_delay(ca);
-@@ -1778,6 +1797,13 @@ static int dvb_ca_en50221_io_release(struct inode *inode, struct file *file)
- 
- 	dvb_ca_private_put(ca);
- 
-+	if (dvbdev->users == 1 && ca->exit == 1) {
-+		mutex_unlock(&ca->remove_mutex);
-+		wake_up(&dvbdev->wait_queue);
-+	} else {
-+		mutex_unlock(&ca->remove_mutex);
-+	}
-+
- 	return err;
- }
- 
-@@ -1902,6 +1928,7 @@ int dvb_ca_en50221_init(struct dvb_adapter *dvb_adapter,
+-		ret = wait_event_interruptible(events->wait_queue,
+-					       dvb_frontend_test_event(fepriv, events));
+-
++		init_waitqueue_entry(&wait, current);
++		add_wait_queue(&events->wait_queue, &wait);
++		while (!dvb_frontend_test_event(fepriv, events)) {
++			wait_woken(&wait, TASK_INTERRUPTIBLE, 0);
++			if (signal_pending(current)) {
++				ret = -ERESTARTSYS;
++				break;
++			}
++		}
++		remove_wait_queue(&events->wait_queue, &wait);
+ 		if (ret < 0)
+ 			return ret;
  	}
- 
- 	mutex_init(&ca->ioctl_mutex);
-+	mutex_init(&ca->remove_mutex);
- 
- 	if (signal_pending(current)) {
- 		ret = -EINTR;
-@@ -1944,6 +1971,14 @@ void dvb_ca_en50221_release(struct dvb_ca_en50221 *pubca)
- 
- 	dprintk("%s\n", __func__);
- 
-+	mutex_lock(&ca->remove_mutex);
-+	ca->exit = 1;
-+	mutex_unlock(&ca->remove_mutex);
-+
-+	if (ca->dvbdev->users < 1)
-+		wait_event(ca->dvbdev->wait_queue,
-+				ca->dvbdev->users == 1);
-+
- 	/* shutdown the thread if there was one */
- 	kthread_stop(ca->thread);
- 
 -- 
 2.39.2
 
