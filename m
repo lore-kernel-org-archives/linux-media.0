@@ -2,49 +2,49 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CBA9C7EE31
-	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:46:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB47DC77B7E
+	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:46:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242620AbjEYSqH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 May 2023 14:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33658 "EHLO
+        id S242527AbjEYSqI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 May 2023 14:46:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242872AbjEYSpg (ORCPT
+        with ESMTP id S242607AbjEYSoy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 May 2023 14:45:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236651B5;
-        Thu, 25 May 2023 11:41:48 -0700 (PDT)
+        Thu, 25 May 2023 14:44:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1003E7A;
+        Thu, 25 May 2023 11:41:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C47B96491B;
-        Thu, 25 May 2023 18:41:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FB0DC433D2;
-        Thu, 25 May 2023 18:41:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D790860BD4;
+        Thu, 25 May 2023 18:40:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D922C433D2;
+        Thu, 25 May 2023 18:40:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685040082;
-        bh=/aQHJrkPZV+ML/j/omdPFfLwhiWitT9bbB2gtn71rlc=;
+        s=k20201202; t=1685040012;
+        bh=MTeMm/00dl6GcC+szTUjiyco7o/tEkA6zATOo5g29Rk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VPsVXesTjBKSh6KOmkDMvGjZ6bJO04X2ZEiy3xBa0o+5ocmkLf2monCr/eEYwY4QE
-         aPHcmnXvSBE9+AEGPNuPVGGHeNWbMkpJ4rmq3yhAY/PEPbCOgwe2ysii+fzdc1RCM5
-         cxg+6mRELC2yp4ogpG2NndSOJAXpPosneji+LSAdVV3bESmgpA9rzlkzJUKj50TZuv
-         rTUVBWzXA0uPkoz1wkz0M84veBYSqoObLB0HZNkrulaDBuOsNOdyIkC8ZN1rI0zes2
-         7ZkUuzX9CtnNq4K5Nkr61heOy+iDzetypzAV6vH6zDpYEUOI3cJDqWk7GAcdGifExT
-         Swsg+Xl2DoEKw==
+        b=VpQaP1hb9heMSm2N3xfvA2dNkq/m37HfEoaAub0ql6Fem/wJI+OW3SaYvlZqy2ozC
+         jn6Yf0ehfQQ2RzIOmnp5MCpl6uTOG/R7E/zjDPzrC716zfWKpM0C+0HNpi9/aKsZRk
+         0wl2D7xgeoq8uyZTJETFupI5+m3AQmyjhap3pN6bubTwxUUr4PpJnWuu1YbPdsi22z
+         DMqXsrOeSkkMRIYpYFlwIMf+Y+1SfiLIQhMvARhvr9u4RJIdH0ADUjVYA5IJRiVVsP
+         TyvUMeZeTQuBfWsDT5Tq6Tt8PgFW56qdlC2DKyUJj+DCdHD8GzuY2pwXJob8XmLg4S
+         QrlcY0ixr1qrg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     YongSu Yoo <yongsuyoo0215@gmail.com>,
+Cc:     Takashi Iwai <tiwai@suse.de>, Yu Hao <yhao016@ucr.edu>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, hverkuil-cisco@xs4all.nl,
-        tommaso.merciai@amarulasolutions.com, colin.i.king@gmail.com,
+        Sasha Levin <sashal@kernel.org>, robert_s@gmx.net,
+        imv4bel@gmail.com, chenzhongjin@huawei.com, linma@zju.edu.cn,
         linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 06/31] media: dvb_demux: fix a bug for the continuity counter
-Date:   Thu, 25 May 2023 14:40:37 -0400
-Message-Id: <20230525184105.1909399-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 22/43] media: dvb-core: Fix kernel WARNING for blocking operation in wait_event*()
+Date:   Thu, 25 May 2023 14:38:33 -0400
+Message-Id: <20230525183854.1855431-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230525184105.1909399-1-sashal@kernel.org>
-References: <20230525184105.1909399-1-sashal@kernel.org>
+In-Reply-To: <20230525183854.1855431-1-sashal@kernel.org>
+References: <20230525183854.1855431-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -53,63 +53,64 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: YongSu Yoo <yongsuyoo0215@gmail.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit 7efb10d8dc70ea3000cc70dca53407c52488acd1 ]
+[ Upstream commit b8c75e4a1b325ea0a9433fa8834be97b5836b946 ]
 
-In dvb_demux.c, some logics exist which compare the expected
-continuity counter and the real continuity counter. If they
-are not matched each other, both of the expected continuity
-counter and the real continuity counter should be printed.
-But there exists a bug that the expected continuity counter
-is not correctly printed. The expected continuity counter is
-replaced with the real countinuity counter + 1 so that
-the epected continuity counter is not correclty printed.
-This is wrong. This bug is fixed.
+Using a semaphore in the wait_event*() condition is no good idea.
+It hits a kernel WARN_ON() at prepare_to_wait_event() like:
+  do not call blocking ops when !TASK_RUNNING; state=1 set at
+  prepare_to_wait_event+0x6d/0x690
 
-Link: https://lore.kernel.org/linux-media/20230305212519.499-1-yongsuyoo0215@gmail.com
+For avoiding the potential deadlock, rewrite to an open-coded loop
+instead.  Unlike the loop in wait_event*(), this uses wait_woken()
+after the condition check, hence the task state stays consistent.
 
-Signed-off-by: YongSu Yoo <yongsuyoo0215@gmail.com>
+CVE-2023-31084 was assigned to this bug.
+
+Link: https://lore.kernel.org/r/CA+UBctCu7fXn4q41O_3=id1+OdyQ85tZY1x+TkT-6OVBL6KAUw@mail.gmail.com/
+
+Link: https://lore.kernel.org/linux-media/20230512151800.1874-1-tiwai@suse.de
+Reported-by: Yu Hao <yhao016@ucr.edu>
+Closes: https://nvd.nist.gov/vuln/detail/CVE-2023-31084
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/dvb-core/dvb_demux.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/dvb-core/dvb_frontend.c | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/dvb-core/dvb_demux.c b/drivers/media/dvb-core/dvb_demux.c
-index 5fde1d38b3e34..80b495982f63c 100644
---- a/drivers/media/dvb-core/dvb_demux.c
-+++ b/drivers/media/dvb-core/dvb_demux.c
-@@ -125,12 +125,12 @@ static inline int dvb_dmx_swfilter_payload(struct dvb_demux_feed *feed,
- 
- 	cc = buf[3] & 0x0f;
- 	ccok = ((feed->cc + 1) & 0x0f) == cc;
--	feed->cc = cc;
- 	if (!ccok) {
- 		set_buf_flags(feed, DMX_BUFFER_FLAG_DISCONTINUITY_DETECTED);
- 		dprintk_sect_loss("missed packet: %d instead of %d!\n",
- 				  cc, (feed->cc + 1) & 0x0f);
+diff --git a/drivers/media/dvb-core/dvb_frontend.c b/drivers/media/dvb-core/dvb_frontend.c
+index 09facc78d88aa..fea62bce97468 100644
+--- a/drivers/media/dvb-core/dvb_frontend.c
++++ b/drivers/media/dvb-core/dvb_frontend.c
+@@ -293,14 +293,22 @@ static int dvb_frontend_get_event(struct dvb_frontend *fe,
  	}
-+	feed->cc = cc;
  
- 	if (buf[1] & 0x40)	// PUSI ?
- 		feed->peslen = 0xfffa;
-@@ -310,7 +310,6 @@ static int dvb_dmx_swfilter_section_packet(struct dvb_demux_feed *feed,
+ 	if (events->eventw == events->eventr) {
+-		int ret;
++		struct wait_queue_entry wait;
++		int ret = 0;
  
- 	cc = buf[3] & 0x0f;
- 	ccok = ((feed->cc + 1) & 0x0f) == cc;
--	feed->cc = cc;
+ 		if (flags & O_NONBLOCK)
+ 			return -EWOULDBLOCK;
  
- 	if (buf[3] & 0x20) {
- 		/* adaption field present, check for discontinuity_indicator */
-@@ -346,6 +345,7 @@ static int dvb_dmx_swfilter_section_packet(struct dvb_demux_feed *feed,
- 		feed->pusi_seen = false;
- 		dvb_dmx_swfilter_section_new(feed);
+-		ret = wait_event_interruptible(events->wait_queue,
+-					       dvb_frontend_test_event(fepriv, events));
+-
++		init_waitqueue_entry(&wait, current);
++		add_wait_queue(&events->wait_queue, &wait);
++		while (!dvb_frontend_test_event(fepriv, events)) {
++			wait_woken(&wait, TASK_INTERRUPTIBLE, 0);
++			if (signal_pending(current)) {
++				ret = -ERESTARTSYS;
++				break;
++			}
++		}
++		remove_wait_queue(&events->wait_queue, &wait);
+ 		if (ret < 0)
+ 			return ret;
  	}
-+	feed->cc = cc;
- 
- 	if (buf[1] & 0x40) {
- 		/* PUSI=1 (is set), section boundary is here */
 -- 
 2.39.2
 
