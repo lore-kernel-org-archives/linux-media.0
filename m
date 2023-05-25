@@ -2,49 +2,49 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D441C7EE2F
-	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 09:17:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25BA0C7EE2E
+	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 09:17:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240627AbjEYJRp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 May 2023 05:17:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52570 "EHLO
+        id S240630AbjEYJRq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 May 2023 05:17:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240596AbjEYJRe (ORCPT
+        with ESMTP id S240631AbjEYJRf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 May 2023 05:17:34 -0400
+        Thu, 25 May 2023 05:17:35 -0400
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6705A1B0
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9DB31B1
         for <linux-media@vger.kernel.org>; Thu, 25 May 2023 02:17:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1685006252; x=1716542252;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=5PTeweLPTRd1sCvqIsPZ3AJXQB1XQ71FsPOHa6uUk6Y=;
-  b=SE80HRlKU/ybokGtHCne7gQrAh8FU92Ng0xgdqXCoTocTJl5/y/ULOR7
-   wFkpeKP4S7MikXExyoZBhW8CQL77wOJsOOwQjrrLSoOSclHG/aVCaW3RS
-   IeqjqLst8EsPTBb2f/Ls55KQ+4DH2jMgoS4ZzPJyL+kBN6fsIxHDtWhNc
-   W3ay1GN/Cr13L/IEHfaB308FXkbctnynxzT0MIVkkoTlZszdUOgCeinBf
-   Bj5pubGXoBZ9Pzx5QmfeNdnmYSx5TXF5p++qcJgR6OXSfbOWN1ZJjLMTo
-   Rln5U8FmVgqLp8BubB60fHJMHfF6/EDhHxn2Dw+se9tDf213IUao/rrVj
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="333456119"
+  bh=5rW8DK32Hyv8FwdY9xWNQn2lY3oKeRhHTHoKPj3mXUI=;
+  b=n0Nz9pQsKVrqtpyOQlF+m3R7jy3nzbh85DfnPN5g9Bjl8rHfTUnEUI5/
+   zC/dO3LxauTj4P2SeChO7soFcAyndyZU4gCCX0JOnI5U/3hxoNSy4Rm4a
+   v5KlcyadYV7RaL7s7LiApSLzN3PurJUTUYvj0F1iy3ao/kH9QGazqHYy0
+   qzhBX4YY4alhz5GRBTyz6WCJgN9zlcorPhWzcPDYlNzn6+QiyylQb1IwR
+   mPA0adVrKGvTL6/i/MeWB3bh7yDoA3rR8Ta83v1iESqYrnRSdJVryCOYj
+   2c9BOdR/93Fmr5sZVS7iUQTy7uLkDNOGdBYrlcYDDVBv59YjyGwUDSy6k
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="333456108"
 X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
-   d="scan'208";a="333456119"
+   d="scan'208";a="333456108"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
   by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 02:17:19 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="879029161"
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="879029156"
 X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
-   d="scan'208";a="879029161"
+   d="scan'208";a="879029156"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
   by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 02:17:11 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id B2413123012;
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id A0376123002;
         Thu, 25 May 2023 12:16:49 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.94.2)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1q2758-009kpx-Ir; Thu, 25 May 2023 12:16:26 +0300
+        id 1q2758-009kpn-GA; Thu, 25 May 2023 12:16:26 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com,
@@ -75,9 +75,9 @@ Cc:     laurent.pinchart@ideasonboard.com,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Sowjanya Komatineni <skomatineni@nvidia.com>,
         Marco Felsch <m.felsch@pengutronix.de>
-Subject: [RESEND PATCH v3 26/32] media: am437x-vpfe: Register V4L2 device early
-Date:   Thu, 25 May 2023 12:16:09 +0300
-Message-Id: <20230525091615.2324824-27-sakari.ailus@linux.intel.com>
+Subject: [RESEND PATCH v3 23/32] media: pxa_camera: Fix probe error handling
+Date:   Thu, 25 May 2023 12:16:06 +0300
+Message-Id: <20230525091615.2324824-24-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230525091615.2324824-1-sakari.ailus@linux.intel.com>
 References: <20230525091615.2324824-1-sakari.ailus@linux.intel.com>
@@ -87,98 +87,112 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Register V4L2 device before the async notifier so the struct device will
-be available for the notifier which makes it possible to use it for debug
-prints.
+Fix and simplify error handling in pxa_camera probe, by moving devm_*()
+functions early in the probe function and then tearing down what was set
+up on error patch.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- .../media/platform/ti/am437x/am437x-vpfe.c    | 27 +++++++++----------
- 1 file changed, 13 insertions(+), 14 deletions(-)
+ drivers/media/platform/intel/pxa_camera.c | 48 ++++++++++++-----------
+ 1 file changed, 25 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/media/platform/ti/am437x/am437x-vpfe.c b/drivers/media/platform/ti/am437x/am437x-vpfe.c
-index a1e01ef5ebddb..1457a188fea12 100644
---- a/drivers/media/platform/ti/am437x/am437x-vpfe.c
-+++ b/drivers/media/platform/ti/am437x/am437x-vpfe.c
-@@ -2403,10 +2403,17 @@ static int vpfe_probe(struct platform_device *pdev)
+diff --git a/drivers/media/platform/intel/pxa_camera.c b/drivers/media/platform/intel/pxa_camera.c
+index f0d316d5fe27c..dad5e8d97683e 100644
+--- a/drivers/media/platform/intel/pxa_camera.c
++++ b/drivers/media/platform/intel/pxa_camera.c
+@@ -2289,6 +2289,24 @@ static int pxa_camera_probe(struct platform_device *pdev)
+ 	if (IS_ERR(pcdev->clk))
+ 		return PTR_ERR(pcdev->clk);
  
- 	vpfe->pdev = &pdev->dev;
- 
-+	ret = v4l2_device_register(&pdev->dev, &vpfe->v4l2_dev);
-+	if (ret) {
-+		vpfe_err(vpfe, "Unable to register v4l2 device.\n");
-+		return ret;
++	/*
++	 * Request the regions.
++	 */
++	base = devm_ioremap_resource(&pdev->dev, res);
++	if (IS_ERR(base))
++		return PTR_ERR(base);
++
++	pcdev->irq = irq;
++	pcdev->base = base;
++
++	/* request irq */
++	err = devm_request_irq(&pdev->dev, pcdev->irq, pxa_camera_irq, 0,
++			       PXA_CAM_DRV_NAME, pcdev);
++	if (err) {
++		dev_err(&pdev->dev, "Camera interrupt register failed\n");
++		return err;
 +	}
 +
- 	vpfe_cfg = vpfe_get_pdata(vpfe);
- 	if (!vpfe_cfg) {
- 		dev_err(&pdev->dev, "No platform data\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto probe_out_cleanup;
+ 	v4l2_async_nf_init(&pcdev->notifier);
+ 	pcdev->res = res;
+ 	pcdev->pdata = pdev->dev.platform_data;
+@@ -2338,21 +2356,12 @@ static int pxa_camera_probe(struct platform_device *pdev)
+ 	spin_lock_init(&pcdev->lock);
+ 	mutex_init(&pcdev->mlock);
+ 
+-	/*
+-	 * Request the regions.
+-	 */
+-	base = devm_ioremap_resource(&pdev->dev, res);
+-	if (IS_ERR(base))
+-		return PTR_ERR(base);
+-
+-	pcdev->irq = irq;
+-	pcdev->base = base;
+-
+ 	/* request dma */
+ 	pcdev->dma_chans[0] = dma_request_chan(&pdev->dev, "CI_Y");
+ 	if (IS_ERR(pcdev->dma_chans[0])) {
+ 		dev_err(&pdev->dev, "Can't request DMA for Y\n");
+-		return PTR_ERR(pcdev->dma_chans[0]);
++		err = PTR_ERR(pcdev->dma_chans[0]);
++		goto exit_notifier_cleanup;
  	}
  
- 	vpfe->cfg = vpfe_cfg;
-@@ -2433,13 +2440,6 @@ static int vpfe_probe(struct platform_device *pdev)
- 		goto probe_out_cleanup;
+ 	pcdev->dma_chans[1] = dma_request_chan(&pdev->dev, "CI_U");
+@@ -2379,14 +2388,6 @@ static int pxa_camera_probe(struct platform_device *pdev)
+ 		}
  	}
  
--	ret = v4l2_device_register(&pdev->dev, &vpfe->v4l2_dev);
--	if (ret) {
--		vpfe_err(vpfe,
--			"Unable to register v4l2 device.\n");
--		goto probe_out_cleanup;
+-	/* request irq */
+-	err = devm_request_irq(&pdev->dev, pcdev->irq, pxa_camera_irq, 0,
+-			       PXA_CAM_DRV_NAME, pcdev);
+-	if (err) {
+-		dev_err(&pdev->dev, "Camera interrupt register failed\n");
+-		goto exit_free_dma;
 -	}
 -
- 	/* set the driver data in platform device */
- 	platform_set_drvdata(pdev, vpfe);
- 	/* Enabling module functional clock */
-@@ -2449,7 +2449,7 @@ static int vpfe_probe(struct platform_device *pdev)
- 	ret = pm_runtime_resume_and_get(&pdev->dev);
- 	if (ret < 0) {
- 		vpfe_err(vpfe, "Unable to resume device.\n");
--		goto probe_out_v4l2_unregister;
-+		goto probe_out_cleanup;
- 	}
+ 	tasklet_setup(&pcdev->task_eof, pxa_camera_eof);
  
- 	vpfe_ccdc_config_defaults(ccdc);
-@@ -2462,7 +2462,7 @@ static int vpfe_probe(struct platform_device *pdev)
- 				GFP_KERNEL);
- 	if (!vpfe->sd) {
- 		ret = -ENOMEM;
--		goto probe_out_v4l2_unregister;
-+		goto probe_out_cleanup;
- 	}
+ 	pxa_camera_activate(pcdev);
+@@ -2398,16 +2399,15 @@ static int pxa_camera_probe(struct platform_device *pdev)
  
- 	vpfe->notifier.ops = &vpfe_async_ops;
-@@ -2470,15 +2470,14 @@ static int vpfe_probe(struct platform_device *pdev)
- 	if (ret) {
- 		vpfe_err(vpfe, "Error registering async notifier\n");
- 		ret = -EINVAL;
--		goto probe_out_v4l2_unregister;
-+		goto probe_out_cleanup;
- 	}
+ 	err = pxa_camera_init_videobuf2(pcdev);
+ 	if (err)
+-		goto exit_notifier_cleanup;
++		goto exit_v4l2_device_unregister;
+ 
+ 	pcdev->notifier.ops = &pxa_camera_sensor_ops;
+ 	err = v4l2_async_nf_register(&pcdev->v4l2_dev, &pcdev->notifier);
+ 	if (err)
+-		goto exit_notifier_cleanup;
++		goto exit_v4l2_device_unregister;
  
  	return 0;
- 
--probe_out_v4l2_unregister:
--	v4l2_device_unregister(&vpfe->v4l2_dev);
- probe_out_cleanup:
- 	v4l2_async_nf_cleanup(&vpfe->notifier);
-+	v4l2_device_unregister(&vpfe->v4l2_dev);
- 	return ret;
+-exit_notifier_cleanup:
+-	v4l2_async_nf_cleanup(&pcdev->notifier);
++exit_v4l2_device_unregister:
+ 	v4l2_device_unregister(&pcdev->v4l2_dev);
+ exit_deactivate:
+ 	pxa_camera_deactivate(pcdev);
+@@ -2418,6 +2418,8 @@ static int pxa_camera_probe(struct platform_device *pdev)
+ 	dma_release_channel(pcdev->dma_chans[1]);
+ exit_free_dma_y:
+ 	dma_release_channel(pcdev->dma_chans[0]);
++exit_notifier_cleanup:
++	v4l2_async_nf_cleanup(&pcdev->notifier);
+ 	return err;
  }
  
-@@ -2493,8 +2492,8 @@ static void vpfe_remove(struct platform_device *pdev)
- 
- 	v4l2_async_nf_unregister(&vpfe->notifier);
- 	v4l2_async_nf_cleanup(&vpfe->notifier);
--	v4l2_device_unregister(&vpfe->v4l2_dev);
- 	video_unregister_device(&vpfe->video_dev);
-+	v4l2_device_unregister(&vpfe->v4l2_dev);
- }
- 
- #ifdef CONFIG_PM_SLEEP
 -- 
 2.30.2
 
