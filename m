@@ -2,118 +2,85 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58E78C7EE29
-	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 19:56:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98A37C77B7E
+	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 20:10:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234662AbjEYT43 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 May 2023 15:56:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45184 "EHLO
+        id S233225AbjEYUKr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 May 2023 16:10:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjEYT42 (ORCPT
+        with ESMTP id S236434AbjEYUKo (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 May 2023 15:56:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73BE0122
-        for <linux-media@vger.kernel.org>; Thu, 25 May 2023 12:55:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685044533;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zVbOTVecVYKoMsVv2+y0oYPZF/OrujTxGhEgP9zW7aA=;
-        b=ArbhV6jLD6XLROgplFLFapNM1oJyS+T9Yiuje9ayN6n0qs77paJnZtMcklydEivSGabw93
-        wkcrrzood85+8Takb2Qi3QdLyZ6oXZ//B4NcpIwLy4m7+KDEqsUr9AwxOrfwT4XuSOr7aW
-        X3qmVgdrlOxu2QkMLdtdM7hwMziETWM=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-377-6oKWMzKWMkuooHE65TK2dw-1; Thu, 25 May 2023 14:40:49 -0400
-X-MC-Unique: 6oKWMzKWMkuooHE65TK2dw-1
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-94a341efd9aso117168466b.0
-        for <linux-media@vger.kernel.org>; Thu, 25 May 2023 11:40:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685040048; x=1687632048;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zVbOTVecVYKoMsVv2+y0oYPZF/OrujTxGhEgP9zW7aA=;
-        b=GuBQvUAI381Aub0uwjApB736w78BSgHQKPWUOSHob5SEAzHx5II4O86LDuNlCcDNCg
-         QtAtfz8X6I6UVNRy4n+wctOdt47GiUvPiT6QMjw2D0UaPb7SMsYlQ5kp7eLNTfxFf9mF
-         0rMtVklN/ubOLQheiPoVP4vvKsFVVBeV4Vm8IR7mMPwDZ4DCRhYmmtiyy1im1mOUaQ3j
-         s6S25NoeV4qotCkjqB85yCYJseK3+igr7oXfXFZTEavW1PDJyYqXOin/Sg+qbq3J5eBg
-         1cRDzHp1eBkye0XNnEYQbEZ60vm5vuneRNPEntcWKAx4zzyv6hVUpW9Y+ioGOd9AE0go
-         9b/w==
-X-Gm-Message-State: AC+VfDy08MMSchDuZfldM7rT61ztx1aiqvcAmzRuzPKF0+40qCF/ZMJi
-        Tql2tzOSUN/Q7K5tAVkul42pyd/a/zGLMzY0itdBX13ScDfEKc7KHQAWjEWxNuBjXAg/MDE5zXV
-        gX9MBQrDgoJWQ1FNa/QQW6qqRr2a+GbY=
-X-Received: by 2002:a17:906:ef07:b0:966:53b1:b32a with SMTP id f7-20020a170906ef0700b0096653b1b32amr2355225ejs.53.1685040047916;
-        Thu, 25 May 2023 11:40:47 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5gkK/wTpTJ3CVYRrJpQFJ0ucU91Y1Vree4XMrNsOdAkcUDQCXMwAlLH7RrdlcrGgrHVbpTJA==
-X-Received: by 2002:a17:906:ef07:b0:966:53b1:b32a with SMTP id f7-20020a170906ef0700b0096653b1b32amr2355211ejs.53.1685040047581;
-        Thu, 25 May 2023 11:40:47 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id n11-20020a170906378b00b0096b4ec45e10sm1149605ejc.139.2023.05.25.11.40.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 May 2023 11:40:42 -0700 (PDT)
-Message-ID: <745f5335-b849-52da-f3e2-52cb1f4d1bd6@redhat.com>
-Date:   Thu, 25 May 2023 20:40:42 +0200
+        Thu, 25 May 2023 16:10:44 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8AA5A9;
+        Thu, 25 May 2023 13:10:41 -0700 (PDT)
+Received: from whitebuilder.lan (unknown [IPv6:2606:6d00:17:6c0::c73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nicolas)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 895DD6606E80;
+        Thu, 25 May 2023 21:10:39 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1685045440;
+        bh=6K4oxHbB+nTrEz4B2HipTaW/E968gqdNKKQAyz2Otu0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nAlC6QgjmICFfhX8wFdFN2nqipwwE6YqwZ+OdbIskGL+4q50twU8bR69/IR4tvPMU
+         ctJdRSvy1GlOQFlrIr3eZxKlhvxeDi/RIirl+2YqWF0Y+ffweYtOTQai2RXyqm3Vie
+         50H4Ys55RXrgycTupLgFiFv90k1pny7w1XpSfwlrbCJFneg7kwj+QBivUpA3iyX+hU
+         VhAgHKO0hesk2O/UcPkaxCOta5HkKUdKdFL4hi7RnG0mmAdt8suOc0vbu/cjnWM61y
+         tztHLJj5uPapQQhh7PdJZByBc5lTFrNWfyvCCJ++tR4Y9tHpWK9TF6uxMzhQOoM229
+         3Wjq1602lkubQ==
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Ming Qian <ming.qian@nxp.com>, Shijie Qin <shijie.qin@nxp.com>,
+        Zhou Peng <eagle.zhou@nxp.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     kernel@collabora.com,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1] media: amphion: Fix firmware path to match linux-firmware
+Date:   Thu, 25 May 2023 16:10:15 -0400
+Message-Id: <20230525201015.503063-1-nicolas.dufresne@collabora.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 3/3] platform/x86: int3472: Add ov13b10 (09B13) sensor
- module support
-To:     bingbu.cao@intel.com, djrscally@gmail.com,
-        dan.scally@ideasonboard.com, hao.yao@intel.com
-Cc:     markgross@kernel.org, linux-media@vger.kernel.org,
-        sakari.ailus@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        bingbu.cao@linux.intel.com
-References: <20230524035135.90315-1-bingbu.cao@intel.com>
- <20230524035135.90315-3-bingbu.cao@intel.com>
-Content-Language: en-US, nl
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230524035135.90315-3-bingbu.cao@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi all,
+The path did not match the one it was submitted into linux-firmware
+which prevented generic distribution from having working CODEC.
 
-On 5/24/23 05:51, bingbu.cao@intel.com wrote:
-> From: Hao Yao <hao.yao@intel.com>
-> 
-> Add a new sensor support in INT3472 driver which module name is '09B13'.
-> 
-> Signed-off-by: Hao Yao <hao.yao@intel.com>
-> Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
-> ---
->  drivers/platform/x86/intel/int3472/discrete.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/platform/x86/intel/int3472/discrete.c b/drivers/platform/x86/intel/int3472/discrete.c
-> index d5d5c650d6d2..63acb48bf8df 100644
-> --- a/drivers/platform/x86/intel/int3472/discrete.c
-> +++ b/drivers/platform/x86/intel/int3472/discrete.c
-> @@ -60,6 +60,8 @@ static const struct int3472_sensor_config int3472_sensor_configs[] = {
->  	{ "GEFF150023R", REGULATOR_SUPPLY("avdd", NULL), NULL },
->  	/* Surface Go 1&2 - OV5693, Front */
->  	{ "YHCU", REGULATOR_SUPPLY("avdd", NULL), NULL },
-> +	/* OV13B10 */
-> +	{ "09B13", REGULATOR_SUPPLY("vcc", NULL), NULL },
+Fixes: 9f599f351e86 ("media: amphion: add vpu core driver")
+Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+---
+ drivers/media/platform/amphion/vpu_core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-"vcc" is not really a useful supply name. All the existing sensor drivers in drivers/media/i2c typically check for both "avdd" and "dvdd". Can you verify if this is supplying digital or analog power using the schematics of the laptop ?
-
-And then use one of the standard "avdd" or "dvdd" supply names ?
-
-I would like to try and get rid of this table and sofar all the sensors which have a regulator GPIO are listed as sing it for "avdd" so I was hoping to be able to just always use "avdd".
-
-At least I would like us to come up with some default fallback for the supply-name in case a sensor-module is not listed in this table and "avdd" seems to be the best fallback.
-
-Note that if your current sensor driver expects "vcc" that that is not a good reason to go with "vcc" here. It would be better to adjust the sensor driver to use the standard "avdd" and "dvdd" supply names (using the bulk regulator api), like all the other sensor drivers do.
-
-Regards,
-
-Hans
+diff --git a/drivers/media/platform/amphion/vpu_core.c b/drivers/media/platform/amphion/vpu_core.c
+index de23627a119a0..82bf8b3be66a2 100644
+--- a/drivers/media/platform/amphion/vpu_core.c
++++ b/drivers/media/platform/amphion/vpu_core.c
+@@ -826,7 +826,7 @@ static const struct dev_pm_ops vpu_core_pm_ops = {
+ 
+ static struct vpu_core_resources imx8q_enc = {
+ 	.type = VPU_CORE_TYPE_ENC,
+-	.fwname = "vpu/vpu_fw_imx8_enc.bin",
++	.fwname = "amphion/vpu/vpu_fw_imx8_enc.bin",
+ 	.stride = 16,
+ 	.max_width = 1920,
+ 	.max_height = 1920,
+@@ -841,7 +841,7 @@ static struct vpu_core_resources imx8q_enc = {
+ 
+ static struct vpu_core_resources imx8q_dec = {
+ 	.type = VPU_CORE_TYPE_DEC,
+-	.fwname = "vpu/vpu_fw_imx8_dec.bin",
++	.fwname = "amphion/vpu/vpu_fw_imx8_dec.bin",
+ 	.stride = 256,
+ 	.max_width = 8188,
+ 	.max_height = 8188,
+-- 
+2.40.1
 
