@@ -2,48 +2,48 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9DEBC7EE29
-	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:52:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3243C7EE29
+	for <linux-media@archiver.kernel.org>; Thu, 25 May 2023 18:52:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242756AbjEYSwN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 May 2023 14:52:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39384 "EHLO
+        id S242868AbjEYSwQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 May 2023 14:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243628AbjEYSvX (ORCPT
+        with ESMTP id S243014AbjEYStv (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 May 2023 14:51:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46EC61995;
-        Thu, 25 May 2023 11:44:50 -0700 (PDT)
+        Thu, 25 May 2023 14:49:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96341720;
+        Thu, 25 May 2023 11:43:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5261C60F7A;
-        Thu, 25 May 2023 18:43:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB057C4339E;
-        Thu, 25 May 2023 18:43:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3415960B51;
+        Thu, 25 May 2023 18:41:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF52DC433D2;
+        Thu, 25 May 2023 18:41:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685040185;
-        bh=JfbjucYZxZeoARKGFRNMP0CfCebVUgXqlZwJHeDw1Wc=;
+        s=k20201202; t=1685040101;
+        bh=vbktacNvzMxmaMmPXfXNjFE5Pft/4vAe4J/2Z+imNbc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mKlVU5StsQbiCQqykJKlW8D6McoYtU/82oIowjbmWg6fKJxyL2dMj3KI5yxI94Ep3
-         0aq6Tsdpagiasxbfjysd/M5vFsi83mpJWzNaIPM14BAdFft5fOoo2cHdPg2HPTyFIR
-         OsYuKIPnSwvqI0Doa6X+016xVxi0LCasmKEV/lj0kTIWIkfHnuv2+VaPfVO3f7meme
-         Sf6hNkMHT4eh3oA+U4coXx6Szw7+p67rbCTCduLT60Z2Pv3unqNz/tnpxBWumCGRIl
-         KnROmeppGcK0UTlNDdlzg0Qml0MnAHnOAYFXQmKWFQjOH011sp70b6UL4/Dm36EM17
-         GjcodNYdrsnWA==
+        b=ZFJfv0EoU8P3a70Jyp6HSubEh3QntrPXxA6LrvaFc40vLcmbZ2lgAEai3IWfnWjAH
+         UdkDlh9FFqybstuXAfh+G+CP7ERF2UIlvuyLViScl/ZyMioBIa2B8qOwhukasUR2LD
+         hdsvvkv/7+H5LNRki6qtcY4pTe+Q0t7DZSrYaE4vwYaolBJP/FHamIDojLs/f6NK/b
+         R7EOnz+QLAdpr86nRPNhfI+HbVxp02XIUG3SzD2zhbeHb5wxhv5XE8CoIi8BOX5ACz
+         rb4VnJn0UI1Nwh2WWHWmGSWVkLiJMb9cfuHKKDrbNR7rgrWEYpqRyfEgwNLs9Nqh9t
+         lhISIdl9f1V/Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Wei Chen <harperchen1110@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>, serjk@netup.ru,
         aospan@netup.ru, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 11/27] media: netup_unidvb: fix irq init by register it at the end of probe
-Date:   Thu, 25 May 2023 14:42:20 -0400
-Message-Id: <20230525184238.1943072-11-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 13/31] media: netup_unidvb: fix irq init by register it at the end of probe
+Date:   Thu, 25 May 2023 14:40:44 -0400
+Message-Id: <20230525184105.1909399-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230525184238.1943072-1-sashal@kernel.org>
-References: <20230525184238.1943072-1-sashal@kernel.org>
+In-Reply-To: <20230525184105.1909399-1-sashal@kernel.org>
+References: <20230525184105.1909399-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -73,7 +73,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 9 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/media/pci/netup_unidvb/netup_unidvb_core.c b/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
-index eb5621c9ebf85..58035b5c41c4e 100644
+index 77bae14685513..3fa1d178e70fd 100644
 --- a/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
 +++ b/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
 @@ -887,12 +887,7 @@ static int netup_unidvb_initdev(struct pci_dev *pci_dev,
