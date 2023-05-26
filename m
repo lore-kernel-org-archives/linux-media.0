@@ -2,93 +2,116 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 272E2C7EE23
-	for <linux-media@archiver.kernel.org>; Fri, 26 May 2023 12:05:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5905C77B73
+	for <linux-media@archiver.kernel.org>; Fri, 26 May 2023 12:39:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243295AbjEZMFT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 May 2023 08:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48176 "EHLO
+        id S237087AbjEZMjE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 May 2023 08:39:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242864AbjEZMFN (ORCPT
+        with ESMTP id S230178AbjEZMjD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 May 2023 08:05:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D66E4F;
-        Fri, 26 May 2023 05:05:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D53B61527;
-        Fri, 26 May 2023 12:05:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F23CC433D2;
-        Fri, 26 May 2023 12:04:55 +0000 (UTC)
-Message-ID: <bdee7988-3551-4011-f93e-c4dd1e4ee76b@xs4all.nl>
-Date:   Fri, 26 May 2023 14:04:53 +0200
+        Fri, 26 May 2023 08:39:03 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56EBE9E
+        for <linux-media@vger.kernel.org>; Fri, 26 May 2023 05:39:02 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-510b4e488e4so1132793a12.3
+        for <linux-media@vger.kernel.org>; Fri, 26 May 2023 05:39:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685104741; x=1687696741;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=GoudHZlMmHOBkEuNNFzfbcFKzOUP+KGL9yOg3jQ33XA=;
+        b=VDPK7zIXvlBIp9VbOXmsumdf0LBhvA1OtsmZcaDVTpbMGdCAUi5H+jwnMgAMenuK4R
+         ApZjAeyDcvL+0vom0AZkrHYq2uDmAwmMO/gV3LbEbJ9b542Bs9xXEVN24f6Ssckn0JDx
+         3KPnj9DEyI2OnOABY+iMjfQCemdgAhYipASfqQd1c/zNhxlkdKnQi36O4HkPIFHEvsqz
+         mgRNbDzKP8MeglPI90vEC93IQb5PcAwpUGt/sKOMJj27sFPiHoENW6o92NezueOhQ9bQ
+         sSDu9AazW/K8XbQ3CnKAiQ1JfUYCRbalz9R9racNEzxTWKEy+WbtF7yYmO4Re26vhass
+         RO4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685104741; x=1687696741;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GoudHZlMmHOBkEuNNFzfbcFKzOUP+KGL9yOg3jQ33XA=;
+        b=YIgvjKycYSoJpC5rNPcYbiUzxJU3udSUyF3WBV0bGiUznXgIrUPk3dQWyrTtGa9lCJ
+         b6NspusBL7zI2CIarXlNwFzBAAsCg9cvB18VaNTPXlR6joYq9p+8MJBjxGWklG8SVuan
+         q6gZbQLG5OMi57ekor0vYfzqN1cBb/wTmqY22q0r9G1w4P3O8nh45jOHsbAms07cZON2
+         1S7JSoi4rrzyJxYbJCk9S0gagXHe2AItllvKIxPilN/UZuJbJY79Wh4DYjCfueydvFUm
+         UxhSts7FaUwZmwiW4gL6DLDumtsz/csOuu+JVQ+JQZPaL6IFQpvYuOfenea2dl9M+wWb
+         Gd3Q==
+X-Gm-Message-State: AC+VfDxI3QmRVjR17b+2acI9HPETFrgnSXL/zxgcs24B6vd9xtn7ZDI9
+        uDIlGqVlAjWa0/QCz6+9tU1fg7vS83U+6w==
+X-Google-Smtp-Source: ACHHUZ5UsPwp1ni4OwuOKfoxhrMwJn+s1T8G22O1bjX7F5cEW7vbnnffj5SWpsQOIuM9mBnIS2+V1A==
+X-Received: by 2002:aa7:d9cc:0:b0:509:c6e6:c002 with SMTP id v12-20020aa7d9cc000000b00509c6e6c002mr933703eds.39.1685104740604;
+        Fri, 26 May 2023 05:39:00 -0700 (PDT)
+Received: from tom-HP-ZBook-Fury-15-G7-Mobile-Workstation (net-188-217-50-121.cust.vodafonedsl.it. [188.217.50.121])
+        by smtp.gmail.com with ESMTPSA id u8-20020a05640207c800b0050a276e7ba8sm1499706edy.36.2023.05.26.05.38.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 05:39:00 -0700 (PDT)
+Date:   Fri, 26 May 2023 14:38:58 +0200
+From:   Tommaso Merciai <tomm.merciai@gmail.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Martin Hecht <martin.hecht@avnet.eu>,
+        Michael Roeder <michael.roeder@avnet.eu>
+Subject: Re: [ANN] Media Summit June 26th: Please let me know if you will
+ attend
+Message-ID: <ZHCoYqlctSsqSUHE@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+References: <aec8b9e1-25d4-d0bc-63b6-68ff06e06683@xs4all.nl>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [v10] media: mediatek: vcodec: support stateless AV1 decoder
-To:     Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-Cc:     George Sun <george.sun@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20230414083020.22219-1-xiaoyong.lu@mediatek.com>
-Content-Language: en-US
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20230414083020.22219-1-xiaoyong.lu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <aec8b9e1-25d4-d0bc-63b6-68ff06e06683@xs4all.nl>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 14/04/2023 10:30, Xiaoyong Lu wrote:
-> Add mediatek av1 decoder linux driver which use the stateless API in
-> MT8195.
+Hello Hans,
+
+On Mon, May 15, 2023 at 04:34:20PM +0200, Hans Verkuil wrote:
+> Hi all,
 > 
-> Signed-off-by: Xiaoyong Lu<xiaoyong.lu@mediatek.com>
-> Tested-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> We organized a Media Summit on Monday June 26th in Prague. It is held
+> at the Holiday Inn close by the conference centre where the Embedded
+> Open Source Summit is held (1).
+> 
+> Holiday Inn Prague Congress Centre - Meeting room "E"
+> Na Pankr�ci 1684/ 15, 140 00 Praha 4-Nusle
+> https://www.ihg.com/holidayinn/hotels/us/en/prague/prgnp/hoteldetail
+> 
+> We have room for about 20 people, so let me know if you plan to attend
+> in person. That way we know how many people we'll get.
 
-After rebasing on top of our media staging tree I get these compile errors:
+Thanks for your effort on support/create this event.
 
-  CC [M]  drivers/media/platform/mediatek/vcodec/vdec/vdec_av1_req_lat_if.o
-drivers/media/platform/mediatek/vcodec/vdec/vdec_av1_req_lat_if.c: In function ‘vdec_av1_slice_lat_decode’:
-drivers/media/platform/mediatek/vcodec/vdec/vdec_av1_req_lat_if.c:2075:46: error: ‘struct mtk_vcodec_dev’ has no member named ‘msg_queue_core_ctx’
- 2075 |                 vdec_msg_queue_qbuf(&ctx->dev->msg_queue_core_ctx, lat_buf);
-      |                                              ^~
-drivers/media/platform/mediatek/vcodec/vdec/vdec_av1_req_lat_if.c:2114:46: error: ‘struct mtk_vcodec_dev’ has no member named ‘msg_queue_core_ctx’
- 2114 |                 vdec_msg_queue_qbuf(&ctx->dev->msg_queue_core_ctx, lat_buf);
-      |                                              ^~
+I don't have particular topics. I would like to attend in person too, if possible.
+In real we are me and other 2 guys that are in cc (Martin Hecht and Michael Roeder).
 
-That's due to the patch "media: mediatek: vcodec: move core context from device
-to each instance" that has now been merged and that drops that queue.
-
-Can you rebase v10? This is now the only remaining blocked for the av1 series
-to be merged.
+Let me know if can be possible for us to partecipate at this event.
+Many thanks! :)
 
 Regards,
+Tommaso
 
-	Hans
+> 
+> Regarding remote participation: only if there is really no other way.
+> Meeting face-to-face once a year is important IMHO, and attending remotely
+> is a poor substitute. That said, if it is really necessary to set something
+> up, then I can do the same I did in Dublin, setting up a Webex meeting.
+> That worked reasonably well, except that I will need to bring a better
+> speaker since I learned that the laptop speaker was pretty bad.
+> 
+> If you do want to participate remotely, please let me know as well.
+> 
+> I'll post a separate email with the draft Agenda for the media summit.
+> 
+> Hope to see you all in Prague!
+> 
+> Regards,
+> 
+> 	Hans
+> 
+> (1) https://events.linuxfoundation.org/embedded-open-source-summit/
