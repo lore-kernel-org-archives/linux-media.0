@@ -2,157 +2,316 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E132C7EE23
-	for <linux-media@archiver.kernel.org>; Fri, 26 May 2023 10:06:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A30E1C7EE2D
+	for <linux-media@archiver.kernel.org>; Fri, 26 May 2023 10:18:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbjEZKGh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 May 2023 06:06:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55296 "EHLO
+        id S236577AbjEZKS1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 May 2023 06:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbjEZKGg (ORCPT
+        with ESMTP id S230248AbjEZKSZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 May 2023 06:06:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 647119E
-        for <linux-media@vger.kernel.org>; Fri, 26 May 2023 03:06:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E8AF064ED9
-        for <linux-media@vger.kernel.org>; Fri, 26 May 2023 10:06:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4A35C433EF;
-        Fri, 26 May 2023 10:06:33 +0000 (UTC)
-Message-ID: <a1e0324d-9409-52e4-96e7-577e8e987aa5@xs4all.nl>
-Date:   Fri, 26 May 2023 12:06:31 +0200
+        Fri, 26 May 2023 06:18:25 -0400
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id D0689DF;
+        Fri, 26 May 2023 03:18:21 -0700 (PDT)
+Received: from [172.30.38.103] (unknown [180.167.10.98])
+        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id CBC5B1801278C3;
+        Fri, 26 May 2023 18:18:09 +0800 (CST)
+Message-ID: <5f2f2e0e-506d-8527-dd8f-2ec6da4601a6@nfschina.com>
+Date:   Fri, 26 May 2023 18:18:09 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 13/13] media: bttv: convert to vb2
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] drm: Remove unnecessary (void*) conversions
 Content-Language: en-US
-To:     Deborah Brouwer <deborah.brouwer@collabora.com>
-Cc:     linux-media@vger.kernel.org
-References: <cover.1682995256.git.deborah.brouwer@collabora.com>
- <b9c14229f95f8100a2fb17f4991163b513ad8691.1682995256.git.deborah.brouwer@collabora.com>
- <3286f56e-012b-44bd-b3dd-9b91a24d1a8c@xs4all.nl> <ZGJAa/0Y1u9gAuoV@db550>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <ZGJAa/0Y1u9gAuoV@db550>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>, Xinhui.Pan@amd.com,
+        airlied@gmail.com, daniel@ffwll.ch, evan.quan@amd.com,
+        l.stach@pengutronix.de, linux+etnaviv@armlinux.org.uk,
+        christian.gmeiner@gmail.com, bskeggs@redhat.com,
+        kherbst@redhat.com, lyude@redhat.com, tomba@kernel.org,
+        emma@anholt.net, airlied@redhat.com, kraxel@redhat.com,
+        abrodkin@synopsys.com, ray.huang@amd.com,
+        gurchetansingh@chromium.org, olvaffe@gmail.com, zackr@vmware.com,
+        linux-graphics-maintainer@vmware.com, sumit.semwal@linaro.org
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, etnaviv@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org,
+        spice-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, kernel-janitors@vger.kernel.org
+X-MD-Sfrom: suhui@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From:   Su Hui <suhui@nfschina.com>
+In-Reply-To: <5b5c7b06-ef99-d275-3693-b2e3d114cac9@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Deb,
+On 2023/5/26 15:27, Christian König wrote:
+> Am 26.05.23 um 05:32 schrieb Su Hui:
+>> Pointer variables of (void*) type do not require type cast.
+>
+> Please split that up by subsystem/driver. Taking it through the misc 
+> tree might just cause merge conflicts.
+>
+Sorry for that, I will split it and send again.
+Thanks for your reply!
 
-On 15/05/2023 16:59, Deborah Brouwer wrote:
-> On Thu, May 11, 2023 at 05:29:14PM +0200, Hans Verkuil wrote:
->> Hi Deb,
+Su Hui
+
+> Christian.
+>
 >>
->> When testing this I was wondering why the sequence counter didn't detect dropped
->> frames (which happens when you start/stop a vbi stream while streaming video).
+>> Signed-off-by: Su Hui <suhui@nfschina.com>
+>> ---
+>>   drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c | 2 +-
+>>   drivers/gpu/drm/amd/pm/amdgpu_pm.c                        | 2 +-
+>>   drivers/gpu/drm/etnaviv/etnaviv_drv.c                     | 4 ++--
+>>   drivers/gpu/drm/nouveau/nouveau_debugfs.c                 | 2 +-
+>>   drivers/gpu/drm/omapdrm/omap_debugfs.c                    | 6 +++---
+>>   drivers/gpu/drm/pl111/pl111_debugfs.c                     | 2 +-
+>>   drivers/gpu/drm/qxl/qxl_debugfs.c                         | 4 ++--
+>>   drivers/gpu/drm/tiny/arcpgu.c                             | 2 +-
+>>   drivers/gpu/drm/ttm/ttm_resource.c                        | 3 +--
+>>   drivers/gpu/drm/virtio/virtgpu_debugfs.c                  | 6 +++---
+>>   drivers/gpu/drm/vmwgfx/ttm_object.c                       | 5 ++---
+>>   drivers/gpu/drm/vmwgfx/vmwgfx_gem.c                       | 2 +-
+>>   12 files changed, 19 insertions(+), 21 deletions(-)
 >>
->> On 02/05/2023 05:27, Deborah Brouwer wrote:
->>> -static void bttv_field_count(struct bttv *btv)
->>> -{
->>> -	int need_count = 0;
->>> -
->>> -	if (btv->users)
->>> -		need_count++;
->>> -
->>> -	if (need_count) {
->>> -		/* start field counter */
->>> -		btor(BT848_INT_VSYNC,BT848_INT_MASK);
->>> -	} else {
->>> -		/* stop field counter */
->>> -		btand(~BT848_INT_VSYNC,BT848_INT_MASK);
->>> -		btv->field_count = 0;
->>> -	}
->>> -}
->>
->> This is the root cause: this function is used to turn on VSYNC interrupts
->> and in the interrupt handler the field_count is incremented.
->>
->> In the vb1 version of this driver this field_count is passed on to vb1, which
->> uses it to set the sequence counter to field_count / 2.
->>
->> By removing this function the VSYNC irq is never enabled and so field_count is
->> always 0. So I think in bttv the seqnr field should be dropped and the field_count
->> mechanism re-instated.
->>
->> Comparing the number of dropped frames when starting/stopping vbi it looks like
->> in both cases (vb1 and vb2) one frame is dropped when starting vbi. But when
->> stopping vbi no frames are dropped in the vb1 case, but 3 in the vb2 case.
-> 
-> Ok, I used btv->field_count >> 1 to set the sequence numbers and I added VSYNC to
-> the interrupt mask when start_streaming() is called. I can see the dropped video frames
-> in v4l2-ctl when vbi starts and stops (or vice versa), but I am not sure if this means
-> that we are actually dropping any valid, captured pixels.
-> 
-> The internal FIELD change signal (even/odd) that is picked up by VSYNC seems to run
-> independently from capturing. For example, out of curiosity, I added VSYNC to the
-> interrupt mask at probe, and it starts to increment field_count (and so the sequence
-> numbers) immediately and continuously even though capture isn't enabled.
-
-How exactly it is triggered, I'm not sure myself (I never dug deep enough into the
-technical details), but remember that this is analog video, and it behaves quite
-differently from modern video interfaces. Just think of the way old TVs worked: even
-though there is no valid signal, you still get a picture (snow).
-
-> So I am wondering if field_count is a totally reliable way to assign sequence numbers
-> to the buffers. For example, using field_count, the buffer sequence numbers start with
-> 3 instead of 0 in both vb1 and vb2 (sometimes it starts at 2 in vb2).
-> Maybe the reason for this is that the field signal (even/odd) continues to be sent while
-> the captured pixels are being input into the chip's FIFO buffer. The FIFO buffer is
-> preparing the pixels for output by adding the timing/control
-> information but hasn't yet made them available to be picked up by the DMA controller for
-> output to memory. So, there is a disconnect, when streaming starts, between field_count
-> (which keeps incrementing) and the actual availability of pixels.
-> 
-> Maybe there is a similar disconnect happening when vbi starts or stops. Instead of actually
-> dropping pixels what we really have is just a delay in the RISC program that has to cycle
-> through its instructions. vb2 has made this a bit worse when streaming stops because we wait
-> for all the buffers to finish. I will investigate more if there is an easy way to fix this in vb2
-> without changing the RISC program.
-
-You can clearly see based on the timestamps that bttv really drops frames. That
-corresponds with the field count that's based on the VSYNC.
-
-An alternative to using the VSYNC would be to just use the timestamps and detect
-if frames have been dropped.
-
-> 
->>
->> Another thing I discovered is that for PAL the vcr_hack control has to be enabled,
->> otherwise the video is full of glitches. This was present before your series, and
->> happens even with a video signal from a proper PAL video generator, so this is really
->> strange. I can't remember that I needed this in the past, but it has been years
->> since I last tested it.
->>
->> PAL capture is fine for Top/Bottom/Alternate settings, it only fails for Interlaced
->> and Sequential Top/Bottom capture modes.
-> 
-> Interesting to know that this happened in your tests also.
-> Obviously the easy solution would be just to enable the vcr_hack by default.
-> It removes the last four scan lines and so prevents the risc program
-> counter from getting stuck at a buffer memory address (which definitely
-> causes dropped frames) instead of returning to the main risc program address.
-
-Dropping 4 lines is really too much. A single line was sufficient to make it work
-again for PAL, but it's just weird behavior.
-
-Unfortunately, I won't have time to dig deeper into this and since it is not
-something that this series introduced, I don't think it is important enough to
-work on this, at least for now.
-
-Regards,
-
-	Hans
-
-> 
->>
->> When I have more time I will dig into this a bit more.
->>
->> Regards,
->>
->> 	Hans
-
+>> diff --git 
+>> a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c 
+>> b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c
+>> index 827fcb4fb3b3..8a2c39927167 100644
+>> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c
+>> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c
+>> @@ -3312,7 +3312,7 @@ static ssize_t dtn_log_write(
+>>     static int mst_topo_show(struct seq_file *m, void *unused)
+>>   {
+>> -    struct amdgpu_device *adev = (struct amdgpu_device *)m->private;
+>> +    struct amdgpu_device *adev = m->private;
+>>       struct drm_device *dev = adev_to_drm(adev);
+>>       struct drm_connector *connector;
+>>       struct drm_connector_list_iter conn_iter;
+>> diff --git a/drivers/gpu/drm/amd/pm/amdgpu_pm.c 
+>> b/drivers/gpu/drm/amd/pm/amdgpu_pm.c
+>> index 58c2246918fd..e6c870bd307b 100644
+>> --- a/drivers/gpu/drm/amd/pm/amdgpu_pm.c
+>> +++ b/drivers/gpu/drm/amd/pm/amdgpu_pm.c
+>> @@ -3671,7 +3671,7 @@ static void amdgpu_parse_cg_state(struct 
+>> seq_file *m, u64 flags)
+>>     static int amdgpu_debugfs_pm_info_show(struct seq_file *m, void 
+>> *unused)
+>>   {
+>> -    struct amdgpu_device *adev = (struct amdgpu_device *)m->private;
+>> +    struct amdgpu_device *adev = m->private;
+>>       struct drm_device *dev = adev_to_drm(adev);
+>>       u64 flags = 0;
+>>       int r;
+>> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.c 
+>> b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+>> index 31a7f59ccb49..dd57f7164e9a 100644
+>> --- a/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+>> +++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+>> @@ -198,7 +198,7 @@ static int etnaviv_ring_show(struct etnaviv_gpu 
+>> *gpu, struct seq_file *m)
+>>     static int show_unlocked(struct seq_file *m, void *arg)
+>>   {
+>> -    struct drm_info_node *node = (struct drm_info_node *) m->private;
+>> +    struct drm_info_node *node = m->private;
+>>       struct drm_device *dev = node->minor->dev;
+>>       int (*show)(struct drm_device *dev, struct seq_file *m) =
+>>               node->info_ent->data;
+>> @@ -208,7 +208,7 @@ static int show_unlocked(struct seq_file *m, void 
+>> *arg)
+>>     static int show_each_gpu(struct seq_file *m, void *arg)
+>>   {
+>> -    struct drm_info_node *node = (struct drm_info_node *) m->private;
+>> +    struct drm_info_node *node = m->private;
+>>       struct drm_device *dev = node->minor->dev;
+>>       struct etnaviv_drm_private *priv = dev->dev_private;
+>>       struct etnaviv_gpu *gpu;
+>> diff --git a/drivers/gpu/drm/nouveau/nouveau_debugfs.c 
+>> b/drivers/gpu/drm/nouveau/nouveau_debugfs.c
+>> index 2a36d1ca8fda..96b59d5d68ed 100644
+>> --- a/drivers/gpu/drm/nouveau/nouveau_debugfs.c
+>> +++ b/drivers/gpu/drm/nouveau/nouveau_debugfs.c
+>> @@ -37,7 +37,7 @@
+>>   static int
+>>   nouveau_debugfs_vbios_image(struct seq_file *m, void *data)
+>>   {
+>> -    struct drm_info_node *node = (struct drm_info_node *) m->private;
+>> +    struct drm_info_node *node = m->private;
+>>       struct nouveau_drm *drm = nouveau_drm(node->minor->dev);
+>>       int i;
+>>   diff --git a/drivers/gpu/drm/omapdrm/omap_debugfs.c 
+>> b/drivers/gpu/drm/omapdrm/omap_debugfs.c
+>> index a3d470468e5b..a94ce502e152 100644
+>> --- a/drivers/gpu/drm/omapdrm/omap_debugfs.c
+>> +++ b/drivers/gpu/drm/omapdrm/omap_debugfs.c
+>> @@ -19,7 +19,7 @@
+>>     static int gem_show(struct seq_file *m, void *arg)
+>>   {
+>> -    struct drm_info_node *node = (struct drm_info_node *) m->private;
+>> +    struct drm_info_node *node = m->private;
+>>       struct drm_device *dev = node->minor->dev;
+>>       struct omap_drm_private *priv = dev->dev_private;
+>>   @@ -33,7 +33,7 @@ static int gem_show(struct seq_file *m, void *arg)
+>>     static int mm_show(struct seq_file *m, void *arg)
+>>   {
+>> -    struct drm_info_node *node = (struct drm_info_node *) m->private;
+>> +    struct drm_info_node *node = m->private;
+>>       struct drm_device *dev = node->minor->dev;
+>>       struct drm_printer p = drm_seq_file_printer(m);
+>>   @@ -45,7 +45,7 @@ static int mm_show(struct seq_file *m, void *arg)
+>>   #ifdef CONFIG_DRM_FBDEV_EMULATION
+>>   static int fb_show(struct seq_file *m, void *arg)
+>>   {
+>> -    struct drm_info_node *node = (struct drm_info_node *) m->private;
+>> +    struct drm_info_node *node = m->private;
+>>       struct drm_device *dev = node->minor->dev;
+>>       struct drm_fb_helper *helper = dev->fb_helper;
+>>       struct drm_framebuffer *fb;
+>> diff --git a/drivers/gpu/drm/pl111/pl111_debugfs.c 
+>> b/drivers/gpu/drm/pl111/pl111_debugfs.c
+>> index 6744fa16f464..4df03ec5d368 100644
+>> --- a/drivers/gpu/drm/pl111/pl111_debugfs.c
+>> +++ b/drivers/gpu/drm/pl111/pl111_debugfs.c
+>> @@ -32,7 +32,7 @@ static const struct {
+>>     static int pl111_debugfs_regs(struct seq_file *m, void *unused)
+>>   {
+>> -    struct drm_info_node *node = (struct drm_info_node *)m->private;
+>> +    struct drm_info_node *node = m->private;
+>>       struct drm_device *dev = node->minor->dev;
+>>       struct pl111_drm_dev_private *priv = dev->dev_private;
+>>       int i;
+>> diff --git a/drivers/gpu/drm/qxl/qxl_debugfs.c 
+>> b/drivers/gpu/drm/qxl/qxl_debugfs.c
+>> index 2d9ed3b94574..5b4fe3049529 100644
+>> --- a/drivers/gpu/drm/qxl/qxl_debugfs.c
+>> +++ b/drivers/gpu/drm/qxl/qxl_debugfs.c
+>> @@ -38,7 +38,7 @@
+>>   static int
+>>   qxl_debugfs_irq_received(struct seq_file *m, void *data)
+>>   {
+>> -    struct drm_info_node *node = (struct drm_info_node *) m->private;
+>> +    struct drm_info_node *node = m->private;
+>>       struct qxl_device *qdev = to_qxl(node->minor->dev);
+>>         seq_printf(m, "%d\n", atomic_read(&qdev->irq_received));
+>> @@ -52,7 +52,7 @@ qxl_debugfs_irq_received(struct seq_file *m, void 
+>> *data)
+>>   static int
+>>   qxl_debugfs_buffers_info(struct seq_file *m, void *data)
+>>   {
+>> -    struct drm_info_node *node = (struct drm_info_node *) m->private;
+>> +    struct drm_info_node *node = m->private;
+>>       struct qxl_device *qdev = to_qxl(node->minor->dev);
+>>       struct qxl_bo *bo;
+>>   diff --git a/drivers/gpu/drm/tiny/arcpgu.c 
+>> b/drivers/gpu/drm/tiny/arcpgu.c
+>> index e5b10e41554a..09f728355aba 100644
+>> --- a/drivers/gpu/drm/tiny/arcpgu.c
+>> +++ b/drivers/gpu/drm/tiny/arcpgu.c
+>> @@ -338,7 +338,7 @@ static int arcpgu_unload(struct drm_device *drm)
+>>   #ifdef CONFIG_DEBUG_FS
+>>   static int arcpgu_show_pxlclock(struct seq_file *m, void *arg)
+>>   {
+>> -    struct drm_info_node *node = (struct drm_info_node *)m->private;
+>> +    struct drm_info_node *node = m->private;
+>>       struct drm_device *drm = node->minor->dev;
+>>       struct arcpgu_drm_private *arcpgu = dev_to_arcpgu(drm);
+>>       unsigned long clkrate = clk_get_rate(arcpgu->clk);
+>> diff --git a/drivers/gpu/drm/ttm/ttm_resource.c 
+>> b/drivers/gpu/drm/ttm/ttm_resource.c
+>> index 7333f7a87a2f..540faabcf8a4 100644
+>> --- a/drivers/gpu/drm/ttm/ttm_resource.c
+>> +++ b/drivers/gpu/drm/ttm/ttm_resource.c
+>> @@ -727,9 +727,8 @@ ttm_kmap_iter_linear_io_fini(struct 
+>> ttm_kmap_iter_linear_io *iter_io,
+>>     static int ttm_resource_manager_show(struct seq_file *m, void 
+>> *unused)
+>>   {
+>> -    struct ttm_resource_manager *man =
+>> -        (struct ttm_resource_manager *)m->private;
+>>       struct drm_printer p = drm_seq_file_printer(m);
+>> +    struct ttm_resource_manager *man = m->private;
+>>       ttm_resource_manager_debug(man, &p);
+>>       return 0;
+>>   }
+>> diff --git a/drivers/gpu/drm/virtio/virtgpu_debugfs.c 
+>> b/drivers/gpu/drm/virtio/virtgpu_debugfs.c
+>> index 853dd9aa397e..577691af9707 100644
+>> --- a/drivers/gpu/drm/virtio/virtgpu_debugfs.c
+>> +++ b/drivers/gpu/drm/virtio/virtgpu_debugfs.c
+>> @@ -43,7 +43,7 @@ static void virtio_gpu_add_int(struct seq_file *m, 
+>> const char *name, int value)
+>>     static int virtio_gpu_features(struct seq_file *m, void *data)
+>>   {
+>> -    struct drm_info_node *node = (struct drm_info_node *)m->private;
+>> +    struct drm_info_node *node = m->private;
+>>       struct virtio_gpu_device *vgdev = node->minor->dev->dev_private;
+>>         virtio_gpu_add_bool(m, "virgl", vgdev->has_virgl_3d);
+>> @@ -68,7 +68,7 @@ static int virtio_gpu_features(struct seq_file *m, 
+>> void *data)
+>>   static int
+>>   virtio_gpu_debugfs_irq_info(struct seq_file *m, void *data)
+>>   {
+>> -    struct drm_info_node *node = (struct drm_info_node *) m->private;
+>> +    struct drm_info_node *node = m->private;
+>>       struct virtio_gpu_device *vgdev = node->minor->dev->dev_private;
+>>         seq_printf(m, "fence %llu %lld\n",
+>> @@ -80,7 +80,7 @@ virtio_gpu_debugfs_irq_info(struct seq_file *m, 
+>> void *data)
+>>   static int
+>>   virtio_gpu_debugfs_host_visible_mm(struct seq_file *m, void *data)
+>>   {
+>> -    struct drm_info_node *node = (struct drm_info_node *)m->private;
+>> +    struct drm_info_node *node = m->private;
+>>       struct virtio_gpu_device *vgdev = node->minor->dev->dev_private;
+>>       struct drm_printer p;
+>>   diff --git a/drivers/gpu/drm/vmwgfx/ttm_object.c 
+>> b/drivers/gpu/drm/vmwgfx/ttm_object.c
+>> index ddf8373c1d77..e9e3cc8f5b49 100644
+>> --- a/drivers/gpu/drm/vmwgfx/ttm_object.c
+>> +++ b/drivers/gpu/drm/vmwgfx/ttm_object.c
+>> @@ -513,8 +513,7 @@ static void ttm_prime_refcount_release(struct 
+>> ttm_base_object **p_base)
+>>    */
+>>   static void ttm_prime_dmabuf_release(struct dma_buf *dma_buf)
+>>   {
+>> -    struct ttm_prime_object *prime =
+>> -        (struct ttm_prime_object *) dma_buf->priv;
+>> +    struct ttm_prime_object *prime = dma_buf->priv;
+>>       struct ttm_base_object *base = &prime->base;
+>>       struct ttm_object_device *tdev = base->tfile->tdev;
+>>   @@ -554,7 +553,7 @@ int ttm_prime_fd_to_handle(struct 
+>> ttm_object_file *tfile,
+>>       if (dma_buf->ops != &tdev->ops)
+>>           return -ENOSYS;
+>>   -    prime = (struct ttm_prime_object *) dma_buf->priv;
+>> +    prime = dma_buf->priv;
+>>       base = &prime->base;
+>>       *handle = base->handle;
+>>       ret = ttm_ref_object_add(tfile, base, NULL, false);
+>> diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_gem.c 
+>> b/drivers/gpu/drm/vmwgfx/vmwgfx_gem.c
+>> index c0da89e16e6f..3267a4e61382 100644
+>> --- a/drivers/gpu/drm/vmwgfx/vmwgfx_gem.c
+>> +++ b/drivers/gpu/drm/vmwgfx/vmwgfx_gem.c
+>> @@ -220,7 +220,7 @@ static void vmw_bo_print_info(int id, struct 
+>> vmw_bo *bo, struct seq_file *m)
+>>     static int vmw_debugfs_gem_info_show(struct seq_file *m, void 
+>> *unused)
+>>   {
+>> -    struct vmw_private *vdev = (struct vmw_private *)m->private;
+>> +    struct vmw_private *vdev = m->private;
+>>       struct drm_device *dev = &vdev->drm;
+>>       struct drm_file *file;
+>>       int r;
+>
