@@ -2,136 +2,92 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC430C7EE23
-	for <linux-media@archiver.kernel.org>; Sat, 27 May 2023 06:05:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82862C77B73
+	for <linux-media@archiver.kernel.org>; Sat, 27 May 2023 07:55:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231545AbjE0GFd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 27 May 2023 02:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49124 "EHLO
+        id S231975AbjE0Hyr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 27 May 2023 03:54:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjE0GFc (ORCPT
+        with ESMTP id S230133AbjE0Hyp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 27 May 2023 02:05:32 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C795F7;
-        Fri, 26 May 2023 23:05:31 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-5147e40bbbbso1764559a12.3;
-        Fri, 26 May 2023 23:05:31 -0700 (PDT)
+        Sat, 27 May 2023 03:54:45 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73ADDBB;
+        Sat, 27 May 2023 00:54:44 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-64f1f133c37so343487b3a.0;
+        Sat, 27 May 2023 00:54:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685167530; x=1687759530;
-        h=mime-version:references:in-reply-to:message-id:cc:to:subject:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=weCO8x8l3Juw6l9mP/1dLNluMB62SRUfdduhPwPRwKs=;
-        b=SdQmwYWzkmMO8AWb1haTnxZndg0YJcUN+JsS6L5Et4rBcxZTYTTmE1si7S4ZjsqlBU
-         JBleZ9gZ3TzzhZUvcgzCQRvWrRmFPyLEWobb1DFPoSPEhZxKQ7X5jFpdKKvTzOBntcgP
-         g85zpyd/56hc4UGJ8o1JPmMHzAqyPNmQ2eOwqEoysDSP6tszcGKRLG35xvyK4XV3h6Vp
-         qVfX1pdd7DVl/bmrjBC6gaa6Yil5lrG42ESJPMUayZe4lyQZ2RxAsL0FjZALJdLiUlAB
-         xCURYMMqEqU8EEyQ9ylzllLJ+0hPL9qntJu1SBQqwXTTtmNDz8g3DDC8bMp/Tw4CKbfP
-         V6pQ==
+        d=gmail.com; s=20221208; t=1685174084; x=1687766084;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ps1IF/L3y0LuIXv1kuyXMXVV1V92IKkA4nkdR1TZzsU=;
+        b=J1k3fPaQZMPaMfdKrnm1zm7gzhHU3qdmAEgC4wn/zWlP5HZ6JqC5OlOYRpBy+aPcQg
+         yUhoygdEbaP/d6l50zsX+P2x/nCpG+WCQ3vo2jEYDG6kXl3wiY3GZCZeW+KK7JfJUpXb
+         vglxbKZsZSapWDZ6FUSrA82OzrEKw49uNha6r3OrW2h+wK+WUgqPh8mybzRX0ER05svx
+         YYA6tu4labf09OfctbtGzSUoFMvh+n05rb5TndVmhR89vfRWC7USJ3BZBiHfKfvK5I6A
+         uDJ1Kg6CpMzxNxSyjL2LyjV+88Akn+4O1hOLrEvQDDmCoLXemg9Gg6AS8g50KFwbTkEl
+         6+Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685167530; x=1687759530;
-        h=mime-version:references:in-reply-to:message-id:cc:to:subject:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=weCO8x8l3Juw6l9mP/1dLNluMB62SRUfdduhPwPRwKs=;
-        b=hy+IHeNXUEwdLm5uAsM53q7TuYGVE7o0DQf6WtGK0iMY222JDFd9OtmXLLnWZjoCa5
-         LQDRQcY8O4oBy5pQVJ9ecoKoM3Tbt9MTAU8SC8k/5oIeHslBYKwJcsNnvph9doJJWmqA
-         lPdjY34H90XIQPYJN+lW2yiqtgIlsLbSkv2Y/OAkAmRV2yhLZ7jv8DppVw4UkffqFtnC
-         KH4Yj1aruXVFGSv9edXohBupVbLSubkqmEugIdTtAcRy6/bdLfr7KtNFtTitz9kprQuS
-         XSl4sb1moVu9N8TFpvBR0Q614rRqVDsZ9SopNQvBFZ7Awov+84II7cuUH4fsR5pd8ijv
-         TwWg==
-X-Gm-Message-State: AC+VfDx61vAtILfLk+YTwespGP1VCdcx4S7oyGypMxxMh2LSd6Fw5sMq
-        9eCaPA5fb/eKn5IC+/6LInE=
-X-Google-Smtp-Source: ACHHUZ7it/5Dzo6q+LTuAj4VcpeoTRV3nU7vfiGOmmq8/KbZZDZFVtTL/4vpN5p4NGF3N5RoEXfn/Q==
-X-Received: by 2002:a17:906:fd8d:b0:96f:4927:7a96 with SMTP id xa13-20020a170906fd8d00b0096f49277a96mr3475603ejb.70.1685167529890;
-        Fri, 26 May 2023 23:05:29 -0700 (PDT)
-Received: from [192.168.94.52] ([95.183.227.33])
-        by smtp.gmail.com with ESMTPSA id e16-20020a170906c01000b00973ca837a68sm1648361ejz.217.2023.05.26.23.05.26
+        d=1e100.net; s=20221208; t=1685174084; x=1687766084;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ps1IF/L3y0LuIXv1kuyXMXVV1V92IKkA4nkdR1TZzsU=;
+        b=MdtLaB7Exo9P2dk5ePZu+ThbHhs0/u5nPxdYjtyWJ+Btl9CQOsPmTZ6x0Nr6gBAIAu
+         sQAsOI21RtiCtVjWXlDjm0eNkI6lk88lCjk8qMHHiR6Sg+SQRi6BUQ62OSFuMUef7TBc
+         AoZdSDoTHuQqenT0NM4xIwzU+pSWojfjWYh3inN+36sdDVfTERVKKkCxgpsQLF3xRKcg
+         m24lQsWUzQnFe5uz4ra8gxV+Rt2G8u3EEwOE/70QCAtgSrH+L6MYMMvqzx56Gzc7zlfM
+         OxKMPnYS56Fgia9Dq4kbThK4KZbXW39tUh7eTldM1WcB+n+Mhde3hGhqiH8nH3CgUkOM
+         GKyw==
+X-Gm-Message-State: AC+VfDxoLp5zjGxMeY+qXF7gaG4UyH2ALrr0ekzTpFDb/mahK055WP8C
+        fhaBI15Wc5q931vaucjb++I=
+X-Google-Smtp-Source: ACHHUZ5Wl/x2AX2Bqkt5RQGo8lzJHVe2CTWpN35HVupnCmsS+crSB8FjThb8CWMDAlUiyAzTHgUY6Q==
+X-Received: by 2002:a05:6a00:349b:b0:64d:41f1:7c87 with SMTP id cp27-20020a056a00349b00b0064d41f17c87mr5793226pfb.2.1685174083809;
+        Sat, 27 May 2023 00:54:43 -0700 (PDT)
+Received: from ubuntu.localdomain ([103.114.158.1])
+        by smtp.gmail.com with ESMTPSA id v7-20020a63d547000000b0053f22b76cdcsm3770567pgi.82.2023.05.27.00.54.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 23:05:29 -0700 (PDT)
-Date:   Sat, 27 May 2023 09:05:19 +0300
-From:   Yassine Oudjana <yassine.oudjana@gmail.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: media: camss: qcom,msm8996-camss: Add
- CAMSS power domain
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hans Verkuil <hansverk@cisco.com>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <VKZAVR.M3FJVE7XKKY71@gmail.com>
-In-Reply-To: <631e5eec-853b-dce2-c474-62e76e83d7e6@linaro.org>
-References: <20230526180712.8481-1-y.oudjana@protonmail.com>
-        <20230526180712.8481-2-y.oudjana@protonmail.com>
-        <20230526-obstruct-venus-5833511a58af@spud>
-        <838b134d-46cb-6237-49b0-0c287141ebb3@linaro.org>
-        <20230526-street-pox-2ff5ee106c43@spud>
-        <8d89c14f-b2c2-7db2-f637-aa6d90273f4d@linaro.org>
-        <631e5eec-853b-dce2-c474-62e76e83d7e6@linaro.org>
-X-Mailer: geary/43.0
+        Sat, 27 May 2023 00:54:43 -0700 (PDT)
+From:   Min Li <lm0963hack@gmail.com>
+To:     alexander.deucher@amd.com
+Cc:     christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+        daniel@ffwll.ch, sumit.semwal@linaro.org,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org
+Subject: [PATCH] drm/radeon: fix race condition UAF in radeon_gem_set_domain_ioctl
+Date:   Fri, 26 May 2023 20:37:53 +0800
+Message-Id: <20230526123753.16160-1-lm0963hack@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Userspace can race to free the gobj(robj converted from), robj should not
+be accessed again after drm_gem_object_put, otherwith it will result in
+use-after-free.
 
-On Fri, May 26 2023 at 10:36:32 PM +02:00:00, Konrad Dybcio 
-<konrad.dybcio@linaro.org> wrote:
-> 
-> 
-> On 26.05.2023 22:21, Bryan O'Donoghue wrote:
->>  On 26/05/2023 21:19, Conor Dooley wrote:
->>>  On Fri, May 26, 2023 at 09:05:47PM +0100, Bryan O'Donoghue wrote:
->>>>  On 26/05/2023 20:46, Conor Dooley wrote:
->>>>>>  +  - power-domain-names
->>>>>  Why is this now required?
->>>>> 
->>>>>  Thanks,
->>>>>  Conor.
->>>>> 
->>>> 
->>>>  Its an accurate description of the power/clock tree to have the 
->>>> top power
->>>>  domain be switched on prior to the clocks that depend on it.
->>> 
->>>  But what does that have to do with the *names* now being required?
->> 
->>  oh the names
->> 
->>  no toss that
-> this should be
-> 
-> if:properties:compatible:blahblahmsm8996:then:required:power-domain-names
+Signed-off-by: Min Li <lm0963hack@gmail.com>
+---
+ drivers/gpu/drm/radeon/radeon_gem.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The only compatible in this binding is qcom,msm8996-camss, so what 
-would this achieve?
-
-> 
-> Konrad
->> 
->>> 
->>>>  I think Yassine, you could probably include the majority of your
->>>>  cover-letter text in this commit to explain this change a bit 
->>>> better.
->>> 
->>>  I think it would be good to have that regardless.
->>> 
->>>  Cheers,
->>>  Conor.
->>> 
->>>>  bod
->>>     ^^^ I've been trying not to think about rugby since the weekend 
->>> :(
->> 
->>  Pockets O'Gara should have his paddy papers rescinded
-
+diff --git a/drivers/gpu/drm/radeon/radeon_gem.c b/drivers/gpu/drm/radeon/radeon_gem.c
+index bdc5af23f005..450c7cbdd28a 100644
+--- a/drivers/gpu/drm/radeon/radeon_gem.c
++++ b/drivers/gpu/drm/radeon/radeon_gem.c
+@@ -478,7 +478,7 @@ int radeon_gem_set_domain_ioctl(struct drm_device *dev, void *data,
+ 
+ 	drm_gem_object_put(gobj);
+ 	up_read(&rdev->exclusive_lock);
+-	r = radeon_gem_handle_lockup(robj->rdev, r);
++	r = radeon_gem_handle_lockup(rdev, r);
+ 	return r;
+ }
+ 
+-- 
+2.34.1
 
