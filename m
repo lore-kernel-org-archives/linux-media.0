@@ -2,48 +2,40 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 800F9C7EE2E
-	for <linux-media@archiver.kernel.org>; Mon, 29 May 2023 22:05:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7B4AC7EE31
+	for <linux-media@archiver.kernel.org>; Mon, 29 May 2023 22:46:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbjE2WF4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 May 2023 18:05:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38306 "EHLO
+        id S230026AbjE2WqT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 May 2023 18:46:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjE2WFz (ORCPT
+        with ESMTP id S229830AbjE2WqS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 29 May 2023 18:05:55 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7DBADB;
-        Mon, 29 May 2023 15:05:53 -0700 (PDT)
-Received: from [192.168.2.2] (109-252-150-34.dynamic.spd-mgts.ru [109.252.150.34])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+        Mon, 29 May 2023 18:46:18 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48186D2;
+        Mon, 29 May 2023 15:46:11 -0700 (PDT)
+Received: from workpc.. (109-252-150-34.dynamic.spd-mgts.ru [109.252.150.34])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 26C94660217A;
-        Mon, 29 May 2023 23:05:50 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 414816605992;
+        Mon, 29 May 2023 23:46:08 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685397952;
-        bh=E8D9UsqcqdEvEaSPqwft+gP6ubYKoB1Svo0H0BTDyFA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=P6uFKmXC0TuQ4UYU9RsteNwepJOX/EuIwZ3L7kLP8gvVCzg0XXjllPHK/tLG5xcGx
-         VJDkSEKqLLRaaDkqDA2Hf3zPtNqI4QWffOKLx5/FByohz6tXFlgep4mKsnMP5uwn3J
-         ITdsL7oiuo7wEZNTU8EDVMvfsF+ONOzX1R+omxBBDun/jsdmTI3x84WaBr4jCTXgfr
-         tI6vDNXbD0B0JM8bMmC22PwJqZMhYPK/Q6UTa7HnDxLhfJH9ZyAYCFj8XL7I/p7eZ8
-         OMtQvEIhBWLr1Wmp8g1qFwPQodk8FA+dembDBoTf4wzxgIvxEG8mqJnTxmV0pQ8l/e
-         hmFRL6ZZZSLFg==
-Message-ID: <d813304a-cb9e-7e97-ebba-13b6126c6b9a@collabora.com>
-Date:   Tue, 30 May 2023 01:05:47 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 6/6] drm/shmem-helper: Switch to reservation lock
-Content-Language: en-US
-To:     Emil Velikov <emil.l.velikov@gmail.com>
-Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        s=mail; t=1685400369;
+        bh=ZiNxP0qBEhRDYC26fKFev4bnhE2oiLkLtrQkBgUqZF8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=fREDhA5LXqvtyL8w/hGgPvDdUlc+p/OAOYzNUvnBLtjyQukFROvCGPCjwxt2jHOM/
+         mhMqg/QmeSruSQy2p0SsRIMxofG27rQMR+hf7/cuXnuhKtghaHqUroMC7a5LKp2v5O
+         KjEN/jCNChB9iAYB8/qpjeyq6T3Tsmrv9Cj+EWb0AqViXPymh16TV+mYFW0zIWFift
+         4JgJXNy7fe0gebBUqpcl+NkoroUsvC7Iv1IMOM3COb9VcFMlScnVIn4nFrNkZ7l12M
+         gb4zv1ATRxitIeN1UVZAIQy2retzcnpQ5Js8Su6UlQD3CaBzbDbWt6Nw7QP48AMpua
+         6RYbeGg+ELQkg==
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Liam Mark <lmark@codeaurora.org>,
         Brian Starkey <Brian.Starkey@arm.com>,
         John Stultz <jstultz@google.com>,
         Gerd Hoffmann <kraxel@redhat.com>,
@@ -56,39 +48,104 @@ Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
         Tomasz Figa <tfiga@chromium.org>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Emil Velikov <emil.l.velikov@gmail.com>
+Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
         linux-tegra@vger.kernel.org, kernel@collabora.com
-References: <20230521205112.150206-1-dmitry.osipenko@collabora.com>
- <20230521205112.150206-7-dmitry.osipenko@collabora.com>
- <CACvgo52QvmZw5k_9dmBHPB25rTdLZJzVG_vNFr8or+3f5sVO=Q@mail.gmail.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <CACvgo52QvmZw5k_9dmBHPB25rTdLZJzVG_vNFr8or+3f5sVO=Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: [PATCH v4 1/6] media: videobuf2: Don't assert held reservation lock for dma-buf mmapping
+Date:   Tue, 30 May 2023 01:39:30 +0300
+Message-Id: <20230529223935.2672495-2-dmitry.osipenko@collabora.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230529223935.2672495-1-dmitry.osipenko@collabora.com>
+References: <20230529223935.2672495-1-dmitry.osipenko@collabora.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 5/22/23 16:02, Emil Velikov wrote:
->> -void drm_gem_shmem_put_pages(struct drm_gem_shmem_object *shmem)
->> +static int drm_gem_shmem_pin_locked(struct drm_gem_shmem_object *shmem)
->> +{
->> +       int ret;
->> +
->> +       dma_resv_assert_held(shmem->base.resv);
->> +
->> +       ret = drm_gem_shmem_get_pages(shmem);
->> +
->> +       return ret;
-> With the assert_held in the getter, it would be less confusing to
-> inline this and the unpin_locked functions.
+Don't assert held dma-buf reservation lock on memory mapping of exported
+buffer.
 
-Sorry, missed this comment earlier. The reason why it's a separate
-function is because there will be another caller once we'll add the
-drm-shrinker.
+We're going to change dma-buf mmap() locking policy such that exporters
+will have to handle the lock. The previous locking policy caused deadlock
+problem for DRM drivers in a case of self-imported dma-bufs once these
+drivers are moved to use reservation lock universally. The problem is
+solved by moving the lock down to exporters. This patch prepares videobuf2
+for the locking policy update.
 
+Reviewed-by: Emil Velikov <emil.l.velikov@gmail.com>
+Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+---
+ drivers/media/common/videobuf2/videobuf2-dma-contig.c | 3 ---
+ drivers/media/common/videobuf2/videobuf2-dma-sg.c     | 3 ---
+ drivers/media/common/videobuf2/videobuf2-vmalloc.c    | 3 ---
+ 3 files changed, 9 deletions(-)
+
+diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
+index 205d3cac425c..2fa455d4a048 100644
+--- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
++++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
+@@ -11,7 +11,6 @@
+  */
+ 
+ #include <linux/dma-buf.h>
+-#include <linux/dma-resv.h>
+ #include <linux/module.h>
+ #include <linux/refcount.h>
+ #include <linux/scatterlist.h>
+@@ -456,8 +455,6 @@ static int vb2_dc_dmabuf_ops_vmap(struct dma_buf *dbuf, struct iosys_map *map)
+ static int vb2_dc_dmabuf_ops_mmap(struct dma_buf *dbuf,
+ 	struct vm_area_struct *vma)
+ {
+-	dma_resv_assert_held(dbuf->resv);
+-
+ 	return vb2_dc_mmap(dbuf->priv, vma);
+ }
+ 
+diff --git a/drivers/media/common/videobuf2/videobuf2-dma-sg.c b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
+index 183037fb1273..28f3fdfe23a2 100644
+--- a/drivers/media/common/videobuf2/videobuf2-dma-sg.c
++++ b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
+@@ -10,7 +10,6 @@
+  * the Free Software Foundation.
+  */
+ 
+-#include <linux/dma-resv.h>
+ #include <linux/module.h>
+ #include <linux/mm.h>
+ #include <linux/refcount.h>
+@@ -498,8 +497,6 @@ static int vb2_dma_sg_dmabuf_ops_vmap(struct dma_buf *dbuf,
+ static int vb2_dma_sg_dmabuf_ops_mmap(struct dma_buf *dbuf,
+ 	struct vm_area_struct *vma)
+ {
+-	dma_resv_assert_held(dbuf->resv);
+-
+ 	return vb2_dma_sg_mmap(dbuf->priv, vma);
+ }
+ 
+diff --git a/drivers/media/common/videobuf2/videobuf2-vmalloc.c b/drivers/media/common/videobuf2/videobuf2-vmalloc.c
+index a6c6d2fcaaa4..7c635e292106 100644
+--- a/drivers/media/common/videobuf2/videobuf2-vmalloc.c
++++ b/drivers/media/common/videobuf2/videobuf2-vmalloc.c
+@@ -10,7 +10,6 @@
+  * the Free Software Foundation.
+  */
+ 
+-#include <linux/dma-resv.h>
+ #include <linux/io.h>
+ #include <linux/module.h>
+ #include <linux/mm.h>
+@@ -319,8 +318,6 @@ static int vb2_vmalloc_dmabuf_ops_vmap(struct dma_buf *dbuf,
+ static int vb2_vmalloc_dmabuf_ops_mmap(struct dma_buf *dbuf,
+ 	struct vm_area_struct *vma)
+ {
+-	dma_resv_assert_held(dbuf->resv);
+-
+ 	return vb2_vmalloc_mmap(dbuf->priv, vma);
+ }
+ 
 -- 
-Best regards,
-Dmitry
+2.40.1
 
