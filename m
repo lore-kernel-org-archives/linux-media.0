@@ -2,63 +2,63 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14B2DC77B7A
-	for <linux-media@archiver.kernel.org>; Tue, 30 May 2023 17:31:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38DA1C7EE31
+	for <linux-media@archiver.kernel.org>; Tue, 30 May 2023 17:31:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233508AbjE3RbH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 30 May 2023 13:31:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58822 "EHLO
+        id S233507AbjE3RbJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 30 May 2023 13:31:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbjE3RbB (ORCPT
+        with ESMTP id S233483AbjE3RbB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 30 May 2023 13:31:01 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE47013D
-        for <linux-media@vger.kernel.org>; Tue, 30 May 2023 10:30:44 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-30aeee7c8a0so42749f8f.1
-        for <linux-media@vger.kernel.org>; Tue, 30 May 2023 10:30:44 -0700 (PDT)
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6389C9C
+        for <linux-media@vger.kernel.org>; Tue, 30 May 2023 10:30:46 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-30ae967ef74so1909303f8f.0
+        for <linux-media@vger.kernel.org>; Tue, 30 May 2023 10:30:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google; t=1685467843; x=1688059843;
+        d=raspberrypi.com; s=google; t=1685467845; x=1688059845;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jbrlyIIVWtljdw9WJ85IvtoCQCr75FYCyMVLGQO5Tmc=;
-        b=CA0VBEoc9iIBzHXJRv4T+k/OL6i3wBgopcXzil+L2P8VpB3s0QjWHoj3gJlUnn2zfY
-         MRABR0lKl6stLocFEZ+aneDF+hR2zlE4wnZx/9/0EXijhvm8zTAfVrGJjSercDkQurmk
-         8zXW9mJjx6wEKMQBNsVwzedFlbFY0vEePWLDJR09RYvS/JnaqYw58x8vQ8JAlySRrpqi
-         aBKWB5S7h7yXLGF9bI7mnvg76dFzq5ELcr3RbyunOAOcZEEuxj8awsxjcEZvCA9jUaHs
-         sE5gfT/tIBldNYSqJ+w/Mbcv1ZyI5lYjLGJFoGYnCAO6g6Ha9/vL3KPkD7mgNflHAVpy
-         /8VQ==
+        bh=UdxllUf7XSE8wufKDBQEcR0WBJJ3JohUaq1pMuVJA4k=;
+        b=MLURZDEdQlK9LLDCDtXuLilnaCnp3X6ACo+gKLe1VQ6z2UU+j7mLla1lfX3j0ep0wo
+         SAEy12NX9WIhU/DDIzWiC9ixcp4woyMLhtLGlx8kFXPBryLU4j4zSAmlAMVyjcO9z101
+         aVrC/2aiOAOcKDa9dwq3oOHPw1lgCsSqTLyykodEAAcw32DWun+ntwZ0Pk0m0Z8vq9s3
+         7UD4sUOpNrZzQWl3Hgn+SVhjMWUZfnl4Ki87XCaAG7QcEVNUeenFymFhYYQ7Zrl38doV
+         N5ODZo67oqKqpJ/OS6/m6etDw3VDqfB4ZhgELlZL5MlXQfHfoIhml1B0dotdEQWjj/kx
+         HoYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685467843; x=1688059843;
+        d=1e100.net; s=20221208; t=1685467845; x=1688059845;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jbrlyIIVWtljdw9WJ85IvtoCQCr75FYCyMVLGQO5Tmc=;
-        b=lPcxtBEHEdqx877wKGdGGck2UN2ddVoxjGKFZZ14MylMTAjITUa5VIppeh+G6BemRq
-         AAFjxlkY9QXnq/Fxh4MzHmJiAy7mDsfWp4bSbQ8KIB53El71zZleaKfoEwmz+/Ml3Xlm
-         I31fkN8gZwS5pjKmdBOhQ8ALVyVRxBkmyhcoqW9MgMKBUP6lmNQIvMJBx1O1qeeszK+z
-         qSiuWdVVtMq8p1HhjOGWhUoihvm2ciYjnFSt8LNd6qRyu/U9oIa+uiIdiL5xnZoYZ3k4
-         S99AlqdLlMUDutmyp10SU8z/x5YnEGdNmtHyekzRyo9h96TleEWdh8txc7yxtIUMMfz2
-         uYRw==
-X-Gm-Message-State: AC+VfDwoWHBbDs4ff4KOrj5ObSqx8ybpuFomR4f+M4Uf6kW6Ewz1Hqe5
-        X2qfAhF4H0/S8jtRLfSNm8Hgsg==
-X-Google-Smtp-Source: ACHHUZ58ZZhVsCHcRerb4diHY/iL0doRdlIylB7Zl7T38eUt87QIs7tYNUSOBmSCHZnVQyQOthf1YQ==
-X-Received: by 2002:a5d:5957:0:b0:30a:ed4c:e17d with SMTP id e23-20020a5d5957000000b0030aed4ce17dmr4276888wri.5.1685467843361;
-        Tue, 30 May 2023 10:30:43 -0700 (PDT)
+        bh=UdxllUf7XSE8wufKDBQEcR0WBJJ3JohUaq1pMuVJA4k=;
+        b=RbclCGAeP5ZPVl3AlfJEv1DafkwOSEY6kFZsjIVTpPQidj0b5Y65e/K8EN9aZEfQ0m
+         40KduKgEZsrFBQ+vrt+vP0OQyyB5vqQ5BD03GgHXN3K4MNVbfXbwuOSxQ2HAox0cBWB8
+         Yi7wT3NZuNnCNvJ4LLVqlQhFLfewC7tBbngvWGQqU1VS/RM3C68ixbkxWX96mgwk5+3F
+         y3Tk5QN2JWe6utia2Y1iJGq5n8MSmoUB+JZhmWIojTOmC8QxVvoNumCePKPOo0twePk8
+         2gcDn9VNy1zKPH7hl+CFDGeRO3Tp+Usr58ynJ/fJPb3vCs5hp+iZ3K3f/wdEIiUyKzBz
+         OnwQ==
+X-Gm-Message-State: AC+VfDyoDiYUV0dQciDcKfKnDB2HhtrFZgTifyOm4T9OB3TfOF3s0odl
+        LwxGMqVrVPVC2CpybJoeDHAZWpCtvmTxGSyDoXc=
+X-Google-Smtp-Source: ACHHUZ5Z++0LqzBzqc+b0LusLAVGSGtYlS1+lsiiPVIgoqOh8u+bHjL6M1mhHU+8IWr7KIe+ZgsDVQ==
+X-Received: by 2002:adf:fe4d:0:b0:30a:d4e3:8a08 with SMTP id m13-20020adffe4d000000b0030ad4e38a08mr2055564wrs.71.1685467844992;
+        Tue, 30 May 2023 10:30:44 -0700 (PDT)
 Received: from dave-Ubuntu2204.pitowers.org ([93.93.133.154])
-        by smtp.googlemail.com with ESMTPSA id h14-20020a056000000e00b0030ae901bc54sm3964823wrx.62.2023.05.30.10.30.42
+        by smtp.googlemail.com with ESMTPSA id h14-20020a056000000e00b0030ae901bc54sm3964823wrx.62.2023.05.30.10.30.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 10:30:43 -0700 (PDT)
+        Tue, 30 May 2023 10:30:44 -0700 (PDT)
 From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         linux-media@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
 Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: [PATCH 12/21] media: i2c: imx258: Allow configuration of clock lane behaviour
-Date:   Tue, 30 May 2023 18:29:51 +0100
-Message-Id: <20230530173000.3060865-13-dave.stevenson@raspberrypi.com>
+Subject: [PATCH 14/21] media: i2c: imx258: Add support for long exposure modes
+Date:   Tue, 30 May 2023 18:29:53 +0100
+Message-Id: <20230530173000.3060865-15-dave.stevenson@raspberrypi.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230530173000.3060865-1-dave.stevenson@raspberrypi.com>
 References: <20230530173000.3060865-1-dave.stevenson@raspberrypi.com>
@@ -68,62 +68,102 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The sensor supports the clock lane either remaining in HS mode
-during frame blanking, or dropping to LP11.
+The sensor has a register CIT_LSHIFT which extends the exposure
+and frame times by the specified power of 2 for longer
+exposure times.
 
-Add configuration of the mode via V4L2_MBUS_CSI2_NONCONTINUOUS_CLOCK.
+Add support for this by configuring this register via V4L2_CID_VBLANK
+and extending the V4L2_CID_EXPOSURE range accordingly.
 
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 ---
- drivers/media/i2c/imx258.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ drivers/media/i2c/imx258.c | 38 ++++++++++++++++++++++++++++++++------
+ 1 file changed, 32 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
-index 1fa83fe82f27..b5c2dcb7c9e6 100644
+index f5199e3243e8..1e424058fcb9 100644
 --- a/drivers/media/i2c/imx258.c
 +++ b/drivers/media/i2c/imx258.c
-@@ -72,6 +72,8 @@
+@@ -69,6 +69,10 @@
+ #define IMX258_HDR_RATIO_STEP		1
+ #define IMX258_HDR_RATIO_DEFAULT	0x0
+ 
++/* Long exposure multiplier */
++#define IMX258_LONG_EXP_SHIFT_MAX	7
++#define IMX258_LONG_EXP_SHIFT_REG	0x3002
++
  /* Test Pattern Control */
  #define IMX258_REG_TEST_PATTERN		0x0600
  
-+#define IMX258_CLK_BLANK_STOP		0x4040
+@@ -629,6 +633,8 @@ struct imx258 {
+ 	struct v4l2_ctrl *vblank;
+ 	struct v4l2_ctrl *hblank;
+ 	struct v4l2_ctrl *exposure;
++	/* Current long exposure factor in use. Set through V4L2_CID_VBLANK */
++	unsigned int long_exp_shift;
+ 
+ 	/* Current mode */
+ 	const struct imx258_mode *cur_mode;
+@@ -793,6 +799,26 @@ static void imx258_adjust_exposure_range(struct imx258 *imx258)
+ 				 exposure_def);
+ }
+ 
++static int imx258_set_frame_length(struct imx258 *imx258, unsigned int val)
++{
++	int ret;
 +
- /* Orientation */
- #define REG_MIRROR_FLIP_CONTROL		0x0101
- #define REG_CONFIG_MIRROR_FLIP		0x03
-@@ -634,6 +636,7 @@ struct imx258 {
- 	const struct imx258_link_freq_config *link_freq_configs;
- 	const s64 *link_freq_menu_items;
- 	unsigned int nlanes;
-+	unsigned int csi2_flags;
- 
- 	/*
- 	 * Mutex for serialized access:
-@@ -1072,6 +1075,15 @@ static int imx258_start_streaming(struct imx258 *imx258)
- 		return ret;
- 	}
- 
-+	ret = imx258_write_reg(imx258, IMX258_CLK_BLANK_STOP,
-+			       IMX258_REG_VALUE_08BIT,
-+			       imx258->csi2_flags & V4L2_MBUS_CSI2_NONCONTINUOUS_CLOCK ?
-+			       1 : 0);
-+	if (ret) {
-+		dev_err(&client->dev, "%s failed to set clock lane mode\n", __func__);
-+		return ret;
++	imx258->long_exp_shift = 0;
++
++	while (val > IMX258_VTS_MAX) {
++		imx258->long_exp_shift++;
++		val >>= 1;
 +	}
 +
- 	/* Apply default values of current mode */
- 	reg_list = &imx258->cur_mode->reg_list;
- 	ret = imx258_write_regs(imx258, reg_list->regs, reg_list->num_of_regs);
-@@ -1486,6 +1498,8 @@ static int imx258_probe(struct i2c_client *client)
- 		goto error_endpoint_poweron;
- 	}
- 
-+	imx258->csi2_flags = ep.bus.mipi_csi2.flags;
++	ret = imx258_write_reg(imx258, IMX258_REG_VTS,
++			       IMX258_REG_VALUE_16BIT, val);
++	if (ret)
++		return ret;
 +
- 	/* Initialize subdev */
- 	v4l2_i2c_subdev_init(&imx258->sd, client, &imx258_subdev_ops);
- 
++	return imx258_write_reg(imx258, IMX258_LONG_EXP_SHIFT_REG,
++				IMX258_REG_VALUE_08BIT, imx258->long_exp_shift);
++}
++
+ static int imx258_set_ctrl(struct v4l2_ctrl *ctrl)
+ {
+ 	struct imx258 *imx258 =
+@@ -823,7 +849,7 @@ static int imx258_set_ctrl(struct v4l2_ctrl *ctrl)
+ 	case V4L2_CID_EXPOSURE:
+ 		ret = imx258_write_reg(imx258, IMX258_REG_EXPOSURE,
+ 				IMX258_REG_VALUE_16BIT,
+-				ctrl->val);
++				ctrl->val >> imx258->long_exp_shift);
+ 		break;
+ 	case V4L2_CID_DIGITAL_GAIN:
+ 		ret = imx258_update_digital_gain(imx258, IMX258_REG_VALUE_16BIT,
+@@ -855,9 +881,8 @@ static int imx258_set_ctrl(struct v4l2_ctrl *ctrl)
+ 		}
+ 		break;
+ 	case V4L2_CID_VBLANK:
+-		ret = imx258_write_reg(imx258, IMX258_REG_VTS,
+-				       IMX258_REG_VALUE_16BIT,
+-				       imx258->cur_mode->height + ctrl->val);
++		ret = imx258_set_frame_length(imx258,
++					      imx258->cur_mode->height + ctrl->val);
+ 		break;
+ 	default:
+ 		dev_info(&client->dev,
+@@ -983,8 +1008,9 @@ static int imx258_set_pad_format(struct v4l2_subdev *sd,
+ 			     imx258->cur_mode->height;
+ 		__v4l2_ctrl_modify_range(
+ 			imx258->vblank, vblank_min,
+-			IMX258_VTS_MAX - imx258->cur_mode->height, 1,
+-			vblank_def);
++			((1 << IMX258_LONG_EXP_SHIFT_MAX) * IMX258_VTS_MAX) -
++						imx258->cur_mode->height,
++			1, vblank_def);
+ 		__v4l2_ctrl_s_ctrl(imx258->vblank, vblank_def);
+ 		h_blank =
+ 			imx258->link_freq_configs[mode->link_freq_index].pixels_per_line
 -- 
 2.25.1
 
