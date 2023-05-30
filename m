@@ -2,43 +2,43 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22169C7EE2F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96906C7EE32
 	for <linux-media@archiver.kernel.org>; Tue, 30 May 2023 10:06:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231358AbjE3KGC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 30 May 2023 06:06:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42454 "EHLO
+        id S231361AbjE3KGD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 30 May 2023 06:06:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbjE3KF6 (ORCPT
+        with ESMTP id S231329AbjE3KGA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 30 May 2023 06:05:58 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D38A9C;
-        Tue, 30 May 2023 03:05:57 -0700 (PDT)
+        Tue, 30 May 2023 06:06:00 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7254BF0;
+        Tue, 30 May 2023 03:05:59 -0700 (PDT)
 Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 109156601F54;
-        Tue, 30 May 2023 11:05:55 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 562346606E76;
+        Tue, 30 May 2023 11:05:57 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685441156;
-        bh=AZ184lm4DFK2T6MKQmesqJJtsTeSZhaeVIOOM3dp9z0=;
+        s=mail; t=1685441158;
+        bh=KHiRYUOpyRFGmSroNyC9pEEG4SP4vKghXMYN6bkDTnQ=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ae4twUX/nzJABQDkveTl1edb3HwoQKq2r4rTJ2pipXJ74hk20r9W55vss2+cjxlzQ
-         OfZkRaNpTUHZgI+7rTMtkPH0Ni5XdoliIm4r+YiYuEDX4kjxkeYdFy9HSbN44ehOPL
-         XrZtCNvRQxX9WePNkBdiO/MRY45DrwjJxB4cd/5Wb5MsQhGwzOGjeo4WkYD0n+LAle
-         N9Ke4lbEODytoSlIzolpyoskj067UnfhPeLT6QnqZdVIVbPyKYOtw5R25h/uSdUbJR
-         ilfPdvcDoHiNHFTCCCnI7gk9mTxjUScxAPNQPBPJntBWByj1XO2tn1BML7rdkya1FF
-         TkpbQTJU9D4qw==
-Message-ID: <7e83e62c-bb53-1b57-46ca-6d1e2e35aba8@collabora.com>
-Date:   Tue, 30 May 2023 12:05:52 +0200
+        b=IiM7C//lNBIq9f1NANrZ6B3JJzTrjfluDjZl8s+t+OnZleyoXmFQK9GjwgWjUd7fh
+         Qhfa/aKb5puO3WEoHCCurZ2EoK5iJ6WdZpWx2hTsblqtgMazJxGM6WPAvhM3oLAWt/
+         x+BladDOwvDb4fhxCUZMk24qg+a7nnbuv6r6BCnerxAFmUqXtz0Zs7zejjbA90v9P/
+         YGqHbBgpvADAQRESuEfH5IkdEobWAybtQDlq2AKLT2uZpl7dtH+ve48kQILE5NbYgq
+         h6aR68HJ65OOqUuualBNTStQnvYvWoLbiDfQR+p+x+NzLs1vME4cFtx/RSdLruVtGf
+         EiNfKAIyGSKeA==
+Message-ID: <486334dd-2cb9-d884-9979-ceb45cb7e1db@collabora.com>
+Date:   Tue, 30 May 2023 12:05:54 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.1
-Subject: Re: [PATCH v5,5/8] media: mediatek: vcodec: Get each instance format
- type
+Subject: Re: [PATCH v5,3/8] media: mediatek: vcodec: Add a debugfs file to get
+ different useful information
 Content-Language: en-US
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Chen-Yu Tsai <wenst@chromium.org>,
@@ -56,10 +56,10 @@ Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
         linux-mediatek@lists.infradead.org,
         Project_Global_Chrome_Upstream_Group@mediatek.com
 References: <20230525021219.23638-1-yunfei.dong@mediatek.com>
- <20230525021219.23638-6-yunfei.dong@mediatek.com>
+ <20230525021219.23638-4-yunfei.dong@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230525021219.23638-6-yunfei.dong@mediatek.com>
+In-Reply-To: <20230525021219.23638-4-yunfei.dong@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -67,12 +67,12 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 Il 25/05/23 04:12, Yunfei Dong ha scritto:
-> Adding echo command to get capture and output queue format
-> type of each instance:"echo '-format' > vdec", not current
-> hardware supported.
+> In oder to get each instance information according to test command, adding
+> one file node "vdec".
+> 
+> Can use echo command to set different string value as 'echo -picinfo > vdec'.
 > 
 > Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
 
