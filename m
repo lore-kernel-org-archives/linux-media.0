@@ -2,63 +2,63 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10502C7EE2F
-	for <linux-media@archiver.kernel.org>; Tue, 30 May 2023 17:31:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54889C77B7A
+	for <linux-media@archiver.kernel.org>; Tue, 30 May 2023 17:31:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233495AbjE3RbN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 30 May 2023 13:31:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58840 "EHLO
+        id S233509AbjE3RbO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 30 May 2023 13:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233487AbjE3RbC (ORCPT
+        with ESMTP id S233498AbjE3RbE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 30 May 2023 13:31:02 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E664110A
-        for <linux-media@vger.kernel.org>; Tue, 30 May 2023 10:30:47 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f60e730bf2so49249555e9.1
-        for <linux-media@vger.kernel.org>; Tue, 30 May 2023 10:30:47 -0700 (PDT)
+        Tue, 30 May 2023 13:31:04 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA99A103
+        for <linux-media@vger.kernel.org>; Tue, 30 May 2023 10:30:49 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4eed764a10cso5129799e87.0
+        for <linux-media@vger.kernel.org>; Tue, 30 May 2023 10:30:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google; t=1685467846; x=1688059846;
+        d=raspberrypi.com; s=google; t=1685467848; x=1688059848;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=43TPLP/zbwjjcZHsJnlPOp0qUD2+JiyTZrGh8WQAfhs=;
-        b=OM7iccpfdiTbONVwFnEGafOIBxIXpG0QTMDRHlQ3pxsGqKa3sK7W/PzPXwrDux0Aj/
-         opKl17PGjdTfdfPPFuPtYYw4AhvgH+1ZKzC2Z3zkB93i1gdwKjNMXPG55MnkHtcIhoDK
-         TRD2gJ6vHiKYyxumNhyhOhJ/Dyd5MUzw9V7Qn02iS50MtStVjLcrvaB/l/3R0ga4XawS
-         EE5+RhmFRT7TDNS1axU6gP/IOu6fxtEjRuviCJUtSNJ3w8ssNDalDUV+d8SHAhGBmwK6
-         SSJtWAqDVyBrHA7Nx+Fx87+FDQAQQQOPfAr2Dz4opdFU6HnDGYrNzBgKUL0QwQYhre+8
-         /vkw==
+        bh=/RTXQRG5bAHWhgIfsGKkL1H4XXRZuZcBB1mAp7EY4Bk=;
+        b=LHKx4EECXZPuEFoZFs1qBTv3R6QqfvyJELoJ+fsHLQy0t0ZOOx1tvfhA8DqH94YI+O
+         fIfS2QeUNs2m9vUjJuoFtyadgmVoa3KhzNEC+9dW4JSmfsZwqfA2F+H0ddcg18s44ynj
+         ZLTdYq3BzqgMx1/oF0aqdFnIGcVRAJff3XspbHuMm1l/pUVOSBA4rgduJvKJ1UJBurqv
+         8U9vPlYj9gCjFwTGuw3tnOh5j7XpvW9oVAkBvirTprUBINJlYN5m0jWqBOV91npvCTEH
+         4qC5/MuWSikcvWUsiHO9vyhJr+SQxNZY2ubj7K8Xwvs7E54fjMjeU+1lyK6/lLUvMPuX
+         u9Yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685467846; x=1688059846;
+        d=1e100.net; s=20221208; t=1685467848; x=1688059848;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=43TPLP/zbwjjcZHsJnlPOp0qUD2+JiyTZrGh8WQAfhs=;
-        b=KWkBS+2uNZctl6f09mcJhkEHGuM9sPpiuWIBE0dRQE3FcNAYjuKvAKB7e7jk80DHq+
-         cVJPA0VMcL4QBtYcdUq3giP0WMSg09Vyz1bnvEVUeIi9a6XOCs+2E+sycPQ3yEAPMZeG
-         DEtBTcOrCSthRD93WTt7MeS7Xv4DcJRDqpSFe9iX6fNWjP7DZ2L1V1n9GEgQRrcAT6dS
-         xQlY1humHsVWYlNAPnxD89hq4Z+w10HojJl20vGXtc5VtzPihQu12fS/XeXP+YJq5Eie
-         aV6HQ5aOHhQeTBDzxMxHYJWyeIicJQJdrnCsc02AuKWPvVUzYKc8iaCLVbFzaU2TlK0i
-         uY6w==
-X-Gm-Message-State: AC+VfDxyNhfhT9CIoICRVLax7hg7lpLKF+VeGHcz+9xp24pJKV7gjAX4
-        dzQGI2Xly51qQVogihmK22+Ekw==
-X-Google-Smtp-Source: ACHHUZ5RwwXfjKiXmITxChOZWxmXXS3AWlzn00d34nzz6SvZdZqve5cgB9OfE5OgQAGB1OGJ3xb1aw==
-X-Received: by 2002:a7b:cb99:0:b0:3f6:923:9ec with SMTP id m25-20020a7bcb99000000b003f6092309ecmr3101950wmi.25.1685467846477;
-        Tue, 30 May 2023 10:30:46 -0700 (PDT)
+        bh=/RTXQRG5bAHWhgIfsGKkL1H4XXRZuZcBB1mAp7EY4Bk=;
+        b=gYSwBtdi5yVFDxsxPU5hANdvBtVkEigZjS8dPviOGAnxndjB7W7+TOubaY148k+hMM
+         +EFZuABYXhsFck2/jFEQJaBdKExSFLfp/WTKwUObnTyvOsMfZjIVkrSP0RKj5ukwyW7S
+         htCrH1dQfAs+AeNBxBMS4BoXAXdhM4X4b0ywMFzjxQV/nta9XC7dlGIVFw477NNVHC9s
+         DXFu5NWTqm1Oru/3iPjLLcbYDU149ra8z3G2ypb7CMPdIyINrzBxr89gNmp9OWZyZlmn
+         m1vKT3aN/y9ejOgENxldD6R7fySD8MI3+2caT/KJW6q8lr5YSqvi+8nOCmtZOeKbr2F4
+         6NwA==
+X-Gm-Message-State: AC+VfDxumuYoG7HA4JvsHuGBlhMJs8/FDaJoUGwSHlDvGVn59x6XUVf+
+        Tqb+45s85+J1YT0o7dHFNMe/sQ==
+X-Google-Smtp-Source: ACHHUZ7UdIvS0DXG7D1yG/oMQikBYA/CxnjEWTgKklZqd+yVUuky2Bypkg87wb0O776dDM7hZYRyIg==
+X-Received: by 2002:a19:5506:0:b0:4f2:6ddf:2011 with SMTP id n6-20020a195506000000b004f26ddf2011mr1370790lfe.19.1685467848168;
+        Tue, 30 May 2023 10:30:48 -0700 (PDT)
 Received: from dave-Ubuntu2204.pitowers.org ([93.93.133.154])
-        by smtp.googlemail.com with ESMTPSA id h14-20020a056000000e00b0030ae901bc54sm3964823wrx.62.2023.05.30.10.30.45
+        by smtp.googlemail.com with ESMTPSA id h14-20020a056000000e00b0030ae901bc54sm3964823wrx.62.2023.05.30.10.30.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 10:30:46 -0700 (PDT)
+        Tue, 30 May 2023 10:30:47 -0700 (PDT)
 From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         linux-media@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
 Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: [PATCH 16/21] media: i2c: imx258: Set pixel_rate range to the same as the value
-Date:   Tue, 30 May 2023 18:29:55 +0100
-Message-Id: <20230530173000.3060865-17-dave.stevenson@raspberrypi.com>
+Subject: [PATCH 18/21] dt-bindings: media: imx258: Rename to include vendor prefix
+Date:   Tue, 30 May 2023 18:29:57 +0100
+Message-Id: <20230530173000.3060865-19-dave.stevenson@raspberrypi.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230530173000.3060865-1-dave.stevenson@raspberrypi.com>
 References: <20230530173000.3060865-1-dave.stevenson@raspberrypi.com>
@@ -68,61 +68,46 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-With a read only control there is limited point in advertising
-a minimum and maximum for the control, so change to set the
-value, min, and max all to the selected pixel rate.
+imx258.yaml doesn't include the vendor prefix of sony, so
+rename to add it.
+Update the id entry and MAINTAINERS to match.
 
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 ---
- drivers/media/i2c/imx258.c | 18 +++++++-----------
- 1 file changed, 7 insertions(+), 11 deletions(-)
+ .../bindings/media/i2c/{imx258.yaml => sony,imx258.yaml}        | 2 +-
+ MAINTAINERS                                                     | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+ rename Documentation/devicetree/bindings/media/i2c/{imx258.yaml => sony,imx258.yaml} (97%)
 
-diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
-index 7d6528f9ca4d..b9b650d40365 100644
---- a/drivers/media/i2c/imx258.c
-+++ b/drivers/media/i2c/imx258.c
-@@ -1002,7 +1002,8 @@ static int imx258_set_pad_format(struct v4l2_subdev *sd,
+diff --git a/Documentation/devicetree/bindings/media/i2c/imx258.yaml b/Documentation/devicetree/bindings/media/i2c/sony,imx258.yaml
+similarity index 97%
+rename from Documentation/devicetree/bindings/media/i2c/imx258.yaml
+rename to Documentation/devicetree/bindings/media/i2c/sony,imx258.yaml
+index 80d24220baa0..bee61a443b23 100644
+--- a/Documentation/devicetree/bindings/media/i2c/imx258.yaml
++++ b/Documentation/devicetree/bindings/media/i2c/sony,imx258.yaml
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: http://devicetree.org/schemas/media/i2c/imx258.yaml#
++$id: http://devicetree.org/schemas/media/i2c/sony,imx258.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
  
- 		link_freq = imx258->link_freq_menu_items[mode->link_freq_index];
- 		pixel_rate = link_freq_to_pixel_rate(link_freq, imx258->nlanes);
--		__v4l2_ctrl_s_ctrl_int64(imx258->pixel_rate, pixel_rate);
-+		__v4l2_ctrl_modify_range(imx258->pixel_rate, pixel_rate,
-+					 pixel_rate, 1, pixel_rate);
- 		/* Update limits and set FPS to default */
- 		vblank_def = imx258->cur_mode->vts_def -
- 			     imx258->cur_mode->height;
-@@ -1328,8 +1329,7 @@ static int imx258_init_controls(struct imx258 *imx258)
- 	struct v4l2_ctrl *vflip, *hflip;
- 	s64 vblank_def;
- 	s64 vblank_min;
--	s64 pixel_rate_min;
--	s64 pixel_rate_max;
-+	s64 pixel_rate;
- 	int ret;
+ title: Sony IMX258 13 Mpixel CMOS Digital Image Sensor
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 26f705e94a41..16d0f64d8ee8 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -19633,7 +19633,7 @@ M:	Sakari Ailus <sakari.ailus@linux.intel.com>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ T:	git git://linuxtv.org/media_tree.git
+-F:	Documentation/devicetree/bindings/media/i2c/imx258.yaml
++F:	Documentation/devicetree/bindings/media/i2c/sony,imx258.yaml
+ F:	drivers/media/i2c/imx258.c
  
- 	ctrl_hdlr = &imx258->ctrl_handler;
-@@ -1360,17 +1360,13 @@ static int imx258_init_controls(struct imx258 *imx258)
- 	if (vflip)
- 		vflip->flags |= V4L2_CTRL_FLAG_READ_ONLY;
- 
--	pixel_rate_max =
--		link_freq_to_pixel_rate(imx258->link_freq_menu_items[0],
--					imx258->nlanes);
--	pixel_rate_min =
--		link_freq_to_pixel_rate(imx258->link_freq_menu_items[1],
--					imx258->nlanes);
-+	pixel_rate = link_freq_to_pixel_rate(imx258->link_freq_menu_items[0],
-+					     imx258->nlanes);
- 	/* By default, PIXEL_RATE is read only */
- 	imx258->pixel_rate = v4l2_ctrl_new_std(ctrl_hdlr, &imx258_ctrl_ops,
- 				V4L2_CID_PIXEL_RATE,
--				pixel_rate_min, pixel_rate_max,
--				1, pixel_rate_max);
-+				pixel_rate, pixel_rate,
-+				1, pixel_rate);
- 
- 
- 	vblank_def = imx258->cur_mode->vts_def - imx258->cur_mode->height;
+ SONY IMX274 SENSOR DRIVER
 -- 
 2.25.1
 
