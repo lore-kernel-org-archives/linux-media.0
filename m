@@ -2,464 +2,795 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 852F0C7EE2F
-	for <linux-media@archiver.kernel.org>; Wed, 31 May 2023 14:11:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C38F8C7EE23
+	for <linux-media@archiver.kernel.org>; Wed, 31 May 2023 14:17:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237588AbjEaOLA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 31 May 2023 10:11:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51764 "EHLO
+        id S237582AbjEaORb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 31 May 2023 10:17:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235420AbjEaOKk (ORCPT
+        with ESMTP id S237586AbjEaORM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 31 May 2023 10:10:40 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on20706.outbound.protection.outlook.com [IPv6:2a01:111:f403:7010::706])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C502F1999;
-        Wed, 31 May 2023 07:07:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iq3pmMMyhjhYrBKhVNnbypijVOrypyxGlqomwmxrvTjQKIFJbKsQ4MxncWdcznAOk/DLNxSrCHm6nmpr/7I1QBUYyqW49WPxaOpmuaBsX4pq/nO2k3EkCrz3T07etXpwfy5K8HRNd2Haljef/epHMv1fK9Fxd3OJ8BujCokdSJkpqZn0d8jJNcx1CZHzP559BBJT2oP3txBMF6LSpx35OAQrbFtgZBBUoPNLeXG1LE/PjvLeNiJJQ9zHviGHOx2rdBoiO4yBeME4O+p6vdJ1zuhlmP/Ej5vZBCjWS4yN+eyjfCmjWYNWP1mV2NEp/onrKVAIZs/oxlHVyEi8pk2Duw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MTEgEWGkM9RhMxbiY3h+MyZAGB5AG5FoGVi7MmyXzd8=;
- b=HJ7WYDVx9IK5pVfMWe29B15+xwEKyBais3Qw353BOEeIhaEU8mmyStM6mS8P7QDTuA3ZG6aAgLiCZju64Juhx1kG2W8my3f8nisAncInMxAOUPgwlBOVIO+9eh5BXNweZ/Dr8FyDFy4Ay0PbM6teK2Uuwjs7wCRecAucgoZh5QAyma0e/pVD2PzhXde4LuGHoRIIPJTheXjJUBXF6BJGs6qDn4ymvBD/m7FJWIM1M4f+74A4EzHfFF0flvrHb6E3yvLvamu5cJDtzDWXtLjB9wQRCpoBhDJQRB/GLVW5I8TiWbKUa5h+gChx38KCa+qZV0M4Z9MtTUxzTEJQWI7+Tg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MTEgEWGkM9RhMxbiY3h+MyZAGB5AG5FoGVi7MmyXzd8=;
- b=v3mkpPyJDdKFO7/IldQnxyVNN3f+GasxOTlNSiCbDZfP35CiOZrDVv+URd7vJK+Ak+EOleZW6LqzR6+uI3ogCHJzkSiHSCX38sWrJAC1o70X5c6uBZm9SJYGlbHuWVQcyc/whSni5tc6cYvJhxkqPqyL+FgcDiPBSedeppgl7hY=
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by OSZPR01MB8797.jpnprd01.prod.outlook.com (2603:1096:604:159::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Wed, 31 May
- 2023 13:44:47 +0000
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::bd0a:a38d:b4d2:5d2]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::bd0a:a38d:b4d2:5d2%6]) with mapi id 15.20.6455.020; Wed, 31 May 2023
- 13:44:47 +0000
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-CC:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wolfram Sang <wsa@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        =?utf-8?B?VXdlIEtsZWluZS1Lw7ZuaWc=?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Corey Minyard <cminyard@mvista.com>,
-        =?utf-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Antonio Borneo <antonio.borneo@foss.st.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: RE: [PATCH v5 01/11] i2c: Enhance i2c_new_ancillary_device API
-Thread-Topic: [PATCH v5 01/11] i2c: Enhance i2c_new_ancillary_device API
-Thread-Index: AQHZjJbXGsyu+Gf1qUyolpKmZgFmTa9w75gAgAALD6CAAyijgIAAApUwgAAqgYCAAADfgIAAHxkAgAABmUA=
-Date:   Wed, 31 May 2023 13:44:47 +0000
-Message-ID: <OS0PR01MB5922051F1C166AA5A4AB105386489@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-References: <20230522101849.297499-1-biju.das.jz@bp.renesas.com>
- <20230522101849.297499-2-biju.das.jz@bp.renesas.com>
- <20230529080552.GJ25984@pendragon.ideasonboard.com>
- <OS0PR01MB592283E55078298EEA30C6B9864A9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <20230531085941.GA27043@pendragon.ideasonboard.com>
- <OS0PR01MB59226E87241A61A2CB255DEE86489@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <20230531114103.GD27043@pendragon.ideasonboard.com>
- <OS0PR01MB592217BBDCD7C0072F24493D86489@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <20230531133528.GH27043@pendragon.ideasonboard.com>
-In-Reply-To: <20230531133528.GH27043@pendragon.ideasonboard.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|OSZPR01MB8797:EE_
-x-ms-office365-filtering-correlation-id: 9c405e13-f6e7-4a41-60fc-08db61dd3332
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: N5WAFALAAcNERQ6/NgTDtfdII8dnxiq96u8TSKdiViH07fW3ktwG2DBrVeTxQOWXayvMPlnrR+W/IjvjAVok6wkVIjF6CBefq9dp3gp1rWBFbtBNqwB7ICq5eOwxwnBVEMyNkDM4j+OT+PZkLZzkf/aGib1/zDWLgVH7TEEtnsvC+7TzeV/HnYEVpzHTW76U+O8Mnfuw4bcxZ+XCuQzNF+LAVqZb44scoruoiFfP8wdSWyB6HsswtYYCJpTFGbtv0y3iie4vHlweyeP5hJ0onJE5IgH84SguTq/qiTkSmDzsk/E7CooJiZMSWrdq/J80yqkJtcBTaiyPiDHhof46Zu8JjFtAzDV6Ys6OPhT90jEiHUeWE60zuCLxlb0EsacT3uOQXQX+cgD+YcRV6AyjhkgukXpsim/5nWKDaqQXRu/e0gJh+mlh6Tyn9Y7x7ba6XiYVQv+LwhzpDtyzqBmo8n47aQiavW9yOrijEf0JE6xxkG6TdZbthSJCfEaTQe23IV8w4zQyy2jtwR4xmnahdf41dKYH11d0FpvdaJ32/56HedGw7ntXcHImnz9EnG0OcjN5rGp5+EZPegRcanVte3Dm+IiYEPn2S7VI7VEPFqFWpCE4NhKZnDO7yN61o4Mr
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(39860400002)(376002)(366004)(396003)(451199021)(5660300002)(52536014)(38100700002)(8676002)(122000001)(8936002)(55016003)(76116006)(26005)(83380400001)(66556008)(66476007)(66446008)(6506007)(66946007)(9686003)(64756008)(41300700001)(86362001)(33656002)(71200400001)(186003)(316002)(6916009)(4326008)(7696005)(38070700005)(7416002)(478600001)(54906003)(2906002)(30864003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UUZybVpPVnF3VGo1ZitUQ2FuZ0FRVnA4anU5R1RwZ1htUndVLzB4VUFWMVNJ?=
- =?utf-8?B?Rk9CNHppNUVTQUs4dFRYMUFpZjA1NzIrYWYvTHdzVjlMbExQMHhRa2ZaUzlx?=
- =?utf-8?B?VTA5NlhmS21taExPRGlSSWxSb3lKVjVoRkF4Zm44UE1mZUx1NlZJVUJJYW9I?=
- =?utf-8?B?Z3VnWHhRNFdsa1lLcHYzRkhER0NGQUR6QlBPbW81Z0YzeXd0Y0lYdytLSGsw?=
- =?utf-8?B?by9HRklkWlBIMGdOaEdDUVBrM0dNcU9jQkVKTUNaYmRHV3ZGWU9aR1ZScGVj?=
- =?utf-8?B?Y2dpb05rRFVyWmdOMUpOVU5jclBBZ0dRTkc2TkVDMlQ0MWZFTFlZTDZyL1hi?=
- =?utf-8?B?VE4vR21VSUNCdFZBbVdSWUFZeGJ2NzNvOUNsbFpKRnMwK28rNUtYWkEySnJl?=
- =?utf-8?B?UmRhSmpCdFVHa1BxcGk5ZDFMRnlPeDFzVWdzbmlJVlpGQnBrK3hjK0RTTjl2?=
- =?utf-8?B?a2hHdHAxaExoMnI0RlYvUWVvUG1abmRxeU1HY3h0VlAwWkdDV1orK2VkZllL?=
- =?utf-8?B?VURPK1hFQzZ2RWtCZTJEWmh2MDhWQ1U5dS9Md3UzaXZKL3h2eG5PZ21LeUUr?=
- =?utf-8?B?Z09ybGF4cXFYSE8wc3BNbVpJTC9YeS9tLyt1Z2MrQnVvOUVuNTVHQlhwTTVv?=
- =?utf-8?B?VndBZCtJQmg5Nk9ZN0FYWWNrc2RGU0kyZW00dUExOW1ML04wK01MQ3EvZy9C?=
- =?utf-8?B?dE5wK3FMUEF3T2crbzBycHpwbElTRFMrdUdsZ1kwbnordjFFTk5vNDVMWk1v?=
- =?utf-8?B?QTRLQnNldVJwRE80OTJQNlpyeHNtOVBlQ2tqdW95aHlHZHdaMVdzalV1cVJo?=
- =?utf-8?B?aHA3Mk9YQXh2NE9vMGQ5UHhLMll6YitmM1daQjJRQmkxbk9vTVMvUTdKVDRC?=
- =?utf-8?B?YVQwZ1dIdStvU25xbjYvd1dvTWlKQythM3diaExkcDZIb1JSNVkxb25haFNU?=
- =?utf-8?B?VDdRQ2VlcUI4cE9wdXcrWi9VdEFoTlU2TWJHMjdCNmJRZXhnNGN2RHVRNlZY?=
- =?utf-8?B?dnFWV1lza0tJTjBxS0JEd0hmOTg4cWs0QkNIMFhjUUJ0SUdicnZ5SUY2dURt?=
- =?utf-8?B?U2ZlUHNIVlE2a041Q2c3RFpJc2Y4eW5SOFViR25TZGV5cHBaUVhnVzNvdmgw?=
- =?utf-8?B?Q2hQTHNGcEx4YnkyVFJNa2NYbGMwZGdhWllWd3pVbnhXMTZmNDlwYnNQcWJU?=
- =?utf-8?B?UTdaajdKV1pEQ1JVZi83bGttR1NjSGZpTjNyem83eW5RbFlUaUVUcDNmbVB0?=
- =?utf-8?B?d2k3c05tMTJzQllLK21RN0UzUWFkdjhnRzBHa3owREpkNHAwQk1FYUJhQmsy?=
- =?utf-8?B?Z2hBUGhZRmRvRkVDcmVRZExSNXA0bUlTOHFNbGJSL3J6TUhPMDdoRzlKTHhL?=
- =?utf-8?B?NkdvRUZiRkVQOVpVbEMrY1h5b2ZlZGMxUGhMNGlkSjB0QkxKZUYvT0VpcUFk?=
- =?utf-8?B?eVgveU4yS1JmOWwyOW1iNjNYVWo4QVRmbkF2V0JEa1VmQjF0anlUZElia3NQ?=
- =?utf-8?B?b0tWb24yTVorOHpWZHZ2alRzS1JBamxmejlsdHN1VXY1Zk1nRENBd3B1VURW?=
- =?utf-8?B?K0czL21mTHBqbUdON1lZNnBsYWUzQ1BxVlFlSmtVSkcvMlpMOG1qcjRNZU9P?=
- =?utf-8?B?Z3pOM2dWdjdoWWdTZ1hKbTVJczRLdzZaazhkQnRqVk1JUHA5RzY0MVBBQmdY?=
- =?utf-8?B?TFNlRHBpU0hZejVVanVkSUxiMEVJWE01dWZnVGdFWEhvNEhna3dsRzlNN2ZF?=
- =?utf-8?B?RkFFampXc09tNnZiSzlla0REejlZUitWMHd3bHIzQklRQUUzazZ5OU5Dd3Fu?=
- =?utf-8?B?K3N1dVdZUU0wSTZyMFdXTWh3RGNENUxHbkNhV1hPZmNRdk1rV1NpQTRlTjNL?=
- =?utf-8?B?ZXNDeW1lTkVqU3pIMHk5QUk5M2tGVzUyVVhCZ2J4Z2ttYkg5QUF4dEcvSTRo?=
- =?utf-8?B?QnFIblFxNHdmWjJOWEFHaGlSSjk0dytWNFVVYlFuWDdZTkVHTXRDTGRUU0RN?=
- =?utf-8?B?WGhSL0dQcEZ0dEtrYUg4R2pwM1plOHFvVUYyektoVWkrdVBUSldQZzI2OGNL?=
- =?utf-8?B?eXk2eDdrMThiYkFqWkhZU2h2Sjg4aW1CTkRFN3VGT1M3VzNMT2JxVGVLY21r?=
- =?utf-8?Q?FeQlU86dNZw+/4Ss465vZMwHP?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 31 May 2023 10:17:12 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC3AB172A
+        for <linux-media@vger.kernel.org>; Wed, 31 May 2023 07:15:07 -0700 (PDT)
+Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 26D337F5;
+        Wed, 31 May 2023 15:48:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1685540920;
+        bh=38hW9qjMnm9OfcFuF7kqYPjGF7te2xLUnzOwwEDLTmA=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=N/gJliBmit/61T8NyT6C7oy39EqCCojSONbS3PcgbssaHqB1VE7HYkmoeuaT2a0mf
+         dwDicUq8EQ9mYZPD5ccyarOLcg1KZZzo39GXia6XKOLbgah+0r5ILFGr8CKfzkBl84
+         lvK+dpciQbAPqJYagx4Tt7zCde9mR4WdGQj6wD7o=
+Message-ID: <870c4190-8f1c-e6bd-aeed-7393e733ff53@ideasonboard.com>
+Date:   Wed, 31 May 2023 14:48:58 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9c405e13-f6e7-4a41-60fc-08db61dd3332
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 May 2023 13:44:47.7332
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: qWXCzugWUoJ8kJJqznSbHClYEgKPYaxzSkl4hhCK5KSo9ZsqvVAf8doxYetAUWESfGjM1ISb+Axq9j09vOkltkkCL3KELecK4sUohqP3fcA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSZPR01MB8797
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Content-Language: en-US
+To:     bingbu.cao@intel.com, linux-media@vger.kernel.org,
+        sakari.ailus@linux.intel.com
+Cc:     wentong.wu@intel.com, bingbu.cao@linux.intel.com
+References: <20230518100523.1578703-1-bingbu.cao@intel.com>
+From:   Dan Scally <dan.scally@ideasonboard.com>
+Subject: Re: [PATCH 1/3] media: intel: rename cio2 bridge to ipu bridge and
+ move out of ipu3
+In-Reply-To: <20230518100523.1578703-1-bingbu.cao@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-SGkgTGF1cmVudCwNCg0KVGhhbmtzIGZvciB0aGUgZmVlZGJhY2suDQoNCj4gU3ViamVjdDogUmU6
-IFtQQVRDSCB2NSAwMS8xMV0gaTJjOiBFbmhhbmNlIGkyY19uZXdfYW5jaWxsYXJ5X2RldmljZSBB
-UEkNCj4gDQo+IE9uIFdlZCwgTWF5IDMxLCAyMDIzIGF0IDEyOjUzOjE4UE0gKzAwMDAsIEJpanUg
-RGFzIHdyb3RlOg0KPiA+ID4gU3ViamVjdDogUmU6IFtQQVRDSCB2NSAwMS8xMV0gaTJjOiBFbmhh
-bmNlIGkyY19uZXdfYW5jaWxsYXJ5X2RldmljZQ0KPiA+ID4gQVBJIE9uIFdlZCwgTWF5IDMxLCAy
-MDIzIGF0IDA5OjM0OjA2QU0gKzAwMDAsIEJpanUgRGFzIHdyb3RlOg0KPiA+ID4gPiA+IFN1Ympl
-Y3Q6IFJlOiBbUEFUQ0ggdjUgMDEvMTFdIGkyYzogRW5oYW5jZQ0KPiA+ID4gPiA+IGkyY19uZXdf
-YW5jaWxsYXJ5X2RldmljZSBBUEkgT24gTW9uLCBNYXkgMjksIDIwMjMgYXQgMDk6MDA6NDNBTQ0K
-PiArMDAwMCwgQmlqdSBEYXMgd3JvdGU6DQo+ID4gPiA+ID4gPiA+IFN1YmplY3Q6IFJlOiBbUEFU
-Q0ggdjUgMDEvMTFdIGkyYzogRW5oYW5jZQ0KPiA+ID4gPiA+ID4gPiBpMmNfbmV3X2FuY2lsbGFy
-eV9kZXZpY2UgQVBJIE9uIE1vbiwgTWF5IDIyLCAyMDIzIGF0DQo+IDExOjE4OjM5QU0gKzAxMDAs
-IEJpanUgRGFzIHdyb3RlOg0KPiA+ID4gPiA+ID4gPiA+IFJlbmVzYXMgUE1JQyBSQUEyMTUzMDAg
-ZXhwb3NlcyB0d28gc2VwYXJhdGUgaTJjIGRldmljZXMsDQo+ID4gPiA+ID4gPiA+ID4gb25lIGZv
-ciB0aGUgbWFpbiBkZXZpY2UgYW5kIGFub3RoZXIgZm9yIHJ0YyBkZXZpY2UuDQo+ID4gPiA+ID4g
-PiA+ID4NCj4gPiA+ID4gPiA+ID4gPiBFbmhhbmNlIGkyY19uZXdfYW5jaWxsYXJ5X2RldmljZSgp
-IHRvIGluc3RhbnRpYXRlIGEgcmVhbA0KPiBkZXZpY2UuDQo+ID4gPiA+ID4gPiA+DQo+ID4gPiA+
-ID4gPiA+IERvZXNuJ3QgaXQgYWxyZWFkeSBpbnN0YW50aWF0ZSBhIHJlYWwgZGV2aWNlID8NCj4g
-PiA+ID4gPiA+DQo+ID4gPiA+ID4gQW5kIHRoYXQgZnVuY3Rpb24gY2FsbHMgaTJjX25ld19jbGll
-bnRfZGV2aWNlKCksIHdoaWNoIGFsbG9jYXRlcw0KPiA+ID4gPiA+IGEgc3RydWN0IGkyY19jbGll
-bnQgdGhhdCBlbWJlZHMgYSBzdHJ1Y3QgZGV2aWNlLCBhbmQgcmVnaXN0ZXJzDQo+ID4gPiA+ID4g
-dGhhdCBkZXZpY2Ugd2l0aCB0aGUga2VybmVsIGRldmljZSBjb3JlLiBIb3cgaXMgdGhhdCBkaWZm
-ZXJlbnQsDQo+ID4gPiA+ID4gaW4gdGVybXMgb2YgaW5zdGFudGlhdGluZyBhICJyZWFsIGRldmlj
-ZSIsIGZyb20gd2hhdCB0aGlzIHBhdGNoDQo+IGRvZXMgPw0KPiA+ID4gPg0KPiA+ID4gPiBUaGVy
-ZSBpcyBhIGRpZmZlcmVuY2UsIHJpZ2h0PyBpdCBpbnN0YW50aWF0ZXMgbmV3ICJpMmMgZHVtbXkN
-Cj4gY2xpZW50Ig0KPiA+ID4gPiBkcml2ZXIgYW5kIGEgInJlYWwgaTJjIGNsaWVudCBkZXZpY2Ui
-IGRyaXZlciBsaWtlIHJ0YyBkZXZpY2UNCj4gPiA+IGNsaWVudChydGMtaXNsMjEwOCk/Pw0KPiA+
-ID4NCj4gPiA+IEkgZG9uJ3Qgc2VlIGhvdyB0aGVyZSdzIGEgZGlmZmVyZW5jZSBpbiBiZWhhdmlv
-dXIgaW4gdGhlIGNvZGUgeW91DQo+ID4gPiBoYXZlIGltcGxlbWVudGVkLCBzb3JyeS4NCj4gPg0K
-PiA+IFdpbGwgcmV3b3JkLA0KPiA+DQo+ID4gRW5oYW5jZSBpMmNfbmV3X2FuY2lsbGFyeV9kZXZp
-Y2UoKSB0byBpbnN0YW50aWF0ZSBhICJJMkMgY2xpZW50DQo+IGRldmljZSINCj4gPiBhcGFydCBm
-cm9tIHRoZSBhbHJlYWR5IHN1cHBvcnRlZCAiSTJDIGR1bW15IGNsaWVudCBkZXZpY2UiLg0KPiA+
-DQo+ID4gPiA+ID4gPiA+ID4gKGVnOiBJbnN0YW50aWF0ZSBydGMgZGV2aWNlIGZyb20gUE1JQyBk
-cml2ZXIpDQo+ID4gPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+ID4gPiBBZGRlZCBoZWxwZXIgZnVu
-Y3Rpb24gX19pMmNfbmV3X2R1bW15X2RldmljZSB0byBzaGFyZSB0aGUNCj4gPiA+ID4gPiA+ID4g
-PiBjb2RlIGJldHdlZW4gaTJjX25ld19kdW1teV9kZXZpY2UgYW5kDQo+IGkyY19uZXdfYW5jaWxs
-YXJ5X2RldmljZSgpLg0KPiA+ID4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiA+ID4gQWxzbyBhZGRl
-ZCBoZWxwZXIgZnVuY3Rpb24gX19pMmNfbmV3X2NsaWVudF9kZXZpY2UoKSB0bw0KPiA+ID4gPiA+
-ID4gPiA+IHBhc3MgcGFyZW50IGRldiBwYXJhbWV0ZXIsIHNvIHRoYXQgdGhlIGFuY2lsbGFyeSBk
-ZXZpY2UNCj4gPiA+ID4gPiA+ID4gPiBjYW4gYXNzaWduIGl0cyBwYXJlbnQgZHVyaW5nIGNyZWF0
-aW9uLg0KPiA+ID4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiA+ID4gU3VnZ2VzdGVkLWJ5OiBHZWVy
-dCBVeXR0ZXJob2V2ZW4gPGdlZXJ0K3JlbmVzYXNAZ2xpZGVyLmJlPg0KPiA+ID4gPiA+ID4gPiA+
-IFNpZ25lZC1vZmYtYnk6IEJpanUgRGFzIDxiaWp1LmRhcy5qekBicC5yZW5lc2FzLmNvbT4NCj4g
-PiA+ID4gPiA+ID4gPiAtLS0NCj4gPiA+ID4gPiA+ID4gPiB2NC0+djU6DQo+ID4gPiA+ID4gPiA+
-ID4gICogUmVwbGFjZWQgcGFyYW1ldGVyIGRldi0+cGFyZW50IGluDQo+IF9faTJjX25ld19jbGll
-bnRfZGV2aWNlKCkgYW5kDQo+ID4gPiA+ID4gPiA+ID4gICAgX19pMmNfbmV3X2R1bW15X2Rldmlj
-ZSgpLg0KPiA+ID4gPiA+ID4gPiA+ICAqIEltcHJvdmVkIGVycm9yIG1lc3NhZ2UgaW4gX19pMmNf
-bmV3X2R1bW15X2RldmljZSgpIGJ5DQo+IHByaW50aW5nIGRldmljZSBuYW1lLg0KPiA+ID4gPiA+
-ID4gPiA+ICAqIFVwZGF0ZWQgY29tbWVudCBmb3IgYW5jaWxsYXJ5J3MgZGV2aWNlIHBhcmVudA0K
-PiA+ID4gPiA+ID4gPiA+ICAqIERyb3BwZWQgYXV4X2RldmljZV9uYW1lIGNoZWNrIGluDQo+IGky
-Y19uZXdfYW5jaWxsYXJ5X2RldmljZSgpLg0KPiA+ID4gPiA+ID4gPiA+IHYzLT52NDoNCj4gPiA+
-ID4gPiA+ID4gPiAgKiBEcm9wcGVkIFJiIHRhZyBmcm9tIEdlZXJ0IGFzIHRoZXJlIGFyZSBuZXcg
-Y2hhbmdlcy4NCj4gPiA+ID4gPiA+ID4gPiAgKiBJbnRyb2R1Y2VkIF9faTJjX25ld19kdW1teV9k
-ZXZpY2UoKSB0byBzaGFyZSB0aGUgY29kZQ0KPiBiZXR3ZWVuDQo+ID4gPiA+ID4gPiA+ID4gICAg
-aTJjX25ld19kdW1teV9kZXZpY2UgYW5kIGkyY19uZXdfYW5jaWxsYXJ5X2RldmljZSgpLg0KPiA+
-ID4gPiA+ID4gPiA+ICAqIEludHJvZHVjZWQgX19pMmNfbmV3X2NsaWVudF9kZXZpY2UoKSB0byBw
-YXNzIHBhcmVudCBkZXYNCj4gPiA+ID4gPiA+ID4gPiAgICBwYXJhbWV0ZXIsIHNvIHRoYXQgdGhl
-IGFuY2lsbGFyeSBkZXZpY2UgY2FuIGFzc2lnbiBpdHMNCj4gcGFyZW50IGR1cmluZw0KPiA+ID4g
-PiA+ID4gPiA+ICAgIGNyZWF0aW9uLg0KPiA+ID4gPiA+ID4gPiA+IHYzOg0KPiA+ID4gPiA+ID4g
-PiA+ICAqIE5ldyBwYXRjaA0KPiA+ID4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiA+ID4gUmVmOg0K
-PiA+ID4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiA+ID4gLS0tDQo+ID4gPiA+ID4gPiA+ID4gIGRy
-aXZlcnMvZ3B1L2RybS9icmlkZ2UvYWR2NzUxMS9hZHY3NTExX2Rydi5jIHwgIDYgKy0NCj4gPiA+
-ID4gPiA+ID4gPiAgZHJpdmVycy9pMmMvaTJjLWNvcmUtYmFzZS5jICAgICAgICAgICAgICAgICAg
-fCA5Mg0KPiArKysrKysrKysrKysrLS0tLS0tLQ0KPiA+ID4gPiA+ID4gPiA+ICBkcml2ZXJzL21l
-ZGlhL2kyYy9hZHY3NDh4L2Fkdjc0OHgtY29yZS5jICAgICB8ICAyICstDQo+ID4gPiA+ID4gPiA+
-ID4gIGRyaXZlcnMvbWVkaWEvaTJjL2Fkdjc2MDQuYyAgICAgICAgICAgICAgICAgIHwgIDMgKy0N
-Cj4gPiA+ID4gPiA+ID4gPiAgaW5jbHVkZS9saW51eC9pMmMuaCAgICAgICAgICAgICAgICAgICAg
-ICAgICAgfCAgMyArLQ0KPiA+ID4gPiA+ID4gPiA+ICA1IGZpbGVzIGNoYW5nZWQsIDY5IGluc2Vy
-dGlvbnMoKyksIDM3IGRlbGV0aW9ucygtKQ0KPiA+ID4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiA+
-ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9icmlkZ2UvYWR2NzUxMS9hZHY3NTExX2Ry
-di5jDQo+ID4gPiA+ID4gPiA+ID4gYi9kcml2ZXJzL2dwdS9kcm0vYnJpZGdlL2Fkdjc1MTEvYWR2
-NzUxMV9kcnYuYw0KPiA+ID4gPiA+ID4gPiA+IGluZGV4IGRkY2VhZmE3YjYzNy4uODYzMDZiMDEw
-YTBhIDEwMDY0NA0KPiA+ID4gPiA+ID4gPiA+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9icmlkZ2Uv
-YWR2NzUxMS9hZHY3NTExX2Rydi5jDQo+ID4gPiA+ID4gPiA+ID4gKysrIGIvZHJpdmVycy9ncHUv
-ZHJtL2JyaWRnZS9hZHY3NTExL2Fkdjc1MTFfZHJ2LmMNCj4gPiA+ID4gPiA+ID4gPiBAQCAtMTA3
-Miw3ICsxMDcyLDcgQEAgc3RhdGljIGludA0KPiA+ID4gPiA+ID4gPiA+IGFkdjc1MTFfaW5pdF9j
-ZWNfcmVnbWFwKHN0cnVjdCBhZHY3NTExICphZHYpDQo+ID4gPiA+ID4gPiA+ID4gIAlpbnQgcmV0
-Ow0KPiA+ID4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiA+ID4gIAlhZHYtPmkyY19jZWMgPSBpMmNf
-bmV3X2FuY2lsbGFyeV9kZXZpY2UoYWR2LT5pMmNfbWFpbiwNCj4gImNlYyIsDQo+ID4gPiA+ID4g
-PiA+ID4gLQ0KPiAJQURWNzUxMV9DRUNfSTJDX0FERFJfREVGQVVMVCk7DQo+ID4gPiA+ID4gPiA+
-ID4gKwkJCQkgICAgQURWNzUxMV9DRUNfSTJDX0FERFJfREVGQVVMVCwNCj4gTlVMTCk7DQo+ID4g
-PiA+ID4gPiA+ID4gIAlpZiAoSVNfRVJSKGFkdi0+aTJjX2NlYykpDQo+ID4gPiA+ID4gPiA+ID4g
-IAkJcmV0dXJuIFBUUl9FUlIoYWR2LT5pMmNfY2VjKTsNCj4gPiA+ID4gPiA+ID4gPg0KPiA+ID4g
-PiA+ID4gPiA+IEBAIC0xMjYxLDcgKzEyNjEsNyBAQCBzdGF0aWMgaW50IGFkdjc1MTFfcHJvYmUo
-c3RydWN0DQo+IGkyY19jbGllbnQgKmkyYykNCj4gPiA+ID4gPiA+ID4gPiAgCWFkdjc1MTFfcGFj
-a2V0X2Rpc2FibGUoYWR2NzUxMSwgMHhmZmZmKTsNCj4gPiA+ID4gPiA+ID4gPg0KPiA+ID4gPiA+
-ID4gPiA+ICAJYWR2NzUxMS0+aTJjX2VkaWQgPSBpMmNfbmV3X2FuY2lsbGFyeV9kZXZpY2UoaTJj
-LA0KPiAiZWRpZCIsDQo+ID4gPiA+ID4gPiA+ID4gLQ0KPiAJQURWNzUxMV9FRElEX0kyQ19BRERS
-X0RFRkFVTFQpOw0KPiA+ID4gPiA+ID4gPiA+ICsJCQkJCUFEVjc1MTFfRURJRF9JMkNfQUREUl9E
-RUZBVUxULA0KPiBOVUxMKTsNCj4gPiA+ID4gPiA+ID4gPiAgCWlmIChJU19FUlIoYWR2NzUxMS0+
-aTJjX2VkaWQpKSB7DQo+ID4gPiA+ID4gPiA+ID4gIAkJcmV0ID0gUFRSX0VSUihhZHY3NTExLT5p
-MmNfZWRpZCk7DQo+ID4gPiA+ID4gPiA+ID4gIAkJZ290byB1bmluaXRfcmVndWxhdG9yczsgQEAg
-LTEyNzEsNyArMTI3MSw3IEBADQo+IHN0YXRpYw0KPiA+ID4gPiA+ID4gPiA+IGludCBhZHY3NTEx
-X3Byb2JlKHN0cnVjdCBpMmNfY2xpZW50ICppMmMpDQo+ID4gPiA+ID4gPiA+ID4gIAkJICAgICBh
-ZHY3NTExLT5pMmNfZWRpZC0+YWRkciA8PCAxKTsNCj4gPiA+ID4gPiA+ID4gPg0KPiA+ID4gPiA+
-ID4gPiA+ICAJYWR2NzUxMS0+aTJjX3BhY2tldCA9IGkyY19uZXdfYW5jaWxsYXJ5X2RldmljZShp
-MmMsDQo+ICJwYWNrZXQiLA0KPiA+ID4gPiA+ID4gPiA+IC0NCj4gCUFEVjc1MTFfUEFDS0VUX0ky
-Q19BRERSX0RFRkFVTFQpOw0KPiA+ID4gPiA+ID4gPiA+ICsNCj4gCUFEVjc1MTFfUEFDS0VUX0ky
-Q19BRERSX0RFRkFVTFQsIE5VTEwpOw0KPiA+ID4gPiA+ID4gPiA+ICAJaWYgKElTX0VSUihhZHY3
-NTExLT5pMmNfcGFja2V0KSkgew0KPiA+ID4gPiA+ID4gPiA+ICAJCXJldCA9IFBUUl9FUlIoYWR2
-NzUxMS0+aTJjX3BhY2tldCk7DQo+ID4gPiA+ID4gPiA+ID4gIAkJZ290byBlcnJfaTJjX3VucmVn
-aXN0ZXJfZWRpZDsgZGlmZiAtLWdpdA0KPiA+ID4gPiA+ID4gPiA+IGEvZHJpdmVycy9pMmMvaTJj
-LWNvcmUtYmFzZS5jDQo+ID4gPiA+ID4gPiA+ID4gYi9kcml2ZXJzL2kyYy9pMmMtY29yZS1iYXNl
-LmMgaW5kZXgNCj4gPiA+ID4gPiA+ID4gPiBhZTNhZjczOGIwM2YuLjM0NDJhYTgwMjkwZg0KPiA+
-ID4gPiA+ID4gPiA+IDEwMDY0NA0KPiA+ID4gPiA+ID4gPiA+IC0tLSBhL2RyaXZlcnMvaTJjL2ky
-Yy1jb3JlLWJhc2UuY3Z2Y2NjDQo+ID4gPiA+ID4gPiA+ID4gKysrIGIvZHJpdmVycy9pMmMvaTJj
-LWNvcmUtYmFzZS5jY2t2bHJnbnVsa2oNCj4gPiA+ID4gPiA+ID4gPiBAQCAtODkzLDI0ICs4OTMs
-MTAgQEAgaW50IGkyY19kZXZfaXJxX2Zyb21fcmVzb3VyY2VzKGNvbnN0DQo+IHN0cnVjdCByZXNv
-dXJjZSAqcmVzb3VyY2VzLA0KPiA+ID4gPiA+ID4gPiA+ICAJcmV0dXJuIDA7DQo+ID4gPiA+ID4g
-PiA+ID4gIH0NCj4gPiA+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gPiA+IC0vKioNCj4gPiA+ID4g
-PiA+ID4gPiAtICogaTJjX25ld19jbGllbnRfZGV2aWNlIC0gaW5zdGFudGlhdGUgYW4gaTJjIGRl
-dmljZQ0KPiA+ID4gPiA+ID4gPiA+IC0gKiBAYWRhcDogdGhlIGFkYXB0ZXIgbWFuYWdpbmcgdGhl
-IGRldmljZQ0KPiA+ID4gPiA+ID4gPiA+IC0gKiBAaW5mbzogZGVzY3JpYmVzIG9uZSBJMkMgZGV2
-aWNlOyBidXNfbnVtIGlzIGlnbm9yZWQNCj4gPiA+ID4gPiA+ID4gPiAtICogQ29udGV4dDogY2Fu
-IHNsZWVwDQo+ID4gPiA+ID4gPiA+ID4gLSAqDQo+ID4gPiA+ID4gPiA+ID4gLSAqIENyZWF0ZSBh
-biBpMmMgZGV2aWNlLiBCaW5kaW5nIGlzIGhhbmRsZWQgdGhyb3VnaA0KPiA+ID4gPiA+ID4gPiA+
-IGRyaXZlciBtb2RlbA0KPiA+ID4gPiA+ID4gPiA+IC0gKiBwcm9iZSgpL3JlbW92ZSgpIG1ldGhv
-ZHMuICBBIGRyaXZlciBtYXkgYmUgYm91bmQgdG8NCj4gPiA+ID4gPiA+ID4gPiB0aGlzIGRldmlj
-ZSB3aGVuIHdlDQo+ID4gPiA+ID4gPiA+ID4gLSAqIHJldHVybiBmcm9tIHRoaXMgZnVuY3Rpb24s
-IG9yIGFueSBsYXRlciBtb21lbnQgKGUuZy4NCj4gPiA+ID4gPiA+ID4gPiBtYXliZSBob3RwbHVn
-Z2luZyB3aWxsDQo+ID4gPiA+ID4gPiA+ID4gLSAqIGxvYWQgdGhlIGRyaXZlciBtb2R1bGUpLiAg
-VGhpcyBjYWxsIGlzIG5vdCBhcHByb3ByaWF0ZQ0KPiA+ID4gPiA+ID4gPiA+IGZvciB1c2UgYnkg
-bWFpbmJvYXJkDQo+ID4gPiA+ID4gPiA+ID4gLSAqIGluaXRpYWxpemF0aW9uIGxvZ2ljLCB3aGlj
-aCB1c3VhbGx5IHJ1bnMgZHVyaW5nIGFuDQo+ID4gPiA+ID4gPiA+ID4gYXJjaF9pbml0Y2FsbCgp
-IGxvbmcNCj4gPiA+ID4gPiA+ID4gPiAtICogYmVmb3JlIGFueSBpMmNfYWRhcHRlciBjb3VsZCBl
-eGlzdC4NCj4gPiA+ID4gPiA+ID4gPiAtICoNCj4gPiA+ID4gPiA+ID4gPiAtICogVGhpcyByZXR1
-cm5zIHRoZSBuZXcgaTJjIGNsaWVudCwgd2hpY2ggbWF5IGJlIHNhdmVkDQo+ID4gPiA+ID4gPiA+
-ID4gZm9yIGxhdGVyIHVzZSB3aXRoDQo+ID4gPiA+ID4gPiA+ID4gLSAqIGkyY191bnJlZ2lzdGVy
-X2RldmljZSgpOyBvciBhbiBFUlJfUFRSIHRvIGRlc2NyaWJlIHRoZQ0KPiBlcnJvci4NCj4gPiA+
-ID4gPiA+ID4gPiAtICovDQo+ID4gPiA+ID4gPiA+ID4gLXN0cnVjdCBpMmNfY2xpZW50ICoNCj4g
-PiA+ID4gPiA+ID4gPiAtaTJjX25ld19jbGllbnRfZGV2aWNlKHN0cnVjdCBpMmNfYWRhcHRlciAq
-YWRhcCwgc3RydWN0DQo+ID4gPiA+ID4gPiA+ID4gaTJjX2JvYXJkX2luZm8gY29uc3QgKmluZm8p
-DQo+ID4gPiA+ID4gPiA+ID4gK3N0YXRpYyBzdHJ1Y3QgaTJjX2NsaWVudCAqIF9faTJjX25ld19j
-bGllbnRfZGV2aWNlKHN0cnVjdA0KPiA+ID4gPiA+ID4gPiA+ICtpMmNfYWRhcHRlciAqYWRhcCwN
-Cj4gPiA+ID4gPiA+ID4gPiArCQkJc3RydWN0IGkyY19ib2FyZF9pbmZvIGNvbnN0ICppbmZvLA0K
-PiA+ID4gPiA+ID4gPiA+ICsJCQlzdHJ1Y3QgZGV2aWNlICpwYXJlbnQpDQo+ID4gPiA+ID4gPiA+
-ID4gIHsNCj4gPiA+ID4gPiA+ID4gPiAgCXN0cnVjdCBpMmNfY2xpZW50CSpjbGllbnQ7DQo+ID4g
-PiA+ID4gPiA+ID4gIAlpbnQJCQlzdGF0dXM7DQo+ID4gPiA+ID4gPiA+ID4gQEAgLTk0NCw3ICs5
-MzAsNyBAQCBpMmNfbmV3X2NsaWVudF9kZXZpY2Uoc3RydWN0DQo+IGkyY19hZGFwdGVyICphZGFw
-LCBzdHJ1Y3QgaTJjX2JvYXJkX2luZm8gY29uc3QgKmluZg0KPiA+ID4gPiA+ID4gPiA+ICAJaWYg
-KHN0YXR1cykNCj4gPiA+ID4gPiA+ID4gPiAgCQlnb3RvIG91dF9lcnI7DQo+ID4gPiA+ID4gPiA+
-ID4NCj4gPiA+ID4gPiA+ID4gPiAtCWNsaWVudC0+ZGV2LnBhcmVudCA9ICZjbGllbnQtPmFkYXB0
-ZXItPmRldjsNCj4gPiA+ID4gPiA+ID4gPiArCWNsaWVudC0+ZGV2LnBhcmVudCA9IHBhcmVudCA/
-IHBhcmVudCA6DQo+ID4gPiA+ID4gPiA+ID4gKyZjbGllbnQtPmFkYXB0ZXItPmRldjsNCj4gPiA+
-ID4gPiA+ID4gPiAgCWNsaWVudC0+ZGV2LmJ1cyA9ICZpMmNfYnVzX3R5cGU7DQo+ID4gPiA+ID4g
-PiA+ID4gIAljbGllbnQtPmRldi50eXBlID0gJmkyY19jbGllbnRfdHlwZTsNCj4gPiA+ID4gPiA+
-ID4gPiAgCWNsaWVudC0+ZGV2Lm9mX25vZGUgPSBvZl9ub2RlX2dldChpbmZvLT5vZl9ub2RlKTsg
-QEANCj4gPiA+ID4gPiA+ID4gPiAtOTg0LDYNCj4gPiA+ID4gPiA+ID4gPiArOTcwLDI4IEBAIGky
-Y19uZXdfY2xpZW50X2RldmljZShzdHJ1Y3QgaTJjX2FkYXB0ZXIgKmFkYXAsDQo+ID4gPiA+ID4g
-PiA+ID4gK3N0cnVjdCBpMmNfYm9hcmRfaW5mbyBjb25zdCAqaW5mDQo+ID4gPiA+ID4gPiA+ID4g
-IAlrZnJlZShjbGllbnQpOw0KPiA+ID4gPiA+ID4gPiA+ICAJcmV0dXJuIEVSUl9QVFIoc3RhdHVz
-KTsNCj4gPiA+ID4gPiA+ID4gPiAgfQ0KPiA+ID4gPiA+ID4gPiA+ICsNCj4gPiA+ID4gPiA+ID4g
-PiArLyoqDQo+ID4gPiA+ID4gPiA+ID4gKyAqIGkyY19uZXdfY2xpZW50X2RldmljZSAtIGluc3Rh
-bnRpYXRlIGFuIGkyYyBkZXZpY2UNCj4gPiA+ID4gPiA+ID4gPiArICogQGFkYXA6IHRoZSBhZGFw
-dGVyIG1hbmFnaW5nIHRoZSBkZXZpY2UNCj4gPiA+ID4gPiA+ID4gPiArICogQGluZm86IGRlc2Ny
-aWJlcyBvbmUgSTJDIGRldmljZTsgYnVzX251bSBpcyBpZ25vcmVkDQo+ID4gPiA+ID4gPiA+ID4g
-KyAqIENvbnRleHQ6IGNhbiBzbGVlcA0KPiA+ID4gPiA+ID4gPiA+ICsgKg0KPiA+ID4gPiA+ID4g
-PiA+ICsgKiBDcmVhdGUgYW4gaTJjIGRldmljZS4gQmluZGluZyBpcyBoYW5kbGVkIHRocm91Z2gN
-Cj4gPiA+ID4gPiA+ID4gPiArZHJpdmVyIG1vZGVsDQo+ID4gPiA+ID4gPiA+ID4gKyAqIHByb2Jl
-KCkvcmVtb3ZlKCkgbWV0aG9kcy4gIEEgZHJpdmVyIG1heSBiZSBib3VuZCB0bw0KPiA+ID4gPiA+
-ID4gPiA+ICt0aGlzIGRldmljZSB3aGVuIHdlDQo+ID4gPiA+ID4gPiA+ID4gKyAqIHJldHVybiBm
-cm9tIHRoaXMgZnVuY3Rpb24sIG9yIGFueSBsYXRlciBtb21lbnQgKGUuZy4NCj4gPiA+ID4gPiA+
-ID4gPiArbWF5YmUgaG90cGx1Z2dpbmcgd2lsbA0KPiA+ID4gPiA+ID4gPiA+ICsgKiBsb2FkIHRo
-ZSBkcml2ZXIgbW9kdWxlKS4gIFRoaXMgY2FsbCBpcyBub3QgYXBwcm9wcmlhdGUNCj4gPiA+ID4g
-PiA+ID4gPiArZm9yIHVzZSBieSBtYWluYm9hcmQNCj4gPiA+ID4gPiA+ID4gPiArICogaW5pdGlh
-bGl6YXRpb24gbG9naWMsIHdoaWNoIHVzdWFsbHkgcnVucyBkdXJpbmcgYW4NCj4gPiA+ID4gPiA+
-ID4gPiArYXJjaF9pbml0Y2FsbCgpIGxvbmcNCj4gPiA+ID4gPiA+ID4gPiArICogYmVmb3JlIGFu
-eSBpMmNfYWRhcHRlciBjb3VsZCBleGlzdC4NCj4gPiA+ID4gPiA+ID4gPiArICoNCj4gPiA+ID4g
-PiA+ID4gPiArICogVGhpcyByZXR1cm5zIHRoZSBuZXcgaTJjIGNsaWVudCwgd2hpY2ggbWF5IGJl
-IHNhdmVkDQo+ID4gPiA+ID4gPiA+ID4gK2ZvciBsYXRlciB1c2Ugd2l0aA0KPiA+ID4gPiA+ID4g
-PiA+ICsgKiBpMmNfdW5yZWdpc3Rlcl9kZXZpY2UoKTsgb3IgYW4gRVJSX1BUUiB0byBkZXNjcmli
-ZSB0aGUNCj4gZXJyb3IuDQo+ID4gPiA+ID4gPiA+ID4gKyAqLw0KPiA+ID4gPiA+ID4gPiA+ICtz
-dHJ1Y3QgaTJjX2NsaWVudCAqDQo+ID4gPiA+ID4gPiA+ID4gK2kyY19uZXdfY2xpZW50X2Rldmlj
-ZShzdHJ1Y3QgaTJjX2FkYXB0ZXIgKmFkYXAsIHN0cnVjdA0KPiA+ID4gPiA+ID4gPiA+ICtpMmNf
-Ym9hcmRfaW5mbyBjb25zdCAqaW5mbykgew0KPiA+ID4gPiA+ID4gPiA+ICsJcmV0dXJuIF9faTJj
-X25ld19jbGllbnRfZGV2aWNlKGFkYXAsIGluZm8sIE5VTEwpOyB9DQo+ID4gPiA+ID4gPiA+ID4g
-IEVYUE9SVF9TWU1CT0xfR1BMKGkyY19uZXdfY2xpZW50X2RldmljZSk7DQo+ID4gPiA+ID4gPiA+
-ID4NCj4gPiA+ID4gPiA+ID4gPiAgLyoqDQo+ID4gPiA+ID4gPiA+ID4gQEAgLTEwNTQsNiArMTA2
-MiwyNiBAQCBzdGF0aWMgc3RydWN0IGkyY19kcml2ZXINCj4gZHVtbXlfZHJpdmVyID0gew0KPiA+
-ID4gPiA+ID4gPiA+ICAJLmlkX3RhYmxlCT0gZHVtbXlfaWQsDQo+ID4gPiA+ID4gPiA+ID4gIH07
-DQo+ID4gPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+ID4gPiArc3RhdGljIHN0cnVjdCBpMmNfY2xp
-ZW50ICpfX2kyY19uZXdfZHVtbXlfZGV2aWNlKHN0cnVjdA0KPiBpMmNfYWRhcHRlciAqYWRhcHRl
-ciwNCj4gPiA+ID4gPiA+ID4gPiArCQkJCQkJIHUxNiBhZGRyZXNzLCBjb25zdCBjaGFyDQo+ICpu
-YW1lLA0KPiA+ID4gPiA+ID4gPiA+ICsJCQkJCQkgc3RydWN0IGRldmljZSAqcGFyZW50KSB7DQo+
-ID4gPiA+ID4gPiA+ID4gKwlzdHJ1Y3QgaTJjX2JvYXJkX2luZm8gaW5mbyA9IHsNCj4gPiA+ID4g
-PiA+ID4gPiArCQlJMkNfQk9BUkRfSU5GTygiZHVtbXkiLCBhZGRyZXNzKSwNCj4gPiA+ID4gPiA+
-ID4gPiArCX07DQo+ID4gPiA+ID4gPiA+ID4gKw0KPiA+ID4gPiA+ID4gPiA+ICsJaWYgKG5hbWUp
-IHsNCj4gPiA+ID4gPiA+ID4gPiArCQlzc2l6ZV90IHJldCA9IHN0cnNjcHkoaW5mby50eXBlLCBu
-YW1lLA0KPiA+ID4gPiA+ID4gPiA+ICtzaXplb2YoaW5mby50eXBlKSk7DQo+ID4gPiA+ID4gPiA+
-ID4gKw0KPiA+ID4gPiA+ID4gPiA+ICsJCWlmIChyZXQgPCAwKQ0KPiA+ID4gPiA+ID4gPiA+ICsJ
-CQlyZXR1cm4gRVJSX1BUUihkZXZfZXJyX3Byb2JlKCZhZGFwdGVyLQ0KPiA+ZGV2LCByZXQsDQo+
-ID4gPiA+ID4gPiA+ID4gKwkJCQkJCSAgICAgIkludmFsaWQgZGV2aWNlDQo+IG5hbWU6ICVzXG4i
-LA0KPiA+ID4gPiA+ID4gPiA+ICsJCQkJCQkgICAgIG5hbWUpKTsNCj4gPiA+ID4gPiA+ID4gPiAr
-CX0NCj4gPiA+ID4gPiA+ID4gPiArDQo+ID4gPiA+ID4gPiA+ID4gKwlyZXR1cm4gX19pMmNfbmV3
-X2NsaWVudF9kZXZpY2UoYWRhcHRlciwgJmluZm8sDQo+IHBhcmVudCk7DQo+ID4gPiA+ID4gPiA+
-ID4gK30NCj4gPiA+ID4gPiA+ID4gPiArDQo+ID4gPiA+ID4gPiA+ID4gIC8qKg0KPiA+ID4gPiA+
-ID4gPiA+ICAgKiBpMmNfbmV3X2R1bW15X2RldmljZSAtIHJldHVybiBhIG5ldyBpMmMgZGV2aWNl
-IGJvdW5kDQo+IHRvIGEgZHVtbXkgZHJpdmVyDQo+ID4gPiA+ID4gPiA+ID4gICAqIEBhZGFwdGVy
-OiB0aGUgYWRhcHRlciBtYW5hZ2luZyB0aGUgZGV2aWNlIEBAIC0xMDc0LDExDQo+ID4gPiA+ID4g
-PiA+ID4gKzExMDIsNyBAQCBzdGF0aWMgc3RydWN0IGkyY19kcml2ZXIgZHVtbXlfZHJpdmVyID0g
-ew0KPiA+ID4gPiA+ID4gPiA+ICAgKi8NCj4gPiA+ID4gPiA+ID4gPiAgc3RydWN0IGkyY19jbGll
-bnQgKmkyY19uZXdfZHVtbXlfZGV2aWNlKHN0cnVjdA0KPiBpMmNfYWRhcHRlciAqYWRhcHRlciwg
-dTE2IGFkZHJlc3MpICB7DQo+ID4gPiA+ID4gPiA+ID4gLQlzdHJ1Y3QgaTJjX2JvYXJkX2luZm8g
-aW5mbyA9IHsNCj4gPiA+ID4gPiA+ID4gPiAtCQlJMkNfQk9BUkRfSU5GTygiZHVtbXkiLCBhZGRy
-ZXNzKSwNCj4gPiA+ID4gPiA+ID4gPiAtCX07DQo+ID4gPiA+ID4gPiA+ID4gLQ0KPiA+ID4gPiA+
-ID4gPiA+IC0JcmV0dXJuIGkyY19uZXdfY2xpZW50X2RldmljZShhZGFwdGVyLCAmaW5mbyk7DQo+
-ID4gPiA+ID4gPiA+ID4gKwlyZXR1cm4gX19pMmNfbmV3X2R1bW15X2RldmljZShhZGFwdGVyLCBh
-ZGRyZXNzLCBOVUxMLA0KPiA+ID4gPiA+ID4gPiA+ICtOVUxMKTsNCj4gPiA+ID4gPiA+ID4gPiAg
-fQ0KPiA+ID4gPiA+ID4gPiA+ICBFWFBPUlRfU1lNQk9MX0dQTChpMmNfbmV3X2R1bW15X2Rldmlj
-ZSk7DQo+ID4gPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+ID4gPiBAQCAtMTEyMiwxNSArMTE0Niwx
-OSBAQA0KPiBFWFBPUlRfU1lNQk9MX0dQTChkZXZtX2kyY19uZXdfZHVtbXlfZGV2aWNlKTsNCj4g
-PiA+ID4gPiA+ID4gPiAgICogQGNsaWVudDogSGFuZGxlIHRvIHRoZSBwcmltYXJ5IGNsaWVudA0K
-PiA+ID4gPiA+ID4gPiA+ICAgKiBAbmFtZTogSGFuZGxlIHRvIHNwZWNpZnkgd2hpY2ggc2Vjb25k
-YXJ5IGFkZHJlc3MgdG8NCj4gZ2V0DQo+ID4gPiA+ID4gPiA+ID4gICAqIEBkZWZhdWx0X2FkZHI6
-IFVzZWQgYXMgYSBmYWxsYmFjayBpZiBubyBzZWNvbmRhcnkNCj4gPiA+ID4gPiA+ID4gPiBhZGRy
-ZXNzIHdhcyBzcGVjaWZpZWQNCj4gPiA+ID4gPiA+ID4gPiArICogQGF1eF9kZXZpY2VfbmFtZTog
-QW5jaWxsYXJ5IGRldmljZSBuYW1lDQo+ID4gPiA+ID4gPiA+ID4gICAqIENvbnRleHQ6IGNhbiBz
-bGVlcA0KPiA+ID4gPiA+ID4gPiA+ICAgKg0KPiA+ID4gPiA+ID4gPiA+ICAgKiBJMkMgY2xpZW50
-cyBjYW4gYmUgY29tcG9zZWQgb2YgbXVsdGlwbGUgSTJDIHNsYXZlcw0KPiBib3VuZCB0b2dldGhl
-ciBpbiBhIHNpbmdsZQ0KPiA+ID4gPiA+ID4gPiA+ICAgKiBjb21wb25lbnQuIFRoZSBJMkMgY2xp
-ZW50IGRyaXZlciB0aGVuIGJpbmRzIHRvIHRoZQ0KPiA+ID4gPiA+ID4gPiA+IG1hc3RlciBJMkMg
-c2xhdmUgYW5kIG5lZWRzDQo+ID4gPiA+ID4gPiA+ID4gLSAqIHRvIGNyZWF0ZSBJMkMgZHVtbXkg
-Y2xpZW50cyB0byBjb21tdW5pY2F0ZSB3aXRoIGFsbA0KPiB0aGUgb3RoZXIgc2xhdmVzLg0KPiA+
-ID4gPiA+ID4gPiA+ICsgKiB0byBjcmVhdGUgSTJDIGFuY2lsbGFyeSBjbGllbnRzIHRvIGNvbW11
-bmljYXRlIHdpdGgNCj4gYWxsIHRoZSBvdGhlciBzbGF2ZXMuDQo+ID4gPiA+ID4gPiA+ID4gICAq
-DQo+ID4gPiA+ID4gPiA+ID4gLSAqIFRoaXMgZnVuY3Rpb24gY3JlYXRlcyBhbmQgcmV0dXJucyBh
-biBJMkMgZHVtbXkgY2xpZW50DQo+ID4gPiA+ID4gPiA+ID4gd2hvc2UgSTJDIGFkZHJlc3MgaXMN
-Cj4gPiA+ID4gPiA+ID4gPiAtICogcmV0cmlldmVkIGZyb20gdGhlIHBsYXRmb3JtIGZpcm13YXJl
-IGJhc2VkIG9uIHRoZQ0KPiA+ID4gPiA+ID4gPiA+IGdpdmVuIHNsYXZlIG5hbWUuIElmIG5vDQo+
-ID4gPiA+ID4gPiA+ID4gLSAqIGFkZHJlc3MgaXMgc3BlY2lmaWVkIGJ5IHRoZSBmaXJtd2FyZSBk
-ZWZhdWx0X2FkZHIgaXMNCj4gdXNlZC4NCj4gPiA+ID4gPiA+ID4gPiArICogVGhpcyBmdW5jdGlv
-biBjcmVhdGVzIGFuZCByZXR1cm5zIGFuIEkyQyBhbmNpbGxhcnkNCj4gPiA+ID4gPiA+ID4gPiAr
-IGNsaWVudCB3aG9zZSBJMkMgYWRkcmVzcw0KPiA+ID4gPiA+ID4gPiA+ICsgKiBpcyByZXRyaWV2
-ZWQgZnJvbSB0aGUgcGxhdGZvcm0gZmlybXdhcmUgYmFzZWQgb24gdGhlDQo+ID4gPiA+ID4gPiA+
-ID4gKyBnaXZlbiBzbGF2ZSBuYW1lLiBpZg0KPiA+ID4gPiA+ID4gPiA+ICsgKiBhdXhfZGV2aWNl
-X25hbWUgaXMgc3BlY2lmaWVkIGJ5IHRoZSBmaXJtd2FyZSwNCj4gPiA+ID4gPiA+ID4NCj4gPiA+
-ID4gPiA+ID4gVW5sZXNzIEknbSBtaXNzaW5nIHNvbWV0aGluZywgYXV4X2RldmljZV9uYW1lIGlz
-bid0DQo+ID4gPiA+ID4gPiA+IHNwZWNpZmllZCBieSB0aGUgZmlybXdhcmUsIGl0J3MgYSBmdW5j
-dGlvbiBwYXJhbWV0ZXIuDQo+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gSXQgaXMgc3BlY2lmaWVk
-IGluIHRoZSBwbGF0Zm9ybSBmaXJtd2FyZShkZXZpY2UgdHJlZQ0KPiBmaXJtd2FyZSkuDQo+ID4g
-PiA+ID4NCj4gPiA+ID4gPiBXaGF0IEkgbWVhbnQsIGluIHRoZSBjb250ZXh0IG9mIHRoZSBkb2N1
-bWVudGF0aW9uIGhlcmUsIGlzIHRoYXQNCj4gPiA+ID4gPiB0aGUgYWRkcmVzcyBpcyByZXRyaWV2
-ZWQgZnJvbSB0aGUgcGxhdGZvcm0gZmlybXdhcmUgYnkgdGhlDQo+ID4gPiA+ID4gaTJjX25ld19h
-bmNpbGxhcnlfZGV2aWNlKCkgZnVuY3Rpb24sIG5vdCBwYXNzZWQgYXMgYSBwYXJhbWV0ZXIsDQo+
-ID4gPiA+ID4gd2hpbGUgdGhlIG5hbWUgaXMgcGFzc2VkIGFzIGEgcGFyYW1ldGVyLiBJdCdzIG5v
-dCByZWxldmFudCwgZm9yDQo+ID4gPiA+ID4gdGhlIGRvY3VtZW50YXRpb24gb2YgdGhpcyBmdW5j
-dGlvbiwgd2hlcmUgdGhlIGNhbGxlciBnZXRzIHRoZQ0KPiBuYW1lIGZyb20uDQo+ID4gPiA+DQo+
-ID4gPiA+IEFyZSB5b3Ugb2sgd2l0aCB0aGVzZSB3b3JkaW5ncz8NCj4gPiA+ID4NCj4gPiA+ID4g
-KiBUaGlzIGZ1bmN0aW9uIGNyZWF0ZXMgYW5kIHJldHVybnMgYW4gSTJDIGFuY2lsbGFyeSBjbGll
-bnQgd2hvc2UNCj4gPiA+ID4gSTJDIGFkZHJlc3MNCj4gPiA+ID4gKiBpcyByZXRyaWV2ZWQgZnJv
-bSB0aGUgcGxhdGZvcm0gZmlybXdhcmUgYmFzZWQgb24gdGhlIGdpdmVuIHNsYXZlDQo+ID4gPiA+
-IG5hbWUuIElmDQo+ID4gPiA+ICogYXV4X2RldmljZV9uYW1lIGlzIG5vdCBOVUxMLCB0aGUgYW5j
-aWxsYXJ5J3MgZGV2aWNlIHBhcmVudA0KPiA+ID4gPiAqIHdpbGwgYmUgc2V0IHRvIHRoZSBwcmlt
-YXJ5IGRldmljZSBvdGhlcndpc2UgaXQgd2lsbCBiZSBzZXQgdG8NCj4gSTJDIGFkYXB0ZXIuDQo+
-ID4gPg0KPiA+ID4gVGhlIHdvcmRpbmcgaXMgYmV0dGVyLCBidXQgdGhpcyBpcyBub3Qgd2hhdCB5
-b3UgaGF2ZSBpbXBsZW1lbnRlZCBpbg0KPiA+ID4gdGhlIGNvZGUuIFRoZSBuYW1lIGRvZXNuJ3Qg
-c2VsZWN0IHdoaWNoIHBhcmVudCBpcyB1c2VkLg0KPiA+DQo+ID4gSXQgaXMgdGhlIHNhbWUgaW1w
-bGVtZW50ZWQgaW4gdGhlIGNvZGUuDQo+ID4NCj4gPiBGb3IgdGhlIGV4aXN0aW5nIHVzZXJzLCBh
-dXhfZGV2aWNlX25hbWUgaXMgTlVMTCAtLT4gVGhlIHBhcmVudCBpcyBzZXQNCj4gPiBhcyAiSTJD
-IGFkYXB0ZXIiLg0KPiA+DQo+ID4gRm9yIGluc3RhbnRpYXRpbmcgYSAiaTJjIGNsaWVudCBkZXZp
-Y2UiLCBhdXhfZGV2aWNlX25hbWUgaXMgbm90IE5VTEwNCj4gPiAtLT4gVGhlIHBhcmVudCBpcyBz
-ZXQgYXMgcHJpbWFyeSBkZXZpY2UuDQo+ID4NCj4gPiBUaGUgcHJpbWFyeSBkZXZpY2UgaXMgdGhl
-IG9uZSBpbnN0YW50aWF0ZWQgdGhlICJpMmMgY2xpZW50IGRldmljZSINCj4gPiB1c2luZyBpMmNf
-bmV3X2FuY2lsbGFyeV9kZXZpY2UoKS4NCj4gPg0KPiA+IFBsZWFzZSBjb3JyZWN0IG1lIGlmIGFu
-eXRoaW5nIHdyb25nIGhlcmUuDQo+IA0KPiBCZWZvcmUgeW91ciBwYXRjaDoNCj4gDQo+IHN0cnVj
-dCBpMmNfY2xpZW50ICppMmNfbmV3X2FuY2lsbGFyeV9kZXZpY2Uoc3RydWN0IGkyY19jbGllbnQg
-KmNsaWVudCwNCj4gCQkJCQkJY29uc3QgY2hhciAqbmFtZSwNCj4gCQkJCQkJdTE2IGRlZmF1bHRf
-YWRkcikNCj4gew0KPiBbLi4uXQ0KPiAJcmV0dXJuIGkyY19uZXdfZHVtbXlfZGV2aWNlKGNsaWVu
-dC0+YWRhcHRlciwgYWRkcik7IH0NCj4gDQo+IHN0cnVjdCBpMmNfY2xpZW50ICppMmNfbmV3X2R1
-bW15X2RldmljZShzdHJ1Y3QgaTJjX2FkYXB0ZXIgKmFkYXB0ZXIsIHUxNg0KPiBhZGRyZXNzKSB7
-DQo+IAlzdHJ1Y3QgaTJjX2JvYXJkX2luZm8gaW5mbyA9IHsNCj4gCQlJMkNfQk9BUkRfSU5GTygi
-ZHVtbXkiLCBhZGRyZXNzKSwNCj4gCX07DQo+IA0KPiAJcmV0dXJuIGkyY19uZXdfY2xpZW50X2Rl
-dmljZShhZGFwdGVyLCAmaW5mbyk7IH0NCj4gDQo+IHN0cnVjdCBpMmNfY2xpZW50ICoNCj4gaTJj
-X25ld19jbGllbnRfZGV2aWNlKHN0cnVjdCBpMmNfYWRhcHRlciAqYWRhcCwgc3RydWN0IGkyY19i
-b2FyZF9pbmZvDQo+IGNvbnN0ICppbmZvKSB7DQo+IAlzdHJ1Y3QgaTJjX2NsaWVudAkqY2xpZW50
-Ow0KPiAJaW50CQkJc3RhdHVzOw0KPiANCj4gCWNsaWVudCA9IGt6YWxsb2Moc2l6ZW9mICpjbGll
-bnQsIEdGUF9LRVJORUwpOw0KPiAJaWYgKCFjbGllbnQpDQo+IAkJcmV0dXJuIEVSUl9QVFIoLUVO
-T01FTSk7DQo+IA0KPiAJY2xpZW50LT5hZGFwdGVyID0gYWRhcDsNCj4gWy4uLl0NCj4gCWNsaWVu
-dC0+ZGV2LnBhcmVudCA9ICZjbGllbnQtPmFkYXB0ZXItPmRldjsgWy4uLl0NCj4gCXJldHVybiBj
-bGllbnQ7DQo+IFsuLi5dDQo+IH0NCj4gDQo+IGkyY19uZXdfYW5jaWxsYXJ5X2RldmljZSgpIHJl
-dHVybnMgYW4gaTJjX2NsaWVudCB3aXRoIGNsaWVudC0+ZGV2LnBhcmVudA0KPiBzZXQgdG8gdGhl
-IEkyQyBhZGFwdGVyIGRldmljZS4NCj4gDQo+IEFmdGVyIHlvdXIgcGF0Y2g6DQo+IA0KPiBzdHJ1
-Y3QgaTJjX2NsaWVudCAqaTJjX25ld19hbmNpbGxhcnlfZGV2aWNlKHN0cnVjdCBpMmNfY2xpZW50
-ICpjbGllbnQsDQo+IAkJCQkJICAgIGNvbnN0IGNoYXIgKm5hbWUsDQo+IAkJCQkJICAgIHUxNiBk
-ZWZhdWx0X2FkZHIsDQo+IAkJCQkJICAgIGNvbnN0IGNoYXIgKmF1eF9kZXZpY2VfbmFtZSkNCj4g
-ew0KPiBbLi4uXQ0KPiAJcmV0dXJuIF9faTJjX25ld19kdW1teV9kZXZpY2UoY2xpZW50LT5hZGFw
-dGVyLCBhZGRyLA0KPiBhdXhfZGV2aWNlX25hbWUsDQo+IAkJCQkgICAgICAmY2xpZW50LT5kZXYp
-Ow0KPiB9DQo+IA0KPiBzdGF0aWMgc3RydWN0IGkyY19jbGllbnQgKl9faTJjX25ld19kdW1teV9k
-ZXZpY2Uoc3RydWN0IGkyY19hZGFwdGVyDQo+ICphZGFwdGVyLA0KPiAJCQkJCQkgdTE2IGFkZHJl
-c3MsIGNvbnN0IGNoYXIgKm5hbWUsDQo+IAkJCQkJCSBzdHJ1Y3QgZGV2aWNlICpwYXJlbnQpDQo+
-IHsNCj4gCXN0cnVjdCBpMmNfYm9hcmRfaW5mbyBpbmZvID0gew0KPiAJCUkyQ19CT0FSRF9JTkZP
-KCJkdW1teSIsIGFkZHJlc3MpLA0KPiAJfTsNCj4gDQo+IFsuLi5dDQo+IA0KPiAJcmV0dXJuIF9f
-aTJjX25ld19jbGllbnRfZGV2aWNlKGFkYXB0ZXIsICZpbmZvLCBwYXJlbnQpOyB9DQo+IA0KPiBz
-dGF0aWMgc3RydWN0IGkyY19jbGllbnQgKg0KPiBfX2kyY19uZXdfY2xpZW50X2RldmljZShzdHJ1
-Y3QgaTJjX2FkYXB0ZXIgKmFkYXAsDQo+IAkJCXN0cnVjdCBpMmNfYm9hcmRfaW5mbyBjb25zdCAq
-aW5mbywNCj4gCQkJc3RydWN0IGRldmljZSAqcGFyZW50KQ0KPiB7DQo+IAlzdHJ1Y3QgaTJjX2Ns
-aWVudAkqY2xpZW50Ow0KPiAJaW50CQkJc3RhdHVzOw0KPiANCj4gCWNsaWVudCA9IGt6YWxsb2Mo
-c2l6ZW9mICpjbGllbnQsIEdGUF9LRVJORUwpOw0KPiAJaWYgKCFjbGllbnQpDQo+IAkJcmV0dXJu
-IEVSUl9QVFIoLUVOT01FTSk7DQo+IA0KPiAJY2xpZW50LT5hZGFwdGVyID0gYWRhcDsNCj4gWy4u
-Ll0NCj4gCWNsaWVudC0+ZGV2LnBhcmVudCA9IHBhcmVudCA/IHBhcmVudCA6ICZjbGllbnQtPmFk
-YXB0ZXItPmRldjsNCj4gWy4uLl0NCj4gCXJldHVybiBjbGllbnQ7DQo+IFsuLi5dDQo+IH0NCj4g
-DQo+IGkyY19uZXdfYW5jaWxsYXJ5X2RldmljZSgpIHJldHVybnMgYW4gaTJjX2NsaWVudCB3aXRo
-IGNsaWVudC0+ZGV2LnBhcmVudA0KPiBzZXQgdG8gdGhlIG1haW4gaTJjX2NsaWVudCBkZXZpY2Us
-ICpyZWdhcmRsZXNzKiBvZiB0aGUgdmFsdWUgb2YgdGhlDQo+IGF1eF9kZXZpY2VfbmFtZSBwYXJh
-bWV0ZXIuDQo+IA0KPiBUaGUgYmVoYXZpb3VyIG9mIGkyY19uZXdfYW5jaWxsYXJ5X2RldmljZSgp
-IGhhcyBjaGFuZ2VkIGZvciBleGlzdGluZw0KPiB1c2Vycy4NCg0KT29wcyBtaXNzZWQgaXQuIFRo
-YW5rcyBmb3IgdGhlIGV4cGxhbmF0aW9uLg0KDQpXaWxsIGZpeCB0aGlzIGluIG5leHQgdmVyc2lv
-biBiYXNlZCBvbiBjb25jbHVzaW9uIG9mIHRoaXMgdGhyZWFkLg0KDQpDaGVlcnMsDQpCaWp1DQo=
+Hi Bingbu
+
+On 18/05/2023 11:05, bingbu.cao@intel.com wrote:
+> From: Bingbu Cao <bingbu.cao@intel.com>
+>
+> cio2 bridge was involved along with IPU3. However, in fact all Intel IPUs
+> besides IPU3 CIO2 need this bridge driver. This patch move bridge driver
+> out of ipu3 directory and rename as ipu-bridge. Then it can be worked with
+> IPU3 and other Intel IPUs.
+
+
+Will this be used in the upcoming IPU6 support then?
+
+
+The principle is fine to me anyway, so for all three patches:
+
+
+Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
+
+>
+> Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
+> ---
+>   drivers/media/pci/Kconfig                     |   2 +-
+>   drivers/media/pci/intel/Kconfig               |  21 +++
+>   drivers/media/pci/intel/Makefile              |   4 +-
+>   .../{ipu3/cio2-bridge.c => ipu-bridge.c}      | 177 +++++++++---------
+>   .../{ipu3/cio2-bridge.h => ipu-bridge.h}      |  56 +++---
+>   drivers/media/pci/intel/ipu3/Kconfig          |  19 --
+>   drivers/media/pci/intel/ipu3/Makefile         |   1 -
+>   drivers/media/pci/intel/ipu3/ipu3-cio2-main.c |   4 +-
+>   drivers/media/pci/intel/ipu3/ipu3-cio2.h      |   6 -
+>   9 files changed, 147 insertions(+), 143 deletions(-)
+>   create mode 100644 drivers/media/pci/intel/Kconfig
+>   rename drivers/media/pci/intel/{ipu3/cio2-bridge.c => ipu-bridge.c} (69%)
+>   rename drivers/media/pci/intel/{ipu3/cio2-bridge.h => ipu-bridge.h} (72%)
+>
+> diff --git a/drivers/media/pci/Kconfig b/drivers/media/pci/Kconfig
+> index 480194543d05..ee095bde0b68 100644
+> --- a/drivers/media/pci/Kconfig
+> +++ b/drivers/media/pci/Kconfig
+> @@ -73,7 +73,7 @@ config VIDEO_PCI_SKELETON
+>   	  Enable build of the skeleton PCI driver, used as a reference
+>   	  when developing new drivers.
+>   
+> -source "drivers/media/pci/intel/ipu3/Kconfig"
+> +source "drivers/media/pci/intel/Kconfig"
+>   
+>   endif #MEDIA_PCI_SUPPORT
+>   endif #PCI
+> diff --git a/drivers/media/pci/intel/Kconfig b/drivers/media/pci/intel/Kconfig
+> new file mode 100644
+> index 000000000000..64a29b0b7033
+> --- /dev/null
+> +++ b/drivers/media/pci/intel/Kconfig
+> @@ -0,0 +1,21 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +config IPU_BRIDGE
+> +	bool "Intel IPU Sensors Bridge"
+> +	depends on VIDEO_IPU3_CIO2 && ACPI
+> +	depends on I2C
+> +	help
+> +	  This extension provides an API for the Intel IPU driver to create
+> +	  connections to cameras that are hidden in the SSDB buffer in ACPI.
+> +	  It can be used to enable support for cameras in detachable / hybrid
+> +	  devices that ship with Windows.
+> +
+> +	  Say Y here if your device is a detachable / hybrid laptop that comes
+> +	  with Windows installed by the OEM, for example:
+> +
+> +		- Microsoft Surface models (except Surface Pro 3)
+> +		- The Lenovo Miix line (for example the 510, 520, 710 and 720)
+> +		- Dell 7285
+> +
+> +	  If in doubt, say N here.
+> +
+> +source "drivers/media/pci/intel/ipu3/Kconfig"
+> diff --git a/drivers/media/pci/intel/Makefile b/drivers/media/pci/intel/Makefile
+> index 0b4236c4db49..951191a7e401 100644
+> --- a/drivers/media/pci/intel/Makefile
+> +++ b/drivers/media/pci/intel/Makefile
+> @@ -1,6 +1,6 @@
+>   # SPDX-License-Identifier: GPL-2.0-only
+>   #
+> -# Makefile for the IPU3 cio2 and ImGU drivers
+> +# Makefile for the IPU drivers
+>   #
+> -
+> +obj-$(CONFIG_IPU_BRIDGE) += ipu-bridge.o
+>   obj-y	+= ipu3/
+> diff --git a/drivers/media/pci/intel/ipu3/cio2-bridge.c b/drivers/media/pci/intel/ipu-bridge.c
+> similarity index 69%
+> rename from drivers/media/pci/intel/ipu3/cio2-bridge.c
+> rename to drivers/media/pci/intel/ipu-bridge.c
+> index 3c2accfe5455..f7134e308696 100644
+> --- a/drivers/media/pci/intel/ipu3/cio2-bridge.c
+> +++ b/drivers/media/pci/intel/ipu-bridge.c
+> @@ -8,7 +8,7 @@
+>   #include <linux/property.h>
+>   #include <media/v4l2-fwnode.h>
+>   
+> -#include "cio2-bridge.h"
+> +#include "ipu-bridge.h"
+>   
+>   /*
+>    * Extend this array with ACPI Hardware IDs of devices known to be working
+> @@ -20,26 +20,26 @@
+>    *
+>    * Do not add an entry for a sensor that is not actually supported.
+>    */
+> -static const struct cio2_sensor_config cio2_supported_sensors[] = {
+> +static const struct ipu_sensor_config ipu_supported_sensors[] = {
+>   	/* Omnivision OV5693 */
+> -	CIO2_SENSOR_CONFIG("INT33BE", 1, 419200000),
+> +	IPU_SENSOR_CONFIG("INT33BE", 1, 419200000),
+>   	/* Omnivision OV8865 */
+> -	CIO2_SENSOR_CONFIG("INT347A", 1, 360000000),
+> +	IPU_SENSOR_CONFIG("INT347A", 1, 360000000),
+>   	/* Omnivision OV7251 */
+> -	CIO2_SENSOR_CONFIG("INT347E", 1, 319200000),
+> +	IPU_SENSOR_CONFIG("INT347E", 1, 319200000),
+>   	/* Omnivision OV2680 */
+> -	CIO2_SENSOR_CONFIG("OVTI2680", 0),
+> +	IPU_SENSOR_CONFIG("OVTI2680", 0),
+>   	/* Omnivision ov8856 */
+> -	CIO2_SENSOR_CONFIG("OVTI8856", 3, 180000000, 360000000, 720000000),
+> +	IPU_SENSOR_CONFIG("OVTI8856", 3, 180000000, 360000000, 720000000),
+>   	/* Omnivision ov2740 */
+> -	CIO2_SENSOR_CONFIG("INT3474", 1, 360000000),
+> +	IPU_SENSOR_CONFIG("INT3474", 1, 360000000),
+>   	/* Hynix hi556 */
+> -	CIO2_SENSOR_CONFIG("INT3537", 1, 437000000),
+> +	IPU_SENSOR_CONFIG("INT3537", 1, 437000000),
+>   	/* Omnivision ov13b10 */
+> -	CIO2_SENSOR_CONFIG("OVTIDB10", 1, 560000000),
+> +	IPU_SENSOR_CONFIG("OVTIDB10", 1, 560000000),
+>   };
+>   
+> -static const struct cio2_property_names prop_names = {
+> +static const struct ipu_property_names prop_names = {
+>   	.clock_frequency = "clock-frequency",
+>   	.rotation = "rotation",
+>   	.orientation = "orientation",
+> @@ -49,7 +49,7 @@ static const struct cio2_property_names prop_names = {
+>   	.link_frequencies = "link-frequencies",
+>   };
+>   
+> -static const char * const cio2_vcm_types[] = {
+> +static const char * const ipu_vcm_types[] = {
+>   	"ad5823",
+>   	"dw9714",
+>   	"ad5816",
+> @@ -61,8 +61,8 @@ static const char * const cio2_vcm_types[] = {
+>   	"lc898212axb",
+>   };
+>   
+> -static int cio2_bridge_read_acpi_buffer(struct acpi_device *adev, char *id,
+> -					void *data, u32 size)
+> +static int ipu_bridge_read_acpi_buffer(struct acpi_device *adev, char *id,
+> +				       void *data, u32 size)
+>   {
+>   	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
+>   	union acpi_object *obj;
+> @@ -98,12 +98,12 @@ static int cio2_bridge_read_acpi_buffer(struct acpi_device *adev, char *id,
+>   	return ret;
+>   }
+>   
+> -static u32 cio2_bridge_parse_rotation(struct cio2_sensor *sensor)
+> +static u32 ipu_bridge_parse_rotation(struct ipu_sensor *sensor)
+>   {
+>   	switch (sensor->ssdb.degree) {
+> -	case CIO2_SENSOR_ROTATION_NORMAL:
+> +	case IPU_SENSOR_ROTATION_NORMAL:
+>   		return 0;
+> -	case CIO2_SENSOR_ROTATION_INVERTED:
+> +	case IPU_SENSOR_ROTATION_INVERTED:
+>   		return 180;
+>   	default:
+>   		dev_warn(&sensor->adev->dev,
+> @@ -113,7 +113,7 @@ static u32 cio2_bridge_parse_rotation(struct cio2_sensor *sensor)
+>   	}
+>   }
+>   
+> -static enum v4l2_fwnode_orientation cio2_bridge_parse_orientation(struct cio2_sensor *sensor)
+> +static enum v4l2_fwnode_orientation ipu_bridge_parse_orientation(struct ipu_sensor *sensor)
+>   {
+>   	switch (sensor->pld->panel) {
+>   	case ACPI_PLD_PANEL_FRONT:
+> @@ -132,20 +132,20 @@ static enum v4l2_fwnode_orientation cio2_bridge_parse_orientation(struct cio2_se
+>   	}
+>   }
+>   
+> -static void cio2_bridge_create_fwnode_properties(
+> -	struct cio2_sensor *sensor,
+> -	struct cio2_bridge *bridge,
+> -	const struct cio2_sensor_config *cfg)
+> +static void ipu_bridge_create_fwnode_properties(
+> +	struct ipu_sensor *sensor,
+> +	struct ipu_bridge *bridge,
+> +	const struct ipu_sensor_config *cfg)
+>   {
+>   	u32 rotation;
+>   	enum v4l2_fwnode_orientation orientation;
+>   
+> -	rotation = cio2_bridge_parse_rotation(sensor);
+> -	orientation = cio2_bridge_parse_orientation(sensor);
+> +	rotation = ipu_bridge_parse_rotation(sensor);
+> +	orientation = ipu_bridge_parse_orientation(sensor);
+>   
+>   	sensor->prop_names = prop_names;
+>   
+> -	sensor->local_ref[0] = SOFTWARE_NODE_REFERENCE(&sensor->swnodes[SWNODE_CIO2_ENDPOINT]);
+> +	sensor->local_ref[0] = SOFTWARE_NODE_REFERENCE(&sensor->swnodes[SWNODE_IPU_ENDPOINT]);
+>   	sensor->remote_ref[0] = SOFTWARE_NODE_REFERENCE(&sensor->swnodes[SWNODE_SENSOR_ENDPOINT]);
+>   
+>   	sensor->dev_properties[0] = PROPERTY_ENTRY_U32(
+> @@ -181,16 +181,16 @@ static void cio2_bridge_create_fwnode_properties(
+>   			cfg->link_freqs,
+>   			cfg->nr_link_freqs);
+>   
+> -	sensor->cio2_properties[0] = PROPERTY_ENTRY_U32_ARRAY_LEN(
+> +	sensor->ipu_properties[0] = PROPERTY_ENTRY_U32_ARRAY_LEN(
+>   					sensor->prop_names.data_lanes,
+>   					bridge->data_lanes,
+>   					sensor->ssdb.lanes);
+> -	sensor->cio2_properties[1] = PROPERTY_ENTRY_REF_ARRAY(
+> +	sensor->ipu_properties[1] = PROPERTY_ENTRY_REF_ARRAY(
+>   					sensor->prop_names.remote_endpoint,
+>   					sensor->remote_ref);
+>   }
+>   
+> -static void cio2_bridge_init_swnode_names(struct cio2_sensor *sensor)
+> +static void ipu_bridge_init_swnode_names(struct ipu_sensor *sensor)
+>   {
+>   	snprintf(sensor->node_names.remote_port,
+>   		 sizeof(sensor->node_names.remote_port),
+> @@ -203,26 +203,26 @@ static void cio2_bridge_init_swnode_names(struct cio2_sensor *sensor)
+>   		 SWNODE_GRAPH_ENDPOINT_NAME_FMT, 0); /* And endpoint 0 */
+>   }
+>   
+> -static void cio2_bridge_init_swnode_group(struct cio2_sensor *sensor)
+> +static void ipu_bridge_init_swnode_group(struct ipu_sensor *sensor)
+>   {
+>   	struct software_node *nodes = sensor->swnodes;
+>   
+>   	sensor->group[SWNODE_SENSOR_HID] = &nodes[SWNODE_SENSOR_HID];
+>   	sensor->group[SWNODE_SENSOR_PORT] = &nodes[SWNODE_SENSOR_PORT];
+>   	sensor->group[SWNODE_SENSOR_ENDPOINT] = &nodes[SWNODE_SENSOR_ENDPOINT];
+> -	sensor->group[SWNODE_CIO2_PORT] = &nodes[SWNODE_CIO2_PORT];
+> -	sensor->group[SWNODE_CIO2_ENDPOINT] = &nodes[SWNODE_CIO2_ENDPOINT];
+> +	sensor->group[SWNODE_IPU_PORT] = &nodes[SWNODE_IPU_PORT];
+> +	sensor->group[SWNODE_IPU_ENDPOINT] = &nodes[SWNODE_IPU_ENDPOINT];
+>   	if (sensor->ssdb.vcmtype)
+>   		sensor->group[SWNODE_VCM] =  &nodes[SWNODE_VCM];
+>   }
+>   
+> -static void cio2_bridge_create_connection_swnodes(struct cio2_bridge *bridge,
+> -						  struct cio2_sensor *sensor)
+> +static void ipu_bridge_create_connection_swnodes(struct ipu_bridge *bridge,
+> +						 struct ipu_sensor *sensor)
+>   {
+>   	struct software_node *nodes = sensor->swnodes;
+>   	char vcm_name[ACPI_ID_LEN + 4];
+>   
+> -	cio2_bridge_init_swnode_names(sensor);
+> +	ipu_bridge_init_swnode_names(sensor);
+>   
+>   	nodes[SWNODE_SENSOR_HID] = NODE_SENSOR(sensor->name,
+>   					       sensor->dev_properties);
+> @@ -232,24 +232,24 @@ static void cio2_bridge_create_connection_swnodes(struct cio2_bridge *bridge,
+>   						sensor->node_names.endpoint,
+>   						&nodes[SWNODE_SENSOR_PORT],
+>   						sensor->ep_properties);
+> -	nodes[SWNODE_CIO2_PORT] = NODE_PORT(sensor->node_names.remote_port,
+> -					    &bridge->cio2_hid_node);
+> -	nodes[SWNODE_CIO2_ENDPOINT] = NODE_ENDPOINT(
+> +	nodes[SWNODE_IPU_PORT] = NODE_PORT(sensor->node_names.remote_port,
+> +					   &bridge->ipu_hid_node);
+> +	nodes[SWNODE_IPU_ENDPOINT] = NODE_ENDPOINT(
+>   						sensor->node_names.endpoint,
+> -						&nodes[SWNODE_CIO2_PORT],
+> -						sensor->cio2_properties);
+> +						&nodes[SWNODE_IPU_PORT],
+> +						sensor->ipu_properties);
+>   	if (sensor->ssdb.vcmtype) {
+>   		/* append ssdb.link to distinguish VCM nodes with same HID */
+>   		snprintf(vcm_name, sizeof(vcm_name), "%s-%u",
+> -			 cio2_vcm_types[sensor->ssdb.vcmtype - 1],
+> +			 ipu_vcm_types[sensor->ssdb.vcmtype - 1],
+>   			 sensor->ssdb.link);
+>   		nodes[SWNODE_VCM] = NODE_VCM(vcm_name);
+>   	}
+>   
+> -	cio2_bridge_init_swnode_group(sensor);
+> +	ipu_bridge_init_swnode_group(sensor);
+>   }
+>   
+> -static void cio2_bridge_instantiate_vcm_i2c_client(struct cio2_sensor *sensor)
+> +static void ipu_bridge_instantiate_vcm_i2c_client(struct ipu_sensor *sensor)
+>   {
+>   	struct i2c_board_info board_info = { };
+>   	char name[16];
+> @@ -259,7 +259,7 @@ static void cio2_bridge_instantiate_vcm_i2c_client(struct cio2_sensor *sensor)
+>   
+>   	snprintf(name, sizeof(name), "%s-VCM", acpi_dev_name(sensor->adev));
+>   	board_info.dev_name = name;
+> -	strscpy(board_info.type, cio2_vcm_types[sensor->ssdb.vcmtype - 1],
+> +	strscpy(board_info.type, ipu_vcm_types[sensor->ssdb.vcmtype - 1],
+>   		ARRAY_SIZE(board_info.type));
+>   	board_info.swnode = &sensor->swnodes[SWNODE_VCM];
+>   
+> @@ -273,9 +273,9 @@ static void cio2_bridge_instantiate_vcm_i2c_client(struct cio2_sensor *sensor)
+>   	}
+>   }
+>   
+> -static void cio2_bridge_unregister_sensors(struct cio2_bridge *bridge)
+> +static void ipu_bridge_unregister_sensors(struct ipu_bridge *bridge)
+>   {
+> -	struct cio2_sensor *sensor;
+> +	struct ipu_sensor *sensor;
+>   	unsigned int i;
+>   
+>   	for (i = 0; i < bridge->n_sensors; i++) {
+> @@ -287,12 +287,12 @@ static void cio2_bridge_unregister_sensors(struct cio2_bridge *bridge)
+>   	}
+>   }
+>   
+> -static int cio2_bridge_connect_sensor(const struct cio2_sensor_config *cfg,
+> -				      struct cio2_bridge *bridge,
+> -				      struct pci_dev *cio2)
+> +static int ipu_bridge_connect_sensor(const struct ipu_sensor_config *cfg,
+> +				     struct ipu_bridge *bridge,
+> +				     struct pci_dev *ipu)
+>   {
+>   	struct fwnode_handle *fwnode, *primary;
+> -	struct cio2_sensor *sensor;
+> +	struct ipu_sensor *sensor;
+>   	struct acpi_device *adev;
+>   	acpi_status status;
+>   	int ret;
+> @@ -303,22 +303,22 @@ static int cio2_bridge_connect_sensor(const struct cio2_sensor_config *cfg,
+>   
+>   		if (bridge->n_sensors >= CIO2_NUM_PORTS) {
+>   			acpi_dev_put(adev);
+> -			dev_err(&cio2->dev, "Exceeded available CIO2 ports\n");
+> +			dev_err(&ipu->dev, "Exceeded available IPU ports\n");
+>   			return -EINVAL;
+>   		}
+>   
+>   		sensor = &bridge->sensors[bridge->n_sensors];
+>   
+> -		ret = cio2_bridge_read_acpi_buffer(adev, "SSDB",
+> -						   &sensor->ssdb,
+> -						   sizeof(sensor->ssdb));
+> +		ret = ipu_bridge_read_acpi_buffer(adev, "SSDB",
+> +						  &sensor->ssdb,
+> +						  sizeof(sensor->ssdb));
+>   		if (ret)
+>   			goto err_put_adev;
+>   
+>   		snprintf(sensor->name, sizeof(sensor->name), "%s-%u",
+>   			 cfg->hid, sensor->ssdb.link);
+>   
+> -		if (sensor->ssdb.vcmtype > ARRAY_SIZE(cio2_vcm_types)) {
+> +		if (sensor->ssdb.vcmtype > ARRAY_SIZE(ipu_vcm_types)) {
+>   			dev_warn(&adev->dev, "Unknown VCM type %d\n",
+>   				 sensor->ssdb.vcmtype);
+>   			sensor->ssdb.vcmtype = 0;
+> @@ -330,15 +330,15 @@ static int cio2_bridge_connect_sensor(const struct cio2_sensor_config *cfg,
+>   			goto err_put_adev;
+>   		}
+>   
+> -		if (sensor->ssdb.lanes > CIO2_MAX_LANES) {
+> +		if (sensor->ssdb.lanes > IPU_MAX_LANES) {
+>   			dev_err(&adev->dev,
+>   				"Number of lanes in SSDB is invalid\n");
+>   			ret = -EINVAL;
+>   			goto err_free_pld;
+>   		}
+>   
+> -		cio2_bridge_create_fwnode_properties(sensor, bridge, cfg);
+> -		cio2_bridge_create_connection_swnodes(bridge, sensor);
+> +		ipu_bridge_create_fwnode_properties(sensor, bridge, cfg);
+> +		ipu_bridge_create_connection_swnodes(bridge, sensor);
+>   
+>   		ret = software_node_register_node_group(sensor->group);
+>   		if (ret)
+> @@ -356,9 +356,9 @@ static int cio2_bridge_connect_sensor(const struct cio2_sensor_config *cfg,
+>   		primary = acpi_fwnode_handle(adev);
+>   		primary->secondary = fwnode;
+>   
+> -		cio2_bridge_instantiate_vcm_i2c_client(sensor);
+> +		ipu_bridge_instantiate_vcm_i2c_client(sensor);
+>   
+> -		dev_info(&cio2->dev, "Found supported sensor %s\n",
+> +		dev_info(&ipu->dev, "Found supported sensor %s\n",
+>   			 acpi_dev_name(adev));
+>   
+>   		bridge->n_sensors++;
+> @@ -375,17 +375,17 @@ static int cio2_bridge_connect_sensor(const struct cio2_sensor_config *cfg,
+>   	return ret;
+>   }
+>   
+> -static int cio2_bridge_connect_sensors(struct cio2_bridge *bridge,
+> -				       struct pci_dev *cio2)
+> +static int ipu_bridge_connect_sensors(struct ipu_bridge *bridge,
+> +				      struct pci_dev *ipu)
+>   {
+>   	unsigned int i;
+>   	int ret;
+>   
+> -	for (i = 0; i < ARRAY_SIZE(cio2_supported_sensors); i++) {
+> -		const struct cio2_sensor_config *cfg =
+> -			&cio2_supported_sensors[i];
+> +	for (i = 0; i < ARRAY_SIZE(ipu_supported_sensors); i++) {
+> +		const struct ipu_sensor_config *cfg =
+> +			&ipu_supported_sensors[i];
+>   
+> -		ret = cio2_bridge_connect_sensor(cfg, bridge, cio2);
+> +		ret = ipu_bridge_connect_sensor(cfg, bridge, ipu);
+>   		if (ret)
+>   			goto err_unregister_sensors;
+>   	}
+> @@ -393,7 +393,7 @@ static int cio2_bridge_connect_sensors(struct cio2_bridge *bridge,
+>   	return 0;
+>   
+>   err_unregister_sensors:
+> -	cio2_bridge_unregister_sensors(bridge);
+> +	ipu_bridge_unregister_sensors(bridge);
+>   	return ret;
+>   }
+>   
+> @@ -409,15 +409,15 @@ static int cio2_bridge_connect_sensors(struct cio2_bridge *bridge,
+>    * acpi_dev_ready_for_enumeration() helper, like the i2c-core-acpi code does
+>    * for the sensors.
+>    */
+> -static int cio2_bridge_sensors_are_ready(void)
+> +static int ipu_bridge_sensors_are_ready(void)
+>   {
+>   	struct acpi_device *adev;
+>   	bool ready = true;
+>   	unsigned int i;
+>   
+> -	for (i = 0; i < ARRAY_SIZE(cio2_supported_sensors); i++) {
+> -		const struct cio2_sensor_config *cfg =
+> -			&cio2_supported_sensors[i];
+> +	for (i = 0; i < ARRAY_SIZE(ipu_supported_sensors); i++) {
+> +		const struct ipu_sensor_config *cfg =
+> +			&ipu_supported_sensors[i];
+>   
+>   		for_each_acpi_dev_match(adev, cfg->hid, NULL, -1) {
+>   			if (!adev->status.enabled)
+> @@ -431,50 +431,50 @@ static int cio2_bridge_sensors_are_ready(void)
+>   	return ready;
+>   }
+>   
+> -int cio2_bridge_init(struct pci_dev *cio2)
+> +int ipu_bridge_init(struct pci_dev *ipu)
+>   {
+> -	struct device *dev = &cio2->dev;
+> +	struct device *dev = &ipu->dev;
+>   	struct fwnode_handle *fwnode;
+> -	struct cio2_bridge *bridge;
+> +	struct ipu_bridge *bridge;
+>   	unsigned int i;
+>   	int ret;
+>   
+> -	if (!cio2_bridge_sensors_are_ready())
+> +	if (!ipu_bridge_sensors_are_ready())
+>   		return -EPROBE_DEFER;
+>   
+>   	bridge = kzalloc(sizeof(*bridge), GFP_KERNEL);
+>   	if (!bridge)
+>   		return -ENOMEM;
+>   
+> -	strscpy(bridge->cio2_node_name, CIO2_HID,
+> -		sizeof(bridge->cio2_node_name));
+> -	bridge->cio2_hid_node.name = bridge->cio2_node_name;
+> +	strscpy(bridge->ipu_node_name, IPU_HID,
+> +		sizeof(bridge->ipu_node_name));
+> +	bridge->ipu_hid_node.name = bridge->ipu_node_name;
+>   
+> -	ret = software_node_register(&bridge->cio2_hid_node);
+> +	ret = software_node_register(&bridge->ipu_hid_node);
+>   	if (ret < 0) {
+> -		dev_err(dev, "Failed to register the CIO2 HID node\n");
+> +		dev_err(dev, "Failed to register the IPU HID node\n");
+>   		goto err_free_bridge;
+>   	}
+>   
+>   	/*
+>   	 * Map the lane arrangement, which is fixed for the IPU3 (meaning we
+>   	 * only need one, rather than one per sensor). We include it as a
+> -	 * member of the struct cio2_bridge rather than a global variable so
+> +	 * member of the struct ipu_bridge rather than a global variable so
+>   	 * that it survives if the module is unloaded along with the rest of
+>   	 * the struct.
+>   	 */
+> -	for (i = 0; i < CIO2_MAX_LANES; i++)
+> +	for (i = 0; i < IPU_MAX_LANES; i++)
+>   		bridge->data_lanes[i] = i + 1;
+>   
+> -	ret = cio2_bridge_connect_sensors(bridge, cio2);
+> +	ret = ipu_bridge_connect_sensors(bridge, ipu);
+>   	if (ret || bridge->n_sensors == 0)
+> -		goto err_unregister_cio2;
+> +		goto err_unregister_ipu;
+>   
+>   	dev_info(dev, "Connected %d cameras\n", bridge->n_sensors);
+>   
+> -	fwnode = software_node_fwnode(&bridge->cio2_hid_node);
+> +	fwnode = software_node_fwnode(&bridge->ipu_hid_node);
+>   	if (!fwnode) {
+> -		dev_err(dev, "Error getting fwnode from cio2 software_node\n");
+> +		dev_err(dev, "Error getting fwnode from ipu software_node\n");
+>   		ret = -ENODEV;
+>   		goto err_unregister_sensors;
+>   	}
+> @@ -484,11 +484,12 @@ int cio2_bridge_init(struct pci_dev *cio2)
+>   	return 0;
+>   
+>   err_unregister_sensors:
+> -	cio2_bridge_unregister_sensors(bridge);
+> -err_unregister_cio2:
+> -	software_node_unregister(&bridge->cio2_hid_node);
+> +	ipu_bridge_unregister_sensors(bridge);
+> +err_unregister_ipu:
+> +	software_node_unregister(&bridge->ipu_hid_node);
+>   err_free_bridge:
+>   	kfree(bridge);
+>   
+>   	return ret;
+>   }
+> +EXPORT_SYMBOL_NS_GPL(ipu_bridge_init, INTEL_IPU_BRIDGE);
+> diff --git a/drivers/media/pci/intel/ipu3/cio2-bridge.h b/drivers/media/pci/intel/ipu-bridge.h
+> similarity index 72%
+> rename from drivers/media/pci/intel/ipu3/cio2-bridge.h
+> rename to drivers/media/pci/intel/ipu-bridge.h
+> index b76ed8a641e2..d35b5f30ac3f 100644
+> --- a/drivers/media/pci/intel/ipu3/cio2-bridge.h
+> +++ b/drivers/media/pci/intel/ipu-bridge.h
+> @@ -1,25 +1,25 @@
+>   /* SPDX-License-Identifier: GPL-2.0 */
+>   /* Author: Dan Scally <djrscally@gmail.com> */
+> -#ifndef __CIO2_BRIDGE_H
+> -#define __CIO2_BRIDGE_H
+> +#ifndef __IPU_BRIDGE_H
+> +#define __IPU_BRIDGE_H
+>   
+>   #include <linux/property.h>
+>   #include <linux/types.h>
+>   
+> -#include "ipu3-cio2.h"
+> +#include "ipu3/ipu3-cio2.h"
+>   
+>   struct i2c_client;
+>   
+> -#define CIO2_HID				"INT343E"
+> -#define CIO2_MAX_LANES				4
+> +#define IPU_HID				"INT343E"
+> +#define IPU_MAX_LANES				4
+>   #define MAX_NUM_LINK_FREQS			3
+>   
+>   /* Values are educated guesses as we don't have a spec */
+> -#define CIO2_SENSOR_ROTATION_NORMAL		0
+> -#define CIO2_SENSOR_ROTATION_INVERTED		1
+> +#define IPU_SENSOR_ROTATION_NORMAL		0
+> +#define IPU_SENSOR_ROTATION_INVERTED		1
+>   
+> -#define CIO2_SENSOR_CONFIG(_HID, _NR, ...)	\
+> -	(const struct cio2_sensor_config) {	\
+> +#define IPU_SENSOR_CONFIG(_HID, _NR, ...)	\
+> +	(const struct ipu_sensor_config) {	\
+>   		.hid = _HID,			\
+>   		.nr_link_freqs = _NR,		\
+>   		.link_freqs = { __VA_ARGS__ }	\
+> @@ -49,19 +49,19 @@ struct i2c_client;
+>   		.name = _TYPE,			\
+>   	}
+>   
+> -enum cio2_sensor_swnodes {
+> +enum ipu_sensor_swnodes {
+>   	SWNODE_SENSOR_HID,
+>   	SWNODE_SENSOR_PORT,
+>   	SWNODE_SENSOR_ENDPOINT,
+> -	SWNODE_CIO2_PORT,
+> -	SWNODE_CIO2_ENDPOINT,
+> +	SWNODE_IPU_PORT,
+> +	SWNODE_IPU_ENDPOINT,
+>   	/* Must be last because it is optional / maybe empty */
+>   	SWNODE_VCM,
+>   	SWNODE_COUNT
+>   };
+>   
+>   /* Data representation as it is in ACPI SSDB buffer */
+> -struct cio2_sensor_ssdb {
+> +struct ipu_sensor_ssdb {
+>   	u8 version;
+>   	u8 sku;
+>   	u8 guid_csi2[16];
+> @@ -90,7 +90,7 @@ struct cio2_sensor_ssdb {
+>   	u8 reserved2[13];
+>   } __packed;
+>   
+> -struct cio2_property_names {
+> +struct ipu_property_names {
+>   	char clock_frequency[16];
+>   	char rotation[9];
+>   	char orientation[12];
+> @@ -100,19 +100,19 @@ struct cio2_property_names {
+>   	char link_frequencies[17];
+>   };
+>   
+> -struct cio2_node_names {
+> +struct ipu_node_names {
+>   	char port[7];
+>   	char endpoint[11];
+>   	char remote_port[7];
+>   };
+>   
+> -struct cio2_sensor_config {
+> +struct ipu_sensor_config {
+>   	const char *hid;
+>   	const u8 nr_link_freqs;
+>   	const u64 link_freqs[MAX_NUM_LINK_FREQS];
+>   };
+>   
+> -struct cio2_sensor {
+> +struct ipu_sensor {
+>   	/* append ssdb.link(u8) in "-%u" format as suffix of HID */
+>   	char name[ACPI_ID_LEN + 4];
+>   	struct acpi_device *adev;
+> @@ -121,26 +121,32 @@ struct cio2_sensor {
+>   	/* SWNODE_COUNT + 1 for terminating NULL */
+>   	const struct software_node *group[SWNODE_COUNT + 1];
+>   	struct software_node swnodes[SWNODE_COUNT];
+> -	struct cio2_node_names node_names;
+> +	struct ipu_node_names node_names;
+>   
+> -	struct cio2_sensor_ssdb ssdb;
+> +	struct ipu_sensor_ssdb ssdb;
+>   	struct acpi_pld_info *pld;
+>   
+> -	struct cio2_property_names prop_names;
+> +	struct ipu_property_names prop_names;
+>   	struct property_entry ep_properties[5];
+>   	struct property_entry dev_properties[5];
+> -	struct property_entry cio2_properties[3];
+> +	struct property_entry ipu_properties[3];
+>   	struct software_node_ref_args local_ref[1];
+>   	struct software_node_ref_args remote_ref[1];
+>   	struct software_node_ref_args vcm_ref[1];
+>   };
+>   
+> -struct cio2_bridge {
+> -	char cio2_node_name[ACPI_ID_LEN];
+> -	struct software_node cio2_hid_node;
+> +struct ipu_bridge {
+> +	char ipu_node_name[ACPI_ID_LEN];
+> +	struct software_node ipu_hid_node;
+>   	u32 data_lanes[4];
+>   	unsigned int n_sensors;
+> -	struct cio2_sensor sensors[CIO2_NUM_PORTS];
+> +	struct ipu_sensor sensors[CIO2_NUM_PORTS];
+>   };
+>   
+> +#if IS_ENABLED(CONFIG_IPU_BRIDGE)
+> +int ipu_bridge_init(struct pci_dev *ipu);
+> +#else
+> +static inline int ipu_bridge_init(struct pci_dev *ipu) { return 0; }
+> +#endif
+> +
+>   #endif
+> diff --git a/drivers/media/pci/intel/ipu3/Kconfig b/drivers/media/pci/intel/ipu3/Kconfig
+> index 65b0c1598fbf..9be06ee81ff0 100644
+> --- a/drivers/media/pci/intel/ipu3/Kconfig
+> +++ b/drivers/media/pci/intel/ipu3/Kconfig
+> @@ -17,22 +17,3 @@ config VIDEO_IPU3_CIO2
+>   	  Say Y or M here if you have a Skylake/Kaby Lake SoC with MIPI CSI-2
+>   	  connected camera.
+>   	  The module will be called ipu3-cio2.
+> -
+> -config CIO2_BRIDGE
+> -	bool "IPU3 CIO2 Sensors Bridge"
+> -	depends on VIDEO_IPU3_CIO2 && ACPI
+> -	depends on I2C
+> -	help
+> -	  This extension provides an API for the ipu3-cio2 driver to create
+> -	  connections to cameras that are hidden in the SSDB buffer in ACPI.
+> -	  It can be used to enable support for cameras in detachable / hybrid
+> -	  devices that ship with Windows.
+> -
+> -	  Say Y here if your device is a detachable / hybrid laptop that comes
+> -	  with Windows installed by the OEM, for example:
+> -
+> -		- Microsoft Surface models (except Surface Pro 3)
+> -		- The Lenovo Miix line (for example the 510, 520, 710 and 720)
+> -		- Dell 7285
+> -
+> -	  If in doubt, say N here.
+> diff --git a/drivers/media/pci/intel/ipu3/Makefile b/drivers/media/pci/intel/ipu3/Makefile
+> index 933777e6ea8a..429d516452e4 100644
+> --- a/drivers/media/pci/intel/ipu3/Makefile
+> +++ b/drivers/media/pci/intel/ipu3/Makefile
+> @@ -2,4 +2,3 @@
+>   obj-$(CONFIG_VIDEO_IPU3_CIO2) += ipu3-cio2.o
+>   
+>   ipu3-cio2-y += ipu3-cio2-main.o
+> -ipu3-cio2-$(CONFIG_CIO2_BRIDGE) += cio2-bridge.o
+> diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c b/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
+> index 3c84cb121632..03a7ab4d2e69 100644
+> --- a/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
+> +++ b/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
+> @@ -29,6 +29,7 @@
+>   #include <media/v4l2-ioctl.h>
+>   #include <media/videobuf2-dma-sg.h>
+>   
+> +#include "../ipu-bridge.h"
+>   #include "ipu3-cio2.h"
+>   
+>   struct ipu3_cio2_fmt {
+> @@ -1727,7 +1728,7 @@ static int cio2_pci_probe(struct pci_dev *pci_dev,
+>   			return -EINVAL;
+>   		}
+>   
+> -		r = cio2_bridge_init(pci_dev);
+> +		r = ipu_bridge_init(pci_dev);
+>   		if (r)
+>   			return r;
+>   	}
+> @@ -2060,3 +2061,4 @@ MODULE_AUTHOR("Yuning Pu <yuning.pu@intel.com>");
+>   MODULE_AUTHOR("Yong Zhi <yong.zhi@intel.com>");
+>   MODULE_LICENSE("GPL v2");
+>   MODULE_DESCRIPTION("IPU3 CIO2 driver");
+> +MODULE_IMPORT_NS(INTEL_IPU_BRIDGE);
+> diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.h b/drivers/media/pci/intel/ipu3/ipu3-cio2.h
+> index 3a1f394e05aa..d731ce8adbe3 100644
+> --- a/drivers/media/pci/intel/ipu3/ipu3-cio2.h
+> +++ b/drivers/media/pci/intel/ipu3/ipu3-cio2.h
+> @@ -459,10 +459,4 @@ static inline struct cio2_queue *vb2q_to_cio2_queue(struct vb2_queue *vq)
+>   	return container_of(vq, struct cio2_queue, vbq);
+>   }
+>   
+> -#if IS_ENABLED(CONFIG_CIO2_BRIDGE)
+> -int cio2_bridge_init(struct pci_dev *cio2);
+> -#else
+> -static inline int cio2_bridge_init(struct pci_dev *cio2) { return 0; }
+> -#endif
+> -
+>   #endif
