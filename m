@@ -2,171 +2,138 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A372C7EE24
-	for <linux-media@archiver.kernel.org>; Thu,  1 Jun 2023 02:38:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B16FC77B7A
+	for <linux-media@archiver.kernel.org>; Thu,  1 Jun 2023 03:03:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231172AbjFACiq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 31 May 2023 22:38:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60020 "EHLO
+        id S231224AbjFADDq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 31 May 2023 23:03:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230414AbjFACio (ORCPT
+        with ESMTP id S231398AbjFADDU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 31 May 2023 22:38:44 -0400
-Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on2043.outbound.protection.outlook.com [40.107.14.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7723FE7;
-        Wed, 31 May 2023 19:38:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fH7/vtoDnc4K0wPaaFXm69EF0E1y70frKWOea5kxrsRXnjV+lUzGjBmTGj3vwZCtO9/51iO95JyRkldtbtC94vlWUrzunk76qqETpcqHl2uUNyCRra6QD/TiYal4A7pR7uamox0dHbP6gwDgp3oMW6HD9kxC1uS2NhgkPHhw6kqwdsHmFDfFrQCfQtqKVkJUcxbbOWF0BZ9c7O9KnLZFJ5MFCRDH/cQxQ0etBeCLbMqnRCWN4jZpVxDH8KM1jv9r8uiGNk/j6TOL3jxE+AAJHtJADibCviXJ1vce4Puh+BFnd6J63KNsVky9HVqrKJIw+t2rJW1XqL6TB0ok6TRvBw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8bEuT3Akp62ZfYHy6luVNNKX9T0bttqvL2nGd1nvaRw=;
- b=EpX2jmpsAClGZOBq97RRTwBlGh3Zkd4P4noFXxygiY+XQ2SdRShnoxJkX2QShAndlqaIDCpi0ZfO9HsJX19b4woV5NaCH8LyNxmqFYp/TplYHoXXgRk+teHDeSRZpY02D+NqBOnWK4ik+YqqsetkeSbEHcqpqc5tcJkUd9r0OEVnxmW34/cFFZf4+hDUuO8s8aD8cFEekbCHtmu6haKEc+OwHec2sAdW+8zaiAn8XfN8mO/B9QqOqW0GGKjJJ3s3dIHZ/6h+K0AWjUTkSKbMjQxrq+D0wnWvVu5Euec2kupEyOAY/JgMZmetaYuEbnR88waz225lyugJg7Zk3BeC4A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8bEuT3Akp62ZfYHy6luVNNKX9T0bttqvL2nGd1nvaRw=;
- b=TK4IbMcsLtqKu1puxCPhvcUaVW5Uqi1OKtB+zAooygTVornZ99JNsLKdFGafw/XT8RoFn0iyvR3MFPWvrN9Bi8G5np3BcqGmy15SFAvrnZFvUREh1I/hsbTzPr06OHtobVu96WX/Db84R/4p++P92TvIHT6xOqgyeP0AhBWLLuQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
- by AM8PR04MB7409.eurprd04.prod.outlook.com (2603:10a6:20b:1c5::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Thu, 1 Jun
- 2023 02:38:39 +0000
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::79f2:2888:dbd7:ad6f]) by AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::79f2:2888:dbd7:ad6f%7]) with mapi id 15.20.6433.024; Thu, 1 Jun 2023
- 02:38:39 +0000
-From:   Ming Qian <ming.qian@nxp.com>
-To:     shawnguo@kernel.org, mirela.rabulea@oss.nxp.com
-Cc:     robh+dt@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        linux-imx@nxp.com, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: imx8-ss-img: Assign slot for imx jpeg encoder/decoder
-Date:   Thu,  1 Jun 2023 10:38:01 +0800
-Message-Id: <20230601023801.25229-1-ming.qian@nxp.com>
-X-Mailer: git-send-email 2.38.1
+        Wed, 31 May 2023 23:03:20 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845CF1A8;
+        Wed, 31 May 2023 20:03:05 -0700 (PDT)
+X-UUID: d1a035c2002811eeb20a276fd37b9834-20230601
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=BETkkIZySjhEOf7Tdtg9qVoyKMNyel8xSjuNwP+/t0k=;
+        b=CxB77BRfoB4LCT/XplwD/1pudNgR8hqvKsup0hF53+2vR6w6X/Ars0GcoSWVxUbABUf3xDPLw5xbvqw0YZgm0w09nR0yZPqlPYRhFOpLR9hSRNkHHPfJuhF6UtvDfhGJwuMiwSgwZ7dClsES+Wn68TK8pFYJ7HbL/8AVasFjynM=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.25,REQID:4fe05f72-5467-4ce3-b994-1e035416400d,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:-5
+X-CID-META: VersionHash:d5b0ae3,CLOUDID:ad72333d-7aa7-41f3-a6bd-0433bee822f3,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-UUID: d1a035c2002811eeb20a276fd37b9834-20230601
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 37087001; Thu, 01 Jun 2023 11:03:01 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 1 Jun 2023 11:02:59 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Thu, 1 Jun 2023 11:02:58 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Chen-Yu Tsai <wenst@chromium.org>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
+        <nfraprado@collabora.com>, Nathan Hebert <nhebert@chromium.org>
+CC:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH 1/8] media: mediatek: vcodec: remove unused parameter
+Date:   Thu, 1 Jun 2023 11:02:49 +0800
+Message-ID: <20230601030256.29875-2-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230601030256.29875-1-yunfei.dong@mediatek.com>
+References: <20230601030256.29875-1-yunfei.dong@mediatek.com>
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: SI1PR02CA0023.apcprd02.prod.outlook.com
- (2603:1096:4:1f4::19) To AM6PR04MB6341.eurprd04.prod.outlook.com
- (2603:10a6:20b:d8::14)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM6PR04MB6341:EE_|AM8PR04MB7409:EE_
-X-MS-Office365-Filtering-Correlation-Id: 40a8fb68-e6f1-428e-abd2-08db62494e81
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8b4/N8AbNzPgJ90e67HDhWfn//Np4r34bIn91f+SzjTzktMOtWYrpVIb2xFB1k+6xwypIznBVHi9MPHxwZBBZhg8nDOENrXrQsfws6ZOHP1ix0XD5OKGZQbJnqYgq2UyPuUsxbPuBLhCqKwmF4CR7Q4HA95sTtsyDPACBClt91hl//5QqGzMLKGMwDhafJHYa0lzVY8UgmU6Bt+GEq3V1AFyYdgB9tpMvUpdB0y5FvEoRUJapssbf4zm5KlF/T5XmaArmMatSp9AJLfrHESMnNWXbrfmthvGYBlbqKzO3ZkyTtDxl9sL1HEmHY/6pDFfiUhJha5nU0F2fXJ/69EorjtL32gz2pzbVn4FNH2ITS0M6UI+sVIXdfLF7qrZwffaGxQnwE3c+A/rfl3988s2c8QcSX+6J+TJt3MRe/eQ1MHb1+V800b9zzqXDFMkQprDtS0E/75DeLaA5DRZqhpjyRFp6neTop0DIC/faKC+VdhkU2bK+g19nsDnTMw/jE84jiR4RR/CZeAePBu6ixQw6EpKZkJ5Nje+IoMJbyakqz0W5BsogrJxCkyJI6po+6k7lcIncFVTwJegkdc4ukeO25qQ08cLn6HA2Dm8GZgXsCL0tnn/o7g8tDDCkorvNMST
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(376002)(39860400002)(366004)(346002)(451199021)(478600001)(6666004)(83380400001)(44832011)(66556008)(66946007)(4326008)(66476007)(316002)(2616005)(1076003)(26005)(6506007)(6512007)(8936002)(8676002)(5660300002)(2906002)(41300700001)(186003)(38350700002)(38100700002)(36756003)(86362001)(6486002)(52116002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ARVedSWJK7WTQlmJmaGR16m0qvyv6OlpnlOF0X53b0/BqKZxvpg1DzFaGDJr?=
- =?us-ascii?Q?lTGqsZ2DOaRMY2cVZ/9PQe5vuiOCXOWalPTwkmIMSRKPySIbSjYZvJwRW1kC?=
- =?us-ascii?Q?JeWTSBFleh3810f8lEgL5CWFkg8il1Kr8avnRW2JaMqesRpRwjuKM450iJXE?=
- =?us-ascii?Q?KCffAxtM0tmflsf29PHc9uWqFfMIoz8+mVaybT3sucXf1x82s6UMGvXtaD9h?=
- =?us-ascii?Q?i1yJH31pcq2IquT0l53QsePXZkxt0HzA22TG+9APxJeX8E0W86IBe7HTDAwO?=
- =?us-ascii?Q?9QhSl71tOzlfXEvb0vvVuIujTpYQoOxN6oIWt4GKpxKYFiq24SRKODMSYlj/?=
- =?us-ascii?Q?WskMDXCcdYivGZZif/U1xDjvTBGd95VxURDnsTwfTrQFggSIsbJ01Op/yLyY?=
- =?us-ascii?Q?hnAR1VhNSm2mjBQAPFJxgfvoEQ+s1s1h0YaUUBGFBMQOku3JRF7h7YE1aGLP?=
- =?us-ascii?Q?mFk1QzUMjARr/3c5iCtDGC8/xPsZ0gCpZiDMHQHsFNkCNGRw3hcl97xM6/A4?=
- =?us-ascii?Q?KfTuwudoAd8/3lrFLVW61+vKGDmypIYYFipKKRdDg+18NaJoEfKptzfuWcSt?=
- =?us-ascii?Q?TvQBKtMUrZoVtPbLqYBJhdzbwwP6kjiH2YGTRMrq9nQTPZn+Jx9ZOYk9NG04?=
- =?us-ascii?Q?umNKE1EJR4I2gZxljZYA/fX2rO+MmxtKf0R0jEhOpg5BMOkMOcXezROvxOcc?=
- =?us-ascii?Q?NL1FPo/5i25mP1s0MttluEf/tXITPMTLZPV7W8rqhxB8IL6YkePI+E1gXj95?=
- =?us-ascii?Q?KnVjcqKkMq+ymfBr8hdQ1x5D89GZydiHcK3sB7ZxmEJqNKaGzjp1uLZW3ZOf?=
- =?us-ascii?Q?kuTzWFsfUznexPC789wFJ0HKhlSXO1X7ELUHDnogK+EByxWbHz4EzIjb4Iyt?=
- =?us-ascii?Q?PDCVYTJ/LjzEdRC3+CA1jni3ptqoPNwrRH7mbNVzfDbhv5H0At8kJ/6YVa51?=
- =?us-ascii?Q?wYTICWyDOLub+sBX65Q7EvVBMFAKx7L6Ut69hW3Tba8P8GPIr4GugIBMKMGa?=
- =?us-ascii?Q?UsNJq0KqrGu4GkOeTgT3NMKzbDshneI00reON2/SThxyVCY3ogGyfV6zETL4?=
- =?us-ascii?Q?c0bul44BXbVH2dcFsHtYXxNefOIfrwJY3BwiIy5BbV5u5dAYhzuGV7jBLWfy?=
- =?us-ascii?Q?6GzxLAj1qw9fgZDpc4cJJazJ3F/RqR4sTkaOBH6eTZ8+7YBZT4Qn1mnfWMQt?=
- =?us-ascii?Q?KIllPepuk5V1en14jzL0gxGOmcbyS8Y4+IrZOiZi5r392+TWHBOqP2sscmyv?=
- =?us-ascii?Q?A2egFlvGErR/IF7kKcZups1hBctobGyKi7SY0vG30vw9AM1oEFlV73za25Lc?=
- =?us-ascii?Q?E+1go76QWw8zytTpU4HS/vi9eKXZjBI5Si7gsGoFUVcZP8ZPCOyRdYuXppSs?=
- =?us-ascii?Q?qATv9/RNMi5TYXwfEWKsIN3VmL8dR1lR+tyWE+m+IeF+CR4Vh2FNMTlR3t0Y?=
- =?us-ascii?Q?3r3ik8RUq7KZKEvdT4BkilFy69XsZxhPG/5BfVHEKhXDjovzW1D3D+7vFK4c?=
- =?us-ascii?Q?0jw1RNwASvTpWebXYWxi8KutBqXPj+b3gP6tTHwiFQ3UvsPrQF3WBKMojCwv?=
- =?us-ascii?Q?9d6A8abIJL1aCWTcV6zPsXOXXUQk+T4XFLqqxDxv?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 40a8fb68-e6f1-428e-abd2-08db62494e81
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2023 02:38:39.3688
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2VgSVPYowqxllljrsR+6aBCmiGkqUy/w9bmIXU5RsW4K70Hp/wC98r2WTqcmV4xiKP9Qs7jC427f8Qm3vkvmdw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7409
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-assign a single slot,
-configure interrupt and power domain only for 1 slot,
-not for the all 4 slots.
+remove unused parameter in struct mtk_vcodec_dev.
 
-Signed-off-by: Ming Qian <ming.qian@nxp.com>
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 ---
- .../arm64/boot/dts/freescale/imx8-ss-img.dtsi | 22 +++++--------------
- 1 file changed, 6 insertions(+), 16 deletions(-)
+ drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c | 2 --
+ drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h     | 6 ------
+ drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c | 2 --
+ 3 files changed, 10 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8-ss-img.dtsi b/arch/arm64/boot/dts/freescale/imx8-ss-img.dtsi
-index a90654155a88..176dcce24b64 100644
---- a/arch/arm64/boot/dts/freescale/imx8-ss-img.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8-ss-img.dtsi
-@@ -18,10 +18,7 @@ img_ipg_clk: clock-img-ipg {
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
+index d41f2121b94f..03721eda2769 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
+@@ -336,8 +336,6 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+ 		goto err_core_workq;
+ 	}
  
- 	jpegdec: jpegdec@58400000 {
- 		reg = <0x58400000 0x00050000>;
--		interrupts = <GIC_SPI 309 IRQ_TYPE_LEVEL_HIGH>,
--			     <GIC_SPI 310 IRQ_TYPE_LEVEL_HIGH>,
--			     <GIC_SPI 311 IRQ_TYPE_LEVEL_HIGH>,
--			     <GIC_SPI 312 IRQ_TYPE_LEVEL_HIGH>;
-+		interrupts = <GIC_SPI 309 IRQ_TYPE_LEVEL_HIGH>;
- 		clocks = <&img_jpeg_dec_lpcg IMX_LPCG_CLK_0>,
- 			 <&img_jpeg_dec_lpcg IMX_LPCG_CLK_4>;
- 		clock-names = "per", "ipg";
-@@ -29,18 +26,13 @@ jpegdec: jpegdec@58400000 {
- 				  <&img_jpeg_dec_lpcg IMX_LPCG_CLK_4>;
- 		assigned-clock-rates = <200000000>, <200000000>;
- 		power-domains = <&pd IMX_SC_R_MJPEG_DEC_MP>,
--				<&pd IMX_SC_R_MJPEG_DEC_S0>,
--				<&pd IMX_SC_R_MJPEG_DEC_S1>,
--				<&pd IMX_SC_R_MJPEG_DEC_S2>,
--				<&pd IMX_SC_R_MJPEG_DEC_S3>;
-+				<&pd IMX_SC_R_MJPEG_DEC_S0>;
-+		slot = <0>;
- 	};
+-	init_waitqueue_head(&dev->queue);
+-
+ 	vfd_dec = video_device_alloc();
+ 	if (!vfd_dec) {
+ 		mtk_v4l2_err("Failed to allocate video device");
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+index f17d67e781c9..e3230a4d7b8e 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+@@ -448,10 +448,7 @@ struct mtk_vcodec_enc_pdata {
+  * @decode_workqueue: decode work queue
+  * @encode_workqueue: encode work queue
+  *
+- * @int_cond: used to identify interrupt condition happen
+- * @int_type: used to identify what kind of interrupt condition happen
+  * @dev_mutex: video_device lock
+- * @queue: waitqueue for waiting for completion of device commands
+  *
+  * @dec_irq: decoder irq resource
+  * @enc_irq: h264 encoder irq resource
+@@ -496,10 +493,7 @@ struct mtk_vcodec_dev {
  
- 	jpegenc: jpegenc@58450000 {
- 		reg = <0x58450000 0x00050000>;
--		interrupts = <GIC_SPI 305 IRQ_TYPE_LEVEL_HIGH>,
--			     <GIC_SPI 306 IRQ_TYPE_LEVEL_HIGH>,
--			     <GIC_SPI 307 IRQ_TYPE_LEVEL_HIGH>,
--			     <GIC_SPI 308 IRQ_TYPE_LEVEL_HIGH>;
-+		interrupts = <GIC_SPI 305 IRQ_TYPE_LEVEL_HIGH>;
- 		clocks = <&img_jpeg_enc_lpcg IMX_LPCG_CLK_0>,
- 			 <&img_jpeg_enc_lpcg IMX_LPCG_CLK_4>;
- 		clock-names = "per", "ipg";
-@@ -48,10 +40,8 @@ jpegenc: jpegenc@58450000 {
- 				  <&img_jpeg_enc_lpcg IMX_LPCG_CLK_4>;
- 		assigned-clock-rates = <200000000>, <200000000>;
- 		power-domains = <&pd IMX_SC_R_MJPEG_ENC_MP>,
--				<&pd IMX_SC_R_MJPEG_ENC_S0>,
--				<&pd IMX_SC_R_MJPEG_ENC_S1>,
--				<&pd IMX_SC_R_MJPEG_ENC_S2>,
--				<&pd IMX_SC_R_MJPEG_ENC_S3>;
-+				<&pd IMX_SC_R_MJPEG_ENC_S0>;
-+		slot = <0>;
- 	};
+ 	struct workqueue_struct *decode_workqueue;
+ 	struct workqueue_struct *encode_workqueue;
+-	int int_cond;
+-	int int_type;
+ 	struct mutex dev_mutex;
+-	wait_queue_head_t queue;
  
- 	img_jpeg_dec_lpcg: clock-controller@585d0000 {
+ 	int dec_irq;
+ 	int enc_irq;
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
+index 5df0a22ff3b5..a56652e476c2 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
+@@ -311,8 +311,6 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+ 		goto err_res;
+ 	}
+ 
+-	init_waitqueue_head(&dev->queue);
+-
+ 	/* allocate video device for encoder and register it */
+ 	vfd_enc = video_device_alloc();
+ 	if (!vfd_enc) {
 -- 
-2.38.1
+2.25.1
 
