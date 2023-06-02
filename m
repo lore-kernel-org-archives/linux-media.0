@@ -2,158 +2,239 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58DABC77B7A
-	for <linux-media@archiver.kernel.org>; Fri,  2 Jun 2023 15:22:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9862C7EE2A
+	for <linux-media@archiver.kernel.org>; Fri,  2 Jun 2023 15:25:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234614AbjFBPWV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 2 Jun 2023 11:22:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39960 "EHLO
+        id S236601AbjFBPZ5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 2 Jun 2023 11:25:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236431AbjFBPWU (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 2 Jun 2023 11:22:20 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A812CE5B
-        for <linux-media@vger.kernel.org>; Fri,  2 Jun 2023 08:22:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685719331; x=1717255331;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=39JHTSG6qAPQGqhe6r1WgE8i3gjOlsOnp7C0zEI6iDg=;
-  b=A81QrLxEJ2f+aG8JnwqzpyQXTg2fPC0BG3oPp4XNjiyvbg/d5vuQGX7i
-   hzUvgVRmpbZTevih5eb+NMtrxN1J5VJHg5dN1TCNduDRZaViQBPDiioc5
-   DUW0uV3Y7h5xNMToc4qMTiR0XEq71IJ3A4P2nvhxREGaJVEaume9cQYP+
-   z0gq+NgVD0dbCstLFIbYhkhRW2kAi7fXeNlIjU1tKyjipbSYBnWgsGntw
-   NJcOCEPrkoaH53QFLXbLJztAfvWiGPo85KAUH68xQkrx5zOijVFWFXgYv
-   seo196ZaDOetJOyNOB48lmFRUcJf9tBtusH4hcyN/k5JjK2qgJBQcYuO3
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="442271064"
-X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
-   d="scan'208";a="442271064"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 08:22:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="685344491"
-X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
-   d="scan'208";a="685344491"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 08:21:59 -0700
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id 23A44120B16;
-        Fri,  2 Jun 2023 18:05:55 +0300 (EEST)
-Date:   Fri, 2 Jun 2023 15:05:55 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, tomi.valkeinen@ideasonboard.com,
-        bingbu.cao@intel.com, hongju.wang@intel.com
-Subject: Re: [RFC 1/7] media: mc: Add INTERNAL_SOURCE pad type flag
-Message-ID: <ZHoFU0tHFdvymgk3@kekkonen.localdomain>
-References: <20230505215257.60704-1-sakari.ailus@linux.intel.com>
- <20230505215257.60704-2-sakari.ailus@linux.intel.com>
- <20230602091844.GE19463@pendragon.ideasonboard.com>
+        with ESMTP id S236495AbjFBPZx (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 2 Jun 2023 11:25:53 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C8FE4E;
+        Fri,  2 Jun 2023 08:25:46 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (om126156168104.26.openmobile.ne.jp [126.156.168.104])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 884CD844;
+        Fri,  2 Jun 2023 17:25:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1685719522;
+        bh=qxxf/d08ZqtGMHoK4SpD04QNfH/WTFybI3QFyM9eykE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=A2utsvl2PPql1S26cGr98mxyumTzYpnMf8fkfVhmQC1PL+7oJw3DjO0NKIVxMuTPE
+         e0OwTdriIiArAmQZiIsZo0zBs2RQeg6kXpu6VDrXeBLHnzu4pq3d/4ZlkEwu7qNACz
+         pSSxCP15nsCEwyX0cyLHJwc+g/DQCKpa7GvVlFf0=
+Date:   Fri, 2 Jun 2023 18:25:43 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Dmitry Perchanov <dmitry.perchanov@intel.com>
+Cc:     linux-media@vger.kernel.org, mchehab@kernel.org,
+        linux-kernel@vger.kernel.org, sakari.ailus@intel.com,
+        Evgeni Raikhel <evgeni.raikhel@intel.com>, demisrael@gmail.com,
+        Nir Azkiel <nir.azkiel@intel.com>
+Subject: Re: [PATCH v4] media: uapi: v4l: Intel metadata format update
+Message-ID: <20230602152543.GJ26944@pendragon.ideasonboard.com>
+References: <7e0e6a37eee28185ec2fbd4f1d42569c8da6726d.camel@intel.com>
+ <944dd3c67fc7e9c1b8d6bd0491d61fdbb9489e70.camel@intel.com>
+ <20230602144624.GA3343@pendragon.ideasonboard.com>
+ <2eef3b075da7e91b938222a345e3f18f3765619f.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230602091844.GE19463@pendragon.ideasonboard.com>
+In-Reply-To: <2eef3b075da7e91b938222a345e3f18f3765619f.camel@intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Laurent,
+Hi Dmitry,
 
-On Fri, Jun 02, 2023 at 12:18:44PM +0300, Laurent Pinchart wrote:
-> Hi Sakari,
+On Fri, Jun 02, 2023 at 06:00:04PM +0300, Dmitry Perchanov wrote:
+> Hi Laurent,
 > 
-> Thank you for the patch.
+> Thanks for review!
+> I will gladly accept your proposed changes.
 > 
-> On Sat, May 06, 2023 at 12:52:51AM +0300, Sakari Ailus wrote:
-> > Internal source pads will be used as routing endpoints in V4L2
-> > [GS]_ROUTING IOCTLs, to indicate that the stream begins in the entity.
-> > 
-> > Also prevent creating links to pads that have been flagged as internal.
-> > 
-> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > ---
-> >  .../userspace-api/media/mediactl/media-types.rst          | 7 +++++++
-> >  drivers/media/mc/mc-entity.c                              | 8 +++++++-
-> >  include/uapi/linux/media.h                                | 1 +
-> >  3 files changed, 15 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/Documentation/userspace-api/media/mediactl/media-types.rst b/Documentation/userspace-api/media/mediactl/media-types.rst
-> > index 0ffeece1e0c8..c724139ad46c 100644
-> > --- a/Documentation/userspace-api/media/mediactl/media-types.rst
-> > +++ b/Documentation/userspace-api/media/mediactl/media-types.rst
-> > @@ -361,6 +361,7 @@ Types and flags used to represent the media graph elements
-> >  .. _MEDIA-PAD-FL-SINK:
-> >  .. _MEDIA-PAD-FL-SOURCE:
-> >  .. _MEDIA-PAD-FL-MUST-CONNECT:
-> > +.. _MEDIA-PAD-FL-INTERNAL-SOURCE:
-> >  
-> >  .. flat-table:: Media pad flags
-> >      :header-rows:  0
-> > @@ -382,6 +383,12 @@ Types and flags used to represent the media graph elements
-> >  	  when this flag isn't set; the absence of the flag doesn't imply
-> >  	  there is none.
-> >  
-> > +    *  -  ``MEDIA_PAD_FL_INTERNAL_SOURCE``
-> > +       -  This flag indicates an internal pad that has no external
-> > +	  connections. Such a pad may not be connected with a link. The internal
-> > +	  flag indicates that the stream either starts or ends in the
+> Comments inline.
 > 
-> There's no mention of "stream" (with this meaning) anywhere in the MC
-> API documentation, so you will need to explain streams first.
+> On Fri, 2023-06-02 at 17:46 +0300, Laurent Pinchart wrote:
+> > On Thu, Jun 01, 2023 at 07:08:46PM +0300, Dmitry Perchanov wrote:
+> > > Update metadata structure for Intel RealSense UVC/MIPI cameras.
+> > > Compliant to Intel Configuration version 3.
+> > > 
+> > > Signed-off-by: Dmitry Perchanov <dmitry.perchanov@intel.com>
+> > > ---
+> > >  .../media/v4l/pixfmt-meta-d4xx.rst            | 52 ++++++++++++++++---
+> > >  1 file changed, 46 insertions(+), 6 deletions(-)
+> > > 
+> > > diff --git a/Documentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst b/Documentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst
+> > > index 4e437ba97a0e..7482f298d0cc 100644
+> > > --- a/Documentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst
+> > > +++ b/Documentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst
+> > > @@ -12,7 +12,7 @@ Intel D4xx UVC Cameras Metadata
+> > >  Description
+> > >  ===========
+> > >  
+> > > -Intel D4xx (D435 and other) cameras include per-frame metadata in their UVC
+> > > +Intel D4xx (D435, D455 and others) cameras include per-frame metadata in their UVC
+> > >  payload headers, following the Microsoft(R) UVC extension proposal [1_]. That
+> > >  means, that the private D4XX metadata, following the standard UVC header, is
+> > >  organised in blocks. D4XX cameras implement several standard block types,
+> > > @@ -26,6 +26,8 @@ V4L2_META_FMT_UVC with the only difference, that it also includes proprietary
+> > >  payload header data. D4xx cameras use bulk transfers and only send one payload
+> > >  per frame, therefore their headers cannot be larger than 255 bytes.
+> > >  
+> > > +This document implements Intel Configuration version 3 [9_].
+> > > +
+> > >  Below are proprietary Microsoft style metadata types, used by D4xx cameras,
+> > >  where all fields are in little endian order:
+> > >  
+> > > @@ -43,7 +45,7 @@ where all fields are in little endian order:
+> > >      * - __u32 ID
+> > >        - 0x80000000
+> > >      * - __u32 Size
+> > > -      - Size in bytes (currently 56)
+> > > +      - Size in bytes, include ID (all protocol versions: 60)
+> > >      * - __u32 Version
+> > >        - Version of this structure. The documentation herein corresponds to
+> > >          version xxx. The version number will be incremented when new fields are
+> > 
+> > Should this read "version 3" instead of "version xxx" ?
+> 
+> This can read 1, 2 or 3, depends on firmware version.
+> All cameras have same firmware. The latest will report 3.
 
-I'll add it to glossary and add a reference here.
+The sentence reads
 
+"The documentation herein corresponds to version xxx."
+
+As you're updating the documentation to correspond to version 3, I
+thought it would be best to make that explicit. Another option would be
+
+"The documentation herein covers versions 1, 2 and 3."
+
+I think I like that better. What do you think ?
+
+> > > @@ -72,13 +74,17 @@ where all fields are in little endian order:
+> > >        - Bottom border of the AE Region of Interest
+> > >      * - __u32 Preset
+> > >        - Preset selector value, default: 0, unless changed by the user
+> > > -    * - __u32 Laser mode
+> > > -      - 0: off, 1: on
+> > > +    * - __u8 Emitter mode (v3 only) (__u32 Laser mode for v1) [8_]
+> > > +      - 0: off, 1: on, same as __u32 Laser mode for v1
+> > > +    * - __u8 RFU byte (v3 only)
+> > > +      - Spare byte for future use
+> > > +    * - __u16 LED Power (v3 only)
+> > > +      - Led power value 0-360 (F416 SKU)
+> > >      * - :cspan:`1` *Capture Timing*
+> > >      * - __u32 ID
+> > >        - 0x80000001
+> > >      * - __u32 Size
+> > > -      - Size in bytes (currently 40)
+> > > +      - Size in bytes, include ID (all protocol versions: 40)
+> > >      * - __u32 Version
+> > >        - Version of this structure. The documentation herein corresponds to
+> > >          version xxx. The version number will be incremented when new fields are
+> > > @@ -101,7 +107,7 @@ where all fields are in little endian order:
+> > >      * - __u32 ID
+> > >        - 0x80000002
+> > >      * - __u32 Size
+> > > -      - Size in bytes (currently 40)
+> > > +      - Size in bytes, include ID (v1:36, v3:40)
+> > >      * - __u32 Version
+> > >        - Version of this structure. The documentation herein corresponds to
+> > >          version xxx. The version number will be incremented when new fields are
+> > > @@ -124,6 +130,14 @@ where all fields are in little endian order:
+> > >        - Requested frame rate per second
+> > >      * - __u16 Trigger
+> > >        - Byte 0: bit 0: depth and RGB are synchronised, bit 1: external trigger
+> > > +    * - __u16 Calibration count (v3 only)
+> > > +      - Calibration counter, see [4_] below
+> > > +    * - __u8 GPIO input data (v3 only)
+> > > +      - GPIO readout, see [4_] below (Supported from FW 5.12.7.0)
+> > > +    * - __u32 Sub-preset info (v3 only)
+> > > +      - Sub-preset choice information, see [4_] below
+> > > +    * - __u8 reserved (v3 only)
+> > > +      - RFU byte.
+> > >  
+> > >  .. _1:
+> > >  
+> > > @@ -140,6 +154,8 @@ where all fields are in little endian order:
+> > >    0x00000010 Exposure priority
+> > >    0x00000020 AE ROI
+> > >    0x00000040 Preset
+> > > +  0x00000080 Emitter mode
+> > > +  0x00000100 LED Power
+> > >  
+> > >  .. _3:
+> > >  
+> > > @@ -165,6 +181,8 @@ where all fields are in little endian order:
+> > >    0x00000040 Framerate
+> > >    0x00000080 Trigger
+> > >    0x00000100 Cal count
+> > > +  0x00000200 GPIO Input Data
+> > > +  0x00000400 Sub-preset Info
+> > >  
+> > >  .. _5:
+> > >  
+> > > @@ -211,3 +229,25 @@ Left sensor: ::
+> > >  Fish Eye sensor: ::
+> > >  
+> > >    1 RAW8
+> > > +
+> > > +.. _8:
+> > > +
+> > > +[8] The "Laser mode" is replaced by three different fields.
+> > 
+> > "... has been replaced in version 3 by ..."
+> > 
+> > > +"Laser" renamed to "Emitter" as there multiple technologies
+> > 
+> > s/there/there are/
 > 
-> Apart from that, and addressing Tomi's comment, this patch seems OK.
+> Accepted. Thanks!
+>
+> > > +for camera projectors. As we have another field for "Laser Power"
+> > > +we introduced "LED Power" for extra emitter.
+> > > +
+> > > +The __u32 "Laser mode" integer is divided by two bytes and short: ::
+> > 
+> > The "Laser mode" __u32 field has been split into: ::
+>
+> Accepted. Thanks!
 > 
-> > +	  entity. For a given pad, the INTERNAL_SOURCE flag may not be set if
-> > +	  either SINK or SOURCE flags is set.
-> >  
-> >  One and only one of ``MEDIA_PAD_FL_SINK`` and ``MEDIA_PAD_FL_SOURCE``
-> >  must be set for every pad.
-> > diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
-> > index ef34ddd715c9..ed99160a2487 100644
-> > --- a/drivers/media/mc/mc-entity.c
-> > +++ b/drivers/media/mc/mc-entity.c
-> > @@ -1062,7 +1062,8 @@ int media_get_pad_index(struct media_entity *entity, u32 pad_type,
-> >  
-> >  	for (i = 0; i < entity->num_pads; i++) {
-> >  		if ((entity->pads[i].flags &
-> > -		     (MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_SOURCE)) != pad_type)
-> > +		     (MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_SOURCE |
-> > +		      MEDIA_PAD_FL_INTERNAL_SOURCE)) != pad_type)
-> >  			continue;
-> >  
-> >  		if (entity->pads[i].sig_type == sig_type)
-> > @@ -1087,6 +1088,11 @@ media_create_pad_link(struct media_entity *source, u16 source_pad,
-> >  		return -EINVAL;
-> >  	if (WARN_ON(!(sink->pads[sink_pad].flags & MEDIA_PAD_FL_SINK)))
-> >  		return -EINVAL;
-> > +	if (WARN_ON(sink->pads[sink_pad].flags &
-> > +		    MEDIA_PAD_FL_INTERNAL_SOURCE) ||
-> > +	    WARN_ON(source->pads[source_pad].flags &
-> > +		    MEDIA_PAD_FL_INTERNAL_SOURCE))
-> > +		return -EINVAL;
-> >  
-> >  	link = media_add_link(&source->links);
-> >  	if (link == NULL)
-> > diff --git a/include/uapi/linux/media.h b/include/uapi/linux/media.h
-> > index edb8dfef9eba..0e2577e8b425 100644
-> > --- a/include/uapi/linux/media.h
-> > +++ b/include/uapi/linux/media.h
-> > @@ -208,6 +208,7 @@ struct media_entity_desc {
-> >  #define MEDIA_PAD_FL_SINK			(1U << 0)
-> >  #define MEDIA_PAD_FL_SOURCE			(1U << 1)
-> >  #define MEDIA_PAD_FL_MUST_CONNECT		(1U << 2)
-> > +#define MEDIA_PAD_FL_INTERNAL_SOURCE		(1U << 3)
-> >  
-> >  struct media_pad_desc {
-> >  	__u32 entity;		/* entity ID */
+> > > +   1 __u8 Emitter mode
+> > > +   2 __u8 RFU byte
+> > > +   3 __u16 LED Power
+> > > +
+> > > +This is a change between versions 1 and 3. All versions 1,2 and 3
+> > 
+> > s/1,2/1, 2/
+>
+> Accepted. Thanks!
 > 
+> > > +are backward compatible with same data format and they are supported.
+> > > +See [2_] for which attributes are valid.
+> > > +
+> > > +.. _9:
+> > > +
+> > > +[9]
+> > > +LibRealSense SDK metadata source:
+> > 
+> > I'll remove the blank line after '[9]', that is
+> > 
+> > > +[9] LibRealSense SDK metadata source:
+>
+> Accepted. Thanks!
+> 
+> > I can fix all this when applying if you're fine with the changes.
+>
+> Yes, I agree. Thank You for your effort!
+>
+> > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > 
+> > > +https://github.com/IntelRealSense/librealsense/blob/master/src/metadata.h
 
 -- 
 Regards,
 
-Sakari Ailus
+Laurent Pinchart
