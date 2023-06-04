@@ -2,41 +2,41 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27693C77B73
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jun 2023 16:15:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2417FC7EE2C
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jun 2023 16:15:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232011AbjFDQPP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jun 2023 12:15:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48056 "EHLO
+        id S230392AbjFDQPQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jun 2023 12:15:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232025AbjFDQPL (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sun, 4 Jun 2023 12:15:11 -0400
+        with ESMTP id S232085AbjFDQPO (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 4 Jun 2023 12:15:14 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C39DE
-        for <linux-media@vger.kernel.org>; Sun,  4 Jun 2023 09:14:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D6BBD
+        for <linux-media@vger.kernel.org>; Sun,  4 Jun 2023 09:14:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685895268;
+        s=mimecast20190719; t=1685895264;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mEN+0TniimPe0eT5Q4F9MXhk6psY/lXJ+SgLAGSDQ9E=;
-        b=aQA3HdbvQ8jX9/HY6E9c0LhOCkHhlog3xwQkPBRVuKvNMe30yWaODge9a5EkIywdbd49hy
-        aHZGgOUDWzXSKY0kj1oxZXkju09O4qCXAy60DXZd5inlJreEbtOku8yZvXyMOfaFXF8Phl
-        7ygKg/P/Ytd9KJ/jlpK9fFVcnHWyopc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=M3j4urxrfbfsTzi9VhtL6nDLuxZBzv2hqo4tFVVp13E=;
+        b=ek0l5E/bPnEZYsm/KUL5KqobXZayXfuwuFbHBeIOXEg3zPP/HPWiROryX9hmFugeen8XPj
+        iphUwCLvU8BZ83uG+5vpdbOCXH7uY4WB5SpsQ+hCxmoU3xsjFhGCBgHMwSav9TcKKvhP8W
+        qDzPgRBIu9+3GiABxWoZ3QZmr55xyeI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-528-GHbHWw-yOnyw4vpif4rexg-1; Sun, 04 Jun 2023 12:14:25 -0400
-X-MC-Unique: GHbHWw-yOnyw4vpif4rexg-1
+ us-mta-488-GwxHq19ROFWPj0DMcjTnIA-1; Sun, 04 Jun 2023 12:14:19 -0400
+X-MC-Unique: GwxHq19ROFWPj0DMcjTnIA-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 228F3800159;
-        Sun,  4 Jun 2023 16:14:25 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6828C3C02B7A;
+        Sun,  4 Jun 2023 16:14:18 +0000 (UTC)
 Received: from localhost.localdomain (unknown [10.39.192.9])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 914F0492B00;
-        Sun,  4 Jun 2023 16:14:23 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D711E401029;
+        Sun,  4 Jun 2023 16:14:15 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -47,9 +47,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>, Kate Hsuan <hpa@redhat.com>,
         Nable <nable.maininbox@googlemail.com>,
         andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 5/5] media: atomisp: Add testing instructions to TODO file
-Date:   Sun,  4 Jun 2023 18:14:06 +0200
-Message-Id: <20230604161406.69369-6-hdegoede@redhat.com>
+Subject: [PATCH 2/5] media: atomisp: ov2680: Stop using half pixelclock for binned modes
+Date:   Sun,  4 Jun 2023 18:14:03 +0200
+Message-Id: <20230604161406.69369-3-hdegoede@redhat.com>
 In-Reply-To: <20230604161406.69369-1-hdegoede@redhat.com>
 References: <20230604161406.69369-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -59,58 +59,68 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Testing the atomisp can be a bit tricky. The BYT/CHT CPUs are not
-very powerful so some apps like camorama cannot run at full FPS.
+Stop using half pixelclock for binned modes this fixes:
+1. The exposure being twice as high for binned mods (due to the half clk)
+2. The framerate being 15 fps instead of 30 fps
 
-Add instructions for how to test with gstreamer which does
-runs at full FPS without issues.
+The original code with fixed per mode register lists did use half pixel
+clk, but this should be combined with using half for the VTS value too.
+
+Using half VTS fixes the framerate issue, but this has the undesired
+side-effect of change the exposure ctrl range (half the range, double
+the amount of exposure per step).
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/staging/media/atomisp/TODO | 33 ++++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ drivers/staging/media/atomisp/i2c/atomisp-ov2680.c | 8 +-------
+ drivers/staging/media/atomisp/i2c/ov2680.h         | 1 +
+ 2 files changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/TODO b/drivers/staging/media/atomisp/TODO
-index b7a09eb20d0d..ecf8ba67b7af 100644
---- a/drivers/staging/media/atomisp/TODO
-+++ b/drivers/staging/media/atomisp/TODO
-@@ -78,3 +78,36 @@ TODO
-   the firmware files
+diff --git a/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c b/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
+index 3ec0421b90a5..1db2eb9f9e25 100644
+--- a/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
++++ b/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
+@@ -244,27 +244,21 @@ static void ov2680_calc_mode(struct ov2680_dev *sensor)
+ static int ov2680_set_mode(struct ov2680_dev *sensor)
+ {
+ 	struct i2c_client *client = sensor->client;
+-	u8 pll_div, unknown, inc, fmt1, fmt2;
++	u8 unknown, inc, fmt1, fmt2;
+ 	int ret;
  
- * The atomisp code still has a lot of cruft which needs cleaning up
-+
-+
-+Testing
-+=======
-+
-+Since libcamera support is not available yet, the easiest way to test for
-+now is using v4l2-ctl to select the input and gstreamer for streaming.
-+
-+To select the input run:
-+
-+v4l2-ctl -i <input>
-+
-+Where <input> is 0 (front cam) or 1 (back cam).
-+
-+The simplest gstreamer pipeline for testing running the sensor
-+at its max resolution is:
-+
-+gst-launch-1.0 v4l2src ! videoconvert ! xvimagesink sync=false
-+
-+To select e.g 640x480 as resolution use:
-+
-+gst-launch-1.0 v4l2src ! video/x-raw,format=YV12,width=640,height=480 ! \
-+               videoconvert ! xvimagesink sync=false
-+
-+And to show fps use:
-+
-+gst-launch-1.0 v4l2src ! video/x-raw,format=YV12,width=640,height=480 ! \
-+               videoconvert ! fpsdisplaysink video-sink=xvimagesink sync=false
-+
-+Often the image will be over / under exposed. This can be fixed by using
-+v4l2-ctl on the sensor subdev to tweak the exposure ctrl; or by using a GUI
-+app for v4l2-controls which also supports subdev such as the Fedora patched
-+gtk-v4l tool.
+ 	if (sensor->mode.binning) {
+-		pll_div = 1;
+ 		unknown = 0x23;
+ 		inc = 0x31;
+ 		fmt1 = 0xc2;
+ 		fmt2 = 0x01;
+ 	} else {
+-		pll_div = 0;
+ 		unknown = 0x21;
+ 		inc = 0x11;
+ 		fmt1 = 0xc0;
+ 		fmt2 = 0x00;
+ 	}
+ 
+-	ret = ov_write_reg8(client, 0x3086, pll_div);
+-	if (ret)
+-		return ret;
+-
+ 	ret = ov_write_reg8(client, 0x370a, unknown);
+ 	if (ret)
+ 		return ret;
+diff --git a/drivers/staging/media/atomisp/i2c/ov2680.h b/drivers/staging/media/atomisp/i2c/ov2680.h
+index fd9c7485f8c1..b6c0ef591c69 100644
+--- a/drivers/staging/media/atomisp/i2c/ov2680.h
++++ b/drivers/staging/media/atomisp/i2c/ov2680.h
+@@ -181,6 +181,7 @@ static struct ov2680_reg const ov2680_global_setting[] = {
+ 	{0x3082, 0x45},
+ 	{0x3084, 0x09},
+ 	{0x3085, 0x04},
++	{0x3086, 0x00},
+ 	{0x3503, 0x03},
+ 	{0x350b, 0x36},
+ 	{0x3600, 0xb4},
 -- 
 2.40.1
 
