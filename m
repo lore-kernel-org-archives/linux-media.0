@@ -2,119 +2,137 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86207C7EE2A
-	for <linux-media@archiver.kernel.org>; Mon,  5 Jun 2023 10:30:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61650C7EE24
+	for <linux-media@archiver.kernel.org>; Mon,  5 Jun 2023 10:37:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231562AbjFEKaT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 5 Jun 2023 06:30:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50028 "EHLO
+        id S231574AbjFEKhm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 5 Jun 2023 06:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231280AbjFEKaR (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 5 Jun 2023 06:30:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF8FED
-        for <linux-media@vger.kernel.org>; Mon,  5 Jun 2023 03:29:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685960969;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8AtwIALSdDfeC27ZQtwOHEZtWeXJnZHUT6kwQAx9PzQ=;
-        b=UZ52QaQ5kkBmdrRlmdQnnWeAkkG4scSQ1wOB3/tUuxsXLbudPHO7ObIBtSwqD1xZpmUTRn
-        DVnsALdxzpC4C5kBTyr//sFiMjK+9b9xnU88+mB5i3mOXMR/SvG+kF121CAHN17VKQVz2x
-        GTXahmxroPraxxOn0GwiAJJDsWGwMOA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-116-IsVGsLD0PQ-KyruKzhMB7w-1; Mon, 05 Jun 2023 06:29:25 -0400
-X-MC-Unique: IsVGsLD0PQ-KyruKzhMB7w-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S231185AbjFEKhi (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 5 Jun 2023 06:37:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E9B5116;
+        Mon,  5 Jun 2023 03:37:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 263D0101A531;
-        Mon,  5 Jun 2023 10:29:25 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.67.24.47])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2BA2A9E75;
-        Mon,  5 Jun 2023 10:29:21 +0000 (UTC)
-From:   Kate Hsuan <hpa@redhat.com>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Cc:     Kate Hsuan <hpa@redhat.com>
-Subject: [PATCH 2/3] atomisp: sh_css_params: write the sp_group config according to the ISP model
-Date:   Mon,  5 Jun 2023 18:29:02 +0800
-Message-Id: <20230605102903.924283-3-hpa@redhat.com>
-In-Reply-To: <20230605102903.924283-1-hpa@redhat.com>
-References: <20230605102903.924283-1-hpa@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 86D53614D5;
+        Mon,  5 Jun 2023 10:37:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60829C433D2;
+        Mon,  5 Jun 2023 10:37:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685961454;
+        bh=hAyKurn2OOaYTMwG3H4jsrgJYf3qIZ+AJycUSJ3bmZM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=l8xpfhqSyLuvOKs9VzQFn/gG3GT3Tqvmhur5Ai5En+UWLYVB4bMyoaBGJL/bjForQ
+         TVfhhZSZdau4ICVIcQWCoRhsbdh14L073Dj71fE0DNrK5nqju1RYElC1my8cVmyZ/l
+         I3Qk59uMcti09j8vl1159n/kV5YhJHy+pf9T5K9zVfugJ2sfe6JZlxBHWm1OKm9wKz
+         I1AqvCkkn84Rt4zzNIgfHTWoyUV7h5fx059sOfltbgHPgnfVRhva6l8Kwjy3AOeC2a
+         yrwrB607tvpUoLoSKWcki3OT9FyYTTjouzHDBnp0JjLquovaz3Cz2URzFqAqV+CELY
+         wTExy5Lt6XaiA==
+Date:   Mon, 5 Jun 2023 11:37:27 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        Hyunwoo Kim <imv4bel@gmail.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Thomas Voegtle <tv@lio96.de>, linux-kernel@vger.kernel.org
+Subject: Re: Sometimes DVB broken with commit 6769a0b7ee0c3b
+Message-ID: <20230605113727.69e7f309@sal.lan>
+In-Reply-To: <439d143b-1de7-6365-cf64-f1b44fd6d1cf@leemhuis.info>
+References: <da5382ad-09d6-20ac-0d53-611594b30861@lio96.de>
+        <439d143b-1de7-6365-cf64-f1b44fd6d1cf@leemhuis.info>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Pick up the necessary part of sp_group configuration for both model and
-then copy those parts into a tempetory buffer. This buffer is finally
-written to the ISP with correct length.
+Em Mon, 5 Jun 2023 11:38:49 +0200
+"Linux regression tracking (Thorsten Leemhuis)" <regressions@leemhuis.info>=
+ escreveu:
 
-Signed-off-by: Kate Hsuan <hpa@redhat.com>
----
- .../staging/media/atomisp/pci/sh_css_params.c | 37 ++++++++++++++++++-
- 1 file changed, 35 insertions(+), 2 deletions(-)
+> Hi, Thorsten here, the Linux kernel's regression tracker.
+>=20
+> On 30.05.23 13:12, Thomas Voegtle wrote:
+> >=20
+> > I have the problem that sometimes my DVB card does not initialize
+> > properly booting Linux 6.4-rc4.
+> > This is not always, maybe in 3 out of 4 attempts.
+> > When this happens somehow you don't see anything special in dmesg, but
+> > the card just doesn't work.
+> >=20
+> > Reverting this helps:
+> > commit 6769a0b7ee0c3b31e1b22c3fadff2bfb642de23f
+> > Author: Hyunwoo Kim <imv4bel@gmail.com>
+> > Date:=C2=A0=C2=A0 Thu Nov 17 04:59:22 2022 +0000
+> >=20
+> > =C2=A0=C2=A0=C2=A0 media: dvb-core: Fix use-after-free on race conditio=
+n at dvb_frontend
+> >=20
+> >=20
+> > I have:
+> > 03:00.0 Multimedia video controller [0400]: Conexant Systems, Inc.
+> > CX23887/8
+> > PCIe Broadcast Audio and Video Decoder with 3D Comb [14f1:8880] (rev 04)
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Subsystem: Hauppauge compute=
+r works Inc. Device [0070:c138]
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Kernel driver in use: cx2388=
+5 =20
+>=20
+> Hmmm, that was posted last Tuesday and received not a single reply. :-/
+>=20
+> Hyunwoo Kim: could you please look at it, as it's a regression caused by
+> a commit of yours (one that would be good to solve before 6.4 is
+> finalized!)? And in case you are unable to do so let us know?
+>=20
+> But FWIW:
+>=20
+> Mauro: I wonder if this is something you or someone else has to look
+> into, as Hyunwoo Kim posted a few times per months to Linux lists, but
+> according  to a quick search on lore hasn't posted anything since ~two
+> months now. :-/
 
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_params.c b/drivers/staging/media/atomisp/pci/sh_css_params.c
-index 588f2adab058..2913d9d6d226 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_params.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css_params.c
-@@ -3720,10 +3720,43 @@ struct ia_css_shading_table *ia_css_get_shading_table(struct ia_css_stream
- 
- ia_css_ptr sh_css_store_sp_group_to_ddr(void)
- {
-+	u8 *write_buf;
-+	u8 *buf_ptr;
-+
- 	IA_CSS_ENTER_LEAVE_PRIVATE("void");
-+
-+	write_buf = kzalloc(sizeof(u8) * 8192, GFP_KERNEL);
-+
-+	buf_ptr = write_buf;
-+	if (IS_ISP2401) {
-+		memcpy(buf_ptr, &sh_css_sp_group.config, sizeof(u8) * 5);
-+		buf_ptr += (sizeof(u8) * 5);
-+		memset(buf_ptr, 0, 3);
-+		buf_ptr += 3; /* Padding 3 bytes for struct sh_css_sp_config*/
-+	} else {
-+		memcpy(buf_ptr, &sh_css_sp_group.config, sizeof(sh_css_sp_group.config));
-+		buf_ptr += sizeof(sh_css_sp_group.config);
-+	}
-+
-+	memcpy(buf_ptr, &sh_css_sp_group.pipe, sizeof(sh_css_sp_group.pipe));
-+	buf_ptr += sizeof(sh_css_sp_group.pipe);
-+
-+	if (IS_ISP2401) {
-+		memcpy(buf_ptr, &sh_css_sp_group.pipe_io, sizeof(sh_css_sp_group.pipe_io));
-+		buf_ptr += sizeof(sh_css_sp_group.pipe_io);
-+		memcpy(buf_ptr, &sh_css_sp_group.pipe_io_status,
-+		       sizeof(sh_css_sp_group.pipe_io_status));
-+		buf_ptr += sizeof(sh_css_sp_group.pipe_io_status);
-+	}
-+
-+	memcpy(buf_ptr, &sh_css_sp_group.debug, sizeof(sh_css_sp_group.debug));
-+	buf_ptr += sizeof(sh_css_sp_group.debug);
-+
- 	hmm_store(xmem_sp_group_ptrs,
--		   &sh_css_sp_group,
--		   sizeof(struct sh_css_sp_group));
-+		  write_buf,
-+		  buf_ptr - write_buf);
-+
-+	kfree(write_buf);
- 	return xmem_sp_group_ptrs;
- }
- 
--- 
-2.40.1
+Yeah, I was slow applying this one, as I was afraid of it to cause
+troubles. The DVB frontend state machine is complex, and uses a
+semaphore to update its state. There was some past attempts of
+addressing some lifetime issues there that we ended needing to revert
+or not being applied, as the fix caused more harm than good.
 
+The way DVB tuning works is that it uses a zigzag mechanism to
+tune to a frequency. It actually tries to tune at several different
+frequencies, like:
+
+	f
+	f + delta
+	f - delta
+	f + 2 * delta
+	f - 2 * delta
+	...
+
+the DVB core supports 3 different types of zigzag approaches:
+	- hardware-based - no need to do any special implementation;
+	- software-based - Kernel will try the above tunes in in a
+	  zig-zag way;
+	- custom-based - the hardware has some helpers to speedup
+	  and improve the tuning logic.
+
+If a signal is lost, the device will re-run the zigzag logic.
+
+It is not trivial to test all possible conditions there, and some
+boards may have multiple frontend devices for different types of
+TV transmission (cable, satellite, air).
+
+As I don't have a DVB signal generator anymore, my tests were limited to=20
+devices I have it handy that are compatible with DVB/T.=20
+
+In any case, we need more details about the problem, as CX23887 is just
+the media streaming PCIe bridge device. It tells nothing about what
+frontend is attached to the bridge.
+
+Regards,
+Mauro
