@@ -2,223 +2,120 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A83EC77B73
-	for <linux-media@archiver.kernel.org>; Tue,  6 Jun 2023 14:29:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D306C77B7A
+	for <linux-media@archiver.kernel.org>; Tue,  6 Jun 2023 15:54:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233065AbjFFO3i (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 6 Jun 2023 10:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34644 "EHLO
+        id S238206AbjFFPy1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 6 Jun 2023 11:54:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237677AbjFFO3f (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Jun 2023 10:29:35 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D1F186
-        for <linux-media@vger.kernel.org>; Tue,  6 Jun 2023 07:29:00 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id 6a1803df08f44-6260a9ef126so50091036d6.2
-        for <linux-media@vger.kernel.org>; Tue, 06 Jun 2023 07:29:00 -0700 (PDT)
+        with ESMTP id S232415AbjFFPyZ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Jun 2023 11:54:25 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91AC110D1;
+        Tue,  6 Jun 2023 08:54:24 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-977cf86aae5so447979066b.0;
+        Tue, 06 Jun 2023 08:54:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686061735; x=1688653735;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QWL9TIrPPXL5iMN2PMKfmz/IG3LdlvRosmbZV+NkrDo=;
-        b=Vp0EzqeVhbKmKBEuFi1siWznTrf0iSbDTcmi3S994OnQu2m3UPcRsYKfX1G0i0ubUl
-         jy0coySV6ZWx89tT9CHj6XSn/637wxMFIY5t4QsdDj27b1LHD4552wYSdH8o50foY2kP
-         Fc8SLpIiZ17VTlx3WtKdpOvhOCDX0QDN78dluaffXpbzDbZh4oi/w/Q554a7Mpg20iWr
-         iCTcW6f/t84frCulyguRpQGYK9bwrX3zPH23nF0gLySptcsP9Oeb70rfrAeohXbeiOwl
-         Ad+78RffNt+EMfSYaapL/3WcIHNlxqCtl17NHgLnbVWxdeNEbTjppLiRpVboCRGbX7R7
-         evsg==
+        d=gmail.com; s=20221208; t=1686066863; x=1688658863;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AycpAEzM4UVxeNN1UkOzTKSrPahRGWW+rcSs3aKWXAY=;
+        b=NivT3q9JwYgpsrPpz3UOriLewwMn0QTVzKJAoD5LtRTtdn4MhkXc6akwXftdLBVIeN
+         lJv6/cpJy3RcgF6YwueCHzxteVZUar27qqK0/oQkS9i6c5KvszS23W4tIf20Z1GjJKK8
+         AagFDVqU1XGguPGRkwMaY/doDXK1LHmcFH4y4DeIOPZjGzCaNGmxlKSZ80xxYvbmiTqj
+         g9G60bMGQ0s8ubSy8WZxfFOCB68cpVln8O1naLeDCMONRDYQgScrsRUqblYv5vX7K7QL
+         IZrnoDzBjUNMcUjeSEmg3WKF8L6tqGzHt+1E2sYZXUKwK/z4p/FogP011c7gpytx/7qJ
+         HRKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686061735; x=1688653735;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QWL9TIrPPXL5iMN2PMKfmz/IG3LdlvRosmbZV+NkrDo=;
-        b=iRjm7LcJ3Ooa3bcbOzKdCNShualfXuxuHgUwwsqBaoIWb6hKs+xtRCrEQtkmaV1dFo
-         JslGIV+CsdR38hH0wyvwtH7MwMTLhRA2LOPJBHH257COxtu2aGi3Z4UslFSx5DzB5CxE
-         bOVc+wxvHN5J9sSMf/WCtfoPnntrjVol4eE+XOXoBbDH5e2ShWIpcuDiFrXgsVvB4Sqp
-         U8CMb89RVbS2kqc6hSN42aXz92mdvONqmwLMC+CvqRyXr5bfl0x3P1kHnNPgO2Vsh6l9
-         aOD0A6aQQQUqFOX5ZnvcBCRaTHVOEaPgC94GACjS2AYQGpHVogQgNUxwfKCAZqJgEoWv
-         1OAg==
-X-Gm-Message-State: AC+VfDzHb2cp2P2fD5H8GKK/Cfo3BBk7JaGgj9QHHWydx7sLytmJ5+rg
-        yUslk0UHufG7mOvJBUHhImP4rEBnhmi1/hbU5JM=
-X-Google-Smtp-Source: ACHHUZ6IMo/9b+2gOvTRs51NN62pfdUiKh3o+2G8v9K9VPXnSeSAgJF/QsRpDrwL6nBwxCcxvLx/yoB+XhixH9UHCfM=
-X-Received: by 2002:a05:6214:2627:b0:626:f3d:9e46 with SMTP id
- gv7-20020a056214262700b006260f3d9e46mr2682955qvb.18.1686061734700; Tue, 06
- Jun 2023 07:28:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230606133136.23619-1-hdegoede@redhat.com>
-In-Reply-To: <20230606133136.23619-1-hdegoede@redhat.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 6 Jun 2023 17:28:18 +0300
-Message-ID: <CAHp75VdxraOTMrxu_KxCzCKHNW8fiiqMRpaSQN3tVqiXAwGJWQ@mail.gmail.com>
-Subject: Re: [PATCH] media: atomisp: csi2-bridge: Add support for setting
- "clock-" and "link-frequencies" props
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        d=1e100.net; s=20221208; t=1686066863; x=1688658863;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AycpAEzM4UVxeNN1UkOzTKSrPahRGWW+rcSs3aKWXAY=;
+        b=FwpMF68RaGWUIU9RNqt350zXBhVkKirgI+K3ttIJ55NxKX5o11K6mdwXuJQhQX7OmJ
+         Mb9e7Hq4/9dTphjIhCS4r+UkfOTZwH0aNX5V5HAkm0a2o6l54h3hqmyuMA1S7C+TE7ML
+         OUk9o4glq1R/RNyDVDBOj7Vp00A/bXL6285gsL3kX8s3dp4IXOJZ5qKe8P68VjWZfqEE
+         2sHYfw1yb9NxFK4WANpEzhcTJSDPOSimmKGyh1AHTa2Ohuzg6eMipVxLYsB9TPiwyGLu
+         f2Eev5YQPzAc8Hg4V0tpb++CoKWEIHA77G12H35HOj4O1T4AYLnHwj2mvR4iNshBqe92
+         VL4w==
+X-Gm-Message-State: AC+VfDyeooFXE5n7TbNsbRXo0oDBkNw73T9JcCsg25S22aLbn7V53aKV
+        ZzRg4302rX/g+IYe3Jl7oRE=
+X-Google-Smtp-Source: ACHHUZ4K6RgUZOqXEZJ8DpbPTIdtnV2tc5Sk/AZG5KUZGQvpHaxqQfNKq8CTVJcGMzSp0XiYQt+lvw==
+X-Received: by 2002:a17:907:2d8f:b0:94d:69e0:6098 with SMTP id gt15-20020a1709072d8f00b0094d69e06098mr3206261ejc.45.1686066862792;
+        Tue, 06 Jun 2023 08:54:22 -0700 (PDT)
+Received: from tom-HP-ZBook-Fury-15-G7-Mobile-Workstation.station (net-188-217-50-121.cust.vodafonedsl.it. [188.217.50.121])
+        by smtp.gmail.com with ESMTPSA id x13-20020a170906710d00b0096f694609f3sm5800412ejj.31.2023.06.06.08.54.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 08:54:22 -0700 (PDT)
+From:   Tommaso Merciai <tomm.merciai@gmail.com>
+Cc:     jacopo.mondi@ideasonboard.com, laurent.pinchart@ideasonboard.com,
+        martin.hecht@avnet.eu, michael.roeder@avnet.eu,
+        linuxfancy@googlegroups.com,
+        Tommaso Merciai <tomm.merciai@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Yury Luneff <yury.lunev@gmail.com>,
-        Nable <nable.maininbox@googlemail.com>,
-        andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Gerald Loacker <gerald.loacker@wolfvision.net>,
+        =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
+        Mikhail Rudenko <mike.rudenko@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Nicholas Roth <nicholas@rothemail.net>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH v3 0/3] media: i2c: Add support for alvium camera
+Date:   Tue,  6 Jun 2023 17:54:01 +0200
+Message-Id: <20230606155416.260941-1-tomm.merciai@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Jun 6, 2023 at 4:31=E2=80=AFPM Hans de Goede <hdegoede@redhat.com> =
-wrote:
->
-> Some standard v4l2 sensor drivers from drivers/media/i2c expect a
-> "clock-frequency" property on the device indicating the frequency
-> of the extclk for the sensor. Example of such drivers are the
-> ov2680 and ov5693 drivers.
->
-> The standard ov5693 sensor also expects a "link-frequencies" property.
-> Add support for setting both properties.
->
-> Note the "clock-frequency" prop is added before the "rotation" prop while
-> the "link-frequencies" are added at the end to match the ipu3 cio2-bridge
-> code from which this is derived.
+Hello All,
 
-LGTM,
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+This series add support for Allied Vision Alvium camera.
+The Alvium camera is shipped with sensor + isp in the same housing.
+The camera can be equipped with one out of various sensor and abstract
+the user from this. Camera is connected via MIPI CSI-2.
 
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> ---
->  drivers/staging/media/atomisp/pci/atomisp_csi2.h    | 13 +++++++++----
->  .../staging/media/atomisp/pci/atomisp_csi2_bridge.c | 12 ++++++++++--
->  2 files changed, 19 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/staging/media/atomisp/pci/atomisp_csi2.h b/drivers/s=
-taging/media/atomisp/pci/atomisp_csi2.h
-> index b389ccda5e98..16ddb3ab2963 100644
-> --- a/drivers/staging/media/atomisp/pci/atomisp_csi2.h
-> +++ b/drivers/staging/media/atomisp/pci/atomisp_csi2.h
-> @@ -31,6 +31,7 @@
->  #define CSI2_PADS_NUM          2
->
->  #define CSI2_MAX_LANES         4
-> +#define CSI2_MAX_LINK_FREQS    3
->
->  #define CSI2_MAX_ACPI_GPIOS    2u
->
-> @@ -64,10 +65,12 @@ enum atomisp_csi2_sensor_swnodes {
->  };
->
->  struct atomisp_csi2_property_names {
-> +       char clock_frequency[16];
->         char rotation[9];
->         char bus_type[9];
->         char data_lanes[11];
->         char remote_endpoint[16];
-> +       char link_frequencies[17];
->  };
->
->  struct atomisp_csi2_node_names {
-> @@ -79,6 +82,8 @@ struct atomisp_csi2_node_names {
->  struct atomisp_csi2_sensor_config {
->         const char *hid;
->         int lanes;
-> +       int nr_link_freqs;
-> +       u64 link_freqs[CSI2_MAX_LINK_FREQS];
->  };
->
->  struct atomisp_csi2_sensor {
-> @@ -93,10 +98,10 @@ struct atomisp_csi2_sensor {
->         struct software_node swnodes[SWNODE_COUNT];
->         struct atomisp_csi2_node_names node_names;
->         struct atomisp_csi2_property_names prop_names;
-> -       /* "rotation" + terminating entry */
-> -       struct property_entry dev_properties[2];
-> -       /* "bus-type", "data-lanes", "remote-endpoint" + terminating entr=
-y */
-> -       struct property_entry ep_properties[4];
-> +       /* "clock-frequency", "rotation" + terminating entry */
-> +       struct property_entry dev_properties[3];
-> +       /* "bus-type", "data-lanes", "remote-endpoint" + "link-freq" + te=
-rminating entry */
-> +       struct property_entry ep_properties[5];
->         /* "data-lanes", "remote-endpoint" + terminating entry */
->         struct property_entry csi2_properties[3];
->         struct software_node_ref_args local_ref[1];
-> diff --git a/drivers/staging/media/atomisp/pci/atomisp_csi2_bridge.c b/dr=
-ivers/staging/media/atomisp/pci/atomisp_csi2_bridge.c
-> index 28d8779bbbc4..0d12ba78d9c1 100644
-> --- a/drivers/staging/media/atomisp/pci/atomisp_csi2_bridge.c
-> +++ b/drivers/staging/media/atomisp/pci/atomisp_csi2_bridge.c
-> @@ -85,7 +85,7 @@ static const guid_t atomisp_dsm_guid =3D
->
->  /*
->   * Extend this array with ACPI Hardware IDs of sensors known to be worki=
-ng
-> - * plus the number of links expected by their drivers.
-> + * plus the default number of links + link-frequencies.
->   *
->   * Do not add an entry for a sensor that is not actually supported,
->   * or which have not yet been converted to work without atomisp_gmin
-> @@ -492,10 +492,12 @@ static int atomisp_csi2_add_gpio_mappings(struct at=
-omisp_csi2_sensor *sensor,
->  }
->
->  static const struct atomisp_csi2_property_names prop_names =3D {
-> +       .clock_frequency =3D "clock-frequency",
->         .rotation =3D "rotation",
->         .bus_type =3D "bus-type",
->         .data_lanes =3D "data-lanes",
->         .remote_endpoint =3D "remote-endpoint",
-> +       .link_frequencies =3D "link-frequencies",
->  };
->
->  static void atomisp_csi2_create_fwnode_properties(struct atomisp_csi2_se=
-nsor *sensor,
-> @@ -507,7 +509,9 @@ static void atomisp_csi2_create_fwnode_properties(str=
-uct atomisp_csi2_sensor *se
->         sensor->local_ref[0] =3D SOFTWARE_NODE_REFERENCE(&sensor->swnodes=
-[SWNODE_CSI2_ENDPOINT]);
->         sensor->remote_ref[0] =3D SOFTWARE_NODE_REFERENCE(&sensor->swnode=
-s[SWNODE_SENSOR_ENDPOINT]);
->
-> -       sensor->dev_properties[0] =3D PROPERTY_ENTRY_U32(sensor->prop_nam=
-es.rotation, 0);
-> +       sensor->dev_properties[0] =3D PROPERTY_ENTRY_U32(sensor->prop_nam=
-es.clock_frequency,
-> +                                                      PMC_CLK_RATE_19_2M=
-HZ);
-> +       sensor->dev_properties[1] =3D PROPERTY_ENTRY_U32(sensor->prop_nam=
-es.rotation, 0);
->
->         sensor->ep_properties[0] =3D PROPERTY_ENTRY_U32(sensor->prop_name=
-s.bus_type,
->                                                       V4L2_FWNODE_BUS_TYP=
-E_CSI2_DPHY);
-> @@ -516,6 +520,10 @@ static void atomisp_csi2_create_fwnode_properties(st=
-ruct atomisp_csi2_sensor *se
->                                                                 sensor->l=
-anes);
->         sensor->ep_properties[2] =3D PROPERTY_ENTRY_REF_ARRAY(sensor->pro=
-p_names.remote_endpoint,
->                                                             sensor->local=
-_ref);
-> +       if (cfg->nr_link_freqs > 0)
-> +               sensor->ep_properties[3] =3D
-> +                       PROPERTY_ENTRY_U64_ARRAY_LEN(sensor->prop_names.l=
-ink_frequencies,
-> +                                                    cfg->link_freqs, cfg=
-->nr_link_freqs);
->
->         sensor->csi2_properties[0] =3D PROPERTY_ENTRY_U32_ARRAY_LEN(senso=
-r->prop_names.data_lanes,
->                                                                   bridge-=
->data_lanes,
-> --
-> 2.40.1
->
+Working on top of Ideas on Board (branch: ideasonboard/v6.2/isi)
+I'm able to test the driver on imx8mp-evk.
+I collect also some patches to enable HDMI on imx8mp-evk from Pengutronix
+(branch: pengutronix-imx8mp-hdmi)
 
+I collect the patchset required to enable ISI + HDMI on imx8mp-evk into
+the following branch from Avnet Silica Software & Services EMEA [1].
 
---=20
-With Best Regards,
-Andy Shevchenko
+Some documentation on testing ISP and ISI of imx8mp-evk here [2].
+
+Thanks all for the great work!
+
+[1] - https://github.com/avs-sas/linux/tree/tm/ideasonboard/v6.4.0-rc2/isi/imx8mp_evk/alvium_drv_skel1e_v1
+[2] - https://gist.github.com/Scott31393/077a10024a6058536d3f2fdde476265a
+
+Tommaso Merciai (3):
+  dt-bindings: vendor-prefixes: Add prefix alliedvision
+  media: dt-bindings: alvium: add document YAML binding
+  media: i2c: Add support for alvium camera
+
+ .../media/i2c/alliedvision,alvium-csi2.yaml   |   93 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |    2 +
+ drivers/media/i2c/Kconfig                     |   10 +
+ drivers/media/i2c/Makefile                    |    1 +
+ drivers/media/i2c/alvium-csi2.c               | 3478 +++++++++++++++++
+ drivers/media/i2c/alvium-csi2.h               |  485 +++
+ 6 files changed, 4069 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/alliedvision,alvium-csi2.yaml
+ create mode 100644 drivers/media/i2c/alvium-csi2.c
+ create mode 100644 drivers/media/i2c/alvium-csi2.h
+
+-- 
+2.34.1
+
