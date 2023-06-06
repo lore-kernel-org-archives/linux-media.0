@@ -2,119 +2,152 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFC27C7EE24
-	for <linux-media@archiver.kernel.org>; Tue,  6 Jun 2023 18:27:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C1B0C77B73
+	for <linux-media@archiver.kernel.org>; Tue,  6 Jun 2023 18:28:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238634AbjFFS1E (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 6 Jun 2023 14:27:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44552 "EHLO
+        id S238774AbjFFS2u (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 6 Jun 2023 14:28:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238524AbjFFS1B (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Jun 2023 14:27:01 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6E21702
-        for <linux-media@vger.kernel.org>; Tue,  6 Jun 2023 11:26:59 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id af79cd13be357-75d4fb03100so400442985a.3
-        for <linux-media@vger.kernel.org>; Tue, 06 Jun 2023 11:26:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686076018; x=1688668018;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=EgWp+MBxEt8xLJXziW77AWY9c6lqc/rcXlQ+WkMys1I=;
-        b=TFRaVkLcKLqFJPBQQ1ujtMNfkCzjmG3/6h7c3036WnXTH0IuSb0oXxXxiUEjKViAKQ
-         AvQy7CYkQSCTnyhpd/mYXwSUxMdCdBjbIOjalvMI8mTg2ylUC/sBTaIcfZzfVPbE+i7L
-         qslSw0agu6qTPH6NHQO6QLQ//i6VEZtn6dGlc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686076018; x=1688668018;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EgWp+MBxEt8xLJXziW77AWY9c6lqc/rcXlQ+WkMys1I=;
-        b=aDFqGf6NaZFBREKJ4eUKddKZqaKATBkHbIORyLBUdwtfj4A6cfGMHv3Oq2FKIPbClo
-         tk+fMxCv5YwKd9LK1C6DDoFXwhtIWptqP7cNb3/HOBAUhJl38LMLrWQffnX1bWRf6xlW
-         E3BkNXHR4rK2jETXIOt8s5+apHGAN2klF3Oda00okc+rXCI6xkhh2ptvC1rSctEdlgso
-         p8W2PSZ4TQtneEAdA7oJied97Zu+0tPgO9XwXxVPrnfsL68MRbjDjaC7V014El9xCDxw
-         njChwrmyspvwj4y8+PV0HENT9EQrU0uZsIu8S46joUzeWX0+vhpURJq0YB80NZM6pnou
-         JMTw==
-X-Gm-Message-State: AC+VfDwyyrUDu8J/VHRPFZtdh+9FFwqmQQxh1jWMj8Hn82dg8EY4Hx74
-        N9mXvZ4/jcmksA70HnMjpm9uMF+F/zjmX/ymz80=
-X-Google-Smtp-Source: ACHHUZ5ayeoTrfBk8xoS7RGF9Y7q1foz+4EmsKYgiRm3glu9fhUz2fel4x0CByAe2/1BFWl9PBhJEw==
-X-Received: by 2002:a05:620a:3b12:b0:75e:c361:2ccd with SMTP id tl18-20020a05620a3b1200b0075ec3612ccdmr497153qkn.31.1686076018539;
-        Tue, 06 Jun 2023 11:26:58 -0700 (PDT)
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com. [209.85.160.172])
-        by smtp.gmail.com with ESMTPSA id p12-20020ae9f30c000000b0075b2af4a076sm5112114qkg.16.2023.06.06.11.26.57
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 11:26:57 -0700 (PDT)
-Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-3f7f864525fso71157231cf.1
-        for <linux-media@vger.kernel.org>; Tue, 06 Jun 2023 11:26:57 -0700 (PDT)
-X-Received: by 2002:a05:6214:250d:b0:625:aa49:9abd with SMTP id
- gf13-20020a056214250d00b00625aa499abdmr329934qvb.65.1686076017218; Tue, 06
- Jun 2023 11:26:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230606170919.GJ25679@pendragon.ideasonboard.com> <20230606171150.12875-1-laurent.pinchart@ideasonboard.com>
-In-Reply-To: <20230606171150.12875-1-laurent.pinchart@ideasonboard.com>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Tue, 6 Jun 2023 20:26:46 +0200
-X-Gmail-Original-Message-ID: <CANiDSCsQJB7bL2ObW2BssK4igEJ2ME3DU-RvsU4wkSoHbnTcfw@mail.gmail.com>
-Message-ID: <CANiDSCsQJB7bL2ObW2BssK4igEJ2ME3DU-RvsU4wkSoHbnTcfw@mail.gmail.com>
-Subject: Re: [PATCH] media: uvcvideo: Fix menu count handling for userspace XU mappings
+        with ESMTP id S233653AbjFFS2t (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Jun 2023 14:28:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C9A11D;
+        Tue,  6 Jun 2023 11:28:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B63B2636B1;
+        Tue,  6 Jun 2023 18:23:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A157C433D2;
+        Tue,  6 Jun 2023 18:23:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686075820;
+        bh=T+JI2ckyFu8VOR3qL8ljjpZpkbu8FJMpdeuRNK5j1WE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VdOOJgmvG/YB+5sHAaFhY5A1/u8H5VgzQ7ybtKfQFNamKSS9dJ4/2MKitMx+RX8YA
+         Y32N4YPmL+OSm1EWmcEEE0K0IKBbZ3PLd883eAlzxXu7mAkzMSlzYk7vflhxq/8Vh/
+         7IEOHX+NR72Q1mUOV1QALhWSQGgfMKj3bP61tpr5DGD6dFraRH6orAyBAFf0ESBwgf
+         JYajhMXowNPNKau/sp5QRce4Vb2fnSrBLEUv4700TxaqE/6t7QDZqkSsccwKU/brf8
+         Qhcze7tgo6uoSPF8KFW8zEhMbc+Tm6W2qexRbJrzVaIgoGWiGtOjB4qy+n+mVFxjei
+         07Q0q5FHVkpRg==
+Date:   Tue, 6 Jun 2023 19:23:32 +0100
+From:   Conor Dooley <conor@kernel.org>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, Poncho <poncho@spahan.ch>,
-        "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>, regressions@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Cc:     Tommaso Merciai <tomm.merciai@gmail.com>,
+        jacopo.mondi@ideasonboard.com, martin.hecht@avnet.eu,
+        michael.roeder@avnet.eu, linuxfancy@googlegroups.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Gerald Loacker <gerald.loacker@wolfvision.net>,
+        Mikhail Rudenko <mike.rudenko@gmail.com>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Nicholas Roth <nicholas@rothemail.net>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] media: dt-bindings: alvium: add document YAML
+ binding
+Message-ID: <20230606-create-catchable-e16113afac82@spud>
+References: <20230606155416.260941-1-tomm.merciai@gmail.com>
+ <20230606155416.260941-3-tomm.merciai@gmail.com>
+ <20230606163656.GI25679@pendragon.ideasonboard.com>
+ <20230606-jaundice-womankind-7e583789fb7a@spud>
+ <20230606181752.GC14101@pendragon.ideasonboard.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="/wO+rvK5rRihXazv"
+Content-Disposition: inline
+In-Reply-To: <20230606181752.GC14101@pendragon.ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Laurent
 
-On Tue, 6 Jun 2023 at 19:11, Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> When commit 716c330433e3 ("media: uvcvideo: Use standard names for
-> menus") reworked the handling of menu controls, it inadvertently
-> replaced a GENMASK(n - 1, 0) with a BIT_MASK(n). The latter isn't
-> equivalent to the former, which broke adding XU mappings from userspace.
-> Fix it.
+--/wO+rvK5rRihXazv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Ups, that was wrong :), sorry about that
+On Tue, Jun 06, 2023 at 09:17:52PM +0300, Laurent Pinchart wrote:
+> On Tue, Jun 06, 2023 at 07:07:42PM +0100, Conor Dooley wrote:
+> > Hey Laurent, Tommaso,
+> >=20
+> > On Tue, Jun 06, 2023 at 07:36:56PM +0300, Laurent Pinchart wrote:
+> > > On Tue, Jun 06, 2023 at 05:54:03PM +0200, Tommaso Merciai wrote:
+> >=20
+> > > > +  alliedvision,lp2hs-delay-us:
+> > > > +    maxItems: 1
+> > > > +    description:
+> > > > +      Low power to high speed delay time in microseconds.
+> > >=20
+> > > You can drop "in microseconds", that's implied by the suffix.
+> > >=20
+> > > > +      The purpose of this property is force a DPhy reset for the p=
+eriod
+> > > > +      described by the microseconds on the property, before it sta=
+rts
+> > > > +      streaming. To be clear, with that value bigger than 0 the Al=
+vium
+> > > > +      forces a dphy-reset on all lanes for that period. That means=
+ all
+> > > > +      lanes go up into low power state. This may help a csi2 rx ip=
+ to
+> > > > +      reset if that IP can't deal with a continous clock.
+> > >=20
+> > > I'd like to propose what I think is a clearer version:
+> > >=20
+> > >     description: |
+> > >       Low power to high speed delay time.
+> > >=20
+> > >       If the value is larger than 0, the camera forces a reset of all
+> > >       D-PHY lanes for the duration specified by this property. All la=
+nes
+> > >       will transition to the low-power state and back to the high-spe=
+ed
+> > >       state after the delay. Otherwise the lanes will transition to a=
+nd
+> > >       remain in the high-speed state immediately after power on.
+> > >=20
+> > >       This is meant to help CSI-2 receivers synchronizing their D-PHY
+> > >       RX.
+> >=20
+> > Question about the property.
+> > Why not make it have a minimum value of 1 and drop the special-case
+> > behaviour for zero?
+>=20
+> The property is optional, so it can indeed be omitted if no delay is
+> desired. I have no strong preference on whether or not to allow 0 as a
+> valid value.
 
-Thanks for the quick fix.
+FWIW, I prefer the semantics of the property if it doesn't have the
+limbo state of being present but doing nothing.
 
->
-> Reported-by: Poncho <poncho@spahan.ch>
-> Link: https://lore.kernel.org/linux-media/468a36ec-c3ac-cb47-e12f-5906239ae3cd@spahan.ch/
-> Fixes: 716c330433e3 ("media: uvcvideo: Use standard names for menus")
-> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Ricardo Ribalda <ribalda@chromium.org>
-> ---
-> This is untested. Poncho, would you be able to test this patch to see if
-> it fixes your issue ?
-> ---
->  drivers/media/usb/uvc/uvc_v4l2.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-> index 5ac2a424b13d..f4988f03640a 100644
-> --- a/drivers/media/usb/uvc/uvc_v4l2.c
-> +++ b/drivers/media/usb/uvc/uvc_v4l2.c
-> @@ -45,7 +45,7 @@ static int uvc_control_add_xu_mapping(struct uvc_video_chain *chain,
->         map->menu_names = NULL;
->         map->menu_mapping = NULL;
->
-> -       map->menu_mask = BIT_MASK(xmap->menu_count);
-> +       map->menu_mask = GENMASK(xmap->menu_count - 1, 0);
->
->         size = xmap->menu_count * sizeof(*map->menu_mapping);
->         map->menu_mapping = kzalloc(size, GFP_KERNEL);
-> --
-> Regards,
->
-> Laurent Pinchart
->
+Cheers,
+Conor.
 
+BTW, I seem to get bounces from shawnx.tu@intel.com, who is listed in
+MAINTAINERS for several drivers. Do you know if they have a non-intel
+address to replace those entries with, or should they be dropped?
 
--- 
-Ricardo Ribalda
+--/wO+rvK5rRihXazv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZH95pAAKCRB4tDGHoIJi
+0ku3AP4ggWo9VZWGTA9FT9GGznavW3AY/aadgCo0GxyloBybbgEAzzzwXaC7fzis
+PR8yODKfvMxBuv0CdqCLPm6e3sft8AI=
+=hRQC
+-----END PGP SIGNATURE-----
+
+--/wO+rvK5rRihXazv--
