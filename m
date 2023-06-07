@@ -2,82 +2,109 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 834B3C7EE25
-	for <linux-media@archiver.kernel.org>; Wed,  7 Jun 2023 20:54:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60481C7EE25
+	for <linux-media@archiver.kernel.org>; Wed,  7 Jun 2023 20:57:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235491AbjFGUyY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Jun 2023 16:54:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55376 "EHLO
+        id S235599AbjFGU5i (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Jun 2023 16:57:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235487AbjFGUyE (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Jun 2023 16:54:04 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964861FDC
-        for <linux-media@vger.kernel.org>; Wed,  7 Jun 2023 13:53:56 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="354595184"
-X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
-   d="scan'208";a="354595184"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 13:53:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="854046137"
-X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
-   d="scan'208";a="854046137"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001.fm.intel.com with ESMTP; 07 Jun 2023 13:53:54 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andy@kernel.org>)
-        id 1q70AC-00207z-32;
-        Wed, 07 Jun 2023 23:53:52 +0300
-Date:   Wed, 7 Jun 2023 23:53:52 +0300
-From:   Andy Shevchenko <andy@kernel.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Daniel Scally <dan.scally@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        with ESMTP id S235527AbjFGU5g (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Jun 2023 16:57:36 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86EB51BEA;
+        Wed,  7 Jun 2023 13:57:31 -0700 (PDT)
+Received: from notapiano.myfiosgateway.com (zone.collabora.co.uk [167.235.23.81])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8C01166032D2;
+        Wed,  7 Jun 2023 21:57:26 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686171449;
+        bh=3Ss4Xbs+eUeVm0wwUGrfx/rLq0kUmO44VcFrpD6blPQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Hjy4ZAVDbkJPCL4X1AXfEB2Qx119GEsaxIbUuBS0OMEF7Rq9rtwOugPt2aFyEie0i
+         fKbdk32a3zQF8wT4eUuV1aZVpksNTJFwhr1BVsRUkaY2VDNb64IagZxnCyfEsm7JSr
+         YlHGXXbaw7WuKIiJcc2wQRA2jBRFc7JifUkg+wBW/1UahWkwhXJKRg21WkAJGR8o1Q
+         hbXEVn06a0H/rFhsnkHyqGx8hSBdVRfnm9TguMpGP5QYPUYqh4VdfIR+/EFNI1YVO7
+         8YON8g1BUz0/1/D/NrO/+3mbbWR8o9CumX2U8FczxHYottf3ww5OiUX7wzyH+udumm
+         lxmDVGfI+tEOQ==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org
-Subject: Re: [PATCH 15/28] media: ov2680: Add support for 19.2 MHz clock
-Message-ID: <ZIDuYN5Zmh2ZzPBc@smile.fi.intel.com>
-References: <20230607164712.63579-1-hdegoede@redhat.com>
- <20230607164712.63579-16-hdegoede@redhat.com>
+        Michael Turquette <mturquette@baylibre.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: [PATCH v2 0/5] Enable decoder for mt8183
+Date:   Wed,  7 Jun 2023 16:53:37 -0400
+Message-ID: <20230607205714.510012-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230607164712.63579-16-hdegoede@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 06:46:59PM +0200, Hans de Goede wrote:
-> Most x86/ACPI boards use the ov2680 with a 19.2 MHz xvclk,
-> rather then the expected 24MHz, add support for this.
-> 
-> Compensate for the lower clk by setting a higher PLL multiplier
-> of 69 when using 19.2 MHz vs the default multiplier of 55 for
-> a 24MHz xvclk.
 
-...
+This series enables the hardware decoder present on mt8183. At first
+glance, the only missing piece is the devicetree node for it, however,
+simply adding it as is would cause an address collision between the
+first register iospace and the clock-controller node, so a rework of the
+dt-binding and driver, as well as addition of a clock, were needed
+first.
 
-> @@ -720,12 +736,19 @@ static int ov2680_parse_dt(struct ov2680_dev *sensor)
+Tested that H264 decoding works with the hardware decoder on
+mt8183-kukui-jacuzzi-juniper-sku16, giving a fluster score of 98/135 on
+the JVT-AVC_V1 test suite. And ensured other SoCs (MT8192 and MT8195)
+still work as usual.
 
-I believe this call is solely the part of the ->probe() flow, hence...
+Changes in v2:
+- Merged commit 1 (media: dt-bindings: mediatek,vcodec: Allow single
+  clock for mt8183) into commit 3 (media: dt-bindings: mediatek,vcodec:
+  Remove VDEC_SYS for mt8183)
+- Further constrained properties in dt-binding
+- Added CLK_IGNORE_UNUSED flag to active clock
+- Reformatted reg-names in DT node
 
-...
+Nícolas F. R. A. Prado (4):
+  media: dt-bindings: mediatek,vcodec: Don't require assigned-clocks
+  media: dt-bindings: mediatek,vcodec: Remove VDEC_SYS for mt8183
+  media: mediatek: vcodec: Read HW active status from clock
+  clk: mediatek: mt8183: Add CLK_VDEC_ACTIVE to vdec
 
-> +	if (i == ARRAY_SIZE(ov2680_xvclk_freqs)) {
-> +		dev_err(dev, "unsupported xvclk frequency %d Hz\n", sensor->xvclk_freq);
->  		return -EINVAL;
+Yunfei Dong (1):
+  arm64: dts: mediatek: mt8183: Add decoder
 
-	return dev_err_probe(...);
-
-?
-
->  	}
+ .../media/mediatek,vcodec-decoder.yaml        | 65 +++++++++++++++----
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      | 30 +++++++++
+ drivers/clk/mediatek/clk-mt8183-vdec.c        |  5 ++
+ .../mediatek/vcodec/mtk_vcodec_dec_drv.c      | 59 +++++++++++++----
+ .../mediatek/vcodec/mtk_vcodec_dec_hw.c       | 20 ++++--
+ .../mediatek/vcodec/mtk_vcodec_dec_pm.c       | 12 +++-
+ .../platform/mediatek/vcodec/mtk_vcodec_drv.h |  1 +
+ include/dt-bindings/clock/mt8183-clk.h        |  3 +-
+ 8 files changed, 165 insertions(+), 30 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.41.0
 
