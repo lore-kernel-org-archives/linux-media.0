@@ -2,142 +2,120 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 965D8C77B7A
-	for <linux-media@archiver.kernel.org>; Wed,  7 Jun 2023 07:57:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79A7AC77B7A
+	for <linux-media@archiver.kernel.org>; Wed,  7 Jun 2023 08:40:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236306AbjFGH5x (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Jun 2023 03:57:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47290 "EHLO
+        id S237989AbjFGIk0 convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Jun 2023 04:40:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235470AbjFGH5w (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Jun 2023 03:57:52 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FFBB184
-        for <linux-media@vger.kernel.org>; Wed,  7 Jun 2023 00:57:51 -0700 (PDT)
-Received: from ideasonboard.com (unknown [IPv6:2001:b07:5d2e:52c9:72c3:346:a663:c82d])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 64EEC75B;
-        Wed,  7 Jun 2023 09:57:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1686124642;
-        bh=EWa0GrDGyeyDBCKLXa0cusvhsTCfPZak7q4RPWSJEkE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UACdPP9ef3316qcnjr7kQRKXMZZalXI0dgTsXcRLzVd0txedm6wGcOlSPTwUOsFU5
-         Da67lG5xZGDelKr2JstLPJ2FqEusS3pknhAa+F0monFQkkSu+PjM+X+gKv0NXv2cuB
-         lgEZeteSjbpmUrKsRnchBeRw/OA/r9I675GIhRvQ=
-Date:   Wed, 7 Jun 2023 09:57:44 +0200
-From:   Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-To:     "G.N. Zhou" <guoniu.zhou@nxp.com>
-Cc:     "G.N. Zhou (OSS)" <guoniu.zhou@oss.nxp.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "slongerbeam@gmail.com" <slongerbeam@gmail.com>,
-        "jacopo@jmondi.org" <jacopo@jmondi.org>,
-        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
-        "laurent.pinchart@ideasonboard.com" 
-        <laurent.pinchart@ideasonboard.com>
-Subject: Re: [PATCH] media: ov5640: fix low resolution image abnormal issue
-Message-ID: <edcjyd3k35h5mbk2t3pqxpj5blrcmxiytce7v5at4u6pntiyoz@3utgqjdbmr3m>
-References: <20230518100557.2495843-1-guoniu.zhou@oss.nxp.com>
- <AS8PR04MB9080182A18EB8A338087F419FA53A@AS8PR04MB9080.eurprd04.prod.outlook.com>
+        with ESMTP id S238524AbjFGIkV (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Jun 2023 04:40:21 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203571706;
+        Wed,  7 Jun 2023 01:40:14 -0700 (PDT)
+Received: from ip5b412278.dynamic.kabel-deutschland.de ([91.65.34.120] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1q6oi6-0006LM-Ch; Wed, 07 Jun 2023 10:40:06 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Keith Zhao <keith.zhao@starfivetech.com>,
+        Shengyu Qu <wiagn233@outlook.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        christian.koenig@amd.com, Bjorn Andersson <andersson@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>, Jagan Teki <jagan@edgeble.ai>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Jack Zhu <jack.zhu@starfivetech.com>,
+        Shengyang Chen <shengyang.chen@starfivetech.com>,
+        Changhuang Liang <changhuang.liang@starfivetech.com>
+Subject: Re: [PATCH 1/9] dt-bindings: display: Add yamls for JH7110 display subsystem
+Date:   Wed, 07 Jun 2023 10:40:04 +0200
+Message-ID: <3560873.iIbC2pHGDl@diego>
+In-Reply-To: <20230606-geometry-blurb-1f0f07d4bf6a@spud>
+References: <20230602074043.33872-1-keith.zhao@starfivetech.com>
+ <1991848.PYKUYFuaPT@diego> <20230606-geometry-blurb-1f0f07d4bf6a@spud>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <AS8PR04MB9080182A18EB8A338087F419FA53A@AS8PR04MB9080.eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello Guoniu Zhou
-
-On Wed, Jun 07, 2023 at 06:26:22AM +0000, G.N. Zhou wrote:
-> Hi ALL,
->
-> Is there any comments or update? I will appreciate that if there are any.
-
-You're very right, sorry about the delay
-
->
-> Best Regards
-> G.N Zhou
->
->
-> > -----Original Message-----
-> > From: G.N. Zhou (OSS)
-> > Sent: 2023年5月18日 18:01
-> > To: linux-media@vger.kernel.org; mchehab@kernel.org;
-> > slongerbeam@gmail.com; jacopo@jmondi.org; sakari.ailus@linux.intel.com
-> > Cc: laurent.pinchart@ideasonboard.com
-> > Subject: [PATCH] media: ov5640: fix low resolution image abnormal issue
-> >
-> > From: "Guoniu.zhou" <guoniu.zhou@nxp.com>
-> >
-> > OV5640 will output abnormal image data when work at low resolution (320x240,
-> > 176x144 and 160x120) after switching from high resolution, such as 1080P, the
-> > time interval between high and low switching must be less than 1000ms in order
-> > to OV5640 don't enter suspend state during the time.
-> >
-
-Thanks for finding this out, I presume it took quite some effort to
-dig that register out.
-
-However I don't have the register documented anywhere. Do you ?
-
-> > The reason is by 0x3824 value don't restore to initialize value when do resolution
-> > switching. In high resolution setting array, 0x3824 is set to 0x04, but low
-
-Why I do see:
-ov5640_setting_QSXGA_2592_1944[] = { ... {0x3824, 0x02, 0, 0},.. };
-
-Have you tested switching to full-resolution mode to a lower
-resolution ?
-
-> > resolution setting array remove 0x3824 in commit db15c1957a2d ("media:
-> > ov5640: Remove duplicated mode settings"). So when do resolution switching
-> > from high to low, such as 1080P to 320x240, and the time interval is less than
-> > auto suspend delay time which means global initialize setting array will not be
-> > loaded, the output image data are abnormal.
-> >
-
-Ok, this was possibily either a micro-optimization or a plain mistake
-as I do see in commit db15c1957a2d the ov5640_setting_low_res[] array
-being introduced, but compared to the register tables it replaces it
-is missing:
-
-        {0x4407, 0x04, 0, 0}, {0x460b, 0x35, 0, 0}, {0x460c, 0x22, 0, 0},
-        {0x3824, 0x02, 0, 0}
-
-These registers are already programmed with these values by
-ov5640_init_setting[], that might be the reason I left them out from
-ov5640_setting_low_res[].
-
-But as you have correctly noticed, switching between modes doesn't go
-through ov5640_init_setting[] (of course) so I can only conclude the
-above register should all be re-introduced in
-ov5640_setting_low_res[]. What do you think ?
-
-Thanks again!
+Am Mittwoch, 7. Juni 2023, 00:37:53 CEST schrieb Conor Dooley:
+> On Wed, Jun 07, 2023 at 12:22:33AM +0200, Heiko St�bner wrote:
+> > Am Dienstag, 6. Juni 2023, 20:41:17 CEST schrieb Shengyu Qu:
+> > > > On Fri, Jun 02, 2023 at 03:40:35PM +0800, Keith Zhao wrote:
+> > > >> Add bindings for JH7110 display subsystem which
+> > > >> has a display controller verisilicon dc8200
+> > > >> and an HDMI interface.
+> 
+> > > >> +description:
+> > > >> +  The StarFive SoC uses the HDMI signal transmiter based on innosilicon IP
+> > > > Is innosilicon the same thing as verisilicon? Also
+> > > > s/transmiter/transmitter/, both here and in the title.
+> > > 
+> > > I think that is not the same, I remember Rockchip has used a HDMI 
+> > > transmitter from
+> > > 
+> > > Innosilicon, and there is a existing driver for that in mainline.
+> > 
+> > Yep, I think Innosilicon is the company you turn to when you want to save
+> > a bit of money ;-) . In the bigger SoCs Rockchip most of the time uses
+> > Designware hdmi blocks and looking at the history only the rk3036 ever
+> > used an Innosilicon block.
+> > 
+> > Looking at the history, 2016 really was a long time ago :-D.
+> > 
+> > > So Keith, if that's true, I think it is better to seperate the HDMI 
+> > > stuff and reuse existing driver.
+> > 
+> > I'm not so sure about that - at least from a cursory glance :-) .
+> > 
+> > The registers do look slightly different and I don't know how much
+> > the IP changed between the rk3036-version and the jh7110 version.
+> > 
+> > At the very least, I know my rk3036 board isn't booting right now, so
+> > I can't really provide help for generalizing the rockchip-driver.
+> > 
+> > At the very least both the binding and driver could drop the "starfive-hdmi"
+> > and actually use the Innosilicon in the naming somewhere, so that it's
+> > clear for future developers :-)
+> 
+> Seeing "based on" always makes me a little bit nervous to be honest when
+> it comes to using a compatible from the IP. Is it the IP? What version
+> is it? etc. Perhaps "starfive,jh7110-hdmi" & falling back to some sort
+> of "innosilicon,hdmi" would be more future/IP-silliness proof.
+> Driver can always be generic & bind against "innosilicon,hdmi" until
+> that becomes impossible.
 
 
-> > Signed-off-by: Guoniu.zhou <guoniu.zhou@nxp.com>
-> > ---
-> >  drivers/media/i2c/ov5640.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c index
-> > 1536649b9e90..b1a4565fdc0f 100644
-> > --- a/drivers/media/i2c/ov5640.c
-> > +++ b/drivers/media/i2c/ov5640.c
-> > @@ -634,7 +634,7 @@ static const struct reg_value ov5640_setting_low_res[]
-> > = {
-> >  	{0x3a0a, 0x00, 0, 0}, {0x3a0b, 0xf6, 0, 0}, {0x3a0e, 0x03, 0, 0},
-> >  	{0x3a0d, 0x04, 0, 0}, {0x3a14, 0x03, 0, 0}, {0x3a15, 0xd8, 0, 0},
-> >  	{0x4001, 0x02, 0, 0}, {0x4004, 0x02, 0, 0},
-> > -	{0x4407, 0x04, 0, 0}, {0x5001, 0xa3, 0, 0},
-> > +	{0x4407, 0x04, 0, 0}, {0x3824, 0x02, 0, 0}, {0x5001, 0xa3, 0, 0},
-> >  };
-> >
-> >  static const struct reg_value ov5640_setting_720P_1280_720[] = {
-> > --
-> > 2.37.1
->
+what Connor said makes a lot of sense. Just name the compatible
+after the actual implementation - aka "starfive,jh7110-hdmi" .
+
+This is similar to what the rk3036 does with its
+"rockchip,rk3036-inno-hdmi". That way you're nicely independent
+and future proof.
+
+
+Heiko
+
+
