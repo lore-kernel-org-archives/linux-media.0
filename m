@@ -2,147 +2,140 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 284CCC88CB4
-	for <linux-media@archiver.kernel.org>; Mon, 12 Jun 2023 14:00:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DEC5DC7EE23
+	for <linux-media@archiver.kernel.org>; Wed,  7 Jun 2023 08:02:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233694AbjFLOAX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 12 Jun 2023 10:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46188 "EHLO
+        id S238609AbjFGIC6 convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Jun 2023 04:02:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233262AbjFLN7s (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 12 Jun 2023 09:59:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935AA170E
-        for <linux-media@vger.kernel.org>; Mon, 12 Jun 2023 06:59:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E845A62985
-        for <linux-media@vger.kernel.org>; Mon, 12 Jun 2023 13:58:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98E12C433EF;
-        Mon, 12 Jun 2023 13:58:44 +0000 (UTC)
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Cc:     Zheng Zhang <zheng.zhang@email.ucr.edu>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 3/3] Documentation: media: cec: describe new callbacks
-Date:   Mon, 12 Jun 2023 15:58:39 +0200
-Message-Id: <20230612135839.254935-4-hverkuil-cisco@xs4all.nl>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230612135839.254935-1-hverkuil-cisco@xs4all.nl>
-References: <20230612135839.254935-1-hverkuil-cisco@xs4all.nl>
+        with ESMTP id S238633AbjFGICs (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Jun 2023 04:02:48 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203871735;
+        Wed,  7 Jun 2023 01:02:43 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id E591624E307;
+        Wed,  7 Jun 2023 16:02:35 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 7 Jun
+ 2023 16:02:35 +0800
+Received: from [192.168.60.122] (180.164.60.184) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 7 Jun
+ 2023 16:02:35 +0800
+Message-ID: <ab89b684-8b49-2088-b0d2-ca362fd9dfb4@starfivetech.com>
+Date:   Wed, 7 Jun 2023 16:02:34 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 1/9] dt-bindings: display: Add yamls for JH7110 display
+ subsystem
+Content-Language: en-US
+References: <20230602074043.33872-1-keith.zhao@starfivetech.com>
+ <20230602-uncommon-rejoicing-e73c0c475f9f@spud>
+ <TY3P286MB26116576E3E502CAE53834599852A@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
+ <1991848.PYKUYFuaPT@diego> <20230606-geometry-blurb-1f0f07d4bf6a@spud>
+ <ifgjvonhkzcwrklzch5efguor2x6az4m737dwte4uyow7ar5dr@z4glaxse6dou>
+From:   Keith Zhao <keith.zhao@starfivetech.com>
+To:     undisclosed-recipients:;
+In-Reply-To: <ifgjvonhkzcwrklzch5efguor2x6az4m737dwte4uyow7ar5dr@z4glaxse6dou>
+Content-Type: text/plain; charset="UTF-8"
+X-Originating-IP: [180.164.60.184]
+X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Describe the new callbacks and clarify when the adap->lock
-mutex is held or not.
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- Documentation/driver-api/media/cec-core.rst | 44 ++++++++++++++++-----
- 1 file changed, 34 insertions(+), 10 deletions(-)
 
-diff --git a/Documentation/driver-api/media/cec-core.rst b/Documentation/driver-api/media/cec-core.rst
-index ae0d20798edc..f1ffdec388f3 100644
---- a/Documentation/driver-api/media/cec-core.rst
-+++ b/Documentation/driver-api/media/cec-core.rst
-@@ -109,9 +109,11 @@ your driver:
- 		int (*adap_monitor_all_enable)(struct cec_adapter *adap, bool enable);
- 		int (*adap_monitor_pin_enable)(struct cec_adapter *adap, bool enable);
- 		int (*adap_log_addr)(struct cec_adapter *adap, u8 logical_addr);
--		void (*adap_configured)(struct cec_adapter *adap, bool configured);
-+		void (*adap_unconfigured)(struct cec_adapter *adap);
- 		int (*adap_transmit)(struct cec_adapter *adap, u8 attempts,
- 				      u32 signal_free_time, struct cec_msg *msg);
-+		void (*adap_nb_transmit_canceled)(struct cec_adapter *adap,
-+						  const struct cec_msg *msg);
- 		void (*adap_status)(struct cec_adapter *adap, struct seq_file *file);
- 		void (*adap_free)(struct cec_adapter *adap);
- 
-@@ -122,8 +124,8 @@ your driver:
- 		...
- 	};
- 
--The seven low-level ops deal with various aspects of controlling the CEC adapter
--hardware:
-+These low-level ops deal with various aspects of controlling the CEC adapter
-+hardware. They are all called with the mutex adap->lock held.
- 
- 
- To enable/disable the hardware::
-@@ -179,14 +181,12 @@ can receive directed messages to that address.
- Note that adap_log_addr must return 0 if logical_addr is CEC_LOG_ADDR_INVALID.
- 
- 
--Called when the adapter is fully configured or unconfigured::
-+Called when the adapter is unconfigured::
- 
--	void (*adap_configured)(struct cec_adapter *adap, bool configured);
-+	void (*adap_unconfigured)(struct cec_adapter *adap);
- 
--If configured == true, then the adapter is fully configured, i.e. all logical
--addresses have been successfully claimed. If configured == false, then the
--adapter is unconfigured. If the driver has to take specific actions after
--(un)configuration, then that can be done through this optional callback.
-+The adapter is unconfigured. If the driver has to take specific actions after
-+unconfiguration, then that can be done through this optional callback.
- 
- 
- To transmit a new message::
-@@ -207,6 +207,19 @@ The CEC_FREE_TIME_TO_USEC macro can be used to convert signal_free_time to
- microseconds (one data bit period is 2.4 ms).
- 
- 
-+To pass on the result of a canceled non-blocking transmit::
-+
-+	void (*adap_nb_transmit_canceled)(struct cec_adapter *adap,
-+					  const struct cec_msg *msg);
-+
-+This optional callback can be used to obtain the result of a canceled
-+non-blocking transmit with sequence number msg->sequence. This is
-+called if the transmit was aborted, the transmit timed out (i.e. the
-+hardware never signaled that the transmit finished), or the transmit
-+was successful, but the wait for the expected reply was either aborted
-+or it timed out.
-+
-+
- To log the current CEC hardware status::
- 
- 	void (*adap_status)(struct cec_adapter *adap, struct seq_file *file);
-@@ -372,7 +385,8 @@ Implementing the High-Level CEC Adapter
- ---------------------------------------
- 
- The low-level operations drive the hardware, the high-level operations are
--CEC protocol driven. The following high-level callbacks are available:
-+CEC protocol driven. The high-level callbacks are called without the adap->lock
-+mutex being held. The following high-level callbacks are available:
- 
- .. code-block:: none
- 
-@@ -384,9 +398,19 @@ CEC protocol driven. The following high-level callbacks are available:
- 		...
- 
- 		/* High-level CEC message callback */
-+		void (*configured)(struct cec_adapter *adap);
- 		int (*received)(struct cec_adapter *adap, struct cec_msg *msg);
- 	};
- 
-+Called when the adapter is configured::
-+
-+	void (*configured)(struct cec_adapter *adap);
-+
-+The adapter is fully configured, i.e. all logical addresses have been
-+successfully claimed. If the driver has to take specific actions after
-+configuration, then that can be done through this optional callback.
-+
-+
- The received() callback allows the driver to optionally handle a newly
- received CEC message::
- 
--- 
-2.39.2
+On 2023/6/7 14:41, Maxime Ripard wrote:
+> On Tue, Jun 06, 2023 at 11:37:53PM +0100, Conor Dooley wrote:
+>> On Wed, Jun 07, 2023 at 12:22:33AM +0200, Heiko Stübner wrote:
+>> > Am Dienstag, 6. Juni 2023, 20:41:17 CEST schrieb Shengyu Qu:
+>> > > > On Fri, Jun 02, 2023 at 03:40:35PM +0800, Keith Zhao wrote:
+>> > > >> Add bindings for JH7110 display subsystem which
+>> > > >> has a display controller verisilicon dc8200
+>> > > >> and an HDMI interface.
+>> 
+>> > > >> +description:
+>> > > >> +  The StarFive SoC uses the HDMI signal transmiter based on innosilicon IP
+>> > > > Is innosilicon the same thing as verisilicon? Also
+>> > > > s/transmiter/transmitter/, both here and in the title.
+yes,innosilicon is the HDMI IP  and verisilicon is the DC-controller IP
+
+>> > > 
+>> > > I think that is not the same, I remember Rockchip has used a HDMI 
+>> > > transmitter from
+>> > > 
+>> > > Innosilicon, and there is a existing driver for that in mainline.
+>> > 
+>> > Yep, I think Innosilicon is the company you turn to when you want to save
+>> > a bit of money ;-) . In the bigger SoCs Rockchip most of the time uses
+>> > Designware hdmi blocks and looking at the history only the rk3036 ever
+>> > used an Innosilicon block.
+>> > 
+I have done a HDMIcomparison of the rk3036 and the jh7110, and they are both based on ip Innosilicon.
+
+the hardware of them .
+Some parts of the hardware of the two are common, such as the logic of hdmi I2C to obtain edid, and the register definition is consistent.
+
+Many registers are defined differently from the linux main line inno driver, including registers that contain specific bits
+and some registers in linux main line inno driver no longer used in my new inoo hdmi hardware.
+
+>> > Looking at the history, 2016 really was a long time ago :-D.
+>> > 
+>> > > So Keith, if that's true, I think it is better to seperate the HDMI 
+>> > > stuff and reuse existing driver.
+>> > 
+>> > I'm not so sure about that - at least from a cursory glance :-) .
+>> > 
+>> > The registers do look slightly different and I don't know how much
+>> > the IP changed between the rk3036-version and the jh7110 version.
+>> > 
+>> > At the very least, I know my rk3036 board isn't booting right now, so
+>> > I can't really provide help for generalizing the rockchip-driver.
+>> > 
+>> > At the very least both the binding and driver could drop the "starfive-hdmi"
+>> > and actually use the Innosilicon in the naming somewhere, so that it's
+>> > clear for future developers :-)
+>> 
+>> Seeing "based on" always makes me a little bit nervous to be honest when
+>> it comes to using a compatible from the IP. Is it the IP? What version
+>> is it? etc. Perhaps "starfive,jh7110-hdmi" & falling back to some sort
+>> of "innosilicon,hdmi" would be more future/IP-silliness proof.
+>> Driver can always be generic & bind against "innosilicon,hdmi" until
+>> that becomes impossible.
+> 
+> Given that Neil was saying that there's at least two
+> generations/revisions/models of an HDMI controller from Innosilicon, I'm
+> not sure that compatible is enough to reach that goal anyway.
+> 
+> Maxime
+
+
+
+I will change the  the binding  to meet innosilicon,hdmi .
+for the drivers part , I will study the possibility of RK-HDMI reuse.
+
+Thank you for your comments
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
