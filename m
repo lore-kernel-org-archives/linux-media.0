@@ -2,170 +2,195 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D250C87FDC
-	for <linux-media@archiver.kernel.org>; Wed,  7 Jun 2023 08:55:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE898C7EE23
+	for <linux-media@archiver.kernel.org>; Wed,  7 Jun 2023 08:56:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239391AbjFGIzj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Jun 2023 04:55:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54550 "EHLO
+        id S239646AbjFGI4O convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Jun 2023 04:56:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239850AbjFGIzQ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Jun 2023 04:55:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DCC2117;
-        Wed,  7 Jun 2023 01:54:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E31C763C7F;
-        Wed,  7 Jun 2023 08:53:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ADF8C433EF;
-        Wed,  7 Jun 2023 08:53:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686127996;
-        bh=EkWcDuYEPYfXUrrU09MKWymiN3k4KVR9kC0PGQAic3I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TcuIqfFjWcbeOOOUYSC7vRtsg3ISAh7sWe8Thmd9VhPEL9AaFvBM+isNCLvGdxFon
-         VGRBCxfhFeshT+KFH75mjdqXdMReqlCS8FVDzMN/aSrBkWXt/7rLZvX1dGLUkkeKlL
-         cBm5zAHw6osPAqQh4yWkdYBUhYYaEugEDS5TlpsYtE7RQMROKDVdcPxW7fj3Q9lDW6
-         beNqQ49hY5fMf3eQgijV/b6mc0IjGeOibqRh5IJEpVdh1fmvvIyhzPtmaAox68NBIl
-         cCFkrmPWHXPNxcXD2cfNQx8LXUUTgrYEYH+Xe3UfJPN0dgRGCnu/jfNXfrwWWAjnjb
-         gBBanZEGAqawg==
-Date:   Wed, 7 Jun 2023 10:53:07 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        with ESMTP id S239918AbjFGIzZ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Jun 2023 04:55:25 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6022708
+        for <linux-media@vger.kernel.org>; Wed,  7 Jun 2023 01:54:46 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1q6ovb-0007f2-IU; Wed, 07 Jun 2023 10:54:03 +0200
+Message-ID: <e0eeae3b35e8efac7c577ca3159abcf7f43d5082.camel@pengutronix.de>
+Subject: Re: [PATCH 3/9] drm/verisilicon: Add basic drm driver
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Keith Zhao <keith.zhao@starfivetech.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Shengyang Chen <shengyang.chen@starfivetech.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jagan Teki <jagan@edgeble.ai>,
         Rob Herring <robh+dt@kernel.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Corey Minyard <cminyard@mvista.com>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Antonio Borneo <antonio.borneo@foss.st.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH v5 01/11] i2c: Enhance i2c_new_ancillary_device API
-Message-ID: <ZIBFc3y9jD59lZ3A@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Corey Minyard <cminyard@mvista.com>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Antonio Borneo <antonio.borneo@foss.st.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>
-References: <20230522101849.297499-1-biju.das.jz@bp.renesas.com>
- <20230522101849.297499-2-biju.das.jz@bp.renesas.com>
- <20230529080552.GJ25984@pendragon.ideasonboard.com>
- <OS0PR01MB592283E55078298EEA30C6B9864A9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <20230531085941.GA27043@pendragon.ideasonboard.com>
- <CAMuHMdXywnxO6cL5R84mryFuyVMswj6EniY-bZx7m_2L3iUY9A@mail.gmail.com>
+        Chris Morgan <macromorgan@hotmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Changhuang Liang <changhuang.liang@starfivetech.com>,
+        Jack Zhu <jack.zhu@starfivetech.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Shawn Guo <shawnguo@kernel.org>, christian.koenig@amd.com
+Date:   Wed, 07 Jun 2023 10:53:57 +0200
+In-Reply-To: <20230602074043.33872-4-keith.zhao@starfivetech.com>
+References: <20230602074043.33872-1-keith.zhao@starfivetech.com>
+         <20230602074043.33872-4-keith.zhao@starfivetech.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Nm5CNVphMfOl2T+J"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdXywnxO6cL5R84mryFuyVMswj6EniY-bZx7m_2L3iUY9A@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Hi Keith,
 
---Nm5CNVphMfOl2T+J
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Am Freitag, dem 02.06.2023 um 15:40 +0800 schrieb Keith Zhao:
+> Add a basic platform driver of the DRM driver for JH7110 SoC.
+> 
+> Signed-off-by: Keith Zhao <keith.zhao@starfivetech.com>
+> ---
+>  MAINTAINERS                          |   2 +
+>  drivers/gpu/drm/Kconfig              |   2 +
+>  drivers/gpu/drm/Makefile             |   1 +
+>  drivers/gpu/drm/verisilicon/Kconfig  |  13 ++
+>  drivers/gpu/drm/verisilicon/Makefile |   6 +
+>  drivers/gpu/drm/verisilicon/vs_drv.c | 284 +++++++++++++++++++++++++++
+>  drivers/gpu/drm/verisilicon/vs_drv.h |  48 +++++
+>  include/uapi/drm/drm_fourcc.h        |  83 ++++++++
+>  include/uapi/drm/vs_drm.h            |  50 +++++
+>  9 files changed, 489 insertions(+)
+>  create mode 100644 drivers/gpu/drm/verisilicon/Kconfig
+>  create mode 100644 drivers/gpu/drm/verisilicon/Makefile
+>  create mode 100644 drivers/gpu/drm/verisilicon/vs_drv.c
+>  create mode 100644 drivers/gpu/drm/verisilicon/vs_drv.h
+>  create mode 100644 include/uapi/drm/vs_drm.h
+> 
+> 
+> [...]
+> +#endif /* __VS_DRV_H__ */
+> diff --git a/include/uapi/drm/drm_fourcc.h b/include/uapi/drm/drm_fourcc.h
+> index de703c6be969..af4fb50f9207 100644
+> --- a/include/uapi/drm/drm_fourcc.h
+> +++ b/include/uapi/drm/drm_fourcc.h
+> @@ -419,6 +419,7 @@ extern "C" {
+>  #define DRM_FORMAT_MOD_VENDOR_ARM     0x08
+>  #define DRM_FORMAT_MOD_VENDOR_ALLWINNER 0x09
+>  #define DRM_FORMAT_MOD_VENDOR_AMLOGIC 0x0a
+> +#define DRM_FORMAT_MOD_VENDOR_VS      0x0b
+>  
+>  /* add more to the end as needed */
+>  
+> @@ -1519,6 +1520,88 @@ drm_fourcc_canonicalize_nvidia_format_mod(__u64 modifier)
+>  #define AMD_FMT_MOD_CLEAR(field) \
+>  	(~((__u64)AMD_FMT_MOD_##field##_MASK << AMD_FMT_MOD_##field##_SHIFT))
+>  
+> +#define DRM_FORMAT_MOD_VS_TYPE_NORMAL        0x00
+> +#define DRM_FORMAT_MOD_VS_TYPE_COMPRESSED    0x01
+> +#define DRM_FORMAT_MOD_VS_TYPE_CUSTOM_10BIT  0x02
+> +#define DRM_FORMAT_MOD_VS_TYPE_MASK     ((__u64)0x3 << 54)
+> +
+> +#define fourcc_mod_vs_code(type, val) \
+> +	fourcc_mod_code(VS, ((((__u64)type) << 54) | (val)))
+> +
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_MODE_MASK    0x3F
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_8X8_XMAJOR   0x00
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_8X8_YMAJOR   0x01
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_16X4     0x02
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_8X4      0x03
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_4X8      0x04
+> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_16X4   0x06
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_64X4     0x07
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_32X4     0x08
+> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_256X1  0x09
+> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_128X1  0x0A
+> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_64X4   0x0B
+> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_256X2  0x0C
+> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_128X2  0x0D
+> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_128X4  0x0E
+> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_64X1   0x0F
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_16X8     0x10
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_8X16     0x11
+> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_512X1  0x12
+> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_32X4   0x13
+> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_64X2   0x14
+> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_32X2   0x15
+> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_32X1   0x16
+> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_16X1   0x17
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_128X4    0x18
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_256X4    0x19
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_512X4    0x1A
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_16X16    0x1B
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_32X16    0x1C
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_64X16    0x1D
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_128X8    0x1E
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_8X4_S    0x1F
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_16X4_S   0x20
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_32X4_S   0x21
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_16X4_LSB 0x22
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_32X4_LSB 0x23
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_32X8     0x24
+> +
+> +#define DRM_FORMAT_MOD_VS_DEC_ALIGN_32      (0x01 << 6)
+> +#define DRM_FORMAT_MOD_VS_DEC_ALIGN_64      (0x01 << 7)
+> +
+> +#define fourcc_mod_vs_dec_code(tile, align) \
+> +	fourcc_mod_vs_code(DRM_FORMAT_MOD_VS_TYPE_COMPRESSED, \
+> +				((tile) | (align)))
+> +
+> +#define DRM_FORMAT_MOD_VS_NORM_MODE_MASK        0x1F
+> +#define DRM_FORMAT_MOD_VS_LINEAR                0x00
+> +#define DRM_FORMAT_MOD_VS_TILED4x4              0x01
+> +#define DRM_FORMAT_MOD_VS_SUPER_TILED_XMAJOR    0x02
+> +#define DRM_FORMAT_MOD_VS_SUPER_TILED_YMAJOR    0x03
+> +#define DRM_FORMAT_MOD_VS_TILE_8X8              0x04
+> +#define DRM_FORMAT_MOD_VS_TILE_MODE1            0x05
+> +#define DRM_FORMAT_MOD_VS_TILE_MODE2            0x06
+> +#define DRM_FORMAT_MOD_VS_TILE_8X4              0x07
+> +#define DRM_FORMAT_MOD_VS_TILE_MODE4            0x08
+> +#define DRM_FORMAT_MOD_VS_TILE_MODE5            0x09
+> +#define DRM_FORMAT_MOD_VS_TILE_MODE6            0x0A
+> +#define DRM_FORMAT_MOD_VS_SUPER_TILED_XMAJOR_8X4    0x0B
+> +#define DRM_FORMAT_MOD_VS_SUPER_TILED_YMAJOR_4X8    0x0C
+> +#define DRM_FORMAT_MOD_VS_TILE_Y                0x0D
+> +#define DRM_FORMAT_MOD_VS_TILE_128X1            0x0F
+> +#define DRM_FORMAT_MOD_VS_TILE_256X1            0x10
+> +#define DRM_FORMAT_MOD_VS_TILE_32X1             0x11
+> +#define DRM_FORMAT_MOD_VS_TILE_64X1             0x12
+> +#define DRM_FORMAT_MOD_VS_TILE_MODE4X4          0x15
+> +
+> +#define fourcc_mod_vs_norm_code(tile) \
+> +	fourcc_mod_vs_code(DRM_FORMAT_MOD_VS_TYPE_NORMAL, \
+> +				(tile))
+> +
+> +#define fourcc_mod_vs_custom_code(tile) \
+> +	fourcc_mod_vs_code(DRM_FORMAT_MOD_VS_TYPE_CUSTOM_10BIT, \
+> +				(tile))
+> +
 
-Hi all,
+You are opening a new namespace for what is effectively the VIVANTE
+tiling. While your list seems much more exhaustive than the (reverse
+engineered) list provided under the VIVANTE namespace, this is still
+unacceptable as it adds new aliases for existing modifiers.
 
-sorry for not being able to chime in earlier.
+Also any modifier additions should be in a separate patch and not
+buried in another change.
 
-> In Biju's particular use case, the i2c device responds to two addresses,
-> which is the standard i2c ancillary use case.  However, what's special
-
-Not quite. ancillary is used when a *driver* needs to take care of two
-addresses. We already have devices bundling two features into the same
-chip. I recall at least RTC + EEPROM somewhere. And so far, we have been
-handling this by creating two nodes in DT and have proper binding docs.
-I think this is cleaner. First, you can see in DT already what the
-compound device really consists of. In this case, which RTC and RTC
-driver is exactly needed. Second, the code added here adds complexity to
-the I2C core with another layer of inderection for dummy devices.
-
-> As some resources are shared (knowledge about the clocks), splitting
-> this in two distinct devices in DT (which is what Biju's initial patch
-> series did) would need phandles to link both nodes together.
->=20
-> Do you have a better idea how to represent this?
-
-Not sure if I understood this chip correctly, but maybe: The PMIC driver
-exposes a clock gate which can be consumed by the RTC driver?
-
-Happy hacking,
-
-   Wolfram
-
-
---Nm5CNVphMfOl2T+J
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSARW8ACgkQFA3kzBSg
-KbbYsRAAgTcDHo1Azv7DhDEOMF7wTqPXl27TMa07c345Y64Hxn/2+x1zO5eddL2T
-dHKlj2vg5Ry53CEbEC1wGPxBSDSOtDQvPPxXCSEFDi1ead63j/gOeGcuMvwySb80
-7wk2qUBMkkT00yQDweMv9AwNXbo0MKOHnEYZHkhFBy36gS2qqzSYkjj6AdJuVKJR
-6va/d1QulASM1ZutznMHQvXd/lL/XDBbraxfQBjGlrZG9C6wJq23WuoWavjbHwdU
-DAzXIYSGMvqbIMSrXNjnGrVeEFwNnMYFM8EOTk319nQR9Z1i1UMiqvoOEVoEZWW+
-XzrLf1ydWAXICb9j0Mc6RlYTfz+/YUZA0JlBsv+ypN9tw4tPEkmKfmlg6TWAQBA9
-aXM84EZjePIhZSU826pOURtAS+fDsfPQZMlnYS6KKdrhU+h3y29rpHA28gKjBTWT
-yt3LSb2AOjcOlvsFZQBigDINvwjPfhCRFjpMH2BAzKF5Ei7qygPw1kREgyh5zmr3
-UDbelnwjQAk4SuZbqJpRTyKyQdPLl/ReW5lMEhIdOb/n2THQT8fEiFCElpbasoEU
-Zg/L7xaU6qROiqbZMPKisltXTlyZ68kY0NPRm+w0AytwQWb1C1IBqGUf8KyJWuKr
-oP/yC5SljRtET9R5XI6UgV0wnt4uN8UscY5sMJxbDGCEoTm/iAY=
-=0ELS
------END PGP SIGNATURE-----
-
---Nm5CNVphMfOl2T+J--
+Regards,
+Lucas
