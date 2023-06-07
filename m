@@ -2,120 +2,374 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78AEFC7EE23
-	for <linux-media@archiver.kernel.org>; Wed,  7 Jun 2023 16:21:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71A70C77B7A
+	for <linux-media@archiver.kernel.org>; Wed,  7 Jun 2023 16:48:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231599AbjFGQVE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Jun 2023 12:21:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45208 "EHLO
+        id S230197AbjFGQsL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Jun 2023 12:48:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231234AbjFGQVC (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Jun 2023 12:21:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4981E47
-        for <linux-media@vger.kernel.org>; Wed,  7 Jun 2023 09:20:12 -0700 (PDT)
+        with ESMTP id S230150AbjFGQsL (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Jun 2023 12:48:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CD51FC2
+        for <linux-media@vger.kernel.org>; Wed,  7 Jun 2023 09:47:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686154811;
+        s=mimecast20190719; t=1686156445;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=leDQvk6GCJ6UGvGZQwyCLpOzEB2aiUaJDSnRSybzK+4=;
-        b=V2eoJGV/G0V+L10MU3f1UzXJygRtmZIbURc+1kOQo2KDjD1G7RmE94Ovx+ifeSfDe78TBv
-        gaAqyl5v2LTK9incyRAR4JSxaJd1v/qO4JF5CIlKLy9Sehd2llhastCCwV/EEvPSx1F4M6
-        CFqjo79y2LmoCxqG7rD9zn5gAXAfPWM=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-656-ED28zPAhOuq7dRnghBPEGw-1; Wed, 07 Jun 2023 12:20:10 -0400
-X-MC-Unique: ED28zPAhOuq7dRnghBPEGw-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-977d4b0d9e3so325201266b.0
-        for <linux-media@vger.kernel.org>; Wed, 07 Jun 2023 09:20:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686154809; x=1688746809;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=leDQvk6GCJ6UGvGZQwyCLpOzEB2aiUaJDSnRSybzK+4=;
-        b=OgNdwnH3VEf/RsmrUy9mGutWCV5nXOshjIGQUWvxzAevzqSK79vWEqN3yHkBV1V3iI
-         Aao4cAAMmzaDSTBuBFXk/eckJTWeugERlTtQbDg4Nw/3k+um5pX8qpLo9CsUt2WNAL7G
-         eKssatyVB64PGO7CBY99E17gg7U7NXsdviuYw5chgITe+ph20R68pPTVZCeBDIHBYeJf
-         dDPDKNKWCwZG8dcqfJdzOfe2Ej8Ma2Is1LYQ+jA2Vyh7KG3wQw3iEqVcbtvNMpDIDpwV
-         nIkUP71tMBvY+tBcThWFe4QfxbRy3VFXR6ffYjmczXCA7jdpc890H0F2m84Y88zLtvLy
-         ktBw==
-X-Gm-Message-State: AC+VfDzUdwJWVvwuIvEsAUyj5EnxUr/KPhI3KGgH+oQZ4Cg3k0kKrMEF
-        Z8ZloVyeWqcQprds3lNtMrszT1AOiAgM9SvOE3pPKmP+6aaURiDlQRtHEHeNIKvnyMWGycDaESW
-        WKqLGB7DVOcumdUmzqurS3Uk=
-X-Received: by 2002:a17:907:6d98:b0:973:d43f:5fdf with SMTP id sb24-20020a1709076d9800b00973d43f5fdfmr7000645ejc.61.1686154809541;
-        Wed, 07 Jun 2023 09:20:09 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4PJirVo0hAQ4QkUsd43RNAVcTHxOGLEbbWa7IXM213AopFesTseVDAEDju8pK1cBcMnPSeag==
-X-Received: by 2002:a17:907:6d98:b0:973:d43f:5fdf with SMTP id sb24-20020a1709076d9800b00973d43f5fdfmr7000625ejc.61.1686154809312;
-        Wed, 07 Jun 2023 09:20:09 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id t16-20020a170906065000b009682b2b3d66sm7046688ejb.197.2023.06.07.09.20.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 09:20:08 -0700 (PDT)
-Message-ID: <1847f77d-0a14-8204-bdeb-cf30699f0acb@redhat.com>
-Date:   Wed, 7 Jun 2023 18:20:08 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 1/3] media: Add MIPI CCI register access helper functions
-Content-Language: en-US, nl
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andy Shevchenko <andy@kernel.org>, linux-media@vger.kernel.org
-References: <20230606165808.70751-1-hdegoede@redhat.com>
- <20230606165808.70751-2-hdegoede@redhat.com>
- <CAHp75Vd6TPfZhPEDUdAj0Y7G8fQDPKQhmcY_tDWmN7VHBpXL0w@mail.gmail.com>
- <0760b8ba-0091-5270-5e46-9787a910bd6f@redhat.com>
- <ZIBxhg1LVL8+zBCE@kekkonen.localdomain>
- <CAHp75VeZe-aeusoeYgDh=6kGfxNUDexLvvwMdLTKe-k1_vtAwA@mail.gmail.com>
- <2f367370-1dcd-5246-4016-dfb06019eda6@redhat.com>
- <CAHp75VekdeW1P0-CvcdTCYryvq0DGkJ6JzCVtatVAgFDu5gJxA@mail.gmail.com>
+        bh=Qj7aUMT6a4xbXTKHDtYnL2V15NZUYKhWQ7phLUZWU2M=;
+        b=aT6do5Ko6KXgf8nIs4VAetfUMJ/nzPhzSr8BGJDV7w+MmwaZUPP/fISxy4PS7GPkqJixYP
+        PqGOkmxPNiEKYQLLlDStD/jp6rBWWGXqmZt0H/S4z1Tot8V2NgzlR0TEpwgfdYlhaDANq9
+        8fmJLKszUP8xtjczcScTtkCRhSGMcMA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-147-05HM59wLNISr702wlunsBA-1; Wed, 07 Jun 2023 12:47:21 -0400
+X-MC-Unique: 05HM59wLNISr702wlunsBA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4028785A5BF;
+        Wed,  7 Jun 2023 16:47:21 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.39.192.22])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 27965C16044;
+        Wed,  7 Jun 2023 16:47:20 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAHp75VekdeW1P0-CvcdTCYryvq0DGkJ6JzCVtatVAgFDu5gJxA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Daniel Scally <dan.scally@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Andy Shevchenko <andy@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org
+Subject: [PATCH 01/28] media: ov2680: Remove auto-gain and auto-exposure controls
+Date:   Wed,  7 Jun 2023 18:46:45 +0200
+Message-Id: <20230607164712.63579-2-hdegoede@redhat.com>
+In-Reply-To: <20230607164712.63579-1-hdegoede@redhat.com>
+References: <20230607164712.63579-1-hdegoede@redhat.com>
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+Quoting the OV2680 datasheet:
 
-On 6/7/23 18:14, Andy Shevchenko wrote:
-> On Wed, Jun 7, 2023 at 6:58 PM Hans de Goede <hdegoede@redhat.com> wrote:
->> On 6/7/23 17:40, Andy Shevchenko wrote:
->>> On Wed, Jun 7, 2023 at 3:01 PM Sakari Ailus
->>> <sakari.ailus@linux.intel.com> wrote:
->>>> On Wed, Jun 07, 2023 at 10:40:34AM +0200, Hans de Goede wrote:
->>>>> On 6/6/23 22:43, Andy Shevchenko wrote:
-> 
-> ...
-> 
->>>>>               *val = __get_unaligned_be24(buf);
->>>
->>> __without double underscore prefix
->>
->> include/asm-generic/unaligned.h
->>
->> defines __get_unaligned_be24() and not get_unaligned_be24(), I guess because 24bit is not a standard register width.
-> 
-> Strange. Do you have some custom patches in the area?
-> 
-> https://elixir.bootlin.com/linux/v6.4-rc5/source/include/asm-generic/unaligned.h#L112
-> https://elixir.bootlin.com/linux/v6.4-rc5/source/include/asm-generic/unaligned.h#L90
+"3.2 exposure and gain control
 
-No I do not have any custom patches in that area; and the wrapper you
-point to is right there...
+In the OV2680, the exposure time and gain are set manually from an external
+controller. The OV2680 supports manual gain and exposure control only for
+normal applications, no auto mode."
 
-I somehow missed it, sorry.
+And indeed testing with the atomisp_ov2680 fork of ov2680.c has shown that
+auto-exposure and auto-gain do not work.
 
-So I will drop the __ as requested when adding the switch-case implementation for v2.
+Note that the code setting the auto-exposure flag was broken, callers
+of ov2680_exposure_set() were directly passing !!ctrls->auto_exp->val as
+"bool auto_exp" value, but ctrls->auto_exp is a menu control with:
 
-Regards,
+enum  v4l2_exposure_auto_type {
+        V4L2_EXPOSURE_AUTO = 0,
+        V4L2_EXPOSURE_MANUAL = 1,
+	...
 
-Hans
+So instead of passing !!ctrls->auto_exp->val they should have been passing
+ctrls->auto_exp->val == V4L2_EXPOSURE_AUTO, iow the passed value was
+inverted of what it should have been.
+
+Also remove ov2680_g_volatile_ctrl() since without auto support the gain
+and exposure controls are not volatile.
+
+This also fixes the control values not being properly applied in
+ov2680_mode_set(). The 800x600 mode register-list also sets gain,
+exposure and vflip overriding the last set ctrl values.
+
+ov2680_mode_set() does call ov2680_gain_set() and ov2680_exposure_set()
+but did this before writing the mode register-list, so these values
+would still be overridden by the mode register-list.
+
+Add a v4l2_ctrl_handler_setup() call after writing the mode register-list
+to restore all ctrl values. Also remove the ctrls->gain->is_new check from
+ov2680_gain_set() so that the gain always gets restored properly.
+
+Last since ov2680_mode_set() now calls v4l2_ctrl_handler_setup(), remove
+the v4l2_ctrl_handler_setup() call after ov2680_mode_restore() since
+ov2680_mode_restore() calls ov2680_mode_set().
+
+Fixes: 3ee47cad3e69 ("media: ov2680: Add Omnivision OV2680 sensor driver")
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ drivers/media/i2c/ov2680.c | 162 ++++---------------------------------
+ 1 file changed, 17 insertions(+), 145 deletions(-)
+
+diff --git a/drivers/media/i2c/ov2680.c b/drivers/media/i2c/ov2680.c
+index 54153bf66bdd..02204e185e2f 100644
+--- a/drivers/media/i2c/ov2680.c
++++ b/drivers/media/i2c/ov2680.c
+@@ -85,15 +85,8 @@ struct ov2680_mode_info {
+ 
+ struct ov2680_ctrls {
+ 	struct v4l2_ctrl_handler handler;
+-	struct {
+-		struct v4l2_ctrl *auto_exp;
+-		struct v4l2_ctrl *exposure;
+-	};
+-	struct {
+-		struct v4l2_ctrl *auto_gain;
+-		struct v4l2_ctrl *gain;
+-	};
+-
++	struct v4l2_ctrl *exposure;
++	struct v4l2_ctrl *gain;
+ 	struct v4l2_ctrl *hflip;
+ 	struct v4l2_ctrl *vflip;
+ 	struct v4l2_ctrl *test_pattern;
+@@ -143,6 +136,7 @@ static const struct reg_value ov2680_setting_30fps_QUXGA_800_600[] = {
+ 	{0x380e, 0x02}, {0x380f, 0x84}, {0x3811, 0x04}, {0x3813, 0x04},
+ 	{0x3814, 0x31}, {0x3815, 0x31}, {0x3820, 0xc0}, {0x4008, 0x00},
+ 	{0x4009, 0x03}, {0x4837, 0x1e}, {0x3501, 0x4e}, {0x3502, 0xe0},
++	{0x3503, 0x03},
+ };
+ 
+ static const struct reg_value ov2680_setting_30fps_720P_1280_720[] = {
+@@ -405,69 +399,14 @@ static int ov2680_test_pattern_set(struct ov2680_dev *sensor, int value)
+ 	return 0;
+ }
+ 
+-static int ov2680_gain_set(struct ov2680_dev *sensor, bool auto_gain)
++static int ov2680_gain_set(struct ov2680_dev *sensor, u32 gain)
+ {
+-	struct ov2680_ctrls *ctrls = &sensor->ctrls;
+-	u32 gain;
+-	int ret;
+-
+-	ret = ov2680_mod_reg(sensor, OV2680_REG_R_MANUAL, BIT(1),
+-			     auto_gain ? 0 : BIT(1));
+-	if (ret < 0)
+-		return ret;
+-
+-	if (auto_gain || !ctrls->gain->is_new)
+-		return 0;
+-
+-	gain = ctrls->gain->val;
+-
+-	ret = ov2680_write_reg16(sensor, OV2680_REG_GAIN_PK, gain);
+-
+-	return 0;
++	return ov2680_write_reg16(sensor, OV2680_REG_GAIN_PK, gain);
+ }
+ 
+-static int ov2680_gain_get(struct ov2680_dev *sensor)
++static int ov2680_exposure_set(struct ov2680_dev *sensor, u32 exp)
+ {
+-	u32 gain;
+-	int ret;
+-
+-	ret = ov2680_read_reg16(sensor, OV2680_REG_GAIN_PK, &gain);
+-	if (ret)
+-		return ret;
+-
+-	return gain;
+-}
+-
+-static int ov2680_exposure_set(struct ov2680_dev *sensor, bool auto_exp)
+-{
+-	struct ov2680_ctrls *ctrls = &sensor->ctrls;
+-	u32 exp;
+-	int ret;
+-
+-	ret = ov2680_mod_reg(sensor, OV2680_REG_R_MANUAL, BIT(0),
+-			     auto_exp ? 0 : BIT(0));
+-	if (ret < 0)
+-		return ret;
+-
+-	if (auto_exp || !ctrls->exposure->is_new)
+-		return 0;
+-
+-	exp = (u32)ctrls->exposure->val;
+-	exp <<= 4;
+-
+-	return ov2680_write_reg24(sensor, OV2680_REG_EXPOSURE_PK_HIGH, exp);
+-}
+-
+-static int ov2680_exposure_get(struct ov2680_dev *sensor)
+-{
+-	int ret;
+-	u32 exp;
+-
+-	ret = ov2680_read_reg24(sensor, OV2680_REG_EXPOSURE_PK_HIGH, &exp);
+-	if (ret)
+-		return ret;
+-
+-	return exp >> 4;
++	return ov2680_write_reg24(sensor, OV2680_REG_EXPOSURE_PK_HIGH, exp << 4);
+ }
+ 
+ static int ov2680_stream_enable(struct ov2680_dev *sensor)
+@@ -482,32 +421,16 @@ static int ov2680_stream_disable(struct ov2680_dev *sensor)
+ 
+ static int ov2680_mode_set(struct ov2680_dev *sensor)
+ {
+-	struct ov2680_ctrls *ctrls = &sensor->ctrls;
+ 	int ret;
+ 
+-	ret = ov2680_gain_set(sensor, false);
+-	if (ret < 0)
+-		return ret;
+-
+-	ret = ov2680_exposure_set(sensor, false);
+-	if (ret < 0)
+-		return ret;
+-
+ 	ret = ov2680_load_regs(sensor, sensor->current_mode);
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	if (ctrls->auto_gain->val) {
+-		ret = ov2680_gain_set(sensor, true);
+-		if (ret < 0)
+-			return ret;
+-	}
+-
+-	if (ctrls->auto_exp->val == V4L2_EXPOSURE_AUTO) {
+-		ret = ov2680_exposure_set(sensor, true);
+-		if (ret < 0)
+-			return ret;
+-	}
++	/* Restore value of all ctrls */
++	ret = __v4l2_ctrl_handler_setup(&sensor->ctrls.handler);
++	if (ret < 0)
++		return ret;
+ 
+ 	sensor->mode_pending_changes = false;
+ 
+@@ -590,15 +513,10 @@ static int ov2680_s_power(struct v4l2_subdev *sd, int on)
+ 	else
+ 		ret = ov2680_power_off(sensor);
+ 
+-	mutex_unlock(&sensor->lock);
+-
+-	if (on && ret == 0) {
+-		ret = v4l2_ctrl_handler_setup(&sensor->ctrls.handler);
+-		if (ret < 0)
+-			return ret;
+-
++	if (on && ret == 0)
+ 		ret = ov2680_mode_restore(sensor);
+-	}
++
++	mutex_unlock(&sensor->lock);
+ 
+ 	return ret;
+ }
+@@ -794,52 +712,19 @@ static int ov2680_enum_frame_interval(struct v4l2_subdev *sd,
+ 	return 0;
+ }
+ 
+-static int ov2680_g_volatile_ctrl(struct v4l2_ctrl *ctrl)
+-{
+-	struct v4l2_subdev *sd = ctrl_to_sd(ctrl);
+-	struct ov2680_dev *sensor = to_ov2680_dev(sd);
+-	struct ov2680_ctrls *ctrls = &sensor->ctrls;
+-	int val;
+-
+-	if (!sensor->is_enabled)
+-		return 0;
+-
+-	switch (ctrl->id) {
+-	case V4L2_CID_GAIN:
+-		val = ov2680_gain_get(sensor);
+-		if (val < 0)
+-			return val;
+-		ctrls->gain->val = val;
+-		break;
+-	case V4L2_CID_EXPOSURE:
+-		val = ov2680_exposure_get(sensor);
+-		if (val < 0)
+-			return val;
+-		ctrls->exposure->val = val;
+-		break;
+-	}
+-
+-	return 0;
+-}
+-
+ static int ov2680_s_ctrl(struct v4l2_ctrl *ctrl)
+ {
+ 	struct v4l2_subdev *sd = ctrl_to_sd(ctrl);
+ 	struct ov2680_dev *sensor = to_ov2680_dev(sd);
+-	struct ov2680_ctrls *ctrls = &sensor->ctrls;
+ 
+ 	if (!sensor->is_enabled)
+ 		return 0;
+ 
+ 	switch (ctrl->id) {
+-	case V4L2_CID_AUTOGAIN:
+-		return ov2680_gain_set(sensor, !!ctrl->val);
+ 	case V4L2_CID_GAIN:
+-		return ov2680_gain_set(sensor, !!ctrls->auto_gain->val);
+-	case V4L2_CID_EXPOSURE_AUTO:
+-		return ov2680_exposure_set(sensor, !!ctrl->val);
++		return ov2680_gain_set(sensor, ctrl->val);
+ 	case V4L2_CID_EXPOSURE:
+-		return ov2680_exposure_set(sensor, !!ctrls->auto_exp->val);
++		return ov2680_exposure_set(sensor, ctrl->val);
+ 	case V4L2_CID_VFLIP:
+ 		if (sensor->is_streaming)
+ 			return -EBUSY;
+@@ -864,7 +749,6 @@ static int ov2680_s_ctrl(struct v4l2_ctrl *ctrl)
+ }
+ 
+ static const struct v4l2_ctrl_ops ov2680_ctrl_ops = {
+-	.g_volatile_ctrl = ov2680_g_volatile_ctrl,
+ 	.s_ctrl = ov2680_s_ctrl,
+ };
+ 
+@@ -936,7 +820,7 @@ static int ov2680_v4l2_register(struct ov2680_dev *sensor)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	v4l2_ctrl_handler_init(hdl, 7);
++	v4l2_ctrl_handler_init(hdl, 5);
+ 
+ 	hdl->lock = &sensor->lock;
+ 
+@@ -948,16 +832,9 @@ static int ov2680_v4l2_register(struct ov2680_dev *sensor)
+ 					ARRAY_SIZE(test_pattern_menu) - 1,
+ 					0, 0, test_pattern_menu);
+ 
+-	ctrls->auto_exp = v4l2_ctrl_new_std_menu(hdl, ops,
+-						 V4L2_CID_EXPOSURE_AUTO,
+-						 V4L2_EXPOSURE_MANUAL, 0,
+-						 V4L2_EXPOSURE_AUTO);
+-
+ 	ctrls->exposure = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_EXPOSURE,
+ 					    0, 32767, 1, 0);
+ 
+-	ctrls->auto_gain = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_AUTOGAIN,
+-					     0, 1, 1, 1);
+ 	ctrls->gain = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_GAIN, 0, 2047, 1, 0);
+ 
+ 	if (hdl->error) {
+@@ -965,14 +842,9 @@ static int ov2680_v4l2_register(struct ov2680_dev *sensor)
+ 		goto cleanup_entity;
+ 	}
+ 
+-	ctrls->gain->flags |= V4L2_CTRL_FLAG_VOLATILE;
+-	ctrls->exposure->flags |= V4L2_CTRL_FLAG_VOLATILE;
+ 	ctrls->vflip->flags |= V4L2_CTRL_FLAG_MODIFY_LAYOUT;
+ 	ctrls->hflip->flags |= V4L2_CTRL_FLAG_MODIFY_LAYOUT;
+ 
+-	v4l2_ctrl_auto_cluster(2, &ctrls->auto_gain, 0, true);
+-	v4l2_ctrl_auto_cluster(2, &ctrls->auto_exp, 1, true);
+-
+ 	sensor->sd.ctrl_handler = hdl;
+ 
+ 	ret = v4l2_async_register_subdev(&sensor->sd);
+-- 
+2.40.1
 
