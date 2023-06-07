@@ -2,41 +2,41 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 065B7C7EE25
-	for <linux-media@archiver.kernel.org>; Wed,  7 Jun 2023 16:48:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 902DFC83003
+	for <linux-media@archiver.kernel.org>; Wed,  7 Jun 2023 16:48:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbjFGQse (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Jun 2023 12:48:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35310 "EHLO
+        id S230462AbjFGQsn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Jun 2023 12:48:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230418AbjFGQsc (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Jun 2023 12:48:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7764D1FD7
-        for <linux-media@vger.kernel.org>; Wed,  7 Jun 2023 09:47:49 -0700 (PDT)
+        with ESMTP id S229835AbjFGQsm (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Jun 2023 12:48:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E99D1FE3
+        for <linux-media@vger.kernel.org>; Wed,  7 Jun 2023 09:47:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686156468;
+        s=mimecast20190719; t=1686156473;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mF0G/BuKqMpDT6L2PdQklC8fyBPiSirrDLVqY8Z5J5Q=;
-        b=Gq00v1uJ+YEU2jy8vcsRNBImt/uwc/7lLcYjkwuPSjMAgToqw5/KHr6nkymrHO6GVJIzW0
-        HES1iOJDZviTtEjEEd7o552YtnP0gA4ndo3ARAgE8rQNT10gBdLw02QjJzvg8LYXp1apO3
-        O5cGiMYV+H1Jz1TmZ1nTlRG+MiHCH/k=
+        bh=e2j9uhooCDtqZkdd+jVDKfIEBOVRls05VfRR57bHZ10=;
+        b=gAcPkaF72vZfJyDxoZd8ornJQ/TeeA7Xvg5l04GYt2FfTQMiigqQOFNM4ifzM+Ti0QkeTC
+        WN5LTFVApXPN6VHIGrDNQJkCnvlGbIz46OFTdSm0GR6ah1hMuIEtKQYVdjsqx3e27VcVce
+        xSXzelDPkLEOUDqIEzoY5YRpuQTqSpc=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-381-rf10S96LMECgfgJod8OZHg-1; Wed, 07 Jun 2023 12:47:43 -0400
-X-MC-Unique: rf10S96LMECgfgJod8OZHg-1
+ us-mta-558-t19ptmjiPQeJFAl6m_t-fg-1; Wed, 07 Jun 2023 12:47:50 -0400
+X-MC-Unique: t19ptmjiPQeJFAl6m_t-fg-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AC625811E8D;
-        Wed,  7 Jun 2023 16:47:41 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7B4B5858F15;
+        Wed,  7 Jun 2023 16:47:49 +0000 (UTC)
 Received: from localhost.localdomain (unknown [10.39.192.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 91F2CC1603B;
-        Wed,  7 Jun 2023 16:47:40 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6323CC1603B;
+        Wed,  7 Jun 2023 16:47:48 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Daniel Scally <dan.scally@ideasonboard.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -45,9 +45,9 @@ To:     Daniel Scally <dan.scally@ideasonboard.com>,
 Cc:     Hans de Goede <hdegoede@redhat.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org
-Subject: [PATCH 16/28] media: ov2680: Add endpoint matching support
-Date:   Wed,  7 Jun 2023 18:47:00 +0200
-Message-Id: <20230607164712.63579-17-hdegoede@redhat.com>
+Subject: [PATCH 18/28] media: ov2680: Fix ov2680_enum_frame_interval()
+Date:   Wed,  7 Jun 2023 18:47:02 +0200
+Message-Id: <20230607164712.63579-19-hdegoede@redhat.com>
 In-Reply-To: <20230607164712.63579-1-hdegoede@redhat.com>
 References: <20230607164712.63579-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -57,100 +57,52 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add endpoint matching support and defer probe() until
-the endpoint fwnode is available. This is necessary on ACPI
-platforms where the bridge code creating the fwnodes may also e.g.
-set the "clock-frequency" device property and add GPIO mappings.
+Fix and simplify ov2680_enum_frame_interval(), the index is not
+an index into ov2680_mode_data[], so using OV2680_MODE_MAX is wrong.
+
+Instead it is an index indexing the different framerates for
+the resolution specified in fie->width, fie->height.
+
+Since the ov2680 code only supports a single fixed framerate,
+index must always be 0 and we don't need to check the other
+fie input values.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/media/i2c/ov2680.c | 26 +++++++++++++++++++-------
- 1 file changed, 19 insertions(+), 7 deletions(-)
+ drivers/media/i2c/ov2680.c | 16 ++++++----------
+ 1 file changed, 6 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/media/i2c/ov2680.c b/drivers/media/i2c/ov2680.c
-index b3a792b28467..9fa92b4f1307 100644
+index 190c58caae11..bc76ebee4854 100644
 --- a/drivers/media/i2c/ov2680.c
 +++ b/drivers/media/i2c/ov2680.c
-@@ -102,6 +102,7 @@ struct ov2680_ctrls {
- 
- struct ov2680_dev {
- 	struct device			*dev;
-+	struct fwnode_handle		*ep_fwnode;
- 	struct regmap			*regmap;
- 	struct v4l2_subdev		sd;
- 
-@@ -614,6 +615,7 @@ static int ov2680_v4l2_register(struct ov2680_dev *sensor, struct i2c_client *cl
- 	sensor->sd.flags = V4L2_SUBDEV_FL_HAS_DEVNODE;
- 	sensor->pad.flags = MEDIA_PAD_FL_SOURCE;
- 	sensor->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
-+	sensor->sd.fwnode = sensor->ep_fwnode;
- 
- 	ret = media_entity_pads_init(&sensor->sd.entity, 1, &sensor->pad);
- 	if (ret < 0)
-@@ -768,29 +770,37 @@ static int ov2680_probe(struct i2c_client *client)
- 	if (IS_ERR(sensor->regmap))
- 		return PTR_ERR(sensor->regmap);
- 
-+	/*
-+	 * Sometimes the fwnode graph is initialized by the bridge driver.
-+	 * Bridge drivers doing this may also add GPIO mappings, wait for this.
-+	 */
-+	sensor->ep_fwnode = fwnode_graph_get_next_endpoint(dev_fwnode(dev), NULL);
-+	if (!sensor->ep_fwnode)
-+		return dev_err_probe(dev, -EPROBE_DEFER, "waiting for fwnode graph endpoint\n");
-+
-+	mutex_init(&sensor->lock);
-+
- 	ret = ov2680_parse_dt(sensor);
- 	if (ret < 0)
--		return -EINVAL;
-+		goto err_fwnode_put;
- 
- 	ret = ov2680_mode_init(sensor);
- 	if (ret < 0)
--		return ret;
-+		goto err_fwnode_put;
- 
- 	ret = ov2680_get_regulators(sensor);
- 	if (ret < 0) {
- 		dev_err(dev, "failed to get regulators\n");
--		return ret;
-+		goto err_fwnode_put;
- 	}
- 
--	mutex_init(&sensor->lock);
--
- 	/*
- 	 * Power up and verify the chip now, so that if runtime pm is
- 	 * disabled the chip is left on and streaming will work.
- 	 */
- 	ret = ov2680_power_on(sensor);
- 	if (ret < 0)
--		goto lock_destroy;
-+		goto err_fwnode_put;
- 
- 	ret = ov2680_check_id(sensor);
- 	if (ret < 0)
-@@ -817,9 +827,10 @@ static int ov2680_probe(struct i2c_client *client)
- 	pm_runtime_put_noidle(&client->dev);
- err_powerdown:
- 	ov2680_power_off(sensor);
--lock_destroy:
-+err_fwnode_put:
- 	dev_err(dev, "ov2680 init fail: %d\n", ret);
- 	mutex_destroy(&sensor->lock);
-+	fwnode_handle_put(sensor->ep_fwnode);
- 
- 	return ret;
+@@ -507,20 +507,16 @@ static int ov2680_enum_frame_size(struct v4l2_subdev *sd,
  }
-@@ -833,6 +844,7 @@ static void ov2680_remove(struct i2c_client *client)
- 	mutex_destroy(&sensor->lock);
- 	media_entity_cleanup(&sensor->sd.entity);
- 	v4l2_ctrl_handler_free(&sensor->ctrls.handler);
-+	fwnode_handle_put(sensor->ep_fwnode);
  
- 	/*
- 	 * Disable runtime PM. In case runtime PM is disabled in the kernel,
+ static int ov2680_enum_frame_interval(struct v4l2_subdev *sd,
+-			      struct v4l2_subdev_state *sd_state,
+-			      struct v4l2_subdev_frame_interval_enum *fie)
++				      struct v4l2_subdev_state *sd_state,
++				      struct v4l2_subdev_frame_interval_enum *fie)
+ {
+-	struct v4l2_fract tpf;
++	struct ov2680_dev *sensor = to_ov2680_dev(sd);
+ 
+-	if (fie->index >= OV2680_MODE_MAX || fie->width > OV2680_WIDTH_MAX ||
+-	    fie->height > OV2680_HEIGHT_MAX ||
+-	    fie->which > V4L2_SUBDEV_FORMAT_ACTIVE)
++	/* Only 1 framerate */
++	if (fie->index)
+ 		return -EINVAL;
+ 
+-	tpf.denominator = OV2680_FRAME_RATE;
+-	tpf.numerator = 1;
+-
+-	fie->interval = tpf;
++	fie->interval = sensor->frame_interval;
+ 
+ 	return 0;
+ }
 -- 
 2.40.1
 
