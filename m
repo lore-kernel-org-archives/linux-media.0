@@ -2,41 +2,41 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59647C77B7A
-	for <linux-media@archiver.kernel.org>; Wed,  7 Jun 2023 16:48:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB9FFC7EE25
+	for <linux-media@archiver.kernel.org>; Wed,  7 Jun 2023 16:48:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbjFGQsY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Jun 2023 12:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35118 "EHLO
+        id S230370AbjFGQs1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Jun 2023 12:48:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbjFGQsW (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Jun 2023 12:48:22 -0400
+        with ESMTP id S230326AbjFGQs0 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Jun 2023 12:48:26 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3180C1FD5
-        for <linux-media@vger.kernel.org>; Wed,  7 Jun 2023 09:47:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 797701FE5
+        for <linux-media@vger.kernel.org>; Wed,  7 Jun 2023 09:47:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686156454;
+        s=mimecast20190719; t=1686156462;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=28S34J0mUYb0e2vgDcj6xQYUYpbjqf25xlxLoYWNNi0=;
-        b=Atym28eQMdWMG/e4NqBmAuLXsiRE+fT8I5lZOYAZqnxh3eKZ4pLilsgl+XOo3wSY8DBUiT
-        WYibIaOdB1l5T7v/HN5GYIS1+9Jq2fSspcHK4byRbf+0B7+rl5+faOIWtUnSByWLz4letG
-        MK0x+69H6cq0WjX0dfIGpdC8ZvcH1yA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=zwlUmpUMuUvEgmRjkAoTrbSSyqdC/Q4esOSzxS9zp6Q=;
+        b=QR0AhDWML8HVnv0PGhvB4gwMOqFtnKW6/F28+Q5fE7kcggtBYDcZpYpJ8Louri0P+wXctm
+        xCskycJPLnDA/9TXv74HY/rJUaNPP4hVMCZoujucI/IGDyJBptXlnVCjCel5apyAaQgLX5
+        xa0SqXhSusQ5VCQZCOCxf3zmmRXT3rA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-272-0FIrfZlqNdy5mexyGhd6Uw-1; Wed, 07 Jun 2023 12:47:29 -0400
-X-MC-Unique: 0FIrfZlqNdy5mexyGhd6Uw-1
+ us-mta-592-1Xk2OQvENWW1sY2SihJYoQ-1; Wed, 07 Jun 2023 12:47:39 -0400
+X-MC-Unique: 1Xk2OQvENWW1sY2SihJYoQ-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2426F2823802;
-        Wed,  7 Jun 2023 16:47:29 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 127EF85A5BF;
+        Wed,  7 Jun 2023 16:47:39 +0000 (UTC)
 Received: from localhost.localdomain (unknown [10.39.192.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0ABE7C16046;
-        Wed,  7 Jun 2023 16:47:27 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id ECB0AC1603B;
+        Wed,  7 Jun 2023 16:47:37 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Daniel Scally <dan.scally@ideasonboard.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -45,9 +45,9 @@ To:     Daniel Scally <dan.scally@ideasonboard.com>,
 Cc:     Hans de Goede <hdegoede@redhat.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org
-Subject: [PATCH 07/28] media: ov2680: Fix ov2680_set_fmt() which == V4L2_SUBDEV_FORMAT_TRY not working
-Date:   Wed,  7 Jun 2023 18:46:51 +0200
-Message-Id: <20230607164712.63579-8-hdegoede@redhat.com>
+Subject: [PATCH 14/28] media: ov2680: Add support for more clk setups
+Date:   Wed,  7 Jun 2023 18:46:58 +0200
+Message-Id: <20230607164712.63579-15-hdegoede@redhat.com>
 In-Reply-To: <20230607164712.63579-1-hdegoede@redhat.com>
 References: <20230607164712.63579-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -57,81 +57,76 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-ov2680_set_fmt() which == V4L2_SUBDEV_FORMAT_TRY was getting
-the try_fmt v4l2_mbus_framefmt struct from the passed in sd_state
-and then storing the contents of that into the return by reference
-format->format struct.
+On ACPI systems the following 2 scenarios are possible:
 
-While the right thing to do would be filling format->format based on
-the just looked up mode and then store the results of that in
-sd_state->pads[0].try_fmt .
+1. The xvclk is fully controlled by ACPI powermanagement, so there
+   is no "xvclk" for the driver to get (since it is abstracted away).
+   In this case there will be a "clock-frequency" device property
+   to tell the driver the xvclk rate.
 
-Before the previous change introducing ov2680_fill_format() this
-resulted in ov2680_set_fmt() which == V4L2_SUBDEV_FORMAT_TRY always
-returning the zero-ed out sd_state->pads[0].try_fmt in format->format
-breaking callers using this.
+2. There is a xvclk modelled in the clk framework for the driver,
+   but the clk-generator may not be set to the right frequency
+   yet. In this case there will also be a "clock-frequency" device
+   property and the driver is expected to set the rate of the xvclk
+   through this frequency through the clk framework.
 
-After the introduction of ov2680_fill_format() which at least
-initializes sd_state->pads[0].try_fmt properly, format->format
-is now always being filled with the default 800x600 mode set by
-ov2680_init_cfg() independent of the actual requested mode.
+Handle both these scenarios by switching to devm_clk_get_optional()
+and checking for a "clock-frequency" device property.
 
-Move the filling of format->format with ov2680_fill_format() to
-before the if (which == V4L2_SUBDEV_FORMAT_TRY) and then store
-the filled in format->format in sd_state->pads[0].try_fmt to
-fix this.
+This is modelled after how this same issues was fixed for the ov8865 in
+commit 73dcffeb2ff9 ("media: i2c: Support 19.2MHz input clock in ov8865").
 
-Note this removes the fmt local variable because IMHO having a local
-variable which points to a sub-struct of one of the function arguments
-just leads to confusion when reading the code.
-
-Fixes: 3ee47cad3e69 ("media: ov2680: Add Omnivision OV2680 sensor driver")
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/media/i2c/ov2680.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ drivers/media/i2c/ov2680.c | 23 +++++++++++++++++++++--
+ 1 file changed, 21 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/i2c/ov2680.c b/drivers/media/i2c/ov2680.c
-index 9d26437a1297..ffdc7c06a361 100644
+index d04336d9c3ce..81d59206f901 100644
 --- a/drivers/media/i2c/ov2680.c
 +++ b/drivers/media/i2c/ov2680.c
-@@ -599,7 +599,6 @@ static int ov2680_set_fmt(struct v4l2_subdev *sd,
- 			  struct v4l2_subdev_format *format)
+@@ -676,6 +676,7 @@ static int ov2680_check_id(struct ov2680_dev *sensor)
+ static int ov2680_parse_dt(struct ov2680_dev *sensor)
  {
- 	struct ov2680_dev *sensor = to_ov2680_dev(sd);
--	struct v4l2_mbus_framefmt *fmt = &format->format;
- 	struct v4l2_mbus_framefmt *try_fmt;
- 	const struct ov2680_mode_info *mode;
- 	int ret = 0;
-@@ -608,14 +607,16 @@ static int ov2680_set_fmt(struct v4l2_subdev *sd,
- 		return -EINVAL;
+ 	struct device *dev = sensor->dev;
++	unsigned int rate = 0;
+ 	int ret;
  
- 	mode = v4l2_find_nearest_size(ov2680_mode_data,
--				      ARRAY_SIZE(ov2680_mode_data), width,
--				      height, fmt->width, fmt->height);
-+				      ARRAY_SIZE(ov2680_mode_data), width, height,
-+				      format->format.width, format->format.height);
- 	if (!mode)
- 		return -EINVAL;
+ 	/*
+@@ -694,13 +695,31 @@ static int ov2680_parse_dt(struct ov2680_dev *sensor)
+ 		return ret;
+ 	}
  
-+	ov2680_fill_format(sensor, &format->format, mode->width, mode->height);
+-	sensor->xvclk = devm_clk_get(dev, "xvclk");
++	sensor->xvclk = devm_clk_get_optional(dev, "xvclk");
+ 	if (IS_ERR(sensor->xvclk)) {
+ 		dev_err(dev, "xvclk clock missing or invalid\n");
+ 		return PTR_ERR(sensor->xvclk);
+ 	}
+ 
+-	sensor->xvclk_freq = clk_get_rate(sensor->xvclk);
++	/*
++	 * We could have either a 24MHz or 19.2MHz clock rate from either dt or
++	 * ACPI...but we also need to support the weird IPU3 case which will
++	 * have an external clock AND a clock-frequency property. Check for the
++	 * clock-frequency property and if found, set that rate if we managed
++	 * to acquire a clock. This should cover the ACPI case. If the system
++	 * uses devicetree then the configured rate should already be set, so
++	 * we can just read it.
++	 */
++	ret = fwnode_property_read_u32(dev_fwnode(dev), "clock-frequency", &rate);
++	if (!ret && sensor->xvclk) {
++		ret = clk_set_rate(sensor->xvclk, rate);
++		if (ret)
++			return dev_err_probe(dev, ret, "failed to set clock rate\n");
++	} else if (ret && !sensor->xvclk) {
++		return dev_err_probe(dev, ret, "invalid clock config\n");
++	}
 +
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
- 		try_fmt = v4l2_subdev_get_try_format(sd, sd_state, 0);
--		format->format = *try_fmt;
-+		*try_fmt = format->format;
- 		return 0;
- 	}
- 
-@@ -626,8 +627,6 @@ static int ov2680_set_fmt(struct v4l2_subdev *sd,
- 		goto unlock;
- 	}
- 
--	ov2680_fill_format(sensor, fmt, mode->width, mode->height);
--
- 	sensor->current_mode = mode;
- 	sensor->fmt = format->format;
- 	sensor->mode_pending_changes = true;
++	sensor->xvclk_freq = rate ? rate : clk_get_rate(sensor->xvclk);
+ 	if (sensor->xvclk_freq != OV2680_XVCLK_VALUE) {
+ 		dev_err(dev, "wrong xvclk frequency %d HZ, expected: %d Hz\n",
+ 			sensor->xvclk_freq, OV2680_XVCLK_VALUE);
 -- 
 2.40.1
 
