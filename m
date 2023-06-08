@@ -2,123 +2,360 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 088B3C7EE25
-	for <linux-media@archiver.kernel.org>; Thu,  8 Jun 2023 08:34:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17D9AC7EE25
+	for <linux-media@archiver.kernel.org>; Thu,  8 Jun 2023 08:35:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235496AbjFHIeV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 8 Jun 2023 04:34:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37872 "EHLO
+        id S234434AbjFHIfp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 8 Jun 2023 04:35:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232984AbjFHIeO (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Jun 2023 04:34:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD4C269E
-        for <linux-media@vger.kernel.org>; Thu,  8 Jun 2023 01:33:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686213209;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6WmgJiiB2u8woSFpdvZ/uxVeJDxRAQpKd9AvYFQONZs=;
-        b=QywbLDLmnnEEo5uwRQ+d6n2FnyyBTilzxT0VYS/Dkb3wm4Xc1QiztbS4wB1VoOYzftaTGz
-        rN5D02ueRrJFTvSqAGAZmObZo6tuYgbuRnK61jE5BmXaGUjoMu3ksPG4bReWUtkNGiowLQ
-        sPW04+qBEHPAo6NdSevQOJqOpOYyD3U=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-593-5JWdr0I7MbuflPjXIaITiA-1; Thu, 08 Jun 2023 04:33:28 -0400
-X-MC-Unique: 5JWdr0I7MbuflPjXIaITiA-1
-Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-516a17e29efso321313a12.1
-        for <linux-media@vger.kernel.org>; Thu, 08 Jun 2023 01:33:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686213207; x=1688805207;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6WmgJiiB2u8woSFpdvZ/uxVeJDxRAQpKd9AvYFQONZs=;
-        b=CLU3SIhv4CCnQndE8c47o6blDiOHT7Jt6MjVVkSODuWq4SjMZEAOWDlNZL9NkIlgWD
-         iqkAKVI8tkirR/eYhkRuLOGeBQttS80WiY52TIkk4PEHi9SOSi9aPCSNtwU8EDyKFuc8
-         Ybj/0gvX3/HOtdo9bP0O+JlwgPrDvHR9CIbHVTok5k7MxTM0/ek25OIDpBggE/lWQUdv
-         4FAG0ljfvLKATUMllx20HE4CT7T0rdLDN0a3Z3gchMRvRFlQzrqYvXufkotYjia8Jw0n
-         x4Gtu1a3vL0x50kDAdznTE6mpC9yyjrmTqVmQKQOqyVHKDEpki+OurTNa0jdrSd61f3+
-         N5fg==
-X-Gm-Message-State: AC+VfDyR1U0ATtrYbT/FJxWglZDD3cmVuQ1fcCnShFiD8DWVZbNHNUY+
-        cLrr3ocryPuQgVVfvmhrxiY7q+Aa8KAsDHZdt0Vd9iUrwQcl78jx9jpTK2bFFx/ASVQ9EiYwrmS
-        LeWgfRZBQRd8tgy1dhNhefVmSKN2NEHM=
-X-Received: by 2002:aa7:d798:0:b0:514:8d90:5eae with SMTP id s24-20020aa7d798000000b005148d905eaemr7695668edq.10.1686213206895;
-        Thu, 08 Jun 2023 01:33:26 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7/3TYVosq9Vkk9XsuP/bbTbwKNJMmJbqqmGF8XXA59BskcFPkPcJZQneF7WCc0m5WHLiJjVg==
-X-Received: by 2002:aa7:d798:0:b0:514:8d90:5eae with SMTP id s24-20020aa7d798000000b005148d905eaemr7695658edq.10.1686213206626;
-        Thu, 08 Jun 2023 01:33:26 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id u11-20020aa7d0cb000000b00514a97b6b80sm270922edo.78.2023.06.08.01.33.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 01:33:26 -0700 (PDT)
-Message-ID: <6203f390-5d06-647a-426d-7671002aec96@redhat.com>
-Date:   Thu, 8 Jun 2023 10:33:25 +0200
+        with ESMTP id S232984AbjFHIfn (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Jun 2023 04:35:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D34B26B2
+        for <linux-media@vger.kernel.org>; Thu,  8 Jun 2023 01:35:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0475161A9C
+        for <linux-media@vger.kernel.org>; Thu,  8 Jun 2023 08:35:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49895C433EF;
+        Thu,  8 Jun 2023 08:35:40 +0000 (UTC)
+Message-ID: <2dee5a48-147a-27ff-b1da-cdb1d238e022@xs4all.nl>
+Date:   Thu, 8 Jun 2023 10:35:38 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 1/3] media: Add MIPI CCI register access helper functions
-To:     Andy Shevchenko <andy@kernel.org>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Thunderbird/102.11.0
+Subject: Re: [RFC 5/7] media: uapi: Add generic serial metadata mbus formats
+Content-Language: en-US
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         linux-media@vger.kernel.org
-References: <20230606165808.70751-1-hdegoede@redhat.com>
- <20230606165808.70751-2-hdegoede@redhat.com>
- <20230607181855.GM5058@pendragon.ideasonboard.com>
- <b558aac9-0a34-ecca-57b0-d132af8cdefb@redhat.com>
- <ZIDjgFtZ7qp6YYz1@smile.fi.intel.com>
-Content-Language: en-US, nl
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <ZIDjgFtZ7qp6YYz1@smile.fi.intel.com>
+Cc:     laurent.pinchart@ideasonboard.com, tomi.valkeinen@ideasonboard.com,
+        bingbu.cao@intel.com, hongju.wang@intel.com
+References: <20230505215257.60704-1-sakari.ailus@linux.intel.com>
+ <20230505215257.60704-6-sakari.ailus@linux.intel.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20230505215257.60704-6-sakari.ailus@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Andy,
-
-On 6/7/23 22:07, Andy Shevchenko wrote:
-> On Wed, Jun 07, 2023 at 09:01:40PM +0200, Hans de Goede wrote:
->> On 6/7/23 20:18, Laurent Pinchart wrote:
->>> On Tue, Jun 06, 2023 at 06:58:06PM +0200, Hans de Goede wrote:
+On 05/05/2023 23:52, Sakari Ailus wrote:
+> Add generic serial metadata mbus formats. These formats describe data
+> width and packing but not the content itself. The reason for specifying
+> such formats is that the formats as such are fairly device specific but
+> they are still handled by CSI-2 receiver drivers that should not be aware
+> of device specific formats. What makes generic metadata formats possible
+> is that these formats are parsed by software only, after capturing the
+> data to system memory.
 > 
-> ...
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> ---
+>  .../media/v4l/subdev-formats.rst              | 257 ++++++++++++++++++
+>  include/uapi/linux/media-bus-format.h         |   9 +
+>  2 files changed, 266 insertions(+)
 > 
->>>> +		if (regs[i].delay_us)
->>>> +			fsleep(regs[i].delay_us);
->>>
->>> Do you have an immediate need for this ? If not, I'd drop support for
->>> the delay, and add it later when and if needed. It will be easier to
->>> discuss the API and use cases with a real user.
->>
->> This is a 1:1 mirror of regmap_multi_reg_write() note this uses
->> the existing struct reg_sequence delay_us field and the:
->>
->> 		if (regs[i].delay_us)
->> 			fsleep(regs[i].delay_us);
->>
->> is copied from the implementation of regmap_multi_reg_write()
-> 
-> Reading this I'm wondering if we can actually implement a regmap-cci inside
-> drivers/base/regmap and use it. It might be that this is impossible, but can
-> save us from repeating existing code I think.
+> diff --git a/Documentation/userspace-api/media/v4l/subdev-formats.rst b/Documentation/userspace-api/media/v4l/subdev-formats.rst
+> index a3a35eeed708..1492fff58426 100644
+> --- a/Documentation/userspace-api/media/v4l/subdev-formats.rst
+> +++ b/Documentation/userspace-api/media/v4l/subdev-formats.rst
+> @@ -8234,3 +8234,260 @@ The following table lists the existing metadata formats.
+>  	both sides of the link and the bus format is a fixed
+>  	metadata format that is not configurable from userspace.
+>  	Width and height will be set to 0 for this format.
+> +
+> +Generic Serial Metadata Formats
+> +^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> +
+> +Generic serial metadata formats are used on serial busses where the actual data
+> +content is more or less device specific but the data is transmitted and received
+> +by multiple devices that do not process the data in any way, simply writing
+> +it to system memory for processing in software at the end of the pipeline.
+> +
+> +The more specific variant describing the actual data is used on the internal
+> +source pad of the originating sub-device.
 
-Someone (you I believe?) already suggested this when discussing replacing
-the ov_16bit_addr_reg_helpers.h . This is not possible because regmap
-assumes a fixed register width for the device and this assumption is
-all over the place in regmap.
+As Laurent said as well, the mention of 'internal source pad' is confusing.
 
-The whole purpose of the CCI helpers is to provide a thin layer on top
-to deal with different register widths while delegating everything else
-to regmap.
+Aren't there two possibilities here? Either the entity has just a source pad
+that delivers the metadata, and that source pad has the precise metadata
+format. Or the entity supports routing and then there is a sink pad connected
+to an internal source that is routed to a source pad. In that case that sink
+pad has the precise metadata format.
+
+Apologies if I am wrong, it's hard to keep track of all the possibilities,
+especially if you do not use this regularly.
+
+> +
+> +"b" in an array cell signifies a byte of data, followed by the number of byte
+> +and finally the bit number in subscript. "p" indicates a padding bit.
+> +
+> +.. _media-bus-format-generic-meta:
+> +
+> +.. cssclass: longtable
+> +
+> +.. flat-table:: Generic Serial Metadata Formats
+> +    :header-rows:  2
+> +    :stub-columns: 0
+> +
+> +    * - Identifier
+> +      - Code
+> +      -
+> +      - :cspan:`23` Data organization
+> +    * -
+> +      -
+> +      - Bit
+> +      - 23
+> +      - 22
+> +      - 21
+> +      - 20
+> +      - 19
+> +      - 18
+> +      - 17
+> +      - 16
+> +      - 15
+> +      - 14
+> +      - 13
+> +      - 12
+> +      - 11
+> +      - 10
+> +      - 9
+> +      - 8
+> +      - 7
+> +      - 6
+> +      - 5
+> +      - 4
+> +      - 3
+> +      - 2
+> +      - 1
+> +      - 0
+> +    * .. _MEDIA-BUS-FMT-META-1X8-8:
+> +
+> +      - MEDIA_BUS_FMT_META_1X8_8
+> +      - 0x8001
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      - b0\ :sub:`7`
+> +      - b0\ :sub:`6`
+> +      - b0\ :sub:`5`
+> +      - b0\ :sub:`4`
+> +      - b0\ :sub:`3`
+> +      - b0\ :sub:`2`
+> +      - b0\ :sub:`1`
+> +      - b0\ :sub:`0`
+> +    * .. _MEDIA-BUS-FMT-META-1X8-10:
+> +
+> +      - MEDIA_BUS_FMT_META_1X8_10
+> +      - 0x8002
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      - b0\ :sub:`7`
+> +      - b0\ :sub:`6`
+> +      - b0\ :sub:`5`
+> +      - b0\ :sub:`4`
+> +      - b0\ :sub:`3`
+> +      - b0\ :sub:`2`
+> +      - b0\ :sub:`1`
+> +      - b0\ :sub:`0`
+> +      - p
+> +      - p
+> +    * .. _MEDIA-BUS-FMT-META-1X8-12:
+> +
+> +      - MEDIA_BUS_FMT_META_1X8_12
+> +      - 0x8003
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      - b0\ :sub:`7`
+> +      - b0\ :sub:`6`
+> +      - b0\ :sub:`5`
+> +      - b0\ :sub:`4`
+> +      - b0\ :sub:`3`
+> +      - b0\ :sub:`2`
+> +      - b0\ :sub:`1`
+> +      - b0\ :sub:`0`
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> +    * .. _MEDIA-BUS-FMT-META-1X8-14:
+> +
+> +      - MEDIA_BUS_FMT_META_1X8_14
+> +      - 0x8004
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      - b0\ :sub:`7`
+> +      - b0\ :sub:`6`
+> +      - b0\ :sub:`5`
+> +      - b0\ :sub:`4`
+> +      - b0\ :sub:`3`
+> +      - b0\ :sub:`2`
+> +      - b0\ :sub:`1`
+> +      - b0\ :sub:`0`
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> +    * .. _MEDIA-BUS-FMT-META-1X8-16:
+> +
+> +      - MEDIA_BUS_FMT_META_1X8_16
+> +      - 0x8005
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      - b0\ :sub:`7`
+> +      - b0\ :sub:`6`
+> +      - b0\ :sub:`5`
+> +      - b0\ :sub:`4`
+> +      - b0\ :sub:`3`
+> +      - b0\ :sub:`2`
+> +      - b0\ :sub:`1`
+> +      - b0\ :sub:`0`
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> +    * .. _MEDIA-BUS-FMT-META-1X8-20:
+> +
+> +      - MEDIA_BUS_FMT_META_1X8_20
+> +      - 0x8007
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      - b0\ :sub:`7`
+> +      - b0\ :sub:`6`
+> +      - b0\ :sub:`5`
+> +      - b0\ :sub:`4`
+> +      - b0\ :sub:`3`
+> +      - b0\ :sub:`2`
+> +      - b0\ :sub:`1`
+> +      - b0\ :sub:`0`
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> +    * .. _MEDIA-BUS-FMT-META-1X8-24:
+> +
+> +      - MEDIA_BUS_FMT_META_1X8_24
+> +      - 0x8009
+> +      -
+> +      - b0\ :sub:`7`
+> +      - b0\ :sub:`6`
+> +      - b0\ :sub:`5`
+> +      - b0\ :sub:`4`
+> +      - b0\ :sub:`3`
+> +      - b0\ :sub:`2`
+> +      - b0\ :sub:`1`
+> +      - b0\ :sub:`0`
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> +      - p
+> diff --git a/include/uapi/linux/media-bus-format.h b/include/uapi/linux/media-bus-format.h
+> index a03c543cb072..722463523bbd 100644
+> --- a/include/uapi/linux/media-bus-format.h
+> +++ b/include/uapi/linux/media-bus-format.h
+> @@ -173,4 +173,13 @@
+>   */
+>  #define MEDIA_BUS_FMT_METADATA_FIXED		0x7001
+>  
+> +/* Generic line based metadata formats for serial buses. Next is 0x800b. */
+> +#define MEDIA_BUS_FMT_META_1X8_8		0x8001
+> +#define MEDIA_BUS_FMT_META_1X8_10		0x8002
+> +#define MEDIA_BUS_FMT_META_1X8_12		0x8003
+> +#define MEDIA_BUS_FMT_META_1X8_14		0x8004
+> +#define MEDIA_BUS_FMT_META_1X8_16		0x8005
+
+You skip 0x8006 here in case there will be a _18 variant?
+
+> +#define MEDIA_BUS_FMT_META_1X8_20		0x8007
+> +#define MEDIA_BUS_FMT_META_1X8_24		0x8009
+> +
+>  #endif /* __LINUX_MEDIA_BUS_FORMAT_H */
 
 Regards,
 
-Hans
-
-
+	Hans
