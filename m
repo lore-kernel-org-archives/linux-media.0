@@ -2,158 +2,202 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1373C7EE23
-	for <linux-media@archiver.kernel.org>; Thu,  8 Jun 2023 13:18:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5394BC7EE37
+	for <linux-media@archiver.kernel.org>; Thu,  8 Jun 2023 14:07:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236672AbjFHNR7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 8 Jun 2023 09:17:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47902 "EHLO
+        id S236814AbjFHOHC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 8 Jun 2023 10:07:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234086AbjFHNRx (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Jun 2023 09:17:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A821BD6
-        for <linux-media@vger.kernel.org>; Thu,  8 Jun 2023 06:17:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686230229;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/FNjp5Ec56Wc0xx/EwnuWM1/BFNIiJMjIHY+dLjxpPY=;
-        b=UfKcFgEoP/YOFDyzjDxip+Sq+sjlZw/+bPsh7eP9MeBDoLZiOMAc4slCHAw7GCdRKK+VTh
-        M+BUz0rKNsBiRfqFXyStgw7UPI3l6QfOHLmF2QNEYM5eNudDSnd9xFYwumJUIiR9/qW+rJ
-        IsJYVHb0N0TeAjMAT89LULwRDOaj+m4=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-353-JgLWKpKrMGqi177sonVlkQ-1; Thu, 08 Jun 2023 09:17:08 -0400
-X-MC-Unique: JgLWKpKrMGqi177sonVlkQ-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-97542592eb9so65821566b.2
-        for <linux-media@vger.kernel.org>; Thu, 08 Jun 2023 06:17:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686230226; x=1688822226;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/FNjp5Ec56Wc0xx/EwnuWM1/BFNIiJMjIHY+dLjxpPY=;
-        b=jrtBiGlJjF24lsgO0gkKlP+DNTx3lkPxENzXtHzb8B25pu0rvRTM3f6WS+vvOGJDPA
-         71cGzWRzSuJe3DvTLKeB0JfNEBicz1lDZYo9zIMRbHEUc8al/O5K4IWrzfcOBHLke14G
-         55WSB7vL4xOZTNIKZkZOq+VPzq/F06uRcjDdMtfMgdZi4nrIvDrq//moVVk5PlpSBMdj
-         h0BtK0JlMFCUTNIr/qj3iKFEfCyjLDMYXA6mahJBwqJi386UOheBlJXF/EzY0yxRyAQp
-         Y62Ug8rp0GQS80SirVSNWV5jUyiM8R72oTOV9VNLjJjydUBFtxEdI0mf97qXhaRZUog7
-         rGJg==
-X-Gm-Message-State: AC+VfDxAPA5LioAban9Z1a4ZVJ5zzGaHRv5WNotNJxe/997flU/inANG
-        09uXoSau1G3aBlXvxrn1yTD7bI6BIBMLWB30gjo4xVJ415cvfzw367WUUDrNuRY9BNxSRNFctxu
-        chDtJ8jM43MCQIj2NV/zQN2nGD4Cc4ww=
-X-Received: by 2002:a17:907:3da1:b0:94f:7edf:8fa1 with SMTP id he33-20020a1709073da100b0094f7edf8fa1mr11974258ejc.32.1686230226729;
-        Thu, 08 Jun 2023 06:17:06 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5xzGbybp/BFtr/ICE/QKaAapIQgEL2HoqBBsVJd8Wp5YM2vyFi8PH82uw69yB/QK3gTp2D3w==
-X-Received: by 2002:a17:907:3da1:b0:94f:7edf:8fa1 with SMTP id he33-20020a1709073da100b0094f7edf8fa1mr11974237ejc.32.1686230226436;
-        Thu, 08 Jun 2023 06:17:06 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id d13-20020a170906370d00b00977d0f1c5bcsm684174ejc.69.2023.06.08.06.17.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 06:17:05 -0700 (PDT)
-Message-ID: <989e1e71-47d3-e9aa-6b0e-c1dcc78bf843@redhat.com>
-Date:   Thu, 8 Jun 2023 15:17:04 +0200
+        with ESMTP id S236756AbjFHOHB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Jun 2023 10:07:01 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F5C2D6B;
+        Thu,  8 Jun 2023 07:06:54 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D7C866606EC6;
+        Thu,  8 Jun 2023 15:06:51 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686233212;
+        bh=kjaR2FllOAiVWb1avCR9mHDwOW3pyNO/oWSCjV78BAc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=TVvR7iryuWlbkSiuF6gLKPyzY0lkWiW0S4sfQbmL9Ot735qZKnwu7q8Y4m9dy+qNz
+         /A8VY9pXimTXQxsP6gmHHAuoIqhBrgdajJGJIPEs149yISjp5O5f9+f4IC+yseut3T
+         YX/ciQyFzQN8oeSctF4/or4Gb4OUBCsxyZ9DMgAfinyqCd08/5N08AzL9cOxwiU6Xz
+         KPLR3O5cjKx79z2kkuTi3cRsnqpkkPYPACWVqIdSfMzfGwZbT5OvRTy3yktyKzYLvT
+         NaPnF8L4ojB0uORsCxJfEACWlKL3mx50QJ6IsMsb/kARqWD7i+L+lDn+ON+7HC9h5I
+         9fz8uWy3BERlg==
+Message-ID: <925956db-9001-7a4f-700e-c84220103201@collabora.com>
+Date:   Thu, 8 Jun 2023 16:06:48 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 05/28] media: ov2680: Don't take the lock for try_fmt
- calls
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Daniel Scally <dan.scally@ideasonboard.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org
-References: <20230607164712.63579-1-hdegoede@redhat.com>
- <20230607164712.63579-6-hdegoede@redhat.com>
- <ZIHNQ4JngKVJKMYu@kekkonen.localdomain>
- <20230608124830.GR5058@pendragon.ideasonboard.com>
-Content-Language: en-US, nl
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230608124830.GR5058@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2,04/10] media: mediatek: vcodec: remove the dependency
+ of debug log
+Content-Language: en-US
+To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        =?UTF-8?B?WXVuZmVpIERvbmcgKOiRo+S6kemjnik=?= 
+        <Yunfei.Dong@mediatek.com>,
+        "nhebert@chromium.org" <nhebert@chromium.org>,
+        "wenst@chromium.org" <wenst@chromium.org>,
+        "nfraprado@collabora.com" <nfraprado@collabora.com>,
+        "benjamin.gaignard@collabora.com" <benjamin.gaignard@collabora.com>,
+        "hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "frkoenig@chromium.org" <frkoenig@chromium.org>,
+        "stevecho@chromium.org" <stevecho@chromium.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "hsinyi@chromium.org" <hsinyi@chromium.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20230607084901.28021-1-yunfei.dong@mediatek.com>
+ <20230607084901.28021-5-yunfei.dong@mediatek.com>
+ <ad28c125d9efca1f7e422fffe42dd56cef66b349.camel@collabora.com>
+ <6bb7e4b283332f1b76c1550347cb245a57eee90b.camel@mediatek.com>
+ <ac3f4becf89d909503caeb8a05883fc38afccd41.camel@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <ac3f4becf89d909503caeb8a05883fc38afccd41.camel@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
-
-On 6/8/23 14:48, Laurent Pinchart wrote:
-> Hi Sakari,
-> 
-> On Thu, Jun 08, 2023 at 12:44:51PM +0000, Sakari Ailus wrote:
->> On Wed, Jun 07, 2023 at 06:46:49PM +0200, Hans de Goede wrote:
->>> On ov2680_set_fmt() calls with format->which == V4L2_SUBDEV_FORMAT_TRY,
->>> ov2680_set_fmt() does not talk to the sensor.
->>>
->>> So in this case there is no need to lock the sensor->lock mutex or
->>> to check that the sensor is streaming.
->>>
->>> Fixes: 3ee47cad3e69 ("media: ov2680: Add Omnivision OV2680 sensor driver")
->>> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
->>> ---
->>>  drivers/media/i2c/ov2680.c | 20 +++++++++-----------
->>>  1 file changed, 9 insertions(+), 11 deletions(-)
->>>
->>> diff --git a/drivers/media/i2c/ov2680.c b/drivers/media/i2c/ov2680.c
->>> index d90bbca6e913..a26a6f18f4f1 100644
->>> --- a/drivers/media/i2c/ov2680.c
->>> +++ b/drivers/media/i2c/ov2680.c
->>> @@ -592,24 +592,22 @@ static int ov2680_set_fmt(struct v4l2_subdev *sd,
->>>  	if (format->pad != 0)
->>>  		return -EINVAL;
->>>  
->>> -	mutex_lock(&sensor->lock);
->>> -
->>> -	if (sensor->is_streaming) {
->>> -		ret = -EBUSY;
->>> -		goto unlock;
->>> -	}
->>> -
->>>  	mode = v4l2_find_nearest_size(ov2680_mode_data,
->>>  				      ARRAY_SIZE(ov2680_mode_data), width,
->>>  				      height, fmt->width, fmt->height);
->>> -	if (!mode) {
->>> -		ret = -EINVAL;
->>> -		goto unlock;
->>> -	}
->>> +	if (!mode)
->>> +		return -EINVAL;
->>>  
->>>  	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
->>>  		try_fmt = v4l2_subdev_get_try_format(sd, sd_state, 0);
->>>  		format->format = *try_fmt;
+Il 08/06/23 15:11, Nicolas Dufresne ha scritto:
+> Le jeudi 08 juin 2023 à 07:27 +0000, Yunfei Dong (董云飞) a écrit :
+>> Hi Nicolas,
 >>
->> Access to sd_state needs to be serialised, so mutex should be held here.
+>> Thanks for your review.
+>> On Wed, 2023-06-07 at 21:41 -0400, Nicolas Dufresne wrote:
+>>>   	
+>>> External email : Please do not click links or open attachments until
+>>> you have verified the sender or the content.
+>>>   Hi Yunfei,
+>>>
+>>> Le mercredi 07 juin 2023 à 16:48 +0800, Yunfei Dong a écrit :
+>>>> 'mtk_vcodec_debug' and 'mtk_vcodec_err' depends on 'mtk_vcodec_ctx'
+>>>> to get the index of each instance, using the index directly instead
+>>>> of with 'mtk_vcodec_ctx'.
+>>>>
+>>>> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+>>>> ---
+>>>>   .../mediatek/vcodec/mtk_vcodec_util.h         |  26 ++-
+>>>>   .../vcodec/vdec/vdec_av1_req_lat_if.c         | 105 +++++++-----
+>>>>   .../mediatek/vcodec/vdec/vdec_h264_if.c       |  62 ++++---
+>>>>   .../mediatek/vcodec/vdec/vdec_h264_req_if.c   |  39 +++--
+>>>>   .../vcodec/vdec/vdec_h264_req_multi_if.c      |  80 +++++----
+>>>>   .../vcodec/vdec/vdec_hevc_req_multi_if.c      |  67 ++++----
+>>>>   .../mediatek/vcodec/vdec/vdec_vp8_if.c        |  54 ++++---
+>>>>   .../mediatek/vcodec/vdec/vdec_vp8_req_if.c    |  46 +++---
+>>>>   .../mediatek/vcodec/vdec/vdec_vp9_if.c        | 152 ++++++++++--
+>>> ------
+>>>>   .../vcodec/vdec/vdec_vp9_req_lat_if.c         |  84 ++++++----
+>>>>   .../platform/mediatek/vcodec/vdec_vpu_if.c    |  59 ++++---
+>>>>   .../mediatek/vcodec/venc/venc_h264_if.c       |  86 +++++-----
+>>>>   .../mediatek/vcodec/venc/venc_vp8_if.c        |  48 +++---
+>>>>   .../platform/mediatek/vcodec/venc_vpu_if.c    |  64 ++++----
+>>>>   14 files changed, 565 insertions(+), 407 deletions(-)
+>>>>
+>>>> diff --git
+>>> a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h
+>>> b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h
+>>>> index ecb0bdf3a4f4..ddc12c3e2983 100644
+>>>> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h
+>>>> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h
+>>>> @@ -31,9 +31,8 @@ struct mtk_vcodec_dev;
+>>>>   #define mtk_v4l2_err(fmt, args...)                \
+>>>>   pr_err("[MTK_V4L2][ERROR] " fmt "\n", ##args)
+>>>>   
+>>>> -#define mtk_vcodec_err(h, fmt, args...)\
+>>>> -pr_err("[MTK_VCODEC][ERROR][%d]: " fmt "\n",\
+>>>> -       ((struct mtk_vcodec_ctx *)(h)->ctx)->id, ##args)
+>>>> +#define mtk_vcodec_err(plat_dev, inst_id, fmt,
+>>> args...)                                 \
+>>>> +dev_err(&(plat_dev)->dev, "[MTK_VCODEC][ERROR][%d]: " fmt "\n",
+>>> inst_id, ##args)
+>>>>   
+>>>>   #if defined(CONFIG_DEBUG_FS)
+>>>>   extern int mtk_v4l2_dbg_level;
+>>>> @@ -46,27 +45,24 @@ extern int mtk_vcodec_dbg;
+>>>>    __func__, __LINE__, ##args);        \
+>>>>   } while (0)
+>>>>   
+>>>> -#define mtk_vcodec_debug(h, fmt, args...)                      \
+>>>> -do {                      \
+>>>> -if (mtk_vcodec_dbg)                      \
+>>>> -dev_dbg(&(((struct mtk_vcodec_ctx *)(h)->ctx)->dev->plat_dev-
+>>>> dev),   \
+>>>> -"[MTK_VCODEC][%d]: %s, %d " fmt "\n",                         \
+>>>> -((struct mtk_vcodec_ctx *)(h)->ctx)->id,                      \
+>>>> -__func__, __LINE__, ##args);                                  \
+>>>> +#define mtk_vcodec_debug(plat_dev, inst_id, fmt,
+>>> args...)                               \
+>>>> +do
+>>> {
+>>>          \
+>>>> +if
+>>> (mtk_vcodec_dbg)
+>>> \
+>>>> +dev_dbg(&(plat_dev)->dev, "[MTK_VCODEC][%d]: %s, %d " fmt "\n", \
+>>>
+>>> At least in this patch, you systematically pass plat_dev as
+>>> <something>->ctx->dev->plat_dev, which is quite long and verbose, any
+>>> reason we
+>>> can't just pass that <something> here ? We can follow the same
+>>> structure path
+>>> for both encoder/decoder ?
+>>>
+>>
+>> In order to separate encode and decoder, need to define two different
+>> struct mtk_vcodec_dec_ctx and struct mtk_vcodec_enc_ctx.
+>>
+>> struct mtk_vcodec_ctx won't be used again, need to use platform device
+>> to print dev_dbg and dev_err.
+>>
+>> encoder and decoder using the same interface to print log message.
 > 
-> This operation should be called with the state lock held already, so I
-> don't think any extra locking is needed.
+> Just a reminder, I'm just making suggestions, there is no strict action required
+> here other then a discussion to try and make the logging a bit more light.
+> 
+> My points was that C macros don't care about types, so if you keep the path to
+> the platform device the same (ctx->dev->plat_dev), you could just pass the ctx
+> as argument. What I don't know though myself, is if this is actually feasible in
+> all code path, but considering you had access to the instance previously, I
+> thought it should.
+> 
 
-Right sd_state is allocated per v4l2-subdev fd so I would expect
-the caller to take care of any necessary locking here.
+One macro used to access two different structures?
+
+Please, no.
 
 Regards,
+Angelo
 
-Hans
-
-
-
-
+> regards,
+> Nicolas
 > 
->>> +		return 0;
->>> +	}
->>> +
->>> +	mutex_lock(&sensor->lock);
->>> +
->>> +	if (sensor->is_streaming) {
->>> +		ret = -EBUSY;
->>>  		goto unlock;
->>>  	}
->>>  
+>>
+>> Best Regards,
+>> Yunfei Dong
+>>>> +inst_id, __func__, __LINE__, ##args);                   \
+>>>>   } while (0)
+>>>>   #else
+>>>>   #define mtk_v4l2_debug(level, fmt, args...) pr_debug(fmt, ##args)
+>>>>   
+>>>> -#define mtk_vcodec_debug(h, fmt, args...)\
+>>>> -pr_debug("[MTK_VCODEC][%d]: " fmt "\n",\
+>>>
+>> ...snip...
 > 
 
