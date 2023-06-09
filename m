@@ -2,125 +2,107 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3994AC7EE45
-	for <linux-media@archiver.kernel.org>; Fri,  9 Jun 2023 19:50:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12F87C7EE2E
+	for <linux-media@archiver.kernel.org>; Fri,  9 Jun 2023 20:43:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232033AbjFITud (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 9 Jun 2023 15:50:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48232 "EHLO
+        id S232338AbjFIUnU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 9 Jun 2023 16:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232031AbjFITua (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Jun 2023 15:50:30 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A6835B6;
-        Fri,  9 Jun 2023 12:50:24 -0700 (PDT)
-Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S229471AbjFIUnT (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Jun 2023 16:43:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F123C30ED
+        for <linux-media@vger.kernel.org>; Fri,  9 Jun 2023 13:42:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686343354;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=i8u5YBtgug7p9/d4nlwZdckLX/Cv1cwVjAeKYPeg0YE=;
+        b=OpxdvFFhF/HYa5YT3wVrurujSWIvy+z+VE81/NlNli/o+DbQDsnNp3bGLIE1h2G20bQGKL
+        9c/NuDAvL948QvnYX5i00W+ZVxWmnbiow1d1WvREFGVF942YlEH9YpzFeHT9+NAOZ1VbnW
+        aBLHbzf4skleNPYe6RDmrtHT0KvgFrc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-209-99Kg8QYpM8a6O7fJ6zqO9g-1; Fri, 09 Jun 2023 16:42:30 -0400
+X-MC-Unique: 99Kg8QYpM8a6O7fJ6zqO9g-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id EECC16606F38;
-        Fri,  9 Jun 2023 20:50:19 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686340223;
-        bh=sT2pRLDd7z+EnfSme49Ke9q6MWh5t4ZyOMO6CUyMwM0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=atA08n8m54vjX8SBuJeS3IX0TrUn1O020hMGKaJHiQzkVm57wBUvh8VuKZA2+M1zX
-         AUIdD6zroJTMWm/k7oLKCjc1qFMvuD2aV95jDEKi8vEkqDrm1fU44qOGQb2ZeGarfK
-         I0HIGj4ZWTJzmDsQSnAeWNC0d2F8pJgR/SVvQqT0cR8gyNl2uz6mblbs5A7PlmnVn5
-         ltmRGEzJrK45v6t5JBUq+cl8F44x6Y37o1Cearg+Eq+v74N3uzFqEn8XrEP7G1halb
-         nPTP1IRxOBsy2mwrtUhDX9VWNG3maLm08mATRZsS2uNduFpsZ9+L+6wH061UHHYvkv
-         sZeu4/YIdPXCw==
-Date:   Fri, 9 Jun 2023 15:50:15 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Nathan Hebert <nhebert@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v4,3/4] media: mediatek: vcodec: move core context from
- device to each instance
-Message-ID: <5d15905d-2a7b-4eb6-9f52-38303eaf5292@notapiano>
-References: <20230525014009.23345-1-yunfei.dong@mediatek.com>
- <20230525014009.23345-4-yunfei.dong@mediatek.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6AA918007D9;
+        Fri,  9 Jun 2023 20:42:30 +0000 (UTC)
+Received: from shalem.redhat.com (unknown [10.39.192.16])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 366C840CFD00;
+        Fri,  9 Jun 2023 20:42:29 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Dan Scally <dan.scally@ideasonboard.com>,
+        Hao Yao <hao.yao@intel.com>, Bingbu Cao <bingbu.cao@intel.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH 0/4] platform/x86: int3472: discrete: Regulator rework / Lenovo Miix 510 support
+Date:   Fri,  9 Jun 2023 22:42:24 +0200
+Message-Id: <20230609204228.74967-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230525014009.23345-4-yunfei.dong@mediatek.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, May 25, 2023 at 09:40:08AM +0800, Yunfei Dong wrote:
-[..]
-> --- a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
-> +++ b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
-[..]
-> @@ -247,6 +229,8 @@ void vdec_msg_queue_deinit(struct vdec_msg_queue *msg_queue,
->  
->  		kfree(lat_buf->private_data);
->  	}
-> +
-> +	cancel_work_sync(&msg_queue->core_work);
+Hi Dan, Hao Yao and Bingbu Cao,
 
-Hi Yunfei,
+Patches 1/2 drop the sensor-config stuff since I thought we should be
+able to make things work without any board specific fixups.
 
-this hunk is causing warnings during boot and when exercising the decoder with
-fluster on mt8192-asurada-spherion. This deinit function is called on the
-v4l2 release callback, even though the work might not have been initialized as
-that only happens if/when the codec specific 'decode' callback is called (as a
-result of device_run m2m callback).
+This is the result of my working on getting IPU6 to work on Jasper Lake
+for $dayjob and then tonight I switched to trying to get the ov2680
+on the Lenovo Miix 510 to work and it turns out that does require some
+board specific workarounds after all :|
 
-Thanks,
-Nícolas
+With this series together with my recent ov2680 sensor driver series:
+https://lore.kernel.org/linux-media/20230607164712.63579-1-hdegoede@redhat.com/
+I can get the ov2680 driver to load and successfully read the id register:
 
-<4>[  496.164381] ------------[ cut here ]------------
-<4>[  496.169259] WARNING: CPU: 5 PID: 2338 at kernel/workqueue.c:3376 __flush_work.isra.0+0x23c/0x258
-<4>[  496.178299] Modules linked in: r8153_ecm cdc_ether usbnet r8152 mt7921e mt7921_common mt76_connac_lib mt76 mac80211 btusb btintel btmtk btrtl btbcm cfg80211 bluetooth uvcvideo mt8192_mt6359_rt1015_rt5682 uvc ecdh_generic snd_soc_mt8192_afe ecc videobuf2_vmalloc crct10dif_ce cros_usbpd_logger fuse ip_tables ipv6
-<4>[  496.206108] CPU: 5 PID: 2338 Comm: gst-launch-1.0 Tainted: G        W          6.4.0-rc5-next-20230607+ #475
-<4>[  496.216182] Hardware name: Google Spherion (rev0 - 3) (DT)
-<4>[  496.221915] pstate: 00400009 (nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-<4>[  496.229125] pc : __flush_work.isra.0+0x23c/0x258
-<4>[  496.233992] lr : __cancel_work_timer+0x14c/0x1c8
-<4>[  496.238859] sp : ffff8000896e3b00
-<4>[  496.242423] x29: ffff8000896e3b00 x28: ffff57c3d4079f80 x27: 0000000000000000
-<4>[  496.249807] x26: ffff57c3d4079f80 x25: ffffb76395b59dc8 x24: 0000000000000001
-<4>[  496.257191] x23: ffffb763928daab8 x22: ffff57c3d4079f80 x21: 0000000000000000
-<4>[  496.264575] x20: ffffb763955f6778 x19: ffff57c3cf06f4a0 x18: 0000000000000000
-<4>[  496.271958] x17: 000000040044ffff x16: 005000f2b5503510 x15: 0000000000000000
-<4>[  496.279342] x14: ffff57c3c03a1f80 x13: ffffa0616a2fc000 x12: 000000003464d91d
-<4>[  496.286726] x11: 0000000000000000 x10: 0000000000001b10 x9 : ffffb763928de61c
-<4>[  496.294110] x8 : ffff57c3d407baf0 x7 : 0000000000000000 x6 : ffff57c3d4079f80
-<4>[  496.301494] x5 : ffff57c3d4079f80 x4 : 0000000000000000 x3 : 0000000000000000
-<4>[  496.308878] x2 : ffff8000896e3bf0 x1 : 0000000000000011 x0 : 0000000000000000
-<4>[  496.316262] Call trace:
-<4>[  496.318958]  __flush_work.isra.0+0x23c/0x258
-<4>[  496.323477]  __cancel_work_timer+0x14c/0x1c8
-<4>[  496.327996]  cancel_work_sync+0x1c/0x30
-<4>[  496.332082]  vdec_msg_queue_deinit+0xac/0xc8
-<4>[  496.336604]  vdec_h264_slice_deinit+0x64/0xb8
-<4>[  496.341211]  vdec_if_deinit+0x3c/0x68
-<4>[  496.345123]  mtk_vcodec_dec_release+0x20/0x40
-<4>[  496.349729]  fops_vcodec_release+0x50/0xd8
-<4>[  496.354074]  v4l2_release+0x7c/0x100
-<4>[  496.357900]  __fput+0x80/0x270
-<4>[  496.361205]  ____fput+0x18/0x30
-<4>[  496.364595]  task_work_run+0x78/0xe0
-<4>[  496.368420]  do_notify_resume+0x29c/0x7f8
-<4>[  496.372680]  el0_svc+0xa4/0xb8
-<4>[  496.375987]  el0t_64_sync_handler+0xc0/0xc8
-<4>[  496.380423]  el0t_64_sync+0x1a8/0x1b0
-<4>[  496.384336] ---[ end trace 0000000000000000 ]---
+[   11.365319] ipu3-cio2 0000:00:14.3: Found supported sensor OVTI2680:00
+[   11.431595] ov2680 i2c-OVTI2680:00: supply DOVDD not found, using dummy regulator
+[   11.433125] ov2680 i2c-OVTI2680:00: supply DVDD not found, using dummy regulator
+[   11.454698] ov2680 i2c-OVTI2680:00: sensor_revision id = 0x2680, rev= 0
+
+Dan, currently the DMI match used only matches the 12IKB version of
+the Miix 510 I think you have a 12ISK version. Can you verify this
+works there too?  I guess we can just drop the KB part of the DMI
+match if this works on the 12ISK version too.
+
+Hao Yao and Bingbu Cao I think that the way the issue with how different
+drivers may expect different regulator supply-ids is of interest to you
+too. Note I see that the mainline version of ov13b10.c does not have
+regulator support at all yet. So when adding this please just use
+one of the existing set of supply-names + the bulk API like how
+the ov5693.c driver is doing. In this case no int3472 driver changes
+will be necessary at all.
+
+Regards,
+
+Hans
+
+
+Hans de Goede (4):
+  platform/x86: int3472: discrete: Drop GPIO remapping support
+  platform/x86: int3472: discrete: Remove sensor_config-s
+  platform/x86: int3472: discrete: Add support for 1 GPIO regulator
+    shared between 2 sensors
+  platform/x86: int3472: discrete: Add alternative "AVDD" regulator
+    supply name
+
+ .../x86/intel/int3472/clk_and_regulator.c     | 72 ++++++++++++++----
+ drivers/platform/x86/intel/int3472/common.h   | 14 +---
+ drivers/platform/x86/intel/int3472/discrete.c | 76 ++-----------------
+ 3 files changed, 66 insertions(+), 96 deletions(-)
+
+-- 
+2.40.1
+
