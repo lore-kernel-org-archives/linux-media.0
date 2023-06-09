@@ -2,129 +2,73 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38099C7EE2E
-	for <linux-media@archiver.kernel.org>; Fri,  9 Jun 2023 09:51:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 454C7C7EE37
+	for <linux-media@archiver.kernel.org>; Fri,  9 Jun 2023 09:53:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241353AbjFIJu7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 9 Jun 2023 05:50:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43042 "EHLO
+        id S241828AbjFIJxt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 9 Jun 2023 05:53:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241344AbjFIJuX (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Jun 2023 05:50:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D04728C
-        for <linux-media@vger.kernel.org>; Fri,  9 Jun 2023 02:43:55 -0700 (PDT)
+        with ESMTP id S241827AbjFIJxD (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Jun 2023 05:53:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA343C07
+        for <linux-media@vger.kernel.org>; Fri,  9 Jun 2023 02:45:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6431C60E94
-        for <linux-media@vger.kernel.org>; Fri,  9 Jun 2023 09:43:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63817C433EF;
-        Fri,  9 Jun 2023 09:43:16 +0000 (UTC)
-Message-ID: <da55b552-08ce-6bbe-c70b-eda6f53727f0@xs4all.nl>
-Date:   Fri, 9 Jun 2023 11:43:14 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 60785612DC
+        for <linux-media@vger.kernel.org>; Fri,  9 Jun 2023 09:45:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A103C433D2
+        for <linux-media@vger.kernel.org>; Fri,  9 Jun 2023 09:45:12 +0000 (UTC)
+Message-ID: <3ba0c0ef-cb63-5cb1-fe0a-a053019da9b6@xs4all.nl>
+Date:   Fri, 9 Jun 2023 11:45:11 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
 Content-Language: en-US
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>
 From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [PATCH] media: i2c: adp1653: don't reuse the same node pointer
+Subject: [GIT PULL FOR v6.5] smatch fixes
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The child device_node pointer was used for two different childs.
-This confused smatch, causing this warning:
+This cleans up some of the reported smatch issues.
 
-drivers/media/i2c/adp1653.c:444 adp1653_of_init() warn: missing unwind goto?
+Regards,
 
-Use two different pointers, one for each child node, and add separate
-goto labels for each node as well. This also improves error logging
-since it will now state for which node the property was missing.
+	Hans
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
-diff --git a/drivers/media/i2c/adp1653.c b/drivers/media/i2c/adp1653.c
-index 98ca417b8004..04ec465aaa94 100644
---- a/drivers/media/i2c/adp1653.c
-+++ b/drivers/media/i2c/adp1653.c
-@@ -411,43 +411,43 @@ static int adp1653_of_init(struct i2c_client *client,
- 			   struct device_node *node)
- {
- 	struct adp1653_platform_data *pd;
--	struct device_node *child;
-+	struct device_node *node_flash, *node_indicator;
+The following changes since commit aafeeaf3d2a8a91a5407c774c578abec79dcff00:
 
- 	pd = devm_kzalloc(&client->dev, sizeof(*pd), GFP_KERNEL);
- 	if (!pd)
- 		return -ENOMEM;
- 	flash->platform_data = pd;
+  media: video-mux: update driver to active state (2023-05-26 10:58:18 +0100)
 
--	child = of_get_child_by_name(node, "flash");
--	if (!child)
-+	node_flash = of_get_child_by_name(node, "flash");
-+	if (!node_flash)
- 		return -EINVAL;
+are available in the Git repository at:
 
--	if (of_property_read_u32(child, "flash-timeout-us",
-+	if (of_property_read_u32(node_flash, "flash-timeout-us",
- 				 &pd->max_flash_timeout))
--		goto err;
-+		goto err_flash;
+  git://linuxtv.org/hverkuil/media_tree.git tags/br-v6.5j
 
--	if (of_property_read_u32(child, "flash-max-microamp",
-+	if (of_property_read_u32(node_flash, "flash-max-microamp",
- 				 &pd->max_flash_intensity))
--		goto err;
-+		goto err_flash;
+for you to fetch changes up to dbe155da8e6c4ee23adad83f0cd38530c6de63b0:
 
- 	pd->max_flash_intensity /= 1000;
+  media: pci: tw686x: no need to check 'next' (2023-06-09 08:36:34 +0200)
 
--	if (of_property_read_u32(child, "led-max-microamp",
-+	if (of_property_read_u32(node_flash, "led-max-microamp",
- 				 &pd->max_torch_intensity))
--		goto err;
-+		goto err_flash;
+----------------------------------------------------------------
+Tag branch
 
- 	pd->max_torch_intensity /= 1000;
--	of_node_put(child);
-+	of_node_put(node_flash);
+----------------------------------------------------------------
+Hans Verkuil (6):
+      media: rockchip: rga: fix clock cleanup
+      media: usb: as102: drop as102_dev NULL check
+      media: platform: renesas-ceu: drop buf NULL check
+      media: platform: mediatek: vpu: fix NULL ptr dereference
+      media: mediatek: vpu: add missing clk_unprepare
+      media: pci: tw686x: no need to check 'next'
 
--	child = of_get_child_by_name(node, "indicator");
--	if (!child)
-+	node_indicator = of_get_child_by_name(node, "indicator");
-+	if (!node_indicator)
- 		return -EINVAL;
-
--	if (of_property_read_u32(child, "led-max-microamp",
-+	if (of_property_read_u32(node_indicator, "led-max-microamp",
- 				 &pd->max_indicator_intensity))
--		goto err;
-+		goto err_indicator;
-
--	of_node_put(child);
-+	of_node_put(node_indicator);
-
- 	pd->enable_gpio = devm_gpiod_get(&client->dev, "enable", GPIOD_OUT_LOW);
- 	if (IS_ERR(pd->enable_gpio)) {
-@@ -456,9 +456,13 @@ static int adp1653_of_init(struct i2c_client *client,
- 	}
-
- 	return 0;
--err:
--	dev_err(&client->dev, "Required property not found\n");
--	of_node_put(child);
-+err_flash:
-+	dev_err(&client->dev, "Required flash property not found\n");
-+	of_node_put(node_flash);
-+	return -EINVAL;
-+err_indicator:
-+	dev_err(&client->dev, "Required indicator property not found\n");
-+	of_node_put(node_indicator);
- 	return -EINVAL;
- }
-
+ drivers/media/pci/tw686x/tw686x-audio.c       | 2 +-
+ drivers/media/platform/mediatek/vpu/mtk_vpu.c | 7 +++++--
+ drivers/media/platform/renesas/renesas-ceu.c  | 9 ---------
+ drivers/media/platform/rockchip/rga/rga.c     | 4 ++--
+ drivers/media/usb/as102/as102_usb_drv.c       | 6 ++----
+ 5 files changed, 10 insertions(+), 18 deletions(-)
