@@ -2,200 +2,167 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C6A1C7EE37
-	for <linux-media@archiver.kernel.org>; Fri,  9 Jun 2023 09:54:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05C07C7EE25
+	for <linux-media@archiver.kernel.org>; Fri,  9 Jun 2023 09:57:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbjFIJyW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 9 Jun 2023 05:54:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43458 "EHLO
+        id S241918AbjFIJ5c (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 9 Jun 2023 05:57:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbjFIJyC (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Jun 2023 05:54:02 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB20768F;
-        Fri,  9 Jun 2023 02:45:47 -0700 (PDT)
+        with ESMTP id S241923AbjFIJ4q (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Jun 2023 05:56:46 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F1165B5
+        for <linux-media@vger.kernel.org>; Fri,  9 Jun 2023 02:47:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686303947; x=1717839947;
+  t=1686304076; x=1717840076;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=sdk4GfKmT+9A6cNv+r44G3DJaK2ahYk6wc3iwdcCzMY=;
-  b=GBsYEuWPPQNpTOXZKnF6YbH0cCn0ac0ZL9tenRpjfMrwZO90TI1v+iZV
-   5uZAo9HnpngZ3x3bDFmWxYPhLEOfSO1OUliSugbkx/ZtfHbW8t7e6s8z/
-   rpDa5+vugiAvE7XPvfE9MOCBW3XM3z+Gvkgo3mvGRrYU5ghspXuYuVwaP
-   +masI3Ww4FkIk71w9SGBrE3RBjhPMkQYxt0jzKZSLC7aVlAOa74vlrXsR
-   PK7Whk6A6Lb2iEaMVCcMOvDEk0kAIzbajUuvHfm8Mn+Ejo9RlFzPYC92i
-   R0+rvynLOaChiDhEaLE0dWWnIZoIm9r7NS/joh3/5YtGWLjVXgtCEB7dj
+  bh=vrIHRkjDp3lE3EHm994foGsJHYSQkGp+/SVTPYvupoY=;
+  b=Uk9ed1ELuSzTgs+J5x27RjnYhKYyxuZ9SZwUrd+3aQiMyP6MpYmThQv+
+   nlrDnvhJUaKwikpOnQYFSULMyUkrZqIPJHorid/qWfVcFpHbC9XpbUv6e
+   yV+UFyr81ogy574tOo1Fq2+AYhBOmWhL+GqWo6xKfdTu7cJkefCcxbi4a
+   CA6uVxGoviRvDzZpZk0V1TMfvcb1gVNBHquMdIuPM9emnrPvN5BMo8p4F
+   Lv2tCxI28/fvMu93GpGD3ubutRAFFcOCnVIMfBP2By2uPT6BauNHUXtlK
+   IEMt/fZws/ZunJzVwU0QtgtnFVrCqdetqpx8EQcQj4HyEsydGhGyf0YXH
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="355052559"
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="337196541"
 X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
-   d="scan'208";a="355052559"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 02:44:27 -0700
+   d="scan'208";a="337196541"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 02:47:55 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="834581685"
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="800166338"
 X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
-   d="scan'208";a="834581685"
+   d="scan'208";a="800166338"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 02:44:21 -0700
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 02:47:55 -0700
 Received: from kekkonen.localdomain (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id E125511F9D2;
-        Fri,  9 Jun 2023 12:44:18 +0300 (EEST)
-Date:   Fri, 9 Jun 2023 09:44:18 +0000
+        by kekkonen.fi.intel.com (Postfix) with SMTP id 9CCDC11F9D2;
+        Fri,  9 Jun 2023 12:47:52 +0300 (EEST)
+Date:   Fri, 9 Jun 2023 09:47:52 +0000
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Tommaso Merciai <tomm.merciai@gmail.com>
-Cc:     jacopo.mondi@ideasonboard.com, laurent.pinchart@ideasonboard.com,
-        martin.hecht@avnet.eu, michael.roeder@avnet.eu,
-        linuxfancy@googlegroups.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Gerald Loacker <gerald.loacker@wolfvision.net>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nicholas Roth <nicholas@rothemail.net>,
-        Mikhail Rudenko <mike.rudenko@gmail.com>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 2/3] media: dt-bindings: alvium: add document YAML
- binding
-Message-ID: <ZIL0ctohCl5181gJ@kekkonen.localdomain>
-References: <20230608083127.545750-1-tomm.merciai@gmail.com>
- <20230608083127.545750-3-tomm.merciai@gmail.com>
- <ZILkSEllSfSGD8XK@kekkonen.localdomain>
- <ZILzvMBCXfde3COF@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Subject: Re: [PATCH] media: i2c: adp1653: don't reuse the same node pointer
+Message-ID: <ZIL1SCUUzd/xbJ+/@kekkonen.localdomain>
+References: <da55b552-08ce-6bbe-c70b-eda6f53727f0@xs4all.nl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZILzvMBCXfde3COF@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+In-Reply-To: <da55b552-08ce-6bbe-c70b-eda6f53727f0@xs4all.nl>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Tommaso,
+Hi Hans,
 
-On Fri, Jun 09, 2023 at 11:41:16AM +0200, Tommaso Merciai wrote:
-> Hi Sakari,
-> Thanks for your feedback.
-> 
-> On Fri, Jun 09, 2023 at 08:35:20AM +0000, Sakari Ailus wrote:
-> > Hi Tommaso,
-> > 
-> > On Thu, Jun 08, 2023 at 10:31:15AM +0200, Tommaso Merciai wrote:
-> > > Add documentation of device tree in YAML schema for the ALVIUM
-> > > Camera from Allied Vision Inc.
-> > > 
-> > > References:
-> > >  - https://www.alliedvision.com/en/products/embedded-vision-solutions
-> > > 
-> > > Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
-> > > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > > ---
-> > > Changes since v1:
-> > >  - Fixed build error as suggested by RHerring bot
-> > > 
-> > > Changes since v2:
-> > >  - Fixed License as suggested by KKozlowski/CDooley
-> > >  - Removed rotation property as suggested by CDooley/LPinchart
-> > >  - Fixed example node name as suggested by CDooley
-> > >  - Fixed title as suggested by LPinchart
-> > >  - Fixed compatible name as suggested by LPinchart
-> > >  - Removed clock as suggested by LPinchart
-> > >  - Removed gpios not as suggested by LPinchart
-> > >  - Renamed property name streamon-delay into alliedvision,lp2hs-delay-us
-> > >  - Fixed vendor prefix, unit append as suggested by KKozlowski
-> > >  - Fixed data-lanes
-> > >  - Fixed blank space + example indentation (from 6 -> 4 space) as suggested by KKozlowski
-> > >  - Dropped status into example  as suggested by KKozlowski
-> > >  - Added vcc-ext-in supply as suggested by LPinchart
-> > >  - Dropped pinctrl into example as suggested by LPinchart
-> > > 
-> > > Changes since v3:
-> > >  - Fixed vcc-ext-in-supply description as suggested by LPinchart
-> > >  - Fixed alliedvision,lp2hs-delay-us description as suggested by LPinchart
-> > >  - Added maximum to alliedvision,lp2hs-delay-us as suggested by LPinchart
-> > >  - Collected Reviewed-by tag from LPinchart
-> > > 
-> > > Changes since v4:
-> > >  - Fixed id as reported by RHerring bot and LPinchart
-> > >  - Add minimum into alliedvision,lp2hs-delay-us as suggested by CDooley
-> > >  - Tested using make dt_binding_check DT_SCHEMA_FILES=alliedvision,alvium-csi2.yaml
-> > > 
-> > >  .../media/i2c/alliedvision,alvium-csi2.yaml   | 97 +++++++++++++++++++
-> > >  1 file changed, 97 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/media/i2c/alliedvision,alvium-csi2.yaml
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium-csi2.yaml b/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium-csi2.yaml
-> > > new file mode 100644
-> > > index 000000000000..c771e5039641
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium-csi2.yaml
-> > > @@ -0,0 +1,97 @@
-> > > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/media/i2c/alliedvision,alvium-csi2.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Allied Vision Alvium Camera
-> > > +
-> > > +maintainers:
-> > > +  - Tommaso Merciai <tomm.merciai@gmail.com>
-> > > +  - Martin Hecht <martin.hecht@avnet.eu>
-> > > +
-> > > +allOf:
-> > > +  - $ref: /schemas/media/video-interface-devices.yaml#
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    const: alliedvision,alvium-csi2
-> > > +
-> > > +  reg:
-> > > +    maxItems: 1
-> > > +
-> > > +  vcc-ext-in-supply:
-> > > +    description: |
-> > > +      The regulator that supplies power to the VCC_EXT_IN pins.
-> > > +
-> > > +  alliedvision,lp2hs-delay-us:
-> > > +    minimum: 1
-> > > +    maximum: 150000
-> > > +    description: |
-> > > +      Low power to high speed delay time.
-> > > +
-> > > +      If the value is larger than 0, the camera forces a reset of all
-> > > +      D-PHY lanes for the duration specified by this property. All lanes
-> > > +      will transition to the low-power state and back to the high-speed
-> > > +      state after the delay. Otherwise the lanes will transition to and
-> > > +      remain in the high-speed state immediately after power on.
-> > > +
-> > > +      This is meant to help CSI-2 receivers synchronizing their D-PHY
-> > > +      RX.
-> > 
-> > Why do you need this? D-PHY TX is obviously controlled by the driver.
-> > Explicit control of PHY initialisation is of course best option when
-> > combined with some receivers, done via driver's pre_streamon and s_stream
-> > callbacks. Can't your hardware do that?
-> 
-> You mean calculate this time in some dynamical way and program this
-> during pre_streamon or s_stream?
-> 
-> If yes, unfortunately hw can't do this.
+Thanks for the patch.
 
-This shouldn't be based on timing but rather progress of the bus
-initialisation sequence. That's how it works on most sensors nowadays.
+On Fri, Jun 09, 2023 at 11:43:14AM +0200, Hans Verkuil wrote:
+> The child device_node pointer was used for two different childs.
+> This confused smatch, causing this warning:
+> 
+> drivers/media/i2c/adp1653.c:444 adp1653_of_init() warn: missing unwind goto?
+> 
+> Use two different pointers, one for each child node, and add separate
+> goto labels for each node as well. This also improves error logging
+> since it will now state for which node the property was missing.
 
-The description is also lacking details on what delay this exactly is. What
-is the bus state during that delay?
+It would have been better to fix smatch. :-(
+
+I guess changing the driver isn't wrong either still.
+
+> 
+> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+> ---
+> diff --git a/drivers/media/i2c/adp1653.c b/drivers/media/i2c/adp1653.c
+> index 98ca417b8004..04ec465aaa94 100644
+> --- a/drivers/media/i2c/adp1653.c
+> +++ b/drivers/media/i2c/adp1653.c
+> @@ -411,43 +411,43 @@ static int adp1653_of_init(struct i2c_client *client,
+>  			   struct device_node *node)
+>  {
+>  	struct adp1653_platform_data *pd;
+> -	struct device_node *child;
+> +	struct device_node *node_flash, *node_indicator;
+> 
+>  	pd = devm_kzalloc(&client->dev, sizeof(*pd), GFP_KERNEL);
+>  	if (!pd)
+>  		return -ENOMEM;
+>  	flash->platform_data = pd;
+> 
+> -	child = of_get_child_by_name(node, "flash");
+> -	if (!child)
+> +	node_flash = of_get_child_by_name(node, "flash");
+> +	if (!node_flash)
+>  		return -EINVAL;
+> 
+> -	if (of_property_read_u32(child, "flash-timeout-us",
+> +	if (of_property_read_u32(node_flash, "flash-timeout-us",
+>  				 &pd->max_flash_timeout))
+> -		goto err;
+> +		goto err_flash;
+> 
+> -	if (of_property_read_u32(child, "flash-max-microamp",
+> +	if (of_property_read_u32(node_flash, "flash-max-microamp",
+>  				 &pd->max_flash_intensity))
+> -		goto err;
+> +		goto err_flash;
+> 
+>  	pd->max_flash_intensity /= 1000;
+> 
+> -	if (of_property_read_u32(child, "led-max-microamp",
+> +	if (of_property_read_u32(node_flash, "led-max-microamp",
+>  				 &pd->max_torch_intensity))
+> -		goto err;
+> +		goto err_flash;
+> 
+>  	pd->max_torch_intensity /= 1000;
+> -	of_node_put(child);
+> +	of_node_put(node_flash);
+
+How about moving this to where the other node is put, and initialise the
+nodes to NULL and so continue having a single error label?
+
+> 
+> -	child = of_get_child_by_name(node, "indicator");
+> -	if (!child)
+> +	node_indicator = of_get_child_by_name(node, "indicator");
+> +	if (!node_indicator)
+>  		return -EINVAL;
+> 
+> -	if (of_property_read_u32(child, "led-max-microamp",
+> +	if (of_property_read_u32(node_indicator, "led-max-microamp",
+>  				 &pd->max_indicator_intensity))
+> -		goto err;
+> +		goto err_indicator;
+> 
+> -	of_node_put(child);
+> +	of_node_put(node_indicator);
+> 
+>  	pd->enable_gpio = devm_gpiod_get(&client->dev, "enable", GPIOD_OUT_LOW);
+>  	if (IS_ERR(pd->enable_gpio)) {
+> @@ -456,9 +456,13 @@ static int adp1653_of_init(struct i2c_client *client,
+>  	}
+> 
+>  	return 0;
+> -err:
+> -	dev_err(&client->dev, "Required property not found\n");
+> -	of_node_put(child);
+> +err_flash:
+> +	dev_err(&client->dev, "Required flash property not found\n");
+> +	of_node_put(node_flash);
+> +	return -EINVAL;
+> +err_indicator:
+> +	dev_err(&client->dev, "Required indicator property not found\n");
+> +	of_node_put(node_indicator);
+>  	return -EINVAL;
+>  }
+> 
 
 -- 
-Regards,
+Kind regards,
 
 Sakari Ailus
