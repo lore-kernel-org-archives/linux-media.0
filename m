@@ -2,68 +2,68 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55EA4C7EE2F
-	for <linux-media@archiver.kernel.org>; Sat, 10 Jun 2023 17:08:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E702FC77B7A
+	for <linux-media@archiver.kernel.org>; Sat, 10 Jun 2023 17:08:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbjFJRIA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 10 Jun 2023 13:08:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56120 "EHLO
+        id S230352AbjFJRIF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 10 Jun 2023 13:08:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjFJRH7 (ORCPT
+        with ESMTP id S230316AbjFJRIB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 10 Jun 2023 13:07:59 -0400
+        Sat, 10 Jun 2023 13:08:01 -0400
 Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B300C2D68;
-        Sat, 10 Jun 2023 10:07:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE54E2D74;
+        Sat, 10 Jun 2023 10:07:59 -0700 (PDT)
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 76A435C00BA;
-        Sat, 10 Jun 2023 13:07:52 -0400 (EDT)
+        by mailout.nyi.internal (Postfix) with ESMTP id 555E85C00D2;
+        Sat, 10 Jun 2023 13:07:59 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Sat, 10 Jun 2023 13:07:52 -0400
+  by compute6.internal (MEProxy); Sat, 10 Jun 2023 13:07:59 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         invisiblethingslab.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm1; t=1686416872; x=1686503272; bh=CFxrsTHk2WZ2bHj5E7HOWzGC2
-        M6TbCCvBJcoVes5ASQ=; b=HO0vJtT77+rZndOX90RQX40x6vq642GbuMdxU55Ca
-        zeVatV2LwToz78+BK08NzP769skVN+z1oFdl8bU5R0yZdNJ9jpkOcn2Q/JfzDTQQ
-        Ynz3V4ag043lIML+1y895NbuI+eXWQM+vf0q7tIEhg3Y1irGvhk1r/GeSqC26ceX
-        hATz9XyCucDSV/zhLfdkBcBO/QulWpjU9VY8T2Ehu9xXxtrv56Samma8R/JICMc0
-        d3uE+rvdtv1Nm19G4eocL0vTbxmsjOc5ljGXADTU7zOnwI41Ii+7deQXrNPM4CJA
-        hLDYENmpLE0N/5ccHG1kBTmUUASAmZ0Vha3NaQ0oDXffw==
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1686416879; x=1686503279; bh=7Jo4c9QtvH
+        tlbToAB55IunRxRJMuKNem21WfUtrWYf0=; b=R4G872AhYLcgiVT64bv01uWxyk
+        UTwIQzhAviwtIXFLPZXZvAExiP7zCJC1L2DwDvix0Y/EASfsycXqZVWDZYv/W4KD
+        wa1afVEZ+1fTLXff2BL4wiL1DmJUjneB6egjzzThpU7oSwT+n5VRD1uhE3af5Vfy
+        vn3SNtiLfO9TOfggoGNENKVz4LorILzprI6jhwRDoyledV1PZ4Z+7BRY315l64et
+        DJoAyfYhYPgCJnu+1QxzEKf4KKCEh/oPuFIgP+1RdfOEv9whP+j9vPOvziuk8757
+        4sBfrpQU0TpgjfT9CRKmXccMjv+U4IhX4fbkDzlw5y1ICiUdvgEkDaTKyjnA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
-        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
-        :x-me-sender:x-sasl-enc; s=fm1; t=1686416872; x=1686503272; bh=C
-        FxrsTHk2WZ2bHj5E7HOWzGC2M6TbCCvBJcoVes5ASQ=; b=NjIw4pICWS+wOmKQm
-        1JvFxSVOo56p+oLMbtOx+kbeeI6t01RsLM8kprlB/zc679knq1dlFrOL+wE8FEME
-        mmAFpuvGIGrP49cxKoc9kqWhPlX0wpzo6RsFb5N3R67UJ2dptFmLg06xx4lcCyZ7
-        UlXREv/EdYUaSjvsbWGWYqUgABLfxE9j7iDOgeBiovjD/HzfPodvq+g029XHvUfh
-        6R7pVnLpqOA8rK5qepvydgnq7z/Y5Rmn8VRt5rket3TftfDCvOD0oT8URRDlfhgR
-        YWiRqygOUFRunE901x96yp3zyPNkOwHDuYirhZkoe6fFfxT2NBDPynKznM6S/HYa
-        zNNsA==
-X-ME-Sender: <xms:562EZIHNmIhVynvm4xE89UT3qDlPgrSIbHlL_DhLNY3MF9ozhD153w>
-    <xme:562EZBWCkwrOhRchGamiG1LC4POJ4DW7-7uWHjkIJge4DAfzB5BA8hm4kbmQ3i3Vr
-    tmAOoZRv1_hGUo>
-X-ME-Received: <xmr:562EZCKZaSApRloWyugsw47u4f85dZw7icN334m9xVu8tWsQHWZ0pkfwNKljG6gO9g9ZDNGnfEw>
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1686416879; x=
+        1686503279; bh=7Jo4c9QtvHtlbToAB55IunRxRJMuKNem21WfUtrWYf0=; b=X
+        oovcJPuoEjGfvUgRl8xODTUTUISTuoR53DYOjfKU+/3BDsVh9AoXonh+6CGk2Bx7
+        V6rmqF7vS8zoo1Tq/Mq+uSoXdTEUeB0XrE2Z81DFUu+eZzgi4O6WstMXfs6vCds5
+        a3tvdw7mykCNksP4Xqmjr1YqdJZIrni8VQVutX3OVk46TMhnc1+4v2rWIJW82eAL
+        HJk7AWeud3HyBNvLmjin43Ig0qw3YGZb7qhEJHmFsRUDnYKcaRYlV3Lz9PH7ZGKC
+        jHdNH/JiBTewLNml7VzaJoNy/fFJAOtQt80QOMes9VM8/dV+0Vw2NN2wp34Ht7ae
+        uQRe+sBFu1chU7B7k9vqg==
+X-ME-Sender: <xms:762EZFtrsXGWH6Bi3vsdNf7KO0WeAt9CZgF_sw0uvbT6nPQTRvmhrg>
+    <xme:762EZOeT2PjJFMbEpxkmF7v5Ty5_38noAd9nNqfMz21lY7bnR-tZACZY5n9yd1A9l
+    HxBXgLwPt8Ypd8>
+X-ME-Received: <xmr:762EZIzbbCs6lnlbpMn_MlYje7UdvucwNz94immORIpcW5DKbdPhrri6mwCDj-bwC0Rald-kszY>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedutddgudduudcutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhvfevufffkffogggtgfesthekredtredtjeenucfhrhhomhepffgvmhhi
-    ucforghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhngh
-    hslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhephfeggfeiiedtieejgedutdekgfet
-    geehheegteekvefhfefgudehtdevleegueegnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhs
-    lhgrsgdrtghomh
-X-ME-Proxy: <xmx:562EZKErxpgl5N_se3kC8U37cL5hz2WlqsADlcD4GKe7rtwn3Zrp1g>
-    <xmx:562EZOX9QiqhLuzoWJ93E4yM6dzrE0GxOw99lLBSC620PpT0gMQ12g>
-    <xmx:562EZNN0pFTENofYZ29lVzLhPTdxbAtlN0V5TwFhFWiRgfiFnT4dMg>
-    <xmx:6K2EZFOg-xqiLURhcCMM0Nouy_Ve5GKyKJqvBV2aCAS2z947YwW29w>
+    enucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeffvghm
+    ihcuofgrrhhivgcuqfgsvghnohhurhcuoeguvghmihesihhnvhhishhisghlvghthhhinh
+    hgshhlrggsrdgtohhmqeenucggtffrrghtthgvrhhnpeekveekveegudffgffgleekudeu
+    keetlefgveelhfehuedtfedvgfeklefhtefgfeenucffohhmrghinhepkhgvrhhnvghlrd
+    horhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhep
+    uggvmhhisehinhhvihhsihgslhgvthhhihhnghhslhgrsgdrtghomh
+X-ME-Proxy: <xmx:762EZMOujFzVTRxP5-Stj3u7XjXaI8pS8gkgQzJSuiZZTSb2tQ0tvg>
+    <xmx:762EZF9f8T4nECydLj9PLL5sjS1r2O07qLaoojvZ21krMTEcyVSMZQ>
+    <xmx:762EZMWR73avhokyajzpl_EzpP-Mqwt25X8qAzLefJ4m4wpvN7lrWg>
+    <xmx:762EZMjEEqz6bjWwVaBe2mGNSoOxz4EDSPbBgCo8kz67pTPZdFl0vw>
 Feedback-ID: iac594737:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 10 Jun 2023 13:07:50 -0400 (EDT)
+ 10 Jun 2023 13:07:57 -0400 (EDT)
 From:   Demi Marie Obenour <demi@invisiblethingslab.com>
 To:     Hans de Goede <hdegoede@redhat.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -82,46 +82,56 @@ To:     Hans de Goede <hdegoede@redhat.com>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>
 Cc:     Demi Marie Obenour <demi@invisiblethingslab.com>,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org
-Subject: [PATCH v2 0/3] Make sscanf() stricter
-Date:   Sat, 10 Jun 2023 13:07:40 -0400
-Message-Id: <20230610170743.2510-1-demi@invisiblethingslab.com>
+        linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
+        Christoph Hellwig <hch@lst.de>
+Subject: [PATCH v2 2/3] vsscanf(): do not skip spaces
+Date:   Sat, 10 Jun 2023 13:07:42 -0400
+Message-Id: <20230610170743.2510-3-demi@invisiblethingslab.com>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230610170743.2510-1-demi@invisiblethingslab.com>
+References: <20230610170743.2510-1-demi@invisiblethingslab.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Roger Pau Monné suggested making xenbus_scanf() stricter instead of
-using a custom parser.  Christoph Hellwig asked why the normal vsscanf()
-cannot be made stricter.  Richard Weinberger mentioned Linus Torvalds’s
-suggestion of using ! to allow overflow.
+Passing spaces before e.g. an integer is usually
+not intended.  This was suggested by Christoph in
+https://lore.kernel.org/lkml/ZIQrohcizoj4bZWx@infradead.org/.
 
-Changes since v1:
+Suggested-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
+---
+ lib/vsprintf.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-- Better commit messages.
-- Use ! to explicitly opt-in to allowing overflow.
-- Treat overflow as a conversion failure instead of returning ERANGE.
-- Drop the first patch (removal of simple_strtoll()) as it breaks
-  bcache.
-- Stop skipping spaces in vsscanf() instead of adding a separate
-  vsscanf_strict() function.
-
-Demi Marie Obenour (3):
-  vsscanf(): Integer overflow is a conversion failure
-  vsscanf(): do not skip spaces
-  Strict XenStore entry parsing
-
- .../hive_isp_css_include/platform_support.h   |  1 -
- drivers/xen/xenbus/xenbus_xs.c                | 17 ++--
- include/linux/limits.h                        |  1 +
- include/linux/mfd/wl1273-core.h               |  3 -
- include/vdso/limits.h                         |  3 +
- lib/vsprintf.c                                | 90 +++++++++++++------
- 6 files changed, 80 insertions(+), 35 deletions(-)
-
+diff --git a/lib/vsprintf.c b/lib/vsprintf.c
+index 8caccdcda0a2b470cda70c9b3837de37207eb512..d2d795d1aff0fd5cc50fb65ffb067067ab9f0dc6 100644
+--- a/lib/vsprintf.c
++++ b/lib/vsprintf.c
+@@ -3547,8 +3547,6 @@ int vsscanf(const char *buf, const char *fmt, va_list args)
+ 			char *s = (char *)va_arg(args, char *);
+ 			if (field_width == -1)
+ 				field_width = SHRT_MAX;
+-			/* first, skip leading white space in buffer */
+-			str = skip_spaces(str);
+ 
+ 			/* now copy until next white space */
+ 			while (*str && !isspace(*str) && field_width--)
+@@ -3635,11 +3633,7 @@ int vsscanf(const char *buf, const char *fmt, va_list args)
+ 			return num;
+ 		}
+ 
+-		/* have some sort of integer conversion.
+-		 * first, skip white space in buffer.
+-		 */
+-		str = skip_spaces(str);
+-
++		/* have some sort of integer conversion. */
+ 		digit = *str;
+ 		if (is_sign && digit == '-') {
+ 			if (field_width == 1)
 -- 
 Sincerely,
 Demi Marie Obenour (she/her/hers)
