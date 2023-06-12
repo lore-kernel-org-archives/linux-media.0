@@ -2,140 +2,77 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DEC5DC7EE23
-	for <linux-media@archiver.kernel.org>; Wed,  7 Jun 2023 08:02:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C17A2C88CB4
+	for <linux-media@archiver.kernel.org>; Mon, 12 Jun 2023 14:22:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238609AbjFGIC6 convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Jun 2023 04:02:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48994 "EHLO
+        id S238057AbjFLOWj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 12 Jun 2023 10:22:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238633AbjFGICs (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Jun 2023 04:02:48 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203871735;
-        Wed,  7 Jun 2023 01:02:43 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id E591624E307;
-        Wed,  7 Jun 2023 16:02:35 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 7 Jun
- 2023 16:02:35 +0800
-Received: from [192.168.60.122] (180.164.60.184) by EXMBX061.cuchost.com
- (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 7 Jun
- 2023 16:02:35 +0800
-Message-ID: <ab89b684-8b49-2088-b0d2-ca362fd9dfb4@starfivetech.com>
-Date:   Wed, 7 Jun 2023 16:02:34 +0800
+        with ESMTP id S238048AbjFLOW1 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 12 Jun 2023 10:22:27 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E03C10F3;
+        Mon, 12 Jun 2023 07:20:09 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id 6a1803df08f44-62de0e82a07so12560706d6.1;
+        Mon, 12 Jun 2023 07:20:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686579568; x=1689171568;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LGt2khsldW/yK01+mAcstIFHVN65sV05z5Q79/bd880=;
+        b=ljEZHTKkONftdKKVSCi+wKIDdm0gnLJ6SMBdTdimtUJIhZHOpe76DvW3UUDLYM/2kU
+         B5QCbInfk2RTZ/c53c+7GbxXOVj7MDaF7xLWlukwCl18GXuSd+vg6LcpZkMbWImY57Ya
+         C7Kik1WKlSuEUJDiGYpkXlh7cQsJt6pamP874FmHLJ0BElhvp7NgnXmfMfbkXC4bKPBc
+         mL5J5inTe5v5PEBFDTZOtqmlYbYR1vtwPHZ733loEQ/EqwxCfxfegSbG5KHOfGwNAukW
+         6p3lf5jb+wQS/2sfH1xjBDRKbQHv35Ul8lEApqSErk3abp2/dK6tMEKqxS7eTIx3aHb9
+         k9wA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686579568; x=1689171568;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LGt2khsldW/yK01+mAcstIFHVN65sV05z5Q79/bd880=;
+        b=Xy3fXQ0WorQG4PvZ+HhUQAGdvyw2jULExN9gZhK0RVcfQiXWbxJr6kk//5vW2mqkMX
+         dLnXzzKGW+mI8pBV/CIcJXf4ix3xjKoDbgmfqFw3W4yu4HC5UvBZE3bxaZC6LrK+ihx6
+         azMjiz2gkN55QKduP5nhLBf7KxOy4v+Q7UxSgoC2AelK/G83KTiaJ1310EIvTlJ5F/4m
+         VgYV5s4qU8VHUxbozPUeBUFsAReXk2Kz8KnIq/ETbniQhEsWGXwxjcRntZ0MzANmYZSR
+         ZPb8uGAkW8vocKdOyUc4r1Bp+rQHXpkeoAfIXtJ/dz9ms79+XLWThhmu4exB2jxWeCic
+         rVdg==
+X-Gm-Message-State: AC+VfDxTGgHboHa4yHKj3WpMAJhKivLBkVLVmSA/yC/NTkZmLWuFpWo7
+        DRTy7KL+6FuuSFNjTcdWQB/reURSA2jlhPWG00CTu185TTzUew==
+X-Google-Smtp-Source: ACHHUZ7EiL/u/Oo0zMxIczzjDxMtBBH12JwT1SrPTJPkS8ghP6RD7B8U5Okx2cKU3Hp5YLtAnSFPjLBGKMuVgEDkCn8=
+X-Received: by 2002:a05:6214:2a83:b0:62b:3dd9:2dc with SMTP id
+ jr3-20020a0562142a8300b0062b3dd902dcmr9945032qvb.64.1686579568244; Mon, 12
+ Jun 2023 07:19:28 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 1/9] dt-bindings: display: Add yamls for JH7110 display
- subsystem
-Content-Language: en-US
-References: <20230602074043.33872-1-keith.zhao@starfivetech.com>
- <20230602-uncommon-rejoicing-e73c0c475f9f@spud>
- <TY3P286MB26116576E3E502CAE53834599852A@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
- <1991848.PYKUYFuaPT@diego> <20230606-geometry-blurb-1f0f07d4bf6a@spud>
- <ifgjvonhkzcwrklzch5efguor2x6az4m737dwte4uyow7ar5dr@z4glaxse6dou>
-From:   Keith Zhao <keith.zhao@starfivetech.com>
-To:     undisclosed-recipients:;
-In-Reply-To: <ifgjvonhkzcwrklzch5efguor2x6az4m737dwte4uyow7ar5dr@z4glaxse6dou>
+References: <20230612141632.5232-1-hdegoede@redhat.com>
+In-Reply-To: <20230612141632.5232-1-hdegoede@redhat.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 12 Jun 2023 17:18:52 +0300
+Message-ID: <CAHp75Ve3+XvsyrPauSzto0jU8Q1czM4Bj-qMquAc_WYK+ZHhxg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] platform/x86: int3472: discrete: Fix getting active_value
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Andy Shevchenko <andy@kernel.org>,
+        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Dan Scally <dan.scally@ideasonboard.com>,
+        platform-driver-x86@vger.kernel.org, linux-media@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Originating-IP: [180.164.60.184]
-X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX061.cuchost.com
- (172.16.6.61)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+On Mon, Jun 12, 2023 at 5:16=E2=80=AFPM Hans de Goede <hdegoede@redhat.com>=
+ wrote:
+>
+> acpi_object.integer.value is 64 bit, so to get bits 31-24
+> the value not only needs to be shifted but also masked.
 
+Why? The type of active_value is u8. How does this make any difference?
 
-On 2023/6/7 14:41, Maxime Ripard wrote:
-> On Tue, Jun 06, 2023 at 11:37:53PM +0100, Conor Dooley wrote:
->> On Wed, Jun 07, 2023 at 12:22:33AM +0200, Heiko Stübner wrote:
->> > Am Dienstag, 6. Juni 2023, 20:41:17 CEST schrieb Shengyu Qu:
->> > > > On Fri, Jun 02, 2023 at 03:40:35PM +0800, Keith Zhao wrote:
->> > > >> Add bindings for JH7110 display subsystem which
->> > > >> has a display controller verisilicon dc8200
->> > > >> and an HDMI interface.
->> 
->> > > >> +description:
->> > > >> +  The StarFive SoC uses the HDMI signal transmiter based on innosilicon IP
->> > > > Is innosilicon the same thing as verisilicon? Also
->> > > > s/transmiter/transmitter/, both here and in the title.
-yes,innosilicon is the HDMI IP  and verisilicon is the DC-controller IP
-
->> > > 
->> > > I think that is not the same, I remember Rockchip has used a HDMI 
->> > > transmitter from
->> > > 
->> > > Innosilicon, and there is a existing driver for that in mainline.
->> > 
->> > Yep, I think Innosilicon is the company you turn to when you want to save
->> > a bit of money ;-) . In the bigger SoCs Rockchip most of the time uses
->> > Designware hdmi blocks and looking at the history only the rk3036 ever
->> > used an Innosilicon block.
->> > 
-I have done a HDMIcomparison of the rk3036 and the jh7110, and they are both based on ip Innosilicon.
-
-the hardware of them .
-Some parts of the hardware of the two are common, such as the logic of hdmi I2C to obtain edid, and the register definition is consistent.
-
-Many registers are defined differently from the linux main line inno driver, including registers that contain specific bits
-and some registers in linux main line inno driver no longer used in my new inoo hdmi hardware.
-
->> > Looking at the history, 2016 really was a long time ago :-D.
->> > 
->> > > So Keith, if that's true, I think it is better to seperate the HDMI 
->> > > stuff and reuse existing driver.
->> > 
->> > I'm not so sure about that - at least from a cursory glance :-) .
->> > 
->> > The registers do look slightly different and I don't know how much
->> > the IP changed between the rk3036-version and the jh7110 version.
->> > 
->> > At the very least, I know my rk3036 board isn't booting right now, so
->> > I can't really provide help for generalizing the rockchip-driver.
->> > 
->> > At the very least both the binding and driver could drop the "starfive-hdmi"
->> > and actually use the Innosilicon in the naming somewhere, so that it's
->> > clear for future developers :-)
->> 
->> Seeing "based on" always makes me a little bit nervous to be honest when
->> it comes to using a compatible from the IP. Is it the IP? What version
->> is it? etc. Perhaps "starfive,jh7110-hdmi" & falling back to some sort
->> of "innosilicon,hdmi" would be more future/IP-silliness proof.
->> Driver can always be generic & bind against "innosilicon,hdmi" until
->> that becomes impossible.
-> 
-> Given that Neil was saying that there's at least two
-> generations/revisions/models of an HDMI controller from Innosilicon, I'm
-> not sure that compatible is enough to reach that goal anyway.
-> 
-> Maxime
-
-
-
-I will change the  the binding  to meet innosilicon,hdmi .
-for the drivers part , I will study the possibility of RK-HDMI reuse.
-
-Thank you for your comments
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+--=20
+With Best Regards,
+Andy Shevchenko
