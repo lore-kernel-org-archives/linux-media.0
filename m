@@ -2,143 +2,96 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D438EC7EE2E
-	for <linux-media@archiver.kernel.org>; Mon, 12 Jun 2023 10:13:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64EC9C7EE23
+	for <linux-media@archiver.kernel.org>; Mon, 12 Jun 2023 10:28:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232648AbjFLKNg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 12 Jun 2023 06:13:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48772 "EHLO
+        id S234803AbjFLK2p (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 12 Jun 2023 06:28:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232269AbjFLKNS (ORCPT
+        with ESMTP id S233327AbjFLK23 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 12 Jun 2023 06:13:18 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16DE10CC;
-        Mon, 12 Jun 2023 02:53:56 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Mon, 12 Jun 2023 06:28:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3C0E546
+        for <linux-media@vger.kernel.org>; Mon, 12 Jun 2023 03:08:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5AE1E6605907;
-        Mon, 12 Jun 2023 10:53:54 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686563635;
-        bh=12+M92ejc+eDkMrCoA63t6hfzspIbG8XPxdjeW+mgqE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=IEjF90KqrXkK2WXSoPZpydyHRiHNiisuQv0m/SM8Icg68gW/oWxAhG7JpoS2bPH3A
-         ECZs3viXyqx83QNASlzbfaP4XcIDuAPijapONC6WRlhIwLUioYvHXt5AHXZRsqUtpb
-         dHcoHLn1oGJSTJCBqN6IvGwgGRqNY4SijA993M+HuKivXnM5LER+zRSQclNA+zjqcJ
-         si8uTlazy6ukbUAP2RFAmCTMc9PLqXcVXrqRAgkn6uPk6QNskA+Z9PFlao54EZy7rL
-         0zX9P8xaaMNp75bQoZWzzR/vkKe+zFz7je2tA0Kf7Bb37Z92qltgyLsewoTbvQdPWY
-         oKQ1uWqcd2C9A==
-Message-ID: <fda4f196-8466-8290-9072-d80fff367720@collabora.com>
-Date:   Mon, 12 Jun 2023 11:53:51 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BCD5F62347
+        for <linux-media@vger.kernel.org>; Mon, 12 Jun 2023 09:58:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD92CC433B3
+        for <linux-media@vger.kernel.org>; Mon, 12 Jun 2023 09:58:53 +0000 (UTC)
+Message-ID: <a912e164-94c9-b6af-3e0e-8e1fca97e697@xs4all.nl>
+Date:   Mon, 12 Jun 2023 11:58:51 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 0/5] Enable decoder for mt8183
+ Thunderbird/102.11.0
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [GIT FIXES FOR v6.5] (v2) Various fixes that need to go into v6.5
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Content-Language: en-US
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     kernel@collabora.com, Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20230607205714.510012-1-nfraprado@collabora.com>
- <380c6489-7a3c-778b-5b81-6339b6964b90@xs4all.nl>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <380c6489-7a3c-778b-5b81-6339b6964b90@xs4all.nl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Il 12/06/23 09:02, Hans Verkuil ha scritto:
-> Hi Nicolas,
-> 
-> On 07/06/2023 22:53, Nícolas F. R. A. Prado wrote:
->>
->> This series enables the hardware decoder present on mt8183. At first
->> glance, the only missing piece is the devicetree node for it, however,
->> simply adding it as is would cause an address collision between the
->> first register iospace and the clock-controller node, so a rework of the
->> dt-binding and driver, as well as addition of a clock, were needed
->> first.
->>
->> Tested that H264 decoding works with the hardware decoder on
->> mt8183-kukui-jacuzzi-juniper-sku16, giving a fluster score of 98/135 on
->> the JVT-AVC_V1 test suite. And ensured other SoCs (MT8192 and MT8195)
->> still work as usual.
->>
->> Changes in v2:
->> - Merged commit 1 (media: dt-bindings: mediatek,vcodec: Allow single
->>    clock for mt8183) into commit 3 (media: dt-bindings: mediatek,vcodec:
->>    Remove VDEC_SYS for mt8183)
->> - Further constrained properties in dt-binding
->> - Added CLK_IGNORE_UNUSED flag to active clock
->> - Reformatted reg-names in DT node
->>
->> Nícolas F. R. A. Prado (4):
->>    media: dt-bindings: mediatek,vcodec: Don't require assigned-clocks
->>    media: dt-bindings: mediatek,vcodec: Remove VDEC_SYS for mt8183
->>    media: mediatek: vcodec: Read HW active status from clock
->>    clk: mediatek: mt8183: Add CLK_VDEC_ACTIVE to vdec
-> 
-> Is the clk patch independent from the others? It's not clear to me.
-> 
-> If the clk patch has to go in together with the media patches, then
-> please let me know and post a v3 where the clk patch is also CC-ed to
-> the linux-media mailinglist to ensure it ends up in our patchwork system.
-> 
-> And in that case I need a Acked-by from the clk maintainer as well.
-> 
-> If it is independent, then there is no need for a v3 (at least, not
-> for this).
-> 
+Changes since v1:
 
-The clock patch is not independent, as in the devicetree changes will not
-work without the addition of that clock (and of course even fail building),
-so that series needs a v3.
+Added new tags to "media: mediatek: vcodec: fix cancel_work_sync fail with fluster test"
 
-Nícolas, please go on and send a v3 as requested.
+Regards,
 
-Cheers,
-Angelo
+	Hans
 
-> Regards,
-> 
-> 	Hans
-> 
->>
->> Yunfei Dong (1):
->>    arm64: dts: mediatek: mt8183: Add decoder
->>
->>   .../media/mediatek,vcodec-decoder.yaml        | 65 +++++++++++++++----
->>   arch/arm64/boot/dts/mediatek/mt8183.dtsi      | 30 +++++++++
->>   drivers/clk/mediatek/clk-mt8183-vdec.c        |  5 ++
->>   .../mediatek/vcodec/mtk_vcodec_dec_drv.c      | 59 +++++++++++++----
->>   .../mediatek/vcodec/mtk_vcodec_dec_hw.c       | 20 ++++--
->>   .../mediatek/vcodec/mtk_vcodec_dec_pm.c       | 12 +++-
->>   .../platform/mediatek/vcodec/mtk_vcodec_drv.h |  1 +
->>   include/dt-bindings/clock/mt8183-clk.h        |  3 +-
->>   8 files changed, 165 insertions(+), 30 deletions(-)
->>
-> 
-> 
+The following changes since commit d78b9d6671decdaedb539635b1d0a34f8f5934f8:
 
+  media: mediatek: vcodec: Add dbgfs help function (2023-06-09 16:38:52 +0100)
+
+are available in the Git repository at:
+
+  git://linuxtv.org/hverkuil/media_tree.git tags/br-v6.5l
+
+for you to fetch changes up to 725bcb1d034c478a5b317920603fe1787850bd1a:
+
+  media: mediatek: vcodec: fix cancel_work_sync fail with fluster test (2023-06-12 11:52:29 +0200)
+
+----------------------------------------------------------------
+Tag branch
+
+----------------------------------------------------------------
+Alexander Stein (1):
+      media: amphion: use dev_err_probe
+
+Arnd Bergmann (1):
+      media: mtk_jpeg_core: avoid unused-variable warning
+
+Dmitry Antipov (1):
+      media: pulse8-cec: handle possible ping error
+
+Ming Qian (1):
+      media: imx-jpeg: Support to assign slot for encoder/decoder
+
+Nicolas Dufresne (1):
+      media: amphion: Fix firmware path to match linux-firmware
+
+Nikolay Burykin (1):
+      media: pci: cx23885: fix error handling for cx23885 ATSC boards
+
+Yunfei Dong (1):
+      media: mediatek: vcodec: fix cancel_work_sync fail with fluster test
+
+ drivers/media/cec/usb/pulse8/pulse8-cec.c               |   7 ++-
+ drivers/media/pci/cx23885/cx23885-dvb.c                 |  12 -----
+ drivers/media/platform/amphion/vpu_core.c               |   4 +-
+ drivers/media/platform/amphion/vpu_mbox.c               |   9 ++--
+ drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c    |   6 +--
+ drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c  |   4 +-
+ drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c  |   4 +-
+ drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c |   3 +-
+ drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h       |   1 -
+ drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c          | 135 ++++++++++++++++++++++------------------------
+ drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h          |   5 +-
+ 11 files changed, 84 insertions(+), 106 deletions(-)
 
