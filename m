@@ -2,101 +2,105 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B1E6C7EE2F
-	for <linux-media@archiver.kernel.org>; Mon, 12 Jun 2023 14:23:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98FEEC7EE2F
+	for <linux-media@archiver.kernel.org>; Mon, 12 Jun 2023 14:23:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237485AbjFLOXg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 12 Jun 2023 10:23:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33108 "EHLO
+        id S238024AbjFLOXz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 12 Jun 2023 10:23:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237650AbjFLOXU (ORCPT
+        with ESMTP id S238086AbjFLOXn (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 12 Jun 2023 10:23:20 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E9B423C;
-        Mon, 12 Jun 2023 07:21:24 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id d75a77b69052e-3f9eea9d0a1so18176851cf.1;
-        Mon, 12 Jun 2023 07:21:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686579678; x=1689171678;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=//gr08G4E9x97zoXLjFQxJE0puyHEflMAsoYK5q/Yyo=;
-        b=FjheNVl1afDXFESoQJ7WOmgcvD7DN6iygsjtM0+Y5q2UyQu40IKpT08R0HoMXLe3uz
-         pH2CWk12DAF9IE2ZE737sDr4Uzp2wfU6dgEnn6B+8cC1UTrLnUJ4MiLo6V7UQpqs/3y5
-         3vGyldCNkjZr9iSJyQnMMKAsnsUWJXeuQxyryKo3xenOoRzwNvWS4D03G60FPwHZ23ky
-         i7LA9mfdJFBNHOLhCP6etlY9dcs247ciJ2XybKbRqek5OhVGo/pBurtv/qPmriHRIJBo
-         n3/OlnTb51gSrKQ9D4rkNu2IwnVpeQGTev1JLzikJlp6xUHUBItFwXXQXAvqk5zAVpiQ
-         +Ctg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686579678; x=1689171678;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=//gr08G4E9x97zoXLjFQxJE0puyHEflMAsoYK5q/Yyo=;
-        b=Gr+/iTG231yC7vXIdeCUyf+m0Pv3iMVnMKO6z0fxGYNYh7XWYO8qUjwiXoE59zERgw
-         LGc7AC+tzwA5IvR11IAH3uft5TzrMg5NFBXOFdU4Fog+sp+w38DVsIN9slL18da4jhIj
-         t5y1rUqfgZU30Rq/TUbc/ABIjc76S2yu7F0K5POFQwjYyXWEq8VmVEYB8MQZ+bMfQQY+
-         elUndePk8NcmJRQLdQWBZ3wPetPpYgTP9u78uSRPflpEher6tQfyAg3gtz5Pvmqgmkbj
-         z7Ediwkw9aCIulEdwmiTRcz/KG4kWIOrEhkysTT+GSnuGoehQOomZK3Ypx5Wsx9/Qn88
-         EJLQ==
-X-Gm-Message-State: AC+VfDyBxBguXFWXaCoqYWOQjinx34pOUOlw7BKM7ocVQ8WJO25MZQSX
-        H85gOhERA1wKJlAZsh2GIJ27KsXknnMd31wz/MI=
-X-Google-Smtp-Source: ACHHUZ4g12xl/+ZG+MszeC+uYwvO7EihSH5FLjABuYJrCwARhPwGhQVTuMP+EbEzyNwgWfz9xTj8HTh8iSZrLckWGwE=
-X-Received: by 2002:a05:6214:c67:b0:628:ed0e:a165 with SMTP id
- t7-20020a0562140c6700b00628ed0ea165mr11528457qvj.58.1686579678391; Mon, 12
- Jun 2023 07:21:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230612141632.5232-1-hdegoede@redhat.com> <20230612141632.5232-2-hdegoede@redhat.com>
-In-Reply-To: <20230612141632.5232-2-hdegoede@redhat.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 12 Jun 2023 17:20:42 +0300
-Message-ID: <CAHp75VfGJLkxsn9C0K1FB5pQ1Bkrsp00mh7MXGDQ2N5nDsL8Xg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] platform/x86: int3472: discrete: Log a warning if the
- pin-numbers don't match
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Andy Shevchenko <andy@kernel.org>,
-        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Dan Scally <dan.scally@ideasonboard.com>,
+        Mon, 12 Jun 2023 10:23:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32FB43AA8
+        for <linux-media@vger.kernel.org>; Mon, 12 Jun 2023 07:20:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686579601;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=q4TwCgusytKSulbypQtYUJ/IonR429FcZB5BLgIBpv8=;
+        b=emoJ7va9QXi9/Av37MEY7gHz0STe+OhyP5/TsyXLPB1U1W3I1GSXmWmN69NHXN5qnnQbTF
+        UzdIk4dGRA8MkkioRbFJ6QLPag9JwShVTUOKcMTuS2dHS80O+DKrdxoXijgyf4I8JXtKAf
+        z1wEA9NrXsYcl+PiQmco7ZXAldqVMmk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-478-1yqKf_YGNLyl0spoI3Noew-1; Mon, 12 Jun 2023 10:16:35 -0400
+X-MC-Unique: 1yqKf_YGNLyl0spoI3Noew-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 69D073C11CCA;
+        Mon, 12 Jun 2023 14:16:35 +0000 (UTC)
+Received: from x1.localdomain.com (unknown [10.39.195.43])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 869CF40C20F4;
+        Mon, 12 Jun 2023 14:16:34 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Andy Shevchenko <andy@kernel.org>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Dan Scally <dan.scally@ideasonboard.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
         platform-driver-x86@vger.kernel.org, linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: [PATCH 2/2] platform/x86: int3472: discrete: Log a warning if the pin-numbers don't match
+Date:   Mon, 12 Jun 2023 16:16:32 +0200
+Message-Id: <20230612141632.5232-2-hdegoede@redhat.com>
+In-Reply-To: <20230612141632.5232-1-hdegoede@redhat.com>
+References: <20230612141632.5232-1-hdegoede@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 5:16=E2=80=AFPM Hans de Goede <hdegoede@redhat.com>=
- wrote:
->
-> The INT3472 discrete code assumes that the ACPI GPIO resources are
-> in the same order as the pin-info _DSM entries.
->
-> The returned pin-info includes the pin-number in bits 15-8. Add a check
-> that this matches with the ACPI GPIO resource pin-number in case
-> the assumption is not true with some ACPI tables.
+The INT3472 discrete code assumes that the ACPI GPIO resources are
+in the same order as the pin-info _DSM entries.
 
-...
+The returned pin-info includes the pin-number in bits 15-8. Add a check
+that this matches with the ACPI GPIO resource pin-number in case
+the assumption is not true with some ACPI tables.
 
-> +       u8 active_value, pin, type;
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ drivers/platform/x86/intel/int3472/discrete.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-> +       /* Bits 15-8 contain the pin-number on the GPIO chip */
-> +       pin =3D (obj->integer.value >> 8) & 0xff;
+diff --git a/drivers/platform/x86/intel/int3472/discrete.c b/drivers/platform/x86/intel/int3472/discrete.c
+index 4ef60883154d..c1132bbbff41 100644
+--- a/drivers/platform/x86/intel/int3472/discrete.c
++++ b/drivers/platform/x86/intel/int3472/discrete.c
+@@ -149,8 +149,8 @@ static int skl_int3472_handle_gpio_resources(struct acpi_resource *ares,
+ {
+ 	struct int3472_discrete_device *int3472 = data;
+ 	struct acpi_resource_gpio *agpio;
++	u8 active_value, pin, type;
+ 	union acpi_object *obj;
+-	u8 active_value, type;
+ 	const char *err_msg;
+ 	const char *func;
+ 	u32 polarity;
+@@ -174,10 +174,18 @@ static int skl_int3472_handle_gpio_resources(struct acpi_resource *ares,
+ 		return 1;
+ 	}
+ 
++	/* Bits 7-0 contain the type/function of the pin */
+ 	type = obj->integer.value & 0xff;
+ 
+ 	int3472_get_func_and_polarity(type, &func, &polarity);
+ 
++	/* Bits 15-8 contain the pin-number on the GPIO chip */
++	pin = (obj->integer.value >> 8) & 0xff;
++	if (pin != agpio->pin_table[0])
++		dev_warn(int3472->dev, "%s %s pin number mismatch _DSM %d resource %d\n",
++			 func, agpio->resource_source.string_ptr, pin,
++			 agpio->pin_table[0]);
++
+ 	/* If bits 31-24 of the _DSM entry are all 0 then the signal is inverted */
+ 	active_value = (obj->integer.value >> 24) & 0xff;
+ 	if (!active_value)
+-- 
+2.40.1
 
-All the same here, as long as the pin is u8, the ' & 0xff' is no-op as
-it's already implied.
-
-> +       if (pin !=3D agpio->pin_table[0])
-> +               dev_warn(int3472->dev, "%s %s pin number mismatch _DSM %d=
- resource %d\n",
-
-%u
-%u
-
-> +                        func, agpio->resource_source.string_ptr, pin,
-> +                        agpio->pin_table[0]);
-
-
---=20
-With Best Regards,
-Andy Shevchenko
