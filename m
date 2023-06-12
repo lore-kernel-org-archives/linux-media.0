@@ -2,97 +2,109 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36AE7C88CB4
-	for <linux-media@archiver.kernel.org>; Mon, 12 Jun 2023 13:53:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC2C6C88CB2
+	for <linux-media@archiver.kernel.org>; Mon, 12 Jun 2023 13:59:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235622AbjFLNxB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 12 Jun 2023 09:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40656 "EHLO
+        id S232004AbjFLN70 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 12 Jun 2023 09:59:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231319AbjFLNwz (ORCPT
+        with ESMTP id S229900AbjFLN7Z (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 12 Jun 2023 09:52:55 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304371AC;
-        Mon, 12 Jun 2023 06:52:54 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-65242634690so3260517b3a.0;
-        Mon, 12 Jun 2023 06:52:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686577973; x=1689169973;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2Kbv3PFtGp+JNdvKh4QJEj5gSxVAqbUOQ4hjxsPiiBA=;
-        b=aCiwCVfmCFrvDVHKxS/YiPaZVp4okZplYzc8EMQ6eScIEZegTvaYZVu/3EPq9v0Meh
-         QIWJ1ptu9NtY52AL4qnsSW4i/bour84pSTkmj3WIl8XbalUz420zbgecQOfpcvypVyg+
-         TvFkxt6lqR1guZA21jnTzisD2l65JT7xYGEz90EVIuChqsUhetNULFHQzufzQNduscPA
-         GsnaD/1z6spVqJ1mnqfpIaoeHpo+OWMCD/W7+mE1+4XGiDko04FJYTltUCAvNPPmHeoz
-         VSjvYVKb1k0GTZKV8IX5qZ5Cz3TLfbu1mmfzOX4VW/rdWoD/+ShiG43gyw2YSWlAYWRe
-         +6eQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686577973; x=1689169973;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=2Kbv3PFtGp+JNdvKh4QJEj5gSxVAqbUOQ4hjxsPiiBA=;
-        b=P3jcuuQMnDKMkUqtHV0M5w7idas4FmbL/+G4+YZ+Olhzn0pAu7vBZxuemfCiG+WeX6
-         qj2z3tinpNgsqgnY2P6RoTdjyXSaD5HDWMTZBPji/YGdVWMYP7SGRzAw2yUfzS143GFZ
-         lzI4FAaIPpL1OGc0sz0LrrReQkRztiSiCoJR/AFPITuLHpgzwaOiNS6b3hc9h1WBoA3m
-         8v2zsLAu2GaXD0RonQm6IYNnle/KkUZLzMRNx7oJF0rdCbJM0AW4Go5MR6onSVA+L3r6
-         GEKrdmCnUJyX7gJbzSC8U2NRGfl/hRMIr8BQxABojL0ez19s9zoqrxnvooTsPzuRa5Ce
-         fw9A==
-X-Gm-Message-State: AC+VfDyhAqTDOYKQXJpL/URUeVAR9kne0O32hBZo8gaVsj8obbGcNL9f
-        YvfC2Ll/1SJuYR3tQsaxCzwhQcPmAFs=
-X-Google-Smtp-Source: ACHHUZ58h+luk0LktID8x6yR94SKolsflfBUZWQFQZBJ7NYlUf+nxgvari4wbsVoI3IeEmCDIFoD9w==
-X-Received: by 2002:a05:6a00:84c:b0:65f:1990:c03c with SMTP id q12-20020a056a00084c00b0065f1990c03cmr11287167pfk.25.1686577973509;
-        Mon, 12 Jun 2023 06:52:53 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-21.three.co.id. [180.214.232.21])
-        by smtp.gmail.com with ESMTPSA id r1-20020a62e401000000b00662b551e5c4sm7150363pfh.94.2023.06.12.06.52.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 06:52:53 -0700 (PDT)
-Message-ID: <67afa974-835a-77cc-d4bb-49cba0ff5bf5@gmail.com>
-Date:   Mon, 12 Jun 2023 20:52:48 +0700
+        Mon, 12 Jun 2023 09:59:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B841B19AF
+        for <linux-media@vger.kernel.org>; Mon, 12 Jun 2023 06:58:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C178962983
+        for <linux-media@vger.kernel.org>; Mon, 12 Jun 2023 13:58:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E7E9C433D2;
+        Mon, 12 Jun 2023 13:58:43 +0000 (UTC)
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Cc:     Zheng Zhang <zheng.zhang@email.ucr.edu>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 2/3] media: cec: core: add adap_unconfigured() callback
+Date:   Mon, 12 Jun 2023 15:58:38 +0200
+Message-Id: <20230612135839.254935-3-hverkuil-cisco@xs4all.nl>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230612135839.254935-1-hverkuil-cisco@xs4all.nl>
+References: <20230612135839.254935-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Content-Language: en-US
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Lukasz Kalamlacki <kalamlacki@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Fwd: w_scan hangs on 6.3.7 and does not react on kill -9
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+The adap_configured() callback was called with the adap->lock mutex
+held if the 'configured' argument was false, and without the adap->lock
+mutex held if that argument was true.
 
-I notice a regression report on Bugzilla [1]. Quoting from it:
+That was very confusing, and so split this up in a adap_unconfigured()
+callback and a high-level configured() callback.
 
-> w_scan tool on kernel 6.3.7 hangs so badly that it cannot be killed by kill -9 
-> I tried also w_scan_cpp 20230604 but it also fails I have 2040:8268 Hauppauge soloHD device as reported by lsusb. During reboot of the OS it prints a lot of kernel errors but it is after syslog is killed I guess and in syslog messages I do not see anything. On default Debian kernel 5.10.0-23 this problem does not exists.
+This also makes it easier to understand when the mutex is held: all
+low-level adap_* callbacks are called with the mutex held. All other
+callbacks are called without that mutex held.
 
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Fixes: f1b57164305d ("media: cec: add optional adap_configured callback")
+---
+ drivers/media/cec/core/cec-adap.c | 4 ++--
+ include/media/cec.h               | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-See Bugzilla for the full thread and attached dmesg and kernel config.
-
-Lukasz: On what hardware you have this regression? Also, it is really
-helpful if you can perform bisection (as outlined
-in Documentation/admin-guide/bug-bisect.html) to find the culprit,
-when developers can't figure it out by inspecting the code alone.
-Last but not least, please also try latest mainline (currently v6.4-rc6).
-
-Anyway, I'm adding it to regzbot:
-
-#regzbot introduced: v5.10..v6.3 https://bugzilla.kernel.org/show_bug.cgi?id=217540
-#regzbot title: w_scan zombie (unkillable) on kernel v6.3
-
-Thanks.
-
-[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217540
-
+diff --git a/drivers/media/cec/core/cec-adap.c b/drivers/media/cec/core/cec-adap.c
+index f8cb8542e5e9..17f780740e2b 100644
+--- a/drivers/media/cec/core/cec-adap.c
++++ b/drivers/media/cec/core/cec-adap.c
+@@ -1348,7 +1348,7 @@ static void cec_adap_unconfigure(struct cec_adapter *adap)
+ 	cec_flush(adap);
+ 	wake_up_interruptible(&adap->kthread_waitq);
+ 	cec_post_state_event(adap);
+-	call_void_op(adap, adap_configured, false);
++	call_void_op(adap, adap_unconfigured);
+ }
+ 
+ /*
+@@ -1539,7 +1539,7 @@ static int cec_config_thread_func(void *arg)
+ 	adap->kthread_config = NULL;
+ 	complete(&adap->config_completion);
+ 	mutex_unlock(&adap->lock);
+-	call_void_op(adap, adap_configured, true);
++	call_void_op(adap, configured);
+ 	return 0;
+ 
+ unconfigure:
+diff --git a/include/media/cec.h b/include/media/cec.h
+index 6556cc161dc0..9c007f83569a 100644
+--- a/include/media/cec.h
++++ b/include/media/cec.h
+@@ -113,12 +113,12 @@ struct cec_fh {
+ #define CEC_FREE_TIME_TO_USEC(ft)		((ft) * 2400)
+ 
+ struct cec_adap_ops {
+-	/* Low-level callbacks */
++	/* Low-level callbacks, called with adap->lock held */
+ 	int (*adap_enable)(struct cec_adapter *adap, bool enable);
+ 	int (*adap_monitor_all_enable)(struct cec_adapter *adap, bool enable);
+ 	int (*adap_monitor_pin_enable)(struct cec_adapter *adap, bool enable);
+ 	int (*adap_log_addr)(struct cec_adapter *adap, u8 logical_addr);
+-	void (*adap_configured)(struct cec_adapter *adap, bool configured);
++	void (*adap_unconfigured)(struct cec_adapter *adap);
+ 	int (*adap_transmit)(struct cec_adapter *adap, u8 attempts,
+ 			     u32 signal_free_time, struct cec_msg *msg);
+ 	void (*adap_nb_transmit_canceled)(struct cec_adapter *adap,
+@@ -131,6 +131,7 @@ struct cec_adap_ops {
+ 	bool (*error_inj_parse_line)(struct cec_adapter *adap, char *line);
+ 
+ 	/* High-level CEC message callback, called without adap->lock held */
++	void (*configured)(struct cec_adapter *adap);
+ 	int (*received)(struct cec_adapter *adap, struct cec_msg *msg);
+ };
+ 
 -- 
-An old man doll... just what I always wanted! - Clara
+2.39.2
+
