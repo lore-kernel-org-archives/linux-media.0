@@ -2,161 +2,115 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D301EB64D0
-	for <linux-media@archiver.kernel.org>; Tue, 13 Jun 2023 15:13:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26503EB64D0
+	for <linux-media@archiver.kernel.org>; Tue, 13 Jun 2023 15:40:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240877AbjFMPNu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 13 Jun 2023 11:13:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40372 "EHLO
+        id S241475AbjFMPkg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 13 Jun 2023 11:40:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240619AbjFMPNs (ORCPT
+        with ESMTP id S243036AbjFMPkE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 13 Jun 2023 11:13:48 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553C6CA
-        for <linux-media@vger.kernel.org>; Tue, 13 Jun 2023 08:13:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686669227; x=1718205227;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yhkMGBztrUbnU3mC6eESXQir1qgWkxESChcCkYaezcI=;
-  b=bOSkUQ8ryrYtb8WDqRsMFvQbggt1Yf3aOv2gl8gBanOQmDfyrqaVwMhW
-   28LXJn12Nygpf0CucVUQul3oqK2fRZD5N8RT6hX0QYqPMKrDQ5bhzC6xh
-   wOlfKsFAdc2KlbQvOpOVptXqOHmGtPQc5YV8r9Vbp2cLFMslbftMrt6+e
-   zfTOVIT42LyDUyZPPAXto2/vKbysLg1sbg5ILTgCEhn0wZ7FfzN3b4qm1
-   O6tjIKCrb86dfnWexkH4ZLpGIAW8Up4Kn1Ta/5ABFFaavx7GeSyyydwpI
-   6aWc+a9A4Y5Nj/hZZ6kNR9k7ars+DFwuMKcHSrJl6nxbtMX41bp6oQ6TV
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="358359426"
-X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
-   d="scan'208";a="358359426"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 08:13:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="856132056"
-X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
-   d="scan'208";a="856132056"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 08:13:39 -0700
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id 964FE11F9D2;
-        Tue, 13 Jun 2023 18:08:08 +0300 (EEST)
-Date:   Tue, 13 Jun 2023 15:08:08 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org,
-        Philipp Zabel <p.zabel@pengutronix.de>, hverkuil@xs4all.nl,
-        Francesco Dolcini <francesco@dolcini.it>,
-        aishwarya.kothari@toradex.com, Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Hyun Kwon <hyun.kwon@xilinx.com>, bingbu.cao@intel.com,
-        niklas.soderlund@ragnatech.se,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        Sylvain Petinot <sylvain.petinot@foss.st.com>,
-        Eugen Hristev <eugen.hristev@collabora.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Dafna Hirschfeld <dafna@fastmail.com>,
-        Hugues Fruchet <hugues.fruchet@foss.st.com>,
-        Yong Deng <yong.deng@magewell.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Benoit Parrot <bparrot@ti.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Marco Felsch <m.felsch@pengutronix.de>
-Subject: Re: [RESEND PATCH v3 24/32] media: pxa_camera: Register V4L2 device
- early
-Message-ID: <ZIiGWE5EowXaRuWW@kekkonen.localdomain>
-References: <20230525091615.2324824-1-sakari.ailus@linux.intel.com>
- <20230525091615.2324824-25-sakari.ailus@linux.intel.com>
- <20230530045441.GO21633@pendragon.ideasonboard.com>
- <20230530045608.GP21633@pendragon.ideasonboard.com>
+        Tue, 13 Jun 2023 11:40:04 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A97A1B2
+        for <linux-media@vger.kernel.org>; Tue, 13 Jun 2023 08:39:48 -0700 (PDT)
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id DCA243F272
+        for <linux-media@vger.kernel.org>; Tue, 13 Jun 2023 15:39:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1686670784;
+        bh=h2VB2F1nqgPgNlWNC2nzeOkEx2tuyJu/3uifBQZUmKY=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version;
+        b=Px1GsJBpr91+X+7dRDPpYZOSu31kCRXMwUv1yRwhk0LSTw+MnXf3q/0x6j5EMI2Hl
+         PKhNnljqQhYp64fIh0dsOaaY2ENyUvAjU7T/pbozQOHlqO7vUwc7DIwd5njsqZDh5q
+         gxeDlAQPCeEDnq4BfAiNQ4T+ncUVs81YYlWVfvw+Twtlds7tDgHDjh61gqXKpYf+c5
+         SXXGXV8/A+9494aMHL99ZVyGs6CNtDEOn6tNz1alFrVdeZ8ECan4kcqwbDO/vIisgG
+         Mhk4uB9L3HF8h6ByoEMnRXR7/XW4ZiHkTN9JE7KOifUmN1E6ZI2v2cyyC1OHc+rYTg
+         N8U9/Oov+xVwQ==
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f7f4dc6ec2so36580855e9.0
+        for <linux-media@vger.kernel.org>; Tue, 13 Jun 2023 08:39:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686670784; x=1689262784;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=h2VB2F1nqgPgNlWNC2nzeOkEx2tuyJu/3uifBQZUmKY=;
+        b=EcsPrSVokIf/CFPnKQyczueOs+nqLUa6h0KfKNMW6aGMFaiuZu6DHwefuOMtr11ymJ
+         H8lik8oEODSB4z/uEHLnJ+V+Kp/nM2t2Z1sicF5t+VfAp78eZTbaNxD+i6WLw0LOsI2g
+         Cto9FrrBSoBLqmnrYmIG18HUztX4S+BkjrSL7RUgGGJrY9ykOPs2T7e2Mhke3cPxg0uW
+         JZd3umMJoBhlluAKLgZSs6bHn1RtiYmI+jfUENL8ovbFLhRjDdtBHh9rOH7Sy7JO/JgK
+         OVbqru0ByKBUJCSEOeM8MYJbNBxdOAa4/Ps/kxd8fuBnlEseNeIuhp4ApU9BQWKrJ+J2
+         wm7A==
+X-Gm-Message-State: AC+VfDzPXxn33NIHHe6ACJXfjsg1IzyNm+qIRn7v1HUu2G/xKS3vNWRV
+        2AeOxrbdnsjO8oOryxssWmo6ceCOynjVCAQ4A6JSOWVRr0bz6kCR23QCak/nLDHMqOVN3Qrscyi
+        zF6VRZ9aGluUowE4eR2n3HJ80C57JmoYX87wfkTKI
+X-Received: by 2002:a05:6000:1248:b0:2f8:3225:2bc2 with SMTP id j8-20020a056000124800b002f832252bc2mr6846729wrx.41.1686670783783;
+        Tue, 13 Jun 2023 08:39:43 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7u6y5BjGv0z8bT/LB9RrsvWeO5qrDCAe7zl2OSeRDtbWoTqJ0KQBMBeO8sS2CFGRWa+dBvvw==
+X-Received: by 2002:a05:6000:1248:b0:2f8:3225:2bc2 with SMTP id j8-20020a056000124800b002f832252bc2mr6846717wrx.41.1686670783535;
+        Tue, 13 Jun 2023 08:39:43 -0700 (PDT)
+Received: from localhost ([194.191.244.86])
+        by smtp.gmail.com with ESMTPSA id b5-20020adff905000000b0030aedb8156esm15556257wrr.102.2023.06.13.08.39.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 08:39:43 -0700 (PDT)
+From:   Juerg Haefliger <juerg.haefliger@canonical.com>
+To:     juerg.haefliger@canonical.com
+Cc:     gregkh@linuxfoundation.org, jbrunet@baylibre.com,
+        khilman@baylibre.com, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev, martin.blumenstingl@googlemail.com,
+        mchehab@kernel.org, narmstrong@baylibre.com,
+        linux-media@vger.kernel.org
+Subject: [PATCH v2 resend 2] media: meson: vdec: Add MODULE_FIRMWARE macro
+Date:   Tue, 13 Jun 2023 17:39:39 +0200
+Message-Id: <20230613153939.152457-1-juerg.haefliger@canonical.com>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20230126153258.1558471-1-juerg.haefliger@canonical.com>
+References: <20230126153258.1558471-1-juerg.haefliger@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230530045608.GP21633@pendragon.ideasonboard.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Laurent,
+The meson-vdec module loads firmware so add MODULE_FIRMWARE macros to
+provide that information via modinfo.
 
-On Tue, May 30, 2023 at 07:56:08AM +0300, Laurent Pinchart wrote:
-> On Tue, May 30, 2023 at 07:54:46AM +0300, Laurent Pinchart wrote:
-> > Hi Sakari,
-> > 
-> > Thank you for the patch.
-> > 
-> > On Thu, May 25, 2023 at 12:16:07PM +0300, Sakari Ailus wrote:
-> > > Register V4L2 device before initialising the notifier. This way the device
-> > > is available to the notifier from the beginning which makes it possible to
-> > > use it for debug prints.
-> > > 
-> > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > > ---
-> > >  drivers/media/platform/intel/pxa_camera.c | 19 ++++++++++---------
-> > >  1 file changed, 10 insertions(+), 9 deletions(-)
-> > > 
-> > > diff --git a/drivers/media/platform/intel/pxa_camera.c b/drivers/media/platform/intel/pxa_camera.c
-> > > index dad5e8d97683e..5df93fd4ff04b 100644
-> > > --- a/drivers/media/platform/intel/pxa_camera.c
-> > > +++ b/drivers/media/platform/intel/pxa_camera.c
-> > > @@ -2307,6 +2307,10 @@ static int pxa_camera_probe(struct platform_device *pdev)
-> > >  		return err;
-> > >  	}
-> > >  
-> > > +	err = v4l2_device_register(&pdev->dev, &pcdev->v4l2_dev);
-> > > +	if (err)
-> > > +		return err;
-> > > +
-> > >  	v4l2_async_nf_init(&pcdev->notifier);
-> > >  	pcdev->res = res;
-> > >  	pcdev->pdata = pdev->dev.platform_data;
-> > > @@ -2324,10 +2328,10 @@ static int pxa_camera_probe(struct platform_device *pdev)
-> > >  	} else if (pdev->dev.of_node) {
-> > >  		err = pxa_camera_pdata_from_dt(&pdev->dev, pcdev);
-> > >  	} else {
-> > > -		return -ENODEV;
-> > > +		err = -ENODEV;
-> > >  	}
-> > >  	if (err < 0)
-> > > -		return err;
-> > > +		goto exit_v4l2_device_unregister;
-> > >  
-> > >  	if (!(pcdev->platform_flags & (PXA_CAMERA_DATAWIDTH_8 |
-> > >  			PXA_CAMERA_DATAWIDTH_9 | PXA_CAMERA_DATAWIDTH_10))) {
-> > > @@ -2393,22 +2397,17 @@ static int pxa_camera_probe(struct platform_device *pdev)
-> > >  	pxa_camera_activate(pcdev);
-> > >  
-> > >  	platform_set_drvdata(pdev, pcdev);
-> > > -	err = v4l2_device_register(&pdev->dev, &pcdev->v4l2_dev);
-> > > -	if (err)
-> > > -		goto exit_deactivate;
-> > >  
-> > >  	err = pxa_camera_init_videobuf2(pcdev);
-> > >  	if (err)
-> > > -		goto exit_v4l2_device_unregister;
-> > > +		goto exit_deactivate;
-> > >  
-> > >  	pcdev->notifier.ops = &pxa_camera_sensor_ops;
-> > >  	err = v4l2_async_nf_register(&pcdev->v4l2_dev, &pcdev->notifier);
-> > 
-> > The v4l2_device isn't made available to the notifier before this call,
-> > so why is it necessary to register it earlier ?
-> 
-> Ah, it's because of patch 31/32. Please record this in the commit
-> message.
+Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
 
-It's already in the commit message, as you requested in an earlier review.
+---
+v2 resend 2:
+  - cc linux-media@vger.kernel.org
+v2:
+  - Drop duplicates
+  - Add Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+---
+ drivers/staging/media/meson/vdec/vdec_platform.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
+diff --git a/drivers/staging/media/meson/vdec/vdec_platform.c b/drivers/staging/media/meson/vdec/vdec_platform.c
+index 88c9d72e1c83..70c9fd7c8bc5 100644
+--- a/drivers/staging/media/meson/vdec/vdec_platform.c
++++ b/drivers/staging/media/meson/vdec/vdec_platform.c
+@@ -280,3 +280,12 @@ const struct vdec_platform vdec_platform_sm1 = {
+ 	.num_formats = ARRAY_SIZE(vdec_formats_sm1),
+ 	.revision = VDEC_REVISION_SM1,
+ };
++
++MODULE_FIRMWARE("meson/vdec/g12a_h264.bin");
++MODULE_FIRMWARE("meson/vdec/g12a_vp9.bin");
++MODULE_FIRMWARE("meson/vdec/gxbb_h264.bin");
++MODULE_FIRMWARE("meson/vdec/gxl_h264.bin");
++MODULE_FIRMWARE("meson/vdec/gxl_mpeg12.bin");
++MODULE_FIRMWARE("meson/vdec/gxl_vp9.bin");
++MODULE_FIRMWARE("meson/vdec/gxm_h264.bin");
++MODULE_FIRMWARE("meson/vdec/sm1_vp9_mmu.bin");
 -- 
-Sakari Ailus
+2.37.2
+
