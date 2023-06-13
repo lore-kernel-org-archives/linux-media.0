@@ -2,155 +2,183 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D822EB64D9
-	for <linux-media@archiver.kernel.org>; Tue, 13 Jun 2023 15:00:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DB17EB64D0
+	for <linux-media@archiver.kernel.org>; Tue, 13 Jun 2023 15:04:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242272AbjFMPAW convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 13 Jun 2023 11:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35550 "EHLO
+        id S242557AbjFMPEk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 13 Jun 2023 11:04:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232792AbjFMPAV (ORCPT
+        with ESMTP id S235653AbjFMPEj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 13 Jun 2023 11:00:21 -0400
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD0DE5;
-        Tue, 13 Jun 2023 08:00:19 -0700 (PDT)
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-75d4b85b3ccso104572085a.2;
-        Tue, 13 Jun 2023 08:00:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686668418; x=1689260418;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HCZylnYVESKbr03w+qaTawlaNs+/D1wETaN7cDLoL5w=;
-        b=h7mRRon1AfdXBSb6VNymN7CiInAtR3zN3Ebf2osauCNC1OYvVZEAM+xz4omZb+fymp
-         P2EeEIGh9CmqzShvQT3BKXL+WCQGJd83adbQlEl9f0I8zwQkGMy6Xpi2cOqYp2+L8jdd
-         XYZThbqhsU2sM40b1lG4vvOXxWOFGIW8mzNPZXuNED8NmeH1Y0gYbJByQEJbAL9BuL4r
-         /Owka2tU8Uky9TaVzdzYbcj1zlAd2Mpmk8+ucs5zOzszLrQG86UmH7JG6DJxTxk8iH6f
-         ahgO4IzhwnQ/52IgRFZkGAQgXvsP4vhTkZjy4DFldPoprWyv6pGfOU66IP0er4nSwp+s
-         A23Q==
-X-Gm-Message-State: AC+VfDyi3jscrAbCBKn6xZ2iGrioL/iwQKG9grzuqx/asBu8uZUvOXRz
-        9594G5CtqeFg7xlwXLawxTXHkDZB/uO+Okuh
-X-Google-Smtp-Source: ACHHUZ7aNbfLovc1tsSZwLxUh7v5Tw+sr+IXn+vOfC6FjwUse7rGt63HRqJy1YxpEnImUZl1CVtTfQ==
-X-Received: by 2002:a05:620a:8c96:b0:75b:23a1:362c with SMTP id ra22-20020a05620a8c9600b0075b23a1362cmr12349100qkn.61.1686668417521;
-        Tue, 13 Jun 2023 08:00:17 -0700 (PDT)
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com. [209.85.222.172])
-        by smtp.gmail.com with ESMTPSA id h24-20020a05620a10b800b0075772c756e0sm1474651qkk.101.2023.06.13.08.00.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 08:00:17 -0700 (PDT)
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-7606bc82639so105016385a.1;
-        Tue, 13 Jun 2023 08:00:17 -0700 (PDT)
-X-Received: by 2002:a25:9f07:0:b0:bc3:cc17:6250 with SMTP id
- n7-20020a259f07000000b00bc3cc176250mr1355567ybq.1.1686667920065; Tue, 13 Jun
- 2023 07:52:00 -0700 (PDT)
+        Tue, 13 Jun 2023 11:04:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E53110FF;
+        Tue, 13 Jun 2023 08:04:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6498562D43;
+        Tue, 13 Jun 2023 15:04:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF13DC433F0;
+        Tue, 13 Jun 2023 15:04:34 +0000 (UTC)
+Message-ID: <2e7209cf-29c4-0245-fefe-deece350bd2c@xs4all.nl>
+Date:   Tue, 13 Jun 2023 17:04:32 +0200
 MIME-Version: 1.0
-References: <OS0PR01MB5922AA27B212F610A5E816138650A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <20230608103929.GO5058@pendragon.ideasonboard.com> <OS0PR01MB592259E6A7ACED4A0548DD228650A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <20230608125019.GD26742@pendragon.ideasonboard.com> <OS0PR01MB5922ECEABE4D6FC385D184008650A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <OS0PR01MB592265BFDF18F860E1EB4CFE8654A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <ZIcRKl3PDy0+yZS9@ninjato> <CAMuHMdV_iwdP+K1us86OB4VtDDqA=P_vNeCP15kqRuXqcYr3hg@mail.gmail.com>
- <ZIcUEdctlgRsGxJ3@ninjato> <CAMuHMdVOkBeKOEW9PkWB3Tqwa6-rC3BQj=W9VAEgeZfgqvQmWQ@mail.gmail.com>
- <ZIeDcVcfxfcMx/BP@shikoro> <CAMuHMdV_Ty=rkcMzsrnJ3YHZngRbyWvYjR_K9Zh7RiAJ4LbvKg@mail.gmail.com>
- <OS0PR01MB59225195B4F2C771F302F7EE8655A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-In-Reply-To: <OS0PR01MB59225195B4F2C771F302F7EE8655A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 13 Jun 2023 16:51:44 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUTAerddXG3zJVRZEAwcrR6V=NFeHwsKV9_tE+ccfw6_w@mail.gmail.com>
-Message-ID: <CAMuHMdUTAerddXG3zJVRZEAwcrR6V=NFeHwsKV9_tE+ccfw6_w@mail.gmail.com>
-Subject: Re: [PATCH v5 01/11] i2c: Enhance i2c_new_ancillary_device API
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Corey Minyard <cminyard@mvista.com>,
-        =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Antonio Borneo <antonio.borneo@foss.st.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [RESEND PATCH v6 1/1] Added Digiteq Automotive MGB4 driver
+Content-Language: en-US
+To:     =?UTF-8?Q?Martin_T=c5=afma?= <tumic@gpxsee.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Martin_T=c5=afma?= <martin.tuma@digiteqautomotive.com>
+References: <20230524112126.2242-1-tumic@gpxsee.org>
+ <20230524112126.2242-2-tumic@gpxsee.org>
+ <3a7da3cd-8d03-a2c4-0534-a75565aefc13@xs4all.nl>
+ <7072a8f3-5c9e-1170-e480-6fb57b95110f@gpxsee.org>
+ <6b792de3-bb2c-d2b5-a652-eca6d20dad20@xs4all.nl>
+ <c34db414-159a-313f-90eb-2bfc0f4496fa@gpxsee.org>
+ <089e728b-0596-d3e3-39a1-651a3ac73e33@xs4all.nl>
+ <f72a7380-d8bc-24bf-630c-75f8ffd6abf3@gpxsee.org>
+ <72494a61-5be8-033b-5bcd-59699a226002@xs4all.nl>
+ <756729ed-18d6-519c-ba61-98afeecaa0b7@gpxsee.org>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <756729ed-18d6-519c-ba61-98afeecaa0b7@gpxsee.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Biju,
+Hi Martin,
 
-On Tue, Jun 13, 2023 at 12:45 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> > Subject: Re: [PATCH v5 01/11] i2c: Enhance i2c_new_ancillary_device API
-> > On Mon, Jun 12, 2023 at 10:43 PM Wolfram Sang <wsa@kernel.org> wrote:
-> > > > Perhaps we should first think through what an ancillary device
-> > > > really is.  My understanding is that it is used to talk to secondary
-> > > > addresses of a multi-address I2C slave device.
-> > >
-> > > As I mentioned somewhere before, this is not the case. Ancillary
-> > > devices are when one *driver* handles more than one address.
-> > > Everything else has been handled differently in the past (for  all the
-> > uses I am aware of).
-> > >
-> > > Yet, I have another idea which is so simple that I wonder if it maybe
-> > > has already been discussed so far?
-> > >
-> > > * have two regs in the bindings
-> > > * use the second reg with i2c_new_client_device to instantiate the
-> > >   RTC sibling. 'struct i2c_board_info', which is one parameter, should
-> > >   have enough options to pass data, e.g it has a software_node.
-> > >
-> > > Should work or did I miss something here?
-> >
-> > That should work, mostly (i2c_new_dummy_device() also calls
-> > i2c_new_client_device()).  And as i2c_board_info has an of_node member
-> > (something I had missed before!), the new I2C device can access the clocks
-> > in the DT node using the standard way.
->
-> Looks like, I cannot assign of_node member like below as it results in pinctrl failure[1]
-> during device bind.
->
-> info.of_node = client->dev.of_node;
->
-> [1]
-> pinctrl-rzg2l 11030000.pinctrl: pin P43_0 already requested by 3-0012; cannot claim for 3-006f
-> pinctrl-rzg2l 11030000.pinctrl: pin-344 (3-006f) status -22
-> pinctrl-rzg2l 11030000.pinctrl: could not request pin 344 (P43_0) from group pmic  on device pinctrl-rzg2l
-> raa215300 3-006f: Error applying setting, reverse things back
+On 13/06/2023 16:46, Martin Tůma wrote:
+> On 13. 06. 23 14:18, Hans Verkuil wrote:
+>> Hi Martin,
+>>
+>> On 12/06/2023 13:34, Martin Tůma wrote:
+>>> On 12. 06. 23 10:51, Hans Verkuil wrote:
+>>>> On 08/06/2023 17:30, Martin Tůma wrote:
+>>>>> On 08. 06. 23 12:23, Hans Verkuil wrote:
+>>>>>
+>>>>>> Can you make a list of which sysfs properties correspond to existing V4L2
+>>>>>> format or timing fields and which are 'new'?
+>>>>>>
+>>>>>
+>>>>> On the left all the current mgb4 sysfs properties (see the admin-guide doc from the patch for description), on the right v4l2 structures where they could be mapped (may not be true for all of
+>>>>> them in
+>>>>> the patch, I will check it and update the code in v7)
+>>>>>
+>>>>>
+>>>>> --- PCIE CARD ---
+>>>>>
+>>>>> module_type        -
+>>>>> module_version        -
+>>>>> fw_type            -
+>>>>> fw_version        -
+>>>>> serial_number        -
+>>>>> temperature        hwmon
+>>>>>
+>>>>> --- INPUTS ---
+>>>>>
+>>>>> input_id        -
+>>>>> oldi_lane_width        -
+>>>>> color_mapping        -
+>>>>> link_status        v4l2_input.status (V4L2_IN_ST_NO_SYNC)
+>>>>> stream_status        v4l2_input.status (V4L2_IN_ST_NO_SIGNAL)
+>>>>> video_width        v4l2_bt_timings.width
+>>>>> video_height        v4l2_bt_timings.height
+>>>>> vsync_status        v4l2_bt_timings.polarities
+>>>>> hsync_status        v4l2_bt_timings.polarities
+>>>>> vsync_gap_length    -
+>>>>> hsync_gap_length    -
+>>>>> pclk_frequency        v4l2_bt_timings.pixelclock
+>>>>> hsync_width        v4l2_bt_timings.hsync
+>>>>> vsync_width        v4l2_bt_timings.vsync
+>>>>> hback_porch        v4l2_bt_timings.hbackporch
+>>>>> hfront_porch        v4l2_bt_timings.hfrontporch
+>>>>> vback_porch        v4l2_bt_timings.vbackporch
+>>>>> vfront_porch        v4l2_bt_timings.vfrontporch
+>>>>> frequency_range        -
+>>>>> alignment        v4l2_pix_format.bytesperline
+>>>>> fpdl3_input_width    -
+>>>>> gmsl_mode        -
+>>>>> gmsl_stream_id        -
+>>>>> gmsl_fec        -
+>>>>>
+>>>>> --- OUTPUTS ---
+>>>>>
+>>>>> output_id        -
+>>>>> video_source        -
+>>>>> display_width        v4l2_bt_timings.width
+>>>>> display_height        v4l2_bt_timings.height
+>>>>> frame_rate        v4l2_frmivalenum
+>>>>
+>>>> The frame rate is a property of the width/height+blanking and the
+>>>> pixel clock frequency. IMHO it does not make sense to have this as
+>>>> a writable property. Read-only is OK.
+>>>>
+>>>>> hsync_polarity        v4l2_bt_timings.polarities
+>>>>> vsync_polarity        v4l2_bt_timings.polarities
+>>>>> de_polarity        -
+>>>>> pclk_frequency        v4l2_bt_timings.pixelclock
+>>>>> hsync_width        v4l2_bt_timings.hsync
+>>>>> vsync_width        v4l2_bt_timings.vsync
+>>>>> vsync_width        v4l2_bt_timings.vsync
+>>>>> hback_porch        v4l2_bt_timings.hbackporch
+>>>>> hfront_porch        v4l2_bt_timings.hfrontporch
+>>>>> vback_porch        v4l2_bt_timings.vbackporch
+>>>>> vfront_porch        v4l2_bt_timings.vfrontporch
+>>>>> alignment        v4l2_pix_format.bytesperline
+>>>>> fpdl3_output_width    -
+>>>>>
+>>>>>
+>>>>> M.
+>>>>
+>>>> The property I am most concerned with is alignment (both for input and output).
+>>>> But it is not clear to me what the use-case is.
+>>>>
+>>>
+>>> Hi,
+>>> The use-case is to provide the alignment required by some video processing chips. We have a product based on NVIDIA Jetson TX2 that uses the mgb4 cards and the HW video encoding needs a specific
+>>> alignment to work.
+>>
+>> OK. I would suggest that for this property it has a default value of 0 (i.e. a 1 byte alignment),
+>> and in that case VIDIOC_S_FMT allows userspace to set bytesperline to whatever they want. I.e.,
+>> this is the normal behavior for DMA engines that can deal with custom padding at the end of each
+>> line.
+>>
+>> If it is > 0, then bytesperline is fixed, based on this value.
+>>
+>> That way both methods are supported fairly cleanly.
+>>
+>> BTW, what is missing in the property documentation for writable properties is what the default
+>> value is. That must be documented as well.
+>>
+> 
+> The default value is 1 (no padding, 1 byte alignment), I will add it to the documentation.
+> 
+> I would really urge to stick with the "set all the properties at one place in sysfs, report them in v4l2" mechanism. Like with most of the properties, there are some special cases and HW related
+> dependencies across inputs/outputs (the output alignment has to comply with input alignment - see the documentation rst for details) and duplicating this logic together with some additional logic
+> handling changes from another source - VIDIOC_S_FMT - will make the driver much more complicated and "messy" for no benefit for the user (he will be even more confused).
 
-Where do you have a reference to pin P43_0 in your DT?
-The last versions you posted did not have any pinctrl properties?
+When mainlining drivers it is important to support the standard APIs as much as possible,
+otherwise it will become a big mess if every driver does something different. So as
+maintainer it is my job to ensure that the standard APIs are used.
 
-v6: https://lore.kernel.org/linux-renesas-soc/20230602142426.438375-5-biju.das.jz@bp.renesas.com
-v5: https://lore.kernel.org/linux-renesas-soc/20230522101849.297499-12-biju.das.jz@bp.renesas.com
+Looking at the properties that were introduced, most are related to timings, except
+for alignment. That is really something for VIDIOC_S_FMT. And should be perfectly
+fine to support as long as alignment is set to 1. If it is > 1, then bytesperline can
+be set by the driver and userspace can't change it. It adds only very little complexity,
+but it ensures that the default behavior is consistent with the V4L2 API.
 
-Gr{oetje,eeting}s,
+I'm not very keen on all the properties at all, but given the specific nature of
+this board I can understand it. They are to some extent similar to device tree
+snippets to configure the device. But 'alignment' is not really part of that,
+but I'm OK with it as long as the standard method is also supported. And in fact,
+the property documentation should refer to the standard method as well.
 
-                        Geert
+Regards,
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+	Hans
