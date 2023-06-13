@@ -2,183 +2,120 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DB17EB64D0
-	for <linux-media@archiver.kernel.org>; Tue, 13 Jun 2023 15:04:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01309EB64D0
+	for <linux-media@archiver.kernel.org>; Tue, 13 Jun 2023 15:10:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242557AbjFMPEk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 13 Jun 2023 11:04:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36870 "EHLO
+        id S239782AbjFMPK4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 13 Jun 2023 11:10:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235653AbjFMPEj (ORCPT
+        with ESMTP id S236388AbjFMPKz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 13 Jun 2023 11:04:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E53110FF;
-        Tue, 13 Jun 2023 08:04:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6498562D43;
-        Tue, 13 Jun 2023 15:04:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF13DC433F0;
-        Tue, 13 Jun 2023 15:04:34 +0000 (UTC)
-Message-ID: <2e7209cf-29c4-0245-fefe-deece350bd2c@xs4all.nl>
-Date:   Tue, 13 Jun 2023 17:04:32 +0200
+        Tue, 13 Jun 2023 11:10:55 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 939B8173C
+        for <linux-media@vger.kernel.org>; Tue, 13 Jun 2023 08:10:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686669052; x=1718205052;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eRZObogH/MfsEuLcSx3n66N8BQCM28Pih9tZEg2TIZo=;
+  b=B0qgve26WBD1k4sLnaCvnos5cAQTXcBFdOpXivzmOljG9s4cSAFNe/0n
+   qyrvjZPQsQ00zoD8zgPYKIOqIIfx02etOjo7XkaP3xHY5sKqpr6q5ET/4
+   NCjHu0adNOZH/I/cUqZ3QUkIcZam3G0C0Sw1sjwmSBKxAzGZIOj0xMzV+
+   bkftGo3Yfjynd/uLy5B5kcxQm/1OcYcdAUwSWJBZ3Bo6B+VjOzforgx2D
+   MPdtILZ9VnngQgw7moijl/xAuJRzQEpnffcKeA9auG0Jj+KIGPGu/+tfm
+   5mxqGHUsqqgNxZn/9GVaQ+l4OgpuznSqlrusmJeRDgNliyJty1Ox/+pzR
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="357241297"
+X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
+   d="scan'208";a="357241297"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 08:10:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="689058412"
+X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
+   d="scan'208";a="689058412"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 08:10:29 -0700
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id B79B2121526;
+        Tue, 13 Jun 2023 18:10:26 +0300 (EEST)
+Date:   Tue, 13 Jun 2023 15:10:26 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org,
+        Philipp Zabel <p.zabel@pengutronix.de>, hverkuil@xs4all.nl,
+        Francesco Dolcini <francesco@dolcini.it>,
+        aishwarya.kothari@toradex.com, Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Hyun Kwon <hyun.kwon@xilinx.com>, bingbu.cao@intel.com,
+        niklas.soderlund@ragnatech.se,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Sylvain Petinot <sylvain.petinot@foss.st.com>,
+        Eugen Hristev <eugen.hristev@collabora.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Dafna Hirschfeld <dafna@fastmail.com>,
+        Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        Yong Deng <yong.deng@magewell.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Benoit Parrot <bparrot@ti.com>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Marco Felsch <m.felsch@pengutronix.de>
+Subject: Re: [RESEND PATCH v3 13/32] media: v4l: async: Simplify async
+ sub-device fwnode matching
+Message-ID: <ZIiG4hag+hn9w1Q/@kekkonen.localdomain>
+References: <20230525091615.2324824-1-sakari.ailus@linux.intel.com>
+ <20230525091615.2324824-14-sakari.ailus@linux.intel.com>
+ <20230530050848.GR21633@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [RESEND PATCH v6 1/1] Added Digiteq Automotive MGB4 driver
-Content-Language: en-US
-To:     =?UTF-8?Q?Martin_T=c5=afma?= <tumic@gpxsee.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Martin_T=c5=afma?= <martin.tuma@digiteqautomotive.com>
-References: <20230524112126.2242-1-tumic@gpxsee.org>
- <20230524112126.2242-2-tumic@gpxsee.org>
- <3a7da3cd-8d03-a2c4-0534-a75565aefc13@xs4all.nl>
- <7072a8f3-5c9e-1170-e480-6fb57b95110f@gpxsee.org>
- <6b792de3-bb2c-d2b5-a652-eca6d20dad20@xs4all.nl>
- <c34db414-159a-313f-90eb-2bfc0f4496fa@gpxsee.org>
- <089e728b-0596-d3e3-39a1-651a3ac73e33@xs4all.nl>
- <f72a7380-d8bc-24bf-630c-75f8ffd6abf3@gpxsee.org>
- <72494a61-5be8-033b-5bcd-59699a226002@xs4all.nl>
- <756729ed-18d6-519c-ba61-98afeecaa0b7@gpxsee.org>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <756729ed-18d6-519c-ba61-98afeecaa0b7@gpxsee.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230530050848.GR21633@pendragon.ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Martin,
+Hi Laurent,
 
-On 13/06/2023 16:46, Martin Tůma wrote:
-> On 13. 06. 23 14:18, Hans Verkuil wrote:
->> Hi Martin,
->>
->> On 12/06/2023 13:34, Martin Tůma wrote:
->>> On 12. 06. 23 10:51, Hans Verkuil wrote:
->>>> On 08/06/2023 17:30, Martin Tůma wrote:
->>>>> On 08. 06. 23 12:23, Hans Verkuil wrote:
->>>>>
->>>>>> Can you make a list of which sysfs properties correspond to existing V4L2
->>>>>> format or timing fields and which are 'new'?
->>>>>>
->>>>>
->>>>> On the left all the current mgb4 sysfs properties (see the admin-guide doc from the patch for description), on the right v4l2 structures where they could be mapped (may not be true for all of
->>>>> them in
->>>>> the patch, I will check it and update the code in v7)
->>>>>
->>>>>
->>>>> --- PCIE CARD ---
->>>>>
->>>>> module_type        -
->>>>> module_version        -
->>>>> fw_type            -
->>>>> fw_version        -
->>>>> serial_number        -
->>>>> temperature        hwmon
->>>>>
->>>>> --- INPUTS ---
->>>>>
->>>>> input_id        -
->>>>> oldi_lane_width        -
->>>>> color_mapping        -
->>>>> link_status        v4l2_input.status (V4L2_IN_ST_NO_SYNC)
->>>>> stream_status        v4l2_input.status (V4L2_IN_ST_NO_SIGNAL)
->>>>> video_width        v4l2_bt_timings.width
->>>>> video_height        v4l2_bt_timings.height
->>>>> vsync_status        v4l2_bt_timings.polarities
->>>>> hsync_status        v4l2_bt_timings.polarities
->>>>> vsync_gap_length    -
->>>>> hsync_gap_length    -
->>>>> pclk_frequency        v4l2_bt_timings.pixelclock
->>>>> hsync_width        v4l2_bt_timings.hsync
->>>>> vsync_width        v4l2_bt_timings.vsync
->>>>> hback_porch        v4l2_bt_timings.hbackporch
->>>>> hfront_porch        v4l2_bt_timings.hfrontporch
->>>>> vback_porch        v4l2_bt_timings.vbackporch
->>>>> vfront_porch        v4l2_bt_timings.vfrontporch
->>>>> frequency_range        -
->>>>> alignment        v4l2_pix_format.bytesperline
->>>>> fpdl3_input_width    -
->>>>> gmsl_mode        -
->>>>> gmsl_stream_id        -
->>>>> gmsl_fec        -
->>>>>
->>>>> --- OUTPUTS ---
->>>>>
->>>>> output_id        -
->>>>> video_source        -
->>>>> display_width        v4l2_bt_timings.width
->>>>> display_height        v4l2_bt_timings.height
->>>>> frame_rate        v4l2_frmivalenum
->>>>
->>>> The frame rate is a property of the width/height+blanking and the
->>>> pixel clock frequency. IMHO it does not make sense to have this as
->>>> a writable property. Read-only is OK.
->>>>
->>>>> hsync_polarity        v4l2_bt_timings.polarities
->>>>> vsync_polarity        v4l2_bt_timings.polarities
->>>>> de_polarity        -
->>>>> pclk_frequency        v4l2_bt_timings.pixelclock
->>>>> hsync_width        v4l2_bt_timings.hsync
->>>>> vsync_width        v4l2_bt_timings.vsync
->>>>> vsync_width        v4l2_bt_timings.vsync
->>>>> hback_porch        v4l2_bt_timings.hbackporch
->>>>> hfront_porch        v4l2_bt_timings.hfrontporch
->>>>> vback_porch        v4l2_bt_timings.vbackporch
->>>>> vfront_porch        v4l2_bt_timings.vfrontporch
->>>>> alignment        v4l2_pix_format.bytesperline
->>>>> fpdl3_output_width    -
->>>>>
->>>>>
->>>>> M.
->>>>
->>>> The property I am most concerned with is alignment (both for input and output).
->>>> But it is not clear to me what the use-case is.
->>>>
->>>
->>> Hi,
->>> The use-case is to provide the alignment required by some video processing chips. We have a product based on NVIDIA Jetson TX2 that uses the mgb4 cards and the HW video encoding needs a specific
->>> alignment to work.
->>
->> OK. I would suggest that for this property it has a default value of 0 (i.e. a 1 byte alignment),
->> and in that case VIDIOC_S_FMT allows userspace to set bytesperline to whatever they want. I.e.,
->> this is the normal behavior for DMA engines that can deal with custom padding at the end of each
->> line.
->>
->> If it is > 0, then bytesperline is fixed, based on this value.
->>
->> That way both methods are supported fairly cleanly.
->>
->> BTW, what is missing in the property documentation for writable properties is what the default
->> value is. That must be documented as well.
->>
+On Tue, May 30, 2023 at 08:08:48AM +0300, Laurent Pinchart wrote:
+> Hi Sakari,
 > 
-> The default value is 1 (no padding, 1 byte alignment), I will add it to the documentation.
+> Thank you for the patch.
 > 
-> I would really urge to stick with the "set all the properties at one place in sysfs, report them in v4l2" mechanism. Like with most of the properties, there are some special cases and HW related
-> dependencies across inputs/outputs (the output alignment has to comply with input alignment - see the documentation rst for details) and duplicating this logic together with some additional logic
-> handling changes from another source - VIDIOC_S_FMT - will make the driver much more complicated and "messy" for no benefit for the user (he will be even more confused).
+> On Thu, May 25, 2023 at 12:15:56PM +0300, Sakari Ailus wrote:
+> > V4L2 async sub-device matching originally used the device nodes only.
+> > Endpoint nodes were taken into use instead as using the device nodes was
+> > problematic for it was in some cases ambiguous which link might have been
+> > in question.
+> > 
+> > There is however no need to use endpoint nodes on both sides, as the async
+> > sub-device's fwnode can always be trivially obtained using
+> > fwnode_graph_get_remote_endpoint() when needed while what counts is
+> > whether or not the link is between two device nodes, i.e. the device nodes
+> > match.
+> > 
+> > This will briefly break the adv748x driver but it will be fixed later in
+> > the set, by patch "media: adv748x: Return to endpoint matching".
+> 
+> I'm afraid I don't like this. This series is complex and has a high risk
+> of causing tricky issues. I would like to be able to bisect the changes.
 
-When mainlining drivers it is important to support the standard APIs as much as possible,
-otherwise it will become a big mess if every driver does something different. So as
-maintainer it is my job to ensure that the standard APIs are used.
+As we discussed separately, this has been tested on both rcar-vin + adv748x
+and i.MX6, I'm not overly concerned of this.
 
-Looking at the properties that were introduced, most are related to timings, except
-for alignment. That is really something for VIDIOC_S_FMT. And should be perfectly
-fine to support as long as alignment is set to 1. If it is > 1, then bytesperline can
-be set by the driver and userspace can't change it. It adds only very little complexity,
-but it ensures that the default behavior is consistent with the V4L2 API.
+-- 
+Kind regards,
 
-I'm not very keen on all the properties at all, but given the specific nature of
-this board I can understand it. They are to some extent similar to device tree
-snippets to configure the device. But 'alignment' is not really part of that,
-but I'm OK with it as long as the standard method is also supported. And in fact,
-the property documentation should refer to the standard method as well.
-
-Regards,
-
-	Hans
+Sakari Ailus
