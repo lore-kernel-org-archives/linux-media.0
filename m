@@ -2,329 +2,112 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35712EB64D8
-	for <linux-media@archiver.kernel.org>; Wed, 14 Jun 2023 16:56:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10401EB64DB
+	for <linux-media@archiver.kernel.org>; Wed, 14 Jun 2023 18:31:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232195AbjFNQ4o convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 14 Jun 2023 12:56:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34000 "EHLO
+        id S234018AbjFNSbO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 14 Jun 2023 14:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbjFNQ4n (ORCPT
+        with ESMTP id S229559AbjFNSbN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 14 Jun 2023 12:56:43 -0400
-Received: from irl.hu (irl.hu [95.85.9.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8877B1BC6
-        for <linux-media@vger.kernel.org>; Wed, 14 Jun 2023 09:56:41 -0700 (PDT)
-Received: from [192.168.2.4] (softdnserr [::ffff:81.182.137.62])
-  (AUTH: CRAM-MD5 soyer@irl.hu, )
-  by irl.hu with ESMTPSA
-  id 0000000000060124.000000006489F147.003B5213; Wed, 14 Jun 2023 18:56:38 +0200
-Message-ID: <0d2c103938ce4d020553711e4b0b4ce1c38a0152.camel@irl.hu>
-Subject: Re: [PATCH] media: uvcvideo: uvc_ctrl_get_rel_speed: use 0 as
- default
-From:   Gergo Koteles <soyer@irl.hu>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Wed, 14 Jun 2023 14:31:13 -0400
+Received: from smtp.smtpout.orange.fr (smtp-20.smtpout.orange.fr [80.12.242.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B977DE3
+        for <linux-media@vger.kernel.org>; Wed, 14 Jun 2023 11:31:10 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id 9VGsqBvw5uHEf9VGtqP6SV; Wed, 14 Jun 2023 20:31:08 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1686767468;
+        bh=reNbQlvt6iwnJUAjcJkxGRJU4vzmBikzkd2pe0kBB0M=;
+        h=From:To:Cc:Subject:Date;
+        b=mQgaw/wMo3xhmP22Js9wU/i1RrWxxozS6T6PLcb3um4wW0aVihOiiRViAdIjQkeK2
+         GC5PYs8tcrQdD5kbmW0JlRUKSMi11pr59L3/C4dbfIhz0YYCvb1IX7pRvoA2XhTEFJ
+         jhkIyDEVD8749HDeD3z1r9BlOF3zrPmoE30TA7JtQG3bH7/+QxGQurB1Ys/gjZIDhG
+         diF2/2Jj+nlkGLNpkqjdty+bTWd8+53LKlrQlyoDMbJExn67WyXanFf1Vhxto9V/Ae
+         R8w9Fq9diwxUW1ilUH684bOBvmT8xLtIrW4Hpy1CaLYfZyQrrTz+LCNwBF78b/wLgq
+         IJENaW26ufWRA==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Wed, 14 Jun 2023 20:31:08 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         linux-media@vger.kernel.org
-Date:   Wed, 14 Jun 2023 18:56:38 +0200
-In-Reply-To: <CANiDSCs22ztCf8zXVRJS47ZwroTDy_1tOG3OO+tpdtXrxm-j_A@mail.gmail.com>
-References: <eb4f7f29a94231c5fa404f7492dba8e7fd9fbb23.1686746422.git.soyer@irl.hu>
-         <CANiDSCsmKvOZFmcBCAtc8D971a=FvRcn_rJgO=omKrCR2fvNOA@mail.gmail.com>
-         <d50992e1f4709eb8f0a34120b70f2b02d3e655e5.camel@irl.hu>
-         <CANiDSCshBFwE+HDqgQ7tc33gNtUuowP5s+bprqxaAF6D6HBO_w@mail.gmail.com>
-         <CANiDSCt193avx+fKgujT7u-4hguEyq=kmfULG75F1LK=fjMLhA@mail.gmail.com>
-         <944fc6422e73a7b1334fdc1856bdf0480c7fc4e9.camel@irl.hu>
-         <CANiDSCupgF6m6T3R=w7BxqVe672cPHk05Yj0yqiW3hLp+GEkdw@mail.gmail.com>
-         <3480de8b7cfd17dc93165d816fa624fdba75d0e6.camel@irl.hu>
-         <CANiDSCs22ztCf8zXVRJS47ZwroTDy_1tOG3OO+tpdtXrxm-j_A@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
+Subject: [PATCH v2] media: v4l2-core: Fix a potential resource leak in v4l2_fwnode_parse_link()
+Date:   Wed, 14 Jun 2023 20:31:05 +0200
+Message-Id: <773118ad2c2b56f136e10466997eaaa911e6a422.1686767431.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Ricardo,
+If fwnode_graph_get_remote_endpoint() fails, 'fwnode' is known to be NULL,
+so fwnode_handle_put() is a no-op.
 
-On Wed, 2023-06-14 at 18:29 +0200, Ricardo Ribalda wrote:
-> Hi Gergo
-> 
-> 
-> 
-> On Wed, 14 Jun 2023 at 17:46, Gergo Koteles <soyer@irl.hu> wrote:
-> > 
-> > Hi Ricardo,
-> > On Wed, 2023-06-14 at 17:25 +0200, Ricardo Ribalda wrote:
-> > > On Wed, 14 Jun 2023 at 17:22, Gergo Koteles <soyer@irl.hu> wrote:
-> > > > 
-> > > > Hi Ricardo,
-> > > > On Wed, 2023-06-14 at 17:08 +0200, Ricardo Ribalda wrote:
-> > > > > On Wed, 14 Jun 2023 at 17:07, Ricardo Ribalda
-> > > > > <ribalda@chromium.org>
-> > > > > wrote:
-> > > > > > 
-> > > > > > Hi Soyer
-> > > > > > 
-> > > > > > 
-> > > > > > On Wed, 14 Jun 2023 at 16:59, soyer <soyer@irl.hu> wrote:
-> > > > > > > 
-> > > > > > > Hi Ricardo
-> > > > > > > 
-> > > > > > > On Wed, 2023-06-14 at 16:19 +0200, Ricardo Ribalda wrote:
-> > > > > > > > [Now in plain text mode]
-> > > > > > > > 
-> > > > > > > > Hi Gergo
-> > > > > > > > 
-> > > > > > > > Doesn't your patch affect pan and tilt for all the
-> > > > > > > > cameras,
-> > > > > > > > not
-> > > > > > > > only
-> > > > > > > > the BCC950?
-> > > > > > > > 
-> > > > > > > Yes, it affects all cameras that support
-> > > > > > > CT_PANTILT_RELATIVE_CONTROL.
-> > > > > > > 
-> > > > > > > > Also it seems that 1 means that device does not support
-> > > > > > > > programmable
-> > > > > > > > speed. Is that correct?
-> > > > > > > > 
-> > > > > > > > ```
-> > > > > > > > The bPanSpeed field is used to specify the speed of the
-> > > > > > > > movement for
-> > > > > > > > the Pan direction. A low
-> > > > > > > > number indicates a slow speed and a high number
-> > > > > > > > indicates a
-> > > > > > > > higher
-> > > > > > > > speed. The GET_MIN,
-> > > > > > > > GET_MAX and GET_RES requests are used to retrieve the
-> > > > > > > > range
-> > > > > > > > and
-> > > > > > > > resolution for this field.
-> > > > > > > > The GET_DEF request is used to retrieve the default
-> > > > > > > > value
-> > > > > > > > for
-> > > > > > > > this
-> > > > > > > > field. If the control does not
-> > > > > > > > support speed control for the Pan control, it will
-> > > > > > > > return
-> > > > > > > > the
-> > > > > > > > value 1
-> > > > > > > > in this field for all these
-> > > > > > > > requests.
-> > > > > > > > ```
-> > > > > > 
-> > > > > > It seems to me that the module is compliant to the
-> > > > > > standard. It
-> > > > > > returns 1 as GET_DEF because it does not support speed
-> > > > > > control.
-> > > > > > 
-> > > > > > Maybe you should ignore the speed control instead of
-> > > > > > changing
-> > > > > > its
-> > > > > > default value?
-> > > > > 
-> > > > > ( this is the standard I am refering to: 4.2.2.1.15 PanTilt
-> > > > > (Relative) Control
-> > > > > 
-> > > > > 
-> > > > > https://www.usb.org/document-library/video-class-v15-document-set
-> > > > > )
-> > > > > > 
-> > > > > > 
-> > > > 
-> > > > It's a different API. V4L2 control values are not the same as
-> > > > the
-> > > > UVC
-> > > > standard control values.
-> > > 
-> > > What I am saying, is that if
-> > > CT_PANTILT_RELATIVE_CONTROL.bPanSpeed.GET_DEF is 1 you should not
-> > > create the mapping to
-> > > V4L2_CID_PAN_SPEED
-> > > 
-> > If I set V4L2_CID_PAN_SPEED to 1 (max), the BCC950 starts to move
-> > at
-> > maximum speed. This is what it should do according to description
-> > of
-> > the V4L2_CID_PAN_SPEED.
-> > 
-> > My understanding is that, if the camera supports
-> > CT_PANTILT_RELATIVE_CONTROL there should be a V4L2_CID_PAN_SPEED.
-> > CT_PANTILT_RELATIVE_CONTROL.bPanSpeed.GET_DEF == 1 only says that
-> > only
-> > one speed is available not a range.
-> 
-> I think I got confused by the names.
-> 
-> Can you check if this works?
-> 
-> ribalda@alco:~/work/linux$ git diff
-> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c
-> b/drivers/media/usb/uvc/uvc_ctrl.c
-> index 5e9d3da862dd..abab2f4efc94 100644
-> --- a/drivers/media/usb/uvc/uvc_ctrl.c
-> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
-> @@ -437,6 +437,7 @@ static s32 uvc_ctrl_get_rel_speed(struct
-> uvc_control_mapping *mapping,
->         s8 rel = (s8)data[first];
-> 
->         switch (query) {
-> +       case UVC_GET_DEF:
->         case UVC_GET_CUR:
->                 return (rel == 0) ? 0 : (rel > 0 ? data[first+1]
->                                                  : -data[first+1]);
-> @@ -444,7 +445,6 @@ static s32 uvc_ctrl_get_rel_speed(struct
-> uvc_control_mapping *mapping,
->                 return -data[first+1];
->         case UVC_GET_MAX:
->         case UVC_GET_RES:
-> -       case UVC_GET_DEF:
->         default:
->                 return data[first+1];
->         }
-> ribalda@alco:~/work/linux$
-> 
-> 
+Release the reference taken from a previous fwnode_graph_get_port_parent()
+call instead.
 
-It works this way also.
-Should I send a new version?
+Also handle fwnode_graph_get_port_parent() failures.
 
+In order to fix these issues, add an error handling path to the function
+and the needed gotos.
 
-> > 
-> > 
-> > 
-> > > > 
-> > > > Eg the V4L2_CID_PAN_SPEED control value calculated from
-> > > > CT_PANTILT_RELATIVE_CONTROL's bPanRelative and bPanSpeed value.
-> > > > 
-> > > > It only bothers me that I have to handle these two controls
-> > > > differently.
-> > > > 
-> > > > > > > > 
-> > > > > > > I started from the V4L2 control description.
-> > > > > > > 
-> > > > > > > V4L2_CID_PAN_SPEED (integer)
-> > > > > > > This control turns the camera horizontally at the
-> > > > > > > specific
-> > > > > > > speed.
-> > > > > > > The
-> > > > > > > unit is undefined. A positive value moves the camera to
-> > > > > > > the
-> > > > > > > right
-> > > > > > > (clockwise when viewed from above), a negative value to
-> > > > > > > the
-> > > > > > > left.
-> > > > > > > A
-> > > > > > > value of zero stops the motion if one is in progress and
-> > > > > > > has
-> > > > > > > no
-> > > > > > > effect
-> > > > > > > otherwise.
-> > > > > > > 
-> > > > > > > And this is why I thought that 1 is not a good default
-> > > > > > > value,
-> > > > > > > because
-> > > > > > > it moves the camera.
-> > > > > > > The other V4L2 controls have a default value that I can
-> > > > > > > safely
-> > > > > > > set the
-> > > > > > > controls to.
-> > > > > > > 
-> > > > > > > Are you using it to determine if the camera supports
-> > > > > > > speed
-> > > > > > > control?
-> > > > > > > 
-> > > > > > > > When you program that value do you see any difference
-> > > > > > > > on
-> > > > > > > > the
-> > > > > > > > device?
-> > > > > > > > What is max, min and res?
-> > > > > > > > 
-> > > > > > > 
-> > > > > > > No, it works the same way.
-> > > > > > > Only the default value changes (from 1 to 0)
-> > > > > > > 
-> > > > > > >  pan_speed 0x009a0920 (int)    : min=-1 max=1 step=1
-> > > > > > > default=0
-> > > > > > > value=0
-> > > > > > > tilt_speed 0x009a0921 (int)    : min=-1 max=1 step=1
-> > > > > > > default=0
-> > > > > > > value=0
-> > > > > > > 
-> > > > > > > 
-> > > > > > > 
-> > > > > > > > 
-> > > > > > > > Thanks!
-> > > > > > > > 
-> > > > > > > > Regards!
-> > > > > > > > 
-> > > > > > > > 
-> > > > > > > 
-> > > > > > > Thanks,
-> > > > > > > Gergo
-> > > > > > > 
-> > > > > > > > On Wed, 14 Jun 2023 at 15:13, Gergo Koteles
-> > > > > > > > <soyer@irl.hu>
-> > > > > > > > wrote:
-> > > > > > > > > 
-> > > > > > > > > The Logitech BCC950 incorrectly reports 1 (the max
-> > > > > > > > > value)
-> > > > > > > > > for the default values of V4L2_CID_PAN_SPEED,
-> > > > > > > > > V4L2_CID_TILT_SPEED.
-> > > > > > > > > 
-> > > > > > > > > This patch sets them to 0, which is the stop value.
-> > > > > > > > > 
-> > > > > > > > > Previous discussion
-> > > > > > > > > Link:
-> > > > > > > > > https://lore.kernel.org/all/CAP_ceTy6XVmvTTAmvCp1YU2wxHwXqnarm69Yaz8K4FmpJqYxAg@mail.gmail.com/
-> > > > > > > > > 
-> > > > > > > > > Signed-off-by: Gergo Koteles <soyer@irl.hu>
-> > > > > > > > > ---
-> > > > > > > > >  drivers/media/usb/uvc/uvc_ctrl.c | 3 ++-
-> > > > > > > > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > > > > > > > > 
-> > > > > > > > > diff --git a/drivers/media/usb/uvc/uvc_ctrl.c
-> > > > > > > > > b/drivers/media/usb/uvc/uvc_ctrl.c
-> > > > > > > > > index 5e9d3da862dd..e131958c0930 100644
-> > > > > > > > > --- a/drivers/media/usb/uvc/uvc_ctrl.c
-> > > > > > > > > +++ b/drivers/media/usb/uvc/uvc_ctrl.c
-> > > > > > > > > @@ -444,9 +444,10 @@ static s32
-> > > > > > > > > uvc_ctrl_get_rel_speed(struct
-> > > > > > > > > uvc_control_mapping *mapping,
-> > > > > > > > >                 return -data[first+1];
-> > > > > > > > >         case UVC_GET_MAX:
-> > > > > > > > >         case UVC_GET_RES:
-> > > > > > > > > +               return data[first+1];
-> > > > > > > > >         case UVC_GET_DEF:
-> > > > > > > > >         default:
-> > > > > > > > > -               return data[first+1];
-> > > > > > > > > +               return 0;
-> > > > > > > > >         }
-> > > > > > > > >  }
-> > > > > > > > > 
-> > > > > > > > > 
-> > > > > > > > > base-commit: be9aac187433af6abba5fcc2e73d91d0794ba360
-> > > > > > > > > --
-> > > > > > > > > 2.40.1
-> > > > > > > > > 
-> > > > > > > > 
-> > > > > > > > 
-> > > > > > > 
-> > > > > > 
-> > > > > > 
-> > > > > > --
-> > > > > > Ricardo Ribalda
-> > > > > 
-> > > > > 
-> > > > > 
-> > > > 
-> > > 
-> > > 
-> > 
-> 
-> 
-> --
-> Ricardo Ribalda
+Fixes: ca50c197bd96 ("[media] v4l: fwnode: Support generic fwnode for parsing standardised properties")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+v2: - Handle fwnode_graph_get_port_parent() errors   [Sakari Ailus <sakari.ailus@linux.intel.com>]
+    - Rephrase the commit log
+
+v1: https://lore.kernel.org/all/2ddd10ec9e009bbb85518355f1e09e1ecd349925.1685340968.git.christophe.jaillet@wanadoo.fr/
+---
+ drivers/media/v4l2-core/v4l2-fwnode.c | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/v4l2-core/v4l2-fwnode.c
+index 049c2f2001ea..4fa9225aa3d9 100644
+--- a/drivers/media/v4l2-core/v4l2-fwnode.c
++++ b/drivers/media/v4l2-core/v4l2-fwnode.c
+@@ -568,19 +568,29 @@ int v4l2_fwnode_parse_link(struct fwnode_handle *fwnode,
+ 	link->local_id = fwep.id;
+ 	link->local_port = fwep.port;
+ 	link->local_node = fwnode_graph_get_port_parent(fwnode);
++	if (!link->local_node)
++		return -ENOLINK;
+ 
+ 	fwnode = fwnode_graph_get_remote_endpoint(fwnode);
+-	if (!fwnode) {
+-		fwnode_handle_put(fwnode);
+-		return -ENOLINK;
+-	}
++	if (!fwnode)
++		goto err_put_local_node;
+ 
+ 	fwnode_graph_parse_endpoint(fwnode, &fwep);
+ 	link->remote_id = fwep.id;
+ 	link->remote_port = fwep.port;
+ 	link->remote_node = fwnode_graph_get_port_parent(fwnode);
++	if (!link->remote_node)
++		goto err_put_remote_endpoint;
+ 
+ 	return 0;
++
++err_put_remote_endpoint:
++	fwnode_handle_put(fwnode);
++
++err_put_local_node:
++	fwnode_handle_put(link->local_node);
++
++	return -ENOLINK;
+ }
+ EXPORT_SYMBOL_GPL(v4l2_fwnode_parse_link);
+ 
+-- 
+2.34.1
 
