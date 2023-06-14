@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 520D4EB64DB
-	for <linux-media@archiver.kernel.org>; Wed, 14 Jun 2023 19:26:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DBB9FEB64D8
+	for <linux-media@archiver.kernel.org>; Wed, 14 Jun 2023 19:26:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236422AbjFNT0p (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 14 Jun 2023 15:26:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50424 "EHLO
+        id S236414AbjFNT0r (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 14 Jun 2023 15:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236593AbjFNTZA (ORCPT
+        with ESMTP id S236578AbjFNTZA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 14 Jun 2023 15:25:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557EE2683
-        for <linux-media@vger.kernel.org>; Wed, 14 Jun 2023 12:23:58 -0700 (PDT)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D5C268F
+        for <linux-media@vger.kernel.org>; Wed, 14 Jun 2023 12:24:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686770637;
+        s=mimecast20190719; t=1686770639;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=F6Km22jKD6sF4GMl4bTvLULRzhMvvlHcdtBVPWEwHWc=;
-        b=d9tLU7RpM2MzlmTxd2HFreurm65bDRPgoncrmOAqrEACGlnsLT8ID9NpTtS7QuBx8EKrSE
-        d2ucuphlMlOcbMC5sD1+82ObCaBMFlARcnMxcmzutYMM1P+3fm8o40gV4w3L4v0SEr6t6b
-        4FAnWWcnMQJbZ13ekf745YPX2qhUIZ4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=8YIlSt15O+Dzk2oj7Oqp3qvXOQNmSfutXO1qnaI3Epc=;
+        b=Vn9O2BTAptJTxLiXFl2wxT0JxKjbaKkouuaYYdfpMHq/nNmcBgGJhnvcHdsRfcu7wfkjld
+        DoeObVQbDoKszbiXm2sjXHJ4nu+ihusl60jqZpxi727a0gRTSgAL6su/kKh+ORf5wcVnaP
+        tMsUWzr6q9UrwCJ0euPSCkHyRgA8WDE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-517-gyJGj6jXMcK6ZyXv-sdSDg-1; Wed, 14 Jun 2023 15:23:54 -0400
-X-MC-Unique: gyJGj6jXMcK6ZyXv-sdSDg-1
+ us-mta-578-Bs399RwOMdiT-mFh7IkZVw-1; Wed, 14 Jun 2023 15:23:55 -0400
+X-MC-Unique: Bs399RwOMdiT-mFh7IkZVw-1
 Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 18E4F384952E;
-        Wed, 14 Jun 2023 19:23:53 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 755AD101A52C;
+        Wed, 14 Jun 2023 19:23:55 +0000 (UTC)
 Received: from localhost.localdomain (unknown [10.39.192.46])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 01B891415102;
-        Wed, 14 Jun 2023 19:23:51 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 796681415102;
+        Wed, 14 Jun 2023 19:23:54 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>
@@ -45,9 +45,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Andy Shevchenko <andy@kernel.org>, Kate Hsuan <hpa@redhat.com>,
         linux-media@vger.kernel.org
-Subject: [PATCH v2 2/5] media: ov5693: Convert to new CCI register access helpers
-Date:   Wed, 14 Jun 2023 21:23:40 +0200
-Message-Id: <20230614192343.57280-3-hdegoede@redhat.com>
+Subject: [PATCH v2 4/5] media: atomisp: ov2680: Convert to new CCI register access helpers
+Date:   Wed, 14 Jun 2023 21:23:42 +0200
+Message-Id: <20230614192343.57280-5-hdegoede@redhat.com>
 In-Reply-To: <20230614192343.57280-1-hdegoede@redhat.com>
 References: <20230614192343.57280-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -58,837 +58,552 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 Use the new comon CCI register access helpers to replace the private
-register access helpers in the ov5693 driver.
+register access helpers in the ov2680 driver.
 
+While at it also switch to using the same register address defines
+as the standard drivers/media/i2c/ov2680.c driver to make merging
+the 2 drivers simpler.
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
-Note for reviewers all the OV5693_REG_?BIT defines in both the register
-address defines as well as in ov5693_global_regs[] were automatically
-changed using search replace.
----
- drivers/media/i2c/Kconfig  |   1 +
- drivers/media/i2c/ov5693.c | 574 ++++++++++++++-----------------------
- 2 files changed, 220 insertions(+), 355 deletions(-)
+ drivers/staging/media/atomisp/i2c/Kconfig     |   1 +
+ .../media/atomisp/i2c/atomisp-ov2680.c        | 237 ++++++++----------
+ drivers/staging/media/atomisp/i2c/ov2680.h    |  86 +------
+ 3 files changed, 107 insertions(+), 217 deletions(-)
 
-diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-index 11e503129085..298884a09196 100644
---- a/drivers/media/i2c/Kconfig
-+++ b/drivers/media/i2c/Kconfig
-@@ -591,6 +591,7 @@ config VIDEO_OV5693
- 	tristate "OmniVision OV5693 sensor support"
+diff --git a/drivers/staging/media/atomisp/i2c/Kconfig b/drivers/staging/media/atomisp/i2c/Kconfig
+index 16b6b808d4a7..e353b7fdbff0 100644
+--- a/drivers/staging/media/atomisp/i2c/Kconfig
++++ b/drivers/staging/media/atomisp/i2c/Kconfig
+@@ -53,6 +53,7 @@ config VIDEO_ATOMISP_OV2680
+ 	tristate "Omnivision OV2680 sensor support"
+ 	depends on ACPI
  	depends on I2C && VIDEO_DEV
- 	select V4L2_FWNODE
 +	select V4L2_CCI
  	help
- 	  This is a Video4Linux2 sensor driver for the OmniVision
- 	  OV5693 camera.
-diff --git a/drivers/media/i2c/ov5693.c b/drivers/media/i2c/ov5693.c
-index 7f9212cce239..349124e422bd 100644
---- a/drivers/media/i2c/ov5693.c
-+++ b/drivers/media/i2c/ov5693.c
-@@ -12,7 +12,6 @@
-  * Jake Day
-  */
- 
--#include <asm/unaligned.h>
- #include <linux/acpi.h>
- #include <linux/clk.h>
- #include <linux/delay.h>
-@@ -23,36 +22,32 @@
- #include <linux/regulator/consumer.h>
- #include <linux/slab.h>
+ 	  This is a Video4Linux2 sensor-level driver for the Omnivision
+ 	  OV2680 raw camera.
+diff --git a/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c b/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
+index 4cc2839937af..ffdd7f21f450 100644
+--- a/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
++++ b/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
+@@ -23,13 +23,50 @@
+ #include <linux/i2c.h>
+ #include <linux/module.h>
+ #include <linux/pm_runtime.h>
++#include <linux/regmap.h>
  #include <linux/types.h>
-+
-+#include <media/v4l2-cci.h>
- #include <media/v4l2-ctrls.h>
+ 
+-#include <media/ov_16bit_addr_reg_helpers.h>
  #include <media/v4l2-device.h>
- #include <media/v4l2-fwnode.h>
  
--#define OV5693_REG_8BIT(n)			((1 << 16) | (n))
--#define OV5693_REG_16BIT(n)			((2 << 16) | (n))
--#define OV5693_REG_24BIT(n)			((3 << 16) | (n))
--#define OV5693_REG_SIZE_SHIFT			16
--#define OV5693_REG_ADDR_MASK			0xffff
--
- /* System Control */
--#define OV5693_SW_RESET_REG			OV5693_REG_8BIT(0x0103)
--#define OV5693_SW_STREAM_REG			OV5693_REG_8BIT(0x0100)
-+#define OV5693_SW_RESET_REG			CCI_REG8(0x0103)
-+#define OV5693_SW_STREAM_REG			CCI_REG8(0x0100)
- #define OV5693_START_STREAMING			0x01
- #define OV5693_STOP_STREAMING			0x00
- #define OV5693_SW_RESET				0x01
+ #include "ov2680.h"
  
--#define OV5693_REG_CHIP_ID			OV5693_REG_16BIT(0x300a)
-+#define OV5693_REG_CHIP_ID			CCI_REG16(0x300a)
- /* Yes, this is right. The datasheet for the OV5693 gives its ID as 0x5690 */
- #define OV5693_CHIP_ID				0x5690
- 
- /* Exposure */
--#define OV5693_EXPOSURE_CTRL_REG		OV5693_REG_24BIT(0x3500)
-+#define OV5693_EXPOSURE_CTRL_REG		CCI_REG24(0x3500)
- #define OV5693_EXPOSURE_CTRL_MASK		GENMASK(19, 4)
- #define OV5693_INTEGRATION_TIME_MARGIN		8
- #define OV5693_EXPOSURE_MIN			1
- #define OV5693_EXPOSURE_STEP			1
- 
- /* Analogue Gain */
--#define OV5693_GAIN_CTRL_REG			OV5693_REG_16BIT(0x350a)
-+#define OV5693_GAIN_CTRL_REG			CCI_REG16(0x350a)
- #define OV5693_GAIN_CTRL_MASK			GENMASK(10, 4)
- #define OV5693_GAIN_MIN				1
- #define OV5693_GAIN_MAX				127
-@@ -60,9 +55,9 @@
- #define OV5693_GAIN_STEP			1
- 
- /* Digital Gain */
--#define OV5693_MWB_RED_GAIN_REG			OV5693_REG_16BIT(0x3400)
--#define OV5693_MWB_GREEN_GAIN_REG		OV5693_REG_16BIT(0x3402)
--#define OV5693_MWB_BLUE_GAIN_REG		OV5693_REG_16BIT(0x3404)
-+#define OV5693_MWB_RED_GAIN_REG			CCI_REG16(0x3400)
-+#define OV5693_MWB_GREEN_GAIN_REG		CCI_REG16(0x3402)
-+#define OV5693_MWB_BLUE_GAIN_REG		CCI_REG16(0x3404)
- #define OV5693_MWB_GAIN_MASK			GENMASK(11, 0)
- #define OV5693_MWB_GAIN_MAX			0x0fff
- #define OV5693_DIGITAL_GAIN_MIN			1
-@@ -71,36 +66,36 @@
- #define OV5693_DIGITAL_GAIN_STEP		1
- 
- /* Timing and Format */
--#define OV5693_CROP_START_X_REG			OV5693_REG_16BIT(0x3800)
--#define OV5693_CROP_START_Y_REG			OV5693_REG_16BIT(0x3802)
--#define OV5693_CROP_END_X_REG			OV5693_REG_16BIT(0x3804)
--#define OV5693_CROP_END_Y_REG			OV5693_REG_16BIT(0x3806)
--#define OV5693_OUTPUT_SIZE_X_REG		OV5693_REG_16BIT(0x3808)
--#define OV5693_OUTPUT_SIZE_Y_REG		OV5693_REG_16BIT(0x380a)
-+#define OV5693_CROP_START_X_REG			CCI_REG16(0x3800)
-+#define OV5693_CROP_START_Y_REG			CCI_REG16(0x3802)
-+#define OV5693_CROP_END_X_REG			CCI_REG16(0x3804)
-+#define OV5693_CROP_END_Y_REG			CCI_REG16(0x3806)
-+#define OV5693_OUTPUT_SIZE_X_REG		CCI_REG16(0x3808)
-+#define OV5693_OUTPUT_SIZE_Y_REG		CCI_REG16(0x380a)
- 
--#define OV5693_TIMING_HTS_REG			OV5693_REG_16BIT(0x380c)
-+#define OV5693_TIMING_HTS_REG			CCI_REG16(0x380c)
- #define OV5693_FIXED_PPL			2688U
--#define OV5693_TIMING_VTS_REG			OV5693_REG_16BIT(0x380e)
-+#define OV5693_TIMING_VTS_REG			CCI_REG16(0x380e)
- #define OV5693_TIMING_MAX_VTS			0xffff
- #define OV5693_TIMING_MIN_VTS			0x04
- 
--#define OV5693_OFFSET_START_X_REG		OV5693_REG_16BIT(0x3810)
--#define OV5693_OFFSET_START_Y_REG		OV5693_REG_16BIT(0x3812)
-+#define OV5693_OFFSET_START_X_REG		CCI_REG16(0x3810)
-+#define OV5693_OFFSET_START_Y_REG		CCI_REG16(0x3812)
- 
--#define OV5693_SUB_INC_X_REG			OV5693_REG_8BIT(0x3814)
--#define OV5693_SUB_INC_Y_REG			OV5693_REG_8BIT(0x3815)
-+#define OV5693_SUB_INC_X_REG			CCI_REG8(0x3814)
-+#define OV5693_SUB_INC_Y_REG			CCI_REG8(0x3815)
- 
--#define OV5693_FORMAT1_REG			OV5693_REG_8BIT(0x3820)
-+#define OV5693_FORMAT1_REG			CCI_REG8(0x3820)
- #define OV5693_FORMAT1_FLIP_VERT_ISP_EN		BIT(6)
- #define OV5693_FORMAT1_FLIP_VERT_SENSOR_EN	BIT(1)
- #define OV5693_FORMAT1_VBIN_EN			BIT(0)
--#define OV5693_FORMAT2_REG			OV5693_REG_8BIT(0x3821)
-+#define OV5693_FORMAT2_REG			CCI_REG8(0x3821)
- #define OV5693_FORMAT2_HDR_EN			BIT(7)
- #define OV5693_FORMAT2_FLIP_HORZ_ISP_EN		BIT(2)
- #define OV5693_FORMAT2_FLIP_HORZ_SENSOR_EN	BIT(1)
- #define OV5693_FORMAT2_HBIN_EN			BIT(0)
- 
--#define OV5693_ISP_CTRL2_REG			OV5693_REG_8BIT(0x5002)
-+#define OV5693_ISP_CTRL2_REG			CCI_REG8(0x5002)
- #define OV5693_ISP_SCALE_ENABLE			BIT(7)
- 
- /* Pixel Array */
-@@ -116,7 +111,7 @@
- #define OV5693_MIN_CROP_HEIGHT			2
- 
- /* Test Pattern */
--#define OV5693_TEST_PATTERN_REG			OV5693_REG_8BIT(0x5e00)
-+#define OV5693_TEST_PATTERN_REG			CCI_REG8(0x5e00)
- #define OV5693_TEST_PATTERN_ENABLE		BIT(7)
- #define OV5693_TEST_PATTERN_ROLLING		BIT(6)
- #define OV5693_TEST_PATTERN_RANDOM		0x01
-@@ -137,19 +132,10 @@ static const char * const ov5693_supply_names[] = {
- 
- #define OV5693_NUM_SUPPLIES	ARRAY_SIZE(ov5693_supply_names)
- 
--struct ov5693_reg {
--	u32 reg;
--	u8 val;
--};
--
--struct ov5693_reg_list {
--	u32 num_regs;
--	const struct ov5693_reg *regs;
--};
--
- struct ov5693_device {
- 	struct i2c_client *client;
- 	struct device *dev;
-+	struct regmap *regmap;
- 
- 	/* Protect against concurrent changes to controls */
- 	struct mutex lock;
-@@ -189,156 +175,151 @@ struct ov5693_device {
- 	} ctrls;
++#define OV2680_CHIP_ID				0x2680
++
++#define OV2680_REG_STREAM_CTRL			CCI_REG8(0x0100)
++#define OV2680_REG_SOFT_RESET			CCI_REG8(0x0103)
++
++#define OV2680_REG_CHIP_ID			CCI_REG16(0x300a)
++#define OV2680_REG_SC_CMMN_SUB_ID		CCI_REG8(0x302a)
++
++#define OV2680_REG_EXPOSURE_PK			CCI_REG24(0x3500)
++#define OV2680_REG_R_MANUAL			CCI_REG8(0x3503)
++#define OV2680_REG_GAIN_PK			CCI_REG16(0x350a)
++
++#define OV2680_REG_SENSOR_CTRL_0A		CCI_REG8(0x370a)
++
++#define OV2680_REG_HORIZONTAL_START		CCI_REG16(0x3800)
++#define OV2680_REG_VERTICAL_START		CCI_REG16(0x3802)
++#define OV2680_REG_HORIZONTAL_END		CCI_REG16(0x3804)
++#define OV2680_REG_VERTICAL_END			CCI_REG16(0x3806)
++#define OV2680_REG_HORIZONTAL_OUTPUT_SIZE	CCI_REG16(0x3808)
++#define OV2680_REG_VERTICAL_OUTPUT_SIZE		CCI_REG16(0x380a)
++#define OV2680_REG_TIMING_HTS			CCI_REG16(0x380c)
++#define OV2680_REG_TIMING_VTS			CCI_REG16(0x380e)
++#define OV2680_REG_ISP_X_WIN			CCI_REG16(0x3810)
++#define OV2680_REG_ISP_Y_WIN			CCI_REG16(0x3812)
++#define OV2680_REG_X_INC			CCI_REG8(0x3814)
++#define OV2680_REG_Y_INC			CCI_REG8(0x3815)
++#define OV2680_REG_FORMAT1			CCI_REG8(0x3820)
++#define OV2680_REG_FORMAT2			CCI_REG8(0x3821)
++
++#define OV2680_REG_ISP_CTRL00			CCI_REG8(0x5080)
++
++#define OV2680_REG_X_WIN			CCI_REG16(0x5704)
++#define OV2680_REG_Y_WIN			CCI_REG16(0x5706)
++
++#define OV2680_FRAME_RATE			30
++#define OV2680_INTEGRATION_TIME_MARGIN		8
++
+ static const struct v4l2_rect ov2680_default_crop = {
+ 	.left = OV2680_ACTIVE_START_LEFT,
+ 	.top = OV2680_ACTIVE_START_TOP,
+@@ -37,21 +74,6 @@ static const struct v4l2_rect ov2680_default_crop = {
+ 	.height = OV2680_ACTIVE_HEIGHT,
  };
  
--static const struct ov5693_reg ov5693_global_regs[] = {
--	{OV5693_REG_8BIT(0x3016), 0xf0},
--	{OV5693_REG_8BIT(0x3017), 0xf0},
--	{OV5693_REG_8BIT(0x3018), 0xf0},
--	{OV5693_REG_8BIT(0x3022), 0x01},
--	{OV5693_REG_8BIT(0x3028), 0x44},
--	{OV5693_REG_8BIT(0x3098), 0x02},
--	{OV5693_REG_8BIT(0x3099), 0x19},
--	{OV5693_REG_8BIT(0x309a), 0x02},
--	{OV5693_REG_8BIT(0x309b), 0x01},
--	{OV5693_REG_8BIT(0x309c), 0x00},
--	{OV5693_REG_8BIT(0x30a0), 0xd2},
--	{OV5693_REG_8BIT(0x30a2), 0x01},
--	{OV5693_REG_8BIT(0x30b2), 0x00},
--	{OV5693_REG_8BIT(0x30b3), 0x83},
--	{OV5693_REG_8BIT(0x30b4), 0x03},
--	{OV5693_REG_8BIT(0x30b5), 0x04},
--	{OV5693_REG_8BIT(0x30b6), 0x01},
--	{OV5693_REG_8BIT(0x3080), 0x01},
--	{OV5693_REG_8BIT(0x3104), 0x21},
--	{OV5693_REG_8BIT(0x3106), 0x00},
--	{OV5693_REG_8BIT(0x3406), 0x01},
--	{OV5693_REG_8BIT(0x3503), 0x07},
--	{OV5693_REG_8BIT(0x350b), 0x40},
--	{OV5693_REG_8BIT(0x3601), 0x0a},
--	{OV5693_REG_8BIT(0x3602), 0x38},
--	{OV5693_REG_8BIT(0x3612), 0x80},
--	{OV5693_REG_8BIT(0x3620), 0x54},
--	{OV5693_REG_8BIT(0x3621), 0xc7},
--	{OV5693_REG_8BIT(0x3622), 0x0f},
--	{OV5693_REG_8BIT(0x3625), 0x10},
--	{OV5693_REG_8BIT(0x3630), 0x55},
--	{OV5693_REG_8BIT(0x3631), 0xf4},
--	{OV5693_REG_8BIT(0x3632), 0x00},
--	{OV5693_REG_8BIT(0x3633), 0x34},
--	{OV5693_REG_8BIT(0x3634), 0x02},
--	{OV5693_REG_8BIT(0x364d), 0x0d},
--	{OV5693_REG_8BIT(0x364f), 0xdd},
--	{OV5693_REG_8BIT(0x3660), 0x04},
--	{OV5693_REG_8BIT(0x3662), 0x10},
--	{OV5693_REG_8BIT(0x3663), 0xf1},
--	{OV5693_REG_8BIT(0x3665), 0x00},
--	{OV5693_REG_8BIT(0x3666), 0x20},
--	{OV5693_REG_8BIT(0x3667), 0x00},
--	{OV5693_REG_8BIT(0x366a), 0x80},
--	{OV5693_REG_8BIT(0x3680), 0xe0},
--	{OV5693_REG_8BIT(0x3681), 0x00},
--	{OV5693_REG_8BIT(0x3700), 0x42},
--	{OV5693_REG_8BIT(0x3701), 0x14},
--	{OV5693_REG_8BIT(0x3702), 0xa0},
--	{OV5693_REG_8BIT(0x3703), 0xd8},
--	{OV5693_REG_8BIT(0x3704), 0x78},
--	{OV5693_REG_8BIT(0x3705), 0x02},
--	{OV5693_REG_8BIT(0x370a), 0x00},
--	{OV5693_REG_8BIT(0x370b), 0x20},
--	{OV5693_REG_8BIT(0x370c), 0x0c},
--	{OV5693_REG_8BIT(0x370d), 0x11},
--	{OV5693_REG_8BIT(0x370e), 0x00},
--	{OV5693_REG_8BIT(0x370f), 0x40},
--	{OV5693_REG_8BIT(0x3710), 0x00},
--	{OV5693_REG_8BIT(0x371a), 0x1c},
--	{OV5693_REG_8BIT(0x371b), 0x05},
--	{OV5693_REG_8BIT(0x371c), 0x01},
--	{OV5693_REG_8BIT(0x371e), 0xa1},
--	{OV5693_REG_8BIT(0x371f), 0x0c},
--	{OV5693_REG_8BIT(0x3721), 0x00},
--	{OV5693_REG_8BIT(0x3724), 0x10},
--	{OV5693_REG_8BIT(0x3726), 0x00},
--	{OV5693_REG_8BIT(0x372a), 0x01},
--	{OV5693_REG_8BIT(0x3730), 0x10},
--	{OV5693_REG_8BIT(0x3738), 0x22},
--	{OV5693_REG_8BIT(0x3739), 0xe5},
--	{OV5693_REG_8BIT(0x373a), 0x50},
--	{OV5693_REG_8BIT(0x373b), 0x02},
--	{OV5693_REG_8BIT(0x373c), 0x41},
--	{OV5693_REG_8BIT(0x373f), 0x02},
--	{OV5693_REG_8BIT(0x3740), 0x42},
--	{OV5693_REG_8BIT(0x3741), 0x02},
--	{OV5693_REG_8BIT(0x3742), 0x18},
--	{OV5693_REG_8BIT(0x3743), 0x01},
--	{OV5693_REG_8BIT(0x3744), 0x02},
--	{OV5693_REG_8BIT(0x3747), 0x10},
--	{OV5693_REG_8BIT(0x374c), 0x04},
--	{OV5693_REG_8BIT(0x3751), 0xf0},
--	{OV5693_REG_8BIT(0x3752), 0x00},
--	{OV5693_REG_8BIT(0x3753), 0x00},
--	{OV5693_REG_8BIT(0x3754), 0xc0},
--	{OV5693_REG_8BIT(0x3755), 0x00},
--	{OV5693_REG_8BIT(0x3756), 0x1a},
--	{OV5693_REG_8BIT(0x3758), 0x00},
--	{OV5693_REG_8BIT(0x3759), 0x0f},
--	{OV5693_REG_8BIT(0x376b), 0x44},
--	{OV5693_REG_8BIT(0x375c), 0x04},
--	{OV5693_REG_8BIT(0x3774), 0x10},
--	{OV5693_REG_8BIT(0x3776), 0x00},
--	{OV5693_REG_8BIT(0x377f), 0x08},
--	{OV5693_REG_8BIT(0x3780), 0x22},
--	{OV5693_REG_8BIT(0x3781), 0x0c},
--	{OV5693_REG_8BIT(0x3784), 0x2c},
--	{OV5693_REG_8BIT(0x3785), 0x1e},
--	{OV5693_REG_8BIT(0x378f), 0xf5},
--	{OV5693_REG_8BIT(0x3791), 0xb0},
--	{OV5693_REG_8BIT(0x3795), 0x00},
--	{OV5693_REG_8BIT(0x3796), 0x64},
--	{OV5693_REG_8BIT(0x3797), 0x11},
--	{OV5693_REG_8BIT(0x3798), 0x30},
--	{OV5693_REG_8BIT(0x3799), 0x41},
--	{OV5693_REG_8BIT(0x379a), 0x07},
--	{OV5693_REG_8BIT(0x379b), 0xb0},
--	{OV5693_REG_8BIT(0x379c), 0x0c},
--	{OV5693_REG_8BIT(0x3a04), 0x06},
--	{OV5693_REG_8BIT(0x3a05), 0x14},
--	{OV5693_REG_8BIT(0x3e07), 0x20},
--	{OV5693_REG_8BIT(0x4000), 0x08},
--	{OV5693_REG_8BIT(0x4001), 0x04},
--	{OV5693_REG_8BIT(0x4004), 0x08},
--	{OV5693_REG_8BIT(0x4006), 0x20},
--	{OV5693_REG_8BIT(0x4008), 0x24},
--	{OV5693_REG_8BIT(0x4009), 0x10},
--	{OV5693_REG_8BIT(0x4058), 0x00},
--	{OV5693_REG_8BIT(0x4101), 0xb2},
--	{OV5693_REG_8BIT(0x4307), 0x31},
--	{OV5693_REG_8BIT(0x4511), 0x05},
--	{OV5693_REG_8BIT(0x4512), 0x01},
--	{OV5693_REG_8BIT(0x481f), 0x30},
--	{OV5693_REG_8BIT(0x4826), 0x2c},
--	{OV5693_REG_8BIT(0x4d02), 0xfd},
--	{OV5693_REG_8BIT(0x4d03), 0xf5},
--	{OV5693_REG_8BIT(0x4d04), 0x0c},
--	{OV5693_REG_8BIT(0x4d05), 0xcc},
--	{OV5693_REG_8BIT(0x4837), 0x0a},
--	{OV5693_REG_8BIT(0x5003), 0x20},
--	{OV5693_REG_8BIT(0x5013), 0x00},
--	{OV5693_REG_8BIT(0x5842), 0x01},
--	{OV5693_REG_8BIT(0x5843), 0x2b},
--	{OV5693_REG_8BIT(0x5844), 0x01},
--	{OV5693_REG_8BIT(0x5845), 0x92},
--	{OV5693_REG_8BIT(0x5846), 0x01},
--	{OV5693_REG_8BIT(0x5847), 0x8f},
--	{OV5693_REG_8BIT(0x5848), 0x01},
--	{OV5693_REG_8BIT(0x5849), 0x0c},
--	{OV5693_REG_8BIT(0x5e10), 0x0c},
--	{OV5693_REG_8BIT(0x3820), 0x00},
--	{OV5693_REG_8BIT(0x3821), 0x1e},
--	{OV5693_REG_8BIT(0x5041), 0x14}
--};
--
--static const struct ov5693_reg_list ov5693_global_setting = {
--	.num_regs = ARRAY_SIZE(ov5693_global_regs),
--	.regs = ov5693_global_regs,
-+static const struct cci_reg_sequence ov5693_global_regs[] = {
-+	{CCI_REG8(0x3016), 0xf0},
-+	{CCI_REG8(0x3017), 0xf0},
-+	{CCI_REG8(0x3018), 0xf0},
-+	{CCI_REG8(0x3022), 0x01},
-+	{CCI_REG8(0x3028), 0x44},
-+	{CCI_REG8(0x3098), 0x02},
-+	{CCI_REG8(0x3099), 0x19},
-+	{CCI_REG8(0x309a), 0x02},
-+	{CCI_REG8(0x309b), 0x01},
-+	{CCI_REG8(0x309c), 0x00},
-+	{CCI_REG8(0x30a0), 0xd2},
-+	{CCI_REG8(0x30a2), 0x01},
-+	{CCI_REG8(0x30b2), 0x00},
-+	{CCI_REG8(0x30b3), 0x83},
-+	{CCI_REG8(0x30b4), 0x03},
-+	{CCI_REG8(0x30b5), 0x04},
-+	{CCI_REG8(0x30b6), 0x01},
-+	{CCI_REG8(0x3080), 0x01},
-+	{CCI_REG8(0x3104), 0x21},
-+	{CCI_REG8(0x3106), 0x00},
-+	{CCI_REG8(0x3406), 0x01},
-+	{CCI_REG8(0x3503), 0x07},
-+	{CCI_REG8(0x350b), 0x40},
-+	{CCI_REG8(0x3601), 0x0a},
-+	{CCI_REG8(0x3602), 0x38},
-+	{CCI_REG8(0x3612), 0x80},
-+	{CCI_REG8(0x3620), 0x54},
-+	{CCI_REG8(0x3621), 0xc7},
-+	{CCI_REG8(0x3622), 0x0f},
-+	{CCI_REG8(0x3625), 0x10},
-+	{CCI_REG8(0x3630), 0x55},
-+	{CCI_REG8(0x3631), 0xf4},
-+	{CCI_REG8(0x3632), 0x00},
-+	{CCI_REG8(0x3633), 0x34},
-+	{CCI_REG8(0x3634), 0x02},
-+	{CCI_REG8(0x364d), 0x0d},
-+	{CCI_REG8(0x364f), 0xdd},
-+	{CCI_REG8(0x3660), 0x04},
-+	{CCI_REG8(0x3662), 0x10},
-+	{CCI_REG8(0x3663), 0xf1},
-+	{CCI_REG8(0x3665), 0x00},
-+	{CCI_REG8(0x3666), 0x20},
-+	{CCI_REG8(0x3667), 0x00},
-+	{CCI_REG8(0x366a), 0x80},
-+	{CCI_REG8(0x3680), 0xe0},
-+	{CCI_REG8(0x3681), 0x00},
-+	{CCI_REG8(0x3700), 0x42},
-+	{CCI_REG8(0x3701), 0x14},
-+	{CCI_REG8(0x3702), 0xa0},
-+	{CCI_REG8(0x3703), 0xd8},
-+	{CCI_REG8(0x3704), 0x78},
-+	{CCI_REG8(0x3705), 0x02},
-+	{CCI_REG8(0x370a), 0x00},
-+	{CCI_REG8(0x370b), 0x20},
-+	{CCI_REG8(0x370c), 0x0c},
-+	{CCI_REG8(0x370d), 0x11},
-+	{CCI_REG8(0x370e), 0x00},
-+	{CCI_REG8(0x370f), 0x40},
-+	{CCI_REG8(0x3710), 0x00},
-+	{CCI_REG8(0x371a), 0x1c},
-+	{CCI_REG8(0x371b), 0x05},
-+	{CCI_REG8(0x371c), 0x01},
-+	{CCI_REG8(0x371e), 0xa1},
-+	{CCI_REG8(0x371f), 0x0c},
-+	{CCI_REG8(0x3721), 0x00},
-+	{CCI_REG8(0x3724), 0x10},
-+	{CCI_REG8(0x3726), 0x00},
-+	{CCI_REG8(0x372a), 0x01},
-+	{CCI_REG8(0x3730), 0x10},
-+	{CCI_REG8(0x3738), 0x22},
-+	{CCI_REG8(0x3739), 0xe5},
-+	{CCI_REG8(0x373a), 0x50},
-+	{CCI_REG8(0x373b), 0x02},
-+	{CCI_REG8(0x373c), 0x41},
-+	{CCI_REG8(0x373f), 0x02},
-+	{CCI_REG8(0x3740), 0x42},
-+	{CCI_REG8(0x3741), 0x02},
-+	{CCI_REG8(0x3742), 0x18},
-+	{CCI_REG8(0x3743), 0x01},
-+	{CCI_REG8(0x3744), 0x02},
-+	{CCI_REG8(0x3747), 0x10},
-+	{CCI_REG8(0x374c), 0x04},
-+	{CCI_REG8(0x3751), 0xf0},
-+	{CCI_REG8(0x3752), 0x00},
-+	{CCI_REG8(0x3753), 0x00},
-+	{CCI_REG8(0x3754), 0xc0},
-+	{CCI_REG8(0x3755), 0x00},
-+	{CCI_REG8(0x3756), 0x1a},
-+	{CCI_REG8(0x3758), 0x00},
-+	{CCI_REG8(0x3759), 0x0f},
-+	{CCI_REG8(0x376b), 0x44},
-+	{CCI_REG8(0x375c), 0x04},
-+	{CCI_REG8(0x3774), 0x10},
-+	{CCI_REG8(0x3776), 0x00},
-+	{CCI_REG8(0x377f), 0x08},
-+	{CCI_REG8(0x3780), 0x22},
-+	{CCI_REG8(0x3781), 0x0c},
-+	{CCI_REG8(0x3784), 0x2c},
-+	{CCI_REG8(0x3785), 0x1e},
-+	{CCI_REG8(0x378f), 0xf5},
-+	{CCI_REG8(0x3791), 0xb0},
-+	{CCI_REG8(0x3795), 0x00},
-+	{CCI_REG8(0x3796), 0x64},
-+	{CCI_REG8(0x3797), 0x11},
-+	{CCI_REG8(0x3798), 0x30},
-+	{CCI_REG8(0x3799), 0x41},
-+	{CCI_REG8(0x379a), 0x07},
-+	{CCI_REG8(0x379b), 0xb0},
-+	{CCI_REG8(0x379c), 0x0c},
-+	{CCI_REG8(0x3a04), 0x06},
-+	{CCI_REG8(0x3a05), 0x14},
-+	{CCI_REG8(0x3e07), 0x20},
-+	{CCI_REG8(0x4000), 0x08},
-+	{CCI_REG8(0x4001), 0x04},
-+	{CCI_REG8(0x4004), 0x08},
-+	{CCI_REG8(0x4006), 0x20},
-+	{CCI_REG8(0x4008), 0x24},
-+	{CCI_REG8(0x4009), 0x10},
-+	{CCI_REG8(0x4058), 0x00},
-+	{CCI_REG8(0x4101), 0xb2},
-+	{CCI_REG8(0x4307), 0x31},
-+	{CCI_REG8(0x4511), 0x05},
-+	{CCI_REG8(0x4512), 0x01},
-+	{CCI_REG8(0x481f), 0x30},
-+	{CCI_REG8(0x4826), 0x2c},
-+	{CCI_REG8(0x4d02), 0xfd},
-+	{CCI_REG8(0x4d03), 0xf5},
-+	{CCI_REG8(0x4d04), 0x0c},
-+	{CCI_REG8(0x4d05), 0xcc},
-+	{CCI_REG8(0x4837), 0x0a},
-+	{CCI_REG8(0x5003), 0x20},
-+	{CCI_REG8(0x5013), 0x00},
-+	{CCI_REG8(0x5842), 0x01},
-+	{CCI_REG8(0x5843), 0x2b},
-+	{CCI_REG8(0x5844), 0x01},
-+	{CCI_REG8(0x5845), 0x92},
-+	{CCI_REG8(0x5846), 0x01},
-+	{CCI_REG8(0x5847), 0x8f},
-+	{CCI_REG8(0x5848), 0x01},
-+	{CCI_REG8(0x5849), 0x0c},
-+	{CCI_REG8(0x5e10), 0x0c},
-+	{CCI_REG8(0x3820), 0x00},
-+	{CCI_REG8(0x3821), 0x1e},
-+	{CCI_REG8(0x5041), 0x14}
- };
- 
- static const struct v4l2_rect ov5693_default_crop = {
-@@ -373,115 +354,6 @@ static const u8 ov5693_test_pattern_bits[] = {
- 	OV5693_TEST_PATTERN_ROLLING,
- };
- 
--/* I2C I/O Operations */
--
--static int ov5693_read_reg(struct ov5693_device *ov5693, u32 addr, u32 *value)
+-static int ov2680_write_reg_array(struct i2c_client *client,
+-				  const struct ov2680_reg *reglist)
 -{
--	struct i2c_client *client = ov5693->client;
--	__be16 reg;
--	u8 val[4];
--	struct i2c_msg msg[] = {
--		{
--			.addr	= client->addr,
--			.flags	= 0,
--			.len	= 2,
--			.buf	= (u8 *)&reg,
--		},
--		{
--			.addr	= client->addr,
--			.flags	= I2C_M_RD,
--			.buf	= (u8 *)&val,
--		},
--	};
--	unsigned int len = ((addr >> OV5693_REG_SIZE_SHIFT) & 3);
--	unsigned int i;
+-	const struct ov2680_reg *next = reglist;
 -	int ret;
 -
--	reg = cpu_to_be16(addr & OV5693_REG_ADDR_MASK);
--
--	msg[1].len = len;
--
--	ret = i2c_transfer(client->adapter, msg, 2);
--	if (ret < 0)
--		return dev_err_probe(&client->dev, ret,
--				     "Failed to read register 0x%04x\n",
--				     addr & OV5693_REG_ADDR_MASK);
--
--	*value = 0;
--	for (i = 0; i < len; ++i) {
--		*value <<= 8;
--		*value |= val[i];
+-	for (; next->reg != 0; next++) {
+-		ret = ov_write_reg8(client, next->reg, next->val);
+-		if (ret)
+-			return ret;
 -	}
 -
 -	return 0;
 -}
 -
--static void ov5693_write_reg(struct ov5693_device *ov5693, u32 addr, u32 value,
--			     int *error)
--{
--	struct i2c_client *client = ov5693->client;
--	struct {
--		__be16 reg;
--		u8 val[4];
--	} __packed buf;
--	struct i2c_msg msg = {
--		.addr	= client->addr,
--		.buf	= (u8 *)&buf,
--	};
--	unsigned int len = ((addr >> OV5693_REG_SIZE_SHIFT) & 3);
--	unsigned int i;
+ static void ov2680_set_bayer_order(struct ov2680_dev *sensor, struct v4l2_mbus_framefmt *fmt)
+ {
+ 	static const int ov2680_hv_flip_bayer_order[] = {
+@@ -78,7 +100,8 @@ static int ov2680_set_vflip(struct ov2680_dev *sensor, s32 val)
+ 	if (sensor->is_streaming)
+ 		return -EBUSY;
+ 
+-	ret = ov_update_reg(sensor->client, OV2680_REG_FORMAT1, BIT(2), val ? BIT(2) : 0);
++	ret = cci_update_bits(sensor->regmap, OV2680_REG_FORMAT1, BIT(2),
++			      val ? BIT(2) : 0, NULL);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -93,7 +116,8 @@ static int ov2680_set_hflip(struct ov2680_dev *sensor, s32 val)
+ 	if (sensor->is_streaming)
+ 		return -EBUSY;
+ 
+-	ret = ov_update_reg(sensor->client, OV2680_REG_FORMAT2, BIT(2), val ? BIT(2) : 0);
++	ret = cci_update_bits(sensor->regmap, OV2680_REG_FORMAT2, BIT(2),
++			      val ? BIT(2) : 0, NULL);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -103,30 +127,25 @@ static int ov2680_set_hflip(struct ov2680_dev *sensor, s32 val)
+ 
+ static int ov2680_exposure_set(struct ov2680_dev *sensor, u32 exp)
+ {
+-	return ov_write_reg24(sensor->client, OV2680_REG_EXPOSURE_PK_HIGH, exp << 4);
++	return cci_write(sensor->regmap, OV2680_REG_EXPOSURE_PK, exp << 4, NULL);
+ }
+ 
+ static int ov2680_gain_set(struct ov2680_dev *sensor, u32 gain)
+ {
+-	return ov_write_reg16(sensor->client, OV2680_REG_GAIN_PK, gain);
++	return cci_write(sensor->regmap, OV2680_REG_GAIN_PK, gain, NULL);
+ }
+ 
+ static int ov2680_test_pattern_set(struct ov2680_dev *sensor, int value)
+ {
 -	int ret;
++	int ret = 0;
+ 
+ 	if (!value)
+-		return ov_update_reg(sensor->client, OV2680_REG_ISP_CTRL00, BIT(7), 0);
++		return cci_update_bits(sensor->regmap, OV2680_REG_ISP_CTRL00, BIT(7), 0, NULL);
+ 
+-	ret = ov_update_reg(sensor->client, OV2680_REG_ISP_CTRL00, 0x03, value - 1);
+-	if (ret < 0)
+-		return ret;
++	cci_update_bits(sensor->regmap, OV2680_REG_ISP_CTRL00, 0x03, value - 1, &ret);
++	cci_update_bits(sensor->regmap, OV2680_REG_ISP_CTRL00, BIT(7), BIT(7), &ret);
+ 
+-	ret = ov_update_reg(sensor->client, OV2680_REG_ISP_CTRL00, BIT(7), BIT(7));
+-	if (ret < 0)
+-		return ret;
 -
--	if (*error < 0)
--		return;
--
--	buf.reg = cpu_to_be16(addr & OV5693_REG_ADDR_MASK);
--	for (i = 0; i < len; ++i) {
--		buf.val[len - i - 1] = value & 0xff;
--		value >>= 8;
--	}
--
--	msg.len	= len + 2;
--
--	ret = i2c_transfer(client->adapter, &msg, 1);
--	if (ret < 0) {
--		dev_err(&client->dev, "Failed to write register 0x%04x: %d\n",
--			addr & OV5693_REG_ADDR_MASK, ret);
--		*error = ret;
--	}
--}
--
--static int ov5693_write_reg_array(struct ov5693_device *ov5693,
--				  const struct ov5693_reg_list *reglist)
--{
--	unsigned int i;
--	int ret = 0;
--
--	for (i = 0; i < reglist->num_regs; i++)
--		ov5693_write_reg(ov5693, reglist->regs[i].reg,
--				 reglist->regs[i].val, &ret);
+-	return 0;
++	return ret;
+ }
+ 
+ static int ov2680_s_ctrl(struct v4l2_ctrl *ctrl)
+@@ -171,17 +190,18 @@ static const struct v4l2_ctrl_ops ov2680_ctrl_ops = {
+ 
+ static int ov2680_init_registers(struct v4l2_subdev *sd)
+ {
+-	struct i2c_client *client = v4l2_get_subdevdata(sd);
++	struct ov2680_dev *sensor = to_ov2680_sensor(sd);
+ 	int ret;
+ 
+-	ret = ov_write_reg8(client, OV2680_SW_RESET, 0x01);
++	ret = cci_write(sensor->regmap, OV2680_REG_SOFT_RESET, 0x01, NULL);
++	if (ret < 0)
++		return ret;
+ 
+ 	/* Wait for sensor reset */
+ 	usleep_range(1000, 2000);
+ 
+-	ret |= ov2680_write_reg_array(client, ov2680_global_setting);
 -
 -	return ret;
--}
--
--static int ov5693_update_bits(struct ov5693_device *ov5693, u32 address,
--			      u32 mask, u32 bits)
--{
--	u32 value = 0;
++	return regmap_multi_reg_write(sensor->regmap, ov2680_global_setting,
++				      ARRAY_SIZE(ov2680_global_setting));
+ }
+ 
+ static struct v4l2_mbus_framefmt *
+@@ -247,9 +267,8 @@ static void ov2680_calc_mode(struct ov2680_dev *sensor)
+ 
+ static int ov2680_set_mode(struct ov2680_dev *sensor)
+ {
+-	struct i2c_client *client = sensor->client;
+ 	u8 sensor_ctrl_0a, inc, fmt1, fmt2;
 -	int ret;
--
--	ret = ov5693_read_reg(ov5693, address, &value);
++	int ret = 0;
+ 
+ 	if (sensor->mode.binning) {
+ 		sensor_ctrl_0a = 0x23;
+@@ -263,77 +282,27 @@ static int ov2680_set_mode(struct ov2680_dev *sensor)
+ 		fmt2 = 0x00;
+ 	}
+ 
+-	ret = ov_write_reg8(client, OV2680_REG_SENSOR_CTRL_0A, sensor_ctrl_0a);
+-	if (ret)
+-		return ret;
++	cci_write(sensor->regmap, OV2680_REG_SENSOR_CTRL_0A, sensor_ctrl_0a, &ret);
++	cci_write(sensor->regmap, OV2680_REG_HORIZONTAL_START, sensor->mode.h_start, &ret);
++	cci_write(sensor->regmap, OV2680_REG_VERTICAL_START, sensor->mode.v_start, &ret);
++	cci_write(sensor->regmap, OV2680_REG_HORIZONTAL_END, sensor->mode.h_end, &ret);
++	cci_write(sensor->regmap, OV2680_REG_VERTICAL_END, sensor->mode.v_end, &ret);
++	cci_write(sensor->regmap, OV2680_REG_HORIZONTAL_OUTPUT_SIZE,
++		  sensor->mode.h_output_size, &ret);
++	cci_write(sensor->regmap, OV2680_REG_VERTICAL_OUTPUT_SIZE,
++		  sensor->mode.v_output_size, &ret);
++	cci_write(sensor->regmap, OV2680_REG_TIMING_HTS, sensor->mode.hts, &ret);
++	cci_write(sensor->regmap, OV2680_REG_TIMING_VTS, sensor->mode.vts, &ret);
++	cci_write(sensor->regmap, OV2680_REG_ISP_X_WIN, 0, &ret);
++	cci_write(sensor->regmap, OV2680_REG_ISP_Y_WIN, 0, &ret);
++	cci_write(sensor->regmap, OV2680_REG_X_INC, inc, &ret);
++	cci_write(sensor->regmap, OV2680_REG_Y_INC, inc, &ret);
++	cci_write(sensor->regmap, OV2680_REG_X_WIN, sensor->mode.h_output_size, &ret);
++	cci_write(sensor->regmap, OV2680_REG_Y_WIN, sensor->mode.v_output_size, &ret);
++	cci_write(sensor->regmap, OV2680_REG_FORMAT1, fmt1, &ret);
++	cci_write(sensor->regmap, OV2680_REG_FORMAT2, fmt2, &ret);
+ 
+-	ret = ov_write_reg16(client, OV2680_HORIZONTAL_START_H, sensor->mode.h_start);
 -	if (ret)
 -		return ret;
 -
--	value &= ~mask;
--	value |= bits;
--
--	ov5693_write_reg(ov5693, address, value, &ret);
--
--	return ret;
--}
--
- /* V4L2 Controls Functions */
- 
- static int ov5693_flip_vert_configure(struct ov5693_device *ov5693,
-@@ -491,8 +363,8 @@ static int ov5693_flip_vert_configure(struct ov5693_device *ov5693,
- 		  OV5693_FORMAT1_FLIP_VERT_SENSOR_EN;
- 	int ret;
- 
--	ret = ov5693_update_bits(ov5693, OV5693_FORMAT1_REG, bits,
--				 enable ? bits : 0);
-+	ret = cci_update_bits(ov5693->regmap, OV5693_FORMAT1_REG, bits,
-+			      enable ? bits : 0, NULL);
- 	if (ret)
- 		return ret;
- 
-@@ -506,8 +378,8 @@ static int ov5693_flip_horz_configure(struct ov5693_device *ov5693,
- 		  OV5693_FORMAT2_FLIP_HORZ_SENSOR_EN;
- 	int ret;
- 
--	ret = ov5693_update_bits(ov5693, OV5693_FORMAT2_REG, bits,
--				 enable ? bits : 0);
-+	ret = cci_update_bits(ov5693->regmap, OV5693_FORMAT2_REG, bits,
-+			      enable ? bits : 0, NULL);
- 	if (ret)
- 		return ret;
- 
-@@ -516,10 +388,10 @@ static int ov5693_flip_horz_configure(struct ov5693_device *ov5693,
- 
- static int ov5693_get_exposure(struct ov5693_device *ov5693, s32 *value)
- {
--	u32 exposure;
-+	u64 exposure;
- 	int ret;
- 
--	ret = ov5693_read_reg(ov5693, OV5693_EXPOSURE_CTRL_REG, &exposure);
-+	ret = cci_read(ov5693->regmap, OV5693_EXPOSURE_CTRL_REG, &exposure, NULL);
- 	if (ret)
- 		return ret;
- 
-@@ -536,17 +408,17 @@ static int ov5693_exposure_configure(struct ov5693_device *ov5693,
- 
- 	exposure = (exposure << 4) & OV5693_EXPOSURE_CTRL_MASK;
- 
--	ov5693_write_reg(ov5693, OV5693_EXPOSURE_CTRL_REG, exposure, &ret);
-+	cci_write(ov5693->regmap, OV5693_EXPOSURE_CTRL_REG, exposure, &ret);
- 
- 	return ret;
- }
- 
- static int ov5693_get_gain(struct ov5693_device *ov5693, u32 *gain)
- {
--	u32 value;
-+	u64 value;
- 	int ret;
- 
--	ret = ov5693_read_reg(ov5693, OV5693_GAIN_CTRL_REG, &value);
-+	ret = cci_read(ov5693->regmap, OV5693_GAIN_CTRL_REG, &value, NULL);
- 	if (ret)
- 		return ret;
- 
-@@ -563,9 +435,9 @@ static int ov5693_digital_gain_configure(struct ov5693_device *ov5693,
- 
- 	gain &= OV5693_MWB_GAIN_MASK;
- 
--	ov5693_write_reg(ov5693, OV5693_MWB_RED_GAIN_REG, gain, &ret);
--	ov5693_write_reg(ov5693, OV5693_MWB_GREEN_GAIN_REG, gain, &ret);
--	ov5693_write_reg(ov5693, OV5693_MWB_BLUE_GAIN_REG, gain, &ret);
-+	cci_write(ov5693->regmap, OV5693_MWB_RED_GAIN_REG, gain, &ret);
-+	cci_write(ov5693->regmap, OV5693_MWB_GREEN_GAIN_REG, gain, &ret);
-+	cci_write(ov5693->regmap, OV5693_MWB_BLUE_GAIN_REG, gain, &ret);
- 
- 	return ret;
- }
-@@ -576,7 +448,7 @@ static int ov5693_analog_gain_configure(struct ov5693_device *ov5693, u32 gain)
- 
- 	gain = (gain << 4) & OV5693_GAIN_CTRL_MASK;
- 
--	ov5693_write_reg(ov5693, OV5693_GAIN_CTRL_REG, gain, &ret);
-+	cci_write(ov5693->regmap, OV5693_GAIN_CTRL_REG, gain, &ret);
- 
- 	return ret;
- }
-@@ -586,7 +458,7 @@ static int ov5693_vts_configure(struct ov5693_device *ov5693, u32 vblank)
- 	u16 vts = ov5693->mode.format.height + vblank;
- 	int ret = 0;
- 
--	ov5693_write_reg(ov5693, OV5693_TIMING_VTS_REG, vts, &ret);
-+	cci_write(ov5693->regmap, OV5693_TIMING_VTS_REG, vts, &ret);
- 
- 	return ret;
- }
-@@ -595,8 +467,8 @@ static int ov5693_test_pattern_configure(struct ov5693_device *ov5693, u32 idx)
- {
- 	int ret = 0;
- 
--	ov5693_write_reg(ov5693, OV5693_TEST_PATTERN_REG,
--			 ov5693_test_pattern_bits[idx], &ret);
-+	cci_write(ov5693->regmap, OV5693_TEST_PATTERN_REG,
-+		  ov5693_test_pattern_bits[idx], &ret);
- 
- 	return ret;
- }
-@@ -685,59 +557,47 @@ static int ov5693_mode_configure(struct ov5693_device *ov5693)
- 	int ret = 0;
- 
- 	/* Crop Start X */
--	ov5693_write_reg(ov5693, OV5693_CROP_START_X_REG, mode->crop.left,
--			 &ret);
-+	cci_write(ov5693->regmap, OV5693_CROP_START_X_REG, mode->crop.left, &ret);
- 
- 	/* Offset X */
--	ov5693_write_reg(ov5693, OV5693_OFFSET_START_X_REG, 0, &ret);
-+	cci_write(ov5693->regmap, OV5693_OFFSET_START_X_REG, 0, &ret);
- 
- 	/* Output Size X */
--	ov5693_write_reg(ov5693, OV5693_OUTPUT_SIZE_X_REG, mode->format.width,
--			 &ret);
-+	cci_write(ov5693->regmap, OV5693_OUTPUT_SIZE_X_REG, mode->format.width, &ret);
- 
- 	/* Crop End X */
--	ov5693_write_reg(ov5693, OV5693_CROP_END_X_REG,
--			 mode->crop.left + mode->crop.width, &ret);
-+	cci_write(ov5693->regmap, OV5693_CROP_END_X_REG,
-+		  mode->crop.left + mode->crop.width, &ret);
- 
- 	/* Horizontal Total Size */
--	ov5693_write_reg(ov5693, OV5693_TIMING_HTS_REG, OV5693_FIXED_PPL,
--			 &ret);
-+	cci_write(ov5693->regmap, OV5693_TIMING_HTS_REG, OV5693_FIXED_PPL, &ret);
- 
- 	/* Crop Start Y */
--	ov5693_write_reg(ov5693, OV5693_CROP_START_Y_REG, mode->crop.top,
--			 &ret);
-+	cci_write(ov5693->regmap, OV5693_CROP_START_Y_REG, mode->crop.top, &ret);
- 
- 	/* Offset Y */
--	ov5693_write_reg(ov5693, OV5693_OFFSET_START_Y_REG, 0, &ret);
-+	cci_write(ov5693->regmap, OV5693_OFFSET_START_Y_REG, 0, &ret);
- 
- 	/* Output Size Y */
--	ov5693_write_reg(ov5693, OV5693_OUTPUT_SIZE_Y_REG, mode->format.height,
--			 &ret);
-+	cci_write(ov5693->regmap, OV5693_OUTPUT_SIZE_Y_REG, mode->format.height, &ret);
- 
- 	/* Crop End Y */
--	ov5693_write_reg(ov5693, OV5693_CROP_END_Y_REG,
--			 mode->crop.top + mode->crop.height, &ret);
-+	cci_write(ov5693->regmap, OV5693_CROP_END_Y_REG,
-+		  mode->crop.top + mode->crop.height, &ret);
- 
- 	/* Subsample X increase */
--	ov5693_write_reg(ov5693, OV5693_SUB_INC_X_REG,
--			 ((mode->inc_x_odd << 4) & 0xf0) | 0x01, &ret);
-+	cci_write(ov5693->regmap, OV5693_SUB_INC_X_REG,
-+		  ((mode->inc_x_odd << 4) & 0xf0) | 0x01, &ret);
- 	/* Subsample Y increase */
--	ov5693_write_reg(ov5693, OV5693_SUB_INC_Y_REG,
--			 ((mode->inc_y_odd << 4) & 0xf0) | 0x01, &ret);
--
+-	ret = ov_write_reg16(client, OV2680_VERTICAL_START_H, sensor->mode.v_start);
 -	if (ret)
 -		return ret;
-+	cci_write(ov5693->regmap, OV5693_SUB_INC_Y_REG,
-+		  ((mode->inc_y_odd << 4) & 0xf0) | 0x01, &ret);
- 
- 	/* Binning */
--	ret = ov5693_update_bits(ov5693, OV5693_FORMAT1_REG,
--				 OV5693_FORMAT1_VBIN_EN,
--				 mode->binning_y ? OV5693_FORMAT1_VBIN_EN : 0);
+-
+-	ret = ov_write_reg16(client, OV2680_HORIZONTAL_END_H, sensor->mode.h_end);
 -	if (ret)
 -		return ret;
-+	ret = cci_update_bits(ov5693->regmap, OV5693_FORMAT1_REG, OV5693_FORMAT1_VBIN_EN,
-+			      mode->binning_y ? OV5693_FORMAT1_VBIN_EN : 0, &ret);
- 
--	ret = ov5693_update_bits(ov5693, OV5693_FORMAT2_REG,
--				 OV5693_FORMAT2_HBIN_EN,
--				 mode->binning_x ? OV5693_FORMAT2_HBIN_EN : 0);
-+	ret = cci_update_bits(ov5693->regmap, OV5693_FORMAT2_REG, OV5693_FORMAT2_HBIN_EN,
-+			      mode->binning_x ? OV5693_FORMAT2_HBIN_EN : 0, &ret);
- 
- 	return ret;
+-
+-	ret = ov_write_reg16(client, OV2680_VERTICAL_END_H, sensor->mode.v_end);
+-	if (ret)
+-		return ret;
+-
+-	ret = ov_write_reg16(client, OV2680_HORIZONTAL_OUTPUT_SIZE_H,
+-				 sensor->mode.h_output_size);
+-	if (ret)
+-		return ret;
+-
+-	ret = ov_write_reg16(client, OV2680_VERTICAL_OUTPUT_SIZE_H,
+-				 sensor->mode.v_output_size);
+-	if (ret)
+-		return ret;
+-
+-	ret = ov_write_reg16(client, OV2680_HTS, sensor->mode.hts);
+-	if (ret)
+-		return ret;
+-
+-	ret = ov_write_reg16(client, OV2680_VTS, sensor->mode.vts);
+-	if (ret)
+-		return ret;
+-
+-	ret = ov_write_reg16(client, OV2680_ISP_X_WIN, 0);
+-	if (ret)
+-		return ret;
+-
+-	ret = ov_write_reg16(client, OV2680_ISP_Y_WIN, 0);
+-	if (ret)
+-		return ret;
+-
+-	ret = ov_write_reg8(client, OV2680_X_INC, inc);
+-	if (ret)
+-		return ret;
+-
+-	ret = ov_write_reg8(client, OV2680_Y_INC, inc);
+-	if (ret)
+-		return ret;
+-
+-	ret = ov_write_reg16(client, OV2680_X_WIN, sensor->mode.h_output_size);
+-	if (ret)
+-		return ret;
+-
+-	ret = ov_write_reg16(client, OV2680_Y_WIN, sensor->mode.v_output_size);
+-	if (ret)
+-		return ret;
+-
+-	ret = ov_write_reg8(client, OV2680_REG_FORMAT1, fmt1);
+-	if (ret)
+-		return ret;
+-
+-	ret = ov_write_reg8(client, OV2680_REG_FORMAT2, fmt2);
+-	if (ret)
+-		return ret;
+-
+-	return 0;
++	return ret;
  }
-@@ -746,9 +606,8 @@ static int ov5693_enable_streaming(struct ov5693_device *ov5693, bool enable)
- {
- 	int ret = 0;
  
--	ov5693_write_reg(ov5693, OV5693_SW_STREAM_REG,
--			 enable ? OV5693_START_STREAMING :
--				  OV5693_STOP_STREAMING, &ret);
-+	cci_write(ov5693->regmap, OV5693_SW_STREAM_REG,
-+		  enable ? OV5693_START_STREAMING : OV5693_STOP_STREAMING, &ret);
- 
- 	return ret;
+ static int ov2680_set_fmt(struct v4l2_subdev *sd,
+@@ -478,35 +447,26 @@ static int ov2680_init_cfg(struct v4l2_subdev *sd,
+ 	return ov2680_set_fmt(sd, sd_state, &fmt);
  }
-@@ -757,7 +616,7 @@ static int ov5693_sw_reset(struct ov5693_device *ov5693)
+ 
+-static int ov2680_detect(struct i2c_client *client)
++static int ov2680_detect(struct ov2680_dev *sensor)
  {
- 	int ret = 0;
+-	struct i2c_adapter *adapter = client->adapter;
+-	u32 high = 0, low = 0;
+-	int ret;
+-	u16 id;
+-	u8 revision;
++	u64 chip_id, rev;
++	int ret = 0;
  
--	ov5693_write_reg(ov5693, OV5693_SW_RESET_REG, OV5693_SW_RESET, &ret);
-+	cci_write(ov5693->regmap, OV5693_SW_RESET_REG, OV5693_SW_RESET, &ret);
+-	if (!i2c_check_functionality(adapter, I2C_FUNC_I2C))
+-		return -ENODEV;
+-
+-	ret = ov_read_reg8(client, OV2680_SC_CMMN_CHIP_ID_H, &high);
+-	if (ret) {
+-		dev_err(&client->dev, "sensor_id_high read failed (%d)\n", ret);
+-		return -ENODEV;
+-	}
+-	ret = ov_read_reg8(client, OV2680_SC_CMMN_CHIP_ID_L, &low);
+-	id = ((((u16)high) << 8) | (u16)low);
+-
+-	if (id != OV2680_ID) {
+-		dev_err(&client->dev, "sensor ID error 0x%x\n", id);
++	cci_read(sensor->regmap, OV2680_REG_CHIP_ID, &chip_id, &ret);
++	cci_read(sensor->regmap, OV2680_REG_SC_CMMN_SUB_ID, &rev, &ret);
++	if (ret < 0) {
++		dev_err(sensor->dev, "failed to read chip id\n");
+ 		return -ENODEV;
+ 	}
  
- 	return ret;
- }
-@@ -771,7 +630,8 @@ static int ov5693_sensor_init(struct ov5693_device *ov5693)
- 		return dev_err_probe(ov5693->dev, ret,
- 				     "software reset error\n");
+-	ret = ov_read_reg8(client, OV2680_SC_CMMN_SUB_ID, &high);
+-	revision = (u8)high & 0x0f;
++	if (chip_id != OV2680_CHIP_ID) {
++		dev_err(sensor->dev, "chip id: 0x%04llx does not match expected 0x%04x\n",
++			chip_id, OV2680_CHIP_ID);
++		return -ENODEV;
++	}
  
--	ret = ov5693_write_reg_array(ov5693, &ov5693_global_setting);
-+	ret = cci_multi_reg_write(ov5693->regmap, ov5693_global_regs,
-+				  ARRAY_SIZE(ov5693_global_regs), NULL);
- 	if (ret)
- 		return dev_err_probe(ov5693->dev, ret,
- 				     "global settings error\n");
-@@ -871,15 +731,15 @@ static int __maybe_unused ov5693_sensor_resume(struct device *dev)
- static int ov5693_detect(struct ov5693_device *ov5693)
- {
- 	int ret;
--	u32 id;
-+	u64 id;
- 
--	ret = ov5693_read_reg(ov5693, OV5693_REG_CHIP_ID, &id);
-+	ret = cci_read(ov5693->regmap, OV5693_REG_CHIP_ID, &id, NULL);
- 	if (ret)
- 		return ret;
- 
- 	if (id != OV5693_CHIP_ID)
- 		return dev_err_probe(ov5693->dev, -ENODEV,
--				     "sensor ID mismatch. Found 0x%04x\n", id);
-+				     "sensor ID mismatch. Found 0x%04llx\n", id);
+-	dev_info(&client->dev, "sensor_revision id = 0x%x, rev= %d\n",
+-		 id, revision);
++	dev_info(sensor->dev, "sensor_revision id = 0x%llx, rev= %lld\n",
++		 chip_id, rev & 0x0f);
  
  	return 0;
  }
-@@ -1410,6 +1270,10 @@ static int ov5693_probe(struct i2c_client *client)
- 	ov5693->client = client;
- 	ov5693->dev = &client->dev;
+@@ -538,11 +498,11 @@ static int ov2680_s_stream(struct v4l2_subdev *sd, int enable)
+ 		if (ret)
+ 			goto error_power_down;
  
-+	ov5693->regmap = cci_regmap_init_i2c(client, 16);
-+	if (IS_ERR(ov5693->regmap))
-+		return PTR_ERR(ov5693->regmap);
-+
- 	ret = ov5693_check_hwcfg(ov5693);
+-		ret = ov_write_reg8(client, OV2680_SW_STREAM, OV2680_START_STREAMING);
++		ret = cci_write(sensor->regmap, OV2680_REG_STREAM_CTRL, 1, NULL);
+ 		if (ret)
+ 			goto error_power_down;
+ 	} else {
+-		ov_write_reg8(client, OV2680_SW_STREAM, OV2680_STOP_STREAMING);
++		cci_write(sensor->regmap, OV2680_REG_STREAM_CTRL, 0, NULL);
+ 		pm_runtime_put(sensor->sd.dev);
+ 	}
+ 
+@@ -563,6 +523,7 @@ static int ov2680_s_stream(struct v4l2_subdev *sd, int enable)
+ 
+ static int ov2680_s_config(struct v4l2_subdev *sd)
+ {
++	struct ov2680_dev *sensor = to_ov2680_sensor(sd);
+ 	struct i2c_client *client = v4l2_get_subdevdata(sd);
+ 	int ret;
+ 
+@@ -573,7 +534,7 @@ static int ov2680_s_config(struct v4l2_subdev *sd)
+ 	}
+ 
+ 	/* config & detect sensor */
+-	ret = ov2680_detect(client);
++	ret = ov2680_detect(sensor);
  	if (ret)
- 		return ret;
+ 		dev_err(&client->dev, "ov2680_detect err s_config.\n");
+ 
+@@ -586,7 +547,7 @@ static int ov2680_g_frame_interval(struct v4l2_subdev *sd,
+ 				   struct v4l2_subdev_frame_interval *interval)
+ {
+ 	interval->interval.numerator = 1;
+-	interval->interval.denominator = OV2680_FPS;
++	interval->interval.denominator = OV2680_FRAME_RATE;
+ 	return 0;
+ }
+ 
+@@ -638,7 +599,7 @@ static int ov2680_enum_frame_interval(struct v4l2_subdev *sd,
+ 		return -EINVAL;
+ 
+ 	fie->interval.numerator = 1;
+-	fie->interval.denominator = OV2680_FPS;
++	fie->interval.denominator = OV2680_FRAME_RATE;
+ 	return 0;
+ }
+ 
+@@ -738,9 +699,13 @@ static int ov2680_probe(struct i2c_client *client)
+ 	if (!sensor)
+ 		return -ENOMEM;
+ 
++	sensor->regmap = cci_regmap_init_i2c(client, 16);
++	if (IS_ERR(sensor->regmap))
++		return PTR_ERR(sensor->regmap);
++
+ 	mutex_init(&sensor->lock);
+ 
+-	sensor->client = client;
++	sensor->dev = &client->dev;
+ 	v4l2_i2c_subdev_init(&sensor->sd, client, &ov2680_ops);
+ 
+ 	/*
+diff --git a/drivers/staging/media/atomisp/i2c/ov2680.h b/drivers/staging/media/atomisp/i2c/ov2680.h
+index d032af245674..7815522724f7 100644
+--- a/drivers/staging/media/atomisp/i2c/ov2680.h
++++ b/drivers/staging/media/atomisp/i2c/ov2680.h
+@@ -24,6 +24,7 @@
+ #include <linux/delay.h>
+ #include <linux/videodev2.h>
+ #include <linux/spinlock.h>
++#include <media/v4l2-cci.h>
+ #include <media/v4l2-subdev.h>
+ #include <media/v4l2-device.h>
+ #include <media/v4l2-ctrls.h>
+@@ -44,75 +45,12 @@
+ /* 1704 * 1294 * 30fps = 66MHz pixel clock */
+ #define OV2680_PIXELS_PER_LINE			1704
+ #define OV2680_LINES_PER_FRAME			1294
+-#define OV2680_FPS				30
++
+ #define OV2680_SKIP_FRAMES			3
+ 
+ /* If possible send 16 extra rows / lines to the ISP as padding */
+ #define OV2680_END_MARGIN			16
+ 
+-#define OV2680_FOCAL_LENGTH_NUM			334	/*3.34mm*/
+-
+-#define OV2680_INTEGRATION_TIME_MARGIN		8
+-#define OV2680_ID				0x2680
+-
+-/*
+- * OV2680 System control registers
+- */
+-#define OV2680_SW_SLEEP				0x0100
+-#define OV2680_SW_RESET				0x0103
+-#define OV2680_SW_STREAM			0x0100
+-
+-#define OV2680_SC_CMMN_CHIP_ID_H		0x300A
+-#define OV2680_SC_CMMN_CHIP_ID_L		0x300B
+-#define OV2680_SC_CMMN_SCCB_ID			0x302B /* 0x300C*/
+-#define OV2680_SC_CMMN_SUB_ID			0x302A /* process, version*/
+-
+-#define OV2680_GROUP_ACCESS			0x3208 /*Bit[7:4] Group control, Bit[3:0] Group ID*/
+-
+-#define OV2680_REG_EXPOSURE_PK_HIGH		0x3500
+-#define OV2680_REG_GAIN_PK			0x350a
+-
+-#define OV2680_REG_SENSOR_CTRL_0A		0x370a
+-
+-#define OV2680_HORIZONTAL_START_H		0x3800 /* Bit[11:8] */
+-#define OV2680_HORIZONTAL_START_L		0x3801 /* Bit[7:0]  */
+-#define OV2680_VERTICAL_START_H			0x3802 /* Bit[11:8] */
+-#define OV2680_VERTICAL_START_L			0x3803 /* Bit[7:0]  */
+-#define OV2680_HORIZONTAL_END_H			0x3804 /* Bit[11:8] */
+-#define OV2680_HORIZONTAL_END_L			0x3805 /* Bit[7:0]  */
+-#define OV2680_VERTICAL_END_H			0x3806 /* Bit[11:8] */
+-#define OV2680_VERTICAL_END_L			0x3807 /* Bit[7:0]  */
+-#define OV2680_HORIZONTAL_OUTPUT_SIZE_H		0x3808 /* Bit[11:8] */
+-#define OV2680_HORIZONTAL_OUTPUT_SIZE_L		0x3809 /* Bit[7:0]  */
+-#define OV2680_VERTICAL_OUTPUT_SIZE_H		0x380a /* Bit[11:8] */
+-#define OV2680_VERTICAL_OUTPUT_SIZE_L		0x380b /* Bit[7:0]  */
+-#define OV2680_HTS				0x380c
+-#define OV2680_VTS				0x380e
+-#define OV2680_ISP_X_WIN			0x3810
+-#define OV2680_ISP_Y_WIN			0x3812
+-#define OV2680_X_INC				0x3814
+-#define OV2680_Y_INC				0x3815
+-
+-#define OV2680_FRAME_OFF_NUM			0x4202
+-
+-/*Flip/Mirror*/
+-#define OV2680_REG_FORMAT1			0x3820
+-#define OV2680_REG_FORMAT2			0x3821
+-
+-#define OV2680_MWB_RED_GAIN_H			0x5004/*0x3400*/
+-#define OV2680_MWB_GREEN_GAIN_H			0x5006/*0x3402*/
+-#define OV2680_MWB_BLUE_GAIN_H			0x5008/*0x3404*/
+-#define OV2680_MWB_GAIN_MAX			0x0fff
+-
+-#define OV2680_REG_ISP_CTRL00			0x5080
+-
+-#define OV2680_X_WIN				0x5704
+-#define OV2680_Y_WIN				0x5706
+-#define OV2680_WIN_CONTROL			0x5708
+-
+-#define OV2680_START_STREAMING			0x01
+-#define OV2680_STOP_STREAMING			0x00
+-
+ /*
+  * ov2680 device structure.
+  */
+@@ -121,7 +59,8 @@ struct ov2680_dev {
+ 	struct media_pad pad;
+ 	/* Protect against concurrent changes to controls */
+ 	struct mutex lock;
+-	struct i2c_client *client;
++	struct device *dev;
++	struct regmap *regmap;
+ 	struct gpio_desc *powerdown;
+ 	struct fwnode_handle *ep_fwnode;
+ 	bool is_streaming;
+@@ -150,19 +89,6 @@ struct ov2680_dev {
+ 	} ctrls;
+ };
+ 
+-/**
+- * struct ov2680_reg - MI sensor  register format
+- * @type: type of the register
+- * @reg: 16-bit offset to register
+- * @val: 8/16/32-bit register value
+- *
+- * Define a structure for sensor register initialization values
+- */
+-struct ov2680_reg {
+-	u16 reg;
+-	u32 val;	/* @set value for read/mod/write, @mask */
+-};
+-
+ #define to_ov2680_sensor(x) container_of(x, struct ov2680_dev, sd)
+ 
+ static inline struct v4l2_subdev *ctrl_to_sd(struct v4l2_ctrl *ctrl)
+@@ -173,7 +99,7 @@ static inline struct v4l2_subdev *ctrl_to_sd(struct v4l2_ctrl *ctrl)
+ 	return &sensor->sd;
+ }
+ 
+-static struct ov2680_reg const ov2680_global_setting[] = {
++static const struct reg_sequence ov2680_global_setting[] = {
+ 	/* MIPI PHY, 0x10 -> 0x1c enable bp_c_hs_en_lat and bp_d_hs_en_lat */
+ 	{0x3016, 0x1c},
+ 
+@@ -242,8 +168,6 @@ static struct ov2680_reg const ov2680_global_setting[] = {
+ 
+ 	/* DPC THRE RATIO 0x04 (4) -> 0x00 (0) */
+ 	{0x5792, 0x00},
+-
+-	{}
+ };
+ 
+ #endif
 -- 
 2.40.1
 
