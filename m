@@ -2,242 +2,167 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44F3AEB64DD
-	for <linux-media@archiver.kernel.org>; Thu, 15 Jun 2023 09:07:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9EC3EB64DB
+	for <linux-media@archiver.kernel.org>; Thu, 15 Jun 2023 09:12:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244919AbjFOJHP convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Jun 2023 05:07:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45820 "EHLO
+        id S245504AbjFOJML (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Jun 2023 05:12:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239094AbjFOJHO (ORCPT
+        with ESMTP id S245563AbjFOJMH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Jun 2023 05:07:14 -0400
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE80119;
-        Thu, 15 Jun 2023 02:07:12 -0700 (PDT)
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-bd744ffc263so1498172276.3;
-        Thu, 15 Jun 2023 02:07:12 -0700 (PDT)
+        Thu, 15 Jun 2023 05:12:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA012683
+        for <linux-media@vger.kernel.org>; Thu, 15 Jun 2023 02:11:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686820285;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3tR9dTAVJON9WjlpsNwz36ogssIzptMu2ktCE2N4uao=;
+        b=YkRN8HgTtayUTZlJIKbe6N4hPp2ayTlhWgMMkxQYm6zdYIiLvErc/91YnjmQJHYXhHLRfY
+        dObAvn0lVmorKzy6+/J3S8rqRvg/D/d9on92WOPmJLmqYByKX1dZpZWfFDLKLnJN72W3WQ
+        zFSiX7HcAXyrizeljWB12oZS4YeTX+8=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-306-BqG6mMXeOZyOCyuX__mKPA-1; Thu, 15 Jun 2023 05:11:24 -0400
+X-MC-Unique: BqG6mMXeOZyOCyuX__mKPA-1
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-94a34d3e5ebso131972466b.3
+        for <linux-media@vger.kernel.org>; Thu, 15 Jun 2023 02:11:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686820032; x=1689412032;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XmqLQ0CkJgsWUGPcmqNBpJER8sgocx9vIladrrnTfN0=;
-        b=Ze91gIbj6NenyNDZvLFhQfveqFP/4W8Jh7QF+Tjf/JkXzXsgLfBmoz2xM2oiOfRXkm
-         FMVR4aF1lZtcQ+RLCNOWk0j3Pp/sIKrbPnsyOIu8q9mwSPEzILJJssGgnSNfhKOFoYia
-         P/o2FjE10fn683vB+BpKl9T+toPdnz+z6po5wHt9VVRDrPgBIn9R4pwuoxk3geXytMz+
-         29d/iKFzlygObR4HL2kUd7g3jZnFRWRS4jbgABRVS2kG3ArbFToFva9Im7+hhbvLxfS0
-         1ay3Lv52QLfJAtgSXKsTZe3pCLPiCoWOi9tQJiyXjfSdcSsHNNIUWX/uvAtx9Ke5mdeN
-         mSgA==
-X-Gm-Message-State: AC+VfDxOunZrxFXh+Oa6meTemw7iAp2mfKvUYvPAZNSsfaD7F/etqw98
-        SUCyciB4InIjl12859gzaqHnM4XuTouZ0w==
-X-Google-Smtp-Source: ACHHUZ6AS+CLfulyglHf8hBR8o952OkqEEqnDPAJDJlr5cOq8J4+njOz1Tgvux2cE2lDNcImZVzcfA==
-X-Received: by 2002:a25:c058:0:b0:b99:53e9:ba89 with SMTP id c85-20020a25c058000000b00b9953e9ba89mr4288001ybf.50.1686820031585;
-        Thu, 15 Jun 2023 02:07:11 -0700 (PDT)
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
-        by smtp.gmail.com with ESMTPSA id n4-20020a259944000000b00bad1cf6eb8csm2734321ybo.0.2023.06.15.02.07.11
+        d=1e100.net; s=20221208; t=1686820283; x=1689412283;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3tR9dTAVJON9WjlpsNwz36ogssIzptMu2ktCE2N4uao=;
+        b=Y+MRa24xORQ7eStNOIaQbIEQA2hoinIy8I0LUrnw12JRJUlJAVyqWhu4ycUHf6p77S
+         RySz4R+gPV7d1sn/iL8ut45mxHBLaIcdM7tlgjYIsJVZY8vsT1re0Z/zhHwQhYhVCjYe
+         WGECDY2OAELZlfPfDsq6Rf0QZrHhrNTZlU6uk1MR29mkIbIXjn1OPKCSv6n5w93eD9Qf
+         dLbc33Pq2ZTeZfrqVpE8H3bo6lccwC68ECnHkj6MA9t+/rDlte2aLKdWM6u70c983ukq
+         7qogZM4jWOl7OSLPVQFtktJlizHKBm8gmUHWqDGLQRi3XohYjWDEWNdGKBe9sbGAHxfv
+         wMiA==
+X-Gm-Message-State: AC+VfDzGylBV4+90LU6+ndcxrx4/Me4NlzSgU+Zrg+V3g5FUnDkyTUjT
+        oJEJREVOgNub20YGw560MtvJR9ZyLPlcwknApUdns2l7yXS0FxQlDuqQg8N4IrhIF+5L4mSYiKD
+        AK1LbOSKTP6mqgSPmeGIRQTQ=
+X-Received: by 2002:a17:907:3605:b0:973:daa0:315 with SMTP id bk5-20020a170907360500b00973daa00315mr16427010ejc.1.1686820282894;
+        Thu, 15 Jun 2023 02:11:22 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ45HEhCG6qZFLJqUVL7T9uZ+Niy4+xAr/njLm32/es761IFlqGD/33rzsLsemzkRno12nF6lw==
+X-Received: by 2002:a17:907:3605:b0:973:daa0:315 with SMTP id bk5-20020a170907360500b00973daa00315mr16426993ejc.1.1686820282537;
+        Thu, 15 Jun 2023 02:11:22 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id f13-20020a170906494d00b0097461fecc91sm9031776ejt.81.2023.06.15.02.11.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 02:07:11 -0700 (PDT)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-5702116762fso10785347b3.3;
-        Thu, 15 Jun 2023 02:07:11 -0700 (PDT)
-X-Received: by 2002:a05:622a:14d0:b0:3f9:1736:dc87 with SMTP id
- u16-20020a05622a14d000b003f91736dc87mr4513058qtx.36.1686819645079; Thu, 15
- Jun 2023 02:00:45 -0700 (PDT)
+        Thu, 15 Jun 2023 02:11:21 -0700 (PDT)
+Message-ID: <b8e5f3f7-d82d-390b-ac63-824a42c3f6cd@redhat.com>
+Date:   Thu, 15 Jun 2023 11:11:20 +0200
 MIME-Version: 1.0
-References: <OS0PR01MB5922ECEABE4D6FC385D184008650A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <OS0PR01MB592265BFDF18F860E1EB4CFE8654A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <ZIcRKl3PDy0+yZS9@ninjato> <CAMuHMdV_iwdP+K1us86OB4VtDDqA=P_vNeCP15kqRuXqcYr3hg@mail.gmail.com>
- <ZIcUEdctlgRsGxJ3@ninjato> <CAMuHMdVOkBeKOEW9PkWB3Tqwa6-rC3BQj=W9VAEgeZfgqvQmWQ@mail.gmail.com>
- <ZIeDcVcfxfcMx/BP@shikoro> <OS0PR01MB592220CCA081848A711D75328655A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <OS0PR01MB592210CE54A9CF953980DFEE8655A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <OS0PR01MB59220D794AED55A6B795C3EF8655A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <20230614081314.GD17519@pendragon.ideasonboard.com> <OS0PR01MB59225C45554667D342454923865AA@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CAMuHMdWOTVxK+xkf5F_fBb2eB8E6kt1eWW0e15sPWj30Q7WHPQ@mail.gmail.com> <OS0PR01MB5922763D0F2F124EDF67CCEB865AA@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-In-Reply-To: <OS0PR01MB5922763D0F2F124EDF67CCEB865AA@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 15 Jun 2023 11:00:29 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUwQUWtH_cRJaNKUyDAM-a4HByjLnMME5ui-EOEH55chQ@mail.gmail.com>
-Message-ID: <CAMuHMdUwQUWtH_cRJaNKUyDAM-a4HByjLnMME5ui-EOEH55chQ@mail.gmail.com>
-Subject: Re: [PATCH v5 01/11] i2c: Enhance i2c_new_ancillary_device API
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Corey Minyard <cminyard@mvista.com>,
-        =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Antonio Borneo <antonio.borneo@foss.st.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 1/5] media: Add MIPI CCI register access helper
+ functions
+Content-Language: en-US, nl
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Andy Shevchenko <andy@kernel.org>, Kate Hsuan <hpa@redhat.com>,
+        linux-media@vger.kernel.org
+References: <20230614192343.57280-1-hdegoede@redhat.com>
+ <20230614192343.57280-2-hdegoede@redhat.com>
+ <ZIolnOxs29H8EUmC@kekkonen.localdomain>
+ <20230614213429.GA28757@pendragon.ideasonboard.com>
+ <ZIo1kHgYMK84iMj7@kekkonen.localdomain>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <ZIo1kHgYMK84iMj7@kekkonen.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Biju,
+Hi Sakari,
 
-On Wed, Jun 14, 2023 at 1:04 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> > Subject: Re: [PATCH v5 01/11] i2c: Enhance i2c_new_ancillary_device API
-> > On Wed, Jun 14, 2023 at 10:21 AM Biju Das <biju.das.jz@bp.renesas.com>
-> > wrote:
-> > > > Subject: Re: [PATCH v5 01/11] i2c: Enhance i2c_new_ancillary_device
-> > > > API On Tue, Jun 13, 2023 at 07:31:46PM +0000, Biju Das wrote:
-> > > > > > Subject: RE: [PATCH v5 01/11] i2c: Enhance
-> > > > > > i2c_new_ancillary_device API
-> > > > > > > Subject: RE: [PATCH v5 01/11] i2c: Enhance
-> > > > > > > i2c_new_ancillary_device API
-> > > > > > > > Subject: Re: [PATCH v5 01/11] i2c: Enhance
-> > > > > > > > i2c_new_ancillary_device API
-> > > > > > > >
-> > > > > > > > Hi everyone,
-> > > > > > > >
-> > > > > > > > > Perhaps we should first think through what an ancillary
-> > > > > > > > > device really is.  My understanding is that it is used to
-> > > > > > > > > talk to secondary addresses of a multi-address I2C slave
-> > device.
-> > > > > > > >
-> > > > > > > > As I mentioned somewhere before, this is not the case.
-> > > > > > > > Ancillary devices are when one *driver* handles more than one
-> > address.
-> > > > > > > > Everything else has been handled differently in the past
-> > > > > > > > (for all the uses I am aware of).
-> > > > > > > >
-> > > > > > > > Yet, I have another idea which is so simple that I wonder if
-> > > > > > > > it maybe has already been discussed so far?
-> > > > > > > >
-> > > > > > > > * have two regs in the bindings
-> > > > > > >
-> > > > > > > OK, it is inline with DT maintainers expectation as it is
-> > > > > > > matching with real hw as single device node having two regs.
-> > > > > > >
-> > > > > > > > * use the second reg with i2c_new_client_device to instantiate
-> > the
-> > > > > > > >   RTC sibling. 'struct i2c_board_info', which is one
-> > > > > > > > parameter,
-> > > > should
-> > > > > > > >   have enough options to pass data, e.g it has a
-> > software_node.
-> > > > > > >
-> > > > > > > OK, I can see the below can be passed from PMIC to new client
-> > > > device.
-> > > > > > >
-> > > > > > >         client->addr = info->addr;
-> > > > > > >
-> > > > > > >         client->init_irq = info->irq;
-> > > > > > >
-> > > > > > > >
-> > > > > > > > Should work or did I miss something here?
-> > > > > > >
-> > > > > > > I guess it will work. We instantiate appropriate device based
-> > > > > > > On PMIC revision and slave address and IRQ resource passed
-> > > > > > > through 'struct i2c_board_info'
-> > > > > > >
-> > > > > > > Will check this and update you.
-> > > > > >
-> > > > > > info.irq = irq; -->Irq fine
-> > > > > > info.addr = addr; -->slave address fine size =
-> > > > > > strscpy(info.type, name, sizeof(info.type)); -->instantiation
-> > > > > > based on PMIC version fine.
-> > > > > >
-> > > > > > 1) How do we share clk details on instantiated device to find is
-> > > > > > it connected to external crystal or external clock source? as we
-> > > > > > cannot pass of_node between PMIC and "i2c_board_info" as it
-> > > > > > results in pinctrl failure. info->platformdata and
-> > > > > > Client->dev.platformdata to retrieve this info??
-> > > > >
-> > > > > Or
-> > > > >
-> > > > > I2C instantiation based on actual oscillator bit value, ie, two
-> > > > > i2c_device_id's with one for setting oscillator bit and another
-> > > > > for clearing oscillator bit
-> > > > >
-> > > > > PMIC driver parses the clock details. Based on firmware version
-> > > > > and clock, It instantiates either i2c_device_id with setting
-> > > > > oscillator bit or clearing oscillator bit.
-> > > >
-> > > > I don't like that hack. I still think that two DT nodes is the best
-> > > > option, I think you're trying hard to hack around a problem that is
-> > > > actually not a problem.
-> > >
-> > > Why do you think it is a hack? I believe rather it is actual solution
-> > >
-> > > PMIC is a single device, with 2 regs, clocks, pinctrl and IRQ
-> > properties.
-> > > So it will be represented as single node with single compatible.
-> > >
-> > > By instating a client device, we are sharing the relevant resources to
-> > RTC device driver.
-> >
-> > Exactly.  RAA215300 is a PMIC with an integrated ISL1208-derivative.
-> > My biggest concern with using 2 separate nodes in DT is that one day we
-> > might discover another integration issue, which needs communication
-> > between the two parts.
-> >
-> > Things from the top of my head:
+On 6/14/23 23:48, Sakari Ailus wrote:
+> Hi Laurent,
+> 
+> On Thu, Jun 15, 2023 at 12:34:29AM +0300, Laurent Pinchart wrote:
+>> Hello,
+>>
+>> On Wed, Jun 14, 2023 at 08:39:56PM +0000, Sakari Ailus wrote:
+>>> On Wed, Jun 14, 2023 at 09:23:39PM +0200, Hans de Goede wrote:
+>>>> The CSI2 specification specifies a standard method to access camera sensor
+>>>> registers called "Camera Control Interface (CCI)".
+>>>>
+>>>> This uses either 8 or 16 bit (big-endian wire order) register addresses
+>>>> and supports 8, 16, 24 or 32 bit (big-endian wire order) register widths.
+>>>>
+>>>> Currently a lot of Linux camera sensor drivers all have their own custom
+>>>> helpers for this, often copy and pasted from other drivers.
+>>>>
+>>>> Add a set of generic helpers for this so that all sensor drivers can
+>>>> switch to a single common implementation.
+>>>>
+>>>> These helpers take an extra optional "int *err" function parameter,
+>>>> this can be used to chain a bunch of register accesses together with
+>>>> only a single error check at the end, rather then needing to error
+>>>> check each individual register access. The first failing call will
+>>>> set the contents of err to a non 0 value and all other calls will
+>>>> then become no-ops.
+>>>>
+>>>> Link: https://lore.kernel.org/linux-media/59aefa7f-7bf9-6736-6040-39551329cd0a@redhat.com/
+>>>> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+>>>> ---
+>>>> Changes in v2:
+>>>> - Drop cci_reg_type enum
+>>>> - Make having an encoded reg-width mandatory rather then using 0 to encode
+>>>>   8 bit width making reg-addresses without an encoded width default to
+>>>>   a width of 8
+>>>> - Add support for 64 bit wide registers
+>>
+>> I'm in two minds about this. This means that the read and write
+>> functions take a u64 argument, which will be less efficient on 32-bit
+>> platforms. I think it would be possible, with some macro magic, to
+>> accept different argument sizes, but maybe that's a micro-optimization
+>> that would actually result in worse code. 
+>>
+>> 64-bit support could be useful, but as far as I can tell, it's not used
+>> in this series, so maybe we could leave this for later ?
+> 
+> I prefer to have it now, I just told Tommaso working on the Alvium driver
+> to use this, and he needs 64-bit access. :-)
+> 
+> You could also easily have 32-bit and 64-bit variant of the functions, with
+> C11 _Generic(). Introducing it now would be easier than later.
 
-> >   2. On the real ISL1208, the interrupt pin can also be used as a clock
-> >      output.  Perhaps this is fed to some PMIC part in the
-> >      RAA215300, too?
->
-> The ISL1208 driver doesn't support clock output. It is same as ISL1208, but difference is
-> since same INT# pin used for PMIC, I guess we won't be able to use PMIC interrupt, if RTC configured for clock output.
+I took a quick look at C11 _Generic() and that looks at the type
+of "things" so in this case it would look at type of the val argument.
 
-Exactly.
+Problem is that that can still be e.g. an int when doing a
+read/write from a 64 bit registers.
 
-The documentation confirms it can also be configured as clock signal
-output in Frequency Output (FOUT) mode of the RTC on RAA215300.
+So we would then need to handle the 64 bit width case in the 32
+bit versions of the functions too.
 
-> >   3. Are there other I2C addresses the chip listens to?
->
-> No, only 2 address 0x12 and 0x6f.
+And likewise I can see someone passing a long on a 64 bit
+arch while doing a cci_write() to a non 64 bit register.
 
-Both addresses are programmable, and can even be the same!
-Interesting, but more challenging for the Linux driver model...
+So this would basically mean copy and pasting cci_read()
++ cci_write() 2x with the only difference being one
+variant taking a 32 bit val argument and the other a
+64 bit val argument.
 
-> > I only have access to the Short-Form Datasheet for the RAA215300, so I
-> > cannot check myself...
+This seems like premature optimization to me.
 
-Thanks, got access through the kind people behind the Renesas website.
+As mentioned in my reply to Laurent if we want to
+optimize things we really should look at avoiding
+unnecessary i2c transfers, or packing multiple
+writes into a single i2c transfer for writes to
+subsequent registers. That is where significant
+speedups can be made.
 
-Other things I noticed during a quick glance:
-  - To activate the RTC, the host must first set the RTC EN bit =
-    1 and the WRTC bit = 1.
-    The RTC EN bit is located in the PMIC address space.
-    IMHO this precludes using a separate DT node.
-  - ISL1208 supports 400 kHz I2C, RAA215300 supports 1 MHz.
+Regards,
 
-Gr{oetje,eeting}s,
+Hans
 
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
