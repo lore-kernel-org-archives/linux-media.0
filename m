@@ -2,52 +2,52 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D779EB64DB
-	for <linux-media@archiver.kernel.org>; Thu, 15 Jun 2023 11:42:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B7CAEB64DC
+	for <linux-media@archiver.kernel.org>; Thu, 15 Jun 2023 11:43:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344299AbjFOLmf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Jun 2023 07:42:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53492 "EHLO
+        id S1344430AbjFOLnM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Jun 2023 07:43:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344241AbjFOLls (ORCPT
+        with ESMTP id S1344363AbjFOLma (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Jun 2023 07:41:48 -0400
+        Thu, 15 Jun 2023 07:42:30 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4FB4209;
-        Thu, 15 Jun 2023 04:39:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D043584;
+        Thu, 15 Jun 2023 04:39:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C09916391A;
-        Thu, 15 Jun 2023 11:39:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95763C433C8;
-        Thu, 15 Jun 2023 11:39:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 58B3263912;
+        Thu, 15 Jun 2023 11:39:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D4EAC433C8;
+        Thu, 15 Jun 2023 11:39:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686829172;
-        bh=6ZdsxUTZElnUIX2In0sqe3VToJpb/0owUcP8EWfTa2U=;
+        s=k20201202; t=1686829149;
+        bh=S1IDXCHd/U+Nc2Q9yGCCF+cX+g8D9zoTb8jVqXYpAig=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kbRrkEUcOLx7IHcVy0KsUxHqaRUeujumPJq+qYi7mCb6OX99nuN4nC6g0AUfwe+Ji
-         VJGSIRK3PkTySi9P5wzTCGbb9TIW5P0OLF9FPRNZq5JzOAFu6N2iTfQY6ZW6yC7Wj7
-         2iweZ0rsRR6OUvUpK6F8xNxTi2JHI/QIXdyifxtn8Q0P2h2DJDfIbSWWQgdvyfye/j
-         tKcAhxwKW4HL4wbsIzR7Z93YgZo2i9liSpWLjbR4pDMEjqSQTnX35qW4bfVItpJk7E
-         Zi/4F1E3BHuJGRHOtoVC2npJEpOf1OPWpBUU9TKg3fhLT5mErbQJY4Dj5ViIcL7aRJ
-         9aM1Zra5Y7LDw==
+        b=m/pldQlwk/v0llHN+5fEkedwmraojozsiOW1l9PKBibl8HNuy2pXe/3yBa8LhG90v
+         khE07Ema40LTaqKE3HGEd7reMQhYdaHclVinWK/rdN6YaxRKNbHNH0T1CfPfj0NU98
+         4qq4MOmkeiGpzvqdH6aSOwPBFd4/lFU8XSoq1x3PEn/9r5iF6arPMFaELlIsmf7eVa
+         QIBHctYyBmpgNZeC5y4fvko+m7M+kkCuLUSvwzavJUpOOYkFI59SA7gvNzEqJWJhhq
+         ztYDVnwzDVQOkxn/ZGhn08ttG7d+Ggd3IiROmIjOc0B82g86TThJ8OANm1dTSxLaL1
+         PymTOfKngiKWw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 6/9] media: cec: core: don't set last_initiator if tx in progress
-Date:   Thu, 15 Jun 2023 07:39:14 -0400
-Message-Id: <20230615113917.649505-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 06/10] media: cec: core: don't set last_initiator if tx in progress
+Date:   Thu, 15 Jun 2023 07:38:50 -0400
+Message-Id: <20230615113854.649370-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230615113917.649505-1-sashal@kernel.org>
-References: <20230615113917.649505-1-sashal@kernel.org>
+In-Reply-To: <20230615113854.649370-1-sashal@kernel.org>
+References: <20230615113854.649370-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.184
+X-stable-base: Linux 5.15.117
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -73,10 +73,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/cec/core/cec-adap.c b/drivers/media/cec/core/cec-adap.c
-index e23aa608f66f6..97b479223fe52 100644
+index 67776a0d31e8c..99ede1417d727 100644
 --- a/drivers/media/cec/core/cec-adap.c
 +++ b/drivers/media/cec/core/cec-adap.c
-@@ -1085,7 +1085,8 @@ void cec_received_msg_ts(struct cec_adapter *adap,
+@@ -1086,7 +1086,8 @@ void cec_received_msg_ts(struct cec_adapter *adap,
  	mutex_lock(&adap->lock);
  	dprintk(2, "%s: %*ph\n", __func__, msg->len, msg->msg);
  
