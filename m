@@ -2,95 +2,137 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5C3FEB64D9
-	for <linux-media@archiver.kernel.org>; Thu, 15 Jun 2023 12:22:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EF8DEB64D9
+	for <linux-media@archiver.kernel.org>; Thu, 15 Jun 2023 12:39:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344034AbjFOMWH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Jun 2023 08:22:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35446 "EHLO
+        id S244403AbjFOMjW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Jun 2023 08:39:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343986AbjFOMVx (ORCPT
+        with ESMTP id S231163AbjFOMjU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Jun 2023 08:21:53 -0400
-Received: from www.linuxtv.org (www.linuxtv.org [130.149.80.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1666B273C
-        for <linux-media@vger.kernel.org>; Thu, 15 Jun 2023 05:20:14 -0700 (PDT)
-Received: from builder.linuxtv.org ([140.211.167.10] helo=slave0)
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1q9lNd-002pUE-1V; Thu, 15 Jun 2023 11:43:09 +0000
-Received: from ip6-localhost ([::1] helo=localhost.localdomain)
-        by slave0 with esmtp (Exim 4.94.2)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1q9lNa-000BGl-F5; Thu, 15 Jun 2023 11:43:06 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL for v6.4-rc7] media fixes (#92507)
-Date:   Thu, 15 Jun 2023 11:43:06 +0000
-Message-Id: <20230615114306.43273-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230615121721.1f901ebb@sal.lan>
-References: 
+        Thu, 15 Jun 2023 08:39:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9055F1FE5
+        for <linux-media@vger.kernel.org>; Thu, 15 Jun 2023 05:38:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686832719;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4y5XlF7+P4puBisHahWVb8CkbwNpV9TQalR2O3xuL3g=;
+        b=ceV4i9sPrQy+r6jVcqVgfVs4jwc8Ui8uZ+UlPkPQ+aQbYF0nM//r+Dlecgs1gWL20Dwp9R
+        12T1In3UW8shvCM4tEZHuFuskrkGs23u3QmgybPBAMkqxzHfsWZoSY71Sj+DvhhYyGR0N7
+        NFuRvGZdq3j6sZazDFHwLMFa8HyNdE0=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-98-yU9wU-OHOJ--q_rjXzubtQ-1; Thu, 15 Jun 2023 08:38:38 -0400
+X-MC-Unique: yU9wU-OHOJ--q_rjXzubtQ-1
+Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-514a6909c35so7112521a12.3
+        for <linux-media@vger.kernel.org>; Thu, 15 Jun 2023 05:38:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686832717; x=1689424717;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4y5XlF7+P4puBisHahWVb8CkbwNpV9TQalR2O3xuL3g=;
+        b=V0L4ILowxHtGsagyq9Ubz4hiRGKInp52SibItIH14OQWS2gY9KRxrwRQh0+QRxFDys
+         BTINQv2AsCU/GTY0VQjQIlCFhKzyckK7y6ZpmzKpR49TPu+5OTDzLCXetDkKXTCyTl2P
+         x2HYKXA21nbJrMETiJanFa8KPDwFuXbpS/gzEeiDVq6U/Dty6StlxMM7PEXqwGtscLGh
+         8R7p6M/B4Unj0+JjBArcx/0YnEcktUI1Dn5u+4ahvTq6kzenY5Mx+fmNY3MTKT/+4IYw
+         xN0ZCdF9QIH+Urps5o1saLxfBADglc2z2Pfe7pRjgrFftDtzqLSRfY2YcUe36ciim3au
+         x63A==
+X-Gm-Message-State: AC+VfDxZd208ZwqQYzYHmAZL6z3iyMi+tbuCVrJ6f1UFRl16q5S96LSS
+        Rhr8gorAZsMPcF9G+Y2EIFXWM+CIy0820231hUCDwYuPqoEphrKIxb6VPdwoFODCuL0JGcsFBWG
+        Ep6t2EF2UjN8i9c9QH1FtZLo=
+X-Received: by 2002:a05:6402:1acc:b0:519:608a:142 with SMTP id ba12-20020a0564021acc00b00519608a0142mr2913999edb.33.1686832717549;
+        Thu, 15 Jun 2023 05:38:37 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6+qIZ7tAmzegaBiAZKQ8qhI6L0DzRMftKtOqVHNA9h3sit8G1ZKZxiLY0YhH4WoepECeAj2A==
+X-Received: by 2002:a05:6402:1acc:b0:519:608a:142 with SMTP id ba12-20020a0564021acc00b00519608a0142mr2913982edb.33.1686832717226;
+        Thu, 15 Jun 2023 05:38:37 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id s3-20020a056402164300b00510d8e43fe0sm8870903edx.7.2023.06.15.05.38.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Jun 2023 05:38:35 -0700 (PDT)
+Message-ID: <0f58b3ca-125f-d4c6-9f7f-87a240e945dc@redhat.com>
+Date:   Thu, 15 Jun 2023 14:38:34 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 0/4] platform/x86: int3472: discrete: Regulator rework /
+ Lenovo Miix 510 support
+To:     Dan Scally <dan.scally@ideasonboard.com>,
+        Hao Yao <hao.yao@intel.com>, Bingbu Cao <bingbu.cao@intel.com>
+Cc:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-media@vger.kernel.org
+References: <20230609204228.74967-1-hdegoede@redhat.com>
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230609204228.74967-1-hdegoede@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+Hi All,
 
-Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/20230615121721.1f901ebb@sal.lan/
-Build log: https://builder.linuxtv.org/job/patchwork/314812/
-Build time: 00:21:03
-Link: https://lore.kernel.org/linux-media/20230615121721.1f901ebb@sal.lan
+On 6/9/23 22:42, Hans de Goede wrote:
+> Hi Dan, Hao Yao and Bingbu Cao,
+> 
+> Patches 1/2 drop the sensor-config stuff since I thought we should be
+> able to make things work without any board specific fixups.
+> 
+> This is the result of my working on getting IPU6 to work on Jasper Lake
+> for $dayjob and then tonight I switched to trying to get the ov2680
+> on the Lenovo Miix 510 to work and it turns out that does require some
+> board specific workarounds after all :|
+> 
+> With this series together with my recent ov2680 sensor driver series:
+> https://lore.kernel.org/linux-media/20230607164712.63579-1-hdegoede@redhat.com/
+> I can get the ov2680 driver to load and successfully read the id register:
+> 
+> [   11.365319] ipu3-cio2 0000:00:14.3: Found supported sensor OVTI2680:00
+> [   11.431595] ov2680 i2c-OVTI2680:00: supply DOVDD not found, using dummy regulator
+> [   11.433125] ov2680 i2c-OVTI2680:00: supply DVDD not found, using dummy regulator
+> [   11.454698] ov2680 i2c-OVTI2680:00: sensor_revision id = 0x2680, rev= 0
+> 
+> Dan, currently the DMI match used only matches the 12IKB version of
+> the Miix 510 I think you have a 12ISK version. Can you verify this
+> works there too?  I guess we can just drop the KB part of the DMI
+> match if this works on the 12ISK version too.
+> 
+> Hao Yao and Bingbu Cao I think that the way the issue with how different
+> drivers may expect different regulator supply-ids is of interest to you
+> too. Note I see that the mainline version of ov13b10.c does not have
+> regulator support at all yet. So when adding this please just use
+> one of the existing set of supply-names + the bulk API like how
+> the ov5693.c driver is doing. In this case no int3472 driver changes
+> will be necessary at all.
 
-gpg: Signature made Thu 15 Jun 2023 11:15:44 AM UTC
-gpg:                using RSA key F909AE68FC11DF09C1755C00085F3EBD8EE4E115
-gpg: Good signature from "Mauro Carvalho Chehab <mchehab+huawei@kernel.org>" [ultimate]
-gpg:                 aka "Mauro Carvalho Chehab <mchehab@kernel.org>" [ultimate]
-gpg:                 aka "Mauro Carvalho Chehab <m.chehab@samsung.com>" [ultimate]
-gpg:                 aka "Mauro Carvalho Chehab <mchehab@osg.samsung.com>" [ultimate]
-gpg:                 aka "Mauro Carvalho Chehab <mchehab@s-opensource.com>" [ultimate]
-gpg:                 aka "Mauro Carvalho Chehab <mchehab+samsung@kernel.org>" [ultimate]
-gpg:                 aka "[jpeg image of size 3594]" [ultimate]
+I've added this to my review-hans (soon to be for-next) branch now.
 
-Summary: got 1/1 patches with issues, being 1 at build time, plus one error when buinding PDF document
+Regards,
 
-Error/warnings:
-
-patches/0001-Revert-media-dvb-core-Fix-use-after-free-on-race-con.patch:
-
-    allyesconfig: return code #0:
-	../scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-	../scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
-	../scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
-	SPARSE:../drivers/staging/media/tegra-video/vip.c ../drivers/staging/media/tegra-video/vip.c:280:24: warning: symbol 'tegra_vip_driver' was not declared. Should it be static?
-	../drivers/staging/media/atomisp/i2c/atomisp-gc0310.c:447 gc0310_s_stream() warn: missing error code 'ret'
-	../drivers/staging/media/atomisp/i2c/atomisp-ov2680.c: ../drivers/staging/media/atomisp/i2c/atomisp-ov2680.c:476 ov2680_init_cfg() error: we previously assumed 'sd_state' could be null (see line 468)
-	../drivers/staging/media/atomisp/i2c/atomisp-ov2680.c:524 ov2680_s_stream() warn: missing error code 'ret'
-	../drivers/staging/media/atomisp/pci/atomisp_fops.c: ../drivers/staging/media/atomisp/pci/atomisp_fops.c:517 atomisp_open() warn: missing unwind goto?
-	../drivers/staging/media/atomisp/pci/atomisp_cmd.c: ../drivers/staging/media/atomisp/pci/atomisp_cmd.c:2801 atomisp_cp_dvs_6axis_config() warn: missing unwind goto?
-	../drivers/staging/media/atomisp/pci/atomisp_cmd.c: ../drivers/staging/media/atomisp/pci/atomisp_cmd.c:2900 atomisp_cp_morph_table() warn: missing unwind goto?
-	../drivers/staging/media/atomisp/pci/atomisp_cmd.c: ../drivers/staging/media/atomisp/pci/atomisp_cmd.c:4283 atomisp_set_fmt_to_snr() warn: variable dereferenced before check 'asd' (see line 4268)
-
-    allyesconfig: return code #0:
-	../drivers/media/i2c/adp1653.c: ../drivers/media/i2c/adp1653.c:444 adp1653_of_init() warn: missing unwind goto?
-	../drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c: ../drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c:347 vdec_msg_queue_init() warn: missing unwind goto?
-	../drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: ../drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c:2775 mxc_jpeg_probe() warn: missing unwind goto?
-	../drivers/media/i2c/ov5645.c: ../drivers/media/i2c/ov5645.c:687 ov5645_set_power_on() warn: 'ov5645->xclk' from clk_prepare_enable() not released on lines: 687.
-	SMATCH:../drivers/media/usb/siano/smsusb.c ../drivers/media/usb/siano/smsusb.c:53:38: :warning: array of flexible structures
-	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2570 dvb_register() parse error: OOM: 3000032Kb sm_state_count = 1973014
-	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2570 dvb_register() warn: Function too hairy.  No more merges.
-	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2570 dvb_register() parse error: __split_smt: function too hairy.  Giving up after 54 seconds
-	../drivers/media/usb/uvc/uvc_v4l2.c: note: in included file (through ../arch/x86/include/asm/uaccess.h, ../include/linux/uaccess.h, ../include/linux/sched/task.h, ../include/linux/sched/signal.h, ../include/linux/rcuwait.h, ...):
-	SPARSE:../drivers/media/usb/uvc/uvc_v4l2.c ../arch/x86/include/asm/uaccess_64.h:88:24: warning: cast removes address space '__user' of expression
-	../drivers/media/pci/ivtv/ivtvfb.c: note: in included file (through ../arch/x86/include/asm/uaccess.h, ../include/linux/uaccess.h, ../include/linux/sched/task.h, ../include/linux/sched/signal.h, ../drivers/media/pci/ivtv/ivtv-driver.h):
-	SPARSE:../drivers/media/pci/ivtv/ivtvfb.c ../arch/x86/include/asm/uaccess_64.h:88:24: warning: cast removes address space '__user' of expression
-	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2884 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
-	../drivers/media/usb/pvrusb2/pvrusb2-hdw.c: ../drivers/media/usb/pvrusb2/pvrusb2-hdw.c:3293 pvr2_hdw_get_tuner_status() warn: inconsistent indenting
+Hans
 
 
-Error #512 when building PDF docs
+
+
+> Hans de Goede (4):
+>   platform/x86: int3472: discrete: Drop GPIO remapping support
+>   platform/x86: int3472: discrete: Remove sensor_config-s
+>   platform/x86: int3472: discrete: Add support for 1 GPIO regulator
+>     shared between 2 sensors
+>   platform/x86: int3472: discrete: Add alternative "AVDD" regulator
+>     supply name
+> 
+>  .../x86/intel/int3472/clk_and_regulator.c     | 72 ++++++++++++++----
+>  drivers/platform/x86/intel/int3472/common.h   | 14 +---
+>  drivers/platform/x86/intel/int3472/discrete.c | 76 ++-----------------
+>  3 files changed, 66 insertions(+), 96 deletions(-)
+> 
 
