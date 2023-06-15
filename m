@@ -2,112 +2,83 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2876EB64D9
-	for <linux-media@archiver.kernel.org>; Thu, 15 Jun 2023 14:20:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CCF70C0015E
+	for <linux-media@archiver.kernel.org>; Thu, 15 Jun 2023 14:40:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344996AbjFOOUM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Jun 2023 10:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46886 "EHLO
+        id S241558AbjFOOkL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Jun 2023 10:40:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240062AbjFOOUL (ORCPT
+        with ESMTP id S1345123AbjFOOkH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Jun 2023 10:20:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A472B1FC2
-        for <linux-media@vger.kernel.org>; Thu, 15 Jun 2023 07:19:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686838764;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cg4zvaEJsrC/8RsRj/DiyuRV2bgqfzZdfRSLzxOYlfg=;
-        b=Y/k5nopU7qpGCu1WDQOGosZz2NbfupapIaYLmRdRZklVIeGGDRDWiwRI1s4JFvmXzbGR4f
-        gi4DuqS3OK+AZZSX4LfWLc8WsMaKMn+TK3jFWBwMBTIW15dzw7gZpzjOB1d8KSqghdjn7f
-        dnCKXVXCG+Et51+WDO5fv17vaiPDFmk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-632-wFdORKd8OMuKTnXdspVAOQ-1; Thu, 15 Jun 2023 10:15:42 -0400
-X-MC-Unique: wFdORKd8OMuKTnXdspVAOQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 10717858284;
-        Thu, 15 Jun 2023 14:13:58 +0000 (UTC)
-Received: from shalem.redhat.com (unknown [10.39.192.154])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F21A048FB01;
-        Thu, 15 Jun 2023 14:13:56 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Daniel Scally <dan.scally@ideasonboard.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andy Shevchenko <andy@kernel.org>, Kate Hsuan <hpa@redhat.com>,
-        Tommaso Merciai <tomm.merciai@gmail.com>,
+        Thu, 15 Jun 2023 10:40:07 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 236211707;
+        Thu, 15 Jun 2023 07:40:03 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.43:38118.1572836322
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
+        by 189.cn (HERMES) with SMTP id A4EC7100295;
+        Thu, 15 Jun 2023 22:36:20 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-75648544bd-7vx9t with ESMTP id f757833a38c0491a9b3e100f3191d20a for maarten.lankhorst@linux.intel.com;
+        Thu, 15 Jun 2023 22:36:21 CST
+X-Transaction-ID: f757833a38c0491a9b3e100f3191d20a
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+From:   Sui Jingfeng <15330273260@189.cn>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Sui Jingfeng <suijingfeng@loongson.cn>,
+        Christian Koenig <christian.koenig@amd.com>
+Cc:     inux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-media@vger.kernel.org
-Subject: [PATCH v2 05/28] media: ov2680: Don't take the lock for try_fmt calls
-Date:   Thu, 15 Jun 2023 16:13:26 +0200
-Message-Id: <20230615141349.172363-6-hdegoede@redhat.com>
-In-Reply-To: <20230615141349.172363-1-hdegoede@redhat.com>
-References: <20230615141349.172363-1-hdegoede@redhat.com>
+Subject: [PATCH v15 2/2] MAINTAINERS: add maintainers for DRM LOONGSON driver
+Date:   Thu, 15 Jun 2023 22:36:13 +0800
+Message-Id: <20230615143613.1236245-3-15330273260@189.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230615143613.1236245-1-15330273260@189.cn>
+References: <20230615143613.1236245-1-15330273260@189.cn>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On ov2680_set_fmt() calls with format->which == V4L2_SUBDEV_FORMAT_TRY,
-ov2680_set_fmt() does not talk to the sensor.
+From: Sui Jingfeng <suijingfeng@loongson.cn>
 
-So in this case there is no need to lock the sensor->lock mutex or
-to check that the sensor is streaming.
+This patch add Sui Jingfeng as maintainer to drm/loongson driver.
 
-Fixes: 3ee47cad3e69 ("media: ov2680: Add Omnivision OV2680 sensor driver")
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
 ---
- drivers/media/i2c/ov2680.c | 20 +++++++++-----------
- 1 file changed, 9 insertions(+), 11 deletions(-)
+ MAINTAINERS | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/media/i2c/ov2680.c b/drivers/media/i2c/ov2680.c
-index f6297874af3b..2b20990f4cf5 100644
---- a/drivers/media/i2c/ov2680.c
-+++ b/drivers/media/i2c/ov2680.c
-@@ -595,24 +595,22 @@ static int ov2680_set_fmt(struct v4l2_subdev *sd,
- 	if (format->pad != 0)
- 		return -EINVAL;
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 225e20582a96..70262eb6e614 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -6956,6 +6956,13 @@ T:	git git://anongit.freedesktop.org/drm/drm-misc
+ F:	drivers/gpu/drm/lima/
+ F:	include/uapi/drm/lima_drm.h
  
--	mutex_lock(&sensor->lock);
--
--	if (sensor->is_streaming) {
--		ret = -EBUSY;
--		goto unlock;
--	}
--
- 	mode = v4l2_find_nearest_size(ov2680_mode_data,
- 				      ARRAY_SIZE(ov2680_mode_data), width,
- 				      height, fmt->width, fmt->height);
--	if (!mode) {
--		ret = -EINVAL;
--		goto unlock;
--	}
-+	if (!mode)
-+		return -EINVAL;
- 
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
- 		try_fmt = v4l2_subdev_get_try_format(sd, sd_state, 0);
- 		format->format = *try_fmt;
-+		return 0;
-+	}
++DRM DRIVERS FOR LOONGSON
++M:	Sui Jingfeng <suijingfeng@loongson.cn>
++L:	dri-devel@lists.freedesktop.org
++S:	Supported
++T:	git git://anongit.freedesktop.org/drm/drm-misc
++F:	drivers/gpu/drm/loongson/
 +
-+	mutex_lock(&sensor->lock);
-+
-+	if (sensor->is_streaming) {
-+		ret = -EBUSY;
- 		goto unlock;
- 	}
- 
+ DRM DRIVERS FOR MEDIATEK
+ M:	Chun-Kuang Hu <chunkuang.hu@kernel.org>
+ M:	Philipp Zabel <p.zabel@pengutronix.de>
 -- 
-2.40.1
+2.25.1
 
