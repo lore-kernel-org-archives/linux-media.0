@@ -2,195 +2,95 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58752EB64D9
-	for <linux-media@archiver.kernel.org>; Thu, 15 Jun 2023 12:06:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5C3FEB64D9
+	for <linux-media@archiver.kernel.org>; Thu, 15 Jun 2023 12:22:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344689AbjFOMGw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Jun 2023 08:06:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50882 "EHLO
+        id S1344034AbjFOMWH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Jun 2023 08:22:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344684AbjFOMGi (ORCPT
+        with ESMTP id S1343986AbjFOMVx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Jun 2023 08:06:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F22C82120
-        for <linux-media@vger.kernel.org>; Thu, 15 Jun 2023 05:05:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686830708;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vT5YPefdclIvpGGO3OhnRz7E2rEkyVfPWr51ZrtvFrw=;
-        b=OTWurTU++MlilIJ+vSezmjaBEQqTNVsxJW6Wsy408XseIHIy9LkwiAANGdRHFOSoIHrrVH
-        eOpXxXekZ+HW6tZQJL+6BBdUyBOD/ldwqTgHdAhgyS8U+SQP2Y6vIWDSSQHY/CouO4tbku
-        HNffERtt9rGCFc9kY0KFNu9cT8Y4L4A=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-518-C1myEKQpN_Cmy9UJuR1nnA-1; Thu, 15 Jun 2023 08:05:06 -0400
-X-MC-Unique: C1myEKQpN_Cmy9UJuR1nnA-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-98286c6cbeaso108209766b.1
-        for <linux-media@vger.kernel.org>; Thu, 15 Jun 2023 05:05:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686830704; x=1689422704;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vT5YPefdclIvpGGO3OhnRz7E2rEkyVfPWr51ZrtvFrw=;
-        b=IJ1ThamFFl/2XstCMuQNp5vjTmVaiHhhROm3BTVUCD+3SWU7T0Ie5T0cA5+3baEpUq
-         kiC9R99yniY+ys+KlMp/ZYhkvpPC1qPOnBmBxI3BCB9dXogUMb1AupwCWl6f2fDid1FP
-         xu2Yc7FiA6o4yi15eU03MQwLPmOx3PaMgWJv3qxgJVIu3ZnEsL6l16A0Ca98i62D6OR/
-         NxHSCxVKsotpAndlbVk7chlnXpsBNi5+lGvxCfFOp033vqivFCnqGmBMsUQ2QufxhTgy
-         4DDR18NSPhmXbr7jzvI7sYozTqAccOiTAJ29C3jMIHtiPqaIhUm6s0LgJcIFeZQeVJQ9
-         tUpw==
-X-Gm-Message-State: AC+VfDy9Hba3NpN0th3MFvVZF+Cxlxw3hKFuH4nr7jyeQH1oFgTfY4K1
-        Xhz88P4LCvnrhUV97uC0m/TTqJRXd7FVM5r5E9W+ng349Le01XCsoBtCn7QpHD1eplFC7hnsO0f
-        FUsUHCiZ7T+t0djbKqk2rYJ6G//0OTsI=
-X-Received: by 2002:a17:907:9710:b0:96f:a8c2:77ad with SMTP id jg16-20020a170907971000b0096fa8c277admr19369310ejc.63.1686830704427;
-        Thu, 15 Jun 2023 05:05:04 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7GulmIezcwMd23dOmH6wBBpIItmUdT6BbLJuOngoRrGGTvc/jQbHnr7Wc1MPsfq8Bvf+pFXw==
-X-Received: by 2002:a17:907:9710:b0:96f:a8c2:77ad with SMTP id jg16-20020a170907971000b0096fa8c277admr19369292ejc.63.1686830704126;
-        Thu, 15 Jun 2023 05:05:04 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id y9-20020a17090668c900b0098242730348sm3189777ejr.72.2023.06.15.05.05.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 05:05:02 -0700 (PDT)
-Message-ID: <f10d2b2d-1496-936c-c609-38279d8f6262@redhat.com>
-Date:   Thu, 15 Jun 2023 14:05:02 +0200
+        Thu, 15 Jun 2023 08:21:53 -0400
+Received: from www.linuxtv.org (www.linuxtv.org [130.149.80.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1666B273C
+        for <linux-media@vger.kernel.org>; Thu, 15 Jun 2023 05:20:14 -0700 (PDT)
+Received: from builder.linuxtv.org ([140.211.167.10] helo=slave0)
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1q9lNd-002pUE-1V; Thu, 15 Jun 2023 11:43:09 +0000
+Received: from ip6-localhost ([::1] helo=localhost.localdomain)
+        by slave0 with esmtp (Exim 4.94.2)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1q9lNa-000BGl-F5; Thu, 15 Jun 2023 11:43:06 +0000
+From:   Jenkins <jenkins@linuxtv.org>
+To:     mchehab@kernel.org, linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+Subject: Re: [GIT PULL for v6.4-rc7] media fixes (#92507)
+Date:   Thu, 15 Jun 2023 11:43:06 +0000
+Message-Id: <20230615114306.43273-1-jenkins@linuxtv.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230615121721.1f901ebb@sal.lan>
+References: 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 1/5] media: Add MIPI CCI register access helper
- functions
-Content-Language: en-US, nl
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andy Shevchenko <andy@kernel.org>, Kate Hsuan <hpa@redhat.com>,
-        linux-media@vger.kernel.org
-References: <20230614192343.57280-1-hdegoede@redhat.com>
- <20230614192343.57280-2-hdegoede@redhat.com>
- <ZIolnOxs29H8EUmC@kekkonen.localdomain>
- <4c9b2cec-e026-e527-2253-fc541ec85d05@redhat.com>
- <ZIrf7Ku9LHRCIU5K@kekkonen.localdomain>
- <647c6bf0-2ad3-16bd-8081-7f4244f60938@redhat.com>
- <ZIr41hzdphg1UbJy@kekkonen.localdomain>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <ZIr41hzdphg1UbJy@kekkonen.localdomain>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+From: builder@linuxtv.org
 
-On 6/15/23 13:41, Sakari Ailus wrote:
-> Hi Hans,
-> 
-> On Thu, Jun 15, 2023 at 12:15:47PM +0200, Hans de Goede wrote:
->> Hi,
->>
->> On 6/15/23 11:54, Sakari Ailus wrote:
->>> Hi Hans,
->>>
->>> On Thu, Jun 15, 2023 at 10:45:35AM +0200, Hans de Goede wrote:
->>>> Hi Sakari,
->>>>
->>>> On 6/14/23 22:39, Sakari Ailus wrote:
->>>
->>> ...
->>>>>> diff --git a/drivers/media/v4l2-core/Kconfig b/drivers/media/v4l2-core/Kconfig
->>>>>> index 348559bc2468..523ba243261d 100644
->>>>>> --- a/drivers/media/v4l2-core/Kconfig
->>>>>> +++ b/drivers/media/v4l2-core/Kconfig
->>>>>> @@ -74,6 +74,11 @@ config V4L2_FWNODE
->>>>>>  config V4L2_ASYNC
->>>>>>  	tristate
->>>>>>  
->>>>>> +config V4L2_CCI
->>>>>> +	tristate
->>>>>> +	depends on I2C
->>>>>
->>>>> This won't do anything if the dependent driver will select V4L2_CCI, will
->>>>> it? I'd let the sensor driver depend on I2C instead. CCI is also supported
->>>>> on I3C, for instance.
->>>>
->>>> It will cause a Kconfig error if the dependent driver does not depend
->>>> on I2C. Kconfig items doing select MUST depend on all the depends on
->>>> of the items they are selecting; and (continued below)
->>>
->>> Maybe this has changed? It used to be that these cases were silently
->>> ignored and it wasn't that long ago. I haven't been following this up.
->>>
->>> Nevertheless, this shouldn't depend on I2C as such.
->>>
->>>>
->>>>>
->>>>>> +	select REGMAP_I2C
->>>>>
->>>>> This is a good question.
->>>>>
->>>>> How about adding V4L2_CCI_I2C that would select REGMAP_I2C?
->>>>
->>>> v4l2-cci.ko uses the devm_regmap_init_i2c() symbol, so
->>>> REGMAP_I2C must be enabled when V4L2_CCI is enabled and
->>>> REGMAP_I2C is a symbol which should be selected rather
->>>> then depended on when necessary.
->>>
->>> I agree.
->>
->> If you agree that because of the symbol dependency that
->> the select REGMAP_I2C is necessary then the depends on I2C
->> is also necessary because any Kconfig symbol selecting
->> another symbol MUST depends on all of the dependencies
->> of the selected symbol and REGMAP_I2C has:
->>
->> config REGMAP_I2C
->>         tristate
->>         depends on I2C
-> 
-> Yes.
-> 
-> How about putting cci_regmap_init_i2c() behind an #ifdef? Then there
-> wouldn't be a need for REGMAP_I2C unconditionally, but dependent on I2C.
-> 
-> I guess right now I2C is more or less given in many systems but binding CCI
-> to it still seems dubious.
+Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/20230615121721.1f901ebb@sal.lan/
+Build log: https://builder.linuxtv.org/job/patchwork/314812/
+Build time: 00:21:03
+Link: https://lore.kernel.org/linux-media/20230615121721.1f901ebb@sal.lan
 
-Yes, I can wrap the cci_regmap_init_i2c() prototype +
-implementation in
+gpg: Signature made Thu 15 Jun 2023 11:15:44 AM UTC
+gpg:                using RSA key F909AE68FC11DF09C1755C00085F3EBD8EE4E115
+gpg: Good signature from "Mauro Carvalho Chehab <mchehab+huawei@kernel.org>" [ultimate]
+gpg:                 aka "Mauro Carvalho Chehab <mchehab@kernel.org>" [ultimate]
+gpg:                 aka "Mauro Carvalho Chehab <m.chehab@samsung.com>" [ultimate]
+gpg:                 aka "Mauro Carvalho Chehab <mchehab@osg.samsung.com>" [ultimate]
+gpg:                 aka "Mauro Carvalho Chehab <mchehab@s-opensource.com>" [ultimate]
+gpg:                 aka "Mauro Carvalho Chehab <mchehab+samsung@kernel.org>" [ultimate]
+gpg:                 aka "[jpeg image of size 3594]" [ultimate]
 
-#ifdef CONFIG_REGMAP_I2C
+Summary: got 1/1 patches with issues, being 1 at build time, plus one error when buinding PDF document
 
-for version 4. Downside of this is that all i2c sensor drivers
-which want to use the CCI helpers now will need to have
-a select REGMAP_I2C added to their Kconfig snippet.
+Error/warnings:
 
-Regards,
+patches/0001-Revert-media-dvb-core-Fix-use-after-free-on-race-con.patch:
 
-Hans
+    allyesconfig: return code #0:
+	../scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
+	../scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+	../scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
+	SPARSE:../drivers/staging/media/tegra-video/vip.c ../drivers/staging/media/tegra-video/vip.c:280:24: warning: symbol 'tegra_vip_driver' was not declared. Should it be static?
+	../drivers/staging/media/atomisp/i2c/atomisp-gc0310.c:447 gc0310_s_stream() warn: missing error code 'ret'
+	../drivers/staging/media/atomisp/i2c/atomisp-ov2680.c: ../drivers/staging/media/atomisp/i2c/atomisp-ov2680.c:476 ov2680_init_cfg() error: we previously assumed 'sd_state' could be null (see line 468)
+	../drivers/staging/media/atomisp/i2c/atomisp-ov2680.c:524 ov2680_s_stream() warn: missing error code 'ret'
+	../drivers/staging/media/atomisp/pci/atomisp_fops.c: ../drivers/staging/media/atomisp/pci/atomisp_fops.c:517 atomisp_open() warn: missing unwind goto?
+	../drivers/staging/media/atomisp/pci/atomisp_cmd.c: ../drivers/staging/media/atomisp/pci/atomisp_cmd.c:2801 atomisp_cp_dvs_6axis_config() warn: missing unwind goto?
+	../drivers/staging/media/atomisp/pci/atomisp_cmd.c: ../drivers/staging/media/atomisp/pci/atomisp_cmd.c:2900 atomisp_cp_morph_table() warn: missing unwind goto?
+	../drivers/staging/media/atomisp/pci/atomisp_cmd.c: ../drivers/staging/media/atomisp/pci/atomisp_cmd.c:4283 atomisp_set_fmt_to_snr() warn: variable dereferenced before check 'asd' (see line 4268)
+
+    allyesconfig: return code #0:
+	../drivers/media/i2c/adp1653.c: ../drivers/media/i2c/adp1653.c:444 adp1653_of_init() warn: missing unwind goto?
+	../drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c: ../drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c:347 vdec_msg_queue_init() warn: missing unwind goto?
+	../drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: ../drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c:2775 mxc_jpeg_probe() warn: missing unwind goto?
+	../drivers/media/i2c/ov5645.c: ../drivers/media/i2c/ov5645.c:687 ov5645_set_power_on() warn: 'ov5645->xclk' from clk_prepare_enable() not released on lines: 687.
+	SMATCH:../drivers/media/usb/siano/smsusb.c ../drivers/media/usb/siano/smsusb.c:53:38: :warning: array of flexible structures
+	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2570 dvb_register() parse error: OOM: 3000032Kb sm_state_count = 1973014
+	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2570 dvb_register() warn: Function too hairy.  No more merges.
+	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2570 dvb_register() parse error: __split_smt: function too hairy.  Giving up after 54 seconds
+	../drivers/media/usb/uvc/uvc_v4l2.c: note: in included file (through ../arch/x86/include/asm/uaccess.h, ../include/linux/uaccess.h, ../include/linux/sched/task.h, ../include/linux/sched/signal.h, ../include/linux/rcuwait.h, ...):
+	SPARSE:../drivers/media/usb/uvc/uvc_v4l2.c ../arch/x86/include/asm/uaccess_64.h:88:24: warning: cast removes address space '__user' of expression
+	../drivers/media/pci/ivtv/ivtvfb.c: note: in included file (through ../arch/x86/include/asm/uaccess.h, ../include/linux/uaccess.h, ../include/linux/sched/task.h, ../include/linux/sched/signal.h, ../drivers/media/pci/ivtv/ivtv-driver.h):
+	SPARSE:../drivers/media/pci/ivtv/ivtvfb.c ../arch/x86/include/asm/uaccess_64.h:88:24: warning: cast removes address space '__user' of expression
+	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2884 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
+	../drivers/media/usb/pvrusb2/pvrusb2-hdw.c: ../drivers/media/usb/pvrusb2/pvrusb2-hdw.c:3293 pvr2_hdw_get_tuner_status() warn: inconsistent indenting
 
 
-
-	
-
-> 
->>
->> <snip>
->>
->>> This is documented in
->>> Documentation/driver-api/media/maintainer-entry-profile.rst and media tree
->>> follows that.
->>
->> Ah, I missed that. Ok, I'll run
->>
->> ./scripts/checkpatch.pl --strict --max-line-length=80
->>
->> and fix the warnings, with maybe one or 2 exceptions
->> where longer lines really make the code more readable.
-> 
-> Thank you.
-> 
+Error #512 when building PDF docs
 
