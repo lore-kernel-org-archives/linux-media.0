@@ -2,91 +2,162 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D6CEEB64D9
-	for <linux-media@archiver.kernel.org>; Thu, 15 Jun 2023 13:57:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EC70EB64D9
+	for <linux-media@archiver.kernel.org>; Thu, 15 Jun 2023 14:15:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344773AbjFON5Z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Jun 2023 09:57:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33490 "EHLO
+        id S1344966AbjFOOPD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Jun 2023 10:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245328AbjFON5U (ORCPT
+        with ESMTP id S1345035AbjFOOOz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Jun 2023 09:57:20 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F1C1FD5
-        for <linux-media@vger.kernel.org>; Thu, 15 Jun 2023 06:56:58 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="362308593"
-X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="362308593"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 06:23:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="886654108"
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="886654108"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP; 15 Jun 2023 06:23:18 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andy@kernel.org>)
-        id 1q9mwX-003wpF-0b;
-        Thu, 15 Jun 2023 16:23:17 +0300
-Date:   Thu, 15 Jun 2023 16:23:16 +0300
-From:   Andy Shevchenko <andy@kernel.org>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+        Thu, 15 Jun 2023 10:14:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 191B52684
+        for <linux-media@vger.kernel.org>; Thu, 15 Jun 2023 07:14:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686838448;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0huc8l/ZBQ3rWLUPeRNF+pjzKasirOc23tipcM7psZ4=;
+        b=VPr8piVFZJnD7U3AbDaNfrUyuWQaBL9bg8zrjoJa3cQY8C6yx7KvURZF9gaAbqaPAqUTVE
+        N6JOXGV2TZ2m3RUujwlAlQEnbtegwa63riszJijFNg7TfV/KImvXHh9uKT/2wfkfJbxmmL
+        0306wGjRdaZ3StMZvWRyt2lSqKhcnxY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-592-YkLwqrIZMVq7nrFJkRlX8Q-1; Thu, 15 Jun 2023 10:14:05 -0400
+X-MC-Unique: YkLwqrIZMVq7nrFJkRlX8Q-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 798673C01DEC;
+        Thu, 15 Jun 2023 14:13:55 +0000 (UTC)
+Received: from shalem.redhat.com (unknown [10.39.192.154])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 64DB948FB01;
+        Thu, 15 Jun 2023 14:13:54 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Daniel Scally <dan.scally@ideasonboard.com>
 Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] media: Add MIPI CCI register access helper
- functions
-Message-ID: <ZIsQxIhG1ovB9jsz@smile.fi.intel.com>
-References: <20230614192343.57280-1-hdegoede@redhat.com>
- <20230614192343.57280-2-hdegoede@redhat.com>
- <ZIolnOxs29H8EUmC@kekkonen.localdomain>
- <4c9b2cec-e026-e527-2253-fc541ec85d05@redhat.com>
- <ZIrf7Ku9LHRCIU5K@kekkonen.localdomain>
- <647c6bf0-2ad3-16bd-8081-7f4244f60938@redhat.com>
- <ZIr41hzdphg1UbJy@kekkonen.localdomain>
+        Andy Shevchenko <andy@kernel.org>, Kate Hsuan <hpa@redhat.com>,
+        Tommaso Merciai <tomm.merciai@gmail.com>,
+        linux-media@vger.kernel.org
+Subject: [PATCH v2 03/28] media: ov2680: Fix vflip / hflip set functions
+Date:   Thu, 15 Jun 2023 16:13:24 +0200
+Message-Id: <20230615141349.172363-4-hdegoede@redhat.com>
+In-Reply-To: <20230615141349.172363-1-hdegoede@redhat.com>
+References: <20230615141349.172363-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZIr41hzdphg1UbJy@kekkonen.localdomain>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 11:41:10AM +0000, Sakari Ailus wrote:
-> On Thu, Jun 15, 2023 at 12:15:47PM +0200, Hans de Goede wrote:
-> > On 6/15/23 11:54, Sakari Ailus wrote:
-> > > On Thu, Jun 15, 2023 at 10:45:35AM +0200, Hans de Goede wrote:
-> > >> On 6/14/23 22:39, Sakari Ailus wrote:
+ov2680_vflip_disable() / ov2680_hflip_disable() pass BIT(0) instead of
+0 as value to ov2680_mod_reg().
 
-...
+While fixing this also:
 
-> > If you agree that because of the symbol dependency that
-> > the select REGMAP_I2C is necessary then the depends on I2C
-> > is also necessary because any Kconfig symbol selecting
-> > another symbol MUST depends on all of the dependencies
-> > of the selected symbol and REGMAP_I2C has:
-> > 
-> > config REGMAP_I2C
-> >         tristate
-> >         depends on I2C
-> 
-> Yes.
-> 
-> How about putting cci_regmap_init_i2c() behind an #ifdef? Then there
-> wouldn't be a need for REGMAP_I2C unconditionally, but dependent on I2C.
-> 
-> I guess right now I2C is more or less given in many systems but binding CCI
-> to it still seems dubious.
+1. Stop having separate enable/disable functions for hflip / vflip
+2. Move the is_streaming check, which is unique to hflip / vflip
+   into the ov2680_set_?flip() functions.
 
-Can't we solve the issue when it comes?
-What you are suggesting seems controversial to me at this stage.
+for a nice code cleanup.
 
+Fixes: 3ee47cad3e69 ("media: ov2680: Add Omnivision OV2680 sensor driver")
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ drivers/media/i2c/ov2680.c | 50 ++++++++++----------------------------
+ 1 file changed, 13 insertions(+), 37 deletions(-)
+
+diff --git a/drivers/media/i2c/ov2680.c b/drivers/media/i2c/ov2680.c
+index 2001e08253ef..c93810f84ed7 100644
+--- a/drivers/media/i2c/ov2680.c
++++ b/drivers/media/i2c/ov2680.c
+@@ -328,11 +328,15 @@ static void ov2680_set_bayer_order(struct ov2680_dev *sensor)
+ 	sensor->fmt.code = ov2680_hv_flip_bayer_order[hv_flip];
+ }
+ 
+-static int ov2680_vflip_enable(struct ov2680_dev *sensor)
++static int ov2680_set_vflip(struct ov2680_dev *sensor, s32 val)
+ {
+ 	int ret;
+ 
+-	ret = ov2680_mod_reg(sensor, OV2680_REG_FORMAT1, BIT(2), BIT(2));
++	if (sensor->is_streaming)
++		return -EBUSY;
++
++	ret = ov2680_mod_reg(sensor, OV2680_REG_FORMAT1,
++			     BIT(2), val ? BIT(2) : 0);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -340,33 +344,15 @@ static int ov2680_vflip_enable(struct ov2680_dev *sensor)
+ 	return 0;
+ }
+ 
+-static int ov2680_vflip_disable(struct ov2680_dev *sensor)
++static int ov2680_set_hflip(struct ov2680_dev *sensor, s32 val)
+ {
+ 	int ret;
+ 
+-	ret = ov2680_mod_reg(sensor, OV2680_REG_FORMAT1, BIT(2), BIT(0));
+-	if (ret < 0)
+-		return ret;
++	if (sensor->is_streaming)
++		return -EBUSY;
+ 
+-	return ov2680_bayer_order(sensor);
+-}
+-
+-static int ov2680_hflip_enable(struct ov2680_dev *sensor)
+-{
+-	int ret;
+-
+-	ret = ov2680_mod_reg(sensor, OV2680_REG_FORMAT2, BIT(2), BIT(2));
+-	if (ret < 0)
+-		return ret;
+-
+-	return ov2680_bayer_order(sensor);
+-}
+-
+-static int ov2680_hflip_disable(struct ov2680_dev *sensor)
+-{
+-	int ret;
+-
+-	ret = ov2680_mod_reg(sensor, OV2680_REG_FORMAT2, BIT(2), BIT(0));
++	ret = ov2680_mod_reg(sensor, OV2680_REG_FORMAT2,
++			     BIT(2), val ? BIT(2) : 0);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -720,19 +706,9 @@ static int ov2680_s_ctrl(struct v4l2_ctrl *ctrl)
+ 	case V4L2_CID_EXPOSURE:
+ 		return ov2680_exposure_set(sensor, ctrl->val);
+ 	case V4L2_CID_VFLIP:
+-		if (sensor->is_streaming)
+-			return -EBUSY;
+-		if (ctrl->val)
+-			return ov2680_vflip_enable(sensor);
+-		else
+-			return ov2680_vflip_disable(sensor);
++		return ov2680_set_vflip(sensor, ctrl->val);
+ 	case V4L2_CID_HFLIP:
+-		if (sensor->is_streaming)
+-			return -EBUSY;
+-		if (ctrl->val)
+-			return ov2680_hflip_enable(sensor);
+-		else
+-			return ov2680_hflip_disable(sensor);
++		return ov2680_set_hflip(sensor, ctrl->val);
+ 	case V4L2_CID_TEST_PATTERN:
+ 		return ov2680_test_pattern_set(sensor, ctrl->val);
+ 	default:
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.40.1
 
