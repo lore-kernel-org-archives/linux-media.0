@@ -2,164 +2,102 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B94DEB64D7
-	for <linux-media@archiver.kernel.org>; Fri, 16 Jun 2023 17:22:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE684EB64D8
+	for <linux-media@archiver.kernel.org>; Fri, 16 Jun 2023 17:23:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241507AbjFPRWa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 16 Jun 2023 13:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57276 "EHLO
+        id S244736AbjFPRXL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 16 Jun 2023 13:23:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232242AbjFPRWZ (ORCPT
+        with ESMTP id S1344566AbjFPRXK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 16 Jun 2023 13:22:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1AB1FEC
-        for <linux-media@vger.kernel.org>; Fri, 16 Jun 2023 10:21:38 -0700 (PDT)
+        Fri, 16 Jun 2023 13:23:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA5D26B3
+        for <linux-media@vger.kernel.org>; Fri, 16 Jun 2023 10:21:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686936097;
+        s=mimecast20190719; t=1686936106;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=AIp6fOanI5PTGoVFIMq8DHV2iHwJWOmIxJo5OyBEUpw=;
-        b=a/3fsRMYFuL1KfiE5leGfSUU7Gc87wHCxLN72aVe7b0NJvpT/1238ArN+j/qvjkhjVJbQQ
-        6bqnHtCLR4XzDGIkeTokjud6rdNI2ELHuZ+uL4jObGwFGYSBTC68Ap9LN/BZeMxbZw1GUZ
-        +axdxgQkBP0gy3YN157Z9tyZw+zECV8=
+        bh=hbhbe4lOgz4k5EXeSjp8uAwD2Dwf4BE4cmVFkBHorgg=;
+        b=jOdwWTzagJiNsefr54D3lfJqN2MwcWSqpfWJlIPOwp+UQjsA0Acn8Zg6uvLNkmJNeyGjND
+        RovF23fP15xCpyZDXekxjC91d6wlXArr4We9qHPOgPp/dwCkyZOgc0JfnHjXIyLjpCRxji
+        loPut4RQ9DOh8/HHCD9/bZvChaV901I=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-576-dHFZWSvTMUKJITy6dZ5BtA-1; Fri, 16 Jun 2023 13:21:35 -0400
-X-MC-Unique: dHFZWSvTMUKJITy6dZ5BtA-1
+ us-mta-269-MA4qkkl7PTixBxlh6DZPSA-1; Fri, 16 Jun 2023 13:21:41 -0400
+X-MC-Unique: MA4qkkl7PTixBxlh6DZPSA-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 19E3385A58C;
-        Fri, 16 Jun 2023 17:21:35 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 00B63800A15;
+        Fri, 16 Jun 2023 17:21:41 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.192.38])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 01C8A40C95E1;
-        Fri, 16 Jun 2023 17:21:33 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1E54A40C95E2;
+        Fri, 16 Jun 2023 17:21:40 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
         Andy Shevchenko <andy@kernel.org>,
         Daniel Scally <dan.scally@ideasonboard.com>
 Cc:     Hans de Goede <hdegoede@redhat.com>,
-        platform-driver-x86@vger.kernel.org, linux-media@vger.kernel.org,
-        Hao Yao <hao.yao@intel.com>
-Subject: [PATCH v2 1/6] platform/x86: int3472: discrete: Drop GPIO remapping support
-Date:   Fri, 16 Jun 2023 19:21:27 +0200
-Message-ID: <20230616172132.37859-2-hdegoede@redhat.com>
+        platform-driver-x86@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH v2 6/6] platform/x86: int3472: discrete: Log a warning if the pin-numbers don't match
+Date:   Fri, 16 Jun 2023 19:21:32 +0200
+Message-ID: <20230616172132.37859-7-hdegoede@redhat.com>
 In-Reply-To: <20230616172132.37859-1-hdegoede@redhat.com>
 References: <20230616172132.37859-1-hdegoede@redhat.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The only sensor driver which needs GPIO remapping support is the ov2680
-driver and ACPI enumeration support + other necessary changes to
-the ov2680 driver were never upstreamed.
+The INT3472 discrete code assumes that the ACPI GPIO resources are
+in the same order as the pin-info _DSM entries.
 
-A new series updating the ov2680 driver is pending upstream now and
-in this series the ov2680 driver is patched to look for "powerdown"
-as con-id, instead of relying on GPIO remapping in the int3472 code,
-so the GPIO remapping is no longer necessary.
+The returned pin-info includes the pin-number in bits 15-8. Add a check
+that this matches with the ACPI GPIO resource pin-number in case
+the assumption is not true with some ACPI tables.
 
-Tested-by: Hao Yao <hao.yao@intel.com>
 Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/platform/x86/intel/int3472/common.h   |  6 ---
- drivers/platform/x86/intel/int3472/discrete.c | 37 ++-----------------
- 2 files changed, 3 insertions(+), 40 deletions(-)
+ drivers/platform/x86/intel/int3472/discrete.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/platform/x86/intel/int3472/common.h b/drivers/platform/x86/intel/int3472/common.h
-index 0c9c899e017b..735567f374a6 100644
---- a/drivers/platform/x86/intel/int3472/common.h
-+++ b/drivers/platform/x86/intel/int3472/common.h
-@@ -69,15 +69,9 @@ struct int3472_cldb {
- 	u8 reserved2[17];
- };
- 
--struct int3472_gpio_function_remap {
--	const char *documented;
--	const char *actual;
--};
--
- struct int3472_sensor_config {
- 	const char *sensor_module_name;
- 	struct regulator_consumer_supply supply_map;
--	const struct int3472_gpio_function_remap *function_maps;
- };
- 
- struct int3472_discrete_device {
 diff --git a/drivers/platform/x86/intel/int3472/discrete.c b/drivers/platform/x86/intel/int3472/discrete.c
-index 8111579a59d4..2ab3c7466986 100644
+index 557517f43ede..e33c2d75975c 100644
 --- a/drivers/platform/x86/intel/int3472/discrete.c
 +++ b/drivers/platform/x86/intel/int3472/discrete.c
-@@ -39,27 +39,13 @@ static const guid_t cio2_sensor_module_guid =
-  * the functions mapping resources to the sensors. Where the sensors have
-  * a power enable pin defined in DSDT we need to provide a supply name so
-  * the sensor drivers can find the regulator. The device name will be derived
-- * from the sensor's ACPI device within the code. Optionally, we can provide a
-- * NULL terminated array of function name mappings to deal with any platform
-- * specific deviations from the documented behaviour of GPIOs.
-- *
-- * Map a GPIO function name to NULL to prevent the driver from mapping that
-- * GPIO at all.
-+ * from the sensor's ACPI device within the code.
-  */
--
--static const struct int3472_gpio_function_remap ov2680_gpio_function_remaps[] = {
--	{ "reset", NULL },
--	{ "powerdown", "reset" },
--	{ }
--};
--
- static const struct int3472_sensor_config int3472_sensor_configs[] = {
--	/* Lenovo Miix 510-12ISK - OV2680, Front */
--	{ "GNDF140809R", { 0 }, ov2680_gpio_function_remaps },
- 	/* Lenovo Miix 510-12ISK - OV5648, Rear */
--	{ "GEFF150023R", REGULATOR_SUPPLY("avdd", NULL), NULL },
-+	{ "GEFF150023R", REGULATOR_SUPPLY("avdd", NULL) },
- 	/* Surface Go 1&2 - OV5693, Front */
--	{ "YHCU", REGULATOR_SUPPLY("avdd", NULL), NULL },
-+	{ "YHCU", REGULATOR_SUPPLY("avdd", NULL) },
- };
- 
- static const struct int3472_sensor_config *
-@@ -96,7 +82,6 @@ static int skl_int3472_map_gpio_to_sensor(struct int3472_discrete_device *int347
- 					  struct acpi_resource_gpio *agpio,
- 					  const char *func, u32 polarity)
+@@ -154,8 +154,8 @@ static int skl_int3472_handle_gpio_resources(struct acpi_resource *ares,
  {
--	const struct int3472_sensor_config *sensor_config;
- 	char *path = agpio->resource_source.string_ptr;
- 	struct gpiod_lookup *table_entry;
- 	struct acpi_device *adev;
-@@ -108,22 +93,6 @@ static int skl_int3472_map_gpio_to_sensor(struct int3472_discrete_device *int347
- 		return -EINVAL;
- 	}
+ 	struct int3472_discrete_device *int3472 = data;
+ 	struct acpi_resource_gpio *agpio;
++	u8 active_value, pin, type;
+ 	union acpi_object *obj;
+-	u8 active_value, type;
+ 	const char *err_msg;
+ 	const char *func;
+ 	u32 polarity;
+@@ -183,6 +183,12 @@ static int skl_int3472_handle_gpio_resources(struct acpi_resource *ares,
  
--	sensor_config = int3472->sensor_config;
--	if (!IS_ERR(sensor_config) && sensor_config->function_maps) {
--		const struct int3472_gpio_function_remap *remap;
--
--		for (remap = sensor_config->function_maps; remap->documented; remap++) {
--			if (!strcmp(func, remap->documented)) {
--				func = remap->actual;
--				break;
--			}
--		}
--	}
--
--	/* Functions mapped to NULL should not be mapped to the sensor */
--	if (!func)
--		return 0;
--
- 	status = acpi_get_handle(NULL, path, &handle);
- 	if (ACPI_FAILURE(status))
- 		return -EINVAL;
+ 	int3472_get_func_and_polarity(type, &func, &polarity);
+ 
++	pin = FIELD_GET(INT3472_GPIO_DSM_PIN, obj->integer.value);
++	if (pin != agpio->pin_table[0])
++		dev_warn(int3472->dev, "%s %s pin number mismatch _DSM %d resource %d\n",
++			 func, agpio->resource_source.string_ptr, pin,
++			 agpio->pin_table[0]);
++
+ 	active_value = FIELD_GET(INT3472_GPIO_DSM_SENSOR_ON_VAL, obj->integer.value);
+ 	if (!active_value)
+ 		polarity ^= GPIO_ACTIVE_LOW;
 -- 
 2.41.0
 
