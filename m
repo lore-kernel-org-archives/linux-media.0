@@ -2,90 +2,134 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AEDB5EB64DB
-	for <linux-media@archiver.kernel.org>; Sat, 17 Jun 2023 14:44:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 462FFEB64DA
+	for <linux-media@archiver.kernel.org>; Sat, 17 Jun 2023 18:43:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235937AbjFQOop (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 17 Jun 2023 10:44:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56582 "EHLO
+        id S234202AbjFQSmz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 17 Jun 2023 14:42:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236051AbjFQOon (ORCPT
+        with ESMTP id S1346455AbjFQSmy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 17 Jun 2023 10:44:43 -0400
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A67281BF3;
-        Sat, 17 Jun 2023 07:44:42 -0700 (PDT)
-Received: by mail-qv1-xf35.google.com with SMTP id 6a1803df08f44-630074df712so7011796d6.1;
-        Sat, 17 Jun 2023 07:44:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687013081; x=1689605081;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sLolGhYclmQaW5o7zV+d/VOXcPSOBFE0oX7ksBODT6U=;
-        b=oDRxMSjUN186InS30QTEzlvpBOEvG5QFhozhA2mLKPQqsnnVT6Kf55AZH+Ltz3TfR8
-         z/WUpBGyoDEDyjwBBuxEsCzVsh4I63/S+bi1Rnsdfi9GCRMj7GCsq5P+XZIsB+3Xir35
-         jU9z+W+SaRTtToMioy0h1hXKCzoxf8Nczjl1NnJTcxXugDmBz8+9lPSM/ZSpNIr5YNEK
-         rSVj5PlKLyz+oeMJSuXeTj9G/Q843TtuNGMXdimlQPdBOZfUKJy1mTR0EGjkh4aEiZql
-         79I72xJULuWn9UtlmLlxNcvpVd3M3jEeIGlmxqWJH2hCIj1LOF2m1i76KZQEtheeZFqZ
-         O7Gg==
+        Sat, 17 Jun 2023 14:42:54 -0400
+Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C19A19BE
+        for <linux-media@vger.kernel.org>; Sat, 17 Jun 2023 11:42:47 -0700 (PDT)
+Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-340c149231fso16010335ab.2
+        for <linux-media@vger.kernel.org>; Sat, 17 Jun 2023 11:42:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687013081; x=1689605081;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sLolGhYclmQaW5o7zV+d/VOXcPSOBFE0oX7ksBODT6U=;
-        b=AHFa/0Au4LFEz9JKFIJkVc38HUZrUKj6Pj1wev47fZLvtqlnvP94cYW+bKlYTH4Vvs
-         CC9Cu+4N68tHv63KuJFL9dvotKfFXIbmaHM4vRxB7joh4M+9FQemr1EUTXIcN4Ie79/r
-         KoF74d5778nd6VtJzToxOyjHAHa9+nl6fUh7hYZsoxthdwgp5lD0thcdUaB1p5d9np9d
-         uZ6gUYDXqq3CnN/AL5m7AKsaWkFE0SGEDGcyKYVHtR7emyPPBsxE4Gm0CVOzsUwLrqZv
-         4aby0X0Z25vp3/z8W7uv1vZViK42OFDvQ+DVWRJTOeS7AuJJXlnNw5X2jIEZ+vDfIk2A
-         iK+Q==
-X-Gm-Message-State: AC+VfDyMi3XXhvp3xi72Vppha81kaC7B4zwJmWv+alX2HPhmkTEGT/mF
-        pXLTs1N5SWZO7tawKRvoALgt+v2AuP6IoeTMXvex2pv1+h0=
-X-Google-Smtp-Source: ACHHUZ4p9RNOf744Cx4yu79ntGpssxEc5tCzmUVkD/J/iAhgxdCiBH0PJYimoJSo4cbKLmga6+xQ7QS5GXtZo5HDmQo=
-X-Received: by 2002:a05:6214:124b:b0:625:7c0b:4640 with SMTP id
- r11-20020a056214124b00b006257c0b4640mr6481569qvv.22.1687013081669; Sat, 17
- Jun 2023 07:44:41 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687027366; x=1689619366;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DBaDf6IaqpzK1ZRigtHt9P4RoGRnNk1rRIyUUGVymcY=;
+        b=ZfXCpjthRG099w8Nb4JOSgVRD13guVFah+iXjYqCWiKmvhVZFEQ+lCs6NnTQpBA52j
+         SqU0d8Ovi1UoC65iEOF6SexxRVJKCe+92y+XhV2aNgpAuD3l0vqE/2L5FvOHBtLJfsjd
+         7Z/m7ymVOruNlPaxTM/LyejOWeDQ3ZA397wZD8LUuf+ctle2HQrQNJ5GNIgGdM9vc+sF
+         boXV8Vs1aqjSdrmVieSqWRNWOmLXAMHLpABKqQNGnS/+TwABM0TPIvLfsHwGL+VRnhPu
+         6VT0+TRzhTRlhwpIliFMuHPbzDXIr2g0oJ5YBcsDk1QvHj8uk3fi9LM4x8c1v/WY/GhS
+         Bvcg==
+X-Gm-Message-State: AC+VfDzkox/SaStoM5Q1u1ah30mxzBIkdTPFtAz53E7UzE3umrb1mjWG
+        hOAhjluCROhllF65MXQy6XR/Pr7JKge5rqKWNjJil98EIbci
+X-Google-Smtp-Source: ACHHUZ7CYafZSONe2OvDQu1FzU/g//AWiU+h+oZNfT7C8pKY2i6K0k+u8Q1dvFGQcIC5sN+Dv8KKCW7XpvJDLw7jCAqjoAFcGZXK
 MIME-Version: 1.0
-References: <20230616172132.37859-1-hdegoede@redhat.com> <20230616172132.37859-7-hdegoede@redhat.com>
-In-Reply-To: <20230616172132.37859-7-hdegoede@redhat.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 17 Jun 2023 17:44:04 +0300
-Message-ID: <CAHp75VfUN3ckdqcj=W8y_Mh8-wt3KHyFsc2grC92r9x42uM9mQ@mail.gmail.com>
-Subject: Re: [PATCH v2 6/6] platform/x86: int3472: discrete: Log a warning if
- the pin-numbers don't match
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Daniel Scally <dan.scally@ideasonboard.com>,
-        platform-driver-x86@vger.kernel.org, linux-media@vger.kernel.org
+X-Received: by 2002:a92:d204:0:b0:338:bdd7:d439 with SMTP id
+ y4-20020a92d204000000b00338bdd7d439mr1512731ily.6.1687027366660; Sat, 17 Jun
+ 2023 11:42:46 -0700 (PDT)
+Date:   Sat, 17 Jun 2023 11:42:46 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ea931b05fe57aa62@google.com>
+Subject: [syzbot] [dri?] KMSAN: uninit-value in drm_mode_setcrtc
+From:   syzbot <syzbot+4fad2e57beb6397ab2fc@syzkaller.appspotmail.com>
+To:     airlied@gmail.com, christian.koenig@amd.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, glider@google.com,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, maarten.lankhorst@linux.intel.com,
+        mripard@kernel.org, sumit.semwal@linaro.org,
+        syzkaller-bugs@googlegroups.com, tzimmermann@suse.de
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 8:21=E2=80=AFPM Hans de Goede <hdegoede@redhat.com>=
- wrote:
->
-> The INT3472 discrete code assumes that the ACPI GPIO resources are
-> in the same order as the pin-info _DSM entries.
->
-> The returned pin-info includes the pin-number in bits 15-8. Add a check
-> that this matches with the ACPI GPIO resource pin-number in case
-> the assumption is not true with some ACPI tables.
+Hello,
 
-...
+syzbot found the following issue on:
 
-> +       pin =3D FIELD_GET(INT3472_GPIO_DSM_PIN, obj->integer.value);
+HEAD commit:    2741f1b02117 string: use __builtin_memcpy() in strlcpy/str..
+git tree:       https://github.com/google/kmsan.git master
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=17bb33d1280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=753079601b2300f9
+dashboard link: https://syzkaller.appspot.com/bug?extid=4fad2e57beb6397ab2fc
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16d669a5280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14d8f095280000
 
-I believe the definition should be in this patch which sounds to me
-more logical.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ebd05512d8d7/disk-2741f1b0.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/aa555b09582c/vmlinux-2741f1b0.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/5ea0934e02cc/bzImage-2741f1b0.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+4fad2e57beb6397ab2fc@syzkaller.appspotmail.com
+
+=====================================================
+BUG: KMSAN: uninit-value in drm_mode_setcrtc+0x1ad3/0x24a0 drivers/gpu/drm/drm_crtc.c:896
+ drm_mode_setcrtc+0x1ad3/0x24a0 drivers/gpu/drm/drm_crtc.c:896
+ drm_ioctl_kernel+0x5ae/0x730 drivers/gpu/drm/drm_ioctl.c:788
+ drm_ioctl+0xd12/0x1590 drivers/gpu/drm/drm_ioctl.c:891
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl+0x222/0x400 fs/ioctl.c:856
+ __x64_sys_ioctl+0x96/0xe0 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Uninit was created at:
+ slab_post_alloc_hook+0x12d/0xb60 mm/slab.h:716
+ slab_alloc_node mm/slub.c:3451 [inline]
+ __kmem_cache_alloc_node+0x4ff/0x8b0 mm/slub.c:3490
+ __do_kmalloc_node mm/slab_common.c:965 [inline]
+ __kmalloc+0x121/0x3c0 mm/slab_common.c:979
+ kmalloc_array include/linux/slab.h:596 [inline]
+ drm_mode_setcrtc+0x1dba/0x24a0 drivers/gpu/drm/drm_crtc.c:846
+ drm_ioctl_kernel+0x5ae/0x730 drivers/gpu/drm/drm_ioctl.c:788
+ drm_ioctl+0xd12/0x1590 drivers/gpu/drm/drm_ioctl.c:891
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl+0x222/0x400 fs/ioctl.c:856
+ __x64_sys_ioctl+0x96/0xe0 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+CPU: 1 PID: 4955 Comm: syz-executor275 Not tainted 6.4.0-rc4-syzkaller-g2741f1b02117 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
+=====================================================
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
---
-With Best Regards,
-Andy Shevchenko
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
