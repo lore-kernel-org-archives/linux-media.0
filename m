@@ -2,134 +2,108 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 462FFEB64DA
-	for <linux-media@archiver.kernel.org>; Sat, 17 Jun 2023 18:43:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 801D2EB64D7
+	for <linux-media@archiver.kernel.org>; Sun, 18 Jun 2023 18:18:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234202AbjFQSmz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 17 Jun 2023 14:42:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50138 "EHLO
+        id S229550AbjFRSSg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Jun 2023 14:18:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346455AbjFQSmy (ORCPT
+        with ESMTP id S229521AbjFRSSf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 17 Jun 2023 14:42:54 -0400
-Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C19A19BE
-        for <linux-media@vger.kernel.org>; Sat, 17 Jun 2023 11:42:47 -0700 (PDT)
-Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-340c149231fso16010335ab.2
-        for <linux-media@vger.kernel.org>; Sat, 17 Jun 2023 11:42:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687027366; x=1689619366;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DBaDf6IaqpzK1ZRigtHt9P4RoGRnNk1rRIyUUGVymcY=;
-        b=ZfXCpjthRG099w8Nb4JOSgVRD13guVFah+iXjYqCWiKmvhVZFEQ+lCs6NnTQpBA52j
-         SqU0d8Ovi1UoC65iEOF6SexxRVJKCe+92y+XhV2aNgpAuD3l0vqE/2L5FvOHBtLJfsjd
-         7Z/m7ymVOruNlPaxTM/LyejOWeDQ3ZA397wZD8LUuf+ctle2HQrQNJ5GNIgGdM9vc+sF
-         boXV8Vs1aqjSdrmVieSqWRNWOmLXAMHLpABKqQNGnS/+TwABM0TPIvLfsHwGL+VRnhPu
-         6VT0+TRzhTRlhwpIliFMuHPbzDXIr2g0oJ5YBcsDk1QvHj8uk3fi9LM4x8c1v/WY/GhS
-         Bvcg==
-X-Gm-Message-State: AC+VfDzkox/SaStoM5Q1u1ah30mxzBIkdTPFtAz53E7UzE3umrb1mjWG
-        hOAhjluCROhllF65MXQy6XR/Pr7JKge5rqKWNjJil98EIbci
-X-Google-Smtp-Source: ACHHUZ7CYafZSONe2OvDQu1FzU/g//AWiU+h+oZNfT7C8pKY2i6K0k+u8Q1dvFGQcIC5sN+Dv8KKCW7XpvJDLw7jCAqjoAFcGZXK
+        Sun, 18 Jun 2023 14:18:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD44EAA
+        for <linux-media@vger.kernel.org>; Sun, 18 Jun 2023 11:17:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687112267;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=PYQdVMUqNfC3tSh5mFYgKCL0bXZs+1UhR11OrbqPkWA=;
+        b=PVt9zh0wQDMVzu6Y/GRZozFtQaJiKnNOjC/7C+AxVjHre6bJYjOMFbA0aFVQSgP3grK5zG
+        yX9JmSm/yOX7maRbGaK3TXzaSQrM5hYFXoh9Pmj3JRO1pXVN6olTppG8YPt/GIYlAADgrG
+        c0Y0zLCLx1lNWZtZHfSCYiPnB7MhsYg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-9-bYBcxI_6O8-ZSBUeMZXiwQ-1; Sun, 18 Jun 2023 14:17:43 -0400
+X-MC-Unique: bYBcxI_6O8-ZSBUeMZXiwQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EC11585A58C;
+        Sun, 18 Jun 2023 18:17:42 +0000 (UTC)
+Received: from shalem.redhat.com (unknown [10.39.192.65])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A41C7440CB;
+        Sun, 18 Jun 2023 18:17:41 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Pavel Machek <pavel@ucw.cz>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Daniel Scally <dan.scally@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org,
+        Ricardo Ribalda Delgado <ribalda@kernel.org>
+Subject: [PATCH] media: ad5820: Drop unsupported ad5823 from i2c_ and of_device_id tables
+Date:   Sun, 18 Jun 2023 20:17:40 +0200
+Message-ID: <20230618181740.42432-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:d204:0:b0:338:bdd7:d439 with SMTP id
- y4-20020a92d204000000b00338bdd7d439mr1512731ily.6.1687027366660; Sat, 17 Jun
- 2023 11:42:46 -0700 (PDT)
-Date:   Sat, 17 Jun 2023 11:42:46 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ea931b05fe57aa62@google.com>
-Subject: [syzbot] [dri?] KMSAN: uninit-value in drm_mode_setcrtc
-From:   syzbot <syzbot+4fad2e57beb6397ab2fc@syzkaller.appspotmail.com>
-To:     airlied@gmail.com, christian.koenig@amd.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, glider@google.com,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, maarten.lankhorst@linux.intel.com,
-        mripard@kernel.org, sumit.semwal@linaro.org,
-        syzkaller-bugs@googlegroups.com, tzimmermann@suse.de
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+The supported ad5820 and ad5821 VCMs both use a single 16 bit register
+which is written by sending 2 bytes with the data directly after sending
+the i2c-client address.
 
-syzbot found the following issue on:
+The ad5823 OTOH has a more typical i2c / smbus device setup with multiple
+8 bit registers where the first byte send after the i2c-client address is
+the register address and the actual data only starts from the second byte
+after the i2c-client address.
 
-HEAD commit:    2741f1b02117 string: use __builtin_memcpy() in strlcpy/str..
-git tree:       https://github.com/google/kmsan.git master
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=17bb33d1280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=753079601b2300f9
-dashboard link: https://syzkaller.appspot.com/bug?extid=4fad2e57beb6397ab2fc
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16d669a5280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14d8f095280000
+The ad5823 i2c_ and of_device_id-s was added at the same time as
+the ad5821 ids with as rationale:
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/ebd05512d8d7/disk-2741f1b0.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/aa555b09582c/vmlinux-2741f1b0.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/5ea0934e02cc/bzImage-2741f1b0.xz
+"""
+Some camera modules also refer that AD5823 is a replacement of AD5820:
+https://download.kamami.com/p564094-OV8865_DS.pdf
+"""
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+4fad2e57beb6397ab2fc@syzkaller.appspotmail.com
+The AD5823 may be an electrical and functional replacement of the AD5820,
+but from a software pov it is not compatible at all and it is going to
+need its own driver, drop its id from the ad5820 driver.
 
-=====================================================
-BUG: KMSAN: uninit-value in drm_mode_setcrtc+0x1ad3/0x24a0 drivers/gpu/drm/drm_crtc.c:896
- drm_mode_setcrtc+0x1ad3/0x24a0 drivers/gpu/drm/drm_crtc.c:896
- drm_ioctl_kernel+0x5ae/0x730 drivers/gpu/drm/drm_ioctl.c:788
- drm_ioctl+0xd12/0x1590 drivers/gpu/drm/drm_ioctl.c:891
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl+0x222/0x400 fs/ioctl.c:856
- __x64_sys_ioctl+0x96/0xe0 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Uninit was created at:
- slab_post_alloc_hook+0x12d/0xb60 mm/slab.h:716
- slab_alloc_node mm/slub.c:3451 [inline]
- __kmem_cache_alloc_node+0x4ff/0x8b0 mm/slub.c:3490
- __do_kmalloc_node mm/slab_common.c:965 [inline]
- __kmalloc+0x121/0x3c0 mm/slab_common.c:979
- kmalloc_array include/linux/slab.h:596 [inline]
- drm_mode_setcrtc+0x1dba/0x24a0 drivers/gpu/drm/drm_crtc.c:846
- drm_ioctl_kernel+0x5ae/0x730 drivers/gpu/drm/drm_ioctl.c:788
- drm_ioctl+0xd12/0x1590 drivers/gpu/drm/drm_ioctl.c:891
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl+0x222/0x400 fs/ioctl.c:856
- __x64_sys_ioctl+0x96/0xe0 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-CPU: 1 PID: 4955 Comm: syz-executor275 Not tainted 6.4.0-rc4-syzkaller-g2741f1b02117 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
-=====================================================
-
-
+Fixes: b8bf73136bae ("media: ad5820: Add support for ad5821 and ad5823")
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Ricardo Ribalda Delgado <ribalda@kernel.org>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/media/i2c/ad5820.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/drivers/media/i2c/ad5820.c b/drivers/media/i2c/ad5820.c
+index 5f605b9be3b1..1543d24f522c 100644
+--- a/drivers/media/i2c/ad5820.c
++++ b/drivers/media/i2c/ad5820.c
+@@ -349,7 +349,6 @@ static void ad5820_remove(struct i2c_client *client)
+ static const struct i2c_device_id ad5820_id_table[] = {
+ 	{ "ad5820", 0 },
+ 	{ "ad5821", 0 },
+-	{ "ad5823", 0 },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, ad5820_id_table);
+@@ -357,7 +356,6 @@ MODULE_DEVICE_TABLE(i2c, ad5820_id_table);
+ static const struct of_device_id ad5820_of_table[] = {
+ 	{ .compatible = "adi,ad5820" },
+ 	{ .compatible = "adi,ad5821" },
+-	{ .compatible = "adi,ad5823" },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, ad5820_of_table);
+-- 
+2.41.0
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
