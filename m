@@ -2,151 +2,128 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A7DCEB64DA
-	for <linux-media@archiver.kernel.org>; Mon, 19 Jun 2023 08:20:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BF03C0015E
+	for <linux-media@archiver.kernel.org>; Mon, 19 Jun 2023 08:43:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230208AbjFSIU3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 19 Jun 2023 04:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57670 "EHLO
+        id S230293AbjFSInR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 19 Jun 2023 04:43:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjFSIU1 (ORCPT
+        with ESMTP id S229674AbjFSImz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 19 Jun 2023 04:20:27 -0400
-Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF07E50;
-        Mon, 19 Jun 2023 01:20:21 -0700 (PDT)
-Received: from ed3e173716be.home.arpa (unknown [124.16.138.129])
-        by APP-05 (Coremail) with SMTP id zQCowAD3_7vUDZBkfYFsAQ--.5512S2;
-        Mon, 19 Jun 2023 16:12:04 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     dwlsalmeida@gmail.com, mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH 1/2] media: vidtv: psi: Add check for kstrdup
-Date:   Mon, 19 Jun 2023 16:12:01 +0800
-Message-Id: <20230619081202.25283-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 19 Jun 2023 04:42:55 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265D03A92;
+        Mon, 19 Jun 2023 01:40:48 -0700 (PDT)
+Received: from [192.168.88.20] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 18098547;
+        Mon, 19 Jun 2023 10:39:56 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1687163998;
+        bh=6NJRwC5Dr2vzbjlVl+AeJg6cppAZ6p7cGxmaf/F5s+A=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=PaMdwDVelUCr2Bpl2OTfDXcqBa72Fpqc3Hu/XO7d+sfRqTSba/rZCj1lwsB+RT3uR
+         gIs59uF6Vc5B3SJS4habkckkrntXpSc/YOZGagGbM0stbTIGIvGlg/AkMT1KEKFO5J
+         +4E8WyJYBT0wdbv/Q2lI9F6NGyDLy4rYgedF8/Wg=
+Message-ID: <fa3f72a1-8f69-e3f1-96c3-5e53c612afe7@ideasonboard.com>
+Date:   Mon, 19 Jun 2023 11:40:28 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowAD3_7vUDZBkfYFsAQ--.5512S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWry7ury8Zw4xCr1rZw4fKrg_yoW5CF1Upa
-        yrW3Z0yrWIgr4Yga15Jw1kZFy5Can7tF4rCry2qw13Z34fur45KF17A3WY9rs5A34Svr4a
-        vFW5tw13Wry5JFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkq14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r43
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
-        W8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
-        cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjMKZJUUUUU==
-X-Originating-IP: [124.16.138.129]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v14 11/18] media: i2c: ds90ub9xx: Select GPIOLIB rather
+ than OF_GPIO
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>
+References: <20230616135922.442979-1-tomi.valkeinen@ideasonboard.com>
+ <20230616135922.442979-12-tomi.valkeinen@ideasonboard.com>
+ <ZIxu+IvTSaFW3erU@smile.fi.intel.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <ZIxu+IvTSaFW3erU@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add check for the return value of kstrdup() and return the error
-if it fails in order to avoid NULL pointer dereference.
+On 16/06/2023 17:17, Andy Shevchenko wrote:
+> On Fri, Jun 16, 2023 at 04:59:15PM +0300, Tomi Valkeinen wrote:
+>> Select GPIOLIB rather than OF_GPIO, as the drivers use gpiolib
+>> functionality, but no of_gpio (directly).
+> 
+> This is useful change, but has to be folded in the original code.
+> We do not want even a trace of newly added OF_GPIO.
 
-Fixes: 7a7899f6f58e ("media: vidtv: psi: Implement an Event Information Table (EIT)")
-Fixes: c2f78f0cb294 ("media: vidtv: psi: add a Network Information Table (NIT)")
-Fixes: f90cf6079bf6 ("media: vidtv: add a bridge driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/media/test-drivers/vidtv/vidtv_psi.c | 45 +++++++++++++++++---
- 1 file changed, 40 insertions(+), 5 deletions(-)
+Yes, I think the first three new patches should be squashed:
 
-diff --git a/drivers/media/test-drivers/vidtv/vidtv_psi.c b/drivers/media/test-drivers/vidtv/vidtv_psi.c
-index ce0b7a6e92dc..2a51c898c11e 100644
---- a/drivers/media/test-drivers/vidtv/vidtv_psi.c
-+++ b/drivers/media/test-drivers/vidtv/vidtv_psi.c
-@@ -301,16 +301,29 @@ struct vidtv_psi_desc_service *vidtv_psi_service_desc_init(struct vidtv_psi_desc
- 
- 	desc->service_name_len = service_name_len;
- 
--	if (service_name && service_name_len)
-+	if (service_name && service_name_len) {
- 		desc->service_name = kstrdup(service_name, GFP_KERNEL);
-+		if (!desc->service_name)
-+			goto free_desc;
-+	}
- 
- 	desc->provider_name_len = provider_name_len;
- 
--	if (provider_name && provider_name_len)
-+	if (provider_name && provider_name_len) {
- 		desc->provider_name = kstrdup(provider_name, GFP_KERNEL);
-+		if (!desc->provider_name)
-+			goto free_desc_service_name;
-+	}
- 
- 	vidtv_psi_desc_chain(head, (struct vidtv_psi_desc *)desc);
- 	return desc;
-+
-+free_desc_service_name:
-+	if (service_name && service_name_len)
-+		kfree(desc->service_name);
-+free_desc:
-+	kfree(desc);
-+	return NULL;
- }
- 
- struct vidtv_psi_desc_registration
-@@ -355,8 +368,13 @@ struct vidtv_psi_desc_network_name
- 
- 	desc->length = network_name_len;
- 
--	if (network_name && network_name_len)
-+	if (network_name && network_name_len) {
- 		desc->network_name = kstrdup(network_name, GFP_KERNEL);
-+		if (!desc->network_name) {
-+			kfree(desc);
-+			return NULL;
-+		}
-+	}
- 
- 	vidtv_psi_desc_chain(head, (struct vidtv_psi_desc *)desc);
- 	return desc;
-@@ -442,15 +460,32 @@ struct vidtv_psi_desc_short_event
- 		iso_language_code = "eng";
- 
- 	desc->iso_language_code = kstrdup(iso_language_code, GFP_KERNEL);
-+	if (!desc->iso_language_code)
-+		goto free_desc;
- 
--	if (event_name && event_name_len)
-+	if (event_name && event_name_len) {
- 		desc->event_name = kstrdup(event_name, GFP_KERNEL);
-+		if (!desc->event_name)
-+			goto free_desc_language_code;
-+	}
- 
--	if (text && text_len)
-+	if (text && text_len) {
- 		desc->text = kstrdup(text, GFP_KERNEL);
-+		if (!desc->text)
-+			goto free_desc_event_name;
-+	}
- 
- 	vidtv_psi_desc_chain(head, (struct vidtv_psi_desc *)desc);
- 	return desc;
-+
-+free_desc_event_name:
-+	if (event_name && event_name_len)
-+		kfree(desc->event_name);
-+free_desc_language_code:
-+	kfree(desc->iso_language_code);
-+free_desc:
-+	kfree(desc);
-+	return NULL;
- }
- 
- struct vidtv_psi_desc *vidtv_psi_desc_clone(struct vidtv_psi_desc *desc)
--- 
-2.25.1
+   media: i2c: ds90ub960: Fix use of UB960_SR_FWD_CTL1
+   media: i2c: ds90ub9xx: Add COMMON_CLK kconfig dependency
+   media: i2c: ds90ub9xx: Select GPIOLIB rather than OF_GPIO
+
+The rest... Thinking about it now, I should have perhaps left them out, 
+as they're not fixing issues, and perhaps they just confuse the merging 
+process.
+
+  Tomi
+
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
+>> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+>> ---
+>>   drivers/media/i2c/Kconfig | 6 +++---
+>>   1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+>> index 8a5f09a3de6c..29fc00e30d8b 100644
+>> --- a/drivers/media/i2c/Kconfig
+>> +++ b/drivers/media/i2c/Kconfig
+>> @@ -1622,7 +1622,7 @@ config VIDEO_DS90UB913
+>>   	depends on OF && I2C && VIDEO_DEV && COMMON_CLK
+>>   	select I2C_ATR
+>>   	select MEDIA_CONTROLLER
+>> -	select OF_GPIO
+>> +	select GPIOLIB
+>>   	select REGMAP_I2C
+>>   	select V4L2_FWNODE
+>>   	select VIDEO_V4L2_SUBDEV_API
+>> @@ -1635,7 +1635,7 @@ config VIDEO_DS90UB953
+>>   	depends on OF && I2C && VIDEO_DEV && COMMON_CLK
+>>   	select I2C_ATR
+>>   	select MEDIA_CONTROLLER
+>> -	select OF_GPIO
+>> +	select GPIOLIB
+>>   	select REGMAP_I2C
+>>   	select V4L2_FWNODE
+>>   	select VIDEO_V4L2_SUBDEV_API
+>> @@ -1648,7 +1648,7 @@ config VIDEO_DS90UB960
+>>   	depends on OF && I2C && VIDEO_DEV && COMMON_CLK
+>>   	select I2C_ATR
+>>   	select MEDIA_CONTROLLER
+>> -	select OF_GPIO
+>> +	select GPIOLIB
+>>   	select REGMAP_I2C
+>>   	select V4L2_FWNODE
+>>   	select VIDEO_V4L2_SUBDEV_API
+>> -- 
+>> 2.34.1
+>>
+> 
 
