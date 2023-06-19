@@ -2,134 +2,237 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EEB9EB64D9
-	for <linux-media@archiver.kernel.org>; Mon, 19 Jun 2023 07:45:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85B41EB64D9
+	for <linux-media@archiver.kernel.org>; Mon, 19 Jun 2023 08:13:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbjFSHpe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 19 Jun 2023 03:45:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39592 "EHLO
+        id S230041AbjFSINe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 19 Jun 2023 04:13:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjFSHpc (ORCPT
+        with ESMTP id S230005AbjFSIN0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 19 Jun 2023 03:45:32 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D5BB1;
-        Mon, 19 Jun 2023 00:45:30 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E859E6606EAC;
-        Mon, 19 Jun 2023 08:45:28 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687160729;
-        bh=PUG5piy46+BtYUKqIE057P4sOhXAzTDm9lhm1PwoWoY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=GGqRtKhW4JTknQ5gxd+v4wckj01dUHFUW/D+sKxscKEtYmWQbkXiunIs2qh+v+Zhd
-         dcuWE4vDEjQjJaelk+7IgREEp2ZFdhfqTZtVJHgk5ClzG7Jvel9Uhh8xg9Q/edK9XA
-         mEYgdCxOjqpyA7XFmmsXn+z26lg6lrRQkDEoVrCKWo0aJm5F4CBP4Gpr3BzGKSR1Db
-         Wm1aFnS9KerDDF+f82XQAJoEbvHOzZw6jJIgYFL2fDzYd3QMM4YEtBWoOHquj8dtCE
-         KbLlNwPdhdPdHwdbXyNM0+lLgm+qQbLvDA5iPXpPTe3Oog1hy1F9XSBQBjuFuX/2rJ
-         4j+X8ySOP18nA==
-Message-ID: <4736dabb-8585-3906-d6f1-165eff96eb26@collabora.com>
-Date:   Mon, 19 Jun 2023 09:45:27 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 3/5] media: mediatek: vcodec: Read HW active status
- from clock
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>, Chen-Yu Tsai <wenst@chromium.org>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>, kernel@collabora.com,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mon, 19 Jun 2023 04:13:26 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD771B9
+        for <linux-media@vger.kernel.org>; Mon, 19 Jun 2023 01:13:24 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-9889429a89eso164047966b.1
+        for <linux-media@vger.kernel.org>; Mon, 19 Jun 2023 01:13:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687162403; x=1689754403;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9IZmNBpCk3CmUDoVfQixBIhRKfGCWj/vMP5w1KQ2xDA=;
+        b=Sqeu07k81iC282yZ5K+ExzZTFVtimG2ZFId3DIFXkPz/Tm60kGMfInFDS7v2acJAwg
+         q7sEa176Vc2xk5WvrY9ehuZf6X+mnBKYJPvfTGiasJdP7oWhWjhtLb8MwKFZxdGAJgRl
+         cwGI6yKq9ipQC+VlPEzY96m0CLs/HJGVYFdq8mx2h134anGLYsqfAxi/2p76PJk8TCUa
+         bqxdI8CGqafiIY8NMKruOAGLGZNQJgpY+rF35saNxXXlMnrt2SDSasVZ3orVu1OXVGE+
+         m9fa0VCcA8JIgXs4Ex2bbWgHgaFyvenf+UUXHbVrSoh+Ds796xvtHI2WZujO33xBnQ3n
+         +NfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687162403; x=1689754403;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9IZmNBpCk3CmUDoVfQixBIhRKfGCWj/vMP5w1KQ2xDA=;
+        b=fufNvjoLnpEFB8GZx/SORrhDJNy1iLLWZ48dZ1P0M3m3dMHi0YWSBF+Qd9wzLaK3ph
+         C0luiKuVyaSyKKq6HiI6B2Y9zqFuDFclh4nYkPMkzgtFA1KCgU9yxiB/Aie+AEtDdmvh
+         +CDHA/ZN5oBKQ9k+KYXar3Bd2D7rSrCHyb8TQefOstiTAB+gu3ortlNYZXmVGs5pAITR
+         jULqjO04glHBHp0YjZKs07+tRPgny/kAWQbltJyAX3dkt5HlbGX/5awY8QsGgZtqvZHQ
+         wfF1hH7EEZS7xtJXXuJr49bmnls2D2USp1z4diXJK2QAIcNq9/wEjXv4KJwRmHzfTK9o
+         QmhQ==
+X-Gm-Message-State: AC+VfDydIYXxeOMZoySdLxsofWe1yuLBje7C9F1tr3dmHbnqhlnrx31j
+        YzBcNuprucFitGttfK1BnAaMncoztOppHQ==
+X-Google-Smtp-Source: ACHHUZ4BRRXUnwptBwipIPDbpM+8vd/Jyy8nbOnxu/2mwY6IHeeUmAPkgHGTRo5KmSs28gY4qgezAg==
+X-Received: by 2002:a17:907:7da4:b0:969:9c0c:4c97 with SMTP id oz36-20020a1709077da400b009699c0c4c97mr12804093ejc.1.1687162403126;
+        Mon, 19 Jun 2023 01:13:23 -0700 (PDT)
+Received: from tom-HP-ZBook-Fury-15-G7-Mobile-Workstation (net-2-39-142-242.cust.vodafonedsl.it. [2.39.142.242])
+        by smtp.gmail.com with ESMTPSA id le8-20020a170907170800b00988b6d05f33sm909991ejc.223.2023.06.19.01.13.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 01:13:22 -0700 (PDT)
+Date:   Mon, 19 Jun 2023 10:13:20 +0200
+From:   Tommaso Merciai <tomm.merciai@gmail.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20230607205714.510012-1-nfraprado@collabora.com>
- <20230607205714.510012-4-nfraprado@collabora.com>
- <CAGXv+5HHARvkCYfjPjRKgyWuzv-Dt215z1=yA+_tw4hyasdGQA@mail.gmail.com>
- <f0018817-d47b-d772-ed9f-9126bf71a0d1@collabora.com>
- <83770481aa762b69738c27f9d9934dd9.sboyd@kernel.org>
- <90781ea3-d43a-6267-278c-184050fe456e@collabora.com>
- <d579dc00ed9877f9daf170134fe781e6.sboyd@kernel.org>
- <d2c11880-afc1-5c0b-229b-2a4080b22fba@collabora.com>
- <d97a0c8e7aeb4216b361839bc3c9bd54.sboyd@kernel.org>
- <76a641e6-64ef-a973-422c-de50d498e52f@collabora.com>
- <eee9a51a9fbe44f028ef33cd92c18a51.sboyd@kernel.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <eee9a51a9fbe44f028ef33cd92c18a51.sboyd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Andy Shevchenko <andy@kernel.org>, Kate Hsuan <hpa@redhat.com>,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH v2 1/5] media: Add MIPI CCI register access helper
+ functions
+Message-ID: <ZJAOIN3hQcjkOlqs@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+References: <ZIo1kHgYMK84iMj7@kekkonen.localdomain>
+ <b8e5f3f7-d82d-390b-ac63-824a42c3f6cd@redhat.com>
+ <20230615092100.GE741@pendragon.ideasonboard.com>
+ <ZIriVxMVVxG2dsUO@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+ <71aa3c7e-5bb2-afe6-a9a5-390307a8b3f9@redhat.com>
+ <ZIr1YVf15ZBJvguX@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+ <ZIr8CFZzq0MttUf+@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+ <3b79c522-4bba-fd38-e087-8a506ae14a23@redhat.com>
+ <ZIs5L1owIKEkg6aW@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+ <73420627-f49a-eaf2-8544-02af15cfd6db@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <73420627-f49a-eaf2-8544-02af15cfd6db@redhat.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Il 15/06/23 19:40, Stephen Boyd ha scritto:
-> Quoting AngeloGioacchino Del Regno (2023-06-15 00:30:56)
->> Il 15/06/23 02:40, Stephen Boyd ha scritto:
->>> Quoting AngeloGioacchino Del Regno (2023-06-14 01:13:43)
->>>> Il 12/06/23 21:19, Stephen Boyd ha scritto:
->>>>> Quoting AngeloGioacchino Del Regno (2023-06-09 00:42:13)
->>>>>> Il 09/06/23 01:56, Stephen Boyd ha scritto:
->>>>>>> Quoting AngeloGioacchino Del Regno (2023-06-08 02:01:58)
->>>>>>>> Il 08/06/23 10:12, Chen-Yu Tsai ha scritto:
->>>>>>>>> On Thu, Jun 8, 2023 at 4:57 AM Nícolas F. R. A. Prado
->>>>>>>>> <nfraprado@collabora.com> wrote:
->>>>>>
->>>>>> The firmware gives an indication of "boot done", but that's for the "core" part
->>>>>> of the vcodec... then it manages this clock internally to enable/disable the
->>>>>> "compute" IP of the decoder.
->>>>>>
->>>>>> As far as I know (and I've been researching about this) the firmware will not
->>>>>> give any "decoder powered, clocked - ready to get data" indication, and the
->>>>>> only way that we have to judge whether it is in this specific state or not is
->>>>>> to check if the "VDEC_ACTIVE" clock got enabled by the firmware.
->>>>>
->>>>> Is Linux ever going to use clk consumer APIs like clk_enable/clk_disable
->>>>> on this VDEC_ACTIVE clk? If the answer is no, then there isn't any
->>>>> reason to put it in the clk framework, and probably syscon is the way to
->>>>> go for now.
->>>>>
->>>>
->>>> Not for the current platform, but that may change in future SoCs... we're not sure.
->>>
->>> If you're not using the clk consumer APIs then it shouldn't be a clk.
->>>
->>>>
->>>>> Another approach could be to wait for some amount of time after telling
->>>>> firmware to power up and assume the hardware is active.
->>>>>
->>>>
->>>> That would be highly error prone though. Expecting that the HW is alive means that
->>>> we're 100% sure that both firmware and driver are doing the right thing at every
->>>> moment, which is something that we'd like to assume but, realistically, for safety
->>>> reasons we just don't.
->>>>
->>>> Should we anyway go for a syscon *now* and then change it to a clock later, if any
->>>> new platform needs this as a clock?
->>>
->>> Yeah. Or implement this as a power domain and have it read the register
->>> directly waiting to return from the power_on()?
->>
->> A power domain would force us to incorrectly describe the hardware in the bindings
->> though, I think... so, Nícolas, please, let's go for a syscon at this point, as it
-> 
-> You don't have to add the power domain in DT, do you? You can populate a
-> power domain in software directly?
-> 
+Hi Hans, Laurent,
 
-Right. I didn't evaluate that possibility at all. Looks good!
-
->> really looks like being the only viable option.
->>
->> Stephen, many thanks for the valuable suggestions and the nice conversation.
->>
+On Fri, Jun 16, 2023 at 06:54:54PM +0200, Hans de Goede wrote:
+> Hi Tommaso,
 > 
+> On 6/15/23 18:15, Tommaso Merciai wrote:
+> > Hi Hans,
+> > 
+> > On Thu, Jun 15, 2023 at 02:00:46PM +0200, Hans de Goede wrote:
+> >> Hi,
+> >>
+> >> On 6/15/23 13:54, Tommaso Merciai wrote:
+> >>> On Thu, Jun 15, 2023 at 01:26:25PM +0200, Tommaso Merciai wrote:
+> >>>> Hi Hans,
+> >>>>
+> >>>> On Thu, Jun 15, 2023 at 01:10:40PM +0200, Hans de Goede wrote:
+> >>>>> Hi Tommaso,
+> >>>>>
+> >>>>> On 6/15/23 12:05, Tommaso Merciai wrote:
+> >>>>>> Hi Hans, Laurent, Sakari,
+> >>>>>>
+> >>>>>> Can I cherry-pick this patch and use these new functions also
+> >>>>>> for cci regs of the alvium driver?
+> >>>>>
+> >>>>> Yes that sounds like a good plan.
+> >>>>>
+> >>>>>> Are on going to be merge?
+> >>>>>
+> >>>>> Yes this will hopefully get merged upstream soon.
+> >>>>
+> >>>> Thanks for the info!
+> >>>>
+> >>>> I want to ask you your opinion about this:
+> >>>>
+> >>>> Into alvium driver actually I'm using the following defines
+> >>>> manipulations:
+> >>>>
+> >>>> #define REG_BCRM_REG_ADDR_R				REG_BCRM_CCI_16BIT(0x0014)
+> >>>>
+> >>>> #define REG_BCRM_FEATURE_INQUIRY_R			REG_BCRM_V4L2_64BIT(0x0008)
+> >>>> #define REG_BCRM_DEVICE_FIRMWARE_VERSION_R		REG_BCRM_V4L2_64BIT(0x0010)
+> >>>>
+> >>>> My plan is to use your cci API for cci register in this way defines
+> >>>> became like:
+> >>>>
+> >>>> #define REG_BCRM_REG_ADDR_R				CCI_REG16(0x0014)
+> >>>>
+> >>>> And leave v4l2 regs are it are right now:
+> >>>>
+> >>>> #define REG_BCRM_FEATURE_INQUIRY_R			REG_BCRM_V4L2_64BIT(0x0008)
+> >>>> #define REG_BCRM_DEVICE_FIRMWARE_VERSION_R		REG_BCRM_V4L2_64BIT(0x0010)
+> >>>>
+> >>>> What do you think about?
+> >>>
+> >>> Or maybe is worth don't use v4l2 bit for v4l2 regs, I think is implicit
+> >>> that what regs that are not CCI are v4l2, then we return wit the
+> >>> following defines:
+> >>>
+> >>>
+> >>>
+> >>> #define REG_BCRM_REG_ADDR_R                           CCI_REG16(0x0014)
+> >>> ^CCI regs
+> >>>
+> >>> #define REG_BCRM_FEATURE_INQUIRY_R                    0x0008 
+> >>> #define REG_BCRM_DEVICE_FIRMWARE_VERSION_R            0x0010
+> >>> ^v4l2 regs
+> >>
+> >> I'm not sure what you mean with "V4L2" registers ? I guess you mean
+> >> registers which cannot be accessed through the CCI helper functions,
+> >> but starting with v2 this is no longer true. There now is a CCI_REG64()
+> >> so you can simply use that.
+> > 
+> > I'm playing a bit with v3 of your cci api :)
+> > 
+> > My problem is the following, bcrm regs are not real regs but are offset
+> > from bcrm address (this is not fixed, it depends on the camera).
+> > 
+> > Then the workflow is:
+> > 
+> >  - read bcrm_address (base address)
+> >  - then sum this to the offset (regs)
+> > 
+> > Myabe this clarify:
+> > 
+> > static int alvium_read(struct alvium_dev *alvium, u32 reg, u64 *val)
+> > {
+> > 	int ret;
+> > 
+> > 	if (reg & REG_BCRM_V4L2)
+> > 		reg += alvium->bcrm_addr;
+> > 
+> > 	cci_read(alvium->regmap, reg, val, &ret);
+> > 	if (ret)
+> > 		return ret;
+> > 
+> > 	return 0;
+> > }
+> > 
+> > int alvium_write(struct alvium_dev *alvium, u32 reg, u64 val)
+> > {
+> > 	int ret;
+> > 
+> > 	if (reg & REG_BCRM_V4L2)
+> > 		reg += alvium->bcrm_addr;
+> > 
+> > 	cci_write(alvium->regmap, reg, val, &ret);
+> > 	if (ret)
+> > 		return ret;
+> > 
+> > 	return 0;
+> > }
+> > 
+> > Where for example:
+> > 
+> > #define REG_BCRM_V4L2		BIT(31)
+> > #define REG_BCRM_V4L2_64BIT(n)	(REG_BCRM_V4L2 | CCI_REG64(n))
+> > 
+> > #define REG_BCRM_WRITE_HANDSHAKE_RW REG_BCRM_V4L2_8BIT(0x0418)
+> > 
+> > 
+> > But I'm not sure that I'm in the right direction. 
+> > 
+> > In real I need first to get the real address then sum the bcrm_address
+> > if this is a bcrm regs(offset) then re-incapsule the address into the
+> > right CCI_REG# defines.
+> 
+> Ah I see, so you have a set of windowed registers where
+> the base address of these registers may change.
 
+Yep, right :)
+
+> 
+> What I don't understand though is why you use V4L2 in the
+> name of the #defines for this? Does the datasheet actually
+> name them like this ? V4L2 stands for video4linux version 2,
+> so unless these registers are somehow Linux specific using
+> V4L2 in the #define names is a bit weird IMHO.
+
+These registers are offered from the alvium fw for v4l2 API.
+We had a previous discussion with Laurent about this.
+
+Btw I will send v7 with Laurent hints (read_timeout_poll/err-params)
+And we can discuss there.
+
+(If for you is ok :) )
+
+I will keep both you and Laurent in CC.
+
+Thanks again both for your review/hints :)
+
+Regards,
+Tommaso
+
+> 
+> Regards,
+> 
+> Hans
+> 
