@@ -2,45 +2,45 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88737EB64D9
-	for <linux-media@archiver.kernel.org>; Mon, 19 Jun 2023 17:20:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9270EB64DC
+	for <linux-media@archiver.kernel.org>; Mon, 19 Jun 2023 17:20:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231129AbjFSRUV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 19 Jun 2023 13:20:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60776 "EHLO
+        id S231224AbjFSRUW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 19 Jun 2023 13:20:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231247AbjFSRUU (ORCPT
+        with ESMTP id S230454AbjFSRUU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 19 Jun 2023 13:20:20 -0400
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D736194;
-        Mon, 19 Jun 2023 10:20:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08ABFB2;
+        Mon, 19 Jun 2023 10:20:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687195219; x=1718731219;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=M8cpsIdLnXuuGWAJvDw9amJqINMPDXinMkvsofzWarg=;
-  b=OgAyet8Ncy4YSguU9Ts7KSft997A0tLOtSzqufKOPHkMcM3/6cYRgoT/
-   3PMFgb+g8BQgJsVyiS6nQiaXqM52tSFEkAe6+KuhrJ9Sv+1nyqjlJeGcq
-   G6fP5wbnLtRGyd1D6HYrciYlZaU0/05zc3/iqQSUkkAyu+9TGChjhCG9w
-   fAhwgujuneQarL/erLR84c2wgM6D+Hx2Fu0wBFPjcXSdfe87qaiXG3wvb
-   RxGa30wz6oS/6oo17WBuEH1DJyME0ZIS0+eAFzRxErDqce0K8whm4Np1p
-   rVEgGh128I+5nUf0pmonNZkKNXtQWAp1+x3fGvizFPYsXKs6iYn0paAKP
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="363105833"
+  t=1687195220; x=1718731220;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=bEqeDD3qlJ8khKucahwjiIUNYJkrQelnvBDmHsOyzeg=;
+  b=LrjxG/YMpV2mNCBu8ud282VtY3Z5fe9/VmNor8Jwcigy7CgTQ0ANtnd6
+   dj1RL8zB/nMmyv/Tw3UgRyO2biYKlSEkrh3funj2YydqATn+ZcaZQtRy8
+   qGQJwOOtWEwwh4DiOJIb5NBHtsKuNYOVrFCsOSlNEDCUjQgRU4xUDAW5N
+   WE8NGf9QH36Fo8Hqp391nbAKZfZDEcSRZLoLaYkvAakwFFm4aMvMo7m3u
+   CycKxI6S0czuE9XYH4kcX7bqN34NAm8ik6a6SZt0VP9xJ80iEfPx3hc/E
+   Evo4KyCSyV9ZRMpr5E8FZoDYhBJifrAqkwfpokXm5F/l/5aFPRWMgshq/
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="363105850"
 X-IronPort-AV: E=Sophos;i="6.00,255,1681196400"; 
-   d="scan'208";a="363105833"
+   d="scan'208";a="363105850"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
   by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 10:20:18 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="960482500"
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="960482501"
 X-IronPort-AV: E=Sophos;i="6.00,255,1681196400"; 
-   d="scan'208";a="960482500"
+   d="scan'208";a="960482501"
 Received: from black.fi.intel.com ([10.237.72.28])
   by fmsmga006.fm.intel.com with ESMTP; 19 Jun 2023 10:20:13 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 8B0323CC; Mon, 19 Jun 2023 20:20:23 +0300 (EEST)
+        id A68BE40F; Mon, 19 Jun 2023 20:20:23 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -57,70 +57,47 @@ Cc:     Antti Palosaari <crope@iki.fi>, Sergey Kozlov <serjk@netup.ru>,
         Akihiro Tsukada <tskd08@gmail.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Subject: [PATCH v1 0/4] ASoC: remove copy of intlog10()
-Date:   Mon, 19 Jun 2023 20:20:15 +0300
-Message-Id: <20230619172019.21457-1-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 2/4] lib/math/int_log: Use ARRAY_SIZE(logtable) where makes sense
+Date:   Mon, 19 Jun 2023 20:20:17 +0300
+Message-Id: <20230619172019.21457-3-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
+In-Reply-To: <20230619172019.21457-1-andriy.shevchenko@linux.intel.com>
+References: <20230619172019.21457-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The first three patches moves intlog10() to be available in entire
-kernel. The last one removes copy of it in one driver. Besides already
-good Lines of Code (LoC) statistics the upcoming users, if any, can
-utilize the exported functions.
+Use ARRAY_SIZE(logtable) where makes sense.
 
-The series can be routed either via ASoC tree or media tree.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ lib/math/int_log.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Note, int_log.h is separated from math.h due to licensing.
-I dunno if we can mix two in a single header file. In any
-case we may do it later on.
-
-Andy Shevchenko (4):
-  lib/math: Move dvb_math.c into lib/math/int_log.c
-  lib/math/int_log: Use ARRAY_SIZE(logtable) where makes sense
-  lib/math/int_log: Replace LGPL-2.1-or-later boilerplate with SPDX
-    identifier
-  ASoC: nau8825: Replace copied'n'pasted intlog10()
-
- Documentation/driver-api/media/dtv-common.rst |  2 +-
- drivers/media/dvb-core/Makefile               |  2 +-
- drivers/media/dvb-frontends/af9013_priv.h     |  2 +-
- drivers/media/dvb-frontends/af9033_priv.h     |  2 +-
- drivers/media/dvb-frontends/cxd2820r_priv.h   |  2 +-
- drivers/media/dvb-frontends/cxd2841er.c       |  2 +-
- .../cxd2880/cxd2880_tnrdmd_dvbt2_mon.c        |  2 +-
- .../cxd2880/cxd2880_tnrdmd_dvbt_mon.c         |  2 +-
- .../media/dvb-frontends/cxd2880/cxd2880_top.c |  2 +-
- drivers/media/dvb-frontends/dib7000p.c        |  2 +-
- drivers/media/dvb-frontends/dib8000.c         |  2 +-
- drivers/media/dvb-frontends/dib9000.c         |  2 +-
- drivers/media/dvb-frontends/drxk_hard.c       |  2 +-
- drivers/media/dvb-frontends/lgdt3305.c        |  2 +-
- drivers/media/dvb-frontends/lgdt3306a.c       |  2 +-
- drivers/media/dvb-frontends/lgdt330x.c        |  2 +-
- drivers/media/dvb-frontends/m88ds3103_priv.h  |  2 +-
- drivers/media/dvb-frontends/mn88443x.c        |  2 +-
- drivers/media/dvb-frontends/mn88472_priv.h    |  2 +-
- drivers/media/dvb-frontends/mn88473_priv.h    |  2 +-
- drivers/media/dvb-frontends/or51132.c         |  2 +-
- drivers/media/dvb-frontends/or51211.c         |  2 +-
- drivers/media/dvb-frontends/rtl2830_priv.h    |  2 +-
- drivers/media/dvb-frontends/rtl2832_priv.h    |  2 +-
- drivers/media/dvb-frontends/si2165.c          |  2 +-
- drivers/media/dvb-frontends/stv0367.c         |  2 +-
- drivers/media/dvb-frontends/tc90522.c         |  2 +-
- drivers/media/dvb-frontends/tda10048.c        |  2 +-
- include/{media/dvb_math.h => linux/int_log.h} | 18 +---
- lib/math/Makefile                             |  2 +-
- .../dvb-core/dvb_math.c => lib/math/int_log.c | 26 ++----
- sound/soc/codecs/nau8825.c                    | 93 +------------------
- 32 files changed, 45 insertions(+), 150 deletions(-)
- rename include/{media/dvb_math.h => linux/int_log.h} (63%)
- rename drivers/media/dvb-core/dvb_math.c => lib/math/int_log.c (84%)
-
+diff --git a/lib/math/int_log.c b/lib/math/int_log.c
+index 322df25a22d6..ea98fc0b3fe2 100644
+--- a/lib/math/int_log.c
++++ b/lib/math/int_log.c
+@@ -91,7 +91,7 @@ unsigned int intlog2(u32 value)
+ 	 *	so we would use the entry 0x18
+ 	 */
+ 	significand = value << (31 - msb);
+-	logentry = (significand >> 23) & 0xff;
++	logentry = (significand >> 23) % ARRAY_SIZE(logtable);
+ 
+ 	/**
+ 	 *	last step we do is interpolation because of the
+@@ -109,7 +109,7 @@ unsigned int intlog2(u32 value)
+ 	 *	logtable_next is 256
+ 	 */
+ 	interpolation = ((significand & 0x7fffff) *
+-			((logtable[(logentry + 1) & 0xff] -
++			((logtable[(logentry + 1) % ARRAY_SIZE(logtable)] -
+ 			  logtable[logentry]) & 0xffff)) >> 15;
+ 
+ 	/* now we return the result */
 -- 
 2.40.0.1.gaa8946217a0b
 
