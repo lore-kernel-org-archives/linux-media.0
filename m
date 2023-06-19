@@ -2,95 +2,124 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9024EB64D9
-	for <linux-media@archiver.kernel.org>; Mon, 19 Jun 2023 10:55:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DB2BEB64DC
+	for <linux-media@archiver.kernel.org>; Mon, 19 Jun 2023 10:59:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232229AbjFSKzR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 19 Jun 2023 06:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53170 "EHLO
+        id S232511AbjFSK7R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 19 Jun 2023 06:59:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbjFSKyp (ORCPT
+        with ESMTP id S232385AbjFSK64 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 19 Jun 2023 06:54:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19344100
-        for <linux-media@vger.kernel.org>; Mon, 19 Jun 2023 03:52:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687171949;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ii0g44MHqb3/hcjWWH34sglXiDVkosGVv1NC25z3QnE=;
-        b=Zc5eSQC3OvNUttXlvYVTp/R/swjg25xCDN0qUWUwusV/d36DmC5NEJBGA6CSWxj1xyJ7cz
-        pmkU5eXIwNJUhgUwkObgR4nzvngD8/lU8pWh/vtfFpgiv1sRckunPh7yWI5PoEbm6X7lx+
-        d5S+0iACHMUQzzhVABtktjYuZ3XnMbY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-355-ek3U7LH8OXuq8CIMAIBJXw-1; Mon, 19 Jun 2023 06:52:24 -0400
-X-MC-Unique: ek3U7LH8OXuq8CIMAIBJXw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 297CC801189;
-        Mon, 19 Jun 2023 10:52:23 +0000 (UTC)
-Received: from x1.localdomain.com (unknown [10.39.193.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 95BB1112132C;
-        Mon, 19 Jun 2023 10:52:21 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Yury Luneff <yury.lunev@gmail.com>,
-        Nable <nable.maininbox@googlemail.com>,
-        andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
-        Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: [PATCH 5/7] media: atomisp: Add some higher resolutions to atomisp_enum_framesizes()
-Date:   Mon, 19 Jun 2023 12:52:10 +0200
-Message-Id: <20230619105212.303653-5-hdegoede@redhat.com>
-In-Reply-To: <20230619105212.303653-1-hdegoede@redhat.com>
-References: <20230619105212.303653-1-hdegoede@redhat.com>
+        Mon, 19 Jun 2023 06:58:56 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ECCB10F2;
+        Mon, 19 Jun 2023 03:57:35 -0700 (PDT)
+Received: from [192.168.88.20] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 59952DDA;
+        Mon, 19 Jun 2023 12:56:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1687172219;
+        bh=cD5pqKTY5/ObcvKp271EhUpO47bHD0WwDTzCRMlW9Ng=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=TdV0Ju26ZNebUaHN5/9bM4MNZNuAMA3ToCFYvHf9NrkG65IIPBcgXh9lkLmotE20l
+         wybYH2rdiekkF1OKSbv821V3chou6EkYMRAydKIGa7eGdC6u5xr3IYDDfyJkolJ2/u
+         enRIPVPhukWDi0ZRB+3DkwvJoBFvgN5K6WbpnQFs=
+Message-ID: <3dda6808-cda2-e587-88a7-00621b2cfca3@ideasonboard.com>
+Date:   Mon, 19 Jun 2023 13:57:29 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v14 18/18] media: i2c: ds90ub953: Support non-sync mode
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>
+References: <20230616135922.442979-1-tomi.valkeinen@ideasonboard.com>
+ <20230616135922.442979-19-tomi.valkeinen@ideasonboard.com>
+ <ZIx17WC7plfDPpmc@smile.fi.intel.com>
+ <dc79de4e-4043-5448-db44-ef8f7749a376@ideasonboard.com>
+ <ZJAyb9WHjWrdSsBw@smile.fi.intel.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <ZJAyb9WHjWrdSsBw@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add some higher resolutions to the fixed list of resolutions which
-atomisp_enum_framesizes() uses on sensors which can do cropping and can
-thus make any resolution that will fit.
+On 19/06/2023 13:48, Andy Shevchenko wrote:
+> On Mon, Jun 19, 2023 at 12:00:57PM +0300, Tomi Valkeinen wrote:
+>> On 16/06/2023 17:47, Andy Shevchenko wrote:
+>>> On Fri, Jun 16, 2023 at 04:59:22PM +0300, Tomi Valkeinen wrote:
+>>>> Add support for FPD-Link non-sync mode with external clock. The only
+>>>> thing that needs to be added is the calculation for the clkout.
+> 
+> ...
+> 
+>>>> +	switch (priv->mode) {
+>>>> +	case UB953_MODE_SYNC:
+>>>> +		if (priv->hw_data->is_ub971)
+>>>> +			return priv->plat_data->bc_rate * 160ull;
+>>>> +		else
+>>>> +			return priv->plat_data->bc_rate / 2 * 160ull;
+>>>
+>>> Redundant 'else'.
+>>
+>> True, but I like the symmetry in:
+>>
+>> if (foo)
+>> 	return 123;
+>> else
+>> 	return 321;
+> 
+> At the same time it will be symmetry with other switch-case(s). That's why the
+> question about fallthrough below.
+> 
+>>> Do I understand correctly you don't want to fallthrough because it will give
+>>> ±160 in the rate (depending if it's even or odd)?
+>>
+>> Sorry, can you clarify? Fallthrough to what?
+> 
+> To the below case since '/ 2 * 160 ~= *80'. Why ~ because it might give
+> off-by-one error due to even/odd input.
 
-This is useful for higher resolution sensors like the 2560x1920 ov5693
-sensor.
+The below case is different. "priv->plat_data->bc_rate" vs 
+"clk_get_rate(priv->clkin)".
 
-Note the highest resolutions added here are 1920x<height> because
-the atomisp firmware does not support widths > 1920 with the default
-asd->run_mode->val == ATOMISP_RUN_MODE_PREVIEW setting.
+As to the order of the calculation (/ 2 * 160 versus * 160 / 2), 
+generally speaking, I have never figured out what are the correct ways 
+to calculate clock rates.
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/staging/media/atomisp/pci/atomisp_ioctl.c | 3 +++
- 1 file changed, 3 insertions(+)
+I wrote "x / 2 * 160" as that's what the documentation gives (there's a 
+hardware /2 divider in non-ub971 chips, followed by a 160 multiplier). 
+But does the documentation presume that the calculation is done 
+precisely, not in integers? If so, "x * 160 / 2" would be better (but 
+then, do we need to round?). Or does the /2 hardware divider basically 
+actually work as a an integer division, in case "x / 2 * 160" is the 
+correct one.
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-index 047b9fb075d0..8fd981f49659 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-@@ -708,6 +708,9 @@ static int atomisp_enum_framesizes_crop_inner(struct atomisp_device *isp,
- 					      int *valid_sizes)
- {
- 	static const struct v4l2_frmsize_discrete frame_sizes[] = {
-+		{ 1920, 1440 },
-+		{ 1920, 1200 },
-+		{ 1920, 1080 },
- 		{ 1600, 1200 },
- 		{ 1600, 1080 },
- 		{ 1600,  900 },
--- 
-2.40.1
+>>>> +	case UB953_MODE_NONSYNC_EXT:
+>>>> +		/* CLKIN_DIV = 1 always */
+>>>> +		return clk_get_rate(priv->clkin) * 80ull;
+> 
+
+  Tomi
 
