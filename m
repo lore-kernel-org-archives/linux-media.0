@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C3F7EB64DB
-	for <linux-media@archiver.kernel.org>; Mon, 19 Jun 2023 11:27:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA0FDEB64D9
+	for <linux-media@archiver.kernel.org>; Mon, 19 Jun 2023 11:27:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231420AbjFSL12 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 19 Jun 2023 07:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46602 "EHLO
+        id S231494AbjFSL1a (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 19 Jun 2023 07:27:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230293AbjFSL11 (ORCPT
+        with ESMTP id S229932AbjFSL13 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 19 Jun 2023 07:27:27 -0400
+        Mon, 19 Jun 2023 07:27:29 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ACD810F;
-        Mon, 19 Jun 2023 04:27:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC9F100;
+        Mon, 19 Jun 2023 04:27:28 -0700 (PDT)
 Received: from desky.lan (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3D59AFB;
-        Mon, 19 Jun 2023 13:26:49 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DB887800;
+        Mon, 19 Jun 2023 13:26:50 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1687174009;
-        bh=SKZE2foAuEiJpM0lv3kNXoNAKjM6FsyDumDBcf61Xvs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ZF1xhfol2ETOAkBHuhR8/KeNPrD0+8aql8U32pZdWdmLtitmvbN4/Ts/ld3X49toj
-         bsV/UKVz4R3t7OB11GHOwHoZYDQntwySGsdDPALi8WSBW0tjWr1OCMpePzXtZi/Kj2
-         W1ddrcCS0M/mRKUHjd8D2tehqnxQneYVwKyOu+tY=
+        s=mail; t=1687174011;
+        bh=Ua5NcitkYLYSqBnLZDqy7P/dMOR9PahCDNt3nwt7wFM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ZNHpJMwzDW3Z/m/Niqez8UbbEjXIXS1IOOiQTnROmHWVPt55Owh09Fnz6j/ytirh8
+         ePGHkqMzS3byVpgXkvJF6NcpS3kxhtDEknarMnldYRYtA6LqlZuLwWOGB3sFlhaJcb
+         WE0zJE+/WWHvQMbci4olFIHpTO3mrfKBxzj16AFM=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -32,80 +32,67 @@ To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH 1/3] media: subdev: Drop implicit zeroing of stream field
-Date:   Mon, 19 Jun 2023 14:27:05 +0300
-Message-Id: <20230619112707.239565-1-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH 3/3] media: subdev: Add debug prints to enable/disable_streams
+Date:   Mon, 19 Jun 2023 14:27:07 +0300
+Message-Id: <20230619112707.239565-3-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230619112707.239565-1-tomi.valkeinen@ideasonboard.com>
+References: <20230619112707.239565-1-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Now that the kernel drivers have been fixed to initialize the stream
-field, and we have the client capability which the userspace uses to say
-it has initialized the stream field, we can drop the implicit zeroing of
-the stream field in the various check functions.
+It is often useful to see when streaming for a device is being enabled
+or disabled. Add debug prints for this to v4l2_subdev_enable_streams()
+and v4l2_subdev_disable_streams().
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 ---
- drivers/media/v4l2-core/v4l2-subdev.c | 15 ---------------
- 1 file changed, 15 deletions(-)
+ drivers/media/v4l2-core/v4l2-subdev.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-index 2ec179cd1264..c1ac6d7a63d2 100644
+index 73f716a42569..0f86a165b202 100644
 --- a/drivers/media/v4l2-core/v4l2-subdev.c
 +++ b/drivers/media/v4l2-core/v4l2-subdev.c
-@@ -200,9 +200,6 @@ static inline int check_format(struct v4l2_subdev *sd,
- 	if (!format)
- 		return -EINVAL;
+@@ -1977,11 +1977,16 @@ int v4l2_subdev_enable_streams(struct v4l2_subdev *sd, u32 pad,
+ 		goto done;
+ 	}
  
--	if (!(sd->flags & V4L2_SUBDEV_FL_STREAMS))
--		format->stream = 0;
--
- 	return check_which(format->which) ? : check_pad(sd, format->pad) ? :
- 	       check_state(sd, state, format->which, format->pad, format->stream);
- }
-@@ -230,9 +227,6 @@ static int call_enum_mbus_code(struct v4l2_subdev *sd,
- 	if (!code)
- 		return -EINVAL;
++	dev_dbg(dev, "enable streams %u:%#llx\n", pad, streams_mask);
++
+ 	/* Call the .enable_streams() operation. */
+ 	ret = v4l2_subdev_call(sd, pad, enable_streams, state, pad,
+ 			       streams_mask);
+-	if (ret)
++	if (ret) {
++		dev_dbg(dev, "enable streams %u:%#llx failed: %d\n", pad,
++			streams_mask, ret);
+ 		goto done;
++	}
  
--	if (!(sd->flags & V4L2_SUBDEV_FL_STREAMS))
--		code->stream = 0;
--
- 	return check_which(code->which) ? : check_pad(sd, code->pad) ? :
- 	       check_state(sd, state, code->which, code->pad, code->stream) ? :
- 	       sd->ops->pad->enum_mbus_code(sd, state, code);
-@@ -245,9 +239,6 @@ static int call_enum_frame_size(struct v4l2_subdev *sd,
- 	if (!fse)
- 		return -EINVAL;
+ 	/* Mark the streams as enabled. */
+ 	for (i = 0; i < state->stream_configs.num_configs; ++i) {
+@@ -2089,11 +2094,16 @@ int v4l2_subdev_disable_streams(struct v4l2_subdev *sd, u32 pad,
+ 		goto done;
+ 	}
  
--	if (!(sd->flags & V4L2_SUBDEV_FL_STREAMS))
--		fse->stream = 0;
--
- 	return check_which(fse->which) ? : check_pad(sd, fse->pad) ? :
- 	       check_state(sd, state, fse->which, fse->pad, fse->stream) ? :
- 	       sd->ops->pad->enum_frame_size(sd, state, fse);
-@@ -283,9 +274,6 @@ static int call_enum_frame_interval(struct v4l2_subdev *sd,
- 	if (!fie)
- 		return -EINVAL;
++	dev_dbg(dev, "disable streams %u:%#llx\n", pad, streams_mask);
++
+ 	/* Call the .disable_streams() operation. */
+ 	ret = v4l2_subdev_call(sd, pad, disable_streams, state, pad,
+ 			       streams_mask);
+-	if (ret)
++	if (ret) {
++		dev_dbg(dev, "disable streams %u:%#llx failed: %d\n", pad,
++			streams_mask, ret);
+ 		goto done;
++	}
  
--	if (!(sd->flags & V4L2_SUBDEV_FL_STREAMS))
--		fie->stream = 0;
--
- 	return check_which(fie->which) ? : check_pad(sd, fie->pad) ? :
- 	       check_state(sd, state, fie->which, fie->pad, fie->stream) ? :
- 	       sd->ops->pad->enum_frame_interval(sd, state, fie);
-@@ -298,9 +286,6 @@ static inline int check_selection(struct v4l2_subdev *sd,
- 	if (!sel)
- 		return -EINVAL;
- 
--	if (!(sd->flags & V4L2_SUBDEV_FL_STREAMS))
--		sel->stream = 0;
--
- 	return check_which(sel->which) ? : check_pad(sd, sel->pad) ? :
- 	       check_state(sd, state, sel->which, sel->pad, sel->stream);
- }
+ 	/* Mark the streams as disabled. */
+ 	for (i = 0; i < state->stream_configs.num_configs; ++i) {
 -- 
 2.34.1
 
