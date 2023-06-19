@@ -2,68 +2,83 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8659EB64D9
-	for <linux-media@archiver.kernel.org>; Mon, 19 Jun 2023 11:13:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE569EB64D9
+	for <linux-media@archiver.kernel.org>; Mon, 19 Jun 2023 11:27:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231552AbjFSLNB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 19 Jun 2023 07:13:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
+        id S231342AbjFSL11 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 19 Jun 2023 07:27:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231476AbjFSLNA (ORCPT
+        with ESMTP id S230311AbjFSL11 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 19 Jun 2023 07:13:00 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B105091
-        for <linux-media@vger.kernel.org>; Mon, 19 Jun 2023 04:12:59 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="425557358"
-X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
-   d="scan'208";a="425557358"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 04:12:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="663948619"
-X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
-   d="scan'208";a="663948619"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP; 19 Jun 2023 04:12:43 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andy@kernel.org>)
-        id 1qBCoL-004yWr-2n;
-        Mon, 19 Jun 2023 14:12:41 +0300
-Date:   Mon, 19 Jun 2023 14:12:41 +0300
-From:   Andy Shevchenko <andy@kernel.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Mon, 19 Jun 2023 07:27:27 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68B4113;
+        Mon, 19 Jun 2023 04:27:25 -0700 (PDT)
+Received: from desky.lan (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 19B36547;
+        Mon, 19 Jun 2023 13:26:50 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1687174010;
+        bh=vKoVEh8/BVZ6bIy/hlGDIh7J4gLuFZr4qI4O6tce2iI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=HjZjo4QG3nRjoqquQPe5bfdbkA0Xmvxu7yuKfqGthGc3bq6IA8xHcAzqdb9rOWX+e
+         AhmLPyGjc1Tu/c/1dRXsXfp8LzsA7T377g5X2dANXTsCondZTP0Z7g4XK7kQ+WxYjd
+         RZ8vcIA1cloPOrcC34vqnWeB0bWj0YXnNsZAWPrQ=
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        Yury Luneff <yury.lunev@gmail.com>,
-        Nable <nable.maininbox@googlemail.com>,
-        andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
-        Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev, kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>
-Subject: Re: [PATCH 1/7] media: atomisp: Fix missing v4l2_fh_release() in
- atomisp_open() error exit
-Message-ID: <ZJA4KYg9t1f8T2p7@smile.fi.intel.com>
-References: <20230619105212.303653-1-hdegoede@redhat.com>
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH 2/3] media: subdev: Constify v4l2_subdev_set_routing_with_fmt() param
+Date:   Mon, 19 Jun 2023 14:27:06 +0300
+Message-Id: <20230619112707.239565-2-tomi.valkeinen@ideasonboard.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230619112707.239565-1-tomi.valkeinen@ideasonboard.com>
+References: <20230619112707.239565-1-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230619105212.303653-1-hdegoede@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 12:52:06PM +0200, Hans de Goede wrote:
-> Fix missing v4l2_fh_release() in atomisp_open()'s
-> "if (pipe->users)" error exit path.
+The routing parameter of v4l2_subdev_set_routing_with_fmt() is missing
+'const'. Add it.
 
-All LGTM,
-Reviewed-by: Andy Shevchenko <andy@kernel.org>
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+---
+ drivers/media/v4l2-core/v4l2-subdev.c | 2 +-
+ include/media/v4l2-subdev.h           | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+index c1ac6d7a63d2..73f716a42569 100644
+--- a/drivers/media/v4l2-core/v4l2-subdev.c
++++ b/drivers/media/v4l2-core/v4l2-subdev.c
+@@ -1590,7 +1590,7 @@ EXPORT_SYMBOL_GPL(__v4l2_subdev_next_active_route);
+ 
+ int v4l2_subdev_set_routing_with_fmt(struct v4l2_subdev *sd,
+ 				     struct v4l2_subdev_state *state,
+-				     struct v4l2_subdev_krouting *routing,
++				     const struct v4l2_subdev_krouting *routing,
+ 				     const struct v4l2_mbus_framefmt *fmt)
+ {
+ 	struct v4l2_subdev_stream_configs *stream_configs;
+diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+index b325df0d54d6..ca0bacb88537 100644
+--- a/include/media/v4l2-subdev.h
++++ b/include/media/v4l2-subdev.h
+@@ -1532,7 +1532,7 @@ __v4l2_subdev_next_active_route(const struct v4l2_subdev_krouting *routing,
+  */
+ int v4l2_subdev_set_routing_with_fmt(struct v4l2_subdev *sd,
+ 				     struct v4l2_subdev_state *state,
+-				     struct v4l2_subdev_krouting *routing,
++				     const struct v4l2_subdev_krouting *routing,
+ 				     const struct v4l2_mbus_framefmt *fmt);
+ 
+ /**
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.34.1
 
