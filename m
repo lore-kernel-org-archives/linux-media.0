@@ -2,28 +2,28 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BECAEB64D8
-	for <linux-media@archiver.kernel.org>; Tue, 20 Jun 2023 03:58:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8425BEB64DB
+	for <linux-media@archiver.kernel.org>; Tue, 20 Jun 2023 04:01:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbjFTD6k (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 19 Jun 2023 23:58:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37778 "EHLO
+        id S229680AbjFTEBz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 20 Jun 2023 00:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbjFTD6c (ORCPT
+        with ESMTP id S229462AbjFTEBy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 19 Jun 2023 23:58:32 -0400
+        Tue, 20 Jun 2023 00:01:54 -0400
 Received: from mo-csw-fb.securemx.jp (mo-csw-fb1514.securemx.jp [210.130.202.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4BB971A7;
-        Mon, 19 Jun 2023 20:58:30 -0700 (PDT)
-Received: by mo-csw-fb.securemx.jp (mx-mo-csw-fb1514) id 35K3HaR0027553; Tue, 20 Jun 2023 12:17:36 +0900
-Received: by mo-csw.securemx.jp (mx-mo-csw1515) id 35K3H0NN007271; Tue, 20 Jun 2023 12:17:01 +0900
-X-Iguazu-Qid: 34trY2IxWanTrAOr0j
-X-Iguazu-QSIG: v=2; s=0; t=1687231020; q=34trY2IxWanTrAOr0j; m=uPfg4gTq+4w8KdHfdGDYGPgWvBdyDLW7FEhIV6vhsMc=
-Received: from imx2-a.toshiba.co.jp (imx2-a.toshiba.co.jp [106.186.93.35])
-        by relay.securemx.jp (mx-mr1513) id 35K3Gvl1013553
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8046E1A7;
+        Mon, 19 Jun 2023 21:01:50 -0700 (PDT)
+Received: by mo-csw-fb.securemx.jp (mx-mo-csw-fb1514) id 35K3HOOH027548; Tue, 20 Jun 2023 12:17:24 +0900
+Received: by mo-csw.securemx.jp (mx-mo-csw1514) id 35K3GcAM002896; Tue, 20 Jun 2023 12:16:38 +0900
+X-Iguazu-Qid: 34trpHMSnXmTjlxbug
+X-Iguazu-QSIG: v=2; s=0; t=1687230997; q=34trpHMSnXmTjlxbug; m=VijdW/1VVpKTosARkiGIGWKaDbgPs1ppw5zTgecCyaQ=
+Received: from imx12-a.toshiba.co.jp ([38.106.60.135])
+        by relay.securemx.jp (mx-mr1511) id 35K3GZcJ025779
         (version=TLSv1.2 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 20 Jun 2023 12:16:57 +0900
-X-SA-MID: 2939651
+        Tue, 20 Jun 2023 12:16:35 +0900
+X-SA-MID: 2172042
 From:   Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
 To:     Hans Verkuil <hverkuil@xs4all.nl>,
         Sakari Ailus <sakari.ailus@iki.fi>,
@@ -36,68 +36,125 @@ To:     Hans Verkuil <hverkuil@xs4all.nl>,
         Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
 Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 5/5] MAINTAINERS: Add entries for Toshiba Visconti Video Input Interface
-Date:   Tue, 20 Jun 2023 12:11:11 +0900
+Subject: [PATCH v6 0/5] Add Toshiba Visconti Video Input Interface driver
+Date:   Tue, 20 Jun 2023 12:11:06 +0900
 X-TSB-HOP2: ON
-Message-Id: <20230620031111.3776-6-yuji2.ishikawa@toshiba.co.jp>
+Message-Id: <20230620031111.3776-1-yuji2.ishikawa@toshiba.co.jp>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230620031111.3776-1-yuji2.ishikawa@toshiba.co.jp>
-References: <20230620031111.3776-1-yuji2.ishikawa@toshiba.co.jp>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Added entries for visconti Video Input Interface driver, including;
-* device tree bindings
-* source files
-* documentation files
+This series is the Video Input Interface driver
+for Toshiba's ARM SoC, Visconti[0].
+This provides DT binding documentation,
+device driver, documentation and MAINTAINER files.
 
-Signed-off-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
----
+A visconti VIIF driver instance exposes
+1 media control device file and 3 video device files
+for a VIIF hardware.
+Detailed HW/SW are described in documentation directory.
+The VIIF hardware has CSI2 receiver,
+image signal processor and DMAC inside.
+The subdevice for image signal processor provides
+vendor specific V4L2 controls.
+
+The device driver depends on two other drivers under development;
+clock framework driver and IOMMU driver.
+Corresponding features will be added later.
+
+Best regards,
+Yuji
+
 Changelog v2:
-- no change
+- Resend v1 because a patch exceeds size limit.
 
 Changelog v3:
-- added entry for driver API documentation
+- Add documentation to describe SW and HW
+- Adapted to media control framework
+- Introduced ISP subdevice, capture device
+- Remove private IOCTLs and add vendor specific V4L2 controls
+- Change function name avoiding camelcase and uppercase letters
 
 Changelog v4:
-- added entry for header file
+- Split patches because a patch exceeds size limit
+- fix dt-bindings document
+- stop specifying ID numbers for driver instance explicitly at device tree
+- use pm_runtime to trigger initialization of HW
+  along with open/close of device files.
+- add a entry for a header file at MAINTAINERS file
 
 Changelog v5:
-- no change
+- Fix coding style problem in viif.c (patch 2/6)
 
 Changelog v6:
- - update path to VIIF driver source files
+- add register definition of BUS-IF and MPU in dt-bindings
+- add CSI2RX subdevice (separeted from ISP subdevice)
+- change directory layout (moved to media/platform/toshiba/visconti)
+- change source file layout (removed hwd_xxxx.c)
+- pointer to userland memory is removed from uAPI parameters
+- change register access (from struct style to macro style)
+- remove unused macros
 
- MAINTAINERS | 4 ++++
- 1 file changed, 4 insertions(+)
+Yuji Ishikawa (5):
+  dt-bindings: media: platform: visconti: Add Toshiba Visconti Video
+    Input Interface bindings
+  media: platform: visconti: Add Toshiba Visconti Video Input Interface
+    driver
+  media: add V4L2 vendor specific control handlers
+  documentation: media: add documentation for Toshiba Visconti Video
+    Input Interface driver
+  MAINTAINERS: Add entries for Toshiba Visconti Video Input Interface
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f794002a1..4673bca45 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2957,17 +2957,21 @@ F:	Documentation/devicetree/bindings/arm/toshiba.yaml
- F:	Documentation/devicetree/bindings/clock/toshiba,tmpv770x-pipllct.yaml
- F:	Documentation/devicetree/bindings/clock/toshiba,tmpv770x-pismu.yaml
- F:	Documentation/devicetree/bindings/gpio/toshiba,gpio-visconti.yaml
-+F:	Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml
- F:	Documentation/devicetree/bindings/net/toshiba,visconti-dwmac.yaml
- F:	Documentation/devicetree/bindings/pci/toshiba,visconti-pcie.yaml
- F:	Documentation/devicetree/bindings/pinctrl/toshiba,visconti-pinctrl.yaml
- F:	Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml
-+F:	Documentation/driver-api/media/drivers/visconti-viif.rst
- F:	arch/arm64/boot/dts/toshiba/
- F:	drivers/clk/visconti/
- F:	drivers/gpio/gpio-visconti.c
-+F:	drivers/media/platform/toshiba/visconti/
- F:	drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c
- F:	drivers/pci/controller/dwc/pcie-visconti.c
- F:	drivers/pinctrl/visconti/
- F:	drivers/watchdog/visconti_wdt.c
-+F:	include/uapi/linux/visconti_viif.h
- N:	visconti
- 
- ARM/UNIPHIER ARCHITECTURE
+ .../bindings/media/toshiba,visconti-viif.yaml |  102 +
+ .../driver-api/media/drivers/index.rst        |    1 +
+ .../media/drivers/visconti-viif.rst           |  462 +++
+ MAINTAINERS                                   |    4 +
+ drivers/media/platform/Kconfig                |    1 +
+ drivers/media/platform/Makefile               |    1 +
+ drivers/media/platform/toshiba/Kconfig        |    6 +
+ drivers/media/platform/toshiba/Makefile       |    2 +
+ .../media/platform/toshiba/visconti/Kconfig   |   18 +
+ .../media/platform/toshiba/visconti/Makefile  |    8 +
+ .../media/platform/toshiba/visconti/viif.c    |  714 ++++
+ .../media/platform/toshiba/visconti/viif.h    |  375 ++
+ .../platform/toshiba/visconti/viif_capture.c  | 1481 +++++++
+ .../platform/toshiba/visconti/viif_capture.h  |   22 +
+ .../platform/toshiba/visconti/viif_common.c   |  191 +
+ .../platform/toshiba/visconti/viif_common.h   |   38 +
+ .../platform/toshiba/visconti/viif_controls.c | 3411 +++++++++++++++++
+ .../platform/toshiba/visconti/viif_controls.h |   18 +
+ .../platform/toshiba/visconti/viif_csi2rx.c   |  687 ++++
+ .../platform/toshiba/visconti/viif_csi2rx.h   |   24 +
+ .../toshiba/visconti/viif_csi2rx_regs.h       |  102 +
+ .../platform/toshiba/visconti/viif_isp.c      | 1264 ++++++
+ .../platform/toshiba/visconti/viif_isp.h      |   24 +
+ .../platform/toshiba/visconti/viif_regs.h     |  714 ++++
+ include/uapi/linux/v4l2-controls.h            |    6 +
+ include/uapi/linux/visconti_viif.h            | 1800 +++++++++
+ 26 files changed, 11476 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml
+ create mode 100644 Documentation/driver-api/media/drivers/visconti-viif.rst
+ create mode 100644 drivers/media/platform/toshiba/Kconfig
+ create mode 100644 drivers/media/platform/toshiba/Makefile
+ create mode 100644 drivers/media/platform/toshiba/visconti/Kconfig
+ create mode 100644 drivers/media/platform/toshiba/visconti/Makefile
+ create mode 100644 drivers/media/platform/toshiba/visconti/viif.c
+ create mode 100644 drivers/media/platform/toshiba/visconti/viif.h
+ create mode 100644 drivers/media/platform/toshiba/visconti/viif_capture.c
+ create mode 100644 drivers/media/platform/toshiba/visconti/viif_capture.h
+ create mode 100644 drivers/media/platform/toshiba/visconti/viif_common.c
+ create mode 100644 drivers/media/platform/toshiba/visconti/viif_common.h
+ create mode 100644 drivers/media/platform/toshiba/visconti/viif_controls.c
+ create mode 100644 drivers/media/platform/toshiba/visconti/viif_controls.h
+ create mode 100644 drivers/media/platform/toshiba/visconti/viif_csi2rx.c
+ create mode 100644 drivers/media/platform/toshiba/visconti/viif_csi2rx.h
+ create mode 100644 drivers/media/platform/toshiba/visconti/viif_csi2rx_regs.h
+ create mode 100644 drivers/media/platform/toshiba/visconti/viif_isp.c
+ create mode 100644 drivers/media/platform/toshiba/visconti/viif_isp.h
+ create mode 100644 drivers/media/platform/toshiba/visconti/viif_regs.h
+ create mode 100644 include/uapi/linux/visconti_viif.h
+
 -- 
 2.25.1
 
