@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D783EB64D8
-	for <linux-media@archiver.kernel.org>; Thu, 22 Jun 2023 13:14:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AC35EB64DA
+	for <linux-media@archiver.kernel.org>; Thu, 22 Jun 2023 13:14:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231579AbjFVNOB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 22 Jun 2023 09:14:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32822 "EHLO
+        id S231593AbjFVNOC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 22 Jun 2023 09:14:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjFVNOA (ORCPT
+        with ESMTP id S231558AbjFVNOB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 22 Jun 2023 09:14:00 -0400
+        Thu, 22 Jun 2023 09:14:01 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317E210F8;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C761BD3;
         Thu, 22 Jun 2023 06:13:59 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:7d72:676c:e745:a6ef])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 411256607115;
-        Thu, 22 Jun 2023 14:13:57 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4FB41660711E;
+        Thu, 22 Jun 2023 14:13:58 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687439637;
-        bh=7Bj5hAoh3Iuvgs44g1/kDJV9XKTUPPQFWhuUxH1CfxU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=F/M4eSTFBa0RVdvd99Qfx5JodBeCZuvC5W+xcR2jfJ9AoPKorjPt4DR3Aom0jclX7
-         FOld3+gclSyEgJCEeZxnFr7DxjrvNjZSuM5JA+JEoVzLEZ10L9rxNHb4gDuWT7o7oL
-         1aXA2ccbTIZvNlNcCWQAhY2a/FgiXkmFhZZp1vHGUlK9CxDcI33Jh7u13bdfEXsoT2
-         YiSwiNniqrsZj9TjnZM9r6WDNMShGgadZI0PSMPFT17DwPmRsXnYNokP88lmzGB4MI
-         Xon5UQAYvyEJfN/ufvy+FqNaNus1SRDnaFK2nYpSgubd2ikSLAdz+i/wq7f2WUvHeg
-         tuMOaSBrPra+Q==
+        s=mail; t=1687439638;
+        bh=t8kITWrGl0OsCDx7lvzHoBExx5sUqFU5dAXRs/EKO4E=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=cvR797bhp0zTiCSdScfhlbTHiIQr+utHyzNqQOongrdtKYpDwzUY0dWzKZPiFEqnU
+         Vp+M7Y2JVVVAbeAA1bPTwIAWMVRo1zoQ0Jo632vU3uYP8DwzoI6ae2TvgAxP4N7hGb
+         tC991tunarQYTHZ42wBjAFs76L3DMPSL4Z3l/u4D5NyNX/M1MdoAi2HKtFFo5zj5dv
+         LCHML8nEK+y2kfaAqa+i4SV7jLe/BQQRK0t1vmXPQVo/UKPWsX035tkjUJO/rrc/Np
+         rcZUErqSo9hyzmJXEaydmOtL+Wr2cCXILV8i/zNvZ5ymW326nqxtRdxJawJSvSIt07
+         4SjxbEmqKZYvw==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -43,95 +43,138 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v3 00/11] Add DELETE_BUF ioctl
-Date:   Thu, 22 Jun 2023 15:13:38 +0200
-Message-Id: <20230622131349.144160-1-benjamin.gaignard@collabora.com>
+Subject: [PATCH v3 02/11] media: videobuf2: Use Xarray instead of static buffers array
+Date:   Thu, 22 Jun 2023 15:13:40 +0200
+Message-Id: <20230622131349.144160-3-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230622131349.144160-1-benjamin.gaignard@collabora.com>
+References: <20230622131349.144160-1-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Unlike when resolution change on keyframes, dynamic resolution change
-on inter frames doesn't allow to do a stream off/on sequence because
-it is need to keep all previous references alive to decode inter frames.
-This constraint have two main problems:
-- more memory consumption.
-- more buffers in use.
-To solve these issue this series introduce DELETE_BUF ioctl and remove
-the 32 buffers limit per queue.
+Instead of a static array change bufs to a dynamically allocated array.
+This will allow to store more video buffers if needed.
 
-VP9 conformance tests using fluster give a score of 210/305.
-The 25 resize inter tests (vp90-2-21-resize_inter_* files) are ok
-but require to use postprocessor.
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+---
+ .../media/common/videobuf2/videobuf2-core.c   | 38 +++++++++++--------
+ include/media/videobuf2-core.h                |  6 +--
+ 2 files changed, 25 insertions(+), 19 deletions(-)
 
-Kernel branch is available here:
-https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/commits/remove_vb2_queue_limit_v3
-
-GStreamer branch to use DELETE_BUF ioctl and testing dynamic resolution
-change is here:
-https://gitlab.freedesktop.org/benjamin.gaignard1/gstreamer/-/commits/VP9_drc
-
-changes in version 3:
-- Use Xarray API to store allocated video buffers.
-- No module parameter to limit the number of buffer per queue.
-- Use Xarray inside Verisilicon driver to store postprocessor buffers
-  and remove VB2_MAX_FRAME limit.
-- Allow Versilicon driver to change of resolution while streaming
-- Various fixes the Verisilicon VP9 code to improve fluster score.
+diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
+index 42fd3984c2bc..f1ff7af34a9f 100644
+--- a/drivers/media/common/videobuf2/videobuf2-core.c
++++ b/drivers/media/common/videobuf2/videobuf2-core.c
+@@ -409,18 +409,24 @@ static void init_buffer_cache_hints(struct vb2_queue *q, struct vb2_buffer *vb)
+  * vb2_queue_add_buffer() - add a buffer to a queue
+  * @q:	pointer to &struct vb2_queue with videobuf2 queue.
+  * @vb:	pointer to &struct vb2_buffer to be added to the queue.
+- * @index: index where add vb2_buffer in the queue
+  */
+-static bool vb2_queue_add_buffer(struct vb2_queue *q, struct vb2_buffer *vb, int index)
++static bool vb2_queue_add_buffer(struct vb2_queue *q, struct vb2_buffer *vb)
+ {
+-	if (index < VB2_MAX_FRAME && !q->bufs[index]) {
+-		q->bufs[index] = vb;
+-		vb->index = index;
+-		vb->vb2_queue = q;
+-		return true;
+-	}
++	struct xa_limit range = {
++		.max = UINT_MAX,
++		.min = q->num_buffers,
++	};
++	u32 index;
++	int ret;
  
-changes in version 2:
-- Use a dynamic array and not a list to keep trace of allocated buffers.
-  Not use IDR interface because it is marked as deprecated in kernel
-  documentation.
-- Add a module parameter to limit the number of buffer per queue.
-- Add DELETE_BUF ioctl and m2m helpers.
-
-Benjamin Gaignard (11):
-  media: videobuf2: Access vb2_queue bufs array through helper functions
-  media: videobuf2: Use Xarray instead of static buffers array
-  media: videobuf2: Remove VB2_MAX_FRAME limit on buffer storage
-  media: videobuf2: Stop define VB2_MAX_FRAME as global
-  media: verisilicon: Refactor postprocessor to store more buffers
-  media: verisilicon: Store chroma and motion vectors offset
-  media: verisilicon: vp9: Use destination buffer height to compute
-    chroma offset
-  media: verisilicon: postproc: Fix down scale test
-  media: verisilicon: vp9: Allow to change resolution while streaming
-  media: v4l2: Add DELETE_BUF ioctl
-  media: v4l2: Add mem2mem helpers for DELETE_BUF ioctl
-
- .../userspace-api/media/v4l/user-func.rst     |   1 +
- .../media/v4l/vidioc-delete-buf.rst           |  51 ++++
- .../media/common/videobuf2/videobuf2-core.c   | 275 ++++++++++++++----
- .../media/common/videobuf2/videobuf2-v4l2.c   |  34 ++-
- drivers/media/platform/amphion/vdec.c         |   1 +
- drivers/media/platform/amphion/vpu_dbg.c      |  22 +-
- .../platform/mediatek/jpeg/mtk_jpeg_core.c    |   6 +-
- .../vcodec/vdec/vdec_vp9_req_lat_if.c         |   4 +-
- drivers/media/platform/qcom/venus/hfi.h       |   2 +
- drivers/media/platform/st/sti/hva/hva-v4l2.c  |   4 +
- drivers/media/platform/verisilicon/hantro.h   |   8 +-
- .../platform/verisilicon/hantro_g2_vp9_dec.c  |  10 +-
- .../media/platform/verisilicon/hantro_hw.h    |   4 +-
- .../platform/verisilicon/hantro_postproc.c    | 114 +++++---
- .../media/platform/verisilicon/hantro_v4l2.c  |  37 +--
- drivers/media/test-drivers/vim2m.c            |   1 +
- drivers/media/test-drivers/visl/visl-dec.c    |  28 +-
- drivers/media/v4l2-core/v4l2-dev.c            |   1 +
- drivers/media/v4l2-core/v4l2-ioctl.c          |  10 +
- drivers/media/v4l2-core/v4l2-mem2mem.c        |  20 ++
- .../staging/media/atomisp/pci/atomisp_ioctl.c |   2 +-
- drivers/staging/media/ipu3/ipu3-v4l2.c        |   2 +
- include/media/v4l2-ioctl.h                    |   4 +
- include/media/v4l2-mem2mem.h                  |  12 +
- include/media/videobuf2-core.h                |  16 +-
- include/media/videobuf2-v4l2.h                |  15 +-
- include/uapi/linux/videodev2.h                |   2 +
- 27 files changed, 523 insertions(+), 163 deletions(-)
- create mode 100644 Documentation/userspace-api/media/v4l/vidioc-delete-buf.rst
-
+-	return false;
++	ret = xa_alloc(&q->bufs, &index, vb, range, GFP_KERNEL);
++	if (ret)
++		return false;
++
++	vb->index = index;
++	vb->vb2_queue = q;
++
++	return true;
+ }
+ 
+ /**
+@@ -430,10 +436,8 @@ static bool vb2_queue_add_buffer(struct vb2_queue *q, struct vb2_buffer *vb, int
+  */
+ static void vb2_queue_remove_buffer(struct vb2_queue *q, struct vb2_buffer *vb)
+ {
+-	if (vb->index < VB2_MAX_FRAME) {
+-		q->bufs[vb->index] = NULL;
+-		vb->vb2_queue = NULL;
+-	}
++	xa_erase(&q->bufs, vb->index);
++	vb->vb2_queue = NULL;
+ }
+ 
+ /*
+@@ -474,7 +478,7 @@ static int __vb2_queue_alloc(struct vb2_queue *q, enum vb2_memory memory,
+ 		}
+ 		call_void_bufop(q, init_buffer, vb);
+ 
+-		if (!vb2_queue_add_buffer(q, vb, q->num_buffers + buffer)) {
++		if (!vb2_queue_add_buffer(q, vb)) {
+ 			dprintk(q, 1, "failed adding buffer %d to queue\n", buffer);
+ 			kfree(vb);
+ 			break;
+@@ -930,7 +934,7 @@ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
+ 	}
+ 
+ 	mutex_lock(&q->mmap_lock);
+-	q->num_buffers = allocated_buffers;
++	q->num_buffers += allocated_buffers;
+ 
+ 	if (ret < 0) {
+ 		/*
+@@ -2547,6 +2551,9 @@ int vb2_core_queue_init(struct vb2_queue *q)
+ 	mutex_init(&q->mmap_lock);
+ 	init_waitqueue_head(&q->done_wq);
+ 
++	xa_init_flags(&q->bufs, XA_FLAGS_ALLOC);
++	q->num_buffers = 0;
++
+ 	q->memory = VB2_MEMORY_UNKNOWN;
+ 
+ 	if (q->buf_struct_size == 0)
+@@ -2574,6 +2581,7 @@ void vb2_core_queue_release(struct vb2_queue *q)
+ 	mutex_lock(&q->mmap_lock);
+ 	__vb2_queue_free(q, q->num_buffers);
+ 	mutex_unlock(&q->mmap_lock);
++	xa_destroy(&q->bufs);
+ }
+ EXPORT_SYMBOL_GPL(vb2_core_queue_release);
+ 
+diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
+index 4b6a9d2ea372..77921cf894ef 100644
+--- a/include/media/videobuf2-core.h
++++ b/include/media/videobuf2-core.h
+@@ -619,7 +619,7 @@ struct vb2_queue {
+ 	struct mutex			mmap_lock;
+ 	unsigned int			memory;
+ 	enum dma_data_direction		dma_dir;
+-	struct vb2_buffer		*bufs[VB2_MAX_FRAME];
++	struct xarray			bufs;
+ 	unsigned int			num_buffers;
+ 
+ 	struct list_head		queued_list;
+@@ -1239,9 +1239,7 @@ static inline void vb2_clear_last_buffer_dequeued(struct vb2_queue *q)
+ static inline struct vb2_buffer *vb2_get_buffer(struct vb2_queue *q,
+ 						unsigned int index)
+ {
+-	if (index < q->num_buffers)
+-		return q->bufs[index];
+-	return NULL;
++	return xa_load(&q->bufs, index);
+ }
+ 
+ /*
 -- 
 2.39.2
 
