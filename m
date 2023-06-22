@@ -2,49 +2,49 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F59FEB64DA
-	for <linux-media@archiver.kernel.org>; Thu, 22 Jun 2023 11:41:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D41AFEB64DB
+	for <linux-media@archiver.kernel.org>; Thu, 22 Jun 2023 11:41:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230446AbjFVLlP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 22 Jun 2023 07:41:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42208 "EHLO
+        id S230450AbjFVLlQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 22 Jun 2023 07:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230390AbjFVLlN (ORCPT
+        with ESMTP id S229561AbjFVLlO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 22 Jun 2023 07:41:13 -0400
+        Thu, 22 Jun 2023 07:41:14 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 538A41BF0
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FBEF1BE6
         for <linux-media@vger.kernel.org>; Thu, 22 Jun 2023 04:41:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687434072; x=1718970072;
+  t=1687434073; x=1718970073;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=SOlSwMSc5tzoSJgir+mpDSUJggMngQHIbTeg/lY9qhg=;
-  b=kb+3sLo2PgGzqGkZYLPGoQlu503QNx+4UCPCE+7j0lMf4Agx8WU6b/vd
-   cSW41rdV9fCejxeGFvak+xyFftrU7iQ7nwG9mR7QPN6XLVL7RZ+3GoTkZ
-   iyk83Z8fVBsQ/3upCxgraWe22NCtKrJdfXzRIpyua2V4u2GZiE63w8z+R
-   NJJww+QLfwKeP0Z0Lcp9IwSzsrvuK1g6GgJ5wNWHNyqhLZT38VSB7pf+5
-   R6tLQ6+grClysm9yrrEt93YuOccxCfteoNLw9iKZAon9H5upXuqskpW4s
-   4WflKS3PsUiIbbg+jmSzEF0cI6dCpuSsvoE0G7xuauev/KvorVTGrFZ/W
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="357957581"
+  bh=fncVFRl8+6RV56tkQCB29Z2i0FGn582VpnBdz6xEowY=;
+  b=FAJ/ceAGHzv2umMk3ds/34f8N30HQG0TEqV6okRzJvM2xa2eea1cTYMh
+   lve82DEXNzeoQa54cVsRlVRHO+ete6qsZ4lvlQ0OiyG4/DkrL+uFIjvts
+   91ZkcEeMgk6waRfg7V5C0M92wozXHDBZHTDeBW5poneZvJoJLVI8QrqoU
+   wM5UBIa68YtbQswRkQfJtcf0bhrQqWMFgvfNs1jSptrdg5IVs5waQ70t2
+   g0o/FI2trAufv7Q71hcy8BR3g0lcaFJMx4By3njUsL1fBQ01/qh5qS7BN
+   IEPS/9dJeWHPgO0sqrYI1Qx+Ahg/j6bpJCtyyobJRQjdi4+ugGqRNTJ7Z
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="357957602"
 X-IronPort-AV: E=Sophos;i="6.00,263,1681196400"; 
-   d="scan'208";a="357957581"
+   d="scan'208";a="357957602"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
   by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 04:41:10 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="804749888"
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="804749887"
 X-IronPort-AV: E=Sophos;i="6.00,263,1681196400"; 
-   d="scan'208";a="804749888"
+   d="scan'208";a="804749887"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
   by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 04:41:02 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id D69EE120AE2;
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id CC0971209CA;
         Thu, 22 Jun 2023 14:40:50 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1qCIg2-003oSQ-2Y;
+        id 1qCIg2-003oSG-2P;
         Thu, 22 Jun 2023 14:40:38 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
@@ -76,96 +76,97 @@ Cc:     laurent.pinchart@ideasonboard.com,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Sowjanya Komatineni <skomatineni@nvidia.com>,
         Marco Felsch <m.felsch@pengutronix.de>
-Subject: [PATCH v4 07/38] media: Documentation: v4l: Add section titles for async
-Date:   Thu, 22 Jun 2023 14:39:57 +0300
-Message-Id: <20230622114028.908825-8-sakari.ailus@linux.intel.com>
+Subject: [PATCH v4 05/38] media: omap3isp: Move link creation to bound callback
+Date:   Thu, 22 Jun 2023 14:39:55 +0300
+Message-Id: <20230622114028.908825-6-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230622114028.908825-1-sakari.ailus@linux.intel.com>
 References: <20230622114028.908825-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add section titles for async documentation. While the documentation is
-mostly fine as-is, it has grown from its original state but remains
-without internal structure. Add it now.
-
-Also remove an extra newline.
+Move the creation of the links between external sub-devices and ISP
+sub-devices to the bound callback. This way we can also remove the need to
+access the sub-device's notifier field that will soon be removed.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Tested-by: Philipp Zabel <p.zabel@pengutronix.de> # imx6qp
+Tested_by: Niklas Söderlund <niklas.soderlund@ragnatech.se> # rcar + adv746x
+Tested-by: Aishwarya Kothari <aishwarya.kothari@toradex.com> # Apalis i.MX6Q with TC358743
 ---
- .../driver-api/media/v4l2-subdev.rst          | 19 ++++++++++++++++++-
- 1 file changed, 18 insertions(+), 1 deletion(-)
+ drivers/media/platform/ti/omap3isp/isp.c | 38 ++++++++++++------------
+ 1 file changed, 19 insertions(+), 19 deletions(-)
 
-diff --git a/Documentation/driver-api/media/v4l2-subdev.rst b/Documentation/driver-api/media/v4l2-subdev.rst
-index c46511c9b6c87..3cc56ac8d221c 100644
---- a/Documentation/driver-api/media/v4l2-subdev.rst
-+++ b/Documentation/driver-api/media/v4l2-subdev.rst
-@@ -157,6 +157,9 @@ below.
- Using one or the other registration method only affects the probing process, the
- run-time bridge-subdevice interaction is in both cases the same.
+diff --git a/drivers/media/platform/ti/omap3isp/isp.c b/drivers/media/platform/ti/omap3isp/isp.c
+index f3aaa9e76492e..c3872eadf5dff 100644
+--- a/drivers/media/platform/ti/omap3isp/isp.c
++++ b/drivers/media/platform/ti/omap3isp/isp.c
+@@ -2022,35 +2022,34 @@ enum isp_of_phy {
+ 	ISP_OF_PHY_CSIPHY2,
+ };
  
-+Registering synchronous sub-devices
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-+
- In the **synchronous** case a device (bridge) driver needs to register the
- :c:type:`v4l2_subdev` with the v4l2_device:
+-static int isp_subdev_notifier_complete(struct v4l2_async_notifier *async)
++static int isp_subdev_notifier_bound(struct v4l2_async_notifier *async,
++				     struct v4l2_subdev *sd,
++				     struct v4l2_async_subdev *asd)
+ {
+ 	struct isp_device *isp = container_of(async, struct isp_device,
+ 					      notifier);
+-	struct v4l2_device *v4l2_dev = &isp->v4l2_dev;
+-	struct v4l2_subdev *sd;
++	struct isp_bus_cfg *bus_cfg =
++		&container_of(asd, struct isp_async_subdev, asd)->bus;
+ 	int ret;
  
-@@ -175,10 +178,12 @@ You can unregister a sub-device using:
- 	:c:func:`v4l2_device_unregister_subdev <v4l2_device_unregister_subdev>`
- 	(:c:type:`sd <v4l2_subdev>`).
+ 	mutex_lock(&isp->media_dev.graph_mutex);
++	ret = isp_link_entity(isp, &sd->entity, bus_cfg->interface);
++	mutex_unlock(&isp->media_dev.graph_mutex);
  
+-	ret = media_entity_enum_init(&isp->crashed, &isp->media_dev);
+-	if (ret) {
+-		mutex_unlock(&isp->media_dev.graph_mutex);
+-		return ret;
+-	}
 -
- Afterwards the subdev module can be unloaded and
- :c:type:`sd <v4l2_subdev>`->dev == ``NULL``.
+-	list_for_each_entry(sd, &v4l2_dev->subdevs, list) {
+-		if (sd->notifier != &isp->notifier)
+-			continue;
++	return ret;
++}
  
-+Registering asynchronous sub-devices
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-+
- In the **asynchronous** case subdevice probing can be invoked independently of
- the bridge driver availability. The subdevice driver then has to verify whether
- all the requirements for a successful probing are satisfied. This can include a
-@@ -190,6 +195,9 @@ performed using the :c:func:`v4l2_async_unregister_subdev` call. Subdevices
- registered this way are stored in a global list of subdevices, ready to be
- picked up by bridge drivers.
+-		ret = isp_link_entity(isp, &sd->entity,
+-				      v4l2_subdev_to_bus_cfg(sd)->interface);
+-		if (ret < 0) {
+-			mutex_unlock(&isp->media_dev.graph_mutex);
+-			return ret;
+-		}
+-	}
++static int isp_subdev_notifier_complete(struct v4l2_async_notifier *async)
++{
++	struct isp_device *isp = container_of(async, struct isp_device,
++					      notifier);
++	int ret;
  
-+Asynchronous sub-device notifiers
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-+
- Bridge drivers in turn have to register a notifier object. This is
- performed using the :c:func:`v4l2_async_nf_register` call. To
- unregister the notifier the driver has to call
-@@ -208,12 +216,18 @@ the needs of the driver.
- :c:func:`v4l2_async_nf_add_i2c` are for bridge and ISP drivers for
- registering their async sub-devices with the notifier.
++	mutex_lock(&isp->media_dev.graph_mutex);
++	ret = media_entity_enum_init(&isp->crashed, &isp->media_dev);
+ 	mutex_unlock(&isp->media_dev.graph_mutex);
++	if (ret)
++		return ret;
  
-+Asynchronous sub-device registration helper for camera sensor drivers
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-+
- :c:func:`v4l2_async_register_subdev_sensor` is a helper function for
- sensor drivers registering their own async sub-device, but it also registers a
- notifier and further registers async sub-devices for lens and flash devices
- found in firmware. The notifier for the sub-device is unregistered with the
- async sub-device.
+ 	ret = v4l2_device_register_subdev_nodes(&isp->v4l2_dev);
+ 	if (ret < 0)
+@@ -2240,6 +2239,7 @@ static int isp_parse_of_endpoints(struct isp_device *isp)
+ }
  
-+Asynchronous sub-device notifier example
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-+
- These functions allocate an async sub-device descriptor which is of type struct
- :c:type:`v4l2_async_subdev` embedded in a driver-specific struct. The &struct
- :c:type:`v4l2_async_subdev` shall be the first member of this struct:
-@@ -237,6 +251,9 @@ These functions allocate an async sub-device descriptor which is of type struct
- 	if (IS_ERR(my_asd))
- 		return PTR_ERR(my_asd);
+ static const struct v4l2_async_notifier_operations isp_subdev_notifier_ops = {
++	.bound = isp_subdev_notifier_bound,
+ 	.complete = isp_subdev_notifier_complete,
+ };
  
-+Asynchronous sub-device notifier callbacks
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-+
- The V4L2 core will then use these descriptors to match asynchronously
- registered subdevices to them. If a match is detected the ``.bound()``
- notifier callback is called. After all subdevices have been located the
 -- 
 2.39.2
 
