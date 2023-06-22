@@ -2,49 +2,49 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDFAAEB64D8
-	for <linux-media@archiver.kernel.org>; Thu, 22 Jun 2023 11:41:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 30C27EB64DB
+	for <linux-media@archiver.kernel.org>; Thu, 22 Jun 2023 11:41:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230452AbjFVLlR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 22 Jun 2023 07:41:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42230 "EHLO
+        id S230348AbjFVLlT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 22 Jun 2023 07:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230348AbjFVLlO (ORCPT
+        with ESMTP id S230373AbjFVLlP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 22 Jun 2023 07:41:14 -0400
+        Thu, 22 Jun 2023 07:41:15 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659611BF9
-        for <linux-media@vger.kernel.org>; Thu, 22 Jun 2023 04:41:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C781BFA
+        for <linux-media@vger.kernel.org>; Thu, 22 Jun 2023 04:41:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687434073; x=1718970073;
+  t=1687434074; x=1718970074;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=/mTSxL7PYp2oPVqyLDTgbCsgQArjvs6KJotDNsCK3C0=;
-  b=k6CUGhFH+Uloj5yCirrJZQjyNCVYAE3bbob87J5l/rwCx/z/3g0uL2g+
-   Y6pggh00sY+D/tAUYgjlqXOfv8bqKOttpwvKSBxiANDs4x9Gt5Z0fzSB1
-   fUAuo2tShKK7HwrRPYwhGcCG5uzp3PFd+zdo8V21hIpSIL9iBWj3my1CM
-   4lwv6cZ6VWA4/BI6cm5FsqsgtGn6KfkC1Go2Q46OS0EHdembl/rwmun6g
-   edbabi18cAHNVn3cL/UzMyXfxkROc/uVo6Yxt3ip/tB8hvoUPUSOmOFW3
-   NS0geIyKMbZwW0NXyZsoGjSUvO3v7ng/qOu1SZd2Hohu5oHCi3rRTmVVG
+  bh=R2FNkjx4T3KNkjouUEJN8Bwxx1yTC+kK1Zh4mi578QI=;
+  b=fj/ScAGb4fIBispdfqMv+lEFqEBWZ/YKiBgxKl1NsMgQXBk///2fH58m
+   tZmCC0Ugdg6nwAAgsoaMyotsRO0Bh/OXzzZ45/eCXSraywPFdHb/aV2Zt
+   5OXrA38vAMzKAyatTmTTBB0MQsAYs9ka4suenkJfNC1HKOXSZLNmkCmNQ
+   KqHLw51VVJynEoWtguSIGgwnRFHFFi+tQ9abVj9FFWfLEyE4xjXDSCWI8
+   jkhgBNlVY5zU2MvtUECrkK66WfX0HttKulnMH0T/G2aGV6q8MerAV8Wv4
+   0eemJ9UXWjPhTnqw50seIuPIB6V6TFoL9TtZebrH3J/FwDN7P6gYJ1nl+
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="357957619"
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="357957685"
 X-IronPort-AV: E=Sophos;i="6.00,263,1681196400"; 
-   d="scan'208";a="357957619"
+   d="scan'208";a="357957685"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
   by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 04:41:10 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="804749891"
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="804749898"
 X-IronPort-AV: E=Sophos;i="6.00,263,1681196400"; 
-   d="scan'208";a="804749891"
+   d="scan'208";a="804749898"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 04:41:02 -0700
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 04:41:03 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id E1C22120B44;
-        Thu, 22 Jun 2023 14:40:50 +0300 (EEST)
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 0312D120BBB;
+        Thu, 22 Jun 2023 14:40:51 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1qCIg2-003oSa-2g;
+        id 1qCIg2-003oSz-2y;
         Thu, 22 Jun 2023 14:40:38 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
@@ -76,9 +76,9 @@ Cc:     laurent.pinchart@ideasonboard.com,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Sowjanya Komatineni <skomatineni@nvidia.com>,
         Marco Felsch <m.felsch@pengutronix.de>
-Subject: [PATCH v4 09/38] media: Documentation: v4l: Document missing async subdev function
-Date:   Thu, 22 Jun 2023 14:39:59 +0300
-Message-Id: <20230622114028.908825-10-sakari.ailus@linux.intel.com>
+Subject: [PATCH v4 14/38] media: v4l: async: Make V4L2 async match information a struct
+Date:   Thu, 22 Jun 2023 14:40:04 +0300
+Message-Id: <20230622114028.908825-15-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230622114028.908825-1-sakari.ailus@linux.intel.com>
 References: <20230622114028.908825-1-sakari.ailus@linux.intel.com>
@@ -89,8 +89,11 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Also v4l2_async_nf_add_fwnode() may be used to add an async sub-device
-descriptor to a notifier. Document this. Also remove a redundant sentence.
+Make V4L2 async match information a struct, making it easier to use it
+elsewhere outside the scope of struct v4l2_async_subdev.
+
+Also remove an obsolete comment --- none of these fields are supposed to
+be touched by drivers.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Tested-by: Philipp Zabel <p.zabel@pengutronix.de> # imx6qp
@@ -98,34 +101,158 @@ Tested_by: Niklas Söderlund <niklas.soderlund@ragnatech.se> # rcar + adv746x
 Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 Tested-by: Aishwarya Kothari <aishwarya.kothari@toradex.com> # Apalis i.MX6Q with TC358743
 ---
- Documentation/driver-api/media/v4l2-subdev.rst | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
+ drivers/media/v4l2-core/v4l2-async.c | 18 ++++++------
+ include/media/v4l2-async.h           | 41 ++++++++++++++++------------
+ 2 files changed, 32 insertions(+), 27 deletions(-)
 
-diff --git a/Documentation/driver-api/media/v4l2-subdev.rst b/Documentation/driver-api/media/v4l2-subdev.rst
-index 646bd00068be2..e463ab4a3413a 100644
---- a/Documentation/driver-api/media/v4l2-subdev.rst
-+++ b/Documentation/driver-api/media/v4l2-subdev.rst
-@@ -206,15 +206,11 @@ takes two arguments: a pointer to struct :c:type:`v4l2_device` and a
- pointer to struct :c:type:`v4l2_async_notifier`.
+diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
+index 925ab5571cd48..5aa8ab83eb8da 100644
+--- a/drivers/media/v4l2-core/v4l2-async.c
++++ b/drivers/media/v4l2-core/v4l2-async.c
+@@ -212,7 +212,7 @@ v4l2_async_find_match(struct v4l2_async_notifier *notifier,
  
- Before registering the notifier, bridge drivers must do two things: first, the
--notifier must be initialized using the :c:func:`v4l2_async_nf_init`.
--Second, bridge drivers can then begin to form a list of subdevice descriptors
--that the bridge device needs for its operation. Several functions are available
--to add subdevice descriptors to a notifier, depending on the type of device and
--the needs of the driver.
+ 	list_for_each_entry(asd, &notifier->waiting, list) {
+ 		/* bus_type has been verified valid before */
+-		switch (asd->match_type) {
++		switch (asd->match.type) {
+ 		case V4L2_ASYNC_MATCH_I2C:
+ 			match = match_i2c;
+ 			break;
+@@ -237,10 +237,10 @@ v4l2_async_find_match(struct v4l2_async_notifier *notifier,
+ static bool asd_equal(struct v4l2_async_subdev *asd_x,
+ 		      struct v4l2_async_subdev *asd_y)
+ {
+-	if (asd_x->match_type != asd_y->match_type)
++	if (asd_x->match.type != asd_y->match.type)
+ 		return false;
+ 
+-	switch (asd_x->match_type) {
++	switch (asd_x->match.type) {
+ 	case V4L2_ASYNC_MATCH_I2C:
+ 		return asd_x->match.i2c.adapter_id ==
+ 			asd_y->match.i2c.adapter_id &&
+@@ -554,7 +554,7 @@ static int v4l2_async_nf_asd_valid(struct v4l2_async_notifier *notifier,
+ {
+ 	struct device *dev = notifier_dev(notifier);
+ 
+-	switch (asd->match_type) {
++	switch (asd->match.type) {
+ 	case V4L2_ASYNC_MATCH_I2C:
+ 	case V4L2_ASYNC_MATCH_FWNODE:
+ 		if (v4l2_async_nf_has_async_subdev(notifier, asd, skip_self)) {
+@@ -564,7 +564,7 @@ static int v4l2_async_nf_asd_valid(struct v4l2_async_notifier *notifier,
+ 		break;
+ 	default:
+ 		dev_err(dev, "v4l2-async: Invalid match type %u on %p\n",
+-			asd->match_type, asd);
++			asd->match.type, asd);
+ 		return -EINVAL;
+ 	}
+ 
+@@ -690,7 +690,7 @@ static void __v4l2_async_nf_cleanup(struct v4l2_async_notifier *notifier)
+ 		return;
+ 
+ 	list_for_each_entry_safe(asd, tmp, &notifier->asd_list, asd_list) {
+-		switch (asd->match_type) {
++		switch (asd->match.type) {
+ 		case V4L2_ASYNC_MATCH_FWNODE:
+ 			fwnode_handle_put(asd->match.fwnode);
+ 			break;
+@@ -745,7 +745,7 @@ __v4l2_async_nf_add_fwnode(struct v4l2_async_notifier *notifier,
+ 	if (!asd)
+ 		return ERR_PTR(-ENOMEM);
+ 
+-	asd->match_type = V4L2_ASYNC_MATCH_FWNODE;
++	asd->match.type = V4L2_ASYNC_MATCH_FWNODE;
+ 	asd->match.fwnode = fwnode_handle_get(fwnode);
+ 
+ 	ret = __v4l2_async_nf_add_subdev(notifier, asd);
+@@ -792,7 +792,7 @@ __v4l2_async_nf_add_i2c(struct v4l2_async_notifier *notifier, int adapter_id,
+ 	if (!asd)
+ 		return ERR_PTR(-ENOMEM);
+ 
+-	asd->match_type = V4L2_ASYNC_MATCH_I2C;
++	asd->match.type = V4L2_ASYNC_MATCH_I2C;
+ 	asd->match.i2c.adapter_id = adapter_id;
+ 	asd->match.i2c.address = address;
+ 
+@@ -905,7 +905,7 @@ EXPORT_SYMBOL(v4l2_async_unregister_subdev);
+ static void print_waiting_subdev(struct seq_file *s,
+ 				 struct v4l2_async_subdev *asd)
+ {
+-	switch (asd->match_type) {
++	switch (asd->match.type) {
+ 	case V4L2_ASYNC_MATCH_I2C:
+ 		seq_printf(s, " [i2c] dev=%d-%04x\n", asd->match.i2c.adapter_id,
+ 			   asd->match.i2c.address);
+diff --git a/include/media/v4l2-async.h b/include/media/v4l2-async.h
+index 2c9baa3c9266a..d347ef32f4ecb 100644
+--- a/include/media/v4l2-async.h
++++ b/include/media/v4l2-async.h
+@@ -34,23 +34,37 @@ enum v4l2_async_match_type {
+ };
+ 
+ /**
+- * struct v4l2_async_subdev - sub-device descriptor, as known to a bridge
++ * struct v4l2_async_match_desc - async sub-device match information
+  *
+- * @match_type:	type of match that will be used
+- * @match:	union of per-bus type matching data sets
+- * @match.fwnode:
+- *		pointer to &struct fwnode_handle to be matched.
++ * @type:	type of match that will be used
++ * @fwnode:	pointer to &struct fwnode_handle to be matched.
+  *		Used if @match_type is %V4L2_ASYNC_MATCH_FWNODE.
+- * @match.i2c:	embedded struct with I2C parameters to be matched.
++ * @i2c:	embedded struct with I2C parameters to be matched.
+  *		Both @match.i2c.adapter_id and @match.i2c.address
+  *		should be matched.
+  *		Used if @match_type is %V4L2_ASYNC_MATCH_I2C.
+- * @match.i2c.adapter_id:
++ * @i2c.adapter_id:
+  *		I2C adapter ID to be matched.
+  *		Used if @match_type is %V4L2_ASYNC_MATCH_I2C.
+- * @match.i2c.address:
++ * @i2c.address:
+  *		I2C address to be matched.
+  *		Used if @match_type is %V4L2_ASYNC_MATCH_I2C.
++ */
++struct v4l2_async_match_desc {
++	enum v4l2_async_match_type type;
++	union {
++		struct fwnode_handle *fwnode;
++		struct {
++			int adapter_id;
++			unsigned short address;
++		} i2c;
++	};
++};
++
++/**
++ * struct v4l2_async_subdev - sub-device descriptor, as known to a bridge
++ *
++ * @match:	struct of match type and per-bus type matching data sets
+  * @asd_list:	used to add struct v4l2_async_subdev objects to the
+  *		master notifier @asd_list
+  * @list:	used to link struct v4l2_async_subdev objects, waiting to be
+@@ -61,16 +75,7 @@ enum v4l2_async_match_type {
+  * v4l2_async_subdev as its first member.
+  */
+ struct v4l2_async_subdev {
+-	enum v4l2_async_match_type match_type;
+-	union {
+-		struct fwnode_handle *fwnode;
+-		struct {
+-			int adapter_id;
+-			unsigned short address;
+-		} i2c;
+-	} match;
 -
--:c:func:`v4l2_async_nf_add_fwnode_remote` and
--:c:func:`v4l2_async_nf_add_i2c` are for bridge and ISP drivers for
--registering their async sub-devices with the notifier.
-+notifier must be initialized using the :c:func:`v4l2_async_nf_init`.  Second,
-+bridge drivers can then begin to form a list of subdevice descriptors that the
-+bridge device needs for its operation. :c:func:`v4l2_async_nf_add_fwnode`,
-+:c:func:`v4l2_async_nf_add_fwnode_remote` and :c:func:`v4l2_async_nf_add_i2c`
-+are available for that purpose.
- 
- Asynchronous sub-device registration helper for camera sensor drivers
- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-	/* v4l2-async core private: not to be used by drivers */
++	struct v4l2_async_match_desc match;
+ 	struct list_head list;
+ 	struct list_head asd_list;
+ };
 -- 
 2.39.2
 
