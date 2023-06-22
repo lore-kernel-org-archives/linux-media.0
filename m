@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51D7CC001B3
-	for <linux-media@archiver.kernel.org>; Thu, 22 Jun 2023 13:14:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59E58EB64DD
+	for <linux-media@archiver.kernel.org>; Thu, 22 Jun 2023 13:14:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231650AbjFVNOJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 22 Jun 2023 09:14:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32852 "EHLO
+        id S231659AbjFVNOM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 22 Jun 2023 09:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231601AbjFVNOC (ORCPT
+        with ESMTP id S231586AbjFVNOB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 22 Jun 2023 09:14:02 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C519D1BD3;
-        Thu, 22 Jun 2023 06:14:01 -0700 (PDT)
+        Thu, 22 Jun 2023 09:14:01 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EDCF1BD7;
+        Thu, 22 Jun 2023 06:14:00 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:7d72:676c:e745:a6ef])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4B4B8660712D;
-        Thu, 22 Jun 2023 14:14:00 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id CAD856607121;
+        Thu, 22 Jun 2023 14:13:58 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687439640;
-        bh=ZiJZeCrdYyJk6ji66RurI+0QVQYXWWl0hCRxE21ZIiQ=;
+        s=mail; t=1687439639;
+        bh=AARgP4b8y2Xc1aS5YL8NqmR9rbb2o30p7zaaWtG32hU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U0zsmGVCsQ+HRf88BblNgvRpabk8rpioN4X5sKdE9Z0Qe9DGe9cNQE0k1E8fE9HCx
-         i0/LkBviZzhZnivGLqThkTSmEp7ueCMhIPoeQw2Xq6Yu5+Y8TalLwt7mDSlGOsy1Hm
-         Kmf7ugd6oCy8LNL0mI2psUJUEgddM4VbBrFdqzapOKCEcyZgNpeHVkaaPoOs0XZ9H/
-         Lh3Dp1q/ja1beetzo7WsEbILf+X0S3GQWpf7rMypG1wEyE61OoaiLdFNReduOSmHEv
-         quEqtqd3ja49w1clhV8+nHtlQ+oFqbO+m6lnfhva6eIeI3rZxjNy1aN+BfIwQCR6AA
-         diw36mypgVTyA==
+        b=ZxTiNMH1hDCi1nmk94lamG1X/2drYWUgcsGIuJCmAR05Ubc5m56NTZ+iGvO/n0COj
+         nne8y6hoklBPJ4I4t+WDe+eTO2xu+fS1eTuXPRnUScsede9aTvM654IoXdkFqk/GnG
+         3mlubjY9Uu2T3PqDO/7ETnGGa7FqWaMwdW5l/zCaTM9bRqXcsyj6ro6OMKhffFAnL6
+         jUETkWD2LsuwYKGL2MAfHw4aQEE6iuZZD+SfZ8qz1s9PM68lv2tgozf3XHVDQd3dHi
+         k5RcUi5+R72uhu9shyNTsVUXzQDGH02zvUa16zSSJTA1JSma86yxCtjJ7lcwBFsmUI
+         rQ2YJSV5cVQ1A==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -43,9 +43,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v3 06/11] media: verisilicon: Store chroma and motion vectors offset
-Date:   Thu, 22 Jun 2023 15:13:44 +0200
-Message-Id: <20230622131349.144160-7-benjamin.gaignard@collabora.com>
+Subject: [PATCH v3 03/11] media: videobuf2: Remove VB2_MAX_FRAME limit on buffer storage
+Date:   Thu, 22 Jun 2023 15:13:41 +0200
+Message-Id: <20230622131349.144160-4-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230622131349.144160-1-benjamin.gaignard@collabora.com>
 References: <20230622131349.144160-1-benjamin.gaignard@collabora.com>
@@ -55,63 +55,63 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Store computed values of chroma and motion vectors offset because
-they depends on width and height values which change if the resolution
-change.
+Remove VB2_MAX_FRAME buffer limit since Xarray allows to store
+more than that.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- drivers/media/platform/verisilicon/hantro.h            | 2 ++
- drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c | 6 ++++--
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ drivers/media/common/videobuf2/videobuf2-core.c | 15 +++++----------
+ 1 file changed, 5 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/media/platform/verisilicon/hantro.h
-index bd0dca11b90a..16c7e9bafde3 100644
---- a/drivers/media/platform/verisilicon/hantro.h
-+++ b/drivers/media/platform/verisilicon/hantro.h
-@@ -320,6 +320,8 @@ struct hantro_vp9_decoded_buffer_info {
- 	/* Info needed when the decoded frame serves as a reference frame. */
- 	unsigned short width;
- 	unsigned short height;
-+	size_t chroma_offset;
-+	size_t mv_offset;
- 	u32 bit_depth : 4;
- };
+diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
+index f1ff7af34a9f..86e1e926fa45 100644
+--- a/drivers/media/common/videobuf2/videobuf2-core.c
++++ b/drivers/media/common/videobuf2/videobuf2-core.c
+@@ -455,9 +455,9 @@ static int __vb2_queue_alloc(struct vb2_queue *q, enum vb2_memory memory,
+ 	struct vb2_buffer *vb;
+ 	int ret;
  
-diff --git a/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c b/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
-index 6fc4b555517f..6db1c32fce4d 100644
---- a/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
-+++ b/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
-@@ -158,9 +158,11 @@ static void config_output(struct hantro_ctx *ctx,
+-	/* Ensure that q->num_buffers+num_buffers is below VB2_MAX_FRAME */
++	/* Ensure that q->num_buffers + num_buffers is UINT_MAX */
+ 	num_buffers = min_t(unsigned int, num_buffers,
+-			    VB2_MAX_FRAME - q->num_buffers);
++			    UINT_MAX - q->num_buffers);
  
- 	chroma_addr = luma_addr + chroma_offset(ctx, dec_params);
- 	hantro_write_addr(ctx->dev, G2_OUT_CHROMA_ADDR, chroma_addr);
-+	dst->vp9.chroma_offset = chroma_offset(ctx, dec_params);
+ 	for (buffer = 0; buffer < num_buffers; ++buffer) {
+ 		/* Allocate vb2 buffer structures */
+@@ -858,9 +858,9 @@ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
+ 	/*
+ 	 * Make sure the requested values and current defaults are sane.
+ 	 */
+-	WARN_ON(q->min_buffers_needed > VB2_MAX_FRAME);
++	WARN_ON(q->min_buffers_needed > UINT_MAX);
+ 	num_buffers = max_t(unsigned int, *count, q->min_buffers_needed);
+-	num_buffers = min_t(unsigned int, num_buffers, VB2_MAX_FRAME);
++	num_buffers = min_t(unsigned int, num_buffers, UINT_MAX);
+ 	memset(q->alloc_devs, 0, sizeof(q->alloc_devs));
+ 	/*
+ 	 * Set this now to ensure that drivers see the correct q->memory value
+@@ -976,11 +976,6 @@ int vb2_core_create_bufs(struct vb2_queue *q, enum vb2_memory memory,
+ 	bool no_previous_buffers = !q->num_buffers;
+ 	int ret;
  
- 	mv_addr = luma_addr + mv_offset(ctx, dec_params);
- 	hantro_write_addr(ctx->dev, G2_OUT_MV_ADDR, mv_addr);
-+	dst->vp9.mv_offset = mv_offset(ctx, dec_params);
- }
+-	if (q->num_buffers == VB2_MAX_FRAME) {
+-		dprintk(q, 1, "maximum number of buffers already allocated\n");
+-		return -ENOBUFS;
+-	}
+-
+ 	if (no_previous_buffers) {
+ 		if (q->waiting_in_dqbuf && *count) {
+ 			dprintk(q, 1, "another dup()ped fd is waiting for a buffer\n");
+@@ -1005,7 +1000,7 @@ int vb2_core_create_bufs(struct vb2_queue *q, enum vb2_memory memory,
+ 			return -EINVAL;
+ 	}
  
- struct hantro_vp9_ref_reg {
-@@ -195,7 +197,7 @@ static void config_ref(struct hantro_ctx *ctx,
- 	luma_addr = hantro_get_dec_buf_addr(ctx, &buf->base.vb.vb2_buf);
- 	hantro_write_addr(ctx->dev, ref_reg->y_base, luma_addr);
+-	num_buffers = min(*count, VB2_MAX_FRAME - q->num_buffers);
++	num_buffers = min(*count, UINT_MAX - q->num_buffers);
  
--	chroma_addr = luma_addr + chroma_offset(ctx, dec_params);
-+	chroma_addr = luma_addr + buf->vp9.chroma_offset;
- 	hantro_write_addr(ctx->dev, ref_reg->c_base, chroma_addr);
- }
- 
-@@ -238,7 +240,7 @@ static void config_ref_registers(struct hantro_ctx *ctx,
- 	config_ref(ctx, dst, &ref_regs[2], dec_params, dec_params->alt_frame_ts);
- 
- 	mv_addr = hantro_get_dec_buf_addr(ctx, &mv_ref->base.vb.vb2_buf) +
--		  mv_offset(ctx, dec_params);
-+		  mv_ref->vp9.mv_offset;
- 	hantro_write_addr(ctx->dev, G2_REF_MV_ADDR(0), mv_addr);
- 
- 	hantro_reg_write(ctx->dev, &vp9_last_sign_bias,
+ 	if (requested_planes && requested_sizes) {
+ 		num_planes = requested_planes;
 -- 
 2.39.2
 
