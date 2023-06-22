@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E14D8EB64D8
-	for <linux-media@archiver.kernel.org>; Thu, 22 Jun 2023 13:14:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51D7CC001B3
+	for <linux-media@archiver.kernel.org>; Thu, 22 Jun 2023 13:14:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbjFVNOI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 22 Jun 2023 09:14:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32850 "EHLO
+        id S231650AbjFVNOJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 22 Jun 2023 09:14:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbjFVNOC (ORCPT
+        with ESMTP id S231601AbjFVNOC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 22 Jun 2023 09:14:02 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98831BF5;
-        Thu, 22 Jun 2023 06:14:00 -0700 (PDT)
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C519D1BD3;
+        Thu, 22 Jun 2023 06:14:01 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:7d72:676c:e745:a6ef])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4DD366607128;
-        Thu, 22 Jun 2023 14:13:59 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4B4B8660712D;
+        Thu, 22 Jun 2023 14:14:00 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687439639;
-        bh=Gzf/ktNZ3NOcffLCLpulGdLdygvof7OsvFbMBCI7WyY=;
+        s=mail; t=1687439640;
+        bh=ZiJZeCrdYyJk6ji66RurI+0QVQYXWWl0hCRxE21ZIiQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aMvDuxSN0D+ICceIa2k0/8ICJfyucHrHRy6tMCtP/unZ6iPcQKKAEFLkWsTfyZZKa
-         tYZvz+3gLPPQgWb5r2zlBEe0pFVZEHNFtzut4Y2T929FVyI6i1VRb5DpNhpRGOljp8
-         8ChyFAD7r82W9PHtPu4lrMufSVdbn+TERA+ogPra54nVT1haZrF3K6Hd5NL7Po/6jX
-         mCpx047zWZHtydN5YRQypOVaHxAxXx0tJgal/ffcKkpC6Q+o3m8R3dICGjJz6aqD98
-         eM0fO8vwWuZcWWfz5EyZzI2f9vUdJ0vr03/nsSOcUe3jyH+deoHQMw9RBI+u1WworB
-         /9QEx87W6XWaA==
+        b=U0zsmGVCsQ+HRf88BblNgvRpabk8rpioN4X5sKdE9Z0Qe9DGe9cNQE0k1E8fE9HCx
+         i0/LkBviZzhZnivGLqThkTSmEp7ueCMhIPoeQw2Xq6Yu5+Y8TalLwt7mDSlGOsy1Hm
+         Kmf7ugd6oCy8LNL0mI2psUJUEgddM4VbBrFdqzapOKCEcyZgNpeHVkaaPoOs0XZ9H/
+         Lh3Dp1q/ja1beetzo7WsEbILf+X0S3GQWpf7rMypG1wEyE61OoaiLdFNReduOSmHEv
+         quEqtqd3ja49w1clhV8+nHtlQ+oFqbO+m6lnfhva6eIeI3rZxjNy1aN+BfIwQCR6AA
+         diw36mypgVTyA==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -43,9 +43,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v3 04/11] media: videobuf2: Stop define VB2_MAX_FRAME as global
-Date:   Thu, 22 Jun 2023 15:13:42 +0200
-Message-Id: <20230622131349.144160-5-benjamin.gaignard@collabora.com>
+Subject: [PATCH v3 06/11] media: verisilicon: Store chroma and motion vectors offset
+Date:   Thu, 22 Jun 2023 15:13:44 +0200
+Message-Id: <20230622131349.144160-7-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230622131349.144160-1-benjamin.gaignard@collabora.com>
 References: <20230622131349.144160-1-benjamin.gaignard@collabora.com>
@@ -55,127 +55,63 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-After changing bufs arrays to a dynamic allocated array
-VB2_MAX_FRAME doesn't mean anything for videobuf2 core.
-Remove it from the core definitions but keep it for drivers internal
-needs.
+Store computed values of chroma and motion vectors offset because
+they depends on width and height values which change if the resolution
+change.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- drivers/media/common/videobuf2/videobuf2-core.c               | 2 ++
- drivers/media/platform/amphion/vdec.c                         | 1 +
- .../media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c | 2 ++
- drivers/media/platform/qcom/venus/hfi.h                       | 2 ++
- drivers/media/platform/verisilicon/hantro_hw.h                | 2 ++
- drivers/staging/media/ipu3/ipu3-v4l2.c                        | 2 ++
- include/media/videobuf2-core.h                                | 1 -
- include/media/videobuf2-v4l2.h                                | 4 ----
- 8 files changed, 11 insertions(+), 5 deletions(-)
+ drivers/media/platform/verisilicon/hantro.h            | 2 ++
+ drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c | 6 ++++--
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
-index 86e1e926fa45..899783f67580 100644
---- a/drivers/media/common/videobuf2/videobuf2-core.c
-+++ b/drivers/media/common/videobuf2/videobuf2-core.c
-@@ -31,6 +31,8 @@
+diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/media/platform/verisilicon/hantro.h
+index bd0dca11b90a..16c7e9bafde3 100644
+--- a/drivers/media/platform/verisilicon/hantro.h
++++ b/drivers/media/platform/verisilicon/hantro.h
+@@ -320,6 +320,8 @@ struct hantro_vp9_decoded_buffer_info {
+ 	/* Info needed when the decoded frame serves as a reference frame. */
+ 	unsigned short width;
+ 	unsigned short height;
++	size_t chroma_offset;
++	size_t mv_offset;
+ 	u32 bit_depth : 4;
+ };
  
- #include <trace/events/vb2.h>
+diff --git a/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c b/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
+index 6fc4b555517f..6db1c32fce4d 100644
+--- a/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
++++ b/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
+@@ -158,9 +158,11 @@ static void config_output(struct hantro_ctx *ctx,
  
-+#define VB2_MAX_FRAME	32
-+
- static int debug;
- module_param(debug, int, 0644);
+ 	chroma_addr = luma_addr + chroma_offset(ctx, dec_params);
+ 	hantro_write_addr(ctx->dev, G2_OUT_CHROMA_ADDR, chroma_addr);
++	dst->vp9.chroma_offset = chroma_offset(ctx, dec_params);
  
-diff --git a/drivers/media/platform/amphion/vdec.c b/drivers/media/platform/amphion/vdec.c
-index 3fa1a74a2e20..b3219f6d17fa 100644
---- a/drivers/media/platform/amphion/vdec.c
-+++ b/drivers/media/platform/amphion/vdec.c
-@@ -28,6 +28,7 @@
+ 	mv_addr = luma_addr + mv_offset(ctx, dec_params);
+ 	hantro_write_addr(ctx->dev, G2_OUT_MV_ADDR, mv_addr);
++	dst->vp9.mv_offset = mv_offset(ctx, dec_params);
+ }
  
- #define VDEC_MIN_BUFFER_CAP		8
- #define VDEC_MIN_BUFFER_OUT		8
-+#define VB2_MAX_FRAME			32
+ struct hantro_vp9_ref_reg {
+@@ -195,7 +197,7 @@ static void config_ref(struct hantro_ctx *ctx,
+ 	luma_addr = hantro_get_dec_buf_addr(ctx, &buf->base.vb.vb2_buf);
+ 	hantro_write_addr(ctx->dev, ref_reg->y_base, luma_addr);
  
- struct vdec_fs_info {
- 	char name[8];
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-index 6532a69f1fa8..a1e0f24bb91c 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-@@ -16,6 +16,8 @@
- #include "../vdec_drv_if.h"
- #include "../vdec_vpu_if.h"
+-	chroma_addr = luma_addr + chroma_offset(ctx, dec_params);
++	chroma_addr = luma_addr + buf->vp9.chroma_offset;
+ 	hantro_write_addr(ctx->dev, ref_reg->c_base, chroma_addr);
+ }
  
-+#define VB2_MAX_FRAME	32
-+
- /* reset_frame_context defined in VP9 spec */
- #define VP9_RESET_FRAME_CONTEXT_NONE0 0
- #define VP9_RESET_FRAME_CONTEXT_NONE1 1
-diff --git a/drivers/media/platform/qcom/venus/hfi.h b/drivers/media/platform/qcom/venus/hfi.h
-index f25d412d6553..bd5ca5a8b945 100644
---- a/drivers/media/platform/qcom/venus/hfi.h
-+++ b/drivers/media/platform/qcom/venus/hfi.h
-@@ -10,6 +10,8 @@
+@@ -238,7 +240,7 @@ static void config_ref_registers(struct hantro_ctx *ctx,
+ 	config_ref(ctx, dst, &ref_regs[2], dec_params, dec_params->alt_frame_ts);
  
- #include "hfi_helper.h"
+ 	mv_addr = hantro_get_dec_buf_addr(ctx, &mv_ref->base.vb.vb2_buf) +
+-		  mv_offset(ctx, dec_params);
++		  mv_ref->vp9.mv_offset;
+ 	hantro_write_addr(ctx->dev, G2_REF_MV_ADDR(0), mv_addr);
  
-+#define VB2_MAX_FRAME				32
-+
- #define VIDC_SESSION_TYPE_VPE			0
- #define VIDC_SESSION_TYPE_ENC			1
- #define VIDC_SESSION_TYPE_DEC			2
-diff --git a/drivers/media/platform/verisilicon/hantro_hw.h b/drivers/media/platform/verisilicon/hantro_hw.h
-index e83f0c523a30..9e8faf7ba6fb 100644
---- a/drivers/media/platform/verisilicon/hantro_hw.h
-+++ b/drivers/media/platform/verisilicon/hantro_hw.h
-@@ -15,6 +15,8 @@
- #include <media/v4l2-vp9.h>
- #include <media/videobuf2-core.h>
- 
-+#define VB2_MAX_FRAME	32
-+
- #define DEC_8190_ALIGN_MASK	0x07U
- 
- #define MB_DIM			16
-diff --git a/drivers/staging/media/ipu3/ipu3-v4l2.c b/drivers/staging/media/ipu3/ipu3-v4l2.c
-index e530767e80a5..6627b5c2d4d6 100644
---- a/drivers/staging/media/ipu3/ipu3-v4l2.c
-+++ b/drivers/staging/media/ipu3/ipu3-v4l2.c
-@@ -10,6 +10,8 @@
- #include "ipu3.h"
- #include "ipu3-dmamap.h"
- 
-+#define VB2_MAX_FRAME	32
-+
- /******************** v4l2_subdev_ops ********************/
- 
- #define IPU3_RUNNING_MODE_VIDEO		0
-diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
-index 77921cf894ef..080b783d608d 100644
---- a/include/media/videobuf2-core.h
-+++ b/include/media/videobuf2-core.h
-@@ -20,7 +20,6 @@
- #include <media/media-request.h>
- #include <media/frame_vector.h>
- 
--#define VB2_MAX_FRAME	(32)
- #define VB2_MAX_PLANES	(8)
- 
- /**
-diff --git a/include/media/videobuf2-v4l2.h b/include/media/videobuf2-v4l2.h
-index 5a845887850b..88a7a565170e 100644
---- a/include/media/videobuf2-v4l2.h
-+++ b/include/media/videobuf2-v4l2.h
-@@ -15,10 +15,6 @@
- #include <linux/videodev2.h>
- #include <media/videobuf2-core.h>
- 
--#if VB2_MAX_FRAME != VIDEO_MAX_FRAME
--#error VB2_MAX_FRAME != VIDEO_MAX_FRAME
--#endif
--
- #if VB2_MAX_PLANES != VIDEO_MAX_PLANES
- #error VB2_MAX_PLANES != VIDEO_MAX_PLANES
- #endif
+ 	hantro_reg_write(ctx->dev, &vp9_last_sign_bias,
 -- 
 2.39.2
 
