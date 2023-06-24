@@ -2,94 +2,102 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 680FEEB64DD
-	for <linux-media@archiver.kernel.org>; Sat, 24 Jun 2023 02:43:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B865EB64DA
+	for <linux-media@archiver.kernel.org>; Sat, 24 Jun 2023 09:07:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbjFXCnH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 23 Jun 2023 22:43:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
+        id S232823AbjFXJH1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 24 Jun 2023 05:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjFXCnG (ORCPT
+        with ESMTP id S230432AbjFXJH0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 23 Jun 2023 22:43:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71772E1
-        for <linux-media@vger.kernel.org>; Fri, 23 Jun 2023 19:43:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0568861B8D
-        for <linux-media@vger.kernel.org>; Sat, 24 Jun 2023 02:43:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07CCBC433C8
-        for <linux-media@vger.kernel.org>; Sat, 24 Jun 2023 02:43:03 +0000 (UTC)
-Date:   Sat, 24 Jun 2023 04:43:01 +0200
-Message-ID: <60dd4897bc2446ac62c818b5dcaafe1d.hverkuil@xs4all.nl>
-From:   "Hans Verkuil" <hverkuil-cisco@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: ERRORS
+        Sat, 24 Jun 2023 05:07:26 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8876910F7
+        for <linux-media@vger.kernel.org>; Sat, 24 Jun 2023 02:07:20 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1qCzEi-0007xI-TW; Sat, 24 Jun 2023 11:07:16 +0200
+Message-ID: <7dd4f71e-afbd-2f0a-b6bb-8324916ab3d1@leemhuis.info>
+Date:   Sat, 24 Jun 2023 11:07:14 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] media: uvcvideo: Fix menu count handling for userspace XU
+ mappings
+Content-Language: en-US, de-DE
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Poncho <poncho@spahan.ch>
+Cc:     linux-media@vger.kernel.org,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        regressions@lists.linux.dev
+References: <20230606170919.GJ25679@pendragon.ideasonboard.com>
+ <20230606171150.12875-1-laurent.pinchart@ideasonboard.com>
+ <785fcf0b-3f63-a0da-3eea-f57124e99e15@spahan.ch>
+ <20230624002517.GF1669@pendragon.ideasonboard.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <20230624002517.GF1669@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1687597645;9a9f3238;
+X-HE-SMSGID: 1qCzEi-0007xI-TW
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the architectures in the list below.
+On 24.06.23 02:25, Laurent Pinchart wrote:
+> 
+> On Wed, Jun 21, 2023 at 05:26:39PM +0200, Poncho wrote:
+>> Hi Laurent
+>>
+>> Friendly ping. I think this patch was forgotten.
+> Thanks for the reminder. I'll send a pull request for v6.6.
 
-Results of the daily build of media_tree:
+Why 6.6? If this would be a feature I'd fully understand. But this
+afaics fixes a regression and thus should be handled as one, even if
+it's a regression from a earlier release. For details see this recent
+mail from Linus:
 
-date:			Sat Jun 24 03:00:06 CEST 2023
-media-tree git hash:	d78b9d6671decdaedb539635b1d0a34f8f5934f8
-v4l-utils git hash:	16e70e28584c3462b4a0745266cecc39d1fbb945
-edid-decode git hash:	a31e680438789d45207497bf999a20cf6e2c0ec1
-gcc version:		i686-linux-gcc (GCC) 13.1.0
-sparse repo:            git://git.kernel.org/pub/scm/devel/sparse/sparse.git
-sparse version:		v0.6.4-39-gce1a6720-dirty
-smatch repo:            git://repo.or.cz/smatch.git
-smatch version:		v0.5.0-8371-g475c3cec-dirty
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: 2edd9d2066000d3f99520e10945aa1803a4eafd7
-host hardware:		x86_64
-host os:		6.1.0-5-amd64
+https://lore.kernel.org/all/CAHk-=wis_qQy4oDNynNKi5b7Qhosmxtoj1jxo5wmB6SRUwQUBQ@mail.gmail.com/
 
-linux-git-sh: OK
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-arm-stm32: OK
-linux-git-arm-pxa: OK
-linux-git-mips: WARNINGS
-linux-git-arm-multi: WARNINGS
-linux-git-powerpc64: OK
-linux-git-arm64: OK
-linux-git-i686: WARNINGS
-linux-git-x86_64: WARNINGS
-Check COMPILE_TEST: WARNINGS: VIDEOBUF_VMALLOC VIDEOBUF_DMA_CONTIG
-Check for strcpy/strncpy/strlcpy: OK
-apps: WARNINGS
-spec-git: OK
-virtme: OK: Final Summary: 3080, Succeeded: 3080, Failed: 0, Warnings: 0
-virtme-32: OK: Final Summary: 3193, Succeeded: 3193, Failed: 0, Warnings: 0
-CONFIG_PM=n: OK
-CONFIG_PM_SLEEP=n: WARNINGS
-CONFIG_OF=n: WARNINGS
-CONFIG_DEBUG_FS=n: WARNINGS
-sparse: WARNINGS
-smatch: ERRORS
-kerneldoc: WARNINGS
+Side note: as it's a regression it would be good if this commit had a
+"CC: <stable..." tag as well.
 
-Detailed results are available here:
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
 
-https://hverkuil.home.xs4all.nl/logs/Saturday.log
-
-Detailed regression test results are available here:
-
-https://hverkuil.home.xs4all.nl/logs/Saturday-test-media.log
-https://hverkuil.home.xs4all.nl/logs/Saturday-test-media-32.log
-https://hverkuil.home.xs4all.nl/logs/Saturday-test-media-dmesg.log
-
-Full logs are available here:
-
-https://hverkuil.home.xs4all.nl/logs/Saturday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-https://hverkuil.home.xs4all.nl/spec/index.html
+>> On 06.06.23 19:11, Laurent Pinchart wrote:
+>>> When commit 716c330433e3 ("media: uvcvideo: Use standard names for
+>>> menus") reworked the handling of menu controls, it inadvertently
+>>> replaced a GENMASK(n - 1, 0) with a BIT_MASK(n). The latter isn't
+>>> equivalent to the former, which broke adding XU mappings from userspace.
+>>> Fix it.
+>>>
+>>> Reported-by: Poncho <poncho@spahan.ch>
+>>> Link: https://lore.kernel.org/linux-media/468a36ec-c3ac-cb47-e12f-5906239ae3cd@spahan.ch/
+>>> Fixes: 716c330433e3 ("media: uvcvideo: Use standard names for menus")
+>>> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+>>> ---
+>>> This is untested. Poncho, would you be able to test this patch to see if
+>>> it fixes your issue ?
+>>> ---
+>>>   drivers/media/usb/uvc/uvc_v4l2.c | 2 +-
+>>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+>>> index 5ac2a424b13d..f4988f03640a 100644
+>>> --- a/drivers/media/usb/uvc/uvc_v4l2.c
+>>> +++ b/drivers/media/usb/uvc/uvc_v4l2.c
+>>> @@ -45,7 +45,7 @@ static int uvc_control_add_xu_mapping(struct uvc_video_chain *chain,
+>>>   	map->menu_names = NULL;
+>>>   	map->menu_mapping = NULL;
+>>>   
+>>> -	map->menu_mask = BIT_MASK(xmap->menu_count);
+>>> +	map->menu_mask = GENMASK(xmap->menu_count - 1, 0);
+>>>   
+>>>   	size = xmap->menu_count * sizeof(*map->menu_mapping);
+>>>   	map->menu_mapping = kzalloc(size, GFP_KERNEL);
+> 
