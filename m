@@ -2,65 +2,90 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1501DEB64D7
-	for <linux-media@archiver.kernel.org>; Mon, 26 Jun 2023 11:25:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5719EB64D7
+	for <linux-media@archiver.kernel.org>; Mon, 26 Jun 2023 11:41:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbjFZLZS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 26 Jun 2023 07:25:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60656 "EHLO
+        id S229796AbjFZLlZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 26 Jun 2023 07:41:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjFZLZR (ORCPT
+        with ESMTP id S229768AbjFZLlY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 26 Jun 2023 07:25:17 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E00B101;
-        Mon, 26 Jun 2023 04:25:16 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-400a9d4b474so5580341cf.0;
-        Mon, 26 Jun 2023 04:25:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687778715; x=1690370715;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=MurxMTQFEWdZvNUGfU83XotW57ML2bBX0pSdLPLZ+f0=;
-        b=p4nGsAEcV2VUdiYQDXgMMnG+Wi6MKcS0zbocgr4eP/gx+JyK8POwk4fIlMIuRWpf9J
-         1ffIEBQp/RcPSc8WqUJwKi0X06v1mzgp/wzne8tEwT41c2Gqk6YoFm76itEJSvbbuYVm
-         ze9GzNyWagTlvTHeSEOEoFfX0gjHrSwV9O/Dqq7L9eolq2Ej5DLJls2aqzyOmo155nVU
-         lVscXPT+7vYiCTLP9Oc/NE+3CLJr9aj2GMSEMxFTDiQHquKymWabuO9hohGmZzdevgHB
-         f+y6AVxQ9IqNBNS/3CYwfE/Q1LMKQahA+/zq9gNFNlqbBPDRSN2HZSWkqmGabfUiEThF
-         HL4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687778715; x=1690370715;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MurxMTQFEWdZvNUGfU83XotW57ML2bBX0pSdLPLZ+f0=;
-        b=awzrmk/YoREkFGW5XobCbcdjhYcuONmpAnSKg7Wb1NC/lzXrx8oDbkjBQosXpf4iNl
-         8fcAiwEyxSxrgWKWXNh37OgmNiMVjLrGzyrQfIZEi1oxlJI5Vv5s1oLHzuayWmmjhY0E
-         788hWe3QevbEjkjE2ZXAsimP93Bxtak3kEw8qTvVr+2/AS3c3/neopgREo+ILx49th+1
-         TLcx72qBtd3AI3KuctHEMCT1MIke/AQDp0Ta11UOMrE7HLcSHd0IUAV9mlY9gbfn+EPK
-         jsUq9Gp3i9rYw9RvKRq2ez4DR5kBh6NkwbVFXrYzDyKGSBe3mapHLAlsmmILIWsGOo6Y
-         g6gQ==
-X-Gm-Message-State: AC+VfDwlGr1cDVMUdX7ilqgR98jBpDg0f2ALJxZ7+l0He/97LwaTVaG+
-        em0AQU214gLFjxno97fyN8H8zQSDh6JHvC/NadI=
-X-Google-Smtp-Source: ACHHUZ6r5+Vtu4RaA9efJ4JNSDQbAsOj3um01LgO75PP4O5L1d5t0BkmmtlzGB24LMaYjqWzLT+5p4x9yfhHwY7pj5U=
-X-Received: by 2002:ac8:5acc:0:b0:3fd:e17e:9468 with SMTP id
- d12-20020ac85acc000000b003fde17e9468mr33095220qtd.37.1687778715428; Mon, 26
- Jun 2023 04:25:15 -0700 (PDT)
+        Mon, 26 Jun 2023 07:41:24 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F65A0
+        for <linux-media@vger.kernel.org>; Mon, 26 Jun 2023 04:41:23 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1qDkaw-0005a3-1h; Mon, 26 Jun 2023 13:41:22 +0200
+Message-ID: <fa1fe0cc-4e87-78fb-fa89-3d0ac9d90bf3@leemhuis.info>
+Date:   Mon, 26 Jun 2023 13:41:21 +0200
 MIME-Version: 1.0
-Received: by 2002:ac8:5f47:0:b0:3e6:3312:616d with HTTP; Mon, 26 Jun 2023
- 04:25:15 -0700 (PDT)
-From:   "zbynek.miklik@email.cz" <hallotherebuddy10413m@gmail.com>
-Date:   Mon, 26 Jun 2023 11:25:15 +0000
-Message-ID: <CABsaQPJscjHGv+C2VJj73_V4e0KiS5ZOTbSiraCx22ZjtgpCkg@mail.gmail.com>
-Subject: Newsy Paper
-To:     Klaus Schmidinger <Klaus.Schmidinger@tvdr.de>,
-        linux dvb <linux-dvb@yahoo.com>,
-        linux media <linux-media@vger.kernel.org>,
-        Igor M Liplianin <liplianin@me.by>,
-        Majordomo <Majordomo@vger.kernel.org>,
-        Meysam Hariri <meysam.hariri@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: v4l2-async: regression due to endpoint matching
+Content-Language: en-US, de-DE
+From:   "Linux regression tracking #adding (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-media@vger.kernel.org,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>,
+          Linux regressions mailing list 
+          <regressions@lists.linux.dev>
+References: <8360125.31r3eYUQgx@steina-w>
+ <aea6c4a7-5bb0-9395-8883-6b163c181995@leemhuis.info>
+In-Reply-To: <aea6c4a7-5bb0-9395-8883-6b163c181995@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1687779683;13bf4328;
+X-HE-SMSGID: 1qDkaw-0005a3-1h
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-https://bit.ly/43YOfP4
+On 28.04.23 08:52, Linux regression tracking #adding (Thorsten Leemhuis)
+wrote:
+> [CCing the regression list, as it should be in the loop for regressions:
+> https://docs.kernel.org/admin-guide/reporting-regressions.html]
+> 
+> [TLDR: I'm adding this report to the list of tracked Linux kernel
+> regressions; the text you find below is based on a few templates
+> paragraphs you might have encountered already in similar form.
+> See link in footer if these mails annoy you.]
+> 
+> On 27.04.23 16:40, Alexander Stein wrote:
+>>
+>> I have a setup on my TQMa6x (imx6q-mba6a.dts) with a tc358743 attached to the 
+>> MIPI CSI input.
+>> I noticed that since commit 1f391df44607 ("media: v4l2-async: Use endpoints in 
+>> __v4l2_async_nf_add_fwnode_remote()") the async subdevice probing does not 
+>> work anymore. If I revert that, it is working again, even on next-20230425.
+>> [...]
+> 
+> Thanks for the report. To be sure the issue doesn't fall through the
+> cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
+> tracking bot:
+> 
+> #regzbot ^introduced 1f391df44607
+> #regzbot title media: v4l2-async: async subdevice probing stopped
+> working on TQMa6x
+> #regzbot ignore-activity
+
+I'm removing this from the list of tracked regressions, because as I
+understand things a revert would cause a regressions itself; a quick fix
+sadly is not really possible and a proper one already WIP[1]. There
+hence is not much worth tracking this. Should happen in a ideal world,
+but that's how it is sometimes:
+
+#regzbot inconclusive: revert no option and a proper fix will take some time
+#regzbot ignore-activity
+
+[1] afaics it's this, but I might be wrong with
+https://lore.kernel.org/all/20230622114028.908825-1-sakari.ailus@linux.intel.com/
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
