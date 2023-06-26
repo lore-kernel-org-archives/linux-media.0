@@ -2,1862 +2,350 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D80DC001B3
-	for <linux-media@archiver.kernel.org>; Mon, 26 Jun 2023 03:55:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 701C6EB64DC
+	for <linux-media@archiver.kernel.org>; Mon, 26 Jun 2023 07:09:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231214AbjFZDzE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 25 Jun 2023 23:55:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60900 "EHLO
+        id S229768AbjFZHI7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 26 Jun 2023 03:08:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230355AbjFZDyp (ORCPT
+        with ESMTP id S229509AbjFZHI5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 25 Jun 2023 23:54:45 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB431AB;
-        Sun, 25 Jun 2023 20:54:07 -0700 (PDT)
-X-UUID: 14b2c91e13d511ee9cb5633481061a41-20230626
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=JiYdnAdPtsc/Oc//8vQmuTOa8iGv/YLYFOxGgeNSoxA=;
-        b=O4T9Y4v4mdVoUPXpEqvd/QGz5ikqAaQ2Cs/wscTAfmoohlmOpEwt4MAYk+6t1mWdw7vyWUP+zVsSU1wjxg0H7x13s2nl8fxV6HvZd788y2zg3uBUeVZpPDjgwsaNMAwJwOQ0MH1YgXDY3p5+aER94TrLN4M+cY7G/Uvwt8oZhB4=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.27,REQID:1e2b2843-4ff2-4c1e-a822-47c9892a4fe0,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-        ON:release,TS:70
-X-CID-INFO: VERSION:1.1.27,REQID:1e2b2843-4ff2-4c1e-a822-47c9892a4fe0,IP:0,URL
-        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
-        ON:quarantine,TS:70
-X-CID-META: VersionHash:01c9525,CLOUDID:b8b5a33f-7aa7-41f3-a6bd-0433bee822f3,B
-        ulkID:230626115401V4YSEKXD,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:1
-        ,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
-X-CID-BVR: 2,OSH|NGT
-X-CID-BAS: 2,OSH|NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_SDM,TF_CID_SPAM_ASC,TF_CID_SPAM_FAS,
-        TF_CID_SPAM_FSD
-X-UUID: 14b2c91e13d511ee9cb5633481061a41-20230626
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1605650364; Mon, 26 Jun 2023 11:53:59 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- MTKMBS14N2.mediatek.inc (172.21.101.76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 26 Jun 2023 11:53:57 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Mon, 26 Jun 2023 11:53:56 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
-        <nfraprado@collabora.com>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Nathan Hebert <nhebert@chromium.org>
-CC:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
+        Mon, 26 Jun 2023 03:08:57 -0400
+Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on2088.outbound.protection.outlook.com [40.107.13.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9DC1A6;
+        Mon, 26 Jun 2023 00:08:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=j9eItA5AVa6xUaSf8G9OGqBID2ZJ4D+jsnAcwY1cWWOxI88stFh8c2lSCkbJjr9updcbumBgVwPaMPSzU/jRNg+XaRy41ieSQLLm3WDRxyJIwYDMqJsdbu1t4qVaHZHSJTDVqxLYTgzHSgGPeeRVxM51LxsQBVq2hm8c2oIDnX6h6TGITgmHUfnWg2cPrOwPLGZsiLqT/SDpYUWubxplv5knVbyatX7DQRq7m5ZKIxJfd8B7FunkTv4rOW0Xkx5tV5MfNiiCP0IAF5hov4T+HUKzgAceAGV+71jt6bWXWomFrklsQ3XyhjHnVlBxlYnA+1MuerviEMj23UJsyM4IwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=17zU8Ot508WCfJV34aGs0u7Oy5+BB1oZ3yGPFG3t5jg=;
+ b=TKq0JjolHWPSNxRP8/ak6/U+unC3iQjD/3jGIEzoWlioUxwDNVZtRmGzq/Fi1HGkqlnQWnX/W7jg3ym1V/iKwYxbjnOQCvH+mBBNc7h/Qcq5yPfU2AfQmyyOnlPFGUXARjH1NzFAaTlrdOQ73Zd5aNGjgo9fqoxQlZKU+tAfsYrLLQ0AchjVRu69AszHOpXkkE/453ypUmWo7Q+uJA1x0enUuzVRf4XLtMxFI/njQzKXbrikpdMNCyRFXb1G910gifLDB9sCZmxu1iQrI2oGaxIpZWiYi39f5imiJgVGiG0MP43S14CFGX/5QsXApg8H7mt3LPAZuVwD4XzL3z5Xmw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=17zU8Ot508WCfJV34aGs0u7Oy5+BB1oZ3yGPFG3t5jg=;
+ b=lyS6qU6LGIZu+voLaeEv+9BvabWwkNWxrcM9KBLddDeDIFC3oGkYYixFs/Bc3KO+rItU1Yz4aZk1zL2nIAiFE+8J4v7E4VWy2TEj7XhoK/Vs4aaI2EzxhpXTBLdDT8ZdKZkerrGmi+2VYb3rp0PbT+NN7KEVm7741jw6h5a3MYk=
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
+ by VE1PR04MB7359.eurprd04.prod.outlook.com (2603:10a6:800:1a0::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Mon, 26 Jun
+ 2023 07:08:52 +0000
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::79f2:2888:dbd7:ad6f]) by AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::79f2:2888:dbd7:ad6f%7]) with mapi id 15.20.6521.026; Mon, 26 Jun 2023
+ 07:08:51 +0000
+From:   Ming Qian <ming.qian@nxp.com>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "tfiga@chromium.org" <tfiga@chromium.org>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "ezequiel@vanguardiasur.com.ar" <ezequiel@vanguardiasur.com.ar>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>,
+        "nicolas.dufresne@collabora.com" <nicolas.dufresne@collabora.com>
+CC:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
+        "linux-mediatek@lists.infradead.org" 
         <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v4,08/11] media: mediatek: vcodec: separate struct mtk_vcodec_dev
-Date:   Mon, 26 Jun 2023 11:53:43 +0800
-Message-ID: <20230626035346.30654-9-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230626035346.30654-1-yunfei.dong@mediatek.com>
-References: <20230626035346.30654-1-yunfei.dong@mediatek.com>
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-rockchip@lists.infradead.org" 
+        <linux-rockchip@lists.infradead.org>,
+        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        "kernel@collabora.com" <kernel@collabora.com>
+Subject: RE: [EXT] [PATCH v3 10/11] media: v4l2: Add DELETE_BUF ioctl
+Thread-Topic: [EXT] [PATCH v3 10/11] media: v4l2: Add DELETE_BUF ioctl
+Thread-Index: AQHZpQtryt6+FQi9LEi1Ln2Ygf6Dlq+crahA
+Date:   Mon, 26 Jun 2023 07:08:51 +0000
+Message-ID: <AM6PR04MB63410CCAE0686CC95DD2B8E0E726A@AM6PR04MB6341.eurprd04.prod.outlook.com>
+References: <20230622131349.144160-1-benjamin.gaignard@collabora.com>
+ <20230622131349.144160-11-benjamin.gaignard@collabora.com>
+In-Reply-To: <20230622131349.144160-11-benjamin.gaignard@collabora.com>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AM6PR04MB6341:EE_|VE1PR04MB7359:EE_
+x-ms-office365-filtering-correlation-id: 1fb8688c-a3bd-4049-bfa2-08db7614325c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: tyERjZp5kQQBhXH+IMUYZ1UhqU73WxEji5SVRgeW5te3Yv7oUvkIOj35M77b5dRsGbhHjJNv7mP+JV/ueyc894qFP96jNzTQCe/P318G1ONISlvfNRlQgk/z5cf2lPv7qo5fKZI+JhWrnrFPpTzD7j3pbre/BnUdgLk80WV/1W+rLzF6k2oCcBoyUleCvtxHL9Ai6Oerp7aWvFtUgqAfmKhqE2YBoZEnFRFrPb2wAJE+vu9ItGApnFiYZy512OtJJX3y7u410SJQQPR2xMj6fiL7bh/UR0Zqcg/3IkNRA7qdQdc5/MdUcHcJ4uBow3weKQHJyM1lGAmD7miuCxKlfx08yd4W/QUkTYjP375kT5bD9Tz0a1L8qGFeZlHQgpOUSdN69JFeMXwku5aW8sQZEcGHxfglcqQP6LnnDJbjqW4gQUszBY6hNsqR1ptoIAXKRuQ8JNDrCcwlEelqvwHJHH7WYVrFp5KsQXK3CguVrtOkhwfn7IGwz9aOA14G5SFRFYX9jIu/s55I6aZy+P8uzE5gqfotQLsE09lvIhWVKL1fHtqrct+2KwzoYBud8cAajbePxwkx8TLRnRGeip26FIULTPGbkot4s9VgZA/kEAy+i+E6EpJ+fURanOl2t2Gg
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(396003)(39860400002)(376002)(346002)(451199021)(33656002)(30864003)(5660300002)(52536014)(44832011)(7416002)(86362001)(8936002)(8676002)(41300700001)(66556008)(64756008)(66476007)(38070700005)(76116006)(4326008)(38100700002)(122000001)(316002)(66946007)(55016003)(9686003)(6506007)(26005)(186003)(66446008)(2906002)(7696005)(71200400001)(54906003)(478600001)(110136005)(83380400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?gb2312?B?VUtqRDh6YUswZEwxYUpDQ1BuZGZZalA0WmRJUEhESDVoZG1PL29ObjFCVU9L?=
+ =?gb2312?B?Z1dGVkkxeGdUU3I3clRjQXY4aWRITnVWWkFLS3hmaXozUDA3UE9CT2lFZ3Fa?=
+ =?gb2312?B?QVZsSjB4SHJZSkIwNlBpUURVMHg5dkExN3c5OGRDcW1ZalR4MWFwTnpwREhO?=
+ =?gb2312?B?MlUySko0Mnh2UGhFYWJrNW5iVjB0OHIvMFVNY20wdHM3THNwQlVNZDVuT2RB?=
+ =?gb2312?B?Z2NKRFJnbi9DazdURmtaZTQvRnBnako5ckRaeTlGRE96MWg3UEZNUWhPd0xr?=
+ =?gb2312?B?bGJQZnVlcVA1QjhiTWZmeHcwWTk5bGZoZEVtb09SVHVDT0ZsVjNmcEpFeG1E?=
+ =?gb2312?B?aGc0L2JSekd6Q2t1a0F0TkRDdWc1L2t1MGNpYis1M2hHUXZiZ0ZiVkxLenp0?=
+ =?gb2312?B?R201TDA0N05Eazl4eStLOGNzanZtWGY3WkZ4NzR0SURJeUVNS2FqVHJvcC9O?=
+ =?gb2312?B?c2lWczQ0TDRNWCtTUnFJWS9HZEUxV0xESG9UTk1Da2pEcTFEQ1h1L1NIbmNv?=
+ =?gb2312?B?Ty9zZEl3M0EyZ2ExYktjRjAyQlhkVEFsSjJ3cjdxWDNFUXV4WGRqYTlIRkdu?=
+ =?gb2312?B?a3l0MzBjcGsrSWhieHkveis0N3YxcXAzSXdyM2t4cmRHQmdWUTJ4Ylk0WGZo?=
+ =?gb2312?B?dVBzK25VNkxhNzZIWDhnSGJZNzFDZE9jRXlwbmRYYUN6WU5aZG9GaHd3WEl2?=
+ =?gb2312?B?bTk1ZW1ycFVweUJwYm9uUFZkUktlNTFUQnNlTzFLaXVsRzJtZUl4RVVtaTVk?=
+ =?gb2312?B?eDA2YVNtejRhdENuWjVGTExWQkY2d2lkMUVidTIxbWU0dXIyTTFxZDdlQmYv?=
+ =?gb2312?B?K2R1WmNqeW1rZTlLUHN5dG1qZGg3Yk13YkVTT0IvVEkzeThBTkltNzhPYU8y?=
+ =?gb2312?B?V0xqK0RYQ2dJYzB2YXBzRFBuYm9IUnNReENKY0Nlc3JXU282WWhNRERpS3Vk?=
+ =?gb2312?B?YjI5a2Q2bFVaNjZOdUdWcmlKVDhBZy9HcUhVbG5uMWMwWUZyT0ltcVlpdDky?=
+ =?gb2312?B?dDNTWnovQWIyUkxlOVFWcThZeGtUWDA5b0laZGlkV3d1ZnFwcDdvMmJpR0Y0?=
+ =?gb2312?B?M0hPdXVNbk85QlZZdktoYS96bHRESU12K2NITktWcTNsTEsycCt3Q3NVWnp2?=
+ =?gb2312?B?Zk9RdHdxVkJDUWlOVUpTM0ZYZ2ZrdVVTaWJMeDlQQnBmd2I1SHN4NEw3bEM0?=
+ =?gb2312?B?cGNEVUR6NXBPaVNnOUVzNU5ZUlNybHllK3VGQWlrUUZ1Z2t2QjVveTJ0d2dl?=
+ =?gb2312?B?SDFxbzB0TThtRTEreUM2ZWVVTHRBcTVZbFBSbW44c1FhaFYwUzVjTlVwelFx?=
+ =?gb2312?B?eWFKVXFEaU93SC9VNnJtVy92amMxTnpXRU40Y2RYbUlPSTJYQ3IwbG1aSXFO?=
+ =?gb2312?B?d09XbUtMTDVqaVFqRlJiTTdDSFk3eEJuL3dOeXExSFAwNURnUW1mRlRCWFRW?=
+ =?gb2312?B?Q29jSEVnRzgxQnZLbjM4bFZ2dERqS215RFVBSUgxLzIrdjRGU293dzA1a1N3?=
+ =?gb2312?B?Y0xIekJUc2hydE95WFRiSGdvSWtEQk9PNUFEcXRLTmNXWlVKTm9BVUpyc0sy?=
+ =?gb2312?B?cWxSck50elRXM3F3SERKMFBLRnFGZGYwK3M5Tk9tb3MzOWcrb05pa0FqaGMz?=
+ =?gb2312?B?SDBwZ2dYYnF6SjVSdlFweDNBNFdxNlFFNHByRzg0NTZnUlZOMkl1UEszVlRJ?=
+ =?gb2312?B?R0ZLSG9zTzNjemJ3N1JVM3BwSEQxNFY4ZjAzek4wZ3lNU0F5UlBLd0dRbDRw?=
+ =?gb2312?B?M2E5eHpEWjFwdjB6U0RoSGZPeXk2ckhJclppa3U0TktqSy9yVHhTY3VJeVU5?=
+ =?gb2312?B?YmJNQUN0VjNncUUxclRxL1hORlVNa0Q3RUV5VlltZFBra0N2c0VSTHZLb2wv?=
+ =?gb2312?B?N0toZy84K2ZxN2t0cnpVbWVpRlQyTVNoWHRkZVBnRldhMjdUZXVRT2J2ZFZv?=
+ =?gb2312?B?czJhZkozS3Z1V0ZFMGpyNDNaSTZEcVowRmFSQ2hQYXd0Ti9YUy9WUXNvUWQ2?=
+ =?gb2312?B?YklXSTJIb3Y1OTcyRy9TYUt5YU9UUlhWTlp6RVVxL2c2UWg0b3poYS9QeVp6?=
+ =?gb2312?B?QWxJQUNoTG5zSjFQcXcrY1VXU2RmN2RRZVIzN1pZWHlpUlF2d1hLY0NkOCtm?=
+ =?gb2312?Q?nIog=3D?=
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1fb8688c-a3bd-4049-bfa2-08db7614325c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jun 2023 07:08:51.9039
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: YuqSNl2M11FFFTX1oCrdaKTBkJZzB3Ibtnu23Ry5ucO8dwNFeB71Mo6UaSVVNYrDVJecp0RBccM2ezA+5jYwyQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7359
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Adding different dev struct for encoder and decoder, remove
-'struct mtk_vcodec_dev'.
-
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
----
- .../mediatek/vcodec/mtk_vcodec_com_drv.h      |  71 +++++
- .../mediatek/vcodec/mtk_vcodec_dbgfs.c        |  51 ++-
- .../mediatek/vcodec/mtk_vcodec_dbgfs.h        |  14 +-
- .../platform/mediatek/vcodec/mtk_vcodec_dec.c |   4 +-
- .../mediatek/vcodec/mtk_vcodec_dec_drv.c      |  19 +-
- .../mediatek/vcodec/mtk_vcodec_dec_drv.h      | 172 +++++++++-
- .../mediatek/vcodec/mtk_vcodec_dec_hw.c       |   5 +-
- .../mediatek/vcodec/mtk_vcodec_dec_hw.h       |   4 +-
- .../mediatek/vcodec/mtk_vcodec_dec_pm.c       |  10 +-
- .../mediatek/vcodec/mtk_vcodec_dec_pm.h       |   2 +-
- .../mediatek/vcodec/mtk_vcodec_dec_stateful.c |   3 +-
- .../vcodec/mtk_vcodec_dec_stateless.c         |   5 +-
- .../platform/mediatek/vcodec/mtk_vcodec_drv.h | 295 ------------------
- .../platform/mediatek/vcodec/mtk_vcodec_enc.c |   5 +-
- .../mediatek/vcodec/mtk_vcodec_enc_drv.c      |  15 +-
- .../mediatek/vcodec/mtk_vcodec_enc_drv.h      |  93 +++++-
- .../mediatek/vcodec/mtk_vcodec_enc_pm.c       |   4 +-
- .../mediatek/vcodec/mtk_vcodec_enc_pm.h       |   4 +-
- .../platform/mediatek/vcodec/mtk_vcodec_fw.c  |  12 +-
- .../platform/mediatek/vcodec/mtk_vcodec_fw.h  |   3 +-
- .../mediatek/vcodec/mtk_vcodec_fw_priv.h      |   3 +-
- .../mediatek/vcodec/mtk_vcodec_fw_scp.c       |  21 +-
- .../mediatek/vcodec/mtk_vcodec_fw_vpu.c       |  18 +-
- .../mediatek/vcodec/mtk_vcodec_intr.c         |   4 +-
- .../mediatek/vcodec/mtk_vcodec_util.c         |  10 +-
- .../mediatek/vcodec/mtk_vcodec_util.h         |   8 +-
- .../vcodec/vdec/vdec_h264_req_common.h        |   2 +-
- .../vcodec/vdec/vdec_h264_req_multi_if.c      |   2 +-
- .../platform/mediatek/vcodec/vdec_drv_if.h    |   1 -
- .../platform/mediatek/vcodec/vdec_msg_queue.c |   4 +-
- .../platform/mediatek/vcodec/vdec_msg_queue.h |   2 +-
- .../platform/mediatek/vcodec/vdec_vpu_if.c    |   3 +-
- .../mediatek/vcodec/venc/venc_h264_if.c       |   2 +-
- .../mediatek/vcodec/venc/venc_vp8_if.c        |   2 +-
- .../platform/mediatek/vcodec/venc_drv_base.h  |   2 +-
- .../platform/mediatek/vcodec/venc_drv_if.c    |   4 +-
- .../platform/mediatek/vcodec/venc_drv_if.h    |   3 +-
- .../platform/mediatek/vcodec/venc_vpu_if.c    |   2 +-
- 38 files changed, 465 insertions(+), 419 deletions(-)
- delete mode 100644 drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_com_drv.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_com_drv.h
-index 3b6e1faf60ce..6087e27bd604 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_com_drv.h
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_com_drv.h
-@@ -17,6 +17,77 @@
- 
- #define MTK_VCODEC_MAX_PLANES	3
- 
-+#define WAIT_INTR_TIMEOUT_MS	1000
-+
-+/*
-+ * enum mtk_q_type - Type of queue
-+ */
-+enum mtk_q_type {
-+	MTK_Q_DATA_SRC = 0,
-+	MTK_Q_DATA_DST = 1,
-+};
-+
-+/*
-+ * enum mtk_hw_reg_idx - MTK hw register base index
-+ */
-+enum mtk_hw_reg_idx {
-+	VDEC_SYS,
-+	VDEC_MISC,
-+	VDEC_LD,
-+	VDEC_TOP,
-+	VDEC_CM,
-+	VDEC_AD,
-+	VDEC_AV,
-+	VDEC_PP,
-+	VDEC_HWD,
-+	VDEC_HWQ,
-+	VDEC_HWB,
-+	VDEC_HWG,
-+	NUM_MAX_VDEC_REG_BASE,
-+	/* h264 encoder */
-+	VENC_SYS = NUM_MAX_VDEC_REG_BASE,
-+	/* vp8 encoder */
-+	VENC_LT_SYS,
-+	NUM_MAX_VCODEC_REG_BASE
-+};
-+
-+/*
-+ * struct mtk_vcodec_clk_info - Structure used to store clock name
-+ */
-+struct mtk_vcodec_clk_info {
-+	const char	*clk_name;
-+	struct clk	*vcodec_clk;
-+};
-+
-+/*
-+ * struct mtk_vcodec_clk - Structure used to store vcodec clock information
-+ */
-+struct mtk_vcodec_clk {
-+	struct mtk_vcodec_clk_info	*clk_info;
-+	int	clk_num;
-+};
-+
-+/*
-+ * struct mtk_vcodec_pm - Power management data structure
-+ */
-+struct mtk_vcodec_pm {
-+	struct mtk_vcodec_clk	vdec_clk;
-+	struct mtk_vcodec_clk	venc_clk;
-+	struct device	*dev;
-+};
-+
-+/*
-+ * enum mtk_vdec_hw_id - Hardware index used to separate
-+ *                         different hardware
-+ */
-+enum mtk_vdec_hw_id {
-+	MTK_VDEC_CORE,
-+	MTK_VDEC_LAT0,
-+	MTK_VDEC_LAT1,
-+	MTK_VDEC_LAT_SOC,
-+	MTK_VDEC_HW_MAX,
-+};
-+
- /**
-  * enum mtk_instance_state - The state of an MTK Vcodec instance.
-  * @MTK_STATE_FREE: default state when instance is created
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c
-index 0f4bbfb3bba5..c6a02b33cc74 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c
-@@ -7,7 +7,8 @@
- #include <linux/debugfs.h>
- 
- #include "mtk_vcodec_dbgfs.h"
--#include "mtk_vcodec_drv.h"
-+#include "mtk_vcodec_dec_drv.h"
-+#include "mtk_vcodec_enc_drv.h"
- #include "mtk_vcodec_util.h"
- 
- static void mtk_vdec_dbgfs_get_format_type(struct mtk_vcodec_dec_ctx *ctx, char *buf,
-@@ -72,7 +73,7 @@ static void mtk_vdec_dbgfs_get_help(char *buf, int *used, int total)
- static ssize_t mtk_vdec_dbgfs_write(struct file *filp, const char __user *ubuf,
- 				    size_t count, loff_t *ppos)
- {
--	struct mtk_vcodec_dev *vcodec_dev = filp->private_data;
-+	struct mtk_vcodec_dec_dev *vcodec_dev = filp->private_data;
- 	struct mtk_vcodec_dbgfs *dbgfs = &vcodec_dev->dbgfs;
- 
- 	mutex_lock(&dbgfs->dbgfs_lock);
-@@ -88,7 +89,7 @@ static ssize_t mtk_vdec_dbgfs_write(struct file *filp, const char __user *ubuf,
- static ssize_t mtk_vdec_dbgfs_read(struct file *filp, char __user *ubuf,
- 				   size_t count, loff_t *ppos)
- {
--	struct mtk_vcodec_dev *vcodec_dev = filp->private_data;
-+	struct mtk_vcodec_dec_dev *vcodec_dev = filp->private_data;
- 	struct mtk_vcodec_dbgfs *dbgfs = &vcodec_dev->dbgfs;
- 	struct mtk_vcodec_dbgfs_inst *dbgfs_inst;
- 	struct mtk_vcodec_dec_ctx *ctx;
-@@ -146,7 +147,7 @@ static const struct file_operations vdec_fops = {
- void mtk_vcodec_dbgfs_create(struct mtk_vcodec_dec_ctx *ctx)
- {
- 	struct mtk_vcodec_dbgfs_inst *dbgfs_inst;
--	struct mtk_vcodec_dev *vcodec_dev = ctx->dev;
-+	struct mtk_vcodec_dec_dev *vcodec_dev = ctx->dev;
- 
- 	dbgfs_inst = kzalloc(sizeof(*dbgfs_inst), GFP_KERNEL);
- 	if (!dbgfs_inst)
-@@ -161,7 +162,7 @@ void mtk_vcodec_dbgfs_create(struct mtk_vcodec_dec_ctx *ctx)
- }
- EXPORT_SYMBOL_GPL(mtk_vcodec_dbgfs_create);
- 
--void mtk_vcodec_dbgfs_remove(struct mtk_vcodec_dev *vcodec_dev, int ctx_id)
-+void mtk_vcodec_dbgfs_remove(struct mtk_vcodec_dec_dev *vcodec_dev, int ctx_id)
- {
- 	struct mtk_vcodec_dbgfs_inst *dbgfs_inst;
- 
-@@ -179,16 +180,13 @@ void mtk_vcodec_dbgfs_remove(struct mtk_vcodec_dev *vcodec_dev, int ctx_id)
- }
- EXPORT_SYMBOL_GPL(mtk_vcodec_dbgfs_remove);
- 
--void mtk_vcodec_dbgfs_init(struct mtk_vcodec_dev *vcodec_dev, bool is_encode)
-+static void mtk_vcodec_dbgfs_vdec_init(struct mtk_vcodec_dec_dev *vcodec_dev)
- {
- 	struct dentry *vcodec_root;
- 
--	if (is_encode)
--		vcodec_dev->dbgfs.vcodec_root = debugfs_create_dir("vcodec-enc", NULL);
--	else
--		vcodec_dev->dbgfs.vcodec_root = debugfs_create_dir("vcodec-dec", NULL);
-+	vcodec_dev->dbgfs.vcodec_root = debugfs_create_dir("vcodec-dec", NULL);
- 	if (IS_ERR(vcodec_dev->dbgfs.vcodec_root))
--		dev_err(&vcodec_dev->plat_dev->dev, "create vcodec dir err:%d\n",
-+		dev_err(&vcodec_dev->plat_dev->dev, "create vdec dir err:%d\n",
- 			IS_ERR(vcodec_dev->dbgfs.vcodec_root));
- 
- 	vcodec_root = vcodec_dev->dbgfs.vcodec_root;
-@@ -196,18 +194,39 @@ void mtk_vcodec_dbgfs_init(struct mtk_vcodec_dev *vcodec_dev, bool is_encode)
- 	debugfs_create_x32("mtk_vcodec_dbg", 0644, vcodec_root, &mtk_vcodec_dbg);
- 
- 	vcodec_dev->dbgfs.inst_count = 0;
--	if (is_encode)
--		return;
--
- 	INIT_LIST_HEAD(&vcodec_dev->dbgfs.dbgfs_head);
- 	debugfs_create_file("vdec", 0200, vcodec_root, vcodec_dev, &vdec_fops);
- 	mutex_init(&vcodec_dev->dbgfs.dbgfs_lock);
- }
-+
-+static void mtk_vcodec_dbgfs_venc_init(struct mtk_vcodec_enc_dev *vcodec_dev)
-+{
-+	struct dentry *vcodec_root;
-+
-+	vcodec_dev->dbgfs.vcodec_root = debugfs_create_dir("vcodec-enc", NULL);
-+	if (IS_ERR(vcodec_dev->dbgfs.vcodec_root))
-+		dev_err(&vcodec_dev->plat_dev->dev, "create venc dir err:%d\n",
-+			IS_ERR(vcodec_dev->dbgfs.vcodec_root));
-+
-+	vcodec_root = vcodec_dev->dbgfs.vcodec_root;
-+	debugfs_create_x32("mtk_v4l2_dbg_level", 0644, vcodec_root, &mtk_v4l2_dbg_level);
-+	debugfs_create_x32("mtk_vcodec_dbg", 0644, vcodec_root, &mtk_vcodec_dbg);
-+
-+	vcodec_dev->dbgfs.inst_count = 0;
-+}
-+
-+void mtk_vcodec_dbgfs_init(void *vcodec_dev, bool is_encode)
-+{
-+	if (is_encode)
-+		mtk_vcodec_dbgfs_venc_init(vcodec_dev);
-+	else
-+		mtk_vcodec_dbgfs_vdec_init(vcodec_dev);
-+}
- EXPORT_SYMBOL_GPL(mtk_vcodec_dbgfs_init);
- 
--void mtk_vcodec_dbgfs_deinit(struct mtk_vcodec_dev *vcodec_dev)
-+void mtk_vcodec_dbgfs_deinit(struct mtk_vcodec_dbgfs *dbgfs)
- {
--	debugfs_remove_recursive(vcodec_dev->dbgfs.vcodec_root);
-+	debugfs_remove_recursive(dbgfs->vcodec_root);
- }
- EXPORT_SYMBOL_GPL(mtk_vcodec_dbgfs_deinit);
- 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.h
-index 372413d590c5..073d2fedb54a 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.h
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.h
-@@ -7,7 +7,7 @@
- #ifndef __MTK_VCODEC_DBGFS_H__
- #define __MTK_VCODEC_DBGFS_H__
- 
--struct mtk_vcodec_dev;
-+struct mtk_vcodec_dec_dev;
- struct mtk_vcodec_dec_ctx;
- 
- /*
-@@ -51,23 +51,23 @@ struct mtk_vcodec_dbgfs {
- 
- #if defined(CONFIG_DEBUG_FS)
- void mtk_vcodec_dbgfs_create(struct mtk_vcodec_dec_ctx *ctx);
--void mtk_vcodec_dbgfs_remove(struct mtk_vcodec_dev *vcodec_dev, int ctx_id);
--void mtk_vcodec_dbgfs_init(struct mtk_vcodec_dev *vcodec_dev, bool is_encode);
--void mtk_vcodec_dbgfs_deinit(struct mtk_vcodec_dev *vcodec_dev);
-+void mtk_vcodec_dbgfs_remove(struct mtk_vcodec_dec_dev *vcodec_dev, int ctx_id);
-+void mtk_vcodec_dbgfs_init(void *vcodec_dev, bool is_encode);
-+void mtk_vcodec_dbgfs_deinit(struct mtk_vcodec_dbgfs *dbgfs);
- #else
- static inline void mtk_vcodec_dbgfs_create(struct mtk_vcodec_dec_ctx *ctx)
- {
- }
- 
--static inline void mtk_vcodec_dbgfs_remove(struct mtk_vcodec_dev *vcodec_dev, int ctx_id)
-+static inline void mtk_vcodec_dbgfs_remove(struct mtk_vcodec_dec_dev *vcodec_dev, int ctx_id)
- {
- }
- 
--static inline void mtk_vcodec_dbgfs_init(struct mtk_vcodec_dev *vcodec_dev, bool is_encode)
-+static inline void mtk_vcodec_dbgfs_init(void *vcodec_dev, bool is_encode)
- {
- }
- 
--static inline void mtk_vcodec_dbgfs_deinit(struct mtk_vcodec_dev *vcodec_dev)
-+static inline void mtk_vcodec_dbgfs_deinit(struct mtk_vcodec_dbgfs *dbgfs)
- {
- }
- #endif
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-index 619ff3dd8d50..0363fec572e5 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-@@ -9,7 +9,7 @@
- #include <media/v4l2-mem2mem.h>
- #include <media/videobuf2-dma-contig.h>
- 
--#include "mtk_vcodec_drv.h"
-+#include "mtk_vcodec_dec_drv.h"
- #include "mtk_vcodec_dec.h"
- #include "mtk_vcodec_intr.h"
- #include "mtk_vcodec_util.h"
-@@ -890,7 +890,7 @@ void vb2ops_vdec_stop_streaming(struct vb2_queue *q)
- static void m2mops_vdec_device_run(void *priv)
- {
- 	struct mtk_vcodec_dec_ctx *ctx = priv;
--	struct mtk_vcodec_dev *dev = ctx->dev;
-+	struct mtk_vcodec_dec_dev *dev = ctx->dev;
- 
- 	queue_work(dev->decode_workqueue, &ctx->decode_work);
- }
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-index 5609fd3268f2..8e3aea9a3ab0 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-@@ -17,7 +17,6 @@
- #include <media/videobuf2-dma-contig.h>
- #include <media/v4l2-device.h>
- 
--#include "mtk_vcodec_drv.h"
- #include "mtk_vcodec_dec.h"
- #include "mtk_vcodec_dec_hw.h"
- #include "mtk_vcodec_dec_pm.h"
-@@ -25,7 +24,7 @@
- #include "mtk_vcodec_util.h"
- #include "mtk_vcodec_fw.h"
- 
--static int mtk_vcodec_get_hw_count(struct mtk_vcodec_dec_ctx *ctx, struct mtk_vcodec_dev *dev)
-+static int mtk_vcodec_get_hw_count(struct mtk_vcodec_dec_ctx *ctx, struct mtk_vcodec_dec_dev *dev)
- {
- 	switch (dev->vdec_pdata->hw_arch) {
- 	case MTK_VDEC_PURE_SINGLE_CORE:
-@@ -40,7 +39,7 @@ static int mtk_vcodec_get_hw_count(struct mtk_vcodec_dec_ctx *ctx, struct mtk_vc
- 
- static irqreturn_t mtk_vcodec_dec_irq_handler(int irq, void *priv)
- {
--	struct mtk_vcodec_dev *dev = priv;
-+	struct mtk_vcodec_dec_dev *dev = priv;
- 	struct mtk_vcodec_dec_ctx *ctx;
- 	u32 cg_status = 0;
- 	unsigned int dec_done_status = 0;
-@@ -75,7 +74,7 @@ static irqreturn_t mtk_vcodec_dec_irq_handler(int irq, void *priv)
- 	return IRQ_HANDLED;
- }
- 
--static int mtk_vcodec_get_reg_bases(struct mtk_vcodec_dev *dev)
-+static int mtk_vcodec_get_reg_bases(struct mtk_vcodec_dec_dev *dev)
- {
- 	struct platform_device *pdev = dev->plat_dev;
- 	int reg_num, i;
-@@ -99,7 +98,7 @@ static int mtk_vcodec_get_reg_bases(struct mtk_vcodec_dev *dev)
- 	return 0;
- }
- 
--static int mtk_vcodec_init_dec_resources(struct mtk_vcodec_dev *dev)
-+static int mtk_vcodec_init_dec_resources(struct mtk_vcodec_dec_dev *dev)
- {
- 	struct platform_device *pdev = dev->plat_dev;
- 	int ret;
-@@ -136,7 +135,7 @@ static int mtk_vcodec_init_dec_resources(struct mtk_vcodec_dev *dev)
- 
- static int fops_vcodec_open(struct file *file)
- {
--	struct mtk_vcodec_dev *dev = video_drvdata(file);
-+	struct mtk_vcodec_dec_dev *dev = video_drvdata(file);
- 	struct mtk_vcodec_dec_ctx *ctx = NULL;
- 	int ret = 0, i, hw_count;
- 	struct vb2_queue *src_vq;
-@@ -233,7 +232,7 @@ static int fops_vcodec_open(struct file *file)
- 
- static int fops_vcodec_release(struct file *file)
- {
--	struct mtk_vcodec_dev *dev = video_drvdata(file);
-+	struct mtk_vcodec_dec_dev *dev = video_drvdata(file);
- 	struct mtk_vcodec_dec_ctx *ctx = fh_to_dec_ctx(file->private_data);
- 
- 	mtk_v4l2_vdec_dbg(0, ctx, "[%d] decoder", ctx->id);
-@@ -270,7 +269,7 @@ static const struct v4l2_file_operations mtk_vcodec_fops = {
- 
- static int mtk_vcodec_probe(struct platform_device *pdev)
- {
--	struct mtk_vcodec_dev *dev;
-+	struct mtk_vcodec_dec_dev *dev;
- 	struct video_device *vfd_dec;
- 	phandle rproc_phandle;
- 	enum mtk_vcodec_fw_type fw_type;
-@@ -477,7 +476,7 @@ MODULE_DEVICE_TABLE(of, mtk_vcodec_match);
- 
- static void mtk_vcodec_dec_remove(struct platform_device *pdev)
- {
--	struct mtk_vcodec_dev *dev = platform_get_drvdata(pdev);
-+	struct mtk_vcodec_dec_dev *dev = platform_get_drvdata(pdev);
- 
- 	destroy_workqueue(dev->decode_workqueue);
- 
-@@ -493,7 +492,7 @@ static void mtk_vcodec_dec_remove(struct platform_device *pdev)
- 	if (dev->vfd_dec)
- 		video_unregister_device(dev->vfd_dec);
- 
--	mtk_vcodec_dbgfs_deinit(dev);
-+	mtk_vcodec_dbgfs_deinit(&dev->dbgfs);
- 	v4l2_device_unregister(&dev->v4l2_dev);
- 	if (!dev->vdec_pdata->is_subdev_supported)
- 		pm_runtime_disable(dev->pm.dev);
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.h
-index 94870b651919..a18ba8f32d41 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.h
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.h
-@@ -8,9 +8,49 @@
- #define _MTK_VCODEC_DEC_DRV_H_
- 
- #include "mtk_vcodec_com_drv.h"
-+#include "mtk_vcodec_dbgfs.h"
- #include "mtk_vcodec_fw_priv.h"
-+#include "mtk_vcodec_util.h"
- #include "vdec_msg_queue.h"
- 
-+#define MTK_VCODEC_DEC_NAME	"mtk-vcodec-dec"
-+
-+#define IS_VDEC_LAT_ARCH(hw_arch) ((hw_arch) >= MTK_VDEC_LAT_SINGLE_CORE)
-+#define IS_VDEC_INNER_RACING(capability) ((capability) & MTK_VCODEC_INNER_RACING)
-+
-+/*
-+ * struct mtk_vdec_format_types - Structure used to get supported
-+ *		  format types according to decoder capability
-+ */
-+enum mtk_vdec_format_types {
-+	MTK_VDEC_FORMAT_MM21 = 0x20,
-+	MTK_VDEC_FORMAT_MT21C = 0x40,
-+	MTK_VDEC_FORMAT_H264_SLICE = 0x100,
-+	MTK_VDEC_FORMAT_VP8_FRAME = 0x200,
-+	MTK_VDEC_FORMAT_VP9_FRAME = 0x400,
-+	MTK_VDEC_FORMAT_AV1_FRAME = 0x800,
-+	MTK_VDEC_FORMAT_HEVC_FRAME = 0x1000,
-+	MTK_VCODEC_INNER_RACING = 0x20000,
-+};
-+
-+/*
-+ * enum mtk_vdec_hw_count - Supported hardware count
-+ */
-+enum mtk_vdec_hw_count {
-+	MTK_VDEC_NO_HW = 0,
-+	MTK_VDEC_ONE_CORE,
-+	MTK_VDEC_ONE_LAT_ONE_CORE,
-+	MTK_VDEC_MAX_HW_COUNT,
-+};
-+
-+/*
-+ * enum mtk_vdec_hw_arch - Used to separate different hardware architecture
-+ */
-+enum mtk_vdec_hw_arch {
-+	MTK_VDEC_PURE_SINGLE_CORE,
-+	MTK_VDEC_LAT_SINGLE_CORE,
-+};
-+
- /**
-  * struct vdec_pic_info  - picture size information
-  * @pic_w: picture width
-@@ -33,24 +73,54 @@ struct vdec_pic_info {
- 	unsigned int reserved;
- };
- 
--/*
-- * enum mtk_vdec_hw_id - Hardware index used to separate
-- *                         different hardware
-+/**
-+ * struct mtk_vcodec_dec_pdata - compatible data for each IC
-+ * @init_vdec_params: init vdec params
-+ * @ctrls_setup: init vcodec dec ctrls
-+ * @worker: worker to start a decode job
-+ * @flush_decoder: function that flushes the decoder
-+ * @get_cap_buffer: get capture buffer from capture queue
-+ * @cap_to_disp: put capture buffer to disp list for lat and core arch
-+ * @vdec_vb2_ops: struct vb2_ops
-+ *
-+ * @vdec_formats: supported video decoder formats
-+ * @num_formats: count of video decoder formats
-+ * @default_out_fmt: default output buffer format
-+ * @default_cap_fmt: default capture buffer format
-+ *
-+ * @hw_arch: hardware arch is used to separate pure_sin_core and lat_sin_core
-+ *
-+ * @is_subdev_supported: whether support parent-node architecture(subdev)
-+ * @uses_stateless_api: whether the decoder uses the stateless API with requests
-  */
--enum mtk_vdec_hw_id {
--	MTK_VDEC_CORE,
--	MTK_VDEC_LAT0,
--	MTK_VDEC_LAT1,
--	MTK_VDEC_LAT_SOC,
--	MTK_VDEC_HW_MAX,
-+struct mtk_vcodec_dec_pdata {
-+	void (*init_vdec_params)(struct mtk_vcodec_dec_ctx *ctx);
-+	int (*ctrls_setup)(struct mtk_vcodec_dec_ctx *ctx);
-+	void (*worker)(struct work_struct *work);
-+	int (*flush_decoder)(struct mtk_vcodec_dec_ctx *ctx);
-+	struct vdec_fb *(*get_cap_buffer)(struct mtk_vcodec_dec_ctx *ctx);
-+	void (*cap_to_disp)(struct mtk_vcodec_dec_ctx *ctx, int error,
-+			    struct media_request *src_buf_req);
-+
-+	const struct vb2_ops *vdec_vb2_ops;
-+
-+	const struct mtk_video_fmt *vdec_formats;
-+	const int *num_formats;
-+	const struct mtk_video_fmt *default_out_fmt;
-+	const struct mtk_video_fmt *default_cap_fmt;
-+
-+	enum mtk_vdec_hw_arch hw_arch;
-+
-+	bool is_subdev_supported;
-+	bool uses_stateless_api;
- };
- 
- /**
-  * struct mtk_vcodec_dec_ctx - Context (instance) private data.
-  *
-  * @type: type of the instance - decoder or encoder
-- * @dev: pointer to the mtk_vcodec_dev of the device
-- * @list: link to ctx_list of mtk_vcodec_dev
-+ * @dev: pointer to the mtk_vcodec_dec_dev of the device
-+ * @list: link to ctx_list of mtk_vcodec_dec_dev
-  *
-  * @fh: struct v4l2_fh
-  * @m2m_ctx: pointer to the v4l2_m2m_ctx of the context
-@@ -95,7 +165,7 @@ enum mtk_vdec_hw_id {
-  */
- struct mtk_vcodec_dec_ctx {
- 	enum mtk_instance_type type;
--	struct mtk_vcodec_dev *dev;
-+	struct mtk_vcodec_dec_dev *dev;
- 	struct list_head list;
- 
- 	struct v4l2_fh fh;
-@@ -136,6 +206,84 @@ struct mtk_vcodec_dec_ctx {
- 	struct vdec_msg_queue msg_queue;
- };
- 
-+/**
-+ * struct mtk_vcodec_dec_dev - driver data
-+ * @v4l2_dev: V4L2 device to register video devices for.
-+ * @vfd_dec: Video device for decoder
-+ * @mdev_dec: Media device for decoder
-+ *
-+ * @m2m_dev_dec: m2m device for decoder
-+ * @plat_dev: platform device
-+ * @ctx_list: list of struct mtk_vcodec_ctx
-+ * @curr_ctx: The context that is waiting for codec hardware
-+ *
-+ * @reg_base: Mapped address of MTK Vcodec registers.
-+ * @vdec_pdata: decoder IC-specific data
-+ *
-+ * @fw_handler: used to communicate with the firmware.
-+ * @id_counter: used to identify current opened instance
-+ *
-+ * @dec_mutex: decoder hardware lock
-+ * @dev_mutex: video_device lock
-+ * @decode_workqueue: decode work queue
-+ *
-+ * @irqlock: protect data access by irq handler and work thread
-+ * @dec_irq: decoder irq resource
-+ *
-+ * @pm: power management control
-+ * @dec_capability: used to identify decode capability, ex: 4k
-+ *
-+ * @core_workqueue: queue used for core hardware decode
-+ *
-+ * @subdev_dev: subdev hardware device
-+ * @subdev_prob_done: check whether all used hw device is prob done
-+ * @subdev_bitmap: used to record hardware is ready or not
-+ *
-+ * @dec_active_cnt: used to mark whether need to record register value
-+ * @vdec_racing_info: record register value
-+ * @dec_racing_info_mutex: mutex lock used for inner racing mode
-+ * @dbgfs: debug log related information
-+ */
-+struct mtk_vcodec_dec_dev {
-+	struct v4l2_device v4l2_dev;
-+	struct video_device *vfd_dec;
-+	struct media_device mdev_dec;
-+
-+	struct v4l2_m2m_dev *m2m_dev_dec;
-+	struct platform_device *plat_dev;
-+	struct list_head ctx_list;
-+	struct mtk_vcodec_dec_ctx *curr_ctx;
-+
-+	void __iomem *reg_base[NUM_MAX_VCODEC_REG_BASE];
-+	const struct mtk_vcodec_dec_pdata *vdec_pdata;
-+
-+	struct mtk_vcodec_fw *fw_handler;
-+	unsigned long id_counter;
-+
-+	/* decoder hardware mutex lock */
-+	struct mutex dec_mutex[MTK_VDEC_HW_MAX];
-+	struct mutex dev_mutex;
-+	struct workqueue_struct *decode_workqueue;
-+
-+	spinlock_t irqlock;
-+	int dec_irq;
-+
-+	struct mtk_vcodec_pm pm;
-+	unsigned int dec_capability;
-+
-+	struct workqueue_struct *core_workqueue;
-+
-+	void *subdev_dev[MTK_VDEC_HW_MAX];
-+	int (*subdev_prob_done)(struct mtk_vcodec_dec_dev *vdec_dev);
-+	DECLARE_BITMAP(subdev_bitmap, MTK_VDEC_HW_MAX);
-+
-+	atomic_t dec_active_cnt;
-+	u32 vdec_racing_info[132];
-+	/* Protects access to vdec_racing_info data */
-+	struct mutex dec_racing_info_mutex;
-+	struct mtk_vcodec_dbgfs dbgfs;
-+};
-+
- static inline struct mtk_vcodec_dec_ctx *fh_to_dec_ctx(struct v4l2_fh *fh)
- {
- 	return container_of(fh, struct mtk_vcodec_dec_ctx, fh);
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
-index dde0894f2ab0..23c19efa3cf6 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
-@@ -12,7 +12,6 @@
- #include <linux/pm_runtime.h>
- #include <linux/slab.h>
- 
--#include "mtk_vcodec_drv.h"
- #include "mtk_vcodec_dec.h"
- #include "mtk_vcodec_dec_hw.h"
- #include "mtk_vcodec_dec_pm.h"
-@@ -36,7 +35,7 @@ static const struct of_device_id mtk_vdec_hw_match[] = {
- };
- MODULE_DEVICE_TABLE(of, mtk_vdec_hw_match);
- 
--static int mtk_vdec_hw_prob_done(struct mtk_vcodec_dev *vdec_dev)
-+static int mtk_vdec_hw_prob_done(struct mtk_vcodec_dec_dev *vdec_dev)
- {
- 	struct platform_device *pdev = vdec_dev->plat_dev;
- 	struct device_node *subdev_node;
-@@ -123,7 +122,7 @@ static int mtk_vdec_hw_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct mtk_vdec_hw_dev *subdev_dev;
--	struct mtk_vcodec_dev *main_dev;
-+	struct mtk_vcodec_dec_dev *main_dev;
- 	const struct of_device_id *of_id;
- 	int hw_idx;
- 	int ret;
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.h
-index d62c7f961cfa..2b33f00e931e 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.h
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.h
-@@ -10,7 +10,7 @@
- #include <linux/io.h>
- #include <linux/platform_device.h>
- 
--#include "mtk_vcodec_drv.h"
-+#include "mtk_vcodec_dec_drv.h"
- 
- #define VDEC_HW_ACTIVE 0x10
- #define VDEC_IRQ_CFG 0x11
-@@ -45,7 +45,7 @@ enum mtk_vdec_hw_reg_idx {
-  */
- struct mtk_vdec_hw_dev {
- 	struct platform_device *plat_dev;
--	struct mtk_vcodec_dev *main_dev;
-+	struct mtk_vcodec_dec_dev *main_dev;
- 	void __iomem *reg_base[VDEC_HW_MAX];
- 
- 	struct mtk_vcodec_dec_ctx *curr_ctx;
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c
-index 29ef00c4a326..ed1f503a944e 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c
-@@ -107,7 +107,7 @@ static void mtk_vcodec_dec_clock_off(struct mtk_vcodec_pm *pm)
- 		clk_disable_unprepare(dec_clk->clk_info[i].vcodec_clk);
- }
- 
--static void mtk_vcodec_dec_enable_irq(struct mtk_vcodec_dev *vdec_dev, int hw_idx)
-+static void mtk_vcodec_dec_enable_irq(struct mtk_vcodec_dec_dev *vdec_dev, int hw_idx)
- {
- 	struct mtk_vdec_hw_dev *subdev_dev;
- 
-@@ -125,7 +125,7 @@ static void mtk_vcodec_dec_enable_irq(struct mtk_vcodec_dev *vdec_dev, int hw_id
- 	}
- }
- 
--static void mtk_vcodec_dec_disable_irq(struct mtk_vcodec_dev *vdec_dev, int hw_idx)
-+static void mtk_vcodec_dec_disable_irq(struct mtk_vcodec_dec_dev *vdec_dev, int hw_idx)
- {
- 	struct mtk_vdec_hw_dev *subdev_dev;
- 
-@@ -171,7 +171,7 @@ static void mtk_vcodec_record_racing_info(struct mtk_vcodec_dec_ctx *ctx)
- 	mutex_unlock(&ctx->dev->dec_racing_info_mutex);
- }
- 
--static struct mtk_vcodec_pm *mtk_vcodec_dec_get_pm(struct mtk_vcodec_dev *vdec_dev,
-+static struct mtk_vcodec_pm *mtk_vcodec_dec_get_pm(struct mtk_vcodec_dec_dev *vdec_dev,
- 						   int hw_idx)
- {
- 	struct mtk_vdec_hw_dev *subdev_dev;
-@@ -191,7 +191,7 @@ static struct mtk_vcodec_pm *mtk_vcodec_dec_get_pm(struct mtk_vcodec_dev *vdec_d
- 	return &vdec_dev->pm;
- }
- 
--static void mtk_vcodec_dec_child_dev_on(struct mtk_vcodec_dev *vdec_dev,
-+static void mtk_vcodec_dec_child_dev_on(struct mtk_vcodec_dec_dev *vdec_dev,
- 					int hw_idx)
- {
- 	struct mtk_vcodec_pm *pm;
-@@ -211,7 +211,7 @@ static void mtk_vcodec_dec_child_dev_on(struct mtk_vcodec_dev *vdec_dev,
- 	}
- }
- 
--static void mtk_vcodec_dec_child_dev_off(struct mtk_vcodec_dev *vdec_dev,
-+static void mtk_vcodec_dec_child_dev_off(struct mtk_vcodec_dec_dev *vdec_dev,
- 					 int hw_idx)
- {
- 	struct mtk_vcodec_pm *pm;
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.h
-index f6c68e57bcc1..87a50d589d42 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.h
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.h
-@@ -7,7 +7,7 @@
- #ifndef _MTK_VCODEC_DEC_PM_H_
- #define _MTK_VCODEC_DEC_PM_H_
- 
--#include "mtk_vcodec_drv.h"
-+#include "mtk_vcodec_dec_drv.h"
- 
- int mtk_vcodec_init_dec_clk(struct platform_device *pdev, struct mtk_vcodec_pm *pm);
- 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateful.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateful.c
-index 93230fe7ab97..459e74a46737 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateful.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateful.c
-@@ -4,7 +4,6 @@
- #include <media/v4l2-mem2mem.h>
- #include <media/videobuf2-dma-contig.h>
- 
--#include "mtk_vcodec_drv.h"
- #include "mtk_vcodec_dec.h"
- #include "mtk_vcodec_intr.h"
- #include "mtk_vcodec_util.h"
-@@ -279,7 +278,7 @@ static void mtk_vdec_worker(struct work_struct *work)
- {
- 	struct mtk_vcodec_dec_ctx *ctx =
- 		container_of(work, struct mtk_vcodec_dec_ctx, decode_work);
--	struct mtk_vcodec_dev *dev = ctx->dev;
-+	struct mtk_vcodec_dec_dev *dev = ctx->dev;
- 	struct vb2_v4l2_buffer *src_buf, *dst_buf;
- 	struct mtk_vcodec_mem buf;
- 	struct vdec_fb *pfb;
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
-index 64e9dfd0fcb5..6268a39c2bb3 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
-@@ -6,7 +6,6 @@
- #include <media/v4l2-mem2mem.h>
- #include <linux/module.h>
- 
--#include "mtk_vcodec_drv.h"
- #include "mtk_vcodec_dec.h"
- #include "mtk_vcodec_intr.h"
- #include "mtk_vcodec_util.h"
-@@ -288,7 +287,7 @@ static void mtk_vdec_worker(struct work_struct *work)
- {
- 	struct mtk_vcodec_dec_ctx *ctx =
- 		container_of(work, struct mtk_vcodec_dec_ctx, decode_work);
--	struct mtk_vcodec_dev *dev = ctx->dev;
-+	struct mtk_vcodec_dec_dev *dev = ctx->dev;
- 	struct vb2_v4l2_buffer *vb2_v4l2_src;
- 	struct vb2_buffer *vb2_src;
- 	struct mtk_vcodec_mem *bs_src;
-@@ -444,7 +443,7 @@ const struct media_device_ops mtk_vcodec_media_ops = {
- static void mtk_vcodec_add_formats(unsigned int fourcc,
- 				   struct mtk_vcodec_dec_ctx *ctx)
- {
--	struct mtk_vcodec_dev *dev = ctx->dev;
-+	struct mtk_vcodec_dec_dev *dev = ctx->dev;
- 	const struct mtk_vcodec_dec_pdata *pdata = dev->vdec_pdata;
- 	int count_formats = *pdata->num_formats;
- 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-deleted file mode 100644
-index 76db7770d981..000000000000
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-+++ /dev/null
-@@ -1,295 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--/*
--* Copyright (c) 2016 MediaTek Inc.
--* Author: PC Chen <pc.chen@mediatek.com>
--*         Tiffany Lin <tiffany.lin@mediatek.com>
--*/
--
--#ifndef _MTK_VCODEC_DRV_H_
--#define _MTK_VCODEC_DRV_H_
--
--#include <linux/platform_device.h>
--#include <linux/videodev2.h>
--#include <media/v4l2-ctrls.h>
--#include <media/v4l2-device.h>
--#include <media/v4l2-ioctl.h>
--#include <media/v4l2-mem2mem.h>
--#include <media/videobuf2-core.h>
--
--#include "mtk_vcodec_dbgfs.h"
--#include "mtk_vcodec_dec_drv.h"
--#include "mtk_vcodec_enc_drv.h"
--#include "mtk_vcodec_util.h"
--#include "vdec_msg_queue.h"
--
--#define MTK_VCODEC_DEC_NAME	"mtk-vcodec-dec"
--#define MTK_VCODEC_ENC_NAME	"mtk-vcodec-enc"
--
--#define MTK_V4L2_BENCHMARK	0
--#define WAIT_INTR_TIMEOUT_MS	1000
--#define IS_VDEC_LAT_ARCH(hw_arch) ((hw_arch) >= MTK_VDEC_LAT_SINGLE_CORE)
--#define IS_VDEC_INNER_RACING(capability) ((capability) & MTK_VCODEC_INNER_RACING)
--
--/*
-- * enum mtk_hw_reg_idx - MTK hw register base index
-- */
--enum mtk_hw_reg_idx {
--	VDEC_SYS,
--	VDEC_MISC,
--	VDEC_LD,
--	VDEC_TOP,
--	VDEC_CM,
--	VDEC_AD,
--	VDEC_AV,
--	VDEC_PP,
--	VDEC_HWD,
--	VDEC_HWQ,
--	VDEC_HWB,
--	VDEC_HWG,
--	NUM_MAX_VDEC_REG_BASE,
--	/* h264 encoder */
--	VENC_SYS = NUM_MAX_VDEC_REG_BASE,
--	/* vp8 encoder */
--	VENC_LT_SYS,
--	NUM_MAX_VCODEC_REG_BASE
--};
--
--
--
--/*
-- * enum mtk_vdec_hw_count - Supported hardware count
-- */
--enum mtk_vdec_hw_count {
--	MTK_VDEC_NO_HW = 0,
--	MTK_VDEC_ONE_CORE,
--	MTK_VDEC_ONE_LAT_ONE_CORE,
--	MTK_VDEC_MAX_HW_COUNT,
--};
--
--/*
-- * enum mtk_q_type - Type of queue
-- */
--enum mtk_q_type {
--	MTK_Q_DATA_SRC = 0,
--	MTK_Q_DATA_DST = 1,
--};
--
--
--/*
-- * struct mtk_vcodec_clk_info - Structure used to store clock name
-- */
--struct mtk_vcodec_clk_info {
--	const char	*clk_name;
--	struct clk	*vcodec_clk;
--};
--
--/*
-- * struct mtk_vcodec_clk - Structure used to store vcodec clock information
-- */
--struct mtk_vcodec_clk {
--	struct mtk_vcodec_clk_info	*clk_info;
--	int	clk_num;
--};
--
--/*
-- * struct mtk_vcodec_pm - Power management data structure
-- */
--struct mtk_vcodec_pm {
--	struct mtk_vcodec_clk	vdec_clk;
--	struct mtk_vcodec_clk	venc_clk;
--	struct device	*dev;
--};
--
--/*
-- * enum mtk_vdec_hw_arch - Used to separate different hardware architecture
-- */
--enum mtk_vdec_hw_arch {
--	MTK_VDEC_PURE_SINGLE_CORE,
--	MTK_VDEC_LAT_SINGLE_CORE,
--};
--
--/*
-- * struct mtk_vdec_format_types - Structure used to get supported
-- *		  format types according to decoder capability
-- */
--enum mtk_vdec_format_types {
--	MTK_VDEC_FORMAT_MM21 = 0x20,
--	MTK_VDEC_FORMAT_MT21C = 0x40,
--	MTK_VDEC_FORMAT_H264_SLICE = 0x100,
--	MTK_VDEC_FORMAT_VP8_FRAME = 0x200,
--	MTK_VDEC_FORMAT_VP9_FRAME = 0x400,
--	MTK_VDEC_FORMAT_AV1_FRAME = 0x800,
--	MTK_VDEC_FORMAT_HEVC_FRAME = 0x1000,
--	MTK_VCODEC_INNER_RACING = 0x20000,
--};
--
--/**
-- * struct mtk_vcodec_dec_pdata - compatible data for each IC
-- * @init_vdec_params: init vdec params
-- * @ctrls_setup: init vcodec dec ctrls
-- * @worker: worker to start a decode job
-- * @flush_decoder: function that flushes the decoder
-- * @get_cap_buffer: get capture buffer from capture queue
-- * @cap_to_disp: put capture buffer to disp list for lat and core arch
-- * @vdec_vb2_ops: struct vb2_ops
-- *
-- * @vdec_formats: supported video decoder formats
-- * @num_formats: count of video decoder formats
-- * @default_out_fmt: default output buffer format
-- * @default_cap_fmt: default capture buffer format
-- *
-- * @hw_arch: hardware arch is used to separate pure_sin_core and lat_sin_core
-- *
-- * @is_subdev_supported: whether support parent-node architecture(subdev)
-- * @uses_stateless_api: whether the decoder uses the stateless API with requests
-- */
--
--struct mtk_vcodec_dec_pdata {
--	void (*init_vdec_params)(struct mtk_vcodec_dec_ctx *ctx);
--	int (*ctrls_setup)(struct mtk_vcodec_dec_ctx *ctx);
--	void (*worker)(struct work_struct *work);
--	int (*flush_decoder)(struct mtk_vcodec_dec_ctx *ctx);
--	struct vdec_fb *(*get_cap_buffer)(struct mtk_vcodec_dec_ctx *ctx);
--	void (*cap_to_disp)(struct mtk_vcodec_dec_ctx *ctx, int error,
--			    struct media_request *src_buf_req);
--
--	struct vb2_ops *vdec_vb2_ops;
--
--	const struct mtk_video_fmt *vdec_formats;
--	const int *num_formats;
--	const struct mtk_video_fmt *default_out_fmt;
--	const struct mtk_video_fmt *default_cap_fmt;
--
--	enum mtk_vdec_hw_arch hw_arch;
--
--	bool is_subdev_supported;
--	bool uses_stateless_api;
--};
--
--/**
-- * struct mtk_vcodec_enc_pdata - compatible data for each IC
-- *
-- * @uses_ext: whether the encoder uses the extended firmware messaging format
-- * @min_bitrate: minimum supported encoding bitrate
-- * @max_bitrate: maximum supported encoding bitrate
-- * @capture_formats: array of supported capture formats
-- * @num_capture_formats: number of entries in capture_formats
-- * @output_formats: array of supported output formats
-- * @num_output_formats: number of entries in output_formats
-- * @core_id: stand for h264 or vp8 encode index
-- * @uses_34bit: whether the encoder uses 34-bit iova
-- */
--struct mtk_vcodec_enc_pdata {
--	bool uses_ext;
--	unsigned long min_bitrate;
--	unsigned long max_bitrate;
--	const struct mtk_video_fmt *capture_formats;
--	size_t num_capture_formats;
--	const struct mtk_video_fmt *output_formats;
--	size_t num_output_formats;
--	int core_id;
--	bool uses_34bit;
--};
--
--#define MTK_ENC_CTX_IS_EXT(ctx) ((ctx)->dev->venc_pdata->uses_ext)
--#define MTK_ENC_IOVA_IS_34BIT(ctx) ((ctx)->dev->venc_pdata->uses_34bit)
--
--/**
-- * struct mtk_vcodec_dev - driver data
-- * @v4l2_dev: V4L2 device to register video devices for.
-- * @vfd_dec: Video device for decoder
-- * @mdev_dec: Media device for decoder
-- * @vfd_enc: Video device for encoder.
-- *
-- * @m2m_dev_dec: m2m device for decoder
-- * @m2m_dev_enc: m2m device for encoder.
-- * @plat_dev: platform device
-- * @ctx_list: list of struct mtk_vcodec_dec_ctx
-- * @irqlock: protect data access by irq handler and work thread
-- * @curr_ctx: The context that is waiting for codec hardware
-- * @curr_enc_ctx: The encoder context that is waiting for codec hardware
-- *
-- * @reg_base: Mapped address of MTK Vcodec registers.
-- * @vdec_pdata: decoder IC-specific data
-- * @venc_pdata: encoder IC-specific data
-- *
-- * @fw_handler: used to communicate with the firmware.
-- * @id_counter: used to identify current opened instance
-- *
-- * @decode_workqueue: decode work queue
-- * @encode_workqueue: encode work queue
-- *
-- * @dev_mutex: video_device lock
-- *
-- * @dec_irq: decoder irq resource
-- * @enc_irq: h264 encoder irq resource
-- *
-- * @dec_mutex: decoder hardware lock
-- * @enc_mutex: encoder hardware lock.
-- *
-- * @pm: power management control
-- * @dec_capability: used to identify decode capability, ex: 4k
-- * @enc_capability: used to identify encode capability
-- *
-- * @core_workqueue: queue used for core hardware decode
-- *
-- * @subdev_dev: subdev hardware device
-- * @subdev_prob_done: check whether all used hw device is prob done
-- * @subdev_bitmap: used to record hardware is ready or not
-- *
-- * @dec_active_cnt: used to mark whether need to record register value
-- * @vdec_racing_info: record register value
-- * @dec_racing_info_mutex: mutex lock used for inner racing mode
-- * @dbgfs: debug log related information
-- */
--struct mtk_vcodec_dev {
--	struct v4l2_device v4l2_dev;
--	struct video_device *vfd_dec;
--	struct media_device mdev_dec;
--	struct video_device *vfd_enc;
--
--	struct v4l2_m2m_dev *m2m_dev_dec;
--	struct v4l2_m2m_dev *m2m_dev_enc;
--	struct platform_device *plat_dev;
--	struct list_head ctx_list;
--	spinlock_t irqlock;
--	struct mtk_vcodec_dec_ctx *curr_ctx;
--	struct mtk_vcodec_enc_ctx *curr_enc_ctx;
--	void __iomem *reg_base[NUM_MAX_VCODEC_REG_BASE];
--	const struct mtk_vcodec_dec_pdata *vdec_pdata;
--	const struct mtk_vcodec_enc_pdata *venc_pdata;
--
--	struct mtk_vcodec_fw *fw_handler;
--
--	unsigned long id_counter;
--
--	struct workqueue_struct *decode_workqueue;
--	struct workqueue_struct *encode_workqueue;
--	struct mutex dev_mutex;
--
--	int dec_irq;
--	int enc_irq;
--
--	/* decoder hardware mutex lock */
--	struct mutex dec_mutex[MTK_VDEC_HW_MAX];
--	struct mutex enc_mutex;
--
--	struct mtk_vcodec_pm pm;
--	unsigned int dec_capability;
--	unsigned int enc_capability;
--
--	struct workqueue_struct *core_workqueue;
--
--	void *subdev_dev[MTK_VDEC_HW_MAX];
--	int (*subdev_prob_done)(struct mtk_vcodec_dev *vdec_dev);
--	DECLARE_BITMAP(subdev_bitmap, MTK_VDEC_HW_MAX);
--
--	atomic_t dec_active_cnt;
--	u32 vdec_racing_info[132];
--	/* Protects access to vdec_racing_info data */
--	struct mutex dec_racing_info_mutex;
--
--	struct mtk_vcodec_dbgfs dbgfs;
--};
--
--#endif /* _MTK_VCODEC_DRV_H_ */
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-index deabf012848e..85dabb20fb11 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-@@ -10,7 +10,6 @@
- #include <media/videobuf2-dma-contig.h>
- #include <linux/pm_runtime.h>
- 
--#include "mtk_vcodec_drv.h"
- #include "mtk_vcodec_enc.h"
- #include "mtk_vcodec_intr.h"
- #include "mtk_vcodec_util.h"
-@@ -1436,7 +1435,7 @@ int mtk_vcodec_enc_queue_init(void *priv, struct vb2_queue *src_vq,
- 
- int mtk_venc_unlock(struct mtk_vcodec_enc_ctx *ctx)
- {
--	struct mtk_vcodec_dev *dev = ctx->dev;
-+	struct mtk_vcodec_enc_dev *dev = ctx->dev;
- 
- 	mutex_unlock(&dev->enc_mutex);
- 	return 0;
-@@ -1444,7 +1443,7 @@ int mtk_venc_unlock(struct mtk_vcodec_enc_ctx *ctx)
- 
- int mtk_venc_lock(struct mtk_vcodec_enc_ctx *ctx)
- {
--	struct mtk_vcodec_dev *dev = ctx->dev;
-+	struct mtk_vcodec_enc_dev *dev = ctx->dev;
- 
- 	mutex_lock(&dev->enc_mutex);
- 	return 0;
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-index c9b6ce9dfa2d..0830708de32f 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-@@ -16,7 +16,6 @@
- #include <media/v4l2-mem2mem.h>
- #include <media/videobuf2-dma-contig.h>
- 
--#include "mtk_vcodec_drv.h"
- #include "mtk_vcodec_enc.h"
- #include "mtk_vcodec_enc_pm.h"
- #include "mtk_vcodec_intr.h"
-@@ -85,14 +84,14 @@ static void clean_irq_status(unsigned int irq_status, void __iomem *addr)
- }
- static irqreturn_t mtk_vcodec_enc_irq_handler(int irq, void *priv)
- {
--	struct mtk_vcodec_dev *dev = priv;
-+	struct mtk_vcodec_enc_dev *dev = priv;
- 	struct mtk_vcodec_enc_ctx *ctx;
- 	unsigned long flags;
- 	void __iomem *addr;
- 	int core_id;
- 
- 	spin_lock_irqsave(&dev->irqlock, flags);
--	ctx = dev->curr_enc_ctx;
-+	ctx = dev->curr_ctx;
- 	spin_unlock_irqrestore(&dev->irqlock, flags);
- 
- 	core_id = dev->venc_pdata->core_id;
-@@ -116,7 +115,7 @@ static irqreturn_t mtk_vcodec_enc_irq_handler(int irq, void *priv)
- 
- static int fops_vcodec_open(struct file *file)
- {
--	struct mtk_vcodec_dev *dev = video_drvdata(file);
-+	struct mtk_vcodec_enc_dev *dev = video_drvdata(file);
- 	struct mtk_vcodec_enc_ctx *ctx = NULL;
- 	int ret = 0;
- 	struct vb2_queue *src_vq;
-@@ -203,7 +202,7 @@ static int fops_vcodec_open(struct file *file)
- 
- static int fops_vcodec_release(struct file *file)
- {
--	struct mtk_vcodec_dev *dev = video_drvdata(file);
-+	struct mtk_vcodec_enc_dev *dev = video_drvdata(file);
- 	struct mtk_vcodec_enc_ctx *ctx = fh_to_enc_ctx(file->private_data);
- 
- 	mtk_v4l2_venc_dbg(1, ctx, "[%d] encoder", ctx->id);
-@@ -232,7 +231,7 @@ static const struct v4l2_file_operations mtk_vcodec_fops = {
- 
- static int mtk_vcodec_probe(struct platform_device *pdev)
- {
--	struct mtk_vcodec_dev *dev;
-+	struct mtk_vcodec_enc_dev *dev;
- 	struct video_device *vfd_enc;
- 	phandle rproc_phandle;
- 	enum mtk_vcodec_fw_type fw_type;
-@@ -454,7 +453,7 @@ MODULE_DEVICE_TABLE(of, mtk_vcodec_enc_match);
- 
- static void mtk_vcodec_enc_remove(struct platform_device *pdev)
- {
--	struct mtk_vcodec_dev *dev = platform_get_drvdata(pdev);
-+	struct mtk_vcodec_enc_dev *dev = platform_get_drvdata(pdev);
- 
- 	destroy_workqueue(dev->encode_workqueue);
- 	if (dev->m2m_dev_enc)
-@@ -463,7 +462,7 @@ static void mtk_vcodec_enc_remove(struct platform_device *pdev)
- 	if (dev->vfd_enc)
- 		video_unregister_device(dev->vfd_enc);
- 
--	mtk_vcodec_dbgfs_deinit(dev);
-+	mtk_vcodec_dbgfs_deinit(&dev->dbgfs);
- 	v4l2_device_unregister(&dev->v4l2_dev);
- 	pm_runtime_disable(dev->pm.dev);
- 	mtk_vcodec_fw_release(dev->fw_handler);
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.h
-index 6aa4afe5b796..a88ef9078848 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.h
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.h
-@@ -8,7 +8,39 @@
- #define _MTK_VCODEC_ENC_DRV_H_
- 
- #include "mtk_vcodec_com_drv.h"
-+#include "mtk_vcodec_dbgfs.h"
- #include "mtk_vcodec_fw_priv.h"
-+#include "mtk_vcodec_util.h"
-+
-+#define MTK_VCODEC_ENC_NAME	"mtk-vcodec-enc"
-+
-+#define MTK_ENC_CTX_IS_EXT(ctx) ((ctx)->dev->venc_pdata->uses_ext)
-+#define MTK_ENC_IOVA_IS_34BIT(ctx) ((ctx)->dev->venc_pdata->uses_34bit)
-+
-+/**
-+ * struct mtk_vcodec_enc_pdata - compatible data for each IC
-+ *
-+ * @uses_ext: whether the encoder uses the extended firmware messaging format
-+ * @min_bitrate: minimum supported encoding bitrate
-+ * @max_bitrate: maximum supported encoding bitrate
-+ * @capture_formats: array of supported capture formats
-+ * @num_capture_formats: number of entries in capture_formats
-+ * @output_formats: array of supported output formats
-+ * @num_output_formats: number of entries in output_formats
-+ * @core_id: stand for h264 or vp8 encode index
-+ * @uses_34bit: whether the encoder uses 34-bit iova
-+ */
-+struct mtk_vcodec_enc_pdata {
-+	bool uses_ext;
-+	unsigned long min_bitrate;
-+	unsigned long max_bitrate;
-+	const struct mtk_video_fmt *capture_formats;
-+	size_t num_capture_formats;
-+	const struct mtk_video_fmt *output_formats;
-+	size_t num_output_formats;
-+	int core_id;
-+	bool uses_34bit;
-+};
- 
- /*
-  * enum mtk_encode_param - General encoding parameters type
-@@ -61,8 +93,8 @@ struct mtk_enc_params {
-  * struct mtk_vcodec_enc_ctx - Context (instance) private data.
-  *
-  * @type: type of the instance - decoder or encoder
-- * @dev: pointer to the mtk_vcodec_dev of the device
-- * @list: link to ctx_list of mtk_vcodec_dev
-+ * @dev: pointer to the mtk_vcodec_enc_dev of the device
-+ * @list: link to ctx_list of mtk_vcodec_enc_dev
-  *
-  * @fh: struct v4l2_fh
-  * @m2m_ctx: pointer to the v4l2_m2m_ctx of the context
-@@ -101,7 +133,7 @@ struct mtk_enc_params {
-  */
- struct mtk_vcodec_enc_ctx {
- 	enum mtk_instance_type type;
--	struct mtk_vcodec_dev *dev;
-+	struct mtk_vcodec_enc_dev *dev;
- 	struct list_head list;
- 
- 	struct v4l2_fh fh;
-@@ -136,6 +168,61 @@ struct mtk_vcodec_enc_ctx {
- 	struct mutex q_mutex;
- };
- 
-+/**
-+ * struct mtk_vcodec_enc_dev - driver data
-+ * @v4l2_dev: V4L2 device to register video devices for.
-+ * @vfd_enc: Video device for encoder.
-+ *
-+ * @m2m_dev_enc: m2m device for encoder.
-+ * @plat_dev: platform device
-+ * @ctx_list: list of struct mtk_vcodec_ctx
-+ * @curr_ctx: The context that is waiting for codec hardware
-+ *
-+ * @reg_base: Mapped address of MTK Vcodec registers.
-+ * @venc_pdata: encoder IC-specific data
-+ *
-+ * @fw_handler: used to communicate with the firmware.
-+ * @id_counter: used to identify current opened instance
-+ *
-+ * @enc_mutex: encoder hardware lock.
-+ * @dev_mutex: video_device lock
-+ * @encode_workqueue: encode work queue
-+ *
-+ * @enc_irq: h264 encoder irq resource
-+ * @irqlock: protect data access by irq handler and work thread
-+ *
-+ * @pm: power management control
-+ * @enc_capability: used to identify encode capability
-+ * @dbgfs: debug log related information
-+ */
-+struct mtk_vcodec_enc_dev {
-+	struct v4l2_device v4l2_dev;
-+	struct video_device *vfd_enc;
-+
-+	struct v4l2_m2m_dev *m2m_dev_enc;
-+	struct platform_device *plat_dev;
-+	struct list_head ctx_list;
-+	struct mtk_vcodec_enc_ctx *curr_ctx;
-+
-+	void __iomem *reg_base[NUM_MAX_VCODEC_REG_BASE];
-+	const struct mtk_vcodec_enc_pdata *venc_pdata;
-+
-+	struct mtk_vcodec_fw *fw_handler;
-+	unsigned long id_counter;
-+
-+	/* encoder hardware mutex lock */
-+	struct mutex enc_mutex;
-+	struct mutex dev_mutex;
-+	struct workqueue_struct *encode_workqueue;
-+
-+	int enc_irq;
-+	spinlock_t irqlock;
-+
-+	struct mtk_vcodec_pm pm;
-+	unsigned int enc_capability;
-+	struct mtk_vcodec_dbgfs dbgfs;
-+};
-+
- static inline struct mtk_vcodec_enc_ctx *fh_to_enc_ctx(struct v4l2_fh *fh)
- {
- 	return container_of(fh, struct mtk_vcodec_enc_ctx, fh);
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_pm.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_pm.c
-index 3165e114b221..f7481f33a0b2 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_pm.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_pm.c
-@@ -9,10 +9,10 @@
- #include <linux/of_platform.h>
- #include <linux/pm_runtime.h>
- 
-+#include "mtk_vcodec_enc_drv.h"
- #include "mtk_vcodec_enc_pm.h"
--#include "mtk_vcodec_util.h"
- 
--int mtk_vcodec_init_enc_clk(struct mtk_vcodec_dev *mtkdev)
-+int mtk_vcodec_init_enc_clk(struct mtk_vcodec_enc_dev *mtkdev)
- {
- 	struct platform_device *pdev;
- 	struct mtk_vcodec_pm *pm;
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_pm.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_pm.h
-index bc455cefc0cd..e50be0575190 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_pm.h
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_pm.h
-@@ -7,9 +7,9 @@
- #ifndef _MTK_VCODEC_ENC_PM_H_
- #define _MTK_VCODEC_ENC_PM_H_
- 
--#include "mtk_vcodec_drv.h"
-+#include "mtk_vcodec_enc_drv.h"
- 
--int mtk_vcodec_init_enc_clk(struct mtk_vcodec_dev *dev);
-+int mtk_vcodec_init_enc_clk(struct mtk_vcodec_enc_dev *dev);
- 
- void mtk_vcodec_enc_clock_on(struct mtk_vcodec_pm *pm);
- void mtk_vcodec_enc_clock_off(struct mtk_vcodec_pm *pm);
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw.c
-index 623dd916d09e..5c9f04574ad1 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw.c
-@@ -1,20 +1,28 @@
- // SPDX-License-Identifier: GPL-2.0
- 
-+#include "mtk_vcodec_dec_drv.h"
-+#include "mtk_vcodec_enc_drv.h"
- #include "mtk_vcodec_fw.h"
- #include "mtk_vcodec_fw_priv.h"
- #include "mtk_vcodec_util.h"
--#include "mtk_vcodec_drv.h"
- 
- struct mtk_vcodec_fw *mtk_vcodec_fw_select(void *priv, enum mtk_vcodec_fw_type type,
- 					   enum mtk_vcodec_fw_use fw_use)
- {
-+	struct platform_device *plat_dev;
-+
-+	if (fw_use == ENCODER)
-+		plat_dev = ((struct mtk_vcodec_enc_dev *)priv)->plat_dev;
-+	else
-+		plat_dev = ((struct mtk_vcodec_dec_dev *)priv)->plat_dev;
-+
- 	switch (type) {
- 	case VPU:
- 		return mtk_vcodec_fw_vpu_init(priv, fw_use);
- 	case SCP:
- 		return mtk_vcodec_fw_scp_init(priv, fw_use);
- 	default:
--		pr_err("invalid vcodec fw type");
-+		dev_err(&plat_dev->dev, "invalid vcodec fw type");
- 		return ERR_PTR(-EINVAL);
- 	}
- }
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw.h
-index d8cfbec323d5..83479ab70385 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw.h
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw.h
-@@ -8,7 +8,8 @@
- 
- #include "../vpu/mtk_vpu.h"
- 
--struct mtk_vcodec_dev;
-+struct mtk_vcodec_dec_dev;
-+struct mtk_vcodec_enc_dev;
- 
- enum mtk_vcodec_fw_type {
- 	VPU,
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_priv.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_priv.h
-index 3438a4917344..99603accd82e 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_priv.h
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_priv.h
-@@ -5,7 +5,8 @@
- 
- #include "mtk_vcodec_fw.h"
- 
--struct mtk_vcodec_dev;
-+struct mtk_vcodec_dec_dev;
-+struct mtk_vcodec_enc_dev;
- 
- struct mtk_vcodec_fw {
- 	enum mtk_vcodec_fw_type type;
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_scp.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_scp.c
-index 71ff1a6ae872..3cb5a5befd24 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_scp.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_scp.c
-@@ -1,8 +1,8 @@
- // SPDX-License-Identifier: GPL-2.0
- 
-+#include "mtk_vcodec_dec_drv.h"
-+#include "mtk_vcodec_enc_drv.h"
- #include "mtk_vcodec_fw_priv.h"
--#include "mtk_vcodec_util.h"
--#include "mtk_vcodec_drv.h"
- 
- static int mtk_vcodec_scp_load_firmware(struct mtk_vcodec_fw *fw)
- {
-@@ -56,14 +56,25 @@ static const struct mtk_vcodec_fw_ops mtk_vcodec_rproc_msg = {
- struct mtk_vcodec_fw *mtk_vcodec_fw_scp_init(void *priv, enum mtk_vcodec_fw_use fw_use)
- {
- 	struct mtk_vcodec_fw *fw;
--	struct mtk_vcodec_dev *dev = priv;
- 	struct platform_device *plat_dev;
- 	struct mtk_scp *scp;
- 
--	plat_dev = dev->plat_dev;
-+	if (fw_use == ENCODER) {
-+		struct mtk_vcodec_enc_dev *enc_dev = priv;
-+
-+		plat_dev = enc_dev->plat_dev;
-+	} else if (fw_use == DECODER) {
-+		struct mtk_vcodec_dec_dev *dec_dev = priv;
-+
-+		plat_dev = dec_dev->plat_dev;
-+	} else {
-+		pr_err("Invalid fw_use %d (use a resonable fw id here)\n", fw_use);
-+		return ERR_PTR(-EINVAL);
-+	}
-+
- 	scp = scp_get(plat_dev);
- 	if (!scp) {
--		dev_err(&dev->plat_dev->dev, "could not get vdec scp handle");
-+		dev_err(&plat_dev->dev, "could not get vdec scp handle");
- 		return ERR_PTR(-EPROBE_DEFER);
- 	}
- 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_vpu.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_vpu.c
-index 571072dffbfa..18274a51a8f8 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_vpu.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_vpu.c
-@@ -1,8 +1,8 @@
- // SPDX-License-Identifier: GPL-2.0
- 
-+#include "mtk_vcodec_dec_drv.h"
-+#include "mtk_vcodec_enc_drv.h"
- #include "mtk_vcodec_fw_priv.h"
--#include "mtk_vcodec_util.h"
--#include "mtk_vcodec_drv.h"
- 
- static int mtk_vcodec_vpu_load_firmware(struct mtk_vcodec_fw *fw)
- {
-@@ -53,7 +53,7 @@ static void mtk_vcodec_vpu_release(struct mtk_vcodec_fw *fw)
- 
- static void mtk_vcodec_vpu_reset_dec_handler(void *priv)
- {
--	struct mtk_vcodec_dev *dev = priv;
-+	struct mtk_vcodec_dec_dev *dev = priv;
- 	struct mtk_vcodec_dec_ctx *ctx;
- 
- 	dev_err(&dev->plat_dev->dev, "Watchdog timeout!!");
-@@ -68,7 +68,7 @@ static void mtk_vcodec_vpu_reset_dec_handler(void *priv)
- 
- static void mtk_vcodec_vpu_reset_enc_handler(void *priv)
- {
--	struct mtk_vcodec_dev *dev = priv;
-+	struct mtk_vcodec_enc_dev *dev = priv;
- 	struct mtk_vcodec_enc_ctx *ctx;
- 
- 	dev_err(&dev->plat_dev->dev, "Watchdog timeout!!");
-@@ -94,24 +94,28 @@ static const struct mtk_vcodec_fw_ops mtk_vcodec_vpu_msg = {
- struct mtk_vcodec_fw *mtk_vcodec_fw_vpu_init(void *priv, enum mtk_vcodec_fw_use fw_use)
- {
- 	struct platform_device *fw_pdev;
--	struct mtk_vcodec_dev *dev = priv;
- 	struct platform_device *plat_dev;
- 	struct mtk_vcodec_fw *fw;
- 	enum rst_id rst_id;
- 
- 	if (fw_use == ENCODER) {
-+		struct mtk_vcodec_enc_dev *enc_dev = priv;
-+
-+		plat_dev = enc_dev->plat_dev;
- 		rst_id = VPU_RST_ENC;
- 	} else if (fw_use == DECODER) {
-+		struct mtk_vcodec_dec_dev *dec_dev = priv;
-+
-+		plat_dev = dec_dev->plat_dev;
- 		rst_id = VPU_RST_DEC;
- 	} else {
- 		pr_err("Invalid fw_use %d (use a resonable fw id here)\n", fw_use);
- 		return ERR_PTR(-EINVAL);
- 	}
- 
--	plat_dev = dev->plat_dev;
- 	fw_pdev = vpu_get_plat_device(plat_dev);
- 	if (!fw_pdev) {
--		dev_err(&dev->plat_dev->dev, "firmware device is not ready");
-+		dev_err(&plat_dev->dev, "firmware device is not ready");
- 		return ERR_PTR(-EINVAL);
- 	}
- 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_intr.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_intr.c
-index 66d1f50d8968..69dae0336a14 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_intr.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_intr.c
-@@ -7,9 +7,9 @@
- #include <linux/errno.h>
- #include <linux/wait.h>
- 
--#include "mtk_vcodec_drv.h"
-+#include "mtk_vcodec_dec_drv.h"
-+#include "mtk_vcodec_enc_drv.h"
- #include "mtk_vcodec_intr.h"
--#include "mtk_vcodec_util.h"
- 
- int mtk_vcodec_wait_for_done_ctx(void *priv, int command, unsigned int timeout_ms,
- 				 unsigned int hw_id)
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.c
-index adaeae79558a..18f632eb0b8a 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.c
-@@ -9,9 +9,9 @@
- #include <linux/of.h>
- #include <linux/of_device.h>
- 
-+#include "mtk_vcodec_dec_drv.h"
-+#include "mtk_vcodec_enc_drv.h"
- #include "mtk_vcodec_dec_hw.h"
--#include "mtk_vcodec_drv.h"
--#include "mtk_vcodec_util.h"
- 
- #if defined(CONFIG_DEBUG_FS)
- int mtk_vcodec_dbg;
-@@ -75,7 +75,7 @@ void mtk_vcodec_mem_free(void *priv, struct mtk_vcodec_mem *mem)
- }
- EXPORT_SYMBOL(mtk_vcodec_mem_free);
- 
--void *mtk_vcodec_get_hw_dev(struct mtk_vcodec_dev *dev, int hw_idx)
-+void *mtk_vcodec_get_hw_dev(struct mtk_vcodec_dec_dev *dev, int hw_idx)
- {
- 	if (hw_idx >= MTK_VDEC_HW_MAX || hw_idx < 0 || !dev->subdev_dev[hw_idx]) {
- 		dev_err(&dev->plat_dev->dev, "hw idx is out of range:%d", hw_idx);
-@@ -86,7 +86,7 @@ void *mtk_vcodec_get_hw_dev(struct mtk_vcodec_dev *dev, int hw_idx)
- }
- EXPORT_SYMBOL(mtk_vcodec_get_hw_dev);
- 
--void mtk_vcodec_set_curr_ctx(struct mtk_vcodec_dev *vdec_dev,
-+void mtk_vcodec_set_curr_ctx(struct mtk_vcodec_dec_dev *vdec_dev,
- 			     struct mtk_vcodec_dec_ctx *ctx, int hw_idx)
- {
- 	unsigned long flags;
-@@ -108,7 +108,7 @@ void mtk_vcodec_set_curr_ctx(struct mtk_vcodec_dev *vdec_dev,
- }
- EXPORT_SYMBOL(mtk_vcodec_set_curr_ctx);
- 
--struct mtk_vcodec_dec_ctx *mtk_vcodec_get_curr_ctx(struct mtk_vcodec_dev *vdec_dev,
-+struct mtk_vcodec_dec_ctx *mtk_vcodec_get_curr_ctx(struct mtk_vcodec_dec_dev *vdec_dev,
- 						   unsigned int hw_idx)
- {
- 	unsigned long flags;
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h
-index 4d48b516f62d..6c24bb8b1715 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h
-@@ -23,7 +23,7 @@ struct mtk_vcodec_fb {
- };
- 
- struct mtk_vcodec_dec_ctx;
--struct mtk_vcodec_dev;
-+struct mtk_vcodec_dec_dev;
- 
- #undef pr_fmt
- #define pr_fmt(fmt) "%s(),%d: " fmt, __func__, __LINE__
-@@ -83,10 +83,10 @@ extern int mtk_vcodec_dbg;
- void __iomem *mtk_vcodec_get_reg_addr(void __iomem **reg_base, unsigned int reg_idx);
- int mtk_vcodec_mem_alloc(void *priv, struct mtk_vcodec_mem *mem);
- void mtk_vcodec_mem_free(void *priv, struct mtk_vcodec_mem *mem);
--void mtk_vcodec_set_curr_ctx(struct mtk_vcodec_dev *vdec_dev,
-+void mtk_vcodec_set_curr_ctx(struct mtk_vcodec_dec_dev *vdec_dev,
- 			     struct mtk_vcodec_dec_ctx *ctx, int hw_idx);
--struct mtk_vcodec_dec_ctx *mtk_vcodec_get_curr_ctx(struct mtk_vcodec_dev *vdec_dev,
-+struct mtk_vcodec_dec_ctx *mtk_vcodec_get_curr_ctx(struct mtk_vcodec_dec_dev *vdec_dev,
- 						   unsigned int hw_idx);
--void *mtk_vcodec_get_hw_dev(struct mtk_vcodec_dev *dev, int hw_idx);
-+void *mtk_vcodec_get_hw_dev(struct mtk_vcodec_dec_dev *dev, int hw_idx);
- 
- #endif /* _MTK_VCODEC_UTIL_H_ */
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.h b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.h
-index 0dda9e2315c0..ac82be336055 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.h
-+++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.h
-@@ -13,7 +13,7 @@
- #include <media/v4l2-mem2mem.h>
- #include <media/videobuf2-dma-contig.h>
- 
--#include "../mtk_vcodec_drv.h"
-+#include "../mtk_vcodec_dec_drv.h"
- 
- #define NAL_NON_IDR_SLICE			0x01
- #define NAL_IDR_SLICE				0x05
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
-index 846cc39c0168..79eff921fc97 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
-@@ -540,7 +540,7 @@ static int vdec_h264_slice_core_decode(struct vdec_lat_buf *lat_buf)
- 	return 0;
- }
- 
--static void vdec_h264_insert_startcode(struct mtk_vcodec_dev *vcodec_dev, unsigned char *buf,
-+static void vdec_h264_insert_startcode(struct mtk_vcodec_dec_dev *vcodec_dev, unsigned char *buf,
- 				       size_t *bs_size, struct mtk_h264_pps_param *pps)
- {
- 	struct device *dev = &vcodec_dev->plat_dev->dev;
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_drv_if.h b/drivers/media/platform/mediatek/vcodec/vdec_drv_if.h
-index 816ed6ab1ed0..7b41ce23158b 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec_drv_if.h
-+++ b/drivers/media/platform/mediatek/vcodec/vdec_drv_if.h
-@@ -8,7 +8,6 @@
- #ifndef _VDEC_DRV_IF_H_
- #define _VDEC_DRV_IF_H_
- 
--#include "mtk_vcodec_drv.h"
- #include "mtk_vcodec_dec.h"
- #include "mtk_vcodec_util.h"
- 
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
-index 0dd1374ccc38..890b955e4b31 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
-@@ -8,8 +8,8 @@
- #include <linux/interrupt.h>
- #include <linux/kthread.h>
- 
-+#include "mtk_vcodec_dec_drv.h"
- #include "mtk_vcodec_dec_pm.h"
--#include "mtk_vcodec_drv.h"
- #include "vdec_msg_queue.h"
- 
- #define VDEC_MSG_QUEUE_TIMEOUT_MS 1500
-@@ -239,7 +239,7 @@ static void vdec_msg_queue_core_work(struct work_struct *work)
- 		container_of(work, struct vdec_msg_queue, core_work);
- 	struct mtk_vcodec_dec_ctx *ctx =
- 		container_of(msg_queue, struct mtk_vcodec_dec_ctx, msg_queue);
--	struct mtk_vcodec_dev *dev = ctx->dev;
-+	struct mtk_vcodec_dec_dev *dev = ctx->dev;
- 	struct vdec_lat_buf *lat_buf;
- 
- 	spin_lock(&msg_queue->core_ctx.ready_lock);
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h
-index 1fb3f57c2384..eeb5deb907ed 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h
-+++ b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h
-@@ -18,7 +18,7 @@
- 
- struct vdec_lat_buf;
- struct mtk_vcodec_dec_ctx;
--struct mtk_vcodec_dev;
-+struct mtk_vcodec_dec_dev;
- typedef int (*core_decode_cb_t)(struct vdec_lat_buf *lat_buf);
- 
- /**
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.c b/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.c
-index d82391411ba1..7fe8e196cb45 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.c
-@@ -4,8 +4,7 @@
-  * Author: PC Chen <pc.chen@mediatek.com>
-  */
- 
--#include "mtk_vcodec_drv.h"
--#include "mtk_vcodec_util.h"
-+#include "mtk_vcodec_dec_drv.h"
- #include "vdec_drv_if.h"
- #include "vdec_ipi_msg.h"
- #include "vdec_vpu_if.h"
-diff --git a/drivers/media/platform/mediatek/vcodec/venc/venc_h264_if.c b/drivers/media/platform/mediatek/vcodec/venc/venc_h264_if.c
-index c5f9fc24a692..41d463d40843 100644
---- a/drivers/media/platform/mediatek/vcodec/venc/venc_h264_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/venc/venc_h264_if.c
-@@ -10,7 +10,7 @@
- #include <linux/kernel.h>
- #include <linux/slab.h>
- 
--#include "../mtk_vcodec_drv.h"
-+#include "../mtk_vcodec_enc_drv.h"
- #include "../mtk_vcodec_util.h"
- #include "../mtk_vcodec_intr.h"
- #include "../mtk_vcodec_enc.h"
-diff --git a/drivers/media/platform/mediatek/vcodec/venc/venc_vp8_if.c b/drivers/media/platform/mediatek/vcodec/venc/venc_vp8_if.c
-index e8e4474eacc7..dfd6833576f4 100644
---- a/drivers/media/platform/mediatek/vcodec/venc/venc_vp8_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/venc/venc_vp8_if.c
-@@ -9,7 +9,7 @@
- #include <linux/kernel.h>
- #include <linux/slab.h>
- 
--#include "../mtk_vcodec_drv.h"
-+#include "../mtk_vcodec_enc_drv.h"
- #include "../mtk_vcodec_util.h"
- #include "../mtk_vcodec_intr.h"
- #include "../mtk_vcodec_enc.h"
-diff --git a/drivers/media/platform/mediatek/vcodec/venc_drv_base.h b/drivers/media/platform/mediatek/vcodec/venc_drv_base.h
-index 17f8183461b5..856d50151bf6 100644
---- a/drivers/media/platform/mediatek/vcodec/venc_drv_base.h
-+++ b/drivers/media/platform/mediatek/vcodec/venc_drv_base.h
-@@ -9,7 +9,7 @@
- #ifndef _VENC_DRV_BASE_
- #define _VENC_DRV_BASE_
- 
--#include "mtk_vcodec_drv.h"
-+#include "mtk_vcodec_enc_drv.h"
- 
- #include "venc_drv_if.h"
- 
-diff --git a/drivers/media/platform/mediatek/vcodec/venc_drv_if.c b/drivers/media/platform/mediatek/vcodec/venc_drv_if.c
-index 08083030516e..1bdaecdd64a7 100644
---- a/drivers/media/platform/mediatek/vcodec/venc_drv_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/venc_drv_if.c
-@@ -65,7 +65,7 @@ int venc_if_encode(struct mtk_vcodec_enc_ctx *ctx,
- 	mtk_venc_lock(ctx);
- 
- 	spin_lock_irqsave(&ctx->dev->irqlock, flags);
--	ctx->dev->curr_enc_ctx = ctx;
-+	ctx->dev->curr_ctx = ctx;
- 	spin_unlock_irqrestore(&ctx->dev->irqlock, flags);
- 
- 	mtk_vcodec_enc_clock_on(&ctx->dev->pm);
-@@ -74,7 +74,7 @@ int venc_if_encode(struct mtk_vcodec_enc_ctx *ctx,
- 	mtk_vcodec_enc_clock_off(&ctx->dev->pm);
- 
- 	spin_lock_irqsave(&ctx->dev->irqlock, flags);
--	ctx->dev->curr_enc_ctx = NULL;
-+	ctx->dev->curr_ctx = NULL;
- 	spin_unlock_irqrestore(&ctx->dev->irqlock, flags);
- 
- 	mtk_venc_unlock(ctx);
-diff --git a/drivers/media/platform/mediatek/vcodec/venc_drv_if.h b/drivers/media/platform/mediatek/vcodec/venc_drv_if.h
-index 90d714e86ede..d00fb68b8235 100644
---- a/drivers/media/platform/mediatek/vcodec/venc_drv_if.h
-+++ b/drivers/media/platform/mediatek/vcodec/venc_drv_if.h
-@@ -9,8 +9,7 @@
- #ifndef _VENC_DRV_IF_H_
- #define _VENC_DRV_IF_H_
- 
--#include "mtk_vcodec_drv.h"
--#include "mtk_vcodec_util.h"
-+#include "mtk_vcodec_enc_drv.h"
- 
- /*
-  * enum venc_yuv_fmt - The type of input yuv format
-diff --git a/drivers/media/platform/mediatek/vcodec/venc_vpu_if.c b/drivers/media/platform/mediatek/vcodec/venc_vpu_if.c
-index c69f66b6d341..bfff16da0451 100644
---- a/drivers/media/platform/mediatek/vcodec/venc_vpu_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/venc_vpu_if.c
-@@ -4,7 +4,7 @@
-  * Author: PoChun Lin <pochun.lin@mediatek.com>
-  */
- 
--#include "mtk_vcodec_drv.h"
-+#include "mtk_vcodec_enc_drv.h"
- #include "mtk_vcodec_fw.h"
- #include "venc_ipi_msg.h"
- #include "venc_vpu_if.h"
--- 
-2.18.0
-
+SGkgQmVuamFtaW4sDQoNCj4tLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPkZyb206IEJlbmph
+bWluIEdhaWduYXJkIDxiZW5qYW1pbi5nYWlnbmFyZEBjb2xsYWJvcmEuY29tPg0KPlNlbnQ6IDIw
+MjPE6jbUwjIyyNUgMjE6MTQNCj5UbzogbWNoZWhhYkBrZXJuZWwub3JnOyB0ZmlnYUBjaHJvbWl1
+bS5vcmc7IG0uc3p5cHJvd3NraUBzYW1zdW5nLmNvbTsNCj5NaW5nIFFpYW4gPG1pbmcucWlhbkBu
+eHAuY29tPjsgZXplcXVpZWxAdmFuZ3VhcmRpYXN1ci5jb20uYXI7DQo+cC56YWJlbEBwZW5ndXRy
+b25peC5kZTsgZ3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5vcmc7IGh2ZXJrdWlsLQ0KPmNpc2NvQHhz
+NGFsbC5ubDsgbmljb2xhcy5kdWZyZXNuZUBjb2xsYWJvcmEuY29tDQo+Q2M6IGxpbnV4LW1lZGlh
+QHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgbGludXgtYXJt
+LQ0KPmtlcm5lbEBsaXN0cy5pbmZyYWRlYWQub3JnOyBsaW51eC1tZWRpYXRla0BsaXN0cy5pbmZy
+YWRlYWQub3JnOyBsaW51eC1hcm0tDQo+bXNtQHZnZXIua2VybmVsLm9yZzsgbGludXgtcm9ja2No
+aXBAbGlzdHMuaW5mcmFkZWFkLm9yZzsgbGludXgtDQo+c3RhZ2luZ0BsaXN0cy5saW51eC5kZXY7
+IGtlcm5lbEBjb2xsYWJvcmEuY29tOyBCZW5qYW1pbiBHYWlnbmFyZA0KPjxiZW5qYW1pbi5nYWln
+bmFyZEBjb2xsYWJvcmEuY29tPg0KPlN1YmplY3Q6IFtFWFRdIFtQQVRDSCB2MyAxMC8xMV0gbWVk
+aWE6IHY0bDI6IEFkZCBERUxFVEVfQlVGIGlvY3RsDQo+DQo+Q2F1dGlvbjogVGhpcyBpcyBhbiBl
+eHRlcm5hbCBlbWFpbC4gUGxlYXNlIHRha2UgY2FyZSB3aGVuIGNsaWNraW5nIGxpbmtzIG9yDQo+
+b3BlbmluZyBhdHRhY2htZW50cy4gV2hlbiBpbiBkb3VidCwgcmVwb3J0IHRoZSBtZXNzYWdlIHVz
+aW5nIHRoZSAnUmVwb3J0DQo+dGhpcyBlbWFpbCcgYnV0dG9uDQo+DQo+DQo+VklESU9DX0RFTEVU
+RV9CVUYgaW9jdGwgYWxsb3dzIHRvIGRlbGV0ZSBhIGJ1ZmZlciBmcm9tIGEgcXVldWUuDQo+DQo+
+U2lnbmVkLW9mZi1ieTogQmVuamFtaW4gR2FpZ25hcmQgPGJlbmphbWluLmdhaWduYXJkQGNvbGxh
+Ym9yYS5jb20+DQo+LS0tDQo+IC4uLi91c2Vyc3BhY2UtYXBpL21lZGlhL3Y0bC91c2VyLWZ1bmMu
+cnN0ICAgICB8ICAxICsNCj4gLi4uL21lZGlhL3Y0bC92aWRpb2MtZGVsZXRlLWJ1Zi5yc3QgICAg
+ICAgICAgIHwgNTEgKysrKysrKysrKysrKysrKysrKw0KPiAuLi4vbWVkaWEvY29tbW9uL3ZpZGVv
+YnVmMi92aWRlb2J1ZjItY29yZS5jICAgfCAzMyArKysrKysrKysrKysNCj4gLi4uL21lZGlhL2Nv
+bW1vbi92aWRlb2J1ZjIvdmlkZW9idWYyLXY0bDIuYyAgIHwgIDYgKysrDQo+IGRyaXZlcnMvbWVk
+aWEvdjRsMi1jb3JlL3Y0bDItZGV2LmMgICAgICAgICAgICB8ICAxICsNCj4gZHJpdmVycy9tZWRp
+YS92NGwyLWNvcmUvdjRsMi1pb2N0bC5jICAgICAgICAgIHwgMTAgKysrKw0KPiBpbmNsdWRlL21l
+ZGlhL3Y0bDItaW9jdGwuaCAgICAgICAgICAgICAgICAgICAgfCAgNCArKw0KPiBpbmNsdWRlL21l
+ZGlhL3ZpZGVvYnVmMi1jb3JlLmggICAgICAgICAgICAgICAgfCAgOSArKysrDQo+IGluY2x1ZGUv
+bWVkaWEvdmlkZW9idWYyLXY0bDIuaCAgICAgICAgICAgICAgICB8IDExICsrKysNCj4gaW5jbHVk
+ZS91YXBpL2xpbnV4L3ZpZGVvZGV2Mi5oICAgICAgICAgICAgICAgIHwgIDIgKw0KPiAxMCBmaWxl
+cyBjaGFuZ2VkLCAxMjggaW5zZXJ0aW9ucygrKQ0KPiBjcmVhdGUgbW9kZSAxMDA2NDQgRG9jdW1l
+bnRhdGlvbi91c2Vyc3BhY2UtYXBpL21lZGlhL3Y0bC92aWRpb2MtZGVsZXRlLQ0KPmJ1Zi5yc3QN
+Cj4NCj5kaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi91c2Vyc3BhY2UtYXBpL21lZGlhL3Y0bC91
+c2VyLWZ1bmMucnN0DQo+Yi9Eb2N1bWVudGF0aW9uL3VzZXJzcGFjZS1hcGkvbWVkaWEvdjRsL3Vz
+ZXItZnVuYy5yc3QNCj5pbmRleCAxNWZmMGJmN2JiZTYuLjhjNzQwMTZlMTJmZCAxMDA2NDQNCj4t
+LS0gYS9Eb2N1bWVudGF0aW9uL3VzZXJzcGFjZS1hcGkvbWVkaWEvdjRsL3VzZXItZnVuYy5yc3QN
+Cj4rKysgYi9Eb2N1bWVudGF0aW9uL3VzZXJzcGFjZS1hcGkvbWVkaWEvdjRsL3VzZXItZnVuYy5y
+c3QNCj5AQCAtMTcsNiArMTcsNyBAQCBGdW5jdGlvbiBSZWZlcmVuY2UNCj4gICAgIHZpZGlvYy1k
+YmctZy1jaGlwLWluZm8NCj4gICAgIHZpZGlvYy1kYmctZy1yZWdpc3Rlcg0KPiAgICAgdmlkaW9j
+LWRlY29kZXItY21kDQo+KyAgICB2aWRpb2MtZGVsZXRlLWJ1Zg0KPiAgICAgdmlkaW9jLWRxZXZl
+bnQNCj4gICAgIHZpZGlvYy1kdi10aW1pbmdzLWNhcA0KPiAgICAgdmlkaW9jLWVuY29kZXItY21k
+DQo+ZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vdXNlcnNwYWNlLWFwaS9tZWRpYS92NGwvdmlk
+aW9jLWRlbGV0ZS1idWYucnN0DQo+Yi9Eb2N1bWVudGF0aW9uL3VzZXJzcGFjZS1hcGkvbWVkaWEv
+djRsL3ZpZGlvYy1kZWxldGUtYnVmLnJzdA0KPm5ldyBmaWxlIG1vZGUgMTAwNjQ0DQo+aW5kZXgg
+MDAwMDAwMDAwMDAwLi4wZTdjZTU4ZjkxYmMNCj4tLS0gL2Rldi9udWxsDQo+KysrIGIvRG9jdW1l
+bnRhdGlvbi91c2Vyc3BhY2UtYXBpL21lZGlhL3Y0bC92aWRpb2MtZGVsZXRlLWJ1Zi5yc3QNCj5A
+QCAtMCwwICsxLDUxIEBADQo+Ky4uIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHRkRMLTEuMS1u
+by1pbnZhcmlhbnRzLW9yLWxhdGVyIC4uDQo+K2M6bmFtZXNwYWNlOjogVjRMDQo+Kw0KPisuLiBf
+VklESU9DX0RFTEVURV9CVUY6DQo+Kw0KPisqKioqKioqKioqKioqKioqKioqKioqKioNCj4raW9j
+dGwgVklESU9DX0RFTEVURV9CVUYNCj4rKioqKioqKioqKioqKioqKioqKioqKioqDQo+Kw0KPitO
+YW1lDQo+Kz09PT0NCj4rDQo+K1ZJRElPQ19ERUxFVEVfQlVGIC0gRGVsZXRlIGEgYnVmZmVyIGZy
+b20gYSBxdWV1ZQ0KPisNCj4rU3lub3BzaXMNCj4rPT09PT09PT0NCj4rDQo+Ky4uIGM6bWFjcm86
+OiBWSURJT0NfREVMRVRFX0JVRg0KPisNCj4rYGBpbnQgaW9jdGwoaW50IGZkLCBWSURJT0NfREVM
+RVRFX0JVRiwgc3RydWN0IHY0bDJfYnVmZmVyICphcmdwKWBgDQo+Kw0KPitBcmd1bWVudHMNCj4r
+PT09PT09PT09DQo+Kw0KPitgYGZkYGANCj4rICAgIEZpbGUgZGVzY3JpcHRvciByZXR1cm5lZCBi
+eSA6YzpmdW5jOmBvcGVuKClgLg0KPisNCj4rYGBhcmdwYGANCj4rICAgIFBvaW50ZXIgdG8gc3Ry
+dWN0IDpjOnR5cGU6YHY0bDJfYnVmZmVyYC4NCj4rDQo+K0Rlc2NyaXB0aW9uDQo+Kz09PT09PT09
+PT09DQo+Kw0KPitBcHBsaWNhdGlvbnMgY2FuIG9wdGlvbmFsbHkgY2FsbCB0aGUgOnJlZjpgVklE
+SU9DX0RFTEVURV9CVUZgIGlvY3RsIHRvDQo+K2RlbGV0ZSBhIGJ1ZmZlciBmcm9tIGEgcXVldWUu
+DQo+Kw0KPitUaGUgc3RydWN0IDpjOnR5cGU6YHY0bDJfYnVmZmVyYCBzdHJ1Y3R1cmUgaXMgc3Bl
+Y2lmaWVkIGluDQo+KzpyZWY6YGJ1ZmZlcmAuDQo+Kw0KPitSZXR1cm4gVmFsdWUNCj4rPT09PT09
+PT09PT09DQo+Kw0KPitPbiBzdWNjZXNzIDAgaXMgcmV0dXJuZWQsIG9uIGVycm9yIC0xIGFuZCB0
+aGUgYGBlcnJub2BgIHZhcmlhYmxlIGlzIHNldA0KPithcHByb3ByaWF0ZWx5LiBUaGUgZ2VuZXJp
+YyBlcnJvciBjb2RlcyBhcmUgZGVzY3JpYmVkIGF0IHRoZQ0KPis6cmVmOmBHZW5lcmljIEVycm9y
+IENvZGVzIDxnZW4tZXJyb3JzPmAgY2hhcHRlci4NCj4rDQo+K0VCVVNZDQo+KyAgICBGaWxlIEkv
+TyBpcyBpbiBwcm9ncmVzcy4NCj4rDQo+K0VJTlZBTA0KPisgICAgVGhlIGJ1ZmZlciBgYGluZGV4
+YGAgZG9lc24ndCBleGlzdCBpbiB0aGUgcXVldWUuDQo+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvbWVk
+aWEvY29tbW9uL3ZpZGVvYnVmMi92aWRlb2J1ZjItY29yZS5jDQo+Yi9kcml2ZXJzL21lZGlhL2Nv
+bW1vbi92aWRlb2J1ZjIvdmlkZW9idWYyLWNvcmUuYw0KPmluZGV4IDg5OTc4M2Y2NzU4MC4uYWE1
+NDZjOTcyYzNkIDEwMDY0NA0KPi0tLSBhL2RyaXZlcnMvbWVkaWEvY29tbW9uL3ZpZGVvYnVmMi92
+aWRlb2J1ZjItY29yZS5jDQo+KysrIGIvZHJpdmVycy9tZWRpYS9jb21tb24vdmlkZW9idWYyL3Zp
+ZGVvYnVmMi1jb3JlLmMNCj5AQCAtMTYzNyw2ICsxNjM3LDM5IEBAIGludCB2YjJfY29yZV9wcmVw
+YXJlX2J1ZihzdHJ1Y3QgdmIyX3F1ZXVlICpxLA0KPnVuc2lnbmVkIGludCBpbmRleCwgdm9pZCAq
+cGIpICB9DQo+RVhQT1JUX1NZTUJPTF9HUEwodmIyX2NvcmVfcHJlcGFyZV9idWYpOw0KPg0KPitp
+bnQgdmIyX2NvcmVfZGVsZXRlX2J1ZihzdHJ1Y3QgdmIyX3F1ZXVlICpxLCB1bnNpZ25lZCBpbnQg
+aW5kZXgpIHsNCj4rICAgICAgIHN0cnVjdCB2YjJfYnVmZmVyICp2YjsNCj4rDQo+KyAgICAgICB2
+YiA9IHZiMl9nZXRfYnVmZmVyKHEsIGluZGV4KTsNCj4rICAgICAgIGlmICghdmIpIHsNCj4rICAg
+ICAgICAgICAgICAgZHByaW50ayhxLCAxLCAiaW52YWxpZCBidWZmZXIgaW5kZXggJWRcbiIsIGlu
+ZGV4KTsNCj4rICAgICAgICAgICAgICAgcmV0dXJuIC1FSU5WQUw7DQo+KyAgICAgICB9DQo+Kw0K
+PisgICAgICAgaWYgKHZiLT5zdGF0ZSAhPSBWQjJfQlVGX1NUQVRFX0RFUVVFVUVEKSB7DQo+KyAg
+ICAgICAgICAgICAgIGRwcmludGsocSwgMSwgImNhbid0IGRlbGV0ZSBub24gZGVxdWV1ZWQgYnVm
+ZmVyIGluZGV4ICVkXG4iLCBpbmRleCk7DQo+KyAgICAgICAgICAgICAgIHJldHVybiAtRUlOVkFM
+Ow0KPisgICAgICAgfQ0KPisNCj4rICAgICAgIGlmICh2Yi0+cGxhbmVzWzBdLm1lbV9wcml2KQ0K
+PisgICAgICAgICAgICAgICBjYWxsX3ZvaWRfdmJfcW9wKHZiLCBidWZfY2xlYW51cCwgdmIpOw0K
+PisNCj4rICAgICAgIC8qIEZyZWUgTU1BUCBidWZmZXJzIG9yIHJlbGVhc2UgVVNFUlBUUiBidWZm
+ZXJzICovDQo+KyAgICAgICBpZiAocS0+bWVtb3J5ID09IFZCMl9NRU1PUllfTU1BUCkNCj4rICAg
+ICAgICAgICAgICAgX192YjJfYnVmX21lbV9mcmVlKHZiKTsNCj4rICAgICAgIGVsc2UgaWYgKHEt
+Pm1lbW9yeSA9PSBWQjJfTUVNT1JZX0RNQUJVRikNCj4rICAgICAgICAgICAgICAgX192YjJfYnVm
+X2RtYWJ1Zl9wdXQodmIpOw0KPisgICAgICAgZWxzZQ0KPisgICAgICAgICAgICAgICBfX3ZiMl9i
+dWZfdXNlcnB0cl9wdXQodmIpOw0KPisNCj4rICAgICAgIHZiMl9xdWV1ZV9yZW1vdmVfYnVmZmVy
+KHEsIHZiKTsNCj4rICAgICAgIGtmcmVlKHZiKTsNCg0KVGhlIG51bV9idWZmZXJzIGlzIG5vdCBj
+aGFuZ2VkLCBJcyB0aGF0IG9uIHB1cnBvc2U/DQpudW1fYnVmZmVycyBkb2Vzbid0IG1lYW4gdGhl
+IG51bWJlciBvZiB2YjIgYnVmZmVycywgIGJ1dCBvbmx5IGRlY2lkZXMgdGhlIG1heCBpbmRleCBv
+ZiBhbGxvY2F0ZWQgdmIyIGJ1ZmZlcj8NCk9uY2UgdGhlIGluZGV4IGlzIGRlbGV0ZWQsIHRoZW4g
+aXQgd29uJ3QgYmUgdXNlZCBhbnltb3JlLCB1bmxlc3MgZnJlZSB0aGUgdmIyIHF1ZXVlPyBpcyBp
+dCBhIGhvbGUgaW4gdmIyIHF1ZXVlPw0KDQpBbmQgeW91IGNhbiB1c2UgeGFfZm9yX2VhY2goKSBp
+bnN0ZWFkIHRoZSBmb3IgbG9vcCB0byBpdGVyYXRlIG92ZXIgdGhlIHByZXNlbnQgYnVmZmVycyBp
+biB2YjIgcXVldWUuDQoNCj4rDQo+KyAgICAgICBkcHJpbnRrKHEsIDIsICJidWZmZXIgJWQgZGVs
+ZXRlZFxuIiwgaW5kZXgpOw0KPisgICAgICAgcmV0dXJuIDA7DQo+K30NCj4rDQo+IC8qDQo+ICAq
+IHZiMl9zdGFydF9zdHJlYW1pbmcoKSAtIEF0dGVtcHQgdG8gc3RhcnQgc3RyZWFtaW5nLg0KPiAg
+KiBAcTogICAgICAgICB2aWRlb2J1ZjIgcXVldWUNCj5kaWZmIC0tZ2l0IGEvZHJpdmVycy9tZWRp
+YS9jb21tb24vdmlkZW9idWYyL3ZpZGVvYnVmMi12NGwyLmMNCj5iL2RyaXZlcnMvbWVkaWEvY29t
+bW9uL3ZpZGVvYnVmMi92aWRlb2J1ZjItdjRsMi5jDQo+aW5kZXggNzI0MTM1ZDQxZjdmLi5jZWE2
+NjZjMTdiNDEgMTAwNjQ0DQo+LS0tIGEvZHJpdmVycy9tZWRpYS9jb21tb24vdmlkZW9idWYyL3Zp
+ZGVvYnVmMi12NGwyLmMNCj4rKysgYi9kcml2ZXJzL21lZGlhL2NvbW1vbi92aWRlb2J1ZjIvdmlk
+ZW9idWYyLXY0bDIuYw0KPkBAIC03NTEsNiArNzUxLDEyIEBAIGludCB2YjJfcHJlcGFyZV9idWYo
+c3RydWN0IHZiMl9xdWV1ZSAqcSwgc3RydWN0DQo+bWVkaWFfZGV2aWNlICptZGV2LCAgfSAgRVhQ
+T1JUX1NZTUJPTF9HUEwodmIyX3ByZXBhcmVfYnVmKTsNCj4NCj4raW50IHZiMl9kZWxldGVfYnVm
+KHN0cnVjdCB2YjJfcXVldWUgKnEsIHN0cnVjdCB2NGwyX2J1ZmZlciAqYikgew0KPisgICAgICAg
+cmV0dXJuIHZiMl9jb3JlX2RlbGV0ZV9idWYocSwgYi0+aW5kZXgpOyB9DQo+K0VYUE9SVF9TWU1C
+T0xfR1BMKHZiMl9kZWxldGVfYnVmKTsNCj4rDQo+IGludCB2YjJfY3JlYXRlX2J1ZnMoc3RydWN0
+IHZiMl9xdWV1ZSAqcSwgc3RydWN0IHY0bDJfY3JlYXRlX2J1ZmZlcnMgKmNyZWF0ZSkNCj57DQo+
+ICAgICAgICB1bnNpZ25lZCByZXF1ZXN0ZWRfcGxhbmVzID0gMTsNCj5kaWZmIC0tZ2l0IGEvZHJp
+dmVycy9tZWRpYS92NGwyLWNvcmUvdjRsMi1kZXYuYyBiL2RyaXZlcnMvbWVkaWEvdjRsMi0NCj5j
+b3JlL3Y0bDItZGV2LmMNCj5pbmRleCBmODEyNzk0OTI2ODIuLjgwYWNlMmUxZTkzMiAxMDA2NDQN
+Cj4tLS0gYS9kcml2ZXJzL21lZGlhL3Y0bDItY29yZS92NGwyLWRldi5jDQo+KysrIGIvZHJpdmVy
+cy9tZWRpYS92NGwyLWNvcmUvdjRsMi1kZXYuYw0KPkBAIC03MjAsNiArNzIwLDcgQEAgc3RhdGlj
+IHZvaWQgZGV0ZXJtaW5lX3ZhbGlkX2lvY3RscyhzdHJ1Y3QgdmlkZW9fZGV2aWNlDQo+KnZkZXYp
+DQo+ICAgICAgICAgICAgICAgIFNFVF9WQUxJRF9JT0NUTChvcHMsIFZJRElPQ19QUkVQQVJFX0JV
+RiwgdmlkaW9jX3ByZXBhcmVfYnVmKTsNCj4gICAgICAgICAgICAgICAgU0VUX1ZBTElEX0lPQ1RM
+KG9wcywgVklESU9DX1NUUkVBTU9OLCB2aWRpb2Nfc3RyZWFtb24pOw0KPiAgICAgICAgICAgICAg
+ICBTRVRfVkFMSURfSU9DVEwob3BzLCBWSURJT0NfU1RSRUFNT0ZGLCB2aWRpb2Nfc3RyZWFtb2Zm
+KTsNCj4rICAgICAgICAgICAgICAgU0VUX1ZBTElEX0lPQ1RMKG9wcywgVklESU9DX0RFTEVURV9C
+VUYsDQo+KyB2aWRpb2NfZGVsZXRlX2J1Zik7DQo+ICAgICAgICB9DQo+DQo+ICAgICAgICBpZiAo
+aXNfdmlkIHx8IGlzX3ZiaSB8fCBpc19tZXRhKSB7IGRpZmYgLS1naXQgYS9kcml2ZXJzL21lZGlh
+L3Y0bDItY29yZS92NGwyLQ0KPmlvY3RsLmMgYi9kcml2ZXJzL21lZGlhL3Y0bDItY29yZS92NGwy
+LWlvY3RsLmMNCj5pbmRleCBhODU4YWNlYTY1NDcuLjFjNzM3Mjc5ZDNlZiAxMDA2NDQNCj4tLS0g
+YS9kcml2ZXJzL21lZGlhL3Y0bDItY29yZS92NGwyLWlvY3RsLmMNCj4rKysgYi9kcml2ZXJzL21l
+ZGlhL3Y0bDItY29yZS92NGwyLWlvY3RsLmMNCj5AQCAtMjE1Niw2ICsyMTU2LDE1IEBAIHN0YXRp
+YyBpbnQgdjRsX3ByZXBhcmVfYnVmKGNvbnN0IHN0cnVjdA0KPnY0bDJfaW9jdGxfb3BzICpvcHMs
+DQo+ICAgICAgICByZXR1cm4gcmV0ID8gcmV0IDogb3BzLT52aWRpb2NfcHJlcGFyZV9idWYoZmls
+ZSwgZmgsIGIpOyAgfQ0KPg0KPitzdGF0aWMgaW50IHY0bF9kZWxldGVfYnVmKGNvbnN0IHN0cnVj
+dCB2NGwyX2lvY3RsX29wcyAqb3BzLA0KPisgICAgICAgICAgICAgICAgICAgICAgICAgc3RydWN0
+IGZpbGUgKmZpbGUsIHZvaWQgKmZoLCB2b2lkICphcmcpIHsNCj4rICAgICAgIHN0cnVjdCB2NGwy
+X2J1ZmZlciAqYiA9IGFyZzsNCj4rICAgICAgIGludCByZXQgPSBjaGVja19mbXQoZmlsZSwgYi0+
+dHlwZSk7DQo+Kw0KPisgICAgICAgcmV0dXJuIHJldCA/IHJldCA6IG9wcy0+dmlkaW9jX2RlbGV0
+ZV9idWYoZmlsZSwgZmgsIGIpOyB9DQo+Kw0KPiBzdGF0aWMgaW50IHY0bF9nX3Bhcm0oY29uc3Qg
+c3RydWN0IHY0bDJfaW9jdGxfb3BzICpvcHMsDQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICBzdHJ1Y3QgZmlsZSAqZmlsZSwgdm9pZCAqZmgsIHZvaWQgKmFyZykgIHsgQEAgLTI5MDUs
+NiArMjkxNCw3DQo+QEAgc3RhdGljIGNvbnN0IHN0cnVjdCB2NGwyX2lvY3RsX2luZm8gdjRsMl9p
+b2N0bHNbXSA9IHsNCj4gICAgICAgIElPQ1RMX0lORk8oVklESU9DX0VOVU1fRlJFUV9CQU5EUywg
+djRsX2VudW1fZnJlcV9iYW5kcywNCj52NGxfcHJpbnRfZnJlcV9iYW5kLCAwKSwNCj4gICAgICAg
+IElPQ1RMX0lORk8oVklESU9DX0RCR19HX0NISVBfSU5GTywgdjRsX2RiZ19nX2NoaXBfaW5mbywN
+Cj52NGxfcHJpbnRfZGJnX2NoaXBfaW5mbywgSU5GT19GTF9DTEVBUih2NGwyX2RiZ19jaGlwX2lu
+Zm8sIG1hdGNoKSksDQo+ICAgICAgICBJT0NUTF9JTkZPKFZJRElPQ19RVUVSWV9FWFRfQ1RSTCwg
+djRsX3F1ZXJ5X2V4dF9jdHJsLA0KPnY0bF9wcmludF9xdWVyeV9leHRfY3RybCwgSU5GT19GTF9D
+VFJMIHwgSU5GT19GTF9DTEVBUih2NGwyX3F1ZXJ5X2V4dF9jdHJsLA0KPmlkKSksDQo+KyAgICAg
+ICBJT0NUTF9JTkZPKFZJRElPQ19ERUxFVEVfQlVGLCB2NGxfZGVsZXRlX2J1ZiwgdjRsX3ByaW50
+X2J1ZmZlciwNCj4rIElORk9fRkxfUVVFVUUpLA0KPiB9Ow0KPiAjZGVmaW5lIFY0TDJfSU9DVExT
+IEFSUkFZX1NJWkUodjRsMl9pb2N0bHMpDQo+DQo+ZGlmZiAtLWdpdCBhL2luY2x1ZGUvbWVkaWEv
+djRsMi1pb2N0bC5oIGIvaW5jbHVkZS9tZWRpYS92NGwyLWlvY3RsLmggaW5kZXgNCj5lZGI3MzNm
+MjE2MDQuLjJmMjMyZWQ4ODRjNyAxMDA2NDQNCj4tLS0gYS9pbmNsdWRlL21lZGlhL3Y0bDItaW9j
+dGwuaA0KPisrKyBiL2luY2x1ZGUvbWVkaWEvdjRsMi1pb2N0bC5oDQo+QEAgLTE2Myw2ICsxNjMs
+OCBAQCBzdHJ1Y3QgdjRsMl9maDsNCj4gICogICAgIDpyZWY6YFZJRElPQ19DUkVBVEVfQlVGUyA8
+dmlkaW9jX2NyZWF0ZV9idWZzPmAgaW9jdGwNCj4gICogQHZpZGlvY19wcmVwYXJlX2J1ZjogcG9p
+bnRlciB0byB0aGUgZnVuY3Rpb24gdGhhdCBpbXBsZW1lbnRzDQo+ICAqICAgICA6cmVmOmBWSURJ
+T0NfUFJFUEFSRV9CVUYgPHZpZGlvY19wcmVwYXJlX2J1Zj5gIGlvY3RsDQo+KyAqIEB2aWRpb2Nf
+ZGVsZXRlX2J1ZjogcG9pbnRlciB0byB0aGUgZnVuY3Rpb24gdGhhdCBpbXBsZW1lbnRzDQo+KyAq
+ICAgICA6cmVmOmBWSURJT0NfREVMRVRFX0JVRiA8dmlkaW9jX2RlbGV0ZV9idWY+YCBpb2N0bA0K
+PiAgKiBAdmlkaW9jX292ZXJsYXk6IHBvaW50ZXIgdG8gdGhlIGZ1bmN0aW9uIHRoYXQgaW1wbGVt
+ZW50cw0KPiAgKiAgICAgOnJlZjpgVklESU9DX09WRVJMQVkgPHZpZGlvY19vdmVybGF5PmAgaW9j
+dGwNCj4gICogQHZpZGlvY19nX2ZidWY6IHBvaW50ZXIgdG8gdGhlIGZ1bmN0aW9uIHRoYXQgaW1w
+bGVtZW50cyBAQCAtNDIyLDYgKzQyNCw4DQo+QEAgc3RydWN0IHY0bDJfaW9jdGxfb3BzIHsNCj4g
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc3RydWN0IHY0bDJfY3JlYXRlX2J1ZmZl
+cnMgKmIpOw0KPiAgICAgICAgaW50ICgqdmlkaW9jX3ByZXBhcmVfYnVmKShzdHJ1Y3QgZmlsZSAq
+ZmlsZSwgdm9pZCAqZmgsDQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0cnVj
+dCB2NGwyX2J1ZmZlciAqYik7DQo+KyAgICAgICBpbnQgKCp2aWRpb2NfZGVsZXRlX2J1Zikoc3Ry
+dWN0IGZpbGUgKmZpbGUsIHZvaWQgKmZoLA0KPisgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgIHN0cnVjdCB2NGwyX2J1ZmZlciAqYik7DQo+DQo+ICAgICAgICBpbnQgKCp2aWRpb2Nfb3Zl
+cmxheSkoc3RydWN0IGZpbGUgKmZpbGUsIHZvaWQgKmZoLCB1bnNpZ25lZCBpbnQgaSk7DQo+ICAg
+ICAgICBpbnQgKCp2aWRpb2NfZ19mYnVmKShzdHJ1Y3QgZmlsZSAqZmlsZSwgdm9pZCAqZmgsIGRp
+ZmYgLS1naXQNCj5hL2luY2x1ZGUvbWVkaWEvdmlkZW9idWYyLWNvcmUuaCBiL2luY2x1ZGUvbWVk
+aWEvdmlkZW9idWYyLWNvcmUuaCBpbmRleA0KPjA4MGI3ODNkNjA4ZC4uMGY5ZTY4Zjc2Yjc3IDEw
+MDY0NA0KPi0tLSBhL2luY2x1ZGUvbWVkaWEvdmlkZW9idWYyLWNvcmUuaA0KPisrKyBiL2luY2x1
+ZGUvbWVkaWEvdmlkZW9idWYyLWNvcmUuaA0KPkBAIC04NDAsNiArODQwLDE1IEBAIGludCB2YjJf
+Y29yZV9jcmVhdGVfYnVmcyhzdHJ1Y3QgdmIyX3F1ZXVlICpxLA0KPmVudW0gdmIyX21lbW9yeSBt
+ZW1vcnksDQo+ICAqLw0KPiBpbnQgdmIyX2NvcmVfcHJlcGFyZV9idWYoc3RydWN0IHZiMl9xdWV1
+ZSAqcSwgdW5zaWduZWQgaW50IGluZGV4LCB2b2lkICpwYik7DQo+DQo+Ky8qKg0KPisgKiB2YjJf
+Y29yZV9kZWxldGVfYnVmKCkgLQ0KPisgKiBAcTogcG9pbnRlciB0byAmc3RydWN0IHZiMl9xdWV1
+ZSB3aXRoIHZpZGVvYnVmMiBxdWV1ZS4NCj4rICogQGluZGV4OiAgICAgaWQgbnVtYmVyIG9mIHRo
+ZSBidWZmZXIuDQo+KyAqDQo+KyAqICBSZXR1cm46IHJldHVybnMgemVybyBvbiBzdWNjZXNzOyBh
+biBlcnJvciBjb2RlIG90aGVyd2lzZS4NCj4rICovDQo+K2ludCB2YjJfY29yZV9kZWxldGVfYnVm
+KHN0cnVjdCB2YjJfcXVldWUgKnEsIHVuc2lnbmVkIGludCBpbmRleCk7DQo+Kw0KPiAvKioNCj4g
+ICogdmIyX2NvcmVfcWJ1ZigpIC0gUXVldWUgYSBidWZmZXIgZnJvbSB1c2Vyc3BhY2UNCj4gICoN
+Cj5kaWZmIC0tZ2l0IGEvaW5jbHVkZS9tZWRpYS92aWRlb2J1ZjItdjRsMi5oIGIvaW5jbHVkZS9t
+ZWRpYS92aWRlb2J1ZjItdjRsMi5oDQo+aW5kZXggODhhN2E1NjUxNzBlLi4zYmVlYjRjNzM1ZjAg
+MTAwNjQ0DQo+LS0tIGEvaW5jbHVkZS9tZWRpYS92aWRlb2J1ZjItdjRsMi5oDQo+KysrIGIvaW5j
+bHVkZS9tZWRpYS92aWRlb2J1ZjItdjRsMi5oDQo+QEAgLTExNCw2ICsxMTQsMTcgQEAgaW50IHZi
+Ml9jcmVhdGVfYnVmcyhzdHJ1Y3QgdmIyX3F1ZXVlICpxLCBzdHJ1Y3QNCj52NGwyX2NyZWF0ZV9i
+dWZmZXJzICpjcmVhdGUpOw0KPiAgKi8NCj4gaW50IHZiMl9wcmVwYXJlX2J1ZihzdHJ1Y3QgdmIy
+X3F1ZXVlICpxLCBzdHJ1Y3QgbWVkaWFfZGV2aWNlICptZGV2LA0KPiAgICAgICAgICAgICAgICAg
+ICAgc3RydWN0IHY0bDJfYnVmZmVyICpiKTsNCj4rLyoqDQo+KyAqIHZiMl9kZWxldGVfYnVmKCkg
+LSBEZWxldGUgdGhlIGJ1ZmZlciBmcm9tIHRoZSBxdWV1ZQ0KPisgKg0KPisgKiBAcTogICAgICAg
+ICBwb2ludGVyIHRvICZzdHJ1Y3QgdmIyX3F1ZXVlIHdpdGggdmlkZW9idWYyIHF1ZXVlLg0KPisg
+KiBAYjogICAgICAgICBidWZmZXIgc3RydWN0dXJlIHBhc3NlZCBmcm9tIHVzZXJzcGFjZSB0bw0K
+PisgKiAgICAgICAgICAgICAmdjRsMl9pb2N0bF9vcHMtPnZpZGlvY19kZWxldGVfYnVmIGhhbmRs
+ZXIgaW4gZHJpdmVyDQo+KyAqDQo+KyAqIFRoZSByZXR1cm4gdmFsdWVzIGZyb20gdGhpcyBmdW5j
+dGlvbiBhcmUgaW50ZW5kZWQgdG8gYmUgZGlyZWN0bHkNCj4rcmV0dXJuZWQNCj4rICogZnJvbSAm
+djRsMl9pb2N0bF9vcHMtPnZpZGlvY19kZWxldGVfYnVmIGhhbmRsZXIgaW4gZHJpdmVyLg0KPisg
+Ki8NCj4raW50IHZiMl9kZWxldGVfYnVmKHN0cnVjdCB2YjJfcXVldWUgKnEsIHN0cnVjdCB2NGwy
+X2J1ZmZlciAqYik7DQo+DQo+IC8qKg0KPiAgKiB2YjJfcWJ1ZigpIC0gUXVldWUgYSBidWZmZXIg
+ZnJvbSB1c2Vyc3BhY2UgZGlmZiAtLWdpdA0KPmEvaW5jbHVkZS91YXBpL2xpbnV4L3ZpZGVvZGV2
+Mi5oIGIvaW5jbHVkZS91YXBpL2xpbnV4L3ZpZGVvZGV2Mi5oIGluZGV4DQo+YWVlNzVlYjllNjg2
+Li4zMWJiYTE5MTU2NDIgMTAwNjQ0DQo+LS0tIGEvaW5jbHVkZS91YXBpL2xpbnV4L3ZpZGVvZGV2
+Mi5oDQo+KysrIGIvaW5jbHVkZS91YXBpL2xpbnV4L3ZpZGVvZGV2Mi5oDQo+QEAgLTI3MDIsNiAr
+MjcwMiw4IEBAIHN0cnVjdCB2NGwyX2NyZWF0ZV9idWZmZXJzIHsgICNkZWZpbmUNCj5WSURJT0Nf
+REJHX0dfQ0hJUF9JTkZPICBfSU9XUignVicsIDEwMiwgc3RydWN0IHY0bDJfZGJnX2NoaXBfaW5m
+bykNCj4NCj4gI2RlZmluZSBWSURJT0NfUVVFUllfRVhUX0NUUkwgIF9JT1dSKCdWJywgMTAzLCBz
+dHJ1Y3QgdjRsMl9xdWVyeV9leHRfY3RybCkNCj4rI2RlZmluZSBWSURJT0NfREVMRVRFX0JVRiAg
+ICAgIF9JT1dSKCdWJywgMTA0LCBzdHJ1Y3QgdjRsMl9idWZmZXIpDQo+Kw0KPg0KPiAvKiBSZW1p
+bmRlcjogd2hlbiBhZGRpbmcgbmV3IGlvY3RscyBwbGVhc2UgYWRkIHN1cHBvcnQgZm9yIHRoZW0g
+dG8NCj4gICAgZHJpdmVycy9tZWRpYS92NGwyLWNvcmUvdjRsMi1jb21wYXQtaW9jdGwzMi5jIGFz
+IHdlbGwhICovDQo+LS0NCj4yLjM5LjINCg0K
