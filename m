@@ -2,41 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B03EEB64DC
-	for <linux-media@archiver.kernel.org>; Tue, 27 Jun 2023 17:57:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EAB3EB64DC
+	for <linux-media@archiver.kernel.org>; Tue, 27 Jun 2023 17:58:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231555AbjF0R55 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Jun 2023 13:57:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37388 "EHLO
+        id S231896AbjF0R57 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Jun 2023 13:57:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231890AbjF0R5p (ORCPT
+        with ESMTP id S231852AbjF0R5q (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Jun 2023 13:57:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A412D59
-        for <linux-media@vger.kernel.org>; Tue, 27 Jun 2023 10:56:53 -0700 (PDT)
+        Tue, 27 Jun 2023 13:57:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 971BF2D7D
+        for <linux-media@vger.kernel.org>; Tue, 27 Jun 2023 10:56:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687888612;
+        s=mimecast20190719; t=1687888613;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=fQXCr8AYuGTJgufWH9PIwJSfI0EOgxMbJ383PgbiS9Y=;
-        b=U4QL1Il6ih0nBoBBOQja+LGye42AUYAQdGgz6B4XJXxjlhaipA4I9jqLPVTgczrxGTwtRm
-        b6is9kA4in7ZjGbDfOaW3iHwCNgaDxTP5dt2CwShqmAdvWmZbKeH5bIfv6V/+oOf3cD9RR
-        nL5VLEoDBgOaOA3bWS/sHaQ6jCQi83Q=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gKtDMJU4mEJurNtFzATwewadf+bZ067mPE4miPWSVN4=;
+        b=T9kVtpDTSlU8uHU3IW4NxaC0Et8Py5yrnTjeikXbgBW2HGWno+icQzcUPRCaABWuR7cJ4P
+        S7xF/pxr0EakxGTHsFOi6dM8ie9APoirKs6cICcUOgfCL620S5Px+WkPffqZB+cHfOsIZg
+        +4FSk76PNHjdAmrFfUYO+XNQNEst/2U=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-541-WI_MuUZLMeKEf8F09I_2cg-1; Tue, 27 Jun 2023 13:56:45 -0400
-X-MC-Unique: WI_MuUZLMeKEf8F09I_2cg-1
+ us-mta-62-LLMfnjhqNHOsP91LCCU6Tw-1; Tue, 27 Jun 2023 13:56:50 -0400
+X-MC-Unique: LLMfnjhqNHOsP91LCCU6Tw-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 38DEE1C08962;
-        Tue, 27 Jun 2023 17:56:45 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D29243C0FCA0;
+        Tue, 27 Jun 2023 17:56:49 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.194.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C0955200B677;
-        Tue, 27 Jun 2023 17:56:43 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 84831200B677;
+        Tue, 27 Jun 2023 17:56:48 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -46,9 +47,11 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Andy Shevchenko <andy@kernel.org>, Kate Hsuan <hpa@redhat.com>,
         Hao Yao <hao.yao@intel.com>, Bingbu Cao <bingbu.cao@intel.com>,
         linux-media@vger.kernel.org
-Subject: [PATCH 00/12] media: intel-cio2-bridge: Add shared intel-cio2-bridge code, rework VCM instantiation
-Date:   Tue, 27 Jun 2023 19:56:30 +0200
-Message-ID: <20230627175643.114778-1-hdegoede@redhat.com>
+Subject: [PATCH 03/12] media: ipu3-cio2: Make cio2_bridge_init() take a regular struct device as argument
+Date:   Tue, 27 Jun 2023 19:56:33 +0200
+Message-ID: <20230627175643.114778-4-hdegoede@redhat.com>
+In-Reply-To: <20230627175643.114778-1-hdegoede@redhat.com>
+References: <20230627175643.114778-1-hdegoede@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
@@ -56,82 +59,125 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi All,
+Make cio2_bridge_init() take a regular struct device, rather then
+a pci_dev as argument.
 
-While working on adding (proper) VCM support to the atomisp code
-I found myself copying yet more code from
-drivers/media/pci/intel/ipu3/cio2-bridge.c into the atomisp code.
+This is a preparation patch for making the cio2-bridge code more generic
+so that it can be shared with the atomisp driver.
 
-So I decided that it really was time to factor out the common code
-(most of the code) from intel/ipu3/cio2-bridge.c into its own
-helper library and then share it between the atomisp and IPU3 code.
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ drivers/media/pci/intel/ipu3/cio2-bridge.c    | 16 +++++++---------
+ drivers/media/pci/intel/ipu3/ipu3-cio2-main.c |  2 +-
+ drivers/media/pci/intel/ipu3/ipu3-cio2.h      |  4 ++--
+ 3 files changed, 10 insertions(+), 12 deletions(-)
 
-This will hopefully also be useful for the ongoing work to upstream
-IPU6 input system support which also needs this functionality and
-currently contains a 3th copy of this code in the out of tree driver.
-
-This set consists of the following parts:
-
-Patch 1     A bugfix for a recent change to the cio2-bridge code
-Patches 2-8 Cleanup / preparation patches
-Patch 9     Move the main body of the cio2-bridge.c code into
-            a new shared intel-cio2-bridge module
-Patch 10    Drop cio2-bridge code copy from atomisp, switching to
-            the shared intel-cio2-bridge module
-Patch 11    Rework how VCM client instantiation is done so that
-            a device-link can be added from VCM to sensor to
-            fix issues with the VCM power-state being tied to
-            the sensor power state
-Patch 12    Example patch to show how patch 11 avoids the need
-            for hacks in VCM drivers caused by the shared power state
-            (not intended for merging)
-
-Regards,
-
-Hans
-
-
-Hans de Goede (12):
-  media: ipu3-cio2: Do not use on stack memory for software_node.name
-    field
-  media: ipu3-cio2: Move initialization of node_names.vcm to
-    cio2_bridge_init_swnode_names()
-  media: ipu3-cio2: Make cio2_bridge_init() take a regular struct device
-    as argument
-  media: ipu3-cio2: Store dev pointer in struct cio2_bridge
-  media: ipu3-cio2: Only keep PLD around while parsing
-  media: ipu3-cio2: Add a cio2_bridge_parse_sensor_fwnode() helper
-    function
-  media: ipu3-cio2: Add a parse_sensor_fwnode callback to
-    cio2_bridge_init()
-  media: ipu3-cio2: Add supported_sensors parameter to
-    cio2_bridge_init()
-  media: ipu3-cio2: Move cio2_bridge_init() code into a new shared
-    intel-cio2-bridge.ko
-  media: atomisp: csi2-bridge: Switch to new common cio2_bridge_init()
-  media: intel-cio2-bridge: Add a runtime-pm device-link between VCM and
-    sensor
-  [RFC] media: dw9719: Drop hack to enable "vsio" regulator
-
- MAINTAINERS                                   |   9 +
- drivers/media/common/Kconfig                  |   4 +
- drivers/media/common/Makefile                 |   1 +
- drivers/media/common/intel-cio2-bridge.c      | 464 ++++++++++++++++++
- drivers/media/i2c/dw9719.c                    |  27 +-
- drivers/media/pci/intel/ipu3/Kconfig          |   1 +
- drivers/media/pci/intel/ipu3/cio2-bridge.c    | 464 +++---------------
- drivers/media/pci/intel/ipu3/cio2-bridge.h    | 146 ------
- drivers/media/pci/intel/ipu3/ipu3-cio2-main.c |   7 +-
- drivers/media/pci/intel/ipu3/ipu3-cio2.h      |   7 +-
- drivers/staging/media/atomisp/Kconfig         |   2 +
- .../staging/media/atomisp/pci/atomisp_csi2.h  |  67 ---
- .../media/atomisp/pci/atomisp_csi2_bridge.c   | 307 ++----------
- include/media/intel-cio2-bridge.h             | 105 ++++
- 14 files changed, 723 insertions(+), 888 deletions(-)
- create mode 100644 drivers/media/common/intel-cio2-bridge.c
- delete mode 100644 drivers/media/pci/intel/ipu3/cio2-bridge.h
- create mode 100644 include/media/intel-cio2-bridge.h
-
+diff --git a/drivers/media/pci/intel/ipu3/cio2-bridge.c b/drivers/media/pci/intel/ipu3/cio2-bridge.c
+index 0f7adca9d6f9..72a28844dfdb 100644
+--- a/drivers/media/pci/intel/ipu3/cio2-bridge.c
++++ b/drivers/media/pci/intel/ipu3/cio2-bridge.c
+@@ -4,7 +4,6 @@
+ #include <linux/acpi.h>
+ #include <linux/device.h>
+ #include <linux/i2c.h>
+-#include <linux/pci.h>
+ #include <linux/property.h>
+ #include <media/v4l2-fwnode.h>
+ 
+@@ -288,7 +287,7 @@ static void cio2_bridge_unregister_sensors(struct cio2_bridge *bridge)
+ 
+ static int cio2_bridge_connect_sensor(const struct cio2_sensor_config *cfg,
+ 				      struct cio2_bridge *bridge,
+-				      struct pci_dev *cio2)
++				      struct device *dev)
+ {
+ 	struct fwnode_handle *fwnode, *primary;
+ 	struct cio2_sensor *sensor;
+@@ -302,7 +301,7 @@ static int cio2_bridge_connect_sensor(const struct cio2_sensor_config *cfg,
+ 
+ 		if (bridge->n_sensors >= CIO2_NUM_PORTS) {
+ 			acpi_dev_put(adev);
+-			dev_err(&cio2->dev, "Exceeded available CIO2 ports\n");
++			dev_err(dev, "Exceeded available CIO2 ports\n");
+ 			return -EINVAL;
+ 		}
+ 
+@@ -357,7 +356,7 @@ static int cio2_bridge_connect_sensor(const struct cio2_sensor_config *cfg,
+ 
+ 		cio2_bridge_instantiate_vcm_i2c_client(sensor);
+ 
+-		dev_info(&cio2->dev, "Found supported sensor %s\n",
++		dev_info(dev, "Found supported sensor %s\n",
+ 			 acpi_dev_name(adev));
+ 
+ 		bridge->n_sensors++;
+@@ -375,7 +374,7 @@ static int cio2_bridge_connect_sensor(const struct cio2_sensor_config *cfg,
+ }
+ 
+ static int cio2_bridge_connect_sensors(struct cio2_bridge *bridge,
+-				       struct pci_dev *cio2)
++				       struct device *dev)
+ {
+ 	unsigned int i;
+ 	int ret;
+@@ -384,7 +383,7 @@ static int cio2_bridge_connect_sensors(struct cio2_bridge *bridge,
+ 		const struct cio2_sensor_config *cfg =
+ 			&cio2_supported_sensors[i];
+ 
+-		ret = cio2_bridge_connect_sensor(cfg, bridge, cio2);
++		ret = cio2_bridge_connect_sensor(cfg, bridge, dev);
+ 		if (ret)
+ 			goto err_unregister_sensors;
+ 	}
+@@ -430,9 +429,8 @@ static int cio2_bridge_sensors_are_ready(void)
+ 	return ready;
+ }
+ 
+-int cio2_bridge_init(struct pci_dev *cio2)
++int cio2_bridge_init(struct device *dev)
+ {
+-	struct device *dev = &cio2->dev;
+ 	struct fwnode_handle *fwnode;
+ 	struct cio2_bridge *bridge;
+ 	unsigned int i;
+@@ -465,7 +463,7 @@ int cio2_bridge_init(struct pci_dev *cio2)
+ 	for (i = 0; i < CIO2_MAX_LANES; i++)
+ 		bridge->data_lanes[i] = i + 1;
+ 
+-	ret = cio2_bridge_connect_sensors(bridge, cio2);
++	ret = cio2_bridge_connect_sensors(bridge, dev);
+ 	if (ret || bridge->n_sensors == 0)
+ 		goto err_unregister_cio2;
+ 
+diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c b/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
+index 34984a7474ed..afc3255b5eb8 100644
+--- a/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
++++ b/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
+@@ -1724,7 +1724,7 @@ static int cio2_pci_probe(struct pci_dev *pci_dev,
+ 			return -EINVAL;
+ 		}
+ 
+-		r = cio2_bridge_init(pci_dev);
++		r = cio2_bridge_init(dev);
+ 		if (r)
+ 			return r;
+ 	}
+diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.h b/drivers/media/pci/intel/ipu3/ipu3-cio2.h
+index 3a1f394e05aa..7ff7915f9823 100644
+--- a/drivers/media/pci/intel/ipu3/ipu3-cio2.h
++++ b/drivers/media/pci/intel/ipu3/ipu3-cio2.h
+@@ -460,9 +460,9 @@ static inline struct cio2_queue *vb2q_to_cio2_queue(struct vb2_queue *vq)
+ }
+ 
+ #if IS_ENABLED(CONFIG_CIO2_BRIDGE)
+-int cio2_bridge_init(struct pci_dev *cio2);
++int cio2_bridge_init(struct device *dev);
+ #else
+-static inline int cio2_bridge_init(struct pci_dev *cio2) { return 0; }
++static inline int cio2_bridge_init(struct device *dev) { return 0; }
+ #endif
+ 
+ #endif
 -- 
 2.41.0
 
