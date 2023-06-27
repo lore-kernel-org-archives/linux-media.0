@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67C32EB64DD
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8602CC0015E
 	for <linux-media@archiver.kernel.org>; Tue, 27 Jun 2023 13:22:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbjF0NV2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Jun 2023 09:21:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60450 "EHLO
+        id S230444AbjF0NVb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Jun 2023 09:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231152AbjF0NUt (ORCPT
+        with ESMTP id S230030AbjF0NU6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Jun 2023 09:20:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D423710FC
-        for <linux-media@vger.kernel.org>; Tue, 27 Jun 2023 06:19:23 -0700 (PDT)
+        Tue, 27 Jun 2023 09:20:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7FA82D42
+        for <linux-media@vger.kernel.org>; Tue, 27 Jun 2023 06:19:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687871963;
+        s=mimecast20190719; t=1687871999;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jXyuPG3nVUsOxq8Ri0oMCx9yYwZq/YYp3TT4e/nljwk=;
-        b=i9MmyBraLknNelIWxvU80J/mE/WC9IjA4co9mbQ9swPhfRVPKZ/lIhqVc9/ql6KhnQ0bP+
-        CbGcU2JFwDTp0zmffGYh2nL7lqs/kgRkudTUdwH2UoovTZyDtzqXUg8d+Hgecsf9QI5TUg
-        WvPENEunoqjEwbhnV6fafwRw2LNQSAs=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=CbmO4mqJqy6BvJgNh6ch0Hk4UPUCsKOB8MJsLY3VcNQ=;
+        b=d+Kv8mccv6WW4+oEci3zASu69TC1AD7B8Qs4q+owtz8Sxfwy8vH0RNlM8j13+dSo1wlNMH
+        pvgQ+VTU8Z0ufsXo7zumh2QNd0WF7KSr+nL1t/KjzTqbY9GL/mDBLUt9xH0xeLe9EP+yxq
+        pFCQjLXKreMgdu4Xn5755THGXNx59Xc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-628-eJ_b4G9BP42-Mv3rXqgeHA-1; Tue, 27 Jun 2023 09:19:19 -0400
-X-MC-Unique: eJ_b4G9BP42-Mv3rXqgeHA-1
+ us-mta-19-7dZe9trROTap0Yhvd95VYQ-1; Tue, 27 Jun 2023 09:18:46 -0400
+X-MC-Unique: 7dZe9trROTap0Yhvd95VYQ-1
 Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 04FF33815EFC;
-        Tue, 27 Jun 2023 13:19:19 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 739FC8C80F2;
+        Tue, 27 Jun 2023 13:18:45 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.194.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id ACB7F401061;
-        Tue, 27 Jun 2023 13:19:17 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 24EFB400F5A;
+        Tue, 27 Jun 2023 13:18:44 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -48,9 +48,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Andy Shevchenko <andy@kernel.org>, Kate Hsuan <hpa@redhat.com>,
         Tommaso Merciai <tomm.merciai@gmail.com>,
         linux-media@vger.kernel.org
-Subject: [PATCH v3 29/29] MAINTAINERS: Add Hans de Goede as OV2680 sensor driver maintainer
-Date:   Tue, 27 Jun 2023 15:18:30 +0200
-Message-ID: <20230627131830.54601-30-hdegoede@redhat.com>
+Subject: [PATCH v3 08/29] media: ov2680: Fix regulators being left enabled on ov2680_power_on() errors
+Date:   Tue, 27 Jun 2023 15:18:09 +0200
+Message-ID: <20230627131830.54601-9-hdegoede@redhat.com>
 In-Reply-To: <20230627131830.54601-1-hdegoede@redhat.com>
 References: <20230627131830.54601-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,25 +60,54 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add myself as OV2680 sensor driver maintainer.
+When the ov2680_power_on() "sensor soft reset failed" path is hit during
+probe() the WARN() about putting an enabled regulator at
+drivers/regulator/core.c:2398 triggers 3 times (once for each regulator),
+filling dmesg with backtraces.
 
+Fix this by properly disabling the regulators on ov2680_power_on() errors.
+
+Fixes: 3ee47cad3e69 ("media: ov2680: Add Omnivision OV2680 sensor driver")
+Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
+Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/i2c/ov2680.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c6a7b43321d9..2ec35c3569dd 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15518,6 +15518,7 @@ F:	drivers/media/i2c/ov13b10.c
+diff --git a/drivers/media/i2c/ov2680.c b/drivers/media/i2c/ov2680.c
+index 7fc4b39ebb37..55fc56ffad31 100644
+--- a/drivers/media/i2c/ov2680.c
++++ b/drivers/media/i2c/ov2680.c
+@@ -475,7 +475,7 @@ static int ov2680_power_on(struct ov2680_dev *sensor)
+ 		ret = ov2680_write_reg(sensor, OV2680_REG_SOFT_RESET, 0x01);
+ 		if (ret != 0) {
+ 			dev_err(dev, "sensor soft reset failed\n");
+-			return ret;
++			goto err_disable_regulators;
+ 		}
+ 		usleep_range(1000, 2000);
+ 	} else {
+@@ -485,7 +485,7 @@ static int ov2680_power_on(struct ov2680_dev *sensor)
  
- OMNIVISION OV2680 SENSOR DRIVER
- M:	Rui Miguel Silva <rmfrfs@gmail.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-media@vger.kernel.org
- S:	Maintained
- T:	git git://linuxtv.org/media_tree.git
+ 	ret = clk_prepare_enable(sensor->xvclk);
+ 	if (ret < 0)
+-		return ret;
++		goto err_disable_regulators;
+ 
+ 	sensor->is_enabled = true;
+ 
+@@ -495,6 +495,10 @@ static int ov2680_power_on(struct ov2680_dev *sensor)
+ 	ov2680_stream_disable(sensor);
+ 
+ 	return 0;
++
++err_disable_regulators:
++	regulator_bulk_disable(OV2680_NUM_SUPPLIES, sensor->supplies);
++	return ret;
+ }
+ 
+ static int ov2680_s_power(struct v4l2_subdev *sd, int on)
 -- 
 2.41.0
 
