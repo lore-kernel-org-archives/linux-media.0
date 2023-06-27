@@ -2,111 +2,170 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0D1AEB64DC
-	for <linux-media@archiver.kernel.org>; Tue, 27 Jun 2023 14:39:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 426A2EB64D9
+	for <linux-media@archiver.kernel.org>; Tue, 27 Jun 2023 14:41:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231809AbjF0OjS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Jun 2023 10:39:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38144 "EHLO
+        id S231226AbjF0OlX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Jun 2023 10:41:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231918AbjF0Oi5 (ORCPT
+        with ESMTP id S229629AbjF0OlU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Jun 2023 10:38:57 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3B553C07;
-        Tue, 27 Jun 2023 07:38:23 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-98e25fa6f5bso468411566b.3;
-        Tue, 27 Jun 2023 07:38:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687876701; x=1690468701;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aycEXc1p8AecpgCVFe3SN1Ps1KLQUbHdHOvGWse/Ca4=;
-        b=jaXJB/YU3JQz39KDQb+QDAKFdsmnrticA9rtbWy1ykxlRnJIevC3j1hKmX/0MXVoJg
-         w8jKqiTx/y9VWXNo0RJK0TTbnTi+K67/HN2VTh7KHWkPnGQEfyVpXole7nMsnq9KjbdU
-         GNfMDg+30KGrk9ZG/1UvMhYx20ICRMS0AAYEUTAkoRSst1k7LoXzQD/0L2Mwvdp2379C
-         9Muz3hE2k134stWl1rFqKDHWVHUbta01qqTOZNiG0/KdvW/8J6F83ImxVyahIfkbFR4+
-         1IDF/pq7mHSbbSGFCBjfbVDLBkWqS+TO2qIz6/IRHUNtSzGJL0jvOsy4E/pKGoM6RguG
-         b7ZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687876701; x=1690468701;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aycEXc1p8AecpgCVFe3SN1Ps1KLQUbHdHOvGWse/Ca4=;
-        b=lSFl+keIJRKLNlxxvi/IYSQgC5RyZdzlBeGLlGveVECxWk9ydnk6rTtT9yFB+z2oPG
-         wBI6htaCD4DykRIJm1GIrkkoKkPTGPO+VwW/3RXJpSsdLBFm8oz1d9HAcgnv10khL7Dy
-         jUXu2od7fPUAoSanaU9NIw8q04iRI4WgoljXQJWY7gTUkZuwOrrbin914328fD8kX/ki
-         IAVkCtjDTRJq7ujsSiXSkWJNlT19fg7lPGnLFWtcxD3ycTz5hmVxDsTgerM53hEGUcO/
-         QCY71+zUAlwAJHClEKtvOWuiPpQKIbgTOd8d5ynTUiCYxme3ajAjmFkOmE9iI/MS76qY
-         OxQg==
-X-Gm-Message-State: AC+VfDxSNYTNpqrDRaDun+Vf/z7Glm8KJUrW4yQTkQSNf9/5XrUSGkDC
-        uHwbsNUi1r8C3YrFz0LbAJcounQB7fvEJi8+
-X-Google-Smtp-Source: ACHHUZ50qYhprpbhs8hRwJ1pExP9hgcQpDJ1t3RmUD8qchv2Au4jmHRBJUCn5fqkbiSdOan16EquKQ==
-X-Received: by 2002:a17:907:7293:b0:988:d841:7f8d with SMTP id dt19-20020a170907729300b00988d8417f8dmr21453302ejc.71.1687876700555;
-        Tue, 27 Jun 2023 07:38:20 -0700 (PDT)
-Received: from tom-HP-ZBook-Fury-15-G7-Mobile-Workstation ([193.85.242.128])
-        by smtp.gmail.com with ESMTPSA id b21-20020a170906491500b009828dac8425sm4590406ejq.105.2023.06.27.07.38.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 07:38:20 -0700 (PDT)
-Date:   Tue, 27 Jun 2023 16:38:18 +0200
-From:   Tommaso Merciai <tomm.merciai@gmail.com>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] media: bt8xx: make read-only arrays static
-Message-ID: <ZJr0WvhFfCILwbeP@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
-References: <20230627134851.728487-1-colin.i.king@gmail.com>
+        Tue, 27 Jun 2023 10:41:20 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017733590
+        for <linux-media@vger.kernel.org>; Tue, 27 Jun 2023 07:40:53 -0700 (PDT)
+Received: from [192.168.144.60] (90-182-211-1.rcp.o2.cz [90.182.211.1])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 33BD410A;
+        Tue, 27 Jun 2023 16:40:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1687876809;
+        bh=YHiu8DHNTNkAIafKqmBUmEE2RM5OWafhR18eWVejASM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=gzXtpwqjKdjJrPuIrySQ/cg4kkMzxkjmBSbd1DFdpgAwl8NI5dG/WOIvootPDqS0e
+         7ojn5cXY4AkpYrNCiWw7jaYWwvbQy4lZJpKzKu6a4NOnjCpADqTcSlK1qD/CKR9Meq
+         5xua2BN0Xxo5CIW21V6ahXnlBLfyjOmdC8dj6TPU=
+Message-ID: <08701132-eab4-fc44-d14d-6dc72ec5c4c4@ideasonboard.com>
+Date:   Tue, 27 Jun 2023 16:40:45 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230627134851.728487-1-colin.i.king@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 11/29] media: ov2680: Check for "powerdown" GPIO con-id
+ before checking for "reset" GPIO con-id
+Content-Language: en-US
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Rui Miguel Silva <rmfrfs@gmail.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Andy Shevchenko <andy@kernel.org>, Kate Hsuan <hpa@redhat.com>,
+        Tommaso Merciai <tomm.merciai@gmail.com>,
+        linux-media@vger.kernel.org
+References: <20230627131830.54601-1-hdegoede@redhat.com>
+ <20230627131830.54601-12-hdegoede@redhat.com>
+From:   Dan Scally <dan.scally@ideasonboard.com>
+In-Reply-To: <20230627131830.54601-12-hdegoede@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Colin,
+Hi Hans
 
-On Tue, Jun 27, 2023 at 02:48:51PM +0100, Colin Ian King wrote:
-> Don't populate the arrays on the stack, instead make them static const.
-> Also add spaces between values to clean up checkpatch style warnings.
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+On 27/06/2023 15:18, Hans de Goede wrote:
+> The datasheet of the OV2680 labels the single GPIO to put the sensor in
+> powersaving mode as XSHUTDN aka shutdown, _not_ reset.
+>
+> This is important because some boards have standardized sensor connectors
+> which allow connecting various sensor modules. These connectors have both
+> reset and powerdown signals and the powerdown signal is routed to
+> the OV2680's XSHUTDN pin.
+>
+> On x86/ACPI multiple Bay Trail, Cherry Trail, Sky Lake and Kaby Lake models
+> have an OV2680 connected to the ISP2 / IPU3. On these devices the GPIOS are
+> not described in DT instead the GPIOs are described with an Intel specific
+> DSM which labels them as either powerdown or reset. Often this DSM returns
+> both reset and powerdown pins even though the OV2680 has only 1 such pin.
+>
+> For the ov2680 driver to work on these devices it must use the GPIO with
+> "powerdown" as con-id, matching the XSHUTDN name from the datasheet.
+>
+> As for why "powerdown" vs say "shutdown" the ACPI DSM -> con-id mapping
+> code is shared, so we must use standardized names and currently all of
+> the following sensor drivers already use "powerdown":
+> adv7180, gc0310, isl7998x, ov02a10, ov2659, ov5640, ov5648, ov5670,
+> ov5693, ov7670, ov772x, ov7740, ov8858, ov8865 and ov9650 .
+>
+> Where as the hi846 driver is the lonely standout using "shutdown".
+>
+> Try the "powerdown" con-id first to make things work, falling back to
+> "reset" to keep existing DT setups working.
+>
+> Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 > ---
->  drivers/media/pci/bt8xx/dvb-bt8xx.c | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/media/pci/bt8xx/dvb-bt8xx.c b/drivers/media/pci/bt8xx/dvb-bt8xx.c
-> index 4cb890b949c3..df83b59a618d 100644
-> --- a/drivers/media/pci/bt8xx/dvb-bt8xx.c
-> +++ b/drivers/media/pci/bt8xx/dvb-bt8xx.c
-> @@ -190,11 +190,15 @@ static int cx24108_tuner_set_params(struct dvb_frontend *fe)
->  	u32 freq = c->frequency;
->  	int i, a, n, pump;
->  	u32 band, pll;
-> -	u32 osci[]={950000,1019000,1075000,1178000,1296000,1432000,
-> -		1576000,1718000,1856000,2036000,2150000};
-> -	u32 bandsel[]={0,0x00020000,0x00040000,0x00100800,0x00101000,
-> +	static const u32 osci[] = {
-> +		950000, 1019000, 1075000, 1178000, 1296000, 1432000,
-> +		1576000, 1718000, 1856000, 2036000, 2150000
-> +	};
-> +	static const u32 bandsel[] = {
-> +		0, 0x00020000, 0x00040000, 0x00100800, 0x00101000,
->  		0x00102000,0x00104000,0x00108000,0x00110000,
 
-Are you not missing space also here?
 
-> -		0x00120000,0x00140000};
-> +		0x00120000, 0x00140000
-> +	};
->  
->  	#define XTAL 1011100 /* Hz, really 1.0111 MHz and a /10 prescaler */
->  	dprintk("cx24108 debug: entering SetTunerFreq, freq=%d\n", freq);
-> -- 
-> 2.39.2
-> 
+Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
 
-Regards,
-Tommaso
+>   drivers/media/i2c/ov2680.c | 29 ++++++++++++++++++++---------
+>   1 file changed, 20 insertions(+), 9 deletions(-)
+>
+> diff --git a/drivers/media/i2c/ov2680.c b/drivers/media/i2c/ov2680.c
+> index 824e2962e7d5..0de047c49c31 100644
+> --- a/drivers/media/i2c/ov2680.c
+> +++ b/drivers/media/i2c/ov2680.c
+> @@ -96,7 +96,7 @@ struct ov2680_dev {
+>   	u32				xvclk_freq;
+>   	struct regulator_bulk_data	supplies[OV2680_NUM_SUPPLIES];
+>   
+> -	struct gpio_desc		*reset_gpio;
+> +	struct gpio_desc		*pwdn_gpio;
+>   	struct mutex			lock; /* protect members */
+>   
+>   	bool				mode_pending_changes;
+> @@ -180,19 +180,19 @@ static inline struct v4l2_subdev *ctrl_to_sd(struct v4l2_ctrl *ctrl)
+>   
+>   static void ov2680_power_up(struct ov2680_dev *sensor)
+>   {
+> -	if (!sensor->reset_gpio)
+> +	if (!sensor->pwdn_gpio)
+>   		return;
+>   
+> -	gpiod_set_value(sensor->reset_gpio, 0);
+> +	gpiod_set_value(sensor->pwdn_gpio, 0);
+>   	usleep_range(5000, 10000);
+>   }
+>   
+>   static void ov2680_power_down(struct ov2680_dev *sensor)
+>   {
+> -	if (!sensor->reset_gpio)
+> +	if (!sensor->pwdn_gpio)
+>   		return;
+>   
+> -	gpiod_set_value(sensor->reset_gpio, 1);
+> +	gpiod_set_value(sensor->pwdn_gpio, 1);
+>   	usleep_range(5000, 10000);
+>   }
+>   
+> @@ -350,7 +350,7 @@ static int ov2680_power_on(struct ov2680_dev *sensor)
+>   		return ret;
+>   	}
+>   
+> -	if (!sensor->reset_gpio) {
+> +	if (!sensor->pwdn_gpio) {
+>   		ret = cci_write(sensor->regmap, OV2680_REG_SOFT_RESET, 0x01,
+>   				NULL);
+>   		if (ret != 0) {
+> @@ -742,16 +742,27 @@ static int ov2680_check_id(struct ov2680_dev *sensor)
+>   static int ov2680_parse_dt(struct ov2680_dev *sensor)
+>   {
+>   	struct device *dev = sensor->dev;
+> +	struct gpio_desc *gpio;
+>   	int ret;
+>   
+> -	sensor->reset_gpio = devm_gpiod_get_optional(dev, "reset",
+> -						     GPIOD_OUT_HIGH);
+> -	ret = PTR_ERR_OR_ZERO(sensor->reset_gpio);
+> +	/*
+> +	 * The pin we want is named XSHUTDN in the datasheet. Linux sensor
+> +	 * drivers have standardized on using "powerdown" as con-id name
+> +	 * for powerdown or shutdown pins. Older DTB files use "reset",
+> +	 * so fallback to that if there is no "powerdown" pin.
+> +	 */
+> +	gpio = devm_gpiod_get_optional(dev, "powerdown", GPIOD_OUT_HIGH);
+> +	if (!gpio)
+> +		gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
+> +
+> +	ret = PTR_ERR_OR_ZERO(gpio);
+>   	if (ret < 0) {
+>   		dev_dbg(dev, "error while getting reset gpio: %d\n", ret);
+>   		return ret;
+>   	}
+>   
+> +	sensor->pwdn_gpio = gpio;
+> +
+>   	sensor->xvclk = devm_clk_get(dev, "xvclk");
+>   	if (IS_ERR(sensor->xvclk)) {
+>   		dev_err(dev, "xvclk clock missing or invalid\n");
