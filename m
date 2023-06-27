@@ -2,188 +2,98 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A8B2EB64D9
-	for <linux-media@archiver.kernel.org>; Tue, 27 Jun 2023 20:23:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1AE8C001B0
+	for <linux-media@archiver.kernel.org>; Tue, 27 Jun 2023 20:39:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231232AbjF0UXV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Jun 2023 16:23:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44084 "EHLO
+        id S230163AbjF0Ujv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Jun 2023 16:39:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbjF0UXT (ORCPT
+        with ESMTP id S231478AbjF0Uju (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Jun 2023 16:23:19 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E766E268C;
-        Tue, 27 Jun 2023 13:23:17 -0700 (PDT)
-Received: from umang.jainideasonboard.com (85-160-38-115.reb.o2.cz [85.160.38.115])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7A80231B9;
-        Tue, 27 Jun 2023 22:15:56 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1687896957;
-        bh=FYswsBqlGTJd9Uyph3V+TQd6xP/1Bv4ExB0Kmxk7mY4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LH38S3H1Nk+x0OaEipDZuzWIsskQgS7sUasWv0Emmzbvpp3RWXSsCS8H6ilSbeEhX
-         hkp/6tV9iShsHKHFZm+eBJJRIAWJjEiM3bjTy3A9HKu76FO8Gm1oHops0hdAh4JZsj
-         r9GqDFxUGku8zZSFM4zY+zYjWN/Xi4uBbvpA6tkg=
-From:   Umang Jain <umang.jain@ideasonboard.com>
-To:     linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     stefan.wahren@i2se.com, gregkh@linuxfoundation.org,
-        f.fainelli@gmail.com, athierry@redhat.com, error27@gmail.com,
-        dave.stevenson@raspberrypi.com, kieran.bingham@ideasonboard.com,
-        laurent.pinchart@ideasonboard.com,
-        Umang Jain <umang.jain@ideasonboard.com>
-Subject: [PATCH v8 3/5] staging: bcm2835-camera: Register bcm2835-camera with vchiq_bus_type
-Date:   Tue, 27 Jun 2023 22:16:26 +0200
-Message-Id: <20230627201628.207483-4-umang.jain@ideasonboard.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230627201628.207483-1-umang.jain@ideasonboard.com>
-References: <20230627201628.207483-1-umang.jain@ideasonboard.com>
+        Tue, 27 Jun 2023 16:39:50 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D050198A
+        for <linux-media@vger.kernel.org>; Tue, 27 Jun 2023 13:39:49 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="427682242"
+X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
+   d="scan'208";a="427682242"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 13:39:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="786787983"
+X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
+   d="scan'208";a="786787983"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004.fm.intel.com with ESMTP; 27 Jun 2023 13:39:28 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andy@kernel.org>)
+        id 1qEFTD-000Q4e-0N;
+        Tue, 27 Jun 2023 23:39:27 +0300
+Date:   Tue, 27 Jun 2023 23:39:26 +0300
+From:   Andy Shevchenko <andy@kernel.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Daniel Scally <dan.scally@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Kate Hsuan <hpa@redhat.com>, Hao Yao <hao.yao@intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>, linux-media@vger.kernel.org
+Subject: Re: [PATCH 06/12] media: ipu3-cio2: Add a
+ cio2_bridge_parse_sensor_fwnode() helper function
+Message-ID: <ZJtI/j9RUp3Nv8s3@smile.fi.intel.com>
+References: <20230627175643.114778-1-hdegoede@redhat.com>
+ <20230627175643.114778-7-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230627175643.114778-7-hdegoede@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Register the bcm2835-camera with the vchiq_bus_type instead of using
-platform driver/device.
+On Tue, Jun 27, 2023 at 07:56:36PM +0200, Hans de Goede wrote:
+> The code to go from ACPI sensor info to a fwnode-tree with connector
+> nodes and endpoint properties is 99% the same for the atomisp2 and
+> the IPU3.
+> 
+> The main difference is that atomisp2 devices do not have a SSDB table
+> with various info.
+> 
+> Abstract out the parsing of the sensor's ACPI fwnode into a helper
+> function and store the parsed results, rather then the raw SSDB
+> in struct cio2_sensor.
+> 
+> This is a preparation patch for making the cio2-bridge code more generic
+> so that it can be shared with the atomisp driver.
 
-Also the VCHIQ firmware doesn't support device enumeration, hence
-one has to maintain a list of devices to be registered in the interface.
+...
 
-Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
----
- .../bcm2835-camera/bcm2835-camera.c           | 16 +++++++-------
- .../interface/vchiq_arm/vchiq_arm.c           | 21 ++++++++++++++++---
- 2 files changed, 26 insertions(+), 11 deletions(-)
+> +	if (ssdb.vcmtype > ARRAY_SIZE(cio2_vcm_types)) {
+> +		dev_warn(&adev->dev, "Unknown VCM type %d\n", ssdb.vcmtype);
+> +		ssdb.vcmtype = 0;
+> +	}
 
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-index 346d00df815a..f37b2a881d92 100644
---- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-+++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-@@ -24,8 +24,9 @@
- #include <media/v4l2-event.h>
- #include <media/v4l2-common.h>
- #include <linux/delay.h>
--#include <linux/platform_device.h>
- 
-+#include "../interface/vchiq_arm/vchiq_arm.h"
-+#include "../interface/vchiq_arm/vchiq_device.h"
- #include "../vchiq-mmal/mmal-common.h"
- #include "../vchiq-mmal/mmal-encodings.h"
- #include "../vchiq-mmal/mmal-vchiq.h"
-@@ -1841,7 +1842,7 @@ static struct v4l2_format default_v4l2_format = {
- 	.fmt.pix.sizeimage = 1024 * 768,
- };
- 
--static int bcm2835_mmal_probe(struct platform_device *pdev)
-+static int bcm2835_mmal_probe(struct vchiq_device *device)
- {
- 	int ret;
- 	struct bcm2835_mmal_dev *dev;
-@@ -1896,7 +1897,7 @@ static int bcm2835_mmal_probe(struct platform_device *pdev)
- 						       &camera_instance);
- 		ret = v4l2_device_register(NULL, &dev->v4l2_dev);
- 		if (ret) {
--			dev_err(&pdev->dev, "%s: could not register V4L2 device: %d\n",
-+			dev_err(&device->dev, "%s: could not register V4L2 device: %d\n",
- 				__func__, ret);
- 			goto free_dev;
- 		}
-@@ -1976,7 +1977,7 @@ static int bcm2835_mmal_probe(struct platform_device *pdev)
- 	return ret;
- }
- 
--static void bcm2835_mmal_remove(struct platform_device *pdev)
-+static void bcm2835_mmal_remove(struct vchiq_device *device)
- {
- 	int camera;
- 	struct vchiq_mmal_instance *instance = gdev[0]->instance;
-@@ -1988,17 +1989,16 @@ static void bcm2835_mmal_remove(struct platform_device *pdev)
- 	vchiq_mmal_finalise(instance);
- }
- 
--static struct platform_driver bcm2835_camera_driver = {
-+static struct vchiq_driver bcm2835_camera_driver = {
- 	.probe		= bcm2835_mmal_probe,
--	.remove_new	= bcm2835_mmal_remove,
-+	.remove		= bcm2835_mmal_remove,
- 	.driver		= {
- 		.name	= "bcm2835-camera",
- 	},
- };
- 
--module_platform_driver(bcm2835_camera_driver)
-+module_vchiq_driver(bcm2835_camera_driver)
- 
- MODULE_DESCRIPTION("Broadcom 2835 MMAL video capture");
- MODULE_AUTHOR("Vincent Sanders");
- MODULE_LICENSE("GPL");
--MODULE_ALIAS("platform:bcm2835-camera");
-diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-index e8d40f891449..79d4d0eeb5fb 100644
---- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-+++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-@@ -67,7 +67,6 @@ int vchiq_susp_log_level = VCHIQ_LOG_ERROR;
- DEFINE_SPINLOCK(msg_queue_spinlock);
- struct vchiq_state g_state;
- 
--static struct platform_device *bcm2835_camera;
- static struct platform_device *bcm2835_audio;
- 
- struct vchiq_drvdata {
-@@ -134,6 +133,15 @@ struct vchiq_pagelist_info {
- 	unsigned int scatterlist_mapped;
- };
- 
-+/*
-+ * The devices implemented in the VCHIQ firmware are not discoverable,
-+ * so we need to maintain a list of them in order to register them with
-+ * the interface.
-+ */
-+static const char *const vchiq_devices[] = {
-+	"bcm2835-camera",
-+};
-+
- static void __iomem *g_regs;
- /* This value is the size of the L2 cache lines as understood by the
-  * VPU firmware, which determines the required alignment of the
-@@ -1798,6 +1806,7 @@ static int vchiq_probe(struct platform_device *pdev)
- 	struct device_node *fw_node;
- 	const struct of_device_id *of_id;
- 	struct vchiq_drvdata *drvdata;
-+	unsigned int i;
- 	int err;
- 
- 	of_id = of_match_node(vchiq_of_match, pdev->dev.of_node);
-@@ -1840,9 +1849,15 @@ static int vchiq_probe(struct platform_device *pdev)
- 		goto error_exit;
- 	}
- 
--	bcm2835_camera = vchiq_register_child(pdev, "bcm2835-camera");
- 	bcm2835_audio = vchiq_register_child(pdev, "bcm2835_audio");
- 
-+	for (i = 0; i < ARRAY_SIZE(vchiq_devices); i++) {
-+		err = vchiq_device_register(&pdev->dev, vchiq_devices[i]);
-+		if (err)
-+			dev_err(&pdev->dev, "Failed to register %s vchiq device\n",
-+			vchiq_devices[i]);
-+	}
-+
- 	return 0;
- 
- failed_platform_init:
-@@ -1854,7 +1869,7 @@ static int vchiq_probe(struct platform_device *pdev)
- static void vchiq_remove(struct platform_device *pdev)
- {
- 	platform_device_unregister(bcm2835_audio);
--	platform_device_unregister(bcm2835_camera);
-+	bus_for_each_dev(&vchiq_bus_type, NULL, NULL, vchiq_device_unregister);
- 	vchiq_debugfs_deinit();
- 	vchiq_deregister_chrdev();
- }
+I'm wondering if we actually can add the first entry in the types as UNKNOWN or
+so, and hence
+
+	if (ssdb.vcmtype >= ARRAY_SIZE(cio2_vcm_types)) {
+		...
+	}
+
+
+> +	if (ssdb.vcmtype)
+> +		sensor->vcm_type = cio2_vcm_types[ssdb.vcmtype - 1];
+
+...and here the conditional can be dropped.
+
+	sensor->vcm_type = cio2_vcm_types[ssdb.vcmtype];
+
+Maybe it's a material for a separate change... Dunno.
+
 -- 
-2.39.1
+With Best Regards,
+Andy Shevchenko
+
 
