@@ -2,112 +2,144 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8602CC0015E
-	for <linux-media@archiver.kernel.org>; Tue, 27 Jun 2023 13:22:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42C34EB64D9
+	for <linux-media@archiver.kernel.org>; Tue, 27 Jun 2023 13:44:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbjF0NVb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Jun 2023 09:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60462 "EHLO
+        id S230336AbjF0NoX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Jun 2023 09:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230030AbjF0NU6 (ORCPT
+        with ESMTP id S230284AbjF0NoW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Jun 2023 09:20:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7FA82D42
-        for <linux-media@vger.kernel.org>; Tue, 27 Jun 2023 06:19:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687871999;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CbmO4mqJqy6BvJgNh6ch0Hk4UPUCsKOB8MJsLY3VcNQ=;
-        b=d+Kv8mccv6WW4+oEci3zASu69TC1AD7B8Qs4q+owtz8Sxfwy8vH0RNlM8j13+dSo1wlNMH
-        pvgQ+VTU8Z0ufsXo7zumh2QNd0WF7KSr+nL1t/KjzTqbY9GL/mDBLUt9xH0xeLe9EP+yxq
-        pFCQjLXKreMgdu4Xn5755THGXNx59Xc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-19-7dZe9trROTap0Yhvd95VYQ-1; Tue, 27 Jun 2023 09:18:46 -0400
-X-MC-Unique: 7dZe9trROTap0Yhvd95VYQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 739FC8C80F2;
-        Tue, 27 Jun 2023 13:18:45 +0000 (UTC)
-Received: from shalem.redhat.com (unknown [10.39.194.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 24EFB400F5A;
-        Tue, 27 Jun 2023 13:18:44 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Daniel Scally <dan.scally@ideasonboard.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andy Shevchenko <andy@kernel.org>, Kate Hsuan <hpa@redhat.com>,
-        Tommaso Merciai <tomm.merciai@gmail.com>,
-        linux-media@vger.kernel.org
-Subject: [PATCH v3 08/29] media: ov2680: Fix regulators being left enabled on ov2680_power_on() errors
-Date:   Tue, 27 Jun 2023 15:18:09 +0200
-Message-ID: <20230627131830.54601-9-hdegoede@redhat.com>
-In-Reply-To: <20230627131830.54601-1-hdegoede@redhat.com>
-References: <20230627131830.54601-1-hdegoede@redhat.com>
+        Tue, 27 Jun 2023 09:44:22 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1D22115;
+        Tue, 27 Jun 2023 06:44:20 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35RC4fK3017073;
+        Tue, 27 Jun 2023 15:44:00 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=selector1;
+ bh=gb/GTincEGAMp60icRQgZirL/MSQpEL+fvlyld9bd+c=;
+ b=M9myctKtAHQ4gFPupVkZEOOEz34Sy7bzAYQKf06TOliA/xhNizxbCJyrorDgf6I+31nm
+ IUp6kZe6kHrDOEd996V9qlCYm2NoR3UfpmQRhGckoVrrOmNT4ppn2WgVDRr5uIoUGvxl
+ c1YcpqV88/1VvhvRbvT9h/EGCn/XSNZzhzCOUT3BXDIhpzOpD/qAXMlitdpesM2nWtpN
+ l4PhKRlJ3KKDtnM9ZrKBqihhAMidT0aIR7wxGDRxXaWMhA25jcCsXD4LOG06HfqTJ7fz
+ jAH2fpGTpiuRU+dmZ3w9Q1VeCnvEm9KcJQEILcEM/mhavHvx2ptVL2V5utQ0HY/q2GcA eA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rfv7a23mj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Jun 2023 15:44:00 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id F38BD100057;
+        Tue, 27 Jun 2023 15:43:59 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E76A7237D9B;
+        Tue, 27 Jun 2023 15:43:59 +0200 (CEST)
+Received: from gnbcxd0016.gnb.st.com (10.129.178.213) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 27 Jun
+ 2023 15:43:59 +0200
+Date:   Tue, 27 Jun 2023 15:43:51 +0200
+From:   Alain Volmat <alain.volmat@foss.st.com>
+To:     sun yq <yqsun1997@gmail.com>
+CC:     <tiffany.lin@mediatek.com>, <andrew-ct.chen@mediatek.com>,
+        <yunfei.dong@mediatek.com>, <matthias.bgg@gmail.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <499671216@qq.com>
+Subject: Re: [PATCH] OOB read and write in mtk multiple places
+Message-ID: <20230627134314.GA3605030@gnbcxd0016.gnb.st.com>
+Mail-Followup-To: sun yq <yqsun1997@gmail.com>, tiffany.lin@mediatek.com,
+        andrew-ct.chen@mediatek.com, yunfei.dong@mediatek.com,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, 499671216@qq.com
+References: <20230627081002.1768990-1-yqsun1997@gmail.com>
+ <20230627104237.GA3601890@gnbcxd0016.gnb.st.com>
+ <CAA0BgY_bKg4qXmtmWqHQW+EOvfXUG0FqRtAJ7A8C40uL1v8qVA@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+In-Reply-To: <CAA0BgY_bKg4qXmtmWqHQW+EOvfXUG0FqRtAJ7A8C40uL1v8qVA@mail.gmail.com>
+X-Disclaimer: ce message est personnel / this message is private
+X-Originating-IP: [10.129.178.213]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-27_09,2023-06-27_01,2023-05-22_02
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When the ov2680_power_on() "sensor soft reset failed" path is hit during
-probe() the WARN() about putting an enabled regulator at
-drivers/regulator/core.c:2398 triggers 3 times (once for each regulator),
-filling dmesg with backtraces.
+Hi,
 
-Fix this by properly disabling the regulators on ov2680_power_on() errors.
+On Tue, Jun 27, 2023 at 08:28:11PM +0800, sun yq wrote:
+> When using V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE, the number of planes is
+> controlled by the user. Only checking the oob at the function may miss
+> other functions, so it is appropriate to change the size of the macro.
+> You can refer to other functions, such as
+o> mtk_dip_vb2_video_queue_setup, the max plane size of this module is 8
 
-Fixes: 3ee47cad3e69 ("media: ov2680: Add Omnivision OV2680 sensor driver")
-Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
-Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/media/i2c/ov2680.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+To my understanding, the vcodec driver only has formats requiring up to
+3 planes.  Could you explain why you need to change this macro to 8 ?
+Could you please describe the issue you had which led to this change ?
 
-diff --git a/drivers/media/i2c/ov2680.c b/drivers/media/i2c/ov2680.c
-index 7fc4b39ebb37..55fc56ffad31 100644
---- a/drivers/media/i2c/ov2680.c
-+++ b/drivers/media/i2c/ov2680.c
-@@ -475,7 +475,7 @@ static int ov2680_power_on(struct ov2680_dev *sensor)
- 		ret = ov2680_write_reg(sensor, OV2680_REG_SOFT_RESET, 0x01);
- 		if (ret != 0) {
- 			dev_err(dev, "sensor soft reset failed\n");
--			return ret;
-+			goto err_disable_regulators;
- 		}
- 		usleep_range(1000, 2000);
- 	} else {
-@@ -485,7 +485,7 @@ static int ov2680_power_on(struct ov2680_dev *sensor)
- 
- 	ret = clk_prepare_enable(sensor->xvclk);
- 	if (ret < 0)
--		return ret;
-+		goto err_disable_regulators;
- 
- 	sensor->is_enabled = true;
- 
-@@ -495,6 +495,10 @@ static int ov2680_power_on(struct ov2680_dev *sensor)
- 	ov2680_stream_disable(sensor);
- 
- 	return 0;
-+
-+err_disable_regulators:
-+	regulator_bulk_disable(OV2680_NUM_SUPPLIES, sensor->supplies);
-+	return ret;
- }
- 
- static int ov2680_s_power(struct v4l2_subdev *sd, int on)
--- 
-2.41.0
-
+> 
+> 
+> On Tue, Jun 27, 2023 at 6:42 PM Alain Volmat <alain.volmat@foss.st.com> wrote:
+> >
+> > Hi,
+> >
+> > I had a look at some places where this macro MTK_VCODEC_MAX_PLANES
+> > is being used, such as q_data->bytesperline etc.
+> > This patch seems to be increasing the table size from 3 to 8 but,
+> > if my understanding is correct doesn't solve the issue that
+> > (taking the example you give in vidioc_venc_g_fmt) the table
+> > bytesperline is accessed taking into account a num_planes values which
+> > is unchecked if appropriate for this driver.
+> >
+> > What are the 8 planes you are referring to ?
+> >
+> > While increasing the table to 8 might also be necessary, it seems to me
+> > that the real OOB access issue should be solved by checking the num of
+> > planes value.
+> >
+> > Regards,
+> > Alain
+> >
+> > On Tue, Jun 27, 2023 at 04:10:02PM +0800, yqsun1997@gmail.com wrote:
+> > > From: yqsun1997 <yqsun1997@gmail.com>
+> > >
+> > > The num_planes max index is 8,
+> > > but bytesperline and bytesperline in struct mtk_q_data,
+> > > The max index is MTK_VCODEC_MAX_PLANES == 3,
+> > > so will cause OOB read and write in multiple places.like vidioc_venc_g_fmt
+> > > same as commit 8fbcf730
+> > >
+> > > Signed-off-by: yqsun1997 <yqsun1997@gmail.com>
+> > > ---
+> > >  drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+> > > index 9acab54fd..c2c157675 100644
+> > > --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+> > > +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+> > > @@ -22,7 +22,7 @@
+> > >  #define MTK_VCODEC_DEC_NAME  "mtk-vcodec-dec"
+> > >  #define MTK_VCODEC_ENC_NAME  "mtk-vcodec-enc"
+> > >
+> > > -#define MTK_VCODEC_MAX_PLANES        3
+> > > +#define MTK_VCODEC_MAX_PLANES        8
+> > >  #define MTK_V4L2_BENCHMARK   0
+> > >  #define WAIT_INTR_TIMEOUT_MS 1000
+> > >  #define IS_VDEC_LAT_ARCH(hw_arch) ((hw_arch) >= MTK_VDEC_LAT_SINGLE_CORE)
+> > > --
+> > > 2.39.2
+> > >
