@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91EC9C001DB
-	for <linux-media@archiver.kernel.org>; Tue, 27 Jun 2023 13:21:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58605EB64D9
+	for <linux-media@archiver.kernel.org>; Tue, 27 Jun 2023 13:22:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbjF0NV1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Jun 2023 09:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60158 "EHLO
+        id S230422AbjF0NVb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Jun 2023 09:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbjF0NUt (ORCPT
+        with ESMTP id S231178AbjF0NUw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Jun 2023 09:20:49 -0400
+        Tue, 27 Jun 2023 09:20:52 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612142952
-        for <linux-media@vger.kernel.org>; Tue, 27 Jun 2023 06:19:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19708295E
+        for <linux-media@vger.kernel.org>; Tue, 27 Jun 2023 06:19:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687871955;
+        s=mimecast20190719; t=1687871961;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vsjh68AwaiI9uZdM+NLzoO73sUn0GRzvtvlVHANlkGI=;
-        b=IgQHc2p/tzP6PjU3aMd6vBoB5MQmq9Gv8wW45njWW8cORnOYSCUffTrvFRTY89eaF9wYfb
-        qgHo29jZ0Cmn9bBlyJ3dMK3NfobRFUZRtgJlt2g3qgEgo+/O9aptzfSYIX99ykG7Mf6zCL
-        TvOhxMVHHc4OudREGjscbp6wkPomK/A=
+        bh=WDuXK4TzfQmkHMyqANeUfd78Tf+eIGVy7F+h3zTwfaM=;
+        b=fA+dyNgR9H8rNpztLhgqYHT4/qo2nf1JaFOLapa4rtabnAwG1ptsg3Y2c1BrvTVlaQcz4m
+        c88j6AWQMQAUhlOgF8/FyANlPk8+N9AEC1KqWl1AP8sWQEGXRhbRyhN5ZVxLCjujyiJ5QV
+        ZZEjf7Xh+yaWwScwzGP+RPx9ImxIJ2s=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-240-8zx-Uht8PHSRKng8RnWRmw-1; Tue, 27 Jun 2023 09:19:12 -0400
-X-MC-Unique: 8zx-Uht8PHSRKng8RnWRmw-1
+ us-mta-356-Udlqp_xKNkiLZcYlaCEhnQ-1; Tue, 27 Jun 2023 09:19:18 -0400
+X-MC-Unique: Udlqp_xKNkiLZcYlaCEhnQ-1
 Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8FC7A800969;
-        Tue, 27 Jun 2023 13:19:11 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 79DB58C7C2B;
+        Tue, 27 Jun 2023 13:19:17 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.194.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4179A401061;
-        Tue, 27 Jun 2023 13:19:10 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D3F08401061;
+        Tue, 27 Jun 2023 13:19:14 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -48,9 +48,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Andy Shevchenko <andy@kernel.org>, Kate Hsuan <hpa@redhat.com>,
         Tommaso Merciai <tomm.merciai@gmail.com>,
         linux-media@vger.kernel.org
-Subject: [PATCH v3 25/29] media: ov2680: Add a bunch of register tweaks
-Date:   Tue, 27 Jun 2023 15:18:26 +0200
-Message-ID: <20230627131830.54601-26-hdegoede@redhat.com>
+Subject: [PATCH v3 28/29] media: ov2680: Add link-freq and pixel-rate controls
+Date:   Tue, 27 Jun 2023 15:18:29 +0200
+Message-ID: <20230627131830.54601-29-hdegoede@redhat.com>
 In-Reply-To: <20230627131830.54601-1-hdegoede@redhat.com>
 References: <20230627131830.54601-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,97 +60,84 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Usually when developing a sensor driver with help from the vendor
-the vendor will provide a bunch of register tweaks for optimal
-performance of the sensor.
-
-The atomisp-ov2680.c driver was (presumably) developed by Intel with
-help from OmniVision and indeed contains a bunch of register tweaks.
-
-Add these register tweaks to the "main" ov2680.c driver.
+Add read-only link-freq and pixel-rate controls. This is necessary for
+the sensor to work with the ipu3-cio2 driver and for libcamera.
 
 Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/media/i2c/ov2680.c | 53 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
+ drivers/media/i2c/ov2680.c | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
 diff --git a/drivers/media/i2c/ov2680.c b/drivers/media/i2c/ov2680.c
-index e26a6487d421..6c9f038c4631 100644
+index 8bc542df1890..95d3152ddd22 100644
 --- a/drivers/media/i2c/ov2680.c
 +++ b/drivers/media/i2c/ov2680.c
-@@ -178,18 +178,71 @@ static const int ov2680_hv_flip_bayer_order[] = {
+@@ -75,6 +75,12 @@
+ #define OV2680_MIN_CROP_WIDTH			2
+ #define OV2680_MIN_CROP_HEIGHT			2
+ 
++/* Fixed pre-div of 1/2 */
++#define OV2680_PLL_PREDIV0			2
++
++/* Pre-div configurable through reg 0x3080, left at its default of 0x02 : 1/2 */
++#define OV2680_PLL_PREDIV			2
++
+ /* 66MHz pixel clock: 66MHz / 1704 * 1294 = 30fps */
+ #define OV2680_PIXELS_PER_LINE			1704
+ #define OV2680_LINES_PER_FRAME			1294
+@@ -118,6 +124,8 @@ struct ov2680_ctrls {
+ 	struct v4l2_ctrl *hflip;
+ 	struct v4l2_ctrl *vflip;
+ 	struct v4l2_ctrl *test_pattern;
++	struct v4l2_ctrl *link_freq;
++	struct v4l2_ctrl *pixel_rate;
  };
  
- static const struct reg_sequence ov2680_global_setting[] = {
-+	/* MIPI PHY, 0x10 -> 0x1c enable bp_c_hs_en_lat and bp_d_hs_en_lat */
-+	{0x3016, 0x1c},
-+
- 	/* R MANUAL set exposure and gain to manual (hw does not do auto) */
- 	{0x3503, 0x03},
+ struct ov2680_mode {
+@@ -145,6 +153,8 @@ struct ov2680_dev {
+ 	struct clk			*xvclk;
+ 	u32				xvclk_freq;
+ 	u8				pll_mult;
++	s64				link_freq[1];
++	s64				pixel_rate;
+ 	struct regulator_bulk_data	supplies[OV2680_NUM_SUPPLIES];
  
-+	/* Analog control register tweaks */
-+	{0x3603, 0x39}, /* Reset value 0x99 */
-+	{0x3604, 0x24}, /* Reset value 0x74 */
-+	{0x3621, 0x37}, /* Reset value 0x44 */
-+
-+	/* Sensor control register tweaks */
-+	{0x3701, 0x64}, /* Reset value 0x61 */
-+	{0x3705, 0x3c}, /* Reset value 0x21 */
-+	{0x370c, 0x50}, /* Reset value 0x10 */
-+	{0x370d, 0xc0}, /* Reset value 0x00 */
-+	{0x3718, 0x88}, /* Reset value 0x80 */
-+
-+	/* PSRAM tweaks */
-+	{0x3781, 0x80}, /* Reset value 0x00 */
-+	{0x3784, 0x0c}, /* Reset value 0x00, based on OV2680_R1A_AM10.ovt */
-+	{0x3789, 0x60}, /* Reset value 0x50 */
-+
-+	/* BLC CTRL00 0x01 -> 0x81 set avg_weight to 8 */
-+	{0x4000, 0x81},
-+
- 	/* Set black level compensation range to 0 - 3 (default 0 - 11) */
- 	{0x4008, 0x00},
- 	{0x4009, 0x03},
+ 	struct gpio_desc		*pwdn_gpio;
+@@ -906,6 +916,12 @@ static int ov2680_v4l2_register(struct ov2680_dev *sensor)
+ 	ctrls->gain = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_GAIN,
+ 					0, 1023, 1, 250);
  
-+	/* VFIFO R2 0x00 -> 0x02 set Frame reset enable */
-+	{0x4602, 0x02},
++	ctrls->link_freq = v4l2_ctrl_new_int_menu(hdl, NULL, V4L2_CID_LINK_FREQ,
++						  0, 0, sensor->link_freq);
++	ctrls->pixel_rate = v4l2_ctrl_new_std(hdl, NULL, V4L2_CID_PIXEL_RATE,
++					      0, sensor->pixel_rate,
++					      1, sensor->pixel_rate);
 +
-+	/* MIPI ctrl CLK PREPARE MIN change from 0x26 (38) -> 0x36 (54) */
-+	{0x481f, 0x36},
-+
-+	/* MIPI ctrl CLK LPX P MIN change from 0x32 (50) -> 0x36 (54) */
-+	{0x4825, 0x36},
-+
-+	/* R ISP CTRL2 0x20 -> 0x30, set sof_sel bit */
-+	{0x5002, 0x30},
-+
- 	/*
- 	 * Window CONTROL 0x00 -> 0x01, enable manual window control,
- 	 * this is necessary for full size flip and mirror support.
- 	 */
- 	{0x5708, 0x01},
-+
-+	/*
-+	 * DPC CTRL0 0x14 -> 0x3e, set enable_tail, enable_3x3_cluster
-+	 * and enable_general_tail bits based OV2680_R1A_AM10.ovt.
-+	 */
-+	{0x5780, 0x3e},
-+
-+	/* DPC MORE CONNECTION CASE THRE 0x0c (12) -> 0x02 (2) */
-+	{0x5788, 0x02},
-+
-+	/* DPC GAIN LIST1 0x0f (15) -> 0x08 (8) */
-+	{0x578e, 0x08},
-+
-+	/* DPC GAIN LIST2 0x3f (63) -> 0x0c (12) */
-+	{0x578f, 0x0c},
-+
-+	/* DPC THRE RATIO 0x04 (4) -> 0x00 (0) */
-+	{0x5792, 0x00},
- };
+ 	if (hdl->error) {
+ 		ret = hdl->error;
+ 		goto cleanup_entity;
+@@ -913,6 +929,7 @@ static int ov2680_v4l2_register(struct ov2680_dev *sensor)
  
- static struct ov2680_dev *to_ov2680_dev(struct v4l2_subdev *sd)
+ 	ctrls->vflip->flags |= V4L2_CTRL_FLAG_MODIFY_LAYOUT;
+ 	ctrls->hflip->flags |= V4L2_CTRL_FLAG_MODIFY_LAYOUT;
++	ctrls->link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+ 
+ 	sensor->sd.ctrl_handler = hdl;
+ 
+@@ -1030,6 +1047,12 @@ static int ov2680_parse_dt(struct ov2680_dev *sensor)
+ 
+ 	sensor->pll_mult = ov2680_pll_multipliers[i];
+ 
++	sensor->link_freq[0] = sensor->xvclk_freq / OV2680_PLL_PREDIV0 /
++			       OV2680_PLL_PREDIV * sensor->pll_mult;
++
++	/* CSI-2 is double data rate, bus-format is 10 bpp */
++	sensor->pixel_rate = sensor->link_freq[0] * 2 / 10;
++
+ 	return 0;
+ }
+ 
 -- 
 2.41.0
 
