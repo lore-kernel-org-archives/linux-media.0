@@ -2,101 +2,125 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BB85EB64D9
-	for <linux-media@archiver.kernel.org>; Tue, 27 Jun 2023 17:35:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 134F7EB64D9
+	for <linux-media@archiver.kernel.org>; Tue, 27 Jun 2023 17:57:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231578AbjF0Rfx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Jun 2023 13:35:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53630 "EHLO
+        id S231855AbjF0R5k (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Jun 2023 13:57:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230482AbjF0Rfv (ORCPT
+        with ESMTP id S230361AbjF0R5i (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Jun 2023 13:35:51 -0400
-Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510E4269E;
-        Tue, 27 Jun 2023 10:35:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=iIHKX23DruyWxNvBPEkGuI6LxtvA8lzHrP07ul+XeWg=;
-  b=Ixk+uerCSeTIr9ry6BMbctwfqD/cZnATnAx+lIta14URQK6WCY5xHjGm
-   o3KZXqW1gNajuttsDVa436Hys12QuNPP2txSbbx2HNdh9pIRN48Mulca3
-   yAySyKmwGTMzvh54rhJs1cScpvyPiplespvWI9GEO7/NX4JgVXoWk5zMN
-   0=;
-Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="6.01,163,1684792800"; 
-   d="scan'208";a="59972658"
-Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 19:35:47 +0200
-Date:   Tue, 27 Jun 2023 19:35:47 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Julia Lawall <Julia.Lawall@inria.fr>
-cc:     Sakari Ailus <sakari.ailus@linux.intel.com>, keescook@chromium.org,
-        kernel-janitors@vger.kernel.org, Bingbu Cao <bingbu.cao@intel.com>,
-        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        Tue, 27 Jun 2023 13:57:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C881C296B
+        for <linux-media@vger.kernel.org>; Tue, 27 Jun 2023 10:56:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687888610;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=R0U8uQhbtG16k9BC3X+eFDuoEN8n7CYMNO+M8lwvbi0=;
+        b=N50N82kje9SxsQvRb31bkBHt5m/cak2BYXCF3WQ0r+/R7CkZ3j1vusBe7nFNelCn2Ev0oj
+        Ywh+NfV0O8M8oQ0ddOmsZBob8R98QmEwQS5A7k14EdSt1BYdJ9KrAl6gp8fo2RPmRbbY7l
+        kdm/3ATQ8Z/FBZ60Mf1vVKL+BjmwPXs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-364-WU1u5ucgMSuV_zw8Zoy9jQ-1; Tue, 27 Jun 2023 13:56:47 -0400
+X-MC-Unique: WU1u5ucgMSuV_zw8Zoy9jQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BDEDB92E4C1;
+        Tue, 27 Jun 2023 17:56:46 +0000 (UTC)
+Received: from shalem.redhat.com (unknown [10.39.194.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6D98A200A3AD;
+        Tue, 27 Jun 2023 17:56:45 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Daniel Scally <dan.scally@ideasonboard.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 23/26] media: staging: imgu: use array_size
-In-Reply-To: <20230623211457.102544-24-Julia.Lawall@inria.fr>
-Message-ID: <alpine.DEB.2.22.394.2306271933480.3150@hadrien>
-References: <20230623211457.102544-1-Julia.Lawall@inria.fr> <20230623211457.102544-24-Julia.Lawall@inria.fr>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Andy Shevchenko <andy@kernel.org>, Kate Hsuan <hpa@redhat.com>,
+        Hao Yao <hao.yao@intel.com>, Bingbu Cao <bingbu.cao@intel.com>,
+        linux-media@vger.kernel.org
+Subject: [PATCH 01/12] media: ipu3-cio2: Do not use on stack memory for software_node.name field
+Date:   Tue, 27 Jun 2023 19:56:31 +0200
+Message-ID: <20230627175643.114778-2-hdegoede@redhat.com>
+In-Reply-To: <20230627175643.114778-1-hdegoede@redhat.com>
+References: <20230627175643.114778-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Commit 567f97bd381f ("media: ipu3-cio2: support multiple sensors and VCMs
+with same HID") introduced an on stack vcm_name and then uses this for
+the name field of the software_node struct used for the vcm.
 
+But the software_node struct is much longer lived then the current
+stack-frame, so this is no good.
 
-On Fri, 23 Jun 2023, Julia Lawall wrote:
+Instead extend the cio2_node_names struct with an extra field to store
+the vcm software_node name and use that.
 
-> Use array_size to protect against multiplication overflows.
->
-> The changes were done using the following Coccinelle semantic patch:
->
-> // <smpl>
-> @@
->     expression E1, E2;
->     constant C1, C2;
->     identifier alloc = {vmalloc,vzalloc};
-> @@
->
-> (
->       alloc(C1 * C2,...)
-> |
->       alloc(
-> -           (E1) * (E2)
-> +           array_size(E1, E2)
->       ,...)
-> )
-> // </smpl>
->
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
->
-> ---
->  drivers/staging/media/ipu3/ipu3-mmu.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/staging/media/ipu3/ipu3-mmu.c b/drivers/staging/media/ipu3/ipu3-mmu.c
-> index cb9bf5fb29a5..9c4adb815c94 100644
-> --- a/drivers/staging/media/ipu3/ipu3-mmu.c
-> +++ b/drivers/staging/media/ipu3/ipu3-mmu.c
-> @@ -464,7 +464,7 @@ struct imgu_mmu_info *imgu_mmu_init(struct device *parent, void __iomem *base)
->  	 * Allocate the array of L2PT CPU pointers, initialized to zero,
->  	 * which means the dummy L2PT allocated above.
->  	 */
-> -	mmu->l2pts = vzalloc(IPU3_PT_PTES * sizeof(*mmu->l2pts));
-> +	mmu->l2pts = vzalloc(array_size(IPU3_PT_PTES, sizeof(*mmu->l2pts)));
->  	if (!mmu->l2pts)
->  		goto fail_l2pt;
+Note this also changes the length of the allocated buffer from
+ACPI_ID_LEN + 4 to 16. the name is filled with "<cio2_vcm_types[x]>-%u"
+where cio2_vcm_types[x] is not an ACPI_ID. The maximum length of
+the strings in the cio2_vcm_types[] array is 11 + 5 bytes for "-255\0"
+means 16 bytes are needed in the worst case scenario.
 
-I think that this patch can be dropped.  Since it is a multiplcation of
-two constants, if there is an overflow, I guess the compiler would detect
-it?
+Fixes: 567f97bd381f ("media: ipu3-cio2: support multiple sensors and VCMs with same HID")
+Cc: Bingbu Cao <bingbu.cao@intel.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ drivers/media/pci/intel/ipu3/cio2-bridge.c | 7 +++----
+ drivers/media/pci/intel/ipu3/cio2-bridge.h | 1 +
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-julia
+diff --git a/drivers/media/pci/intel/ipu3/cio2-bridge.c b/drivers/media/pci/intel/ipu3/cio2-bridge.c
+index 3c2accfe5455..dab5395ccc84 100644
+--- a/drivers/media/pci/intel/ipu3/cio2-bridge.c
++++ b/drivers/media/pci/intel/ipu3/cio2-bridge.c
+@@ -220,7 +220,6 @@ static void cio2_bridge_create_connection_swnodes(struct cio2_bridge *bridge,
+ 						  struct cio2_sensor *sensor)
+ {
+ 	struct software_node *nodes = sensor->swnodes;
+-	char vcm_name[ACPI_ID_LEN + 4];
+ 
+ 	cio2_bridge_init_swnode_names(sensor);
+ 
+@@ -240,10 +239,10 @@ static void cio2_bridge_create_connection_swnodes(struct cio2_bridge *bridge,
+ 						sensor->cio2_properties);
+ 	if (sensor->ssdb.vcmtype) {
+ 		/* append ssdb.link to distinguish VCM nodes with same HID */
+-		snprintf(vcm_name, sizeof(vcm_name), "%s-%u",
+-			 cio2_vcm_types[sensor->ssdb.vcmtype - 1],
++		snprintf(sensor->node_names.vcm, sizeof(sensor->node_names.vcm),
++			 "%s-%u", cio2_vcm_types[sensor->ssdb.vcmtype - 1],
+ 			 sensor->ssdb.link);
+-		nodes[SWNODE_VCM] = NODE_VCM(vcm_name);
++		nodes[SWNODE_VCM] = NODE_VCM(sensor->node_names.vcm);
+ 	}
+ 
+ 	cio2_bridge_init_swnode_group(sensor);
+diff --git a/drivers/media/pci/intel/ipu3/cio2-bridge.h b/drivers/media/pci/intel/ipu3/cio2-bridge.h
+index b76ed8a641e2..a824b96bcdf2 100644
+--- a/drivers/media/pci/intel/ipu3/cio2-bridge.h
++++ b/drivers/media/pci/intel/ipu3/cio2-bridge.h
+@@ -104,6 +104,7 @@ struct cio2_node_names {
+ 	char port[7];
+ 	char endpoint[11];
+ 	char remote_port[7];
++	char vcm[16];
+ };
+ 
+ struct cio2_sensor_config {
+-- 
+2.41.0
+
