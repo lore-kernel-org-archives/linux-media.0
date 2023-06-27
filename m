@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97385C0015E
-	for <linux-media@archiver.kernel.org>; Tue, 27 Jun 2023 13:20:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F7DDEB64DD
+	for <linux-media@archiver.kernel.org>; Tue, 27 Jun 2023 13:20:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbjF0NU3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Jun 2023 09:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60148 "EHLO
+        id S229599AbjF0NU4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Jun 2023 09:20:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjF0NUS (ORCPT
+        with ESMTP id S230025AbjF0NUY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Jun 2023 09:20:18 -0400
+        Tue, 27 Jun 2023 09:20:24 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3BD3294C
-        for <linux-media@vger.kernel.org>; Tue, 27 Jun 2023 06:19:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F022949
+        for <linux-media@vger.kernel.org>; Tue, 27 Jun 2023 06:19:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687871952;
+        s=mimecast20190719; t=1687871949;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=nqzmNJ6bN2ZNwt6F4klv6ynBmCYKRUSMCB7sDp+6Lq0=;
-        b=T4hxfYaM4OVw3A1t6YsrAUxGugp86VFCX3wNKDUX8oJVlCEKdko4CtvfZ1zD1bWDZLeJuf
-        Rx37sDkCbqUbRM1GPuoGA2zp55Thgxjp+qCwWNtZQZbsGGmr+Kf1uTGf7pNtD2bOE7R20/
-        jJqSbnf/EfqpPrzF9OY3qqLZjdloKdw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=mkf3I5gdk7XEjn8bCuQ+aD3I35PlbZkEB2r+HGOtCrw=;
+        b=TLPfX1ykaAEv7LEF47GIWsgo7CUsp8sZrN9VlLSjbGYfdc2hVC3eLg8TMu5Gp+KdP/CmWi
+        Pv1Eezz7+qkq89k4F8p9B+5/tDE+6GzcgOQzHeYwnj5hhTVadrVivQaAedLcOx31xerQ7P
+        3cAd8hFmGri0CIN/uSatrvOfsSd8NkM=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-259-EQZjK3dXOD6pgpwZhPZe9Q-1; Tue, 27 Jun 2023 09:19:10 -0400
-X-MC-Unique: EQZjK3dXOD6pgpwZhPZe9Q-1
+ us-mta-527-zXIBBQPdPKC1zA8aqA_bAA-1; Tue, 27 Jun 2023 09:19:05 -0400
+X-MC-Unique: zXIBBQPdPKC1zA8aqA_bAA-1
 Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0C370104D51C;
-        Tue, 27 Jun 2023 13:19:10 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5839D3C0CD50;
+        Tue, 27 Jun 2023 13:19:02 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.194.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B34F6400F5A;
-        Tue, 27 Jun 2023 13:19:08 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 08CF8400F5A;
+        Tue, 27 Jun 2023 13:19:00 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -48,9 +48,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Andy Shevchenko <andy@kernel.org>, Kate Hsuan <hpa@redhat.com>,
         Tommaso Merciai <tomm.merciai@gmail.com>,
         linux-media@vger.kernel.org
-Subject: [PATCH v3 24/29] media: ov2680: Fix exposure and gain ctrls range and default value
-Date:   Tue, 27 Jun 2023 15:18:25 +0200
-Message-ID: <20230627131830.54601-25-hdegoede@redhat.com>
+Subject: [PATCH v3 19/29] media: ov2680: Annotate the per mode register setting lists
+Date:   Tue, 27 Jun 2023 15:18:20 +0200
+Message-ID: <20230627131830.54601-20-hdegoede@redhat.com>
 In-Reply-To: <20230627131830.54601-1-hdegoede@redhat.com>
 References: <20230627131830.54601-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,60 +60,156 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The exposure control's max effective value is VTS - 8, set the control
-range to match this. Thas means that if/when a future commit makes VTS
-configurable as a control itself the exposure range needs to be
-updated dynamically to match the VTS value.
+Annotate the per mode register setting lists.
 
-The gain control goes from 0 - 1023, higher values wrap around to
-the lowest gain setting.
+This is a preparation patch for moving to calculating the per mode
+settings, allowing to set any mode through cropping.
 
-Also stop setting 0 as default for both controls this leads to
-a totally black picture which is no good. This is esp. important
-for tests of the sensor driver without (userspace driven)
-auto exposure / gain.
+The annotations make it easier to see which registers are mode
+dependent and which are fixed.
 
 Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/media/i2c/ov2680.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/media/i2c/ov2680.c | 118 ++++++++++++++++++++++++++++++++-----
+ 1 file changed, 104 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/media/i2c/ov2680.c b/drivers/media/i2c/ov2680.c
-index 6591ce3b9244..e26a6487d421 100644
+index 7ca70877abf1..09b74c15220b 100644
 --- a/drivers/media/i2c/ov2680.c
 +++ b/drivers/media/i2c/ov2680.c
-@@ -81,6 +81,9 @@
- /* If possible send 16 extra rows / lines to the ISP as padding */
- #define OV2680_END_MARGIN			16
+@@ -141,27 +141,117 @@ static const int ov2680_hv_flip_bayer_order[] = {
+ };
  
-+/* Max exposure time is VTS - 8 */
-+#define OV2680_INTEGRATION_TIME_MARGIN		8
+ static const struct reg_sequence ov2680_setting_30fps_QUXGA_800_600[] = {
+-	{0x3086, 0x01}, {0x370a, 0x23}, {0x3808, 0x03}, {0x3809, 0x20},
+-	{0x380a, 0x02}, {0x380b, 0x58}, {0x380c, 0x06}, {0x380d, 0xac},
+-	{0x380e, 0x02}, {0x380f, 0x84}, {0x3811, 0x04}, {0x3813, 0x04},
+-	{0x3814, 0x31}, {0x3815, 0x31}, {0x3820, 0xc0}, {0x4008, 0x00},
+-	{0x4009, 0x03}, {0x4837, 0x1e}, {0x3501, 0x4e}, {0x3502, 0xe0},
++	/* Set PLL SP DIV to 1 for binning mode */
++	{0x3086, 0x01},
 +
- #define OV2680_DEFAULT_WIDTH			800
- #define OV2680_DEFAULT_HEIGHT			600
++	/* Sensor control register 0x0a to 0x23 for binning mode */
++	{0x370a, 0x23},
++
++	/* Set X and Y output size to 800x600 */
++	{0x3808, 0x03},
++	{0x3809, 0x20},
++	{0x380a, 0x02},
++	{0x380b, 0x58},
++
++	/* Set HTS + VTS to 1708x644 */
++	{0x380c, 0x06},
++	{0x380d, 0xac},
++	{0x380e, 0x02},
++	{0x380f, 0x84},
++
++	/* Set ISP WIN X and Y start to 4x4 */
++	{0x3811, 0x04},
++	{0x3813, 0x04},
++
++	/* Set X INC and Y INC for binning */
++	{0x3814, 0x31},
++	{0x3815, 0x31},
++
++	/* Initialize FORMAT1 to default/reset value (vflip disabled) */
++	{0x3820, 0xc0},
++
++	/* Set black level compensation range to 0 - 3 (default 0 - 11) */
++	{0x4008, 0x00},
++	{0x4009, 0x03},
++
++	/* Set MIPI pclk period to 0x1e (default/reset is 0x18) */
++	{0x4837, 0x1e},
++
++	/* Initialize exposure to 0x4ee (overridden by the ctrl, drop this */
++	{0x3501, 0x4e},
++	{0x3502, 0xe0},
++
++	/* R MANUAL set exposure and gain to manual (hw does not do auto) */
+ 	{0x3503, 0x03},
+ };
  
-@@ -823,6 +826,7 @@ static int ov2680_v4l2_register(struct ov2680_dev *sensor)
- 	const struct v4l2_ctrl_ops *ops = &ov2680_ctrl_ops;
- 	struct ov2680_ctrls *ctrls = &sensor->ctrls;
- 	struct v4l2_ctrl_handler *hdl = &ctrls->handler;
-+	int exp_max = OV2680_LINES_PER_FRAME - OV2680_INTEGRATION_TIME_MARGIN;
- 	int ret = 0;
+ static const struct reg_sequence ov2680_setting_30fps_720P_1280_720[] = {
+-	{0x3086, 0x00}, {0x3808, 0x05}, {0x3809, 0x00}, {0x380a, 0x02},
+-	{0x380b, 0xd0}, {0x380c, 0x06}, {0x380d, 0xa8}, {0x380e, 0x05},
+-	{0x380f, 0x0e}, {0x3811, 0x08}, {0x3813, 0x06}, {0x3814, 0x11},
+-	{0x3815, 0x11}, {0x3820, 0xc0}, {0x4008, 0x00},
++	/* Set PLL SP DIV to 0 for not binning mode */
++	{0x3086, 0x00},
++
++	/* Set X and Y output size to 1280x720 */
++	{0x3808, 0x05},
++	{0x3809, 0x00},
++	{0x380a, 0x02},
++	{0x380b, 0xd0},
++
++	/* Set HTS + VTS to 1704x1294 */
++	{0x380c, 0x06},
++	{0x380d, 0xa8},
++	{0x380e, 0x05},
++	{0x380f, 0x0e},
++
++	/* Set ISP WIN X and Y start to 8x6 */
++	{0x3811, 0x08},
++	{0x3813, 0x06},
++
++	/* Set X INC and Y INC for non binning */
++	{0x3814, 0x11},
++	{0x3815, 0x11},
++
++	/* Initialize FORMAT1 to default/reset value (vflip disabled) */
++	{0x3820, 0xc0},
++
++	/* Set backlight compensation range start to 0 */
++	{0x4008, 0x00},
+ };
  
- 	v4l2_i2c_subdev_init(&sensor->sd, client, &ov2680_subdev_ops);
-@@ -849,9 +853,10 @@ static int ov2680_v4l2_register(struct ov2680_dev *sensor)
- 					0, 0, test_pattern_menu);
+ static const struct reg_sequence ov2680_setting_30fps_UXGA_1600_1200[] = {
+-	{0x3086, 0x00}, {0x3501, 0x4e}, {0x3502, 0xe0}, {0x3808, 0x06},
+-	{0x3809, 0x40}, {0x380a, 0x04}, {0x380b, 0xb0}, {0x380c, 0x06},
+-	{0x380d, 0xa8}, {0x380e, 0x05}, {0x380f, 0x0e}, {0x3811, 0x00},
+-	{0x3813, 0x00}, {0x3814, 0x11}, {0x3815, 0x11}, {0x3820, 0xc0},
+-	{0x4008, 0x00}, {0x4837, 0x18}
++	/* Set PLL SP DIV to 0 for not binning mode */
++	{0x3086, 0x00},
++
++	/* Initialize exposure to 0x4ee (overridden by the ctrl, drop this */
++	{0x3501, 0x4e},
++	{0x3502, 0xe0},
++
++	/* Set X and Y output size to 1600x1200 */
++	{0x3808, 0x06},
++	{0x3809, 0x40},
++	{0x380a, 0x04},
++	{0x380b, 0xb0},
++
++	/* Set HTS + VTS to 1704x1294 */
++	{0x380c, 0x06},
++	{0x380d, 0xa8},
++	{0x380e, 0x05},
++	{0x380f, 0x0e},
++
++	/* Set ISP WIN X and Y start to 0x0 */
++	{0x3811, 0x00},
++	{0x3813, 0x00},
++
++	/* Set X INC and Y INC for non binning */
++	{0x3814, 0x11},
++	{0x3815, 0x11},
++
++	/* Initialize FORMAT1 to default/reset value (vflip disabled) */
++	{0x3820, 0xc0},
++
++	/* Set backlight compensation range start to 0 */
++	{0x4008, 0x00},
++
++	/* Set MIPI pclk period to default/reset value of 0x18 */
++	{0x4837, 0x18}
+ };
  
- 	ctrls->exposure = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_EXPOSURE,
--					    0, 32767, 1, 0);
-+					    0, exp_max, 1, exp_max);
- 
--	ctrls->gain = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_GAIN, 0, 2047, 1, 0);
-+	ctrls->gain = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_GAIN,
-+					0, 1023, 1, 250);
- 
- 	if (hdl->error) {
- 		ret = hdl->error;
+ static const struct ov2680_mode_info ov2680_mode_init_data = {
 -- 
 2.41.0
 
