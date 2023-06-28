@@ -2,430 +2,333 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03FB3EB64DC
-	for <linux-media@archiver.kernel.org>; Wed, 28 Jun 2023 16:13:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63228EB64D7
+	for <linux-media@archiver.kernel.org>; Wed, 28 Jun 2023 16:15:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbjF1QN4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Jun 2023 12:13:56 -0400
-Received: from mail-io1-f53.google.com ([209.85.166.53]:56788 "EHLO
-        mail-io1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjF1QNy (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Jun 2023 12:13:54 -0400
-Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-7836272f36eso3675339f.1;
-        Wed, 28 Jun 2023 09:13:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687968833; x=1690560833;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UNCgrN2Ev9LAjc1TYI8mAnRmahIC/Joz+LgDtYAovIM=;
-        b=bXCoxzFabxlrgxCnK2QWxmPRDJ6fec7ersWf54fKnG/VgoKSzAgn/pw4F1CVMwFu+P
-         LWSlV5V7wTL50ZeJ6kCvh2pSHAQbqCirPidgTawNfLvnmbJRJ2jpn54KVFdCGTqPp1Jg
-         aHvuZDISzTpqj1Y2m8si9QqnApR/DJ7kHL1kngBIDVtA/0BvMTpr6IEecfzTlofGsqID
-         csj5EokglvE1/DtTRiOsM8WVQoNOs6FBLwsSS47Y13SdMuSbxQrW/J7UXBSCxb2NFCIU
-         Ocj03SAawzfAO44ar1Z1TLudAfOIVHXTYSOdqbivbRnBD9jhzipca7IvSDJGzDUu1Iu8
-         AOxQ==
-X-Gm-Message-State: AC+VfDxNBuP8sht0giUtM7owjCqWwljqZoQX/15LD3mpW3cM4osg4uH7
-        WZjPUtqSf8D12Lu2Dqmqmw==
-X-Google-Smtp-Source: ACHHUZ7gIrH8Qif+o4s4mpLJ1PjMye/7thQ3X6jQMeFF1KjdG1/ZUyuwxUHvKk23FRnOol3wT6tXyg==
-X-Received: by 2002:a05:6602:1310:b0:786:25a3:ef30 with SMTP id h16-20020a056602131000b0078625a3ef30mr1326529iov.7.1687968833203;
-        Wed, 28 Jun 2023 09:13:53 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id dq34-20020a0566384d2200b0042566919376sm3151279jab.30.2023.06.28.09.13.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 09:13:52 -0700 (PDT)
-Received: (nullmailer pid 565403 invoked by uid 1000);
-        Wed, 28 Jun 2023 16:13:49 -0000
-Date:   Wed, 28 Jun 2023 10:13:49 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Julien Stephan <jstephan@baylibre.com>
-Cc:     Louis Kuo <louis.kuo@mediatek.com>,
-        Phi-Bang Nguyen <pnguyen@baylibre.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Andy Hsieh <andy.hsieh@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        devicetree@vger.kernel.org,
-        Florian Sylvestre <fsylvestre@baylibre.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Moudy Ho <moudy.ho@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Subject: Re: [PATCH 1/4] dt-bindings: media: add mediatek ISP3.0 sensor
- interface
-Message-ID: <20230628161349.GA557442-robh@kernel.org>
-References: <20230628145412.1610260-1-jstephan@baylibre.com>
- <20230628145412.1610260-2-jstephan@baylibre.com>
+        id S231355AbjF1QPU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Jun 2023 12:15:20 -0400
+Received: from mx.gpxsee.org ([37.205.14.76]:34572 "EHLO mx.gpxsee.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231465AbjF1QPK (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 28 Jun 2023 12:15:10 -0400
+Received: from mgb4.digiteq.red (unknown [62.77.71.229])
+        by mx.gpxsee.org (Postfix) with ESMTPSA id 9277A2CC9F;
+        Wed, 28 Jun 2023 18:15:08 +0200 (CEST)
+From:   tumic@gpxsee.org
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Martin=20T=C5=AFma?= <martin.tuma@digiteqautomotive.com>
+Subject: [PATCH v7 0/2] Digiteq Automotive MGB4 driver
+Date:   Wed, 28 Jun 2023 20:15:06 +0200
+Message-Id: <20230628181508.2777-1-tumic@gpxsee.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230628145412.1610260-2-jstephan@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 04:52:52PM +0200, Julien Stephan wrote:
-> From: Louis Kuo <louis.kuo@mediatek.com>
-> 
-> This adds the bindings, for the mediatek ISP3.0 SENINF module embedded in
-> some Mediatek SoC, such as the mt8365
-> 
-> Signed-off-by: Louis Kuo <louis.kuo@mediatek.com>
-> Signed-off-by: Phi-Bang Nguyen <pnguyen@baylibre.com>
-> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Signed-off-by: Julien Stephan <jstephan@baylibre.com>
-> ---
->  .../media/mediatek,mt8365-seninf.yaml         | 299 ++++++++++++++++++
->  MAINTAINERS                                   |   7 +
->  2 files changed, 306 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mt8365-seninf.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/media/mediatek,mt8365-seninf.yaml b/Documentation/devicetree/bindings/media/mediatek,mt8365-seninf.yaml
-> new file mode 100644
-> index 000000000000..a54f785bb252
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/mediatek,mt8365-seninf.yaml
-> @@ -0,0 +1,299 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright (c) 2023 MediaTek, BayLibre
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/mediatek,mt8365-seninf.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek Sensor Interface 3.0
-> +
-> +maintainers:
-> +  - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> +  - Julien Stephan <jstephan@baylibre.com>
-> +  - Andy Hsieh <andy.hsieh@mediatek.com>
-> +
-> +description:
-> +  The ISP3.0 SENINF is the CSI-2 and parallel camera sensor interface found in
-> +  multiple MediaTek SoCs. It can support up to three physical CSI-2
-> +  input ports, configured in DPHY (2 or 4 data lanes) or CPHY depending on the soc.
-> +  On the output side, SENINF can be connected either to CAMSV instance or
-> +  to the internal ISP. CAMSV is used to bypass the internal ISP processing
-> +  in order to connect either an external ISP, or a sensor (RAW, YUV).
-> +
-> +properties:
-> +  compatible:
-> +    const: mediatek,mt8365-seninf
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: Seninf camsys clock
-> +      - description: Seninf top mux clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: cam_seninf
+From: Martin Tůma <martin.tuma@digiteqautomotive.com>
 
-_seninf is redundant as that is the block name. 'camsys' perhaps based 
-on the description.
+Hi,
+This patch adds a driver for the Digiteq Automotive MGB4 grabber card.
+MGB4 is a modular frame grabber PCIe card for automotive video interfaces
+(FPD-Link and GMSL for now). It is based on a Xilinx FPGA and uses their
+XDMA IP core for DMA transfers. Additionally, Xilinx I2C and SPI IP cores
+which already have drivers in linux are used in the design.
 
-> +      - const: top_mux_seninf
+The driver is a quite standard v4l2 driver, with one exception - there are
+a lot of sysfs options that may/must be set before opening the v4l2 device
+to adapt the card on a specific signal (see mgb4.rst for details)
+as the card must be able to work with various signal sources (or displays)
+that can not be auto-detected.
 
-top_mux
+Changes in v7:
+* Now using hwmon for FPGA temperature reporting.
+* Now using VIDIOC_S_FMT and v4l2_pix_format.bytesperline for setting
+  the alignment.
+* Removed the magic sleep when loading the i2c/spi adapter modules (solved by
+  request_module() calls with propper - "platform:" prefixed - module
+  names).
+* Now properly reporting all the timings info in the VIDIOC_G_DV_TIMINGS
+  ioctls.
+* Updated the documentation.
+* Minor fixes as discussed in the v6 review.
+* Added debugfs access to the FPGA registers.
 
-> +
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +
-> +    properties:
-> +      port@0:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
-> +        description: CSI0 or CSI0A port
-> +
-> +        properties:
-> +          phys:
-> +            maxItems: 1
-> +            description: phandle to the PHY connected to CSI0/CSI0A
+Changes in v6:
+* Rebased to current master that includes the Xilinx XDMA driver.
 
-'port' nodes shouldn't have properties. This goes in the top level.
+Changes in v5:
+* Removed unused <linux/version.h> includes
 
-> +
-> +        patternProperties:
-> +          endpoint:
-> +            $ref: video-interfaces.yaml#
-> +            unevaluatedProperties: false
-> +
-> +            properties:
-> +              clock-lanes:
-> +                maxItems: 1
-> +              data-lanes:
-> +                minItems: 1
-> +                maxItems: 4
-> +
-> +      port@1:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
-> +        description: CSI1 port
-> +
-> +        properties:
-> +          phys:
-> +            maxItems: 1
-> +            description: phandle to the PHY connected to CSI1
-> +
-> +        patternProperties:
-> +          endpoint:
-> +            $ref: video-interfaces.yaml#
-> +            unevaluatedProperties: false
-> +
-> +            properties:
-> +              clock-lanes:
-> +                maxItems: 1
-> +              data-lanes:
-> +                minItems: 1
-> +                maxItems: 4
-> +
-> +      port@2:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
-> +        description: CSI2 port
-> +
-> +        properties:
-> +          phys:
-> +            maxItems: 1
-> +            description: phandle to the PHY connected to CSI2
-> +
-> +        patternProperties:
-> +          endpoint:
-> +            $ref: video-interfaces.yaml#
-> +            unevaluatedProperties: false
-> +
-> +            properties:
-> +              clock-lanes:
-> +                maxItems: 1
-> +              data-lanes:
-> +                minItems: 1
-> +                maxItems: 4
-> +
-> +      port@3:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
-> +        description: CSI0B port
-> +
-> +        properties:
-> +          phys:
-> +            maxItems: 1
-> +            description: phandle to the PHY connected to CSI0B
-> +
-> +        patternProperties:
-> +          endpoint:
-> +            $ref: video-interfaces.yaml#
-> +            unevaluatedProperties: false
-> +
-> +            properties:
-> +              clock-lanes:
-> +                maxItems: 1
-> +              data-lanes:
-> +                minItems: 1
-> +                maxItems: 2
-> +
-> +      port@4:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
-> +        description: connection point for cam0
-> +
-> +        patternProperties:
-> +          endpoint:
-> +            $ref: video-interfaces.yaml#
+Changes in v4:
+* Redesigned the signal change handling logic. Now using the propper timings
+  API in the video input driver and a propper open() syscall check/logic in
+  the video output driver.
+* Fixed all minor issues from v3 review.
+* 'checkpatch.pl --strict' used for checking the code.
 
-Are you using any properties from here? If not, you just need to 
-reference graph.yaml#/properties/port.
+Changes in v3:
+* Rebased the DMA transfers part to use the new XDMA driver from Xilinx/AMD
 
-> +            unevaluatedProperties: false
-> +
-> +      port@5:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
-> +        description: connection point for cam1
-> +
-> +        patternProperties:
-> +          endpoint:
-> +            $ref: video-interfaces.yaml#
-> +            unevaluatedProperties: false
-> +
-> +      port@6:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
-> +        description: connection point for camsv0
-> +
-> +        patternProperties:
-> +          endpoint:
-> +            $ref: video-interfaces.yaml#
-> +            unevaluatedProperties: false
-> +
-> +      port@7:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
-> +        description: connection point for camsv1
-> +
-> +        patternProperties:
-> +          endpoint:
-> +            $ref: video-interfaces.yaml#
-> +            unevaluatedProperties: false
-> +
-> +      port@8:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
-> +        description: connection point for camsv2
-> +
-> +        patternProperties:
-> +          endpoint:
-> +            $ref: video-interfaces.yaml#
-> +            unevaluatedProperties: false
-> +
-> +      port@9:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
-> +        description: connection point for camsv3
-> +
-> +        patternProperties:
-> +          endpoint:
-> +            $ref: video-interfaces.yaml#
-> +            unevaluatedProperties: false
-> +
-> +    required:
-> +      - port@0
-> +      - port@1
-> +      - port@2
-> +      - port@3
-> +      - port@4
-> +      - port@5
-> +      - port@6
-> +      - port@7
-> +      - port@8
-> +      - port@9
-> +
-> +required:
-> +  - compatible
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - power-domains
-> +  - ports
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/mediatek,mt8365-clk.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/phy/phy.h>
-> +    #include <dt-bindings/power/mediatek,mt8365-power.h>
-> +
-> +    soc {
-> +          #address-cells = <2>;
-> +          #size-cells = <2>;
-> +
-> +          seninf: seninf@15040000 {
-> +                compatible = "mediatek,mt8365-seninf";
-> +                reg = <0 0x15040000 0 0x6000>;
-> +                interrupts = <GIC_SPI 210 IRQ_TYPE_LEVEL_LOW>;
-> +                clocks = <&camsys CLK_CAM_SENIF>,
-> +                         <&topckgen CLK_TOP_SENIF_SEL>;
-> +                clock-names = "cam_seninf", "top_mux_seninf";
-> +
-> +                power-domains = <&spm MT8365_POWER_DOMAIN_CAM>;
-> +
-> +                ports {
-> +                      #address-cells = <1>;
-> +                      #size-cells = <0>;
-> +
-> +                      port@0 {
-> +                            reg = <0>;
-> +                            phys = <&mipi_csi0 PHY_TYPE_DPHY>;
-> +                            seninf_in1: endpoint {
-> +                              clock-lanes = <2>;
-> +                              data-lanes = <1 3 0 4>;
-> +                              remote-endpoint = <&isp1_out>;
-> +                            };
-> +                      };
-> +
-> +                      port@1 {
-> +                          reg = <1>;
-> +                      };
-> +
-> +                      port@2 {
-> +                            reg = <2>;
-> +                      };
-> +
-> +                      port@3 {
-> +                            reg = <3>;
-> +                      };
-> +
-> +                      port@4 {
-> +                            reg = <4>;
-> +                            seninf_camsv1_endpoint: endpoint {
-> +                                remote-endpoint = <&camsv1_endpoint>;
-> +                            };
-> +                      };
-> +
-> +                      port@5 {
-> +                            reg = <5>;
-> +                      };
-> +
-> +                      port@6 {
-> +                            reg = <6>;
-> +                      };
-> +
-> +                      port@7 {
-> +                            reg = <7>;
-> +                      };
-> +
-> +                      port@8 {
-> +                            reg = <8>;
-> +                      };
-> +
-> +                      port@9 {
-> +                            reg = <9>;
-> +                      };
-> +
-> +                };
-> +          };
-> +    };
-> +
-> +...
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index e505023ffda1..1248a915a72f 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -13256,6 +13256,13 @@ M:	Sean Wang <sean.wang@mediatek.com>
->  S:	Maintained
->  F:	drivers/char/hw_random/mtk-rng.c
->  
-> +MEDIATEK ISP3.0 DRIVER
-> +M:	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> +M:	Julien Stephan <jstephan@baylibre.com>
-> +M:	Andy Hsieh <andy.hsieh@mediatek.com>
-> +S:	Supported
-> +F:	Documentation/devicetree/bindings/media/mediatek,mt8365-seninf.yaml
-> +
->  MEDIATEK SMI DRIVER
->  M:	Yong Wu <yong.wu@mediatek.com>
->  L:	linux-mediatek@lists.infradead.org (moderated for non-subscribers)
-> -- 
-> 2.41.0
-> 
+Changes in v2:
+* Completely rewritten the original Xilinx's XDMA driver to meet kernel code
+  standards.
+* Added all required "to" and "cc" mail addresses.
+
+
+===== v4l2-compliance results - input =====
+
+v4l2-compliance 1.24.1, 64 bits, 64-bit time_t
+
+Compliance test for mgb4 device /dev/video0:
+
+Driver Info:
+        Driver name      : mgb4
+        Card type        : MGB4 PCIe Card
+        Bus info         : PCI:0000:01:00.0
+        Driver version   : 6.4.0
+        Capabilities     : 0x85200001
+                Video Capture
+                Read/Write
+                Streaming
+                Extended Pix Format
+                Device Capabilities
+        Device Caps      : 0x05200001
+                Video Capture
+                Read/Write
+                Streaming
+                Extended Pix Format
+
+Required ioctls:
+        test VIDIOC_QUERYCAP: OK
+        test invalid ioctls: OK
+
+Allow for multiple opens:
+        test second /dev/video0 open: OK
+        test VIDIOC_QUERYCAP: OK
+        test VIDIOC_G/S_PRIORITY: OK
+        test for unlimited opens: OK
+
+Debug ioctls:
+        test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
+        test VIDIOC_LOG_STATUS: OK (Not Supported)
+
+Input ioctls:
+        test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+        test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+        test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+        test VIDIOC_ENUMAUDIO: OK (Not Supported)
+        test VIDIOC_G/S/ENUMINPUT: OK
+        test VIDIOC_G/S_AUDIO: OK (Not Supported)
+        Inputs: 1 Audio Inputs: 0 Tuners: 0
+
+Output ioctls:
+        test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+        test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+        test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+        test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+        test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+        Outputs: 0 Audio Outputs: 0 Modulators: 0
+
+Input/Output configuration ioctls:
+        test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+        test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK
+        test VIDIOC_DV_TIMINGS_CAP: OK
+        test VIDIOC_G/S_EDID: OK (Not Supported)
+
+Control ioctls (Input 0):
+        test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK (Not Supported)
+        test VIDIOC_QUERYCTRL: OK (Not Supported)
+        test VIDIOC_G/S_CTRL: OK (Not Supported)
+        test VIDIOC_G/S/TRY_EXT_CTRLS: OK (Not Supported)
+                warn: v4l2-test-controls.cpp(1139): V4L2_CID_DV_RX_POWER_PRESENT not found for input 0
+        test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK (Not Supported)
+        test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+        Standard Controls: 0 Private Controls: 0
+
+Format ioctls (Input 0):
+        test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+        test VIDIOC_G/S_PARM: OK
+        test VIDIOC_G_FBUF: OK (Not Supported)
+        test VIDIOC_G_FMT: OK
+        test VIDIOC_TRY_FMT: OK
+        test VIDIOC_S_FMT: OK
+        test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+        test Cropping: OK (Not Supported)
+        test Composing: OK (Not Supported)
+        test Scaling: OK (Not Supported)
+
+Codec ioctls (Input 0):
+        test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
+        test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+        test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
+
+Buffer ioctls (Input 0):
+        test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+        test VIDIOC_EXPBUF: OK
+        test Requests: OK (Not Supported)
+
+Total for mgb4 device /dev/video0: 45, Succeeded: 45, Failed: 0, Warnings: 1
+
+===== v4l2-compliance results - output =====
+
+v4l2-compliance 1.24.1, 64 bits, 64-bit time_t
+
+Compliance test for mgb4 device /dev/video2:
+
+Driver Info:
+        Driver name      : mgb4
+        Card type        : MGB4 PCIe Card
+        Bus info         : PCI:0000:01:00.0
+        Driver version   : 6.4.0
+        Capabilities     : 0x85200002
+                Video Output
+                Read/Write
+                Streaming
+                Extended Pix Format
+                Device Capabilities
+        Device Caps      : 0x05200002
+                Video Output
+                Read/Write
+                Streaming
+                Extended Pix Format
+
+Required ioctls:
+        test VIDIOC_QUERYCAP: OK
+        test invalid ioctls: OK
+
+Allow for multiple opens:
+        test second /dev/video2 open: OK
+        test VIDIOC_QUERYCAP: OK
+        test VIDIOC_G/S_PRIORITY: OK
+        test for unlimited opens: OK
+
+Debug ioctls:
+        test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
+        test VIDIOC_LOG_STATUS: OK (Not Supported)
+
+Input ioctls:
+        test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+        test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+        test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+        test VIDIOC_ENUMAUDIO: OK (Not Supported)
+        test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
+        test VIDIOC_G/S_AUDIO: OK (Not Supported)
+        Inputs: 0 Audio Inputs: 0 Tuners: 0
+
+Output ioctls:
+        test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+        test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+        test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+        test VIDIOC_G/S/ENUMOUTPUT: OK
+        test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+        Outputs: 1 Audio Outputs: 0 Modulators: 0
+
+Input/Output configuration ioctls:
+        test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+        test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
+        test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
+        test VIDIOC_G/S_EDID: OK (Not Supported)
+
+Control ioctls (Output 0):
+        test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK (Not Supported)
+        test VIDIOC_QUERYCTRL: OK (Not Supported)
+        test VIDIOC_G/S_CTRL: OK (Not Supported)
+        test VIDIOC_G/S/TRY_EXT_CTRLS: OK (Not Supported)
+        test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK (Not Supported)
+        test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+        Standard Controls: 0 Private Controls: 0
+
+Format ioctls (Output 0):
+        test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+        test VIDIOC_G/S_PARM: OK (Not Supported)
+        test VIDIOC_G_FBUF: OK (Not Supported)
+        test VIDIOC_G_FMT: OK
+        test VIDIOC_TRY_FMT: OK
+        test VIDIOC_S_FMT: OK
+        test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+        test Cropping: OK (Not Supported)
+        test Composing: OK (Not Supported)
+        test Scaling: OK (Not Supported)
+
+Codec ioctls (Output 0):
+        test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
+        test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+        test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
+
+Buffer ioctls (Output 0):
+        test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+        test VIDIOC_EXPBUF: OK
+        test Requests: OK (Not Supported)
+
+Total for mgb4 device /dev/video2: 45, Succeeded: 45, Failed: 0, Warnings: 0
+
+
+Martin Tůma (2):
+  Added Digiteq Automotive MGB4 driver
+  Added Digiteq Automotive MGB4 driver documentation
+
+ Documentation/admin-guide/media/mgb4.rst      | 369 +++++++
+ .../admin-guide/media/pci-cardlist.rst        |   1 +
+ .../admin-guide/media/v4l-drivers.rst         |   1 +
+ MAINTAINERS                                   |   7 +
+ drivers/media/pci/Kconfig                     |   1 +
+ drivers/media/pci/Makefile                    |   1 +
+ drivers/media/pci/mgb4/Kconfig                |  17 +
+ drivers/media/pci/mgb4/Makefile               |   6 +
+ drivers/media/pci/mgb4/mgb4_cmt.c             | 244 +++++
+ drivers/media/pci/mgb4/mgb4_cmt.h             |  17 +
+ drivers/media/pci/mgb4/mgb4_core.c            | 705 +++++++++++++
+ drivers/media/pci/mgb4/mgb4_core.h            |  70 ++
+ drivers/media/pci/mgb4/mgb4_dma.c             | 123 +++
+ drivers/media/pci/mgb4/mgb4_dma.h             |  18 +
+ drivers/media/pci/mgb4/mgb4_i2c.c             | 140 +++
+ drivers/media/pci/mgb4/mgb4_i2c.h             |  35 +
+ drivers/media/pci/mgb4/mgb4_io.h              |  33 +
+ drivers/media/pci/mgb4/mgb4_regs.c            |  30 +
+ drivers/media/pci/mgb4/mgb4_regs.h            |  35 +
+ drivers/media/pci/mgb4/mgb4_sysfs.h           |  18 +
+ drivers/media/pci/mgb4/mgb4_sysfs_in.c        | 757 ++++++++++++++
+ drivers/media/pci/mgb4/mgb4_sysfs_out.c       | 700 +++++++++++++
+ drivers/media/pci/mgb4/mgb4_sysfs_pci.c       |  71 ++
+ drivers/media/pci/mgb4/mgb4_trigger.c         | 208 ++++
+ drivers/media/pci/mgb4/mgb4_trigger.h         |   8 +
+ drivers/media/pci/mgb4/mgb4_vin.c             | 930 ++++++++++++++++++
+ drivers/media/pci/mgb4/mgb4_vin.h             |  69 ++
+ drivers/media/pci/mgb4/mgb4_vout.c            | 594 +++++++++++
+ drivers/media/pci/mgb4/mgb4_vout.h            |  65 ++
+ 29 files changed, 5273 insertions(+)
+ create mode 100644 Documentation/admin-guide/media/mgb4.rst
+ create mode 100644 drivers/media/pci/mgb4/Kconfig
+ create mode 100644 drivers/media/pci/mgb4/Makefile
+ create mode 100644 drivers/media/pci/mgb4/mgb4_cmt.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_cmt.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_core.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_core.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_dma.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_dma.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_i2c.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_i2c.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_io.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_regs.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_regs.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_in.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_out.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_pci.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_trigger.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_trigger.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vin.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vin.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vout.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vout.h
+
+
+base-commit: 933174ae28ba72ab8de5b35cb7c98fc211235096
+-- 
+2.40.1
+
