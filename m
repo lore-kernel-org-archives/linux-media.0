@@ -2,113 +2,121 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 120B7EB64D7
-	for <linux-media@archiver.kernel.org>; Wed, 28 Jun 2023 08:32:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 558F8EB64D7
+	for <linux-media@archiver.kernel.org>; Wed, 28 Jun 2023 09:28:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233744AbjF1Icd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Jun 2023 04:32:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235221AbjF1IaP (ORCPT
+        id S231296AbjF1J2B (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Jun 2023 05:28:01 -0400
+Received: from mail-io1-f54.google.com ([209.85.166.54]:51612 "EHLO
+        mail-io1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234530AbjF1JSO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:30:15 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90EC144AF;
-        Wed, 28 Jun 2023 01:22:53 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-4008d810c28so41011121cf.3;
-        Wed, 28 Jun 2023 01:22:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687940572; x=1690532572;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AfH/3M1MI/78IiqObqTGPZhCo/6frficXtfBUG01mvM=;
-        b=JG8Ln/xENQUAhg5pM/bBg3Xc2mKBHBbInlZWJjKYqrdi/vhoN7Yc2ac0oMPhRBoJ7W
-         yRfcOFVTKwZitqJhkPKEA6kcwARHC6BtYt+m6FBJLxjhLjnhmxFJ5GzfOSexVyuFqLvm
-         v0pJdJIkobDHoRn190KwAcgmwqS+4cpj+RoEhXO8SZPuEa0ZWgpvQh0VsymIr/GbM91z
-         +J7nDuXydrnaT23ivsHkA+zyHa6Q4ux6lUhspsk1lCaVV8T3zYSjnPjE2rsWEWDs4D5m
-         Yi7VxfWGKXJgD3GJJbXUF9+K6Lrysp57F8Hh54sojCikfABGHG5luxlH6rV1OshMcYUr
-         +Ikw==
+        Wed, 28 Jun 2023 05:18:14 -0400
+Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-78358268d1bso137972639f.3;
+        Wed, 28 Jun 2023 02:18:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687940572; x=1690532572;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AfH/3M1MI/78IiqObqTGPZhCo/6frficXtfBUG01mvM=;
-        b=EGoMKNRH0QWKukjoX1VV5tf3qbOMnUIoHeunLO+9cVlFhMlKSHmto6fwy56neM4uRd
-         U2cUu25qITFgItrzxMRIOkwxoBVWclp6YybrmYLx3H4gDAtlDb7fU3ZszIjO0uTrCjoe
-         HFvruudT9lTMd6fDwmtfdXH48NPsAMlXL2Vw3i7EYA/vsKWxXRoQudC7aCvayzy6Fo/7
-         1pQAEsSEP/bl450nCVkoY0hnPxrRoPe8N8YzWTy2WjZ2Ow6dtQBOxDnkmNXKoCzVCHj2
-         09vAROhP+M34/mBvvxXf4gc0BQl1G2UHxfmorX1ntUasFR/36ty0qf7EhUR3OV+L2vLa
-         B+Tw==
-X-Gm-Message-State: AC+VfDwpC5mwtGm+Jtu3pNZecMRITi5L8J/52hRdQFKYP+VokwDJYy5x
-        JPsrXgCsXg6mbHvRy8AinHGBs3jofU5NfQ==
-X-Google-Smtp-Source: ACHHUZ5pnQDNTECdgISJR0kDPKbUH3W5ZvqVvA3k0m/h+QnyvBTCn6jGI4qFNZv97UUyufGDuQIJTg==
-X-Received: by 2002:a05:6a21:7881:b0:121:ef3f:ed0b with SMTP id bf1-20020a056a21788100b00121ef3fed0bmr24448649pzc.60.1687936831745;
-        Wed, 28 Jun 2023 00:20:31 -0700 (PDT)
-Received: from oslab-pc.tsinghua.edu.cn ([166.111.139.122])
-        by smtp.gmail.com with ESMTPSA id l187-20020a6391c4000000b00543b4433aa9sm6924313pge.36.2023.06.28.00.20.29
+        d=1e100.net; s=20221208; t=1687943893; x=1690535893;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=y3rNiHDzzvT5fn4zsItuTLUfPl9yseXqas/GeAA6tTU=;
+        b=M2xdpC9YyeyaqFLVRhoUphFWh/NJZL5y3wh37KlDHKx15LF9dkTy7xWghSqOmTODAA
+         HuLyzM1pRFraLNh94tH91euZIBL7m5w6q+hdgNvG5Mjj8hQLsyO0TOxdLTKwks1lobiu
+         AqgcleOHNt+IQO6dVm3HBM7Pjg9pcHQfwlG4nK1pwGDW6Alq1n9YndOTPLp4DjU4uVdk
+         M/WNJmr36IOGf43qGk8K6xClmtBS79jqTGtSQNNKn/nAdIZhy1rNq1PZtqqqLSGLAx8a
+         /tzWJwkMQQxWQpKeUrnm1EclF/TM2DM7exMfckcPpYsx65HcK6SPOiEM3X8UdAX40itw
+         KgUQ==
+X-Gm-Message-State: AC+VfDxufqd99VleAS5ZOjwe3iT3Lf1NaPUZAekpp0TDHtiCjkk4IikV
+        ayclH1boIF5baxBJ1TvWtNvYGhZDnw==
+X-Google-Smtp-Source: ACHHUZ5hdew/tbjh37LxMK1//ANp1jJhQJGeMCqjFo7ZC1u/XMFXJeJvxavj99PxkNADBXvIkZi10w==
+X-Received: by 2002:a6b:d808:0:b0:783:491a:13fe with SMTP id y8-20020a6bd808000000b00783491a13femr11503497iob.5.1687943893293;
+        Wed, 28 Jun 2023 02:18:13 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id p14-20020a02b38e000000b0042adbd157b5sm1089962jan.179.2023.06.28.02.18.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 00:20:31 -0700 (PDT)
-From:   Tuo Li <islituo@gmail.com>
-To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        baijiaju1990@outlook.com, Tuo Li <islituo@gmail.com>,
-        BassCheck <bass@buaa.edu.cn>
-Subject: [PATCH] media: bt8xx: Fix a possible data race in buffer_queue()
-Date:   Wed, 28 Jun 2023 15:19:51 +0800
-Message-Id: <20230628071951.1011421-1-islituo@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
+        Wed, 28 Jun 2023 02:18:12 -0700 (PDT)
+Received: (nullmailer pid 4146586 invoked by uid 1000);
+        Wed, 28 Jun 2023 09:18:10 -0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     guoniu.zhou@oss.nxp.com
+Cc:     krzysztof.kozlowski+dt@linaro.org, sakari.ailus@linux.intel.com,
+        laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
+        robh+dt@kernel.org, xavier.roumegue@oss.nxp.com,
+        conor+dt@kernel.org, linux-media@vger.kernel.org,
+        linux-imx@nxp.com, kernel@pengutronix.de,
+        devicetree@vger.kernel.org, jacopo.mondi@ideasonboard.com
+In-Reply-To: <20230628064251.1774296-2-guoniu.zhou@oss.nxp.com>
+References: <20230628064251.1774296-1-guoniu.zhou@oss.nxp.com>
+ <20230628064251.1774296-2-guoniu.zhou@oss.nxp.com>
+Message-Id: <168794389087.4146462.8940502156407485967.robh@kernel.org>
+Subject: Re: [PATCH v4 1/3] media: dt-bindings: nxp,imx8-isi: add i.MX93
+ ISI compatible string
+Date:   Wed, 28 Jun 2023 03:18:10 -0600
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The variable btv->loop_irq is often protected by the lock btv->s_lock when
-is accessed. Here is an example in bttv_irq_timeout():
 
-  spin_lock_irqsave(&btv->s_lock,flags); 
-  ...
-  btv->loop_irq = 0;
-  ...
-  spin_unlock_irqrestore(&btv->s_lock,flags);
+On Wed, 28 Jun 2023 14:42:49 +0800, guoniu.zhou@oss.nxp.com wrote:
+> From: "Guoniu.zhou" <guoniu.zhou@nxp.com>
+> 
+> Add the compatible string support for i.MX93 ISI.
+> 
+> Signed-off-by: Guoniu.zhou <guoniu.zhou@nxp.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Reviewed-by: Tommaso Merciai <tomm.merciai@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
 
-However, it is accessed without holding the lock btv->s_lock in 
-buffer_queue():
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-  btv->loop_irq |= 1;
+yamllint warnings/errors:
 
-And thus a data race can occur.
-To fix this possible data race, a lock and unlock pair is added when
-accessing the variable btv->loop_irq in buffer_queue().
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/clock/milbeaut-clock.example.dtb: /example-2/serial@1e700010: failed to match any schema with compatible: ['socionext,milbeaut-usio-uart']
+Documentation/devicetree/bindings/clock/sprd,sc9863a-clk.example.dtb: /example-1/syscon@20e00000: failed to match any schema with compatible: ['sprd,sc9863a-glbregs', 'syscon', 'simple-mfd']
+Documentation/devicetree/bindings/leds/common.example.dtb: /example-2/i2c/led-controller@30: failed to match any schema with compatible: ['panasonic,an30259a']
+Documentation/devicetree/bindings/sound/audio-graph-card2.example.dtb: /example-0/cpu: failed to match any schema with compatible: ['cpu-driver']
+Documentation/devicetree/bindings/sound/audio-graph-card2.example.dtb: /example-0/codec: failed to match any schema with compatible: ['codec-driver']
+Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.example.dtb: /example-0/avs-monitor@7d5d2000: failed to match any schema with compatible: ['brcm,bcm2711-avs-monitor', 'syscon', 'simple-mfd']
+Documentation/devicetree/bindings/thermal/imx-thermal.example.dtb: /example-0/anatop@20c8000: failed to match any schema with compatible: ['fsl,imx6q-anatop', 'syscon', 'simple-mfd']
+Documentation/devicetree/bindings/i2c/qcom,i2c-cci.example.dtb: /example-0/cci@ac4a000/i2c-bus@1/camera@60: failed to match any schema with compatible: ['ovti,ov7251']
+Documentation/devicetree/bindings/iio/adc/ti,palmas-gpadc.example.dtb: /example-0/pmic: failed to match any schema with compatible: ['ti,twl6035-pmic', 'ti,palmas-pmic']
+Documentation/devicetree/bindings/iio/adc/ti,palmas-gpadc.example.dtb: /example-0/pmic: failed to match any schema with compatible: ['ti,twl6035-pmic', 'ti,palmas-pmic']
+Documentation/devicetree/bindings/input/mediatek,pmic-keys.example.dtb: /example-0/pmic: failed to match any schema with compatible: ['mediatek,mt6397']
+Documentation/devicetree/bindings/input/sprd,sc27xx-vibrator.example.dtb: /example-0/pmic@0: failed to match any schema with compatible: ['sprd,sc2731']
+Documentation/devicetree/bindings/dma/dma-controller.example.dtb: /example-0/dma-controller@48000000: failed to match any schema with compatible: ['ti,omap-sdma']
+Documentation/devicetree/bindings/dma/dma-router.example.dtb: /example-0/dma-router@4a002b78: failed to match any schema with compatible: ['ti,dra7-dma-crossbar']
+Documentation/devicetree/bindings/memory-controllers/ingenic,nemc.example.dtb: /example-0/memory-controller@13410000/ethernet@6: failed to match any schema with compatible: ['davicom,dm9000']
+Documentation/devicetree/bindings/arm/hisilicon/controller/sysctrl.example.dtb: /example-0/system-controller@802000/clock@0: failed to match any schema with compatible: ['hisilicon,hi3620-clock']
+Documentation/devicetree/bindings/arm/hisilicon/controller/cpuctrl.example.dtb: /example-0/cpuctrl@a22000/clock@0: failed to match any schema with compatible: ['hisilicon,hix5hd2-clock']
+Documentation/devicetree/bindings/arm/hisilicon/controller/hi3798cv200-perictrl.example.dtb: /example-0/peripheral-controller@8a20000/phy@850: failed to match any schema with compatible: ['hisilicon,hi3798cv200-combphy']
+Documentation/devicetree/bindings/media/rockchip-isp1.example.dtb: /example-0/parent/i2c/camera@36: failed to match any schema with compatible: ['ovti,ov5695']
+Documentation/devicetree/bindings/net/marvell,mvusb.example.dtb: /example-0/usb/mdio@1/switch@0: failed to match any schema with compatible: ['marvell,mv88e6190']
+Documentation/devicetree/bindings/net/qca,ar71xx.example.dtb: /example-0/ethernet@1a000000/mdio/switch@10: failed to match any schema with compatible: ['qca,ar9331-switch']
+Documentation/devicetree/bindings/reset/hisilicon,hi3660-reset.example.dtb: /example-0/iomcu@ffd7e000: failed to match any schema with compatible: ['hisilicon,hi3660-iomcu', 'syscon']
 
-Reported-by: BassCheck <bass@buaa.edu.cn>
-Signed-off-by: Tuo Li <islituo@gmail.com>
----
- drivers/media/pci/bt8xx/bttv-driver.c | 3 +++
- 1 file changed, 3 insertions(+)
+doc reference errors (make refcheckdocs):
 
-diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
-index 734f02b91aa3..241c51951627 100644
---- a/drivers/media/pci/bt8xx/bttv-driver.c
-+++ b/drivers/media/pci/bt8xx/bttv-driver.c
-@@ -1617,13 +1617,16 @@ buffer_queue(struct videobuf_queue *q, struct videobuf_buffer *vb)
- 	struct bttv_buffer *buf = container_of(vb,struct bttv_buffer,vb);
- 	struct bttv_fh *fh = q->priv_data;
- 	struct bttv    *btv = fh->btv;
-+	unsigned long flags;
- 
-+	spin_lock_irqsave(&btv->s_lock,flags);
- 	buf->vb.state = VIDEOBUF_QUEUED;
- 	list_add_tail(&buf->vb.queue,&btv->capture);
- 	if (!btv->curr.frame_irq) {
- 		btv->loop_irq |= 1;
- 		bttv_set_dma(btv, 0x03);
- 	}
-+	spin_unlock_irqrestore(&btv->s_lock,flags);
- }
- 
- static void buffer_release(struct videobuf_queue *q, struct videobuf_buffer *vb)
--- 
-2.34.1
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230628064251.1774296-2-guoniu.zhou@oss.nxp.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
