@@ -2,126 +2,123 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 277EFEB64D7
-	for <linux-media@archiver.kernel.org>; Wed, 28 Jun 2023 09:28:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9462DC001B0
+	for <linux-media@archiver.kernel.org>; Wed, 28 Jun 2023 09:52:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233070AbjF1J2O (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Jun 2023 05:28:14 -0400
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:39676 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236027AbjF1I7a (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:59:30 -0400
+        id S230167AbjF1Jvq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Jun 2023 05:51:46 -0400
+Received: from mga17.intel.com ([192.55.52.151]:4320 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231307AbjF1Jrc (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 28 Jun 2023 05:47:32 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687942770; x=1719478770;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=H5XOlVYF53c/y157iszIY78jZEcz/O9uOxgpG6UDJZM=;
-  b=1BY/EKVTCKqKJN1BK2u7VJQVgd5cIlSCCmuBERP1t+aNmM+pewTvDh96
-   DeqzSDdhKaWBVTnrzwn1OjKV7I6vY9BxRWATYnOnxySOeGNQar6ltaFw0
-   SXvVWaKEkRa0/a5FPDtAU8QdTEooTOZcKLHhVyKFA6+UjpZ+4oWhHX3Lj
-   nuaiaI4RnskwMSt1Vgu4V4bHLWC2WNgp+XNaEBa+uqQoj2hydpuEnL0aB
-   AvPciMMa6FV3EoTAqBpkbggXs2PIJoQYxqF6akKZmxXdfdJWoOygpb/Hw
-   R9QpsptvJmxkriQff5u5/WPAM10vHhd3DxLvrN5+pgxiuuXXsmxyj6o5Z
-   A==;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687945651; x=1719481651;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=0rxMvXN9/9rNCH+4gQCmn1WFc0BxwRhyzO2KvFRuxfY=;
+  b=KXxWEzyJgKuVEON0TQHUXf4B2wOh1kJMqU6ZZ3iZswZhjGNDx0I+AX/S
+   rb2Ke5uQ/IU8ESE0BP8Kq0JBxCWKPfU+OForK38y3b2SLf7l0Lx/d+qrb
+   kGWwCxVy9PqaXCPZBJ4cNw4ckQn5CzLSW7GJJw1gbHjr/cqAimOUSWExA
+   PBvkf1Z7hM6OhWBX/vl+VHksk8KhCR3RLmWareOg1t6XhQ+iE1e8sV0iJ
+   n6ftgslovuz/NPqQaW6V8E2Sm921i+azRx6sx+H+ossM7JaoqG/p3b14P
+   2g4G7vVcs9brClTpPShYvoVpYI1CZ3ReItCZi6BRf33gsKyBhsKiFf2Dc
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="342137871"
 X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="232626321"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Jun 2023 01:59:30 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 28 Jun 2023 01:59:19 -0700
-Received: from [10.12.67.138] (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Wed, 28 Jun 2023 01:59:17 -0700
-Message-ID: <2b323110-428c-e2a0-9d2c-fbffd4524cf9@microchip.com>
-Date:   Wed, 28 Jun 2023 10:59:16 +0200
+   d="scan'208";a="342137871"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 02:47:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="667040646"
+X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
+   d="scan'208";a="667040646"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 28 Jun 2023 02:47:27 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qERlm-000DAP-0p;
+        Wed, 28 Jun 2023 09:47:26 +0000
+Date:   Wed, 28 Jun 2023 17:46:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
+        <nfraprado@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     oe-kbuild-all@lists.linux.dev, kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
+        <nfraprado@collabora.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v4 5/7] media: mediatek: vcodec: Read HW active status
+ from syscon
+Message-ID: <202306281746.a2zk4ETu-lkp@intel.com>
+References: <20230627214615.1503901-6-nfraprado@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] MAINTAINERS: Orphan the OV7740 driver
-Content-Language: en-US
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-CC:     <linux-media@vger.kernel.org>, <hverkuil-cisco@xs4all.nl>,
-        <mchehab@kernel.org>, <laurent.pinchart@ideasonboard.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Balamanikandan Gunasundar 
-        <balamanikandan.gunasundar@microchip.com>,
-        "Songjun Wu" <songjun.wu@atmel.com>,
-        Hari Prasath <Hari.PrasathGE@microchip.com>
-References: <20230522134751.30489-1-nicolas.ferre@microchip.com>
- <ZGuJ7GqxDI0aZxK6@kekkonen.localdomain>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <ZGuJ7GqxDI0aZxK6@kekkonen.localdomain>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230627214615.1503901-6-nfraprado@collabora.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Sakari,
+Hi Nícolas,
 
-On 22/05/2023 at 17:27, Sakari Ailus wrote:
-> Hi Nicolas,
-> 
-> On Mon, May 22, 2023 at 03:47:51PM +0200, nicolas.ferre@microchip.com wrote:
->> From: Nicolas Ferre <nicolas.ferre@microchip.com>
->>
->> Wenyou's email is bouncing, remove him from this camera driver's entry
->> and mark it as orphan.
->>
->> Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
->> ---
->> Wenyou, all,
->>
->> If you want to take this driver, please don't hesitate to update this patch for
->> a better maintenance. My only concern is the @microchip.com email address
->> bouncing.
+kernel test robot noticed the following build errors:
 
-I'm sorry to insist, but bouncing email on our domain is becoming a real 
-problem.
-I don't see this patch on Linux-next, so what can I do to make this move 
-forward?
+[auto build test ERROR on media-tree/master]
+[also build test ERROR on robh/for-next]
+[cannot apply to mbgg-mediatek/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> What about the driver author (cc'd)?
+url:    https://github.com/intel-lab-lkp/linux/commits/N-colas-F-R-A-Prado/media-dt-bindings-mediatek-vcodec-Allow-single-clock-for-mt8183/20230628-054734
+base:   git://linuxtv.org/media_tree.git master
+patch link:    https://lore.kernel.org/r/20230627214615.1503901-6-nfraprado%40collabora.com
+patch subject: [PATCH v4 5/7] media: mediatek: vcodec: Read HW active status from syscon
+config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20230628/202306281746.a2zk4ETu-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230628/202306281746.a2zk4ETu-lkp@intel.com/reproduce)
 
-I didn't hear about Songjun for a long time.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306281746.a2zk4ETu-lkp@intel.com/
 
-Best regards,
-    Nicolas
+All errors (new ones prefixed by >>):
 
->>   MAINTAINERS | 3 +--
->>   1 file changed, 1 insertion(+), 2 deletions(-)
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index e0ad886d3163..bae9c7591144 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -15577,9 +15577,8 @@ F:    drivers/media/i2c/ov772x.c
->>   F:   include/media/i2c/ov772x.h
->>
->>   OMNIVISION OV7740 SENSOR DRIVER
->> -M:   Wenyou Yang <wenyou.yang@microchip.com>
->>   L:   linux-media@vger.kernel.org
->> -S:   Maintained
->> +S:   Orphan
->>   T:   git git://linuxtv.org/media_tree.git
->>   F:   Documentation/devicetree/bindings/media/i2c/ov7740.txt
->>   F:   drivers/media/i2c/ov7740.c
->> --
->> 2.34.1
->>
-> 
-> --
-> Kind regards,
-> 
-> Sakari Ailus
+   drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c: In function 'mtk_vcodec_is_hw_active':
+>> drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c:52:17: error: implicit declaration of function 'FIELD_GET' [-Werror=implicit-function-declaration]
+      52 |         return !FIELD_GET(VDEC_HW_ACTIVE_MASK, cg_status);
+         |                 ^~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/FIELD_GET +52 drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
+
+    42	
+    43	static bool mtk_vcodec_is_hw_active(struct mtk_vcodec_dev *dev)
+    44	{
+    45		u32 cg_status;
+    46	
+    47		if (dev->vdecsys_regmap)
+    48			return !regmap_test_bits(dev->vdecsys_regmap, VDEC_HW_ACTIVE_ADDR,
+    49						 VDEC_HW_ACTIVE_MASK);
+    50	
+    51		cg_status = readl(dev->reg_base[VDEC_SYS] + VDEC_HW_ACTIVE_ADDR);
+  > 52		return !FIELD_GET(VDEC_HW_ACTIVE_MASK, cg_status);
+    53	}
+    54	
 
 -- 
-Nicolas Ferre
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
