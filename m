@@ -2,193 +2,146 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B39D9EB64DC
-	for <linux-media@archiver.kernel.org>; Thu, 29 Jun 2023 15:04:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9B1CEB64DD
+	for <linux-media@archiver.kernel.org>; Thu, 29 Jun 2023 15:04:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232449AbjF2PEt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 29 Jun 2023 11:04:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44512 "EHLO
+        id S232492AbjF2PEu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 29 Jun 2023 11:04:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232491AbjF2PEq (ORCPT
+        with ESMTP id S232499AbjF2PEr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 29 Jun 2023 11:04:46 -0400
-X-Greylist: delayed 894 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 29 Jun 2023 08:04:43 PDT
-Received: from refb02.tmes.trendmicro.eu (refb02.tmes.trendmicro.eu [18.185.115.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71AB30F0
-        for <linux-media@vger.kernel.org>; Thu, 29 Jun 2023 08:04:43 -0700 (PDT)
-Received: from 104.47.7.174_.trendmicro.com (unknown [172.21.19.51])
-        by refb02.tmes.trendmicro.eu (Postfix) with ESMTPS id C9F11108D82D5
-        for <linux-media@vger.kernel.org>; Thu, 29 Jun 2023 14:49:52 +0000 (UTC)
-Received: from 104.47.7.174_.trendmicro.com (unknown [172.21.199.100])
-        by repost01.tmes.trendmicro.eu (Postfix) with SMTP id 244D210001234;
-        Thu, 29 Jun 2023 14:49:51 +0000 (UTC)
-X-TM-MAIL-RECEIVED-TIME: 1688050178.713000
-X-TM-MAIL-UUID: 67d40f0c-723f-4a07-8140-b912dc22be84
-Received: from DEU01-BE0-obe.outbound.protection.outlook.com (unknown [104.47.7.174])
-        by repre01.tmes.trendmicro.eu (Trend Micro Email Security) with ESMTPS id AE4621000031D;
-        Thu, 29 Jun 2023 14:49:38 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JoHXcDuy99jLDXURhUlzN4gyxFPzpfAW/RjP7u1MabxjTigrWqk3G2PhkgdUkxFAV/Je+bf7ZEQSvR2R8G+SJiisScaB36bmX9vaSraYfts8OQGROgpu99NrbacZenCrOIjzOJoqvtWWOOm3OuL+++mhxo4JLnarEXD6BKeG+zy6yhPi5B0A0LjWHM97nnyrhSZUcnkozkyu3uLy40WoFMzGLX6s+KskZ8okOAYqeApCnEZcHfzjrjlAdA0hI6yNZmbWPEIvvKgQCNKYqIUYnpWuATZmaIkQt/h5REs6wcNzKUcpWrLTz/ktFnRIf/vQY7Cpv3GCH+ti33fWT2H3uQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uXE0H22iw+cpckPfVbWhUzcsGOxy+sHiyyCjodERnMY=;
- b=noXSRX0VcBc0eXPqSbBIeIu0R7ksQ++yaTlV6rYl7iveNve/k/urq3P0vbGcZLqzshcgD8EyCi22CYU224HzKjTawxZK0fOs2OEdfc5UOGYW0KLkevS7mSSKYdknxhvPWLwgUkvShPzRP7SxNqpavTuq7c4y6AJwzBAInX3YjFx7N3zQ26uuBRH6fNAMxqdIiv6Mi14cCZrzEr7BQO/5dWaDVqRE4MMCj0p6eyemujGAO/GA5BMiSSup56eiYdyyFk9BZ7LQFKrYo0bkjBt7nThlCX9PMO094IWNK/93b1gAw9G5J/NLG03xjDC5NxtUhOcnIQJTh2hKV2GeDEa7iw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 217.66.60.4) smtp.rcpttodomain=chromium.org smtp.mailfrom=opensynergy.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=opensynergy.com; dkim=none (message not signed); arc=none
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 217.66.60.4)
- smtp.mailfrom=opensynergy.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=opensynergy.com;
-Received-SPF: Pass (protection.outlook.com: domain of opensynergy.com
- designates 217.66.60.4 as permitted sender) receiver=protection.outlook.com;
- client-ip=217.66.60.4; helo=SR-MAIL-03.open-synergy.com; pr=C
-From:   Alexander Gordeev <Alexander.Gordeev@opensynergy.com>
-To:     virtio-comment@lists.oasis-open.org,
-        virtio-dev@lists.oasis-open.org
-Cc:     Alexander Gordeev <Alexander.Gordeev@opensynergy.com>,
-        Albert Esteve <aesteve@redhat.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        alex.bennee@linaro.org,
-        Andrew Gazizov <andrew.gazizov@opensynergy.com>,
-        Andrii Cherniavskyi <andrii.cherniavskyi@opensynergy.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Enric Balletbo i Serra <eballetb@redhat.com>,
-        Enrico Granata <egranata@google.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Keiichi Watanabe <keiichiw@chromium.org>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Marcin Wojtas <mwojtas@google.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Peter Griffin <peter.griffin@linaro.org>,
-        Tomasz Figa <tfiga@chromium.org>, Matti.Moell@opensynergy.com,
-        bag@semihalf.com, bgrzesik@google.com, hmazur@google.com,
-        mikrawczyk@google.com, srosek@google.com, zyta@google.com,
-        linux-media@vger.kernel.org, libcamera-devel@lists.libcamera.org
-Subject: [RFC PATCH v8 0/1] Virtio video device specification
-Date:   Thu, 29 Jun 2023 16:49:14 +0200
-Message-Id: <20230629144915.597188-1-Alexander.Gordeev@opensynergy.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 29 Jun 2023 11:04:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFEE230C4
+        for <linux-media@vger.kernel.org>; Thu, 29 Jun 2023 08:04:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688051040;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ttEB+OK6KENb+ypGCwa1/2v5yEw3o94baRMAlYka2S0=;
+        b=EUmdgyKPVRq3zkcLP6YCfh35+qLI4iKi9JKqrq2rJinG5rOM6eBzdI7Z4aMNdL9TP7lW3o
+        CRHiZs6QxaBETjpsBMvvs6pj89m52l5siLiUSNc9tDhXEuZCqPPgS1wY5NWmhBQGk04eSu
+        eTB2HkPwVU1X/ON0rEntg6igWMvi1vE=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-512-jGz4p583P92P13IHPyxGWw-1; Thu, 29 Jun 2023 11:03:54 -0400
+X-MC-Unique: jGz4p583P92P13IHPyxGWw-1
+Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-51d96b7f36bso516249a12.2
+        for <linux-media@vger.kernel.org>; Thu, 29 Jun 2023 08:03:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688051028; x=1690643028;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ttEB+OK6KENb+ypGCwa1/2v5yEw3o94baRMAlYka2S0=;
+        b=QmZcp8CaoRqpmueduWpyNCaavpHvaUXW5+6ksZkMsZWx+43vOK2iHBrTfBrW1sCSgK
+         COES8Jw8NyYx8XFiVs5rY/KDqxS262sEH/sFoOwIBrRpUG8rNRCYgJj61slk/OstEJN0
+         zuiQTul2UB0Pt74UpZoCSLQMOCqtqO5D8My7fE6r+lMqWB12K9EKsUWC2DZ/2waRBr/o
+         XvckH3XYX3ajL6ghiqKR+BdRomX1J9RkNcw31+k7h5GQBbMERYNnjeOh/lcgEhrv4HA1
+         YVqaR7ipuix4Ag/jqwdRinLxVBZZ15EocBg2CB8X/M0jtP42bf2H806bq9QWus2IR4/6
+         UFFA==
+X-Gm-Message-State: AC+VfDysY55rd7vMCZLUGKNbNy/A5T1xFzORvau2g41iCK5O5syb963T
+        a0M6IsU0ssyVx+6eEAEiESMs3L+nFDTymofO0+OnT8kd1w4+Z3i+b1iD+IVngC81qIdTJSqY1Mk
+        RoUicr3ah/keJIieaN3m69AdU5hYjQQk=
+X-Received: by 2002:aa7:cc11:0:b0:514:96f9:4f20 with SMTP id q17-20020aa7cc11000000b0051496f94f20mr22299290edt.41.1688051028494;
+        Thu, 29 Jun 2023 08:03:48 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5oxuCde35n7o4ubhEime+ZM1EF68W38PZmn7uw001fH6lV8lLA5tmuNyD2ui9rdnZSXIXvxA==
+X-Received: by 2002:aa7:cc11:0:b0:514:96f9:4f20 with SMTP id q17-20020aa7cc11000000b0051496f94f20mr22299276edt.41.1688051028189;
+        Thu, 29 Jun 2023 08:03:48 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:2a07:3a01:67e5:daf9:cec0:df6? (2001-1c00-2a07-3a01-67e5-daf9-cec0-0df6.cable.dynamic.v6.ziggo.nl. [2001:1c00:2a07:3a01:67e5:daf9:cec0:df6])
+        by smtp.gmail.com with ESMTPSA id rp25-20020a170906d97900b0098e17ea781csm6158412ejb.94.2023.06.29.08.03.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jun 2023 08:03:47 -0700 (PDT)
+Message-ID: <712d9f02-9a97-3e07-94b4-9e6abb7fe9cd@redhat.com>
+Date:   Thu, 29 Jun 2023 17:03:47 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1EUR05FT039:EE_|FR0P281MB2046:EE_
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: 0bf81e8f-0f0a-4dbe-b644-08db78b00f99
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zX2xceQkmOiDI1mEwvCjEjCRe+ZctXd5Dxrfzho9lSMu7dzcifEGX8+h/12j1PfzA8vbfbPpDxZ+DHc2wQOcEigZAJHl1LNcesaSypJGONx7UDeRPh6fmuMQKsWH21KX+RkB9hg/dVKHFM3DJgjEJLmjdp2dfdj25hA5A0iu0MIB1tE+mah4twICr6MG4vYtv7paeEGuRQyEnRlXkNwPOikjAP5Yu5E4vI7MAu+BZil3eVuIxTNrIqycBHL5bpcFIZfzg9y1XkqAk1DwCS8YZi7nwdPKm4jDtAu2FV1HSmXT+3ogHpJoguEOXa+83ALQ6LzBHoAWDq9iTnIKLKUvhnc/tuDX8GhsrRWyRsqyyj6TWUCbYGmJ/du71pBoV//dfrEdP9HkSd6UUze/yP8/5Q+Imtzi4pC/CodYLtr6EnUkz62eCvZFX3JZB68E+Y7C8oUHA/KgBVe7elPFJiTVKe23Bwc8gsCt5hm7tRzjFfIQ9lKJJw1e/rYO+jaHHfAWR0yCv6LMKwZbJY0CqNCd56Gss0lrBMjozhgHKpBXIMHtq0GHT1OQ3aAZZie5xrq+chsIguU4J+8B3z4VgKmvJtHpazcDjgyb3T6jFXO9mtIrvgEa7sJlBYqGEcgHceUHsobmfjY1xYfaPCvMzojAQC7LrewaO28j0aaDpkEGogXNZulBvH6lHKIQxPyhdr8bVfSMTgtOWiarzH0U2lo6zklY90Wmyggn3W5++aWnIx7fKjz7qXIXsTVBpFPsPOCvBjhV3HFLkgsCbad+au/OOg==
-X-Forefront-Antispam-Report: CIP:217.66.60.4;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SR-MAIL-03.open-synergy.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(396003)(376002)(39840400004)(346002)(136003)(451199021)(46966006)(36840700001)(7416002)(5930299015)(1076003)(5660300002)(336012)(4326008)(316002)(70206006)(478600001)(36756003)(70586007)(8676002)(8936002)(2906002)(186003)(54906003)(966005)(36860700001)(42186006)(40480700001)(41300700001)(82310400005)(86362001)(81166007)(47076005)(26005)(2616005)(83380400001)(36900700001);DIR:OUT;SFP:1102;
-X-OriginatorOrg: opensynergy.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2023 14:49:37.3585
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0bf81e8f-0f0a-4dbe-b644-08db78b00f99
-X-MS-Exchange-CrossTenant-Id: 800fae25-9b1b-4edc-993d-c939c4e84a64
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=800fae25-9b1b-4edc-993d-c939c4e84a64;Ip=[217.66.60.4];Helo=[SR-MAIL-03.open-synergy.com]
-X-MS-Exchange-CrossTenant-AuthSource: VI1EUR05FT039.eop-eur05.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: FR0P281MB2046
-X-TM-AS-ERS: 104.47.7.174-0.0.0.0
-X-TMASE-Version: StarCloud-1.3-9.1.1011-27722.000
-X-TMASE-Result: 10--13.217400-4.000000
-X-TMASE-MatchedRID: xXA8JSLb31tKqT77NMMyNxZu3Ax5Ngq859KGlOljPvu4xpDSsMYz9Ik+
-        ek903bmdJIE8B+MatXg0MlZvaRoxGC6T4pgCl/M6R6eMmpdkcdk6Cu19Vtgyg//cMgrTjbBkRQc
-        XrCueZFhpO0BOxhTlbJA/ATZ0Yg5D0GDK5hZjJXyB7KF1cYE+v/emg0BhV6PFu5fROEbKeImvU1
-        tCOC5lhTIs3LEAaA7XSE3uK2tLdI1NOAGUOSRGeF7YyKSX4fHjFQ/jDVQKXn4eyPVZe0RJiUkgG
-        AfseSYI2agkMppXv0n2CX+DNSvaTpVqXn8k6sIeju2XlcEx9HQFgK3XHdr3w4loy91GB/ZEB0lB
-        bq8327NXoinqR4tvX6Wz+FpE58Tnk/dA6P3T5Fuw0Dfrl0kL6wjIhAT2d4YVyEYRIXZC1hLpS1H
-        JaayLrp6fQ44SVZDd6xA0Ava73nBHnLDmms99+BEuOqgkm3/1h7z+gmKKj0oDf6I8jFx+tgxKJh
-        lMXnCqcYO7LzLWqS5krrVhD7Q0DkmcU+PbeIu4GrcQV6ODggA/FSuCUJL71oRUjoIe39qe
-X-TMASE-XGENCLOUD: 63fc4136-7300-4884-b1b5-fe214e3d4904-0-0-200-0
-X-TM-Deliver-Signature: E20E4B2E1F2FAFE8063F4F07ED9B9661
-X-TM-Addin-Auth: VzlyViWVjvreRq2jAlTwoTktHB4Ho5ISkitaE0gRjobWlTcvBcoo7FvhCQp
-        mVsk50NE5mQ3+HxUDNOTk1pKfopxjKVGMM8D1RuxoUxYePHY36dB9ztQeqLNiloSE98p0Jh/Zjo
-        NsvI/waMsFTPSNlthdAoupefPv9Z0v1/f4/+7IC3czAvDnUzDk8vPzUEGEIY10AW4/oDkKqVf0q
-        EnN7tjUBZCjkxf5cnPsdrf8N4Qik+JG0UbyLBf3PmM/46VNuHBF5baIN+XoxOi/TjbkeKu3meYT
-        lEqCQJ7eOOKwrGAHzXYwHgWy5owzp5lE6Kia.t7kmS6ReXbQ3us1rnwxn9AffsQCChUxohIKm43
-        LwVrB6EYZlfqhGKuYkACBR3mEnKGyaHZo8FqjacPojkifyNZsw+DjRRqpW0xZuvEMdM/nCWOf97
-        alY759K5Z31JrC2hYG4HoHvUMirIEDdknuLzM9qhmnF1jJBiXO0fqn8dOKQZDxjR4wMnxr6bvYr
-        FS1G3ThoVVM/AujSKXh+D7lj9T+FMrfSfnaU0gnWq9Wk0KBI0MZDbPexv6Z7vCKczITuBMguhxh
-        f3lhmWmIii5opOSx87+IcwiLausIhaJmbuSQwAYumRf7QI8t84T1bR3XQt4IH/1dBhx2Fu5UVnw
-        DqBQ==
-X-TM-Addin-ProductCode: EMS
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=opensynergy.com;
-        s=TM-DKIM-20210503141657; t=1688050191;
-        bh=0vYK3F+00qzY6tgYrDYn2jmyyaCVmzedj4Tjbgvevhw=; l=3149;
-        h=From:To:Date;
-        b=Ymn84sk52EWKJPWWXE3j/OJeeocbKwETMnMIoqNFqO6fqWp9/uYYbkQNYp58rexc0
-         qbQqFl6hHDzjfI7XSdIZCnTDYXKODPy73krAY3d2piHVSWeV4r5SHVngyq4WkfmMZm
-         q9eBkcCVkUt7x+yFf4ry+teuGojZAcfhE7eh7SwucOf2VO5rbz7+VRsIJS4JXnEmyi
-         gZW8BUNrAb9d1rWip/Z1TY422pykWdyB0rHvJov1DfvQUuGHR+rbXSDMB9hwPddVPv
-         4vFN4ys41owTVDd2IrBime44UBPHOZnNilQwTEx769nTEbftqwdvBw2evC59mwWgRC
-         FrXUM2kmHwP9w==
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 1/1] media: i2c: Select V4L2_FWNODE and
+ VIDEO_V4L2_SUBDEV_API for sensors
+Content-Language: en-US
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Dan Scally <dan.scally@ideasonboard.com>, hverkuil@xs4all.nl
+References: <20230629122648.924600-1-sakari.ailus@linux.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230629122648.924600-1-sakari.ailus@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 Hi,
 
-This is the 8th version of virtio-video device patch. Feedback would be very
-appreciated.
+On 6/29/23 14:26, Sakari Ailus wrote:
+> Select V4L2_FWNODE and VIDEO_V4L2_SUBDEV_API for all sensor drivers. This
+> also adds the options to drivers that don't specifically need them, these
+> are still seldom used drivers using old APIs. The upside is that these
+> should now all compile --- many drivers have had missing dependencies.
+> 
+> The "menu" is replaced by selectable "menuconfig" to select the needed
+> V4L2_FWNODE and VIDEO_V4L2_SUBDEV_API options.
+> 
+> Also select MEDIA_CONTROLLER which VIDEO_V4L2_SUBDEV_API effectively
+> depends on.
+> 
+> Reported-by: Hans de Goede <hdegoede@redhat.com>
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-The main change coming with this draft is the introduction of background
-operations and delayed responses to commands (the term is taken from the SCMI
-spec) over eventq. Now most of the commands work like this. The only
-exceptions are STREAM_CREATE and RESOURCE_ATTACH_BACKING commands. This should
-help avoid commandq descriptors exhaustion. Also I introduced "in band" and
-"out of band" handling of SET_PARAMS command. Out of band is the way how it
-was done before i.e. the command is handled immediately after dequeuing from
-commandq. In band means putting it into device's INPUT queue so that it can
-be executed precisely after a certain input resource and before the next one.
-These two changes allowed me to represent the events as a custom case of the
-delayed responses. Also this enables processing resolution changes embedded in
-the stream and coming from outside in the same way. I think this makes it
-possible to implement V4L2 Requests API.
+Thanks, patch looks good to me:
 
-Questions for discussion/roadmap:
-1. It looks like the current way of describing the device capabilities is not
-very well extendable. I'd like to change it again. The goal is that after
-adding new generic parameters/new codecs/new codec parameters and covering
-them with the feature flags the format of the device response doesn't depend
-that much on the enabled flags. My current idea is to convert this into a
-serie of descriptors with offsets and sizes, so that the device can then
-simply adjust offsets and sizes, but keep that layout the same. Any ideas here
-would be appreciated.
-2. Since draft v7 the device is expected to provide all and every one of its
-capabilities as a response to the DEVICE_QUERY_CAPS command. Maybe the device
-shouldn't adjust the parameters itself now?
-3. I think the last piece, that is missing completely, is QoS. How can the
-device indicate to the driver, that it is saturated? How could the device be
-shared between multiple guests in a fair way?
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
-Full PDF: https://drive.google.com/file/d/1uPg4kxThlNPBSiC4b5veyFz4OFGytU7v/view?usp=sharing
-PDF with the video section only: https://drive.google.com/file/d/1iW3MbseRZLovlxpc4XAF8VTvhQ_Tww6q/view?usp=sharing
+Regards,
 
-Changelog v7 -> v8:
-* Added the delayed responses to commands sent on the eventq.
-* Added the in band STREAM_SET_PARAMS command handling.
-* Implemented device events using the newly added delayed responses.
+Hans
 
-Alexander Gordeev (1):
-  virtio-video: Add virtio video device specification
 
- conformance.tex                           |    4 +
- content.tex                               |    1 +
- device-types/video/description.tex        | 2040 +++++++++++++++++++++
- device-types/video/device-conformance.tex |   22 +
- device-types/video/driver-conformance.tex |   16 +
- introduction.tex                          |   21 +
- 6 files changed, 2104 insertions(+)
- create mode 100644 device-types/video/description.tex
- create mode 100644 device-types/video/device-conformance.tex
- create mode 100644 device-types/video/driver-conformance.tex
 
--- 
-2.34.1
+
+> ---
+> since v1:
+> 
+> - Select MEDIA_CONTROLLER, don't depend on it.
+> 
+>  drivers/media/i2c/Kconfig | 13 ++++++++++---
+>  1 file changed, 10 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+> index 815c83135021c..c7ffaa79abeb9 100644
+> --- a/drivers/media/i2c/Kconfig
+> +++ b/drivers/media/i2c/Kconfig
+> @@ -25,8 +25,15 @@ config VIDEO_IR_I2C
+>  # V4L2 I2C drivers that are related with Camera support
+>  #
+>  
+> -menu "Camera sensor devices"
+> -	visible if MEDIA_CAMERA_SUPPORT
+> +menuconfig VIDEO_CAMERA_SENSOR
+> +	bool "Camera sensor devices"
+> +	depends on MEDIA_CAMERA_SUPPORT
+> +	select MEDIA_CONTROLLER
+> +	select V4L2_FWNODE
+> +	select VIDEO_V4L2_SUBDEV_API
+> +	default y
+> +
+> +if VIDEO_CAMERA_SENSOR
+>  
+>  config VIDEO_APTINA_PLL
+>  	tristate
+> @@ -810,7 +817,7 @@ config VIDEO_ST_VGXY61
+>  source "drivers/media/i2c/ccs/Kconfig"
+>  source "drivers/media/i2c/et8ek8/Kconfig"
+>  
+> -endmenu
+> +endif
+>  
+>  menu "Lens drivers"
+>  	visible if MEDIA_CAMERA_SUPPORT
 
