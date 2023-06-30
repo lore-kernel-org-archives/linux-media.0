@@ -2,92 +2,169 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91476EB64DD
-	for <linux-media@archiver.kernel.org>; Fri, 30 Jun 2023 11:14:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63A38EB64DA
+	for <linux-media@archiver.kernel.org>; Fri, 30 Jun 2023 11:21:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232804AbjF3LOI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 30 Jun 2023 07:14:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57210 "EHLO
+        id S230455AbjF3LVz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Jun 2023 07:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232916AbjF3LNy (ORCPT
+        with ESMTP id S232850AbjF3LVx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 30 Jun 2023 07:13:54 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F6443C34
-        for <linux-media@vger.kernel.org>; Fri, 30 Jun 2023 04:13:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688123624; x=1719659624;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=cEy6/SAvUVm0NMOWUFBFc3aWA48lpAETSD1n0tuDBGs=;
-  b=HSH1exEN0xADj16SS1lTpU32waLZLk8dfNFAl9V4Tm9Dd9/EUsv/3TWB
-   VwuxyiNFnnG2iZDTCFyb84IA8TaD4xJsTM4qBQINiWAyorrSi/dk1mvkw
-   oGWReLVTXHuWxTFL5elRYJg2nCBE4VtSAUA+U7mDkc8c0Fj+7wdHk65Iz
-   Q5tbhEAdd9/bgQyIabBnAHVBKyUhwyQ6/hMtZPaJzTY19xAbARVUQ1qfZ
-   IW+CYxXUE6QHKs5sQC3CNQ6pqDi0NblzojA1wywb52zIgJs6GNF+btg9N
-   65V/y+wj1nf4Drs46qjBwoG5x2BBPNjsO1YDX/PyLs+p5yDk6RKumaBXT
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="448748059"
-X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="448748059"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 04:13:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="891727910"
-X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="891727910"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 04:13:25 -0700
-Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id 1A16D12022F;
-        Fri, 30 Jun 2023 14:03:06 +0300 (EEST)
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Cc:     mchehab@kernel.org
-Subject: [PATCH 2/2] media: MAINTAINERS: Add documentation under V4L2 camera sensors
-Date:   Fri, 30 Jun 2023 14:03:04 +0300
-Message-Id: <20230630110304.98942-3-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230630110304.98942-1-sakari.ailus@linux.intel.com>
-References: <20230630110304.98942-1-sakari.ailus@linux.intel.com>
+        Fri, 30 Jun 2023 07:21:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E008F5
+        for <linux-media@vger.kernel.org>; Fri, 30 Jun 2023 04:21:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688124067;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9DYvV0OvjESZXnynIRWO/dWm7ZebngYcslB5yGYJSFI=;
+        b=DGHpjWjjVKX/nkJFpSYqtoRPEC8hBvOX6+iEkpI/BB6MUptLTsxpvYOLUprNZ5KtOnZ2/b
+        pWEG/p9EK+dgf5ruXvegukmkT4jTGfE9njYSN4sys0UYKbUuwwIpGpnpJWc8XFx3NqgZmx
+        Jg+Dx4KJ/TNQKEtccZvVL2veOKfsLfk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-112-ymcK-mTIO3yy1SiS00u7ug-1; Fri, 30 Jun 2023 07:21:02 -0400
+X-MC-Unique: ymcK-mTIO3yy1SiS00u7ug-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E5CAF1044597;
+        Fri, 30 Jun 2023 11:07:20 +0000 (UTC)
+Received: from shalem.redhat.com (unknown [10.39.193.184])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3AEB6492B02;
+        Fri, 30 Jun 2023 11:07:19 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Daniel Scally <dan.scally@ideasonboard.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Andy Shevchenko <andy@kernel.org>, Kate Hsuan <hpa@redhat.com>,
+        Hao Yao <hao.yao@intel.com>, Bingbu Cao <bingbu.cao@intel.com>,
+        linux-media@vger.kernel.org
+Subject: [PATCH v2 10/15] media: ipu-bridge: Add a parse_sensor_fwnode callback to ipu_bridge_init()
+Date:   Fri, 30 Jun 2023 13:06:38 +0200
+Message-ID: <20230630110643.209761-11-hdegoede@redhat.com>
+In-Reply-To: <20230630110643.209761-1-hdegoede@redhat.com>
+References: <20230630110643.209761-1-hdegoede@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add documentation related files under the camera sensor entry. Add the
-word "CAMERA" to the subject as well since there are many other kinds of
-sensors.
+Add a parse_sensor_fwnode callback to ipu_bridge_init(), so that
+ipu_bridge_init() can be used with other sensor fwnode parse functions
+then just ipu_bridge_parse_ssdb().
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+This will allow the ipu3-bridge code to also be used by the atomisp
+driver.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- MAINTAINERS | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/media/pci/intel/ipu-bridge.c     | 11 +++++++----
+ drivers/media/pci/intel/ipu-bridge.h     | 10 ++++++++--
+ drivers/media/pci/intel/ipu3/ipu3-cio2.c |  2 +-
+ 3 files changed, 16 insertions(+), 7 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1fc59cd2fc0d..2d3f3c8f7689 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -22117,7 +22117,7 @@ F:	drivers/media/v4l2-core/v4l2-fwnode.c
- F:	include/media/v4l2-async.h
- F:	include/media/v4l2-fwnode.h
+diff --git a/drivers/media/pci/intel/ipu-bridge.c b/drivers/media/pci/intel/ipu-bridge.c
+index 891dc0b7c960..d60992fbdbeb 100644
+--- a/drivers/media/pci/intel/ipu-bridge.c
++++ b/drivers/media/pci/intel/ipu-bridge.c
+@@ -148,8 +148,7 @@ static enum v4l2_fwnode_orientation ipu_bridge_parse_orientation(struct acpi_dev
+ 	return orientation;
+ }
  
--V4L2 SENSOR AND LENS DRIVERS
-+V4L2 CAMERA SENSOR AND LENS DRIVERS
- M:	Sakari Ailus <sakari.ailus@linux.intel.com>
- L:	linux-media@vger.kernel.org
- S:	Maintained
-@@ -22132,6 +22132,8 @@ F:	drivers/media/i2c/st-vgxy61.c
- F:	drivers/media/i2c/dw*
- F:	drivers/media/i2c/ak*
- F:	drivers/media/i2c/lm*
-+F:	Documentation/driver-api/media/camera-sensor.rst
-+F:	Documentation/driver-api/media/tx-rx.rst
+-static int ipu_bridge_parse_ssdb(struct acpi_device *adev,
+-				 struct ipu_sensor *sensor)
++int ipu_bridge_parse_ssdb(struct acpi_device *adev, struct ipu_sensor *sensor)
+ {
+ 	struct ipu_sensor_ssdb ssdb = {};
+ 	int ret;
+@@ -179,6 +178,7 @@ static int ipu_bridge_parse_ssdb(struct acpi_device *adev,
  
- VF610 NAND DRIVER
- M:	Stefan Agner <stefan@agner.ch>
+ 	return 0;
+ }
++EXPORT_SYMBOL_NS_GPL(ipu_bridge_parse_ssdb, INTEL_IPU_BRIDGE);
+ 
+ static void ipu_bridge_create_fwnode_properties(
+ 	struct ipu_sensor *sensor,
+@@ -343,7 +343,7 @@ static int ipu_bridge_connect_sensor(const struct ipu_sensor_config *cfg,
+ 
+ 		sensor = &bridge->sensors[bridge->n_sensors];
+ 
+-		ret = ipu_bridge_parse_ssdb(adev, sensor);
++		ret = bridge->parse_sensor_fwnode(adev, sensor);
+ 		if (ret)
+ 			goto err_put_adev;
+ 
+@@ -441,7 +441,9 @@ static int ipu_bridge_sensors_are_ready(void)
+ 	return ready;
+ }
+ 
+-int ipu_bridge_init(struct device *dev)
++int ipu_bridge_init(struct device *dev,
++		    int (*parse_sensor_fwnode)(struct acpi_device *adev,
++					       struct ipu_sensor *sensor))
+ {
+ 	struct fwnode_handle *fwnode;
+ 	struct ipu_bridge *bridge;
+@@ -459,6 +461,7 @@ int ipu_bridge_init(struct device *dev)
+ 		sizeof(bridge->ipu_node_name));
+ 	bridge->ipu_hid_node.name = bridge->ipu_node_name;
+ 	bridge->dev = dev;
++	bridge->parse_sensor_fwnode = parse_sensor_fwnode;
+ 
+ 	ret = software_node_register(&bridge->ipu_hid_node);
+ 	if (ret < 0) {
+diff --git a/drivers/media/pci/intel/ipu-bridge.h b/drivers/media/pci/intel/ipu-bridge.h
+index a8b89c4b95bc..969d8d7d6b93 100644
+--- a/drivers/media/pci/intel/ipu-bridge.h
++++ b/drivers/media/pci/intel/ipu-bridge.h
+@@ -142,6 +142,8 @@ struct ipu_sensor {
+ 
+ struct ipu_bridge {
+ 	struct device *dev;
++	int (*parse_sensor_fwnode)(struct acpi_device *adev,
++				   struct ipu_sensor *sensor);
+ 	char ipu_node_name[ACPI_ID_LEN];
+ 	struct software_node ipu_hid_node;
+ 	u32 data_lanes[4];
+@@ -150,9 +152,13 @@ struct ipu_bridge {
+ };
+ 
+ #if IS_ENABLED(CONFIG_IPU_BRIDGE)
+-int ipu_bridge_init(struct device *dev);
++int ipu_bridge_init(struct device *dev,
++		    int (*parse_sensor_fwnode)(struct acpi_device *adev,
++					       struct ipu_sensor *sensor));
++int ipu_bridge_parse_ssdb(struct acpi_device *adev, struct ipu_sensor *sensor);
+ #else
+-static inline int ipu_bridge_init(struct device *dev) { return 0; }
++/* Use a define to avoid the parse_sensor_fwnode arg getting evaluated */
++#define ipu_bridge_init(dev, parse_sensor_fwnode)	(0)
+ #endif
+ 
+ #endif
+diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
+index 4068fa0a5ecf..26c4c1375990 100644
+--- a/drivers/media/pci/intel/ipu3/ipu3-cio2.c
++++ b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
+@@ -1725,7 +1725,7 @@ static int cio2_pci_probe(struct pci_dev *pci_dev,
+ 			return -EINVAL;
+ 		}
+ 
+-		r = ipu_bridge_init(dev);
++		r = ipu_bridge_init(dev, ipu_bridge_parse_ssdb);
+ 		if (r)
+ 			return r;
+ 	}
 -- 
-2.39.2
+2.41.0
 
