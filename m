@@ -2,142 +2,75 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44824EB64D7
-	for <linux-media@archiver.kernel.org>; Fri, 30 Jun 2023 11:08:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7948DEB64DA
+	for <linux-media@archiver.kernel.org>; Fri, 30 Jun 2023 11:13:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232792AbjF3LIz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 30 Jun 2023 07:08:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53214 "EHLO
+        id S232897AbjF3LNz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Jun 2023 07:13:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232783AbjF3LIy (ORCPT
+        with ESMTP id S232930AbjF3LNo (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 30 Jun 2023 07:08:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F963A8F
-        for <linux-media@vger.kernel.org>; Fri, 30 Jun 2023 04:07:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688123277;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uBIo7d9P1njIbz4EMxBV8T+jr+Ihzq6cl5EOJBHAZlI=;
-        b=Qh+3XWkAdimpZV8prqTNrDTbWSPZtp8M/FQF8W0E478hplkIUDuNdrOiV1cAOKjjNp0RBO
-        aKrxQZNABhgaWgrZYR+dKkdX5thaIDjdLfKYiFAflGYJg9J3DYIP10JMNqRuR017vhMPsx
-        IzfzX4aluLzLMn04PEKwt5l15fhSBgw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-303-5ecS9kMnNlGkhHDdWcfQ4A-1; Fri, 30 Jun 2023 07:07:53 -0400
-X-MC-Unique: 5ecS9kMnNlGkhHDdWcfQ4A-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DC376805951;
-        Fri, 30 Jun 2023 11:07:37 +0000 (UTC)
-Received: from shalem.redhat.com (unknown [10.39.193.184])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 75B4C492B02;
-        Fri, 30 Jun 2023 11:07:36 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Daniel Scally <dan.scally@ideasonboard.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andy Shevchenko <andy@kernel.org>, Kate Hsuan <hpa@redhat.com>,
-        Hao Yao <hao.yao@intel.com>, Bingbu Cao <bingbu.cao@intel.com>,
-        linux-media@vger.kernel.org
-Subject: [PATCH v2 15/15] [RFC] media: dw9719: Drop hack to enable "vsio" regulator
-Date:   Fri, 30 Jun 2023 13:06:43 +0200
-Message-ID: <20230630110643.209761-16-hdegoede@redhat.com>
-In-Reply-To: <20230630110643.209761-1-hdegoede@redhat.com>
-References: <20230630110643.209761-1-hdegoede@redhat.com>
+        Fri, 30 Jun 2023 07:13:44 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1482F5
+        for <linux-media@vger.kernel.org>; Fri, 30 Jun 2023 04:13:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688123606; x=1719659606;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=yrZdsfD+3i5RORdLzVYieZYeMppJ/BkS9ybYxIKCa3o=;
+  b=Tfdfhr82mETWa9IouuIqy6bMxERwmaSiC64IzjPBtDJG03TkRFnJmd/6
+   9dTukLz44+99X728h3jftLm8y+Nt/JlkrxHqmPoz5v/z9cO++QAgXqxN0
+   dOkfDX/cU3MHLckaJe39LzlGfoJWx1GhC0hvVlfFo0shkJAqlZNbKO5EG
+   Oe+ra2X311lfLPiE2EvN0/DbT23rjErahnrO7komaPJjGu9tMMT8a3Fe6
+   AwTvqXNfuablapnbJUl9hkUXHkRMksfcEdkziXne6in1xPXw90EHK5dC/
+   ln69g/GmlKr57+GaouZGbeLV9FR7isLEYu/DhjjDHlQFoX20BSTSPXbUd
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="448748055"
+X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
+   d="scan'208";a="448748055"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 04:13:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="891727909"
+X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
+   d="scan'208";a="891727909"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 04:13:25 -0700
+Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id ECEC811FB8E;
+        Fri, 30 Jun 2023 14:03:04 +0300 (EEST)
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     mchehab@kernel.org
+Subject: [PATCH 0/2] More MAINTAINERS entries
+Date:   Fri, 30 Jun 2023 14:03:02 +0300
+Message-Id: <20230630110304.98942-1-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Drop the hack where the driver is getting + enabling a "vsio" regulator
-even though the dw9719 does not have a vsio pin / power-plane at all.
+Hi folks,
 
-Now that drivers/media/pci/intel/ipu-bridge.c adds a device-link
-making the VCM a consumer of the sensor this hack is no longer necessary.
+These two patches add two more maintainers entries in anticipation of more
+contributors with commit access.
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
-Note to reviewers, the dw9719 driver is not upstream yet (I plan to
-resubmit it soon with this squashed in). This patch is only included
-in this patch-set to illustrate how the VCM -> sensor device-link
-avoids the need for hacks like this.
----
- drivers/media/i2c/dw9719.c | 27 +++++++--------------------
- 1 file changed, 7 insertions(+), 20 deletions(-)
+Mauro: would you prefer to be added to the MC entry? You're already listed
+as the subsystem maintainer so you'll be included that way in any case.
 
-diff --git a/drivers/media/i2c/dw9719.c b/drivers/media/i2c/dw9719.c
-index 94b76b4b2463..5fe01a125c1a 100644
---- a/drivers/media/i2c/dw9719.c
-+++ b/drivers/media/i2c/dw9719.c
-@@ -35,14 +35,12 @@
- #define DW9719_DEFAULT_VCM_FREQ		0x60
- #define DW9719_ENABLE_RINGING		0x02
- 
--#define NUM_REGULATORS			2
--
- #define to_dw9719_device(x) container_of(x, struct dw9719_device, sd)
- 
- struct dw9719_device {
- 	struct device *dev;
- 	struct i2c_client *client;
--	struct regulator_bulk_data regulators[NUM_REGULATORS];
-+	struct regulator *regulator;
- 	struct v4l2_subdev sd;
- 
- 	struct dw9719_v4l2_ctrls {
-@@ -131,14 +129,14 @@ static int dw9719_detect(struct dw9719_device *dw9719)
- 
- static int dw9719_power_down(struct dw9719_device *dw9719)
- {
--	return regulator_bulk_disable(NUM_REGULATORS, dw9719->regulators);
-+	return regulator_disable(dw9719->regulator);
- }
- 
- static int dw9719_power_up(struct dw9719_device *dw9719)
- {
- 	int ret;
- 
--	ret = regulator_bulk_enable(NUM_REGULATORS, dw9719->regulators);
-+	ret = regulator_enable(dw9719->regulator);
- 	if (ret)
- 		return ret;
- 
-@@ -315,21 +313,10 @@ static int dw9719_probe(struct i2c_client *client)
- 	dw9719->client = client;
- 	dw9719->dev = &client->dev;
- 
--	dw9719->regulators[0].supply = "vdd";
--	/*
--	 * The DW9719 has only the 1 VDD voltage input, but some PMICs such as
--	 * the TPS68470 PMIC have I2C passthrough capability, to disconnect the
--	 * sensor's I2C pins from the I2C bus when the sensors VSIO (Sensor-IO)
--	 * is off, because some sensors then short these pins to ground;
--	 * and the DW9719 might sit behind this passthrough, this it needs to
--	 * enable VSIO as that will also enable the I2C passthrough.
--	 */
--	dw9719->regulators[1].supply = "vsio";
--
--	ret = devm_regulator_bulk_get(&client->dev, NUM_REGULATORS,
--				      dw9719->regulators);
--	if (ret)
--		return dev_err_probe(&client->dev, ret, "getting regulators\n");
-+	dw9719->regulator = devm_regulator_get(&client->dev, "vdd");
-+	if (IS_ERR(dw9719->regulator))
-+		return dev_err_probe(&client->dev, PTR_ERR(dw9719->regulator),
-+				     "getting regulator\n");
- 
- 	v4l2_i2c_subdev_init(&dw9719->sd, client, &dw9719_ops);
- 	dw9719->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+Sakari Ailus (2):
+  media: MAINTAINERS: Add entry for V4L2 async and fwnode frameworks
+  media: MAINTAINERS: Add documentation under V4L2 camera sensors
+
+ MAINTAINERS | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
+
 -- 
-2.41.0
+2.39.2
+
 
