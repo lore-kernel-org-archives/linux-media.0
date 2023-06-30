@@ -2,54 +2,54 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C97DBEB64DC
-	for <linux-media@archiver.kernel.org>; Fri, 30 Jun 2023 14:40:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EB6FC001B3
+	for <linux-media@archiver.kernel.org>; Fri, 30 Jun 2023 14:40:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232691AbjF3Okd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 30 Jun 2023 10:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43394 "EHLO
+        id S232704AbjF3Okf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Jun 2023 10:40:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232661AbjF3Ok3 (ORCPT
+        with ESMTP id S232671AbjF3Okb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 30 Jun 2023 10:40:29 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4DE3AA4
-        for <linux-media@vger.kernel.org>; Fri, 30 Jun 2023 07:40:27 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4fa48b5dc2eso3292460e87.1
-        for <linux-media@vger.kernel.org>; Fri, 30 Jun 2023 07:40:27 -0700 (PDT)
+        Fri, 30 Jun 2023 10:40:31 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B00D43AB9
+        for <linux-media@vger.kernel.org>; Fri, 30 Jun 2023 07:40:29 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4fb761efa7aso3131077e87.0
+        for <linux-media@vger.kernel.org>; Fri, 30 Jun 2023 07:40:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google; t=1688136025; x=1690728025;
+        d=semihalf.com; s=google; t=1688136028; x=1690728028;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8v3MtXxbIi9CkWhq0qdzoruMHr5eKjgstWlIhBmdOPg=;
-        b=Y+fs485ZRswLUAJU3sgZvDsMrlqFIlnbx4zfJCKttLjFDY1pqMFhpKFJwU4dqh1JRl
-         QlfmSEN8KRL5GJyLcWBxyd1mD1Cy96k2RA7AnPoY0piwC6kSzZoJmgAR40gLSjy6z6DA
-         k/rQgeY6DrBwu+QFx/NywdREEMUSeGQFqxf6tj3aJyguvyt9yqbtCa0TGTLQ+fz1nXk9
-         IMpDB/lRypHBpk6iPpyrXzA/N3DGovO9ov2c0K7DEl9u4eJemZxaIfDorp9dYS23U5iU
-         TZmRqwf61HRXjqc4T5o3cPFVQRQ8Y7X3gvMyhRE7/TO7ut+VnhQEeHrN/FHrK1Cxx8Hz
-         lOsw==
+        bh=emMdYQhKSBWYyb26wPZv/mWPp2WHz1S9ZDQ86I2IF/0=;
+        b=V72U2cWWwPSteJrPZUnc6PeVhllY9a4cS333XTdnQibxRO1sFyOZo2HNrnolEG+lzm
+         JZ/aiIm0w31r6uG37XoLdwQQEeQmRSM8QCrmPSOw+VmpDRHE8AqrAlQ5laqN/Q60aZXq
+         4Cp2NaeAH83ZHq+qUJv21ZDFhbhaJb6wtiUWm7ByU+KB/IkNT3NDwH5FoTkQUxFMB1y/
+         B6eFcJmKqhHllR47OpQZ6GaWCBcNbxaD2/95ElymDhKerOgMeKwcefyAk6i8hVW9x8VC
+         d9zb7WRETb2sOB8UzKQiydCKNb2qWBgm839uojgUO9K1pDq4P949qVu1nWTAwc+cHYxk
+         AgCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688136025; x=1690728025;
+        d=1e100.net; s=20221208; t=1688136028; x=1690728028;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8v3MtXxbIi9CkWhq0qdzoruMHr5eKjgstWlIhBmdOPg=;
-        b=R5TwUpN0xr57ZwMPuCSxPbVoDuWf/vFJSG4PzsQv4l090cfYWM7EZJz4LW4DcDsGo5
-         CyCgss1lTVzNO/nvhE9AR432X/VxZhIEailVS6bdBBjUWSa3k1Eb8tFQGivMJk+125Ng
-         xGKTnQg/8VYmcbTRaxGgocGAjHuV6OwQNchQ/TenahZoqzmHjWceNI1ssjJ58xDyfGre
-         xEkhJSQGhlRXb3IO0eBCZTnr3gSPOLTySlHimhpp0HLrSJ9fyMDfU7Ode3p8O6dquDb+
-         69ULSRjnFju/71yosY8pD8687+5ah0SpaEA1Biu4uRPHi0UsdJoJhT/1Wk6je8u3HWMc
-         MPjQ==
-X-Gm-Message-State: ABy/qLYzTZoTNh9jsZfsTyWWIEyyKnlDU6VaQJrLST0NtqIVzvbCiMJA
-        xuCYJRY9IHW0T5M9jeKDggjtTg==
-X-Google-Smtp-Source: APBJJlE4jASW+KjZ+d/WKrIUL9kQA541uUhAf+TfgyMfdxiroxUgVP9ET45dNgRcafBouHYVUK7Y0w==
-X-Received: by 2002:a05:6512:ea0:b0:4f8:6882:ae9d with SMTP id bi32-20020a0565120ea000b004f86882ae9dmr2984390lfb.69.1688136025539;
-        Fri, 30 Jun 2023 07:40:25 -0700 (PDT)
+        bh=emMdYQhKSBWYyb26wPZv/mWPp2WHz1S9ZDQ86I2IF/0=;
+        b=ey87WIeVvzZMWTAr4HTUFfg4NjgsWFEI5p3JBKJ3g3+yArECw9E7pzm1xCELk3oBYJ
+         9LiQB6ax6QbmI3/M1we2R2NpLwWvLRK3zNqzLH0kc5yr1DaIYIMUwiHU2sKjv1FgsPBD
+         3mvvBDYml+ljp5nf0F6c1CdNcfrgMw4NkME4v7zFbw2tDZqIQcuYHJQzGNgsjQSwgRp6
+         RIb4Jqkr8gH4fahgf+EHU/XshxJi3mwmxlg6KMi6RjK5bkixsIgCebscxurJOxF7ckYv
+         GANkXhVw60mQnQcMURoz0RvtHfXDIFK7qu7kE/9Hev+zKq9iNLMQ6oUSsj91o7QtcC+T
+         T75Q==
+X-Gm-Message-State: ABy/qLbJkk99S+CW4jhkMSV0YgXKn/CFdtkubQlDr7hB0sr3BlLkyeft
+        xjc59COpNWK0qz509qNArxwY1g==
+X-Google-Smtp-Source: APBJJlEsGNJcNi+LYRa4Ynk0xbdeGY61seaeeiiO3TENmq3RME0O+S3nvKv2xCdP4363H7InYSodTw==
+X-Received: by 2002:a05:6512:ac3:b0:4f8:70d8:28f8 with SMTP id n3-20020a0565120ac300b004f870d828f8mr3092132lfu.55.1688136028043;
+        Fri, 30 Jun 2023 07:40:28 -0700 (PDT)
 Received: from panikiel.roam.corp.google.com (staticline-31-182-201-26.toya.net.pl. [31.182.201.26])
-        by smtp.gmail.com with ESMTPSA id b7-20020a056512024700b004f85d80ca64sm2750402lfo.221.2023.06.30.07.40.24
+        by smtp.gmail.com with ESMTPSA id b7-20020a056512024700b004f85d80ca64sm2750402lfo.221.2023.06.30.07.40.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jun 2023 07:40:25 -0700 (PDT)
+        Fri, 30 Jun 2023 07:40:27 -0700 (PDT)
 From:   =?UTF-8?q?Pawe=C5=82=20Anikiel?= <pan@semihalf.com>
 To:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org
@@ -58,9 +58,9 @@ Cc:     dinguyen@kernel.org, robh+dt@kernel.org,
         mchehab@kernel.org, upstream@semihalf.com, amstan@chromium.org,
         ribalda@chromium.org,
         =?UTF-8?q?Pawe=C5=82=20Anikiel?= <pan@semihalf.com>
-Subject: [RFC PATCH 1/3] media: Add 10, 12, and 16 bit RGB formats
-Date:   Fri, 30 Jun 2023 16:40:04 +0200
-Message-ID: <20230630144006.1513270-2-pan@semihalf.com>
+Subject: [RFC PATCH 3/3] ARM: dts: Add Chameleon v3 video node
+Date:   Fri, 30 Jun 2023 16:40:06 +0200
+Message-ID: <20230630144006.1513270-4-pan@semihalf.com>
 X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
 In-Reply-To: <20230630144006.1513270-1-pan@semihalf.com>
 References: <20230630144006.1513270-1-pan@semihalf.com>
@@ -71,46 +71,78 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add the RGB30U, RGB30L, RGB36U, RGB36L, and RGB48 pixel formats.
+Add node for the video system device.
 
 Signed-off-by: Paweł Anikiel <pan@semihalf.com>
 ---
- drivers/media/v4l2-core/v4l2-ioctl.c | 5 +++++
- include/uapi/linux/videodev2.h       | 5 +++++
- 2 files changed, 10 insertions(+)
+ .../socfpga/socfpga_arria10_chameleonv3.dts   | 54 +++++++++++++++++++
+ 1 file changed, 54 insertions(+)
 
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index a858acea6547..5ee616704225 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -1300,6 +1300,11 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
- 	case V4L2_PIX_FMT_ARGB2101010:	descr = "32-bit ARGB 2-10-10-10"; break;
- 	case V4L2_PIX_FMT_BGR48_12:	descr = "12-bit Depth BGR"; break;
- 	case V4L2_PIX_FMT_ABGR64_12:	descr = "12-bit Depth BGRA"; break;
-+	case V4L2_PIX_FMT_RGB30U:	descr = "30-bit RXGXBX-10-10-10"; break;
-+	case V4L2_PIX_FMT_RGB30L:	descr = "30-bit XRXGXB-10-10-10"; break;
-+	case V4L2_PIX_FMT_RGB36U:	descr = "36-bit RXGXBX-12-12-12"; break;
-+	case V4L2_PIX_FMT_RGB36L:	descr = "36-bit XRXGXB-12-12-12"; break;
-+	case V4L2_PIX_FMT_RGB48:	descr = "48-bit RGB-16-16-16"; break;
- 	case V4L2_PIX_FMT_GREY:		descr = "8-bit Greyscale"; break;
- 	case V4L2_PIX_FMT_Y4:		descr = "4-bit Greyscale"; break;
- 	case V4L2_PIX_FMT_Y6:		descr = "6-bit Greyscale"; break;
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index aee75eb9e686..3568819eabeb 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -583,6 +583,11 @@ struct v4l2_pix_format {
- /* RGB formats (6 or 8 bytes per pixel) */
- #define V4L2_PIX_FMT_BGR48_12    v4l2_fourcc('B', '3', '1', '2') /* 48  BGR 12-bit per component */
- #define V4L2_PIX_FMT_ABGR64_12   v4l2_fourcc('B', '4', '1', '2') /* 64  BGRA 12-bit per component */
-+#define V4L2_PIX_FMT_RGB30U  v4l2_fourcc('R', '3', '0', 'U') /* 30  RXGXBX-10-10-10 */
-+#define V4L2_PIX_FMT_RGB30L  v4l2_fourcc('R', '3', '0', 'L') /* 30  XRXGXB-10-10-10 */
-+#define V4L2_PIX_FMT_RGB36U  v4l2_fourcc('R', '3', '6', 'U') /* 36  RXGXBX-12-12-12 */
-+#define V4L2_PIX_FMT_RGB36L  v4l2_fourcc('R', '3', '6', 'L') /* 36  XRXGXB-12-12-12 */
-+#define V4L2_PIX_FMT_RGB48   v4l2_fourcc('R', 'G', 'B', '6') /* 48  RGB-16-16-16    */
+diff --git a/arch/arm/boot/dts/intel/socfpga/socfpga_arria10_chameleonv3.dts b/arch/arm/boot/dts/intel/socfpga/socfpga_arria10_chameleonv3.dts
+index 422d00cd4c74..5e66363d4ab5 100644
+--- a/arch/arm/boot/dts/intel/socfpga/socfpga_arria10_chameleonv3.dts
++++ b/arch/arm/boot/dts/intel/socfpga/socfpga_arria10_chameleonv3.dts
+@@ -10,6 +10,60 @@ / {
+ 	compatible = "google,chameleon-v3", "enclustra,mercury-aa1",
+ 		     "altr,socfpga-arria10", "altr,socfpga";
  
- /* Grey formats */
- #define V4L2_PIX_FMT_GREY    v4l2_fourcc('G', 'R', 'E', 'Y') /*  8  Greyscale     */
++	soc {
++		video@c0060500 {
++			compatible = "google,chv3-video";
++			reg = <0xc0060500 0x100>,
++			      <0xc0060600 0x100>,
++			      <0xc0060700 0x100>,
++			      <0xc0060800 0x100>,
++			      <0xc0060900 0x100>,
++			      <0xc0060a00 0x100>,
++			      <0xc0062000 0x800>,
++			      <0xc0064000 0x800>,
++			      <0xc0060f20 0x10>,
++			      <0xc0060f30 0x10>,
++			      <0xc0060f40 0x10>,
++			      <0xc0060f50 0x10>,
++			      <0xc0060f60 0x10>,
++			      <0xc0060f70 0x10>,
++			      <0xc0060f80 0x10>,
++			      <0xc0060fe0 0x10>;
++			reg-names = "fb0",
++				"fb_mst1",
++				"fb_mst2",
++				"fb_mst3",
++				"fb_mst4",
++				"fb_sst",
++				"dp_mst",
++				"dp_sst",
++				"fb0_irq",
++				"fb_mst1_irq",
++				"fb_mst2_irq",
++				"fb_mst3_irq",
++				"fb_mst4_irq",
++				"fb_sst_irq",
++				"dp_mst_irq",
++				"dp_sst_irq";
++			interrupts = <0 19 IRQ_TYPE_LEVEL_HIGH>,
++				<0 22 IRQ_TYPE_LEVEL_HIGH>,
++				<0 23 IRQ_TYPE_LEVEL_HIGH>,
++				<0 24 IRQ_TYPE_LEVEL_HIGH>,
++				<0 25 IRQ_TYPE_LEVEL_HIGH>,
++				<0 26 IRQ_TYPE_LEVEL_HIGH>,
++				<0 27 IRQ_TYPE_LEVEL_HIGH>,
++				<0 33 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "fb0",
++				"fb_mst1",
++				"fb_mst2",
++				"fb_mst3",
++				"fb_mst4",
++				"fb_sst",
++				"dp_mst",
++				"dp_sst";
++		};
++	};
++
+ 	aliases {
+ 		serial0 = &uart0;
+ 		i2c0 = &i2c0;
 -- 
 2.41.0.255.g8b1d071c50-goog
 
