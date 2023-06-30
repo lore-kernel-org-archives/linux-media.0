@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F997EB64DA
-	for <linux-media@archiver.kernel.org>; Fri, 30 Jun 2023 11:08:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44824EB64D7
+	for <linux-media@archiver.kernel.org>; Fri, 30 Jun 2023 11:08:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232549AbjF3LIr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 30 Jun 2023 07:08:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52662 "EHLO
+        id S232792AbjF3LIz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Jun 2023 07:08:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232382AbjF3LIh (ORCPT
+        with ESMTP id S232783AbjF3LIy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 30 Jun 2023 07:08:37 -0400
+        Fri, 30 Jun 2023 07:08:54 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69412680
-        for <linux-media@vger.kernel.org>; Fri, 30 Jun 2023 04:07:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F963A8F
+        for <linux-media@vger.kernel.org>; Fri, 30 Jun 2023 04:07:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688123266;
+        s=mimecast20190719; t=1688123277;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=b6LUHSsZCffPHvjjOLnvJLVwI4i6Vp7XVLDMC3Rkl0Y=;
-        b=DblXEx3Xwm+vyqJhQuWmUS0Z2HaW6610Po4BqM05H/FO3450gwN/gcFbqb2LAEMbK00oN+
-        0orVpNqaDorO0V8Z8XPVwE3jqMvuktXRIDLuS2uiFaKIkZicxaJ72BiL8hzo80Ndwzw6nh
-        yrtMob4vdlkdG9SK3yIARQ/RssQUh9A=
-Received: from mimecast-mx02.redhat.com (66.187.233.88 [66.187.233.88]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-531-NO1XFYkRPeuHQ5XdLFQ-BA-1; Fri, 30 Jun 2023 07:06:55 -0400
-X-MC-Unique: NO1XFYkRPeuHQ5XdLFQ-BA-1
+        bh=uBIo7d9P1njIbz4EMxBV8T+jr+Ihzq6cl5EOJBHAZlI=;
+        b=Qh+3XWkAdimpZV8prqTNrDTbWSPZtp8M/FQF8W0E478hplkIUDuNdrOiV1cAOKjjNp0RBO
+        aKrxQZNABhgaWgrZYR+dKkdX5thaIDjdLfKYiFAflGYJg9J3DYIP10JMNqRuR017vhMPsx
+        IzfzX4aluLzLMn04PEKwt5l15fhSBgw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-303-5ecS9kMnNlGkhHDdWcfQ4A-1; Fri, 30 Jun 2023 07:07:53 -0400
+X-MC-Unique: 5ecS9kMnNlGkhHDdWcfQ4A-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0A32E894EC2;
-        Fri, 30 Jun 2023 11:06:50 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DC376805951;
+        Fri, 30 Jun 2023 11:07:37 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.193.184])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CB8A6492B02;
-        Fri, 30 Jun 2023 11:06:47 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 75B4C492B02;
+        Fri, 30 Jun 2023 11:07:36 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -47,9 +47,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Andy Shevchenko <andy@kernel.org>, Kate Hsuan <hpa@redhat.com>,
         Hao Yao <hao.yao@intel.com>, Bingbu Cao <bingbu.cao@intel.com>,
         linux-media@vger.kernel.org
-Subject: [PATCH v2 02/15] media: ipu-bridge: Do not use on stack memory for software_node.name field
-Date:   Fri, 30 Jun 2023 13:06:30 +0200
-Message-ID: <20230630110643.209761-3-hdegoede@redhat.com>
+Subject: [PATCH v2 15/15] [RFC] media: dw9719: Drop hack to enable "vsio" regulator
+Date:   Fri, 30 Jun 2023 13:06:43 +0200
+Message-ID: <20230630110643.209761-16-hdegoede@redhat.com>
 In-Reply-To: <20230630110643.209761-1-hdegoede@redhat.com>
 References: <20230630110643.209761-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -59,69 +59,85 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Commit 567f97bd381f ("media: ipu3-cio2: support multiple sensors and VCMs
-with same HID") introduced an on stack vcm_name and then uses this for
-the name field of the software_node struct used for the vcm.
+Drop the hack where the driver is getting + enabling a "vsio" regulator
+even though the dw9719 does not have a vsio pin / power-plane at all.
 
-But the software_node struct is much longer lived then the current
-stack-frame, so this is no good.
+Now that drivers/media/pci/intel/ipu-bridge.c adds a device-link
+making the VCM a consumer of the sensor this hack is no longer necessary.
 
-Instead extend the ipu_node_names struct with an extra field to store
-the vcm software_node name and use that.
-
-Note this also changes the length of the allocated buffer from
-ACPI_ID_LEN + 4 to 16. the name is filled with "<ipu_vcm_types[x]>-%u"
-where ipu_vcm_types[x] is not an ACPI_ID. The maximum length of
-the strings in the ipu_vcm_types[] array is 11 + 5 bytes for "-255\0"
-means 16 bytes are needed in the worst case scenario.
-
-Fixes: 567f97bd381f ("media: ipu3-cio2: support multiple sensors and VCMs with same HID")
-Cc: Bingbu Cao <bingbu.cao@intel.com>
-Reviewed-by: Andy Shevchenko <andy@kernel.org>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/media/pci/intel/ipu-bridge.c | 7 +++----
- drivers/media/pci/intel/ipu-bridge.h | 1 +
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Note to reviewers, the dw9719 driver is not upstream yet (I plan to
+resubmit it soon with this squashed in). This patch is only included
+in this patch-set to illustrate how the VCM -> sensor device-link
+avoids the need for hacks like this.
+---
+ drivers/media/i2c/dw9719.c | 27 +++++++--------------------
+ 1 file changed, 7 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/media/pci/intel/ipu-bridge.c b/drivers/media/pci/intel/ipu-bridge.c
-index f0927f80184d..ef6c6cb7b51b 100644
---- a/drivers/media/pci/intel/ipu-bridge.c
-+++ b/drivers/media/pci/intel/ipu-bridge.c
-@@ -220,7 +220,6 @@ static void ipu_bridge_create_connection_swnodes(struct ipu_bridge *bridge,
- 						 struct ipu_sensor *sensor)
+diff --git a/drivers/media/i2c/dw9719.c b/drivers/media/i2c/dw9719.c
+index 94b76b4b2463..5fe01a125c1a 100644
+--- a/drivers/media/i2c/dw9719.c
++++ b/drivers/media/i2c/dw9719.c
+@@ -35,14 +35,12 @@
+ #define DW9719_DEFAULT_VCM_FREQ		0x60
+ #define DW9719_ENABLE_RINGING		0x02
+ 
+-#define NUM_REGULATORS			2
+-
+ #define to_dw9719_device(x) container_of(x, struct dw9719_device, sd)
+ 
+ struct dw9719_device {
+ 	struct device *dev;
+ 	struct i2c_client *client;
+-	struct regulator_bulk_data regulators[NUM_REGULATORS];
++	struct regulator *regulator;
+ 	struct v4l2_subdev sd;
+ 
+ 	struct dw9719_v4l2_ctrls {
+@@ -131,14 +129,14 @@ static int dw9719_detect(struct dw9719_device *dw9719)
+ 
+ static int dw9719_power_down(struct dw9719_device *dw9719)
  {
- 	struct software_node *nodes = sensor->swnodes;
--	char vcm_name[ACPI_ID_LEN + 4];
+-	return regulator_bulk_disable(NUM_REGULATORS, dw9719->regulators);
++	return regulator_disable(dw9719->regulator);
+ }
  
- 	ipu_bridge_init_swnode_names(sensor);
+ static int dw9719_power_up(struct dw9719_device *dw9719)
+ {
+ 	int ret;
  
-@@ -240,10 +239,10 @@ static void ipu_bridge_create_connection_swnodes(struct ipu_bridge *bridge,
- 						sensor->ipu_properties);
- 	if (sensor->ssdb.vcmtype) {
- 		/* append ssdb.link to distinguish VCM nodes with same HID */
--		snprintf(vcm_name, sizeof(vcm_name), "%s-%u",
--			 ipu_vcm_types[sensor->ssdb.vcmtype - 1],
-+		snprintf(sensor->node_names.vcm, sizeof(sensor->node_names.vcm),
-+			 "%s-%u", ipu_vcm_types[sensor->ssdb.vcmtype - 1],
- 			 sensor->ssdb.link);
--		nodes[SWNODE_VCM] = NODE_VCM(vcm_name);
-+		nodes[SWNODE_VCM] = NODE_VCM(sensor->node_names.vcm);
- 	}
+-	ret = regulator_bulk_enable(NUM_REGULATORS, dw9719->regulators);
++	ret = regulator_enable(dw9719->regulator);
+ 	if (ret)
+ 		return ret;
  
- 	ipu_bridge_init_swnode_group(sensor);
-diff --git a/drivers/media/pci/intel/ipu-bridge.h b/drivers/media/pci/intel/ipu-bridge.h
-index 8cb733c03e2f..6cce712a0f34 100644
---- a/drivers/media/pci/intel/ipu-bridge.h
-+++ b/drivers/media/pci/intel/ipu-bridge.h
-@@ -103,6 +103,7 @@ struct ipu_node_names {
- 	char port[7];
- 	char endpoint[11];
- 	char remote_port[7];
-+	char vcm[16];
- };
+@@ -315,21 +313,10 @@ static int dw9719_probe(struct i2c_client *client)
+ 	dw9719->client = client;
+ 	dw9719->dev = &client->dev;
  
- struct ipu_sensor_config {
+-	dw9719->regulators[0].supply = "vdd";
+-	/*
+-	 * The DW9719 has only the 1 VDD voltage input, but some PMICs such as
+-	 * the TPS68470 PMIC have I2C passthrough capability, to disconnect the
+-	 * sensor's I2C pins from the I2C bus when the sensors VSIO (Sensor-IO)
+-	 * is off, because some sensors then short these pins to ground;
+-	 * and the DW9719 might sit behind this passthrough, this it needs to
+-	 * enable VSIO as that will also enable the I2C passthrough.
+-	 */
+-	dw9719->regulators[1].supply = "vsio";
+-
+-	ret = devm_regulator_bulk_get(&client->dev, NUM_REGULATORS,
+-				      dw9719->regulators);
+-	if (ret)
+-		return dev_err_probe(&client->dev, ret, "getting regulators\n");
++	dw9719->regulator = devm_regulator_get(&client->dev, "vdd");
++	if (IS_ERR(dw9719->regulator))
++		return dev_err_probe(&client->dev, PTR_ERR(dw9719->regulator),
++				     "getting regulator\n");
+ 
+ 	v4l2_i2c_subdev_init(&dw9719->sd, client, &dw9719_ops);
+ 	dw9719->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
 -- 
 2.41.0
 
