@@ -2,169 +2,113 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 63A38EB64DA
-	for <linux-media@archiver.kernel.org>; Fri, 30 Jun 2023 11:21:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0699EB64D7
+	for <linux-media@archiver.kernel.org>; Fri, 30 Jun 2023 11:22:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230455AbjF3LVz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 30 Jun 2023 07:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
+        id S232192AbjF3LWk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Jun 2023 07:22:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232850AbjF3LVx (ORCPT
+        with ESMTP id S229968AbjF3LWj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 30 Jun 2023 07:21:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E008F5
-        for <linux-media@vger.kernel.org>; Fri, 30 Jun 2023 04:21:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688124067;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9DYvV0OvjESZXnynIRWO/dWm7ZebngYcslB5yGYJSFI=;
-        b=DGHpjWjjVKX/nkJFpSYqtoRPEC8hBvOX6+iEkpI/BB6MUptLTsxpvYOLUprNZ5KtOnZ2/b
-        pWEG/p9EK+dgf5ruXvegukmkT4jTGfE9njYSN4sys0UYKbUuwwIpGpnpJWc8XFx3NqgZmx
-        Jg+Dx4KJ/TNQKEtccZvVL2veOKfsLfk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-112-ymcK-mTIO3yy1SiS00u7ug-1; Fri, 30 Jun 2023 07:21:02 -0400
-X-MC-Unique: ymcK-mTIO3yy1SiS00u7ug-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 30 Jun 2023 07:22:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3A4C0;
+        Fri, 30 Jun 2023 04:22:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E5CAF1044597;
-        Fri, 30 Jun 2023 11:07:20 +0000 (UTC)
-Received: from shalem.redhat.com (unknown [10.39.193.184])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3AEB6492B02;
-        Fri, 30 Jun 2023 11:07:19 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Daniel Scally <dan.scally@ideasonboard.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andy Shevchenko <andy@kernel.org>, Kate Hsuan <hpa@redhat.com>,
-        Hao Yao <hao.yao@intel.com>, Bingbu Cao <bingbu.cao@intel.com>,
-        linux-media@vger.kernel.org
-Subject: [PATCH v2 10/15] media: ipu-bridge: Add a parse_sensor_fwnode callback to ipu_bridge_init()
-Date:   Fri, 30 Jun 2023 13:06:38 +0200
-Message-ID: <20230630110643.209761-11-hdegoede@redhat.com>
-In-Reply-To: <20230630110643.209761-1-hdegoede@redhat.com>
-References: <20230630110643.209761-1-hdegoede@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BB276168C;
+        Fri, 30 Jun 2023 11:22:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DB8EC433C8;
+        Fri, 30 Jun 2023 11:22:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688124157;
+        bh=m5STNqiJvAYLI/NlBN13tyDYzsXURBtP7i6n5935fIk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KXTFKFInaQsuvChh3L6rrCqd0dYf533iVP+lqfxOAV81gg7IkRu5vnZorwc0vRkEg
+         hj2Upkk5KxFMZZaqy76KLCKfuTNscamHnRnJazxR3Iu8S5gWTfLzkSrdWaESpxpDn5
+         J6H4srZ7wmkDFYYIOlLO9Sb9fFeJUs/DPyvaX/wYCdvN13ey8dx+Cdb+20LqmoQNC1
+         U8O27vgeTbkf0FBqDl3ofjzRXRtVURxtXeM1rigC+rGJT/WaqLaN9g5Ws2uXWzAqUU
+         Njnng51YdRI3zBs/f59pD+fxUaYpRZdiv8H8jSaRWvErxs+XcC+MV4O2z+UfZ7/Qqu
+         ocZUOmMvxz1EA==
+Date:   Fri, 30 Jun 2023 12:22:31 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Shengjiu Wang <shengjiu.wang@gmail.com>
+Cc:     Shengjiu Wang <shengjiu.wang@nxp.com>, tfiga@chromium.org,
+        m.szyprowski@samsung.com, mchehab@kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xiubo.Lee@gmail.com, festevam@gmail.com, nicoleotsuka@gmail.com,
+        lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 4/6] ASoC: fsl_asrc: Add memory to memory driver
+Message-ID: <f234b307-9ee6-489d-af8f-46cdc966a6cb@sirena.org.uk>
+References: <1688002673-28493-1-git-send-email-shengjiu.wang@nxp.com>
+ <1688002673-28493-5-git-send-email-shengjiu.wang@nxp.com>
+ <f6598cb0-6773-4475-85e1-5dfacaa16de3@sirena.org.uk>
+ <CAA+D8ANbMYr9ATSfWnbq69ECHOPNTiOBc7QACEeHomCC+rTHng@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ZYyaaohwRe2QLoL2"
+Content-Disposition: inline
+In-Reply-To: <CAA+D8ANbMYr9ATSfWnbq69ECHOPNTiOBc7QACEeHomCC+rTHng@mail.gmail.com>
+X-Cookie: Old mail has arrived.
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a parse_sensor_fwnode callback to ipu_bridge_init(), so that
-ipu_bridge_init() can be used with other sensor fwnode parse functions
-then just ipu_bridge_parse_ssdb().
 
-This will allow the ipu3-bridge code to also be used by the atomisp
-driver.
+--ZYyaaohwRe2QLoL2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/media/pci/intel/ipu-bridge.c     | 11 +++++++----
- drivers/media/pci/intel/ipu-bridge.h     | 10 ++++++++--
- drivers/media/pci/intel/ipu3/ipu3-cio2.c |  2 +-
- 3 files changed, 16 insertions(+), 7 deletions(-)
+On Fri, Jun 30, 2023 at 11:37:29AM +0800, Shengjiu Wang wrote:
+> On Thu, Jun 29, 2023 at 7:39=E2=80=AFPM Mark Brown <broonie@kernel.org> w=
+rote:
+> > On Thu, Jun 29, 2023 at 09:37:51AM +0800, Shengjiu Wang wrote:
 
-diff --git a/drivers/media/pci/intel/ipu-bridge.c b/drivers/media/pci/intel/ipu-bridge.c
-index 891dc0b7c960..d60992fbdbeb 100644
---- a/drivers/media/pci/intel/ipu-bridge.c
-+++ b/drivers/media/pci/intel/ipu-bridge.c
-@@ -148,8 +148,7 @@ static enum v4l2_fwnode_orientation ipu_bridge_parse_orientation(struct acpi_dev
- 	return orientation;
- }
- 
--static int ipu_bridge_parse_ssdb(struct acpi_device *adev,
--				 struct ipu_sensor *sensor)
-+int ipu_bridge_parse_ssdb(struct acpi_device *adev, struct ipu_sensor *sensor)
- {
- 	struct ipu_sensor_ssdb ssdb = {};
- 	int ret;
-@@ -179,6 +178,7 @@ static int ipu_bridge_parse_ssdb(struct acpi_device *adev,
- 
- 	return 0;
- }
-+EXPORT_SYMBOL_NS_GPL(ipu_bridge_parse_ssdb, INTEL_IPU_BRIDGE);
- 
- static void ipu_bridge_create_fwnode_properties(
- 	struct ipu_sensor *sensor,
-@@ -343,7 +343,7 @@ static int ipu_bridge_connect_sensor(const struct ipu_sensor_config *cfg,
- 
- 		sensor = &bridge->sensors[bridge->n_sensors];
- 
--		ret = ipu_bridge_parse_ssdb(adev, sensor);
-+		ret = bridge->parse_sensor_fwnode(adev, sensor);
- 		if (ret)
- 			goto err_put_adev;
- 
-@@ -441,7 +441,9 @@ static int ipu_bridge_sensors_are_ready(void)
- 	return ready;
- }
- 
--int ipu_bridge_init(struct device *dev)
-+int ipu_bridge_init(struct device *dev,
-+		    int (*parse_sensor_fwnode)(struct acpi_device *adev,
-+					       struct ipu_sensor *sensor))
- {
- 	struct fwnode_handle *fwnode;
- 	struct ipu_bridge *bridge;
-@@ -459,6 +461,7 @@ int ipu_bridge_init(struct device *dev)
- 		sizeof(bridge->ipu_node_name));
- 	bridge->ipu_hid_node.name = bridge->ipu_node_name;
- 	bridge->dev = dev;
-+	bridge->parse_sensor_fwnode = parse_sensor_fwnode;
- 
- 	ret = software_node_register(&bridge->ipu_hid_node);
- 	if (ret < 0) {
-diff --git a/drivers/media/pci/intel/ipu-bridge.h b/drivers/media/pci/intel/ipu-bridge.h
-index a8b89c4b95bc..969d8d7d6b93 100644
---- a/drivers/media/pci/intel/ipu-bridge.h
-+++ b/drivers/media/pci/intel/ipu-bridge.h
-@@ -142,6 +142,8 @@ struct ipu_sensor {
- 
- struct ipu_bridge {
- 	struct device *dev;
-+	int (*parse_sensor_fwnode)(struct acpi_device *adev,
-+				   struct ipu_sensor *sensor);
- 	char ipu_node_name[ACPI_ID_LEN];
- 	struct software_node ipu_hid_node;
- 	u32 data_lanes[4];
-@@ -150,9 +152,13 @@ struct ipu_bridge {
- };
- 
- #if IS_ENABLED(CONFIG_IPU_BRIDGE)
--int ipu_bridge_init(struct device *dev);
-+int ipu_bridge_init(struct device *dev,
-+		    int (*parse_sensor_fwnode)(struct acpi_device *adev,
-+					       struct ipu_sensor *sensor));
-+int ipu_bridge_parse_ssdb(struct acpi_device *adev, struct ipu_sensor *sensor);
- #else
--static inline int ipu_bridge_init(struct device *dev) { return 0; }
-+/* Use a define to avoid the parse_sensor_fwnode arg getting evaluated */
-+#define ipu_bridge_init(dev, parse_sensor_fwnode)	(0)
- #endif
- 
- #endif
-diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-index 4068fa0a5ecf..26c4c1375990 100644
---- a/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-+++ b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-@@ -1725,7 +1725,7 @@ static int cio2_pci_probe(struct pci_dev *pci_dev,
- 			return -EINVAL;
- 		}
- 
--		r = ipu_bridge_init(dev);
-+		r = ipu_bridge_init(dev, ipu_bridge_parse_ssdb);
- 		if (r)
- 			return r;
- 	}
--- 
-2.41.0
+> > > Implement the ASRC memory to memory function using
+> > > the v4l2 framework, user can use this function with
+> > > v4l2 ioctl interface.
 
+> > This feels like the bit where we interface v4l to ASoC should be a
+> > separate library, there shouldn't be anything device specific about
+> > getting an audio stream into a block of memory.  I'm thinking something
+> > like the way we handle dmaengine here.
+
+> > I've not dug into the code yet though.
+
+> Users may want to get the ASRC output in the user space, then
+> do mixing with other streams before sending to ALSA.
+
+> As there is no such API in ASoC,  the best interface I found is
+> the V4L2, but I need to do a little modification of the V4L2 API,
+
+> extend it for audio usage.
+
+> Could you please suggest more about the "separate library"?
+> Should I place this "sound/soc/fsl/fsl_asrc_m2m.c" in another folder?
+
+The concept of connecting an audio stream from v4l directly to something
+in ASoC isn't specific to this driver or even to the i.MX platform, the
+code that deals with that part of things should be split out so that it
+works the same for any other drivers that do this.
+
+--ZYyaaohwRe2QLoL2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSeuvYACgkQJNaLcl1U
+h9DZPQf/WRYZwwHKLB9mVIRQZZ3u6JtZ0ySgC91H4ZgQ5NoaNPmmTmrm01BN5uZY
+g1Olg2Bv9gQOnIpXDWytRn/v2JUdQ20dZ6cLKy+bbl1BhQqvulFIGTzKGMq4b3IH
+7PYrDvV/5kgWexeIpT9DLyjRkbGqKQyBvqNBlFqNfxkMsIrt62KoCV675wsDlMWD
+EU1tqBs19JrAxETCTXrL2RJ5S04bAWMke1rUCk0+1VmY3ZdogUqzcG+5aNGu76BS
+brxQXCbTUXO///D75UaNwnA/8+O4lhy6G+2AHIjU3ipDArCU7JOtZgb5OAHKIM/N
+IqrbcHoRZmDTkY8gRIRocOi8b3wQUA==
+=zz+l
+-----END PGP SIGNATURE-----
+
+--ZYyaaohwRe2QLoL2--
