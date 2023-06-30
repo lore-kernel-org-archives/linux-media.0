@@ -2,424 +2,466 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E561EB64D7
-	for <linux-media@archiver.kernel.org>; Fri, 30 Jun 2023 10:05:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 055BFEB64D7
+	for <linux-media@archiver.kernel.org>; Fri, 30 Jun 2023 10:05:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233015AbjF3KFS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 30 Jun 2023 06:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52170 "EHLO
+        id S233016AbjF3KFg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Jun 2023 06:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233007AbjF3KFR (ORCPT
+        with ESMTP id S233004AbjF3KFe (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 30 Jun 2023 06:05:17 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A141BE1
-        for <linux-media@vger.kernel.org>; Fri, 30 Jun 2023 03:05:15 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-313f18f5295so1990796f8f.3
-        for <linux-media@vger.kernel.org>; Fri, 30 Jun 2023 03:05:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1688119514; x=1690711514;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=d4IN7o3HY+rAmG5ZCBhkQPMQxrlMvqGrP+JRduM50kQ=;
-        b=3KLNbyC3mjTh/sk4F0wOd3vs9LhPqcP7Pz8I/JY8cAHwUGu3nz2b/7ijpi+r8dtpLE
-         GnPFvwH6O9rvmxOt+M62PXRPIv8syoKGePv4LokzTz3PoZQ1hJ4dQR8vS8MM2PlGtnX6
-         R94hdDYlGpP0qkzVPGxrepYxhmudGPdloM0CetMWA1H4wM8A3HwxrNn999AJUWossuec
-         w/Rcq89tGF5/T43/sttFsUmZVbkYdFPpuz2+KRtpMG56p3uhZu/aHJMsqQyLPz1Oy0uW
-         HZJvzjRicXILjsaKKTf9XDPnBFyvlitmy21og0pLrVTvqVoDt1dR20Bi4A+zZd+cZFV3
-         IWrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688119514; x=1690711514;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=d4IN7o3HY+rAmG5ZCBhkQPMQxrlMvqGrP+JRduM50kQ=;
-        b=geOr5VvQXi5ofpZN/TcA/62JSCU6nikOubjAEv5/xIJDXRncX6XIG/LO1Q+JBkMEyM
-         aYlwRCFclF6Be7BaxSpAFkFuowg/eScGgxSw/H2K1aP2Frl1OHp76F9voOgKfKXiE3d0
-         1wbrJF6Uzq6AwwPsbAKdxWFiAN9QbVHfA/MffrEbKTOPQt0/E1aXoeucnKFBbvFxYW1I
-         8OkPZNkL8WDDQI2urhgoSrfknACtqLRFBfbutXwHXWw2GzPSOrUE/RwXRwS+EQ5K60T+
-         rhz/0/7J+2QU0Mct8G8ZSVl+Y2g2XenJhnqkpU7ZVuz2IRkokRClZIoYtxUhvFR4bbBK
-         nUaw==
-X-Gm-Message-State: ABy/qLYuYOvOEHptCN+n2JRCR1cowcGV6QxgvT9v1OMnI8Fumw3WJn73
-        f2aQf9cL0WME0vUP0OE8N9Sh5Q==
-X-Google-Smtp-Source: APBJJlFGqPTzHOni+PuFDNr7CC1rLmJJ25QDTMtUD8xhIbq6+m3xFfcgKJMTVOvCczfLZvBjt7zveg==
-X-Received: by 2002:adf:dd0a:0:b0:313:f679:a9a5 with SMTP id a10-20020adfdd0a000000b00313f679a9a5mr1872185wrm.20.1688119513925;
-        Fri, 30 Jun 2023 03:05:13 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:e0a:55f:21e0:9e19:4376:dea6:dbfa])
-        by smtp.gmail.com with ESMTPSA id x11-20020adff0cb000000b0031424f4ef1dsm743280wro.19.2023.06.30.03.05.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jun 2023 03:05:13 -0700 (PDT)
-From:   Julien Stephan <jstephan@baylibre.com>
-Cc:     Louis Kuo <louis.kuo@mediatek.com>,
-        Phi-Bang Nguyen <pnguyen@baylibre.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Julien Stephan <jstephan@baylibre.com>,
-        Andy Hsieh <andy.hsieh@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        devicetree@vger.kernel.org,
-        Florian Sylvestre <fsylvestre@baylibre.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Moudy Ho <moudy.ho@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Subject: [PATCH v2 1/4] dt-bindings: media: add mediatek ISP3.0 sensor interface
-Date:   Fri, 30 Jun 2023 12:01:50 +0200
-Message-ID: <20230630100321.1951138-2-jstephan@baylibre.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230630100321.1951138-1-jstephan@baylibre.com>
-References: <20230630100321.1951138-1-jstephan@baylibre.com>
+        Fri, 30 Jun 2023 06:05:34 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C21E2122;
+        Fri, 30 Jun 2023 03:05:31 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (dkzdf0gkyyyyyyyyyyyyt-3.rev.dnainternet.fi [IPv6:2001:14ba:4506:4f15::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4QsrY16f6sz49Q3M;
+        Fri, 30 Jun 2023 13:05:25 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1688119527;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6qcAL44V2VQPq8nW4DQ+CM8zwpG0FjZ9MKM6NQq5bKo=;
+        b=OQNlOj2ifgFuY5Z58PueDGVtRMoGfQlMq/fhl/MMqHhgiId3zuEN5DGn+einZotd6rnAtI
+        mfDnDJ96+VBbt7I1L1OaR735WNT2qhDmmUzQrwqVupu6t8mYW/QESNpEQn6GRmfybYkbUt
+        2e5IVRDVEAjn20ywuT+qt1eoXJ2lgprEsJXQ+N5x+wc3rFbseYeilalJB9m6wfR0La84u+
+        0JhelEg5hDR5iO7jAq4Kv3z0tK14NCYIy255H2HV3hTBmCJm9WStWj7yGSzFfjYphlsVie
+        NKV7yXiYsJAgXTX6sTPE0wtpMGT6/08LQrwj5DIqbrDd/QIvWT7kSAo5Jp7Sbg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1688119527;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6qcAL44V2VQPq8nW4DQ+CM8zwpG0FjZ9MKM6NQq5bKo=;
+        b=f69EeWpqh1bUOkWZMFZvrfBmqAFqZS5lHnhS1v/eVBcWO217U6rYNMFhVxLUe3ydapV4ak
+        rMtxj7mN65e/XUkM4d3YNDK72JILhSfadpI3dfjRun7beAI9EQxMcEmgx0hUGd94TOo5Ke
+        d5ha3Rf1eHIdljIHFOp6xhqcJVhm1lE8LJLIAMrdiXjlCn8lMKv29tqDxHhPtwcXH2QJEa
+        vQYis0d0lbZWJByzbhlW9jakuJc3E9+CW/YySmL2VruAvKtuJSMDJCR4f0sY3490d6Lj0Y
+        xYwJlNJ7BITQq8iHu/6yGWZfYTONZ8/ELEpinz1O6N63Y1Ok2RdhCbhkCU9/uA==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1688119527; a=rsa-sha256;
+        cv=none;
+        b=Iirl49YpCiFZUxiJjAhpe6vncipdoxx9m9KqBYKIODu9XDLSiVotLHm00FJ6MWCLVr8Z4X
+        EUbA22GdsoUWpHoVSBogmt+kCDRfPiyt3EaRKViZuzmBk1mQtgJtERF8Qi+HEH7rzBiM5T
+        /5Fc8KpS6Kr3Jdnf/p50l9ZGcwbBDC1Qzeqnta2VA+HReSBw42ge/TpkM7Z2PwOq/tmMKJ
+        wU6bBbdBmkrnHiCaWrhHUAZTy5uY+oa/7MG2wgpW8UYzptxaZM+jG+IJYhg4YR/q0qtUCU
+        VyfcMq5LXgdmw/3lVR9bGhMuakwFND5NWZ+TiVrHjSjsfqykv/3ZBEoJXwaexg==
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 34A37634C91;
+        Fri, 30 Jun 2023 13:05:25 +0300 (EEST)
+Date:   Fri, 30 Jun 2023 10:05:25 +0000
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Shengjiu Wang <shengjiu.wang@nxp.com>
+Cc:     tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shengjiu.wang@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
+        nicoleotsuka@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
+        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        linuxppc-dev@lists.ozlabs.org, hverkuil@xs4all.nl,
+        Jacopo Mondi <jacopo@jmondi.org>
+Subject: Re: [PATCH 1/6] media: v4l2: Add audio capture and output support
+Message-ID: <ZJ6o5fT4V4HXivFa@valkosipuli.retiisi.eu>
+References: <1688002673-28493-1-git-send-email-shengjiu.wang@nxp.com>
+ <1688002673-28493-2-git-send-email-shengjiu.wang@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1688002673-28493-2-git-send-email-shengjiu.wang@nxp.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Louis Kuo <louis.kuo@mediatek.com>
+Hi Shengjiu,
 
-This adds the bindings, for the mediatek ISP3.0 SENINF module embedded in
-some Mediatek SoC, such as the mt8365
+On Thu, Jun 29, 2023 at 09:37:48AM +0800, Shengjiu Wang wrote:
+> Audio signal processing has the requirement for memory to
+> memory similar as Video.
+> 
+> This patch is to add this support in v4l2 framework, defined
+> new buffer type V4L2_BUF_TYPE_AUDIO_CAPTURE and
+> V4L2_BUF_TYPE_AUDIO_OUTPUT, defined new format v4l2_audio_format
+> for audio case usage.
 
-Signed-off-by: Louis Kuo <louis.kuo@mediatek.com>
-Signed-off-by: Phi-Bang Nguyen <pnguyen@baylibre.com>
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Julien Stephan <jstephan@baylibre.com>
----
- .../media/mediatek,mt8365-seninf.yaml         | 295 ++++++++++++++++++
- MAINTAINERS                                   |   7 +
- 2 files changed, 302 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/mediatek,mt8365-seninf.yaml
+Why are you proposing to add this to V4L2 framework instead of doing this
+within ALSA?
 
-diff --git a/Documentation/devicetree/bindings/media/mediatek,mt8365-seninf.yaml b/Documentation/devicetree/bindings/media/mediatek,mt8365-seninf.yaml
-new file mode 100644
-index 000000000000..1697e94853f5
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/mediatek,mt8365-seninf.yaml
-@@ -0,0 +1,295 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+# Copyright (c) 2023 MediaTek, BayLibre
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/mediatek,mt8365-seninf.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MediaTek Sensor Interface 3.0
-+
-+maintainers:
-+  - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-+  - Julien Stephan <jstephan@baylibre.com>
-+  - Andy Hsieh <andy.hsieh@mediatek.com>
-+
-+description:
-+  The ISP3.0 SENINF is the CSI-2 and parallel camera sensor interface found in
-+  multiple MediaTek SoCs. It can support up to three physical CSI-2
-+  input ports, configured in DPHY (2 or 4 data lanes) or CPHY depending on the SoC.
-+  On the output side, SENINF can be connected either to CAMSV instance or
-+  to the internal ISP. CAMSV is used to transfer the sensor data (Raw, YUV)
-+  to DRAM directly, without internal ISP processing.
-+
-+properties:
-+  compatible:
-+    const: mediatek,mt8365-seninf
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: Seninf camsys clock
-+      - description: Seninf top mux clock
-+
-+  clock-names:
-+    items:
-+      - const: camsys
-+      - const: top_mux
-+
-+  phys:
-+    minItems: 1
-+    maxItems: 4
-+    description:
-+      phandle to the PHYs connected to CSI0/A, CSI1, CSI2 and CSI0B
-+
-+  phy-names:
-+    minItems: 1
-+    items:
-+      - const: csi0
-+      - const: csi1
-+      - const: csi2
-+      - const: csi0b
-+
-+  ports:
-+    $ref: /schemas/graph.yaml#/properties/ports
-+
-+    properties:
-+      port@0:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-+        description: CSI0 or CSI0A port
-+
-+        properties:
-+          endpoint:
-+            $ref: video-interfaces.yaml#
-+            unevaluatedProperties: false
-+
-+            properties:
-+              clock-lanes:
-+                maxItems: 1
-+              data-lanes:
-+                minItems: 1
-+                maxItems: 4
-+
-+      port@1:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-+        description: CSI1 port
-+
-+        properties:
-+          endpoint:
-+            $ref: video-interfaces.yaml#
-+            unevaluatedProperties: false
-+
-+            properties:
-+              clock-lanes:
-+                maxItems: 1
-+              data-lanes:
-+                minItems: 1
-+                maxItems: 4
-+
-+      port@2:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-+        description: CSI2 port
-+
-+        properties:
-+          endpoint:
-+            $ref: video-interfaces.yaml#
-+            unevaluatedProperties: false
-+
-+            properties:
-+              clock-lanes:
-+                maxItems: 1
-+              data-lanes:
-+                minItems: 1
-+                maxItems: 4
-+
-+      port@3:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-+        description: CSI0B port
-+
-+        properties:
-+          endpoint:
-+            $ref: video-interfaces.yaml#
-+            unevaluatedProperties: false
-+
-+            properties:
-+              clock-lanes:
-+                maxItems: 1
-+              data-lanes:
-+                minItems: 1
-+                maxItems: 2
-+
-+      port@4:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-+        description: connection point for cam0
-+
-+        properties:
-+          endpoint:
-+            $ref: /schemas/graph.yaml#/$defs/endpoint-base
-+            unevaluatedProperties: false
-+
-+      port@5:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-+        description: connection point for cam1
-+
-+        properties:
-+          endpoint:
-+            $ref: /schemas/graph.yaml#/$defs/endpoint-base
-+            unevaluatedProperties: false
-+
-+      port@6:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-+        description: connection point for camsv0
-+
-+        properties:
-+          endpoint:
-+            $ref: /schemas/graph.yaml#/$defs/endpoint-base
-+            unevaluatedProperties: false
-+
-+      port@7:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-+        description: connection point for camsv1
-+
-+        properties:
-+          endpoint:
-+            $ref: /schemas/graph.yaml#/$defs/endpoint-base
-+            unevaluatedProperties: false
-+
-+      port@8:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-+        description: connection point for camsv2
-+
-+        properties:
-+          endpoint:
-+            $ref: /schemas/graph.yaml#/$defs/endpoint-base
-+            unevaluatedProperties: false
-+
-+      port@9:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-+        description: connection point for camsv3
-+
-+        properties:
-+          endpoint:
-+            $ref: /schemas/graph.yaml#/$defs/endpoint-base
-+            unevaluatedProperties: false
-+
-+    required:
-+      - port@0
-+      - port@1
-+      - port@2
-+      - port@3
-+      - port@4
-+      - port@5
-+      - port@6
-+      - port@7
-+      - port@8
-+      - port@9
-+
-+required:
-+  - compatible
-+  - interrupts
-+  - clocks
-+  - clock-names
-+  - power-domains
-+  - ports
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/mediatek,mt8365-clk.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/phy/phy.h>
-+    #include <dt-bindings/power/mediatek,mt8365-power.h>
-+
-+    soc {
-+          #address-cells = <2>;
-+          #size-cells = <2>;
-+
-+          seninf: seninf@15040000 {
-+                compatible = "mediatek,mt8365-seninf";
-+                reg = <0 0x15040000 0 0x6000>;
-+                interrupts = <GIC_SPI 210 IRQ_TYPE_LEVEL_LOW>;
-+                clocks = <&camsys CLK_CAM_SENIF>,
-+                         <&topckgen CLK_TOP_SENIF_SEL>;
-+                clock-names = "camsys", "top_mux";
-+
-+                power-domains = <&spm MT8365_POWER_DOMAIN_CAM>;
-+
-+                phys = <&mipi_csi0 PHY_TYPE_DPHY>;
-+                phy-names = "csi0";
-+
-+                ports {
-+                      #address-cells = <1>;
-+                      #size-cells = <0>;
-+
-+                      port@0 {
-+                            reg = <0>;
-+                            seninf_in1: endpoint {
-+                              clock-lanes = <2>;
-+                              data-lanes = <1 3 0 4>;
-+                              remote-endpoint = <&isp1_out>;
-+                            };
-+                      };
-+
-+                      port@1 {
-+                          reg = <1>;
-+                      };
-+
-+                      port@2 {
-+                            reg = <2>;
-+                      };
-+
-+                      port@3 {
-+                            reg = <3>;
-+                      };
-+
-+                      port@4 {
-+                            reg = <4>;
-+                            seninf_camsv1_endpoint: endpoint {
-+                                remote-endpoint = <&camsv1_endpoint>;
-+                            };
-+                      };
-+
-+                      port@5 {
-+                            reg = <5>;
-+                      };
-+
-+                      port@6 {
-+                            reg = <6>;
-+                      };
-+
-+                      port@7 {
-+                            reg = <7>;
-+                      };
-+
-+                      port@8 {
-+                            reg = <8>;
-+                      };
-+
-+                      port@9 {
-+                            reg = <9>;
-+                      };
-+
-+                };
-+          };
-+    };
-+
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e0976ae2a523..af273a477139 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13350,6 +13350,13 @@ M:	Sean Wang <sean.wang@mediatek.com>
- S:	Maintained
- F:	drivers/char/hw_random/mtk-rng.c
- 
-+MEDIATEK ISP3.0 DRIVER
-+M:	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-+M:	Julien Stephan <jstephan@baylibre.com>
-+M:	Andy Hsieh <andy.hsieh@mediatek.com>
-+S:	Supported
-+F:	Documentation/devicetree/bindings/media/mediatek,mt8365-seninf.yaml
-+
- MEDIATEK SMI DRIVER
- M:	Yong Wu <yong.wu@mediatek.com>
- L:	linux-mediatek@lists.infradead.org (moderated for non-subscribers)
+Also cc Hans and Jacopo.
+
+> 
+> The created audio device is named "/dev/audioX".
+> 
+> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+> ---
+>  .../media/common/videobuf2/videobuf2-v4l2.c   |  4 ++
+>  drivers/media/v4l2-core/v4l2-dev.c            | 17 ++++++
+>  drivers/media/v4l2-core/v4l2-ioctl.c          | 52 +++++++++++++++++++
+>  include/media/v4l2-dev.h                      |  2 +
+>  include/media/v4l2-ioctl.h                    | 34 ++++++++++++
+>  include/uapi/linux/videodev2.h                | 19 +++++++
+>  6 files changed, 128 insertions(+)
+> 
+> diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+> index c7a54d82a55e..12f2be2773a2 100644
+> --- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
+> +++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+> @@ -785,6 +785,10 @@ int vb2_create_bufs(struct vb2_queue *q, struct v4l2_create_buffers *create)
+>  	case V4L2_BUF_TYPE_META_OUTPUT:
+>  		requested_sizes[0] = f->fmt.meta.buffersize;
+>  		break;
+> +	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
+> +	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
+> +		requested_sizes[0] = f->fmt.audio.buffersize;
+> +		break;
+>  	default:
+>  		return -EINVAL;
+>  	}
+> diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
+> index f81279492682..67484f4c6eaf 100644
+> --- a/drivers/media/v4l2-core/v4l2-dev.c
+> +++ b/drivers/media/v4l2-core/v4l2-dev.c
+> @@ -553,6 +553,7 @@ static void determine_valid_ioctls(struct video_device *vdev)
+>  	bool is_tch = vdev->vfl_type == VFL_TYPE_TOUCH;
+>  	bool is_meta = vdev->vfl_type == VFL_TYPE_VIDEO &&
+>  		       (vdev->device_caps & meta_caps);
+> +	bool is_audio = vdev->vfl_type == VFL_TYPE_AUDIO;
+>  	bool is_rx = vdev->vfl_dir != VFL_DIR_TX;
+>  	bool is_tx = vdev->vfl_dir != VFL_DIR_RX;
+>  	bool is_io_mc = vdev->device_caps & V4L2_CAP_IO_MC;
+> @@ -664,6 +665,19 @@ static void determine_valid_ioctls(struct video_device *vdev)
+>  		SET_VALID_IOCTL(ops, VIDIOC_S_FMT, vidioc_s_fmt_meta_out);
+>  		SET_VALID_IOCTL(ops, VIDIOC_TRY_FMT, vidioc_try_fmt_meta_out);
+>  	}
+> +	if (is_audio && is_rx) {
+> +		/* audio capture specific ioctls */
+> +		SET_VALID_IOCTL(ops, VIDIOC_ENUM_FMT, vidioc_enum_fmt_audio_cap);
+> +		SET_VALID_IOCTL(ops, VIDIOC_G_FMT, vidioc_g_fmt_audio_cap);
+> +		SET_VALID_IOCTL(ops, VIDIOC_S_FMT, vidioc_s_fmt_audio_cap);
+> +		SET_VALID_IOCTL(ops, VIDIOC_TRY_FMT, vidioc_try_fmt_audio_cap);
+> +	} else if (is_audio && is_tx) {
+> +		/* audio output specific ioctls */
+> +		SET_VALID_IOCTL(ops, VIDIOC_ENUM_FMT, vidioc_enum_fmt_audio_out);
+> +		SET_VALID_IOCTL(ops, VIDIOC_G_FMT, vidioc_g_fmt_audio_out);
+> +		SET_VALID_IOCTL(ops, VIDIOC_S_FMT, vidioc_s_fmt_audio_out);
+> +		SET_VALID_IOCTL(ops, VIDIOC_TRY_FMT, vidioc_try_fmt_audio_out);
+> +	}
+>  	if (is_vbi) {
+>  		/* vbi specific ioctls */
+>  		if ((is_rx && (ops->vidioc_g_fmt_vbi_cap ||
+> @@ -927,6 +941,9 @@ int __video_register_device(struct video_device *vdev,
+>  	case VFL_TYPE_TOUCH:
+>  		name_base = "v4l-touch";
+>  		break;
+> +	case VFL_TYPE_AUDIO:
+> +		name_base = "audio";
+> +		break;
+>  	default:
+>  		pr_err("%s called with unknown type: %d\n",
+>  		       __func__, type);
+> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+> index a858acea6547..26bc4b0d8ef0 100644
+> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+> @@ -188,6 +188,8 @@ const char *v4l2_type_names[] = {
+>  	[V4L2_BUF_TYPE_SDR_OUTPUT]         = "sdr-out",
+>  	[V4L2_BUF_TYPE_META_CAPTURE]       = "meta-cap",
+>  	[V4L2_BUF_TYPE_META_OUTPUT]	   = "meta-out",
+> +	[V4L2_BUF_TYPE_AUDIO_CAPTURE]      = "audio-cap",
+> +	[V4L2_BUF_TYPE_AUDIO_OUTPUT]	   = "audio-out",
+>  };
+>  EXPORT_SYMBOL(v4l2_type_names);
+>  
+> @@ -276,6 +278,7 @@ static void v4l_print_format(const void *arg, bool write_only)
+>  	const struct v4l2_sliced_vbi_format *sliced;
+>  	const struct v4l2_window *win;
+>  	const struct v4l2_meta_format *meta;
+> +	const struct v4l2_audio_format *audio;
+>  	u32 pixelformat;
+>  	u32 planes;
+>  	unsigned i;
+> @@ -346,6 +349,12 @@ static void v4l_print_format(const void *arg, bool write_only)
+>  		pr_cont(", dataformat=%p4cc, buffersize=%u\n",
+>  			&pixelformat, meta->buffersize);
+>  		break;
+> +	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
+> +	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
+> +		audio = &p->fmt.audio;
+> +		pr_cont(", rate=%u, format=%u, channels=%u, buffersize=%u\n",
+> +			audio->rate, audio->format, audio->channels, audio->buffersize);
+> +		break;
+>  	}
+>  }
+>  
+> @@ -927,6 +936,7 @@ static int check_fmt(struct file *file, enum v4l2_buf_type type)
+>  	bool is_tch = vfd->vfl_type == VFL_TYPE_TOUCH;
+>  	bool is_meta = vfd->vfl_type == VFL_TYPE_VIDEO &&
+>  		       (vfd->device_caps & meta_caps);
+> +	bool is_audio = vfd->vfl_type == VFL_TYPE_AUDIO;
+>  	bool is_rx = vfd->vfl_dir != VFL_DIR_TX;
+>  	bool is_tx = vfd->vfl_dir != VFL_DIR_RX;
+>  
+> @@ -992,6 +1002,14 @@ static int check_fmt(struct file *file, enum v4l2_buf_type type)
+>  		if (is_meta && is_tx && ops->vidioc_g_fmt_meta_out)
+>  			return 0;
+>  		break;
+> +	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
+> +		if (is_audio && is_rx && ops->vidioc_g_fmt_audio_cap)
+> +			return 0;
+> +		break;
+> +	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
+> +		if (is_audio && is_tx && ops->vidioc_g_fmt_audio_out)
+> +			return 0;
+> +		break;
+>  	default:
+>  		break;
+>  	}
+> @@ -1592,6 +1610,16 @@ static int v4l_enum_fmt(const struct v4l2_ioctl_ops *ops,
+>  			break;
+>  		ret = ops->vidioc_enum_fmt_meta_out(file, fh, arg);
+>  		break;
+> +	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
+> +		if (unlikely(!ops->vidioc_enum_fmt_audio_cap))
+> +			break;
+> +		ret = ops->vidioc_enum_fmt_audio_cap(file, fh, arg);
+> +		break;
+> +	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
+> +		if (unlikely(!ops->vidioc_enum_fmt_audio_out))
+> +			break;
+> +		ret = ops->vidioc_enum_fmt_audio_out(file, fh, arg);
+> +		break;
+>  	}
+>  	if (ret == 0)
+>  		v4l_fill_fmtdesc(p);
+> @@ -1668,6 +1696,10 @@ static int v4l_g_fmt(const struct v4l2_ioctl_ops *ops,
+>  		return ops->vidioc_g_fmt_meta_cap(file, fh, arg);
+>  	case V4L2_BUF_TYPE_META_OUTPUT:
+>  		return ops->vidioc_g_fmt_meta_out(file, fh, arg);
+> +	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
+> +		return ops->vidioc_g_fmt_audio_cap(file, fh, arg);
+> +	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
+> +		return ops->vidioc_g_fmt_audio_out(file, fh, arg);
+>  	}
+>  	return -EINVAL;
+>  }
+> @@ -1779,6 +1811,16 @@ static int v4l_s_fmt(const struct v4l2_ioctl_ops *ops,
+>  			break;
+>  		memset_after(p, 0, fmt.meta);
+>  		return ops->vidioc_s_fmt_meta_out(file, fh, arg);
+> +	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
+> +		if (unlikely(!ops->vidioc_s_fmt_audio_cap))
+> +			break;
+> +		memset_after(p, 0, fmt.audio);
+> +		return ops->vidioc_s_fmt_audio_cap(file, fh, arg);
+> +	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
+> +		if (unlikely(!ops->vidioc_s_fmt_audio_out))
+> +			break;
+> +		memset_after(p, 0, fmt.audio);
+> +		return ops->vidioc_s_fmt_audio_out(file, fh, arg);
+>  	}
+>  	return -EINVAL;
+>  }
+> @@ -1887,6 +1929,16 @@ static int v4l_try_fmt(const struct v4l2_ioctl_ops *ops,
+>  			break;
+>  		memset_after(p, 0, fmt.meta);
+>  		return ops->vidioc_try_fmt_meta_out(file, fh, arg);
+> +	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
+> +		if (unlikely(!ops->vidioc_try_fmt_audio_cap))
+> +			break;
+> +		memset_after(p, 0, fmt.audio);
+> +		return ops->vidioc_try_fmt_audio_cap(file, fh, arg);
+> +	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
+> +		if (unlikely(!ops->vidioc_try_fmt_audio_out))
+> +			break;
+> +		memset_after(p, 0, fmt.audio);
+> +		return ops->vidioc_try_fmt_audio_out(file, fh, arg);
+>  	}
+>  	return -EINVAL;
+>  }
+> diff --git a/include/media/v4l2-dev.h b/include/media/v4l2-dev.h
+> index e0a13505f88d..0924e6d1dab1 100644
+> --- a/include/media/v4l2-dev.h
+> +++ b/include/media/v4l2-dev.h
+> @@ -30,6 +30,7 @@
+>   * @VFL_TYPE_SUBDEV:	for V4L2 subdevices
+>   * @VFL_TYPE_SDR:	for Software Defined Radio tuners
+>   * @VFL_TYPE_TOUCH:	for touch sensors
+> + * @VFL_TYPE_AUDIO:	for audio input/output devices
+>   * @VFL_TYPE_MAX:	number of VFL types, must always be last in the enum
+>   */
+>  enum vfl_devnode_type {
+> @@ -39,6 +40,7 @@ enum vfl_devnode_type {
+>  	VFL_TYPE_SUBDEV,
+>  	VFL_TYPE_SDR,
+>  	VFL_TYPE_TOUCH,
+> +	VFL_TYPE_AUDIO,
+>  	VFL_TYPE_MAX /* Shall be the last one */
+>  };
+>  
+> diff --git a/include/media/v4l2-ioctl.h b/include/media/v4l2-ioctl.h
+> index edb733f21604..f840cf740ce1 100644
+> --- a/include/media/v4l2-ioctl.h
+> +++ b/include/media/v4l2-ioctl.h
+> @@ -45,6 +45,12 @@ struct v4l2_fh;
+>   * @vidioc_enum_fmt_meta_out: pointer to the function that implements
+>   *	:ref:`VIDIOC_ENUM_FMT <vidioc_enum_fmt>` ioctl logic
+>   *	for metadata output
+> + * @vidioc_enum_fmt_audio_cap: pointer to the function that implements
+> + *	:ref:`VIDIOC_ENUM_FMT <vidioc_enum_fmt>` ioctl logic
+> + *	for audio capture
+> + * @vidioc_enum_fmt_audio_out: pointer to the function that implements
+> + *	:ref:`VIDIOC_ENUM_FMT <vidioc_enum_fmt>` ioctl logic
+> + *	for audio output
+>   * @vidioc_g_fmt_vid_cap: pointer to the function that implements
+>   *	:ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for video capture
+>   *	in single plane mode
+> @@ -79,6 +85,10 @@ struct v4l2_fh;
+>   *	:ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for metadata capture
+>   * @vidioc_g_fmt_meta_out: pointer to the function that implements
+>   *	:ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for metadata output
+> + * @vidioc_g_fmt_audio_cap: pointer to the function that implements
+> + *	:ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for audio capture
+> + * @vidioc_g_fmt_audio_out: pointer to the function that implements
+> + *	:ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for audio output
+>   * @vidioc_s_fmt_vid_cap: pointer to the function that implements
+>   *	:ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for video capture
+>   *	in single plane mode
+> @@ -113,6 +123,10 @@ struct v4l2_fh;
+>   *	:ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for metadata capture
+>   * @vidioc_s_fmt_meta_out: pointer to the function that implements
+>   *	:ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for metadata output
+> + * @vidioc_s_fmt_audio_cap: pointer to the function that implements
+> + *	:ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for audio capture
+> + * @vidioc_s_fmt_audio_out: pointer to the function that implements
+> + *	:ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for audio output
+>   * @vidioc_try_fmt_vid_cap: pointer to the function that implements
+>   *	:ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for video capture
+>   *	in single plane mode
+> @@ -149,6 +163,10 @@ struct v4l2_fh;
+>   *	:ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for metadata capture
+>   * @vidioc_try_fmt_meta_out: pointer to the function that implements
+>   *	:ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for metadata output
+> + * @vidioc_try_fmt_audio_cap: pointer to the function that implements
+> + *	:ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for audio capture
+> + * @vidioc_try_fmt_audio_out: pointer to the function that implements
+> + *	:ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for audio output
+>   * @vidioc_reqbufs: pointer to the function that implements
+>   *	:ref:`VIDIOC_REQBUFS <vidioc_reqbufs>` ioctl
+>   * @vidioc_querybuf: pointer to the function that implements
+> @@ -315,6 +333,10 @@ struct v4l2_ioctl_ops {
+>  					struct v4l2_fmtdesc *f);
+>  	int (*vidioc_enum_fmt_meta_out)(struct file *file, void *fh,
+>  					struct v4l2_fmtdesc *f);
+> +	int (*vidioc_enum_fmt_audio_cap)(struct file *file, void *fh,
+> +					 struct v4l2_fmtdesc *f);
+> +	int (*vidioc_enum_fmt_audio_out)(struct file *file, void *fh,
+> +					 struct v4l2_fmtdesc *f);
+>  
+>  	/* VIDIOC_G_FMT handlers */
+>  	int (*vidioc_g_fmt_vid_cap)(struct file *file, void *fh,
+> @@ -345,6 +367,10 @@ struct v4l2_ioctl_ops {
+>  				     struct v4l2_format *f);
+>  	int (*vidioc_g_fmt_meta_out)(struct file *file, void *fh,
+>  				     struct v4l2_format *f);
+> +	int (*vidioc_g_fmt_audio_cap)(struct file *file, void *fh,
+> +				      struct v4l2_format *f);
+> +	int (*vidioc_g_fmt_audio_out)(struct file *file, void *fh,
+> +				      struct v4l2_format *f);
+>  
+>  	/* VIDIOC_S_FMT handlers */
+>  	int (*vidioc_s_fmt_vid_cap)(struct file *file, void *fh,
+> @@ -375,6 +401,10 @@ struct v4l2_ioctl_ops {
+>  				     struct v4l2_format *f);
+>  	int (*vidioc_s_fmt_meta_out)(struct file *file, void *fh,
+>  				     struct v4l2_format *f);
+> +	int (*vidioc_s_fmt_audio_cap)(struct file *file, void *fh,
+> +				      struct v4l2_format *f);
+> +	int (*vidioc_s_fmt_audio_out)(struct file *file, void *fh,
+> +				      struct v4l2_format *f);
+>  
+>  	/* VIDIOC_TRY_FMT handlers */
+>  	int (*vidioc_try_fmt_vid_cap)(struct file *file, void *fh,
+> @@ -405,6 +435,10 @@ struct v4l2_ioctl_ops {
+>  				       struct v4l2_format *f);
+>  	int (*vidioc_try_fmt_meta_out)(struct file *file, void *fh,
+>  				       struct v4l2_format *f);
+> +	int (*vidioc_try_fmt_audio_cap)(struct file *file, void *fh,
+> +					struct v4l2_format *f);
+> +	int (*vidioc_try_fmt_audio_out)(struct file *file, void *fh,
+> +					struct v4l2_format *f);
+>  
+>  	/* Buffer handlers */
+>  	int (*vidioc_reqbufs)(struct file *file, void *fh,
+> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+> index aee75eb9e686..a7af28f4c8c3 100644
+> --- a/include/uapi/linux/videodev2.h
+> +++ b/include/uapi/linux/videodev2.h
+> @@ -153,6 +153,8 @@ enum v4l2_buf_type {
+>  	V4L2_BUF_TYPE_SDR_OUTPUT           = 12,
+>  	V4L2_BUF_TYPE_META_CAPTURE         = 13,
+>  	V4L2_BUF_TYPE_META_OUTPUT	   = 14,
+> +	V4L2_BUF_TYPE_AUDIO_CAPTURE        = 15,
+> +	V4L2_BUF_TYPE_AUDIO_OUTPUT         = 16,
+>  	/* Deprecated, do not use */
+>  	V4L2_BUF_TYPE_PRIVATE              = 0x80,
+>  };
+> @@ -169,6 +171,7 @@ enum v4l2_buf_type {
+>  	 || (type) == V4L2_BUF_TYPE_VBI_OUTPUT			\
+>  	 || (type) == V4L2_BUF_TYPE_SLICED_VBI_OUTPUT		\
+>  	 || (type) == V4L2_BUF_TYPE_SDR_OUTPUT			\
+> +	 || (type) == V4L2_BUF_TYPE_AUDIO_OUTPUT		\
+>  	 || (type) == V4L2_BUF_TYPE_META_OUTPUT)
+>  
+>  #define V4L2_TYPE_IS_CAPTURE(type) (!V4L2_TYPE_IS_OUTPUT(type))
+> @@ -2404,6 +2407,20 @@ struct v4l2_meta_format {
+>  	__u32				buffersize;
+>  } __attribute__ ((packed));
+>  
+> +/**
+> + * struct v4l2_audio_format - audio data format definition
+> + * @rate:		sample rate
+> + * @format:		sample format
+> + * @channels:		channel numbers
+> + * @buffersize:		maximum size in bytes required for data
+> + */
+> +struct v4l2_audio_format {
+> +	__u32				rate;
+> +	__u32				format;
+> +	__u32				channels;
+> +	__u32				buffersize;
+> +} __attribute__ ((packed));
+> +
+>  /**
+>   * struct v4l2_format - stream data format
+>   * @type:	enum v4l2_buf_type; type of the data stream
+> @@ -2412,6 +2429,7 @@ struct v4l2_meta_format {
+>   * @win:	definition of an overlaid image
+>   * @vbi:	raw VBI capture or output parameters
+>   * @sliced:	sliced VBI capture or output parameters
+> + * @audio:	definition of an audio format
+>   * @raw_data:	placeholder for future extensions and custom formats
+>   * @fmt:	union of @pix, @pix_mp, @win, @vbi, @sliced, @sdr, @meta
+>   *		and @raw_data
+> @@ -2426,6 +2444,7 @@ struct v4l2_format {
+>  		struct v4l2_sliced_vbi_format	sliced;  /* V4L2_BUF_TYPE_SLICED_VBI_CAPTURE */
+>  		struct v4l2_sdr_format		sdr;     /* V4L2_BUF_TYPE_SDR_CAPTURE */
+>  		struct v4l2_meta_format		meta;    /* V4L2_BUF_TYPE_META_CAPTURE */
+> +		struct v4l2_audio_format	audio;   /* V4L2_BUF_TYPE_AUDIO_CAPTURE */
+>  		__u8	raw_data[200];                   /* user-defined */
+>  	} fmt;
+>  };
+> -- 
+> 2.34.1
+> 
+
 -- 
-2.41.0
-
+Sakari Ailus
