@@ -2,159 +2,146 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36890EB64D7
-	for <linux-media@archiver.kernel.org>; Fri, 30 Jun 2023 10:47:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CABAEB64DD
+	for <linux-media@archiver.kernel.org>; Fri, 30 Jun 2023 11:08:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231455AbjF3Krs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 30 Jun 2023 06:47:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43058 "EHLO
+        id S232330AbjF3LIO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Jun 2023 07:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231501AbjF3Krr (ORCPT
+        with ESMTP id S232372AbjF3LHx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 30 Jun 2023 06:47:47 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2050.outbound.protection.outlook.com [40.107.223.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BCF42D56
-        for <linux-media@vger.kernel.org>; Fri, 30 Jun 2023 03:47:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TycprFfIfk2j4WjxfOmj2ekRAV43EWSzlQigJhIjR3bLXoF8afK70zY4RvJuIWBq4JNYlF6vHfgPg573vDo4jFGhb568YJ2DDlMRUnCxB3SIqfG9ZNhYC4PRTtu9JfpNb6xghR+I0lffpaB7k8fxf5L65RUHRsLCqUlWLO5QZJNgfmnelWHN8PAEVozS+d6miEoOzpbbJ2XDeKQkfpQQQKH83Ka4N1z69mZ0x4iyX8d3ZlV0YGUc2lQvWFk4Gzr+VyhGlaHCYmCLh1qGZUUmbojM8RRkqghtlrlegAuKAEu74Aw3FEm9YFOSZ+ABeB8H6xzyddh2lApXUKWidFXkig==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1yAteb3LdHGDLz/vWuZn62Diq0FLYpbAmsGE5yvOZJ4=;
- b=WosOY0cb5bM60tDQ/z3EA51XhtXExNEPyHm1qJKWqoKjKP7FdyxjQWMi4MtjzMmgojaiMjNJGr41mn6Cz0bQLxDecemdxGluEgaEZBzXT2eon9yMYYJKEFJA79PwYdcLjwYgk0lMsdEWIH3do89pFIiJ5Z8e8zAgVq0qgkRl4vRka/wu6iWpDZduv04Wlz0ahQL599W9wrQhyuK01CTEyVpDMcFTv4FaH5x+8NmGQGXWvXGd3mgjYx3vKKqmLUv4TDy3GUGZXLfS1sg6O3aFTCQA+CGOEVkSYcZJdtHDygG/nD1yqe4wo6p1KIZGcpDoh5klEFm35PAuyIyL1cVW5A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synaptics.com; dmarc=pass action=none
- header.from=synaptics.com; dkim=pass header.d=synaptics.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=Synaptics.onmicrosoft.com; s=selector2-Synaptics-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1yAteb3LdHGDLz/vWuZn62Diq0FLYpbAmsGE5yvOZJ4=;
- b=Jrv1Yf3H5eSylgx0k9j0ds8jTmg/yrV1NjnLi9hwZkuxj984nVCI48jtz2yrXfvJrm+TrL35qd6dBy//52tNzLMQBgdeRMrcR4BDEYOJa0HXr39Njhi8jgvmorLyrtGNxaBjgKfDv+YLPpqBYRGSEC9OozIYYbsKbYHT1faUtKE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=synaptics.com;
-Received: from DM6PR03MB5196.namprd03.prod.outlook.com (2603:10b6:5:24a::19)
- by BLAPR03MB5492.namprd03.prod.outlook.com (2603:10b6:208:290::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.19; Fri, 30 Jun
- 2023 10:47:44 +0000
-Received: from DM6PR03MB5196.namprd03.prod.outlook.com
- ([fe80::6882:b9c1:2b2d:998d]) by DM6PR03MB5196.namprd03.prod.outlook.com
- ([fe80::6882:b9c1:2b2d:998d%5]) with mapi id 15.20.6544.019; Fri, 30 Jun 2023
- 10:47:44 +0000
-Message-ID: <a2ffa1cb-42db-a78a-8bd7-b0e422aade13@synaptics.com>
-Date:   Fri, 30 Jun 2023 18:47:36 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-From:   Hsia-Jun Li <Randy.Li@synaptics.com>
-Content-Language: en-GB
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     ayaka <ayaka@soulik.info>, Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Brian.Starkey@arm.com, boris.brezillon@collabora.com,
-        frkoenig@chromium.org, hans.verkuil@cisco.com, hiroh@chromium.org,
-        Hans Verkuil <hverkuil@xs4all.nl>,
+        Fri, 30 Jun 2023 07:07:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7950E1FCB
+        for <linux-media@vger.kernel.org>; Fri, 30 Jun 2023 04:06:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688123211;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Hz56BT7c5dXaoSnbOYv8xxRUU2eae8Bc2EAuUODSjNY=;
+        b=NZwYFFbAwCLj8EzpYbV2q+rTW4vsJQ1M3q8vGQGqr4jA8zxo1dzJRtd5SJYN+zyY2CPdZv
+        A86r/w2Lr4+uLw1tzwKBbuTiP1L35GwvIN6mRElEuihjA4mQzr4wN+WKwY43yENoexVt1B
+        dLb5Jf7yCthwAd130tliuDPyE+RE5eI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-358-yLt83ealNf-OygJaObZQ9A-1; Fri, 30 Jun 2023 07:06:46 -0400
+X-MC-Unique: yLt83ealNf-OygJaObZQ9A-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9006E1C0726F;
+        Fri, 30 Jun 2023 11:06:45 +0000 (UTC)
+Received: from shalem.redhat.com (unknown [10.39.193.184])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1FBA4492B02;
+        Fri, 30 Jun 2023 11:06:43 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Daniel Scally <dan.scally@ideasonboard.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Helen Koike <helen.koike@collabora.com>
-Subject: [RFC]: m2m dec reports the graphics memory requirement
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PH0PR07CA0014.namprd07.prod.outlook.com
- (2603:10b6:510:5::19) To DM6PR03MB5196.namprd03.prod.outlook.com
- (2603:10b6:5:24a::19)
+        Andy Shevchenko <andy@kernel.org>, Kate Hsuan <hpa@redhat.com>,
+        Hao Yao <hao.yao@intel.com>, Bingbu Cao <bingbu.cao@intel.com>,
+        linux-media@vger.kernel.org
+Subject: [PATCH v2 00/15] media: ipu-bridge: Shared with atomisp, rework VCM instantiation
+Date:   Fri, 30 Jun 2023 13:06:28 +0200
+Message-ID: <20230630110643.209761-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR03MB5196:EE_|BLAPR03MB5492:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4b6e4e5a-2b8a-46bc-aedd-08db79576f53
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sWQJm2xAwXfbZWOP47aMDik501K27QIYmLlmdAHxfvI1cBCXV6S7bwpHEaP4KjesvIvh8ZWtQZAZoMDl3fQtrcQ3Zmg9nyLp0fsfA+C3NUip3W5j1RWKaGyup0Q2ydK03yr6+SizexVc0WE8Rf7ML5zOklKqtDtF4QsUPAYRQ8IW9H5+hjlS0RXha7j252wK+ZsgPOrRbdrBQpFslNVAj+o9JllUyReHxK+7Ot9H8fj4HPctN6jk7Ugq/gUTb9jesZzSOlQU0o/mMM+VxhOBHGhbPW0WJvDGouA/jTHnyrqFY9Zb2qfeC+jMRWf5fdL+2tXu3Df9dT9tTz7n6StHOvN7NKbWLMW43jpaWWY5gvh25JKdkSpjwGdy9fj3m0mjwMKW8dbxqbcm/3OakmaTZ8N617oRXufLbRqw2YvC1aesJStE1SP1w32gq/BaABciTZQ/S3+edBfhd/hUQ9hlQjebUGmKcr1B9BGy4LMHEMyLnVNQodzNQ3mTBzHMKLZekiKnd233muyp5roGuqBS1TFZM/T+VDSSAe/0pibiVlcRYLGx6fqmuhJer3i4Gss3RYfqXBv5mCT680kjaHywZM9Aa29YKRUzHxIGz/SFlBLQhPsRap74YRwxPd9FFdCiKmTJbbTB5Suz9QmApQt0IIRVryb3pCmVD/SEJ6eWdZrfsnKkwPWkyGCt4Xv1oxae
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR03MB5196.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(39850400004)(396003)(136003)(346002)(366004)(451199021)(31686004)(66946007)(54906003)(66556008)(66476007)(7416002)(2906002)(36756003)(8936002)(316002)(38350700002)(38100700002)(41300700001)(4326008)(6916009)(478600001)(83380400001)(6486002)(52116002)(6666004)(5660300002)(86362001)(6512007)(31696002)(8676002)(26005)(2616005)(186003)(6506007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UW1WMHM5clh2MGdNa2hJdEROYzZOZWpFQk1DU1N6aUcxOTlVUnZMMC9aQ1By?=
- =?utf-8?B?SmRPTVZpRkUzdDlwN3oyNDBld29nUjNKY1NYdVJsS2FoOUJuRVh2VHd3YVlB?=
- =?utf-8?B?NTJjdTlnT29BbWJJN2s1dGtseFNQZmt3dUg3eVJUSGZhTVZhdjRJRnJjTFR0?=
- =?utf-8?B?d2U2ZTV0ZU5mdUN0NHBlSlRwSzBGcWMwY0lkOWw4OHcvMEtMKzV0VE5nOVJr?=
- =?utf-8?B?TTFYZGJ3SXllTWlQbndqZHQ4OUxXdEN4K2pJcDVjRlBDQ0poNXVhV1NCYXhk?=
- =?utf-8?B?NTY2V2tQOFBtQm9uay9zVkJrMTJaN0QrSTE0KzQ2VEJIUXh2RTRyOXBQSENQ?=
- =?utf-8?B?QnJYNFlpVWlsUlpBeFZCWFNDMEFPMjczbGdlUlBIcTJQTlF0MnZyWFh5S1B0?=
- =?utf-8?B?d3MrckY5eFRyTWc1VWpGRisyNSs5K014b3ZwQk9RWVgvbEYwK2VPTjMvNGdm?=
- =?utf-8?B?UFJ4NzZkeThxemRtTUcwTmtsRHZVcEdiaFhWVVQzVlJDWjFVejY3U2NTRTF6?=
- =?utf-8?B?YURGeC8yWlFpUDVYczhRYTZ4S00xY2lCazJsVFlLcnhZWHplSVJxQitKWDRB?=
- =?utf-8?B?SXh4YXU4c3ZmclJ3eDQwMkFsZDJNaFNMZVZCanowSllNMlZTYTE0dmhrcXlW?=
- =?utf-8?B?ejdaUVNpVUlpZ2RMRGY1UlFBUnlrMWloNG5RKzQ3YXU0emxFdXM2TFNTSFls?=
- =?utf-8?B?dGFxWVFsdUNNT1lwamtFMjRoeWN3ZWVVMlE0aEs4V2JFa2xNWWJ5TDRxNzNr?=
- =?utf-8?B?ZGp6b0JSK2xVdmxPaWQrT1RFMGxBZ1BDZGIvRTl1OEVqNHo0OE1KeTM4c3VX?=
- =?utf-8?B?WGtyQUlHTDQxU092c2ZNaXBVMGdzOVl2eVFXT0dpbVlWcjBZUnBTeWJ6KzhD?=
- =?utf-8?B?ckdrRU9COEhXeUZ4ekJJQ2JkUG5Yc2hKTnV3K2xHVmxQazI1RHB3V3J4UzNs?=
- =?utf-8?B?aW1ud2x6YklXT1hpYXIwZTUyY0paNUFrZWVTZEdvZU5pcDJCSU4vbkcxK3hr?=
- =?utf-8?B?V2VyNy9vSXZFUEJmOThNR1A5VkJEM3RjZUZFeEdCZ1RncEMzQ3FFK2N5QnF4?=
- =?utf-8?B?RlovV2EreGpYZXdKZVZnWmd5Z0ZscWNLa2hCK1ZBOHMyclp4U0pYYldudTJ4?=
- =?utf-8?B?MTdrQTdzQ0NQd01WUXltZFpnZmw5VjJNcEpXWFgzN0ZEbGZBVVM4NUdUcmRP?=
- =?utf-8?B?Y2JzeTZMbEtydXo5c1NaRVgwTkR5WkpTQ1YzN1U0SUJnOEN5VlFJa1Y5S0Ix?=
- =?utf-8?B?UjViRmhtMG1CcXcxbTZmTnNGM2VrUnkxTXFUdTIrdWdNV0NXeEFQNFh1aGEw?=
- =?utf-8?B?Nmx1d2p4emFzbUNnc0R1RjltK0JWdkttdlM4dmpVUjdjdWZ3THNWTnpXWjk5?=
- =?utf-8?B?V1htRUxJRGRsNTdYVlM5MjVwbFR3bGJrRDdWeVBDNjdHa3BGMmpUR2pqR0xJ?=
- =?utf-8?B?SDliUnkwWWxVMXJPNGFhTCtwZnhnWmV0VWovcDhmOUtzS2puR1ZDS3J1Nm9i?=
- =?utf-8?B?YzZXZ28vOWNRK1UrcjhrSE9tWXUvZlVUZmpmK3MyalFZK0g5RXR4RHpaZnVy?=
- =?utf-8?B?QS9MK1R1ckNMVU5aVzh0bnhaVzl5Q2VFYW1EUm5LLzFod3hKblFhYmRaVUZn?=
- =?utf-8?B?OFkwTEN5SEdTRVlUclB0b1M2ajEyOStpVnl6elNHV3VzcVdFeXZjK0tzU2RE?=
- =?utf-8?B?c1ZHN1NLQU82S3lqc2RkNVJNcmlWaUppczZUZU1yNDBZY2hvWG5rU1VRTHNF?=
- =?utf-8?B?R1NwbmZkWVB4YW9RVlRidlJObGdnYUMvMjdhUFdWd3lFVXU3K3J3QWt6eFpS?=
- =?utf-8?B?YXVWUzUvZExhUzRkVnl0dm1TSy9BM0tQVTAyQ1l2WWRiL0h1Y2J3aDQ5Y3d2?=
- =?utf-8?B?d3lpd2gwTGk2cUNKRDBRakp1N3RVV3RlR2J1dlBsWDZheTIzT0ltYmRXUmYx?=
- =?utf-8?B?QzlhcnQ0TmxUTzlIMmpOSzVPWUJmUGRST0ZXT005MWI0OHlNd1Y4Q3FLVmJk?=
- =?utf-8?B?NkdYWjBnZ3BjRUFVbGsrNkNHMTBaWFB2angybUhzRjZnNkNRSXh5VEV6L3BR?=
- =?utf-8?B?dFNZd1UvVUV5bFFDQWRLM0NzQ3pJV3ljNGtzSEE1VUFGMElwOGpJeURVUU9T?=
- =?utf-8?Q?91/U567yApSQ0v97nzn/galh1?=
-X-OriginatorOrg: synaptics.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4b6e4e5a-2b8a-46bc-aedd-08db79576f53
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR03MB5196.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2023 10:47:44.1301
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 335d1fbc-2124-4173-9863-17e7051a2a0e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yHwtBU68YWxjC/VY5rVuQzfNeJ2v3k5QdT2liaPAKmdghEopymAFeqdatXseF46PHiwafGbeil1OVHZNcwX3wQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR03MB5492
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello All
+Hi All,
 
-This RFC tries to address the following problems:
+Here is v2 of my patch-series to make the atomisp code share the
+ACPI -> sensor fwnode bridge code with the IPU3 (and IPU6 code).
 
-1. Application may request too many buffers, increasing pressure to 
-system's memory allocator(Thinking about running Android with 8K UHD 
-playback in a system with only 2 GiB memory available);
+The last 2 patches also rework VCM instantiation, which was my
+initial reason for unifying / sharing the code.
 
-2. Application may allocate too few buffers while the codec stream 
-didn't follow the statement in its sequence info;
+Changes in v2:
+- Rebase on top of f54eb0ac7c1a ("media: ipu3-cio2: rename cio2 bridge
+  to ipu bridge and move out of ipu3")
+  (rebase on top of sailus/media_tree.git/for-6.6-1.4-signed)
+- Share the ipu_supported_sensors[] array between atomisp and IPU3/IPU6
+  (leave it in ipu-bridge.c instead of giving each consumer its own copy)
+- 2 new bugfixes:
+  media: ipu-bridge: Fix null pointer deref on SSDB/PLD parsing warnings  
+  media: ipu-bridge: Allow building as module
 
-3. Application would allocate all the graphics buffers in a large size 
-meeting the decoding requirement, while only few alternative ref(never 
-display) frame requests that;
+Original cover-letter:
 
-4. ioctl() G_FMT may need to reflex a format which far from the current 
-sequence, or we can't know the resolution change result at an early stage;
+While working on adding (proper) VCM support to the atomisp code
+I found myself copying yet more code from
+drivers/media/pci/intel/ipu3/cio2-bridge.c into the atomisp code.
+
+So I decided that it really was time to factor out the common code
+(most of the code) from intel/ipu3/cio2-bridge.c into its own
+helper library and then share it between the atomisp and IPU3 code.
+
+This will hopefully also be useful for the ongoing work to upstream
+IPU6 input system support which also needs this functionality and
+currently contains a 3th copy of this code in the out of tree driver.
+
+This set consists of the following parts:
+
+Patches 1-4  Bugfixes for recent changes
+Patches 5-12 Cleanup / preparation patches
+Patch 13     Drop ipu-bridge code copy from atomisp, switching to
+             the shared ipu-bridge module
+Patch 14     Rework how VCM client instantiation is done so that
+             a device-link can be added from VCM to sensor to
+             fix issues with the VCM power-state being tied to
+             the sensor power state
+Patch 15     Example patch to show how patch 11 avoids the need
+             for hacks in VCM drivers caused by the shared power state
+             (not intended for merging)
+
+Regards,
+
+Hans
 
 
-A few solutions here:
+Hans de Goede (15):
+  media: ipu-bridge: Fix null pointer deref on SSDB/PLD parsing warnings
+  media: ipu-bridge: Do not use on stack memory for software_node.name
+    field
+  media: ipu-bridge: Move initialization of node_names.vcm to
+    ipu_bridge_init_swnode_names()
+  media: ipu-bridge: Allow building as module
+  media: ipu-bridge: Make ipu_bridge_init() take a regular struct device
+    as argument
+  media: ipu-bridge: Store dev pointer in struct ipu_bridge
+  media: ipu-bridge: Only keep PLD around while parsing
+  media: ipu-bridge: Add a ipu_bridge_parse_ssdb() helper function
+  media: ipu-bridge: Drop early setting of sensor->adev
+  media: ipu-bridge: Add a parse_sensor_fwnode callback to
+    ipu_bridge_init()
+  media: ipu-bridge: Move ipu-bridge.h to include/media/
+  media: ipu-bridge: Add GalaxyCore GC0310 to ipu_supported_sensors[]
+  media: atomisp: csi2-bridge: Switch to new common ipu_bridge_init()
+  media: ipu-bridge: Add a runtime-pm device-link between VCM and sensor
+  [RFC] media: dw9719: Drop hack to enable "vsio" regulator
 
-1. Extend the struct v4l2_event_src_change in struct v4l2_event with the 
-graphics pixel format(break uAPI)
-
-2. Getting controls after the SRC_CHG event, struct v4l2_event need to 
-tell how many controls it needs to fetch.
-
-3. struct v4l2_ext_buffer for such out-of-band data.
-
-
-Sorry for making it html before
+ drivers/media/i2c/dw9719.c                    |  27 +-
+ drivers/media/pci/intel/Kconfig               |  19 +-
+ drivers/media/pci/intel/ipu-bridge.c          | 334 +++++++++++-------
+ drivers/media/pci/intel/ipu3/Kconfig          |  20 ++
+ drivers/media/pci/intel/ipu3/ipu3-cio2.c      |  10 +-
+ drivers/staging/media/atomisp/Kconfig         |   2 +
+ .../staging/media/atomisp/pci/atomisp_csi2.h  |  67 ----
+ .../media/atomisp/pci/atomisp_csi2_bridge.c   | 328 +++--------------
+ .../staging/media/atomisp/pci/atomisp_v4l2.c  |   1 +
+ .../pci/intel => include/media}/ipu-bridge.h  |  26 +-
+ 10 files changed, 303 insertions(+), 531 deletions(-)
+ rename {drivers/media/pci/intel => include/media}/ipu-bridge.h (80%)
 
 -- 
-Hsia-Jun(Randy) Li
+2.41.0
 
