@@ -2,191 +2,107 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9D36EB64DC
-	for <linux-media@archiver.kernel.org>; Mon, 26 Jun 2023 05:35:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 749CEC3063F
+	for <linux-media@archiver.kernel.org>; Mon,  3 Jul 2023 17:59:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229582AbjFZFfN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 26 Jun 2023 01:35:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56820 "EHLO
+        id S230292AbjGCR7H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 Jul 2023 13:59:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjFZFfM (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 26 Jun 2023 01:35:12 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA91CE1;
-        Sun, 25 Jun 2023 22:35:05 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id CBF318139;
-        Mon, 26 Jun 2023 13:34:56 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 26 Jun
- 2023 13:34:56 +0800
-Received: from [192.168.1.115] (180.164.60.184) by EXMBX061.cuchost.com
- (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 26 Jun
- 2023 13:34:56 +0800
-Message-ID: <32d1db3e-be6a-5219-b886-14c5f5102a5f@starfivetech.com>
-Date:   Mon, 26 Jun 2023 13:34:55 +0800
+        with ESMTP id S230030AbjGCR7E (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Jul 2023 13:59:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6665EE42;
+        Mon,  3 Jul 2023 10:59:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF0A460FFB;
+        Mon,  3 Jul 2023 17:59:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A2F4C433C8;
+        Mon,  3 Jul 2023 17:58:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688407142;
+        bh=XiKFb7V3OWMEwZYvzGXbVzuxPSM8FbOxPhs9OT74TMw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FhW9voFlWsg2QeJzEydQBhtOwjlMm8fZzCdy3Jg6bgRw3Esqh+f8rsZBYIA3SCaPx
+         AQz+Oc9EBN6nn93BEoFFPSg+57WrZmANomGNefAIrNciFIsppxAehBRnMqXAt/ywjm
+         z7iqgzyrENrfpeSnG308kL3EU9gR+y4v6L3MlpiOyNoivVjA3mh4bTEnyioySkQzgM
+         GxeHgvOxN6ShRkFj3TRimrwaeLvgUIl10cAmpoOAJRCAw3PSjPMnrlQB4GB7fHJBUf
+         S3+AIOJVoJNcN8mVzU6/cDqq2x4yEOq0egDriSpyLBXZ5+3puLj3beKYTz+4YpegCI
+         Yid4vMQ3ucBZQ==
+Date:   Mon, 3 Jul 2023 18:58:55 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Takashi Iwai <tiwai@suse.de>,
+        Shengjiu Wang <shengjiu.wang@gmail.com>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Shengjiu Wang <shengjiu.wang@nxp.com>, tfiga@chromium.org,
+        m.szyprowski@samsung.com, mchehab@kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xiubo.Lee@gmail.com, festevam@gmail.com, nicoleotsuka@gmail.com,
+        lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org,
+        Jacopo Mondi <jacopo@jmondi.org>
+Subject: Re: [PATCH 1/6] media: v4l2: Add audio capture and output support
+Message-ID: <090cc065-b078-4f2c-9b2d-3b0b7418461d@sirena.org.uk>
+References: <1688002673-28493-1-git-send-email-shengjiu.wang@nxp.com>
+ <1688002673-28493-2-git-send-email-shengjiu.wang@nxp.com>
+ <ZJ6o5fT4V4HXivFa@valkosipuli.retiisi.eu>
+ <CAA+D8AND1yZ7eZLjBGxVF=i3hLMecUm-j7AVHN9npJi-4=3VrA@mail.gmail.com>
+ <87h6ql5hch.wl-tiwai@suse.de>
+ <43f0ecdf-7454-49ae-96b3-2eae5487e9a5@sirena.org.uk>
+ <d78e6ec3-a531-8fd4-a785-29b6712f83ae@xs4all.nl>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 9/9] drm/verisilicon: Add starfive hdmi driver
-Content-Language: en-US
-References: <20230602074043.33872-1-keith.zhao@starfivetech.com>
- <CGME20230602081437epcas1p36b7961b1d3f01dbed3fe2672a92e9d92@epcas1p3.samsung.com>
- <20230602074043.33872-10-keith.zhao@starfivetech.com>
- <003a01d9a57b$c140f340$43c2d9c0$@samsung.com>
-From:   Keith Zhao <keith.zhao@starfivetech.com>
-To:     undisclosed-recipients:;
-In-Reply-To: <003a01d9a57b$c140f340$43c2d9c0$@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [180.164.60.184]
-X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX061.cuchost.com
- (172.16.6.61)
-X-YovoleRuleAgent: yovoleflag
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lxJuGwNgfQ7aT3CA"
+Content-Disposition: inline
+In-Reply-To: <d78e6ec3-a531-8fd4-a785-29b6712f83ae@xs4all.nl>
+X-Cookie: Please go away.
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-yes I tested 
-modetest -M starfive -D 0 -s 116@31:1280x720-59.94 -v
-modetest -M starfive -D 0 -s 116@31:1920x1080 -v
 
-and the second command will repeat the problem
-as you advise at the beginning
-I call the "starfive_hdmi_setup"  function in the "starfive_hdmi_encoder_enable"
-instead of "starfive_hdmi_encoder_mode_set"
-resolve the problem
-i will add this modify in my next patch
+--lxJuGwNgfQ7aT3CA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thank you Hoegeun
+On Mon, Jul 03, 2023 at 03:12:55PM +0200, Hans Verkuil wrote:
 
-On 2023/6/23 10:38, Hoegeun Kwon wrote:
-> Hi Keith,
-> 
-> There is a problem with stopping when changing modes.
-> 
-> Below test log
-> 
-> root:~> modetest -Mstarfive -c
-> Connectors:
-> id      encoder status          name            size (mm)       modes
-> encoders
-> 116     115     connected       HDMI-A-1        320x180         51      115
->   modes:
->         index name refresh (Hz) hdisp hss hse htot vdisp vss vse vtot
->   #0 1280x800 59.91 1280 1328 1360 1440 800 803 809 823 71000 flags: phsync,
-> pvsync; type: preferred, driver
->   #1 1920x1080 60.00 1920 2008 2052 2200 1080 1084 1089 1125 148500 flags:
-> phsync, pvsync; type: driver
-> [...]
-> 
-> root:~> modetest -Mstarfive -s 116:#0 -v
-> setting mode 1280x800-59.91Hz on connectors 116, crtc 31
-> freq: 60.65Hz
-> freq: 59.91Hz
-> freq: 59.91Hz
-> 
-> root:~> modetest -Mstarfive -s 116:#1 -v
-> setting mode 1920x1080-60.00Hz on connectors 116, crtc 31
-> [   94.535626] rcu: INFO: rcu_sched detected stalls on CPUs/tasks:
-> [   94.560985] rcu:     1-...0: (20 ticks this GP)
-> idle=c9bc/1/0x4000000000000000 softirq=3869/3871 fqs=1120
-> [   94.589532] rcu:     (detected by 3, t=5264 jiffies, g=4645, q=63
-> ncpus=4)
-> [   94.615335] Task dump for CPU 1:
-> [   94.637723] task:modetest        state:R  running task     stack:0
-> pid:407   ppid:397    flags:0x00000008
-> [   94.667299] Call Trace:
-> [   94.689297] [<ffffffff80d1e8fc>] __schedule+0x2a8/0xa52
-> [   94.714221] [<ffffffff80d1f100>] schedule+0x5a/0xdc
-> [   94.738626] [<ffffffff80d25a14>] schedule_timeout+0x220/0x2a6
-> [   94.763762] [<ffffffff80d2037a>] wait_for_completion+0xfe/0x126
-> [   94.789073] [<ffffffff8002ffe4>] kthread_flush_worker+0x82/0xa0
-> 
-> 
->> -----Original Message-----
->> From: dri-devel <dri-devel-bounces@lists.freedesktop.org> On Behalf Of
->> Keith Zhao
->> Sent: Friday, June 2, 2023 4:41 PM
->> To: dri-devel@lists.freedesktop.org; devicetree@vger.kernel.org; linux-
->> kernel@vger.kernel.org; linux-riscv@lists.infradead.org; linux-
->> media@vger.kernel.org; linaro-mm-sig@lists.linaro.org
->> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>; Sumit Semwal
->> <sumit.semwal@linaro.org>; Emil Renner Berthing <kernel@esmil.dk>;
->> Shengyang Chen <shengyang.chen@starfivetech.com>; Conor Dooley
->> <conor+dt@kernel.org>; Albert Ou <aou@eecs.berkeley.edu>; Thomas
->> Zimmermann <tzimmermann@suse.de>; Jagan Teki <jagan@edgeble.ai>; Rob
->> Herring <robh+dt@kernel.org>; Chris Morgan <macromorgan@hotmail.com>; Paul
->> Walmsley <paul.walmsley@sifive.com>; Keith Zhao
->> <keith.zhao@starfivetech.com>; Bjorn Andersson <andersson@kernel.org>;
->> Changhuang Liang <changhuang.liang@starfivetech.com>; Jack Zhu
->> <jack.zhu@starfivetech.com>; Palmer Dabbelt <palmer@dabbelt.com>; Shawn
->> Guo <shawnguo@kernel.org>; christian.koenig@amd.com
->> Subject: [PATCH 9/9] drm/verisilicon: Add starfive hdmi driver
->> 
->> Add HDMI dirver for StarFive SoC JH7110.
->> 
->> Signed-off-by: Keith Zhao <keith.zhao@starfivetech.com>
->> ---
->>  drivers/gpu/drm/verisilicon/Kconfig         |  11 +
->>  drivers/gpu/drm/verisilicon/Makefile        |   1 +
->>  drivers/gpu/drm/verisilicon/starfive_hdmi.c | 928 ++++++++++++++++++++
->> drivers/gpu/drm/verisilicon/starfive_hdmi.h | 296 +++++++
->>  drivers/gpu/drm/verisilicon/vs_drv.c        |   6 +
->>  drivers/gpu/drm/verisilicon/vs_drv.h        |   4 +
->>  6 files changed, 1246 insertions(+)
->>  create mode 100644 drivers/gpu/drm/verisilicon/starfive_hdmi.c
->>  create mode 100644 drivers/gpu/drm/verisilicon/starfive_hdmi.h
-> 
-> [...]
-> 
->> diff --git a/drivers/gpu/drm/verisilicon/starfive_hdmi.c
->> b/drivers/gpu/drm/verisilicon/starfive_hdmi.c
->> new file mode 100644
->> index 000000000000..128ecca03309
->> --- /dev/null
->> +++ b/drivers/gpu/drm/verisilicon/starfive_hdmi.c
->> @@ -0,0 +1,928 @@
-> 
-> [...]
-> 
->> +static int starfive_hdmi_setup(struct starfive_hdmi *hdmi,
->> +			       struct drm_display_mode *mode) {
-> 
-> [...]
-> 
->> +	return 0;
->> +}
->> +
->> +static void starfive_hdmi_encoder_mode_set(struct drm_encoder *encoder,
->> +					   struct drm_display_mode *mode,
->> +					   struct drm_display_mode
-> *adj_mode) {
->> +	struct starfive_hdmi *hdmi = encoder_to_hdmi(encoder);
->> +
->> +	starfive_hdmi_setup(hdmi, adj_mode);
-> 
-> When starfive_hdmi_setup runs here,
-> when changing the mode, a problem occurs because try to write a value to reg
-> in a state that is not resumed after suspend.
-> 
->> +
->> +	memcpy(&hdmi->previous_mode, adj_mode, sizeof(hdmi-
->> >previous_mode)); }
->> +
->> +static void starfive_hdmi_encoder_enable(struct drm_encoder *encoder) {
->> +	struct starfive_hdmi *hdmi = encoder_to_hdmi(encoder);
->> +
->> +	pm_runtime_get_sync(hdmi->dev);
-> 
-> So if move the call point of starfive_hdmi_setup here, it works normally.
-> 
->> +}
-> 
-> Best regards,
-> Hoegeun
-> 
-> 
+> My main concern is that these cross-subsystem drivers are a pain to
+> maintain. So there have to be good reasons to do this.
+
+> Also it is kind of weird to have to use the V4L2 API in userspace to
+> deal with a specific audio conversion. Quite unexpected.
+
+> But in the end, that's a decision I can't make.
+
+> So I wait for that feedback. Note that if the decision is made that this
+> can use V4L2, then there is quite a lot more that needs to be done:
+> documentation, new compliance tests, etc. It's adding a new API, and that
+> comes with additional work...
+
+Absolutely, I agree with all of this - my impression was that the target
+here would be bypass of audio streams to/from a v4l2 device, without
+bouncing through an application layer.  If it's purely for audio usage
+with no other tie to v4l2 then involving v4l2 does just seem like
+complication.
+
+--lxJuGwNgfQ7aT3CA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSjDF4ACgkQJNaLcl1U
+h9C2qQf/T1bo/x5kzUxZUiZwHmeGiBJp44klM7V/tJxivlJLnJasmtd1XuabJOck
+svgGpJOHeeAAIAQIleix37Lwq5hMLYgRdPPAHw3+uw4mYtDzqo5dx8t7Wb8d7+px
+152zx6Cv8YdJ1mK/UOKXC/+knHpkW0r9PtzwItAAnCTPpAIPjB0FAjSkhRuQr2bl
+tlzLcAepTA/uPQYuK1FbwUZEcm0i/qo/aFpE5T7hYpY3IlFYrtMz8uNyqhXMsuM2
+SMREMMIMF84hMJkJ3sRrf6609xv86w+Rkh6illa8jX/GCKDHQRNR0xa+0Gky5cah
+eOW+Q5lSP6NtzVnkBdM3DUDl/+IaRg==
+=ImD6
+-----END PGP SIGNATURE-----
+
+--lxJuGwNgfQ7aT3CA--
