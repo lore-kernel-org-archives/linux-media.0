@@ -2,56 +2,56 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BCF4AEB64D9
-	for <linux-media@archiver.kernel.org>; Tue,  4 Jul 2023 12:58:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26D7CEB64D9
+	for <linux-media@archiver.kernel.org>; Tue,  4 Jul 2023 13:05:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbjGDM6z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 4 Jul 2023 08:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57166 "EHLO
+        id S231159AbjGDNFA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 4 Jul 2023 09:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230238AbjGDM6z (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Jul 2023 08:58:55 -0400
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7320F10D0
-        for <linux-media@vger.kernel.org>; Tue,  4 Jul 2023 05:58:53 -0700 (PDT)
-Received: by mail-vs1-xe2d.google.com with SMTP id ada2fe7eead31-440ad576d87so1807645137.1
-        for <linux-media@vger.kernel.org>; Tue, 04 Jul 2023 05:58:53 -0700 (PDT)
+        with ESMTP id S231218AbjGDNE6 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Jul 2023 09:04:58 -0400
+Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF7F1980
+        for <linux-media@vger.kernel.org>; Tue,  4 Jul 2023 06:04:25 -0700 (PDT)
+Received: by mail-vk1-xa2f.google.com with SMTP id 71dfb90a1353d-47e746f9560so125344e0c.1
+        for <linux-media@vger.kernel.org>; Tue, 04 Jul 2023 06:04:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google; t=1688475532; x=1691067532;
+        d=raspberrypi.com; s=google; t=1688475864; x=1691067864;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zVfYTGpiXVn9ZbZMWSCGB4PnJdTdMsSHihBjew+DAug=;
-        b=QI73vCobqsCwFHhbxIAGMreHSH6InBUC5LAkkV1lW2/fvBnXn6+OqkgAXhtY7Nm1w6
-         b/5asxjhurXVQOeaSdAk33eBBwzLhYOY0s2lxrV4yTqGUvAzH4ijhnP+Amee7RtX2S15
-         mXytCanwh3gbYcUfQ67b3i5w+BJOFjIl16gW5hSt2u017pKL32EbOo72K6JQE0tl6hRS
-         pTL9BgJ896A52UagsrmI/NqsjpWsqhakOJiOtva7IEh4URVmU/gVNBsQKOcdYB3rFp7N
-         s+ml1YqIR3tRm7RS/k8SUt6HktM8v1rguEX46u4a8SsSp66agnLip1dZ93fyAXlNQk3E
-         FqZQ==
+        bh=Je2IixiKUbt9NqSRg4gDrVP8T4/tNCU78MaXm4X340k=;
+        b=oKvtHkdj4yN43IFV4ScgtWN4e346FcYRethiN1fZhu8pZGtLmHbwde39e98T9oy4z7
+         1Wwg4Q3Wqh7zFxc6tFnzZmqdCDQvrJ8K74Kzi4Ev8VXvZY/JtLxZIXTMbH1EoSeDst8T
+         WB67GPYmHO0ExldyeY+Q6Jr2ySoQFPGJsWheBXM0eYA7FpvbIWwSLe/fBa9GGl1Jz1TU
+         /xWKeujhPqVRTbj72SwFcp2ancm/Q3HbzxH+nKEMvendr3f0LvwsG1sy7oVLOdpNmBfC
+         nCwD7imHQ9h6Cd78SZumvCmiKa1Tkr11Q4YY1CX0XqW2DnCvzq+0j1XpUYnAgC0KhJd7
+         ZCNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688475532; x=1691067532;
+        d=1e100.net; s=20221208; t=1688475864; x=1691067864;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zVfYTGpiXVn9ZbZMWSCGB4PnJdTdMsSHihBjew+DAug=;
-        b=KmiQGr3D9wpp+FhBJS5sI9p19JBemwzxYfagQbOrD1RfdSgADYnP/sG4Id1gkgozVm
-         kZ/spbZrrKlemOfJYV7ftfOuedsHU+6sErvhi60uN7QJXSyQBihiysGN0moRacnqzUH3
-         lxcLDsaLrKl5Sp+p1nQcO6ZstV9fy8IRW2+16m+1OY3Raq1q4rJIR8CSpsPRYp0M1/W+
-         /ALWOsRLGz9TjUoZ6gplpeTAub1DVEqbsjwzUeZNZmcMdcBrGQIOpHrKrd/mVWaWHbr7
-         z1faMKnPJ3KDnkeWfAkeKyxhYBhVAuE6TbrsECij+YNgDVh37Ar1yPagACgFny79U2o8
-         KL9A==
-X-Gm-Message-State: ABy/qLbQotvA3Qm0AXb48dF/LNv0MSYEDmKoCl2cNjvhLx7CmrfLBtT/
-        qyY6w+6vBRB/XS/dc2gd1S3GsNK6ivm7X0qf34f+GYFpGPD4yKgk
-X-Google-Smtp-Source: APBJJlEKzh07VwU63FdkqfHEUH2pTPf+biccOCqbhFmMzL0SbKmTZL22QGx21Wl/EIiWZwW8iJ2655TfStzogJ2Qnno=
-X-Received: by 2002:a05:6102:97:b0:444:59e2:f700 with SMTP id
- t23-20020a056102009700b0044459e2f700mr6503028vsp.7.1688475532596; Tue, 04 Jul
- 2023 05:58:52 -0700 (PDT)
+        bh=Je2IixiKUbt9NqSRg4gDrVP8T4/tNCU78MaXm4X340k=;
+        b=V1zR9npviz0ebuzoM/xYA95cxfBFMmRYvkJ95mE1Aij8wlhiWdiInDNEFBUpoSs6n9
+         M5zpm+gm7LDLlbFfkxPvrYyYg1i6CaDBKYdUgnNXNnr62paShB0efGLqtXhL7I2CraZR
+         ETfkNKnMhGDP/2dhRjcnDF9v48mT/U98sbgCVfQ2YmzEN/KhGEUxY9Wl7u3/jRKcRfNY
+         E7l6GecCcpG2ExN5MpHytF+/0w1wD1kUnYgR6r88FGbZOb5aR8DSGyLZLJoqWBgzlbum
+         /5FHSp4WknpWFT1ta7En5Sqpt/3MvzfvehjJmwIDWd0gnBr53u0bTevHTvga9KgPmQP2
+         JrHw==
+X-Gm-Message-State: ABy/qLahMr5w9m9l1paElKZZYBauD/9AzhtJGhfsSWs79EoLTLNwVq6G
+        rLWZBgUtTmS7O+r4mQofthZcvNrmqHGUFNSqCWip32hcT6c6IEfL
+X-Google-Smtp-Source: APBJJlF7nTnW5BQ6Djycb5X/rsMYdBFk3iRl7ptjiit/AxEitYFpSPFU5EWrwca7RDCD4XGqRvIn1ydwEw39J0WbxVY=
+X-Received: by 2002:a05:6102:50d:b0:443:6082:1436 with SMTP id
+ l13-20020a056102050d00b0044360821436mr6758242vsa.6.1688475863889; Tue, 04 Jul
+ 2023 06:04:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230704123819.156418-1-jacopo.mondi@ideasonboard.com> <20230704123819.156418-2-jacopo.mondi@ideasonboard.com>
-In-Reply-To: <20230704123819.156418-2-jacopo.mondi@ideasonboard.com>
+References: <20230704123819.156418-1-jacopo.mondi@ideasonboard.com> <20230704123819.156418-3-jacopo.mondi@ideasonboard.com>
+In-Reply-To: <20230704123819.156418-3-jacopo.mondi@ideasonboard.com>
 From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date:   Tue, 4 Jul 2023 13:58:37 +0100
-Message-ID: <CAPY8ntD+bK1Djn1DULQKe=oVyOmAhx_t=QK1cgyC3jpPL5Pqnw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] Documentation: v4l: Flip handling for RAW sensors
+Date:   Tue, 4 Jul 2023 14:04:08 +0100
+Message-ID: <CAPY8ntA7DjyDstTjhpGiau2ppkEs45-y5QygqtB96cLE8_f-Yg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] Documentation: v4l: Exposure/gain for camera sensor
 To:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 Cc:     linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
         Sakari Ailus <sakari.ailus@iki.fi>,
@@ -63,46 +63,59 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 On Tue, 4 Jul 2023 at 13:38, Jacopo Mondi <jacopo.mondi@ideasonboard.com> wrote:
 >
-> Document the requirement of notifying to userspace the possible
-> re-ordering of the color sample components when a vertical or horizontal
-> flip is applied to a RAW camera sensor.
+> Document the suggested way to exposure controls for exposure and gain
+> for camera sensor drivers.
 >
 > Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 > ---
->  Documentation/driver-api/media/camera-sensor.rst | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
+>  .../driver-api/media/camera-sensor.rst        | 27 +++++++++++++++++++
+>  1 file changed, 27 insertions(+)
 >
 > diff --git a/Documentation/driver-api/media/camera-sensor.rst b/Documentation/driver-api/media/camera-sensor.rst
-> index 93f4f2536c25..7516d61a903d 100644
+> index 7516d61a903d..fb70d55f6671 100644
 > --- a/Documentation/driver-api/media/camera-sensor.rst
 > +++ b/Documentation/driver-api/media/camera-sensor.rst
-> @@ -173,3 +173,19 @@ V4L2_CID_VFLIP controls with the values programmed by the register sequences.
->  The default values of these controls shall be 0 (disabled). Especially these
->  controls shall not be inverted, independently of the sensor's mounting
->  rotation.
+> @@ -189,3 +189,30 @@ the ``V4L2_CID_VFLIP`` and ``V4L2_CID_HFLIP`` controls with the
+>  a flip can potentially change the output buffer content layout. Flips should
+>  also be taken into account when enumerating and handling media bus formats
+>  on the camera sensor source pads.
 > +
-> +Flip handling for raw camera color sensors
-> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> +Exposure and Gain Control
+> +-------------------------
 > +
-> +Applying vertical and horizontal flips on raw camera sensors inverts the color
-> +sample reading direction on the sensor's pixel array. This may cause the
-> +re-ordering of the color samples on the sensor's output frame. As an example, a
-> +raw camera sensor with a Bayer pattern color filter array with a native RGGB
-> +Bayer order will produce frames with GRBG component ordering when an horizontal
-> +flip is applied. Camera sensor drivers where inverting the reading order
-> +direction causes a re-ordering of the color components are requested to register
+> +Camera sensor drivers that allow applications to control the image exposure
+> +and gain should do so by exposing dedicated controls to applications.
+> +
+> +Exposure time is controlled by registering the ``V4L2_CID_EXPOSURE`` control.
+> +The control definition does not specify a unit to allow maximum flexibility
+> +for multiple device types, but when used for camera sensor drivers it should be
+> +expressed in unit of lines whenever possible.
+> +
+> +To convert lines into units of time, the total line length (visible and
+> +not visible pixels) has to be divided by the pixel rate::
+> +
+> +        line duration = total line length / pixel rate
+> +                      = (image width + horizontal blanking) / pixel rate
+> +
+> +Camera sensor driver should try whenever possible to distinguish between the
+> +analogue and digital gain control functions. Analogue gain is a multiplier
 
-requested or required?
+nit: multiplication factor
 
-I'm not that fussed either way, just down to how strict you want the spec to be.
+> +factor applied to all color channels on the pixel array before they get
+> +converted in the digital domain. It should be made controllable by
 
+nit: converted into the digital domain
+
+> +registering the ``V4L2_CID_ANALOGUE_GAIN`` control, expressed as a device
+> +specific gain code. Digital gain control is optional and should be exposed to
+> +applications by registering ``V4L2_CID_DIGITAL_GAIN``. Camera sensor drivers are
+> +discouraged from using ``V4L2_CID_GAIN`` as it doesn't allow differentiation of
+> +analogue vs digital gain.
+
+Sorry to have missed those first time around. With or without:
 Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
-> +the ``V4L2_CID_VFLIP`` and ``V4L2_CID_HFLIP`` controls with the
-> +``V4L2_CTRL_FLAG_MODIFY_LAYOUT`` flag enabled to notify userspace that enabling
-> +a flip can potentially change the output buffer content layout. Flips should
-> +also be taken into account when enumerating and handling media bus formats
-> +on the camera sensor source pads.
 > --
 > 2.40.1
 >
