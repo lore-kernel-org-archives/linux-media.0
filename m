@@ -2,181 +2,367 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87222EB64DD
-	for <linux-media@archiver.kernel.org>; Tue,  4 Jul 2023 12:57:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94540C001DB
+	for <linux-media@archiver.kernel.org>; Tue,  4 Jul 2023 12:58:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231511AbjGDM5a (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 4 Jul 2023 08:57:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56298 "EHLO
+        id S230052AbjGDM6s (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 4 Jul 2023 08:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231544AbjGDM5Z (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Jul 2023 08:57:25 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A360D10E0
-        for <linux-media@vger.kernel.org>; Tue,  4 Jul 2023 05:57:21 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (85-160-42-71.reb.o2.cz [85.160.42.71])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 21F096DF;
-        Tue,  4 Jul 2023 14:56:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1688475396;
-        bh=E6o3Xci9mSk1ykAJGqDbZS5XOLJ65xy0QJKZVB9ECMw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BbRrQ1uFD237Rb5n8j5Qgvn4UbQUVXRWscs4TNAcvU6J92PKXT9jkhb1AknvnG1ov
-         gPsY8RnWwzctHc++LRo9gzYsBNXaGMD4tvj8lj86kY8Do38J79F13Hn2L5MlGjTtqF
-         /DvNnOLxGn+iS/Z1Z69plUmhxnVXe4kdX7pm5QI4=
-Date:   Tue, 4 Jul 2023 15:57:20 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-media@vger.kernel.org, tomi.valkeinen@ideasonboard.com,
-        bingbu.cao@intel.com, hongju.wang@intel.com, hverkuil@xs4all.nl
-Subject: Re: [PATCH 0/7] Generic line based metadata support, internal pads
-Message-ID: <20230704125720.GA24035@pendragon.ideasonboard.com>
-References: <20230630204338.126583-1-sakari.ailus@linux.intel.com>
+        with ESMTP id S229610AbjGDM6r (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Jul 2023 08:58:47 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD57E7E;
+        Tue,  4 Jul 2023 05:58:46 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3fb4146e8fcso48332615e9.0;
+        Tue, 04 Jul 2023 05:58:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688475524; x=1691067524;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oYBmFx9wrFb79+i1yrmX9us6yWsDnEHsPb/qaqkrYns=;
+        b=M9nRH1jXGux0a27X/sX5TaQ3CU8jv98OQkFLwBcJ3+uMFa8m3NUaz+y9Ukvonq+hdd
+         G6v1EY1x8vC/XRbfHA6hv4bqCN2++Q3XTcF85YdqOq0POQFoqlVLVsMS4Yds6rP/cZUw
+         oE0sn4DV7Y02efEweQIoI5DnU/Kt2UlAtmwY4Rp/XafsCBjIGgjQa4HqYWAoymPsYuws
+         Aw+z9yB0Cr+yWSD9dYanDIhcLMSsMcuT02s6Pvqbg/oxptsmGT8rwvHVYdf2lAyPPGYt
+         eKWpqw4slJdeKa1xeA/xL8mtv04zeU1qdusdMEHAZ/vaNs65fp9xy7i490SFtHplQJ/I
+         mWdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688475524; x=1691067524;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oYBmFx9wrFb79+i1yrmX9us6yWsDnEHsPb/qaqkrYns=;
+        b=e0p3Shl/Oad9T4Z8Cu7RtwzW0X1EMdzK1X7nCj314H646OkL1vLq2PNdlLndOvS6mP
+         zYvj6OHr3byFWf+ke7du4pV4MG5ydPecZA/FhhwcTU7bLupsypN/aeGTbCAE049IiuyF
+         bzZydFOypXy4WAWjy2b8NdXoss4qAudAI9NLBLRG3IAxFGX6qlU+8egTFa4pQwMqTjJz
+         q391Fy2Qma2REW3n83BCWp6jyASPc0K/IPz5zFvVgtoQaYFLR70mHjHCvELcEDzyc1WX
+         163lPg8r7felxVS0FjjRWJJxtiTenkcRON7bJFlM5K8GqvV0l7+PKxfTd6wbc5ID3afc
+         3ZVA==
+X-Gm-Message-State: AC+VfDyVBAa7HBklEstIPcI/jyaViA58nKYGdWneqpmoOAlMhGBYl9J1
+        GQApvNInb2eUI4ZTgUeknHJTYkohx5S0Lw==
+X-Google-Smtp-Source: ACHHUZ6GTJL89wliDIqCSDyiNJ2aUoyu7j979f6v+s6igJRx2cO119ceGZ81fz9C/kKXDqcjlnluEQ==
+X-Received: by 2002:a7b:c8c4:0:b0:3fa:8c8b:716 with SMTP id f4-20020a7bc8c4000000b003fa8c8b0716mr16337001wml.1.1688475524016;
+        Tue, 04 Jul 2023 05:58:44 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id l17-20020a1c7911000000b003fbb9339b29sm15220213wme.42.2023.07.04.05.58.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jul 2023 05:58:42 -0700 (PDT)
+Message-ID: <5635d5b9-68ea-3218-9859-6469e03829bb@gmail.com>
+Date:   Tue, 4 Jul 2023 14:58:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230630204338.126583-1-sakari.ailus@linux.intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] dt-bindings: cleanup DTS example whitespaces
+Content-Language: en-US, ca-ES, es-ES
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-rockchip@lists.infradead.org, linux-iio@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20230702182308.7583-1-krzysztof.kozlowski@linaro.org>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20230702182308.7583-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sakari,
 
-On Fri, Jun 30, 2023 at 11:43:31PM +0300, Sakari Ailus wrote:
-> Hi folks,
-> 
-> Here are a few patches to add support generic, line based metadata as well
-> as internal source pads. While the amount of code is not very large, to
-> the contrary it is quite small actually IMO, I presume what this is about
-> and why it is being proposed requires some explaining.
-> 
-> Metadata mbus codes and formats have existed for some time in V4L2. They
-> however have been only used by drivers that produce the data itself and
-> effectively this metadata has always been statistics of some sort (at
-> least when it comes to ISPs). What is different here is that we intend to
-> add support for metadata originating from camera sensors.
 
-I've just realized that, unless I'm mistaken, we've never documented
-which of the v4l2_mbus_framefmt fields are valid for metadata formats.
-Should this be fixed as part of this series ?
+On 02/07/2023 20:23, Krzysztof Kozlowski wrote:
+> The DTS code coding style expects spaces around '=' sign.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Rob,
+> 
+> Maybe this could go via your tree? Rebased on your for-next:
+> v6.4-rc2-45-gf0ac35049606
+> ---
+[...]
+>   .../bindings/net/mediatek-dwmac.yaml           |  2 +-
+[...]
+>   .../bindings/phy/mediatek,dsi-phy.yaml         |  2 +-
+[...]
+>   .../devicetree/bindings/usb/mediatek,mtu3.yaml |  2 +-
+>   .../devicetree/bindings/usb/ti,am62-usb.yaml   |  2 +-
 
-> Camera sensors produce different kinds of metadata, embedded data (usually
-> register address--value pairs used to capture the frame, in a more or less
-> sensor specific format), histograms (in a very sensor specific format),
-> dark pixels etc. The number of these formats is probably going to be about
-> as large as image data formats if not larger, as the image data formats
-> are much better standardised but a smaller subset of them will be
-> supported by V4L2, at least initially but possibly much more in the long
-> run.
-> 
-> Having this many device specific formats would be a major problem for all
-> the other drivers along that pipeline (not to mention the users of those
-> drivers), including bridge (e.g. CSI-2 to parallel) but especially CSI-2
-> receiver drivers that have DMA: the poor driver developer would not only
-> need to know camera sensor specific formats but to choose the specific
-> packing of that format suitable for the DMA used by the hardware. It is
-> unlikely many of these would ever get tested while being present on the
-> driver API. Also adding new sensors with new embedded data formats would
-> involve updating all bridge and CSI-2 receiver drivers. I don't expect
-> this to be a workable approach.
-> 
-> Instead what I'm proposing is to use specific metadata formats on the
-> sensor devices only, on internal pads (more about those soon) of the
-> sensors, only visible in the UAPI, and then generic mbus formats along the
-> pipeline and finally generic V4L2 metadata formats on the DMAs (specific
-> to bit depth and packing). This would unsnarl the two, defining what data
-> there is (specific mbus code) and how that is transported and packed
-> (generic mbus codes and V4L2 formats).
-> 
-> The user space would be required to "know" the path of that data from the
-> sensor's internal pad to the V4L2 video node. I do not see this as these
-> devices require at least some knowledge of the pipeline, i.e. hardware at
-> hand. Separating what the data means and how it is packed may even be
-> beneficial: it allows separating code that interprets the data (sensor
-> internal mbus code) from the code that accesses it (packing).
-> 
-> These formats are in practice line based, meaning that there may be
-> padding at the end of the line, depending on the bus as well as the DMA.
-> If non-line based formats are needed, it is always possible to set the
-> "height" field to 1.
-> 
-> The internal (source) pads are an alternative to source routes [1]. The
-> source routes were not universally liked and I do have to say I like
-> re-using existing interface concepts (pads and everything you can do with
-> pads, including access format, selections etc.) wherever it makes sense,
-> instead of duplicating functionality.
-> 
-> Effectively internal source pads behave mostly just like sink pads, but
-> they describe a flow of data that originates from a sub-device instead of
-> arriving to a sub-device. The SUBDEV_S_ROUTING IOCTLs are used to enable
-> and disable routes from internal source pads to sub-device's source pads.
-> The subdev format IOCTLs are usable, too, so one can find which subdev
-> format is available on given internal source pad.
-> 
-> This set depends on these patches:
-> 
-> <URL:https://lore.kernel.org/linux-media/20230505205416.55002-1-sakari.ailus@linux.intel.com/T/#t>
-> 
-> I've also pushed these here and I'll keep updating the branch:
-> 
-> <URL:https://git.linuxtv.org/sailus/media_tree.git/log/?h=metadata>
-> 
-> Questions and comments are most welcome.
-> 
-> Driver support is to be added, as well as an example.
+For MediaTek parts:
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
 
-Jacopo and I are working on this, including libcamera support.
-
-> [1] <URL:https://lore.kernel.org/linux-media/20220831141357.1396081-20-tomi.valkeinen@ideasonboard.com/>
+>   15 files changed, 30 insertions(+), 30 deletions(-)
 > 
-> since v1:
-> 
-> - Make the new pad flag just "INTERNAL", requiring either SINK or SOURCE
->   pad flag to accompany it. Removed the union in struct v4l2_subdev_route.
-> 
-> - Add the term "stream" to MC glossary.
-> 
-> - Improved and fixed documentation (according to comments).
-> 
-> - Note these formats are little endian.
-> 
-> - Remove 1X8 from the names of the mbus codes. These formats have generally
->   8 bits per pixel.
-> 
-> - Fix mbus code numbering (had holes in RFC).
-> 
-> - Add new metadata fields to debug prints.
-> 
-> - Fix a minor documentation build issue.
-> 
-> Sakari Ailus (7):
->   media: mc: Check pad flag validity
->   media: mc: Add INTERNAL pad flag
->   media: v4l: subdev: Support INTERNAL pads in routing IOCTLs
->   media: uapi: v4l: Document source routes
->   media: uapi: Add generic serial metadata mbus formats
->   media: uapi: Add generic 8-bit metadata format definitions
->   media: v4l: Support line-based metadata capture
-> 
->  .../userspace-api/media/glossary.rst          |   6 +
->  .../media/mediactl/media-types.rst            |   6 +
->  .../userspace-api/media/v4l/dev-meta.rst      |  15 +
->  .../userspace-api/media/v4l/dev-subdev.rst    |  20 ++
->  .../userspace-api/media/v4l/meta-formats.rst  |   1 +
->  .../media/v4l/metafmt-generic.rst             | 331 ++++++++++++++++++
->  .../media/v4l/subdev-formats.rst              | 257 ++++++++++++++
->  .../media/v4l/vidioc-enum-fmt.rst             |   7 +
->  .../media/videodev2.h.rst.exceptions          |   1 +
->  drivers/media/mc/mc-entity.c                  |  17 +-
->  drivers/media/v4l2-core/v4l2-ioctl.c          |  13 +-
->  drivers/media/v4l2-core/v4l2-subdev.c         |   3 +-
->  include/uapi/linux/media-bus-format.h         |   9 +
->  include/uapi/linux/media.h                    |   1 +
->  include/uapi/linux/videodev2.h                |  19 +
->  15 files changed, 701 insertions(+), 5 deletions(-)
->  create mode 100644 Documentation/userspace-api/media/v4l/metafmt-generic.rst
-
--- 
-Regards,
-
-Laurent Pinchart
+> diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-cti.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-cti.yaml
+> index 0c5b875cb654..d6c84b6e7fe6 100644
+> --- a/Documentation/devicetree/bindings/arm/arm,coresight-cti.yaml
+> +++ b/Documentation/devicetree/bindings/arm/arm,coresight-cti.yaml
+> @@ -287,7 +287,7 @@ examples:
+>               arm,trig-in-sigs = <0 1>;
+>               arm,trig-in-types = <PE_DBGTRIGGER
+>                                    PE_PMUIRQ>;
+> -            arm,trig-out-sigs=<0 1 2 >;
+> +            arm,trig-out-sigs = <0 1 2 >;
+>               arm,trig-out-types = <PE_EDBGREQ
+>                                     PE_DBGRESTART
+>                                     PE_CTIIRQ>;
+> @@ -309,24 +309,24 @@ examples:
+>   
+>         trig-conns@0 {
+>           reg = <0>;
+> -        arm,trig-in-sigs=<0>;
+> -        arm,trig-in-types=<GEN_INTREQ>;
+> -        arm,trig-out-sigs=<0>;
+> -        arm,trig-out-types=<GEN_HALTREQ>;
+> +        arm,trig-in-sigs = <0>;
+> +        arm,trig-in-types = <GEN_INTREQ>;
+> +        arm,trig-out-sigs = <0>;
+> +        arm,trig-out-types = <GEN_HALTREQ>;
+>           arm,trig-conn-name = "sys_profiler";
+>         };
+>   
+>         trig-conns@1 {
+>           reg = <1>;
+> -        arm,trig-out-sigs=<2 3>;
+> -        arm,trig-out-types=<GEN_HALTREQ GEN_RESTARTREQ>;
+> +        arm,trig-out-sigs = <2 3>;
+> +        arm,trig-out-types = <GEN_HALTREQ GEN_RESTARTREQ>;
+>           arm,trig-conn-name = "watchdog";
+>         };
+>   
+>         trig-conns@2 {
+>           reg = <2>;
+> -        arm,trig-in-sigs=<1 6>;
+> -        arm,trig-in-types=<GEN_HALTREQ GEN_RESTARTREQ>;
+> +        arm,trig-in-sigs = <1 6>;
+> +        arm,trig-in-types = <GEN_HALTREQ GEN_RESTARTREQ>;
+>           arm,trig-conn-name = "g_counter";
+>         };
+>       };
+> diff --git a/Documentation/devicetree/bindings/arm/keystone/ti,sci.yaml b/Documentation/devicetree/bindings/arm/keystone/ti,sci.yaml
+> index 91b96065f7df..86b59de7707e 100644
+> --- a/Documentation/devicetree/bindings/arm/keystone/ti,sci.yaml
+> +++ b/Documentation/devicetree/bindings/arm/keystone/ti,sci.yaml
+> @@ -96,8 +96,8 @@ examples:
+>         compatible = "ti,k2g-sci";
+>         ti,system-reboot-controller;
+>         mbox-names = "rx", "tx";
+> -      mboxes= <&msgmgr 5 2>,
+> -              <&msgmgr 0 0>;
+> +      mboxes = <&msgmgr 5 2>,
+> +               <&msgmgr 0 0>;
+>         reg-names = "debug_messages";
+>         reg = <0x02921800 0x800>;
+>       };
+> @@ -107,8 +107,8 @@ examples:
+>         compatible = "ti,k2g-sci";
+>         ti,host-id = <12>;
+>         mbox-names = "rx", "tx";
+> -      mboxes= <&secure_proxy_main 11>,
+> -              <&secure_proxy_main 13>;
+> +      mboxes = <&secure_proxy_main 11>,
+> +               <&secure_proxy_main 13>;
+>         reg-names = "debug_messages";
+>         reg = <0x44083000 0x1000>;
+>   
+> diff --git a/Documentation/devicetree/bindings/display/msm/gmu.yaml b/Documentation/devicetree/bindings/display/msm/gmu.yaml
+> index 029d72822d8b..65b02c7a1211 100644
+> --- a/Documentation/devicetree/bindings/display/msm/gmu.yaml
+> +++ b/Documentation/devicetree/bindings/display/msm/gmu.yaml
+> @@ -225,7 +225,7 @@ examples:
+>       #include <dt-bindings/interrupt-controller/arm-gic.h>
+>   
+>       gmu: gmu@506a000 {
+> -        compatible="qcom,adreno-gmu-630.2", "qcom,adreno-gmu";
+> +        compatible = "qcom,adreno-gmu-630.2", "qcom,adreno-gmu";
+>   
+>           reg = <0x506a000 0x30000>,
+>                 <0xb280000 0x10000>,
+> diff --git a/Documentation/devicetree/bindings/display/panel/samsung,s6e8aa0.yaml b/Documentation/devicetree/bindings/display/panel/samsung,s6e8aa0.yaml
+> index 1cdc91b3439f..200fbf1c74a0 100644
+> --- a/Documentation/devicetree/bindings/display/panel/samsung,s6e8aa0.yaml
+> +++ b/Documentation/devicetree/bindings/display/panel/samsung,s6e8aa0.yaml
+> @@ -74,7 +74,7 @@ examples:
+>               vdd3-supply = <&vcclcd_reg>;
+>               vci-supply = <&vlcd_reg>;
+>               reset-gpios = <&gpy4 5 0>;
+> -            power-on-delay= <50>;
+> +            power-on-delay = <50>;
+>               reset-delay = <100>;
+>               init-delay = <100>;
+>               panel-width-mm = <58>;
+> diff --git a/Documentation/devicetree/bindings/display/rockchip/rockchip-vop.yaml b/Documentation/devicetree/bindings/display/rockchip/rockchip-vop.yaml
+> index 6f43d885c9b3..df61cb5f5c54 100644
+> --- a/Documentation/devicetree/bindings/display/rockchip/rockchip-vop.yaml
+> +++ b/Documentation/devicetree/bindings/display/rockchip/rockchip-vop.yaml
+> @@ -121,11 +121,11 @@ examples:
+>           #size-cells = <0>;
+>           vopb_out_edp: endpoint@0 {
+>             reg = <0>;
+> -          remote-endpoint=<&edp_in_vopb>;
+> +          remote-endpoint = <&edp_in_vopb>;
+>           };
+>           vopb_out_hdmi: endpoint@1 {
+>             reg = <1>;
+> -          remote-endpoint=<&hdmi_in_vopb>;
+> +          remote-endpoint = <&hdmi_in_vopb>;
+>           };
+>         };
+>       };
+> diff --git a/Documentation/devicetree/bindings/iio/adc/ti,adc108s102.yaml b/Documentation/devicetree/bindings/iio/adc/ti,adc108s102.yaml
+> index 9b072b057f16..a60b1e100ee4 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/ti,adc108s102.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/ti,adc108s102.yaml
+> @@ -35,7 +35,7 @@ unevaluatedProperties: false
+>   examples:
+>     - |
+>       spi {
+> -        #address-cells= <1>;
+> +        #address-cells = <1>;
+>           #size-cells = <0>;
+>   
+>           adc@0 {
+> diff --git a/Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml b/Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml
+> index 7dde7967c886..1e72b8808d24 100644
+> --- a/Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml
+> +++ b/Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml
+> @@ -137,7 +137,7 @@ examples:
+>   
+>                   cru_parallel_in: endpoint@0 {
+>                       reg = <0>;
+> -                    remote-endpoint= <&ov5642>;
+> +                    remote-endpoint = <&ov5642>;
+>                       hsync-active = <1>;
+>                       vsync-active = <1>;
+>                   };
+> @@ -150,7 +150,7 @@ examples:
+>   
+>                   cru_csi_in: endpoint@0 {
+>                       reg = <0>;
+> -                    remote-endpoint= <&csi_cru_in>;
+> +                    remote-endpoint = <&csi_cru_in>;
+>                   };
+>               };
+>           };
+> diff --git a/Documentation/devicetree/bindings/media/renesas,vin.yaml b/Documentation/devicetree/bindings/media/renesas,vin.yaml
+> index 91e8f368fb52..324703bfb1bd 100644
+> --- a/Documentation/devicetree/bindings/media/renesas,vin.yaml
+> +++ b/Documentation/devicetree/bindings/media/renesas,vin.yaml
+> @@ -303,11 +303,11 @@ examples:
+>   
+>                               vin0csi20: endpoint@0 {
+>                                       reg = <0>;
+> -                                    remote-endpoint= <&csi20vin0>;
+> +                                    remote-endpoint = <&csi20vin0>;
+>                               };
+>                               vin0csi40: endpoint@2 {
+>                                       reg = <2>;
+> -                                    remote-endpoint= <&csi40vin0>;
+> +                                    remote-endpoint = <&csi40vin0>;
+>                               };
+>                       };
+>               };
+> diff --git a/Documentation/devicetree/bindings/mtd/mtd-physmap.yaml b/Documentation/devicetree/bindings/mtd/mtd-physmap.yaml
+> index f8c976898a95..18f6733408b4 100644
+> --- a/Documentation/devicetree/bindings/mtd/mtd-physmap.yaml
+> +++ b/Documentation/devicetree/bindings/mtd/mtd-physmap.yaml
+> @@ -164,7 +164,7 @@ examples:
+>               reg = <0 0xf80000>;
+>           };
+>           firmware@f80000 {
+> -            label ="firmware";
+> +            label = "firmware";
+>               reg = <0xf80000 0x80000>;
+>               read-only;
+>           };
+> diff --git a/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml b/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
+> index 0fa2132fa4f4..400aedb58205 100644
+> --- a/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
+> +++ b/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
+> @@ -156,7 +156,7 @@ examples:
+>           reg = <0x1101c000 0x1300>;
+>           interrupts = <GIC_SPI 237 IRQ_TYPE_LEVEL_LOW>;
+>           interrupt-names = "macirq";
+> -        phy-mode ="rgmii-rxid";
+> +        phy-mode = "rgmii-rxid";
+>           mac-address = [00 55 7b b5 7d f7];
+>           clock-names = "axi",
+>                         "apb",
+> diff --git a/Documentation/devicetree/bindings/perf/amlogic,g12-ddr-pmu.yaml b/Documentation/devicetree/bindings/perf/amlogic,g12-ddr-pmu.yaml
+> index 50f46a6898b1..4adab0149108 100644
+> --- a/Documentation/devicetree/bindings/perf/amlogic,g12-ddr-pmu.yaml
+> +++ b/Documentation/devicetree/bindings/perf/amlogic,g12-ddr-pmu.yaml
+> @@ -42,8 +42,8 @@ examples:
+>     - |
+>       #include <dt-bindings/interrupt-controller/arm-gic.h>
+>       pmu {
+> -        #address-cells=<2>;
+> -        #size-cells=<2>;
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+>   
+>           pmu@ff638000 {
+>               compatible = "amlogic,g12a-ddr-pmu";
+> diff --git a/Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml b/Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml
+> index 26f2b887cfc1..b8d77165c4a1 100644
+> --- a/Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml
+> @@ -83,7 +83,7 @@ examples:
+>           clocks = <&clk26m>;
+>           clock-output-names = "mipi_tx0_pll";
+>           drive-strength-microamp = <4000>;
+> -        nvmem-cells= <&mipi_tx_calibration>;
+> +        nvmem-cells = <&mipi_tx_calibration>;
+>           nvmem-cell-names = "calibration-data";
+>           #clock-cells = <0>;
+>           #phy-cells = <0>;
+> diff --git a/Documentation/devicetree/bindings/remoteproc/amlogic,meson-mx-ao-arc.yaml b/Documentation/devicetree/bindings/remoteproc/amlogic,meson-mx-ao-arc.yaml
+> index 3100cb870170..76e8ca44906a 100644
+> --- a/Documentation/devicetree/bindings/remoteproc/amlogic,meson-mx-ao-arc.yaml
+> +++ b/Documentation/devicetree/bindings/remoteproc/amlogic,meson-mx-ao-arc.yaml
+> @@ -75,7 +75,7 @@ additionalProperties: false
+>   examples:
+>     - |
+>       remoteproc@1c {
+> -      compatible= "amlogic,meson8-ao-arc", "amlogic,meson-mx-ao-arc";
+> +      compatible = "amlogic,meson8-ao-arc", "amlogic,meson-mx-ao-arc";
+>         reg = <0x1c 0x8>, <0x38 0x8>;
+>         reg-names = "remap", "cpu";
+>         resets = <&media_cpu_reset>;
+> diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+> index 478214ab045e..a59d91243ac8 100644
+> --- a/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+> @@ -304,7 +304,7 @@ examples:
+>     # Dual role switch with type-c
+>     - |
+>       usb@11201000 {
+> -        compatible ="mediatek,mt8183-mtu3", "mediatek,mtu3";
+> +        compatible = "mediatek,mt8183-mtu3", "mediatek,mtu3";
+>           reg = <0x11201000 0x2e00>, <0x11203e00 0x0100>;
+>           reg-names = "mac", "ippc";
+>           interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_LOW>;
+> diff --git a/Documentation/devicetree/bindings/usb/ti,am62-usb.yaml b/Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
+> index d25fc708e32c..fec5651f5602 100644
+> --- a/Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
+> +++ b/Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
+> @@ -92,7 +92,7 @@ examples:
+>   
+>           usb@31100000 {
+>             compatible = "snps,dwc3";
+> -          reg =<0x00 0x31100000 0x00 0x50000>;
+> +          reg = <0x00 0x31100000 0x00 0x50000>;
+>             interrupts = <GIC_SPI 226 IRQ_TYPE_LEVEL_HIGH>, /* irq.0 */
+>                          <GIC_SPI 226 IRQ_TYPE_LEVEL_HIGH>; /* irq.0 */
+>             interrupt-names = "host", "peripheral";
