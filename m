@@ -2,44 +2,44 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9456AEB64DA
-	for <linux-media@archiver.kernel.org>; Tue,  4 Jul 2023 04:01:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBCE1EB64DA
+	for <linux-media@archiver.kernel.org>; Tue,  4 Jul 2023 04:01:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbjGDEBW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 4 Jul 2023 00:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49538 "EHLO
+        id S230382AbjGDEBb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 4 Jul 2023 00:01:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjGDEBV (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Jul 2023 00:01:21 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2063.outbound.protection.outlook.com [40.107.237.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A10FBD;
-        Mon,  3 Jul 2023 21:01:20 -0700 (PDT)
+        with ESMTP id S230331AbjGDEBa (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Jul 2023 00:01:30 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2086.outbound.protection.outlook.com [40.107.237.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B265BD;
+        Mon,  3 Jul 2023 21:01:29 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IqCoVCqhXI/mpZrDN94LVkFdy1yuNJBYA2DacL93KtQPGdSZcSfqueJ4HujBEisdUXuusHeF+JMTiv4CFP9Ht03NXWWe8DrTNRy4/XD0yTRHFK4ZKnKcCoCZWj8ySQWoIKMREdAJQBiH9sNnSFe44Igx1YfslUWAzvkJ1QmI7knvx53uEjb4ZFF+6Xv0ZNSVmRHiCqwIkDSh6b+TcXnYgz6+7N8infcNHZmVjJQ8Oj0WKCPLB90vnJAusrB4mYA7iXAhNQAn1W05Yzl4mVfiLvG2acBytdfgXEYeC6KbNRgSraZm05Lw6CXuRLg0n5SlErnndZ2ZBwtoYNDQYMfJJQ==
+ b=QK5n2JMWmwbPPkycgWiINovtsGIPg+tMsWOZ8jAth/chmjFFbofhhZedGpcMPnOk7K6hSR2RIYmz6LpBItZgprAgCVKkjA0hp/kMlsBPR3dMbD1hVL1mrfhfJlo+9QEnfkRKVCNCtsj+9b4jMRZuzuaZBKe6MC8D0j5Fk3BwCYvhYxPedbh0qzUcfLUtQsqp9b0lHjzigktMhD5HPcHyn8CcNRsBVoENkr0p+tRBLoAsz3R7m67MUAhav22uCrPPaChjP1D1c6u6J3hPibnkRN0jKrx6I+DMwsD4D9JCxCD78BDRRehYl2Ls+bzqhgfOdY2CF+eW6GzypbMkCaVZOw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pj/olEsbQcMMhLjC/sOANcpoOYF3GIuvyudyhrik1f0=;
- b=jBNETjzro30IQiVujUtXDdk7UlFYH57BTRwFQSYxKgUQX6zr5zJFmAlBmzXKXYKIhFHo/hCLk2fBw+tU96nwGUzmwrLQptFUxxT98RGHG02zEwNuFbBZmHIH5Tu2PqssO8lbgqkWmK2L5BO9LRUQg8mtGuRGkwzjOnhSobaymDerSVNoe70ktdFFd6OvMeiEFiq52kJRuYtp4TQYOWe4fIh8aBnANrPV36CzS0/7n+omfiaVnMk3Qjj7oaEHK9IJbejxi5cPbZlgfJqmNp6jZGdIndY+XdK3G4iXjX1ftbLbDTUphmYUIYXV1BHeWZcFO/fIRcpMj8DVvLRX0rjHiA==
+ bh=vZ5quQBoOmUGeDe5qMsjGd2YRmqwU8bGbvl+E2PaBBs=;
+ b=c0mgukgQy5HPFjkOBsvj6tlrt7mAFWmQRLdvaiZNmoAl4w92NOBo2IcIfJthNQibYE7+3wwMLok+gOmiHtVr0oRAQHmNw6tChOVjT/vDUAtP5zMsl6gGHk9Q9gs4/tAtRV7azmPRSfD5OIsRkysms4rqicqxejY6Z/zOTcrePmvCxkmnKaFBBOORl14+sgiqjsrZqsF06WdCbCJpuLjJrAVcDbFuDRoFC0SU8gSFISG9B1ZLDiSnF+uG+dl6uftLpDFg6V6RJ0Tdcy41fRG6RzJsQ7mu38duNwfGJQVwT8EBZSlx+xZ6MMZFbmT0Is1LEYZ7zVxWfTHpc87KXfdmVw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=synaptics.com; dmarc=pass action=none
  header.from=synaptics.com; dkim=pass header.d=synaptics.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=Synaptics.onmicrosoft.com; s=selector2-Synaptics-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pj/olEsbQcMMhLjC/sOANcpoOYF3GIuvyudyhrik1f0=;
- b=YYAQTa4yyWm48/BOBvkHiIhRspLPSeY44U0asnupbEcAGOWLe1UaXL9QEnWUlSSdHxnsMlcm3qpX5V1loY858kFr6re8HKNkISNgbc2QPfdBiPn7ZShKPPV8VUR931JJl+QqgCesKI9zcM0uGssocqGRb3FX0Gc1BaKUddpgWBU=
+ bh=vZ5quQBoOmUGeDe5qMsjGd2YRmqwU8bGbvl+E2PaBBs=;
+ b=jV9YgQDEOmxKa4C5EQu/dslVgb1vqHh97J0BZCiLD0J6+GnRVLTp+/jpv+5u4hqiDyg2VtaiYHVYZ3/Ysx94aLyfJHwWTbkcZ6BXJUt3rg5leo1Oc87zIxQNGJnbZt9d2H0WSUBXcxYTA8VjCYepidDPW6ejiMgCsyJ9P7q73AY=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=synaptics.com;
 Received: from DM6PR03MB5196.namprd03.prod.outlook.com (2603:10b6:5:24a::19)
  by CH3PR03MB7385.namprd03.prod.outlook.com (2603:10b6:610:19a::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Tue, 4 Jul
- 2023 04:01:15 +0000
+ 2023 04:01:27 +0000
 Received: from DM6PR03MB5196.namprd03.prod.outlook.com
  ([fe80::6882:b9c1:2b2d:998d]) by DM6PR03MB5196.namprd03.prod.outlook.com
  ([fe80::6882:b9c1:2b2d:998d%5]) with mapi id 15.20.6544.024; Tue, 4 Jul 2023
- 04:01:15 +0000
+ 04:01:27 +0000
 From:   Hsia-Jun Li <randy.li@synaptics.com>
 To:     linux-media@vger.kernel.org
 Cc:     ayaka@soulik.info, hans.verkuil@cisco.com, tfiga@chromium.org,
@@ -47,10 +47,12 @@ Cc:     ayaka@soulik.info, hans.verkuil@cisco.com, tfiga@chromium.org,
         hiroh@chromium.org, hverkuil@xs4all.nl,
         linux-kernel@vger.kernel.org, nicolas@ndufresne.ca,
         "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
-Subject: [PATCH 0/2] Improve V4L2 M2M job scheduler
-Date:   Tue,  4 Jul 2023 12:00:36 +0800
-Message-ID: <20230704040044.681850-1-randy.li@synaptics.com>
+Subject: [PATCH 2/2] media: v4l2-mem2mem: add a list for buf used by hw
+Date:   Tue,  4 Jul 2023 12:00:38 +0800
+Message-ID: <20230704040044.681850-3-randy.li@synaptics.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230704040044.681850-1-randy.li@synaptics.com>
+References: <20230704040044.681850-1-randy.li@synaptics.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: BYAPR01CA0041.prod.exchangelabs.com (2603:10b6:a03:94::18)
@@ -58,50 +60,50 @@ X-ClientProxiedBy: BYAPR01CA0041.prod.exchangelabs.com (2603:10b6:a03:94::18)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DM6PR03MB5196:EE_|CH3PR03MB7385:EE_
-X-MS-Office365-Filtering-Correlation-Id: 885ec4a1-96b5-4199-09e6-08db7c434bf4
+X-MS-Office365-Filtering-Correlation-Id: 2c0e4f16-8fed-4e12-e637-08db7c435760
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6cXcfrPeNFLnwzXc2hukfougmjOBXVdPKcKT+ir+W8O4heasf+IGP8+GzGS4W0TQfryet1CFtAIJplIeE7pZtUqE9mMa9q0VXZbchkw/3o3Fb1qanmM3hqI0PfHe2tMRy8I3N6xF0Z9Iq26/6XTLWnOZhLQ9PQ596+O3IXqwS+6Z7e3veldmanwK0Bg76WKBo7mgw7pFDx9pSNwhtZeeH1T0acNCaPJKrhhfUzu2Ggf1nkXEq3HJewqFa3cy+cWsq3jjIYC2MIufq/VA4Xcfxgep8wM6SgCgnnnNAtToO0tbzXkBcpeAr9FCkGhZSzF5s3jUP+sO8ndeqHnG63sTsFpDyCo3au7qESXEHfXHXNV+fMcfck+ZRKQU3SVY6XYsHPgFWnAoSfCg7cwO1baz8il+Gme7dO6f18JH1HRPNANncgW4/4BqkphrNOJEmJ74Z5bYcMCR1tfpbjTf1XXdNGFuF3muNnla1dEil9Lbn6ni/viWcg13XE6/0Bfec5c5+q+FfPMHs6TU2Hte2P5eF23MmnsxcbS4tCACwlMKyjRCexL7vT3SSBxGmbGROObGxVq6Sg0pusPFNdNff7SGUFgGI2xmWXrTkqKn4nu+YsUc/wZqdnxwqhSp0TDI0sOu
+X-Microsoft-Antispam-Message-Info: FbOfHuK0SujUIIMwVrG8YvVen+NkJvAzeNvitveqZGd7UyFoHNjF7dMWRCnGjPmTtat+hZlbU1+8uXnmpItINtI+nEyER+JjlxjvUd4YuA1KvvViFzuwdaaYltCYHPuER5v6ZqB/KIH0897RU3EHVl+20TqJmF3kRix9UdOum33F+wVNIiTjFyZD7/8ghMKvI7U6xF1Yh9ZO9azhhCoFuydhHf++1ekevgGhdppb/8VGTkBzFPoidHzBvD1/sYzmXVmU6Zzv2vTH+vCRpvEIkmllcHU35JcizPkEjum6eAwQJqi8Jq2eA90Eutx31urqFYq86Y+2htApHdkcWHof1ua9q7b9zfT6kmfZLnegxKrP7TEnVZrcAp2yPK8CI1aMOoWR+gskrxuJzjsf9pGJT0nM3HdbWWP/B/ZBu734o5M7EhMiPp8Gpi0jSCq5cmI4zcf1el7ub0JQLEfuxuxKQ4Td7RhfNmy8Ndiz3ejyMGPX+DKijHFZyJpTbmPMG6uSjpmLZ8TZyoTTZ8zZeM8wuNpPLAIfNWbVa39vtJD8bhV0mebALOzVQie+E7Ceo0sowYJ0F+ZdxTZIIKztsEUitEXYtI+Y9hJEpFNlO0VEb0w47anP1D+NGInaqjUQfVmh
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR03MB5196.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(346002)(366004)(396003)(376002)(136003)(451199021)(41300700001)(38100700002)(6666004)(38350700002)(52116002)(2616005)(107886003)(83380400001)(6506007)(26005)(186003)(1076003)(6512007)(86362001)(6486002)(478600001)(316002)(2906002)(36756003)(66476007)(4326008)(66556008)(66946007)(8936002)(8676002)(6916009)(7416002)(5660300002)(66899021);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QusyktqzlazVPE+xMKNQ888yEevjygxBfyEtWFvICy7nQf3Inur9iihr1Mi7?=
- =?us-ascii?Q?D/aBXuw0KgZBjsgKjCo2ASngqDc/tq5qdMpE6Bp0Tn/x2SE6837xXrzYaRzT?=
- =?us-ascii?Q?dHrTOw7L19CG7PBQuWFyR4D7bZPTcMErcgzkoXq3PL0vPQE0MDEGRa3y3b7h?=
- =?us-ascii?Q?4h0horG0juy3FS0xfwlRZ5duSny66FKQLifUUMzY3njILvjSiePXYmwySGqq?=
- =?us-ascii?Q?PjNZxdbmaQhqX9Oob812ho9059gfOFa1WO0qMKdCi2ccSwZO69XuaDA1HSjd?=
- =?us-ascii?Q?3r/P2hdcLXWymWI7AcSMkPp9WYWZK26xqxRRtQiq2akMncibSXicKEHcs9Id?=
- =?us-ascii?Q?YMkGUmR8IUa2AmAiV1Oo+S+lD7z7AV391t5YKTGtOIAVDjcCyKLl6d9nbXtD?=
- =?us-ascii?Q?JIXAf1Jz6HpOSCrD86mPOQNYWudS7T5pNCwjarfr4xT01UsM3vfxgI/WO/E8?=
- =?us-ascii?Q?z+SxOuqzUttcTrOWspSdJqseFc9mjkZSRn9Qmbjs7MWbpPjKuUp62x/E2IXL?=
- =?us-ascii?Q?MCAKG+91STm59MTrtv2QLr9UhFcJMMJRoEscrZrvozIKjzhb5HlEQXGM71FC?=
- =?us-ascii?Q?+BIdurTEEWIercrC+/2OGrpvLb+0QAGPqAk4G75DJHObt/QlRFtBsDAhO//s?=
- =?us-ascii?Q?sNne5ucXpC6ax6GqqCc9VmxN1DZzY9nL94G4czE0o3UThX7i645HkvWMD0hm?=
- =?us-ascii?Q?RfqEvbBQsib+SiKKjDuxB6EuEncONJtuvQxKxhpH4T66tc3Hz7H5MT6oZbPt?=
- =?us-ascii?Q?ZXDw+UVDnFeQc9i9Kg0G4DBOKciCgG1ooC594EHQbuwonbYRbIuVlNn7DY9/?=
- =?us-ascii?Q?I1lnVH3k/aAw2XfDZYmwfdXWxrawNpLlqF1kJdOfwpQ/MItU/jEYW7TOFBhV?=
- =?us-ascii?Q?jmKaasQckzWTa8ArESBE4N7z0SYyXpn+nsaUZbX4N50lA5xvp4tofz6v7ncG?=
- =?us-ascii?Q?Z9m1X90M1Isf/SxOyVj57fP+j1n4GX0Dpcoc3uGJd8dJ5ZHNnTU1lb4V5zv4?=
- =?us-ascii?Q?40TcUUJhKxjkRtgymDIaEw5OkAcMCeNZAG8xE0Ej/dtDkjnvi4do01cDqeyn?=
- =?us-ascii?Q?2TRbApbR0usY2nMNk/JvxSmHKuHYJg0u7tbAHrDE8prVIpfnYgRPhQ5rGnA1?=
- =?us-ascii?Q?Gcbs76OOynVlnD/6cBT7ohEv7Aqlpg0eqSQdNDD95ameGWz188+LeDaG97Lv?=
- =?us-ascii?Q?mZ6QOaed59UbWokVc4gWxwhf40hLdV2mO6dJ+Qjyg0qa3aF4/kuJeT4ZZekw?=
- =?us-ascii?Q?qV+cLJm3K5H055bWM9R7mqO3Unw3LMnpgF0s2nQLQd0MnCAkFOktHNnhMIBo?=
- =?us-ascii?Q?uIrBvJdy8UId40GPENcSh1EZv2OtgQwyZTokDBdT02X+RsrgacRlhZavATWQ?=
- =?us-ascii?Q?xtrkduorCGafpl8b6WZ5lFNpdZGtDdl74wYLRmuhoeRrYya392s5x1ZhWYPG?=
- =?us-ascii?Q?epDWvwXyn+RsD+jjcI2OUXY2lX7NrHLOREG6rRntiBFEGrKaWkUJbc+44I1Q?=
- =?us-ascii?Q?PRdCrx+6QFIVsWrZXyrIEYhHiYFAu8ACnZJa5uKJSg08RtcKYXi+dHop9OZK?=
- =?us-ascii?Q?a04+94RQekCTEF3haE8vEEmbqEdL5k0VPCQdvn6C?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MmeS6IVp4CBKoqmkE+X3YUhqTmU6sTOiA1AMsyz+QZB5vG9eNu80Klpv9yJ8?=
+ =?us-ascii?Q?IqTaKKg7b3e9di6lBHKEj4wijrQ/eSQeBfgzf8C9VMO6UCn8509dKtwXfWDO?=
+ =?us-ascii?Q?buf9jCmJCN2hqkc38pSp7jym0Qp8Cz74tiwjK3UFXKQRuwmd6ZxIUiGQ7FyM?=
+ =?us-ascii?Q?YKqHBTyGMVgQWHHiRauMm9kk6vj8BXdU3oUM5sSlv7Zg+BQZ2VySxn9UEfvg?=
+ =?us-ascii?Q?dAMg2Qm4iNNJ+HrrLMJhg/2EDnXI6MByzCJwM+ezy1P9RfUlIQjzqR2/QtPA?=
+ =?us-ascii?Q?bPD4MQC1HwmzQb6wm1/Xokn5c+E9/HpmqBcHsCuUAGMLlyzLoxnmy356SWIi?=
+ =?us-ascii?Q?O43PNUe5sOayWEgjhoGJ0A4JBy27P2umcARYX+ivJ2/n9tVdqPBcnGFgzYGa?=
+ =?us-ascii?Q?atgBqlabzde5aKGdnwZmQxM9TGHTqJgX+FQlTIB5Hw0iCdIZEhDPWBKn0nQY?=
+ =?us-ascii?Q?dhhDR6M48bDK9cDNRuhUgeibK/TPRCNkERRNnayrMwYhtexWvTg7xGh0FHWE?=
+ =?us-ascii?Q?kR/raXKRWey7TGtB8kdsCcA2O8n1PMMrjiOqnYHaNtkTKWXVIm/4a95lb6wL?=
+ =?us-ascii?Q?HXPZP1/eXWqmN/zHhGyIQ4ZKF3R3E2dAcO+Z6/J1G9hkMq5bk3UV3Lae9jCq?=
+ =?us-ascii?Q?9QwMPVam0tukojtelMeqKKKK9nBJuoyUB9LrAgReKAsjuOhJdGkPF/xu0Vzg?=
+ =?us-ascii?Q?2Jac69DbbkJpXvgn/iVcHjay3u0udRH+pcgluEnknxXA+vX8DZcqWXxsBV9x?=
+ =?us-ascii?Q?VyHB+vTWU53eheXT9iSpf520V4SyFN2/8WFH4S66DOK7ece7MUKXY0sBhdaH?=
+ =?us-ascii?Q?OdqsDaHtvrDUMmsvqHFe1KzmhkP7Lsa0DkWcr+UXJT+7HGZ2jAiraagPLFUT?=
+ =?us-ascii?Q?/cv+WxbTS7UG845fsDQSmUirbALfGxjPdDkNOxVO08Sd+ORNsC9/0+0gqYya?=
+ =?us-ascii?Q?qoR3PpqVn8v1r4RFbcffYZEF48r6ToTHCxZLK5AkmCwfuRhdyxBDouSzUsuE?=
+ =?us-ascii?Q?CFwKpLYdMqL3xdK27MLbnANFbcGwPfnMkj3ODpy53lmOHFrcIIKzGcX5BIo5?=
+ =?us-ascii?Q?9XJhYY8O67AEZJjkP6KfXTyFwYxizYoVuJFOfC63S5YzcAv8pPJ7smNUMsFH?=
+ =?us-ascii?Q?RQgkGno45upFnctTH75CVhnJN8lywmUllpWNTlYLKDuz/ueU8TL3Gj4pwnrG?=
+ =?us-ascii?Q?6vsSc9V42VDrf6o21ZggFVGx85eSL4FAFGJ0SbRcOFxP+b2cg99gihDhbWmz?=
+ =?us-ascii?Q?hkE8aEMQe9OG2nNRhp9ErT9Ch9MuYNV/C4Hl4LY2K3JuL25K3SCLBzVkPVyZ?=
+ =?us-ascii?Q?9TgOhrmCAkGHjWm0dHndsKNjWKQU+mRgFlJpkMr7mPKKyHi6WpbyTMAfMM8N?=
+ =?us-ascii?Q?PjppzjMs2mZmCCWPjKcJi5eSpcKKMmCFX7GuNK70GDduYFjhqPf2ivrkf5UZ?=
+ =?us-ascii?Q?GGErwHecfV+k08Jtv5vh/zYAgwEfGitWRD0PvfG+60vlo/3C1NDhoiLsmtlq?=
+ =?us-ascii?Q?mx1mClmN8o1iDUp9L7StdlzEINvX2vuoh1a/1PvDm1YfHsDoM/4WL5TWbl6h?=
+ =?us-ascii?Q?2uvy7Q19QCVpTym0s7coIqaqvyhBlM5bpkCSYypZ?=
 X-OriginatorOrg: synaptics.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 885ec4a1-96b5-4199-09e6-08db7c434bf4
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2c0e4f16-8fed-4e12-e637-08db7c435760
 X-MS-Exchange-CrossTenant-AuthSource: DM6PR03MB5196.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2023 04:01:15.4391
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2023 04:01:27.6491
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 335d1fbc-2124-4173-9863-17e7051a2a0e
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hkeuNjL+A5+oLV44XtZ0o15KttgA9W3PZF/hcsd98ITOSL/0mcBH+lBasOhtgUdUM0rEsIaOqjFa+iorcaumKQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: Wt0sz6+IVAzTPmXPC/ldagP26DYPTBd+AKO2IIWPMhF/rEphzwGqjxTm2CKGIV7wpoVzQYLEXbEIS4SP+JZuSg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR03MB7385
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -109,35 +111,107 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
 
-The first patch is an old patch, I resend it again.
-I want to make the work thats parses the bitstream
-to extract the sequence information or video resolution
-as a part of V4L2 schedule. Such a work would also
-consume the device's resources likes remote CPU
-time.
+Many drivers have to create its own buf_struct for a
+vb2_queue to track such a state. Also driver has to
+iterate over rdy_queue every times to find out a buffer
+which is not sent to hardware(or firmware), this new
+list just offers the driver a place to store the buffer
+that hardware(firmware) has acknowledged.
 
-Although reuse a flag which no current driver may
-not be a good idea. I could add a new flag for that
-if people like that.
+One important advance about this list, it doesn't like
+rdy_queue which both bottom half of the user calling
+could operate it, while the v4l2 worker would as well.
+The v4l2 core could only operate this queue when its
+v4l2_context is not running, the driver would only
+access this new hw_queue in its own worker.
 
-The second is a patch offering a generic solution
-for tracking buffers which have been pushed to
-hardware(or firmware). It didn't record which buffer
-that hardware(firmware) still holds for future
-decoding(likes the reference buffer), while it
-has been sent to the user(dequeue). We may need
-a flag for this work.
+Signed-off-by: Hsia-Jun(Randy) Li <randy.li@synaptics.com>
+---
+ drivers/media/v4l2-core/v4l2-mem2mem.c | 25 +++++++++++++++++--------
+ include/media/v4l2-mem2mem.h           | 10 +++++++++-
+ 2 files changed, 26 insertions(+), 9 deletions(-)
 
-Hsia-Jun(Randy) Li (1):
-  media: v4l2-mem2mem: add a list for buf used by hw
-
-Randy Li (1):
-  media: v4l2-mem2mem: allow device run without buf
-
- drivers/media/v4l2-core/v4l2-mem2mem.c | 30 +++++++++++++++++---------
- include/media/v4l2-mem2mem.h           | 10 ++++++++-
- 2 files changed, 29 insertions(+), 11 deletions(-)
-
+diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
+index c771aba42015..b4151147d5bd 100644
+--- a/drivers/media/v4l2-core/v4l2-mem2mem.c
++++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
+@@ -321,15 +321,21 @@ static void __v4l2_m2m_try_queue(struct v4l2_m2m_dev *m2m_dev,
+ 		goto job_unlock;
+ 	}
+ 
+-	src = v4l2_m2m_next_src_buf(m2m_ctx);
+-	dst = v4l2_m2m_next_dst_buf(m2m_ctx);
+-	if (!src && !m2m_ctx->out_q_ctx.buffered) {
+-		dprintk("No input buffers available\n");
+-		goto job_unlock;
++	if (list_empty(&m2m_ctx->out_q_ctx.hw_queue)) {
++		src = v4l2_m2m_next_src_buf(m2m_ctx);
++
++		if (!src && !m2m_ctx->out_q_ctx.buffered) {
++			dprintk("No input buffers available\n");
++			goto job_unlock;
++		}
+ 	}
+-	if (!dst && !m2m_ctx->cap_q_ctx.buffered) {
+-		dprintk("No output buffers available\n");
+-		goto job_unlock;
++
++	if (list_empty(&m2m_ctx->cap_q_ctx.hw_queue)) {
++		dst = v4l2_m2m_next_dst_buf(m2m_ctx);
++		if (!dst && !m2m_ctx->cap_q_ctx.buffered) {
++			dprintk("No output buffers available\n");
++			goto job_unlock;
++		}
+ 	}
+ 
+ 	m2m_ctx->new_frame = true;
+@@ -896,6 +902,7 @@ int v4l2_m2m_streamoff(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+ 	INIT_LIST_HEAD(&q_ctx->rdy_queue);
+ 	q_ctx->num_rdy = 0;
+ 	spin_unlock_irqrestore(&q_ctx->rdy_spinlock, flags);
++	INIT_LIST_HEAD(&q_ctx->hw_queue);
+ 
+ 	if (m2m_dev->curr_ctx == m2m_ctx) {
+ 		m2m_dev->curr_ctx = NULL;
+@@ -1234,6 +1241,8 @@ struct v4l2_m2m_ctx *v4l2_m2m_ctx_init(struct v4l2_m2m_dev *m2m_dev,
+ 
+ 	INIT_LIST_HEAD(&out_q_ctx->rdy_queue);
+ 	INIT_LIST_HEAD(&cap_q_ctx->rdy_queue);
++	INIT_LIST_HEAD(&out_q_ctx->hw_queue);
++	INIT_LIST_HEAD(&cap_q_ctx->hw_queue);
+ 	spin_lock_init(&out_q_ctx->rdy_spinlock);
+ 	spin_lock_init(&cap_q_ctx->rdy_spinlock);
+ 
+diff --git a/include/media/v4l2-mem2mem.h b/include/media/v4l2-mem2mem.h
+index d6c8eb2b5201..2342656e582d 100644
+--- a/include/media/v4l2-mem2mem.h
++++ b/include/media/v4l2-mem2mem.h
+@@ -53,9 +53,16 @@ struct v4l2_m2m_dev;
+  *	processed
+  *
+  * @q:		pointer to struct &vb2_queue
+- * @rdy_queue:	List of V4L2 mem-to-mem queues
++ * @rdy_queue:	List of V4L2 mem-to-mem queues. If v4l2_m2m_buf_queue() is
++ *		called in struct vb2_ops->buf_queue(), the buffer enqueued
++ *		by user would be added to this list.
+  * @rdy_spinlock: spin lock to protect the struct usage
+  * @num_rdy:	number of buffers ready to be processed
++ * @hw_queue:	A list for tracking the buffer is occupied by the hardware
++ * 		(or device's firmware). A buffer could only be in either
++ * 		this list or @rdy_queue.
++ * 		Driver may choose not to use this list while uses its own
++ * 		private data to do this work.
+  * @buffered:	is the queue buffered?
+  *
+  * Queue for buffers ready to be processed as soon as this
+@@ -68,6 +75,7 @@ struct v4l2_m2m_queue_ctx {
+ 	struct list_head	rdy_queue;
+ 	spinlock_t		rdy_spinlock;
+ 	u8			num_rdy;
++	struct list_head	hw_queue;
+ 	bool			buffered;
+ };
+ 
 -- 
 2.17.1
 
