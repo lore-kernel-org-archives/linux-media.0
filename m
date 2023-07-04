@@ -2,143 +2,201 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7B9CEB64DA
-	for <linux-media@archiver.kernel.org>; Tue,  4 Jul 2023 11:20:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79ABDEB64D9
+	for <linux-media@archiver.kernel.org>; Tue,  4 Jul 2023 11:22:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbjGDLUn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 4 Jul 2023 07:20:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39998 "EHLO
+        id S230385AbjGDLWC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 4 Jul 2023 07:22:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230451AbjGDLUm (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Jul 2023 07:20:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109BF10D9
-        for <linux-media@vger.kernel.org>; Tue,  4 Jul 2023 04:19:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688469553;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Gt1P33Zakq8BZbGTiIneB+Me7/n3qT7CVF9NDstVBSk=;
-        b=a+uj/XY+CpiQuy+vmQFDlSFtA2p1x13t5TurAqbICxIX4rcBKYfmrMWrwQZD8bn3DEQJgU
-        OxQDd4p2+b/FN86SAz3wnMUGcIjNhzLexNVH5lVu2WrmKPugXfmnaAat5bEnrSDq4CR5IT
-        rYjIfBTDK4CYXFAaEYgbHtHe5tfVgTg=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-335-efZb1ynrN-qo8ttna7snjw-1; Tue, 04 Jul 2023 07:19:09 -0400
-X-MC-Unique: efZb1ynrN-qo8ttna7snjw-1
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-98e1085308eso625843266b.0
-        for <linux-media@vger.kernel.org>; Tue, 04 Jul 2023 04:19:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688469548; x=1691061548;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gt1P33Zakq8BZbGTiIneB+Me7/n3qT7CVF9NDstVBSk=;
-        b=PGVGfNJhuATZTjLowN8fkrtGOoZo3u783cI9f4cLIt47jjt9sRRnq66R98UpuKvVBv
-         OKKSy9pzS2EtcX9Mua2jm3Ku4lmNzHYwvwVPXFP+VY9yg04tNPlwfM3pbC1KPZmWldCh
-         LHTEfQ9Xf28a4K8U9au2Aj+J/rN1rAT+pl1Mqq97FNRog+e18JtNPUMyAkjMUxmJgMeu
-         EhlgUU3ZiwcgLMy2qHlBhw6c/X5KlOFOPkySLC+iVrg/gG94JVCS68kZ91dNWIHcfDzq
-         eZ1TtRh9NL+wdrbUwhaBmaiBM3n6aNabjqXBQQ85J5y5BWzJ98Cw4I9MZZ5st5wTI53h
-         ndtA==
-X-Gm-Message-State: ABy/qLbwKMPRjofoeFJALtBoe2/bjpsyEisU6JrjNcWxux0CLCOvNnkN
-        bCllEg9SE99ue8HIiKuqFsHzWxpFY4uvlIXh18HSsRR+Klq6/crgqMlikCXOHN78/PWTrI0vbWa
-        yu6mZB/LkNJnFik4i3+nqEN4=
-X-Received: by 2002:a17:907:2d25:b0:992:4723:76f4 with SMTP id gs37-20020a1709072d2500b00992472376f4mr13988354ejc.6.1688469548599;
-        Tue, 04 Jul 2023 04:19:08 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6mrcjEgitpJ3Jg1irl4D/hQS/1Md7c4phtJbOG+pG9aFNPKcZfZo4mLT6PJZP/zKNI2ZqSbA==
-X-Received: by 2002:a17:907:2d25:b0:992:4723:76f4 with SMTP id gs37-20020a1709072d2500b00992472376f4mr13988339ejc.6.1688469548262;
-        Tue, 04 Jul 2023 04:19:08 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id us3-20020a170906bfc300b00991bba473e2sm11119800ejb.85.2023.07.04.04.19.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 04:19:07 -0700 (PDT)
-Message-ID: <bf3a315d-7f06-c0af-b23d-0c7bb27e2886@redhat.com>
-Date:   Tue, 4 Jul 2023 13:19:07 +0200
+        with ESMTP id S230326AbjGDLVz (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Jul 2023 07:21:55 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE1B9D
+        for <linux-media@vger.kernel.org>; Tue,  4 Jul 2023 04:21:37 -0700 (PDT)
+Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6B7C89B9;
+        Tue,  4 Jul 2023 13:20:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1688469651;
+        bh=GT8m+cfVlUwrWo88kM3msZd7v8AQjuNo3m9Cl7zlXOo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=KK0WCj5heVV7gJn9Q86RCKH3XhWhrYfadpnYuahtLL6I3lzCuZZfqQqCqPAprFYQI
+         uZJbV2scOBtTxJE1eEFFJSMeSQ6i61yIzxOF4TKkG+SdM11ImBQ/san1cUrJNr+uiX
+         PwcmEx99iu9LQpF4VNOSS0eVy/B6cKoxMME+2Uek=
+Message-ID: <2f157fd4-22e0-7686-45c3-e97635ab5a08@ideasonboard.com>
+Date:   Tue, 4 Jul 2023 12:21:32 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 04/15] media: ipu-bridge: Allow building as module
-Content-Language: en-US, nl
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Daniel Scally <dan.scally@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 07/15] media: ipu-bridge: Only keep PLD around while
+ parsing
+Content-Language: en-US
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Andy Shevchenko <andy@kernel.org>, Kate Hsuan <hpa@redhat.com>,
         Hao Yao <hao.yao@intel.com>, Bingbu Cao <bingbu.cao@intel.com>,
         linux-media@vger.kernel.org
 References: <20230630110643.209761-1-hdegoede@redhat.com>
- <20230630110643.209761-5-hdegoede@redhat.com>
- <CAHp75VcdP67ETJhy-2mV3TfC0e=awMnv_du0CkaHFuGubB8R3w@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAHp75VcdP67ETJhy-2mV3TfC0e=awMnv_du0CkaHFuGubB8R3w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+ <20230630110643.209761-8-hdegoede@redhat.com>
+From:   Dan Scally <dan.scally@ideasonboard.com>
+In-Reply-To: <20230630110643.209761-8-hdegoede@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+Hi Hans
 
-On 6/30/23 16:08, Andy Shevchenko wrote:
-> On Fri, Jun 30, 2023 at 2:07 PM Hans de Goede <hdegoede@redhat.com> wrote:
->>
->> After commit f54eb0ac7c1a ("media: ipu3-cio2: rename cio2 bridge to ipu
->> bridge and move out of ipu3") the ipu-bridge code is always builtin
-> 
-> built in
-> 
->> even if all (its only) consumers are build as modules.
-> 
-> I'm not sure I understood the remark in parentheses correctly. All of
-> its consumers are the only consumers of this module?
-
-There is only 1 consumer so both all of its consumers and its only
-consumer, I'll drop the confusing "(its only)" part.
-
-> 
->> Fix this by turning "config IPU_BRIDGE" into a pure library Kconfig
->> option (not user selectable, must be selected by consumers) and
->> re-introducing the CIO2_BRIDGE Kconfig bits in .../pci/intel/ipu3/Kconfig
->> which were dropped to still allow building ipu3-cio2 without ipu-bridge
->> support.
-> 
-> ...
-> 
->>  config IPU_BRIDGE
->> -       bool "Intel IPU Sensors Bridge"
->> -       depends on VIDEO_IPU3_CIO2 && ACPI
->> -       depends on I2C
->> -       help
->> -         This extension provides an API for the Intel IPU driver to create
->> -         connections to cameras that are hidden in the SSDB buffer in ACPI.
->> -         It can be used to enable support for cameras in detachable / hybrid
->> -         devices that ship with Windows.
->> -
->> -         Say Y here if your device is a detachable / hybrid laptop that comes
->> -         with Windows installed by the OEM, for example:
->> -
->> -               - Microsoft Surface models (except Surface Pro 3)
->> -               - The Lenovo Miix line (for example the 510, 520, 710 and 720)
->> -               - Dell 7285
->> -
->> -         If in doubt, say N here.
->> +       tristate
->> +       depends on ACPI && I2C
-> 
-> Can we leave
-> 
->   depends on I2C
-> 
-> line untouched?
-
-Sure, I'll change that for v3.
-
-Regards,
-
-Hans
+On 30/06/2023 13:06, Hans de Goede wrote:
+> There is no need to keep a reference to the PLD struct around,
+> it is only used once the get the sensor orientation.
+>
+> Make ipu_bridge_parse_orientation() also get + put the PLD.
+>
+> This is a preparation patch for making the ipu-bridge code more generic
+> so that it can be shared with the atomisp driver.
+>
+> Reviewed-by: Andy Shevchenko <andy@kernel.org>
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> ---
+>   drivers/media/pci/intel/ipu-bridge.c | 48 ++++++++++++++++------------
+>   drivers/media/pci/intel/ipu-bridge.h |  1 -
+>   2 files changed, 27 insertions(+), 22 deletions(-)
+>
+> diff --git a/drivers/media/pci/intel/ipu-bridge.c b/drivers/media/pci/intel/ipu-bridge.c
+> index 8e91d9b3e0fe..3a984d688b42 100644
+> --- a/drivers/media/pci/intel/ipu-bridge.c
+> +++ b/drivers/media/pci/intel/ipu-bridge.c
+> @@ -112,23 +112,39 @@ static u32 ipu_bridge_parse_rotation(struct ipu_sensor *sensor)
+>   	}
+>   }
+>   
+> -static enum v4l2_fwnode_orientation ipu_bridge_parse_orientation(struct ipu_sensor *sensor)
+> +static enum v4l2_fwnode_orientation ipu_bridge_parse_orientation(struct acpi_device *adev)
+>   {
+> -	switch (sensor->pld->panel) {
+> +	enum v4l2_fwnode_orientation orientation;
+> +	struct acpi_pld_info *pld;
+> +	acpi_status status;
+> +
+> +	status = acpi_get_physical_device_location(adev->handle, &pld);
+> +	if (ACPI_FAILURE(status)) {
+> +		dev_warn(&adev->dev, "_PLD call failed using unknown orientation\n");
 
 
+I think some punctuation after "_PLD call failed", and I'd probably say "default" rather than "unknown".
+
+
+Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
+
+> +		return V4L2_FWNODE_ORIENTATION_EXTERNAL;
+> +	}
+> +
+> +	switch (pld->panel) {
+>   	case ACPI_PLD_PANEL_FRONT:
+> -		return V4L2_FWNODE_ORIENTATION_FRONT;
+> +		orientation = V4L2_FWNODE_ORIENTATION_FRONT;
+> +		break;
+>   	case ACPI_PLD_PANEL_BACK:
+> -		return V4L2_FWNODE_ORIENTATION_BACK;
+> +		orientation = V4L2_FWNODE_ORIENTATION_BACK;
+> +		break;
+>   	case ACPI_PLD_PANEL_TOP:
+>   	case ACPI_PLD_PANEL_LEFT:
+>   	case ACPI_PLD_PANEL_RIGHT:
+>   	case ACPI_PLD_PANEL_UNKNOWN:
+> -		return V4L2_FWNODE_ORIENTATION_EXTERNAL;
+> +		orientation = V4L2_FWNODE_ORIENTATION_EXTERNAL;
+> +		break;
+>   	default:
+> -		dev_warn(&sensor->adev->dev, "Unknown _PLD panel value %d\n",
+> -			 sensor->pld->panel);
+> -		return V4L2_FWNODE_ORIENTATION_EXTERNAL;
+> +		dev_warn(&adev->dev, "Unknown _PLD panel val %d\n", pld->panel);
+> +		orientation = V4L2_FWNODE_ORIENTATION_EXTERNAL;
+> +		break;
+>   	}
+> +
+> +	ACPI_FREE(pld);
+> +	return orientation;
+>   }
+>   
+>   static void ipu_bridge_create_fwnode_properties(
+> @@ -140,7 +156,7 @@ static void ipu_bridge_create_fwnode_properties(
+>   	enum v4l2_fwnode_orientation orientation;
+>   
+>   	rotation = ipu_bridge_parse_rotation(sensor);
+> -	orientation = ipu_bridge_parse_orientation(sensor);
+> +	orientation = ipu_bridge_parse_orientation(sensor->adev);
+>   
+>   	sensor->prop_names = prop_names;
+>   
+> @@ -279,7 +295,6 @@ static void ipu_bridge_unregister_sensors(struct ipu_bridge *bridge)
+>   	for (i = 0; i < bridge->n_sensors; i++) {
+>   		sensor = &bridge->sensors[i];
+>   		software_node_unregister_node_group(sensor->group);
+> -		ACPI_FREE(sensor->pld);
+>   		acpi_dev_put(sensor->adev);
+>   		i2c_unregister_device(sensor->vcm_i2c_client);
+>   	}
+> @@ -291,7 +306,6 @@ static int ipu_bridge_connect_sensor(const struct ipu_sensor_config *cfg,
+>   	struct fwnode_handle *fwnode, *primary;
+>   	struct ipu_sensor *sensor;
+>   	struct acpi_device *adev;
+> -	acpi_status status;
+>   	int ret;
+>   
+>   	for_each_acpi_dev_match(adev, cfg->hid, NULL, -1) {
+> @@ -326,17 +340,11 @@ static int ipu_bridge_connect_sensor(const struct ipu_sensor_config *cfg,
+>   			sensor->ssdb.vcmtype = 0;
+>   		}
+>   
+> -		status = acpi_get_physical_device_location(adev->handle, &sensor->pld);
+> -		if (ACPI_FAILURE(status)) {
+> -			ret = -ENODEV;
+> -			goto err_put_adev;
+> -		}
+> -
+>   		if (sensor->ssdb.lanes > IPU_MAX_LANES) {
+>   			dev_err(&adev->dev,
+>   				"Number of lanes in SSDB is invalid\n");
+>   			ret = -EINVAL;
+> -			goto err_free_pld;
+> +			goto err_put_adev;
+>   		}
+>   
+>   		ipu_bridge_create_fwnode_properties(sensor, bridge, cfg);
+> @@ -344,7 +352,7 @@ static int ipu_bridge_connect_sensor(const struct ipu_sensor_config *cfg,
+>   
+>   		ret = software_node_register_node_group(sensor->group);
+>   		if (ret)
+> -			goto err_free_pld;
+> +			goto err_put_adev;
+>   
+>   		fwnode = software_node_fwnode(&sensor->swnodes[
+>   						      SWNODE_SENSOR_HID]);
+> @@ -370,8 +378,6 @@ static int ipu_bridge_connect_sensor(const struct ipu_sensor_config *cfg,
+>   
+>   err_free_swnodes:
+>   	software_node_unregister_node_group(sensor->group);
+> -err_free_pld:
+> -	ACPI_FREE(sensor->pld);
+>   err_put_adev:
+>   	acpi_dev_put(adev);
+>   	return ret;
+> diff --git a/drivers/media/pci/intel/ipu-bridge.h b/drivers/media/pci/intel/ipu-bridge.h
+> index 6cb68e3344dc..907ca833a7c1 100644
+> --- a/drivers/media/pci/intel/ipu-bridge.h
+> +++ b/drivers/media/pci/intel/ipu-bridge.h
+> @@ -124,7 +124,6 @@ struct ipu_sensor {
+>   	struct ipu_node_names node_names;
+>   
+>   	struct ipu_sensor_ssdb ssdb;
+> -	struct acpi_pld_info *pld;
+>   
+>   	struct ipu_property_names prop_names;
+>   	struct property_entry ep_properties[5];
