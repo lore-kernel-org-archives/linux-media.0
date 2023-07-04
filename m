@@ -2,2576 +2,5183 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91F6DC04A6A
-	for <linux-media@archiver.kernel.org>; Tue,  4 Jul 2023 11:14:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1225AC00528
+	for <linux-media@archiver.kernel.org>; Tue,  4 Jul 2023 11:14:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231680AbjGDLOF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 4 Jul 2023 07:14:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35290 "EHLO
+        id S231648AbjGDLOA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 4 Jul 2023 07:14:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231575AbjGDLNv (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Jul 2023 07:13:51 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7FD0E7C;
+        with ESMTP id S231559AbjGDLNu (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Jul 2023 07:13:50 -0400
+Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E2D08BE;
         Tue,  4 Jul 2023 04:13:43 -0700 (PDT)
-X-UUID: d243404e1a5b11eeb20a276fd37b9834-20230704
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=wmogQbtSj87trFGMXFlrLNQ8JBzM7tCsNhizovU6D1s=;
-        b=M6gHYrKRA/iSWa694bkV0aTLsmVpGXYM2j/tlcQrua4dV7IRQNgtYd3hipopdP4ycrR5xUd38N09q/OhdT+AqtV8ua/g0+v0DoGFbYg7YENk3FCCcl0RIV7j3HEkjPTvmH64mqgP+gdOvMVMAPw/UZdur7a887F0aN//gNdmiYc=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.27,REQID:a6c15a50-9394-4201-8a48-38dc306db324,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-25
-X-CID-META: VersionHash:01c9525,CLOUDID:b1128d0d-26a8-467f-b838-f99719a9c083,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:1,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
-X-CID-BVR: 2,OSH|NGT
-X-CID-BAS: 2,OSH|NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: d243404e1a5b11eeb20a276fd37b9834-20230704
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 295379011; Tue, 04 Jul 2023 19:13:36 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 4 Jul 2023 19:13:35 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Tue, 4 Jul 2023 19:13:34 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
-        <nfraprado@collabora.com>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Nathan Hebert <nhebert@chromium.org>
-CC:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v5,06/11] media: mediatek: vcodec: replace pr_* with dev_* for v4l2 debug message
-Date:   Tue, 4 Jul 2023 19:13:22 +0800
-Message-ID: <20230704111327.7140-7-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230704111327.7140-1-yunfei.dong@mediatek.com>
-References: <20230704111327.7140-1-yunfei.dong@mediatek.com>
+Received: from mgb4.digiteq.red (unknown [62.77.71.229])
+        by mx.gpxsee.org (Postfix) with ESMTPSA id 943DC30849;
+        Tue,  4 Jul 2023 13:13:40 +0200 (CEST)
+From:   tumic@gpxsee.org
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Martin=20T=C5=AFma?= <martin.tuma@digiteqautomotive.com>
+Subject: [PATCH v8 1/2] Added Digiteq Automotive MGB4 driver
+Date:   Tue,  4 Jul 2023 15:13:38 +0200
+Message-Id: <20230704131339.2177-2-tumic@gpxsee.org>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230704131339.2177-1-tumic@gpxsee.org>
+References: <20230704131339.2177-1-tumic@gpxsee.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Adding different macro mtk_v4l2_vdec_dbg and mtk_v4l2_venc_dbg for
-encoder and decoder. Then calling the common marco mtk_v4l2_debug to
-print debug message.
+From: Martin Tůma <martin.tuma@digiteqautomotive.com>
 
-Replace pr_err with dev_err for 'mtk_v4l2_err' debug message.
-Replace pr_debug with dev_dbg for 'mtk_v4l2_debug' debug message.
+Digiteq Automotive MGB4 is a modular frame grabber PCIe card for automotive
+video interfaces. As for now, two modules - FPD-Link and GMSL - are
+available and supported by the driver. The card has two inputs and two
+outputs (FPD-Link only).
 
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+In addition to the video interfaces it also provides a trigger signal
+interface and a MTD interface for FPGA firmware upload.
+
+Signed-off-by: Martin Tůma <martin.tuma@digiteqautomotive.com>
 ---
- .../platform/mediatek/vcodec/mtk_vcodec_dec.c | 116 +++++-----
- .../mediatek/vcodec/mtk_vcodec_dec_drv.c      |  53 ++---
- .../mediatek/vcodec/mtk_vcodec_dec_hw.c       |   7 +-
- .../mediatek/vcodec/mtk_vcodec_dec_pm.c       |  19 +-
- .../mediatek/vcodec/mtk_vcodec_dec_stateful.c | 143 ++++++------
- .../vcodec/mtk_vcodec_dec_stateless.c         |  62 ++---
- .../platform/mediatek/vcodec/mtk_vcodec_enc.c | 211 ++++++++----------
- .../mediatek/vcodec/mtk_vcodec_enc_drv.c      |  45 ++--
- .../mediatek/vcodec/mtk_vcodec_enc_pm.c       |   8 +-
- .../platform/mediatek/vcodec/mtk_vcodec_fw.c  |   2 +-
- .../mediatek/vcodec/mtk_vcodec_fw_scp.c       |   2 +-
- .../mediatek/vcodec/mtk_vcodec_fw_vpu.c       |   7 +-
- .../mediatek/vcodec/mtk_vcodec_intr.c         |  12 +-
- .../mediatek/vcodec/mtk_vcodec_util.c         |  30 ++-
- .../mediatek/vcodec/mtk_vcodec_util.h         |  27 ++-
- .../vcodec/vdec/vdec_av1_req_lat_if.c         |  10 +-
- .../mediatek/vcodec/vdec/vdec_h264_req_if.c   |  14 +-
- .../vcodec/vdec/vdec_h264_req_multi_if.c      |  16 +-
- .../vcodec/vdec/vdec_hevc_req_multi_if.c      |  14 +-
- .../platform/mediatek/vcodec/vdec_drv_if.c    |   4 +-
- .../platform/mediatek/vcodec/vdec_msg_queue.c |  52 +++--
- .../platform/mediatek/vcodec/vdec_msg_queue.h |   2 +
- .../platform/mediatek/vcodec/vdec_vpu_if.c    |   2 +-
- 23 files changed, 416 insertions(+), 442 deletions(-)
+ MAINTAINERS                             |   7 +
+ drivers/media/pci/Kconfig               |   1 +
+ drivers/media/pci/Makefile              |   1 +
+ drivers/media/pci/mgb4/Kconfig          |  17 +
+ drivers/media/pci/mgb4/Makefile         |   6 +
+ drivers/media/pci/mgb4/mgb4_cmt.c       | 244 +++++++
+ drivers/media/pci/mgb4/mgb4_cmt.h       |  17 +
+ drivers/media/pci/mgb4/mgb4_core.c      | 711 ++++++++++++++++++
+ drivers/media/pci/mgb4/mgb4_core.h      |  72 ++
+ drivers/media/pci/mgb4/mgb4_dma.c       | 123 ++++
+ drivers/media/pci/mgb4/mgb4_dma.h       |  18 +
+ drivers/media/pci/mgb4/mgb4_i2c.c       | 140 ++++
+ drivers/media/pci/mgb4/mgb4_i2c.h       |  35 +
+ drivers/media/pci/mgb4/mgb4_io.h        |  33 +
+ drivers/media/pci/mgb4/mgb4_regs.c      |  30 +
+ drivers/media/pci/mgb4/mgb4_regs.h      |  35 +
+ drivers/media/pci/mgb4/mgb4_sysfs.h     |  18 +
+ drivers/media/pci/mgb4/mgb4_sysfs_in.c  | 757 +++++++++++++++++++
+ drivers/media/pci/mgb4/mgb4_sysfs_out.c | 700 ++++++++++++++++++
+ drivers/media/pci/mgb4/mgb4_sysfs_pci.c |  71 ++
+ drivers/media/pci/mgb4/mgb4_trigger.c   | 208 ++++++
+ drivers/media/pci/mgb4/mgb4_trigger.h   |   8 +
+ drivers/media/pci/mgb4/mgb4_vin.c       | 930 ++++++++++++++++++++++++
+ drivers/media/pci/mgb4/mgb4_vin.h       |  69 ++
+ drivers/media/pci/mgb4/mgb4_vout.c      | 594 +++++++++++++++
+ drivers/media/pci/mgb4/mgb4_vout.h      |  65 ++
+ 26 files changed, 4910 insertions(+)
+ create mode 100644 drivers/media/pci/mgb4/Kconfig
+ create mode 100644 drivers/media/pci/mgb4/Makefile
+ create mode 100644 drivers/media/pci/mgb4/mgb4_cmt.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_cmt.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_core.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_core.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_dma.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_dma.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_i2c.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_i2c.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_io.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_regs.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_regs.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_in.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_out.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_pci.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_trigger.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_trigger.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vin.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vin.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vout.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vout.h
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-index 93fcea821001..269f90fe0a1a 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-@@ -82,7 +82,7 @@ static int vidioc_decoder_cmd(struct file *file, void *priv,
- 	if (ret)
- 		return ret;
- 
--	mtk_v4l2_debug(1, "decoder cmd=%u", cmd->cmd);
-+	mtk_v4l2_vdec_dbg(1, ctx, "decoder cmd=%u", cmd->cmd);
- 	dst_vq = v4l2_m2m_get_vq(ctx->m2m_ctx,
- 				V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
- 	switch (cmd->cmd) {
-@@ -90,11 +90,11 @@ static int vidioc_decoder_cmd(struct file *file, void *priv,
- 		src_vq = v4l2_m2m_get_vq(ctx->m2m_ctx,
- 				V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
- 		if (!vb2_is_streaming(src_vq)) {
--			mtk_v4l2_debug(1, "Output stream is off. No need to flush.");
-+			mtk_v4l2_vdec_dbg(1, ctx, "Output stream is off. No need to flush.");
- 			return 0;
- 		}
- 		if (!vb2_is_streaming(dst_vq)) {
--			mtk_v4l2_debug(1, "Capture stream is off. No need to flush.");
-+			mtk_v4l2_vdec_dbg(1, ctx, "Capture stream is off. No need to flush.");
- 			return 0;
- 		}
- 		v4l2_m2m_buf_queue(ctx->m2m_ctx, &ctx->empty_flush_buf.vb);
-@@ -172,8 +172,7 @@ static int vidioc_vdec_qbuf(struct file *file, void *priv,
- 	struct mtk_vcodec_ctx *ctx = fh_to_ctx(priv);
- 
- 	if (ctx->state == MTK_STATE_ABORT) {
--		mtk_v4l2_err("[%d] Call on QBUF after unrecoverable error",
--				ctx->id);
-+		mtk_v4l2_vdec_err(ctx, "[%d] Call on QBUF after unrecoverable error", ctx->id);
- 		return -EIO;
- 	}
- 
-@@ -186,8 +185,7 @@ static int vidioc_vdec_dqbuf(struct file *file, void *priv,
- 	struct mtk_vcodec_ctx *ctx = fh_to_ctx(priv);
- 
- 	if (ctx->state == MTK_STATE_ABORT) {
--		mtk_v4l2_err("[%d] Call on DQBUF after unrecoverable error",
--				ctx->id);
-+		mtk_v4l2_vdec_err(ctx, "[%d] Call on DQBUF after unrecoverable error", ctx->id);
- 		return -EIO;
- 	}
- 
-@@ -288,11 +286,10 @@ static int vidioc_try_fmt(struct mtk_vcodec_ctx *ctx, struct v4l2_format *f,
- 		    (pix_fmt_mp->height + 64) <= frmsize->max_height)
- 			pix_fmt_mp->height += 64;
- 
--		mtk_v4l2_debug(0,
--			"before resize width=%d, height=%d, after resize width=%d, height=%d, sizeimage=%d",
--			tmp_w, tmp_h, pix_fmt_mp->width,
--			pix_fmt_mp->height,
--			pix_fmt_mp->width * pix_fmt_mp->height);
-+		mtk_v4l2_vdec_dbg(0, ctx,
-+				  "before resize wxh=%dx%d, after resize wxh=%dx%d, sizeimage=%d",
-+				  tmp_w, tmp_h, pix_fmt_mp->width, pix_fmt_mp->height,
-+				  pix_fmt_mp->width * pix_fmt_mp->height);
- 
- 		pix_fmt_mp->num_planes = fmt->num_planes;
- 		pix_fmt_mp->plane_fmt[0].sizeimage =
-@@ -344,7 +341,7 @@ static int vidioc_try_fmt_vid_out_mplane(struct file *file, void *priv,
- 	}
- 
- 	if (pix_fmt_mp->plane_fmt[0].sizeimage == 0) {
--		mtk_v4l2_err("sizeimage of output format must be given");
-+		mtk_v4l2_vdec_err(ctx, "sizeimage of output format must be given");
- 		return -EINVAL;
- 	}
- 
-@@ -432,7 +429,7 @@ static int vidioc_vdec_s_fmt(struct file *file, void *priv,
- 	const struct mtk_video_fmt *fmt;
- 	const struct mtk_vcodec_dec_pdata *dec_pdata = ctx->dev->vdec_pdata;
- 
--	mtk_v4l2_debug(3, "[%d]", ctx->id);
-+	mtk_v4l2_vdec_dbg(3, ctx, "[%d]", ctx->id);
- 
- 	q_data = mtk_vdec_get_q_data(ctx, f->type);
- 	if (!q_data)
-@@ -446,7 +443,7 @@ static int vidioc_vdec_s_fmt(struct file *file, void *priv,
- 	if (!dec_pdata->uses_stateless_api &&
- 	    f->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE &&
- 	    vb2_is_busy(&ctx->m2m_ctx->out_q_ctx.q)) {
--		mtk_v4l2_err("out_q_ctx buffers already requested");
-+		mtk_v4l2_vdec_err(ctx, "out_q_ctx buffers already requested");
- 		ret = -EBUSY;
- 	}
- 
-@@ -456,7 +453,7 @@ static int vidioc_vdec_s_fmt(struct file *file, void *priv,
- 	 */
- 	if ((f->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE) &&
- 	    vb2_is_busy(&ctx->m2m_ctx->cap_q_ctx.q)) {
--		mtk_v4l2_err("cap_q_ctx buffers already requested");
-+		mtk_v4l2_vdec_err(ctx, "cap_q_ctx buffers already requested");
- 		ret = -EBUSY;
- 	}
- 
-@@ -491,8 +488,8 @@ static int vidioc_vdec_s_fmt(struct file *file, void *priv,
- 		if (ctx->state == MTK_STATE_FREE) {
- 			ret = vdec_if_init(ctx, q_data->fmt->fourcc);
- 			if (ret) {
--				mtk_v4l2_err("[%d]: vdec_if_init() fail ret=%d",
--					ctx->id, ret);
-+				mtk_v4l2_vdec_err(ctx, "[%d]: vdec_if_init() fail ret=%d",
-+						  ctx->id, ret);
- 				return -EINVAL;
- 			}
- 			ctx->state = MTK_STATE_INIT;
-@@ -515,8 +512,8 @@ static int vidioc_vdec_s_fmt(struct file *file, void *priv,
- 		 */
- 		ret = vdec_if_get_param(ctx, GET_PARAM_PIC_INFO, &ctx->picinfo);
- 		if (ret) {
--			mtk_v4l2_err("[%d]Error!! Get GET_PARAM_PICTURE_INFO Fail",
--				     ctx->id);
-+			mtk_v4l2_vdec_err(ctx, "[%d]Error!! Get GET_PARAM_PICTURE_INFO Fail",
-+					  ctx->id);
- 		}
- 
- 		ctx->last_decoded_picinfo = ctx->picinfo;
-@@ -540,11 +537,13 @@ static int vidioc_vdec_s_fmt(struct file *file, void *priv,
- 
- 		ctx->q_data[MTK_Q_DATA_DST].coded_width = ctx->picinfo.buf_w;
- 		ctx->q_data[MTK_Q_DATA_DST].coded_height = ctx->picinfo.buf_h;
--		mtk_v4l2_debug(2, "[%d] vdec_if_init() num_plane = %d wxh=%dx%d pic wxh=%dx%d sz[0]=0x%x sz[1]=0x%x",
--			       ctx->id, pix_mp->num_planes, ctx->picinfo.buf_w, ctx->picinfo.buf_h,
--			       ctx->picinfo.pic_w, ctx->picinfo.pic_h,
--			       ctx->q_data[MTK_Q_DATA_DST].sizeimage[0],
--			       ctx->q_data[MTK_Q_DATA_DST].sizeimage[1]);
-+		mtk_v4l2_vdec_dbg(2, ctx,
-+				  "[%d] init() plane:%d wxh=%dx%d pic wxh=%dx%d sz=0x%x_0x%x",
-+				  ctx->id, pix_mp->num_planes,
-+				  ctx->picinfo.buf_w, ctx->picinfo.buf_h,
-+				  ctx->picinfo.pic_w, ctx->picinfo.pic_h,
-+				  ctx->q_data[MTK_Q_DATA_DST].sizeimage[0],
-+				  ctx->q_data[MTK_Q_DATA_DST].sizeimage[1]);
- 	}
- 	return 0;
- }
-@@ -570,14 +569,11 @@ static int vidioc_enum_framesizes(struct file *file, void *priv,
- 		fsize->type = V4L2_FRMSIZE_TYPE_STEPWISE;
- 		fsize->stepwise = dec_pdata->vdec_formats[i].frmsize;
- 
--		mtk_v4l2_debug(1, "%x, %d %d %d %d %d %d",
--				ctx->dev->dec_capability,
--				fsize->stepwise.min_width,
--				fsize->stepwise.max_width,
--				fsize->stepwise.step_width,
--				fsize->stepwise.min_height,
--				fsize->stepwise.max_height,
--				fsize->stepwise.step_height);
-+		mtk_v4l2_vdec_dbg(1, ctx, "%x, %d %d %d %d %d %d",
-+				  ctx->dev->dec_capability, fsize->stepwise.min_width,
-+				  fsize->stepwise.max_width, fsize->stepwise.step_width,
-+				  fsize->stepwise.min_height, fsize->stepwise.max_height,
-+				  fsize->stepwise.step_height);
- 
- 		return 0;
- 	}
-@@ -641,7 +637,7 @@ static int vidioc_vdec_g_fmt(struct file *file, void *priv,
- 
- 	vq = v4l2_m2m_get_vq(ctx->m2m_ctx, f->type);
- 	if (!vq) {
--		mtk_v4l2_err("no vb2 queue for type=%d", f->type);
-+		mtk_v4l2_vdec_err(ctx, "no vb2 queue for type=%d", f->type);
- 		return -EINVAL;
- 	}
- 
-@@ -712,8 +708,8 @@ static int vidioc_vdec_g_fmt(struct file *file, void *priv,
- 		pix_mp->plane_fmt[1].bytesperline = q_data->bytesperline[1];
- 		pix_mp->plane_fmt[1].sizeimage = q_data->sizeimage[1];
- 
--		mtk_v4l2_debug(1, "[%d] type=%d state=%d Format information could not be read, not ready yet!",
--				ctx->id, f->type, ctx->state);
-+		mtk_v4l2_vdec_dbg(1, ctx, "[%d] type=%d state=%d Format information not ready!",
-+				  ctx->id, f->type, ctx->state);
- 	}
- 
- 	return 0;
-@@ -730,7 +726,7 @@ int vb2ops_vdec_queue_setup(struct vb2_queue *vq, unsigned int *nbuffers,
- 	q_data = mtk_vdec_get_q_data(ctx, vq->type);
- 
- 	if (q_data == NULL) {
--		mtk_v4l2_err("vq->type=%d err\n", vq->type);
-+		mtk_v4l2_vdec_err(ctx, "vq->type=%d err\n", vq->type);
- 		return -EINVAL;
- 	}
- 
-@@ -756,10 +752,9 @@ int vb2ops_vdec_queue_setup(struct vb2_queue *vq, unsigned int *nbuffers,
- 			sizes[i] = q_data->sizeimage[i];
- 	}
- 
--	mtk_v4l2_debug(1,
--			"[%d]\t type = %d, get %d plane(s), %d buffer(s) of size 0x%x 0x%x ",
--			ctx->id, vq->type, *nplanes, *nbuffers,
--			sizes[0], sizes[1]);
-+	mtk_v4l2_vdec_dbg(1, ctx,
-+			  "[%d]\t type = %d, get %d plane(s), %d buffer(s) of size 0x%x 0x%x ",
-+			  ctx->id, vq->type, *nplanes, *nbuffers, sizes[0], sizes[1]);
- 
- 	return 0;
- }
-@@ -770,16 +765,15 @@ int vb2ops_vdec_buf_prepare(struct vb2_buffer *vb)
- 	struct mtk_q_data *q_data;
- 	int i;
- 
--	mtk_v4l2_debug(3, "[%d] (%d) id=%d",
--			ctx->id, vb->vb2_queue->type, vb->index);
-+	mtk_v4l2_vdec_dbg(3, ctx, "[%d] (%d) id=%d",
-+			  ctx->id, vb->vb2_queue->type, vb->index);
- 
- 	q_data = mtk_vdec_get_q_data(ctx, vb->vb2_queue->type);
- 
- 	for (i = 0; i < q_data->fmt->num_planes; i++) {
- 		if (vb2_plane_size(vb, i) < q_data->sizeimage[i]) {
--			mtk_v4l2_err("data will not fit into plane %d (%lu < %d)",
--				i, vb2_plane_size(vb, i),
--				q_data->sizeimage[i]);
-+			mtk_v4l2_vdec_err(ctx, "data will not fit into plane %d (%lu < %d)",
-+					  i, vb2_plane_size(vb, i), q_data->sizeimage[i]);
- 			return -EINVAL;
- 		}
- 		if (!V4L2_TYPE_IS_OUTPUT(vb->type))
-@@ -807,7 +801,7 @@ void vb2ops_vdec_buf_finish(struct vb2_buffer *vb)
- 	mutex_unlock(&ctx->lock);
- 
- 	if (buf_error) {
--		mtk_v4l2_err("Unrecoverable error on buffer.");
-+		mtk_v4l2_vdec_err(ctx, "Unrecoverable error on buffer.");
- 		ctx->state = MTK_STATE_ABORT;
- 	}
- }
-@@ -843,8 +837,8 @@ void vb2ops_vdec_stop_streaming(struct vb2_queue *q)
- 	struct mtk_vcodec_ctx *ctx = vb2_get_drv_priv(q);
- 	int ret;
- 
--	mtk_v4l2_debug(3, "[%d] (%d) state=(%x) ctx->decoded_frame_cnt=%d",
--			ctx->id, q->type, ctx->state, ctx->decoded_frame_cnt);
-+	mtk_v4l2_vdec_dbg(3, ctx, "[%d] (%d) state=(%x) ctx->decoded_frame_cnt=%d",
-+			  ctx->id, q->type, ctx->state, ctx->decoded_frame_cnt);
- 
- 	if (q->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) {
- 		while ((src_buf = v4l2_m2m_src_buf_remove(ctx->m2m_ctx))) {
-@@ -870,17 +864,17 @@ void vb2ops_vdec_stop_streaming(struct vb2_queue *q)
- 		 */
- 		ctx->picinfo = ctx->last_decoded_picinfo;
- 
--		mtk_v4l2_debug(2,
--				"[%d]-> new(%d,%d), old(%d,%d), real(%d,%d)",
--				ctx->id, ctx->last_decoded_picinfo.pic_w,
--				ctx->last_decoded_picinfo.pic_h,
--				ctx->picinfo.pic_w, ctx->picinfo.pic_h,
--				ctx->last_decoded_picinfo.buf_w,
--				ctx->last_decoded_picinfo.buf_h);
-+		mtk_v4l2_vdec_dbg(2, ctx,
-+				  "[%d]-> new(%d,%d), old(%d,%d), real(%d,%d)",
-+				  ctx->id, ctx->last_decoded_picinfo.pic_w,
-+				  ctx->last_decoded_picinfo.pic_h,
-+				  ctx->picinfo.pic_w, ctx->picinfo.pic_h,
-+				  ctx->last_decoded_picinfo.buf_w,
-+				  ctx->last_decoded_picinfo.buf_h);
- 
- 		ret = ctx->dev->vdec_pdata->flush_decoder(ctx);
- 		if (ret)
--			mtk_v4l2_err("DecodeFinal failed, ret=%d", ret);
-+			mtk_v4l2_vdec_err(ctx, "DecodeFinal failed, ret=%d", ret);
- 	}
- 	ctx->state = MTK_STATE_FLUSH;
- 
-@@ -905,7 +899,7 @@ static int m2mops_vdec_job_ready(void *m2m_priv)
- {
- 	struct mtk_vcodec_ctx *ctx = m2m_priv;
- 
--	mtk_v4l2_debug(3, "[%d]", ctx->id);
-+	mtk_v4l2_vdec_dbg(3, ctx, "[%d]", ctx->id);
- 
- 	if (ctx->state == MTK_STATE_ABORT)
- 		return 0;
-@@ -973,7 +967,7 @@ int mtk_vcodec_dec_queue_init(void *priv, struct vb2_queue *src_vq,
- 	struct mtk_vcodec_ctx *ctx = priv;
- 	int ret = 0;
- 
--	mtk_v4l2_debug(3, "[%d]", ctx->id);
-+	mtk_v4l2_vdec_dbg(3, ctx, "[%d]", ctx->id);
- 
- 	src_vq->type		= V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
- 	src_vq->io_modes	= VB2_DMABUF | VB2_MMAP;
-@@ -988,7 +982,7 @@ int mtk_vcodec_dec_queue_init(void *priv, struct vb2_queue *src_vq,
- 
- 	ret = vb2_queue_init(src_vq);
- 	if (ret) {
--		mtk_v4l2_err("Failed to initialize videobuf2 queue(output)");
-+		mtk_v4l2_vdec_err(ctx, "Failed to initialize videobuf2 queue(output)");
- 		return ret;
- 	}
- 	dst_vq->type		= V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
-@@ -1004,7 +998,7 @@ int mtk_vcodec_dec_queue_init(void *priv, struct vb2_queue *src_vq,
- 
- 	ret = vb2_queue_init(dst_vq);
- 	if (ret)
--		mtk_v4l2_err("Failed to initialize videobuf2 queue(capture)");
-+		mtk_v4l2_vdec_err(ctx, "Failed to initialize videobuf2 queue(capture)");
- 
- 	return ret;
- }
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-index 03721eda2769..4469c2411f40 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-@@ -25,7 +25,7 @@
- #include "mtk_vcodec_util.h"
- #include "mtk_vcodec_fw.h"
- 
--static int mtk_vcodec_get_hw_count(struct mtk_vcodec_dev *dev)
-+static int mtk_vcodec_get_hw_count(struct mtk_vcodec_ctx *ctx, struct mtk_vcodec_dev *dev)
- {
- 	switch (dev->vdec_pdata->hw_arch) {
- 	case MTK_VDEC_PURE_SINGLE_CORE:
-@@ -33,7 +33,7 @@ static int mtk_vcodec_get_hw_count(struct mtk_vcodec_dev *dev)
- 	case MTK_VDEC_LAT_SINGLE_CORE:
- 		return MTK_VDEC_ONE_LAT_ONE_CORE;
- 	default:
--		mtk_v4l2_err("hw arch %d not supported", dev->vdec_pdata->hw_arch);
-+		mtk_v4l2_vdec_err(ctx, "hw arch %d not supported", dev->vdec_pdata->hw_arch);
- 		return MTK_VDEC_NO_HW;
- 	}
- }
-@@ -52,8 +52,7 @@ static irqreturn_t mtk_vcodec_dec_irq_handler(int irq, void *priv)
- 	/* check if HW active or not */
- 	cg_status = readl(dev->reg_base[0]);
- 	if ((cg_status & VDEC_HW_ACTIVE) != 0) {
--		mtk_v4l2_err("DEC ISR, VDEC active is not 0x0 (0x%08x)",
--			     cg_status);
-+		mtk_v4l2_vdec_err(ctx, "DEC ISR, VDEC active is not 0x0 (0x%08x)", cg_status);
- 		return IRQ_HANDLED;
- 	}
- 
-@@ -71,9 +70,7 @@ static irqreturn_t mtk_vcodec_dec_irq_handler(int irq, void *priv)
- 
- 	wake_up_ctx(ctx, MTK_INST_IRQ_RECEIVED, 0);
- 
--	mtk_v4l2_debug(3,
--			"mtk_vcodec_dec_irq_handler :wake up ctx %d, dec_done_status=%x",
--			ctx->id, dec_done_status);
-+	mtk_v4l2_vdec_dbg(3, ctx, "wake up ctx %d, dec_done_status=%x", ctx->id, dec_done_status);
- 
- 	return IRQ_HANDLED;
- }
-@@ -96,7 +93,7 @@ static int mtk_vcodec_get_reg_bases(struct mtk_vcodec_dev *dev)
- 		if (IS_ERR(dev->reg_base[i]))
- 			return PTR_ERR(dev->reg_base[i]);
- 
--		mtk_v4l2_debug(2, "reg[%d] base=%p", i, dev->reg_base[i]);
-+		dev_dbg(&pdev->dev, "reg[%d] base=%p", i, dev->reg_base[i]);
- 	}
- 
- 	return 0;
-@@ -156,7 +153,7 @@ static int fops_vcodec_open(struct file *file)
- 	INIT_LIST_HEAD(&ctx->list);
- 	ctx->dev = dev;
- 	if (ctx->dev->vdec_pdata->is_subdev_supported) {
--		hw_count = mtk_vcodec_get_hw_count(dev);
-+		hw_count = mtk_vcodec_get_hw_count(ctx, dev);
- 		if (!hw_count || !dev->subdev_prob_done) {
- 			ret = -EINVAL;
- 			goto err_ctrls_setup;
-@@ -176,15 +173,14 @@ static int fops_vcodec_open(struct file *file)
- 	ctx->type = MTK_INST_DECODER;
- 	ret = dev->vdec_pdata->ctrls_setup(ctx);
- 	if (ret) {
--		mtk_v4l2_err("Failed to setup mt vcodec controls");
-+		mtk_v4l2_vdec_err(ctx, "Failed to setup mt vcodec controls");
- 		goto err_ctrls_setup;
- 	}
- 	ctx->m2m_ctx = v4l2_m2m_ctx_init(dev->m2m_dev_dec, ctx,
- 		&mtk_vcodec_dec_queue_init);
- 	if (IS_ERR((__force void *)ctx->m2m_ctx)) {
- 		ret = PTR_ERR((__force void *)ctx->m2m_ctx);
--		mtk_v4l2_err("Failed to v4l2_m2m_ctx_init() (%d)",
--			ret);
-+		mtk_v4l2_vdec_err(ctx, "Failed to v4l2_m2m_ctx_init() (%d)", ret);
- 		goto err_m2m_ctx_init;
- 	}
- 	src_vq = v4l2_m2m_get_vq(ctx->m2m_ctx,
-@@ -202,14 +198,14 @@ static int fops_vcodec_open(struct file *file)
- 			 * Return 0 if downloading firmware successfully,
- 			 * otherwise it is failed
- 			 */
--			mtk_v4l2_err("failed to load firmware!");
-+			mtk_v4l2_vdec_err(ctx, "failed to load firmware!");
- 			goto err_load_fw;
- 		}
- 
- 		dev->dec_capability =
- 			mtk_vcodec_fw_get_vdec_capa(dev->fw_handler);
- 
--		mtk_v4l2_debug(0, "decoder capability %x", dev->dec_capability);
-+		mtk_v4l2_vdec_dbg(0, ctx, "decoder capability %x", dev->dec_capability);
- 	}
- 
- 	ctx->dev->vdec_pdata->init_vdec_params(ctx);
-@@ -218,8 +214,7 @@ static int fops_vcodec_open(struct file *file)
- 	mtk_vcodec_dbgfs_create(ctx);
- 
- 	mutex_unlock(&dev->dev_mutex);
--	mtk_v4l2_debug(0, "%s decoder [%d]", dev_name(&dev->plat_dev->dev),
--			ctx->id);
-+	mtk_v4l2_vdec_dbg(0, ctx, "%s decoder [%d]", dev_name(&dev->plat_dev->dev), ctx->id);
- 	return ret;
- 
- 	/* Deinit when failure occurred */
-@@ -241,7 +236,7 @@ static int fops_vcodec_release(struct file *file)
- 	struct mtk_vcodec_dev *dev = video_drvdata(file);
- 	struct mtk_vcodec_ctx *ctx = fh_to_ctx(file->private_data);
- 
--	mtk_v4l2_debug(0, "[%d] decoder", ctx->id);
-+	mtk_v4l2_vdec_dbg(0, ctx, "[%d] decoder", ctx->id);
- 	mutex_lock(&dev->dev_mutex);
- 
- 	/*
-@@ -296,7 +291,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 					 &rproc_phandle)) {
- 		fw_type = SCP;
- 	} else {
--		mtk_v4l2_err("Could not get vdec IPI device");
-+		dev_dbg(&pdev->dev, "Could not get vdec IPI device");
- 		return -ENODEV;
- 	}
- 	dma_set_max_seg_size(&pdev->dev, UINT_MAX);
-@@ -316,7 +311,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 			alloc_ordered_workqueue("core-decoder",
- 						WQ_MEM_RECLAIM | WQ_FREEZABLE);
- 		if (!dev->core_workqueue) {
--			mtk_v4l2_err("Failed to create core workqueue");
-+			dev_dbg(&pdev->dev, "Failed to create core workqueue");
- 			ret = -EINVAL;
- 			goto err_res;
- 		}
-@@ -332,13 +327,13 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 
- 	ret = v4l2_device_register(&pdev->dev, &dev->v4l2_dev);
- 	if (ret) {
--		mtk_v4l2_err("v4l2_device_register err=%d", ret);
-+		dev_err(&pdev->dev, "v4l2_device_register err=%d", ret);
- 		goto err_core_workq;
- 	}
- 
- 	vfd_dec = video_device_alloc();
- 	if (!vfd_dec) {
--		mtk_v4l2_err("Failed to allocate video device");
-+		dev_err(&pdev->dev, "Failed to allocate video device");
- 		ret = -ENOMEM;
- 		goto err_dec_alloc;
- 	}
-@@ -359,7 +354,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 
- 	dev->m2m_dev_dec = v4l2_m2m_init(&mtk_vdec_m2m_ops);
- 	if (IS_ERR((__force void *)dev->m2m_dev_dec)) {
--		mtk_v4l2_err("Failed to init mem2mem dec device");
-+		dev_err(&pdev->dev, "Failed to init mem2mem dec device");
- 		ret = PTR_ERR((__force void *)dev->m2m_dev_dec);
- 		goto err_dec_alloc;
- 	}
-@@ -368,7 +363,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 		alloc_ordered_workqueue(MTK_VCODEC_DEC_NAME,
- 			WQ_MEM_RECLAIM | WQ_FREEZABLE);
- 	if (!dev->decode_workqueue) {
--		mtk_v4l2_err("Failed to create decode workqueue");
-+		dev_err(&pdev->dev, "Failed to create decode workqueue");
- 		ret = -EINVAL;
- 		goto err_event_workq;
- 	}
-@@ -377,7 +372,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 		ret = of_platform_populate(pdev->dev.of_node, NULL, NULL,
- 					   &pdev->dev);
- 		if (ret) {
--			mtk_v4l2_err("Main device of_platform_populate failed.");
-+			dev_err(&pdev->dev, "Main device of_platform_populate failed.");
- 			goto err_reg_cont;
- 		}
- 	} else {
-@@ -390,7 +385,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 
- 	ret = video_register_device(vfd_dec, VFL_TYPE_VIDEO, -1);
- 	if (ret) {
--		mtk_v4l2_err("Failed to register video device");
-+		dev_err(&pdev->dev, "Failed to register video device");
- 		goto err_reg_cont;
- 	}
- 
-@@ -409,21 +404,21 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 		ret = v4l2_m2m_register_media_controller(dev->m2m_dev_dec, dev->vfd_dec,
- 							 MEDIA_ENT_F_PROC_VIDEO_DECODER);
- 		if (ret) {
--			mtk_v4l2_err("Failed to register media controller");
-+			dev_err(&pdev->dev, "Failed to register media controller");
- 			goto err_dec_mem_init;
- 		}
- 
- 		ret = media_device_register(&dev->mdev_dec);
- 		if (ret) {
--			mtk_v4l2_err("Failed to register media device");
-+			dev_err(&pdev->dev, "Failed to register media device");
- 			goto err_media_reg;
- 		}
- 
--		mtk_v4l2_debug(0, "media registered as /dev/media%d", vfd_dec->minor);
-+		dev_dbg(&pdev->dev, "media registered as /dev/media%d", vfd_dec->minor);
- 	}
- 
- 	mtk_vcodec_dbgfs_init(dev, false);
--	mtk_v4l2_debug(0, "decoder registered as /dev/video%d", vfd_dec->minor);
-+	dev_dbg(&pdev->dev, "decoder registered as /dev/video%d", vfd_dec->minor);
- 
- 	return 0;
- 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
-index e1cb2f8dca33..7c4d8ec201e3 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
-@@ -77,8 +77,7 @@ static irqreturn_t mtk_vdec_hw_irq_handler(int irq, void *priv)
- 	/* check if HW active or not */
- 	cg_status = readl(dev->reg_base[VDEC_HW_SYS]);
- 	if (cg_status & VDEC_HW_ACTIVE) {
--		mtk_v4l2_err("vdec active is not 0x0 (0x%08x)",
--			     cg_status);
-+		mtk_v4l2_vdec_err(ctx, "vdec active is not 0x0 (0x%08x)", cg_status);
- 		return IRQ_HANDLED;
- 	}
- 
-@@ -93,8 +92,8 @@ static irqreturn_t mtk_vdec_hw_irq_handler(int irq, void *priv)
- 
- 	wake_up_ctx(ctx, MTK_INST_IRQ_RECEIVED, dev->hw_idx);
- 
--	mtk_v4l2_debug(3, "wake up ctx %d, dec_done_status=%x",
--		       ctx->id, dec_done_status);
-+	mtk_v4l2_vdec_dbg(3, ctx, "wake up ctx %d, dec_done_status=%x",
-+			  ctx->id, dec_done_status);
- 
- 	return IRQ_HANDLED;
- }
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c
-index 777d445999e9..3ab996705b97 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c
-@@ -32,7 +32,7 @@ int mtk_vcodec_init_dec_clk(struct platform_device *pdev, struct mtk_vcodec_pm *
- 		if (!dec_clk->clk_info)
- 			return -ENOMEM;
- 	} else {
--		mtk_v4l2_err("Failed to get vdec clock count");
-+		dev_err(&pdev->dev, "Failed to get vdec clock count");
- 		return -EINVAL;
- 	}
- 
-@@ -41,14 +41,13 @@ int mtk_vcodec_init_dec_clk(struct platform_device *pdev, struct mtk_vcodec_pm *
- 		ret = of_property_read_string_index(pdev->dev.of_node,
- 			"clock-names", i, &clk_info->clk_name);
- 		if (ret) {
--			mtk_v4l2_err("Failed to get clock name id = %d", i);
-+			dev_err(&pdev->dev, "Failed to get clock name id = %d", i);
- 			return ret;
- 		}
- 		clk_info->vcodec_clk = devm_clk_get(&pdev->dev,
- 			clk_info->clk_name);
- 		if (IS_ERR(clk_info->vcodec_clk)) {
--			mtk_v4l2_err("devm_clk_get (%d)%s fail", i,
--				clk_info->clk_name);
-+			dev_err(&pdev->dev, "devm_clk_get (%d)%s fail", i, clk_info->clk_name);
- 			return PTR_ERR(clk_info->vcodec_clk);
- 		}
- 	}
-@@ -63,7 +62,7 @@ static int mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm)
- 
- 	ret = pm_runtime_resume_and_get(pm->dev);
- 	if (ret)
--		mtk_v4l2_err("pm_runtime_resume_and_get fail %d", ret);
-+		dev_err(pm->dev, "pm_runtime_resume_and_get fail %d", ret);
- 
- 	return ret;
- }
-@@ -74,7 +73,7 @@ static void mtk_vcodec_dec_pw_off(struct mtk_vcodec_pm *pm)
- 
- 	ret = pm_runtime_put(pm->dev);
- 	if (ret && ret != -EAGAIN)
--		mtk_v4l2_err("pm_runtime_put fail %d", ret);
-+		dev_err(pm->dev, "pm_runtime_put fail %d", ret);
- }
- 
- static void mtk_vcodec_dec_clock_on(struct mtk_vcodec_pm *pm)
-@@ -86,7 +85,7 @@ static void mtk_vcodec_dec_clock_on(struct mtk_vcodec_pm *pm)
- 	for (i = 0; i < dec_clk->clk_num; i++) {
- 		ret = clk_prepare_enable(dec_clk->clk_info[i].vcodec_clk);
- 		if (ret) {
--			mtk_v4l2_err("clk_prepare_enable %d %s fail %d", i,
-+			dev_err(pm->dev, "clk_prepare_enable %d %s fail %d", i,
- 				dec_clk->clk_info[i].clk_name, ret);
- 			goto error;
- 		}
-@@ -120,7 +119,7 @@ static void mtk_vcodec_dec_enable_irq(struct mtk_vcodec_dev *vdec_dev, int hw_id
- 		if (subdev_dev)
- 			enable_irq(subdev_dev->dec_irq);
- 		else
--			mtk_v4l2_err("Failed to get hw dev\n");
-+			dev_err(&vdec_dev->plat_dev->dev, "Failed to get hw dev\n");
- 	} else {
- 		enable_irq(vdec_dev->dec_irq);
- 	}
-@@ -138,7 +137,7 @@ static void mtk_vcodec_dec_disable_irq(struct mtk_vcodec_dev *vdec_dev, int hw_i
- 		if (subdev_dev)
- 			disable_irq(subdev_dev->dec_irq);
- 		else
--			mtk_v4l2_err("Failed to get hw dev\n");
-+			dev_err(&vdec_dev->plat_dev->dev, "Failed to get hw dev\n");
- 	} else {
- 		disable_irq(vdec_dev->dec_irq);
- 	}
-@@ -185,7 +184,7 @@ static struct mtk_vcodec_pm *mtk_vcodec_dec_get_pm(struct mtk_vcodec_dev *vdec_d
- 		if (subdev_dev)
- 			return &subdev_dev->pm;
- 
--		mtk_v4l2_err("Failed to get hw dev\n");
-+		dev_err(&vdec_dev->plat_dev->dev, "Failed to get hw dev\n");
- 		return NULL;
- 	}
- 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateful.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateful.c
-index 0fbd030026c7..3c289b08bc87 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateful.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateful.c
-@@ -61,15 +61,16 @@ static struct vb2_buffer *get_display_buffer(struct mtk_vcodec_ctx *ctx)
- 	struct mtk_video_dec_buf *dstbuf;
- 	struct vb2_v4l2_buffer *vb;
- 
--	mtk_v4l2_debug(3, "[%d]", ctx->id);
-+	mtk_v4l2_vdec_dbg(3, ctx, "[%d]", ctx->id);
- 	if (vdec_if_get_param(ctx, GET_PARAM_DISP_FRAME_BUFFER,
- 			      &disp_frame_buffer)) {
--		mtk_v4l2_err("[%d]Cannot get param : GET_PARAM_DISP_FRAME_BUFFER", ctx->id);
-+		mtk_v4l2_vdec_err(ctx, "[%d]Cannot get param : GET_PARAM_DISP_FRAME_BUFFER",
-+				  ctx->id);
- 		return NULL;
- 	}
- 
- 	if (!disp_frame_buffer) {
--		mtk_v4l2_debug(3, "No display frame buffer");
-+		mtk_v4l2_vdec_dbg(3, ctx, "No display frame buffer");
- 		return NULL;
- 	}
- 
-@@ -78,9 +79,9 @@ static struct vb2_buffer *get_display_buffer(struct mtk_vcodec_ctx *ctx)
- 	vb = &dstbuf->m2m_buf.vb;
- 	mutex_lock(&ctx->lock);
- 	if (dstbuf->used) {
--		mtk_v4l2_debug(2, "[%d]status=%x queue id=%d to done_list %d",
--			       ctx->id, disp_frame_buffer->status,
--			       vb->vb2_buf.index, dstbuf->queued_in_vb2);
-+		mtk_v4l2_vdec_dbg(2, ctx, "[%d]status=%x queue id=%d to done_list %d",
-+				  ctx->id, disp_frame_buffer->status,
-+				  vb->vb2_buf.index, dstbuf->queued_in_vb2);
- 
- 		v4l2_m2m_buf_done(vb, VB2_BUF_STATE_DONE);
- 		ctx->decoded_frame_cnt++;
-@@ -105,16 +106,16 @@ static struct vb2_buffer *get_free_buffer(struct mtk_vcodec_ctx *ctx)
- 
- 	if (vdec_if_get_param(ctx, GET_PARAM_FREE_FRAME_BUFFER,
- 			      &free_frame_buffer)) {
--		mtk_v4l2_err("[%d] Error!! Cannot get param", ctx->id);
-+		mtk_v4l2_vdec_err(ctx, "[%d] Error!! Cannot get param", ctx->id);
- 		return NULL;
- 	}
- 	if (!free_frame_buffer) {
--		mtk_v4l2_debug(3, " No free frame buffer");
-+		mtk_v4l2_vdec_dbg(3, ctx, " No free frame buffer");
- 		return NULL;
- 	}
- 
--	mtk_v4l2_debug(3, "[%d] tmp_frame_addr = 0x%p", ctx->id,
--		       free_frame_buffer);
-+	mtk_v4l2_vdec_dbg(3, ctx, "[%d] tmp_frame_addr = 0x%p", ctx->id,
-+			  free_frame_buffer);
- 
- 	dstbuf = container_of(free_frame_buffer, struct mtk_video_dec_buf,
- 			      frame_buffer);
-@@ -131,9 +132,9 @@ static struct vb2_buffer *get_free_buffer(struct mtk_vcodec_ctx *ctx)
- 			 * This reduce overheads that dq/q unused capture
- 			 * buffer. In this case, queued_in_vb2 = true.
- 			 */
--			mtk_v4l2_debug(2, "[%d]status=%x queue id=%d to rdy_queue %d",
--				       ctx->id, free_frame_buffer->status,
--				       vb->vb2_buf.index, dstbuf->queued_in_vb2);
-+			mtk_v4l2_vdec_dbg(2, ctx, "[%d]status=%x queue id=%d to rdy_queue %d",
-+					  ctx->id, free_frame_buffer->status,
-+					  vb->vb2_buf.index, dstbuf->queued_in_vb2);
- 			v4l2_m2m_buf_queue(ctx->m2m_ctx, vb);
- 		} else if (!dstbuf->queued_in_vb2 && dstbuf->queued_in_v4l2) {
- 			/*
-@@ -146,10 +147,10 @@ static struct vb2_buffer *get_free_buffer(struct mtk_vcodec_ctx *ctx)
- 			 * means this buffer is not from previous decode
- 			 * output.
- 			 */
--			mtk_v4l2_debug(2,
--				       "[%d]status=%x queue id=%d to rdy_queue",
--				       ctx->id, free_frame_buffer->status,
--				       vb->vb2_buf.index);
-+			mtk_v4l2_vdec_dbg(2, ctx,
-+					  "[%d]status=%x queue id=%d to rdy_queue",
-+					  ctx->id, free_frame_buffer->status,
-+					  vb->vb2_buf.index);
- 			v4l2_m2m_buf_queue(ctx->m2m_ctx, vb);
- 			dstbuf->queued_in_vb2 = true;
- 		} else {
-@@ -161,10 +162,10 @@ static struct vb2_buffer *get_free_buffer(struct mtk_vcodec_ctx *ctx)
- 			 * When this buffer q from user space, it could
- 			 * directly q to vb2 buffer
- 			 */
--			mtk_v4l2_debug(3, "[%d]status=%x err queue id=%d %d %d",
--				       ctx->id, free_frame_buffer->status,
--				       vb->vb2_buf.index, dstbuf->queued_in_vb2,
--				       dstbuf->queued_in_v4l2);
-+			mtk_v4l2_vdec_dbg(3, ctx, "[%d]status=%x err queue id=%d %d %d",
-+					  ctx->id, free_frame_buffer->status,
-+					  vb->vb2_buf.index, dstbuf->queued_in_vb2,
-+					  dstbuf->queued_in_v4l2);
- 		}
- 		dstbuf->used = false;
- 	}
-@@ -191,7 +192,7 @@ static void mtk_vdec_queue_res_chg_event(struct mtk_vcodec_ctx *ctx)
- 		.u.src_change.changes = V4L2_EVENT_SRC_CH_RESOLUTION,
- 	};
- 
--	mtk_v4l2_debug(1, "[%d]", ctx->id);
-+	mtk_v4l2_vdec_dbg(1, ctx, "[%d]", ctx->id);
- 	v4l2_event_queue_fh(&ctx->fh, &ev_src_ch);
- }
- 
-@@ -202,7 +203,7 @@ static int mtk_vdec_flush_decoder(struct mtk_vcodec_ctx *ctx)
- 
- 	ret = vdec_if_decode(ctx, NULL, NULL, &res_chg);
- 	if (ret)
--		mtk_v4l2_err("DecodeFinal failed, ret=%d", ret);
-+		mtk_v4l2_vdec_err(ctx, "DecodeFinal failed, ret=%d", ret);
- 
- 	clean_display_buffer(ctx);
- 	clean_free_buffer(ctx);
-@@ -221,14 +222,14 @@ static void mtk_vdec_update_fmt(struct mtk_vcodec_ctx *ctx,
- 	for (k = 0; k < num_supported_formats; k++) {
- 		fmt = &mtk_video_formats[k];
- 		if (fmt->fourcc == pixelformat) {
--			mtk_v4l2_debug(1, "Update cap fourcc(%d -> %d)",
--				       dst_q_data->fmt->fourcc, pixelformat);
-+			mtk_v4l2_vdec_dbg(1, ctx, "Update cap fourcc(%d -> %d)",
-+					  dst_q_data->fmt->fourcc, pixelformat);
- 			dst_q_data->fmt = fmt;
- 			return;
- 		}
- 	}
- 
--	mtk_v4l2_err("Cannot get fourcc(%d), using init value", pixelformat);
-+	mtk_v4l2_vdec_err(ctx, "Cannot get fourcc(%d), using init value", pixelformat);
- }
- 
- static int mtk_vdec_pic_info_update(struct mtk_vcodec_ctx *ctx)
-@@ -238,7 +239,8 @@ static int mtk_vdec_pic_info_update(struct mtk_vcodec_ctx *ctx)
- 
- 	if (vdec_if_get_param(ctx, GET_PARAM_PIC_INFO,
- 			      &ctx->last_decoded_picinfo)) {
--		mtk_v4l2_err("[%d]Error!! Cannot get param : GET_PARAM_PICTURE_INFO ERR", ctx->id);
-+		mtk_v4l2_vdec_err(ctx, "[%d]Error!! Cannot get param : GET_PARAM_PICTURE_INFO ERR",
-+				  ctx->id);
- 		return -EINVAL;
- 	}
- 
-@@ -246,7 +248,7 @@ static int mtk_vdec_pic_info_update(struct mtk_vcodec_ctx *ctx)
- 	    ctx->last_decoded_picinfo.pic_h == 0 ||
- 	    ctx->last_decoded_picinfo.buf_w == 0 ||
- 	    ctx->last_decoded_picinfo.buf_h == 0) {
--		mtk_v4l2_err("Cannot get correct pic info");
-+		mtk_v4l2_vdec_err(ctx, "Cannot get correct pic info");
- 		return -EINVAL;
- 	}
- 
-@@ -258,15 +260,15 @@ static int mtk_vdec_pic_info_update(struct mtk_vcodec_ctx *ctx)
- 	    ctx->last_decoded_picinfo.pic_h == ctx->picinfo.pic_h)
- 		return 0;
- 
--	mtk_v4l2_debug(1, "[%d]-> new(%d,%d), old(%d,%d), real(%d,%d)", ctx->id,
--		       ctx->last_decoded_picinfo.pic_w,
--		       ctx->last_decoded_picinfo.pic_h, ctx->picinfo.pic_w,
--		       ctx->picinfo.pic_h, ctx->last_decoded_picinfo.buf_w,
--		       ctx->last_decoded_picinfo.buf_h);
-+	mtk_v4l2_vdec_dbg(1, ctx, "[%d]-> new(%d,%d), old(%d,%d), real(%d,%d)", ctx->id,
-+			  ctx->last_decoded_picinfo.pic_w,
-+			  ctx->last_decoded_picinfo.pic_h, ctx->picinfo.pic_w,
-+			  ctx->picinfo.pic_h, ctx->last_decoded_picinfo.buf_w,
-+			  ctx->last_decoded_picinfo.buf_h);
- 
- 	ret = vdec_if_get_param(ctx, GET_PARAM_DPB_SIZE, &dpbsize);
- 	if (dpbsize == 0)
--		mtk_v4l2_err("Incorrect dpb size, ret=%d", ret);
-+		mtk_v4l2_vdec_err(ctx, "Incorrect dpb size, ret=%d", ret);
- 
- 	ctx->dpb_size = dpbsize;
- 
-@@ -288,14 +290,14 @@ static void mtk_vdec_worker(struct work_struct *work)
- 	src_buf = v4l2_m2m_next_src_buf(ctx->m2m_ctx);
- 	if (!src_buf) {
- 		v4l2_m2m_job_finish(dev->m2m_dev_dec, ctx->m2m_ctx);
--		mtk_v4l2_debug(1, "[%d] src_buf empty!!", ctx->id);
-+		mtk_v4l2_vdec_dbg(1, ctx, "[%d] src_buf empty!!", ctx->id);
- 		return;
- 	}
- 
- 	dst_buf = v4l2_m2m_next_dst_buf(ctx->m2m_ctx);
- 	if (!dst_buf) {
- 		v4l2_m2m_job_finish(dev->m2m_dev_dec, ctx->m2m_ctx);
--		mtk_v4l2_debug(1, "[%d] dst_buf empty!!", ctx->id);
-+		mtk_v4l2_vdec_dbg(1, ctx, "[%d] dst_buf empty!!", ctx->id);
- 		return;
- 	}
- 
-@@ -313,15 +315,15 @@ static void mtk_vdec_worker(struct work_struct *work)
- 		vb2_dma_contig_plane_dma_addr(&dst_buf->vb2_buf, 1);
- 	pfb->base_c.size = ctx->picinfo.fb_sz[1];
- 	pfb->status = 0;
--	mtk_v4l2_debug(3, "===>[%d] vdec_if_decode() ===>", ctx->id);
-+	mtk_v4l2_vdec_dbg(3, ctx, "===>[%d] vdec_if_decode() ===>", ctx->id);
- 
--	mtk_v4l2_debug(3,
--		       "id=%d Framebuf  pfb=%p VA=%p Y_DMA=%pad C_DMA=%pad Size=%zx",
--		       dst_buf->vb2_buf.index, pfb, pfb->base_y.va,
--		       &pfb->base_y.dma_addr, &pfb->base_c.dma_addr, pfb->base_y.size);
-+	mtk_v4l2_vdec_dbg(3, ctx,
-+			  "id=%d Framebuf  pfb=%p VA=%p Y_DMA=%pad C_DMA=%pad Size=%zx",
-+			  dst_buf->vb2_buf.index, pfb, pfb->base_y.va,
-+			  &pfb->base_y.dma_addr, &pfb->base_c.dma_addr, pfb->base_y.size);
- 
- 	if (src_buf == &ctx->empty_flush_buf.vb) {
--		mtk_v4l2_debug(1, "Got empty flush input buffer.");
-+		mtk_v4l2_vdec_dbg(1, ctx, "Got empty flush input buffer.");
- 		src_buf = v4l2_m2m_src_buf_remove(ctx->m2m_ctx);
- 
- 		/* update dst buf status */
-@@ -350,12 +352,12 @@ static void mtk_vdec_worker(struct work_struct *work)
- 	buf.size = (size_t)src_buf->vb2_buf.planes[0].bytesused;
- 	if (!buf.va) {
- 		v4l2_m2m_job_finish(dev->m2m_dev_dec, ctx->m2m_ctx);
--		mtk_v4l2_err("[%d] id=%d src_addr is NULL!!", ctx->id,
--			     src_buf->vb2_buf.index);
-+		mtk_v4l2_vdec_err(ctx, "[%d] id=%d src_addr is NULL!!", ctx->id,
-+				  src_buf->vb2_buf.index);
- 		return;
- 	}
--	mtk_v4l2_debug(3, "[%d] Bitstream VA=%p DMA=%pad Size=%zx vb=%p",
--		       ctx->id, buf.va, &buf.dma_addr, buf.size, src_buf);
-+	mtk_v4l2_vdec_dbg(3, ctx, "[%d] Bitstream VA=%p DMA=%pad Size=%zx vb=%p",
-+			  ctx->id, buf.va, &buf.dma_addr, buf.size, src_buf);
- 	dst_buf->vb2_buf.timestamp = src_buf->vb2_buf.timestamp;
- 	dst_buf->timecode = src_buf->timecode;
- 	mutex_lock(&ctx->lock);
-@@ -366,9 +368,10 @@ static void mtk_vdec_worker(struct work_struct *work)
- 	ret = vdec_if_decode(ctx, &buf, pfb, &res_chg);
- 
- 	if (ret) {
--		mtk_v4l2_err(" <===[%d], src_buf[%d] sz=0x%zx pts=%llu dst_buf[%d] vdec_if_decode() ret=%d res_chg=%d===>",
--			     ctx->id, src_buf->vb2_buf.index, buf.size,
--			     src_buf->vb2_buf.timestamp, dst_buf->vb2_buf.index, ret, res_chg);
-+		mtk_v4l2_vdec_err(ctx,
-+				  "[%d] decode src[%d] sz=0x%zx pts=%llu dst[%d] ret=%d res_chg=%d",
-+				  ctx->id, src_buf->vb2_buf.index, buf.size,
-+				  src_buf->vb2_buf.timestamp, dst_buf->vb2_buf.index, ret, res_chg);
- 		src_buf = v4l2_m2m_src_buf_remove(ctx->m2m_ctx);
- 		if (ret == -EIO) {
- 			mutex_lock(&ctx->lock);
-@@ -421,8 +424,8 @@ static void vb2ops_vdec_stateful_buf_queue(struct vb2_buffer *vb)
- 	struct vb2_v4l2_buffer *vb2_v4l2;
- 	struct mtk_q_data *dst_q_data;
- 
--	mtk_v4l2_debug(3, "[%d] (%d) id=%d, vb=%p", ctx->id,
--		       vb->vb2_queue->type, vb->index, vb);
-+	mtk_v4l2_vdec_dbg(3, ctx, "[%d] (%d) id=%d, vb=%p", ctx->id,
-+			  vb->vb2_queue->type, vb->index, vb);
- 	/*
- 	 * check if this buffer is ready to be used after decode
- 	 */
-@@ -448,20 +451,19 @@ static void vb2ops_vdec_stateful_buf_queue(struct vb2_buffer *vb)
- 	v4l2_m2m_buf_queue(ctx->m2m_ctx, to_vb2_v4l2_buffer(vb));
- 
- 	if (ctx->state != MTK_STATE_INIT) {
--		mtk_v4l2_debug(3, "[%d] already init driver %d", ctx->id,
--			       ctx->state);
-+		mtk_v4l2_vdec_dbg(3, ctx, "[%d] already init driver %d", ctx->id, ctx->state);
- 		return;
- 	}
- 
- 	src_buf = v4l2_m2m_next_src_buf(ctx->m2m_ctx);
- 	if (!src_buf) {
--		mtk_v4l2_err("No src buffer");
-+		mtk_v4l2_vdec_err(ctx, "No src buffer");
- 		return;
- 	}
- 
- 	if (src_buf == &ctx->empty_flush_buf.vb) {
- 		/* This shouldn't happen. Just in case. */
--		mtk_v4l2_err("Invalid flush buffer.");
-+		mtk_v4l2_vdec_err(ctx, "Invalid flush buffer.");
- 		v4l2_m2m_src_buf_remove(ctx->m2m_ctx);
- 		return;
- 	}
-@@ -469,9 +471,8 @@ static void vb2ops_vdec_stateful_buf_queue(struct vb2_buffer *vb)
- 	src_mem.va = vb2_plane_vaddr(&src_buf->vb2_buf, 0);
- 	src_mem.dma_addr = vb2_dma_contig_plane_dma_addr(&src_buf->vb2_buf, 0);
- 	src_mem.size = (size_t)src_buf->vb2_buf.planes[0].bytesused;
--	mtk_v4l2_debug(2, "[%d] buf id=%d va=%p dma=%pad size=%zx", ctx->id,
--		       src_buf->vb2_buf.index, src_mem.va, &src_mem.dma_addr,
--		       src_mem.size);
-+	mtk_v4l2_vdec_dbg(2, ctx, "[%d] buf id=%d va=%p dma=%pad size=%zx", ctx->id,
-+			  src_buf->vb2_buf.index, src_mem.va, &src_mem.dma_addr, src_mem.size);
- 
- 	ret = vdec_if_decode(ctx, &src_mem, NULL, &res_chg);
- 	if (ret || !res_chg) {
-@@ -484,20 +485,22 @@ static void vb2ops_vdec_stateful_buf_queue(struct vb2_buffer *vb)
- 
- 		src_buf = v4l2_m2m_src_buf_remove(ctx->m2m_ctx);
- 		if (ret == -EIO) {
--			mtk_v4l2_err("[%d] Unrecoverable error in vdec_if_decode.", ctx->id);
-+			mtk_v4l2_vdec_err(ctx, "[%d] Unrecoverable error in vdec_if_decode.",
-+					  ctx->id);
- 			ctx->state = MTK_STATE_ABORT;
- 			v4l2_m2m_buf_done(src_buf, VB2_BUF_STATE_ERROR);
- 		} else {
- 			v4l2_m2m_buf_done(src_buf, VB2_BUF_STATE_DONE);
- 		}
--		mtk_v4l2_debug(ret ? 0 : 1,
--			       "[%d] vdec_if_decode() src_buf=%d, size=%zu, fail=%d, res_chg=%d",
--			       ctx->id, src_buf->vb2_buf.index, src_mem.size, ret, res_chg);
-+		mtk_v4l2_vdec_dbg(ret ? 0 : 1, ctx,
-+				  "[%d] decode() src_buf=%d, size=%zu, fail=%d, res_chg=%d",
-+				  ctx->id, src_buf->vb2_buf.index, src_mem.size, ret, res_chg);
- 		return;
- 	}
- 
- 	if (vdec_if_get_param(ctx, GET_PARAM_PIC_INFO, &ctx->picinfo)) {
--		mtk_v4l2_err("[%d]Error!! Cannot get param : GET_PARAM_PICTURE_INFO ERR", ctx->id);
-+		mtk_v4l2_vdec_err(ctx, "[%d]Error!! Cannot get param : GET_PARAM_PICTURE_INFO ERR",
-+				  ctx->id);
- 		return;
- 	}
- 
-@@ -508,17 +511,17 @@ static void vb2ops_vdec_stateful_buf_queue(struct vb2_buffer *vb)
- 		dst_q_data->bytesperline[i] = ctx->picinfo.buf_w;
- 	}
- 
--	mtk_v4l2_debug(2, "[%d] vdec_if_init() OK wxh=%dx%d pic wxh=%dx%d sz[0]=0x%x sz[1]=0x%x",
--		       ctx->id, ctx->picinfo.buf_w, ctx->picinfo.buf_h, ctx->picinfo.pic_w,
--		       ctx->picinfo.pic_h, dst_q_data->sizeimage[0], dst_q_data->sizeimage[1]);
-+	mtk_v4l2_vdec_dbg(2, ctx, "[%d] init OK wxh=%dx%d pic wxh=%dx%d sz[0]=0x%x sz[1]=0x%x",
-+			  ctx->id, ctx->picinfo.buf_w, ctx->picinfo.buf_h, ctx->picinfo.pic_w,
-+			  ctx->picinfo.pic_h, dst_q_data->sizeimage[0], dst_q_data->sizeimage[1]);
- 
- 	ret = vdec_if_get_param(ctx, GET_PARAM_DPB_SIZE, &dpbsize);
- 	if (dpbsize == 0)
--		mtk_v4l2_err("[%d] GET_PARAM_DPB_SIZE fail=%d", ctx->id, ret);
-+		mtk_v4l2_vdec_err(ctx, "[%d] GET_PARAM_DPB_SIZE fail=%d", ctx->id, ret);
- 
- 	ctx->dpb_size = dpbsize;
- 	ctx->state = MTK_STATE_HEADER;
--	mtk_v4l2_debug(1, "[%d] dpbsize=%d", ctx->id, ctx->dpb_size);
-+	mtk_v4l2_vdec_dbg(1, ctx, "[%d] dpbsize=%d", ctx->id, ctx->dpb_size);
- 
- 	mtk_vdec_queue_res_chg_event(ctx);
- }
-@@ -533,7 +536,7 @@ static int mtk_vdec_g_v_ctrl(struct v4l2_ctrl *ctrl)
- 		if (ctx->state >= MTK_STATE_HEADER) {
- 			ctrl->val = ctx->dpb_size;
- 		} else {
--			mtk_v4l2_debug(0, "Seqinfo not ready");
-+			mtk_v4l2_vdec_dbg(0, ctx, "Seqinfo not ready");
- 			ctrl->val = 0;
- 		}
- 		break;
-@@ -570,7 +573,7 @@ static int mtk_vcodec_dec_ctrls_setup(struct mtk_vcodec_ctx *ctx)
- 			       V4L2_MPEG_VIDEO_H264_PROFILE_MAIN);
- 
- 	if (ctx->ctrl_hdl.error) {
--		mtk_v4l2_err("Adding control failed %d", ctx->ctrl_hdl.error);
-+		mtk_v4l2_vdec_err(ctx, "Adding control failed %d", ctx->ctrl_hdl.error);
- 		return ctx->ctrl_hdl.error;
- 	}
- 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
-index db1e14a1bd6c..f4f278d4bce3 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
-@@ -232,10 +232,10 @@ static void mtk_vdec_stateless_cap_to_disp(struct mtk_vcodec_ctx *ctx, int error
- 	vb2_dst = v4l2_m2m_dst_buf_remove(ctx->m2m_ctx);
- 	if (vb2_dst) {
- 		v4l2_m2m_buf_done(vb2_dst, state);
--		mtk_v4l2_debug(2, "free frame buffer id:%d to done list",
--			       vb2_dst->vb2_buf.index);
-+		mtk_v4l2_vdec_dbg(2, ctx, "free frame buffer id:%d to done list",
-+				  vb2_dst->vb2_buf.index);
- 	} else {
--		mtk_v4l2_err("dst buffer is NULL");
-+		mtk_v4l2_vdec_err(ctx, "dst buffer is NULL");
- 	}
- 
- 	if (src_buf_req)
-@@ -251,7 +251,7 @@ static struct vdec_fb *vdec_get_cap_buffer(struct mtk_vcodec_ctx *ctx)
- 
- 	vb2_v4l2 = v4l2_m2m_next_dst_buf(ctx->m2m_ctx);
- 	if (!vb2_v4l2) {
--		mtk_v4l2_debug(1, "[%d] dst_buf empty!!", ctx->id);
-+		mtk_v4l2_vdec_dbg(1, ctx, "[%d] dst_buf empty!!", ctx->id);
- 		return NULL;
- 	}
- 
-@@ -269,9 +269,10 @@ static struct vdec_fb *vdec_get_cap_buffer(struct mtk_vcodec_ctx *ctx)
- 			vb2_dma_contig_plane_dma_addr(dst_buf, 1);
- 		pfb->base_c.size = ctx->q_data[MTK_Q_DATA_DST].sizeimage[1];
- 	}
--	mtk_v4l2_debug(1, "id=%d Framebuf  pfb=%p VA=%p Y_DMA=%pad C_DMA=%pad Size=%zx frame_count = %d",
--		       dst_buf->index, pfb, pfb->base_y.va, &pfb->base_y.dma_addr,
--		       &pfb->base_c.dma_addr, pfb->base_y.size, ctx->decoded_frame_cnt);
-+	mtk_v4l2_vdec_dbg(1, ctx,
-+			  "id=%d Framebuf pfb=%p VA=%p Y/C_DMA=%pad_%pad Sz=%zx frame_count = %d",
-+			  dst_buf->index, pfb, pfb->base_y.va, &pfb->base_y.dma_addr,
-+			  &pfb->base_c.dma_addr, pfb->base_y.size, ctx->decoded_frame_cnt);
- 
- 	return pfb;
- }
-@@ -300,7 +301,7 @@ static void mtk_vdec_worker(struct work_struct *work)
- 	vb2_v4l2_src = v4l2_m2m_next_src_buf(ctx->m2m_ctx);
- 	if (!vb2_v4l2_src) {
- 		v4l2_m2m_job_finish(dev->m2m_dev_dec, ctx->m2m_ctx);
--		mtk_v4l2_debug(1, "[%d] no available source buffer", ctx->id);
-+		mtk_v4l2_vdec_dbg(1, ctx, "[%d] no available source buffer", ctx->id);
- 		return;
- 	}
- 
-@@ -309,33 +310,34 @@ static void mtk_vdec_worker(struct work_struct *work)
- 				   m2m_buf.vb);
- 	bs_src = &dec_buf_src->bs_buffer;
- 
--	mtk_v4l2_debug(3, "[%d] (%d) id=%d, vb=%p", ctx->id,
--		       vb2_src->vb2_queue->type, vb2_src->index, vb2_src);
-+	mtk_v4l2_vdec_dbg(3, ctx, "[%d] (%d) id=%d, vb=%p", ctx->id,
-+			  vb2_src->vb2_queue->type, vb2_src->index, vb2_src);
- 
- 	bs_src->va = vb2_plane_vaddr(vb2_src, 0);
- 	bs_src->dma_addr = vb2_dma_contig_plane_dma_addr(vb2_src, 0);
- 	bs_src->size = (size_t)vb2_src->planes[0].bytesused;
- 	if (!bs_src->va) {
- 		v4l2_m2m_job_finish(dev->m2m_dev_dec, ctx->m2m_ctx);
--		mtk_v4l2_err("[%d] id=%d source buffer is NULL", ctx->id,
--			     vb2_src->index);
-+		mtk_v4l2_vdec_err(ctx, "[%d] id=%d source buffer is NULL", ctx->id,
-+				  vb2_src->index);
- 		return;
- 	}
- 
--	mtk_v4l2_debug(3, "[%d] Bitstream VA=%p DMA=%pad Size=%zx vb=%p",
--		       ctx->id, bs_src->va, &bs_src->dma_addr, bs_src->size, vb2_src);
-+	mtk_v4l2_vdec_dbg(3, ctx, "[%d] Bitstream VA=%p DMA=%pad Size=%zx vb=%p",
-+			  ctx->id, bs_src->va, &bs_src->dma_addr, bs_src->size, vb2_src);
- 	/* Apply request controls. */
- 	src_buf_req = vb2_src->req_obj.req;
- 	if (src_buf_req)
- 		v4l2_ctrl_request_setup(src_buf_req, &ctx->ctrl_hdl);
- 	else
--		mtk_v4l2_err("vb2 buffer media request is NULL");
-+		mtk_v4l2_vdec_err(ctx, "vb2 buffer media request is NULL");
- 
- 	ret = vdec_if_decode(ctx, bs_src, NULL, &res_chg);
- 	if (ret && ret != -EAGAIN) {
--		mtk_v4l2_err(" <===[%d], src_buf[%d] sz=0x%zx pts=%llu vdec_if_decode() ret=%d res_chg=%d===>",
--			     ctx->id, vb2_src->index, bs_src->size,
--			     vb2_src->timestamp, ret, res_chg);
-+		mtk_v4l2_vdec_err(ctx,
-+				  "[%d] decode src_buf[%d] sz=0x%zx pts=%llu ret=%d res_chg=%d",
-+				  ctx->id, vb2_src->index, bs_src->size,
-+				  vb2_src->timestamp, ret, res_chg);
- 		if (ret == -EIO) {
- 			mutex_lock(&ctx->lock);
- 			dec_buf_src->error = true;
-@@ -363,7 +365,8 @@ static void vb2ops_vdec_stateless_buf_queue(struct vb2_buffer *vb)
- 	struct mtk_vcodec_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
- 	struct vb2_v4l2_buffer *vb2_v4l2 = to_vb2_v4l2_buffer(vb);
- 
--	mtk_v4l2_debug(3, "[%d] (%d) id=%d, vb=%p", ctx->id, vb->vb2_queue->type, vb->index, vb);
-+	mtk_v4l2_vdec_dbg(3, ctx, "[%d] (%d) id=%d, vb=%p", ctx->id, vb->vb2_queue->type,
-+			  vb->index, vb);
- 
- 	mutex_lock(&ctx->lock);
- 	v4l2_m2m_buf_queue(ctx->m2m_ctx, vb2_v4l2);
-@@ -374,9 +377,9 @@ static void vb2ops_vdec_stateless_buf_queue(struct vb2_buffer *vb)
- 	/* If an OUTPUT buffer, we may need to update the state */
- 	if (ctx->state == MTK_STATE_INIT) {
- 		ctx->state = MTK_STATE_HEADER;
--		mtk_v4l2_debug(1, "Init driver from init to header.");
-+		mtk_v4l2_vdec_dbg(1, ctx, "Init driver from init to header.");
- 	} else {
--		mtk_v4l2_debug(3, "[%d] already init driver %d", ctx->id, ctx->state);
-+		mtk_v4l2_vdec_dbg(3, ctx, "[%d] already init driver %d", ctx->id, ctx->state);
- 	}
- }
- 
-@@ -393,7 +396,7 @@ static int mtk_vcodec_dec_ctrls_setup(struct mtk_vcodec_ctx *ctx)
- 
- 	v4l2_ctrl_handler_init(&ctx->ctrl_hdl, NUM_CTRLS);
- 	if (ctx->ctrl_hdl.error) {
--		mtk_v4l2_err("v4l2_ctrl_handler_init failed\n");
-+		mtk_v4l2_vdec_err(ctx, "v4l2_ctrl_handler_init failed\n");
- 		return ctx->ctrl_hdl.error;
- 	}
- 
-@@ -402,7 +405,8 @@ static int mtk_vcodec_dec_ctrls_setup(struct mtk_vcodec_ctx *ctx)
- 
- 		v4l2_ctrl_new_custom(&ctx->ctrl_hdl, &cfg, NULL);
- 		if (ctx->ctrl_hdl.error) {
--			mtk_v4l2_err("Adding control %d failed %d", i, ctx->ctrl_hdl.error);
-+			mtk_v4l2_vdec_err(ctx, "Adding control %d failed %d", i,
-+					  ctx->ctrl_hdl.error);
- 			return ctx->ctrl_hdl.error;
- 		}
- 	}
-@@ -421,11 +425,11 @@ static int fops_media_request_validate(struct media_request *mreq)
- 		/* We expect exactly one buffer with the request */
- 		break;
- 	case 0:
--		mtk_v4l2_debug(1, "No buffer provided with the request");
-+		pr_debug(MTK_DBG_VCODEC_STR "No buffer provided with the request.");
- 		return -ENOENT;
- 	default:
--		mtk_v4l2_debug(1, "Too many buffers (%d) provided with the request",
--			       buffer_cnt);
-+		pr_debug(MTK_DBG_VCODEC_STR "Too many buffers (%d) provided with the request.",
-+			 buffer_cnt);
- 		return -EINVAL;
- 	}
- 
-@@ -470,13 +474,13 @@ static void mtk_vcodec_add_formats(unsigned int fourcc,
- 		mtk_video_formats[count_formats].num_planes = 2;
- 		break;
- 	default:
--		mtk_v4l2_err("Can not add unsupported format type");
-+		mtk_v4l2_vdec_err(ctx, "Can not add unsupported format type");
- 		return;
- 	}
- 
- 	num_formats++;
--	mtk_v4l2_debug(3, "num_formats: %d dec_capability: 0x%x",
--		       count_formats, ctx->dev->dec_capability);
-+	mtk_v4l2_vdec_dbg(3, ctx, "num_formats: %d dec_capability: 0x%x",
-+			  count_formats, ctx->dev->dec_capability);
- }
- 
- static void mtk_vcodec_get_supported_formats(struct mtk_vcodec_ctx *ctx)
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-index 9ff439a50f53..276da79d98e7 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-@@ -51,63 +51,53 @@ static int vidioc_venc_s_ctrl(struct v4l2_ctrl *ctrl)
- 
- 	switch (ctrl->id) {
- 	case V4L2_CID_MPEG_VIDEO_BITRATE_MODE:
--		mtk_v4l2_debug(2, "V4L2_CID_MPEG_VIDEO_BITRATE_MODE val= %d",
--			       ctrl->val);
-+		mtk_v4l2_venc_dbg(2, ctx, "V4L2_CID_MPEG_VIDEO_BITRATE_MODE val= %d", ctrl->val);
- 		if (ctrl->val != V4L2_MPEG_VIDEO_BITRATE_MODE_CBR) {
--			mtk_v4l2_err("Unsupported bitrate mode =%d", ctrl->val);
-+			mtk_v4l2_venc_err(ctx, "Unsupported bitrate mode =%d", ctrl->val);
- 			ret = -EINVAL;
- 		}
- 		break;
- 	case V4L2_CID_MPEG_VIDEO_BITRATE:
--		mtk_v4l2_debug(2, "V4L2_CID_MPEG_VIDEO_BITRATE val = %d",
--			       ctrl->val);
-+		mtk_v4l2_venc_dbg(2, ctx, "V4L2_CID_MPEG_VIDEO_BITRATE val = %d", ctrl->val);
- 		p->bitrate = ctrl->val;
- 		ctx->param_change |= MTK_ENCODE_PARAM_BITRATE;
- 		break;
- 	case V4L2_CID_MPEG_VIDEO_B_FRAMES:
--		mtk_v4l2_debug(2, "V4L2_CID_MPEG_VIDEO_B_FRAMES val = %d",
--			       ctrl->val);
-+		mtk_v4l2_venc_dbg(2, ctx, "V4L2_CID_MPEG_VIDEO_B_FRAMES val = %d", ctrl->val);
- 		p->num_b_frame = ctrl->val;
- 		break;
- 	case V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE:
--		mtk_v4l2_debug(2, "V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE val = %d",
--			       ctrl->val);
-+		mtk_v4l2_venc_dbg(2, ctx, "V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE val = %d",
-+				  ctrl->val);
- 		p->rc_frame = ctrl->val;
- 		break;
- 	case V4L2_CID_MPEG_VIDEO_H264_MAX_QP:
--		mtk_v4l2_debug(2, "V4L2_CID_MPEG_VIDEO_H264_MAX_QP val = %d",
--			       ctrl->val);
-+		mtk_v4l2_venc_dbg(2, ctx, "V4L2_CID_MPEG_VIDEO_H264_MAX_QP val = %d", ctrl->val);
- 		p->h264_max_qp = ctrl->val;
- 		break;
- 	case V4L2_CID_MPEG_VIDEO_HEADER_MODE:
--		mtk_v4l2_debug(2, "V4L2_CID_MPEG_VIDEO_HEADER_MODE val = %d",
--			       ctrl->val);
-+		mtk_v4l2_venc_dbg(2, ctx, "V4L2_CID_MPEG_VIDEO_HEADER_MODE val = %d", ctrl->val);
- 		p->seq_hdr_mode = ctrl->val;
- 		break;
- 	case V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE:
--		mtk_v4l2_debug(2, "V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE val = %d",
--			       ctrl->val);
-+		mtk_v4l2_venc_dbg(2, ctx, "V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE val = %d", ctrl->val);
- 		p->rc_mb = ctrl->val;
- 		break;
- 	case V4L2_CID_MPEG_VIDEO_H264_PROFILE:
--		mtk_v4l2_debug(2, "V4L2_CID_MPEG_VIDEO_H264_PROFILE val = %d",
--			       ctrl->val);
-+		mtk_v4l2_venc_dbg(2, ctx, "V4L2_CID_MPEG_VIDEO_H264_PROFILE val = %d", ctrl->val);
- 		p->h264_profile = ctrl->val;
- 		break;
- 	case V4L2_CID_MPEG_VIDEO_H264_LEVEL:
--		mtk_v4l2_debug(2, "V4L2_CID_MPEG_VIDEO_H264_LEVEL val = %d",
--			       ctrl->val);
-+		mtk_v4l2_venc_dbg(2, ctx, "V4L2_CID_MPEG_VIDEO_H264_LEVEL val = %d", ctrl->val);
- 		p->h264_level = ctrl->val;
- 		break;
- 	case V4L2_CID_MPEG_VIDEO_H264_I_PERIOD:
--		mtk_v4l2_debug(2, "V4L2_CID_MPEG_VIDEO_H264_I_PERIOD val = %d",
--			       ctrl->val);
-+		mtk_v4l2_venc_dbg(2, ctx, "V4L2_CID_MPEG_VIDEO_H264_I_PERIOD val = %d", ctrl->val);
- 		p->intra_period = ctrl->val;
- 		ctx->param_change |= MTK_ENCODE_PARAM_INTRA_PERIOD;
- 		break;
- 	case V4L2_CID_MPEG_VIDEO_GOP_SIZE:
--		mtk_v4l2_debug(2, "V4L2_CID_MPEG_VIDEO_GOP_SIZE val = %d",
--			       ctrl->val);
-+		mtk_v4l2_venc_dbg(2, ctx, "V4L2_CID_MPEG_VIDEO_GOP_SIZE val = %d", ctrl->val);
- 		p->gop_size = ctrl->val;
- 		ctx->param_change |= MTK_ENCODE_PARAM_GOP_SIZE;
- 		break;
-@@ -116,10 +106,10 @@ static int vidioc_venc_s_ctrl(struct v4l2_ctrl *ctrl)
- 		 * FIXME - what vp8 profiles are actually supported?
- 		 * The ctrl is added (with only profile 0 supported) for now.
- 		 */
--		mtk_v4l2_debug(2, "V4L2_CID_MPEG_VIDEO_VP8_PROFILE val = %d", ctrl->val);
-+		mtk_v4l2_venc_dbg(2, ctx, "V4L2_CID_MPEG_VIDEO_VP8_PROFILE val = %d", ctrl->val);
- 		break;
- 	case V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME:
--		mtk_v4l2_debug(2, "V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME");
-+		mtk_v4l2_venc_dbg(2, ctx, "V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME");
- 		p->force_intra = 1;
- 		ctx->param_change |= MTK_ENCODE_PARAM_FORCE_INTRA;
- 		break;
-@@ -341,11 +331,12 @@ static int vidioc_try_fmt_out(struct mtk_vcodec_ctx *ctx, struct v4l2_format *f,
- 	if (pix_fmt_mp->height < tmp_h && (pix_fmt_mp->height + 32) <= max_height)
- 		pix_fmt_mp->height += 32;
- 
--	mtk_v4l2_debug(0, "before resize w=%d, h=%d, after resize w=%d, h=%d, sizeimage=%d %d",
--		       tmp_w, tmp_h, pix_fmt_mp->width,
--		       pix_fmt_mp->height,
--		       pix_fmt_mp->plane_fmt[0].sizeimage,
--		       pix_fmt_mp->plane_fmt[1].sizeimage);
-+	mtk_v4l2_venc_dbg(0, ctx,
-+			  "before resize wxh=%dx%d, after resize wxh=%dx%d, sizeimage=%d %d",
-+			  tmp_w, tmp_h, pix_fmt_mp->width,
-+			  pix_fmt_mp->height,
-+			  pix_fmt_mp->plane_fmt[0].sizeimage,
-+			  pix_fmt_mp->plane_fmt[1].sizeimage);
- 
- 	pix_fmt_mp->num_planes = fmt->num_planes;
- 	pix_fmt_mp->plane_fmt[0].sizeimage =
-@@ -396,7 +387,7 @@ static void mtk_venc_set_param(struct mtk_vcodec_ctx *ctx,
- 		param->input_yuv_fmt = VENC_YUV_FORMAT_NV21;
- 		break;
- 	default:
--		mtk_v4l2_err("Unsupported fourcc =%d", q_data_src->fmt->fourcc);
-+		mtk_v4l2_venc_err(ctx, "Unsupported fourcc =%d", q_data_src->fmt->fourcc);
- 		break;
- 	}
- 	param->h264_profile = enc_params->h264_profile;
-@@ -414,13 +405,13 @@ static void mtk_venc_set_param(struct mtk_vcodec_ctx *ctx,
- 	param->gop_size = enc_params->gop_size;
- 	param->bitrate = enc_params->bitrate;
- 
--	mtk_v4l2_debug(0,
--		"fmt 0x%x, P/L %d/%d, w/h %d/%d, buf %d/%d, fps/bps %d/%d, gop %d, i_period %d",
--		param->input_yuv_fmt, param->h264_profile,
--		param->h264_level, param->width, param->height,
--		param->buf_width, param->buf_height,
--		param->frm_rate, param->bitrate,
--		param->gop_size, param->intra_period);
-+	mtk_v4l2_venc_dbg(0, ctx,
-+			  "fmt 0x%x, P/L %d/%d w/h %d/%d buf %d/%d fps/bps %d/%d gop %d i_per %d",
-+			  param->input_yuv_fmt, param->h264_profile,
-+			  param->h264_level, param->width, param->height,
-+			  param->buf_width, param->buf_height,
-+			  param->frm_rate, param->bitrate,
-+			  param->gop_size, param->intra_period);
- }
- 
- static int vidioc_venc_s_fmt_cap(struct file *file, void *priv,
-@@ -435,12 +426,12 @@ static int vidioc_venc_s_fmt_cap(struct file *file, void *priv,
- 
- 	vq = v4l2_m2m_get_vq(ctx->m2m_ctx, f->type);
- 	if (!vq) {
--		mtk_v4l2_err("fail to get vq");
-+		mtk_v4l2_venc_err(ctx, "fail to get vq");
- 		return -EINVAL;
- 	}
- 
- 	if (vb2_is_busy(vq)) {
--		mtk_v4l2_err("queue busy");
-+		mtk_v4l2_venc_err(ctx, "queue busy");
- 		return -EBUSY;
- 	}
- 
-@@ -468,8 +459,8 @@ static int vidioc_venc_s_fmt_cap(struct file *file, void *priv,
- 	if (ctx->state == MTK_STATE_FREE) {
- 		ret = venc_if_init(ctx, q_data->fmt->fourcc);
- 		if (ret) {
--			mtk_v4l2_err("venc_if_init failed=%d, codec type=%x",
--					ret, q_data->fmt->fourcc);
-+			mtk_v4l2_venc_err(ctx, "venc_if_init failed=%d, codec type=%x",
-+					  ret, q_data->fmt->fourcc);
- 			return -EBUSY;
- 		}
- 		ctx->state = MTK_STATE_INIT;
-@@ -490,12 +481,12 @@ static int vidioc_venc_s_fmt_out(struct file *file, void *priv,
- 
- 	vq = v4l2_m2m_get_vq(ctx->m2m_ctx, f->type);
- 	if (!vq) {
--		mtk_v4l2_err("fail to get vq");
-+		mtk_v4l2_venc_err(ctx, "fail to get vq");
- 		return -EINVAL;
- 	}
- 
- 	if (vb2_is_busy(vq)) {
--		mtk_v4l2_err("queue busy");
-+		mtk_v4l2_venc_err(ctx, "queue busy");
- 		return -EBUSY;
- 	}
- 
-@@ -670,8 +661,8 @@ static int vidioc_venc_qbuf(struct file *file, void *priv,
- 	struct mtk_vcodec_ctx *ctx = fh_to_ctx(priv);
- 
- 	if (ctx->state == MTK_STATE_ABORT) {
--		mtk_v4l2_err("[%d] Call on QBUF after unrecoverable error",
--				ctx->id);
-+		mtk_v4l2_venc_err(ctx, "[%d] Call on QBUF after unrecoverable error",
-+				  ctx->id);
- 		return -EIO;
- 	}
- 
-@@ -685,8 +676,8 @@ static int vidioc_venc_dqbuf(struct file *file, void *priv,
- 	int ret;
- 
- 	if (ctx->state == MTK_STATE_ABORT) {
--		mtk_v4l2_err("[%d] Call on QBUF after unrecoverable error",
--				ctx->id);
-+		mtk_v4l2_venc_err(ctx, "[%d] Call on QBUF after unrecoverable error",
-+				  ctx->id);
- 		return -EIO;
- 	}
- 
-@@ -724,8 +715,8 @@ static int vidioc_encoder_cmd(struct file *file, void *priv,
- 	int ret;
- 
- 	if (ctx->state == MTK_STATE_ABORT) {
--		mtk_v4l2_err("[%d] Call to CMD after unrecoverable error",
--			     ctx->id);
-+		mtk_v4l2_venc_err(ctx, "[%d] Call to CMD after unrecoverable error",
-+				  ctx->id);
- 		return -EIO;
- 	}
- 
-@@ -737,7 +728,7 @@ static int vidioc_encoder_cmd(struct file *file, void *priv,
- 	if (ctx->is_flushing)
- 		return -EBUSY;
- 
--	mtk_v4l2_debug(1, "encoder cmd=%u", cmd->cmd);
-+	mtk_v4l2_venc_dbg(1, ctx, "encoder cmd=%u", cmd->cmd);
- 
- 	dst_vq = v4l2_m2m_get_vq(ctx->m2m_ctx,
- 				 V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
-@@ -746,11 +737,11 @@ static int vidioc_encoder_cmd(struct file *file, void *priv,
- 		src_vq = v4l2_m2m_get_vq(ctx->m2m_ctx,
- 					 V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
- 		if (!vb2_is_streaming(src_vq)) {
--			mtk_v4l2_debug(1, "Output stream is off. No need to flush.");
-+			mtk_v4l2_venc_dbg(1, ctx, "Output stream is off. No need to flush.");
- 			return 0;
- 		}
- 		if (!vb2_is_streaming(dst_vq)) {
--			mtk_v4l2_debug(1, "Capture stream is off. No need to flush.");
-+			mtk_v4l2_venc_dbg(1, ctx, "Capture stream is off. No need to flush.");
- 			return 0;
- 		}
- 		ctx->is_flushing = true;
-@@ -841,9 +832,8 @@ static int vb2ops_venc_buf_prepare(struct vb2_buffer *vb)
- 
- 	for (i = 0; i < q_data->fmt->num_planes; i++) {
- 		if (vb2_plane_size(vb, i) < q_data->sizeimage[i]) {
--			mtk_v4l2_err("data will not fit into plane %d (%lu < %d)",
--				i, vb2_plane_size(vb, i),
--				q_data->sizeimage[i]);
-+			mtk_v4l2_venc_err(ctx, "data will not fit into plane %d (%lu < %d)",
-+					  i, vb2_plane_size(vb, i), q_data->sizeimage[i]);
- 			return -EINVAL;
- 		}
- 	}
-@@ -863,10 +853,8 @@ static void vb2ops_venc_buf_queue(struct vb2_buffer *vb)
- 
- 	if ((vb->vb2_queue->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) &&
- 	    (ctx->param_change != MTK_ENCODE_PARAM_NONE)) {
--		mtk_v4l2_debug(1, "[%d] Before id=%d encode parameter change %x",
--			       ctx->id,
--			       vb2_v4l2->vb2_buf.index,
--			       ctx->param_change);
-+		mtk_v4l2_venc_dbg(1, ctx, "[%d] Before id=%d encode parameter change %x",
-+				  ctx->id, vb2_v4l2->vb2_buf.index, ctx->param_change);
- 		mtk_buf->param_change = ctx->param_change;
- 		mtk_buf->enc_params = ctx->enc_params;
- 		ctx->param_change = MTK_ENCODE_PARAM_NONE;
-@@ -901,14 +889,14 @@ static int vb2ops_venc_start_streaming(struct vb2_queue *q, unsigned int count)
- 
- 	ret = pm_runtime_resume_and_get(&ctx->dev->plat_dev->dev);
- 	if (ret < 0) {
--		mtk_v4l2_err("pm_runtime_resume_and_get fail %d", ret);
-+		mtk_v4l2_venc_err(ctx, "pm_runtime_resume_and_get fail %d", ret);
- 		goto err_start_stream;
- 	}
- 
- 	mtk_venc_set_param(ctx, &param);
- 	ret = venc_if_set_param(ctx, VENC_SET_PARAM_ENC, &param);
- 	if (ret) {
--		mtk_v4l2_err("venc_if_set_param failed=%d", ret);
-+		mtk_v4l2_venc_err(ctx, "venc_if_set_param failed=%d", ret);
- 		ctx->state = MTK_STATE_ABORT;
- 		goto err_set_param;
- 	}
-@@ -921,7 +909,7 @@ static int vb2ops_venc_start_streaming(struct vb2_queue *q, unsigned int count)
- 					VENC_SET_PARAM_PREPEND_HEADER,
- 					NULL);
- 		if (ret) {
--			mtk_v4l2_err("venc_if_set_param failed=%d", ret);
-+			mtk_v4l2_venc_err(ctx, "venc_if_set_param failed=%d", ret);
- 			ctx->state = MTK_STATE_ABORT;
- 			goto err_set_param;
- 		}
-@@ -933,7 +921,7 @@ static int vb2ops_venc_start_streaming(struct vb2_queue *q, unsigned int count)
- err_set_param:
- 	pm_ret = pm_runtime_put(&ctx->dev->plat_dev->dev);
- 	if (pm_ret < 0)
--		mtk_v4l2_err("pm_runtime_put fail %d", pm_ret);
-+		mtk_v4l2_venc_err(ctx, "pm_runtime_put fail %d", pm_ret);
- 
- err_start_stream:
- 	for (i = 0; i < q->num_buffers; ++i) {
-@@ -944,9 +932,8 @@ static int vb2ops_venc_start_streaming(struct vb2_queue *q, unsigned int count)
- 		 * can be marked as done.
- 		 */
- 		if (buf && buf->state == VB2_BUF_STATE_ACTIVE) {
--			mtk_v4l2_debug(0, "[%d] id=%d, type=%d, %d -> VB2_BUF_STATE_QUEUED",
--					ctx->id, i, q->type,
--					(int)buf->state);
-+			mtk_v4l2_venc_dbg(0, ctx, "[%d] id=%d, type=%d, %d->VB2_BUF_STATE_QUEUED",
-+					  ctx->id, i, q->type, (int)buf->state);
- 			v4l2_m2m_buf_done(to_vb2_v4l2_buffer(buf),
- 					  VB2_BUF_STATE_QUEUED);
- 		}
-@@ -961,7 +948,7 @@ static void vb2ops_venc_stop_streaming(struct vb2_queue *q)
- 	struct vb2_v4l2_buffer *src_buf, *dst_buf;
- 	int ret;
- 
--	mtk_v4l2_debug(2, "[%d]-> type=%d", ctx->id, q->type);
-+	mtk_v4l2_venc_dbg(2, ctx, "[%d]-> type=%d", ctx->id, q->type);
- 
- 	if (q->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE) {
- 		while ((dst_buf = v4l2_m2m_dst_buf_remove(ctx->m2m_ctx))) {
-@@ -972,7 +959,7 @@ static void vb2ops_venc_stop_streaming(struct vb2_queue *q)
- 		if (ctx->is_flushing) {
- 			struct v4l2_m2m_buffer *b, *n;
- 
--			mtk_v4l2_debug(1, "STREAMOFF called while flushing");
-+			mtk_v4l2_venc_dbg(1, ctx, "STREAMOFF called while flushing");
- 			/*
- 			 * STREAMOFF could be called before the flush buffer is
- 			 * dequeued. Check whether empty flush buf is still in
-@@ -1006,21 +993,21 @@ static void vb2ops_venc_stop_streaming(struct vb2_queue *q)
- 	     vb2_is_streaming(&ctx->m2m_ctx->out_q_ctx.q)) ||
- 	    (q->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE &&
- 	     vb2_is_streaming(&ctx->m2m_ctx->cap_q_ctx.q))) {
--		mtk_v4l2_debug(1, "[%d]-> q type %d out=%d cap=%d",
--			       ctx->id, q->type,
--			       vb2_is_streaming(&ctx->m2m_ctx->out_q_ctx.q),
--			       vb2_is_streaming(&ctx->m2m_ctx->cap_q_ctx.q));
-+		mtk_v4l2_venc_dbg(1, ctx, "[%d]-> q type %d out=%d cap=%d",
-+				  ctx->id, q->type,
-+				  vb2_is_streaming(&ctx->m2m_ctx->out_q_ctx.q),
-+				  vb2_is_streaming(&ctx->m2m_ctx->cap_q_ctx.q));
- 		return;
- 	}
- 
- 	/* Release the encoder if both streams are stopped. */
- 	ret = venc_if_deinit(ctx);
- 	if (ret)
--		mtk_v4l2_err("venc_if_deinit failed=%d", ret);
-+		mtk_v4l2_venc_err(ctx, "venc_if_deinit failed=%d", ret);
- 
- 	ret = pm_runtime_put(&ctx->dev->plat_dev->dev);
- 	if (ret < 0)
--		mtk_v4l2_err("pm_runtime_put fail %d", ret);
-+		mtk_v4l2_venc_err(ctx, "pm_runtime_put fail %d", ret);
- 
- 	ctx->state = MTK_STATE_FREE;
- }
-@@ -1054,7 +1041,7 @@ static int mtk_venc_encode_header(void *priv)
- 
- 	dst_buf = v4l2_m2m_dst_buf_remove(ctx->m2m_ctx);
- 	if (!dst_buf) {
--		mtk_v4l2_debug(1, "No dst buffer");
-+		mtk_v4l2_venc_dbg(1, ctx, "No dst buffer");
- 		return -EINVAL;
- 	}
- 
-@@ -1062,12 +1049,10 @@ static int mtk_venc_encode_header(void *priv)
- 	bs_buf.dma_addr = vb2_dma_contig_plane_dma_addr(&dst_buf->vb2_buf, 0);
- 	bs_buf.size = (size_t)dst_buf->vb2_buf.planes[0].length;
- 
--	mtk_v4l2_debug(1,
--			"[%d] buf id=%d va=0x%p dma_addr=0x%llx size=%zu",
--			ctx->id,
--			dst_buf->vb2_buf.index, bs_buf.va,
--			(u64)bs_buf.dma_addr,
--			bs_buf.size);
-+	mtk_v4l2_venc_dbg(1, ctx,
-+			  "[%d] buf id=%d va=0x%p dma_addr=0x%llx size=%zu",
-+			  ctx->id, dst_buf->vb2_buf.index, bs_buf.va,
-+			  (u64)bs_buf.dma_addr, bs_buf.size);
- 
- 	ret = venc_if_encode(ctx,
- 			VENC_START_OPT_ENCODE_SEQUENCE_HEADER,
-@@ -1077,7 +1062,7 @@ static int mtk_venc_encode_header(void *priv)
- 		vb2_set_plane_payload(&dst_buf->vb2_buf, 0, 0);
- 		ctx->state = MTK_STATE_ABORT;
- 		v4l2_m2m_buf_done(dst_buf, VB2_BUF_STATE_ERROR);
--		mtk_v4l2_err("venc_if_encode failed=%d", ret);
-+		mtk_v4l2_venc_err(ctx, "venc_if_encode failed=%d", ret);
- 		return -EINVAL;
- 	}
- 	src_buf = v4l2_m2m_next_src_buf(ctx->m2m_ctx);
-@@ -1085,7 +1070,7 @@ static int mtk_venc_encode_header(void *priv)
- 		dst_buf->vb2_buf.timestamp = src_buf->vb2_buf.timestamp;
- 		dst_buf->timecode = src_buf->timecode;
- 	} else {
--		mtk_v4l2_err("No timestamp for the header buffer.");
-+		mtk_v4l2_venc_err(ctx, "No timestamp for the header buffer.");
- 	}
- 
- 	ctx->state = MTK_STATE_HEADER;
-@@ -1114,10 +1099,8 @@ static int mtk_venc_param_change(struct mtk_vcodec_ctx *ctx)
- 
- 	if (mtk_buf->param_change & MTK_ENCODE_PARAM_BITRATE) {
- 		enc_prm.bitrate = mtk_buf->enc_params.bitrate;
--		mtk_v4l2_debug(1, "[%d] id=%d, change param br=%d",
--				ctx->id,
--				vb2_v4l2->vb2_buf.index,
--				enc_prm.bitrate);
-+		mtk_v4l2_venc_dbg(1, ctx, "[%d] id=%d, change param br=%d",
-+				  ctx->id, vb2_v4l2->vb2_buf.index, enc_prm.bitrate);
- 		ret |= venc_if_set_param(ctx,
- 					 VENC_SET_PARAM_ADJUST_BITRATE,
- 					 &enc_prm);
-@@ -1125,27 +1108,23 @@ static int mtk_venc_param_change(struct mtk_vcodec_ctx *ctx)
- 	if (!ret && mtk_buf->param_change & MTK_ENCODE_PARAM_FRAMERATE) {
- 		enc_prm.frm_rate = mtk_buf->enc_params.framerate_num /
- 				   mtk_buf->enc_params.framerate_denom;
--		mtk_v4l2_debug(1, "[%d] id=%d, change param fr=%d",
--			       ctx->id,
--			       vb2_v4l2->vb2_buf.index,
--			       enc_prm.frm_rate);
-+		mtk_v4l2_venc_dbg(1, ctx, "[%d] id=%d, change param fr=%d",
-+				  ctx->id, vb2_v4l2->vb2_buf.index, enc_prm.frm_rate);
- 		ret |= venc_if_set_param(ctx,
- 					 VENC_SET_PARAM_ADJUST_FRAMERATE,
- 					 &enc_prm);
- 	}
- 	if (!ret && mtk_buf->param_change & MTK_ENCODE_PARAM_GOP_SIZE) {
- 		enc_prm.gop_size = mtk_buf->enc_params.gop_size;
--		mtk_v4l2_debug(1, "change param intra period=%d",
--			       enc_prm.gop_size);
-+		mtk_v4l2_venc_dbg(1, ctx, "change param intra period=%d", enc_prm.gop_size);
- 		ret |= venc_if_set_param(ctx,
- 					 VENC_SET_PARAM_GOP_SIZE,
- 					 &enc_prm);
- 	}
- 	if (!ret && mtk_buf->param_change & MTK_ENCODE_PARAM_FORCE_INTRA) {
--		mtk_v4l2_debug(1, "[%d] id=%d, change param force I=%d",
--				ctx->id,
--				vb2_v4l2->vb2_buf.index,
--				mtk_buf->enc_params.force_intra);
-+		mtk_v4l2_venc_dbg(1, ctx, "[%d] id=%d, change param force I=%d",
-+				  ctx->id, vb2_v4l2->vb2_buf.index,
-+				  mtk_buf->enc_params.force_intra);
- 		if (mtk_buf->enc_params.force_intra)
- 			ret |= venc_if_set_param(ctx,
- 						 VENC_SET_PARAM_FORCE_INTRA,
-@@ -1156,8 +1135,8 @@ static int mtk_venc_param_change(struct mtk_vcodec_ctx *ctx)
- 
- 	if (ret) {
- 		ctx->state = MTK_STATE_ABORT;
--		mtk_v4l2_err("venc_if_set_param %d failed=%d",
--				mtk_buf->param_change, ret);
-+		mtk_v4l2_venc_err(ctx, "venc_if_set_param %d failed=%d",
-+				  mtk_buf->param_change, ret);
- 		return -1;
- 	}
- 
-@@ -1218,14 +1197,11 @@ static void mtk_venc_worker(struct work_struct *work)
- 	bs_buf.dma_addr = vb2_dma_contig_plane_dma_addr(&dst_buf->vb2_buf, 0);
- 	bs_buf.size = (size_t)dst_buf->vb2_buf.planes[0].length;
- 
--	mtk_v4l2_debug(2,
--			"Framebuf PA=%llx Size=0x%zx;PA=0x%llx Size=0x%zx;PA=0x%llx Size=%zu",
--			(u64)frm_buf.fb_addr[0].dma_addr,
--			frm_buf.fb_addr[0].size,
--			(u64)frm_buf.fb_addr[1].dma_addr,
--			frm_buf.fb_addr[1].size,
--			(u64)frm_buf.fb_addr[2].dma_addr,
--			frm_buf.fb_addr[2].size);
-+	mtk_v4l2_venc_dbg(2, ctx,
-+			  "Framebuf PA=%llx Size=0x%zx;PA=0x%llx Size=0x%zx;PA=0x%llx Size=%zu",
-+			  (u64)frm_buf.fb_addr[0].dma_addr, frm_buf.fb_addr[0].size,
-+			  (u64)frm_buf.fb_addr[1].dma_addr, frm_buf.fb_addr[1].size,
-+			  (u64)frm_buf.fb_addr[2].dma_addr, frm_buf.fb_addr[2].size);
- 
- 	ret = venc_if_encode(ctx, VENC_START_OPT_ENCODE_FRAME,
- 			     &frm_buf, &bs_buf, &enc_result);
-@@ -1240,20 +1216,19 @@ static void mtk_venc_worker(struct work_struct *work)
- 		v4l2_m2m_buf_done(src_buf, VB2_BUF_STATE_ERROR);
- 		vb2_set_plane_payload(&dst_buf->vb2_buf, 0, 0);
- 		v4l2_m2m_buf_done(dst_buf, VB2_BUF_STATE_ERROR);
--		mtk_v4l2_err("venc_if_encode failed=%d", ret);
-+		mtk_v4l2_venc_err(ctx, "venc_if_encode failed=%d", ret);
- 	} else {
- 		v4l2_m2m_buf_done(src_buf, VB2_BUF_STATE_DONE);
- 		vb2_set_plane_payload(&dst_buf->vb2_buf, 0, enc_result.bs_size);
- 		v4l2_m2m_buf_done(dst_buf, VB2_BUF_STATE_DONE);
--		mtk_v4l2_debug(2, "venc_if_encode bs size=%d",
--				 enc_result.bs_size);
-+		mtk_v4l2_venc_dbg(2, ctx, "venc_if_encode bs size=%d",
-+				  enc_result.bs_size);
- 	}
- 
- 	v4l2_m2m_job_finish(ctx->dev->m2m_dev_enc, ctx->m2m_ctx);
- 
--	mtk_v4l2_debug(1, "<=== src_buf[%d] dst_buf[%d] venc_if_encode ret=%d Size=%u===>",
--			src_buf->vb2_buf.index, dst_buf->vb2_buf.index, ret,
--			enc_result.bs_size);
-+	mtk_v4l2_venc_dbg(1, ctx, "<=== src_buf[%d] dst_buf[%d] venc_if_encode ret=%d Size=%u===>",
-+			  src_buf->vb2_buf.index, dst_buf->vb2_buf.index, ret, enc_result.bs_size);
- }
- 
- static void m2mops_venc_device_run(void *priv)
-@@ -1277,8 +1252,7 @@ static int m2mops_venc_job_ready(void *m2m_priv)
- 	struct mtk_vcodec_ctx *ctx = m2m_priv;
- 
- 	if (ctx->state == MTK_STATE_ABORT || ctx->state == MTK_STATE_FREE) {
--		mtk_v4l2_debug(3, "[%d]Not ready: state=0x%x.",
--			       ctx->id, ctx->state);
-+		mtk_v4l2_venc_dbg(3, ctx, "[%d]Not ready: state=0x%x.", ctx->id, ctx->state);
- 		return 0;
- 	}
- 
-@@ -1413,8 +1387,7 @@ int mtk_vcodec_enc_ctrls_setup(struct mtk_vcodec_ctx *ctx)
- 
- 
- 	if (handler->error) {
--		mtk_v4l2_err("Init control handler fail %d",
--				handler->error);
-+		mtk_v4l2_venc_err(ctx, "Init control handler fail %d", handler->error);
- 		return handler->error;
- 	}
- 
-@@ -1482,7 +1455,7 @@ void mtk_vcodec_enc_release(struct mtk_vcodec_ctx *ctx)
- 	int ret = venc_if_deinit(ctx);
- 
- 	if (ret)
--		mtk_v4l2_err("venc_if_deinit failed=%d", ret);
-+		mtk_v4l2_venc_err(ctx, "venc_if_deinit failed=%d", ret);
- 
- 	ctx->state = MTK_STATE_FREE;
- }
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-index 0db81e150b18..cb1dcbcb16bb 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-@@ -97,12 +97,11 @@ static irqreturn_t mtk_vcodec_enc_irq_handler(int irq, void *priv)
- 
- 	core_id = dev->venc_pdata->core_id;
- 	if (core_id < 0 || core_id >= NUM_MAX_VCODEC_REG_BASE) {
--		mtk_v4l2_err("Invalid core id: %d, ctx id: %d",
--			     core_id, ctx->id);
-+		mtk_v4l2_venc_err(ctx, "Invalid core id: %d, ctx id: %d", core_id, ctx->id);
- 		return IRQ_HANDLED;
- 	}
- 
--	mtk_v4l2_debug(1, "id: %d, core id: %d", ctx->id, core_id);
-+	mtk_v4l2_venc_dbg(1, ctx, "id: %d, core id: %d", ctx->id, core_id);
- 
- 	addr = dev->reg_base[core_id] + MTK_VENC_IRQ_ACK_OFFSET;
- 
-@@ -143,16 +142,14 @@ static int fops_vcodec_open(struct file *file)
- 	ctx->type = MTK_INST_ENCODER;
- 	ret = mtk_vcodec_enc_ctrls_setup(ctx);
- 	if (ret) {
--		mtk_v4l2_err("Failed to setup controls() (%d)",
--				ret);
-+		mtk_v4l2_venc_err(ctx, "Failed to setup controls() (%d)", ret);
- 		goto err_ctrls_setup;
- 	}
- 	ctx->m2m_ctx = v4l2_m2m_ctx_init(dev->m2m_dev_enc, ctx,
- 					 &mtk_vcodec_enc_queue_init);
- 	if (IS_ERR((__force void *)ctx->m2m_ctx)) {
- 		ret = PTR_ERR((__force void *)ctx->m2m_ctx);
--		mtk_v4l2_err("Failed to v4l2_m2m_ctx_init() (%d)",
--				ret);
-+		mtk_v4l2_venc_err(ctx, "Failed to v4l2_m2m_ctx_init() (%d)", ret);
- 		goto err_m2m_ctx_init;
- 	}
- 	src_vq = v4l2_m2m_get_vq(ctx->m2m_ctx,
-@@ -171,23 +168,23 @@ static int fops_vcodec_open(struct file *file)
- 			 * Return 0 if downloading firmware successfully,
- 			 * otherwise it is failed
- 			 */
--			mtk_v4l2_err("vpu_load_firmware failed!");
-+			mtk_v4l2_venc_err(ctx, "vpu_load_firmware failed!");
- 			goto err_load_fw;
- 		}
- 
- 		dev->enc_capability =
- 			mtk_vcodec_fw_get_venc_capa(dev->fw_handler);
--		mtk_v4l2_debug(0, "encoder capability %x", dev->enc_capability);
-+		mtk_v4l2_venc_dbg(0, ctx, "encoder capability %x", dev->enc_capability);
- 	}
- 
--	mtk_v4l2_debug(2, "Create instance [%d]@%p m2m_ctx=%p ",
--			ctx->id, ctx, ctx->m2m_ctx);
-+	mtk_v4l2_venc_dbg(2, ctx, "Create instance [%d]@%p m2m_ctx=%p ",
-+			  ctx->id, ctx, ctx->m2m_ctx);
- 
- 	list_add(&ctx->list, &dev->ctx_list);
- 
- 	mutex_unlock(&dev->dev_mutex);
--	mtk_v4l2_debug(0, "%s encoder [%d]", dev_name(&dev->plat_dev->dev),
--			ctx->id);
-+	mtk_v4l2_venc_dbg(0, ctx, "%s encoder [%d]", dev_name(&dev->plat_dev->dev),
-+			  ctx->id);
- 	return ret;
- 
- 	/* Deinit when failure occurred */
-@@ -209,7 +206,7 @@ static int fops_vcodec_release(struct file *file)
- 	struct mtk_vcodec_dev *dev = video_drvdata(file);
- 	struct mtk_vcodec_ctx *ctx = fh_to_ctx(file->private_data);
- 
--	mtk_v4l2_debug(1, "[%d] encoder", ctx->id);
-+	mtk_v4l2_venc_dbg(1, ctx, "[%d] encoder", ctx->id);
- 	mutex_lock(&dev->dev_mutex);
- 
- 	v4l2_m2m_ctx_release(ctx->m2m_ctx);
-@@ -255,7 +252,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 					 &rproc_phandle)) {
- 		fw_type = SCP;
- 	} else {
--		mtk_v4l2_err("Could not get venc IPI device");
-+		dev_err(&pdev->dev, "[MTK VCODEC] Could not get venc IPI device");
- 		return -ENODEV;
- 	}
- 	dma_set_max_seg_size(&pdev->dev, UINT_MAX);
-@@ -267,7 +264,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 	dev->venc_pdata = of_device_get_match_data(&pdev->dev);
- 	ret = mtk_vcodec_init_enc_clk(dev);
- 	if (ret < 0) {
--		dev_err(&pdev->dev, "Failed to get mtk vcodec clock source!");
-+		dev_err(&pdev->dev, "[MTK VCODEC] Failed to get mtk vcodec clock source!");
- 		goto err_enc_pm;
- 	}
- 
-@@ -292,7 +289,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 			       0, pdev->name, dev);
- 	if (ret) {
- 		dev_err(&pdev->dev,
--			"Failed to install dev->enc_irq %d (%d) core_id (%d)",
-+			"[MTK VCODEC] Failed to install dev->enc_irq %d (%d) core_id (%d)",
- 			dev->enc_irq, ret, dev->venc_pdata->core_id);
- 		ret = -EINVAL;
- 		goto err_res;
-@@ -307,14 +304,14 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 
- 	ret = v4l2_device_register(&pdev->dev, &dev->v4l2_dev);
- 	if (ret) {
--		mtk_v4l2_err("v4l2_device_register err=%d", ret);
-+		dev_err(&pdev->dev, "[MTK VCODEC] v4l2_device_register err=%d", ret);
- 		goto err_res;
- 	}
- 
- 	/* allocate video device for encoder and register it */
- 	vfd_enc = video_device_alloc();
- 	if (!vfd_enc) {
--		mtk_v4l2_err("Failed to allocate video device");
-+		dev_err(&pdev->dev, "[MTK VCODEC] Failed to allocate video device");
- 		ret = -ENOMEM;
- 		goto err_enc_alloc;
- 	}
-@@ -335,7 +332,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 
- 	dev->m2m_dev_enc = v4l2_m2m_init(&mtk_venc_m2m_ops);
- 	if (IS_ERR((__force void *)dev->m2m_dev_enc)) {
--		mtk_v4l2_err("Failed to init mem2mem enc device");
-+		dev_err(&pdev->dev, "[MTK VCODEC] Failed to init mem2mem enc device");
- 		ret = PTR_ERR((__force void *)dev->m2m_dev_enc);
- 		goto err_enc_mem_init;
- 	}
-@@ -345,20 +342,20 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 						WQ_MEM_RECLAIM |
- 						WQ_FREEZABLE);
- 	if (!dev->encode_workqueue) {
--		mtk_v4l2_err("Failed to create encode workqueue");
-+		dev_err(&pdev->dev, "[MTK VCODEC] Failed to create encode workqueue");
- 		ret = -EINVAL;
- 		goto err_event_workq;
- 	}
- 
- 	ret = video_register_device(vfd_enc, VFL_TYPE_VIDEO, -1);
- 	if (ret) {
--		mtk_v4l2_err("Failed to register video device");
-+		dev_err(&pdev->dev, "[MTK VCODEC] Failed to register video device");
- 		goto err_enc_reg;
- 	}
- 
- 	mtk_vcodec_dbgfs_init(dev, true);
--	mtk_v4l2_debug(0, "encoder %d registered as /dev/video%d",
--		       dev->venc_pdata->core_id, vfd_enc->num);
-+	dev_dbg(&pdev->dev,  "[MTK VCODEC] encoder %d registered as /dev/video%d",
-+		dev->venc_pdata->core_id, vfd_enc->num);
- 
- 	return 0;
- 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_pm.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_pm.c
-index 7055954eb2af..3165e114b221 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_pm.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_pm.c
-@@ -35,7 +35,7 @@ int mtk_vcodec_init_enc_clk(struct mtk_vcodec_dev *mtkdev)
- 		if (!enc_clk->clk_info)
- 			return -ENOMEM;
- 	} else {
--		mtk_v4l2_err("Failed to get venc clock count");
-+		dev_err(pm->dev, "[MTK VCODEC] Failed to get venc clock count");
- 		return -EINVAL;
- 	}
- 
-@@ -44,13 +44,13 @@ int mtk_vcodec_init_enc_clk(struct mtk_vcodec_dev *mtkdev)
- 		ret = of_property_read_string_index(pdev->dev.of_node,
- 			"clock-names", i, &clk_info->clk_name);
- 		if (ret) {
--			mtk_v4l2_err("venc failed to get clk name %d", i);
-+			dev_err(pm->dev, "[MTK VCODEC] venc failed to get clk name %d", i);
- 			return ret;
- 		}
- 		clk_info->vcodec_clk = devm_clk_get(&pdev->dev,
- 			clk_info->clk_name);
- 		if (IS_ERR(clk_info->vcodec_clk)) {
--			mtk_v4l2_err("venc devm_clk_get (%d)%s fail", i,
-+			dev_err(pm->dev, "[MTK VCODEC] venc devm_clk_get (%d)%s fail", i,
- 				clk_info->clk_name);
- 			return PTR_ERR(clk_info->vcodec_clk);
- 		}
-@@ -67,7 +67,7 @@ void mtk_vcodec_enc_clock_on(struct mtk_vcodec_pm *pm)
- 	for (i = 0; i < enc_clk->clk_num; i++) {
- 		ret = clk_prepare_enable(enc_clk->clk_info[i].vcodec_clk);
- 		if (ret) {
--			mtk_v4l2_err("venc clk_prepare_enable %d %s fail %d", i,
-+			dev_err(pm->dev, "[MTK VCODEC] venc clk_prepare_enable %d %s fail %d", i,
- 				enc_clk->clk_info[i].clk_name, ret);
- 			goto clkerr;
- 		}
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw.c
-index be9159acacf8..6e6986fb28bb 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw.c
-@@ -14,7 +14,7 @@ struct mtk_vcodec_fw *mtk_vcodec_fw_select(void *priv, enum mtk_vcodec_fw_type t
- 	case SCP:
- 		return mtk_vcodec_fw_scp_init(priv, fw_use);
- 	default:
--		mtk_v4l2_err("invalid vcodec fw type");
-+		pr_err(MTK_DBG_VCODEC_STR "Invalid vcodec fw type");
- 		return ERR_PTR(-EINVAL);
- 	}
- }
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_scp.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_scp.c
-index 9a2472442c6f..71ff1a6ae872 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_scp.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_scp.c
-@@ -63,7 +63,7 @@ struct mtk_vcodec_fw *mtk_vcodec_fw_scp_init(void *priv, enum mtk_vcodec_fw_use
- 	plat_dev = dev->plat_dev;
- 	scp = scp_get(plat_dev);
- 	if (!scp) {
--		mtk_v4l2_err("could not get vdec scp handle");
-+		dev_err(&dev->plat_dev->dev, "could not get vdec scp handle");
- 		return ERR_PTR(-EPROBE_DEFER);
- 	}
- 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_vpu.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_vpu.c
-index 46a028031133..ee6846886dd6 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_vpu.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_vpu.c
-@@ -56,13 +56,12 @@ static void mtk_vcodec_vpu_reset_handler(void *priv)
- 	struct mtk_vcodec_dev *dev = priv;
- 	struct mtk_vcodec_ctx *ctx;
- 
--	mtk_v4l2_err("Watchdog timeout!!");
-+	dev_err(&dev->plat_dev->dev, "Watchdog timeout!!");
- 
- 	mutex_lock(&dev->dev_mutex);
- 	list_for_each_entry(ctx, &dev->ctx_list, list) {
- 		ctx->state = MTK_STATE_ABORT;
--		mtk_v4l2_debug(0, "[%d] Change to state MTK_STATE_ABORT",
--			       ctx->id);
-+		mtk_v4l2_vdec_dbg(0, ctx, "[%d] Change to state MTK_STATE_ABORT", ctx->id);
- 	}
- 	mutex_unlock(&dev->dev_mutex);
- }
-@@ -98,7 +97,7 @@ struct mtk_vcodec_fw *mtk_vcodec_fw_vpu_init(void *priv, enum mtk_vcodec_fw_use
- 	plat_dev = dev->plat_dev;
- 	fw_pdev = vpu_get_plat_device(plat_dev);
- 	if (!fw_pdev) {
--		mtk_v4l2_err("firmware device is not ready");
-+		dev_err(&dev->plat_dev->dev, "firmware device is not ready");
- 		return ERR_PTR(-EINVAL);
- 	}
- 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_intr.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_intr.c
-index daa44f635727..5a06be55915b 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_intr.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_intr.c
-@@ -33,14 +33,14 @@ int mtk_vcodec_wait_for_done_ctx(void *priv, int command, unsigned int timeout_m
- 
- 	if (!ret) {
- 		status = -1;	/* timeout */
--		mtk_v4l2_err("[%d] cmd=%d, type=%d, dec timeout=%ums (%d %d)",
--			     ctx_id, command, ctx_type, timeout_ms,
--			     ctx_int_cond[hw_id], ctx_int_type[hw_id]);
-+		dev_err(&ctx->dev->plat_dev->dev, "[%d] cmd=%d, type=%d, dec timeout=%ums (%d %d)",
-+			ctx_id, command, ctx_type, timeout_ms,
-+			ctx_int_cond[hw_id], ctx_int_type[hw_id]);
- 	} else if (-ERESTARTSYS == ret) {
- 		status = -1;
--		mtk_v4l2_err("[%d] cmd=%d, type=%d, dec inter fail (%d %d)",
--			     ctx_id, command, ctx_type,
--			     ctx_int_cond[hw_id], ctx_int_type[hw_id]);
-+		dev_err(&ctx->dev->plat_dev->dev, "[%d] cmd=%d, type=%d, dec inter fail (%d %d)",
-+			ctx_id, command, ctx_type,
-+			ctx_int_cond[hw_id], ctx_int_type[hw_id]);
- 	}
- 
- 	ctx_int_cond[hw_id] = 0;
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.c
-index 847e321f4fcc..761194ffd2c4 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.c
-@@ -24,7 +24,7 @@ EXPORT_SYMBOL(mtk_v4l2_dbg_level);
- void __iomem *mtk_vcodec_get_reg_addr(void __iomem **reg_base, unsigned int reg_idx)
- {
- 	if (reg_idx >= NUM_MAX_VCODEC_REG_BASE) {
--		mtk_v4l2_err("Invalid arguments, reg_idx=%d", reg_idx);
-+		pr_err(MTK_DBG_V4L2_STR "Invalid arguments, reg_idx=%d", reg_idx);
- 		return NULL;
- 	}
- 	return reg_base[reg_idx];
-@@ -39,15 +39,14 @@ int mtk_vcodec_mem_alloc(void *priv, struct mtk_vcodec_mem *mem)
- 
- 	mem->va = dma_alloc_coherent(dev, size, &mem->dma_addr, GFP_KERNEL);
- 	if (!mem->va) {
--		mtk_v4l2_err("%s dma_alloc size=%ld failed!", dev_name(dev),
--			     size);
-+		mtk_v4l2_vdec_err(ctx, "%s dma_alloc size=%ld failed!", dev_name(dev), size);
- 		return -ENOMEM;
- 	}
- 
--	mtk_v4l2_debug(3, "[%d]  - va      = %p", ctx->id, mem->va);
--	mtk_v4l2_debug(3, "[%d]  - dma     = 0x%lx", ctx->id,
--		       (unsigned long)mem->dma_addr);
--	mtk_v4l2_debug(3, "[%d]    size = 0x%lx", ctx->id, size);
-+	mtk_v4l2_vdec_dbg(3, ctx, "[%d]  - va      = %p", ctx->id, mem->va);
-+	mtk_v4l2_vdec_dbg(3, ctx, "[%d]  - dma     = 0x%lx", ctx->id,
-+			  (unsigned long)mem->dma_addr);
-+	mtk_v4l2_vdec_dbg(3, ctx, "[%d]    size = 0x%lx", ctx->id, size);
- 
- 	return 0;
- }
-@@ -60,15 +59,14 @@ void mtk_vcodec_mem_free(void *priv, struct mtk_vcodec_mem *mem)
- 	struct device *dev = &ctx->dev->plat_dev->dev;
- 
- 	if (!mem->va) {
--		mtk_v4l2_err("%s dma_free size=%ld failed!", dev_name(dev),
--			     size);
-+		mtk_v4l2_vdec_err(ctx, "%s dma_free size=%ld failed!", dev_name(dev), size);
- 		return;
- 	}
- 
--	mtk_v4l2_debug(3, "[%d]  - va      = %p", ctx->id, mem->va);
--	mtk_v4l2_debug(3, "[%d]  - dma     = 0x%lx", ctx->id,
--		       (unsigned long)mem->dma_addr);
--	mtk_v4l2_debug(3, "[%d]    size = 0x%lx", ctx->id, size);
-+	mtk_v4l2_vdec_dbg(3, ctx, "[%d]  - va      = %p", ctx->id, mem->va);
-+	mtk_v4l2_vdec_dbg(3, ctx, "[%d]  - dma     = 0x%lx", ctx->id,
-+			  (unsigned long)mem->dma_addr);
-+	mtk_v4l2_vdec_dbg(3, ctx, "[%d]    size = 0x%lx", ctx->id, size);
- 
- 	dma_free_coherent(dev, size, mem->va, mem->dma_addr);
- 	mem->va = NULL;
-@@ -80,7 +78,7 @@ EXPORT_SYMBOL(mtk_vcodec_mem_free);
- void *mtk_vcodec_get_hw_dev(struct mtk_vcodec_dev *dev, int hw_idx)
- {
- 	if (hw_idx >= MTK_VDEC_HW_MAX || hw_idx < 0 || !dev->subdev_dev[hw_idx]) {
--		mtk_v4l2_err("hw idx is out of range:%d", hw_idx);
-+		dev_err(&dev->plat_dev->dev, "hw idx is out of range:%d", hw_idx);
- 		return NULL;
- 	}
- 
-@@ -98,7 +96,7 @@ void mtk_vcodec_set_curr_ctx(struct mtk_vcodec_dev *vdec_dev,
- 	if (vdec_dev->vdec_pdata->is_subdev_supported) {
- 		subdev_dev = mtk_vcodec_get_hw_dev(vdec_dev, hw_idx);
- 		if (!subdev_dev) {
--			mtk_v4l2_err("Failed to get hw dev");
-+			dev_err(&vdec_dev->plat_dev->dev, "Failed to get hw dev");
- 			spin_unlock_irqrestore(&vdec_dev->irqlock, flags);
- 			return;
- 		}
-@@ -121,7 +119,7 @@ struct mtk_vcodec_ctx *mtk_vcodec_get_curr_ctx(struct mtk_vcodec_dev *vdec_dev,
- 	if (vdec_dev->vdec_pdata->is_subdev_supported) {
- 		subdev_dev = mtk_vcodec_get_hw_dev(vdec_dev, hw_idx);
- 		if (!subdev_dev) {
--			mtk_v4l2_err("Failed to get hw dev");
-+			dev_err(&vdec_dev->plat_dev->dev, "Failed to get hw dev");
- 			spin_unlock_irqrestore(&vdec_dev->irqlock, flags);
- 			return NULL;
- 		}
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h
-index a684a7e4ab6e..65542c345f41 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h
-@@ -11,6 +11,9 @@
- #include <linux/types.h>
- #include <linux/dma-direction.h>
- 
-+#define MTK_DBG_VCODEC_STR "[MTK_VCODEC]"
-+#define MTK_DBG_V4L2_STR "[MTK_V4L2]"
+diff --git a/MAINTAINERS b/MAINTAINERS
+index bc201627c2e0..8ac4b4d6e8ca 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -6050,6 +6050,13 @@ L:	linux-gpio@vger.kernel.org
+ S:	Maintained
+ F:	drivers/gpio/gpio-gpio-mm.c
+ 
++DIGITEQ AUTOMOTIVE MGB4 V4L2 DRIVER
++M:	Martin Tuma <martin.tuma@digiteqautomotive.com>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++F:	Documentation/admin-guide/media/mgb4.rst
++F:	drivers/media/pci/mgb4/
 +
- struct mtk_vcodec_mem {
- 	size_t size;
- 	void *va;
-@@ -28,8 +31,8 @@ struct mtk_vcodec_dev;
- #undef pr_fmt
- #define pr_fmt(fmt) "%s(),%d: " fmt, __func__, __LINE__
+ DIOLAN U2C-12 I2C DRIVER
+ M:	Guenter Roeck <linux@roeck-us.net>
+ L:	linux-i2c@vger.kernel.org
+diff --git a/drivers/media/pci/Kconfig b/drivers/media/pci/Kconfig
+index 480194543d05..28cea9675d71 100644
+--- a/drivers/media/pci/Kconfig
++++ b/drivers/media/pci/Kconfig
+@@ -13,6 +13,7 @@ if MEDIA_PCI_SUPPORT
+ if MEDIA_CAMERA_SUPPORT
+ 	comment "Media capture support"
  
--#define mtk_v4l2_err(fmt, args...)                \
--	pr_err("[MTK_V4L2][ERROR] " fmt "\n", ##args)
-+#define mtk_v4l2_err(plat_dev, fmt, args...)                            \
-+	dev_err(&(plat_dev)->dev, "[MTK_V4L2][ERROR] " fmt "\n", ##args)
- 
- #define mtk_vcodec_err(inst_id, plat_dev, fmt, args...)                                 \
- 	dev_err(&(plat_dev)->dev, "[MTK_VCODEC][ERROR][%d]: " fmt "\n", inst_id, ##args)
-@@ -38,11 +41,11 @@ struct mtk_vcodec_dev;
- extern int mtk_v4l2_dbg_level;
- extern int mtk_vcodec_dbg;
- 
--#define mtk_v4l2_debug(level, fmt, args...)				\
--	do {								\
--		if (mtk_v4l2_dbg_level >= (level))			\
--			pr_debug("[MTK_V4L2] %s, %d: " fmt "\n",        \
--				 __func__, __LINE__, ##args);	        \
-+#define mtk_v4l2_debug(plat_dev, level, fmt, args...)                             \
-+	do {                                                                      \
-+		if (mtk_v4l2_dbg_level >= (level))                                \
-+			dev_dbg(&(plat_dev)->dev, "[MTK_V4L2] %s, %d: " fmt "\n", \
-+				 __func__, __LINE__, ##args);                     \
- 	} while (0)
- 
- #define mtk_vcodec_debug(inst_id, plat_dev, fmt, args...)                               \
-@@ -70,6 +73,16 @@ extern int mtk_vcodec_dbg;
- #define mtk_venc_debug(ctx, fmt, args...)                              \
- 	mtk_vcodec_debug((ctx)->id, (ctx)->dev->plat_dev, fmt, ##args)
- 
-+#define mtk_v4l2_vdec_err(ctx, fmt, args...) mtk_v4l2_err((ctx)->dev->plat_dev, fmt, ##args)
++source "drivers/media/pci/mgb4/Kconfig"
+ source "drivers/media/pci/solo6x10/Kconfig"
+ source "drivers/media/pci/sta2x11/Kconfig"
+ source "drivers/media/pci/tw5864/Kconfig"
+diff --git a/drivers/media/pci/Makefile b/drivers/media/pci/Makefile
+index 8bed619b7130..f18c7e15abe3 100644
+--- a/drivers/media/pci/Makefile
++++ b/drivers/media/pci/Makefile
+@@ -32,6 +32,7 @@ obj-$(CONFIG_VIDEO_CX25821) += cx25821/
+ obj-$(CONFIG_VIDEO_CX88) += cx88/
+ obj-$(CONFIG_VIDEO_DT3155) += dt3155/
+ obj-$(CONFIG_VIDEO_IVTV) += ivtv/
++obj-$(CONFIG_VIDEO_MGB4) += mgb4/
+ obj-$(CONFIG_VIDEO_SAA7134) += saa7134/
+ obj-$(CONFIG_VIDEO_SAA7164) += saa7164/
+ obj-$(CONFIG_VIDEO_SOLO6X10) += solo6x10/
+diff --git a/drivers/media/pci/mgb4/Kconfig b/drivers/media/pci/mgb4/Kconfig
+new file mode 100644
+index 000000000000..13fad15a434c
+--- /dev/null
++++ b/drivers/media/pci/mgb4/Kconfig
+@@ -0,0 +1,17 @@
++# SPDX-License-Identifier: GPL-2.0-only
++config VIDEO_MGB4
++	tristate "Digiteq Automotive MGB4 support"
++	depends on VIDEO_DEV && PCI && I2C && DMADEVICES && SPI && MTD && IIO
++	select VIDEOBUF2_DMA_SG
++	select IIO_BUFFER
++	select IIO_TRIGGERED_BUFFER
++	select I2C_XILINX
++	select SPI_XILINX
++	select MTD_SPI_NOR
++	select XILINX_XDMA
++	help
++	  This is a video4linux driver for Digiteq Automotive MGB4 grabber
++	  cards.
 +
-+#define mtk_v4l2_vdec_dbg(level, ctx, fmt, args...)             \
-+	mtk_v4l2_debug((ctx)->dev->plat_dev, level, fmt, ##args)
++	  To compile this driver as a module, choose M here: the
++	  module will be called mgb4.
+diff --git a/drivers/media/pci/mgb4/Makefile b/drivers/media/pci/mgb4/Makefile
+new file mode 100644
+index 000000000000..e92ead18bed0
+--- /dev/null
++++ b/drivers/media/pci/mgb4/Makefile
+@@ -0,0 +1,6 @@
++# SPDX-License-Identifier: GPL-2.0
++mgb4-objs	:= mgb4_regs.o mgb4_core.o mgb4_vin.o mgb4_vout.o \
++               mgb4_sysfs_pci.o mgb4_sysfs_in.o mgb4_sysfs_out.o \
++               mgb4_i2c.o mgb4_cmt.o mgb4_trigger.o mgb4_dma.o
 +
-+#define mtk_v4l2_venc_err(ctx, fmt, args...) mtk_v4l2_err((ctx)->dev->plat_dev, fmt, ##args)
++obj-$(CONFIG_VIDEO_MGB4) += mgb4.o
+diff --git a/drivers/media/pci/mgb4/mgb4_cmt.c b/drivers/media/pci/mgb4/mgb4_cmt.c
+new file mode 100644
+index 000000000000..b8058da48b2d
+--- /dev/null
++++ b/drivers/media/pci/mgb4/mgb4_cmt.c
+@@ -0,0 +1,244 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2021-2023 Digiteq Automotive
++ *     author: Martin Tuma <martin.tuma@digiteqautomotive.com>
++ *
++ * The CMT module configures the FPGA Clock Management Tile (CMT) registers. For
++ * different video signal frequencies (FPGA input signal frequencies), the FPGA
++ * CMT registers need to be adjusted for the FPGA to work properly. The values
++ * are precomputed based on formulas given by Xilinx in their FPGA documentation
++ * (which are in turn full of some magic values/tables...).
++ */
 +
-+#define mtk_v4l2_venc_dbg(level, ctx, fmt, args...)             \
-+	mtk_v4l2_debug((ctx)->dev->plat_dev, level, fmt, ##args)
++#include <linux/types.h>
++#include <linux/kernel.h>
++#include "mgb4_core.h"
++#include "mgb4_cmt.h"
 +
- void __iomem *mtk_vcodec_get_reg_addr(void __iomem **reg_base, unsigned int reg_idx);
- int mtk_vcodec_mem_alloc(void *priv, struct mtk_vcodec_mem *mem);
- void mtk_vcodec_mem_free(void *priv, struct mtk_vcodec_mem *mem);
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_av1_req_lat_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_av1_req_lat_if.c
-index dfed8fe7f54c..6e731f84a801 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_av1_req_lat_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_av1_req_lat_if.c
-@@ -861,8 +861,8 @@ static void vdec_av1_slice_decrease_ref_count(struct vdec_av1_slice_slot *slots,
- 	frame_info[fb_idx].ref_count--;
- 	if (frame_info[fb_idx].ref_count < 0) {
- 		frame_info[fb_idx].ref_count = 0;
--		mtk_v4l2_err("av1_error: %s() fb_idx %d decrease ref_count error\n",
--			     __func__, fb_idx);
-+		pr_err(MTK_DBG_V4L2_STR "av1_error: %s() fb_idx %d decrease ref_count error\n",
-+		       __func__, fb_idx);
- 	}
- 
- 	vdec_av1_slice_clear_fb(&frame_info[fb_idx]);
-@@ -910,7 +910,7 @@ static void vdec_av1_slice_setup_slot(struct vdec_av1_slice_instance *instance,
- 	vsi->slot_id = vdec_av1_slice_get_new_slot(vsi);
- 
- 	if (vsi->slot_id == AV1_INVALID_IDX) {
--		mtk_v4l2_err("warning:av1 get invalid index slot\n");
-+		mtk_v4l2_vdec_err(instance->ctx, "warning:av1 get invalid index slot\n");
- 		vsi->slot_id = 0;
- 	}
- 	cur_frame_info = &vsi->slots.frame_info[vsi->slot_id];
-@@ -1504,8 +1504,8 @@ static void vdec_av1_slice_setup_ref(struct vdec_av1_slice_pfc *pfc,
- 		slot_id = frame->ref_frame_map[ref_idx];
- 		frame_info = &slots->frame_info[slot_id];
- 		if (slot_id == AV1_INVALID_IDX) {
--			mtk_v4l2_err("cannot match reference[%d] 0x%llx\n", i,
--				     ctrl_fh->reference_frame_ts[ref_idx]);
-+			pr_err(MTK_DBG_V4L2_STR "cannot match reference[%d] 0x%llx\n", i,
-+			       ctrl_fh->reference_frame_ts[ref_idx]);
- 			frame->order_hints[i] = 0;
- 			frame->ref_frame_valid[i] = 0;
- 			continue;
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_if.c
-index 250746db366b..bdff1d2feb1c 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_if.c
-@@ -187,7 +187,7 @@ static int alloc_mv_buf(struct vdec_h264_slice_inst *inst,
- 	struct mtk_vcodec_mem *mem = NULL;
- 	unsigned int buf_sz = mtk_vdec_h264_get_mv_buf_size(pic->buf_w, pic->buf_h);
- 
--	mtk_v4l2_debug(3, "size = 0x%x", buf_sz);
-+	mtk_v4l2_vdec_dbg(3, inst->ctx, "size = 0x%x", buf_sz);
- 	for (i = 0; i < H264_MAX_MV_NUM; i++) {
- 		mem = &inst->mv_buf[i];
- 		if (mem->va)
-@@ -243,12 +243,12 @@ static void get_pic_info(struct vdec_h264_slice_inst *inst,
- 		    ctx->last_decoded_picinfo.buf_h != ctx->picinfo.buf_h)
- 			inst->vsi_ctx.dec.realloc_mv_buf = true;
- 
--		mtk_v4l2_debug(1, "ResChg: (%d %d) : old(%d, %d) -> new(%d, %d)",
--			       inst->vsi_ctx.dec.resolution_changed,
--			       inst->vsi_ctx.dec.realloc_mv_buf,
--			       ctx->last_decoded_picinfo.pic_w,
--			       ctx->last_decoded_picinfo.pic_h,
--			       ctx->picinfo.pic_w, ctx->picinfo.pic_h);
-+		mtk_v4l2_vdec_dbg(1, inst->ctx, "ResChg: (%d %d) : old(%d, %d) -> new(%d, %d)",
-+				  inst->vsi_ctx.dec.resolution_changed,
-+				  inst->vsi_ctx.dec.realloc_mv_buf,
-+				  ctx->last_decoded_picinfo.pic_w,
-+				  ctx->last_decoded_picinfo.pic_h,
-+				  ctx->picinfo.pic_w, ctx->picinfo.pic_h);
- 	}
- }
- 
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
-index 2a160dcb5296..1c2389e63e4c 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
-@@ -294,7 +294,7 @@ static void vdec_h264_slice_fill_decode_reflist(struct vdec_h264_slice_inst *ins
- 	mtk_vdec_h264_fill_dpb_info(inst->ctx, &slice_param->decode_params,
- 				    slice_param->h264_dpb_info);
- 
--	mtk_v4l2_debug(3, "cur poc = %d\n", dec_params->bottom_field_order_cnt);
-+	mtk_v4l2_vdec_dbg(3, inst->ctx, "cur poc = %d\n", dec_params->bottom_field_order_cnt);
- 	/* Build the reference lists */
- 	v4l2_h264_init_reflist_builder(&reflist_builder, dec_params, sps,
- 				       inst->dpb);
-@@ -314,7 +314,7 @@ static int vdec_h264_slice_alloc_mv_buf(struct vdec_h264_slice_inst *inst,
- 	struct mtk_vcodec_mem *mem;
- 	int i, err;
- 
--	mtk_v4l2_debug(3, "size = 0x%x", buf_sz);
-+	mtk_v4l2_vdec_dbg(3, inst->ctx, "size = 0x%x", buf_sz);
- 	for (i = 0; i < H264_MAX_MV_NUM; i++) {
- 		mem = &inst->mv_buf[i];
- 		if (mem->va)
-@@ -372,12 +372,12 @@ static void vdec_h264_slice_get_pic_info(struct vdec_h264_slice_inst *inst)
- 		    ctx->last_decoded_picinfo.buf_h != ctx->picinfo.buf_h)
- 			inst->realloc_mv_buf = true;
- 
--		mtk_v4l2_debug(1, "resChg: (%d %d) : old(%d, %d) -> new(%d, %d)",
--			       inst->resolution_changed,
--			       inst->realloc_mv_buf,
--			       ctx->last_decoded_picinfo.pic_w,
--			       ctx->last_decoded_picinfo.pic_h,
--			       ctx->picinfo.pic_w, ctx->picinfo.pic_h);
-+		mtk_v4l2_vdec_dbg(1, inst->ctx, "resChg: (%d %d) : old(%d, %d) -> new(%d, %d)",
-+				  inst->resolution_changed,
-+				  inst->realloc_mv_buf,
-+				  ctx->last_decoded_picinfo.pic_w,
-+				  ctx->last_decoded_picinfo.pic_h,
-+				  ctx->picinfo.pic_w, ctx->picinfo.pic_h);
- 	}
- }
- 
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_hevc_req_multi_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_hevc_req_multi_if.c
-index 5a864bcfe7ba..aa32b7cbf6f1 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_hevc_req_multi_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_hevc_req_multi_if.c
-@@ -649,7 +649,7 @@ static int vdec_hevc_slice_alloc_mv_buf(struct vdec_hevc_slice_inst *inst,
- 	struct mtk_vcodec_mem *mem;
- 	int i, err;
- 
--	mtk_v4l2_debug(3, "allocate mv buffer size = 0x%x", buf_sz);
-+	mtk_v4l2_vdec_dbg(3, inst->ctx, "allocate mv buffer size = 0x%x", buf_sz);
- 	for (i = 0; i < HEVC_MAX_MV_NUM; i++) {
- 		mem = &inst->mv_buf[i];
- 		if (mem->va)
-@@ -707,12 +707,12 @@ static void vdec_hevc_slice_get_pic_info(struct vdec_hevc_slice_inst *inst)
- 		    ctx->last_decoded_picinfo.buf_h != ctx->picinfo.buf_h)
- 			inst->realloc_mv_buf = true;
- 
--		mtk_v4l2_debug(1, "resChg: (%d %d) : old(%d, %d) -> new(%d, %d)",
--			       inst->resolution_changed,
--			       inst->realloc_mv_buf,
--			       ctx->last_decoded_picinfo.pic_w,
--			       ctx->last_decoded_picinfo.pic_h,
--			       ctx->picinfo.pic_w, ctx->picinfo.pic_h);
-+		mtk_v4l2_vdec_dbg(1, inst->ctx, "resChg: (%d %d) : old(%d, %d) -> new(%d, %d)",
-+				  inst->resolution_changed,
-+				  inst->realloc_mv_buf,
-+				  ctx->last_decoded_picinfo.pic_w,
-+				  ctx->last_decoded_picinfo.pic_h,
-+				  ctx->picinfo.pic_w, ctx->picinfo.pic_h);
- 	}
- }
- 
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_drv_if.c b/drivers/media/platform/mediatek/vcodec/vdec_drv_if.c
-index 06d393174cc2..e66faf50892b 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec_drv_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec_drv_if.c
-@@ -75,7 +75,7 @@ int vdec_if_decode(struct mtk_vcodec_ctx *ctx, struct mtk_vcodec_mem *bs,
- 
- 	if (bs) {
- 		if ((bs->dma_addr & 63) != 0) {
--			mtk_v4l2_err("bs dma_addr should 64 byte align");
-+			mtk_v4l2_vdec_err(ctx, "bs dma_addr should 64 byte align");
- 			return -EINVAL;
- 		}
- 	}
-@@ -83,7 +83,7 @@ int vdec_if_decode(struct mtk_vcodec_ctx *ctx, struct mtk_vcodec_mem *bs,
- 	if (fb) {
- 		if (((fb->base_y.dma_addr & 511) != 0) ||
- 		    ((fb->base_c.dma_addr & 511) != 0)) {
--			mtk_v4l2_err("frame buffer dma_addr should 512 byte align");
-+			mtk_v4l2_vdec_err(ctx, "frame buffer dma_addr should 512 byte align");
- 			return -EINVAL;
- 		}
- 	}
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
-index f555341ae708..1b2d01b15032 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
-@@ -77,7 +77,7 @@ int vdec_msg_queue_qbuf(struct vdec_msg_queue_ctx *msg_ctx, struct vdec_lat_buf
- 
- 	head = vdec_get_buf_list(msg_ctx->hardware_index, buf);
- 	if (!head) {
--		mtk_v4l2_err("fail to qbuf: %d", msg_ctx->hardware_index);
-+		mtk_v4l2_vdec_err(buf->ctx, "fail to qbuf: %d", msg_ctx->hardware_index);
- 		return -EINVAL;
- 	}
- 
-@@ -95,8 +95,8 @@ int vdec_msg_queue_qbuf(struct vdec_msg_queue_ctx *msg_ctx, struct vdec_lat_buf
- 		}
- 	}
- 
--	mtk_v4l2_debug(3, "enqueue buf type: %d addr: 0x%p num: %d",
--		       msg_ctx->hardware_index, buf, msg_ctx->ready_num);
-+	mtk_v4l2_vdec_dbg(3, buf->ctx, "enqueue buf type: %d addr: 0x%p num: %d",
-+			  msg_ctx->hardware_index, buf, msg_ctx->ready_num);
- 	spin_unlock(&msg_ctx->ready_lock);
- 
- 	return 0;
-@@ -123,8 +123,6 @@ struct vdec_lat_buf *vdec_msg_queue_dqbuf(struct vdec_msg_queue_ctx *msg_ctx)
- 
- 	spin_lock(&msg_ctx->ready_lock);
- 	if (list_empty(&msg_ctx->ready_queue)) {
--		mtk_v4l2_debug(3, "queue is NULL, type:%d num: %d",
--			       msg_ctx->hardware_index, msg_ctx->ready_num);
- 		spin_unlock(&msg_ctx->ready_lock);
- 
- 		if (msg_ctx->hardware_index == MTK_VDEC_CORE)
-@@ -146,15 +144,15 @@ struct vdec_lat_buf *vdec_msg_queue_dqbuf(struct vdec_msg_queue_ctx *msg_ctx)
- 	head = vdec_get_buf_list(msg_ctx->hardware_index, buf);
- 	if (!head) {
- 		spin_unlock(&msg_ctx->ready_lock);
--		mtk_v4l2_err("fail to dqbuf: %d", msg_ctx->hardware_index);
-+		mtk_v4l2_vdec_err(buf->ctx, "fail to dqbuf: %d", msg_ctx->hardware_index);
- 		return NULL;
- 	}
- 	list_del(head);
- 	vdec_msg_queue_dec(&buf->ctx->msg_queue, msg_ctx->hardware_index);
- 
- 	msg_ctx->ready_num--;
--	mtk_v4l2_debug(3, "dqueue buf type:%d addr: 0x%p num: %d",
--		       msg_ctx->hardware_index, buf, msg_ctx->ready_num);
-+	mtk_v4l2_vdec_dbg(3, buf->ctx, "dqueue buf type:%d addr: 0x%p num: %d",
-+			  msg_ctx->hardware_index, buf, msg_ctx->ready_num);
- 	spin_unlock(&msg_ctx->ready_lock);
- 
- 	return buf;
-@@ -164,7 +162,7 @@ void vdec_msg_queue_update_ube_rptr(struct vdec_msg_queue *msg_queue, uint64_t u
- {
- 	spin_lock(&msg_queue->lat_ctx.ready_lock);
- 	msg_queue->wdma_rptr_addr = ube_rptr;
--	mtk_v4l2_debug(3, "update ube rprt (0x%llx)", ube_rptr);
-+	mtk_v4l2_vdec_dbg(3, msg_queue->ctx, "update ube rprt (0x%llx)", ube_rptr);
- 	spin_unlock(&msg_queue->lat_ctx.ready_lock);
- }
- 
-@@ -172,20 +170,19 @@ void vdec_msg_queue_update_ube_wptr(struct vdec_msg_queue *msg_queue, uint64_t u
- {
- 	spin_lock(&msg_queue->lat_ctx.ready_lock);
- 	msg_queue->wdma_wptr_addr = ube_wptr;
--	mtk_v4l2_debug(3, "update ube wprt: (0x%llx 0x%llx) offset: 0x%llx",
--		       msg_queue->wdma_rptr_addr, msg_queue->wdma_wptr_addr,
--		       ube_wptr);
-+	mtk_v4l2_vdec_dbg(3, msg_queue->ctx, "update ube wprt: (0x%llx 0x%llx) offset: 0x%llx",
-+			  msg_queue->wdma_rptr_addr, msg_queue->wdma_wptr_addr,
-+			  ube_wptr);
- 	spin_unlock(&msg_queue->lat_ctx.ready_lock);
- }
- 
- bool vdec_msg_queue_wait_lat_buf_full(struct vdec_msg_queue *msg_queue)
- {
- 	if (atomic_read(&msg_queue->lat_list_cnt) == NUM_BUFFER_COUNT) {
--		mtk_v4l2_debug(3, "wait buf full: list(%d %d) ready_num:%d status:%d",
--			       atomic_read(&msg_queue->lat_list_cnt),
--			       atomic_read(&msg_queue->core_list_cnt),
--			       msg_queue->lat_ctx.ready_num,
--			       msg_queue->status);
-+		mtk_v4l2_vdec_dbg(3, msg_queue->ctx, "wait buf full: (%d %d) ready:%d status:%d",
-+				  atomic_read(&msg_queue->lat_list_cnt),
-+				  atomic_read(&msg_queue->core_list_cnt),
-+				  msg_queue->lat_ctx.ready_num, msg_queue->status);
- 		return true;
- 	}
- 
-@@ -193,10 +190,10 @@ bool vdec_msg_queue_wait_lat_buf_full(struct vdec_msg_queue *msg_queue)
- 	vdec_msg_queue_qbuf(&msg_queue->core_ctx, &msg_queue->empty_lat_buf);
- 	wait_event(msg_queue->core_dec_done, msg_queue->flush_done);
- 
--	mtk_v4l2_debug(3, "flush done => ready_num:%d status:%d list(%d %d)",
--		       msg_queue->lat_ctx.ready_num, msg_queue->status,
--		       atomic_read(&msg_queue->lat_list_cnt),
--		       atomic_read(&msg_queue->core_list_cnt));
-+	mtk_v4l2_vdec_dbg(3, msg_queue->ctx, "flush done => ready_num:%d status:%d list(%d %d)",
-+			  msg_queue->lat_ctx.ready_num, msg_queue->status,
-+			  atomic_read(&msg_queue->lat_list_cnt),
-+			  atomic_read(&msg_queue->core_list_cnt));
- 
- 	return false;
- }
-@@ -305,7 +302,7 @@ int vdec_msg_queue_init(struct vdec_msg_queue *msg_queue,
- 					     ctx->picinfo.buf_h);
- 	err = mtk_vcodec_mem_alloc(ctx, &msg_queue->wdma_addr);
- 	if (err) {
--		mtk_v4l2_err("failed to allocate wdma_addr buf");
-+		mtk_v4l2_vdec_err(ctx, "failed to allocate wdma_addr buf");
- 		return -ENOMEM;
- 	}
- 	msg_queue->wdma_rptr_addr = msg_queue->wdma_addr.dma_addr;
-@@ -315,20 +312,21 @@ int vdec_msg_queue_init(struct vdec_msg_queue *msg_queue,
- 	msg_queue->empty_lat_buf.core_decode = NULL;
- 	msg_queue->empty_lat_buf.is_last_frame = true;
- 
-+	msg_queue->ctx = ctx;
- 	for (i = 0; i < NUM_BUFFER_COUNT; i++) {
- 		lat_buf = &msg_queue->lat_buf[i];
- 
- 		lat_buf->wdma_err_addr.size = VDEC_ERR_MAP_SZ_AVC;
- 		err = mtk_vcodec_mem_alloc(ctx, &lat_buf->wdma_err_addr);
- 		if (err) {
--			mtk_v4l2_err("failed to allocate wdma_err_addr buf[%d]", i);
-+			mtk_v4l2_vdec_err(ctx, "failed to allocate wdma_err_addr buf[%d]", i);
- 			goto mem_alloc_err;
- 		}
- 
- 		lat_buf->slice_bc_addr.size = VDEC_LAT_SLICE_HEADER_SZ;
- 		err = mtk_vcodec_mem_alloc(ctx, &lat_buf->slice_bc_addr);
- 		if (err) {
--			mtk_v4l2_err("failed to allocate wdma_addr buf[%d]", i);
-+			mtk_v4l2_vdec_err(ctx, "failed to allocate wdma_addr buf[%d]", i);
- 			goto mem_alloc_err;
- 		}
- 
-@@ -336,14 +334,14 @@ int vdec_msg_queue_init(struct vdec_msg_queue *msg_queue,
- 			lat_buf->rd_mv_addr.size = VDEC_RD_MV_BUFFER_SZ;
- 			err = mtk_vcodec_mem_alloc(ctx, &lat_buf->rd_mv_addr);
- 			if (err) {
--				mtk_v4l2_err("failed to allocate rd_mv_addr buf[%d]", i);
-+				mtk_v4l2_vdec_err(ctx, "failed to allocate rd_mv_addr buf[%d]", i);
- 				return -ENOMEM;
- 			}
- 
- 			lat_buf->tile_addr.size = VDEC_LAT_TILE_SZ;
- 			err = mtk_vcodec_mem_alloc(ctx, &lat_buf->tile_addr);
- 			if (err) {
--				mtk_v4l2_err("failed to allocate tile_addr buf[%d]", i);
-+				mtk_v4l2_vdec_err(ctx, "failed to allocate tile_addr buf[%d]", i);
- 				return -ENOMEM;
- 			}
- 		}
-@@ -359,7 +357,7 @@ int vdec_msg_queue_init(struct vdec_msg_queue *msg_queue,
- 		lat_buf->is_last_frame = false;
- 		err = vdec_msg_queue_qbuf(&msg_queue->lat_ctx, lat_buf);
- 		if (err) {
--			mtk_v4l2_err("failed to qbuf buf[%d]", i);
-+			mtk_v4l2_vdec_err(ctx, "failed to qbuf buf[%d]", i);
- 			goto mem_alloc_err;
- 		}
- 	}
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h
-index 2a745e902ad1..2f82cc08caa3 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h
-+++ b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h
-@@ -100,6 +100,7 @@ struct vdec_lat_buf {
-  * @empty_lat_buf: the last lat buf used to flush decode
-  * @core_dec_done: core work queue decode done event
-  * @status: current context decode status for core hardware
-+ * @ctx: mtk vcodec context information
-  */
- struct vdec_msg_queue {
- 	struct vdec_lat_buf lat_buf[NUM_BUFFER_COUNT];
-@@ -118,6 +119,7 @@ struct vdec_msg_queue {
- 	struct vdec_lat_buf empty_lat_buf;
- 	wait_queue_head_t core_dec_done;
- 	int status;
-+	struct mtk_vcodec_ctx *ctx;
- };
- 
- /**
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.c b/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.c
-index ab15ee6e2005..d82391411ba1 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.c
-@@ -91,7 +91,7 @@ static void vpu_dec_ipi_handler(void *data, unsigned int len, void *priv)
- 					(unsigned long)msg->ap_inst_addr;
- 
- 	if (!vpu) {
--		mtk_v4l2_err("ap_inst_addr is NULL, did the SCP hang or crash?");
-+		mtk_v4l2_vdec_err(vpu->ctx, "ap_inst_addr is NULL, did the SCP hang or crash?");
- 		return;
- 	}
- 
++static const u16 cmt_vals_out[][15] = {
++	{0x1208, 0x0000, 0x171C, 0x0000, 0x1E38, 0x0000, 0x11C7, 0x0000, 0x1041, 0x01BC, 0x7C01, 0x7DE9, 0xFFFF, 0x9900, 0x8100, },
++	{0x11C7, 0x0000, 0x1619, 0x0080, 0x1C71, 0x0000, 0x130D, 0x0080, 0x0041, 0x0090, 0x7C01, 0x7DE9, 0xFFFF, 0x1100, 0x9000, },
++	{0x11C7, 0x0000, 0x1619, 0x0080, 0x1C71, 0x0000, 0x165A, 0x0080, 0x0082, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1000, 0x9000, },
++	{0x11C7, 0x0000, 0x1619, 0x0080, 0x1C71, 0x0000, 0x1187, 0x0080, 0x1041, 0x01EE, 0x7C01, 0x7DE9, 0xFFFF, 0x9900, 0x8100, },
++	{0x1186, 0x0000, 0x1555, 0x0000, 0x1AAA, 0x0000, 0x1451, 0x0000, 0x0042, 0x0013, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x1000, },
++	{0x11C7, 0x0000, 0x1619, 0x0080, 0x1C71, 0x0000, 0x134E, 0x0080, 0x0041, 0x005E, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x1000, },
++	{0x1145, 0x0000, 0x1452, 0x0080, 0x18E3, 0x0000, 0x1619, 0x0080, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1000, 0x9000, },
++	{0x1145, 0x0000, 0x1452, 0x0080, 0x18E3, 0x0000, 0x179E, 0x0000, 0x00C3, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0800, 0x1000, },
++	{0x1145, 0x0000, 0x1452, 0x0080, 0x18E3, 0x0000, 0x179F, 0x0080, 0x00C3, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0800, 0x1000, },
++	{0x1145, 0x0000, 0x1452, 0x0080, 0x18E3, 0x0000, 0x17DF, 0x0000, 0x00C3, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1000, 0x8800, },
++	{0x1145, 0x0000, 0x1452, 0x0080, 0x18E3, 0x0000, 0x128B, 0x0080, 0x0041, 0x00DB, 0x7C01, 0x7DE9, 0xFFFF, 0x9000, 0x0100, },
++	{0x1186, 0x0000, 0x1555, 0x0000, 0x1AAA, 0x0000, 0x1820, 0x0000, 0x0083, 0x00FA, 0x7DE9, 0x7DE8, 0xFFFF, 0x0900, 0x9000, },
++	{0x1186, 0x0000, 0x1555, 0x0000, 0x1AAA, 0x0000, 0x1187, 0x0080, 0x1041, 0x01EE, 0x7C01, 0x7DE9, 0xFFFF, 0x9900, 0x8100, },
++	{0x1104, 0x0000, 0x138E, 0x0000, 0x171C, 0x0000, 0x169B, 0x0080, 0x00C3, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1800, 0x0100, },
++	{0x1145, 0x0000, 0x1452, 0x0080, 0x18E3, 0x0000, 0x171C, 0x0000, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1100, 0x1800, },
++	{0x1186, 0x0000, 0x1555, 0x0000, 0x1AAA, 0x0000, 0x1515, 0x0080, 0x0042, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x1000, },
++	{0x1104, 0x0000, 0x138E, 0x0000, 0x171C, 0x0000, 0x1493, 0x0080, 0x0082, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x1000, },
++	{0x1145, 0x0000, 0x1452, 0x0080, 0x18E3, 0x0000, 0x15D8, 0x0080, 0x0082, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1900, 0x0100, },
++	{0x1104, 0x0000, 0x138E, 0x0000, 0x171C, 0x0000, 0x124A, 0x0080, 0x0041, 0x010D, 0x7C01, 0x7DE9, 0xFFFF, 0x9000, 0x0100, },
++	{0x1104, 0x0000, 0x138E, 0x0000, 0x171C, 0x0000, 0x175D, 0x0000, 0x00C3, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0800, 0x1000, },
++	{0x1145, 0x0000, 0x1452, 0x0080, 0x18E3, 0x0000, 0x1619, 0x0080, 0x0082, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1000, 0x9000, },
++	{0x1145, 0x0000, 0x1452, 0x0080, 0x18E3, 0x0000, 0x17DF, 0x0000, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1000, 0x8800, },
++	{0x1145, 0x0000, 0x1452, 0x0080, 0x18E3, 0x0000, 0x17E0, 0x0080, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x9000, },
++	{0x1145, 0x0000, 0x1452, 0x0080, 0x18E3, 0x0000, 0x1820, 0x0000, 0x0083, 0x00FA, 0x7DE9, 0x7DE8, 0xFFFF, 0x0900, 0x9000, },
++	{0x1104, 0x0000, 0x138E, 0x0000, 0x171C, 0x0000, 0x13D0, 0x0080, 0x0042, 0x002C, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x1000, },
++	{0x1104, 0x0000, 0x138E, 0x0000, 0x171C, 0x0000, 0x128B, 0x0080, 0x0041, 0x00DB, 0x7C01, 0x7DE9, 0xFFFF, 0x9000, 0x0100, },
++	{0x1104, 0x0000, 0x138E, 0x0000, 0x171C, 0x0000, 0x1820, 0x0000, 0x00C3, 0x00FA, 0x7DE9, 0x7DE8, 0xFFFF, 0x0900, 0x9000, },
++	{0x1145, 0x0000, 0x1452, 0x0080, 0x18E3, 0x0000, 0x134E, 0x0080, 0x0041, 0x005E, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x1000, },
++	{0x1145, 0x0000, 0x1452, 0x0080, 0x18E3, 0x0000, 0x1515, 0x0080, 0x0042, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x1000, },
++	{0x10C3, 0x0000, 0x128B, 0x0080, 0x1555, 0x0000, 0x175D, 0x0000, 0x00C4, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0800, 0x1000, },
++	{0x1145, 0x0000, 0x1452, 0x0080, 0x18E3, 0x0000, 0x11C7, 0x0000, 0x1041, 0x01BC, 0x7C01, 0x7DE9, 0xFFFF, 0x9900, 0x8100, },
++	{0x10C3, 0x0000, 0x128B, 0x0080, 0x1555, 0x0000, 0x1209, 0x0080, 0x0041, 0x013F, 0x7C01, 0x7DE9, 0xFFFF, 0x9900, 0x1100, },
++	{0x10C3, 0x0000, 0x128B, 0x0080, 0x1555, 0x0000, 0x1556, 0x0080, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0800, 0x8000, },
++	{0x10C3, 0x0000, 0x128B, 0x0080, 0x1555, 0x0000, 0x179F, 0x0080, 0x00C4, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0800, 0x1000, },
++	{0x1104, 0x0000, 0x138E, 0x0000, 0x171C, 0x0000, 0x15D8, 0x0080, 0x0082, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1900, 0x0100, },
++	{0x10C3, 0x0000, 0x128B, 0x0080, 0x1555, 0x0000, 0x1105, 0x0080, 0x1041, 0x01E8, 0x6401, 0x65E9, 0xFFFF, 0x9800, 0x1100, },
++	{0x10C3, 0x0000, 0x128B, 0x0080, 0x1555, 0x0000, 0x1820, 0x0000, 0x00C4, 0x00FA, 0x7DE9, 0x7DE8, 0xFFFF, 0x0900, 0x9000, },
++	{0x1104, 0x0000, 0x138E, 0x0000, 0x171C, 0x0000, 0x1493, 0x0080, 0x0042, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x1000, },
++	{0x10C3, 0x0000, 0x128B, 0x0080, 0x1555, 0x0000, 0x138E, 0x0000, 0x0042, 0x005E, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x1000, },
++	{0x1104, 0x0000, 0x138E, 0x0000, 0x171C, 0x0000, 0x17E0, 0x0080, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x9000, },
++	{0x1104, 0x0000, 0x138E, 0x0000, 0x171C, 0x0000, 0x165A, 0x0080, 0x0082, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1000, 0x9000, },
++	{0x10C3, 0x0000, 0x128B, 0x0080, 0x1555, 0x0000, 0x175D, 0x0000, 0x00C3, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0800, 0x1000, },
++	{0x1104, 0x0000, 0x138E, 0x0000, 0x171C, 0x0000, 0x1187, 0x0080, 0x1041, 0x01EE, 0x7C01, 0x7DE9, 0xFFFF, 0x9900, 0x8100, },
++	{0x10C3, 0x0000, 0x128B, 0x0080, 0x1555, 0x0000, 0x175E, 0x0080, 0x00C3, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0800, 0x1000, },
++	{0x10C3, 0x0000, 0x128B, 0x0080, 0x1555, 0x0000, 0x179E, 0x0000, 0x00C3, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0800, 0x1000, },
++	{0x1104, 0x0000, 0x138E, 0x0000, 0x171C, 0x0000, 0x134E, 0x0080, 0x0041, 0x005E, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x1000, },
++	{0x10C3, 0x0000, 0x128B, 0x0080, 0x1555, 0x0000, 0x165A, 0x0080, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1000, 0x9000, },
++	{0x1104, 0x0000, 0x138E, 0x0000, 0x171C, 0x0000, 0x16DC, 0x0080, 0x0082, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1100, 0x1800, },
++	{0x10C3, 0x0000, 0x128B, 0x0080, 0x1555, 0x0000, 0x169A, 0x0000, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1000, 0x9000, },
++	{0x1104, 0x0000, 0x138E, 0x0000, 0x171C, 0x0000, 0x11C7, 0x0000, 0x1041, 0x01BC, 0x7C01, 0x7DE9, 0xFFFF, 0x9900, 0x8100, },
++	{0x10C3, 0x0000, 0x128B, 0x0080, 0x1555, 0x0000, 0x169B, 0x0080, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1800, 0x0100, },
++	{0x1104, 0x0000, 0x138E, 0x0000, 0x171C, 0x0000, 0x171D, 0x0080, 0x0082, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1100, 0x1800, },
++	{0x10C3, 0x0000, 0x128B, 0x0080, 0x1555, 0x0000, 0x16DB, 0x0000, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1800, 0x0100, },
++	{0x10C3, 0x0000, 0x128B, 0x0080, 0x1555, 0x0000, 0x1146, 0x0080, 0x1041, 0x0184, 0x7C01, 0x7DE9, 0xFFFF, 0x9900, 0x8100, },
++	{0x10C3, 0x0000, 0x128B, 0x0080, 0x1555, 0x0000, 0x171C, 0x0000, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1100, 0x1800, },
++	{0x10C3, 0x0000, 0x128B, 0x0080, 0x1555, 0x0000, 0x1451, 0x0000, 0x0042, 0x0013, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x1000, },
++	{0x10C3, 0x0000, 0x128B, 0x0080, 0x1555, 0x0000, 0x171D, 0x0080, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1100, 0x1800, },
++	{0x10C3, 0x0000, 0x128B, 0x0080, 0x1555, 0x0000, 0x175D, 0x0000, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0800, 0x1000, },
++	{0x10C3, 0x0000, 0x128B, 0x0080, 0x1555, 0x0000, 0x1452, 0x0080, 0x0042, 0x0013, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x1000, },
++	{0x10C3, 0x0000, 0x128B, 0x0080, 0x1555, 0x0000, 0x15D8, 0x0080, 0x0082, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1900, 0x0100, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x1104, 0x0000, 0x1041, 0x01E8, 0x5801, 0x59E9, 0xFFFF, 0x9900, 0x0900, },
++	{0x10C3, 0x0000, 0x128B, 0x0080, 0x1555, 0x0000, 0x179F, 0x0080, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0800, 0x1000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x1515, 0x0080, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x1000, },
++	{0x10C3, 0x0000, 0x128B, 0x0080, 0x1555, 0x0000, 0x17DF, 0x0000, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1000, 0x8800, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x1659, 0x0000, 0x00C3, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1000, 0x9000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x1555, 0x0000, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0800, 0x8000, },
++	{0x10C3, 0x0000, 0x128B, 0x0080, 0x1555, 0x0000, 0x14D3, 0x0000, 0x0042, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x1000, },
++	{0x10C3, 0x0000, 0x128B, 0x0080, 0x1555, 0x0000, 0x1820, 0x0000, 0x0083, 0x00FA, 0x7DE9, 0x7DE8, 0xFFFF, 0x0900, 0x9000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x1556, 0x0080, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0800, 0x8000, },
++	{0x10C3, 0x0000, 0x128B, 0x0080, 0x1555, 0x0000, 0x1187, 0x0080, 0x1041, 0x01EE, 0x7C01, 0x7DE9, 0xFFFF, 0x9900, 0x8100, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x1452, 0x0080, 0x0082, 0x0013, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x1000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x169B, 0x0080, 0x00C3, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1800, 0x0100, },
++	{0x10C3, 0x0000, 0x128B, 0x0080, 0x1555, 0x0000, 0x1514, 0x0000, 0x0042, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x1000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x17E0, 0x0080, 0x00C4, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x9000, },
++	{0x10C3, 0x0000, 0x128B, 0x0080, 0x1555, 0x0000, 0x1515, 0x0080, 0x0042, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x1000, },
++	{0x10C3, 0x0000, 0x128B, 0x0080, 0x1555, 0x0000, 0x16DC, 0x0080, 0x0082, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1100, 0x1800, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x1493, 0x0080, 0x0082, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x1000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x171C, 0x0000, 0x00C3, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1100, 0x1800, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x15D8, 0x0080, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1900, 0x0100, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x171D, 0x0080, 0x00C3, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1100, 0x1800, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x1618, 0x0000, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1900, 0x0100, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x175D, 0x0000, 0x00C3, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0800, 0x1000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x14D4, 0x0080, 0x0082, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x1000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x1619, 0x0080, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1000, 0x9000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x179E, 0x0000, 0x00C3, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0800, 0x1000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x179F, 0x0080, 0x00C3, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0800, 0x1000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x1515, 0x0080, 0x0082, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x1000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x13D0, 0x0080, 0x0042, 0x002C, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x1000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x169A, 0x0000, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1000, 0x9000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x128B, 0x0080, 0x0041, 0x00DB, 0x7C01, 0x7DE9, 0xFFFF, 0x9000, 0x0100, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x169B, 0x0080, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1800, 0x0100, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x1820, 0x0000, 0x00C3, 0x00FA, 0x7DE9, 0x7DE8, 0xFFFF, 0x0900, 0x9000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x1556, 0x0080, 0x0082, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0800, 0x8000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x16DB, 0x0000, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1800, 0x0100, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x1411, 0x0080, 0x0042, 0x002C, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x1000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x171C, 0x0000, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1100, 0x1800, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x1597, 0x0080, 0x0082, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0800, 0x8000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x1451, 0x0000, 0x0042, 0x0013, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x1000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x171D, 0x0080, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1100, 0x1800, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x12CC, 0x0080, 0x0041, 0x00A9, 0x7C01, 0x7DE9, 0xFFFF, 0x1100, 0x9000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x175D, 0x0000, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0800, 0x1000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x1452, 0x0080, 0x0042, 0x0013, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x1000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x15D8, 0x0080, 0x0082, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1900, 0x0100, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x175E, 0x0080, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0800, 0x1000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x1492, 0x0000, 0x0042, 0x0013, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x1000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x179F, 0x0080, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0800, 0x1000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x1619, 0x0080, 0x0082, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1000, 0x9000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x1493, 0x0080, 0x0042, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x1000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x17DF, 0x0000, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1000, 0x8800, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x130D, 0x0080, 0x0041, 0x0090, 0x7C01, 0x7DE9, 0xFFFF, 0x1100, 0x9000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x17E0, 0x0080, 0x0083, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x9000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x14D3, 0x0000, 0x0042, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x1000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x165A, 0x0080, 0x0082, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1000, 0x9000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x1820, 0x0000, 0x0083, 0x00FA, 0x7DE9, 0x7DE8, 0xFFFF, 0x0900, 0x9000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x14D4, 0x0080, 0x0042, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x0900, 0x1000, },
++	{0x1082, 0x0000, 0x11C7, 0x0000, 0x138E, 0x0000, 0x169B, 0x0080, 0x0082, 0x00FA, 0x7C01, 0x7DE9, 0xFFFF, 0x1800, 0x0100, },
++};
++
++static const u16 cmt_vals_in[][13] = {
++	{0x1082, 0x0000, 0x5104, 0x0000, 0x11C7, 0x0000, 0x1041, 0x02BC, 0x7C01, 0xFFE9, 0x9900, 0x9908, 0x8100},
++	{0x1104, 0x0000, 0x9208, 0x0000, 0x138E, 0x0000, 0x1041, 0x015E, 0x7C01, 0xFFE9, 0x0100, 0x0908, 0x1000},
++};
++
++static const u32 cmt_addrs_out[][15] = {
++	{0x420, 0x424, 0x428, 0x42C, 0x430, 0x434, 0x450, 0x454, 0x458, 0x460, 0x464, 0x468, 0x4A0, 0x538, 0x53C},
++	{0x620, 0x624, 0x628, 0x62C, 0x630, 0x634, 0x650, 0x654, 0x658, 0x660, 0x664, 0x668, 0x6A0, 0x738, 0x73C},
++};
++
++static const u32 cmt_addrs_in[][13] = {
++	{0x020, 0x024, 0x028, 0x02C, 0x050, 0x054, 0x058, 0x060, 0x064, 0x068, 0x0A0, 0x138, 0x13C},
++	{0x220, 0x224, 0x228, 0x22C, 0x250, 0x254, 0x258, 0x260, 0x264, 0x268, 0x2A0, 0x338, 0x33C},
++};
++
++static const u32 cmt_freq[] = {
++	25000, 25510, 26020, 26530, 26983, 27551, 28000, 28570,
++	29046, 29522, 30000, 30476, 30952, 31546, 32000, 32539,
++	33035, 33571, 33928, 34522, 35000, 35428, 36000, 36571,
++	36904, 37500, 38093, 38571, 39047, 39453, 40000, 40476,
++	40952, 41494, 41964, 42857, 43535, 44047, 44444, 45000,
++	45535, 46029, 46428, 46823, 47617, 48214, 48571, 49107,
++	49523, 50000, 50476, 50892, 51428, 52380, 53333, 53967,
++	54285, 55238, 55555, 55952, 57142, 58095, 58571, 59047,
++	59521, 60000, 60316, 60952, 61428, 61904, 62500, 63092,
++	63491, 64282, 65078, 65476, 66071, 66664, 67142, 67854,
++	68571, 69044, 69642, 70000, 71425, 72616, 73214, 73808,
++	74285, 75000, 75714, 76187, 76785, 77142, 78570, 80000,
++	80357, 80951, 81428, 82142, 82857, 83332, 83928, 84285,
++	85713, 87142, 87500, 88094, 88571, 89285, 90000, 90475,
++	91071, 91428, 92856, 94642,
++};
++
++static size_t freq_srch(u32 key, const u32 *array, size_t size)
++{
++	int l = 0;
++	int r = size - 1;
++	int m;
++
++	while (l <= r) {
++		m = (l + r) / 2;
++		if (array[m] < key)
++			l = m + 1;
++		else if (array[m] > key)
++			r = m - 1;
++		else
++			return m;
++	}
++
++	if (r < 0 || l > size - 1)
++		return m;
++	else
++		return (abs(key - array[l]) < abs(key - array[r])) ? l : r;
++}
++
++u32 mgb4_cmt_set_vout_freq(struct mgb4_vout_dev *voutdev, unsigned int freq)
++{
++	struct mgb4_regs *video = &voutdev->mgbdev->video;
++	const struct mgb4_vout_regs *regs = &voutdev->config->regs;
++	const u16 *reg_set;
++	const u32 *addr;
++	u32 config;
++	size_t i, index;
++
++	index = freq_srch(freq, cmt_freq, ARRAY_SIZE(cmt_freq));
++	addr = cmt_addrs_out[voutdev->config->id];
++	reg_set = cmt_vals_out[index];
++
++	config = mgb4_read_reg(video, regs->config);
++
++	mgb4_write_reg(video, regs->config, 0x1 | (config & ~0x3));
++
++	for (i = 0; i < ARRAY_SIZE(cmt_addrs_out[0]); i++)
++		mgb4_write_reg(&voutdev->mgbdev->cmt, addr[i], reg_set[i]);
++
++	mgb4_mask_reg(video, regs->config, 0x100, 0x100);
++	mgb4_mask_reg(video, regs->config, 0x100, 0x0);
++
++	mgb4_write_reg(video, regs->config, config & ~0x1);
++
++	return cmt_freq[index];
++}
++
++void mgb4_cmt_set_vin_freq_range(struct mgb4_vin_dev *vindev,
++				 unsigned int freq_range)
++{
++	struct mgb4_regs *video = &vindev->mgbdev->video;
++	const struct mgb4_vin_regs *regs = &vindev->config->regs;
++	const u16 *reg_set;
++	const u32 *addr;
++	u32 config;
++	size_t i;
++
++	addr = cmt_addrs_in[vindev->config->id];
++	reg_set = cmt_vals_in[freq_range];
++
++	config = mgb4_read_reg(video, regs->config);
++
++	mgb4_write_reg(video, regs->config, 0x1 | (config & ~0x3));
++
++	for (i = 0; i < ARRAY_SIZE(cmt_addrs_in[0]); i++)
++		mgb4_write_reg(&vindev->mgbdev->cmt, addr[i], reg_set[i]);
++
++	mgb4_mask_reg(video, regs->config, 0x1000, 0x1000);
++	mgb4_mask_reg(video, regs->config, 0x1000, 0x0);
++
++	mgb4_write_reg(video, regs->config, config & ~0x1);
++}
+diff --git a/drivers/media/pci/mgb4/mgb4_cmt.h b/drivers/media/pci/mgb4/mgb4_cmt.h
+new file mode 100644
+index 000000000000..b15df56ca059
+--- /dev/null
++++ b/drivers/media/pci/mgb4/mgb4_cmt.h
+@@ -0,0 +1,17 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2021-2023 Digiteq Automotive
++ *     author: Martin Tuma <martin.tuma@digiteqautomotive.com>
++ */
++
++#ifndef __MGB4_CMT_H__
++#define __MGB4_CMT_H__
++
++#include "mgb4_vout.h"
++#include "mgb4_vin.h"
++
++u32 mgb4_cmt_set_vout_freq(struct mgb4_vout_dev *voutdev, unsigned int freq);
++void mgb4_cmt_set_vin_freq_range(struct mgb4_vin_dev *vindev,
++				 unsigned int freq_range);
++
++#endif
+diff --git a/drivers/media/pci/mgb4/mgb4_core.c b/drivers/media/pci/mgb4/mgb4_core.c
+new file mode 100644
+index 000000000000..33ad447c1811
+--- /dev/null
++++ b/drivers/media/pci/mgb4/mgb4_core.c
+@@ -0,0 +1,711 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * This is the driver for the MGB4 video grabber card by Digiteq Automotive.
++ *
++ * Copyright (C) 2021-2023 Digiteq Automotive
++ *     author: Martin Tuma <martin.tuma@digiteqautomotive.com>
++ *
++ * This is the main driver module. The DMA, I2C and SPI sub-drivers are
++ * initialized here and the input/output v4l2 devices are created.
++ *
++ * The mgb4 card uses different expansion modules for different video sources
++ * (GMSL and FPDL3 for now) so in probe() we detect the module type based on
++ * what we see on the I2C bus and check if it matches the FPGA bitstream (there
++ * are different bitstreams for different expansion modules). When no expansion
++ * module is present, we still let the driver initialize to allow flashing of
++ * the FPGA firmware using the SPI FLASH device. No v4l2 video devices are
++ * created in this case.
++ */
++
++#include <linux/types.h>
++#include <linux/module.h>
++#include <linux/pci.h>
++#include <linux/platform_device.h>
++#include <linux/clk.h>
++#include <linux/clk-provider.h>
++#include <linux/clkdev.h>
++#include <linux/i2c.h>
++#include <linux/delay.h>
++#include <linux/dma/amd_xdma.h>
++#include <linux/platform_data/amd_xdma.h>
++#include <linux/spi/xilinx_spi.h>
++#include <linux/mtd/mtd.h>
++#include <linux/hwmon.h>
++#include <linux/debugfs.h>
++#include "mgb4_dma.h"
++#include "mgb4_i2c.h"
++#include "mgb4_sysfs.h"
++#include "mgb4_vout.h"
++#include "mgb4_vin.h"
++#include "mgb4_trigger.h"
++#include "mgb4_core.h"
++
++#define MGB4_USER_IRQS 16
++
++static int flashid;
++
++static struct xdma_chan_info h2c_chan_info = {
++	.dir = DMA_MEM_TO_DEV,
++};
++
++static struct xdma_chan_info c2h_chan_info = {
++	.dir = DMA_DEV_TO_MEM,
++};
++
++static struct xspi_platform_data spi_platform_data = {
++	.num_chipselect = 1,
++	.bits_per_word = 8
++};
++
++static const struct i2c_board_info extender_info = {
++	I2C_BOARD_INFO("extender", 0x21)
++};
++
++#if IS_REACHABLE(CONFIG_HWMON)
++static umode_t temp_is_visible(const void *data, enum hwmon_sensor_types type,
++			       u32 attr, int channel)
++{
++	if (type == hwmon_temp &&
++	    (attr == hwmon_temp_input || attr == hwmon_temp_label))
++		return 0444;
++	else
++		return 0;
++}
++
++static int temp_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
++		     int channel, long *val)
++{
++	struct mgb4_dev *mgbdev = dev_get_drvdata(dev);
++	u32 val10, raw;
++
++	if (type == hwmon_temp && attr == hwmon_temp_input) {
++		raw = mgb4_read_reg(&mgbdev->video, 0xD0);
++		/* register value -> Celsius degrees formula given by Xilinx */
++		val10 = ((((raw >> 20) & 0xFFF) * 503975) - 1118822400) / 409600;
++		*val = val10 * 100;
++		return 0;
++	} else {
++		return -EOPNOTSUPP;
++	}
++}
++
++static int temp_read_string(struct device *dev, enum hwmon_sensor_types type,
++			    u32 attr, int channel, const char **str)
++{
++	if (type == hwmon_temp && attr == hwmon_temp_label) {
++		*str = "FPGA Temperature";
++		return 0;
++	} else {
++		return -EOPNOTSUPP;
++	}
++}
++
++static const struct hwmon_ops temp_ops = {
++	.is_visible = temp_is_visible,
++	.read = temp_read,
++	.read_string = temp_read_string
++};
++
++static const struct hwmon_channel_info *temp_channel_info[] = {
++	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_LABEL),
++	NULL
++};
++
++static const struct hwmon_chip_info temp_chip_info = {
++	.ops = &temp_ops,
++	.info = temp_channel_info,
++};
++#endif
++
++static int match_i2c_adap(struct device *dev, void *data)
++{
++	return i2c_verify_adapter(dev) ? 1 : 0;
++}
++
++static struct i2c_adapter *get_i2c_adap(struct platform_device *pdev)
++{
++	struct device *dev;
++
++	mutex_lock(&pdev->dev.mutex);
++	dev = device_find_child(&pdev->dev, NULL, match_i2c_adap);
++	mutex_unlock(&pdev->dev.mutex);
++
++	return dev ? to_i2c_adapter(dev) : NULL;
++}
++
++static int match_spi_adap(struct device *dev, void *data)
++{
++	return to_spi_device(dev) ? 1 : 0;
++}
++
++static struct spi_master *get_spi_adap(struct platform_device *pdev)
++{
++	struct device *dev;
++
++	mutex_lock(&pdev->dev.mutex);
++	dev = device_find_child(&pdev->dev, NULL, match_spi_adap);
++	mutex_unlock(&pdev->dev.mutex);
++
++	return dev ? container_of(dev, struct spi_master, dev) : NULL;
++}
++
++static int init_spi(struct mgb4_dev *mgbdev)
++{
++	struct resource spi_resources[] = {
++		{
++			.start	= 0x400,
++			.end	= 0x47f,
++			.flags	= IORESOURCE_MEM,
++			.name	= "io-memory",
++		},
++		{
++			.start	= 14,
++			.end	= 14,
++			.flags	= IORESOURCE_IRQ,
++			.name	= "irq",
++		},
++	};
++	struct spi_board_info spi_info = {
++		.max_speed_hz = 10000000,
++		.modalias = "m25p80",
++		.chip_select = 0,
++		.mode = SPI_MODE_3,
++	};
++	struct pci_dev *pdev = mgbdev->pdev;
++	struct device *dev = &pdev->dev;
++	struct spi_master *master;
++	struct spi_device *spi_dev;
++	u32 irq;
++	int rv, id;
++	resource_size_t mapbase = pci_resource_start(pdev, MGB4_MGB4_BAR_ID);
++
++	request_module("platform:xilinx_spi");
++
++	irq = xdma_get_user_irq(mgbdev->xdev, 14);
++	xdma_enable_user_irq(mgbdev->xdev, irq);
++
++	spi_resources[0].parent = &pdev->resource[MGB4_MGB4_BAR_ID];
++	spi_resources[0].start += mapbase;
++	spi_resources[0].end += mapbase;
++	spi_resources[1].start = irq;
++	spi_resources[1].end = irq;
++
++	id = pci_dev_id(pdev);
++	mgbdev->spi_pdev = platform_device_register_resndata(dev, "xilinx_spi",
++							     id, spi_resources,
++							     ARRAY_SIZE(spi_resources),
++							     &spi_platform_data,
++							     sizeof(spi_platform_data));
++	if (IS_ERR(mgbdev->spi_pdev)) {
++		dev_err(dev, "failed to register SPI device\n");
++		return PTR_ERR(mgbdev->spi_pdev);
++	}
++
++	master = get_spi_adap(mgbdev->spi_pdev);
++	if (!master) {
++		dev_err(dev, "failed to get SPI adapter\n");
++		rv = -EINVAL;
++		goto err_pdev;
++	}
++
++	snprintf(mgbdev->fw_part_name, sizeof(mgbdev->fw_part_name),
++		 "mgb4-fw.%d", flashid);
++	mgbdev->partitions[0].name = mgbdev->fw_part_name;
++	mgbdev->partitions[0].size = 0x400000;
++	mgbdev->partitions[0].offset = 0x400000;
++	mgbdev->partitions[0].mask_flags = 0;
++
++	snprintf(mgbdev->data_part_name, sizeof(mgbdev->data_part_name),
++		 "mgb4-data.%d", flashid);
++	mgbdev->partitions[1].name = mgbdev->data_part_name;
++	mgbdev->partitions[1].size = 0x10000;
++	mgbdev->partitions[1].offset = 0xFF0000;
++	mgbdev->partitions[1].mask_flags = MTD_CAP_NORFLASH;
++
++	snprintf(mgbdev->flash_name, sizeof(mgbdev->flash_name),
++		 "mgb4-flash.%d", flashid);
++	mgbdev->flash_data.name = mgbdev->flash_name;
++	mgbdev->flash_data.parts = mgbdev->partitions;
++	mgbdev->flash_data.nr_parts = ARRAY_SIZE(mgbdev->partitions);
++	mgbdev->flash_data.type = "spi-nor";
++
++	spi_info.platform_data = &mgbdev->flash_data;
++
++	spi_dev = spi_new_device(master, &spi_info);
++	put_device(&master->dev);
++	if (!spi_dev) {
++		dev_err(dev, "failed to create MTD device\n");
++		rv = -EINVAL;
++		goto err_pdev;
++	}
++
++	return 0;
++
++err_pdev:
++	platform_device_unregister(mgbdev->spi_pdev);
++
++	return rv;
++}
++
++static void free_spi(struct mgb4_dev *mgbdev)
++{
++	platform_device_unregister(mgbdev->spi_pdev);
++}
++
++static int init_i2c(struct mgb4_dev *mgbdev)
++{
++	struct resource i2c_resources[] = {
++		{
++			.start	= 0x200,
++			.end	= 0x3ff,
++			.flags	= IORESOURCE_MEM,
++			.name	= "io-memory",
++		},
++		{
++			.start	= 15,
++			.end	= 15,
++			.flags	= IORESOURCE_IRQ,
++			.name	= "irq",
++		},
++	};
++	struct pci_dev *pdev = mgbdev->pdev;
++	struct device *dev = &pdev->dev;
++	char clk_name[16];
++	u32 irq;
++	int rv, id;
++	resource_size_t mapbase = pci_resource_start(pdev, MGB4_MGB4_BAR_ID);
++
++	request_module("platform:xiic-i2c");
++
++	irq = xdma_get_user_irq(mgbdev->xdev, 15);
++	xdma_enable_user_irq(mgbdev->xdev, irq);
++
++	i2c_resources[0].parent = &pdev->resource[MGB4_MGB4_BAR_ID];
++	i2c_resources[0].start += mapbase;
++	i2c_resources[0].end += mapbase;
++	i2c_resources[1].start = irq;
++	i2c_resources[1].end = irq;
++
++	id = pci_dev_id(pdev);
++
++	/* create dummy clock required by the xiic-i2c adapter */
++	snprintf(clk_name, sizeof(clk_name), "xiic-i2c.%d", id);
++	mgbdev->i2c_clk = clk_hw_register_fixed_rate(NULL, clk_name, NULL,
++						     0, 125000000);
++	if (IS_ERR(mgbdev->i2c_clk)) {
++		dev_err(dev, "failed to register I2C clock\n");
++		return PTR_ERR(mgbdev->i2c_clk);
++	}
++	mgbdev->i2c_cl = clkdev_hw_create(mgbdev->i2c_clk, NULL, "xiic-i2c.%d",
++					  id);
++	if (!mgbdev->i2c_cl) {
++		dev_err(dev, "failed to register I2C clockdev\n");
++		rv = -ENOMEM;
++		goto err_clk;
++	}
++
++	mgbdev->i2c_pdev = platform_device_register_resndata(dev, "xiic-i2c",
++							     id, i2c_resources,
++							     ARRAY_SIZE(i2c_resources),
++							     NULL, 0);
++	if (IS_ERR(mgbdev->i2c_pdev)) {
++		dev_err(dev, "failed to register I2C device\n");
++		rv = PTR_ERR(mgbdev->i2c_pdev);
++		goto err_clkdev;
++	}
++
++	mgbdev->i2c_adap = get_i2c_adap(mgbdev->i2c_pdev);
++	if (!mgbdev->i2c_adap) {
++		dev_err(dev, "failed to get I2C adapter\n");
++		rv = -EINVAL;
++		goto err_pdev;
++	}
++
++	mutex_init(&mgbdev->i2c_lock);
++
++	return 0;
++
++err_pdev:
++	platform_device_unregister(mgbdev->i2c_pdev);
++err_clkdev:
++	clkdev_drop(mgbdev->i2c_cl);
++err_clk:
++	clk_hw_unregister(mgbdev->i2c_clk);
++
++	return rv;
++}
++
++static void free_i2c(struct mgb4_dev *mgbdev)
++{
++	put_device(&mgbdev->i2c_adap->dev);
++	platform_device_unregister(mgbdev->i2c_pdev);
++	clkdev_drop(mgbdev->i2c_cl);
++	clk_hw_unregister(mgbdev->i2c_clk);
++}
++
++static int init_sysfs(struct pci_dev *pdev)
++{
++	struct device_attribute **attr, **eattr;
++	int rv;
++
++	for (attr = mgb4_pci_attrs; *attr; attr++) {
++		rv = device_create_file(&pdev->dev, *attr);
++		if (rv < 0)
++			goto err_file;
++	}
++
++	return 0;
++
++err_file:
++	for (eattr = mgb4_pci_attrs; eattr != attr; eattr++)
++		device_remove_file(&pdev->dev, *eattr);
++
++	return rv;
++}
++
++static void free_sysfs(struct pci_dev *pdev)
++{
++	struct device_attribute **attr;
++
++	for (attr = mgb4_pci_attrs; *attr; attr++)
++		device_remove_file(&pdev->dev, *attr);
++}
++
++static int get_serial_number(struct mgb4_dev *mgbdev)
++{
++	struct device *dev = &mgbdev->pdev->dev;
++	struct mtd_info *mtd;
++	size_t rs;
++	int rv;
++
++	mgbdev->serial_number = 0;
++
++	mtd = get_mtd_device_nm(mgbdev->data_part_name);
++	if (IS_ERR(mtd)) {
++		dev_warn(dev, "failed to get data MTD device\n");
++		return -ENOENT;
++	}
++	rv = mtd_read(mtd, 0, sizeof(mgbdev->serial_number), &rs,
++		      (u_char *)&mgbdev->serial_number);
++	put_mtd_device(mtd);
++	if (rv < 0 || rs != sizeof(mgbdev->serial_number)) {
++		dev_warn(dev, "error reading MTD device\n");
++		return -EIO;
++	}
++
++	return 0;
++}
++
++static int get_module_version(struct mgb4_dev *mgbdev)
++{
++	struct device *dev = &mgbdev->pdev->dev;
++	struct mgb4_i2c_client extender;
++	s32 version;
++	u32 fw_version;
++	int rv;
++
++	rv = mgb4_i2c_init(&extender, mgbdev->i2c_adap, &extender_info, 8);
++	if (rv < 0) {
++		dev_err(dev, "failed to create extender I2C device\n");
++		return rv;
++	}
++	version = mgb4_i2c_read_byte(&extender, 0x00);
++	mgb4_i2c_free(&extender);
++	if (version < 0) {
++		dev_err(dev, "error reading module version\n");
++		return -EIO;
++	}
++
++	mgbdev->module_version = ~((u32)version) & 0xff;
++	if (!(MGB4_IS_FPDL3(mgbdev) || MGB4_IS_GMSL(mgbdev))) {
++		dev_err(dev, "unknown module type\n");
++		return -EINVAL;
++	}
++	fw_version = mgb4_read_reg(&mgbdev->video, 0xC4);
++	if (fw_version >> 24 != mgbdev->module_version >> 4) {
++		dev_err(dev, "module/firmware type mismatch\n");
++		return -EINVAL;
++	}
++
++	dev_info(dev, "%s module detected\n",
++		 MGB4_IS_FPDL3(mgbdev) ? "FPDL3" : "GMSL");
++
++	return 0;
++}
++
++static int map_regs(struct pci_dev *pdev, struct resource *res,
++		    struct mgb4_regs *regs)
++{
++	int rv;
++	resource_size_t mapbase = pci_resource_start(pdev, MGB4_MGB4_BAR_ID);
++
++	res->start += mapbase;
++	res->end += mapbase;
++
++	rv = mgb4_regs_map(res, regs);
++	if (rv < 0) {
++		dev_err(&pdev->dev, "failed to map %s registers\n", res->name);
++		return rv;
++	}
++
++	return 0;
++}
++
++static int init_xdma(struct mgb4_dev *mgbdev)
++{
++	struct xdma_platdata data;
++	struct resource res[2] = { 0 };
++	struct dma_slave_map *map;
++	struct pci_dev *pdev = mgbdev->pdev;
++	struct device *dev = &pdev->dev;
++	int i;
++
++	res[0].start = pci_resource_start(pdev, MGB4_XDMA_BAR_ID);
++	res[0].end = pci_resource_end(pdev, MGB4_XDMA_BAR_ID);
++	res[0].flags = IORESOURCE_MEM;
++	res[0].parent = &pdev->resource[MGB4_XDMA_BAR_ID];
++	res[1].start = pci_irq_vector(pdev, 0);
++	res[1].end = res[1].start + MGB4_VIN_DEVICES + MGB4_VOUT_DEVICES
++		     + MGB4_USER_IRQS - 1;
++	res[1].flags = IORESOURCE_IRQ;
++
++	data.max_dma_channels = MGB4_VIN_DEVICES + MGB4_VOUT_DEVICES;
++	data.device_map = mgbdev->slave_map;
++	data.device_map_cnt = MGB4_VIN_DEVICES + MGB4_VOUT_DEVICES;
++
++	for (i = 0; i < MGB4_VIN_DEVICES; i++) {
++		sprintf(mgbdev->channel_names[i], "c2h%d", i);
++		map = &data.device_map[i];
++		map->slave = mgbdev->channel_names[i];
++		map->devname = dev_name(dev);
++		map->param = XDMA_FILTER_PARAM(&c2h_chan_info);
++	}
++	for (i = 0; i < MGB4_VOUT_DEVICES; i++) {
++		sprintf(mgbdev->channel_names[i + MGB4_VIN_DEVICES], "h2c%d", i);
++		map = &data.device_map[i + MGB4_VIN_DEVICES];
++		map->slave = mgbdev->channel_names[i + MGB4_VIN_DEVICES];
++		map->devname = dev_name(dev);
++		map->param = XDMA_FILTER_PARAM(&h2c_chan_info);
++	}
++
++	mgbdev->xdev = platform_device_register_resndata(dev, "xdma",
++							 PLATFORM_DEVID_AUTO, res,
++							 2, &data, sizeof(data));
++	if (IS_ERR(mgbdev->xdev)) {
++		dev_err(dev, "failed to register XDMA device\n");
++		return PTR_ERR(mgbdev->xdev);
++	}
++
++	return 0;
++}
++
++static void free_xdma(struct mgb4_dev *mgbdev)
++{
++	platform_device_unregister(mgbdev->xdev);
++}
++
++static int mgb4_probe(struct pci_dev *pdev, const struct pci_device_id *id)
++{
++	int i, rv;
++	struct mgb4_dev *mgbdev;
++	struct resource video = {
++		.start	= 0x0,
++		.end	= 0x100,
++		.flags	= IORESOURCE_MEM,
++		.name	= "mgb4-video",
++	};
++	struct resource cmt = {
++		.start	= 0x1000,
++		.end	= 0x1800,
++		.flags	= IORESOURCE_MEM,
++		.name	= "mgb4-cmt",
++	};
++	int irqs = pci_msix_vec_count(pdev);
++
++	mgbdev = kzalloc(sizeof(*mgbdev), GFP_KERNEL);
++	if (!mgbdev)
++		return -ENOMEM;
++
++	mgbdev->pdev = pdev;
++	pci_set_drvdata(pdev, mgbdev);
++
++	/* PCIe related stuff */
++	rv = pci_enable_device(pdev);
++	if (rv) {
++		dev_err(&pdev->dev, "error enabling PCI device\n");
++		goto err_mgbdev;
++	}
++
++	rv = pcie_capability_set_word(pdev, PCI_EXP_DEVCTL, PCI_EXP_DEVCTL_RELAX_EN);
++	if (rv)
++		dev_warn(&pdev->dev, "error enabling PCIe relaxed ordering\n");
++	rv = pcie_capability_set_word(pdev, PCI_EXP_DEVCTL, PCI_EXP_DEVCTL_EXT_TAG);
++	if (rv)
++		dev_warn(&pdev->dev, "error enabling PCIe extended tag field\n");
++	rv = pcie_set_readrq(pdev, 512);
++	if (rv)
++		dev_warn(&pdev->dev, "error setting PCIe max. memory read size\n");
++	pci_set_master(pdev);
++
++	rv = pci_alloc_irq_vectors(pdev, irqs, irqs, PCI_IRQ_MSIX);
++	if (rv < 0) {
++		dev_err(&pdev->dev, "error allocating MSI-X IRQs\n");
++		goto err_enable_pci;
++	}
++
++	rv = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
++	if (rv) {
++		dev_err(&pdev->dev, "error setting DMA mask\n");
++		goto err_enable_pci;
++	}
++
++	/* DMA + IRQ engine */
++	rv = init_xdma(mgbdev);
++	if (rv)
++		goto err_alloc_irq;
++	rv = mgb4_dma_channel_init(mgbdev);
++	if (rv)
++		goto err_dma_chan;
++
++	/* mgb4 video registers */
++	rv = map_regs(pdev, &video, &mgbdev->video);
++	if (rv < 0)
++		goto err_dma_chan;
++	/* mgb4 cmt registers */
++	rv = map_regs(pdev, &cmt, &mgbdev->cmt);
++	if (rv < 0)
++		goto err_video_regs;
++
++	/* SPI FLASH */
++	rv = init_spi(mgbdev);
++	if (rv < 0)
++		goto err_cmt_regs;
++
++	/* I2C controller */
++	rv = init_i2c(mgbdev);
++	if (rv < 0)
++		goto err_spi;
++
++	/* PCI card related sysfs attributes */
++	rv = init_sysfs(pdev);
++	if (rv < 0)
++		goto err_i2c;
++
++#if IS_REACHABLE(CONFIG_HWMON)
++	/* HWmon (card temperature) */
++	mgbdev->hwmon_dev = hwmon_device_register_with_info(&pdev->dev, "mgb4",
++							    mgbdev,
++							    &temp_chip_info, 0);
++#endif
++
++#ifdef CONFIG_DEBUG_FS
++	mgbdev->debugfs = debugfs_create_dir(dev_name(&pdev->dev), NULL);
++#endif
++
++	/* Get card serial number. On systems without MTD flash support we may
++	 * get an error thus ignore the return value. An invalid serial number
++	 * should not break anything...
++	 */
++	if (get_serial_number(mgbdev) < 0)
++		dev_warn(&pdev->dev, "error reading card serial number\n");
++
++	/* Get module type. If no valid module is found, skip the video device
++	 * creation part but do not exit with error to allow flashing the card.
++	 */
++	rv = get_module_version(mgbdev);
++	if (rv < 0)
++		goto exit;
++
++	/* Video input v4l2 devices */
++	for (i = 0; i < MGB4_VIN_DEVICES; i++)
++		mgbdev->vin[i] = mgb4_vin_create(mgbdev, i);
++
++	/* Video output v4l2 devices */
++	for (i = 0; i < MGB4_VOUT_DEVICES; i++)
++		mgbdev->vout[i] = mgb4_vout_create(mgbdev, i);
++
++	/* Triggers */
++	mgbdev->indio_dev = mgb4_trigger_create(mgbdev);
++
++exit:
++	flashid++;
++
++	return 0;
++
++err_i2c:
++	free_i2c(mgbdev);
++err_spi:
++	free_spi(mgbdev);
++err_cmt_regs:
++	mgb4_regs_free(&mgbdev->cmt);
++err_video_regs:
++	mgb4_regs_free(&mgbdev->video);
++err_dma_chan:
++	mgb4_dma_channel_free(mgbdev);
++	free_xdma(mgbdev);
++err_alloc_irq:
++	pci_disable_msix(pdev);
++err_enable_pci:
++	pci_disable_device(pdev);
++err_mgbdev:
++	kfree(mgbdev);
++
++	return rv;
++}
++
++static void mgb4_remove(struct pci_dev *pdev)
++{
++	struct mgb4_dev *mgbdev = pci_get_drvdata(pdev);
++	int i;
++
++#ifdef CONFIG_DEBUG_FS
++	debugfs_remove_recursive(mgbdev->debugfs);
++#endif
++#if IS_REACHABLE(CONFIG_HWMON)
++	hwmon_device_unregister(mgbdev->hwmon_dev);
++#endif
++
++	if (mgbdev->indio_dev)
++		mgb4_trigger_free(mgbdev->indio_dev);
++
++	for (i = 0; i < MGB4_VOUT_DEVICES; i++)
++		if (mgbdev->vout[i])
++			mgb4_vout_free(mgbdev->vout[i]);
++	for (i = 0; i < MGB4_VIN_DEVICES; i++)
++		if (mgbdev->vin[i])
++			mgb4_vin_free(mgbdev->vin[i]);
++
++	free_sysfs(mgbdev->pdev);
++	free_spi(mgbdev);
++	free_i2c(mgbdev);
++	mgb4_regs_free(&mgbdev->video);
++	mgb4_regs_free(&mgbdev->cmt);
++
++	mgb4_dma_channel_free(mgbdev);
++	free_xdma(mgbdev);
++
++	pci_disable_msix(mgbdev->pdev);
++	pci_disable_device(mgbdev->pdev);
++
++	kfree(mgbdev);
++}
++
++static const struct pci_device_id mgb4_pci_ids[] = {
++	{ PCI_DEVICE(0x1ed8, 0x0101), },
++	{ 0, }
++};
++MODULE_DEVICE_TABLE(pci, mgb4_pci_ids);
++
++static struct pci_driver mgb4_pci_driver = {
++	.name = KBUILD_MODNAME,
++	.id_table = mgb4_pci_ids,
++	.probe = mgb4_probe,
++	.remove = mgb4_remove,
++};
++
++module_pci_driver(mgb4_pci_driver);
++
++MODULE_AUTHOR("Digiteq Automotive s.r.o.");
++MODULE_DESCRIPTION("Digiteq Automotive MGB4 Driver");
++MODULE_LICENSE("GPL");
++MODULE_SOFTDEP("pre: platform:xiic-i2c platform:xilinx_spi spi-nor");
+diff --git a/drivers/media/pci/mgb4/mgb4_core.h b/drivers/media/pci/mgb4/mgb4_core.h
+new file mode 100644
+index 000000000000..65445c41ad56
+--- /dev/null
++++ b/drivers/media/pci/mgb4/mgb4_core.h
+@@ -0,0 +1,72 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2021-2023 Digiteq Automotive
++ *     author: Martin Tuma <martin.tuma@digiteqautomotive.com>
++ */
++
++#ifndef __MGB4_CORE_H__
++#define __MGB4_CORE_H__
++
++#include <linux/spi/flash.h>
++#include <linux/mtd/partitions.h>
++#include <linux/mutex.h>
++#include <linux/dmaengine.h>
++#include "mgb4_regs.h"
++
++#define MGB4_VIN_DEVICES  2
++#define MGB4_VOUT_DEVICES 2
++
++#define MGB4_MGB4_BAR_ID  0
++#define MGB4_XDMA_BAR_ID  1
++
++#define MGB4_IS_GMSL(mgbdev) \
++	((mgbdev)->module_version >> 4 == 2)
++#define MGB4_IS_FPDL3(mgbdev) \
++	((mgbdev)->module_version >> 4 == 1)
++
++struct mgb4_dma_channel {
++	struct dma_chan *chan;
++	struct completion req_compl;
++};
++
++struct mgb4_dev {
++	struct pci_dev *pdev;
++	struct platform_device *xdev;
++	struct mgb4_vin_dev *vin[MGB4_VIN_DEVICES];
++	struct mgb4_vout_dev *vout[MGB4_VOUT_DEVICES];
++
++	struct mgb4_dma_channel c2h_chan[MGB4_VIN_DEVICES];
++	struct mgb4_dma_channel h2c_chan[MGB4_VOUT_DEVICES];
++	struct dma_slave_map slave_map[MGB4_VIN_DEVICES + MGB4_VOUT_DEVICES];
++
++	struct mgb4_regs video;
++	struct mgb4_regs cmt;
++
++	struct clk_hw *i2c_clk;
++	struct clk_lookup *i2c_cl;
++	struct platform_device *i2c_pdev;
++	struct i2c_adapter *i2c_adap;
++	struct mutex i2c_lock; /* I2C bus access lock */
++
++	struct platform_device *spi_pdev;
++	struct flash_platform_data flash_data;
++	struct mtd_partition partitions[2];
++	char flash_name[16];
++	char fw_part_name[16];
++	char data_part_name[16];
++	char channel_names[MGB4_VIN_DEVICES + MGB4_VOUT_DEVICES][16];
++
++	struct iio_dev *indio_dev;
++#if IS_REACHABLE(CONFIG_HWMON)
++	struct device *hwmon_dev;
++#endif
++
++	u8 module_version;
++	u32 serial_number;
++
++#ifdef CONFIG_DEBUG_FS
++	struct dentry *debugfs;
++#endif
++};
++
++#endif
+diff --git a/drivers/media/pci/mgb4/mgb4_dma.c b/drivers/media/pci/mgb4/mgb4_dma.c
+new file mode 100644
+index 000000000000..cae888e6504b
+--- /dev/null
++++ b/drivers/media/pci/mgb4/mgb4_dma.c
+@@ -0,0 +1,123 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2021-2022 Digiteq Automotive
++ *     author: Martin Tuma <martin.tuma@digiteqautomotive.com>
++ *
++ * This module handles the DMA transfers. A standard dmaengine API as provided
++ * by the XDMA module is used.
++ */
++
++#include <linux/pci.h>
++#include <linux/dma-direction.h>
++#include "mgb4_core.h"
++#include "mgb4_dma.h"
++
++static void chan_irq(void *param)
++{
++	struct mgb4_dma_channel *chan = param;
++
++	complete(&chan->req_compl);
++}
++
++int mgb4_dma_transfer(struct mgb4_dev *mgbdev, u32 channel, bool write,
++		      u64 paddr, struct sg_table *sgt)
++{
++	struct dma_slave_config cfg;
++	struct mgb4_dma_channel *chan;
++	struct dma_async_tx_descriptor *tx;
++	struct pci_dev *pdev = mgbdev->pdev;
++	int ret;
++
++	memset(&cfg, 0, sizeof(cfg));
++
++	if (write) {
++		cfg.direction = DMA_MEM_TO_DEV;
++		cfg.dst_addr = paddr;
++		cfg.dst_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
++		chan = &mgbdev->h2c_chan[channel];
++	} else {
++		cfg.direction = DMA_DEV_TO_MEM;
++		cfg.src_addr = paddr;
++		cfg.src_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
++		chan = &mgbdev->c2h_chan[channel];
++	}
++
++	ret = dmaengine_slave_config(chan->chan, &cfg);
++	if (ret) {
++		dev_err(&pdev->dev, "failed to config dma: %d\n", ret);
++		return ret;
++	}
++
++	tx = dmaengine_prep_slave_sg(chan->chan, sgt->sgl, sgt->nents,
++				     cfg.direction, 0);
++	if (!tx) {
++		dev_err(&pdev->dev, "failed to prep slave sg\n");
++		return -EIO;
++	}
++
++	tx->callback = chan_irq;
++	tx->callback_param = chan;
++
++	ret = dma_submit_error(dmaengine_submit(tx));
++	if (ret) {
++		dev_err(&pdev->dev, "failed to submit sg\n");
++		return -EIO;
++	}
++
++	dma_async_issue_pending(chan->chan);
++
++	if (!wait_for_completion_timeout(&chan->req_compl,
++					 msecs_to_jiffies(10000))) {
++		dev_err(&pdev->dev, "dma timeout\n");
++		dmaengine_terminate_sync(chan->chan);
++		return -EIO;
++	}
++
++	return 0;
++}
++
++int mgb4_dma_channel_init(struct mgb4_dev *mgbdev)
++{
++	int i, ret;
++	char name[16];
++	struct pci_dev *pdev = mgbdev->pdev;
++
++	for (i = 0; i < MGB4_VIN_DEVICES; i++) {
++		sprintf(name, "c2h%d", i);
++		mgbdev->c2h_chan[i].chan = dma_request_chan(&pdev->dev, name);
++		if (IS_ERR(mgbdev->c2h_chan[i].chan)) {
++			dev_err(&pdev->dev, "failed to initialize %s", name);
++			ret = PTR_ERR(mgbdev->c2h_chan[i].chan);
++			mgbdev->c2h_chan[i].chan = NULL;
++			return ret;
++		}
++		init_completion(&mgbdev->c2h_chan[i].req_compl);
++	}
++	for (i = 0; i < MGB4_VOUT_DEVICES; i++) {
++		sprintf(name, "h2c%d", i);
++		mgbdev->h2c_chan[i].chan = dma_request_chan(&pdev->dev, name);
++		if (IS_ERR(mgbdev->h2c_chan[i].chan)) {
++			dev_err(&pdev->dev, "failed to initialize %s", name);
++			ret = PTR_ERR(mgbdev->h2c_chan[i].chan);
++			mgbdev->h2c_chan[i].chan = NULL;
++			return ret;
++		}
++		init_completion(&mgbdev->h2c_chan[i].req_compl);
++	}
++
++	return 0;
++}
++
++void mgb4_dma_channel_free(struct mgb4_dev *mgbdev)
++{
++	int i;
++
++	for (i = 0; i < MGB4_VIN_DEVICES; i++) {
++		if (mgbdev->c2h_chan[i].chan)
++			dma_release_channel(mgbdev->c2h_chan[i].chan);
++	}
++	for (i = 0; i < MGB4_VOUT_DEVICES; i++) {
++		if (mgbdev->h2c_chan[i].chan)
++			dma_release_channel(mgbdev->h2c_chan[i].chan);
++	}
++}
+diff --git a/drivers/media/pci/mgb4/mgb4_dma.h b/drivers/media/pci/mgb4/mgb4_dma.h
+new file mode 100644
+index 000000000000..4ebc2b1ce9b7
+--- /dev/null
++++ b/drivers/media/pci/mgb4/mgb4_dma.h
+@@ -0,0 +1,18 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2021-2023 Digiteq Automotive
++ *     author: Martin Tuma <martin.tuma@digiteqautomotive.com>
++ */
++
++#ifndef __MGB4_DMA_H__
++#define __MGB4_DMA_H__
++
++#include "mgb4_core.h"
++
++int mgb4_dma_channel_init(struct mgb4_dev *mgbdev);
++void mgb4_dma_channel_free(struct mgb4_dev *mgbdev);
++
++int mgb4_dma_transfer(struct mgb4_dev *mgbdev, u32 channel, bool write,
++		      u64 paddr, struct sg_table *sgt);
++
++#endif
+diff --git a/drivers/media/pci/mgb4/mgb4_i2c.c b/drivers/media/pci/mgb4/mgb4_i2c.c
+new file mode 100644
+index 000000000000..2697b67e290e
+--- /dev/null
++++ b/drivers/media/pci/mgb4/mgb4_i2c.c
+@@ -0,0 +1,140 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2021-2023 Digiteq Automotive
++ *     author: Martin Tuma <martin.tuma@digiteqautomotive.com>
++ *
++ * The i2c module unifies the I2C access to the serializes/deserializes. The I2C
++ * chips on the GMSL module use 16b addressing, the FPDL3 chips use standard
++ * 8b addressing.
++ */
++
++#include "mgb4_i2c.h"
++
++static int read_r16(struct i2c_client *client, u16 reg, u8 *val, int len)
++{
++	int ret;
++	u8 buf[2];
++	struct i2c_msg msg[2] = {
++		{
++			.addr = client->addr,
++			.flags = 0,
++			.len = 2,
++			.buf = buf,
++		}, {
++			.addr = client->addr,
++			.flags = I2C_M_RD,
++			.len = len,
++			.buf = val,
++		}
++	};
++
++	buf[0] = (reg >> 8) & 0xff;
++	buf[1] = (reg >> 0) & 0xff;
++
++	ret = i2c_transfer(client->adapter, msg, 2);
++	if (ret < 0)
++		return ret;
++	else if (ret != 2)
++		return -EREMOTEIO;
++	else
++		return 0;
++}
++
++static int write_r16(struct i2c_client *client, u16 reg, const u8 *val, int len)
++{
++	int ret;
++	u8 buf[4];
++	struct i2c_msg msg[1] = {
++		{
++			.addr = client->addr,
++			.flags = 0,
++			.len = 2 + len,
++			.buf = buf,
++		}
++	};
++
++	if (2 + len > sizeof(buf))
++		return -EINVAL;
++
++	buf[0] = (reg >> 8) & 0xff;
++	buf[1] = (reg >> 0) & 0xff;
++	memcpy(&buf[2], val, len);
++
++	ret = i2c_transfer(client->adapter, msg, 1);
++	if (ret < 0)
++		return ret;
++	else if (ret != 1)
++		return -EREMOTEIO;
++	else
++		return 0;
++}
++
++int mgb4_i2c_init(struct mgb4_i2c_client *client, struct i2c_adapter *adap,
++		  struct i2c_board_info const *info, int addr_size)
++{
++	client->client = i2c_new_client_device(adap, info);
++	if (IS_ERR(client->client))
++		return PTR_ERR(client->client);
++
++	client->addr_size = addr_size;
++
++	return 0;
++}
++
++void mgb4_i2c_free(struct mgb4_i2c_client *client)
++{
++	i2c_unregister_device(client->client);
++}
++
++s32 mgb4_i2c_read_byte(struct mgb4_i2c_client *client, u16 reg)
++{
++	int ret;
++	u8 b;
++
++	if (client->addr_size == 8)
++		return i2c_smbus_read_byte_data(client->client, reg);
++
++	ret = read_r16(client->client, reg, &b, 1);
++	if (ret < 0)
++		return ret;
++
++	return (s32)b;
++}
++
++s32 mgb4_i2c_write_byte(struct mgb4_i2c_client *client, u16 reg, u8 val)
++{
++	if (client->addr_size == 8)
++		return i2c_smbus_write_byte_data(client->client, reg, val);
++	else
++		return write_r16(client->client, reg, &val, 1);
++}
++
++s32 mgb4_i2c_mask_byte(struct mgb4_i2c_client *client, u16 reg, u8 mask, u8 val)
++{
++	s32 ret;
++
++	if (mask != 0xFF) {
++		ret = mgb4_i2c_read_byte(client, reg);
++		if (ret < 0)
++			return ret;
++		val |= (u8)ret & ~mask;
++	}
++
++	return mgb4_i2c_write_byte(client, reg, val);
++}
++
++int mgb4_i2c_configure(struct mgb4_i2c_client *client,
++		       const struct mgb4_i2c_kv *values, size_t count)
++{
++	size_t i;
++	s32 res;
++
++	for (i = 0; i < count; i++) {
++		res = mgb4_i2c_mask_byte(client, values[i].reg, values[i].mask,
++					 values[i].val);
++		if (res < 0)
++			return res;
++	}
++
++	return 0;
++}
+diff --git a/drivers/media/pci/mgb4/mgb4_i2c.h b/drivers/media/pci/mgb4/mgb4_i2c.h
+new file mode 100644
+index 000000000000..fac6a1634474
+--- /dev/null
++++ b/drivers/media/pci/mgb4/mgb4_i2c.h
+@@ -0,0 +1,35 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2021-2023 Digiteq Automotive
++ *     author: Martin Tuma <martin.tuma@digiteqautomotive.com>
++ */
++
++#ifndef __MGB4_I2C_H__
++#define __MGB4_I2C_H__
++
++#include <linux/i2c.h>
++
++struct mgb4_i2c_client {
++	struct i2c_client *client;
++	int addr_size;
++};
++
++struct mgb4_i2c_kv {
++	u16 reg;
++	u8 mask;
++	u8 val;
++};
++
++int mgb4_i2c_init(struct mgb4_i2c_client *client, struct i2c_adapter *adap,
++		  struct i2c_board_info const *info, int addr_size);
++void mgb4_i2c_free(struct mgb4_i2c_client *client);
++
++s32 mgb4_i2c_read_byte(struct mgb4_i2c_client *client, u16 reg);
++s32 mgb4_i2c_write_byte(struct mgb4_i2c_client *client, u16 reg, u8 val);
++s32 mgb4_i2c_mask_byte(struct mgb4_i2c_client *client, u16 reg, u8 mask,
++		       u8 val);
++
++int mgb4_i2c_configure(struct mgb4_i2c_client *client,
++		       const struct mgb4_i2c_kv *values, size_t count);
++
++#endif
+diff --git a/drivers/media/pci/mgb4/mgb4_io.h b/drivers/media/pci/mgb4/mgb4_io.h
+new file mode 100644
+index 000000000000..8698db1be4a9
+--- /dev/null
++++ b/drivers/media/pci/mgb4/mgb4_io.h
+@@ -0,0 +1,33 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2021-2022 Digiteq Automotive
++ *     author: Martin Tuma <martin.tuma@digiteqautomotive.com>
++ */
++
++#ifndef __MGB4_IO_H__
++#define __MGB4_IO_H__
++
++#include <media/v4l2-dev.h>
++
++#define MGB4_DEFAULT_WIDTH     1280
++#define MGB4_DEFAULT_HEIGHT    640
++#define MGB4_DEFAULT_PERIOD    (125000000 / 60)
++
++/* Register access error indication */
++#define MGB4_ERR_NO_REG        0xFFFFFFFE
++/* Frame buffer addresses greater than 0xFFFFFFFA indicate HW errors */
++#define MGB4_ERR_QUEUE_TIMEOUT 0xFFFFFFFD
++#define MGB4_ERR_QUEUE_EMPTY   0xFFFFFFFC
++#define MGB4_ERR_QUEUE_FULL    0xFFFFFFFB
++
++struct mgb4_frame_buffer {
++	struct vb2_v4l2_buffer vb;
++	struct list_head list;
++};
++
++static inline struct mgb4_frame_buffer *to_frame_buffer(struct vb2_v4l2_buffer *vbuf)
++{
++	return container_of(vbuf, struct mgb4_frame_buffer, vb);
++}
++
++#endif
+diff --git a/drivers/media/pci/mgb4/mgb4_regs.c b/drivers/media/pci/mgb4/mgb4_regs.c
+new file mode 100644
+index 000000000000..53d4e4503a74
+--- /dev/null
++++ b/drivers/media/pci/mgb4/mgb4_regs.c
+@@ -0,0 +1,30 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2021-2022 Digiteq Automotive
++ *     author: Martin Tuma <martin.tuma@digiteqautomotive.com>
++ */
++
++#include <linux/ioport.h>
++#include "mgb4_regs.h"
++
++int mgb4_regs_map(struct resource *res, struct mgb4_regs *regs)
++{
++	regs->mapbase = res->start;
++	regs->mapsize = res->end - res->start;
++
++	if (!request_mem_region(regs->mapbase, regs->mapsize, res->name))
++		return -EINVAL;
++	regs->membase = ioremap(regs->mapbase, regs->mapsize);
++	if (!regs->membase) {
++		release_mem_region(regs->mapbase, regs->mapsize);
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++void mgb4_regs_free(struct mgb4_regs *regs)
++{
++	iounmap(regs->membase);
++	release_mem_region(regs->mapbase, regs->mapsize);
++}
+diff --git a/drivers/media/pci/mgb4/mgb4_regs.h b/drivers/media/pci/mgb4/mgb4_regs.h
+new file mode 100644
+index 000000000000..c45180890730
+--- /dev/null
++++ b/drivers/media/pci/mgb4/mgb4_regs.h
+@@ -0,0 +1,35 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2021-2022 Digiteq Automotive
++ *     author: Martin Tuma <martin.tuma@digiteqautomotive.com>
++ */
++
++#ifndef __MGB4_REGS_H__
++#define __MGB4_REGS_H__
++
++#include <linux/io.h>
++
++struct mgb4_regs {
++	resource_size_t mapbase;
++	resource_size_t mapsize;
++	void __iomem *membase;
++};
++
++#define mgb4_write_reg(regs, offset, val) \
++	iowrite32(val, (regs)->membase + (offset))
++#define  mgb4_read_reg(regs, offset) \
++	ioread32((regs)->membase + (offset))
++
++static inline void mgb4_mask_reg(struct mgb4_regs *regs, u32 reg, u32 mask,
++				 u32 val)
++{
++	u32 ret = mgb4_read_reg(regs, reg);
++
++	val |= ret & ~mask;
++	mgb4_write_reg(regs, reg, val);
++}
++
++int mgb4_regs_map(struct resource *res, struct mgb4_regs *regs);
++void mgb4_regs_free(struct mgb4_regs *regs);
++
++#endif
+diff --git a/drivers/media/pci/mgb4/mgb4_sysfs.h b/drivers/media/pci/mgb4/mgb4_sysfs.h
+new file mode 100644
+index 000000000000..2b42a8ba37f7
+--- /dev/null
++++ b/drivers/media/pci/mgb4/mgb4_sysfs.h
+@@ -0,0 +1,18 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2021-2022 Digiteq Automotive
++ *     author: Martin Tuma <martin.tuma@digiteqautomotive.com>
++ */
++
++#ifndef __MGB4_SYSFS_H__
++#define __MGB4_SYSFS_H__
++
++#include <linux/sysfs.h>
++
++extern struct device_attribute *mgb4_pci_attrs[];
++extern struct device_attribute *mgb4_fpdl3_in_attrs[];
++extern struct device_attribute *mgb4_gmsl_in_attrs[];
++extern struct device_attribute *mgb4_fpdl3_out_attrs[];
++extern struct device_attribute *mgb4_gmsl_out_attrs[];
++
++#endif
+diff --git a/drivers/media/pci/mgb4/mgb4_sysfs_in.c b/drivers/media/pci/mgb4/mgb4_sysfs_in.c
+new file mode 100644
+index 000000000000..4fe29158521b
+--- /dev/null
++++ b/drivers/media/pci/mgb4/mgb4_sysfs_in.c
+@@ -0,0 +1,757 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2021-2023 Digiteq Automotive
++ *     author: Martin Tuma <martin.tuma@digiteqautomotive.com>
++ *
++ * This module handles all the sysfs info/configuration that is related to the
++ * v4l2 input devices.
++ */
++
++#include <linux/device.h>
++#include "mgb4_core.h"
++#include "mgb4_i2c.h"
++#include "mgb4_vin.h"
++#include "mgb4_cmt.h"
++#include "mgb4_sysfs.h"
++
++/* Common for both FPDL3 and GMSL */
++
++static ssize_t read_input_id(struct device *dev,
++			     struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++
++	return sprintf(buf, "%d\n", vindev->config->id);
++}
++
++static ssize_t read_oldi_lane_width(struct device *dev,
++				    struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++	struct mgb4_dev *mgbdev = vindev->mgbdev;
++	u16 i2c_reg;
++	u8 i2c_mask, i2c_single_val, i2c_dual_val;
++	u32 config;
++	int ret;
++
++	i2c_reg = MGB4_IS_GMSL(mgbdev) ? 0x1CE : 0x49;
++	i2c_mask = MGB4_IS_GMSL(mgbdev) ? 0x0E : 0x03;
++	i2c_single_val = MGB4_IS_GMSL(mgbdev) ? 0x00 : 0x02;
++	i2c_dual_val = MGB4_IS_GMSL(mgbdev) ? 0x0E : 0x00;
++
++	mutex_lock(&mgbdev->i2c_lock);
++	ret = mgb4_i2c_read_byte(&vindev->deser, i2c_reg);
++	mutex_unlock(&mgbdev->i2c_lock);
++	if (ret < 0)
++		return -EIO;
++
++	config = mgb4_read_reg(&mgbdev->video, vindev->config->regs.config);
++
++	if (((config & (1U << 9)) && ((ret & i2c_mask) != i2c_dual_val)) ||
++	    (!(config & (1U << 9)) && ((ret & i2c_mask) != i2c_single_val))) {
++		dev_err(dev, "I2C/FPGA register value mismatch\n");
++		return -EINVAL;
++	}
++
++	return sprintf(buf, "%s\n", config & (1U << 9) ? "1" : "0");
++}
++
++static ssize_t write_oldi_lane_width(struct device *dev,
++				     struct device_attribute *attr,
++				     const char *buf, size_t count)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++	struct mgb4_dev *mgbdev = vindev->mgbdev;
++	u32 fpga_data;
++	u16 i2c_reg;
++	u8 i2c_mask, i2c_data;
++	unsigned long val;
++	int ret;
++
++	ret = kstrtoul(buf, 10, &val);
++	if (ret)
++		return ret;
++
++	switch (val) {
++	case 0: /* single */
++		fpga_data = 0;
++		i2c_data = MGB4_IS_GMSL(mgbdev) ? 0x00 : 0x02;
++		break;
++	case 1: /* dual */
++		fpga_data = 1U << 9;
++		i2c_data = MGB4_IS_GMSL(mgbdev) ? 0x0E : 0x00;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	i2c_reg = MGB4_IS_GMSL(mgbdev) ? 0x1CE : 0x49;
++	i2c_mask = MGB4_IS_GMSL(mgbdev) ? 0x0E : 0x03;
++
++	mutex_lock(&mgbdev->i2c_lock);
++	ret = mgb4_i2c_mask_byte(&vindev->deser, i2c_reg, i2c_mask, i2c_data);
++	mutex_unlock(&mgbdev->i2c_lock);
++	if (ret < 0)
++		return -EIO;
++	mgb4_mask_reg(&mgbdev->video, vindev->config->regs.config, 1U << 9,
++		      fpga_data);
++	if (MGB4_IS_GMSL(mgbdev)) {
++		/* reset input link */
++		mutex_lock(&mgbdev->i2c_lock);
++		ret = mgb4_i2c_mask_byte(&vindev->deser, 0x10, 1U << 5, 1U << 5);
++		mutex_unlock(&mgbdev->i2c_lock);
++		if (ret < 0)
++			return -EIO;
++	}
++
++	return count;
++}
++
++static ssize_t read_color_mapping(struct device *dev,
++				  struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++	u32 config = mgb4_read_reg(&vindev->mgbdev->video,
++	  vindev->config->regs.config);
++
++	return sprintf(buf, "%s\n", config & (1U << 8) ? "0" : "1");
++}
++
++static ssize_t write_color_mapping(struct device *dev,
++				   struct device_attribute *attr,
++				   const char *buf, size_t count)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++	u32 fpga_data;
++	unsigned long val;
++	int ret;
++
++	ret = kstrtoul(buf, 10, &val);
++	if (ret)
++		return ret;
++
++	switch (val) {
++	case 0: /* OLDI/JEIDA */
++		fpga_data = (1U << 8);
++		break;
++	case 1: /* SPWG/VESA */
++		fpga_data = 0;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	mgb4_mask_reg(&vindev->mgbdev->video, vindev->config->regs.config,
++		      1U << 8, fpga_data);
++
++	return count;
++}
++
++static ssize_t read_link_status(struct device *dev,
++				struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++	u32 status = mgb4_read_reg(&vindev->mgbdev->video,
++				   vindev->config->regs.status);
++
++	return sprintf(buf, "%s\n", status & (1U << 2) ? "1" : "0");
++}
++
++static ssize_t read_stream_status(struct device *dev,
++				  struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++	u32 status = mgb4_read_reg(&vindev->mgbdev->video,
++				   vindev->config->regs.status);
++
++	return sprintf(buf, "%s\n", ((status & (1 << 14)) &&
++		       (status & (1 << 2)) && (status & (3 << 9))) ? "1" : "0");
++}
++
++static ssize_t read_video_width(struct device *dev,
++				struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++	u32 config = mgb4_read_reg(&vindev->mgbdev->video,
++	  vindev->config->regs.resolution);
++
++	return sprintf(buf, "%u\n", config >> 16);
++}
++
++static ssize_t read_video_height(struct device *dev,
++				 struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++	u32 config = mgb4_read_reg(&vindev->mgbdev->video,
++	  vindev->config->regs.resolution);
++
++	return sprintf(buf, "%u\n", config & 0xFFFF);
++}
++
++static ssize_t read_hsync_status(struct device *dev,
++				 struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++	u32 status = mgb4_read_reg(&vindev->mgbdev->video,
++				   vindev->config->regs.status);
++	u32 res;
++
++	if (!(status & (1U << 11)))
++		res = 0x02; // not available
++	else if (status & (1U << 12))
++		res = 0x01; // active high
++	else
++		res = 0x00; // active low
++
++	return sprintf(buf, "%u\n", res);
++}
++
++static ssize_t read_vsync_status(struct device *dev,
++				 struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++	u32 status = mgb4_read_reg(&vindev->mgbdev->video,
++				   vindev->config->regs.status);
++	u32 res;
++
++	if (!(status & (1U << 11)))
++		res = 0x02; // not available
++	else if (status & (1U << 13))
++		res = 0x01; // active high
++	else
++		res = 0x00; // active low
++
++	return sprintf(buf, "%u\n", res);
++}
++
++static ssize_t read_hsync_gap(struct device *dev, struct device_attribute *attr,
++			      char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++	u32 sync = mgb4_read_reg(&vindev->mgbdev->video,
++				 vindev->config->regs.sync);
++
++	return sprintf(buf, "%u\n", sync >> 16);
++}
++
++static ssize_t write_hsync_gap(struct device *dev,
++			       struct device_attribute *attr, const char *buf,
++			       size_t count)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++	unsigned long val;
++	int ret;
++
++	ret = kstrtoul(buf, 10, &val);
++	if (ret)
++		return ret;
++	if (val > 0xFFFF)
++		return -EINVAL;
++
++	mgb4_mask_reg(&vindev->mgbdev->video, vindev->config->regs.sync,
++		      0xFFFF0000, val << 16);
++
++	return count;
++}
++
++static ssize_t read_vsync_gap(struct device *dev, struct device_attribute *attr,
++			      char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++	u32 sync = mgb4_read_reg(&vindev->mgbdev->video,
++				 vindev->config->regs.sync);
++
++	return sprintf(buf, "%u\n", sync & 0xFFFF);
++}
++
++static ssize_t write_vsync_gap(struct device *dev,
++			       struct device_attribute *attr, const char *buf,
++			       size_t count)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++	unsigned long val;
++	int ret;
++
++	ret = kstrtoul(buf, 10, &val);
++	if (ret)
++		return ret;
++	if (val > 0xFFFF)
++		return -EINVAL;
++
++	mgb4_mask_reg(&vindev->mgbdev->video, vindev->config->regs.sync, 0xFFFF,
++		      val);
++
++	return count;
++}
++
++static ssize_t read_pclk_frequency(struct device *dev,
++				   struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++	u32 freq = mgb4_read_reg(&vindev->mgbdev->video,
++				 vindev->config->regs.pclk);
++
++	return sprintf(buf, "%u\n", freq);
++}
++
++static ssize_t read_hsync_width(struct device *dev,
++				struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++	u32 sig = mgb4_read_reg(&vindev->mgbdev->video,
++				vindev->config->regs.signal);
++
++	return sprintf(buf, "%u\n", (sig & 0x00FF0000) >> 16);
++}
++
++static ssize_t read_vsync_width(struct device *dev,
++				struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++	u32 sig = mgb4_read_reg(&vindev->mgbdev->video,
++				vindev->config->regs.signal2);
++
++	return sprintf(buf, "%u\n", (sig & 0x00FF0000) >> 16);
++}
++
++static ssize_t read_hback_porch(struct device *dev,
++				struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++	u32 sig = mgb4_read_reg(&vindev->mgbdev->video,
++				vindev->config->regs.signal);
++
++	return sprintf(buf, "%u\n", (sig & 0x0000FF00) >> 8);
++}
++
++static ssize_t read_hfront_porch(struct device *dev,
++				 struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++	u32 sig = mgb4_read_reg(&vindev->mgbdev->video,
++				vindev->config->regs.signal);
++
++	return sprintf(buf, "%u\n", (sig & 0x000000FF));
++}
++
++static ssize_t read_vback_porch(struct device *dev,
++				struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++	u32 sig = mgb4_read_reg(&vindev->mgbdev->video,
++				vindev->config->regs.signal2);
++
++	return sprintf(buf, "%u\n", (sig & 0x0000FF00) >> 8);
++}
++
++static ssize_t read_vfront_porch(struct device *dev,
++				 struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++	u32 sig = mgb4_read_reg(&vindev->mgbdev->video,
++				vindev->config->regs.signal2);
++
++	return sprintf(buf, "%u\n", (sig & 0x000000FF));
++}
++
++static ssize_t read_frequency_range(struct device *dev,
++				    struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++
++	return sprintf(buf, "%d\n", vindev->freq_range);
++}
++
++static ssize_t write_frequency_range(struct device *dev,
++				     struct device_attribute *attr,
++				     const char *buf, size_t count)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++	unsigned long val, flags;
++	int ret;
++
++	ret = kstrtoul(buf, 10, &val);
++	if (ret)
++		return ret;
++	if (val > 1)
++		return -EINVAL;
++
++	spin_lock_irqsave(&vindev->vdev.fh_lock, flags);
++	if (!list_empty(&vindev->vdev.fh_list)) {
++		spin_unlock_irqrestore(&vindev->vdev.fh_lock, flags);
++		return -EBUSY;
++	}
++
++	mgb4_cmt_set_vin_freq_range(vindev, val);
++	vindev->freq_range = val;
++
++	spin_unlock_irqrestore(&vindev->vdev.fh_lock, flags);
++
++	return count;
++}
++
++/* FPDL3 only */
++
++static ssize_t read_fpdl3_input_width(struct device *dev,
++				      struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++	s32 ret;
++
++	mutex_lock(&vindev->mgbdev->i2c_lock);
++	ret = mgb4_i2c_read_byte(&vindev->deser, 0x34);
++	mutex_unlock(&vindev->mgbdev->i2c_lock);
++	if (ret < 0)
++		return -EIO;
++
++	switch ((u8)ret & 0x18) {
++	case 0:
++		return sprintf(buf, "0\n");
++	case 0x10:
++		return sprintf(buf, "1\n");
++	case 0x08:
++		return sprintf(buf, "2\n");
++	default:
++		return -EINVAL;
++	}
++}
++
++static ssize_t write_fpdl3_input_width(struct device *dev,
++				       struct device_attribute *attr,
++				       const char *buf, size_t count)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++	u8 i2c_data;
++	unsigned long val;
++	int ret;
++
++	ret = kstrtoul(buf, 10, &val);
++	if (ret)
++		return ret;
++
++	switch (val) {
++	case 0: /* auto */
++		i2c_data = 0x00;
++		break;
++	case 1: /* single */
++		i2c_data = 0x10;
++		break;
++	case 2: /* dual */
++		i2c_data = 0x08;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	mutex_lock(&vindev->mgbdev->i2c_lock);
++	ret = mgb4_i2c_mask_byte(&vindev->deser, 0x34, 0x18, i2c_data);
++	mutex_unlock(&vindev->mgbdev->i2c_lock);
++	if (ret < 0)
++		return -EIO;
++
++	return count;
++}
++
++/* GMSL only */
++
++static ssize_t read_gmsl_mode(struct device *dev,
++			      struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++	s32 r1, r300, r3;
++
++	mutex_lock(&vindev->mgbdev->i2c_lock);
++	r1 = mgb4_i2c_read_byte(&vindev->deser, 0x01);
++	r300 = mgb4_i2c_read_byte(&vindev->deser, 0x300);
++	r3 = mgb4_i2c_read_byte(&vindev->deser, 0x03);
++	mutex_unlock(&vindev->mgbdev->i2c_lock);
++	if (r1 < 0 || r300 < 0 || r3 < 0)
++		return -EIO;
++
++	if ((r1 & 0x03) == 0x03 && (r300 & 0x0C) == 0x0C && (r3 & 0xC0) == 0xC0)
++		return sprintf(buf, "0\n");
++	else if ((r1 & 0x03) == 0x02 && (r300 & 0x0C) == 0x08 && (r3 & 0xC0) == 0x00)
++		return sprintf(buf, "1\n");
++	else if ((r1 & 0x03) == 0x01 && (r300 & 0x0C) == 0x04 && (r3 & 0xC0) == 0x00)
++		return sprintf(buf, "2\n");
++	else if ((r1 & 0x03) == 0x00 && (r300 & 0x0C) == 0x00 && (r3 & 0xC0) == 0x00)
++		return sprintf(buf, "3\n");
++	else
++		return -EINVAL;
++}
++
++static ssize_t write_gmsl_mode(struct device *dev,
++			       struct device_attribute *attr, const char *buf,
++			       size_t count)
++{
++	static const struct mgb4_i2c_kv G12[] = {
++		{0x01, 0x03, 0x03}, {0x300, 0x0C, 0x0C}, {0x03, 0xC0, 0xC0}};
++	static const struct mgb4_i2c_kv G6[] = {
++		{0x01, 0x03, 0x02}, {0x300, 0x0C, 0x08}, {0x03, 0xC0, 0x00}};
++	static const struct mgb4_i2c_kv G3[] = {
++		{0x01, 0x03, 0x01}, {0x300, 0x0C, 0x04}, {0x03, 0xC0, 0x00}};
++	static const struct mgb4_i2c_kv G1[] = {
++		{0x01, 0x03, 0x00}, {0x300, 0x0C, 0x00}, {0x03, 0xC0, 0x00}};
++	static const struct mgb4_i2c_kv reset[] = {
++		{0x10, 1U << 5, 1U << 5}, {0x300, 1U << 6, 1U << 6}};
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++	const struct mgb4_i2c_kv *values;
++	unsigned long val;
++	int ret;
++
++	ret = kstrtoul(buf, 10, &val);
++	if (ret)
++		return ret;
++
++	switch (val) {
++	case 0: /* 12Gb/s */
++		values = G12;
++		break;
++	case 1: /* 6Gb/s */
++		values = G6;
++		break;
++	case 2: /* 3Gb/s */
++		values = G3;
++		break;
++	case 3: /* 1.5Gb/s */
++		values = G1;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	mutex_lock(&vindev->mgbdev->i2c_lock);
++	ret = mgb4_i2c_configure(&vindev->deser, values, 3);
++	ret |= mgb4_i2c_configure(&vindev->deser, reset, 2);
++	mutex_unlock(&vindev->mgbdev->i2c_lock);
++	if (ret < 0)
++		return -EIO;
++
++	return count;
++}
++
++static ssize_t read_gmsl_stream_id(struct device *dev,
++				   struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++	s32 ret;
++
++	mutex_lock(&vindev->mgbdev->i2c_lock);
++	ret = mgb4_i2c_read_byte(&vindev->deser, 0xA0);
++	mutex_unlock(&vindev->mgbdev->i2c_lock);
++	if (ret < 0)
++		return -EIO;
++
++	return sprintf(buf, "%d\n", ret & 0x03);
++}
++
++static ssize_t write_gmsl_stream_id(struct device *dev,
++				    struct device_attribute *attr,
++				    const char *buf, size_t count)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++	unsigned long val, flags;
++	int ret;
++
++	ret = kstrtoul(buf, 10, &val);
++	if (ret)
++		return ret;
++	if (val > 3)
++		return -EINVAL;
++
++	spin_lock_irqsave(&vindev->vdev.fh_lock, flags);
++	ret = list_empty(&vindev->vdev.fh_list);
++	spin_unlock_irqrestore(&vindev->vdev.fh_lock, flags);
++	if (!ret)
++		return -EBUSY;
++
++	/* Formaly, there is a race condition here as the change should also be
++	 * done under the spinlock above, but we only want to prevent
++	 * a resolution change while the device is in use. However, resolution
++	 * changes can happen anyway and the driver can handle them (they only
++	 * break the image, not the system).
++	 *
++	 * So instead of trying to workaround the spinlock - mgb4_i2c_mask_byte()
++	 * does sleep - we simply let the rare race condition happen...
++	 */
++	mutex_lock(&vindev->mgbdev->i2c_lock);
++	ret = mgb4_i2c_mask_byte(&vindev->deser, 0xA0, 0x03, (u8)val);
++	mutex_unlock(&vindev->mgbdev->i2c_lock);
++	if (ret < 0)
++		return -EIO;
++
++	return count;
++}
++
++static ssize_t read_gmsl_fec(struct device *dev, struct device_attribute *attr,
++			     char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++	s32 r3e0, r308;
++
++	mutex_lock(&vindev->mgbdev->i2c_lock);
++	r3e0 = mgb4_i2c_read_byte(&vindev->deser, 0x3E0);
++	r308 = mgb4_i2c_read_byte(&vindev->deser, 0x308);
++	mutex_unlock(&vindev->mgbdev->i2c_lock);
++	if (r3e0 < 0 || r308 < 0)
++		return -EIO;
++
++	if ((r3e0 & 0x07) == 0x00 && (r308 & 0x01) == 0x00)
++		return sprintf(buf, "0\n");
++	else if ((r3e0 & 0x07) == 0x07 && (r308 & 0x01) == 0x01)
++		return sprintf(buf, "1\n");
++	else
++		return -EINVAL;
++}
++
++static ssize_t write_gmsl_fec(struct device *dev, struct device_attribute *attr,
++			      const char *buf, size_t count)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
++	static const struct mgb4_i2c_kv enable[] = {
++		{0x3E0, 0x07, 0x07}, {0x308, 0x01, 0x01}};
++	static const struct mgb4_i2c_kv disable[] = {
++		{0x3E0, 0x07, 0x00}, {0x308, 0x01, 0x00}};
++	static const struct mgb4_i2c_kv reset[] = {
++		{0x10, 1U << 5, 1U << 5}, {0x300, 1U << 6, 1U << 6}};
++	const struct mgb4_i2c_kv *values;
++	unsigned long val;
++	int ret;
++
++	ret = kstrtoul(buf, 10, &val);
++	if (ret)
++		return ret;
++
++	switch (val) {
++	case 0: /* disabled */
++		values = disable;
++		break;
++	case 1: /* enabled */
++		values = enable;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	mutex_lock(&vindev->mgbdev->i2c_lock);
++	ret = mgb4_i2c_configure(&vindev->deser, values, 2);
++	ret |= mgb4_i2c_configure(&vindev->deser, reset, 2);
++	mutex_unlock(&vindev->mgbdev->i2c_lock);
++	if (ret < 0)
++		return -EIO;
++
++	return count;
++}
++
++static DEVICE_ATTR(input_id, 0444, read_input_id, NULL);
++static DEVICE_ATTR(oldi_lane_width, 0644, read_oldi_lane_width,
++		   write_oldi_lane_width);
++static DEVICE_ATTR(color_mapping, 0644, read_color_mapping,
++		   write_color_mapping);
++static DEVICE_ATTR(link_status, 0444, read_link_status, NULL);
++static DEVICE_ATTR(stream_status, 0444, read_stream_status, NULL);
++static DEVICE_ATTR(video_width, 0444, read_video_width, NULL);
++static DEVICE_ATTR(video_height, 0444, read_video_height, NULL);
++static DEVICE_ATTR(hsync_status, 0444, read_hsync_status, NULL);
++static DEVICE_ATTR(vsync_status, 0444, read_vsync_status, NULL);
++static DEVICE_ATTR(hsync_gap_length, 0644, read_hsync_gap, write_hsync_gap);
++static DEVICE_ATTR(vsync_gap_length, 0644, read_vsync_gap, write_vsync_gap);
++static DEVICE_ATTR(pclk_frequency, 0444, read_pclk_frequency, NULL);
++static DEVICE_ATTR(hsync_width, 0444, read_hsync_width, NULL);
++static DEVICE_ATTR(vsync_width, 0444, read_vsync_width, NULL);
++static DEVICE_ATTR(hback_porch, 0444, read_hback_porch, NULL);
++static DEVICE_ATTR(hfront_porch, 0444, read_hfront_porch, NULL);
++static DEVICE_ATTR(vback_porch, 0444, read_vback_porch, NULL);
++static DEVICE_ATTR(vfront_porch, 0444, read_vfront_porch, NULL);
++static DEVICE_ATTR(frequency_range, 0644, read_frequency_range,
++		   write_frequency_range);
++
++static DEVICE_ATTR(fpdl3_input_width, 0644, read_fpdl3_input_width,
++		   write_fpdl3_input_width);
++
++static DEVICE_ATTR(gmsl_mode, 0644, read_gmsl_mode, write_gmsl_mode);
++static DEVICE_ATTR(gmsl_stream_id, 0644, read_gmsl_stream_id,
++		   write_gmsl_stream_id);
++static DEVICE_ATTR(gmsl_fec, 0644, read_gmsl_fec, write_gmsl_fec);
++
++struct device_attribute *mgb4_fpdl3_in_attrs[] = {
++	&dev_attr_input_id,
++	&dev_attr_link_status,
++	&dev_attr_stream_status,
++	&dev_attr_video_width,
++	&dev_attr_video_height,
++	&dev_attr_hsync_status,
++	&dev_attr_vsync_status,
++	&dev_attr_oldi_lane_width,
++	&dev_attr_color_mapping,
++	&dev_attr_hsync_gap_length,
++	&dev_attr_vsync_gap_length,
++	&dev_attr_pclk_frequency,
++	&dev_attr_hsync_width,
++	&dev_attr_vsync_width,
++	&dev_attr_hback_porch,
++	&dev_attr_hfront_porch,
++	&dev_attr_vback_porch,
++	&dev_attr_vfront_porch,
++	&dev_attr_frequency_range,
++	&dev_attr_fpdl3_input_width,
++	NULL
++};
++
++struct device_attribute *mgb4_gmsl_in_attrs[] = {
++	&dev_attr_input_id,
++	&dev_attr_link_status,
++	&dev_attr_stream_status,
++	&dev_attr_video_width,
++	&dev_attr_video_height,
++	&dev_attr_hsync_status,
++	&dev_attr_vsync_status,
++	&dev_attr_oldi_lane_width,
++	&dev_attr_color_mapping,
++	&dev_attr_hsync_gap_length,
++	&dev_attr_vsync_gap_length,
++	&dev_attr_pclk_frequency,
++	&dev_attr_hsync_width,
++	&dev_attr_vsync_width,
++	&dev_attr_hback_porch,
++	&dev_attr_hfront_porch,
++	&dev_attr_vback_porch,
++	&dev_attr_vfront_porch,
++	&dev_attr_frequency_range,
++	&dev_attr_gmsl_mode,
++	&dev_attr_gmsl_stream_id,
++	&dev_attr_gmsl_fec,
++	NULL
++};
+diff --git a/drivers/media/pci/mgb4/mgb4_sysfs_out.c b/drivers/media/pci/mgb4/mgb4_sysfs_out.c
+new file mode 100644
+index 000000000000..243a654f75ad
+--- /dev/null
++++ b/drivers/media/pci/mgb4/mgb4_sysfs_out.c
+@@ -0,0 +1,700 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2021-2023 Digiteq Automotive
++ *     author: Martin Tuma <martin.tuma@digiteqautomotive.com>
++ *
++ * This module handles all the sysfs info/configuration that is related to the
++ * v4l2 output devices.
++ */
++
++#include <linux/device.h>
++#include "mgb4_core.h"
++#include "mgb4_i2c.h"
++#include "mgb4_vout.h"
++#include "mgb4_vin.h"
++#include "mgb4_cmt.h"
++#include "mgb4_sysfs.h"
++
++static int loopin_cnt(struct mgb4_vin_dev *vindev)
++{
++	struct mgb4_vout_dev *voutdev;
++	u32 config;
++	int i, cnt = 0;
++
++	for (i = 0; i < MGB4_VOUT_DEVICES; i++) {
++		voutdev = vindev->mgbdev->vout[i];
++		if (!voutdev)
++			continue;
++
++		config = mgb4_read_reg(&voutdev->mgbdev->video,
++				       voutdev->config->regs.config);
++		if ((config & 0xc) >> 2 == vindev->config->id)
++			cnt++;
++	}
++
++	return cnt;
++}
++
++/* Common for both FPDL3 and GMSL */
++
++static ssize_t read_output_id(struct device *dev,
++			      struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++
++	return sprintf(buf, "%d\n", voutdev->config->id);
++}
++
++static ssize_t read_video_source(struct device *dev,
++				 struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++	u32 config = mgb4_read_reg(&voutdev->mgbdev->video,
++	  voutdev->config->regs.config);
++
++	return sprintf(buf, "%u\n", (config & 0xc) >> 2);
++}
++
++static ssize_t write_video_source(struct device *dev,
++				  struct device_attribute *attr,
++				  const char *buf, size_t count)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++	struct mgb4_dev *mgbdev = voutdev->mgbdev;
++	struct mgb4_vin_dev *loopin_new = 0, *loopin_old = 0;
++	unsigned long val;
++	unsigned long flags_in[MGB4_VIN_DEVICES], flags_out[MGB4_VOUT_DEVICES];
++	ssize_t ret;
++	u32 config;
++	int i;
++
++	memset(flags_in, 0, sizeof(flags_in));
++	memset(flags_out, 0, sizeof(flags_out));
++
++	ret = kstrtoul(buf, 10, &val);
++	if (ret)
++		return ret;
++	if (val > 3)
++		return -EINVAL;
++
++	for (i = 0; i < MGB4_VIN_DEVICES; i++)
++		if (mgbdev->vin[i])
++			spin_lock_irqsave(&mgbdev->vin[i]->vdev.fh_lock,
++					  flags_in[i]);
++	for (i = 0; i < MGB4_VOUT_DEVICES; i++)
++		if (mgbdev->vout[i])
++			spin_lock_irqsave(&mgbdev->vout[i]->vdev.fh_lock,
++					  flags_out[i]);
++
++	ret = -EBUSY;
++	for (i = 0; i < MGB4_VIN_DEVICES; i++)
++		if (mgbdev->vin[i] && !list_empty(&mgbdev->vin[i]->vdev.fh_list))
++			goto error;
++	for (i = 0; i < MGB4_VOUT_DEVICES; i++)
++		if (mgbdev->vout[i] && !list_empty(&mgbdev->vout[i]->vdev.fh_list))
++			goto error;
++
++	config = mgb4_read_reg(&mgbdev->video, voutdev->config->regs.config);
++
++	if (((config & 0xc) >> 2) < MGB4_VIN_DEVICES)
++		loopin_old = mgbdev->vin[(config & 0xc) >> 2];
++	if (val < MGB4_VIN_DEVICES)
++		loopin_new = mgbdev->vin[val];
++	if (loopin_old && loopin_cnt(loopin_old) == 1)
++		mgb4_mask_reg(&mgbdev->video, loopin_old->config->regs.config,
++			      0x2, 0x0);
++	if (loopin_new)
++		mgb4_mask_reg(&mgbdev->video, loopin_new->config->regs.config,
++			      0x2, 0x2);
++
++	if (val == voutdev->config->id + MGB4_VIN_DEVICES)
++		mgb4_write_reg(&mgbdev->video, voutdev->config->regs.config,
++			       config & ~(1 << 1));
++	else
++		mgb4_write_reg(&mgbdev->video, voutdev->config->regs.config,
++			       config | (1U << 1));
++
++	mgb4_mask_reg(&mgbdev->video, voutdev->config->regs.config, 0xc,
++		      val << 2);
++
++	ret = count;
++
++error:
++	for (i = MGB4_VOUT_DEVICES - 1; i >= 0; i--)
++		if (mgbdev->vout[i])
++			spin_unlock_irqrestore(&mgbdev->vout[i]->vdev.fh_lock,
++					       flags_out[i]);
++	for (i = MGB4_VIN_DEVICES - 1; i >= 0; i--)
++		if (mgbdev->vin[i])
++			spin_unlock_irqrestore(&mgbdev->vin[i]->vdev.fh_lock,
++					       flags_in[i]);
++
++	return ret;
++}
++
++static ssize_t read_display_width(struct device *dev,
++				  struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++	u32 config = mgb4_read_reg(&voutdev->mgbdev->video,
++	  voutdev->config->regs.resolution);
++
++	return sprintf(buf, "%u\n", config >> 16);
++}
++
++static ssize_t write_display_width(struct device *dev,
++				   struct device_attribute *attr,
++				   const char *buf, size_t count)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++	unsigned long val, flags;
++	int ret, busy;
++
++	ret = kstrtoul(buf, 10, &val);
++	if (ret)
++		return ret;
++	if (val > 0xFFFF)
++		return -EINVAL;
++
++	spin_lock_irqsave(&voutdev->vdev.fh_lock, flags);
++	busy = !list_empty(&voutdev->vdev.fh_list);
++	if (busy) {
++		spin_unlock_irqrestore(&voutdev->vdev.fh_lock, flags);
++		return -EBUSY;
++	}
++
++	mgb4_mask_reg(&voutdev->mgbdev->video, voutdev->config->regs.resolution,
++		      0xFFFF0000, val << 16);
++
++	spin_unlock_irqrestore(&voutdev->vdev.fh_lock, flags);
++
++	return count;
++}
++
++static ssize_t read_display_height(struct device *dev,
++				   struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++	u32 config = mgb4_read_reg(&voutdev->mgbdev->video,
++	  voutdev->config->regs.resolution);
++
++	return sprintf(buf, "%u\n", config & 0xFFFF);
++}
++
++static ssize_t write_display_height(struct device *dev,
++				    struct device_attribute *attr,
++				    const char *buf, size_t count)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++	unsigned long val, flags;
++	int ret, busy;
++
++	ret = kstrtoul(buf, 10, &val);
++	if (ret)
++		return ret;
++	if (val > 0xFFFF)
++		return -EINVAL;
++
++	spin_lock_irqsave(&voutdev->vdev.fh_lock, flags);
++	busy = !list_empty(&voutdev->vdev.fh_list);
++	if (busy) {
++		spin_unlock_irqrestore(&voutdev->vdev.fh_lock, flags);
++		return -EBUSY;
++	}
++
++	mgb4_mask_reg(&voutdev->mgbdev->video, voutdev->config->regs.resolution,
++		      0xFFFF, val);
++
++	spin_unlock_irqrestore(&voutdev->vdev.fh_lock, flags);
++
++	return count;
++}
++
++static ssize_t read_frame_rate(struct device *dev,
++			       struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++	u32 period = mgb4_read_reg(&voutdev->mgbdev->video,
++				   voutdev->config->regs.frame_period);
++
++	return sprintf(buf, "%u\n", 125000000 / period);
++}
++
++static ssize_t write_frame_rate(struct device *dev,
++				struct device_attribute *attr, const char *buf,
++				size_t count)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++	unsigned long val;
++	int ret;
++
++	ret = kstrtoul(buf, 10, &val);
++	if (ret)
++		return ret;
++
++	mgb4_write_reg(&voutdev->mgbdev->video,
++		       voutdev->config->regs.frame_period, 125000000 / val);
++
++	return count;
++}
++
++static ssize_t read_hsync_width(struct device *dev,
++				struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++	u32 sig = mgb4_read_reg(&voutdev->mgbdev->video,
++				voutdev->config->regs.hsync);
++
++	return sprintf(buf, "%u\n", (sig & 0x00FF0000) >> 16);
++}
++
++static ssize_t write_hsync_width(struct device *dev,
++				 struct device_attribute *attr, const char *buf,
++				 size_t count)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++	unsigned long val;
++	int ret;
++
++	ret = kstrtoul(buf, 10, &val);
++	if (ret)
++		return ret;
++	if (val > 0xFF)
++		return -EINVAL;
++
++	mgb4_mask_reg(&voutdev->mgbdev->video, voutdev->config->regs.hsync,
++		      0x00FF0000, val << 16);
++
++	return count;
++}
++
++static ssize_t read_vsync_width(struct device *dev,
++				struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++	u32 sig = mgb4_read_reg(&voutdev->mgbdev->video,
++				voutdev->config->regs.vsync);
++
++	return sprintf(buf, "%u\n", (sig & 0x00FF0000) >> 16);
++}
++
++static ssize_t write_vsync_width(struct device *dev,
++				 struct device_attribute *attr, const char *buf,
++				 size_t count)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++	unsigned long val;
++	int ret;
++
++	ret = kstrtoul(buf, 10, &val);
++	if (ret)
++		return ret;
++	if (val > 0xFF)
++		return -EINVAL;
++
++	mgb4_mask_reg(&voutdev->mgbdev->video, voutdev->config->regs.vsync,
++		      0x00FF0000, val << 16);
++
++	return count;
++}
++
++static ssize_t read_hback_porch(struct device *dev,
++				struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++	u32 sig = mgb4_read_reg(&voutdev->mgbdev->video,
++				voutdev->config->regs.hsync);
++
++	return sprintf(buf, "%u\n", (sig & 0x0000FF00) >> 8);
++}
++
++static ssize_t write_hback_porch(struct device *dev,
++				 struct device_attribute *attr, const char *buf,
++				 size_t count)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++	unsigned long val;
++	int ret;
++
++	ret = kstrtoul(buf, 10, &val);
++	if (ret)
++		return ret;
++	if (val > 0xFF)
++		return -EINVAL;
++
++	mgb4_mask_reg(&voutdev->mgbdev->video, voutdev->config->regs.hsync,
++		      0x0000FF00, val << 8);
++
++	return count;
++}
++
++static ssize_t read_vback_porch(struct device *dev,
++				struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++	u32 sig = mgb4_read_reg(&voutdev->mgbdev->video,
++				voutdev->config->regs.vsync);
++
++	return sprintf(buf, "%u\n", (sig & 0x0000FF00) >> 8);
++}
++
++static ssize_t write_vback_porch(struct device *dev,
++				 struct device_attribute *attr, const char *buf,
++				 size_t count)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++	unsigned long val;
++	int ret;
++
++	ret = kstrtoul(buf, 10, &val);
++	if (ret)
++		return ret;
++	if (val > 0xFF)
++		return -EINVAL;
++
++	mgb4_mask_reg(&voutdev->mgbdev->video, voutdev->config->regs.vsync,
++		      0x0000FF00, val << 8);
++
++	return count;
++}
++
++static ssize_t read_hfront_porch(struct device *dev,
++				 struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++	u32 sig = mgb4_read_reg(&voutdev->mgbdev->video,
++				voutdev->config->regs.hsync);
++
++	return sprintf(buf, "%u\n", (sig & 0x000000FF));
++}
++
++static ssize_t write_hfront_porch(struct device *dev,
++				  struct device_attribute *attr,
++				  const char *buf, size_t count)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++	unsigned long val;
++	int ret;
++
++	ret = kstrtoul(buf, 10, &val);
++	if (ret)
++		return ret;
++	if (val > 0xFF)
++		return -EINVAL;
++
++	mgb4_mask_reg(&voutdev->mgbdev->video, voutdev->config->regs.hsync,
++		      0x000000FF, val);
++
++	return count;
++}
++
++static ssize_t read_vfront_porch(struct device *dev,
++				 struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++	u32 sig = mgb4_read_reg(&voutdev->mgbdev->video,
++				voutdev->config->regs.vsync);
++
++	return sprintf(buf, "%u\n", (sig & 0x000000FF));
++}
++
++static ssize_t write_vfront_porch(struct device *dev,
++				  struct device_attribute *attr, const char *buf,
++				  size_t count)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++	unsigned long val;
++	int ret;
++
++	ret = kstrtoul(buf, 10, &val);
++	if (ret)
++		return ret;
++	if (val > 0xFF)
++		return -EINVAL;
++
++	mgb4_mask_reg(&voutdev->mgbdev->video, voutdev->config->regs.vsync,
++		      0x000000FF, val);
++
++	return count;
++}
++
++/* FPDL3 only */
++
++static ssize_t read_hsync_polarity(struct device *dev,
++				   struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++	u32 config = mgb4_read_reg(&voutdev->mgbdev->video,
++	  voutdev->config->regs.hsync);
++
++	return sprintf(buf, "%u\n", (config & (1U << 31)) >> 31);
++}
++
++static ssize_t write_hsync_polarity(struct device *dev,
++				    struct device_attribute *attr,
++				    const char *buf, size_t count)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++	unsigned long val;
++	int ret;
++
++	ret = kstrtoul(buf, 10, &val);
++	if (ret)
++		return ret;
++	if (val > 1)
++		return -EINVAL;
++
++	mgb4_mask_reg(&voutdev->mgbdev->video, voutdev->config->regs.hsync,
++		      (1U << 31), val << 31);
++
++	return count;
++}
++
++static ssize_t read_vsync_polarity(struct device *dev,
++				   struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++	u32 config = mgb4_read_reg(&voutdev->mgbdev->video,
++	  voutdev->config->regs.vsync);
++
++	return sprintf(buf, "%u\n", (config & (1U << 31)) >> 31);
++}
++
++static ssize_t write_vsync_polarity(struct device *dev,
++				    struct device_attribute *attr,
++				    const char *buf, size_t count)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++	unsigned long val;
++	int ret;
++
++	ret = kstrtoul(buf, 10, &val);
++	if (ret)
++		return ret;
++	if (val > 1)
++		return -EINVAL;
++
++	mgb4_mask_reg(&voutdev->mgbdev->video, voutdev->config->regs.vsync,
++		      (1U << 31), val << 31);
++
++	return count;
++}
++
++static ssize_t read_de_polarity(struct device *dev,
++				struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++	u32 config = mgb4_read_reg(&voutdev->mgbdev->video,
++	  voutdev->config->regs.vsync);
++
++	return sprintf(buf, "%u\n", (config & (1U << 30)) >> 30);
++}
++
++static ssize_t write_de_polarity(struct device *dev,
++				 struct device_attribute *attr, const char *buf,
++				 size_t count)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++	unsigned long val;
++	int ret;
++
++	ret = kstrtoul(buf, 10, &val);
++	if (ret)
++		return ret;
++	if (val > 1)
++		return -EINVAL;
++
++	mgb4_mask_reg(&voutdev->mgbdev->video, voutdev->config->regs.vsync,
++		      (1U << 30), val << 30);
++
++	return count;
++}
++
++static ssize_t read_fpdl3_output_width(struct device *dev,
++				       struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++	s32 ret;
++
++	mutex_lock(&voutdev->mgbdev->i2c_lock);
++	ret = mgb4_i2c_read_byte(&voutdev->ser, 0x5B);
++	mutex_unlock(&voutdev->mgbdev->i2c_lock);
++	if (ret < 0)
++		return -EIO;
++
++	switch ((u8)ret & 0x03) {
++	case 0:
++		return sprintf(buf, "0\n");
++	case 1:
++		return sprintf(buf, "1\n");
++	case 3:
++		return sprintf(buf, "2\n");
++	default:
++		return -EINVAL;
++	}
++}
++
++static ssize_t write_fpdl3_output_width(struct device *dev,
++					struct device_attribute *attr,
++					const char *buf, size_t count)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++	u8 i2c_data;
++	unsigned long val;
++	int ret;
++
++	ret = kstrtoul(buf, 10, &val);
++	if (ret)
++		return ret;
++
++	switch (val) {
++	case 0: /* auto */
++		i2c_data = 0x00;
++		break;
++	case 1: /* single */
++		i2c_data = 0x01;
++		break;
++	case 2: /* dual */
++		i2c_data = 0x03;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	mutex_lock(&voutdev->mgbdev->i2c_lock);
++	ret = mgb4_i2c_mask_byte(&voutdev->ser, 0x5B, 0x03, i2c_data);
++	mutex_unlock(&voutdev->mgbdev->i2c_lock);
++	if (ret < 0)
++		return -EIO;
++
++	return count;
++}
++
++static ssize_t read_pclk_frequency(struct device *dev,
++				   struct device_attribute *attr, char *buf)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++
++	return sprintf(buf, "%u\n", voutdev->freq);
++}
++
++static ssize_t write_pclk_frequency(struct device *dev,
++				    struct device_attribute *attr,
++				    const char *buf, size_t count)
++{
++	struct video_device *vdev = to_video_device(dev);
++	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
++	unsigned long val, flags;
++	int ret, busy;
++	unsigned int dp;
++
++	ret = kstrtoul(buf, 10, &val);
++	if (ret)
++		return ret;
++
++	spin_lock_irqsave(&voutdev->vdev.fh_lock, flags);
++	busy = !list_empty(&voutdev->vdev.fh_list);
++	if (busy) {
++		spin_unlock_irqrestore(&voutdev->vdev.fh_lock, flags);
++		return -EBUSY;
++	}
++
++	dp = (val > 50000) ? 1 : 0;
++	voutdev->freq = mgb4_cmt_set_vout_freq(voutdev, val >> dp) << dp;
++
++	spin_unlock_irqrestore(&voutdev->vdev.fh_lock, flags);
++
++	mgb4_mask_reg(&voutdev->mgbdev->video, voutdev->config->regs.config,
++		      0x10, dp << 4);
++	mutex_lock(&voutdev->mgbdev->i2c_lock);
++	ret = mgb4_i2c_mask_byte(&voutdev->ser, 0x4F, 1 << 6, ((~dp) & 1) << 6);
++	mutex_unlock(&voutdev->mgbdev->i2c_lock);
++	if (ret < 0)
++		return -EIO;
++
++	return count;
++}
++
++static DEVICE_ATTR(output_id, 0444, read_output_id, NULL);
++static DEVICE_ATTR(video_source, 0644, read_video_source, write_video_source);
++static DEVICE_ATTR(display_width, 0644, read_display_width,
++		   write_display_width);
++static DEVICE_ATTR(display_height, 0644, read_display_height,
++		   write_display_height);
++static DEVICE_ATTR(frame_rate, 0644, read_frame_rate, write_frame_rate);
++static DEVICE_ATTR(hsync_polarity, 0644, read_hsync_polarity,
++		   write_hsync_polarity);
++static DEVICE_ATTR(vsync_polarity, 0644, read_vsync_polarity,
++		   write_vsync_polarity);
++static DEVICE_ATTR(de_polarity, 0644, read_de_polarity,
++		   write_de_polarity);
++static DEVICE_ATTR(pclk_frequency, 0644, read_pclk_frequency,
++		   write_pclk_frequency);
++static DEVICE_ATTR(hsync_width, 0644, read_hsync_width, write_hsync_width);
++static DEVICE_ATTR(vsync_width, 0644, read_vsync_width, write_vsync_width);
++static DEVICE_ATTR(hback_porch, 0644, read_hback_porch, write_hback_porch);
++static DEVICE_ATTR(hfront_porch, 0644, read_hfront_porch, write_hfront_porch);
++static DEVICE_ATTR(vback_porch, 0644, read_vback_porch, write_vback_porch);
++static DEVICE_ATTR(vfront_porch, 0644, read_vfront_porch, write_vfront_porch);
++
++static DEVICE_ATTR(fpdl3_output_width, 0644, read_fpdl3_output_width,
++		   write_fpdl3_output_width);
++
++struct device_attribute *mgb4_fpdl3_out_attrs[] = {
++	&dev_attr_output_id,
++	&dev_attr_video_source,
++	&dev_attr_display_width,
++	&dev_attr_display_height,
++	&dev_attr_frame_rate,
++	&dev_attr_hsync_polarity,
++	&dev_attr_vsync_polarity,
++	&dev_attr_de_polarity,
++	&dev_attr_pclk_frequency,
++	&dev_attr_hsync_width,
++	&dev_attr_vsync_width,
++	&dev_attr_hback_porch,
++	&dev_attr_hfront_porch,
++	&dev_attr_vback_porch,
++	&dev_attr_vfront_porch,
++	&dev_attr_fpdl3_output_width,
++	NULL
++};
++
++struct device_attribute *mgb4_gmsl_out_attrs[] = {
++	&dev_attr_output_id,
++	&dev_attr_video_source,
++	&dev_attr_display_width,
++	&dev_attr_display_height,
++	&dev_attr_frame_rate,
++	NULL
++};
+diff --git a/drivers/media/pci/mgb4/mgb4_sysfs_pci.c b/drivers/media/pci/mgb4/mgb4_sysfs_pci.c
+new file mode 100644
+index 000000000000..f98da2c5f180
+--- /dev/null
++++ b/drivers/media/pci/mgb4/mgb4_sysfs_pci.c
+@@ -0,0 +1,71 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2021-2022 Digiteq Automotive
++ *     author: Martin Tuma <martin.tuma@digiteqautomotive.com>
++ *
++ * This module handles all the sysfs info/configuration that is related to the
++ * PCI card device.
++ */
++
++#include <linux/device.h>
++#include "mgb4_core.h"
++#include "mgb4_sysfs.h"
++
++static ssize_t read_module_version(struct device *dev,
++				   struct device_attribute *attr, char *buf)
++{
++	struct mgb4_dev *mgbdev = dev_get_drvdata(dev);
++
++	return sprintf(buf, "%u\n", mgbdev->module_version & 0x0F);
++}
++
++static ssize_t read_module_type(struct device *dev,
++				struct device_attribute *attr, char *buf)
++{
++	struct mgb4_dev *mgbdev = dev_get_drvdata(dev);
++
++	return sprintf(buf, "%u\n", mgbdev->module_version >> 4);
++}
++
++static ssize_t read_fw_version(struct device *dev,
++			       struct device_attribute *attr, char *buf)
++{
++	struct mgb4_dev *mgbdev = dev_get_drvdata(dev);
++	u32 config = mgb4_read_reg(&mgbdev->video, 0xC4);
++
++	return sprintf(buf, "%u\n", config & 0xFFFF);
++}
++
++static ssize_t read_fw_type(struct device *dev,
++			    struct device_attribute *attr, char *buf)
++{
++	struct mgb4_dev *mgbdev = dev_get_drvdata(dev);
++	u32 config = mgb4_read_reg(&mgbdev->video, 0xC4);
++
++	return sprintf(buf, "%u\n", config >> 24);
++}
++
++static ssize_t read_serial_number(struct device *dev,
++				  struct device_attribute *attr, char *buf)
++{
++	struct mgb4_dev *mgbdev = dev_get_drvdata(dev);
++	u32 sn = mgbdev->serial_number;
++
++	return sprintf(buf, "%03d-%03d-%03d-%03d\n", sn >> 24, (sn >> 16) & 0xFF,
++	  (sn >> 8) & 0xFF, sn & 0xFF);
++}
++
++static DEVICE_ATTR(module_version, 0444, read_module_version, NULL);
++static DEVICE_ATTR(module_type, 0444, read_module_type, NULL);
++static DEVICE_ATTR(fw_version, 0444, read_fw_version, NULL);
++static DEVICE_ATTR(fw_type, 0444, read_fw_type, NULL);
++static DEVICE_ATTR(serial_number, 0444, read_serial_number, NULL);
++
++struct device_attribute *mgb4_pci_attrs[] = {
++	&dev_attr_module_type,
++	&dev_attr_module_version,
++	&dev_attr_fw_type,
++	&dev_attr_fw_version,
++	&dev_attr_serial_number,
++	NULL
++};
+diff --git a/drivers/media/pci/mgb4/mgb4_trigger.c b/drivers/media/pci/mgb4/mgb4_trigger.c
+new file mode 100644
+index 000000000000..923650d53d4c
+--- /dev/null
++++ b/drivers/media/pci/mgb4/mgb4_trigger.c
+@@ -0,0 +1,208 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2021-2023 Digiteq Automotive
++ *     author: Martin Tuma <martin.tuma@digiteqautomotive.com>
++ *
++ * This module handles the IIO trigger device. The card has two signal inputs
++ * for event triggers that can be used to record events related to the video
++ * stream. A standard linux IIO device with triggered buffer capability is
++ * created and configured that can be used to fetch the events with the same
++ * clock source as the video frames.
++ */
++
++#include <linux/iio/iio.h>
++#include <linux/iio/buffer.h>
++#include <linux/iio/trigger.h>
++#include <linux/iio/trigger_consumer.h>
++#include <linux/iio/triggered_buffer.h>
++#include <linux/pci.h>
++#include <linux/dma/amd_xdma.h>
++#include "mgb4_core.h"
++#include "mgb4_trigger.h"
++
++struct trigger_data {
++	struct mgb4_dev *mgbdev;
++	struct iio_trigger *trig;
++};
++
++static int trigger_read_raw(struct iio_dev *indio_dev,
++			    struct iio_chan_spec const *chan, int *val,
++			    int *val2, long mask)
++{
++	struct trigger_data *st = iio_priv(indio_dev);
++
++	switch (mask) {
++	case IIO_CHAN_INFO_RAW:
++		if (iio_buffer_enabled(indio_dev))
++			return -EBUSY;
++		*val = mgb4_read_reg(&st->mgbdev->video, 0xA0);
++
++		return IIO_VAL_INT;
++	}
++
++	return -EINVAL;
++}
++
++static int trigger_set_state(struct iio_trigger *trig, bool state)
++{
++	struct iio_dev *indio_dev = iio_trigger_get_drvdata(trig);
++	struct trigger_data *st = iio_priv(indio_dev);
++	int irq = xdma_get_user_irq(st->mgbdev->xdev, 11);
++
++	if (state)
++		xdma_enable_user_irq(st->mgbdev->xdev, irq);
++	else
++		xdma_disable_user_irq(st->mgbdev->xdev, irq);
++
++	return 0;
++}
++
++static const struct iio_trigger_ops trigger_ops = {
++	.set_trigger_state = &trigger_set_state,
++};
++
++static const struct iio_info trigger_info = {
++	.read_raw         = trigger_read_raw,
++};
++
++#define TRIGGER_CHANNEL(_si) {                    \
++	.type = IIO_ACTIVITY,                         \
++	.info_mask_separate = BIT(IIO_CHAN_INFO_RAW), \
++	.scan_index = _si,                            \
++	.scan_type = {                                \
++		.sign = 'u',                              \
++		.realbits = 32,                           \
++		.storagebits = 32,                        \
++		.shift = 0,                               \
++		.endianness = IIO_CPU                     \
++	},                                            \
++}
++
++static const struct iio_chan_spec trigger_channels[] = {
++	TRIGGER_CHANNEL(0),
++	IIO_CHAN_SOFT_TIMESTAMP(1),
++};
++
++static irqreturn_t trigger_handler(int irq, void *p)
++{
++	struct iio_poll_func *pf = p;
++	struct iio_dev *indio_dev = pf->indio_dev;
++	struct trigger_data *st = iio_priv(indio_dev);
++	struct {
++		u32 data;
++		s64 ts __aligned(8);
++	} scan;
++
++	scan.data = mgb4_read_reg(&st->mgbdev->video, 0xA0);
++	mgb4_write_reg(&st->mgbdev->video, 0xA0, scan.data);
++
++	iio_push_to_buffers_with_timestamp(indio_dev, &scan, pf->timestamp);
++	iio_trigger_notify_done(indio_dev->trig);
++
++	mgb4_write_reg(&st->mgbdev->video, 0xB4, 1U << 11);
++
++	return IRQ_HANDLED;
++}
++
++static int probe_trigger(struct iio_dev *indio_dev, int irq)
++{
++	int ret;
++	struct trigger_data *st = iio_priv(indio_dev);
++
++	st->trig = iio_trigger_alloc(&st->mgbdev->pdev->dev, "%s-dev%d",
++				     indio_dev->name, iio_device_id(indio_dev));
++	if (!st->trig)
++		return -ENOMEM;
++
++	ret = request_irq(irq, &iio_trigger_generic_data_rdy_poll, 0,
++			  "mgb4-trigger", st->trig);
++	if (ret)
++		goto error_free_trig;
++
++	st->trig->ops = &trigger_ops;
++	iio_trigger_set_drvdata(st->trig, indio_dev);
++	ret = iio_trigger_register(st->trig);
++	if (ret)
++		goto error_free_irq;
++
++	indio_dev->trig = iio_trigger_get(st->trig);
++
++	return 0;
++
++error_free_irq:
++	free_irq(irq, st->trig);
++error_free_trig:
++	iio_trigger_free(st->trig);
++
++	return ret;
++}
++
++static void remove_trigger(struct iio_dev *indio_dev, int irq)
++{
++	struct trigger_data *st = iio_priv(indio_dev);
++
++	iio_trigger_unregister(st->trig);
++	free_irq(irq, st->trig);
++	iio_trigger_free(st->trig);
++}
++
++struct iio_dev *mgb4_trigger_create(struct mgb4_dev *mgbdev)
++{
++	struct iio_dev *indio_dev;
++	struct trigger_data *data;
++	struct pci_dev *pdev = mgbdev->pdev;
++	struct device *dev = &pdev->dev;
++	int rv, irq;
++
++	indio_dev = iio_device_alloc(dev, sizeof(*data));
++	if (!indio_dev)
++		return NULL;
++
++	indio_dev->info = &trigger_info;
++	indio_dev->name = "mgb4";
++	indio_dev->modes = INDIO_DIRECT_MODE;
++	indio_dev->channels = trigger_channels;
++	indio_dev->num_channels = ARRAY_SIZE(trigger_channels);
++
++	data = iio_priv(indio_dev);
++	data->mgbdev = mgbdev;
++
++	irq = xdma_get_user_irq(mgbdev->xdev, 11);
++	rv = probe_trigger(indio_dev, irq);
++	if (rv < 0) {
++		dev_err(dev, "iio triggered setup failed\n");
++		goto error_alloc;
++	}
++	rv = iio_triggered_buffer_setup(indio_dev, &iio_pollfunc_store_time,
++					trigger_handler, NULL);
++	if (rv < 0) {
++		dev_err(dev, "iio triggered buffer setup failed\n");
++		goto error_trigger;
++	}
++	rv = iio_device_register(indio_dev);
++	if (rv < 0) {
++		dev_err(dev, "iio device register failed\n");
++		goto error_buffer;
++	}
++
++	return indio_dev;
++
++error_buffer:
++	iio_triggered_buffer_cleanup(indio_dev);
++error_trigger:
++	remove_trigger(indio_dev, irq);
++error_alloc:
++	iio_device_free(indio_dev);
++
++	return NULL;
++}
++
++void mgb4_trigger_free(struct iio_dev *indio_dev)
++{
++	struct trigger_data *st = iio_priv(indio_dev);
++
++	iio_device_unregister(indio_dev);
++	iio_triggered_buffer_cleanup(indio_dev);
++	remove_trigger(indio_dev, xdma_get_user_irq(st->mgbdev->xdev, 11));
++	iio_device_free(indio_dev);
++}
+diff --git a/drivers/media/pci/mgb4/mgb4_trigger.h b/drivers/media/pci/mgb4/mgb4_trigger.h
+new file mode 100644
+index 000000000000..6c25bc4576f6
+--- /dev/null
++++ b/drivers/media/pci/mgb4/mgb4_trigger.h
+@@ -0,0 +1,8 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2021-2022 Digiteq Automotive
++ *     author: Martin Tuma <martin.tuma@digiteqautomotive.com>
++ */
++
++struct iio_dev *mgb4_trigger_create(struct mgb4_dev *mgbdev);
++void mgb4_trigger_free(struct iio_dev *indio_dev);
+diff --git a/drivers/media/pci/mgb4/mgb4_vin.c b/drivers/media/pci/mgb4/mgb4_vin.c
+new file mode 100644
+index 000000000000..4712e966595a
+--- /dev/null
++++ b/drivers/media/pci/mgb4/mgb4_vin.c
+@@ -0,0 +1,930 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2021-2023 Digiteq Automotive
++ *     author: Martin Tuma <martin.tuma@digiteqautomotive.com>
++ *
++ * This is the v4l2 input device module. It initializes the signal deserializers
++ * and creates the v4l2 video devices. The input signal can change at any time
++ * which is handled by the "timings" callbacks and an IRQ based watcher, that
++ * emits the V4L2_EVENT_SOURCE_CHANGE event in case of a signal source change.
++ *
++ * When the device is in loopback mode (a direct, in HW, in->out frame passing
++ * mode) the card's frame queue must be running regardless of whether a v4l2
++ * stream is running and the output parameters like frame buffers padding must
++ * be in sync with the input parameters.
++ */
++
++#include <linux/pci.h>
++#include <linux/workqueue.h>
++#include <linux/align.h>
++#include <linux/dma/amd_xdma.h>
++#include <media/v4l2-ioctl.h>
++#include <media/videobuf2-v4l2.h>
++#include <media/videobuf2-dma-sg.h>
++#include <media/v4l2-dv-timings.h>
++#include <media/v4l2-event.h>
++#include "mgb4_core.h"
++#include "mgb4_dma.h"
++#include "mgb4_sysfs.h"
++#include "mgb4_io.h"
++#include "mgb4_vout.h"
++#include "mgb4_vin.h"
++
++static const struct mgb4_vin_config vin_cfg[] = {
++	{0, 0, 0, 6, {0x10, 0x00, 0x04, 0x08, 0x1C, 0x14, 0x18, 0x20, 0x24, 0x28}},
++	{1, 1, 1, 7, {0x40, 0x30, 0x34, 0x38, 0x4C, 0x44, 0x48, 0x50, 0x54, 0x58}}
++};
++
++static const struct i2c_board_info fpdl3_deser_info[] = {
++	{I2C_BOARD_INFO("deserializer1", 0x38)},
++	{I2C_BOARD_INFO("deserializer2", 0x36)},
++};
++
++static const struct i2c_board_info gmsl_deser_info[] = {
++	{I2C_BOARD_INFO("deserializer1", 0x4C)},
++	{I2C_BOARD_INFO("deserializer2", 0x2A)},
++};
++
++static const struct mgb4_i2c_kv fpdl3_i2c[] = {
++	{0x06, 0xFF, 0x04}, {0x07, 0xFF, 0x01}, {0x45, 0xFF, 0xE8},
++	{0x49, 0xFF, 0x00}, {0x34, 0xFF, 0x00}, {0x23, 0xFF, 0x00}
++};
++
++static const struct mgb4_i2c_kv gmsl_i2c[] = {
++	{0x01, 0x03, 0x03}, {0x300, 0x0C, 0x0C}, {0x03, 0xC0, 0xC0},
++	{0x1CE, 0x0E, 0x0E}, {0x11, 0x05, 0x00}, {0x05, 0xC0, 0x40},
++	{0x307, 0x0F, 0x00}, {0xA0, 0x03, 0x00}, {0x3E0, 0x07, 0x07},
++	{0x308, 0x01, 0x01}, {0x10, 0x20, 0x20}, {0x300, 0x40, 0x40}
++};
++
++static const struct v4l2_dv_timings_cap video_timings_cap = {
++	.type = V4L2_DV_BT_656_1120,
++	.bt = {
++		.min_width = 320,
++		.max_width = 4096,
++		.min_height = 240,
++		.max_height = 2160,
++		.min_pixelclock = 1843200, /* 320 x 240 x 24Hz */
++		.max_pixelclock = 530841600, /* 4096 x 2160 x 60Hz */
++		.standards = V4L2_DV_BT_STD_CEA861 | V4L2_DV_BT_STD_DMT |
++			V4L2_DV_BT_STD_CVT | V4L2_DV_BT_STD_GTF,
++		.capabilities = V4L2_DV_BT_CAP_PROGRESSIVE |
++			V4L2_DV_BT_CAP_CUSTOM,
++	},
++};
++
++/*
++ * Returns the video output connected with the given video input if the input
++ * is in loopback mode.
++ */
++static struct mgb4_vout_dev *loopback_dev(struct mgb4_vin_dev *vindev, int i)
++{
++	struct mgb4_vout_dev *voutdev;
++	u32 config;
++
++	voutdev = vindev->mgbdev->vout[i];
++	if (!voutdev)
++		return NULL;
++
++	config = mgb4_read_reg(&voutdev->mgbdev->video,
++			       voutdev->config->regs.config);
++	if ((config & 0xc) >> 2 == vindev->config->id)
++		return voutdev;
++
++	return NULL;
++}
++
++/*
++ * Check, whether the loopback mode - a HW INPUT->OUTPUT transmission - is
++ * enabled on the given input.
++ */
++static int loopback_active(struct mgb4_vin_dev *vindev)
++{
++	int i;
++
++	for (i = 0; i < MGB4_VOUT_DEVICES; i++)
++		if (loopback_dev(vindev, i))
++			return 1;
++
++	return 0;
++}
++
++/*
++ * Set the output frame buffer padding of all outputs connected with the given
++ * input when the video input is set to loopback mode. The paddings must be
++ * the same for the loopback to work properly.
++ */
++static void set_loopback_padding(struct mgb4_vin_dev *vindev, u32 padding)
++{
++	struct mgb4_regs *video = &vindev->mgbdev->video;
++	struct mgb4_vout_dev *voutdev;
++	int i;
++
++	for (i = 0; i < MGB4_VOUT_DEVICES; i++) {
++		voutdev = loopback_dev(vindev, i);
++		if (voutdev)
++			mgb4_write_reg(video, voutdev->config->regs.padding,
++				       padding);
++	}
++}
++
++static int get_timings(struct mgb4_vin_dev *vindev,
++		       struct v4l2_dv_timings *timings)
++{
++	struct mgb4_regs *video = &vindev->mgbdev->video;
++	const struct mgb4_vin_regs *regs = &vindev->config->regs;
++
++	u32 status = mgb4_read_reg(video, regs->status);
++	u32 pclk = mgb4_read_reg(video, regs->pclk);
++	u32 signal = mgb4_read_reg(video, regs->signal);
++	u32 signal2 = mgb4_read_reg(video, regs->signal2);
++	u32 resolution = mgb4_read_reg(video, regs->resolution);
++
++	if (!(status & (1U << 2)))
++		return -ENOLCK;
++	if (!(status & (3 << 9)))
++		return -ENOLINK;
++
++	memset(timings, 0, sizeof(*timings));
++	timings->type = V4L2_DV_BT_656_1120;
++	timings->bt.width = resolution >> 16;
++	timings->bt.height = resolution & 0xFFFF;
++	if (status & (1U << 12))
++		timings->bt.polarities |= V4L2_DV_HSYNC_POS_POL;
++	if (status & (1U << 13))
++		timings->bt.polarities |= V4L2_DV_VSYNC_POS_POL;
++	timings->bt.pixelclock = pclk * 1000;
++	timings->bt.hsync = (signal & 0x00FF0000) >> 16;
++	timings->bt.vsync = (signal2 & 0x00FF0000) >> 16;
++	timings->bt.hbackporch = (signal & 0x0000FF00) >> 8;
++	timings->bt.hfrontporch = signal & 0x000000FF;
++	timings->bt.vbackporch = (signal2 & 0x0000FF00) >> 8;
++	timings->bt.vfrontporch = signal2 & 0x000000FF;
++
++	return 0;
++}
++
++static void return_all_buffers(struct mgb4_vin_dev *vindev,
++			       enum vb2_buffer_state state)
++{
++	struct mgb4_frame_buffer *buf, *node;
++	unsigned long flags;
++
++	spin_lock_irqsave(&vindev->qlock, flags);
++	list_for_each_entry_safe(buf, node, &vindev->buf_list, list) {
++		vb2_buffer_done(&buf->vb.vb2_buf, state);
++		list_del(&buf->list);
++	}
++	spin_unlock_irqrestore(&vindev->qlock, flags);
++}
++
++static int queue_setup(struct vb2_queue *q, unsigned int *nbuffers,
++		       unsigned int *nplanes, unsigned int sizes[],
++		       struct device *alloc_devs[])
++{
++	struct mgb4_vin_dev *vindev = vb2_get_drv_priv(q);
++	unsigned int size = (vindev->timings.bt.width + vindev->padding)
++	 * vindev->timings.bt.height * 4;
++
++	if (!size)
++		return -EINVAL;
++
++	if (*nplanes)
++		return sizes[0] < size ? -EINVAL : 0;
++	*nplanes = 1;
++	sizes[0] = size;
++
++	return 0;
++}
++
++static int buffer_init(struct vb2_buffer *vb)
++{
++	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++	struct mgb4_frame_buffer *buf = to_frame_buffer(vbuf);
++
++	INIT_LIST_HEAD(&buf->list);
++
++	return 0;
++}
++
++static int buffer_prepare(struct vb2_buffer *vb)
++{
++	struct mgb4_vin_dev *vindev = vb2_get_drv_priv(vb->vb2_queue);
++	struct device *dev = &vindev->mgbdev->pdev->dev;
++	unsigned int size = (vindev->timings.bt.width + vindev->padding)
++	 * vindev->timings.bt.height * 4;
++
++	if (vb2_plane_size(vb, 0) < size) {
++		dev_err(dev, "buffer too small (%lu < %u)\n",
++			vb2_plane_size(vb, 0), size);
++		return -EINVAL;
++	}
++
++	vb2_set_plane_payload(vb, 0, size);
++
++	return 0;
++}
++
++static void buffer_queue(struct vb2_buffer *vb)
++{
++	struct mgb4_vin_dev *vindev = vb2_get_drv_priv(vb->vb2_queue);
++	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++	struct mgb4_frame_buffer *buf = to_frame_buffer(vbuf);
++	unsigned long flags;
++
++	spin_lock_irqsave(&vindev->qlock, flags);
++	list_add_tail(&buf->list, &vindev->buf_list);
++	spin_unlock_irqrestore(&vindev->qlock, flags);
++}
++
++static void stop_streaming(struct vb2_queue *vq)
++{
++	struct mgb4_vin_dev *vindev = vb2_get_drv_priv(vq);
++	const struct mgb4_vin_config *config = vindev->config;
++	int irq = xdma_get_user_irq(vindev->mgbdev->xdev, config->vin_irq);
++
++	xdma_disable_user_irq(vindev->mgbdev->xdev, irq);
++
++	/*
++	 * In loopback mode, the HW frame queue must be left running for
++	 * the IN->OUT transmission to work!
++	 */
++	if (!loopback_active(vindev))
++		mgb4_mask_reg(&vindev->mgbdev->video, config->regs.config, 0x2,
++			      0x0);
++
++	cancel_work_sync(&vindev->dma_work);
++	return_all_buffers(vindev, VB2_BUF_STATE_ERROR);
++}
++
++static int start_streaming(struct vb2_queue *vq, unsigned int count)
++{
++	struct mgb4_vin_dev *vindev = vb2_get_drv_priv(vq);
++	const struct mgb4_vin_config *config = vindev->config;
++	int irq = xdma_get_user_irq(vindev->mgbdev->xdev, config->vin_irq);
++
++	vindev->sequence = 0;
++
++	/*
++	 * In loopback mode, the HW frame queue is already running.
++	 */
++	if (!loopback_active(vindev))
++		mgb4_mask_reg(&vindev->mgbdev->video, config->regs.config, 0x2,
++			      0x2);
++
++	xdma_enable_user_irq(vindev->mgbdev->xdev, irq);
++
++	return 0;
++}
++
++static const struct vb2_ops queue_ops = {
++	.queue_setup = queue_setup,
++	.buf_init = buffer_init,
++	.buf_prepare = buffer_prepare,
++	.buf_queue = buffer_queue,
++	.start_streaming = start_streaming,
++	.stop_streaming = stop_streaming,
++	.wait_prepare = vb2_ops_wait_prepare,
++	.wait_finish = vb2_ops_wait_finish
++};
++
++static int fh_open(struct file *file)
++{
++	struct mgb4_vin_dev *vindev = video_drvdata(file);
++	int rv;
++
++	mutex_lock(&vindev->lock);
++
++	rv = v4l2_fh_open(file);
++	if (rv)
++		goto out;
++
++	if (!v4l2_fh_is_singular_file(file))
++		goto out;
++
++	get_timings(vindev, &vindev->timings);
++	set_loopback_padding(vindev, vindev->padding);
++
++out:
++	mutex_unlock(&vindev->lock);
++	return rv;
++}
++
++static int fh_release(struct file *file)
++{
++	struct mgb4_vin_dev *vindev = video_drvdata(file);
++	int rv;
++
++	mutex_lock(&vindev->lock);
++
++	if (v4l2_fh_is_singular_file(file))
++		set_loopback_padding(vindev, 0);
++
++	rv = _vb2_fop_release(file, NULL);
++
++	mutex_unlock(&vindev->lock);
++
++	return rv;
++}
++
++static const struct v4l2_file_operations video_fops = {
++	.owner = THIS_MODULE,
++	.open = fh_open,
++	.release = fh_release,
++	.unlocked_ioctl = video_ioctl2,
++	.read = vb2_fop_read,
++	.mmap = vb2_fop_mmap,
++	.poll = vb2_fop_poll,
++};
++
++static int vidioc_querycap(struct file *file, void *priv,
++			   struct v4l2_capability *cap)
++{
++	strscpy(cap->driver, KBUILD_MODNAME, sizeof(cap->driver));
++	strscpy(cap->card, "MGB4 PCIe Card", sizeof(cap->card));
++
++	return 0;
++}
++
++static int vidioc_enum_fmt(struct file *file, void *priv,
++			   struct v4l2_fmtdesc *f)
++{
++	if (f->index != 0)
++		return -EINVAL;
++
++	f->pixelformat = V4L2_PIX_FMT_ABGR32;
++
++	return 0;
++}
++
++static int vidioc_enum_frameintervals(struct file *file, void *priv,
++				      struct v4l2_frmivalenum *ival)
++{
++	struct mgb4_vin_dev *vindev = video_drvdata(file);
++
++	if (ival->index != 0)
++		return -EINVAL;
++	if (ival->pixel_format != V4L2_PIX_FMT_ABGR32)
++		return -EINVAL;
++	if (ival->width != vindev->timings.bt.width ||
++	    ival->height != vindev->timings.bt.height)
++		return -EINVAL;
++
++	ival->type = V4L2_FRMIVAL_TYPE_CONTINUOUS;
++	ival->stepwise.min.denominator = 60;
++	ival->stepwise.min.numerator = 1;
++	ival->stepwise.max.denominator = 1;
++	ival->stepwise.max.numerator = 1;
++	ival->stepwise.step = ival->stepwise.max;
++
++	return 0;
++}
++
++static int vidioc_g_fmt(struct file *file, void *priv, struct v4l2_format *f)
++{
++	struct mgb4_vin_dev *vindev = video_drvdata(file);
++
++	f->fmt.pix.pixelformat = V4L2_PIX_FMT_ABGR32;
++	f->fmt.pix.width = vindev->timings.bt.width;
++	f->fmt.pix.height = vindev->timings.bt.height;
++	f->fmt.pix.field = V4L2_FIELD_NONE;
++	f->fmt.pix.colorspace = V4L2_COLORSPACE_RAW;
++	f->fmt.pix.bytesperline = (f->fmt.pix.width + vindev->padding) * 4;
++	f->fmt.pix.sizeimage = f->fmt.pix.bytesperline * f->fmt.pix.height;
++
++	return 0;
++}
++
++static int vidioc_s_fmt(struct file *file, void *priv, struct v4l2_format *f)
++{
++	struct mgb4_vin_dev *vindev = video_drvdata(file);
++	struct mgb4_regs *video = &vindev->mgbdev->video;
++
++	if (vb2_is_busy(&vindev->queue))
++		return -EBUSY;
++
++	f->fmt.pix.pixelformat = V4L2_PIX_FMT_ABGR32;
++	f->fmt.pix.width = vindev->timings.bt.width;
++	f->fmt.pix.height = vindev->timings.bt.height;
++	f->fmt.pix.field = V4L2_FIELD_NONE;
++	f->fmt.pix.colorspace = V4L2_COLORSPACE_RAW;
++	f->fmt.pix.bytesperline = max(f->fmt.pix.width * 4,
++				      ALIGN_DOWN(f->fmt.pix.bytesperline, 4));
++	f->fmt.pix.sizeimage = f->fmt.pix.bytesperline * f->fmt.pix.height;
++
++	vindev->padding = (f->fmt.pix.bytesperline - (f->fmt.pix.width * 4)) / 4;
++	mgb4_write_reg(video, vindev->config->regs.padding, vindev->padding);
++	set_loopback_padding(vindev, vindev->padding);
++
++	return 0;
++}
++
++static int vidioc_try_fmt(struct file *file, void *priv, struct v4l2_format *f)
++{
++	struct mgb4_vin_dev *vindev = video_drvdata(file);
++
++	f->fmt.pix.pixelformat = V4L2_PIX_FMT_ABGR32;
++	f->fmt.pix.width = vindev->timings.bt.width;
++	f->fmt.pix.height = vindev->timings.bt.height;
++	f->fmt.pix.field = V4L2_FIELD_NONE;
++	f->fmt.pix.colorspace = V4L2_COLORSPACE_RAW;
++	f->fmt.pix.bytesperline = max(f->fmt.pix.width * 4,
++				      ALIGN_DOWN(f->fmt.pix.bytesperline, 4));
++	f->fmt.pix.sizeimage = f->fmt.pix.bytesperline * f->fmt.pix.height;
++
++	return 0;
++}
++
++static int vidioc_enum_input(struct file *file, void *priv,
++			     struct v4l2_input *i)
++{
++	struct mgb4_vin_dev *vindev = video_drvdata(file);
++	struct mgb4_regs *video = &vindev->mgbdev->video;
++	u32 status;
++
++	if (i->index != 0)
++		return -EINVAL;
++
++	strscpy(i->name, "MGB4", sizeof(i->name));
++	i->type = V4L2_INPUT_TYPE_CAMERA;
++	i->capabilities = V4L2_IN_CAP_DV_TIMINGS;
++	i->status = 0;
++
++	status = mgb4_read_reg(video, vindev->config->regs.status);
++	if (!(status & (1U << 2)))
++		i->status |= V4L2_IN_ST_NO_SYNC;
++	if (!(status & (3 << 9)))
++		i->status |= V4L2_IN_ST_NO_SIGNAL;
++
++	return 0;
++}
++
++static int vidioc_enum_framesizes(struct file *file, void *fh,
++				  struct v4l2_frmsizeenum *fsize)
++{
++	struct mgb4_vin_dev *vindev = video_drvdata(file);
++
++	if (fsize->index != 0 || fsize->pixel_format != V4L2_PIX_FMT_ABGR32)
++		return -EINVAL;
++
++	fsize->discrete.width = vindev->timings.bt.width;
++	fsize->discrete.height = vindev->timings.bt.height;
++	fsize->type = V4L2_FRMSIZE_TYPE_DISCRETE;
++
++	return 0;
++}
++
++static int vidioc_s_input(struct file *file, void *priv, unsigned int i)
++{
++	return (i == 0) ? 0 : -EINVAL;
++}
++
++static int vidioc_g_input(struct file *file, void *priv, unsigned int *i)
++{
++	*i = 0;
++	return 0;
++}
++
++static int vidioc_parm(struct file *file, void *priv,
++		       struct v4l2_streamparm *parm)
++{
++	struct mgb4_vin_dev *vindev = video_drvdata(file);
++	struct mgb4_regs *video = &vindev->mgbdev->video;
++	const struct mgb4_vin_regs *regs = &vindev->config->regs;
++	struct v4l2_fract timeperframe = {
++		.numerator = mgb4_read_reg(video, regs->frame_period),
++		.denominator = 125000000,
++	};
++
++	if (parm->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
++		return -EINVAL;
++
++	parm->parm.capture.readbuffers = 2;
++	parm->parm.capture.capability = V4L2_CAP_TIMEPERFRAME;
++	parm->parm.capture.timeperframe = timeperframe;
++
++	return 0;
++}
++
++static int vidioc_s_dv_timings(struct file *file, void *fh,
++			       struct v4l2_dv_timings *timings)
++{
++	struct mgb4_vin_dev *vindev = video_drvdata(file);
++
++	if (timings->bt.width < video_timings_cap.bt.min_width ||
++	    timings->bt.width > video_timings_cap.bt.max_width ||
++	    timings->bt.height < video_timings_cap.bt.min_height ||
++	    timings->bt.height > video_timings_cap.bt.max_height)
++		return -EINVAL;
++	if (timings->bt.width == vindev->timings.bt.width &&
++	    timings->bt.height == vindev->timings.bt.height)
++		return 0;
++	if (vb2_is_busy(&vindev->queue))
++		return -EBUSY;
++
++	vindev->timings = *timings;
++
++	return 0;
++}
++
++static int vidioc_g_dv_timings(struct file *file, void *fh,
++			       struct v4l2_dv_timings *timings)
++{
++	struct mgb4_vin_dev *vindev = video_drvdata(file);
++	*timings = vindev->timings;
++
++	return 0;
++}
++
++static int vidioc_query_dv_timings(struct file *file, void *fh,
++				   struct v4l2_dv_timings *timings)
++{
++	struct mgb4_vin_dev *vindev = video_drvdata(file);
++
++	return get_timings(vindev, timings);
++}
++
++static int vidioc_enum_dv_timings(struct file *file, void *fh,
++				  struct v4l2_enum_dv_timings *timings)
++{
++	return v4l2_enum_dv_timings_cap(timings, &video_timings_cap, NULL, NULL);
++}
++
++static int vidioc_dv_timings_cap(struct file *file, void *fh,
++				 struct v4l2_dv_timings_cap *cap)
++{
++	*cap = video_timings_cap;
++
++	return 0;
++}
++
++static int vidioc_subscribe_event(struct v4l2_fh *fh,
++				  const struct v4l2_event_subscription *sub)
++{
++	switch (sub->type) {
++	case V4L2_EVENT_SOURCE_CHANGE:
++		return v4l2_src_change_event_subscribe(fh, sub);
++	}
++
++	return v4l2_ctrl_subscribe_event(fh, sub);
++}
++
++static const struct v4l2_ioctl_ops video_ioctl_ops = {
++	.vidioc_querycap = vidioc_querycap,
++	.vidioc_enum_fmt_vid_cap = vidioc_enum_fmt,
++	.vidioc_try_fmt_vid_cap = vidioc_try_fmt,
++	.vidioc_s_fmt_vid_cap = vidioc_s_fmt,
++	.vidioc_g_fmt_vid_cap = vidioc_g_fmt,
++	.vidioc_enum_framesizes = vidioc_enum_framesizes,
++	.vidioc_enum_frameintervals = vidioc_enum_frameintervals,
++	.vidioc_enum_input = vidioc_enum_input,
++	.vidioc_g_input = vidioc_g_input,
++	.vidioc_s_input = vidioc_s_input,
++	.vidioc_reqbufs = vb2_ioctl_reqbufs,
++	.vidioc_create_bufs = vb2_ioctl_create_bufs,
++	.vidioc_prepare_buf = vb2_ioctl_prepare_buf,
++	.vidioc_querybuf = vb2_ioctl_querybuf,
++	.vidioc_qbuf = vb2_ioctl_qbuf,
++	.vidioc_dqbuf = vb2_ioctl_dqbuf,
++	.vidioc_expbuf = vb2_ioctl_expbuf,
++	.vidioc_streamon = vb2_ioctl_streamon,
++	.vidioc_streamoff = vb2_ioctl_streamoff,
++	.vidioc_g_parm = vidioc_parm,
++	.vidioc_s_parm = vidioc_parm,
++	.vidioc_dv_timings_cap = vidioc_dv_timings_cap,
++	.vidioc_enum_dv_timings = vidioc_enum_dv_timings,
++	.vidioc_g_dv_timings = vidioc_g_dv_timings,
++	.vidioc_s_dv_timings = vidioc_s_dv_timings,
++	.vidioc_query_dv_timings = vidioc_query_dv_timings,
++	.vidioc_subscribe_event = vidioc_subscribe_event,
++	.vidioc_unsubscribe_event = v4l2_event_unsubscribe,
++};
++
++static void dma_transfer(struct work_struct *work)
++{
++	struct mgb4_vin_dev *vindev = container_of(work, struct mgb4_vin_dev,
++						   dma_work);
++	struct mgb4_regs *video = &vindev->mgbdev->video;
++	struct device *dev = &vindev->mgbdev->pdev->dev;
++	struct mgb4_frame_buffer *buf = 0;
++	unsigned long flags;
++	u32 addr;
++	int rv;
++
++	spin_lock_irqsave(&vindev->qlock, flags);
++	if (!list_empty(&vindev->buf_list)) {
++		buf = list_first_entry(&vindev->buf_list,
++				       struct mgb4_frame_buffer, list);
++		list_del_init(vindev->buf_list.next);
++	}
++	spin_unlock_irqrestore(&vindev->qlock, flags);
++
++	if (!buf)
++		return;
++
++	addr = mgb4_read_reg(video, vindev->config->regs.address);
++	if (addr >= MGB4_ERR_QUEUE_FULL) {
++		dev_dbg(dev, "frame queue error (%d)\n", (int)addr);
++		vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
++		return;
++	}
++
++	rv = mgb4_dma_transfer(vindev->mgbdev, vindev->config->dma_channel,
++			       false, addr,
++			       vb2_dma_sg_plane_desc(&buf->vb.vb2_buf, 0));
++	if (rv < 0) {
++		dev_warn(dev, "DMA transfer error\n");
++		vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
++	} else {
++		buf->vb.vb2_buf.timestamp = ktime_get_ns();
++		buf->vb.sequence = vindev->sequence++;
++		buf->vb.field = V4L2_FIELD_NONE;
++		vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_DONE);
++	}
++}
++
++static void signal_change(struct work_struct *work)
++{
++	struct mgb4_vin_dev *vindev = container_of(work, struct mgb4_vin_dev,
++						   err_work);
++	struct mgb4_regs *video = &vindev->mgbdev->video;
++	struct v4l2_bt_timings *timings = &vindev->timings.bt;
++	struct device *dev = &vindev->mgbdev->pdev->dev;
++
++	u32 resolution = mgb4_read_reg(video, vindev->config->regs.resolution);
++	u32 width = resolution >> 16;
++	u32 height = resolution & 0xFFFF;
++
++	if (timings->width != width || timings->height != height) {
++		static const struct v4l2_event ev = {
++			.type = V4L2_EVENT_SOURCE_CHANGE,
++			.u.src_change.changes = V4L2_EVENT_SRC_CH_RESOLUTION,
++		};
++
++		v4l2_event_queue(&vindev->vdev, &ev);
++
++		if (vb2_is_streaming(&vindev->queue))
++			vb2_queue_error(&vindev->queue);
++	}
++
++	dev_dbg(dev, "stream changed to %ux%u\n", width, height);
++}
++
++static irqreturn_t vin_handler(int irq, void *ctx)
++{
++	struct mgb4_vin_dev *vindev = (struct mgb4_vin_dev *)ctx;
++	struct mgb4_regs *video = &vindev->mgbdev->video;
++
++	schedule_work(&vindev->dma_work);
++
++	mgb4_write_reg(video, 0xB4, 1U << vindev->config->vin_irq);
++
++	return IRQ_HANDLED;
++}
++
++static irqreturn_t err_handler(int irq, void *ctx)
++{
++	struct mgb4_vin_dev *vindev = (struct mgb4_vin_dev *)ctx;
++	struct mgb4_regs *video = &vindev->mgbdev->video;
++
++	schedule_work(&vindev->err_work);
++
++	mgb4_write_reg(video, 0xB4, 1U << vindev->config->err_irq);
++
++	return IRQ_HANDLED;
++}
++
++static int deser_init(struct mgb4_vin_dev *vindev, int id)
++{
++	int rv, addr_size;
++	size_t values_count;
++	const struct mgb4_i2c_kv *values;
++	const struct i2c_board_info *info;
++	struct device *dev = &vindev->mgbdev->pdev->dev;
++
++	if (MGB4_IS_GMSL(vindev->mgbdev)) {
++		info = &gmsl_deser_info[id];
++		addr_size = 16;
++		values = gmsl_i2c;
++		values_count = ARRAY_SIZE(gmsl_i2c);
++	} else {
++		info = &fpdl3_deser_info[id];
++		addr_size = 8;
++		values = fpdl3_i2c;
++		values_count = ARRAY_SIZE(fpdl3_i2c);
++	}
++
++	rv = mgb4_i2c_init(&vindev->deser, vindev->mgbdev->i2c_adap, info,
++			   addr_size);
++	if (rv < 0) {
++		dev_err(dev, "failed to create deserializer\n");
++		return rv;
++	}
++	rv = mgb4_i2c_configure(&vindev->deser, values, values_count);
++	if (rv < 0) {
++		dev_err(dev, "failed to configure deserializer\n");
++		goto err_i2c_dev;
++	}
++
++	return 0;
++
++err_i2c_dev:
++	mgb4_i2c_free(&vindev->deser);
++
++	return rv;
++}
++
++static void fpga_init(struct mgb4_vin_dev *vindev)
++{
++	struct mgb4_regs *video = &vindev->mgbdev->video;
++	const struct mgb4_vin_regs *regs = &vindev->config->regs;
++
++	mgb4_write_reg(video, regs->config, 0x00000001);
++	mgb4_write_reg(video, regs->sync, 0x03E80002);
++	mgb4_write_reg(video, regs->padding, 0x00000000);
++	mgb4_write_reg(video, regs->config, 1U << 9);
++}
++
++#ifdef CONFIG_DEBUG_FS
++static void debugfs_init(struct mgb4_vin_dev *vindev)
++{
++	struct mgb4_regs *video = &vindev->mgbdev->video;
++
++	vindev->debugfs = debugfs_create_dir(vindev->vdev.name,
++					     vindev->mgbdev->debugfs);
++	if (!vindev->debugfs)
++		return;
++
++	vindev->regs[0].name = "CONFIG";
++	vindev->regs[0].offset = vindev->config->regs.config;
++	vindev->regs[1].name = "STATUS";
++	vindev->regs[1].offset = vindev->config->regs.status;
++	vindev->regs[2].name = "RESOLUTION";
++	vindev->regs[2].offset = vindev->config->regs.resolution;
++	vindev->regs[3].name = "FRAME_PERIOD";
++	vindev->regs[3].offset = vindev->config->regs.frame_period;
++	vindev->regs[4].name = "HS_VS_GENER_SETTINGS";
++	vindev->regs[4].offset = vindev->config->regs.sync;
++	vindev->regs[5].name = "PCLK_FREQUENCY";
++	vindev->regs[5].offset = vindev->config->regs.pclk;
++	vindev->regs[6].name = "VIDEO_PARAMS_1";
++	vindev->regs[6].offset = vindev->config->regs.signal;
++	vindev->regs[7].name = "VIDEO_PARAMS_2";
++	vindev->regs[7].offset = vindev->config->regs.signal2;
++	vindev->regs[8].name = "PADDING_PIXELS";
++	vindev->regs[8].offset = vindev->config->regs.padding;
++
++	vindev->regset.base = video->membase;
++	vindev->regset.regs = vindev->regs;
++	vindev->regset.nregs = ARRAY_SIZE(vindev->regs);
++
++	debugfs_create_regset32("registers", 0444, vindev->debugfs,
++				&vindev->regset);
++}
++#endif
++
++struct mgb4_vin_dev *mgb4_vin_create(struct mgb4_dev *mgbdev, int id)
++{
++	int rv;
++	struct device_attribute **attr, **module_attr;
++	struct mgb4_vin_dev *vindev;
++	struct pci_dev *pdev = mgbdev->pdev;
++	struct device *dev = &pdev->dev;
++	int vin_irq, err_irq;
++
++	vindev = kzalloc(sizeof(*vindev), GFP_KERNEL);
++	if (!vindev)
++		return NULL;
++
++	vindev->mgbdev = mgbdev;
++	vindev->config = &vin_cfg[id];
++
++	/* Frame queue*/
++	INIT_LIST_HEAD(&vindev->buf_list);
++	spin_lock_init(&vindev->qlock);
++
++	/* Work queues */
++	INIT_WORK(&vindev->dma_work, dma_transfer);
++	INIT_WORK(&vindev->err_work, signal_change);
++
++	/* IRQ callback */
++	vin_irq = xdma_get_user_irq(mgbdev->xdev, vindev->config->vin_irq);
++	rv = request_irq(vin_irq, vin_handler, 0, "mgb4-vin", vindev);
++	if (rv) {
++		dev_err(dev, "failed to register vin irq handler\n");
++		goto err_alloc;
++	}
++	/* Error IRQ callback */
++	err_irq = xdma_get_user_irq(mgbdev->xdev, vindev->config->err_irq);
++	rv = request_irq(err_irq, err_handler, 0, "mgb4-err", vindev);
++	if (rv) {
++		dev_err(dev, "failed to register err irq handler\n");
++		goto err_vin_irq;
++	}
++
++	/* Set the FPGA registers default values */
++	fpga_init(vindev);
++
++	/* Set the deserializer default values */
++	rv = deser_init(vindev, id);
++	if (rv)
++		goto err_err_irq;
++
++	/* V4L2 stuff init */
++	rv = v4l2_device_register(dev, &vindev->v4l2dev);
++	if (rv) {
++		dev_err(dev, "failed to register v4l2 device\n");
++		goto err_err_irq;
++	}
++
++	mutex_init(&vindev->lock);
++
++	vindev->queue.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
++	vindev->queue.io_modes = VB2_MMAP | VB2_DMABUF | VB2_READ;
++	vindev->queue.buf_struct_size = sizeof(struct mgb4_frame_buffer);
++	vindev->queue.ops = &queue_ops;
++	vindev->queue.mem_ops = &vb2_dma_sg_memops;
++	vindev->queue.gfp_flags = GFP_DMA32;
++	vindev->queue.timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
++	vindev->queue.min_buffers_needed = 2;
++	vindev->queue.drv_priv = vindev;
++	vindev->queue.lock = &vindev->lock;
++	vindev->queue.dev = dev;
++	rv = vb2_queue_init(&vindev->queue);
++	if (rv) {
++		dev_err(dev, "failed to initialize vb2 queue\n");
++		goto err_v4l2_dev;
++	}
++
++	snprintf(vindev->vdev.name, sizeof(vindev->vdev.name), "mgb4-in%d",
++		 id + 1);
++	vindev->vdev.device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_READWRITE
++	  | V4L2_CAP_STREAMING;
++	vindev->vdev.fops = &video_fops;
++	vindev->vdev.ioctl_ops = &video_ioctl_ops;
++	vindev->vdev.release = video_device_release_empty;
++	vindev->vdev.v4l2_dev = &vindev->v4l2dev;
++	vindev->vdev.lock = &vindev->lock;
++	vindev->vdev.queue = &vindev->queue;
++	video_set_drvdata(&vindev->vdev, vindev);
++
++	/* Enable the video signal change watcher */
++	xdma_enable_user_irq(vindev->mgbdev->xdev, err_irq);
++
++	/* Register the video device */
++	rv = video_register_device(&vindev->vdev, VFL_TYPE_VIDEO, -1);
++	if (rv) {
++		dev_err(dev, "failed to register video device\n");
++		goto err_v4l2_dev;
++	}
++
++	/* Module sysfs attributes */
++	module_attr = MGB4_IS_GMSL(mgbdev)
++	  ? mgb4_gmsl_in_attrs : mgb4_fpdl3_in_attrs;
++	for (attr = module_attr; *attr; attr++)
++		device_create_file(&vindev->vdev.dev, *attr);
++
++#ifdef CONFIG_DEBUG_FS
++	debugfs_init(vindev);
++#endif
++
++	return vindev;
++
++err_v4l2_dev:
++	v4l2_device_unregister(&vindev->v4l2dev);
++err_err_irq:
++	free_irq(err_irq, vindev);
++err_vin_irq:
++	free_irq(vin_irq, vindev);
++err_alloc:
++	kfree(vindev);
++
++	return NULL;
++}
++
++void mgb4_vin_free(struct mgb4_vin_dev *vindev)
++{
++	struct device_attribute **attr, **module_attr;
++	int vin_irq = xdma_get_user_irq(vindev->mgbdev->xdev,
++					vindev->config->vin_irq);
++	int err_irq = xdma_get_user_irq(vindev->mgbdev->xdev,
++					vindev->config->err_irq);
++
++	xdma_disable_user_irq(vindev->mgbdev->xdev, err_irq);
++
++	free_irq(vin_irq, vindev);
++	free_irq(err_irq, vindev);
++
++	debugfs_remove_recursive(vindev->debugfs);
++
++	module_attr = MGB4_IS_GMSL(vindev->mgbdev)
++	  ? mgb4_gmsl_in_attrs : mgb4_fpdl3_in_attrs;
++	for (attr = module_attr; *attr; attr++)
++		device_remove_file(&vindev->vdev.dev, *attr);
++
++	mgb4_i2c_free(&vindev->deser);
++	video_unregister_device(&vindev->vdev);
++	v4l2_device_unregister(&vindev->v4l2dev);
++
++	kfree(vindev);
++}
+diff --git a/drivers/media/pci/mgb4/mgb4_vin.h b/drivers/media/pci/mgb4/mgb4_vin.h
+new file mode 100644
+index 000000000000..0249b400ad4d
+--- /dev/null
++++ b/drivers/media/pci/mgb4/mgb4_vin.h
+@@ -0,0 +1,69 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2021-2023 Digiteq Automotive
++ *     author: Martin Tuma <martin.tuma@digiteqautomotive.com>
++ */
++
++#ifndef __MGB4_VIN_H__
++#define __MGB4_VIN_H__
++
++#include <media/v4l2-device.h>
++#include <media/v4l2-dev.h>
++#include <media/v4l2-ctrls.h>
++#include <media/videobuf2-core.h>
++#include <linux/debugfs.h>
++#include "mgb4_i2c.h"
++
++struct mgb4_vin_regs {
++	u32 address;
++	u32 config;
++	u32 status;
++	u32 resolution;
++	u32 frame_period;
++	u32 sync;
++	u32 pclk;
++	u32 signal;
++	u32 signal2;
++	u32 padding;
++};
++
++struct mgb4_vin_config {
++	int id;
++	int dma_channel;
++	int vin_irq;
++	int err_irq;
++	struct mgb4_vin_regs regs;
++};
++
++struct mgb4_vin_dev {
++	struct mgb4_dev *mgbdev;
++	struct v4l2_device v4l2dev;
++	struct video_device vdev;
++	struct vb2_queue queue;
++	struct mutex lock; /* vdev lock */
++
++	spinlock_t qlock; /* video buffer queue lock */
++	struct list_head buf_list;
++	struct work_struct dma_work, err_work;
++
++	unsigned int sequence;
++
++	struct v4l2_dv_timings timings;
++	u32 freq_range;
++	u32 padding;
++
++	struct mgb4_i2c_client deser;
++
++	const struct mgb4_vin_config *config;
++
++#ifdef CONFIG_DEBUG_FS
++	struct dentry *debugfs;
++	struct debugfs_regset32 regset;
++	struct debugfs_reg32 regs[9];
++#endif
++};
++
++struct mgb4_vin_dev *mgb4_vin_create(struct mgb4_dev *mgbdev, int id);
++void mgb4_vin_free(struct mgb4_vin_dev *vindev);
++
++#endif
+diff --git a/drivers/media/pci/mgb4/mgb4_vout.c b/drivers/media/pci/mgb4/mgb4_vout.c
+new file mode 100644
+index 000000000000..718a400db310
+--- /dev/null
++++ b/drivers/media/pci/mgb4/mgb4_vout.c
+@@ -0,0 +1,594 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2021-2023 Digiteq Automotive
++ *     author: Martin Tuma <martin.tuma@digiteqautomotive.com>
++ *
++ * This is the v4l2 output device module. It initializes the signal serializers
++ * and creates the v4l2 video devices.
++ *
++ * When the device is in loopback mode (a direct, in HW, in->out frame passing
++ * mode) we disable the v4l2 output by returning EBUSY in the open() syscall.
++ */
++
++#include <linux/pci.h>
++#include <linux/align.h>
++#include <linux/dma/amd_xdma.h>
++#include <media/v4l2-ioctl.h>
++#include <media/videobuf2-v4l2.h>
++#include <media/videobuf2-dma-sg.h>
++#include "mgb4_core.h"
++#include "mgb4_dma.h"
++#include "mgb4_sysfs.h"
++#include "mgb4_io.h"
++#include "mgb4_cmt.h"
++#include "mgb4_vout.h"
++
++static const struct mgb4_vout_config vout_cfg[] = {
++	{0, 0, 8, {0x78, 0x60, 0x64, 0x68, 0x74, 0x6C, 0x70, 0x7c}},
++	{1, 1, 9, {0x98, 0x80, 0x84, 0x88, 0x94, 0x8c, 0x90, 0x9c}}
++};
++
++static const struct i2c_board_info fpdl3_ser_info[] = {
++	{I2C_BOARD_INFO("serializer1", 0x14)},
++	{I2C_BOARD_INFO("serializer2", 0x16)},
++};
++
++static const struct mgb4_i2c_kv fpdl3_i2c[] = {
++	{0x05, 0xFF, 0x04}, {0x06, 0xFF, 0x01}, {0xC2, 0xFF, 0x80}
++};
++
++static void return_all_buffers(struct mgb4_vout_dev *voutdev,
++			       enum vb2_buffer_state state)
++{
++	struct mgb4_frame_buffer *buf, *node;
++	unsigned long flags;
++
++	spin_lock_irqsave(&voutdev->qlock, flags);
++	list_for_each_entry_safe(buf, node, &voutdev->buf_list, list) {
++		vb2_buffer_done(&buf->vb.vb2_buf, state);
++		list_del(&buf->list);
++	}
++	spin_unlock_irqrestore(&voutdev->qlock, flags);
++}
++
++static int queue_setup(struct vb2_queue *q, unsigned int *nbuffers,
++		       unsigned int *nplanes, unsigned int sizes[],
++		       struct device *alloc_devs[])
++{
++	struct mgb4_vout_dev *voutdev = vb2_get_drv_priv(q);
++	unsigned int size;
++
++	size = (voutdev->width + voutdev->padding) * voutdev->height * 4;
++
++	if (*nplanes)
++		return sizes[0] < size ? -EINVAL : 0;
++	*nplanes = 1;
++	sizes[0] = size;
++
++	return 0;
++}
++
++static int buffer_init(struct vb2_buffer *vb)
++{
++	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++	struct mgb4_frame_buffer *buf = to_frame_buffer(vbuf);
++
++	INIT_LIST_HEAD(&buf->list);
++
++	return 0;
++}
++
++static int buffer_prepare(struct vb2_buffer *vb)
++{
++	struct mgb4_vout_dev *voutdev = vb2_get_drv_priv(vb->vb2_queue);
++	struct device *dev = &voutdev->mgbdev->pdev->dev;
++	unsigned int size;
++
++	size = (voutdev->width * voutdev->padding) * voutdev->height * 4;
++
++	if (vb2_plane_size(vb, 0) < size) {
++		dev_err(dev, "buffer too small (%lu < %u)\n",
++			vb2_plane_size(vb, 0), size);
++		return -EINVAL;
++	}
++
++	vb2_set_plane_payload(vb, 0, size);
++
++	return 0;
++}
++
++static void buffer_queue(struct vb2_buffer *vb)
++{
++	struct mgb4_vout_dev *vindev = vb2_get_drv_priv(vb->vb2_queue);
++	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++	struct mgb4_frame_buffer *buf = to_frame_buffer(vbuf);
++	unsigned long flags;
++
++	spin_lock_irqsave(&vindev->qlock, flags);
++	list_add_tail(&buf->list, &vindev->buf_list);
++	spin_unlock_irqrestore(&vindev->qlock, flags);
++}
++
++static void stop_streaming(struct vb2_queue *vq)
++{
++	struct mgb4_vout_dev *voutdev = vb2_get_drv_priv(vq);
++	struct mgb4_dev *mgbdev = voutdev->mgbdev;
++	int irq = xdma_get_user_irq(mgbdev->xdev, voutdev->config->irq);
++
++	xdma_disable_user_irq(mgbdev->xdev, irq);
++	cancel_work_sync(&voutdev->dma_work);
++	mgb4_mask_reg(&mgbdev->video, voutdev->config->regs.config, 0x2, 0x0);
++	return_all_buffers(voutdev, VB2_BUF_STATE_ERROR);
++}
++
++static int start_streaming(struct vb2_queue *vq, unsigned int count)
++{
++	struct mgb4_vout_dev *voutdev = vb2_get_drv_priv(vq);
++	struct mgb4_dev *mgbdev = voutdev->mgbdev;
++	struct device *dev = &mgbdev->pdev->dev;
++	struct mgb4_frame_buffer *buf;
++	struct mgb4_regs *video = &mgbdev->video;
++	const struct mgb4_vout_config *config = voutdev->config;
++	int irq = xdma_get_user_irq(mgbdev->xdev, config->irq);
++	int rv;
++	u32 addr;
++
++	mgb4_mask_reg(video, config->regs.config, 0x2, 0x2);
++
++	addr = mgb4_read_reg(video, config->regs.address);
++	if (addr >= MGB4_ERR_QUEUE_FULL) {
++		dev_dbg(dev, "frame queue error (%d)\n", (int)addr);
++		return_all_buffers(voutdev, VB2_BUF_STATE_QUEUED);
++		return -EBUSY;
++	}
++
++	buf = list_first_entry(&voutdev->buf_list, struct mgb4_frame_buffer,
++			       list);
++	list_del_init(voutdev->buf_list.next);
++
++	rv = mgb4_dma_transfer(mgbdev, config->dma_channel, true, addr,
++			       vb2_dma_sg_plane_desc(&buf->vb.vb2_buf, 0));
++	if (rv < 0) {
++		dev_warn(dev, "DMA transfer error\n");
++		vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
++	} else {
++		vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_DONE);
++	}
++
++	xdma_enable_user_irq(mgbdev->xdev, irq);
++
++	return 0;
++}
++
++static const struct vb2_ops queue_ops = {
++	.queue_setup = queue_setup,
++	.buf_init = buffer_init,
++	.buf_prepare = buffer_prepare,
++	.buf_queue = buffer_queue,
++	.start_streaming = start_streaming,
++	.stop_streaming = stop_streaming,
++	.wait_prepare = vb2_ops_wait_prepare,
++	.wait_finish = vb2_ops_wait_finish
++};
++
++static int vidioc_querycap(struct file *file, void *priv,
++			   struct v4l2_capability *cap)
++{
++	strscpy(cap->driver, KBUILD_MODNAME, sizeof(cap->driver));
++	strscpy(cap->card, "MGB4 PCIe Card", sizeof(cap->card));
++
++	return 0;
++}
++
++static int vidioc_enum_fmt(struct file *file, void *priv,
++			   struct v4l2_fmtdesc *f)
++{
++	if (f->index != 0)
++		return -EINVAL;
++
++	f->pixelformat = V4L2_PIX_FMT_ABGR32;
++
++	return 0;
++}
++
++static int vidioc_g_fmt(struct file *file, void *priv, struct v4l2_format *f)
++{
++	struct mgb4_vout_dev *voutdev = video_drvdata(file);
++
++	f->fmt.pix.pixelformat = V4L2_PIX_FMT_ABGR32;
++	f->fmt.pix.width = voutdev->width;
++	f->fmt.pix.height = voutdev->height;
++	f->fmt.pix.field = V4L2_FIELD_NONE;
++	f->fmt.pix.colorspace = V4L2_COLORSPACE_RAW;
++	f->fmt.pix.bytesperline = (f->fmt.pix.width + voutdev->padding) * 4;
++	f->fmt.pix.sizeimage = f->fmt.pix.bytesperline * f->fmt.pix.height;
++
++	return 0;
++}
++
++static int vidioc_s_fmt(struct file *file, void *priv, struct v4l2_format *f)
++{
++	struct mgb4_vout_dev *voutdev = video_drvdata(file);
++	struct mgb4_regs *video = &voutdev->mgbdev->video;
++
++	if (vb2_is_busy(&voutdev->queue))
++		return -EBUSY;
++
++	f->fmt.pix.pixelformat = V4L2_PIX_FMT_ABGR32;
++	f->fmt.pix.width = voutdev->width;
++	f->fmt.pix.height = voutdev->height;
++	f->fmt.pix.field = V4L2_FIELD_NONE;
++	f->fmt.pix.colorspace = V4L2_COLORSPACE_RAW;
++	f->fmt.pix.bytesperline = max(f->fmt.pix.width * 4,
++				      ALIGN_DOWN(f->fmt.pix.bytesperline, 4));
++	f->fmt.pix.sizeimage = f->fmt.pix.bytesperline * f->fmt.pix.height;
++
++	voutdev->padding = (f->fmt.pix.bytesperline - (f->fmt.pix.width * 4)) / 4;
++	mgb4_write_reg(video, voutdev->config->regs.padding, voutdev->padding);
++
++	return 0;
++}
++
++static int vidioc_try_fmt(struct file *file, void *priv, struct v4l2_format *f)
++{
++	struct mgb4_vout_dev *voutdev = video_drvdata(file);
++
++	f->fmt.pix.pixelformat = V4L2_PIX_FMT_ABGR32;
++	f->fmt.pix.width = voutdev->width;
++	f->fmt.pix.height = voutdev->height;
++	f->fmt.pix.field = V4L2_FIELD_NONE;
++	f->fmt.pix.colorspace = V4L2_COLORSPACE_RAW;
++	f->fmt.pix.bytesperline = max(f->fmt.pix.width * 4,
++				      ALIGN_DOWN(f->fmt.pix.bytesperline, 4));
++	f->fmt.pix.sizeimage = f->fmt.pix.bytesperline * f->fmt.pix.height;
++
++	return 0;
++}
++
++static int vidioc_g_output(struct file *file, void *priv, unsigned int *i)
++{
++	*i = 0;
++	return 0;
++}
++
++static int vidioc_s_output(struct file *file, void *priv, unsigned int i)
++{
++	return i ? -EINVAL : 0;
++}
++
++static int vidioc_enum_output(struct file *file, void *priv,
++			      struct v4l2_output *out)
++{
++	if (out->index != 0)
++		return -EINVAL;
++
++	out->type = V4L2_OUTPUT_TYPE_ANALOG;
++	strscpy(out->name, "MGB4", sizeof(out->name));
++
++	return 0;
++}
++
++static const struct v4l2_ioctl_ops video_ioctl_ops = {
++	.vidioc_querycap = vidioc_querycap,
++	.vidioc_enum_fmt_vid_out = vidioc_enum_fmt,
++	.vidioc_try_fmt_vid_out = vidioc_try_fmt,
++	.vidioc_s_fmt_vid_out = vidioc_s_fmt,
++	.vidioc_g_fmt_vid_out = vidioc_g_fmt,
++	.vidioc_enum_output = vidioc_enum_output,
++	.vidioc_g_output = vidioc_g_output,
++	.vidioc_s_output = vidioc_s_output,
++	.vidioc_reqbufs = vb2_ioctl_reqbufs,
++	.vidioc_create_bufs = vb2_ioctl_create_bufs,
++	.vidioc_prepare_buf = vb2_ioctl_prepare_buf,
++	.vidioc_querybuf = vb2_ioctl_querybuf,
++	.vidioc_qbuf = vb2_ioctl_qbuf,
++	.vidioc_dqbuf = vb2_ioctl_dqbuf,
++	.vidioc_expbuf = vb2_ioctl_expbuf,
++	.vidioc_streamon = vb2_ioctl_streamon,
++	.vidioc_streamoff = vb2_ioctl_streamoff,
++};
++
++static int fh_open(struct file *file)
++{
++	struct mgb4_vout_dev *voutdev = video_drvdata(file);
++	struct mgb4_regs *video = &voutdev->mgbdev->video;
++	struct device *dev = &voutdev->mgbdev->pdev->dev;
++	u32 config, resolution;
++	int rv;
++
++	/* Return EBUSY when the device is in loopback mode */
++	config = mgb4_read_reg(video, voutdev->config->regs.config);
++	if ((config & 0xc) >> 2 != voutdev->config->id + MGB4_VIN_DEVICES) {
++		dev_dbg(dev, "can not open - device in loopback mode");
++		return -EBUSY;
++	}
++
++	mutex_lock(&voutdev->lock);
++
++	rv = v4l2_fh_open(file);
++	if (rv)
++		goto out;
++
++	if (!v4l2_fh_is_singular_file(file))
++		goto out;
++
++	resolution = mgb4_read_reg(video, voutdev->config->regs.resolution);
++	voutdev->width = resolution >> 16;
++	voutdev->height = resolution & 0xFFFF;
++
++out:
++	mutex_unlock(&voutdev->lock);
++	return rv;
++}
++
++static const struct v4l2_file_operations video_fops = {
++	.owner = THIS_MODULE,
++	.open = fh_open,
++	.release = vb2_fop_release,
++	.unlocked_ioctl = video_ioctl2,
++	.write = vb2_fop_write,
++	.mmap = vb2_fop_mmap,
++	.poll = vb2_fop_poll,
++};
++
++static void dma_transfer(struct work_struct *work)
++{
++	struct mgb4_vout_dev *voutdev = container_of(work, struct mgb4_vout_dev,
++						     dma_work);
++	struct device *dev = &voutdev->mgbdev->pdev->dev;
++	struct mgb4_regs *video = &voutdev->mgbdev->video;
++	struct mgb4_frame_buffer *buf = 0;
++	unsigned long flags;
++	u32 addr;
++	int rv;
++
++	spin_lock_irqsave(&voutdev->qlock, flags);
++	if (!list_empty(&voutdev->buf_list)) {
++		buf = list_first_entry(&voutdev->buf_list,
++				       struct mgb4_frame_buffer, list);
++		list_del_init(voutdev->buf_list.next);
++	}
++	spin_unlock_irqrestore(&voutdev->qlock, flags);
++
++	if (!buf)
++		return;
++
++	addr = mgb4_read_reg(video, voutdev->config->regs.address);
++	if (addr >= MGB4_ERR_QUEUE_FULL) {
++		dev_dbg(dev, "frame queue error (%d)\n", (int)addr);
++		vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
++		return;
++	}
++
++	rv = mgb4_dma_transfer(voutdev->mgbdev, voutdev->config->dma_channel,
++			       true, addr,
++			       vb2_dma_sg_plane_desc(&buf->vb.vb2_buf, 0));
++	if (rv < 0) {
++		dev_warn(dev, "DMA transfer error\n");
++		vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
++	} else {
++		vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_DONE);
++	}
++}
++
++static irqreturn_t handler(int irq, void *ctx)
++{
++	struct mgb4_vout_dev *voutdev = (struct mgb4_vout_dev *)ctx;
++	struct mgb4_regs *video = &voutdev->mgbdev->video;
++
++	schedule_work(&voutdev->dma_work);
++
++	mgb4_write_reg(video, 0xB4, 1U << voutdev->config->irq);
++
++	return IRQ_HANDLED;
++}
++
++static int ser_init(struct mgb4_vout_dev *voutdev, int id)
++{
++	int rv;
++	const struct i2c_board_info *info = &fpdl3_ser_info[id];
++	struct mgb4_i2c_client *ser = &voutdev->ser;
++	struct device *dev = &voutdev->mgbdev->pdev->dev;
++
++	if (MGB4_IS_GMSL(voutdev->mgbdev))
++		return 0;
++
++	rv = mgb4_i2c_init(ser, voutdev->mgbdev->i2c_adap, info, 8);
++	if (rv < 0) {
++		dev_err(dev, "failed to create serializer\n");
++		return rv;
++	}
++	rv = mgb4_i2c_configure(ser, fpdl3_i2c, ARRAY_SIZE(fpdl3_i2c));
++	if (rv < 0) {
++		dev_err(dev, "failed to configure serializer\n");
++		goto err_i2c_dev;
++	}
++
++	return 0;
++
++err_i2c_dev:
++	mgb4_i2c_free(ser);
++
++	return rv;
++}
++
++static void fpga_init(struct mgb4_vout_dev *voutdev)
++{
++	struct mgb4_regs *video = &voutdev->mgbdev->video;
++	const struct mgb4_vout_regs *regs = &voutdev->config->regs;
++
++	mgb4_write_reg(video, regs->config, 0x00000011);
++	mgb4_write_reg(video, regs->resolution,
++		       (MGB4_DEFAULT_WIDTH << 16) | MGB4_DEFAULT_HEIGHT);
++	mgb4_write_reg(video, regs->hsync, 0x00102020);
++	mgb4_write_reg(video, regs->vsync, 0x40020202);
++	mgb4_write_reg(video, regs->frame_period, MGB4_DEFAULT_PERIOD);
++	mgb4_write_reg(video, regs->padding, 0x00000000);
++
++	voutdev->freq = mgb4_cmt_set_vout_freq(voutdev, 70000 >> 1) << 1;
++
++	mgb4_write_reg(video, regs->config,
++		       (voutdev->config->id + MGB4_VIN_DEVICES) << 2 | 1 << 4);
++}
++
++#ifdef CONFIG_DEBUG_FS
++static void debugfs_init(struct mgb4_vout_dev *voutdev)
++{
++	struct mgb4_regs *video = &voutdev->mgbdev->video;
++
++	voutdev->debugfs = debugfs_create_dir(voutdev->vdev.name,
++					      voutdev->mgbdev->debugfs);
++	if (!voutdev->debugfs)
++		return;
++
++	voutdev->regs[0].name = "CONFIG";
++	voutdev->regs[0].offset = voutdev->config->regs.config;
++	voutdev->regs[1].name = "STATUS";
++	voutdev->regs[1].offset = voutdev->config->regs.status;
++	voutdev->regs[2].name = "RESOLUTION";
++	voutdev->regs[2].offset = voutdev->config->regs.resolution;
++	voutdev->regs[3].name = "VIDEO_PARAMS_1";
++	voutdev->regs[3].offset = voutdev->config->regs.hsync;
++	voutdev->regs[4].name = "VIDEO_PARAMS_2";
++	voutdev->regs[4].offset = voutdev->config->regs.vsync;
++	voutdev->regs[5].name = "FRAME_PERIOD";
++	voutdev->regs[5].offset = voutdev->config->regs.frame_period;
++	voutdev->regs[6].name = "PADDING";
++	voutdev->regs[6].offset = voutdev->config->regs.padding;
++
++	voutdev->regset.base = video->membase;
++	voutdev->regset.regs = voutdev->regs;
++	voutdev->regset.nregs = ARRAY_SIZE(voutdev->regs);
++
++	debugfs_create_regset32("registers", 0444, voutdev->debugfs,
++				&voutdev->regset);
++}
++#endif
++
++struct mgb4_vout_dev *mgb4_vout_create(struct mgb4_dev *mgbdev, int id)
++{
++	int rv, irq;
++	struct device_attribute **attr, **module_attr;
++	struct mgb4_vout_dev *voutdev;
++	struct mgb4_regs *video;
++	struct pci_dev *pdev = mgbdev->pdev;
++	struct device *dev = &pdev->dev;
++
++	voutdev = kzalloc(sizeof(*voutdev), GFP_KERNEL);
++	if (!voutdev)
++		return NULL;
++
++	voutdev->mgbdev = mgbdev;
++	voutdev->config = &vout_cfg[id];
++	video = &voutdev->mgbdev->video;
++
++	/* Frame queue */
++	INIT_LIST_HEAD(&voutdev->buf_list);
++	spin_lock_init(&voutdev->qlock);
++
++	/* DMA transfer stuff */
++	INIT_WORK(&voutdev->dma_work, dma_transfer);
++
++	/* IRQ callback */
++	irq = xdma_get_user_irq(mgbdev->xdev, voutdev->config->irq);
++	rv = request_irq(irq, handler, 0, "mgb4-vout", voutdev);
++	if (rv) {
++		dev_err(dev, "failed to register irq handler\n");
++		goto err_alloc;
++	}
++
++	/* Set the FPGA registers default values */
++	fpga_init(voutdev);
++
++	/* Set the serializer default values */
++	rv = ser_init(voutdev, id);
++	if (rv)
++		goto err_irq;
++
++	/* V4L2 stuff init  */
++	rv = v4l2_device_register(dev, &voutdev->v4l2dev);
++	if (rv) {
++		dev_err(dev, "failed to register v4l2 device\n");
++		goto err_irq;
++	}
++
++	mutex_init(&voutdev->lock);
++
++	voutdev->queue.type = V4L2_BUF_TYPE_VIDEO_OUTPUT;
++	voutdev->queue.io_modes = VB2_MMAP | VB2_DMABUF | VB2_WRITE;
++	voutdev->queue.buf_struct_size = sizeof(struct mgb4_frame_buffer);
++	voutdev->queue.ops = &queue_ops;
++	voutdev->queue.mem_ops = &vb2_dma_sg_memops;
++	voutdev->queue.gfp_flags = GFP_DMA32;
++	voutdev->queue.timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
++	voutdev->queue.min_buffers_needed = 2;
++	voutdev->queue.drv_priv = voutdev;
++	voutdev->queue.lock = &voutdev->lock;
++	voutdev->queue.dev = dev;
++	rv = vb2_queue_init(&voutdev->queue);
++	if (rv) {
++		dev_err(dev, "failed to initialize vb2 queue\n");
++		goto err_v4l2_dev;
++	}
++
++	snprintf(voutdev->vdev.name, sizeof(voutdev->vdev.name), "mgb4-out%d",
++		 id + 1);
++	voutdev->vdev.device_caps = V4L2_CAP_VIDEO_OUTPUT | V4L2_CAP_READWRITE
++	  | V4L2_CAP_STREAMING;
++	voutdev->vdev.vfl_dir = VFL_DIR_TX;
++	voutdev->vdev.fops = &video_fops;
++	voutdev->vdev.ioctl_ops = &video_ioctl_ops;
++	voutdev->vdev.release = video_device_release_empty;
++	voutdev->vdev.v4l2_dev = &voutdev->v4l2dev;
++	voutdev->vdev.lock = &voutdev->lock;
++	voutdev->vdev.queue = &voutdev->queue;
++	video_set_drvdata(&voutdev->vdev, voutdev);
++
++	rv = video_register_device(&voutdev->vdev, VFL_TYPE_VIDEO, -1);
++	if (rv) {
++		dev_err(dev, "failed to register video device\n");
++		goto err_v4l2_dev;
++	}
++
++	/* Module sysfs attributes */
++	module_attr = MGB4_IS_GMSL(mgbdev)
++	  ? mgb4_gmsl_out_attrs : mgb4_fpdl3_out_attrs;
++	for (attr = module_attr; *attr; attr++)
++		device_create_file(&voutdev->vdev.dev, *attr);
++
++#ifdef CONFIG_DEBUG_FS
++	debugfs_init(voutdev);
++#endif
++
++	return voutdev;
++
++err_v4l2_dev:
++	v4l2_device_unregister(&voutdev->v4l2dev);
++err_irq:
++	free_irq(irq, voutdev);
++err_alloc:
++	kfree(voutdev);
++
++	return NULL;
++}
++
++void mgb4_vout_free(struct mgb4_vout_dev *voutdev)
++{
++	struct device_attribute **attr, **module_attr;
++	int irq = xdma_get_user_irq(voutdev->mgbdev->xdev, voutdev->config->irq);
++
++	free_irq(irq, voutdev);
++
++	debugfs_remove_recursive(voutdev->debugfs);
++
++	module_attr = MGB4_IS_GMSL(voutdev->mgbdev)
++	  ? mgb4_gmsl_out_attrs : mgb4_fpdl3_out_attrs;
++	for (attr = module_attr; *attr; attr++)
++		device_remove_file(&voutdev->vdev.dev, *attr);
++
++	mgb4_i2c_free(&voutdev->ser);
++	video_unregister_device(&voutdev->vdev);
++	v4l2_device_unregister(&voutdev->v4l2dev);
++
++	kfree(voutdev);
++}
+diff --git a/drivers/media/pci/mgb4/mgb4_vout.h b/drivers/media/pci/mgb4/mgb4_vout.h
+new file mode 100644
+index 000000000000..b163dee711fd
+--- /dev/null
++++ b/drivers/media/pci/mgb4/mgb4_vout.h
+@@ -0,0 +1,65 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2021-2023 Digiteq Automotive
++ *     author: Martin Tuma <martin.tuma@digiteqautomotive.com>
++ */
++
++#ifndef __MGB4_VOUT_H__
++#define __MGB4_VOUT_H__
++
++#include <media/v4l2-device.h>
++#include <media/v4l2-dev.h>
++#include <media/v4l2-ctrls.h>
++#include <media/videobuf2-core.h>
++#include <linux/debugfs.h>
++#include "mgb4_i2c.h"
++
++struct mgb4_vout_regs {
++	u32 address;
++	u32 config;
++	u32 status;
++	u32 resolution;
++	u32 frame_period;
++	u32 hsync;
++	u32 vsync;
++	u32 padding;
++};
++
++struct mgb4_vout_config {
++	int id;
++	int dma_channel;
++	int irq;
++	struct mgb4_vout_regs regs;
++};
++
++struct mgb4_vout_dev {
++	struct mgb4_dev *mgbdev;
++	struct v4l2_device v4l2dev;
++	struct video_device vdev;
++	struct vb2_queue queue;
++	struct mutex lock; /* vdev lock */
++
++	spinlock_t qlock; /* buffer queue lock */
++	struct list_head buf_list;
++	struct work_struct dma_work;
++
++	u32 width;
++	u32 height;
++	u32 freq;
++	u32 padding;
++
++	struct mgb4_i2c_client ser;
++
++	const struct mgb4_vout_config *config;
++
++#ifdef CONFIG_DEBUG_FS
++	struct dentry *debugfs;
++	struct debugfs_regset32 regset;
++	struct debugfs_reg32 regs[7];
++#endif
++};
++
++struct mgb4_vout_dev *mgb4_vout_create(struct mgb4_dev *mgbdev, int id);
++void mgb4_vout_free(struct mgb4_vout_dev *voutdev);
++
++#endif
 -- 
-2.18.0
+2.40.1
 
