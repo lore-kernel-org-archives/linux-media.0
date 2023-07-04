@@ -2,28 +2,28 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF469EB64D9
-	for <linux-media@archiver.kernel.org>; Tue,  4 Jul 2023 10:41:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B60DC001B3
+	for <linux-media@archiver.kernel.org>; Tue,  4 Jul 2023 10:41:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231479AbjGDKlO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 4 Jul 2023 06:41:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53596 "EHLO
+        id S230260AbjGDKlq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 4 Jul 2023 06:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231932AbjGDKlJ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Jul 2023 06:41:09 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E118D18D
-        for <linux-media@vger.kernel.org>; Tue,  4 Jul 2023 03:41:08 -0700 (PDT)
+        with ESMTP id S231958AbjGDKlO (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Jul 2023 06:41:14 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F655195
+        for <linux-media@vger.kernel.org>; Tue,  4 Jul 2023 03:41:13 -0700 (PDT)
 Received: from uno.localdomain (85-160-42-71.reb.o2.cz [85.160.42.71])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4FD596DF;
-        Tue,  4 Jul 2023 12:40:23 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 08FCB2C6;
+        Tue,  4 Jul 2023 12:40:25 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1688467224;
-        bh=/3/yZkALZPHzOiEU/xBHKn93LT4uu+I4TrvB4GmN4Ps=;
+        s=mail; t=1688467226;
+        bh=QlAkJMRKJXzjhQnq9hORGQ2cLtHSLGFTxAOkiNZhCiQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UH++37pU5LnwaBUUcQoDSeJq2RTacHkCX2AUdRPIfagJ7WusjjA6+DysMsjAAFxhQ
-         JPnik99mic0DqeZ5skeK14vjW+Z0QkDH2SiTeI0GHy3oXm1Y4aTtTyLiY9qeMgMsg7
-         l/yyIPy5uCpyQG1bOQ2tAFIEbq2EKocwx4J51ArY=
+        b=eSkjnOpIAia2uMw49ffMm7GK0PQJadk+R2MWd++w4DRA1hplJoIQeIunbDsEZlBbB
+         TyAEwLcMTWn6+Keuo4ipaXXDHwQFcIarcp6wcJgGrHs/jbGqija4WwxEaa79VP0iG7
+         oUsAIRS/Woyr6T302F88w/eIGDKAB5FdEU+XJms8=
 From:   Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
@@ -32,11 +32,10 @@ Cc:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
         Sakari Ailus <sakari.ailus@iki.fi>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>,
-        Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-Subject: [PATCH 1/5] media: i2c: imx219: Rename mbus codes array
-Date:   Tue,  4 Jul 2023 12:40:53 +0200
-Message-Id: <20230704104057.149837-2-jacopo.mondi@ideasonboard.com>
+        Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
+Subject: [PATCH 4/5] media: i2c: imx219: Simplify format assignment
+Date:   Tue,  4 Jul 2023 12:40:56 +0200
+Message-Id: <20230704104057.149837-5-jacopo.mondi@ideasonboard.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230704104057.149837-1-jacopo.mondi@ideasonboard.com>
 References: <20230704103611.149631-1-jacopo.mondi@ideasonboard.com>
@@ -47,86 +46,110 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+The set_fmt and init_cfg functions both fills a v4l2_mbus_framefmt
+instance, passing in the mode and the media bus code. While set_fmt
+uses function helpers, init_cfg open-codes the assignments.
 
-The imx219 is using the name codes[] for the mbus format which is not
-easy to read and know what it means. Change it to imx219_mbus_formats.
+Simplify the format initialization by moving it to a common helper.
 
-Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 ---
- drivers/media/i2c/imx219.c | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ drivers/media/i2c/imx219.c | 56 ++++++++++++++------------------------
+ 1 file changed, 21 insertions(+), 35 deletions(-)
 
 diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-index f9471c9e3a74..998a673a4290 100644
+index 127ecee3643d..c1246bd23b0d 100644
 --- a/drivers/media/i2c/imx219.c
 +++ b/drivers/media/i2c/imx219.c
-@@ -345,7 +345,7 @@ static const char * const imx219_supply_name[] = {
-  * - v flip
-  * - h&v flips
-  */
--static const u32 codes[] = {
-+static const u32 imx219_mbus_formats[] = {
- 	MEDIA_BUS_FMT_SRGGB10_1X10,
- 	MEDIA_BUS_FMT_SGRBG10_1X10,
- 	MEDIA_BUS_FMT_SGBRG10_1X10,
-@@ -578,17 +578,17 @@ static u32 imx219_get_format_code(struct imx219 *imx219, u32 code)
+@@ -670,6 +670,23 @@ static const struct v4l2_ctrl_ops imx219_ctrl_ops = {
+ 	.s_ctrl = imx219_set_ctrl,
+ };
  
- 	lockdep_assert_held(&imx219->mutex);
++static void imx219_update_pad_format(struct imx219 *imx219,
++				     const struct imx219_mode *mode,
++				     struct v4l2_mbus_framefmt *fmt, u32 code)
++{
++	/* Bayer order varies with flips */
++	fmt->code = imx219_get_format_code(imx219, code);
++	fmt->width = mode->width;
++	fmt->height = mode->height;
++	fmt->field = V4L2_FIELD_NONE;
++	fmt->colorspace = V4L2_COLORSPACE_SRGB;
++	fmt->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(fmt->colorspace);
++	fmt->quantization = V4L2_MAP_QUANTIZATION_DEFAULT(true,
++							  fmt->colorspace,
++							  fmt->ycbcr_enc);
++	fmt->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(fmt->colorspace);
++}
++
+ static int imx219_init_cfg(struct v4l2_subdev *sd,
+ 			   struct v4l2_subdev_state *state)
+ {
+@@ -679,17 +696,8 @@ static int imx219_init_cfg(struct v4l2_subdev *sd,
  
--	for (i = 0; i < ARRAY_SIZE(codes); i++)
--		if (codes[i] == code)
-+	for (i = 0; i < ARRAY_SIZE(imx219_mbus_formats); i++)
-+		if (imx219_mbus_formats[i] == code)
- 			break;
+ 	/* Initialize try_fmt */
+ 	format = v4l2_subdev_get_pad_format(sd, state, 0);
+-	format->width = supported_modes[0].width;
+-	format->height = supported_modes[0].height;
+-	format->code = imx219_get_format_code(imx219,
+-					      MEDIA_BUS_FMT_SRGGB10_1X10);
+-	format->field = V4L2_FIELD_NONE;
+-	format->colorspace = V4L2_COLORSPACE_SRGB;
+-	format->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(format->colorspace);
+-	format->quantization = V4L2_MAP_QUANTIZATION_DEFAULT(true,
+-							  format->colorspace,
+-							  format->ycbcr_enc);
+-	format->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(format->colorspace);
++	imx219_update_pad_format(imx219, &supported_modes[0], format,
++				 MEDIA_BUS_FMT_SRGGB10_1X10);
  
--	if (i >= ARRAY_SIZE(codes))
-+	if (i >= ARRAY_SIZE(imx219_mbus_formats))
- 		i = 0;
- 
- 	i = (i & ~3) | (imx219->vflip->val ? 2 : 0) |
- 	    (imx219->hflip->val ? 1 : 0);
- 
--	return codes[i];
-+	return imx219_mbus_formats[i];
+ 	/* Initialize try_crop rectangle. */
+ 	try_crop = v4l2_subdev_get_pad_crop(sd, state, 0);
+@@ -737,26 +745,6 @@ static int imx219_enum_frame_size(struct v4l2_subdev *sd,
+ 	return 0;
  }
  
- static void imx219_set_default_format(struct imx219 *imx219)
-@@ -731,11 +731,11 @@ static int imx219_enum_mbus_code(struct v4l2_subdev *sd,
- {
- 	struct imx219 *imx219 = to_imx219(sd);
- 
--	if (code->index >= (ARRAY_SIZE(codes) / 4))
-+	if (code->index >= (ARRAY_SIZE(imx219_mbus_formats) / 4))
- 		return -EINVAL;
- 
- 	mutex_lock(&imx219->mutex);
--	code->code = imx219_get_format_code(imx219, codes[code->index * 4]);
-+	code->code = imx219_get_format_code(imx219, imx219_mbus_formats[code->index * 4]);
- 	mutex_unlock(&imx219->mutex);
- 
- 	return 0;
-@@ -831,14 +831,14 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
- 
- 	mutex_lock(&imx219->mutex);
- 
--	for (i = 0; i < ARRAY_SIZE(codes); i++)
--		if (codes[i] == fmt->format.code)
-+	for (i = 0; i < ARRAY_SIZE(imx219_mbus_formats); i++)
-+		if (imx219_mbus_formats[i] == fmt->format.code)
- 			break;
--	if (i >= ARRAY_SIZE(codes))
-+	if (i >= ARRAY_SIZE(imx219_mbus_formats))
+-static void imx219_reset_colorspace(struct v4l2_mbus_framefmt *fmt)
+-{
+-	fmt->colorspace = V4L2_COLORSPACE_SRGB;
+-	fmt->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(fmt->colorspace);
+-	fmt->quantization = V4L2_MAP_QUANTIZATION_DEFAULT(true,
+-							  fmt->colorspace,
+-							  fmt->ycbcr_enc);
+-	fmt->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(fmt->colorspace);
+-}
+-
+-static void imx219_update_pad_format(struct imx219 *imx219,
+-				     const struct imx219_mode *mode,
+-				     struct v4l2_subdev_format *fmt)
+-{
+-	fmt->format.width = mode->width;
+-	fmt->format.height = mode->height;
+-	fmt->format.field = V4L2_FIELD_NONE;
+-	imx219_reset_colorspace(&fmt->format);
+-}
+-
+ static int imx219_set_pad_format(struct v4l2_subdev *sd,
+ 				 struct v4l2_subdev_state *sd_state,
+ 				 struct v4l2_subdev_format *fmt)
+@@ -772,15 +760,13 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
+ 	if (i >= ARRAY_SIZE(imx219_mbus_formats))
  		i = 0;
  
- 	/* Bayer order varies with flips */
--	fmt->format.code = imx219_get_format_code(imx219, codes[i]);
-+	fmt->format.code = imx219_get_format_code(imx219, imx219_mbus_formats[i]);
- 
+-	/* Bayer order varies with flips */
+-	fmt->format.code = imx219_get_format_code(imx219, imx219_mbus_formats[i]);
+-
  	mode = v4l2_find_nearest_size(supported_modes,
  				      ARRAY_SIZE(supported_modes),
+ 				      width, height,
+ 				      fmt->format.width, fmt->format.height);
+ 
+-	imx219_update_pad_format(imx219, mode, fmt);
++	imx219_update_pad_format(imx219, mode, &fmt->format,
++				 imx219_mbus_formats[i]);
+ 
+ 	if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
+ 		imx219->mode = mode;
 -- 
 2.40.1
 
