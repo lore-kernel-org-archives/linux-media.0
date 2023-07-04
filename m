@@ -2,42 +2,41 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57912C001B3
-	for <linux-media@archiver.kernel.org>; Tue,  4 Jul 2023 12:12:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92F8DC001DD
+	for <linux-media@archiver.kernel.org>; Tue,  4 Jul 2023 12:12:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231454AbjGDMMi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 4 Jul 2023 08:12:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59708 "EHLO
+        id S231501AbjGDMMk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 4 Jul 2023 08:12:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231518AbjGDMMa (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Jul 2023 08:12:30 -0400
+        with ESMTP id S231461AbjGDMMg (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Jul 2023 08:12:36 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F72BE7B;
-        Tue,  4 Jul 2023 05:12:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30F410F8;
+        Tue,  4 Jul 2023 05:12:32 -0700 (PDT)
 Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1E3BF6606F8B;
-        Tue,  4 Jul 2023 13:12:27 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4E1F96606FA2;
+        Tue,  4 Jul 2023 13:12:30 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1688472748;
-        bh=mN8qypJRIFbd3Kesz4lPo40wSVIs6bQ5nGg3PNEh0Es=;
+        s=mail; t=1688472751;
+        bh=P1P/9q4onpwMjyiQG602hRaoNrRzXoH8b1X945zhtAM=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=TWgC58eTs6oZA7ZEYYX4Jy6iRrUATyE+Mf8PohuGsnWKJzD5P+6FQBSVq55XZgxzj
-         tjnF0biSjx988Fl7AcytyQiabX2CHLqZw4A7sKIiFF3u8qyKfW96dbsXN09eoQx/rx
-         usXL4+EF/k4o8R5+eDvstgt8YDTDjEeChMZ+/54K7lxd6kfi0M0Zca1q52+YDGwAXW
-         4k3vE4r0ys2t6ibSAZtgcVnhFhxZopQRCEkOsqtWFzCFVTNefiFPfI4x6hezUt6z4p
-         RztDoE8Rg8kmXvC0pfxNb4flQcrin/3rIRwxYt5lctbpoQSGv+HvzZ1gmLlKUG80R1
-         Q7bXK2YlGLhqw==
-Message-ID: <d0679fb7-6856-a19e-6a36-69a834d23ade@collabora.com>
-Date:   Tue, 4 Jul 2023 14:12:24 +0200
+        b=C71tfIEusVtlX580C9ELSJo8phI4SpDiLr9nkMgjg4EkdvbYzzBh8klrCoLl5JDpY
+         svONfH40auZA1XiNp9K+IP+NV0coCIXseuXVSbeOWjKTq4IGVDwr+k65QuuGBDxmvf
+         CK1+240ofHdU1xgMH5sRoNTjBGjWfhkkxOwwyqfoc+wS7JJVKtf0zCSW1/G24ABcI3
+         9TLXfMd9tTxIKj0lgLUdbROadDCabJF0GModd/MmmWnzwAFmcDcQvNqCCoWmti75bM
+         l8Zj1z7hbP5QWM2L3jB3Uag0qx7G4AWyIRy2dt7K7hiM0eR7EW+T1QQ3Y0jB6k/r0B
+         Z54vFg4q5c3OA==
+Message-ID: <6f5ac0a3-51dd-184b-c116-def6d7d853c4@collabora.com>
+Date:   Tue, 4 Jul 2023 14:12:27 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v5,05/11] media: mediatek: vcodec: remove the dependency
- of vcodec debug log
+Subject: Re: [PATCH v5,02/11] media: mediatek: vcodec: align fw interface
 Content-Language: en-US
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
@@ -56,10 +55,10 @@ Cc:     Chen-Yu Tsai <wenst@chromium.org>,
         linux-mediatek@lists.infradead.org,
         Project_Global_Chrome_Upstream_Group@mediatek.com
 References: <20230704111327.7140-1-yunfei.dong@mediatek.com>
- <20230704111327.7140-6-yunfei.dong@mediatek.com>
+ <20230704111327.7140-3-yunfei.dong@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230704111327.7140-6-yunfei.dong@mediatek.com>
+In-Reply-To: <20230704111327.7140-3-yunfei.dong@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -67,12 +66,9 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 Il 04/07/23 13:13, Yunfei Dong ha scritto:
-> 'mtk_vcodec_debug' and 'mtk_vcodec_err' depends on 'mtk_vcodec_ctx'
-> to get the index of each instance. Define two different macro
-> mtk_vdec_debug and mtk_venc_debug for decoder and encoder, and re-write
-> macro mtk_vcodec_debug as the common interface which is called
-> by mtk_vdec_debug and mtk_venc_debug. The vcodec debug log can be
-> separeated by encoder and decoder.
+> Align scp and vpu firmware interface, remove the depedency for
+> 'struct mtk_vcodec_dev' and 'struct mtk_vcodec_ctx'. It will be
+> much easier to separate video encoder and decoder.
 > 
 > Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 > Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
