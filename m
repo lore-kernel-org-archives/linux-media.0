@@ -2,120 +2,241 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26D7CEB64D9
-	for <linux-media@archiver.kernel.org>; Tue,  4 Jul 2023 13:05:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C594EB64D9
+	for <linux-media@archiver.kernel.org>; Tue,  4 Jul 2023 13:14:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231159AbjGDNFA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 4 Jul 2023 09:05:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60330 "EHLO
+        id S231349AbjGDNOB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 4 Jul 2023 09:14:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbjGDNE6 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Jul 2023 09:04:58 -0400
-Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF7F1980
-        for <linux-media@vger.kernel.org>; Tue,  4 Jul 2023 06:04:25 -0700 (PDT)
-Received: by mail-vk1-xa2f.google.com with SMTP id 71dfb90a1353d-47e746f9560so125344e0c.1
-        for <linux-media@vger.kernel.org>; Tue, 04 Jul 2023 06:04:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google; t=1688475864; x=1691067864;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Je2IixiKUbt9NqSRg4gDrVP8T4/tNCU78MaXm4X340k=;
-        b=oKvtHkdj4yN43IFV4ScgtWN4e346FcYRethiN1fZhu8pZGtLmHbwde39e98T9oy4z7
-         1Wwg4Q3Wqh7zFxc6tFnzZmqdCDQvrJ8K74Kzi4Ev8VXvZY/JtLxZIXTMbH1EoSeDst8T
-         WB67GPYmHO0ExldyeY+Q6Jr2ySoQFPGJsWheBXM0eYA7FpvbIWwSLe/fBa9GGl1Jz1TU
-         /xWKeujhPqVRTbj72SwFcp2ancm/Q3HbzxH+nKEMvendr3f0LvwsG1sy7oVLOdpNmBfC
-         nCwD7imHQ9h6Cd78SZumvCmiKa1Tkr11Q4YY1CX0XqW2DnCvzq+0j1XpUYnAgC0KhJd7
-         ZCNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688475864; x=1691067864;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Je2IixiKUbt9NqSRg4gDrVP8T4/tNCU78MaXm4X340k=;
-        b=V1zR9npviz0ebuzoM/xYA95cxfBFMmRYvkJ95mE1Aij8wlhiWdiInDNEFBUpoSs6n9
-         M5zpm+gm7LDLlbFfkxPvrYyYg1i6CaDBKYdUgnNXNnr62paShB0efGLqtXhL7I2CraZR
-         ETfkNKnMhGDP/2dhRjcnDF9v48mT/U98sbgCVfQ2YmzEN/KhGEUxY9Wl7u3/jRKcRfNY
-         E7l6GecCcpG2ExN5MpHytF+/0w1wD1kUnYgR6r88FGbZOb5aR8DSGyLZLJoqWBgzlbum
-         /5FHSp4WknpWFT1ta7En5Sqpt/3MvzfvehjJmwIDWd0gnBr53u0bTevHTvga9KgPmQP2
-         JrHw==
-X-Gm-Message-State: ABy/qLahMr5w9m9l1paElKZZYBauD/9AzhtJGhfsSWs79EoLTLNwVq6G
-        rLWZBgUtTmS7O+r4mQofthZcvNrmqHGUFNSqCWip32hcT6c6IEfL
-X-Google-Smtp-Source: APBJJlF7nTnW5BQ6Djycb5X/rsMYdBFk3iRl7ptjiit/AxEitYFpSPFU5EWrwca7RDCD4XGqRvIn1ydwEw39J0WbxVY=
-X-Received: by 2002:a05:6102:50d:b0:443:6082:1436 with SMTP id
- l13-20020a056102050d00b0044360821436mr6758242vsa.6.1688475863889; Tue, 04 Jul
- 2023 06:04:23 -0700 (PDT)
+        with ESMTP id S229603AbjGDNOA (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Jul 2023 09:14:00 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F12E7A;
+        Tue,  4 Jul 2023 06:13:58 -0700 (PDT)
+X-UUID: a05c79361a6c11ee9cb5633481061a41-20230704
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=HwyjMIi6W5gJLbkiKH8PrOs8tqDPzUCinWwlMbK7hP4=;
+        b=uY3Gs6I6MVobUlRY8nD9MoV+/RX6p1zuvr0WGvJYXfEXNIGhXKIHdOr/7BhUWw9QllBysEu/ETtdQCtD2LiagLXPmQUmq+MZcmo1KwYZZyKhc4h6ZNFiNTJ+7f4KGEMxlzxalgk/ZqFlBzJPih1yKCiLN+CVa04mtUxjLQBRz/4=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.27,REQID:d1599421-a382-4a00-8b6e-ad9daf4e3d59,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:-25
+X-CID-META: VersionHash:01c9525,CLOUDID:80c08d0d-26a8-467f-b838-f99719a9c083,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: a05c79361a6c11ee9cb5633481061a41-20230704
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 672305477; Tue, 04 Jul 2023 21:13:54 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Tue, 4 Jul 2023 21:13:53 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Tue, 4 Jul 2023 21:13:52 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
+        <nfraprado@collabora.com>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Nathan Hebert <nhebert@chromium.org>
+CC:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v6,02/11] media: mediatek: vcodec: align fw interface
+Date:   Tue, 4 Jul 2023 21:13:40 +0800
+Message-ID: <20230704131349.8354-3-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230704131349.8354-1-yunfei.dong@mediatek.com>
+References: <20230704131349.8354-1-yunfei.dong@mediatek.com>
 MIME-Version: 1.0
-References: <20230704123819.156418-1-jacopo.mondi@ideasonboard.com> <20230704123819.156418-3-jacopo.mondi@ideasonboard.com>
-In-Reply-To: <20230704123819.156418-3-jacopo.mondi@ideasonboard.com>
-From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date:   Tue, 4 Jul 2023 14:04:08 +0100
-Message-ID: <CAPY8ntA7DjyDstTjhpGiau2ppkEs45-y5QygqtB96cLE8_f-Yg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] Documentation: v4l: Exposure/gain for camera sensor
-To:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, 4 Jul 2023 at 13:38, Jacopo Mondi <jacopo.mondi@ideasonboard.com> wrote:
->
-> Document the suggested way to exposure controls for exposure and gain
-> for camera sensor drivers.
->
-> Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-> ---
->  .../driver-api/media/camera-sensor.rst        | 27 +++++++++++++++++++
->  1 file changed, 27 insertions(+)
->
-> diff --git a/Documentation/driver-api/media/camera-sensor.rst b/Documentation/driver-api/media/camera-sensor.rst
-> index 7516d61a903d..fb70d55f6671 100644
-> --- a/Documentation/driver-api/media/camera-sensor.rst
-> +++ b/Documentation/driver-api/media/camera-sensor.rst
-> @@ -189,3 +189,30 @@ the ``V4L2_CID_VFLIP`` and ``V4L2_CID_HFLIP`` controls with the
->  a flip can potentially change the output buffer content layout. Flips should
->  also be taken into account when enumerating and handling media bus formats
->  on the camera sensor source pads.
-> +
-> +Exposure and Gain Control
-> +-------------------------
-> +
-> +Camera sensor drivers that allow applications to control the image exposure
-> +and gain should do so by exposing dedicated controls to applications.
-> +
-> +Exposure time is controlled by registering the ``V4L2_CID_EXPOSURE`` control.
-> +The control definition does not specify a unit to allow maximum flexibility
-> +for multiple device types, but when used for camera sensor drivers it should be
-> +expressed in unit of lines whenever possible.
-> +
-> +To convert lines into units of time, the total line length (visible and
-> +not visible pixels) has to be divided by the pixel rate::
-> +
-> +        line duration = total line length / pixel rate
-> +                      = (image width + horizontal blanking) / pixel rate
-> +
-> +Camera sensor driver should try whenever possible to distinguish between the
-> +analogue and digital gain control functions. Analogue gain is a multiplier
+Align scp and vpu firmware interface, remove the depedency for
+'struct mtk_vcodec_dev' and 'struct mtk_vcodec_ctx'. It will be
+much easier to separate video encoder and decoder.
 
-nit: multiplication factor
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ .../media/platform/mediatek/vcodec/mtk_vcodec_fw.c   |  7 +++----
+ .../media/platform/mediatek/vcodec/mtk_vcodec_fw.h   |  3 +--
+ .../platform/mediatek/vcodec/mtk_vcodec_fw_priv.h    | 11 +++++------
+ .../platform/mediatek/vcodec/mtk_vcodec_fw_scp.c     |  9 ++++++---
+ .../platform/mediatek/vcodec/mtk_vcodec_fw_vpu.c     | 12 ++++++++----
+ 5 files changed, 23 insertions(+), 19 deletions(-)
 
-> +factor applied to all color channels on the pixel array before they get
-> +converted in the digital domain. It should be made controllable by
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw.c
+index 556e54aadac9..be9159acacf8 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw.c
+@@ -5,15 +5,14 @@
+ #include "mtk_vcodec_util.h"
+ #include "mtk_vcodec_drv.h"
+ 
+-struct mtk_vcodec_fw *mtk_vcodec_fw_select(struct mtk_vcodec_dev *dev,
+-					   enum mtk_vcodec_fw_type type,
++struct mtk_vcodec_fw *mtk_vcodec_fw_select(void *priv, enum mtk_vcodec_fw_type type,
+ 					   enum mtk_vcodec_fw_use fw_use)
+ {
+ 	switch (type) {
+ 	case VPU:
+-		return mtk_vcodec_fw_vpu_init(dev, fw_use);
++		return mtk_vcodec_fw_vpu_init(priv, fw_use);
+ 	case SCP:
+-		return mtk_vcodec_fw_scp_init(dev);
++		return mtk_vcodec_fw_scp_init(priv, fw_use);
+ 	default:
+ 		mtk_v4l2_err("invalid vcodec fw type");
+ 		return ERR_PTR(-EINVAL);
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw.h
+index 16824114657f..d8cfbec323d5 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw.h
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw.h
+@@ -25,8 +25,7 @@ struct mtk_vcodec_fw;
+ typedef void (*mtk_vcodec_ipi_handler) (void *data,
+ 	unsigned int len, void *priv);
+ 
+-struct mtk_vcodec_fw *mtk_vcodec_fw_select(struct mtk_vcodec_dev *dev,
+-					   enum mtk_vcodec_fw_type type,
++struct mtk_vcodec_fw *mtk_vcodec_fw_select(void *priv, enum mtk_vcodec_fw_type type,
+ 					   enum mtk_vcodec_fw_use fw_use);
+ void mtk_vcodec_fw_release(struct mtk_vcodec_fw *fw);
+ 
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_priv.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_priv.h
+index b41e66185cec..3438a4917344 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_priv.h
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_priv.h
+@@ -12,6 +12,7 @@ struct mtk_vcodec_fw {
+ 	const struct mtk_vcodec_fw_ops *ops;
+ 	struct platform_device *pdev;
+ 	struct mtk_scp *scp;
++	enum mtk_vcodec_fw_use fw_use;
+ };
+ 
+ struct mtk_vcodec_fw_ops {
+@@ -28,22 +29,20 @@ struct mtk_vcodec_fw_ops {
+ };
+ 
+ #if IS_ENABLED(CONFIG_VIDEO_MEDIATEK_VCODEC_VPU)
+-struct mtk_vcodec_fw *mtk_vcodec_fw_vpu_init(struct mtk_vcodec_dev *dev,
+-					     enum mtk_vcodec_fw_use fw_use);
++struct mtk_vcodec_fw *mtk_vcodec_fw_vpu_init(void *priv, enum mtk_vcodec_fw_use fw_use);
+ #else
+ static inline struct mtk_vcodec_fw *
+-mtk_vcodec_fw_vpu_init(struct mtk_vcodec_dev *dev,
+-		       enum mtk_vcodec_fw_use fw_use)
++mtk_vcodec_fw_vpu_init(void *priv, enum mtk_vcodec_fw_use fw_use)
+ {
+ 	return ERR_PTR(-ENODEV);
+ }
+ #endif /* CONFIG_VIDEO_MEDIATEK_VCODEC_VPU */
+ 
+ #if IS_ENABLED(CONFIG_VIDEO_MEDIATEK_VCODEC_SCP)
+-struct mtk_vcodec_fw *mtk_vcodec_fw_scp_init(struct mtk_vcodec_dev *dev);
++struct mtk_vcodec_fw *mtk_vcodec_fw_scp_init(void *priv, enum mtk_vcodec_fw_use fw_use);
+ #else
+ static inline struct mtk_vcodec_fw *
+-mtk_vcodec_fw_scp_init(struct mtk_vcodec_dev *dev)
++mtk_vcodec_fw_scp_init(void *priv, enum mtk_vcodec_fw_use fw_use)
+ {
+ 	return ERR_PTR(-ENODEV);
+ }
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_scp.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_scp.c
+index d8e66b645bd8..9a2472442c6f 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_scp.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_scp.c
+@@ -53,18 +53,21 @@ static const struct mtk_vcodec_fw_ops mtk_vcodec_rproc_msg = {
+ 	.release = mtk_vcodec_scp_release,
+ };
+ 
+-struct mtk_vcodec_fw *mtk_vcodec_fw_scp_init(struct mtk_vcodec_dev *dev)
++struct mtk_vcodec_fw *mtk_vcodec_fw_scp_init(void *priv, enum mtk_vcodec_fw_use fw_use)
+ {
+ 	struct mtk_vcodec_fw *fw;
++	struct mtk_vcodec_dev *dev = priv;
++	struct platform_device *plat_dev;
+ 	struct mtk_scp *scp;
+ 
+-	scp = scp_get(dev->plat_dev);
++	plat_dev = dev->plat_dev;
++	scp = scp_get(plat_dev);
+ 	if (!scp) {
+ 		mtk_v4l2_err("could not get vdec scp handle");
+ 		return ERR_PTR(-EPROBE_DEFER);
+ 	}
+ 
+-	fw = devm_kzalloc(&dev->plat_dev->dev, sizeof(*fw), GFP_KERNEL);
++	fw = devm_kzalloc(&plat_dev->dev, sizeof(*fw), GFP_KERNEL);
+ 	fw->type = SCP;
+ 	fw->ops = &mtk_vcodec_rproc_msg;
+ 	fw->scp = scp;
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_vpu.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_vpu.c
+index cfc7ebed8fb7..46a028031133 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_vpu.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_vpu.c
+@@ -77,10 +77,11 @@ static const struct mtk_vcodec_fw_ops mtk_vcodec_vpu_msg = {
+ 	.release = mtk_vcodec_vpu_release,
+ };
+ 
+-struct mtk_vcodec_fw *mtk_vcodec_fw_vpu_init(struct mtk_vcodec_dev *dev,
+-					     enum mtk_vcodec_fw_use fw_use)
++struct mtk_vcodec_fw *mtk_vcodec_fw_vpu_init(void *priv, enum mtk_vcodec_fw_use fw_use)
+ {
+ 	struct platform_device *fw_pdev;
++	struct mtk_vcodec_dev *dev = priv;
++	struct platform_device *plat_dev;
+ 	struct mtk_vcodec_fw *fw;
+ 	enum rst_id rst_id;
+ 
+@@ -94,19 +95,22 @@ struct mtk_vcodec_fw *mtk_vcodec_fw_vpu_init(struct mtk_vcodec_dev *dev,
+ 		break;
+ 	}
+ 
+-	fw_pdev = vpu_get_plat_device(dev->plat_dev);
++	plat_dev = dev->plat_dev;
++	fw_pdev = vpu_get_plat_device(plat_dev);
+ 	if (!fw_pdev) {
+ 		mtk_v4l2_err("firmware device is not ready");
+ 		return ERR_PTR(-EINVAL);
+ 	}
++
+ 	vpu_wdt_reg_handler(fw_pdev, mtk_vcodec_vpu_reset_handler, dev, rst_id);
+ 
+-	fw = devm_kzalloc(&dev->plat_dev->dev, sizeof(*fw), GFP_KERNEL);
++	fw = devm_kzalloc(&plat_dev->dev, sizeof(*fw), GFP_KERNEL);
+ 	if (!fw)
+ 		return ERR_PTR(-ENOMEM);
+ 	fw->type = VPU;
+ 	fw->ops = &mtk_vcodec_vpu_msg;
+ 	fw->pdev = fw_pdev;
++	fw->fw_use = fw_use;
+ 
+ 	return fw;
+ }
+-- 
+2.18.0
 
-nit: converted into the digital domain
-
-> +registering the ``V4L2_CID_ANALOGUE_GAIN`` control, expressed as a device
-> +specific gain code. Digital gain control is optional and should be exposed to
-> +applications by registering ``V4L2_CID_DIGITAL_GAIN``. Camera sensor drivers are
-> +discouraged from using ``V4L2_CID_GAIN`` as it doesn't allow differentiation of
-> +analogue vs digital gain.
-
-Sorry to have missed those first time around. With or without:
-Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-
-> --
-> 2.40.1
->
