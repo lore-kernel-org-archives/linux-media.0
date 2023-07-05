@@ -2,120 +2,71 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7A3FC001DF
-	for <linux-media@archiver.kernel.org>; Wed,  5 Jul 2023 18:22:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5F01EB64DA
+	for <linux-media@archiver.kernel.org>; Wed,  5 Jul 2023 18:26:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232926AbjGESWl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 Jul 2023 14:22:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45802 "EHLO
+        id S229635AbjGES0a (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 Jul 2023 14:26:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233245AbjGESW0 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Jul 2023 14:22:26 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73801FC6;
-        Wed,  5 Jul 2023 11:21:55 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 365ELITL007785;
-        Wed, 5 Jul 2023 19:29:47 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=ASO7x6wwPI3SLWfbOr8DTOnpWV4+m1p0k3Uv8b/JSoE=;
- b=JblBwHCmyxQQNKB6wA60itPw6b0nT0WPebNgtMUGOQRVBidiTdR8mcmGt4o6jz2FHdWU
- uxMppjaBfb3A3gkPsj1R3MJLGyB58yiS/zsmesLLISWgLui2gXrkqoM1M45hCLo4Sspk
- HsLr7ogY0TTQZI4S6dyVfrUKFu+exsZGvuTxk+s1cMJjeo5rTabQMPo1Hr/US6jvQnz8
- w5E2M6bUvqfUeTfwEjd+3i1hnc1aPSgFSrVSXHHeGuGnkqjQ5fweuAhtEiUBamoLcG97
- BYFYNGS027+rJk9nhQnk00+YcpM0a7pJrJ1PgS21YAc/gqfGKrS8f14Aba/JVdGEvkVH yQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rna75h458-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Jul 2023 19:29:47 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2DB35100057;
-        Wed,  5 Jul 2023 19:29:47 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2447E24C434;
-        Wed,  5 Jul 2023 19:29:47 +0200 (CEST)
-Received: from localhost (10.201.21.121) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 5 Jul
- 2023 19:29:46 +0200
-From:   Gatien Chevallier <gatien.chevallier@foss.st.com>
-To:     <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <alexandre.torgue@foss.st.com>,
-        <vkoul@kernel.org>, <jic23@kernel.org>,
-        <olivier.moysan@foss.st.com>, <arnaud.pouliquen@foss.st.com>,
-        <mchehab@kernel.org>, <fabrice.gasnier@foss.st.com>,
-        <andi.shyti@kernel.org>, <ulf.hansson@linaro.org>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <hugues.fruchet@foss.st.com>, <lee@kernel.org>, <will@kernel.org>,
-        <catalin.marinas@arm.com>, <arnd@kernel.org>,
-        <richardcochran@gmail.com>
-CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        Gatien Chevallier <gatien.chevallier@foss.st.com>
-Subject: [PATCH 07/10] arm64: dts: st: add RIFSC as a domain controller for STM32MP25x boards
-Date:   Wed, 5 Jul 2023 19:27:56 +0200
-Message-ID: <20230705172759.1610753-8-gatien.chevallier@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
-References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.201.21.121]
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-05_09,2023-07-05_01,2023-05-22_02
+        with ESMTP id S233287AbjGES0H (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Jul 2023 14:26:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A1C41BF2;
+        Wed,  5 Jul 2023 11:25:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 21850618DB;
+        Wed,  5 Jul 2023 18:19:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 89804C433C9;
+        Wed,  5 Jul 2023 18:19:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688581142;
+        bh=35fE4X24iWUOG8ffPnGRK7LSwjvaZONObHYQiQz6jUc=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Exdc8XWp+qr1Tj17BbpsD8VcWzEKv3d04AU8m7xYUfLy0CRtGo3lkdr8MGeCEcC03
+         ESsb6fPMQxwTPPDvdvpyc2RTKJHAlMIQVQ93H9PEXbzxBjyHY9uga6ngt/VLkhBxSi
+         B2kvjegwYJ/NR1y7glprI+OHVRb3ddqPbOEkA9Vz48mMYDQGmO81XODjZsKf2SpWsI
+         MFZfnCFuzMYzJUzfKC2Yr9oZ6WvWAq/JIDIwu+ZFY36rYyZaPQPJLGIK3gMHhMEw81
+         o3TVOlL+myRBKlJUX/aFSKILACskBap/IpTCaPsJW162oUQd9YF5PVNpJVEVbLpy+W
+         0bBwavJQ0hT0w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6C95EC39563;
+        Wed,  5 Jul 2023 18:19:02 +0000 (UTC)
+Subject: Re: [GIT PULL for v6.5-rc1] media updates
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230705085045.1feaaacc@coco.lan>
+References: <20230705085045.1feaaacc@coco.lan>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230705085045.1feaaacc@coco.lan>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v6.5-1
+X-PR-Tracked-Commit-Id: c61480a2ea5e5b997d10dfda556d3a63e31f87cd
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 15ac468614e5e4fee82e1eb32568f427b0e51adc
+Message-Id: <168858114243.22216.17101754052234942896.pr-tracker-bot@kernel.org>
+Date:   Wed, 05 Jul 2023 18:19:02 +0000
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-RIFSC is a firewall controller. Change its compatible so that is matches
-the documentation and reference RIFSC as a feature-domain-controller.
+The pull request you sent on Wed, 5 Jul 2023 08:50:45 +0200:
 
-Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
----
- arch/arm64/boot/dts/st/stm32mp251.dtsi | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+> git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v6.5-1
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 5268a4321841..62101084cab8 100644
---- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
-+++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -106,17 +106,20 @@ soc@0 {
- 		ranges = <0x0 0x0 0x0 0x80000000>;
- 
- 		rifsc: rifsc-bus@42080000 {
--			compatible = "simple-bus";
-+			compatible = "st,stm32mp25-rifsc";
- 			reg = <0x42080000 0x1000>;
- 			#address-cells = <1>;
- 			#size-cells = <1>;
- 			ranges;
-+			feature-domain-controller;
-+			#feature-domain-cells = <1>;
- 
- 			usart2: serial@400e0000 {
- 				compatible = "st,stm32h7-uart";
- 				reg = <0x400e0000 0x400>;
- 				interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
- 				clocks = <&ck_flexgen_08>;
-+				feature-domains = <&rifsc 32>;
- 				status = "disabled";
- 			};
- 		};
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/15ac468614e5e4fee82e1eb32568f427b0e51adc
+
+Thank you!
+
 -- 
-2.25.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
