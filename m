@@ -2,105 +2,165 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3B7AEB64DD
-	for <linux-media@archiver.kernel.org>; Wed,  5 Jul 2023 14:44:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EE2DEB64DA
+	for <linux-media@archiver.kernel.org>; Wed,  5 Jul 2023 14:45:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232113AbjGEOog (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 Jul 2023 10:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51028 "EHLO
+        id S232647AbjGEOpx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 Jul 2023 10:45:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232659AbjGEOob (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Jul 2023 10:44:31 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107611732
-        for <linux-media@vger.kernel.org>; Wed,  5 Jul 2023 07:44:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688568262; x=1720104262;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6hOqw1/fpqmmF1Ucef5hmych7rV7Z9wO/73ROloUc7k=;
-  b=SVw2uykrWMDU3LYGkLs9hWZbRDoH/l6MRsez3LKtvKimMHIN5znv5wHf
-   LaC0jw7dawbucS+qkiPz9PyxrbIqiPWrvwtKvcjLq2MBIZy9XSvT0AmYQ
-   b7oAsmMjlpOeDjf6KgMyMUaHYIuRO4Kn0a1oo8S83FXznDhQbSqbH9mWg
-   73y2wEUY7oSvW3yHcOkN3GSf66/HEi9TyYESOdzBnA9vSb1LRLhHKt9wR
-   J844OWA3HMfXPuIq3Z5Dp4BvJcIl7FswBSnHXU0wV4BYinzqKk3DikQ7L
-   A+Gqk2IEi0qXyrddVmmxTzt5SFmX/xB/dbRH04/hsY8ha+/2Vp/6eSO3c
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="365929023"
-X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
-   d="scan'208";a="365929023"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 07:44:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="789189505"
-X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
-   d="scan'208";a="789189505"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 07:44:17 -0700
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id B48D211F931;
-        Wed,  5 Jul 2023 17:36:08 +0300 (EEST)
-Date:   Wed, 5 Jul 2023 14:36:08 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     linux-media@vger.kernel.org, Wentong Wu <wentong.wu@intel.com>,
-        bingbu.cao@linux.intel.com, zhifeng.wang@intel.com,
-        xiang.ye@intel.com, tian.shu.qiu@intel.com,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH v2 1/2] media: ipu-bridge: add IVSC support
-Message-ID: <ZKV/2Pm+dz23o8sQ@kekkonen.localdomain>
-References: <20230630134506.109269-1-sakari.ailus@linux.intel.com>
- <20230630134506.109269-2-sakari.ailus@linux.intel.com>
- <ZJ8UtSP8q/hq8Xre@smile.fi.intel.com>
+        with ESMTP id S232244AbjGEOpr (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Jul 2023 10:45:47 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA4D1717
+        for <linux-media@vger.kernel.org>; Wed,  5 Jul 2023 07:45:45 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id ca18e2360f4ac-78362f574c9so239356039f.3
+        for <linux-media@vger.kernel.org>; Wed, 05 Jul 2023 07:45:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1688568345; x=1691160345;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wIyQfWNYaIauekpeSYzDVVz2eIIvCCocDHmDK74a8j0=;
+        b=Y0E2ucxqwnDFoG1ae0oj9yAH8x5pbwfwKRYJlrsKE2yUxE+qAIcB6+a7Ju6TEKfwGi
+         D1LSIptdrXTz35Z7zoKP+o96dADAJSjyWqv7UrKLVUMeFVnFI1WapZq0T5vSZNtwxyaN
+         MjA/4/nnHngSIQy0lW/u/nrTQ/pe/8fNF7Flg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688568345; x=1691160345;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wIyQfWNYaIauekpeSYzDVVz2eIIvCCocDHmDK74a8j0=;
+        b=BQZn1ds5KxYUi9Amyvu8FYQOEBtir4Voj9fSc8Dp2CeNJKwuVpkzaF/d/Si1ijRw+N
+         HDq2PN5diArySWiEbg++GWQeU954xDfb8X8IByuTxQ8QoCzO3li5UKe0pnjDOZN5P/XS
+         OUazpy0YlIR2LdDRwrzI4TTv263A8ZFlWmKqmlniphQuUFFm8xLuZAvfHThvDYnIIbxJ
+         8toP+Ijr7eL04uktgbbSjud+CSlkfTapWe/LRVOiDB4aASzWNRfU3wB7NKnO1gxHqjuC
+         o7uowTHYyEHp6KXAlb8Fl7/3ULCbqbp58+9IcmqEj+6T8cMRQtx+J3BtPvzugWp2I9RX
+         zvhw==
+X-Gm-Message-State: AC+VfDxSjwG9/pAwmI5Z5k9WlUn5MR43FcF03rtF9udvRcJfpt2iBYKC
+        5mTDzAJMEhxnidvpfHU8UGqYK8xlhfVsZ/rcIys=
+X-Google-Smtp-Source: ACHHUZ4pR2z0PqTFxJMIrSP7RON/gz9JTZhX67xhWN/o0FJ7Tjzg5+maDU0qHma7tI0+ZHlOU0LHkw==
+X-Received: by 2002:a6b:a16:0:b0:783:694f:e791 with SMTP id z22-20020a6b0a16000000b00783694fe791mr18358569ioi.12.1688568344753;
+        Wed, 05 Jul 2023 07:45:44 -0700 (PDT)
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com. [209.85.166.48])
+        by smtp.gmail.com with ESMTPSA id c26-20020a02a61a000000b0042b39f1c3d2sm2507822jam.144.2023.07.05.07.45.44
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jul 2023 07:45:44 -0700 (PDT)
+Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-7835bad99fbso240241639f.1
+        for <linux-media@vger.kernel.org>; Wed, 05 Jul 2023 07:45:44 -0700 (PDT)
+X-Received: by 2002:a6b:7a02:0:b0:785:d017:c16f with SMTP id
+ h2-20020a6b7a02000000b00785d017c16fmr17816152iom.14.1688568343801; Wed, 05
+ Jul 2023 07:45:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZJ8UtSP8q/hq8Xre@smile.fi.intel.com>
+References: <20230630144006.1513270-1-pan@semihalf.com>
+In-Reply-To: <20230630144006.1513270-1-pan@semihalf.com>
+From:   Alexandru M Stan <amstan@chromium.org>
+Date:   Wed, 5 Jul 2023 10:45:07 -0400
+X-Gmail-Original-Message-ID: <CAHNYxRx7WsCyZBLTfBTcxYtf1z68YkXgMdYq+8OFMpjq6y9TfA@mail.gmail.com>
+Message-ID: <CAHNYxRx7WsCyZBLTfBTcxYtf1z68YkXgMdYq+8OFMpjq6y9TfA@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/3] Google Chameleon v3 video driver
+To:     =?UTF-8?Q?Pawe=C5=82_Anikiel?= <pan@semihalf.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dinguyen@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, mchehab@kernel.org, upstream@semihalf.com,
+        ribalda@chromium.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Andy,
+On Fri, Jun 30, 2023 at 10:40=E2=80=AFAM Pawe=C5=82 Anikiel <pan@semihalf.c=
+om> wrote:
+>
+> The Google Chameleon v3 is a testing device for external displays. It
+> is based on an Arria 10 SoCFPGA. This patch adds a V4L2 driver for the
+> video system. The video system consists of:
+>   * Six video interfaces (DMA ping pong buffers) in the FPGA, called
+>   "framebuffers".
+>   * Two Intel DisplayPort DPRX IP cores in the FPGA, one MST x4, one SST
+>   * IT68051 chip, handled by EC firmware
+>
+> The driver is implemented as a single device driver, because the video
+> interface devices need to talk to the DisplayPort IP core devices
+> (e.g. to configure the EDID). This has the effect of the DPRX driver
+> being in the chameleonv3 directory even though it's an Intel IP.
+>
+> The DPRX code handles all the AUX communication (DPCD, sideband messages,
+> message transfers). There is similarity to what's already present in
+> the DRM subsystem, but I found it hard to reuse that code effectively.
+>
+> My main concern is with the overall structure of the driver - how it's
+> divided into parts, the interfaces and APIs used, etc. Any feedback is
+> greately appreciated.
+>
+> Pawe=C5=82 Anikiel (3):
+>   media: Add 10, 12, and 16 bit RGB formats
+>   media: Add Google Chameleon v3 video driver
+>   ARM: dts: Add Chameleon v3 video node
+>
+>  .../socfpga/socfpga_arria10_chameleonv3.dts   |  54 ++
+>  drivers/media/platform/Kconfig                |   1 +
+>  drivers/media/platform/Makefile               |   1 +
+>  drivers/media/platform/google/Kconfig         |   4 +
+>  drivers/media/platform/google/Makefile        |   2 +
+>  .../media/platform/google/chameleonv3/Kconfig |   9 +
+>  .../platform/google/chameleonv3/Makefile      |  15 +
+>  .../platform/google/chameleonv3/chv3-core.c   | 292 ++++++++++
+>  .../platform/google/chameleonv3/chv3-core.h   |  17 +
+>  .../platform/google/chameleonv3/chv3-fb.c     | 539 ++++++++++++++++++
+>  .../platform/google/chameleonv3/chv3-fb.h     |  34 ++
+>  .../platform/google/chameleonv3/dprx-aux.c    |  77 +++
+>  .../platform/google/chameleonv3/dprx-dp.c     |  82 +++
+>  .../platform/google/chameleonv3/dprx-dpcd.c   | 424 ++++++++++++++
+>  .../platform/google/chameleonv3/dprx-dprx.c   | 262 +++++++++
+>  .../platform/google/chameleonv3/dprx-edid.c   |  39 ++
+>  .../platform/google/chameleonv3/dprx-i2c.c    |  41 ++
+>  .../platform/google/chameleonv3/dprx-mt.c     | 184 ++++++
+>  .../platform/google/chameleonv3/dprx-sbmsg.c  | 162 ++++++
+>  .../media/platform/google/chameleonv3/dprx.h  | 128 +++++
+>  drivers/media/v4l2-core/v4l2-ioctl.c          |   5 +
+>  include/uapi/linux/videodev2.h                |   5 +
+>  22 files changed, 2377 insertions(+)
+>  create mode 100644 drivers/media/platform/google/Kconfig
+>  create mode 100644 drivers/media/platform/google/Makefile
+>  create mode 100644 drivers/media/platform/google/chameleonv3/Kconfig
+>  create mode 100644 drivers/media/platform/google/chameleonv3/Makefile
+>  create mode 100644 drivers/media/platform/google/chameleonv3/chv3-core.c
+>  create mode 100644 drivers/media/platform/google/chameleonv3/chv3-core.h
+>  create mode 100644 drivers/media/platform/google/chameleonv3/chv3-fb.c
+>  create mode 100644 drivers/media/platform/google/chameleonv3/chv3-fb.h
+>  create mode 100644 drivers/media/platform/google/chameleonv3/dprx-aux.c
+>  create mode 100644 drivers/media/platform/google/chameleonv3/dprx-dp.c
+>  create mode 100644 drivers/media/platform/google/chameleonv3/dprx-dpcd.c
+>  create mode 100644 drivers/media/platform/google/chameleonv3/dprx-dprx.c
+>  create mode 100644 drivers/media/platform/google/chameleonv3/dprx-edid.c
+>  create mode 100644 drivers/media/platform/google/chameleonv3/dprx-i2c.c
+>  create mode 100644 drivers/media/platform/google/chameleonv3/dprx-mt.c
+>  create mode 100644 drivers/media/platform/google/chameleonv3/dprx-sbmsg.=
+c
+>  create mode 100644 drivers/media/platform/google/chameleonv3/dprx.h
+>
+> --
+> 2.41.0.255.g8b1d071c50-goog
+>
 
-On Fri, Jun 30, 2023 at 08:45:25PM +0300, Andy Shevchenko wrote:
-> On Fri, Jun 30, 2023 at 04:45:05PM +0300, Sakari Ailus wrote:
-> > From: Wentong Wu <wentong.wu@intel.com>
-> > 
-> > Previously on ACPI platforms, sensors that are intended to be connected
-> > to a IPU device for use with the ipu3-cio2 driver lacking the necessary
-> > connection information in firmware. IPU bridge driver is to connect
-> > sensors to IPU device via software nodes.
-> > 
-> > Currently IVSC located between IPU device and sensors is available in
-> > existing commercial platforms from multiple OEMs. But the connection
-> > information between them in firmware is also not enough to build V4L2
-> > connection graph. This patch parses the connection properties from the
-> > SSDB buffer in DSDT and build the connection using software nodes.
-> > 
-> > IVSC driver is based on MEI framework (previously known as HECI), it
-> > has two MEI clients, MEI CSI and MEI ACE. Both clients are used to
-> > communicate messages with IVSC firmware. Linux abstracts MEI client
-> > as a device, whose bus type is MEI. And the device is addressed by a
-> > GUID/UUID which is part of the device name of MEI client. After figured
-> > out MEI CSI via the UUID composed device name, this patch setup the
-> > connection between MEI CSI and IPU, and the connection between MEI CSI
-> > and sensor via software nodes.
-> > 
-> > Signed-off-by: Wentong Wu <wentong.wu@intel.com>
-> > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > [Sakari Ailus: rebase on Hans de Goede's cleanups and fixes]
-> 
-> I believe we use past tense in these comment lines...
+Thank you Pawel for sending this.
 
-No objections, I'll add the missing "d" while applying if there are no
-other comments.
+To generate more interest in this device/driver I wanted to share that
+the FPGA implementation (the registers/hw this driver talks to) is
+also open source [1]. This is to show that this is not some throw away
+driver for some proprietary thing.
+The previous Chameleon device has been useful for testing drivers
+using the Intel Graphics Test [2] which can exercise a lot of the DRM
+video output kernel drivers on many devices, v3 is also compatible
+with the same RPC protocol.
 
-> 
-> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> 
+[1] https://chromium.googlesource.com/chromiumos/platform/chameleon/+/refs/=
+heads/main/v3/fpga/
+[2] https://drm.pages.freedesktop.org/igt-gpu-tools/igt-gpu-tools-Chamelium=
+.html
 
--- 
-Regards,
-
-Sakari Ailus
+Alexandru Stan (amstan)
