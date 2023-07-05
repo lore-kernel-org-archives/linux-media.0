@@ -2,41 +2,41 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41C91EB64DA
-	for <linux-media@archiver.kernel.org>; Wed,  5 Jul 2023 21:32:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CD01C001DF
+	for <linux-media@archiver.kernel.org>; Wed,  5 Jul 2023 21:32:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232173AbjGEVcH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 Jul 2023 17:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37322 "EHLO
+        id S232185AbjGEVcI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 Jul 2023 17:32:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbjGEVcD (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Jul 2023 17:32:03 -0400
+        with ESMTP id S231488AbjGEVcE (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Jul 2023 17:32:04 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F371E19BD
-        for <linux-media@vger.kernel.org>; Wed,  5 Jul 2023 14:30:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D101BC8
+        for <linux-media@vger.kernel.org>; Wed,  5 Jul 2023 14:30:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688592632;
+        s=mimecast20190719; t=1688592637;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lOI7cpcNK8zoC+qtqEt3rkkD5JPdd/L+4TbpPOVkBAI=;
-        b=GPFZ9hLYSJxztmAaDqYbVpfiYmRIj7zhPHluRaumWyH9hkfNRH2djA7Fqjf9VNSx13nRpe
-        oUe4t3dTGxR3pj8aTrMMGz1jAc++ByqyDTUE3DRfusot2jbIJW4QJ3CsKB47+FXt1K7QVQ
-        GKlyjC/z8ZGxiGJpthHfeSMAEkNqAj4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=6/idKObEBMF5v/OL1iE+Xb2PRP/FocktvUvdnk5HwcQ=;
+        b=NOgs7s5I2+7QkgznOnySxjKA7PtLZuMSo1O4kyr52vjOp1Zo0jpCkKuIhBDCKyw4d9UkBn
+        F7h9kIUQiQakRx3R012WEi4/Ie+9GWQp4Zkkv+HX7CO7elSyYgeOyK+a7+/TDfgV0npGtb
+        4+kCMwcCY4l09mAU3coR+BxEV5mTkLs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-586-AfJZGqF5NLOg9kkw0P-cnA-1; Wed, 05 Jul 2023 17:30:29 -0400
-X-MC-Unique: AfJZGqF5NLOg9kkw0P-cnA-1
+ us-mta-328-l9S3beFqPQOkPFcI-Iz8JQ-1; Wed, 05 Jul 2023 17:30:34 -0400
+X-MC-Unique: l9S3beFqPQOkPFcI-Iz8JQ-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 71F823C100AC;
-        Wed,  5 Jul 2023 21:30:28 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BC2B6800B35;
+        Wed,  5 Jul 2023 21:30:33 +0000 (UTC)
 Received: from localhost.localdomain (unknown [10.39.192.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E331A40C2063;
-        Wed,  5 Jul 2023 21:30:26 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 335F840C2063;
+        Wed,  5 Jul 2023 21:30:32 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -47,9 +47,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>, linux-acpi@vger.kernel.org,
         Andy Shevchenko <andy@kernel.org>, Kate Hsuan <hpa@redhat.com>,
         Hao Yao <hao.yao@intel.com>, Bingbu Cao <bingbu.cao@intel.com>,
         linux-media@vger.kernel.org
-Subject: [PATCH v3 04/18] media: ipu-bridge: Allow building as module
-Date:   Wed,  5 Jul 2023 23:29:56 +0200
-Message-ID: <20230705213010.390849-5-hdegoede@redhat.com>
+Subject: [PATCH v3 07/18] media: ipu-bridge: Only keep PLD around while parsing
+Date:   Wed,  5 Jul 2023 23:29:59 +0200
+Message-ID: <20230705213010.390849-8-hdegoede@redhat.com>
 In-Reply-To: <20230705213010.390849-1-hdegoede@redhat.com>
 References: <20230705213010.390849-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -59,99 +59,148 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-After commit f54eb0ac7c1a ("media: ipu3-cio2: rename cio2 bridge to ipu
-bridge and move out of ipu3") the ipu-bridge code is always built in
-even if all consumers are build as module.
+There is no need to keep a reference to the PLD struct around,
+it is only used once the get the sensor orientation.
 
-Fix this by turning "config IPU_BRIDGE" into a pure library Kconfig
-option (not user selectable, must be selected by consumers) and
-re-introducing the CIO2_BRIDGE Kconfig bits in .../pci/intel/ipu3/Kconfig
-which were dropped to still allow building ipu3-cio2 without ipu-bridge
-support.
+Make ipu_bridge_parse_orientation() also get + put the PLD.
 
-Fixes: f54eb0ac7c1a ("media: ipu3-cio2: rename cio2 bridge to ipu bridge and move out of ipu3")
+This is a preparation patch for making the ipu-bridge code more generic
+so that it can be shared with the atomisp driver.
+
+Reviewed-by: Andy Shevchenko <andy@kernel.org>
+Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/media/pci/intel/Kconfig      | 18 ++----------------
- drivers/media/pci/intel/ipu-bridge.c |  4 ++++
- drivers/media/pci/intel/ipu3/Kconfig | 20 ++++++++++++++++++++
- 3 files changed, 26 insertions(+), 16 deletions(-)
+ drivers/media/pci/intel/ipu-bridge.c | 48 ++++++++++++++++------------
+ drivers/media/pci/intel/ipu-bridge.h |  1 -
+ 2 files changed, 27 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/media/pci/intel/Kconfig b/drivers/media/pci/intel/Kconfig
-index 64a29b0b7033..3179184d7616 100644
---- a/drivers/media/pci/intel/Kconfig
-+++ b/drivers/media/pci/intel/Kconfig
-@@ -1,21 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- config IPU_BRIDGE
--	bool "Intel IPU Sensors Bridge"
--	depends on VIDEO_IPU3_CIO2 && ACPI
-+	tristate
-+	depends on ACPI
- 	depends on I2C
--	help
--	  This extension provides an API for the Intel IPU driver to create
--	  connections to cameras that are hidden in the SSDB buffer in ACPI.
--	  It can be used to enable support for cameras in detachable / hybrid
--	  devices that ship with Windows.
--
--	  Say Y here if your device is a detachable / hybrid laptop that comes
--	  with Windows installed by the OEM, for example:
--
--		- Microsoft Surface models (except Surface Pro 3)
--		- The Lenovo Miix line (for example the 510, 520, 710 and 720)
--		- Dell 7285
--
--	  If in doubt, say N here.
- 
- source "drivers/media/pci/intel/ipu3/Kconfig"
 diff --git a/drivers/media/pci/intel/ipu-bridge.c b/drivers/media/pci/intel/ipu-bridge.c
-index 1c88fd925a8b..97b544736af2 100644
+index 8e91d9b3e0fe..11cfab641513 100644
 --- a/drivers/media/pci/intel/ipu-bridge.c
 +++ b/drivers/media/pci/intel/ipu-bridge.c
-@@ -497,3 +497,7 @@ int ipu_bridge_init(struct pci_dev *ipu)
- 	return ret;
+@@ -112,23 +112,39 @@ static u32 ipu_bridge_parse_rotation(struct ipu_sensor *sensor)
+ 	}
  }
- EXPORT_SYMBOL_NS_GPL(ipu_bridge_init, INTEL_IPU_BRIDGE);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Dan Scally <djrscally@gmail.com>");
-+MODULE_DESCRIPTION("Intel IPU ACPI Sensors Bridge");
-diff --git a/drivers/media/pci/intel/ipu3/Kconfig b/drivers/media/pci/intel/ipu3/Kconfig
-index 9be06ee81ff0..0951545eab21 100644
---- a/drivers/media/pci/intel/ipu3/Kconfig
-+++ b/drivers/media/pci/intel/ipu3/Kconfig
-@@ -8,6 +8,7 @@ config VIDEO_IPU3_CIO2
- 	select VIDEO_V4L2_SUBDEV_API
- 	select V4L2_FWNODE
- 	select VIDEOBUF2_DMA_SG
-+	select IPU_BRIDGE if CIO2_BRIDGE
  
- 	help
- 	  This is the Intel IPU3 CIO2 CSI-2 receiver unit, found in Intel
-@@ -17,3 +18,22 @@ config VIDEO_IPU3_CIO2
- 	  Say Y or M here if you have a Skylake/Kaby Lake SoC with MIPI CSI-2
- 	  connected camera.
- 	  The module will be called ipu3-cio2.
+-static enum v4l2_fwnode_orientation ipu_bridge_parse_orientation(struct ipu_sensor *sensor)
++static enum v4l2_fwnode_orientation ipu_bridge_parse_orientation(struct acpi_device *adev)
+ {
+-	switch (sensor->pld->panel) {
++	enum v4l2_fwnode_orientation orientation;
++	struct acpi_pld_info *pld;
++	acpi_status status;
 +
-+config CIO2_BRIDGE
-+	bool "IPU3 CIO2 Sensors Bridge"
-+	depends on VIDEO_IPU3_CIO2 && ACPI
-+	depends on I2C
-+	help
-+	  This extension provides an API for the ipu3-cio2 driver to create
-+	  connections to cameras that are hidden in the SSDB buffer in ACPI.
-+	  It can be used to enable support for cameras in detachable / hybrid
-+	  devices that ship with Windows.
++	status = acpi_get_physical_device_location(adev->handle, &pld);
++	if (ACPI_FAILURE(status)) {
++		dev_warn(&adev->dev, "_PLD call failed, using default orientation\n");
++		return V4L2_FWNODE_ORIENTATION_EXTERNAL;
++	}
 +
-+	  Say Y here if your device is a detachable / hybrid laptop that comes
-+	  with Windows installed by the OEM, for example:
++	switch (pld->panel) {
+ 	case ACPI_PLD_PANEL_FRONT:
+-		return V4L2_FWNODE_ORIENTATION_FRONT;
++		orientation = V4L2_FWNODE_ORIENTATION_FRONT;
++		break;
+ 	case ACPI_PLD_PANEL_BACK:
+-		return V4L2_FWNODE_ORIENTATION_BACK;
++		orientation = V4L2_FWNODE_ORIENTATION_BACK;
++		break;
+ 	case ACPI_PLD_PANEL_TOP:
+ 	case ACPI_PLD_PANEL_LEFT:
+ 	case ACPI_PLD_PANEL_RIGHT:
+ 	case ACPI_PLD_PANEL_UNKNOWN:
+-		return V4L2_FWNODE_ORIENTATION_EXTERNAL;
++		orientation = V4L2_FWNODE_ORIENTATION_EXTERNAL;
++		break;
+ 	default:
+-		dev_warn(&sensor->adev->dev, "Unknown _PLD panel value %d\n",
+-			 sensor->pld->panel);
+-		return V4L2_FWNODE_ORIENTATION_EXTERNAL;
++		dev_warn(&adev->dev, "Unknown _PLD panel val %d\n", pld->panel);
++		orientation = V4L2_FWNODE_ORIENTATION_EXTERNAL;
++		break;
+ 	}
 +
-+		- Microsoft Surface models (except Surface Pro 3)
-+		- The Lenovo Miix line (for example the 510, 520, 710 and 720)
-+		- Dell 7285
-+
-+	  If in doubt, say N here.
++	ACPI_FREE(pld);
++	return orientation;
+ }
+ 
+ static void ipu_bridge_create_fwnode_properties(
+@@ -140,7 +156,7 @@ static void ipu_bridge_create_fwnode_properties(
+ 	enum v4l2_fwnode_orientation orientation;
+ 
+ 	rotation = ipu_bridge_parse_rotation(sensor);
+-	orientation = ipu_bridge_parse_orientation(sensor);
++	orientation = ipu_bridge_parse_orientation(sensor->adev);
+ 
+ 	sensor->prop_names = prop_names;
+ 
+@@ -279,7 +295,6 @@ static void ipu_bridge_unregister_sensors(struct ipu_bridge *bridge)
+ 	for (i = 0; i < bridge->n_sensors; i++) {
+ 		sensor = &bridge->sensors[i];
+ 		software_node_unregister_node_group(sensor->group);
+-		ACPI_FREE(sensor->pld);
+ 		acpi_dev_put(sensor->adev);
+ 		i2c_unregister_device(sensor->vcm_i2c_client);
+ 	}
+@@ -291,7 +306,6 @@ static int ipu_bridge_connect_sensor(const struct ipu_sensor_config *cfg,
+ 	struct fwnode_handle *fwnode, *primary;
+ 	struct ipu_sensor *sensor;
+ 	struct acpi_device *adev;
+-	acpi_status status;
+ 	int ret;
+ 
+ 	for_each_acpi_dev_match(adev, cfg->hid, NULL, -1) {
+@@ -326,17 +340,11 @@ static int ipu_bridge_connect_sensor(const struct ipu_sensor_config *cfg,
+ 			sensor->ssdb.vcmtype = 0;
+ 		}
+ 
+-		status = acpi_get_physical_device_location(adev->handle, &sensor->pld);
+-		if (ACPI_FAILURE(status)) {
+-			ret = -ENODEV;
+-			goto err_put_adev;
+-		}
+-
+ 		if (sensor->ssdb.lanes > IPU_MAX_LANES) {
+ 			dev_err(&adev->dev,
+ 				"Number of lanes in SSDB is invalid\n");
+ 			ret = -EINVAL;
+-			goto err_free_pld;
++			goto err_put_adev;
+ 		}
+ 
+ 		ipu_bridge_create_fwnode_properties(sensor, bridge, cfg);
+@@ -344,7 +352,7 @@ static int ipu_bridge_connect_sensor(const struct ipu_sensor_config *cfg,
+ 
+ 		ret = software_node_register_node_group(sensor->group);
+ 		if (ret)
+-			goto err_free_pld;
++			goto err_put_adev;
+ 
+ 		fwnode = software_node_fwnode(&sensor->swnodes[
+ 						      SWNODE_SENSOR_HID]);
+@@ -370,8 +378,6 @@ static int ipu_bridge_connect_sensor(const struct ipu_sensor_config *cfg,
+ 
+ err_free_swnodes:
+ 	software_node_unregister_node_group(sensor->group);
+-err_free_pld:
+-	ACPI_FREE(sensor->pld);
+ err_put_adev:
+ 	acpi_dev_put(adev);
+ 	return ret;
+diff --git a/drivers/media/pci/intel/ipu-bridge.h b/drivers/media/pci/intel/ipu-bridge.h
+index 6cb68e3344dc..907ca833a7c1 100644
+--- a/drivers/media/pci/intel/ipu-bridge.h
++++ b/drivers/media/pci/intel/ipu-bridge.h
+@@ -124,7 +124,6 @@ struct ipu_sensor {
+ 	struct ipu_node_names node_names;
+ 
+ 	struct ipu_sensor_ssdb ssdb;
+-	struct acpi_pld_info *pld;
+ 
+ 	struct ipu_property_names prop_names;
+ 	struct property_entry ep_properties[5];
 -- 
 2.41.0
 
