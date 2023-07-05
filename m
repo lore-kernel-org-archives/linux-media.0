@@ -2,41 +2,41 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9711CEB64DA
-	for <linux-media@archiver.kernel.org>; Wed,  5 Jul 2023 21:31:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25F35EB64DD
+	for <linux-media@archiver.kernel.org>; Wed,  5 Jul 2023 21:32:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbjGEVb7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 Jul 2023 17:31:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37306 "EHLO
+        id S232152AbjGEVcG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 Jul 2023 17:32:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbjGEVbz (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Jul 2023 17:31:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7EF19B7
-        for <linux-media@vger.kernel.org>; Wed,  5 Jul 2023 14:30:29 -0700 (PDT)
+        with ESMTP id S231608AbjGEVcD (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Jul 2023 17:32:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15BD1BC5
+        for <linux-media@vger.kernel.org>; Wed,  5 Jul 2023 14:30:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688592628;
+        s=mimecast20190719; t=1688592636;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=W0DTzrgAZBiYTKYT0PbWhHnkaHxl706xaM7SL5gQnHs=;
-        b=AWv18lOeeq9Ga1QQKa4j9+3yvep+2ADXHxb6BvFwbRidKsa3WsulTlCecqSwmGzcaLJCr2
-        KB5WAwnfuYgFAyigslvuXWhDI4Z2enpanhplO+jEy6M8OXgFivlU8/MvCMqHFPmWEeX84T
-        jKEsPxY6fARChy+CO0dwWTVGFHG9Er4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=RIOYZWKFZnnVX+fRZk228ehuIyHNvqiFYc52E4HU1Bw=;
+        b=biYAh80yy4VS2NTMtDTvmn6HZ0bXL8CxJmwW/bACeWA2Ty8ZDc5epvP1qelyX0vlqdZQr7
+        aOgOYsvJnuyCzzgFtE98OgheEwAsRB+LlIQs45ABPRGohQ5qapbiH4jGTgmNYKTpBopPtX
+        6qoEBh8AfRCMxPUoXvaVLbjKqK57Zp8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-587-Ii-d3Cz6MAWGKJ4S3i21bQ-1; Wed, 05 Jul 2023 17:30:27 -0400
-X-MC-Unique: Ii-d3Cz6MAWGKJ4S3i21bQ-1
+ us-mta-602-gl5RHiVwNCqRkbjH5qry8w-1; Wed, 05 Jul 2023 17:30:30 -0400
+X-MC-Unique: gl5RHiVwNCqRkbjH5qry8w-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B00048022EF;
-        Wed,  5 Jul 2023 21:30:26 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 398C73814951;
+        Wed,  5 Jul 2023 21:30:30 +0000 (UTC)
 Received: from localhost.localdomain (unknown [10.39.192.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2A55340C2063;
-        Wed,  5 Jul 2023 21:30:25 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A64D240C2063;
+        Wed,  5 Jul 2023 21:30:28 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -47,9 +47,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>, linux-acpi@vger.kernel.org,
         Andy Shevchenko <andy@kernel.org>, Kate Hsuan <hpa@redhat.com>,
         Hao Yao <hao.yao@intel.com>, Bingbu Cao <bingbu.cao@intel.com>,
         linux-media@vger.kernel.org
-Subject: [PATCH v3 03/18] media: ipu-bridge: Move initialization of node_names.vcm to ipu_bridge_init_swnode_names()
-Date:   Wed,  5 Jul 2023 23:29:55 +0200
-Message-ID: <20230705213010.390849-4-hdegoede@redhat.com>
+Subject: [PATCH v3 05/18] media: ipu-bridge: Make ipu_bridge_init() take a regular struct device as argument
+Date:   Wed,  5 Jul 2023 23:29:57 +0200
+Message-ID: <20230705213010.390849-6-hdegoede@redhat.com>
 In-Reply-To: <20230705213010.390849-1-hdegoede@redhat.com>
 References: <20230705213010.390849-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -59,52 +59,127 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Move initialization of node_names.vcm to ipu_bridge_init_swnode_names()
-where it belongs.
+Make ipu_bridge_init() take a regular struct device, rather then
+a pci_dev as argument.
 
-And make the initialization of nodes[SWNODE_VCM] unconditional,
-ipu_bridge_init_swnode_group() takes care of not registering it
-when there is no VCM.
+This is a preparation patch for making the ipu-bridge code more generic
+so that it can be shared with the atomisp driver.
 
 Reviewed-by: Andy Shevchenko <andy@kernel.org>
 Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/media/pci/intel/ipu-bridge.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/media/pci/intel/ipu-bridge.c     | 16 +++++++---------
+ drivers/media/pci/intel/ipu-bridge.h     |  4 ++--
+ drivers/media/pci/intel/ipu3/ipu3-cio2.c |  2 +-
+ 3 files changed, 10 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/media/pci/intel/ipu-bridge.c b/drivers/media/pci/intel/ipu-bridge.c
-index ef6c6cb7b51b..1c88fd925a8b 100644
+index 97b544736af2..9027a8d2d176 100644
 --- a/drivers/media/pci/intel/ipu-bridge.c
 +++ b/drivers/media/pci/intel/ipu-bridge.c
-@@ -201,6 +201,12 @@ static void ipu_bridge_init_swnode_names(struct ipu_sensor *sensor)
- 	snprintf(sensor->node_names.endpoint,
- 		 sizeof(sensor->node_names.endpoint),
- 		 SWNODE_GRAPH_ENDPOINT_NAME_FMT, 0); /* And endpoint 0 */
-+	if (sensor->ssdb.vcmtype) {
-+		/* append ssdb.link to distinguish nodes with same model VCM */
-+		snprintf(sensor->node_names.vcm, sizeof(sensor->node_names.vcm),
-+			 "%s-%u", ipu_vcm_types[sensor->ssdb.vcmtype - 1],
-+			 sensor->ssdb.link);
-+	}
+@@ -4,7 +4,6 @@
+ #include <linux/acpi.h>
+ #include <linux/device.h>
+ #include <linux/i2c.h>
+-#include <linux/pci.h>
+ #include <linux/property.h>
+ #include <media/v4l2-fwnode.h>
+ 
+@@ -288,7 +287,7 @@ static void ipu_bridge_unregister_sensors(struct ipu_bridge *bridge)
+ 
+ static int ipu_bridge_connect_sensor(const struct ipu_sensor_config *cfg,
+ 				     struct ipu_bridge *bridge,
+-				     struct pci_dev *ipu)
++				     struct device *dev)
+ {
+ 	struct fwnode_handle *fwnode, *primary;
+ 	struct ipu_sensor *sensor;
+@@ -302,7 +301,7 @@ static int ipu_bridge_connect_sensor(const struct ipu_sensor_config *cfg,
+ 
+ 		if (bridge->n_sensors >= IPU_MAX_PORTS) {
+ 			acpi_dev_put(adev);
+-			dev_err(&ipu->dev, "Exceeded available IPU ports\n");
++			dev_err(dev, "Exceeded available IPU ports\n");
+ 			return -EINVAL;
+ 		}
+ 
+@@ -362,7 +361,7 @@ static int ipu_bridge_connect_sensor(const struct ipu_sensor_config *cfg,
+ 
+ 		ipu_bridge_instantiate_vcm_i2c_client(sensor);
+ 
+-		dev_info(&ipu->dev, "Found supported sensor %s\n",
++		dev_info(dev, "Found supported sensor %s\n",
+ 			 acpi_dev_name(adev));
+ 
+ 		bridge->n_sensors++;
+@@ -380,7 +379,7 @@ static int ipu_bridge_connect_sensor(const struct ipu_sensor_config *cfg,
  }
  
- static void ipu_bridge_init_swnode_group(struct ipu_sensor *sensor)
-@@ -237,13 +243,7 @@ static void ipu_bridge_create_connection_swnodes(struct ipu_bridge *bridge,
- 						sensor->node_names.endpoint,
- 						&nodes[SWNODE_IPU_PORT],
- 						sensor->ipu_properties);
--	if (sensor->ssdb.vcmtype) {
--		/* append ssdb.link to distinguish VCM nodes with same HID */
--		snprintf(sensor->node_names.vcm, sizeof(sensor->node_names.vcm),
--			 "%s-%u", ipu_vcm_types[sensor->ssdb.vcmtype - 1],
--			 sensor->ssdb.link);
--		nodes[SWNODE_VCM] = NODE_VCM(sensor->node_names.vcm);
--	}
-+	nodes[SWNODE_VCM] = NODE_VCM(sensor->node_names.vcm);
+ static int ipu_bridge_connect_sensors(struct ipu_bridge *bridge,
+-				      struct pci_dev *ipu)
++				      struct device *dev)
+ {
+ 	unsigned int i;
+ 	int ret;
+@@ -389,7 +388,7 @@ static int ipu_bridge_connect_sensors(struct ipu_bridge *bridge,
+ 		const struct ipu_sensor_config *cfg =
+ 			&ipu_supported_sensors[i];
  
- 	ipu_bridge_init_swnode_group(sensor);
+-		ret = ipu_bridge_connect_sensor(cfg, bridge, ipu);
++		ret = ipu_bridge_connect_sensor(cfg, bridge, dev);
+ 		if (ret)
+ 			goto err_unregister_sensors;
+ 	}
+@@ -435,9 +434,8 @@ static int ipu_bridge_sensors_are_ready(void)
+ 	return ready;
  }
+ 
+-int ipu_bridge_init(struct pci_dev *ipu)
++int ipu_bridge_init(struct device *dev)
+ {
+-	struct device *dev = &ipu->dev;
+ 	struct fwnode_handle *fwnode;
+ 	struct ipu_bridge *bridge;
+ 	unsigned int i;
+@@ -470,7 +468,7 @@ int ipu_bridge_init(struct pci_dev *ipu)
+ 	for (i = 0; i < IPU_MAX_LANES; i++)
+ 		bridge->data_lanes[i] = i + 1;
+ 
+-	ret = ipu_bridge_connect_sensors(bridge, ipu);
++	ret = ipu_bridge_connect_sensors(bridge, dev);
+ 	if (ret || bridge->n_sensors == 0)
+ 		goto err_unregister_ipu;
+ 
+diff --git a/drivers/media/pci/intel/ipu-bridge.h b/drivers/media/pci/intel/ipu-bridge.h
+index 6cce712a0f34..8c1437f252d2 100644
+--- a/drivers/media/pci/intel/ipu-bridge.h
++++ b/drivers/media/pci/intel/ipu-bridge.h
+@@ -144,9 +144,9 @@ struct ipu_bridge {
+ };
+ 
+ #if IS_ENABLED(CONFIG_IPU_BRIDGE)
+-int ipu_bridge_init(struct pci_dev *ipu);
++int ipu_bridge_init(struct device *dev);
+ #else
+-static inline int ipu_bridge_init(struct pci_dev *ipu) { return 0; }
++static inline int ipu_bridge_init(struct device *dev) { return 0; }
+ #endif
+ 
+ #endif
+diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
+index dc09fbdb062b..4068fa0a5ecf 100644
+--- a/drivers/media/pci/intel/ipu3/ipu3-cio2.c
++++ b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
+@@ -1725,7 +1725,7 @@ static int cio2_pci_probe(struct pci_dev *pci_dev,
+ 			return -EINVAL;
+ 		}
+ 
+-		r = ipu_bridge_init(pci_dev);
++		r = ipu_bridge_init(dev);
+ 		if (r)
+ 			return r;
+ 	}
 -- 
 2.41.0
 
