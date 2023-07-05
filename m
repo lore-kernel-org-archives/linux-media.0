@@ -2,35 +2,35 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97B71EB64DA
-	for <linux-media@archiver.kernel.org>; Wed,  5 Jul 2023 12:11:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 007BEC001E0
+	for <linux-media@archiver.kernel.org>; Wed,  5 Jul 2023 12:11:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231963AbjGEMLH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 Jul 2023 08:11:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34356 "EHLO
+        id S231981AbjGEMLJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 Jul 2023 08:11:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbjGEMLG (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Jul 2023 08:11:06 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C87BE;
-        Wed,  5 Jul 2023 05:11:05 -0700 (PDT)
+        with ESMTP id S231965AbjGEMLH (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Jul 2023 08:11:07 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 224B1D8;
+        Wed,  5 Jul 2023 05:11:06 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:cbfb:e358:222c:d8c1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 354B266020F5;
-        Wed,  5 Jul 2023 13:11:03 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 494256606FB0;
+        Wed,  5 Jul 2023 13:11:04 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1688559063;
-        bh=0EkrhqfP9XUDXvCh3iJ2AF/1rs8GBjnfIgfGSYhPJMo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=e6SFTrA/Jj+0xACBNA/LjXYY9LHtlF9uNFamKrovQoUdpxcuDIYTWlQSlXqaRrpcZ
-         Dq/N3wsdZeHPIrDsTpHSteNF04Q+7zKvF4sJM6Wv8kZmIw0TME12eRRkqOSUrySuoz
-         IqcVmjQQpgDuHQEZtVa6hhfAClSumhkjq7+Kjs5pWAwt/U/qkATMvIothDaB90hsby
-         wcsNZuJ9PtKJhAiuVkuFd4j3T7F1QxCo9TC5y2utZmibmDhAqxTjpCVGk4CrNbEsN+
-         n+Ouqv0/ZvYpSMoeB3Bp9OLkxm/Aja9VtC4x9ANyRK7exm3NQd4fx4A1m03koZg2Bo
-         z2ZmREQ30ZsHw==
+        s=mail; t=1688559064;
+        bh=KRDWgSGJLJJkZ4YtMc9THdOTvbmNUOepA0+ihzaVNOw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ZcMU1y9EUXHri9xNIMVSQgGfsIxsb4k9NexSZvNAzIxyrv92JPCztdcNThKs+rPTD
+         yE9dBa4VclSkMCl72vxAU6gGnMBfjj/moi3iDAkxiu6fJqvNlt5tpyQKIJlTx725SB
+         697NDE9taZcN72QTr4rAutJ7efLEGPDIALQSWYuL0mY9mspeUKGzpu0sAL01a6DPP9
+         Ix3jBJKvB2vwaARdqD/OYAe8aKbv8lD02on7+e8sE+yLZZemPUYAZXfxDtyEON+bjJ
+         7pjP8kTY4uP3+Nov0Rq8yTDL0yxucgyqc243/SB41KjcwqfwETylY1h3hgd+lP0HR+
+         W9YAVLFvYswtw==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -42,103 +42,140 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v4 00/10]  Add DELETE_BUF ioctl
-Date:   Wed,  5 Jul 2023 14:10:46 +0200
-Message-Id: <20230705121056.37017-1-benjamin.gaignard@collabora.com>
+Subject: [PATCH v4 02/10] media: videobuf2: Be more flexible on the number of queue stored buffers
+Date:   Wed,  5 Jul 2023 14:10:48 +0200
+Message-Id: <20230705121056.37017-3-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230705121056.37017-1-benjamin.gaignard@collabora.com>
+References: <20230705121056.37017-1-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Unlike when resolution change on keyframes, dynamic resolution change
-on inter frames doesn't allow to do a stream off/on sequence because
-it is need to keep all previous references alive to decode inter frames.
-This constraint have two main problems:
-- more memory consumption.
-- more buffers in use.
-To solve these issue this series introduce DELETE_BUFS ioctl and remove
-the 32 buffers limit per queue.
+Add 'max_allowed_buffers' field in vb2_queue struct to let drivers decide
+how many buffers could be stored in a queue.
+This request 'bufs' array to be allocated at queue init time and freed
+when releasing the queue.
+By default VB2_MAX_FRAME remains the limit.
 
-VP9 conformance tests using fluster give a score of 210/305.
-The 24 resize inter tests (vp90-2-21-resize_inter_* files) are ok
-but require to use postprocessor.
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+---
+version 4:
+- no Xarray here but instead a new field to let queues decide
+  of their own maximum.
+ .../media/common/videobuf2/videobuf2-core.c   | 22 ++++++++++++-------
+ include/media/videobuf2-core.h                |  4 +++-
+ 2 files changed, 17 insertions(+), 9 deletions(-)
 
-Kernel branch is available here:
-https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/commits/remove_vb2_queue_limit_v4
-
-GStreamer branch to use DELETE_BUF ioctl and testing dynamic resolution
-change is here:
-https://gitlab.freedesktop.org/benjamin.gaignard1/gstreamer/-/commits/VP9_drc
-
-changes in version 4:
-- Stop using Xarray, instead let queues decide about their own maximum
-  number of buffer and allocate bufs array given that value.
-- Rework offset cookie encoding pattern.
-- Change DELETE_BUF to DELETE_BUFS because it now usable for
-  range of buffer to be symetrical of CREATE_BUFS.
-- Add fixes tags on couple of Verisilicon related patches.
-- Be smarter in Verisilicon postprocessor buffers management.
-- Rebase on top of v6.4
-
-changes in version 3:
-- Use Xarray API to store allocated video buffers.
-- No module parameter to limit the number of buffer per queue.
-- Use Xarray inside Verisilicon driver to store postprocessor buffers
-  and remove VB2_MAX_FRAME limit.
-- Allow Versilicon driver to change of resolution while streaming
-- Various fixes the Verisilicon VP9 code to improve fluster score.
+diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
+index 42fd3984c2bc..77e69b01d88d 100644
+--- a/drivers/media/common/videobuf2/videobuf2-core.c
++++ b/drivers/media/common/videobuf2/videobuf2-core.c
+@@ -413,7 +413,7 @@ static void init_buffer_cache_hints(struct vb2_queue *q, struct vb2_buffer *vb)
+  */
+ static bool vb2_queue_add_buffer(struct vb2_queue *q, struct vb2_buffer *vb, int index)
+ {
+-	if (index < VB2_MAX_FRAME && !q->bufs[index]) {
++	if (index < q->max_allowed_buffers && !q->bufs[index]) {
+ 		q->bufs[index] = vb;
+ 		vb->index = index;
+ 		vb->vb2_queue = q;
+@@ -430,7 +430,7 @@ static bool vb2_queue_add_buffer(struct vb2_queue *q, struct vb2_buffer *vb, int
+  */
+ static void vb2_queue_remove_buffer(struct vb2_queue *q, struct vb2_buffer *vb)
+ {
+-	if (vb->index < VB2_MAX_FRAME) {
++	if (vb->index < q->max_allowed_buffers) {
+ 		q->bufs[vb->index] = NULL;
+ 		vb->vb2_queue = NULL;
+ 	}
+@@ -451,9 +451,9 @@ static int __vb2_queue_alloc(struct vb2_queue *q, enum vb2_memory memory,
+ 	struct vb2_buffer *vb;
+ 	int ret;
  
-changes in version 2:
-- Use a dynamic array and not a list to keep trace of allocated buffers.
-  Not use IDR interface because it is marked as deprecated in kernel
-  documentation.
-- Add a module parameter to limit the number of buffer per queue.
-- Add DELETE_BUF ioctl and m2m helpers.
+-	/* Ensure that q->num_buffers+num_buffers is below VB2_MAX_FRAME */
++	/* Ensure that q->num_buffers+num_buffers is below q->max_allowed_buffers */
+ 	num_buffers = min_t(unsigned int, num_buffers,
+-			    VB2_MAX_FRAME - q->num_buffers);
++			    q->max_allowed_buffers - q->num_buffers);
  
-Benjamin Gaignard (10):
-  media: videobuf2: Access vb2_queue bufs array through helper functions
-  media: videobuf2: Be more flexible on the number of queue stored
-    buffers
-  media: videobuf2: Rework offset 'cookie' encoding pattern
-  media: verisilicon: Refactor postprocessor to store more buffers
-  media: verisilicon: Store chroma and motion vectors offset
-  media: verisilicon: vp9: Use destination buffer height to compute
-    chroma offset
-  media: verisilicon: postproc: Fix down scale test
-  media: verisilicon: vp9: Allow to change resolution while streaming
-  media: v4l2: Add DELETE_BUFS ioctl
-  media: v4l2: Add mem2mem helpers for DELETE_BUFS ioctl
-
- .../userspace-api/media/v4l/user-func.rst     |   1 +
- .../media/v4l/vidioc-delete-bufs.rst          |  73 +++++
- .../media/common/videobuf2/videobuf2-core.c   | 304 +++++++++++++-----
- .../media/common/videobuf2/videobuf2-v4l2.c   |  44 ++-
- drivers/media/platform/amphion/vpu_dbg.c      |  22 +-
- .../platform/mediatek/jpeg/mtk_jpeg_core.c    |   6 +-
- .../vcodec/vdec/vdec_vp9_req_lat_if.c         |   2 +-
- drivers/media/platform/st/sti/hva/hva-v4l2.c  |   4 +
- drivers/media/platform/verisilicon/hantro.h   |   9 +-
- .../media/platform/verisilicon/hantro_drv.c   |   4 +-
- .../platform/verisilicon/hantro_g2_vp9_dec.c  |  10 +-
- .../media/platform/verisilicon/hantro_hw.h    |   2 +-
- .../platform/verisilicon/hantro_postproc.c    | 105 ++++--
- .../media/platform/verisilicon/hantro_v4l2.c  |  27 +-
- drivers/media/test-drivers/vim2m.c            |   1 +
- drivers/media/test-drivers/visl/visl-dec.c    |  28 +-
- drivers/media/v4l2-core/v4l2-dev.c            |   1 +
- drivers/media/v4l2-core/v4l2-ioctl.c          |  17 +
- drivers/media/v4l2-core/v4l2-mem2mem.c        |  20 ++
- .../staging/media/atomisp/pci/atomisp_ioctl.c |   2 +-
- include/media/v4l2-ioctl.h                    |   4 +
- include/media/v4l2-mem2mem.h                  |  12 +
- include/media/videobuf2-core.h                |  13 +-
- include/media/videobuf2-v4l2.h                |  11 +
- include/uapi/linux/videodev2.h                |  17 +
- 25 files changed, 592 insertions(+), 147 deletions(-)
- create mode 100644 Documentation/userspace-api/media/v4l/vidioc-delete-bufs.rst
-
+ 	for (buffer = 0; buffer < num_buffers; ++buffer) {
+ 		/* Allocate vb2 buffer structures */
+@@ -854,9 +854,9 @@ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
+ 	/*
+ 	 * Make sure the requested values and current defaults are sane.
+ 	 */
+-	WARN_ON(q->min_buffers_needed > VB2_MAX_FRAME);
++	WARN_ON(q->min_buffers_needed > q->max_allowed_buffers);
+ 	num_buffers = max_t(unsigned int, *count, q->min_buffers_needed);
+-	num_buffers = min_t(unsigned int, num_buffers, VB2_MAX_FRAME);
++	num_buffers = min_t(unsigned int, num_buffers, q->max_allowed_buffers);
+ 	memset(q->alloc_devs, 0, sizeof(q->alloc_devs));
+ 	/*
+ 	 * Set this now to ensure that drivers see the correct q->memory value
+@@ -972,7 +972,7 @@ int vb2_core_create_bufs(struct vb2_queue *q, enum vb2_memory memory,
+ 	bool no_previous_buffers = !q->num_buffers;
+ 	int ret;
+ 
+-	if (q->num_buffers == VB2_MAX_FRAME) {
++	if (q->num_buffers == q->max_allowed_buffers) {
+ 		dprintk(q, 1, "maximum number of buffers already allocated\n");
+ 		return -ENOBUFS;
+ 	}
+@@ -1001,7 +1001,7 @@ int vb2_core_create_bufs(struct vb2_queue *q, enum vb2_memory memory,
+ 			return -EINVAL;
+ 	}
+ 
+-	num_buffers = min(*count, VB2_MAX_FRAME - q->num_buffers);
++	num_buffers = min(*count, q->max_allowed_buffers - q->num_buffers);
+ 
+ 	if (requested_planes && requested_sizes) {
+ 		num_planes = requested_planes;
+@@ -2549,6 +2549,11 @@ int vb2_core_queue_init(struct vb2_queue *q)
+ 
+ 	q->memory = VB2_MEMORY_UNKNOWN;
+ 
++	if (!q->max_allowed_buffers)
++		q->max_allowed_buffers = VB2_MAX_FRAME;
++
++	q->bufs = kcalloc(q->max_allowed_buffers, sizeof(*q->bufs), GFP_KERNEL);
++
+ 	if (q->buf_struct_size == 0)
+ 		q->buf_struct_size = sizeof(struct vb2_buffer);
+ 
+@@ -2573,6 +2578,7 @@ void vb2_core_queue_release(struct vb2_queue *q)
+ 	__vb2_queue_cancel(q);
+ 	mutex_lock(&q->mmap_lock);
+ 	__vb2_queue_free(q, q->num_buffers);
++	kfree(q->bufs);
+ 	mutex_unlock(&q->mmap_lock);
+ }
+ EXPORT_SYMBOL_GPL(vb2_core_queue_release);
+diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
+index 4b6a9d2ea372..ee9161b9fd64 100644
+--- a/include/media/videobuf2-core.h
++++ b/include/media/videobuf2-core.h
+@@ -558,6 +558,7 @@ struct vb2_buf_ops {
+  * @dma_dir:	DMA mapping direction.
+  * @bufs:	videobuf2 buffer structures
+  * @num_buffers: number of allocated/used buffers
++ * @max_allowed_buffers: upper limit of number of allocated/used buffers
+  * @queued_list: list of buffers currently queued from userspace
+  * @queued_count: number of buffers queued and ready for streaming.
+  * @owned_by_drv_count: number of buffers owned by the driver
+@@ -619,8 +620,9 @@ struct vb2_queue {
+ 	struct mutex			mmap_lock;
+ 	unsigned int			memory;
+ 	enum dma_data_direction		dma_dir;
+-	struct vb2_buffer		*bufs[VB2_MAX_FRAME];
++	struct vb2_buffer		**bufs;
+ 	unsigned int			num_buffers;
++	unsigned int			max_allowed_buffers;
+ 
+ 	struct list_head		queued_list;
+ 	unsigned int			queued_count;
 -- 
 2.39.2
 
