@@ -2,57 +2,57 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C580C001DF
-	for <linux-media@archiver.kernel.org>; Mon, 10 Jul 2023 22:35:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 088B1C001B0
+	for <linux-media@archiver.kernel.org>; Mon, 10 Jul 2023 22:35:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbjGJWff (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 10 Jul 2023 18:35:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60172 "EHLO
+        id S231210AbjGJWfg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 10 Jul 2023 18:35:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231134AbjGJWfb (ORCPT
+        with ESMTP id S231163AbjGJWfd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 10 Jul 2023 18:35:31 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899651702
-        for <linux-media@vger.kernel.org>; Mon, 10 Jul 2023 15:34:52 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-573d70da2dcso57740357b3.1
-        for <linux-media@vger.kernel.org>; Mon, 10 Jul 2023 15:34:52 -0700 (PDT)
+        Mon, 10 Jul 2023 18:35:33 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A807170D
+        for <linux-media@vger.kernel.org>; Mon, 10 Jul 2023 15:34:55 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-c78d98b0213so2767678276.2
+        for <linux-media@vger.kernel.org>; Mon, 10 Jul 2023 15:34:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689028455; x=1691620455;
+        d=google.com; s=20221208; t=1689028463; x=1691620463;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oKO6sogguZyjcmLGJ/hPDJOveqN84Swf5N5/pg86eqs=;
-        b=Xc1Br1GD5LT+ysV69O+uNAFOOUAbf02O+HrvNnkbfJ1izSzFy6Ok06vRSUdPziTGaE
-         +3glhnpZcNM+j4eKCMIQwzsvEIs7TUtCF6YQ7B3LB5UhdlozLITb0gWXFx15pEiIQwHB
-         lb1XngFtKIZWG1x07iobyzwkMGwrncaUqi7OjBAV9mfOg4lMhlt3qQue+doX9PnCJO43
-         rujdU8bT5yD1p9K7vmBkF+fpO8gWOxm5COgUqgl1cz9uYCBrniBM+9z6RMAxOXhqziPJ
-         biD0LDnt/JaMQ2Wj+vQZk9IEDe9NJK+hbJMwVlywjwf9Mrl5ow415UQIgWSBJjmiua/K
-         kleg==
+        bh=oQJYRa4cYbFlxJ1mDmha+0HxPANtp6LWuy6ed2Yjbu4=;
+        b=CetzuFarHJgPUiGBwDAWLpdzt0w3V9hQbqMPhuZfIenfXirykHD2HLGYdWQSkINvJh
+         xJG2uW65yyAAb+o06RvuUp3WpLKZAzNYnV7EddNjt5dfXFCFq8AZmqCWdcr58enYZIQE
+         n5JK8gg0yI5kVZJS/Tnc0gRJy7edUPwC0tcHLkojiMtzkNIt/J3L+ITk1kszc47h7Vz7
+         7HfhvqbXuGyD3D189Y0m4jp9NOnOMRg/24QxNfglicfLYXQlHIKScA6XdF716DYeVEDF
+         C2/NnZaF4OaiJaWHPvY80aoJTwZFVHVTEJFSi6QbKnAMO9h++YLyvxmo53PBx0z1bgkV
+         UbJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689028455; x=1691620455;
+        d=1e100.net; s=20221208; t=1689028463; x=1691620463;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oKO6sogguZyjcmLGJ/hPDJOveqN84Swf5N5/pg86eqs=;
-        b=IVCO077eJDGiZ6yaUZsLNf2eIXC+NO6chcFO82+Moydy2UcChggwAxatRxUx7HhvBG
-         bnwO2nRuoVruavty6U1bacQzJtzIwbnhi6yDwdxule2CNkGCL+6IrIDT+nfZFkuE7De4
-         TUwTwXHHqTaK5zGXyj80gOKYAolkhGhwhhQr4mjg1JihMLrH5iUXyb7v1Do3s3D2hmb9
-         wjawqrnQmfDjSYN5fj/mPz1M9gf8SNXrJj9trMzkoQITTQI5pL5rB0RaLkcnqJgpEDxw
-         Aj4MMHoGuoHuGSp6sjysq0ACd6so1nKP/FRoL4O9HbCKxEaguucMZya/gbpUPOo6N6pU
-         MkEg==
-X-Gm-Message-State: ABy/qLYwvRtB4AtPIbTBx9ctWMShY4ksUyI9en2nhohcOLOCjqg9CUNh
-        NwiI4u7Fpuh73bP/wpcbVX8eoENgDE60JLv2Hw==
-X-Google-Smtp-Source: APBJJlG5e3EZCuprxXAZBHD12ycHywImC9zBDIViU2VYzdwhsM3l+IXw2PlsHbyEhMIScVpgSI4Mos+P/4wWIVOHRw==
+        bh=oQJYRa4cYbFlxJ1mDmha+0HxPANtp6LWuy6ed2Yjbu4=;
+        b=iuNDsWQVMT6e2y0wWWx46Imhn+QYGTE4B7Dnc2YPsDx32joqupqIjuqtp1aGAqs091
+         MQKy41fNg+GWXX8Dm3ZA1gnTi472mWx0OiLbJd/wyiiJbKi+4EQDQ6uGhgdmFpTvNX4q
+         TrLuQLbzNl9YqsYOg1hn3GDYFdOq/eXIzGfB9uc96YbTsDyMfB/z2sRt6312awOz1tTQ
+         yGfX8uz9ySMsZTYi04MthTJh4GVM4huJDcR1nXbBdldhocgHTCT0FKEnD8l/QFWvUnH8
+         v5hbNzXkkxwE3YZqv5ZeylpiP49x6b0jMRSg663TVTiYm/NykZhLTN5cbp0YXq22iVNv
+         dvHg==
+X-Gm-Message-State: ABy/qLbLQDk5Y4BxdEF7iM7X+5GtpeuyIUMfSMQQkqgg8eFcw44qPPox
+        6oy/ArXxt/thmx44aBCn+CLoH/N8/uC2hHfj6A==
+X-Google-Smtp-Source: APBJJlHJiw9FD0eEFF7lSrjMDR+hUHliNX9UFzA9i3ufkboc97+XMgqpqjgotP7HgV453EARzYkdxteZjWVekbKkug==
 X-Received: from almasrymina.svl.corp.google.com ([2620:15c:2c4:200:4c0f:bfb6:9942:8c53])
- (user=almasrymina job=sendgmr) by 2002:a81:d305:0:b0:56d:2a88:49e5 with SMTP
- id y5-20020a81d305000000b0056d2a8849e5mr98145ywi.2.1689028455695; Mon, 10 Jul
- 2023 15:34:15 -0700 (PDT)
-Date:   Mon, 10 Jul 2023 15:32:59 -0700
+ (user=almasrymina job=sendgmr) by 2002:a25:4252:0:b0:c6f:6ffe:f904 with SMTP
+ id p79-20020a254252000000b00c6f6ffef904mr50579yba.9.1689028463039; Mon, 10
+ Jul 2023 15:34:23 -0700 (PDT)
+Date:   Mon, 10 Jul 2023 15:33:01 -0700
 In-Reply-To: <20230710223304.1174642-1-almasrymina@google.com>
 Mime-Version: 1.0
 References: <20230710223304.1174642-1-almasrymina@google.com>
 X-Mailer: git-send-email 2.41.0.390.g38632f3daf-goog
-Message-ID: <20230710223304.1174642-9-almasrymina@google.com>
-Subject: [RFC PATCH 08/10] selftests: add ncdevmem, netcat for devmem TCP
+Message-ID: <20230710223304.1174642-11-almasrymina@google.com>
+Subject: [RFC PATCH 10/10] memory-provider: add dmabuf devmem provider
 From:   Mina Almasry <almasrymina@google.com>
 To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
@@ -76,746 +76,275 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-ncdevmem is a devmem TCP netcat. It works similarly to netcat, but it
-sends and receives data using the devmem TCP APIs. It uses udmabuf as
-the dmabuf provider. It is compatible with a regular netcat running on
-a peer, or a ncdevmem running on a peer.
+Use Jakub's memory provider PoC API:
+https://github.com/kuba-moo/linux/tree/pp-providers
 
-In addition to normal netcat support, ncdevmem has a validation mode,
-where it sends a specific pattern and validates this pattern on the
-receiver side to ensure data integrity.
+To implement a dmabuf devmem memory provider. The provider allocates
+NET_RX dmabuf pages to the page pool. This abstracts any custom memory
+allocation or freeing changes for devmem TCP from drivers using the
+page pool.
+
+The memory provider allocates NET_RX pages from the
+dmabuf pages provided by the driver. These pages are ZONE_DEVICE pages
+with the sg dma_addrs stored in the zone_device_data entry in the page.
+The page pool entries in struct page are in a union with the ZONE_DEVICE
+entries, and - without special handling - the page pool would
+accidentally overwrite the data in the ZONE_DEVICE fields.
+
+To solve this, the memory provider converts the page from a ZONE_DEVICE
+page to a ZONE_NORMAL page upon giving it to the page pool, and converts
+it back to ZONE_DEVICE page upon getting it back from the page pool.
+This is safe to do because the NET_RX pages are dmabuf pages created to
+hold the dma_addr in the dma_buf_map_attachement sg_table entries, and
+are only used with code that handles them specifically.
+
+However, since dmabuf pages can now also be page pool page, we need
+to update 2 places to detect this correctly:
+
+1. is_dma_buf_page() needs to be updated to correctly detect dmabuf
+   pages after they've been inserted into the pool.
+
+2. dma_buf_page_to_dma_addr() needs to be updated. For page pool pages,
+   the dma_addr exists in page->dma_addr. For non page pool pages, the
+   dma_addr exists in page->zone_device_data.
 
 Signed-off-by: Mina Almasry <almasrymina@google.com>
 ---
- tools/testing/selftests/net/.gitignore |   1 +
- tools/testing/selftests/net/Makefile   |   1 +
- tools/testing/selftests/net/ncdevmem.c | 693 +++++++++++++++++++++++++
- 3 files changed, 695 insertions(+)
- create mode 100644 tools/testing/selftests/net/ncdevmem.c
+ include/linux/dma-buf.h |  29 ++++++++++-
+ include/net/page_pool.h |  20 ++++++++
+ net/core/page_pool.c    | 104 ++++++++++++++++++++++++++++++++++++----
+ 3 files changed, 143 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
-index f27a7338b60e..1153ba177f1b 100644
---- a/tools/testing/selftests/net/.gitignore
-+++ b/tools/testing/selftests/net/.gitignore
-@@ -16,6 +16,7 @@ ipsec
- ipv6_flowlabel
- ipv6_flowlabel_mgr
- msg_zerocopy
-+ncdevmem
- nettest
- psock_fanout
- psock_snd
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index c12df57d5539..ea5ccbd99d3b 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -84,6 +84,7 @@ TEST_GEN_FILES += ip_local_port_range
- TEST_GEN_FILES += bind_wildcard
- TEST_PROGS += test_vxlan_mdb.sh
- TEST_PROGS += test_bridge_neigh_suppress.sh
-+TEST_GEN_FILES += ncdevmem
+diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
+index 93228a2fec47..896359fa998d 100644
+--- a/include/linux/dma-buf.h
++++ b/include/linux/dma-buf.h
+@@ -692,15 +692,26 @@ static inline bool is_dma_buf_pages_file(struct file *file)
  
- TEST_FILES := settings
+ struct page *dma_buf_pages_net_rx_alloc(struct dma_buf_pages *priv);
  
-diff --git a/tools/testing/selftests/net/ncdevmem.c b/tools/testing/selftests/net/ncdevmem.c
-new file mode 100644
-index 000000000000..4f62f22bf763
---- /dev/null
-+++ b/tools/testing/selftests/net/ncdevmem.c
-@@ -0,0 +1,693 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+#define __EXPORTED_HEADERS__
-+
-+#include <linux/uio.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <stdbool.h>
-+#include <string.h>
-+#include <errno.h>
-+#define __iovec_defined
-+#include <fcntl.h>
-+#include <malloc.h>
-+
-+#include <arpa/inet.h>
-+#include <sys/socket.h>
-+#include <sys/mman.h>
-+#include <sys/ioctl.h>
-+#include <sys/syscall.h>
-+
-+#include <linux/memfd.h>
-+#include <linux/if.h>
-+#include <linux/dma-buf.h>
-+#include <linux/udmabuf.h>
-+
-+#define PAGE_SHIFT 12
-+#define PAGE_SIZE 4096
-+#define TEST_PREFIX "ncdevmem"
-+#define NUM_PAGES 16000
-+
-+#ifndef MSG_SOCK_DEVMEM
-+#define MSG_SOCK_DEVMEM 0x2000000
-+#endif
-+
-+/*
-+ * tcpdevmem netcat. Works similarly to netcat but does device memory TCP
-+ * instead of regular TCP. Uses udmabuf to mock a dmabuf provider.
-+ *
-+ * Usage:
-+ *
-+ * * Without validation:
-+ *
-+ *	On server:
-+ *	ncdevmem -s <server IP> -c <client IP> -f eth1 -n 0000:06:00.0 -l \
-+ *		-p 5201
-+ *
-+ *	On client:
-+ *	ncdevmem -s <server IP> -c <client IP> -f eth1 -n 0000:06:00.0 -p 5201
-+ *
-+ * * With Validation:
-+ *	On server:
-+ *	ncdevmem -s <server IP> -c <client IP> -l -f eth1 -n 0000:06:00.0 \
-+ *		-p 5202 -v 1
-+ *
-+ *	On client:
-+ *	ncdevmem -s <server IP> -c <client IP> -f eth1 -n 0000:06:00.0 -p 5202 \
-+ *		-v 100000
-+ *
-+ * Note this is compatible with regular netcat. i.e. the sender or receiver can
-+ * be replaced with regular netcat to test the RX or TX path in isolation.
-+ */
-+
-+static char *server_ip = "192.168.1.4";
-+static char *client_ip = "192.168.1.2";
-+static char *port = "5201";
-+static size_t do_validation = 0;
-+static int queue_num = 15;
-+static char *ifname = "eth1";
-+static char *nic_pci_addr = "0000:06:00.0";
-+static unsigned int iterations = 0;
-+
-+void print_bytes(void *ptr, size_t size)
++static inline bool is_dma_buf_page_net_rx(struct page *page)
 +{
-+	unsigned char *p = ptr;
-+	int i;
-+	for (i = 0; i < size; i++) {
-+		printf("%02hhX ", p[i]);
-+	}
-+	printf("\n");
++	struct dma_buf_pages *priv;
++
++	return (is_page_pool_page(page) && (priv = page->pp->mp_priv) &&
++		priv->pgmap.ops == &dma_buf_pgmap_ops);
 +}
 +
-+void print_nonzero_bytes(void *ptr, size_t size)
+ static inline bool is_dma_buf_page(struct page *page)
+ {
+ 	return (is_zone_device_page(page) && page->pgmap &&
+-		page->pgmap->ops == &dma_buf_pgmap_ops);
++		page->pgmap->ops == &dma_buf_pgmap_ops) ||
++	       is_dma_buf_page_net_rx(page);
+ }
+ 
+ static inline dma_addr_t dma_buf_page_to_dma_addr(struct page *page)
+ {
+-	return (dma_addr_t)page->zone_device_data;
++	return is_dma_buf_page_net_rx(page) ?
++		       (dma_addr_t)page->dma_addr :
++		       (dma_addr_t)page->zone_device_data;
+ }
+ 
+ static inline int dma_buf_map_sg(struct device *dev, struct scatterlist *sg,
+@@ -718,6 +729,16 @@ static inline int dma_buf_map_sg(struct device *dev, struct scatterlist *sg,
+ 
+ 	return nents;
+ }
++
++static inline bool is_dma_buf_pages_priv(void *ptr)
 +{
-+	unsigned char *p = ptr;
-+	unsigned int i;
-+	for (i = 0; i < size; i++) {
-+		if (p[i])
-+			printf("%c", p[i]);
-+	}
-+	printf("\n");
++	struct dma_buf_pages *priv = (struct dma_buf_pages *)ptr;
++
++	if (!priv || priv->pgmap.ops != &dma_buf_pgmap_ops)
++		return false;
++
++	return true;
 +}
-+
-+void initialize_validation(void *line, size_t size)
+ #else
+ static inline bool is_dma_buf_page(struct page *page)
+ {
+@@ -745,6 +766,10 @@ static inline struct page *dma_buf_pages_net_rx_alloc(struct dma_buf_pages *priv
+ 	return NULL;
+ }
+ 
++static inline bool is_dma_buf_pages_priv(void *ptr)
 +{
-+	static unsigned char seed = 1;
-+	unsigned char *ptr = line;
-+	for (size_t i = 0; i < size; i++) {
-+		ptr[i] = seed;
-+		seed++;
-+		if (seed == 254)
-+			seed = 0;
-+	}
++	return false;
 +}
-+
-+void validate_buffer(void *line, size_t size)
+ #endif
+ 
+ 
+diff --git a/include/net/page_pool.h b/include/net/page_pool.h
+index 7b6668479baf..a57757a13cc8 100644
+--- a/include/net/page_pool.h
++++ b/include/net/page_pool.h
+@@ -157,6 +157,7 @@ enum pp_memory_provider_type {
+ 	PP_MP_HUGE_SPLIT, /* 2MB, online page alloc */
+ 	PP_MP_HUGE, /* 2MB, all memory pre-allocated */
+ 	PP_MP_HUGE_1G, /* 1G pages, MEP, pre-allocated */
++	PP_MP_DMABUF_DEVMEM, /* dmabuf devmem provider */
+ };
+ 
+ struct pp_memory_provider_ops {
+@@ -170,6 +171,7 @@ extern const struct pp_memory_provider_ops basic_ops;
+ extern const struct pp_memory_provider_ops hugesp_ops;
+ extern const struct pp_memory_provider_ops huge_ops;
+ extern const struct pp_memory_provider_ops huge_1g_ops;
++extern const struct pp_memory_provider_ops dmabuf_devmem_ops;
+ 
+ struct page_pool {
+ 	struct page_pool_params p;
+@@ -420,4 +422,22 @@ static inline void page_pool_nid_changed(struct page_pool *pool, int new_nid)
+ 		page_pool_update_nid(pool, new_nid);
+ }
+ 
++static inline bool is_page_pool_page(struct page *page)
 +{
-+	static unsigned char seed = 1;
-+	int errors = 0;
-+
-+	unsigned char *ptr = line;
-+	for (size_t i = 0; i < size; i++) {
-+		if (ptr[i] != seed) {
-+			fprintf(stderr,
-+				"Failed validation: expected=%u, "
-+				"actual=%u, index=%lu\n",
-+				seed, ptr[i], i);
-+			errors++;
-+			if (errors > 20)
-+				exit(1);
-+		}
-+		seed++;
-+		if (seed == 254)
-+			seed = 0;
-+	}
-+
-+	fprintf(stdout, "Validated buffer\n");
-+}
-+
-+/* Triggers a driver reset...
-+ *
-+ * The proper way to do this is probably 'ethtool --reset', but I don't have
-+ * that supported on my current test bed. I resort to changing this
-+ * configuration in the driver which also causes a driver reset...
-+ */
-+static void reset_flow_steering()
-+{
-+	char command[256];
-+	memset(command, 0, sizeof(command));
-+	snprintf(command, sizeof(command), "sudo ethtool -K %s ntuple off",
-+		 "eth1");
-+	system(command);
-+
-+	memset(command, 0, sizeof(command));
-+	snprintf(command, sizeof(command), "sudo ethtool -K %s ntuple on",
-+		 "eth1");
-+	system(command);
-+}
-+
-+static void configure_flow_steering()
-+{
-+	char command[256];
-+	memset(command, 0, sizeof(command));
-+	snprintf(command, sizeof(command),
-+		 "sudo ethtool -N %s flow-type tcp4 src-ip %s dst-ip %s "
-+		 "src-port %s dst-port %s queue %d",
-+		 ifname, client_ip, server_ip, port, port, queue_num);
-+	system(command);
-+}
-+
-+/* Triggers a device reset, which causes the dmabuf pages binding to take
-+ * effect. A better and more generic way to do this may be ethtool --reset.
-+ */
-+static void trigger_device_reset()
-+{
-+	char command[256];
-+	memset(command, 0, sizeof(command));
-+	snprintf(command, sizeof(command),
-+		 "sudo ethtool --set-priv-flags %s enable-header-split off",
-+		 ifname);
-+	system(command);
-+
-+	memset(command, 0, sizeof(command));
-+	snprintf(command, sizeof(command),
-+		 "sudo ethtool --set-priv-flags %s enable-header-split on",
-+		 ifname);
-+	system(command);
-+}
-+
-+static void create_udmabuf(int *devfd, int *memfd, int *buf, size_t dmabuf_size)
-+{
-+	struct udmabuf_create create;
-+	int ret;
-+
-+	*devfd = open("/dev/udmabuf", O_RDWR);
-+	if (*devfd < 0) {
-+		fprintf(stderr,
-+			"%s: [skip,no-udmabuf: Unable to access DMA "
-+			"buffer device file]\n",
-+			TEST_PREFIX);
-+		exit(70);
-+	}
-+
-+	*memfd = memfd_create("udmabuf-test", MFD_ALLOW_SEALING);
-+	if (*memfd < 0) {
-+		printf("%s: [skip,no-memfd]\n", TEST_PREFIX);
-+		exit(72);
-+	}
-+
-+	ret = fcntl(*memfd, F_ADD_SEALS, F_SEAL_SHRINK);
-+	if (ret < 0) {
-+		printf("%s: [skip,fcntl-add-seals]\n", TEST_PREFIX);
-+		exit(73);
-+	}
-+
-+	ret = ftruncate(*memfd, dmabuf_size);
-+	if (ret == -1) {
-+		printf("%s: [FAIL,memfd-truncate]\n", TEST_PREFIX);
-+		exit(74);
-+	}
-+
-+	memset(&create, 0, sizeof(create));
-+
-+	create.memfd = *memfd;
-+	create.offset = 0;
-+	create.size = dmabuf_size;
-+	*buf = ioctl(*devfd, UDMABUF_CREATE, &create);
-+	if (*buf < 0) {
-+		printf("%s: [FAIL, create udmabuf]\n", TEST_PREFIX);
-+		exit(75);
-+	}
-+}
-+
-+
-+int do_server()
-+{
-+	struct dma_buf_create_pages_info pages_create_info = { 0 };
-+	int devfd, memfd, buf, buf_pages, ret;
-+	size_t dmabuf_size;
-+
-+	dmabuf_size = getpagesize() * NUM_PAGES;
-+
-+	create_udmabuf(&devfd, &memfd, &buf, dmabuf_size);
-+
-+	pages_create_info.dma_buf_fd = buf;
-+	pages_create_info.type = DMA_BUF_PAGES_NET_RX;
-+	pages_create_info.create_flags = (1 << queue_num);
-+
-+	ret = sscanf(nic_pci_addr, "0000:%hhx:%hhx.%hhx",
-+		     &pages_create_info.pci_bdf[0],
-+		     &pages_create_info.pci_bdf[1],
-+		     &pages_create_info.pci_bdf[2]);
-+
-+	if (ret != 3) {
-+		printf("%s: [FAIL, parse fail]\n", TEST_PREFIX);
-+		exit(76);
-+	}
-+
-+	buf_pages = ioctl(buf, DMA_BUF_CREATE_PAGES, &pages_create_info);
-+	if (buf_pages < 0) {
-+		perror("create pages");
-+		exit(77);
-+	}
-+
-+	char *buf_mem = NULL;
-+	buf_mem = mmap(NULL, dmabuf_size, PROT_READ | PROT_WRITE, MAP_SHARED,
-+		       buf, 0);
-+	if (buf_mem == MAP_FAILED) {
-+		perror("mmap()");
-+		exit(1);
-+	}
-+
-+	/* Need to trigger the NIC to reallocate its RX pages, otherwise the
-+	 * bind doesn't take effect.
++	/* page->pp_magic is OR'ed with PP_SIGNATURE after the allocation
++	 * in order to preserve any existing bits, such as bit 0 for the
++	 * head page of compound page and bit 1 for pfmemalloc page, so
++	 * mask those bits for freeing side when doing below checking,
++	 * and page_is_pfmemalloc() is checked in __page_pool_put_page()
++	 * to avoid recycling the pfmemalloc page.
 +	 */
-+	trigger_device_reset();
++	if (unlikely((page->pp_magic & ~0x3UL) != PP_SIGNATURE))
++		return false;
 +
-+	sleep(1);
++	if (!page->pp)
++		return false;
 +
-+	reset_flow_steering();
-+	configure_flow_steering();
++	return true;
++}
 +
-+	struct sockaddr_in server_sin;
-+	server_sin.sin_family = AF_INET;
-+	server_sin.sin_port = htons(atoi(port));
+ #endif /* _NET_PAGE_POOL_H */
+diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+index df3f431fcff3..e626d4e309c1 100644
+--- a/net/core/page_pool.c
++++ b/net/core/page_pool.c
+@@ -236,6 +236,9 @@ static int page_pool_init(struct page_pool *pool,
+ 	case PP_MP_HUGE_1G:
+ 		pool->mp_ops = &huge_1g_ops;
+ 		break;
++	case PP_MP_DMABUF_DEVMEM:
++		pool->mp_ops = &dmabuf_devmem_ops;
++		break;
+ 	default:
+ 		err = -EINVAL;
+ 		goto free_ptr_ring;
+@@ -975,14 +978,7 @@ bool page_pool_return_skb_page(struct page *page, bool napi_safe)
+ 
+ 	page = compound_head(page);
+ 
+-	/* page->pp_magic is OR'ed with PP_SIGNATURE after the allocation
+-	 * in order to preserve any existing bits, such as bit 0 for the
+-	 * head page of compound page and bit 1 for pfmemalloc page, so
+-	 * mask those bits for freeing side when doing below checking,
+-	 * and page_is_pfmemalloc() is checked in __page_pool_put_page()
+-	 * to avoid recycling the pfmemalloc page.
+-	 */
+-	if (unlikely((page->pp_magic & ~0x3UL) != PP_SIGNATURE))
++	if (!is_page_pool_page(page))
+ 		return false;
+ 
+ 	pp = page->pp;
+@@ -1538,3 +1534,95 @@ const struct pp_memory_provider_ops huge_1g_ops = {
+ 	.alloc_pages		= mp_huge_1g_alloc_pages,
+ 	.release_page		= mp_huge_1g_release,
+ };
 +
-+	ret = inet_pton(server_sin.sin_family, server_ip, &server_sin.sin_addr);
-+	if (socket < 0) {
-+		printf("%s: [FAIL, create socket]\n", TEST_PREFIX);
-+		exit(79);
-+	}
++/*** "Dmabuf devmem page" ***/
 +
-+	int socket_fd = socket(server_sin.sin_family, SOCK_STREAM, 0);
-+	if (socket < 0) {
-+		printf("%s: [FAIL, create socket]\n", TEST_PREFIX);
-+		exit(76);
-+	}
++/* Dmabuf devmem memory provider allocates DMA_BUF_PAGES_NET_RX pages which are
++ * backing the dma_buf_map_attachment() from the NIC to the device memory.
++ *
++ * These pages are wrappers around the dma_addr of the sg entries in the
++ * sg_table returned from dma_buf_map_attachment(). They can be passed to the
++ * networking stack, which will generate devmem skbs from them and process them
++ * correctly.
++ */
++static int mp_dmabuf_devmem_init(struct page_pool *pool)
++{
++	struct dma_buf_pages *priv;
 +
-+	int opt = 1;
-+	ret = setsockopt(socket_fd, SOL_SOCKET,
-+			 SO_REUSEADDR | SO_REUSEPORT | SO_ZEROCOPY, &opt,
-+			 sizeof(opt));
-+	if (ret) {
-+		printf("%s: [FAIL, set sock opt]: %s\n", TEST_PREFIX,
-+		       strerror(errno));
-+		exit(76);
-+	}
-+
-+	printf("binding to address %s:%d\n", server_ip,
-+	       ntohs(server_sin.sin_port));
-+
-+	ret = bind(socket_fd, &server_sin, sizeof(server_sin));
-+	if (ret) {
-+		printf("%s: [FAIL, bind]: %s\n", TEST_PREFIX, strerror(errno));
-+		exit(76);
-+	}
-+
-+	ret = listen(socket_fd, 1);
-+	if (ret) {
-+		printf("%s: [FAIL, listen]: %s\n", TEST_PREFIX,
-+		       strerror(errno));
-+		exit(76);
-+	}
-+
-+	struct sockaddr_in client_addr;
-+	socklen_t client_addr_len = sizeof(client_addr);
-+
-+	char buffer[256];
-+
-+	inet_ntop(server_sin.sin_family, &server_sin.sin_addr, buffer,
-+		  sizeof(buffer));
-+	printf("Waiting or connection on %s:%d\n", buffer,
-+	       ntohs(server_sin.sin_port));
-+	int client_fd = accept(socket_fd, &client_addr, &client_addr_len);
-+
-+	inet_ntop(client_addr.sin_family, &client_addr.sin_addr, buffer,
-+		  sizeof(buffer));
-+	printf("Got connection from %s:%d\n", buffer,
-+	       ntohs(client_addr.sin_port));
-+
-+	char iobuf[819200];
-+	char ctrl_data[sizeof(int) * 20000];
-+
-+	size_t total_received = 0;
-+	size_t i = 0;
-+	size_t page_aligned_frags = 0;
-+	size_t non_page_aligned_frags = 0;
-+	while (1) {
-+		bool is_devmem = false;
-+		printf("\n\n");
-+
-+		struct msghdr msg = { 0 };
-+		struct iovec iov = { .iov_base = iobuf,
-+				     .iov_len = sizeof(iobuf) };
-+		msg.msg_iov = &iov;
-+		msg.msg_iovlen = 1;
-+		msg.msg_control = ctrl_data;
-+		msg.msg_controllen = sizeof(ctrl_data);
-+		ssize_t ret = recvmsg(client_fd, &msg, MSG_SOCK_DEVMEM);
-+		printf("recvmsg ret=%ld\n", ret);
-+		if (ret < 0 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
-+			continue;
-+		}
-+		if (ret < 0) {
-+			perror("recvmsg");
-+			continue;
-+		}
-+		if (ret == 0) {
-+			printf("client exited\n");
-+			goto cleanup;
-+		}
-+
-+		i++;
-+		struct cmsghdr *cm = NULL;
-+		struct cmsg_devmem *cmsg_devmem = NULL;
-+		for (cm = CMSG_FIRSTHDR(&msg); cm; cm = CMSG_NXTHDR(&msg, cm)) {
-+			if (cm->cmsg_level != SOL_SOCKET ||
-+			    (cm->cmsg_type != SCM_DEVMEM_OFFSET &&
-+			     cm->cmsg_type != SCM_DEVMEM_HEADER)) {
-+				fprintf(stdout, "skipping non-devmem cmsg\n");
-+				continue;
-+			}
-+
-+			cmsg_devmem = (struct cmsg_devmem *)CMSG_DATA(cm);
-+			is_devmem = true;
-+
-+			if (cm->cmsg_type == SCM_DEVMEM_HEADER) {
-+				// TODO: process data copied from skb's linear
-+				// buffer.
-+				fprintf(stdout,
-+					"SCM_DEVMEM_HEADER. "
-+					"cmsg_devmem->frag_size=%u\n",
-+					cmsg_devmem->frag_size);
-+
-+				continue;
-+			}
-+
-+			struct devmemtoken token = { cmsg_devmem->frag_token,
-+						     1 };
-+
-+			total_received += cmsg_devmem->frag_size;
-+			printf("received frag_page=%u, in_page_offset=%u,"
-+			       " frag_offset=%u, frag_size=%u, token=%u"
-+			       " total_received=%lu\n",
-+			       cmsg_devmem->frag_offset >> PAGE_SHIFT,
-+			       cmsg_devmem->frag_offset % PAGE_SIZE,
-+			       cmsg_devmem->frag_offset, cmsg_devmem->frag_size,
-+			       cmsg_devmem->frag_token, total_received);
-+
-+			if (cmsg_devmem->frag_size % PAGE_SIZE)
-+				non_page_aligned_frags++;
-+			else
-+				page_aligned_frags++;
-+
-+			struct dma_buf_sync sync = { 0 };
-+			sync.flags = DMA_BUF_SYNC_READ | DMA_BUF_SYNC_START;
-+			ioctl(buf, DMA_BUF_IOCTL_SYNC, &sync);
-+
-+			if (do_validation)
-+				validate_buffer(
-+					((unsigned char *)buf_mem) +
-+						cmsg_devmem->frag_offset,
-+					cmsg_devmem->frag_size);
-+			else
-+				print_nonzero_bytes(
-+					((unsigned char *)buf_mem) +
-+						cmsg_devmem->frag_offset,
-+					cmsg_devmem->frag_size);
-+
-+			sync.flags = DMA_BUF_SYNC_READ | DMA_BUF_SYNC_END;
-+			ioctl(buf, DMA_BUF_IOCTL_SYNC, &sync);
-+
-+			ret = setsockopt(client_fd, SOL_SOCKET,
-+					 SO_DEVMEM_DONTNEED, &token,
-+					 sizeof(token));
-+			if (ret) {
-+				perror("SO_DEVMEM_DONTNEED");
-+				exit(1);
-+			}
-+		}
-+		if (!is_devmem)
-+			printf("flow steering error\n");
-+
-+		printf("total_received=%lu\n", total_received);
-+	}
-+
-+cleanup:
-+	fprintf(stdout, "%s: ok\n", TEST_PREFIX);
-+
-+	fprintf(stdout, "page_aligned_frags=%lu, non_page_aligned_frags=%lu\n",
-+		page_aligned_frags, non_page_aligned_frags);
-+
-+	fprintf(stdout, "page_aligned_frags=%lu, non_page_aligned_frags=%lu\n",
-+		page_aligned_frags, non_page_aligned_frags);
-+
-+	munmap(buf_mem, dmabuf_size);
-+	close(client_fd);
-+	close(socket_fd);
-+	close(buf_pages);
-+	close(buf);
-+	close(memfd);
-+	close(devfd);
-+	trigger_device_reset();
++	priv = pool->mp_priv;
++	if (!is_dma_buf_pages_priv(priv))
++		return -EINVAL;
 +
 +	return 0;
 +}
 +
-+int do_client()
++static void mp_dmabuf_devmem_destroy(struct page_pool *pool)
 +{
-+	printf("doing client\n");
-+
-+	struct dma_buf_create_pages_info pages_create_info = { 0 };
-+	int devfd, memfd, buf, buf_pages, ret;
-+	size_t dmabuf_size;
-+
-+	dmabuf_size = getpagesize() * NUM_PAGES;
-+
-+	create_udmabuf(&devfd, &memfd, &buf, dmabuf_size);
-+
-+	pages_create_info.dma_buf_fd = buf;
-+	pages_create_info.type = DMA_BUF_PAGES_NET_TX;
-+
-+	ret = sscanf(nic_pci_addr, "0000:%hhx:%hhx.%hhx",
-+		     &pages_create_info.pci_bdf[0],
-+		     &pages_create_info.pci_bdf[1],
-+		     &pages_create_info.pci_bdf[2]);
-+
-+	if (ret != 3) {
-+		printf("%s: [FAIL, parse fail]\n", TEST_PREFIX);
-+		exit(76);
-+	}
-+
-+	buf_pages = ioctl(buf, DMA_BUF_CREATE_PAGES, &pages_create_info);
-+	if (buf_pages < 0) {
-+		perror("create pages");
-+		exit(77);
-+	}
-+
-+	char *buf_mem = NULL;
-+	buf_mem = mmap(NULL, dmabuf_size, PROT_READ | PROT_WRITE, MAP_SHARED,
-+		       buf, 0);
-+	if (buf_mem == MAP_FAILED) {
-+		perror("mmap()");
-+		exit(1);
-+	}
-+
-+	struct sockaddr_in server_sin;
-+	server_sin.sin_family = AF_INET;
-+	server_sin.sin_port = htons(atoi(port));
-+
-+	ret = inet_pton(server_sin.sin_family, server_ip, &server_sin.sin_addr);
-+	if (socket < 0) {
-+		printf("%s: [FAIL, create socket]\n", TEST_PREFIX);
-+		exit(79);
-+	}
-+
-+	int socket_fd = socket(server_sin.sin_family, SOCK_STREAM, 0);
-+	if (socket < 0) {
-+		printf("%s: [FAIL, create socket]\n", TEST_PREFIX);
-+		exit(76);
-+	}
-+
-+	int opt = 1;
-+	ret = setsockopt(socket_fd, SOL_SOCKET,
-+			 SO_REUSEADDR | SO_REUSEPORT | SO_ZEROCOPY, &opt,
-+			 sizeof(opt));
-+	if (ret) {
-+		printf("%s: [FAIL, set sock opt]: %s\n", TEST_PREFIX,
-+		       strerror(errno));
-+		exit(76);
-+	}
-+
-+	struct sockaddr_in client_sin;
-+	client_sin.sin_family = AF_INET;
-+	client_sin.sin_port = htons(atoi(port));
-+
-+	ret = inet_pton(client_sin.sin_family, client_ip, &client_sin.sin_addr);
-+	if (socket < 0) {
-+		printf("%s: [FAIL, create socket]\n", TEST_PREFIX);
-+		exit(79);
-+	}
-+
-+	ret = bind(socket_fd, &client_sin, sizeof(client_sin));
-+	if (ret) {
-+		printf("%s: [FAIL, bind]: %s\n", TEST_PREFIX, strerror(errno));
-+		exit(76);
-+	}
-+
-+	ret = setsockopt(socket_fd, SOL_SOCKET, SO_ZEROCOPY, &opt, sizeof(opt));
-+	if (ret) {
-+		printf("%s: [FAIL, set sock opt]: %s\n", TEST_PREFIX,
-+		       strerror(errno));
-+		exit(76);
-+	}
-+
-+	ret = connect(socket_fd, &server_sin, sizeof(server_sin));
-+	if (ret) {
-+		printf("%s: [FAIL, connect]: %s\n", TEST_PREFIX,
-+		       strerror(errno));
-+		exit(76);
-+	}
-+
-+	char *line = NULL;
-+	size_t line_size = 0;
-+	size_t len = 0;
-+
-+	size_t i = 0;
-+	while (!iterations || i < iterations) {
-+		i++;
-+		free(line);
-+		line = NULL;
-+		if (do_validation) {
-+			line = malloc(do_validation);
-+			if (!line) {
-+				fprintf(stderr, "Failed to allocate\n");
-+				exit(1);
-+			}
-+			memset(line, 0, do_validation);
-+			initialize_validation(line, do_validation);
-+			line_size = do_validation;
-+		} else {
-+			line_size = getline(&line, &len, stdin);
-+		}
-+
-+		if (line_size < 0)
-+			continue;
-+
-+		fprintf(stdout, "DEBUG: read line_size=%lu\n", line_size);
-+
-+		struct dma_buf_sync sync = { 0 };
-+		sync.flags = DMA_BUF_SYNC_WRITE | DMA_BUF_SYNC_START;
-+		ioctl(buf, DMA_BUF_IOCTL_SYNC, &sync);
-+
-+		memset(buf_mem, 0, dmabuf_size);
-+		memcpy(buf_mem, line, line_size);
-+
-+		if (do_validation)
-+			validate_buffer(buf_mem, line_size);
-+
-+		struct iovec iov = { .iov_base = NULL, .iov_len = line_size };
-+
-+		struct msghdr msg = { 0 };
-+
-+		msg.msg_iov = &iov;
-+		msg.msg_iovlen = 1;
-+
-+		char ctrl_data[CMSG_SPACE(sizeof(int) * 2)];
-+		msg.msg_control = ctrl_data;
-+		msg.msg_controllen = sizeof(ctrl_data);
-+
-+		struct cmsghdr *cmsg = CMSG_FIRSTHDR(&msg);
-+		cmsg->cmsg_level = SOL_SOCKET;
-+		cmsg->cmsg_type = SCM_DEVMEM_OFFSET;
-+		cmsg->cmsg_len = CMSG_LEN(sizeof(int) * 2);
-+		*((int *)CMSG_DATA(cmsg)) = buf_pages;
-+		((int *)CMSG_DATA(cmsg))[1] = 0;
-+
-+		ret = sendmsg(socket_fd, &msg, MSG_ZEROCOPY);
-+		if (ret < 0)
-+			perror("sendmsg");
-+		else
-+			fprintf(stdout, "DEBUG: sendmsg_ret=%d\n", ret);
-+
-+		sync.flags = DMA_BUF_SYNC_WRITE | DMA_BUF_SYNC_END;
-+		ioctl(buf, DMA_BUF_IOCTL_SYNC, &sync);
-+
-+		// sleep for a bit before we overwrite the dmabuf that's being
-+		// sent.
-+		if (do_validation)
-+			sleep(1);
-+	}
-+
-+	fprintf(stdout, "%s: ok\n", TEST_PREFIX);
-+
-+	while (1)
-+		sleep(10);
-+
-+	munmap(buf_mem, dmabuf_size);
-+
-+	free(line);
-+	close(socket_fd);
-+	close(buf_pages);
-+	close(buf);
-+	close(memfd);
-+	close(devfd);
-+	trigger_device_reset();
-+
-+	return 0;
 +}
 +
-+int main(int argc, char *argv[])
++static struct page *mp_dmabuf_devmem_alloc_pages(struct page_pool *pool,
++						 gfp_t gfp)
 +{
-+	int is_server = 0, opt;
++	struct dma_buf_pages *priv = pool->mp_priv;
++	dma_addr_t dma_addr;
++	struct page *page;
 +
-+	// put ':' in the starting of the
-+	// string so that program can
-+	//distinguish between '?' and ':'
-+	while ((opt = getopt(argc, argv, "ls:c:p:v:q:f:n:i:")) != -1) {
-+		switch (opt) {
-+		case 'l':
-+			is_server = 1;
-+			break;
-+		case 's':
-+			server_ip = optarg;
-+			break;
-+		case 'c':
-+			client_ip = optarg;
-+			break;
-+		case 'p':
-+			port = optarg;
-+			break;
-+		case 'v':
-+			do_validation = atoll(optarg);
-+			break;
-+		case 'q':
-+			queue_num = atoi(optarg);
-+			break;
-+		case 'f':
-+			ifname = optarg;
-+			break;
-+		case 'n':
-+			nic_pci_addr = optarg;
-+			break;
-+		case 'i':
-+			iterations = atoll(optarg);
-+			break;
-+		case '?':
-+			printf("unknown option: %c\n", optopt);
-+			break;
-+		}
-+	}
++	page = dma_buf_pages_net_rx_alloc(priv);
++	if (!page)
++		return page;
 +
-+	// optind is for the extra arguments
-+	// which are not parsed
-+	for (; optind < argc; optind++) {
-+		printf("extra arguments: %s\n", argv[optind]);
-+	}
++	/* It shouldn't be possible for the allocation to give us a page not
++	 * belonging to this page_pool's pgmap.
++	 */
++	BUG_ON(page->pgmap != &priv->pgmap);
 +
-+	if (is_server)
-+		return do_server();
++	/* netdev_rxq_alloc_dma_buf_page() allocates a ZONE_DEVICE page.
++	 * Prepare to convert it into a page_pool page. We need to hold pgmap
++	 * and zone_device_data (which holds the dma_addr).
++	 *
++	 * DMA_BUF_PAGES_NET_RX are dmabuf pages created specifically to wrap
++	 * the dma_addr of the sg_table into a struct page. These pages are
++	 * used by code specifically equipped to handle them, so this
++	 * conversation from ZONE_DEVICE page to page pool page should be safe.
++	 */
++	dma_addr = (dma_addr_t)page->zone_device_data;
 +
-+	return do_client();
++	set_page_zone(page, ZONE_NORMAL);
++	page->pp_magic = 0;
++	page_pool_set_pp_info(pool, page);
++
++	page->dma_addr = dma_addr;
++
++	return page;
 +}
++
++static bool mp_dmabuf_devmem_release_page(struct page_pool *pool,
++		struct page *page)
++{
++	struct dma_buf_pages *priv = pool->mp_priv;
++	unsigned long dma_addr = page->dma_addr;
++
++	page_pool_clear_pp_info(page);
++
++	/* As the page pool releases the page, restore it back to a ZONE_DEVICE
++	 * page so it gets freed according to the
++	 * page->pgmap->ops->page_free().
++	 */
++	set_page_zone(page, ZONE_DEVICE);
++	page->zone_device_data = (void*)dma_addr;
++	page->pgmap = &priv->pgmap;
++	put_page(page);
++
++	/* Return false here as we don't want the page pool touching the page
++	 * after it's released to us.
++	 */
++	return false;
++}
++
++const struct pp_memory_provider_ops dmabuf_devmem_ops = {
++	.init			= mp_dmabuf_devmem_init,
++	.destroy		= mp_dmabuf_devmem_destroy,
++	.alloc_pages		= mp_dmabuf_devmem_alloc_pages,
++	.release_page		= mp_dmabuf_devmem_release_page,
++};
++EXPORT_SYMBOL(dmabuf_devmem_ops);
 -- 
 2.41.0.390.g38632f3daf-goog
 
