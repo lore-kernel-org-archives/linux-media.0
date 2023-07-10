@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DDF5EB64DC
-	for <linux-media@archiver.kernel.org>; Mon, 10 Jul 2023 13:23:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7BCFEB64D9
+	for <linux-media@archiver.kernel.org>; Mon, 10 Jul 2023 13:23:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231659AbjGJNXG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 10 Jul 2023 09:23:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36878 "EHLO
+        id S231637AbjGJNXL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 10 Jul 2023 09:23:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbjGJNXF (ORCPT
+        with ESMTP id S231320AbjGJNXJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 10 Jul 2023 09:23:05 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFBA5FE
-        for <linux-media@vger.kernel.org>; Mon, 10 Jul 2023 06:22:56 -0700 (PDT)
+        Mon, 10 Jul 2023 09:23:09 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D937BE2
+        for <linux-media@vger.kernel.org>; Mon, 10 Jul 2023 06:23:04 -0700 (PDT)
 Received: from uno.LocalDomain (93-61-96-190.ip145.fastwebnet.it [93.61.96.190])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D254BC85;
-        Mon, 10 Jul 2023 15:22:05 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 179FDDA7;
+        Mon, 10 Jul 2023 15:22:07 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1688995326;
-        bh=/VlroI16ulc/4CcHFj/PtqR4JJemBFSoXd4ZidVM7Ec=;
-        h=From:To:Cc:Subject:Date:From;
-        b=fA8LmIf0Q/NIGD/FL1Zu4vkAA5nq6/qXi7RTK7LyLZL8dmLQ/alEIrqIw1onAytyW
-         L9l2xrBPoUxJsYLeLtFCTnUZGsJxeup/765CqEBuuIea5kyEeeSqBBuy2lc9xflwVd
-         cX37IA46WOZpupUAWbRkS2jJPtlzYdmZ4gSpSkf8=
+        s=mail; t=1688995327;
+        bh=QKpNeSKW5e8AbrpNtPSuMYB/au8vcmPe2kyEIMgFs1U=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=nLLOmg5Y8lJU0JjR+G9pqAFHvIOuSrvaH/bPECJbbI0bD0GHD/UdYhUDUGJg+h3on
+         DumMjCSY1K+H4hgXVbs96N+fRN0z0jewcYPIjhKt1riYfLuHE5IjBFmyKMAnD7pplW
+         /y8hpi93pO1UHq8o5FUYGk1OwBTSgNODJ2kall20=
 From:   Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
@@ -32,36 +32,62 @@ Cc:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
         Sakari Ailus <sakari.ailus@iki.fi>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: [PATCH v3 0/2] Documentation: v4l: more camera sensor doc
-Date:   Mon, 10 Jul 2023 15:22:38 +0200
-Message-Id: <20230710132240.7864-1-jacopo.mondi@ideasonboard.com>
+Subject: [PATCH v3 2/2] Documentation: v4l: Exposure/gain for camera sensor
+Date:   Mon, 10 Jul 2023 15:22:40 +0200
+Message-Id: <20230710132240.7864-3-jacopo.mondi@ideasonboard.com>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230710132240.7864-1-jacopo.mondi@ideasonboard.com>
+References: <20230710132240.7864-1-jacopo.mondi@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Two small addictions to camera sensor documentation to reflect what has
-been discussed during my presentation at EOSS last week.
+Document the suggested way to exposure controls for exposure and gain
+for camera sensor drivers.
 
-Thanks
-   j
+Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+---
+ .../driver-api/media/camera-sensor.rst        | 27 +++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-v2->v3:
-- minor spelling fixes from Dave
-- Add Dave's tags
-
-v1->v2:
-- Address Dave's review comments
-
-Jacopo Mondi (2):
-  Documentation: v4l: Flip handling for RAW sensors
-  Documentation: v4l: Exposure/gain for camera sensor
-
- .../driver-api/media/camera-sensor.rst        | 43 +++++++++++++++++++
- 1 file changed, 43 insertions(+)
-
---
+diff --git a/Documentation/driver-api/media/camera-sensor.rst b/Documentation/driver-api/media/camera-sensor.rst
+index cd915ca119ea..67fe77b1edb9 100644
+--- a/Documentation/driver-api/media/camera-sensor.rst
++++ b/Documentation/driver-api/media/camera-sensor.rst
+@@ -189,3 +189,30 @@ the ``V4L2_CID_VFLIP`` and ``V4L2_CID_HFLIP`` controls with the
+ a flip can potentially change the output buffer content layout. Flips should
+ also be taken into account when enumerating and handling media bus formats
+ on the camera sensor source pads.
++
++Exposure and Gain Control
++-------------------------
++
++Camera sensor drivers that allow applications to control the image exposure
++and gain should do so by exposing dedicated controls to applications.
++
++Exposure time is controlled by registering the ``V4L2_CID_EXPOSURE`` control.
++The control definition does not specify a unit to allow maximum flexibility
++for multiple device types, but when used for camera sensor drivers it should be
++expressed in unit of lines whenever possible.
++
++To convert lines into units of time, the total line length (visible and
++not visible pixels) has to be divided by the pixel rate::
++
++        line duration = total line length / pixel rate
++                      = (image width + horizontal blanking) / pixel rate
++
++Camera sensor driver should try whenever possible to distinguish between the
++analogue and digital gain control functions. Analogue gain is a multiplication
++factor applied to all color channels on the pixel array before they get
++converted into the digital domain. It should be made controllable by
++registering the ``V4L2_CID_ANALOGUE_GAIN`` control, expressed as a device
++specific gain code. Digital gain control is optional and should be exposed to
++applications by registering ``V4L2_CID_DIGITAL_GAIN``. Camera sensor drivers are
++discouraged from using ``V4L2_CID_GAIN`` as it doesn't allow differentiation of
++analogue vs digital gain.
+-- 
 2.40.1
 
