@@ -2,86 +2,191 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DCCBEB64D9
-	for <linux-media@archiver.kernel.org>; Mon, 10 Jul 2023 10:13:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F729EB64D9
+	for <linux-media@archiver.kernel.org>; Mon, 10 Jul 2023 12:54:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232996AbjGJKN4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 10 Jul 2023 06:13:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56822 "EHLO
+        id S230197AbjGJMyB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 10 Jul 2023 08:54:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233122AbjGJKNj (ORCPT
+        with ESMTP id S230078AbjGJMyA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 10 Jul 2023 06:13:39 -0400
-Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4AE172E
-        for <linux-media@vger.kernel.org>; Mon, 10 Jul 2023 03:11:39 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:f087:2614:ec9d:569f])
-        by baptiste.telenet-ops.be with bizsmtp
-        id KNBV2A00B1w4dBK01NBVv9; Mon, 10 Jul 2023 12:11:30 +0200
-Received: from geert (helo=localhost)
-        by ramsan.of.borg with local-esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1qInrd-0010sR-3d;
-        Mon, 10 Jul 2023 12:11:29 +0200
-Date:   Mon, 10 Jul 2023 12:11:29 +0200 (CEST)
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     linux-kernel@vger.kernel.org
-cc:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        sparclinux@vger.kernel.org, linux-sh@vger.kernel.org
-Subject: Re: Build regressions/improvements in v6.5-rc1
-In-Reply-To: <20230710100012.2625532-1-geert@linux-m68k.org>
-Message-ID: <bd856932-c2fb-d5f2-17f7-f7f1a1773adf@linux-m68k.org>
-References: <CAHk-=wj8sPDVoWgaceAs1AiwZrHV8mtC3vQNGbeV6-RypJi6aw@mail.gmail.com> <20230710100012.2625532-1-geert@linux-m68k.org>
+        Mon, 10 Jul 2023 08:54:00 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF76C9
+        for <linux-media@vger.kernel.org>; Mon, 10 Jul 2023 05:53:57 -0700 (PDT)
+Received: from ideasonboard.com (93-61-96-190.ip145.fastwebnet.it [93.61.96.190])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 76406C85;
+        Mon, 10 Jul 2023 14:53:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1688993586;
+        bh=panw/c0KoOEJq9rd+l3KFCH84hRtaBPTsQskPhGEWkM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LbmUY5tQJpoHYe0HtYuzVjOMWdVGy1OOe8wwCX5gk/aGFPrFWk0NQkhpHNotSGmAM
+         XArhjkcKLVnyO5NUHJIAYqk2agzbh3XNsPh1f3MlZpkS/FvOuRs46KEOMLcf0OPVoa
+         LIunXybdyXSoCYIgf4dfGbRE32o0aNtqvDv6IJa8=
+Date:   Mon, 10 Jul 2023 14:53:50 +0200
+From:   Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        linux-media@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        tomi.valkeinen@ideasonboard.com, bingbu.cao@intel.com,
+        hongju.wang@intel.com, hverkuil@xs4all.nl
+Subject: Re: [PATCH 4/7] media: uapi: v4l: Document source routes
+Message-ID: <wenqkwuulzv45uheym3h2mwkgxfeatmtwh4tabvf7pwmoilfgo@akjhsd7d4bp6>
+References: <20230630204338.126583-1-sakari.ailus@linux.intel.com>
+ <20230630204338.126583-5-sakari.ailus@linux.intel.com>
+ <qiomumxpmbhtowvpdorruk74gcrsbab6c5vfchcfmdt5cd34pi@i7cdk3g6f2ff>
+ <ZKlS3e5BJqvTEk+5@kekkonen.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZKlS3e5BJqvTEk+5@kekkonen.localdomain>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, 10 Jul 2023, Geert Uytterhoeven wrote:
-> Below is the list of build error/warning regressions/improvements in
-> v6.5-rc1[1] compared to v6.4[2].
+Hi Sakari
+
+On Sat, Jul 08, 2023 at 12:13:17PM +0000, Sakari Ailus wrote:
+> Hi Jacopo,
 >
-> Summarized:
->  - build errors: +3/-4
->  - build warnings: +36/-18
+> On Mon, Jul 03, 2023 at 09:47:37AM +0200, Jacopo Mondi wrote:
+> > Hi Sakari
+> >
+> > On Fri, Jun 30, 2023 at 11:43:35PM +0300, Sakari Ailus wrote:
+> > > Document how internal pads are used on source routes.
+> > >
+> > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > > ---
+> > >  .../userspace-api/media/v4l/dev-subdev.rst    | 20 +++++++++++++++++++
+> > >  1 file changed, 20 insertions(+)
+> > >
+> > > diff --git a/Documentation/userspace-api/media/v4l/dev-subdev.rst b/Documentation/userspace-api/media/v4l/dev-subdev.rst
+> > > index a4f1df7093e8..5a46c9a9d352 100644
+> > > --- a/Documentation/userspace-api/media/v4l/dev-subdev.rst
+> > > +++ b/Documentation/userspace-api/media/v4l/dev-subdev.rst
+> > > @@ -551,6 +551,26 @@ A stream at a specific point in the media pipeline is identified by the
+> > >  sub-device and a (pad, stream) pair. For sub-devices that do not support
+> > >  multiplexed streams the 'stream' field is always 0.
+> > >
+> > > +.. _v4l2-subdev-source-routes:
+> > > +
+> > > +Source routes
+> > > +^^^^^^^^^^^^^
+> >
+> > I always found the concept of source routes a bit confusing, should we
+> > instead just present internal pads ?
+> >
+> > > +
+> > > +Cases where a single sub-device pad is a source of multiple streams are special
+> > > +as there is no external sink pad for such a route. In those cases, the sources
+> > > +of the streams are indicated by source routes that have an internal source pad
+> > > +as the sink pad of such a route. Internal source pads have the
+> > > +:ref:`MEDIA_PAD_FL_INTERNAL <MEDIA-PAD-FL-INTERNAL>` and ``MEDIA_PAD_FL_SINK``
+> > > +pad flags set.
+> >
+> > All this last part is a little bit hard to parse, not your fault but
+> > the fact "internal source pads" are actually "SINK" pads is a bit
+> > confusing ?
+> >
+> > Can we remove the "source route" concept to avoid mixing source/sink ?
+> >
+> > This can be rewritten as
+> >
+> > Internal pads
+> > ^^^^^^^^^^^^^
+> >
+> > Cases where a single sub-device pad is a source of multiple streams are special
+> > as there is no external sink pad for such a route. A typical example is a
+> > sensor device which produces a video stream and a metadata stream of
+> > embedded data. To support such cases internal pads are introduced as
+> > sink pads of such internally generated streams.
+> > Internal source pads have the :ref:`MEDIA_PAD_FL_INTERNAL
+> > <MEDIA-PAD-FL-INTERNAL>` and ``MEDIA_PAD_FL_SINK`` pad flags set.
+> >
+> > > +Internal source pads have all the properties of a sink pad in such case,
+> >
+> > Also here, "Internal source pads" are actually sinks :)
+> >
+> > I would drop "source" from "Internal source pads"
 >
-> Note that there may be false regressions, as some logs are incomplete.
-> Still, they're build errors/warnings.
+> How about this (compared to the patch):
 >
-> Happy fixing! ;-)
+> diff --git a/Documentation/userspace-api/media/v4l/dev-subdev.rst b/Documentation/userspace-api/media/v4l/dev-subdev.rst
+> index 5a46c9a9d352..9d544a29e78a 100644
+> --- a/Documentation/userspace-api/media/v4l/dev-subdev.rst
+> +++ b/Documentation/userspace-api/media/v4l/dev-subdev.rst
+> @@ -553,21 +553,23 @@ multiplexed streams the 'stream' field is always 0.
 >
-> Thanks to the linux-next team for providing the build service.
+>  .. _v4l2-subdev-source-routes:
 >
-> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5/ (all 162 configs)
-> [2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/6995e2de6891c724bfeb2db33d7b87775f913ad1/ (160 out of 162 configs)
+> -Source routes
+> -^^^^^^^^^^^^^
+> -
+> -Cases where a single sub-device pad is a source of multiple streams are special
+> -as there is no external sink pad for such a route. In those cases, the sources
+> -of the streams are indicated by source routes that have an internal source pad
+> -as the sink pad of such a route. Internal source pads have the
+> -:ref:`MEDIA_PAD_FL_INTERNAL <MEDIA-PAD-FL-INTERNAL>` and ``MEDIA_PAD_FL_SINK``
+> -pad flags set.
+> -
+> -Internal source pads have all the properties of a sink pad in such case,
+> -including formats and selections. The format in this case is the source format
+> -of the stream. An internal pad always has a single stream only (0).
+> -
+> -Generally source routes are not modifiable but they can be activated and
+> +Internal pads and source routes
+> +^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> +
+> +Cases where a single sub-device source pad is traversed by multiple streams one
+> +or more of which originate from within the sub-device itself are special as
+> +there is no external sink pad for such routes. In those cases, the sources of
+
+"external" made me think of "a different entity". Can we just drop it
+or am I too easy to confuse ?
+
+> +the internally generated streams are indicated by internal pads, pads which have
+
+s/indicated by/represented by/ ?
+
+'internal pads, pads...'
+
+or
+
+/internal pads, which are sink pads with the
+:ref:`MEDIA_PAD_FL_INTERNAL` <MEDIA-PAD-FL-INTERNAL> pad flag set.'
+
+and drop the "on the sink pad of the route" ?
+
+
+> +a :ref:`MEDIA_PAD_FL_INTERNAL` <MEDIA-PAD-FL-INTERNAL> pad flag set on the sink
+> +pad of the route. A typical use case for these is a camera sensor device which
+> +produces a pixel data stream and an embedded data stream.
+
+This case is represented with two internal sink pads for the video and
+the data streams and a single multiplexed source pad that connects to
+the next entity in the pipeline.
+
+> +
+> +Internal pads have all the properties of an external pad, including formats and
+> +selections. The format in this case is the source format of the stream. An
+> +internal pad always has a single stream only (0).
+> +
+> +/Source routes/ are routes from an internal sink pad to a(n external) source
+> +pad. Generally source routes are not modifiable but they can be activated and
+>  deactivated using the :ref:`V4L2_SUBDEV_ROUTE_FL_ACTIVE
+>  <v4l2-subdev-routing-flags>` flag, depending on driver capabilities.
+
+If you want to keep the part about source routes, this form is ok with
+me!
+
 >
+> I'll also check the ACTIVE route flag, it wasn't merged with the rest of
+> the Tomi's streams series.
 >
-> *** ERRORS ***
+> --
+> Kind regards,
 >
-> 3 error regressions:
->  + /kisskb/src/drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c: error: the frame size of 1392 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]:  => 1036:1
-
-m68k-gcc8/m68k-allmodconfig
-
->  + error: modpost: "__xchg_called_with_bad_pointer" [lib/atomic64_test.ko] undefined!:  => N/A
-
-sparc64-gcc11/sparc64-allmodconfig
-
->  + {standard input}: Error: unknown pseudo-op: `.glo':  => 1097
-
-sh4-gcc11/sh-allmodconfig (ICE)
-
-Gr{oetje,eeting}s,
-
- 						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
- 							    -- Linus Torvalds
+> Sakari Ailus
