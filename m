@@ -2,83 +2,107 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 594D8EB64DD
-	for <linux-media@archiver.kernel.org>; Tue, 11 Jul 2023 13:01:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7134AC001DC
+	for <linux-media@archiver.kernel.org>; Tue, 11 Jul 2023 13:25:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231190AbjGKNBz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 11 Jul 2023 09:01:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34112 "EHLO
+        id S231646AbjGKNZd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 11 Jul 2023 09:25:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbjGKNBy (ORCPT
+        with ESMTP id S230078AbjGKNZb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 11 Jul 2023 09:01:54 -0400
-Received: from mail-oi1-x247.google.com (mail-oi1-x247.google.com [IPv6:2607:f8b0:4864:20::247])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7695B1720
-        for <linux-media@vger.kernel.org>; Tue, 11 Jul 2023 06:01:24 -0700 (PDT)
-Received: by mail-oi1-x247.google.com with SMTP id 5614622812f47-3a3b86821fcso4249332b6e.0
-        for <linux-media@vger.kernel.org>; Tue, 11 Jul 2023 06:01:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689080409; x=1691672409;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZHO68MXPpG0tvQzxAfkPPUuZs9MEkFTVvcLzHBD3OLA=;
-        b=A315ppGj0Yz2LcQllgyFaSFwnALI89tAsXhH5E6jrTqGGubZgIJl/N8REQCFQLiF/l
-         B1E60wdUCscS/PraGkcSlhs4eTZtd5dj8ATEVzPG/JGxAZ2rWiqvvMpPUBcxMUHcgGww
-         7hI3tTs/eSOKBhASDHhQ8JV8KgmIHfalzGGz7/Lo+peBbf5ojT6p3RzYT4xVAhspQg9K
-         bE3/GQQmoEtXlWOltWqViW5nsAxhqCRmQ2hSlP6+OJAinYFiZDFTrl48txxL/4FXgW62
-         2QiaDGVrv2XDifdYcly3oBPHPXE6WCzC9si0bltMFAIcthLFav2yNmu3JdYcDM7Macwg
-         gLvg==
-X-Gm-Message-State: ABy/qLYhJTb2FdS2ZLKNR9m82lu4jKtu1vHxXmzLE8D6d476dQBWmCAG
-        BYG4KEF6hluxBGQehIuRRWx2V0tKrLWeSLwZi53VmcQHiySG
-X-Google-Smtp-Source: APBJJlEM78f3nwOEwdHgjq9Mi44uFvFxi3Se/Jn99rEUe9f1P8TqteqjzvWe8OaMMfEt089MxeYLbUkwtNmaBVqFxUOiFEarLPfK
+        Tue, 11 Jul 2023 09:25:31 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE60118D;
+        Tue, 11 Jul 2023 06:25:30 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36BC933w015239;
+        Tue, 11 Jul 2023 14:33:10 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=selector1;
+ bh=bZyrpsmbqDtckH2IvHk4LGejHt9ZGYj7tCxIp9TuL2s=;
+ b=kxFrX+yubZp6WwlU9HtqXxBhiAtD9mJ2YofZRBbaQAfC1yiILOEzG/VKb3mN6p0Ez1GG
+ Q/gyGiukohOfXqDgf5SfMh+IMhOXEGSZDnLPtxTKHlg32GU6RWLhnKYrJSvf/OBff9/8
+ AaH5a4dMVCtU7oWpDLjLXXHJ+ZfvYgEP6+7xEythRVccCLC7Y8SDiPLJwGyoNQiUJGmN
+ LG8gpJ0yrpmHda7/NRP3KD232dsbIoV3Mcq4R3VitiaUeF1ueCr4rEX/dR13yg7v5sC8
+ 5Jc0lFvEqGiMNgg6wcZ3hYffzHlQiW4377nGA+HhhIfeGV1PFFeGAjJ+ZzMCIWACfplV 1g== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rs6u684x4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 14:33:10 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 21ECA100058;
+        Tue, 11 Jul 2023 14:33:10 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9B936222CB6;
+        Tue, 11 Jul 2023 14:33:09 +0200 (CEST)
+Received: from localhost (10.129.178.213) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 11 Jul
+ 2023 14:33:09 +0200
+From:   Alain Volmat <alain.volmat@foss.st.com>
+To:     Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Sylvain Petinot <sylvain.petinot@foss.st.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+CC:     <alain.volmat@foss.st.com>, <linux-media@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/2] media: i2c: st_mipid02: cascade s_stream call to the source subdev
+Date:   Tue, 11 Jul 2023 14:32:09 +0200
+Message-ID: <20230711123211.794838-2-alain.volmat@foss.st.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230711123211.794838-1-alain.volmat@foss.st.com>
+References: <20230711123211.794838-1-alain.volmat@foss.st.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6808:e82:b0:3a3:7eca:3022 with SMTP id
- k2-20020a0568080e8200b003a37eca3022mr2139536oil.2.1689080408726; Tue, 11 Jul
- 2023 06:00:08 -0700 (PDT)
-Date:   Tue, 11 Jul 2023 06:00:08 -0700
-In-Reply-To: <0000000000003ee3610599d20096@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c26a66060035ad18@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in __media_entity_remove_links
-From:   syzbot <syzbot+0b0095300dfeb8a83dc8@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, laurent.pinchart@ideasonboard.com,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org, mchehab@kernel.org, nogikh@google.com,
-        sakari.ailus@linux.intel.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.129.178.213]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-11_06,2023-07-11_01,2023-05-22_02
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This bug is marked as fixed by commit:
-media: uvcvideo: Avoid cyclic entity chains due to malformed
+Cascade the s_stream call to the source subdev whenever the bridge
+streaming is enable / disabled.
 
-But I can't find it in the tested trees[1] for more than 90 days.
-Is it a correct commit? Please update it by replying:
-
-#syz fix: exact-commit-title
-
-Until then the bug is still considered open and new crashes with
-the same signature are ignored.
-
-Kernel: Linux
-Dashboard link: https://syzkaller.appspot.com/bug?extid=0b0095300dfeb8a83dc8
-
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
 ---
-[1] I expect the commit to be present in:
+ drivers/media/i2c/st-mipid02.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-1. for-kernelci branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
+diff --git a/drivers/media/i2c/st-mipid02.c b/drivers/media/i2c/st-mipid02.c
+index 906553a28676..703d2f06f552 100644
+--- a/drivers/media/i2c/st-mipid02.c
++++ b/drivers/media/i2c/st-mipid02.c
+@@ -547,6 +547,13 @@ static int mipid02_stream_disable(struct mipid02_dev *bridge)
+ 	struct i2c_client *client = bridge->i2c_client;
+ 	int ret;
+ 
++	if (!bridge->s_subdev)
++		goto error;
++
++	ret = v4l2_subdev_call(bridge->s_subdev, video, s_stream, 0);
++	if (ret)
++		goto error;
++
+ 	/* Disable all lanes */
+ 	ret = mipid02_write_reg(bridge, MIPID02_CLK_LANE_REG1, 0);
+ 	if (ret)
+@@ -633,6 +640,10 @@ static int mipid02_stream_enable(struct mipid02_dev *bridge)
+ 	if (ret)
+ 		goto error;
+ 
++	ret = v4l2_subdev_call(bridge->s_subdev, video, s_stream, 1);
++	if (ret)
++		goto error;
++
+ 	return 0;
+ 
+ error:
+-- 
+2.25.1
 
-2. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
-
-3. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
-
-4. main branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
-
-The full list of 9 trees can be found at
-https://syzkaller.appspot.com/upstream/repos
