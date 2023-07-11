@@ -2,115 +2,83 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15BD1EB64DC
-	for <linux-media@archiver.kernel.org>; Tue, 11 Jul 2023 12:58:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 594D8EB64DD
+	for <linux-media@archiver.kernel.org>; Tue, 11 Jul 2023 13:01:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230194AbjGKM6f (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 11 Jul 2023 08:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58828 "EHLO
+        id S231190AbjGKNBz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 11 Jul 2023 09:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232376AbjGKM6a (ORCPT
+        with ESMTP id S229907AbjGKNBy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 11 Jul 2023 08:58:30 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2684170B;
-        Tue, 11 Jul 2023 05:57:59 -0700 (PDT)
-X-UUID: 8bc3dc341fea11eeb20a276fd37b9834-20230711
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=MaO4Pp49q26ZvXTVzU2ZtIU90FsXfRWQRbJkJwwgleA=;
-        b=H1YchBBdxt90zTliS+PHEBDBSB/ydxtkqMgk40f2U5ulZ/EDwJAeviSxWCFh2zOR6UPPVnLu27ihusXLgS0joNngMNPgbzP1q2wNEr7SzXlkI4FXVAnMJfIznwN+idLvoSRriTjFbjfBICxIpoECNZmTWKYaxFinbnIcKuwcLdc=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.28,REQID:31695e12-f710-4ba1-ae5b-dd79da6205ee,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:176cd25,CLOUDID:e55ad00d-26a8-467f-b838-f99719a9c083,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,
-        DKR:0,DKP:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 8bc3dc341fea11eeb20a276fd37b9834-20230711
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1355193415; Tue, 11 Jul 2023 20:57:52 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 11 Jul 2023 20:57:50 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Tue, 11 Jul 2023 20:57:50 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
-        <nfraprado@collabora.com>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Nathan Hebert <nhebert@chromium.org>
-CC:     Chen-Yu Tsai <wenst@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Mingjia Zhang <mingjia.zhang@mediatek.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH 0/3] media: mediatek: vcodec: Add driver to support 10bit
-Date:   Tue, 11 Jul 2023 20:57:46 +0800
-Message-ID: <20230711125749.15555-1-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 11 Jul 2023 09:01:54 -0400
+Received: from mail-oi1-x247.google.com (mail-oi1-x247.google.com [IPv6:2607:f8b0:4864:20::247])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7695B1720
+        for <linux-media@vger.kernel.org>; Tue, 11 Jul 2023 06:01:24 -0700 (PDT)
+Received: by mail-oi1-x247.google.com with SMTP id 5614622812f47-3a3b86821fcso4249332b6e.0
+        for <linux-media@vger.kernel.org>; Tue, 11 Jul 2023 06:01:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689080409; x=1691672409;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZHO68MXPpG0tvQzxAfkPPUuZs9MEkFTVvcLzHBD3OLA=;
+        b=A315ppGj0Yz2LcQllgyFaSFwnALI89tAsXhH5E6jrTqGGubZgIJl/N8REQCFQLiF/l
+         B1E60wdUCscS/PraGkcSlhs4eTZtd5dj8ATEVzPG/JGxAZ2rWiqvvMpPUBcxMUHcgGww
+         7hI3tTs/eSOKBhASDHhQ8JV8KgmIHfalzGGz7/Lo+peBbf5ojT6p3RzYT4xVAhspQg9K
+         bE3/GQQmoEtXlWOltWqViW5nsAxhqCRmQ2hSlP6+OJAinYFiZDFTrl48txxL/4FXgW62
+         2QiaDGVrv2XDifdYcly3oBPHPXE6WCzC9si0bltMFAIcthLFav2yNmu3JdYcDM7Macwg
+         gLvg==
+X-Gm-Message-State: ABy/qLYhJTb2FdS2ZLKNR9m82lu4jKtu1vHxXmzLE8D6d476dQBWmCAG
+        BYG4KEF6hluxBGQehIuRRWx2V0tKrLWeSLwZi53VmcQHiySG
+X-Google-Smtp-Source: APBJJlEM78f3nwOEwdHgjq9Mi44uFvFxi3Se/Jn99rEUe9f1P8TqteqjzvWe8OaMMfEt089MxeYLbUkwtNmaBVqFxUOiFEarLPfK
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
+X-Received: by 2002:a05:6808:e82:b0:3a3:7eca:3022 with SMTP id
+ k2-20020a0568080e8200b003a37eca3022mr2139536oil.2.1689080408726; Tue, 11 Jul
+ 2023 06:00:08 -0700 (PDT)
+Date:   Tue, 11 Jul 2023 06:00:08 -0700
+In-Reply-To: <0000000000003ee3610599d20096@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c26a66060035ad18@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in __media_entity_remove_links
+From:   syzbot <syzbot+0b0095300dfeb8a83dc8@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, laurent.pinchart@ideasonboard.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, mchehab@kernel.org, nogikh@google.com,
+        sakari.ailus@linux.intel.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Define two capture formats V4L2_PIX_FMT_MT2110R and
-V4L2_PIX_FMT_MT2110T to support 10bit in mt8195, mt8199 and more.
-Getting the size of each plane again when userspace set 10bit
-syntax to driver.
+This bug is marked as fixed by commit:
+media: uvcvideo: Avoid cyclic entity chains due to malformed
 
-V4L2_PIX_FMT_MT2110R is used for H264, and V4L2_PIX_FMT_MT2110T
-is used for AV1/VP9/HEVC.
+But I can't find it in the tested trees[1] for more than 90 days.
+Is it a correct commit? Please update it by replying:
 
-patch 1 Add driver to support 10bit
-patch 2 Add capture format V4L2_PIX_FMT_MT2110T to support 10bit tile mode
-patch 3 Add capture format V4L2_PIX_FMT_MT2110R to support 10bit raster mode
+#syz fix: exact-commit-title
+
+Until then the bug is still considered open and new crashes with
+the same signature are ignored.
+
+Kernel: Linux
+Dashboard link: https://syzkaller.appspot.com/bug?extid=0b0095300dfeb8a83dc8
+
 ---
-- send the first version v1:
-- Run 10bit VP9/AV1 fluster test pass.
-- Will return error when the 10bit parameter no correctly in function mtk_vdec_s_ctrl.
----
+[1] I expect the commit to be present in:
 
-Reference series:
-[1]: this series depends on v6 which is send by Yunfei Dong.
-     message-id: 20230704131349.8354-1-yunfei.dong@mediatek.com
+1. for-kernelci branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
 
-Mingjia Zhang (3):
-  media: mediatek: vcodec: Add capture format to support 10bit tile mode
-  media: mediatek: vcodec: Add capture format to support 10bit raster
-    mode
-  media: mediatek: vcodec: Add driver to support 10bit
+2. master branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
 
- .../media/v4l/pixfmt-reserved.rst             |  15 ++
- .../mediatek/vcodec/decoder/mtk_vcodec_dec.c  |  22 ++-
- .../vcodec/decoder/mtk_vcodec_dec_drv.h       |   5 +
- .../vcodec/decoder/mtk_vcodec_dec_stateless.c | 140 +++++++++++++++++-
- drivers/media/v4l2-core/v4l2-common.c         |   4 +
- drivers/media/v4l2-core/v4l2-ioctl.c          |   2 +
- include/uapi/linux/videodev2.h                |   2 +
- 7 files changed, 186 insertions(+), 4 deletions(-)
+3. master branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
 
--- 
-2.18.0
+4. main branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
 
+The full list of 9 trees can be found at
+https://syzkaller.appspot.com/upstream/repos
