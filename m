@@ -2,64 +2,147 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52834EB64D9
-	for <linux-media@archiver.kernel.org>; Wed, 12 Jul 2023 08:52:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F6B3EB64D9
+	for <linux-media@archiver.kernel.org>; Wed, 12 Jul 2023 09:27:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231309AbjGLIwP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 12 Jul 2023 04:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44670 "EHLO
+        id S231472AbjGLJ1b (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 12 Jul 2023 05:27:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230393AbjGLIwO (ORCPT
+        with ESMTP id S232772AbjGLJ1a (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 12 Jul 2023 04:52:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B3AB1
-        for <linux-media@vger.kernel.org>; Wed, 12 Jul 2023 01:52:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9386161696
-        for <linux-media@vger.kernel.org>; Wed, 12 Jul 2023 08:52:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F6D3C433C7;
-        Wed, 12 Jul 2023 08:52:10 +0000 (UTC)
-Message-ID: <9028875f-69d8-9643-af9e-f911560b2751@xs4all.nl>
-Date:   Wed, 12 Jul 2023 10:52:08 +0200
+        Wed, 12 Jul 2023 05:27:30 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8EAFB
+        for <linux-media@vger.kernel.org>; Wed, 12 Jul 2023 02:27:28 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (aztw-30-b2-v4wan-166917-cust845.vm26.cable.virginm.net [82.37.23.78])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2AA0557E;
+        Wed, 12 Jul 2023 11:26:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1689153997;
+        bh=VQBawMs5v5Cuzb4i/VMoUE9m4V0htg8NIpT63e9XsZs=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=dQDcmI8XDRM7X+/DXAjS4ANroUKQ3Ye0CeHrQAq9YIegkTeeAvC8mB/fsukJdf5y4
+         mmlMjFIpLkSOGjw50Nd1iGbnfBPoFWVmag7dw9GjfVukMNiBHVb1WfZa7f6y/8XRrY
+         PyoYk3NjzKvmjQYTE+usR+qfQjBTIxz7JC6qXUoI=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [GIT FIXES FOR v6.5] Two verisilicon fixes
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAJ+vNU111GKHpu4pkTUpgXCxV2iOQ-kQ4OL7mHgBRJ+3SX18PA@mail.gmail.com>
+References: <CAJ+vNU1xHpuFZjG5ySAkg9aPxxMsp581aA+bZzHqhp8c=QGpFg@mail.gmail.com> <CAHCN7xKy8gNz5V+9rdh-GhdYbEAsWpRbhNK-HD-C9D=BSO14+w@mail.gmail.com> <CAJ+vNU3gpU6ESBpn1n8+0KxRDOJGXQmZohkQ-iCULr6CVQKu4g@mail.gmail.com> <CAHCN7xJmSDsxUdazrKM8Qqk+tVRTW951hHL_cUgj-1YWEho4RA@mail.gmail.com> <CAJ+vNU1G0Z-4B9-42fgPFcO+ByA_s3Okpw-8ggcJP3a9+_j1-A@mail.gmail.com> <168911579461.688351.285047948246635641@Monstersaurus> <CAJ+vNU111GKHpu4pkTUpgXCxV2iOQ-kQ4OL7mHgBRJ+3SX18PA@mail.gmail.com>
+Subject: Re: imx8mp mipi csi camera overlay: Unable to retrieve endpoint for port@1
+From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc:     Adam Ford <aford173@gmail.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Schrempf Frieder <frieder.schrempf@kontron.de>
+To:     Tim Harvey <tharvey@gateworks.com>
+Date:   Wed, 12 Jul 2023 10:27:23 +0100
+Message-ID: <168915404389.540247.12034155743376705581@Monstersaurus>
+User-Agent: alot/0.10
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
+Quoting Tim Harvey (2023-07-12 00:45:10)
+> On Tue, Jul 11, 2023 at 3:49=E2=80=AFPM Kieran Bingham
+> <kieran.bingham@ideasonboard.com> wrote:
+> >
+> > Hi Tim,
+> >
 
-  Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
+<snip>
 
-are available in the Git repository at:
+> > >
+> > > Hi Adam,
+> > >
+> > > Thanks, this helped point me in the right direction and proves the
+> > > video capture device works with v4l2.
+> > >
+> > > For the imx219 which can capture 640x480 raw 8bit bayer:
+> > > # configure media entities for 8-bit raw bayer 640x480
+> > > media-ctl -v -V "'imx219 3-0010':0 [fmt:SRGGB8/640x480 field:none]"
+> > > media-ctl -v -V "'crossbar':0 [fmt:SRGGB8/640x480 field:none]"
+> > > media-ctl -v -V "'mxc_isi.0':0 [fmt:SRGGB8/640x480 field:none]"
+> > > # configure for RGGB (8-bit bayer) 640x480
+> > > v4l2-ctl --device /dev/video0
+> > > --set-fmt-video=3Dwidth=3D640,height=3D480,pixelformat=3DRGGB --verbo=
+se
+> > > # capture a frame
+> > > v4l2-ctl --device /dev/video0 --stream-mmap --stream-to=3Dframe.raw
+> > > --stream-count=3D1
+> > > convert -size 640x480 -depth 8 gray:frame.raw frame.png # convert to =
+png
+> > > # stream to display
+> > > gst-launch-1.0 v4l2src ! \
+> > >       video/x-bayer,format=3Drggb,width=3D640,height=3D480,framerate=
+=3D10/1 ! \
+> > >       bayer2rgb ! fbdevsink
+> > >
+> >
+> > I would expect if that's all working then libcamera with the ISI
+> > pipeline handler would be able to handle all of the media-ctl
+> > configuration for you.
+> >
+> > You should be able to use this directly (without needing calls to media=
+-ctl):
+> >
+> > gst-launch-1.0 libcamerasrc ! \
+> >         video/x-bayer,format=3Drggb,width=3D640,height=3D480 ! \
+> >         bayer2rgb ! fbdevsink
+> >
+> > in the same way.
+> >
+> > If it does work, I'd be interested to hear that, and if it doesn't -
+> > then lets fix it!
+> >
+> > Note I removed the framerate=3D10/1 as that's the part I would suspect
+> > might cause issues in the libcamerasrc. It's likely worth trying both
+> > with and without it.
+>=20
+> Hi Kieran,
+>=20
+> I've never looked into libcamera before but I love the idea of not
+> needing to deal with media-ctl pipelines. I don't see a libcamerasrc
 
-  git://linuxtv.org/hverkuil/media_tree.git tags/br-v6.5n
+Indeed, that's one of the key points of libcamera - to handle all this
+complexity of routing, configuration, and format propogation for every
+platform on behalf of each application. (As well as manage any connected
+ISP).
 
-for you to fetch changes up to 90a0416f9e1152b90ee9d5e2157db0a5b7686388:
+There's a few out of tree patches I believe, but it doesn't take much to
+get libcamera running the ISP on the i.MX8MP as well so then you can
+have hardware accelerated debayering and image processing too.
 
-  media: verisilicon: change confusingly named relaxed register access (2023-07-12 10:07:08 +0200)
 
-----------------------------------------------------------------
-Tag branch
+> in gstreamer 1.20.3 which I'm using. A quick look at the libcamera
+> docs [1] seems to indicate building from source isn't necessary when
+> libcamera is installed but I've installed libcamera-tools/libcamera0
+> and there is still no libcamerasrc shown in gstreamer?
 
-----------------------------------------------------------------
-Arnd Bergmann (2):
-      media: verisilicon: fix excessive stack usage
-      media: verisilicon: change confusingly named relaxed register access
+libcamerasrc is currently built as part of the libcamera project, not
+gstreamer. I don't know what package libcamera-tools/libcamera0 refers
+to - but look to see if your distribution package the gstreamer
+component of libcamera separately. Once that's installed it should be
+available.
 
- drivers/media/platform/verisilicon/hantro.h          | 50 +++++++++++++++++++++++++-------------------------
- drivers/media/platform/verisilicon/hantro_postproc.c | 12 ++++++------
- 2 files changed, 31 insertions(+), 31 deletions(-)
+Feel free to find us in the IRC/Matrix channels too if you get stuck for
+a realtime support channel to get things running.
+
+--
+Kieran
+
+
+>=20
+> best regards,
+>=20
+> Tim
+> [1] https://libcamera.org/getting-started.html
