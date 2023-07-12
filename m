@@ -2,113 +2,101 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59BFAEB64D9
-	for <linux-media@archiver.kernel.org>; Wed, 12 Jul 2023 09:50:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66B7BEB64D9
+	for <linux-media@archiver.kernel.org>; Wed, 12 Jul 2023 10:12:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231573AbjGLJuh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 12 Jul 2023 05:50:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60696 "EHLO
+        id S232520AbjGLKMJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 12 Jul 2023 06:12:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233191AbjGLJue (ORCPT
+        with ESMTP id S231615AbjGLKMI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 12 Jul 2023 05:50:34 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D665B1994
-        for <linux-media@vger.kernel.org>; Wed, 12 Jul 2023 02:50:28 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3fbc12181b6so72730455e9.2
-        for <linux-media@vger.kernel.org>; Wed, 12 Jul 2023 02:50:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689155427; x=1691747427;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SDLl7N6iOSv4y2UNRlUrhwDMQ6zi5QYkOLDM/VqBWRY=;
-        b=w9d5GrFLFCoTstxsHOxlhqo/yha4f4p32y9TXodqZSSxwDujNRDl5umxgBzfoGdiSI
-         yNC0iHAB4Xk4CAMQZo0z9ylUrvOAf4sw7UR8NHQPdKmpYSk3iKhN+ffjR3VJo3yfQd1d
-         2qC73ay2slCOhXYPuwdgOz7GGhrdXBK4UBt9peU+pR1HwYSsiRG49zSPBtUb9be2vQYa
-         N2+axpGwyrkDdrATsnaxJNN+I14W5Q42DxyYSdyDT/wgVvqs348MZuuAaFkwCn6g8wTc
-         RDYOjGCRPF41ip7MLlJwv0yLMf1zDtATdc6HvFsVy/uq9sE+FCcnFm0DeXCTIixry7eh
-         Wvrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689155427; x=1691747427;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SDLl7N6iOSv4y2UNRlUrhwDMQ6zi5QYkOLDM/VqBWRY=;
-        b=PwH8xjsuVcyctvDha6jx0LLkDFhf93Crwal6x8eXQgmCfbca00EK71Llj77JeX6tPk
-         hnWi4L9aK4cbiLR9gXNG7V4FGGQdhyVuQtlM/M3IMYcsDvxMHZBIbID8HYZwSIRQpsNb
-         Yign6z6c1pG9OjklJoQk7qm6+L4g+8k7hoJMCicxHLBVZMDkYZgVzTSRWxCvRw0utMJE
-         x+GfBtY3qSEIxm/3PxFfnoDwhA7AheE688X1IvwHjvKhcM5XhXuZRcILkYJpw353GjA3
-         VSjQbSEesLEbYbA9JlcLO6ojBaHSzQSSFPfCRkGnAV2v1JhILqgwtxrv5lMzRLgQf1WG
-         M4XA==
-X-Gm-Message-State: ABy/qLaQEtPN9LQQSrvSMWBPFKV8xExu0fh104aIX6UK0c/NlwgHK5xh
-        YY03XSj0pKvpXW12GuiGfps6Ug==
-X-Google-Smtp-Source: APBJJlGiavtnYkAOBeJMkeW+URsKlQtTYOUF8TITqpkgTcPLRi8xCUl4VRxsbeG91n1Qvbnds+IwTg==
-X-Received: by 2002:adf:fe01:0:b0:315:ac1b:91e with SMTP id n1-20020adffe01000000b00315ac1b091emr1931523wrr.53.1689155427018;
-        Wed, 12 Jul 2023 02:50:27 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id c3-20020a5d4f03000000b00311d8c2561bsm4554831wru.60.2023.07.12.02.50.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jul 2023 02:50:26 -0700 (PDT)
-Message-ID: <2abbae30-f92e-33e4-5509-8979129da665@linaro.org>
-Date:   Wed, 12 Jul 2023 10:50:25 +0100
+        Wed, 12 Jul 2023 06:12:08 -0400
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FB01991;
+        Wed, 12 Jul 2023 03:12:06 -0700 (PDT)
+Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 053DF61E5FE01;
+        Wed, 12 Jul 2023 12:09:16 +0200 (CEST)
+Message-ID: <461f3b88-87e6-32f2-3ed8-5764a9a6e162@molgen.mpg.de>
+Date:   Wed, 12 Jul 2023 12:09:15 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] media: venus: Fix firmware path for sm8250
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] media: aspeed: Fix memory overwrite if timing is 1600x900
 Content-Language: en-US
-To:     Patrick Whewell <patrick.whewell@sightlineapplications.com>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        William Gray <william.gray@linaro.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230711185330.10106-1-patrick.whewell@sightlineapplications.com>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20230711185330.10106-1-patrick.whewell@sightlineapplications.com>
+To:     Jammy Huang <jammy_huang@aspeedtech.com>
+References: <20230712092606.2508-1-jammy_huang@aspeedtech.com>
+Cc:     eajames@linux.ibm.com, mchehab@kernel.org, joel@jms.id.au,
+        andrew@aj.id.au, linux-media@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20230712092606.2508-1-jammy_huang@aspeedtech.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 11/07/2023 19:53, Patrick Whewell wrote:
-> The firmware path for the sm8250 resources is incorrect. This fixes the
-> path to address the firmware correctly.
+Dear Jammy,
+
+
+Thank you very much for your patch.
+
+Am 12.07.23 um 11:26 schrieb Jammy Huang:
+> When capturing 1600x900, system could crash when system memory usage is
+> tight.
+
+Please provide part of the trace, and if you have a commend to reproduce 
+it, please also add it. Is it documented somewhere, that it needs to be 
+aligned?
+
+> The size of macro block captured is 8x8. Therefore, we should make sure
+> the height of src-buf is 8 aligned to fix this issue.
 > 
-> Signed-off-by: Patrick Whewell <patrick.whewell@sightlineapplications.com>
+> Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
 > ---
->   drivers/media/platform/qcom/venus/core.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>   drivers/media/platform/aspeed/aspeed-video.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
-> index 2ae867cb4c48..348085f8fc9c 100644
-> --- a/drivers/media/platform/qcom/venus/core.c
-> +++ b/drivers/media/platform/qcom/venus/core.c
-> @@ -814,7 +814,7 @@ static const struct venus_resources sm8250_res = {
->   	.vmem_size = 0,
->   	.vmem_addr = 0,
->   	.dma_mask = 0xe0000000 - 1,
-> -	.fwname = "qcom/vpu-1.0/venus.mdt",
-> +	.fwname = "qcom/vpu-1.0/venus.mbn",
->   };
+> diff --git a/drivers/media/platform/aspeed/aspeed-video.c b/drivers/media/platform/aspeed/aspeed-video.c
+> index 374eb7781936..14594f55a77f 100644
+> --- a/drivers/media/platform/aspeed/aspeed-video.c
+> +++ b/drivers/media/platform/aspeed/aspeed-video.c
+> @@ -1130,7 +1130,7 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
+>   static void aspeed_video_set_resolution(struct aspeed_video *video)
+>   {
+>   	struct v4l2_bt_timings *act = &video->active_timings;
+> -	unsigned int size = act->width * act->height;
+> +	unsigned int size = act->width * ALIGN(act->height, 8);
 >   
->   static const struct freq_tbl sc7280_freq_table[] = {
+>   	/* Set capture/compression frame sizes */
+>   	aspeed_video_calc_compressed_size(video, size);
+> @@ -1147,7 +1147,7 @@ static void aspeed_video_set_resolution(struct aspeed_video *video)
+>   		u32 width = ALIGN(act->width, 64);
+>   
+>   		aspeed_video_write(video, VE_CAP_WINDOW, width << 16 | act->height);
+> -		size = width * act->height;
+> +		size = width * ALIGN(act->height, 8);
 
-Is the policy not to stick with .mdt for existing platforms but use .mbn 
-for new platforms.
+Maybe add a comment.
 
-https://lore.kernel.org/all/CALAqxLU1gjTY95+phBt=WksyguZuKpNKa6aYaJTe0GeCAg6WrA@mail.gmail.com/T/
+Excuse my ignorance, but as `width` is already 64 bit aligned, how does 
+aligning the second factor make a difference for `size`? Can you give an 
+example?
 
-Its a symlink for me but, is it a symlink for everybody ?
+>   	} else {
+>   		aspeed_video_write(video, VE_CAP_WINDOW,
+>   				   act->width << 16 | act->height);
+> 
+> base-commit: 2605e80d3438c77190f55b821c6575048c68268e
 
-root@linaro-gnome:~# ls /lib/firmware/qcom/vpu-1.0/ -l
-lrwxrwxrwx 1 root root       9 Dec  2  2022 venus.mdt -> venus.mbn
 
----
-bod
+Kind regards,
+
+Paul
