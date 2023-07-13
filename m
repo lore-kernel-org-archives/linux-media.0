@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 141BCC0015E
-	for <linux-media@archiver.kernel.org>; Thu, 13 Jul 2023 10:05:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1CDBC001DF
+	for <linux-media@archiver.kernel.org>; Thu, 13 Jul 2023 10:05:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234429AbjGMKFg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 13 Jul 2023 06:05:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46330 "EHLO
+        id S234518AbjGMKFi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 13 Jul 2023 06:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234215AbjGMKFU (ORCPT
+        with ESMTP id S234435AbjGMKFV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 13 Jul 2023 06:05:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31FCE271E
-        for <linux-media@vger.kernel.org>; Thu, 13 Jul 2023 03:04:14 -0700 (PDT)
+        Thu, 13 Jul 2023 06:05:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0648E269F
+        for <linux-media@vger.kernel.org>; Thu, 13 Jul 2023 03:04:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689242653;
+        s=mimecast20190719; t=1689242646;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=4w6JCt8xhkAp7WrGBI0D8ORfC5IimxZn6ab1tqrxkKw=;
-        b=gX5nNLR49oKa/n5CvvQ/oPOncD0DjOq1pJmjIG0huwKUuIL+iGgQX2vUeam4drMKzQxGYj
-        YhTBzZxZJLcTuGxFOcB0JjEWrvTwUd9epeDqbhSGohuZT1uqpsk/TTu1mFkH5vnpCYZrOB
-        rpvd0VlzOUwbKmtk+rqAGb2BdHloxII=
-Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-654-4-YnDJHeOF2hcMb5FneZIA-1; Thu, 13 Jul 2023 06:04:10 -0400
-X-MC-Unique: 4-YnDJHeOF2hcMb5FneZIA-1
+        bh=rOVJDTFrcAstOS0UfsxYlchXQfmdDZV7WwXYoUlB40Q=;
+        b=GQ9AnAgsFRr9at7vglUc0LPj3PqXC60KIPUn8FSW1QKeu8egghdnbz/APC+llb1Fw6H18l
+        TGHNn1M7/tMAXb37JTYwUSpHPwTjwouuNQYbJ+h45tKrONE1c1j+lrymxiuVvmdtAbQc1z
+        DoEkkpHq0yO0u0q3LRnbIkb5OBPGp8s=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-299-B3Q0_ON5MWSItB7fqeENUQ-1; Thu, 13 Jul 2023 06:04:03 -0400
+X-MC-Unique: B3Q0_ON5MWSItB7fqeENUQ-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A13563C0D84F;
-        Thu, 13 Jul 2023 10:04:09 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 92BEB104458C;
+        Thu, 13 Jul 2023 10:04:02 +0000 (UTC)
 Received: from fedora.redhat.com (unknown [10.67.24.111])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 245E1111E3EB;
-        Thu, 13 Jul 2023 10:04:04 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 765CA1120ABB;
+        Thu, 13 Jul 2023 10:03:58 +0000 (UTC)
 From:   Kate Hsuan <hpa@redhat.com>
 To:     Hans de Goede <hdegoede@redhat.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -45,9 +45,9 @@ To:     Hans de Goede <hdegoede@redhat.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev
 Cc:     Kate Hsuan <hpa@redhat.com>
-Subject: [PATCH 08/11] media: atomisp: ifmtr: Removed #if defined(ISP2401) to make driver generic
-Date:   Thu, 13 Jul 2023 18:02:28 +0800
-Message-ID: <20230713100231.308923-9-hpa@redhat.com>
+Subject: [PATCH 07/11] media: atomisp: pipeline: Removed #if defined(ISP2401) to make driver generic
+Date:   Thu, 13 Jul 2023 18:02:27 +0800
+Message-ID: <20230713100231.308923-8-hpa@redhat.com>
 In-Reply-To: <20230713100231.308923-1-hpa@redhat.com>
 References: <20230713100231.308923-1-hpa@redhat.com>
 MIME-Version: 1.0
@@ -61,84 +61,47 @@ Removed #if defined(ISP2401) to make driver generic.
 
 Signed-off-by: Kate Hsuan <hpa@redhat.com>
 ---
- .../atomisp/pci/hive_isp_css_common/host/input_formatter.c      | 2 --
- drivers/staging/media/atomisp/pci/runtime/ifmtr/src/ifmtr.c     | 2 --
- drivers/staging/media/atomisp/pci/sh_css_sp.c                   | 2 --
- drivers/staging/media/atomisp/pci/sh_css_sp.h                   | 2 --
- 4 files changed, 8 deletions(-)
+ .../atomisp/pci/runtime/pipeline/interface/ia_css_pipeline.h    | 2 --
+ .../staging/media/atomisp/pci/runtime/pipeline/src/pipeline.c   | 2 --
+ 2 files changed, 4 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_formatter.c b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_formatter.c
-index 5cd6136f21a2..e01f30f137a0 100644
---- a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_formatter.c
-+++ b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_formatter.c
-@@ -15,7 +15,6 @@
+diff --git a/drivers/staging/media/atomisp/pci/runtime/pipeline/interface/ia_css_pipeline.h b/drivers/staging/media/atomisp/pci/runtime/pipeline/interface/ia_css_pipeline.h
+index 222c381ff3b9..5f5dab7252aa 100644
+--- a/drivers/staging/media/atomisp/pci/runtime/pipeline/interface/ia_css_pipeline.h
++++ b/drivers/staging/media/atomisp/pci/runtime/pipeline/interface/ia_css_pipeline.h
+@@ -241,7 +241,6 @@ bool ia_css_pipeline_uses_params(struct ia_css_pipeline *pipeline);
+  */
+ bool ia_css_pipeline_get_sp_thread_id(unsigned int key, unsigned int *val);
  
- #include "system_global.h"
- 
--#ifndef ISP2401
- 
- #include "input_formatter.h"
- #include <type_support.h>
-@@ -243,4 +242,3 @@ void input_formatter_bin_get_state(
- 				  HIVE_STR2MEM_EN_STAT_UPDATE_ADDRESS);
- 	return;
- }
+-#if defined(ISP2401)
+ /**
+  * @brief Get the pipeline io status
+  *
+@@ -250,7 +249,6 @@ bool ia_css_pipeline_get_sp_thread_id(unsigned int key, unsigned int *val);
+  *	Pointer to pipe_io_status
+  */
+ struct sh_css_sp_pipeline_io_status *ia_css_pipeline_get_pipe_io_status(void);
 -#endif
-diff --git a/drivers/staging/media/atomisp/pci/runtime/ifmtr/src/ifmtr.c b/drivers/staging/media/atomisp/pci/runtime/ifmtr/src/ifmtr.c
-index 6d9f47629fbc..86254888f676 100644
---- a/drivers/staging/media/atomisp/pci/runtime/ifmtr/src/ifmtr.c
-+++ b/drivers/staging/media/atomisp/pci/runtime/ifmtr/src/ifmtr.c
-@@ -16,7 +16,6 @@
- #include "system_global.h"
- #include <linux/kernel.h>
  
--#ifndef ISP2401
- 
- #include "ia_css_ifmtr.h"
- #include <math_support.h>
-@@ -550,4 +549,3 @@ static int ifmtr_input_start_line(
- 	return 0;
+ /**
+  * @brief Map an SP thread to this pipeline
+diff --git a/drivers/staging/media/atomisp/pci/runtime/pipeline/src/pipeline.c b/drivers/staging/media/atomisp/pci/runtime/pipeline/src/pipeline.c
+index e9e187649a65..3d8741e7d5ca 100644
+--- a/drivers/staging/media/atomisp/pci/runtime/pipeline/src/pipeline.c
++++ b/drivers/staging/media/atomisp/pci/runtime/pipeline/src/pipeline.c
+@@ -454,12 +454,10 @@ bool ia_css_pipeline_has_stopped(struct ia_css_pipeline *pipeline)
+ 	return sp_group.pipe[thread_id].num_stages == 0;
  }
  
--#endif
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_sp.c b/drivers/staging/media/atomisp/pci/sh_css_sp.c
-index 297e1b981720..4ef1c9e61ea8 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_sp.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css_sp.c
-@@ -632,7 +632,6 @@ set_view_finder_buffer(const struct ia_css_frame *frame)
- 	return 0;
- }
- 
--#if !defined(ISP2401)
- void sh_css_sp_set_if_configs(
-     const input_formatter_cfg_t	*config_a,
-     const input_formatter_cfg_t	*config_b,
-@@ -654,7 +653,6 @@ void sh_css_sp_set_if_configs(
- 
- 	return;
+-#if defined(ISP2401)
+ struct sh_css_sp_pipeline_io_status *ia_css_pipeline_get_pipe_io_status(void)
+ {
+ 	return(&sh_css_sp_group.pipe_io_status);
  }
 -#endif
  
- #if !defined(ISP2401)
- void
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_sp.h b/drivers/staging/media/atomisp/pci/sh_css_sp.h
-index f69a79b0b0da..b052c40e69bc 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_sp.h
-+++ b/drivers/staging/media/atomisp/pci/sh_css_sp.h
-@@ -149,13 +149,11 @@ sh_css_sp_get_debug_state(struct sh_css_sp_debug_state *state);
- 
- #endif
- 
--#if !defined(ISP2401)
- void
- sh_css_sp_set_if_configs(
-     const input_formatter_cfg_t	*config_a,
-     const input_formatter_cfg_t	*config_b,
-     const uint8_t		if_config_index);
--#endif
- 
- void
- sh_css_sp_program_input_circuit(int fmt_type,
+ bool ia_css_pipeline_is_mapped(unsigned int key)
+ {
 -- 
 2.41.0
 
