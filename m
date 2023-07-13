@@ -2,53 +2,53 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FCB6C07CA9
-	for <linux-media@archiver.kernel.org>; Thu, 13 Jul 2023 13:03:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2443FC00528
+	for <linux-media@archiver.kernel.org>; Thu, 13 Jul 2023 13:04:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234877AbjGMNDx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 13 Jul 2023 09:03:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40524 "EHLO
+        id S235008AbjGMNEH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 13 Jul 2023 09:04:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234603AbjGMNDs (ORCPT
+        with ESMTP id S234659AbjGMNDt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 13 Jul 2023 09:03:48 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D477D1989;
-        Thu, 13 Jul 2023 06:03:46 -0700 (PDT)
+        Thu, 13 Jul 2023 09:03:49 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 907471BF0;
+        Thu, 13 Jul 2023 06:03:48 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 5CE741FDAF;
-        Thu, 13 Jul 2023 13:03:45 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 1EA931FDC9;
+        Thu, 13 Jul 2023 13:03:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1689253425; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1689253427; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=N3ShY8nHVy2Uay8SMC7IIP+u11ICJ0kvaU7vZpkeGvw=;
-        b=neEEsF0423ZQegvd/Vl4uWyIfCVcI1SvBw9ly7Ix7PF+lJG0Jv0HzaRv5zSJ/+5NJuZ4bN
-        j/zJane2bcT1dnlOqTJd/fG6MpfCvQEhu8EOC61gY7mzJN07LYl+8LCZEcKPU4xkSX8GJj
-        /1AT+cJf+ciAPBRpproKLug6vUGGm2Q=
+        bh=HF0ntTEfTFR2eIXkYuLTyCKB+tFcMggnqDzzMkFmIGA=;
+        b=pe+qEXqJT+w10Pj0fQwIyEJNJ7j/Bori0K7x9Dm/FhkLEWa80NpjznEwi/zmXxEKMJnQR5
+        x1cH6p2e+ll9PtyZWYjOuIj38TZKMFoyvh5GgknRzsp4r4EsO0e9pzHZdLp+glZF0bvu4x
+        WordDcVoUxe3yXVHMy/M/kS+SlY4uWM=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1689253425;
+        s=susede2_ed25519; t=1689253427;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=N3ShY8nHVy2Uay8SMC7IIP+u11ICJ0kvaU7vZpkeGvw=;
-        b=xF3v5U/qkvo9ynqkbndFoJCYE760wJq4nAH1gPFvOoSXNSfFZMU61jYkDMSJN/NEAWGR9n
-        bP72sQTRjiBbTJDg==
+        bh=HF0ntTEfTFR2eIXkYuLTyCKB+tFcMggnqDzzMkFmIGA=;
+        b=oB84ogaZr49lPA5lWsqOwuCBJmr3240Mz/gxj4+2FgMua3ao0lDwllYU8VxJI03P/YNaIp
+        3xYRcz33b31UpHDg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E075C13489;
-        Thu, 13 Jul 2023 13:03:44 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A6B1F13489;
+        Thu, 13 Jul 2023 13:03:46 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id sJ/jNTD2r2TVPgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 13 Jul 2023 13:03:44 +0000
+        id EE7FJzL2r2TVPgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 13 Jul 2023 13:03:46 +0000
 From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     deller@gmx.de, javierm@redhat.com
 Cc:     linux-sh@vger.kernel.org, dri-devel@lists.freedesktop.org,
@@ -61,12 +61,12 @@ Cc:     linux-sh@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
         Thomas Zimmermann <tzimmermann@suse.de>,
         Sam Ravnborg <sam@ravnborg.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Subject: [PATCH v2 08/18] sh: Assign FB_MODE_IS_UNKNOWN to struct fb_videomode.flag
-Date:   Thu, 13 Jul 2023 14:58:28 +0200
-Message-ID: <20230713130338.31086-9-tzimmermann@suse.de>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Teddy Wang <teddy.wang@siliconmotion.com>
+Subject: [PATCH v2 12/18] staging: Remove flag FBINFO_FLAG_DEFAULT from fbdev drivers
+Date:   Thu, 13 Jul 2023 14:58:32 +0200
+Message-ID: <20230713130338.31086-13-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230713130338.31086-1-tzimmermann@suse.de>
 References: <20230713130338.31086-1-tzimmermann@suse.de>
@@ -76,37 +76,51 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Assign FB_MODE_IS_UNKNOWN to sh7763fb_videomode.flag instead of
-FBINFO_FLAG_DEFAULT. Both are 0, so the stored value does not change.
+The flag FBINFO_FLAG_DEFAULT is 0 and has no effect, as struct
+fbinfo.flags has been allocated to zero by framebuffer_alloc(). So do
+not set it.
 
-FBINFO_FLAG_DEFAULT is a flag for a framebuffer in struct fb_info.
-Flags for videomodes are prefixed with FB_MODE_.
+Flags should signal differences from the default values. After cleaning
+up all occurrences of FBINFO_DEFAULT, the token will be removed.
 
 v2:
-	* assign FB_MODE_IS_UNKNOWN (Adrian)
+	* fix commit message (Miguel)
 
 Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
 Acked-by: Sam Ravnborg <sam@ravnborg.org>
-Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-Cc: Rich Felker <dalias@libc.org>
-Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc: Teddy Wang <teddy.wang@siliconmotion.com>
 ---
- arch/sh/boards/mach-sh7763rdp/setup.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/staging/fbtft/fbtft-core.c | 2 +-
+ drivers/staging/sm750fb/sm750.c    | 1 -
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/sh/boards/mach-sh7763rdp/setup.c b/arch/sh/boards/mach-sh7763rdp/setup.c
-index 97e715e4e9b3..e25193001ea0 100644
---- a/arch/sh/boards/mach-sh7763rdp/setup.c
-+++ b/arch/sh/boards/mach-sh7763rdp/setup.c
-@@ -119,7 +119,7 @@ static struct fb_videomode sh7763fb_videomode = {
- 	.vsync_len = 1,
- 	.sync = 0,
- 	.vmode = FB_VMODE_NONINTERLACED,
--	.flag = FBINFO_FLAG_DEFAULT,
-+	.flag = FB_MODE_IS_UNKNOWN,
- };
+diff --git a/drivers/staging/fbtft/fbtft-core.c b/drivers/staging/fbtft/fbtft-core.c
+index 3a4abf3bae40..eac1d570f437 100644
+--- a/drivers/staging/fbtft/fbtft-core.c
++++ b/drivers/staging/fbtft/fbtft-core.c
+@@ -684,7 +684,7 @@ struct fb_info *fbtft_framebuffer_alloc(struct fbtft_display *display,
+ 	info->var.transp.offset =  0;
+ 	info->var.transp.length =  0;
  
- static struct sh7760fb_platdata sh7763fb_def_pdata = {
+-	info->flags =              FBINFO_FLAG_DEFAULT | FBINFO_VIRTFB;
++	info->flags =              FBINFO_VIRTFB;
+ 
+ 	par = info->par;
+ 	par->info = info;
+diff --git a/drivers/staging/sm750fb/sm750.c b/drivers/staging/sm750fb/sm750.c
+index c260f73cf570..79bcd5bd4938 100644
+--- a/drivers/staging/sm750fb/sm750.c
++++ b/drivers/staging/sm750fb/sm750.c
+@@ -807,7 +807,6 @@ static int lynxfb_set_fbinfo(struct fb_info *info, int index)
+ 	info->screen_base = crtc->v_screen;
+ 	pr_debug("screen_base vaddr = %p\n", info->screen_base);
+ 	info->screen_size = line_length * var->yres_virtual;
+-	info->flags = FBINFO_FLAG_DEFAULT | 0;
+ 
+ 	/* set info->fix */
+ 	fix->type = FB_TYPE_PACKED_PIXELS;
 -- 
 2.41.0
 
