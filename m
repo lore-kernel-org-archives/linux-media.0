@@ -2,108 +2,410 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89431C00528
-	for <linux-media@archiver.kernel.org>; Fri, 14 Jul 2023 07:54:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36AC7EB64DC
+	for <linux-media@archiver.kernel.org>; Fri, 14 Jul 2023 08:03:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234831AbjGNHy6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 14 Jul 2023 03:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45784 "EHLO
+        id S235596AbjGNID0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 14 Jul 2023 04:03:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235505AbjGNHwC (ORCPT
+        with ESMTP id S234831AbjGNIDA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 14 Jul 2023 03:52:02 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CAA30ED;
-        Fri, 14 Jul 2023 00:52:01 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id BB7BC1FD6E;
-        Fri, 14 Jul 2023 07:51:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1689321119; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fHWIv3bHRzrRKcyf/zVidbDkljZLPdxvWwq51ebKJX8=;
-        b=Bfhup+SoqqGm/Pr8MMxWjewkwxH2agGKumPN9ufOQY+lQ89+34aYGx4g7+jlzwSYk2JlDp
-        oEoMKzD4EF0nI6HnNp6zvVH49mFRwokARnLhgd358jfv9g+Wx1O8gHJuHbXaGePOhAo7Yh
-        wQZiCrxXt3VWyqRDZ+XTmvLIbLWVTE8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1689321119;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fHWIv3bHRzrRKcyf/zVidbDkljZLPdxvWwq51ebKJX8=;
-        b=gjwnxcj+hE+7D1XdYMgmTJwalQL+sD6c9lOwxVHiERT/k/VMQ3HV9mhzr5dIm/CdSUAWmW
-        eRCbJYrIOeoW4IBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 616F813A92;
-        Fri, 14 Jul 2023 07:51:59 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id kF/0Fp/+sGQCQwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 14 Jul 2023 07:51:59 +0000
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     deller@gmx.de, javierm@redhat.com
-Cc:     linux-sh@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-geode@lists.infradead.org, linux-nvidia@lists.surfsouth.com,
-        linux-hyperv@vger.kernel.org, linux-omap@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sam Ravnborg <sam@ravnborg.org>, Timur Tabi <timur@kernel.org>
-Subject: [PATCH v3 06/18] fbdev/fsl-diu-fb: Remove flag FBINFO_DEFAULT
-Date:   Fri, 14 Jul 2023 09:49:32 +0200
-Message-ID: <20230714075155.5686-7-tzimmermann@suse.de>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230714075155.5686-1-tzimmermann@suse.de>
-References: <20230714075155.5686-1-tzimmermann@suse.de>
+        Fri, 14 Jul 2023 04:03:00 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC8F30FF
+        for <linux-media@vger.kernel.org>; Fri, 14 Jul 2023 01:00:27 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-51e344efd75so3245493a12.1
+        for <linux-media@vger.kernel.org>; Fri, 14 Jul 2023 01:00:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689321626; x=1691913626;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hhIEaZT66fpgOrz7emi75FsAfVnGXApsKGJmEeC5HNM=;
+        b=qMYVT9o8N49LnyLccxc5EzVogUYRt2wP/EAEH8rFgGXfHiVoJK25hX5emK8VALfm/3
+         RRErlGglhdF8X7RyoN+Gz9EucNdXmml+awz3ZNPPKDW92XcoIPYGiyIwQ2rY1fN8GdAA
+         ZLhPFn/trk9lpiUrs89IDqdnkn2gfPEjPOVU6Y0qwwR7Ih3asBEteRE7JaK/ieueE9PC
+         sreYXT8BoCm54dHAa1mdhE4M7R36dxdN1rDNhyqEJtiSC8Z1U53s1OcVEVzf8D7wLLE8
+         JxccKBAafM5xSBT6WVTbBlV/SOwnp5/2vF+vRJenC4jrKhByyQNR/syNCHVkLW1uPEG3
+         T8NQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689321626; x=1691913626;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hhIEaZT66fpgOrz7emi75FsAfVnGXApsKGJmEeC5HNM=;
+        b=E7jNDiOZ4yuO731qc3E3VJPeJeH35ntcRV0fvv3DKsollFzfodKJMvz8UPWIyy9WMp
+         xR7jUHy71p53q/F1alWbVud5CNk3Iutp/vj3hEcR29uHUbSd1X3PjxqvCyDd/dFHk674
+         NfVwzmgtCBY5t9e1tvUMKKNmfNjYA8q90yz87Qb8Vfcpo3vuamqhInGi+R9g6fPEZT3C
+         vTpbpW27Q94i3lc8qOKf3ta/8v0xsT1iD9w1PU9uJXuOt5HVfeXXGriJLVhPSFA2nz1p
+         l541id6Su6h3qNmzqsnQRdWveIOXwOvxGbFvrUQMKEW3T2iV7a9cywgE6dcHzXQ/3+hP
+         VkSA==
+X-Gm-Message-State: ABy/qLZPFzBmh9AjyNaBrXh6AgImL1rXcqPGqoAXd3Ol7+xFoqzYd/u/
+        LK1QpNRW2pFvHDKULT/dm3r9lw==
+X-Google-Smtp-Source: APBJJlHuuFhssaTeRZ/9vCODR9ZcDG6llqQ10STvCGNK4bwPUEjcp9uDRzpgitEg6C0iQVneHKPsIQ==
+X-Received: by 2002:a05:6402:35b:b0:51d:a012:ec2 with SMTP id r27-20020a056402035b00b0051da0120ec2mr2277963edw.3.1689321626412;
+        Fri, 14 Jul 2023 01:00:26 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id x19-20020aa7dad3000000b0051e28d315a2sm5358978eds.78.2023.07.14.01.00.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Jul 2023 01:00:25 -0700 (PDT)
+Message-ID: <0d0cec7f-030f-ebc1-11f0-06214197a351@linaro.org>
+Date:   Fri, 14 Jul 2023 10:00:23 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v7 2/5] media: platform: visconti: Add Toshiba Visconti
+ Video Input Interface driver
+Content-Language: en-US
+To:     Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230714015059.18775-1-yuji2.ishikawa@toshiba.co.jp>
+ <20230714015059.18775-3-yuji2.ishikawa@toshiba.co.jp>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230714015059.18775-3-yuji2.ishikawa@toshiba.co.jp>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The flag FBINFO_DEFAULT is 0 and has no effect, as struct fbinfo.flags
-has been allocated to zero by dmam_alloc_coherent(__GFP_ZERO). So do not
-set it.
+On 14/07/2023 03:50, Yuji Ishikawa wrote:
+> Add support to Video Input Interface on Toshiba Visconti ARM SoCs.
+> The interface device includes CSI2 Receiver,
+> frame grabber, video DMAC and image signal processor.
+> 
+> A driver instance provides three /dev/videoX device files;
+> one for RGB image capture, another one for optional RGB capture
+> with different parameters and the last one for RAW capture.
+> 
 
-Flags should signal differences from the default values. After cleaning
-up all occurrences of FBINFO_DEFAULT, the token will be removed.
+...
 
-v2:
-	* fix commit message (Miguel)
+> +static int visconti_viif_parse_dt(struct viif_device *viif_dev)
+> +{
+> +	struct device_node *of = viif_dev->dev->of_node;
+> +	struct v4l2_fwnode_endpoint fw_ep;
+> +	struct viif_subdev *viif_sd;
+> +	struct device_node *ep;
+> +	unsigned int i;
+> +	int num_ep;
+> +	int ret;
+> +
+> +	memset(&fw_ep, 0, sizeof(struct v4l2_fwnode_endpoint));
 
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Acked-by: Sam Ravnborg <sam@ravnborg.org>
-Cc: Timur Tabi <timur@kernel.org>
-Cc: Helge Deller <deller@gmx.de>
----
- drivers/video/fbdev/fsl-diu-fb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Why you cannot initialize it in declaration? = { 0 }?
 
-diff --git a/drivers/video/fbdev/fsl-diu-fb.c b/drivers/video/fbdev/fsl-diu-fb.c
-index 785eb8a06943..c62b48f27ba9 100644
---- a/drivers/video/fbdev/fsl-diu-fb.c
-+++ b/drivers/video/fbdev/fsl-diu-fb.c
-@@ -1476,7 +1476,7 @@ static int install_fb(struct fb_info *info)
- 
- 	info->var.activate = FB_ACTIVATE_NOW;
- 	info->fbops = &fsl_diu_ops;
--	info->flags = FBINFO_DEFAULT | FBINFO_VIRTFB | FBINFO_PARTIAL_PAN_OK |
-+	info->flags = FBINFO_VIRTFB | FBINFO_PARTIAL_PAN_OK |
- 		FBINFO_READS_FAST;
- 	info->pseudo_palette = mfbi->pseudo_palette;
- 
--- 
-2.41.0
+> +
+> +	num_ep = of_graph_get_endpoint_count(of);
+> +	if (!num_ep)
+> +		return -ENODEV;
+> +
+> +	ret = visconti_viif_init_async_subdevs(viif_dev, num_ep);
+> +	if (ret)
+> +		return ret;
+> +
+> +	for (i = 0; i < num_ep; i++) {
+> +		ep = of_graph_get_endpoint_by_regs(of, 0, i);
+> +		if (!ep) {
+> +			dev_err(viif_dev->dev, "No subdevice connected on endpoint %u.\n", i);
+> +			ret = -ENODEV;
+> +			goto error_put_node;
+> +		}
+> +
+> +		ret = v4l2_fwnode_endpoint_parse(of_fwnode_handle(ep), &fw_ep);
+> +		if (ret) {
+> +			dev_err(viif_dev->dev, "Unable to parse endpoint #%u.\n", i);
+> +			goto error_put_node;
+> +		}
+> +
+> +		if (fw_ep.bus_type != V4L2_MBUS_CSI2_DPHY ||
+> +		    fw_ep.bus.mipi_csi2.num_data_lanes == 0) {
+> +			dev_err(viif_dev->dev, "missing CSI-2 properties in endpoint\n");
+> +			ret = -EINVAL;
+> +			goto error_put_node;
+> +		}
+> +
+> +		/* Setup the ceu subdevice and the async subdevice. */
+> +		viif_sd = &viif_dev->subdevs[i];
+> +		INIT_LIST_HEAD(&viif_sd->asd.list);
+> +
+> +		viif_sd->num_lane = fw_ep.bus.mipi_csi2.num_data_lanes;
+> +		viif_sd->asd.match_type = V4L2_ASYNC_MATCH_FWNODE;
+> +		viif_sd->asd.match.fwnode =
+> +			fwnode_graph_get_remote_port_parent(of_fwnode_handle(ep));
+> +
+> +		viif_dev->asds[i] = &viif_sd->asd;
+> +		of_node_put(ep);
+> +	}
+> +
+> +	return num_ep;
+> +
+> +error_put_node:
+> +	of_node_put(ep);
+> +	return ret;
+> +}
+> +
+> +static const struct of_device_id visconti_viif_of_table[] = {
+> +	{
+> +		.compatible = "toshiba,visconti5-viif",
+> +	},
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, visconti_viif_of_table);
+> +
+> +#define NUM_IRQS   3
+> +#define IRQ_ID_STR "viif"
+> +
+> +static int visconti_viif_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct viif_device *viif_dev;
+> +	dma_addr_t tables_dma;
+> +	int ret, i, num_sd;
+> +
+> +	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(36));
+> +	if (ret)
+> +		return ret;
+> +
+> +	viif_dev = devm_kzalloc(dev, sizeof(*viif_dev), GFP_KERNEL);
+> +	if (!viif_dev)
+> +		return -ENOMEM;
+> +
+> +	platform_set_drvdata(pdev, viif_dev);
+> +	viif_dev->dev = dev;
+> +
+> +	spin_lock_init(&viif_dev->regbuf_lock);
+> +	mutex_init(&viif_dev->pow_lock);
+> +	mutex_init(&viif_dev->stream_lock);
+> +
+> +	viif_dev->capture_reg = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(viif_dev->capture_reg))
+> +		return PTR_ERR(viif_dev->capture_reg);
+> +
+> +	viif_dev->csi2host_reg = devm_platform_ioremap_resource(pdev, 1);
+> +	if (IS_ERR(viif_dev->csi2host_reg))
+> +		return PTR_ERR(viif_dev->csi2host_reg);
+> +
+> +	viif_dev->hwaif_reg = devm_platform_ioremap_resource(pdev, 2);
+> +	if (IS_ERR(viif_dev->hwaif_reg))
+> +		return PTR_ERR(viif_dev->hwaif_reg);
+> +
+> +	viif_dev->mpu_reg = devm_platform_ioremap_resource(pdev, 3);
+> +	if (IS_ERR(viif_dev->mpu_reg))
+> +		return PTR_ERR(viif_dev->mpu_reg);
+> +
+> +	viif_dev->run_flag_main = false;
+> +
+> +	for (i = 0; i < NUM_IRQS; i++) {
+> +		ret = platform_get_irq(pdev, i);
+> +		if (ret < 0) {
+> +			dev_err(dev, "failed to acquire irq resource\n");
+> +			return ret;
+
+return dev_err_probe()
+
+> +		}
+> +		viif_dev->irq[i] = ret;
+> +		ret = devm_request_irq(dev, viif_dev->irq[i], visconti_viif_irq, 0, IRQ_ID_STR,
+> +				       viif_dev);
+> +		if (ret) {
+> +			dev_err(dev, "irq request failed\n");
+
+return dev_err_probe()
+
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	viif_dev->tables =
+> +		dma_alloc_wc(dev, sizeof(struct viif_table_area), &tables_dma, GFP_KERNEL);
+> +	if (!viif_dev->tables) {
+> +		dev_err(dev, "dma_alloc_wc failed\n");
+
+Are you sure DMA memory allocation errors shall be printed?
+
+> +		return -ENOMEM;
+> +	}
+> +	viif_dev->tables_dma = (struct viif_table_area *)tables_dma;
+> +
+> +	/* power control */
+
+Drop the comment, it is useless.
+
+> +	pm_runtime_enable(dev);
+> +
+> +	/* build media_dev */
+> +	viif_dev->media_dev.hw_revision = 0;
+> +	strscpy(viif_dev->media_dev.model, VIIF_DRIVER_NAME, sizeof(viif_dev->media_dev.model));
+> +	viif_dev->media_dev.dev = dev;
+> +	/* TODO: platform:visconti-viif-0,1,2,3 for each VIIF driver instance */
+> +	snprintf(viif_dev->media_dev.bus_info, sizeof(viif_dev->media_dev.bus_info), "%s-0",
+> +		 VIIF_BUS_INFO_BASE);
+> +	media_device_init(&viif_dev->media_dev);
+> +
+> +	/* build v4l2_dev */
+> +	viif_dev->v4l2_dev.mdev = &viif_dev->media_dev;
+> +	ret = v4l2_device_register(dev, &viif_dev->v4l2_dev);
+> +	if (ret)
+> +		goto error_dma_free;
+> +
+> +	ret = media_device_register(&viif_dev->media_dev);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to register media device: %d\n", ret);
+> +		goto error_v4l2_unregister;
+
+dev_err_probe
+
+> +	}
+> +
+> +	ret = visconti_viif_csi2rx_register(viif_dev);
+> +	if (ret) {
+> +		dev_err(dev, "failed to register csi2rx sub node: %d\n", ret);
+
+dev_err_probe
+
+
+> +		goto error_media_unregister;
+> +	}
+> +
+> +	ret = visconti_viif_isp_register(viif_dev);
+> +	if (ret) {
+> +		dev_err(dev, "failed to register isp sub node: %d\n", ret);
+
+dev_err_probe
+
+
+> +		goto error_media_unregister;
+> +	}
+> +	ret = visconti_viif_capture_register(viif_dev);
+> +	if (ret) {
+> +		dev_err(dev, "failed to register capture node: %d\n", ret);
+
+dev_err_probe
+
+> +		goto error_media_unregister;
+> +	}
+> +
+> +	/* handle subdevices in device tree */
+> +	num_sd = visconti_viif_parse_dt(viif_dev);
+> +	if (ret < 0) {
+> +		ret = num_sd;
+
+ret = dev_err_probe
+
+> +		goto error_media_unregister;
+> +	}
+> +
+> +	viif_dev->notifier.v4l2_dev = &viif_dev->v4l2_dev;
+> +	v4l2_async_nf_init(&viif_dev->notifier);
+> +	for (i = 0; i < num_sd; i++)
+> +		__v4l2_async_nf_add_subdev(&viif_dev->notifier, viif_dev->asds[i]);
+> +	viif_dev->notifier.ops = &viif_notify_ops;
+> +	ret = v4l2_async_nf_register(&viif_dev->v4l2_dev, &viif_dev->notifier);
+> +	if (ret)
+> +		goto error_media_unregister;
+> +
+> +	viif_dev->wq = create_workqueue("visconti-viif");
+> +	if (!viif_dev->wq)
+> +		return -ENOMEM;
+
+No error cleanup?
+
+> +	INIT_WORK(&viif_dev->work, visconti_viif_wthread_l1info);
+> +
+> +	return 0;
+> +
+> +error_media_unregister:
+> +	media_device_unregister(&viif_dev->media_dev);
+> +error_v4l2_unregister:
+> +	v4l2_device_unregister(&viif_dev->v4l2_dev);
+> +error_dma_free:
+> +	pm_runtime_disable(dev);
+> +	dma_free_wc(&pdev->dev, sizeof(struct viif_table_area), viif_dev->tables,
+> +		    (dma_addr_t)viif_dev->tables_dma);
+> +	return ret;
+> +}
+> +
+> +static int visconti_viif_remove(struct platform_device *pdev)
+> +{
+> +	struct viif_device *viif_dev = platform_get_drvdata(pdev);
+> +
+> +	destroy_workqueue(viif_dev->wq);
+> +	visconti_viif_isp_unregister(viif_dev);
+> +	visconti_viif_capture_unregister(viif_dev);
+> +	v4l2_async_nf_unregister(&viif_dev->notifier);
+
+Why these three are not called in probe error paths?
+
+> +	media_device_unregister(&viif_dev->media_dev);
+> +	v4l2_device_unregister(&viif_dev->v4l2_dev);
+> +	pm_runtime_disable(&pdev->dev);
+> +	dma_free_wc(&pdev->dev, sizeof(struct viif_table_area), viif_dev->tables,
+> +		    (dma_addr_t)viif_dev->tables_dma);
+> +
+> +	return 0;
+> +}
+> +
+> +static int visconti_viif_runtime_suspend(struct device *dev)
+> +{
+> +	/* This callback is kicked when the last device-file is closed */
+> +	struct viif_device *viif_dev = dev_get_drvdata(dev);
+> +
+> +	mutex_lock(&viif_dev->pow_lock);
+
+Why?
+
+> +	visconti_viif_hw_off(viif_dev);
+> +	mutex_unlock(&viif_dev->pow_lock);
+> +
+> +	return 0;
+> +}
+> +
+> +static int visconti_viif_runtime_resume(struct device *dev)
+> +{
+> +	/* This callback is kicked when the first device-file is opened */
+> +	struct viif_device *viif_dev = dev_get_drvdata(dev);
+> +
+> +	viif_dev->rawpack_mode = (u32)VIIF_RAWPACK_DISABLE;
+> +
+> +	mutex_lock(&viif_dev->pow_lock);
+
+Why?
+
+> +
+> +	/* Initialize HWD driver */
+> +	visconti_viif_hw_on(viif_dev);
+> +
+> +	/* VSYNC mask setting of MAIN unit */
+> +	viif_main_vsync_set_irq_mask(viif_dev, MASK_INT_M_SYNC_MASK_SET);
+> +
+> +	/* STATUS error mask setting of MAIN unit */
+> +	viif_main_status_err_set_irq_mask(viif_dev, MASK_INT_M_DELAY_INT_ERROR);
+> +
+> +	/* VSYNC mask settings of SUB unit */
+> +	viif_sub_vsync_set_irq_mask(viif_dev, MASK_INT_S_SYNC_MASK_SET);
+> +
+> +	/* STATUS error mask setting(unmask) of SUB unit */
+> +	viif_sub_status_err_set_irq_mask(viif_dev,
+> +					 MASK_INT_S_RESERVED_SET | MASK_INT_S_DELAY_INT_ERROR);
+> +
+> +	mutex_unlock(&viif_dev->pow_lock);
+> +
+> +	return 0;
+> +}
+> +
+
+Best regards,
+Krzysztof
 
