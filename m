@@ -2,53 +2,53 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F405C27C5E
-	for <linux-media@archiver.kernel.org>; Fri, 14 Jul 2023 07:52:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40CC2C25B7E
+	for <linux-media@archiver.kernel.org>; Fri, 14 Jul 2023 07:52:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235768AbjGNHwi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 14 Jul 2023 03:52:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45784 "EHLO
+        id S235782AbjGNHwk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 14 Jul 2023 03:52:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235549AbjGNHwH (ORCPT
+        with ESMTP id S235523AbjGNHwD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 14 Jul 2023 03:52:07 -0400
+        Fri, 14 Jul 2023 03:52:03 -0400
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13ECD30FD;
-        Fri, 14 Jul 2023 00:52:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744B330E5;
+        Fri, 14 Jul 2023 00:52:02 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 73FB11FD98;
-        Fri, 14 Jul 2023 07:52:03 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id DD8CA1FD82;
+        Fri, 14 Jul 2023 07:52:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1689321123; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1689321120; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ucmT+1GLTDoqupQ1pU8mLni2ss8QN6gSt8DgqXn9pcI=;
-        b=dxLsstQbla8TzztfdF9jB+ru3N8knrJaOiF7eIFMJPWUplhamsz381ttWSQNK1R3AIqw+b
-        iu4muL0IOx29RaeiEs9RJdI1hib4KYCaGLiiPgNz52ABZ/gfqUSyvtHhBEwTQi232qSMFJ
-        2K9Ji1LldUaR9nsZpp18E3Z+K0BpbFc=
+        bh=YWl4r3MXDzIpXc1GMxrVHAXu9+tdMITd+1eR5phnaTY=;
+        b=asN4jXBhI2JnwiwV6m9qEbnKE6Z4Oc3L6Y4ATww+BqsaYS7uaZM+9SQSMvB7K4ptM8UVen
+        O4vu9DX6TkcqS6fNZR+Te45m5hhoE1GqHgY0RZoK/yj/sVKfMZ/xF16Vl8vjaaPsWheSm8
+        fJk0qsYzSaeeDOGdugbWt/iPt+uxIOc=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1689321123;
+        s=susede2_ed25519; t=1689321120;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ucmT+1GLTDoqupQ1pU8mLni2ss8QN6gSt8DgqXn9pcI=;
-        b=w0ER7TI9hEhnvBKAAF5kg9tZ1akYSqO2cqdxcBLYYkHr2ZsB3+gDXLD8Vwg7tCOWvtHp40
-        uXGfAVzC5wtPTrCw==
+        bh=YWl4r3MXDzIpXc1GMxrVHAXu9+tdMITd+1eR5phnaTY=;
+        b=bss22TCu6JS5gpff6CSCqj18ohWIMh0ca+BK3HIlzAgNTlfyZzGFs/kX3qlf3MyySKee1Y
+        g4nNnceri51mOWCw==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 24E9D13A92;
-        Fri, 14 Jul 2023 07:52:03 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 892CE13A15;
+        Fri, 14 Jul 2023 07:52:00 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id 6NcACKP+sGQCQwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 14 Jul 2023 07:52:03 +0000
+        id IJCsIKD+sGQCQwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Fri, 14 Jul 2023 07:52:00 +0000
 From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     deller@gmx.de, javierm@redhat.com
 Cc:     linux-sh@vger.kernel.org, dri-devel@lists.freedesktop.org,
@@ -60,10 +60,12 @@ Cc:     linux-sh@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-hyperv@vger.kernel.org, linux-omap@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
         Thomas Zimmermann <tzimmermann@suse.de>,
-        Sam Ravnborg <sam@ravnborg.org>
-Subject: [PATCH v3 15/18] fbdev/atafb: Remove flag FBINFO_FLAG_DEFAULT
-Date:   Fri, 14 Jul 2023 09:49:41 +0200
-Message-ID: <20230714075155.5686-16-tzimmermann@suse.de>
+        Sam Ravnborg <sam@ravnborg.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Robin van der Gracht <robin@protonic.nl>
+Subject: [PATCH v3 09/18] auxdisplay: Remove flag FBINFO_FLAG_DEFAULT from fbdev drivers
+Date:   Fri, 14 Jul 2023 09:49:35 +0200
+Message-ID: <20230714075155.5686-10-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230714075155.5686-1-tzimmermann@suse.de>
 References: <20230714075155.5686-1-tzimmermann@suse.de>
@@ -74,7 +76,7 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 The flag FBINFO_FLAG_DEFAULT is 0 and has no effect, as struct
-fbinfo.flags has been allocated to zero by a static declaration. So do
+fbinfo.flags has been allocated to zero by framebuffer_alloc(). So do
 not set it.
 
 Flags should signal differences from the default values. After cleaning
@@ -85,23 +87,38 @@ v2:
 
 Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
 Acked-by: Sam Ravnborg <sam@ravnborg.org>
-Cc: Helge Deller <deller@gmx.de>
+Acked-by: Miguel Ojeda <ojeda@kernel.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>
+Cc: Robin van der Gracht <robin@protonic.nl>
 ---
- drivers/video/fbdev/atafb.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/auxdisplay/cfag12864bfb.c | 1 -
+ drivers/auxdisplay/ht16k33.c      | 1 -
+ 2 files changed, 2 deletions(-)
 
-diff --git a/drivers/video/fbdev/atafb.c b/drivers/video/fbdev/atafb.c
-index 2bc4089865e6..c4a420b791b9 100644
---- a/drivers/video/fbdev/atafb.c
-+++ b/drivers/video/fbdev/atafb.c
-@@ -3112,7 +3112,6 @@ static int __init atafb_probe(struct platform_device *pdev)
- #ifdef ATAFB_FALCON
- 	fb_info.pseudo_palette = current_par.hw.falcon.pseudo_palette;
- #endif
--	fb_info.flags = FBINFO_FLAG_DEFAULT;
+diff --git a/drivers/auxdisplay/cfag12864bfb.c b/drivers/auxdisplay/cfag12864bfb.c
+index c2cab7e2b126..729845bcc803 100644
+--- a/drivers/auxdisplay/cfag12864bfb.c
++++ b/drivers/auxdisplay/cfag12864bfb.c
+@@ -79,7 +79,6 @@ static int cfag12864bfb_probe(struct platform_device *device)
+ 	info->var = cfag12864bfb_var;
+ 	info->pseudo_palette = NULL;
+ 	info->par = NULL;
+-	info->flags = FBINFO_FLAG_DEFAULT;
  
- 	if (!fb_find_mode(&fb_info.var, &fb_info, mode_option, atafb_modedb,
- 			  NUM_TOTAL_MODES, &atafb_modedb[defmode],
+ 	if (register_framebuffer(info) < 0)
+ 		goto fballoced;
+diff --git a/drivers/auxdisplay/ht16k33.c b/drivers/auxdisplay/ht16k33.c
+index edaf92b7ea77..df3f37651e45 100644
+--- a/drivers/auxdisplay/ht16k33.c
++++ b/drivers/auxdisplay/ht16k33.c
+@@ -646,7 +646,6 @@ static int ht16k33_fbdev_probe(struct device *dev, struct ht16k33_priv *priv,
+ 	fbdev->info->var = ht16k33_fb_var;
+ 	fbdev->info->bl_dev = bl;
+ 	fbdev->info->pseudo_palette = NULL;
+-	fbdev->info->flags = FBINFO_FLAG_DEFAULT;
+ 	fbdev->info->par = priv;
+ 
+ 	err = register_framebuffer(fbdev->info);
 -- 
 2.41.0
 
