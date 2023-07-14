@@ -2,102 +2,140 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76D46C001DE
-	for <linux-media@archiver.kernel.org>; Fri, 14 Jul 2023 08:09:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84D57EB64DA
+	for <linux-media@archiver.kernel.org>; Fri, 14 Jul 2023 08:31:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235406AbjGNIJp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 14 Jul 2023 04:09:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59770 "EHLO
+        id S235327AbjGNIbm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 14 Jul 2023 04:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234611AbjGNIJF (ORCPT
+        with ESMTP id S235189AbjGNIbj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 14 Jul 2023 04:09:05 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB9D3C39
-        for <linux-media@vger.kernel.org>; Fri, 14 Jul 2023 01:06:47 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4R2PFc5MrdzBR9sj
-        for <linux-media@vger.kernel.org>; Fri, 14 Jul 2023 16:06:44 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1689322004; x=1691914005; bh=XnHXJPirhwWBp38ABP/TuJuTwR8
-        3qRslG4kr4zY2jQE=; b=prRBxH8oaDBDTnR82sVlKMzhnplxgraSpUiFkTrSEAi
-        PL/0jsa+/sZJSgNgjvqdrFQxajScW/0VMmk1IkERiOJnCxIrMehW37VmPbLwXLTz
-        4/Gg6Epqe4zEUM8ajdjI6Emvj6lYvp3VJs3ihqxvcok75YhIfp5jDc/08LR4ZkJY
-        DJR48ZTH6xczM1qTomDWaAvfVGKk2V529dYKCtUB80aGWWZ/CX6qltAQ3ViLWxqD
-        lnf1NQjE0i2Pt5XDCz6HEsa2yzHyW+YTtD0wixN1haz5NiBN1wLqxmY+PHSop7WZ
-        EGAY3AuUQCUrdLd8ZPKP/0alZxTnW14UuYWckTM1FFw==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id RQDUuf8Qp81B for <linux-media@vger.kernel.org>;
-        Fri, 14 Jul 2023 16:06:44 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4R2PFc412lzBR9sc;
-        Fri, 14 Jul 2023 16:06:44 +0800 (CST)
+        Fri, 14 Jul 2023 04:31:39 -0400
+X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 14 Jul 2023 01:31:37 PDT
+Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DD91FCD;
+        Fri, 14 Jul 2023 01:31:36 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: linasend@asahilina.net)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 9DFBF5BC3A;
+        Fri, 14 Jul 2023 08:21:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
+        s=default; t=1689322902;
+        bh=2fvwzfS8YmheCobPc2+Jok2ymjxw2dE4WFuUm89CeSo=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc;
+        b=Ul6meaIpNeuWcJCwpAYhbbiGf+LI7dxOrwbWECurU79oGo8mKIXGq/PpwntwxYhL6
+         3jZjBXVRBxLBudEsjD01rpTbvNsZQqsHexszbM+UPx65RHtHxKoWh3iGQDbZhqac0c
+         THw+fGYmeqS407Le8VwRRLJzQcnsrUsKmVYXvE4n13iIuHOL9OUMhyaPV+s7f27n66
+         xcSXZrePdpYH2rzOqGGsDd6GDt1kdlSQxj5s+Ptu9W6UFTqHEg7NdBIB3mTJhyIwCP
+         mSI2w2bgT6Q3HAovBrdpzKF/wQmls6tyfDsWUyEiInhAtHI5ue5ZUTnuLnKUKSOKyZ
+         KvwjJ2D3DjJ1A==
+From:   Asahi Lina <lina@asahilina.net>
+Date:   Fri, 14 Jul 2023 17:21:30 +0900
+Subject: [PATCH 2/3] drm/scheduler: Fix UAF in
+ drm_sched_fence_get_timeline_name
 MIME-Version: 1.0
-Date:   Fri, 14 Jul 2023 16:06:44 +0800
-From:   sunran001@208suo.com
-To:     mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: dvb: remove spaces before '['
-In-Reply-To: <20230714080514.14297-1-xujianghui@cdjrlc.com>
-References: <20230714080514.14297-1-xujianghui@cdjrlc.com>
-User-Agent: Roundcube Webmail
-Message-ID: <ad3e13dcf101ff613c7fc72c99db8dd2@208suo.com>
-X-Sender: sunran001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20230714-drm-sched-fixes-v1-2-c567249709f7@asahilina.net>
+References: <20230714-drm-sched-fixes-v1-0-c567249709f7@asahilina.net>
+In-Reply-To: <20230714-drm-sched-fixes-v1-0-c567249709f7@asahilina.net>
+To:     Luben Tuikov <luben.tuikov@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     Faith Ekstrand <faith.ekstrand@collabora.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, asahi@lists.linux.dev,
+        Asahi Lina <lina@asahilina.net>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1689322891; l=3041;
+ i=lina@asahilina.net; s=20230221; h=from:subject:message-id;
+ bh=2fvwzfS8YmheCobPc2+Jok2ymjxw2dE4WFuUm89CeSo=;
+ b=cGIqcU2xLXIEnYceEA1R5m+dM1c4K6uQypwIVQQxiA9kE8cWOkpsy03Lc3UmPGdJzzI4sez2N
+ D0FF7Vk7S0VDhI+z11BCCD/UVgnFr42ZSzTeAuiFCbjqPftu2mpb7Vf
+X-Developer-Key: i=lina@asahilina.net; a=ed25519;
+ pk=Qn8jZuOtR1m5GaiDfTrAoQ4NE1XoYVZ/wmt5YtXWFC4=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Remove spaces to clear checkpatch errors.
+A signaled scheduler fence can outlive its scheduler, since fences are
+independencly reference counted. Therefore, we can't reference the
+scheduler in the get_timeline_name() implementation.
 
-ERROR: space prohibited before open square bracket '['
+Fixes oopses on `cat /sys/kernel/debug/dma_buf/bufinfo` when shared
+dma-bufs reference fences from GPU schedulers that no longer exist.
 
-Signed-off-by: Ran Sun <sunran001@208suo.com>
+Signed-off-by: Asahi Lina <lina@asahilina.net>
 ---
-  drivers/media/dvb-frontends/tda826x.c | 6 +++---
-  1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/scheduler/sched_entity.c | 7 ++++++-
+ drivers/gpu/drm/scheduler/sched_fence.c  | 4 +++-
+ include/drm/gpu_scheduler.h              | 5 +++++
+ 3 files changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/dvb-frontends/tda826x.c 
-b/drivers/media/dvb-frontends/tda826x.c
-index f9703a1dd758..7f17efe17d11 100644
---- a/drivers/media/dvb-frontends/tda826x.c
-+++ b/drivers/media/dvb-frontends/tda826x.c
-@@ -38,7 +38,7 @@ static int tda826x_sleep(struct dvb_frontend *fe)
-  {
-      struct tda826x_priv *priv = fe->tuner_priv;
-      int ret;
--    u8 buf [] = { 0x00, 0x8d };
-+    u8 buf[] = { 0x00, 0x8d };
-      struct i2c_msg msg = { .addr = priv->i2c_address, .flags = 0, .buf 
-= buf, .len = 2 };
+diff --git a/drivers/gpu/drm/scheduler/sched_entity.c b/drivers/gpu/drm/scheduler/sched_entity.c
+index b2bbc8a68b30..17f35b0b005a 100644
+--- a/drivers/gpu/drm/scheduler/sched_entity.c
++++ b/drivers/gpu/drm/scheduler/sched_entity.c
+@@ -389,7 +389,12 @@ static bool drm_sched_entity_add_dependency_cb(struct drm_sched_entity *entity)
+ 
+ 		/*
+ 		 * Fence is from the same scheduler, only need to wait for
+-		 * it to be scheduled
++		 * it to be scheduled.
++		 *
++		 * Note: s_fence->sched could have been freed and reallocated
++		 * as another scheduler. This false positive case is okay, as if
++		 * the old scheduler was freed all of its jobs must have
++		 * signaled their completion fences.
+ 		 */
+ 		fence = dma_fence_get(&s_fence->scheduled);
+ 		dma_fence_put(entity->dependency);
+diff --git a/drivers/gpu/drm/scheduler/sched_fence.c b/drivers/gpu/drm/scheduler/sched_fence.c
+index ef120475e7c6..06a0eebcca10 100644
+--- a/drivers/gpu/drm/scheduler/sched_fence.c
++++ b/drivers/gpu/drm/scheduler/sched_fence.c
+@@ -68,7 +68,7 @@ static const char *drm_sched_fence_get_driver_name(struct dma_fence *fence)
+ static const char *drm_sched_fence_get_timeline_name(struct dma_fence *f)
+ {
+ 	struct drm_sched_fence *fence = to_drm_sched_fence(f);
+-	return (const char *)fence->sched->name;
++	return (const char *)fence->sched_name;
+ }
+ 
+ static void drm_sched_fence_free_rcu(struct rcu_head *rcu)
+@@ -216,6 +216,8 @@ void drm_sched_fence_init(struct drm_sched_fence *fence,
+ 	unsigned seq;
+ 
+ 	fence->sched = entity->rq->sched;
++	strlcpy(fence->sched_name, entity->rq->sched->name,
++		sizeof(fence->sched_name));
+ 	seq = atomic_inc_return(&entity->fence_seq);
+ 	dma_fence_init(&fence->scheduled, &drm_sched_fence_ops_scheduled,
+ 		       &fence->lock, entity->fence_context, seq);
+diff --git a/include/drm/gpu_scheduler.h b/include/drm/gpu_scheduler.h
+index e95b4837e5a3..4fa9523bd47d 100644
+--- a/include/drm/gpu_scheduler.h
++++ b/include/drm/gpu_scheduler.h
+@@ -305,6 +305,11 @@ struct drm_sched_fence {
+          * @lock: the lock used by the scheduled and the finished fences.
+          */
+ 	spinlock_t			lock;
++        /**
++         * @sched_name: the name of the scheduler that owns this fence. We
++	 * keep a copy here since fences can outlive their scheduler.
++         */
++	char sched_name[16];
+         /**
+          * @owner: job owner for debugging
+          */
 
-      dprintk("%s:\n", __func__);
-@@ -65,7 +65,7 @@ static int tda826x_set_params(struct dvb_frontend *fe)
-      u32 div;
-      u32 ksyms;
-      u32 bandwidth;
--    u8 buf [11];
-+    u8 buf[11];
-      struct i2c_msg msg = { .addr = priv->i2c_address, .flags = 0, .buf 
-= buf, .len = 11 };
+-- 
+2.40.1
 
-      dprintk("%s:\n", __func__);
-@@ -130,7 +130,7 @@ static const struct dvb_tuner_ops tda826x_tuner_ops 
-= {
-  struct dvb_frontend *tda826x_attach(struct dvb_frontend *fe, int addr, 
-struct i2c_adapter *i2c, int has_loopthrough)
-  {
-      struct tda826x_priv *priv = NULL;
--    u8 b1 [] = { 0, 0 };
-+    u8 b1[] = { 0, 0 };
-      struct i2c_msg msg[2] = {
-          { .addr = addr, .flags = 0,        .buf = NULL, .len = 0 },
-          { .addr = addr, .flags = I2C_M_RD, .buf = b1, .len = 2 }
