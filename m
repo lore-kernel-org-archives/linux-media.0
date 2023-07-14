@@ -2,168 +2,206 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D09AFEB64DA
-	for <linux-media@archiver.kernel.org>; Fri, 14 Jul 2023 07:46:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58161C0015E
+	for <linux-media@archiver.kernel.org>; Fri, 14 Jul 2023 07:50:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235189AbjGNHqB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 14 Jul 2023 03:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42126 "EHLO
+        id S233638AbjGNHuK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 14 Jul 2023 03:50:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235321AbjGNHp6 (ORCPT
+        with ESMTP id S235469AbjGNHuJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 14 Jul 2023 03:45:58 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E37D2D78;
-        Fri, 14 Jul 2023 00:45:53 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-51e344efd75so3221158a12.1;
-        Fri, 14 Jul 2023 00:45:53 -0700 (PDT)
+        Fri, 14 Jul 2023 03:50:09 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319A030DF
+        for <linux-media@vger.kernel.org>; Fri, 14 Jul 2023 00:50:06 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3fc03aa6e04so14787535e9.2
+        for <linux-media@vger.kernel.org>; Fri, 14 Jul 2023 00:50:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689320751; x=1691912751;
+        d=linaro.org; s=google; t=1689321004; x=1691913004;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=N6vuG3HQkEQ7VNeSQ5xmh1TS6CjzB/10WVd0XG/5aiY=;
-        b=gjzet+3EtfmPg0tf8IJHdcqio4lk8hH5r0xGb3jPub9rRkdCMPlN07kjBsFMoNgcUl
-         9scbBglIZZafZTLDAVubtwb6YTanXfnEwyUEE3Xu9iU5qB+whYOrbNEf2ssOHEqvKdeG
-         KC8Fule84HyTin/rpOsFjWQ2PzioUgoterzvoTE5x15sm5L2Pg0UtE4dkeixAfjLmJmw
-         7BUdczbiPnmAM3KnW3ox/dM3xHSlKpcK5eF8Ce6hgLFRp72tDCyneWEOh9w12AX2ZzAp
-         RmVGFDyypB4Tt8gw880ZKOmFh5s0a30KiULcXr8YnPHrT3HuFjh3Whv9ZPZhrOLVxlQ6
-         DLwg==
+        bh=Ugr1nKWo0tHUl4i565GOZQnCj/QVDFoqHM8cjNP8oLQ=;
+        b=Ol7SNUGf0nyq4TmloK/Y5A3bNqYAzcHTc6BNnYkNndswp+w0xHRJ6IhvOOfIaNXNUo
+         aReZsNf106ztb87etspgpuz3Z7rl72nirHfrApIbMp2gV1FtvQF1FQRU2Ht19Sz28y/g
+         XG5kyuzrfqeXWY62QI57jveGTRSyaTRXRv6/ko/h0E5dGEYwf75qkeYi1bq3q0CkRqMv
+         wmclO7ajAdoBIJG7/cyJuMktcMLdQcjl5T4va3zN7ToasN1GopJPvKBt771qYBw7nBNW
+         fkjE1b3t6LRzN1zLyYAyojHGedzKlo760DmHqgstLPWeK2a6tc3rywziof7m9kkdGDWF
+         BkrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689320751; x=1691912751;
+        d=1e100.net; s=20221208; t=1689321004; x=1691913004;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=N6vuG3HQkEQ7VNeSQ5xmh1TS6CjzB/10WVd0XG/5aiY=;
-        b=kEns4YZnDS85ecoaXpVOe98NnZjd9Fhof63xzf9W2bl6V1+YJxud64IESSWktI0YFZ
-         H3qkSTwPU48E6terwVxmlnnZVYkOtD2jR+5uwpEqKm83OLTWtVS3jY/ZAYmTHws3/T1O
-         5aOndXgRIE8CY4X203WuvEIiWfYEOfDUxaNp+S6Qu06hVAAWD6AL3e9zJmgjEBuuRyOn
-         sOuMhYwjX5slUUg16BIE1h6izLfC9E8yh6AVo+u7+tn8Y063+JnVE+VrgxexQ1HshST5
-         0JqlIHZvDycA9yHKfBc4oGKNWG/Wwt9J1z4ac5eAadljqNYabNi+YGNnsjihnjbh0K0X
-         SYaA==
-X-Gm-Message-State: ABy/qLaYRTGbD9B1ctUoWYlVmCZhFy28NlvSPq0XZt3sWoEWMTQ3kfFZ
-        rTqPLxV9sfI8xSyZPGbnv9U=
-X-Google-Smtp-Source: APBJJlE9LmJVESEldeBsjKBFMJhkXTV0WWWDsVr7FqxjeFyNg3BVE+QDcTnHHM2SkLqoXFEitTeN4A==
-X-Received: by 2002:a05:6402:518f:b0:51e:4218:b91b with SMTP id q15-20020a056402518f00b0051e4218b91bmr2404203edd.1.1689320750718;
-        Fri, 14 Jul 2023 00:45:50 -0700 (PDT)
-Received: from ?IPV6:2a00:e180:156e:8700:817e:6375:6a13:2da9? ([2a00:e180:156e:8700:817e:6375:6a13:2da9])
-        by smtp.gmail.com with ESMTPSA id n1-20020a056402514100b0051e2cde9e3esm5419862edd.75.2023.07.14.00.45.49
+        bh=Ugr1nKWo0tHUl4i565GOZQnCj/QVDFoqHM8cjNP8oLQ=;
+        b=evyLpiXYhclIRmi8mxpVFglf24ZieWRRdtgiQ4TkMdXtBjI5W79gMsMK0IU8B6a1dg
+         pU4BeamUKvYmoJoMKtPeP5+kO3dfNvjVC2TwV9GVTFJ+bx9FcdbgBzYGJ/u74o/+RpzZ
+         Sx3sGBg3LF+bv68s4Tb8oljMls02iOkxp/j81x4ByuhymaQGexwLXnAB7tNc1a/bGq8u
+         oNB9/Fxu1BHBmt1RsuqQUQ/WkX+q0v2pGKyY5V9hJ615JpfGOSx5PT60cGnENz4F7c/C
+         rJwuEjXeCqeD82wiFZ7cvDVF3v+/YzcrbyAR0k6f+Pi2GzKwxHglvHQeisQtDcmmzBhT
+         ElCA==
+X-Gm-Message-State: ABy/qLb+zGywwTgjVSSjfhKfaYTLc1X4PGB+8DDQrTgy6PCG8gyG7T9m
+        cg8yoPLWLJIyetNZm0G9u/R9R0dn+K6sa03lEKI=
+X-Google-Smtp-Source: APBJJlH+84rp2p3GFR4kUoeLJFeu4BMqNMFFRD/PLdDKyjHBuhSO9ixuy4JX54IRwxvQp0IrtKTWwg==
+X-Received: by 2002:a1c:730c:0:b0:3fb:b890:128b with SMTP id d12-20020a1c730c000000b003fbb890128bmr3299001wmb.27.1689321004638;
+        Fri, 14 Jul 2023 00:50:04 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id u13-20020a7bcb0d000000b003fbd597bccesm762282wmj.41.2023.07.14.00.50.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Jul 2023 00:45:50 -0700 (PDT)
-Message-ID: <942c0138-e264-88c0-ebb1-cce0604d74ff@gmail.com>
-Date:   Fri, 14 Jul 2023 09:45:48 +0200
+        Fri, 14 Jul 2023 00:50:04 -0700 (PDT)
+Message-ID: <7aa255e8-1cf1-03c6-02c8-de7c737a5683@linaro.org>
+Date:   Fri, 14 Jul 2023 09:50:02 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [Linaro-mm-sig] Re: [PATCH v3] misc: sram: Add DMA-BUF Heap
- exporting of SRAM areas
+Subject: Re: [PATCH v7 1/5] dt-bindings: media: platform: visconti: Add
+ Toshiba Visconti Video Input Interface
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Davis <afd@ti.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        John Stultz <jstultz@google.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-References: <20230713191316.116019-1-afd@ti.com>
- <2023071308-squeeze-hamster-d02f@gregkh>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <2023071308-squeeze-hamster-d02f@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230714015059.18775-1-yuji2.ishikawa@toshiba.co.jp>
+ <20230714015059.18775-2-yuji2.ishikawa@toshiba.co.jp>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230714015059.18775-2-yuji2.ishikawa@toshiba.co.jp>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Am 13.07.23 um 21:28 schrieb Greg Kroah-Hartman:
-> On Thu, Jul 13, 2023 at 02:13:16PM -0500, Andrew Davis wrote:
->> This new export type exposes to userspace the SRAM area as a DMA-BUF Heap,
->> this allows for allocations of DMA-BUFs that can be consumed by various
->> DMA-BUF supporting devices.
-> What devices exactly?
->
-> And what userspace tools/programs are going to use this api?
->
->> Signed-off-by: Andrew Davis <afd@ti.com>
->> ---
->>
->> Changes from v2:
->>   - Make sram_dma_heap_allocate static (kernel test robot)
->>   - Rebase on v6.5-rc1
->>
->>   drivers/misc/Kconfig         |   7 +
->>   drivers/misc/Makefile        |   1 +
->>   drivers/misc/sram-dma-heap.c | 245 +++++++++++++++++++++++++++++++++++
->>   drivers/misc/sram.c          |   6 +
->>   drivers/misc/sram.h          |  16 +++
->>   5 files changed, 275 insertions(+)
->>   create mode 100644 drivers/misc/sram-dma-heap.c
->>
->> diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
->> index 75e427f124b28..ee34dfb61605f 100644
->> --- a/drivers/misc/Kconfig
->> +++ b/drivers/misc/Kconfig
->> @@ -448,6 +448,13 @@ config SRAM
->>   config SRAM_EXEC
->>   	bool
->>   
->> +config SRAM_DMA_HEAP
->> +	bool "Export on-chip SRAM pools using DMA-Heaps"
->> +	depends on DMABUF_HEAPS && SRAM
->> +	help
->> +	  This driver allows the export of on-chip SRAM marked as both pool
->> +	  and exportable to userspace using the DMA-Heaps interface.
-> Module name?
->
->>   config DW_XDATA_PCIE
->>   	depends on PCI
->>   	tristate "Synopsys DesignWare xData PCIe driver"
->> diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
->> index f2a4d1ff65d46..5e7516bfaa8de 100644
->> --- a/drivers/misc/Makefile
->> +++ b/drivers/misc/Makefile
->> @@ -47,6 +47,7 @@ obj-$(CONFIG_VMWARE_VMCI)	+= vmw_vmci/
->>   obj-$(CONFIG_LATTICE_ECP3_CONFIG)	+= lattice-ecp3-config.o
->>   obj-$(CONFIG_SRAM)		+= sram.o
->>   obj-$(CONFIG_SRAM_EXEC)		+= sram-exec.o
->> +obj-$(CONFIG_SRAM_DMA_HEAP)	+= sram-dma-heap.o
->>   obj-$(CONFIG_GENWQE)		+= genwqe/
->>   obj-$(CONFIG_ECHO)		+= echo/
->>   obj-$(CONFIG_CXL_BASE)		+= cxl/
->> diff --git a/drivers/misc/sram-dma-heap.c b/drivers/misc/sram-dma-heap.c
->> new file mode 100644
->> index 0000000000000..c054c04dff33e
->> --- /dev/null
->> +++ b/drivers/misc/sram-dma-heap.c
->> @@ -0,0 +1,245 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * SRAM DMA-Heap userspace exporter
->> + *
->> + * Copyright (C) 2019-2022 Texas Instruments Incorporated - https://www.ti.com/
->> + *	Andrew Davis <afd@ti.com>
-> It's 2023 :(
->
-> And this needs review from the dma-buf maintainers before I could do
-> anything with it.
+On 14/07/2023 03:50, Yuji Ishikawa wrote:
+> Adds the Device Tree binding documentation that allows to describe
+> the Video Input Interface found in Toshiba Visconti SoCs.
+> 
+> Signed-off-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
+> Reviewed-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+> ---
+> Changelog v2:
 
-Yeah, agree. Thanks Greg.
+Thank you for your patch. There is something to discuss/improve.
 
-It would be nice if you explicitly CC the maintainers for DMA-buf and 
-DMA-buf heaps as well.
+> - no change
+> 
+> Changelog v3:
+> - no change
+> 
+> Changelog v4:
+> - fix style problems at the v3 patch
+> - remove "index" member
+> - update example
+> 
+> Changelog v5:
+> - no change
+> 
+> Changelog v6:
+> - add register definition of BUS-IF and MPU
+> 
+> Changelog v7:
+> - remove trailing "bindings" from commit header message
+> - remove trailing "Device Tree Bindings" from title
+> - fix text wrapping of description
+> - change compatible to visconti5-viif
 
-Of hand I can only find the version from 2020 in the LKML archives.
+Then the filename should be updated to match it:
+toshiba,visconti5-viif.yaml
 
-Regards,
-Christian.
 
->
-> thanks,
->
-> greg k-h
-> _______________________________________________
-> Linaro-mm-sig mailing list -- linaro-mm-sig@lists.linaro.org
-> To unsubscribe send an email to linaro-mm-sig-leave@lists.linaro.org
+> - explicitly define allowed properties for port::endpoint
+> 
+>  .../bindings/media/toshiba,visconti-viif.yaml | 108 ++++++++++++++++++
+>  1 file changed, 108 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml
+> 
+
+...
+
+> +  port:
+> +    $ref: /schemas/graph.yaml#/$defs/port-base
+> +    unevaluatedProperties: false
+> +    description: Input port, single endpoint describing the CSI-2 transmitter.
+> +
+> +    properties:
+> +      endpoint:
+> +        $ref: video-interfaces.yaml#
+> +        additionalProperties: false
+
+This should be rather:
+unevaluatedProperties: false
+> +
+> +        required: ["bus-type", "clock-noncontinuous", "link-frequencies", "remote-endpoint"]
+
+That's not the syntax we try to keep in the bindings. See
+renesas,rzg2l-csi2.yaml.
+
+> +
+> +        properties:
+> +          data-lanes:
+> +            description: VIIF supports 2 or 4 data lanes
+> +            $ref: /schemas/types.yaml#/definitions/uint32-array
+> +            minItems: 1
+> +            maxItems: 4
+> +            items:
+> +              minimum: 1
+> +              maximum: 4
+> +
+> +          clock-lanes:
+> +            description: VIIF supports 1 clock lane
+> +            const: 0
+
+Are you sure it must be on position 0?
+
+> +
+> +          bus-type: true
+> +          clock-noncontinuous: true
+> +          link-frequencies: true
+> +          remote-endpoint: true
+
+Drop all of these "xxx: true", should not be needed after converting to
+unevaluatedProperties: false
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - port
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    soc {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        viif@1c000000 {
+
+isp@
+(or video or something else matching this type of the device, but this
+should be a generic name)
+
+> +            compatible = "toshiba,visconti5-viif";
+> +            reg = <0 0x1c000000 0 0x6000>,
+> +                  <0 0x1c008000 0 0x400>,
+> +                  <0 0x1c00E000 0 0x1000>,
+> +                  <0 0x2417A000 0 0x1000>;
+
+Lowercase hex, please.
+
+Best regards,
+Krzysztof
 
