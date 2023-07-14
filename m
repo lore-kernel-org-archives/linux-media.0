@@ -2,136 +2,310 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B73AEB64DC
-	for <linux-media@archiver.kernel.org>; Fri, 14 Jul 2023 08:31:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FA78EB64DA
+	for <linux-media@archiver.kernel.org>; Fri, 14 Jul 2023 08:32:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235212AbjGNIbx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 14 Jul 2023 04:31:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44060 "EHLO
+        id S235489AbjGNIcc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 14 Jul 2023 04:32:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234889AbjGNIbk (ORCPT
+        with ESMTP id S235589AbjGNIcZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 14 Jul 2023 04:31:40 -0400
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD0D213C;
-        Fri, 14 Jul 2023 01:31:36 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: linasend@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 54FF75BAE8;
-        Fri, 14 Jul 2023 08:21:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1689322895;
-        bh=7LaE8gDQp5a1iynAfRg1d1jsyri669yUm6LM+c+fXeg=;
-        h=From:Subject:Date:To:Cc;
-        b=UgOOMtT/nFZfrWhhlW4xZ6o892ww1exUx7uhNua+wOM7l2SsLPE45su02/Pcb3cb9
-         TcPsvZNiq/deby8jTeEfspKikZb38fHEesCMAviL+VmU0M8SRKWz+q1OvLW69Z2edg
-         VxrvEzRY9bC8mWF8oUWHhl85vPey7GBAHQMYt3umax2JHUuQoGidLi4d4wREWFJwpL
-         zlGHJYxeRn2dy/DcQNPrNtduqdKgo4mV3e9D/ZXlF3VbCXL5nN2eUJJAbI9hFAy78G
-         ZaF8hjd+ZvMVI5iBCHQsgkL8vA/7bbdL9RoAe60Ymb0ISMgtqnfm5sqgUkKK407BNq
-         lETcX3BQOtscQ==
-From:   Asahi Lina <lina@asahilina.net>
-Subject: [PATCH 0/3] DRM scheduler documentation & bug fixes
-Date:   Fri, 14 Jul 2023 17:21:28 +0900
-Message-Id: <20230714-drm-sched-fixes-v1-0-c567249709f7@asahilina.net>
+        Fri, 14 Jul 2023 04:32:25 -0400
+Received: from mail.208.org (unknown [183.242.55.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5C0269F
+        for <linux-media@vger.kernel.org>; Fri, 14 Jul 2023 01:31:54 -0700 (PDT)
+Received: from mail.208.org (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTP id 4R2PpZ3J2xzBR9sj
+        for <linux-media@vger.kernel.org>; Fri, 14 Jul 2023 16:31:50 +0800 (CST)
+Authentication-Results: mail.208.org (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)" header.d=208.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
+        content-transfer-encoding:content-type:message-id:user-agent
+        :references:in-reply-to:subject:to:from:date:mime-version; s=
+        dkim; t=1689323510; x=1691915511; bh=wUAz80Gh0Z0D/BGyRr/WcEoBCY9
+        jnoASW6XecQdyeJs=; b=Ebbcb1BsZ9d9WEpvkHS7x3Drf5M6UgyzfBxXxwNdGrA
+        DNcWKg13/EKvYRCUGS144wVDHNCyBMrRrEuV5R2lSopnojlSixjwr3duPK1XmU1r
+        Zzw2klxO2OH+7Q/QYhmLLZ5FzuuEVE7i4bVMTJqShHDcyAut2kfR5nlKvZHQaUgS
+        zsMeJ0CwnAKWHaacSELD+MqTK7efNXswwLHjJoeMnfB+2ScvCP8k6Vvw+TnpMgtu
+        p7DX8cTkgBNpmyubihJjMu0g1IqHcTPIx+uFteEnopu92PmhUuzcEJLKflfWkqOJ
+        JOsg3c17ILY6o2GiSBHjUzmGn8Z0JdklobiwW0eaphw==
+X-Virus-Scanned: amavisd-new at mail.208.org
+Received: from mail.208.org ([127.0.0.1])
+        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id o0zxbnzizYMo for <linux-media@vger.kernel.org>;
+        Fri, 14 Jul 2023 16:31:50 +0800 (CST)
+Received: from localhost (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTPSA id 4R2PpZ1gYnzBR9sg;
+        Fri, 14 Jul 2023 16:31:50 +0800 (CST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Date:   Fri, 14 Jul 2023 16:31:50 +0800
+From:   sunran001@208suo.com
+To:     mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: dvb: add missing spaces before '*' and around '=',
+ remove spaces after '*'
+In-Reply-To: <20230714083042.14458-1-xujianghui@cdjrlc.com>
+References: <20230714083042.14458-1-xujianghui@cdjrlc.com>
+User-Agent: Roundcube Webmail
+Message-ID: <ef55095b44ab1d31a65f1c662f33b60f@208suo.com>
+X-Sender: sunran001@208suo.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAIgFsWQC/x3LSwqAMAxF0a1IxgaqFkS3Ig6sfdoM/NCACKV7t
- zg8XG4iRRQojVWiiEdUrrOgqStaw3LuYPHF1Jq2M31j2ceDdQ3wvMkL5cE6LMZ2zqGnct0Rfyj
- TNOf8AZODU3hhAAAA
-To:     Luben Tuikov <luben.tuikov@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, asahi@lists.linux.dev,
-        Asahi Lina <lina@asahilina.net>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1689322891; l=3816;
- i=lina@asahilina.net; s=20230221; h=from:subject:message-id;
- bh=7LaE8gDQp5a1iynAfRg1d1jsyri669yUm6LM+c+fXeg=;
- b=RD6jS9hPk9Ng458Wf9vj0cVu5zbGFCK8e/BYOvUyQkZPw0JH1LoJWPboPFvY9KDwoZf+/M19K
- iQDoGu52PTvAZj6WsJE645nIhkFQbMejqFfOjJ1Fwbn2ZCrNHAmCjiy
-X-Developer-Key: i=lina@asahilina.net; a=ed25519;
- pk=Qn8jZuOtR1m5GaiDfTrAoQ4NE1XoYVZ/wmt5YtXWFC4=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Based on the previous discussion while I was writing the Rust
-abstractions for the DRM scheduler, it looks like we're overdue for some
-documentation.
+Add missing spaces to clear checkpatch errors.
 
-This series first attempts to document what I've learned about the
-scheduler and what I believe should be the *intended* lifetime
-semantics, and then fixes a few bugs that result from that:
+ERROR: "foo* bar" should be "foo *bar"
+ERROR: spaces required around that '=' (ctx:VxV)
+ERROR: that open brace { should be on the previous line
 
-1. The DRM scheduler fences cannot be required to be outlived by the
-   scheduler. This is non-negotiable. The whole point of these fences is
-   to decouple the underlying hardware/driver from consumers, such as
-   dma-bufs with an attached fence. If this requirement were not met,
-   then we'd have to somehow keep the scheduler and all the driver
-   components associated with it alive as long as a dma-buf with an
-   attached drm_sched fence is alive, which could be indefinitely even
-   after the hardware that produced that dma-buf is long gone. Consider,
-   for example, using a hot-pluggable GPU to write to a dma-buf in main
-   memory, which gets presented on an integrated display controller, and
-   then the GPU is unplugged. That buffer could potentially live
-   forever, we can't block GPU driver cleanup on that.
-
-2. Make the DRM scheduler properly clean up jobs on shutdown, such that
-   we can support the use case of tearing down the scheduler with
-   in-flight jobs. This is important to cleanly support the firmware
-   scheduling use case, where the DRM scheduler is attached to a file
-   (which we want to be able to tear down quickly when userspace closes
-   it) while firmware could continue to (attempt to) run in-flight jobs
-   after that point. The major missing codepath to make this work is
-   detaching jobs from their HW fences on scheduler shutdown, so
-   implement that. This also makes writing a safe Rust abstraction
-   plausible, since otherwise we'd have to add a huge pile of complexity
-   to that side in order to enforce the invariant that the scheduler
-   outlives its jobs (including setting up a workqueue to handle
-   scheduler teardown and other craziness, which is an unacceptable
-   level of complexity for what should be a lightweight abstraction).
-
-I believe there *may* still be at least one UAF-type bug related to case
-2 above, but it's very hard to trigger and I wasn't able to figure out
-what causes it the one time I saw it recently. Other than that, things
-look quite robust on the Asahi driver with these patches, even when
-trying to break things by killing GPU consumers in a tight loop and
-things like that. If we agree this is a good way forward, I think this
-is a good start even if there's still a bug lurking somewhere.
-
-Aside (but related to the previous discussion): the can_run_job thing
-is gone, I'm using fences returned from prepare() now and that works
-well (and actually fixes one corner case related to wait contexts I'd
-missed), so hopefully that's OK with everyone ^^
-
-Changes from the previous version of patch #2: explicitly signal
-detached job fences with an error. I'd missed that and I think it's what
-was causing us some rare lockups due to fences never getting signaled.
-
-Signed-off-by: Asahi Lina <lina@asahilina.net>
+Signed-off-by: Ran Sun <sunran001@208suo.com>
 ---
-Asahi Lina (3):
-      drm/scheduler: Add more documentation
-      drm/scheduler: Fix UAF in drm_sched_fence_get_timeline_name
-      drm/scheduler: Clean up jobs when the scheduler is torn down.
- drivers/gpu/drm/scheduler/sched_entity.c |  7 ++-
- drivers/gpu/drm/scheduler/sched_fence.c  |  4 +-
- drivers/gpu/drm/scheduler/sched_main.c   | 90 ++++++++++++++++++++++++++++++--
- include/drm/gpu_scheduler.h              |  5 ++
- 4 files changed, 99 insertions(+), 7 deletions(-)
----
-base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
-change-id: 20230714-drm-sched-fixes-94bea043bbe7
+  drivers/media/dvb-frontends/mt352.c | 69 ++++++++++++++---------------
+  1 file changed, 34 insertions(+), 35 deletions(-)
 
-Thank you,
-~~ Lina
+diff --git a/drivers/media/dvb-frontends/mt352.c 
+b/drivers/media/dvb-frontends/mt352.c
+index 399d5c519027..457deff9a364 100644
+--- a/drivers/media/dvb-frontends/mt352.c
++++ b/drivers/media/dvb-frontends/mt352.c
+@@ -28,7 +28,7 @@
+  #include "mt352.h"
 
+  struct mt352_state {
+-    struct i2c_adapter* i2c;
++    struct i2c_adapter *i2c;
+      struct dvb_frontend frontend;
+
+      /* configuration settings */
+@@ -43,7 +43,7 @@ static int debug;
+
+  static int mt352_single_write(struct dvb_frontend *fe, u8 reg, u8 val)
+  {
+-    struct mt352_state* state = fe->demodulator_priv;
++    struct mt352_state *state = fe->demodulator_priv;
+      u8 buf[2] = { reg, val };
+      struct i2c_msg msg = { .addr = state->config.demod_address, .flags 
+= 0,
+                     .buf = buf, .len = 2 };
+@@ -55,22 +55,22 @@ static int mt352_single_write(struct dvb_frontend 
+*fe, u8 reg, u8 val)
+      return 0;
+  }
+
+-static int _mt352_write(struct dvb_frontend* fe, const u8 ibuf[], int 
+ilen)
++static int _mt352_write(struct dvb_frontend *fe, const u8 ibuf[], int 
+ilen)
+  {
+-    int err,i;
+-    for (i=0; i < ilen-1; i++)
+-        if ((err = mt352_single_write(fe,ibuf[0]+i,ibuf[i+1])))
++    int err, i;
++    for (i = 0; i < ilen-1; i++)
++        if ((err = mt352_single_write(fe, ibuf[0]+i, ibuf[i+1])))
+              return err;
+
+      return 0;
+  }
+
+-static int mt352_read_register(struct mt352_state* state, u8 reg)
++static int mt352_read_register(struct mt352_state *state, u8 reg)
+  {
+      int ret;
+-    u8 b0 [] = { reg };
+-    u8 b1 [] = { 0 };
+-    struct i2c_msg msg [] = { { .addr = state->config.demod_address,
++    u8 b0[] = { reg };
++    u8 b1[] = { 0 };
++    struct i2c_msg msg[] = { { .addr = state->config.demod_address,
+                      .flags = 0,
+                      .buf = b0, .len = 1 },
+                    { .addr = state->config.demod_address,
+@@ -88,7 +88,7 @@ static int mt352_read_register(struct mt352_state* 
+state, u8 reg)
+      return b1[0];
+  }
+
+-static int mt352_sleep(struct dvb_frontend* fe)
++static int mt352_sleep(struct dvb_frontend *fe)
+  {
+      static u8 mt352_softdown[] = { CLOCK_CTL, 0x20, 0x08 };
+
+@@ -96,12 +96,12 @@ static int mt352_sleep(struct dvb_frontend* fe)
+      return 0;
+  }
+
+-static void mt352_calc_nominal_rate(struct mt352_state* state,
++static void mt352_calc_nominal_rate(struct mt352_state *state,
+                      u32 bandwidth,
+                      unsigned char *buf)
+  {
+      u32 adc_clock = 20480; /* 20.340 MHz */
+-    u32 bw,value;
++    u32 bw, value;
+
+      switch (bandwidth) {
+      case 6000000:
+@@ -126,12 +126,12 @@ static void mt352_calc_nominal_rate(struct 
+mt352_state* state,
+      buf[1] = lsb(value);
+  }
+
+-static void mt352_calc_input_freq(struct mt352_state* state,
++static void mt352_calc_input_freq(struct mt352_state *state,
+                    unsigned char *buf)
+  {
+      int adc_clock = 20480; /* 20.480000 MHz */
+      int if2       = 36167; /* 36.166667 MHz */
+-    int ife,value;
++    int ife, value;
+
+      if (state->config.adc_clock)
+          adc_clock = state->config.adc_clock;
+@@ -155,7 +155,7 @@ static void mt352_calc_input_freq(struct 
+mt352_state* state,
+  static int mt352_set_parameters(struct dvb_frontend *fe)
+  {
+      struct dtv_frontend_properties *op = &fe->dtv_property_cache;
+-    struct mt352_state* state = fe->demodulator_priv;
++    struct mt352_state *state = fe->demodulator_priv;
+      unsigned char buf[13];
+      static unsigned char tuner_go[] = { 0x5d, 0x01 };
+      static unsigned char fsm_go[]   = { 0x5e, 0x01 };
+@@ -298,15 +298,14 @@ static int mt352_set_parameters(struct 
+dvb_frontend *fe)
+      return 0;
+  }
+
+-static int mt352_get_parameters(struct dvb_frontend* fe,
++static int mt352_get_parameters(struct dvb_frontend *fe,
+                  struct dtv_frontend_properties *op)
+  {
+-    struct mt352_state* state = fe->demodulator_priv;
++    struct mt352_state *state = fe->demodulator_priv;
+      u16 tps;
+      u16 div;
+      u8 trl;
+-    static const u8 tps_fec_to_api[8] =
+-    {
++    static const u8 tps_fec_to_api[8] = {
+          FEC_1_2,
+          FEC_2_3,
+          FEC_3_4,
+@@ -317,7 +316,7 @@ static int mt352_get_parameters(struct dvb_frontend* 
+fe,
+          FEC_AUTO
+      };
+
+-    if ( (mt352_read_register(state,0x00) & 0xC0) != 0xC0 )
++    if ( (mt352_read_register(state, 0x00) & 0xC0) != 0xC0)
+          return -EINVAL;
+
+      /* Use TPS_RECEIVED-registers, not the TPS_CURRENT-registers 
+because
+@@ -406,7 +405,7 @@ static int mt352_get_parameters(struct dvb_frontend* 
+fe,
+
+  static int mt352_read_status(struct dvb_frontend *fe, enum fe_status 
+*status)
+  {
+-    struct mt352_state* state = fe->demodulator_priv;
++    struct mt352_state *state = fe->demodulator_priv;
+      int s0, s1, s3;
+
+      /* FIXME:
+@@ -458,9 +457,9 @@ static int mt352_read_ber(struct dvb_frontend* fe, 
+u32* ber)
+      return 0;
+  }
+
+-static int mt352_read_signal_strength(struct dvb_frontend* fe, u16* 
+strength)
++static int mt352_read_signal_strength(struct dvb_frontend *fe, u16 
+*strength)
+  {
+-    struct mt352_state* state = fe->demodulator_priv;
++    struct mt352_state *state = fe->demodulator_priv;
+
+      /* align the 12 bit AGC gain with the most significant bits */
+      u16 signal = ((mt352_read_register(state, AGC_GAIN_1) & 0x0f) << 
+12) |
+@@ -471,9 +470,9 @@ static int mt352_read_signal_strength(struct 
+dvb_frontend* fe, u16* strength)
+      return 0;
+  }
+
+-static int mt352_read_snr(struct dvb_frontend* fe, u16* snr)
++static int mt352_read_snr(struct dvb_frontend *fe, u16 *snr)
+  {
+-    struct mt352_state* state = fe->demodulator_priv;
++    struct mt352_state *state = fe->demodulator_priv;
+
+      u8 _snr = mt352_read_register (state, SNR);
+      *snr = (_snr << 8) | _snr;
+@@ -481,9 +480,9 @@ static int mt352_read_snr(struct dvb_frontend* fe, 
+u16* snr)
+      return 0;
+  }
+
+-static int mt352_read_ucblocks(struct dvb_frontend* fe, u32* ucblocks)
++static int mt352_read_ucblocks(struct dvb_frontend *fe, u32 *ucblocks)
+  {
+-    struct mt352_state* state = fe->demodulator_priv;
++    struct mt352_state *state = fe->demodulator_priv;
+
+      *ucblocks = (mt352_read_register (state,  RS_UBC_1) << 8) |
+              (mt352_read_register (state,  RS_UBC_0));
+@@ -491,7 +490,7 @@ static int mt352_read_ucblocks(struct dvb_frontend* 
+fe, u32* ucblocks)
+      return 0;
+  }
+
+-static int mt352_get_tune_settings(struct dvb_frontend* fe, struct 
+dvb_frontend_tune_settings* fe_tune_settings)
++static int mt352_get_tune_settings(struct dvb_frontend *fe, struct 
+dvb_frontend_tune_settings *fe_tune_settings)
+  {
+      fe_tune_settings->min_delay_ms = 800;
+      fe_tune_settings->step_size = 0;
+@@ -500,9 +499,9 @@ static int mt352_get_tune_settings(struct 
+dvb_frontend* fe, struct dvb_frontend_
+      return 0;
+  }
+
+-static int mt352_init(struct dvb_frontend* fe)
++static int mt352_init(struct dvb_frontend *fe)
+  {
+-    struct mt352_state* state = fe->demodulator_priv;
++    struct mt352_state *state = fe->demodulator_priv;
+
+      static u8 mt352_reset_attach [] = { RESET, 0xC0 };
+
+@@ -519,7 +518,7 @@ static int mt352_init(struct dvb_frontend* fe)
+      return 0;
+  }
+
+-static void mt352_release(struct dvb_frontend* fe)
++static void mt352_release(struct dvb_frontend *fe)
+  {
+      struct mt352_state* state = fe->demodulator_priv;
+      kfree(state);
+@@ -527,10 +526,10 @@ static void mt352_release(struct dvb_frontend* fe)
+
+  static const struct dvb_frontend_ops mt352_ops;
+
+-struct dvb_frontend* mt352_attach(const struct mt352_config* config,
+-                  struct i2c_adapter* i2c)
++struct dvb_frontend *mt352_attach(const struct mt352_config *config,
++                  struct i2c_adapter *i2c)
+  {
+-    struct mt352_state* state = NULL;
++    struct mt352_state *state = NULL;
+
+      /* allocate memory for the internal state */
+      state = kzalloc(sizeof(struct mt352_state), GFP_KERNEL);
