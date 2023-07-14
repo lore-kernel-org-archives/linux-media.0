@@ -2,44 +2,43 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72081EB64DA
-	for <linux-media@archiver.kernel.org>; Fri, 14 Jul 2023 08:31:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 653EEEB64DA
+	for <linux-media@archiver.kernel.org>; Fri, 14 Jul 2023 08:31:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235399AbjGNIbt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 14 Jul 2023 04:31:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44120 "EHLO
+        id S235426AbjGNIbv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 14 Jul 2023 04:31:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235274AbjGNIbj (ORCPT
+        with ESMTP id S229492AbjGNIbj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 14 Jul 2023 04:31:39 -0400
 Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A992213B;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8B4212B;
         Fri, 14 Jul 2023 01:31:36 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: linasend@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 477955BC41;
-        Fri, 14 Jul 2023 08:21:43 +0000 (UTC)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 0184C5BC38;
+        Fri, 14 Jul 2023 08:21:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1689322906;
-        bh=DL0HcpNnaq62QnwTFHu2+eWSTA+us8B0tZYj+4sZi9A=;
+        s=default; t=1689322899;
+        bh=SiuL//u01cpp5eowFbvlhLlowHgzfDnh6OXKL8CX6Qo=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc;
-        b=LY2skEBBhivIyGJs6j2I6//vYIBT9A6FegazsY5W1icthWJA0ZH01P5biTfimyZSl
-         s1bzUnQsLSVfvbGMAh310XYK1riGjOyRWIUCXkjw0PJK3rT/DPl1WUwXdnR3p+Qxe2
-         7DK7A3uHYdZ8tVDJ9eydZibGPE/rPQ12VLIYC7bgOXM4ehFdZw2h5u/N2tj14/Yedl
-         l4FcyYZDnRJyWYtX3Pt5SfOI55elff60j+C5FIWdoONWPuxEZeWYLdD/DpkDQg7RPN
-         ZjeHWL1n7a4srdMwNfNbbk1asXK2x/nIAEbtb7n76REtIF3ZBlTFfzHkbcn3me6QXF
-         2Aa5UIqsXHkNw==
+        b=jTbM8iICekJjMQkS8TPm+lGxRLkRWT0/LnMFix4yI5i9aW2W8kIC4DZfAIW3ftLAt
+         VeHeIq0qSPMn0ajIYWJL/jWVmvCL3GajvWpOvcbiAXBfT3f85HmmPMD4SW/fIL8h/C
+         s5RYchWzcSOH8IQzSJ5Px/0rsjQn2RnSP8Kt0d+SsD/NwC2PhBOMcR3cxg1aTOYDvV
+         Ei7SoK9VjbbNk5Sli2mLSr7WToHp8/EQ3mPvdTujFcB39SO2gCK868iIsuiXC2DcXr
+         99DTSYsBHjww36hV2i+IfIO+dZCpihCiJz0aMsM5HMpstYVad7TJ/4QiN3z9hOJhei
+         E+WjBqvgJKZQQ==
 From:   Asahi Lina <lina@asahilina.net>
-Date:   Fri, 14 Jul 2023 17:21:31 +0900
-Subject: [PATCH 3/3] drm/scheduler: Clean up jobs when the scheduler is
- torn down.
+Date:   Fri, 14 Jul 2023 17:21:29 +0900
+Subject: [PATCH 1/3] drm/scheduler: Add more documentation
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230714-drm-sched-fixes-v1-3-c567249709f7@asahilina.net>
+Message-Id: <20230714-drm-sched-fixes-v1-1-c567249709f7@asahilina.net>
 References: <20230714-drm-sched-fixes-v1-0-c567249709f7@asahilina.net>
 In-Reply-To: <20230714-drm-sched-fixes-v1-0-c567249709f7@asahilina.net>
 To:     Luben Tuikov <luben.tuikov@amd.com>,
@@ -53,80 +52,95 @@ Cc:     Faith Ekstrand <faith.ekstrand@collabora.com>,
         linux-media@vger.kernel.org, asahi@lists.linux.dev,
         Asahi Lina <lina@asahilina.net>
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1689322891; l=2399;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1689322891; l=3946;
  i=lina@asahilina.net; s=20230221; h=from:subject:message-id;
- bh=DL0HcpNnaq62QnwTFHu2+eWSTA+us8B0tZYj+4sZi9A=;
- b=r4JAZ5SsLR1ABJAGgswG/w06/9Z8YAtBlcxFJE2s82va4E4Ux6B2DLkVnNr2uuWp7xekQ2Unx
- sUgYVv6hvKyAFu70SDykSmPZ2Z+Wh9mz8X9Qu6GizGTOT+ZR4K8t0tB
+ bh=SiuL//u01cpp5eowFbvlhLlowHgzfDnh6OXKL8CX6Qo=;
+ b=W7DZprDVToONdsfgSG5/Md25GSR994KvtI3Fa+/4LBSTFzarcsYcFhySWLme0A2jAZXVl+3n/
+ uLmvTuHCmrXCSYDjQ6pa1slmUz9KlJCVgWpqYdmzcqk73XPqRuk6KKj
 X-Developer-Key: i=lina@asahilina.net; a=ed25519;
  pk=Qn8jZuOtR1m5GaiDfTrAoQ4NE1XoYVZ/wmt5YtXWFC4=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-drm_sched_fini() currently leaves any pending jobs dangling, which
-causes segfaults and other badness when job completion fences are
-signaled after the scheduler is torn down.
-
-Explicitly detach all jobs from their completion callbacks and free
-them. This makes it possible to write a sensible safe abstraction for
-drm_sched, without having to externally duplicate the tracking of
-in-flight jobs.
-
-This shouldn't regress any existing drivers, since calling
-drm_sched_fini() with any pending jobs is broken and this change should
-be a no-op if there are no pending jobs.
+Document the implied lifetime rules of the scheduler (or at least the
+intended ones), as well as the expectations of how resource acquisition
+should be handled.
 
 Signed-off-by: Asahi Lina <lina@asahilina.net>
 ---
- drivers/gpu/drm/scheduler/sched_main.c | 32 ++++++++++++++++++++++++++++++--
- 1 file changed, 30 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/scheduler/sched_main.c | 58 ++++++++++++++++++++++++++++++++--
+ 1 file changed, 55 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
-index 1f3bc3606239..a4da4aac0efd 100644
+index 7b2bfc10c1a5..1f3bc3606239 100644
 --- a/drivers/gpu/drm/scheduler/sched_main.c
 +++ b/drivers/gpu/drm/scheduler/sched_main.c
-@@ -1186,10 +1186,38 @@ EXPORT_SYMBOL(drm_sched_init);
- void drm_sched_fini(struct drm_gpu_scheduler *sched)
- {
- 	struct drm_sched_entity *s_entity;
-+	struct drm_sched_job *s_job, *tmp;
- 	int i;
+@@ -43,9 +43,61 @@
+  *
+  * The jobs in a entity are always scheduled in the order that they were pushed.
+  *
+- * Note that once a job was taken from the entities queue and pushed to the
+- * hardware, i.e. the pending queue, the entity must not be referenced anymore
+- * through the jobs entity pointer.
++ * Lifetime rules
++ * --------------
++ *
++ * Getting object lifetimes right across the stack is critical to avoid UAF
++ * issues. The DRM scheduler has the following lifetime rules:
++ *
++ * - The scheduler must outlive all of its entities.
++ * - Jobs pushed to the scheduler are owned by it, and must only be freed
++ *   after the free_job() callback is called.
++ * - Scheduler fences are reference-counted and may outlive the scheduler.
++ * - The scheduler *may* be destroyed while jobs are still in flight.
++ * - There is no guarantee that all jobs have been freed when all entities
++ *   and the scheduled have been destroyed. Jobs may be freed asynchronously
++ *   after this point.
++ * - Once a job is taken from the entity's queue and pushed to the hardware,
++ *   i.e. the pending queue, the entity must not be referenced any more
++ *   through the job's entity pointer. In other words, entities are not
++ *   required to outlive job execution.
++ *
++ * If the scheduler is destroyed with jobs in flight, the following
++ * happens:
++ *
++ * - Jobs that were pushed but have not yet run will be destroyed as part
++ *   of the entity cleanup (which must happen before the scheduler itself
++ *   is destroyed, per the first rule above). This signals the job
++ *   finished fence with an error flag. This process runs asynchronously
++ *   after drm_sched_entity_destroy() returns.
++ * - Jobs that are in-flight on the hardware are "detached" from their
++ *   driver fence (the fence returned from the run_job() callback). In
++ *   this case, it is up to the driver to ensure that any bookkeeping or
++ *   internal data structures have separately managed lifetimes and that
++ *   the hardware either cancels the jobs or runs them to completion.
++ *   The DRM scheduler itself will immediately signal the job complete
++ *   fence (with an error flag) and then call free_job() as part of the
++ *   cleanup process.
++ *
++ * After the scheduler is destroyed, drivers *may* (but are not required to)
++ * skip signaling their remaining driver fences, as long as they have only ever
++ * been returned to the scheduler being destroyed as the return value from
++ * run_job() and not passed anywhere else. If these fences are used in any other
++ * context, then the driver *must* signal them, per the usual fence signaling
++ * rules.
++ *
++ * Resource management
++ * -------------------
++ *
++ * Drivers may need to acquire certain hardware resources (e.g. VM IDs) in order
++ * to run a job. This process must happen during the job's prepare() callback,
++ * not in the run() callback. If any resource is unavailable at job prepare time,
++ * the driver must return a suitable fence that can be waited on to wait for the
++ * resource to (potentially) become available.
++ *
++ * In order to avoid deadlocks, drivers must always acquire resources in the
++ * same order, and release them in opposite order when a job completes or if
++ * resource acquisition fails.
+  */
  
--	if (sched->thread)
--		kthread_stop(sched->thread);
-+	if (!sched->thread)
-+		return;
-+
-+	/*
-+	 * Stop the scheduler, detaching all jobs from their hardware callbacks
-+	 * and cleaning up complete jobs.
-+	 */
-+	drm_sched_stop(sched, NULL);
-+
-+	/*
-+	 * Iterate through the pending job list and free all jobs.
-+	 * This assumes the driver has either guaranteed jobs are already stopped, or that
-+	 * otherwise it is responsible for keeping any necessary data structures for
-+	 * in-progress jobs alive even when the free_job() callback is called early (e.g. by
-+	 * putting them in its own queue or doing its own refcounting).
-+	 */
-+	list_for_each_entry_safe(s_job, tmp, &sched->pending_list, list) {
-+		spin_lock(&sched->job_list_lock);
-+		list_del_init(&s_job->list);
-+		spin_unlock(&sched->job_list_lock);
-+
-+		dma_fence_set_error(&s_job->s_fence->finished, -ESRCH);
-+		drm_sched_fence_finished(s_job->s_fence);
-+
-+		WARN_ON(s_job->s_fence->parent);
-+		sched->ops->free_job(s_job);
-+	}
-+
-+	kthread_stop(sched->thread);
- 
- 	for (i = DRM_SCHED_PRIORITY_COUNT - 1; i >= DRM_SCHED_PRIORITY_MIN; i--) {
- 		struct drm_sched_rq *rq = &sched->sched_rq[i];
+ #include <linux/kthread.h>
 
 -- 
 2.40.1
