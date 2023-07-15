@@ -2,53 +2,53 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1A1FC001E0
-	for <linux-media@archiver.kernel.org>; Sat, 15 Jul 2023 18:53:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E296C25B79
+	for <linux-media@archiver.kernel.org>; Sat, 15 Jul 2023 18:54:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230371AbjGOSxy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 15 Jul 2023 14:53:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50048 "EHLO
+        id S231486AbjGOSyP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 15 Jul 2023 14:54:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbjGOSxx (ORCPT
+        with ESMTP id S230443AbjGOSyB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 15 Jul 2023 14:53:53 -0400
+        Sat, 15 Jul 2023 14:54:01 -0400
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786DD2729;
-        Sat, 15 Jul 2023 11:53:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B342D66;
+        Sat, 15 Jul 2023 11:53:54 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id EA2401F8CD;
-        Sat, 15 Jul 2023 18:53:45 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id A8CE31FD67;
+        Sat, 15 Jul 2023 18:53:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1689447225; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        t=1689447230; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=sWCVV7wJiemOx2M9P2wz1m/QXnYnbGSsQYJ48wiDA5o=;
-        b=V6vRbybAq9ARL34BJ9Sh74wyjFzK7XI+ob8Ne24DQYLrCN1fZvKaAZ4dghwNLDW/fzMe34
-        5uBvZQM4sF/puAy8vvZO6iFLFLP7AoK0ZTzquyJrHtN8uFwWIVqtr2felTmZ6ey495AJYC
-        lpy+O6h+HbERXK0n0MlCa1do4Hv2g1c=
+        bh=q7Mpa+i5zVgwFyEUu/qFO3pmfeFq7myykbLWTHzzTXc=;
+        b=FKXRk9Rs0p/wWygeIwcofCSMLcvh3D+HZRevzxln0Q9nv0hzyaa2BjZyC8bgRiXvrhpd/D
+        nwQnSRB7LIFVZhB9gvdDuKZQp5s85400bWwXiKV7Nj/M7EnZxkMrJixADCwRbKZM5agq+j
+        9fN21b9/zQMyJzS+04n+ZKUe+zHBk6E=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1689447225;
+        s=susede2_ed25519; t=1689447230;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+         mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=sWCVV7wJiemOx2M9P2wz1m/QXnYnbGSsQYJ48wiDA5o=;
-        b=Qb6n3UjprVOu2U+9Zflrq0O3KQFf2uw2iVWhp4sr0hLo+gBevwrbaxeRvaeTvlDB7+rrD2
-        /74J/7XyPCWPFODQ==
+        bh=q7Mpa+i5zVgwFyEUu/qFO3pmfeFq7myykbLWTHzzTXc=;
+        b=1ikzy2+ncpFn+AxbrKecbjenm1ztTvNEgh++r4yJKXhqXpuUDOGFhEJVh6taETEvUh26oz
+        EqUdeNHw5yPVf/BQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7A56413A23;
-        Sat, 15 Jul 2023 18:53:45 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3D076133F7;
+        Sat, 15 Jul 2023 18:53:50 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id EIXpHDnrsmQCBwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Sat, 15 Jul 2023 18:53:45 +0000
+        id QKT+DT7rsmQCBwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Sat, 15 Jul 2023 18:53:50 +0000
 From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     deller@gmx.de, javierm@redhat.com, geert@linux-m68k.org,
         dan.carpenter@linaro.org
@@ -61,25 +61,24 @@ Cc:     linux-sh@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-omap@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         kvm@vger.kernel.org, Thomas Zimmermann <tzimmermann@suse.de>,
         Sam Ravnborg <sam@ravnborg.org>,
-        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>
-Subject: [PATCH v4 01/18] drm: Remove flag FBINFO_DEFAULT from fbdev emulation
-Date:   Sat, 15 Jul 2023 20:51:43 +0200
-Message-ID: <20230715185343.7193-2-tzimmermann@suse.de>
+        Andy Walls <awalls@md.metrocast.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [PATCH v4 11/18] media: Remove flag FBINFO_FLAG_DEFAULT from fbdev drivers
+Date:   Sat, 15 Jul 2023 20:51:53 +0200
+Message-ID: <20230715185343.7193-12-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230715185343.7193-1-tzimmermann@suse.de>
 References: <20230715185343.7193-1-tzimmermann@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The flag FBINFO_DEFAULT is 0 and has no effect, as struct fbinfo.flags
-has been allocated to zero by framebuffer_alloc(). So do not set it.
+The flag FBINFO_FLAG_DEFAULT is 0 and has no effect, as struct
+fbinfo.flags has been allocated to zero by kzalloc(). So do not
+set it.
 
 Flags should signal differences from the default values. After cleaning
 up all occurrences of FBINFO_DEFAULT, the token will be removed.
@@ -89,67 +88,38 @@ v2:
 
 Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
 Acked-by: Sam Ravnborg <sam@ravnborg.org>
-Cc: Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
-Cc: Alex Deucher <alexander.deucher@amd.com>
-Cc: "Christian König" <christian.koenig@amd.com>
-Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
+Cc: Andy Walls <awalls@md.metrocast.net>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Hans Verkuil <hverkuil@xs4all.nl>
 ---
- drivers/gpu/drm/drm_fbdev_dma.c       | 1 -
- drivers/gpu/drm/drm_fbdev_generic.c   | 1 -
- drivers/gpu/drm/gma500/fbdev.c        | 2 +-
- drivers/gpu/drm/radeon/radeon_fbdev.c | 2 +-
- 4 files changed, 2 insertions(+), 4 deletions(-)
+ drivers/media/pci/ivtv/ivtvfb.c              | 1 -
+ drivers/media/test-drivers/vivid/vivid-osd.c | 1 -
+ 2 files changed, 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/drm_fbdev_dma.c b/drivers/gpu/drm/drm_fbdev_dma.c
-index f9b1f7cd31b7..ee7c265b0585 100644
---- a/drivers/gpu/drm/drm_fbdev_dma.c
-+++ b/drivers/gpu/drm/drm_fbdev_dma.c
-@@ -123,7 +123,6 @@ static int drm_fbdev_dma_helper_fb_probe(struct drm_fb_helper *fb_helper,
- 	drm_fb_helper_fill_info(info, fb_helper, sizes);
+diff --git a/drivers/media/pci/ivtv/ivtvfb.c b/drivers/media/pci/ivtv/ivtvfb.c
+index 0aeb9daaee4c..23c8c094e791 100644
+--- a/drivers/media/pci/ivtv/ivtvfb.c
++++ b/drivers/media/pci/ivtv/ivtvfb.c
+@@ -1048,7 +1048,6 @@ static int ivtvfb_init_vidmode(struct ivtv *itv)
+ 	/* Generate valid fb_info */
  
- 	info->fbops = &drm_fbdev_dma_fb_ops;
--	info->flags = FBINFO_DEFAULT;
+ 	oi->ivtvfb_info.node = -1;
+-	oi->ivtvfb_info.flags = FBINFO_FLAG_DEFAULT;
+ 	oi->ivtvfb_info.par = itv;
+ 	oi->ivtvfb_info.var = oi->ivtvfb_defined;
+ 	oi->ivtvfb_info.fix = oi->ivtvfb_fix;
+diff --git a/drivers/media/test-drivers/vivid/vivid-osd.c b/drivers/media/test-drivers/vivid/vivid-osd.c
+index ec25edc679b3..051f1805a16d 100644
+--- a/drivers/media/test-drivers/vivid/vivid-osd.c
++++ b/drivers/media/test-drivers/vivid/vivid-osd.c
+@@ -310,7 +310,6 @@ static int vivid_fb_init_vidmode(struct vivid_dev *dev)
+ 	/* Generate valid fb_info */
  
- 	/* screen */
- 	info->flags |= FBINFO_VIRTFB; /* system memory */
-diff --git a/drivers/gpu/drm/drm_fbdev_generic.c b/drivers/gpu/drm/drm_fbdev_generic.c
-index b9343fb6cf13..a0ea042b1526 100644
---- a/drivers/gpu/drm/drm_fbdev_generic.c
-+++ b/drivers/gpu/drm/drm_fbdev_generic.c
-@@ -109,7 +109,6 @@ static int drm_fbdev_generic_helper_fb_probe(struct drm_fb_helper *fb_helper,
- 	drm_fb_helper_fill_info(info, fb_helper, sizes);
- 
- 	info->fbops = &drm_fbdev_generic_fb_ops;
--	info->flags = FBINFO_DEFAULT;
- 
- 	/* screen */
- 	info->flags |= FBINFO_VIRTFB | FBINFO_READS_FAST;
-diff --git a/drivers/gpu/drm/gma500/fbdev.c b/drivers/gpu/drm/gma500/fbdev.c
-index 054426549fc6..be8f5fbd5260 100644
---- a/drivers/gpu/drm/gma500/fbdev.c
-+++ b/drivers/gpu/drm/gma500/fbdev.c
-@@ -215,7 +215,7 @@ static int psb_fbdev_fb_probe(struct drm_fb_helper *fb_helper,
- 	}
- 
- 	info->fbops = &psb_fbdev_fb_ops;
--	info->flags = FBINFO_DEFAULT;
-+
- 	/* Accessed stolen memory directly */
- 	info->screen_base = dev_priv->vram_addr + backing->offset;
- 	info->screen_size = size;
-diff --git a/drivers/gpu/drm/radeon/radeon_fbdev.c b/drivers/gpu/drm/radeon/radeon_fbdev.c
-index f941e2e7cae6..68c06ac9acce 100644
---- a/drivers/gpu/drm/radeon/radeon_fbdev.c
-+++ b/drivers/gpu/drm/radeon/radeon_fbdev.c
-@@ -253,7 +253,7 @@ static int radeon_fbdev_fb_helper_fb_probe(struct drm_fb_helper *fb_helper,
- 	}
- 
- 	info->fbops = &radeon_fbdev_fb_ops;
--	info->flags = FBINFO_DEFAULT;
-+
- 	/* radeon resume is fragile and needs a vt switch to help it along */
- 	info->skip_vt_switch = false;
- 
+ 	dev->fb_info.node = -1;
+-	dev->fb_info.flags = FBINFO_FLAG_DEFAULT;
+ 	dev->fb_info.par = dev;
+ 	dev->fb_info.var = dev->fb_defined;
+ 	dev->fb_info.fix = dev->fb_fix;
 -- 
 2.41.0
 
