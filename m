@@ -2,174 +2,199 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FACDC001B0
-	for <linux-media@archiver.kernel.org>; Mon, 17 Jul 2023 09:57:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61051EB64DC
+	for <linux-media@archiver.kernel.org>; Mon, 17 Jul 2023 10:00:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbjGQJ5e (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Jul 2023 05:57:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55382 "EHLO
+        id S230318AbjGQKAs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Jul 2023 06:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbjGQJ5d (ORCPT
+        with ESMTP id S229652AbjGQKAq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 17 Jul 2023 05:57:33 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDB0188
-        for <linux-media@vger.kernel.org>; Mon, 17 Jul 2023 02:57:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1689587849; x=1721123849;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=k8AqfeTIT15pBQHKdrs1BtKxgX246yAD5CipWxKHC2M=;
-  b=VongPd1aEzn4XO4LMWZ2zbERwf8Y00jEL37lBgUKSDDDPv5QufeXG8SB
-   JpLzIkCh40PSnKsSBpqKczkyYFTLh1iFG4mg7X3dy+4xWsJY84gCv43kZ
-   EedJgA48P9h4sKcBsX8INTsV+bpDQHaCYTEJQisr+LTUxezgH3NbVmo3u
-   e/iHDC2PhVB4CMogTu/eCysZzrrkBnhN9+pSm0nUIc2Wgvh6blL2cWreF
-   M5tDgv8RwYjYAp9pZmWIh1e/+6F90DWiYAlfSA+yzSLFO7E34plBgZm6S
-   4FwhvnqJrp7Pxm7ZX6JBrER9AJlKbI0xDILIOx1PfvoXYebwimZcS5hIp
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.01,211,1684792800"; 
-   d="scan'208";a="31960340"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 17 Jul 2023 11:57:27 +0200
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 7DFBB280078;
-        Mon, 17 Jul 2023 11:57:26 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Tim Harvey <tharvey@gateworks.com>
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Schrempf Frieder <frieder.schrempf@kontron.de>
-Subject: Re: media: imx: imx7-media-csi: Get rid of superfluous call to imx7_csi_mbus_fm t_to_pix_fmt
-Date:   Mon, 17 Jul 2023 11:57:26 +0200
-Message-ID: <2290635.ElGaqSPkdT@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <CAJ+vNU0BOVLTL17ofgHwtexbpuMYwH_aGUC==EXABUtHHiv_ag@mail.gmail.com>
-References: <CAJ+vNU0BOVLTL17ofgHwtexbpuMYwH_aGUC==EXABUtHHiv_ag@mail.gmail.com>
+        Mon, 17 Jul 2023 06:00:46 -0400
+Received: from mail.208.org (unknown [183.242.55.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B902186
+        for <linux-media@vger.kernel.org>; Mon, 17 Jul 2023 03:00:44 -0700 (PDT)
+Received: from mail.208.org (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTP id 4R4Hdj170RzBR9sV
+        for <linux-media@vger.kernel.org>; Mon, 17 Jul 2023 18:00:41 +0800 (CST)
+Authentication-Results: mail.208.org (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)" header.d=208.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
+        content-transfer-encoding:content-type:message-id:user-agent
+        :references:in-reply-to:subject:to:from:date:mime-version; s=
+        dkim; t=1689588041; x=1692180042; bh=czwbeW8H49F0gfKBw9D02MCpsic
+        pEDfqhcKbVAk1Tqg=; b=WHm9+V+njyz8yddNKxintwUkzFe1jhBdNitMwxR7a4n
+        gI0En+IzolFIpoivVGajsuqgirV9aYBSwBvC4rV3ZtUFUq0Cvj2W73fVyuJtUTxx
+        yAYb/Q2LfqK0KC7qXIwYRB/f6683j7UqnVDND0oKEdNbTEl7FMpJdKzoebiDBG4B
+        Lq02gxxjmh7bBemD1HoBwPI12b2jSOn7E3N4QPi+Adh5z4b6CW5qb8zRvNzOMEyw
+        OwGnswa0cGYMjr60rk+q1jlwu/6/6VPhsHTJreEgzUppWaVGW7LngWDte3HCcDvp
+        4hDzGyjVrWVWvUuko9fFZ1aMdS7Gx1Te0eOzcaOkLtA==
+X-Virus-Scanned: amavisd-new at mail.208.org
+Received: from mail.208.org ([127.0.0.1])
+        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id UYExBBoudZ5O for <linux-media@vger.kernel.org>;
+        Mon, 17 Jul 2023 18:00:41 +0800 (CST)
+Received: from localhost (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTPSA id 4R4Hdh6T7NzBR7b5;
+        Mon, 17 Jul 2023 18:00:40 +0800 (CST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
+Date:   Mon, 17 Jul 2023 18:00:40 +0800
+From:   sunran001@208suo.com
+To:     mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: stv0299: add missing spaces before '*' and remove
+ spaces after '*'
+In-Reply-To: <20230717095932.389-1-xujianghui@cdjrlc.com>
+References: <20230717095932.389-1-xujianghui@cdjrlc.com>
+User-Agent: Roundcube Webmail
+Message-ID: <006749faebbc8d727076152d7e9d1575@208suo.com>
+X-Sender: sunran001@208suo.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Tim,
+Add missing spaces to clear checkpatch errors.
 
-Am Freitag, 14. Juli 2023, 03:34:15 CEST schrieb Tim Harvey:
-> Alexander,
->=20
-> I found that commit 6f482c4729d9: ("media: imx: imx7-media-csi: Get
-> rid of superfluous call to imx7_csi_mbus_fmt_to_pix_fmt") introduced
-> an issue causing me to not be able to capture anymore on an imx8mm
-> with an imx219 camera.
->=20
-> I'm using a RaspberryPi Camera v2 which has an IMX219 8MP camera module:
-> - https://datasheets.raspberrypi.com/camera/camera-v2-schematics.pdf
-> - has its own on-board 24MHz osc so no clock required from baseboard
-> - pin 11 enables 1.8V and 2.8V LDO which is connected to a GPIO I use
-> as a regulator enable
->=20
-> I'm using the imx8mm-venice-gw72xx-0x-imx219 dt overlay [1] to test this.
->=20
-> Here is some additional information about how I'm using the camera module:
-> # cat /sys/bus/media/devices/media*/model
-> imx-media
-> hantro-vpu
-> hantro-vpu
-> # cat /sys/class/video4linux/video*/name
-> csi capture
-> nxp,imx8mm-vpu-g1-dec
-> nxp,imx8mq-vpu-g2-dec
-> # enable imx219 to csi link
-> media-ctl --reset
-> media-ctl -l "'imx219 2-0010':0 -> 'csis-32e30000.mipi-csi':0 [1]"
-> # configure for 640x480 raw8
-> media-ctl -v -V "'imx219 2-0010':0 [fmt:SRGGB8/640x480 field:none]"
-> media-ctl -v -V "'csis-32e30000.mipi-csi':0 [fmt:SRGGB8/640x480 field:non=
-e]"
-> media-ctl -v -V "'csi':0 [fmt:SRGGB8/640x480 field:none]"
-> # configure for RGGB (8-bit bayer), 640x480 resolution
-> v4l2-ctl --device /dev/video0
-> --set-fmt-video=3Dwidth=3D640,height=3D480,pixelformat=3DRGGB --verbose
->=20
-> before commit 6f482c4729d9: ("media: imx: imx7-media-csi: Get rid of
-> superfluous call to imx7_csi_mbus_fmt_to_pix_fmt") this would report
-> back 640x480 resolution:
-> VIDIOC_QUERYCAP: ok
-> VIDIOC_G_FMT: ok
-> VIDIOC_S_FMT: ok
-> Format Video Capture:
->         Width/Height      : 640/480
->         Pixel Format      : 'RGGB' (8-bit Bayer RGRG/GBGB)
->         Field             : None
->         Bytes per Line    : 640
->         Size Image        : 307200
->         Colorspace        : Default
->         Transfer Function : Default (maps to Rec. 709)
->         YCbCr/HSV Encoding: Default (maps to ITU-R 601)
->         Quantization      : Default (maps to Full Range)
->         Flags             :
->=20
-> And after the commit it reports back an invalid 768x480 resolution:
-> VIDIOC_QUERYCAP: ok
-> VIDIOC_G_FMT: ok
-> VIDIOC_S_FMT: ok
-> Format Video Capture:
->         Width/Height      : 768/480
->         Pixel Format      : 'RGGB' (8-bit Bayer RGRG/GBGB)
->         Field             : None
->         Bytes per Line    : 768
->         Size Image        : 368640
->         Colorspace        : Default
->         Transfer Function : Default (maps to Rec. 709)
->         YCbCr/HSV Encoding: Default (maps to ITU-R 601)
->         Quantization      : Default (maps to Full Range)
->         Flags             :
->=20
-> This resolution and frame size mis-match causes issues for example
-> when using gstreamer to capture and stream frames.
+ERROR: "foo* bar" should be "foo *bar"
 
-Oh, that's weird. Can you check what the call to v4l_bound_align_image()=20
-inside __imx7_csi_video_try_fmt() is actually doing? Check walign, width=20
-before and after the call. From a glance that seems to be the only way widt=
-h=20
-could be modified.
+Signed-off-by: Ran Sun <sunran001@208suo.com>
+---
+  drivers/media/dvb-frontends/stv0299.c | 28 +++++++++++++--------------
+  1 file changed, 14 insertions(+), 14 deletions(-)
 
-> I noticed you have several outstanding patches pending for
-> imx7-media-csi... perhaps there is something there you already know of
-> that addresses this issue?
+diff --git a/drivers/media/dvb-frontends/stv0299.c 
+b/drivers/media/dvb-frontends/stv0299.c
+index b5263a0ee5aa..f933928eb836 100644
+--- a/drivers/media/dvb-frontends/stv0299.c
++++ b/drivers/media/dvb-frontends/stv0299.c
+@@ -82,9 +82,9 @@ static int stv0299_writeregI (struct stv0299_state* 
+state, u8 reg, u8 data)
+      return (ret != 1) ? -EREMOTEIO : 0;
+  }
 
-There nothing pending AFAICS. Everything has been integrated into linux-nex=
-t=20
-at least.
+-static int stv0299_write(struct dvb_frontend* fe, const u8 buf[], int 
+len)
++static int stv0299_write(struct dvb_frontend *fe, const u8 buf[], int 
+len)
+  {
+-    struct stv0299_state* state = fe->demodulator_priv;
++    struct stv0299_state *state = fe->demodulator_priv;
 
-Best regards,
-Alexander
+      if (len != 2)
+          return -EINVAL;
+@@ -92,7 +92,7 @@ static int stv0299_write(struct dvb_frontend* fe, 
+const u8 buf[], int len)
+      return stv0299_writeregI(state, buf[0], buf[1]);
+  }
 
-> best regards,
->=20
-> Tim
-> [1]
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/a=
-rc
-> h/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-imx219.dtso
+-static u8 stv0299_readreg (struct stv0299_state* state, u8 reg)
++static u8 stv0299_readreg (struct stv0299_state *state, u8 reg)
+  {
+      int ret;
+      u8 b0 [] = { reg };
+@@ -109,7 +109,7 @@ static u8 stv0299_readreg (struct stv0299_state* 
+state, u8 reg)
+      return b1[0];
+  }
 
+-static int stv0299_readregs (struct stv0299_state* state, u8 reg1, u8 
+*b, u8 len)
++static int stv0299_readregs (struct stv0299_state *state, u8 reg1, u8 
+*b, u8 len)
+  {
+      int ret;
+      struct i2c_msg msg [] = { { .addr = state->config->demod_address, 
+.flags = 0, .buf = &reg1, .len = 1 },
+@@ -177,7 +177,7 @@ static enum fe_code_rate stv0299_get_fec(struct 
+stv0299_state *state)
+      return fec_tab [index];
+  }
 
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
+-static int stv0299_wait_diseqc_fifo (struct stv0299_state* state, int 
+timeout)
++static int stv0299_wait_diseqc_fifo (struct stv0299_state *state, int 
+timeout)
+  {
+      unsigned long start = jiffies;
 
+@@ -194,7 +194,7 @@ static int stv0299_wait_diseqc_fifo (struct 
+stv0299_state* state, int timeout)
+      return 0;
+  }
 
+-static int stv0299_wait_diseqc_idle (struct stv0299_state* state, int 
+timeout)
++static int stv0299_wait_diseqc_idle (struct stv0299_state *state, int 
+timeout)
+  {
+      unsigned long start = jiffies;
+
+@@ -211,9 +211,9 @@ static int stv0299_wait_diseqc_idle (struct 
+stv0299_state* state, int timeout)
+      return 0;
+  }
+
+-static int stv0299_set_symbolrate (struct dvb_frontend* fe, u32 srate)
++static int stv0299_set_symbolrate (struct dvb_frontend *fe, u32 srate)
+  {
+-    struct stv0299_state* state = fe->demodulator_priv;
++    struct stv0299_state *state = fe->demodulator_priv;
+      u64 big = srate;
+      u32 ratio;
+
+@@ -229,7 +229,7 @@ static int stv0299_set_symbolrate (struct 
+dvb_frontend* fe, u32 srate)
+      return state->config->set_symbol_rate(fe, srate, ratio);
+  }
+
+-static int stv0299_get_symbolrate (struct stv0299_state* state)
++static int stv0299_get_symbolrate (struct stv0299_state *state)
+  {
+      u32 Mclk = state->config->mclk / 4096L;
+      u32 srate;
+@@ -261,10 +261,10 @@ static int stv0299_get_symbolrate (struct 
+stv0299_state* state)
+      return srate;
+  }
+
+-static int stv0299_send_diseqc_msg (struct dvb_frontend* fe,
++static int stv0299_send_diseqc_msg (struct dvb_frontend *fe,
+                      struct dvb_diseqc_master_cmd *m)
+  {
+-    struct stv0299_state* state = fe->demodulator_priv;
++    struct stv0299_state *state = fe->demodulator_priv;
+      u8 val;
+      int i;
+
+@@ -295,7 +295,7 @@ static int stv0299_send_diseqc_msg (struct 
+dvb_frontend* fe,
+  static int stv0299_send_diseqc_burst(struct dvb_frontend *fe,
+                       enum fe_sec_mini_cmd burst)
+  {
+-    struct stv0299_state* state = fe->demodulator_priv;
++    struct stv0299_state *state = fe->demodulator_priv;
+      u8 val;
+
+      dprintk ("%s\n", __func__);
+@@ -323,7 +323,7 @@ static int stv0299_send_diseqc_burst(struct 
+dvb_frontend *fe,
+  static int stv0299_set_tone(struct dvb_frontend *fe,
+                  enum fe_sec_tone_mode tone)
+  {
+-    struct stv0299_state* state = fe->demodulator_priv;
++    struct stv0299_state *state = fe->demodulator_priv;
+      u8 val;
+
+      if (stv0299_wait_diseqc_idle (state, 100) < 0)
+@@ -346,7 +346,7 @@ static int stv0299_set_tone(struct dvb_frontend *fe,
+  static int stv0299_set_voltage(struct dvb_frontend *fe,
+                     enum fe_sec_voltage voltage)
+  {
+-    struct stv0299_state* state = fe->demodulator_priv;
++    struct stv0299_state *state = fe->demodulator_priv;
+      u8 reg0x08;
+      u8 reg0x0c;
