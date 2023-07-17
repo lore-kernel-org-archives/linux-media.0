@@ -2,31 +2,31 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A63B1EB64DD
-	for <linux-media@archiver.kernel.org>; Mon, 17 Jul 2023 02:05:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 954AFC001B0
+	for <linux-media@archiver.kernel.org>; Mon, 17 Jul 2023 02:05:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230354AbjGQCFf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 16 Jul 2023 22:05:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45888 "EHLO
+        id S230359AbjGQCFg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 16 Jul 2023 22:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230348AbjGQCFd (ORCPT
+        with ESMTP id S230342AbjGQCFe (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 16 Jul 2023 22:05:33 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B1BF1
+        Sun, 16 Jul 2023 22:05:34 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9D2E54
         for <linux-media@vger.kernel.org>; Sun, 16 Jul 2023 19:05:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nurfuerspam.de;
- s=s31663417; t=1689559512; x=1690164312; i=herdler@nurfuerspam.de;
- bh=Ttj6vK0l2iFGMGEMKbeOwDXjBJWRYblOs9I8fDNjoyQ=;
+ s=s31663417; t=1689559513; x=1690164313; i=herdler@nurfuerspam.de;
+ bh=sZTEgP7BqvTzPt3tLwGoXfs/8ByTdpc5bJK1e4QRKUg=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
- b=oD7I/59+tYKZ8D0sfkQ9ZDxAlqTxjWnDzyKtNfX+4aFPM0hQ2QGmNJEVoZ+9U+MkqjVeshp
- 1ykpA1/JRRSV144g0wNMWl91fN1ZCYBTpW3fInXoZZVjl1XcKHdz4Z5yAO1bWVlmzAQaAXaRE
- B5f5U4TOs/9Lk5MR5PSdlPRAHIoRplzE/5GFSkiAIWw1nBES5K6jQ5EglIq8S/xhEUPhIH835
- 3cAbsugV07TLkudex9zcbDpyrgYDx4/x1xioNhxVufLCrvftF0NU0Z2+/MS7uM0Zff5E+QwRI
- oBRxVWZeofbJxlro0NuFqIYKAi4799Z6bddtytFrwwuOGtvuPV1Q==
+ b=Lt1jF3LWTCCrjemLRBAkbpC8UK9PVBk7WQUkZ3nXbe+/cPClj5HxbtUZPdd7JCMOrjsUNS4
+ sGco9azoThAWtXZP5J/+SkFWCkCvsa3ZW8ZsTrg7t0x80wIa3M35+rrYhGcZ1XMblE6So4hdN
+ cC/QMqXBA/lqG2IYOZNTna5UQLqwtKxWBmupMHledchbVDlkv5ktQFBm46Ls1lDGyyhcVvzfc
+ hx6ViRDi1OJWOMiT9OjAo3zgM7pfDGyNhbk9cukdNHYRy80z8k6Mmv4976oesC70vu6tNbVYd
+ w5cqGy4xWNiiVJEirR9P9Yfsm55Hc6DnkjF2gSkRSEeC//7Oc6tQ==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from astro.haus ([217.113.179.15]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MwwZX-1q2CaK40GR-00yU8a; Mon, 17
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MHXBp-1q8HBR3NnF-00DVHK; Mon, 17
  Jul 2023 04:05:12 +0200
 From:   Stefan Herdler <herdler@nurfuerspam.de>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -35,96 +35,155 @@ Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Tomasz Maciej Nowak <tmn505@gmail.com>,
         Corinna Vinschen <vinschen@redhat.com>,
         Soeren Moch <smoch@web.de>
-Subject: [PATCH v3 2/6] Add documentation for osd.h
-Date:   Mon, 17 Jul 2023 04:04:42 +0200
-Message-Id: <20230717020446.28877-3-herdler@nurfuerspam.de>
+Subject: [PATCH v3 5/6] Add documentation for video.h (data types)
+Date:   Mon, 17 Jul 2023 04:04:45 +0200
+Message-Id: <20230717020446.28877-6-herdler@nurfuerspam.de>
 X-Mailer: git-send-email 2.34.0
 In-Reply-To: <20230717020446.28877-1-herdler@nurfuerspam.de>
 References: <20230717020446.28877-1-herdler@nurfuerspam.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:3F01pS3IrE1s8X5obXmQ8aTjWjyYUMskEv8qmrFph/Yv6TeCP2b
- ayZROXMksXZxo1zIPsOKxvQAsTfKpQMKrXSxDnw5oFiNlR7YRGKL1fv1brCOWfVOj6k4kjI
- pCRqfio/64QiCP33wB/WN8zSKWfmNdope9m7rA471egsGYkZYGcc3qbQ9mG+Q1Hz/6kU3Dv
- Y5mrczmf6b05r+FF2MDQQ==
-UI-OutboundReport: notjunk:1;M01:P0:RLEhT0p/oBM=;JeWcgY1Z/MIfo2pQXzeZTK6k+0o
- x23Xcyn4OGmd5bQ976lhMSGmfe6pPBXeX7P/Z5HV3zD7+ks/qZ227NcKW2YICoI/zT/U+JPEr
- 35fNaWUSiZNzROQMWR/WckFpSRWVQyDzGALrEAUNsYl9nLnqYav1K29JhvRsPflA3R8SNMAdJ
- 5Cy7qOZnhdUgiOJwCNmNQ0uZ+KgeliHTwESsdCrkrin2ZePzO7mADYPOq0VCKtipCLgdb0scf
- s7gXwIJNyBac67J7PGVRc444EcSpPLmfMCGIttwHiJjYKA/arHOy5MzudwFe/zWw6gPpZ4+d0
- 8qXVWfStSnO5uZEvka6/NHOyHNgHyI/gnqceg977qCCoO1z2y6KRCtK56aufY5lbYoTncze3/
- G5OKnkyDAyz7KZ0w4yKlpVeDDQqFvuNHQohVpG8a767Am/uG25oMEJ2gXVRGOfXWaoRWX6I87
- 9zA5JnrLq/9zLy7nfNQXoWZrEYMVG5hRJjfKPpT9vVNO1lqlfA1a3z0MOSyjx91n8OqFjCN9W
- TJODZCOlA5YvEEZM9Progw0V6Cv+llNhJ1cq0aFJjsUQ7YyWjtpuL4snu6QnGdbs6w6uRQdE+
- cBlp7XhA5Fpvx+tRAvFrJ2t6X6ABw+b0ydFsxKxx5dp2Sp/DP2VjuluPEs+qdBR4tnWyXq4M/
- Lv2iKNBco+9myc83Fdxq6KPj4dH5ETbnnlgNi7RW+AGZBzyIdf/VUvcY2DpgOS5SHBjSjpAgl
- yT8vy0pSBb9oWYg4tY+xx/YP7b0LppYbD86FUzZqZIeMv1bFFHAIvI+ng9xzbmuvZ3jisfykw
- X6BVznMA6jfYEUT9PcIKUJ+P269X5Si0GqDNjB4OPoQNyoYX9mF+W1GKo2u6LqZjfQqbr56jH
- 6AlvP2nBCjZIhX4iwOTZVwoSoMxaw4js7TZaMHq5jLFx719+Ac+kz5xVS25Ixft+W59xh3493
- j4N1J6kWGcB6K0bwkg2oGQTTQJo=
+X-Provags-ID: V03:K1:TOh6xpxLGlcajBXqNbDVf8Lb32jOievJLj41KO8jl8kXTUypo3P
+ ga9wEm40r55Dp/zzadz8q1Ke1C4kAHqztpSV1c1d9pPwLp+TPieqca9C4BcKXdPVGWP88j9
+ DK9+FHW+GXbvIwfZcGy+WvcpTE905WUk8OKiNONZSnavaDRqqxmL2j7Fj1i2qY+yJ/tRaN+
+ 62e18niOeteNJk3ykidlQ==
+UI-OutboundReport: notjunk:1;M01:P0:LbiRKAGihis=;yJdoHiNLgxVu4PqMpHhI2kxz0LH
+ YCA1DPnex//Y5rdfXqrSTWZknYBbb4mFwNGOUJA0uLTlTFmAVpxL8EeatvMjurtFpsndJQIUU
+ 6MZfRHihoRSnTQufHr88sNETO5hKUlyOGXN6PLoQjxiMlkKjje+yyEZdtZi00k85Ibo09KStx
+ /i8rIeCKwGbCiqmpMWPkIste2eaIdySn2YOtpMP+kUc7gASxrSHgGTxaT2UBW0zZH3+yZ0WYq
+ Y51LVhXNTT6poUqZH2eXDsxxJcQglUfv2qCjnpTqaJdc4YmSIMJdVP4NdElv8y+Lr8UUX3BPe
+ dxQkjAfZKHGKvq+O/S2o+mmWrquWR4IRxRWGMbKnvb1vYMlnsT8X+cXwOeZ7yXZAn5xacVboS
+ A7RsSbu/rhfjQ8mRD/rZM8mPYtvp5SnJuNODCpOBq2483dd5zIsOtaXITeTVI+t7Dkc+aNgz8
+ eQaUKFo045yoXNa93n8pAEb61p6UktRCoAvMrjG2mXOqRPBSGoNgR2UI7N/Scf5ZA/sSI8Bfv
+ p0Ijcr4Q8Z5DlySrxGqTppGxCFETfnpGll/ptQo1TEsfPF1zgY05LDBtusQuWrgwU4L30pfCv
+ 25WQTHVCTCOthGfdWNXzy/wIj2x1hCnrw6sC9u1I8XpsnweWeVVWeHoeDMxJ82gXOgvTlI06E
+ I5kwsdvPNEXa8Yx7G6lS63Lfulp7WGYFNDMw7Q5anPxcaZMMrHXPCfbUsz5XM+vEeOSLizeY5
+ QVnoez7T6h+eRT3GJyaUDivsQKgZ4Qa9zUg5scGrFFW/1Q6UUzu8yQ83PXeLq0q4//KUk7DH/
+ kD6B4BgdbcHHBCOL0t1XMMDy06oGyzeC3V7ITzRHiHk87Nncj3YNaNDc9iVUmG0sDSvpaauJ1
+ Bo01Qjvv6v2ixR4D6aGlhlyt1ArzRewzEkrWYm6DsYDmu2h0ys69Ns1LLN4CwkdRZQIPOVmq4
+ oT0rktKnoe44/VKsOmRzxO2MbkM=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add new documentation file for osd.h
+Add new documentation file for video.h
+Step 1: data types only
 
 Signed-off-by: Stefan Herdler <herdler@nurfuerspam.de>
 =2D--
 
-Everything is used by the AV7110 driver, except 3 OSD_Commands.
-Remarks has been placed there.
-
-That's probably the best solution.
-Removing would create a gap in the enumeration.
-Omitting in the documentation would make header and documentation
-inconsistent again.
+Possibly left overs from DVD-API ? :
+video_attributes_t
+VIDEO_CAP_SPU
+VIDEO_CAP_NAVI
+VIDEO_CAP_CSS
 
 
 
- .../media/dvb/legacy_dvb_osd.rst              | 883 ++++++++++++++++++
- 1 file changed, 883 insertions(+)
- create mode 100644 Documentation/userspace-api/media/dvb/legacy_dvb_osd.r=
-st
+>> +
+>> +video_stream_source_t
+>> +---------------------
+>> +
+>> +The video stream source is set through the `VIDEO_SELECT_SOURCE`_ call
+>> +and can take the following values, depending on whether we are replayi=
+ng
+>> +from an internal (demuxer) or external (user write) source.
+>> +
+>> +
+>> +.. code-block:: c
+>> +
+>> +    typedef enum {
+>> +	VIDEO_SOURCE_DEMUX, /* Select the demux as the main source */
+>> +	VIDEO_SOURCE_MEMORY /* If this source is selected, the stream
+>> +		       comes from the user through the write
+>> +		       system call */
+>> +    } video_stream_source_t;
+>
+> FYI, this carries the same problem as the audio one: this API is problem=
+atic
+> for modern hardware that has multiple tuners and demuxers. Setting up
+> pipelines for audio and video decoding on modern hardware require a lot
+> more than just demux/memory.
 
-diff --git a/Documentation/userspace-api/media/dvb/legacy_dvb_osd.rst b/Do=
-cumentation/userspace-api/media/dvb/legacy_dvb_osd.rst
+This kind of limitations are pretty well known for a while now, even to
+normal users.
+I remember some DVB-cards, where, due to hardware limitations, only a
+fraction of the tuners can be active simultaneously.
+The user had to chose the active tuners while loading the driver. Which is
+definitely not a ideal solution, because changing the reception path
+without reloading the driver isn't possible.
+A real solution would be widely appreciated, I think.
+Well, but back to topic ...
+
+
+In case of the decoder we are are maybe lucky. One decoder with multiple
+demuxers should theoretically already be possible without any changes.
+The data fed to the decoder can be controlled by the PID filter output
+selection DMX_OUT_DECODER.
+
+There are existing multi tuner systems with one decoder controlled by this
+API, but I don't know whether they do it this way or not.
+A quick search wasn't very successful and at least the AV7110 should have
+a hardware PID filter. More detailed research has to be done there.
+However this topic is not directly part of the decoder API and I'm running
+out of time, so I had to stop at this point.
+
+
+
+ .../media/dvb/legacy_dvb_video.rst            | 798 ++++++++++++++++++
+ 1 file changed, 798 insertions(+)
+ create mode 100644 Documentation/userspace-api/media/dvb/legacy_dvb_video=
+.rst
+
+diff --git a/Documentation/userspace-api/media/dvb/legacy_dvb_video.rst b/=
+Documentation/userspace-api/media/dvb/legacy_dvb_video.rst
 new file mode 100644
-index 000000000000..eb4754bb00d0
+index 000000000000..165fd6005a07
 =2D-- /dev/null
-+++ b/Documentation/userspace-api/media/dvb/legacy_dvb_osd.rst
-@@ -0,0 +1,883 @@
++++ b/Documentation/userspace-api/media/dvb/legacy_dvb_video.rst
+@@ -0,0 +1,798 @@
 +.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later OR GPL-2.0
 +
-+.. c:namespace:: dtv.legacy.osd
++.. c:namespace:: dtv.legacy.video
 +
-+.. _dvb_osd:
++.. _dvb_video:
 +
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+DVB OSD Device
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++DVB Video Device
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 +
 +.. attention:: Do **not** use in new drivers!
 +             See: :ref:`legacy_dvb_decoder_notes`
 +
-+The DVB OSD device controls the OnScreen-Display of the AV7110 based
-+DVB-cards with hardware MPEG2 decoder. It can be accessed through
-+``/dev/dvb/adapter?/osd0``.
-+Data types and ioctl definitions can be accessed by including
-+``linux/dvb/osd.h`` in your application.
++The DVB video device controls the MPEG2 video decoder of the DVB
++hardware. It can be accessed through ``/dev/dvb/adapter0/video0``. Data
++types and ioctl definitions can be accessed by including
++``linux/dvb/video.h`` in your application.
 +
-+The OSD is not a frame-buffer like on many other cards.
-+It is a kind of canvas one can draw on.
-+The color-depth is limited depending on the memory size installed.
-+An appropriate palette of colors has to be set up.
-+The installed memory size can be identified with the `OSD_GET_CAPABILITY`=
-_
-+ioctl.
++Note that the DVB video device only controls decoding of the MPEG video
++stream, not its presentation on the TV or computer screen. On PCs this
++is typically handled by an associated video4linux device, e.g.
++``/dev/video``, which allows scaling and defining output windows.
 +
-+OSD Data Types
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++Most DVB cards don=E2=80=99t have their own MPEG decoder, which results i=
+n the
++omission of the audio and video device as well as the video4linux
++device.
 +
-+OSD_Command
-+-----------
++These ioctls were also used by V4L2 to control MPEG decoders implemented
++in V4L2. The use of these ioctls for that purpose has been made obsolete
++and proper V4L2 ioctls or controls have been created to replace that
++functionality. Use :ref:`V4L2 ioctls<video>` for new drivers!
++
++
++Video Data Types
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++
++
++
++video_format_t
++--------------
 +
 +Synopsis
 +~~~~~~~~
@@ -132,388 +191,10 @@ _
 +.. code-block:: c
 +
 +    typedef enum {
-+	/* All functions return -2 on "not open" */
-+	OSD_Close =3D 1,
-+	OSD_Open,
-+	OSD_Show,
-+	OSD_Hide,
-+	OSD_Clear,
-+	OSD_Fill,
-+	OSD_SetColor,
-+	OSD_SetPalette,
-+	OSD_SetTrans,
-+	OSD_SetPixel,
-+	OSD_GetPixel,
-+	OSD_SetRow,
-+	OSD_SetBlock,
-+	OSD_FillRow,
-+	OSD_FillBlock,
-+	OSD_Line,
-+	OSD_Query,
-+	OSD_Test,
-+	OSD_Text,
-+	OSD_SetWindow,
-+	OSD_MoveWindow,
-+	OSD_OpenRaw,
-+    } OSD_Command;
-+
-+Commands
-+~~~~~~~~
-+
-+.. note::  All functions return -2 on "not open"
-+
-+.. flat-table::
-+    :header-rows:  1
-+    :stub-columns: 0
-+
-+    -  ..
-+
-+       -  Command
-+
-+       -  | Used variables of ``struct`` `osd_cmd_t`_.
-+          | Usage{variable} if alternative use.
-+
-+       -  :cspan:`2` Description
-+
-+
-+
-+    -  ..
-+
-+       -  ``OSD_Close``
-+
-+       -  -
-+
-+       -  | Disables OSD and releases the buffers.
-+          | Returns 0 on success.
-+
-+    -  ..
-+
-+       -  ``OSD_Open``
-+
-+       -  | x0,y0,x1,y1,
-+          | BitPerPixel[2/4/8]{color&0x0F},
-+          | mix[0..15]{color&0xF0}
-+
-+       -  | Opens OSD with this size and bit depth
-+          | Returns 0 on success,
-+          | -1 on DRAM allocation error,
-+          | -2 on "already open".
-+
-+    -  ..
-+
-+       -  ``OSD_Show``
-+
-+       - -
-+
-+       -  | Enables OSD mode.
-+          | Returns 0 on success.
-+
-+    -  ..
-+
-+       -  ``OSD_Hide``
-+
-+       - -
-+
-+       -  | Disables OSD mode.
-+          | Returns 0 on success.
-+
-+    -  ..
-+
-+       -  ``OSD_Clear``
-+
-+       - -
-+
-+       -  | Sets all pixel to color 0.
-+          | Returns 0 on success.
-+
-+    -  ..
-+
-+       -  ``OSD_Fill``
-+
-+       -  color
-+
-+       -  | Sets all pixel to color <color>.
-+          | Returns 0 on success.
-+
-+    -  ..
-+
-+       -  ``OSD_SetColor``
-+
-+       -  | color,
-+          | R{x0},G{y0},B{x1},
-+          | opacity{y1}
-+
-+       -  | Set palette entry <num> to <r,g,b>, <mix> and <trans> apply
-+          | R,G,B: 0..255
-+          | R=3DRed, G=3DGreen, B=3DBlue
-+          | opacity=3D0:      pixel opacity 0% (only video pixel shows)
-+          | opacity=3D1..254: pixel opacity as specified in header
-+          | opacity=3D255:    pixel opacity 100% (only OSD pixel shows)
-+          | Returns 0 on success, -1 on error.
-+
-+    -  ..
-+
-+       -  ``OSD_SetPalette``
-+
-+       -  | firstcolor{color},
-+          | lastcolor{x0},data
-+
-+       -  | Set a number of entries in the palette.
-+          | Sets the entries "firstcolor" through "lastcolor" from the
-+            array "data".
-+          | Data has 4 byte for each color:
-+          | R,G,B, and a opacity value: 0->transparent, 1..254->mix,
-+            255->pixel
-+
-+    -  ..
-+
-+       -  ``OSD_SetTrans``
-+
-+       -  transparency{color}
-+
-+       -  | Sets transparency of mixed pixel (0..15).
-+          | Returns 0 on success.
-+
-+    -  ..
-+
-+       -  ``OSD_SetPixel``
-+
-+       -  x0,y0,color
-+
-+       -  | Sets pixel <x>,<y> to color number <color>.
-+          | Returns 0 on success, -1 on error.
-+
-+    -  ..
-+
-+       -  ``OSD_GetPixel``
-+
-+       -  x0,y0
-+
-+       -  | Returns color number of pixel <x>,<y>,  or -1.
-+          | Command currently not supported by the AV7110!
-+
-+    -  ..
-+
-+       -  ``OSD_SetRow``
-+
-+       -  x0,y0,x1,data
-+
-+       -  | Fills pixels x0,y through  x1,y with the content of data[].
-+          | Returns 0 on success, -1 on clipping all pixel (no pixel
-+            drawn).
-+
-+    -  ..
-+
-+       -  ``OSD_SetBlock``
-+
-+       -  | x0,y0,x1,y1,
-+          | increment{color},
-+          | data
-+
-+       -  | Fills pixels x0,y0 through  x1,y1 with the content of data[].
-+          | Inc contains the width of one line in the data block,
-+          | inc<=3D0 uses block width as line width.
-+          | Returns 0 on success, -1 on clipping all pixel.
-+
-+    -  ..
-+
-+       -  ``OSD_FillRow``
-+
-+       -  x0,y0,x1,color
-+
-+       -  | Fills pixels x0,y through  x1,y with the color <color>.
-+          | Returns 0 on success, -1 on clipping all pixel.
-+
-+    -  ..
-+
-+       -  ``OSD_FillBlock``
-+
-+       -  x0,y0,x1,y1,color
-+
-+       -  | Fills pixels x0,y0 through  x1,y1 with the color <color>.
-+          | Returns 0 on success, -1 on clipping all pixel.
-+
-+    -  ..
-+
-+       -  ``OSD_Line``
-+
-+       -  x0,y0,x1,y1,color
-+
-+       -  | Draw a line from x0,y0 to x1,y1 with the color <color>.
-+          | Returns 0 on success.
-+
-+    -  ..
-+
-+       -  ``OSD_Query``
-+
-+       -  | x0,y0,x1,y1,
-+          | xasp{color}; yasp=3D11
-+
-+       -  | Fills parameters with the picture dimensions and the pixel
-+            aspect ratio.
-+          | Returns 0 on success.
-+          | Command currently not supported by the AV7110!
-+
-+    -  ..
-+
-+       -  ``OSD_Test``
-+
-+       -  -
-+
-+       -  | Draws a test picture.
-+          | For debugging purposes only.
-+          | Returns 0 on success.
-+    -  ..
-+
-+       -  ``OSD_Text``
-+
-+       -  x0,y0,size,color,text
-+
-+       -  Draws a text at position x0,y0 with the color <color>.
-+
-+    -  ..
-+
-+       -  ``OSD_SetWindow``
-+
-+       -  x0
-+
-+       -  Set window with number 0<x0<8 as current.
-+
-+    -  ..
-+
-+       -  ``OSD_MoveWindow``
-+
-+       -  x0,y0
-+
-+       -  Move current window to (x0, y0).
-+
-+    -  ..
-+
-+       -  ``OSD_OpenRaw``
-+
-+       -  | x0,y0,x1,y1,
-+          | `osd_raw_window_t`_ {color}
-+
-+       -  Open other types of OSD windows.
-+
-+Description
-+~~~~~~~~~~~
-+
-+The ``OSD_Command`` data type is used with the `OSD_SEND_CMD`_ ioctl to
-+tell the driver which OSD_Command to execute.
-+
-+
-+-----
-+
-+osd_cmd_t
-+---------
-+
-+Synopsis
-+~~~~~~~~
-+
-+.. code-block:: c
-+
-+    typedef struct osd_cmd_s {
-+	OSD_Command cmd;
-+	int x0;
-+	int y0;
-+	int x1;
-+	int y1;
-+	int color;
-+	void __user *data;
-+    } osd_cmd_t;
-+
-+Variables
-+~~~~~~~~~
-+
-+.. flat-table::
-+    :header-rows:  0
-+    :stub-columns: 0
-+
-+    -  ..
-+
-+       -  ``OSD_Command cmd``
-+
-+       -  `OSD_Command`_ to be executed.
-+
-+    -  ..
-+
-+       -  ``int x0``
-+
-+       -  First horizontal position.
-+
-+    -  ..
-+
-+       -  ``int y0``
-+
-+       -  First vertical position.
-+
-+    -  ..
-+
-+       -  ``int x1``
-+
-+       -  Second horizontal position.
-+
-+    -  ..
-+
-+       -  ``int y1``
-+
-+       -  Second vertical position.
-+
-+    -  ..
-+
-+       -  ``int color``
-+
-+       -  Number of the color in the palette.
-+
-+    -  ..
-+
-+       -  ``void __user *data``
-+
-+       -  Command specific Data.
-+
-+Description
-+~~~~~~~~~~~
-+
-+The ``osd_cmd_t`` data type is used with the `OSD_SEND_CMD`_ ioctl.
-+It contains the data for the OSD_Command and the `OSD_Command`_ itself.
-+The structure has to be passed to the driver and the components may be
-+modified by it.
-+
-+
-+-----
-+
-+
-+osd_raw_window_t
-+----------------
-+
-+Synopsis
-+~~~~~~~~
-+
-+.. code-block:: c
-+
-+    typedef enum {
-+	OSD_BITMAP1,
-+	OSD_BITMAP2,
-+	OSD_BITMAP4,
-+	OSD_BITMAP8,
-+	OSD_BITMAP1HR,
-+	OSD_BITMAP2HR,
-+	OSD_BITMAP4HR,
-+	OSD_BITMAP8HR,
-+	OSD_YCRCB422,
-+	OSD_YCRCB444,
-+	OSD_YCRCB444HR,
-+	OSD_VIDEOTSIZE,
-+	OSD_VIDEOHSIZE,
-+	OSD_VIDEOQSIZE,
-+	OSD_VIDEODSIZE,
-+	OSD_VIDEOTHSIZE,
-+	OSD_VIDEOTQSIZE,
-+	OSD_VIDEOTDSIZE,
-+	OSD_VIDEONSIZE,
-+	OSD_CURSOR
-+    } osd_raw_window_t;
++	VIDEO_FORMAT_4_3,
++	VIDEO_FORMAT_16_9,
++	VIDEO_FORMAT_221_1
++    } video_format_t;
 +
 +Constants
 +~~~~~~~~~
@@ -524,147 +205,100 @@ _
 +
 +    -  ..
 +
-+       -  ``OSD_BITMAP1``
++       -  ``VIDEO_FORMAT_4_3``
 +
-+       -  :cspan:`1` 1 bit bitmap
-+
-+    -  ..
-+
-+       -  ``OSD_BITMAP2``
-+
-+       -  2 bit bitmap
++       -  Select 4:3 format.
 +
 +    -  ..
 +
-+       -  ``OSD_BITMAP4``
++       -  ``VIDEO_FORMAT_16_9``
 +
-+       -  4 bit bitmap
-+
-+    -  ..
-+
-+       -  ``OSD_BITMAP8``
-+
-+       -  8 bit bitmap
++       -  Select 16:9 format.
 +
 +    -  ..
 +
-+       -  ``OSD_BITMAP1HR``
++       -  ``VIDEO_FORMAT_221_1``
 +
-+       -  1 Bit bitmap half resolution
-+
-+    -  ..
-+
-+       -  ``OSD_BITMAP2HR``
-+
-+       -  2 Bit bitmap half resolution
-+
-+    -  ..
-+
-+       -  ``OSD_BITMAP4HR``
-+
-+       -  4 Bit bitmap half resolution
-+
-+    -  ..
-+
-+       -  ``OSD_BITMAP8HR``
-+
-+       -  8 Bit bitmap half resolution
-+
-+    -  ..
-+
-+       -  ``OSD_YCRCB422``
-+
-+       -  4:2:2 YCRCB Graphic Display
-+
-+    -  ..
-+
-+       -  ``OSD_YCRCB444``
-+
-+       -  4:4:4 YCRCB Graphic Display
-+
-+    -  ..
-+
-+       -  ``OSD_YCRCB444HR``
-+
-+       -  4:4:4 YCRCB graphic half resolution
-+
-+    -  ..
-+
-+       -  ``OSD_VIDEOTSIZE``
-+
-+       -  True Size Normal MPEG Video Display
-+
-+    -  ..
-+
-+       -  ``OSD_VIDEOHSIZE``
-+
-+       -  MPEG Video Display Half Resolution
-+
-+    -  ..
-+
-+       -  ``OSD_VIDEOQSIZE``
-+
-+       -  MPEG Video Display Quarter Resolution
-+
-+    -  ..
-+
-+       -  ``OSD_VIDEODSIZE``
-+
-+       -  MPEG Video Display Double Resolution
-+
-+    -  ..
-+
-+       -  ``OSD_VIDEOTHSIZE``
-+
-+       -  True Size MPEG Video Display Half Resolution
-+
-+    -  ..
-+
-+       -  ``OSD_VIDEOTQSIZE``
-+
-+       -  True Size MPEG Video Display Quarter Resolution
-+
-+    -  ..
-+
-+       -  ``OSD_VIDEOTDSIZE``
-+
-+       -  True Size MPEG Video Display Double Resolution
-+
-+    -  ..
-+
-+       -  ``OSD_VIDEONSIZE``
-+
-+       -  Full Size MPEG Video Display
-+
-+    -  ..
-+
-+       -  ``OSD_CURSOR``
-+
-+       -  Cursor
++       -  Select 2.21:1 format.
 +
 +Description
 +~~~~~~~~~~~
 +
-+The ``osd_raw_window_t`` data type is used with the `OSD_Command`_
-+OSD_OpenRaw to tell the driver which type of OSD to open.
++The ``video_format_t`` data type
++is used in the `VIDEO_SET_FORMAT`_ function to tell the driver which
++aspect ratio the output hardware (e.g. TV) has. It is also used in the
++data structures `video_status`_ returned by `VIDEO_GET_STATUS`_
++and `video_event`_ returned by `VIDEO_GET_EVENT`_ which report
++about the display format of the current video stream.
 +
 +
 +-----
 +
 +
-+osd_cap_t
-+---------
++video_displayformat_t
++---------------------
 +
 +Synopsis
 +~~~~~~~~
 +
 +.. code-block:: c
 +
-+    typedef struct osd_cap_s {
-+	int  cmd;
-+    #define OSD_CAP_MEMSIZE         1
-+	long val;
-+    } osd_cap_t;
++    typedef enum {
++	VIDEO_PAN_SCAN,
++	VIDEO_LETTER_BOX,
++	VIDEO_CENTER_CUT_OUT
++    } video_displayformat_t;
++
++Constants
++~~~~~~~~~
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++
++    -  ..
++
++       -  ``VIDEO_PAN_SCAN``
++
++       -  Use pan and scan format.
++
++    -  ..
++
++       -  ``VIDEO_LETTER_BOX``
++
++       -  Use letterbox format.
++
++    -  ..
++
++       -  ``VIDEO_CENTER_CUT_OUT``
++
++       -  Use center cut out format.
++
++Description
++~~~~~~~~~~~
++
++In case the display format of the video stream and of the display
++hardware differ the application has to specify how to handle the
++cropping of the picture. This can be done using the
++`VIDEO_SET_DISPLAY_FORMAT`_ call which accepts this enum as argument.
++
++
++-----
++
++
++video_size_t
++------------
++
++Synopsis
++~~~~~~~~
++
++.. code-block:: c
++
++    typedef struct {
++	int w;
++	int h;
++	video_format_t aspect_ratio;
++    } video_size_t;
 +
 +Variables
 +~~~~~~~~~
@@ -675,55 +309,46 @@ _
 +
 +    -  ..
 +
-+       -  ``int  cmd``
++       -  ``int w``
 +
-+       -  Capability to query.
-+
-+    -  ..
-+
-+       -  ``long val``
-+
-+       -  Used to store the Data.
-+
-+Supported capabilities
-+~~~~~~~~~~~~~~~~~~~~~~
-+
-+.. flat-table::
-+    :header-rows:  0
-+    :stub-columns: 0
++       -  Video width in pixels.
 +
 +    -  ..
 +
-+       -  ``OSD_CAP_MEMSIZE``
++       -  ``int h``
 +
-+       -  Memory size installed on the card.
++       -  Video height in pixels.
++
++    -  ..
++
++       -  `video_format_t`_ ``aspect_ratio``
++
++       -  Aspect ratio.
 +
 +Description
 +~~~~~~~~~~~
 +
-+This structure of data used with the `OSD_GET_CAPABILITY`_ call.
++Used in the struct `video_event`_. It stores the resolution and
++aspect ratio of the video.
 +
 +
 +-----
 +
 +
-+OSD Function Calls
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+
-+OSD_SEND_CMD
-+------------
++video_stream_source_t
++---------------------
 +
 +Synopsis
 +~~~~~~~~
 +
-+.. c:macro:: OSD_SEND_CMD
-+
 +.. code-block:: c
 +
-+    int ioctl(int fd, int request =3D OSD_SEND_CMD, enum osd_cmd_t *cmd)
++    typedef enum {
++	VIDEO_SOURCE_DEMUX,
++	VIDEO_SOURCE_MEMORY
++    } video_stream_source_t;
 +
-+
-+Arguments
++Constants
 +~~~~~~~~~
 +
 +.. flat-table::
@@ -732,61 +357,48 @@ _
 +
 +    -  ..
 +
-+       -  ``int fd``
++       -  ``VIDEO_SOURCE_DEMUX``
 +
-+       -  :cspan:`1` File descriptor returned by a previous call
-+          to `open()`_.
++       -  :cspan:`1` Select the demux as the main source.
 +
 +    -  ..
 +
-+       -  ``int request``
++       -  ``VIDEO_SOURCE_MEMORY``
 +
-+       -  Pointer to the location of the structure `osd_cmd_t`_ for this
-+          command.
++       -  If this source is selected, the stream
++          comes from the user through the write
++          system call.
 +
 +Description
 +~~~~~~~~~~~
 +
-+.. attention:: Do **not** use in new drivers!
-+             See: :ref:`legacy_dvb_decoder_notes`
-+
-+This ioctl sends the `OSD_Command`_ to the card.
-+
-+Return Value
-+~~~~~~~~~~~~
-+
-+On success 0 is returned, on error -1 and the ``errno`` variable is set
-+appropriately. The generic error codes are described at the
-+:ref:`Generic Error Codes <gen-errors>` chapter.
-+
-+.. flat-table::
-+    :header-rows:  0
-+    :stub-columns: 0
-+
-+    -  ..
-+
-+       -  ``EINVAL``
-+
-+       -  Command is out of range.
++The video stream source is set through the `VIDEO_SELECT_SOURCE`_ call
++and can take the following values, depending on whether we are replaying
++from an internal (demuxer) or external (user write) source.
++VIDEO_SOURCE_DEMUX selects the demultiplexer (fed either by the
++frontend or the DVR device) as the source of the video stream. If
++VIDEO_SOURCE_MEMORY is selected the stream comes from the application
++through the `write()`_ system call.
 +
 +
 +-----
 +
 +
-+OSD_GET_CAPABILITY
++video_play_state_t
 +------------------
 +
 +Synopsis
 +~~~~~~~~
 +
-+.. c:macro:: OSD_GET_CAPABILITY
-+
 +.. code-block:: c
 +
-+    int ioctl(int fd, int request =3D OSD_GET_CAPABILITY,
-+    struct osd_cap_t *cap)
++    typedef enum {
++	VIDEO_STOPPED,
++	VIDEO_PLAYING,
++	VIDEO_FREEZED
++    } video_play_state_t;
 +
-+Arguments
++Constants
 +~~~~~~~~~
 +
 +.. flat-table::
@@ -795,72 +407,61 @@ _
 +
 +    -  ..
 +
-+       -  ``int fd``
++       -  ``VIDEO_STOPPED``
 +
-+       -  :cspan:`1` File descriptor returned by a previous call
-+          to `open()`_.
-+
-+    -  ..
-+
-+       -  ``int request``
-+
-+       -  Equals ``OSD_GET_CAPABILITY`` for this command.
++       -  Video is stopped.
 +
 +    -  ..
 +
-+       -  ``unsigned int *cap``
++       -  ``VIDEO_PLAYING``
 +
-+       -  Pointer to the location of the structure `osd_cap_t`_ for this
-+          command.
++       -  Video is currently playing.
++
++    -  ..
++
++       -  ``VIDEO_FREEZED``
++
++       -  Video is frozen.
 +
 +Description
 +~~~~~~~~~~~
 +
-+.. attention:: Do **not** use in new drivers!
-+             See: :ref:`legacy_dvb_decoder_notes`
-+
-+This ioctl is used to get the capabilities of the OSD of the AV7110 based
-+DVB-decoder-card in use.
-+
-+.. note::
-+    The structure osd_cap_t has to be setup by the user and passed to the
-+    driver.
-+
-+Return Value
-+~~~~~~~~~~~~
-+
-+On success 0 is returned, on error -1 and the ``errno`` variable is set
-+appropriately. The generic error codes are described at the
-+:ref:`Generic Error Codes <gen-errors>` chapter.
-+
-+.. flat-table::
-+    :header-rows:  0
-+    :stub-columns: 0
-+
-+
-+    -  ..
-+
-+       -  ``EINVAL``
-+
-+       -  Unsupported capability.
++This values can be returned by the `VIDEO_GET_STATUS`_ call
++representing the state of video playback.
 +
 +
 +-----
 +
 +
-+open()
-+------
++struct video_command
++--------------------
 +
 +Synopsis
 +~~~~~~~~
 +
 +.. code-block:: c
 +
-+    #include <fcntl.h>
++    struct video_command {
++	__u32 cmd;
++	__u32 flags;
++	union {
++	    struct {
++		__u64 pts;
++	    } stop;
 +
-+.. c:function:: int open(const char *deviceName, int flags)
++	    struct {
++		__s32 speed;
++		__u32 format;
++	    } play;
 +
-+Arguments
++	    struct {
++		__u32 data[16];
++	    } raw;
++	};
++    };
++
++
++Variables
 +~~~~~~~~~
 +
 +.. flat-table::
@@ -869,84 +470,98 @@ _
 +
 +    -  ..
 +
-+       -  ``const char *deviceName``
++       -  ``__u32 cmd``
 +
-+       -  Name of specific OSD device.
-+
-+    -  ..
-+
-+       -  :rspan:`3` ``int flags``
-+
-+       -  :cspan:`1` A bit-wise OR of the following flags:
++       -  `Decoder command`_
 +
 +    -  ..
 +
-+       -  ``O_RDONLY``
++       -  ``__u32 flags``
 +
-+       -  read-only access
-+
-+    -  ..
-+
-+       -  ``O_RDWR``
-+
-+       -  read/write access
++       -  Flags for the `Decoder command`_.
 +
 +    -  ..
 +
-+       -  ``O_NONBLOCK``
-+       -  | Open in non-blocking mode
-+          | (blocking mode is the default)
++       -  ``struct stop``
++
++       -  ``__u64 pts``
++
++       -  MPEG PTS
++
++    -  ..
++
++       -  :rspan:`5` ``stuct play``
++
++       -  :rspan:`4` ``__s32 speed``
++
++       -   0 or 1000 specifies normal speed,
++
++    -  ..
++
++       -   1:  specifies forward single stepping,
++
++    -  ..
++
++       -   -1: specifies backward single stepping,
++
++    -  ..
++
++       -   >1: playback at speed / 1000 of the normal speed
++
++    -  ..
++
++       -   <-1: reverse playback at ( -speed / 1000 ) of the normal speed=
+.
++
++    -  ..
++
++       -  ``__u32 format``
++
++       -  `Play input formats`_
++
++    -  ..
++
++       -  ``__u32 data[16]``
++
++       -  Reserved
 +
 +Description
 +~~~~~~~~~~~
 +
-+This system call opens a named OSD device (e.g.
-+``/dev/dvb/adapter?/osd0``) for subsequent use.
-+
-+Return Value
-+~~~~~~~~~~~~
-+
-+.. flat-table::
-+    :header-rows:  0
-+    :stub-columns: 0
-+
-+    -  ..
-+
-+       -  ``ENODEV``
-+
-+       -  Device driver not loaded/available.
-+
-+    -  ..
-+
-+       -  ``EINTERNAL``
-+
-+       -  Internal error.
-+
-+    -  ..
-+
-+       -  ``EBUSY``
-+
-+       -  Device or resource busy.
-+
-+    -  ..
-+
-+       -  ``EINVAL``
-+
-+       -  Invalid argument.
++The structure must be zeroed before use by the application. This ensures
++it can be extended safely in the future.
 +
 +
 +-----
 +
 +
-+close()
-+-------
++Predefined decoder commands and flags
++-------------------------------------
 +
 +Synopsis
 +~~~~~~~~
 +
-+.. c:function:: int close(int fd)
++.. code-block:: c
 +
-+Arguments
++    #define VIDEO_CMD_PLAY                      (0)
++    #define VIDEO_CMD_STOP                      (1)
++    #define VIDEO_CMD_FREEZE                    (2)
++    #define VIDEO_CMD_CONTINUE                  (3)
++
++    #define VIDEO_CMD_FREEZE_TO_BLACK      (1 << 0)
++
++    #define VIDEO_CMD_STOP_TO_BLACK        (1 << 0)
++    #define VIDEO_CMD_STOP_IMMEDIATELY     (1 << 1)
++
++    #define VIDEO_PLAY_FMT_NONE                 (0)
++    #define VIDEO_PLAY_FMT_GOP                  (1)
++
++    #define VIDEO_VSYNC_FIELD_UNKNOWN           (0)
++    #define VIDEO_VSYNC_FIELD_ODD               (1)
++    #define VIDEO_VSYNC_FIELD_EVEN              (2)
++    #define VIDEO_VSYNC_FIELD_PROGRESSIVE       (3)
++
++Constants
 +~~~~~~~~~
 +
 +.. flat-table::
@@ -955,18 +570,122 @@ _
 +
 +    -  ..
 +
-+       -  ``int fd``
++       -  :rspan:`3` _`Decoder command`
 +
-+       -  :cspan:`1` File descriptor returned by a previous call
-+          to `open()`_ .
++       -  ``VIDEO_CMD_PLAY``
 +
-+Description
-+~~~~~~~~~~~
++       -  Start playback.
 +
-+This system call closes a previously opened OSD device.
++    -  ..
 +
-+Return Value
-+~~~~~~~~~~~~
++       -  ``VIDEO_CMD_STOP``
++
++       -  Stop playback.
++
++    -  ..
++
++       -  ``VIDEO_CMD_FREEZE``
++
++       -  Freeze playback.
++
++    -  ..
++
++       -  ``VIDEO_CMD_CONTINUE``
++
++       -  Continue playback after freeze.
++
++    -  ..
++
++       -  Flags for ``VIDEO_CMD_FREEZE``
++
++       -  ``VIDEO_CMD_FREEZE_TO_BLACK``
++
++       -  Show black picture on freeze.
++
++    -  ..
++
++       -  :rspan:`1` Flags for ``VIDEO_CMD_STOP``
++
++       -  ``VIDEO_CMD_STOP_TO_BLACK``
++
++       -  Show black picture on stop.
++
++    -  ..
++
++       -  ``VIDEO_CMD_STOP_IMMEDIATELY``
++
++       -  Stop immediately, without emptying buffers.
++
++    -  ..
++
++       -  :rspan:`1` _`Play input formats`
++
++       -  ``VIDEO_PLAY_FMT_NONE``
++
++       -  The decoder has no special format requirements
++
++    -  ..
++
++       -  ``VIDEO_PLAY_FMT_GOP``
++
++       -  The decoder requires full GOPs
++
++    -  ..
++
++       -  :rspan:`3` Field order
++
++       -  ``VIDEO_VSYNC_FIELD_UNKNOWN``
++
++       -  FIELD_UNKNOWN can be used if the hardware does not know
++          whether the Vsync is for an odd, even or progressive
++          (i.e. non-interlaced) field.
++
++    -  ..
++
++       -  ``VIDEO_VSYNC_FIELD_ODD``
++
++       -  Vsync is for an odd field.
++
++    -  ..
++
++       -  ``VIDEO_VSYNC_FIELD_EVEN``
++
++       -  Vsync is for an even field.
++
++    -  ..
++
++       -  ``VIDEO_VSYNC_FIELD_PROGRESSIVE``
++
++       -  progressive (i.e. non-interlaced)
++
++
++-----
++
++
++video_event
++-----------
++
++Synopsis
++~~~~~~~~
++
++.. code-block:: c
++
++    struct video_event {
++	__s32 type;
++    #define VIDEO_EVENT_SIZE_CHANGED        1
++    #define VIDEO_EVENT_FRAME_RATE_CHANGED  2
++    #define VIDEO_EVENT_DECODER_STOPPED     3
++    #define VIDEO_EVENT_VSYNC               4
++	long timestamp;
++	union {
++	    video_size_t size;
++	    unsigned int frame_rate;
++	    unsigned char vsync_field;
++	} u;
++    };
++
++Variables
++~~~~~~~~~
 +
 +.. flat-table::
 +    :header-rows:  0
@@ -974,9 +693,256 @@ _
 +
 +    -  ..
 +
-+       -  ``EBADF``
++       -  :rspan:`4` ``__s32 type``
 +
-+       -  fd is not a valid open file descriptor.
++       -  :cspan:`1` Event type.
++
++    -  ..
++
++       -  ``VIDEO_EVENT_SIZE_CHANGED``
++
++       -  Size changed.
++
++    -  ..
++
++       -  ``VIDEO_EVENT_FRAME_RATE_CHANGED``
++
++       -  Framerate changed.
++
++    -  ..
++
++       -  ``VIDEO_EVENT_DECODER_STOPPED``
++
++       -  Decoder stopped.
++
++    -  ..
++
++       -  ``VIDEO_EVENT_VSYNC``
++
++       -  Vsync occurred.
++
++    -  ..
++
++       -  ``long timestamp``
++
++       -  :cspan:`1` MPEG PTS at occurrence.
++
++    -  ..
++
++       -  :rspan:`2` ``union u``
++
++       -  `video_size_t`_ size
++
++       -  Resolution and aspect ratio of the video.
++
++    -  ..
++
++       -  ``unsigned int frame_rate``
++
++       -  in frames per 1000sec
++
++    -  ..
++
++       -  ``unsigned char vsync_field``
++
++       -  | unknown / odd / even / progressive
++          | See: `Predefined decoder commands and flags`_
++
++Description
++~~~~~~~~~~~
++
++This is the structure of a video event as it is returned by the
++`VIDEO_GET_EVENT`_ call. See there for more details.
++
++
++-----
++
++
++video_status
++------------
++
++Synopsis
++~~~~~~~~
++
++The `VIDEO_GET_STATUS`_ call returns the following structure informing
++about various states of the playback operation.
++
++.. code-block:: c
++
++    struct video_status {
++	int                    video_blank;
++	video_play_state_t     play_state;
++	video_stream_source_t  stream_source;
++	video_format_t         video_format;
++	video_displayformat_t  display_format;
++    };
++
++Variables
++~~~~~~~~~
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++
++    -  ..
++
++       -  :rspan:`2` ``int video_blank``
++
++       -  :cspan:`1` Show blank video on freeze?
++
++    -  ..
++
++       -  TRUE  ( !=3D 0 )
++
++       -  Blank screen when freeze.
++
++    -  ..
++
++       -  FALSE ( =3D=3D 0 )
++
++       -  Show last decoded frame.
++
++    -  ..
++
++       -  `video_play_state_t`_ ``play_state``
++
++       -  Current state of playback.
++
++    -  ..
++
++       -  `video_stream_source_t`_ ``stream_source``
++
++       -  Current source (demux/memory).
++
++    -  ..
++
++       -  `video_format_t`_ ``video_format``
++
++       -  Current aspect ratio of stream.
++
++    -  ..
++
++       -  `video_displayformat_t`_ ``display_format``
++
++       -  Applied cropping mode.
++
++Description
++~~~~~~~~~~~
++
++If ``video_blank`` is set ``TRUE`` video will be blanked out if the
++channel is changed or if playback is stopped. Otherwise, the last picture
++will be displayed. ``play_state`` indicates if the video is currently
++frozen, stopped, or being played back. The ``stream_source`` corresponds
++to the selected source for the video stream. It can come either from the
++demultiplexer or from memory. The ``video_format`` indicates the aspect
++ratio (one of 4:3 or 16:9) of the currently played video stream.
++Finally, ``display_format`` corresponds to the applied cropping mode in
++case the source video format is not the same as the format of the output
++device.
++
++
++-----
++
++
++video_still_picture
++-------------------
++
++Synopsis
++~~~~~~~~
++
++.. code-block:: c
++
++    struct video_still_picture {
++    char *iFrame;
++    int32_t size;
++    };
++
++Variables
++~~~~~~~~~
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++
++    -  ..
++
++       -  ``char *iFrame``
++
++       -  Pointer to a single iframe in memory.
++
++    -  ..
++
++       -  ``int32_t size``
++
++       -  Size of the iframe.
++
++
++Description
++~~~~~~~~~~~
++
++An I-frame displayed via the `VIDEO_STILLPICTURE`_ call is passed on
++within this structure.
++
++
++-----
++
++
++video capabilities
++------------------
++
++Synopsis
++~~~~~~~~
++
++.. code-block:: c
++
++    #define VIDEO_CAP_MPEG1   1
++    #define VIDEO_CAP_MPEG2   2
++    #define VIDEO_CAP_SYS     4
++    #define VIDEO_CAP_PROG    8
++
++Constants
++~~~~~~~~~
++Bit definitions for capabilities:
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++
++    -  ..
++
++       -  ``VIDEO_CAP_MPEG1``
++
++       -  :cspan:`1` The hardware can decode MPEG1.
++
++    -  ..
++
++       -  ``VIDEO_CAP_MPEG2``
++
++       -  The hardware can decode MPEG2.
++
++    -  ..
++
++       -  ``VIDEO_CAP_SYS``
++
++       -  The video device accepts system stream.
++
++          You still have to open the video and the audio device
++          but only send the stream to the video device.
++
++    -  ..
++
++       -  ``VIDEO_CAP_PROG``
++
++       -  The video device accepts program stream.
++
++          You still have to open the video and the audio device
++          but only send the stream to the video device.
++
++Description
++~~~~~~~~~~~
++
++A call to `VIDEO_GET_CAPABILITIES`_ returns an unsigned integer with the
++following bits set according to the hardware's capabilities.
 =2D-
 2.34.0
 
