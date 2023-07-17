@@ -2,32 +2,32 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB5D3EB64DD
-	for <linux-media@archiver.kernel.org>; Mon, 17 Jul 2023 02:05:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72BFBC001B0
+	for <linux-media@archiver.kernel.org>; Mon, 17 Jul 2023 02:05:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230339AbjGQCF3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 16 Jul 2023 22:05:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45872 "EHLO
+        id S230340AbjGQCFa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 16 Jul 2023 22:05:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjGQCF2 (ORCPT
+        with ESMTP id S230225AbjGQCF3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 16 Jul 2023 22:05:28 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C944F9B
+        Sun, 16 Jul 2023 22:05:29 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245DC9D
         for <linux-media@vger.kernel.org>; Sun, 16 Jul 2023 19:05:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nurfuerspam.de;
- s=s31663417; t=1689559511; x=1690164311; i=herdler@nurfuerspam.de;
- bh=Kb82KV5lTg8m8QoVc1gILeLjYFEsKRsN5m2rGmHJGjk=;
+ s=s31663417; t=1689559512; x=1690164312; i=herdler@nurfuerspam.de;
+ bh=Kss5ubkzTmur5RmuyIrKijs5qjP5XaPUNd6sW7J8Q7M=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
- b=N/TtVvfyemv+rXO2G0fjCM3UZ/GxdNgAK2DGS4OihtZcj1yJaRHG3lfRrfawRibfhiDIALN
- Tkf6a/+UVE1MnwUJ+cKehh+N+ek1iS4+TNQU5YukLcUE0xw4Vis4ZNGhY+cwyYCoyBZFsJiMh
- zKRhAZ/4x+9IqXO4veY0fNcCN48E4mCjcBYT0fe5w85eoaApWhW27OXO49R6Z/KGeFhzfIiUj
- pUwqRk9kucDYBsq3Cj2ufJBZKL/naE/9S54pwnS7oTWsf6tlj6M0obdZjyPrRVSxsuFWgtPkE
- o8QPtnLMA6OribmDAhOEarSA8h/eTDHm0/kQ7hoouDkiBkKVabaw==
+ b=TNU4q0t2LHYs4EfLv7+RxtwL33YAzF06fc75YlkUZVxSI0akTI7k1PTGG2VDQIFEE2IwdJU
+ ls4Xz5aRF3lGDd5BV4poA21+qcFvwlqIC3CxwUG9NByusGgPQoxGOfgnkDY921gxRO+HmT1s7
+ V6kHQO00YpBz7J/EjtYWjsQPg8s5M0BSSpYlJmb4X/HSOD+S80btUYHNJsrz7UeQOrmeBxcjn
+ 2P6Lfbcru7OEooEWI1Odx8Yh1iy7O0zZTM720I+SAWbYJu8jRJiEcuhtxH1aOOr3yhSt1MaKU
+ Jtz7QRVUwt6uTQyW5RyjHaZUe2lxF0JcnSupb5GHmcESHZnGWvng==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from astro.haus ([217.113.179.15]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MwQTF-1q2jDe1mfV-00sQ8A; Mon, 17
- Jul 2023 04:05:11 +0200
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N7zBb-1pr9yN11b1-0153hc; Mon, 17
+ Jul 2023 04:05:12 +0200
 From:   Stefan Herdler <herdler@nurfuerspam.de>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
@@ -35,113 +35,504 @@ Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Tomasz Maciej Nowak <tmn505@gmail.com>,
         Corinna Vinschen <vinschen@redhat.com>,
         Soeren Moch <smoch@web.de>
-Subject: [PATCH v3 0/6] Legacy DVB API: completion of documentation
-Date:   Mon, 17 Jul 2023 04:04:40 +0200
-Message-Id: <20230717020446.28877-1-herdler@nurfuerspam.de>
+Subject: [PATCH v3 3/6] Add documentation for audio.h (data types)
+Date:   Mon, 17 Jul 2023 04:04:43 +0200
+Message-Id: <20230717020446.28877-4-herdler@nurfuerspam.de>
 X-Mailer: git-send-email 2.34.0
-In-Reply-To: <20230327192826.65ae299d@sal.lan>
-References: 
+In-Reply-To: <20230717020446.28877-1-herdler@nurfuerspam.de>
+References: <20230717020446.28877-1-herdler@nurfuerspam.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:7Jlv80+TUTQkli00geyV4Lnux5lARPqxdRe5neLsDo1lX1jTtwa
- yKdro+pGX3etQW6aTrVsmE+mQKqZEymt/WXvGz932WAQh5uIgKoZ0EUtqa+dBngNHlFkxP8
- QbKeyyZM7vpiF1eVHBXClmJ7q3uHoMumEeB/T8U5dCHE+2u3I2LTwuFRsTvPZVgd1KuJs6G
- emVuzxEesdajYakgVeBeA==
-UI-OutboundReport: notjunk:1;M01:P0:b+sbG6KBl0Q=;DrQLCD8aJrSqlxJ6i57i0hIjRe+
- 2bSKOmVBAG4ZK5cK6BNaphIdtcy53bVNS5UyAHfPQPbekeHCCC90jJA816e/CkJTWmxXaKo/u
- m6H9bDH6R+8Dri0NQqFKO1FGKxz5PQrrAHuIEERp2P/7/YPhymstXoygi6ufU9hfSneujcioJ
- 7tZvRn4/ZRFEragspIVNiBxRVLbXNslMaLt5GBDu34nxijLwmVkL0n11UHH8BETV/ID8/Sj38
- nARP/HnHfEYNr+HSURrKvymISKwjZFg+UaCfFgE8Ji9mJaYhUMKwlHXuMY0mErqYYzuZjTneA
- s8SR9i1XX1qnJQepaubIxHCiXspwEPiY88njH3AN7vuisu8DXkflIpoqYWPKWcXFuZpHzzVcS
- +0DxcpiksKsiI4u7qMRCqHQiL/8UJGnFDlxK86oRE2hDAFAP+bAVYmepQQwSH2DKb3FctQELT
- YNIo6Ke5uHtkAwyQEpDgWaJYpuJTIApMJWoeD1jk8eLPqQsIvLw04skOqeduerXSJiLZ0kVHd
- MSVcgvpenh9Q5oM+tqftsziL+D+6kqkwx4o5aq6lG8yeuH9+ILNdEWaRNBV9Cj3c1oaZKTgxy
- JVbsh8b8UNVQRUJjQZO5mkK0o7JCq7VkSl7goCaDDazqNffgdypq1r/Uz14z/PWMTVIqRbJUh
- UzZSdcU2hTQyrotycH90DUHWOZRoC2YL40TBOLCZ/NFb5Wy+mGqxS8x2wDQssQ+Ja/HaJGXsU
- 22S8xgAtL1RO5xU8E6Rqd4ev8UyXYmng0f5UrBsTvwDNkNMPsjuZtoDGKZUI/gLuY20AVPxsm
- Chhh1Y87Gjz39I8a2GB/rDocv1dnUu0vRjrmdas+LTaDglRtItlDzDQQUsr7oUsgfN0dJpKQu
- YH1PlVz+r+w/117JxZsxhdU1Wz+2ixr83XgtYBYIJ84s+PbteSak/mvRh/nPzBpgCMmdpBhs0
- 4ksXYA==
+X-Provags-ID: V03:K1:ZTx7sbSeHZyo7TNbVAA19K7daQMirKbHvUWaRKkdWA/7b8SIbE0
+ ympILij097PEsEHHQ3veKghBMxU9FCrm9wIXyCxHD3/U8xn6GVgRPpdB3HqvDeXsibh0TSE
+ sjvgn03MqaOOFtPmtTHs+E0mrCE/v4oAAG7ZA1Lg7jHmhakeVza2wVERGNJlfyGSNnUYeWz
+ IeobN421Fz6jm1tCaZ+Pg==
+UI-OutboundReport: notjunk:1;M01:P0:ayySXucW28o=;l/skPjbCBsXB6ks6nERHjCTYxpX
+ VKePwRh/qD0Bnl+YHeIpuFXO9igBF+yqB22dYQU0BeXJtXgwc7oWexlRO13t7FHDsljmgxaXw
+ ymVx9jR1NuKBAosuYILke9G+wP+VFzbz9TfdMHL+4p7U+dxKXpn6xExFNLp2VFEWKbP9Rv6s3
+ w0mOVJR6OePAZCknIZ6HW0ouWkpRq66EJ75WBG+d2+yVtmsWFTb9EHmz3c0OgOsp7q97XJdzw
+ wR7delkcOBmZuYwyjJ/iR2bqdqJW/3JCDqDP6ItBv9Wl3s3orIQjFhsRtBsCFzv5lQFfHvANk
+ JbinuxNaHfJnpAog1Xm4nQjY9JFIrUZPbA43U6uPc9atchOka4SE86CE7jxjN/HjMVQiwSVDc
+ UKvEfdbTn5TuvCmgS67nnoGZTdw7JV47rYb5cXZYd8LG9h+txGhJH1mAi5xQYENftKiaAENC/
+ LCpjSyRGwOwxn4pJVD0WdwzPI2PHNX8/rJCZffoE6b1fpHVqKuzGOCB8+48ec5zV3fby1d+5/
+ r9IfEwPttrShj6n8Va7InzRdNDzDG5MdR4duJbukb0UfdFS8F0X2mKT6SCNsgWAWK+OWKdIhZ
+ cxNTcr7csEAwV2yDtrFDk0zmF08n1rLNDHqqhs2A9Fxod3W6BVYOQZ+KjGigWl2Dq7x2HI26v
+ /hArrQ/a+4KAfE/gE6AtvqfB4rNmxOshmDaJiide5PfxZSdJxYZRNQ9w3YoLr256FHQPdw5Sn
+ dTrPRR3eOXBj5tYqkyaHPfwVDshdJGg8+3XQfYBS8DeUx9VKJM/IHwmocVBWgJ2Kl1NPlEXF3
+ hk/oJMjm2uCW1jpES2slq+SqgzzdTjVwwXHke8yk1COyStfgG3R7GTwLakFPpbCTLnj014KpI
+ dzGFEJlqSSpRS6set8ZqLGFe6RMpFbsZPNPKBZx2wcOSXRaXXkgoQ4xAbXB3/4+sofCo9csQ7
+ BqmVI/BZzdFimF55TKHT2kwOr4k=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Changes since v2:
-* Split the patch into a patch series.
-* Incorporate the changes requested.
-* Style updates to better match the existing documentation.
-* And a lot of small fixes.
+Add new documentation file for audio.h
+Step 1: data types only
 
-
-Hi Mauro,
-
-it took a little longer then expected, but I didn't had much time in spare
-for this. I'm pretty much occupied by other things at the moment.
-The winter season would be better for things like this, but I try to
-finish it as quick as possible.
-
-I went through your mail point by point and I'm confident, that I was able
-to sort out your questions now. At least I don't see anything that need to
-be improved anymore.
-The work has been done in a lot of small blocks over a pretty long period
-after my daily work, mostly late at night. Despite double checking
-everything, I maybe still have missed something. I hope it is not too
-much.
-
-For usage it has been checked against the known projects using the DVB
-decoder APIs:
-* The AV7110 kernel driver.
-* The out of tree driver for the HD full featured cards.[1]
-* The "Enigma2" sources from openatv team.[2]
-  (The drivers of the boxes are binary only.)
-
-Possibly unused items have been listed in the comment of the patches.
-Please take this lists with a pinch of salt. With the number of items
-checked, it is pretty easy to miss an occurrence or have a false positive.
-Although I've done my best, there is still the chance that I've missed an
-use case.
-
-I tried to complete the documentation of this unused definition too.
-Most information had been collect anyway and writing it down wasn't that
-much of effort.
-
-Removing the definition and documentation later at once is always an
-option.
-I would prefer to do it this way, if something has to be removed.
-It is easier to revert the change in case of a regression.
-If necessary I can provide the patches too.
-
-Regards
-Stefan
-
-[1: https://github.com/s-moch/linux-saa716x]
-[2: https://github.com/openatv/enigma2/tree/master]
-
-
-
-Stefan Herdler (6):
-  Add documentation for legacy DVB decoder API
-  Add documentation for osd.h
-  Add documentation for audio.h (data types)
-  Add documentation for audio.h (function calls)
-  Add documentation for video.h (data types)
-  Add documentation for video.h (function calls)
-
- .../media/dvb/legacy_dvb_apis.rst             |    1 +
- .../media/dvb/legacy_dvb_audio.rst            | 1642 +++++++++++
- .../media/dvb/legacy_dvb_decoder_api.rst      |   61 +
- .../media/dvb/legacy_dvb_osd.rst              |  883 ++++++
- .../media/dvb/legacy_dvb_video.rst            | 2430 +++++++++++++++++
- 5 files changed, 5017 insertions(+)
+Signed-off-by: Stefan Herdler <herdler@nurfuerspam.de>
+=2D--
+ .../media/dvb/legacy_dvb_audio.rst            | 447 ++++++++++++++++++
+ 1 file changed, 447 insertions(+)
  create mode 100644 Documentation/userspace-api/media/dvb/legacy_dvb_audio=
 .rst
- create mode 100644 Documentation/userspace-api/media/dvb/legacy_dvb_decod=
-er_api.rst
- create mode 100644 Documentation/userspace-api/media/dvb/legacy_dvb_osd.r=
-st
- create mode 100644 Documentation/userspace-api/media/dvb/legacy_dvb_video=
-.rst
 
+diff --git a/Documentation/userspace-api/media/dvb/legacy_dvb_audio.rst b/=
+Documentation/userspace-api/media/dvb/legacy_dvb_audio.rst
+new file mode 100644
+index 000000000000..4c994f8c97e5
+=2D-- /dev/null
++++ b/Documentation/userspace-api/media/dvb/legacy_dvb_audio.rst
+@@ -0,0 +1,447 @@
++.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later OR GPL-2.0
++
++.. c:namespace:: dtv.legacy.audio
++
++.. _dvb_audio:
++
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++DVB Audio Device
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++
++.. attention:: Do **not** use in new drivers!
++             See: :ref:`legacy_dvb_decoder_notes`
++
++The DVB audio device controls the MPEG2 audio decoder of the DVB
++hardware. It can be accessed through ``/dev/dvb/adapter?/audio?``. Data
++types and ioctl definitions can be accessed by including
++``linux/dvb/audio.h`` in your application.
++
++Please note that most DVB cards don=E2=80=99t have their own MPEG decoder=
+, which
++results in the omission of the audio and video device.
++
++These ioctls were also used by V4L2 to control MPEG decoders implemented
++in V4L2. The use of these ioctls for that purpose has been made obsolete
++and proper V4L2 ioctls or controls have been created to replace that
++functionality. Use :ref:`V4L2 ioctls<video>` for new drivers!
++
++
++Audio Data Types
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++
++This section describes the structures, data types and defines used when
++talking to the audio device.
++
++
++-----
++
++
++audio_stream_source_t
++---------------------
++
++Synopsis
++~~~~~~~~
++
++.. c:enum:: audio_stream_source_t
++
++.. code-block:: c
++
++    typedef enum {
++    AUDIO_SOURCE_DEMUX,
++    AUDIO_SOURCE_MEMORY
++    } audio_stream_source_t;
++
++Constants
++~~~~~~~~~
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++
++    -  ..
++
++       -  ``AUDIO_SOURCE_DEMUX``
++
++       -  :cspan:`1` Selects the demultiplexer (fed either by the fronten=
+d
++          or the DVR device) as the source of the video stream.
++
++    -  ..
++
++       -  ``AUDIO_SOURCE_MEMORY``
++
++       -  Selects the stream from the application that comes through
++          the `write()`_ system call.
++
++Description
++~~~~~~~~~~~
++
++The audio stream source is set through the `AUDIO_SELECT_SOURCE`_ call
++and can take the following values, depending on whether we are replaying
++from an internal (demux) or external (user write) source.
++
++The data fed to the decoder is also controlled by the PID-filter.
++Output selection: :c:enum:`dmx_output` ``DMX_OUT_DECODER``.
++
++
++-----
++
++
++audio_play_state_t
++------------------
++
++Synopsis
++~~~~~~~~
++
++.. c:enum:: audio_play_state_t
++
++.. code-block:: c
++
++    typedef enum {
++	AUDIO_STOPPED,
++	AUDIO_PLAYING,
++	AUDIO_PAUSED
++    } audio_play_state_t;
++
++Constants
++~~~~~~~~~
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++
++    -  ..
++
++       -  ``AUDIO_STOPPED``
++
++       -  Audio is stopped.
++
++    -  ..
++
++       -  ``AUDIO_PLAYING``
++
++       -  Audio is currently playing.
++
++    -  ..
++
++       -  ``AUDIO_PAUSE``
++
++       -  Audio is frozen.
++
++Description
++~~~~~~~~~~~
++
++This values can be returned by the `AUDIO_GET_STATUS`_ call
++representing the state of audio playback.
++
++
++-----
++
++
++audio_channel_select_t
++----------------------
++
++Synopsis
++~~~~~~~~
++
++.. c:enum:: audio_channel_select_t
++
++.. code-block:: c
++
++    typedef enum {
++	AUDIO_STEREO,
++	AUDIO_MONO_LEFT,
++	AUDIO_MONO_RIGHT,
++	AUDIO_MONO,
++	AUDIO_STEREO_SWAPPED
++    } audio_channel_select_t;
++
++Constants
++~~~~~~~~~
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++
++    -  ..
++
++       -  ``AUDIO_STEREO``
++
++       -  Stereo.
++
++    -  ..
++
++       -  ``AUDIO_MONO_LEFT``
++
++       -  Mono, select left stereo channel as source.
++
++    -  ..
++
++       -  ``AUDIO_MONO_RIGHT``
++
++       -  Mono, select right stereo channel as source.
++
++    -  ..
++
++       -  ``AUDIO_MONO``
++
++       -  Mono source only.
++
++    -  ..
++
++       -  ``AUDIO_STEREO_SWAPPED``
++
++       -  Stereo, swap L & R.
++
++Description
++~~~~~~~~~~~
++
++The audio channel selected via `AUDIO_CHANNEL_SELECT`_ is determined by
++this values.
++
++
++-----
++
++
++audio_mixer_t
++-------------
++
++Synopsis
++~~~~~~~~
++
++.. c:struct:: audio_mixer
++
++.. code-block:: c
++
++    typedef struct audio_mixer {
++	unsigned int volume_left;
++	unsigned int volume_right;
++    } audio_mixer_t;
++
++Variables
++~~~~~~~~~
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++
++    -  ..
++
++       -  ``unsigned int volume_left``
++
++       -  Volume left channel.
++          Valid range: 0 ... 255
++
++    -  ..
++
++       -  ``unsigned int volume_right``
++
++       -  Volume right channel.
++          Valid range: 0 ... 255
++
++Description
++~~~~~~~~~~~
++
++This structure is used by the `AUDIO_SET_MIXER`_ call to set the
++audio volume.
++
++
++-----
++
++
++audio_status
++------------
++
++Synopsis
++~~~~~~~~
++
++.. c:struct:: audio_status
++
++.. code-block:: c
++
++    typedef struct audio_status {
++	int AV_sync_state;
++	int mute_state;
++	audio_play_state_t play_state;
++	audio_stream_source_t stream_source;
++	audio_channel_select_t channel_select;
++	int bypass_mode;
++	audio_mixer_t mixer_state;
++    } audio_status_t;
++
++Variables
++~~~~~~~~~
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++
++    -  ..
++
++       -  :rspan:`2` ``int AV_sync_state``
++
++       -  :cspan:`1` Shows if A/V synchronization is ON or OFF.
++
++    -  ..
++
++       -  TRUE  ( !=3D 0 )
++
++       -  AV-sync ON.
++
++    -  ..
++
++       -  FALSE ( =3D=3D 0 )
++
++       -  AV-sync OFF.
++
++    -  ..
++
++       -  :rspan:`2` ``int mute_state``
++
++       -  :cspan:`1` Indicates if audio is muted or not.
++
++    -  ..
++
++       -  TRUE  ( !=3D 0 )
++
++       -  mute audio
++
++    -  ..
++
++       -  FALSE ( =3D=3D 0 )
++
++       -  unmute audio
++
++    -  ..
++
++       -  `audio_play_state_t`_ ``play_state``
++
++       -  Current playback state.
++
++    -  ..
++
++       -  `audio_stream_source_t`_ ``stream_source``
++
++       -  Current source of the data.
++
++    -  ..
++
++       -  :rspan:`2` ``int bypass_mode``
++
++       -  :cspan:`1` Is the decoding of the current Audio stream in
++          the DVB subsystem enabled or disabled.
++
++    -  ..
++
++       -  TRUE  ( !=3D 0 )
++
++       -  Bypass disabled.
++
++    -  ..
++
++       -  FALSE ( =3D=3D 0 )
++
++       -  Bypass enabled.
++
++    -  ..
++
++       -  `audio_mixer_t`_ ``mixer_state``
++
++       -  Current volume settings.
++
++Description
++~~~~~~~~~~~
++
++The `AUDIO_GET_STATUS`_ call returns this structure as information
++about various states of the playback operation.
++
++
++-----
++
++
++audio encodings
++---------------
++
++Synopsis
++~~~~~~~~
++
++.. code-block:: c
++
++     #define AUDIO_CAP_DTS    1
++     #define AUDIO_CAP_LPCM   2
++     #define AUDIO_CAP_MP1    4
++     #define AUDIO_CAP_MP2    8
++     #define AUDIO_CAP_MP3   16
++     #define AUDIO_CAP_AAC   32
++     #define AUDIO_CAP_OGG   64
++     #define AUDIO_CAP_SDDS 128
++     #define AUDIO_CAP_AC3  256
++
++Constants
++~~~~~~~~~
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++
++    -  ..
++
++       -  ``AUDIO_CAP_DTS``
++
++       -  :cspan:`1` The hardware accepts DTS audio tracks.
++
++    -  ..
++
++       -  ``AUDIO_CAP_LPCM``
++
++       -   The hardware accepts uncompressed audio with
++           Linear Pulse-Code Modulation (LPCM)
++
++    -  ..
++
++       -  ``AUDIO_CAP_MP1``
++
++       -  The hardware accepts MPEG-1 Audio Layer 1.
++
++    -  ..
++
++       -  ``AUDIO_CAP_MP2``
++
++       -  The hardware accepts MPEG-1 Audio Layer 2.
++          Also known as MUSICAM.
++
++    -  ..
++
++       -  ``AUDIO_CAP_MP3``
++
++       -  The hardware accepts MPEG-1 Audio Layer III.
++          Commomly known as .mp3.
++
++    -  ..
++
++       -  ``AUDIO_CAP_AAC``
++
++       -  The hardware accepts AAC (Advanced Audio Coding).
++
++    -  ..
++
++       -  ``AUDIO_CAP_OGG``
++
++       -  The hardware accepts Vorbis audio tracks.
++
++    -  ..
++
++       -  ``AUDIO_CAP_SDDS``
++
++       -  The hardware accepts Sony Dynamic Digital Sound (SDDS).
++
++    -  ..
++
++       -  ``AUDIO_CAP_AC3``
++
++       -  The hardware accepts Dolby Digital ATSC A/52 audio.
++          Also known as AC-3.
++
++Description
++~~~~~~~~~~~
++
++A call to `AUDIO_GET_CAPABILITIES`_ returns an unsigned integer with the
++following bits set according to the hardwares capabilities.
 =2D-
 2.34.0
 
