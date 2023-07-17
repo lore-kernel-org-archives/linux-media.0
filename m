@@ -2,104 +2,113 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 312AEC001DF
-	for <linux-media@archiver.kernel.org>; Mon, 17 Jul 2023 12:45:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D1AA3C001B0
+	for <linux-media@archiver.kernel.org>; Mon, 17 Jul 2023 13:21:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbjGQMpX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Jul 2023 08:45:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58300 "EHLO
+        id S231621AbjGQNVk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Jul 2023 09:21:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbjGQMpW (ORCPT
+        with ESMTP id S231622AbjGQNV0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 17 Jul 2023 08:45:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8536091;
-        Mon, 17 Jul 2023 05:45:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 09E4C6103F;
-        Mon, 17 Jul 2023 12:45:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B46DC433C8;
-        Mon, 17 Jul 2023 12:45:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689597920;
-        bh=H13b/kPtnbPNqTkXh0P646Xi0qWC1YULsU7xxoNFXDw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r6K3P5tFClIWpj34d+MHBPFy6UlUBif976s68oHmrLN04lY7LhD7hht47BGRezIUA
-         yUmb7+y1oCmtF1ye936kJU5r8VusBrE86uMb1cFwKXBPZLt82lBIvi2idEfeqKW+0R
-         h8kPNuU9UvT/NFTm4cfdKscK571sWITEM8MuiTat0DUfFydekOW2DeVrfF2/yly3z5
-         aubqxJW0S+73OiYo7yDr/eJ3Ei2f7ceGBWqwQy01U1y/3QaU4XuNKSOx3ekHtfslxP
-         IllGMq3bOABvAcXbfqYw4X9YbiHXjrnJrkh0FcNdSGqX8M7ys9zXmHuwzo6ui/6L7u
-         k43KmZlKtLpNg==
-Received: from johan by xi.lan with local (Exim 4.96)
-        (envelope-from <johan@kernel.org>)
-        id 1qLNbR-0000Qa-36;
-        Mon, 17 Jul 2023 14:45:26 +0200
-Date:   Mon, 17 Jul 2023 14:45:25 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
+        Mon, 17 Jul 2023 09:21:26 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C12E19AC
+        for <linux-media@vger.kernel.org>; Mon, 17 Jul 2023 06:20:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689600030; x=1721136030;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=r6Wqcjup7NWTPHKxUHN7MSj/jv6yNCqqHWhTGC9HmTs=;
+  b=MHVwuboZvDigy7dOLwk/+68qF91hAmZ3aN75o1oOHmMgtSn9FLxzCvup
+   gSzku6GET0dTcSlNkADMTMHsfv0PUE8nk5oFAthm+mZD8maluiJJmdsTa
+   YruSvhuTGBLw2ZQaMBY1Y8FP73oSD0wVMUVu3hOaYMMlc/ka1+cYOAZgF
+   1wjFf5IO45p38U7jo94aVYxpz4YQy8q2QjM3LWZQcc/+dzpAIdkQkN73f
+   Y5ZOLv3UXDmBuRgs5H8B9nmLtHE4d9jrC1buLjb+m9+7nUQxMSlJNX0bf
+   tp5DNDuL88SkOsBT2Mg9m1HUna3WrMvcXRA9w6pbM59Xf+onLkTL1glRX
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="432097236"
+X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
+   d="scan'208";a="432097236"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 06:20:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="726541807"
+X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
+   d="scan'208";a="726541807"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 06:20:18 -0700
+Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id C2B1D120A14;
+        Mon, 17 Jul 2023 16:20:15 +0300 (EEST)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
+        (envelope-from <sakari.ailus@linux.intel.com>)
+        id 1qLO8F-004s00-30;
+        Mon, 17 Jul 2023 16:19:19 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     laurent.pinchart@ideasonboard.com,
+        Philipp Zabel <p.zabel@pengutronix.de>, hverkuil@xs4all.nl,
+        Francesco Dolcini <francesco@dolcini.it>,
+        aishwarya.kothari@toradex.com, Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Hyun Kwon <hyun.kwon@xilinx.com>, bingbu.cao@intel.com,
+        niklas.soderlund@ragnatech.se,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Sylvain Petinot <sylvain.petinot@foss.st.com>,
+        Eugen Hristev <eugen.hristev@collabora.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
         Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] media: camss: Intepret OF graph connections more
- sensibly
-Message-ID: <ZLU35SucePevwU6i@hovoldconsulting.com>
-References: <20230614-topic-camss_grpah-v2-1-57d9d5e49038@linaro.org>
- <ZLUcaQN6hCjjulTv@hovoldconsulting.com>
- <18f2a5b5-5cc2-6bea-ca08-5da218b3192b@linaro.org>
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Dafna Hirschfeld <dafna@fastmail.com>,
+        Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        Yong Deng <yong.deng@magewell.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Benoit Parrot <bparrot@ti.com>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Marco Felsch <m.felsch@pengutronix.de>
+Subject: [PATCH v5 03/38] media: atmel-isi: Remote unneeeded forward declaration
+Date:   Mon, 17 Jul 2023 16:18:34 +0300
+Message-Id: <20230717131909.1160787-4-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230717131909.1160787-1-sakari.ailus@linux.intel.com>
+References: <20230717131909.1160787-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <18f2a5b5-5cc2-6bea-ca08-5da218b3192b@linaro.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Jul 17, 2023 at 02:40:05PM +0200, Konrad Dybcio wrote:
-> On 17.07.2023 12:48, Johan Hovold wrote:
-> > On Sat, Jul 15, 2023 at 05:37:52PM +0200, Konrad Dybcio wrote:
+Remove an unneeded forward declaration for struct v4l2_async_subdev.
 
-> >> diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
-> >> index 1ef26aea3eae..8b75197fa5d7 100644
-> >> --- a/drivers/media/platform/qcom/camss/camss.c
-> >> +++ b/drivers/media/platform/qcom/camss/camss.c
-> >> @@ -1084,9 +1084,8 @@ static int camss_of_parse_ports(struct camss *camss)
-> >>  
-> >>  		remote = of_graph_get_remote_port_parent(node);
-> >>  		if (!remote) {
-> >> -			dev_err(dev, "Cannot get remote parent\n");
-> >> -			ret = -EINVAL;
-> >> -			goto err_cleanup;
-> >> +			of_node_put(node);
-> > 
-> > This is broken and could potentially lead to a use after free.
-> > 
-> > Specifically, the iteration macro already takes care of putting this
-> > reference.
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Tested-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> # Renesas RZ/G2L SMARC
+---
+ drivers/media/platform/atmel/atmel-isi.h | 2 --
+ 1 file changed, 2 deletions(-)
 
-> /**
->  * for_each_endpoint_of_node - iterate over every endpoint in a device node
->  * @parent: parent device node containing ports and endpoints
->  * @child: loop variable pointing to the current endpoint node
->  *
->  * When breaking out of the loop, of_node_put(child) has to be called manually.
->  */
+diff --git a/drivers/media/platform/atmel/atmel-isi.h b/drivers/media/platform/atmel/atmel-isi.h
+index 7ad3895a2c87..ef38eddef5fc 100644
+--- a/drivers/media/platform/atmel/atmel-isi.h
++++ b/drivers/media/platform/atmel/atmel-isi.h
+@@ -121,8 +121,6 @@
+ #define ISI_DATAWIDTH_8				0x01
+ #define ISI_DATAWIDTH_10			0x02
+ 
+-struct v4l2_async_subdev;
+-
+ struct isi_platform_data {
+ 	u8 has_emb_sync;
+ 	u8 hsync_act_low;
+-- 
+2.39.2
 
-Please read this comment you just pasted here again as it seems you did
-not understand it.
-
-> > 
-> >> +			continue;
-
-And again, please remember to trim your replies. Including context after
-your reply is almost always wrong.
-
-Johan
