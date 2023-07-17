@@ -2,50 +2,50 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EFA1C001B0
-	for <linux-media@archiver.kernel.org>; Mon, 17 Jul 2023 13:21:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFCF1EB64DC
+	for <linux-media@archiver.kernel.org>; Mon, 17 Jul 2023 13:21:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbjGQNVv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Jul 2023 09:21:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59872 "EHLO
+        id S230100AbjGQNVx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Jul 2023 09:21:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbjGQNVg (ORCPT
+        with ESMTP id S229954AbjGQNVg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 17 Jul 2023 09:21:36 -0400
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456B51FD8
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453321FD6
         for <linux-media@vger.kernel.org>; Mon, 17 Jul 2023 06:20:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1689600055; x=1721136055;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=nd5GhAnfJvE9/krpplxOzh8HEMUV5sBrEsuZr8JV/qs=;
-  b=B/iMdfy5GnP2Dinz5bk/jocO+6Kc/Umy1E6DXwhh31GqPyV7fIoWUujk
-   mEKNA7nkctfsFXBhD0ntx9NOHAwyK6uFOr9txvmdn42Fd9TkidPtN/n3z
-   T1VxtAEKPCqyJ2K8DNZZz1JV+T89CRPDxkopAbQC1IseEwrK6dcXTu7dp
-   31H0vB6ttT/HRgRdeAQaWoHAXjqik2G+pBzsl+Wl/BqxD4p7QONH8blik
-   yL89Vf5hnhiVYgjCSgqztSfykSYSprRMJxgcKE+gfaN3O+xAxqJTvEbtE
-   /8ZzChEZAK9VoUfhTM0Pg9MdSjexlJRROJAHdhtQl2+9gZTP/BCgXlq1O
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="432097426"
+  bh=JmpHmS2RKGPfNneYRVrUsB805bMYBIYSLG2ZtEZZ0BI=;
+  b=SPfqIOru07N6DTTrxKV7NvLh9x64NtMnE4rNHwN9cxOSKG5uT5m494OQ
+   K1sRv1x0R9bB2Nz9TvkTmlhVQqx4DU663lP0TIjI4IU2VvormKZJpAbqm
+   5u7qSxp3Fzja5yq5la89O7HThHSMcJWQ884fvswQg7wHKggtQak23jeMq
+   /faO/aQjsWGuqm8cPJd6I4hvl7lpiOiieYLoDF6vbQGC8xenVhAK3Bipm
+   OMfQ1Z1tDGdtlV2HjAE+e4T4Xhm3K6A2Fcbm1vwOUBXvYZT3C9id+0MAx
+   0B1z2ZHdBVEaJzAYKvKWA/E4Pf1AxM7jGHpc+KuarBpk8DYAEpRFpTakW
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="432097403"
 X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
-   d="scan'208";a="432097426"
+   d="scan'208";a="432097403"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
   by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 06:20:35 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="726541904"
+X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="726541898"
 X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
-   d="scan'208";a="726541904"
+   d="scan'208";a="726541898"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
   by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 06:20:27 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id D009B120CAD;
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id F2F53120ECF;
         Mon, 17 Jul 2023 16:20:15 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1qLO8F-004s0F-3A;
-        Mon, 17 Jul 2023 16:19:19 +0300
+        id 1qLO8G-004s0j-0P;
+        Mon, 17 Jul 2023 16:19:20 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com,
@@ -76,42 +76,118 @@ Cc:     laurent.pinchart@ideasonboard.com,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Sowjanya Komatineni <skomatineni@nvidia.com>,
         Marco Felsch <m.felsch@pengutronix.de>
-Subject: [PATCH v5 06/38] media: Documentation: v4l: Fix async notifier registration example
-Date:   Mon, 17 Jul 2023 16:18:37 +0300
-Message-Id: <20230717131909.1160787-7-sakari.ailus@linux.intel.com>
+Subject: [PATCH v5 12/38] media: v4l: async: Clean up testing for duplicate async subdevs
+Date:   Mon, 17 Jul 2023 16:18:43 +0300
+Message-Id: <20230717131909.1160787-13-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230717131909.1160787-1-sakari.ailus@linux.intel.com>
 References: <20230717131909.1160787-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-An example adding an async sub-device to a V4L2 async notifier. The name
-of the variable in error handling was wrong (asd vs. my_asd).
+There's a need to verify that a single async sub-device isn't being added
+multiple times, this would be an error. This takes place at the time of
+adding the async sub-device to the notifier's list as well as when the
+notifier is added to the global notifier's list.
+
+Use the pointer to the sub-device for testing this instead of an index to
+an array that is long gone. (There was an array of async sub-devices in
+the notifier before it was converted to a linked list by commit
+66beb323e4a0 ("media: v4l2: async: Remove notifier subdevs array").)
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Tested-by: Philipp Zabel <p.zabel@pengutronix.de> # imx6qp
+Tested-by: Niklas Söderlund <niklas.soderlund@ragnatech.se> # rcar + adv746x
+Tested-by: Aishwarya Kothari <aishwarya.kothari@toradex.com> # Apalis i.MX6Q with TC358743
 Tested-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> # Renesas RZ/G2L SMARC
 ---
- Documentation/driver-api/media/v4l2-subdev.rst | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/v4l2-core/v4l2-async.c | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/Documentation/driver-api/media/v4l2-subdev.rst b/Documentation/driver-api/media/v4l2-subdev.rst
-index 602dadaa81d8..c46511c9b6c8 100644
---- a/Documentation/driver-api/media/v4l2-subdev.rst
-+++ b/Documentation/driver-api/media/v4l2-subdev.rst
-@@ -234,8 +234,8 @@ These functions allocate an async sub-device descriptor which is of type struct
- 						 struct my_async_subdev);
- 	fwnode_handle_put(ep);
+diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
+index c5781124337a..9b79bcc1af82 100644
+--- a/drivers/media/v4l2-core/v4l2-async.c
++++ b/drivers/media/v4l2-core/v4l2-async.c
+@@ -519,23 +519,23 @@ __v4l2_async_nf_has_async_subdev(struct v4l2_async_notifier *notifier,
+ }
  
--	if (IS_ERR(asd))
--		return PTR_ERR(asd);
-+	if (IS_ERR(my_asd))
-+		return PTR_ERR(my_asd);
+ /*
+- * Find out whether an async sub-device was set up already or
+- * whether it exists in a given notifier before @this_index.
+- * If @this_index < 0, search the notifier's entire @asd_list.
++ * Find out whether an async sub-device was set up already or whether it exists
++ * in a given notifier. The skip_self argument is used to skip testing the same
++ * sub-device in the notifier in case the sub-device has been already added to
++ * the notifier.
+  */
+ static bool
+ v4l2_async_nf_has_async_subdev(struct v4l2_async_notifier *notifier,
+-			       struct v4l2_async_subdev *asd, int this_index)
++			       struct v4l2_async_subdev *asd, bool skip_self)
+ {
+ 	struct v4l2_async_subdev *asd_y;
+-	int j = 0;
  
- The V4L2 core will then use these descriptors to match asynchronously
- registered subdevices to them. If a match is detected the ``.bound()``
+ 	lockdep_assert_held(&list_lock);
+ 
+ 	/* Check that an asd is not being added more than once. */
+ 	list_for_each_entry(asd_y, &notifier->asd_list, asd_list) {
+-		if (this_index >= 0 && j++ >= this_index)
+-			break;
++		if (skip_self && asd == asd_y)
++			continue;
+ 		if (asd_equal(asd, asd_y))
+ 			return true;
+ 	}
+@@ -550,7 +550,7 @@ v4l2_async_nf_has_async_subdev(struct v4l2_async_notifier *notifier,
+ 
+ static int v4l2_async_nf_asd_valid(struct v4l2_async_notifier *notifier,
+ 				   struct v4l2_async_subdev *asd,
+-				   int this_index)
++				   bool skip_self)
+ {
+ 	struct device *dev = notifier_dev(notifier);
+ 
+@@ -560,7 +560,7 @@ static int v4l2_async_nf_asd_valid(struct v4l2_async_notifier *notifier,
+ 	switch (asd->match_type) {
+ 	case V4L2_ASYNC_MATCH_I2C:
+ 	case V4L2_ASYNC_MATCH_FWNODE:
+-		if (v4l2_async_nf_has_async_subdev(notifier, asd, this_index)) {
++		if (v4l2_async_nf_has_async_subdev(notifier, asd, skip_self)) {
+ 			dev_dbg(dev, "v4l2-async: subdev descriptor already listed in a notifier\n");
+ 			return -EEXIST;
+ 		}
+@@ -583,7 +583,7 @@ EXPORT_SYMBOL(v4l2_async_nf_init);
+ static int __v4l2_async_nf_register(struct v4l2_async_notifier *notifier)
+ {
+ 	struct v4l2_async_subdev *asd;
+-	int ret, i = 0;
++	int ret;
+ 
+ 	INIT_LIST_HEAD(&notifier->waiting);
+ 	INIT_LIST_HEAD(&notifier->done);
+@@ -591,7 +591,7 @@ static int __v4l2_async_nf_register(struct v4l2_async_notifier *notifier)
+ 	mutex_lock(&list_lock);
+ 
+ 	list_for_each_entry(asd, &notifier->asd_list, asd_list) {
+-		ret = v4l2_async_nf_asd_valid(notifier, asd, i++);
++		ret = v4l2_async_nf_asd_valid(notifier, asd, true);
+ 		if (ret)
+ 			goto err_unlock;
+ 
+@@ -725,7 +725,7 @@ static int __v4l2_async_nf_add_subdev(struct v4l2_async_notifier *notifier,
+ 
+ 	mutex_lock(&list_lock);
+ 
+-	ret = v4l2_async_nf_asd_valid(notifier, asd, -1);
++	ret = v4l2_async_nf_asd_valid(notifier, asd, false);
+ 	if (ret)
+ 		goto unlock;
+ 
 -- 
 2.39.2
 
