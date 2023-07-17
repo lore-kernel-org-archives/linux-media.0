@@ -2,49 +2,49 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A8EBC001DC
-	for <linux-media@archiver.kernel.org>; Mon, 17 Jul 2023 13:22:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69953EB64DC
+	for <linux-media@archiver.kernel.org>; Mon, 17 Jul 2023 13:22:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231470AbjGQNWN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Jul 2023 09:22:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59672 "EHLO
+        id S231771AbjGQNWP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Jul 2023 09:22:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231646AbjGQNVl (ORCPT
+        with ESMTP id S231643AbjGQNVl (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 17 Jul 2023 09:21:41 -0400
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA84E129
-        for <linux-media@vger.kernel.org>; Mon, 17 Jul 2023 06:21:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D317A1A2
+        for <linux-media@vger.kernel.org>; Mon, 17 Jul 2023 06:21:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689600064; x=1721136064;
+  t=1689600065; x=1721136065;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=HLHW3rA4JuPT5dByGrvSJChXJKsCLFgf0pXxxwhiiig=;
-  b=DCj7oJ2MXZCgV6z4FI8tNOrG8VhlPhFkB4vMnHmfc/abIYDiYRdinQz0
-   FX2xAgDmkqcc+l/qQqqlb7e7qz3V1LezjPFDkwP7sTp4ZysRiGSRmlbp2
-   en7nhL+zp+ZINvIJqWXkw+/j5WkQHsmZldDNBPo8yd8F/FOixC6VfZjzn
-   sHs3Ca/9WxVxaOmxJNHsbfGSkyEeY86Shs5LkOGf10JYdzDi5DvR5Eyft
-   vixDL/QIus1H0CjjA9XC3JZ7dwxCeadO3JINFmGRXTMpCxN2525PdDxTa
-   q1Ba5yYY+6LgxlAF4Ksl75DD/jQ5rvgQMm5ai9KJJKB9R+AYqYsHnwEyA
+  bh=eTV+2YEOnm9cdTQHWiyxLJHrVzqYUKnlFEo0De6KsFc=;
+  b=STH6XI2hvWR5Qf/XAQf3SC5nibzP8feDxc0aH1fT+F+S3aZRYa3hol/k
+   azuoNbxR73Z/sD3EBN/UWiVZukhX715yd1mzM+Sa6qee0hCzQD3iUjq+B
+   vCNp6WhjVB0aOJGFWhJ79oNXaRHryISXyAjv07Q/jCDsaMu69OWcK2etH
+   TiNs8nb3p4ZeQM9uVVJ0DAh9jr5J1sUgE3aWTqfO2bfWrYI5z2bg8Q7uH
+   MTqNVOlrPYeg4j/vyHC8UkFh7S68aLjNk5NkM8Yp7jEdfCTgktd3avE7u
+   2jnEkFSb0iJBG0Ro6TqnUBsdeFX9v12mIKRW0QfQ9N0eq2sC2lhQ4pErr
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="432097775"
+X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="432097816"
 X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
-   d="scan'208";a="432097775"
+   d="scan'208";a="432097816"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
   by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 06:20:51 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="726542106"
+X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="726542098"
 X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
-   d="scan'208";a="726542106"
+   d="scan'208";a="726542098"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
   by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 06:20:36 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id 634571210B4;
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 3376612104C;
         Mon, 17 Jul 2023 16:20:16 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1qLO8G-004s2G-1j;
+        id 1qLO8G-004s1S-17;
         Mon, 17 Jul 2023 16:19:20 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
@@ -76,9 +76,9 @@ Cc:     laurent.pinchart@ideasonboard.com,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Sowjanya Komatineni <skomatineni@nvidia.com>,
         Marco Felsch <m.felsch@pengutronix.de>
-Subject: [PATCH v5 31/38] media: marvell: cafe: Register V4L2 device earlier
-Date:   Mon, 17 Jul 2023 16:19:02 +0300
-Message-Id: <20230717131909.1160787-32-sakari.ailus@linux.intel.com>
+Subject: [PATCH v5 21/38] media: v4l: async: Drop duplicate handling when adding connections
+Date:   Mon, 17 Jul 2023 16:18:52 +0300
+Message-Id: <20230717131909.1160787-22-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230717131909.1160787-1-sakari.ailus@linux.intel.com>
 References: <20230717131909.1160787-1-sakari.ailus@linux.intel.com>
@@ -89,10 +89,11 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Register V4L2 device before the async notifier. This way the device can be
-made available to the V4L2 async framework from the notifier init time
-onwards. A subsequent patch will add struct v4l2_device as an argument to
-v4l2_async_nf_init().
+The connections are checked for duplicates already when the notifier is
+registered. This is effectively a sanity check for driver (and possibly
+obscure firmware) bugs. Don't do this when adding the connection.
+
+Retain the int return type for now. It'll be needed very soon again.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Tested-by: Philipp Zabel <p.zabel@pengutronix.de> # imx6qp
@@ -100,91 +101,89 @@ Tested-by: Niklas Söderlund <niklas.soderlund@ragnatech.se> # rcar + adv746x
 Tested-by: Aishwarya Kothari <aishwarya.kothari@toradex.com> # Apalis i.MX6Q with TC358743
 Tested-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> # Renesas RZ/G2L SMARC
 ---
- drivers/media/platform/marvell/cafe-driver.c | 11 +++++++++--
- drivers/media/platform/marvell/mcam-core.c   |  9 ---------
- 2 files changed, 9 insertions(+), 11 deletions(-)
+ drivers/media/v4l2-core/v4l2-async.c | 27 ++++++++-------------------
+ 1 file changed, 8 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/media/platform/marvell/cafe-driver.c b/drivers/media/platform/marvell/cafe-driver.c
-index dd1bba70bd79..fbfbb9f67ddf 100644
---- a/drivers/media/platform/marvell/cafe-driver.c
-+++ b/drivers/media/platform/marvell/cafe-driver.c
-@@ -536,6 +536,10 @@ static int cafe_pci_probe(struct pci_dev *pdev,
- 	if (ret)
- 		goto out_pdown;
+diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
+index 0a9c9fb2a42c..0cd4e18e628c 100644
+--- a/drivers/media/v4l2-core/v4l2-async.c
++++ b/drivers/media/v4l2-core/v4l2-async.c
+@@ -471,14 +471,11 @@ v4l2_async_nf_has_async_match_entry(struct v4l2_async_notifier *notifier,
  
-+	ret = v4l2_device_register(mcam->dev, &mcam->v4l2_dev);
-+	if (ret)
-+		goto out_smbus_shutdown;
-+
- 	v4l2_async_nf_init(&mcam->notifier);
- 
- 	asd = v4l2_async_nf_add_i2c(&mcam->notifier,
-@@ -544,12 +548,12 @@ static int cafe_pci_probe(struct pci_dev *pdev,
- 				    struct v4l2_async_connection);
- 	if (IS_ERR(asd)) {
- 		ret = PTR_ERR(asd);
--		goto out_smbus_shutdown;
-+		goto out_v4l2_device_unregister;
- 	}
- 
- 	ret = mccic_register(mcam);
- 	if (ret)
--		goto out_smbus_shutdown;
-+		goto out_v4l2_device_unregister;
- 
- 	clkdev_create(mcam->mclk, "xclk", "%d-%04x",
- 		i2c_adapter_id(cam->i2c_adapter), ov7670_info.addr);
-@@ -565,6 +569,8 @@ static int cafe_pci_probe(struct pci_dev *pdev,
- 
- out_mccic_shutdown:
- 	mccic_shutdown(mcam);
-+out_v4l2_device_unregister:
-+	v4l2_device_unregister(&mcam->v4l2_dev);
- out_smbus_shutdown:
- 	cafe_smbus_shutdown(cam);
- out_pdown:
-@@ -587,6 +593,7 @@ static int cafe_pci_probe(struct pci_dev *pdev,
- static void cafe_shutdown(struct cafe_camera *cam)
+ /*
+  * Find out whether an async sub-device was set up already or whether it exists
+- * in a given notifier. The skip_self argument is used to skip testing the same
+- * sub-device in the notifier in case the sub-device has been already added to
+- * the notifier.
++ * in a given notifier.
+  */
+ static bool
+ v4l2_async_nf_has_async_match(struct v4l2_async_notifier *notifier,
+-			      struct v4l2_async_match_desc *match,
+-			      bool skip_self)
++			      struct v4l2_async_match_desc *match)
  {
- 	mccic_shutdown(&cam->mcam);
-+	v4l2_device_unregister(&cam->mcam.v4l2_dev);
- 	cafe_smbus_shutdown(cam);
- 	free_irq(cam->pdev->irq, cam);
- 	pci_iounmap(cam->pdev, cam->mcam.regs);
-diff --git a/drivers/media/platform/marvell/mcam-core.c b/drivers/media/platform/marvell/mcam-core.c
-index 3cee6d6b83fa..7a6e043ac753 100644
---- a/drivers/media/platform/marvell/mcam-core.c
-+++ b/drivers/media/platform/marvell/mcam-core.c
-@@ -1863,13 +1863,6 @@ int mccic_register(struct mcam_camera *cam)
- 		goto out;
- 	}
+ 	struct v4l2_async_connection *asc;
  
--	/*
--	 * Register with V4L
--	 */
--	ret = v4l2_device_register(cam->dev, &cam->v4l2_dev);
--	if (ret)
--		goto out;
+@@ -486,7 +483,7 @@ v4l2_async_nf_has_async_match(struct v4l2_async_notifier *notifier,
+ 
+ 	/* Check that an asd is not being added more than once. */
+ 	list_for_each_entry(asc, &notifier->asc_list, asc_entry) {
+-		if (skip_self && &asc->match == match)
++		if (&asc->match == match)
+ 			continue;
+ 		if (v4l2_async_match_equal(&asc->match, match))
+ 			return true;
+@@ -501,16 +498,14 @@ v4l2_async_nf_has_async_match(struct v4l2_async_notifier *notifier,
+ }
+ 
+ static int v4l2_async_nf_match_valid(struct v4l2_async_notifier *notifier,
+-				     struct v4l2_async_match_desc *match,
+-				     bool skip_self)
++				     struct v4l2_async_match_desc *match)
+ {
+ 	struct device *dev = notifier_dev(notifier);
+ 
+ 	switch (match->type) {
+ 	case V4L2_ASYNC_MATCH_TYPE_I2C:
+ 	case V4L2_ASYNC_MATCH_TYPE_FWNODE:
+-		if (v4l2_async_nf_has_async_match(notifier, match,
+-						  skip_self)) {
++		if (v4l2_async_nf_has_async_match(notifier, match)) {
+ 			dev_dbg(dev, "v4l2-async: match descriptor already listed in a notifier\n");
+ 			return -EEXIST;
+ 		}
+@@ -541,7 +536,7 @@ static int __v4l2_async_nf_register(struct v4l2_async_notifier *notifier)
+ 	mutex_lock(&list_lock);
+ 
+ 	list_for_each_entry(asc, &notifier->asc_list, asc_entry) {
+-		ret = v4l2_async_nf_match_valid(notifier, &asc->match, true);
++		ret = v4l2_async_nf_match_valid(notifier, &asc->match);
+ 		if (ret)
+ 			goto err_unlock;
+ 
+@@ -670,19 +665,13 @@ EXPORT_SYMBOL_GPL(v4l2_async_nf_cleanup);
+ static int __v4l2_async_nf_add_connection(struct v4l2_async_notifier *notifier,
+ 					  struct v4l2_async_connection *asc)
+ {
+-	int ret;
 -
- 	mutex_init(&cam->s_mutex);
- 	cam->state = S_NOTREADY;
- 	mcam_set_config_needed(cam, 1);
-@@ -1915,7 +1908,6 @@ int mccic_register(struct mcam_camera *cam)
+ 	mutex_lock(&list_lock);
  
- out:
- 	v4l2_async_nf_unregister(&cam->notifier);
--	v4l2_device_unregister(&cam->v4l2_dev);
- 	v4l2_async_nf_cleanup(&cam->notifier);
- 	return ret;
+-	ret = v4l2_async_nf_match_valid(notifier, &asc->match, false);
+-	if (ret)
+-		goto unlock;
+-
+ 	list_add_tail(&asc->asc_entry, &notifier->asc_list);
+ 
+-unlock:
+ 	mutex_unlock(&list_lock);
+-	return ret;
++
++	return 0;
  }
-@@ -1937,7 +1929,6 @@ void mccic_shutdown(struct mcam_camera *cam)
- 		mcam_free_dma_bufs(cam);
- 	v4l2_ctrl_handler_free(&cam->ctrl_handler);
- 	v4l2_async_nf_unregister(&cam->notifier);
--	v4l2_device_unregister(&cam->v4l2_dev);
- 	v4l2_async_nf_cleanup(&cam->notifier);
- }
- EXPORT_SYMBOL_GPL(mccic_shutdown);
+ 
+ struct v4l2_async_connection *
 -- 
 2.39.2
 
