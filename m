@@ -2,126 +2,272 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6778DC0015E
-	for <linux-media@archiver.kernel.org>; Wed, 19 Jul 2023 17:57:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3520AC0015E
+	for <linux-media@archiver.kernel.org>; Wed, 19 Jul 2023 17:57:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbjGSR50 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 19 Jul 2023 13:57:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42186 "EHLO
+        id S230281AbjGSR5g (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 19 Jul 2023 13:57:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbjGSR5T (ORCPT
+        with ESMTP id S230212AbjGSR5a (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 19 Jul 2023 13:57:19 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58E81FF3
-        for <linux-media@vger.kernel.org>; Wed, 19 Jul 2023 10:57:14 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-6686a05bc66so5383056b3a.1
-        for <linux-media@vger.kernel.org>; Wed, 19 Jul 2023 10:57:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20221208.gappssmtp.com; s=20221208; t=1689789434; x=1690394234;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4FVEMGAeC4A4acfilWsGklHz88eR5z5EWRCCV9Kst0I=;
-        b=0Q1tzUOb9vYJXHmPeDryrYB5A4pEESrmEqXYj9Hg+90Z5+QCPv2ecrkofZgQVHrh2Q
-         2SmV6ESktQAtsjCYVJZhJojTRHsrQLvYLqNH0EoTgXcN4+EyUGH6ZSXKFYb02Y0hiirh
-         icie1/r4QjaO+Xr/8VrDJJ+t8iIcRUo2snH46DM7aXAbB12rMZS46rJ2h5Z2q3coLAKN
-         GMT7GgUwcUUW4SpZr+6zG8X6fnKROWImTBv7u2v/1CdFXwNuMSzJvhzr6uNXEVsoU8p0
-         jr3ynj+/29rinW5TGGhTFa+uF7yLH222PS2w2a9Iu7qAlX2Am1gjapUEui6PcMe/HT1i
-         pwCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689789434; x=1690394234;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4FVEMGAeC4A4acfilWsGklHz88eR5z5EWRCCV9Kst0I=;
-        b=RJMn/QehzWHY4zTQZSZHn3U8cxfpTPcn3k0aVlU4f5y1ZPgUnzGjbS1ov8dObXfLoe
-         P1v7MWd/Jhxa1LR9TVouUl19uc+pV1zNX2yjlismTz2jQ9vh4x+Op9KP9aTtnwh6gsPJ
-         oDbgjZcGcnV64WpuBFwfPctuaPpT+zeDChRfluCkIwDx58wSQpqz52jFUZ1gIQh0kiMp
-         InQhR9igZklo8Qz9auk8Phjh3w5ZvW0GfH0TSbc7Ooi6W9WlUtJxIjhSL+BXxw1Ni/rX
-         +F0daxCbqXhuSW1fPXS96QgnoEXzX6e8UFHkwooXisncfst8mShotbCLMgkdvfLhqhBj
-         rxFw==
-X-Gm-Message-State: ABy/qLbIbBEmaM1aoScoL1h5eAN++fWTYOVsxnlPfolI8H8FWWnJobGi
-        hRq5GofiVyFFzLqv1GuFdjqwPA==
-X-Google-Smtp-Source: APBJJlEsVXT/riHHb217/IRnC4FkTdrL+WEIRgGEaqW1QkKPQqx7J9SZ2+4YPKCL/Z0Wz9JzjQeyoQ==
-X-Received: by 2002:a17:90a:d598:b0:264:97a:2ba6 with SMTP id v24-20020a17090ad59800b00264097a2ba6mr4560333pju.7.1689789434001;
-        Wed, 19 Jul 2023 10:57:14 -0700 (PDT)
-Received: from hermes.local (204-195-127-207.wavecable.com. [204.195.127.207])
-        by smtp.gmail.com with ESMTPSA id nw17-20020a17090b255100b00263f41a655esm1415304pjb.43.2023.07.19.10.57.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jul 2023 10:57:13 -0700 (PDT)
-Date:   Wed, 19 Jul 2023 10:57:11 -0700
-From:   Stephen Hemminger <stephen@networkplumber.org>
-To:     Mina Almasry <almasrymina@google.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, David Ahern <dsahern@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Andy Lutomirski <luto@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        netdev@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Shuah Khan <shuah@kernel.org>
-Subject: Re: [RFC PATCH 00/10] Device Memory TCP
-Message-ID: <20230719105711.448f8cad@hermes.local>
-In-Reply-To: <CAHS8izPORN=r2-hzYSgN4s_Aoo2dnwoJXrU5Hu=43sb8zsWyhQ@mail.gmail.com>
-References: <20230710223304.1174642-1-almasrymina@google.com>
-        <12393cd2-4b09-4956-fff0-93ef3929ee37@kernel.org>
-        <CAHS8izNPTwtk+zN7XYt-+ycpT+47LMcRrYXYh=suTXCZQ6-rVQ@mail.gmail.com>
-        <ZLbUpdNYvyvkD27P@ziepe.ca>
-        <20230718111508.6f0b9a83@kernel.org>
-        <35f3ec37-11fe-19c8-9d6f-ae5a789843cb@kernel.org>
-        <20230718112940.2c126677@kernel.org>
-        <eb34f812-a866-a1a3-9f9b-7d5054d17609@kernel.org>
-        <20230718154503.0421b4cd@kernel.org>
-        <CAHS8izPORN=r2-hzYSgN4s_Aoo2dnwoJXrU5Hu=43sb8zsWyhQ@mail.gmail.com>
+        Wed, 19 Jul 2023 13:57:30 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307AC1FF5;
+        Wed, 19 Jul 2023 10:57:25 -0700 (PDT)
+Received: from [192.168.1.141] ([37.4.248.68]) by mrelayeu.kundenserver.de
+ (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MQy0N-1qbOZE21MF-00O1y2; Wed, 19 Jul 2023 19:51:51 +0200
+Message-ID: <f1d46c8c-2dfd-4fe7-6005-fc7b97f5cafb@i2se.com>
+Date:   Wed, 19 Jul 2023 19:51:50 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v9 1/5] staging: vc04_services: vchiq_arm: Add new bus
+ type and device type
+Content-Language: en-US
+To:     Umang Jain <umang.jain@ideasonboard.com>,
+        linux-staging@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, f.fainelli@gmail.com,
+        athierry@redhat.com, error27@gmail.com,
+        dave.stevenson@raspberrypi.com, kieran.bingham@ideasonboard.com,
+        laurent.pinchart@ideasonboard.com
+References: <20230719164427.1383646-1-umang.jain@ideasonboard.com>
+ <20230719164427.1383646-2-umang.jain@ideasonboard.com>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <20230719164427.1383646-2-umang.jain@ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:8VJip2zrPWfOrkss/26VVuw/ZEQ+jciPFDMSIIifivfwfYruXyv
+ MMZanM2hs9O1N/y2K98q/zamtKAScB5ijAGqLi7J++xqTwI6HANrxDKz15jNb01OxWDhA08
+ NW5yOgtMJ8KhXEvZHFPvGwi20ar0uzlUnUXPqLGcOxC0fFU9Ovj2giyiTCCR46caPLRPqrv
+ tAZcpzAu0+wkS5XX1XU8w==
+UI-OutboundReport: notjunk:1;M01:P0:hMttlQkVM2g=;HIJk1JqgwdmnPTy+Myjm+1cI1jY
+ LIoSjk084Anhiyf+nuyKaPrSmEzpOqL0XDBvXpAPmIfwTExJLrt401CuROIHqJHkQ9AY+Jf6v
+ r3HS48txAC1+KK7Dxqt7vr13Qq7K4iH+n1En/4d0JH8jjHOcfc0JZbLQ1HXhHi/sVxpNEubVk
+ F9Omty/amA+GzgiUEO2Z47iWojttilcCXcN20whmj9IaaKX8JoTb8iiahwXFz6R3Vrlm7xZHI
+ 1er4Xad6u0Zqy09lc2tTIYDzxxCx1IJ8EMI87kHRm4xU8iNqZj3Kt2++rGrCRaX5/W8YS8r9t
+ IlnIizGZLr3EqL2vjDoGrfIDL9GZJ12dAl1IiHaLQnb3Dy0orcAkf4iVkj9u9jH8DTUmWIuxV
+ 6/GBEHuoV3sSD7RtNq2JiRowwdUz5DweDpOSQ/01o7IKiBqmnYh4L21zyiCLl3aQHKyhVcEtk
+ tjgHj5QG0JbDx/BHBiTmBeIYdiZJKGMBgZqwIhDEmdg9AbRHdjJO2QJH+ZI5KUbe96WJetsjw
+ fEt7xrWAnmS54vHJhfC3Wwi/BLWGcitAdrDmtx4tOKwStLpIqU+l+wRyX79uiK4np/kkTqskU
+ BfuDBnvxs7EVGrKw5e2v3V6I6qnj4BWf0jYT2iHHejKU3grsm1x3sEtTcdRcgI40wKmjYdrYR
+ hyy6y37oFvHoA3s4FAzHpt8vL8ss/Ci0dYGHqwun8g==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, 19 Jul 2023 08:10:58 -0700
-Mina Almasry <almasrymina@google.com> wrote:
+Hi Umang,
 
-> On Tue, Jul 18, 2023 at 3:45=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> =
-wrote:
-> >
-> > On Tue, 18 Jul 2023 16:35:17 -0600 David Ahern wrote: =20
-> > > I do not see how 1 RSS context (or more specifically a h/w Rx queue) =
-can
-> > > be used properly with memory from different processes (or dma-buf
-> > > references). =20
->=20
-> Right, my experience with dma-bufs from GPUs are that they're
-> allocated from the userspace and owned by the process that allocated
-> the backing GPU memory and generated the dma-buf from it. I.e., we're
-> limited to 1 dma-buf per RX queue. If we enable binding multiple
-> dma-bufs to the same RX queue, we have a problem, because AFAIU the
-> NIC can't decide which dma-buf to put the packet into (it hasn't
-> parsed the packet's destination yet).
->=20
-> > > When the process dies, that memory needs to be flushed from
-> > > the H/W queues. Queues with interlaced submissions make that more
-> > > complicated. =20
-> > =20
->=20
-> When the process dies, do we really want to flush the memory from the
-> hardware queues? The drivers I looked at don't seem to have a function
-> to flush the rx queues alone, they usually do an entire driver reset
-> to achieve that. Not sure if that's just convenience or there is some
-> technical limitation there. Do we really want  to trigger a driver
-> reset at the event a userspace process crashes?
+Am 19.07.23 um 18:44 schrieb Umang Jain:
+> The devices that the vchiq interface registers (bcm2835-audio,
+> bcm2835-camera) are implemented and exposed by the VC04 firmware.
+> The device tree describes the VC04 itself with the resources required
+> to communicate with it through a mailbox interface. However, the
+> vchiq interface registers these devices as platform devices. This
+> also means the specific drivers for these devices are getting
+> registered as platform drivers. This is not correct and a blatant
+> abuse of platform device/driver.
+> 
+> Add a new bus type, vchiq_bus_type and device type (struct vchiq_device)
+> which will be used to migrate child devices that the vchiq interfaces
+> creates/registers from the platform device/driver.
+> 
+> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+> ---
+>   drivers/staging/vc04_services/Makefile        |   1 +
+>   .../interface/vchiq_arm/vchiq_device.c        | 102 ++++++++++++++++++
+>   .../interface/vchiq_arm/vchiq_device.h        |  54 ++++++++++
+>   3 files changed, 157 insertions(+)
+>   create mode 100644 drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
+>   create mode 100644 drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.h
+> 
+> diff --git a/drivers/staging/vc04_services/Makefile b/drivers/staging/vc04_services/Makefile
+> index 44794bdf6173..2d071e55e175 100644
+> --- a/drivers/staging/vc04_services/Makefile
+> +++ b/drivers/staging/vc04_services/Makefile
+> @@ -5,6 +5,7 @@ vchiq-objs := \
+>      interface/vchiq_arm/vchiq_core.o  \
+>      interface/vchiq_arm/vchiq_arm.o \
+>      interface/vchiq_arm/vchiq_debugfs.o \
+> +   interface/vchiq_arm/vchiq_device.o \
+>      interface/vchiq_arm/vchiq_connected.o \
+>   
+>   ifdef CONFIG_VCHIQ_CDEV
+> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
+> new file mode 100644
+> index 000000000000..d7dfe4173579
+> --- /dev/null
+> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
+> @@ -0,0 +1,102 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * vchiq_device.c - VCHIQ generic device and bus-type
+> + *
+> + * Copyright (c) 2023 Ideas On Board Oy
+> + */
+> +
+> +#include <linux/device/bus.h>
+> +#include <linux/slab.h>
+> +#include <linux/string.h>
+> +
+> +#include "vchiq_device.h"
+> +
+> +static int vchiq_bus_type_match(struct device *dev, struct device_driver *drv)
+> +{
+> +	if (dev->bus == &vchiq_bus_type &&
+> +	    strcmp(dev_name(dev), drv->name) == 0)
+> +		return 1;
+> +
+> +	return 0;
+> +}
+> +
+> +static int vchiq_bus_uevent(const struct device *dev, struct kobj_uevent_env *env)
+> +{
+> +	const struct vchiq_device *device = container_of_const(dev, struct vchiq_device, dev);
+> +
+> +	return add_uevent_var(env, "MODALIAS=%s", dev_name(&device->dev));
+> +}
+> +
+> +static int vchiq_bus_probe(struct device *dev)
+> +{
+> +	struct vchiq_device *device = to_vchiq_device(dev);
+> +	struct vchiq_driver *driver = to_vchiq_driver(dev->driver);
+> +	int ret;
+> +
+> +	ret = driver->probe(device);
+> +	if (ret == 0)
+> +		return 0;
+> +
+> +	return ret;
 
-Naive idea.
-Would it be possible for process to use mmap() on the GPU memory and then
-do zero copy TCP receive some how? Or is this what is being proposed.
+Why not returning the result of probe directly?
+
+> +}
+> +
+> +struct bus_type vchiq_bus_type = {
+> +	.name   = "vchiq-bus",
+> +	.match  = vchiq_bus_type_match,
+> +	.uevent = vchiq_bus_uevent,
+> +	.probe  = vchiq_bus_probe,
+> +};
+> +
+> +static void vchiq_device_release(struct device *dev)
+> +{
+> +	struct vchiq_device *device = to_vchiq_device(dev);
+> +
+> +	kfree(device);
+> +}
+> +
+> +struct vchiq_device *
+> +vchiq_device_register(struct device *parent, const char *name)
+> +{
+> +	struct vchiq_device *device;
+> +	int ret;
+> +
+> +	device = kzalloc(sizeof(*device), GFP_KERNEL);
+> +	if (!device) {
+> +		dev_err(parent, "Cannot register %s: Insufficient memory\n",
+> +			name);
+> +		return NULL;
+> +	}
+> +
+> +	device->dev.init_name = name;
+> +	device->dev.parent = parent;
+> +	device->dev.bus = &vchiq_bus_type;
+> +	device->dev.release = vchiq_device_release;
+
+Not sure, but maybe a good place to set the DMA mask?
+
+> +
+> +	ret = device_register(&device->dev);
+> +	if (ret) {
+> +		dev_err(parent, "Cannot register %s: %d\n", name, ret);
+> +		put_device(&device->dev);
+> +		return NULL;
+> +	}
+> +
+> +	return device;
+> +}
+> +
+> +void vchiq_device_unregister(struct vchiq_device *vchiq_dev)
+> +{
+> +	device_unregister(&vchiq_dev->dev);
+> +}
+> +
+> +int vchiq_driver_register(struct vchiq_driver *vchiq_drv)
+> +{
+> +	vchiq_drv->driver.bus = &vchiq_bus_type;
+> +
+> +	return driver_register(&vchiq_drv->driver);
+> +}
+> +EXPORT_SYMBOL_GPL(vchiq_driver_register);
+> +
+> +void vchiq_driver_unregister(struct vchiq_driver *vchiq_drv)
+> +{
+> +	driver_unregister(&vchiq_drv->driver);
+> +}
+> +EXPORT_SYMBOL_GPL(vchiq_driver_unregister);
+> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.h b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.h
+> new file mode 100644
+> index 000000000000..7eaaf9a91cda
+> --- /dev/null
+> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.h
+> @@ -0,0 +1,54 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (c) 2023 Ideas On Board Oy
+> + */
+> +
+> +#ifndef _VCHIQ_DEVICE_H
+> +#define _VCHIQ_DEVICE_H
+> +
+> +#include <linux/device.h>
+> +
+> +struct vchiq_device {
+> +	struct device dev;
+> +};
+> +
+> +struct vchiq_driver {
+> +	int		(*probe)(struct vchiq_device *device);
+> +	void		(*remove)(struct vchiq_device *device);
+> +	int		(*resume)(struct vchiq_device *device);
+> +	int		(*suspend)(struct vchiq_device *device,
+> +				   pm_message_t state);
+> +	struct device_driver driver;
+> +};
+> +
+> +static inline struct vchiq_device *to_vchiq_device(struct device *d)
+> +{
+> +	return container_of(d, struct vchiq_device, dev);
+> +}
+> +
+> +static inline struct vchiq_driver *to_vchiq_driver(struct device_driver *d)
+> +{
+> +	return container_of(d, struct vchiq_driver, driver);
+> +}
+> +
+> +extern struct bus_type vchiq_bus_type;
+> +
+> +struct vchiq_device *
+> +vchiq_device_register(struct device *parent, const char *name);
+> +void vchiq_device_unregister(struct vchiq_device *dev);
+> +
+> +int vchiq_driver_register(struct vchiq_driver *vchiq_drv);
+> +void vchiq_driver_unregister(struct vchiq_driver *vchiq_drv);
+> +
+> +/**
+> + * module_vchiq_driver() - Helper macro for registering a vchiq driver
+> + * @__vchiq_driver: vchiq driver struct
+> + *
+> + * Helper macro for vchiq drivers which do not do anything special in
+> + * module init/exit. This eliminates a lot of boilerplate. Each module may only
+> + * use this macro once, and calling it replaces module_init() and module_exit()
+> + */
+> +#define module_vchiq_driver(__vchiq_driver) \
+> +	module_driver(__vchiq_driver, vchiq_driver_register, vchiq_driver_unregister)
+> +
+> +#endif /* _VCHIQ_DEVICE_H */
