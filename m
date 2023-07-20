@@ -2,125 +2,104 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F359EB64DA
-	for <linux-media@archiver.kernel.org>; Thu, 20 Jul 2023 07:52:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64DCCEB64DD
+	for <linux-media@archiver.kernel.org>; Thu, 20 Jul 2023 07:52:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231823AbjGTHwB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 20 Jul 2023 03:52:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37968 "EHLO
+        id S231826AbjGTHwC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 20 Jul 2023 03:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231814AbjGTHv6 (ORCPT
+        with ESMTP id S231815AbjGTHv6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 20 Jul 2023 03:51:58 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DEE226AA
-        for <linux-media@vger.kernel.org>; Thu, 20 Jul 2023 00:51:46 -0700 (PDT)
-Received: from desky.lan (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 09A633386;
-        Thu, 20 Jul 2023 09:50:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1689839412;
-        bh=gJsvsftYBkcBNBVLjSE0RR5g7kuWlwMuDNeiX1ewwz8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F3+e8rhTKP6ChT0vZlPWs+QVGAObQAJZgcvjJh0ShsoPytOhYzyFO/OG8DP/PKyDX
-         Chu4HNcrWC1rrd9cDZzPYGPgxKir1n/XFluSJ8/KtAOrm3hNIMnz83y2IY0hCnqBSP
-         I0NsPMedHtyRp/kBfr0cCqoSvZE5Bbw4CKcx2elY=
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
-        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        niklas.soderlund+renesas@ragnatech.se,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        satish.nagireddy@getcruise.com
-Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Subject: [PATCH v6 7/8] utils/common: Set V4L2_SUBDEV_CLIENT_CAP_STREAMS for subdevs
-Date:   Thu, 20 Jul 2023 10:50:43 +0300
-Message-Id: <20230720075044.442021-8-tomi.valkeinen@ideasonboard.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230720075044.442021-1-tomi.valkeinen@ideasonboard.com>
-References: <20230720075044.442021-1-tomi.valkeinen@ideasonboard.com>
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4F326AB;
+        Thu, 20 Jul 2023 00:51:47 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6F275660707F;
+        Thu, 20 Jul 2023 08:51:45 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1689839506;
+        bh=jIJuDdBqpd9dYlzqbxXjWksr5/fpNfwC3vh0Df86hSA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=EL6Ox+4ZM/rOi9BxMX+3fzD7YFCPDYUIq8nAOqLAksUJWrXi/UZk1mZ5a/8dB5JH5
+         GsAiXRpSjA4qgNdEmczDV5UHgOC10lPTa/FxhnOkt+7vR8Xb0pC8L81bPMVOtbbz3t
+         LK+na0uWDZrkaMZQaBm1hCC0+KiwPEa1bxIllpfRcYtUcy64NCHRyXWQ3jEW5mQliB
+         nkfZbgYxajjmbRMu2kI9hzmv2/5zDIsqUBVbhqaM4CCLtXHSAjois5vNpQKvBxrl6m
+         xOFbXf4Jc4pU5TcBjgD3ixHcIFw46qTmJ+udO++oq1J2lcJqKbCqwW3tvBdhsOVWJr
+         8JJTIyb8Icxlg==
+Message-ID: <32ae3716-672f-cdc2-f246-d8336ed44a68@collabora.com>
+Date:   Thu, 20 Jul 2023 09:51:43 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2] media: mdp3: Fix resource leak in a
+ for_each_child_of_node() loop
+Content-Language: en-US
+To:     Lu Hongfei <luhongfei@vivo.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Moudy Ho <moudy.ho@mediatek.com>,
+        Arnd Bergmann <arnd@arndb.de>, Sun Ke <sunke32@huawei.com>,
+        Deepak R Varma <drv@mailo.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>
+Cc:     "opensource.kernel" <opensource.kernel@vivo.com>
+References: <20230720062248.37906-1-luhongfei@vivo.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230720062248.37906-1-luhongfei@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use the new VIDIOC_SUBDEV_S_CLIENT_CAP ioctl to inform the kernel that
-we support streams, and use the return values of
-VIDIOC_SUBDEV_S_CLIENT_CAP and VIDIOC_SUBDEV_QUERYCAP to decide if the
-entity supports streams.
+Il 20/07/23 08:23, Lu Hongfei ha scritto:
+> for_each_child_of_node should have of_node_put()
+> in error path avoid resource leaks.
+> 
+> Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
+> ---
+> Changelog:
+> v1->v2:
+> 1. Change the subject line of this patch to include driver name.
+> 2. Remove the unneeded of_node_put.
+> 
+>   drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
+> index a605e80c7dc3..40c4b79a5090 100644
+> --- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
+> +++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
+> @@ -1135,6 +1135,7 @@ int mdp_comp_config(struct mdp_dev *mdp)
+>   		comp = mdp_comp_create(mdp, node, id);
+>   		if (IS_ERR(comp)) {
+>   			ret = PTR_ERR(comp);
+> +			of_node_put(node);
+>   			goto err_init_comps;
+>   		}
+>   
 
-Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
----
- utils/common/cv4l-helpers.h |  1 +
- utils/common/v4l-helpers.h  | 18 ++++++++++++++++++
- 2 files changed, 19 insertions(+)
+In case mdp_comp_sub_create() fails, we still want to decrease the refcount
+of `node`....
 
-diff --git a/utils/common/cv4l-helpers.h b/utils/common/cv4l-helpers.h
-index 3cee372b..91a04146 100644
---- a/utils/common/cv4l-helpers.h
-+++ b/utils/common/cv4l-helpers.h
-@@ -82,6 +82,7 @@ public:
- 	bool has_rw() const { return v4l_has_rw(this); }
- 	bool has_streaming() const { return v4l_has_streaming(this); }
- 	bool has_ext_pix_format() const { return v4l_has_ext_pix_format(this); }
-+	bool has_streams() const { return have_streams; }
- 
- 	int querycap(v4l2_capability &cap, bool force = false)
- 	{
-diff --git a/utils/common/v4l-helpers.h b/utils/common/v4l-helpers.h
-index c09cd987..f8e96d58 100644
---- a/utils/common/v4l-helpers.h
-+++ b/utils/common/v4l-helpers.h
-@@ -9,6 +9,7 @@
- #ifndef _V4L_HELPERS_H_
- #define _V4L_HELPERS_H_
- 
-+#include <linux/v4l2-subdev.h>
- #include <linux/videodev2.h>
- #include <string.h>
- #include <stdlib.h>
-@@ -39,6 +40,7 @@ struct v4l_fd {
- 	bool have_selection;
- 	bool is_subdev;
- 	bool is_media;
-+	bool have_streams;
- 
- 	int (*open)(struct v4l_fd *f, const char *file, int oflag, ...);
- 	int (*close)(struct v4l_fd *f);
-@@ -507,6 +509,12 @@ static inline int v4l_open(struct v4l_fd *f, const char *devname, bool non_block
- 
- static inline int v4l_subdev_s_fd(struct v4l_fd *f, int fd, const char *devname)
- {
-+	struct v4l2_subdev_client_capability clientcap = {};
-+	struct v4l2_subdev_capability subdevcap = {};
-+	bool subdev_streams;
-+	bool client_streams;
-+	int ret;
-+
- 	if (f->fd >= 0)
- 		f->close(f);
- 
-@@ -528,6 +536,16 @@ static inline int v4l_subdev_s_fd(struct v4l_fd *f, int fd, const char *devname)
- 	f->have_next_ctrl = false;
- 	f->have_selection = false;
- 
-+	ret = ioctl(f->fd, VIDIOC_SUBDEV_QUERYCAP, &subdevcap);
-+	subdev_streams = !ret && (subdevcap.capabilities & V4L2_SUBDEV_CAP_STREAMS);
-+
-+	clientcap.capabilities = V4L2_SUBDEV_CLIENT_CAP_STREAMS;
-+
-+	ret = ioctl(f->fd, VIDIOC_SUBDEV_S_CLIENT_CAP, &clientcap);
-+	client_streams = !ret && (clientcap.capabilities & V4L2_SUBDEV_CLIENT_CAP_STREAMS);
-+
-+	f->have_streams = subdev_streams && client_streams;
-+
- 	return f->fd;
- }
- 
--- 
-2.34.1
+...so, just call of_node_put(node) just once, at the err_init_comps label.
 
+err_init_comps:
+	mdp_comp_destroy(mdp);
+	of_node_put(node);
+	return ret;
+
+Regards,
+Angelo
