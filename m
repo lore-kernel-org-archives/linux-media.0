@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06816EB64DD
-	for <linux-media@archiver.kernel.org>; Thu, 20 Jul 2023 10:31:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66D60EB64DA
+	for <linux-media@archiver.kernel.org>; Thu, 20 Jul 2023 10:31:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231404AbjGTKbt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 20 Jul 2023 06:31:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37896 "EHLO
+        id S231405AbjGTKb5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 20 Jul 2023 06:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231379AbjGTKbp (ORCPT
+        with ESMTP id S229632AbjGTKbs (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 20 Jul 2023 06:31:45 -0400
+        Thu, 20 Jul 2023 06:31:48 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9015910FC;
-        Thu, 20 Jul 2023 03:31:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82261719;
+        Thu, 20 Jul 2023 03:31:46 -0700 (PDT)
 Received: from [127.0.1.1] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9F1DD373D;
-        Thu, 20 Jul 2023 12:30:45 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 71C1537B1;
+        Thu, 20 Jul 2023 12:30:47 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1689849046;
-        bh=bS5i5doTbSucq0ar42mZOd1EPRTamwE8j3ah3qy/e4s=;
+        s=mail; t=1689849048;
+        bh=Rur1IK4TcPD70743h/tvl3kOfm8iOTDAhEwetSWaWDY=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=wUd28V0pe4O9hotnFlHCiz8pzFKU6I0ugnmryeXgX29mhIi+EDjjtTfbMv5YuCOTO
-         rk3Yf9Fm7Y35rHcJZEGtbIzFl2glcuRF9A86x1mdrknhUsq3JJYfMEqJZa6YRtpn0d
-         CoOVA2qIANLZ3XAGHzBqq/L2fRxNa1RuRV0fU+so=
+        b=kTWD2/BOqU1mHDUETVmqL8Xqgc+KID6QJZTDOvsZViSS1WlREwDP2O7HQPiZhuBbE
+         IqQj6taNn4vL14OwZZ0E8ZBBUjoHMCiGkJ7tunZqd+IkL6P41xgbNwnTFANABWs5eM
+         y/syppZugjyabQMHPXi/e/yxxvfa/Fst76OxvvuE=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Date:   Thu, 20 Jul 2023 13:30:36 +0300
-Subject: [PATCH v2 5/8] media: i2c: ds90ub960: Allow FPD-Link async mode
+Date:   Thu, 20 Jul 2023 13:30:38 +0300
+Subject: [PATCH v2 7/8] media: i2c: ds90ub953: Support non-sync mode
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230720-fpdlink-additions-v2-5-b91b1eca2ad3@ideasonboard.com>
+Message-Id: <20230720-fpdlink-additions-v2-7-b91b1eca2ad3@ideasonboard.com>
 References: <20230720-fpdlink-additions-v2-0-b91b1eca2ad3@ideasonboard.com>
 In-Reply-To: <20230720-fpdlink-additions-v2-0-b91b1eca2ad3@ideasonboard.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -43,52 +43,107 @@ To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Satish Nagireddy <satish.nagireddy@getcruise.com>,
         Matti Vaittinen <mazziesaccount@gmail.com>
 Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=907;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2508;
  i=tomi.valkeinen@ideasonboard.com; h=from:subject:message-id;
- bh=bS5i5doTbSucq0ar42mZOd1EPRTamwE8j3ah3qy/e4s=;
- b=owEBbQKS/ZANAwAIAfo9qoy8lh71AcsmYgBkuQ0GYZsPUbzsSK2JECdTPkcdIHBDIEvrJu359
- Mm270T0WJOJAjMEAAEIAB0WIQTEOAw+ll79gQef86f6PaqMvJYe9QUCZLkNBgAKCRD6PaqMvJYe
- 9QnJD/4s8UeNqGmWQPr9OW3S/znmoLR5DpkmyTgwNiUNCqKqM3a/6v52+j0Muf+J67a80e6Dkhq
- ybnCQ8k6Uy+YWBGOYy0cAjRYBoKazSyzlfASNhduK6EWjDWsbLF7hhuKtloVGUjsLrTAGIL3Gso
- OMWS+vKPSo8DFiHAvi4Hxaljlt5bfDl3+M3X3/VvyVNdHeO5d6//NH3j6fcVIIg9Man94zq9uGa
- /oFJoeiDTXc1RAyC9PqD5lQ8kOD38E9H6WcvuXv/sbAvBr3CEMZesA1N01vsRGxej3b98hQSKDz
- dHNwyUPyhyCp8gtI6hCvTiDFnwLqQJXYAkS24Ui1aDEkV4meIL1qHWt2nec+Ay9use1A3PvFPy/
- Bh0gMywGhqRp+8sgMF7K2/wC75nZRfOpt10GlXBhGcXpTmXwH9GA3Jhzu7z32SHPVfK0aMM02Gq
- qTMXKabRHskOnN3HUNGmyAfoN4a8J7a32oIzLihMLWE83w10lmjQbFDe2hPhaezsCQM0S52PlNH
- 6p4s03CJlxFNg6C6cdWuKpMEL9099sFca4TMHeZveldqIMT6reV7sgQF/HuV2WEOqjLAHBJKjVp
- WdGMfmFrRzk6nSUxXqB6BiDl/XTmgPWr9xOgSHO6kgcKpIrjazB0PRGOh4OdSlho0pmKHhoXR61
- sTS0DtF6TenI4PQ==
+ bh=Rur1IK4TcPD70743h/tvl3kOfm8iOTDAhEwetSWaWDY=;
+ b=owEBbQKS/ZANAwAIAfo9qoy8lh71AcsmYgBkuQ0GiP2nZraBbDa6yM3SKZJuVPbC4eCco1Cnr
+ ATJOwBF2HGJAjMEAAEIAB0WIQTEOAw+ll79gQef86f6PaqMvJYe9QUCZLkNBgAKCRD6PaqMvJYe
+ 9X7KD/9AUuDRNnHu+8MdFW0vpJ19RtR8/1MAfDzbJjDy/hW7fD/oBZvcnwVZ4M83XAzbi1uEjg6
+ znk7BsFaCw9LYOBd9WvU7mGfbcr6F6TH1ZWwRFMZhZE+ZE+aYTIEGppn0mmkgTXs8yeeJHHPEaw
+ K3nvyntN1NyxfotbW2YrhzJ7nxDkvX/3fAE9ST/1jo59TKgkbDVeWyzD9f54zbUPGlqLcnoiiw9
+ Q/0+CvBpN9W33nLsoSHR6J5s2pvdObiXFzH7T8+QMUSoDkwaH5MU/qihWbPoAsMRx0TkdeBe9tx
+ SyCGlrkCtNHKfFsNZvk8MV1ONk4AeZNflPEfcgrj2O5RANhvTFE5h5ybUdwxvkeW/NmvnAIdgjN
+ uqDIj8F63hl1BclVZA1PzhL7gZvtOeUZ/bFs88ja/xF8F5U5ZngplyWmzTPy5PexY7A8Rckm5EQ
+ bzUEIX/xhWqC7ESGr2clmY4deyy1UY2k4yx5rmriIflvt14PQdLA+99wPjbXABRRymNPqlygq6u
+ lePxsFdB33QicHht0dwss9L0IDYeDOj6qT7k0s22ljX/ap9EJg3M57Xv8dFhpcHZvD76Qqpjx0U
+ 7VMUgtY0AW3kEDtNhzwCvJ7gcgAxRxDUCyJJwPx3Q7Pq5yshOJJ4U9iSKmKCqzsTsr91tef0KY/
+ CFzBb21ty6PiVXQ==
 X-Developer-Key: i=tomi.valkeinen@ideasonboard.com; a=openpgp;
  fpr=C4380C3E965EFD81079FF3A7FA3DAA8CBC961EF5
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Allow using FPD-Link in async mode. The driver handles it correctly, but
-the mode was blocked at probe time as there wasn't HW to test this with.
-Now the mode has been tested, and it works.
+Add support for FPD-Link non-sync mode with external clock. The only
+thing that needs to be added is the calculation for the clkout.
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/media/i2c/ds90ub960.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/media/i2c/ds90ub953.c | 34 ++++++++++++++++++++++++++--------
+ 1 file changed, 26 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/i2c/ds90ub960.c b/drivers/media/i2c/ds90ub960.c
-index a83091f47140..ea819fb6e99b 100644
---- a/drivers/media/i2c/ds90ub960.c
-+++ b/drivers/media/i2c/ds90ub960.c
-@@ -3240,7 +3240,6 @@ ub960_parse_dt_rxport_link_properties(struct ub960_data *priv,
- 	switch (rx_mode) {
- 	case RXPORT_MODE_RAW12_HF:
- 	case RXPORT_MODE_RAW12_LF:
--	case RXPORT_MODE_CSI2_ASYNC:
- 		dev_err(dev, "rx%u: unsupported 'ti,rx-mode' %u\n", nport,
- 			rx_mode);
- 		return -EINVAL;
+diff --git a/drivers/media/i2c/ds90ub953.c b/drivers/media/i2c/ds90ub953.c
+index 3a19c6dedd2f..846542e6e20d 100644
+--- a/drivers/media/i2c/ds90ub953.c
++++ b/drivers/media/i2c/ds90ub953.c
+@@ -143,6 +143,7 @@ struct ub953_data {
+ 
+ 	struct i2c_client	*client;
+ 	struct regmap		*regmap;
++	struct clk		*clkin;
+ 
+ 	u32			num_data_lanes;
+ 	bool			non_cont_clk;
+@@ -842,15 +843,21 @@ static int ub953_i2c_master_init(struct ub953_data *priv)
+ 
+ static u64 ub953_get_fc_rate(struct ub953_data *priv)
+ {
+-	if (priv->mode != UB953_MODE_SYNC) {
++	switch (priv->mode) {
++	case UB953_MODE_SYNC:
++		if (priv->hw_data->is_ub971)
++			return priv->plat_data->bc_rate * 160ull;
++		else
++			return priv->plat_data->bc_rate / 2 * 160ull;
++
++	case UB953_MODE_NONSYNC_EXT:
++		/* CLKIN_DIV = 1 always */
++		return clk_get_rate(priv->clkin) * 80ull;
++
++	default:
+ 		/* Not supported */
+ 		return 0;
+ 	}
+-
+-	if (priv->hw_data->is_ub971)
+-		return priv->plat_data->bc_rate * 160ull;
+-	else
+-		return priv->plat_data->bc_rate / 2 * 160ull;
+ }
+ 
+ static unsigned long ub953_calc_clkout_ub953(struct ub953_data *priv,
+@@ -1188,9 +1195,15 @@ static int ub953_hw_init(struct ub953_data *priv)
+ 	dev_dbg(dev, "mode from %s: %#x\n", mode_override ? "reg" : "strap",
+ 		priv->mode);
+ 
+-	if (priv->mode != UB953_MODE_SYNC)
++	if (priv->mode != UB953_MODE_SYNC &&
++	    priv->mode != UB953_MODE_NONSYNC_EXT)
+ 		return dev_err_probe(dev, -ENODEV,
+-				     "Only synchronous mode supported\n");
++				     "Unsupported mode selected: %d\n",
++				     priv->mode);
++
++	if (priv->mode == UB953_MODE_NONSYNC_EXT && !priv->clkin)
++		return dev_err_probe(dev, -EINVAL,
++				     "clkin required for non-sync ext mode\n");
+ 
+ 	ret = ub953_read(priv, UB953_REG_REV_MASK_ID, &v);
+ 	if (ret)
+@@ -1318,6 +1331,11 @@ static int ub953_probe(struct i2c_client *client)
+ 		goto err_mutex_destroy;
+ 	}
+ 
++	priv->clkin = devm_clk_get_optional(dev, "clkin");
++	if (IS_ERR(priv->clkin))
++		return dev_err_probe(dev, PTR_ERR(priv->clkin),
++				     "failed to parse 'clkin'\n");
++
+ 	ret = ub953_parse_dt(priv);
+ 	if (ret)
+ 		goto err_mutex_destroy;
 
 -- 
 2.34.1
