@@ -2,203 +2,147 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87F2DEB64DD
-	for <linux-media@archiver.kernel.org>; Fri, 21 Jul 2023 18:19:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97B8AC001DE
+	for <linux-media@archiver.kernel.org>; Sat, 22 Jul 2023 07:42:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbjGUST6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 21 Jul 2023 14:19:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33648 "EHLO
+        id S230242AbjGVHmr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 22 Jul 2023 03:42:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjGUST4 (ORCPT
+        with ESMTP id S229546AbjGVHmp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 21 Jul 2023 14:19:56 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EEA42D58
-        for <linux-media@vger.kernel.org>; Fri, 21 Jul 2023 11:19:55 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1qMujJ-0007bY-Td; Fri, 21 Jul 2023 20:19:53 +0200
-Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1qMujH-0002AX-8H; Fri, 21 Jul 2023 20:19:51 +0200
-Date:   Fri, 21 Jul 2023 20:19:51 +0200
-From:   Michael Grzeschik <mgr@pengutronix.de>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
+        Sat, 22 Jul 2023 03:42:45 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 968062708;
+        Sat, 22 Jul 2023 00:42:38 -0700 (PDT)
+X-UUID: 519fce1a286311ee9cb5633481061a41-20230722
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=iP74sutZm188n+DtFZsgQM1Jw5cQ6z7zVZi7SJyRwIk=;
+        b=kEiERMxx3YByB+21I/GvShiXrxDu8p2Ji/iOeE+GYTG1gj4MrftrDCPIHLR9C6BOwkc2ZgbQj+oKXnjVwOoqxvicE9LL+xtt5KaCN/UQC5b+wJO+y8JmOeNWLRZGSij2qfhYAMo9wcGKqwAMWWHJXa0saYyQyXLBlVtkNv6skbM=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.28,REQID:2545571d-82b6-456e-9a57-2ea48a0c532f,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:70
+X-CID-INFO: VERSION:1.1.28,REQID:2545571d-82b6-456e-9a57-2ea48a0c532f,IP:0,URL
+        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
+        ON:quarantine,TS:70
+X-CID-META: VersionHash:176cd25,CLOUDID:f3a2ff4c-06c1-468b-847d-5b62d44dbb9b,B
+        ulkID:2307221542347S1BLU8Q,BulkQuantity:0,Recheck:0,SF:19|48|38|29|28|17,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+        ,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SDM,TF_CID_SPAM_ASC,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,
+        TF_CID_SPAM_SNR
+X-UUID: 519fce1a286311ee9cb5633481061a41-20230722
+Received: from mtkmbs14n2.mediatek.inc [(172.21.101.76)] by mailgw01.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 359078772; Sat, 22 Jul 2023 15:42:33 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Sat, 22 Jul 2023 15:42:32 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Sat, 22 Jul 2023 15:42:31 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
+        <nfraprado@collabora.com>,
         Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Jernej =?iso-8859-15?Q?=A6krabec?= <jernej.skrabec@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: Stateless Encoding uAPI Discussion and Proposal
-Message-ID: <20230721181951.GL12001@pengutronix.de>
-References: <ZK2NiQd1KnraAr20@aptenodytes>
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Nathan Hebert <nhebert@chromium.org>
+CC:     Chen-Yu Tsai <wenst@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Steve Cho" <stevecho@chromium.org>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v7,01/11] media: mediatek: vcodec: remove unused parameter
+Date:   Sat, 22 Jul 2023 15:42:20 +0800
+Message-ID: <20230722074230.30558-2-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230722074230.30558-1-yunfei.dong@mediatek.com>
+References: <20230722074230.30558-1-yunfei.dong@mediatek.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="CqfQkoYPE/jGoa5Q"
-Content-Disposition: inline
-In-Reply-To: <ZK2NiQd1KnraAr20@aptenodytes>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+remove unused parameter in struct mtk_vcodec_dev.
 
---CqfQkoYPE/jGoa5Q
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c | 2 --
+ drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h     | 6 ------
+ drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c | 2 --
+ 3 files changed, 10 deletions(-)
 
-Hi everyone!
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
+index 6cf5f88a3a8e..1a293331ba2d 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
+@@ -392,8 +392,6 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+ 		goto err_core_workq;
+ 	}
+ 
+-	init_waitqueue_head(&dev->queue);
+-
+ 	vfd_dec = video_device_alloc();
+ 	if (!vfd_dec) {
+ 		mtk_v4l2_err("Failed to allocate video device");
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+index c38eb62bc72a..6b056bafaf94 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+@@ -449,10 +449,7 @@ struct mtk_vcodec_enc_pdata {
+  * @decode_workqueue: decode work queue
+  * @encode_workqueue: encode work queue
+  *
+- * @int_cond: used to identify interrupt condition happen
+- * @int_type: used to identify what kind of interrupt condition happen
+  * @dev_mutex: video_device lock
+- * @queue: waitqueue for waiting for completion of device commands
+  *
+  * @dec_irq: decoder irq resource
+  * @enc_irq: h264 encoder irq resource
+@@ -498,10 +495,7 @@ struct mtk_vcodec_dev {
+ 
+ 	struct workqueue_struct *decode_workqueue;
+ 	struct workqueue_struct *encode_workqueue;
+-	int int_cond;
+-	int int_type;
+ 	struct mutex dev_mutex;
+-	wait_queue_head_t queue;
+ 
+ 	int dec_irq;
+ 	int enc_irq;
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
+index ead3d0dd289d..8a75d28e9692 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
+@@ -311,8 +311,6 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+ 		goto err_res;
+ 	}
+ 
+-	init_waitqueue_head(&dev->queue);
+-
+ 	/* allocate video device for encoder and register it */
+ 	vfd_enc = video_device_alloc();
+ 	if (!vfd_enc) {
+-- 
+2.18.0
 
-Just to let you know. I have just pushed a Branch that includes some first
-steps to make the h264-stateless encoder working in Gstreamer. The work is
-based on the VP8 Stateless Encoder patches Benjamin Gaignard created.
-
-https://gitlab.freedesktop.org/mgrzeschik/gstreamer/-/commits/1.22/topic/h2=
-64-stateless-encoder
-
-The codec this is used with, is the rkvenc that can be found on rockchip
-rk3568. I will send an RFC driver for that in the next weeks after my vacat=
-ion.
-
-On Tue, Jul 11, 2023 at 07:12:41PM +0200, Paul Kocialkowski wrote:
->After various discussions following Andrzej's talk at EOSS, feedback from =
-the
->Media Summit (which I could not attend unfortunately) and various direct
->discussions, I have compiled some thoughts and ideas about stateless encod=
-ers
->support with various proposals. This is the result of a few years of inter=
-est
->in the topic, after working on a PoC for the Hantro H1 using the hantro dr=
-iver,
->which turned out to have numerous design issues.
->
->I am now working on a H.264 encoder driver for Allwinner platforms (curren=
-tly
->focusing on the V3/V3s), which already provides some usable bitstream and =
-will
->be published soon.
->
->This is a very long email where I've tried to split things into distinct t=
-opics
->and explain a few concepts to make sure everyone is on the same page.
->
-># Bitstream Headers
->
->Stateless encoders typically do not generate all the bitstream headers and
->sometimes no header at all (e.g. Allwinner encoder does not even produce s=
-lice
->headers). There's often some hardware block that makes bit-level writing t=
-o the
->destination buffer easier (deals with alignment, etc).
->
->The values of the bitstream headers must be in line with how the compressed
->data bitstream is generated and generally follow the codec specification.
->Some encoders might allow configuring all the fields found in the headers,
->others may only allow configuring a few or have specific constraints regar=
-ding
->which values are allowed.
->
->As a result, we cannot expect that any given encoder is able to produce fr=
-ames
->for any set of headers. Reporting related constraints and limitations (bey=
-ond
->profile/level) seems quite difficult and error-prone.
->
->So it seems that keeping header generation in-kernel only (close to where =
-the
->hardware is actually configured) is the safest approach.
-
-For the case with the rkvenc, the headers are also not created by the
-kernel driver. Instead we use the gst_h264_bit_writer_sps/pps functions
-that are part of the codecparsers module.
-
-># Codec Features
->
->Codecs have many variable features that can be enabled or not and specific
->configuration fields that can take various values. There is usually some
->top-level indication of profile/level that restricts what can be used.
->
->This is a very similar situation to stateful encoding, where codec-specific
->controls are used to report and set profile/level and configure these aspe=
-cts.
->A particularly nice thing about it is that we can reuse these existing con=
-trols
->and add new ones in the future for features that are not yet covered.
->
->This approach feels more flexible than designing new structures with a sel=
-ected
->set of parameters (that could match the existing controls) for each codec.
-
-I back the Idea of generic profiles instead of explicit configuration
-=66rom the usersapace point of view.
-
-The parameterization works like this:
-
-Read the sane default parameter set from the driver.
-Modify the parameters based on the userspace decisions.
- - (currently hardcoded and not based on any user input)
-Write the updated parameters back to the driver.
-
-># Reference and Reconstruction Management
-<snip>
-
-># Frame Types
-<snip>
-
-># Rate Control
-<snip>
-
-># Regions of Interest
-<snip>
-
-Since the first shot of the rkvenc is I-Frame only code, these other topics=
- are
-currently undefined and unimplemented in the Gstreamer stack.
-
-
-Regards,
-Michael
-
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---CqfQkoYPE/jGoa5Q
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmS6zEQACgkQC+njFXoe
-LGTPfQ/+PmQ8Lvg2djfpwtS7LxFWLLcSURknZAUaxzfZ33D6DjikuhpISojkKcX8
-mQ9Maq0mkyvQJUGWCpnB/28k2360UV2V3n7x16E9ZjUoQhj4WL0k+1H5aL/74rRw
-GnOBvEK6KwI09BsDhb+ozMYhbW8TIp3FYpTj8lZBtjrcyqkiioDwcCOqQBZB+NwG
-TJbBUkG59O0F9BXFNfR/QDF0eJnKE5CpkNVlSkKUPR9tRpmwt+lVvxXBv2fo7g9g
-dFWLKlzUZ1qxEQY3ZVrBQd7JZ4jBrREHlsJx2Wj22AI1gCrYpnA3aknRcs8BfdZc
-BnRj7FZ893OoVJlFbRqP4w8PVnNasxOAiuu5njOnl/3lpjlh7A2l286qaEw863V0
-jMNQSUI2KQS5vvpWZ7f+4j1obwKr/1hS1Y6HBoFwES9BgIFegAcq+dYZaUOxZQk5
-Fx/zGG+3Uldx6NOsOIzV46cHLbmFVZ8v68zlB8FFZkdqeP93xdTAD/DUEpNnQ19B
-Pvm1kKM4nTZIDGLDFJOxF4xiHu8oOypKfeFksXdjqDp4CvQDuYnf0fsEff3rAAUN
-MwL4pTWm1R2aLNq9FcXJ7mX/1H+bkCV2R5mPd0yllFArV/xF3nNRspEuvn8BWzn3
-knSPOepvZ89dsFcJdduTabzypDDYtGiCwMd/Wf1G9ZUsb2l/Z9s=
-=7cn6
------END PGP SIGNATURE-----
-
---CqfQkoYPE/jGoa5Q--
