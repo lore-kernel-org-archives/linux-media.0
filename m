@@ -2,37 +2,37 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AAE9AC00528
-	for <linux-media@archiver.kernel.org>; Mon, 24 Jul 2023 01:49:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CCD9C001E0
+	for <linux-media@archiver.kernel.org>; Mon, 24 Jul 2023 01:52:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232775AbjGXBtb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 23 Jul 2023 21:49:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47562 "EHLO
+        id S232617AbjGXBv7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 23 Jul 2023 21:51:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231159AbjGXBrc (ORCPT
+        with ESMTP id S232600AbjGXBvq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 23 Jul 2023 21:47:32 -0400
+        Sun, 23 Jul 2023 21:51:46 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5DD5199D;
-        Sun, 23 Jul 2023 18:39:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5507EE2;
+        Sun, 23 Jul 2023 18:42:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A852C61047;
-        Mon, 24 Jul 2023 01:34:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DD3FC433C8;
-        Mon, 24 Jul 2023 01:34:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C83E360FB4;
+        Mon, 24 Jul 2023 01:35:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4378FC433C9;
+        Mon, 24 Jul 2023 01:35:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690162488;
-        bh=vSBc29n/0V7Gek75PwWlCSvfClOhA/69+Dc3CrxfUTU=;
+        s=k20201202; t=1690162557;
+        bh=ve8GlTcDx3xxhHd+mTKMYwS4ODpTdL2prrI9QupPcAY=;
         h=From:To:Cc:Subject:Date:From;
-        b=Ac6wylaPc6rZYS56Bp9lv/AHtx2Jdn+anAuWEiEWrAS8PUPv/ySFzyGx5s9zg6bRI
-         Out09OtfYU0eO+eb3SugTA4u6rVox8EnLhjyK5UY1IDXTk7vG5r4TnvfWoPgSGczGp
-         LPnWeJZdmAy/F/tByXUYCjoo4tE6Z6u+Zi1BW7InYqZDwU8jeyLDN1UVjx5UWlOTGy
-         +DCVHUiW3eixbJo3VDpUK+vS4Au2V7yW8xfxwPtFUeXBDEEHTjt+bUUARR28TQ34Ik
-         ymDLN0XJxKOQzibY62TKGdeJQg/jpZFoZwI0yxok6LjEp64/p+PLOWvmS/gRlxPQfl
-         hVpEXcOl78jBw==
+        b=PKJu2ZaQk6qIv7uP5/ds8QgTcGHiGuheln3oxDsz+U+xXtf0CtpJT/h9qV1G5lvPK
+         jZZcmKroBGe+weU2RqfBa6OtkI5teEqYSt+mu5ERaR3sakpL/UwdnNg+fyyEPk12WC
+         W9YiP13FGEOr8DacoKFVuJ3p65V7ZuvAAwPLeHNM28jfZNdgkIIAJdEgX8Bo82BTPd
+         6g2Shw8boqzQbv4cMduCFhkSLGuL2nZSKlfurmoe5kDmJT+Whm980w7vxY6WmGQlNT
+         8Q4iGYBd15woC0tEqvwftB/RnPEncVv8/siZ/QFTtS/g9M3uJNfEWLaDLnsB4qubE4
+         tkWVVwJaZywiw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Yunfei Dong <yunfei.dong@mediatek.com>,
@@ -41,15 +41,15 @@ Cc:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Sasha Levin <sashal@kernel.org>, matthias.bgg@gmail.com,
         linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.19 1/9] media: v4l2-mem2mem: add lock to protect parameter num_rdy
-Date:   Sun, 23 Jul 2023 21:34:37 -0400
-Message-Id: <20230724013445.2334326-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 1/9] media: v4l2-mem2mem: add lock to protect parameter num_rdy
+Date:   Sun, 23 Jul 2023 21:35:43 -0400
+Message-Id: <20230724013554.2334965-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 4.19.288
+X-stable-base: Linux 4.14.320
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -78,10 +78,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 16 insertions(+), 2 deletions(-)
 
 diff --git a/include/media/v4l2-mem2mem.h b/include/media/v4l2-mem2mem.h
-index d655720e16a15..62c67e9e190c0 100644
+index e157d5c9b224e..239bcc4b7e95a 100644
 --- a/include/media/v4l2-mem2mem.h
 +++ b/include/media/v4l2-mem2mem.h
-@@ -405,7 +405,14 @@ void v4l2_m2m_buf_queue(struct v4l2_m2m_ctx *m2m_ctx,
+@@ -392,7 +392,14 @@ void v4l2_m2m_buf_queue(struct v4l2_m2m_ctx *m2m_ctx,
  static inline
  unsigned int v4l2_m2m_num_src_bufs_ready(struct v4l2_m2m_ctx *m2m_ctx)
  {
@@ -97,7 +97,7 @@ index d655720e16a15..62c67e9e190c0 100644
  }
  
  /**
-@@ -417,7 +424,14 @@ unsigned int v4l2_m2m_num_src_bufs_ready(struct v4l2_m2m_ctx *m2m_ctx)
+@@ -404,7 +411,14 @@ unsigned int v4l2_m2m_num_src_bufs_ready(struct v4l2_m2m_ctx *m2m_ctx)
  static inline
  unsigned int v4l2_m2m_num_dst_bufs_ready(struct v4l2_m2m_ctx *m2m_ctx)
  {
