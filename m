@@ -2,53 +2,53 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91C88C001DC
-	for <linux-media@archiver.kernel.org>; Mon, 24 Jul 2023 01:39:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BEDFCC04A6A
+	for <linux-media@archiver.kernel.org>; Mon, 24 Jul 2023 01:40:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231996AbjGXBjQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 23 Jul 2023 21:39:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41510 "EHLO
+        id S232118AbjGXBkk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 23 Jul 2023 21:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232016AbjGXBip (ORCPT
+        with ESMTP id S232072AbjGXBkG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 23 Jul 2023 21:38:45 -0400
+        Sun, 23 Jul 2023 21:40:06 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F644C1C;
-        Sun, 23 Jul 2023 18:34:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28F044BE;
+        Sun, 23 Jul 2023 18:35:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 57C1160F9C;
-        Mon, 24 Jul 2023 01:31:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14823C433C8;
-        Mon, 24 Jul 2023 01:31:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A5C760FCE;
+        Mon, 24 Jul 2023 01:32:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56583C433C7;
+        Mon, 24 Jul 2023 01:32:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690162307;
-        bh=S15+AbMxQ5Xyr3RT5XwQiLJB6O9wdJaVQ9670ztnQZc=;
+        s=k20201202; t=1690162365;
+        bh=AbFeG+jIWhUCdVnnm9TchTKYRxC386D0TsnkIcflR+4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q9x6vPIozLixGVYXxp5RRTcHkrgB508BEBtQEwS7QMjJoviyCkLvK383eqM/YdhDv
-         ZrGblNDrw1E67M0PXx3ZfxC3QhPnYHE/m/V/frNi0CsgCfY5ZAHWA53WKRIBDK6Isr
-         khHypyVkCCaWqFXU6hNI6rf8qs0WNzyJsqfWiZfbNOawXoBczqCx50RNtEzU7H1gdS
-         gZ9NjKDNQjKL68Rrob0Efax0L6Jyt4vz0DmLu15IZsbw0sFmtLb58lguoWXr06Z9tD
-         rjfJeqntYgHt4dGhI/PNjaVzdU8IX0VwJsbuP0LT4P7ed34EXK5Yl76NwkSLap+WiK
-         VD+ik2zqdjfRg==
+        b=JYTu8Jy9L878BPbfpgocX560hy13NCp3nkPYoa9vl/bnxsL6/XbJUN3Ly9r82w0dm
+         OEUN2w4Ir8R9knlMfeTc9qbkBeqrj+ZA+6zagXZphgUKDuwOoLHZLLXoYVKYutje4i
+         vMR5K6fzh+xwEMl7WP5pGU4cQ5oAvNUDDXvLM96Hmuap3wKPAdvDOLqj1ShoY3D0b0
+         tiSeNiZnmcN23TJF1cBVKFW+8jTZzMphxS/T2/AxLkG90oY16o9Lrqnq/85bCMXyFW
+         Mig7EgBOGzGyef1kJw7PY2puUMtOzJZW2bMz2an1Bc1EO48HypJ4qMSr9zYQOF37Y7
+         eIhl2M9JVZS+g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Andrey Konovalov <andrey.konovalov@linaro.org>,
         Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.4 04/40] media: camss: set VFE bpl_alignment to 16 for sdm845 and sm8250
-Date:   Sun, 23 Jul 2023 21:31:04 -0400
-Message-Id: <20230724013140.2327815-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 04/34] media: camss: set VFE bpl_alignment to 16 for sdm845 and sm8250
+Date:   Sun, 23 Jul 2023 21:32:07 -0400
+Message-Id: <20230724013238.2329166-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230724013140.2327815-1-sashal@kernel.org>
-References: <20230724013140.2327815-1-sashal@kernel.org>
+In-Reply-To: <20230724013238.2329166-1-sashal@kernel.org>
+References: <20230724013238.2329166-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.4.5
+X-stable-base: Linux 6.1.40
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -78,10 +78,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
-index e0832f3f4f25c..06c95568e5af4 100644
+index a26e4a5d87b6b..d8cd9b09c20de 100644
 --- a/drivers/media/platform/qcom/camss/camss-vfe.c
 +++ b/drivers/media/platform/qcom/camss/camss-vfe.c
-@@ -1541,7 +1541,11 @@ int msm_vfe_register_entities(struct vfe_device *vfe,
+@@ -1540,7 +1540,11 @@ int msm_vfe_register_entities(struct vfe_device *vfe,
  		}
  
  		video_out->ops = &vfe->video_ops;
