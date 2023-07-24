@@ -2,131 +2,97 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1903CC04FE2
-	for <linux-media@archiver.kernel.org>; Mon, 24 Jul 2023 10:20:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A166C04E69
+	for <linux-media@archiver.kernel.org>; Mon, 24 Jul 2023 12:21:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231444AbjGXKTt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 Jul 2023 06:19:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
+        id S230340AbjGXMVW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 Jul 2023 08:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231825AbjGXKTM (ORCPT
+        with ESMTP id S230397AbjGXMVR (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 Jul 2023 06:19:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE6FE6C;
-        Mon, 24 Jul 2023 03:11:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 24 Jul 2023 08:21:17 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A9E10C7;
+        Mon, 24 Jul 2023 05:21:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1690201274; x=1721737274;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=DOeO1JJC435SRC3aQ4QXuk4VjQRVy8mGR13t/2Ru9Tg=;
+  b=bYEfSrNkXq0DYwU7X/r5bxllhGzd9rHVLrqnhlbqWWMbSftIwSpdTEWb
+   1xbhSvZOtt3dtlJKsB0OgIPxfRlLr3V4/5HdjkS4CUfYATMCVww5//o33
+   TE48RPrMqDDK1DQkJXCgwsdS7AA//gxoRaOevXiyVrFXi3mEhaO2zSMDi
+   5d3Kjo7pUPimfsBfb8SHDnNMNncMw4YIgXpHbDz6R/QOUVZBg9/kCTDRN
+   FsD8eWPzzU31RmryBoBYYlp6cls0ihu7b1VbYpz22Dpkb4qpNWkniSbyQ
+   +qG3D5L+YXIxKlf/GRs8xaknmXQ/Oi0OFNUyFO1FMPSnyws4SMgRl8x6Q
+   g==;
+X-IronPort-AV: E=Sophos;i="6.01,228,1684792800"; 
+   d="scan'208";a="32081029"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 24 Jul 2023 14:21:07 +0200
+Received: from steina-w.tq-net.de (unknown [10.123.53.21])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BCC3161008;
-        Mon, 24 Jul 2023 10:11:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C70AC433C8;
-        Mon, 24 Jul 2023 10:11:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690193515;
-        bh=ntB6+9A6gXeuibXWAnS7vkACPJ1ho6l9uuEMI8YE2HU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Vtt9r1G6X6hnEYkW12w4IR0VVSDENXdX0yiIL9z03CjrOBvzNMI2k5giFMf+YauBp
-         UjMR7IiYXLOA9XPyUaFtjycUiB88qFQh54S+lcaFQhSEUQjI501pPOxWgl+9J58cmk
-         6DBa3z4G8pKHDYovWuZIKiJgLZgjpj4707XK1IG6gl/KVSRm/3fTFuoBLnorBvNrhQ
-         xSkrB3EuketJcZa2rSAjdrCjaQBXCdIW4sv6FjPFy4wIJFekrJek8A6W3QBxZssQ6j
-         Bh0XlJ11WImVa3DK6pKEvwq4tw5JTFzoyCfF4Gl2iYM8HMV0RYAGYV6cQYiywwqX+s
-         5RycXOtDE+nVg==
-Date:   Mon, 24 Jul 2023 12:11:50 +0200
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL for v6.5-rc4] media fixes
-Message-ID: <20230724121150.1d55ce6b@coco.lan>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 3B69E280084;
+        Mon, 24 Jul 2023 14:21:07 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Rob Herring <robh+dt@kernel.org>, Ming Qian <ming.qian@nxp.com>,
+        Shijie Qin <shijie.qin@nxp.com>,
+        Zhou Peng <eagle.zhou@nxp.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Anson Huang <Anson.Huang@nxp.com>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org
+Subject: [PATCH v2 2/3] dt-bindings: spi: lpspi: Add power-domains
+Date:   Mon, 24 Jul 2023 14:20:59 +0200
+Message-Id: <20230724122101.2903318-2-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230724122101.2903318-1-alexander.stein@ew.tq-group.com>
+References: <20230724122101.2903318-1-alexander.stein@ew.tq-group.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Linus,
+i.MX8(X) based SoC use a power domain. Allow supplying this domain in
+bindings.
 
-Please pull from:
-  git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v6.5-2
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+---
+Changes in v2:
+* None
 
-For a couple of fixes:
-  - some warning fixes;
-  - verisilicon: an excessive usage of stack fix and changes at reg access;
-  - amphion: use dev_err_probe;
-  - pulse8-cec: handle possible ping error
-  - imx-jpeg: Support to assign slot for encoder/decoder
-  - amphion: Fix firmware path to match linux-firmware
-  - pci: cx23885: fix error handling for cx23885 ATSC boards
-  - staging: atomisp: select V4L2_FWNODE
-  - mediatek: vcodec: fix cancel_work_sync fail with fluster test
+ Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Regards,
-Mauro
-
-
-The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
-
-  Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v6.5-2
-
-for you to fetch changes up to 0cb1d9c845110ce638a43a1417c7df5968d1daa3:
-
-  media: verisilicon: change confusingly named relaxed register access (2023-07-14 09:14:10 +0200)
-
-----------------------------------------------------------------
-media fixes for v6.5-rc4
-
-----------------------------------------------------------------
-Alexander Stein (1):
-      media: amphion: use dev_err_probe
-
-Arnd Bergmann (3):
-      media: mtk_jpeg_core: avoid unused-variable warning
-      media: verisilicon: fix excessive stack usage
-      media: verisilicon: change confusingly named relaxed register access
-
-Dmitry Antipov (1):
-      media: pulse8-cec: handle possible ping error
-
-Ming Qian (1):
-      media: imx-jpeg: Support to assign slot for encoder/decoder
-
-Nicolas Dufresne (1):
-      media: amphion: Fix firmware path to match linux-firmware
-
-Nikolay Burykin (1):
-      media: pci: cx23885: fix error handling for cx23885 ATSC boards
-
-Sakari Ailus (2):
-      media: tc358746: Address compiler warnings
-      media: staging: atomisp: select V4L2_FWNODE
-
-Yunfei Dong (1):
-      media: mediatek: vcodec: fix cancel_work_sync fail with fluster test
-
- drivers/media/cec/usb/pulse8/pulse8-cec.c          |   7 +-
- drivers/media/i2c/tc358746.c                       |   4 +-
- drivers/media/pci/cx23885/cx23885-dvb.c            |  12 --
- drivers/media/platform/amphion/vpu_core.c          |   4 +-
- drivers/media/platform/amphion/vpu_mbox.c          |   9 +-
- .../media/platform/mediatek/jpeg/mtk_jpeg_core.c   |   6 +-
- .../media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c |   4 +-
- .../media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c |   4 +-
- .../platform/mediatek/vcodec/vdec_msg_queue.c      |   3 +-
- drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h  |   1 -
- drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c     | 135 ++++++++++-----------
- drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h     |   5 +-
- drivers/media/platform/verisilicon/hantro.h        |  46 +++----
- .../media/platform/verisilicon/hantro_postproc.c   |  12 +-
- drivers/staging/media/atomisp/Kconfig              |   1 +
- 15 files changed, 116 insertions(+), 137 deletions(-)
+diff --git a/Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml b/Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml
+index e91425012319..727c5346b8ce 100644
+--- a/Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml
++++ b/Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml
+@@ -63,6 +63,9 @@ properties:
+     maximum: 2
+     default: 1
+ 
++  power-domains:
++    maxItems: 1
++
+ required:
+   - compatible
+   - reg
+-- 
+2.34.1
 
