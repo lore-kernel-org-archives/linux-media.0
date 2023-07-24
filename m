@@ -2,37 +2,37 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D34DFC04FDF
-	for <linux-media@archiver.kernel.org>; Mon, 24 Jul 2023 01:44:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69317C04FE0
+	for <linux-media@archiver.kernel.org>; Mon, 24 Jul 2023 01:44:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232208AbjGXBoS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 23 Jul 2023 21:44:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47942 "EHLO
+        id S232296AbjGXBoW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 23 Jul 2023 21:44:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232763AbjGXBnq (ORCPT
+        with ESMTP id S232331AbjGXBmz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 23 Jul 2023 21:43:46 -0400
+        Sun, 23 Jul 2023 21:42:55 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F00159E5;
-        Sun, 23 Jul 2023 18:38:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8859A1BE4;
+        Sun, 23 Jul 2023 18:37:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C8A160FF8;
-        Mon, 24 Jul 2023 01:34:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7B42C433CA;
-        Mon, 24 Jul 2023 01:34:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F16CE60F66;
+        Mon, 24 Jul 2023 01:33:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67A8CC433C7;
+        Mon, 24 Jul 2023 01:33:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690162443;
+        s=k20201202; t=1690162408;
         bh=HBPxB4RSNktNe65BuqWS+L5dNFVXfE7ZABDYXvs5vsc=;
         h=From:To:Cc:Subject:Date:From;
-        b=RUhqvw34kkZAd5pBAZmtJ/+HoxqO78WbfyaxZijh9Rt5CO8Rie3fzQLcaysa5Pvn2
-         6Xp3qDMkxhfMUzgTx0AZfgBv8nhOH+OgxBCEfATpKAPmBvn0NkF0Hj8Mv5Eyz2c2IM
-         kTqKPYXfr79rwerTr6s+u8mhOeSxkRn3jkHFacNkxRiqYfbh3mi0bMowQQMzMCjwD8
-         ngOuCAD+0G01iv7JMr7bvLJn5i3QD7Lr4faKlDFOfwm0p2SCltI92LVOWKWd6BKVXD
-         eVpB9gQCYdIkJipXbtDTeSbsT/J8zXEziVRN9yiWhxXFtlCnCJHfIWuG7+160zcX5z
-         5KJXSpYZipnSw==
+        b=G0HO7mSzs/MsPLmcuwZw/bTJKEMBOkvpGKx01tPeq2NN8skcgKQiEEVCvB30w+Ci9
+         E6OE83Jejzt6rTzsJUR+K0D4XuB4lNCvhQWvBLkJ9dC2gvI8n2TI+6FnNir0SlpbgE
+         yFhSUXklDDoJ+uM6ZEk7U3LxmSuWbH6XfxKj2f0DXERhUQS+Fo/+CkcPtV39sDid+C
+         kLr7Tesd42ZG4V2GeP60ZdznQAnkgGNvRN3fqVEnMUg6WFYQaNeIrgwQESYfhPUZyr
+         CK6sAFvbdITpapu5cPv1RvgZbY+G25F4CraVv+Q5601HhtKDZZKUv/+e1JcKLGBU0p
+         GUnRA65nx/MrQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Yunfei Dong <yunfei.dong@mediatek.com>,
@@ -41,15 +41,15 @@ Cc:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Sasha Levin <sashal@kernel.org>, matthias.bgg@gmail.com,
         linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.10 01/16] media: v4l2-mem2mem: add lock to protect parameter num_rdy
-Date:   Sun, 23 Jul 2023 21:33:45 -0400
-Message-Id: <20230724013401.2333159-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 01/24] media: v4l2-mem2mem: add lock to protect parameter num_rdy
+Date:   Sun, 23 Jul 2023 21:33:02 -0400
+Message-Id: <20230724013325.2332084-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.186
+X-stable-base: Linux 5.15.121
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
