@@ -2,89 +2,119 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E553EC001DC
-	for <linux-media@archiver.kernel.org>; Sat, 22 Jul 2023 12:00:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48659C001DC
+	for <linux-media@archiver.kernel.org>; Mon, 24 Jul 2023 01:37:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbjGVMAh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 22 Jul 2023 08:00:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37410 "EHLO
+        id S231330AbjGXBhG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 23 Jul 2023 21:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230332AbjGVMAf (ORCPT
+        with ESMTP id S231917AbjGXBgh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 22 Jul 2023 08:00:35 -0400
+        Sun, 23 Jul 2023 21:36:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B861B2;
-        Sat, 22 Jul 2023 05:00:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6137A59F2;
+        Sun, 23 Jul 2023 18:33:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8EA0A60AC2;
-        Sat, 22 Jul 2023 12:00:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 855CFC433C7;
-        Sat, 22 Jul 2023 12:00:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 023F560F29;
+        Mon, 24 Jul 2023 01:31:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E549C433CC;
+        Mon, 24 Jul 2023 01:31:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690027231;
-        bh=3aXluOeHEQMyItJ/v2l7mH04udA2/MJByvhDdbra3VM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UCGL5MIEnYK/Q+LxtrZ/qsyM4pz4Wujq37xIri7r+PnlkSwo2RRmNpY0T/SwzR4Ze
-         80+OoFGGBI2gtlFiFNWRrErleRBf0OTewqhYa7KPOlJMAyNRfjyD0Y2t8Z2pfYDjmZ
-         Q7WdD/Kut68WzRCdagPzYRPhv3RVkybPZVbu2ukktoe2ygCtyvCfvBqXD3TYraXivO
-         I6mIWAXVc5ucuJuEe5E6PAnCgkTtuDMerE69I7Lcs4AkV2xyn02EdHJmk4ZpqmXy5c
-         hfF4yAB4rQ+yQcoAYuYOjrvPHf4p+MRB+RMspyFYAem+3qFmw/DX0IT9K73CLQjBMI
-         QZsvVFXsg/pZg==
-Date:   Sat, 22 Jul 2023 13:00:27 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] media: dt-bindings: samsung,fimc: correct unit
- addresses in DTS example
-Message-ID: <20230722-upstroke-vastness-6d8221298a0b@spud>
-References: <20230722115441.139628-1-krzysztof.kozlowski@linaro.org>
- <20230722115441.139628-2-krzysztof.kozlowski@linaro.org>
+        s=k20201202; t=1690162306;
+        bh=sPgqBc9MDblYXPHS71Myl2hrzTAGjCrucv1FSII+xSY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=PtQYyWlGdOnS/jH+ZGCJWimp1grJZ870ZbuAmtEcoGrx0nrxAL7SvjUYHdKg6zQ/7
+         Np8RA9UxpR97BtTkCcF5YOMfrIXaN33he67Perlix7m6rFZNPM8XwHqQU34UF3OSMj
+         LGXgMy8+6dbF3RO2KgZ3jnJZu8X3HSrN13mx5nTtOcq2gLF3scOxYyNpQpD7cIxwwW
+         0EExZx8tkUGTVe0DPgs7wwGgyabBw4X91xi/TvDIcSaRhKi3E5yoBCMYjuCrl4qCTl
+         JxXS9ddCIk8/Q5VnFSYZWrvXvLt7m10uwjIPCMbfoLxXUP6kiwuUtPB6UPljOH26U2
+         1O8tG11yY7yHQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Pina Chen <pina.chen@mediatek.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sasha Levin <sashal@kernel.org>, matthias.bgg@gmail.com,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.4 03/40] media: v4l2-mem2mem: add lock to protect parameter num_rdy
+Date:   Sun, 23 Jul 2023 21:31:03 -0400
+Message-Id: <20230724013140.2327815-3-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230724013140.2327815-1-sashal@kernel.org>
+References: <20230724013140.2327815-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="YJECmpCRkK1kwFD2"
-Content-Disposition: inline
-In-Reply-To: <20230722115441.139628-2-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.4.5
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+From: Yunfei Dong <yunfei.dong@mediatek.com>
 
---YJECmpCRkK1kwFD2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[ Upstream commit 56b5c3e67b0f9af3f45cf393be048ee8d8a92694 ]
 
-On Sat, Jul 22, 2023 at 01:54:40PM +0200, Krzysztof Kozlowski wrote:
-> The camera node's ranges property and unit addresses of its children
-> were not correct.  If camera is @11800000, then its fimc child is @0.
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Getting below error when using KCSAN to check the driver. Adding lock to
+protect parameter num_rdy when getting the value with function:
+v4l2_m2m_num_src_bufs_ready/v4l2_m2m_num_dst_bufs_ready.
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+kworker/u16:3: [name:report&]BUG: KCSAN: data-race in v4l2_m2m_buf_queue
+kworker/u16:3: [name:report&]
 
-Cheers,
-Conor.
+kworker/u16:3: [name:report&]read-write to 0xffffff8105f35b94 of 1 bytes by task 20865 on cpu 7:
+kworker/u16:3:  v4l2_m2m_buf_queue+0xd8/0x10c
 
---YJECmpCRkK1kwFD2
-Content-Type: application/pgp-signature; name="signature.asc"
+Signed-off-by: Pina Chen <pina.chen@mediatek.com>
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ include/media/v4l2-mem2mem.h | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+diff --git a/include/media/v4l2-mem2mem.h b/include/media/v4l2-mem2mem.h
+index bb9de6a899e07..d6c8eb2b52019 100644
+--- a/include/media/v4l2-mem2mem.h
++++ b/include/media/v4l2-mem2mem.h
+@@ -593,7 +593,14 @@ void v4l2_m2m_buf_queue(struct v4l2_m2m_ctx *m2m_ctx,
+ static inline
+ unsigned int v4l2_m2m_num_src_bufs_ready(struct v4l2_m2m_ctx *m2m_ctx)
+ {
+-	return m2m_ctx->out_q_ctx.num_rdy;
++	unsigned int num_buf_rdy;
++	unsigned long flags;
++
++	spin_lock_irqsave(&m2m_ctx->out_q_ctx.rdy_spinlock, flags);
++	num_buf_rdy = m2m_ctx->out_q_ctx.num_rdy;
++	spin_unlock_irqrestore(&m2m_ctx->out_q_ctx.rdy_spinlock, flags);
++
++	return num_buf_rdy;
+ }
+ 
+ /**
+@@ -605,7 +612,14 @@ unsigned int v4l2_m2m_num_src_bufs_ready(struct v4l2_m2m_ctx *m2m_ctx)
+ static inline
+ unsigned int v4l2_m2m_num_dst_bufs_ready(struct v4l2_m2m_ctx *m2m_ctx)
+ {
+-	return m2m_ctx->cap_q_ctx.num_rdy;
++	unsigned int num_buf_rdy;
++	unsigned long flags;
++
++	spin_lock_irqsave(&m2m_ctx->cap_q_ctx.rdy_spinlock, flags);
++	num_buf_rdy = m2m_ctx->cap_q_ctx.num_rdy;
++	spin_unlock_irqrestore(&m2m_ctx->cap_q_ctx.rdy_spinlock, flags);
++
++	return num_buf_rdy;
+ }
+ 
+ /**
+-- 
+2.39.2
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZLvE2wAKCRB4tDGHoIJi
-0uFZAQCgPYDHFVe+NeMLnFWbsOlNJQCQCDGD3o2KpaRWTacoIAEA7R5O3ItL9YS5
-l7yPCbSxhbknZSs0/vLabFRgazvVaAY=
-=GDU6
------END PGP SIGNATURE-----
-
---YJECmpCRkK1kwFD2--
