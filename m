@@ -2,37 +2,37 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F8AEC41513
-	for <linux-media@archiver.kernel.org>; Mon, 24 Jul 2023 01:47:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40AEAC001E0
+	for <linux-media@archiver.kernel.org>; Mon, 24 Jul 2023 01:49:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232433AbjGXBrO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 23 Jul 2023 21:47:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47764 "EHLO
+        id S232735AbjGXBt3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 23 Jul 2023 21:49:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232659AbjGXBqf (ORCPT
+        with ESMTP id S233383AbjGXBtQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 23 Jul 2023 21:46:35 -0400
+        Sun, 23 Jul 2023 21:49:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D03F5FEA;
-        Sun, 23 Jul 2023 18:39:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D602B6E9A;
+        Sun, 23 Jul 2023 18:41:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B2C261042;
-        Mon, 24 Jul 2023 01:34:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C71AC433D9;
-        Mon, 24 Jul 2023 01:34:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5701F6104E;
+        Mon, 24 Jul 2023 01:34:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7084FC433CA;
+        Mon, 24 Jul 2023 01:34:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690162470;
-        bh=ayLOnIXPsfFciL8jUlc4L5QB/yZF4HQct1g7E8xnzxw=;
+        s=k20201202; t=1690162489;
+        bh=p/kXK0oG2oy8tHU0cEq30EV2AblklY6LbKFSx0eTQfk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I71qX+FCl9PMwPjoATMJu/eUTv+ziuqJ8sas4op+Pta06WsApB2RsFSeak3lZpawM
-         +1AVWwFFTbbFUWUa2rykA8CNBgKoml63qOGzSGQ52Fyyw5KNLC4cVJrk0gdTMgVcTG
-         5MdioHYDd/r1vxikCtHNsvoVvjWzJ3lzXdyOV1LCQT+Y6BixB5mL6oHMLs3ROS33iK
-         DFXUE76zbew41WWjGF+mrjnImgGuGg8Mlyrdw7eIhndLTAtlVh24Dw8durUM9KAG5i
-         QiVS/eny/+gO2VOnXyFNQd31sVvzyYxQF3MMgUkhRlCBdDfRlrM5lS2LarGrrlbygP
-         5uxcUlNxTvsiQ==
+        b=LP+sr/N1OWQsmxZvffVUJaNo1eSR+9Hh5YFb+hAT8RgaykOiQDneWu1Lxn29LaFHr
+         EPO77QyLToRpFC3y5XHJfcQQR6AkcZVzPjI8s9f9dSImScr2R5SgWArsVOQnA8sG55
+         gpcxs+XgzTEd4V2U4B+btROtpuv+LkwStFBHJ92tCLxtLcQjI9m7zZoHMBf3Nff2yf
+         ItChGW8ZZ8Ss0gyfbZcxNoe1zc0/qkJ/CPUvEB6cdG3ftB1r/WasGgiwvXh0WFBWHx
+         Ao3xa+GL2MSgR6w2/pgb66H55GHCV5p2fPwWCmrDa5XMIDM4WrN1C9We8K+sLDOGNt
+         VzFsrDyxqWcAA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
@@ -43,16 +43,16 @@ Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         tiffany.lin@mediatek.com, matthias.bgg@gmail.com,
         linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.4 02/12] media: platform: mediatek: vpu: fix NULL ptr dereference
-Date:   Sun, 23 Jul 2023 21:34:15 -0400
-Message-Id: <20230724013426.2333833-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 2/9] media: platform: mediatek: vpu: fix NULL ptr dereference
+Date:   Sun, 23 Jul 2023 21:34:38 -0400
+Message-Id: <20230724013445.2334326-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230724013426.2333833-1-sashal@kernel.org>
-References: <20230724013426.2333833-1-sashal@kernel.org>
+In-Reply-To: <20230724013445.2334326-1-sashal@kernel.org>
+References: <20230724013445.2334326-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.4.249
+X-stable-base: Linux 4.19.288
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -77,16 +77,17 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/platform/mtk-vpu/mtk_vpu.c b/drivers/media/platform/mtk-vpu/mtk_vpu.c
-index acf64723f9381..650e198a270e4 100644
+index 9b57fb2857285..46ec1f2699aa7 100644
 --- a/drivers/media/platform/mtk-vpu/mtk_vpu.c
 +++ b/drivers/media/platform/mtk-vpu/mtk_vpu.c
-@@ -529,15 +529,17 @@ static int load_requested_vpu(struct mtk_vpu *vpu,
+@@ -537,16 +537,18 @@ static int load_requested_vpu(struct mtk_vpu *vpu,
  int vpu_load_firmware(struct platform_device *pdev)
  {
  	struct mtk_vpu *vpu;
 -	struct device *dev = &pdev->dev;
 +	struct device *dev;
  	struct vpu_run *run;
+ 	const struct firmware *vpu_fw = NULL;
  	int ret;
  
  	if (!pdev) {
