@@ -2,121 +2,89 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96888C001DF
-	for <linux-media@archiver.kernel.org>; Tue, 25 Jul 2023 07:57:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B5AFC001DF
+	for <linux-media@archiver.kernel.org>; Tue, 25 Jul 2023 08:02:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231858AbjGYH5D (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 25 Jul 2023 03:57:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37556 "EHLO
+        id S231477AbjGYICN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 25 Jul 2023 04:02:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231714AbjGYH5C (ORCPT
+        with ESMTP id S230267AbjGYICM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 25 Jul 2023 03:57:02 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B240BF;
-        Tue, 25 Jul 2023 00:57:00 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36P5AZTf027943;
-        Tue, 25 Jul 2023 09:56:50 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=9ZV785p8IMVr0nD8KXmAR86qRA4i/cYx3WyPNy2LyDk=;
- b=oSvGYs5GiJjzbiWhJxQITAnR8wr4jWyDESjNmt/fBhngdl1RiWvuQvpM3b1oalZ1BInr
- vDRccXPvNMZuh3F/tI6Ar/5r0eLs0gQfEIDKG+Qj7ayQNvJGnMD1a8++8e60v73jqO9c
- AKjCOHVGejVQ3GX95vAjkeTe2Ar5oFDqKr/Lgc/ooEPdX9vmrC5NVc1kI0L4g/uiSsYc
- 6eJUqC36V1zvufRC0C5zoUT4X95au+vbmBrXg66g0Y3506IuFWuT1tInUEotecymxB91
- uJaG0RLsTcZwRLj9M6p+3cNgWW5Pr7xjtSluh5Vb12rITA/4Q7CJXaooGaDoUOsOH+md cg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3s280nrxnx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jul 2023 09:56:50 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 84E38100048;
-        Tue, 25 Jul 2023 09:56:49 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6DF5E215BE5;
-        Tue, 25 Jul 2023 09:56:49 +0200 (CEST)
-Received: from [10.129.166.114] (10.129.166.114) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 25 Jul
- 2023 09:56:49 +0200
-Message-ID: <3f593961-ab8a-8498-9b34-1ce729a5f026@foss.st.com>
-Date:   Tue, 25 Jul 2023 09:56:48 +0200
+        Tue, 25 Jul 2023 04:02:12 -0400
+X-Greylist: delayed 906 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 25 Jul 2023 01:02:10 PDT
+Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2249E5
+        for <linux-media@vger.kernel.org>; Tue, 25 Jul 2023 01:02:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
+        s=20161220; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=ByrEm1GEP6Pto5Qfd0Av8mnGlhq3HLawewGUcZoBqWg=; b=qnKtBzndkWiwr08ddY1CvlgIan
+        hkLK0Am/nbg/K1pN0RJnbMtuNnIIpB6mIT8S8W8Jub5RDMwcPaGf/6qOQQmCmL7uiKnuzJLd/VyoY
+        BY6mKEeTU6GH5VlEuxAX9S46ZomtnPcQM5/LnS89iKCu+p7l+xSHqy1CihlK1EOwFhleNE3ERq/8P
+        GeDjXbekrVj90JkJdLwXT5JhviD/93BNmAM0ZXkdNnDmRgKC/iQaaKu4oNvbxJw+T7m4PfbHAlRmZ
+        WWkL76pEPPTubJIwyL7sSdsjouuSmvO3Q6xxX5Vughr/pqthDSwiThfSn9Pcd74F/oCU2CQQSh+RI
+        Ctn74S+A==;
+Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=toshino.localdomain)
+        by mail.kapsi.fi with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.96)
+        (envelope-from <cyndis@kapsi.fi>)
+        id 1qOCl1-008eKy-1S;
+        Tue, 25 Jul 2023 10:46:59 +0300
+From:   Mikko Perttunen <cyndis@kapsi.fi>
+To:     Sumit Semwal <sumit.semwal@linaro.org>,
+        Gustavo Padovan <gustavo@padovan.org>
+Cc:     Mikko Perttunen <mperttunen@nvidia.com>,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dma_buf/sync_file: Enable signaling for fences when querying status
+Date:   Tue, 25 Jul 2023 10:46:11 +0300
+Message-Id: <20230725074611.3309115-1-cyndis@kapsi.fi>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v2 1/2] media: i2c: st_mipid02: cascade s_stream call to
- the source subdev
-To:     Alain Volmat <alain.volmat@foss.st.com>,
-        Sylvain Petinot <sylvain.petinot@foss.st.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230721120316.1172445-1-alain.volmat@foss.st.com>
- <20230721120316.1172445-2-alain.volmat@foss.st.com>
-Content-Language: en-US
-From:   Benjamin Mugnier <benjamin.mugnier@foss.st.com>
-In-Reply-To: <20230721120316.1172445-2-alain.volmat@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.129.166.114]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-25_02,2023-07-24_01,2023-05-22_02
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 91.158.25.70
+X-SA-Exim-Mail-From: cyndis@kapsi.fi
+X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Alain,
+From: Mikko Perttunen <mperttunen@nvidia.com>
 
-Reviewed-By: Benjamin Mugnier <benjamin.mugnier@foss.st.com>
+dma_fence_get_status is not guaranteed to return valid information
+on if the fence has been signaled or not if SW signaling has not
+been enabled for the fence. To ensure valid information is reported,
+enable SW signaling for fences before getting their status.
 
-On 7/21/23 14:03, Alain Volmat wrote:
-> Cascade the s_stream call to the source subdev whenever the bridge
-> streaming is enable / disabled.
-> 
-> Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
-> ---
-> v2: correct uninitialized ret variable in mipid02_stream_disable
-> 
->  drivers/media/i2c/st-mipid02.c | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/i2c/st-mipid02.c b/drivers/media/i2c/st-mipid02.c
-> index 906553a28676..ee456bd4cf76 100644
-> --- a/drivers/media/i2c/st-mipid02.c
-> +++ b/drivers/media/i2c/st-mipid02.c
-> @@ -545,7 +545,14 @@ static int mipid02_configure_from_code(struct mipid02_dev *bridge)
->  static int mipid02_stream_disable(struct mipid02_dev *bridge)
->  {
->  	struct i2c_client *client = bridge->i2c_client;
-> -	int ret;
-> +	int ret = -EINVAL;
-> +
-> +	if (!bridge->s_subdev)
-> +		goto error;
-> +
-> +	ret = v4l2_subdev_call(bridge->s_subdev, video, s_stream, 0);
-> +	if (ret)
-> +		goto error;
->  
->  	/* Disable all lanes */
->  	ret = mipid02_write_reg(bridge, MIPID02_CLK_LANE_REG1, 0);
-> @@ -633,6 +640,10 @@ static int mipid02_stream_enable(struct mipid02_dev *bridge)
->  	if (ret)
->  		goto error;
->  
-> +	ret = v4l2_subdev_call(bridge->s_subdev, video, s_stream, 1);
-> +	if (ret)
-> +		goto error;
-> +
->  	return 0;
->  
->  error:
+Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
+---
+ drivers/dma-buf/sync_file.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
+diff --git a/drivers/dma-buf/sync_file.c b/drivers/dma-buf/sync_file.c
+index af57799c86ce..57f194b8477f 100644
+--- a/drivers/dma-buf/sync_file.c
++++ b/drivers/dma-buf/sync_file.c
+@@ -267,6 +267,7 @@ static int sync_fill_fence_info(struct dma_fence *fence,
+ 	strscpy(info->driver_name, fence->ops->get_driver_name(fence),
+ 		sizeof(info->driver_name));
+ 
++	dma_fence_enable_sw_signaling(fence);
+ 	info->status = dma_fence_get_status(fence);
+ 	while (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags) &&
+ 	       !test_bit(DMA_FENCE_FLAG_TIMESTAMP_BIT, &fence->flags))
+@@ -307,6 +308,7 @@ static long sync_file_ioctl_fence_info(struct sync_file *sync_file,
+ 	 * info->num_fences.
+ 	 */
+ 	if (!info.num_fences) {
++		dma_fence_enable_sw_signaling(sync_file->fence);
+ 		info.status = dma_fence_get_status(sync_file->fence);
+ 		goto no_fences;
+ 	} else {
 -- 
-Regards,
+2.40.1
 
-Benjamin
