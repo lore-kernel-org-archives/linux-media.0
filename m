@@ -2,119 +2,192 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDEB1C001E0
-	for <linux-media@archiver.kernel.org>; Tue, 25 Jul 2023 10:50:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C643C07E8A
+	for <linux-media@archiver.kernel.org>; Tue, 25 Jul 2023 10:54:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233756AbjGYKuY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 25 Jul 2023 06:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58456 "EHLO
+        id S230409AbjGYKyH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 25 Jul 2023 06:54:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233452AbjGYKuC (ORCPT
+        with ESMTP id S233088AbjGYKxN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 25 Jul 2023 06:50:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0243210FD;
-        Tue, 25 Jul 2023 03:49:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 25 Jul 2023 06:53:13 -0400
+Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ACD330EA;
+        Tue, 25 Jul 2023 03:51:46 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (dkzdf0gkyyyyyyyyyyyyt-3.rev.dnainternet.fi [IPv6:2001:14ba:4506:4f15::1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 566B96166E;
-        Tue, 25 Jul 2023 10:49:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6658DC433C8;
-        Tue, 25 Jul 2023 10:49:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1690282196;
-        bh=mqeWrjRkKEshdY5zvAqc2lyl7BsSe/D42AtpoyJoeE4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XQVwhIoIUY49cragFx1gM6ymIKwa5ilV5ALGKUGGIQiNHgJz93cydVDBMnmxtaSIW
-         7JM3+OhgI1DIekW74AbUm1y+aexaRbKgIgQdZw+gZhKrTXr7YmmJWrfUYYoW8tBIje
-         tx/9sed7cFZt5KxMMlPZXCEhzqO6Bu6vpmd8ozsU=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>
-Subject: [PATCH 6.4 043/227] dma-buf/dma-resv: Stop leaking on krealloc() failure
-Date:   Tue, 25 Jul 2023 12:43:30 +0200
-Message-ID: <20230725104516.591974295@linuxfoundation.org>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230725104514.821564989@linuxfoundation.org>
-References: <20230725104514.821564989@linuxfoundation.org>
-User-Agent: quilt/0.67
+        (Authenticated sender: sailus)
+        by meesny.iki.fi (Postfix) with ESMTPSA id 4R9DNk1zV3zyRB;
+        Tue, 25 Jul 2023 13:51:33 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1690282303;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nVTFYmNWV1jP27+FDM4eqhSzMI/cuSd7gi5VmMNOAfg=;
+        b=OIKPneVysIIsOt0iRF7c9GoTrhfIJR3pJ1fYanttlyHbKxBnxdV50h3BXqREUF1tnvN/8H
+        ttNqApgMpAYqB7vDQZc+xH2UvgGKtx66Hw1y+pGiPqPEw8hU2G2wzUdMtgPO8868lDUEuC
+        mAamey/Dq8fuzD8h9oyCJhONbjrEu28=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1690282303;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nVTFYmNWV1jP27+FDM4eqhSzMI/cuSd7gi5VmMNOAfg=;
+        b=B8bdNu9uBV5ZXRnWapFwaJRrCRvDVUeUl1pyKdPWhaxXOVJ824gQaLzPRbWHbGIpGc9grs
+        jqcDmI9Bw1kzqTupLqxIloBqC/4NgCsOXWuXufhnKIg2jSO/0Ve1RtJU6Ax3Z+d0PLJPoe
+        dAV05DsdXtLCk2N97Jcdz7E1wVO/iwM=
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1690282303; a=rsa-sha256; cv=none;
+        b=vct141sa+XcGyQ1kVIQejOrk1qw2TvdjLqv5zflvOIbiywY4zEj5ryKGPtYOfkQM0he69/
+        7oqKcieTLFTTIM75qqs7mrU3HO4obQNPfyig41htRHqPfObXhKwFeAh5H9FyPca2wIIHTX
+        Wvb5rALlBcEDu3u29PPObFj7UthU4Mw=
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 304E7634C23;
+        Tue, 25 Jul 2023 13:51:33 +0300 (EEST)
+Date:   Tue, 25 Jul 2023 10:51:33 +0000
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Joe Tessler <jrt@google.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Wenyou Yang <wenyou.yang@microchip.com>,
+        Bin Liu <bin.liu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+        Houlong Wei <houlong.wei@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Yong Deng <yong.deng@magewell.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH 01/28] media: cec: ch7322: drop of_match_ptr for ID table
+Message-ID: <ZL+pNUYymeXv5EoU@valkosipuli.retiisi.eu>
+References: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
+ <98a77653-ec58-56c4-9893-3b424f67c87e@linaro.org>
+ <5afcec8b-b8f6-35b0-278a-5de185e4a7a2@xs4all.nl>
+ <ZG9XJCD98VWjGjTN@valkosipuli.retiisi.eu>
+ <ZG9ger4WE2VWoVEF@valkosipuli.retiisi.eu>
+ <158425ec-86e8-ca3e-eed8-e14b37c42730@linaro.org>
+ <ce217ae6-6dd5-26ea-2ce7-95d97ef791c4@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <ce217ae6-6dd5-26ea-2ce7-95d97ef791c4@linaro.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Hi Krzysztof,
 
-commit 05abb3be91d8788328231ee02973ab3d47f5e3d2 upstream.
+On Thu, Jul 13, 2023 at 08:46:58AM +0200, Krzysztof Kozlowski wrote:
+> On 19/06/2023 16:13, Krzysztof Kozlowski wrote:
+> > On 25/05/2023 15:19, Sakari Ailus wrote:
+> >> Hi folks,
+> >>
+> >> On Thu, May 25, 2023 at 03:40:04PM +0300, Sakari Ailus wrote:
+> >>> Hi Hans,
+> >>>
+> >>> On Sat, May 13, 2023 at 11:57:33AM +0200, Hans Verkuil wrote:
+> >>>> On 12/05/2023 18:35, Krzysztof Kozlowski wrote:
+> >>>>> On 12/03/2023 14:12, Krzysztof Kozlowski wrote:
+> >>>>>> The driver can match only via the DT table so the table should be always
+> >>>>>> used and the of_match_ptr does not have any sense (this also allows ACPI
+> >>>>>> matching via PRP0001, even though it might not be relevant here).
+> >>>>>>
+> >>>>>>   drivers/media/cec/i2c/ch7322.c:583:34: error: ‘ch7322_of_match’ defined but not used [-Werror=unused-const-variable=]
+> >>>>>>
+> >>>>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> >>>>>> ---
+> >>>>>
+> >>>>> Hans, Sakari,
+> >>>>>
+> >>>>> Can you pick up the patchset? There was positive feedback:
+> >>>>> https://patchwork.linuxtv.org/project/linux-media/patch/20230312131318.351173-1-krzysztof.kozlowski@linaro.org/
+> >>>>>
+> >>>>> but it seems it was not applied.
+> >>>>
+> >>>> I see it is delegated to Sakari in patchwork and marked Under Review, but I don't
+> >>>> see a corresponding pull request for this series.
+> >>>>
+> >>>> Sakari, did something go wrong?
+> >>>
+> >>> I spotted this as Hans notified me in IRC, I wasn't cc'd. Apologies for
+> >>> this --- I intended to take these but I think I must have missed something
+> >>> important in the process. I'll take them now.
+> >>>
+> >>> Thanks.
+> >>
+> >> This no longer applied cleanly. Mostly there was fuzz near .of_match_table
+> >> changes as probe_new (and remove_new?) changes have been recently merged.
+> >> There were other issues as well, I marked a few patches in the set "not
+> >> applicable" as other patches had already done equivalent changes earlier.
+> >>
+> >> There were substance-changing changes in the 20th patch, replied to the
+> >> disuccsion there.
+> >>
+> >> I've pushed the result here and intend to send PR to Mauro soon if there
+> >> are no issues:
+> >>
+> >> <URL:https://git.linuxtv.org/sailus/media_tree.git/log/?h=of-match-ptr>
+> > 
+> > One month later, I still don't see this set in the linux-next.  What's
+> > happening here?
+> > 
+> 
+> I don't think this was merged in v6.5-rc1. It's not in linux-next,
+> either. Another month passed...
 
-Currently dma_resv_get_fences() will leak the previously
-allocated array if the fence iteration got restarted and
-the krealloc_array() fails.
+These are now in the media-stage tree
+<URL:https://git.linuxtv.org/media_stage.git/log/>. Assuming nothing goes
+wrong, these should end up in Linus's tree for 6.6.
 
-Free the old array by hand, and make sure we still clear
-the returned *fences so the caller won't end up accessing
-freed memory. Some (but not all) of the callers of
-dma_resv_get_fences() seem to still trawl through the
-array even when dma_resv_get_fences() failed. And let's
-zero out *num_fences as well for good measure.
+The issues related to media tree maintenance are being addressed as we're
+changing the process how the tree is maintained. The patches will
+eventually get in still, also expect this to improve in the future.
 
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: Christian König <christian.koenig@amd.com>
-Cc: linux-media@vger.kernel.org
-Cc: dri-devel@lists.freedesktop.org
-Cc: linaro-mm-sig@lists.linaro.org
-Fixes: d3c80698c9f5 ("dma-buf: use new iterator in dma_resv_get_fences v3")
-Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Reviewed-by: Christian König <christian.koenig@amd.com>
-Cc: stable@vger.kernel.org
-Link: https://patchwork.freedesktop.org/patch/msgid/20230713194745.1751-1-ville.syrjala@linux.intel.com
-Signed-off-by: Christian König <christian.koenig@amd.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/dma-buf/dma-resv.c |   13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+-- 
+Regards,
 
---- a/drivers/dma-buf/dma-resv.c
-+++ b/drivers/dma-buf/dma-resv.c
-@@ -571,6 +571,7 @@ int dma_resv_get_fences(struct dma_resv
- 	dma_resv_for_each_fence_unlocked(&cursor, fence) {
- 
- 		if (dma_resv_iter_is_restarted(&cursor)) {
-+			struct dma_fence **new_fences;
- 			unsigned int count;
- 
- 			while (*num_fences)
-@@ -579,13 +580,17 @@ int dma_resv_get_fences(struct dma_resv
- 			count = cursor.num_fences + 1;
- 
- 			/* Eventually re-allocate the array */
--			*fences = krealloc_array(*fences, count,
--						 sizeof(void *),
--						 GFP_KERNEL);
--			if (count && !*fences) {
-+			new_fences = krealloc_array(*fences, count,
-+						    sizeof(void *),
-+						    GFP_KERNEL);
-+			if (count && !new_fences) {
-+				kfree(*fences);
-+				*fences = NULL;
-+				*num_fences = 0;
- 				dma_resv_iter_end(&cursor);
- 				return -ENOMEM;
- 			}
-+			*fences = new_fences;
- 		}
- 
- 		(*fences)[(*num_fences)++] = dma_fence_get(fence);
-
-
+Sakari Ailus
