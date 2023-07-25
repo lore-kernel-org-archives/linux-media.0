@@ -2,146 +2,118 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76183C001DF
-	for <linux-media@archiver.kernel.org>; Tue, 25 Jul 2023 16:45:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8039EC41513
+	for <linux-media@archiver.kernel.org>; Tue, 25 Jul 2023 16:46:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231893AbjGYQpY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 25 Jul 2023 12:45:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38308 "EHLO
+        id S232216AbjGYQqO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 25 Jul 2023 12:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232279AbjGYQpI (ORCPT
+        with ESMTP id S231704AbjGYQqC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 25 Jul 2023 12:45:08 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C562691;
-        Tue, 25 Jul 2023 09:44:26 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8FBE24AD;
-        Tue, 25 Jul 2023 18:43:06 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1690303386;
-        bh=bK23WmEsE/Sbfaa8F+kEYiMalIo5AtdcZiq/DtZbfN0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ftt3TmjBa1fmI+fOI52FUU75LN6KNTdzu2Gg5lxnmeO2qFA24WlajNh36YB79wT7Z
-         7Q90SPItYYQEL2MObG+lP+4KUG5GLn92CuTJgeMbXTItNrZlQb5YxjbdIg/1y9qTDQ
-         +ld9pia72C5eKFbO3b4SB57COsaUwFiQ9QHUMZqs=
-Date:   Tue, 25 Jul 2023 19:44:12 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 7/8] media: i2c: ds90ub953: Support non-sync mode
-Message-ID: <20230725164412.GM31069@pendragon.ideasonboard.com>
-References: <20230720-fpdlink-additions-v2-0-b91b1eca2ad3@ideasonboard.com>
- <20230720-fpdlink-additions-v2-7-b91b1eca2ad3@ideasonboard.com>
+        Tue, 25 Jul 2023 12:46:02 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2BB22693;
+        Tue, 25 Jul 2023 09:45:30 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36PEemFf017193;
+        Tue, 25 Jul 2023 18:43:55 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=selector1;
+ bh=ybZAtNCdFLdg/CdkzLz8R7dzMhTsoFiGnXfzzZfhdaU=;
+ b=3EQhXJlQcpkMj/99Cx0njY71WXFaiD/0gyWeoyrn1vkpIIqSHDr57LS1d457i/69q5M6
+ BhgHuvzMPDWss5Jlx/tmAAMa7vP2d7wyxuFNRup7+ohVcZKYKSTJge0jgK9EepIPiwDH
+ CKuBXs8IXcxKvaCkQX7MsTeLMX2alGDE34TQp6Y2LtLRICyWA7skMuFeT6Wul078XzRy
+ yFx+DvuK0pApoXtz1m+5zlm29IUuj3fAX01A02l/5Gj7mJ9UCY3K56STnEWBcZkn4QAu
+ bYpnt+EOo+K5Rb6Igo2KBjWfcDsgAaOmztu78vLeb9EqokB+kvUr5xMCtOkC8D71u/RB LQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3s2cabja2p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Jul 2023 18:43:55 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A6720100048;
+        Tue, 25 Jul 2023 18:43:54 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9AF9027FAB5;
+        Tue, 25 Jul 2023 18:43:54 +0200 (CEST)
+Received: from localhost (10.201.21.121) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 25 Jul
+ 2023 18:43:54 +0200
+From:   Gatien Chevallier <gatien.chevallier@foss.st.com>
+To:     <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <alexandre.torgue@foss.st.com>,
+        <vkoul@kernel.org>, <jic23@kernel.org>,
+        <olivier.moysan@foss.st.com>, <arnaud.pouliquen@foss.st.com>,
+        <mchehab@kernel.org>, <fabrice.gasnier@foss.st.com>,
+        <andi.shyti@kernel.org>, <ulf.hansson@linaro.org>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <hugues.fruchet@foss.st.com>, <lee@kernel.org>, <will@kernel.org>,
+        <catalin.marinas@arm.com>, <arnd@kernel.org>,
+        <richardcochran@gmail.com>, Frank Rowand <frowand.list@gmail.com>
+CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Gatien Chevallier <gatien.chevallier@foss.st.com>
+Subject: [PATCH v2 06/11] of: property: fw_devlink: Add support for "feature-domains"
+Date:   Tue, 25 Jul 2023 18:40:59 +0200
+Message-ID: <20230725164104.273965-7-gatien.chevallier@foss.st.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230725164104.273965-1-gatien.chevallier@foss.st.com>
+References: <20230725164104.273965-1-gatien.chevallier@foss.st.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230720-fpdlink-additions-v2-7-b91b1eca2ad3@ideasonboard.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.201.21.121]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-25_08,2023-07-25_01,2023-05-22_02
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Tomi,
+Allows tracking dependencies between devices and their feature domain
+controller.
 
-Thank you for the patch.
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+---
 
-On Thu, Jul 20, 2023 at 01:30:38PM +0300, Tomi Valkeinen wrote:
-> Add support for FPD-Link non-sync mode with external clock. The only
-> thing that needs to be added is the calculation for the clkout.
-> 
-> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> ---
->  drivers/media/i2c/ds90ub953.c | 34 ++++++++++++++++++++++++++--------
->  1 file changed, 26 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/media/i2c/ds90ub953.c b/drivers/media/i2c/ds90ub953.c
-> index 3a19c6dedd2f..846542e6e20d 100644
-> --- a/drivers/media/i2c/ds90ub953.c
-> +++ b/drivers/media/i2c/ds90ub953.c
-> @@ -143,6 +143,7 @@ struct ub953_data {
->  
->  	struct i2c_client	*client;
->  	struct regmap		*regmap;
-> +	struct clk		*clkin;
->  
->  	u32			num_data_lanes;
->  	bool			non_cont_clk;
-> @@ -842,15 +843,21 @@ static int ub953_i2c_master_init(struct ub953_data *priv)
->  
->  static u64 ub953_get_fc_rate(struct ub953_data *priv)
->  {
-> -	if (priv->mode != UB953_MODE_SYNC) {
-> +	switch (priv->mode) {
-> +	case UB953_MODE_SYNC:
-> +		if (priv->hw_data->is_ub971)
-> +			return priv->plat_data->bc_rate * 160ull;
-> +		else
-> +			return priv->plat_data->bc_rate / 2 * 160ull;
-> +
-> +	case UB953_MODE_NONSYNC_EXT:
-> +		/* CLKIN_DIV = 1 always */
-> +		return clk_get_rate(priv->clkin) * 80ull;
-> +
-> +	default:
->  		/* Not supported */
->  		return 0;
->  	}
-> -
-> -	if (priv->hw_data->is_ub971)
-> -		return priv->plat_data->bc_rate * 160ull;
-> -	else
-> -		return priv->plat_data->bc_rate / 2 * 160ull;
->  }
->  
->  static unsigned long ub953_calc_clkout_ub953(struct ub953_data *priv,
-> @@ -1188,9 +1195,15 @@ static int ub953_hw_init(struct ub953_data *priv)
->  	dev_dbg(dev, "mode from %s: %#x\n", mode_override ? "reg" : "strap",
->  		priv->mode);
->  
-> -	if (priv->mode != UB953_MODE_SYNC)
-> +	if (priv->mode != UB953_MODE_SYNC &&
-> +	    priv->mode != UB953_MODE_NONSYNC_EXT)
->  		return dev_err_probe(dev, -ENODEV,
-> -				     "Only synchronous mode supported\n");
-> +				     "Unsupported mode selected: %d\n",
+Patch not present in V1
 
-%u
+ drivers/of/property.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> +				     priv->mode);
-> +
-> +	if (priv->mode == UB953_MODE_NONSYNC_EXT && !priv->clkin)
-> +		return dev_err_probe(dev, -EINVAL,
-> +				     "clkin required for non-sync ext mode\n");
->  
->  	ret = ub953_read(priv, UB953_REG_REV_MASK_ID, &v);
->  	if (ret)
-> @@ -1318,6 +1331,11 @@ static int ub953_probe(struct i2c_client *client)
->  		goto err_mutex_destroy;
->  	}
->  
-> +	priv->clkin = devm_clk_get_optional(dev, "clkin");
-> +	if (IS_ERR(priv->clkin))
-> +		return dev_err_probe(dev, PTR_ERR(priv->clkin),
-> +				     "failed to parse 'clkin'\n");
-
-You need to goto err_mutex_destroy.
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> +
->  	ret = ub953_parse_dt(priv);
->  	if (ret)
->  		goto err_mutex_destroy;
-> 
-
+diff --git a/drivers/of/property.c b/drivers/of/property.c
+index ddc75cd50825..48256a865539 100644
+--- a/drivers/of/property.c
++++ b/drivers/of/property.c
+@@ -1266,6 +1266,7 @@ DEFINE_SIMPLE_PROP(pwms, "pwms", "#pwm-cells")
+ DEFINE_SIMPLE_PROP(resets, "resets", "#reset-cells")
+ DEFINE_SIMPLE_PROP(leds, "leds", NULL)
+ DEFINE_SIMPLE_PROP(backlight, "backlight", NULL)
++DEFINE_SIMPLE_PROP(feature_domains, "feature-domains", "#feature-domain-cells")
+ DEFINE_SUFFIX_PROP(regulators, "-supply", NULL)
+ DEFINE_SUFFIX_PROP(gpio, "-gpio", "#gpio-cells")
+ 
+@@ -1359,6 +1360,7 @@ static const struct supplier_bindings of_supplier_bindings[] = {
+ 	{ .parse_prop = parse_regulators, },
+ 	{ .parse_prop = parse_gpio, },
+ 	{ .parse_prop = parse_gpios, },
++	{ .parse_prop = parse_feature_domains, },
+ 	{}
+ };
+ 
 -- 
-Regards,
+2.35.3
 
-Laurent Pinchart
