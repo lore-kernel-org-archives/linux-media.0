@@ -2,217 +2,146 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D431C07E8D
-	for <linux-media@archiver.kernel.org>; Tue, 25 Jul 2023 16:43:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76183C001DF
+	for <linux-media@archiver.kernel.org>; Tue, 25 Jul 2023 16:45:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232108AbjGYQnf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 25 Jul 2023 12:43:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37976 "EHLO
+        id S231893AbjGYQpY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 25 Jul 2023 12:45:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231370AbjGYQnU (ORCPT
+        with ESMTP id S232279AbjGYQpI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 25 Jul 2023 12:43:20 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36DEB1BE2;
-        Tue, 25 Jul 2023 09:43:19 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36PELblJ027164;
-        Tue, 25 Jul 2023 18:42:42 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=I45pB3cNw6l4Xcm6iYiUyclnyr+tZB7GHR7hwjNrzmQ=;
- b=Hy6/YoTSaKRPAAa6+jndUuB6Av2yjyjGqB8BrGNGYiYfvpxx65hNRBo0CwHcZszaJRmc
- Bsep7SCnLwdpvfHMjdlkwOw0sFLP2gB2WtBnv58a+7OFNMkhNvayBuepv519PyAA6ZRo
- GFY2XGnABEOrux3ZMn+Nb4pxu4k+83aDIUS5oRjUHlUk9NrAc0TpNMkvBagpao+3ZK5e
- mX0TCMQO0hCkYT9ao/XJJdQ8V3qAeOpv5mgOtOjEb9m0HzmOWSdIOOV0/mma6+5RS+GN
- TreFLIa/E0iQ8dG8vO/6cmz95yQBXBc+4hqxcxy6OfCDzqDx0sxJr+B4yykuoQxx71fr Lw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3s2g3a0rjy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jul 2023 18:42:42 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C36F010002A;
-        Tue, 25 Jul 2023 18:42:41 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B5D402721C4;
-        Tue, 25 Jul 2023 18:42:41 +0200 (CEST)
-Received: from localhost (10.201.21.121) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 25 Jul
- 2023 18:42:41 +0200
-From:   Gatien Chevallier <gatien.chevallier@foss.st.com>
-To:     <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <alexandre.torgue@foss.st.com>,
-        <vkoul@kernel.org>, <jic23@kernel.org>,
-        <olivier.moysan@foss.st.com>, <arnaud.pouliquen@foss.st.com>,
-        <mchehab@kernel.org>, <fabrice.gasnier@foss.st.com>,
-        <andi.shyti@kernel.org>, <ulf.hansson@linaro.org>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <hugues.fruchet@foss.st.com>, <lee@kernel.org>, <will@kernel.org>,
-        <catalin.marinas@arm.com>, <arnd@kernel.org>,
-        <richardcochran@gmail.com>, Frank Rowand <frowand.list@gmail.com>
-CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        Gatien Chevallier <gatien.chevallier@foss.st.com>
-Subject: [PATCH v2 02/11] dt-bindings: bus: document RIFSC
-Date:   Tue, 25 Jul 2023 18:40:55 +0200
-Message-ID: <20230725164104.273965-3-gatien.chevallier@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230725164104.273965-1-gatien.chevallier@foss.st.com>
-References: <20230725164104.273965-1-gatien.chevallier@foss.st.com>
+        Tue, 25 Jul 2023 12:45:08 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C562691;
+        Tue, 25 Jul 2023 09:44:26 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8FBE24AD;
+        Tue, 25 Jul 2023 18:43:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1690303386;
+        bh=bK23WmEsE/Sbfaa8F+kEYiMalIo5AtdcZiq/DtZbfN0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ftt3TmjBa1fmI+fOI52FUU75LN6KNTdzu2Gg5lxnmeO2qFA24WlajNh36YB79wT7Z
+         7Q90SPItYYQEL2MObG+lP+4KUG5GLn92CuTJgeMbXTItNrZlQb5YxjbdIg/1y9qTDQ
+         +ld9pia72C5eKFbO3b4SB57COsaUwFiQ9QHUMZqs=
+Date:   Tue, 25 Jul 2023 19:44:12 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 7/8] media: i2c: ds90ub953: Support non-sync mode
+Message-ID: <20230725164412.GM31069@pendragon.ideasonboard.com>
+References: <20230720-fpdlink-additions-v2-0-b91b1eca2ad3@ideasonboard.com>
+ <20230720-fpdlink-additions-v2-7-b91b1eca2ad3@ideasonboard.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.201.21.121]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-25_08,2023-07-25_01,2023-05-22_02
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230720-fpdlink-additions-v2-7-b91b1eca2ad3@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Document RIFSC (RIF security controller). RIFSC is a firewall controller
-composed of different kinds of hardware resources.
+Hi Tomi,
 
-Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
----
+Thank you for the patch.
 
-Changes in V2: 
-	- Corrected errors highlighted by Rob's robot
-	- No longer define the maxItems for the "feature-domains"
-	  property
-	- Fix example (node name, status)
-	- Declare "feature-domain-names" as an optional
-	  property for child nodes
-	- Fix description of "feature-domains" property
+On Thu, Jul 20, 2023 at 01:30:38PM +0300, Tomi Valkeinen wrote:
+> Add support for FPD-Link non-sync mode with external clock. The only
+> thing that needs to be added is the calculation for the clkout.
+> 
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> ---
+>  drivers/media/i2c/ds90ub953.c | 34 ++++++++++++++++++++++++++--------
+>  1 file changed, 26 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/ds90ub953.c b/drivers/media/i2c/ds90ub953.c
+> index 3a19c6dedd2f..846542e6e20d 100644
+> --- a/drivers/media/i2c/ds90ub953.c
+> +++ b/drivers/media/i2c/ds90ub953.c
+> @@ -143,6 +143,7 @@ struct ub953_data {
+>  
+>  	struct i2c_client	*client;
+>  	struct regmap		*regmap;
+> +	struct clk		*clkin;
+>  
+>  	u32			num_data_lanes;
+>  	bool			non_cont_clk;
+> @@ -842,15 +843,21 @@ static int ub953_i2c_master_init(struct ub953_data *priv)
+>  
+>  static u64 ub953_get_fc_rate(struct ub953_data *priv)
+>  {
+> -	if (priv->mode != UB953_MODE_SYNC) {
+> +	switch (priv->mode) {
+> +	case UB953_MODE_SYNC:
+> +		if (priv->hw_data->is_ub971)
+> +			return priv->plat_data->bc_rate * 160ull;
+> +		else
+> +			return priv->plat_data->bc_rate / 2 * 160ull;
+> +
+> +	case UB953_MODE_NONSYNC_EXT:
+> +		/* CLKIN_DIV = 1 always */
+> +		return clk_get_rate(priv->clkin) * 80ull;
+> +
+> +	default:
+>  		/* Not supported */
+>  		return 0;
+>  	}
+> -
+> -	if (priv->hw_data->is_ub971)
+> -		return priv->plat_data->bc_rate * 160ull;
+> -	else
+> -		return priv->plat_data->bc_rate / 2 * 160ull;
+>  }
+>  
+>  static unsigned long ub953_calc_clkout_ub953(struct ub953_data *priv,
+> @@ -1188,9 +1195,15 @@ static int ub953_hw_init(struct ub953_data *priv)
+>  	dev_dbg(dev, "mode from %s: %#x\n", mode_override ? "reg" : "strap",
+>  		priv->mode);
+>  
+> -	if (priv->mode != UB953_MODE_SYNC)
+> +	if (priv->mode != UB953_MODE_SYNC &&
+> +	    priv->mode != UB953_MODE_NONSYNC_EXT)
+>  		return dev_err_probe(dev, -ENODEV,
+> -				     "Only synchronous mode supported\n");
+> +				     "Unsupported mode selected: %d\n",
 
- .../bindings/bus/st,stm32mp25-rifsc.yaml      | 105 ++++++++++++++++++
- 1 file changed, 105 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
+%u
 
-diff --git a/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml b/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
-new file mode 100644
-index 000000000000..7aeb38296616
---- /dev/null
-+++ b/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
-@@ -0,0 +1,105 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/bus/st,stm32mp25-rifsc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: STM32 Resource isolation framework security controller
-+
-+maintainers:
-+  - Gatien Chevallier <gatien.chevallier@foss.st.com>
-+
-+description: |
-+  Resource isolation framework (RIF) is a comprehensive set of hardware blocks
-+  designed to enforce and manage isolation of STM32 hardware resources like
-+  memory and peripherals.
-+
-+  The RIFSC (RIF security controller) is composed of three sets of registers,
-+  each managing a specific set of hardware resources:
-+    - RISC registers associated with RISUP logic (resource isolation device unit
-+      for peripherals), assign all non-RIF aware peripherals to zero, one or
-+      any security domains (secure, privilege, compartment).
-+    - RIMC registers: associated with RIMU logic (resource isolation master
-+      unit), assign all non RIF-aware bus master to one security domain by
-+      setting secure, privileged and compartment information on the system bus.
-+      Alternatively, the RISUP logic controlling the device port access to a
-+      peripheral can assign target bus attributes to this peripheral master port
-+      (supported attribute: CID).
-+    - RISC registers associated with RISAL logic (resource isolation device unit
-+      for address space - Lite version), assign address space subregions to one
-+      security domains (secure, privilege, compartment).
-+
-+properties:
-+  compatible:
-+    contains:
-+      const: st,stm32mp25-rifsc
-+
-+  reg:
-+    maxItems: 1
-+
-+  "#address-cells":
-+    const: 1
-+
-+  "#size-cells":
-+    const: 1
-+
-+  ranges: true
-+
-+  "#feature-domain-cells":
-+    const: 1
-+
-+  feature-domain-controller: true
-+
-+patternProperties:
-+  "^.*@[0-9a-f]+$":
-+    description: Peripherals
-+    type: object
-+    properties:
-+      feature-domains:
-+        minItems: 1
-+        description:
-+          The phandle of the firewall controller of the peripheral and the
-+          platform-specific firewall ID of the peripheral.
-+
-+      feature-domain-names:
-+        minItems: 1
-+
-+    required:
-+      - feature-domains
-+
-+required:
-+  - compatible
-+  - reg
-+  - "#address-cells"
-+  - "#size-cells"
-+  - feature-domain-controller
-+  - "#feature-domain-cells"
-+  - ranges
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    // In this example, the usart2 device refers to rifsc as its domain
-+    // controller.
-+    // Access rights are verified before creating devices.
-+
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    rifsc: bus@42080000 {
-+        compatible = "st,stm32mp25-rifsc";
-+        reg = <0x42080000 0x1000>;
-+        #address-cells = <1>;
-+        #size-cells = <1>;
-+        feature-domain-controller;
-+        #feature-domain-cells = <1>;
-+        ranges;
-+
-+        usart2: serial@400e0000 {
-+              compatible = "st,stm32h7-uart";
-+              reg = <0x400e0000 0x400>;
-+              interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
-+              clocks = <&ck_flexgen_08>;
-+              feature-domains = <&rifsc 32>;
-+        };
-+    };
+> +				     priv->mode);
+> +
+> +	if (priv->mode == UB953_MODE_NONSYNC_EXT && !priv->clkin)
+> +		return dev_err_probe(dev, -EINVAL,
+> +				     "clkin required for non-sync ext mode\n");
+>  
+>  	ret = ub953_read(priv, UB953_REG_REV_MASK_ID, &v);
+>  	if (ret)
+> @@ -1318,6 +1331,11 @@ static int ub953_probe(struct i2c_client *client)
+>  		goto err_mutex_destroy;
+>  	}
+>  
+> +	priv->clkin = devm_clk_get_optional(dev, "clkin");
+> +	if (IS_ERR(priv->clkin))
+> +		return dev_err_probe(dev, PTR_ERR(priv->clkin),
+> +				     "failed to parse 'clkin'\n");
+
+You need to goto err_mutex_destroy.
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> +
+>  	ret = ub953_parse_dt(priv);
+>  	if (ret)
+>  		goto err_mutex_destroy;
+> 
+
 -- 
-2.35.3
+Regards,
 
+Laurent Pinchart
