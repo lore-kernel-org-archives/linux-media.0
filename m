@@ -2,133 +2,216 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53DA0C001DF
-	for <linux-media@archiver.kernel.org>; Tue, 25 Jul 2023 10:35:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B648C001DE
+	for <linux-media@archiver.kernel.org>; Tue, 25 Jul 2023 10:45:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233672AbjGYKfG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 25 Jul 2023 06:35:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52146 "EHLO
+        id S231802AbjGYKph (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 25 Jul 2023 06:45:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233605AbjGYKfF (ORCPT
+        with ESMTP id S229445AbjGYKpg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 25 Jul 2023 06:35:05 -0400
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90EF412E
-        for <linux-media@vger.kernel.org>; Tue, 25 Jul 2023 03:35:03 -0700 (PDT)
-Received: from [127.0.0.1] (unknown [62.91.23.180])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        Tue, 25 Jul 2023 06:45:36 -0400
+Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E2110CC
+        for <linux-media@vger.kernel.org>; Tue, 25 Jul 2023 03:45:33 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (dkzdf0gkyyyyyyyyyyyyt-3.rev.dnainternet.fi [IPv6:2001:14ba:4506:4f15::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 3F6EA862E8;
-        Tue, 25 Jul 2023 12:35:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1690281301;
-        bh=2K+0ddjHKCBo9DDCZ2NMtYtYKtZ0D6DTt4htnm/vMu8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=xdrjEj8G+oWay4qM7jEZuTydfx1oNgS949bv16ePTV+r/fV5vgYDLpprG32VcVP57
-         1EqQM3dJmlnw7N+u4LIwTphyWsl5GmZNCmzRxwPwXY7BW1Y56nr2CtmAYkOkjahvw1
-         WzdprsSCn3p5Q8Pd4TsH66YM1h04Wg3PuU9KokcGe7NyKzFRMGKs4/OczDErJV3QCr
-         UT1cpMvd+EfHrc+FpRbysyulVlWMWnJwA7ybvAHOy8wEaq4LMBGSrvsvYmrAof21jd
-         +eRvHMpjVpI3iwozMf/7745dTF1N1rCC9+Buxxu1ZbOsLebYoKjnRuEXXx3WRH9lxg
-         GRkvvwUOA1UIw==
-Message-ID: <24b03db9-237e-117b-b059-e719e1727177@denx.de>
-Date:   Tue, 25 Jul 2023 12:35:00 +0200
+        (Authenticated sender: sailus)
+        by meesny.iki.fi (Postfix) with ESMTPSA id 4R9DFj6rGSzyRB
+        for <linux-media@vger.kernel.org>; Tue, 25 Jul 2023 13:45:28 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1690281930;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=uiCND8nqp7NRqKwMrvqdrrdm882GKpIzRUhYAIa+Wko=;
+        b=RPYjQhd4O46Udd4oUx+2XbjJPRUcBy5kIuRFFQlk3kkqVeYWSYyN94aAQ0O1YF1UXjDtid
+        1z2gniz9rbb+w85xKBVt3ikSWuZuEHT+dBkL7QWFW8xMi1mg0G68y1FjDnwqmBZXT7hKf+
+        jIgMCPZ/EHkLBHsnbCw2UPjZadrYAvQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1690281930;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=uiCND8nqp7NRqKwMrvqdrrdm882GKpIzRUhYAIa+Wko=;
+        b=OAZKb87jA5pZI1FEj17d/FxR+5DjAKgyGqSRgLChkYO6N6vaSXQRXLRr+yC+EPy47wanzQ
+        TArAF8/rOs+Fc8sM5QQRPAWYbets5/6DLU/ASSSjxIa0kGVcnkr7AHOEQtYSpaeaQ2bu+P
+        goRm/c3fX+LuiyRdJcKoQQpzeFd4dSs=
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1690281930; a=rsa-sha256; cv=none;
+        b=m2cj/kcdhN2amtAmFjUDIeHa5szfuCAP4l9VcuGlCGbFMejlPbUUZuoowORKmEYQjQfwya
+        JK8nibuvc4jl9XAvrrVeTh1XB7pEN+nnjJfAnEJ7wkIT2Joe3G7Ir16MjQTumlHF7SzGjB
+        iko8A7hl7h/PcPnwRoZr8XbNNyYiFtc=
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id E9CC2634C23
+        for <linux-media@vger.kernel.org>; Tue, 25 Jul 2023 13:45:27 +0300 (EEST)
+Date:   Tue, 25 Jul 2023 10:45:27 +0000
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     linux-media@vger.kernel.org
+Subject: [GIT PULL FOR 6.6] Separate V4L2 async sub-devices from connections
+Message-ID: <ZL+nx1/qYE2FggwD@valkosipuli.retiisi.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] media: ov5640: Enable MIPI interface in
- ov5640_set_power_mipi()
-Content-Language: en-US
-To:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>
-References: <20230724222210.162785-1-marex@denx.de>
- <c5oh3axckaqfenwm3cq5tictl5ra2hda5dmf65gsrjfxuj7crk@dgdlnph5fxvp>
- <47c49ef5-c77b-cd76-62e7-0d488d667636@denx.de>
- <sopwu4d3sx2wjuixp4fvts5urc3lqcfywoz7fgnp5jq77qhucp@ur4gn6g2vwds>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <sopwu4d3sx2wjuixp4fvts5urc3lqcfywoz7fgnp5jq77qhucp@ur4gn6g2vwds>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 7/25/23 12:04, Jacopo Mondi wrote:
-> Hi Marek
+Hi Mauro,
 
-Hi,
+This set reworks V4L2 async framework by separating async sub-devices from
+connections, allowing binding a sub-device with multiple asynchronous
+connections. Consequently, it also allows both i.MX6 and adv748x drivers to
+work with the same kernel.
 
-> On Tue, Jul 25, 2023 at 11:41:18AM +0200, Marek Vasut wrote:
->> On 7/25/23 11:04, Jacopo Mondi wrote:
->>> Hi Marek
->>
->> Hi,
->>
->>> On Tue, Jul 25, 2023 at 12:22:10AM +0200, Marek Vasut wrote:
->>>> Set OV5640_REG_IO_MIPI_CTRL00 bit 2 to 1 instead of 0, since 1 means
->>>> MIPI CSI2 interface, while 0 means CPI parallel interface.
->>>>
->>>> In the ov5640_set_power_mipi() the interface should obviously be set
->>>> to MIPI CSI2 since this functions is used to power up the sensor when
->>>> operated in MIPI CSI2 mode. The sensor should not be in CPI mode in
->>>> that case.
->>>
->>> Does this actually help fixing your 'first frame corrupted issue' ?
->>
->> Yes it does.
->>
->>> I think the logic here was to power up the interface here  in
->>> ov5640_set_power_mipi() with the CSI-2 interface disabled to enter
->>> LP-11 mode (something some receivers like the imx6 one are
->>> particularly sensible to).
->>
->> Per OV5640 datasheet.
->>
->> Register 0x300e bit 2 selects sensor interface mode between MIPI CSI2 and
->> CPI (parallel), it has nothing to do with LP modes .
->>
->> Register 0x3019 bits [6:4] control LP00/LP11 mode on CSI2 lines.
->>
->>> Then at stream time the CSI-2 interface is actually enabled in
->>> ov5640_set_stream_mipi() just before streaming is started.
->>>
->>> Also the register documentation is very confusing and as reported in
->>> ov5640_set_stream_mipi() it is also probably wrong (at least in the
->>> datasheet version I have).
->>>
->>> I would be particularly cautious in touching this sequence as it has
->>> been validated to work with multiple receivers. Of course if it
->>> actually fixes an issue for you it should be taken in, but ideally, as
->>> this sensor is still used in a large number of evaluation boards, it
->>> should be validated by other consumers of this driver (st, imx,
->>> microchip and rensas to name a few).
->>
->> That's quite a tall order which effectively makes it impossible to change or
->> fix anything in this driver.
-> 
-> Really? Asking other people which use this driver to test a patch before
-> merging it to make sure it doesn't break their setup makes "impossibile to
-> change of fix anything" ?
-> 
-> And it's not an order of any sort, but there are a lot of users of
-> this driver and multiple times fixing a thing on one side breaks
-> things for others, I'm just trying to coordinate between multiple
-> developers.
+Please pull.
 
-I'm afraid my expression of skepticism to the expected amount of testing 
-has been misinterpreted, and so was the message you were trying to 
-convey, i.e. communication breakdown.
 
-So let me rephrase.
+The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
 
-If the expectation is that every change to this driver has to be tested 
-by all aforementioned parties, then it will be very hard to get changes 
-in, based on my previous experience.
+  Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
 
-Maybe let's stop this part of the thread here, and focus on the upper part?
+are available in the Git repository at:
+
+  git://linuxtv.org/sailus/media_tree.git tags/async-multi-v6-signed
+
+for you to fetch changes up to a74b4f6c47473d28603b6a95d7f27038e7b8d256:
+
+  media: Documentation: v4l: Document sub-device notifiers (2023-07-24 00:02:48 +0300)
+
+----------------------------------------------------------------
+V4L2 async sub-devices and connections for 6.6
+
+----------------------------------------------------------------
+Jacopo Mondi (1):
+      media: v4l: async: Drop v4l2_async_nf_parse_fwnode_endpoints()
+
+Sakari Ailus (37):
+      media: v4l: fwnode: Remove unneeded forward declaration
+      media: atmel-isi: Remote unneeeded forward declaration
+      media: xilinx-vipp: Clean up bound async notifier callback
+      media: omap3isp: Move link creation to bound callback
+      media: Documentation: v4l: Fix async notifier registration example
+      media: Documentation: v4l: Add section titles for async
+      media: Documentation: v4l: Fix async sensor subdev helper documentation
+      media: Documentation: v4l: Document missing async subdev function
+      media: Documentation: v4l: Document v4l2_async_nf_cleanup
+      media: v4l: async: Add some debug prints
+      media: v4l: async: Clean up testing for duplicate async subdevs
+      media: v4l: async: Don't check whether asd is NULL in validity check
+      media: v4l: async: Make V4L2 async match information a struct
+      media: v4l: async: Rename V4L2_ASYNC_MATCH_ macros, add TYPE_
+      media: v4l: async: Only pass match information for async subdev validation
+      media: v4l: async: Clean up list heads and entries
+      media: v4l: async: Simplify async sub-device fwnode matching
+      media: v4l: async: Rename v4l2_async_subdev as v4l2_async_connection
+      media: v4l: async: Clean up error handling in v4l2_async_match_notify
+      media: v4l: async: Drop duplicate handling when adding connections
+      media: v4l: async: Rework internal lists
+      media: v4l: async: Obtain async connection based on sub-device
+      media: v4l: async: Allow multiple connections between entities
+      media: v4l: async: Drop unneeded list entry initialisation
+      media: v4l: async: Try more connections
+      media: v4l: async: Support fwnode endpoint list matching for subdevs
+      media: adv748x: Return to endpoint matching
+      media: pxa_camera: Fix probe error handling
+      media: pxa_camera: Register V4L2 device early
+      media: marvell: cafe: Register V4L2 device earlier
+      media: am437x-vpfe: Register V4L2 device early
+      media: omap3isp: Initialise V4L2 async notifier later
+      media: xilinx-vipp: Init async notifier after registering V4L2 device
+      media: davinci: Init async notifier after registering V4L2 device
+      media: qcom: Initialise V4L2 async notifier later
+      media: v4l: async: Set v4l2_device and subdev in async notifier init
+      media: Documentation: v4l: Document sub-device notifiers
+
+ Documentation/driver-api/media/v4l2-subdev.rst     | 110 ++--
+ drivers/media/i2c/adv748x/adv748x-csi2.c           |  13 +-
+ drivers/media/i2c/max9286.c                        |  27 +-
+ drivers/media/i2c/rdacm20.c                        |  16 +-
+ drivers/media/i2c/rdacm21.c                        |  15 +-
+ drivers/media/i2c/st-mipid02.c                     |  12 +-
+ drivers/media/i2c/tc358746.c                       |  15 +-
+ drivers/media/pci/intel/ipu3/ipu3-cio2-main.c      |  14 +-
+ drivers/media/platform/atmel/atmel-isi.c           |  12 +-
+ drivers/media/platform/atmel/atmel-isi.h           |   2 -
+ drivers/media/platform/cadence/cdns-csi2rx.c       |  10 +-
+ drivers/media/platform/intel/pxa_camera.c          |  77 +--
+ drivers/media/platform/marvell/cafe-driver.c       |  18 +-
+ drivers/media/platform/marvell/mcam-core.c         |  15 +-
+ drivers/media/platform/marvell/mmp-driver.c        |   6 +-
+ .../media/platform/microchip/microchip-csi2dc.c    |  11 +-
+ .../media/platform/microchip/microchip-isc-base.c  |   4 +-
+ drivers/media/platform/microchip/microchip-isc.h   |   2 +-
+ .../platform/microchip/microchip-sama5d2-isc.c     |   9 +-
+ .../platform/microchip/microchip-sama7g5-isc.c     |   9 +-
+ drivers/media/platform/nxp/imx-mipi-csis.c         |  17 +-
+ drivers/media/platform/nxp/imx7-media-csi.c        |  10 +-
+ .../media/platform/nxp/imx8-isi/imx8-isi-core.c    |  12 +-
+ drivers/media/platform/qcom/camss/camss.c          |  26 +-
+ drivers/media/platform/qcom/camss/camss.h          |   2 +-
+ drivers/media/platform/renesas/rcar-isp.c          |  12 +-
+ .../media/platform/renesas/rcar-vin/rcar-core.c    |  52 +-
+ .../media/platform/renesas/rcar-vin/rcar-csi2.c    |  20 +-
+ drivers/media/platform/renesas/rcar-vin/rcar-vin.h |  10 +-
+ drivers/media/platform/renesas/rcar_drif.c         |  12 +-
+ drivers/media/platform/renesas/renesas-ceu.c       |  10 +-
+ .../media/platform/renesas/rzg2l-cru/rzg2l-core.c  |  14 +-
+ .../media/platform/renesas/rzg2l-cru/rzg2l-cru.h   |   2 +-
+ .../media/platform/renesas/rzg2l-cru/rzg2l-csi2.c  |  12 +-
+ .../media/platform/rockchip/rkisp1/rkisp1-common.h |   2 +-
+ .../media/platform/rockchip/rkisp1/rkisp1-csi.c    |   7 +-
+ .../media/platform/rockchip/rkisp1/rkisp1-dev.c    |  12 +-
+ .../media/platform/rockchip/rkisp1/rkisp1-isp.c    |   8 +-
+ .../media/platform/samsung/exynos4-is/media-dev.c  |  11 +-
+ .../media/platform/samsung/exynos4-is/media-dev.h  |   2 +-
+ drivers/media/platform/st/stm32/stm32-dcmi.c       |  12 +-
+ drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.c |  10 +-
+ .../platform/sunxi/sun6i-csi/sun6i_csi_bridge.c    |  12 +-
+ .../platform/sunxi/sun6i-csi/sun6i_csi_bridge.h    |   2 +-
+ .../sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c        |  10 +-
+ .../sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c    |  10 +-
+ drivers/media/platform/ti/am437x/am437x-vpfe.c     |  36 +-
+ drivers/media/platform/ti/am437x/am437x-vpfe.h     |   2 +-
+ drivers/media/platform/ti/cal/cal.c                |  10 +-
+ drivers/media/platform/ti/davinci/vpif_capture.c   |  35 +-
+ drivers/media/platform/ti/omap3isp/isp.c           |  55 +-
+ drivers/media/platform/ti/omap3isp/isp.h           |  15 +-
+ drivers/media/platform/ti/omap3isp/ispccdc.c       |  13 +-
+ drivers/media/platform/ti/omap3isp/ispccp2.c       |   2 +
+ drivers/media/platform/ti/omap3isp/ispcsi2.c       |   2 +
+ drivers/media/platform/ti/omap3isp/ispcsiphy.c     |  15 +-
+ drivers/media/platform/video-mux.c                 |  10 +-
+ drivers/media/platform/xilinx/xilinx-vipp.c        |  55 +-
+ drivers/media/v4l2-core/v4l2-async.c               | 689 +++++++++++----------
+ drivers/media/v4l2-core/v4l2-fwnode.c              | 109 +---
+ drivers/media/v4l2-core/v4l2-subdev.c              |  13 +
+ .../media/atomisp/pci/atomisp_csi2_bridge.c        |   8 +-
+ drivers/staging/media/atomisp/pci/atomisp_v4l2.c   |   2 +-
+ .../media/deprecated/atmel/atmel-isc-base.c        |   4 +-
+ drivers/staging/media/deprecated/atmel/atmel-isc.h |   2 +-
+ .../media/deprecated/atmel/atmel-sama5d2-isc.c     |   9 +-
+ .../media/deprecated/atmel/atmel-sama7g5-isc.c     |   9 +-
+ drivers/staging/media/imx/imx-media-csi.c          |  10 +-
+ drivers/staging/media/imx/imx-media-dev-common.c   |   6 +-
+ drivers/staging/media/imx/imx-media-dev.c          |   2 +-
+ drivers/staging/media/imx/imx-media-of.c           |   4 +-
+ drivers/staging/media/imx/imx6-mipi-csi2.c         |  12 +-
+ drivers/staging/media/imx/imx8mq-mipi-csi2.c       |  10 +-
+ .../staging/media/sunxi/sun6i-isp/sun6i_isp_proc.c |   6 +-
+ .../staging/media/sunxi/sun6i-isp/sun6i_isp_proc.h |   2 +-
+ drivers/staging/media/tegra-video/vi.c             |  21 +-
+ include/media/davinci/vpif_types.h                 |   2 +-
+ include/media/v4l2-async.h                         | 238 +++----
+ include/media/v4l2-fwnode.h                        |  70 ---
+ include/media/v4l2-subdev.h                        |  19 +-
+ 80 files changed, 1059 insertions(+), 1144 deletions(-)
+
+-- 
+Sakari Ailus
