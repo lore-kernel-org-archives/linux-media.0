@@ -2,162 +2,217 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DAD8EC0015E
-	for <linux-media@archiver.kernel.org>; Wed, 26 Jul 2023 08:46:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1418FC07E8C
+	for <linux-media@archiver.kernel.org>; Wed, 26 Jul 2023 08:47:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233358AbjGZIqO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 26 Jul 2023 04:46:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48396 "EHLO
+        id S233467AbjGZIq6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 26 Jul 2023 04:46:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233355AbjGZIpr (ORCPT
+        with ESMTP id S233421AbjGZIq2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 26 Jul 2023 04:45:47 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D692D56
-        for <linux-media@vger.kernel.org>; Wed, 26 Jul 2023 01:38:11 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id af79cd13be357-7656652da3cso495169485a.1
-        for <linux-media@vger.kernel.org>; Wed, 26 Jul 2023 01:38:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1690360691; x=1690965491;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=74wyanum3tMY6hDx3TZatyjXXaq/omZ9n0t0OUBylr4=;
-        b=G+rQKya9hRJ1KrTW7HkUV7t9ZVQya6/gkmn8HuwfCSiy1lM+Z4u2AL6fEnWGXB0yag
-         feFPkPAhP26iAGresrKu0OMAibMERZTok69c0gVpMZJgW1/oQerJFhYam7sj+FgdW4Me
-         CX5fAlGN/scLlT3Q3B8Qerc+mf8ltS38DMSjg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690360691; x=1690965491;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=74wyanum3tMY6hDx3TZatyjXXaq/omZ9n0t0OUBylr4=;
-        b=GGrEi6ayWwcUIXza2wyOuujevugXYU4WaBCwmABNEa5uBosWu7aMYYIbbIlQH4Qq9Z
-         tjIxS5ON5aLmbFwXK/g1A+qZP1Cwclmo52HmP59DDe+ZKzZ6Xh+R03kZDkeAFwNzcmbE
-         JnJVJsSo1BkSjZ/2cn+1rV1pmIMU+jmtqMEjTwBS9V7gUuGV26TytTSlBge/zfKsnF7Q
-         ye1RX8AmSiJ/Nhw6kg1oWQZZuP5YleqUyKF5LCjopFu48TV8UlBk5xe8+qwmmquqzOLK
-         O8Tt05KVfziG7MXWYV/NKntm66YfiGmPgyin7ApFG61kyFSLfNltHAR3amknz9FVtOW6
-         YNcw==
-X-Gm-Message-State: ABy/qLaeXxaMrevtJyJkYkBkzYO5KymM3zJMnb/J/4nhPKV65mm4Fxul
-        JzawJGkWosRMuMXDSc0JgJZYBT/hrFMXmekbMqpv6Q==
-X-Google-Smtp-Source: APBJJlFPWxxz5UYCNKbrorGqzAZWNTLWA20XBBXd3Kd6YzeLIaVBFQ5nY+oCz7nxjLrfK1loV3cGAw==
-X-Received: by 2002:ad4:53c1:0:b0:63c:fd89:f045 with SMTP id k1-20020ad453c1000000b0063cfd89f045mr1241885qvv.54.1690360691083;
-        Wed, 26 Jul 2023 01:38:11 -0700 (PDT)
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com. [209.85.219.51])
-        by smtp.gmail.com with ESMTPSA id s17-20020a0ca611000000b0063d1aa446e2sm963928qva.59.2023.07.26.01.37.30
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jul 2023 01:37:37 -0700 (PDT)
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-63d0228d32bso18744016d6.2
-        for <linux-media@vger.kernel.org>; Wed, 26 Jul 2023 01:37:30 -0700 (PDT)
-X-Received: by 2002:a0c:c684:0:b0:63c:da03:1c12 with SMTP id
- d4-20020a0cc684000000b0063cda031c12mr975386qvj.60.1690360649449; Wed, 26 Jul
- 2023 01:37:29 -0700 (PDT)
+        Wed, 26 Jul 2023 04:46:28 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659884EC8;
+        Wed, 26 Jul 2023 01:38:58 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36Q7Va8P008022;
+        Wed, 26 Jul 2023 10:38:20 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=selector1;
+ bh=+UNuTiEun7FhBdsfcJqf/qnk8DNj8pRVH/wzdvv/e68=;
+ b=4VfijQiCAGoIOVR4ZEre3LMsXnWRT82xkx0GxR88KgvWtydYfRHzk3VwCG8qfEs+8Mef
+ LAVqksmTmDX5eXE9s2qw+5O/YZoeDAg5nATTvkFKboek0hhOsTfhRp1RjeI5vTy7h/rQ
+ Npfbnh0T3S4IRS6z/XNmIUC+wHg+swW23KDUkUip7W1XfNjkcT3GcLAI70SzQTBpMx0X
+ NmGOsAWOUwu8MQyju/HT5F/E3cvjXgJf0O1azw/oAEoQa3v1Z/CYofFMx8ZdNaL+ElFk
+ J9vRJM8Pi/y/bbd3rqTsyftgnLy5auJFA6dUQ4Jwt+N0DCCU0s5XFBVrnNzKlelGCXn4 OA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3s2y640hfq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Jul 2023 10:38:20 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 798DB10002A;
+        Wed, 26 Jul 2023 10:38:19 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6D95720FA38;
+        Wed, 26 Jul 2023 10:38:19 +0200 (CEST)
+Received: from localhost (10.201.21.121) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 26 Jul
+ 2023 10:38:19 +0200
+From:   Gatien Chevallier <gatien.chevallier@foss.st.com>
+To:     <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <alexandre.torgue@foss.st.com>,
+        <vkoul@kernel.org>, <jic23@kernel.org>,
+        <olivier.moysan@foss.st.com>, <arnaud.pouliquen@foss.st.com>,
+        <mchehab@kernel.org>, <fabrice.gasnier@foss.st.com>,
+        <andi.shyti@kernel.org>, <ulf.hansson@linaro.org>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <hugues.fruchet@foss.st.com>, <lee@kernel.org>, <will@kernel.org>,
+        <catalin.marinas@arm.com>, <arnd@kernel.org>,
+        <richardcochran@gmail.com>, Frank Rowand <frowand.list@gmail.com>
+CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Gatien Chevallier <gatien.chevallier@foss.st.com>
+Subject: [PATCH v3 03/11] dt-bindings: bus: document RIFSC
+Date:   Wed, 26 Jul 2023 10:38:02 +0200
+Message-ID: <20230726083810.232100-4-gatien.chevallier@foss.st.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230726083810.232100-1-gatien.chevallier@foss.st.com>
+References: <20230726083810.232100-1-gatien.chevallier@foss.st.com>
 MIME-Version: 1.0
-References: <20230717-uvc-oob-v2-1-c7745a8d5847@chromium.org>
- <20230725213451.GU31069@pendragon.ideasonboard.com> <CANiDSCttkqows7PZS823Jpk-CqK9Gz2rujF_R4SPDi=wcPJ2LA@mail.gmail.com>
- <20230726080753.GX31069@pendragon.ideasonboard.com>
-In-Reply-To: <20230726080753.GX31069@pendragon.ideasonboard.com>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Wed, 26 Jul 2023 10:37:17 +0200
-X-Gmail-Original-Message-ID: <CANiDSCsfmpi3N8hqC7XxYMg_6Zrf=QROjj-JwgzavPBzhW0NPw@mail.gmail.com>
-Message-ID: <CANiDSCsfmpi3N8hqC7XxYMg_6Zrf=QROjj-JwgzavPBzhW0NPw@mail.gmail.com>
-Subject: Re: [PATCH v2] media: uvcvideo: Fix OOB read
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        stable@kernel.org, Zubin Mithra <zsm@chromium.org>,
-        =?UTF-8?Q?Kai_Wasserb=C3=A4ch?= <kai@dev.carbon-project.org>,
-        Thorsten Leemhuis <linux@leemhuis.info>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.201.21.121]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-26_01,2023-07-25_01,2023-05-22_02
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Laurent
+Document RIFSC (RIF security controller). RIFSC is a firewall controller
+composed of different kinds of hardware resources.
 
-On Wed, 26 Jul 2023 at 10:07, Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hi Ricardo,
->
-> (CC'ing Kai and Thorsten who have added the check to checkpatch)
->
-> On Wed, Jul 26, 2023 at 08:24:50AM +0200, Ricardo Ribalda wrote:
-> > On Tue, 25 Jul 2023 at 23:34, Laurent Pinchart wrote:
-> > > On Thu, Jul 20, 2023 at 05:46:54PM +0000, Ricardo Ribalda wrote:
-> > > > If the index provided by the user is bigger than the mask size, we might do an
-> > > > out of bound read.
-> > > >
-> > > > CC: stable@kernel.org
-> > > > Fixes: 40140eda661e ("media: uvcvideo: Implement mask for V4L2_CTRL_TYPE_MENU")
-> > > > Reported-by: Zubin Mithra <zsm@chromium.org>
-> > >
-> > > checkpatch now requests a Reported-by tag to be immediately followed by
-> > > a Closes tag that contains the URL to the report. Could you please
-> > > provide that ?
-> >
-> > I saw that, but the URL is kind of private:
-> >
-> > Closes: http://issuetracker.google.com/issues/289975230
->
-> Ah :-S I wonder if we should drop the Reported-by tag then ?
->
-> > > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > > > ---
-> > > > Avoid reading index >= 31
-> > > > ---
-> > > > Changes in v2:
-> > > > - Use BITS_PER_TYPE instead of 32 (thanks Sergey).
-> > > > - Add Reported-by tag.
-> > > > - Link to v1: https://lore.kernel.org/r/20230717-uvc-oob-v1-1-f5b9b4aba3b4@chromium.org
-> > > > ---
-> > > >  drivers/media/usb/uvc/uvc_ctrl.c | 3 +++
-> > > >  1 file changed, 3 insertions(+)
-> > > >
-> > > > diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-> > > > index 5e9d3da862dd..e59a463c2761 100644
-> > > > --- a/drivers/media/usb/uvc/uvc_ctrl.c
-> > > > +++ b/drivers/media/usb/uvc/uvc_ctrl.c
-> > > > @@ -1402,6 +1402,9 @@ int uvc_query_v4l2_menu(struct uvc_video_chain *chain,
-> > > >       query_menu->id = id;
-> > > >       query_menu->index = index;
-> > > >
-> > > > +     if (index >= BITS_PER_TYPE(mapping->menu_mask))
-> > > > +             return -EINVAL;
-> > > > +
-> > >
-> > > I'd move this a few lines up, before setting query_menu.
-> >
-> > SGTM, I just wanted to clear all the fields to mimic the other error
-> > paths of the function.
->
-> I'm fine with that too if you prefer.
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+---
 
-Your call. I prefer my version, but I am of course biased :P
+Changes in V2: 
+	- Corrected errors highlighted by Rob's robot
+	- No longer define the maxItems for the "feature-domains"
+	  property
+	- Fix example (node name, status)
+	- Declare "feature-domain-names" as an optional
+	  property for child nodes
+	- Fix description of "feature-domains" property
 
->
-> > > With those minor changes,
-> > >
-> > > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > >
-> > > There's no need for a v3, I can handle the changes locally, but I need
-> > > the URL for the Closes tag.
-> > >
-> > > >       ret = mutex_lock_interruptible(&chain->ctrl_mutex);
-> > > >       if (ret < 0)
-> > > >               return -ERESTARTSYS;
-> > > >
-> > > > ---
-> > > > base-commit: fdf0eaf11452d72945af31804e2a1048ee1b574c
-> > > > change-id: 20230717-uvc-oob-4b0148a00417
->
-> --
-> Regards,
->
-> Laurent Pinchart
+ .../bindings/bus/st,stm32mp25-rifsc.yaml      | 105 ++++++++++++++++++
+ 1 file changed, 105 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
 
-
-
+diff --git a/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml b/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
+new file mode 100644
+index 000000000000..7aeb38296616
+--- /dev/null
++++ b/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
+@@ -0,0 +1,105 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/bus/st,stm32mp25-rifsc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: STM32 Resource isolation framework security controller
++
++maintainers:
++  - Gatien Chevallier <gatien.chevallier@foss.st.com>
++
++description: |
++  Resource isolation framework (RIF) is a comprehensive set of hardware blocks
++  designed to enforce and manage isolation of STM32 hardware resources like
++  memory and peripherals.
++
++  The RIFSC (RIF security controller) is composed of three sets of registers,
++  each managing a specific set of hardware resources:
++    - RISC registers associated with RISUP logic (resource isolation device unit
++      for peripherals), assign all non-RIF aware peripherals to zero, one or
++      any security domains (secure, privilege, compartment).
++    - RIMC registers: associated with RIMU logic (resource isolation master
++      unit), assign all non RIF-aware bus master to one security domain by
++      setting secure, privileged and compartment information on the system bus.
++      Alternatively, the RISUP logic controlling the device port access to a
++      peripheral can assign target bus attributes to this peripheral master port
++      (supported attribute: CID).
++    - RISC registers associated with RISAL logic (resource isolation device unit
++      for address space - Lite version), assign address space subregions to one
++      security domains (secure, privilege, compartment).
++
++properties:
++  compatible:
++    contains:
++      const: st,stm32mp25-rifsc
++
++  reg:
++    maxItems: 1
++
++  "#address-cells":
++    const: 1
++
++  "#size-cells":
++    const: 1
++
++  ranges: true
++
++  "#feature-domain-cells":
++    const: 1
++
++  feature-domain-controller: true
++
++patternProperties:
++  "^.*@[0-9a-f]+$":
++    description: Peripherals
++    type: object
++    properties:
++      feature-domains:
++        minItems: 1
++        description:
++          The phandle of the firewall controller of the peripheral and the
++          platform-specific firewall ID of the peripheral.
++
++      feature-domain-names:
++        minItems: 1
++
++    required:
++      - feature-domains
++
++required:
++  - compatible
++  - reg
++  - "#address-cells"
++  - "#size-cells"
++  - feature-domain-controller
++  - "#feature-domain-cells"
++  - ranges
++
++additionalProperties: false
++
++examples:
++  - |
++    // In this example, the usart2 device refers to rifsc as its domain
++    // controller.
++    // Access rights are verified before creating devices.
++
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    rifsc: bus@42080000 {
++        compatible = "st,stm32mp25-rifsc";
++        reg = <0x42080000 0x1000>;
++        #address-cells = <1>;
++        #size-cells = <1>;
++        feature-domain-controller;
++        #feature-domain-cells = <1>;
++        ranges;
++
++        usart2: serial@400e0000 {
++              compatible = "st,stm32h7-uart";
++              reg = <0x400e0000 0x400>;
++              interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
++              clocks = <&ck_flexgen_08>;
++              feature-domains = <&rifsc 32>;
++        };
++    };
 -- 
-Ricardo Ribalda
+2.25.1
+
