@@ -2,49 +2,49 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E4E2EB64DD
-	for <linux-media@archiver.kernel.org>; Thu, 27 Jul 2023 05:47:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 659DFEB64DD
+	for <linux-media@archiver.kernel.org>; Thu, 27 Jul 2023 05:47:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231978AbjG0FrV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Jul 2023 01:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35232 "EHLO
+        id S232473AbjG0Frg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Jul 2023 01:47:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231358AbjG0FrB (ORCPT
+        with ESMTP id S232418AbjG0FrM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 Jul 2023 01:47:01 -0400
+        Thu, 27 Jul 2023 01:47:12 -0400
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A1530D6
-        for <linux-media@vger.kernel.org>; Wed, 26 Jul 2023 22:46:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9958B30DE
+        for <linux-media@vger.kernel.org>; Wed, 26 Jul 2023 22:46:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690436778; x=1721972778;
+  t=1690436791; x=1721972791;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=syQraCRBi7qZgc23GK2gx2FD7RjMDiriUfASo/FYpKQ=;
-  b=m1kUH9gr60RKRxH4xpFQQQR/snijGm3jiYlz9q46zXlq40lcYsw+nO6p
-   r1xfyJF5hNQc56RAFglNufwu/8XVwhXDqJtLDeNRSVPFRivbTKQBA1A4B
-   gQYOqd1gpFV9G0HzjKZfnJaSpdiHyUhxDam0HA78wSywWB/OhDkWXPvjq
-   qutBEm7SvJRLXN3G3HMVmdLVvdc7EUYwwf2fiLs5j4BuqtIWuOE5NnIlu
-   I9Tzm+GqNmIdNT5aJRERiy7bMf4uIBuLr3W6wFejuHa6D/d7i4L2pThAW
-   ahx+UxqN1icBACY3eUjjFILxq7sHC641Z5dpxslt27rc3liqteRBa2n07
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="399150569"
+  bh=5s4aECybdogvmwUkCRjE9MB0CW4nWuRgjnoMpHQAkBo=;
+  b=gQPYHcEzGeI1nDZIXqsNnZVw3tKG6I2rFfKYcemTOLyKiYfpvX7k9zHR
+   O28s6HM2aaFXVc+7/zcOsJ7Cf76KYupHIaAR294y1MtqWKg/1l5anCMM5
+   PwD7+D6NFcPU2Gss636+NxyVpsLftuT9AFf/P3fR2LEGAFH1SuwIQTHgk
+   FCgzL5aZ2UcZtNlRTWe0sxHWmqjy0Bt9UTVhqe04Pk8S89kSxlsmoZgc5
+   9K9wDcTPbv5wJyo0oKQNEF/jts6HcOUHTZI5DlTkW29KleeDh+8unDR9x
+   ckewOOKFehkjnlnciKB3FEESalPa2MmfFce9egNtpBuoXuIcRyoEp1EDB
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="399150587"
 X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
-   d="scan'208";a="399150569"
+   d="scan'208";a="399150587"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
   by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2023 22:44:38 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="840584046"
+X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="840584050"
 X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
-   d="scan'208";a="840584046"
+   d="scan'208";a="840584050"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
   by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2023 22:44:30 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id A0FF3120B6E;
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id AD5E2120B7B;
         Thu, 27 Jul 2023 08:44:18 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1qOtmD-004xr2-2p;
+        id 1qOtmD-004xrC-2x;
         Thu, 27 Jul 2023 08:43:05 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
@@ -76,9 +76,9 @@ Cc:     laurent.pinchart@ideasonboard.com,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Sowjanya Komatineni <skomatineni@nvidia.com>,
         Marco Felsch <m.felsch@pengutronix.de>
-Subject: [PATCH v6 11/38] media: v4l: async: Add some debug prints
-Date:   Thu, 27 Jul 2023 08:42:28 +0300
-Message-Id: <20230727054255.1183255-12-sakari.ailus@linux.intel.com>
+Subject: [PATCH v6 13/38] media: v4l: async: Don't check whether asd is NULL in validity check
+Date:   Thu, 27 Jul 2023 08:42:30 +0300
+Message-Id: <20230727054255.1183255-14-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230727054255.1183255-1-sakari.ailus@linux.intel.com>
 References: <20230727054255.1183255-1-sakari.ailus@linux.intel.com>
@@ -89,212 +89,33 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Just add some debug prints for V4L2 async sub-device matching process.
-These might come useful in figuring out why things don't work as expected.
+The callers do pass a non-NULL asd to v4l2_async_nf_asd_valid() already.
+There's no need for the NULL check here.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Tested-by: Philipp Zabel <p.zabel@pengutronix.de> # imx6qp
 Tested-by: Niklas Söderlund <niklas.soderlund@ragnatech.se> # rcar + adv746x
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 Tested-by: Aishwarya Kothari <aishwarya.kothari@toradex.com> # Apalis i.MX6Q with TC358743
 Tested-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> # Renesas RZ/G2L SMARC
 ---
- drivers/media/v4l2-core/v4l2-async.c | 71 ++++++++++++++++++++++++----
- 1 file changed, 63 insertions(+), 8 deletions(-)
+ drivers/media/v4l2-core/v4l2-async.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
 diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
-index 7831bc879290..c5781124337a 100644
+index 9b79bcc1af82..925ab5571cd4 100644
 --- a/drivers/media/v4l2-core/v4l2-async.c
 +++ b/drivers/media/v4l2-core/v4l2-async.c
-@@ -77,6 +77,17 @@ static bool match_i2c(struct v4l2_async_notifier *notifier,
- #endif
- }
- 
-+static struct device *notifier_dev(struct v4l2_async_notifier *notifier)
-+{
-+	if (notifier->sd)
-+		return notifier->sd->dev;
-+
-+	if (notifier->v4l2_dev)
-+		return notifier->v4l2_dev->dev;
-+
-+	return NULL;
-+}
-+
- static bool
- match_fwnode_one(struct v4l2_async_notifier *notifier,
- 		 struct v4l2_subdev *sd, struct fwnode_handle *sd_fwnode,
-@@ -88,13 +99,20 @@ match_fwnode_one(struct v4l2_async_notifier *notifier,
- 	bool sd_fwnode_is_ep;
- 	struct device *dev;
- 
-+	dev_dbg(notifier_dev(notifier),
-+		"v4l2-async: fwnode match: need %pfw, trying %pfw\n",
-+		sd_fwnode, asd->match.fwnode);
-+
- 	/*
- 	 * Both the subdev and the async subdev can provide either an endpoint
- 	 * fwnode or a device fwnode. Start with the simple case of direct
- 	 * fwnode matching.
- 	 */
--	if (sd_fwnode == asd->match.fwnode)
-+	if (sd_fwnode == asd->match.fwnode) {
-+		dev_dbg(notifier_dev(notifier),
-+			"v4l2-async: direct match found\n");
- 		return true;
-+	}
- 
- 	/*
- 	 * Otherwise, check if the sd fwnode and the asd fwnode refer to an
-@@ -107,8 +125,11 @@ match_fwnode_one(struct v4l2_async_notifier *notifier,
- 	sd_fwnode_is_ep = fwnode_graph_is_endpoint(sd_fwnode);
- 	asd_fwnode_is_ep = fwnode_graph_is_endpoint(asd->match.fwnode);
- 
--	if (sd_fwnode_is_ep == asd_fwnode_is_ep)
-+	if (sd_fwnode_is_ep == asd_fwnode_is_ep) {
-+		dev_dbg(notifier_dev(notifier),
-+			"v4l2-async: direct match not found\n");
- 		return false;
-+	}
- 
- 	/*
- 	 * The sd and asd fwnodes are of different types. Get the device fwnode
-@@ -122,10 +143,17 @@ match_fwnode_one(struct v4l2_async_notifier *notifier,
- 		other_fwnode = sd_fwnode;
- 	}
- 
-+	dev_dbg(notifier_dev(notifier),
-+		"v4l2-async: fwnode compat match: need %pfw, trying %pfw\n",
-+		dev_fwnode, other_fwnode);
-+
- 	fwnode_handle_put(dev_fwnode);
- 
--	if (dev_fwnode != other_fwnode)
-+	if (dev_fwnode != other_fwnode) {
-+		dev_dbg(notifier_dev(notifier),
-+			"v4l2-async: compat match not found\n");
- 		return false;
-+	}
- 
- 	/*
- 	 * We have a heterogeneous match. Retrieve the struct device of the side
-@@ -145,12 +173,18 @@ match_fwnode_one(struct v4l2_async_notifier *notifier,
- 			   dev->driver->name);
- 	}
- 
-+	dev_dbg(notifier_dev(notifier), "v4l2-async: compat match found\n");
-+
- 	return true;
- }
- 
- static bool match_fwnode(struct v4l2_async_notifier *notifier,
- 			 struct v4l2_subdev *sd, struct v4l2_async_subdev *asd)
+@@ -554,9 +554,6 @@ static int v4l2_async_nf_asd_valid(struct v4l2_async_notifier *notifier,
  {
-+	dev_dbg(notifier_dev(notifier),
-+		"v4l2-async: matching for notifier %pfw, sd fwnode %pfw\n",
-+		dev_fwnode(notifier_dev(notifier)), sd->fwnode);
-+
- 	if (match_fwnode_one(notifier, sd, sd->fwnode, asd))
- 		return true;
+ 	struct device *dev = notifier_dev(notifier);
  
-@@ -158,6 +192,9 @@ static bool match_fwnode(struct v4l2_async_notifier *notifier,
- 	if (IS_ERR_OR_NULL(sd->fwnode->secondary))
- 		return false;
- 
-+	dev_dbg(notifier_dev(notifier),
-+		"v4l2-async: trying secondary fwnode match\n");
-+
- 	return match_fwnode_one(notifier, sd, sd->fwnode->secondary, asd);
- }
- 
-@@ -271,22 +308,33 @@ v4l2_async_nf_can_complete(struct v4l2_async_notifier *notifier)
- static int
- v4l2_async_nf_try_complete(struct v4l2_async_notifier *notifier)
- {
-+	struct v4l2_async_notifier *__notifier = notifier;
-+
- 	/* Quick check whether there are still more sub-devices here. */
- 	if (!list_empty(&notifier->waiting))
- 		return 0;
- 
-+	if (notifier->sd)
-+		dev_dbg(notifier_dev(notifier),
-+			"v4l2-async: trying to complete\n");
-+
- 	/* Check the entire notifier tree; find the root notifier first. */
- 	while (notifier->parent)
- 		notifier = notifier->parent;
- 
- 	/* This is root if it has v4l2_dev. */
--	if (!notifier->v4l2_dev)
-+	if (!notifier->v4l2_dev) {
-+		dev_dbg(notifier_dev(__notifier),
-+			"v4l2-async: V4L2 device not available\n");
- 		return 0;
-+	}
- 
- 	/* Is everything ready? */
- 	if (!v4l2_async_nf_can_complete(notifier))
- 		return 0;
- 
-+	dev_dbg(notifier_dev(__notifier), "v4l2-async: complete\n");
-+
- 	return v4l2_async_nf_call_complete(notifier);
- }
- 
-@@ -350,6 +398,9 @@ static int v4l2_async_match_notify(struct v4l2_async_notifier *notifier,
- 	/* Move from the global subdevice list to notifier's done */
- 	list_move(&sd->async_list, &notifier->done);
- 
-+	dev_dbg(notifier_dev(notifier), "v4l2-async: %s bound (ret %d)\n",
-+		dev_name(sd->dev), ret);
-+
- 	/*
- 	 * See if the sub-device has a notifier. If not, return here.
- 	 */
-@@ -378,6 +429,8 @@ v4l2_async_nf_try_all_subdevs(struct v4l2_async_notifier *notifier)
- 	if (!v4l2_dev)
- 		return 0;
- 
-+	dev_dbg(notifier_dev(notifier), "v4l2-async: trying all sub-devices\n");
-+
- again:
- 	list_for_each_entry(sd, &subdev_list, async_list) {
- 		struct v4l2_async_subdev *asd;
-@@ -387,6 +440,9 @@ v4l2_async_nf_try_all_subdevs(struct v4l2_async_notifier *notifier)
- 		if (!asd)
- 			continue;
- 
-+		dev_dbg(notifier_dev(notifier),
-+			"v4l2-async: match found, subdev %s\n", sd->name);
-+
- 		ret = v4l2_async_match_notify(notifier, v4l2_dev, sd, asd);
- 		if (ret < 0)
- 			return ret;
-@@ -496,8 +552,7 @@ static int v4l2_async_nf_asd_valid(struct v4l2_async_notifier *notifier,
- 				   struct v4l2_async_subdev *asd,
- 				   int this_index)
- {
--	struct device *dev =
--		notifier->v4l2_dev ? notifier->v4l2_dev->dev : NULL;
-+	struct device *dev = notifier_dev(notifier);
- 
- 	if (!asd)
- 		return -EINVAL;
-@@ -506,12 +561,12 @@ static int v4l2_async_nf_asd_valid(struct v4l2_async_notifier *notifier,
+-	if (!asd)
+-		return -EINVAL;
+-
+ 	switch (asd->match_type) {
  	case V4L2_ASYNC_MATCH_I2C:
  	case V4L2_ASYNC_MATCH_FWNODE:
- 		if (v4l2_async_nf_has_async_subdev(notifier, asd, this_index)) {
--			dev_dbg(dev, "subdev descriptor already listed in this or other notifiers\n");
-+			dev_dbg(dev, "v4l2-async: subdev descriptor already listed in a notifier\n");
- 			return -EEXIST;
- 		}
- 		break;
- 	default:
--		dev_err(dev, "Invalid match type %u on %p\n",
-+		dev_err(dev, "v4l2-async: Invalid match type %u on %p\n",
- 			asd->match_type, asd);
- 		return -EINVAL;
- 	}
 -- 
 2.39.2
 
