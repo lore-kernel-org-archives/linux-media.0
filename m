@@ -2,49 +2,49 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B356AC001E0
-	for <linux-media@archiver.kernel.org>; Thu, 27 Jul 2023 05:46:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3E08C001DC
+	for <linux-media@archiver.kernel.org>; Thu, 27 Jul 2023 05:47:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232432AbjG0Fq4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Jul 2023 01:46:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35142 "EHLO
+        id S231907AbjG0Fq6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Jul 2023 01:46:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbjG0Fqe (ORCPT
+        with ESMTP id S231893AbjG0Fqg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 Jul 2023 01:46:34 -0400
+        Thu, 27 Jul 2023 01:46:36 -0400
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 089E63C12
-        for <linux-media@vger.kernel.org>; Wed, 26 Jul 2023 22:45:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E219130FC
+        for <linux-media@vger.kernel.org>; Wed, 26 Jul 2023 22:45:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690436754; x=1721972754;
+  t=1690436757; x=1721972757;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Xzt893+X4Wu5dzLVX6QizHjEZJLuTS5bNsCjyNTAMLY=;
-  b=gxFSuLapOh0WlkRpPxATH6E1Pj/AfEvRXvNh0y7byzzpQVuYJI3/UbaE
-   zuPxwVHf1B39q8NUl7mL3uCYWXiXVWikmccSuPQ9/25+cDA+D+G12+DH0
-   qCDtBsyi3siq6e9F/BzpTGdJd6IL1FPQ/alb6Zkm7Pz9Y3kCEUXZn2qNv
-   irwEzjG7sw5NXHzGFnieS5QrjGfO/iN63V+ibe4rVl91QT16dwxdn7XQl
-   8I8izuLVvTbIQwh8luwjdRLmetjYQ/drWTboZbpLdbtkF69PdX2dX4XSa
-   vMlrNWvkNTJaKV/361Xts7UpJVuZ17unSwN+YphKB8FOB//5IjPe+Q9bK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="399150414"
+  bh=kHefxlgEkUKGCVAPQDujxEjZWvHyInDM2u8g+k6D54k=;
+  b=UgjlmtMdt2cW6ICTSBPhienK9Ja8uGd+UWglSanU0wGBZlDogai277HA
+   HGwcnIOqaTAoLdQDIIY8D4IEoVgqWD0fmp/9BzNYJwXLQSDpG4CN5vIb1
+   28AZeJ7M61Ih41PYi1V8Es6OnOSqmpBFW0t4JuTF/Mj/YkRevgd2vMQdt
+   8y71bCI33giOQAgtjnKrLjF1CUC/UnEfAZupdUYYen5p+NPyN4SD4uFqL
+   FfNohmX145qfTjJpcKIHmkymHJ5MYYZUp43r8g4j/1q0k346hzAXVwL1e
+   Dh0ENFDa0GUo+fNWynhmDhk/KCYKzajL5rmVlrr5FMp6lRIEEQZEy9K/L
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="399150434"
 X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
-   d="scan'208";a="399150414"
+   d="scan'208";a="399150434"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2023 22:44:36 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2023 22:44:37 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="840584031"
+X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="840584033"
 X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
-   d="scan'208";a="840584031"
+   d="scan'208";a="840584033"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2023 22:44:30 -0700
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2023 22:44:29 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id 9C253120B5B;
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 818DD12091C;
         Thu, 27 Jul 2023 08:44:18 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1qOtmD-004xqx-2k;
+        id 1qOtmD-004xqZ-2Q;
         Thu, 27 Jul 2023 08:43:05 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
@@ -76,51 +76,98 @@ Cc:     laurent.pinchart@ideasonboard.com,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Sowjanya Komatineni <skomatineni@nvidia.com>,
         Marco Felsch <m.felsch@pengutronix.de>
-Subject: [PATCH v6 10/38] media: Documentation: v4l: Document v4l2_async_nf_cleanup
-Date:   Thu, 27 Jul 2023 08:42:27 +0300
-Message-Id: <20230727054255.1183255-11-sakari.ailus@linux.intel.com>
+Subject: [PATCH v6 05/38] media: omap3isp: Move link creation to bound callback
+Date:   Thu, 27 Jul 2023 08:42:22 +0300
+Message-Id: <20230727054255.1183255-6-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230727054255.1183255-1-sakari.ailus@linux.intel.com>
 References: <20230727054255.1183255-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Document v4l2_async_nf_cleanup() which must be called before releasing an
-unregistered notifier's memory. Also remove the sentence regarding
-v4l2_async_nf_init() arguments --- those are documented in kerneldoc which
-is referred here.
+Move the creation of the links between external sub-devices and ISP
+sub-devices to the bound callback. This way we can also remove the need to
+access the sub-device's notifier field that will soon be removed.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Tested-by: Philipp Zabel <p.zabel@pengutronix.de> # imx6qp
+Tested-by: Niklas Söderlund <niklas.soderlund@ragnatech.se> # rcar + adv746x
+Tested-by: Aishwarya Kothari <aishwarya.kothari@toradex.com> # Apalis i.MX6Q with TC358743
 Tested-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> # Renesas RZ/G2L SMARC
 ---
- Documentation/driver-api/media/v4l2-subdev.rst | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ drivers/media/platform/ti/omap3isp/isp.c | 38 ++++++++++++------------
+ 1 file changed, 19 insertions(+), 19 deletions(-)
 
-diff --git a/Documentation/driver-api/media/v4l2-subdev.rst b/Documentation/driver-api/media/v4l2-subdev.rst
-index e463ab4a3413..327d444f34dc 100644
---- a/Documentation/driver-api/media/v4l2-subdev.rst
-+++ b/Documentation/driver-api/media/v4l2-subdev.rst
-@@ -198,12 +198,11 @@ picked up by bridge drivers.
- Asynchronous sub-device notifiers
- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+diff --git a/drivers/media/platform/ti/omap3isp/isp.c b/drivers/media/platform/ti/omap3isp/isp.c
+index 2f9c7d688a1c..b01d70dbd0c4 100644
+--- a/drivers/media/platform/ti/omap3isp/isp.c
++++ b/drivers/media/platform/ti/omap3isp/isp.c
+@@ -2022,35 +2022,34 @@ enum isp_of_phy {
+ 	ISP_OF_PHY_CSIPHY2,
+ };
  
--Bridge drivers in turn have to register a notifier object. This is
--performed using the :c:func:`v4l2_async_nf_register` call. To
--unregister the notifier the driver has to call
--:c:func:`v4l2_async_nf_unregister`. The former of the two functions
--takes two arguments: a pointer to struct :c:type:`v4l2_device` and a
--pointer to struct :c:type:`v4l2_async_notifier`.
-+Bridge drivers in turn have to register a notifier object. This is performed
-+using the :c:func:`v4l2_async_nf_register` call. To unregister the notifier the
-+driver has to call :c:func:`v4l2_async_nf_unregister`. Before releasing memory
-+of an unregister notifier, it must be cleaned up by calling
-+:c:func:`v4l2_async_nf_cleanup`.
+-static int isp_subdev_notifier_complete(struct v4l2_async_notifier *async)
++static int isp_subdev_notifier_bound(struct v4l2_async_notifier *async,
++				     struct v4l2_subdev *sd,
++				     struct v4l2_async_subdev *asd)
+ {
+ 	struct isp_device *isp = container_of(async, struct isp_device,
+ 					      notifier);
+-	struct v4l2_device *v4l2_dev = &isp->v4l2_dev;
+-	struct v4l2_subdev *sd;
++	struct isp_bus_cfg *bus_cfg =
++		&container_of(asd, struct isp_async_subdev, asd)->bus;
+ 	int ret;
  
- Before registering the notifier, bridge drivers must do two things: first, the
- notifier must be initialized using the :c:func:`v4l2_async_nf_init`.  Second,
+ 	mutex_lock(&isp->media_dev.graph_mutex);
++	ret = isp_link_entity(isp, &sd->entity, bus_cfg->interface);
++	mutex_unlock(&isp->media_dev.graph_mutex);
+ 
+-	ret = media_entity_enum_init(&isp->crashed, &isp->media_dev);
+-	if (ret) {
+-		mutex_unlock(&isp->media_dev.graph_mutex);
+-		return ret;
+-	}
+-
+-	list_for_each_entry(sd, &v4l2_dev->subdevs, list) {
+-		if (sd->notifier != &isp->notifier)
+-			continue;
++	return ret;
++}
+ 
+-		ret = isp_link_entity(isp, &sd->entity,
+-				      v4l2_subdev_to_bus_cfg(sd)->interface);
+-		if (ret < 0) {
+-			mutex_unlock(&isp->media_dev.graph_mutex);
+-			return ret;
+-		}
+-	}
++static int isp_subdev_notifier_complete(struct v4l2_async_notifier *async)
++{
++	struct isp_device *isp = container_of(async, struct isp_device,
++					      notifier);
++	int ret;
+ 
++	mutex_lock(&isp->media_dev.graph_mutex);
++	ret = media_entity_enum_init(&isp->crashed, &isp->media_dev);
+ 	mutex_unlock(&isp->media_dev.graph_mutex);
++	if (ret)
++		return ret;
+ 
+ 	ret = v4l2_device_register_subdev_nodes(&isp->v4l2_dev);
+ 	if (ret < 0)
+@@ -2240,6 +2239,7 @@ static int isp_parse_of_endpoints(struct isp_device *isp)
+ }
+ 
+ static const struct v4l2_async_notifier_operations isp_subdev_notifier_ops = {
++	.bound = isp_subdev_notifier_bound,
+ 	.complete = isp_subdev_notifier_complete,
+ };
+ 
 -- 
 2.39.2
 
