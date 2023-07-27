@@ -2,158 +2,185 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A92AC04A6A
-	for <linux-media@archiver.kernel.org>; Thu, 27 Jul 2023 11:21:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 754BBC04A6A
+	for <linux-media@archiver.kernel.org>; Thu, 27 Jul 2023 11:26:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232787AbjG0LVp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Jul 2023 07:21:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51226 "EHLO
+        id S231664AbjG0L0H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Jul 2023 07:26:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231219AbjG0LVo (ORCPT
+        with ESMTP id S230064AbjG0L0G (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 Jul 2023 07:21:44 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6AC271F;
-        Thu, 27 Jul 2023 04:21:39 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36R9BbwV007808;
-        Thu, 27 Jul 2023 11:21:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=zarlv8hX04Kd5om8RVcq7azX5DzPy0Bar+CaEh5l6Y8=;
- b=AjtdFc5538vJ2Su6KO6MV+x+3wkbt9eMM0F3lZCXC1snaQhpGMgnbkeAYa0vavA+X7MW
- 8M5LhARW4G5CuOAB4YQTe7IyfIrpyKhQJ3SAdbwABxHj8hc12hGTjFDRgvcUMMdwYvU5
- nfhUwDpJE6jhebQs7bJuc/gH0uxVJdXkFw0UnK2V/gskzasXCTmKqujn4WNDAh/WMa1z
- fJzL6ek2QokSArqOV6aDREjYRNUoTwMc6eWeAfMgk6LHWWS14XeAXi+FOFvAlEADJtPk
- MSjAG9lkoCJp7cgF6bbg7TLd2hE2znx85QHrrYQmE9cEdM7bdCpILUYFExprfBW6gv3c hA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s3mpt0g72-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Jul 2023 11:21:27 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36RBKxhZ004610
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Jul 2023 11:21:00 GMT
-Received: from [10.216.40.41] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Thu, 27 Jul
- 2023 04:19:16 -0700
-Message-ID: <fa84ec4f-bdb9-dace-c56a-46174a9b47ee@quicinc.com>
-Date:   Thu, 27 Jul 2023 16:49:06 +0530
+        Thu, 27 Jul 2023 07:26:06 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45984E61;
+        Thu, 27 Jul 2023 04:26:04 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 36RBPo09084065;
+        Thu, 27 Jul 2023 06:25:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1690457150;
+        bh=Xcy33PUqxwGfc5BJ3nYt5ip5CNyWZGNoW8CPsHBKEh8=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=ubIwm0uiLJYIjymfC0sAavx6VqdSVgjs5fjgPjUCBAl8wVtov6/bHI1cTGwFLG2+2
+         Qlwu8RIhE6CPqg/umNpotEaj4xEV/9jhuRAZ7t3ZALxGSmkdVF6mncpCcmaaKwQk2p
+         Jk+t66h2BhC9X//gfjjt6sL5M8w9MX+NLJ+TInBQ=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 36RBPoLv103463
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 27 Jul 2023 06:25:50 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 27
+ Jul 2023 06:25:49 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 27 Jul 2023 06:25:50 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 36RBPnEC090132;
+        Thu, 27 Jul 2023 06:25:49 -0500
+From:   Devarsh Thakkar <devarsht@ti.com>
+To:     <mchehab@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <hverkuil-cisco@xs4all.nl>, <laurent.pinchart@ideasonboard.com>,
+        <eugen.hristev@collabora.com>, <ezequiel@vanguardiasur.com.ar>,
+        <u.kleine-koenig@pengutronix.de>, <sakari.ailus@linux.intel.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <praneeth@ti.com>, <nm@ti.com>, <vigneshr@ti.com>,
+        <a-bhatia1@ti.com>, <j-luthra@ti.com>, <b-brnich@ti.com>,
+        <detheridge@ti.com>, <p-mantena@ti.com>, <vijayp@ti.com>,
+        <devarsht@ti.com>
+Subject: [PATCH v2 1/2] dt-bindings: media: Add bindings for Imagination E5010 JPEG Encoder driver
+Date:   Thu, 27 Jul 2023 16:55:45 +0530
+Message-ID: <20230727112546.2201995-2-devarsht@ti.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230727112546.2201995-1-devarsht@ti.com>
+References: <20230727112546.2201995-1-devarsht@ti.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v2] dt-bindings: qcom: Update RPMHPD entries for some SoCs
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-CC:     <mathieu.poirier@linaro.org>, <mchehab@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <quic_vgarodia@quicinc.com>,
-        <konrad.dybcio@linaro.org>, <agross@kernel.org>,
-        <freedreno@lists.freedesktop.org>, <daniel@ffwll.ch>,
-        <dri-devel@lists.freedesktop.org>, <jonathan@marek.ca>,
-        <conor+dt@kernel.org>, <robh+dt@kernel.org>, <airlied@gmail.com>,
-        <linux-mmc@vger.kernel.org>, <quic_tdas@quicinc.com>,
-        <stanimir.k.varbanov@gmail.com>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <andersson@kernel.org>,
-        <mturquette@baylibre.com>, <dmitry.baryshkov@linaro.org>,
-        <linux-remoteproc@vger.kernel.org>, <sean@poorly.run>,
-        <ulf.hansson@linaro.org>, <devicetree@vger.kernel.org>,
-        <vladimir.zapolskiy@linaro.org>, <rfoss@kernel.org>,
-        <mani@kernel.org>, <linux-media@vger.kernel.org>,
-        <sboyd@kernel.org>, <quic_abhinavk@quicinc.com>,
-        <bhupesh.sharma@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <marijn.suijten@somainline.org>, <neil.armstrong@linaro.org>,
-        <robdclark@gmail.com>
-References: <1690448953-23425-1-git-send-email-quic_rohiagar@quicinc.com>
- <169045659774.1058731.6391693092002547810.robh@kernel.org>
-From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
-In-Reply-To: <169045659774.1058731.6391693092002547810.robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: MpghvnrdVgqzkq8oP0t730uwgrZDuDQc
-X-Proofpoint-GUID: MpghvnrdVgqzkq8oP0t730uwgrZDuDQc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-27_06,2023-07-26_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 spamscore=0 mlxscore=0 phishscore=0 suspectscore=0
- lowpriorityscore=0 bulkscore=0 clxscore=1011 mlxlogscore=855
- malwarescore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2306200000 definitions=main-2307270101
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Add dt-bindings for Imagination E5010 JPEG Encoder driver which is
+implemented as stateful V4L2 M2M driver.
 
-On 7/27/2023 4:46 PM, Rob Herring wrote:
-> On Thu, 27 Jul 2023 14:39:13 +0530, Rohit Agarwal wrote:
->> Update the RPMHPD references with new bindings defined in rpmhpd.h
->> for Qualcomm SoCs SM8[2345]50.
->>
->> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
->> ---
->>   Documentation/devicetree/bindings/clock/qcom,dispcc-sm8x50.yaml   | 4 ++--
->>   Documentation/devicetree/bindings/clock/qcom,sm8350-videocc.yaml  | 4 ++--
->>   Documentation/devicetree/bindings/clock/qcom,sm8450-camcc.yaml    | 4 ++--
->>   Documentation/devicetree/bindings/clock/qcom,sm8450-dispcc.yaml   | 4 ++--
->>   Documentation/devicetree/bindings/clock/qcom,sm8450-videocc.yaml  | 4 ++--
->>   Documentation/devicetree/bindings/clock/qcom,sm8550-dispcc.yaml   | 4 ++--
->>   Documentation/devicetree/bindings/clock/qcom,videocc.yaml         | 4 ++--
->>   .../devicetree/bindings/display/msm/qcom,sm8250-dpu.yaml          | 4 ++--
->>   .../devicetree/bindings/display/msm/qcom,sm8250-mdss.yaml         | 8 ++++----
->>   .../devicetree/bindings/display/msm/qcom,sm8350-dpu.yaml          | 4 ++--
->>   .../devicetree/bindings/display/msm/qcom,sm8350-mdss.yaml         | 6 +++---
->>   .../devicetree/bindings/display/msm/qcom,sm8450-dpu.yaml          | 4 ++--
->>   .../devicetree/bindings/display/msm/qcom,sm8450-mdss.yaml         | 8 ++++----
->>   .../devicetree/bindings/display/msm/qcom,sm8550-dpu.yaml          | 4 ++--
->>   .../devicetree/bindings/display/msm/qcom,sm8550-mdss.yaml         | 8 ++++----
->>   Documentation/devicetree/bindings/media/qcom,sm8250-venus.yaml    | 4 ++--
->>   Documentation/devicetree/bindings/mmc/sdhci-msm.yaml              | 4 ++--
->>   Documentation/devicetree/bindings/remoteproc/qcom,sm8350-pas.yaml | 6 +++---
->>   18 files changed, 44 insertions(+), 44 deletions(-)
->>
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->
-> yamllint warnings/errors:
->
-> dtschema/dtc warnings/errors:
-> Documentation/devicetree/bindings/remoteproc/qcom,sm8350-pas.example.dts:21:18: fatal error: dt-bindings/power/qcom,rpmhpd.h: No such file or directory
->     21 |         #include <dt-bindings/power/qcom,rpmhpd.h>
->        |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> compilation terminated.
-> make[2]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/remoteproc/qcom,sm8350-pas.example.dtb] Error 1
-> make[2]: *** Waiting for unfinished jobs....
-> make[1]: *** [/builds/robherring/dt-review-ci/linux/Makefile:1500: dt_binding_check] Error 2
-> make: *** [Makefile:234: __sub-make] Error 2
->
-> doc reference errors (make refcheckdocs):
->
-> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/1690448953-23425-1-git-send-email-quic_rohiagar@quicinc.com
->
-> The base for the series is generally the latest rc1. A different dependency
-> should be noted in *this* patch.
->
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
->
-> pip3 install dtschema --upgrade
->
-> Please check and re-submit after running the above command yourself. Note
-> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-> your schema. However, it must be unset to test all examples with your schema.
-This should be ignored as the patch that creates the new header is 
-already applied.
-Please follow this series
+Co-developed-by: David Huang <d-huang@ti.com>
+Signed-off-by: David Huang <d-huang@ti.com>
+Signed-off-by: Devarsh Thakkar <devarsht@ti.com>
+---
+V2: No change, just sending this together with driver and cover-letter
 
-https://lore.kernel.org/all/1689744162-9421-1-git-send-email-quic_rohiagar@quicinc.com/
+ .../bindings/media/img,e5010-jpeg-enc.yaml    | 79 +++++++++++++++++++
+ MAINTAINERS                                   |  5 ++
+ 2 files changed, 84 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/img,e5010-jpeg-enc.yaml
 
-Thanks,
-Rohit.
+diff --git a/Documentation/devicetree/bindings/media/img,e5010-jpeg-enc.yaml b/Documentation/devicetree/bindings/media/img,e5010-jpeg-enc.yaml
+new file mode 100644
+index 000000000000..0060373eace7
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/img,e5010-jpeg-enc.yaml
+@@ -0,0 +1,79 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/img,e5010-jpeg-enc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Imagination E5010 JPEG Encoder
++
++maintainers:
++  - Devarsh Thakkar <devarsht@ti.com>
++
++description: |
++  The E5010 is a JPEG encoder from Imagination Technologies implemented on
++  TI's AM62A SoC. It is capable of real time encoding of YUV420 and YUV422
++  inputs to JPEG and M-JPEG. It supports baseline JPEG Encoding up to
++  8Kx8K resolution.
++
++properties:
++  compatible:
++    const: img,e5010-jpeg-enc
++
++  reg:
++    items:
++      - description: The E5010 main register region
++      - description: The E5010 mmu register region
++
++  reg-names:
++    items:
++      - const: regjasper
++      - const: regmmu
++
++  power-domains:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++  clocks:
++    minItems: 1
++    maxItems: 2
++
++  clock-names:
++    minItems: 1
++    maxItems: 2
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - interrupts
++  - clocks
++  - clock-names
++  - power-domains
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/soc/ti,sci_pm_domain.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    cbass_main {
++      #address-cells = <2>;
++      #size-cells = <2>;
++      e5010: e5010@fd20000 {
++          compatible = "img,e5010-jpeg-enc";
++          reg = <0x00 0xfd20000 0x00 0x100>,
++                <0x00 0xfd20200 0x00 0x200>;
++          reg-names = "regjasper", "regmmu";
++          clocks = <&k3_clks 201 0>;
++          clock-names = "core_clk";
++          power-domains = <&k3_pds 201 TI_SCI_PD_EXCLUSIVE>;
++          interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
++      };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a5c16bb92fe2..aab11219810f 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10170,6 +10170,11 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/auxdisplay/img,ascii-lcd.yaml
+ F:	drivers/auxdisplay/img-ascii-lcd.c
+ 
++IMGTEC JPEG ENCODER DRIVER
++M:	Devarsh Thakkar <devarsht@ti.com>
++S:	Supported
++F:	Documentation/devicetree/bindings/media/img,e5010-jpeg-enc.yaml
++
+ IMGTEC IR DECODER DRIVER
+ S:	Orphan
+ F:	drivers/media/rc/img-ir/
+-- 
+2.34.1
+
