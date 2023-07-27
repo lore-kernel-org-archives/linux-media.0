@@ -2,49 +2,49 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1348C00528
-	for <linux-media@archiver.kernel.org>; Thu, 27 Jul 2023 05:49:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48007C04E69
+	for <linux-media@archiver.kernel.org>; Thu, 27 Jul 2023 05:49:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232466AbjG0FtA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Jul 2023 01:49:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34956 "EHLO
+        id S232470AbjG0FtB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Jul 2023 01:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232429AbjG0Fsi (ORCPT
+        with ESMTP id S232433AbjG0Fsi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 27 Jul 2023 01:48:38 -0400
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD23E35B3
-        for <linux-media@vger.kernel.org>; Wed, 26 Jul 2023 22:47:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C83835A9
+        for <linux-media@vger.kernel.org>; Wed, 26 Jul 2023 22:47:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690436876; x=1721972876;
+  t=1690436874; x=1721972874;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=aZNYrtKf3qCDlYodW4Sc0GW1DTYr6bbBCblxG+URckI=;
-  b=ZfdpIujpgQtiq8He6CBG33Lby7eRUAWax9M/LtHGDxgRmB2z4iCoAsUf
-   Mm1+vxrMG/VAFuD25UHkuqo7s3dp9rU1hD4PzT1gv3eRT3oMysptbmhdR
-   2dS6r+/HyMwNFfh31oVBGrFaft9oLeGIdh0RIftpmfyZDjwCK6BF/zkms
-   a4FDiCUtu04uYlk39PfuVb0xT2riwboWWnOHAwdHtqdjeLHDadmiU+mtz
-   Hk7rvjA2905aazJYAqL4F0txsNXVW0sGh0XGDPfmtvn6daGky3Trxlhwr
-   9mdas7U/Aa4tdbQq4e4dxA6pPFryM1rZCHtPsr6xo6xPYOM//SWm01Me0
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="399151115"
+  bh=bdWoP9HdPU80RO/xRZIGh+by303h7pouQD6wQlf6XOE=;
+  b=Uk1OB9nFqwlMD5rAV7B+TnsVPwPq273c6KMbJ6t+k9dZw3RfMbVydm7m
+   oON5eVQ3vagG1jvk/LVfKsmjnJBJjDnR6YPW5JEBYRWl9up/J9HGzkrI5
+   m96/k/aG9VjGKLa1A6MAzhT9WbifXeQcljidinON4HItESojbtQetBpBn
+   9IYXgAuEQQVL5+PX3rqkPVuiQi8ifaYVG6FojC2R4gcWfIeDmrTS7S8XF
+   75k5OFGYHqQ9Wa3NQWvvedMwSYwITWIHKdYDT5S5vlwc4wmLcw6ayBmtr
+   91kUsOM2Ojqt896ePwwPQt0FE3SijqOqwUkcj2VFyMGnZX+6QIvYSEP7J
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="399151095"
 X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
-   d="scan'208";a="399151115"
+   d="scan'208";a="399151095"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
   by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2023 22:44:55 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="840584164"
+X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="840584162"
 X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
-   d="scan'208";a="840584164"
+   d="scan'208";a="840584162"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
   by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2023 22:44:48 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id 3AAB212219B;
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 4778A12219E;
         Thu, 27 Jul 2023 08:44:19 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1qOtmE-004xt4-1S;
+        id 1qOtmE-004xtE-1d;
         Thu, 27 Jul 2023 08:43:06 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
@@ -76,9 +76,9 @@ Cc:     laurent.pinchart@ideasonboard.com,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Sowjanya Komatineni <skomatineni@nvidia.com>,
         Marco Felsch <m.felsch@pengutronix.de>
-Subject: [PATCH v6 36/38] media: qcom: Initialise V4L2 async notifier later
-Date:   Thu, 27 Jul 2023 08:42:53 +0300
-Message-Id: <20230727054255.1183255-37-sakari.ailus@linux.intel.com>
+Subject: [PATCH v6 38/38] media: Documentation: v4l: Document sub-device notifiers
+Date:   Thu, 27 Jul 2023 08:42:55 +0300
+Message-Id: <20230727054255.1183255-39-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230727054255.1183255-1-sakari.ailus@linux.intel.com>
 References: <20230727054255.1183255-1-sakari.ailus@linux.intel.com>
@@ -89,11 +89,9 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Initialise V4L2 async notifier and parse DT for async sub-devices later,
-just before registering the notifier. This way the device can be made
-available to the V4L2 async framework from the notifier init time onwards.
-A subsequent patch will add struct v4l2_device as an argument to
-v4l2_async_nf_init().
+Document that sub-device notifiers are now registered using
+v4l2_async_subdev_nf_init(). No documentation is changed as it seems that
+sub-device notifiers were not documented apart from kernel-doc comments.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Tested-by: Philipp Zabel <p.zabel@pengutronix.de> # imx6qp
@@ -101,58 +99,31 @@ Tested-by: Niklas Söderlund <niklas.soderlund@ragnatech.se> # rcar + adv746x
 Tested-by: Aishwarya Kothari <aishwarya.kothari@toradex.com> # Apalis i.MX6Q with TC358743
 Tested-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> # Renesas RZ/G2L SMARC
 ---
- drivers/media/platform/qcom/camss/camss.c | 21 ++++++++++-----------
- 1 file changed, 10 insertions(+), 11 deletions(-)
+ Documentation/driver-api/media/v4l2-subdev.rst | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
-index 006855bf076b..b89e2bb5b505 100644
---- a/drivers/media/platform/qcom/camss/camss.c
-+++ b/drivers/media/platform/qcom/camss/camss.c
-@@ -1615,14 +1615,6 @@ static int camss_probe(struct platform_device *pdev)
- 	if (!camss->vfe)
- 		return -ENOMEM;
+diff --git a/Documentation/driver-api/media/v4l2-subdev.rst b/Documentation/driver-api/media/v4l2-subdev.rst
+index eba5e4468282..e56b50b3f203 100644
+--- a/Documentation/driver-api/media/v4l2-subdev.rst
++++ b/Documentation/driver-api/media/v4l2-subdev.rst
+@@ -218,6 +218,17 @@ available. There may be one or more async connections to a given sub-device but
+ this is not known at the time of adding the connections to the notifier. Async
+ connections are bound as matching async sub-devices are found, one by one.
  
--	v4l2_async_nf_init(&camss->notifier);
--
--	num_subdevs = camss_of_parse_ports(camss);
--	if (num_subdevs < 0) {
--		ret = num_subdevs;
--		goto err_cleanup;
--	}
--
- 	ret = camss_icc_get(camss);
- 	if (ret < 0)
- 		goto err_cleanup;
-@@ -1648,9 +1640,17 @@ static int camss_probe(struct platform_device *pdev)
- 		goto err_cleanup;
- 	}
- 
-+	v4l2_async_nf_init(&camss->notifier);
++Asynchronous sub-device notifier for sub-devices
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 +
-+	num_subdevs = camss_of_parse_ports(camss);
-+	if (num_subdevs < 0) {
-+		ret = num_subdevs;
-+		goto err_cleanup;
-+	}
++A driver that registers an asynchronous sub-device may also register an
++asynchronous notifier. This is called an asynchronous sub-device notifier andthe
++process is similar to that of a bridge driver apart from that the notifier is
++initialised using :c:func:`v4l2_async_subdev_nf_init` instead. A sub-device
++notifier may complete only after the V4L2 device becomes available, i.e. there's
++a path via async sub-devices and notifiers to a notifier that is not an
++asynchronous sub-device notifier.
 +
- 	ret = camss_register_entities(camss);
- 	if (ret < 0)
--		goto err_register_entities;
-+		goto err_cleanup;
+ Asynchronous sub-device registration helper for camera sensor drivers
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
  
- 	if (num_subdevs) {
- 		camss->notifier.ops = &camss_subdev_notifier_ops;
-@@ -1691,9 +1691,8 @@ static int camss_probe(struct platform_device *pdev)
- 
- err_register_subdevs:
- 	camss_unregister_entities(camss);
--err_register_entities:
--	v4l2_device_unregister(&camss->v4l2_dev);
- err_cleanup:
-+	v4l2_device_unregister(&camss->v4l2_dev);
- 	v4l2_async_nf_cleanup(&camss->notifier);
- 
- 	return ret;
 -- 
 2.39.2
 
