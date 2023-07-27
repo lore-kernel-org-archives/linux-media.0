@@ -2,208 +2,166 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46EAAC0015E
-	for <linux-media@archiver.kernel.org>; Thu, 27 Jul 2023 08:22:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FB96C41513
+	for <linux-media@archiver.kernel.org>; Thu, 27 Jul 2023 08:35:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234190AbjG0IWW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Jul 2023 04:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55566 "EHLO
+        id S234447AbjG0IfB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Jul 2023 04:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234063AbjG0ISV (ORCPT
+        with ESMTP id S234701AbjG0Idu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 Jul 2023 04:18:21 -0400
-Received: from mgamail.intel.com (unknown [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D1965BE
-        for <linux-media@vger.kernel.org>; Thu, 27 Jul 2023 01:10:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690445450; x=1721981450;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zrfAmZ4o52ulOEe2NdPrWdHquCo9OaUriPnqqYF+iO0=;
-  b=GcEs5c6CItLCraUbhbVdUjvY+fdwtor5Qb6GI9dvoiUSHFoVnuLqyDEJ
-   dfJo1YwrG5sGKOggM5NeVIYiYnqsnmdRV1wtgsLgjkgT79grginzw6hIs
-   mYhYl/JxOy+3m52gRajgYfH13Xoq/V75g6NuQdYaxmi7nE6fHD/jHZwbj
-   zUyxkM2aFzvL9Qtpzqt+9dksVzP+XoSX6gF67ayWTFxAvU8SgOrd5QAfq
-   rwNViL9+aJhCBERAG7NKEtiTr3zT9jmF5k7ath2HzP4HFYq9oFeOL30II
-   7zUxgwW6xtxwpTiAYaikfcV7DMgLSUTsVuNxzk5Kkx9g735ERIXuR4GG/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="399182049"
-X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
-   d="scan'208";a="399182049"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2023 01:10:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="850768991"
-X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
-   d="scan'208";a="850768991"
-Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 27 Jul 2023 01:10:33 -0700
-Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qOw4O-00024h-0b;
-        Thu, 27 Jul 2023 08:10:09 +0000
-Date:   Thu, 27 Jul 2023 16:05:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-media@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [sailus-media-tree:master 9/20] drivers/media/i2c/ov5693.c:1280:19:
- error: call to undeclared function 'devm_cci_regmap_init_i2c'; ISO C99 and
- later do not support implicit function declarations
-Message-ID: <202307271519.XIXA0WQd-lkp@intel.com>
+        Thu, 27 Jul 2023 04:33:50 -0400
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB35F2D4E
+        for <linux-media@vger.kernel.org>; Thu, 27 Jul 2023 01:18:12 -0700 (PDT)
+Received: by mail-qv1-xf31.google.com with SMTP id 6a1803df08f44-635f293884cso4893506d6.3
+        for <linux-media@vger.kernel.org>; Thu, 27 Jul 2023 01:18:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1690445876; x=1691050676;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+pBNJ9Jjy5nne/mBaf+XQM6YNk3Kfb6d2ItNYN5IxBY=;
+        b=XStq0dP/lunnm7P2pL+7qLkD89FL8gf/DMu5sQD7qsV92U2kReLMnQ2A4+jr//sxKQ
+         D3uPQ64lCn+jIpk/TY1XHAsQ3QS2fyknnWTc8cE7OBO7YKAjG4RwP3opf0oggbmtpuuO
+         H49mzeIWwogGduZXepIexRcKuth4A6/ZNm0p4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690445876; x=1691050676;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+pBNJ9Jjy5nne/mBaf+XQM6YNk3Kfb6d2ItNYN5IxBY=;
+        b=Z9C0d/IFPDcdGUtozjwAzcyt+5AwFXulZNSvHQdhUTr3Z0RVldREptfoSYF1+ADclI
+         JyoV6NVURrICqYng9lCv3T1gxSs1uxzpn6p1bKsDs3fQaRW2AtBet4MhiLbaaSVxPSe1
+         ACq7jCcHzvDHFqpgr/Rzmtai1cgAoR+BA5DuavBNpQUKldFID9qxYvYmCAtSoFC4R8Da
+         9IZ8YrkKyv4cvddfyNYMADgB+3vsw+8Ru9FKxaA7crtbWRK7nboQFxKbEJNR/8EUkDpU
+         TQtE/BCGztv+dhG7yedavFuA+bmxbgTYMtvRKmjBb1xrRQb3xzHuPAKGKgcOP7R2Kg5D
+         4umA==
+X-Gm-Message-State: ABy/qLZQJIb3bjM5gbSOUHYa9/Z4pv92q6lJegoJqBb/hoNAtcEQiqmY
+        NASXpUS/B2nVIbrPrai/OjYHyvpcdNdejcOnoMVb+Q==
+X-Google-Smtp-Source: APBJJlF6NdLdGXb0XcZOf50Y8HesR/nGFFn29oAESi9Qu9PSeyz+9wMNQ2o5P/g9e/RoFccyihRP9w==
+X-Received: by 2002:a05:6214:2586:b0:63d:3a7:3aa6 with SMTP id fq6-20020a056214258600b0063d03a73aa6mr5655166qvb.44.1690445875816;
+        Thu, 27 Jul 2023 01:17:55 -0700 (PDT)
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com. [209.85.222.178])
+        by smtp.gmail.com with ESMTPSA id j13-20020a0cf50d000000b0063cdbe73a05sm258781qvm.97.2023.07.27.01.17.55
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jul 2023 01:17:55 -0700 (PDT)
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-76595a7b111so58992385a.2
+        for <linux-media@vger.kernel.org>; Thu, 27 Jul 2023 01:17:55 -0700 (PDT)
+X-Received: by 2002:a05:620a:5318:b0:767:dee0:455d with SMTP id
+ oo24-20020a05620a531800b00767dee0455dmr4057489qkn.20.1690445874607; Thu, 27
+ Jul 2023 01:17:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <a2ffa1cb-42db-a78a-8bd7-b0e422aade13@synaptics.com>
+In-Reply-To: <a2ffa1cb-42db-a78a-8bd7-b0e422aade13@synaptics.com>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Thu, 27 Jul 2023 17:17:43 +0900
+X-Gmail-Original-Message-ID: <CAAFQd5AFJwreERs2Hn_A+3g51OLF6F0eWjx2+rgiZV=FR_61fA@mail.gmail.com>
+Message-ID: <CAAFQd5AFJwreERs2Hn_A+3g51OLF6F0eWjx2+rgiZV=FR_61fA@mail.gmail.com>
+Subject: Re: [RFC]: m2m dec reports the graphics memory requirement
+To:     Hsia-Jun Li <Randy.Li@synaptics.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        ayaka <ayaka@soulik.info>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>, Brian.Starkey@arm.com,
+        boris.brezillon@collabora.com, frkoenig@chromium.org,
+        hans.verkuil@cisco.com, hiroh@chromium.org,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Helen Koike <helen.koike@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-tree:   git://linuxtv.org/sailus/media_tree.git master
-head:   215e4463b11d94668b841368cb6882f3a2968148
-commit: 6ca0d78da91133ec78ecfbdaa7d066849b1b0c0c [9/20] media: ov5693: Convert to new CCI register access helpers
-config: mips-randconfig-r013-20230727 (https://download.01.org/0day-ci/archive/20230727/202307271519.XIXA0WQd-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230727/202307271519.XIXA0WQd-lkp@intel.com/reproduce)
+On Fri, Jun 30, 2023 at 7:47=E2=80=AFPM Hsia-Jun Li <Randy.Li@synaptics.com=
+> wrote:
+>
+> Hello All
+>
+> This RFC tries to address the following problems:
+>
+> 1. Application may request too many buffers, increasing pressure to
+> system's memory allocator(Thinking about running Android with 8K UHD
+> playback in a system with only 2 GiB memory available);
+>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307271519.XIXA0WQd-lkp@intel.com/
+Yeah, I think that's something that has to be addressed. It was also
+mentioned recently in the review of the DELETE_BUF series. I think we
+need some kind of accounting of the allocations to the processes, so
+that the per-process limits of memory usage could apply. Let me add
++Sergey Senozhatsky who often crosses his path with kernel memory
+management.
 
-All errors (new ones prefixed by >>):
+> 2. Application may allocate too few buffers while the codec stream
+> didn't follow the statement in its sequence info;
 
->> drivers/media/i2c/ov5693.c:1280:19: error: call to undeclared function 'devm_cci_regmap_init_i2c'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1280 |         ov5693->regmap = devm_cci_regmap_init_i2c(client, 16);
-         |                          ^
->> drivers/media/i2c/ov5693.c:1280:17: error: incompatible integer to pointer conversion assigning to 'struct regmap *' from 'int' [-Wint-conversion]
-    1280 |         ov5693->regmap = devm_cci_regmap_init_i2c(client, 16);
-         |                        ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+Isn't that just an error? I think generally a stateful decoder
+shouldn't allow allocating less buffers than required by the stream
+(and as reported by V4L2_CID_MIN_BUFFERS_FOR_CAPTURE).
 
+>
+> 3. Application would allocate all the graphics buffers in a large size
+> meeting the decoding requirement, while only few alternative ref(never
+> display) frame requests that;
 
-vim +/devm_cci_regmap_init_i2c +1280 drivers/media/i2c/ov5693.c
+Could you explain when that could happen in practice?
 
-  1267	
-  1268	static int ov5693_probe(struct i2c_client *client)
-  1269	{
-  1270		struct ov5693_device *ov5693;
-  1271		u32 xvclk_rate;
-  1272		int ret = 0;
-  1273	
-  1274		ov5693 = devm_kzalloc(&client->dev, sizeof(*ov5693), GFP_KERNEL);
-  1275		if (!ov5693)
-  1276			return -ENOMEM;
-  1277	
-  1278		ov5693->dev = &client->dev;
-  1279	
-> 1280		ov5693->regmap = devm_cci_regmap_init_i2c(client, 16);
-  1281		if (IS_ERR(ov5693->regmap))
-  1282			return PTR_ERR(ov5693->regmap);
-  1283	
-  1284		ret = ov5693_check_hwcfg(ov5693);
-  1285		if (ret)
-  1286			return ret;
-  1287	
-  1288		mutex_init(&ov5693->lock);
-  1289	
-  1290		v4l2_i2c_subdev_init(&ov5693->sd, client, &ov5693_ops);
-  1291	
-  1292		ov5693->xvclk = devm_clk_get_optional(&client->dev, "xvclk");
-  1293		if (IS_ERR(ov5693->xvclk))
-  1294			return dev_err_probe(&client->dev, PTR_ERR(ov5693->xvclk),
-  1295					     "failed to get xvclk: %ld\n",
-  1296					     PTR_ERR(ov5693->xvclk));
-  1297	
-  1298		if (ov5693->xvclk) {
-  1299			xvclk_rate = clk_get_rate(ov5693->xvclk);
-  1300		} else {
-  1301			ret = fwnode_property_read_u32(dev_fwnode(&client->dev),
-  1302					     "clock-frequency",
-  1303					     &xvclk_rate);
-  1304	
-  1305			if (ret) {
-  1306				dev_err(&client->dev, "can't get clock frequency");
-  1307				return ret;
-  1308			}
-  1309		}
-  1310	
-  1311		if (xvclk_rate != OV5693_XVCLK_FREQ)
-  1312			dev_warn(&client->dev, "Found clk freq %u, expected %u\n",
-  1313				 xvclk_rate, OV5693_XVCLK_FREQ);
-  1314	
-  1315		ret = ov5693_configure_gpios(ov5693);
-  1316		if (ret)
-  1317			return ret;
-  1318	
-  1319		ret = ov5693_get_regulators(ov5693);
-  1320		if (ret)
-  1321			return dev_err_probe(&client->dev, ret,
-  1322					     "Error fetching regulators\n");
-  1323	
-  1324		ov5693->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-  1325		ov5693->pad.flags = MEDIA_PAD_FL_SOURCE;
-  1326		ov5693->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
-  1327	
-  1328		ov5693->mode.crop = ov5693_default_crop;
-  1329		ov5693->mode.format = ov5693_default_fmt;
-  1330		ov5693->mode.vts = __ov5693_calc_vts(ov5693->mode.format.height);
-  1331	
-  1332		ret = ov5693_init_controls(ov5693);
-  1333		if (ret)
-  1334			return ret;
-  1335	
-  1336		ret = media_entity_pads_init(&ov5693->sd.entity, 1, &ov5693->pad);
-  1337		if (ret)
-  1338			goto err_ctrl_handler_free;
-  1339	
-  1340		/*
-  1341		 * We need the driver to work in the event that pm runtime is disable in
-  1342		 * the kernel, so power up and verify the chip now. In the event that
-  1343		 * runtime pm is disabled this will leave the chip on, so that streaming
-  1344		 * will work.
-  1345		 */
-  1346	
-  1347		ret = ov5693_sensor_powerup(ov5693);
-  1348		if (ret)
-  1349			goto err_media_entity_cleanup;
-  1350	
-  1351		ret = ov5693_detect(ov5693);
-  1352		if (ret)
-  1353			goto err_powerdown;
-  1354	
-  1355		pm_runtime_set_active(&client->dev);
-  1356		pm_runtime_get_noresume(&client->dev);
-  1357		pm_runtime_enable(&client->dev);
-  1358	
-  1359		ret = v4l2_async_register_subdev_sensor(&ov5693->sd);
-  1360		if (ret) {
-  1361			dev_err(&client->dev, "failed to register V4L2 subdev: %d",
-  1362				ret);
-  1363			goto err_pm_runtime;
-  1364		}
-  1365	
-  1366		pm_runtime_set_autosuspend_delay(&client->dev, 1000);
-  1367		pm_runtime_use_autosuspend(&client->dev);
-  1368		pm_runtime_put_autosuspend(&client->dev);
-  1369	
-  1370		return ret;
-  1371	
-  1372	err_pm_runtime:
-  1373		pm_runtime_disable(&client->dev);
-  1374		pm_runtime_put_noidle(&client->dev);
-  1375	err_powerdown:
-  1376		ov5693_sensor_powerdown(ov5693);
-  1377	err_media_entity_cleanup:
-  1378		media_entity_cleanup(&ov5693->sd.entity);
-  1379	err_ctrl_handler_free:
-  1380		v4l2_ctrl_handler_free(&ov5693->ctrls.handler);
-  1381	
-  1382		return ret;
-  1383	}
-  1384	
+>
+> 4. ioctl() G_FMT may need to reflex a format which far from the current
+> sequence, or we can't know the resolution change result at an early stage=
+;
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Could you elaborate on this problem?
+
+As per the stateful decoder specification "Any client query issued
+after the decoder queues the event will return values applying to the
+stream after the resolution change, including queue formats, selection
+rectangles and controls.", which means that as soon as the decoder
+gets a frame that has different buffer requirements, it will update
+the format and notify the user space.
+
+>
+>
+> A few solutions here:
+>
+> 1. Extend the struct v4l2_event_src_change in struct v4l2_event with the
+> graphics pixel format(break uAPI)
+>
+
+We can't break uAPI, but I guess we could add a new event that
+replaces the old one, In addition to a pixel format (and I guess the
+number of buffers needed?), we would also need the buffer index or
+some kind of timestamp to make it possible for the user space to
+correlate the event with the action that triggered it.
+
+But I fear that we would need to keep extending and extending the
+struct with more data every once and a while.
+
+> 2. Getting controls after the SRC_CHG event, struct v4l2_event need to
+> tell how many controls it needs to fetch.
+>
+
+What do you mean by "how many controls"?
+
+> 3. struct v4l2_ext_buffer for such out-of-band data.
+>
+
+It's similar to the event, this could end up with an ever growing struct.
+
+If we need to understand the state of the codec for a specific frame,
+I think it's exactly what the request API was designed for. It
+captures the control state for each request, so we can read the
+format, number of buffers needed and whatever we want for the result
+of any given decoding request.
+
+>
+> Sorry for making it html before
+>
+> --
+> Hsia-Jun(Randy) Li
+>
