@@ -2,102 +2,196 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 854A8C001E0
-	for <linux-media@archiver.kernel.org>; Thu, 27 Jul 2023 09:06:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4E51C0015E
+	for <linux-media@archiver.kernel.org>; Thu, 27 Jul 2023 09:08:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233273AbjG0JGd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Jul 2023 05:06:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34442 "EHLO
+        id S232825AbjG0JIS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Jul 2023 05:08:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231790AbjG0JGF (ORCPT
+        with ESMTP id S233920AbjG0JIE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 Jul 2023 05:06:05 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332BC59CF;
-        Thu, 27 Jul 2023 01:47:25 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4fe0cfc7ef9so181954e87.0;
-        Thu, 27 Jul 2023 01:47:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690447643; x=1691052443;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=eTo6Edh8lHo2BapE1JCqPWXw2K03R9O2WOf57wkgONA=;
-        b=UCr1BwouF4RfBo7hbx5lAgeH4wSlqENLK4DJ/7C6ujZkkwccylqrZOyqOyDMBWZbvT
-         SgBidTwmevoiZm0WZj1pX32k9MZsg2nPBCW+U80K3qMg7wqPRbXq28eaMXRqE331Zah9
-         sKSpkrxhf3UmkN1ab8AMjZ0c9m+2ZteV6/HKV+y2qM3w7iSLcfKKKfM30GdvkSLGIThQ
-         L68qbARtnB1265yCYnBi39rmrvY1BPLVgQwsLy0xz0ato0KIJgEmKcSvMwedNmex1x78
-         JZ379MGM9mdUMoiLHjwmmBsd1d4WGOV9rbQcrHT0EkpL33aRwPpwRC9vRMGrXXW1PyzN
-         Hgww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690447643; x=1691052443;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eTo6Edh8lHo2BapE1JCqPWXw2K03R9O2WOf57wkgONA=;
-        b=Kqb+7phlLVL1w9Pcwz3XCYXbEaILjnasC2XMHkl737pl2VoB6NR14MsGmbhEv/ljD4
-         CtY9ZE8aXn8m9caeOtyiSDp1j1yRaKR7SgX8OCeNM3QH9dIYKCtIWtGSlyK76m2/2ayr
-         Uircol1gnsju12k0QuSCCsqkBi0GCLkh2jGiXLU1EWLTLTqMwSiRGSm8dcJAweE6P00x
-         RbQ54nu/6VFwblVqAEIYoPYGxRS6jR9ZNe4krDBjuVpBbxO8xpRhidbmqAWK+q+A2YCM
-         r9kj6ba9/U2VVsvDIKz5K0dxuT7TwWbCNZFCBvkQdt9SvOTCXQgsNdQgkHV3k6nekzVG
-         LE/Q==
-X-Gm-Message-State: ABy/qLabVlVXaPCh0fcQRYP3ZgSaP/9ej2obmWUzKQNrG2GkWIaf80wl
-        RsaxRcxNBDGZBA3N7VIOJqByLiimklE=
-X-Google-Smtp-Source: APBJJlGs4tNJ17hoIOZ54mQyDzSi0jMyBxbdIcNT5QDYsnlHPfzXLcYPgUri69ktswyfD6HezZZTqg==
-X-Received: by 2002:a2e:5759:0:b0:2b9:3c1d:6ec0 with SMTP id r25-20020a2e5759000000b002b93c1d6ec0mr2784929ljd.4.1690447643102;
-        Thu, 27 Jul 2023 01:47:23 -0700 (PDT)
-Received: from [192.168.0.192] ([194.146.248.75])
-        by smtp.gmail.com with ESMTPSA id d10-20020a2e890a000000b002b6d7682050sm222911lji.89.2023.07.27.01.47.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Jul 2023 01:47:22 -0700 (PDT)
-Message-ID: <fb0b48af-3bf7-184c-2a99-d1e06fcdabba@gmail.com>
-Date:   Thu, 27 Jul 2023 10:47:21 +0200
+        Thu, 27 Jul 2023 05:08:04 -0400
+Received: from mgamail.intel.com (unknown [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67A0102EC
+        for <linux-media@vger.kernel.org>; Thu, 27 Jul 2023 01:48:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690447739; x=1721983739;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nv68xje8Pdl+68Pcvzi40sptNdrq8c4sfydWLEs4aag=;
+  b=ksLcllm6+VEzpElphniKCVjPGZc5Z9jayN8tSQob2oS8gVWItT2ItHXk
+   U53w/R6LuCTEqrxJJJFf0Te1KEB0c8VMoL+GrRPp0AUXkXRtfjaqyOWO7
+   jsf8mr5XGet/rddNhzRFbBzJebSxl/MI7LwtH5O4Ui/4sjaXppE8dq2SY
+   ZNiav3GxC8crzz/+u2UYcgF3/clClL7qRRn9fDpXhAqy3Xc95Zd1taEcH
+   MmeKY1mJy2893L6TnzOl/YmTxQuVafEf8BjGHk/CcO5PtdXXVD8n8HUHT
+   vf0Jpcm//ugaK+cCVkTjlbuTcF3znOSN0PXu7U32STHhk9RwCxuaOrHfI
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="454620201"
+X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
+   d="scan'208";a="454620201"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2023 01:48:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="762097894"
+X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
+   d="scan'208";a="762097894"
+Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 27 Jul 2023 01:48:55 -0700
+Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qOwfS-00026V-1v;
+        Thu, 27 Jul 2023 08:48:31 +0000
+Date:   Thu, 27 Jul 2023 16:47:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-media@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: [sailus-media-tree:master 10/20] drivers/media/i2c/imx290.c:1526:19:
+ error: call to undeclared function 'devm_cci_regmap_init_i2c'; ISO C99 and
+ later do not support implicit function declarations
+Message-ID: <202307271602.eGpiQHCZ-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH -next] media: jpeg-core: Remove redundant dev_err()
-To:     Ruan Jinjie <ruanjinjie@huawei.com>, jacek.anaszewski@gmail.com,
-        s.nawrocki@samsung.com, mchehab@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230727100632.2737656-1-ruanjinjie@huawei.com>
-Content-Language: en-US
-From:   Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>
-In-Reply-To: <20230727100632.2737656-1-ruanjinjie@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Thanks!
+tree:   git://linuxtv.org/sailus/media_tree.git master
+head:   215e4463b11d94668b841368cb6882f3a2968148
+commit: 51b1f81e3b15a4cf6c5c1bfd6bb14ff8bc9951fb [10/20] media: imx290: Convert to new CCI register access helpers
+config: mips-randconfig-r013-20230727 (https://download.01.org/0day-ci/archive/20230727/202307271602.eGpiQHCZ-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230727/202307271602.eGpiQHCZ-lkp@intel.com/reproduce)
 
-W dniu 27.07.2023 o 12:06, Ruan Jinjie pisze:
-> There is no need to call the dev_err() function directly to print a custom
-> message when handling an error from platform_get_irq() function as
-> it is going to display an appropriate error message in case of a failure.
-> 
-> Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307271602.eGpiQHCZ-lkp@intel.com/
 
-Acked-by: Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>
+All errors (new ones prefixed by >>):
 
-> ---
->   drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c b/drivers/media/platform/samThsung/s5p-jpeg/jpeg-core.c
-> index 5e819b8b38a4..d2c4a0178b3c 100644
-> --- a/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
-> +++ b/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
-> @@ -2870,10 +2870,8 @@ static int s5p_jpeg_probe(struct platform_device *pdev)
->   
->   	/* interrupt service routine registration */
->   	jpeg->irq = ret = platform_get_irq(pdev, 0);
-> -	if (ret < 0) {
-> -		dev_err(&pdev->dev, "cannot find IRQ\n");
-> +	if (ret < 0)
->   		return ret;
-> -	}
->   
->   	ret = devm_request_irq(&pdev->dev, jpeg->irq, jpeg->variant->jpeg_irq,
->   				0, dev_name(&pdev->dev), jpeg);
+>> drivers/media/i2c/imx290.c:1526:19: error: call to undeclared function 'devm_cci_regmap_init_i2c'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1526 |         imx290->regmap = devm_cci_regmap_init_i2c(client, 16);
+         |                          ^
+   drivers/media/i2c/imx290.c:1526:19: note: did you mean '__devm_regmap_init_i2c'?
+   include/linux/regmap.h:660:16: note: '__devm_regmap_init_i2c' declared here
+     660 | struct regmap *__devm_regmap_init_i2c(struct i2c_client *i2c,
+         |                ^
+>> drivers/media/i2c/imx290.c:1526:17: error: incompatible integer to pointer conversion assigning to 'struct regmap *' from 'int' [-Wint-conversion]
+    1526 |         imx290->regmap = devm_cci_regmap_init_i2c(client, 16);
+         |                        ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
+
+
+vim +/devm_cci_regmap_init_i2c +1526 drivers/media/i2c/imx290.c
+
+  1514	
+  1515	static int imx290_probe(struct i2c_client *client)
+  1516	{
+  1517		struct device *dev = &client->dev;
+  1518		struct imx290 *imx290;
+  1519		int ret;
+  1520	
+  1521		imx290 = devm_kzalloc(dev, sizeof(*imx290), GFP_KERNEL);
+  1522		if (!imx290)
+  1523			return -ENOMEM;
+  1524	
+  1525		imx290->dev = dev;
+> 1526		imx290->regmap = devm_cci_regmap_init_i2c(client, 16);
+  1527		if (IS_ERR(imx290->regmap)) {
+  1528			dev_err(dev, "Unable to initialize I2C\n");
+  1529			return -ENODEV;
+  1530		}
+  1531	
+  1532		ret = imx290_parse_dt(imx290);
+  1533		if (ret)
+  1534			return ret;
+  1535	
+  1536		/* Acquire resources. */
+  1537		imx290->xclk = devm_clk_get(dev, "xclk");
+  1538		if (IS_ERR(imx290->xclk))
+  1539			return dev_err_probe(dev, PTR_ERR(imx290->xclk),
+  1540					     "Could not get xclk\n");
+  1541	
+  1542		ret = imx290_get_regulators(dev, imx290);
+  1543		if (ret < 0)
+  1544			return dev_err_probe(dev, ret, "Cannot get regulators\n");
+  1545	
+  1546		imx290->rst_gpio = devm_gpiod_get_optional(dev, "reset",
+  1547							   GPIOD_OUT_HIGH);
+  1548		if (IS_ERR(imx290->rst_gpio))
+  1549			return dev_err_probe(dev, PTR_ERR(imx290->rst_gpio),
+  1550					     "Cannot get reset gpio\n");
+  1551	
+  1552		/* Initialize external clock frequency. */
+  1553		ret = imx290_init_clk(imx290);
+  1554		if (ret)
+  1555			return ret;
+  1556	
+  1557		/*
+  1558		 * Enable power management. The driver supports runtime PM, but needs to
+  1559		 * work when runtime PM is disabled in the kernel. To that end, power
+  1560		 * the sensor on manually here.
+  1561		 */
+  1562		ret = imx290_power_on(imx290);
+  1563		if (ret < 0) {
+  1564			dev_err(dev, "Could not power on the device\n");
+  1565			return ret;
+  1566		}
+  1567	
+  1568		/*
+  1569		 * Enable runtime PM with autosuspend. As the device has been powered
+  1570		 * manually, mark it as active, and increase the usage count without
+  1571		 * resuming the device.
+  1572		 */
+  1573		pm_runtime_set_active(dev);
+  1574		pm_runtime_get_noresume(dev);
+  1575		pm_runtime_enable(dev);
+  1576		pm_runtime_set_autosuspend_delay(dev, 1000);
+  1577		pm_runtime_use_autosuspend(dev);
+  1578	
+  1579		/* Initialize the V4L2 subdev. */
+  1580		ret = imx290_subdev_init(imx290);
+  1581		if (ret)
+  1582			goto err_pm;
+  1583	
+  1584		v4l2_i2c_subdev_set_name(&imx290->sd, client,
+  1585					 imx290->model->name, NULL);
+  1586	
+  1587		/*
+  1588		 * Finally, register the V4L2 subdev. This must be done after
+  1589		 * initializing everything as the subdev can be used immediately after
+  1590		 * being registered.
+  1591		 */
+  1592		ret = v4l2_async_register_subdev(&imx290->sd);
+  1593		if (ret < 0) {
+  1594			dev_err(dev, "Could not register v4l2 device\n");
+  1595			goto err_subdev;
+  1596		}
+  1597	
+  1598		/*
+  1599		 * Decrease the PM usage count. The device will get suspended after the
+  1600		 * autosuspend delay, turning the power off.
+  1601		 */
+  1602		pm_runtime_mark_last_busy(dev);
+  1603		pm_runtime_put_autosuspend(dev);
+  1604	
+  1605		return 0;
+  1606	
+  1607	err_subdev:
+  1608		imx290_subdev_cleanup(imx290);
+  1609	err_pm:
+  1610		pm_runtime_disable(dev);
+  1611		pm_runtime_put_noidle(dev);
+  1612		imx290_power_off(imx290);
+  1613		return ret;
+  1614	}
+  1615	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
