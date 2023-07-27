@@ -2,254 +2,208 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BC0EC41513
-	for <linux-media@archiver.kernel.org>; Thu, 27 Jul 2023 07:58:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46EAAC0015E
+	for <linux-media@archiver.kernel.org>; Thu, 27 Jul 2023 08:22:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231926AbjG0H6d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Jul 2023 03:58:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33736 "EHLO
+        id S234190AbjG0IWW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Jul 2023 04:22:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233477AbjG0H5h (ORCPT
+        with ESMTP id S234063AbjG0ISV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 Jul 2023 03:57:37 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B773AB7
-        for <linux-media@vger.kernel.org>; Thu, 27 Jul 2023 00:55:04 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id af79cd13be357-76731802203so57506785a.3
-        for <linux-media@vger.kernel.org>; Thu, 27 Jul 2023 00:55:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1690444502; x=1691049302;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I6NJUz38HTUn5Lzf1Xa0ODFyXspS2ZmT9vChRAq/stA=;
-        b=IYqyqWWRS1zPU+/f6hElNXBsiFZ6Uu5xVx/wagwU2bzF1OoYMp7rChZr46iljgJ2ov
-         /KGYrChrKUEw2fMdw5tx4gBVLVFhHW6IoFqv12fhP1+uGsa7+bRPLQ5s6XVc+m34a7ho
-         PxOyjP0byhyIUYb8hEDLlZJCHnCys2Oe+0iHI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690444502; x=1691049302;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=I6NJUz38HTUn5Lzf1Xa0ODFyXspS2ZmT9vChRAq/stA=;
-        b=IDH1c1TU+7D/zlFM3GFf/ZVFcqfqZ4oVH6etGsCfcOxJAqczD/nT9KZ2U6xgdEsDef
-         UfM5nX5ZwQ/JdyXxRc44F0Pgdsi564/tjhnZWKY/odJhoco+5b9PrYRXm1u9uGoESH+o
-         ZxAA2xa4JOiCX8uVamiBMrxcZAQ/GdGeidYE3YRwQumc7D+zmWkNQ3BGI8TiRgwyjw9F
-         HuuIoO9ZtfV/fLLF/zwVWoBApHGUsTtm8cuKutFQ8EM43r2N5QvhhbQcwte7jwBnX+Hu
-         8wtqig0ahfonfWHsnuJ7nNZlpsFB/c82o3rV1fXTlk9sAJdLNr/O84B0Hw7TQh9ewaLY
-         ouxQ==
-X-Gm-Message-State: ABy/qLYoBSohw7nta8I2IFNolqD4BRQZ19qO0SLz4e6RhtBKPz8LG6tp
-        2NajoAQrBGwE7lmOYivLBgpWEnqceGtCU8TrZzI0Qw==
-X-Google-Smtp-Source: APBJJlFVdK3dgQiGQbCGtzHO5HAU734tkg07rpZG/vGBcSN0sV11N9GEP40A6EOc7GL2nRzEEsONoQ==
-X-Received: by 2002:a37:ac05:0:b0:768:125b:2b67 with SMTP id e5-20020a37ac05000000b00768125b2b67mr4446116qkm.33.1690444502717;
-        Thu, 27 Jul 2023 00:55:02 -0700 (PDT)
-Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com. [209.85.222.177])
-        by smtp.gmail.com with ESMTPSA id os31-20020a05620a811f00b00767e20c4267sm242824qkn.61.2023.07.27.00.55.02
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Jul 2023 00:55:02 -0700 (PDT)
-Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-765a4ff26cdso59053985a.0
-        for <linux-media@vger.kernel.org>; Thu, 27 Jul 2023 00:55:02 -0700 (PDT)
-X-Received: by 2002:a05:620a:2915:b0:767:81fc:c6b8 with SMTP id
- m21-20020a05620a291500b0076781fcc6b8mr5945598qkp.6.1690444501768; Thu, 27 Jul
- 2023 00:55:01 -0700 (PDT)
+        Thu, 27 Jul 2023 04:18:21 -0400
+Received: from mgamail.intel.com (unknown [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D1965BE
+        for <linux-media@vger.kernel.org>; Thu, 27 Jul 2023 01:10:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690445450; x=1721981450;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zrfAmZ4o52ulOEe2NdPrWdHquCo9OaUriPnqqYF+iO0=;
+  b=GcEs5c6CItLCraUbhbVdUjvY+fdwtor5Qb6GI9dvoiUSHFoVnuLqyDEJ
+   dfJo1YwrG5sGKOggM5NeVIYiYnqsnmdRV1wtgsLgjkgT79grginzw6hIs
+   mYhYl/JxOy+3m52gRajgYfH13Xoq/V75g6NuQdYaxmi7nE6fHD/jHZwbj
+   zUyxkM2aFzvL9Qtpzqt+9dksVzP+XoSX6gF67ayWTFxAvU8SgOrd5QAfq
+   rwNViL9+aJhCBERAG7NKEtiTr3zT9jmF5k7ath2HzP4HFYq9oFeOL30II
+   7zUxgwW6xtxwpTiAYaikfcV7DMgLSUTsVuNxzk5Kkx9g735ERIXuR4GG/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="399182049"
+X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
+   d="scan'208";a="399182049"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2023 01:10:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="850768991"
+X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
+   d="scan'208";a="850768991"
+Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 27 Jul 2023 01:10:33 -0700
+Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qOw4O-00024h-0b;
+        Thu, 27 Jul 2023 08:10:09 +0000
+Date:   Thu, 27 Jul 2023 16:05:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-media@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: [sailus-media-tree:master 9/20] drivers/media/i2c/ov5693.c:1280:19:
+ error: call to undeclared function 'devm_cci_regmap_init_i2c'; ISO C99 and
+ later do not support implicit function declarations
+Message-ID: <202307271519.XIXA0WQd-lkp@intel.com>
 MIME-Version: 1.0
-References: <20230704040044.681850-1-randy.li@synaptics.com>
- <20230704040044.681850-3-randy.li@synaptics.com> <20230712093301.nkj2vok2x7esdhb3@chromium.org>
- <4e70c8b8-d459-2b79-2b3d-40875f701d97@synaptics.com> <CAAFQd5CGO4iiC7HX9wTetuzjZyaAsKStFOpxqcFkZ_o-eJOPtg@mail.gmail.com>
- <ca16e2d6-a1c7-bff6-496f-07174f379fd9@synaptics.com>
-In-Reply-To: <ca16e2d6-a1c7-bff6-496f-07174f379fd9@synaptics.com>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Thu, 27 Jul 2023 16:54:49 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5DbF_=_ZE3M=g0qjhizDBKy2dbsDxW5fWgUXXFHMoQwzQ@mail.gmail.com>
-Message-ID: <CAAFQd5DbF_=_ZE3M=g0qjhizDBKy2dbsDxW5fWgUXXFHMoQwzQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] media: v4l2-mem2mem: add a list for buf used by hw
-To:     Hsia-Jun Li <Randy.Li@synaptics.com>
-Cc:     linux-media@vger.kernel.org, ayaka@soulik.info,
-        hans.verkuil@cisco.com, mchehab@kernel.org,
-        laurent.pinchart@ideasonboard.com, hiroh@chromium.org,
-        hverkuil@xs4all.nl, linux-kernel@vger.kernel.org,
-        nicolas@ndufresne.ca
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Jul 27, 2023 at 4:33=E2=80=AFPM Hsia-Jun Li <Randy.Li@synaptics.com=
-> wrote:
->
->
->
-> On 7/27/23 15:25, Tomasz Figa wrote:
-> > CAUTION: Email originated externally, do not click links or open attach=
-ments unless you recognize the sender and know the content is safe.
-> >
-> >
-> > On Mon, Jul 17, 2023 at 4:15=E2=80=AFPM Hsia-Jun Li <Randy.Li@synaptics=
-.com> wrote:
-> >>
-> >>
-> >> On 7/12/23 17:33, Tomasz Figa wrote:
-> >>> CAUTION: Email originated externally, do not click links or open atta=
-chments unless you recognize the sender and know the content is safe.
-> >>>
-> >>>
-> >>> On Tue, Jul 04, 2023 at 12:00:38PM +0800, Hsia-Jun Li wrote:
-> >>>> From: "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
-> >>>>
-> >>>> Many drivers have to create its own buf_struct for a
-> >>>> vb2_queue to track such a state. Also driver has to
-> >>>> iterate over rdy_queue every times to find out a buffer
-> >>>> which is not sent to hardware(or firmware), this new
-> >>>> list just offers the driver a place to store the buffer
-> >>>> that hardware(firmware) has acknowledged.
-> >>>>
-> >>>> One important advance about this list, it doesn't like
-> >>>> rdy_queue which both bottom half of the user calling
-> >>>> could operate it, while the v4l2 worker would as well.
-> >>>> The v4l2 core could only operate this queue when its
-> >>>> v4l2_context is not running, the driver would only
-> >>>> access this new hw_queue in its own worker.
-> >>> Could you describe in what case such a list would be useful for a
-> >>> mem2mem driver?
-> >>
-> >> This list, as its description, just for saving us from creating a
-> >> private buffer struct to track buffer state.
-> >>
-> >> The queue in the kernel is not the queue that hardware(codec firmware)
-> >> are using.
-> >>
-> >
-> > Sorry, I find the description difficult to understand. It might make
-> > sense to have the text proofread by someone experienced in writing
-> > technical documentation in English before posting in the future.
-> > Thanks.
-> >
-> Sorry, I may not be able to get more resource here. I would try to ask a
-> chatbot to fix my description next time.
+tree:   git://linuxtv.org/sailus/media_tree.git master
+head:   215e4463b11d94668b841368cb6882f3a2968148
+commit: 6ca0d78da91133ec78ecfbdaa7d066849b1b0c0c [9/20] media: ov5693: Convert to new CCI register access helpers
+config: mips-randconfig-r013-20230727 (https://download.01.org/0day-ci/archive/20230727/202307271519.XIXA0WQd-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230727/202307271519.XIXA0WQd-lkp@intel.com/reproduce)
 
-I think people on the linux-media IRC channel (including me) could
-also be willing to help with rephrasing things, but if a chatbot can
-do it too, it's even better. :)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307271519.XIXA0WQd-lkp@intel.com/
 
-> > I think I got the point from Nicolas' explanation, though.
-> >
-> >>
-> >>>> Signed-off-by: Hsia-Jun(Randy) Li <randy.li@synaptics.com>
-> >>>> ---
-> >>>>    drivers/media/v4l2-core/v4l2-mem2mem.c | 25 +++++++++++++++++----=
-----
-> >>>>    include/media/v4l2-mem2mem.h           | 10 +++++++++-
-> >>>>    2 files changed, 26 insertions(+), 9 deletions(-)
-> >>>>
-> >>>> diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/=
-v4l2-core/v4l2-mem2mem.c
-> >>>> index c771aba42015..b4151147d5bd 100644
-> >>>> --- a/drivers/media/v4l2-core/v4l2-mem2mem.c
-> >>>> +++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
-> >>>> @@ -321,15 +321,21 @@ static void __v4l2_m2m_try_queue(struct v4l2_m=
-2m_dev *m2m_dev,
-> >>>>                 goto job_unlock;
-> >>>>         }
-> >>>>
-> >>>> -     src =3D v4l2_m2m_next_src_buf(m2m_ctx);
-> >>>> -     dst =3D v4l2_m2m_next_dst_buf(m2m_ctx);
-> >>>> -     if (!src && !m2m_ctx->out_q_ctx.buffered) {
-> >>>> -             dprintk("No input buffers available\n");
-> >>>> -             goto job_unlock;
-> >>>> +     if (list_empty(&m2m_ctx->out_q_ctx.hw_queue)) {
-> >>>> +             src =3D v4l2_m2m_next_src_buf(m2m_ctx);
-> >>>> +
-> >>>> +             if (!src && !m2m_ctx->out_q_ctx.buffered) {
-> >>>> +                     dprintk("No input buffers available\n");
-> >>>> +                     goto job_unlock;
-> >>>> +             }
-> >>>>         }
-> >>>> -     if (!dst && !m2m_ctx->cap_q_ctx.buffered) {
-> >>>> -             dprintk("No output buffers available\n");
-> >>>> -             goto job_unlock;
-> >>>> +
-> >>>> +     if (list_empty(&m2m_ctx->cap_q_ctx.hw_queue)) {
-> >>>> +             dst =3D v4l2_m2m_next_dst_buf(m2m_ctx);
-> >>>> +             if (!dst && !m2m_ctx->cap_q_ctx.buffered) {
-> >>>> +                     dprintk("No output buffers available\n");
-> >>>> +                     goto job_unlock;
-> >>>> +             }
-> >>>>         }
-> >>> src and dst would be referenced unitialized below if neither of the
-> >>> above ifs hits...
-> >> I think they have been initialized at v4l2_m2m_ctx_init()
-> >
-> > What do you mean? They are local variables in this function.
-> >
-> Sorry, I didn't notice the sentence after that.
-> >>>
-> >>> Best regards,
-> >>> Tomasz
-> >>>
-> >>>>         m2m_ctx->new_frame =3D true;
-> >>>> @@ -896,6 +902,7 @@ int v4l2_m2m_streamoff(struct file *file, struct=
- v4l2_m2m_ctx *m2m_ctx,
-> >>>>         INIT_LIST_HEAD(&q_ctx->rdy_queue);
-> >>>>         q_ctx->num_rdy =3D 0;
-> >>>>         spin_unlock_irqrestore(&q_ctx->rdy_spinlock, flags);
-> >>>> +     INIT_LIST_HEAD(&q_ctx->hw_queue);
-> >>>>
-> >>>>         if (m2m_dev->curr_ctx =3D=3D m2m_ctx) {
-> >>>>                 m2m_dev->curr_ctx =3D NULL;
-> >>>> @@ -1234,6 +1241,8 @@ struct v4l2_m2m_ctx *v4l2_m2m_ctx_init(struct =
-v4l2_m2m_dev *m2m_dev,
-> >>>>
-> >>>>         INIT_LIST_HEAD(&out_q_ctx->rdy_queue);
-> >>>>         INIT_LIST_HEAD(&cap_q_ctx->rdy_queue);
-> >>>> +     INIT_LIST_HEAD(&out_q_ctx->hw_queue);
-> >>>> +     INIT_LIST_HEAD(&cap_q_ctx->hw_queue);
-> >>>>         spin_lock_init(&out_q_ctx->rdy_spinlock);
-> >>>>         spin_lock_init(&cap_q_ctx->rdy_spinlock);
-> >>>>
-> >>>> diff --git a/include/media/v4l2-mem2mem.h b/include/media/v4l2-mem2m=
-em.h
-> >>>> index d6c8eb2b5201..2342656e582d 100644
-> >>>> --- a/include/media/v4l2-mem2mem.h
-> >>>> +++ b/include/media/v4l2-mem2mem.h
-> >>>> @@ -53,9 +53,16 @@ struct v4l2_m2m_dev;
-> >>>>     *   processed
-> >>>>     *
-> >>>>     * @q:               pointer to struct &vb2_queue
-> >>>> - * @rdy_queue:       List of V4L2 mem-to-mem queues
-> >>>> + * @rdy_queue:       List of V4L2 mem-to-mem queues. If v4l2_m2m_bu=
-f_queue() is
-> >>>> + *           called in struct vb2_ops->buf_queue(), the buffer enqu=
-eued
-> >>>> + *           by user would be added to this list.
-> >>>>     * @rdy_spinlock: spin lock to protect the struct usage
-> >>>>     * @num_rdy: number of buffers ready to be processed
-> >>>> + * @hw_queue:        A list for tracking the buffer is occupied by =
-the hardware
-> >>>> + *           (or device's firmware). A buffer could only be in eith=
-er
-> >>>> + *           this list or @rdy_queue.
-> >>>> + *           Driver may choose not to use this list while uses its =
-own
-> >>>> + *           private data to do this work.
-> >>>>     * @buffered:        is the queue buffered?
-> >>>>     *
-> >>>>     * Queue for buffers ready to be processed as soon as this
-> >>>> @@ -68,6 +75,7 @@ struct v4l2_m2m_queue_ctx {
-> >>>>         struct list_head        rdy_queue;
-> >>>>         spinlock_t              rdy_spinlock;
-> >>>>         u8                      num_rdy;
-> >>>> +     struct list_head        hw_queue;
-> >>>>         bool                    buffered;
-> >>>>    };
-> >>>>
-> >>>> --
-> >>>> 2.17.1
-> >>>>
-> >> --
-> >> Hsia-Jun(Randy) Li
-> >>
->
-> --
-> Hsia-Jun(Randy) Li
+All errors (new ones prefixed by >>):
+
+>> drivers/media/i2c/ov5693.c:1280:19: error: call to undeclared function 'devm_cci_regmap_init_i2c'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1280 |         ov5693->regmap = devm_cci_regmap_init_i2c(client, 16);
+         |                          ^
+>> drivers/media/i2c/ov5693.c:1280:17: error: incompatible integer to pointer conversion assigning to 'struct regmap *' from 'int' [-Wint-conversion]
+    1280 |         ov5693->regmap = devm_cci_regmap_init_i2c(client, 16);
+         |                        ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
+
+
+vim +/devm_cci_regmap_init_i2c +1280 drivers/media/i2c/ov5693.c
+
+  1267	
+  1268	static int ov5693_probe(struct i2c_client *client)
+  1269	{
+  1270		struct ov5693_device *ov5693;
+  1271		u32 xvclk_rate;
+  1272		int ret = 0;
+  1273	
+  1274		ov5693 = devm_kzalloc(&client->dev, sizeof(*ov5693), GFP_KERNEL);
+  1275		if (!ov5693)
+  1276			return -ENOMEM;
+  1277	
+  1278		ov5693->dev = &client->dev;
+  1279	
+> 1280		ov5693->regmap = devm_cci_regmap_init_i2c(client, 16);
+  1281		if (IS_ERR(ov5693->regmap))
+  1282			return PTR_ERR(ov5693->regmap);
+  1283	
+  1284		ret = ov5693_check_hwcfg(ov5693);
+  1285		if (ret)
+  1286			return ret;
+  1287	
+  1288		mutex_init(&ov5693->lock);
+  1289	
+  1290		v4l2_i2c_subdev_init(&ov5693->sd, client, &ov5693_ops);
+  1291	
+  1292		ov5693->xvclk = devm_clk_get_optional(&client->dev, "xvclk");
+  1293		if (IS_ERR(ov5693->xvclk))
+  1294			return dev_err_probe(&client->dev, PTR_ERR(ov5693->xvclk),
+  1295					     "failed to get xvclk: %ld\n",
+  1296					     PTR_ERR(ov5693->xvclk));
+  1297	
+  1298		if (ov5693->xvclk) {
+  1299			xvclk_rate = clk_get_rate(ov5693->xvclk);
+  1300		} else {
+  1301			ret = fwnode_property_read_u32(dev_fwnode(&client->dev),
+  1302					     "clock-frequency",
+  1303					     &xvclk_rate);
+  1304	
+  1305			if (ret) {
+  1306				dev_err(&client->dev, "can't get clock frequency");
+  1307				return ret;
+  1308			}
+  1309		}
+  1310	
+  1311		if (xvclk_rate != OV5693_XVCLK_FREQ)
+  1312			dev_warn(&client->dev, "Found clk freq %u, expected %u\n",
+  1313				 xvclk_rate, OV5693_XVCLK_FREQ);
+  1314	
+  1315		ret = ov5693_configure_gpios(ov5693);
+  1316		if (ret)
+  1317			return ret;
+  1318	
+  1319		ret = ov5693_get_regulators(ov5693);
+  1320		if (ret)
+  1321			return dev_err_probe(&client->dev, ret,
+  1322					     "Error fetching regulators\n");
+  1323	
+  1324		ov5693->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+  1325		ov5693->pad.flags = MEDIA_PAD_FL_SOURCE;
+  1326		ov5693->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
+  1327	
+  1328		ov5693->mode.crop = ov5693_default_crop;
+  1329		ov5693->mode.format = ov5693_default_fmt;
+  1330		ov5693->mode.vts = __ov5693_calc_vts(ov5693->mode.format.height);
+  1331	
+  1332		ret = ov5693_init_controls(ov5693);
+  1333		if (ret)
+  1334			return ret;
+  1335	
+  1336		ret = media_entity_pads_init(&ov5693->sd.entity, 1, &ov5693->pad);
+  1337		if (ret)
+  1338			goto err_ctrl_handler_free;
+  1339	
+  1340		/*
+  1341		 * We need the driver to work in the event that pm runtime is disable in
+  1342		 * the kernel, so power up and verify the chip now. In the event that
+  1343		 * runtime pm is disabled this will leave the chip on, so that streaming
+  1344		 * will work.
+  1345		 */
+  1346	
+  1347		ret = ov5693_sensor_powerup(ov5693);
+  1348		if (ret)
+  1349			goto err_media_entity_cleanup;
+  1350	
+  1351		ret = ov5693_detect(ov5693);
+  1352		if (ret)
+  1353			goto err_powerdown;
+  1354	
+  1355		pm_runtime_set_active(&client->dev);
+  1356		pm_runtime_get_noresume(&client->dev);
+  1357		pm_runtime_enable(&client->dev);
+  1358	
+  1359		ret = v4l2_async_register_subdev_sensor(&ov5693->sd);
+  1360		if (ret) {
+  1361			dev_err(&client->dev, "failed to register V4L2 subdev: %d",
+  1362				ret);
+  1363			goto err_pm_runtime;
+  1364		}
+  1365	
+  1366		pm_runtime_set_autosuspend_delay(&client->dev, 1000);
+  1367		pm_runtime_use_autosuspend(&client->dev);
+  1368		pm_runtime_put_autosuspend(&client->dev);
+  1369	
+  1370		return ret;
+  1371	
+  1372	err_pm_runtime:
+  1373		pm_runtime_disable(&client->dev);
+  1374		pm_runtime_put_noidle(&client->dev);
+  1375	err_powerdown:
+  1376		ov5693_sensor_powerdown(ov5693);
+  1377	err_media_entity_cleanup:
+  1378		media_entity_cleanup(&ov5693->sd.entity);
+  1379	err_ctrl_handler_free:
+  1380		v4l2_ctrl_handler_free(&ov5693->ctrls.handler);
+  1381	
+  1382		return ret;
+  1383	}
+  1384	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
