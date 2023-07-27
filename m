@@ -2,923 +2,305 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75C18C00528
-	for <linux-media@archiver.kernel.org>; Thu, 27 Jul 2023 09:08:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D788BC0015E
+	for <linux-media@archiver.kernel.org>; Thu, 27 Jul 2023 09:08:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233390AbjG0JIW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Jul 2023 05:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35164 "EHLO
+        id S233092AbjG0JIn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Jul 2023 05:08:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231217AbjG0JII (ORCPT
+        with ESMTP id S233421AbjG0JIW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 Jul 2023 05:08:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8151EA5CF;
-        Thu, 27 Jul 2023 01:49:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 094C061DD0;
-        Thu, 27 Jul 2023 08:49:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A041C433C8;
-        Thu, 27 Jul 2023 08:49:05 +0000 (UTC)
-Message-ID: <8e381fd6-9475-88fc-9159-927f119a8b9c@xs4all.nl>
-Date:   Thu, 27 Jul 2023 10:49:03 +0200
+        Thu, 27 Jul 2023 05:08:22 -0400
+Received: from mgamail.intel.com (unknown [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA45AD39
+        for <linux-media@vger.kernel.org>; Thu, 27 Jul 2023 01:49:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690447780; x=1721983780;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=thgfgq9LM0wo6rOSTfSpv96E/Jl8XjqiVjbwuIp009E=;
+  b=A1L2OAO2C79TRlxzAB3tsL4ju9OtYvUT98ubZtvVKlfhwg57p/7PnoLH
+   ppxyYi3K1ziWXZ0OPdQpBbUWhN1cDU+8+UMRdeL1oYKovtgFPMGudtR9h
+   TrGJZToqMf8QxDyT8G7jIZ/zruwpuQvLtrxmr2AA2ljc+0qFvU8Kn2FOI
+   fvZmYijOLawT2pc4JA9ooPecGKaWfHLp13IQdTTucb2UksXR/WnzIYGvc
+   XzjpyrT8zbcHBFxMOldriG5/XQ55ggNQZ/L+UtmLkaDvtEJMNN7wPexUf
+   3nUiTlTGEV9qgAAUR/T+cvQskoEFcN+YrFNGHm952u7Ky0i04R65+Ilyu
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="432049166"
+X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
+   d="scan'208";a="432049166"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2023 01:49:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="756576655"
+X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
+   d="scan'208";a="756576655"
+Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 27 Jul 2023 01:49:37 -0700
+Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qOwgf-00026f-0x;
+        Thu, 27 Jul 2023 08:49:34 +0000
+Date:   Thu, 27 Jul 2023 16:47:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: [sailus-media-tree:master 9/20] drivers/media/i2c/ov5693.c:616:
+ undefined reference to `cci_write'
+Message-ID: <202307271602.UaRdCl4a-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v7 4/6] media: starfive: camss: Add video driver
-Content-Language: en-US
-To:     Jack Zhu <jack.zhu@starfivetech.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>, bryan.odonoghue@linaro.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Eugen Hristev <eugen.hristev@collabora.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, changhuang.liang@starfivetech.com
-References: <20230619112838.19797-1-jack.zhu@starfivetech.com>
- <20230619112838.19797-5-jack.zhu@starfivetech.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20230619112838.19797-5-jack.zhu@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 19/06/2023 13:28, Jack Zhu wrote:
-> Add video driver for StarFive Camera Subsystem.
-> 
-> Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
-> ---
->  .../media/platform/starfive/camss/Makefile    |   4 +-
->  .../media/platform/starfive/camss/stf_video.c | 724 ++++++++++++++++++
->  .../media/platform/starfive/camss/stf_video.h |  92 +++
->  3 files changed, 819 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/media/platform/starfive/camss/stf_video.c
->  create mode 100644 drivers/media/platform/starfive/camss/stf_video.h
-> 
-> diff --git a/drivers/media/platform/starfive/camss/Makefile b/drivers/media/platform/starfive/camss/Makefile
-> index d56ddd078a71..eb457917a914 100644
-> --- a/drivers/media/platform/starfive/camss/Makefile
-> +++ b/drivers/media/platform/starfive/camss/Makefile
-> @@ -3,6 +3,8 @@
->  # Makefile for StarFive Camera Subsystem driver
->  #
->  
-> -starfive-camss-objs += stf_camss.o
-> +starfive-camss-objs += \
-> +		stf_camss.o \
-> +		stf_video.o
->  
->  obj-$(CONFIG_VIDEO_STARFIVE_CAMSS) += starfive-camss.o
-> diff --git a/drivers/media/platform/starfive/camss/stf_video.c b/drivers/media/platform/starfive/camss/stf_video.c
-> new file mode 100644
-> index 000000000000..2e6472fe51c6
-> --- /dev/null
-> +++ b/drivers/media/platform/starfive/camss/stf_video.c
-> @@ -0,0 +1,724 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * stf_video.c
-> + *
-> + * StarFive Camera Subsystem - V4L2 device node
-> + *
-> + * Copyright (C) 2021-2023 StarFive Technology Co., Ltd.
-> + */
-> +
-> +#include <linux/pm_runtime.h>
-> +#include <media/v4l2-ctrls.h>
-> +#include <media/v4l2-event.h>
-> +#include <media/v4l2-mc.h>
-> +#include <media/videobuf2-dma-contig.h>
-> +
-> +#include "stf_camss.h"
-> +#include "stf_video.h"
-> +
-> +static const struct stfcamss_format_info formats_pix_wr[] = {
-> +	{
-> +		.code = MEDIA_BUS_FMT_SRGGB10_1X10,
-> +		.pixelformat = V4L2_PIX_FMT_SRGGB10,
-> +		.planes = 1,
-> +		.vsub = { 1 },
-> +		.bpp = 10,
-> +	},
-> +	{
-> +		.code = MEDIA_BUS_FMT_SGRBG10_1X10,
-> +		.pixelformat = V4L2_PIX_FMT_SGRBG10,
-> +		.planes = 1,
-> +		.vsub = { 1 },
-> +		.bpp = 10,
-> +	},
-> +	{
-> +		.code = MEDIA_BUS_FMT_SGBRG10_1X10,
-> +		.pixelformat = V4L2_PIX_FMT_SGBRG10,
-> +		.planes = 1,
-> +		.vsub = { 1 },
-> +		.bpp = 10,
-> +	},
-> +	{
-> +		.code = MEDIA_BUS_FMT_SBGGR10_1X10,
-> +		.pixelformat = V4L2_PIX_FMT_SBGGR10,
-> +		.planes = 1,
-> +		.vsub = { 1 },
-> +		.bpp = 10,
-> +	},
-> +};
-> +
-> +static const struct stfcamss_format_info formats_pix_isp[] = {
-> +	{
-> +		.code = MEDIA_BUS_FMT_Y12_1X12,
-> +		.pixelformat = V4L2_PIX_FMT_NV12,
-> +		.planes = 2,
-> +		.vsub = { 1, 2 },
-> +		.bpp = 8,
-> +	},
-> +};
-> +
-> +/* -----------------------------------------------------------------------------
-> + * Helper functions
-> + */
-> +
-> +static int video_find_format(u32 code, u32 pixelformat,
-> +			     struct stfcamss_video *video)
-> +{
-> +	unsigned int i;
-> +
-> +	for (i = 0; i < video->nformats; ++i) {
-> +		if (video->formats[i].code == code &&
-> +		    video->formats[i].pixelformat == pixelformat)
-> +			return i;
-> +	}
-> +
-> +	for (i = 0; i < video->nformats; ++i)
-> +		if (video->formats[i].code == code)
-> +			return i;
-> +
-> +	for (i = 0; i < video->nformats; ++i)
-> +		if (video->formats[i].pixelformat == pixelformat)
-> +			return i;
-> +
-> +	return -EINVAL;
-> +}
-> +
-> +static int __video_try_fmt(struct stfcamss_video *video, struct v4l2_format *f)
-> +{
-> +	struct v4l2_pix_format *pix;
-> +	const struct stfcamss_format_info *fi;
-> +	u32 width, height;
-> +	u32 bpl;
-> +	unsigned int i;
-> +
-> +	pix = &f->fmt.pix;
-> +
-> +	for (i = 0; i < video->nformats; i++)
-> +		if (pix->pixelformat == video->formats[i].pixelformat)
-> +			break;
-> +
-> +	if (i == video->nformats)
-> +		i = 0; /* default format */
-> +
-> +	fi = &video->formats[i];
-> +	width = pix->width;
-> +	height = pix->height;
-> +
-> +	memset(pix, 0, sizeof(*pix));
-> +
-> +	pix->pixelformat = fi->pixelformat;
-> +	pix->width = clamp_t(u32, width, STFCAMSS_FRAME_MIN_WIDTH,
-> +			     STFCAMSS_FRAME_MAX_WIDTH);
-> +	pix->height = clamp_t(u32, height, STFCAMSS_FRAME_MIN_HEIGHT,
-> +			      STFCAMSS_FRAME_MAX_HEIGHT);
-> +	bpl = pix->width * fi->bpp / 8;
-> +	bpl = ALIGN(bpl, video->bpl_alignment);
-> +	pix->bytesperline = bpl;
-> +
-> +	for (i = 0; i < fi->planes; ++i)
-> +		pix->sizeimage += bpl * pix->height / fi->vsub[i];
-> +
-> +	pix->field = V4L2_FIELD_NONE;
-> +	pix->colorspace = V4L2_COLORSPACE_SRGB;
-> +	pix->flags = 0;
-> +	pix->ycbcr_enc =
-> +		V4L2_MAP_YCBCR_ENC_DEFAULT(pix->colorspace);
-> +	pix->quantization = V4L2_MAP_QUANTIZATION_DEFAULT(true,
-> +							  pix->colorspace,
-> +							  pix->ycbcr_enc);
-> +	pix->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(pix->colorspace);
-> +
-> +	return 0;
-> +}
-> +
-> +static int stf_video_init_format(struct stfcamss_video *video)
-> +{
-> +	int ret;
-> +	struct v4l2_format format = {
-> +		.type = video->type,
-> +		.fmt.pix = {
-> +			.width = 1920,
-> +			.height = 1080,
-> +			.pixelformat = V4L2_PIX_FMT_RGB565,
-> +		},
-> +	};
-> +
-> +	ret = __video_try_fmt(video, &format);
-> +
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	video->active_fmt = format;
-> +
-> +	return 0;
-> +}
-> +
-> +/* -----------------------------------------------------------------------------
-> + * Video queue operations
-> + */
-> +
-> +static int video_queue_setup(struct vb2_queue *q,
-> +			     unsigned int *num_buffers,
-> +			     unsigned int *num_planes,
-> +			     unsigned int sizes[],
-> +			     struct device *alloc_devs[])
-> +{
-> +	struct stfcamss_video *video = vb2_get_drv_priv(q);
-> +	const struct v4l2_pix_format *format = &video->active_fmt.fmt.pix;
-> +
-> +	if (*num_planes) {
-> +		if (*num_planes != 1)
-> +			return -EINVAL;
-> +
-> +		if (sizes[0] < format->sizeimage)
-> +			return -EINVAL;
-> +	}
-> +
-> +	*num_planes = 1;
-> +	sizes[0] = format->sizeimage;
-> +	if (!sizes[0])
-> +		dev_err(video->stfcamss->dev,
-> +			"%s: error size is zero!!!\n", __func__);
-> +
-> +	dev_dbg(video->stfcamss->dev, "planes = %d, size = %d\n",
-> +		*num_planes, sizes[0]);
-> +
-> +	return 0;
-> +}
-> +
-> +static int video_buf_init(struct vb2_buffer *vb)
-> +{
-> +	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
-> +	struct stfcamss_video *video = vb2_get_drv_priv(vb->vb2_queue);
-> +	struct stfcamss_buffer *buffer =
-> +		container_of(vbuf, struct stfcamss_buffer, vb);
-> +	const struct v4l2_pix_format *fmt = &video->active_fmt.fmt.pix;
-> +	dma_addr_t *paddr;
-> +
-> +	paddr = vb2_plane_cookie(vb, 0);
-> +	buffer->addr[0] = *paddr;
-> +
-> +	if (fmt->pixelformat == V4L2_PIX_FMT_NV12 ||
-> +	    fmt->pixelformat == V4L2_PIX_FMT_NV21 ||
-> +	    fmt->pixelformat == V4L2_PIX_FMT_NV16 ||
-> +	    fmt->pixelformat == V4L2_PIX_FMT_NV61)
-> +		buffer->addr[1] =
-> +			buffer->addr[0] + fmt->bytesperline * fmt->height;
-> +
-> +	return 0;
-> +}
-> +
-> +static int video_buf_prepare(struct vb2_buffer *vb)
-> +{
-> +	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
-> +	struct stfcamss_video *video = vb2_get_drv_priv(vb->vb2_queue);
-> +	const struct v4l2_pix_format *fmt = &video->active_fmt.fmt.pix;
-> +
-> +	if (fmt->sizeimage > vb2_plane_size(vb, 0)) {
-> +		dev_err(video->stfcamss->dev,
-> +			"sizeimage = %d, plane size = %d\n",
-> +			fmt->sizeimage, (unsigned int)vb2_plane_size(vb, 0));
-> +		return -EINVAL;
-> +	}
-> +	vb2_set_plane_payload(vb, 0, fmt->sizeimage);
-> +
-> +	vbuf->field = V4L2_FIELD_NONE;
-> +
-> +	return 0;
-> +}
-> +
-> +static void video_buf_queue(struct vb2_buffer *vb)
-> +{
-> +	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
-> +	struct stfcamss_video *video = vb2_get_drv_priv(vb->vb2_queue);
-> +	struct stfcamss_buffer *buffer =
-> +		container_of(vbuf, struct stfcamss_buffer, vb);
-> +
-> +	video->ops->queue_buffer(video, buffer);
-> +}
-> +
-> +/*
-> + * video_mbus_to_pix - Convert v4l2_mbus_framefmt to v4l2_pix_format
-> + * @mbus: v4l2_mbus_framefmt format (input)
-> + * @pix: v4l2_pix_format_mplane format (output)
-> + * @f: a pointer to formats array element to be used for the conversion
-> + * @alignment: bytesperline alignment value
-> + *
-> + * Fill the output pix structure with information from the input mbus format.
-> + *
-> + * Return 0 on success or a negative error code otherwise
-> + */
-> +static int video_mbus_to_pix(const struct v4l2_mbus_framefmt *mbus,
-> +			     struct v4l2_pix_format *pix,
-> +			     const struct stfcamss_format_info *f,
-> +			     unsigned int alignment)
-> +{
-> +	u32 bytesperline;
-> +	unsigned int i;
-> +
-> +	memset(pix, 0, sizeof(*pix));
-> +	v4l2_fill_pix_format(pix, mbus);
-> +	pix->pixelformat = f->pixelformat;
-> +	bytesperline = pix->width * f->bpp / 8;
-> +	bytesperline = ALIGN(bytesperline, alignment);
-> +	pix->bytesperline = bytesperline;
-> +
-> +	for (i = 0; i < f->planes; ++i)
-> +		pix->sizeimage += bytesperline * pix->height / f->vsub[i];
-> +
-> +	return 0;
-> +}
-> +
-> +static struct v4l2_subdev *video_remote_subdev(struct stfcamss_video *video,
-> +					       u32 *pad)
-> +{
-> +	struct media_pad *remote;
-> +
-> +	remote = media_pad_remote_pad_first(&video->pad);
-> +
-> +	if (!remote || !is_media_entity_v4l2_subdev(remote->entity))
-> +		return NULL;
-> +
-> +	if (pad)
-> +		*pad = remote->index;
-> +
-> +	return media_entity_to_v4l2_subdev(remote->entity);
-> +}
-> +
-> +static int video_get_subdev_format(struct stfcamss_video *video,
-> +				   struct v4l2_format *format)
-> +{
-> +	struct v4l2_pix_format *pix = &video->active_fmt.fmt.pix;
-> +	struct v4l2_subdev_format fmt;
-> +	struct v4l2_subdev *subdev;
-> +	u32 pixelformat;
-> +	u32 pad;
-> +	int ret;
-> +
-> +	subdev = video_remote_subdev(video, &pad);
-> +	if (!subdev)
-> +		return -EPIPE;
-> +
-> +	fmt.pad = pad;
-> +	fmt.which = V4L2_SUBDEV_FORMAT_ACTIVE;
-> +
-> +	ret = v4l2_subdev_call(subdev, pad, get_fmt, NULL, &fmt);
-> +	if (ret)
-> +		return ret;
-> +
-> +	pixelformat = pix->pixelformat;
-> +	ret = video_find_format(fmt.format.code, pixelformat, video);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	format->type = video->type;
-> +
-> +	return video_mbus_to_pix(&fmt.format, &format->fmt.pix,
-> +				 &video->formats[ret], video->bpl_alignment);
-> +}
-> +
-> +static int video_check_format(struct stfcamss_video *video)
-> +{
-> +	struct v4l2_pix_format *pix = &video->active_fmt.fmt.pix;
-> +	struct v4l2_format format;
-> +	struct v4l2_pix_format *sd_pix = &format.fmt.pix;
-> +	int ret;
-> +
-> +	sd_pix->pixelformat = pix->pixelformat;
-> +	ret = video_get_subdev_format(video, &format);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (pix->pixelformat != sd_pix->pixelformat ||
-> +	    pix->height != sd_pix->height ||
-> +	    pix->width != sd_pix->width ||
-> +	    pix->field != format.fmt.pix.field) {
-> +		dev_err(video->stfcamss->dev,
-> +			"not match:\n"
-> +			"pixelformat: 0x%x <-> 0x%x\n"
-> +			"height: %d <-> %d\n"
-> +			"field: %d <-> %d\n",
-> +			pix->pixelformat, sd_pix->pixelformat,
-> +			pix->height, sd_pix->height,
-> +			pix->field, format.fmt.pix.field);
-> +		return -EPIPE;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int video_start_streaming(struct vb2_queue *q, unsigned int count)
-> +{
-> +	struct stfcamss_video *video = vb2_get_drv_priv(q);
-> +	struct video_device *vdev = &video->vdev;
-> +	struct media_entity *entity;
-> +	struct media_pad *pad;
-> +	struct v4l2_subdev *subdev;
-> +	int ret;
-> +
-> +	ret = video_device_pipeline_start(vdev, &video->stfcamss->pipe);
-> +	if (ret < 0) {
-> +		dev_err(video->stfcamss->dev,
-> +			"Failed to media_pipeline_start: %d\n", ret);
+tree:   git://linuxtv.org/sailus/media_tree.git master
+head:   215e4463b11d94668b841368cb6882f3a2968148
+commit: 6ca0d78da91133ec78ecfbdaa7d066849b1b0c0c [9/20] media: ov5693: Convert to new CCI register access helpers
+config: i386-randconfig-i016-20230727 (https://download.01.org/0day-ci/archive/20230727/202307271602.UaRdCl4a-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce: (https://download.01.org/0day-ci/archive/20230727/202307271602.UaRdCl4a-lkp@intel.com/reproduce)
 
-This doesn't call flush_buffers to return the buffers back to the QUEUED state.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307271602.UaRdCl4a-lkp@intel.com/
 
-You do that correctly elsewhere in this function, but you missed this case.
+All errors (new ones prefixed by >>):
 
-> +		return ret;
-> +	}
-> +
-> +	ret = video_check_format(video);
-> +	if (ret < 0)
-> +		goto error;
-> +
-> +	ret = pm_runtime_resume_and_get(video->stfcamss->dev);
-> +	if (ret < 0) {
-> +		dev_err(video->stfcamss->dev, "power up failed %d\n", ret);
-> +		goto error;
-> +	}
-> +
-> +	entity = &vdev->entity;
-> +	while (1) {
-> +		pad = &entity->pads[0];
-> +		if (!(pad->flags & MEDIA_PAD_FL_SINK))
-> +			break;
-> +
-> +		pad = media_pad_remote_pad_first(pad);
-> +		if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
-> +			break;
-> +
-> +		entity = pad->entity;
-> +		subdev = media_entity_to_v4l2_subdev(entity);
-> +
-> +		ret = v4l2_subdev_call(subdev, video, s_stream, 1);
-> +		if (ret < 0 && ret != -ENOIOCTLCMD)
-> +			goto err_pm_put;
-> +	}
-> +	return 0;
-> +
-> +err_pm_put:
-> +	pm_runtime_put(video->stfcamss->dev);
-> +error:
-> +	video_device_pipeline_stop(vdev);
-> +	video->ops->flush_buffers(video, VB2_BUF_STATE_QUEUED);
-> +	return ret;
-> +}
-> +
-> +static void video_stop_streaming(struct vb2_queue *q)
-> +{
-> +	struct stfcamss_video *video = vb2_get_drv_priv(q);
-> +	struct video_device *vdev = &video->vdev;
-> +	struct media_entity *entity;
-> +	struct media_pad *pad;
-> +	struct v4l2_subdev *subdev;
-> +	int ret;
-> +
-> +	entity = &vdev->entity;
-> +	while (1) {
-> +		pad = &entity->pads[0];
-> +		if (!(pad->flags & MEDIA_PAD_FL_SINK))
-> +			break;
-> +
-> +		pad = media_pad_remote_pad_first(pad);
-> +		if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
-> +			break;
-> +
-> +		entity = pad->entity;
-> +		subdev = media_entity_to_v4l2_subdev(entity);
-> +
-> +		v4l2_subdev_call(subdev, video, s_stream, 0);
-> +	}
-> +
-> +	ret = pm_runtime_put(video->stfcamss->dev);
-> +	if (ret < 0)
-> +		dev_err(video->stfcamss->dev, "power down failed:%d\n", ret);
-> +
-> +	video_device_pipeline_stop(vdev);
-> +	video->ops->flush_buffers(video, VB2_BUF_STATE_ERROR);
-> +}
-> +
-> +static const struct vb2_ops stf_video_vb2_q_ops = {
-> +	.queue_setup     = video_queue_setup,
-> +	.wait_prepare    = vb2_ops_wait_prepare,
-> +	.wait_finish     = vb2_ops_wait_finish,
-> +	.buf_init        = video_buf_init,
-> +	.buf_prepare     = video_buf_prepare,
-> +	.buf_queue       = video_buf_queue,
-> +	.start_streaming = video_start_streaming,
-> +	.stop_streaming  = video_stop_streaming,
-> +};
-> +
-> +/* -----------------------------------------------------------------------------
-> + * V4L2 ioctls
-> + */
-> +
-> +static int video_querycap(struct file *file, void *fh,
-> +			  struct v4l2_capability *cap)
-> +{
-> +	strscpy(cap->driver, "stf camss", sizeof(cap->driver));
-> +	strscpy(cap->card, "Starfive Camera Subsystem", sizeof(cap->card));
-> +
-> +	return 0;
-> +}
-> +
-> +static int video_get_pfmt_by_index(struct stfcamss_video *video, int ndx)
-> +{
-> +	int i, j, k;
-> +
-> +	/* find index "i" of "k"th unique pixelformat in formats array */
-> +	k = -1;
-> +	for (i = 0; i < video->nformats; i++) {
-> +		for (j = 0; j < i; j++) {
-> +			if (video->formats[i].pixelformat ==
-> +			    video->formats[j].pixelformat)
-> +				break;
-> +		}
-> +
-> +		if (j == i)
-> +			k++;
-> +
-> +		if (k == ndx)
-> +			return i;
-> +	}
-> +
-> +	return -EINVAL;
-> +}
-> +
-> +static int video_get_pfmt_by_mcode(struct stfcamss_video *video, u32 mcode)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < video->nformats; i++) {
-> +		if (video->formats[i].code == mcode)
-> +			return i;
-> +	}
-> +
-> +	return -EINVAL;
-> +}
-> +
-> +static int video_enum_fmt(struct file *file, void *fh, struct v4l2_fmtdesc *f)
-> +{
-> +	struct stfcamss_video *video = video_drvdata(file);
-> +	int i;
-> +
-> +	if (f->type != video->type)
-> +		return -EINVAL;
-> +	if (f->index >= video->nformats)
-> +		return -EINVAL;
-> +
-> +	if (f->mbus_code) {
-> +		/* Each entry in formats[] table has unique mbus_code */
-> +		if (f->index > 0)
-> +			return -EINVAL;
-> +
-> +		i = video_get_pfmt_by_mcode(video, f->mbus_code);
-> +	} else {
-> +		i = video_get_pfmt_by_index(video, f->index);
-> +	}
-> +
-> +	if (i < 0)
-> +		return -EINVAL;
-> +
-> +	f->pixelformat = video->formats[i].pixelformat;
-> +
-> +	return 0;
-> +}
-> +
-> +static int video_enum_framesizes(struct file *file, void *fh,
-> +				 struct v4l2_frmsizeenum *fsize)
-> +{
-> +	struct stfcamss_video *video = video_drvdata(file);
-> +	int i;
-> +
-> +	if (fsize->index)
-> +		return -EINVAL;
-> +
-> +	for (i = 0; i < video->nformats; i++) {
-> +		if (video->formats[i].pixelformat == fsize->pixel_format)
-> +			break;
-> +	}
-> +
-> +	if (i == video->nformats)
-> +		return -EINVAL;
-> +
-> +	fsize->type = V4L2_FRMSIZE_TYPE_CONTINUOUS;
-> +	fsize->stepwise.min_width = STFCAMSS_FRAME_MIN_WIDTH;
-> +	fsize->stepwise.max_width = STFCAMSS_FRAME_MAX_WIDTH;
-> +	fsize->stepwise.min_height = STFCAMSS_FRAME_MIN_HEIGHT;
-> +	fsize->stepwise.max_height = STFCAMSS_FRAME_MAX_HEIGHT;
-> +	fsize->stepwise.step_width = 1;
-> +	fsize->stepwise.step_height = 1;
-> +
-> +	return 0;
-> +}
-> +
-> +static int video_g_fmt(struct file *file, void *fh, struct v4l2_format *f)
-> +{
-> +	struct stfcamss_video *video = video_drvdata(file);
-> +
-> +	*f = video->active_fmt;
-> +
-> +	return 0;
-> +}
-> +
-> +static int video_s_fmt(struct file *file, void *fh, struct v4l2_format *f)
-> +{
-> +	struct stfcamss_video *video = video_drvdata(file);
-> +	int ret;
-> +
-> +	if (vb2_is_busy(&video->vb2_q))
-> +		return -EBUSY;
-> +
-> +	ret = __video_try_fmt(video, f);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	video->active_fmt = *f;
-> +
-> +	return 0;
-> +}
-> +
-> +static int video_try_fmt(struct file *file, void *fh, struct v4l2_format *f)
-> +{
-> +	struct stfcamss_video *video = video_drvdata(file);
-> +
-> +	return __video_try_fmt(video, f);
-> +}
-> +
-> +static const struct v4l2_ioctl_ops stf_vid_ioctl_ops = {
-> +	.vidioc_querycap                = video_querycap,
-> +	.vidioc_enum_fmt_vid_cap        = video_enum_fmt,
-> +	.vidioc_enum_fmt_vid_out        = video_enum_fmt,
-> +	.vidioc_enum_framesizes         = video_enum_framesizes,
-> +	.vidioc_g_fmt_vid_cap           = video_g_fmt,
-> +	.vidioc_s_fmt_vid_cap           = video_s_fmt,
-> +	.vidioc_try_fmt_vid_cap         = video_try_fmt,
-> +	.vidioc_g_fmt_vid_out           = video_g_fmt,
-> +	.vidioc_s_fmt_vid_out           = video_s_fmt,
-> +	.vidioc_try_fmt_vid_out         = video_try_fmt,
-> +	.vidioc_reqbufs                 = vb2_ioctl_reqbufs,
-> +	.vidioc_querybuf                = vb2_ioctl_querybuf,
-> +	.vidioc_qbuf                    = vb2_ioctl_qbuf,
-> +	.vidioc_expbuf                  = vb2_ioctl_expbuf,
-> +	.vidioc_dqbuf                   = vb2_ioctl_dqbuf,
-> +	.vidioc_create_bufs             = vb2_ioctl_create_bufs,
-> +	.vidioc_prepare_buf             = vb2_ioctl_prepare_buf,
-> +	.vidioc_streamon                = vb2_ioctl_streamon,
-> +	.vidioc_streamoff               = vb2_ioctl_streamoff,
-> +};
-> +
-> +/* -----------------------------------------------------------------------------
-> + * V4L2 file operations
-> + */
-> +
-> +static const struct v4l2_file_operations stf_vid_fops = {
-> +	.owner          = THIS_MODULE,
-> +	.unlocked_ioctl = video_ioctl2,
-> +	.open           = v4l2_fh_open,
-> +	.release        = vb2_fop_release,
-> +	.poll           = vb2_fop_poll,
-> +	.mmap           = vb2_fop_mmap,
-> +	.read           = vb2_fop_read,
-> +};
-> +
-> +/* -----------------------------------------------------------------------------
-> + * STFCAMSS video core
-> + */
-> +
-> +static void stf_video_release(struct video_device *vdev)
-> +{
-> +	struct stfcamss_video *video = video_get_drvdata(vdev);
-> +
-> +	media_entity_cleanup(&vdev->entity);
-> +
-> +	mutex_destroy(&video->q_lock);
-> +	mutex_destroy(&video->lock);
-> +}
-> +
-> +int stf_video_register(struct stfcamss_video *video,
-> +		       struct v4l2_device *v4l2_dev, const char *name)
-> +{
-> +	struct video_device *vdev;
-> +	struct vb2_queue *q;
-> +	struct media_pad *pad = &video->pad;
-> +	int ret;
-> +
-> +	vdev = &video->vdev;
-> +
-> +	mutex_init(&video->q_lock);
-> +
-> +	q = &video->vb2_q;
-> +	q->drv_priv = video;
-> +	q->mem_ops = &vb2_dma_contig_memops;
-> +	q->ops = &stf_video_vb2_q_ops;
-> +	q->type = video->type;
-> +	q->io_modes = VB2_DMABUF | VB2_MMAP | VB2_READ;
+   ld: drivers/media/i2c/ov5693.o: in function `ov5693_enable_streaming':
+>> drivers/media/i2c/ov5693.c:616: undefined reference to `cci_write'
+   ld: drivers/media/i2c/ov5693.o: in function `ov5693_digital_gain_configure':
+   drivers/media/i2c/ov5693.c:438: undefined reference to `cci_write'
+>> ld: drivers/media/i2c/ov5693.c:439: undefined reference to `cci_write'
+   ld: drivers/media/i2c/ov5693.c:440: undefined reference to `cci_write'
+   ld: drivers/media/i2c/ov5693.o: in function `ov5693_flip_vert_configure':
+>> drivers/media/i2c/ov5693.c:365: undefined reference to `cci_update_bits'
+   ld: drivers/media/i2c/ov5693.o: in function `ov5693_test_pattern_configure':
+   drivers/media/i2c/ov5693.c:470: undefined reference to `cci_write'
+   ld: drivers/media/i2c/ov5693.o: in function `ov5693_get_gain':
+>> drivers/media/i2c/ov5693.c:421: undefined reference to `cci_read'
+   ld: drivers/media/i2c/ov5693.o: in function `ov5693_probe':
+>> drivers/media/i2c/ov5693.c:1280: undefined reference to `devm_cci_regmap_init_i2c'
+   ld: drivers/media/i2c/ov5693.o: in function `ov5693_detect':
+   drivers/media/i2c/ov5693.c:744: undefined reference to `cci_read'
 
-VB2_READ support does not generally make sense for uncompressed video since
-read() always requires a memcpy, and that makes it very inefficient.
 
-It doesn't hurt though, so it is up to you whether or not you want this.
+vim +616 drivers/media/i2c/ov5693.c
 
-> +	q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
-> +	q->buf_struct_size = sizeof(struct stfcamss_buffer);
-> +	q->dev = video->stfcamss->dev;
-> +	q->lock = &video->q_lock;
-> +	q->min_buffers_needed = STFCAMSS_MIN_BUFFERS;
-> +	ret = vb2_queue_init(q);
-> +	if (ret < 0) {
-> +		dev_err(video->stfcamss->dev,
-> +			"Failed to init vb2 queue: %d\n", ret);
-> +		goto err_vb2_init;
-> +	}
-> +
-> +	pad->flags = MEDIA_PAD_FL_SINK;
-> +	ret = media_entity_pads_init(&vdev->entity, 1, pad);
-> +	if (ret < 0) {
-> +		dev_err(video->stfcamss->dev,
-> +			"Failed to init video entity: %d\n", ret);
-> +		goto err_vb2_init;
-> +	}
-> +
-> +	mutex_init(&video->lock);
-> +
-> +	if (video->id == STF_V_LINE_WR) {
-> +		video->formats = formats_pix_wr;
-> +		video->nformats = ARRAY_SIZE(formats_pix_wr);
-> +		video->bpl_alignment = 8;
-> +	} else {
-> +		video->formats = formats_pix_isp;
-> +		video->nformats = ARRAY_SIZE(formats_pix_isp);
-> +		video->bpl_alignment = 1;
-> +	}
-> +
-> +	ret = stf_video_init_format(video);
-> +	if (ret < 0) {
-> +		dev_err(video->stfcamss->dev,
-> +			"Failed to init format: %d\n", ret);
-> +		goto err_vid_init_format;
-> +	}
-> +
-> +	vdev->fops = &stf_vid_fops;
-> +	vdev->ioctl_ops = &stf_vid_ioctl_ops;
-> +	vdev->device_caps = V4L2_CAP_VIDEO_CAPTURE;
-> +	vdev->vfl_dir = VFL_DIR_RX;
-> +	vdev->device_caps |= V4L2_CAP_STREAMING | V4L2_CAP_READWRITE;
-> +	vdev->release = stf_video_release;
-> +	vdev->v4l2_dev = v4l2_dev;
-> +	vdev->queue = &video->vb2_q;
-> +	vdev->lock = &video->lock;
-> +	strscpy(vdev->name, name, sizeof(vdev->name));
-> +
-> +	ret = video_register_device(vdev, VFL_TYPE_VIDEO, video->id);
-> +	if (ret < 0) {
-> +		dev_err(video->stfcamss->dev,
-> +			"Failed to register video device: %d\n", ret);
-> +		goto err_vid_reg;
-> +	}
-> +
-> +	video_set_drvdata(vdev, video);
-> +	return 0;
-> +
-> +err_vid_reg:
-> +err_vid_init_format:
-> +	media_entity_cleanup(&vdev->entity);
-> +	mutex_destroy(&video->lock);
-> +err_vb2_init:
-> +	mutex_destroy(&video->q_lock);
-> +	return ret;
-> +}
-> +
-> +void stf_video_unregister(struct stfcamss_video *video)
-> +{
-> +	vb2_video_unregister_device(&video->vdev);
-> +}
-> diff --git a/drivers/media/platform/starfive/camss/stf_video.h b/drivers/media/platform/starfive/camss/stf_video.h
-> new file mode 100644
-> index 000000000000..60323c23a40c
-> --- /dev/null
-> +++ b/drivers/media/platform/starfive/camss/stf_video.h
-> @@ -0,0 +1,92 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * stf_video.h
-> + *
-> + * StarFive Camera Subsystem - V4L2 device node
-> + *
-> + * Copyright (C) 2021-2023 StarFive Technology Co., Ltd.
-> + */
-> +
-> +#ifndef STF_VIDEO_H
-> +#define STF_VIDEO_H
-> +
-> +#include <linux/list.h>
-> +#include <linux/mutex.h>
-> +#include <linux/videodev2.h>
-> +#include <media/v4l2-dev.h>
-> +#include <media/v4l2-fh.h>
-> +#include <media/v4l2-ioctl.h>
-> +#include <media/videobuf2-v4l2.h>
-> +
-> +#define STFCAMSS_FRAME_MIN_WIDTH		64
-> +#define STFCAMSS_FRAME_MAX_WIDTH		1920
-> +#define STFCAMSS_FRAME_MIN_HEIGHT		64
-> +#define STFCAMSS_FRAME_MAX_HEIGHT		1080
-> +#define STFCAMSS_FRAME_WIDTH_ALIGN_8		8
-> +#define STFCAMSS_FRAME_WIDTH_ALIGN_128		128
-> +#define STFCAMSS_MIN_BUFFERS			2
-> +
-> +#define STFCAMSS_MAX_ENTITY_NAME_LEN		27
-> +
-> +enum stf_v_line_id {
-> +	STF_V_LINE_WR = 0,
-> +	STF_V_LINE_ISP,
-> +	STF_V_LINE_MAX,
-> +};
-> +
-> +struct stfcamss_buffer {
-> +	struct vb2_v4l2_buffer vb;
-> +	dma_addr_t addr[3];
-> +	struct list_head queue;
-> +};
-> +
-> +struct fract {
-> +	u8 numerator;
-> +	u8 denominator;
-> +};
-> +
-> +/*
-> + * struct stfcamss_format_info - ISP media bus format information
-> + * @code: V4L2 media bus format code
-> + * @pixelformat: V4L2 pixel format FCC identifier
-> + * @planes: Number of planes
-> + * @vsub: Vertical subsampling (for each plane)
-> + * @bpp: Bits per pixel when stored in memory (for each plane)
-> + */
-> +struct stfcamss_format_info {
-> +	u32 code;
-> +	u32 pixelformat;
-> +	u8 planes;
-> +	u8 vsub[3];
-> +	u8 bpp;
-> +};
-> +
-> +struct stfcamss_video {
-> +	struct stfcamss *stfcamss;
-> +	u8 id;
-> +	struct vb2_queue vb2_q;
-> +	struct video_device vdev;
-> +	struct media_pad pad;
-> +	struct v4l2_format active_fmt;
-> +	enum v4l2_buf_type type;
-> +	const struct stfcamss_video_ops *ops;
-> +	struct mutex lock;	 /* serialize device access */
-> +	struct mutex q_lock;	 /* protects the queue */
-> +	unsigned int bpl_alignment;
-> +	const struct stfcamss_format_info *formats;
-> +	unsigned int nformats;
-> +};
-> +
-> +struct stfcamss_video_ops {
-> +	int (*queue_buffer)(struct stfcamss_video *vid,
-> +			    struct stfcamss_buffer *buf);
-> +	int (*flush_buffers)(struct stfcamss_video *vid,
-> +			     enum vb2_buffer_state state);
-> +};
-> +
-> +int stf_video_register(struct stfcamss_video *video,
-> +		       struct v4l2_device *v4l2_dev, const char *name);
-> +
-> +void stf_video_unregister(struct stfcamss_video *video);
-> +
-> +#endif /* STF_VIDEO_H */
+   415	
+   416	static int ov5693_get_gain(struct ov5693_device *ov5693, u32 *gain)
+   417	{
+   418		u64 value;
+   419		int ret;
+   420	
+ > 421		ret = cci_read(ov5693->regmap, OV5693_GAIN_CTRL_REG, &value, NULL);
+   422		if (ret)
+   423			return ret;
+   424	
+   425		/* As with exposure, the lowest 4 bits are fractional bits. */
+   426		*gain = value >> 4;
+   427	
+   428		return ret;
+   429	}
+   430	
+   431	static int ov5693_digital_gain_configure(struct ov5693_device *ov5693,
+   432						 u32 gain)
+   433	{
+   434		int ret = 0;
+   435	
+   436		gain &= OV5693_MWB_GAIN_MASK;
+   437	
+ > 438		cci_write(ov5693->regmap, OV5693_MWB_RED_GAIN_REG, gain, &ret);
+ > 439		cci_write(ov5693->regmap, OV5693_MWB_GREEN_GAIN_REG, gain, &ret);
+   440		cci_write(ov5693->regmap, OV5693_MWB_BLUE_GAIN_REG, gain, &ret);
+   441	
+   442		return ret;
+   443	}
+   444	
+   445	static int ov5693_analog_gain_configure(struct ov5693_device *ov5693, u32 gain)
+   446	{
+   447		int ret = 0;
+   448	
+   449		gain = (gain << 4) & OV5693_GAIN_CTRL_MASK;
+   450	
+   451		cci_write(ov5693->regmap, OV5693_GAIN_CTRL_REG, gain, &ret);
+   452	
+   453		return ret;
+   454	}
+   455	
+   456	static int ov5693_vts_configure(struct ov5693_device *ov5693, u32 vblank)
+   457	{
+   458		u16 vts = ov5693->mode.format.height + vblank;
+   459		int ret = 0;
+   460	
+   461		cci_write(ov5693->regmap, OV5693_TIMING_VTS_REG, vts, &ret);
+   462	
+   463		return ret;
+   464	}
+   465	
+   466	static int ov5693_test_pattern_configure(struct ov5693_device *ov5693, u32 idx)
+   467	{
+   468		int ret = 0;
+   469	
+   470		cci_write(ov5693->regmap, OV5693_TEST_PATTERN_REG,
+   471			  ov5693_test_pattern_bits[idx], &ret);
+   472	
+   473		return ret;
+   474	}
+   475	
+   476	static int ov5693_s_ctrl(struct v4l2_ctrl *ctrl)
+   477	{
+   478		struct ov5693_device *ov5693 =
+   479		    container_of(ctrl->handler, struct ov5693_device, ctrls.handler);
+   480		int ret = 0;
+   481	
+   482		/* If VBLANK is altered we need to update exposure to compensate */
+   483		if (ctrl->id == V4L2_CID_VBLANK) {
+   484			int exposure_max;
+   485	
+   486			exposure_max = ov5693->mode.format.height + ctrl->val -
+   487				       OV5693_INTEGRATION_TIME_MARGIN;
+   488			__v4l2_ctrl_modify_range(ov5693->ctrls.exposure,
+   489						 ov5693->ctrls.exposure->minimum,
+   490						 exposure_max,
+   491						 ov5693->ctrls.exposure->step,
+   492						 min(ov5693->ctrls.exposure->val,
+   493						     exposure_max));
+   494		}
+   495	
+   496		/* Only apply changes to the controls if the device is powered up */
+   497		if (!pm_runtime_get_if_in_use(ov5693->dev))
+   498			return 0;
+   499	
+   500		switch (ctrl->id) {
+   501		case V4L2_CID_EXPOSURE:
+   502			ret = ov5693_exposure_configure(ov5693, ctrl->val);
+   503			break;
+   504		case V4L2_CID_ANALOGUE_GAIN:
+   505			ret = ov5693_analog_gain_configure(ov5693, ctrl->val);
+   506			break;
+   507		case V4L2_CID_DIGITAL_GAIN:
+   508			ret = ov5693_digital_gain_configure(ov5693, ctrl->val);
+   509			break;
+   510		case V4L2_CID_HFLIP:
+   511			ret = ov5693_flip_horz_configure(ov5693, !!ctrl->val);
+   512			break;
+   513		case V4L2_CID_VFLIP:
+   514			ret = ov5693_flip_vert_configure(ov5693, !!ctrl->val);
+   515			break;
+   516		case V4L2_CID_VBLANK:
+   517			ret = ov5693_vts_configure(ov5693, ctrl->val);
+   518			break;
+   519		case V4L2_CID_TEST_PATTERN:
+   520			ret = ov5693_test_pattern_configure(ov5693, ctrl->val);
+   521			break;
+   522		default:
+   523			ret = -EINVAL;
+   524		}
+   525	
+   526		pm_runtime_put(ov5693->dev);
+   527	
+   528		return ret;
+   529	}
+   530	
+   531	static int ov5693_g_volatile_ctrl(struct v4l2_ctrl *ctrl)
+   532	{
+   533		struct ov5693_device *ov5693 = container_of(ctrl->handler,
+   534							    struct ov5693_device,
+   535							    ctrls.handler);
+   536	
+   537		switch (ctrl->id) {
+   538		case V4L2_CID_EXPOSURE_ABSOLUTE:
+   539			return ov5693_get_exposure(ov5693, &ctrl->val);
+   540		case V4L2_CID_AUTOGAIN:
+   541			return ov5693_get_gain(ov5693, &ctrl->val);
+   542		default:
+   543			return -EINVAL;
+   544		}
+   545	}
+   546	
+   547	static const struct v4l2_ctrl_ops ov5693_ctrl_ops = {
+   548		.s_ctrl = ov5693_s_ctrl,
+   549		.g_volatile_ctrl = ov5693_g_volatile_ctrl
+   550	};
+   551	
+   552	/* System Control Functions */
+   553	
+   554	static int ov5693_mode_configure(struct ov5693_device *ov5693)
+   555	{
+   556		const struct ov5693_mode *mode = &ov5693->mode;
+   557		int ret = 0;
+   558	
+   559		/* Crop Start X */
+   560		cci_write(ov5693->regmap, OV5693_CROP_START_X_REG, mode->crop.left,
+   561			  &ret);
+   562	
+   563		/* Offset X */
+   564		cci_write(ov5693->regmap, OV5693_OFFSET_START_X_REG, 0, &ret);
+   565	
+   566		/* Output Size X */
+   567		cci_write(ov5693->regmap, OV5693_OUTPUT_SIZE_X_REG, mode->format.width,
+   568			  &ret);
+   569	
+   570		/* Crop End X */
+   571		cci_write(ov5693->regmap, OV5693_CROP_END_X_REG,
+   572			  mode->crop.left + mode->crop.width, &ret);
+   573	
+   574		/* Horizontal Total Size */
+   575		cci_write(ov5693->regmap, OV5693_TIMING_HTS_REG, OV5693_FIXED_PPL,
+   576			  &ret);
+   577	
+   578		/* Crop Start Y */
+   579		cci_write(ov5693->regmap, OV5693_CROP_START_Y_REG, mode->crop.top,
+   580			  &ret);
+   581	
+   582		/* Offset Y */
+   583		cci_write(ov5693->regmap, OV5693_OFFSET_START_Y_REG, 0, &ret);
+   584	
+   585		/* Output Size Y */
+   586		cci_write(ov5693->regmap, OV5693_OUTPUT_SIZE_Y_REG, mode->format.height,
+   587			  &ret);
+   588	
+   589		/* Crop End Y */
+   590		cci_write(ov5693->regmap, OV5693_CROP_END_Y_REG,
+   591			  mode->crop.top + mode->crop.height, &ret);
+   592	
+   593		/* Subsample X increase */
+   594		cci_write(ov5693->regmap, OV5693_SUB_INC_X_REG,
+   595			  ((mode->inc_x_odd << 4) & 0xf0) | 0x01, &ret);
+   596		/* Subsample Y increase */
+   597		cci_write(ov5693->regmap, OV5693_SUB_INC_Y_REG,
+   598			  ((mode->inc_y_odd << 4) & 0xf0) | 0x01, &ret);
+   599	
+   600		/* Binning */
+   601		cci_update_bits(ov5693->regmap, OV5693_FORMAT1_REG,
+   602				OV5693_FORMAT1_VBIN_EN,
+   603				mode->binning_y ? OV5693_FORMAT1_VBIN_EN : 0, &ret);
+   604	
+   605		cci_update_bits(ov5693->regmap, OV5693_FORMAT2_REG,
+   606				OV5693_FORMAT2_HBIN_EN,
+   607				mode->binning_x ? OV5693_FORMAT2_HBIN_EN : 0, &ret);
+   608	
+   609		return ret;
+   610	}
+   611	
+   612	static int ov5693_enable_streaming(struct ov5693_device *ov5693, bool enable)
+   613	{
+   614		int ret = 0;
+   615	
+ > 616		cci_write(ov5693->regmap, OV5693_SW_STREAM_REG,
+   617			  enable ? OV5693_START_STREAMING : OV5693_STOP_STREAMING,
+   618			  &ret);
+   619	
+   620		return ret;
+   621	}
+   622	
 
-Regards,
-
-	Hans
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
