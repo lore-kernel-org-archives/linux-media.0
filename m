@@ -2,223 +2,184 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83833C001DF
-	for <linux-media@archiver.kernel.org>; Fri, 28 Jul 2023 18:14:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 30679C001E0
+	for <linux-media@archiver.kernel.org>; Fri, 28 Jul 2023 18:23:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232517AbjG1SOF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 28 Jul 2023 14:14:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57618 "EHLO
+        id S234769AbjG1SXQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 28 Jul 2023 14:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232892AbjG1SOE (ORCPT
+        with ESMTP id S233675AbjG1SXN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 28 Jul 2023 14:14:04 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F274488
-        for <linux-media@vger.kernel.org>; Fri, 28 Jul 2023 11:13:55 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b9aa1d3029so36759511fa.2
-        for <linux-media@vger.kernel.org>; Fri, 28 Jul 2023 11:13:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690568033; x=1691172833;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OB/bj30EnQnr6qTMECfih4Nn+rCyljk2OAQ0K7AzNWE=;
-        b=sgkyoIIxxj+BiKxTUEpniRyHaGqsstpWOTmwkVKFUNAqtP4tLHT8ZRHBpUu8PKmTNa
-         fvFhKwPbOw0bafwB1vOtaVPui1FeDZwTt4gT9trORHRUgq+ACJ0e7enxDL0CjC4EzfVt
-         fWqQ1CISQyFxPZ8tORBha8debkONk4Nj9p/Hzh/ACPLTd+/87oAOCPiGjZhZQnRGcaQX
-         hc2cXUD546s8ED0lYDuHnnkGiSDwznkW1VUudgeVkhCVNGyR7encM/+zEQapwokUyZyI
-         1doqxWmH7PN1kxCPNA+DRYpjmpy4FNY+y5AhUpxbLWRIij3ADQAHOk/OQvW681v9P0R5
-         zvMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690568033; x=1691172833;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OB/bj30EnQnr6qTMECfih4Nn+rCyljk2OAQ0K7AzNWE=;
-        b=OMHgb5iywT+DvdujQQ2P+DU0IFp4CRKO0dQXawSv+YghPiG2tdO0nNWVxAIl+IT4r0
-         dg8qf/0xhLrkUZksMybe7jgzHZ4+BAaOJrGIS2z9RLRUsqo5jUm8XysA+WaZuQa2w5mQ
-         CuJM7w06xhYzwzGiTcppXW1NMaXZYW0dQaYPU6ApPhQlLGzodkY5ZpLWoIPCKvZsTIbV
-         cuHhoHih2ej602VeV3ajbXF8aZ3TVV/C9grcKqdGisMeL2Lp7D5u+DCDRTdzT7JlMoTz
-         gVjDfEVKhIYR4XcG8IhDwnEgR/6mdbAEEUd7jYgnMiIkJi99bDl6E5kiozFry7sp6N+v
-         IdFg==
-X-Gm-Message-State: ABy/qLb84m8ExA1cm8sy4P9BCN1MxM2fP3YAOPDkFf3EfTPYGd2wS4L/
-        nBTdcfQTG6j7ELLFMRkKQ46sfA==
-X-Google-Smtp-Source: APBJJlHZ2xt/9kZ6i7sJ/WW42TO6ZL+VX/STN8Vn819QxWIcAcB46aAFopd7prKIGS3SHkjqImc6vg==
-X-Received: by 2002:a05:6512:3b13:b0:4fe:c53:1824 with SMTP id f19-20020a0565123b1300b004fe0c531824mr3270765lfv.40.1690568033641;
-        Fri, 28 Jul 2023 11:13:53 -0700 (PDT)
-Received: from [192.168.1.101] (abyk53.neoplus.adsl.tpnet.pl. [83.9.30.53])
-        by smtp.gmail.com with ESMTPSA id z5-20020ac24f85000000b004fb74dbbd98sm915772lfs.246.2023.07.28.11.13.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jul 2023 11:13:53 -0700 (PDT)
-Message-ID: <df9b1ee4-1462-f37a-1f08-0321a10fc4f9@linaro.org>
-Date:   Fri, 28 Jul 2023 20:13:51 +0200
+        Fri, 28 Jul 2023 14:23:13 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F074C09;
+        Fri, 28 Jul 2023 11:22:45 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 6C0BF21892;
+        Fri, 28 Jul 2023 18:22:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1690568556; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=9xhX/d0nOfcA8qfj6H2EWd8nVvr6t6TOcGSyy7Z6zD4=;
+        b=RQ3HSvcZyfM+2BUVtTgAA4ueCI0+q6Q+uiolZfqwnFwpqHOAnHQl4T8I4vJ0pk0OkwdMMm
+        u6SHVOBOHDQWiwc19fHKtAKTozXF4VCA3tefHLAN5kRSXQTFznhC+rWLxpd4AFZlG9qbYN
+        j4yCV7M6HeD4KZcPJNFbfcT8/Uc8VQ8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1690568556;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=9xhX/d0nOfcA8qfj6H2EWd8nVvr6t6TOcGSyy7Z6zD4=;
+        b=peACJPHExXeBvbK16dt3LKUcn3oBHF6g2LfMr/JVEUcIWslGUeexgmQmOGeOTrnGmMrLoL
+        H+kCuy5hud4acWDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3268913276;
+        Fri, 28 Jul 2023 18:22:36 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Fp1PC2wHxGQ3CwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Fri, 28 Jul 2023 18:22:36 +0000
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+To:     deller@gmx.de, javierm@redhat.com, sam@ravnborg.org
+Cc:     linux-media@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-geode@lists.infradead.org, linux-omap@vger.kernel.org,
+        kvm@vger.kernel.org, Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH 00/47] fbdev: Use I/O helpers
+Date:   Fri, 28 Jul 2023 18:39:43 +0200
+Message-ID: <20230728182234.10680-1-tzimmermann@suse.de>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 32/33] iris: variant: iris3: implement logic to compute
- clock frequency
-Content-Language: en-US
-To:     Vikash Garodia <quic_vgarodia@quicinc.com>,
-        stanimir.k.varbanov@gmail.com, agross@kernel.org,
-        andersson@kernel.org, mchehab@kernel.org, hans.verkuil@cisco.com,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Cc:     quic_dikshita@quicinc.com
-References: <1690550624-14642-1-git-send-email-quic_vgarodia@quicinc.com>
- <1690550624-14642-33-git-send-email-quic_vgarodia@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <1690550624-14642-33-git-send-email-quic_vgarodia@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 28.07.2023 15:23, Vikash Garodia wrote:
-> From: Dikshita Agarwal <quic_dikshita@quicinc.com>
-> 
-> This implements the logic to computer the required clock frequency
-> by encoder or decoder for a specific usecase. It considers the input
-> as various parameters configured by client for that usecase.
-> 
-> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
-> Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
-> ---
->  .../iris/variant/iris3/src/msm_vidc_clock_iris3.c  | 627 +++++++++++++++++++++
->  1 file changed, 627 insertions(+)
->  create mode 100644 drivers/media/platform/qcom/iris/variant/iris3/src/msm_vidc_clock_iris3.c
-> 
-> diff --git a/drivers/media/platform/qcom/iris/variant/iris3/src/msm_vidc_clock_iris3.c b/drivers/media/platform/qcom/iris/variant/iris3/src/msm_vidc_clock_iris3.c
-> new file mode 100644
-> index 0000000..6665aef
-> --- /dev/null
-> +++ b/drivers/media/platform/qcom/iris/variant/iris3/src/msm_vidc_clock_iris3.c
-> @@ -0,0 +1,627 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +
-> +#include "msm_vidc_debug.h"
-> +
-> +#define ENABLE_FINEBITRATE_SUBUHD60 0
-> +#include "perf_static_model.h"
-> +
-> +/*
-> + * Chipset Generation Technology: SW/FW overhead profiling
-> + * need update with new numbers
-> + */
-> +static u32 frequency_table_iris3[2][6] = {
-I think it's the third repetition of the same (ftbl + OPP)
+Most fbdev drivers operate on I/O memory. And most of those use the
+default implementations for file I/O and console drawing. Convert all
+these low-hanging fruits to the fb_ops initializer macro and Kconfig
+token for fbdev I/O helpers.
 
-> +	/* //make lowsvs_D1 as invalid; */
-> +	{533, 444, 366, 338, 240, 0},
-> +	{800, 666, 549, 507, 360, 0},
-> +};
-> +
-> + /* Tensilica cycles */
-> +#define DECODER_VPP_FW_OVERHEAD_IRIS3                                                  66234
-> +
-> +/* Tensilica cycles; this is measured in Lahaina 1stage with FW profiling */
-Is it gonna differ for other SoCs? Especially that 8350 has IRIS2?
+The fbdev I/O helpers are easily grep-able. In a later patch, they can
+be left to empty values if the rsp. funtionality, such as file I/O or
+console, has been disabled.
 
-> +#define DECODER_VPPVSP1STAGE_FW_OVERHEAD_IRIS3                                         93000
-> +
-> +#define DECODER_VSP_FW_OVERHEAD_IRIS3 \
-> +	(DECODER_VPPVSP1STAGE_FW_OVERHEAD_IRIS3 - DECODER_VPP_FW_OVERHEAD_IRIS3)
-> +
-> +/* Tensilica cycles; encoder has ARP register */
-> +#define ENCODER_VPP_FW_OVERHEAD_IRIS3                                                  48405
-> +
-> +#define ENCODER_VPPVSP1STAGE_FW_OVERHEAD_IRIS3 \
-> +	(ENCODER_VPP_FW_OVERHEAD_IRIS3 + DECODER_VSP_FW_OVERHEAD_IRIS3)
-> +
-> +#define DECODER_SW_OVERHEAD_IRIS3                                                      489583
-> +#define ENCODER_SW_OVERHEAD_IRIS3                                                      489583
-> +
-> +/* Video IP Core Technology: pipefloor and pipe penlaty */
-> +static u32 decoder_vpp_target_clk_per_mb_iris3 = 200;
-Why is this a variable?
+There are no functional changes. The helpers set the defaults that
+the drivers already use.
 
-[...]
+Thomas Zimmermann (47):
+  media/vivid: Use fbdev I/O helpers
+  fbdev/acornfb: Use fbdev I/O helpers
+  fbdev/asiliantfb: Use fbdev I/O helpers
+  fbdev/atmel_lcdfb: Use fbdev I/O helpers
+  fbdev/aty128fb: Use fbdev I/O helpers
+  fbdev/carminefb: Use fbdev I/O helpers
+  fbdev/chipsfb: Use fbdev I/O helpers
+  fbdev/da8xx-fb: Use fbdev I/O helpers
+  fbdev/efifb: Use fbdev I/O helpers
+  fbdev/fm2fb: Use fbdev I/O helpers
+  fbdev/fsl-diu-fb: Use fbdev I/O helpers
+  fbdev/g364fb: Use fbdev I/O helpers
+  fbdev/geode/gx1fb: Use fbdev I/O helpers
+  fbdev/geode/gxfb: Use fbdev I/O helpers
+  fbdev/geode/lxfb: Use fbdev I/O helpers
+  fbdev/goldfishfb: Use fbdev I/O helpers
+  fbdev/grvga: Use fbdev I/O helpers
+  fbdev/gxt4500: Use fbdev I/O helpers
+  fbdev/i740fb: Use fbdev I/O helpers
+  fbdev/imxfb: Use fbdev I/O helpers
+  fbdev/kyro: Use fbdev I/O helpers
+  fbdev/macfb: Use fbdev I/O helpers
+  fbdev/maxinefb: Use fbdev I/O helpers
+  fbdev/mb862xxfb: Use fbdev I/O helpers
+  fbdev/mmpfb: Use fbdev I/O helpers
+  fbdev/mx3fb: Use fbdev I/O helpers
+  fbdev/ocfb: Use fbdev I/O helpers
+  fbdev/offb: Use fbdev I/O helpers
+  fbdev/omapfb: Use fbdev I/O helpers
+  fbdev/platinumfb: Use fbdev I/O helpers
+  fbdev/pmag-aa-fb: Use fbdev I/O helpers
+  fbdev/pmag-ba-fb: Use fbdev I/O helpers
+  fbdev/pmag-b-fb: Use fbdev I/O helpers
+  fbdev/pxa168fb: Use fbdev I/O helpers
+  fbdev/pxafb: Use fbdev I/O helpers
+  fbdev/q40fb: Use fbdev I/O helpers
+  fbdev/s3cfb: Use fbdev I/O helpers
+  fbdev/sh7760fb: Use fbdev I/O helpers
+  fbdev/simplefb: Use fbdev I/O helpers
+  fbdev/sstfb: Use fbdev I/O helpers
+  fbdev/sunxvr1000: Use fbdev I/O helpers
+  fbdev/sunxvr2500: Use fbdev I/O helpers
+  fbdev/uvesafb: Use fbdev I/O helpers
+  fbdev/valkyriefb: Use fbdev I/O helpers
+  fbdev/vesafb: Use fbdev I/O helpers
+  fbdev/xilinxfb: Use fbdev I/O helpers
+  vfio-dev/mdpy-fb: Use fbdev I/O helpers
 
-> +
-> +/* 8KUHD60; UHD240; 1080p960  with B */
-> +static u32 fp_pixel_count_bar0 = 3840 * 2160 * 240;
-> +/* 8KUHD60; UHD240; 1080p960  without B */
-> +static u32 fp_pixel_count_bar1 = 3840 * 2160 * 240;
-Not sure what the 'B' is, but the entries are the same. And looks like
-there's:
+ drivers/media/test-drivers/vivid/Kconfig     |   4 +-
+ drivers/media/test-drivers/vivid/vivid-osd.c |   4 +-
+ drivers/video/fbdev/Kconfig                  | 160 +++++--------------
+ drivers/video/fbdev/acornfb.c                |   4 +-
+ drivers/video/fbdev/asiliantfb.c             |   4 +-
+ drivers/video/fbdev/atmel_lcdfb.c            |   4 +-
+ drivers/video/fbdev/aty/aty128fb.c           |   4 +-
+ drivers/video/fbdev/carminefb.c              |   5 +-
+ drivers/video/fbdev/chipsfb.c                |   4 +-
+ drivers/video/fbdev/da8xx-fb.c               |   4 +-
+ drivers/video/fbdev/efifb.c                  |   4 +-
+ drivers/video/fbdev/fm2fb.c                  |   4 +-
+ drivers/video/fbdev/fsl-diu-fb.c             |   4 +-
+ drivers/video/fbdev/g364fb.c                 |   4 +-
+ drivers/video/fbdev/geode/Kconfig            |  12 +-
+ drivers/video/fbdev/geode/gx1fb_core.c       |   5 +-
+ drivers/video/fbdev/geode/gxfb_core.c        |   5 +-
+ drivers/video/fbdev/geode/lxfb_core.c        |   5 +-
+ drivers/video/fbdev/goldfishfb.c             |   4 +-
+ drivers/video/fbdev/grvga.c                  |   4 +-
+ drivers/video/fbdev/gxt4500.c                |   4 +-
+ drivers/video/fbdev/i740fb.c                 |   4 +-
+ drivers/video/fbdev/imxfb.c                  |   4 +-
+ drivers/video/fbdev/kyro/fbdev.c             |   4 +-
+ drivers/video/fbdev/macfb.c                  |   4 +-
+ drivers/video/fbdev/maxinefb.c               |   4 +-
+ drivers/video/fbdev/mb862xx/mb862xxfbdrv.c   |   4 +-
+ drivers/video/fbdev/mmp/fb/Kconfig           |   4 +-
+ drivers/video/fbdev/mmp/fb/mmpfb.c           |   4 +-
+ drivers/video/fbdev/mx3fb.c                  |   4 +-
+ drivers/video/fbdev/ocfb.c                   |   4 +-
+ drivers/video/fbdev/offb.c                   |   4 +-
+ drivers/video/fbdev/omap/Kconfig             |   4 +-
+ drivers/video/fbdev/omap/omapfb_main.c       |   4 +-
+ drivers/video/fbdev/platinumfb.c             |   4 +-
+ drivers/video/fbdev/pmag-aa-fb.c             |   4 +-
+ drivers/video/fbdev/pmag-ba-fb.c             |   4 +-
+ drivers/video/fbdev/pmagb-b-fb.c             |   4 +-
+ drivers/video/fbdev/pxa168fb.c               |   4 +-
+ drivers/video/fbdev/pxafb.c                  |   4 +-
+ drivers/video/fbdev/q40fb.c                  |   4 +-
+ drivers/video/fbdev/s3c-fb.c                 |   4 +-
+ drivers/video/fbdev/sh7760fb.c               |   4 +-
+ drivers/video/fbdev/simplefb.c               |   4 +-
+ drivers/video/fbdev/sstfb.c                  |   4 +-
+ drivers/video/fbdev/sunxvr1000.c             |   4 +-
+ drivers/video/fbdev/sunxvr2500.c             |   4 +-
+ drivers/video/fbdev/uvesafb.c                |   4 +-
+ drivers/video/fbdev/valkyriefb.c             |   4 +-
+ drivers/video/fbdev/vesafb.c                 |   4 +-
+ drivers/video/fbdev/xilinxfb.c               |   4 +-
+ samples/Kconfig                              |   4 +-
+ samples/vfio-mdev/mdpy-fb.c                  |   4 +-
+ 53 files changed, 94 insertions(+), 286 deletions(-)
 
-- no need for it to be a variable
-- maybe you could make this a macro or just a simple multiplication
 
-[...]
+base-commit: fba8a13ec9ae1a7175cc0dda7235b3d2df0f0f90
+-- 
+2.41.0
 
-> +u32 get_bitrate_entry(u32 pixle_count)
-pixle -> pixel, checkpatch should point out typos
-
-[...]
-
-> +static int calculate_vsp_min_freq(struct api_calculation_input codec_input,
-> +				  struct api_calculation_freq_output *codec_output)
-> +{
-> +	/*
-> +	 * VSP calculation
-> +	 * different methodology from Lahaina
-> +	 */
-Not sure if that comment is useful to the reader.
-
-[...]
-
-
-> +
-> +static u32 calculate_pipe_penalty(struct api_calculation_input codec_input)
-> +{
-> +	u32 pipe_penalty_codec = 0;
-> +
-> +	/* decoder */
-> +	if (codec_input.decoder_or_encoder == CODEC_DECODER)
-> +		pipe_penalty_codec = pipe_penalty_iris3[0][0];
-> +	else
-> +		pipe_penalty_codec = 101;
-Add a define for this magic number?
-
-Also, return the value instead of assigning it and doing the same
-
-
-Konrad
