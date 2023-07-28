@@ -2,112 +2,94 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0446C0015E
-	for <linux-media@archiver.kernel.org>; Fri, 28 Jul 2023 11:28:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76FFEC0015E
+	for <linux-media@archiver.kernel.org>; Fri, 28 Jul 2023 11:46:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236233AbjG1L2v (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 28 Jul 2023 07:28:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35424 "EHLO
+        id S234888AbjG1Lqz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 28 Jul 2023 07:46:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235218AbjG1L2t (ORCPT
+        with ESMTP id S233259AbjG1Lqx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 28 Jul 2023 07:28:49 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA3E43ABA;
-        Fri, 28 Jul 2023 04:28:45 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DDE43755;
-        Fri, 28 Jul 2023 13:27:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1690543662;
-        bh=zlio+8q8WgE1cCASCSlihC71qwk96p4bbXHtv0glq0w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iuWPhIO/YYEgbfTIXWn3aTKbMP5acyGC5ff9vDZeRXRQoQgQUa3qS8BRp/nClMsF6
-         uAm2wil99ELCQFUzuc11RFuItkW5saS3ItEaW3rywSFgJeW7Jg9TwVinicYnnSNvwy
-         DabGrmgnL5Lqnq3hy4clnPVNBvD1EKrI1kA4kDgY=
-Date:   Fri, 28 Jul 2023 14:28:47 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc:     Umang Jain <umang.jain@ideasonboard.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Lee Jackson <lee.jackson@arducam.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Nicholas Roth <nicholas@rothemail.net>,
-        Mikhail Rudenko <mike.rudenko@gmail.com>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        jacopo.mondi@ideasonboard.com
-Subject: Re: [PATCH 0/2] media: i2c: imx519: Support for Sony IMX519 sensor
-Message-ID: <20230728112847.GA5094@pendragon.ideasonboard.com>
-References: <20230727154108.308320-1-umang.jain@ideasonboard.com>
- <169053432818.137962.5791887898514618663@Monstersaurus>
+        Fri, 28 Jul 2023 07:46:53 -0400
+Received: from mgamail.intel.com (unknown [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8522530FC
+        for <linux-media@vger.kernel.org>; Fri, 28 Jul 2023 04:46:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690544812; x=1722080812;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=YZy8rHIWbY5mzOYUfJ50DROnXceYPF7DIc56Dd2QG7A=;
+  b=CIjv6oSAMYw9muiVKesJd7V5hdFWvnHTvlRDob48cZo/gEZgOmgMavzs
+   pyH3pS62VUJUQgU1ZCHFQDSL8Q75Y2ohNrdAh+xmvHY95GyDIFB4az5TA
+   mz18H+yH53y0UVCyMD9HX7hJA8RQG/6QClYHK0O7/4TyUfT4apbOMCg4y
+   s0Q1V2D17uVmw2A656eDz4xH/ApgCxe7K5NmIiRHg3/KuoNlA4HmEK95x
+   9BBltmvpa+CEEaE+z98x/klpt4uNRWvKJr247AKPX41A2mIg+6Lb3DISZ
+   A5xytyQRb6aSarZPD8VqFhsmh3+1SlSouDcEbjV+v8aCZEqSm1t7Dd+vC
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="434858354"
+X-IronPort-AV: E=Sophos;i="6.01,237,1684825200"; 
+   d="scan'208";a="434858354"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2023 04:46:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="730713005"
+X-IronPort-AV: E=Sophos;i="6.01,237,1684825200"; 
+   d="scan'208";a="730713005"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2023 04:46:51 -0700
+Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 9BB0712023A;
+        Fri, 28 Jul 2023 14:46:48 +0300 (EEST)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
+        (envelope-from <sakari.ailus@linux.intel.com>)
+        id 1qPLuX-004yNt-20;
+        Fri, 28 Jul 2023 14:45:33 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     mchehab@kernel.org
+Subject: [PATCH v3 1/2] media: MAINTAINERS: Add entry for V4L2 async and fwnode frameworks
+Date:   Fri, 28 Jul 2023 14:45:22 +0300
+Message-Id: <20230728114523.1185414-2-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230728114523.1185414-1-sakari.ailus@linux.intel.com>
+References: <20230728114523.1185414-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <169053432818.137962.5791887898514618663@Monstersaurus>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Jul 28, 2023 at 09:52:08AM +0100, Kieran Bingham wrote:
-> Hi Umang,
-> 
-> Quoting Umang Jain (2023-07-27 16:41:06)
-> > Series adds driver support for Sony IMX519 sensor.
-> > 
-> > Lee, can do add S-o-B tags please to these patches
-> > since I've updated your email IDs at various places from
-> > info@ to lee.jackson@.
-> 
-> Can you dig and find out what your start point was here please?
-> 
-> This series should already be numbered at least v6, there are 5 previous
-> postings. The most recent of which was already Signed off by
-> 'lee.jackson@arducam.com' So that makes me weary that v5 was not used as
-> the start point for this refresh.
-> 
-> Previous versions are identifiable here:
-> 
-> - https://patchwork.linuxtv.org/project/linux-media/list/?series=&submitter=&state=*&q=imx519&archive=both&delegate=
-> 
-> Could you check through any previous review comments and make sure they
-> have all been addressed too please?
-> 
-> It would be useful if the cover letter or patch described a changelog
-> from the previous version too to identify what has been updated.
+Add an entry for V4L2 async and fwnode frameworks, with myself as the
+maintainer.
 
-I second this. A summary of the major changes in the cover letter plus a
-detailed changelog in each patch is invaluable for review.
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ MAINTAINERS | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-> I see the kernel test robot reported failures based on missing
-> dependencies.
-> 
-> It's helpful to list any dependency information here in the cover
-> letter too.
-
-You can use the --base argument to git-format-patch to record the base
-commit, and point in the cover letter to a public branch where the
-series can be found.
-
-> > Thanks!
-> > 
-> > Lee Jackson (2):
-> >   media: dt-bindings: imx519: Add IMX519 DT bindings
-> >   media: i2c: imx519: Support for the Sony IMX519 sensor
-> > 
-> >  .../bindings/media/i2c/sony,imx519.yaml       |  113 +
-> >  MAINTAINERS                                   |    8 +
-> >  drivers/media/i2c/Kconfig                     |   11 +
-> >  drivers/media/i2c/Makefile                    |    1 +
-> >  drivers/media/i2c/imx519.c                    | 2134 +++++++++++++++++
-> >  5 files changed, 2267 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/media/i2c/sony,imx519.yaml
-> >  create mode 100644 drivers/media/i2c/imx519.c
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 9bfd74da5335..d197ff52a653 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -22282,6 +22282,16 @@ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Maintained
+ F:	drivers/clk/ux500/
+ 
++V4L2 ASYNC AND FWNODE FRAMEWORKS
++M:	Sakari Ailus <sakari.ailus@linux.intel.com>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++T:	git git://linuxtv.org/media_tree.git
++F:	drivers/media/v4l2-core/v4l2-async.c
++F:	drivers/media/v4l2-core/v4l2-fwnode.c
++F:	include/media/v4l2-async.h
++F:	include/media/v4l2-fwnode.h
++
+ V4L2 SENSOR AND LENS DRIVERS
+ M:	Sakari Ailus <sakari.ailus@linux.intel.com>
+ L:	linux-media@vger.kernel.org
 -- 
-Regards,
+2.39.2
 
-Laurent Pinchart
