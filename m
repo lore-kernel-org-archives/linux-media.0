@@ -2,186 +2,90 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FEB2C001E0
-	for <linux-media@archiver.kernel.org>; Fri, 28 Jul 2023 14:28:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 431D9C001E0
+	for <linux-media@archiver.kernel.org>; Fri, 28 Jul 2023 14:34:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236804AbjG1O2M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 28 Jul 2023 10:28:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51398 "EHLO
+        id S237110AbjG1Oee (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 28 Jul 2023 10:34:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237103AbjG1O2A (ORCPT
+        with ESMTP id S237104AbjG1Oec (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 28 Jul 2023 10:28:00 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C4423A95;
-        Fri, 28 Jul 2023 07:27:59 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36S6ckg4012494;
-        Fri, 28 Jul 2023 13:27:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=7E6kElnq6c3Yp/nIQlsBCyWrx67x40jTdIWWziqzz7Y=;
- b=Z+SfZ51enjD7WCDBRqzC7HMNpZH7q+z92AwyohUaIOe6UsXsjVuwYLITfNSO1eTOiy8l
- qy1gPwj6F+clJcfdpXHNVYYHRwTgsGZITHRXohOAeUp2HJj4xI6KVyrPpUD5t/UE+D7c
- 2vFEb9eYZQcoS/F5G75mNKW99/OC+oUvmF0uVLOQBZ1N1XE2i4I6jyvSvTMA7Z2HkFQI
- wdBOjb9dJ6jZxR7YdzjLy0JaepXEXHEEp9KE8bEDKaJ0cmqvkHKSXUZLXHRbtRD2So6b
- 8HlY9W90kgoN0EJgXP/qSuF6Z98RSgC+8ad/Ih9BmVWOTkZBgrf/zebHPrC/54bw4oYb iQ== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s447kh7vw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Jul 2023 13:27:04 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36SDR4nF015169
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Jul 2023 13:27:04 GMT
-Received: from hu-vgarodia-hyd.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Fri, 28 Jul 2023 06:27:00 -0700
-From:   Vikash Garodia <quic_vgarodia@quicinc.com>
-To:     <stanimir.k.varbanov@gmail.com>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <mchehab@kernel.org>, <hans.verkuil@cisco.com>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>
-CC:     <quic_dikshita@quicinc.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>
-Subject: [PATCH 33/33] iris: enable building of iris video driver
-Date:   Fri, 28 Jul 2023 18:53:44 +0530
-Message-ID: <1690550624-14642-34-git-send-email-quic_vgarodia@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1690550624-14642-1-git-send-email-quic_vgarodia@quicinc.com>
-References: <1690550624-14642-1-git-send-email-quic_vgarodia@quicinc.com>
+        Fri, 28 Jul 2023 10:34:32 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1AD3A9A
+        for <linux-media@vger.kernel.org>; Fri, 28 Jul 2023 07:34:31 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3fbea147034so22823815e9.0
+        for <linux-media@vger.kernel.org>; Fri, 28 Jul 2023 07:34:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1690554869; x=1691159669;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yQHJGwayOc+O4cksaa/ROvfn4y8YSDZc3qnYsF4uZqw=;
+        b=EcDu3WAIxaRhO63H6hHNuwo0THjAYjbMikEkGUQleSFNeDnX2Xs8wV8hGhlfUFpIzC
+         1fB6D0X3Ixg0+E/n0cVN/p4U1JhENLqx88d50pw4If+aZ5LzlzVGoK+cLSYwsAjkLhIt
+         yIQIh4qQuSnWqwoI+Cus5tVTn/KZauSQsSh4pruFKtZ1Q6L8Nd2JFVLulSe4xmzExqKQ
+         LzUdpE0t9s/RGbV2tA/8bQOlJweepTEDuAaCmhZUpnFeYDhC4KPSlM105luoEPvRgPoW
+         QZ/ni93CT1E/ipM5l51bH84R3mIT2Y/HtWfc+04p6ND9z+6k6G00UekHetqjN+wxLnnx
+         Cavw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690554869; x=1691159669;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yQHJGwayOc+O4cksaa/ROvfn4y8YSDZc3qnYsF4uZqw=;
+        b=TWBxizecFAOlThWjoMjCP9bXjG0xu2mR6gPB7HoWGSxI0dpovEha2I2hbCuqG9CXmL
+         /6xPG8uDatdl8gzT/soVYe8rRWxoYm/qIrWQKUyOBY1v4sleWFA5M65HsJU1JTWcRdfh
+         obslyOdYdajgz09UsD7O1A4qMmFrQEmsgJStXRIzaVvNHPpHR/H92d4bPRKLqvYerPII
+         Q6snm6bMynll4ZpaT4eauJfZU33DL0gCpL6qBVIdHsVhbQRV2hiR/8YJsxUCl34hzxdN
+         bWv7b85eYtm7+wM85RX9W7Srwe8FsMrQn63+HYVcBCT8uNKW8zI5Vt4tVWrIy/NwL1G3
+         oc0w==
+X-Gm-Message-State: ABy/qLbWjXm8OiUxa8F4I/pKGnz8oJY2Y4jyb0O4X/3RSMUbmVzqlkeM
+        XVdFi2Ubs41WQFi/o26swDYYUQ==
+X-Google-Smtp-Source: APBJJlHqVdMI1zH3ei216nTKTJ3P7/3y7iqzi2E5C3bdueCeKqiWOkVS6ktlrc6U9SJzoyMWV+O1+Q==
+X-Received: by 2002:a1c:7216:0:b0:3fc:627:ea31 with SMTP id n22-20020a1c7216000000b003fc0627ea31mr1875553wmc.38.1690554869645;
+        Fri, 28 Jul 2023 07:34:29 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id hn40-20020a05600ca3a800b003fbaa2903f4sm4378117wmb.19.2023.07.28.07.34.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Jul 2023 07:34:29 -0700 (PDT)
+Message-ID: <f5ffae25-fcd6-b4a5-5114-3b66db5d7c31@linaro.org>
+Date:   Fri, 28 Jul 2023 15:34:28 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: kmev0UsJhFeeKN2MADZqcsMNuHnixTqU
-X-Proofpoint-GUID: kmev0UsJhFeeKN2MADZqcsMNuHnixTqU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-27_10,2023-07-26_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=973
- clxscore=1015 malwarescore=0 lowpriorityscore=0 priorityscore=1501
- impostorscore=0 bulkscore=0 phishscore=0 suspectscore=0 spamscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2307280124
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 00/33] Qualcomm video decoder/encoder driver
+Content-Language: en-US
+To:     Vikash Garodia <quic_vgarodia@quicinc.com>,
+        stanimir.k.varbanov@gmail.com, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, mchehab@kernel.org,
+        hans.verkuil@cisco.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Cc:     quic_dikshita@quicinc.com
+References: <1690550624-14642-1-git-send-email-quic_vgarodia@quicinc.com>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <1690550624-14642-1-git-send-email-quic_vgarodia@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dikshita Agarwal <quic_dikshita@quicinc.com>
+On 28/07/2023 14:23, Vikash Garodia wrote:
+> This patch series introduces support for Qualcomm new video acceleration
+> hardware architecture, used for video stream decoding/encoding. This driver
+> is based on new communication protocol between video hardware and application
+> processor.
 
-This adds iris driver Makefile and Kconfig, also changes
-v4l2 platform/qcom Makefile/Kconfig in order to
-enable compilation of the driver.
+I think my main comment and question for this driver is; what 
+specifically about the sm8550 requires an entirely new driver for the 
+venus block ?
 
-Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
-Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
+We have a re-implementation of the HFI as an example.
+
+What are the specifics of the technical barriers, if any, that preclude 
+adding or extending the existing venus codebase to enable the new silicon ?
+
 ---
- drivers/media/platform/qcom/Kconfig       |  1 +
- drivers/media/platform/qcom/Makefile      |  1 +
- drivers/media/platform/qcom/iris/Kconfig  | 15 ++++++++++
- drivers/media/platform/qcom/iris/Makefile | 46 +++++++++++++++++++++++++++++++
- 4 files changed, 63 insertions(+)
- create mode 100644 drivers/media/platform/qcom/iris/Kconfig
- create mode 100644 drivers/media/platform/qcom/iris/Makefile
-
-diff --git a/drivers/media/platform/qcom/Kconfig b/drivers/media/platform/qcom/Kconfig
-index cc5799b..b86bebd 100644
---- a/drivers/media/platform/qcom/Kconfig
-+++ b/drivers/media/platform/qcom/Kconfig
-@@ -4,3 +4,4 @@ comment "Qualcomm media platform drivers"
- 
- source "drivers/media/platform/qcom/camss/Kconfig"
- source "drivers/media/platform/qcom/venus/Kconfig"
-+source "drivers/media/platform/qcom/iris/Kconfig"
-diff --git a/drivers/media/platform/qcom/Makefile b/drivers/media/platform/qcom/Makefile
-index 4f055c3..83eea29 100644
---- a/drivers/media/platform/qcom/Makefile
-+++ b/drivers/media/platform/qcom/Makefile
-@@ -1,3 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0-only
- obj-y += camss/
- obj-y += venus/
-+obj-y += iris/
-diff --git a/drivers/media/platform/qcom/iris/Kconfig b/drivers/media/platform/qcom/iris/Kconfig
-new file mode 100644
-index 0000000..d434c31
---- /dev/null
-+++ b/drivers/media/platform/qcom/iris/Kconfig
-@@ -0,0 +1,15 @@
-+config VIDEO_QCOM_IRIS
-+	tristate "Qualcomm Iris V4L2 encoder/decoder driver"
-+	depends on V4L_MEM2MEM_DRIVERS
-+	depends on VIDEO_DEV && QCOM_SMEM
-+	depends on (ARCH_QCOM && IOMMU_DMA) || COMPILE_TEST
-+	select QCOM_MDT_LOADER if ARCH_QCOM
-+	select QCOM_SCM
-+	select VIDEOBUF2_DMA_CONTIG
-+	select V4L2_MEM2MEM_DEV
-+	select DMABUF_HEAPS
-+	help
-+	  This is a V4L2 driver for Qualcomm Iris video accelerator
-+	  hardware. It accelerates encoding and decoding operations
-+	  on various Qualcomm SoCs.
-+	  To compile this driver as a module choose m here.
-diff --git a/drivers/media/platform/qcom/iris/Makefile b/drivers/media/platform/qcom/iris/Makefile
-new file mode 100644
-index 0000000..e681c4f
---- /dev/null
-+++ b/drivers/media/platform/qcom/iris/Makefile
-@@ -0,0 +1,46 @@
-+KBUILD_OPTIONS+= VIDEO_ROOT=$(KERNEL_SRC)/$(M)
-+
-+VIDEO_COMPILE_TIME = $(shell date)
-+VIDEO_COMPILE_BY = $(shell whoami | sed 's/\\/\\\\/')
-+VIDEO_COMPILE_HOST = $(shell uname -n)
-+VIDEO_GEN_PATH = $(srctree)/$(src)/vidc/inc/video_generated_h
-+
-+$(shell echo '#define VIDEO_COMPILE_TIME "$(VIDEO_COMPILE_TIME)"' > $(VIDEO_GEN_PATH))
-+$(shell echo '#define VIDEO_COMPILE_BY "$(VIDEO_COMPILE_BY)"' >> $(VIDEO_GEN_PATH))
-+$(shell echo '#define VIDEO_COMPILE_HOST "$(VIDEO_COMPILE_HOST)"' >> $(VIDEO_GEN_PATH))
-+
-+iris-objs += vidc/src/msm_vidc_v4l2.o \
-+                  vidc/src/msm_vidc_vb2.o \
-+                  vidc/src/msm_vidc.o \
-+                  vidc/src/msm_vdec.o \
-+                  vidc/src/msm_venc.o \
-+                  vidc/src/msm_vidc_driver.o \
-+                  vidc/src/msm_vidc_control.o \
-+                  vidc/src/msm_vidc_buffer.o \
-+                  vidc/src/msm_vidc_power.o \
-+                  vidc/src/msm_vidc_probe.o \
-+                  vidc/src/resources.o \
-+                  vidc/src/firmware.o \
-+                  vidc/src/msm_vidc_debug.o \
-+                  vidc/src/msm_vidc_memory.o \
-+                  vidc/src/venus_hfi.o \
-+                  vidc/src/venus_hfi_queue.o \
-+                  vidc/src/hfi_packet.o \
-+                  vidc/src/venus_hfi_response.o \
-+                  vidc/src/msm_vidc_state.o \
-+                  platform/common/src/msm_vidc_platform.o \
-+                  platform/sm8550/src/msm_vidc_sm8550.o \
-+                  variant/common/src/msm_vidc_variant.o \
-+                  variant/iris3/src/msm_vidc_buffer_iris3.o \
-+                  variant/iris3/src/msm_vidc_iris3.o \
-+                  variant/iris3/src/msm_vidc_power_iris3.o \
-+                  variant/iris3/src/msm_vidc_bus_iris3.o \
-+                  variant/iris3/src/msm_vidc_clock_iris3.o
-+
-+obj-$(CONFIG_VIDEO_QCOM_IRIS) += iris.o
-+
-+ccflags-y += -I$(srctree)/$(src)/vidc/inc
-+ccflags-y += -I$(srctree)/$(src)/platform/common/inc
-+ccflags-y += -I$(srctree)/$(src)/platform/sm8550/inc
-+ccflags-y += -I$(srctree)/$(src)/variant/common/inc
-+ccflags-y += -I$(srctree)/$(src)/variant/iris3/inc
--- 
-2.7.4
-
+bod
