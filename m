@@ -2,43 +2,43 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC5AAC001E0
-	for <linux-media@archiver.kernel.org>; Fri, 28 Jul 2023 13:26:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9152C04E69
+	for <linux-media@archiver.kernel.org>; Fri, 28 Jul 2023 13:26:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236748AbjG1N0P (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 28 Jul 2023 09:26:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42662 "EHLO
+        id S236758AbjG1N0T (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 28 Jul 2023 09:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236755AbjG1N0C (ORCPT
+        with ESMTP id S234277AbjG1N0G (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 28 Jul 2023 09:26:02 -0400
+        Fri, 28 Jul 2023 09:26:06 -0400
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F154217;
-        Fri, 28 Jul 2023 06:25:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6544483;
+        Fri, 28 Jul 2023 06:25:51 -0700 (PDT)
 Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36S6sxYe013477;
-        Fri, 28 Jul 2023 13:25:36 GMT
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36S9Kvwj008893;
+        Fri, 28 Jul 2023 13:25:43 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=qcppdkim1;
- bh=hSzVg+ovAm3QNuBLt8y/SoqBD2ilpNPN3GdQG5PzeIA=;
- b=LrJvpNJPD9AVBbhYleGH15/jilTcOhZN7sIvSG/060jKNrTkwGzWDJmASR316d47HvTf
- ouQDU8Mh9JoTu+8HwASkbXDTSCv2oXbmejjP02saGoVEXd8QbyG4BortQkfVALMVh3Ca
- X5r1b5+jJhacK90jBk+JUOpWiC8WLFALUEYwOtOEh1ipXuf61wkpsptf3NCv1sWmuCeF
- RpJNd945faeMpnVF4vWxAkdAls4rT9zTy0Ns3yayyQuySzydVIe/2gQ5bAm6gaAWni6U
- r+NXoRF2PFiijmkBSvJWQ75sEsUIv40J34Bhd2R+fMRy8Tvf39pnJk5UKDGiuFtle0Fc 3g== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s447kh7t7-1
+ bh=tI8WQiJsc3snSCqoYqTYhp9DaiBIcpXw30eJ4gxkENw=;
+ b=JF8iePRd7nkSd1oFJqhCbPRAKDOqTVh7PoZF61YjcR0BGbW7XM8qa6apY963LUQUqtgm
+ GavePD2pZQMj97nQRTfvBRZIQGr/z5+mViQK1NVQcjZcEGf4jNCX/ebba3amayrH3ZaJ
+ OvDfZqIasUMPQSpD5UWpgntDzX773dxCcziuhfnTaI9xmrGG2V/78mNqj//cta8Pge+k
+ FzrxEtWXMEnvy6h3ylpvBi36UHYZ3MHCVlhMkpEOoTwz+p61g3VV1/1uQXkobjRRfube
+ ksSB5iNl34eYe/2LXln8dFdWJnMK5W372LOMhRCyCXprbMPYC+DFZvJTg7JgMQyFw8o+ nA== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s447kh7td-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Jul 2023 13:25:35 +0000
+        Fri, 28 Jul 2023 13:25:42 +0000
 Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36SDPZ6f025638
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36SDPgMe002901
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Jul 2023 13:25:35 GMT
+        Fri, 28 Jul 2023 13:25:42 GMT
 Received: from hu-vgarodia-hyd.qualcomm.com (10.80.80.8) by
  nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Fri, 28 Jul 2023 06:25:31 -0700
+ 15.2.1118.30; Fri, 28 Jul 2023 06:25:38 -0700
 From:   Vikash Garodia <quic_vgarodia@quicinc.com>
 To:     <stanimir.k.varbanov@gmail.com>, <agross@kernel.org>,
         <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
@@ -47,9 +47,9 @@ To:     <stanimir.k.varbanov@gmail.com>, <agross@kernel.org>,
         <linux-arm-msm@vger.kernel.org>
 CC:     <quic_dikshita@quicinc.com>,
         Vikash Garodia <quic_vgarodia@quicinc.com>
-Subject: [PATCH 07/33] iris: iris: add video encoder files
-Date:   Fri, 28 Jul 2023 18:53:18 +0530
-Message-ID: <1690550624-14642-8-git-send-email-quic_vgarodia@quicinc.com>
+Subject: [PATCH 09/33] iris: vidc: add control files
+Date:   Fri, 28 Jul 2023 18:53:20 +0530
+Message-ID: <1690550624-14642-10-git-send-email-quic_vgarodia@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1690550624-14642-1-git-send-email-quic_vgarodia@quicinc.com>
 References: <1690550624-14642-1-git-send-email-quic_vgarodia@quicinc.com>
@@ -60,8 +60,8 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nasanex01a.na.qualcomm.com (10.52.223.231)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: BXbbYEQV5DXc9IPMd0Fve2pJVYZNmuYN
-X-Proofpoint-GUID: BXbbYEQV5DXc9IPMd0Fve2pJVYZNmuYN
+X-Proofpoint-ORIG-GUID: 3BQuUU7g_UxNy4uQga8ZNF_Hp8PqPr7X
+X-Proofpoint-GUID: 3BQuUU7g_UxNy4uQga8ZNF_Hp8PqPr7X
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-07-27_10,2023-07-26_01,2023-05-22_02
@@ -74,1546 +74,878 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This implements video encoder functionalities of the driver.
+This implements supported v4l2 encoder and decoder controls.
 
 Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
 Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
 ---
- .../media/platform/qcom/iris/vidc/inc/msm_venc.h   |   34 +
- .../media/platform/qcom/iris/vidc/src/msm_venc.c   | 1484 ++++++++++++++++++++
- 2 files changed, 1518 insertions(+)
- create mode 100644 drivers/media/platform/qcom/iris/vidc/inc/msm_venc.h
- create mode 100644 drivers/media/platform/qcom/iris/vidc/src/msm_venc.c
+ .../platform/qcom/iris/vidc/inc/msm_vidc_control.h |  26 +
+ .../platform/qcom/iris/vidc/src/msm_vidc_control.c | 824 +++++++++++++++++++++
+ 2 files changed, 850 insertions(+)
+ create mode 100644 drivers/media/platform/qcom/iris/vidc/inc/msm_vidc_control.h
+ create mode 100644 drivers/media/platform/qcom/iris/vidc/src/msm_vidc_control.c
 
-diff --git a/drivers/media/platform/qcom/iris/vidc/inc/msm_venc.h b/drivers/media/platform/qcom/iris/vidc/inc/msm_venc.h
+diff --git a/drivers/media/platform/qcom/iris/vidc/inc/msm_vidc_control.h b/drivers/media/platform/qcom/iris/vidc/inc/msm_vidc_control.h
 new file mode 100644
-index 0000000..bb0a395
+index 0000000..08ba77d
 --- /dev/null
-+++ b/drivers/media/platform/qcom/iris/vidc/inc/msm_venc.h
-@@ -0,0 +1,34 @@
++++ b/drivers/media/platform/qcom/iris/vidc/inc/msm_vidc_control.h
+@@ -0,0 +1,26 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
 + * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
++ * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
 + */
 +
-+#ifndef _MSM_VENC_H_
-+#define _MSM_VENC_H_
++#ifndef _MSM_VIDC_CONTROL_H_
++#define _MSM_VIDC_CONTROL_H_
 +
-+#include "msm_vidc_core.h"
 +#include "msm_vidc_inst.h"
++#include "msm_vidc_internal.h"
 +
-+int msm_venc_streamoff_input(struct msm_vidc_inst *inst);
-+int msm_venc_streamon_input(struct msm_vidc_inst *inst);
-+int msm_venc_streamoff_output(struct msm_vidc_inst *inst);
-+int msm_venc_streamon_output(struct msm_vidc_inst *inst);
-+int msm_venc_qbuf(struct msm_vidc_inst *inst, struct vb2_buffer *vb2);
-+int msm_venc_stop_cmd(struct msm_vidc_inst *inst);
-+int msm_venc_start_cmd(struct msm_vidc_inst *inst);
-+int msm_venc_try_fmt(struct msm_vidc_inst *inst, struct v4l2_format *f);
-+int msm_venc_s_fmt(struct msm_vidc_inst *inst, struct v4l2_format *f);
-+int msm_venc_s_fmt_output(struct msm_vidc_inst *inst, struct v4l2_format *f);
-+int msm_venc_g_fmt(struct msm_vidc_inst *inst, struct v4l2_format *f);
-+int msm_venc_s_selection(struct msm_vidc_inst *inst, struct v4l2_selection *s);
-+int msm_venc_g_selection(struct msm_vidc_inst *inst, struct v4l2_selection *s);
-+int msm_venc_s_param(struct msm_vidc_inst *inst, struct v4l2_streamparm *s_parm);
-+int msm_venc_g_param(struct msm_vidc_inst *inst, struct v4l2_streamparm *s_parm);
-+int msm_venc_subscribe_event(struct msm_vidc_inst *inst,
-+			     const struct v4l2_event_subscription *sub);
-+int msm_venc_enum_fmt(struct msm_vidc_inst *inst, struct v4l2_fmtdesc *f);
-+int msm_venc_inst_init(struct msm_vidc_inst *inst);
-+int msm_venc_inst_deinit(struct msm_vidc_inst *inst);
-+
-+#endif // _MSM_VENC_H_
-diff --git a/drivers/media/platform/qcom/iris/vidc/src/msm_venc.c b/drivers/media/platform/qcom/iris/vidc/src/msm_venc.c
++int msm_vidc_ctrl_handler_init(struct msm_vidc_inst *inst, bool init);
++int msm_vidc_ctrl_handler_deinit(struct msm_vidc_inst *inst);
++int msm_v4l2_op_s_ctrl(struct v4l2_ctrl *ctrl);
++int msm_v4l2_op_g_volatile_ctrl(struct v4l2_ctrl *ctrl);
++int msm_vidc_s_ctrl(struct msm_vidc_inst *inst, struct v4l2_ctrl *ctrl);
++int msm_vidc_prepare_dependency_list(struct msm_vidc_inst *inst);
++int msm_vidc_adjust_v4l2_properties(struct msm_vidc_inst *inst);
++int msm_vidc_set_v4l2_properties(struct msm_vidc_inst *inst);
++bool is_valid_cap_id(enum msm_vidc_inst_capability_type cap_id);
++bool is_valid_cap(struct msm_vidc_inst *inst,
++		  enum msm_vidc_inst_capability_type cap_id);
++enum msm_vidc_inst_capability_type msm_vidc_get_cap_id(struct msm_vidc_inst *inst,
++						       u32 id);
++#endif
+diff --git a/drivers/media/platform/qcom/iris/vidc/src/msm_vidc_control.c b/drivers/media/platform/qcom/iris/vidc/src/msm_vidc_control.c
 new file mode 100644
-index 0000000..4962716
+index 0000000..73b0db6
 --- /dev/null
-+++ b/drivers/media/platform/qcom/iris/vidc/src/msm_venc.c
-@@ -0,0 +1,1484 @@
++++ b/drivers/media/platform/qcom/iris/vidc/src/msm_vidc_control.c
+@@ -0,0 +1,824 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
++ * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
 + */
 +
-+#include "hfi_packet.h"
-+#include "msm_media_info.h"
 +#include "msm_venc.h"
-+#include "msm_vidc_control.h"
-+#include "msm_vidc_core.h"
 +#include "msm_vidc_debug.h"
 +#include "msm_vidc_driver.h"
-+#include "msm_vidc_inst.h"
 +#include "msm_vidc_internal.h"
 +#include "msm_vidc_platform.h"
-+#include "msm_vidc_power.h"
-+#include "venus_hfi.h"
 +
-+static const u32 msm_venc_input_set_prop[] = {
-+	HFI_PROP_COLOR_FORMAT,
-+	HFI_PROP_RAW_RESOLUTION,
-+	HFI_PROP_CROP_OFFSETS,
-+	HFI_PROP_LINEAR_STRIDE_SCANLINE,
-+	HFI_PROP_SIGNAL_COLOR_INFO,
-+};
++static inline bool has_children(struct msm_vidc_inst_cap *cap)
++{
++	return !!cap->children[0];
++}
 +
-+static const u32 msm_venc_output_set_prop[] = {
-+	HFI_PROP_BITSTREAM_RESOLUTION,
-+	HFI_PROP_CROP_OFFSETS,
-+};
++static inline bool is_leaf(struct msm_vidc_inst_cap *cap)
++{
++	return !has_children(cap);
++}
 +
-+static const u32 msm_venc_input_subscribe_for_properties[] = {
-+	HFI_PROP_NO_OUTPUT,
-+};
++bool is_valid_cap_id(enum msm_vidc_inst_capability_type cap_id)
++{
++	return cap_id > INST_CAP_NONE && cap_id < INST_CAP_MAX;
++}
 +
-+static const u32 msm_venc_output_subscribe_for_properties[] = {
-+	HFI_PROP_PICTURE_TYPE,
-+	HFI_PROP_BUFFER_MARK,
-+	HFI_PROP_WORST_COMPRESSION_RATIO,
-+};
++bool is_valid_cap(struct msm_vidc_inst *inst,
++		  enum msm_vidc_inst_capability_type cap_id)
++{
++	if (cap_id <= INST_CAP_NONE || cap_id >= INST_CAP_MAX)
++		return false;
 +
-+static const u32 msm_venc_output_internal_buffer_type[] = {
-+	MSM_VIDC_BUF_BIN,
-+	MSM_VIDC_BUF_COMV,
-+	MSM_VIDC_BUF_NON_COMV,
-+	MSM_VIDC_BUF_LINE,
-+	MSM_VIDC_BUF_DPB,
-+};
++	return !!inst->capabilities[cap_id].cap_id;
++}
 +
-+static const u32 msm_venc_input_internal_buffer_type[] = {
-+	MSM_VIDC_BUF_VPSS,
-+};
++static inline bool is_all_childrens_visited(struct msm_vidc_inst_cap *cap,
++					    bool lookup[INST_CAP_MAX])
++{
++	bool found = true;
++	int i;
 +
-+struct msm_venc_prop_type_handle {
-+	u32 type;
-+	int (*handle)(struct msm_vidc_inst *inst, enum msm_vidc_port_type port);
-+};
++	for (i = 0; i < MAX_CAP_CHILDREN; i++) {
++		if (cap->children[i] == INST_CAP_NONE)
++			continue;
 +
-+static int msm_venc_codec_change(struct msm_vidc_inst *inst, u32 v4l2_codec)
++		if (!lookup[cap->children[i]]) {
++			found = false;
++			break;
++		}
++	}
++	return found;
++}
++
++static int add_node_list(struct list_head *list, enum msm_vidc_inst_capability_type cap_id)
++{
++	struct msm_vidc_inst_cap_entry *entry = NULL;
++
++	entry = vzalloc(sizeof(*entry));
++	if (!entry) {
++		d_vpr_e("%s: allocation failed\n", __func__);
++		return -ENOMEM;
++	}
++
++	INIT_LIST_HEAD(&entry->list);
++	entry->cap_id = cap_id;
++	list_add(&entry->list, list);
++
++	return 0;
++}
++
++static int add_node(struct list_head *list, struct msm_vidc_inst_cap *lcap,
++		    bool lookup[INST_CAP_MAX])
 +{
 +	int rc = 0;
-+	bool session_init = false;
 +
-+	if (!inst->codec)
-+		session_init = true;
-+
-+	if (inst->codec && inst->fmts[OUTPUT_PORT].fmt.pix_mp.pixelformat == v4l2_codec)
++	if (lookup[lcap->cap_id])
 +		return 0;
 +
-+	i_vpr_h(inst, "%s: codec changed from %s to %s\n",
-+		__func__, v4l2_pixelfmt_name(inst, inst->fmts[OUTPUT_PORT].fmt.pix_mp.pixelformat),
-+		v4l2_pixelfmt_name(inst, v4l2_codec));
-+
-+	inst->codec = v4l2_codec_to_driver(inst, v4l2_codec, __func__);
-+	if (!inst->codec) {
-+		i_vpr_e(inst, "%s: invalid codec %#x\n", __func__, v4l2_codec);
-+		rc = -EINVAL;
-+		goto exit;
-+	}
-+
-+	inst->fmts[OUTPUT_PORT].fmt.pix_mp.pixelformat = v4l2_codec;
-+	rc = msm_vidc_update_debug_str(inst);
-+	if (rc)
-+		goto exit;
-+
-+	rc = msm_vidc_get_inst_capability(inst);
-+	if (rc)
-+		goto exit;
-+
-+	rc = msm_vidc_ctrl_handler_init(inst, session_init);
-+	if (rc)
-+		goto exit;
-+
-+	rc = msm_vidc_update_buffer_count(inst, INPUT_PORT);
-+	if (rc)
-+		goto exit;
-+
-+	rc = msm_vidc_update_buffer_count(inst, OUTPUT_PORT);
-+	if (rc)
-+		goto exit;
-+
-+exit:
-+	return rc;
-+}
-+
-+/* todo: add logs for each property once finalised */
-+static int msm_venc_set_colorformat(struct msm_vidc_inst *inst,
-+				    enum msm_vidc_port_type port)
-+{
-+	int rc = 0;
-+	u32 pixelformat;
-+	enum msm_vidc_colorformat_type colorformat;
-+	u32 hfi_colorformat;
-+
-+	if (port != INPUT_PORT) {
-+		i_vpr_e(inst, "%s: invalid port %d\n", __func__, port);
-+		return -EINVAL;
-+	}
-+
-+	pixelformat = inst->fmts[INPUT_PORT].fmt.pix_mp.pixelformat;
-+	colorformat = v4l2_colorformat_to_driver(inst, pixelformat, __func__);
-+	if (!(colorformat & inst->capabilities[PIX_FMTS].step_or_mask)) {
-+		i_vpr_e(inst, "%s: invalid pixelformat %s\n",
-+			__func__, v4l2_pixelfmt_name(inst, pixelformat));
-+		return -EINVAL;
-+	}
-+
-+	hfi_colorformat = get_hfi_colorformat(inst, colorformat);
-+	i_vpr_h(inst, "%s: hfi colorformat: %#x", __func__,
-+		hfi_colorformat);
-+	rc = venus_hfi_session_property(inst,
-+					HFI_PROP_COLOR_FORMAT,
-+					HFI_HOST_FLAGS_NONE,
-+					get_hfi_port(inst, port),
-+					HFI_PAYLOAD_U32_ENUM,
-+					&hfi_colorformat,
-+					sizeof(u32));
-+	if (rc)
-+		return rc;
-+	return 0;
-+}
-+
-+static int msm_venc_set_stride_scanline(struct msm_vidc_inst *inst,
-+					enum msm_vidc_port_type port)
-+{
-+	int rc = 0;
-+	u32 color_format, stride_y, scanline_y;
-+	u32 stride_uv = 0, scanline_uv = 0;
-+	u32 payload[2];
-+
-+	if (port != INPUT_PORT) {
-+		i_vpr_e(inst, "%s: invalid port %d\n", __func__, port);
-+		return -EINVAL;
-+	}
-+
-+	color_format = inst->capabilities[PIX_FMTS].value;
-+	if (!is_linear_colorformat(color_format)) {
-+		i_vpr_h(inst,
-+			"%s: not a linear color fmt, property is not set\n",
-+			__func__);
-+		return 0;
-+	}
-+
-+	if (is_rgba_colorformat(color_format)) {
-+		stride_y = video_rgb_stride_pix(color_format,
-+						inst->fmts[INPUT_PORT].fmt.pix_mp.width);
-+		scanline_y = video_rgb_scanlines(color_format,
-+						 inst->fmts[INPUT_PORT].fmt.pix_mp.height);
-+	} else {
-+		stride_y = video_y_stride_pix(color_format,
-+					      inst->fmts[INPUT_PORT].fmt.pix_mp.width);
-+		scanline_y = video_y_scanlines(color_format,
-+					       inst->fmts[INPUT_PORT].fmt.pix_mp.height);
-+	}
-+	if (color_format == MSM_VIDC_FMT_NV12 ||
-+	    color_format == MSM_VIDC_FMT_P010 ||
-+	    color_format == MSM_VIDC_FMT_NV21) {
-+		stride_uv = stride_y;
-+		scanline_uv = scanline_y / 2;
-+	}
-+
-+	payload[0] = stride_y << 16 | scanline_y;
-+	payload[1] = stride_uv << 16 | scanline_uv;
-+	i_vpr_h(inst,
-+		"%s: y: stride %d scanline, %d uv: stride %d scanline_uv %d",
-+		__func__,
-+		stride_y, scanline_y, stride_uv, scanline_uv);
-+	rc = venus_hfi_session_property(inst,
-+					HFI_PROP_LINEAR_STRIDE_SCANLINE,
-+					HFI_HOST_FLAGS_NONE,
-+					get_hfi_port(inst, port),
-+					HFI_PAYLOAD_64_PACKED,
-+					&payload,
-+					sizeof(u64));
++	rc = add_node_list(list, lcap->cap_id);
 +	if (rc)
 +		return rc;
 +
++	lookup[lcap->cap_id] = true;
 +	return 0;
 +}
 +
-+static int msm_venc_set_raw_resolution(struct msm_vidc_inst *inst,
-+				       enum msm_vidc_port_type port)
++static int msm_vidc_add_capid_to_fw_list(struct msm_vidc_inst *inst,
++					 enum msm_vidc_inst_capability_type cap_id)
 +{
++	struct msm_vidc_inst_cap_entry *entry = NULL;
 +	int rc = 0;
-+	u32 resolution;
 +
-+	if (port != INPUT_PORT) {
-+		i_vpr_e(inst, "%s: invalid port %d\n", __func__, port);
-+		return -EINVAL;
-+	}
-+
-+	resolution = (inst->fmts[port].fmt.pix_mp.width << 16) |
-+		inst->fmts[port].fmt.pix_mp.height;
-+	i_vpr_h(inst, "%s: width: %d height: %d\n", __func__,
-+		inst->fmts[port].fmt.pix_mp.width, inst->fmts[port].fmt.pix_mp.height);
-+	rc = venus_hfi_session_property(inst,
-+					HFI_PROP_RAW_RESOLUTION,
-+					HFI_HOST_FLAGS_NONE,
-+					get_hfi_port(inst, port),
-+					HFI_PAYLOAD_32_PACKED,
-+					&resolution,
-+					sizeof(u32));
-+	if (rc)
-+		return rc;
-+	return 0;
-+}
-+
-+static int msm_venc_set_bitstream_resolution(struct msm_vidc_inst *inst,
-+					     enum msm_vidc_port_type port)
-+{
-+	int rc = 0;
-+	u32 resolution;
-+
-+	if (port != OUTPUT_PORT) {
-+		i_vpr_e(inst, "%s: invalid port %d\n", __func__, port);
-+		return -EINVAL;
-+	}
-+
-+	resolution = (inst->fmts[port].fmt.pix_mp.width << 16) |
-+		inst->fmts[port].fmt.pix_mp.height;
-+	i_vpr_h(inst, "%s: width: %d height: %d\n", __func__,
-+		inst->fmts[port].fmt.pix_mp.width,
-+		inst->fmts[port].fmt.pix_mp.height);
-+	rc = venus_hfi_session_property(inst,
-+					HFI_PROP_BITSTREAM_RESOLUTION,
-+					HFI_HOST_FLAGS_NONE,
-+					get_hfi_port(inst, port),
-+					HFI_PAYLOAD_32_PACKED,
-+					&resolution,
-+					sizeof(u32));
-+	if (rc)
-+		return rc;
-+	return 0;
-+}
-+
-+static int msm_venc_set_crop_offsets(struct msm_vidc_inst *inst,
-+				     enum msm_vidc_port_type port)
-+{
-+	int rc = 0;
-+	u32 left_offset, top_offset, right_offset, bottom_offset;
-+	u32 crop[2] = {0};
-+	u32 width, height;
-+
-+	if (port != OUTPUT_PORT && port != INPUT_PORT) {
-+		i_vpr_e(inst, "%s: invalid port %d\n", __func__, port);
-+		return -EINVAL;
-+	}
-+
-+	if (port == INPUT_PORT) {
-+		left_offset = inst->crop.left;
-+		top_offset = inst->crop.top;
-+		width = inst->crop.width;
-+		height = inst->crop.height;
-+	} else {
-+		left_offset = inst->compose.left;
-+		top_offset = inst->compose.top;
-+		width = inst->compose.width;
-+		height = inst->compose.height;
-+		if (is_rotation_90_or_270(inst)) {
-+			width = inst->compose.height;
-+			height = inst->compose.width;
++	/* skip adding if cap_id already present in firmware list */
++	list_for_each_entry(entry, &inst->firmware_list, list) {
++		if (entry->cap_id == cap_id) {
++			i_vpr_l(inst,
++				"%s: cap[%d] %s already present in fw list\n",
++				__func__, cap_id, cap_name(cap_id));
++			return 0;
 +		}
 +	}
 +
-+	right_offset = (inst->fmts[port].fmt.pix_mp.width - width);
-+	bottom_offset = (inst->fmts[port].fmt.pix_mp.height - height);
-+
-+	crop[0] = left_offset << 16 | top_offset;
-+	crop[1] = right_offset << 16 | bottom_offset;
-+	i_vpr_h(inst,
-+		"%s: l_off: %d t_off: %d r_off: %d b_off: %d",
-+		__func__,
-+		left_offset, top_offset, right_offset, bottom_offset);
-+
-+	rc = venus_hfi_session_property(inst,
-+					HFI_PROP_CROP_OFFSETS,
-+					HFI_HOST_FLAGS_NONE,
-+					get_hfi_port(inst, port),
-+					HFI_PAYLOAD_64_PACKED,
-+					&crop,
-+					sizeof(u64));
++	rc = add_node_list(&inst->firmware_list, cap_id);
 +	if (rc)
 +		return rc;
++
 +	return 0;
 +}
 +
-+static int msm_venc_set_colorspace(struct msm_vidc_inst *inst,
-+				   enum msm_vidc_port_type port)
++static int msm_vidc_add_children(struct msm_vidc_inst *inst,
++				 enum msm_vidc_inst_capability_type cap_id)
 +{
-+	int rc = 0;
-+	u32 primaries = MSM_VIDC_PRIMARIES_RESERVED;
-+	u32 matrix_coeff = MSM_VIDC_MATRIX_COEFF_RESERVED;
-+	u32 transfer_char = MSM_VIDC_TRANSFER_RESERVED;
-+	u32 full_range = 0;
-+	u32 colour_description_present_flag = 0;
-+	u32 video_signal_type_present_flag = 0, payload = 0;
-+	/* Unspecified video format */
-+	u32 video_format = 5;
-+	struct v4l2_format *input_fmt;
-+	u32 pix_fmt;
-+	struct v4l2_pix_format_mplane *pixmp = NULL;
++	struct msm_vidc_inst_cap *cap;
++	int i, rc = 0;
 +
-+	if (port != INPUT_PORT) {
-+		i_vpr_e(inst, "%s: invalid port %d\n", __func__, port);
-+		return -EINVAL;
++	cap = &inst->capabilities[cap_id];
++
++	for (i = 0; i < MAX_CAP_CHILDREN; i++) {
++		if (!cap->children[i])
++			break;
++
++		if (!is_valid_cap_id(cap->children[i]))
++			continue;
++
++		rc = add_node_list(&inst->children_list, cap->children[i]);
++		if (rc)
++			return rc;
 +	}
 +
-+	if (inst->capabilities[SIGNAL_COLOR_INFO].flags & CAP_FLAG_CLIENT_SET) {
-+		i_vpr_h(inst, "%s: client configured colorspace via control\n", __func__);
++	return rc;
++}
++
++static int msm_vidc_adjust_cap(struct msm_vidc_inst *inst,
++			       enum msm_vidc_inst_capability_type cap_id,
++			       struct v4l2_ctrl *ctrl, const char *func)
++{
++	struct msm_vidc_inst_cap *cap;
++	int rc = 0;
++
++	/* validate cap_id */
++	if (!is_valid_cap_id(cap_id))
++		return 0;
++
++	/* validate cap */
++	cap = &inst->capabilities[cap_id];
++	if (!is_valid_cap(inst, cap->cap_id))
++		return 0;
++
++	/* check if adjust supported */
++	if (!cap->adjust) {
++		if (ctrl)
++			msm_vidc_update_cap_value(inst, cap_id, ctrl->val, func);
 +		return 0;
 +	}
 +
-+	input_fmt = &inst->fmts[INPUT_PORT];
-+	pixmp = &inst->fmts[port].fmt.pix_mp;
-+	pix_fmt = v4l2_colorformat_to_driver(inst,
-+					     input_fmt->fmt.pix_mp.pixelformat, __func__);
-+	if (pixmp->colorspace != V4L2_COLORSPACE_DEFAULT ||
-+	    pixmp->ycbcr_enc != V4L2_YCBCR_ENC_DEFAULT ||
-+	    pixmp->xfer_func != V4L2_XFER_FUNC_DEFAULT) {
-+		colour_description_present_flag = 1;
-+		video_signal_type_present_flag = 1;
-+		primaries = v4l2_color_primaries_to_driver(inst,
-+							   pixmp->colorspace, __func__);
-+		matrix_coeff = v4l2_matrix_coeff_to_driver(inst,
-+							   pixmp->ycbcr_enc, __func__);
-+		transfer_char = v4l2_transfer_char_to_driver(inst,
-+							     pixmp->xfer_func, __func__);
-+	} else if (is_rgba_colorformat(pix_fmt)) {
-+		colour_description_present_flag = 1;
-+		video_signal_type_present_flag = 1;
-+		primaries = MSM_VIDC_PRIMARIES_BT709;
-+		matrix_coeff = MSM_VIDC_MATRIX_COEFF_BT709;
-+		transfer_char = MSM_VIDC_TRANSFER_BT709;
-+		full_range = 0;
-+	}
-+
-+	if (pixmp->quantization !=
-+	    V4L2_QUANTIZATION_DEFAULT) {
-+		video_signal_type_present_flag = 1;
-+		full_range = pixmp->quantization ==
-+			V4L2_QUANTIZATION_FULL_RANGE ? 1 : 0;
-+	}
-+
-+	payload = (matrix_coeff & 0xFF) |
-+		((transfer_char << 8) & 0xFF00) |
-+		((primaries << 16) & 0xFF0000) |
-+		((colour_description_present_flag << 24) & 0x1000000) |
-+		((full_range << 25) & 0x2000000) |
-+		((video_format << 26) & 0x1C000000) |
-+		((video_signal_type_present_flag << 29) & 0x20000000);
-+	i_vpr_h(inst, "%s: color info: %#x\n", __func__, payload);
-+	rc = venus_hfi_session_property(inst,
-+					HFI_PROP_SIGNAL_COLOR_INFO,
-+					HFI_HOST_FLAGS_NONE,
-+					get_hfi_port(inst, port),
-+					HFI_PAYLOAD_32_PACKED,
-+					&payload,
-+					sizeof(u32));
-+	if (rc)
-+		return rc;
-+	return 0;
-+}
-+
-+static int msm_venc_set_quality_mode(struct msm_vidc_inst *inst)
-+{
-+	int rc = 0;
-+	struct msm_vidc_core *core = inst->core;
-+	u32 mode;
-+
-+	rc = call_session_op(core, decide_quality_mode, inst);
++	/* call adjust */
++	rc = cap->adjust(inst, ctrl);
 +	if (rc) {
-+		i_vpr_e(inst, "%s: decide_work_route failed\n",
-+			__func__);
-+		return -EINVAL;
++		i_vpr_e(inst, "%s: adjust cap failed for %s\n", func, cap_name(cap_id));
++		return rc;
 +	}
 +
-+	mode = inst->capabilities[QUALITY_MODE].value;
-+	i_vpr_h(inst, "%s: quality_mode: %u\n", __func__, mode);
-+	rc = venus_hfi_session_property(inst,
-+					HFI_PROP_QUALITY_MODE,
-+					HFI_HOST_FLAGS_NONE,
-+					HFI_PORT_BITSTREAM,
-+					HFI_PAYLOAD_U32_ENUM,
-+					&mode,
-+					sizeof(u32));
-+	if (rc)
-+		return rc;
-+	return 0;
++	return rc;
 +}
 +
-+static int msm_venc_set_ring_buffer_count(struct msm_vidc_inst *inst)
++static int msm_vidc_set_cap(struct msm_vidc_inst *inst,
++			    enum msm_vidc_inst_capability_type cap_id,
++			    const char *func)
 +{
-+	int rc = 0;
 +	struct msm_vidc_inst_cap *cap;
++	int rc = 0;
 +
-+	cap = &inst->capabilities[ENC_RING_BUFFER_COUNT];
++	/* validate cap_id */
++	if (!is_valid_cap_id(cap_id))
++		return 0;
 +
++	/* validate cap */
++	cap = &inst->capabilities[cap_id];
++	if (!is_valid_cap(inst, cap->cap_id))
++		return 0;
++
++	/* check if set supported */
 +	if (!cap->set)
 +		return 0;
 +
-+	rc = cap->set(inst, ENC_RING_BUFFER_COUNT);
++	/* call set */
++	rc = cap->set(inst, cap_id);
 +	if (rc) {
-+		i_vpr_e(inst, "%s: set cap failed\n", __func__);
++		i_vpr_e(inst, "%s: set cap failed for %s\n", func, cap_name(cap_id));
 +		return rc;
 +	}
 +
-+	return 0;
-+}
-+
-+static int msm_venc_set_input_properties(struct msm_vidc_inst *inst)
-+{
-+	int i, j, rc = 0;
-+	static const struct msm_venc_prop_type_handle prop_type_handle_arr[] = {
-+		{HFI_PROP_COLOR_FORMAT,               msm_venc_set_colorformat                 },
-+		{HFI_PROP_RAW_RESOLUTION,             msm_venc_set_raw_resolution              },
-+		{HFI_PROP_CROP_OFFSETS,               msm_venc_set_crop_offsets                },
-+		{HFI_PROP_LINEAR_STRIDE_SCANLINE,     msm_venc_set_stride_scanline             },
-+		{HFI_PROP_SIGNAL_COLOR_INFO,          msm_venc_set_colorspace                  },
-+	};
-+
-+	for (i = 0; i < ARRAY_SIZE(msm_venc_input_set_prop); i++) {
-+		/* set session input properties */
-+		for (j = 0; j < ARRAY_SIZE(prop_type_handle_arr); j++) {
-+			if (prop_type_handle_arr[j].type == msm_venc_input_set_prop[i]) {
-+				rc = prop_type_handle_arr[j].handle(inst, INPUT_PORT);
-+				if (rc)
-+					goto exit;
-+				break;
-+			}
-+		}
-+
-+		/* is property type unknown ? */
-+		if (j == ARRAY_SIZE(prop_type_handle_arr))
-+			i_vpr_e(inst, "%s: unknown property %#x\n", __func__,
-+				msm_venc_input_set_prop[i]);
-+	}
-+
-+exit:
 +	return rc;
 +}
 +
-+static int msm_venc_set_output_properties(struct msm_vidc_inst *inst)
++static int msm_vidc_adjust_dynamic_property(struct msm_vidc_inst *inst,
++					    enum msm_vidc_inst_capability_type cap_id,
++					    struct v4l2_ctrl *ctrl)
 +{
-+	int i, j, rc = 0;
-+	static const struct msm_venc_prop_type_handle prop_type_handle_arr[] = {
-+		{HFI_PROP_BITSTREAM_RESOLUTION,       msm_venc_set_bitstream_resolution    },
-+		{HFI_PROP_CROP_OFFSETS,               msm_venc_set_crop_offsets            },
-+	};
-+
-+	for (i = 0; i < ARRAY_SIZE(msm_venc_output_set_prop); i++) {
-+		/* set session output properties */
-+		for (j = 0; j < ARRAY_SIZE(prop_type_handle_arr); j++) {
-+			if (prop_type_handle_arr[j].type == msm_venc_output_set_prop[i]) {
-+				rc = prop_type_handle_arr[j].handle(inst, OUTPUT_PORT);
-+				if (rc)
-+					goto exit;
-+				break;
-+			}
-+		}
-+
-+		/* is property type unknown ? */
-+		if (j == ARRAY_SIZE(prop_type_handle_arr))
-+			i_vpr_e(inst, "%s: unknown property %#x\n", __func__,
-+				msm_venc_output_set_prop[i]);
-+	}
-+
-+exit:
-+	return rc;
-+}
-+
-+static int msm_venc_set_internal_properties(struct msm_vidc_inst *inst)
-+{
++	struct msm_vidc_inst_cap_entry *entry = NULL, *temp = NULL;
++	struct msm_vidc_inst_cap *cap;
++	s32 prev_value;
 +	int rc = 0;
 +
-+	rc = msm_venc_set_quality_mode(inst);
++	cap = &inst->capabilities[0];
++
++	/* sanitize cap_id */
++	if (!is_valid_cap_id(cap_id)) {
++		i_vpr_e(inst, "%s: invalid cap_id %u\n", __func__, cap_id);
++		return -EINVAL;
++	}
++
++	if (!(cap[cap_id].flags & CAP_FLAG_DYNAMIC_ALLOWED)) {
++		i_vpr_h(inst,
++			"%s: dynamic setting of cap[%d] %s is not allowed\n",
++			__func__, cap_id, cap_name(cap_id));
++		return -EBUSY;
++	}
++	i_vpr_h(inst, "%s: cap[%d] %s\n", __func__, cap_id, cap_name(cap_id));
++
++	prev_value = cap[cap_id].value;
++	rc = msm_vidc_adjust_cap(inst, cap_id, ctrl, __func__);
 +	if (rc)
 +		return rc;
 +
-+	rc = msm_venc_set_ring_buffer_count(inst);
-+
-+	return rc;
-+}
-+
-+static int msm_venc_get_input_internal_buffers(struct msm_vidc_inst *inst)
-+{
-+	int i, rc = 0;
-+
-+	for (i = 0; i < ARRAY_SIZE(msm_venc_input_internal_buffer_type); i++) {
-+		rc = msm_vidc_get_internal_buffers(inst, msm_venc_input_internal_buffer_type[i]);
-+		if (rc)
-+			return rc;
++	if (cap[cap_id].value == prev_value && cap_id == GOP_SIZE) {
++		/*
++		 * Ignore setting same GOP size value to firmware to avoid
++		 * unnecessary generation of IDR frame.
++		 */
++		return 0;
 +	}
 +
-+	return rc;
-+}
++	/* add cap_id to firmware list always */
++	rc = msm_vidc_add_capid_to_fw_list(inst, cap_id);
++	if (rc)
++		goto error;
 +
-+static int msm_venc_destroy_internal_buffers(struct msm_vidc_inst *inst,
-+					     enum msm_vidc_port_type port)
-+{
-+	int rc = 0;
-+	struct msm_vidc_buffers *buffers;
-+	struct msm_vidc_buffer *buf, *dummy;
-+	const u32 *internal_buf_type;
-+	u32 i, len;
++	/* add children only if cap value modified */
++	if (cap[cap_id].value == prev_value)
++		return 0;
 +
-+	if (port == INPUT_PORT) {
-+		internal_buf_type = msm_venc_input_internal_buffer_type;
-+		len = ARRAY_SIZE(msm_venc_input_internal_buffer_type);
-+	} else {
-+		internal_buf_type = msm_venc_output_internal_buffer_type;
-+		len = ARRAY_SIZE(msm_venc_output_internal_buffer_type);
-+	}
++	rc = msm_vidc_add_children(inst, cap_id);
++	if (rc)
++		goto error;
 +
-+	for (i = 0; i < len; i++) {
-+		buffers = msm_vidc_get_buffers(inst, internal_buf_type[i], __func__);
-+		if (!buffers)
-+			return -EINVAL;
-+
-+		if (buffers->reuse) {
-+			i_vpr_l(inst, "%s: reuse enabled for %s\n", __func__,
-+				buf_name(internal_buf_type[i]));
-+			continue;
++	list_for_each_entry_safe(entry, temp, &inst->children_list, list) {
++		if (!is_valid_cap_id(entry->cap_id)) {
++			rc = -EINVAL;
++			goto error;
 +		}
 +
-+		list_for_each_entry_safe(buf, dummy, &buffers->list, list) {
-+			i_vpr_h(inst,
-+				"%s: destroying internal buffer: type %d idx %d fd %d addr %#llx size %d\n",
-+				__func__, buf->type, buf->index, buf->fd,
-+				buf->device_addr, buf->buffer_size);
++		if (!cap[entry->cap_id].adjust) {
++			i_vpr_e(inst, "%s: child cap must have ajdust function %s\n",
++				__func__, cap_name(entry->cap_id));
++			rc = -EINVAL;
++			goto error;
++		}
 +
-+			rc = msm_vidc_destroy_internal_buffer(inst, buf);
++		prev_value = cap[entry->cap_id].value;
++		rc = msm_vidc_adjust_cap(inst, entry->cap_id, NULL, __func__);
++		if (rc)
++			goto error;
++
++		/* add children if cap value modified */
++		if (cap[entry->cap_id].value != prev_value) {
++			/* add cap_id to firmware list always */
++			rc = msm_vidc_add_capid_to_fw_list(inst, entry->cap_id);
 +			if (rc)
-+				return rc;
++				goto error;
++
++			rc = msm_vidc_add_children(inst, entry->cap_id);
++			if (rc)
++				goto error;
 +		}
++
++		list_del_init(&entry->list);
++		vfree(entry);
 +	}
 +
-+	return 0;
-+}
-+
-+static int msm_venc_create_input_internal_buffers(struct msm_vidc_inst *inst)
-+{
-+	int i, rc = 0;
-+
-+	for (i = 0; i < ARRAY_SIZE(msm_venc_input_internal_buffer_type); i++) {
-+		rc = msm_vidc_create_internal_buffers(inst, msm_venc_input_internal_buffer_type[i]);
-+		if (rc)
-+			return rc;
-+	}
-+
-+	return rc;
-+}
-+
-+static int msm_venc_queue_input_internal_buffers(struct msm_vidc_inst *inst)
-+{
-+	int i, rc = 0;
-+
-+	for (i = 0; i < ARRAY_SIZE(msm_venc_input_internal_buffer_type); i++) {
-+		rc = msm_vidc_queue_internal_buffers(inst, msm_venc_input_internal_buffer_type[i]);
-+		if (rc)
-+			return rc;
-+	}
-+
-+	return rc;
-+}
-+
-+static int msm_venc_get_output_internal_buffers(struct msm_vidc_inst *inst)
-+{
-+	int i, rc = 0;
-+
-+	for (i = 0; i < ARRAY_SIZE(msm_venc_output_internal_buffer_type); i++) {
-+		rc = msm_vidc_get_internal_buffers(inst, msm_venc_output_internal_buffer_type[i]);
-+		if (rc)
-+			return rc;
-+	}
-+
-+	return rc;
-+}
-+
-+static int msm_venc_create_output_internal_buffers(struct msm_vidc_inst *inst)
-+{
-+	int i, rc = 0;
-+
-+	for (i = 0; i < ARRAY_SIZE(msm_venc_output_internal_buffer_type); i++) {
-+		rc = msm_vidc_create_internal_buffers(inst,
-+						      msm_venc_output_internal_buffer_type[i]);
-+		if (rc)
-+			return rc;
-+	}
-+
-+	return 0;
-+}
-+
-+static int msm_venc_queue_output_internal_buffers(struct msm_vidc_inst *inst)
-+{
-+	int i, rc = 0;
-+
-+	for (i = 0; i < ARRAY_SIZE(msm_venc_output_internal_buffer_type); i++) {
-+		rc = msm_vidc_queue_internal_buffers(inst, msm_venc_output_internal_buffer_type[i]);
-+		if (rc)
-+			return rc;
-+	}
-+
-+	return 0;
-+}
-+
-+static int msm_venc_property_subscription(struct msm_vidc_inst *inst,
-+					  enum msm_vidc_port_type port)
-+{
-+	u32 payload[32] = {0};
-+	u32 i;
-+	u32 payload_size = 0;
-+
-+	payload[0] = HFI_MODE_PROPERTY;
-+	if (port == INPUT_PORT) {
-+		for (i = 0; i < ARRAY_SIZE(msm_venc_input_subscribe_for_properties); i++)
-+			payload[i + 1] = msm_venc_input_subscribe_for_properties[i];
-+		payload_size = (ARRAY_SIZE(msm_venc_input_subscribe_for_properties) + 1) *
-+				sizeof(u32);
-+	} else if (port == OUTPUT_PORT) {
-+		for (i = 0; i < ARRAY_SIZE(msm_venc_output_subscribe_for_properties); i++)
-+			payload[i + 1] = msm_venc_output_subscribe_for_properties[i];
-+		payload_size = (ARRAY_SIZE(msm_venc_output_subscribe_for_properties) + 1) *
-+				sizeof(u32);
-+	} else {
-+		i_vpr_e(inst, "%s: invalid port: %d\n", __func__, port);
-+		return -EINVAL;
-+	}
-+
-+	return venus_hfi_session_command(inst,
-+				       HFI_CMD_SUBSCRIBE_MODE,
-+				       port,
-+				       HFI_PAYLOAD_U32_ARRAY,
-+				       &payload[0],
-+				       payload_size);
-+}
-+
-+int msm_venc_streamoff_input(struct msm_vidc_inst *inst)
-+{
-+	return msm_vidc_session_streamoff(inst, INPUT_PORT);
-+}
-+
-+int msm_venc_streamon_input(struct msm_vidc_inst *inst)
-+{
-+	int rc = 0;
-+
-+	rc = msm_vidc_check_session_supported(inst);
-+	if (rc)
-+		goto error;
-+
-+	rc = msm_vidc_check_scaling_supported(inst);
-+	if (rc)
-+		goto error;
-+
-+	rc = msm_venc_set_input_properties(inst);
-+	if (rc)
-+		goto error;
-+
-+	rc = msm_venc_get_input_internal_buffers(inst);
-+	if (rc)
-+		goto error;
-+
-+	rc = msm_venc_destroy_internal_buffers(inst, INPUT_PORT);
-+	if (rc)
-+		goto error;
-+
-+	rc = msm_venc_create_input_internal_buffers(inst);
-+	if (rc)
-+		goto error;
-+
-+	rc = msm_venc_queue_input_internal_buffers(inst);
-+	if (rc)
-+		goto error;
-+
-+	rc = msm_venc_property_subscription(inst, INPUT_PORT);
-+	if (rc)
-+		goto error;
-+
-+	rc = msm_vidc_process_streamon_input(inst);
-+	if (rc)
-+		goto error;
-+
-+	return 0;
-+
-+error:
-+	i_vpr_e(inst, "%s: failed\n", __func__);
-+	return rc;
-+}
-+
-+int msm_venc_qbuf(struct msm_vidc_inst *inst, struct vb2_buffer *vb2)
-+{
-+	return msm_vidc_queue_buffer_single(inst, vb2);
-+}
-+
-+int msm_venc_stop_cmd(struct msm_vidc_inst *inst)
-+{
-+	i_vpr_h(inst, "received cmd: drain\n");
-+	return msm_vidc_process_drain(inst);
-+}
-+
-+int msm_venc_start_cmd(struct msm_vidc_inst *inst)
-+{
-+	i_vpr_h(inst, "received cmd: resume\n");
-+
-+	vb2_clear_last_buffer_dequeued(inst->bufq[OUTPUT_PORT].vb2q);
-+
-+	/* tune power features */
-+	msm_vidc_allow_dcvs(inst);
-+	msm_vidc_power_data_reset(inst);
-+
-+	/* print final buffer counts & size details */
-+	msm_vidc_print_buffer_info(inst);
-+
-+	/* print internal buffer memory usage stats */
-+	msm_vidc_print_memory_stats(inst);
-+
-+	return msm_vidc_process_resume(inst);
-+}
-+
-+int msm_venc_streamoff_output(struct msm_vidc_inst *inst)
-+{
-+	int rc = 0;
-+	struct msm_vidc_core *core;
-+
-+	core = inst->core;
-+
-+	/* restore LAYER_COUNT max allowed value */
-+	inst->capabilities[ENH_LAYER_COUNT].max =
-+		core->capabilities[MAX_ENH_LAYER_COUNT].value;
-+
-+	rc = msm_vidc_session_streamoff(inst, OUTPUT_PORT);
-+	if (rc)
-+		return rc;
-+
-+	return 0;
-+}
-+
-+int msm_venc_streamon_output(struct msm_vidc_inst *inst)
-+{
-+	int rc = 0;
-+
-+	rc = msm_venc_set_output_properties(inst);
-+	if (rc)
-+		goto error;
-+
-+	rc = msm_vidc_set_v4l2_properties(inst);
-+	if (rc)
-+		goto error;
-+
-+	rc = msm_venc_set_internal_properties(inst);
-+	if (rc)
-+		goto error;
-+
-+	rc = msm_venc_get_output_internal_buffers(inst);
-+	if (rc)
-+		goto error;
-+
-+	rc = msm_venc_destroy_internal_buffers(inst, OUTPUT_PORT);
-+	if (rc)
-+		goto error;
-+
-+	rc = msm_venc_create_output_internal_buffers(inst);
-+	if (rc)
-+		goto error;
-+
-+	rc = msm_venc_queue_output_internal_buffers(inst);
-+	if (rc)
-+		goto error;
-+
-+	rc = msm_venc_property_subscription(inst, OUTPUT_PORT);
-+	if (rc)
-+		goto error;
-+
-+	rc = msm_vidc_process_streamon_output(inst);
-+	if (rc)
-+		goto error;
-+
-+	return 0;
-+
-+error:
-+	i_vpr_e(inst, "%s: failed\n", __func__);
-+	msm_venc_streamoff_output(inst);
-+	return rc;
-+}
-+
-+int msm_venc_try_fmt(struct msm_vidc_inst *inst, struct v4l2_format *f)
-+{
-+	int rc = 0;
-+	struct v4l2_pix_format_mplane *pixmp = &f->fmt.pix_mp;
-+	u32 pix_fmt;
-+
-+	memset(pixmp->reserved, 0, sizeof(pixmp->reserved));
-+
-+	if (f->type == INPUT_MPLANE) {
-+		pix_fmt = v4l2_colorformat_to_driver(inst, f->fmt.pix_mp.pixelformat, __func__);
-+		if (!pix_fmt) {
-+			i_vpr_e(inst, "%s: unsupported format, set current params\n", __func__);
-+			f->fmt.pix_mp.pixelformat = inst->fmts[INPUT_PORT].fmt.pix_mp.pixelformat;
-+			f->fmt.pix_mp.width = inst->fmts[INPUT_PORT].fmt.pix_mp.width;
-+			f->fmt.pix_mp.height = inst->fmts[INPUT_PORT].fmt.pix_mp.height;
-+			pix_fmt = v4l2_colorformat_to_driver(inst, f->fmt.pix_mp.pixelformat,
-+							     __func__);
-+		}
-+	} else if (f->type == OUTPUT_MPLANE) {
-+		pix_fmt = v4l2_codec_to_driver(inst, f->fmt.pix_mp.pixelformat, __func__);
-+		if (!pix_fmt) {
-+			i_vpr_e(inst, "%s: unsupported codec, set current params\n", __func__);
-+			f->fmt.pix_mp.width = inst->fmts[OUTPUT_PORT].fmt.pix_mp.width;
-+			f->fmt.pix_mp.height = inst->fmts[OUTPUT_PORT].fmt.pix_mp.height;
-+			f->fmt.pix_mp.pixelformat = inst->fmts[OUTPUT_PORT].fmt.pix_mp.pixelformat;
-+		}
-+	} else {
-+		i_vpr_e(inst, "%s: invalid type %d\n", __func__, f->type);
-+		return -EINVAL;
-+	}
-+
-+	if (pixmp->field == V4L2_FIELD_ANY)
-+		pixmp->field = V4L2_FIELD_NONE;
-+	pixmp->num_planes = 1;
-+
-+	return rc;
-+}
-+
-+int msm_venc_s_fmt_output(struct msm_vidc_inst *inst, struct v4l2_format *f)
-+{
-+	int rc = 0;
-+	struct v4l2_format *fmt;
-+	struct msm_vidc_core *core;
-+	u32 codec_align;
-+	u32 width, height;
-+	enum msm_vidc_codec_type codec;
-+
-+	core = inst->core;
-+	msm_venc_try_fmt(inst, f);
-+
-+	fmt = &inst->fmts[OUTPUT_PORT];
-+	if (fmt->fmt.pix_mp.pixelformat != f->fmt.pix_mp.pixelformat) {
-+		rc = msm_venc_codec_change(inst, f->fmt.pix_mp.pixelformat);
-+		if (rc)
-+			return rc;
-+	}
-+	fmt->type = OUTPUT_MPLANE;
-+
-+	codec = v4l2_codec_to_driver(inst, f->fmt.pix_mp.pixelformat, __func__);
-+
-+	codec_align = (codec == MSM_VIDC_HEVC) ? 32 : 16;
-+	/* use rotated width height if rotation is enabled */
-+	width = inst->compose.width;
-+	height = inst->compose.height;
-+	if (is_rotation_90_or_270(inst)) {
-+		width = inst->compose.height;
-+		height = inst->compose.width;
-+	}
-+	/* width, height is readonly for client */
-+	fmt->fmt.pix_mp.width = ALIGN(width, codec_align);
-+	fmt->fmt.pix_mp.height = ALIGN(height, codec_align);
-+	fmt->fmt.pix_mp.num_planes = 1;
-+	fmt->fmt.pix_mp.plane_fmt[0].bytesperline = 0;
-+	fmt->fmt.pix_mp.plane_fmt[0].sizeimage =
-+		call_session_op(core, buffer_size, inst, MSM_VIDC_BUF_OUTPUT);
-+	/* video hw supports conversion to V4L2_COLORSPACE_REC709 only */
-+	if (f->fmt.pix_mp.colorspace != V4L2_COLORSPACE_DEFAULT &&
-+	    f->fmt.pix_mp.colorspace != V4L2_COLORSPACE_REC709)
-+		f->fmt.pix_mp.colorspace = V4L2_COLORSPACE_DEFAULT;
-+	fmt->fmt.pix_mp.colorspace = f->fmt.pix_mp.colorspace;
-+	fmt->fmt.pix_mp.xfer_func = f->fmt.pix_mp.xfer_func;
-+	fmt->fmt.pix_mp.ycbcr_enc = f->fmt.pix_mp.ycbcr_enc;
-+	fmt->fmt.pix_mp.quantization = f->fmt.pix_mp.quantization;
-+	inst->buffers.output.min_count =
-+		call_session_op(core, min_count, inst, MSM_VIDC_BUF_OUTPUT);
-+	inst->buffers.output.extra_count =
-+		call_session_op(core, extra_count, inst, MSM_VIDC_BUF_OUTPUT);
-+	if (inst->buffers.output.actual_count <
-+		inst->buffers.output.min_count +
-+		inst->buffers.output.extra_count) {
-+		inst->buffers.output.actual_count =
-+			inst->buffers.output.min_count +
-+			inst->buffers.output.extra_count;
-+	}
-+	inst->buffers.output.size =
-+		fmt->fmt.pix_mp.plane_fmt[0].sizeimage;
-+
-+	i_vpr_h(inst,
-+		"%s: type: OUTPUT, codec %s width %d height %d size %u min_count %d extra_count %d\n",
-+		__func__, v4l2_pixelfmt_name(inst, fmt->fmt.pix_mp.pixelformat),
-+		fmt->fmt.pix_mp.width, fmt->fmt.pix_mp.height,
-+		fmt->fmt.pix_mp.plane_fmt[0].sizeimage,
-+		inst->buffers.output.min_count,
-+		inst->buffers.output.extra_count);
-+
-+	/* finally update client format */
-+	memcpy(f, fmt, sizeof(struct v4l2_format));
-+	return rc;
-+}
-+
-+static int msm_venc_s_fmt_input(struct msm_vidc_inst *inst, struct v4l2_format *f)
-+{
-+	int rc = 0;
-+	struct v4l2_format *fmt, *output_fmt;
-+	struct msm_vidc_core *core;
-+	u32 pix_fmt, width, height, size, bytesperline;
-+
-+	core = inst->core;
-+	msm_venc_try_fmt(inst, f);
-+
-+	pix_fmt = v4l2_colorformat_to_driver(inst, f->fmt.pix_mp.pixelformat, __func__);
-+	msm_vidc_update_cap_value(inst, PIX_FMTS, pix_fmt, __func__);
-+
-+	width = f->fmt.pix_mp.width;
-+	height = f->fmt.pix_mp.height;
-+
-+	if (is_rgba_colorformat(pix_fmt))
-+		bytesperline = video_rgb_stride_bytes(pix_fmt, f->fmt.pix_mp.width);
-+	else
-+		bytesperline = video_y_stride_bytes(pix_fmt, f->fmt.pix_mp.width);
-+
-+	fmt = &inst->fmts[INPUT_PORT];
-+	fmt->type = INPUT_MPLANE;
-+	fmt->fmt.pix_mp.width = width;
-+	fmt->fmt.pix_mp.height = height;
-+	fmt->fmt.pix_mp.num_planes = 1;
-+	fmt->fmt.pix_mp.pixelformat = f->fmt.pix_mp.pixelformat;
-+	fmt->fmt.pix_mp.plane_fmt[0].bytesperline = bytesperline;
-+	size = call_session_op(core, buffer_size, inst, MSM_VIDC_BUF_INPUT);
-+	fmt->fmt.pix_mp.plane_fmt[0].sizeimage = size;
-+	/* update input port colorspace info */
-+	fmt->fmt.pix_mp.colorspace = f->fmt.pix_mp.colorspace;
-+	fmt->fmt.pix_mp.xfer_func = f->fmt.pix_mp.xfer_func;
-+	fmt->fmt.pix_mp.ycbcr_enc = f->fmt.pix_mp.ycbcr_enc;
-+	fmt->fmt.pix_mp.quantization = f->fmt.pix_mp.quantization;
-+	/*
-+	 * Update output port colorspace info.
-+	 */
-+	output_fmt = &inst->fmts[OUTPUT_PORT];
-+	output_fmt->fmt.pix_mp.colorspace = fmt->fmt.pix_mp.colorspace;
-+	output_fmt->fmt.pix_mp.xfer_func = fmt->fmt.pix_mp.xfer_func;
-+	output_fmt->fmt.pix_mp.ycbcr_enc = fmt->fmt.pix_mp.ycbcr_enc;
-+	output_fmt->fmt.pix_mp.quantization = fmt->fmt.pix_mp.quantization;
-+
-+	inst->buffers.input.min_count =
-+		call_session_op(core, min_count, inst, MSM_VIDC_BUF_INPUT);
-+	inst->buffers.input.extra_count =
-+		call_session_op(core, extra_count, inst, MSM_VIDC_BUF_INPUT);
-+	if (inst->buffers.input.actual_count <
-+	    inst->buffers.input.min_count +
-+	    inst->buffers.input.extra_count) {
-+		inst->buffers.input.actual_count =
-+			inst->buffers.input.min_count +
-+			inst->buffers.input.extra_count;
-+	}
-+	inst->buffers.input.size = size;
-+
-+	if (f->fmt.pix_mp.width != inst->crop.width ||
-+	    f->fmt.pix_mp.height != inst->crop.height) {
-+		/* reset crop dimensions with updated resolution */
-+		inst->crop.top = 0;
-+		inst->crop.left = 0;
-+		inst->crop.width = f->fmt.pix_mp.width;
-+		inst->crop.height = f->fmt.pix_mp.height;
-+
-+		/* reset compose dimensions with updated resolution */
-+		inst->compose.top = 0;
-+		inst->compose.left = 0;
-+		inst->compose.width = f->fmt.pix_mp.width;
-+		inst->compose.height = f->fmt.pix_mp.height;
-+
-+		/* update output format */
-+		rc = msm_venc_s_fmt_output(inst, output_fmt);
-+		if (rc)
-+			return rc;
-+	}
-+
-+	i_vpr_h(inst,
-+		"%s: type: INPUT, format %s width %d height %d size %u min_count %d extra_count %d\n",
-+		__func__, v4l2_pixelfmt_name(inst, fmt->fmt.pix_mp.pixelformat),
-+		fmt->fmt.pix_mp.width, fmt->fmt.pix_mp.height,
-+		fmt->fmt.pix_mp.plane_fmt[0].sizeimage,
-+		inst->buffers.input.min_count,
-+		inst->buffers.input.extra_count);
-+
-+	/* finally update client format */
-+	memcpy(f, fmt, sizeof(struct v4l2_format));
-+
-+	return rc;
-+}
-+
-+int msm_venc_s_fmt(struct msm_vidc_inst *inst, struct v4l2_format *f)
-+{
-+	int rc = 0;
-+
-+	if (f->type == INPUT_MPLANE) {
-+		rc = msm_venc_s_fmt_input(inst, f);
-+		if (rc)
-+			goto exit;
-+	} else if (f->type == OUTPUT_MPLANE) {
-+		rc = msm_venc_s_fmt_output(inst, f);
-+		if (rc)
-+			goto exit;
-+	} else {
-+		i_vpr_e(inst, "%s: invalid type %d\n", __func__, f->type);
++	/* expecting children_list to be empty */
++	if (!list_empty(&inst->children_list)) {
++		i_vpr_e(inst, "%s: child_list is not empty\n", __func__);
 +		rc = -EINVAL;
-+		goto exit;
++		goto error;
 +	}
 +
-+exit:
-+	if (rc)
-+		i_vpr_e(inst, "%s: failed\n", __func__);
++	return 0;
++error:
++	list_for_each_entry_safe(entry, temp, &inst->children_list, list) {
++		i_vpr_e(inst, "%s: child list: %s\n", __func__, cap_name(entry->cap_id));
++		list_del_init(&entry->list);
++		vfree(entry);
++	}
++	list_for_each_entry_safe(entry, temp, &inst->firmware_list, list) {
++		i_vpr_e(inst, "%s: fw list: %s\n", __func__, cap_name(entry->cap_id));
++		list_del_init(&entry->list);
++		vfree(entry);
++	}
 +
 +	return rc;
 +}
 +
-+int msm_venc_g_fmt(struct msm_vidc_inst *inst, struct v4l2_format *f)
++static int msm_vidc_set_dynamic_property(struct msm_vidc_inst *inst)
 +{
++	struct msm_vidc_inst_cap_entry *entry = NULL, *temp = NULL;
 +	int rc = 0;
-+	int port;
 +
-+	port = v4l2_type_to_driver_port(inst, f->type, __func__);
-+	if (port < 0)
-+		return -EINVAL;
++	list_for_each_entry_safe(entry, temp, &inst->firmware_list, list) {
++		rc = msm_vidc_set_cap(inst, entry->cap_id, __func__);
++		if (rc)
++			goto error;
 +
-+	memcpy(f, &inst->fmts[port], sizeof(struct v4l2_format));
++		list_del_init(&entry->list);
++		vfree(entry);
++	}
++
++	return 0;
++error:
++	list_for_each_entry_safe(entry, temp, &inst->firmware_list, list) {
++		i_vpr_e(inst, "%s: fw list: %s\n", __func__, cap_name(entry->cap_id));
++		list_del_init(&entry->list);
++		vfree(entry);
++	}
 +
 +	return rc;
 +}
 +
-+int msm_venc_s_selection(struct msm_vidc_inst *inst, struct v4l2_selection *s)
++int msm_vidc_ctrl_handler_deinit(struct msm_vidc_inst *inst)
++{
++	i_vpr_h(inst, "%s(): num ctrls %d\n", __func__, inst->num_ctrls);
++	v4l2_ctrl_handler_free(&inst->ctrl_handler);
++	memset(&inst->ctrl_handler, 0, sizeof(struct v4l2_ctrl_handler));
++
++	return 0;
++}
++
++int msm_vidc_ctrl_handler_init(struct msm_vidc_inst *inst, bool init)
 +{
 +	int rc = 0;
-+	struct v4l2_format *output_fmt;
++	struct msm_vidc_inst_cap *cap;
++	struct msm_vidc_core *core;
++	int idx = 0;
++	struct v4l2_ctrl_config ctrl_cfg = {0};
++	int num_ctrls = 0, ctrl_idx = 0;
++	u64 codecs_count, step_or_mask;
 +
-+	if (s->type != INPUT_MPLANE && s->type != V4L2_BUF_TYPE_VIDEO_OUTPUT) {
-+		i_vpr_e(inst, "%s: invalid type %d\n", __func__, s->type);
++	core = inst->core;
++	cap = &inst->capabilities[0];
++
++	if (!core->v4l2_ctrl_ops) {
++		i_vpr_e(inst, "%s: no control ops\n", __func__);
 +		return -EINVAL;
 +	}
 +
-+	switch (s->target) {
-+	case V4L2_SEL_TGT_CROP:
-+		if (s->r.left || s->r.top) {
-+			i_vpr_h(inst, "%s: unsupported top %d or left %d\n",
-+				__func__, s->r.left, s->r.top);
-+			s->r.left = 0;
-+			s->r.top = 0;
++	for (idx = 0; idx < INST_CAP_MAX; idx++) {
++		if (cap[idx].v4l2_id)
++			num_ctrls++;
++	}
++	if (!num_ctrls) {
++		i_vpr_e(inst, "%s: no ctrls available in cap database\n",
++			__func__);
++		return -EINVAL;
++	}
++
++	if (init) {
++		codecs_count = is_encode_session(inst) ?
++			core->enc_codecs_count :
++			core->dec_codecs_count;
++		rc = v4l2_ctrl_handler_init(&inst->ctrl_handler,
++					    INST_CAP_MAX * codecs_count);
++		if (rc) {
++			i_vpr_e(inst, "control handler init failed, %d\n",
++				inst->ctrl_handler.error);
++			goto error;
 +		}
-+		if (s->r.width > inst->fmts[INPUT_PORT].fmt.pix_mp.width) {
-+			i_vpr_h(inst, "%s: unsupported width %d, fmt width %d\n",
-+				__func__, s->r.width,
-+				inst->fmts[INPUT_PORT].fmt.pix_mp.width);
-+			s->r.width = inst->fmts[INPUT_PORT].fmt.pix_mp.width;
++	}
++
++	for (idx = 0; idx < INST_CAP_MAX; idx++) {
++		struct v4l2_ctrl *ctrl;
++
++		if (!cap[idx].v4l2_id)
++			continue;
++
++		if (ctrl_idx >= num_ctrls) {
++			i_vpr_e(inst,
++				"%s: invalid ctrl %#x, max allowed %d\n",
++				__func__, cap[idx].v4l2_id,
++				num_ctrls);
++			rc = -EINVAL;
++			goto error;
 +		}
-+		if (s->r.height > inst->fmts[INPUT_PORT].fmt.pix_mp.height) {
-+			i_vpr_h(inst, "%s: unsupported height %d, fmt height %d\n",
-+				__func__, s->r.height,
-+				inst->fmts[INPUT_PORT].fmt.pix_mp.height);
-+			s->r.height = inst->fmts[INPUT_PORT].fmt.pix_mp.height;
++		i_vpr_l(inst,
++			"%s: cap[%d] %24s, value %d min %d max %d step_or_mask %#x flags %#x v4l2_id %#x hfi_id %#x\n",
++			__func__, idx, cap_name(idx),
++			cap[idx].value,
++			cap[idx].min,
++			cap[idx].max,
++			cap[idx].step_or_mask,
++			cap[idx].flags,
++			cap[idx].v4l2_id,
++			cap[idx].hfi_id);
++
++		memset(&ctrl_cfg, 0, sizeof(struct v4l2_ctrl_config));
++
++		/*
++		 * few controls might have been already initialized in instance initialization,
++		 * so modify the range values for them instead of initializing them again
++		 */
++		if (!init) {
++			struct msm_vidc_ctrl_data ctrl_priv_data;
++
++			ctrl = v4l2_ctrl_find(&inst->ctrl_handler, cap[idx].v4l2_id);
++			if (ctrl) {
++				step_or_mask = (cap[idx].flags & CAP_FLAG_MENU) ?
++					~(cap[idx].step_or_mask) :
++					cap[idx].step_or_mask;
++				memset(&ctrl_priv_data, 0, sizeof(struct msm_vidc_ctrl_data));
++				ctrl_priv_data.skip_s_ctrl = true;
++				ctrl->priv = &ctrl_priv_data;
++				v4l2_ctrl_modify_range(ctrl,
++						       cap[idx].min,
++						       cap[idx].max,
++						       step_or_mask,
++						       cap[idx].value);
++				/* reset private data to null to ensure s_ctrl not skipped */
++				ctrl->priv = NULL;
++				continue;
++			}
 +		}
 +
-+		inst->crop.left = s->r.left;
-+		inst->crop.top = s->r.top;
-+		inst->crop.width = s->r.width;
-+		inst->crop.height = s->r.height;
-+		/* adjust compose such that it is within crop */
-+		inst->compose.left = inst->crop.left;
-+		inst->compose.top = inst->crop.top;
-+		inst->compose.width = inst->crop.width;
-+		inst->compose.height = inst->crop.height;
-+		/* update output format based on new crop dimensions */
-+		output_fmt = &inst->fmts[OUTPUT_PORT];
-+		rc = msm_venc_s_fmt_output(inst, output_fmt);
-+		if (rc)
-+			return rc;
-+		break;
-+	case V4L2_SEL_TGT_COMPOSE:
-+		if (s->r.left < inst->crop.left) {
-+			i_vpr_e(inst,
-+				"%s: compose left (%d) less than crop left (%d)\n",
-+				__func__, s->r.left, inst->crop.left);
-+			s->r.left = inst->crop.left;
++		if (cap[idx].flags & CAP_FLAG_MENU) {
++			ctrl = v4l2_ctrl_new_std_menu(&inst->ctrl_handler,
++						      core->v4l2_ctrl_ops,
++						      cap[idx].v4l2_id,
++						      cap[idx].max,
++						      ~(cap[idx].step_or_mask),
++						      cap[idx].value);
++		} else {
++			ctrl = v4l2_ctrl_new_std(&inst->ctrl_handler,
++						 core->v4l2_ctrl_ops,
++						 cap[idx].v4l2_id,
++						 cap[idx].min,
++						 cap[idx].max,
++						 cap[idx].step_or_mask,
++						 cap[idx].value);
 +		}
-+		if (s->r.top < inst->crop.top) {
-+			i_vpr_e(inst,
-+				"%s: compose top (%d) less than crop top (%d)\n",
-+				__func__, s->r.top, inst->crop.top);
-+			s->r.top = inst->crop.top;
-+		}
-+		if (s->r.width > inst->crop.width) {
-+			i_vpr_e(inst,
-+				"%s: compose width (%d) greate than crop width (%d)\n",
-+				__func__, s->r.width, inst->crop.width);
-+			s->r.width = inst->crop.width;
-+		}
-+		if (s->r.height > inst->crop.height) {
-+			i_vpr_e(inst,
-+				"%s: compose height (%d) greate than crop height (%d)\n",
-+				__func__, s->r.height, inst->crop.height);
-+			s->r.height = inst->crop.height;
-+		}
-+		inst->compose.left = s->r.left;
-+		inst->compose.top = s->r.top;
-+		inst->compose.width = s->r.width;
-+		inst->compose.height = s->r.height;
-+
-+		if (is_scaling_enabled(inst)) {
-+			i_vpr_h(inst,
-+				"%s: scaling enabled, crop: l %d t %d w %d h %d compose: l %d t %d w %d h %d\n",
-+				__func__, inst->crop.left, inst->crop.top,
-+				inst->crop.width, inst->crop.height,
-+				inst->compose.left, inst->compose.top,
-+				inst->compose.width, inst->compose.height);
++		if (!ctrl) {
++			i_vpr_e(inst, "%s: invalid ctrl %#x cap %24s\n", __func__,
++				cap[idx].v4l2_id, cap_name(idx));
++			rc = -EINVAL;
++			goto error;
 +		}
 +
-+		/* update output format based on new compose dimensions */
-+		output_fmt = &inst->fmts[OUTPUT_PORT];
-+		rc = msm_venc_s_fmt_output(inst, output_fmt);
-+		if (rc)
-+			return rc;
++		rc = inst->ctrl_handler.error;
++		if (rc) {
++			i_vpr_e(inst,
++				"error adding ctrl (%#x) to ctrl handle, %d\n",
++				cap[idx].v4l2_id,
++				inst->ctrl_handler.error);
++			goto error;
++		}
++
++		if (cap[idx].flags & CAP_FLAG_VOLATILE)
++			ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE;
++
++		ctrl->flags |= V4L2_CTRL_FLAG_EXECUTE_ON_WRITE;
++		ctrl_idx++;
++	}
++	inst->num_ctrls = num_ctrls;
++	i_vpr_h(inst, "%s(): num ctrls %d\n", __func__, inst->num_ctrls);
++
++	return 0;
++error:
++	msm_vidc_ctrl_handler_deinit(inst);
++
++	return rc;
++}
++
++static int
++msm_vidc_update_buffer_count_if_needed(struct msm_vidc_inst *inst,
++				       enum msm_vidc_inst_capability_type cap_id)
++{
++	int rc = 0;
++	bool update_input_port = false, update_output_port = false;
++
++	switch (cap_id) {
++	case LAYER_TYPE:
++	case ENH_LAYER_COUNT:
++	case LAYER_ENABLE:
++		update_input_port = true;
 +		break;
 +	default:
-+		i_vpr_e(inst, "%s: invalid target %d\n",
-+			__func__, s->target);
-+		rc = -EINVAL;
++		update_input_port = false;
++		update_output_port = false;
 +		break;
 +	}
-+	if (!rc)
-+		i_vpr_h(inst, "%s: target %d, r [%d, %d, %d, %d]\n",
-+			__func__, s->target, s->r.top, s->r.left,
-+			s->r.width, s->r.height);
++
++	if (update_input_port) {
++		rc = msm_vidc_update_buffer_count(inst, INPUT_PORT);
++		if (rc)
++			return rc;
++	}
++	if (update_output_port) {
++		rc = msm_vidc_update_buffer_count(inst, OUTPUT_PORT);
++		if (rc)
++			return rc;
++	}
++
 +	return rc;
 +}
 +
-+int msm_venc_g_selection(struct msm_vidc_inst *inst, struct v4l2_selection *s)
++int msm_v4l2_op_g_volatile_ctrl(struct v4l2_ctrl *ctrl)
 +{
 +	int rc = 0;
++	struct msm_vidc_inst *inst;
 +
-+	if (s->type != INPUT_MPLANE && s->type != V4L2_BUF_TYPE_VIDEO_OUTPUT) {
-+		i_vpr_e(inst, "%s: invalid type %d\n", __func__, s->type);
++	if (!ctrl) {
++		d_vpr_e("%s: invalid ctrl parameter\n", __func__);
 +		return -EINVAL;
 +	}
 +
-+	switch (s->target) {
-+	case V4L2_SEL_TGT_CROP_BOUNDS:
-+	case V4L2_SEL_TGT_CROP_DEFAULT:
-+	case V4L2_SEL_TGT_CROP:
-+		s->r.left = inst->crop.left;
-+		s->r.top = inst->crop.top;
-+		s->r.width = inst->crop.width;
-+		s->r.height = inst->crop.height;
-+		break;
-+	case V4L2_SEL_TGT_COMPOSE_BOUNDS:
-+	case V4L2_SEL_TGT_COMPOSE_PADDED:
-+	case V4L2_SEL_TGT_COMPOSE_DEFAULT:
-+	case V4L2_SEL_TGT_COMPOSE:
-+		s->r.left = inst->compose.left;
-+		s->r.top = inst->compose.top;
-+		s->r.width = inst->compose.width;
-+		s->r.height = inst->compose.height;
-+		break;
-+	default:
-+		i_vpr_e(inst, "%s: invalid target %d\n",
-+			__func__, s->target);
-+		rc = -EINVAL;
-+		break;
++	inst = container_of(ctrl->handler,
++			    struct msm_vidc_inst, ctrl_handler);
++	inst = get_inst_ref(g_core, inst);
++	if (!inst) {
++		d_vpr_e("%s: could not find inst for ctrl %s id %#x\n",
++			__func__, ctrl->name, ctrl->id);
++		return -EINVAL;
 +	}
-+	if (!rc)
-+		i_vpr_h(inst, "%s: target %d, r [%d, %d, %d, %d]\n",
-+			__func__, s->target, s->r.top, s->r.left,
-+			s->r.width, s->r.height);
-+	return rc;
-+}
++	client_lock(inst, __func__);
++	inst_lock(inst, __func__);
 +
-+int msm_venc_s_param(struct msm_vidc_inst *inst,
-+		     struct v4l2_streamparm *s_parm)
-+{
-+	int rc = 0;
-+	struct v4l2_fract *timeperframe = NULL;
-+	u32 q16_rate, max_rate, default_rate;
-+	u64 us_per_frame = 0, input_rate = 0;
-+	bool is_frame_rate = false;
-+
-+	if (s_parm->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) {
-+		timeperframe = &s_parm->parm.output.timeperframe;
-+		max_rate = inst->capabilities[OPERATING_RATE].max >> 16;
-+		default_rate = inst->capabilities[OPERATING_RATE].value >> 16;
-+		s_parm->parm.output.capability = V4L2_CAP_TIMEPERFRAME;
-+	} else {
-+		timeperframe = &s_parm->parm.capture.timeperframe;
-+		is_frame_rate = true;
-+		max_rate = inst->capabilities[FRAME_RATE].max >> 16;
-+		default_rate = inst->capabilities[FRAME_RATE].value >> 16;
-+		s_parm->parm.capture.capability = V4L2_CAP_TIMEPERFRAME;
-+	}
-+
-+	if (!timeperframe->denominator || !timeperframe->numerator) {
-+		i_vpr_e(inst, "%s: type %s, invalid rate, update with default\n",
-+			__func__, v4l2_type_name(s_parm->type));
-+		if (!timeperframe->numerator)
-+			timeperframe->numerator = 1;
-+		if (!timeperframe->denominator)
-+			timeperframe->denominator = default_rate;
-+	}
-+
-+	us_per_frame = timeperframe->numerator * (u64)USEC_PER_SEC;
-+	do_div(us_per_frame, timeperframe->denominator);
-+
-+	if (!us_per_frame) {
-+		i_vpr_e(inst, "%s: us_per_frame is zero\n", __func__);
-+		rc = -EINVAL;
-+		goto exit;
-+	}
-+
-+	input_rate = (u64)USEC_PER_SEC;
-+	do_div(input_rate, us_per_frame);
-+
-+	i_vpr_h(inst, "%s: type %s, %s value %llu\n",
-+		__func__, v4l2_type_name(s_parm->type),
-+		is_frame_rate ? "frame rate" : "operating rate", input_rate);
-+
-+	q16_rate = (u32)input_rate << 16;
-+	msm_vidc_update_cap_value(inst, is_frame_rate ? FRAME_RATE : OPERATING_RATE,
-+				  q16_rate, __func__);
-+	if ((s_parm->type == INPUT_MPLANE && inst->bufq[INPUT_PORT].vb2q->streaming) ||
-+	    (s_parm->type == OUTPUT_MPLANE && inst->bufq[OUTPUT_PORT].vb2q->streaming)) {
-+		rc = msm_vidc_check_core_mbps(inst);
-+		if (rc) {
-+			i_vpr_e(inst, "%s: unsupported load\n", __func__);
-+			goto reset_rate;
-+		}
-+		rc = input_rate > max_rate;
-+		if (rc) {
-+			i_vpr_e(inst, "%s: unsupported rate %llu, max %u\n", __func__,
-+				input_rate, max_rate);
-+			rc = -ENOMEM;
-+			goto reset_rate;
-+		}
-+	}
-+
-+	if (is_frame_rate)
-+		inst->capabilities[FRAME_RATE].flags |= CAP_FLAG_CLIENT_SET;
-+	else
-+		inst->capabilities[OPERATING_RATE].flags |= CAP_FLAG_CLIENT_SET;
-+	/*
-+	 * In static case, frame rate is set via
-+	 * inst database set function mentioned in
-+	 * FRAME_RATE cap id.
-+	 * In dynamic case, frame rate is set like below.
-+	 */
-+	if (inst->bufq[OUTPUT_PORT].vb2q->streaming) {
-+		rc = venus_hfi_session_property(inst,
-+						HFI_PROP_FRAME_RATE,
-+						HFI_HOST_FLAGS_NONE,
-+						HFI_PORT_BITSTREAM,
-+						HFI_PAYLOAD_Q16,
-+						&q16_rate,
-+						sizeof(u32));
-+		if (rc) {
-+			i_vpr_e(inst,
-+				"%s: failed to set frame rate to fw\n", __func__);
-+			goto exit;
-+		}
-+	}
-+
-+	return 0;
-+
-+reset_rate:
++	rc = msm_vidc_get_control(inst, ctrl);
 +	if (rc) {
-+		i_vpr_e(inst, "%s: setting rate %llu failed, reset to %u\n", __func__,
-+			input_rate, default_rate);
-+		msm_vidc_update_cap_value(inst, is_frame_rate ? FRAME_RATE : OPERATING_RATE,
-+					  default_rate << 16, __func__);
++		i_vpr_e(inst, "%s: failed for ctrl %s id %#x\n",
++			__func__, ctrl->name, ctrl->id);
++		goto unlock;
++	} else {
++		i_vpr_h(inst, "%s: ctrl %s id %#x, value %d\n",
++			__func__, ctrl->name, ctrl->id, ctrl->val);
 +	}
-+exit:
++
++unlock:
++	inst_unlock(inst, __func__);
++	client_unlock(inst, __func__);
++	put_inst(inst);
 +	return rc;
 +}
 +
-+int msm_venc_g_param(struct msm_vidc_inst *inst,
-+		     struct v4l2_streamparm *s_parm)
-+{
-+	struct v4l2_fract *timeperframe = NULL;
-+
-+	if (s_parm->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) {
-+		timeperframe = &s_parm->parm.output.timeperframe;
-+		timeperframe->numerator = 1;
-+		timeperframe->denominator =
-+			inst->capabilities[OPERATING_RATE].value >> 16;
-+		s_parm->parm.output.capability = V4L2_CAP_TIMEPERFRAME;
-+	} else {
-+		timeperframe = &s_parm->parm.capture.timeperframe;
-+		timeperframe->numerator = 1;
-+		timeperframe->denominator =
-+			inst->capabilities[FRAME_RATE].value >> 16;
-+		s_parm->parm.capture.capability = V4L2_CAP_TIMEPERFRAME;
-+	}
-+
-+	i_vpr_h(inst, "%s: type %s, num %u denom %u\n",
-+		__func__, v4l2_type_name(s_parm->type), timeperframe->numerator,
-+		timeperframe->denominator);
-+	return 0;
-+}
-+
-+int msm_venc_subscribe_event(struct msm_vidc_inst *inst,
-+			     const struct v4l2_event_subscription *sub)
++static int
++msm_vidc_update_static_property(struct msm_vidc_inst *inst,
++				enum msm_vidc_inst_capability_type cap_id,
++				struct v4l2_ctrl *ctrl)
 +{
 +	int rc = 0;
 +
-+	switch (sub->type) {
-+	case V4L2_EVENT_EOS:
-+		rc = v4l2_event_subscribe(&inst->fh, sub, MAX_EVENTS, NULL);
-+		break;
-+	case V4L2_EVENT_CTRL:
-+		rc = v4l2_ctrl_subscribe_event(&inst->fh, sub);
-+		break;
-+	default:
-+		i_vpr_e(inst, "%s: invalid type %d id %d\n", __func__, sub->type, sub->id);
++	/* update value to db */
++	msm_vidc_update_cap_value(inst, cap_id, ctrl->val, __func__);
++
++	if (cap_id == ROTATION) {
++		struct v4l2_format *output_fmt;
++
++		output_fmt = &inst->fmts[OUTPUT_PORT];
++		rc = msm_venc_s_fmt_output(inst, output_fmt);
++		if (rc)
++			return rc;
++	}
++
++	if (cap_id == BITSTREAM_SIZE_OVERWRITE) {
++		rc = msm_vidc_update_bitstream_buffer_size(inst);
++		if (rc)
++			return rc;
++	}
++
++	if (cap_id == ENH_LAYER_COUNT && inst->codec == MSM_VIDC_HEVC) {
++		u32 enable;
++
++		/* enable LAYER_ENABLE cap if HEVC_HIER enh layers > 0 */
++		if (ctrl->val > 0)
++			enable = 1;
++		else
++			enable = 0;
++
++		msm_vidc_update_cap_value(inst, LAYER_ENABLE, enable, __func__);
++	}
++
++	rc = msm_vidc_update_buffer_count_if_needed(inst, cap_id);
++
++	return rc;
++}
++
++int msm_vidc_s_ctrl(struct msm_vidc_inst *inst, struct v4l2_ctrl *ctrl)
++{
++	enum msm_vidc_inst_capability_type cap_id;
++	struct msm_vidc_inst_cap *cap;
++	int rc = 0;
++	u32 port;
++
++	cap = &inst->capabilities[0];
++
++	i_vpr_h(inst, FMT_STRING_SET_CTRL,
++		__func__, state_name(inst->state), ctrl->name, ctrl->id, ctrl->val);
++
++	cap_id = msm_vidc_get_cap_id(inst, ctrl->id);
++	if (!is_valid_cap_id(cap_id)) {
++		i_vpr_e(inst, "%s: invalid cap_id for ctrl %s\n", __func__, ctrl->name);
 +		return -EINVAL;
 +	}
 +
-+	if (rc)
-+		i_vpr_e(inst, "%s: failed, type %d id %d\n",
-+			__func__, sub->type, sub->id);
-+	return rc;
-+}
++	/* mark client set flag */
++	cap[cap_id].flags |= CAP_FLAG_CLIENT_SET;
 +
-+int msm_venc_enum_fmt(struct msm_vidc_inst *inst, struct v4l2_fmtdesc *f)
-+{
-+	int rc = 0;
-+	struct msm_vidc_core *core;
-+	u32 array[32] = {0};
-+	u32 i = 0;
++	port = is_encode_session(inst) ? OUTPUT_PORT : INPUT_PORT;
++	if (!inst->bufq[port].vb2q->streaming) {
++		/* static case */
++		rc = msm_vidc_update_static_property(inst, cap_id, ctrl);
++		if (rc)
++			return rc;
++	} else {
++		/* dynamic case */
++		rc = msm_vidc_adjust_dynamic_property(inst, cap_id, ctrl);
++		if (rc)
++			return rc;
 +
-+	core = inst->core;
-+
-+	if (f->type == OUTPUT_MPLANE) {
-+		u32 codecs = core->capabilities[ENC_CODECS].value;
-+		u32 idx = 0;
-+
-+		for (i = 0; i <= 31; i++) {
-+			if (codecs & BIT(i)) {
-+				if (idx >= ARRAY_SIZE(array))
-+					break;
-+				array[idx] = codecs & BIT(i);
-+				idx++;
-+			}
-+		}
-+		if (!array[f->index])
-+			return -EINVAL;
-+		f->pixelformat = v4l2_codec_from_driver(inst, array[f->index],
-+							__func__);
-+		if (!f->pixelformat)
-+			return -EINVAL;
-+		f->flags = V4L2_FMT_FLAG_COMPRESSED;
-+		strscpy(f->description, "codec", sizeof(f->description));
-+	} else if (f->type == INPUT_MPLANE) {
-+		u32 formats = inst->capabilities[PIX_FMTS].step_or_mask;
-+		u32 idx = 0;
-+
-+		for (i = 0; i <= 31; i++) {
-+			if (formats & BIT(i)) {
-+				if (idx >= ARRAY_SIZE(array))
-+					break;
-+				array[idx] = formats & BIT(i);
-+				idx++;
-+			}
-+		}
-+		if (!array[f->index])
-+			return -EINVAL;
-+		f->pixelformat = v4l2_colorformat_from_driver(inst, array[f->index],
-+							      __func__);
-+		if (!f->pixelformat)
-+			return -EINVAL;
-+		strscpy(f->description, "colorformat", sizeof(f->description));
++		rc = msm_vidc_set_dynamic_property(inst);
++		if (rc)
++			return rc;
 +	}
 +
-+	memset(f->reserved, 0, sizeof(f->reserved));
-+
-+	i_vpr_h(inst, "%s: index %d, %s: %s, flags %#x\n",
-+		__func__, f->index, f->description,
-+		v4l2_pixelfmt_name(inst, f->pixelformat), f->flags);
 +	return rc;
 +}
 +
-+int msm_venc_inst_init(struct msm_vidc_inst *inst)
++int msm_v4l2_op_s_ctrl(struct v4l2_ctrl *ctrl)
 +{
++	struct msm_vidc_inst *inst;
++	struct msm_vidc_ctrl_data *priv_ctrl_data;
 +	int rc = 0;
-+	struct msm_vidc_core *core;
-+	struct v4l2_format *f;
-+	enum msm_vidc_colorformat_type colorformat;
 +
-+	core = inst->core;
++	if (!ctrl) {
++		d_vpr_e("%s: invalid ctrl parameter\n", __func__);
++		return -EINVAL;
++	}
 +
-+	if (core->capabilities[DCVS].value)
-+		inst->power.dcvs_mode = true;
++	/*
++	 * v4l2_ctrl_modify_range may internally call s_ctrl
++	 * which will again try to acquire lock leading to deadlock,
++	 * Add check to avoid such scenario.
++	 */
++	priv_ctrl_data = ctrl->priv ? ctrl->priv : NULL;
++	if (priv_ctrl_data && priv_ctrl_data->skip_s_ctrl) {
++		d_vpr_l("%s: skip s_ctrl (%s)\n", __func__, ctrl->name);
++		return 0;
++	}
 +
-+	f = &inst->fmts[OUTPUT_PORT];
-+	f->type = OUTPUT_MPLANE;
-+	f->fmt.pix_mp.width = DEFAULT_WIDTH;
-+	f->fmt.pix_mp.height = DEFAULT_HEIGHT;
-+	f->fmt.pix_mp.pixelformat = V4L2_PIX_FMT_H264;
-+	f->fmt.pix_mp.num_planes = 1;
-+	f->fmt.pix_mp.plane_fmt[0].bytesperline = 0;
-+	f->fmt.pix_mp.plane_fmt[0].sizeimage =
-+		call_session_op(core, buffer_size, inst, MSM_VIDC_BUF_OUTPUT);
-+	f->fmt.pix_mp.field = V4L2_FIELD_NONE;
-+	f->fmt.pix_mp.colorspace = V4L2_COLORSPACE_DEFAULT;
-+	f->fmt.pix_mp.xfer_func = V4L2_XFER_FUNC_DEFAULT;
-+	f->fmt.pix_mp.ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
-+	f->fmt.pix_mp.quantization = V4L2_QUANTIZATION_DEFAULT;
-+	inst->buffers.output.min_count =
-+		call_session_op(core, min_count, inst, MSM_VIDC_BUF_OUTPUT);
-+	inst->buffers.output.extra_count =
-+		call_session_op(core, extra_count, inst, MSM_VIDC_BUF_OUTPUT);
-+	inst->buffers.output.actual_count =
-+			inst->buffers.output.min_count +
-+			inst->buffers.output.extra_count;
-+	inst->buffers.output.size = f->fmt.pix_mp.plane_fmt[0].sizeimage;
++	inst = container_of(ctrl->handler, struct msm_vidc_inst, ctrl_handler);
++	inst = get_inst_ref(g_core, inst);
++	if (!inst) {
++		d_vpr_e("%s: invalid instance\n", __func__);
++		return -EINVAL;
++	}
 +
-+	inst->crop.left = 0;
-+	inst->crop.top = 0;
-+	inst->crop.width = f->fmt.pix_mp.width;
-+	inst->crop.height = f->fmt.pix_mp.height;
++	client_lock(inst, __func__);
++	inst_lock(inst, __func__);
++	rc = inst->event_handle(inst, MSM_VIDC_S_CTRL, ctrl);
++	if (rc)
++		goto unlock;
 +
-+	inst->compose.left = 0;
-+	inst->compose.top = 0;
-+	inst->compose.width = f->fmt.pix_mp.width;
-+	inst->compose.height = f->fmt.pix_mp.height;
++unlock:
++	inst_unlock(inst, __func__);
++	client_unlock(inst, __func__);
++	put_inst(inst);
++	return rc;
++}
 +
-+	f = &inst->fmts[INPUT_PORT];
-+	f->type = INPUT_MPLANE;
-+	f->fmt.pix_mp.pixelformat =
-+		v4l2_colorformat_from_driver(inst, MSM_VIDC_FMT_NV12C, __func__);
-+	f->fmt.pix_mp.width = DEFAULT_WIDTH;
-+	f->fmt.pix_mp.height = DEFAULT_HEIGHT;
-+	f->fmt.pix_mp.num_planes = 1;
-+	colorformat = v4l2_colorformat_to_driver(inst, f->fmt.pix_mp.pixelformat,
-+						 __func__);
-+	f->fmt.pix_mp.plane_fmt[0].bytesperline =
-+		video_y_stride_bytes(colorformat, DEFAULT_WIDTH);
-+	f->fmt.pix_mp.plane_fmt[0].sizeimage =
-+		call_session_op(core, buffer_size, inst, MSM_VIDC_BUF_INPUT);
-+	f->fmt.pix_mp.field = V4L2_FIELD_NONE;
-+	f->fmt.pix_mp.colorspace = V4L2_COLORSPACE_DEFAULT;
-+	f->fmt.pix_mp.xfer_func = V4L2_XFER_FUNC_DEFAULT;
-+	f->fmt.pix_mp.ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
-+	f->fmt.pix_mp.quantization = V4L2_QUANTIZATION_DEFAULT;
-+	inst->buffers.input.min_count =
-+		call_session_op(core, min_count, inst, MSM_VIDC_BUF_INPUT);
-+	inst->buffers.input.extra_count =
-+		call_session_op(core, extra_count, inst, MSM_VIDC_BUF_INPUT);
-+	inst->buffers.input.actual_count =
-+			inst->buffers.input.min_count +
-+			inst->buffers.input.extra_count;
-+	inst->buffers.input.size = f->fmt.pix_mp.plane_fmt[0].sizeimage;
++int msm_vidc_prepare_dependency_list(struct msm_vidc_inst *inst)
++{
++	struct list_head leaf_list, opt_list;
++	struct msm_vidc_inst_cap *cap, *lcap, *temp_cap;
++	struct msm_vidc_inst_cap_entry *entry = NULL, *temp = NULL;
++	bool leaf_visited[INST_CAP_MAX];
++	bool opt_visited[INST_CAP_MAX];
++	int tmp_count_total, tmp_count, num_nodes = 0;
++	int i, rc = 0;
 +
-+	inst->hfi_rc_type = HFI_RC_VBR_CFR;
-+	inst->hfi_layer_type = HFI_HIER_P_SLIDING_WINDOW;
++	cap = &inst->capabilities[0];
 +
-+	rc = msm_venc_codec_change(inst,
-+				   inst->fmts[OUTPUT_PORT].fmt.pix_mp.pixelformat);
++	if (!list_empty(&inst->caps_list)) {
++		i_vpr_h(inst, "%s: dependency list already prepared\n", __func__);
++		return 0;
++	}
++
++	/* init local list and lookup table entries */
++	INIT_LIST_HEAD(&leaf_list);
++	INIT_LIST_HEAD(&opt_list);
++	memset(&leaf_visited, 0, sizeof(leaf_visited));
++	memset(&opt_visited, 0, sizeof(opt_visited));
++
++	/* populate leaf nodes first */
++	for (i = 1; i < INST_CAP_MAX; i++) {
++		lcap = &cap[i];
++		if (!is_valid_cap(inst, lcap->cap_id))
++			continue;
++
++		/* sanitize cap value */
++		if (i != lcap->cap_id) {
++			i_vpr_e(inst, "%s: cap id mismatch. expected %s, actual %s\n",
++				__func__, cap_name(i), cap_name(lcap->cap_id));
++			rc = -EINVAL;
++			goto error;
++		}
++
++		/* add all leaf nodes */
++		if (is_leaf(lcap)) {
++			rc = add_node(&leaf_list, lcap, leaf_visited);
++			if (rc)
++				goto error;
++		} else {
++			rc = add_node(&opt_list, lcap, opt_visited);
++			if (rc)
++				goto error;
++		}
++	}
++
++	/* find total optional list entries */
++	list_for_each_entry(entry, &opt_list, list)
++		num_nodes++;
++
++	/* used for loop detection */
++	tmp_count_total = num_nodes;
++	tmp_count = num_nodes;
++
++	/* sort final outstanding nodes */
++	list_for_each_entry_safe(entry, temp, &opt_list, list) {
++		/* initially remove entry from opt list */
++		list_del_init(&entry->list);
++		opt_visited[entry->cap_id] = false;
++		tmp_count--;
++		temp_cap = &cap[entry->cap_id];
++
++		/**
++		 * if all child are visited then add this entry to
++		 * leaf list else add it to the end of optional list.
++		 */
++		if (is_all_childrens_visited(temp_cap, leaf_visited)) {
++			list_add(&entry->list, &leaf_list);
++			leaf_visited[entry->cap_id] = true;
++			tmp_count_total--;
++		} else {
++			list_add_tail(&entry->list, &opt_list);
++			opt_visited[entry->cap_id] = true;
++		}
++
++		/* detect loop */
++		if (!tmp_count) {
++			if (num_nodes == tmp_count_total) {
++				i_vpr_e(inst, "%s: loop detected in subgraph %d\n",
++					__func__, num_nodes);
++				rc = -EINVAL;
++				goto error;
++			}
++			num_nodes = tmp_count_total;
++			tmp_count = tmp_count_total;
++		}
++	}
++
++	/* expecting opt_list to be empty */
++	if (!list_empty(&opt_list)) {
++		i_vpr_e(inst, "%s: opt_list is not empty\n", __func__);
++		rc = -EINVAL;
++		goto error;
++	}
++
++	/* move elements to &inst->caps_list from local */
++	list_replace_init(&leaf_list, &inst->caps_list);
++
++	return 0;
++error:
++	list_for_each_entry_safe(entry, temp, &opt_list, list) {
++		i_vpr_e(inst, "%s: opt_list: %s\n", __func__, cap_name(entry->cap_id));
++		list_del_init(&entry->list);
++		vfree(entry);
++	}
++	list_for_each_entry_safe(entry, temp, &leaf_list, list) {
++		i_vpr_e(inst, "%s: leaf_list: %s\n", __func__, cap_name(entry->cap_id));
++		list_del_init(&entry->list);
++		vfree(entry);
++	}
++	return rc;
++}
++
++int msm_vidc_adjust_v4l2_properties(struct msm_vidc_inst *inst)
++{
++	struct msm_vidc_inst_cap_entry *entry = NULL, *temp = NULL;
++	int rc = 0;
++
++	/* adjust all possible caps from caps_list */
++	list_for_each_entry_safe(entry, temp, &inst->caps_list, list) {
++		i_vpr_l(inst, "%s: cap: id %3u, name %s\n", __func__,
++			entry->cap_id, cap_name(entry->cap_id));
++
++		rc = msm_vidc_adjust_cap(inst, entry->cap_id, NULL, __func__);
++		if (rc)
++			return rc;
++	}
 +
 +	return rc;
 +}
 +
-+int msm_venc_inst_deinit(struct msm_vidc_inst *inst)
++int msm_vidc_set_v4l2_properties(struct msm_vidc_inst *inst)
 +{
-+	return msm_vidc_ctrl_handler_deinit(inst);
++	struct msm_vidc_inst_cap_entry *entry = NULL, *temp = NULL;
++	int rc = 0;
++
++	/* set all caps from caps_list */
++	list_for_each_entry_safe(entry, temp, &inst->caps_list, list) {
++		rc = msm_vidc_set_cap(inst, entry->cap_id, __func__);
++		if (rc)
++			return rc;
++	}
++
++	return rc;
 +}
 -- 
 2.7.4
