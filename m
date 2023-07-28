@@ -2,43 +2,43 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40EFFC41513
-	for <linux-media@archiver.kernel.org>; Fri, 28 Jul 2023 13:29:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00EBEC001DE
+	for <linux-media@archiver.kernel.org>; Fri, 28 Jul 2023 13:29:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236778AbjG1N3L (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 28 Jul 2023 09:29:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44808 "EHLO
+        id S236852AbjG1N3X (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 28 Jul 2023 09:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236842AbjG1N2t (ORCPT
+        with ESMTP id S236851AbjG1N2u (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 28 Jul 2023 09:28:49 -0400
+        Fri, 28 Jul 2023 09:28:50 -0400
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 804EB3C25;
-        Fri, 28 Jul 2023 06:28:07 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36S7F9CS027724;
-        Fri, 28 Jul 2023 13:26:43 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CAE73C22;
+        Fri, 28 Jul 2023 06:28:06 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36SBd98C018015;
+        Fri, 28 Jul 2023 13:26:42 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=qcppdkim1;
- bh=rrbALL2Sz3VNqLuQVEHpUhcQuPUraXFWuuw2tLJ10Mc=;
- b=EZm1tHP1zIzEkt3+fRLU67qSe4qJ7eJfIAut4FPxrFjH3cyt08hYpXN3NABD5qDMV8K5
- XCetvf7BTmohe+OAWDjouodslER69X8zqypX9Aro/gbSXpKTHwyEmV1igFNzM4Q/qGTU
- yWQjTANRtywwtdUM3qS/ncnLerDFqnf++4t+YCHBQy7VW3q2lgUnMkNI79d7hA06PRbb
- uVek8+lQrIGYOkmrQCnhO2R2Qa/q75Rl2PxPQFbIRMjOX9KMTKE5Dvk1n0XwIP/cVYek
- 41Qa1OZ6ObZj1L5/VD1JU8MTrbnDFWUydMvKZNMA1fN5J9wWggrKI5YhFcRM9V56sYib Xg== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s3k7u3k02-1
+ bh=G5oETVCbo7pwezRFv5fv8f0gSrF7GoUOoytHUbCpDa8=;
+ b=QQQv1u/76KoMHwy1ppotMe0xXXGtpQyPfRyMAhX3E8F7C5Ipc1qO1TSoXVNF3WH/cOMh
+ y4msdpFAHKnG+Tol+S4/nQztsGcWU8PmOzme3y5T0RVQGzmSsZk6dznF5aegXORHdYX9
+ rnpYIS4TOxjECfj9lgyQOB+Y3rOy7dRnIwQ4N1fI1CerCaQ12tNT09EFHW8pueFveye7
+ ALNJJPweJXmtq5p9JRAWLkOIlazbCvo9QbfKq6rY1rVgekqzBtWTaLHFke+UUpmLkdn4
+ pQNcvI0hmvRFbJOYgt+hCbIwNz4p9YBQeOOUBRuml5Rw+l/ZUqzRqXW5bxmSipS8/oAi kw== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s468qs156-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Jul 2023 13:26:42 +0000
+        Fri, 28 Jul 2023 13:26:41 +0000
 Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36SDQQeW026628
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36SDQeSa002793
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Jul 2023 13:26:26 GMT
+        Fri, 28 Jul 2023 13:26:40 GMT
 Received: from hu-vgarodia-hyd.qualcomm.com (10.80.80.8) by
  nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Fri, 28 Jul 2023 06:26:23 -0700
+ 15.2.1118.30; Fri, 28 Jul 2023 06:26:37 -0700
 From:   Vikash Garodia <quic_vgarodia@quicinc.com>
 To:     <stanimir.k.varbanov@gmail.com>, <agross@kernel.org>,
         <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
@@ -47,9 +47,9 @@ To:     <stanimir.k.varbanov@gmail.com>, <agross@kernel.org>,
         <linux-arm-msm@vger.kernel.org>
 CC:     <quic_dikshita@quicinc.com>,
         Vikash Garodia <quic_vgarodia@quicinc.com>
-Subject: [PATCH 22/33] iris: vidc: hfi: defines HFI properties and enums
-Date:   Fri, 28 Jul 2023 18:53:33 +0530
-Message-ID: <1690550624-14642-23-git-send-email-quic_vgarodia@quicinc.com>
+Subject: [PATCH 26/33] iris: platform: sm8550: add capability file for sm8550
+Date:   Fri, 28 Jul 2023 18:53:37 +0530
+Message-ID: <1690550624-14642-27-git-send-email-quic_vgarodia@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1690550624-14642-1-git-send-email-quic_vgarodia@quicinc.com>
 References: <1690550624-14642-1-git-send-email-quic_vgarodia@quicinc.com>
@@ -60,702 +60,1786 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nasanex01a.na.qualcomm.com (10.52.223.231)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ynYBWNuI1yZgWN2LJVZVe_tDLgcsSrAk
-X-Proofpoint-ORIG-GUID: ynYBWNuI1yZgWN2LJVZVe_tDLgcsSrAk
+X-Proofpoint-GUID: XPOk0xq0b2Lx37PLV-2NVbP9p6Ey_liG
+X-Proofpoint-ORIG-GUID: XPOk0xq0b2Lx37PLV-2NVbP9p6Ey_liG
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-07-27_10,2023-07-26_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- mlxscore=0 lowpriorityscore=0 malwarescore=0 bulkscore=0 mlxlogscore=999
- suspectscore=0 priorityscore=1501 clxscore=1015 phishscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2306200000
- definitions=main-2307280124
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 impostorscore=0 malwarescore=0 phishscore=0 mlxlogscore=999
+ mlxscore=0 bulkscore=0 adultscore=0 spamscore=0 lowpriorityscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2307280124
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Defines hfi properties supported by firmware and enums like
-codec, colorformat, profile, level, rate control etc.
+From: Dikshita Agarwal <quic_dikshita@quicinc.com>
+
+This implements all the capabilities supported by sm8550.
 
 Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
 Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
 ---
- .../platform/qcom/iris/vidc/inc/hfi_property.h     | 666 +++++++++++++++++++++
- 1 file changed, 666 insertions(+)
- create mode 100644 drivers/media/platform/qcom/iris/vidc/inc/hfi_property.h
+ .../iris/platform/sm8550/inc/msm_vidc_sm8550.h     |   14 +
+ .../iris/platform/sm8550/src/msm_vidc_sm8550.c     | 1727 ++++++++++++++++++++
+ 2 files changed, 1741 insertions(+)
+ create mode 100644 drivers/media/platform/qcom/iris/platform/sm8550/inc/msm_vidc_sm8550.h
+ create mode 100644 drivers/media/platform/qcom/iris/platform/sm8550/src/msm_vidc_sm8550.c
 
-diff --git a/drivers/media/platform/qcom/iris/vidc/inc/hfi_property.h b/drivers/media/platform/qcom/iris/vidc/inc/hfi_property.h
+diff --git a/drivers/media/platform/qcom/iris/platform/sm8550/inc/msm_vidc_sm8550.h b/drivers/media/platform/qcom/iris/platform/sm8550/inc/msm_vidc_sm8550.h
 new file mode 100644
-index 0000000..3fb6601
+index 0000000..0a2f172
 --- /dev/null
-+++ b/drivers/media/platform/qcom/iris/vidc/inc/hfi_property.h
-@@ -0,0 +1,666 @@
++++ b/drivers/media/platform/qcom/iris/platform/sm8550/inc/msm_vidc_sm8550.h
+@@ -0,0 +1,14 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
 + * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
++ * Copyright (c) 2021-2023 Qualcomm Innovation Center, Inc. All rights reserved.
 + */
 +
-+#ifndef __H_HFI_PROPERTY_H__
-+#define __H_HFI_PROPERTY_H__
++#ifndef _MSM_VIDC_SM8550_H_
++#define _MSM_VIDC_SM8550_H_
 +
-+//todo: DP: remove below header
-+#include <linux/types.h>
++#include "msm_vidc_core.h"
 +
-+#define HFI_PROP_BEGIN                                          0x03000000
-+#define HFI_PROP_IMAGE_VERSION                                  0x03000001
-+#define HFI_PROP_INTRA_FRAME_POWER_COLLAPSE                     0x03000002
-+#define HFI_PROP_UBWC_MAX_CHANNELS                              0x03000003
-+#define HFI_PROP_UBWC_MAL_LENGTH                                0x03000004
-+#define HFI_PROP_UBWC_HBB                                       0x03000005
-+#define HFI_PROP_UBWC_BANK_SWZL_LEVEL1                          0x03000006
-+#define HFI_PROP_UBWC_BANK_SWZL_LEVEL2                          0x03000007
-+#define HFI_PROP_UBWC_BANK_SWZL_LEVEL3                          0x03000008
-+#define HFI_PROP_UBWC_BANK_SPREADING                            0x03000009
++int msm_vidc_init_platform_sm8550(struct msm_vidc_core *core);
 +
-+enum hfi_debug_config {
-+	HFI_DEBUG_CONFIG_DEFAULT = 0x00000000,
-+	HFI_DEBUG_CONFIG_CLRDBGQ = 0x00000001,
-+	HFI_DEBUG_CONFIG_WFI     = 0x00000002,
-+	HFI_DEBUG_CONFIG_ARM9WD  = 0x00000004,
++#endif // _MSM_VIDC_SM8550_H_
+diff --git a/drivers/media/platform/qcom/iris/platform/sm8550/src/msm_vidc_sm8550.c b/drivers/media/platform/qcom/iris/platform/sm8550/src/msm_vidc_sm8550.c
+new file mode 100644
+index 0000000..2408556
+--- /dev/null
++++ b/drivers/media/platform/qcom/iris/platform/sm8550/src/msm_vidc_sm8550.c
+@@ -0,0 +1,1727 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
++ * Copyright (c) 2021-2023 Qualcomm Innovation Center, Inc. All rights reserved.
++ */
++
++#include <dt-bindings/clock/qcom,sm8550-gcc.h>
++#include <dt-bindings/clock/qcom,sm8450-videocc.h>
++
++#include "hfi_command.h"
++#include "hfi_property.h"
++#include "msm_vidc_control.h"
++#include "msm_vidc_debug.h"
++#include "msm_vidc_iris3.h"
++#include "msm_vidc_sm8550.h"
++#include "msm_vidc_platform.h"
++
++/* version: major[24:31], minor[16:23], revision[0:15] */
++#define DRIVER_VERSION          0x04000000
++#define DEFAULT_VIDEO_CONCEAL_COLOR_BLACK 0x8020010
++#define MAX_BASE_LAYER_PRIORITY_ID 63
++#define MAX_OP_POINT            31
++#define MAX_BITRATE             245000000
++#define DEFAULT_BITRATE         20000000
++#define MINIMUM_FPS             1
++#define MAXIMUM_FPS             480
++#define MAXIMUM_DEC_FPS         960
++#define MAX_QP                  51
++#define DEFAULT_QP              20
++#define MAX_CONSTANT_QUALITY    100
++#define MIN_SLICE_BYTE_SIZE     512
++#define MAX_SLICE_BYTE_SIZE       \
++	((MAX_BITRATE) >> 3)
++#define MAX_SLICE_MB_SIZE         \
++	(((4096 + 15) >> 4) * ((2304 + 15) >> 4))
++
++#define ENC     MSM_VIDC_ENCODER
++#define DEC     MSM_VIDC_DECODER
++#define H264    MSM_VIDC_H264
++#define HEVC    MSM_VIDC_HEVC
++#define VP9     MSM_VIDC_VP9
++#define CODECS_ALL     (H264 | HEVC | VP9)
++#define MAXIMUM_OVERRIDE_VP9_FPS 200
++
++static struct codec_info codec_data_sm8550[] = {
++	{
++		.v4l2_codec  = V4L2_PIX_FMT_H264,
++		.vidc_codec  = MSM_VIDC_H264,
++		.pixfmt_name = "AVC",
++	},
++	{
++		.v4l2_codec  = V4L2_PIX_FMT_HEVC,
++		.vidc_codec  = MSM_VIDC_HEVC,
++		.pixfmt_name = "HEVC",
++	},
++	{
++		.v4l2_codec  = V4L2_PIX_FMT_VP9,
++		.vidc_codec  = MSM_VIDC_VP9,
++		.pixfmt_name = "VP9",
++	},
 +};
 +
-+#define HFI_PROP_DEBUG_CONFIG                                   0x0300000a
-+
-+enum hfi_debug_log_level {
-+	HFI_DEBUG_LOG_NONE   = 0x00000000,
-+	HFI_DEBUG_LOG_ERROR  = 0x00000001,
-+	HFI_DEBUG_LOG_FATAL  = 0x00000002,
-+	HFI_DEBUG_LOG_PERF   = 0x00000004,
-+	HFI_DEBUG_LOG_HIGH   = 0x00000008,
-+	HFI_DEBUG_LOG_MEDIUM = 0x00000010,
-+	HFI_DEBUG_LOG_LOW    = 0x00000020,
++static struct color_format_info color_format_data_sm8550[] = {
++	{
++		.v4l2_color_format = V4L2_PIX_FMT_NV12,
++		.vidc_color_format = MSM_VIDC_FMT_NV12,
++		.pixfmt_name       = "NV12",
++	},
++	{
++		.v4l2_color_format = V4L2_PIX_FMT_NV21,
++		.vidc_color_format = MSM_VIDC_FMT_NV21,
++		.pixfmt_name       = "NV21",
++	},
++	{
++		.v4l2_color_format = V4L2_PIX_FMT_QC08C,
++		.vidc_color_format = MSM_VIDC_FMT_NV12C,
++		.pixfmt_name       = "NV12C",
++	},
++	{
++		.v4l2_color_format = V4L2_PIX_FMT_QC10C,
++		.vidc_color_format = MSM_VIDC_FMT_TP10C,
++		.pixfmt_name       = "TP10C",
++	},
++	{
++		.v4l2_color_format = V4L2_PIX_FMT_RGBA32,
++		.vidc_color_format = MSM_VIDC_FMT_RGBA8888,
++		.pixfmt_name       = "RGBA",
++	},
 +};
 +
-+struct hfi_debug_header {
-+	u32   size;
-+	u32   debug_level;
-+	u32   reserved[2];
++static struct color_primaries_info color_primaries_data_sm8550[] = {
++	{
++		.v4l2_color_primaries  = V4L2_COLORSPACE_DEFAULT,
++		.vidc_color_primaries  = MSM_VIDC_PRIMARIES_RESERVED,
++	},
++	{
++		.v4l2_color_primaries  = V4L2_COLORSPACE_REC709,
++		.vidc_color_primaries  = MSM_VIDC_PRIMARIES_BT709,
++	},
++	{
++		.v4l2_color_primaries  = V4L2_COLORSPACE_470_SYSTEM_M,
++		.vidc_color_primaries  = MSM_VIDC_PRIMARIES_BT470_SYSTEM_M,
++	},
++	{
++		.v4l2_color_primaries  = V4L2_COLORSPACE_470_SYSTEM_BG,
++		.vidc_color_primaries  = MSM_VIDC_PRIMARIES_BT470_SYSTEM_BG,
++	},
++	{
++		.v4l2_color_primaries  = V4L2_COLORSPACE_SMPTE170M,
++		.vidc_color_primaries  = MSM_VIDC_PRIMARIES_BT601_525,
++	},
++	{
++		.v4l2_color_primaries  = V4L2_COLORSPACE_SMPTE240M,
++		.vidc_color_primaries  = MSM_VIDC_PRIMARIES_SMPTE_ST240M,
++	},
++	{
++		.v4l2_color_primaries  = V4L2_COLORSPACE_BT2020,
++		.vidc_color_primaries  = MSM_VIDC_PRIMARIES_BT2020,
++	},
++	{
++		.v4l2_color_primaries  = V4L2_COLORSPACE_DCI_P3,
++		.vidc_color_primaries  = MSM_VIDC_PRIMARIES_SMPTE_RP431_2,
++	},
 +};
 +
-+#define HFI_PROP_DEBUG_LOG_LEVEL                                0x0300000b
-+
-+#define HFI_PROP_FENCE_CLIENT_DATA                              0x0300000d
-+
-+enum hfi_codec_type {
-+	HFI_CODEC_DECODE_AVC   = 1,
-+	HFI_CODEC_ENCODE_AVC   = 2,
-+	HFI_CODEC_DECODE_HEVC  = 3,
-+	HFI_CODEC_ENCODE_HEVC  = 4,
-+	HFI_CODEC_DECODE_VP9   = 5,
-+	HFI_CODEC_DECODE_MPEG2 = 6,
-+	HFI_CODEC_DECODE_AV1   = 7,
++static struct transfer_char_info transfer_char_data_sm8550[] = {
++	{
++		.v4l2_transfer_char  = V4L2_XFER_FUNC_DEFAULT,
++		.vidc_transfer_char  = MSM_VIDC_TRANSFER_RESERVED,
++	},
++	{
++		.v4l2_transfer_char  = V4L2_XFER_FUNC_709,
++		.vidc_transfer_char  = MSM_VIDC_TRANSFER_BT709,
++	},
++	{
++		.v4l2_transfer_char  = V4L2_XFER_FUNC_SMPTE240M,
++		.vidc_transfer_char  = MSM_VIDC_TRANSFER_SMPTE_ST240M,
++	},
++	{
++		.v4l2_transfer_char  = V4L2_XFER_FUNC_SRGB,
++		.vidc_transfer_char  = MSM_VIDC_TRANSFER_SRGB_SYCC,
++	},
++	{
++		.v4l2_transfer_char  = V4L2_XFER_FUNC_SMPTE2084,
++		.vidc_transfer_char  = MSM_VIDC_TRANSFER_SMPTE_ST2084_PQ,
++	},
 +};
 +
-+#define HFI_PROP_CODEC                                          0x03000100
-+
-+enum hfi_color_format {
-+	HFI_COLOR_FMT_OPAQUE        = 0,
-+	HFI_COLOR_FMT_NV12          = 1,
-+	HFI_COLOR_FMT_NV12_UBWC     = 2,
-+	HFI_COLOR_FMT_P010          = 3,
-+	HFI_COLOR_FMT_TP10_UBWC     = 4,
-+	HFI_COLOR_FMT_RGBA8888      = 5,
-+	HFI_COLOR_FMT_RGBA8888_UBWC = 6,
-+	HFI_COLOR_FMT_NV21          = 7,
++static struct matrix_coeff_info matrix_coeff_data_sm8550[] = {
++	{
++		.v4l2_matrix_coeff  = V4L2_YCBCR_ENC_DEFAULT,
++		.vidc_matrix_coeff  = MSM_VIDC_MATRIX_COEFF_RESERVED,
++	},
++	{
++		.v4l2_matrix_coeff  = V4L2_YCBCR_ENC_709,
++		.vidc_matrix_coeff  = MSM_VIDC_MATRIX_COEFF_BT709,
++	},
++	{
++		.v4l2_matrix_coeff  = V4L2_YCBCR_ENC_XV709,
++		.vidc_matrix_coeff  = MSM_VIDC_MATRIX_COEFF_BT709,
++	},
++	{
++		.v4l2_matrix_coeff  = V4L2_YCBCR_ENC_XV601,
++		.vidc_matrix_coeff  = MSM_VIDC_MATRIX_COEFF_BT470_SYS_BG_OR_BT601_625,
++	},
++	{
++		.v4l2_matrix_coeff  = V4L2_YCBCR_ENC_601,
++		.vidc_matrix_coeff  = MSM_VIDC_MATRIX_COEFF_BT601_525_BT1358_525_OR_625,
++	},
++	{
++		.v4l2_matrix_coeff  = V4L2_YCBCR_ENC_SMPTE240M,
++		.vidc_matrix_coeff  = MSM_VIDC_MATRIX_COEFF_SMPTE_ST240,
++	},
++	{
++		.v4l2_matrix_coeff  = V4L2_YCBCR_ENC_BT2020,
++		.vidc_matrix_coeff  = MSM_VIDC_MATRIX_COEFF_BT2020_NON_CONSTANT,
++	},
++	{
++		.v4l2_matrix_coeff  = V4L2_YCBCR_ENC_BT2020_CONST_LUM,
++		.vidc_matrix_coeff  = MSM_VIDC_MATRIX_COEFF_BT2020_CONSTANT,
++	},
 +};
 +
-+#define HFI_PROP_COLOR_FORMAT                                   0x03000101
-+
-+#define HFI_PROP_SECURE                                         0x03000102
-+
-+#define HFI_BITMASK_BITSTREAM_WIDTH                             0xffff0000
-+#define HFI_BITMASK_BITSTREAM_HEIGHT                            0x0000ffff
-+#define HFI_PROP_BITSTREAM_RESOLUTION                           0x03000103
-+
-+#define HFI_BITMASK_LINEAR_STRIDE             0xffff0000
-+#define HFI_BITMASK_LINEAR_SCANLINE           0x0000ffff
-+#define HFI_PROP_LINEAR_STRIDE_SCANLINE                        0x03000104
-+
-+#define HFI_BITMASK_CROP_RIGHT_OFFSET        0xffff0000
-+#define HFI_BITMASK_CROP_BOTTOM_OFFSET       0x0000ffff
-+#define HFI_BITMASK_CROP_LEFT_OFFSET         0xffff0000
-+#define HFI_BITMASK_CROP_TOP_OFFSET          0x0000ffff
-+#define HFI_PROP_CROP_OFFSETS                                   0x03000105
-+
-+#define HFI_PROP_SESSION_PRIORITY                               0x03000106
-+
-+enum hfi_avc_profile_type {
-+	HFI_AVC_PROFILE_BASELINE             = 0,
-+	HFI_AVC_PROFILE_CONSTRAINED_BASELINE = 1,
-+	HFI_AVC_PROFILE_MAIN                 = 2,
-+	HFI_AVC_PROFILE_HIGH                 = 4,
-+	HFI_AVC_PROFILE_CONSTRAINED_HIGH     = 17
++static struct msm_platform_core_capability core_data_sm8550[] = {
++	/* {type, value} */
++	{ENC_CODECS, H264 | HEVC},
++	{DEC_CODECS, H264 | HEVC | VP9},
++	{MAX_SESSION_COUNT, 16},
++	{MAX_NUM_720P_SESSIONS, 16},
++	{MAX_NUM_1080P_SESSIONS, 16},
++	{MAX_NUM_4K_SESSIONS, 8},
++	{MAX_NUM_8K_SESSIONS, 2},
++	{MAX_RT_MBPF, 174080},	/* (8192x4352)/256 + (4096x2176)/256*/
++	{MAX_MBPF, 278528}, /* ((8192x4352)/256) * 2 */
++	{MAX_MBPS, 7833600},	/* max_load
++				 * 7680x4320@60fps or 3840x2176@240fps
++				 * which is greater than 4096x2176@120fps,
++				 * 8192x4320@48fps
++				 */
++	{MAX_MBPF_HQ, 8160}, /* ((1920x1088)/256) */
++	{MAX_MBPS_HQ, 489600}, /* ((1920x1088)/256)@60fps */
++	{MAX_MBPF_B_FRAME, 32640}, /* 3840x2176/256 */
++	{MAX_MBPS_B_FRAME, 1958400}, /* 3840x2176/256 MBs@60fps */
++	{MAX_MBPS_ALL_INTRA, 1044480}, /* 4096x2176/256 MBs@30fps */
++	{MAX_ENH_LAYER_COUNT, 5},
++	{NUM_VPP_PIPE, 4},
++	{SW_PC, 1},
++	{FW_UNLOAD, 0},
++	{HW_RESPONSE_TIMEOUT, HW_RESPONSE_TIMEOUT_VALUE}, /* 1000 ms */
++	{SW_PC_DELAY,         SW_PC_DELAY_VALUE        }, /* 1500 ms (>HW_RESPONSE_TIMEOUT)*/
++	{FW_UNLOAD_DELAY,     FW_UNLOAD_DELAY_VALUE    }, /* 3000 ms (>SW_PC_DELAY)*/
++	{DCVS, 1},
++	{DECODE_BATCH, 1},
++	{DECODE_BATCH_TIMEOUT, 200},
++	{STATS_TIMEOUT_MS, 2000},
++	{NON_FATAL_FAULTS, 1},
++	{DEVICE_CAPS, V4L2_CAP_VIDEO_M2M_MPLANE | V4L2_CAP_STREAMING},
 +};
 +
-+enum hfi_hevc_profile_type {
-+	HFI_H265_PROFILE_MAIN                  = 0,
-+	HFI_H265_PROFILE_MAIN_STILL_PICTURE    = 1,
-+	HFI_H265_PROFILE_MAIN_10               = 2,
-+	HFI_H265_PROFILE_MAIN_10_STILL_PICTURE = 3,
++static struct msm_platform_inst_capability instance_cap_data_sm8550[] = {
++	/* {cap, domain, codec,
++	 *      min, max, step_or_mask, value,
++	 *      v4l2_id,
++	 *      hfi_id,
++	 *      flags}
++	 */
++	{FRAME_WIDTH, DEC, CODECS_ALL, 96, 8192, 1, 1920},
++
++	{FRAME_WIDTH, DEC, VP9, 96, 4096, 1, 1920},
++
++	{FRAME_WIDTH, ENC, CODECS_ALL, 128, 8192, 1, 1920},
++
++	{FRAME_WIDTH, ENC, HEVC, 96, 8192, 1, 1920},
++
++	{LOSSLESS_FRAME_WIDTH, ENC, CODECS_ALL, 128, 4096, 1, 1920},
++
++	{LOSSLESS_FRAME_WIDTH, ENC, HEVC, 96, 4096, 1, 1920},
++
++	{FRAME_HEIGHT, DEC, CODECS_ALL, 96, 8192, 1, 1080},
++
++	{FRAME_HEIGHT, DEC, VP9, 96, 4096, 1, 1080},
++
++	{FRAME_HEIGHT, ENC, CODECS_ALL, 128, 8192, 1, 1080},
++
++	{FRAME_HEIGHT, ENC, HEVC, 96, 8192, 1, 1080},
++
++	{LOSSLESS_FRAME_HEIGHT, ENC, CODECS_ALL, 128, 4096, 1, 1080},
++
++	{LOSSLESS_FRAME_HEIGHT, ENC, HEVC, 96, 4096, 1, 1080},
++
++	{PIX_FMTS, ENC | DEC, H264,
++		MSM_VIDC_FMT_NV12,
++		MSM_VIDC_FMT_NV12C,
++		MSM_VIDC_FMT_NV12 | MSM_VIDC_FMT_NV21 | MSM_VIDC_FMT_NV12C,
++		MSM_VIDC_FMT_NV12C},
++
++	{PIX_FMTS, ENC | DEC, HEVC | VP9,
++		MSM_VIDC_FMT_NV12,
++		MSM_VIDC_FMT_TP10C,
++		MSM_VIDC_FMT_NV12 | MSM_VIDC_FMT_NV21 | MSM_VIDC_FMT_NV12C |
++		MSM_VIDC_FMT_TP10C,
++		MSM_VIDC_FMT_NV12C},
++
++	{MIN_BUFFERS_INPUT, ENC | DEC, CODECS_ALL, 0, 64, 1, 4,
++		V4L2_CID_MIN_BUFFERS_FOR_OUTPUT,
++		0,
++		CAP_FLAG_VOLATILE},
++
++	{MIN_BUFFERS_OUTPUT, ENC | DEC, CODECS_ALL,
++		0, 64, 1, 4,
++		V4L2_CID_MIN_BUFFERS_FOR_CAPTURE,
++		HFI_PROP_BUFFER_FW_MIN_OUTPUT_COUNT,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_VOLATILE},
++
++	/* (8192 * 4320) / 256 */
++	{MBPF, ENC, CODECS_ALL, 64, 138240, 1, 138240},
++
++	{MBPF, ENC, HEVC, 36, 138240, 1, 138240},
++
++	{MBPF, DEC, CODECS_ALL, 36, 138240, 1, 138240},
++
++	/* (4096 * 2304) / 256 */
++	{MBPF, DEC, VP9, 36, 36864, 1, 36864},
++
++	/* (4096 * 2304) / 256 */
++	{LOSSLESS_MBPF, ENC, H264 | HEVC, 64, 36864, 1, 36864},
++
++	/* Batch Mode Decode */
++	/* TODO: update with new values based on updated voltage corner */
++	{BATCH_MBPF, DEC, H264 | HEVC | VP9, 64, 34816, 1, 34816},
++
++	/* (4096 * 2304) / 256 */
++	{BATCH_FPS, DEC, H264 | HEVC | VP9, 1, 120, 1, 120},
++
++	{FRAME_RATE, ENC | DEC, CODECS_ALL,
++		(MINIMUM_FPS << 16), (MAXIMUM_FPS << 16),
++		1, (DEFAULT_FPS << 16),
++		0,
++		HFI_PROP_FRAME_RATE,
++		CAP_FLAG_OUTPUT_PORT},
++
++	{OPERATING_RATE, ENC | DEC, CODECS_ALL,
++		(MINIMUM_FPS << 16), (MAXIMUM_FPS << 16),
++		1, (DEFAULT_FPS << 16)},
++
++	{INPUT_RATE, ENC | DEC, CODECS_ALL,
++		(MINIMUM_FPS << 16), INT_MAX,
++		1, (DEFAULT_FPS << 16)},
++
++	{TIMESTAMP_RATE, ENC | DEC, CODECS_ALL,
++		(MINIMUM_FPS << 16), INT_MAX,
++		1, (DEFAULT_FPS << 16)},
++
++	{SCALE_FACTOR, ENC, H264 | HEVC, 1, 8, 1, 8},
++
++	{MB_CYCLES_VSP, ENC, CODECS_ALL, 25, 25, 1, 25},
++
++	{MB_CYCLES_VSP, DEC, CODECS_ALL, 25, 25, 1, 25},
++
++	{MB_CYCLES_VSP, DEC, VP9, 60, 60, 1, 60},
++
++	{MB_CYCLES_VPP, ENC, CODECS_ALL, 675, 675, 1, 675},
++
++	{MB_CYCLES_VPP, DEC, CODECS_ALL, 200, 200, 1, 200},
++
++	{MB_CYCLES_LP, ENC, CODECS_ALL, 320, 320, 1, 320},
++
++	{MB_CYCLES_LP, DEC, CODECS_ALL, 200, 200, 1, 200},
++
++	{MB_CYCLES_FW, ENC | DEC, CODECS_ALL, 489583, 489583, 1, 489583},
++
++	{MB_CYCLES_FW_VPP, ENC, CODECS_ALL, 48405, 48405, 1, 48405},
++
++	{MB_CYCLES_FW_VPP, DEC, CODECS_ALL, 66234, 66234, 1, 66234},
++
++	{HFLIP, ENC, CODECS_ALL,
++		0, 1, 1, 0,
++		V4L2_CID_HFLIP,
++		HFI_PROP_FLIP,
++		CAP_FLAG_OUTPUT_PORT |
++		CAP_FLAG_INPUT_PORT | CAP_FLAG_DYNAMIC_ALLOWED},
++
++	{VFLIP, ENC, CODECS_ALL,
++		0, 1, 1, 0,
++		V4L2_CID_VFLIP,
++		HFI_PROP_FLIP,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
++		CAP_FLAG_DYNAMIC_ALLOWED},
++
++	{ROTATION, ENC, CODECS_ALL,
++		0, 270, 90, 0,
++		V4L2_CID_ROTATE,
++		HFI_PROP_ROTATION,
++		CAP_FLAG_OUTPUT_PORT},
++
++	{HEADER_MODE, ENC, CODECS_ALL,
++		V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE,
++		V4L2_MPEG_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME,
++		BIT(V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE) |
++		BIT(V4L2_MPEG_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME),
++		V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE,
++		V4L2_CID_MPEG_VIDEO_HEADER_MODE,
++		HFI_PROP_SEQ_HEADER_MODE,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
++
++	{PREPEND_SPSPPS_TO_IDR, ENC, CODECS_ALL,
++		0, 1, 1, 0,
++		V4L2_CID_MPEG_VIDEO_PREPEND_SPSPPS_TO_IDR},
++
++	{WITHOUT_STARTCODE, ENC, CODECS_ALL,
++		0, 1, 1, 0,
++		V4L2_CID_MPEG_VIDEO_HEVC_WITHOUT_STARTCODE,
++		HFI_PROP_NAL_LENGTH_FIELD,
++		CAP_FLAG_OUTPUT_PORT},
++
++	{NAL_LENGTH_FIELD, ENC, CODECS_ALL,
++		V4L2_MPEG_VIDEO_HEVC_SIZE_0,
++		V4L2_MPEG_VIDEO_HEVC_SIZE_4,
++		BIT(V4L2_MPEG_VIDEO_HEVC_SIZE_0) |
++		BIT(V4L2_MPEG_VIDEO_HEVC_SIZE_4),
++		V4L2_MPEG_VIDEO_HEVC_SIZE_0,
++		V4L2_CID_MPEG_VIDEO_HEVC_SIZE_OF_LENGTH_FIELD,
++		HFI_PROP_NAL_LENGTH_FIELD,
++		CAP_FLAG_MENU | CAP_FLAG_OUTPUT_PORT},
++
++	/* TODO: Firmware introduced enumeration type for this
++	 * with and without seq header.
++	 */
++	{REQUEST_I_FRAME, ENC, H264 | HEVC,
++		0, 0, 0, 0,
++		V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME,
++		HFI_PROP_REQUEST_SYNC_FRAME,
++		CAP_FLAG_INPUT_PORT | CAP_FLAG_DYNAMIC_ALLOWED},
++
++	/* Enc: Keeping CABAC and CAVLC as same bitrate.
++	 * Dec: there's no use of Bitrate cap
++	 */
++	{BIT_RATE, ENC, H264 | HEVC,
++		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
++		V4L2_CID_MPEG_VIDEO_BITRATE,
++		HFI_PROP_TOTAL_BITRATE,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
++		CAP_FLAG_DYNAMIC_ALLOWED},
++
++	{BITRATE_MODE, ENC, H264,
++		V4L2_MPEG_VIDEO_BITRATE_MODE_VBR,
++		V4L2_MPEG_VIDEO_BITRATE_MODE_CBR,
++		BIT(V4L2_MPEG_VIDEO_BITRATE_MODE_VBR) |
++		BIT(V4L2_MPEG_VIDEO_BITRATE_MODE_CBR),
++		V4L2_MPEG_VIDEO_BITRATE_MODE_VBR,
++		V4L2_CID_MPEG_VIDEO_BITRATE_MODE,
++		HFI_PROP_RATE_CONTROL,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
++
++	{BITRATE_MODE, ENC, HEVC,
++		V4L2_MPEG_VIDEO_BITRATE_MODE_VBR,
++		V4L2_MPEG_VIDEO_BITRATE_MODE_CQ,
++		BIT(V4L2_MPEG_VIDEO_BITRATE_MODE_VBR) |
++		BIT(V4L2_MPEG_VIDEO_BITRATE_MODE_CBR) |
++		BIT(V4L2_MPEG_VIDEO_BITRATE_MODE_CQ),
++		V4L2_MPEG_VIDEO_BITRATE_MODE_VBR,
++		V4L2_CID_MPEG_VIDEO_BITRATE_MODE,
++		HFI_PROP_RATE_CONTROL,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
++
++	{CABAC_MAX_BITRATE, ENC, H264 | HEVC, 0,
++		160000000, 1, 160000000},
++
++	{CAVLC_MAX_BITRATE, ENC, H264, 0,
++		220000000, 1, 220000000},
++
++	{ALLINTRA_MAX_BITRATE, ENC, H264 | HEVC, 0,
++		245000000, 1, 245000000},
++
++	{NUM_COMV, DEC, CODECS_ALL,
++		0, INT_MAX, 1, 0},
++
++	{LOSSLESS, ENC, HEVC,
++		0, 1, 1, 0,
++		V4L2_CID_MPEG_VIDEO_HEVC_LOSSLESS_CU},
++
++	{FRAME_SKIP_MODE, ENC, H264 | HEVC,
++		V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_DISABLED,
++		V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT,
++		BIT(V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_DISABLED) |
++		BIT(V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_LEVEL_LIMIT) |
++		BIT(V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT),
++		V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_DISABLED,
++		V4L2_CID_MPEG_VIDEO_FRAME_SKIP_MODE,
++		0,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
++
++	{FRAME_RC_ENABLE, ENC, H264 | HEVC,
++		0, 1, 1, 1,
++		V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE},
++
++	{CONSTANT_QUALITY, ENC, HEVC,
++		1, MAX_CONSTANT_QUALITY, 1, 90,
++		V4L2_CID_MPEG_VIDEO_CONSTANT_QUALITY,
++		HFI_PROP_CONSTANT_QUALITY,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
++		CAP_FLAG_DYNAMIC_ALLOWED},
++
++	{GOP_SIZE, ENC, CODECS_ALL,
++		0, INT_MAX, 1, 2 * DEFAULT_FPS - 1,
++		V4L2_CID_MPEG_VIDEO_GOP_SIZE,
++		HFI_PROP_MAX_GOP_FRAMES,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
++		CAP_FLAG_DYNAMIC_ALLOWED},
++
++	{GOP_CLOSURE, ENC, H264 | HEVC,
++		0, 1, 1, 1,
++		V4L2_CID_MPEG_VIDEO_GOP_CLOSURE,
++		0},
++
++	{B_FRAME, ENC, H264 | HEVC,
++		0, 7, 1, 0,
++		V4L2_CID_MPEG_VIDEO_B_FRAMES,
++		HFI_PROP_MAX_B_FRAMES,
++		CAP_FLAG_OUTPUT_PORT},
++
++	{LTR_COUNT, ENC, H264 | HEVC,
++		0, MAX_LTR_FRAME_COUNT_2, 1, 0,
++		V4L2_CID_MPEG_VIDEO_LTR_COUNT,
++		HFI_PROP_LTR_COUNT,
++		CAP_FLAG_OUTPUT_PORT},
++
++	{USE_LTR, ENC, H264 | HEVC,
++		0,
++		((1 << MAX_LTR_FRAME_COUNT_2) - 1),
++		0, 0,
++		V4L2_CID_MPEG_VIDEO_USE_LTR_FRAMES,
++		HFI_PROP_LTR_USE,
++		CAP_FLAG_INPUT_PORT | CAP_FLAG_DYNAMIC_ALLOWED},
++
++	{MARK_LTR, ENC, H264 | HEVC,
++		INVALID_DEFAULT_MARK_OR_USE_LTR,
++		(MAX_LTR_FRAME_COUNT_2 - 1),
++		1, INVALID_DEFAULT_MARK_OR_USE_LTR,
++		V4L2_CID_MPEG_VIDEO_FRAME_LTR_INDEX,
++		HFI_PROP_LTR_MARK,
++		CAP_FLAG_INPUT_PORT | CAP_FLAG_DYNAMIC_ALLOWED},
++
++	{BASELAYER_PRIORITY, ENC, H264,
++		0, MAX_BASE_LAYER_PRIORITY_ID, 1, 0,
++		V4L2_CID_MPEG_VIDEO_BASELAYER_PRIORITY_ID,
++		HFI_PROP_BASELAYER_PRIORITYID,
++		CAP_FLAG_OUTPUT_PORT},
++
++	{IR_TYPE, ENC, H264 | HEVC,
++		V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_RANDOM,
++		V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_CYCLIC,
++		BIT(V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_RANDOM) |
++		BIT(V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_CYCLIC),
++		V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_RANDOM,
++		V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE,
++		0,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
++
++	{IR_PERIOD, ENC, H264 | HEVC,
++		0, INT_MAX, 1, 0,
++		V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD,
++		0,
++		CAP_FLAG_INPUT_PORT | CAP_FLAG_OUTPUT_PORT |
++		CAP_FLAG_DYNAMIC_ALLOWED},
++
++	{AU_DELIMITER, ENC, H264 | HEVC,
++		0, 1, 1, 0,
++		V4L2_CID_MPEG_VIDEO_AU_DELIMITER,
++		HFI_PROP_AUD,
++		CAP_FLAG_OUTPUT_PORT},
++
++	{MIN_QUALITY, ENC, H264 | HEVC,
++		0, MAX_SUPPORTED_MIN_QUALITY, 70, MAX_SUPPORTED_MIN_QUALITY,
++		0,
++		HFI_PROP_MAINTAIN_MIN_QUALITY,
++		CAP_FLAG_OUTPUT_PORT},
++
++	{VBV_DELAY, ENC, H264 | HEVC,
++		200, 300, 100, 300,
++		V4L2_CID_MPEG_VIDEO_VBV_DELAY,
++		HFI_PROP_VBV_DELAY,
++		CAP_FLAG_OUTPUT_PORT},
++
++	{PEAK_BITRATE, ENC, H264 | HEVC,
++		/* default peak bitrate is 10% larger than avg bitrate */
++		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
++		V4L2_CID_MPEG_VIDEO_BITRATE_PEAK,
++		HFI_PROP_TOTAL_PEAK_BITRATE,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
++			CAP_FLAG_DYNAMIC_ALLOWED},
++
++	{MIN_FRAME_QP, ENC, H264,
++		MIN_QP_8BIT, MAX_QP, 1, MIN_QP_8BIT,
++		V4L2_CID_MPEG_VIDEO_H264_MIN_QP,
++		HFI_PROP_MIN_QP_PACKED,
++		CAP_FLAG_OUTPUT_PORT},
++
++	{MIN_FRAME_QP, ENC, HEVC,
++		MIN_QP_10BIT, MAX_QP, 1, MIN_QP_10BIT,
++		V4L2_CID_MPEG_VIDEO_HEVC_MIN_QP,
++		HFI_PROP_MIN_QP_PACKED,
++		CAP_FLAG_OUTPUT_PORT},
++
++	{I_FRAME_MIN_QP, ENC, H264,
++		MIN_QP_8BIT, MAX_QP, 1, MIN_QP_8BIT,
++		V4L2_CID_MPEG_VIDEO_H264_I_FRAME_MIN_QP},
++
++	{I_FRAME_MIN_QP, ENC, HEVC,
++		MIN_QP_10BIT, MAX_QP, 1, MIN_QP_10BIT,
++		V4L2_CID_MPEG_VIDEO_HEVC_I_FRAME_MIN_QP},
++
++	{P_FRAME_MIN_QP, ENC, H264,
++		MIN_QP_8BIT, MAX_QP, 1, MIN_QP_8BIT,
++		V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MIN_QP},
++
++	{P_FRAME_MIN_QP, ENC, HEVC,
++		MIN_QP_10BIT, MAX_QP, 1, MIN_QP_10BIT,
++		V4L2_CID_MPEG_VIDEO_HEVC_P_FRAME_MIN_QP},
++
++	{B_FRAME_MIN_QP, ENC, H264,
++		MIN_QP_8BIT, MAX_QP, 1, MIN_QP_8BIT,
++		V4L2_CID_MPEG_VIDEO_H264_B_FRAME_MIN_QP},
++
++	{B_FRAME_MIN_QP, ENC, HEVC,
++		MIN_QP_10BIT, MAX_QP, 1, MIN_QP_10BIT,
++		V4L2_CID_MPEG_VIDEO_HEVC_B_FRAME_MIN_QP},
++
++	{MAX_FRAME_QP, ENC, H264,
++		MIN_QP_8BIT, MAX_QP, 1, MAX_QP,
++		V4L2_CID_MPEG_VIDEO_H264_MAX_QP,
++		HFI_PROP_MAX_QP_PACKED,
++		CAP_FLAG_OUTPUT_PORT},
++
++	{MAX_FRAME_QP, ENC, HEVC,
++		MIN_QP_10BIT, MAX_QP, 1, MAX_QP,
++		V4L2_CID_MPEG_VIDEO_HEVC_MAX_QP,
++		HFI_PROP_MAX_QP_PACKED,
++		CAP_FLAG_OUTPUT_PORT},
++
++	{I_FRAME_MAX_QP, ENC, H264,
++		MIN_QP_8BIT, MAX_QP, 1, MAX_QP,
++		V4L2_CID_MPEG_VIDEO_H264_I_FRAME_MAX_QP},
++
++	{I_FRAME_MAX_QP, ENC, HEVC,
++		MIN_QP_10BIT, MAX_QP, 1, MAX_QP,
++		V4L2_CID_MPEG_VIDEO_HEVC_I_FRAME_MAX_QP},
++
++	{P_FRAME_MAX_QP, ENC, H264,
++		MIN_QP_8BIT, MAX_QP, 1, MAX_QP,
++		V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MAX_QP},
++
++	{P_FRAME_MAX_QP, ENC, HEVC,
++		MIN_QP_10BIT, MAX_QP, 1, MAX_QP,
++		V4L2_CID_MPEG_VIDEO_HEVC_P_FRAME_MAX_QP},
++
++	{B_FRAME_MAX_QP, ENC, H264,
++		MIN_QP_8BIT, MAX_QP, 1, MAX_QP,
++		V4L2_CID_MPEG_VIDEO_H264_B_FRAME_MAX_QP},
++
++	{B_FRAME_MAX_QP, ENC, HEVC,
++		MIN_QP_10BIT, MAX_QP, 1, MAX_QP,
++		V4L2_CID_MPEG_VIDEO_HEVC_B_FRAME_MAX_QP},
++
++	{I_FRAME_QP, ENC, HEVC,
++		MIN_QP_10BIT, MAX_QP, 1, DEFAULT_QP,
++		V4L2_CID_MPEG_VIDEO_HEVC_I_FRAME_QP,
++		HFI_PROP_QP_PACKED,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
++			CAP_FLAG_DYNAMIC_ALLOWED},
++
++	{I_FRAME_QP, ENC, H264,
++		MIN_QP_8BIT, MAX_QP, 1, DEFAULT_QP,
++		V4L2_CID_MPEG_VIDEO_H264_I_FRAME_QP,
++		HFI_PROP_QP_PACKED,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
++			CAP_FLAG_DYNAMIC_ALLOWED},
++
++	{P_FRAME_QP, ENC, HEVC,
++		MIN_QP_10BIT, MAX_QP, 1, DEFAULT_QP,
++		V4L2_CID_MPEG_VIDEO_HEVC_P_FRAME_QP,
++		HFI_PROP_QP_PACKED,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
++			CAP_FLAG_DYNAMIC_ALLOWED},
++
++	{P_FRAME_QP, ENC, H264,
++		MIN_QP_8BIT, MAX_QP, 1, DEFAULT_QP,
++		V4L2_CID_MPEG_VIDEO_H264_P_FRAME_QP,
++		HFI_PROP_QP_PACKED,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
++			CAP_FLAG_DYNAMIC_ALLOWED},
++
++	{B_FRAME_QP, ENC, HEVC,
++		MIN_QP_10BIT, MAX_QP, 1, DEFAULT_QP,
++		V4L2_CID_MPEG_VIDEO_HEVC_B_FRAME_QP,
++		HFI_PROP_QP_PACKED,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
++			CAP_FLAG_DYNAMIC_ALLOWED},
++
++	{B_FRAME_QP, ENC, H264,
++		MIN_QP_8BIT, MAX_QP, 1, DEFAULT_QP,
++		V4L2_CID_MPEG_VIDEO_H264_B_FRAME_QP,
++		HFI_PROP_QP_PACKED,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
++			CAP_FLAG_DYNAMIC_ALLOWED},
++
++	{LAYER_TYPE, ENC, HEVC,
++		V4L2_MPEG_VIDEO_HEVC_HIERARCHICAL_CODING_B,
++		V4L2_MPEG_VIDEO_HEVC_HIERARCHICAL_CODING_P,
++		BIT(V4L2_MPEG_VIDEO_HEVC_HIERARCHICAL_CODING_B) |
++		BIT(V4L2_MPEG_VIDEO_HEVC_HIERARCHICAL_CODING_P),
++		V4L2_MPEG_VIDEO_HEVC_HIERARCHICAL_CODING_P,
++		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_TYPE,
++		HFI_PROP_LAYER_ENCODING_TYPE,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
++
++	{LAYER_TYPE, ENC, H264,
++		V4L2_MPEG_VIDEO_H264_HIERARCHICAL_CODING_B,
++		V4L2_MPEG_VIDEO_H264_HIERARCHICAL_CODING_P,
++		BIT(V4L2_MPEG_VIDEO_H264_HIERARCHICAL_CODING_B) |
++		BIT(V4L2_MPEG_VIDEO_H264_HIERARCHICAL_CODING_P),
++		V4L2_MPEG_VIDEO_H264_HIERARCHICAL_CODING_P,
++		V4L2_CID_MPEG_VIDEO_H264_HIERARCHICAL_CODING_TYPE,
++		HFI_PROP_LAYER_ENCODING_TYPE,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
++
++	{LAYER_ENABLE, ENC, H264,
++		0, 1, 1, 0,
++		V4L2_CID_MPEG_VIDEO_H264_HIERARCHICAL_CODING,
++		HFI_PROP_LAYER_ENCODING_TYPE,
++		CAP_FLAG_OUTPUT_PORT},
++
++	{LAYER_ENABLE, ENC, HEVC,
++		0, 1, 1, 0,
++		0,
++		0,
++		CAP_FLAG_OUTPUT_PORT},
++
++	{ENH_LAYER_COUNT, ENC, HEVC,
++		0, 5, 1, 0,
++		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_LAYER,
++		HFI_PROP_LAYER_COUNT,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
++			CAP_FLAG_DYNAMIC_ALLOWED},
++
++	{ENH_LAYER_COUNT, ENC, H264,
++		0, 5, 1, 0,
++		V4L2_CID_MPEG_VIDEO_H264_HIERARCHICAL_CODING_LAYER,
++		HFI_PROP_LAYER_COUNT,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
++			CAP_FLAG_DYNAMIC_ALLOWED},
++
++	{L0_BR, ENC, H264,
++		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
++		V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L0_BR,
++		HFI_PROP_BITRATE_LAYER1,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
++			CAP_FLAG_DYNAMIC_ALLOWED},
++
++	{L0_BR, ENC, HEVC,
++		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
++		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L0_BR,
++		HFI_PROP_BITRATE_LAYER1,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
++			CAP_FLAG_DYNAMIC_ALLOWED},
++
++	{L1_BR, ENC, H264,
++		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
++		V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L1_BR,
++		HFI_PROP_BITRATE_LAYER2,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
++			CAP_FLAG_DYNAMIC_ALLOWED},
++
++	{L1_BR, ENC, HEVC,
++		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
++		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L1_BR,
++		HFI_PROP_BITRATE_LAYER2,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
++			CAP_FLAG_DYNAMIC_ALLOWED},
++
++	{L2_BR, ENC, H264,
++		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
++		V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L2_BR,
++		HFI_PROP_BITRATE_LAYER3,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
++			CAP_FLAG_DYNAMIC_ALLOWED},
++
++	{L2_BR, ENC, HEVC,
++		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
++		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L2_BR,
++		HFI_PROP_BITRATE_LAYER3,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
++			CAP_FLAG_DYNAMIC_ALLOWED},
++
++	{L3_BR, ENC, H264,
++		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
++		V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L3_BR,
++		HFI_PROP_BITRATE_LAYER4,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
++			CAP_FLAG_DYNAMIC_ALLOWED},
++	{L3_BR, ENC, HEVC,
++		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
++		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L3_BR,
++		HFI_PROP_BITRATE_LAYER4,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
++			CAP_FLAG_DYNAMIC_ALLOWED},
++
++	{L4_BR, ENC, H264,
++		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
++		V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L4_BR,
++		HFI_PROP_BITRATE_LAYER5,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
++			CAP_FLAG_DYNAMIC_ALLOWED},
++
++	{L4_BR, ENC, HEVC,
++		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
++		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L4_BR,
++		HFI_PROP_BITRATE_LAYER5,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
++			CAP_FLAG_DYNAMIC_ALLOWED},
++
++	{L5_BR, ENC, H264,
++		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
++		V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L5_BR,
++		HFI_PROP_BITRATE_LAYER6,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
++			CAP_FLAG_DYNAMIC_ALLOWED},
++
++	{L5_BR, ENC, HEVC,
++		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
++		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L5_BR,
++		HFI_PROP_BITRATE_LAYER6,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
++			CAP_FLAG_DYNAMIC_ALLOWED},
++
++	{ENTROPY_MODE, ENC, H264,
++		V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CAVLC,
++		V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CABAC,
++		BIT(V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CAVLC) |
++		BIT(V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CABAC),
++		V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CABAC,
++		V4L2_CID_MPEG_VIDEO_H264_ENTROPY_MODE,
++		HFI_PROP_CABAC_SESSION,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
++
++	{ENTROPY_MODE, DEC, H264 | HEVC | VP9,
++		V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CAVLC,
++		V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CABAC,
++		BIT(V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CAVLC) |
++		BIT(V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CABAC),
++		V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CABAC,
++		0,
++		HFI_PROP_CABAC_SESSION},
++
++	{PROFILE, ENC | DEC, H264,
++		V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE,
++		V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_HIGH,
++		BIT(V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE) |
++		BIT(V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_HIGH) |
++		BIT(V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE) |
++		BIT(V4L2_MPEG_VIDEO_H264_PROFILE_MAIN) |
++		BIT(V4L2_MPEG_VIDEO_H264_PROFILE_HIGH),
++		V4L2_MPEG_VIDEO_H264_PROFILE_HIGH,
++		V4L2_CID_MPEG_VIDEO_H264_PROFILE,
++		HFI_PROP_PROFILE,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
++
++	{PROFILE, ENC | DEC, HEVC,
++		V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN,
++		V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN_10,
++		BIT(V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN) |
++		BIT(V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN_STILL_PICTURE) |
++		BIT(V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN_10),
++		V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN,
++		V4L2_CID_MPEG_VIDEO_HEVC_PROFILE,
++		HFI_PROP_PROFILE,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
++
++	{PROFILE, DEC, VP9,
++		V4L2_MPEG_VIDEO_VP9_PROFILE_0,
++		V4L2_MPEG_VIDEO_VP9_PROFILE_2,
++		BIT(V4L2_MPEG_VIDEO_VP9_PROFILE_0) |
++		BIT(V4L2_MPEG_VIDEO_VP9_PROFILE_2),
++		V4L2_MPEG_VIDEO_VP9_PROFILE_0,
++		V4L2_CID_MPEG_VIDEO_VP9_PROFILE,
++		HFI_PROP_PROFILE,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
++
++	{LEVEL, ENC, H264,
++		V4L2_MPEG_VIDEO_H264_LEVEL_1_0,
++		V4L2_MPEG_VIDEO_H264_LEVEL_6_0,
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_0) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1B) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_1) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_2) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_3) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_2_0) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_2_1) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_2_2) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_3_0) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_3_1) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_3_2) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_4_0) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_4_1) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_4_2) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_5_0) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_5_1) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_5_2) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_6_0),
++		V4L2_MPEG_VIDEO_H264_LEVEL_5_0,
++		V4L2_CID_MPEG_VIDEO_H264_LEVEL,
++		HFI_PROP_LEVEL,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
++
++	{LEVEL, ENC, HEVC,
++		V4L2_MPEG_VIDEO_HEVC_LEVEL_1,
++		V4L2_MPEG_VIDEO_HEVC_LEVEL_6_2,
++		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_1) |
++		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_2) |
++		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_2_1) |
++		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_3) |
++		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_3_1) |
++		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_4) |
++		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_4_1) |
++		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_5) |
++		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_5_1) |
++		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_5_2) |
++		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_6) |
++		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_6_1) |
++		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_6_2),
++		V4L2_MPEG_VIDEO_HEVC_LEVEL_5,
++		V4L2_CID_MPEG_VIDEO_HEVC_LEVEL,
++		HFI_PROP_LEVEL,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
++
++	{LEVEL, DEC, H264,
++		V4L2_MPEG_VIDEO_H264_LEVEL_1_0,
++		V4L2_MPEG_VIDEO_H264_LEVEL_6_2,
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_0) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1B) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_1) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_2) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_3) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_2_0) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_2_1) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_2_2) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_3_0) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_3_1) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_3_2) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_4_0) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_4_1) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_4_2) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_5_0) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_5_1) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_5_2) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_6_0) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_6_1) |
++		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_6_2),
++		V4L2_MPEG_VIDEO_H264_LEVEL_6_1,
++		V4L2_CID_MPEG_VIDEO_H264_LEVEL,
++		HFI_PROP_LEVEL,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
++
++	{LEVEL, DEC, HEVC,
++		V4L2_MPEG_VIDEO_HEVC_LEVEL_1,
++		V4L2_MPEG_VIDEO_HEVC_LEVEL_6_2,
++		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_1) |
++		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_2) |
++		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_2_1) |
++		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_3) |
++		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_3_1) |
++		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_4) |
++		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_4_1) |
++		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_5) |
++		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_5_1) |
++		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_5_2) |
++		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_6) |
++		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_6_1) |
++		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_6_2),
++		V4L2_MPEG_VIDEO_HEVC_LEVEL_6_1,
++		V4L2_CID_MPEG_VIDEO_HEVC_LEVEL,
++		HFI_PROP_LEVEL,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
++
++	{LEVEL, DEC, VP9,
++		V4L2_MPEG_VIDEO_VP9_LEVEL_1_0,
++		V4L2_MPEG_VIDEO_VP9_LEVEL_6_0,
++		BIT(V4L2_MPEG_VIDEO_VP9_LEVEL_1_0) |
++		BIT(V4L2_MPEG_VIDEO_VP9_LEVEL_1_1) |
++		BIT(V4L2_MPEG_VIDEO_VP9_LEVEL_2_0) |
++		BIT(V4L2_MPEG_VIDEO_VP9_LEVEL_2_1) |
++		BIT(V4L2_MPEG_VIDEO_VP9_LEVEL_3_0) |
++		BIT(V4L2_MPEG_VIDEO_VP9_LEVEL_3_1) |
++		BIT(V4L2_MPEG_VIDEO_VP9_LEVEL_4_0) |
++		BIT(V4L2_MPEG_VIDEO_VP9_LEVEL_4_1) |
++		BIT(V4L2_MPEG_VIDEO_VP9_LEVEL_5_0) |
++		BIT(V4L2_MPEG_VIDEO_VP9_LEVEL_5_1) |
++		BIT(V4L2_MPEG_VIDEO_VP9_LEVEL_5_2) |
++		BIT(V4L2_MPEG_VIDEO_VP9_LEVEL_6_0),
++		V4L2_MPEG_VIDEO_VP9_LEVEL_6_0,
++		V4L2_CID_MPEG_VIDEO_VP9_LEVEL,
++		HFI_PROP_LEVEL,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
++
++	{HEVC_TIER, ENC | DEC, HEVC,
++		V4L2_MPEG_VIDEO_HEVC_TIER_MAIN,
++		V4L2_MPEG_VIDEO_HEVC_TIER_HIGH,
++		BIT(V4L2_MPEG_VIDEO_HEVC_TIER_MAIN) |
++		BIT(V4L2_MPEG_VIDEO_HEVC_TIER_HIGH),
++		V4L2_MPEG_VIDEO_HEVC_TIER_HIGH,
++		V4L2_CID_MPEG_VIDEO_HEVC_TIER,
++		HFI_PROP_TIER,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
++
++	{LF_MODE, ENC, H264,
++		V4L2_MPEG_VIDEO_H264_LOOP_FILTER_MODE_ENABLED,
++		DB_H264_DISABLE_SLICE_BOUNDARY,
++		BIT(V4L2_MPEG_VIDEO_H264_LOOP_FILTER_MODE_ENABLED) |
++		BIT(V4L2_MPEG_VIDEO_H264_LOOP_FILTER_MODE_DISABLED) |
++		BIT(DB_H264_DISABLE_SLICE_BOUNDARY),
++		V4L2_MPEG_VIDEO_H264_LOOP_FILTER_MODE_ENABLED,
++		V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_MODE,
++		HFI_PROP_DEBLOCKING_MODE,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
++
++	{LF_MODE, ENC, HEVC,
++		V4L2_MPEG_VIDEO_HEVC_LOOP_FILTER_MODE_DISABLED,
++		DB_HEVC_DISABLE_SLICE_BOUNDARY,
++		BIT(V4L2_MPEG_VIDEO_HEVC_LOOP_FILTER_MODE_DISABLED) |
++		BIT(V4L2_MPEG_VIDEO_HEVC_LOOP_FILTER_MODE_ENABLED) |
++		BIT(DB_HEVC_DISABLE_SLICE_BOUNDARY),
++		V4L2_MPEG_VIDEO_HEVC_LOOP_FILTER_MODE_ENABLED,
++		V4L2_CID_MPEG_VIDEO_HEVC_LOOP_FILTER_MODE,
++		HFI_PROP_DEBLOCKING_MODE,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
++
++	{LF_ALPHA, ENC, H264,
++		-6, 6, 1, 0,
++		V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_ALPHA},
++
++	{LF_ALPHA, ENC, HEVC,
++		-6, 6, 1, 0,
++		V4L2_CID_MPEG_VIDEO_HEVC_LF_TC_OFFSET_DIV2},
++
++	{LF_BETA, ENC, H264,
++		-6, 6, 1, 0,
++		V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_BETA},
++
++	{LF_BETA, ENC, HEVC,
++		-6, 6, 1, 0,
++		V4L2_CID_MPEG_VIDEO_HEVC_LF_BETA_OFFSET_DIV2},
++
++	{SLICE_MODE, ENC, H264 | HEVC,
++		V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_SINGLE,
++		V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_BYTES,
++		BIT(V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_SINGLE) |
++		BIT(V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_MB) |
++		BIT(V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_BYTES),
++		V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_SINGLE,
++		V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MODE,
++		0,
++		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
++
++	{SLICE_MAX_BYTES, ENC, H264 | HEVC,
++		MIN_SLICE_BYTE_SIZE, MAX_SLICE_BYTE_SIZE,
++		1, MIN_SLICE_BYTE_SIZE,
++		V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MAX_BYTES,
++		HFI_PROP_MULTI_SLICE_BYTES_COUNT,
++		CAP_FLAG_OUTPUT_PORT},
++
++	{SLICE_MAX_MB, ENC, H264 | HEVC,
++		1, MAX_SLICE_MB_SIZE, 1, 1,
++		V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MAX_MB,
++		HFI_PROP_MULTI_SLICE_MB_COUNT,
++		CAP_FLAG_OUTPUT_PORT},
++
++	{MB_RC, ENC, H264 | HEVC,
++		0, 1, 1, 1,
++		V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE,
++		0,
++		CAP_FLAG_OUTPUT_PORT},
++
++	{TRANSFORM_8X8, ENC, H264,
++		0, 1, 1, 1,
++		V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM,
++		HFI_PROP_8X8_TRANSFORM,
++		CAP_FLAG_OUTPUT_PORT},
++
++	{CHROMA_QP_INDEX_OFFSET, ENC, HEVC,
++		MIN_CHROMA_QP_OFFSET, MAX_CHROMA_QP_OFFSET,
++		1, MAX_CHROMA_QP_OFFSET,
++		V4L2_CID_MPEG_VIDEO_H264_CHROMA_QP_INDEX_OFFSET,
++		HFI_PROP_CHROMA_QP_OFFSET,
++		CAP_FLAG_OUTPUT_PORT},
++
++	{DISPLAY_DELAY_ENABLE, DEC, H264 | HEVC | VP9,
++		0, 1, 1, 0,
++		V4L2_CID_MPEG_VIDEO_DEC_DISPLAY_DELAY_ENABLE,
++		HFI_PROP_DECODE_ORDER_OUTPUT,
++		CAP_FLAG_INPUT_PORT},
++
++	{DISPLAY_DELAY, DEC, H264 | HEVC | VP9,
++		0, 1, 1, 0,
++		V4L2_CID_MPEG_VIDEO_DEC_DISPLAY_DELAY,
++		HFI_PROP_DECODE_ORDER_OUTPUT,
++		CAP_FLAG_INPUT_PORT},
++
++	{OUTPUT_ORDER, DEC, H264 | HEVC | VP9,
++		0, 1, 1, 0,
++		0,
++		HFI_PROP_DECODE_ORDER_OUTPUT,
++		CAP_FLAG_INPUT_PORT},
++
++	{INPUT_BUF_HOST_MAX_COUNT, ENC | DEC, CODECS_ALL,
++		DEFAULT_MAX_HOST_BUF_COUNT, DEFAULT_MAX_HOST_BURST_BUF_COUNT,
++		1, DEFAULT_MAX_HOST_BUF_COUNT,
++		0,
++		HFI_PROP_BUFFER_HOST_MAX_COUNT,
++		CAP_FLAG_INPUT_PORT},
++
++	{OUTPUT_BUF_HOST_MAX_COUNT, ENC | DEC, CODECS_ALL,
++		DEFAULT_MAX_HOST_BUF_COUNT, DEFAULT_MAX_HOST_BURST_BUF_COUNT,
++		1, DEFAULT_MAX_HOST_BUF_COUNT,
++		0,
++		HFI_PROP_BUFFER_HOST_MAX_COUNT,
++		CAP_FLAG_OUTPUT_PORT},
++
++	{CONCEAL_COLOR_8BIT, DEC, CODECS_ALL, 0x0, 0xff3fcff, 1,
++		DEFAULT_VIDEO_CONCEAL_COLOR_BLACK,
++		V4L2_CID_MPEG_VIDEO_MUTE_YUV,
++		HFI_PROP_CONCEAL_COLOR_8BIT,
++		CAP_FLAG_INPUT_PORT},
++
++	{CONCEAL_COLOR_10BIT, DEC, CODECS_ALL, 0x0, 0x3fffffff, 1,
++		DEFAULT_VIDEO_CONCEAL_COLOR_BLACK,
++		V4L2_CID_MPEG_VIDEO_MUTE_YUV,
++		HFI_PROP_CONCEAL_COLOR_10BIT,
++		CAP_FLAG_INPUT_PORT},
++
++	{STAGE, DEC | ENC, CODECS_ALL,
++		MSM_VIDC_STAGE_1,
++		MSM_VIDC_STAGE_2, 1,
++		MSM_VIDC_STAGE_2,
++		0,
++		HFI_PROP_STAGE},
++
++	{PIPE, DEC | ENC, CODECS_ALL,
++		MSM_VIDC_PIPE_1,
++		MSM_VIDC_PIPE_4, 1,
++		MSM_VIDC_PIPE_4,
++		0,
++		HFI_PROP_PIPE},
++
++	{POC, DEC, H264, 0, 2, 1, 1,
++		0,
++		HFI_PROP_PIC_ORDER_CNT_TYPE},
++
++	{QUALITY_MODE, ENC, CODECS_ALL,
++		MSM_VIDC_MAX_QUALITY_MODE,
++		MSM_VIDC_POWER_SAVE_MODE, 1,
++		MSM_VIDC_POWER_SAVE_MODE},
++
++	{CODED_FRAMES, DEC, H264 | HEVC,
++		CODED_FRAMES_PROGRESSIVE, CODED_FRAMES_INTERLACE,
++		1, CODED_FRAMES_PROGRESSIVE,
++		0,
++		HFI_PROP_CODED_FRAMES},
++
++	{BIT_DEPTH, DEC, CODECS_ALL, BIT_DEPTH_8, BIT_DEPTH_10, 1, BIT_DEPTH_8,
++		0,
++		HFI_PROP_LUMA_CHROMA_BIT_DEPTH},
++
++	{BITSTREAM_SIZE_OVERWRITE, DEC, CODECS_ALL, 0, INT_MAX, 1, 0,
++		0},
++
++	{DEFAULT_HEADER, DEC, CODECS_ALL,
++		0, 1, 1, 0,
++		0,
++		HFI_PROP_DEC_DEFAULT_HEADER},
++
++	{RAP_FRAME, DEC, CODECS_ALL,
++		0, 1, 1, 1,
++		0,
++		HFI_PROP_DEC_START_FROM_RAP_FRAME,
++		CAP_FLAG_INPUT_PORT},
++
++	{SEQ_CHANGE_AT_SYNC_FRAME, DEC, CODECS_ALL,
++		0, 1, 1, 1,
++		0,
++		HFI_PROP_SEQ_CHANGE_AT_SYNC_FRAME,
++		CAP_FLAG_INPUT_PORT | CAP_FLAG_DYNAMIC_ALLOWED},
++
++	{ALL_INTRA, ENC, H264 | HEVC,
++		0, 1, 1, 0,
++		0,
++		0,
++		CAP_FLAG_OUTPUT_PORT},
 +};
 +
-+enum hfi_vp9_profile_type {
-+	HFI_VP9_PROFILE_0 = 0,
-+	HFI_VP9_PROFILE_1 = 1,
-+	HFI_VP9_PROFILE_2 = 2,
-+	HFI_VP9_PROFILE_3 = 3,
++static struct msm_platform_inst_cap_dependency instance_cap_dependency_data_sm8550[] = {
++	/* {cap, domain, codec,
++	 *      children,
++	 *      adjust, set}
++	 */
++
++	{PIX_FMTS, ENC, H264,
++		{IR_PERIOD}},
++
++	{PIX_FMTS, ENC, HEVC,
++		{PROFILE, MIN_FRAME_QP, MAX_FRAME_QP, I_FRAME_QP, P_FRAME_QP,
++			B_FRAME_QP, MIN_QUALITY, IR_PERIOD, LTR_COUNT}},
++
++	{PIX_FMTS, DEC, HEVC,
++		{PROFILE}},
++
++	{FRAME_RATE, ENC, CODECS_ALL,
++		{0},
++		NULL,
++		msm_vidc_set_q16},
++
++	{HFLIP, ENC, CODECS_ALL,
++		{0},
++		NULL,
++		msm_vidc_set_flip},
++
++	{VFLIP, ENC, CODECS_ALL,
++		{0},
++		NULL,
++		msm_vidc_set_flip},
++
++	{ROTATION, ENC, CODECS_ALL,
++		{0},
++		NULL,
++		msm_vidc_set_rotation},
++
++	{HEADER_MODE, ENC, CODECS_ALL,
++		{0},
++		NULL,
++		msm_vidc_set_header_mode},
++
++	{WITHOUT_STARTCODE, ENC, CODECS_ALL,
++		{0},
++		NULL,
++		msm_vidc_set_nal_length},
++
++	{REQUEST_I_FRAME, ENC, H264 | HEVC,
++		{0},
++		NULL,
++		msm_vidc_set_req_sync_frame},
++
++	{BIT_RATE, ENC, H264,
++		{PEAK_BITRATE, L0_BR},
++		msm_vidc_adjust_bitrate,
++		msm_vidc_set_bitrate},
++
++	{BIT_RATE, ENC, HEVC,
++		{PEAK_BITRATE, L0_BR},
++		msm_vidc_adjust_bitrate,
++		msm_vidc_set_bitrate},
++
++	{BITRATE_MODE, ENC, H264,
++		{LTR_COUNT, IR_PERIOD, I_FRAME_QP, P_FRAME_QP,
++			B_FRAME_QP, ENH_LAYER_COUNT, BIT_RATE,
++			MIN_QUALITY, VBV_DELAY,
++			PEAK_BITRATE, SLICE_MODE},
++		msm_vidc_adjust_bitrate_mode,
++		msm_vidc_set_u32_enum},
++
++	{BITRATE_MODE, ENC, HEVC,
++		{LTR_COUNT, IR_PERIOD, I_FRAME_QP, P_FRAME_QP,
++			B_FRAME_QP, CONSTANT_QUALITY, ENH_LAYER_COUNT,
++			BIT_RATE, MIN_QUALITY, VBV_DELAY,
++			PEAK_BITRATE, SLICE_MODE},
++		msm_vidc_adjust_bitrate_mode,
++		msm_vidc_set_u32_enum},
++
++	{CONSTANT_QUALITY, ENC, HEVC,
++		{0},
++		NULL,
++		msm_vidc_set_constant_quality},
++
++	{GOP_SIZE, ENC, CODECS_ALL,
++		{ALL_INTRA},
++		msm_vidc_adjust_gop_size,
++		msm_vidc_set_gop_size},
++
++	{B_FRAME, ENC, H264 | HEVC,
++		{ALL_INTRA},
++		msm_vidc_adjust_b_frame,
++		msm_vidc_set_u32},
++
++	{LTR_COUNT, ENC, H264 | HEVC,
++		{0},
++		msm_vidc_adjust_ltr_count,
++		msm_vidc_set_u32},
++
++	{USE_LTR, ENC, H264 | HEVC,
++		{0},
++		msm_vidc_adjust_use_ltr,
++		msm_vidc_set_use_and_mark_ltr},
++
++	{MARK_LTR, ENC, H264 | HEVC,
++		{0},
++		msm_vidc_adjust_mark_ltr,
++		msm_vidc_set_use_and_mark_ltr},
++
++	{IR_PERIOD, ENC, H264 | HEVC,
++		{0},
++		msm_vidc_adjust_ir_period,
++		msm_vidc_set_ir_period},
++
++	{AU_DELIMITER, ENC, H264 | HEVC,
++		{0},
++		NULL,
++		msm_vidc_set_u32},
++
++	{MIN_QUALITY, ENC, H264,
++		{0},
++		msm_vidc_adjust_min_quality,
++		msm_vidc_set_u32},
++
++	{MIN_QUALITY, ENC, HEVC,
++		{0},
++		msm_vidc_adjust_min_quality,
++		msm_vidc_set_u32},
++
++	{VBV_DELAY, ENC, H264 | HEVC,
++		{0},
++		NULL,
++		msm_vidc_set_cbr_related_properties},
++
++	{PEAK_BITRATE, ENC, H264 | HEVC,
++		{0},
++		msm_vidc_adjust_peak_bitrate,
++		msm_vidc_set_cbr_related_properties},
++
++	{MIN_FRAME_QP, ENC, H264,
++		{0},
++		NULL,
++		msm_vidc_set_min_qp},
++
++	{MIN_FRAME_QP, ENC, HEVC,
++		{0},
++		msm_vidc_adjust_hevc_min_qp,
++		msm_vidc_set_min_qp},
++
++	{MAX_FRAME_QP, ENC, H264,
++		{0},
++		NULL,
++		msm_vidc_set_max_qp},
++
++	{MAX_FRAME_QP, ENC, HEVC,
++		{0},
++		msm_vidc_adjust_hevc_max_qp,
++		msm_vidc_set_max_qp},
++
++	{I_FRAME_QP, ENC, HEVC,
++		{0},
++		msm_vidc_adjust_hevc_i_frame_qp,
++		msm_vidc_set_frame_qp},
++
++	{I_FRAME_QP, ENC, H264,
++		{0},
++		NULL,
++		msm_vidc_set_frame_qp},
++
++	{P_FRAME_QP, ENC, HEVC,
++		{0},
++		msm_vidc_adjust_hevc_p_frame_qp,
++		msm_vidc_set_frame_qp},
++
++	{P_FRAME_QP, ENC, H264,
++		{0},
++		NULL,
++		msm_vidc_set_frame_qp},
++
++	{B_FRAME_QP, ENC, HEVC,
++		{0},
++		msm_vidc_adjust_hevc_b_frame_qp,
++		msm_vidc_set_frame_qp},
++
++	{B_FRAME_QP, ENC, H264,
++		{0},
++		NULL,
++		msm_vidc_set_frame_qp},
++
++	{LAYER_TYPE, ENC, H264 | HEVC,
++		{LTR_COUNT}},
++
++	{LAYER_ENABLE, ENC, H264 | HEVC,
++		{0}},
++
++	{ENH_LAYER_COUNT, ENC, H264 | HEVC,
++		{GOP_SIZE, B_FRAME, BIT_RATE, MIN_QUALITY, SLICE_MODE,
++			LTR_COUNT},
++		msm_vidc_adjust_layer_count,
++		msm_vidc_set_layer_count_and_type},
++
++	{L0_BR, ENC, H264 | HEVC,
++		{L1_BR},
++		msm_vidc_adjust_layer_bitrate,
++		msm_vidc_set_layer_bitrate},
++
++	{L1_BR, ENC, H264 | HEVC,
++		{L2_BR},
++		msm_vidc_adjust_layer_bitrate,
++		msm_vidc_set_layer_bitrate},
++
++	{L2_BR, ENC, H264 | HEVC,
++		{L3_BR},
++		msm_vidc_adjust_layer_bitrate,
++		msm_vidc_set_layer_bitrate},
++
++	{L3_BR, ENC, H264 | HEVC,
++		{L4_BR},
++		msm_vidc_adjust_layer_bitrate,
++		msm_vidc_set_layer_bitrate},
++
++	{L4_BR, ENC, H264 | HEVC,
++		{L5_BR},
++		msm_vidc_adjust_layer_bitrate,
++		msm_vidc_set_layer_bitrate},
++
++	{L5_BR, ENC, H264 | HEVC,
++		{0},
++		msm_vidc_adjust_layer_bitrate,
++		msm_vidc_set_layer_bitrate},
++
++	{ENTROPY_MODE, ENC, H264,
++		{BIT_RATE},
++		msm_vidc_adjust_entropy_mode,
++		msm_vidc_set_u32},
++
++	{PROFILE, ENC, H264,
++		{ENTROPY_MODE, TRANSFORM_8X8},
++		NULL,
++		msm_vidc_set_u32_enum},
++
++	{PROFILE, DEC, H264,
++		{ENTROPY_MODE},
++		NULL,
++		msm_vidc_set_u32_enum},
++
++	{PROFILE, ENC | DEC, HEVC,
++		{0},
++		msm_vidc_adjust_profile,
++		msm_vidc_set_u32_enum},
++
++	{PROFILE, DEC, VP9,
++		{0},
++		NULL,
++		msm_vidc_set_u32_enum},
++
++	{LEVEL, DEC, CODECS_ALL,
++		{0},
++		NULL,
++		msm_vidc_set_u32_enum},
++
++	{LEVEL, ENC, CODECS_ALL,
++		{0},
++		NULL,
++		msm_vidc_set_level},
++
++	{HEVC_TIER, ENC | DEC, HEVC,
++		{0},
++		NULL,
++		msm_vidc_set_u32_enum},
++
++	{LF_MODE, ENC, CODECS_ALL,
++		{0},
++		NULL,
++		msm_vidc_set_deblock_mode},
++
++	{SLICE_MODE, ENC, H264 | HEVC,
++		{STAGE},
++		msm_vidc_adjust_slice_count,
++		msm_vidc_set_slice_count},
++
++	{TRANSFORM_8X8, ENC, H264,
++		{0},
++		msm_vidc_adjust_transform_8x8,
++		msm_vidc_set_u32},
++
++	{CHROMA_QP_INDEX_OFFSET, ENC, HEVC,
++		{0},
++		msm_vidc_adjust_chroma_qp_index_offset,
++		msm_vidc_set_chroma_qp_index_offset},
++
++	{DISPLAY_DELAY_ENABLE, DEC, H264 | HEVC | VP9,
++		{OUTPUT_ORDER},
++		NULL,
++		NULL},
++
++	{DISPLAY_DELAY, DEC, H264 | HEVC | VP9,
++		{OUTPUT_ORDER},
++		NULL,
++		NULL},
++
++	{OUTPUT_ORDER, DEC, H264 | HEVC | VP9,
++		{0},
++		msm_vidc_adjust_output_order,
++		msm_vidc_set_u32},
++
++	{INPUT_BUF_HOST_MAX_COUNT, ENC | DEC, CODECS_ALL,
++		{0},
++		msm_vidc_adjust_input_buf_host_max_count,
++		msm_vidc_set_u32},
++
++	{INPUT_BUF_HOST_MAX_COUNT, ENC, H264 | HEVC,
++		{0},
++		msm_vidc_adjust_input_buf_host_max_count,
++		msm_vidc_set_u32},
++
++	{OUTPUT_BUF_HOST_MAX_COUNT, ENC | DEC, CODECS_ALL,
++		{0},
++		msm_vidc_adjust_output_buf_host_max_count,
++		msm_vidc_set_u32},
++
++	{OUTPUT_BUF_HOST_MAX_COUNT, ENC, H264 | HEVC,
++		{0},
++		msm_vidc_adjust_output_buf_host_max_count,
++		msm_vidc_set_u32},
++
++	{CONCEAL_COLOR_8BIT, DEC, CODECS_ALL,
++		{0},
++		NULL,
++		msm_vidc_set_u32_packed},
++
++	{CONCEAL_COLOR_10BIT, DEC, CODECS_ALL,
++		{0},
++		NULL,
++		msm_vidc_set_u32_packed},
++
++	{STAGE, ENC | DEC, CODECS_ALL,
++		{0},
++		NULL,
++		msm_vidc_set_stage},
++
++	{STAGE, ENC, H264 | HEVC,
++		{0},
++		NULL,
++		msm_vidc_set_stage},
++
++	{STAGE, DEC, H264 | HEVC | VP9,
++		{0},
++		NULL,
++		msm_vidc_set_stage},
++
++	{PIPE, DEC | ENC, CODECS_ALL,
++		{0},
++		NULL,
++		msm_vidc_set_pipe},
++
++	{RAP_FRAME, DEC, CODECS_ALL,
++		{0},
++		NULL,
++		msm_vidc_set_u32},
++
++	{ALL_INTRA, ENC, H264 | HEVC,
++		{LTR_COUNT, IR_PERIOD, SLICE_MODE, BIT_RATE},
++		msm_vidc_adjust_all_intra,
++		NULL},
 +};
 +
-+enum hfi_mpeg2_profile_type {
-+	HFI_MP2_PROFILE_SIMPLE = 0,
-+	HFI_MP2_PROFILE_MAIN   = 1,
++/* Default UBWC config for LPDDR5 */
++static struct msm_vidc_ubwc_config_data ubwc_config_sm8550[] = {
++	UBWC_CONFIG(8, 32, 16, 0, 1, 1, 1),
 +};
 +
-+enum hfi_av1_profile_type {
-+	HFI_AV1_PROFILE_MAIN = 0,
-+	HFI_AV1_PROFILE_HIGH = 1,
-+	HFI_AV1_PROFILE_PROF = 2,
++static struct msm_vidc_format_capability format_data_sm8550 = {
++	.codec_info = codec_data_sm8550,
++	.codec_info_size = ARRAY_SIZE(codec_data_sm8550),
++	.color_format_info = color_format_data_sm8550,
++	.color_format_info_size = ARRAY_SIZE(color_format_data_sm8550),
++	.color_prim_info = color_primaries_data_sm8550,
++	.color_prim_info_size = ARRAY_SIZE(color_primaries_data_sm8550),
++	.transfer_char_info = transfer_char_data_sm8550,
++	.transfer_char_info_size = ARRAY_SIZE(transfer_char_data_sm8550),
++	.matrix_coeff_info = matrix_coeff_data_sm8550,
++	.matrix_coeff_info_size = ARRAY_SIZE(matrix_coeff_data_sm8550),
 +};
 +
-+#define HFI_PROP_PROFILE                                        0x03000107
-+
-+enum hfi_avc_level_type {
-+	HFI_AVC_LEVEL_1_0 = 0,
-+	HFI_AVC_LEVEL_1B  = 1,
-+	HFI_AVC_LEVEL_1_1 = 2,
-+	HFI_AVC_LEVEL_1_2 = 3,
-+	HFI_AVC_LEVEL_1_3 = 4,
-+	HFI_AVC_LEVEL_2_0 = 5,
-+	HFI_AVC_LEVEL_2_1 = 6,
-+	HFI_AVC_LEVEL_2_2 = 7,
-+	HFI_AVC_LEVEL_3_0 = 8,
-+	HFI_AVC_LEVEL_3_1 = 9,
-+	HFI_AVC_LEVEL_3_2 = 10,
-+	HFI_AVC_LEVEL_4_0 = 11,
-+	HFI_AVC_LEVEL_4_1 = 12,
-+	HFI_AVC_LEVEL_4_2 = 13,
-+	HFI_AVC_LEVEL_5_0 = 14,
-+	HFI_AVC_LEVEL_5_1 = 15,
-+	HFI_AVC_LEVEL_5_2 = 16,
-+	HFI_AVC_LEVEL_6_0 = 17,
-+	HFI_AVC_LEVEL_6_1 = 18,
-+	HFI_AVC_LEVEL_6_2 = 19,
++/* name, min_kbps, max_kbps */
++static const struct bw_table sm8550_bw_table[] = {
++	{ "venus-cnoc",  1000, 1000     },
++	{ "venus-ddr",   1000, 15000000 },
 +};
 +
-+enum hfi_hevc_level_type {
-+	HFI_H265_LEVEL_1   = 0,
-+	HFI_H265_LEVEL_2   = 1,
-+	HFI_H265_LEVEL_2_1 = 2,
-+	HFI_H265_LEVEL_3   = 3,
-+	HFI_H265_LEVEL_3_1 = 4,
-+	HFI_H265_LEVEL_4   = 5,
-+	HFI_H265_LEVEL_4_1 = 6,
-+	HFI_H265_LEVEL_5   = 7,
-+	HFI_H265_LEVEL_5_1 = 8,
-+	HFI_H265_LEVEL_5_2 = 9,
-+	HFI_H265_LEVEL_6   = 10,
-+	HFI_H265_LEVEL_6_1 = 11,
-+	HFI_H265_LEVEL_6_2 = 12,
++/* name */
++static const struct pd_table sm8550_pd_table[] = {
++	{ "iris-ctl" },
++	{ "vcodec"   },
 +};
 +
-+enum hfi_vp9_level_type {
-+	HFI_VP9_LEVEL_1_0 = 0,
-+	HFI_VP9_LEVEL_1_1 = 1,
-+	HFI_VP9_LEVEL_2_0 = 2,
-+	HFI_VP9_LEVEL_2_1 = 3,
-+	HFI_VP9_LEVEL_3_0 = 4,
-+	HFI_VP9_LEVEL_3_1 = 5,
-+	HFI_VP9_LEVEL_4_0 = 6,
-+	HFI_VP9_LEVEL_4_1 = 7,
-+	HFI_VP9_LEVEL_5_0 = 8,
-+	HFI_VP9_LEVEL_5_1 = 9,
-+	HFI_VP9_LEVEL_6_0 = 10,
-+	HFI_VP9_LEVEL_6_1 = 11,
++/* name */
++static const char * const sm8550_opp_table[] = { "mx", "mmcx", NULL };
++
++/* name, clock id, scaling */
++static const struct clk_table sm8550_clk_table[] = {
++	{ "gcc_video_axi0",         GCC_VIDEO_AXI0_CLK,     0 },
++	{ "core_clk",               VIDEO_CC_MVS0C_CLK,     0 },
++	{ "vcodec_clk",             VIDEO_CC_MVS0_CLK,      1 },
 +};
 +
-+enum hfi_mpeg2_level_type {
-+	HFI_MP2_LEVEL_LOW       = 0,
-+	HFI_MP2_LEVEL_MAIN      = 1,
-+	HFI_MP2_LEVEL_HIGH_1440 = 2,
-+	HFI_MP2_LEVEL_HIGH      = 3,
++/* name, exclusive_release */
++static const struct clk_rst_table sm8550_clk_reset_table[] = {
++	{ "video_axi_reset",        0  },
 +};
 +
-+enum hfi_av1_level_type {
-+	HFI_AV1_LEVEL_2_0 = 0,
-+	HFI_AV1_LEVEL_2_1 = 1,
-+	HFI_AV1_LEVEL_2_2 = 2,
-+	HFI_AV1_LEVEL_2_3 = 3,
-+	HFI_AV1_LEVEL_3_0 = 4,
-+	HFI_AV1_LEVEL_3_1 = 5,
-+	HFI_AV1_LEVEL_3_2 = 6,
-+	HFI_AV1_LEVEL_3_3 = 7,
-+	HFI_AV1_LEVEL_4_0 = 8,
-+	HFI_AV1_LEVEL_4_1 = 9,
-+	HFI_AV1_LEVEL_4_2 = 10,
-+	HFI_AV1_LEVEL_4_3 = 11,
-+	HFI_AV1_LEVEL_5_0 = 12,
-+	HFI_AV1_LEVEL_5_1 = 13,
-+	HFI_AV1_LEVEL_5_2 = 14,
-+	HFI_AV1_LEVEL_5_3 = 15,
-+	HFI_AV1_LEVEL_6_0 = 16,
-+	HFI_AV1_LEVEL_6_1 = 17,
-+	HFI_AV1_LEVEL_6_2 = 18,
-+	HFI_AV1_LEVEL_6_3 = 19,
-+	HFI_AV1_LEVEL_7_0 = 20,
-+	HFI_AV1_LEVEL_7_1 = 21,
-+	HFI_AV1_LEVEL_7_2 = 22,
-+	HFI_AV1_LEVEL_7_3 = 23,
-+	HFI_AV1_LEVEL_MAX = 31,
++/* name, start, size, secure, dma_coherant, region, dma_mask */
++const struct context_bank_table sm8550_context_bank_table[] = {
++	{"qcom,vidc,cb-ns", 0x25800000, 0xba800000, 0, 1, MSM_VIDC_NON_SECURE, 0xe0000000 - 1},
++	{"qcom,vidc,cb-sec-non-pxl",   0x01000000, 0x24800000, 1, 0, MSM_VIDC_SECURE_NONPIXEL,  0 },
 +};
 +
-+enum hfi_codec_level_type {
-+	HFI_LEVEL_NONE = 0xFFFFFFFF,
++/* freq */
++static struct freq_table sm8550_freq_table[] = {
++	{533333333}, {444000000}, {366000000}, {338000000}, {240000000}
 +};
 +
-+#define HFI_PROP_LEVEL                                          0x03000108
-+
-+enum hfi_hevc_tier_type {
-+	HFI_H265_TIER_MAIN = 0,
-+	HFI_H265_TIER_HIGH = 1,
++/* register, value, mask */
++static const struct reg_preset_table sm8550_reg_preset_table[] = {
++	{ 0xB0088, 0x0, 0x11 },
 +};
 +
-+enum hfi_av1_tier_type {
-+	HFI_AV1_TIER_MAIN = 0,
-+	HFI_AV1_TIER_HIGH = 1,
++/* decoder properties */
++static const u32 sm8550_vdec_psc_avc[] = {
++	HFI_PROP_BITSTREAM_RESOLUTION,
++	HFI_PROP_CROP_OFFSETS,
++	HFI_PROP_CODED_FRAMES,
++	HFI_PROP_BUFFER_FW_MIN_OUTPUT_COUNT,
++	HFI_PROP_PIC_ORDER_CNT_TYPE,
++	HFI_PROP_PROFILE,
++	HFI_PROP_LEVEL,
++	HFI_PROP_SIGNAL_COLOR_INFO,
 +};
 +
-+#define HFI_PROP_TIER                                           0x03000109
-+
-+#define HFI_PROP_STAGE                                          0x0300010a
-+
-+#define HFI_PROP_PIPE                                           0x0300010b
-+
-+#define HFI_PROP_FRAME_RATE                                     0x0300010c
-+
-+#define HFI_BITMASK_CONCEAL_LUMA       0x000003ff
-+#define HFI_BITMASK_CONCEAL_CB         0x000ffC00
-+#define HFI_BITMASK_CONCEAL_CR         0x3ff00000
-+#define HFI_PROP_CONCEAL_COLOR_8BIT                             0x0300010d
-+
-+#define HFI_BITMASK_CONCEAL_LUMA       0x000003ff
-+#define HFI_BITMASK_CONCEAL_CB         0x000ffC00
-+#define HFI_BITMASK_CONCEAL_CR         0x3ff00000
-+#define HFI_PROP_CONCEAL_COLOR_10BIT                            0x0300010e
-+
-+#define HFI_BITMASK_LUMA_BIT_DEPTH     0xffff0000
-+#define HFI_BITMASK_CHROMA_BIT_DEPTH   0x0000ffff
-+#define HFI_PROP_LUMA_CHROMA_BIT_DEPTH                          0x0300010f
-+
-+#define HFI_BITMASK_FRAME_MBS_ONLY_FLAG           0x00000001
-+#define HFI_BITMASK_MB_ADAPTIVE_FRAME_FIELD_FLAG  0x00000002
-+#define HFI_PROP_CODED_FRAMES                                   0x03000120
-+
-+#define HFI_PROP_CABAC_SESSION                                  0x03000121
-+
-+#define HFI_PROP_8X8_TRANSFORM                                  0x03000122
-+
-+#define HFI_PROP_BUFFER_HOST_MAX_COUNT                          0x03000123
-+
-+#define HFI_PROP_BUFFER_FW_MIN_OUTPUT_COUNT                     0x03000124
-+
-+#define HFI_PROP_BUFFER_MAXDPB_COUNT                            0x03000125
-+
-+#define HFI_PROP_BUFFER_MAX_NUM_REFERENCE                       0x03000126
-+
-+#define HFI_PROP_MAX_NUM_REORDER_FRAMES                         0x03000127
-+
-+#define HFI_PROP_PIC_ORDER_CNT_TYPE                             0x03000128
-+
-+enum hfi_deblock_mode {
-+	HFI_DEBLOCK_ALL_BOUNDARY              = 0x0,
-+	HFI_DEBLOCK_DISABLE                   = 0x1,
-+	HFI_DEBLOCK_DISABLE_AT_SLICE_BOUNDARY = 0x2,
++static const u32 sm8550_vdec_psc_hevc[] = {
++	HFI_PROP_BITSTREAM_RESOLUTION,
++	HFI_PROP_CROP_OFFSETS,
++	HFI_PROP_LUMA_CHROMA_BIT_DEPTH,
++	HFI_PROP_BUFFER_FW_MIN_OUTPUT_COUNT,
++	HFI_PROP_PROFILE,
++	HFI_PROP_LEVEL,
++	HFI_PROP_TIER,
++	HFI_PROP_SIGNAL_COLOR_INFO,
 +};
 +
-+#define HFI_PROP_DEBLOCKING_MODE                                0x03000129
-+
-+enum hfi_rate_control {
-+	HFI_RC_VBR_CFR        = 0x00000000,
-+	HFI_RC_CBR_CFR        = 0x00000001,
-+	HFI_RC_CQ             = 0x00000002,
-+	HFI_RC_OFF            = 0x00000003,
-+	HFI_RC_CBR_VFR        = 0x00000004,
-+	HFI_RC_LOSSLESS       = 0x00000005,
++static const u32 sm8550_vdec_psc_vp9[] = {
++	HFI_PROP_BITSTREAM_RESOLUTION,
++	HFI_PROP_CROP_OFFSETS,
++	HFI_PROP_LUMA_CHROMA_BIT_DEPTH,
++	HFI_PROP_BUFFER_FW_MIN_OUTPUT_COUNT,
++	HFI_PROP_PROFILE,
++	HFI_PROP_LEVEL,
 +};
 +
-+#define HFI_PROP_RATE_CONTROL                                   0x0300012a
-+
-+#define HFI_PROP_TIME_DELTA_BASED_RATE_CONTROL                  0x0300012b
-+
-+#define HFI_PROP_CONTENT_ADAPTIVE_CODING                        0x0300012c
-+
-+#define HFI_PROP_BITRATE_BOOST                                  0x0300012d
-+
-+#define HFI_BITMASK_QP_I          0x000000ff
-+#define HFI_BITMASK_QP_P          0x0000ff00
-+#define HFI_BITMASK_QP_B          0x00ff0000
-+#define HFI_BITMASK_QP_ENABLE     0x0f000000
-+#define HFI_BITMASK_QP_LAYERS     0xf0000000
-+#define HFI_PROP_QP_PACKED                                      0x0300012e
-+
-+#define HFI_PROP_MIN_QP_PACKED                                  0x0300012f
-+
-+#define HFI_PROP_MAX_QP_PACKED                                  0x03000130
-+
-+#define HFI_PROP_IR_RANDOM_PERIOD                               0x03000131
-+
-+#define HFI_PROP_MULTI_SLICE_MB_COUNT                           0x03000132
-+
-+#define HFI_PROP_MULTI_SLICE_BYTES_COUNT                        0x03000133
-+
-+#define HFI_PROP_LTR_COUNT                                      0x03000134
-+
-+#define HFI_PROP_LTR_MARK                                       0x03000135
-+
-+#define HFI_PROP_LTR_USE                                        0x03000136
-+
-+#define HFI_PROP_LTR_MARK_USE_DETAILS                           0x03000137
-+
-+enum hfi_layer_encoding_type {
-+	HFI_HIER_P_SLIDING_WINDOW = 0x1,
-+	HFI_HIER_P_HYBRID_LTR     = 0x2,
-+	HFI_HIER_B                = 0x3,
++static const u32 sm8550_vdec_input_properties_avc[] = {
++	HFI_PROP_NO_OUTPUT,
++	HFI_PROP_SUBFRAME_INPUT,
 +};
 +
-+#define HFI_PROP_LAYER_ENCODING_TYPE                            0x03000138
-+
-+#define HFI_PROP_LAYER_COUNT                                    0x03000139
-+
-+enum hfi_chromaqp_offset_mode {
-+	HFI_ADAPTIVE_CHROMAQP_OFFSET = 0x0,
-+	HFI_FIXED_CHROMAQP_OFFSET = 0x1,
++static const u32 sm8550_vdec_input_properties_hevc[] = {
++	HFI_PROP_NO_OUTPUT,
++	HFI_PROP_SUBFRAME_INPUT,
 +};
 +
-+#define HFI_BITMASK_CHROMA_CB_OFFSET     0x0000ffff
-+#define HFI_BITMASK_CHROMA_CR_OFFSET     0xffff0000
-+#define HFI_PROP_CHROMA_QP_OFFSET                               0x0300013a
-+
-+#define HFI_PROP_TOTAL_BITRATE                                  0x0300013b
-+
-+#define HFI_PROP_BITRATE_LAYER1                                 0x0300013c
-+
-+#define HFI_PROP_BITRATE_LAYER2                                 0x0300013d
-+
-+#define HFI_PROP_BITRATE_LAYER3                                 0x0300013e
-+
-+#define HFI_PROP_BITRATE_LAYER4                                 0x0300013f
-+
-+#define HFI_PROP_BITRATE_LAYER5                                 0x03000140
-+
-+#define HFI_PROP_BITRATE_LAYER6                                 0x03000141
-+
-+#define HFI_PROP_BASELAYER_PRIORITYID                           0x03000142
-+
-+#define HFI_PROP_CONSTANT_QUALITY                               0x03000143
-+
-+#define HFI_PROP_HEIC_GRID_ENABLE                               0x03000144
-+
-+enum hfi_syncframe_request_mode {
-+	HFI_SYNC_FRAME_REQUEST_WITHOUT_SEQ_HDR           = 0x00000001,
-+	HFI_SYNC_FRAME_REQUEST_WITH_PREFIX_SEQ_HDR       = 0x00000002,
++static const u32 sm8550_vdec_input_properties_vp9[] = {
++	HFI_PROP_NO_OUTPUT,
++	HFI_PROP_SUBFRAME_INPUT,
 +};
 +
-+#define HFI_PROP_REQUEST_SYNC_FRAME                             0x03000145
-+
-+#define HFI_PROP_MAX_GOP_FRAMES                                 0x03000146
-+
-+#define HFI_PROP_MAX_B_FRAMES                                   0x03000147
-+
-+enum hfi_quality_mode {
-+	HFI_MODE_MAX_QUALITY = 0x1,
-+	HFI_MODE_POWER_SAVE  = 0x2,
++static const u32 sm8550_vdec_output_properties_avc[] = {
++	HFI_PROP_WORST_COMPRESSION_RATIO,
++	HFI_PROP_WORST_COMPLEXITY_FACTOR,
++	HFI_PROP_PICTURE_TYPE,
++	HFI_PROP_DPB_LIST,
++	HFI_PROP_CABAC_SESSION,
 +};
 +
-+#define HFI_PROP_QUALITY_MODE                                   0x03000148
-+
-+enum hfi_seq_header_mode {
-+	HFI_SEQ_HEADER_SEPERATE_FRAME         = 0x00000001,
-+	HFI_SEQ_HEADER_JOINED_WITH_1ST_FRAME  = 0x00000002,
-+	HFI_SEQ_HEADER_PREFIX_WITH_SYNC_FRAME = 0x00000004,
-+	HFI_SEQ_HEADER_METADATA               = 0x00000008,
++static const u32 sm8550_vdec_output_properties_hevc[] = {
++	HFI_PROP_WORST_COMPRESSION_RATIO,
++	HFI_PROP_WORST_COMPLEXITY_FACTOR,
++	HFI_PROP_PICTURE_TYPE,
++	HFI_PROP_DPB_LIST,
 +};
 +
-+#define HFI_PROP_SEQ_HEADER_MODE                                0x03000149
-+
-+#define HFI_PROP_METADATA_SEQ_HEADER_NAL                        0x0300014a
-+
-+enum hfi_rotation {
-+	HFI_ROTATION_NONE = 0x00000000,
-+	HFI_ROTATION_90   = 0x00000001,
-+	HFI_ROTATION_180  = 0x00000002,
-+	HFI_ROTATION_270  = 0x00000003,
++static const u32 sm8550_vdec_output_properties_vp9[] = {
++	HFI_PROP_WORST_COMPRESSION_RATIO,
++	HFI_PROP_WORST_COMPLEXITY_FACTOR,
++	HFI_PROP_PICTURE_TYPE,
++	HFI_PROP_DPB_LIST,
 +};
 +
-+#define HFI_PROP_ROTATION                                       0x0300014b
++static const struct msm_vidc_platform_data sm8550_data = {
++	/* resources dependent on other module */
++	.bw_tbl = sm8550_bw_table,
++	.bw_tbl_size = ARRAY_SIZE(sm8550_bw_table),
++	.clk_tbl = sm8550_clk_table,
++	.clk_tbl_size = ARRAY_SIZE(sm8550_clk_table),
++	.clk_rst_tbl = sm8550_clk_reset_table,
++	.clk_rst_tbl_size = ARRAY_SIZE(sm8550_clk_reset_table),
++	.subcache_tbl = NULL,
++	.subcache_tbl_size = 0,
 +
-+enum hfi_flip {
-+	HFI_DISABLE_FLIP    = 0x00000000,
-+	HFI_HORIZONTAL_FLIP = 0x00000001,
-+	HFI_VERTICAL_FLIP   = 0x00000002,
++	/* populate context bank */
++	.context_bank_tbl = sm8550_context_bank_table,
++	.context_bank_tbl_size = ARRAY_SIZE(sm8550_context_bank_table),
++
++	/* populate power domain and opp table */
++	.pd_tbl = sm8550_pd_table,
++	.pd_tbl_size = ARRAY_SIZE(sm8550_pd_table),
++	.opp_tbl = sm8550_opp_table,
++	.opp_tbl_size = ARRAY_SIZE(sm8550_opp_table),
++
++	/* platform specific resources */
++	.freq_tbl = sm8550_freq_table,
++	.freq_tbl_size = ARRAY_SIZE(sm8550_freq_table),
++	.reg_prst_tbl = sm8550_reg_preset_table,
++	.reg_prst_tbl_size = ARRAY_SIZE(sm8550_reg_preset_table),
++	.fwname = "vpu30_4v",
++	.pas_id = 9,
++
++	/* caps related resorces */
++	.core_data = core_data_sm8550,
++	.core_data_size = ARRAY_SIZE(core_data_sm8550),
++	.inst_cap_data = instance_cap_data_sm8550,
++	.inst_cap_data_size = ARRAY_SIZE(instance_cap_data_sm8550),
++	.inst_cap_dependency_data = instance_cap_dependency_data_sm8550,
++	.inst_cap_dependency_data_size = ARRAY_SIZE(instance_cap_dependency_data_sm8550),
++	.ubwc_config = ubwc_config_sm8550,
++	.format_data = &format_data_sm8550,
++
++	/* decoder properties related*/
++	.psc_avc_tbl = sm8550_vdec_psc_avc,
++	.psc_avc_tbl_size = ARRAY_SIZE(sm8550_vdec_psc_avc),
++	.psc_hevc_tbl = sm8550_vdec_psc_hevc,
++	.psc_hevc_tbl_size = ARRAY_SIZE(sm8550_vdec_psc_hevc),
++	.psc_vp9_tbl = sm8550_vdec_psc_vp9,
++	.psc_vp9_tbl_size = ARRAY_SIZE(sm8550_vdec_psc_vp9),
++	.dec_input_prop_avc = sm8550_vdec_input_properties_avc,
++	.dec_input_prop_hevc = sm8550_vdec_input_properties_hevc,
++	.dec_input_prop_vp9 = sm8550_vdec_input_properties_vp9,
++	.dec_input_prop_size_avc = ARRAY_SIZE(sm8550_vdec_input_properties_avc),
++	.dec_input_prop_size_hevc = ARRAY_SIZE(sm8550_vdec_input_properties_hevc),
++	.dec_input_prop_size_vp9 = ARRAY_SIZE(sm8550_vdec_input_properties_vp9),
++	.dec_output_prop_avc = sm8550_vdec_output_properties_avc,
++	.dec_output_prop_hevc = sm8550_vdec_output_properties_hevc,
++	.dec_output_prop_vp9 = sm8550_vdec_output_properties_vp9,
++	.dec_output_prop_size_avc = ARRAY_SIZE(sm8550_vdec_output_properties_avc),
++	.dec_output_prop_size_hevc = ARRAY_SIZE(sm8550_vdec_output_properties_hevc),
++	.dec_output_prop_size_vp9 = ARRAY_SIZE(sm8550_vdec_output_properties_vp9),
 +};
 +
-+#define HFI_PROP_FLIP                                           0x0300014c
-+
-+#define HFI_PROP_SCALAR                                         0x0300014d
-+
-+enum hfi_blur_types {
-+	HFI_BLUR_NONE     = 0x00000000,
-+	HFI_BLUR_EXTERNAL = 0x00000001,
-+	HFI_BLUR_ADAPTIVE = 0x00000002,
-+};
-+
-+#define HFI_PROP_BLUR_TYPES                                     0x0300014e
-+
-+#define HFI_BITMASK_BLUR_WIDTH        0xffff0000
-+#define HFI_BITMASK_BLUR_HEIGHT       0x0000ffff
-+#define HFI_PROP_BLUR_RESOLUTION                                0x0300014f
-+
-+#define HFI_BITMASK_SPS_ID            0x000000ff
-+#define HFI_BITMASK_PPS_ID            0x0000ff00
-+#define HFI_BITMASK_VPS_ID            0x00ff0000
-+#define HFI_PROP_SEQUENCE_HEADER_IDS                            0x03000150
-+
-+#define HFI_PROP_AUD                                            0x03000151
-+
-+#define HFI_PROP_DPB_LUMA_CHROMA_MISR                           0x03000153
-+
-+#define HFI_PROP_OPB_LUMA_CHROMA_MISR                           0x03000154
-+
-+#define HFI_BITMASK_QP_I               0x000000ff
-+#define HFI_BITMASK_QP_P               0x0000ff00
-+#define HFI_BITMASK_QP_B               0x00ff0000
-+#define HFI_BITMASK_QP_ENABLE          0x0f000000
-+#define HFI_BITMASK_QP_LAYERS          0xf0000000
-+#define HFI_PROP_SIGNAL_COLOR_INFO                              0x03000155
-+
-+enum hfi_interlace_info {
-+	HFI_INTERLACE_INFO_NONE                = 0x00000000,
-+	HFI_FRAME_PROGRESSIVE                  = 0x00000001,
-+	HFI_FRAME_MBAFF                        = 0x00000002,
-+	HFI_FRAME_INTERLEAVE_TOPFIELD_FIRST    = 0x00000004,
-+	HFI_FRAME_INTERLEAVE_BOTTOMFIELD_FIRST = 0x00000008,
-+	HFI_FRAME_INTERLACE_TOPFIELD_FIRST     = 0x00000010,
-+	HFI_FRAME_INTERLACE_BOTTOMFIELD_FIRST  = 0x00000020,
-+};
-+
-+#define HFI_PROP_INTERLACE_INFO                                 0x03000156
-+
-+#define HFI_PROP_CSC                                            0x03000157
-+
-+#define HFI_PROP_CSC_MATRIX                                     0x03000158
-+
-+#define HFI_PROP_CSC_BIAS                                       0x03000159
-+
-+#define HFI_PROP_CSC_LIMIT                                      0x0300015a
-+
-+#define HFI_PROP_DECODE_ORDER_OUTPUT                            0x0300015b
-+
-+#define HFI_PROP_TIMESTAMP                                      0x0300015c
-+
-+#define HFI_PROP_FRAMERATE_FROM_BITSTREAM                       0x0300015d
-+
-+#define HFI_PROP_SEI_RECOVERY_POINT                             0x0300015e
-+
-+#define HFI_PROP_CONEALED_MB_COUNT                              0x0300015f
-+
-+#define HFI_BITMASK_SAR_WIDTH        0xffff0000
-+#define HFI_BITMASK_SAR_HEIGHT       0x0000ffff
-+#define HFI_PROP_SAR_RESOLUTION                                 0x03000160
-+
-+#define HFI_PROP_HISTOGRAM_INFO                                 0x03000161
-+
-+enum hfi_picture_type {
-+	HFI_PICTURE_IDR = 0x00000001,
-+	HFI_PICTURE_P   = 0x00000002,
-+	HFI_PICTURE_B   = 0x00000004,
-+	HFI_PICTURE_I   = 0x00000008,
-+	HFI_PICTURE_CRA = 0x00000010,
-+	HFI_PICTURE_BLA = 0x00000020,
-+	HFI_PICTURE_NOSHOW = 0x00000040,
-+};
-+
-+#define HFI_PROP_PICTURE_TYPE                                   0x03000162
-+
-+#define HFI_PROP_SEI_MASTERING_DISPLAY_COLOUR                   0x03000163
-+
-+#define HFI_PROP_SEI_CONTENT_LIGHT_LEVEL                        0x03000164
-+
-+#define HFI_PROP_SEI_HDR10PLUS_USERDATA                         0x03000165
-+
-+#define HFI_PROP_SEI_STREAM_USERDATA                            0x03000166
-+
-+#define HFI_PROP_EVA_STAT_INFO                                  0x03000167
-+
-+#define HFI_PROP_DEC_DEFAULT_HEADER                             0x03000168
-+
-+#define HFI_PROP_DEC_START_FROM_RAP_FRAME                       0x03000169
-+
-+#define HFI_PROP_NO_OUTPUT                                      0x0300016a
-+
-+#define HFI_PROP_BUFFER_TAG                                     0x0300016b
-+
-+#define HFI_PROP_BUFFER_MARK                                    0x0300016c
-+
-+#define HFI_PROP_SUBFRAME_OUTPUT                                0x0300016d
-+
-+#define HFI_PROP_ENC_QP_METADATA                                0x0300016e
-+
-+#define HFI_PROP_DEC_QP_METADATA                                0x0300016f
-+
-+#define HFI_PROP_SEI_FRAME_PACKING_ARRANGEMENT                  0x03000170
-+
-+#define HFI_PROP_SEI_PAN_SCAN_RECT                              0x03000171
-+
-+#define HFI_PROP_THUMBNAIL_MODE                                 0x03000172
-+
-+#define HFI_PROP_ROI_INFO                                       0x03000173
-+
-+#define HFI_PROP_WORST_COMPRESSION_RATIO                        0x03000174
-+
-+#define HFI_PROP_WORST_COMPLEXITY_FACTOR                        0x03000175
-+
-+#define HFI_PROP_VBV_DELAY                                      0x03000176
-+
-+#define HFI_PROP_SEQ_CHANGE_AT_SYNC_FRAME                       0x03000177
-+
-+#define HFI_BITMASK_RAW_WIDTH                           0xffff0000
-+#define HFI_BITMASK_RAW_HEIGHT                          0x0000ffff
-+#define HFI_PROP_RAW_RESOLUTION                                 0x03000178
-+
-+#define HFI_PROP_DPB_TAG_LIST                                   0x03000179
-+
-+#define HFI_PROP_DPB_LIST                                       0x0300017A
-+
-+enum hfi_nal_length_field_type {
-+	HFI_NAL_LENGTH_STARTCODES           = 0,
-+	HFI_NAL_LENGTH_SIZE_4               = 4,
-+};
-+
-+#define HFI_PROP_NAL_LENGTH_FIELD                               0x0300017B
-+
-+#define HFI_PROP_TOTAL_PEAK_BITRATE                             0x0300017C
-+
-+#define HFI_PROP_MAINTAIN_MIN_QUALITY                           0x0300017D
-+
-+#define HFI_PROP_IR_CYCLIC_PERIOD                               0x0300017E
-+
-+#define HFI_PROP_ENABLE_SLICE_DELIVERY                          0x0300017F
-+
-+#define HFI_PROP_AV1_FILM_GRAIN_PRESENT                         0x03000180
-+
-+#define HFI_PROP_AV1_SUPER_BLOCK_ENABLED                        0x03000181
-+
-+#define HFI_PROP_AV1_OP_POINT                                   0x03000182
-+
-+#define HFI_PROP_SUBFRAME_INPUT                                 0x03000183
-+
-+#define HFI_PROP_OPB_ENABLE                                     0x03000184
-+
-+#define HFI_PROP_AV1_TILE_ROWS_COLUMNS                          0x03000187
-+
-+#define HFI_PROP_AV1_DRAP_CONFIG                                0x03000189
-+
-+enum hfi_saliency_type {
-+	HFI_SALIENCY_NONE,
-+	HFI_SALIENCY_TYPE0,
-+};
-+
-+#define HFI_PROP_ROI_AS_SALIENCY_INFO                           0x0300018A
-+
-+#define HFI_PROP_FENCE                                          0x0300018B
-+
-+#define HFI_PROP_REQUEST_PREPROCESS                             0x0300018E
-+
-+#define HFI_PROP_UBWC_STRIDE_SCANLINE                           0x03000190
-+
-+#define HFI_PROP_TRANSCODING_STAT_INFO                          0x03000191
-+
-+#define HFI_PROP_DOLBY_RPU_METADATA                             0x03000192
-+
-+#define HFI_PROP_COMV_BUFFER_COUNT                              0x03000193
-+
-+#define HFI_PROP_DISABLE_VUI_TIMING_INFO                        0x03000194
-+
-+#define HFI_PROP_SLICE_DECODE                                   0x03000196
-+
-+#define HFI_PROP_AV1_UNIFORM_TILE_SPACING                       0x03000197
-+
-+#define HFI_PROP_ENC_RING_BIN_BUF                               0x0300019C
-+
-+/* u32 */
-+enum hfi_fence_type {
-+	HFI_SW_FENCE                      = 0x00000001,
-+	HFI_SYNX_V2_FENCE                 = 0x00000002,
-+};
-+
-+#define HFI_PROP_FENCE_TYPE                                     0x0300019D
-+
-+enum hfi_fence_direction_type {
-+	HFI_FENCE_TX_ENABLE          = 0x00000001,
-+	HFI_FENCE_RX_ENABLE          = 0x00000002,
-+};
-+
-+#define HFI_PROP_FENCE_DIRECTION                                0x0300019E
-+
-+#define HFI_PROP_FENCE_ERROR_DATA_CORRUPT                       0x0300019F
-+
-+#define HFI_PROP_END                                            0x03FFFFFF
-+
-+#define HFI_SESSION_ERROR_BEGIN                                 0x04000000
-+
-+#define HFI_ERROR_UNKNOWN_SESSION                               0x04000001
-+
-+#define HFI_ERROR_MAX_SESSIONS                                  0x04000002
-+
-+#define HFI_ERROR_FATAL                                         0x04000003
-+
-+#define HFI_ERROR_INVALID_STATE                                 0x04000004
-+
-+#define HFI_ERROR_INSUFFICIENT_RESOURCES                        0x04000005
-+
-+#define HFI_ERROR_BUFFER_NOT_SET                                0x04000006
-+
-+#define HFI_ERROR_DRAP_CONFIG_EXCEED                            0x04000007
-+
-+#define HFI_SESSION_ERROR_END                                   0x04FFFFFF
-+
-+#define HFI_SYSTEM_ERROR_BEGIN                                  0x05000000
-+
-+#define HFI_SYS_ERROR_WD_TIMEOUT                                0x05000001
-+
-+#define HFI_SYS_ERROR_NOC                                       0x05000002
-+
-+#define HFI_SYS_ERROR_FATAL                                     0x05000003
-+
-+#define HFI_SYSTEM_ERROR_END                                    0x05FFFFFF
-+
-+#define HFI_INFORMATION_BEGIN                                   0x06000000
-+
-+#define HFI_INFO_UNSUPPORTED                                    0x06000001
-+
-+#define HFI_INFO_DATA_CORRUPT                                   0x06000002
-+
-+#define HFI_INFO_NEGATIVE_TIMESTAMP                             0x06000003
-+
-+#define HFI_INFO_BUFFER_OVERFLOW                                0x06000004
-+
-+#define HFI_INFO_VCODEC_RESET                                   0x06000005
-+
-+#define HFI_INFO_HFI_FLAG_DRAIN_LAST                            0x06000006
-+
-+#define HFI_INFO_HFI_FLAG_PSC_LAST                              0x06000007
-+
-+#define HFI_INFO_FENCE_SIGNAL_ERROR                             0x06000008
-+
-+#define HFI_INFORMATION_END                                     0x06FFFFFF
-+
-+#endif //__H_HFI_PROPERTY_H__
++static int msm_vidc_init_data(struct msm_vidc_core *core)
++{
++	d_vpr_h("%s: initialize sm8550 data\n", __func__);
++
++	core->platform->data = sm8550_data;
++
++	return 0;
++}
++
++int msm_vidc_init_platform_sm8550(struct msm_vidc_core *core)
++{
++	return msm_vidc_init_data(core);
++}
 -- 
 2.7.4
 
