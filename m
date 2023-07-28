@@ -2,284 +2,327 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CC36EB64DD
-	for <linux-media@archiver.kernel.org>; Fri, 28 Jul 2023 07:25:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0382AC0015E
+	for <linux-media@archiver.kernel.org>; Fri, 28 Jul 2023 07:27:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234180AbjG1HZ5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 28 Jul 2023 03:25:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55036 "EHLO
+        id S234255AbjG1H07 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 28 Jul 2023 03:26:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234236AbjG1HZh (ORCPT
+        with ESMTP id S233290AbjG1H0k (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 28 Jul 2023 03:25:37 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66772D5F
-        for <linux-media@vger.kernel.org>; Fri, 28 Jul 2023 00:25:26 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id 6a1803df08f44-63d48c3d242so1998986d6.2
-        for <linux-media@vger.kernel.org>; Fri, 28 Jul 2023 00:25:26 -0700 (PDT)
+        Fri, 28 Jul 2023 03:26:40 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA473582
+        for <linux-media@vger.kernel.org>; Fri, 28 Jul 2023 00:26:37 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id d75a77b69052e-40648d758f1so12189171cf.0
+        for <linux-media@vger.kernel.org>; Fri, 28 Jul 2023 00:26:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1690529125; x=1691133925;
+        d=chromium.org; s=google; t=1690529196; x=1691133996;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iHP8me6VokRySX8+Juk9IP6BLwxcpF71AvYOtabkpks=;
-        b=CbzJ26aeUmReO+Sp3FlLVAUZHzPeoSzWP5/pnFXq75nvqiG5GHCafAAgDE9FPcdAgD
-         RWFbJG8Ucwaz8i6+0KMIvRhJvuzdVzFHKvxPAsIO/MPv2lsKdpO2W+NlWUieCNblb85P
-         2zirhKF1raJQiQtAB8Fn7Uw7NpxB/EjVPhjYM=
+        bh=x5Ii7ufrZNlWy4S5bZsqj51LE8m/vOxyVNH0bsHeuCU=;
+        b=LVHeXgXSQB2TiDD1D89D/FzvgUKb+IUc3M5+9L51EXItItaUNoWKRjldAy0YAD4XRg
+         JilHldiHriU9R5E/Szk7zB4+WzXX2jQI84MWil7sUq5PbUBHycx4xZNdksUg4YIpvZLd
+         lN1D31X589RyLKBu60nJnlDZKK+U/BchTGfpw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690529125; x=1691133925;
+        d=1e100.net; s=20221208; t=1690529196; x=1691133996;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iHP8me6VokRySX8+Juk9IP6BLwxcpF71AvYOtabkpks=;
-        b=H0xRuKbb1DS70rIg8TAvknBcpPtHATbHLsY9A/bG6ByJuhVkSA7RoQq0lo4DrWPquS
-         s+haDY7/YxMe1CCIUWM5lKANfsRndfm8HW7eLH6TcILII3e6R8c3pOT/uXgN/WUQB/VE
-         opCOCrZ6r2pH7LmJ8rnJnPjI+khHEEkGnJZ1/lLqO80+GKNjM6fRaiBpV5pt55rbmmzL
-         /cl4zeuRwR+knfwy1Q6BhhZGk0P+H87dbqRC+r2N9y8usC5WAatFVQ/Y1SlmpW9U+jfb
-         4tVvjyYI/Jdl+4QnrMmQtQq9R9F4/ixMnnAeDW55FrwyH88n/8WYPi7ZukWnGI4Lp00u
-         vMng==
-X-Gm-Message-State: ABy/qLb106quvyfMQxBMUtAUCDm+K7QuWFBRMeNEeJoPsPGOvSfAWMTU
-        +35vIQYFeG8nunYmp8S+1WJxp8ByR+SpuuvOxcE+HwQ8
-X-Google-Smtp-Source: APBJJlHR33GtRcwvFKba7t+38KVBt4P2zhVQ+C1Rbm4x//zKKRhrwU9DkqzaXO3/006ZwTKR4dGxVw==
-X-Received: by 2002:a05:6214:21a9:b0:63d:2369:6c41 with SMTP id t9-20020a05621421a900b0063d23696c41mr2063087qvc.55.1690529125306;
-        Fri, 28 Jul 2023 00:25:25 -0700 (PDT)
+        bh=x5Ii7ufrZNlWy4S5bZsqj51LE8m/vOxyVNH0bsHeuCU=;
+        b=fdfv4IV+Zf5Y9C/HEXonoho8ex/n8tw46IJZagY8gfxtxPYIpESF2lx++orVo5FWto
+         Q4qquSpo1D/WDBqpimL/PRk4jnT7ReIKcr2Mxz8uP3Ts7vyem3Jxc/59MM4js0n1Cn9q
+         Cj3Rc5uEWJiM4vPw7QLxk3wWDxQmuW/9/kinYl0WZhzTgAGz9PbiOTcre3pKmNnFPVHr
+         vQ5LFNgXFS0M24bYHK3ZXq2wDI48ra6orr6gvBWG/Xh6nlURVpfDiAoBLDWNgdPHIGtY
+         t6PZo9eEOG2ClsIKJuKisSogQlvcCi2zfSo4XVbtSpvI5sK+wljHBB+o094VjPINZcpf
+         9Igw==
+X-Gm-Message-State: ABy/qLZSVpW4vAk6s+9l8mLR9lanXRbzTIj0ku8IRtuEbmsff2OtT0g0
+        asNLuKFKYl0tNzDnFCY7uqXqWa7xpjTj7n2m+p+SdeHR
+X-Google-Smtp-Source: APBJJlH9bvXJ0W8eQUUX7eDDoC16U86LECl3zlLd9PkfztFyfCIra7dQONM1pj0/Fa/klGtjyZrh/A==
+X-Received: by 2002:a05:622a:1750:b0:400:8fb3:8647 with SMTP id l16-20020a05622a175000b004008fb38647mr2218540qtk.6.1690529195663;
+        Fri, 28 Jul 2023 00:26:35 -0700 (PDT)
 Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com. [209.85.219.53])
-        by smtp.gmail.com with ESMTPSA id e30-20020a0caa5e000000b0063d10086876sm1022837qvb.115.2023.07.28.00.25.24
+        by smtp.gmail.com with ESMTPSA id u11-20020a05622a17cb00b004053dc8365esm963713qtk.23.2023.07.28.00.26.35
         for <linux-media@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jul 2023 00:25:24 -0700 (PDT)
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-63c70dc7ed2so11689836d6.0
-        for <linux-media@vger.kernel.org>; Fri, 28 Jul 2023 00:25:24 -0700 (PDT)
-X-Received: by 2002:a0c:b246:0:b0:63c:ed11:7bf0 with SMTP id
- k6-20020a0cb246000000b0063ced117bf0mr1593631qve.6.1690528721048; Fri, 28 Jul
- 2023 00:18:41 -0700 (PDT)
+        Fri, 28 Jul 2023 00:26:35 -0700 (PDT)
+Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-63d09d886a3so11890646d6.2
+        for <linux-media@vger.kernel.org>; Fri, 28 Jul 2023 00:26:35 -0700 (PDT)
+X-Received: by 2002:a0c:e0cb:0:b0:639:91be:2f26 with SMTP id
+ x11-20020a0ce0cb000000b0063991be2f26mr1637324qvk.55.1690529194671; Fri, 28
+ Jul 2023 00:26:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230206043308.28365-1-ayaka@soulik.info> <20230206043308.28365-3-ayaka@soulik.info>
- <20230713103912.favcnhqwjkzvsa6b@chromium.org> <46d15120-6e19-e224-47f3-e0dcbf0aeda5@soulik.info>
-In-Reply-To: <46d15120-6e19-e224-47f3-e0dcbf0aeda5@soulik.info>
+References: <20230704040044.681850-1-randy.li@synaptics.com>
+ <20230704040044.681850-3-randy.li@synaptics.com> <20230712093301.nkj2vok2x7esdhb3@chromium.org>
+ <f8f766c0166c502e29b06cda71f6531e44a91a17.camel@ndufresne.ca>
+ <CAAFQd5CO4TS6wMsnaL7ob4CXogj5KT52x85YUUN1ZwDkOxW0oQ@mail.gmail.com>
+ <583e22718b80cc5e1ae631528c83c95e97de5cae.camel@ndufresne.ca>
+ <CAAFQd5CAJ7GxiY5=bBAa+L=1WJth6QZ3+PG83=GX+eEx1S4uhg@mail.gmail.com> <7d340df3-e14c-24de-4fc2-b7dca619447c@synaptics.com>
+In-Reply-To: <7d340df3-e14c-24de-4fc2-b7dca619447c@synaptics.com>
 From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Fri, 28 Jul 2023 16:18:29 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5DwEnKznBcJCiC06dU5xJO0Lw6fJSudEfntgLt8fmc+aQ@mail.gmail.com>
-Message-ID: <CAAFQd5DwEnKznBcJCiC06dU5xJO0Lw6fJSudEfntgLt8fmc+aQ@mail.gmail.com>
-Subject: Re: [PATCH v7 2/9] media: vivid: Convert to v4l2_ext_pix_format
-To:     Randy Li <ayaka@soulik.info>
-Cc:     linux-media@vger.kernel.org, randy.li@synaptics.com,
-        Brian.Starkey@arm.com, boris.brezillon@collabora.com,
-        frkoenig@chromium.org, hans.verkuil@cisco.com, hiroh@chromium.org,
-        hverkuil@xs4all.nl, kernel@collabora.com,
-        laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
-        mchehab@kernel.org, narmstrong@baylibre.com, nicolas@ndufresne.ca,
-        sakari.ailus@iki.fi, stanimir.varbanov@linaro.org,
-        Helen Koike <helen.koike@collabora.com>
+Date:   Fri, 28 Jul 2023 16:26:23 +0900
+X-Gmail-Original-Message-ID: <CAAFQd5BKHQPNVpDvpQaFn-q721BJknJCUB72urc2=EKsAH=OCg@mail.gmail.com>
+Message-ID: <CAAFQd5BKHQPNVpDvpQaFn-q721BJknJCUB72urc2=EKsAH=OCg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] media: v4l2-mem2mem: add a list for buf used by hw
+To:     Hsia-Jun Li <Randy.Li@synaptics.com>
+Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
+        linux-media@vger.kernel.org, ayaka@soulik.info,
+        hans.verkuil@cisco.com, mchehab@kernel.org,
+        laurent.pinchart@ideasonboard.com, hiroh@chromium.org,
+        hverkuil@xs4all.nl, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Jul 18, 2023 at 1:00=E2=80=AFAM Randy Li <ayaka@soulik.info> wrote:
+On Fri, Jul 28, 2023 at 4:09=E2=80=AFPM Hsia-Jun Li <Randy.Li@synaptics.com=
+> wrote:
 >
 >
-> On 2023/7/13 18:39, Tomasz Figa wrote:
-> > On Mon, Feb 06, 2023 at 12:33:01PM +0800, ayaka wrote:
-> >> From: Helen Koike <helen.koike@collabora.com>
-> >>
-> >> Simplify Multi/Single planer API handling by converting to v4l2_ext_pi=
-x_format.
-> >>
-> >> Duplicate v4l2_ioctl_ops for touch devices. This is done to force the
-> >> framework to use the ext hooks when the classic Api is used from
-> >> userspace in Vid devices, and to keep touch devices with classic hook.
-> >>
-> >> Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
-> >> Signed-off-by: Helen Koike <helen.koike@collabora.com>
-> >> ---
-> >> Changes in v7:
-> >> - Force the userspace using the new APIs to operate non-touch drivers.
-> > The primary objective of Linux development is not to break the
-> > userspace. We can't just remove the old API, especially not from
-> > existing drivers.
-> Maybe I should create a new virtual driver here? It is impossible to
-> support the new fourcc modifier with the old APIs.
-
-We need to find a way to make an existing driver support both the old
-and new API. Obviously any new functionality of the new API doesn't
-have to be retrofitted to the old API.
-
+>
+> On 7/28/23 12:43, Tomasz Figa wrote:
+> > CAUTION: Email originated externally, do not click links or open attach=
+ments unless you recognize the sender and know the content is safe.
 > >
-> > [snip]
-> >>   int vivid_try_fmt_vid_cap(struct file *file, void *priv,
-> >> -                    struct v4l2_format *f)
-> >> +                      struct v4l2_ext_pix_format *f)
-> >>   {
-> >> -    struct v4l2_pix_format_mplane *mp =3D &f->fmt.pix_mp;
-> >> -    struct v4l2_plane_pix_format *pfmt =3D mp->plane_fmt;
-> >>      struct vivid_dev *dev =3D video_drvdata(file);
-> >> +    struct v4l2_plane_pix_format *pfmt =3D f->plane_fmt;
-> >>      const struct vivid_fmt *fmt;
-> >>      unsigned bytesperline, max_bpl;
-> >>      unsigned factor =3D 1;
-> >>      unsigned w, h;
-> >>      unsigned p;
-> >> -    bool user_set_csc =3D !!(mp->flags & V4L2_PIX_FMT_FLAG_SET_CSC);
-> > Why is this condition being removed?
+> >
+> > On Fri, Jul 28, 2023 at 1:58=E2=80=AFAM Nicolas Dufresne <nicolas@ndufr=
+esne.ca> wrote:
+> >>
+> >> Le jeudi 27 juillet 2023 =C3=A0 16:43 +0900, Tomasz Figa a =C3=A9crit =
+:
+> >>> On Mon, Jul 17, 2023 at 11:07=E2=80=AFPM Nicolas Dufresne <nicolas@nd=
+ufresne.ca> wrote:
+> >>>>
+> >>>> Le mercredi 12 juillet 2023 =C3=A0 09:33 +0000, Tomasz Figa a =C3=A9=
+crit :
+> >>>>> On Tue, Jul 04, 2023 at 12:00:38PM +0800, Hsia-Jun Li wrote:
+> >>>>>> From: "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
+> >>>>>>
+> >>>>>> Many drivers have to create its own buf_struct for a
+> >>>>>> vb2_queue to track such a state. Also driver has to
+> >>>>>> iterate over rdy_queue every times to find out a buffer
+> >>>>>> which is not sent to hardware(or firmware), this new
+> >>>>>> list just offers the driver a place to store the buffer
+> >>>>>> that hardware(firmware) has acknowledged.
+> >>>>>>
+> >>>>>> One important advance about this list, it doesn't like
+> >>>>>> rdy_queue which both bottom half of the user calling
+> >>>>>> could operate it, while the v4l2 worker would as well.
+> >>>>>> The v4l2 core could only operate this queue when its
+> >>>>>> v4l2_context is not running, the driver would only
+> >>>>>> access this new hw_queue in its own worker.
+> >>>>>
+> >>>>> Could you describe in what case such a list would be useful for a
+> >>>>> mem2mem driver?
+> >>>>
+> >>>> Today all driver must track buffers that are "owned by the hardware"=
+. This is a
+> >>>> concept dictated by the m2m framework and enforced through the ACTIV=
+E flag. All
+> >>>> buffers from this list must be mark as done/error/queued after strea=
+moff of the
+> >>>> respective queue in order to acknowledge that they are no longer in =
+use by the
+> >>>> HW. Not doing so will warn:
+> >>>>
+> >>>>    videobuf2_common: driver bug: stop_streaming operation is leaving=
+ buf ...
+> >>>>
+> >>>> Though, there is no queue to easily iterate them. All driver endup h=
+aving their
+> >>>> own queue, or just leaving the buffers in the rdy_queue (which isn't=
+ better).
+> >>>>
+> >>>
+> >>> Thanks for the explanation. I see how it could be useful now.
+> >>>
+> >>> Although I guess this is a problem specifically for hardware (or
+> >>> firmware) which can internally queue more than 1 buffer, right?
+> >>> Otherwise the current buffer could just stay at the top of the
+> >>> rdy_queue until it's removed by the driver's completion handler,
+> >>> timeout/error handler or context destruction.
+> >>
+> >> Correct, its only an issue when you need to process multiple src buffe=
+rs before
+> >> producing a dst buffer. If affects stateful decoder, stateful encoders=
+ and
+> >> deinterlacer as far as I'm aware.
+> >
+> > Is it actually necessary to keep those buffers in a list in that case, =
+though?
+> > I can see that a deinterlacer would indeed need 2 input buffers to
+> > perform the deinterlacing operation, but those would be just known to
+> > the driver, since it's running the task currently.
+> > For a stateful decoder, wouldn't it just consume the bitstream buffer
+> > (producing something partially decoded to its own internal buffers)
+> > and return it shortly?
+> Display re-order. Firmware could do such batch work, taking a few
+> bitstream buffer, then output a list graphics buffer in the display
+> order also discard the usage of the non-display buffer when it is
+> removed from dpb.
 >
-> Because the v4l2_ext_pix has a struct for the colorspace?
-
-What do you mean? I see it has the same enum field for colorspace as
-the original v4l2_pix_format_mplane.
-
-The flag was needed for CAPTURE format to tell the driver whether it
-should perform a conversion to the requested colorspace or just fill
-in the color space as inferred from the current configuration (e.g.
-OUTPUT format).
-How was that addressed in the new API?
-
+> Even in one input and one output mode, firmware need to do redo, let the
+> driver know when a graphics buffer could be display, so firmware would
+> usually hold the graphics buffer(frame) until its display time.
 >
-> Would you like the idea that driver exports a buffer contains all the
-> info for an enumeration ?
->
+
+Okay, so that hold would be for frame buffers, not bitstream buffers, right=
+?
+But yeah, I see that then it could hold onto those buffers until it's
+their turn to display and it could be a bigger number of frames,
+depending on the complexity of the codec.
+
+> Besides, I hate the driver occupied a large of memory without user's
+> order. I would like to drop those internal buffers.
+
+I think this is one reason to migrate to the stateless decoder design.
+
+> > The most realistic scenario would be for stateful encoders which could
+> > keep some input buffers as reference frames for further encoding, but
+> > then would this patch actually work for them? It would make
+> > __v4l2_m2m_try_queue never add the context to the job_queue if there
+> > are some buffers in that hw_queue list.
+> why?
+> >
+> > Maybe what I need here are actual patches modifying some existing
+> > drivers. Randy, would you be able to include that in the next version?
+> May not. The Synaptics VideoSmart is a secure video platform(DRM), I
+> could release a snapshot of the driver when I got the permission, that
+> would be after the official release of the SDK.
+> But you may not be able to compile it because we have our own TEE
+> interface(not optee), also running it because the trusted app would be
+> signed with a per-device key.
+
+Could you modify another, already existing driver then?
+
+> > Thanks.
 > >
 > > Best regards,
 > > Tomasz
 > >
 > >>
-> >> -    fmt =3D vivid_get_format(dev, mp->pixelformat);
-> >> +    fmt =3D vivid_get_format(dev, f->pixelformat);
-> >>      if (!fmt) {
-> >>              dprintk(dev, 1, "Fourcc format (0x%08x) unknown.\n",
-> >> -                    mp->pixelformat);
-> >> -            mp->pixelformat =3D V4L2_PIX_FMT_YUYV;
-> >> -            fmt =3D vivid_get_format(dev, mp->pixelformat);
-> >> +                    f->pixelformat);
-> >> +            f->pixelformat =3D V4L2_PIX_FMT_YUYV;
-> >> +            fmt =3D vivid_get_format(dev, f->pixelformat);
-> >>      }
+> >> Nicolas
 > >>
-> >> -    mp->field =3D vivid_field_cap(dev, mp->field);
-> >> +    f->field =3D vivid_field_cap(dev, f->field);
-> >>      if (vivid_is_webcam(dev)) {
-> >>              const struct v4l2_frmsize_discrete *sz =3D
-> >>                      v4l2_find_nearest_size(webcam_sizes,
-> >>                                             VIVID_WEBCAM_SIZES, width,
-> >> -                                           height, mp->width, mp->hei=
-ght);
-> >> +                                           height, f->width, f->heigh=
-t);
+> >>>
+> >>> Best regards,
+> >>> Tomasz
+> >>>
+> >>>> Nicolas
+> >>>>>
+> >>>>>>
+> >>>>>> Signed-off-by: Hsia-Jun(Randy) Li <randy.li@synaptics.com>
+> >>>>>> ---
+> >>>>>>   drivers/media/v4l2-core/v4l2-mem2mem.c | 25 +++++++++++++++++---=
+-----
+> >>>>>>   include/media/v4l2-mem2mem.h           | 10 +++++++++-
+> >>>>>>   2 files changed, 26 insertions(+), 9 deletions(-)
+> >>>>>>
+> >>>>>> diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/medi=
+a/v4l2-core/v4l2-mem2mem.c
+> >>>>>> index c771aba42015..b4151147d5bd 100644
+> >>>>>> --- a/drivers/media/v4l2-core/v4l2-mem2mem.c
+> >>>>>> +++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
+> >>>>>> @@ -321,15 +321,21 @@ static void __v4l2_m2m_try_queue(struct v4l2=
+_m2m_dev *m2m_dev,
+> >>>>>>              goto job_unlock;
+> >>>>>>      }
+> >>>>>>
+> >>>>>> -   src =3D v4l2_m2m_next_src_buf(m2m_ctx);
+> >>>>>> -   dst =3D v4l2_m2m_next_dst_buf(m2m_ctx);
+> >>>>>> -   if (!src && !m2m_ctx->out_q_ctx.buffered) {
+> >>>>>> -           dprintk("No input buffers available\n");
+> >>>>>> -           goto job_unlock;
+> >>>>>> +   if (list_empty(&m2m_ctx->out_q_ctx.hw_queue)) {
+> >>>>>> +           src =3D v4l2_m2m_next_src_buf(m2m_ctx);
+> >>>>>> +
+> >>>>>> +           if (!src && !m2m_ctx->out_q_ctx.buffered) {
+> >>>>>> +                   dprintk("No input buffers available\n");
+> >>>>>> +                   goto job_unlock;
+> >>>>>> +           }
+> >>>>>>      }
+> >>>>>> -   if (!dst && !m2m_ctx->cap_q_ctx.buffered) {
+> >>>>>> -           dprintk("No output buffers available\n");
+> >>>>>> -           goto job_unlock;
+> >>>>>> +
+> >>>>>> +   if (list_empty(&m2m_ctx->cap_q_ctx.hw_queue)) {
+> >>>>>> +           dst =3D v4l2_m2m_next_dst_buf(m2m_ctx);
+> >>>>>> +           if (!dst && !m2m_ctx->cap_q_ctx.buffered) {
+> >>>>>> +                   dprintk("No output buffers available\n");
+> >>>>>> +                   goto job_unlock;
+> >>>>>> +           }
+> >>>>>>      }
+> >>>>>
+> >>>>> src and dst would be referenced unitialized below if neither of the
+> >>>>> above ifs hits...
+> >>>>>
+> >>>>> Best regards,
+> >>>>> Tomasz
+> >>>>>
+> >>>>>>
+> >>>>>>      m2m_ctx->new_frame =3D true;
+> >>>>>> @@ -896,6 +902,7 @@ int v4l2_m2m_streamoff(struct file *file, stru=
+ct v4l2_m2m_ctx *m2m_ctx,
+> >>>>>>      INIT_LIST_HEAD(&q_ctx->rdy_queue);
+> >>>>>>      q_ctx->num_rdy =3D 0;
+> >>>>>>      spin_unlock_irqrestore(&q_ctx->rdy_spinlock, flags);
+> >>>>>> +   INIT_LIST_HEAD(&q_ctx->hw_queue);
+> >>>>>>
+> >>>>>>      if (m2m_dev->curr_ctx =3D=3D m2m_ctx) {
+> >>>>>>              m2m_dev->curr_ctx =3D NULL;
+> >>>>>> @@ -1234,6 +1241,8 @@ struct v4l2_m2m_ctx *v4l2_m2m_ctx_init(struc=
+t v4l2_m2m_dev *m2m_dev,
+> >>>>>>
+> >>>>>>      INIT_LIST_HEAD(&out_q_ctx->rdy_queue);
+> >>>>>>      INIT_LIST_HEAD(&cap_q_ctx->rdy_queue);
+> >>>>>> +   INIT_LIST_HEAD(&out_q_ctx->hw_queue);
+> >>>>>> +   INIT_LIST_HEAD(&cap_q_ctx->hw_queue);
+> >>>>>>      spin_lock_init(&out_q_ctx->rdy_spinlock);
+> >>>>>>      spin_lock_init(&cap_q_ctx->rdy_spinlock);
+> >>>>>>
+> >>>>>> diff --git a/include/media/v4l2-mem2mem.h b/include/media/v4l2-mem=
+2mem.h
+> >>>>>> index d6c8eb2b5201..2342656e582d 100644
+> >>>>>> --- a/include/media/v4l2-mem2mem.h
+> >>>>>> +++ b/include/media/v4l2-mem2mem.h
+> >>>>>> @@ -53,9 +53,16 @@ struct v4l2_m2m_dev;
+> >>>>>>    * processed
+> >>>>>>    *
+> >>>>>>    * @q:             pointer to struct &vb2_queue
+> >>>>>> - * @rdy_queue:     List of V4L2 mem-to-mem queues
+> >>>>>> + * @rdy_queue:     List of V4L2 mem-to-mem queues. If v4l2_m2m_bu=
+f_queue() is
+> >>>>>> + *         called in struct vb2_ops->buf_queue(), the buffer enqu=
+eued
+> >>>>>> + *         by user would be added to this list.
+> >>>>>>    * @rdy_spinlock: spin lock to protect the struct usage
+> >>>>>>    * @num_rdy:       number of buffers ready to be processed
+> >>>>>> + * @hw_queue:      A list for tracking the buffer is occupied by =
+the hardware
+> >>>>>> + *                 (or device's firmware). A buffer could only be=
+ in either
+> >>>>>> + *                 this list or @rdy_queue.
+> >>>>>> + *                 Driver may choose not to use this list while u=
+ses its own
+> >>>>>> + *                 private data to do this work.
+> >>>>>>    * @buffered:      is the queue buffered?
+> >>>>>>    *
+> >>>>>>    * Queue for buffers ready to be processed as soon as this
+> >>>>>> @@ -68,6 +75,7 @@ struct v4l2_m2m_queue_ctx {
+> >>>>>>      struct list_head        rdy_queue;
+> >>>>>>      spinlock_t              rdy_spinlock;
+> >>>>>>      u8                      num_rdy;
+> >>>>>> +   struct list_head        hw_queue;
+> >>>>>>      bool                    buffered;
+> >>>>>>   };
+> >>>>>>
+> >>>>>> --
+> >>>>>> 2.17.1
+> >>>>>>
+> >>>>
 > >>
-> >>              w =3D sz->width;
-> >>              h =3D sz->height;
-> >> @@ -604,14 +603,14 @@ int vivid_try_fmt_vid_cap(struct file *file, voi=
-d *priv,
-> >>              w =3D dev->src_rect.width;
-> >>              h =3D dev->src_rect.height;
-> >>      }
-> >> -    if (V4L2_FIELD_HAS_T_OR_B(mp->field))
-> >> +    if (V4L2_FIELD_HAS_T_OR_B(f->field))
-> >>              factor =3D 2;
-> >>      if (vivid_is_webcam(dev) ||
-> >>          (!dev->has_scaler_cap && !dev->has_crop_cap && !dev->has_comp=
-ose_cap)) {
-> >> -            mp->width =3D w;
-> >> -            mp->height =3D h / factor;
-> >> +            f->width =3D w;
-> >> +            f->height =3D h / factor;
-> >>      } else {
-> >> -            struct v4l2_rect r =3D { 0, 0, mp->width, mp->height * fa=
-ctor };
-> >> +            struct v4l2_rect r =3D { 0, 0, f->width, f->height * fact=
-or };
-> >>
-> >>              v4l2_rect_set_min_size(&r, &vivid_min_rect);
-> >>              v4l2_rect_set_max_size(&r, &vivid_max_rect);
-> >> @@ -624,16 +623,15 @@ int vivid_try_fmt_vid_cap(struct file *file, voi=
-d *priv,
-> >>              } else if (!dev->has_scaler_cap && !dev->has_crop_cap) {
-> >>                      v4l2_rect_set_min_size(&r, &dev->src_rect);
-> >>              }
-> >> -            mp->width =3D r.width;
-> >> -            mp->height =3D r.height / factor;
-> >> +            f->width =3D r.width;
-> >> +            f->height =3D r.height / factor;
-> >>      }
-> >>
-> >>      /* This driver supports custom bytesperline values */
-> >>
-> >> -    mp->num_planes =3D fmt->buffers;
-> >>      for (p =3D 0; p < fmt->buffers; p++) {
-> >>              /* Calculate the minimum supported bytesperline value */
-> >> -            bytesperline =3D (mp->width * fmt->bit_depth[p]) >> 3;
-> >> +            bytesperline =3D (f->width * fmt->bit_depth[p]) >> 3;
-> >>              /* Calculate the maximum supported bytesperline value */
-> >>              max_bpl =3D (MAX_ZOOM * MAX_WIDTH * fmt->bit_depth[p]) >>=
- 3;
-> >>
-> >> @@ -642,48 +640,49 @@ int vivid_try_fmt_vid_cap(struct file *file, voi=
-d *priv,
-> >>              if (pfmt[p].bytesperline < bytesperline)
-> >>                      pfmt[p].bytesperline =3D bytesperline;
-> >>
-> >> -            pfmt[p].sizeimage =3D (pfmt[p].bytesperline * mp->height)=
- /
-> >> +            pfmt[p].sizeimage =3D (pfmt[p].bytesperline * f->height) =
-/
-> >>                              fmt->vdownsampling[p] + fmt->data_offset[=
-p];
-> >> -
-> >> -            memset(pfmt[p].reserved, 0, sizeof(pfmt[p].reserved));
-> >>      }
-> >> +
-> >> +    if (p < VIDEO_MAX_PLANES)
-> >> +            pfmt[p].sizeimage =3D 0;
-> >> +
-> >>      for (p =3D fmt->buffers; p < fmt->planes; p++)
-> >> -            pfmt[0].sizeimage +=3D (pfmt[0].bytesperline * mp->height=
- *
-> >> +            pfmt[0].sizeimage +=3D (pfmt[0].bytesperline * f->height =
-*
-> >>                      (fmt->bit_depth[p] / fmt->vdownsampling[p])) /
-> >>                      (fmt->bit_depth[0] / fmt->vdownsampling[0]);
-> >>
-> >> -    if (!user_set_csc || !v4l2_is_colorspace_valid(mp->colorspace))
-> >> -            mp->colorspace =3D vivid_colorspace_cap(dev);
-> >> +    if (!v4l2_is_colorspace_valid(f->colorspace))
-> >> +            f->colorspace =3D vivid_colorspace_cap(dev);
-> >>
-> >> -    if (!user_set_csc || !v4l2_is_xfer_func_valid(mp->xfer_func))
-> >> -            mp->xfer_func =3D vivid_xfer_func_cap(dev);
-> >> +    if (!v4l2_is_xfer_func_valid(f->xfer_func))
-> >> +            f->xfer_func =3D vivid_xfer_func_cap(dev);
-> >>
-> >>      if (fmt->color_enc =3D=3D TGP_COLOR_ENC_HSV) {
-> >> -            if (!user_set_csc || !v4l2_is_hsv_enc_valid(mp->hsv_enc))
-> >> -                    mp->hsv_enc =3D vivid_hsv_enc_cap(dev);
-> >> +            if (!v4l2_is_hsv_enc_valid(f->hsv_enc))
-> >> +                    f->hsv_enc =3D vivid_hsv_enc_cap(dev);
-> >>      } else if (fmt->color_enc =3D=3D TGP_COLOR_ENC_YCBCR) {
-> >> -            if (!user_set_csc || !v4l2_is_ycbcr_enc_valid(mp->ycbcr_e=
-nc))
-> >> -                    mp->ycbcr_enc =3D vivid_ycbcr_enc_cap(dev);
-> >> +            if (!v4l2_is_ycbcr_enc_valid(f->ycbcr_enc))
-> >> +                    f->ycbcr_enc =3D vivid_ycbcr_enc_cap(dev);
-> >>      } else {
-> >> -            mp->ycbcr_enc =3D vivid_ycbcr_enc_cap(dev);
-> >> +            f->ycbcr_enc =3D vivid_ycbcr_enc_cap(dev);
-> >>      }
-> >>
-> >>      if (fmt->color_enc =3D=3D TGP_COLOR_ENC_YCBCR ||
-> >>          fmt->color_enc =3D=3D TGP_COLOR_ENC_RGB) {
-> >> -            if (!user_set_csc || !v4l2_is_quant_valid(mp->quantizatio=
-n))
-> >> -                    mp->quantization =3D vivid_quantization_cap(dev);
-> >> +            if (!v4l2_is_quant_valid(f->quantization))
-> >> +                    f->quantization =3D vivid_quantization_cap(dev);
-> >>      } else {
-> >> -            mp->quantization =3D vivid_quantization_cap(dev);
-> >> +            f->quantization =3D vivid_quantization_cap(dev);
-> >>      }
-> >>
-> >> -    memset(mp->reserved, 0, sizeof(mp->reserved));
-> >> +    memset(f->reserved, 0, sizeof(f->reserved));
-> >>      return 0;
-> >>   }
-> > [snip]
+>
+> --
+> Hsia-Jun(Randy) Li
