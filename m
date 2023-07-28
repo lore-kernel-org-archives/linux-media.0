@@ -2,1891 +2,1218 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13C17C001DE
-	for <linux-media@archiver.kernel.org>; Fri, 28 Jul 2023 14:13:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 329A7C001DF
+	for <linux-media@archiver.kernel.org>; Fri, 28 Jul 2023 14:19:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236956AbjG1ONs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 28 Jul 2023 10:13:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41170 "EHLO
+        id S233183AbjG1OTa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 28 Jul 2023 10:19:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236534AbjG1ONr (ORCPT
+        with ESMTP id S236280AbjG1OT3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 28 Jul 2023 10:13:47 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4953AA3
-        for <linux-media@vger.kernel.org>; Fri, 28 Jul 2023 07:13:42 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f4b2bc1565so3718220e87.2
-        for <linux-media@vger.kernel.org>; Fri, 28 Jul 2023 07:13:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690553621; x=1691158421;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WVRceJceGDpCO42uthCJ+MjHJykc0jEKajsH/ocLPME=;
-        b=mgV0HtCycFVwkWdUktsKFZfL/M7nQLQ+XUfsB2fEwHzVatmQBq9dY60P/JKK8Y7b+h
-         8/mhHjcUulMpljH5oorxjX6l1gApyXRaHV8/3qUkWKKSTVzGqGPxdXv9P4FXiMf0pPZe
-         gE9UwMUJbmInX52H50ko7kN4hYs/gj043em4W+fdN3WmD68y723R5kj54ovN1ymmDnT2
-         xt/F2DwYWy5k3P6lr7uSXr6X5pmWdWbwbuu2gYmx/CRI5+9rsCeWLGzE5CYHAKmC24sc
-         SBx+x+StbQUpobzBkjP3acXSMQtDXrvIY19lXJVV2cFlk00jMbuLpO6qvfsbis8QWTmv
-         lNHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690553621; x=1691158421;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WVRceJceGDpCO42uthCJ+MjHJykc0jEKajsH/ocLPME=;
-        b=DA4LesN4dAjvNcJ//1309elRTRD7QodGq1a8SOs4EWQpECyr4fDnl33LWngk54nvrs
-         yGRO9e9bxKquHapctzuWpP8r7O2j/AbdolZCSSlx9lgy3sanPaa92LHMJEu1tG4jMp2v
-         ket6eb5v726qSGWZw++24Ym937VGV5tf9tFk3CnTUtDRsQ1YXwqiD3pJvYhmawDsPIr1
-         Ienxc9YU5UcMYwYNP0vAU2CcIAwGEvk3gWZUqilaNmqIDAZ8MNexGZumzvVSHOKePYBy
-         6+iAZ0NZ+s7E4e49Vyqqp3X5ejTaOsp16hkWyHTH2AN1PXHZZpA0usnvSM9sMV6uz2dL
-         CLLg==
-X-Gm-Message-State: ABy/qLanYP70h3sHYVt6IeyVgSFSZOh6z3LZeHyDPDlLDPdaMwIAKqtx
-        kd/MZuB5NnJ6QvPWkp4KSvIsLA==
-X-Google-Smtp-Source: APBJJlFxgh8gqbZsB86YOIidkLihSExEmglxIQzEgX9Sut4DzgJ/Nb7Q/0GGbnFc16IHB0uxMrYq7g==
-X-Received: by 2002:ac2:5e2e:0:b0:4fb:9446:598b with SMTP id o14-20020ac25e2e000000b004fb9446598bmr1741883lfg.27.1690553620358;
-        Fri, 28 Jul 2023 07:13:40 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id n21-20020a195515000000b004fad5602c18sm836201lfe.73.2023.07.28.07.13.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jul 2023 07:13:39 -0700 (PDT)
-Message-ID: <4d6d460f-445e-cb74-5a63-320f39ae6949@linaro.org>
-Date:   Fri, 28 Jul 2023 17:13:39 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 26/33] iris: platform: sm8550: add capability file for
- sm8550
-Content-Language: en-GB
-To:     Vikash Garodia <quic_vgarodia@quicinc.com>,
-        stanimir.k.varbanov@gmail.com, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, mchehab@kernel.org,
-        hans.verkuil@cisco.com, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Cc:     quic_dikshita@quicinc.com
+        Fri, 28 Jul 2023 10:19:29 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A493E47;
+        Fri, 28 Jul 2023 07:19:26 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36S9wAHF004457;
+        Fri, 28 Jul 2023 13:26:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=qcppdkim1;
+ bh=vr5ZdLxJc4mgvFa8ZTz/SYlkacKXEtu/6e/SVjfMutk=;
+ b=JU6R8XnGO03vhhLWT7Ez1kGK5Ryca+C+u3BWE56n9e1hF9JORT2xhFPY6zXlEgN7ITdB
+ ZFUqkuecZ/HtKYecV715HqStYi/iTHtOGa37KLPjHNcMUq825mlwViOv0YzBVtqvDA5O
+ F+gxPmtQTP3f9oa6eGnOEJZgxnkNTJ1cUEtdQltCwTXXuYFgREEjajF1pqK2/deRxRSs
+ 9SCaDVfhb9/bgou1hpWxKvbtwXUSO4Z8ChTBKOJx4TetYb5vdiQUKuVEs1MyQathSxjR
+ fIEiqXzRWxarB/nHFJO0sedwrlsZVoI3T/pybz59bM2BM10NDKwuEC8nqQ1WfBvzHoj7 FA== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s447kh7vk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Jul 2023 13:26:58 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36SDQvRl002980
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Jul 2023 13:26:57 GMT
+Received: from hu-vgarodia-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Fri, 28 Jul 2023 06:26:54 -0700
+From:   Vikash Garodia <quic_vgarodia@quicinc.com>
+To:     <stanimir.k.varbanov@gmail.com>, <agross@kernel.org>,
+        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <mchehab@kernel.org>, <hans.verkuil@cisco.com>,
+        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>
+CC:     <quic_dikshita@quicinc.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>
+Subject: [PATCH 31/33] iris: variant: iris: implement the logic to compute bus bandwidth
+Date:   Fri, 28 Jul 2023 18:53:42 +0530
+Message-ID: <1690550624-14642-32-git-send-email-quic_vgarodia@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1690550624-14642-1-git-send-email-quic_vgarodia@quicinc.com>
 References: <1690550624-14642-1-git-send-email-quic_vgarodia@quicinc.com>
- <1690550624-14642-27-git-send-email-quic_vgarodia@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1690550624-14642-27-git-send-email-quic_vgarodia@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: G1YBRa91uQJ-nTaHwI1gLRiUTIyPh4Wj
+X-Proofpoint-GUID: G1YBRa91uQJ-nTaHwI1gLRiUTIyPh4Wj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-27_10,2023-07-26_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
+ clxscore=1015 malwarescore=0 lowpriorityscore=0 priorityscore=1501
+ impostorscore=0 bulkscore=0 phishscore=0 suspectscore=0 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2307280124
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 28/07/2023 16:23, Vikash Garodia wrote:
-> From: Dikshita Agarwal <quic_dikshita@quicinc.com>
-> 
-> This implements all the capabilities supported by sm8550.
-> 
-> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
-> Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
-> ---
->   .../iris/platform/sm8550/inc/msm_vidc_sm8550.h     |   14 +
->   .../iris/platform/sm8550/src/msm_vidc_sm8550.c     | 1727 ++++++++++++++++++++
->   2 files changed, 1741 insertions(+)
->   create mode 100644 drivers/media/platform/qcom/iris/platform/sm8550/inc/msm_vidc_sm8550.h
->   create mode 100644 drivers/media/platform/qcom/iris/platform/sm8550/src/msm_vidc_sm8550.c
-> 
-> diff --git a/drivers/media/platform/qcom/iris/platform/sm8550/inc/msm_vidc_sm8550.h b/drivers/media/platform/qcom/iris/platform/sm8550/inc/msm_vidc_sm8550.h
-> new file mode 100644
-> index 0000000..0a2f172
-> --- /dev/null
-> +++ b/drivers/media/platform/qcom/iris/platform/sm8550/inc/msm_vidc_sm8550.h
-> @@ -0,0 +1,14 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
-> + * Copyright (c) 2021-2023 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +
-> +#ifndef _MSM_VIDC_SM8550_H_
-> +#define _MSM_VIDC_SM8550_H_
-> +
-> +#include "msm_vidc_core.h"
-> +
-> +int msm_vidc_init_platform_sm8550(struct msm_vidc_core *core);
-> +
-> +#endif // _MSM_VIDC_SM8550_H_
-> diff --git a/drivers/media/platform/qcom/iris/platform/sm8550/src/msm_vidc_sm8550.c b/drivers/media/platform/qcom/iris/platform/sm8550/src/msm_vidc_sm8550.c
-> new file mode 100644
-> index 0000000..2408556
-> --- /dev/null
-> +++ b/drivers/media/platform/qcom/iris/platform/sm8550/src/msm_vidc_sm8550.c
-> @@ -0,0 +1,1727 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
-> + * Copyright (c) 2021-2023 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +
-> +#include <dt-bindings/clock/qcom,sm8550-gcc.h>
-> +#include <dt-bindings/clock/qcom,sm8450-videocc.h>
-> +
-> +#include "hfi_command.h"
-> +#include "hfi_property.h"
-> +#include "msm_vidc_control.h"
-> +#include "msm_vidc_debug.h"
-> +#include "msm_vidc_iris3.h"
-> +#include "msm_vidc_sm8550.h"
-> +#include "msm_vidc_platform.h"
-> +
-> +/* version: major[24:31], minor[16:23], revision[0:15] */
-> +#define DRIVER_VERSION          0x04000000
-> +#define DEFAULT_VIDEO_CONCEAL_COLOR_BLACK 0x8020010
-> +#define MAX_BASE_LAYER_PRIORITY_ID 63
-> +#define MAX_OP_POINT            31
-> +#define MAX_BITRATE             245000000
-> +#define DEFAULT_BITRATE         20000000
-> +#define MINIMUM_FPS             1
-> +#define MAXIMUM_FPS             480
-> +#define MAXIMUM_DEC_FPS         960
-> +#define MAX_QP                  51
-> +#define DEFAULT_QP              20
-> +#define MAX_CONSTANT_QUALITY    100
-> +#define MIN_SLICE_BYTE_SIZE     512
-> +#define MAX_SLICE_BYTE_SIZE       \
-> +	((MAX_BITRATE) >> 3)
-> +#define MAX_SLICE_MB_SIZE         \
-> +	(((4096 + 15) >> 4) * ((2304 + 15) >> 4))
-> +
-> +#define ENC     MSM_VIDC_ENCODER
-> +#define DEC     MSM_VIDC_DECODER
-> +#define H264    MSM_VIDC_H264
-> +#define HEVC    MSM_VIDC_HEVC
-> +#define VP9     MSM_VIDC_VP9
+From: Dikshita Agarwal <quic_dikshita@quicinc.com>
 
-Another redefinition. Inline it.
+This implements the logic to compute bus bandwidth required by encoder
+or decoder for a specific usecase. It takes input as various video
+usecase parameters as configured by clients.
 
-> +#define CODECS_ALL     (H264 | HEVC | VP9)
-> +#define MAXIMUM_OVERRIDE_VP9_FPS 200
-> +
-> +static struct codec_info codec_data_sm8550[] = {
-> +	{
-> +		.v4l2_codec  = V4L2_PIX_FMT_H264,
-> +		.vidc_codec  = MSM_VIDC_H264,
-> +		.pixfmt_name = "AVC",
+Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
+Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
+---
+ .../iris/variant/iris3/inc/perf_static_model.h     | 229 ++++++
+ .../iris/variant/iris3/src/msm_vidc_bus_iris3.c    | 884 +++++++++++++++++++++
+ 2 files changed, 1113 insertions(+)
+ create mode 100644 drivers/media/platform/qcom/iris/variant/iris3/inc/perf_static_model.h
+ create mode 100644 drivers/media/platform/qcom/iris/variant/iris3/src/msm_vidc_bus_iris3.c
 
-Have you considered using existing code which enumerates formats? For 
-example, it is much better to refactor v4l_fill_fmtdesc() to allow 
-getting the description instead of adding your own names here.
-Not to mention that printk supports %p4cc for printing fourcc values. I 
-hope you knew that.
-
-> +	},
-> +	{
-> +		.v4l2_codec  = V4L2_PIX_FMT_HEVC,
-> +		.vidc_codec  = MSM_VIDC_HEVC,
-> +		.pixfmt_name = "HEVC",
-> +	},
-> +	{
-> +		.v4l2_codec  = V4L2_PIX_FMT_VP9,
-> +		.vidc_codec  = MSM_VIDC_VP9,
-> +		.pixfmt_name = "VP9",
-> +	},
-> +};
-> +
-> +static struct color_format_info color_format_data_sm8550[] = {
-> +	{
-> +		.v4l2_color_format = V4L2_PIX_FMT_NV12,
-> +		.vidc_color_format = MSM_VIDC_FMT_NV12,
-> +		.pixfmt_name       = "NV12",
-> +	},
-> +	{
-> +		.v4l2_color_format = V4L2_PIX_FMT_NV21,
-> +		.vidc_color_format = MSM_VIDC_FMT_NV21,
-> +		.pixfmt_name       = "NV21",
-> +	},
-> +	{
-> +		.v4l2_color_format = V4L2_PIX_FMT_QC08C,
-> +		.vidc_color_format = MSM_VIDC_FMT_NV12C,
-> +		.pixfmt_name       = "NV12C",
-> +	},
-> +	{
-> +		.v4l2_color_format = V4L2_PIX_FMT_QC10C,
-> +		.vidc_color_format = MSM_VIDC_FMT_TP10C,
-> +		.pixfmt_name       = "TP10C",
-> +	},
-> +	{
-> +		.v4l2_color_format = V4L2_PIX_FMT_RGBA32,
-> +		.vidc_color_format = MSM_VIDC_FMT_RGBA8888,
-> +		.pixfmt_name       = "RGBA",
-> +	},
-> +};
-> +
-> +static struct color_primaries_info color_primaries_data_sm8550[] = {
-> +	{
-> +		.v4l2_color_primaries  = V4L2_COLORSPACE_DEFAULT,
-> +		.vidc_color_primaries  = MSM_VIDC_PRIMARIES_RESERVED,
-> +	},
-> +	{
-> +		.v4l2_color_primaries  = V4L2_COLORSPACE_REC709,
-> +		.vidc_color_primaries  = MSM_VIDC_PRIMARIES_BT709,
-> +	},
-> +	{
-> +		.v4l2_color_primaries  = V4L2_COLORSPACE_470_SYSTEM_M,
-> +		.vidc_color_primaries  = MSM_VIDC_PRIMARIES_BT470_SYSTEM_M,
-> +	},
-> +	{
-> +		.v4l2_color_primaries  = V4L2_COLORSPACE_470_SYSTEM_BG,
-> +		.vidc_color_primaries  = MSM_VIDC_PRIMARIES_BT470_SYSTEM_BG,
-> +	},
-> +	{
-> +		.v4l2_color_primaries  = V4L2_COLORSPACE_SMPTE170M,
-> +		.vidc_color_primaries  = MSM_VIDC_PRIMARIES_BT601_525,
-> +	},
-> +	{
-> +		.v4l2_color_primaries  = V4L2_COLORSPACE_SMPTE240M,
-> +		.vidc_color_primaries  = MSM_VIDC_PRIMARIES_SMPTE_ST240M,
-> +	},
-> +	{
-> +		.v4l2_color_primaries  = V4L2_COLORSPACE_BT2020,
-> +		.vidc_color_primaries  = MSM_VIDC_PRIMARIES_BT2020,
-> +	},
-> +	{
-> +		.v4l2_color_primaries  = V4L2_COLORSPACE_DCI_P3,
-> +		.vidc_color_primaries  = MSM_VIDC_PRIMARIES_SMPTE_RP431_2,
-> +	},
-> +};
-> +
-> +static struct transfer_char_info transfer_char_data_sm8550[] = {
-> +	{
-> +		.v4l2_transfer_char  = V4L2_XFER_FUNC_DEFAULT,
-> +		.vidc_transfer_char  = MSM_VIDC_TRANSFER_RESERVED,
-> +	},
-> +	{
-> +		.v4l2_transfer_char  = V4L2_XFER_FUNC_709,
-> +		.vidc_transfer_char  = MSM_VIDC_TRANSFER_BT709,
-> +	},
-> +	{
-> +		.v4l2_transfer_char  = V4L2_XFER_FUNC_SMPTE240M,
-> +		.vidc_transfer_char  = MSM_VIDC_TRANSFER_SMPTE_ST240M,
-> +	},
-> +	{
-> +		.v4l2_transfer_char  = V4L2_XFER_FUNC_SRGB,
-> +		.vidc_transfer_char  = MSM_VIDC_TRANSFER_SRGB_SYCC,
-> +	},
-> +	{
-> +		.v4l2_transfer_char  = V4L2_XFER_FUNC_SMPTE2084,
-> +		.vidc_transfer_char  = MSM_VIDC_TRANSFER_SMPTE_ST2084_PQ,
-> +	},
-> +};
-> +
-> +static struct matrix_coeff_info matrix_coeff_data_sm8550[] = {
-> +	{
-> +		.v4l2_matrix_coeff  = V4L2_YCBCR_ENC_DEFAULT,
-> +		.vidc_matrix_coeff  = MSM_VIDC_MATRIX_COEFF_RESERVED,
-> +	},
-> +	{
-> +		.v4l2_matrix_coeff  = V4L2_YCBCR_ENC_709,
-> +		.vidc_matrix_coeff  = MSM_VIDC_MATRIX_COEFF_BT709,
-> +	},
-> +	{
-> +		.v4l2_matrix_coeff  = V4L2_YCBCR_ENC_XV709,
-> +		.vidc_matrix_coeff  = MSM_VIDC_MATRIX_COEFF_BT709,
-> +	},
-> +	{
-> +		.v4l2_matrix_coeff  = V4L2_YCBCR_ENC_XV601,
-> +		.vidc_matrix_coeff  = MSM_VIDC_MATRIX_COEFF_BT470_SYS_BG_OR_BT601_625,
-> +	},
-> +	{
-> +		.v4l2_matrix_coeff  = V4L2_YCBCR_ENC_601,
-> +		.vidc_matrix_coeff  = MSM_VIDC_MATRIX_COEFF_BT601_525_BT1358_525_OR_625,
-> +	},
-> +	{
-> +		.v4l2_matrix_coeff  = V4L2_YCBCR_ENC_SMPTE240M,
-> +		.vidc_matrix_coeff  = MSM_VIDC_MATRIX_COEFF_SMPTE_ST240,
-> +	},
-> +	{
-> +		.v4l2_matrix_coeff  = V4L2_YCBCR_ENC_BT2020,
-> +		.vidc_matrix_coeff  = MSM_VIDC_MATRIX_COEFF_BT2020_NON_CONSTANT,
-> +	},
-> +	{
-> +		.v4l2_matrix_coeff  = V4L2_YCBCR_ENC_BT2020_CONST_LUM,
-> +		.vidc_matrix_coeff  = MSM_VIDC_MATRIX_COEFF_BT2020_CONSTANT,
-> +	},
-> +};
-
-Are you going to say that these tables are platform-specific instead of 
-being generic to the driver?
-
-> +
-> +static struct msm_platform_core_capability core_data_sm8550[] = {
-> +	/* {type, value} */
-> +	{ENC_CODECS, H264 | HEVC},
-> +	{DEC_CODECS, H264 | HEVC | VP9},
-> +	{MAX_SESSION_COUNT, 16},
-> +	{MAX_NUM_720P_SESSIONS, 16},
-> +	{MAX_NUM_1080P_SESSIONS, 16},
-> +	{MAX_NUM_4K_SESSIONS, 8},
-> +	{MAX_NUM_8K_SESSIONS, 2},
-> +	{MAX_RT_MBPF, 174080},	/* (8192x4352)/256 + (4096x2176)/256*/
-> +	{MAX_MBPF, 278528}, /* ((8192x4352)/256) * 2 */
-> +	{MAX_MBPS, 7833600},	/* max_load
-> +				 * 7680x4320@60fps or 3840x2176@240fps
-> +				 * which is greater than 4096x2176@120fps,
-> +				 * 8192x4320@48fps
-> +				 */
-> +	{MAX_MBPF_HQ, 8160}, /* ((1920x1088)/256) */
-> +	{MAX_MBPS_HQ, 489600}, /* ((1920x1088)/256)@60fps */
-> +	{MAX_MBPF_B_FRAME, 32640}, /* 3840x2176/256 */
-> +	{MAX_MBPS_B_FRAME, 1958400}, /* 3840x2176/256 MBs@60fps */
-> +	{MAX_MBPS_ALL_INTRA, 1044480}, /* 4096x2176/256 MBs@30fps */
-> +	{MAX_ENH_LAYER_COUNT, 5},
-> +	{NUM_VPP_PIPE, 4},
-> +	{SW_PC, 1},
-> +	{FW_UNLOAD, 0},
-> +	{HW_RESPONSE_TIMEOUT, HW_RESPONSE_TIMEOUT_VALUE}, /* 1000 ms */
-> +	{SW_PC_DELAY,         SW_PC_DELAY_VALUE        }, /* 1500 ms (>HW_RESPONSE_TIMEOUT)*/
-> +	{FW_UNLOAD_DELAY,     FW_UNLOAD_DELAY_VALUE    }, /* 3000 ms (>SW_PC_DELAY)*/
-> +	{DCVS, 1},
-> +	{DECODE_BATCH, 1},
-> +	{DECODE_BATCH_TIMEOUT, 200},
-> +	{STATS_TIMEOUT_MS, 2000},
-> +	{NON_FATAL_FAULTS, 1},
-> +	{DEVICE_CAPS, V4L2_CAP_VIDEO_M2M_MPLANE | V4L2_CAP_STREAMING},
-
-Unless there is a good reason, please change this to be a proper data 
-structure instead of being a type-value array. With the T-V it is 
-impossible to notice if the value is missing or duplicated. This comment 
-also applies to the next 'capability' array.
-
-> +};
-> +
-> +static struct msm_platform_inst_capability instance_cap_data_sm8550[] = {
-> +	/* {cap, domain, codec,
-> +	 *      min, max, step_or_mask, value,
-> +	 *      v4l2_id,
-> +	 *      hfi_id,
-> +	 *      flags}
-> +	 */
-> +	{FRAME_WIDTH, DEC, CODECS_ALL, 96, 8192, 1, 1920},
-> +
-> +	{FRAME_WIDTH, DEC, VP9, 96, 4096, 1, 1920},
-> +
-> +	{FRAME_WIDTH, ENC, CODECS_ALL, 128, 8192, 1, 1920},
-> +
-> +	{FRAME_WIDTH, ENC, HEVC, 96, 8192, 1, 1920},
-> +
-> +	{LOSSLESS_FRAME_WIDTH, ENC, CODECS_ALL, 128, 4096, 1, 1920},
-> +
-> +	{LOSSLESS_FRAME_WIDTH, ENC, HEVC, 96, 4096, 1, 1920},
-> +
-> +	{FRAME_HEIGHT, DEC, CODECS_ALL, 96, 8192, 1, 1080},
-> +
-> +	{FRAME_HEIGHT, DEC, VP9, 96, 4096, 1, 1080},
-> +
-> +	{FRAME_HEIGHT, ENC, CODECS_ALL, 128, 8192, 1, 1080},
-> +
-> +	{FRAME_HEIGHT, ENC, HEVC, 96, 8192, 1, 1080},
-> +
-> +	{LOSSLESS_FRAME_HEIGHT, ENC, CODECS_ALL, 128, 4096, 1, 1080},
-> +
-> +	{LOSSLESS_FRAME_HEIGHT, ENC, HEVC, 96, 4096, 1, 1080},
-> +
-> +	{PIX_FMTS, ENC | DEC, H264,
-> +		MSM_VIDC_FMT_NV12,
-> +		MSM_VIDC_FMT_NV12C,
-> +		MSM_VIDC_FMT_NV12 | MSM_VIDC_FMT_NV21 | MSM_VIDC_FMT_NV12C,
-> +		MSM_VIDC_FMT_NV12C},
-> +
-> +	{PIX_FMTS, ENC | DEC, HEVC | VP9,
-> +		MSM_VIDC_FMT_NV12,
-> +		MSM_VIDC_FMT_TP10C,
-> +		MSM_VIDC_FMT_NV12 | MSM_VIDC_FMT_NV21 | MSM_VIDC_FMT_NV12C |
-> +		MSM_VIDC_FMT_TP10C,
-> +		MSM_VIDC_FMT_NV12C},
-> +
-> +	{MIN_BUFFERS_INPUT, ENC | DEC, CODECS_ALL, 0, 64, 1, 4,
-> +		V4L2_CID_MIN_BUFFERS_FOR_OUTPUT,
-> +		0,
-> +		CAP_FLAG_VOLATILE},
-> +
-> +	{MIN_BUFFERS_OUTPUT, ENC | DEC, CODECS_ALL,
-> +		0, 64, 1, 4,
-> +		V4L2_CID_MIN_BUFFERS_FOR_CAPTURE,
-> +		HFI_PROP_BUFFER_FW_MIN_OUTPUT_COUNT,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_VOLATILE},
-> +
-> +	/* (8192 * 4320) / 256 */
-> +	{MBPF, ENC, CODECS_ALL, 64, 138240, 1, 138240},
-> +
-> +	{MBPF, ENC, HEVC, 36, 138240, 1, 138240},
-> +
-> +	{MBPF, DEC, CODECS_ALL, 36, 138240, 1, 138240},
-> +
-> +	/* (4096 * 2304) / 256 */
-> +	{MBPF, DEC, VP9, 36, 36864, 1, 36864},
-> +
-> +	/* (4096 * 2304) / 256 */
-> +	{LOSSLESS_MBPF, ENC, H264 | HEVC, 64, 36864, 1, 36864},
-> +
-> +	/* Batch Mode Decode */
-> +	/* TODO: update with new values based on updated voltage corner */
-> +	{BATCH_MBPF, DEC, H264 | HEVC | VP9, 64, 34816, 1, 34816},
-> +
-> +	/* (4096 * 2304) / 256 */
-> +	{BATCH_FPS, DEC, H264 | HEVC | VP9, 1, 120, 1, 120},
-> +
-> +	{FRAME_RATE, ENC | DEC, CODECS_ALL,
-> +		(MINIMUM_FPS << 16), (MAXIMUM_FPS << 16),
-> +		1, (DEFAULT_FPS << 16),
-> +		0,
-> +		HFI_PROP_FRAME_RATE,
-> +		CAP_FLAG_OUTPUT_PORT},
-> +
-> +	{OPERATING_RATE, ENC | DEC, CODECS_ALL,
-> +		(MINIMUM_FPS << 16), (MAXIMUM_FPS << 16),
-> +		1, (DEFAULT_FPS << 16)},
-> +
-> +	{INPUT_RATE, ENC | DEC, CODECS_ALL,
-> +		(MINIMUM_FPS << 16), INT_MAX,
-> +		1, (DEFAULT_FPS << 16)},
-> +
-> +	{TIMESTAMP_RATE, ENC | DEC, CODECS_ALL,
-> +		(MINIMUM_FPS << 16), INT_MAX,
-> +		1, (DEFAULT_FPS << 16)},
-> +
-> +	{SCALE_FACTOR, ENC, H264 | HEVC, 1, 8, 1, 8},
-> +
-> +	{MB_CYCLES_VSP, ENC, CODECS_ALL, 25, 25, 1, 25},
-> +
-> +	{MB_CYCLES_VSP, DEC, CODECS_ALL, 25, 25, 1, 25},
-> +
-> +	{MB_CYCLES_VSP, DEC, VP9, 60, 60, 1, 60},
-> +
-> +	{MB_CYCLES_VPP, ENC, CODECS_ALL, 675, 675, 1, 675},
-> +
-> +	{MB_CYCLES_VPP, DEC, CODECS_ALL, 200, 200, 1, 200},
-> +
-> +	{MB_CYCLES_LP, ENC, CODECS_ALL, 320, 320, 1, 320},
-> +
-> +	{MB_CYCLES_LP, DEC, CODECS_ALL, 200, 200, 1, 200},
-> +
-> +	{MB_CYCLES_FW, ENC | DEC, CODECS_ALL, 489583, 489583, 1, 489583},
-> +
-> +	{MB_CYCLES_FW_VPP, ENC, CODECS_ALL, 48405, 48405, 1, 48405},
-> +
-> +	{MB_CYCLES_FW_VPP, DEC, CODECS_ALL, 66234, 66234, 1, 66234},
-> +
-> +	{HFLIP, ENC, CODECS_ALL,
-> +		0, 1, 1, 0,
-> +		V4L2_CID_HFLIP,
-> +		HFI_PROP_FLIP,
-> +		CAP_FLAG_OUTPUT_PORT |
-> +		CAP_FLAG_INPUT_PORT | CAP_FLAG_DYNAMIC_ALLOWED},
-> +
-> +	{VFLIP, ENC, CODECS_ALL,
-> +		0, 1, 1, 0,
-> +		V4L2_CID_VFLIP,
-> +		HFI_PROP_FLIP,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-> +		CAP_FLAG_DYNAMIC_ALLOWED},
-> +
-> +	{ROTATION, ENC, CODECS_ALL,
-> +		0, 270, 90, 0,
-> +		V4L2_CID_ROTATE,
-> +		HFI_PROP_ROTATION,
-> +		CAP_FLAG_OUTPUT_PORT},
-> +
-> +	{HEADER_MODE, ENC, CODECS_ALL,
-> +		V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE,
-> +		V4L2_MPEG_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME,
-> +		BIT(V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE) |
-> +		BIT(V4L2_MPEG_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME),
-> +		V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE,
-> +		V4L2_CID_MPEG_VIDEO_HEADER_MODE,
-> +		HFI_PROP_SEQ_HEADER_MODE,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
-> +
-> +	{PREPEND_SPSPPS_TO_IDR, ENC, CODECS_ALL,
-> +		0, 1, 1, 0,
-> +		V4L2_CID_MPEG_VIDEO_PREPEND_SPSPPS_TO_IDR},
-> +
-> +	{WITHOUT_STARTCODE, ENC, CODECS_ALL,
-> +		0, 1, 1, 0,
-> +		V4L2_CID_MPEG_VIDEO_HEVC_WITHOUT_STARTCODE,
-> +		HFI_PROP_NAL_LENGTH_FIELD,
-> +		CAP_FLAG_OUTPUT_PORT},
-> +
-> +	{NAL_LENGTH_FIELD, ENC, CODECS_ALL,
-> +		V4L2_MPEG_VIDEO_HEVC_SIZE_0,
-> +		V4L2_MPEG_VIDEO_HEVC_SIZE_4,
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_SIZE_0) |
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_SIZE_4),
-> +		V4L2_MPEG_VIDEO_HEVC_SIZE_0,
-> +		V4L2_CID_MPEG_VIDEO_HEVC_SIZE_OF_LENGTH_FIELD,
-> +		HFI_PROP_NAL_LENGTH_FIELD,
-> +		CAP_FLAG_MENU | CAP_FLAG_OUTPUT_PORT},
-> +
-> +	/* TODO: Firmware introduced enumeration type for this
-> +	 * with and without seq header.
-> +	 */
-> +	{REQUEST_I_FRAME, ENC, H264 | HEVC,
-> +		0, 0, 0, 0,
-> +		V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME,
-> +		HFI_PROP_REQUEST_SYNC_FRAME,
-> +		CAP_FLAG_INPUT_PORT | CAP_FLAG_DYNAMIC_ALLOWED},
-> +
-> +	/* Enc: Keeping CABAC and CAVLC as same bitrate.
-> +	 * Dec: there's no use of Bitrate cap
-> +	 */
-> +	{BIT_RATE, ENC, H264 | HEVC,
-> +		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
-> +		V4L2_CID_MPEG_VIDEO_BITRATE,
-> +		HFI_PROP_TOTAL_BITRATE,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-> +		CAP_FLAG_DYNAMIC_ALLOWED},
-> +
-> +	{BITRATE_MODE, ENC, H264,
-> +		V4L2_MPEG_VIDEO_BITRATE_MODE_VBR,
-> +		V4L2_MPEG_VIDEO_BITRATE_MODE_CBR,
-> +		BIT(V4L2_MPEG_VIDEO_BITRATE_MODE_VBR) |
-> +		BIT(V4L2_MPEG_VIDEO_BITRATE_MODE_CBR),
-> +		V4L2_MPEG_VIDEO_BITRATE_MODE_VBR,
-> +		V4L2_CID_MPEG_VIDEO_BITRATE_MODE,
-> +		HFI_PROP_RATE_CONTROL,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
-> +
-> +	{BITRATE_MODE, ENC, HEVC,
-> +		V4L2_MPEG_VIDEO_BITRATE_MODE_VBR,
-> +		V4L2_MPEG_VIDEO_BITRATE_MODE_CQ,
-> +		BIT(V4L2_MPEG_VIDEO_BITRATE_MODE_VBR) |
-> +		BIT(V4L2_MPEG_VIDEO_BITRATE_MODE_CBR) |
-> +		BIT(V4L2_MPEG_VIDEO_BITRATE_MODE_CQ),
-> +		V4L2_MPEG_VIDEO_BITRATE_MODE_VBR,
-> +		V4L2_CID_MPEG_VIDEO_BITRATE_MODE,
-> +		HFI_PROP_RATE_CONTROL,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
-> +
-> +	{CABAC_MAX_BITRATE, ENC, H264 | HEVC, 0,
-> +		160000000, 1, 160000000},
-> +
-> +	{CAVLC_MAX_BITRATE, ENC, H264, 0,
-> +		220000000, 1, 220000000},
-> +
-> +	{ALLINTRA_MAX_BITRATE, ENC, H264 | HEVC, 0,
-> +		245000000, 1, 245000000},
-> +
-> +	{NUM_COMV, DEC, CODECS_ALL,
-> +		0, INT_MAX, 1, 0},
-> +
-> +	{LOSSLESS, ENC, HEVC,
-> +		0, 1, 1, 0,
-> +		V4L2_CID_MPEG_VIDEO_HEVC_LOSSLESS_CU},
-> +
-> +	{FRAME_SKIP_MODE, ENC, H264 | HEVC,
-> +		V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_DISABLED,
-> +		V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT,
-> +		BIT(V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_DISABLED) |
-> +		BIT(V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_LEVEL_LIMIT) |
-> +		BIT(V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT),
-> +		V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_DISABLED,
-> +		V4L2_CID_MPEG_VIDEO_FRAME_SKIP_MODE,
-> +		0,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
-> +
-> +	{FRAME_RC_ENABLE, ENC, H264 | HEVC,
-> +		0, 1, 1, 1,
-> +		V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE},
-> +
-> +	{CONSTANT_QUALITY, ENC, HEVC,
-> +		1, MAX_CONSTANT_QUALITY, 1, 90,
-> +		V4L2_CID_MPEG_VIDEO_CONSTANT_QUALITY,
-> +		HFI_PROP_CONSTANT_QUALITY,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-> +		CAP_FLAG_DYNAMIC_ALLOWED},
-> +
-> +	{GOP_SIZE, ENC, CODECS_ALL,
-> +		0, INT_MAX, 1, 2 * DEFAULT_FPS - 1,
-> +		V4L2_CID_MPEG_VIDEO_GOP_SIZE,
-> +		HFI_PROP_MAX_GOP_FRAMES,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-> +		CAP_FLAG_DYNAMIC_ALLOWED},
-> +
-> +	{GOP_CLOSURE, ENC, H264 | HEVC,
-> +		0, 1, 1, 1,
-> +		V4L2_CID_MPEG_VIDEO_GOP_CLOSURE,
-> +		0},
-> +
-> +	{B_FRAME, ENC, H264 | HEVC,
-> +		0, 7, 1, 0,
-> +		V4L2_CID_MPEG_VIDEO_B_FRAMES,
-> +		HFI_PROP_MAX_B_FRAMES,
-> +		CAP_FLAG_OUTPUT_PORT},
-> +
-> +	{LTR_COUNT, ENC, H264 | HEVC,
-> +		0, MAX_LTR_FRAME_COUNT_2, 1, 0,
-> +		V4L2_CID_MPEG_VIDEO_LTR_COUNT,
-> +		HFI_PROP_LTR_COUNT,
-> +		CAP_FLAG_OUTPUT_PORT},
-> +
-> +	{USE_LTR, ENC, H264 | HEVC,
-> +		0,
-> +		((1 << MAX_LTR_FRAME_COUNT_2) - 1),
-> +		0, 0,
-> +		V4L2_CID_MPEG_VIDEO_USE_LTR_FRAMES,
-> +		HFI_PROP_LTR_USE,
-> +		CAP_FLAG_INPUT_PORT | CAP_FLAG_DYNAMIC_ALLOWED},
-> +
-> +	{MARK_LTR, ENC, H264 | HEVC,
-> +		INVALID_DEFAULT_MARK_OR_USE_LTR,
-> +		(MAX_LTR_FRAME_COUNT_2 - 1),
-> +		1, INVALID_DEFAULT_MARK_OR_USE_LTR,
-> +		V4L2_CID_MPEG_VIDEO_FRAME_LTR_INDEX,
-> +		HFI_PROP_LTR_MARK,
-> +		CAP_FLAG_INPUT_PORT | CAP_FLAG_DYNAMIC_ALLOWED},
-> +
-> +	{BASELAYER_PRIORITY, ENC, H264,
-> +		0, MAX_BASE_LAYER_PRIORITY_ID, 1, 0,
-> +		V4L2_CID_MPEG_VIDEO_BASELAYER_PRIORITY_ID,
-> +		HFI_PROP_BASELAYER_PRIORITYID,
-> +		CAP_FLAG_OUTPUT_PORT},
-> +
-> +	{IR_TYPE, ENC, H264 | HEVC,
-> +		V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_RANDOM,
-> +		V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_CYCLIC,
-> +		BIT(V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_RANDOM) |
-> +		BIT(V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_CYCLIC),
-> +		V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_RANDOM,
-> +		V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE,
-> +		0,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
-> +
-> +	{IR_PERIOD, ENC, H264 | HEVC,
-> +		0, INT_MAX, 1, 0,
-> +		V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD,
-> +		0,
-> +		CAP_FLAG_INPUT_PORT | CAP_FLAG_OUTPUT_PORT |
-> +		CAP_FLAG_DYNAMIC_ALLOWED},
-> +
-> +	{AU_DELIMITER, ENC, H264 | HEVC,
-> +		0, 1, 1, 0,
-> +		V4L2_CID_MPEG_VIDEO_AU_DELIMITER,
-> +		HFI_PROP_AUD,
-> +		CAP_FLAG_OUTPUT_PORT},
-> +
-> +	{MIN_QUALITY, ENC, H264 | HEVC,
-> +		0, MAX_SUPPORTED_MIN_QUALITY, 70, MAX_SUPPORTED_MIN_QUALITY,
-> +		0,
-> +		HFI_PROP_MAINTAIN_MIN_QUALITY,
-> +		CAP_FLAG_OUTPUT_PORT},
-> +
-> +	{VBV_DELAY, ENC, H264 | HEVC,
-> +		200, 300, 100, 300,
-> +		V4L2_CID_MPEG_VIDEO_VBV_DELAY,
-> +		HFI_PROP_VBV_DELAY,
-> +		CAP_FLAG_OUTPUT_PORT},
-> +
-> +	{PEAK_BITRATE, ENC, H264 | HEVC,
-> +		/* default peak bitrate is 10% larger than avg bitrate */
-> +		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
-> +		V4L2_CID_MPEG_VIDEO_BITRATE_PEAK,
-> +		HFI_PROP_TOTAL_PEAK_BITRATE,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-> +			CAP_FLAG_DYNAMIC_ALLOWED},
-> +
-> +	{MIN_FRAME_QP, ENC, H264,
-> +		MIN_QP_8BIT, MAX_QP, 1, MIN_QP_8BIT,
-> +		V4L2_CID_MPEG_VIDEO_H264_MIN_QP,
-> +		HFI_PROP_MIN_QP_PACKED,
-> +		CAP_FLAG_OUTPUT_PORT},
-> +
-> +	{MIN_FRAME_QP, ENC, HEVC,
-> +		MIN_QP_10BIT, MAX_QP, 1, MIN_QP_10BIT,
-> +		V4L2_CID_MPEG_VIDEO_HEVC_MIN_QP,
-> +		HFI_PROP_MIN_QP_PACKED,
-> +		CAP_FLAG_OUTPUT_PORT},
-> +
-> +	{I_FRAME_MIN_QP, ENC, H264,
-> +		MIN_QP_8BIT, MAX_QP, 1, MIN_QP_8BIT,
-> +		V4L2_CID_MPEG_VIDEO_H264_I_FRAME_MIN_QP},
-> +
-> +	{I_FRAME_MIN_QP, ENC, HEVC,
-> +		MIN_QP_10BIT, MAX_QP, 1, MIN_QP_10BIT,
-> +		V4L2_CID_MPEG_VIDEO_HEVC_I_FRAME_MIN_QP},
-> +
-> +	{P_FRAME_MIN_QP, ENC, H264,
-> +		MIN_QP_8BIT, MAX_QP, 1, MIN_QP_8BIT,
-> +		V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MIN_QP},
-> +
-> +	{P_FRAME_MIN_QP, ENC, HEVC,
-> +		MIN_QP_10BIT, MAX_QP, 1, MIN_QP_10BIT,
-> +		V4L2_CID_MPEG_VIDEO_HEVC_P_FRAME_MIN_QP},
-> +
-> +	{B_FRAME_MIN_QP, ENC, H264,
-> +		MIN_QP_8BIT, MAX_QP, 1, MIN_QP_8BIT,
-> +		V4L2_CID_MPEG_VIDEO_H264_B_FRAME_MIN_QP},
-> +
-> +	{B_FRAME_MIN_QP, ENC, HEVC,
-> +		MIN_QP_10BIT, MAX_QP, 1, MIN_QP_10BIT,
-> +		V4L2_CID_MPEG_VIDEO_HEVC_B_FRAME_MIN_QP},
-> +
-> +	{MAX_FRAME_QP, ENC, H264,
-> +		MIN_QP_8BIT, MAX_QP, 1, MAX_QP,
-> +		V4L2_CID_MPEG_VIDEO_H264_MAX_QP,
-> +		HFI_PROP_MAX_QP_PACKED,
-> +		CAP_FLAG_OUTPUT_PORT},
-> +
-> +	{MAX_FRAME_QP, ENC, HEVC,
-> +		MIN_QP_10BIT, MAX_QP, 1, MAX_QP,
-> +		V4L2_CID_MPEG_VIDEO_HEVC_MAX_QP,
-> +		HFI_PROP_MAX_QP_PACKED,
-> +		CAP_FLAG_OUTPUT_PORT},
-> +
-> +	{I_FRAME_MAX_QP, ENC, H264,
-> +		MIN_QP_8BIT, MAX_QP, 1, MAX_QP,
-> +		V4L2_CID_MPEG_VIDEO_H264_I_FRAME_MAX_QP},
-> +
-> +	{I_FRAME_MAX_QP, ENC, HEVC,
-> +		MIN_QP_10BIT, MAX_QP, 1, MAX_QP,
-> +		V4L2_CID_MPEG_VIDEO_HEVC_I_FRAME_MAX_QP},
-> +
-> +	{P_FRAME_MAX_QP, ENC, H264,
-> +		MIN_QP_8BIT, MAX_QP, 1, MAX_QP,
-> +		V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MAX_QP},
-> +
-> +	{P_FRAME_MAX_QP, ENC, HEVC,
-> +		MIN_QP_10BIT, MAX_QP, 1, MAX_QP,
-> +		V4L2_CID_MPEG_VIDEO_HEVC_P_FRAME_MAX_QP},
-> +
-> +	{B_FRAME_MAX_QP, ENC, H264,
-> +		MIN_QP_8BIT, MAX_QP, 1, MAX_QP,
-> +		V4L2_CID_MPEG_VIDEO_H264_B_FRAME_MAX_QP},
-> +
-> +	{B_FRAME_MAX_QP, ENC, HEVC,
-> +		MIN_QP_10BIT, MAX_QP, 1, MAX_QP,
-> +		V4L2_CID_MPEG_VIDEO_HEVC_B_FRAME_MAX_QP},
-> +
-> +	{I_FRAME_QP, ENC, HEVC,
-> +		MIN_QP_10BIT, MAX_QP, 1, DEFAULT_QP,
-> +		V4L2_CID_MPEG_VIDEO_HEVC_I_FRAME_QP,
-> +		HFI_PROP_QP_PACKED,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-> +			CAP_FLAG_DYNAMIC_ALLOWED},
-> +
-> +	{I_FRAME_QP, ENC, H264,
-> +		MIN_QP_8BIT, MAX_QP, 1, DEFAULT_QP,
-> +		V4L2_CID_MPEG_VIDEO_H264_I_FRAME_QP,
-> +		HFI_PROP_QP_PACKED,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-> +			CAP_FLAG_DYNAMIC_ALLOWED},
-> +
-> +	{P_FRAME_QP, ENC, HEVC,
-> +		MIN_QP_10BIT, MAX_QP, 1, DEFAULT_QP,
-> +		V4L2_CID_MPEG_VIDEO_HEVC_P_FRAME_QP,
-> +		HFI_PROP_QP_PACKED,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-> +			CAP_FLAG_DYNAMIC_ALLOWED},
-> +
-> +	{P_FRAME_QP, ENC, H264,
-> +		MIN_QP_8BIT, MAX_QP, 1, DEFAULT_QP,
-> +		V4L2_CID_MPEG_VIDEO_H264_P_FRAME_QP,
-> +		HFI_PROP_QP_PACKED,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-> +			CAP_FLAG_DYNAMIC_ALLOWED},
-> +
-> +	{B_FRAME_QP, ENC, HEVC,
-> +		MIN_QP_10BIT, MAX_QP, 1, DEFAULT_QP,
-> +		V4L2_CID_MPEG_VIDEO_HEVC_B_FRAME_QP,
-> +		HFI_PROP_QP_PACKED,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-> +			CAP_FLAG_DYNAMIC_ALLOWED},
-> +
-> +	{B_FRAME_QP, ENC, H264,
-> +		MIN_QP_8BIT, MAX_QP, 1, DEFAULT_QP,
-> +		V4L2_CID_MPEG_VIDEO_H264_B_FRAME_QP,
-> +		HFI_PROP_QP_PACKED,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-> +			CAP_FLAG_DYNAMIC_ALLOWED},
-> +
-> +	{LAYER_TYPE, ENC, HEVC,
-> +		V4L2_MPEG_VIDEO_HEVC_HIERARCHICAL_CODING_B,
-> +		V4L2_MPEG_VIDEO_HEVC_HIERARCHICAL_CODING_P,
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_HIERARCHICAL_CODING_B) |
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_HIERARCHICAL_CODING_P),
-> +		V4L2_MPEG_VIDEO_HEVC_HIERARCHICAL_CODING_P,
-> +		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_TYPE,
-> +		HFI_PROP_LAYER_ENCODING_TYPE,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
-> +
-> +	{LAYER_TYPE, ENC, H264,
-> +		V4L2_MPEG_VIDEO_H264_HIERARCHICAL_CODING_B,
-> +		V4L2_MPEG_VIDEO_H264_HIERARCHICAL_CODING_P,
-> +		BIT(V4L2_MPEG_VIDEO_H264_HIERARCHICAL_CODING_B) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_HIERARCHICAL_CODING_P),
-> +		V4L2_MPEG_VIDEO_H264_HIERARCHICAL_CODING_P,
-> +		V4L2_CID_MPEG_VIDEO_H264_HIERARCHICAL_CODING_TYPE,
-> +		HFI_PROP_LAYER_ENCODING_TYPE,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
-> +
-> +	{LAYER_ENABLE, ENC, H264,
-> +		0, 1, 1, 0,
-> +		V4L2_CID_MPEG_VIDEO_H264_HIERARCHICAL_CODING,
-> +		HFI_PROP_LAYER_ENCODING_TYPE,
-> +		CAP_FLAG_OUTPUT_PORT},
-> +
-> +	{LAYER_ENABLE, ENC, HEVC,
-> +		0, 1, 1, 0,
-> +		0,
-> +		0,
-> +		CAP_FLAG_OUTPUT_PORT},
-> +
-> +	{ENH_LAYER_COUNT, ENC, HEVC,
-> +		0, 5, 1, 0,
-> +		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_LAYER,
-> +		HFI_PROP_LAYER_COUNT,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-> +			CAP_FLAG_DYNAMIC_ALLOWED},
-> +
-> +	{ENH_LAYER_COUNT, ENC, H264,
-> +		0, 5, 1, 0,
-> +		V4L2_CID_MPEG_VIDEO_H264_HIERARCHICAL_CODING_LAYER,
-> +		HFI_PROP_LAYER_COUNT,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-> +			CAP_FLAG_DYNAMIC_ALLOWED},
-> +
-> +	{L0_BR, ENC, H264,
-> +		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
-> +		V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L0_BR,
-> +		HFI_PROP_BITRATE_LAYER1,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-> +			CAP_FLAG_DYNAMIC_ALLOWED},
-> +
-> +	{L0_BR, ENC, HEVC,
-> +		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
-> +		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L0_BR,
-> +		HFI_PROP_BITRATE_LAYER1,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-> +			CAP_FLAG_DYNAMIC_ALLOWED},
-> +
-> +	{L1_BR, ENC, H264,
-> +		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
-> +		V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L1_BR,
-> +		HFI_PROP_BITRATE_LAYER2,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-> +			CAP_FLAG_DYNAMIC_ALLOWED},
-> +
-> +	{L1_BR, ENC, HEVC,
-> +		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
-> +		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L1_BR,
-> +		HFI_PROP_BITRATE_LAYER2,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-> +			CAP_FLAG_DYNAMIC_ALLOWED},
-> +
-> +	{L2_BR, ENC, H264,
-> +		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
-> +		V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L2_BR,
-> +		HFI_PROP_BITRATE_LAYER3,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-> +			CAP_FLAG_DYNAMIC_ALLOWED},
-> +
-> +	{L2_BR, ENC, HEVC,
-> +		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
-> +		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L2_BR,
-> +		HFI_PROP_BITRATE_LAYER3,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-> +			CAP_FLAG_DYNAMIC_ALLOWED},
-> +
-> +	{L3_BR, ENC, H264,
-> +		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
-> +		V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L3_BR,
-> +		HFI_PROP_BITRATE_LAYER4,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-> +			CAP_FLAG_DYNAMIC_ALLOWED},
-> +	{L3_BR, ENC, HEVC,
-> +		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
-> +		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L3_BR,
-> +		HFI_PROP_BITRATE_LAYER4,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-> +			CAP_FLAG_DYNAMIC_ALLOWED},
-> +
-> +	{L4_BR, ENC, H264,
-> +		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
-> +		V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L4_BR,
-> +		HFI_PROP_BITRATE_LAYER5,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-> +			CAP_FLAG_DYNAMIC_ALLOWED},
-> +
-> +	{L4_BR, ENC, HEVC,
-> +		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
-> +		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L4_BR,
-> +		HFI_PROP_BITRATE_LAYER5,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-> +			CAP_FLAG_DYNAMIC_ALLOWED},
-> +
-> +	{L5_BR, ENC, H264,
-> +		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
-> +		V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L5_BR,
-> +		HFI_PROP_BITRATE_LAYER6,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-> +			CAP_FLAG_DYNAMIC_ALLOWED},
-> +
-> +	{L5_BR, ENC, HEVC,
-> +		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
-> +		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L5_BR,
-> +		HFI_PROP_BITRATE_LAYER6,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-> +			CAP_FLAG_DYNAMIC_ALLOWED},
-> +
-> +	{ENTROPY_MODE, ENC, H264,
-> +		V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CAVLC,
-> +		V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CABAC,
-> +		BIT(V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CAVLC) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CABAC),
-> +		V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CABAC,
-> +		V4L2_CID_MPEG_VIDEO_H264_ENTROPY_MODE,
-> +		HFI_PROP_CABAC_SESSION,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
-> +
-> +	{ENTROPY_MODE, DEC, H264 | HEVC | VP9,
-> +		V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CAVLC,
-> +		V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CABAC,
-> +		BIT(V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CAVLC) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CABAC),
-> +		V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CABAC,
-> +		0,
-> +		HFI_PROP_CABAC_SESSION},
-> +
-> +	{PROFILE, ENC | DEC, H264,
-> +		V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE,
-> +		V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_HIGH,
-> +		BIT(V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_HIGH) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_PROFILE_MAIN) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_PROFILE_HIGH),
-> +		V4L2_MPEG_VIDEO_H264_PROFILE_HIGH,
-> +		V4L2_CID_MPEG_VIDEO_H264_PROFILE,
-> +		HFI_PROP_PROFILE,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
-> +
-> +	{PROFILE, ENC | DEC, HEVC,
-> +		V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN,
-> +		V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN_10,
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN) |
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN_STILL_PICTURE) |
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN_10),
-> +		V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN,
-> +		V4L2_CID_MPEG_VIDEO_HEVC_PROFILE,
-> +		HFI_PROP_PROFILE,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
-> +
-> +	{PROFILE, DEC, VP9,
-> +		V4L2_MPEG_VIDEO_VP9_PROFILE_0,
-> +		V4L2_MPEG_VIDEO_VP9_PROFILE_2,
-> +		BIT(V4L2_MPEG_VIDEO_VP9_PROFILE_0) |
-> +		BIT(V4L2_MPEG_VIDEO_VP9_PROFILE_2),
-> +		V4L2_MPEG_VIDEO_VP9_PROFILE_0,
-> +		V4L2_CID_MPEG_VIDEO_VP9_PROFILE,
-> +		HFI_PROP_PROFILE,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
-> +
-> +	{LEVEL, ENC, H264,
-> +		V4L2_MPEG_VIDEO_H264_LEVEL_1_0,
-> +		V4L2_MPEG_VIDEO_H264_LEVEL_6_0,
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_0) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1B) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_1) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_2) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_3) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_2_0) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_2_1) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_2_2) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_3_0) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_3_1) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_3_2) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_4_0) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_4_1) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_4_2) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_5_0) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_5_1) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_5_2) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_6_0),
-> +		V4L2_MPEG_VIDEO_H264_LEVEL_5_0,
-> +		V4L2_CID_MPEG_VIDEO_H264_LEVEL,
-> +		HFI_PROP_LEVEL,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
-> +
-> +	{LEVEL, ENC, HEVC,
-> +		V4L2_MPEG_VIDEO_HEVC_LEVEL_1,
-> +		V4L2_MPEG_VIDEO_HEVC_LEVEL_6_2,
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_1) |
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_2) |
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_2_1) |
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_3) |
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_3_1) |
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_4) |
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_4_1) |
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_5) |
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_5_1) |
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_5_2) |
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_6) |
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_6_1) |
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_6_2),
-> +		V4L2_MPEG_VIDEO_HEVC_LEVEL_5,
-> +		V4L2_CID_MPEG_VIDEO_HEVC_LEVEL,
-> +		HFI_PROP_LEVEL,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
-> +
-> +	{LEVEL, DEC, H264,
-> +		V4L2_MPEG_VIDEO_H264_LEVEL_1_0,
-> +		V4L2_MPEG_VIDEO_H264_LEVEL_6_2,
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_0) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1B) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_1) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_2) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_3) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_2_0) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_2_1) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_2_2) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_3_0) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_3_1) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_3_2) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_4_0) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_4_1) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_4_2) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_5_0) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_5_1) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_5_2) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_6_0) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_6_1) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_6_2),
-> +		V4L2_MPEG_VIDEO_H264_LEVEL_6_1,
-> +		V4L2_CID_MPEG_VIDEO_H264_LEVEL,
-> +		HFI_PROP_LEVEL,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
-> +
-> +	{LEVEL, DEC, HEVC,
-> +		V4L2_MPEG_VIDEO_HEVC_LEVEL_1,
-> +		V4L2_MPEG_VIDEO_HEVC_LEVEL_6_2,
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_1) |
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_2) |
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_2_1) |
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_3) |
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_3_1) |
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_4) |
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_4_1) |
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_5) |
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_5_1) |
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_5_2) |
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_6) |
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_6_1) |
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_6_2),
-> +		V4L2_MPEG_VIDEO_HEVC_LEVEL_6_1,
-> +		V4L2_CID_MPEG_VIDEO_HEVC_LEVEL,
-> +		HFI_PROP_LEVEL,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
-> +
-> +	{LEVEL, DEC, VP9,
-> +		V4L2_MPEG_VIDEO_VP9_LEVEL_1_0,
-> +		V4L2_MPEG_VIDEO_VP9_LEVEL_6_0,
-> +		BIT(V4L2_MPEG_VIDEO_VP9_LEVEL_1_0) |
-> +		BIT(V4L2_MPEG_VIDEO_VP9_LEVEL_1_1) |
-> +		BIT(V4L2_MPEG_VIDEO_VP9_LEVEL_2_0) |
-> +		BIT(V4L2_MPEG_VIDEO_VP9_LEVEL_2_1) |
-> +		BIT(V4L2_MPEG_VIDEO_VP9_LEVEL_3_0) |
-> +		BIT(V4L2_MPEG_VIDEO_VP9_LEVEL_3_1) |
-> +		BIT(V4L2_MPEG_VIDEO_VP9_LEVEL_4_0) |
-> +		BIT(V4L2_MPEG_VIDEO_VP9_LEVEL_4_1) |
-> +		BIT(V4L2_MPEG_VIDEO_VP9_LEVEL_5_0) |
-> +		BIT(V4L2_MPEG_VIDEO_VP9_LEVEL_5_1) |
-> +		BIT(V4L2_MPEG_VIDEO_VP9_LEVEL_5_2) |
-> +		BIT(V4L2_MPEG_VIDEO_VP9_LEVEL_6_0),
-> +		V4L2_MPEG_VIDEO_VP9_LEVEL_6_0,
-> +		V4L2_CID_MPEG_VIDEO_VP9_LEVEL,
-> +		HFI_PROP_LEVEL,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
-> +
-> +	{HEVC_TIER, ENC | DEC, HEVC,
-> +		V4L2_MPEG_VIDEO_HEVC_TIER_MAIN,
-> +		V4L2_MPEG_VIDEO_HEVC_TIER_HIGH,
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_TIER_MAIN) |
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_TIER_HIGH),
-> +		V4L2_MPEG_VIDEO_HEVC_TIER_HIGH,
-> +		V4L2_CID_MPEG_VIDEO_HEVC_TIER,
-> +		HFI_PROP_TIER,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
-> +
-> +	{LF_MODE, ENC, H264,
-> +		V4L2_MPEG_VIDEO_H264_LOOP_FILTER_MODE_ENABLED,
-> +		DB_H264_DISABLE_SLICE_BOUNDARY,
-> +		BIT(V4L2_MPEG_VIDEO_H264_LOOP_FILTER_MODE_ENABLED) |
-> +		BIT(V4L2_MPEG_VIDEO_H264_LOOP_FILTER_MODE_DISABLED) |
-> +		BIT(DB_H264_DISABLE_SLICE_BOUNDARY),
-> +		V4L2_MPEG_VIDEO_H264_LOOP_FILTER_MODE_ENABLED,
-> +		V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_MODE,
-> +		HFI_PROP_DEBLOCKING_MODE,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
-> +
-> +	{LF_MODE, ENC, HEVC,
-> +		V4L2_MPEG_VIDEO_HEVC_LOOP_FILTER_MODE_DISABLED,
-> +		DB_HEVC_DISABLE_SLICE_BOUNDARY,
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_LOOP_FILTER_MODE_DISABLED) |
-> +		BIT(V4L2_MPEG_VIDEO_HEVC_LOOP_FILTER_MODE_ENABLED) |
-> +		BIT(DB_HEVC_DISABLE_SLICE_BOUNDARY),
-> +		V4L2_MPEG_VIDEO_HEVC_LOOP_FILTER_MODE_ENABLED,
-> +		V4L2_CID_MPEG_VIDEO_HEVC_LOOP_FILTER_MODE,
-> +		HFI_PROP_DEBLOCKING_MODE,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
-> +
-> +	{LF_ALPHA, ENC, H264,
-> +		-6, 6, 1, 0,
-> +		V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_ALPHA},
-> +
-> +	{LF_ALPHA, ENC, HEVC,
-> +		-6, 6, 1, 0,
-> +		V4L2_CID_MPEG_VIDEO_HEVC_LF_TC_OFFSET_DIV2},
-> +
-> +	{LF_BETA, ENC, H264,
-> +		-6, 6, 1, 0,
-> +		V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_BETA},
-> +
-> +	{LF_BETA, ENC, HEVC,
-> +		-6, 6, 1, 0,
-> +		V4L2_CID_MPEG_VIDEO_HEVC_LF_BETA_OFFSET_DIV2},
-> +
-> +	{SLICE_MODE, ENC, H264 | HEVC,
-> +		V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_SINGLE,
-> +		V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_BYTES,
-> +		BIT(V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_SINGLE) |
-> +		BIT(V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_MB) |
-> +		BIT(V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_BYTES),
-> +		V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_SINGLE,
-> +		V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MODE,
-> +		0,
-> +		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
-> +
-> +	{SLICE_MAX_BYTES, ENC, H264 | HEVC,
-> +		MIN_SLICE_BYTE_SIZE, MAX_SLICE_BYTE_SIZE,
-> +		1, MIN_SLICE_BYTE_SIZE,
-> +		V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MAX_BYTES,
-> +		HFI_PROP_MULTI_SLICE_BYTES_COUNT,
-> +		CAP_FLAG_OUTPUT_PORT},
-> +
-> +	{SLICE_MAX_MB, ENC, H264 | HEVC,
-> +		1, MAX_SLICE_MB_SIZE, 1, 1,
-> +		V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MAX_MB,
-> +		HFI_PROP_MULTI_SLICE_MB_COUNT,
-> +		CAP_FLAG_OUTPUT_PORT},
-> +
-> +	{MB_RC, ENC, H264 | HEVC,
-> +		0, 1, 1, 1,
-> +		V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE,
-> +		0,
-> +		CAP_FLAG_OUTPUT_PORT},
-> +
-> +	{TRANSFORM_8X8, ENC, H264,
-> +		0, 1, 1, 1,
-> +		V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM,
-> +		HFI_PROP_8X8_TRANSFORM,
-> +		CAP_FLAG_OUTPUT_PORT},
-> +
-> +	{CHROMA_QP_INDEX_OFFSET, ENC, HEVC,
-> +		MIN_CHROMA_QP_OFFSET, MAX_CHROMA_QP_OFFSET,
-> +		1, MAX_CHROMA_QP_OFFSET,
-> +		V4L2_CID_MPEG_VIDEO_H264_CHROMA_QP_INDEX_OFFSET,
-> +		HFI_PROP_CHROMA_QP_OFFSET,
-> +		CAP_FLAG_OUTPUT_PORT},
-> +
-> +	{DISPLAY_DELAY_ENABLE, DEC, H264 | HEVC | VP9,
-> +		0, 1, 1, 0,
-> +		V4L2_CID_MPEG_VIDEO_DEC_DISPLAY_DELAY_ENABLE,
-> +		HFI_PROP_DECODE_ORDER_OUTPUT,
-> +		CAP_FLAG_INPUT_PORT},
-> +
-> +	{DISPLAY_DELAY, DEC, H264 | HEVC | VP9,
-> +		0, 1, 1, 0,
-> +		V4L2_CID_MPEG_VIDEO_DEC_DISPLAY_DELAY,
-> +		HFI_PROP_DECODE_ORDER_OUTPUT,
-> +		CAP_FLAG_INPUT_PORT},
-> +
-> +	{OUTPUT_ORDER, DEC, H264 | HEVC | VP9,
-> +		0, 1, 1, 0,
-> +		0,
-> +		HFI_PROP_DECODE_ORDER_OUTPUT,
-> +		CAP_FLAG_INPUT_PORT},
-> +
-> +	{INPUT_BUF_HOST_MAX_COUNT, ENC | DEC, CODECS_ALL,
-> +		DEFAULT_MAX_HOST_BUF_COUNT, DEFAULT_MAX_HOST_BURST_BUF_COUNT,
-> +		1, DEFAULT_MAX_HOST_BUF_COUNT,
-> +		0,
-> +		HFI_PROP_BUFFER_HOST_MAX_COUNT,
-> +		CAP_FLAG_INPUT_PORT},
-> +
-> +	{OUTPUT_BUF_HOST_MAX_COUNT, ENC | DEC, CODECS_ALL,
-> +		DEFAULT_MAX_HOST_BUF_COUNT, DEFAULT_MAX_HOST_BURST_BUF_COUNT,
-> +		1, DEFAULT_MAX_HOST_BUF_COUNT,
-> +		0,
-> +		HFI_PROP_BUFFER_HOST_MAX_COUNT,
-> +		CAP_FLAG_OUTPUT_PORT},
-> +
-> +	{CONCEAL_COLOR_8BIT, DEC, CODECS_ALL, 0x0, 0xff3fcff, 1,
-> +		DEFAULT_VIDEO_CONCEAL_COLOR_BLACK,
-> +		V4L2_CID_MPEG_VIDEO_MUTE_YUV,
-> +		HFI_PROP_CONCEAL_COLOR_8BIT,
-> +		CAP_FLAG_INPUT_PORT},
-> +
-> +	{CONCEAL_COLOR_10BIT, DEC, CODECS_ALL, 0x0, 0x3fffffff, 1,
-> +		DEFAULT_VIDEO_CONCEAL_COLOR_BLACK,
-> +		V4L2_CID_MPEG_VIDEO_MUTE_YUV,
-> +		HFI_PROP_CONCEAL_COLOR_10BIT,
-> +		CAP_FLAG_INPUT_PORT},
-> +
-> +	{STAGE, DEC | ENC, CODECS_ALL,
-> +		MSM_VIDC_STAGE_1,
-> +		MSM_VIDC_STAGE_2, 1,
-> +		MSM_VIDC_STAGE_2,
-> +		0,
-> +		HFI_PROP_STAGE},
-> +
-> +	{PIPE, DEC | ENC, CODECS_ALL,
-> +		MSM_VIDC_PIPE_1,
-> +		MSM_VIDC_PIPE_4, 1,
-> +		MSM_VIDC_PIPE_4,
-> +		0,
-> +		HFI_PROP_PIPE},
-> +
-> +	{POC, DEC, H264, 0, 2, 1, 1,
-> +		0,
-> +		HFI_PROP_PIC_ORDER_CNT_TYPE},
-> +
-> +	{QUALITY_MODE, ENC, CODECS_ALL,
-> +		MSM_VIDC_MAX_QUALITY_MODE,
-> +		MSM_VIDC_POWER_SAVE_MODE, 1,
-> +		MSM_VIDC_POWER_SAVE_MODE},
-> +
-> +	{CODED_FRAMES, DEC, H264 | HEVC,
-> +		CODED_FRAMES_PROGRESSIVE, CODED_FRAMES_INTERLACE,
-> +		1, CODED_FRAMES_PROGRESSIVE,
-> +		0,
-> +		HFI_PROP_CODED_FRAMES},
-> +
-> +	{BIT_DEPTH, DEC, CODECS_ALL, BIT_DEPTH_8, BIT_DEPTH_10, 1, BIT_DEPTH_8,
-> +		0,
-> +		HFI_PROP_LUMA_CHROMA_BIT_DEPTH},
-> +
-> +	{BITSTREAM_SIZE_OVERWRITE, DEC, CODECS_ALL, 0, INT_MAX, 1, 0,
-> +		0},
-> +
-> +	{DEFAULT_HEADER, DEC, CODECS_ALL,
-> +		0, 1, 1, 0,
-> +		0,
-> +		HFI_PROP_DEC_DEFAULT_HEADER},
-> +
-> +	{RAP_FRAME, DEC, CODECS_ALL,
-> +		0, 1, 1, 1,
-> +		0,
-> +		HFI_PROP_DEC_START_FROM_RAP_FRAME,
-> +		CAP_FLAG_INPUT_PORT},
-> +
-> +	{SEQ_CHANGE_AT_SYNC_FRAME, DEC, CODECS_ALL,
-> +		0, 1, 1, 1,
-> +		0,
-> +		HFI_PROP_SEQ_CHANGE_AT_SYNC_FRAME,
-> +		CAP_FLAG_INPUT_PORT | CAP_FLAG_DYNAMIC_ALLOWED},
-> +
-> +	{ALL_INTRA, ENC, H264 | HEVC,
-> +		0, 1, 1, 0,
-> +		0,
-> +		0,
-> +		CAP_FLAG_OUTPUT_PORT},
-> +};
-> +
-> +static struct msm_platform_inst_cap_dependency instance_cap_dependency_data_sm8550[] = {
-> +	/* {cap, domain, codec,
-> +	 *      children,
-> +	 *      adjust, set}
-> +	 */
-> +
-> +	{PIX_FMTS, ENC, H264,
-> +		{IR_PERIOD}},
-> +
-> +	{PIX_FMTS, ENC, HEVC,
-> +		{PROFILE, MIN_FRAME_QP, MAX_FRAME_QP, I_FRAME_QP, P_FRAME_QP,
-> +			B_FRAME_QP, MIN_QUALITY, IR_PERIOD, LTR_COUNT}},
-> +
-> +	{PIX_FMTS, DEC, HEVC,
-> +		{PROFILE}},
-> +
-> +	{FRAME_RATE, ENC, CODECS_ALL,
-> +		{0},
-> +		NULL,
-> +		msm_vidc_set_q16},
-> +
-> +	{HFLIP, ENC, CODECS_ALL,
-> +		{0},
-> +		NULL,
-> +		msm_vidc_set_flip},
-> +
-> +	{VFLIP, ENC, CODECS_ALL,
-> +		{0},
-> +		NULL,
-> +		msm_vidc_set_flip},
-> +
-> +	{ROTATION, ENC, CODECS_ALL,
-> +		{0},
-> +		NULL,
-> +		msm_vidc_set_rotation},
-> +
-> +	{HEADER_MODE, ENC, CODECS_ALL,
-> +		{0},
-> +		NULL,
-> +		msm_vidc_set_header_mode},
-> +
-> +	{WITHOUT_STARTCODE, ENC, CODECS_ALL,
-> +		{0},
-> +		NULL,
-> +		msm_vidc_set_nal_length},
-> +
-> +	{REQUEST_I_FRAME, ENC, H264 | HEVC,
-> +		{0},
-> +		NULL,
-> +		msm_vidc_set_req_sync_frame},
-> +
-> +	{BIT_RATE, ENC, H264,
-> +		{PEAK_BITRATE, L0_BR},
-> +		msm_vidc_adjust_bitrate,
-> +		msm_vidc_set_bitrate},
-> +
-> +	{BIT_RATE, ENC, HEVC,
-> +		{PEAK_BITRATE, L0_BR},
-> +		msm_vidc_adjust_bitrate,
-> +		msm_vidc_set_bitrate},
-> +
-> +	{BITRATE_MODE, ENC, H264,
-> +		{LTR_COUNT, IR_PERIOD, I_FRAME_QP, P_FRAME_QP,
-> +			B_FRAME_QP, ENH_LAYER_COUNT, BIT_RATE,
-> +			MIN_QUALITY, VBV_DELAY,
-> +			PEAK_BITRATE, SLICE_MODE},
-> +		msm_vidc_adjust_bitrate_mode,
-> +		msm_vidc_set_u32_enum},
-> +
-> +	{BITRATE_MODE, ENC, HEVC,
-> +		{LTR_COUNT, IR_PERIOD, I_FRAME_QP, P_FRAME_QP,
-> +			B_FRAME_QP, CONSTANT_QUALITY, ENH_LAYER_COUNT,
-> +			BIT_RATE, MIN_QUALITY, VBV_DELAY,
-> +			PEAK_BITRATE, SLICE_MODE},
-> +		msm_vidc_adjust_bitrate_mode,
-> +		msm_vidc_set_u32_enum},
-> +
-> +	{CONSTANT_QUALITY, ENC, HEVC,
-> +		{0},
-> +		NULL,
-> +		msm_vidc_set_constant_quality},
-> +
-> +	{GOP_SIZE, ENC, CODECS_ALL,
-> +		{ALL_INTRA},
-> +		msm_vidc_adjust_gop_size,
-> +		msm_vidc_set_gop_size},
-> +
-> +	{B_FRAME, ENC, H264 | HEVC,
-> +		{ALL_INTRA},
-> +		msm_vidc_adjust_b_frame,
-> +		msm_vidc_set_u32},
-> +
-> +	{LTR_COUNT, ENC, H264 | HEVC,
-> +		{0},
-> +		msm_vidc_adjust_ltr_count,
-> +		msm_vidc_set_u32},
-> +
-> +	{USE_LTR, ENC, H264 | HEVC,
-> +		{0},
-> +		msm_vidc_adjust_use_ltr,
-> +		msm_vidc_set_use_and_mark_ltr},
-> +
-> +	{MARK_LTR, ENC, H264 | HEVC,
-> +		{0},
-> +		msm_vidc_adjust_mark_ltr,
-> +		msm_vidc_set_use_and_mark_ltr},
-> +
-> +	{IR_PERIOD, ENC, H264 | HEVC,
-> +		{0},
-> +		msm_vidc_adjust_ir_period,
-> +		msm_vidc_set_ir_period},
-> +
-> +	{AU_DELIMITER, ENC, H264 | HEVC,
-> +		{0},
-> +		NULL,
-> +		msm_vidc_set_u32},
-> +
-> +	{MIN_QUALITY, ENC, H264,
-> +		{0},
-> +		msm_vidc_adjust_min_quality,
-> +		msm_vidc_set_u32},
-> +
-> +	{MIN_QUALITY, ENC, HEVC,
-> +		{0},
-> +		msm_vidc_adjust_min_quality,
-> +		msm_vidc_set_u32},
-> +
-> +	{VBV_DELAY, ENC, H264 | HEVC,
-> +		{0},
-> +		NULL,
-> +		msm_vidc_set_cbr_related_properties},
-> +
-> +	{PEAK_BITRATE, ENC, H264 | HEVC,
-> +		{0},
-> +		msm_vidc_adjust_peak_bitrate,
-> +		msm_vidc_set_cbr_related_properties},
-> +
-> +	{MIN_FRAME_QP, ENC, H264,
-> +		{0},
-> +		NULL,
-> +		msm_vidc_set_min_qp},
-> +
-> +	{MIN_FRAME_QP, ENC, HEVC,
-> +		{0},
-> +		msm_vidc_adjust_hevc_min_qp,
-> +		msm_vidc_set_min_qp},
-> +
-> +	{MAX_FRAME_QP, ENC, H264,
-> +		{0},
-> +		NULL,
-> +		msm_vidc_set_max_qp},
-> +
-> +	{MAX_FRAME_QP, ENC, HEVC,
-> +		{0},
-> +		msm_vidc_adjust_hevc_max_qp,
-> +		msm_vidc_set_max_qp},
-> +
-> +	{I_FRAME_QP, ENC, HEVC,
-> +		{0},
-> +		msm_vidc_adjust_hevc_i_frame_qp,
-> +		msm_vidc_set_frame_qp},
-> +
-> +	{I_FRAME_QP, ENC, H264,
-> +		{0},
-> +		NULL,
-> +		msm_vidc_set_frame_qp},
-> +
-> +	{P_FRAME_QP, ENC, HEVC,
-> +		{0},
-> +		msm_vidc_adjust_hevc_p_frame_qp,
-> +		msm_vidc_set_frame_qp},
-> +
-> +	{P_FRAME_QP, ENC, H264,
-> +		{0},
-> +		NULL,
-> +		msm_vidc_set_frame_qp},
-> +
-> +	{B_FRAME_QP, ENC, HEVC,
-> +		{0},
-> +		msm_vidc_adjust_hevc_b_frame_qp,
-> +		msm_vidc_set_frame_qp},
-> +
-> +	{B_FRAME_QP, ENC, H264,
-> +		{0},
-> +		NULL,
-> +		msm_vidc_set_frame_qp},
-> +
-> +	{LAYER_TYPE, ENC, H264 | HEVC,
-> +		{LTR_COUNT}},
-> +
-> +	{LAYER_ENABLE, ENC, H264 | HEVC,
-> +		{0}},
-> +
-> +	{ENH_LAYER_COUNT, ENC, H264 | HEVC,
-> +		{GOP_SIZE, B_FRAME, BIT_RATE, MIN_QUALITY, SLICE_MODE,
-> +			LTR_COUNT},
-> +		msm_vidc_adjust_layer_count,
-> +		msm_vidc_set_layer_count_and_type},
-> +
-> +	{L0_BR, ENC, H264 | HEVC,
-> +		{L1_BR},
-> +		msm_vidc_adjust_layer_bitrate,
-> +		msm_vidc_set_layer_bitrate},
-> +
-> +	{L1_BR, ENC, H264 | HEVC,
-> +		{L2_BR},
-> +		msm_vidc_adjust_layer_bitrate,
-> +		msm_vidc_set_layer_bitrate},
-> +
-> +	{L2_BR, ENC, H264 | HEVC,
-> +		{L3_BR},
-> +		msm_vidc_adjust_layer_bitrate,
-> +		msm_vidc_set_layer_bitrate},
-> +
-> +	{L3_BR, ENC, H264 | HEVC,
-> +		{L4_BR},
-> +		msm_vidc_adjust_layer_bitrate,
-> +		msm_vidc_set_layer_bitrate},
-> +
-> +	{L4_BR, ENC, H264 | HEVC,
-> +		{L5_BR},
-> +		msm_vidc_adjust_layer_bitrate,
-> +		msm_vidc_set_layer_bitrate},
-> +
-> +	{L5_BR, ENC, H264 | HEVC,
-> +		{0},
-> +		msm_vidc_adjust_layer_bitrate,
-> +		msm_vidc_set_layer_bitrate},
-> +
-> +	{ENTROPY_MODE, ENC, H264,
-> +		{BIT_RATE},
-> +		msm_vidc_adjust_entropy_mode,
-> +		msm_vidc_set_u32},
-> +
-> +	{PROFILE, ENC, H264,
-> +		{ENTROPY_MODE, TRANSFORM_8X8},
-> +		NULL,
-> +		msm_vidc_set_u32_enum},
-> +
-> +	{PROFILE, DEC, H264,
-> +		{ENTROPY_MODE},
-> +		NULL,
-> +		msm_vidc_set_u32_enum},
-> +
-> +	{PROFILE, ENC | DEC, HEVC,
-> +		{0},
-> +		msm_vidc_adjust_profile,
-> +		msm_vidc_set_u32_enum},
-> +
-> +	{PROFILE, DEC, VP9,
-> +		{0},
-> +		NULL,
-> +		msm_vidc_set_u32_enum},
-> +
-> +	{LEVEL, DEC, CODECS_ALL,
-> +		{0},
-> +		NULL,
-> +		msm_vidc_set_u32_enum},
-> +
-> +	{LEVEL, ENC, CODECS_ALL,
-> +		{0},
-> +		NULL,
-> +		msm_vidc_set_level},
-> +
-> +	{HEVC_TIER, ENC | DEC, HEVC,
-> +		{0},
-> +		NULL,
-> +		msm_vidc_set_u32_enum},
-> +
-> +	{LF_MODE, ENC, CODECS_ALL,
-> +		{0},
-> +		NULL,
-> +		msm_vidc_set_deblock_mode},
-> +
-> +	{SLICE_MODE, ENC, H264 | HEVC,
-> +		{STAGE},
-> +		msm_vidc_adjust_slice_count,
-> +		msm_vidc_set_slice_count},
-> +
-> +	{TRANSFORM_8X8, ENC, H264,
-> +		{0},
-> +		msm_vidc_adjust_transform_8x8,
-> +		msm_vidc_set_u32},
-> +
-> +	{CHROMA_QP_INDEX_OFFSET, ENC, HEVC,
-> +		{0},
-> +		msm_vidc_adjust_chroma_qp_index_offset,
-> +		msm_vidc_set_chroma_qp_index_offset},
-> +
-> +	{DISPLAY_DELAY_ENABLE, DEC, H264 | HEVC | VP9,
-> +		{OUTPUT_ORDER},
-> +		NULL,
-> +		NULL},
-> +
-> +	{DISPLAY_DELAY, DEC, H264 | HEVC | VP9,
-> +		{OUTPUT_ORDER},
-> +		NULL,
-> +		NULL},
-> +
-> +	{OUTPUT_ORDER, DEC, H264 | HEVC | VP9,
-> +		{0},
-> +		msm_vidc_adjust_output_order,
-> +		msm_vidc_set_u32},
-> +
-> +	{INPUT_BUF_HOST_MAX_COUNT, ENC | DEC, CODECS_ALL,
-> +		{0},
-> +		msm_vidc_adjust_input_buf_host_max_count,
-> +		msm_vidc_set_u32},
-> +
-> +	{INPUT_BUF_HOST_MAX_COUNT, ENC, H264 | HEVC,
-> +		{0},
-> +		msm_vidc_adjust_input_buf_host_max_count,
-> +		msm_vidc_set_u32},
-> +
-> +	{OUTPUT_BUF_HOST_MAX_COUNT, ENC | DEC, CODECS_ALL,
-> +		{0},
-> +		msm_vidc_adjust_output_buf_host_max_count,
-> +		msm_vidc_set_u32},
-> +
-> +	{OUTPUT_BUF_HOST_MAX_COUNT, ENC, H264 | HEVC,
-> +		{0},
-> +		msm_vidc_adjust_output_buf_host_max_count,
-> +		msm_vidc_set_u32},
-> +
-> +	{CONCEAL_COLOR_8BIT, DEC, CODECS_ALL,
-> +		{0},
-> +		NULL,
-> +		msm_vidc_set_u32_packed},
-> +
-> +	{CONCEAL_COLOR_10BIT, DEC, CODECS_ALL,
-> +		{0},
-> +		NULL,
-> +		msm_vidc_set_u32_packed},
-> +
-> +	{STAGE, ENC | DEC, CODECS_ALL,
-> +		{0},
-> +		NULL,
-> +		msm_vidc_set_stage},
-> +
-> +	{STAGE, ENC, H264 | HEVC,
-> +		{0},
-> +		NULL,
-> +		msm_vidc_set_stage},
-> +
-> +	{STAGE, DEC, H264 | HEVC | VP9,
-> +		{0},
-> +		NULL,
-> +		msm_vidc_set_stage},
-> +
-> +	{PIPE, DEC | ENC, CODECS_ALL,
-> +		{0},
-> +		NULL,
-> +		msm_vidc_set_pipe},
-> +
-> +	{RAP_FRAME, DEC, CODECS_ALL,
-> +		{0},
-> +		NULL,
-> +		msm_vidc_set_u32},
-> +
-> +	{ALL_INTRA, ENC, H264 | HEVC,
-> +		{LTR_COUNT, IR_PERIOD, SLICE_MODE, BIT_RATE},
-> +		msm_vidc_adjust_all_intra,
-> +		NULL},
-> +};
-> +
-> +/* Default UBWC config for LPDDR5 */
-> +static struct msm_vidc_ubwc_config_data ubwc_config_sm8550[] = {
-> +	UBWC_CONFIG(8, 32, 16, 0, 1, 1, 1),
-> +};
-> +
-> +static struct msm_vidc_format_capability format_data_sm8550 = {
-> +	.codec_info = codec_data_sm8550,
-> +	.codec_info_size = ARRAY_SIZE(codec_data_sm8550),
-> +	.color_format_info = color_format_data_sm8550,
-> +	.color_format_info_size = ARRAY_SIZE(color_format_data_sm8550),
-> +	.color_prim_info = color_primaries_data_sm8550,
-> +	.color_prim_info_size = ARRAY_SIZE(color_primaries_data_sm8550),
-> +	.transfer_char_info = transfer_char_data_sm8550,
-> +	.transfer_char_info_size = ARRAY_SIZE(transfer_char_data_sm8550),
-> +	.matrix_coeff_info = matrix_coeff_data_sm8550,
-> +	.matrix_coeff_info_size = ARRAY_SIZE(matrix_coeff_data_sm8550),
-> +};
-> +
-> +/* name, min_kbps, max_kbps */
-> +static const struct bw_table sm8550_bw_table[] = {
-> +	{ "venus-cnoc",  1000, 1000     },
-> +	{ "venus-ddr",   1000, 15000000 },
-
-We have OPP tables for that. There is no need to limit the min/max, just 
-put it to OPP.
-
-> +};
-> +
-> +/* name */
-> +static const struct pd_table sm8550_pd_table[] = {
-> +	{ "iris-ctl" },
-> +	{ "vcodec"   },
-> +};
-> +
-> +/* name */
-> +static const char * const sm8550_opp_table[] = { "mx", "mmcx", NULL };
-> +
-> +/* name, clock id, scaling */
-> +static const struct clk_table sm8550_clk_table[] = {
-> +	{ "gcc_video_axi0",         GCC_VIDEO_AXI0_CLK,     0 },
-> +	{ "core_clk",               VIDEO_CC_MVS0C_CLK,     0 },
-> +	{ "vcodec_clk",             VIDEO_CC_MVS0_CLK,      1 },
-> +};
-
-This strucuture looks like a perfect candidate to be replaced by 
-devm_clk_bulk_get_all().
-
-> +
-> +/* name, exclusive_release */
-> +static const struct clk_rst_table sm8550_clk_reset_table[] = {
-> +	{ "video_axi_reset",        0  },
-
-Can we assume that resets are generic at least?
-
-> +};
-> +
-> +/* name, start, size, secure, dma_coherant, region, dma_mask */
-> +const struct context_bank_table sm8550_context_bank_table[] = {
-> +	{"qcom,vidc,cb-ns", 0x25800000, 0xba800000, 0, 1, MSM_VIDC_NON_SECURE, 0xe0000000 - 1},
-> +	{"qcom,vidc,cb-sec-non-pxl",   0x01000000, 0x24800000, 1, 0, MSM_VIDC_SECURE_NONPIXEL,  0 },
-
-Aren't these a properties of subdevices? If so, why are you putting them 
-here?
-
-> +};
-> +
-> +/* freq */
-> +static struct freq_table sm8550_freq_table[] = {
-> +	{533333333}, {444000000}, {366000000}, {338000000}, {240000000}
-
-OPP table contents.
-
-> +};
-> +
-> +/* register, value, mask */
-> +static const struct reg_preset_table sm8550_reg_preset_table[] = {
-> +	{ 0xB0088, 0x0, 0x11 },
-> +};
-> +
-> +/* decoder properties */
-> +static const u32 sm8550_vdec_psc_avc[] = {
-> +	HFI_PROP_BITSTREAM_RESOLUTION,
-> +	HFI_PROP_CROP_OFFSETS,
-> +	HFI_PROP_CODED_FRAMES,
-> +	HFI_PROP_BUFFER_FW_MIN_OUTPUT_COUNT,
-> +	HFI_PROP_PIC_ORDER_CNT_TYPE,
-> +	HFI_PROP_PROFILE,
-> +	HFI_PROP_LEVEL,
-> +	HFI_PROP_SIGNAL_COLOR_INFO,
-> +};
-> +
-> +static const u32 sm8550_vdec_psc_hevc[] = {
-> +	HFI_PROP_BITSTREAM_RESOLUTION,
-> +	HFI_PROP_CROP_OFFSETS,
-> +	HFI_PROP_LUMA_CHROMA_BIT_DEPTH,
-> +	HFI_PROP_BUFFER_FW_MIN_OUTPUT_COUNT,
-> +	HFI_PROP_PROFILE,
-> +	HFI_PROP_LEVEL,
-> +	HFI_PROP_TIER,
-> +	HFI_PROP_SIGNAL_COLOR_INFO,
-> +};
-> +
-> +static const u32 sm8550_vdec_psc_vp9[] = {
-> +	HFI_PROP_BITSTREAM_RESOLUTION,
-> +	HFI_PROP_CROP_OFFSETS,
-> +	HFI_PROP_LUMA_CHROMA_BIT_DEPTH,
-> +	HFI_PROP_BUFFER_FW_MIN_OUTPUT_COUNT,
-> +	HFI_PROP_PROFILE,
-> +	HFI_PROP_LEVEL,
-> +};
-> +
-> +static const u32 sm8550_vdec_input_properties_avc[] = {
-> +	HFI_PROP_NO_OUTPUT,
-> +	HFI_PROP_SUBFRAME_INPUT,
-> +};
-> +
-> +static const u32 sm8550_vdec_input_properties_hevc[] = {
-> +	HFI_PROP_NO_OUTPUT,
-> +	HFI_PROP_SUBFRAME_INPUT,
-> +};
-> +
-> +static const u32 sm8550_vdec_input_properties_vp9[] = {
-> +	HFI_PROP_NO_OUTPUT,
-> +	HFI_PROP_SUBFRAME_INPUT,
-> +};
-> +
-> +static const u32 sm8550_vdec_output_properties_avc[] = {
-> +	HFI_PROP_WORST_COMPRESSION_RATIO,
-> +	HFI_PROP_WORST_COMPLEXITY_FACTOR,
-> +	HFI_PROP_PICTURE_TYPE,
-> +	HFI_PROP_DPB_LIST,
-> +	HFI_PROP_CABAC_SESSION,
-> +};
-> +
-> +static const u32 sm8550_vdec_output_properties_hevc[] = {
-> +	HFI_PROP_WORST_COMPRESSION_RATIO,
-> +	HFI_PROP_WORST_COMPLEXITY_FACTOR,
-> +	HFI_PROP_PICTURE_TYPE,
-> +	HFI_PROP_DPB_LIST,
-> +};
-> +
-> +static const u32 sm8550_vdec_output_properties_vp9[] = {
-> +	HFI_PROP_WORST_COMPRESSION_RATIO,
-> +	HFI_PROP_WORST_COMPLEXITY_FACTOR,
-> +	HFI_PROP_PICTURE_TYPE,
-> +	HFI_PROP_DPB_LIST,
-> +};
-> +
-> +static const struct msm_vidc_platform_data sm8550_data = {
-> +	/* resources dependent on other module */
-> +	.bw_tbl = sm8550_bw_table,
-> +	.bw_tbl_size = ARRAY_SIZE(sm8550_bw_table),
-> +	.clk_tbl = sm8550_clk_table,
-> +	.clk_tbl_size = ARRAY_SIZE(sm8550_clk_table),
-> +	.clk_rst_tbl = sm8550_clk_reset_table,
-> +	.clk_rst_tbl_size = ARRAY_SIZE(sm8550_clk_reset_table),
-> +	.subcache_tbl = NULL,
-> +	.subcache_tbl_size = 0,
-> +
-> +	/* populate context bank */
-> +	.context_bank_tbl = sm8550_context_bank_table,
-> +	.context_bank_tbl_size = ARRAY_SIZE(sm8550_context_bank_table),
-> +
-> +	/* populate power domain and opp table */
-> +	.pd_tbl = sm8550_pd_table,
-> +	.pd_tbl_size = ARRAY_SIZE(sm8550_pd_table),
-> +	.opp_tbl = sm8550_opp_table,
-> +	.opp_tbl_size = ARRAY_SIZE(sm8550_opp_table),
-> +
-> +	/* platform specific resources */
-> +	.freq_tbl = sm8550_freq_table,
-> +	.freq_tbl_size = ARRAY_SIZE(sm8550_freq_table),
-> +	.reg_prst_tbl = sm8550_reg_preset_table,
-> +	.reg_prst_tbl_size = ARRAY_SIZE(sm8550_reg_preset_table),
-> +	.fwname = "vpu30_4v",
-> +	.pas_id = 9,
-> +
-> +	/* caps related resorces */
-> +	.core_data = core_data_sm8550,
-> +	.core_data_size = ARRAY_SIZE(core_data_sm8550),
-> +	.inst_cap_data = instance_cap_data_sm8550,
-> +	.inst_cap_data_size = ARRAY_SIZE(instance_cap_data_sm8550),
-> +	.inst_cap_dependency_data = instance_cap_dependency_data_sm8550,
-> +	.inst_cap_dependency_data_size = ARRAY_SIZE(instance_cap_dependency_data_sm8550),
-> +	.ubwc_config = ubwc_config_sm8550,
-> +	.format_data = &format_data_sm8550,
-> +
-> +	/* decoder properties related*/
-> +	.psc_avc_tbl = sm8550_vdec_psc_avc,
-> +	.psc_avc_tbl_size = ARRAY_SIZE(sm8550_vdec_psc_avc),
-> +	.psc_hevc_tbl = sm8550_vdec_psc_hevc,
-> +	.psc_hevc_tbl_size = ARRAY_SIZE(sm8550_vdec_psc_hevc),
-> +	.psc_vp9_tbl = sm8550_vdec_psc_vp9,
-> +	.psc_vp9_tbl_size = ARRAY_SIZE(sm8550_vdec_psc_vp9),
-> +	.dec_input_prop_avc = sm8550_vdec_input_properties_avc,
-> +	.dec_input_prop_hevc = sm8550_vdec_input_properties_hevc,
-> +	.dec_input_prop_vp9 = sm8550_vdec_input_properties_vp9,
-> +	.dec_input_prop_size_avc = ARRAY_SIZE(sm8550_vdec_input_properties_avc),
-> +	.dec_input_prop_size_hevc = ARRAY_SIZE(sm8550_vdec_input_properties_hevc),
-> +	.dec_input_prop_size_vp9 = ARRAY_SIZE(sm8550_vdec_input_properties_vp9),
-> +	.dec_output_prop_avc = sm8550_vdec_output_properties_avc,
-> +	.dec_output_prop_hevc = sm8550_vdec_output_properties_hevc,
-> +	.dec_output_prop_vp9 = sm8550_vdec_output_properties_vp9,
-> +	.dec_output_prop_size_avc = ARRAY_SIZE(sm8550_vdec_output_properties_avc),
-> +	.dec_output_prop_size_hevc = ARRAY_SIZE(sm8550_vdec_output_properties_hevc),
-> +	.dec_output_prop_size_vp9 = ARRAY_SIZE(sm8550_vdec_output_properties_vp9),
-
-Size should come next to the array reference.
-
-> +};
-> +
-> +static int msm_vidc_init_data(struct msm_vidc_core *core)
-> +{
-> +	d_vpr_h("%s: initialize sm8550 data\n", __func__);
-> +
-> +	core->platform->data = sm8550_data;
-> +
-
-Please use of_device_match_data() instead.
-
-> +	return 0;
-> +}
-> +
-> +int msm_vidc_init_platform_sm8550(struct msm_vidc_core *core)
-> +{
-> +	return msm_vidc_init_data(core);
-> +}
-
+diff --git a/drivers/media/platform/qcom/iris/variant/iris3/inc/perf_static_model.h b/drivers/media/platform/qcom/iris/variant/iris3/inc/perf_static_model.h
+new file mode 100644
+index 0000000..238f1af
+--- /dev/null
++++ b/drivers/media/platform/qcom/iris/variant/iris3/inc/perf_static_model.h
+@@ -0,0 +1,229 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (c) 2023, Qualcomm Innovation Center, Inc. All rights reserved.
++ */
++
++#ifndef _PERF_STATIC_MODEL_H_
++#define _PERF_STATIC_MODEL_H_
++
++#include <linux/types.h>
++
++/* Reordered CODECS to match Bitrate Table rows */
++#define CODEC_H264_CAVLC                        0
++#define CODEC_H264                              1
++#define CODEC_HEVC                              2
++#define CODEC_VP9                               3
++
++#define CODEC_BSE_FrameFactor                   0
++#define CODEC_BSE_MBFactor                      1
++#define CODEC_BSE_LUC_SIZE                      2
++
++#define CODEC_GOP_IPP                           0
++#define CODEC_GOP_IbP                           1
++#define CODEC_GOP_I1B2b1P                       2
++#define CODEC_GOP_I3B4b1P                       3
++#define CODEC_GOP_PONLY                         4
++#define CODEC_GOP_BONLY                         6
++#define CODEC_GOP_IONLY                         7
++
++#define CODEC_ENCODER_GOP_Bb_ENTRY              0
++#define CODEC_ENCODER_GOP_P_ENTRY               1
++#define CODEC_ENCODER_GOP_FACTORY_ENTRY         2
++
++#define CODEC_ENTROPY_CODING_CAVLC              0
++#define CODEC_ENTROPY_CODING_CABAC              1
++
++#define CODEC_VSPVPP_MODE_1S                    1
++#define CODEC_VSPVPP_MODE_2S                    2
++
++#define COMP_SETTING_PWC                        0
++#define COMP_SETTING_AVG                        1
++#define COMP_SETTING_POWER                      2
++
++#define CODEC_BITDEPTH_8                        8
++#define CODEC_BITDEPTH_10                       10
++
++#define ENCODE_YUV                              0
++#define ENCODE_RGB                              1
++
++#define COMPLEXITY_PWC                          0
++#define COMPLEXITY_AVG                          1
++#define COMPLEXITY_POWER                        2
++
++#define MAX_LINE                                2048
++#ifndef VENUS_MAX_FILENAME_LENGTH
++#define VENUS_MAX_FILENAME_LENGTH               1024
++#endif
++
++#define CODEC_ENCODER                           1
++#define CODEC_DECODER                           2
++
++#define COMPLEXITY_THRESHOLD                    2
++
++enum chipset_generation {
++	MSM_SM8450,
++	MSM_SM8550,
++	MSM_MAX,
++};
++
++enum regression_mode {
++	/* ignores client set cr and bitrate settings */
++	REGRESSION_MODE_SANITY = 1,
++	/* cr and bitrate default mode */
++	REGRESSION_MODE_DEFAULT,
++	/* custom mode where client will set cr and bitrate values */
++	REGRESSION_MODE_CUSTOM,
++};
++
++/*
++ * If firmware provided motion_vector_complexity is >= 2 then set the
++ * complexity_setting as PWC (performance worst case)
++ * If the motion_vector_complexity is < 2 then set the complexity_setting
++ * as AVG (average case value)
++ */
++enum complexity_setting {
++	COMPLEXITY_SETTING_PWC = 0,
++	COMPLEXITY_SETTING_AVG = 1,
++	COMPLEXITY_SETTING_PWR = 2,
++};
++
++/*
++ * If firmware provided motion_vector_complexity is >= 2 then set the
++ * refframe_complexity as PWC (performance worst case)
++ * If the motion_vector_complexity is < 2 then set the refframe_complexity
++ * as AVG (average case value)
++ */
++enum refframe_complexity {
++	REFFRAME_COMPLEXITY_PWC = 4,
++	REFFRAME_COMPLEXITY_AVG = 2,
++	REFFRAME_COMPLEXITY_PWR = 1,
++};
++
++struct api_calculation_input {
++	/*2: decoder; 1: encoder */
++	u32 decoder_or_encoder;
++
++	/* enum chipset_generation */
++	u32 chipset_gen;
++
++	u32 codec;
++	u32 lcu_size;
++	u32 pipe_num;
++	u32 frame_rate;
++	u32 frame_width;
++	u32 frame_height;
++	u32 vsp_vpp_mode;
++	u32 entropy_coding_mode;
++	u32 hierachical_layer;
++
++	/* PWC, AVG/POWER */
++	u32 complexity_setting;
++
++	u32 status_llc_onoff;
++	u32 bitdepth;
++	u32 linear_opb;
++
++	/* AV1D FG */
++	u32 split_opb;
++
++	u32 linear_ipb;
++	u32 lossy_ipb;
++	u32 ipb_yuvrgb;
++	u32 encoder_multiref;
++	u32 bitrate_mbps;
++	u32 refframe_complexity;
++	u32 cr_ipb;
++	u32 cr_rpb;
++	u32 cr_dpb;
++	u32 cr_opb;
++	u32 regression_mode;
++
++	/* used in aurora for depth map decode */
++	u32 lumaonly_decode;
++};
++
++struct corner_voting {
++	u32 percent_lowbound;
++	u32 percent_highbound;
++};
++
++struct api_calculation_freq_output {
++	u32 vpp_min_freq;
++	u32 vsp_min_freq;
++	u32 tensilica_min_freq;
++	u32 hw_min_freq;
++	u32 enc_hqmode;
++	struct corner_voting usecase_corner;
++};
++
++struct api_calculation_bw_output {
++	u32 vsp_read_noc;
++	u32 vsp_write_noc;
++	u32 vsp_read_ddr;
++	u32 vsp_write_ddr;
++	u32 vsp_rd_wr_total_noc;
++	u32 vsp_rd_wr_total_ddr;
++
++	u32 collocated_rd_noc;
++	u32 collocated_wr_noc;
++	u32 collocated_rd_ddr;
++	u32 collocated_wr_ddr;
++	u32 collocated_rd_wr_total_noc;
++	u32 collocated_rd_wr_total_ddr;
++
++	u32 dpb_rd_y_noc;
++	u32 dpb_rd_crcb_noc;
++	u32 dpb_rdwr_duetooverlap_noc;
++	u32 dpb_wr_noc;
++	u32 dpb_rd_y_ddr;
++	u32 dpb_rd_crcb_ddr;
++	u32 dpb_rdwr_duetooverlap_ddr;
++	u32 dpb_wr_ddr;
++	u32 dpb_rd_wr_total_noc;
++	u32 dpb_rd_wr_total_ddr;
++
++	u32 opb_write_total_noc;
++	u32 opb_write_total_ddr;
++
++	u32 ipb_rd_total_noc;
++	u32 ipb_rd_total_ddr;
++
++	u32 bse_tlb_rd_noc;
++	u32 bse_tlb_wr_noc;
++	u32 bse_tlb_rd_ddr;
++	u32 bse_tlb_wr_ddr;
++	u32 bse_rd_wr_total_noc;
++	u32 bse_rd_wr_total_ddr;
++
++	u32 statistics_rd_noc;
++	u32 statistics_wr_noc;
++	u32 statistics_rd_ddr;
++	u32 statistics_wr_ddr;
++
++	u32 mmu_rd_noc;
++	u32 mmu_rd_ddr;
++
++	u32 noc_bw_rd;
++	u32 noc_bw_wr;
++	u32 ddr_bw_rd;
++	u32 ddr_bw_wr;
++
++	/* llc BW components for aurora */
++	u32 dpb_rd_y_llc;
++	u32 dpb_rd_crcb_llc;
++	u32 dpb_wr_llc;
++	u32 bse_tlb_rd_llc;
++	u32 bse_tlb_wr_llc;
++	u32 vsp_read_llc;
++	u32 vsp_write_llc;
++
++	u32 llc_bw_rd;
++	u32 llc_bw_wr;
++};
++
++int msm_vidc_calculate_frequency(struct api_calculation_input codec_input,
++				 struct api_calculation_freq_output *codec_output);
++int msm_vidc_calculate_bandwidth(struct api_calculation_input codec_input,
++				 struct api_calculation_bw_output *codec_output);
++
++#endif /*_PERF_STATIC_MODEL_H_ */
+diff --git a/drivers/media/platform/qcom/iris/variant/iris3/src/msm_vidc_bus_iris3.c b/drivers/media/platform/qcom/iris/variant/iris3/src/msm_vidc_bus_iris3.c
+new file mode 100644
+index 0000000..92aa995
+--- /dev/null
++++ b/drivers/media/platform/qcom/iris/variant/iris3/src/msm_vidc_bus_iris3.c
+@@ -0,0 +1,884 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
++ */
++
++#include "msm_vidc_debug.h"
++#include "perf_static_model.h"
++
++/* 100x */
++static u32 dpbopb_ubwc30_cr_table_cratio_iris3[7][12] = {
++	{237, 399, 272, 137, 225, 158, 185, 259, 203, 138, 167, 152},
++	{269, 404, 302, 202, 367, 238, 210, 299, 232, 134, 181, 149},
++	{269, 404, 302, 202, 367, 238, 210, 299, 232, 134, 181, 149},
++	{269, 404, 302, 202, 367, 238, 210, 299, 232, 134, 181, 149},
++	{237, 399, 272, 137, 225, 158, 185, 259, 203, 138, 167, 152},
++	{269, 404, 302, 202, 367, 238, 210, 299, 232, 134, 181, 149},
++	{269, 404, 302, 202, 367, 238, 210, 299, 232, 134, 181, 149},
++};
++
++/* 100x */
++static u32 rpb_ubwc30_cr_table_cratio_iris3[7][12] = {
++	{193, 294, 218, 135, 214, 155, 175, 241, 191, 139, 162, 149},
++	{285, 406, 316, 207, 373, 243, 201, 280, 221, 139, 177, 152},
++	{285, 406, 316, 207, 373, 243, 201, 280, 221, 139, 177, 152},
++	{285, 406, 316, 207, 373, 243, 201, 280, 221, 139, 177, 152},
++	{193, 294, 218, 135, 214, 155, 175, 241, 191, 139, 162, 149},
++	{285, 406, 316, 207, 373, 243, 201, 280, 221, 139, 177, 152},
++	{285, 406, 316, 207, 373, 243, 201, 280, 221, 139, 177, 152},
++};
++
++/* 100x */
++static u32 ipblossy_ubwc30_cr_table_cratio_iris3[7][12] = {
++	{215, 215, 215, 174, 174, 174, 266, 266, 266, 231, 231, 231},
++	{254, 254, 254, 219, 219, 219, 292, 292, 292, 249, 249, 249},
++	{254, 254, 254, 219, 219, 219, 292, 292, 292, 249, 249, 249},
++	{254, 254, 254, 219, 219, 219, 292, 292, 292, 249, 249, 249},
++	{215, 215, 215, 174, 174, 174, 266, 266, 266, 231, 231, 231},
++	{254, 254, 254, 219, 219, 219, 292, 292, 292, 249, 249, 249},
++	{254, 254, 254, 219, 219, 219, 292, 292, 292, 249, 249, 249},
++};
++
++/* 100x */
++static u32 ipblossless_ubwc30_cr_table_cratio_iris3[7][12] = {
++	{185, 215, 194, 147, 178, 159, 162, 181, 169, 138, 161, 146},
++	{186, 217, 195, 151, 183, 161, 164, 182, 170, 140, 168, 148},
++	{186, 217, 195, 151, 183, 161, 164, 182, 170, 140, 168, 148},
++	{186, 217, 195, 151, 183, 161, 164, 182, 170, 140, 168, 148},
++	{185, 215, 194, 147, 178, 159, 162, 181, 169, 138, 161, 146},
++	{186, 217, 195, 151, 183, 161, 164, 182, 170, 140, 168, 148},
++	{186, 217, 195, 151, 183, 161, 164, 182, 170, 140, 168, 148},
++};
++
++/* 100x */
++static u32 en_original_compression_factor_rgba_pwd_iris3 = 243;
++/* 100x */
++static u32 en_original_compression_factor_rgba_avg_iris3 = 454;
++
++/*                                H   I   J         K   L   M      N   O   P
++ *         TotalW   Total R       Frequency         Write         Read
++ * Name                           B   b   P         B   b   P      B   b   P
++ * I3B4b1P    0.5    1.875        3   4   1         1   0   1      2   2   1
++ * I1B2b1P    0.5    1.75         1   2   1         1   0   1      2   2   1
++ * IbP        0.5    1.5          0   1   1         1   0   1      2   2   1
++ * IPP        1      1            0   0   1         1   0   1      2   2   1
++ * P          1      1            0   0   1         1   0   1      2   2   1
++ * smallB     0      2            0   1   0         1   0   1      2   2   1
++ * bigB       1      2            1   0   0         1   0   1      2   2   1
++ *
++ * Total W = SUMPRODUCT(H16:J16, K16 : M16) / SUM(H16:J16)
++ * Total R = SUMPRODUCT(H16:J16, N16 : P16) / SUM(H16:J16)
++ */
++
++/* 1000x */
++static u32 iris3_en_readfactor[7] = {1000, 1500, 1750, 1875, 1000, 2000, 2000};
++/* 1000x */
++static u32 iris3_en_writefactor[7] = {1000, 500, 500, 500, 1000, 0, 1000};
++static u32 iris3_en_frame_num_parallel = 1;
++
++u32 calculate_number_lcus_iris3(u32 width, u32 height, u32 lcu_size)
++{
++	u32 mbs_width = (width % lcu_size) ?
++		(width / lcu_size + 1) : (width / lcu_size);
++	u32 mbs_height = (height % lcu_size) ?
++		(height / lcu_size + 1) : (height / lcu_size);
++
++	return mbs_width * mbs_height;
++}
++
++u32 calculate_number_ubwctiles_iris3(u32 width, u32 height, u32 tile_w, u32 tile_h)
++{
++	u32 tiles_width = (width % tile_w) ?
++		(width / tile_w + 1) : (width / tile_w);
++	u32 tiles_height = (height % tile_h) ?
++		(height / tile_h + 1) : (height / tile_h);
++
++	return tiles_width * tiles_height;
++}
++
++struct compression_factors {
++	u32 dpb_cf_y;
++	u32 dpb_cf_cbcr;
++	u32 opb_cf_ycbcr;
++	u32 dpb_cr_y;
++	u32 ipb_cr_y;
++	u32 ipb_cr;
++} compression_factor;
++
++u32 get_compression_factors(struct compression_factors *compression_factor,
++			    struct api_calculation_input codec_input)
++{
++	u8 cr_index_entry, cr_index_y, cr_index_c, cr_index_uni;
++	u32 frame_width;
++	u32 frame_height;
++
++	frame_width = codec_input.frame_width;
++	frame_height = codec_input.frame_height;
++	if (frame_width * frame_height <= 1920 * 1080)
++		cr_index_entry = 0;
++	else
++		cr_index_entry = 1;
++
++	if (codec_input.bitdepth == CODEC_BITDEPTH_8) {
++		/* NOT PWC or average and power case */
++		if (codec_input.complexity_setting != 0) {
++			cr_index_y = 0;
++			cr_index_c = 1;
++			cr_index_uni = 2;
++		} else {
++			cr_index_y = 3;
++			cr_index_c = 4;
++			cr_index_uni = 5;
++		}
++	} else {
++		/* NOT PWC or average and power case */
++		if (codec_input.complexity_setting != 0) {
++			cr_index_y = 6;
++			cr_index_c = 7;
++			cr_index_uni = 8;
++		} else {
++			cr_index_y = 9;
++			cr_index_c = 10;
++			cr_index_uni = 11;
++		}
++	}
++
++	if (codec_input.decoder_or_encoder == CODEC_DECODER) {
++		compression_factor->dpb_cf_y =
++			dpbopb_ubwc30_cr_table_cratio_iris3[cr_index_entry][cr_index_y];
++		compression_factor->dpb_cf_cbcr =
++			dpbopb_ubwc30_cr_table_cratio_iris3[cr_index_entry][cr_index_c];
++		compression_factor->opb_cf_ycbcr =
++			dpbopb_ubwc30_cr_table_cratio_iris3[cr_index_entry][cr_index_uni];
++
++		if (codec_input.regression_mode == 3 &&
++		    /* input cr numbers from interface */
++		    (codec_input.cr_dpb != 0 || codec_input.cr_opb != 0)) {
++			compression_factor->dpb_cf_y = (u32)(codec_input.cr_dpb * 100);
++			compression_factor->dpb_cf_cbcr = (u32)(codec_input.cr_dpb * 100);
++			compression_factor->opb_cf_ycbcr = (u32)(codec_input.cr_opb * 100);
++		}
++	} else { /* encoder */
++		/*
++		 * IPB CR Table Choice; static sheet (if framewidth<3840, use lossless table)
++		 * (else, use lossy table)
++		 * stick to this choice for SW purpose (no change for SW)
++		 */
++		if (frame_width < 3840) {
++			compression_factor->ipb_cr =
++				ipblossless_ubwc30_cr_table_cratio_iris3
++				[cr_index_entry][cr_index_uni];
++			compression_factor->ipb_cr_y =
++				ipblossless_ubwc30_cr_table_cratio_iris3
++				[cr_index_entry][cr_index_y];
++		} else {
++			compression_factor->ipb_cr =
++				ipblossy_ubwc30_cr_table_cratio_iris3[cr_index_entry]
++				[cr_index_uni];
++			compression_factor->ipb_cr_y =
++				ipblossy_ubwc30_cr_table_cratio_iris3[cr_index_entry]
++				[cr_index_y];
++		}
++
++		compression_factor->dpb_cf_y =
++			rpb_ubwc30_cr_table_cratio_iris3[cr_index_entry][cr_index_y];
++
++		compression_factor->dpb_cf_cbcr =
++			rpb_ubwc30_cr_table_cratio_iris3[cr_index_entry][cr_index_c];
++
++		if (codec_input.regression_mode == 3 &&
++		    /* input cr from interface */
++		    (codec_input.cr_ipb != 0 || codec_input.cr_rpb != 0)) {
++			compression_factor->dpb_cf_y = (u32)(codec_input.cr_rpb * 100);
++			compression_factor->dpb_cf_cbcr = (u32)(codec_input.cr_rpb * 100);
++			compression_factor->ipb_cr_y = (u32)(codec_input.cr_ipb * 100);
++		}
++	}
++
++	return 0;
++}
++
++static int calculate_bandwidth_decoder_iris3(struct api_calculation_input codec_input,
++					     struct api_calculation_bw_output *codec_output)
++{
++	/* common control parameters */
++	u32 frame_width;
++	u32 frame_height;
++	u32 frame_lcu_size = 16; /* initialized to h264 */
++	u32 lcu_per_frame;
++	u32 target_bitrate;
++	u32 collocated_bytes_per_lcu = 16; /* initialized to h264 */
++
++	u32 frame420_y_bw_linear_8bpp;
++	u32 frame420_y_bw_no_ubwc_tile_10bpp;
++	u32 frame420_y_bw_linear_10bpp;
++
++	u16 ubwc_tile_w;
++	u16 ubwc_tile_h;
++
++	u32 dpb_compression_factor_y;
++	u32 dpb_compression_factor_cbcr;
++
++	u32 reconstructed_write_bw_factor_rd;
++	u32 reference_y_read_bw_factor;
++	u32 reference_cbcr_read_bw_factor;
++
++	/* decoder control parameters */
++	u32 decoder_vsp_read_factor = 6;
++	u32 bins_to_bits_factor = 4;
++
++	u32 dpb_to_opb_ratios_ds = 1;
++
++	u8 llc_enabled_ref_y_rd = 1;
++	u8 llc_enable_ref_crcb_rd = 1;
++	u8 llc_enabled_bse_tlb = 1;
++	/* this is for 2pipe and 1pipe LLC */
++
++	u32 opb_compression_factor_ycbcr;
++	u32 dpb_ubwc_tile_width_pixels;
++	u32 dpb_ubwc_tile_height_pixels;
++	u32 decoder_frame_complexity_factor;
++	u32 llc_saving = 130; /* Initialized to H264 */
++
++	u32 bse_tlb_byte_per_lcu = 0;
++
++	u32 large_bw_calculation_fp = 0;
++
++	llc_enabled_ref_y_rd = (codec_input.status_llc_onoff) ? 1 : 0;
++	llc_enable_ref_crcb_rd = (codec_input.status_llc_onoff) ? 1 : 0;
++	/* H265D BSE tlb in LLC will be pored in Kailua */
++	llc_enabled_bse_tlb = (codec_input.status_llc_onoff) ? 1 : 0;
++
++	frame_width = codec_input.frame_width;
++	frame_height = codec_input.frame_height;
++	if (codec_input.codec == CODEC_H264 ||
++	    codec_input.codec == CODEC_H264_CAVLC) {
++		frame_lcu_size = 16;
++		collocated_bytes_per_lcu = 16;
++		llc_saving = 130;
++	} else if (codec_input.codec == CODEC_HEVC) {
++		if (codec_input.lcu_size == 32) {
++			frame_lcu_size = 32;
++			collocated_bytes_per_lcu = 64;
++			llc_saving = 114;
++		} else if (codec_input.lcu_size == 64) {
++			frame_lcu_size = 64;
++			collocated_bytes_per_lcu = 256;
++			llc_saving = 107;
++		}
++	} else if (codec_input.codec == CODEC_VP9) {
++		if (codec_input.lcu_size == 32) {
++			frame_lcu_size = 32;
++			collocated_bytes_per_lcu = 64;
++			llc_saving = 114;
++		} else if (codec_input.lcu_size == 64) {
++			frame_lcu_size = 64;
++			collocated_bytes_per_lcu = 256;
++			llc_saving = 107;
++		}
++	}
++
++	lcu_per_frame =
++		calculate_number_lcus_iris3(frame_width, frame_height, frame_lcu_size);
++
++	target_bitrate = (u32)(codec_input.bitrate_mbps); /* Mbps */
++
++	ubwc_tile_w = (codec_input.bitdepth == CODEC_BITDEPTH_8) ? 32 : 48;
++	ubwc_tile_h = (codec_input.bitdepth == CODEC_BITDEPTH_8) ? 8 : 4;
++
++	frame420_y_bw_linear_8bpp =
++		((calculate_number_ubwctiles_iris3(frame_width, frame_height, 32, 8) *
++		256 * codec_input.frame_rate + 999) / 1000 + 999) / 1000;
++
++	frame420_y_bw_no_ubwc_tile_10bpp =
++		((calculate_number_ubwctiles_iris3(frame_width, frame_height, 48, 4) *
++		256 * codec_input.frame_rate + 999) / 1000 + 999) / 1000;
++	frame420_y_bw_linear_10bpp = ((frame_width * frame_height *
++		codec_input.frame_rate * 2 + 999) / 1000 + 999) / 1000;
++
++	/* TODO Integrate Compression Ratio returned by FW */
++	get_compression_factors(&compression_factor, codec_input);
++	dpb_compression_factor_y = compression_factor.dpb_cf_y;
++	dpb_compression_factor_cbcr = compression_factor.dpb_cf_cbcr;
++	opb_compression_factor_ycbcr = compression_factor.opb_cf_ycbcr;
++
++	dpb_ubwc_tile_width_pixels = ubwc_tile_w;
++
++	dpb_ubwc_tile_height_pixels = ubwc_tile_h;
++
++	decoder_frame_complexity_factor =
++		(codec_input.complexity_setting == 0) ?
++		400 : ((codec_input.complexity_setting == 1) ? 266 : 100);
++
++	reconstructed_write_bw_factor_rd = (codec_input.complexity_setting == 0) ?
++		105 : 100;
++
++	reference_y_read_bw_factor = llc_saving;
++
++	reference_cbcr_read_bw_factor = llc_saving;
++
++	if (codec_input.codec == CODEC_HEVC) {
++		if (codec_input.lcu_size == 32)
++			bse_tlb_byte_per_lcu = 64;
++		else if (codec_input.lcu_size == 16)
++			bse_tlb_byte_per_lcu = 32;
++		else
++			bse_tlb_byte_per_lcu = 128;
++	} else if ((codec_input.codec == CODEC_H264) ||
++		(codec_input.codec == CODEC_H264_CAVLC)) {
++		bse_tlb_byte_per_lcu = 64;
++	} else if (codec_input.codec == CODEC_VP9) {
++		bse_tlb_byte_per_lcu = 304;
++	}
++
++	codec_output->noc_bw_rd = 0;
++	codec_output->noc_bw_wr = 0;
++	codec_output->ddr_bw_rd = 0;
++	codec_output->ddr_bw_wr = 0;
++
++	large_bw_calculation_fp = 0;
++	large_bw_calculation_fp = ((target_bitrate *
++		decoder_vsp_read_factor + 7) / 8);
++
++	codec_output->vsp_read_noc = large_bw_calculation_fp;
++
++	codec_output->vsp_read_ddr = codec_output->vsp_read_noc;
++
++	large_bw_calculation_fp = ((target_bitrate *
++		bins_to_bits_factor + 7) / 8);
++
++	codec_output->vsp_write_noc = large_bw_calculation_fp;
++	codec_output->vsp_write_ddr = codec_output->vsp_write_noc;
++
++	/* accumulation */
++	codec_output->noc_bw_rd += codec_output->vsp_read_noc;
++	codec_output->ddr_bw_rd += codec_output->vsp_read_ddr;
++	codec_output->noc_bw_wr += codec_output->vsp_write_noc;
++	codec_output->ddr_bw_wr += codec_output->vsp_write_ddr;
++
++	large_bw_calculation_fp = 0;
++	large_bw_calculation_fp = ((collocated_bytes_per_lcu *
++		lcu_per_frame * codec_input.frame_rate + 999) / 1000 + 999) / 1000;
++	codec_output->collocated_rd_noc = large_bw_calculation_fp;
++	codec_output->collocated_wr_noc = codec_output->collocated_rd_noc;
++	codec_output->collocated_rd_ddr = codec_output->collocated_rd_noc;
++	codec_output->collocated_wr_ddr = codec_output->collocated_wr_noc;
++
++	codec_output->collocated_rd_wr_total_noc =
++		(u32)(codec_output->collocated_rd_noc + codec_output->collocated_wr_noc);
++
++	codec_output->collocated_rd_wr_total_ddr =
++		codec_output->collocated_rd_wr_total_noc;
++
++	/* accumulation */
++	codec_output->noc_bw_rd += codec_output->collocated_rd_noc;
++	codec_output->noc_bw_wr += codec_output->collocated_wr_noc;
++	codec_output->ddr_bw_rd += codec_output->collocated_rd_ddr;
++	codec_output->ddr_bw_wr += codec_output->collocated_wr_ddr;
++
++	large_bw_calculation_fp = 0;
++	large_bw_calculation_fp = ((codec_input.bitdepth == CODEC_BITDEPTH_8) ?
++		frame420_y_bw_linear_8bpp :
++		frame420_y_bw_no_ubwc_tile_10bpp) * decoder_frame_complexity_factor;
++
++	large_bw_calculation_fp =
++		(large_bw_calculation_fp + dpb_compression_factor_y - 1) /
++		dpb_compression_factor_y;
++
++	codec_output->dpb_rd_y_noc = large_bw_calculation_fp;
++
++	large_bw_calculation_fp = ((codec_input.bitdepth == CODEC_BITDEPTH_8) ?
++		frame420_y_bw_linear_8bpp : frame420_y_bw_no_ubwc_tile_10bpp) *
++		decoder_frame_complexity_factor;
++
++	large_bw_calculation_fp =
++		(large_bw_calculation_fp + dpb_compression_factor_cbcr - 1) /
++		dpb_compression_factor_cbcr / 2;
++
++	codec_output->dpb_rd_crcb_noc = large_bw_calculation_fp;
++	codec_output->dpb_rdwr_duetooverlap_noc = 0;
++
++	large_bw_calculation_fp = ((codec_input.bitdepth == CODEC_BITDEPTH_8) ?
++		frame420_y_bw_linear_8bpp : frame420_y_bw_no_ubwc_tile_10bpp) *
++		reconstructed_write_bw_factor_rd;
++
++	large_bw_calculation_fp = ((codec_input.bitdepth == CODEC_BITDEPTH_8) ?
++		frame420_y_bw_linear_8bpp : frame420_y_bw_no_ubwc_tile_10bpp) *
++		reconstructed_write_bw_factor_rd;
++
++	large_bw_calculation_fp = large_bw_calculation_fp *
++		(dpb_compression_factor_y / 2 + dpb_compression_factor_cbcr);
++
++	large_bw_calculation_fp = (large_bw_calculation_fp + dpb_compression_factor_y - 1) /
++		dpb_compression_factor_y;
++
++	large_bw_calculation_fp =
++		(large_bw_calculation_fp + dpb_compression_factor_cbcr - 1) /
++		dpb_compression_factor_cbcr;
++
++	codec_output->dpb_wr_noc = large_bw_calculation_fp;
++
++	codec_output->dpb_rd_y_ddr = (llc_enabled_ref_y_rd) ?
++		((codec_output->dpb_rd_y_noc * 100 + reference_y_read_bw_factor - 1) /
++		reference_y_read_bw_factor) : codec_output->dpb_rd_y_noc;
++
++	codec_output->dpb_rd_crcb_ddr = (llc_enable_ref_crcb_rd) ?
++		((codec_output->dpb_rd_crcb_noc * 100 +
++		reference_cbcr_read_bw_factor - 1) /
++		reference_cbcr_read_bw_factor) : codec_output->dpb_rd_crcb_noc;
++
++	codec_output->dpb_rdwr_duetooverlap_ddr = 0;
++	codec_output->dpb_wr_ddr = codec_output->dpb_wr_noc;
++
++	/* accumulation */
++	codec_output->noc_bw_rd += codec_output->dpb_rd_y_noc;
++	codec_output->noc_bw_rd += codec_output->dpb_rd_crcb_noc;
++	codec_output->noc_bw_rd += codec_output->dpb_rdwr_duetooverlap_noc;
++	codec_output->noc_bw_wr += codec_output->dpb_wr_noc;
++	codec_output->ddr_bw_rd += codec_output->dpb_rd_y_ddr;
++	codec_output->ddr_bw_rd += codec_output->dpb_rd_crcb_ddr;
++	codec_output->ddr_bw_rd += codec_output->dpb_rdwr_duetooverlap_ddr;
++	codec_output->ddr_bw_wr += codec_output->dpb_wr_ddr;
++
++	if (codec_input.linear_opb || codec_input.split_opb) {
++		if (codec_input.linear_opb) {
++			if (codec_input.bitdepth == CODEC_BITDEPTH_8) {
++				large_bw_calculation_fp = ((frame420_y_bw_linear_8bpp) *
++				3 / 2 / dpb_to_opb_ratios_ds);
++
++				codec_output->opb_write_total_noc = large_bw_calculation_fp;
++			} else {
++				large_bw_calculation_fp = ((frame420_y_bw_linear_10bpp) *
++				3 / 2 / dpb_to_opb_ratios_ds);
++
++				codec_output->opb_write_total_noc = large_bw_calculation_fp;
++			}
++		} else { /* (CODEC_INPUT.split_opb) */
++			if (codec_input.bitdepth == CODEC_BITDEPTH_8) {
++				large_bw_calculation_fp =
++					(frame420_y_bw_linear_8bpp * 3 / 2 / dpb_to_opb_ratios_ds *
++					100 + opb_compression_factor_ycbcr - 1) /
++					opb_compression_factor_ycbcr;
++
++				codec_output->opb_write_total_noc = large_bw_calculation_fp;
++			} else {
++				large_bw_calculation_fp =
++					(frame420_y_bw_no_ubwc_tile_10bpp * 3 / 2 /
++					dpb_to_opb_ratios_ds * 100 +
++					opb_compression_factor_ycbcr - 1) /
++					opb_compression_factor_ycbcr;
++
++				codec_output->opb_write_total_noc = large_bw_calculation_fp;
++			}
++		}
++	} else {
++		codec_output->opb_write_total_noc = 0;
++	}
++
++	codec_output->opb_write_total_ddr = codec_output->opb_write_total_noc;
++
++	/* accumulation */
++	codec_output->noc_bw_wr += codec_output->opb_write_total_noc;
++	codec_output->ddr_bw_wr += codec_output->opb_write_total_ddr;
++
++	large_bw_calculation_fp = ((bse_tlb_byte_per_lcu * lcu_per_frame *
++		codec_input.frame_rate + 999) / 1000 + 999) / 1000;
++
++	codec_output->bse_tlb_rd_noc = large_bw_calculation_fp;
++
++	if (llc_enabled_bse_tlb)
++		codec_output->bse_tlb_rd_ddr = 0;
++	else
++		codec_output->bse_tlb_rd_ddr = codec_output->bse_tlb_rd_noc;
++
++	codec_output->bse_tlb_wr_noc = codec_output->bse_tlb_rd_noc;
++
++	if (llc_enabled_bse_tlb)
++		codec_output->bse_tlb_wr_ddr = 0;
++	else
++		codec_output->bse_tlb_wr_ddr = codec_output->bse_tlb_wr_noc;
++
++	/* accumulation */
++	codec_output->noc_bw_rd += codec_output->bse_tlb_rd_noc;
++	codec_output->ddr_bw_rd += codec_output->bse_tlb_rd_ddr;
++	codec_output->noc_bw_wr += codec_output->bse_tlb_wr_noc;
++	codec_output->ddr_bw_wr += codec_output->bse_tlb_wr_ddr;
++
++	codec_output->mmu_rd_ddr = 0;
++	codec_output->mmu_rd_noc = 0;
++	/* accumulation */
++	codec_output->noc_bw_rd += codec_output->mmu_rd_noc;
++	codec_output->ddr_bw_rd += codec_output->mmu_rd_ddr;
++
++	return 0;
++}
++
++static int calculate_bandwidth_encoder_iris3(struct api_calculation_input codec_input,
++					     struct api_calculation_bw_output *codec_output)
++{
++	/* common control parameters */
++	u32 frame_width;
++	u32 frame_height;
++	u32 frame_lcu_size;
++	u32 lcu_per_frame;
++	u32 target_bitrate;
++	u32 collocated_bytes_per_lcu;
++
++	u32 frame420_y_bw_linear_8bpp;
++	u32 frame420_y_bw_no_ubwc_tile_10bpp;
++	u32 frame420_y_bw_linear_10bpp;
++
++	u16 ubwc_tile_w;
++	u16 ubwc_tile_h;
++
++	u32 dpb_compression_factor_y;
++	u32 dpb_compression_factor_cbcr;
++
++	u32 reconstructed_write_bw_factor_rd;
++	u32 reference_y_read_bw_factor;
++	u32 reference_crcb_read_bw_factor;
++
++	/* encoder control parameters */
++	u32 en_vertical_tiles_width = 960;
++
++	u8 en_rotation_90_270 = 0;
++	/* TODO Can we use (codec_input.status_llc_onoff) for enc_llc_*? */
++	u8 en_llc_enable_ref_rd_crcb = 0;
++	u8 en_llc_enable_rec_wr_uncompleted = 0;
++	u8 en_llc_enable_ref_rd_y_overlap = 0;
++
++	u32 en_bins_to_bits_factor = 4;
++	u32 en_search_windows_size_horizontal = 96;
++
++	u32 en_tile_number;
++	u32 ipb_compression_factor_y;
++	u32 ipb_compression_factor;
++
++	u32 large_bw_calculation_fp = 0;
++
++	/* TODO Are these really needed in Encoder? */
++	u32 bse_tlb_byte_per_lcu = 0;
++	u8 llc_enabled_bse_tlb = 1;
++
++	/*H265D BSE tlb in LLC will be pored in Kailua */
++	llc_enabled_bse_tlb = (codec_input.status_llc_onoff) ? 1 : 0;
++
++	frame_width = codec_input.frame_width;
++	frame_height = codec_input.frame_height;
++	if (codec_input.codec == CODEC_H264 ||
++	    codec_input.codec == CODEC_H264_CAVLC) {
++		frame_lcu_size = 16;
++		collocated_bytes_per_lcu = 16;
++	} else if (codec_input.codec == CODEC_HEVC) {
++		frame_lcu_size = 32;
++		collocated_bytes_per_lcu = 64;
++	} else {
++		/* TODO What is the value for VP9 ? */
++		frame_lcu_size = 16;
++		collocated_bytes_per_lcu = 16; /* TODO Fixes Uninitialized compilation error. */
++	}
++
++	lcu_per_frame =
++		calculate_number_lcus_iris3(frame_width, frame_height, frame_lcu_size);
++
++	bse_tlb_byte_per_lcu = 16; /* TODO Should be in common declaration */
++
++	target_bitrate = (u32)(codec_input.bitrate_mbps); /* Mbps */
++
++	ubwc_tile_w = (codec_input.bitdepth == CODEC_BITDEPTH_8) ? 32 : 48;
++	ubwc_tile_h = (codec_input.bitdepth == CODEC_BITDEPTH_8) ? 8 : 4;
++
++	/* yuv */
++	if (codec_input.ipb_yuvrgb == 0) {
++		frame420_y_bw_linear_8bpp =
++			((calculate_number_ubwctiles_iris3(frame_width, frame_height,
++			32, 8) * 256 * codec_input.frame_rate + 999) / 1000 + 999) / 1000;
++	} else { /* RGBA */
++		frame420_y_bw_linear_8bpp =
++			((calculate_number_ubwctiles_iris3(frame_width, frame_height,
++			6, 4) * 256 * codec_input.frame_rate + 999) / 1000 + 999) / 1000;
++	}
++
++	frame420_y_bw_no_ubwc_tile_10bpp =
++		((calculate_number_ubwctiles_iris3(frame_width, frame_height, 48, 4) *
++		256 * codec_input.frame_rate + 999) / 1000 + 999) / 1000;
++
++	frame420_y_bw_linear_10bpp = ((frame_width * frame_height *
++		codec_input.frame_rate * 2 + 999) / 1000 + 999) / 1000;
++
++	/* TODO Integrate Compression Ratio returned by FW */
++	get_compression_factors(&compression_factor, codec_input);
++	dpb_compression_factor_y = compression_factor.dpb_cf_y;
++	dpb_compression_factor_cbcr = compression_factor.dpb_cf_cbcr;
++	ipb_compression_factor_y = compression_factor.ipb_cr_y;
++	ipb_compression_factor = compression_factor.ipb_cr;
++
++	en_tile_number = (frame_width % en_vertical_tiles_width) ?
++		((frame_width / en_vertical_tiles_width) + 1) :
++		(frame_width / en_vertical_tiles_width);
++
++	en_tile_number = en_tile_number * 100;
++
++	/* ceil is same as excel roundup (float, 0); */
++	reconstructed_write_bw_factor_rd = ((en_tile_number - 100) * 2 *
++		((codec_input.lcu_size + ubwc_tile_w - 1) / ubwc_tile_w) *
++		ubwc_tile_w + (frame_width - 1)) / (frame_width) + 100;
++
++	reference_y_read_bw_factor = ((en_tile_number - 100) * 2 *
++		((en_search_windows_size_horizontal + ubwc_tile_w - 1) / ubwc_tile_w) *
++		ubwc_tile_w + (frame_width - 1)) / frame_width + 100;
++
++	reference_crcb_read_bw_factor = 150;
++
++	codec_output->noc_bw_rd = 0;
++	codec_output->noc_bw_wr = 0;
++	codec_output->ddr_bw_rd = 0;
++	codec_output->ddr_bw_wr = 0;
++
++	large_bw_calculation_fp = (target_bitrate * en_bins_to_bits_factor + 7) / 8;
++	codec_output->vsp_read_noc = large_bw_calculation_fp;
++	codec_output->vsp_read_ddr = codec_output->vsp_read_noc;
++	large_bw_calculation_fp = (target_bitrate + 7) / 8;
++
++	codec_output->vsp_write_noc = codec_output->vsp_read_noc +
++		large_bw_calculation_fp;
++
++	codec_output->vsp_write_ddr = codec_output->vsp_write_noc;
++
++	/* accumulation */
++	codec_output->noc_bw_rd += codec_output->vsp_read_noc;
++	codec_output->ddr_bw_rd += codec_output->vsp_read_ddr;
++	codec_output->noc_bw_wr += codec_output->vsp_write_noc;
++	codec_output->ddr_bw_wr += codec_output->vsp_write_ddr;
++
++	large_bw_calculation_fp = ((collocated_bytes_per_lcu * lcu_per_frame *
++		codec_input.frame_rate + 999) / 1000 + 999) / 1000;
++
++	codec_output->collocated_rd_noc = large_bw_calculation_fp;
++	codec_output->collocated_wr_noc = codec_output->collocated_rd_noc;
++	codec_output->collocated_rd_ddr = codec_output->collocated_rd_noc;
++	codec_output->collocated_wr_ddr = codec_output->collocated_wr_noc;
++
++	codec_output->collocated_rd_wr_total_noc =
++		(u32)(codec_output->collocated_rd_noc + codec_output->collocated_wr_noc);
++	codec_output->collocated_rd_wr_total_ddr =
++		codec_output->collocated_rd_wr_total_noc;
++
++	/* accumulation */
++	codec_output->noc_bw_rd += codec_output->collocated_rd_noc;
++	codec_output->noc_bw_wr += codec_output->collocated_wr_noc;
++	codec_output->ddr_bw_rd += codec_output->collocated_rd_ddr;
++	codec_output->ddr_bw_wr += codec_output->collocated_wr_ddr;
++
++	large_bw_calculation_fp = 0;
++
++	large_bw_calculation_fp = ((codec_input.bitdepth == CODEC_BITDEPTH_8) ?
++		frame420_y_bw_linear_8bpp :
++		frame420_y_bw_no_ubwc_tile_10bpp) * reference_y_read_bw_factor;
++
++	large_bw_calculation_fp = (large_bw_calculation_fp *
++		iris3_en_readfactor[codec_input.hierachical_layer]);
++
++	large_bw_calculation_fp = (large_bw_calculation_fp +
++		dpb_compression_factor_y - 1) / dpb_compression_factor_y;
++
++	large_bw_calculation_fp = (large_bw_calculation_fp + 999) / 1000;
++
++	codec_output->dpb_rd_y_noc = large_bw_calculation_fp;
++
++	large_bw_calculation_fp = 0;
++
++	large_bw_calculation_fp = ((codec_input.bitdepth == CODEC_BITDEPTH_8) ?
++		frame420_y_bw_linear_8bpp :
++		frame420_y_bw_no_ubwc_tile_10bpp) * reference_crcb_read_bw_factor / 2;
++
++	large_bw_calculation_fp = large_bw_calculation_fp *
++		iris3_en_readfactor[codec_input.hierachical_layer];
++
++	large_bw_calculation_fp = (large_bw_calculation_fp +
++		dpb_compression_factor_cbcr - 1) / dpb_compression_factor_cbcr;
++
++	large_bw_calculation_fp = (large_bw_calculation_fp + 999) / 1000;
++	codec_output->dpb_rd_crcb_noc = large_bw_calculation_fp;
++
++	large_bw_calculation_fp = 0;
++
++	large_bw_calculation_fp = ((codec_input.bitdepth == CODEC_BITDEPTH_8) ?
++		frame420_y_bw_linear_8bpp : frame420_y_bw_no_ubwc_tile_10bpp) *
++		reconstructed_write_bw_factor_rd *
++		iris3_en_writefactor[codec_input.hierachical_layer] /
++		iris3_en_frame_num_parallel;
++
++	large_bw_calculation_fp = (large_bw_calculation_fp + 999) / 1000;
++
++	large_bw_calculation_fp = large_bw_calculation_fp *
++		(dpb_compression_factor_cbcr + dpb_compression_factor_y / 2);
++
++	large_bw_calculation_fp = (large_bw_calculation_fp +
++		dpb_compression_factor_y - 1) / dpb_compression_factor_y;
++
++	large_bw_calculation_fp = (large_bw_calculation_fp +
++		dpb_compression_factor_cbcr - 1) / dpb_compression_factor_cbcr;
++
++	codec_output->dpb_wr_noc = large_bw_calculation_fp;
++
++	/*
++	 * Summary:
++	 * by default (for both HFR and HSR cases) :
++	 *	-Any resolution and fps >= 120, enable layering.
++	 * (120 -> 3, 240 -> 4, 480 -> 5)
++	 *	- (once we enable layering) : 50 per cent frames are Non - reference
++	 *  frames.recon write is disable by Venus firmware
++	 *	- Customer has ability to enable / disable layering.
++	 *  Hence, recon write savings would not be there if customer
++	 *  explicitly disables layer encoding.
++	 */
++
++	/*HFR Cases use alternating rec write if not PWC*/
++	if (codec_input.frame_rate >= 120 && codec_input.complexity_setting != 0)
++		codec_output->dpb_wr_noc = codec_output->dpb_wr_noc / 2;
++
++	/* for power cases with [B1] adaptive non-ref b frame */
++	/* power caes IbP non reference b */
++	if (codec_input.hierachical_layer >= 1 &&
++	    codec_input.hierachical_layer <= 3 &&
++	    codec_input.complexity_setting != 0)
++		codec_output->dpb_wr_noc = codec_output->dpb_wr_noc / 2;
++
++	large_bw_calculation_fp = 0;
++	large_bw_calculation_fp = codec_output->dpb_wr_noc *
++		(reconstructed_write_bw_factor_rd - 100);
++
++	large_bw_calculation_fp = (large_bw_calculation_fp +
++		reconstructed_write_bw_factor_rd - 1) / reconstructed_write_bw_factor_rd;
++
++	codec_output->dpb_rdwr_duetooverlap_noc = large_bw_calculation_fp;
++
++	codec_output->dpb_rd_y_ddr = (en_llc_enable_ref_rd_y_overlap) ?
++		(codec_output->dpb_rd_y_noc * 100 + reference_y_read_bw_factor - 1) /
++		reference_y_read_bw_factor : codec_output->dpb_rd_y_noc;
++
++	codec_output->dpb_rd_crcb_ddr = (en_llc_enable_ref_rd_crcb) ?
++		(codec_output->dpb_rd_crcb_noc * 100 + reference_crcb_read_bw_factor - 1) /
++		reference_crcb_read_bw_factor : codec_output->dpb_rd_crcb_noc;
++
++	codec_output->dpb_rdwr_duetooverlap_ddr = (en_llc_enable_rec_wr_uncompleted) ?
++		0 : codec_output->dpb_rdwr_duetooverlap_noc;
++
++	codec_output->dpb_wr_ddr = (en_llc_enable_rec_wr_uncompleted) ?
++		0 : codec_output->dpb_wr_noc;
++
++	/* accumulation */
++	codec_output->noc_bw_rd += codec_output->dpb_rd_y_noc;
++	codec_output->noc_bw_rd += codec_output->dpb_rd_crcb_noc;
++	codec_output->noc_bw_rd += codec_output->dpb_rdwr_duetooverlap_noc;
++	codec_output->noc_bw_wr += codec_output->dpb_wr_noc;
++	codec_output->ddr_bw_rd += codec_output->dpb_rd_y_ddr;
++	codec_output->ddr_bw_rd += codec_output->dpb_rd_crcb_ddr;
++	codec_output->ddr_bw_rd += codec_output->dpb_rdwr_duetooverlap_ddr;
++	codec_output->ddr_bw_wr += codec_output->dpb_wr_ddr;
++
++	if (codec_input.bitdepth == CODEC_BITDEPTH_8) {
++		if (codec_input.ipb_yuvrgb == 0) { /* yuv */
++			large_bw_calculation_fp = ((frame420_y_bw_linear_8bpp) * 3 / 2);
++			codec_output->ipb_rd_total_noc = large_bw_calculation_fp;
++			if (codec_input.linear_ipb == 0) {
++				codec_output->ipb_rd_total_noc =
++					(large_bw_calculation_fp * 100 + ipb_compression_factor
++					 - 1) / ipb_compression_factor;
++			}
++		} else { /* rgb */
++			large_bw_calculation_fp = frame420_y_bw_linear_8bpp;
++			codec_output->ipb_rd_total_noc = large_bw_calculation_fp;
++			if (codec_input.linear_ipb == 0) {
++				if (codec_input.complexity_setting == 0) /* pwc */
++					codec_output->ipb_rd_total_noc =
++						(large_bw_calculation_fp * 100 +
++						en_original_compression_factor_rgba_pwd_iris3
++						- 1) /
++						en_original_compression_factor_rgba_pwd_iris3;
++				else
++					codec_output->ipb_rd_total_noc =
++					(large_bw_calculation_fp * 100 +
++					en_original_compression_factor_rgba_avg_iris3 - 1) /
++					en_original_compression_factor_rgba_avg_iris3;
++			}
++		}
++	} else {
++		if (codec_input.linear_ipb == 1) {
++			large_bw_calculation_fp = (frame420_y_bw_linear_10bpp) * 3 / 2;
++			codec_output->ipb_rd_total_noc = large_bw_calculation_fp;
++		} else {
++			large_bw_calculation_fp = (frame420_y_bw_no_ubwc_tile_10bpp *
++				300 / 2 + ipb_compression_factor - 1) / ipb_compression_factor;
++			codec_output->ipb_rd_total_noc = large_bw_calculation_fp;
++		}
++	}
++
++	if (en_rotation_90_270) {
++		if (codec_input.codec == CODEC_HEVC) {
++			if (codec_input.bitdepth == CODEC_BITDEPTH_8 &&
++			    codec_input.ipb_yuvrgb == 0)
++				codec_output->ipb_rd_total_noc =
++					codec_output->ipb_rd_total_noc * 1;
++			else
++				codec_output->ipb_rd_total_noc =
++					codec_output->ipb_rd_total_noc * 3;
++		} else {
++			codec_output->ipb_rd_total_noc = codec_output->ipb_rd_total_noc * 2;
++		}
++	}
++
++	codec_output->ipb_rd_total_ddr = codec_output->ipb_rd_total_noc;
++
++	/* accumulation */
++	codec_output->noc_bw_rd += codec_output->ipb_rd_total_noc;
++	codec_output->ddr_bw_rd += codec_output->ipb_rd_total_ddr;
++
++	codec_output->bse_tlb_rd_noc =
++		((bse_tlb_byte_per_lcu * lcu_per_frame * codec_input.frame_rate + 999)
++		/ 1000 + 999) / 1000;
++
++	if (llc_enabled_bse_tlb) /* TODO should be common declaration */
++		codec_output->bse_tlb_rd_ddr = 0;
++	else
++		codec_output->bse_tlb_rd_ddr = codec_output->bse_tlb_rd_noc;
++
++	codec_output->bse_tlb_wr_noc = codec_output->bse_tlb_rd_noc;
++
++	if (llc_enabled_bse_tlb)
++		codec_output->bse_tlb_wr_ddr = 0;
++	else
++		codec_output->bse_tlb_wr_ddr = codec_output->bse_tlb_wr_noc;
++
++	/* accumulation */
++	codec_output->noc_bw_rd += codec_output->bse_tlb_rd_noc;
++	codec_output->ddr_bw_rd += codec_output->bse_tlb_rd_ddr;
++	codec_output->noc_bw_wr += codec_output->bse_tlb_wr_noc;
++	codec_output->ddr_bw_wr += codec_output->bse_tlb_wr_ddr;
++
++	codec_output->mmu_rd_ddr = 0;
++	codec_output->mmu_rd_noc = 0;
++	/* accumulation */
++	codec_output->noc_bw_rd += codec_output->mmu_rd_noc;
++	codec_output->ddr_bw_rd += codec_output->mmu_rd_ddr;
++
++	return 0;
++}
++
++int msm_vidc_calculate_bandwidth(struct api_calculation_input codec_input,
++				 struct api_calculation_bw_output *codec_output)
++{
++	int rc = 0;
++
++	if (codec_input.decoder_or_encoder == CODEC_DECODER) {
++		rc = calculate_bandwidth_decoder_iris3(codec_input, codec_output);
++	} else if (codec_input.decoder_or_encoder == CODEC_ENCODER) {
++		rc = calculate_bandwidth_encoder_iris3(codec_input, codec_output);
++	} else {
++		d_vpr_e("%s: invalid codec %u\n", __func__, codec_input.decoder_or_encoder);
++		return -EINVAL;
++	}
++
++	return rc;
++}
 -- 
-With best wishes
-Dmitry
+2.7.4
 
