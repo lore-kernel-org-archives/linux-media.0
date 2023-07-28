@@ -2,43 +2,43 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D059C41513
-	for <linux-media@archiver.kernel.org>; Fri, 28 Jul 2023 13:28:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57948C0015E
+	for <linux-media@archiver.kernel.org>; Fri, 28 Jul 2023 13:28:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236804AbjG1N2m (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 28 Jul 2023 09:28:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43412 "EHLO
+        id S236820AbjG1N2n (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 28 Jul 2023 09:28:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236955AbjG1N2L (ORCPT
+        with ESMTP id S236953AbjG1N2L (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 28 Jul 2023 09:28:11 -0400
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359FC49E8;
-        Fri, 28 Jul 2023 06:27:34 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36S9RPeF010756;
-        Fri, 28 Jul 2023 13:26:24 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3617949EA;
+        Fri, 28 Jul 2023 06:27:35 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36S9DdlL004300;
+        Fri, 28 Jul 2023 13:26:31 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=qcppdkim1;
- bh=Ud1QmpytpS8kljsAju5FtPOx6RIqUoSKID8szClshbU=;
- b=K2KNQ0HdCH57mNSUt8nA1UTNm9bxXJ7zTbrdZQo1XtzMCydB4eedBmh2pKrjRYaXYT3g
- pEYE4KZFPXXMdPkC0Pr/y6wLxlZA5/5D/pxkG7mYnOiizA6tlKzjrKupxs5Wz+3A2gat
- TSTtdi4f0O48rdH+roqLBwBP9yOcaCyYUh3cZheq0TV1hXraY/DZEWvxkYvwH0ZlS5na
- Y9BIlyzLxZt0RHy+QCR9LT1aJ7PcG1rgSpXNDGTWBttVgSctokHWXeFeUR3vZnn5gcKl
- kOrU++wwS/RdcQFo0CqfljiEItf8hUQxarEda/z1Skm6FeFYvzX3qHSPHX8nhpitf/w2 tA== 
+ bh=+ZaDGwVUfhnyAOVh0gNt/Fg30/Df8MffdW8wq9Xy488=;
+ b=Zj2h3PGEunE1lV8/A/X3R7+SThqj27zK+cZ3IPuvVOoj4gxv9yLAlJEQXT7yZ+Uy/4ZP
+ SKsd6m+3/Qe2g2e19Y5v6ZOaUd3cKzdOdynjs6gZPk0fkW2sxb76JIMu1HIf+8Jd9SAT
+ hqHNKVyfgEGVl4oFHsog4EXxO6SGd7+GA3kvDJQtXW18uDXkaf5iknYqo6XZ85EfJWIv
+ 0oMjvnG9nYPfqEU2FGkRN/tIVqnSPNKDinhwVtKhxIdzG825ACNghiXJ0gDGmgosypAr
+ zc6xIWhNmzqTb9/cFuCCfM72dNWrIVoeoW7r744Xxwyc3qN/QVArtjfry9XqBuKW24mK eg== 
 Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s3n2kbcp0-1
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s403vhk4s-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Jul 2023 13:26:24 +0000
+        Fri, 28 Jul 2023 13:26:31 +0000
 Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36SDQNb8003833
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36SDQUF8003910
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Jul 2023 13:26:23 GMT
+        Fri, 28 Jul 2023 13:26:30 GMT
 Received: from hu-vgarodia-hyd.qualcomm.com (10.80.80.8) by
  nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Fri, 28 Jul 2023 06:26:19 -0700
+ 15.2.1118.30; Fri, 28 Jul 2023 06:26:26 -0700
 From:   Vikash Garodia <quic_vgarodia@quicinc.com>
 To:     <stanimir.k.varbanov@gmail.com>, <agross@kernel.org>,
         <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
@@ -47,9 +47,9 @@ To:     <stanimir.k.varbanov@gmail.com>, <agross@kernel.org>,
         <linux-arm-msm@vger.kernel.org>
 CC:     <quic_dikshita@quicinc.com>,
         Vikash Garodia <quic_vgarodia@quicinc.com>
-Subject: [PATCH 21/33] iris: vidc: hfi: Add packetization layer
-Date:   Fri, 28 Jul 2023 18:53:32 +0530
-Message-ID: <1690550624-14642-22-git-send-email-quic_vgarodia@quicinc.com>
+Subject: [PATCH 23/33] iris: vidc: add PIL functionality for video firmware
+Date:   Fri, 28 Jul 2023 18:53:34 +0530
+Message-ID: <1690550624-14642-24-git-send-email-quic_vgarodia@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1690550624-14642-1-git-send-email-quic_vgarodia@quicinc.com>
 References: <1690550624-14642-1-git-send-email-quic_vgarodia@quicinc.com>
@@ -60,950 +60,357 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nasanex01a.na.qualcomm.com (10.52.223.231)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: sUjhxMZuyDqmKoNH8rbNBIUIn_Qv7RCu
-X-Proofpoint-ORIG-GUID: sUjhxMZuyDqmKoNH8rbNBIUIn_Qv7RCu
+X-Proofpoint-GUID: 21EPb-dA_DQNaRBeUp6pY0Az-bCLsUjK
+X-Proofpoint-ORIG-GUID: 21EPb-dA_DQNaRBeUp6pY0Az-bCLsUjK
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-07-27_10,2023-07-26_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 phishscore=0 impostorscore=0 mlxscore=0 suspectscore=0
- spamscore=0 clxscore=1015 bulkscore=0 mlxlogscore=908 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ priorityscore=1501 adultscore=0 impostorscore=0 phishscore=0
+ mlxlogscore=999 mlxscore=0 malwarescore=0 lowpriorityscore=0 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2306200000 definitions=main-2307280124
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This implements hfi packets used to communicate the info
-to/from firmware.
+From: Dikshita Agarwal <quic_dikshita@quicinc.com>
+
+Here is the implementation of loading/unloading fw in memory
+via mdt loader. This also implements fw suspend and resume.
 
 Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
 Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
 ---
- .../platform/qcom/iris/vidc/inc/hfi_command.h      | 190 ++++++
- .../media/platform/qcom/iris/vidc/inc/hfi_packet.h |  52 ++
- .../media/platform/qcom/iris/vidc/src/hfi_packet.c | 657 +++++++++++++++++++++
- 3 files changed, 899 insertions(+)
- create mode 100644 drivers/media/platform/qcom/iris/vidc/inc/hfi_command.h
- create mode 100644 drivers/media/platform/qcom/iris/vidc/inc/hfi_packet.h
- create mode 100644 drivers/media/platform/qcom/iris/vidc/src/hfi_packet.c
+ .../media/platform/qcom/iris/vidc/inc/firmware.h   |  18 ++
+ .../media/platform/qcom/iris/vidc/src/firmware.c   | 294 +++++++++++++++++++++
+ 2 files changed, 312 insertions(+)
+ create mode 100644 drivers/media/platform/qcom/iris/vidc/inc/firmware.h
+ create mode 100644 drivers/media/platform/qcom/iris/vidc/src/firmware.c
 
-diff --git a/drivers/media/platform/qcom/iris/vidc/inc/hfi_command.h b/drivers/media/platform/qcom/iris/vidc/inc/hfi_command.h
+diff --git a/drivers/media/platform/qcom/iris/vidc/inc/firmware.h b/drivers/media/platform/qcom/iris/vidc/inc/firmware.h
 new file mode 100644
-index 0000000..5542e56
+index 0000000..bd52180
 --- /dev/null
-+++ b/drivers/media/platform/qcom/iris/vidc/inc/hfi_command.h
-@@ -0,0 +1,190 @@
++++ b/drivers/media/platform/qcom/iris/vidc/inc/firmware.h
+@@ -0,0 +1,18 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
-+ * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
++ * Copyright (c) 2022, The Linux Foundation. All rights reserved.
 + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
 + */
 +
-+#ifndef __H_HFI_COMMAND_H__
-+#define __H_HFI_COMMAND_H__
++#ifndef _MSM_VIDC_FIRMWARE_H_
++#define _MSM_VIDC_FIRMWARE_H_
 +
-+//todo: DP: remove below headers
-+#include <linux/bits.h>
-+#include <linux/types.h>
++struct msm_vidc_core;
 +
-+#define HFI_VIDEO_ARCH_LX               0x1
++int fw_load(struct msm_vidc_core *core);
++int fw_unload(struct msm_vidc_core *core);
++int fw_suspend(struct msm_vidc_core *core);
++int fw_resume(struct msm_vidc_core *core);
++void fw_coredump(struct msm_vidc_core *core);
 +
-+struct hfi_header {
-+	u32 size;
-+	u32 session_id;
-+	u32 header_id;
-+	u32 reserved[4];
-+	u32 num_packets;
-+};
-+
-+struct hfi_packet {
-+	u32 size;
-+	u32 type;
-+	u32 flags;
-+	u32 payload_info;
-+	u32 port;
-+	u32 packet_id;
-+	u32 reserved[2];
-+};
-+
-+struct hfi_buffer {
-+	u32 type;
-+	u32 index;
-+	u64 base_address;
-+	u32 addr_offset;
-+	u32 buffer_size;
-+	u32 data_offset;
-+	u32 data_size;
-+	u64 timestamp;
-+	u32 flags;
-+	u32 reserved[5];
-+};
-+
-+enum hfi_packet_host_flags {
-+	HFI_HOST_FLAGS_NONE                = 0x00000000,
-+	HFI_HOST_FLAGS_INTR_REQUIRED       = 0x00000001,
-+	HFI_HOST_FLAGS_RESPONSE_REQUIRED   = 0x00000002,
-+	HFI_HOST_FLAGS_NON_DISCARDABLE     = 0x00000004,
-+	HFI_HOST_FLAGS_GET_PROPERTY        = 0x00000008,
-+};
-+
-+enum hfi_packet_firmware_flags {
-+	HFI_FW_FLAGS_NONE          = 0x00000000,
-+	HFI_FW_FLAGS_SUCCESS       = 0x00000001,
-+	HFI_FW_FLAGS_INFORMATION   = 0x00000002,
-+	HFI_FW_FLAGS_SESSION_ERROR = 0x00000004,
-+	HFI_FW_FLAGS_SYSTEM_ERROR  = 0x00000008,
-+};
-+
-+enum hfi_packet_payload_info {
-+	HFI_PAYLOAD_NONE      = 0x00000000,
-+	HFI_PAYLOAD_U32       = 0x00000001,
-+	HFI_PAYLOAD_S32       = 0x00000002,
-+	HFI_PAYLOAD_U64       = 0x00000003,
-+	HFI_PAYLOAD_S64       = 0x00000004,
-+	HFI_PAYLOAD_STRUCTURE = 0x00000005,
-+	HFI_PAYLOAD_BLOB      = 0x00000006,
-+	HFI_PAYLOAD_STRING    = 0x00000007,
-+	HFI_PAYLOAD_Q16       = 0x00000008,
-+	HFI_PAYLOAD_U32_ENUM  = 0x00000009,
-+	HFI_PAYLOAD_32_PACKED = 0x0000000a,
-+	HFI_PAYLOAD_U32_ARRAY = 0x0000000b,
-+	HFI_PAYLOAD_S32_ARRAY = 0x0000000c,
-+	HFI_PAYLOAD_64_PACKED = 0x0000000d,
-+};
-+
-+enum hfi_packet_port_type {
-+	HFI_PORT_NONE      = 0x00000000,
-+	HFI_PORT_BITSTREAM = 0x00000001,
-+	HFI_PORT_RAW       = 0x00000002,
-+};
-+
-+enum hfi_buffer_type {
-+	HFI_BUFFER_BITSTREAM      = 0x00000001,
-+	HFI_BUFFER_RAW            = 0x00000002,
-+	HFI_BUFFER_METADATA       = 0x00000003,
-+	HFI_BUFFER_SUBCACHE       = 0x00000004,
-+	HFI_BUFFER_PARTIAL_DATA   = 0x00000005,
-+	HFI_BUFFER_DPB            = 0x00000006,
-+	HFI_BUFFER_BIN            = 0x00000007,
-+	HFI_BUFFER_LINE           = 0x00000008,
-+	HFI_BUFFER_ARP            = 0x00000009,
-+	HFI_BUFFER_COMV           = 0x0000000A,
-+	HFI_BUFFER_NON_COMV       = 0x0000000B,
-+	HFI_BUFFER_PERSIST        = 0x0000000C,
-+	HFI_BUFFER_VPSS           = 0x0000000D,
-+};
-+
-+enum hfi_buffer_host_flags {
-+	HFI_BUF_HOST_FLAG_NONE               = 0x00000000,
-+	HFI_BUF_HOST_FLAG_RELEASE            = 0x00000001,
-+	HFI_BUF_HOST_FLAG_READONLY           = 0x00000010,
-+	HFI_BUF_HOST_FLAG_CODEC_CONFIG       = 0x00000100,
-+	HFI_BUF_HOST_FLAGS_CB_NON_SECURE       = 0x00000200,
-+	HFI_BUF_HOST_FLAGS_CB_SECURE_PIXEL     = 0x00000400,
-+	HFI_BUF_HOST_FLAGS_CB_SECURE_BITSTREAM = 0x00000800,
-+	HFI_BUF_HOST_FLAGS_CB_SECURE_NON_PIXEL = 0x00001000,
-+	HFI_BUF_HOST_FLAGS_CB_NON_SECURE_PIXEL = 0x00002000,
-+};
-+
-+enum hfi_buffer_firmware_flags {
-+	HFI_BUF_FW_FLAG_NONE            = 0x00000000,
-+	HFI_BUF_FW_FLAG_RELEASE_DONE    = 0x00000001,
-+	HFI_BUF_FW_FLAG_READONLY        = 0x00000010,
-+	HFI_BUF_FW_FLAG_CODEC_CONFIG    = 0x00000100,
-+	HFI_BUF_FW_FLAG_LAST            = 0x10000000,
-+	HFI_BUF_FW_FLAG_PSC_LAST        = 0x20000000,
-+};
-+
-+enum hfi_metapayload_header_flags {
-+	HFI_METADATA_FLAGS_NONE         = 0x00000000,
-+	HFI_METADATA_FLAGS_TOP_FIELD    = 0x00000001,
-+	HFI_METADATA_FLAGS_BOTTOM_FIELD = 0x00000002,
-+};
-+
-+struct metabuf_header {
-+	u32 count;
-+	u32 size;
-+	u32 version;
-+	u32 reserved[5];
-+};
-+
-+struct metapayload_header {
-+	u32 type;
-+	u32 size;
-+	u32 version;
-+	u32 offset;
-+	u32 flags;
-+	u32 reserved[3];
-+};
-+
-+enum hfi_property_mode_type {
-+	HFI_MODE_NONE                 = 0x00000000,
-+	HFI_MODE_PORT_SETTINGS_CHANGE = 0x00000001,
-+	HFI_MODE_PROPERTY             = 0x00000002,
-+	HFI_MODE_METADATA             = 0x00000004,
-+	HFI_MODE_DYNAMIC_METADATA     = 0x00000005,
-+};
-+
-+enum hfi_reserve_type {
-+	HFI_RESERVE_START = 0x1,
-+	HFI_RESERVE_STOP  = 0x2,
-+};
-+
-+#define HFI_CMD_BEGIN                                           0x01000000
-+#define HFI_CMD_INIT                                            0x01000001
-+#define HFI_CMD_POWER_COLLAPSE                                  0x01000002
-+#define HFI_CMD_OPEN                                            0x01000003
-+#define HFI_CMD_CLOSE                                           0x01000004
-+#define HFI_CMD_START                                           0x01000005
-+#define HFI_CMD_STOP                                            0x01000006
-+#define HFI_CMD_DRAIN                                           0x01000007
-+#define HFI_CMD_RESUME                                          0x01000008
-+#define HFI_CMD_BUFFER                                          0x01000009
-+#define HFI_CMD_DELIVERY_MODE                                   0x0100000A
-+#define HFI_CMD_SUBSCRIBE_MODE                                  0x0100000B
-+#define HFI_CMD_SETTINGS_CHANGE                                 0x0100000C
-+
-+#define HFI_SSR_TYPE_SW_ERR_FATAL       0x1
-+#define HFI_SSR_TYPE_SW_DIV_BY_ZERO     0x2
-+#define HFI_SSR_TYPE_CPU_WDOG_IRQ       0x3
-+#define HFI_SSR_TYPE_NOC_ERROR          0x4
-+#define HFI_BITMASK_HW_CLIENT_ID                        0x000000f0
-+#define HFI_BITMASK_SSR_TYPE                            0x0000000f
-+#define HFI_CMD_SSR                                             0x0100000D
-+
-+#define HFI_STABILITY_TYPE_VCODEC_HUNG        0x1
-+#define HFI_STABILITY_TYPE_ENC_BUFFER_FULL    0x2
-+#define HFI_BITMASK_STABILITY_TYPE                      0x0000000f
-+#define HFI_CMD_STABILITY                                       0x0100000E
-+
-+#define HFI_CMD_RESERVE                                         0x0100000F
-+#define HFI_CMD_FLUSH                                           0x01000010
-+#define HFI_CMD_PAUSE                                           0x01000011
-+#define HFI_CMD_END                                             0x01FFFFFF
-+
-+#endif //__H_HFI_COMMAND_H__
-diff --git a/drivers/media/platform/qcom/iris/vidc/inc/hfi_packet.h b/drivers/media/platform/qcom/iris/vidc/inc/hfi_packet.h
++#endif
+diff --git a/drivers/media/platform/qcom/iris/vidc/src/firmware.c b/drivers/media/platform/qcom/iris/vidc/src/firmware.c
 new file mode 100644
-index 0000000..dc19c85
+index 0000000..f420096
 --- /dev/null
-+++ b/drivers/media/platform/qcom/iris/vidc/inc/hfi_packet.h
-@@ -0,0 +1,52 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#ifndef _HFI_PACKET_H_
-+#define _HFI_PACKET_H_
-+
-+#include "hfi_command.h"
-+#include "hfi_property.h"
-+#include "msm_vidc_core.h"
-+#include "msm_vidc_inst.h"
-+#include "msm_vidc_internal.h"
-+
-+u32 get_hfi_port(struct msm_vidc_inst *inst,
-+		 enum msm_vidc_port_type port);
-+u32 get_hfi_port_from_buffer_type(struct msm_vidc_inst *inst,
-+				  enum msm_vidc_buffer_type buffer_type);
-+u32 hfi_buf_type_from_driver(enum msm_vidc_domain_type domain,
-+			     enum msm_vidc_buffer_type buffer_type);
-+u32 hfi_buf_type_to_driver(enum msm_vidc_domain_type domain,
-+			   enum hfi_buffer_type buffer_type,
-+			   enum hfi_packet_port_type port_type);
-+u32 get_hfi_codec(struct msm_vidc_inst *inst);
-+u32 get_hfi_colorformat(struct msm_vidc_inst *inst,
-+			enum msm_vidc_colorformat_type colorformat);
-+int get_hfi_buffer(struct msm_vidc_inst *inst,
-+		   struct msm_vidc_buffer *buffer, struct hfi_buffer *buf);
-+int hfi_create_header(u8 *packet, u32 packet_size,
-+		      u32 session_id, u32 header_id);
-+int hfi_create_packet(u8 *packet, u32 packet_size,
-+		      u32 pkt_type, u32 pkt_flags, u32 payload_type, u32 port,
-+		      u32 packet_id, void *payload, u32 payload_size);
-+int hfi_create_buffer(u8 *packet, u32 packet_size, u32 *offset,
-+		      enum msm_vidc_domain_type domain,
-+		      struct msm_vidc_buffer *data);
-+int hfi_packet_sys_init(struct msm_vidc_core *core,
-+			u8 *pkt, u32 pkt_size);
-+int hfi_packet_image_version(struct msm_vidc_core *core,
-+			     u8 *pkt, u32 pkt_size);
-+int hfi_packet_sys_pc_prep(struct msm_vidc_core *core,
-+			   u8 *pkt, u32 pkt_size);
-+int hfi_packet_sys_debug_config(struct msm_vidc_core *core, u8 *pkt,
-+				u32 pkt_size, u32 debug_config);
-+int hfi_packet_session_command(struct msm_vidc_inst *inst, u32 pkt_type,
-+			       u32 flags, u32 port, u32 session_id,
-+			       u32 payload_type, void *payload, u32 payload_size);
-+int hfi_packet_sys_intraframe_powercollapse(struct msm_vidc_core *core, u8 *pkt,
-+					    u32 pkt_size, u32 enable);
-+
-+#endif // _HFI_PACKET_H_
-diff --git a/drivers/media/platform/qcom/iris/vidc/src/hfi_packet.c b/drivers/media/platform/qcom/iris/vidc/src/hfi_packet.c
-new file mode 100644
-index 0000000..2cf777c
---- /dev/null
-+++ b/drivers/media/platform/qcom/iris/vidc/src/hfi_packet.c
-@@ -0,0 +1,657 @@
++++ b/drivers/media/platform/qcom/iris/vidc/src/firmware.c
+@@ -0,0 +1,294 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
++ * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
 + */
 +
-+#include "hfi_packet.h"
++#include <linux/firmware.h>
++#include <linux/list.h>
++#include <linux/of_address.h>
++#include <linux/devcoredump.h>
++#include <linux/firmware/qcom/qcom_scm.h>
++#include <linux/soc/qcom/mdt_loader.h>
++#include <linux/soc/qcom/smem.h>
++#include <linux/types.h>
++
++#include "firmware.h"
 +#include "msm_vidc_core.h"
 +#include "msm_vidc_debug.h"
-+#include "msm_vidc_driver.h"
-+#include "msm_vidc_inst.h"
 +#include "msm_vidc_platform.h"
 +
-+u32 get_hfi_port(struct msm_vidc_inst *inst,
-+		 enum msm_vidc_port_type port)
-+{
-+	u32 hfi_port = HFI_PORT_NONE;
++#define MAX_FIRMWARE_NAME_SIZE	128
 +
-+	if (is_decode_session(inst)) {
-+		switch (port) {
-+		case INPUT_PORT:
-+			hfi_port = HFI_PORT_BITSTREAM;
-+			break;
-+		case OUTPUT_PORT:
-+			hfi_port = HFI_PORT_RAW;
-+			break;
-+		default:
-+			i_vpr_e(inst, "%s: invalid port type %d\n",
-+				__func__, port);
-+			break;
++struct tzbsp_memprot {
++	u32 cp_start;
++	u32 cp_size;
++	u32 cp_nonpixel_start;
++	u32 cp_nonpixel_size;
++};
++
++enum tzbsp_video_state {
++	TZBSP_VIDEO_STATE_SUSPEND = 0,
++	TZBSP_VIDEO_STATE_RESUME = 1,
++	TZBSP_VIDEO_STATE_RESTORE_THRESHOLD = 2,
++};
++
++static int protect_cp_mem(struct msm_vidc_core *core)
++{
++	struct tzbsp_memprot memprot;
++	int rc = 0;
++	struct context_bank_info *cb;
++
++	memprot.cp_start = 0x0;
++	memprot.cp_size = 0x0;
++	memprot.cp_nonpixel_start = 0x0;
++	memprot.cp_nonpixel_size = 0x0;
++
++	venus_hfi_for_each_context_bank(core, cb) {
++		if (cb->region == MSM_VIDC_NON_SECURE) {
++			memprot.cp_size = cb->addr_range.start;
++
++			d_vpr_h("%s: memprot.cp_size: %#x\n",
++				__func__, memprot.cp_size);
 +		}
-+	} else if (is_encode_session(inst)) {
-+		switch (port) {
-+		case INPUT_PORT:
-+			hfi_port = HFI_PORT_RAW;
-+			break;
-+		case OUTPUT_PORT:
-+			hfi_port = HFI_PORT_BITSTREAM;
-+			break;
-+		default:
-+			i_vpr_e(inst, "%s: invalid port type %d\n",
-+				__func__, port);
-+			break;
++
++		if (cb->region == MSM_VIDC_SECURE_NONPIXEL) {
++			memprot.cp_nonpixel_start = cb->addr_range.start;
++			memprot.cp_nonpixel_size = cb->addr_range.size;
++
++			d_vpr_h("%s: cp_nonpixel_start: %#x size: %#x\n",
++				__func__, memprot.cp_nonpixel_start,
++				memprot.cp_nonpixel_size);
 +		}
-+	} else {
-+		i_vpr_e(inst, "%s: invalid domain %#x\n",
-+			__func__, inst->domain);
 +	}
 +
-+	return hfi_port;
++	rc = qcom_scm_mem_protect_video_var(memprot.cp_start,
++					    memprot.cp_size,
++					    memprot.cp_nonpixel_start,
++					    memprot.cp_nonpixel_size);
++	if (rc)
++		d_vpr_e("Failed to protect memory(%d)\n", rc);
++
++	return rc;
 +}
 +
-+u32 get_hfi_port_from_buffer_type(struct msm_vidc_inst *inst,
-+				  enum msm_vidc_buffer_type buffer_type)
-+{
-+	u32 hfi_port = HFI_PORT_NONE;
-+
-+	if (is_decode_session(inst)) {
-+		switch (buffer_type) {
-+		case MSM_VIDC_BUF_INPUT:
-+		case MSM_VIDC_BUF_BIN:
-+		case MSM_VIDC_BUF_COMV:
-+		case MSM_VIDC_BUF_NON_COMV:
-+		case MSM_VIDC_BUF_LINE:
-+			hfi_port = HFI_PORT_BITSTREAM;
-+			break;
-+		case MSM_VIDC_BUF_OUTPUT:
-+		case MSM_VIDC_BUF_DPB:
-+			hfi_port = HFI_PORT_RAW;
-+			break;
-+		case MSM_VIDC_BUF_PERSIST:
-+			hfi_port = HFI_PORT_NONE;
-+			break;
-+		default:
-+			i_vpr_e(inst, "%s: invalid buffer type %d\n",
-+				__func__, buffer_type);
-+			break;
-+		}
-+	} else if (is_encode_session(inst)) {
-+		switch (buffer_type) {
-+		case MSM_VIDC_BUF_INPUT:
-+		case MSM_VIDC_BUF_VPSS:
-+			hfi_port = HFI_PORT_RAW;
-+			break;
-+		case MSM_VIDC_BUF_OUTPUT:
-+		case MSM_VIDC_BUF_BIN:
-+		case MSM_VIDC_BUF_COMV:
-+		case MSM_VIDC_BUF_NON_COMV:
-+		case MSM_VIDC_BUF_LINE:
-+		case MSM_VIDC_BUF_DPB:
-+			hfi_port = HFI_PORT_BITSTREAM;
-+			break;
-+		case MSM_VIDC_BUF_ARP:
-+			hfi_port = HFI_PORT_NONE;
-+			break;
-+		default:
-+			i_vpr_e(inst, "%s: invalid buffer type %d\n",
-+				__func__, buffer_type);
-+			break;
-+		}
-+	} else {
-+		i_vpr_e(inst, "%s: invalid domain %#x\n",
-+			__func__, inst->domain);
-+	}
-+
-+	return hfi_port;
-+}
-+
-+u32 hfi_buf_type_from_driver(enum msm_vidc_domain_type domain,
-+			     enum msm_vidc_buffer_type buffer_type)
-+{
-+	switch (buffer_type) {
-+	case MSM_VIDC_BUF_INPUT:
-+		if (domain == MSM_VIDC_DECODER)
-+			return HFI_BUFFER_BITSTREAM;
-+		else
-+			return HFI_BUFFER_RAW;
-+	case MSM_VIDC_BUF_OUTPUT:
-+		if (domain == MSM_VIDC_DECODER)
-+			return HFI_BUFFER_RAW;
-+		else
-+			return HFI_BUFFER_BITSTREAM;
-+	case MSM_VIDC_BUF_BIN:
-+		return HFI_BUFFER_BIN;
-+	case MSM_VIDC_BUF_ARP:
-+		return HFI_BUFFER_ARP;
-+	case MSM_VIDC_BUF_COMV:
-+		return HFI_BUFFER_COMV;
-+	case MSM_VIDC_BUF_NON_COMV:
-+		return HFI_BUFFER_NON_COMV;
-+	case MSM_VIDC_BUF_LINE:
-+		return HFI_BUFFER_LINE;
-+	case MSM_VIDC_BUF_DPB:
-+		return HFI_BUFFER_DPB;
-+	case MSM_VIDC_BUF_PERSIST:
-+		return HFI_BUFFER_PERSIST;
-+	case MSM_VIDC_BUF_VPSS:
-+		return HFI_BUFFER_VPSS;
-+	default:
-+		d_vpr_e("invalid buffer type %d\n",
-+			buffer_type);
-+		return 0;
-+	}
-+}
-+
-+u32 hfi_buf_type_to_driver(enum msm_vidc_domain_type domain,
-+			   enum hfi_buffer_type buffer_type,
-+			   enum hfi_packet_port_type port_type)
-+{
-+	switch (buffer_type) {
-+	case HFI_BUFFER_BITSTREAM:
-+		if (domain == MSM_VIDC_DECODER)
-+			return MSM_VIDC_BUF_INPUT;
-+		else
-+			return MSM_VIDC_BUF_OUTPUT;
-+	case HFI_BUFFER_RAW:
-+		if (domain == MSM_VIDC_DECODER)
-+			return MSM_VIDC_BUF_OUTPUT;
-+		else
-+			return MSM_VIDC_BUF_INPUT;
-+	case HFI_BUFFER_BIN:
-+		return MSM_VIDC_BUF_BIN;
-+	case HFI_BUFFER_ARP:
-+		return MSM_VIDC_BUF_ARP;
-+	case HFI_BUFFER_COMV:
-+		return MSM_VIDC_BUF_COMV;
-+	case HFI_BUFFER_NON_COMV:
-+		return MSM_VIDC_BUF_NON_COMV;
-+	case HFI_BUFFER_LINE:
-+		return MSM_VIDC_BUF_LINE;
-+	case HFI_BUFFER_DPB:
-+		return MSM_VIDC_BUF_DPB;
-+	case HFI_BUFFER_PERSIST:
-+		return MSM_VIDC_BUF_PERSIST;
-+	case HFI_BUFFER_VPSS:
-+		return MSM_VIDC_BUF_VPSS;
-+	default:
-+		d_vpr_e("invalid buffer type %d\n",
-+			buffer_type);
-+		return 0;
-+	}
-+}
-+
-+u32 get_hfi_codec(struct msm_vidc_inst *inst)
-+{
-+	switch (inst->codec) {
-+	case MSM_VIDC_H264:
-+		if (is_encode_session(inst))
-+			return HFI_CODEC_ENCODE_AVC;
-+		else
-+			return HFI_CODEC_DECODE_AVC;
-+	case MSM_VIDC_HEVC:
-+		if (is_encode_session(inst))
-+			return HFI_CODEC_ENCODE_HEVC;
-+		else
-+			return HFI_CODEC_DECODE_HEVC;
-+	case MSM_VIDC_VP9:
-+		return HFI_CODEC_DECODE_VP9;
-+	default:
-+		i_vpr_e(inst, "invalid codec %d, domain %d\n",
-+			inst->codec, inst->domain);
-+		return 0;
-+	}
-+}
-+
-+u32 get_hfi_colorformat(struct msm_vidc_inst *inst,
-+			enum msm_vidc_colorformat_type colorformat)
-+{
-+	u32 hfi_colorformat = HFI_COLOR_FMT_NV12_UBWC;
-+
-+	switch (colorformat) {
-+	case MSM_VIDC_FMT_NV12:
-+		hfi_colorformat = HFI_COLOR_FMT_NV12;
-+		break;
-+	case MSM_VIDC_FMT_NV12C:
-+		hfi_colorformat = HFI_COLOR_FMT_NV12_UBWC;
-+		break;
-+	case MSM_VIDC_FMT_P010:
-+		hfi_colorformat = HFI_COLOR_FMT_P010;
-+		break;
-+	case MSM_VIDC_FMT_TP10C:
-+		hfi_colorformat = HFI_COLOR_FMT_TP10_UBWC;
-+		break;
-+	case MSM_VIDC_FMT_RGBA8888:
-+		hfi_colorformat = HFI_COLOR_FMT_RGBA8888;
-+		break;
-+	case MSM_VIDC_FMT_RGBA8888C:
-+		hfi_colorformat = HFI_COLOR_FMT_RGBA8888_UBWC;
-+		break;
-+	case MSM_VIDC_FMT_NV21:
-+		hfi_colorformat = HFI_COLOR_FMT_NV21;
-+		break;
-+	default:
-+		i_vpr_e(inst, "%s: invalid colorformat %d\n",
-+			__func__, colorformat);
-+		break;
-+	}
-+
-+	return hfi_colorformat;
-+}
-+
-+static u32 get_hfi_region_flag(enum msm_vidc_buffer_region region)
-+{
-+	switch (region) {
-+	case MSM_VIDC_NON_SECURE:
-+		return HFI_BUF_HOST_FLAGS_CB_NON_SECURE;
-+	case MSM_VIDC_NON_SECURE_PIXEL:
-+		return HFI_BUF_HOST_FLAGS_CB_NON_SECURE_PIXEL;
-+	case MSM_VIDC_SECURE_PIXEL:
-+		return HFI_BUF_HOST_FLAGS_CB_SECURE_PIXEL;
-+	case MSM_VIDC_SECURE_NONPIXEL:
-+		return HFI_BUF_HOST_FLAGS_CB_SECURE_NON_PIXEL;
-+	case MSM_VIDC_SECURE_BITSTREAM:
-+		return HFI_BUF_HOST_FLAGS_CB_SECURE_BITSTREAM;
-+	case MSM_VIDC_REGION_MAX:
-+	case MSM_VIDC_REGION_NONE:
-+	default:
-+		return HFI_BUF_HOST_FLAG_NONE;
-+	}
-+}
-+
-+int get_hfi_buffer(struct msm_vidc_inst *inst,
-+		   struct msm_vidc_buffer *buffer, struct hfi_buffer *buf)
-+{
-+	memset(buf, 0, sizeof(struct hfi_buffer));
-+	buf->type = hfi_buf_type_from_driver(inst->domain, buffer->type);
-+	buf->index = buffer->index;
-+	buf->base_address = buffer->device_addr;
-+	buf->addr_offset = 0;
-+	buf->buffer_size = buffer->buffer_size;
-+	/*
-+	 * for decoder input buffers, firmware (BSE HW) needs 256 aligned
-+	 * buffer size otherwise it will truncate or ignore the data after 256
-+	 * aligned size which may lead to error concealment
-+	 */
-+	if (is_decode_session(inst) && is_input_buffer(buffer->type))
-+		buf->buffer_size = ALIGN(buffer->buffer_size, 256);
-+	buf->data_offset = buffer->data_offset;
-+	buf->data_size = buffer->data_size;
-+	if (buffer->attr & MSM_VIDC_ATTR_READ_ONLY)
-+		buf->flags |= HFI_BUF_HOST_FLAG_READONLY;
-+	if (buffer->attr & MSM_VIDC_ATTR_PENDING_RELEASE)
-+		buf->flags |= HFI_BUF_HOST_FLAG_RELEASE;
-+	buf->flags |= get_hfi_region_flag(buffer->region);
-+	buf->timestamp = buffer->timestamp;
-+
-+	return 0;
-+}
-+
-+int hfi_create_header(u8 *packet, u32 packet_size, u32 session_id,
-+		      u32 header_id)
-+{
-+	struct hfi_header *hdr = (struct hfi_header *)packet;
-+
-+	if (!packet || packet_size < sizeof(struct hfi_header)) {
-+		d_vpr_e("%s: invalid params\n", __func__);
-+		return -EINVAL;
-+	}
-+
-+	memset(hdr, 0, sizeof(struct hfi_header));
-+
-+	hdr->size = sizeof(struct hfi_header);
-+	hdr->session_id = session_id;
-+	hdr->header_id = header_id;
-+	hdr->num_packets = 0;
-+	return 0;
-+}
-+
-+int hfi_create_packet(u8 *packet, u32 packet_size, u32 pkt_type,
-+		      u32 pkt_flags, u32 payload_type, u32 port,
-+		      u32 packet_id, void *payload, u32 payload_size)
-+{
-+	struct hfi_header *hdr;
-+	struct hfi_packet *pkt;
-+	u32 pkt_size;
-+
-+	if (!packet) {
-+		d_vpr_e("%s: invalid params\n", __func__);
-+		return -EINVAL;
-+	}
-+	hdr = (struct hfi_header *)packet;
-+	if (hdr->size < sizeof(struct hfi_header)) {
-+		d_vpr_e("%s: invalid hdr size %d\n", __func__, hdr->size);
-+		return -EINVAL;
-+	}
-+	pkt = (struct hfi_packet *)(packet + hdr->size);
-+	pkt_size = sizeof(struct hfi_packet) + payload_size;
-+	if (packet_size < hdr->size  + pkt_size) {
-+		d_vpr_e("%s: invalid packet_size %d, %d %d\n",
-+			__func__, packet_size, hdr->size, pkt_size);
-+		return -EINVAL;
-+	}
-+	memset(pkt, 0, pkt_size);
-+	pkt->size = pkt_size;
-+	pkt->type = pkt_type;
-+	pkt->flags = pkt_flags;
-+	pkt->payload_info = payload_type;
-+	pkt->port = port;
-+	pkt->packet_id = packet_id;
-+	if (payload_size)
-+		memcpy((u8 *)pkt + sizeof(struct hfi_packet),
-+		       payload, payload_size);
-+
-+	hdr->num_packets++;
-+	hdr->size += pkt->size;
-+	return 0;
-+}
-+
-+int hfi_packet_sys_init(struct msm_vidc_core *core,
-+			u8 *pkt, u32 pkt_size)
++static int __load_fw_to_memory(struct platform_device *pdev,
++			       const char *fw_name)
 +{
 +	int rc = 0;
-+	u32 payload = 0;
-+
-+	rc = hfi_create_header(pkt, pkt_size,
-+			       0 /*session_id*/,
-+			       core->header_id++);
-+	if (rc)
-+		goto err_sys_init;
-+
-+	/* HFI_CMD_SYSTEM_INIT */
-+	payload = HFI_VIDEO_ARCH_LX;
-+	d_vpr_h("%s: arch %d\n", __func__, payload);
-+	core->sys_init_id = core->packet_id++;
-+	rc = hfi_create_packet(pkt, pkt_size,
-+			       HFI_CMD_INIT,
-+			       (HFI_HOST_FLAGS_RESPONSE_REQUIRED |
-+			       HFI_HOST_FLAGS_INTR_REQUIRED |
-+			       HFI_HOST_FLAGS_NON_DISCARDABLE),
-+			       HFI_PAYLOAD_U32,
-+			       HFI_PORT_NONE,
-+			       core->sys_init_id,
-+			       &payload,
-+			       sizeof(u32));
-+	if (rc)
-+		goto err_sys_init;
-+
-+	/* HFI_PROP_UBWC_MAX_CHANNELS */
-+	payload = core->platform->data.ubwc_config->max_channels;
-+	d_vpr_h("%s: ubwc max channels %d\n", __func__, payload);
-+	rc = hfi_create_packet(pkt, pkt_size,
-+			       HFI_PROP_UBWC_MAX_CHANNELS,
-+			       HFI_HOST_FLAGS_NONE,
-+			       HFI_PAYLOAD_U32,
-+			       HFI_PORT_NONE,
-+			       core->packet_id++,
-+			       &payload,
-+			       sizeof(u32));
-+	if (rc)
-+		goto err_sys_init;
-+
-+	/* HFI_PROP_UBWC_MAL_LENGTH */
-+	payload = core->platform->data.ubwc_config->mal_length;
-+	d_vpr_h("%s: ubwc mal length %d\n", __func__, payload);
-+	rc = hfi_create_packet(pkt, pkt_size,
-+			       HFI_PROP_UBWC_MAL_LENGTH,
-+			       HFI_HOST_FLAGS_NONE,
-+			       HFI_PAYLOAD_U32,
-+			       HFI_PORT_NONE,
-+			       core->packet_id++,
-+			       &payload,
-+			       sizeof(u32));
-+	if (rc)
-+		goto err_sys_init;
-+
-+	/* HFI_PROP_UBWC_HBB */
-+	payload = core->platform->data.ubwc_config->highest_bank_bit;
-+	d_vpr_h("%s: ubwc hbb %d\n", __func__, payload);
-+	rc = hfi_create_packet(pkt, pkt_size,
-+			       HFI_PROP_UBWC_HBB,
-+			       HFI_HOST_FLAGS_NONE,
-+			       HFI_PAYLOAD_U32,
-+			       HFI_PORT_NONE,
-+			       core->packet_id++,
-+			       &payload,
-+			       sizeof(u32));
-+	if (rc)
-+		goto err_sys_init;
-+
-+	/* HFI_PROP_UBWC_BANK_SWZL_LEVEL1 */
-+	payload = core->platform->data.ubwc_config->bank_swzl_level;
-+	d_vpr_h("%s: ubwc swzl1 %d\n", __func__, payload);
-+	rc = hfi_create_packet(pkt, pkt_size,
-+			       HFI_PROP_UBWC_BANK_SWZL_LEVEL1,
-+			       HFI_HOST_FLAGS_NONE,
-+			       HFI_PAYLOAD_U32,
-+			       HFI_PORT_NONE,
-+			       core->packet_id++,
-+			       &payload,
-+			       sizeof(u32));
-+	if (rc)
-+		goto err_sys_init;
-+
-+	/* HFI_PROP_UBWC_BANK_SWZL_LEVEL2 */
-+	payload = core->platform->data.ubwc_config->bank_swz2_level;
-+	d_vpr_h("%s: ubwc swzl2 %d\n", __func__, payload);
-+	rc = hfi_create_packet(pkt, pkt_size,
-+			       HFI_PROP_UBWC_BANK_SWZL_LEVEL2,
-+			       HFI_HOST_FLAGS_NONE,
-+			       HFI_PAYLOAD_U32,
-+			       HFI_PORT_NONE,
-+			       core->packet_id++,
-+			       &payload,
-+			       sizeof(u32));
-+	if (rc)
-+		goto err_sys_init;
-+
-+	/* HFI_PROP_UBWC_BANK_SWZL_LEVEL3 */
-+	payload = core->platform->data.ubwc_config->bank_swz3_level;
-+	d_vpr_h("%s: ubwc swzl3 %d\n", __func__, payload);
-+	rc = hfi_create_packet(pkt, pkt_size,
-+			       HFI_PROP_UBWC_BANK_SWZL_LEVEL3,
-+			       HFI_HOST_FLAGS_NONE,
-+			       HFI_PAYLOAD_U32,
-+			       HFI_PORT_NONE,
-+			       core->packet_id++,
-+			       &payload,
-+			       sizeof(u32));
-+	if (rc)
-+		goto err_sys_init;
-+
-+	/* HFI_PROP_UBWC_BANK_SPREADING */
-+	payload = core->platform->data.ubwc_config->bank_spreading;
-+	d_vpr_h("%s: ubwc bank spreading %d\n", __func__, payload);
-+	rc = hfi_create_packet(pkt, pkt_size,
-+			       HFI_PROP_UBWC_BANK_SPREADING,
-+			       HFI_HOST_FLAGS_NONE,
-+			       HFI_PAYLOAD_U32,
-+			       HFI_PORT_NONE,
-+			       core->packet_id++,
-+			       &payload,
-+			       sizeof(u32));
-+	if (rc)
-+		goto err_sys_init;
-+
-+	d_vpr_h("System init packet created\n");
-+	return rc;
-+
-+err_sys_init:
-+	d_vpr_e("%s: create packet failed\n", __func__);
-+	return rc;
-+}
-+
-+int hfi_packet_image_version(struct msm_vidc_core *core,
-+			     u8 *pkt, u32 pkt_size)
-+{
-+	int rc = 0;
-+
-+	rc = hfi_create_header(pkt, pkt_size,
-+			       0 /*session_id*/,
-+			       core->header_id++);
-+	if (rc)
-+		goto err_img_version;
-+
-+	/* HFI_PROP_IMAGE_VERSION */
-+	rc = hfi_create_packet(pkt, pkt_size,
-+			       HFI_PROP_IMAGE_VERSION,
-+			       (HFI_HOST_FLAGS_RESPONSE_REQUIRED |
-+			       HFI_HOST_FLAGS_INTR_REQUIRED |
-+			       HFI_HOST_FLAGS_GET_PROPERTY),
-+			       HFI_PAYLOAD_NONE,
-+			       HFI_PORT_NONE,
-+			       core->packet_id++,
-+			       NULL, 0);
-+	if (rc)
-+		goto err_img_version;
-+
-+	d_vpr_h("Image version packet created\n");
-+	return rc;
-+
-+err_img_version:
-+	d_vpr_e("%s: create packet failed\n", __func__);
-+	return rc;
-+}
-+
-+int hfi_packet_sys_pc_prep(struct msm_vidc_core *core,
-+			   u8 *pkt, u32 pkt_size)
-+{
-+	int rc = 0;
-+
-+	rc = hfi_create_header(pkt, pkt_size,
-+			       0 /*session_id*/,
-+			       core->header_id++);
-+	if (rc)
-+		goto err_sys_pc;
-+
-+	/* HFI_CMD_POWER_COLLAPSE */
-+	rc = hfi_create_packet(pkt, pkt_size,
-+			       HFI_CMD_POWER_COLLAPSE,
-+			       HFI_HOST_FLAGS_NONE,
-+			       HFI_PAYLOAD_NONE,
-+			       HFI_PORT_NONE,
-+			       core->packet_id++,
-+			       NULL, 0);
-+	if (rc)
-+		goto err_sys_pc;
-+
-+	d_vpr_h("Power collapse packet created\n");
-+	return rc;
-+
-+err_sys_pc:
-+	d_vpr_e("%s: create packet failed\n", __func__);
-+	return rc;
-+}
-+
-+int hfi_packet_sys_debug_config(struct msm_vidc_core *core,
-+				u8 *pkt, u32 pkt_size, u32 debug_config)
-+{
-+	int rc = 0;
-+	u32 payload = 0;
-+
-+	rc = hfi_create_header(pkt, pkt_size,
-+			       0 /*session_id*/,
-+			       core->header_id++);
-+	if (rc)
-+		goto err_debug;
-+
-+	/* HFI_PROP_DEBUG_CONFIG */
-+	payload = 0; /*TODO:Change later*/
-+	rc = hfi_create_packet(pkt, pkt_size,
-+			       HFI_PROP_DEBUG_CONFIG,
-+			       HFI_HOST_FLAGS_NONE,
-+			       HFI_PAYLOAD_U32_ENUM,
-+			       HFI_PORT_NONE,
-+			       core->packet_id++,
-+			       &payload,
-+			       sizeof(u32));
-+	if (rc)
-+		goto err_debug;
-+
-+	/* HFI_PROP_DEBUG_LOG_LEVEL */
-+	payload = debug_config; /*TODO:Change later*/
-+	rc = hfi_create_packet(pkt, pkt_size,
-+			       HFI_PROP_DEBUG_LOG_LEVEL,
-+			       HFI_HOST_FLAGS_NONE,
-+			       HFI_PAYLOAD_U32_ENUM,
-+			       HFI_PORT_NONE,
-+			       core->packet_id++,
-+			       &payload,
-+			       sizeof(u32));
-+	if (rc)
-+		goto err_debug;
-+
-+err_debug:
-+	if (rc)
-+		d_vpr_e("%s: create packet failed\n", __func__);
-+
-+	return rc;
-+}
-+
-+int hfi_packet_session_command(struct msm_vidc_inst *inst, u32 pkt_type,
-+			       u32 flags, u32 port, u32 session_id,
-+			       u32 payload_type, void *payload, u32 payload_size)
-+{
-+	int rc = 0;
++	const struct firmware *firmware = NULL;
 +	struct msm_vidc_core *core;
++	char firmware_name[MAX_FIRMWARE_NAME_SIZE] = { 0 };
++	struct device_node *node = NULL;
++	struct resource res = { 0 };
++	phys_addr_t phys = 0;
++	size_t res_size = 0;
++	ssize_t fw_size = 0;
++	void *virt = NULL;
++	int pas_id = 0;
 +
-+	core = inst->core;
++	if (!fw_name || !(*fw_name) || !pdev) {
++		d_vpr_e("%s: Invalid inputs\n", __func__);
++		return -EINVAL;
++	}
++	if (strlen(fw_name) >= MAX_FIRMWARE_NAME_SIZE - 4) {
++		d_vpr_e("%s: Invalid fw name\n", __func__);
++		return -EINVAL;
++	}
 +
-+	rc = hfi_create_header(inst->packet, inst->packet_size,
-+			       session_id, core->header_id++);
-+	if (rc)
-+		goto err_cmd;
++	core = dev_get_drvdata(&pdev->dev);
++	if (!core) {
++		d_vpr_e("%s: core not found in device %s",
++			__func__, dev_name(&pdev->dev));
++		return -EINVAL;
++	}
++	scnprintf(firmware_name, ARRAY_SIZE(firmware_name), "%s.mbn", fw_name);
 +
-+	rc = hfi_create_packet(inst->packet,
-+			       inst->packet_size,
-+			       pkt_type,
-+			       flags,
-+			       payload_type,
-+			       port,
-+			       core->packet_id++,
-+			       payload,
-+			       payload_size);
-+	if (rc)
-+		goto err_cmd;
++	pas_id = core->platform->data.pas_id;
 +
-+	i_vpr_h(inst, "Command packet 0x%x created\n", pkt_type);
-+	return rc;
++	node = of_parse_phandle(pdev->dev.of_node, "memory-region", 0);
++	if (!node) {
++		d_vpr_e("%s: failed to read \"memory-region\"\n",
++			__func__);
++		return -EINVAL;
++	}
 +
-+err_cmd:
-+	i_vpr_e(inst, "%s: create packet failed\n", __func__);
++	rc = of_address_to_resource(node, 0, &res);
++	if (rc) {
++		d_vpr_e("%s: failed to read \"memory-region\", error %d\n",
++			__func__, rc);
++		goto exit;
++	}
++	phys = res.start;
++	res_size = (size_t)resource_size(&res);
++
++	rc = request_firmware(&firmware, firmware_name, &pdev->dev);
++	if (rc) {
++		d_vpr_e("%s: failed to request fw \"%s\", error %d\n",
++			__func__, firmware_name, rc);
++		goto exit;
++	}
++
++	fw_size = qcom_mdt_get_size(firmware);
++	if (fw_size < 0 || res_size < (size_t)fw_size) {
++		rc = -EINVAL;
++		d_vpr_e("%s: out of bound fw image fw size: %ld, res_size: %lu",
++			__func__, fw_size, res_size);
++		goto exit;
++	}
++
++	virt = memremap(phys, res_size, MEMREMAP_WC);
++	if (!virt) {
++		d_vpr_e("%s: failed to remap fw memory phys %pa[p]\n",
++			__func__, &phys);
++		return -ENOMEM;
++	}
++
++	/* prevent system suspend during fw_load */
++	pm_stay_awake(pdev->dev.parent);
++	rc = qcom_mdt_load(&pdev->dev, firmware, firmware_name,
++			   pas_id, virt, phys, res_size, NULL);
++	pm_relax(pdev->dev.parent);
++	if (rc) {
++		d_vpr_e("%s: error %d loading fw \"%s\"\n",
++			__func__, rc, firmware_name);
++		goto exit;
++	}
++	rc = qcom_scm_pas_auth_and_reset(pas_id);
++	if (rc) {
++		d_vpr_e("%s: error %d authenticating fw \"%s\"\n",
++			__func__, rc, firmware_name);
++		goto exit;
++	}
++
++	memunmap(virt);
++	release_firmware(firmware);
++	d_vpr_h("%s: firmware \"%s\" loaded successfully\n",
++		__func__, firmware_name);
++
++	return pas_id;
++
++exit:
++	if (virt)
++		memunmap(virt);
++	if (firmware)
++		release_firmware(firmware);
++
 +	return rc;
 +}
 +
-+int hfi_packet_sys_intraframe_powercollapse(struct msm_vidc_core *core,
-+					    u8 *pkt, u32 pkt_size, u32 enable)
++int fw_load(struct msm_vidc_core *core)
++{
++	int rc;
++
++	if (!core->resource->fw_cookie) {
++		core->resource->fw_cookie = __load_fw_to_memory(core->pdev,
++								core->platform->data.fwname);
++		if (core->resource->fw_cookie <= 0) {
++			d_vpr_e("%s: firmware download failed %d\n",
++				__func__, core->resource->fw_cookie);
++			core->resource->fw_cookie = 0;
++			return -ENOMEM;
++		}
++	}
++
++	rc = protect_cp_mem(core);
++	if (rc) {
++		d_vpr_e("%s: protect memory failed\n", __func__);
++		goto fail_protect_mem;
++	}
++
++	return rc;
++
++fail_protect_mem:
++	if (core->resource->fw_cookie)
++		qcom_scm_pas_shutdown(core->resource->fw_cookie);
++	core->resource->fw_cookie = 0;
++	return rc;
++}
++
++int fw_unload(struct msm_vidc_core *core)
++{
++	int ret;
++
++	if (!core->resource->fw_cookie)
++		return -EINVAL;
++
++	ret = qcom_scm_pas_shutdown(core->resource->fw_cookie);
++	if (ret)
++		d_vpr_e("Firmware unload failed rc=%d\n", ret);
++
++	core->resource->fw_cookie = 0;
++
++	return ret;
++}
++
++int fw_suspend(struct msm_vidc_core *core)
++{
++	return qcom_scm_set_remote_state(TZBSP_VIDEO_STATE_SUSPEND, 0);
++}
++
++int fw_resume(struct msm_vidc_core *core)
++{
++	return qcom_scm_set_remote_state(TZBSP_VIDEO_STATE_RESUME, 0);
++}
++
++void fw_coredump(struct msm_vidc_core *core)
 +{
 +	int rc = 0;
-+	u32 payload = 0;
++	struct platform_device *pdev;
++	struct device_node *node = NULL;
++	struct resource res = {0};
++	phys_addr_t mem_phys = 0;
++	size_t res_size = 0;
++	void *mem_va = NULL;
++	char *data = NULL, *dump = NULL;
++	u64 total_size;
 +
-+	rc = hfi_create_header(pkt, pkt_size,
-+			       0 /*session_id*/,
-+			       core->header_id++);
-+	if (rc)
-+		goto err;
++	pdev = core->pdev;
 +
-+	/* HFI_PROP_INTRA_FRAME_POWER_COLLAPSE */
-+	payload = enable;
-+	d_vpr_h("%s: intra frame power collapse %d\n", __func__, payload);
-+	rc = hfi_create_packet(pkt, pkt_size,
-+			       HFI_PROP_INTRA_FRAME_POWER_COLLAPSE,
-+			       HFI_HOST_FLAGS_NONE,
-+			       HFI_PAYLOAD_U32,
-+			       HFI_PORT_NONE,
-+			       core->packet_id++,
-+			       &payload,
-+			       sizeof(u32));
-+	if (rc)
-+		goto err;
++	node = of_parse_phandle(pdev->dev.of_node, "memory-region", 0);
++	if (!node) {
++		d_vpr_e("%s: DT error getting \"memory-region\" property\n",
++			__func__);
++		return;
++	}
 +
-+	d_vpr_h("IFPC packet created\n");
-+	return rc;
++	rc = of_address_to_resource(node, 0, &res);
++	if (rc) {
++		d_vpr_e("%s: error %d while getting \"memory-region\" resource\n",
++			__func__, rc);
++		return;
++	}
 +
-+err:
-+	d_vpr_e("%s: create packet failed\n", __func__);
-+	return rc;
++	mem_phys = res.start;
++	res_size = (size_t)resource_size(&res);
++
++	mem_va = memremap(mem_phys, res_size, MEMREMAP_WC);
++	if (!mem_va) {
++		d_vpr_e("%s: unable to remap firmware memory\n", __func__);
++		return;
++	}
++	total_size = res_size + TOTAL_QSIZE + ALIGNED_SFR_SIZE;
++
++	data = vmalloc(total_size);
++	if (!data) {
++		memunmap(mem_va);
++		return;
++	}
++	dump = data;
++
++	/* copy firmware dump */
++	memcpy(data, mem_va, res_size);
++	memunmap(mem_va);
++
++	/* copy queues(cmd, msg, dbg) dump(along with headers) */
++	data += res_size;
++	memcpy(data, (char *)core->iface_q_table.align_virtual_addr, TOTAL_QSIZE);
++
++	/* copy sfr dump */
++	data += TOTAL_QSIZE;
++	memcpy(data, (char *)core->sfr.align_virtual_addr, ALIGNED_SFR_SIZE);
++
++	dev_coredumpv(&pdev->dev, dump, total_size, GFP_KERNEL);
 +}
 -- 
 2.7.4
