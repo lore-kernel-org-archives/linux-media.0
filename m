@@ -2,131 +2,141 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57695C001DC
-	for <linux-media@archiver.kernel.org>; Sun, 30 Jul 2023 15:34:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1705C41513
+	for <linux-media@archiver.kernel.org>; Sun, 30 Jul 2023 18:57:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjG3Pep (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 30 Jul 2023 11:34:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54414 "EHLO
+        id S230016AbjG3S54 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 30 Jul 2023 14:57:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbjG3Peo (ORCPT
+        with ESMTP id S229622AbjG3S5z (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 30 Jul 2023 11:34:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E7F1729
-        for <linux-media@vger.kernel.org>; Sun, 30 Jul 2023 08:33:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1690731234;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UwGbEbUvdNxTFWaVM2fPNOI2OVAY9HbN99EWxlqWR54=;
-        b=HpG+Bof1wKFDjdyxaYiQADpxZ6FpYPdAEy78ymrov3cpiW/CvM2m4dAiLWqzo7pUVSi+Sr
-        7mvmwmj0VvkOL4c5MZ316WKQnqaHH/miFAn50qGYZvfLh5GEWTpCxnsr2GXRe/qwmoM2ol
-        OFxgIZvrsRoZWyzxKgsFrgn9hnL15jE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-138-_1crPeA9Mjmjhd6BxsHj6Q-1; Sun, 30 Jul 2023 11:33:48 -0400
-X-MC-Unique: _1crPeA9Mjmjhd6BxsHj6Q-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4A582800159;
-        Sun, 30 Jul 2023 15:33:48 +0000 (UTC)
-Received: from shalem.redhat.com (unknown [10.39.192.27])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id ABDDBC57964;
-        Sun, 30 Jul 2023 15:33:46 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>, Kate Hsuan <hpa@redhat.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        Yury Luneff <yury.lunev@gmail.com>,
-        Nable <nable.maininbox@googlemail.com>,
-        andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [PATCH v2 2/2] media: atomisp: Fix me->stages error checking in sh_css_sp_init_pipeline()
-Date:   Sun, 30 Jul 2023 17:33:43 +0200
-Message-ID: <20230730153343.22033-2-hdegoede@redhat.com>
-In-Reply-To: <20230730153343.22033-1-hdegoede@redhat.com>
-References: <20230730153343.22033-1-hdegoede@redhat.com>
+        Sun, 30 Jul 2023 14:57:55 -0400
+Received: from mail-ot1-f79.google.com (mail-ot1-f79.google.com [209.85.210.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E802519B2
+        for <linux-media@vger.kernel.org>; Sun, 30 Jul 2023 11:57:33 -0700 (PDT)
+Received: by mail-ot1-f79.google.com with SMTP id 46e09a7af769-6bc4dfb93cbso7453785a34.1
+        for <linux-media@vger.kernel.org>; Sun, 30 Jul 2023 11:57:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690743418; x=1691348218;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sn0zJw/bbZ65gP8AMpGCkSg/cxSTCQ8T0dWiqBVVyII=;
+        b=gI770mBP07FkWhkOt4Cu1DnubeKSGZV3hgAQRqtG2IC+MflBsBTjiE1pWNoi0SCy6T
+         4BgBuDFG9btPxb5d5S90jYy+QoyIZQMb7D6zrXaBz+CxgiJy8Ebg6nlX9trllbVK+COT
+         tChoBAVIcIMp51zFX//F3fuHwqvwg7l8vqot6gOgXiQplbo+5B2oeQIqpdu0SDVM1BS3
+         waKhlWzL0G2Ft12UC2UU3MWCSiS4OquU3L6WjM80cmmE2eJN+V9mwtE4QrmaEtQE6kxZ
+         hS1D7QW4C1nhyqPd3tmeJohq1V8nlHjVVqb5NMJ5i0IqNK87Ag3uAMviwCRZ7xYqVeLQ
+         RHVA==
+X-Gm-Message-State: ABy/qLZtfFZNvEL0/cGpsI+dgBVo0vqTg84+nI6rQQ5pGzH/PYnfQwpe
+        5Uy/AgAtfJ+8KJ1N0Gi7QxUIWii2CWdfytqj3av0k2xjANgT
+X-Google-Smtp-Source: APBJJlEDostvNQVls9I/PxnBBcxX+8y1S1gB8lPVgbx8ofgkKXWGpk6BIVtPr/hy07fX1RUcXFWFJfohya5BD63aZXPZwLMqVIim
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Received: by 2002:a9d:66cb:0:b0:6b8:8894:e4ac with SMTP id
+ t11-20020a9d66cb000000b006b88894e4acmr9576754otm.3.1690743418244; Sun, 30 Jul
+ 2023 11:56:58 -0700 (PDT)
+Date:   Sun, 30 Jul 2023 11:56:58 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d9d4560601b8e0d7@google.com>
+Subject: [syzbot] [staging?] WARNING in netdev_open
+From:   syzbot <syzbot+b08315e8cf5a78eed03c@syzkaller.appspotmail.com>
+To:     Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The current error-checking of me->stages in sh_css_sp_init_pipeline()
-has some issues / weirdness:
+Hello,
 
-1. It is checked at the top of the function, but only using the atomisp
-   custom assert() macro which e.g. smatch does not recognize
+syzbot found the following issue on:
 
-2. It is first dereferenced in "first_binary = me->stages->binary", but
-   outside of the assert it is checked much later, triggering the following
-   smatch warning:
+HEAD commit:    5f0bc0b042fc mm: suppress mm fault logging if fatal signal..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=116ca2f6a80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c7b1aac4a6659b6d
+dashboard link: https://syzkaller.appspot.com/bug?extid=b08315e8cf5a78eed03c
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
 
-drivers/staging/media/atomisp/pci/sh_css_sp.c:1255 sh_css_sp_init_pipeline()
-warn: variable dereferenced before check 'me->stages' (see line 1224)
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Drop the custom assert() calls (note 'me' is never NULL) and instead add
-a regular check for me->stages not being set.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/0394a19e5a08/disk-5f0bc0b0.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/86e5b158564d/vmlinux-5f0bc0b0.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/612fe43ee34a/bzImage-5f0bc0b0.xz
 
-Reported-by: Hans Verkuil <hverkuil@xs4all.nl>
-Closes: https://lore.kernel.org/linux-media/7c8fc5b4-280e-844e-cdf5-b6ec2a1616aa@xs4all.nl/
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b08315e8cf5a78eed03c@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(lock->magic != lock)
+WARNING: CPU: 1 PID: 4694 at kernel/locking/mutex.c:582 __mutex_lock_common kernel/locking/mutex.c:582 [inline]
+WARNING: CPU: 1 PID: 4694 at kernel/locking/mutex.c:582 __mutex_lock+0x912/0x1340 kernel/locking/mutex.c:747
+Modules linked in:
+CPU: 1 PID: 4694 Comm: dhcpcd Not tainted 6.5.0-rc3-syzkaller-00025-g5f0bc0b042fc #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/12/2023
+RIP: 0010:__mutex_lock_common kernel/locking/mutex.c:582 [inline]
+RIP: 0010:__mutex_lock+0x912/0x1340 kernel/locking/mutex.c:747
+Code: 08 84 d2 0f 85 d1 09 00 00 8b 05 35 2d 77 04 85 c0 0f 85 50 f8 ff ff 48 c7 c6 20 66 6c 8a 48 c7 c7 e0 63 6c 8a e8 8e b2 18 f7 <0f> 0b e9 36 f8 ff ff 48 8b 85 e0 fe ff ff 48 8d b8 30 09 00 00 48
+RSP: 0018:ffffc900034cf730 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888020685940 RSI: ffffffff814d3c06 RDI: 0000000000000001
+RBP: ffffc900034cf880 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000000
+R13: dffffc0000000000 R14: ffff88807adecd88 R15: ffffffff8b7133a0
+FS:  00007fc8da519740(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000557c7eb10131 CR3: 000000002951e000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ netdev_open+0x32/0x820 drivers/staging/rtl8712/os_intfs.c:391
+ __dev_open+0x2c4/0x4d0 net/core/dev.c:1442
+ __dev_change_flags+0x56f/0x730 net/core/dev.c:8530
+ dev_change_flags+0x9a/0x170 net/core/dev.c:8602
+ devinet_ioctl+0x13ef/0x1f00 net/ipv4/devinet.c:1150
+ inet_ioctl+0x3a6/0x3f0 net/ipv4/af_inet.c:980
+ sock_do_ioctl+0x115/0x290 net/socket.c:1190
+ sock_ioctl+0x205/0x6e0 net/socket.c:1307
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x18f/0x210 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fc8da5e7d49
+Code: 5c c3 48 8d 44 24 08 48 89 54 24 e0 48 89 44 24 c0 48 8d 44 24 d0 48 89 44 24 c8 b8 10 00 00 00 c7 44 24 b8 10 00 00 00 0f 05 <41> 89 c0 3d 00 f0 ff ff 76 10 48 8b 15 ae 60 0d 00 f7 d8 41 83 c8
+RSP: 002b:00007fffdec67188 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007fc8da5196c0 RCX: 00007fc8da5e7d49
+RDX: 00007fffdec77378 RSI: 0000000000008914 RDI: 0000000000000018
+RBP: 00007fffdec87538 R08: 00007fffdec77338 R09: 00007fffdec772e8
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fffdec77378 R14: 0000000000000028 R15: 0000000000008914
+ </TASK>
+
+
 ---
- drivers/staging/media/atomisp/pci/sh_css_sp.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_sp.c b/drivers/staging/media/atomisp/pci/sh_css_sp.c
-index 4ef1c9e61ea8..eba70d4800a1 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_sp.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css_sp.c
-@@ -51,6 +51,7 @@
- #include "ia_css_event.h"
- #include "mmu_device.h"
- #include "ia_css_spctrl.h"
-+#include "atomisp_internal.h"
- 
- #ifndef offsetof
- #define offsetof(T, x) ((unsigned int)&(((T *)0)->x))
-@@ -1210,14 +1211,15 @@ sh_css_sp_init_pipeline(struct ia_css_pipeline *me,
- 	struct ia_css_binary	     *first_binary = NULL;
- 	struct ia_css_pipe *pipe = NULL;
- 	unsigned int num;
--
- 	enum ia_css_pipe_id pipe_id = id;
- 	unsigned int thread_id;
- 	u8 if_config_index, tmp_if_config_index;
- 
--	assert(me);
--
--	assert(me->stages);
-+	if (!me->stages) {
-+		dev_err(atomisp_dev, "%s called on a pipeline without stages\n",
-+			__func__);
-+		return; /* FIXME should be able to return an error */
-+	}
- 
- 	first_binary = me->stages->binary;
- 
-@@ -1250,8 +1252,8 @@ sh_css_sp_init_pipeline(struct ia_css_pipeline *me,
- 	} /* if (first_binary != NULL) */
- 
- 	/* Signal the host immediately after start for SP_ISYS_COPY only */
--	if ((me->num_stages == 1) && me->stages &&
--	    (me->stages->sp_func == IA_CSS_PIPELINE_ISYS_COPY))
-+	if (me->num_stages == 1 &&
-+	    me->stages->sp_func == IA_CSS_PIPELINE_ISYS_COPY)
- 		sh_css_sp_group.config.no_isp_sync = true;
- 
- 	/* Init stage data */
--- 
-2.41.0
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
