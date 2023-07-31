@@ -2,44 +2,44 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95A73C001DF
-	for <linux-media@archiver.kernel.org>; Mon, 31 Jul 2023 08:31:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA5F1C04A94
+	for <linux-media@archiver.kernel.org>; Mon, 31 Jul 2023 08:31:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232107AbjGaIbV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 31 Jul 2023 04:31:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46082 "EHLO
+        id S232117AbjGaIbf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 31 Jul 2023 04:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbjGaIax (ORCPT
+        with ESMTP id S232052AbjGaIa7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 31 Jul 2023 04:30:53 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19BB10CA;
-        Mon, 31 Jul 2023 01:30:02 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 36V8TtxR048224;
-        Mon, 31 Jul 2023 03:29:55 -0500
+        Mon, 31 Jul 2023 04:30:59 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3752310F4;
+        Mon, 31 Jul 2023 01:30:04 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 36V8TbxK128697;
+        Mon, 31 Jul 2023 03:29:37 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1690792195;
-        bh=o9JmDGlCqf7iYc+hFKgavJ+cIgy8OWygrvm/7RwaCNo=;
+        s=ti-com-17Q1; t=1690792177;
+        bh=VxN1eO0EV5FCfzTt4Xq/2iHHu69kw7ABwjJVLqhU40w=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=PR3Igdmh8CfimocdKLA5wIR9GgApNgQh8DfR2lekUNA+zkK7HduYofXUuSmQAy/hW
-         dYYNfcfIWLqoBfw2ID9K6uMQOYuA3BcuYa6ukBwrW8Njq4/0sWdiFYyBV0inTbErzV
-         OCoJpnrJhhRioojjIWJo9BuJtUo3QahjXXA0/l+o=
-Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 36V8TtX2087236
+        b=Qk1R8jLTN9Z0dDAP/S9TqC3gzkc9tMB5xPxhk8CEufDzPbqxN065iZwiNATsrJyq7
+         5c77fFvh3tFrdTYfjoXAwTz4HvZwdCOSg71UKDaIHGKvjezSzG8SIzj4f5WoH4Uctd
+         VH8AbWkhS0IkLlxiOFZZ3rEs7/TdBEHvR0L+9kQw=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 36V8TauB106672
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 31 Jul 2023 03:29:55 -0500
-Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 31 Jul 2023 03:29:36 -0500
+Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 31
- Jul 2023 03:29:54 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ Jul 2023 03:29:36 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 31 Jul 2023 03:29:54 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 36V8TsZg084162;
-        Mon, 31 Jul 2023 03:29:54 -0500
+ Frontend Transport; Mon, 31 Jul 2023 03:29:36 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 36V8TZYi016471;
+        Mon, 31 Jul 2023 03:29:36 -0500
 From:   Jai Luthra <j-luthra@ti.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -58,28 +58,28 @@ CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Vaishnav Achath <vaishnav.a@ti.com>,
         Vignesh Raghavendra <vigneshr@ti.com>, <nm@ti.com>,
         <devarsht@ti.com>, <j-luthra@ti.com>
-Subject: [PATCH v8 15/16] media: dt-bindings: Add TI J721E CSI2RX
-Date:   Mon, 31 Jul 2023 13:59:33 +0530
-Message-ID: <20230731-upstream_csi-v8-15-fb7d3661c2c9@ti.com>
+Subject: [PATCH v8 03/16] media: dt-bindings: cadence-csi2rx: Add TI compatible string
+Date:   Mon, 31 Jul 2023 13:59:21 +0530
+Message-ID: <20230731-upstream_csi-v8-3-fb7d3661c2c9@ti.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230731-upstream_csi-v8-0-fb7d3661c2c9@ti.com>
 References: <20230731-upstream_csi-v8-0-fb7d3661c2c9@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3761; i=j-luthra@ti.com;
- h=from:subject:message-id; bh=P09JGVDeZt3QJTcEtMST4pms90RpLSolhngTDU+XnaI=;
- b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBkx2xw/W/v9+VPlHfBxF3Drv6p1QEVN5/bKrRJ/
- 7MZl7OAUk2JAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZMdscAAKCRBD3pH5JJpx
- RV0nD/wMiNawsYKemxtmXt0Ft7T6NMLlLRmTU0QI0wEJzwG6YhWbsNN9LOHlIkyAhYU8m8PcB3S
- aHBlQgb0ckWEYjVQoVq1DoPQ2Yz6IS+e0lRxsoNnuivPAf6QiM+RMwxhnBwXNUy2j0Rx+Wc4kO/
- 9KA4JvNOzEjIci90VxoPKoKIL9dttKhLchcnF/xAp2cQCUt9qa1NMOlYGLxN6BU4iLjOLwY6knl
- NI+6q+dQS9JMq3sD8j5IsxNu48HmYPfpnifBWHjO+RftIL9ilHTx7jg6jZyYqqI72oknYaqIHAI
- j0niviLZEgMveHlEmQk01CIz9JsevJ3wwK7P/iViGNTMBsC6pRYe4oRUxL24h5BY3YtKCXzeyrF
- F6wRAqaP7CplSy2SDh5SbFCKYxkp87dQ02OatCbJqrwiq1plNZ8tL8j7mAcia6F775KsiX7qmRM
- jbvqOSmiWr8a4TqDM5XDc7R6p9zq+sVKkap3eTq6Dh1G84sA0wrAc5ewV6eUw+blC4h5xR0tkG6
- 7wtmwP3eyTTHGimsAIuDnOPdeRrLRxI+joz09P9eD+VG0daPGHTgrKKwuMRRGolm9PARmQMYqGo
- 3PccY8PVla7N3ip0R1jntLJ/yVCsggg4pnA/hAq1bY3HmodQgsMeAW+acDzEDT2O1dIBxmwRS7a
- RBw1yejXwLkjgzQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=747; i=j-luthra@ti.com;
+ h=from:subject:message-id; bh=F2ilYjTbzu9dX3pV5QoTtxm/nD9f4ZdliFaZ8sBuNag=;
+ b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBkx2xlQ9tJFOhA36teU6odWfRkRMu46aQtrwf/b
+ VP/D0xAm2OJAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZMdsZQAKCRBD3pH5JJpx
+ RSuZD/9k0s4G/RncGnncZVaFiIYPd/1titdsezD5eWanjqqpCXObBOehjaxVNfPlH/MXXV+/NQA
+ AiR4M2iTVsTA/XlvMilVl4Abc8kptZ+otasu8SEioxM8Kv4SqOTdQAj+GnCU+AUv/WwyKuCA6pp
+ aEJM9d+yhpl3lBrRMpeXLoPEF94zKdnwmzWg4euHJei0Vb5r3pzYzz6g8VnY7/tUkH5GxONSTRk
+ IC7BJbXyxKYduo++6REn1lH0DUA+VUrQ9bVTyHDCUVjx/iTXPO25i7mMpBjB/Fzov1xWA+a+Zaf
+ FZEr4fmHJitOO5w16c3+Lso8VFVQa9YpSVY0U+uqUTEi0wZJSBppMZlBhunn7e2cCV4mVdSmDFD
+ Y1/9T0GwKZ9n06Zw6900rkczgRUfUhlj13FWS51bgRWG63a1vmAO8ivtjSOxkZrUM9TOO6GKBpl
+ P599cjZpTt4Qv8wilDnpvaHsm4d9KmgJwoOIrsgtBTzl8jr/iwl1oV88ARdB2Yguo5YrS/3P/FQ
+ h3QMNmYGmebBTaaGVs9U/kYcJ3CPvwxmmSahg5ABSkcA+5zKH3tbd5CVNSkszBzN/LpoLUXgXNe
+ 5KgGUbCnOAUlJekMPGRHL+5fNiQ618Gr/xYm4BIYGUEAwwDhNbMa/JMLeQk+d0qGFTD46uyTKJI
+ 1b1hUyFdtFjofSg==
 X-Developer-Key: i=j-luthra@ti.com; a=openpgp; fpr=4DE0D818E5D575E8D45AAFC543DE91F9249A7145
 Content-Transfer-Encoding: 8bit
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
@@ -87,135 +87,28 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Pratyush Yadav <p.yadav@ti.com>
+Add a SoC-specific compatible string for TI's integration of this IP in
+J7 and AM62 line of SoCs.
 
-TI's J721E uses the Cadence CSI2RX and DPHY peripherals to facilitate
-capture over a CSI-2 bus. The TI CSI2RX platform driver glues all the
-parts together.
-
-Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 Signed-off-by: Jai Luthra <j-luthra@ti.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
 ---
-v7->v8:
-- Drop "Device Tree Bindings" from title
-- Rename "Wrapper" to "Shim" in title as that is the name referred in
-  the TRM and other places
-- Update maintainer to myself
-- Drop items from compatible as only a single element is present
-- Rename compatible to "ti,j721e-csi2rx-shim" to distinguish from the
-  SoC-specific CSI2RX bridge compatible
+New in v8
 
- .../bindings/media/ti,j721e-csi2rx-shim.yaml       | 100 +++++++++++++++++++++
- 1 file changed, 100 insertions(+)
+ Documentation/devicetree/bindings/media/cdns,csi2rx.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/media/ti,j721e-csi2rx-shim.yaml b/Documentation/devicetree/bindings/media/ti,j721e-csi2rx-shim.yaml
-new file mode 100644
-index 000000000000..f762fdc05e4d
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/ti,j721e-csi2rx-shim.yaml
-@@ -0,0 +1,100 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/ti,j721e-csi2rx-shim.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: TI J721E CSI2RX Shim
-+
-+description: |
-+  The TI J721E CSI2RX Shim is a wrapper around Cadence CSI2RX bridge that
-+  enables sending captured frames to memory over PSI-L DMA. In the J721E
-+  Technical Reference Manual (SPRUIL1B) it is referred to as "SHIM" under the
-+  CSI_RX_IF section.
-+
-+maintainers:
-+  - Jai Luthra <j-luthra@ti.com>
-+
-+properties:
-+  compatible:
-+    const: ti,j721e-csi2rx-shim
-+
-+  dmas:
-+    maxItems: 1
-+
-+  dma-names:
-+    items:
-+      - const: rx0
-+
-+  reg:
-+    maxItems: 1
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  ranges: true
-+
-+  "#address-cells": true
-+
-+  "#size-cells": true
-+
-+patternProperties:
-+  "^csi-bridge@":
-+    type: object
-+    description: CSI2 bridge node.
-+    $ref: cdns,csi2rx.yaml#
-+
-+required:
-+  - compatible
-+  - reg
-+  - dmas
-+  - dma-names
-+  - power-domains
-+  - ranges
-+  - "#address-cells"
-+  - "#size-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/soc/ti,sci_pm_domain.h>
-+
-+    ti_csi2rx0: ticsi2rx@4500000 {
-+        compatible = "ti,j721e-csi2rx-shim";
-+        dmas = <&main_udmap 0x4940>;
-+        dma-names = "rx0";
-+        reg = <0x4500000 0x1000>;
-+        power-domains = <&k3_pds 26 TI_SCI_PD_EXCLUSIVE>;
-+        #address-cells = <1>;
-+        #size-cells = <1>;
-+        ranges;
-+
-+        cdns_csi2rx: csi-bridge@4504000 {
-+            compatible = "ti,j721e-csi2rx", "cdns,csi2rx";
-+            reg = <0x4504000 0x1000>;
-+            clocks = <&k3_clks 26 2>, <&k3_clks 26 0>, <&k3_clks 26 2>,
-+              <&k3_clks 26 2>, <&k3_clks 26 3>, <&k3_clks 26 3>;
-+            clock-names = "sys_clk", "p_clk", "pixel_if0_clk",
-+              "pixel_if1_clk", "pixel_if2_clk", "pixel_if3_clk";
-+            phys = <&dphy0>;
-+            phy-names = "dphy";
-+
-+            ports {
-+                #address-cells = <1>;
-+                #size-cells = <0>;
-+
-+                csi2_0: port@0 {
-+
-+                    reg = <0>;
-+
-+                    csi2rx0_in_sensor: endpoint {
-+                        remote-endpoint = <&csi2_cam0>;
-+                        bus-type = <4>; /* CSI2 DPHY. */
-+                        clock-lanes = <0>;
-+                        data-lanes = <1 2>;
-+                    };
-+                };
-+            };
-+        };
-+    };
+diff --git a/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml b/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
+index 30a335b10762..2008a47c0580 100644
+--- a/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
++++ b/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
+@@ -18,6 +18,7 @@ properties:
+     items:
+       - enum:
+           - starfive,jh7110-csi2rx
++          - ti,j721e-csi2rx
+       - const: cdns,csi2rx
+ 
+   reg:
 
 -- 
 2.41.0
