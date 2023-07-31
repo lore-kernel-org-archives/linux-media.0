@@ -2,44 +2,44 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC344C04E69
-	for <linux-media@archiver.kernel.org>; Mon, 31 Jul 2023 08:30:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB304C001DF
+	for <linux-media@archiver.kernel.org>; Mon, 31 Jul 2023 08:30:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231418AbjGaIaA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 31 Jul 2023 04:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
+        id S231455AbjGaIaC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 31 Jul 2023 04:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230178AbjGaI3y (ORCPT
+        with ESMTP id S230223AbjGaI3z (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 31 Jul 2023 04:29:54 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1EDC123;
+        Mon, 31 Jul 2023 04:29:55 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115F0127;
         Mon, 31 Jul 2023 01:29:53 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 36V8TiJV054937;
-        Mon, 31 Jul 2023 03:29:44 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 36V8Tetc038392;
+        Mon, 31 Jul 2023 03:29:40 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1690792184;
-        bh=E9UkcS+2VXbNP1qkq12sT+ScQLrPo9DPV31sM7WES4k=;
+        s=ti-com-17Q1; t=1690792180;
+        bh=XCLhxGIh0JMo06o/BSCav3HQdiHa7RMxdoLTIchqhEM=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=B33Hlm9iLPjIJwb3g26K0a9wPzpP/V87bw5IrUWs2ypo7cecEyzvM2vu3Z0R9Oe8P
-         zPPPKOFdka/iXlVaS2t00Kf/3CTGXi6tiQh87P74VmQn3/kGwquyfAVSt3mN7clVNj
-         VpW+W6mhfTUsa4TydOHxCMvLs9RoTIYmhihortyU=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 36V8Timm106712
+        b=fVCyuHRUuCHk3JvHH59qrMM46e3S6FPn0KPSIeii3/qWyn711v/1+2Ih3FNGJ4Zu9
+         wbGJBTpHkqwj2E92VLDvXpvaNrgPs6LC1H9/HFRJVOQAmcK7iGcW6M7hZ1njg6xNqV
+         JYCusBFLmGLOKjKQBlBctFvrycRhGrMVmn9Ip9jY=
+Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 36V8TeP2087116
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 31 Jul 2023 03:29:44 -0500
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 31 Jul 2023 03:29:40 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 31
- Jul 2023 03:29:44 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ Jul 2023 03:29:39 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 31 Jul 2023 03:29:44 -0500
+ Frontend Transport; Mon, 31 Jul 2023 03:29:39 -0500
 Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 36V8ThOw041923;
-        Mon, 31 Jul 2023 03:29:44 -0500
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 36V8Tcll041877;
+        Mon, 31 Jul 2023 03:29:39 -0500
 From:   Jai Luthra <j-luthra@ti.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -58,28 +58,28 @@ CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Vaishnav Achath <vaishnav.a@ti.com>,
         Vignesh Raghavendra <vigneshr@ti.com>, <nm@ti.com>,
         <devarsht@ti.com>, <j-luthra@ti.com>
-Subject: [PATCH v8 08/16] media: cadence: csi2rx: Configure DPHY using link freq
-Date:   Mon, 31 Jul 2023 13:59:26 +0530
-Message-ID: <20230731-upstream_csi-v8-8-fb7d3661c2c9@ti.com>
+Subject: [PATCH v8 05/16] media: cadence: csi2rx: Unregister v4l2 async notifier
+Date:   Mon, 31 Jul 2023 13:59:23 +0530
+Message-ID: <20230731-upstream_csi-v8-5-fb7d3661c2c9@ti.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230731-upstream_csi-v8-0-fb7d3661c2c9@ti.com>
 References: <20230731-upstream_csi-v8-0-fb7d3661c2c9@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1977; i=j-luthra@ti.com;
- h=from:subject:message-id; bh=lP78AAgdw8HiC/cJJfwyiOGaiGILwVLLk4FS6A1HMsg=;
- b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBkx2xqP3MEVfG3j+vK71esq1Pw3SZABy+HUN0Ny
- M1nBEB7X0SJAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZMdsagAKCRBD3pH5JJpx
- RQUBD/9TQBQOcP/dYirvERLs4rZYIVZEt8J/BV1Z53D2ldbo3kjsrzqWKuTLkKGtrk7ZW81bOIm
- F16Jlbf0wBnVeDCRCYos1r5UDFqFCslsouyhFJueNgZY0MC5GAVSojwIjayDu9e4Y+4RySKChTz
- Krcgcke597uA62cuUwKb3aIYlKs33NwFCO9cxNFbPzL0vZKDNnOAYwwlnIImCJOwLOBNktgI7e3
- MWlqRD6m9UQUBhkHxg/ioyQF5QV833WFoH2qbbTkeD7wu2vSP53Tdtbem6V0h4i1kbug64HFXNS
- zPo6CRI9FcA5PWNf98lGMX1QT3xkov9VqrrO+KDgJcyG8OmM0plKExiqY+zt1wc9TWDe2IYJjvM
- sxB2f+fpasDnpD3c9yBaNDa6ButwPhGQl+lE5bTg9myo0Am2KhNvbPoKedYrnDDWwF4V9E57LKK
- 1eE+XurVzM/GDoIh9FVziNUZ74dkWMSuehBrxnlD6MBCvTBAjzGHtN5IAJCTeyX2BQitbmwsCyD
- +Vhoecf+PU/nltqPHTS8run8jrZvjvRPEn6ceo5DzWosldwucLOvbu7j3j1orPeAj9O5fk7YvyA
- C58eYBGd3KqMk506ZrMY1h5HUf1jtUsg0iFpYgN2NAGL/raV1ZI6/VrSKv/XsW18P30M4z1yFh3
- 4MgdIGtqXz6GBUg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1975; i=j-luthra@ti.com;
+ h=from:subject:message-id; bh=+YOzaFzKohVYP5/t2gn60sO0ibX33jElyGn3hPBpAhI=;
+ b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBkx2xn/UaZtrwZ4+2f3CzegNcUSOS6sBYFG007b
+ a77xSczFEaJAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZMdsZwAKCRBD3pH5JJpx
+ Ra5jD/0TqyaKA+b83CHJ1HPeha7SDdH5GpICOomliq/F3IURrIFM2MwsaWLIO4URUuHEpxcp7oS
+ p5+gxHzGCwsdBgy6hH+UV50X2hnLOWnJAlP0CBUZKl5VDohglN9F64A7Mk6QvGHn/Wn7hh2GbO6
+ 0XcwvenndaxhVlw8LC9EAbcHcvQWCW6ZSFql7MZjDoXtJwdYFQNCB1eYEp1sFm+Fvj5+Fiql76a
+ hLSHXAoOHYxAolvUvZLjOttNUd3kzfql7T/NOOduFDVJtFar/R6qxh2CnOJARSQa2XyCC6PRlA9
+ vLc0/q40lfT23sx31fe7vrnJ7JJ4qb+cGTod7HAveMkLpmQewfVh3+QbeIsaBl4E5FiM0Kr5VHa
+ 461m9x8TmyKiQYW6g9KIBlQdaPt+i4DLg4IkcVLYoeCHV83eflDfu81OypknogiY8beA7lEekym
+ BQ/2kmq98mlPbJsJD2Jso0frx/7DVU6SFEn9aAzVzc0wR7ChikNQYUGoHhKxZbrbW+efKCRWQuJ
+ maqZ2I4XIpOObVwlRuljqdQ/bWrK0FdlARmfSoyBuErjLwp5sCUIZYqaaafXwi2FCRadUVhX+p1
+ LPUW2eDpxpOPpn98xng91g1ACG8ONDOsSkHCV3H8JQM/bhavyLBbg6o50bmuyAwAprkH6sclTus
+ 8H5z0E++kLY/bvw==
 X-Developer-Key: i=j-luthra@ti.com; a=openpgp; fpr=4DE0D818E5D575E8D45AAFC543DE91F9249A7145
 Content-Transfer-Encoding: 8bit
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
@@ -89,62 +89,57 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Pratyush Yadav <p.yadav@ti.com>
 
-Some platforms like TI's J721E can have the CSI2RX paired with an
-external DPHY. Use the generic PHY framework to configure the DPHY with
-the correct link frequency.
+The notifier is added to the global notifier list when registered. When
+the module is removed, the struct csi2rx_priv in which the notifier is
+embedded, is destroyed. As a result the notifier list has a reference to
+a notifier that no longer exists. This causes invalid memory accesses
+when the list is iterated over. Similar for when the probe fails.
+Unregister and clean up the notifier to avoid this.
+
+Fixes: 1fc3b37f34f6 ("media: v4l: cadence: Add Cadence MIPI-CSI2 RX driver")
 
 Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
-Co-authored-by: Jai Luthra <j-luthra@ti.com>
 Signed-off-by: Jai Luthra <j-luthra@ti.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
-v7->v8
-- Drop original patch in-lieu of already merged
-  https://lore.kernel.org/linux-media/20230523085626.3295-5-jack.zhu@starfivetech.com/
-- Add a new patch to configure DPHY using link_freq control from the
-  source
+v7->v8: No change
 
- drivers/media/platform/cadence/cdns-csi2rx.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ drivers/media/platform/cadence/cdns-csi2rx.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
-index 4f9654366485..2a80c66fb547 100644
+index b087583d636f..fd6f2e04e77f 100644
 --- a/drivers/media/platform/cadence/cdns-csi2rx.c
 +++ b/drivers/media/platform/cadence/cdns-csi2rx.c
-@@ -149,8 +149,33 @@ static void csi2rx_reset(struct csi2rx_priv *csi2rx)
- static int csi2rx_configure_ext_dphy(struct csi2rx_priv *csi2rx)
- {
- 	union phy_configure_opts opts = { };
-+	struct phy_configure_opts_mipi_dphy *cfg = &opts.mipi_dphy;
-+	struct v4l2_subdev_format sd_fmt = {
-+		.which	= V4L2_SUBDEV_FORMAT_ACTIVE,
-+		.pad	= CSI2RX_PAD_SINK,
-+		.stream	= 0,
-+	};
-+	const struct csi2rx_fmt *fmt;
-+	s64 link_freq;
- 	int ret;
+@@ -479,8 +479,10 @@ static int csi2rx_parse_dt(struct csi2rx_priv *csi2rx)
+ 	asd = v4l2_async_nf_add_fwnode_remote(&csi2rx->notifier, fwh,
+ 					      struct v4l2_async_connection);
+ 	of_node_put(ep);
+-	if (IS_ERR(asd))
++	if (IS_ERR(asd)) {
++		v4l2_async_nf_cleanup(&csi2rx->notifier);
+ 		return PTR_ERR(asd);
++	}
  
-+	ret = v4l2_subdev_call_state_active(&csi2rx->subdev, pad, get_fmt,
-+					    &sd_fmt);
-+	if (ret < 0)
-+		return ret;
-+
-+	fmt = csi2rx_get_fmt_by_code(sd_fmt.format.code);
-+
-+	link_freq = v4l2_get_link_freq(csi2rx->source_subdev->ctrl_handler,
-+				       fmt->bpp, 2 * csi2rx->num_lanes);
-+	if (link_freq < 0)
-+		return link_freq;
-+
-+	ret = phy_mipi_dphy_get_default_config_for_hsclk(link_freq,
-+							 csi2rx->num_lanes, cfg);
-+	if (ret)
-+		return ret;
-+
- 	ret = phy_power_on(csi2rx->dphy);
- 	if (ret)
- 		return ret;
+ 	csi2rx->notifier.ops = &csi2rx_notifier_ops;
+ 
+@@ -543,6 +545,7 @@ static int csi2rx_probe(struct platform_device *pdev)
+ 	return 0;
+ 
+ err_cleanup:
++	v4l2_async_nf_unregister(&csi2rx->notifier);
+ 	v4l2_async_nf_cleanup(&csi2rx->notifier);
+ err_free_priv:
+ 	kfree(csi2rx);
+@@ -553,6 +556,8 @@ static void csi2rx_remove(struct platform_device *pdev)
+ {
+ 	struct csi2rx_priv *csi2rx = platform_get_drvdata(pdev);
+ 
++	v4l2_async_nf_unregister(&csi2rx->notifier);
++	v4l2_async_nf_cleanup(&csi2rx->notifier);
+ 	v4l2_async_unregister_subdev(&csi2rx->subdev);
+ 	kfree(csi2rx);
+ }
 
 -- 
 2.41.0
