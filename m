@@ -2,114 +2,61 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC4FDC04A94
-	for <linux-media@archiver.kernel.org>; Tue,  1 Aug 2023 11:46:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EF2FC0015E
+	for <linux-media@archiver.kernel.org>; Tue,  1 Aug 2023 11:52:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234339AbjHALqJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Aug 2023 07:46:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41920 "EHLO
+        id S233350AbjHALwD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Aug 2023 07:52:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234398AbjHALqG (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Aug 2023 07:46:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F2F170D;
-        Tue,  1 Aug 2023 04:45:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 484DB61564;
-        Tue,  1 Aug 2023 11:45:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EFC4C433C8;
-        Tue,  1 Aug 2023 11:45:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690890357;
-        bh=bwYNSqKRC0R+674VMqvdQly3Gz4NVnq8bIwpgip/fMk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WqmyPFmmeSmegi+a0SHRqS5oZwD76X7tmgjW+ljezELQ+8Wb26NIznCKG5haaLEAF
-         keLzY9Dl8Y+2PRS4UlZ8ig2z8HcVeGXW/vRnTDqvxhcbdPkmGGF9yy4p9pzqPN7wS+
-         FFXXOlRZtzQYDHcY+rsp0zBC3hN0unDTsBHEmpQee2vUeuUg7aVq68vZkK0bEws6RD
-         Mz6rV7Sbxc9Jp9L/kGOLPldmyPAaPk4+2R6tiGhkyuhOxYSmC7FYox9b4nAEKP+5e/
-         oDa0SURRY28NGjaPdq7IsswE5tgKPdMuv/aHJdiypo99SdjAWWGEC/EzBu1rz+eck0
-         GdGIMGvXRAUuQ==
-Date:   Tue, 1 Aug 2023 13:45:54 +0200
-From:   Maxime Ripard <mripard@kernel.org>
-To:     Keith Zhao <keith.zhao@starfivetech.com>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        christian.koenig@amd.com, Bjorn Andersson <andersson@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Shawn Guo <shawnguo@kernel.org>, Jagan Teki <jagan@edgeble.ai>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        Jack Zhu <jack.zhu@starfivetech.com>,
-        Shengyang Chen <shengyang.chen@starfivetech.com>,
-        Changhuang Liang <changhuang.liang@starfivetech.com>
-Subject: Re: [PATCH v1 v1 4/7] drm/fourcc: Add drm/vs tiled modifiers
-Message-ID: <clxexkf4wjx5sxlxz3znbxehgxob2vw56v4pn63vuu6kfffyxo@bek3dvzsz5id>
-References: <20230801101030.2040-1-keith.zhao@starfivetech.com>
- <20230801101030.2040-5-keith.zhao@starfivetech.com>
+        with ESMTP id S230087AbjHALwC (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Aug 2023 07:52:02 -0400
+Received: from mail.cothiafon.pl (mail.cothiafon.pl [217.61.106.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AAACC7
+        for <linux-media@vger.kernel.org>; Tue,  1 Aug 2023 04:52:01 -0700 (PDT)
+Received: by mail.cothiafon.pl (Postfix, from userid 1002)
+        id 3164D83A70; Mon, 31 Jul 2023 10:36:17 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=cothiafon.pl; s=mail;
+        t=1690792622; bh=dwoca0X6C9VXklO/zRgFQCPapTk5LFz4tKaENdvy6Po=;
+        h=Date:From:To:Subject:From;
+        b=ghl9D2LeLPAXkcbUKUHG1xbrxoWb5nnli/cqBT8IFna+AjzLSVjaWYzLnhQyTQxts
+         z3+fdCXIP6c15koySBeL+UuybrkVhxtUnCvAF0pTnMKo7FSG7EegCd9vb3tmT0ozXD
+         +q6RMEdiRmZPKmoZZVdiLgJv5ZHBabq0qxtEdVGZdfH+MChqAQZn28y3O2+ud1m9QC
+         YkxDmIBNM73zrs8DqZ9o5bPeajCJe6BCAWhCAEjw/t0DHm6uC7D6vGmNgBXMWYZ0TV
+         0Jdz3e2Jsjp7yLQ4macBaAvfZclj56EtmLVnRXXtM4hf4i2iXu3ItJ0Stthm4EQ8Ed
+         CTB62Es5C4onA==
+Received: by mail.cothiafon.pl for <linux-media@vger.kernel.org>; Mon, 31 Jul 2023 08:35:48 GMT
+Message-ID: <20230731095940-0.1.28.on4t.0.y74hcrlzp8@cothiafon.pl>
+Date:   Mon, 31 Jul 2023 08:35:48 GMT
+From:   =?UTF-8?Q? "Rados=C5=82aw_Grabowski" ?= 
+        <radoslaw.grabowski@cothiafon.pl>
+To:     <linux-media@vger.kernel.org>
+Subject: W sprawie samochodu
+X-Mailer: mail.cothiafon.pl
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yslrfwhuh7l3ursl"
-Content-Disposition: inline
-In-Reply-To: <20230801101030.2040-5-keith.zhao@starfivetech.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Dzie=C5=84 dobry,
 
---yslrfwhuh7l3ursl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
+, je=C5=9Bli chodzi o system monitoringu GPS.
 
-On Tue, Aug 01, 2023 at 06:10:27PM +0800, Keith Zhao wrote:
-> These are mainly used internally in vs-drm,
-> I'm not sure if the new modifiers can be used with the existing ones.
-> If there is a problem, I will improve it further.
->=20
-> Signed-off-by: Keith Zhao <keith.zhao@starfivetech.com>
-> ---
->  include/uapi/drm/drm_fourcc.h | 27 +++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
->=20
-> diff --git a/include/uapi/drm/drm_fourcc.h b/include/uapi/drm/drm_fourcc.h
-> index 8db7fd3f7..0b884cf50 100644
-> --- a/include/uapi/drm/drm_fourcc.h
-> +++ b/include/uapi/drm/drm_fourcc.h
-> @@ -419,6 +419,7 @@ extern "C" {
->  #define DRM_FORMAT_MOD_VENDOR_ARM     0x08
->  #define DRM_FORMAT_MOD_VENDOR_ALLWINNER 0x09
->  #define DRM_FORMAT_MOD_VENDOR_AMLOGIC 0x0a
-> +#define DRM_FORMAT_MOD_VENDOR_VS      0x0b
+Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
+e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
+a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
 
-Please don't use any acronym there.
+Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
+dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
+szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
+mne znaczenie.
 
-Maxime
+Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
+b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
 
---yslrfwhuh7l3ursl
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZMjwcgAKCRDj7w1vZxhR
-xXHaAP9IH1zIQb62ZyQMhxixSEF8riImLMdkmCdKEGrFpkEFWQD+PXDOQ/6x3wG1
-4wF4AjgAQYTN8OUvFxlHHLqmlcYYDA8=
-=rlbJ
------END PGP SIGNATURE-----
-
---yslrfwhuh7l3ursl--
+Pozdrawiam
+Rados=C5=82aw Grabowski
