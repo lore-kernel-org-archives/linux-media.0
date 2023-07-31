@@ -2,87 +2,76 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BD2DC001DC
-	for <linux-media@archiver.kernel.org>; Mon, 31 Jul 2023 12:03:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DAC95C001E0
+	for <linux-media@archiver.kernel.org>; Mon, 31 Jul 2023 12:07:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbjGaMDL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 31 Jul 2023 08:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57590 "EHLO
+        id S231674AbjGaMH6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 31 Jul 2023 08:07:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232257AbjGaMC6 (ORCPT
+        with ESMTP id S232131AbjGaMHz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 31 Jul 2023 08:02:58 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ABD8E7A
-        for <linux-media@vger.kernel.org>; Mon, 31 Jul 2023 05:02:52 -0700 (PDT)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RDxcF1HPwzNmfp;
-        Mon, 31 Jul 2023 19:59:25 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by kwepemi500008.china.huawei.com
- (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 31 Jul
- 2023 20:02:49 +0800
-From:   Ruan Jinjie <ruanjinjie@huawei.com>
-To:     <prabhakar.csengg@gmail.com>, <mchehab@kernel.org>,
-        <laurent.pinchart@ideasonboard.com>, <linux-media@vger.kernel.org>
-CC:     <ruanjinjie@huawei.com>
-Subject: [PATCH -next] media: platform: ti: fix the return value handle for platform_get_irq()
-Date:   Mon, 31 Jul 2023 20:02:12 +0800
-Message-ID: <20230731120212.2017996-1-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 31 Jul 2023 08:07:55 -0400
+Received: from mgamail.intel.com (unknown [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16CDA10DF;
+        Mon, 31 Jul 2023 05:07:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690805275; x=1722341275;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=gTwSW5Pi476YcxNfncRebsXRrqRzP0HUL96D8nDTvMw=;
+  b=SPNSoy4XGadNl2dhVquzBqmy75S1LFJAXeJKrLfcs06TP1+iuimqP2+f
+   HST5rF1M6eznCRVuReAZ04wmUleFSBKSHSQkbgzbQDE/o9y8R5Ne5Z1bH
+   zZQyVg60XRe98gofIbnoQjTygqwKBjqWMXI8A2BaUM6JeqCMLaM89E+/m
+   s2COu3BNxV/xK9JtVIWImViVv9beJJYn0zA16BkViZloZoqsle/VoUQIp
+   EcfLJzsqYFPMX7FCIVPSWUzj6/6Bhe7RmsA9tFPpff/v9Ppo8UKplLwAA
+   GaOV7UhczFOAsPOeZgr6bKRtPChR0wPtLbP3tRoeURsj63pXHgr2rYZi/
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="455375338"
+X-IronPort-AV: E=Sophos;i="6.01,244,1684825200"; 
+   d="scan'208";a="455375338"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2023 05:07:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="798223224"
+X-IronPort-AV: E=Sophos;i="6.01,244,1684825200"; 
+   d="scan'208";a="798223224"
+Received: from jkrzyszt-mobl2.ger.corp.intel.com ([10.213.1.128])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2023 05:07:51 -0700
+From:   Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+To:     Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        kernel test robot <lkp@intel.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, igt-dev@lists.freedesktop.org,
+        intel-xe@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] kunit: Allow kunit test modules to use test filtering
+Date:   Mon, 31 Jul 2023 14:07:49 +0200
+Message-ID: <1971193.8hb0ThOEGa@jkrzyszt-mobl2.ger.corp.intel.com>
+Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173,
+ 80-298 Gdansk - KRS 101882 - NIP 957-07-52-316
+In-Reply-To: <202307311645.CdN0xKiF-lkp@intel.com>
+References: <20230731054552.2145292-8-janusz.krzysztofik@linux.intel.com>
+ <202307311645.CdN0xKiF-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.90.53.73]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemi500008.china.huawei.com (7.221.188.139)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There is no possible for platform_get_irq() to return 0,
-and the return value of platform_get_irq() is more sensible
-to show the error reason.
+On Monday, 31 July 2023 10:39:03 CEST kernel test robot wrote:
+> >> ERROR: modpost: "glob_match" [lib/kunit/kunit.ko] undefined!
 
-Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
----
- drivers/media/platform/ti/am437x/am437x-vpfe.c | 4 +---
- drivers/media/platform/ti/omap3isp/isp.c       | 4 +---
- 2 files changed, 2 insertions(+), 6 deletions(-)
+Caused by CONFIG_GLOB possibly not selected when building kunit as a module  
+(it was selected via another, unrelated setting in my test .config).
 
-diff --git a/drivers/media/platform/ti/am437x/am437x-vpfe.c b/drivers/media/platform/ti/am437x/am437x-vpfe.c
-index 81a63a3865cf..a85b97107de7 100644
---- a/drivers/media/platform/ti/am437x/am437x-vpfe.c
-+++ b/drivers/media/platform/ti/am437x/am437x-vpfe.c
-@@ -2420,10 +2420,8 @@ static int vpfe_probe(struct platform_device *pdev)
- 	}
- 
- 	ret = platform_get_irq(pdev, 0);
--	if (ret <= 0) {
--		ret = -ENODEV;
-+	if (ret < 0)
- 		goto probe_out_cleanup;
--	}
- 	vpfe->irq = ret;
- 
- 	ret = devm_request_irq(vpfe->pdev, vpfe->irq, vpfe_isr, 0,
-diff --git a/drivers/media/platform/ti/omap3isp/isp.c b/drivers/media/platform/ti/omap3isp/isp.c
-index f3aaa9e76492..226db75221cd 100644
---- a/drivers/media/platform/ti/omap3isp/isp.c
-+++ b/drivers/media/platform/ti/omap3isp/isp.c
-@@ -2398,10 +2398,8 @@ static int isp_probe(struct platform_device *pdev)
- 
- 	/* Interrupt */
- 	ret = platform_get_irq(pdev, 0);
--	if (ret <= 0) {
--		ret = -ENODEV;
-+	if (ret < 0)
- 		goto error_iommu;
--	}
- 	isp->irq_num = ret;
- 
- 	if (devm_request_irq(isp->dev, isp->irq_num, isp_isr, IRQF_SHARED,
--- 
-2.34.1
+Please expect v3 with that fixed.
+
+Thanks,
+Janusz
+
 
