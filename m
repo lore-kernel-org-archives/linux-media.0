@@ -2,44 +2,44 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EFB3C001DE
-	for <linux-media@archiver.kernel.org>; Mon, 31 Jul 2023 08:30:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80D34C41513
+	for <linux-media@archiver.kernel.org>; Mon, 31 Jul 2023 08:30:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231484AbjGaIaE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 31 Jul 2023 04:30:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44894 "EHLO
+        id S231714AbjGaIaK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 31 Jul 2023 04:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbjGaI34 (ORCPT
+        with ESMTP id S231156AbjGaI36 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 31 Jul 2023 04:29:56 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07BDF18C;
-        Mon, 31 Jul 2023 01:29:54 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 36V8TkaN054942;
-        Mon, 31 Jul 2023 03:29:46 -0500
+        Mon, 31 Jul 2023 04:29:58 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5A91A6;
+        Mon, 31 Jul 2023 01:29:55 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 36V8Td7l128703;
+        Mon, 31 Jul 2023 03:29:39 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1690792186;
-        bh=dKmMEpqsVJQCvV6Lp8DGVqTPdKyQoRAETp9L6a97G68=;
+        s=ti-com-17Q1; t=1690792179;
+        bh=psuyjoOHFt8mMG0vCLisbP0KuLODJVZVf6ULOORRK/g=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=LkR2METcX3SYvaFJHj8dsj6i6n/p241ccTOgSV4G3UZngKlpPCJ+b0IUUN1wiGOZA
-         +d5k2Wutngp0+0r8lhM3c36FGEa9XjP0quvBhP/i4in0Si35Sz4edq8qC9f1qj+k+o
-         g1KPLt/Fuxiog9GCPGhajb6Vft8UYZn08JPlB85Y=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 36V8TkSW106720
+        b=vvgleiXNJ22AsdOaKf2voB6bv+K5RKNRFJb7d2QIqkkog02qEdqDUlmLwJahJ+BEj
+         uHKkz+qbNzM5iNLxR6oGJR1qHOwslARNhz3aNfxsBnrzHP67GqXa7YGlnStYw4Ecly
+         wSiviDbECf1R9KtMeRQ6ZAr233xHXGi8ikg0TXHc=
+Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 36V8Tdkq011931
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 31 Jul 2023 03:29:46 -0500
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 31 Jul 2023 03:29:39 -0500
+Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 31
- Jul 2023 03:29:45 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ Jul 2023 03:29:38 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 31 Jul 2023 03:29:45 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 36V8TjWa041939;
-        Mon, 31 Jul 2023 03:29:45 -0500
+ Frontend Transport; Mon, 31 Jul 2023 03:29:38 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 36V8TbgI041857;
+        Mon, 31 Jul 2023 03:29:37 -0500
 From:   Jai Luthra <j-luthra@ti.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -58,28 +58,28 @@ CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Vaishnav Achath <vaishnav.a@ti.com>,
         Vignesh Raghavendra <vigneshr@ti.com>, <nm@ti.com>,
         <devarsht@ti.com>, <j-luthra@ti.com>
-Subject: [PATCH v8 09/16] media: cadence: csi2rx: Soft reset the streams before starting capture
-Date:   Mon, 31 Jul 2023 13:59:27 +0530
-Message-ID: <20230731-upstream_csi-v8-9-fb7d3661c2c9@ti.com>
+Subject: [PATCH v8 04/16] media: cadence: Add support for TI SoCs
+Date:   Mon, 31 Jul 2023 13:59:22 +0530
+Message-ID: <20230731-upstream_csi-v8-4-fb7d3661c2c9@ti.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230731-upstream_csi-v8-0-fb7d3661c2c9@ti.com>
 References: <20230731-upstream_csi-v8-0-fb7d3661c2c9@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1797; i=j-luthra@ti.com;
- h=from:subject:message-id; bh=Jr1HqoB3E2drdTZLT7y6JgE0f/Pnt2n1lScYOS5wBxs=;
- b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBkx2xqE2Q0tImNDFK01hdkztRVJ/xOXdVJIENUI
- a7LnemX9XaJAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZMdsagAKCRBD3pH5JJpx
- RUwYD/48JrxUM6k4+45cOnMsAhXH1ynSFA8gSIxlntBL0735llyo+ivOH7GmwsictV3p0CdvK90
- xLqmVsVBghwBpZwMwP3+nwKtvaHnk0l0haeKOeR7wXIg/Vi04LQ19oAL8cqI305kVPzfxi0FUMB
- RsCB6b8FlpIqjpw2ymokGnRn7R+UuEjSpLbDNZ5diEK/bnR8GTO6jCPl/GXhVky7AFztmTAHsM6
- PIhmdWuOe2cXorty6N4xtPXsgZqq3uZrJ3cWxzq5ZM4Q5lmLlXi+MarImmUxlphj40g0Z2W53Wz
- 6Vo2QLT7XV6+Ut2I+bgzMbZcuJBeFz3dRC+C9kSbhnuma7XbukhjXhLli/gO9MXL1daxbuil9sp
- 9IV3c5MsexufIqfHljIp5hdnFS4KPWM4qBGVMsWPoPpDZ2rKE5fit17QC+9i6+r6mIR4iEQgUPj
- lqBRougxxOyuLtSbdPPlsdg6znH6PKzBnH6BMqSEWXCbVQKXYzVUZRe1LcfOD7m6Ke7IEJNTQhR
- 4e3kkweTBMifA73LSMWYrdHlPXFZ48KZ+Z66ThG7Vlm2BZbQUwrKmiMP/mpYdLhlo1P12GIebdV
- tMemelH2tZM+vg7Q5RrKeD/v1bSoeUk3jzLHZ0XR87PEnzB6HmVVGGdxY44VrEdtUCpcBL02mcd
- +xu74RUmtuSoaig==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=936; i=j-luthra@ti.com;
+ h=from:subject:message-id; bh=wjdUIhPTPNUiUl5Zr2G6+NzHU9p5C+CuVkNHv5MyBA4=;
+ b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBkx2xmR7LVBmz+F0KVBq81OezqTDhkw6tNDZ2FQ
+ VApmgRbY3mJAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZMdsZgAKCRBD3pH5JJpx
+ RQKyD/sEM8vWP5l9lPuD8CjQq1lseRX/srB/8lFCIhOdLI71vJ9JxNcX37DhacH6ZdudoevlUlA
+ WNVvZGbrsVOXNQh/at7M8bvPpXFA0ljuHNVEXNHCK6rVN/0tIaSyQE11MiiBtlSEsbd3psUgWP8
+ yU9bDYoH8Btt4Me/DPY5KI0g3BV0nP+PzbFlg4/FyJ57fb/u+VrMDrkTQ9ySuyVOoFMSvrP90Kj
+ n1k1kMcLpUjJATIAmA+6e/OaO7iMg4jMcl/Q5iDiDdL13L7fqd824/2ZTfMMXd8UBwEbXsm2v4v
+ BBFX1D25oWh7dhg41l/AOgS91WeITuWwtRSH4X6Jb21oJXWxBluLj5AK5++ak2EoUscXbEyFWTl
+ JE2WLzE23tUhVTK0JWeSjuSu8tPjndC02zdXFzv6MImBUQh0Nrxre1RVVnuOPa3hj3XLF7Xts8E
+ wBRFl7w2jqtJff9BvpRVYzvo5wrAyU56AcsCYbu22XJ/N9FtfZ28El59OiK+Lf+VmzdyS6JA/fR
+ zD7d9uKK1LhutJm3qFEADkm3D1BKQVWow7As7KBOQpjGciECmggLfi5Yjo5FY1YI32mO8OOKVUC
+ 1k07nAlVeNdly2aJ8IhgK/boT4TX110msN09Ne5rqUNm0lOUMArVIx0KKXrbWaYYdL8tW5rRu8Q
+ /9MhtQ9N1zKC9sA==
 X-Developer-Key: i=j-luthra@ti.com; a=openpgp; fpr=4DE0D818E5D575E8D45AAFC543DE91F9249A7145
 Content-Transfer-Encoding: 8bit
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
@@ -87,57 +87,31 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Pratyush Yadav <p.yadav@ti.com>
+Multiple TI SoCs (J721E, AM62) use this CSI2RX receiver, integrated with
+an external DPHY and a pixel-grabber IP that unwraps the pixel data and
+send it to memory via DMA.
 
-This resets the stream state machines and FIFOs, giving them a clean
-slate. On J721E if the streams are not reset before starting the
-capture, the captured frame gets wrapped around vertically on every run
-after the first.
+Add a separate compatible for the TI-specific version of this IP.
 
-Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 Signed-off-by: Jai Luthra <j-luthra@ti.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
-v7->v8: No change
+New in v8
 
- drivers/media/platform/cadence/cdns-csi2rx.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/media/platform/cadence/cdns-csi2rx.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
-index 2a80c66fb547..30cdc260b46a 100644
+index 0d879d71d818..b087583d636f 100644
 --- a/drivers/media/platform/cadence/cdns-csi2rx.c
 +++ b/drivers/media/platform/cadence/cdns-csi2rx.c
-@@ -40,6 +40,7 @@
- #define CSI2RX_STREAM_BASE(n)		(((n) + 1) * 0x100)
+@@ -559,6 +559,7 @@ static void csi2rx_remove(struct platform_device *pdev)
  
- #define CSI2RX_STREAM_CTRL_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x000)
-+#define CSI2RX_STREAM_CTRL_SOFT_RST			BIT(4)
- #define CSI2RX_STREAM_CTRL_START			BIT(0)
- 
- #define CSI2RX_STREAM_DATA_CFG_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x008)
-@@ -138,12 +139,22 @@ struct csi2rx_priv *v4l2_subdev_to_csi2rx(struct v4l2_subdev *subdev)
- 
- static void csi2rx_reset(struct csi2rx_priv *csi2rx)
- {
-+	unsigned int i;
-+
- 	writel(CSI2RX_SOFT_RESET_PROTOCOL | CSI2RX_SOFT_RESET_FRONT,
- 	       csi2rx->base + CSI2RX_SOFT_RESET_REG);
- 
- 	udelay(10);
- 
- 	writel(0, csi2rx->base + CSI2RX_SOFT_RESET_REG);
-+
-+	/* Reset individual streams. */
-+	for (i = 0; i < csi2rx->max_streams; i++) {
-+		writel(CSI2RX_STREAM_CTRL_SOFT_RST,
-+		       csi2rx->base + CSI2RX_STREAM_CTRL_REG(i));
-+		usleep_range(10, 20);
-+		writel(0, csi2rx->base + CSI2RX_STREAM_CTRL_REG(i));
-+	}
- }
- 
- static int csi2rx_configure_ext_dphy(struct csi2rx_priv *csi2rx)
+ static const struct of_device_id csi2rx_of_table[] = {
+ 	{ .compatible = "starfive,jh7110-csi2rx" },
++	{ .compatible = "ti,j721e-csi2rx" },
+ 	{ .compatible = "cdns,csi2rx" },
+ 	{ },
+ };
 
 -- 
 2.41.0
