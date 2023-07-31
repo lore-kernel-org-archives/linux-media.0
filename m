@@ -2,150 +2,156 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA2A3C001DC
-	for <linux-media@archiver.kernel.org>; Mon, 31 Jul 2023 08:19:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CCA5C04A94
+	for <linux-media@archiver.kernel.org>; Mon, 31 Jul 2023 08:29:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbjGaITh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 31 Jul 2023 04:19:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39306 "EHLO
+        id S230026AbjGaI3v (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 31 Jul 2023 04:29:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbjGaITC (ORCPT
+        with ESMTP id S229469AbjGaI3u (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 31 Jul 2023 04:19:02 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 676D71B1
-        for <linux-media@vger.kernel.org>; Mon, 31 Jul 2023 01:17:23 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 70CB62E4;
-        Mon, 31 Jul 2023 10:16:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1690791379;
-        bh=ATWeDfMM6NipHRtD8jZ0lB2SDYzoHFkP/Mv0B30QAI0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Bsvvhz5/Y2KO4o8dP7tnOKFvEXr7N07lztucMS6P377nnwWfEqzFkSrtvFrrLWARC
-         tIRiiV4tI+djX833VuLF+rmpXRqKV+keAa64/CQEJ9ivVry5SqlS6nf785GmRQR24a
-         vWODHJZkK9lqD9OXDsQCjfJyKor+wB/08q7J8Ja4=
-Date:   Mon, 31 Jul 2023 11:17:27 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
-Subject: Re: [PATCH v2 4/7] media: i2c: imx219: Fix colorspace info
-Message-ID: <20230731081727.GD5094@pendragon.ideasonboard.com>
-References: <20230710155203.92366-1-jacopo.mondi@ideasonboard.com>
- <20230710155203.92366-5-jacopo.mondi@ideasonboard.com>
- <20230729171300.GC5094@pendragon.ideasonboard.com>
- <f3hrtvxi5z4zyuislnks5zidnhcunqyewrubuvexwstghxh6om@vjw6ofij3dxv>
+        Mon, 31 Jul 2023 04:29:50 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDED8F3;
+        Mon, 31 Jul 2023 01:29:48 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 36V8TX6d054896;
+        Mon, 31 Jul 2023 03:29:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1690792173;
+        bh=7rJDLj3T8cLCJQRX0eYplE/1TiRzoHqS/jXQuxRZZZ0=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=W5DOHI8QC21ckSbmbrQr7600kMz9WleIB510bR3amjTN9bC2DXoTivNYxqDjxF6RB
+         9KXfGlZySXy5iYswDpHSI1xsRAxGclJ0qzHJuZ+C1JbLaAdnaM93rzdHGvTpQ8VIB9
+         GJYgeGijUF+ADA4bzxAunz+6w4MURMIY9ysfQPmo=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 36V8TXeW011880
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 31 Jul 2023 03:29:33 -0500
+Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 31
+ Jul 2023 03:29:33 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 31 Jul 2023 03:29:33 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 36V8TWhr031919;
+        Mon, 31 Jul 2023 03:29:33 -0500
+From:   Jai Luthra <j-luthra@ti.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Benoit Parrot <bparrot@ti.com>,
+        Vaishnav Achath <vaishnav.a@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>, <nm@ti.com>,
+        <devarsht@ti.com>, <j-luthra@ti.com>
+Subject: [PATCH v8 01/16] media: subdev: Export get_format helper for link validation
+Date:   Mon, 31 Jul 2023 13:59:19 +0530
+Message-ID: <20230731-upstream_csi-v8-1-fb7d3661c2c9@ti.com>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230731-upstream_csi-v8-0-fb7d3661c2c9@ti.com>
+References: <20230731-upstream_csi-v8-0-fb7d3661c2c9@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <f3hrtvxi5z4zyuislnks5zidnhcunqyewrubuvexwstghxh6om@vjw6ofij3dxv>
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2383; i=j-luthra@ti.com;
+ h=from:subject:message-id; bh=hchN4nU1yjfLjYGzib3vC33TVA07NDQjiP16zuMScbI=;
+ b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBkx2xjGpyUeOHWpsroGlw9rL7Idjbhfh51R7P8D
+ aptBltinqGJAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZMdsYwAKCRBD3pH5JJpx
+ RQ/3EADD+iB9qv7H4CMzmtXtjHPb769+6dU4E34lrEfOXjnkPewgGcmXuSZxK0kS4N+Js9YpI0K
+ oOs7ncrYn9PGE8yH59o0HzQv/vh2oHI1h7tlSTbVYNJ47+Naanrlw74QsUhFZtNPBAaVtQJEDAx
+ TUgtdmMe69JSYxlRkiC1VX8Fcj8vWQy1hD9D3j94iOwbb1cdmHYgdHeSFL8yhauMgbqxOm8mP7t
+ K4rpvBFpIitLj4taWYKfF4O7aptCm/sJC0cyyj1/2BLjEaAteOFprBaQwxEPceLoHkVy+EQgj2y
+ BzbjqUO9fhkEJrbwbd2Pj1idWHP6GPkezs1STCRFSJz5JC23Lb+hSZEKUKJY3EO5TUud3+mStkY
+ RAmXxWhe+4HA0VaUDP+ycnHC2+oOGeCb6QYL28DN3kQDRVykm8m7W2k/+a+JpRHuOnql3yV++5e
+ ETqSP020tZA9FjZWBUuDp6h65V8dGA3BVfImvvc+SOybudNjL7oUzNVNmqyH6/zzTYehrpv+Q1v
+ A99tSjMBdO/kkJdHZqQZgjlIaYnMl8t+ESIhckqikTkhoCmMNRxPFUBYv1bMOcE+1iubQsGsdSt
+ qfkZNRwlWTSOrsAGC9cPf5iBMvIylS91MoDuk77BOTDSBW8IqehIzl/mbQ/gdgurEBQqaLlt8kA
+ rY3oy0/TNHxRCjQ==
+X-Developer-Key: i=j-luthra@ti.com; a=openpgp; fpr=4DE0D818E5D575E8D45AAFC543DE91F9249A7145
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Jul 31, 2023 at 09:32:08AM +0200, Jacopo Mondi wrote:
-> On Sat, Jul 29, 2023 at 08:13:00PM +0300, Laurent Pinchart wrote:
-> > On Mon, Jul 10, 2023 at 05:52:00PM +0200, Jacopo Mondi wrote:
-> > > The IMX219 is a RAW sensor. Fix the colorspace configuration by
-> > > using V4L2_COLORSPACE_RAW and adjust the quantization and transfer
-> > > function values. Drop ycbcr_enc as it doesn't apply to RAW sensors.
-> >
-> > So this addresses part of my comments for 3/7, nice :-)
-> >
-> > > Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-> > > ---
-> > >  drivers/media/i2c/imx219.c | 26 +++++++++-----------------
-> > >  1 file changed, 9 insertions(+), 17 deletions(-)
-> > >
-> > > diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-> > > index cd43a897391c..6963e24e1bc2 100644
-> > > --- a/drivers/media/i2c/imx219.c
-> > > +++ b/drivers/media/i2c/imx219.c
-> > > @@ -597,15 +597,12 @@ static void imx219_set_default_format(struct imx219 *imx219)
-> > >
-> > >  	fmt = &imx219->fmt;
-> > >  	fmt->code = MEDIA_BUS_FMT_SRGGB10_1X10;
-> > > -	fmt->colorspace = V4L2_COLORSPACE_SRGB;
-> > > -	fmt->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(fmt->colorspace);
-> > > -	fmt->quantization = V4L2_MAP_QUANTIZATION_DEFAULT(true,
-> > > -							  fmt->colorspace,
-> > > -							  fmt->ycbcr_enc);
-> > > -	fmt->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(fmt->colorspace);
-> > > +	fmt->colorspace = V4L2_COLORSPACE_RAW;
-> > > +	fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
-> > >  	fmt->width = supported_modes[0].width;
-> > >  	fmt->height = supported_modes[0].height;
-> > >  	fmt->field = V4L2_FIELD_NONE;
-> > > +	fmt->xfer_func = V4L2_XFER_FUNC_NONE;
-> >
-> > Any reason to not group xfer_func with colorspace and quantization ?
-> >
-> > >  }
-> > >
-> > >  static int imx219_set_ctrl(struct v4l2_ctrl *ctrl)
-> > > @@ -714,12 +711,10 @@ static int imx219_init_cfg(struct v4l2_subdev *sd,
-> > >  	format->code = imx219_get_format_code(imx219,
-> > >  					      MEDIA_BUS_FMT_SRGGB10_1X10);
-> > >  	format->field = V4L2_FIELD_NONE;
-> > > -	format->colorspace = V4L2_COLORSPACE_SRGB;
-> > > +	format->colorspace = V4L2_COLORSPACE_RAW;
-> > >  	format->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(format->colorspace);
-> >
-> > You're keeping ycbcr_enc here while you've dropped it in the two other
-> > locations. Was that on purpose ?
-> 
-> Umang had the same comment, and I clearly forgot to remove this one
-> 
-> > While the encoding doesn't apply to raw formats, I think it should still
-> > be set explicitly, or it will end up having a random value.
-> 
-> Should I use V4L2_YCBCR_ENC_DEFAULT even if for RAW sensors it doesn't
-> make much sense ?
+For link validation on video device drivers, it may be required to
+match the formats set on the source subdev with the formats set on the
+video device.
 
-For the transfer function we have V4L2_XFER_FUNC_NONE, but for the
-encoding we have no similar value. I recall that V4L2_YCBCR_ENC_DEFAULT
-is meant for applications only, and that drivers must always return an
-appropriate non-default value, but I can't find at the moment where that
-is documented. It may have been from a discussion with Hans, and
-v4l2-compliance may enforce it, I haven't checked.
+Export the existing v4l2_subdev_link_validate_get_format() helper so it
+can be reused by such drivers.
 
-We could add a new V4L2_YCBCR_ENC_NONE value, allow
-V4L2_YCBCR_ENC_DEFAULT for this use case, or return V4L2_YCBCR_ENC_601
-as done by other drivers (this is the value returned by
-V4L2_MAP_YCBCR_ENC_DEFAULT() for a RAW colorspace).
+Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Jai Luthra <j-luthra@ti.com>
+---
+New in v8
 
-> > > -	format->quantization = V4L2_MAP_QUANTIZATION_DEFAULT(true,
-> > > -							     format->colorspace,
-> > > -							     format->ycbcr_enc);
-> > > -	format->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(format->colorspace);
-> > > +	format->quantization = V4L2_QUANTIZATION_FULL_RANGE;
-> > > +	format->xfer_func = V4L2_XFER_FUNC_NONE;
-> > >
-> > >  	/* Initialize crop rectangle. */
-> > >  	crop = v4l2_subdev_get_pad_crop(sd, state, 0);
-> > > @@ -775,12 +770,9 @@ static int imx219_enum_frame_size(struct v4l2_subdev *sd,
-> > >
-> > >  static void imx219_reset_colorspace(struct v4l2_mbus_framefmt *fmt)
-> > >  {
-> > > -	fmt->colorspace = V4L2_COLORSPACE_SRGB;
-> > > -	fmt->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(fmt->colorspace);
-> > > -	fmt->quantization = V4L2_MAP_QUANTIZATION_DEFAULT(true,
-> > > -							  fmt->colorspace,
-> > > -							  fmt->ycbcr_enc);
-> > > -	fmt->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(fmt->colorspace);
-> > > +	fmt->colorspace = V4L2_COLORSPACE_RAW;
-> > > +	fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
-> > > +	fmt->xfer_func = V4L2_XFER_FUNC_NONE;
-> > >  }
-> > >
-> > >  static void imx219_update_pad_format(struct imx219 *imx219,
+ drivers/media/v4l2-core/v4l2-subdev.c |  8 ++++----
+ include/media/v4l2-subdev.h           | 12 ++++++++++++
+ 2 files changed, 16 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+index 217b8019fb9b..0d3b5ff5cacc 100644
+--- a/drivers/media/v4l2-core/v4l2-subdev.c
++++ b/drivers/media/v4l2-core/v4l2-subdev.c
+@@ -1130,10 +1130,9 @@ int v4l2_subdev_link_validate_default(struct v4l2_subdev *sd,
+ }
+ EXPORT_SYMBOL_GPL(v4l2_subdev_link_validate_default);
+ 
+-static int
+-v4l2_subdev_link_validate_get_format(struct media_pad *pad, u32 stream,
+-				     struct v4l2_subdev_format *fmt,
+-				     bool states_locked)
++int v4l2_subdev_link_validate_get_format(struct media_pad *pad, u32 stream,
++					 struct v4l2_subdev_format *fmt,
++					 bool states_locked)
+ {
+ 	struct v4l2_subdev_state *state;
+ 	struct v4l2_subdev *sd;
+@@ -1165,6 +1164,7 @@ v4l2_subdev_link_validate_get_format(struct media_pad *pad, u32 stream,
+ 
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(v4l2_subdev_link_validate_get_format);
+ 
+ #if defined(CONFIG_VIDEO_V4L2_SUBDEV_API)
+ 
+diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+index a012741cc876..ef7007f46889 100644
+--- a/include/media/v4l2-subdev.h
++++ b/include/media/v4l2-subdev.h
+@@ -1301,6 +1301,18 @@ int v4l2_subdev_link_validate_default(struct v4l2_subdev *sd,
+ 				      struct v4l2_subdev_format *source_fmt,
+ 				      struct v4l2_subdev_format *sink_fmt);
+ 
++/**
++ * v4l2_subdev_link_validate_get_format - get format for media link validation
++ *
++ * @pad: pad id
++ * @stream: stream id
++ * @fmt: pointer to &struct v4l2_subdev_format
++ * @states_locked: is the subdev state already locked
++ */
++int v4l2_subdev_link_validate_get_format(struct media_pad *pad, u32 stream,
++					 struct v4l2_subdev_format *fmt,
++					 bool states_locked);
++
+ /**
+  * v4l2_subdev_link_validate - validates a media link
+  *
 
 -- 
-Regards,
-
-Laurent Pinchart
+2.41.0
