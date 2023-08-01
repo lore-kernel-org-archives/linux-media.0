@@ -2,125 +2,117 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1D8FC41513
-	for <linux-media@archiver.kernel.org>; Tue,  1 Aug 2023 13:48:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 665DBC001DF
+	for <linux-media@archiver.kernel.org>; Tue,  1 Aug 2023 13:53:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233773AbjHANsd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Aug 2023 09:48:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49912 "EHLO
+        id S233188AbjHANx3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Aug 2023 09:53:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230310AbjHANsc (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Aug 2023 09:48:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB005ED;
-        Tue,  1 Aug 2023 06:48:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 61BF7615B0;
-        Tue,  1 Aug 2023 13:48:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21CBCC433C7;
-        Tue,  1 Aug 2023 13:48:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690897709;
-        bh=yBCVhMlvIlShUF7vexVldIJJJDKdGoCO+kY/QWgk+y4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LEOsTFaPuSkOXKXis4cSvPwJH4oJS/olSV3RAfl00cz/5RO/7LBToy5zGVrRhlAoJ
-         cPuFKLfu5NIYRCpeX30pbTJOBHfhmdYGqgdxFWqVJ69/eLbsHmH2UVAZrUAebgxi7M
-         CKCfWsxFSIhn1QOpieuRHDJiXfN49DhTCP8JMq8oEFIw0TJk/y6pmCwRhPfmnI9tKM
-         QieJVJ290CaLDW/b1nVjqLG+NMheNvZSmhtq18m01j+/6uwuDEyO/M2HF3kHU+iJe2
-         RXOkSQCDn1E44ny2XzbvN/XsadqL+c9c8KqdtjpqteAhxkd7FlfyBoZVk8sLJpVmfr
-         vhmpuZH4v4JIw==
-Date:   Tue, 1 Aug 2023 14:48:21 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Keith Zhao <keith.zhao@starfivetech.com>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        christian.koenig@amd.com, Bjorn Andersson <andersson@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Shawn Guo <shawnguo@kernel.org>, Jagan Teki <jagan@edgeble.ai>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        Jack Zhu <jack.zhu@starfivetech.com>,
-        Shengyang Chen <shengyang.chen@starfivetech.com>,
-        Changhuang Liang <changhuang.liang@starfivetech.com>
-Subject: Re: [PATCH v1 v1 1/7] MAINTAINERS: Update starfive maintainers
-Message-ID: <20230801-reviver-clip-5d1a8d22edab@spud>
-References: <20230801101030.2040-1-keith.zhao@starfivetech.com>
- <20230801101030.2040-2-keith.zhao@starfivetech.com>
+        with ESMTP id S232909AbjHANx2 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Aug 2023 09:53:28 -0400
+Received: from mgamail.intel.com (unknown [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13D1E4;
+        Tue,  1 Aug 2023 06:53:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690898005; x=1722434005;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nIYKnL0gLdWiIzoPC3kqGQrPs7uvjKL+Tri0yD1cqF8=;
+  b=XU1wwi/1c8SGDwvErMRYqcZmtG7oWGBSwXXzOsRPwl6pwEIkj/0QwXZt
+   c1WpYg9bOADyaBDo1evfXyg7dnTcd4yiQxM5CssS0inbVxZXIHuyAK2JE
+   IJEyGRQXtwAoVJTWoQEfJuGiQJ6MFwJg1LUY1xytpg26Yz0hq2QZ31Hdz
+   l7B8Fy4sju4A/M18obMCumj6ZvUutIq3B5bEiyXozvJfN8QsdAN6TuSJf
+   5T4SvSEdWMcoZAvjnHntcQvKHQFyGSI1KwWJOu7XTQgxyExVXZF0rVgkh
+   eRiNMI+kUXImtVEU7MvjiU9LXtEDWwpn65cuKPYSk/5od6rGEuiwVjmaW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10789"; a="366769124"
+X-IronPort-AV: E=Sophos;i="6.01,247,1684825200"; 
+   d="scan'208";a="366769124"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2023 06:53:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10789"; a="705836404"
+X-IronPort-AV: E=Sophos;i="6.01,247,1684825200"; 
+   d="scan'208";a="705836404"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 01 Aug 2023 06:53:22 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1qQpoO-005Clu-0y;
+        Tue, 01 Aug 2023 16:53:20 +0300
+Date:   Tue, 1 Aug 2023 16:53:19 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 7/9] media: i2c: ds90ub953: Restructure clkout
+ management
+Message-ID: <ZMkOTwLHdRQqUtBg@smile.fi.intel.com>
+References: <20230731-fpdlink-additions-v3-0-8acfc49c215a@ideasonboard.com>
+ <20230731-fpdlink-additions-v3-7-8acfc49c215a@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="IVqccmOPnJ1WnFlO"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230801101030.2040-2-keith.zhao@starfivetech.com>
+In-Reply-To: <20230731-fpdlink-additions-v3-7-8acfc49c215a@ideasonboard.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+On Mon, Jul 31, 2023 at 04:24:41PM +0300, Tomi Valkeinen wrote:
+> Separate clkout calculations and register writes into two functions:
+> ub953_calc_clkout_params and ub953_write_clkout_regs, and add a struct
+> ub953_clkout_data that is used to store the clkout parameters.
+> 
+> This simplifies the clkout management.
 
---IVqccmOPnJ1WnFlO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+...
 
-On Tue, Aug 01, 2023 at 06:10:24PM +0800, Keith Zhao wrote:
-> update starfive maintainers
->=20
-> Signed-off-by: Keith Zhao <keith.zhao@starfivetech.com>
+> +#define UB953_DEFAULT_CLKOUT_RATE	25000000UL
 
-Why is this a standalone patch, before you've even added any of the
-files in question?
+HZ_PER_MHZ (from units.h)?
 
-> ---
->  MAINTAINERS | 7 +++++++
->  1 file changed, 7 insertions(+)
->=20
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 3be1bdfe8..daadd1707 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -6760,6 +6760,13 @@ S:	Supported
->  T:	git git://anongit.freedesktop.org/drm/drm-misc
->  F:	drivers/gpu/drm/udl/
-> =20
-> +DRM DRIVERS FOR STARFIVE
-> +M:	Keith Zhao <keith.zhao@starfivetech.com>
-> +L:	dri-devel@lists.freedesktop.org
-> +S:	Maintained
-> +T:	git git://anongit.freedesktop.org/drm/drm-misc
-> +F:	Documentation/devicetree/bindings/display/starfive/
-> +
->  DRM DRIVER FOR VIRTUAL KERNEL MODESETTING (VKMS)
->  M:	Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>
->  M:	Melissa Wen <melissa.srw@gmail.com>
-> --=20
-> 2.34.1
->=20
+...
 
---IVqccmOPnJ1WnFlO
-Content-Type: application/pgp-signature; name="signature.asc"
+> +struct ub953_clkout_data {
+> +	u32 hs_div;
+> +	u32 m;
+> +	u32 n;
+> +	unsigned long rate;
 
------BEGIN PGP SIGNATURE-----
+You may save 4 bytes on some architectures (which do not allow 4-byte alignment
+for 64-bit members) by reshuffling the members.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZMkNJQAKCRB4tDGHoIJi
-0lC7AP0fuE7TbAcoI8Ol6wcV1gi8Wbfl+gmu5cTOS7xJbEy+PgD+IEg0kjZSlNlt
-PYRMDt5Lz1ZoFzNdZ8Dew5xtfjk8oAY=
-=0VQt
------END PGP SIGNATURE-----
+(besides using u32-fract :-)
 
---IVqccmOPnJ1WnFlO--
+> +};
+
+...
+
+> +		dev_dbg(dev, "%s %llu * %u / (8 * %u) = %lu (requested %lu)",
+> +			__func__, fc_rate, m, n, clkout_rate, target_rate);
+
+__func__ in dev_dbg() is not needed. It's very rare nowadays to debug a kernel
+without Dynamic Debug to be on.
+
+...
+
+> +		dev_dbg(dev, "%s %llu / %u * %u / %u = %lu (requested %lu)",
+> +			__func__, fc_rate, hs_div, m, n, clkout_rate,
+> +			target_rate);
+
+Ditto.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
