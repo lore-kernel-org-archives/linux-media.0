@@ -2,30 +2,30 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9BF7C001DF
-	for <linux-media@archiver.kernel.org>; Tue,  1 Aug 2023 10:10:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DE42C41513
+	for <linux-media@archiver.kernel.org>; Tue,  1 Aug 2023 10:10:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233096AbjHAKKl convert rfc822-to-8bit (ORCPT
+        id S233837AbjHAKKo convert rfc822-to-8bit (ORCPT
         <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Aug 2023 06:10:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35298 "EHLO
+        Tue, 1 Aug 2023 06:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230273AbjHAKKi (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Aug 2023 06:10:38 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B66E92;
+        with ESMTP id S230343AbjHAKKj (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Aug 2023 06:10:39 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D73BE;
         Tue,  1 Aug 2023 03:10:36 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 545618080;
-        Tue,  1 Aug 2023 18:10:33 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 1 Aug
- 2023 18:10:33 +0800
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 530F024E2F2;
+        Tue,  1 Aug 2023 18:10:35 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 1 Aug
+ 2023 18:10:34 +0800
 Received: from xiaofei.localdomain (180.164.60.184) by EXMBX061.cuchost.com
  (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 1 Aug
- 2023 18:10:32 +0800
+ 2023 18:10:33 +0800
 From:   Keith Zhao <keith.zhao@starfivetech.com>
 To:     <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
@@ -51,9 +51,9 @@ CC:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
         Jack Zhu <jack.zhu@starfivetech.com>,
         Shengyang Chen <shengyang.chen@starfivetech.com>,
         Changhuang Liang <changhuang.liang@starfivetech.com>
-Subject: [PATCH v1 v1 1/7] MAINTAINERS: Update starfive maintainers
-Date:   Tue, 1 Aug 2023 18:10:24 +0800
-Message-ID: <20230801101030.2040-2-keith.zhao@starfivetech.com>
+Subject: [PATCH v1 v1 4/7] drm/fourcc: Add drm/vs tiled modifiers
+Date:   Tue, 1 Aug 2023 18:10:27 +0800
+Message-ID: <20230801101030.2040-5-keith.zhao@starfivetech.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230801101030.2040-1-keith.zhao@starfivetech.com>
 References: <20230801101030.2040-1-keith.zhao@starfivetech.com>
@@ -68,31 +68,60 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-update starfive maintainers
+These are mainly used internally in vs-drm,
+I'm not sure if the new modifiers can be used with the existing ones.
+If there is a problem, I will improve it further.
 
 Signed-off-by: Keith Zhao <keith.zhao@starfivetech.com>
 ---
- MAINTAINERS | 7 +++++++
- 1 file changed, 7 insertions(+)
+ include/uapi/drm/drm_fourcc.h | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 3be1bdfe8..daadd1707 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6760,6 +6760,13 @@ S:	Supported
- T:	git git://anongit.freedesktop.org/drm/drm-misc
- F:	drivers/gpu/drm/udl/
+diff --git a/include/uapi/drm/drm_fourcc.h b/include/uapi/drm/drm_fourcc.h
+index 8db7fd3f7..0b884cf50 100644
+--- a/include/uapi/drm/drm_fourcc.h
++++ b/include/uapi/drm/drm_fourcc.h
+@@ -419,6 +419,7 @@ extern "C" {
+ #define DRM_FORMAT_MOD_VENDOR_ARM     0x08
+ #define DRM_FORMAT_MOD_VENDOR_ALLWINNER 0x09
+ #define DRM_FORMAT_MOD_VENDOR_AMLOGIC 0x0a
++#define DRM_FORMAT_MOD_VENDOR_VS      0x0b
  
-+DRM DRIVERS FOR STARFIVE
-+M:	Keith Zhao <keith.zhao@starfivetech.com>
-+L:	dri-devel@lists.freedesktop.org
-+S:	Maintained
-+T:	git git://anongit.freedesktop.org/drm/drm-misc
-+F:	Documentation/devicetree/bindings/display/starfive/
+ /* add more to the end as needed */
+ 
+@@ -1562,6 +1563,32 @@ drm_fourcc_canonicalize_nvidia_format_mod(__u64 modifier)
+ #define AMD_FMT_MOD_CLEAR(field) \
+ 	(~((__u64)AMD_FMT_MOD_##field##_MASK << AMD_FMT_MOD_##field##_SHIFT))
+ 
++#define DRM_FORMAT_MOD_VS_TYPE_NORMAL        0x00
++#define DRM_FORMAT_MOD_VS_TYPE_COMPRESSED    0x01
++#define DRM_FORMAT_MOD_VS_TYPE_CUSTOM_10BIT  0x02
++#define DRM_FORMAT_MOD_VS_TYPE_MASK     ((__u64)0x3 << 54)
 +
- DRM DRIVER FOR VIRTUAL KERNEL MODESETTING (VKMS)
- M:	Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>
- M:	Melissa Wen <melissa.srw@gmail.com>
++#define fourcc_mod_vs_code(type, val) \
++	fourcc_mod_code(VS, ((((__u64)type) << 54) | (val)))
++
++#define DRM_FORMAT_MOD_VS_NORM_MODE_MASK        0x1F
++#define DRM_FORMAT_MOD_VS_LINEAR                0x00
++#define DRM_FORMAT_MOD_VS_SUPER_TILED_XMAJOR    0x02
++#define DRM_FORMAT_MOD_VS_SUPER_TILED_YMAJOR    0x03
++#define DRM_FORMAT_MOD_VS_TILE_8X8              0x04
++#define DRM_FORMAT_MOD_VS_TILE_8X4              0x07
++#define DRM_FORMAT_MOD_VS_SUPER_TILED_XMAJOR_8X4    0x0B
++#define DRM_FORMAT_MOD_VS_SUPER_TILED_YMAJOR_4X8    0x0C
++#define DRM_FORMAT_MOD_VS_TILE_MODE4X4          0x15
++
++#define fourcc_mod_vs_norm_code(tile) \
++	fourcc_mod_vs_code(DRM_FORMAT_MOD_VS_TYPE_NORMAL, \
++				(tile))
++
++#define fourcc_mod_vs_custom_code(tile) \
++	fourcc_mod_vs_code(DRM_FORMAT_MOD_VS_TYPE_CUSTOM_10BIT, \
++				(tile))
++
+ #if defined(__cplusplus)
+ }
+ #endif
 -- 
 2.34.1
 
