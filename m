@@ -2,69 +2,114 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83004C00528
-	for <linux-media@archiver.kernel.org>; Tue,  1 Aug 2023 13:53:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B85F7C00528
+	for <linux-media@archiver.kernel.org>; Tue,  1 Aug 2023 13:53:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234007AbjHANxi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Aug 2023 09:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52130 "EHLO
+        id S234136AbjHANxq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Aug 2023 09:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233899AbjHANxh (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Aug 2023 09:53:37 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B860FC3;
-        Tue,  1 Aug 2023 06:53:35 -0700 (PDT)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RFc3P6Xp0zVjf2;
-        Tue,  1 Aug 2023 21:51:45 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by kwepemi500008.china.huawei.com
- (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 1 Aug
- 2023 21:53:28 +0800
-From:   Ruan Jinjie <ruanjinjie@huawei.com>
-To:     <hverkuil-cisco@xs4all.nl>, <mchehab@kernel.org>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <linux-tegra@vger.kernel.org>, <linux-media@vger.kernel.org>
-CC:     <ruanjinjie@huawei.com>
-Subject: [PATCH -next] media: tegra_cec: fix the return value handle for platform_get_irq()
-Date:   Tue, 1 Aug 2023 21:52:53 +0800
-Message-ID: <20230801135253.456322-1-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S233931AbjHANxo (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Aug 2023 09:53:44 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AE4FBEC;
+        Tue,  1 Aug 2023 06:53:41 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8Cxc_BkDslkfCEOAA--.33318S3;
+        Tue, 01 Aug 2023 21:53:40 +0800 (CST)
+Received: from [10.20.42.43] (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxriNiDslkGQxEAA--.5911S3;
+        Tue, 01 Aug 2023 21:53:38 +0800 (CST)
+Message-ID: <00f8d896-7465-384c-dd94-823ad5524e50@loongson.cn>
+Date:   Tue, 1 Aug 2023 21:53:38 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.90.53.73]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500008.china.huawei.com (7.221.188.139)
-X-CFilter-Loop: Reflected
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [v1,v1,5/7] drm/vs: Register DRM device
+Content-Language: en-US
+From:   suijingfeng <suijingfeng@loongson.cn>
+To:     Keith Zhao <keith.zhao@starfivetech.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Shengyang Chen <shengyang.chen@starfivetech.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Jagan Teki <jagan@edgeble.ai>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Changhuang Liang <changhuang.liang@starfivetech.com>,
+        Jack Zhu <jack.zhu@starfivetech.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Shawn Guo <shawnguo@kernel.org>, christian.koenig@amd.com
+References: <20230801101030.2040-6-keith.zhao@starfivetech.com>
+ <6b776c23-9cc1-5a7d-0a85-bd7eb42e847d@loongson.cn>
+In-Reply-To: <6b776c23-9cc1-5a7d-0a85-bd7eb42e847d@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxriNiDslkGQxEAA--.5911S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj9xXoW7XFyrXryxJw15Aw17Zr1rKrX_yoW3ArbEyw
+        sYqr18W3W8JFWUJF1UtFn3ZryIqryj9as5Jay5Ar15Z3W7Xrsavan8JwnYvr4Ygan7G3Wf
+        Grs8ur1fAa47XosvyTuYvTs0mTUanT9S1TB71UUUU17qnTZGkaVYY2UrUUUUj1kv1TuYvT
+        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+        cSsGvfJTRUUUbgxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+        vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        WxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVWxJr0_GcWln4kS14v26r1q6r43M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26rWY
+        6Fy7McIj6I8E87Iv67AKxVWxJVW8Jr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+        8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vI
+        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Wrv_ZF1lx2IqxVAqx4xG67
+        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIY
+        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Ar0_tr1lIxAIcVC0I7IYx2IY6xkF7I0E14
+        v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Cr0_
+        Gr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jMeH
+        DUUUUU=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There is no possible for platform_get_irq() to return 0,
-and the return value of platform_get_irq() is more sensible
-to show the error reason.
+Hi,
 
-Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
----
- drivers/media/cec/platform/tegra/tegra_cec.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 2023/8/1 21:40, suijingfeng wrote:
+>> +if DRM_VERISILICON
+>> +
+>> +config STARFIVE_HDMI
+>> +    bool "Starfive specific extensions HDMI"
+>> +    help
+>> +       This selects support for StarFive SoC specific extensions
+>> +       for the Innosilicon HDMI driver. If you want to enable
+>> +       HDMI on JH7110 based SoC, you should select this option.
+>> +
+>> +       To compile this driver as a module, choose M here.
+>> +endif
+>
+> Why not use 
 
-diff --git a/drivers/media/cec/platform/tegra/tegra_cec.c b/drivers/media/cec/platform/tegra/tegra_cec.c
-index 04dc06e3c42a..79811f2c1951 100644
---- a/drivers/media/cec/platform/tegra/tegra_cec.c
-+++ b/drivers/media/cec/platform/tegra/tegra_cec.c
-@@ -348,8 +348,8 @@ static int tegra_cec_probe(struct platform_device *pdev)
- 
- 	cec->tegra_cec_irq = platform_get_irq(pdev, 0);
- 
--	if (cec->tegra_cec_irq <= 0)
--		return -EBUSY;
-+	if (cec->tegra_cec_irq < 0)
-+		return cec->tegra_cec_irq;
- 
- 	cec->cec_base = devm_ioremap(&pdev->dev, res->start,
- 					     resource_size(res));
--- 
-2.34.1
+  Why not use the 'depends on DRM_VERISILICON'  here ?
+
+
+```
+
+config STARFIVE_HDMI
+
+     depends on DRM_VERISILICON
+     bool "Starfive specific extensions HDMI"
+
+     help
+
+```
+
+
+I see the Kconfig of VC4 using the 'depends on', and most  driver using 
+the 'depends on'
 
