@@ -2,186 +2,104 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42A29C41513
-	for <linux-media@archiver.kernel.org>; Tue,  1 Aug 2023 18:48:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FDF9C04A6A
+	for <linux-media@archiver.kernel.org>; Tue,  1 Aug 2023 18:55:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231806AbjHASsU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Aug 2023 14:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59326 "EHLO
+        id S231151AbjHASz5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Aug 2023 14:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232027AbjHASr5 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Aug 2023 14:47:57 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7209F2700;
-        Tue,  1 Aug 2023 11:47:37 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 964E58D;
-        Tue,  1 Aug 2023 20:46:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1690915592;
-        bh=ffDp7O3afC7Y615B58rFG/L3MZSJl9ezabb6Gkyw+vM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=C0TObPG/iYraSTtqErbiYAaX/ohD9htCX1BxBDPgHxHAoplB48AV2cI1tnpGMfLmv
-         TAniiGebmwUJBBgFENZPZoywsZq5lGcerLALs3vNts/EJF0oKRK3unCUyMu+BU+UhT
-         KjRSN463tQ/LT8YJkak/Ur/8VTbYRfxqMa28cuC8=
-Date:   Tue, 1 Aug 2023 21:47:41 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jack Zhu <jack.zhu@starfivetech.com>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>, bryan.odonoghue@linaro.org,
+        with ESMTP id S229454AbjHASz4 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Aug 2023 14:55:56 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C64C187;
+        Tue,  1 Aug 2023 11:55:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=ZcHJoyOnSyStBYXLxjKo9vGFu+ive0GAxmxsAXs0Erc=; b=fBKF6RRyzycU76I/LkqFaOlU3u
+        QIUo9yM61JDHkELJ1pnhRtC4QwFuYkmsdXwlzXeK20DcCHwwxpmEjYa78GxpKHHKjk9bVv4LYrcJq
+        jB/hkbqhCpyTS9uVfH6TwkFxGnJcJnyq8KlVbwwoXjX0A8dgvqGiTkoZnYgFlWtkS00xIpqrLTRL7
+        4QHaMFvmGICvFrinJYgiJ6z3UzcdZFwfSoSBvDl7T4yroi8FU95d5WvnruBmCocjLYUPJnQsbrhHw
+        30F9/cD6Vud5SxrQ8X/fUjyVstb0u7kO0QDHGjUH/+zCQegLy6u7Vn9caDweSrjeXL0FbbC0wDC2Y
+        jQXTZg3g==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qQuXA-0034zE-0r;
+        Tue, 01 Aug 2023 18:55:52 +0000
+Message-ID: <6286077f-bd7e-8a78-deca-3442bd987ad4@infradead.org>
+Date:   Tue, 1 Aug 2023 11:55:50 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v1 v1 1/7] MAINTAINERS: Update starfive maintainers
+Content-Language: en-US
+To:     Keith Zhao <keith.zhao@starfivetech.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        Eugen Hristev <eugen.hristev@collabora.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, changhuang.liang@starfivetech.com
-Subject: Re: [PATCH v7 4/6] media: starfive: camss: Add video driver
-Message-ID: <20230801184741.GB30382@pendragon.ideasonboard.com>
-References: <20230619112838.19797-1-jack.zhu@starfivetech.com>
- <20230619112838.19797-5-jack.zhu@starfivetech.com>
- <8e381fd6-9475-88fc-9159-927f119a8b9c@xs4all.nl>
- <7c4e63e7-ce28-139f-373d-0fecca6839b9@starfivetech.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <7c4e63e7-ce28-139f-373d-0fecca6839b9@starfivetech.com>
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        christian.koenig@amd.com, Bjorn Andersson <andersson@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Shawn Guo <shawnguo@kernel.org>, Jagan Teki <jagan@edgeble.ai>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Jack Zhu <jack.zhu@starfivetech.com>,
+        Shengyang Chen <shengyang.chen@starfivetech.com>,
+        Changhuang Liang <changhuang.liang@starfivetech.com>
+References: <20230801101030.2040-1-keith.zhao@starfivetech.com>
+ <20230801101030.2040-2-keith.zhao@starfivetech.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230801101030.2040-2-keith.zhao@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jack,
 
-On Tue, Aug 01, 2023 at 02:23:07PM +0800, Jack Zhu wrote:
-> On 2023/7/27 16:49, Hans Verkuil wrote:
-> > On 19/06/2023 13:28, Jack Zhu wrote:
-> >> Add video driver for StarFive Camera Subsystem.
-> >> 
-> >> Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
-> >> ---
-> >>  .../media/platform/starfive/camss/Makefile    |   4 +-
-> >>  .../media/platform/starfive/camss/stf_video.c | 724 ++++++++++++++++++
-> >>  .../media/platform/starfive/camss/stf_video.h |  92 +++
-> >>  3 files changed, 819 insertions(+), 1 deletion(-)
-> >>  create mode 100644 drivers/media/platform/starfive/camss/stf_video.c
-> >>  create mode 100644 drivers/media/platform/starfive/camss/stf_video.h
 
-[snip]
-
-> >> diff --git a/drivers/media/platform/starfive/camss/stf_video.c b/drivers/media/platform/starfive/camss/stf_video.c
-> >> new file mode 100644
-> >> index 000000000000..2e6472fe51c6
-> >> --- /dev/null
-> >> +++ b/drivers/media/platform/starfive/camss/stf_video.c
-> >> @@ -0,0 +1,724 @@
-
-[snip]
-
-> >> +int stf_video_register(struct stfcamss_video *video,
-> >> +		       struct v4l2_device *v4l2_dev, const char *name)
-> >> +{
-> >> +	struct video_device *vdev;
-> >> +	struct vb2_queue *q;
-> >> +	struct media_pad *pad = &video->pad;
-> >> +	int ret;
-> >> +
-> >> +	vdev = &video->vdev;
-> >> +
-> >> +	mutex_init(&video->q_lock);
-> >> +
-> >> +	q = &video->vb2_q;
-> >> +	q->drv_priv = video;
-> >> +	q->mem_ops = &vb2_dma_contig_memops;
-> >> +	q->ops = &stf_video_vb2_q_ops;
-> >> +	q->type = video->type;
-> >> +	q->io_modes = VB2_DMABUF | VB2_MMAP | VB2_READ;
-> > 
-> > VB2_READ support does not generally make sense for uncompressed video since
-> > read() always requires a memcpy, and that makes it very inefficient.
-> > 
-> > It doesn't hurt though, so it is up to you whether or not you want this.
+On 8/1/23 03:10, Keith Zhao wrote:
+> update starfive maintainers
 > 
-> Yes, we would like to retain this feature to meet some possible special needs.
+> Signed-off-by: Keith Zhao <keith.zhao@starfivetech.com>
+> ---
+>  MAINTAINERS | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 3be1bdfe8..daadd1707 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -6760,6 +6760,13 @@ S:	Supported
+>  T:	git git://anongit.freedesktop.org/drm/drm-misc
+>  F:	drivers/gpu/drm/udl/
+>  
 
-The issue with enabling READ support in drivers is that it encourages
-applications to do the wrong thing. If you want to keep it, I'd like to
-know what use cases you envision would strongly require it.
+This new entry should be in alphabetical order (hint: it's not).
 
-> >> +	q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
-> >> +	q->buf_struct_size = sizeof(struct stfcamss_buffer);
-> >> +	q->dev = video->stfcamss->dev;
-> >> +	q->lock = &video->q_lock;
-> >> +	q->min_buffers_needed = STFCAMSS_MIN_BUFFERS;
-> >> +	ret = vb2_queue_init(q);
-> >> +	if (ret < 0) {
-> >> +		dev_err(video->stfcamss->dev,
-> >> +			"Failed to init vb2 queue: %d\n", ret);
-> >> +		goto err_vb2_init;
-> >> +	}
-> >> +
-> >> +	pad->flags = MEDIA_PAD_FL_SINK;
-> >> +	ret = media_entity_pads_init(&vdev->entity, 1, pad);
-> >> +	if (ret < 0) {
-> >> +		dev_err(video->stfcamss->dev,
-> >> +			"Failed to init video entity: %d\n", ret);
-> >> +		goto err_vb2_init;
-> >> +	}
-> >> +
-> >> +	mutex_init(&video->lock);
-> >> +
-> >> +	if (video->id == STF_V_LINE_WR) {
-> >> +		video->formats = formats_pix_wr;
-> >> +		video->nformats = ARRAY_SIZE(formats_pix_wr);
-> >> +		video->bpl_alignment = 8;
-> >> +	} else {
-> >> +		video->formats = formats_pix_isp;
-> >> +		video->nformats = ARRAY_SIZE(formats_pix_isp);
-> >> +		video->bpl_alignment = 1;
-> >> +	}
-> >> +
-> >> +	ret = stf_video_init_format(video);
-> >> +	if (ret < 0) {
-> >> +		dev_err(video->stfcamss->dev,
-> >> +			"Failed to init format: %d\n", ret);
-> >> +		goto err_vid_init_format;
-> >> +	}
-> >> +
-> >> +	vdev->fops = &stf_vid_fops;
-> >> +	vdev->ioctl_ops = &stf_vid_ioctl_ops;
-> >> +	vdev->device_caps = V4L2_CAP_VIDEO_CAPTURE;
-> >> +	vdev->vfl_dir = VFL_DIR_RX;
-> >> +	vdev->device_caps |= V4L2_CAP_STREAMING | V4L2_CAP_READWRITE;
-> >> +	vdev->release = stf_video_release;
-> >> +	vdev->v4l2_dev = v4l2_dev;
-> >> +	vdev->queue = &video->vb2_q;
-> >> +	vdev->lock = &video->lock;
-> >> +	strscpy(vdev->name, name, sizeof(vdev->name));
-> >> +
-> >> +	ret = video_register_device(vdev, VFL_TYPE_VIDEO, video->id);
-> >> +	if (ret < 0) {
-> >> +		dev_err(video->stfcamss->dev,
-> >> +			"Failed to register video device: %d\n", ret);
-> >> +		goto err_vid_reg;
-> >> +	}
-> >> +
-> >> +	video_set_drvdata(vdev, video);
-> >> +	return 0;
-> >> +
-> >> +err_vid_reg:
-> >> +err_vid_init_format:
-> >> +	media_entity_cleanup(&vdev->entity);
-> >> +	mutex_destroy(&video->lock);
-> >> +err_vb2_init:
-> >> +	mutex_destroy(&video->q_lock);
-> >> +	return ret;
-> >> +}
-
-[snip]
+> +DRM DRIVERS FOR STARFIVE
+> +M:	Keith Zhao <keith.zhao@starfivetech.com>
+> +L:	dri-devel@lists.freedesktop.org
+> +S:	Maintained
+> +T:	git git://anongit.freedesktop.org/drm/drm-misc
+> +F:	Documentation/devicetree/bindings/display/starfive/
+> +
+>  DRM DRIVER FOR VIRTUAL KERNEL MODESETTING (VKMS)
+>  M:	Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>
+>  M:	Melissa Wen <melissa.srw@gmail.com>
 
 -- 
-Regards,
-
-Laurent Pinchart
+~Randy
