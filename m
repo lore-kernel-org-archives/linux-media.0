@@ -2,41 +2,40 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81FC9C001E0
-	for <linux-media@archiver.kernel.org>; Wed,  2 Aug 2023 17:36:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D1EE4C04E69
+	for <linux-media@archiver.kernel.org>; Wed,  2 Aug 2023 17:37:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233726AbjHBRg1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Aug 2023 13:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53926 "EHLO
+        id S231915AbjHBRhG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Aug 2023 13:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233167AbjHBRgJ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Aug 2023 13:36:09 -0400
+        with ESMTP id S233679AbjHBRgr (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Aug 2023 13:36:47 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430E549F1
-        for <linux-media@vger.kernel.org>; Wed,  2 Aug 2023 10:34:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C60330ED
+        for <linux-media@vger.kernel.org>; Wed,  2 Aug 2023 10:34:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1690997514;
+        s=mimecast20190719; t=1690997641;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QuPf+Em/SwTiiKyE4NN115UM3dhfhnjbeHSpJYT53rU=;
-        b=QmBMWr4S+2AIUhPDBKTC6X8QBcDY0FXCyDp+xIe0BRSYMwACnTypqZYx5JkxQ/2vXzyAi5
-        TZSOfvkB+0hUnoKRR8trYKlPzf2jQ1qXS4TmZmPmMAfl+xpSkfU+WPQzkjGMWRoTvfLSiY
-        g8hq4+0a5xbBvleqiIgH+2qUHB4jkAs=
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Y/y+7lwl1NB7tK8futruqbFMIDSWk6FZjyuJYIzL9uc=;
+        b=fbXcyKcrqZhWWDLAYnLVHxuziQN4HzOBPWVozADea9b7YSSjVDPAZ7LQkrToiMPb7Cj6AS
+        Q/xzy91JERmzq0LHOrYQVPLHwfSNCownWbFAQZDiq13KljAeQ+mfMaZoA3aunOhOwUedkY
+        BKgJY/2CgPAoS8uM7WFHYG2hxR3DoRE=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-441-qiFP4q9sMwmA1scTetK4kg-1; Wed, 02 Aug 2023 13:31:51 -0400
-X-MC-Unique: qiFP4q9sMwmA1scTetK4kg-1
+ us-mta-151-BwMRKW0xNYOONo7OEW8EXQ-1; Wed, 02 Aug 2023 13:30:49 -0400
+X-MC-Unique: BwMRKW0xNYOONo7OEW8EXQ-1
 Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 21678185A795;
-        Wed,  2 Aug 2023 17:31:51 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 908ED185A795;
+        Wed,  2 Aug 2023 17:30:48 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.192.110])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9D1D7140E949;
-        Wed,  2 Aug 2023 17:31:49 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 06C501454143;
+        Wed,  2 Aug 2023 17:30:46 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -48,11 +47,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Dave Stevenson <dave.stevenson@raspberrypi.com>,
         Tommaso Merciai <tomm.merciai@gmail.com>,
         linux-media@vger.kernel.org
-Subject: [PATCH v4 25/32] media: ov2680: Add a bunch of register tweaks
-Date:   Wed,  2 Aug 2023 19:30:39 +0200
-Message-ID: <20230802173046.368434-26-hdegoede@redhat.com>
-In-Reply-To: <20230802173046.368434-1-hdegoede@redhat.com>
-References: <20230802173046.368434-1-hdegoede@redhat.com>
+Subject: [PATCH v4 00/32] media: ov2680: Bugfixes + ACPI + selection(crop-tgt) API support
+Date:   Wed,  2 Aug 2023 19:30:14 +0200
+Message-ID: <20230802173046.368434-1-hdegoede@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
@@ -60,98 +57,116 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Usually when developing a sensor driver with help from the vendor
-the vendor will provide a bunch of register tweaks for optimal
-performance of the sensor.
+Hi All,
 
-The atomisp-ov2680.c driver was (presumably) developed by Intel with
-help from OmniVision and indeed contains a bunch of register tweaks.
+Here is v4 of my ov2680 sensor driver patch series.
+Also available in this branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/hansg/linux.git/log/?h=media-ov2680
 
-Add these register tweaks to the "main" ov2680.c driver.
+Changes in v4:
+- Rebase on top of latest sailus/media_tree/master (69142f89b61e)
+- Do not set v4l2_subdev.fwnode (let v4l2-core do endpoint matching)
+- Make enum_frame_interval() input checks more strict
+- Make enum_frame_size() returned full-size + binned-/quarter-size
+- Use V4L2_CID_ANALOGUE_GAIN for gain
+- 3 new patches:
+  "media: ov2680: Add bus-cfg / endpoint property verification"
+  "media: ipu-bridge: Add link-frequency to OV2680 ipu_supported_sensors[] entry"
+  "media: atomisp: Drop atomisp-ov2680 sensor driver"
 
-Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
-Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/media/i2c/ov2680.c | 53 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
+Changes in v3:
+- Add Rui Miguel Silva's Ack for the series
+- 2 small fixes for remarks from Andy
+- Add a new patch adding me as co-maintainer in MAINTAINERS
 
-diff --git a/drivers/media/i2c/ov2680.c b/drivers/media/i2c/ov2680.c
-index b251265594b0..e6c99c14da8f 100644
---- a/drivers/media/i2c/ov2680.c
-+++ b/drivers/media/i2c/ov2680.c
-@@ -180,18 +180,71 @@ static const int ov2680_hv_flip_bayer_order[] = {
- };
- 
- static const struct reg_sequence ov2680_global_setting[] = {
-+	/* MIPI PHY, 0x10 -> 0x1c enable bp_c_hs_en_lat and bp_d_hs_en_lat */
-+	{0x3016, 0x1c},
-+
- 	/* R MANUAL set exposure and gain to manual (hw does not do auto) */
- 	{0x3503, 0x03},
- 
-+	/* Analog control register tweaks */
-+	{0x3603, 0x39}, /* Reset value 0x99 */
-+	{0x3604, 0x24}, /* Reset value 0x74 */
-+	{0x3621, 0x37}, /* Reset value 0x44 */
-+
-+	/* Sensor control register tweaks */
-+	{0x3701, 0x64}, /* Reset value 0x61 */
-+	{0x3705, 0x3c}, /* Reset value 0x21 */
-+	{0x370c, 0x50}, /* Reset value 0x10 */
-+	{0x370d, 0xc0}, /* Reset value 0x00 */
-+	{0x3718, 0x88}, /* Reset value 0x80 */
-+
-+	/* PSRAM tweaks */
-+	{0x3781, 0x80}, /* Reset value 0x00 */
-+	{0x3784, 0x0c}, /* Reset value 0x00, based on OV2680_R1A_AM10.ovt */
-+	{0x3789, 0x60}, /* Reset value 0x50 */
-+
-+	/* BLC CTRL00 0x01 -> 0x81 set avg_weight to 8 */
-+	{0x4000, 0x81},
-+
- 	/* Set black level compensation range to 0 - 3 (default 0 - 11) */
- 	{0x4008, 0x00},
- 	{0x4009, 0x03},
- 
-+	/* VFIFO R2 0x00 -> 0x02 set Frame reset enable */
-+	{0x4602, 0x02},
-+
-+	/* MIPI ctrl CLK PREPARE MIN change from 0x26 (38) -> 0x36 (54) */
-+	{0x481f, 0x36},
-+
-+	/* MIPI ctrl CLK LPX P MIN change from 0x32 (50) -> 0x36 (54) */
-+	{0x4825, 0x36},
-+
-+	/* R ISP CTRL2 0x20 -> 0x30, set sof_sel bit */
-+	{0x5002, 0x30},
-+
- 	/*
- 	 * Window CONTROL 0x00 -> 0x01, enable manual window control,
- 	 * this is necessary for full size flip and mirror support.
- 	 */
- 	{0x5708, 0x01},
-+
-+	/*
-+	 * DPC CTRL0 0x14 -> 0x3e, set enable_tail, enable_3x3_cluster
-+	 * and enable_general_tail bits based OV2680_R1A_AM10.ovt.
-+	 */
-+	{0x5780, 0x3e},
-+
-+	/* DPC MORE CONNECTION CASE THRE 0x0c (12) -> 0x02 (2) */
-+	{0x5788, 0x02},
-+
-+	/* DPC GAIN LIST1 0x0f (15) -> 0x08 (8) */
-+	{0x578e, 0x08},
-+
-+	/* DPC GAIN LIST2 0x3f (63) -> 0x0c (12) */
-+	{0x578f, 0x0c},
-+
-+	/* DPC THRE RATIO 0x04 (4) -> 0x00 (0) */
-+	{0x5792, 0x00},
- };
- 
- static struct ov2680_dev *to_ov2680_dev(struct v4l2_subdev *sd)
+Changes in v2
+- Drop "media: Add MIPI CCI register access helper functions"
+  (being reviewed in its own thread / patch-submission)
+- Drop "media: ov2680: Add g_skip_frames op support"
+- Add "media: ov2680: Fix regulators being left enabled on
+  ov2680_power_on() errors"
+- Add "media: ov2680: Add link-freq and pixel-rate controls"
+  with this the driver now works on IPU3 with ipu3-capture.sh
+  (libcamera support requires adding a couple more controls)
+- Limit line length to 80 chars everywhere
+- Address various small remarks from Andy
+
+During all the work done on the atomisp driver I have mostly been testing
+on devices with an ov2680 sensor. As such I have also done a lot of work
+on the atomisp-ov2680.c atomisp specific sensor driver.
+
+With the latest atomisp code from:
+https://git.kernel.org/pub/scm/linux/kernel/git/hansg/linux.git/tag/?h=media-atomisp-6.5-1
+
+The atomisp code can now work with standard v4l2 sensor drivers using
+the selections (crop-tgt) api and v4l2-async sensor driver registration.
+
+This patch series modifies the main drivers/media/i2c/ov2680.c driver
+to add bugfixes, ACPI enumeration, selection API support and further
+improvments. After this the driver can be used with the atomisp driver
+and atomisp-ov2680.c can be dropped.
+
+This also gets the driver much closer to having everything needed for
+use with IPU3 / libcamera. I have a Lenovo Miix 510 now with an IPU3 +
+ov2680 sensor and with this series raw-capture using the ipu3-capture.sh
+script works. I plan to work on libcamera support for this in the near
+future.
+
+Regards,
+
+Hans
+
+
+Hans de Goede (32):
+  media: ov2680: Remove auto-gain and auto-exposure controls
+  media: ov2680: Fix ov2680_bayer_order()
+  media: ov2680: Fix vflip / hflip set functions
+  media: ov2680: Remove VIDEO_V4L2_SUBDEV_API ifdef-s
+  media: ov2680: Don't take the lock for try_fmt calls
+  media: ov2680: Add ov2680_fill_format() helper function
+  media: ov2680: Fix ov2680_set_fmt() which == V4L2_SUBDEV_FORMAT_TRY
+    not working
+  media: ov2680: Fix regulators being left enabled on ov2680_power_on()
+    errors
+  media: ov2680: Convert to new CCI register access helpers
+  media: ov2680: Store dev instead of i2c_client in ov2680_dev
+  media: ov2680: Add runtime-pm support
+  media: ov2680: Check for "powerdown" GPIO con-id before checking for
+    "reset" GPIO con-id
+  media: ov2680: Drop is_enabled flag
+  media: ov2680: Add support for more clk setups
+  media: ov2680: Add support for 19.2 MHz clock
+  media: ov2680: Wait for endpoint fwnode before continuing with probe()
+  media: ov2680: Add support for ACPI enumeration
+  media: ov2680: Fix ov2680_enum_frame_interval()
+  media: ov2680: Annotate the per mode register setting lists
+  media: ov2680: Add ov2680_mode struct
+  media: ov2680: Make setting the mode algorithm based
+  media: ov2680: Add an __ov2680_get_pad_format() helper function
+  media: ov2680: Implement selection support
+  media: ov2680: Fix exposure and gain ctrls range and default value
+  media: ov2680: Add a bunch of register tweaks
+  media: ov2680: Drop unnecessary pad checks
+  media: ov2680: Read and log sensor revision during probe
+  media: ov2680: Add link-freq and pixel-rate controls
+  media: ov2680: Add bus-cfg / endpoint property verification
+  MAINTAINERS: Add Hans de Goede as OV2680 sensor driver maintainer
+  media: ipu-bridge: Add link-frequency to OV2680
+    ipu_supported_sensors[] entry
+  media: atomisp: Drop atomisp-ov2680 sensor driver
+
+ MAINTAINERS                                   |    1 +
+ drivers/media/i2c/Kconfig                     |    1 +
+ drivers/media/i2c/ov2680.c                    | 1380 +++++++++--------
+ drivers/media/pci/intel/ipu-bridge.c          |    2 +-
+ drivers/staging/media/atomisp/i2c/Kconfig     |   13 -
+ drivers/staging/media/atomisp/i2c/Makefile    |    1 -
+ .../media/atomisp/i2c/atomisp-ov2680.c        |  828 ----------
+ drivers/staging/media/atomisp/i2c/ov2680.h    |  173 ---
+ 8 files changed, 752 insertions(+), 1647 deletions(-)
+ delete mode 100644 drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
+ delete mode 100644 drivers/staging/media/atomisp/i2c/ov2680.h
+
 -- 
 2.41.0
 
