@@ -2,112 +2,188 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45766C04A6A
-	for <linux-media@archiver.kernel.org>; Wed,  2 Aug 2023 14:47:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F41CC04E69
+	for <linux-media@archiver.kernel.org>; Wed,  2 Aug 2023 14:53:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234396AbjHBOrn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Aug 2023 10:47:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45198 "EHLO
+        id S234598AbjHBOxQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Aug 2023 10:53:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234384AbjHBOrm (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Aug 2023 10:47:42 -0400
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460581BE7
-        for <linux-media@vger.kernel.org>; Wed,  2 Aug 2023 07:47:41 -0700 (PDT)
-Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 8D5CD867F0;
-        Wed,  2 Aug 2023 16:47:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1690987660;
-        bh=vPBE+WeFYjet/7EnzMPL6KNEyP366bOqLBPiDT+JT7o=;
-        h=From:To:Cc:Subject:Date:From;
-        b=sBPsvqP5ZwM52yJD92OCG/wcBEYSrv2280ucah96E7vvdgJjvXN3Kj9IqzcqrpNwJ
-         Ms585/j38FIkZ4XeNxPiEqcw1QwAS0pw2sdkL4FAoLfdMaAdNZm8R17HYpEQukXh5R
-         mOkEr2v9M/8ExpdjbC2o1PVD/MH2e3ePxGwR0W76K8HeQ3+bKO7YV39Y+qNvkfka05
-         U5HcPKUou0WVM3/BMz9DXJVA0Yk+1jarvXone5qbvywr7/MbrjlmgWiflm9DSd+aZA
-         eBMYkm7FYvwxpAYBTJzpmORD3C2/6ePILs4t567z04CPcur+XAHP/zQFUEfxzEaE42
-         BI+xZWTN2f4pQ==
-From:   Marek Vasut <marex@denx.de>
-To:     linux-media@vger.kernel.org
-Cc:     Marek Vasut <marex@denx.de>,
-        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-        Aishwarya Kothari <aishwarya.kothari@toradex.com>,
-        Francesco Dolcini <francesco@dolcini.it>,
+        with ESMTP id S234574AbjHBOxP (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Aug 2023 10:53:15 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E1B1982;
+        Wed,  2 Aug 2023 07:53:12 -0700 (PDT)
+X-UUID: 4a24474e314411eeb20a276fd37b9834-20230802
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=WvUeVFDPb4EMGYbb53F91WRmcOa9itzlcYCTFvFRYc0=;
+        b=BFjldis3sw6qPYpI46hV4kYF3sxOaAoMzOewVRZY428Hsp5+bwY8oBMycGo6UzyjL7dHa4/Cp0yZC894yLuwCaTuNQKfEgTjK6D1bntBYXixl+JqVr9YL2KTiMUTYlSBozehR/r2fyWSqaEewi7G2Lq2tHBhFshA9u6GSIdJwfM=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.30,REQID:96ab9bb7-1710-4953-afa4-411264a870f3,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:70
+X-CID-INFO: VERSION:1.1.30,REQID:96ab9bb7-1710-4953-afa4-411264a870f3,IP:0,URL
+        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
+        ON:quarantine,TS:70
+X-CID-META: VersionHash:1fcc6f8,CLOUDID:638ed1a0-0933-4333-8d4f-6c3c53ebd55b,B
+        ulkID:230802225309PPL6E4CR,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+        ,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_SDM,TF_CID_SPAM_ASC,TF_CID_SPAM_FAS,
+        TF_CID_SPAM_FSD
+X-UUID: 4a24474e314411eeb20a276fd37b9834-20230802
+Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw02.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1035919754; Wed, 02 Aug 2023 22:53:06 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Wed, 2 Aug 2023 22:53:06 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Wed, 2 Aug 2023 22:53:05 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
+        <nfraprado@collabora.com>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Hugues FRUCHET <hugues.fruchet@foss.st.com>,
-        Jai Luthra <j-luthra@ti.com>,
-        Marcel Ziswiler <marcel@ziswiler.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>
-Subject: [PATCH v2] media: ov5640: Enable MIPI interface in ov5640_set_power_mipi()
-Date:   Wed,  2 Aug 2023 16:47:25 +0200
-Message-Id: <20230802144725.34099-1-marex@denx.de>
-X-Mailer: git-send-email 2.40.1
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Nathan Hebert <nhebert@chromium.org>
+CC:     Chen-Yu Tsai <wenst@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Steve Cho" <stevecho@chromium.org>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v4,2/2] media: mediatek: vcodec: Fix possible invalid memory access for encoder
+Date:   Wed, 2 Aug 2023 22:53:02 +0800
+Message-ID: <20230802145303.28765-2-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230802145303.28765-1-yunfei.dong@mediatek.com>
+References: <20230802145303.28765-1-yunfei.dong@mediatek.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Set OV5640_REG_IO_MIPI_CTRL00 bit 2 to 1 instead of 0, since 1 means
-MIPI CSI2 interface, while 0 means CPI parallel interface.
+The vpu maybe null pointer or unreasonable value when scp crash, need to
+validate that the vpu pointer and the vpu instance within this context is
+valid in case of leading to kernel reboot.
 
-In the ov5640_set_power_mipi() the interface should obviously be set
-to MIPI CSI2 since this functions is used to power up the sensor when
-operated in MIPI CSI2 mode. The sensor should not be in CPI mode in
-that case.
-
-This fixes a corner case where capturing the first frame on i.MX8MN
-with CSI/ISI resulted in corrupted frame.
-
-Fixes: aa4bb8b8838f ("media: ov5640: Re-work MIPI startup sequence")
-Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Tested-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com> # [Test on imx6q]
-Signed-off-by: Marek Vasut <marex@denx.de>
+Fixes: 27a274db6b4c6 ("[media] vcodec: mediatek: Add Mediatek VP8 Video Encoder Driver")
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+Reported-by: Steve Cho <stevecho@google.com>
 ---
-Cc: Aishwarya Kothari <aishwarya.kothari@toradex.com>
-Cc: Francesco Dolcini <francesco@dolcini.it>
-Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc: Hugues FRUCHET <hugues.fruchet@foss.st.com>
-Cc: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Cc: Jai Luthra <j-luthra@ti.com>
-Cc: Marcel Ziswiler <marcel@ziswiler.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Steve Longerbeam <slongerbeam@gmail.com>
-Cc: linux-media@vger.kernel.org
----
-V2: - Update commit message to mention this fixes the first corrupted frame
-    - Collect RB/TB
-    - Expand CC list
----
- drivers/media/i2c/ov5640.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../vcodec/encoder/mtk_vcodec_enc_drv.h       |  2 +
+ .../mediatek/vcodec/encoder/venc_vpu_if.c     | 39 +++++++++++++++++--
+ 2 files changed, 37 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-index ff0aef915fca5..5fe85aa2d2ec4 100644
---- a/drivers/media/i2c/ov5640.c
-+++ b/drivers/media/i2c/ov5640.c
-@@ -2539,9 +2539,9 @@ static int ov5640_set_power_mipi(struct ov5640_dev *sensor, bool on)
- 	 *		  "ov5640_set_stream_mipi()")
- 	 * [4] = 0	: Power up MIPI HS Tx
- 	 * [3] = 0	: Power up MIPI LS Rx
--	 * [2] = 0	: MIPI interface disabled
-+	 * [2] = 1	: MIPI interface enabled
- 	 */
--	ret = ov5640_write_reg(sensor, OV5640_REG_IO_MIPI_CTRL00, 0x40);
-+	ret = ov5640_write_reg(sensor, OV5640_REG_IO_MIPI_CTRL00, 0x44);
- 	if (ret)
- 		return ret;
+diff --git a/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc_drv.h b/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc_drv.h
+index c07010e56649..a042f607ed8d 100644
+--- a/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc_drv.h
++++ b/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc_drv.h
+@@ -123,6 +123,7 @@ struct mtk_enc_params {
+  * @xfer_func: enum v4l2_xfer_func, colorspace transfer function
+  *
+  * @q_mutex: vb2_queue mutex.
++ * @vpu_inst: vpu instance pointer.
+  */
+ struct mtk_vcodec_enc_ctx {
+ 	enum mtk_instance_type type;
+@@ -156,6 +157,7 @@ struct mtk_vcodec_enc_ctx {
+ 	enum v4l2_xfer_func xfer_func;
  
+ 	struct mutex q_mutex;
++	void *vpu_inst;
+ };
+ 
+ /**
+diff --git a/drivers/media/platform/mediatek/vcodec/encoder/venc_vpu_if.c b/drivers/media/platform/mediatek/vcodec/encoder/venc_vpu_if.c
+index 708db1bb32d4..d299cc2962a5 100644
+--- a/drivers/media/platform/mediatek/vcodec/encoder/venc_vpu_if.c
++++ b/drivers/media/platform/mediatek/vcodec/encoder/venc_vpu_if.c
+@@ -42,19 +42,46 @@ static void handle_enc_encode_msg(struct venc_vpu_inst *vpu, const void *data)
+ 	vpu->is_key_frm = msg->is_key_frm;
+ }
+ 
++static bool vpu_enc_check_ap_inst(struct mtk_vcodec_enc_dev *enc_dev, struct venc_vpu_inst *vpu)
++{
++	struct mtk_vcodec_enc_ctx *ctx;
++	int ret = false;
++
++	list_for_each_entry(ctx, &enc_dev->ctx_list, list) {
++		if (!IS_ERR_OR_NULL(ctx) && ctx->vpu_inst == vpu) {
++			ret = true;
++			break;
++		}
++	}
++
++	return ret;
++}
++
+ static void vpu_enc_ipi_handler(void *data, unsigned int len, void *priv)
+ {
++	struct mtk_vcodec_enc_dev *enc_dev;
+ 	const struct venc_vpu_ipi_msg_common *msg = data;
+-	struct venc_vpu_inst *vpu =
+-		(struct venc_vpu_inst *)(unsigned long)msg->venc_inst;
++	struct venc_vpu_inst *vpu;
++
++	enc_dev = (struct mtk_vcodec_enc_dev *)priv;
++	vpu = (struct venc_vpu_inst *)(unsigned long)msg->venc_inst;
++	if (!priv || !vpu) {
++		pr_err(MTK_DBG_V4L2_STR "venc_inst is NULL, did the SCP hang or crash?");
++		return;
++	}
+ 
+ 	mtk_venc_debug(vpu->ctx, "msg_id %x inst %p status %d", msg->msg_id, vpu, msg->status);
++	if (!vpu_enc_check_ap_inst(enc_dev, vpu) || msg->msg_id < VPU_IPIMSG_ENC_INIT_DONE ||
++	    msg->msg_id > VPU_IPIMSG_ENC_DEINIT_DONE) {
++		mtk_v4l2_venc_err(vpu->ctx, "venc msg id not correctly => 0x%x", msg->msg_id);
++		vpu->failure = -EINVAL;
++		goto error;
++	}
+ 
+-	vpu->signaled = 1;
+ 	vpu->failure = (msg->status != VENC_IPI_MSG_STATUS_OK);
+ 	if (vpu->failure) {
+ 		mtk_venc_err(vpu->ctx, "vpu enc status failure %d", vpu->failure);
+-		return;
++		goto error;
+ 	}
+ 
+ 	switch (msg->msg_id) {
+@@ -72,6 +99,9 @@ static void vpu_enc_ipi_handler(void *data, unsigned int len, void *priv)
+ 		mtk_venc_err(vpu->ctx, "unknown msg id %x", msg->msg_id);
+ 		break;
+ 	}
++
++error:
++	vpu->signaled = 1;
+ }
+ 
+ static int vpu_enc_send_msg(struct venc_vpu_inst *vpu, void *msg,
+@@ -105,6 +135,7 @@ int vpu_enc_init(struct venc_vpu_inst *vpu)
+ 	init_waitqueue_head(&vpu->wq_hd);
+ 	vpu->signaled = 0;
+ 	vpu->failure = 0;
++	vpu->ctx->vpu_inst = vpu;
+ 
+ 	status = mtk_vcodec_fw_ipi_register(vpu->ctx->dev->fw_handler, vpu->id,
+ 					    vpu_enc_ipi_handler, "venc", NULL);
 -- 
-2.40.1
+2.18.0
 
