@@ -2,93 +2,380 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22CA0C04A94
-	for <linux-media@archiver.kernel.org>; Wed,  2 Aug 2023 17:31:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE92CC001E0
+	for <linux-media@archiver.kernel.org>; Wed,  2 Aug 2023 17:34:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233187AbjHBRbI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Aug 2023 13:31:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49754 "EHLO
+        id S232673AbjHBRek (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Aug 2023 13:34:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231604AbjHBRar (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Aug 2023 13:30:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6BF4482;
-        Wed,  2 Aug 2023 10:28:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        with ESMTP id S232708AbjHBReW (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Aug 2023 13:34:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12909469D
+        for <linux-media@vger.kernel.org>; Wed,  2 Aug 2023 10:31:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1690997454;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tgUtdvWha1GhX10EvDPeO7wqvqtMO+kIFZkDIPabP4Y=;
+        b=LzojiKTd0B9igNTyr8Wl2fjStdlJnWHr69ViDPtc6sGeJznsR0Mt25m40Yg33j8v7D9wjz
+        /u9fPS4g3IX9c8CJXVRVcjLPD27lfGeFSFBLs/SYihMlQnL7jdlEmGVKXeP1Ykd3lGCH2d
+        RjSRTCeqLtEMHHnK2c3870j4Thm2VV0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-50-j9nrwpTrM_mpTenwToAd7w-1; Wed, 02 Aug 2023 13:30:50 -0400
+X-MC-Unique: j9nrwpTrM_mpTenwToAd7w-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D1BB661A7E;
-        Wed,  2 Aug 2023 17:28:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39DCEC433CD;
-        Wed,  2 Aug 2023 17:28:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690997308;
-        bh=fZOqG176cU7NTL9kF5IUl1tJY6WVyVd2yvYUysK5c4Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s2qTYnVTVxmoM/7E/k8f+YVgG+VoGlUIkCW4hUuPFLuW45Gpukag9xjM4G3yNBRFf
-         F9fCcepA0IJAxVfYgBXTi8XC7/fq7AcFLOvA/w5RvjjHUI+sm7qsyIdmxRSymToi9l
-         yElDU1nHeyyAjVpoQg5Q5NsbrP+YDFUWrR1m5qES87cZqrJ3NPRmGCKpcEEFbO18tz
-         PjSrySyhW7OxIuJFh+AsVT0s3SIttTqOByGvWzsj/DE8J1hbh+ezaer48zzC6FqYxG
-         UbTNdG7cNb+U30jy6EPoOvwQU08wmaPJKQecvoO+Q9ZB6nl+DEYqcINItbtYUY9/HA
-         OxkuVgfo611Cg==
-Date:   Wed, 2 Aug 2023 18:28:21 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Shengjiu Wang <shengjiu.wang@gmail.com>
-Cc:     Takashi Iwai <tiwai@suse.de>, Hans Verkuil <hverkuil@xs4all.nl>,
-        Shengjiu Wang <shengjiu.wang@nxp.com>, sakari.ailus@iki.fi,
-        tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiubo.Lee@gmail.com, festevam@gmail.com, nicoleotsuka@gmail.com,
-        lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [RFC PATCH v2 0/7] Add audio support in v4l2 framework
-Message-ID: <844ef9b6-d5e2-46a9-b7a5-7ee86a2e449c@sirena.org.uk>
-References: <1690265540-25999-1-git-send-email-shengjiu.wang@nxp.com>
- <47d66c28-1eb2-07f5-d6f9-779d675aefe8@xs4all.nl>
- <87il9xu1ro.wl-tiwai@suse.de>
- <CAA+D8ANmBKMp_L2GS=Lp-saMQKja6L4E6No3yP-e=a5YQBD_jQ@mail.gmail.com>
- <87il9xoddo.wl-tiwai@suse.de>
- <CAA+D8AOVEpGxO0YNeS1p+Ym86k6VP-CNQB3JmbeT7mPKg0R99A@mail.gmail.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2B18F800159;
+        Wed,  2 Aug 2023 17:30:50 +0000 (UTC)
+Received: from shalem.redhat.com (unknown [10.39.192.110])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C1ED11454143;
+        Wed,  2 Aug 2023 17:30:48 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Daniel Scally <dan.scally@ideasonboard.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Andy Shevchenko <andy@kernel.org>, Kate Hsuan <hpa@redhat.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Tommaso Merciai <tomm.merciai@gmail.com>,
+        linux-media@vger.kernel.org
+Subject: [PATCH v4 01/32] media: ov2680: Remove auto-gain and auto-exposure controls
+Date:   Wed,  2 Aug 2023 19:30:15 +0200
+Message-ID: <20230802173046.368434-2-hdegoede@redhat.com>
+In-Reply-To: <20230802173046.368434-1-hdegoede@redhat.com>
+References: <20230802173046.368434-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="MdG0m2yIP0FKio4T"
-Content-Disposition: inline
-In-Reply-To: <CAA+D8AOVEpGxO0YNeS1p+Ym86k6VP-CNQB3JmbeT7mPKg0R99A@mail.gmail.com>
-X-Cookie: Humpty Dumpty was pushed.
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Quoting the OV2680 datasheet:
 
---MdG0m2yIP0FKio4T
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+"3.2 exposure and gain control
 
-On Wed, Aug 02, 2023 at 10:41:43PM +0800, Shengjiu Wang wrote:
+In the OV2680, the exposure time and gain are set manually from an external
+controller. The OV2680 supports manual gain and exposure control only for
+normal applications, no auto mode."
 
-> Currently the ASRC in ALSA is to connect to another I2S device as
-> a sound card.  But we'd like to the ASRC can be used by user space directly
-> that user space application can get the output after conversion from ASRC.
+And indeed testing with the atomisp_ov2680 fork of ov2680.c has shown that
+auto-exposure and auto-gain do not work.
 
-That sort of use case would be handled via DPCM at the minute, though
-persuading it to connect two front ends together might be fun (which is
-the sort of reason why we want to push digital information down into
-DAPM and make everything a component).
+Note that the code setting the auto-exposure flag was broken, callers
+of ov2680_exposure_set() were directly passing !!ctrls->auto_exp->val as
+"bool auto_exp" value, but ctrls->auto_exp is a menu control with:
 
---MdG0m2yIP0FKio4T
-Content-Type: application/pgp-signature; name="signature.asc"
+enum  v4l2_exposure_auto_type {
+        V4L2_EXPOSURE_AUTO = 0,
+        V4L2_EXPOSURE_MANUAL = 1,
+	...
 
------BEGIN PGP SIGNATURE-----
+So instead of passing !!ctrls->auto_exp->val they should have been passing
+ctrls->auto_exp->val == V4L2_EXPOSURE_AUTO, iow the passed value was
+inverted of what it should have been.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTKkjQACgkQJNaLcl1U
-h9A05Qf8DvVF+7HkTrWpZeLLTiun4dI0bUwdJ7dBv/9eO2gLeD8aonbFN/iOGUS3
-6HQafM/WVAHT67s9CThpIHGG8oWuubOG2Na3mKSs3xD+zRf4NVxpUN9+2JclaYtt
-zKwBd+OYExLP/x/6qTGyqQi5BC0pmgpk73+mQtRRVClGOdjsfE3ke6TWvOBsIUsZ
-+l3hAMxeKmIgczEq5MkPahD2mfN0CZgbCwaFA2zriaJXCPxPP/YFvYf+Mli8KDBK
-6eRZS7e6SHICYPyqngTDICpj6MbiIxCHm7qIKEboyK5C0cW8PR52o6fbyN0XAHxc
-sNfbpJop+bjYwFJQnjwlPTzGqO5cgg==
-=0H5v
------END PGP SIGNATURE-----
+Also remove ov2680_g_volatile_ctrl() since without auto support the gain
+and exposure controls are not volatile.
 
---MdG0m2yIP0FKio4T--
+This also fixes the control values not being properly applied in
+ov2680_mode_set(). The 800x600 mode register-list also sets gain,
+exposure and vflip overriding the last set ctrl values.
+
+ov2680_mode_set() does call ov2680_gain_set() and ov2680_exposure_set()
+but did this before writing the mode register-list, so these values
+would still be overridden by the mode register-list.
+
+Add a v4l2_ctrl_handler_setup() call after writing the mode register-list
+to restore all ctrl values. Also remove the ctrls->gain->is_new check from
+ov2680_gain_set() so that the gain always gets restored properly.
+
+Last since ov2680_mode_set() now calls v4l2_ctrl_handler_setup(), remove
+the v4l2_ctrl_handler_setup() call after ov2680_mode_restore() since
+ov2680_mode_restore() calls ov2680_mode_set().
+
+Fixes: 3ee47cad3e69 ("media: ov2680: Add Omnivision OV2680 sensor driver")
+Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
+Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ drivers/media/i2c/ov2680.c | 163 ++++---------------------------------
+ 1 file changed, 18 insertions(+), 145 deletions(-)
+
+diff --git a/drivers/media/i2c/ov2680.c b/drivers/media/i2c/ov2680.c
+index 0541b7c8e77b..3a737a1607a4 100644
+--- a/drivers/media/i2c/ov2680.c
++++ b/drivers/media/i2c/ov2680.c
+@@ -85,15 +85,8 @@ struct ov2680_mode_info {
+ 
+ struct ov2680_ctrls {
+ 	struct v4l2_ctrl_handler handler;
+-	struct {
+-		struct v4l2_ctrl *auto_exp;
+-		struct v4l2_ctrl *exposure;
+-	};
+-	struct {
+-		struct v4l2_ctrl *auto_gain;
+-		struct v4l2_ctrl *gain;
+-	};
+-
++	struct v4l2_ctrl *exposure;
++	struct v4l2_ctrl *gain;
+ 	struct v4l2_ctrl *hflip;
+ 	struct v4l2_ctrl *vflip;
+ 	struct v4l2_ctrl *test_pattern;
+@@ -143,6 +136,7 @@ static const struct reg_value ov2680_setting_30fps_QUXGA_800_600[] = {
+ 	{0x380e, 0x02}, {0x380f, 0x84}, {0x3811, 0x04}, {0x3813, 0x04},
+ 	{0x3814, 0x31}, {0x3815, 0x31}, {0x3820, 0xc0}, {0x4008, 0x00},
+ 	{0x4009, 0x03}, {0x4837, 0x1e}, {0x3501, 0x4e}, {0x3502, 0xe0},
++	{0x3503, 0x03},
+ };
+ 
+ static const struct reg_value ov2680_setting_30fps_720P_1280_720[] = {
+@@ -405,69 +399,15 @@ static int ov2680_test_pattern_set(struct ov2680_dev *sensor, int value)
+ 	return 0;
+ }
+ 
+-static int ov2680_gain_set(struct ov2680_dev *sensor, bool auto_gain)
++static int ov2680_gain_set(struct ov2680_dev *sensor, u32 gain)
+ {
+-	struct ov2680_ctrls *ctrls = &sensor->ctrls;
+-	u32 gain;
+-	int ret;
+-
+-	ret = ov2680_mod_reg(sensor, OV2680_REG_R_MANUAL, BIT(1),
+-			     auto_gain ? 0 : BIT(1));
+-	if (ret < 0)
+-		return ret;
+-
+-	if (auto_gain || !ctrls->gain->is_new)
+-		return 0;
+-
+-	gain = ctrls->gain->val;
+-
+-	ret = ov2680_write_reg16(sensor, OV2680_REG_GAIN_PK, gain);
+-
+-	return 0;
++	return ov2680_write_reg16(sensor, OV2680_REG_GAIN_PK, gain);
+ }
+ 
+-static int ov2680_gain_get(struct ov2680_dev *sensor)
++static int ov2680_exposure_set(struct ov2680_dev *sensor, u32 exp)
+ {
+-	u32 gain;
+-	int ret;
+-
+-	ret = ov2680_read_reg16(sensor, OV2680_REG_GAIN_PK, &gain);
+-	if (ret)
+-		return ret;
+-
+-	return gain;
+-}
+-
+-static int ov2680_exposure_set(struct ov2680_dev *sensor, bool auto_exp)
+-{
+-	struct ov2680_ctrls *ctrls = &sensor->ctrls;
+-	u32 exp;
+-	int ret;
+-
+-	ret = ov2680_mod_reg(sensor, OV2680_REG_R_MANUAL, BIT(0),
+-			     auto_exp ? 0 : BIT(0));
+-	if (ret < 0)
+-		return ret;
+-
+-	if (auto_exp || !ctrls->exposure->is_new)
+-		return 0;
+-
+-	exp = (u32)ctrls->exposure->val;
+-	exp <<= 4;
+-
+-	return ov2680_write_reg24(sensor, OV2680_REG_EXPOSURE_PK_HIGH, exp);
+-}
+-
+-static int ov2680_exposure_get(struct ov2680_dev *sensor)
+-{
+-	int ret;
+-	u32 exp;
+-
+-	ret = ov2680_read_reg24(sensor, OV2680_REG_EXPOSURE_PK_HIGH, &exp);
+-	if (ret)
+-		return ret;
+-
+-	return exp >> 4;
++	return ov2680_write_reg24(sensor, OV2680_REG_EXPOSURE_PK_HIGH,
++				  exp << 4);
+ }
+ 
+ static int ov2680_stream_enable(struct ov2680_dev *sensor)
+@@ -482,32 +422,16 @@ static int ov2680_stream_disable(struct ov2680_dev *sensor)
+ 
+ static int ov2680_mode_set(struct ov2680_dev *sensor)
+ {
+-	struct ov2680_ctrls *ctrls = &sensor->ctrls;
+ 	int ret;
+ 
+-	ret = ov2680_gain_set(sensor, false);
+-	if (ret < 0)
+-		return ret;
+-
+-	ret = ov2680_exposure_set(sensor, false);
+-	if (ret < 0)
+-		return ret;
+-
+ 	ret = ov2680_load_regs(sensor, sensor->current_mode);
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	if (ctrls->auto_gain->val) {
+-		ret = ov2680_gain_set(sensor, true);
+-		if (ret < 0)
+-			return ret;
+-	}
+-
+-	if (ctrls->auto_exp->val == V4L2_EXPOSURE_AUTO) {
+-		ret = ov2680_exposure_set(sensor, true);
+-		if (ret < 0)
+-			return ret;
+-	}
++	/* Restore value of all ctrls */
++	ret = __v4l2_ctrl_handler_setup(&sensor->ctrls.handler);
++	if (ret < 0)
++		return ret;
+ 
+ 	sensor->mode_pending_changes = false;
+ 
+@@ -590,15 +514,10 @@ static int ov2680_s_power(struct v4l2_subdev *sd, int on)
+ 	else
+ 		ret = ov2680_power_off(sensor);
+ 
+-	mutex_unlock(&sensor->lock);
+-
+-	if (on && ret == 0) {
+-		ret = v4l2_ctrl_handler_setup(&sensor->ctrls.handler);
+-		if (ret < 0)
+-			return ret;
+-
++	if (on && ret == 0)
+ 		ret = ov2680_mode_restore(sensor);
+-	}
++
++	mutex_unlock(&sensor->lock);
+ 
+ 	return ret;
+ }
+@@ -794,52 +713,19 @@ static int ov2680_enum_frame_interval(struct v4l2_subdev *sd,
+ 	return 0;
+ }
+ 
+-static int ov2680_g_volatile_ctrl(struct v4l2_ctrl *ctrl)
+-{
+-	struct v4l2_subdev *sd = ctrl_to_sd(ctrl);
+-	struct ov2680_dev *sensor = to_ov2680_dev(sd);
+-	struct ov2680_ctrls *ctrls = &sensor->ctrls;
+-	int val;
+-
+-	if (!sensor->is_enabled)
+-		return 0;
+-
+-	switch (ctrl->id) {
+-	case V4L2_CID_GAIN:
+-		val = ov2680_gain_get(sensor);
+-		if (val < 0)
+-			return val;
+-		ctrls->gain->val = val;
+-		break;
+-	case V4L2_CID_EXPOSURE:
+-		val = ov2680_exposure_get(sensor);
+-		if (val < 0)
+-			return val;
+-		ctrls->exposure->val = val;
+-		break;
+-	}
+-
+-	return 0;
+-}
+-
+ static int ov2680_s_ctrl(struct v4l2_ctrl *ctrl)
+ {
+ 	struct v4l2_subdev *sd = ctrl_to_sd(ctrl);
+ 	struct ov2680_dev *sensor = to_ov2680_dev(sd);
+-	struct ov2680_ctrls *ctrls = &sensor->ctrls;
+ 
+ 	if (!sensor->is_enabled)
+ 		return 0;
+ 
+ 	switch (ctrl->id) {
+-	case V4L2_CID_AUTOGAIN:
+-		return ov2680_gain_set(sensor, !!ctrl->val);
+ 	case V4L2_CID_GAIN:
+-		return ov2680_gain_set(sensor, !!ctrls->auto_gain->val);
+-	case V4L2_CID_EXPOSURE_AUTO:
+-		return ov2680_exposure_set(sensor, !!ctrl->val);
++		return ov2680_gain_set(sensor, ctrl->val);
+ 	case V4L2_CID_EXPOSURE:
+-		return ov2680_exposure_set(sensor, !!ctrls->auto_exp->val);
++		return ov2680_exposure_set(sensor, ctrl->val);
+ 	case V4L2_CID_VFLIP:
+ 		if (sensor->is_streaming)
+ 			return -EBUSY;
+@@ -864,7 +750,6 @@ static int ov2680_s_ctrl(struct v4l2_ctrl *ctrl)
+ }
+ 
+ static const struct v4l2_ctrl_ops ov2680_ctrl_ops = {
+-	.g_volatile_ctrl = ov2680_g_volatile_ctrl,
+ 	.s_ctrl = ov2680_s_ctrl,
+ };
+ 
+@@ -936,7 +821,7 @@ static int ov2680_v4l2_register(struct ov2680_dev *sensor)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	v4l2_ctrl_handler_init(hdl, 7);
++	v4l2_ctrl_handler_init(hdl, 5);
+ 
+ 	hdl->lock = &sensor->lock;
+ 
+@@ -948,16 +833,9 @@ static int ov2680_v4l2_register(struct ov2680_dev *sensor)
+ 					ARRAY_SIZE(test_pattern_menu) - 1,
+ 					0, 0, test_pattern_menu);
+ 
+-	ctrls->auto_exp = v4l2_ctrl_new_std_menu(hdl, ops,
+-						 V4L2_CID_EXPOSURE_AUTO,
+-						 V4L2_EXPOSURE_MANUAL, 0,
+-						 V4L2_EXPOSURE_AUTO);
+-
+ 	ctrls->exposure = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_EXPOSURE,
+ 					    0, 32767, 1, 0);
+ 
+-	ctrls->auto_gain = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_AUTOGAIN,
+-					     0, 1, 1, 1);
+ 	ctrls->gain = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_GAIN, 0, 2047, 1, 0);
+ 
+ 	if (hdl->error) {
+@@ -965,14 +843,9 @@ static int ov2680_v4l2_register(struct ov2680_dev *sensor)
+ 		goto cleanup_entity;
+ 	}
+ 
+-	ctrls->gain->flags |= V4L2_CTRL_FLAG_VOLATILE;
+-	ctrls->exposure->flags |= V4L2_CTRL_FLAG_VOLATILE;
+ 	ctrls->vflip->flags |= V4L2_CTRL_FLAG_MODIFY_LAYOUT;
+ 	ctrls->hflip->flags |= V4L2_CTRL_FLAG_MODIFY_LAYOUT;
+ 
+-	v4l2_ctrl_auto_cluster(2, &ctrls->auto_gain, 0, true);
+-	v4l2_ctrl_auto_cluster(2, &ctrls->auto_exp, 1, true);
+-
+ 	sensor->sd.ctrl_handler = hdl;
+ 
+ 	ret = v4l2_async_register_subdev(&sensor->sd);
+-- 
+2.41.0
+
