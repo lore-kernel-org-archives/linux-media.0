@@ -2,100 +2,109 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DDE1C001DF
-	for <linux-media@archiver.kernel.org>; Wed,  2 Aug 2023 21:04:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D487C04A94
+	for <linux-media@archiver.kernel.org>; Wed,  2 Aug 2023 21:47:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231445AbjHBVEn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Aug 2023 17:04:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52182 "EHLO
+        id S233879AbjHBVrJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Aug 2023 17:47:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbjHBVEm (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Aug 2023 17:04:42 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BC726B0
-        for <linux-media@vger.kernel.org>; Wed,  2 Aug 2023 14:04:41 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B77F829A;
-        Wed,  2 Aug 2023 23:03:35 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1691010216;
-        bh=3re0y8JZDhLfaPizte+XU4IuMS0Put9waJxWZd8qXxQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kZfUwOisG6cDktB+DZBqojMg9Qojnjj3F4+MMcjk11OE2jcSsDuzE+m/AK8Vu2+H0
-         UKV8q8yQL59ulTHIWOEoAMYnKKNscsVwA+o8TC/jNczXFmgNtMUeNJODCu/NV3/YQ7
-         TxX19Co0WsW61M2U/94rDKVP3twGvOu0EN50Drzk=
-Date:   Thu, 3 Aug 2023 00:04:44 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Ruan Jinjie <ruanjinjie@huawei.com>
-Cc:     prabhakar.csengg@gmail.com, mchehab@kernel.org,
-        linux-media@vger.kernel.org, Sakari Ailus <sakari.ailus@iki.fi>
-Subject: Re: [PATCH -next] media: platform: ti: fix the return value handle
- for platform_get_irq()
-Message-ID: <20230802210444.GF29718@pendragon.ideasonboard.com>
-References: <20230731120212.2017996-1-ruanjinjie@huawei.com>
+        with ESMTP id S233828AbjHBVqm (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Aug 2023 17:46:42 -0400
+Received: from mgamail.intel.com (unknown [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F084225
+        for <linux-media@vger.kernel.org>; Wed,  2 Aug 2023 14:46:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691012768; x=1722548768;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=x+LP+4lfNYxrrkLWfRafgulLicRZ0Ly2LjAWyJO66Mc=;
+  b=isZrcCKy1iitCwVzOylsWwED1hTyaYZQ4Q9YN71I/KD07rKWoDPw5RfB
+   uwnQlt/SyvG5Q56IB88jsRZ4Avm2oJpXtP6RK7T2EmlrqdwEKW4sMxoxe
+   AJL5QOBeyyF6w3mzmaygBFUSnjVDDvPDVe8hEPOoD/2Lxy2ozRbq514ag
+   5wCvdYrqDGViVa7YxY8nCW1Z3in/cLpOL9I1hhd1pvuH7BQuXHLbfAw77
+   hSfRXCw+5pD+8f3qrgzLqYK/6b2409+1sO8odz5KKNpBgc/K026GpAb8i
+   IVmkFQbbFQhU2HzfDHFWWV+ctBvxrhO08jbU5mLaipBuCEnEsVwUObPsw
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10790"; a="372442049"
+X-IronPort-AV: E=Sophos;i="6.01,250,1684825200"; 
+   d="scan'208";a="372442049"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2023 14:46:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10790"; a="853009295"
+X-IronPort-AV: E=Sophos;i="6.01,250,1684825200"; 
+   d="scan'208";a="853009295"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2023 14:46:02 -0700
+Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 45450120BBA;
+        Thu,  3 Aug 2023 00:45:59 +0300 (EEST)
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        tomi.valkeinen@ideasonboard.com, bingbu.cao@intel.com,
+        hongju.wang@intel.com, hverkuil@xs4all.nl,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Dmitry Perchanov <dmitry.perchanov@intel.com>
+Subject: [PATCH v2 2/9] media: mc: Check pad flag validity
+Date:   Thu,  3 Aug 2023 00:45:49 +0300
+Message-Id: <20230802214556.180589-3-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230802214556.180589-1-sakari.ailus@linux.intel.com>
+References: <20230802214556.180589-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230731120212.2017996-1-ruanjinjie@huawei.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Ruan,
+Check the validity of pad flags on entity init. Exactly one of the flags
+must be set.
 
-Thank you for the patch.
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ drivers/media/mc/mc-entity.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-On Mon, Jul 31, 2023 at 08:02:12PM +0800, Ruan Jinjie wrote:
-> There is no possible for platform_get_irq() to return 0,
-> and the return value of platform_get_irq() is more sensible
-> to show the error reason.
-> 
-> Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
-> ---
->  drivers/media/platform/ti/am437x/am437x-vpfe.c | 4 +---
->  drivers/media/platform/ti/omap3isp/isp.c       | 4 +---
->  2 files changed, 2 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/media/platform/ti/am437x/am437x-vpfe.c b/drivers/media/platform/ti/am437x/am437x-vpfe.c
-> index 81a63a3865cf..a85b97107de7 100644
-> --- a/drivers/media/platform/ti/am437x/am437x-vpfe.c
-> +++ b/drivers/media/platform/ti/am437x/am437x-vpfe.c
-> @@ -2420,10 +2420,8 @@ static int vpfe_probe(struct platform_device *pdev)
->  	}
->  
->  	ret = platform_get_irq(pdev, 0);
-> -	if (ret <= 0) {
-> -		ret = -ENODEV;
-> +	if (ret < 0)
->  		goto probe_out_cleanup;
-> -	}
->  	vpfe->irq = ret;
->  
->  	ret = devm_request_irq(vpfe->pdev, vpfe->irq, vpfe_isr, 0,
-> diff --git a/drivers/media/platform/ti/omap3isp/isp.c b/drivers/media/platform/ti/omap3isp/isp.c
-> index f3aaa9e76492..226db75221cd 100644
-> --- a/drivers/media/platform/ti/omap3isp/isp.c
-> +++ b/drivers/media/platform/ti/omap3isp/isp.c
-> @@ -2398,10 +2398,8 @@ static int isp_probe(struct platform_device *pdev)
->  
->  	/* Interrupt */
->  	ret = platform_get_irq(pdev, 0);
-> -	if (ret <= 0) {
-> -		ret = -ENODEV;
-> +	if (ret < 0)
->  		goto error_iommu;
-> -	}
->  	isp->irq_num = ret;
->  
->  	if (devm_request_irq(isp->dev, isp->irq_num, isp_isr, IRQF_SHARED,
-
-The changes look fine to me.
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-Sakari, would you like to merge this through your tree ?
-
+diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
+index 83468d4a440b..4991281dcccc 100644
+--- a/drivers/media/mc/mc-entity.c
++++ b/drivers/media/mc/mc-entity.c
+@@ -197,6 +197,7 @@ int media_entity_pads_init(struct media_entity *entity, u16 num_pads,
+ 	struct media_device *mdev = entity->graph_obj.mdev;
+ 	struct media_pad *iter;
+ 	unsigned int i = 0;
++	int ret = 0;
+ 
+ 	if (num_pads >= MEDIA_ENTITY_MAX_PADS)
+ 		return -E2BIG;
+@@ -210,6 +211,14 @@ int media_entity_pads_init(struct media_entity *entity, u16 num_pads,
+ 	media_entity_for_each_pad(entity, iter) {
+ 		iter->entity = entity;
+ 		iter->index = i++;
++
++		if (hweight32(iter->flags & (MEDIA_PAD_FL_SINK |
++					     MEDIA_PAD_FL_SOURCE))
++		    != 1) {
++			ret = -EINVAL;
++			break;
++		}
++
+ 		if (mdev)
+ 			media_gobj_create(mdev, MEDIA_GRAPH_PAD,
+ 					  &iter->graph_obj);
+@@ -218,7 +227,7 @@ int media_entity_pads_init(struct media_entity *entity, u16 num_pads,
+ 	if (mdev)
+ 		mutex_unlock(&mdev->graph_mutex);
+ 
+-	return 0;
++	return ret;
+ }
+ EXPORT_SYMBOL_GPL(media_entity_pads_init);
+ 
 -- 
-Regards,
+2.39.2
 
-Laurent Pinchart
