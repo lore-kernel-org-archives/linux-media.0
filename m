@@ -2,45 +2,45 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E55AC001E0
-	for <linux-media@archiver.kernel.org>; Wed,  2 Aug 2023 21:47:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37DD2C001E0
+	for <linux-media@archiver.kernel.org>; Wed,  2 Aug 2023 21:47:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233807AbjHBVra (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Aug 2023 17:47:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44366 "EHLO
+        id S233847AbjHBVrb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Aug 2023 17:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233820AbjHBVrI (ORCPT
+        with ESMTP id S233870AbjHBVrI (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Wed, 2 Aug 2023 17:47:08 -0400
 Received: from mgamail.intel.com (unknown [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193643A86
-        for <linux-media@vger.kernel.org>; Wed,  2 Aug 2023 14:46:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE1F3A90
+        for <linux-media@vger.kernel.org>; Wed,  2 Aug 2023 14:46:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1691012791; x=1722548791;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=r/SIjrwUReb/l+aDUKCinWddolNalKr3CmKEm3N7G3M=;
-  b=XpYIASzBv1foEU3LRJQ8ZsilEW0xJZuzGjTMUGte3wnrlbOdWFE4HgjJ
-   BuNYdqmlb9/1SQaFzJlhz0ZeuygsmRw3cON3n1x9tGQ6HeUjO6YimLAdh
-   kQzUyYahDFK2Dq459D0l5l20D6XmAJDXTVAAz3g1/Tr8WbOYuac+DTKCX
-   I6cUe58TqqKpRGz3j93YGFSsJHDezDAsP8iQB7g9FkYkqucfRx2o6UBnt
-   41V1zxDlhkqy8TUuou7Xd50//+gstGlIU/WggYTK0Oe71kQtGDeYJCLqI
-   eYV9YwG/bvLR/8ZlcyUqx67B42E7ys7Qs02hiJP0J/uPM99ufMeWXx774
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10790"; a="372442055"
+  bh=baraVIKViWXHBmyB8wvxlZVfLAf9ztDNDwMbJv8RESc=;
+  b=Vg4nPoLoaqhq7jHU5G2W5e8zqgO+fNOWWdEpJLFYhdY+Pe621m79LqP9
+   uQOVh0cJusrfQRcxTatFgpLdgbR00DBdyCJmabveoR1tCTt4QPqAGNyV8
+   iV6qSQfqThRO5b2r9hGR7ZVfGM31vD98Tye0Fe6TY9TPQYKnA1EvqL7kW
+   yiNUtX7KaxjNnmNgBH4iRnHEY1dYyZ8nE5v/Lfm9O0o2bGW5Jiy8VVI8V
+   KmdQ3TS4u2QFJmM8AK7zu4iInv/wisheUI5jw//0dUkhP0xBnqgAzQ2M2
+   wQXZLLMPl5f7d4UANpe9aN/qCvZbf1pVnGWc7728+uAZl/piifZUuatid
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10790"; a="372442067"
 X-IronPort-AV: E=Sophos;i="6.01,250,1684825200"; 
-   d="scan'208";a="372442055"
+   d="scan'208";a="372442067"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2023 14:46:06 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2023 14:46:09 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10790"; a="853009323"
+X-IronPort-AV: E=McAfee;i="6600,9927,10790"; a="853009336"
 X-IronPort-AV: E=Sophos;i="6.01,250,1684825200"; 
-   d="scan'208";a="853009323"
+   d="scan'208";a="853009336"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2023 14:46:04 -0700
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2023 14:46:07 -0700
 Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id E17FC120BBB;
-        Thu,  3 Aug 2023 00:46:00 +0300 (EEST)
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id EF2AC1204CF;
+        Thu,  3 Aug 2023 00:46:03 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -49,9 +49,9 @@ Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Andrey Konovalov <andrey.konovalov@linaro.org>,
         Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
         Dmitry Perchanov <dmitry.perchanov@intel.com>
-Subject: [PATCH v2 3/9] media: mc: Add INTERNAL pad flag
-Date:   Thu,  3 Aug 2023 00:45:50 +0300
-Message-Id: <20230802214556.180589-4-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 5/9] media: uapi: Add generic serial metadata mbus formats
+Date:   Thu,  3 Aug 2023 00:45:52 +0300
+Message-Id: <20230802214556.180589-6-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230802214556.180589-1-sakari.ailus@linux.intel.com>
 References: <20230802214556.180589-1-sakari.ailus@linux.intel.com>
@@ -61,96 +61,330 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Internal source pads will be used as routing endpoints in V4L2
-[GS]_ROUTING IOCTLs, to indicate that the stream begins in the entity.
-
-Also prevent creating links to pads that have been flagged as internal.
+Add generic serial metadata mbus formats. These formats describe data
+width and packing but not the content itself. The reason for specifying
+such formats is that the formats as such are fairly device specific but
+they are still handled by CSI-2 receiver drivers that should not be aware
+of device specific formats. What makes generic metadata formats possible
+is that these formats are parsed by software only, after capturing the
+data to system memory.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- Documentation/userspace-api/media/glossary.rst             | 6 ++++++
- Documentation/userspace-api/media/mediactl/media-types.rst | 6 ++++++
- drivers/media/mc/mc-entity.c                               | 6 +++++-
- include/uapi/linux/media.h                                 | 1 +
- 4 files changed, 18 insertions(+), 1 deletion(-)
+ .../userspace-api/media/v4l/dev-subdev.rst    |   8 +-
+ .../media/v4l/subdev-formats.rst              | 257 ++++++++++++++++++
+ include/uapi/linux/media-bus-format.h         |   9 +
+ 3 files changed, 270 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/glossary.rst b/Documentation/userspace-api/media/glossary.rst
-index 96a360edbf3b..f7b99a4527c7 100644
---- a/Documentation/userspace-api/media/glossary.rst
-+++ b/Documentation/userspace-api/media/glossary.rst
-@@ -173,6 +173,12 @@ Glossary
- 	An integrated circuit that integrates all components of a computer
- 	or other electronic systems.
+diff --git a/Documentation/userspace-api/media/v4l/dev-subdev.rst b/Documentation/userspace-api/media/v4l/dev-subdev.rst
+index 0e3ca6d6d81f..8197100663b9 100644
+--- a/Documentation/userspace-api/media/v4l/dev-subdev.rst
++++ b/Documentation/userspace-api/media/v4l/dev-subdev.rst
+@@ -639,8 +639,8 @@ modeled as V4L2 devices, exposed to userspace via /dev/videoX nodes.
+ To configure this pipeline, the userspace must take the following steps:
  
-+_media-glossary-stream:
-+    Stream
-+	A distinct flow of data (image data or metadata) over a media pipeline
-+	from source to sink. A source may be e.g. an image sensor and a sink
-+	e.g. a memory buffer.
+ 1) Set up media links between entities: connect the sensors to the bridge,
+-bridge to the receiver, and the receiver to the DMA engines. This step does
+-not differ from normal non-multiplexed media controller setup.
++   bridge to the receiver, and the receiver to the DMA engines. This step does
++   not differ from normal non-multiplexed media controller setup.
+ 
+ 2) Configure routing
+ 
+@@ -715,8 +715,8 @@ modeled as V4L2 devices, exposed to userspace via /dev/videoX nodes.
+ To configure this pipeline, the userspace must take the following steps:
+ 
+ 1) Set up media links between entities: connect the sensors to the bridge,
+-bridge to the receiver, and the receiver to the DMA engines. This step does
+-not differ from normal non-multiplexed media controller setup.
++   bridge to the receiver, and the receiver to the DMA engines. This step does
++   not differ from normal non-multiplexed media controller setup.
+ 
+ 2) Configure routing
+ 
+diff --git a/Documentation/userspace-api/media/v4l/subdev-formats.rst b/Documentation/userspace-api/media/v4l/subdev-formats.rst
+index a3a35eeed708..c615da08502d 100644
+--- a/Documentation/userspace-api/media/v4l/subdev-formats.rst
++++ b/Documentation/userspace-api/media/v4l/subdev-formats.rst
+@@ -8234,3 +8234,260 @@ The following table lists the existing metadata formats.
+ 	both sides of the link and the bus format is a fixed
+ 	metadata format that is not configurable from userspace.
+ 	Width and height will be set to 0 for this format.
 +
-     V4L2 API
- 	**V4L2 userspace API**
++Generic Serial Metadata Formats
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++
++Generic serial metadata formats are used on serial busses where the actual data
++content is more or less device specific but the data is transmitted and received
++by multiple devices that do not process the data in any way, simply writing
++it to system memory for processing in software at the end of the pipeline.
++
++The more specific variant describing the actual data is used on the internal
++source pad of the originating sub-device.
++
++"b" in an array cell signifies a byte of data, followed by the number of byte
++and finally the bit number in subscript. "p" indicates a padding bit.
++
++.. _media-bus-format-generic-meta:
++
++.. cssclass: longtable
++
++.. flat-table:: Generic Serial Metadata Formats
++    :header-rows:  2
++    :stub-columns: 0
++
++    * - Identifier
++      - Code
++      -
++      - :cspan:`23` Data organization
++    * -
++      -
++      - Bit
++      - 23
++      - 22
++      - 21
++      - 20
++      - 19
++      - 18
++      - 17
++      - 16
++      - 15
++      - 14
++      - 13
++      - 12
++      - 11
++      - 10
++      - 9
++      - 8
++      - 7
++      - 6
++      - 5
++      - 4
++      - 3
++      - 2
++      - 1
++      - 0
++    * .. _MEDIA-BUS-FMT-META-8:
++
++      - MEDIA_BUS_FMT_META_8
++      - 0x8001
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      - b0\ :sub:`7`
++      - b0\ :sub:`6`
++      - b0\ :sub:`5`
++      - b0\ :sub:`4`
++      - b0\ :sub:`3`
++      - b0\ :sub:`2`
++      - b0\ :sub:`1`
++      - b0\ :sub:`0`
++    * .. _MEDIA-BUS-FMT-META-10:
++
++      - MEDIA_BUS_FMT_META_10
++      - 0x8002
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      - b0\ :sub:`7`
++      - b0\ :sub:`6`
++      - b0\ :sub:`5`
++      - b0\ :sub:`4`
++      - b0\ :sub:`3`
++      - b0\ :sub:`2`
++      - b0\ :sub:`1`
++      - b0\ :sub:`0`
++      - p
++      - p
++    * .. _MEDIA-BUS-FMT-META-12:
++
++      - MEDIA_BUS_FMT_META_12
++      - 0x8003
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      - b0\ :sub:`7`
++      - b0\ :sub:`6`
++      - b0\ :sub:`5`
++      - b0\ :sub:`4`
++      - b0\ :sub:`3`
++      - b0\ :sub:`2`
++      - b0\ :sub:`1`
++      - b0\ :sub:`0`
++      - p
++      - p
++      - p
++      - p
++    * .. _MEDIA-BUS-FMT-META-14:
++
++      - MEDIA_BUS_FMT_META_14
++      - 0x8004
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      - b0\ :sub:`7`
++      - b0\ :sub:`6`
++      - b0\ :sub:`5`
++      - b0\ :sub:`4`
++      - b0\ :sub:`3`
++      - b0\ :sub:`2`
++      - b0\ :sub:`1`
++      - b0\ :sub:`0`
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++    * .. _MEDIA-BUS-FMT-META-16:
++
++      - MEDIA_BUS_FMT_META_16
++      - 0x8005
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      - b0\ :sub:`7`
++      - b0\ :sub:`6`
++      - b0\ :sub:`5`
++      - b0\ :sub:`4`
++      - b0\ :sub:`3`
++      - b0\ :sub:`2`
++      - b0\ :sub:`1`
++      - b0\ :sub:`0`
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++    * .. _MEDIA-BUS-FMT-META-20:
++
++      - MEDIA_BUS_FMT_META_20
++      - 0x8007
++      -
++      -
++      -
++      -
++      -
++      - b0\ :sub:`7`
++      - b0\ :sub:`6`
++      - b0\ :sub:`5`
++      - b0\ :sub:`4`
++      - b0\ :sub:`3`
++      - b0\ :sub:`2`
++      - b0\ :sub:`1`
++      - b0\ :sub:`0`
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++    * .. _MEDIA-BUS-FMT-META-24:
++
++      - MEDIA_BUS_FMT_META_24
++      - 0x8009
++      -
++      - b0\ :sub:`7`
++      - b0\ :sub:`6`
++      - b0\ :sub:`5`
++      - b0\ :sub:`4`
++      - b0\ :sub:`3`
++      - b0\ :sub:`2`
++      - b0\ :sub:`1`
++      - b0\ :sub:`0`
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
+diff --git a/include/uapi/linux/media-bus-format.h b/include/uapi/linux/media-bus-format.h
+index a03c543cb072..9ee031397372 100644
+--- a/include/uapi/linux/media-bus-format.h
++++ b/include/uapi/linux/media-bus-format.h
+@@ -173,4 +173,13 @@
+  */
+ #define MEDIA_BUS_FMT_METADATA_FIXED		0x7001
  
-diff --git a/Documentation/userspace-api/media/mediactl/media-types.rst b/Documentation/userspace-api/media/mediactl/media-types.rst
-index 0ffeece1e0c8..28941da27790 100644
---- a/Documentation/userspace-api/media/mediactl/media-types.rst
-+++ b/Documentation/userspace-api/media/mediactl/media-types.rst
-@@ -361,6 +361,7 @@ Types and flags used to represent the media graph elements
- .. _MEDIA-PAD-FL-SINK:
- .. _MEDIA-PAD-FL-SOURCE:
- .. _MEDIA-PAD-FL-MUST-CONNECT:
-+.. _MEDIA-PAD-FL-INTERNAL:
- 
- .. flat-table:: Media pad flags
-     :header-rows:  0
-@@ -382,6 +383,11 @@ Types and flags used to represent the media graph elements
- 	  when this flag isn't set; the absence of the flag doesn't imply
- 	  there is none.
- 
-+    *  -  ``MEDIA_PAD_FL_INTERNAL``
-+       -  The internal flag indicates an internal pad that has no external
-+	  connections. Such a pad shall not be connected with a link. The
-+	  internal flag indicates that the :ref:``stream
-+	  <media-glossary-stream>`` either starts or ends in the entity.
- 
- One and only one of ``MEDIA_PAD_FL_SINK`` and ``MEDIA_PAD_FL_SOURCE``
- must be set for every pad.
-diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
-index 4991281dcccc..03a9e0b8ebab 100644
---- a/drivers/media/mc/mc-entity.c
-+++ b/drivers/media/mc/mc-entity.c
-@@ -1071,7 +1071,8 @@ int media_get_pad_index(struct media_entity *entity, u32 pad_type,
- 
- 	for (i = 0; i < entity->num_pads; i++) {
- 		if ((entity->pads[i].flags &
--		     (MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_SOURCE)) != pad_type)
-+		     (MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_SOURCE |
-+		      MEDIA_PAD_FL_INTERNAL)) != pad_type)
- 			continue;
- 
- 		if (entity->pads[i].sig_type == sig_type)
-@@ -1094,6 +1095,9 @@ media_create_pad_link(struct media_entity *source, u16 source_pad,
- 		return -EINVAL;
- 	if (WARN_ON(!(source->pads[source_pad].flags & MEDIA_PAD_FL_SOURCE)))
- 		return -EINVAL;
-+	if (WARN_ON(source->pads[source_pad].flags & MEDIA_PAD_FL_SOURCE &&
-+		    source->pads[source_pad].flags & MEDIA_PAD_FL_INTERNAL))
-+		return -EINVAL;
- 	if (WARN_ON(!(sink->pads[sink_pad].flags & MEDIA_PAD_FL_SINK)))
- 		return -EINVAL;
- 
-diff --git a/include/uapi/linux/media.h b/include/uapi/linux/media.h
-index 1c80b1d6bbaf..80cfd12a43fc 100644
---- a/include/uapi/linux/media.h
-+++ b/include/uapi/linux/media.h
-@@ -208,6 +208,7 @@ struct media_entity_desc {
- #define MEDIA_PAD_FL_SINK			(1U << 0)
- #define MEDIA_PAD_FL_SOURCE			(1U << 1)
- #define MEDIA_PAD_FL_MUST_CONNECT		(1U << 2)
-+#define MEDIA_PAD_FL_INTERNAL			(1U << 3)
- 
- struct media_pad_desc {
- 	__u32 entity;		/* entity ID */
++/* Generic line based metadata formats for serial buses. Next is 0x8008. */
++#define MEDIA_BUS_FMT_META_8			0x8001
++#define MEDIA_BUS_FMT_META_10			0x8002
++#define MEDIA_BUS_FMT_META_12			0x8003
++#define MEDIA_BUS_FMT_META_14			0x8004
++#define MEDIA_BUS_FMT_META_16			0x8005
++#define MEDIA_BUS_FMT_META_20			0x8006
++#define MEDIA_BUS_FMT_META_24			0x8007
++
+ #endif /* __LINUX_MEDIA_BUS_FORMAT_H */
 -- 
 2.39.2
 
