@@ -2,264 +2,569 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BE38C04A6A
-	for <linux-media@archiver.kernel.org>; Wed,  2 Aug 2023 07:14:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55583C001DF
+	for <linux-media@archiver.kernel.org>; Wed,  2 Aug 2023 07:19:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232691AbjHBHOK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Aug 2023 03:14:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56952 "EHLO
+        id S232224AbjHBHTj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Aug 2023 03:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232137AbjHBHOH (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Aug 2023 03:14:07 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A90F1715
-        for <linux-media@vger.kernel.org>; Wed,  2 Aug 2023 00:14:04 -0700 (PDT)
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230802071401epoutp028c45325d09c8c13ae9023654d00948c3~3f4-7hZXC1677816778epoutp02Q
-        for <linux-media@vger.kernel.org>; Wed,  2 Aug 2023 07:14:01 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230802071401epoutp028c45325d09c8c13ae9023654d00948c3~3f4-7hZXC1677816778epoutp02Q
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1690960441;
-        bh=vdidDrgoxFNtAU59G6U6meSnH4GCYp9SFmNJE4QDbRI=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=Vf9iP9AmmY/7pGFjhnof1coqe3TPJEgGfjY+70PklDpvkgoWySMweqa3SPN70LqNU
-         FAsWqeNlqNKn8EIJZFIYChbIYPrwyPeM2Vpi5t8uNhEh62JO4W0fAGLABwvfVjrSdr
-         G6OgpXN1de6DiKwq3QGcZJbIq/HtIVySBo/DAvdM=
-Received: from epsmges5p2new.samsung.com (unknown [182.195.42.74]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20230802071400epcas5p3d63405bb1ea7cd890e97e28112438844~3f4-cZdfD0557305573epcas5p3D;
-        Wed,  2 Aug 2023 07:14:00 +0000 (GMT)
-X-AuditID: b6c32a4a-ec1fd7000000acda-b3-64ca02385d02
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        58.8C.44250.8320AC46; Wed,  2 Aug 2023 16:14:00 +0900 (KST)
-Mime-Version: 1.0
-Subject: RE: Re: [PATCH] USB: Fix race condition during UVC webcam
- disconnect
-Reply-To: aman.deep@samsung.com
-Sender: AMAN DEEP <aman.deep@samsung.com>
-From:   AMAN DEEP <aman.deep@samsung.com>
-To:     Oliver Neukum <oneukum@suse.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "mchehab@kernel.org" <mchehab@kernel.org>
-CC:     "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "laurent.pinchart@ideasonboard.com" 
-        <laurent.pinchart@ideasonboard.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Anuj Gupta <anuj01.gupta@samsung.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <347f9810-a9b7-8ef0-0442-6d22261d3ff5@suse.com>
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230802052245epcms5p1a526743669b21f2425edcd735bbf0292@epcms5p1>
-Date:   Wed, 02 Aug 2023 10:52:45 +0530
-X-CMS-MailID: 20230802052245epcms5p1a526743669b21f2425edcd735bbf0292
+        with ESMTP id S229744AbjHBHTi (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Aug 2023 03:19:38 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3124C1981
+        for <linux-media@vger.kernel.org>; Wed,  2 Aug 2023 00:19:36 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-4039a2b71c1so37441171cf.0
+        for <linux-media@vger.kernel.org>; Wed, 02 Aug 2023 00:19:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1690960774; x=1691565574;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dbMvUxwH+/+y3la1xiXvJTcsHrArNwK80KsvHS3wgHI=;
+        b=ETtEoNZvnjIBRiuHg18aaJj9lWN9itCP7KatlxIPWQ4BVkrWVd9Hs3OVR7KiXBvXZX
+         ELat7kx0R40ZAqmd+vw5l6NwvIegkuEjf5hg3gs/22hy2rQU7GSOmOUpCyC1VTOI4lTe
+         i8uG8m56winr/X6ogtu71//Sxua0RgEaI1f0Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690960774; x=1691565574;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dbMvUxwH+/+y3la1xiXvJTcsHrArNwK80KsvHS3wgHI=;
+        b=NNXSZ1agor+vEHs75QtG8MRuLkAsvreCukk19safHa72IItQjbBKTh0ESdatQs627p
+         y82Vf1b5KMHyIajOQeHy/EVbUnuWsFOdg9ngek2cNgSfFvJ+Bl7sKLhvFJPYPyhRBs5M
+         Yapo5hO42Y8bB7sASzs3oZukgnFBrKLl7Atbii3k2C+LSQknQCcuvcl2mujipE8d7mNW
+         pf4eyBoKE5tNOHfwCDEfbMqhOXnfkXe60FpjJONdn676LijtlFLAQQXxi73WOYa4UnWg
+         UREszwhaLIlNS+39b4NC7vmBR47qCF2SlF1QupBuhHGygxX3tA59Is9+QuvfWxSK7t4s
+         vmHA==
+X-Gm-Message-State: ABy/qLbiXsN7sT7rlfY80cjL0fcGEr4+2ab8y1+oFA75SWsNO/aexpdK
+        EQ0EFAYktEbHLxYr6MaFTqJYePabjcErNIRexvq9+9sQ
+X-Google-Smtp-Source: APBJJlGdqe5CSiKTxfJyWIShf6ejWcdCNHgXhFnSXqvbozcGVIcBBTvEj/N5tAjWQ0ggNVycPFypxg==
+X-Received: by 2002:a05:620a:1710:b0:767:11b1:de09 with SMTP id az16-20020a05620a171000b0076711b1de09mr15766748qkb.4.1690960774464;
+        Wed, 02 Aug 2023 00:19:34 -0700 (PDT)
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com. [209.85.222.170])
+        by smtp.gmail.com with ESMTPSA id d13-20020a05620a158d00b0076cce1e9a1csm420307qkk.31.2023.08.02.00.19.32
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Aug 2023 00:19:33 -0700 (PDT)
+Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-76c9334baedso278313985a.2
+        for <linux-media@vger.kernel.org>; Wed, 02 Aug 2023 00:19:32 -0700 (PDT)
+X-Received: by 2002:a05:620a:25c8:b0:768:34e2:6473 with SMTP id
+ y8-20020a05620a25c800b0076834e26473mr14652022qko.73.1690960772081; Wed, 02
+ Aug 2023 00:19:32 -0700 (PDT)
+MIME-Version: 1.0
+References: <1690265540-25999-1-git-send-email-shengjiu.wang@nxp.com>
+ <1690265540-25999-5-git-send-email-shengjiu.wang@nxp.com> <20230728075933.pdepqspznenazs5f@chromium.org>
+ <CAA+D8APU-F93JH539cUYDJ83PeMQwyfNV1kF7iGSmZrsdSeiUg@mail.gmail.com>
+In-Reply-To: <CAA+D8APU-F93JH539cUYDJ83PeMQwyfNV1kF7iGSmZrsdSeiUg@mail.gmail.com>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Wed, 2 Aug 2023 16:19:15 +0900
+X-Gmail-Original-Message-ID: <CAAFQd5AD9U8F0DzLLGMVE6EiVPiNRd5v5fLCcvGputSBmLc-0g@mail.gmail.com>
+Message-ID: <CAAFQd5AD9U8F0DzLLGMVE6EiVPiNRd5v5fLCcvGputSBmLc-0g@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 4/7] media: v4l2: Add audio capture and output support
+To:     Shengjiu Wang <shengjiu.wang@gmail.com>
+Cc:     Shengjiu Wang <shengjiu.wang@nxp.com>, hverkuil@xs4all.nl,
+        sakari.ailus@iki.fi, m.szyprowski@samsung.com, mchehab@kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xiubo.Lee@gmail.com, festevam@gmail.com, nicoleotsuka@gmail.com,
+        lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, alsa-devel@alsa-project.org,
+        linuxppc-dev@lists.ozlabs.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrEKsWRmVeSWpSXmKPExsWy7bCmuq4F06kUg+sLTC2u3PSxaF68ns2i
-        c+ISdovLu+awWfRs2MpqsWhZK7PFsk1/mCy6Hq9ks5jw+wKbA6fH7I6ZrB6bVnWyeeyfu4bd
-        Y/bdH4wefVtWMXqs33KVxePzJrkA9igum5TUnMyy1CJ9uwSujHdLHzEWnEquWPz9N2MD46qE
-        LkZODgkBE4mus1/Zuhi5OIQEdjNKtO1YzNLFyMHBKyAo8XeHMEiNsIC/xKNtf9lBbCEBeYnV
-        jzYxQsQ1Jc5N+gYWZxNQlzj15yOYLSJQLjGh6w8LiM0s8IpJ4t4MYYhdvBIz2p+yQNjSEtuX
-        bwWbwylgI3Hl83+ouKjEzdVv2WHs98fmM0LYIhKt984yQ9iCEg9+7oaKy0h0TNoB1VstMaH5
-        OhPILxICLYwSdy5MhCoyl9j1czWYzSvgK/F00wpWEJtFQFXixXeQOAdQjYvEg4vKEDdrSyxb
-        +JoZJMwM9OP6XfoQU2Qlpp5axwRRwifR+/sJE8xbO+bB2MoS729+gDpfUuLgpR6okz0kOu/e
-        YoUE83FGiV1brzNOYFSYhQjpWUg2z0LYvICReRWjZGpBcW56arFpgVFearlecWJucWleul5y
-        fu4mRnAy0vLawfjwwQe9Q4xMHIyHGCU4mJVEeKV/H08R4k1JrKxKLcqPLyrNSS0+xCjNwaIk
-        zvu6dW6KkEB6YklqdmpqQWoRTJaJg1OqgUlA+4jZk9f6+tN3CIcFsEasKKxbw2NlWmrd0JUe
-        z+w/Jdfboee9/IKyOZfPmjY6iPcGz52r/Hrp3qeFn1gCDm7SbRf8ab+m/HXVnejKtJ5f29/o
-        Cvg0tNefTNtw98S3X0xXFwS5fNPS12LaaLjDWMNgiswS33Lud48WzvU1f7Bjfuus6FnrGl9M
-        43lXc1D7fOTrgzWib42avPXSdijfvvjjtXj53BRfW2n5uh9Gz498sk8R+fpCU2BNW+lXybt9
-        HBM+ChRMZtyx94bSdo0c9xTx560pmjP320elvPq6/lTjfzHNb7e1TqSu/mq3eapjV0/2m5xa
-        K+XQUKdszpQrqRP/+nTvsa5w/DsrR/D0BCWW4oxEQy3mouJEAIMrGsi1AwAA
-X-CMS-RootMailID: 20230720113203epcas5p1eb52bec9c076d1a2f3dac5e317d0361b
-References: <347f9810-a9b7-8ef0-0442-6d22261d3ff5@suse.com>
-        <20230728045935epcms5p8f40b56f2c9100c7ea280c6f26b40d4fb@epcms5p8>
-        <CGME20230720113203epcas5p1eb52bec9c076d1a2f3dac5e317d0361b@epcms5p1>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-
-Hi Oliver,
-
-
-Thanks for analysis. I got your point about changes required in UVC driver =
-to handle this race condition.=20
-Alan and Greg also pointed it out, so i tried to handle this race condition=
- in UVC driver.
-I am testing my new changes done in only UVC driver to resolve this issue.
-After checking new patch for this race condition, I will share it.
-
-
->>On 28.07.23 06:59, AMAN DEEP wrote:
+On Tue, Aug 1, 2023 at 6:47=E2=80=AFPM Shengjiu Wang <shengjiu.wang@gmail.c=
+om> wrote:
 >
->Hi,
+> On Fri, Jul 28, 2023 at 3:59=E2=80=AFPM Tomasz Figa <tfiga@chromium.org> =
+wrote:
+> >
+> > Hi Shengjiu,
+> >
+> > On Tue, Jul 25, 2023 at 02:12:17PM +0800, Shengjiu Wang wrote:
+> > > Audio signal processing has the requirement for memory to
+> > > memory similar as Video.
+> > >
+> > > This patch is to add this support in v4l2 framework, defined
+> > > new buffer type V4L2_BUF_TYPE_AUDIO_CAPTURE and
+> > > V4L2_BUF_TYPE_AUDIO_OUTPUT, defined new format v4l2_audio_format
+> > > for audio case usage.
+> > >
+> > > The created audio device is named "/dev/audioX".
+> > >
+> > > Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+> > > ---
+> > >  .../media/common/videobuf2/videobuf2-v4l2.c   |  4 ++
+> > >  drivers/media/v4l2-core/v4l2-dev.c            | 17 ++++++
+> > >  drivers/media/v4l2-core/v4l2-ioctl.c          | 52 +++++++++++++++++=
+++
+> > >  include/media/v4l2-dev.h                      |  2 +
+> > >  include/media/v4l2-ioctl.h                    | 34 ++++++++++++
+> > >  include/uapi/linux/videodev2.h                | 19 +++++++
+> > >  6 files changed, 128 insertions(+)
+> > >
+> >
+> > Thanks for the patch! Please check my comments inline.
 >
->> =5B1-221.1822=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=A0PC=C2=
-=A0is=C2=A0at=C2=A0usb_ifnum_to_if+0x30/0x74=C2=A0=5Busbcore=5D=0D=0A>=0D=
-=0A>This=20has=20to=20fail=20if=20the=20device=20is=20gone,=20but=20the=20q=
-uestion=20is=20why=20the=20driver=0D=0A>is=20doing=20this.=20Hence=20we=20n=
-eed=20to=20look=20at=20the=20backtrace.=0D=0A>=0D=0A>>=20=5B1-221.1822=5D=
-=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=A0LR=C2=A0is=C2=A0at=C2=A00=
-x5=0D=0A>>=20=5B1-221.1822=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=
-=C2=A0pc=C2=A0:=C2=A0=5B<bede1300>=5D=C2=A0=20=C2=A0=20lr=C2=A0:=C2=A0=5B<0=
-0000005>=5D=C2=A0=20=C2=A0=20psr:=C2=A020000113=0D=0A>>=20=5B1-221.1822=5D=
-=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=A0sp=C2=A0:=C2=A0ca443c18=
-=C2=A0=20ip=C2=A0:=C2=A0ca443c28=C2=A0=20fp=C2=A0:=C2=A0ca443c24=0D=0A>>=20=
-=5B1-221.1822=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=A0r10:=C2=
-=A0e668b6c8=C2=A0=20r9=C2=A0:=C2=A000000000=C2=A0=20r8=C2=A0:=C2=A0e668b7e0=
-=0D=0A>>=20=5B1-221.1822=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=
-=A0r7=C2=A0:=C2=A0e7b78880=C2=A0=20r6=C2=A0:=C2=A0bf1d9db0=C2=A0=20r5=C2=A0=
-:=C2=A0e668b6c8=C2=A0=20r4=C2=A0:=C2=A0e690c000=0D=0A>>=20=5B1-221.1822=5D=
-=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=A0r3=C2=A0:=C2=A000002000=
-=C2=A0=20r2=C2=A0:=C2=A0e696ac40=C2=A0=20r1=C2=A0:=C2=A000000001=C2=A0=20r0=
-=C2=A0:=C2=A000000000=0D=0A>>=20=5B1-221.1822=5D=C2=A0=5B=C2=A0=20=C2=A0=20=
-msg:=C2=A04788=5D=C2=A0Flags:=C2=A0nzCv=C2=A0=20IRQs=C2=A0on=C2=A0=20FIQs=
-=C2=A0on=C2=A0=20Mode=C2=A0SVC_32=C2=A0=20ISA=C2=A0ARM=C2=A0=20Segment=C2=
-=A0user=0D=0A>>=20=5B1-221.1822=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=
-=5D=C2=A0Control:=C2=A030c5383d=C2=A0=20Table:=C2=A0261f8a80=C2=A0=20DAC:=
-=C2=A0e45d65d5=0D=0A>>=20=5B1-221.1822=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=
-=A04788=5D=C2=A0Process=C2=A0msg=C2=A0(pid:=C2=A04788,=C2=A0stack=C2=A0limi=
-t=C2=A0=3D=C2=A00xa0153238)=0D=0A>>=20=5B1-221.1822=5D=C2=A0=5B=C2=A0=20=C2=
-=A0=20msg:=C2=A04788=5D=C2=A0Stack:=C2=A0(0xca443c18=C2=A0to=C2=A00xca44400=
-0)=0D=0A>>=20=5B1-221.1822=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=
-=C2=A03c00:=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0ca443c64=C2=A0ca443c28=0D=0A>>=20=5B1-2=
-21.1822=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=A03c20:=C2=A0bede=
-e6e4=C2=A0bede12dc=C2=A000000000=C2=A0bee0ae78=C2=A0ca443c54=C2=A0ca443c40=
-=C2=A0c083c894=C2=A0e7b78880=0D=0A>>=20=5B1-221.1822=5D=C2=A0=5B=C2=A0=20=
-=C2=A0=20msg:=C2=A04788=5D=C2=A03c40:=C2=A0e6b88340=C2=A000000000=C2=A0bee0=
-ae78=C2=A000000001=C2=A0e690c000=C2=A0e668b6c8=C2=A0ca443cb4=C2=A0ca443c68=
-=0D=0A>>=20=5B1-221.1822=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=
-=A03c60:=C2=A0bedf22ac=C2=A0bedee64c=C2=A0e5cf1508=C2=A0e5cf1508=C2=A0e5cf0=
-000=C2=A0e5cf0330=C2=A000000001=C2=A0e5cf0330=0D=0A>>=20=5B1-221.1822=5D=C2=
-=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=A03c80:=C2=A0ca443ca4=C2=A0ca4=
-43c90=C2=A0c083c894=C2=A0e5cf0000=C2=A0e5cf0330=C2=A000000001=C2=A0e5cf0330=
-=C2=A000000000=0D=0A>>=20=5B1-221.1822=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=
-=A04788=5D=C2=A03ca0:=C2=A000000001=C2=A0c08d1b3c=C2=A0ca443ccc=C2=A0ca443c=
-b8=C2=A0bfb3f958=C2=A0bedf1ff4=C2=A0e5cf0330=C2=A0e5cf0330=0D=0A>>=20=5B1-2=
-21.1822=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=A03cc0:=C2=A0ca44=
-3ce4=C2=A0ca443cd0=C2=A0bfb3a024=C2=A0bfb3f8a8=C2=A0e5cf0330=C2=A0e5cf0330=
-=C2=A0ca443d14=C2=A0ca443ce8=0D=0A>>=20=5B1-221.1823=5D=C2=A0=5B=C2=A0=20=
-=C2=A0=20msg:=C2=A04788=5D=C2=A03ce0:=C2=A0be3661e0=C2=A0bfb3a004=C2=A00000=
-0001=C2=A0e5cf0330=C2=A0e5cf0330=C2=A000000001=C2=A0c05d6260=C2=A000000000=
-=0D=0A>>=20=5B1-221.1823=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=
-=A03d00:=C2=A000000001=C2=A0c08d1b3c=C2=A0ca443d2c=C2=A0ca443d18=C2=A0be367=
-994=C2=A0be3661b4=C2=A0e5cf0484=C2=A0e5cf0330=0D=0A>>=20=5B1-221.1823=5D=C2=
-=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=A03d20:=C2=A0ca443d3c=C2=A0ca4=
-43d30=C2=A0be37e3e4=C2=A0be367978=C2=A0ca443d5c=C2=A0ca443d40=C2=A0bfb3a518=
-=C2=A0be37e3cc=0D=0A>>=20=5B1-221.1823=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=
-=A04788=5D=C2=A03d40:=C2=A0e5cf030c=C2=A0e5cf0000=C2=A000000001=C2=A0c05d62=
-60=C2=A0ca443d7c=C2=A0ca443d60=C2=A0bfb3b628=C2=A0bfb3a4f0=0D=0A>>=20=5B1-2=
-21.1823=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=A03d60:=C2=A0bfb3=
-b5e8=C2=A040045613=C2=A000000000=C2=A0c05d6260=C2=A0ca443d94=C2=A0ca443d80=
-=C2=A0c05d6288=C2=A0bfb3b5f4=0D=0A>>=20=5B1-221.1823=5D=C2=A0=5B=C2=A0=20=
-=C2=A0=20msg:=C2=A04788=5D=C2=A03d80:=C2=A0e5cf0010=C2=A040045613=C2=A0ca44=
-3dfc=C2=A0ca443d98=C2=A0c05d9b84=C2=A0c05d626c=C2=A000000068=C2=A0ca443deb=
-=0D=0A>>=20=5B1-221.1823=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=
-=A03da0:=C2=A0c08d1b3c=C2=A000000001=C2=A0ca443e24=C2=A0bfb44680=C2=A000000=
-000=C2=A0e2fa3780=C2=A0c01a926c=C2=A0031e1090=0D=0A>>=20=5B1-221.1823=5D=C2=
-=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=A03dc0:=C2=A0ca443df4=C2=A0fff=
-fffff=C2=A0c01e0048=C2=A00000072c=C2=A0000012b4=C2=A000000000=C2=A040045613=
-=C2=A000000000=0D=0A>>=20=5B1-221.1823=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=
-=A04788=5D=C2=A03de0:=C2=A000000000=C2=A000000001=C2=A000000004=C2=A0ca443e=
-24=C2=A0ca443ed4=C2=A0ca443e00=C2=A0c05db320=C2=A0c05d9a04=0D=0A>>=20=5B1-2=
-21.1823=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=A03e00:=C2=A00000=
-0000=C2=A000000000=C2=A0c05d99f8=C2=A0e77a6700=C2=A0ab8fd26c=C2=A000000000=
-=C2=A000000000=C2=A000000000=0D=0A>>=20=5B1-221.1823=5D=C2=A0=5B=C2=A0=20=
-=C2=A0=20msg:=C2=A04788=5D=C2=A03e20:=C2=A0ca443f60=C2=A000000001=C2=A0ca44=
-3ee0=C2=A000000000=C2=A0ca443e9c=C2=A0ca443e40=C2=A0c02390a8=C2=A0be211e84=
-=0D=0A>>=20=5B1-221.1823=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=
-=A03e40:=C2=A000000000=C2=A000000001=C2=A0e2861600=C2=A000000000=C2=A000000=
-000=C2=A000000000=C2=A000000000=C2=A000000000=0D=0A>>=20=5B1-221.1823=5D=C2=
-=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=A03e60:=C2=A000000000=C2=A0000=
-00000=C2=A000000000=C2=A0c03681bc=C2=A000000008=C2=A000000000=C2=A0ca443ee0=
-=C2=A0c0bbd748=0D=0A>>=20=5B1-221.1823=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=
-=A04788=5D=C2=A03e80:=C2=A000000000=C2=A0c0be9a14=C2=A0ca443ef4=C2=A0000000=
-02=C2=A0ca443ed4=C2=A0ca443ea0=C2=A0c03681bc=C2=A0c036790c=0D=0A>>=20=5B1-2=
-21.1823=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=A03ea0:=C2=A0ca44=
-3ef4=C2=A0c0bbd748=C2=A0e2861600=C2=A0c05db7dc=C2=A0e6695448=C2=A040045613=
-=C2=A0ab8fd26c=C2=A0e77a6700=0D=0A>>=20=5B1-221.1823=5D=C2=A0=5B=C2=A0=20=
-=C2=A0=20msg:=C2=A04788=5D=C2=A03ec0:=C2=A000000021=C2=A000000036=C2=A0ca44=
-3ee4=C2=A0ca443ed8=C2=A0c05db7fc=C2=A0c05db0f8=C2=A0ca443efc=C2=A0ca443ee8=
-=0D=0A>>=20=5B1-221.1823=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=
-=A03ee0:=C2=A0c05d4728=C2=A0c05db7e8=C2=A0ab8fd26c=C2=A0e6695448=C2=A0ca443=
-f6c=C2=A0ca443f00=C2=A0c02506a0=C2=A0c05d46e8=0D=0A>>=20=5B1-221.1823=5D=C2=
-=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=A03f00:=C2=A0ca443f04=C2=A0c08=
-a7a00=C2=A000000000=C2=A000000000=C2=A000000000=C2=A000000000=C2=A000000000=
-=C2=A000000000=0D=0A>>=20=5B1-221.1823=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=
-=A04788=5D=C2=A03f20:=C2=A000000000=C2=A000000000=C2=A000000000=C2=A0000000=
-00=C2=A0ab8fd26c=C2=A0c0abb6ec=C2=A0ab8fd26c=C2=A0e77a6700=0D=0A>>=20=5B1-2=
-21.1823=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=A03f40:=C2=A0ca44=
-3f6c=C2=A0e77a6701=C2=A000000000=C2=A040045613=C2=A0ab8fd26c=C2=A0e77a6700=
-=C2=A000000021=C2=A000000036=0D=0A>>=20=5B1-221.1824=5D=C2=A0=5B=C2=A0=20=
-=C2=A0=20msg:=C2=A04788=5D=C2=A03f60:=C2=A0ca443f94=C2=A0ca443f70=C2=A0c025=
-0b3c=C2=A0c02502fc=C2=A000000000=C2=A0000006f7=C2=A000000000=C2=A000000036=
-=0D=0A>>=20=5B1-221.1824=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=
-=A03f80:=C2=A0c000924c=C2=A0ca442000=C2=A0ca443fa4=C2=A0ca443f98=C2=A0c0250=
-b78=C2=A0c0250adc=C2=A000000000=C2=A0ca443fa8=0D=0A>>=20=5B1-221.1824=5D=C2=
-=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=A03fa0:=C2=A0c0009230=C2=A0c02=
-50b6c=C2=A000000000=C2=A0000006f7=C2=A000000021=C2=A040045613=C2=A0ab8fd26c=
-=C2=A000000021=0D=0A>>=20=5B1-221.1824=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=
-=A04788=5D=C2=A03fc0:=C2=A000000000=C2=A0000006f7=C2=A000000000=C2=A0000000=
-36=C2=A0abb79e30=C2=A000000000=C2=A000000001=C2=A0abb79e28=0D=0A>>=20=5B1-2=
-21.1824=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=A03fe0:=C2=A0aeca=
-607c=C2=A0ab8fd24c=C2=A0aec8e749=C2=A0b5f1ed1c=C2=A020000010=C2=A000000021=
-=C2=A000000000=C2=A000000000=0D=0A>>=20=5B1-221.1824=5D=C2=A0=5B=C2=A0=20=
-=C2=A0=20msg:=C2=A04788=5D=C2=A0Backtrace:=0D=0A>>=20=5B1-221.1824=5D=C2=A0=
-=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=A0=5B<bede12d0>=5D=C2=A0(usb_ifnu=
-m_to_if=C2=A0=5Busbcore=5D)=C2=A0from=C2=A0=5B<bedee6e4>=5D=C2=A0(usb_hcd_a=
-lloc_bandwidth+0xa4/0x564=C2=A0=5Busbcore=5D)=0D=0A>>=20=5B1-221.1824=5D=C2=
-=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=A0=5B<bedee640>=5D=C2=A0(usb_h=
-cd_alloc_bandwidth=C2=A0=5Busbcore=5D)=C2=A0from=C2=A0=5B<bedf22ac>=5D=C2=
-=A0(usb_set_interface+0x2c4/0x61c=C2=A0=5Busbcore=5D)=0D=0A>=0D=0A>This=20i=
-s=20the=20proximate=20cause.=0D=0A>=0D=0A>>=20=5B1-221.1824=5D=C2=A0=5B=C2=
-=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=A0=20r10:e668b6c8=C2=A0r9:e690c000=C2=
-=A0r8:00000001=C2=A0r7:bee0ae78=C2=A0r6:00000000=C2=A0r5:e6b88340=0D=0A>>=
-=20=5B1-221.1824=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=A0=20r4:=
-e7b78880=0D=0A>>=20=5B1-221.1825=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A0478=
-8=5D=C2=A0=5B<bedf1fe8>=5D=C2=A0(usb_set_interface=C2=A0=5Busbcore=5D)=C2=
-=A0from=C2=A0=5B<bfb3f958>=5D=C2=A0(uvc_video_stop_streaming+0xbc/0xc4=C2=
-=A0=5Buvcvideo=5D)=0D=0A>>=20=5B1-221.1825=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg=
-:=C2=A04788=5D=C2=A0=20r10:c08d1b3c=C2=A0r9:00000001=C2=A0r8:00000000=C2=A0=
-r7:e5cf0330=C2=A0r6:00000001=C2=A0r5:e5cf0330=0D=0A>>=20=5B1-221.1825=5D=C2=
-=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=A0=20r4:e5cf0000=0D=0A>>=20=5B=
-1-221.1825=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A04788=5D=C2=A0=5B<bfb3f89c=
->=5D=C2=A0(uvc_video_stop_streaming=C2=A0=5Buvcvideo=5D)=C2=A0from=C2=A0=5B=
-<bfb3a024>=5D=C2=A0(uvc_stop_streaming+0x2c/0x50=C2=A0=5Buvcvideo=5D)=0D=0A=
->=0D=0A>triggered=20from=20here=0D=0A>>=20=5B1-221.1826=5D=C2=A0=5B=C2=A0=
-=20=C2=A0=20msg:=C2=A04788=5D=C2=A0=5B<bfb3b5e8>=5D=C2=A0(uvc_ioctl_streamo=
-ff=C2=A0=5Buvcvideo=5D)=C2=A0from=C2=A0=5B<c05d6288>=5D=C2=A0(v4l_streamoff=
-+0x28/0x2c)=0D=0A>>=20=5B1-221.1826=5D=C2=A0=5B=C2=A0=20=C2=A0=20msg:=C2=A0=
-4788=5D=C2=A0=20r7:c05d6260=C2=A0r6:00000000=C2=A0r5:40045613=C2=A0r4:bfb3b=
-5e8=0D=0A>=0D=0A>User=20space=20is=20trying=20to=20execute=20an=20ioctl()=
-=20on=20a=20device=20whose=0D=0A>disconnect()=20method=20has=20run.=20A=20d=
-river=20has=20to=20either=20prevent=20or=20fail=20such=20calls.=0D=0A>=C2=
-=A0=20=0D=0A>>=20I=20thought=20this=20issue=20can=20occur=20with=20other=20=
-devices=20in=20simillar=20race=20conditions=20so=20i=20thought=20it=20will=
-=20be=20fixed=20for=20all=20drivers.=0D=0A>=0D=0A>No,=20this=20will=20not=
-=20work.=20You=20are=20failing=20to=20take=20into=20consideration=0D=0A>tha=
-t=20the=20life=20time=20of=20the=20device=20is=20different=20from=20its=20a=
-ssociation=0D=0A>with=20a=20particular=20device=20driver.=0D=0A>=0D=0A>>=20=
-Please=20suggest=20if=20we=20need=20to=20add=20locking=20mechanism=20to=20c=
-over=20such=20cases.=0D=0A>>=20i=20will=20try=20accordingly.=0D=0A>=0D=0A>F=
-or=20the=20reason=20I=20stated=20above=20this=20is=20not=20fixable=20with=
-=20locking=0D=0A>at=20this=20level.=20The=20test=20for=20the=20device=20sta=
-te=20is=20the=20wrong=20test.=0D=0A>Consequently=20no=20amount=20of=20locki=
-ng=20can=20correct=20that.=20The=20conditions=0D=0A>only=20happen=20to=20co=
-nincide=20because=20your=20testing=20replicates=20the=20most=0D=0A>common=
-=20code=20path.=20It=20is=20not=20the=20only=20one.=0D=0A>=C2=A0=20=0D=0A>Y=
-ou=20need=20to=20fix=20uvc_disconnect()=0D=0A>=0D=0A>=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0HTH=0D=0A>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0Oliver=0D=0A>=0D=0A=0D=0AThanks,=0D=0AAman=20Deep=
-=0D=0A
+> Thanks for reviewing.
+>
+> Sorry for sending again for using the plain text mode.
+>
+> >
+> > > diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/driver=
+s/media/common/videobuf2/videobuf2-v4l2.c
+> > > index c7a54d82a55e..12f2be2773a2 100644
+> > > --- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
+> > > +++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+> > > @@ -785,6 +785,10 @@ int vb2_create_bufs(struct vb2_queue *q, struct =
+v4l2_create_buffers *create)
+> > >       case V4L2_BUF_TYPE_META_OUTPUT:
+> > >               requested_sizes[0] =3D f->fmt.meta.buffersize;
+> > >               break;
+> > > +     case V4L2_BUF_TYPE_AUDIO_CAPTURE:
+> > > +     case V4L2_BUF_TYPE_AUDIO_OUTPUT:
+> > > +             requested_sizes[0] =3D f->fmt.audio.buffersize;
+> > > +             break;
+> > >       default:
+> > >               return -EINVAL;
+> > >       }
+> > > diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-=
+core/v4l2-dev.c
+> > > index f81279492682..67484f4c6eaf 100644
+> > > --- a/drivers/media/v4l2-core/v4l2-dev.c
+> > > +++ b/drivers/media/v4l2-core/v4l2-dev.c
+> > > @@ -553,6 +553,7 @@ static void determine_valid_ioctls(struct video_d=
+evice *vdev)
+> > >       bool is_tch =3D vdev->vfl_type =3D=3D VFL_TYPE_TOUCH;
+> > >       bool is_meta =3D vdev->vfl_type =3D=3D VFL_TYPE_VIDEO &&
+> > >                      (vdev->device_caps & meta_caps);
+> > > +     bool is_audio =3D vdev->vfl_type =3D=3D VFL_TYPE_AUDIO;
+> > >       bool is_rx =3D vdev->vfl_dir !=3D VFL_DIR_TX;
+> > >       bool is_tx =3D vdev->vfl_dir !=3D VFL_DIR_RX;
+> > >       bool is_io_mc =3D vdev->device_caps & V4L2_CAP_IO_MC;
+> > > @@ -664,6 +665,19 @@ static void determine_valid_ioctls(struct video_=
+device *vdev)
+> > >               SET_VALID_IOCTL(ops, VIDIOC_S_FMT, vidioc_s_fmt_meta_ou=
+t);
+> > >               SET_VALID_IOCTL(ops, VIDIOC_TRY_FMT, vidioc_try_fmt_met=
+a_out);
+> > >       }
+> > > +     if (is_audio && is_rx) {
+> > > +             /* audio capture specific ioctls */
+> > > +             SET_VALID_IOCTL(ops, VIDIOC_ENUM_FMT, vidioc_enum_fmt_a=
+udio_cap);
+> > > +             SET_VALID_IOCTL(ops, VIDIOC_G_FMT, vidioc_g_fmt_audio_c=
+ap);
+> > > +             SET_VALID_IOCTL(ops, VIDIOC_S_FMT, vidioc_s_fmt_audio_c=
+ap);
+> > > +             SET_VALID_IOCTL(ops, VIDIOC_TRY_FMT, vidioc_try_fmt_aud=
+io_cap);
+> > > +     } else if (is_audio && is_tx) {
+> > > +             /* audio output specific ioctls */
+> > > +             SET_VALID_IOCTL(ops, VIDIOC_ENUM_FMT, vidioc_enum_fmt_a=
+udio_out);
+> > > +             SET_VALID_IOCTL(ops, VIDIOC_G_FMT, vidioc_g_fmt_audio_o=
+ut);
+> > > +             SET_VALID_IOCTL(ops, VIDIOC_S_FMT, vidioc_s_fmt_audio_o=
+ut);
+> > > +             SET_VALID_IOCTL(ops, VIDIOC_TRY_FMT, vidioc_try_fmt_aud=
+io_out);
+> > > +     }
+> > >       if (is_vbi) {
+> > >               /* vbi specific ioctls */
+> > >               if ((is_rx && (ops->vidioc_g_fmt_vbi_cap ||
+> > > @@ -927,6 +941,9 @@ int __video_register_device(struct video_device *=
+vdev,
+> > >       case VFL_TYPE_TOUCH:
+> > >               name_base =3D "v4l-touch";
+> > >               break;
+> > > +     case VFL_TYPE_AUDIO:
+> > > +             name_base =3D "audio";
+> >
+> > I think it was mentioned before that "audio" could be confusing. Wasn't
+> > there actually some other kind of /dev/audio device long ago?
+> >
+> > Seems like for touch, "v4l-touch" was introduced. Maybe it would also
+> > make sense to call it "v4l-audio" for audio?
+>
+> Ok,  will change to use "v4l-audio".
+>
+> >
+> > > +             break;
+> > >       default:
+> > >               pr_err("%s called with unknown type: %d\n",
+> > >                      __func__, type);
+> > > diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l=
+2-core/v4l2-ioctl.c
+> > > index 01ba27f2ef87..aa9d872bba8d 100644
+> > > --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+> > > +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+> > > @@ -188,6 +188,8 @@ const char *v4l2_type_names[] =3D {
+> > >       [V4L2_BUF_TYPE_SDR_OUTPUT]         =3D "sdr-out",
+> > >       [V4L2_BUF_TYPE_META_CAPTURE]       =3D "meta-cap",
+> > >       [V4L2_BUF_TYPE_META_OUTPUT]        =3D "meta-out",
+> > > +     [V4L2_BUF_TYPE_AUDIO_CAPTURE]      =3D "audio-cap",
+> > > +     [V4L2_BUF_TYPE_AUDIO_OUTPUT]       =3D "audio-out",
+> > >  };
+> > >  EXPORT_SYMBOL(v4l2_type_names);
+> > >
+> > > @@ -276,6 +278,7 @@ static void v4l_print_format(const void *arg, boo=
+l write_only)
+> > >       const struct v4l2_sliced_vbi_format *sliced;
+> > >       const struct v4l2_window *win;
+> > >       const struct v4l2_meta_format *meta;
+> > > +     const struct v4l2_audio_format *audio;
+> > >       u32 pixelformat;
+> > >       u32 planes;
+> > >       unsigned i;
+> > > @@ -346,6 +349,12 @@ static void v4l_print_format(const void *arg, bo=
+ol write_only)
+> > >               pr_cont(", dataformat=3D%p4cc, buffersize=3D%u\n",
+> > >                       &pixelformat, meta->buffersize);
+> > >               break;
+> > > +     case V4L2_BUF_TYPE_AUDIO_CAPTURE:
+> > > +     case V4L2_BUF_TYPE_AUDIO_OUTPUT:
+> > > +             audio =3D &p->fmt.audio;
+> > > +             pr_cont(", rate=3D%u, format=3D%u, channels=3D%u, buffe=
+rsize=3D%u\n",
+> > > +                     audio->rate, audio->format, audio->channels, au=
+dio->buffersize);
+> > > +             break;
+> > >       }
+> > >  }
+> > >
+> > > @@ -927,6 +936,7 @@ static int check_fmt(struct file *file, enum v4l2=
+_buf_type type)
+> > >       bool is_tch =3D vfd->vfl_type =3D=3D VFL_TYPE_TOUCH;
+> > >       bool is_meta =3D vfd->vfl_type =3D=3D VFL_TYPE_VIDEO &&
+> > >                      (vfd->device_caps & meta_caps);
+> > > +     bool is_audio =3D vfd->vfl_type =3D=3D VFL_TYPE_AUDIO;
+> > >       bool is_rx =3D vfd->vfl_dir !=3D VFL_DIR_TX;
+> > >       bool is_tx =3D vfd->vfl_dir !=3D VFL_DIR_RX;
+> > >
+> > > @@ -992,6 +1002,14 @@ static int check_fmt(struct file *file, enum v4=
+l2_buf_type type)
+> > >               if (is_meta && is_tx && ops->vidioc_g_fmt_meta_out)
+> > >                       return 0;
+> > >               break;
+> > > +     case V4L2_BUF_TYPE_AUDIO_CAPTURE:
+> > > +             if (is_audio && is_rx && ops->vidioc_g_fmt_audio_cap)
+> > > +                     return 0;
+> > > +             break;
+> > > +     case V4L2_BUF_TYPE_AUDIO_OUTPUT:
+> > > +             if (is_audio && is_tx && ops->vidioc_g_fmt_audio_out)
+> > > +                     return 0;
+> > > +             break;
+> > >       default:
+> > >               break;
+> > >       }
+> > > @@ -1594,6 +1612,16 @@ static int v4l_enum_fmt(const struct v4l2_ioct=
+l_ops *ops,
+> > >                       break;
+> > >               ret =3D ops->vidioc_enum_fmt_meta_out(file, fh, arg);
+> > >               break;
+> > > +     case V4L2_BUF_TYPE_AUDIO_CAPTURE:
+> > > +             if (unlikely(!ops->vidioc_enum_fmt_audio_cap))
+> > > +                     break;
+> > > +             ret =3D ops->vidioc_enum_fmt_audio_cap(file, fh, arg);
+> > > +             break;
+> > > +     case V4L2_BUF_TYPE_AUDIO_OUTPUT:
+> > > +             if (unlikely(!ops->vidioc_enum_fmt_audio_out))
+> > > +                     break;
+> > > +             ret =3D ops->vidioc_enum_fmt_audio_out(file, fh, arg);
+> > > +             break;
+> > >       }
+> > >       if (ret =3D=3D 0)
+> > >               v4l_fill_fmtdesc(p);
+> > > @@ -1670,6 +1698,10 @@ static int v4l_g_fmt(const struct v4l2_ioctl_o=
+ps *ops,
+> > >               return ops->vidioc_g_fmt_meta_cap(file, fh, arg);
+> > >       case V4L2_BUF_TYPE_META_OUTPUT:
+> > >               return ops->vidioc_g_fmt_meta_out(file, fh, arg);
+> > > +     case V4L2_BUF_TYPE_AUDIO_CAPTURE:
+> > > +             return ops->vidioc_g_fmt_audio_cap(file, fh, arg);
+> > > +     case V4L2_BUF_TYPE_AUDIO_OUTPUT:
+> > > +             return ops->vidioc_g_fmt_audio_out(file, fh, arg);
+> > >       }
+> > >       return -EINVAL;
+> > >  }
+> > > @@ -1781,6 +1813,16 @@ static int v4l_s_fmt(const struct v4l2_ioctl_o=
+ps *ops,
+> > >                       break;
+> > >               memset_after(p, 0, fmt.meta);
+> > >               return ops->vidioc_s_fmt_meta_out(file, fh, arg);
+> > > +     case V4L2_BUF_TYPE_AUDIO_CAPTURE:
+> > > +             if (unlikely(!ops->vidioc_s_fmt_audio_cap))
+> > > +                     break;
+> > > +             memset_after(p, 0, fmt.audio);
+> > > +             return ops->vidioc_s_fmt_audio_cap(file, fh, arg);
+> > > +     case V4L2_BUF_TYPE_AUDIO_OUTPUT:
+> > > +             if (unlikely(!ops->vidioc_s_fmt_audio_out))
+> > > +                     break;
+> > > +             memset_after(p, 0, fmt.audio);
+> > > +             return ops->vidioc_s_fmt_audio_out(file, fh, arg);
+> > >       }
+> > >       return -EINVAL;
+> > >  }
+> > > @@ -1889,6 +1931,16 @@ static int v4l_try_fmt(const struct v4l2_ioctl=
+_ops *ops,
+> > >                       break;
+> > >               memset_after(p, 0, fmt.meta);
+> > >               return ops->vidioc_try_fmt_meta_out(file, fh, arg);
+> > > +     case V4L2_BUF_TYPE_AUDIO_CAPTURE:
+> > > +             if (unlikely(!ops->vidioc_try_fmt_audio_cap))
+> > > +                     break;
+> > > +             memset_after(p, 0, fmt.audio);
+> > > +             return ops->vidioc_try_fmt_audio_cap(file, fh, arg);
+> > > +     case V4L2_BUF_TYPE_AUDIO_OUTPUT:
+> > > +             if (unlikely(!ops->vidioc_try_fmt_audio_out))
+> > > +                     break;
+> > > +             memset_after(p, 0, fmt.audio);
+> > > +             return ops->vidioc_try_fmt_audio_out(file, fh, arg);
+> > >       }
+> > >       return -EINVAL;
+> > >  }
+> > > diff --git a/include/media/v4l2-dev.h b/include/media/v4l2-dev.h
+> > > index e0a13505f88d..0924e6d1dab1 100644
+> > > --- a/include/media/v4l2-dev.h
+> > > +++ b/include/media/v4l2-dev.h
+> > > @@ -30,6 +30,7 @@
+> > >   * @VFL_TYPE_SUBDEV: for V4L2 subdevices
+> > >   * @VFL_TYPE_SDR:    for Software Defined Radio tuners
+> > >   * @VFL_TYPE_TOUCH:  for touch sensors
+> > > + * @VFL_TYPE_AUDIO:  for audio input/output devices
+> > >   * @VFL_TYPE_MAX:    number of VFL types, must always be last in the=
+ enum
+> > >   */
+> > >  enum vfl_devnode_type {
+> > > @@ -39,6 +40,7 @@ enum vfl_devnode_type {
+> > >       VFL_TYPE_SUBDEV,
+> > >       VFL_TYPE_SDR,
+> > >       VFL_TYPE_TOUCH,
+> > > +     VFL_TYPE_AUDIO,
+> > >       VFL_TYPE_MAX /* Shall be the last one */
+> > >  };
+> > >
+> > > diff --git a/include/media/v4l2-ioctl.h b/include/media/v4l2-ioctl.h
+> > > index edb733f21604..f840cf740ce1 100644
+> > > --- a/include/media/v4l2-ioctl.h
+> > > +++ b/include/media/v4l2-ioctl.h
+> > > @@ -45,6 +45,12 @@ struct v4l2_fh;
+> > >   * @vidioc_enum_fmt_meta_out: pointer to the function that implement=
+s
+> > >   *   :ref:`VIDIOC_ENUM_FMT <vidioc_enum_fmt>` ioctl logic
+> > >   *   for metadata output
+> > > + * @vidioc_enum_fmt_audio_cap: pointer to the function that implemen=
+ts
+> > > + *   :ref:`VIDIOC_ENUM_FMT <vidioc_enum_fmt>` ioctl logic
+> > > + *   for audio capture
+> > > + * @vidioc_enum_fmt_audio_out: pointer to the function that implemen=
+ts
+> > > + *   :ref:`VIDIOC_ENUM_FMT <vidioc_enum_fmt>` ioctl logic
+> > > + *   for audio output
+> > >   * @vidioc_g_fmt_vid_cap: pointer to the function that implements
+> > >   *   :ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for video captur=
+e
+> > >   *   in single plane mode
+> > > @@ -79,6 +85,10 @@ struct v4l2_fh;
+> > >   *   :ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for metadata cap=
+ture
+> > >   * @vidioc_g_fmt_meta_out: pointer to the function that implements
+> > >   *   :ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for metadata out=
+put
+> > > + * @vidioc_g_fmt_audio_cap: pointer to the function that implements
+> > > + *   :ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for audio captur=
+e
+> > > + * @vidioc_g_fmt_audio_out: pointer to the function that implements
+> > > + *   :ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for audio output
+> > >   * @vidioc_s_fmt_vid_cap: pointer to the function that implements
+> > >   *   :ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for video captur=
+e
+> > >   *   in single plane mode
+> > > @@ -113,6 +123,10 @@ struct v4l2_fh;
+> > >   *   :ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for metadata cap=
+ture
+> > >   * @vidioc_s_fmt_meta_out: pointer to the function that implements
+> > >   *   :ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for metadata out=
+put
+> > > + * @vidioc_s_fmt_audio_cap: pointer to the function that implements
+> > > + *   :ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for audio captur=
+e
+> > > + * @vidioc_s_fmt_audio_out: pointer to the function that implements
+> > > + *   :ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for audio output
+> > >   * @vidioc_try_fmt_vid_cap: pointer to the function that implements
+> > >   *   :ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for video capt=
+ure
+> > >   *   in single plane mode
+> > > @@ -149,6 +163,10 @@ struct v4l2_fh;
+> > >   *   :ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for metadata c=
+apture
+> > >   * @vidioc_try_fmt_meta_out: pointer to the function that implements
+> > >   *   :ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for metadata o=
+utput
+> > > + * @vidioc_try_fmt_audio_cap: pointer to the function that implement=
+s
+> > > + *   :ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for audio capt=
+ure
+> > > + * @vidioc_try_fmt_audio_out: pointer to the function that implement=
+s
+> > > + *   :ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for audio outp=
+ut
+> > >   * @vidioc_reqbufs: pointer to the function that implements
+> > >   *   :ref:`VIDIOC_REQBUFS <vidioc_reqbufs>` ioctl
+> > >   * @vidioc_querybuf: pointer to the function that implements
+> > > @@ -315,6 +333,10 @@ struct v4l2_ioctl_ops {
+> > >                                       struct v4l2_fmtdesc *f);
+> > >       int (*vidioc_enum_fmt_meta_out)(struct file *file, void *fh,
+> > >                                       struct v4l2_fmtdesc *f);
+> > > +     int (*vidioc_enum_fmt_audio_cap)(struct file *file, void *fh,
+> > > +                                      struct v4l2_fmtdesc *f);
+> > > +     int (*vidioc_enum_fmt_audio_out)(struct file *file, void *fh,
+> > > +                                      struct v4l2_fmtdesc *f);
+> > >
+> > >       /* VIDIOC_G_FMT handlers */
+> > >       int (*vidioc_g_fmt_vid_cap)(struct file *file, void *fh,
+> > > @@ -345,6 +367,10 @@ struct v4l2_ioctl_ops {
+> > >                                    struct v4l2_format *f);
+> > >       int (*vidioc_g_fmt_meta_out)(struct file *file, void *fh,
+> > >                                    struct v4l2_format *f);
+> > > +     int (*vidioc_g_fmt_audio_cap)(struct file *file, void *fh,
+> > > +                                   struct v4l2_format *f);
+> > > +     int (*vidioc_g_fmt_audio_out)(struct file *file, void *fh,
+> > > +                                   struct v4l2_format *f);
+> > >
+> > >       /* VIDIOC_S_FMT handlers */
+> > >       int (*vidioc_s_fmt_vid_cap)(struct file *file, void *fh,
+> > > @@ -375,6 +401,10 @@ struct v4l2_ioctl_ops {
+> > >                                    struct v4l2_format *f);
+> > >       int (*vidioc_s_fmt_meta_out)(struct file *file, void *fh,
+> > >                                    struct v4l2_format *f);
+> > > +     int (*vidioc_s_fmt_audio_cap)(struct file *file, void *fh,
+> > > +                                   struct v4l2_format *f);
+> > > +     int (*vidioc_s_fmt_audio_out)(struct file *file, void *fh,
+> > > +                                   struct v4l2_format *f);
+> > >
+> > >       /* VIDIOC_TRY_FMT handlers */
+> > >       int (*vidioc_try_fmt_vid_cap)(struct file *file, void *fh,
+> > > @@ -405,6 +435,10 @@ struct v4l2_ioctl_ops {
+> > >                                      struct v4l2_format *f);
+> > >       int (*vidioc_try_fmt_meta_out)(struct file *file, void *fh,
+> > >                                      struct v4l2_format *f);
+> > > +     int (*vidioc_try_fmt_audio_cap)(struct file *file, void *fh,
+> > > +                                     struct v4l2_format *f);
+> > > +     int (*vidioc_try_fmt_audio_out)(struct file *file, void *fh,
+> > > +                                     struct v4l2_format *f);
+> > >
+> > >       /* Buffer handlers */
+> > >       int (*vidioc_reqbufs)(struct file *file, void *fh,
+> > > diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/vide=
+odev2.h
+> > > index 3af6a82d0cad..e5051410928a 100644
+> > > --- a/include/uapi/linux/videodev2.h
+> > > +++ b/include/uapi/linux/videodev2.h
+> > > @@ -153,6 +153,8 @@ enum v4l2_buf_type {
+> > >       V4L2_BUF_TYPE_SDR_OUTPUT           =3D 12,
+> > >       V4L2_BUF_TYPE_META_CAPTURE         =3D 13,
+> > >       V4L2_BUF_TYPE_META_OUTPUT          =3D 14,
+> > > +     V4L2_BUF_TYPE_AUDIO_CAPTURE        =3D 15,
+> > > +     V4L2_BUF_TYPE_AUDIO_OUTPUT         =3D 16,
+> > >       /* Deprecated, do not use */
+> > >       V4L2_BUF_TYPE_PRIVATE              =3D 0x80,
+> > >  };
+> > > @@ -169,6 +171,7 @@ enum v4l2_buf_type {
+> > >        || (type) =3D=3D V4L2_BUF_TYPE_VBI_OUTPUT                  \
+> > >        || (type) =3D=3D V4L2_BUF_TYPE_SLICED_VBI_OUTPUT           \
+> > >        || (type) =3D=3D V4L2_BUF_TYPE_SDR_OUTPUT                  \
+> > > +      || (type) =3D=3D V4L2_BUF_TYPE_AUDIO_OUTPUT                \
+> > >        || (type) =3D=3D V4L2_BUF_TYPE_META_OUTPUT)
+> > >
+> > >  #define V4L2_TYPE_IS_CAPTURE(type) (!V4L2_TYPE_IS_OUTPUT(type))
+> > > @@ -2415,6 +2418,20 @@ struct v4l2_meta_format {
+> > >       __u32                           buffersize;
+> > >  } __attribute__ ((packed));
+> > >
+> > > +/**
+> > > + * struct v4l2_audio_format - audio data format definition
+> > > + * @rate:            sample rate
+> > > + * @format:          sample format
+> > > + * @channels:                channel numbers
+> > > + * @buffersize:              maximum size in bytes required for data
+> > > + */
+> > > +struct v4l2_audio_format {
+> > > +     __u32                           rate;
+> > > +     __u32                           format;
+> >
+> > What are the values for the rate and format fields? Since they are part
+> > of the UAPI, they need to be defined.
+> >
+>
+> The range for sample rate is [5512, 768000].
+> The format is defined in include/uapi/sound/asound.h,  they are
+> SNDRV_PCM_FORMAT_S8, SNDRV_PCM_FORMAT_U8, ...
+>
+> Where should I put these info?
+>
+
+I see, so those are standard definitions of the sound subsystem. I
+think we should refer to the right header and/or data types in the
+kerneldoc comment for the struct. We also need to provide the sphinx
+documentation for the new device type and extend the description of
+relevant ioctls (e.g. VIDIOC_S_FMT) that accept the new structs. I.e.
+the v4l2_format struct used by VIDIOC_S_FMT is documented in
+
+https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/vidioc-g-fmt=
+.html?highlight=3Dg_fmt#c.V4L.v4l2_format
+
+and there is documentation for each of the union members, like
+v4l2_pix_format_mplane that is commonly used for video data:
+
+https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/pixfmt-v4l2-=
+mplane.html#c.v4l2_pix_format_mplane
+
+We'll need a similar one for the new v4l2_audio_format.
+
+Best regards,
+Tomasz
+
+> Best regards
+> Wang shengjiu
+>
+> > Best regards,
+> > Tomasz
+> >
+> > > +     __u32                           channels;
+> > > +     __u32                           buffersize;
+> > > +} __attribute__ ((packed));
+> > > +
+> > >  /**
+> > >   * struct v4l2_format - stream data format
+> > >   * @type:    enum v4l2_buf_type; type of the data stream
+> > > @@ -2423,6 +2440,7 @@ struct v4l2_meta_format {
+> > >   * @win:     definition of an overlaid image
+> > >   * @vbi:     raw VBI capture or output parameters
+> > >   * @sliced:  sliced VBI capture or output parameters
+> > > + * @audio:   definition of an audio format
+> > >   * @raw_data:        placeholder for future extensions and custom fo=
+rmats
+> > >   * @fmt:     union of @pix, @pix_mp, @win, @vbi, @sliced, @sdr, @met=
+a
+> > >   *           and @raw_data
+> > > @@ -2437,6 +2455,7 @@ struct v4l2_format {
+> > >               struct v4l2_sliced_vbi_format   sliced;  /* V4L2_BUF_TY=
+PE_SLICED_VBI_CAPTURE */
+> > >               struct v4l2_sdr_format          sdr;     /* V4L2_BUF_TY=
+PE_SDR_CAPTURE */
+> > >               struct v4l2_meta_format         meta;    /* V4L2_BUF_TY=
+PE_META_CAPTURE */
+> > > +             struct v4l2_audio_format        audio;   /* V4L2_BUF_TY=
+PE_AUDIO_CAPTURE */
+> > >               __u8    raw_data[200];                   /* user-define=
+d */
+> > >       } fmt;
+> > >  };
+> > > --
+> > > 2.34.1
+> > >
