@@ -2,41 +2,41 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D91EC001E0
-	for <linux-media@archiver.kernel.org>; Wed,  2 Aug 2023 17:35:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6E0FC04E69
+	for <linux-media@archiver.kernel.org>; Wed,  2 Aug 2023 17:35:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232170AbjHBRfu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Aug 2023 13:35:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54698 "EHLO
+        id S232362AbjHBRfv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Aug 2023 13:35:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232244AbjHBRf3 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Aug 2023 13:35:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDCB430F8
-        for <linux-media@vger.kernel.org>; Wed,  2 Aug 2023 10:33:20 -0700 (PDT)
+        with ESMTP id S232311AbjHBRfa (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Aug 2023 13:35:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3639B4226
+        for <linux-media@vger.kernel.org>; Wed,  2 Aug 2023 10:33:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1690997506;
+        s=mimecast20190719; t=1690997530;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OU0ELlj18DaO7z7eFjreRnwtZGmvkS2ThEX3kD1fe7I=;
-        b=fZjBRYK+140w+B1fwX/e41PEreSGG5kG3Qu5avkAw7eZRAa58dlNwsS8WBpG9kzNFt77/7
-        dig7hKieLwKyzKt9jrn7GWXGDko6EZyK78+DaY9DLZ3GxuYaxzhDSdZ9crSxXcNbJTNLBe
-        2y+4RbMYxiEgmhyqc4PB49yB8aMkUXg=
+        bh=EcDyRHvJxga23N24g7zZoepisVmaaImy82FpCV8nah8=;
+        b=JYfbuacfSsaNJvlkcUnUfe8jcHFsUe/xQsZRZ1l3WsjE0hO0hKDmNmmEKrRp/GuMyjumcq
+        73r4natQdqf6pxXdR9yYn9qHp98Lc9vQT4n+Mo2lPpBYobQx1CkcOIUeVLagcJ0ifFbXjm
+        Zxk0R92xyZTZ0xZ+xURtTuEE+TyiDT4=
 Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-140-cP4Ult6tNDuJqAPSuEIwlg-1; Wed, 02 Aug 2023 13:31:42 -0400
-X-MC-Unique: cP4Ult6tNDuJqAPSuEIwlg-1
+ us-mta-671-6X6xD8yWPs2cAXVnhrEkzw-1; Wed, 02 Aug 2023 13:32:02 -0400
+X-MC-Unique: 6X6xD8yWPs2cAXVnhrEkzw-1
 Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 69D1828EA6E4;
-        Wed,  2 Aug 2023 17:31:41 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4A31E38294A2;
+        Wed,  2 Aug 2023 17:31:46 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.192.110])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 18A61140E952;
-        Wed,  2 Aug 2023 17:31:16 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E41D31454143;
+        Wed,  2 Aug 2023 17:31:44 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -48,9 +48,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Dave Stevenson <dave.stevenson@raspberrypi.com>,
         Tommaso Merciai <tomm.merciai@gmail.com>,
         linux-media@vger.kernel.org
-Subject: [PATCH v4 19/32] media: ov2680: Annotate the per mode register setting lists
-Date:   Wed,  2 Aug 2023 19:30:33 +0200
-Message-ID: <20230802173046.368434-20-hdegoede@redhat.com>
+Subject: [PATCH v4 22/32] media: ov2680: Add an __ov2680_get_pad_format() helper function
+Date:   Wed,  2 Aug 2023 19:30:36 +0200
+Message-ID: <20230802173046.368434-23-hdegoede@redhat.com>
 In-Reply-To: <20230802173046.368434-1-hdegoede@redhat.com>
 References: <20230802173046.368434-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,157 +60,67 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Annotate the per mode register setting lists.
+Add an __ov2680_get_pad_format() helper function.
 
-This is a preparation patch for moving to calculating the per mode
-settings, allowing to set any mode through cropping.
-
-The annotations make it easier to see which registers are mode
-dependent and which are fixed.
+This is a preparation patch for adding selections support.
 
 Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
 Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/media/i2c/ov2680.c | 118 ++++++++++++++++++++++++++++++++-----
- 1 file changed, 104 insertions(+), 14 deletions(-)
+ drivers/media/i2c/ov2680.c | 26 ++++++++++++++++----------
+ 1 file changed, 16 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/media/i2c/ov2680.c b/drivers/media/i2c/ov2680.c
-index a83efd449993..e7d2e555e1c6 100644
+index 012b95f90c1d..87c4c5ea47c9 100644
 --- a/drivers/media/i2c/ov2680.c
 +++ b/drivers/media/i2c/ov2680.c
-@@ -140,27 +140,117 @@ static const int ov2680_hv_flip_bayer_order[] = {
- };
+@@ -220,6 +220,18 @@ static void ov2680_set_bayer_order(struct ov2680_dev *sensor,
+ 	fmt->code = ov2680_hv_flip_bayer_order[hv_flip];
+ }
  
- static const struct reg_sequence ov2680_setting_30fps_QUXGA_800_600[] = {
--	{0x3086, 0x01}, {0x370a, 0x23}, {0x3808, 0x03}, {0x3809, 0x20},
--	{0x380a, 0x02}, {0x380b, 0x58}, {0x380c, 0x06}, {0x380d, 0xac},
--	{0x380e, 0x02}, {0x380f, 0x84}, {0x3811, 0x04}, {0x3813, 0x04},
--	{0x3814, 0x31}, {0x3815, 0x31}, {0x3820, 0xc0}, {0x4008, 0x00},
--	{0x4009, 0x03}, {0x4837, 0x1e}, {0x3501, 0x4e}, {0x3502, 0xe0},
-+	/* Set PLL SP DIV to 1 for binning mode */
-+	{0x3086, 0x01},
++static struct v4l2_mbus_framefmt *
++__ov2680_get_pad_format(struct ov2680_dev *sensor,
++			struct v4l2_subdev_state *state,
++			unsigned int pad,
++			enum v4l2_subdev_format_whence which)
++{
++	if (which == V4L2_SUBDEV_FORMAT_TRY)
++		return v4l2_subdev_get_try_format(&sensor->sd, state, pad);
 +
-+	/* Sensor control register 0x0a to 0x23 for binning mode */
-+	{0x370a, 0x23},
++	return &sensor->mode.fmt;
++}
 +
-+	/* Set X and Y output size to 800x600 */
-+	{0x3808, 0x03},
-+	{0x3809, 0x20},
-+	{0x380a, 0x02},
-+	{0x380b, 0x58},
-+
-+	/* Set HTS + VTS to 1708x644 */
-+	{0x380c, 0x06},
-+	{0x380d, 0xac},
-+	{0x380e, 0x02},
-+	{0x380f, 0x84},
-+
-+	/* Set ISP WIN X and Y start to 4x4 */
-+	{0x3811, 0x04},
-+	{0x3813, 0x04},
-+
-+	/* Set X INC and Y INC for binning */
-+	{0x3814, 0x31},
-+	{0x3815, 0x31},
-+
-+	/* Initialize FORMAT1 to default/reset value (vflip disabled) */
-+	{0x3820, 0xc0},
-+
-+	/* Set black level compensation range to 0 - 3 (default 0 - 11) */
-+	{0x4008, 0x00},
-+	{0x4009, 0x03},
-+
-+	/* Set MIPI pclk period to 0x1e (default/reset is 0x18) */
-+	{0x4837, 0x1e},
-+
-+	/* Initialize exposure to 0x4ee (overridden by the ctrl, drop this */
-+	{0x3501, 0x4e},
-+	{0x3502, 0xe0},
-+
-+	/* R MANUAL set exposure and gain to manual (hw does not do auto) */
- 	{0x3503, 0x03},
- };
+ static void ov2680_fill_format(struct ov2680_dev *sensor,
+ 			       struct v4l2_mbus_framefmt *fmt,
+ 			       unsigned int width, unsigned int height)
+@@ -508,22 +520,16 @@ static int ov2680_get_fmt(struct v4l2_subdev *sd,
+ 			  struct v4l2_subdev_format *format)
+ {
+ 	struct ov2680_dev *sensor = to_ov2680_dev(sd);
+-	struct v4l2_mbus_framefmt *fmt = NULL;
++	struct v4l2_mbus_framefmt *fmt;
  
- static const struct reg_sequence ov2680_setting_30fps_720P_1280_720[] = {
--	{0x3086, 0x00}, {0x3808, 0x05}, {0x3809, 0x00}, {0x380a, 0x02},
--	{0x380b, 0xd0}, {0x380c, 0x06}, {0x380d, 0xa8}, {0x380e, 0x05},
--	{0x380f, 0x0e}, {0x3811, 0x08}, {0x3813, 0x06}, {0x3814, 0x11},
--	{0x3815, 0x11}, {0x3820, 0xc0}, {0x4008, 0x00},
-+	/* Set PLL SP DIV to 0 for not binning mode */
-+	{0x3086, 0x00},
-+
-+	/* Set X and Y output size to 1280x720 */
-+	{0x3808, 0x05},
-+	{0x3809, 0x00},
-+	{0x380a, 0x02},
-+	{0x380b, 0xd0},
-+
-+	/* Set HTS + VTS to 1704x1294 */
-+	{0x380c, 0x06},
-+	{0x380d, 0xa8},
-+	{0x380e, 0x05},
-+	{0x380f, 0x0e},
-+
-+	/* Set ISP WIN X and Y start to 8x6 */
-+	{0x3811, 0x08},
-+	{0x3813, 0x06},
-+
-+	/* Set X INC and Y INC for non binning */
-+	{0x3814, 0x11},
-+	{0x3815, 0x11},
-+
-+	/* Initialize FORMAT1 to default/reset value (vflip disabled) */
-+	{0x3820, 0xc0},
-+
-+	/* Set backlight compensation range start to 0 */
-+	{0x4008, 0x00},
- };
+ 	if (format->pad != 0)
+ 		return -EINVAL;
  
- static const struct reg_sequence ov2680_setting_30fps_UXGA_1600_1200[] = {
--	{0x3086, 0x00}, {0x3501, 0x4e}, {0x3502, 0xe0}, {0x3808, 0x06},
--	{0x3809, 0x40}, {0x380a, 0x04}, {0x380b, 0xb0}, {0x380c, 0x06},
--	{0x380d, 0xa8}, {0x380e, 0x05}, {0x380f, 0x0e}, {0x3811, 0x00},
--	{0x3813, 0x00}, {0x3814, 0x11}, {0x3815, 0x11}, {0x3820, 0xc0},
--	{0x4008, 0x00}, {0x4837, 0x18}
-+	/* Set PLL SP DIV to 0 for not binning mode */
-+	{0x3086, 0x00},
++	fmt = __ov2680_get_pad_format(sensor, sd_state, format->pad,
++				      format->which);
 +
-+	/* Initialize exposure to 0x4ee (overridden by the ctrl, drop this */
-+	{0x3501, 0x4e},
-+	{0x3502, 0xe0},
-+
-+	/* Set X and Y output size to 1600x1200 */
-+	{0x3808, 0x06},
-+	{0x3809, 0x40},
-+	{0x380a, 0x04},
-+	{0x380b, 0xb0},
-+
-+	/* Set HTS + VTS to 1704x1294 */
-+	{0x380c, 0x06},
-+	{0x380d, 0xa8},
-+	{0x380e, 0x05},
-+	{0x380f, 0x0e},
-+
-+	/* Set ISP WIN X and Y start to 0x0 */
-+	{0x3811, 0x00},
-+	{0x3813, 0x00},
-+
-+	/* Set X INC and Y INC for non binning */
-+	{0x3814, 0x11},
-+	{0x3815, 0x11},
-+
-+	/* Initialize FORMAT1 to default/reset value (vflip disabled) */
-+	{0x3820, 0xc0},
-+
-+	/* Set backlight compensation range start to 0 */
-+	{0x4008, 0x00},
-+
-+	/* Set MIPI pclk period to default/reset value of 0x18 */
-+	{0x4837, 0x18}
- };
+ 	mutex_lock(&sensor->lock);
+-
+-	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
+-		fmt = v4l2_subdev_get_try_format(&sensor->sd, sd_state,
+-						 format->pad);
+-	} else {
+-		fmt = &sensor->mode.fmt;
+-	}
+-
+ 	format->format = *fmt;
+-
+ 	mutex_unlock(&sensor->lock);
  
- static const struct ov2680_mode_info ov2680_mode_init_data = {
+ 	return 0;
 -- 
 2.41.0
 
