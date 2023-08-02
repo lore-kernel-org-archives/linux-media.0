@@ -2,205 +2,182 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57AF1C001DE
-	for <linux-media@archiver.kernel.org>; Wed,  2 Aug 2023 09:01:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CBEAC001DE
+	for <linux-media@archiver.kernel.org>; Wed,  2 Aug 2023 09:09:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234015AbjHBJB0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Aug 2023 05:01:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57278 "EHLO
+        id S234003AbjHBJJX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Aug 2023 05:09:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233857AbjHBJBQ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Aug 2023 05:01:16 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE417272D;
-        Wed,  2 Aug 2023 02:01:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1690966682; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=Q/k3Lgf/XlQYCG7loQ+KXywduAQQ8jt4jdt0K4Bmyp96B0XhRj6/fJyzeHdiBZVWm/
-    A1gqIZJWsbmZtj/RzgAVrmaW6lOn3XejDEnGbOieh85XQ4m/AWlP/8BrV21KRMN29Eib
-    bEToRUX0S5IOM5pTFwPVmwl2oqk9rhO9hCWkNiemEB0CePhJp5GE4OQqtpWYjNpPi9c/
-    DUMr6FWJWk/0RLuOs+eXEGkr6AngLw3VGNf9eTgE6f8YsnHmbFJagXmgFOVwz4isN6ab
-    9gk5NaMrq1XEogUFprm0QQ4DdJPog6Zhy6hVBHWKevHKBXJ096gT5qa1GGG0IfihixrS
-    Pskw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1690966682;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=9gfOXaLYqA7n9aISMUCYty1dCdYf8XP7q3JR+0afV78=;
-    b=TBM4bzuNNvnf2mN6J/mrB0Urxdz4kxECtMh9fEDzNxNoLyYL/OObQX7/71Px/zPHYK
-    cKMHMFXtsRlnpwdWdBpR8C6hghghjuYVSxPr/mwkmhXt9ujCOMfHYwU/thfTP1/Jm89T
-    KealC43swfdxc4Klg5V+6I7POiLIrIvhXFgIqC6Qwh/+uriAaIXq3wYsz6dfvVGFg8Xp
-    q0F9I6uTeXI6/C9up1Tn0uA81uzjM3F6aMXa2W4/9InxY65hFdDKFAD0SeUgrSLHLtNM
-    HDE8JRTI4O+eblP0/J1OUBZO64IBNXy95Y5exXS4IuwmWx98AvO+m+nZo7CWYo0i8RLv
-    dU8A==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1690966682;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=9gfOXaLYqA7n9aISMUCYty1dCdYf8XP7q3JR+0afV78=;
-    b=qmf6NbDKKZXq8jOWnBS+EkUoVSiww0DwU4Vta9uVyvrAv1SKlqoEEvjejf9EqhVNe4
-    /zE/SB1LKsx1kig3Ti0KThWux6V9FioqnSTtvOVakB1IyXN9MPRH6LerxZXUKwUyrOBZ
-    yxf/6Vr17T11RUVLqq0/vU/e3/qknm+a6WMPwrZFY3P3624f/DMtYcGzV9i8gxROLhLM
-    I/eoh4rKFPxM1eDuHghQc3J22CvCtv4uc2Cm7QQ2u8h7E5KUguUyBOijeWl20PmTy5JS
-    mCJYtPakTK0w3QX2NAWlhtELugwZv89KJUGWHnBLn57xh/Ky3n6GDF+XQPuX5F5Y1DqL
-    Hgcw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1690966682;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=9gfOXaLYqA7n9aISMUCYty1dCdYf8XP7q3JR+0afV78=;
-    b=9MLYpKfWhe9Wts/vrosi5h558l5IYUze+jap/igK0RvNaTgHKTrR+rZ6Mouo0vhihO
-    buwaFmlH0zNjDLvlxaCA==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA8Z+P1A=="
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.6.6 DYNA|AUTH)
-    with ESMTPSA id k61817z728w2RE1
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Wed, 2 Aug 2023 10:58:02 +0200 (CEST)
-Date:   Wed, 2 Aug 2023 10:57:55 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>
-Cc:     Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: venus: firmware: Use of_reserved_mem_lookup()
-Message-ID: <ZMoak_qaUSX-pkP2@gerhold.net>
-References: <20230529-venus-of-rmem-v1-1-dfcdc5047ffb@gerhold.net>
+        with ESMTP id S232621AbjHBJJV (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Aug 2023 05:09:21 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C132273B
+        for <linux-media@vger.kernel.org>; Wed,  2 Aug 2023 02:09:19 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8F7232AC;
+        Wed,  2 Aug 2023 11:08:14 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1690967294;
+        bh=wZigPow+2ktJvw97i+PrJ/DrtOm0rYwPZNcmXAOc0t4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QWwxl2Rst0MQxLIXAxsZgNZQ7SzdSLWz1Zjld6aoNSUj+ueEPln/X8ZkYFkTvXA9i
+         DW12biYcQ6lrspGTUwyip5a8dN99qI/hOVfR4QobZmiduNoSmTSFD7mR31dQFN8e7Y
+         PIPAj7cYHXzbXUsGsI4Rd5mEgkVnMK57TrRjPS2Y=
+Date:   Wed, 2 Aug 2023 12:09:23 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Frieder Schrempf <frieder.schrempf@kontron.de>
+Cc:     Tim Harvey <tharvey@gateworks.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Sakari Ailus <sakari.ailus@iki.fi>
+Subject: Re: NULL pointer dereference in imx-mipi-csis driver when starting
+ stream
+Message-ID: <20230802090923.GA29611@pendragon.ideasonboard.com>
+References: <7658a15a-80c5-219f-2477-2a94ba6c6ba1@kontron.de>
+ <d2fc1a0d-d058-757e-f935-1b91cfd19749@kontron.de>
+ <Y+zKibHcez8or6nS@pendragon.ideasonboard.com>
+ <d797611e-8e07-402f-ec75-7a1eadbc2122@kontron.de>
+ <dfdd11f6-8692-1bec-2a7c-1d890039cfe7@kontron.de>
+ <edddba07-c5c3-bab4-ca0c-49e1a5dc1135@kontron.de>
+ <Y+0iMyLnHmqdDJOk@pendragon.ideasonboard.com>
+ <8529dd84-3670-052e-8222-0b5d2c860f4b@kontron.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230529-venus-of-rmem-v1-1-dfcdc5047ffb@gerhold.net>
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <8529dd84-3670-052e-8222-0b5d2c860f4b@kontron.de>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Stanimir,
+Hi Frieder,
 
-I see that you already tagged the Venus updates for 6.6, but could you
-try to still apply this patch as well for 6.6? It's a requirement for
-some DT cleanup I'm working on and ideally needs to go in a kernel
-release earlier to avoid bisect problems.
+(CC'ing Sakari to make him aware of the issue)
 
-AFAICT it's been on the list for more than two months now with two
-Reviewed-by, so should be fine to just apply it. :)
+On Wed, Aug 02, 2023 at 09:37:20AM +0200, Frieder Schrempf wrote:
+> On 15.02.23 19:19, Laurent Pinchart wrote:
+> > On Wed, Feb 15, 2023 at 04:30:49PM +0100, Frieder Schrempf wrote:
+> >> On 15.02.23 15:40, Frieder Schrempf wrote:
+> >>> On 15.02.23 15:20, Frieder Schrempf wrote:
+> >>>> On 15.02.23 13:05, Laurent Pinchart wrote:
+> >>>>> On Wed, Feb 15, 2023 at 12:53:56PM +0100, Frieder Schrempf wrote:
+> >>>>>> On 14.02.23 17:47, Frieder Schrempf wrote:
+> >>>>>>> Hi everyone,
+> >>>>>>>
+> >>>>>>> after solving the previous devicetree and driver issues with the media
+> >>>>>>> pipeline on i.MX8MM using a RPi v2.1 camera module (imx219) as sensor, I
+> >>>>>>> now try to get an image from the sensor and run into the next problem.
+> >>>>>>>
+> >>>>>>> Below you can find the commands I use and the output I'm getting. Maybe
+> >>>>>>> someone can see straight away what's wrong or at least can make a guess
+> >>>>>>> before I start diving into the code. ;)
+> >>>>>>>
+> >>>>>>> By the way: This happens on v6.1.11 and 6.2-rc8.
+> >>>>>>
+> >>>>>> So it looks like there are several problems (again):
+> >>>>>>
+> >>>>>> First I missed to enable the link between the imx219 and the imx-mipi-csis:
+> >>>>>>
+> >>>>>> media-ctl -l "'imx219 1-0010':0 -> 'csis-32e30000.mipi-csi':0[1]"
+> >>>>>>
+> >>>>>> And the imx-mipi-csis driver is missing a check for the missing source
+> >>>>>> link which caused the exception. I currently have this applied and will
+> >>>>>> send this as formal patch later:
+> >>>>>>
+> >>>>>> --- a/drivers/media/platform/nxp/imx-mipi-csis.c
+> >>>>>> +++ b/drivers/media/platform/nxp/imx-mipi-csis.c
+> >>>>>> @@ -596,6 +596,11 @@ static int mipi_csis_calculate_params(struct mipi_csis_device *csis,
+> >>>>>>         s64 link_freq;
+> >>>>>>         u32 lane_rate;
+> >>>>>>
+> >>>>>> +       if (!csis->src_sd) {
+> >>>>>> +               dev_err(csis->dev, "Missing source link\n");
+> >>>>>> +               return -EINVAL;
+> >>>>>> +       }
+> >>>>>> +
+> >>>>>>         /* Calculate the line rate from the pixel rate. */
+> >>>>>>         link_freq = v4l2_get_link_freq(csis->src_sd->ctrl_handler,
+> >>>>>>                                        csis_fmt->width,
+> >>>>>
+> >>>>> The pipeline is not correctly configured, and that should have been
+> >>>>> caught earlier as both pads are created with the
+> >>>>> MEDIA_PAD_FL_MUST_CONNECT flag. The __media_pipeline_start() function
+> >>>>> should have return an error. Could you try to check why that didn't
+> >>>>> happen ?
+> >>>>
+> >>>> Thanks for the pointer. I looked at __media_pipeline_start() and to me
+> >>>> it looks like there's something wrong. During validation of the links,
+> >>>> there is no code to handle the case where all links are skipped before
+> >>>> link_validate() is called on them. The loop is left with has_link = true
+> >>>> and has_enabled_link = true and validation of the pipeline succeeds even
+> >>>> though there is a missing link.
+> >>>>
+> >>>> Does this look like a valid fix to you:
+> >>>>
+> >>>> --- a/drivers/media/mc/mc-entity.c
+> >>>> +++ b/drivers/media/mc/mc-entity.c
+> >>>> @@ -744,6 +744,7 @@ __must_check int __media_pipeline_start(struct media_pad *pad,
+> >>>>                 struct media_pad *pad = ppad->pad;
+> >>>>                 struct media_entity *entity = pad->entity;
+> >>>>                 bool has_enabled_link = false;
+> >>>> +               bool has_valid_link = false;
+> >>>>                 bool has_link = false;
+> >>>>                 struct media_link *link;
+> >>>>
+> >>>> @@ -806,6 +807,15 @@ __must_check int __media_pipeline_start(struct
+> >>>> media_pad *pad,
+> >>>>                                 link->source->index,
+> >>>>                                 link->sink->entity->name,
+> >>>>                                 link->sink->index);
+> >>>> +
+> >>>> +                       has_valid_link = true;
+> >>>> +                       break;
+> >>>> +               }
+> >>>> +
+> >>>> +               if (!has_valid_link) {
+> >>>> +                       dev_dbg(mdev->dev, "No valid link found");
+> >>>> +                       ret = -ENOLINK;
+> >>>> +                       goto error;
+> >>>>                 }
+> >>>
+> >>> On second thought, I see that this is probably not a correct fix. But I
+> >>> still think the current code has a flaw. Or maybe I'm missing something
+> >>> important again. ;)
+> >>
+> >> Looks like the pipeline validation is only run for the pads of the links
+> >> that are enabled. As the following output shows, the pad
+> >> 'csis-32e30000.mipi-csi':0 is not part of the pipeline and the link
+> >> 'csis-32e30000.mipi-csi':0 -> 'imx219 1-0010':0 is therefore not part of
+> >> the validation in __media_pipeline_start().
+> >>
+> >> [   36.069274] imx7-csi 32e20000.csi: media pipeline populated, found pads:
+> >> [   36.080901] imx7-csi 32e20000.csi: - 'csi capture':0
+> >> [   36.085926] imx7-csi 32e20000.csi: - 'csi':1
+> >> [   36.090222] imx7-csi 32e20000.csi: - 'csi':0
+> >> [   36.094524] imx7-csi 32e20000.csi: - 'csis-32e30000.mipi-csi':1
+> >>
+> >> So the first time the disabled link is detected is in the driver in
+> >> mipi_csis_calculate_params() which leads to the crash.
+> > 
+> > Of course ! That's what I was missing. Indeed, we have an issue there.
+> > I'll try to cook up a patch.
+> 
+> Sorry for digging out this old thread. I just wanted to ask if you
+> managed to come up with a fix for the issue above?
+> 
+> Maybe it's already there and I just missed it?
 
-Thanks!
-Stephan
+Thanks for the ping, this had fallen through the cracks. I'll try to get
+back to it this week. I would like __media_pipeline_start() should catch
+the issue.
 
-On Mon, May 29, 2023 at 08:16:14PM +0200, Stephan Gerhold wrote:
-> Reserved memory can be either looked up using the generic function
-> of_address_to_resource() or using the special of_reserved_mem_lookup().
-> The latter has the advantage that it ensures that the referenced memory
-> region was really reserved and is not e.g. status = "disabled".
+> If I remember correctly it's only about handling a misconfigured
+> pipeline so it won't be triggered if things are done properly.
 > 
-> of_reserved_mem also supports allocating reserved memory dynamically at
-> boot time. This works only when using of_reserved_mem_lookup() since
-> there won't be a fixed address in the device tree.
-> 
-> Switch the code to use of_reserved_mem_lookup(). There is no functional
-> difference for static reserved memory allocations.
-> 
-> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
-> ---
-> See e.g. [1] for an example of dynamically allocated reserved memory.
-> (This patch does *not* depend on [1] and is useful without as well...)
-> 
-> [1]: https://lore.kernel.org/linux-arm-msm/20230510-dt-resv-bottom-up-v1-5-3bf68873dbed@gerhold.net/
-> ---
->  drivers/media/platform/qcom/venus/firmware.c | 24 +++++++++++++-----------
->  1 file changed, 13 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/media/platform/qcom/venus/firmware.c b/drivers/media/platform/qcom/venus/firmware.c
-> index cfb11c551167..2e7ffdaff7b2 100644
-> --- a/drivers/media/platform/qcom/venus/firmware.c
-> +++ b/drivers/media/platform/qcom/venus/firmware.c
-> @@ -10,6 +10,7 @@
->  #include <linux/io.h>
->  #include <linux/of.h>
->  #include <linux/of_address.h>
-> +#include <linux/of_reserved_mem.h>
->  #include <linux/platform_device.h>
->  #include <linux/of_device.h>
->  #include <linux/firmware/qcom/qcom_scm.h>
-> @@ -82,9 +83,9 @@ static int venus_load_fw(struct venus_core *core, const char *fwname,
->  			 phys_addr_t *mem_phys, size_t *mem_size)
->  {
->  	const struct firmware *mdt;
-> +	struct reserved_mem *rmem;
->  	struct device_node *node;
->  	struct device *dev;
-> -	struct resource r;
->  	ssize_t fw_size;
->  	void *mem_va;
->  	int ret;
-> @@ -99,13 +100,16 @@ static int venus_load_fw(struct venus_core *core, const char *fwname,
->  		return -EINVAL;
->  	}
->  
-> -	ret = of_address_to_resource(node, 0, &r);
-> -	if (ret)
-> -		goto err_put_node;
-> +	rmem = of_reserved_mem_lookup(node);
-> +	of_node_put(node);
-> +	if (!rmem) {
-> +		dev_err(dev, "failed to lookup reserved memory-region\n");
-> +		return -EINVAL;
-> +	}
->  
->  	ret = request_firmware(&mdt, fwname, dev);
->  	if (ret < 0)
-> -		goto err_put_node;
-> +		return ret;
->  
->  	fw_size = qcom_mdt_get_size(mdt);
->  	if (fw_size < 0) {
-> @@ -113,17 +117,17 @@ static int venus_load_fw(struct venus_core *core, const char *fwname,
->  		goto err_release_fw;
->  	}
->  
-> -	*mem_phys = r.start;
-> -	*mem_size = resource_size(&r);
-> +	*mem_phys = rmem->base;
-> +	*mem_size = rmem->size;
->  
->  	if (*mem_size < fw_size || fw_size > VENUS_FW_MEM_SIZE) {
->  		ret = -EINVAL;
->  		goto err_release_fw;
->  	}
->  
-> -	mem_va = memremap(r.start, *mem_size, MEMREMAP_WC);
-> +	mem_va = memremap(*mem_phys, *mem_size, MEMREMAP_WC);
->  	if (!mem_va) {
-> -		dev_err(dev, "unable to map memory region: %pR\n", &r);
-> +		dev_err(dev, "unable to map memory region %pa size %#zx\n", mem_phys, *mem_size);
->  		ret = -ENOMEM;
->  		goto err_release_fw;
->  	}
-> @@ -138,8 +142,6 @@ static int venus_load_fw(struct venus_core *core, const char *fwname,
->  	memunmap(mem_va);
->  err_release_fw:
->  	release_firmware(mdt);
-> -err_put_node:
-> -	of_node_put(node);
->  	return ret;
->  }
->  
-> 
-> ---
-> base-commit: 9f9f8ca6f012d25428f8605cb36369a449db8508
-> change-id: 20230529-venus-of-rmem-f649885114fd
-> 
-> Best regards,
-> -- 
-> Stephan Gerhold <stephan@gerhold.net>
-> 
+> But as I've managed to trigger it, someone in the future might too and
+> it would be nice to make the framework more robust against this.
+
+-- 
+Regards,
+
+Laurent Pinchart
