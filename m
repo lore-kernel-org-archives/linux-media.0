@@ -2,500 +2,124 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC83BC00528
-	for <linux-media@archiver.kernel.org>; Wed,  2 Aug 2023 09:13:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA932C001DE
+	for <linux-media@archiver.kernel.org>; Wed,  2 Aug 2023 09:26:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233120AbjHBJNq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Aug 2023 05:13:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34412 "EHLO
+        id S234102AbjHBJ0O (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Aug 2023 05:26:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231936AbjHBJNp (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Aug 2023 05:13:45 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981F0FE;
-        Wed,  2 Aug 2023 02:13:43 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8C3762AC;
-        Wed,  2 Aug 2023 11:12:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1690967558;
-        bh=xPF7K54EvFX5Pp0OPsowfb7GQ6atokj/kDXPJn+d9z0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pE+ryr1fMro7dkcFfFGW4PWOSkXnyudXuwAliUhSlLO2TuVcnEqtEQSaUa1symZXb
-         Jfx5Z20ZTMIlIzKrYxZhuAGniz3hq//aVVFxSA6Uh+JL0LOL11687UANswWFFclCgx
-         onYDlCn7puP0YbzZbKntAgBQgMo/xQnmXAqGH2TM=
-Date:   Wed, 2 Aug 2023 12:13:47 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jack Zhu <jack.zhu@starfivetech.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>, bryan.odonoghue@linaro.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Eugen Hristev <eugen.hristev@collabora.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, changhuang.liang@starfivetech.com
-Subject: Re: [PATCH v7 4/6] media: starfive: camss: Add video driver
-Message-ID: <20230802091347.GB29611@pendragon.ideasonboard.com>
-References: <20230619112838.19797-1-jack.zhu@starfivetech.com>
- <20230619112838.19797-5-jack.zhu@starfivetech.com>
- <20230727152528.GI25174@pendragon.ideasonboard.com>
- <3206c2c5-cbba-6316-07c5-5fdcff88add8@starfivetech.com>
+        with ESMTP id S234100AbjHBJ0M (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Aug 2023 05:26:12 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68896E7
+        for <linux-media@vger.kernel.org>; Wed,  2 Aug 2023 02:26:11 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-317716a4622so6041142f8f.1
+        for <linux-media@vger.kernel.org>; Wed, 02 Aug 2023 02:26:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1690968370; x=1691573170;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xyik+TZ3vmuOeL3qHw1bnZpewOZIKIcdIsCzNp04tEg=;
+        b=vCnnK84JpF67wjLutDsqwsSLfbCDkT70d8j8dV9cSQJgoytiD0+PuBDUbbOMTQuEYm
+         Lz8U7B5IA+1IIv3obew5S4JWiKBcyBzmPDyjOFSBJXWJG6P4YjpmkbsfMgwpR2ibQzrY
+         XC6O+Zvr1jMTwEAtO9nwL1he8fCUWqkxZwC1HNEjXMyKnDO2y3k83DTT8dLnRpfBvxDs
+         y+dEIQwJxPeEOqU3uoNmrU/CMbnSf6SrFnORmc1J87gKoFh0clnE8cKTkblZEu/+KKC+
+         GhR5XjP/gSZ9M5oM0jz+tbCFMrK+jwWrvgG4h9Y1nPj4oGeA80ns8NxY5rGSKKA8/X3X
+         nd3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690968370; x=1691573170;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xyik+TZ3vmuOeL3qHw1bnZpewOZIKIcdIsCzNp04tEg=;
+        b=gESxAsu2CZEeDujUP4c6V+vG7NfPfLcl+4UTEH78EjIz+ZqaH0jrrGii5aICRXMD6J
+         Zsq4gT5aWkYmJO4CkYFbUAQMoTKWPG/MHKcWMuMhGZfu7K0J2gvPOnbVndCh6LRKI8pJ
+         TUFjJJo9v47eezFyOkdBshCPsYcfqQfqiHGz4CHcd0VXzrEhx7jM6JD+Fco/kjsyIdWH
+         K5FKRGEjH4uGvXxCkLhGgkGOQ/1Kc/ZcADMLz5z1sziBIZj1rzp8KjJ8j+IlanehU1HU
+         BxpzzXNdwrt7CZYxa8AE1XwqK2VYAr3Vl0Jd2YHyRBBaUtUKvn9sHxDMDG1WN6/1UClh
+         5WOg==
+X-Gm-Message-State: ABy/qLZl0gAhrpVsfXVb6Pp7NWMkXNCqX3nqZeXmYsoO3szMhxK+Zuh6
+        RUppZ6PX0RWoioBJZ1b952bfHJ6PHI1gyVe/3go=
+X-Google-Smtp-Source: APBJJlFnTSJ3Ye5Xa7SaD9lPL8+AVBP998AL39+S2BZmZ2yrJ9KSO45jspHUBtgAIqCU3YOWrUI94g==
+X-Received: by 2002:a5d:440e:0:b0:317:43e0:3f47 with SMTP id z14-20020a5d440e000000b0031743e03f47mr3947650wrq.36.1690968369938;
+        Wed, 02 Aug 2023 02:26:09 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id k1-20020adff5c1000000b00313de682eb3sm18513077wrp.65.2023.08.02.02.26.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Aug 2023 02:26:09 -0700 (PDT)
+Date:   Wed, 2 Aug 2023 11:59:05 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     linux-media@vger.kernel.org
+Subject: Re: [bug report] [media] adv7511: add new video encoder
+Message-ID: <01d8ddac-64a8-46c3-a4b9-32de1d605df5@kadam.mountain>
+References: <591910e0-15db-4055-85ef-d4ca99649120@moroto.mountain>
+ <1f43956c-296a-b1ad-6a36-19a3f0ffeb6b@xs4all.nl>
+ <8bab054d-2e28-4189-8f7c-9982d959c891@kadam.mountain>
+ <23dabcf0-d633-05b0-abbd-de4aed60dea4@xs4all.nl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3206c2c5-cbba-6316-07c5-5fdcff88add8@starfivetech.com>
+In-Reply-To: <23dabcf0-d633-05b0-abbd-de4aed60dea4@xs4all.nl>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jack,
-
-On Wed, Aug 02, 2023 at 10:57:03AM +0800, Jack Zhu wrote:
-> On 2023/7/27 23:25, Laurent Pinchart wrote:
-> > On Mon, Jun 19, 2023 at 07:28:36PM +0800, Jack Zhu wrote:
-> >> Add video driver for StarFive Camera Subsystem.
-> >> 
-> >> Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
-> >> ---
-> >>  .../media/platform/starfive/camss/Makefile    |   4 +-
-> >>  .../media/platform/starfive/camss/stf_video.c | 724 ++++++++++++++++++
-> >>  .../media/platform/starfive/camss/stf_video.h |  92 +++
-> >>  3 files changed, 819 insertions(+), 1 deletion(-)
-> >>  create mode 100644 drivers/media/platform/starfive/camss/stf_video.c
-> >>  create mode 100644 drivers/media/platform/starfive/camss/stf_video.h
-> >> 
-> >> diff --git a/drivers/media/platform/starfive/camss/Makefile b/drivers/media/platform/starfive/camss/Makefile
-> >> index d56ddd078a71..eb457917a914 100644
-> >> --- a/drivers/media/platform/starfive/camss/Makefile
-> >> +++ b/drivers/media/platform/starfive/camss/Makefile
-> >> @@ -3,6 +3,8 @@
-> >>  # Makefile for StarFive Camera Subsystem driver
-> >>  #
-> >>  
-> >> -starfive-camss-objs += stf_camss.o
-> >> +starfive-camss-objs += \
-> >> +		stf_camss.o \
-> >> +		stf_video.o
-> >>  
-> >>  obj-$(CONFIG_VIDEO_STARFIVE_CAMSS) += starfive-camss.o
-> >> diff --git a/drivers/media/platform/starfive/camss/stf_video.c b/drivers/media/platform/starfive/camss/stf_video.c
-> >> new file mode 100644
-> >> index 000000000000..2e6472fe51c6
-> >> --- /dev/null
-> >> +++ b/drivers/media/platform/starfive/camss/stf_video.c
-> >> @@ -0,0 +1,724 @@
-> >> +// SPDX-License-Identifier: GPL-2.0
-> >> +/*
-> >> + * stf_video.c
-> >> + *
-> >> + * StarFive Camera Subsystem - V4L2 device node
-> >> + *
-> >> + * Copyright (C) 2021-2023 StarFive Technology Co., Ltd.
-> >> + */
-> >> +
-> >> +#include <linux/pm_runtime.h>
-> >> +#include <media/v4l2-ctrls.h>
-> >> +#include <media/v4l2-event.h>
-> >> +#include <media/v4l2-mc.h>
-> >> +#include <media/videobuf2-dma-contig.h>
-> >> +
-> >> +#include "stf_camss.h"
-> >> +#include "stf_video.h"
-> >> +
-> >> +static const struct stfcamss_format_info formats_pix_wr[] = {
-> >> +	{
-> >> +		.code = MEDIA_BUS_FMT_SRGGB10_1X10,
-> >> +		.pixelformat = V4L2_PIX_FMT_SRGGB10,
-> >> +		.planes = 1,
-> >> +		.vsub = { 1 },
-> >> +		.bpp = 10,
-> >> +	},
-> >> +	{
-> >> +		.code = MEDIA_BUS_FMT_SGRBG10_1X10,
-> >> +		.pixelformat = V4L2_PIX_FMT_SGRBG10,
-> >> +		.planes = 1,
-> >> +		.vsub = { 1 },
-> >> +		.bpp = 10,
-> >> +	},
-> >> +	{
-> >> +		.code = MEDIA_BUS_FMT_SGBRG10_1X10,
-> >> +		.pixelformat = V4L2_PIX_FMT_SGBRG10,
-> >> +		.planes = 1,
-> >> +		.vsub = { 1 },
-> >> +		.bpp = 10,
-> >> +	},
-> >> +	{
-> >> +		.code = MEDIA_BUS_FMT_SBGGR10_1X10,
-> >> +		.pixelformat = V4L2_PIX_FMT_SBGGR10,
-> >> +		.planes = 1,
-> >> +		.vsub = { 1 },
-> >> +		.bpp = 10,
-> >> +	},
-> >> +};
-> >> +
-> >> +static const struct stfcamss_format_info formats_pix_isp[] = {
-> >> +	{
-> >> +		.code = MEDIA_BUS_FMT_Y12_1X12,
-> >> +		.pixelformat = V4L2_PIX_FMT_NV12,
-> >> +		.planes = 2,
-> >> +		.vsub = { 1, 2 },
-> >> +		.bpp = 8,
-> >> +	},
-> >> +};
-> >> +
-> >> +/* -----------------------------------------------------------------------------
-> >> + * Helper functions
-> >> + */
-> >> +
-> >> +static int video_find_format(u32 code, u32 pixelformat,
-> >> +			     struct stfcamss_video *video)
-> >> +{
-> >> +	unsigned int i;
-> >> +
-> >> +	for (i = 0; i < video->nformats; ++i) {
-> >> +		if (video->formats[i].code == code &&
-> >> +		    video->formats[i].pixelformat == pixelformat)
-> >> +			return i;
-> >> +	}
-> >> +
-> >> +	for (i = 0; i < video->nformats; ++i)
-> >> +		if (video->formats[i].code == code)
-> >> +			return i;
-> >> +
-> >> +	for (i = 0; i < video->nformats; ++i)
-> >> +		if (video->formats[i].pixelformat == pixelformat)
-> >> +			return i;
-> >> +
+On Wed, Aug 02, 2023 at 10:08:53AM +0200, Hans Verkuil wrote:
+> On 02/08/2023 09:49, Dan Carpenter wrote:
+> > On Wed, Aug 02, 2023 at 09:27:17AM +0200, Hans Verkuil wrote:
+> >> Hmm, this is old code and when digging into this I noticed inconsistencies
+> >> in how it is used and how it is documented.
+> >>
+> >> It's used by the v4l2_subdev interrupt_service_routine callback. The header
+> >> include/media/v4l2-subdev.h claims that it is called from IRQ context, but this
+> >> isn't true in most cases. It's used primarily to pass on interrupts meant for
+> >> i2c video receivers/transmitters that arrive at the bridge chip to the actual
+> >> i2c device. And that happens in work handlers that allow the use of locking.
+> >>
+> >> I found one exception where it is also used for an IR (infrared) receiver and
+> >> there it is actually called from IRQ context. It doesn't use i2c or sleeps/locking
+> >> in that case, so it is safe.
+> >>
+> >> But what confuses me is that you state 'This looks at functions which are passed to
+> >> request_irq()', but adv7511_isr isn't passed to request_irq. So why is this warning
+> >> raised?
+> >>
 > > 
-> > This looks weird, I don't think it does what you expect below. I think
-> > you can drop the function, and instead use video_get_pfmt_by_mcode() to
-> > convert the mbus code to a pixel format, and compare it to the active
-> > pixel format in video_check_format().
+> > Actually you're right.  I was thrown off a bit by the name.
 > > 
-> >> +	return -EINVAL;
-> >> +}
-> >> +
-> >> +static int __video_try_fmt(struct stfcamss_video *video, struct v4l2_format *f)
-> >> +{
-> >> +	struct v4l2_pix_format *pix;
-> >> +	const struct stfcamss_format_info *fi;
-> >> +	u32 width, height;
-> >> +	u32 bpl;
-> >> +	unsigned int i;
-> >> +
-> >> +	pix = &f->fmt.pix;
-> > 
-> > You can initialize pix when declaring it.
-> > 
-> >> +
-> >> +	for (i = 0; i < video->nformats; i++)
-> >> +		if (pix->pixelformat == video->formats[i].pixelformat)
-> >> +			break;
-> >> +
-> > 
-> > 	for (i = 0; i < video->nformats; i++) {
-> > 		if (pix->pixelformat == video->formats[i].pixelformat)
-> > 			break;
-> > 	}
-> > 
-> > But a helper function that looks up a format by pixelformat, similar to
-> > video_get_pfmt_by_mcode(), would be useful. I think I would make all
-> > those helpers return a const struct stfcamss_format_info pointer instead
-> > of an index.
-> > 
-> >> +	if (i == video->nformats)
-> >> +		i = 0; /* default format */
-> >> +
-> >> +	fi = &video->formats[i];
-> >> +	width = pix->width;
-> >> +	height = pix->height;
-> >> +
-> >> +	memset(pix, 0, sizeof(*pix));
-> >> +
-> >> +	pix->pixelformat = fi->pixelformat;
-> >> +	pix->width = clamp_t(u32, width, STFCAMSS_FRAME_MIN_WIDTH,
-> >> +			     STFCAMSS_FRAME_MAX_WIDTH);
-> >> +	pix->height = clamp_t(u32, height, STFCAMSS_FRAME_MIN_HEIGHT,
-> >> +			      STFCAMSS_FRAME_MAX_HEIGHT);
-> >> +	bpl = pix->width * fi->bpp / 8;
-> >> +	bpl = ALIGN(bpl, video->bpl_alignment);
-> >> +	pix->bytesperline = bpl;
-> > 
-> > Does the hardware support configuring the stride ?
+> > Was the exception cx23885_irq()?  Because that's what Smatch is
+> > concerned about.  That calls "v4l2_subdev_call(dev->sd_ir, core,
+> > interrupt_service_routine," and Smatch thinks interrupt_service_routine
+> > can point to here.
 > 
-> The hardware does not support.
+> Indeed, that's the exception. I wasn't even aware of this myself until I started
+> grepping the code.
 > 
-> >> +
-> >> +	for (i = 0; i < fi->planes; ++i)
-> >> +		pix->sizeimage += bpl * pix->height / fi->vsub[i];
-> >> +
-> >> +	pix->field = V4L2_FIELD_NONE;
-> >> +	pix->colorspace = V4L2_COLORSPACE_SRGB;
-> >> +	pix->flags = 0;
-> >> +	pix->ycbcr_enc =
-> >> +		V4L2_MAP_YCBCR_ENC_DEFAULT(pix->colorspace);
-> >> +	pix->quantization = V4L2_MAP_QUANTIZATION_DEFAULT(true,
-> >> +							  pix->colorspace,
-> >> +							  pix->ycbcr_enc);
-> >> +	pix->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(pix->colorspace);
-> > 
-> > This doesn't seem right for the processed output.
-> > 
-> >> +
-> >> +	return 0;
-> >> +}
-> >> +
-> >> +static int stf_video_init_format(struct stfcamss_video *video)
-> >> +{
-> >> +	int ret;
-> >> +	struct v4l2_format format = {
-> >> +		.type = video->type,
-> >> +		.fmt.pix = {
-> >> +			.width = 1920,
-> >> +			.height = 1080,
-> >> +			.pixelformat = V4L2_PIX_FMT_RGB565,
-> > 
-> > That format doesn't seem supported, let's pick V4L2_PIX_FMT_NV12.
-> > 
-> >> +		},
-> >> +	};
-> >> +
-> >> +	ret = __video_try_fmt(video, &format);
-> >> +
-> >> +	if (ret < 0)
-> >> +		return ret;
-> >> +
-> >> +	video->active_fmt = format;
-> >> +
-> >> +	return 0;
-> >> +}
-> >> +
-> >> +/* -----------------------------------------------------------------------------
-> >> + * Video queue operations
-> >> + */
-> >> +
-> >> +static int video_queue_setup(struct vb2_queue *q,
-> >> +			     unsigned int *num_buffers,
-> >> +			     unsigned int *num_planes,
-> >> +			     unsigned int sizes[],
-> >> +			     struct device *alloc_devs[])
-> >> +{
-> >> +	struct stfcamss_video *video = vb2_get_drv_priv(q);
-> >> +	const struct v4l2_pix_format *format = &video->active_fmt.fmt.pix;
-> >> +
-> >> +	if (*num_planes) {
-> >> +		if (*num_planes != 1)
-> >> +			return -EINVAL;
-> >> +
-> >> +		if (sizes[0] < format->sizeimage)
-> >> +			return -EINVAL;
-> >> +	}
-> >> +
-> >> +	*num_planes = 1;
-> >> +	sizes[0] = format->sizeimage;
-> >> +	if (!sizes[0])
-> >> +		dev_err(video->stfcamss->dev,
-> >> +			"%s: error size is zero!!!\n", __func__);
-> > 
-> > Shouldn't you return an error ? Also, use dev_dbg(), printing an error
-> > message based on a condition that can easily be triggered by
-> > unpriviledge userspace opens the door to applications flooding the
-> > kernel log.
-> > 
-> >> +
-> >> +	dev_dbg(video->stfcamss->dev, "planes = %d, size = %d\n",
-> >> +		*num_planes, sizes[0]);
-> >> +
-> >> +	return 0;
-> >> +}
-> >> +
-> >> +static int video_buf_init(struct vb2_buffer *vb)
-> >> +{
-> >> +	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
-> >> +	struct stfcamss_video *video = vb2_get_drv_priv(vb->vb2_queue);
-> >> +	struct stfcamss_buffer *buffer =
-> >> +		container_of(vbuf, struct stfcamss_buffer, vb);
-> > 
-> > A static inline to_stfcamss_buffer() function that wraps the
-> > container_of() would be nice. You can use it below too.
-> > 
-> >> +	const struct v4l2_pix_format *fmt = &video->active_fmt.fmt.pix;
-> >> +	dma_addr_t *paddr;
-> >> +
-> >> +	paddr = vb2_plane_cookie(vb, 0);
-> >> +	buffer->addr[0] = *paddr;
-> >> +
-> >> +	if (fmt->pixelformat == V4L2_PIX_FMT_NV12 ||
-> >> +	    fmt->pixelformat == V4L2_PIX_FMT_NV21 ||
-> >> +	    fmt->pixelformat == V4L2_PIX_FMT_NV16 ||
-> >> +	    fmt->pixelformat == V4L2_PIX_FMT_NV61)
-> > 
-> > Only V4L2_PIX_FMT_NV12 is listed in formats_pix_isp. Does the hardware
-> > support the other formats ? If so, it would be nice to support them
-> > already.
-> > 
-> >> +		buffer->addr[1] =
-> >> +			buffer->addr[0] + fmt->bytesperline * fmt->height;
-> > 
-> > As the hardware supports non-contiguous planes, you should use the
-> > MPLANE API (V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE) and support the NV*M
-> > formats in addition to the NV* formats.
-> > 
-> >> +
-> >> +	return 0;
-> >> +}
-> >> +
-> >> +static int video_buf_prepare(struct vb2_buffer *vb)
-> >> +{
-> >> +	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
-> >> +	struct stfcamss_video *video = vb2_get_drv_priv(vb->vb2_queue);
-> >> +	const struct v4l2_pix_format *fmt = &video->active_fmt.fmt.pix;
-> >> +
-> >> +	if (fmt->sizeimage > vb2_plane_size(vb, 0)) {
-> >> +		dev_err(video->stfcamss->dev,
-> > 
-> > dev_dbg() here too.
-> > 
-> >> +			"sizeimage = %d, plane size = %d\n",
-> >> +			fmt->sizeimage, (unsigned int)vb2_plane_size(vb, 0));
-> > 
-> > Both are unsigned, use %u instead of %d.
-> > 
-> >> +		return -EINVAL;
-> >> +	}
-> >> +	vb2_set_plane_payload(vb, 0, fmt->sizeimage);
-> >> +
-> >> +	vbuf->field = V4L2_FIELD_NONE;
-> >> +
-> >> +	return 0;
-> >> +}
-> >> +
-> >> +static void video_buf_queue(struct vb2_buffer *vb)
-> >> +{
-> >> +	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
-> >> +	struct stfcamss_video *video = vb2_get_drv_priv(vb->vb2_queue);
-> >> +	struct stfcamss_buffer *buffer =
-> >> +		container_of(vbuf, struct stfcamss_buffer, vb);
-> >> +
-> >> +	video->ops->queue_buffer(video, buffer);
-> >> +}
-> >> +
-> >> +/*
-> >> + * video_mbus_to_pix - Convert v4l2_mbus_framefmt to v4l2_pix_format
-> >> + * @mbus: v4l2_mbus_framefmt format (input)
-> >> + * @pix: v4l2_pix_format_mplane format (output)
-> >> + * @f: a pointer to formats array element to be used for the conversion
-> >> + * @alignment: bytesperline alignment value
-> >> + *
-> >> + * Fill the output pix structure with information from the input mbus format.
-> >> + *
-> >> + * Return 0 on success or a negative error code otherwise
-> >> + */
-> >> +static int video_mbus_to_pix(const struct v4l2_mbus_framefmt *mbus,
-> >> +			     struct v4l2_pix_format *pix,
-> >> +			     const struct stfcamss_format_info *f,
-> >> +			     unsigned int alignment)
-> >> +{
-> >> +	u32 bytesperline;
-> >> +	unsigned int i;
-> >> +
-> >> +	memset(pix, 0, sizeof(*pix));
-> >> +	v4l2_fill_pix_format(pix, mbus);
-> >> +	pix->pixelformat = f->pixelformat;
-> >> +	bytesperline = pix->width * f->bpp / 8;
-> >> +	bytesperline = ALIGN(bytesperline, alignment);
-> >> +	pix->bytesperline = bytesperline;
-> >> +
-> >> +	for (i = 0; i < f->planes; ++i)
-> >> +		pix->sizeimage += bytesperline * pix->height / f->vsub[i];
-> > 
-> > This function is used for validation of the format only, the
-> > bytesperline and sizeimage values are never used. You can simplify the
-> > driver by dropping the function and comparing the width, height and
-> > field of the subdev and video device from the v4l2_mbus_framefmt and
-> > v4l2_pix_format respectively in video_check_format().
-> > video_get_subdev_format() will then take a v4l2_mbus_framefmt pointer,
-> > not a v4l2_pix_format.
-> > 
-> > The format match check still needs conversion of the 
-> > 
-> > To check the format, you need to convert the mbus code from the subdev
-> > to a pixel format using the 
-> > 
-> >> +
-> >> +	return 0;
-> >> +}
-> >> +
-> >> +static struct v4l2_subdev *video_remote_subdev(struct stfcamss_video *video,
-> >> +					       u32 *pad)
-> >> +{
-> >> +	struct media_pad *remote;
-> >> +
-> >> +	remote = media_pad_remote_pad_first(&video->pad);
-> >> +
-> >> +	if (!remote || !is_media_entity_v4l2_subdev(remote->entity))
-> >> +		return NULL;
-> >> +
-> >> +	if (pad)
-> >> +		*pad = remote->index;
-> >> +
-> >> +	return media_entity_to_v4l2_subdev(remote->entity);
-> > 
-> > As the connected subdev is always the same (the CSI-2 RX for the raw
-> > capture video device and the ISP for the processed capture video
-> > device), I would store a pointer to the connected subdev in the
-> > stfcamss_video structure at registration time. You can pass the pointer
-> > to the stf_video_register() function.
+> I wonder if there is better kernel support for things like this, i.e. the irq
+> from one device is hooked up to another device. Typical for PCI devices where
+> the i2c devices on the PCI card route their interrupt lines to the PCI bridge
+> device.
 > 
-> As the hardware also supports the dvp interface, I think the current
-> function implementation should be flexible and easy to expand later.
+> An alternative is to change the sd_ir handling so that it doesn't use
+> the interrupt_service_routine callback and then change the documentation for
+> the interrupt_service_routine callback to allow sleeping. It's rather ugly
+> the way these two modes are mixed today.
 
-Fair enough, I'm fine with that.
+I wouldn't worry too much about it...  This check isn't anywhere near
+being published yet.  Ideally, I could silence this in Smatch.
 
-> >> +}
-> >> +
-> >> +static int video_get_subdev_format(struct stfcamss_video *video,
-> >> +				   struct v4l2_format *format)
-> >> +{
-> >> +	struct v4l2_pix_format *pix = &video->active_fmt.fmt.pix;
-> >> +	struct v4l2_subdev_format fmt;
-> >> +	struct v4l2_subdev *subdev;
-> >> +	u32 pixelformat;
-> >> +	u32 pad;
-> >> +	int ret;
-> >> +
-> >> +	subdev = video_remote_subdev(video, &pad);
-> >> +	if (!subdev)
-> >> +		return -EPIPE;
-> >> +
-> >> +	fmt.pad = pad;
-> >> +	fmt.which = V4L2_SUBDEV_FORMAT_ACTIVE;
-> >> +
-> >> +	ret = v4l2_subdev_call(subdev, pad, get_fmt, NULL, &fmt);
-> > 
-> > Use v4l2_subdev_call_state_active() to support the subdev state API.
-> > 
-> >> +	if (ret)
-> >> +		return ret;
-> >> +
-> >> +	pixelformat = pix->pixelformat;
-> >> +	ret = video_find_format(fmt.format.code, pixelformat, video);
-> >> +	if (ret < 0)
-> >> +		return ret;
-> >> +
-> >> +	format->type = video->type;
-> >> +
-> >> +	return video_mbus_to_pix(&fmt.format, &format->fmt.pix,
-> >> +				 &video->formats[ret], video->bpl_alignment);
-> >> +}
-> >> +
+This is a flaw in Smatch where it treats all function pointers of a
+given type as the same.  So every time ->interrupt_service_routine() is
+called it thinks they can be treated as equivalent.
 
--- 
-Regards,
+The main issue so far as this check is concerned is that it thinks
+(struct spi_message)->complete functions are equivalent when they're
+not.  So I probably will add a table of function pointers like that
+where it's hard coded that they aren't called from interrupt context.
 
-Laurent Pinchart
+I'd like to fix this in a better way, but in this case it's really hard.
+
+regards,
+dan carpenter
