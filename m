@@ -2,41 +2,41 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC671C04A6A
-	for <linux-media@archiver.kernel.org>; Thu,  3 Aug 2023 09:35:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62749C0015E
+	for <linux-media@archiver.kernel.org>; Thu,  3 Aug 2023 09:36:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235112AbjHCJfl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Aug 2023 05:35:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33378 "EHLO
+        id S235131AbjHCJgt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Aug 2023 05:36:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235088AbjHCJfg (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Aug 2023 05:35:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6467D3598
-        for <linux-media@vger.kernel.org>; Thu,  3 Aug 2023 02:34:16 -0700 (PDT)
+        with ESMTP id S235130AbjHCJgA (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Aug 2023 05:36:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB9435A2
+        for <linux-media@vger.kernel.org>; Thu,  3 Aug 2023 02:34:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1691055255;
+        s=mimecast20190719; t=1691055259;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=cObHkZ504KWlHQpDz8Tf2YqZrc4/61AxKkqb5T0wBaI=;
-        b=eKJ2I22kRas9HOgwTswtQrOsOcvKqJ4oomxZ8hT74ofR39sFc3gjpwIjiXGhL07UtqEnEs
-        jqITTcj9CQd+FvIBgkb/7LnEqyMSbdi9I7ZVWlJiqfmWQvqTOQEhib8fk49xg5GO9NCmf1
-        1GK7i1JmZ2C5HbbyuKL0ZCLqbtVJf5w=
+        bh=0NgLAKz9Yt7HtZ5vybpERWJr/SrAgRfg1hdXVwyplVw=;
+        b=RfnGW16vEHdrfcnzpkYnaAWger1pMz6tTz3R9FjTIzAL0vdlOp7841N42og0X0RPWZa/z1
+        BkMv+3I0eORO4V/qOqWyn/GhK2BIngVxaCaQVymPKnzcCrf2sQucqbGT2nMZiZ/8e7CihK
+        GrGRijNjePGd6qolq4D7AqYJIIfF0lY=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-609-xAerU9l3MMKJud3ZnihYRQ-1; Thu, 03 Aug 2023 05:34:11 -0400
-X-MC-Unique: xAerU9l3MMKJud3ZnihYRQ-1
+ us-mta-134-Clv5J6QQOsOq-Hz2TVPYJQ-1; Thu, 03 Aug 2023 05:34:18 -0400
+X-MC-Unique: Clv5J6QQOsOq-Hz2TVPYJQ-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 13A0E185A78B;
-        Thu,  3 Aug 2023 09:34:11 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9417688D06C;
+        Thu,  3 Aug 2023 09:34:17 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.193.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A1F4D2166B25;
-        Thu,  3 Aug 2023 09:34:09 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2F49C2166B25;
+        Thu,  3 Aug 2023 09:34:16 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -48,9 +48,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Dave Stevenson <dave.stevenson@raspberrypi.com>,
         Tommaso Merciai <tomm.merciai@gmail.com>,
         linux-media@vger.kernel.org
-Subject: [PATCH v5 12/32] media: ov2680: Check for "powerdown" GPIO con-id before checking for "reset" GPIO con-id
-Date:   Thu,  3 Aug 2023 11:33:27 +0200
-Message-ID: <20230803093348.15679-13-hdegoede@redhat.com>
+Subject: [PATCH v5 16/32] media: ov2680: Wait for endpoint fwnode before continuing with probe()
+Date:   Thu,  3 Aug 2023 11:33:31 +0200
+Message-ID: <20230803093348.15679-17-hdegoede@redhat.com>
 In-Reply-To: <20230803093348.15679-1-hdegoede@redhat.com>
 References: <20230803093348.15679-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,118 +60,56 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The datasheet of the OV2680 labels the single GPIO to put the sensor in
-powersaving mode as XSHUTDN aka shutdown, _not_ reset.
-
-This is important because some boards have standardized sensor connectors
-which allow connecting various sensor modules. These connectors have both
-reset and powerdown signals and the powerdown signal is routed to
-the OV2680's XSHUTDN pin.
-
-On x86/ACPI multiple Bay Trail, Cherry Trail, Sky Lake and Kaby Lake models
-have an OV2680 connected to the ISP2 / IPU3. On these devices the GPIOS are
-not described in DT instead the GPIOs are described with an Intel specific
-DSM which labels them as either powerdown or reset. Often this DSM returns
-both reset and powerdown pins even though the OV2680 has only 1 such pin.
-
-For the ov2680 driver to work on these devices it must use the GPIO with
-"powerdown" as con-id, matching the XSHUTDN name from the datasheet.
-
-As for why "powerdown" vs say "shutdown" the ACPI DSM -> con-id mapping
-code is shared, so we must use standardized names and currently all of
-the following sensor drivers already use "powerdown":
-adv7180, gc0310, isl7998x, ov02a10, ov2659, ov5640, ov5648, ov5670,
-ov5693, ov7670, ov772x, ov7740, ov8858, ov8865 and ov9650 .
-
-Where as the hi846 driver is the lonely standout using "shutdown".
-
-Try the "powerdown" con-id first to make things work, falling back to
-"reset" to keep existing DT setups working.
+Defer probe() until the endpoint fwnode is available. This is necessary
+on ACPI platforms where the bridge code creating the fwnodes may also e.g.
+set the "clock-frequency" device property and add GPIO mappings.
 
 Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
 Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/media/i2c/ov2680.c | 29 ++++++++++++++++++++---------
- 1 file changed, 20 insertions(+), 9 deletions(-)
+Changes in v4:
+- Only defer probe do not set v4l2_subdev.fwnode
+---
+ drivers/media/i2c/ov2680.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/i2c/ov2680.c b/drivers/media/i2c/ov2680.c
-index bc0ca2927370..b912ae7a63da 100644
+index a8c257f3bcd6..d4664581b49b 100644
 --- a/drivers/media/i2c/ov2680.c
 +++ b/drivers/media/i2c/ov2680.c
-@@ -97,7 +97,7 @@ struct ov2680_dev {
- 	u32				xvclk_freq;
- 	struct regulator_bulk_data	supplies[OV2680_NUM_SUPPLIES];
- 
--	struct gpio_desc		*reset_gpio;
-+	struct gpio_desc		*pwdn_gpio;
- 	struct mutex			lock; /* protect members */
- 
- 	bool				is_enabled;
-@@ -180,19 +180,19 @@ static inline struct v4l2_subdev *ctrl_to_sd(struct v4l2_ctrl *ctrl)
- 
- static void ov2680_power_up(struct ov2680_dev *sensor)
- {
--	if (!sensor->reset_gpio)
-+	if (!sensor->pwdn_gpio)
- 		return;
- 
--	gpiod_set_value(sensor->reset_gpio, 0);
-+	gpiod_set_value(sensor->pwdn_gpio, 0);
- 	usleep_range(5000, 10000);
- }
- 
- static void ov2680_power_down(struct ov2680_dev *sensor)
- {
--	if (!sensor->reset_gpio)
-+	if (!sensor->pwdn_gpio)
- 		return;
- 
--	gpiod_set_value(sensor->reset_gpio, 1);
-+	gpiod_set_value(sensor->pwdn_gpio, 1);
- 	usleep_range(5000, 10000);
- }
- 
-@@ -336,7 +336,7 @@ static int ov2680_power_on(struct ov2680_dev *sensor)
- 		return ret;
- 	}
- 
--	if (!sensor->reset_gpio) {
-+	if (!sensor->pwdn_gpio) {
- 		ret = cci_write(sensor->regmap, OV2680_REG_SOFT_RESET, 0x01,
- 				NULL);
- 		if (ret != 0) {
-@@ -697,16 +697,27 @@ static int ov2680_check_id(struct ov2680_dev *sensor)
+@@ -717,10 +717,22 @@ static int ov2680_check_id(struct ov2680_dev *sensor)
  static int ov2680_parse_dt(struct ov2680_dev *sensor)
  {
  	struct device *dev = sensor->dev;
-+	struct gpio_desc *gpio;
- 	int ret;
++	struct fwnode_handle *ep_fwnode;
+ 	struct gpio_desc *gpio;
+ 	unsigned int rate = 0;
+ 	int i, ret;
  
--	sensor->reset_gpio = devm_gpiod_get_optional(dev, "reset",
--						     GPIOD_OUT_HIGH);
--	ret = PTR_ERR_OR_ZERO(sensor->reset_gpio);
 +	/*
-+	 * The pin we want is named XSHUTDN in the datasheet. Linux sensor
-+	 * drivers have standardized on using "powerdown" as con-id name
-+	 * for powerdown or shutdown pins. Older DTB files use "reset",
-+	 * so fallback to that if there is no "powerdown" pin.
++	 * Sometimes the fwnode graph is initialized by the bridge driver.
++	 * Bridge drivers doing this may also add GPIO mappings, wait for this.
 +	 */
-+	gpio = devm_gpiod_get_optional(dev, "powerdown", GPIOD_OUT_HIGH);
-+	if (!gpio)
-+		gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
++	ep_fwnode = fwnode_graph_get_next_endpoint(dev_fwnode(dev), NULL);
++	if (!ep_fwnode)
++		return dev_err_probe(dev, -EPROBE_DEFER,
++				     "waiting for fwnode graph endpoint\n");
 +
-+	ret = PTR_ERR_OR_ZERO(gpio);
- 	if (ret < 0) {
- 		dev_dbg(dev, "error while getting reset gpio: %d\n", ret);
- 		return ret;
- 	}
++	fwnode_handle_put(ep_fwnode);
++
+ 	/*
+ 	 * The pin we want is named XSHUTDN in the datasheet. Linux sensor
+ 	 * drivers have standardized on using "powerdown" as con-id name
+@@ -801,7 +813,7 @@ static int ov2680_probe(struct i2c_client *client)
  
-+	sensor->pwdn_gpio = gpio;
-+
- 	sensor->xvclk = devm_clk_get(dev, "xvclk");
- 	if (IS_ERR(sensor->xvclk)) {
- 		dev_err(dev, "xvclk clock missing or invalid\n");
+ 	ret = ov2680_parse_dt(sensor);
+ 	if (ret < 0)
+-		return -EINVAL;
++		return ret;
+ 
+ 	ret = ov2680_mode_init(sensor);
+ 	if (ret < 0)
 -- 
 2.41.0
 
