@@ -2,41 +2,41 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DA5DC00528
-	for <linux-media@archiver.kernel.org>; Thu,  3 Aug 2023 09:37:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DDC31C04A6A
+	for <linux-media@archiver.kernel.org>; Thu,  3 Aug 2023 09:37:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235235AbjHCJhZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Aug 2023 05:37:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33784 "EHLO
+        id S235064AbjHCJh0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Aug 2023 05:37:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235145AbjHCJgT (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Aug 2023 05:36:19 -0400
+        with ESMTP id S235164AbjHCJgY (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Aug 2023 05:36:24 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61074213F
-        for <linux-media@vger.kernel.org>; Thu,  3 Aug 2023 02:34:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0DF3A8D
+        for <linux-media@vger.kernel.org>; Thu,  3 Aug 2023 02:34:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1691055283;
+        s=mimecast20190719; t=1691055288;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=UeJfKrSWTX8+/jDmovl06WfeG5HYQ4aXeIF1EDNjzoQ=;
-        b=JJH2N0ITOHIDQ7heuXB2iHoM6RAkk5Sr6tMB1oRnoYOMcHxLuceIVkt7FgsTaLz8habZp7
-        rdOCkg3DmzcLnL9yXmeg4iyDPFCE3VCktQMrmnkqhyWp20+MraFjlFoQ0o64TcHsqy9ZY6
-        ZLju/zgo8hYlVR73DgM1RNFF+CFL/A8=
-Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-478-zyx67YwBPbulzoV0Yi_KJw-1; Thu, 03 Aug 2023 05:34:39 -0400
-X-MC-Unique: zyx67YwBPbulzoV0Yi_KJw-1
+        bh=zv4wc/KrPFjSdLd8ZjfVcuoMD+rO4L1aVjHfc9rhDPg=;
+        b=BecPywm/JSXdu3t0D0Tej4AJ1Isjb0Q1Tz30URDMZdNO4aA1hRbU/A49WIxeiUG9aK7/a2
+        bS6t0dqBE9hKzFnQ+B8SdQSnOCo+3CUZObKJO248l0GaKyC6T+h8Kl6UCGg4JZbCNtXYJR
+        bxG9bzaDR9/Mfu1UMa4+yO31cy5JOIY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-602-NzHTa2DWPCKK_dgMxHFg_Q-1; Thu, 03 Aug 2023 05:34:42 -0400
+X-MC-Unique: NzHTa2DWPCKK_dgMxHFg_Q-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C64D93C01BAD;
-        Thu,  3 Aug 2023 09:34:38 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0F291104458A;
+        Thu,  3 Aug 2023 09:34:42 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.193.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 622AC2166B25;
-        Thu,  3 Aug 2023 09:34:37 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9DF4C2166B25;
+        Thu,  3 Aug 2023 09:34:40 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -48,9 +48,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Dave Stevenson <dave.stevenson@raspberrypi.com>,
         Tommaso Merciai <tomm.merciai@gmail.com>,
         linux-media@vger.kernel.org
-Subject: [PATCH v5 29/32] media: ov2680: Add bus-cfg / endpoint property verification
-Date:   Thu,  3 Aug 2023 11:33:44 +0200
-Message-ID: <20230803093348.15679-30-hdegoede@redhat.com>
+Subject: [PATCH v5 31/32] media: ipu-bridge: Add link-frequency to OV2680 ipu_supported_sensors[] entry
+Date:   Thu,  3 Aug 2023 11:33:46 +0200
+Message-ID: <20230803093348.15679-32-hdegoede@redhat.com>
 In-Reply-To: <20230803093348.15679-1-hdegoede@redhat.com>
 References: <20230803093348.15679-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,140 +60,27 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Verify that the number of CSI lanes and link-frequency specified
-in the endpoint fwnode are correct.
+Now that the ov2680 driver verifies the bus-cfg from the endpoint
+fwnode the link-frequency must be set for things to work.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
-Changes in v4:
-- New patch in v4 of this patch-set
----
- drivers/media/i2c/ov2680.c | 60 +++++++++++++++++++++++++++++---------
- 1 file changed, 47 insertions(+), 13 deletions(-)
+ drivers/media/pci/intel/ipu-bridge.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/ov2680.c b/drivers/media/i2c/ov2680.c
-index 83ec034b5307..72bab0ff8a36 100644
---- a/drivers/media/i2c/ov2680.c
-+++ b/drivers/media/i2c/ov2680.c
-@@ -25,6 +25,7 @@
- #include <media/v4l2-cci.h>
- #include <media/v4l2-common.h>
- #include <media/v4l2-ctrls.h>
-+#include <media/v4l2-fwnode.h>
- #include <media/v4l2-subdev.h>
- 
- #define OV2680_CHIP_ID				0x2680
-@@ -1008,6 +1009,9 @@ static int ov2680_check_id(struct ov2680_dev *sensor)
- 
- static int ov2680_parse_dt(struct ov2680_dev *sensor)
- {
-+	struct v4l2_fwnode_endpoint bus_cfg = {
-+		.bus_type = V4L2_MBUS_CSI2_DPHY,
-+	};
- 	struct device *dev = sensor->dev;
- 	struct fwnode_handle *ep_fwnode;
- 	struct gpio_desc *gpio;
-@@ -1023,7 +1027,10 @@ static int ov2680_parse_dt(struct ov2680_dev *sensor)
- 		return dev_err_probe(dev, -EPROBE_DEFER,
- 				     "waiting for fwnode graph endpoint\n");
- 
-+	ret = v4l2_fwnode_endpoint_alloc_parse(ep_fwnode, &bus_cfg);
- 	fwnode_handle_put(ep_fwnode);
-+	if (ret)
-+		return ret;
- 
- 	/*
- 	 * The pin we want is named XSHUTDN in the datasheet. Linux sensor
-@@ -1038,15 +1045,16 @@ static int ov2680_parse_dt(struct ov2680_dev *sensor)
- 	ret = PTR_ERR_OR_ZERO(gpio);
- 	if (ret < 0) {
- 		dev_dbg(dev, "error while getting reset gpio: %d\n", ret);
--		return ret;
-+		goto out_free_bus_cfg;
- 	}
- 
- 	sensor->pwdn_gpio = gpio;
- 
- 	sensor->xvclk = devm_clk_get_optional(dev, "xvclk");
- 	if (IS_ERR(sensor->xvclk)) {
--		dev_err(dev, "xvclk clock missing or invalid\n");
--		return PTR_ERR(sensor->xvclk);
-+		ret = dev_err_probe(dev, PTR_ERR(sensor->xvclk),
-+				    "xvclk clock missing or invalid\n");
-+		goto out_free_bus_cfg;
- 	}
- 
- 	/*
-@@ -1060,14 +1068,17 @@ static int ov2680_parse_dt(struct ov2680_dev *sensor)
- 	 */
- 	ret = fwnode_property_read_u32(dev_fwnode(dev), "clock-frequency",
- 				       &rate);
--	if (ret && !sensor->xvclk)
--		return dev_err_probe(dev, ret, "invalid clock config\n");
-+	if (ret && !sensor->xvclk) {
-+		dev_err_probe(dev, ret, "invalid clock config\n");
-+		goto out_free_bus_cfg;
-+	}
- 
- 	if (!ret && sensor->xvclk) {
- 		ret = clk_set_rate(sensor->xvclk, rate);
--		if (ret)
--			return dev_err_probe(dev, ret,
--					     "failed to set clock rate\n");
-+		if (ret) {
-+			dev_err_probe(dev, ret, "failed to set clock rate\n");
-+			goto out_free_bus_cfg;
-+		}
- 	}
- 
- 	sensor->xvclk_freq = rate ?: clk_get_rate(sensor->xvclk);
-@@ -1077,10 +1088,12 @@ static int ov2680_parse_dt(struct ov2680_dev *sensor)
- 			break;
- 	}
- 
--	if (i == ARRAY_SIZE(ov2680_xvclk_freqs))
--		return dev_err_probe(dev, -EINVAL,
--				     "unsupported xvclk frequency %d Hz\n",
--				     sensor->xvclk_freq);
-+	if (i == ARRAY_SIZE(ov2680_xvclk_freqs)) {
-+		ret = dev_err_probe(dev, -EINVAL,
-+				    "unsupported xvclk frequency %d Hz\n",
-+				    sensor->xvclk_freq);
-+		goto out_free_bus_cfg;
-+	}
- 
- 	sensor->pll_mult = ov2680_pll_multipliers[i];
- 
-@@ -1091,7 +1104,28 @@ static int ov2680_parse_dt(struct ov2680_dev *sensor)
- 	sensor->pixel_rate = sensor->link_freq[0] * 2;
- 	do_div(sensor->pixel_rate, 10);
- 
--	return 0;
-+	/* Verify bus cfg */
-+	if (bus_cfg.bus.mipi_csi2.num_data_lanes != 1) {
-+		ret = dev_err_probe(dev, -EINVAL,
-+				    "only a 1-lane CSI2 config is supported");
-+		goto out_free_bus_cfg;
-+	}
-+
-+	for (i = 0; i < bus_cfg.nr_of_link_frequencies; i++)
-+		if (bus_cfg.link_frequencies[i] == sensor->link_freq[0])
-+			break;
-+
-+	if (bus_cfg.nr_of_link_frequencies == 0 ||
-+	    bus_cfg.nr_of_link_frequencies == i) {
-+		ret = dev_err_probe(dev, -EINVAL,
-+				    "supported link freq %lld not found\n",
-+				    sensor->link_freq[0]);
-+		goto out_free_bus_cfg;
-+	}
-+
-+out_free_bus_cfg:
-+	v4l2_fwnode_endpoint_free(&bus_cfg);
-+	return ret;
- }
- 
- static int ov2680_probe(struct i2c_client *client)
+diff --git a/drivers/media/pci/intel/ipu-bridge.c b/drivers/media/pci/intel/ipu-bridge.c
+index 940457940057..be9ab2ab6b8d 100644
+--- a/drivers/media/pci/intel/ipu-bridge.c
++++ b/drivers/media/pci/intel/ipu-bridge.c
+@@ -30,7 +30,7 @@ static const struct ipu_sensor_config ipu_supported_sensors[] = {
+ 	/* Omnivision OV7251 */
+ 	IPU_SENSOR_CONFIG("INT347E", 1, 319200000),
+ 	/* Omnivision OV2680 */
+-	IPU_SENSOR_CONFIG("OVTI2680", 0),
++	IPU_SENSOR_CONFIG("OVTI2680", 1, 331200000),
+ 	/* Omnivision ov8856 */
+ 	IPU_SENSOR_CONFIG("OVTI8856", 3, 180000000, 360000000, 720000000),
+ 	/* Omnivision ov2740 */
 -- 
 2.41.0
 
