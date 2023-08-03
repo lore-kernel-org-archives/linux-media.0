@@ -2,85 +2,118 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5BEDC0015E
-	for <linux-media@archiver.kernel.org>; Thu,  3 Aug 2023 09:37:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA0DCC04A6A
+	for <linux-media@archiver.kernel.org>; Thu,  3 Aug 2023 09:53:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235096AbjHCJhd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Aug 2023 05:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33382 "EHLO
+        id S234994AbjHCJxl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Aug 2023 05:53:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235123AbjHCJg0 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Aug 2023 05:36:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3ADF30FF
-        for <linux-media@vger.kernel.org>; Thu,  3 Aug 2023 02:34:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1691055284;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kmFxdIVPuLqC1j0PdkbqpqLArIEzt/Tnmml1oyk6O/E=;
-        b=BbwZmPo7thE769ddsRriDiH1s74SWIlgOPM4HVGA23BA3G+/pTeEheWAlwi7bKaYIkQiQk
-        HbCyx+vyUwUt3SVKId6csEebyyTfRvM9rhTXu0MbBbyKCJZrlrFWL37s2LsnQbToqGdKxG
-        DVq8ZZeYGTEgdEYFEozLqqREGPhLAuM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-690-IPYkAYXNNHu6RfjfgZKa9g-1; Thu, 03 Aug 2023 05:34:40 -0400
-X-MC-Unique: IPYkAYXNNHu6RfjfgZKa9g-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6B48F8564EF;
-        Thu,  3 Aug 2023 09:34:40 +0000 (UTC)
-Received: from shalem.redhat.com (unknown [10.39.193.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 04C962166B25;
-        Thu,  3 Aug 2023 09:34:38 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        with ESMTP id S234023AbjHCJxj (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Aug 2023 05:53:39 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61E630C7
+        for <linux-media@vger.kernel.org>; Thu,  3 Aug 2023 02:53:37 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fe1fc8768aso8042195e9.1
+        for <linux-media@vger.kernel.org>; Thu, 03 Aug 2023 02:53:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1691056416; x=1691661216;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=o/B0ToLExP+DiR9D97raY/1J2KSwUj5aVQTHcLopPW4=;
+        b=hnii72+lRfd3fIj8r+WNkTKXqcHLxpE84fpR4zovZr6d4FRi/cSQ8Df191YVGBlsiC
+         IPFvADsBsCMlNrZJpT+HaTU6fxodvjHbwmFhyc/GefTUYpyhqMwD6dfR9zehmjFhwrmw
+         msdRDz9+zNRfViEUhW0t8UmAfACzDQ506jBsy7sNzGDXVMXQKpxQ5+AdQ2vDOvMnavNh
+         Hjfoe/NerLWkfc4mvnQCJTDqil9W4pPKxArj8d+xZfnhMotyOtFHcJICur+WCDMpuvi9
+         i5TI2AB2rTgc0HsXoYOABVfqAd4JlCS6zbRPUuVrdVHBC2/06xza3GFHWBz36B4uSC1B
+         lzZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691056416; x=1691661216;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o/B0ToLExP+DiR9D97raY/1J2KSwUj5aVQTHcLopPW4=;
+        b=AmaiqObxmOAzroDqI2O9U1ub/IXxjPV00hCsW/ShCmXIm07cTEIV1s7Fhi+eBfNEj/
+         QajgF52iVYYtha1OemSBlUI3xczmgM4B7OTjDqLggnfMpKtpd2aJJjO97F0WSl/4klyZ
+         VhZw9lcR8FIVnmc5GDyjBFXSLCfgQsV1Xfr+O1livq9xOCsyj/fOshzYbgFqQvC3VEwz
+         UF2V+NWxXNLbYGmQxC5+X44DOvtS3ZdcmH7VNTjJmZfz4uUQh455JwAs0nXGeUkZ7WOn
+         dNm2U8mPdcW1D5n+n4eRhe0Yecqt0NLFZlaYXNRzUvN0JffbK2AoMJUe0EnY9VXq5tFC
+         XMqA==
+X-Gm-Message-State: ABy/qLaxL4wJONelLomeqfBgoGI4+sbRTPIqVfluniyNCW2j1jmSmc5x
+        OdjUD7Rl9VfUOeC2EtUySLkigw==
+X-Google-Smtp-Source: APBJJlEypDBS9JVFp+B8z1U3CVh5JzhVEqfWbu5Fxsi6niCNxUT0RBG20ys8Q2wWkY0Xe2Z09A8w2A==
+X-Received: by 2002:a1c:7c0e:0:b0:3fe:2b69:fc6c with SMTP id x14-20020a1c7c0e000000b003fe2b69fc6cmr5373711wmc.39.1691056416186;
+        Thu, 03 Aug 2023 02:53:36 -0700 (PDT)
+Received: from localhost ([2a01:e0a:55f:21e0:9e19:4376:dea6:dbfa])
+        by smtp.gmail.com with ESMTPSA id t12-20020a7bc3cc000000b003fbc30825fbsm3800361wmj.39.2023.08.03.02.53.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Aug 2023 02:53:35 -0700 (PDT)
+Date:   Thu, 3 Aug 2023 11:53:35 +0200
+From:   Julien Stephan <jstephan@baylibre.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Phi-bang Nguyen <pnguyen@baylibre.com>,
+        Florian Sylvestre <fsylvestre@baylibre.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Daniel Scally <dan.scally@ideasonboard.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andy Hsieh <andy.hsieh@mediatek.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        devicetree@vger.kernel.org,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
+        Louis Kuo <louis.kuo@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andy Shevchenko <andy@kernel.org>, Kate Hsuan <hpa@redhat.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Tommaso Merciai <tomm.merciai@gmail.com>,
-        linux-media@vger.kernel.org
-Subject: [PATCH v5 30/32] MAINTAINERS: Add Hans de Goede as OV2680 sensor driver maintainer
-Date:   Thu,  3 Aug 2023 11:33:45 +0200
-Message-ID: <20230803093348.15679-31-hdegoede@redhat.com>
-In-Reply-To: <20230803093348.15679-1-hdegoede@redhat.com>
-References: <20230803093348.15679-1-hdegoede@redhat.com>
+        Moudy Ho <moudy.ho@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Subject: Re: [PATCH v2 4/4] media: platform: mediatek: isp_30: add mediatek
+ ISP3.0 camsv
+Message-ID: <iq7jffjeaejdfb26a4ysjgjzuopov4ji2ecgzmv4563tdveaep@hh2gzgzkbdzj>
+References: <20230630100321.1951138-1-jstephan@baylibre.com>
+ <20230630100321.1951138-5-jstephan@baylibre.com>
+ <0430ddab-6a6c-9fa3-95bd-05ce8ac5b94f@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0430ddab-6a6c-9fa3-95bd-05ce8ac5b94f@collabora.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add myself as OV2680 sensor driver maintainer.
+On Mon, Jul 03, 2023 at 02:21:17PM +0200, AngeloGioacchino Del Regno wrote:
+..snip..
+> > +
+> > +	mtk_cam_init_cfg(&cam->subdev, NULL);
+>
+> mtk_cam_init_cfg() returns an integer, and this is probably because you expect
+> it to get logic to fail: in that case, check the result of that call here,
+> otherwise, make that function void.
+>
 
-Reviewed-by: Rui Miguel Silva <rmfrfs@gmail.com>
-Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+Hi Angelo,
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 0600c2f29080..9369a35c23a3 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15608,6 +15608,7 @@ F:	drivers/media/i2c/ov13b10.c
- 
- OMNIVISION OV2680 SENSOR DRIVER
- M:	Rui Miguel Silva <rmfrfs@gmail.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-media@vger.kernel.org
- S:	Maintained
- T:	git git://linuxtv.org/media_tree.git
--- 
-2.41.0
+mtk_cam_init_cfg returns an int because it should match v4l2_subdev_pad_ops->init_cfg prototype..
 
+mtk_cam_init does not fail, always return 0, so I though it would be ok
+to discard the return value here. What do you think?
+
+> > +
+
+..snip..
+
+> > +	unsigned int bpp;
+>
+> Can we get any format that uses a billion bits per pixel? :-P
+>
+> u8 bpp;
+>
+
+I am preparing the driver for futur upgrades.. in a billion years ;)
+
+Cheers
+Julien
