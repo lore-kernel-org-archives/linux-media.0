@@ -2,87 +2,89 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D55DC001DF
-	for <linux-media@archiver.kernel.org>; Thu,  3 Aug 2023 21:53:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2749EC001DB
+	for <linux-media@archiver.kernel.org>; Thu,  3 Aug 2023 21:56:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231481AbjHCVxh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Aug 2023 17:53:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48424 "EHLO
+        id S231821AbjHCV44 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Aug 2023 17:56:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbjHCVxg (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Aug 2023 17:53:36 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359072D7E;
-        Thu,  3 Aug 2023 14:53:31 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 23B0AC67;
-        Thu,  3 Aug 2023 23:52:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1691099546;
-        bh=ZqDmGTJU5wYQKOmk6F4NuUrXtBi0FAI5NAPCvoFr3Ew=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I+ngpATuJZoM5K1OKuk4FjG7sQCuFQHwVmlnjGM47vS91kb6ur0lf4oSjanmhiTGV
-         yeHZItElUXcbjrP6vykbKdatqn5KSqpsZ8gW3DFWtb8WX4bIsEDsY2Pe1sunlkBXMV
-         Jw2zARH0Q/fezSuUvD/m2K1KcHAk1ONomy0dKrQ8=
-Date:   Fri, 4 Aug 2023 00:53:36 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] media: i2c: ds90ub960: Fix PLL config for 1200
- MHz CSI rate
-Message-ID: <20230803215336.GI27752@pendragon.ideasonboard.com>
-References: <20230803-ub9xx-uninit-vars-v2-0-512570ecb798@ideasonboard.com>
- <20230803-ub9xx-uninit-vars-v2-3-512570ecb798@ideasonboard.com>
+        with ESMTP id S229882AbjHCV4y (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Aug 2023 17:56:54 -0400
+Received: from irl.hu (irl.hu [95.85.9.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B95763ABE;
+        Thu,  3 Aug 2023 14:56:51 -0700 (PDT)
+Received: from fedori.lan (51b69adf.dsl.pool.telekom.hu [::ffff:81.182.154.223])
+  (AUTH: CRAM-MD5 soyer@irl.hu, )
+  by irl.hu with ESMTPSA
+  id 0000000000072E37.0000000064CC1C4D.0001D183; Thu, 03 Aug 2023 23:29:42 +0200
+From:   =?UTF-8?q?Gerg=C5=91=20K=C3=B6teles?= <soyer@irl.hu>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Gerg=C5=91=20K=C3=B6teles?= <soyer@irl.hu>
+Subject: [RFC PATCH 1/2] media: v4l2: ctrls: Add ROLL_ABSOLUTE control
+Date:   Thu,  3 Aug 2023 23:28:57 +0200
+Message-ID: <8eb0e251fb4f4ab4f3ed5472fbd26e94786b46ff.1691096157.git.soyer@irl.hu>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <cover.1691096157.git.soyer@irl.hu>
+References: <cover.1691096157.git.soyer@irl.hu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230803-ub9xx-uninit-vars-v2-3-512570ecb798@ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Aug 03, 2023 at 03:15:47PM +0300, Tomi Valkeinen wrote:
-> smatch reports:
-> 
-> drivers/media/i2c/ds90ub960.c:1788 ub960_init_tx_ports() error: uninitialized symbol 'pll_div'.
-> 
-> This is caused by 'pll_div' not being set for 1200 MHz CSI rate. Set the
-> 'pll_div' correctly.
-> 
-> Fixes: afe267f2d368 ("media: i2c: add DS90UB960 driver")
-> Reported-by: Hans Verkuil <hverkuil@xs4all.nl>
-> Closes: https://lore.kernel.org/all/8d6daeb1-b62a-bbb2-b840-8759c84f2085@xs4all.nl/
-> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Add V4L2_CID_ROLL_ABSOLUTE as an integer control to
+retrieve and set the camera roll in degrees, and its
+documentation.
 
-My
+Signed-off-by: Gergő Köteles <soyer@irl.hu>
+---
+ Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst | 5 +++++
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c                  | 1 +
+ include/uapi/linux/v4l2-controls.h                         | 2 ++
+ 3 files changed, 8 insertions(+)
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-from v1, send before I noticed v2 was on the list, still applies.
-
-> ---
->  drivers/media/i2c/ds90ub960.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/media/i2c/ds90ub960.c b/drivers/media/i2c/ds90ub960.c
-> index 4833b39b9178..4ab45e326d80 100644
-> --- a/drivers/media/i2c/ds90ub960.c
-> +++ b/drivers/media/i2c/ds90ub960.c
-> @@ -1763,6 +1763,7 @@ static int ub960_init_tx_ports(struct ub960_data *priv)
->  		break;
->  	case MHZ(1200):
->  		speed_select = 1;
-> +		pll_div = 0x18;
->  		break;
->  	case MHZ(800):
->  		speed_select = 2;
-> 
-
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
+index cdc515c60468..81bc31a4bf79 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
+@@ -672,3 +672,8 @@ enum v4l2_scene_mode -
+ 
+     As modes differ for each sensor, menu items are not standardized by this
+     control and are left to the programmer.
++
++``V4L2_CID_ROLL_ABSOLUTE (integer)``
++    This control describes the camera rotation along the image viewing axis in
++    degrees. Values range from -180 to +180, the default is zero. Positive
++    values rotate the camera clockwise, negative values counter-clockwise.
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+index 8696eb1cdd61..0e8af56cb2a2 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+@@ -1086,6 +1086,7 @@ const char *v4l2_ctrl_get_name(u32 id)
+ 	case V4L2_CID_CAMERA_ORIENTATION:	return "Camera Orientation";
+ 	case V4L2_CID_CAMERA_SENSOR_ROTATION:	return "Camera Sensor Rotation";
+ 	case V4L2_CID_HDR_SENSOR_MODE:		return "HDR Sensor Mode";
++	case V4L2_CID_ROLL_ABSOLUTE:		return "Roll, Absolute";
+ 
+ 	/* FM Radio Modulator controls */
+ 	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index c3604a0a3e30..5131711ea873 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -1075,6 +1075,8 @@ enum v4l2_auto_focus_range {
+ 
+ #define V4L2_CID_HDR_SENSOR_MODE		(V4L2_CID_CAMERA_CLASS_BASE+36)
+ 
++#define V4L2_CID_ROLL_ABSOLUTE			(V4L2_CID_CAMERA_CLASS_BASE+37)
++
+ /* FM Modulator class control IDs */
+ 
+ #define V4L2_CID_FM_TX_CLASS_BASE		(V4L2_CTRL_CLASS_FM_TX | 0x900)
 -- 
-Regards,
+2.41.0
 
-Laurent Pinchart
