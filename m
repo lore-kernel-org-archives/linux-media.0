@@ -2,41 +2,41 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F330C04A6A
-	for <linux-media@archiver.kernel.org>; Thu,  3 Aug 2023 09:34:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC424C00528
+	for <linux-media@archiver.kernel.org>; Thu,  3 Aug 2023 09:35:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235059AbjHCJex (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Aug 2023 05:34:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33190 "EHLO
+        id S234508AbjHCJfS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Aug 2023 05:35:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235018AbjHCJes (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Aug 2023 05:34:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1376F3582
-        for <linux-media@vger.kernel.org>; Thu,  3 Aug 2023 02:34:02 -0700 (PDT)
+        with ESMTP id S234028AbjHCJfQ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Aug 2023 05:35:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598A93583
+        for <linux-media@vger.kernel.org>; Thu,  3 Aug 2023 02:34:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1691055241;
+        s=mimecast20190719; t=1691055245;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7j4UG2P6TifUH18dZOHk5aY8Yhue/DQR2pIcbHH+qDU=;
-        b=ghEjTmkZ2o+OY91OzSMuYf3H59kwgkk+l8hTkE9TRoH8o08iGkrwbXXusxuZcmTbKiewpq
-        lwVZ4nAJLZwR/494O2pjISf8JjgZtN8Aj9ap86v+2UJb00cBBu2dN0WSnGc2CXyTfPZbCv
-        JegxOaBLDskStfq1AbxioWtd6l72A6s=
+        bh=ApOx9JYyYB42Wtd+wLJUGbXCtlI48Gdo4YHkbgnoBTw=;
+        b=ctkHOjgxxhkIaQ7XBFa7j3JFIcwVN5TFL8L0mZ6EFwzeWyPgdwIEj/acqYo5Jdtx6vyqlh
+        Ndabnw03qePsiO2NrkfYMJPukp9Xf6Wq/svKvuslcGdMMIm0iGcRedFNhWS+IPyHdl8ra9
+        LkCj9gKlnqbUxc9lDmul/4Qkt74wwnI=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-694-hTy97dESNjW0lG4s3D0pBg-1; Thu, 03 Aug 2023 05:33:55 -0400
-X-MC-Unique: hTy97dESNjW0lG4s3D0pBg-1
+ us-mta-505-jRJsrN6tO2Ge7lTqWyPfDA-1; Thu, 03 Aug 2023 05:34:02 -0400
+X-MC-Unique: jRJsrN6tO2Ge7lTqWyPfDA-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4DDD480006E;
-        Thu,  3 Aug 2023 09:33:55 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 49956104458E;
+        Thu,  3 Aug 2023 09:34:01 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.193.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DB5E92166B25;
-        Thu,  3 Aug 2023 09:33:53 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D412C2166B25;
+        Thu,  3 Aug 2023 09:33:58 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -48,9 +48,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Dave Stevenson <dave.stevenson@raspberrypi.com>,
         Tommaso Merciai <tomm.merciai@gmail.com>,
         linux-media@vger.kernel.org
-Subject: [PATCH v5 03/32] media: ov2680: Fix vflip / hflip set functions
-Date:   Thu,  3 Aug 2023 11:33:18 +0200
-Message-ID: <20230803093348.15679-4-hdegoede@redhat.com>
+Subject: [PATCH v5 06/32] media: ov2680: Add ov2680_fill_format() helper function
+Date:   Thu,  3 Aug 2023 11:33:21 +0200
+Message-ID: <20230803093348.15679-7-hdegoede@redhat.com>
 In-Reply-To: <20230803093348.15679-1-hdegoede@redhat.com>
 References: <20230803093348.15679-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,108 +60,137 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-ov2680_vflip_disable() / ov2680_hflip_disable() pass BIT(0) instead of
-0 as value to ov2680_mod_reg().
+Add a ov2680_fill_format() helper function and use this everywhere were
+a v4l2_mbus_framefmt struct needs to be filled in so that the driver always
+fills it consistently.
 
-While fixing this also:
+This is a preparation patch for fixing ov2680_set_fmt()
+which == V4L2_SUBDEV_FORMAT_TRY calls not properly filling in
+the passed in v4l2_mbus_framefmt struct.
 
-1. Stop having separate enable/disable functions for hflip / vflip
-2. Move the is_streaming check, which is unique to hflip / vflip
-   into the ov2680_set_?flip() functions.
-
-for a nice code cleanup.
+Note that for ov2680_init_cfg() this now simply always fills
+the try_fmt struct of the passed in sd_state. This is correct because
+ov2680_init_cfg() is never called with a NULL sd_state so the old
+sd_state check is not necessary.
 
 Fixes: 3ee47cad3e69 ("media: ov2680: Add Omnivision OV2680 sensor driver")
-Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
 Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
+Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/media/i2c/ov2680.c | 50 ++++++++++----------------------------
- 1 file changed, 13 insertions(+), 37 deletions(-)
+ drivers/media/i2c/ov2680.c | 49 +++++++++++++++++++++-----------------
+ 1 file changed, 27 insertions(+), 22 deletions(-)
 
 diff --git a/drivers/media/i2c/ov2680.c b/drivers/media/i2c/ov2680.c
-index 621144f16fdc..74024ba968b4 100644
+index e6e14743ba1e..f2eb8d85a7e4 100644
 --- a/drivers/media/i2c/ov2680.c
 +++ b/drivers/media/i2c/ov2680.c
-@@ -328,11 +328,15 @@ static void ov2680_set_bayer_order(struct ov2680_dev *sensor)
- 	sensor->fmt.code = ov2680_hv_flip_bayer_order[hv_flip];
+@@ -54,6 +54,9 @@
+ #define OV2680_WIDTH_MAX		1600
+ #define OV2680_HEIGHT_MAX		1200
+ 
++#define OV2680_DEFAULT_WIDTH			800
++#define OV2680_DEFAULT_HEIGHT			600
++
+ enum ov2680_mode_id {
+ 	OV2680_MODE_QUXGA_800_600,
+ 	OV2680_MODE_720P_1280_720,
+@@ -315,7 +318,8 @@ static void ov2680_power_down(struct ov2680_dev *sensor)
+ 	usleep_range(5000, 10000);
  }
  
--static int ov2680_vflip_enable(struct ov2680_dev *sensor)
-+static int ov2680_set_vflip(struct ov2680_dev *sensor, s32 val)
+-static void ov2680_set_bayer_order(struct ov2680_dev *sensor)
++static void ov2680_set_bayer_order(struct ov2680_dev *sensor,
++				   struct v4l2_mbus_framefmt *fmt)
  {
- 	int ret;
+ 	int hv_flip = 0;
  
--	ret = ov2680_mod_reg(sensor, OV2680_REG_FORMAT1, BIT(2), BIT(2));
-+	if (sensor->is_streaming)
-+		return -EBUSY;
+@@ -325,7 +329,19 @@ static void ov2680_set_bayer_order(struct ov2680_dev *sensor)
+ 	if (sensor->ctrls.hflip && sensor->ctrls.hflip->val)
+ 		hv_flip += 2;
+ 
+-	sensor->fmt.code = ov2680_hv_flip_bayer_order[hv_flip];
++	fmt->code = ov2680_hv_flip_bayer_order[hv_flip];
++}
 +
-+	ret = ov2680_mod_reg(sensor, OV2680_REG_FORMAT1,
-+			     BIT(2), val ? BIT(2) : 0);
++static void ov2680_fill_format(struct ov2680_dev *sensor,
++			       struct v4l2_mbus_framefmt *fmt,
++			       unsigned int width, unsigned int height)
++{
++	memset(fmt, 0, sizeof(*fmt));
++	fmt->width = width;
++	fmt->height = height;
++	fmt->field = V4L2_FIELD_NONE;
++	fmt->colorspace = V4L2_COLORSPACE_SRGB;
++	ov2680_set_bayer_order(sensor, fmt);
+ }
+ 
+ static int ov2680_set_vflip(struct ov2680_dev *sensor, s32 val)
+@@ -340,7 +356,7 @@ static int ov2680_set_vflip(struct ov2680_dev *sensor, s32 val)
  	if (ret < 0)
  		return ret;
  
-@@ -340,33 +344,15 @@ static int ov2680_vflip_enable(struct ov2680_dev *sensor)
+-	ov2680_set_bayer_order(sensor);
++	ov2680_set_bayer_order(sensor, &sensor->fmt);
  	return 0;
  }
  
--static int ov2680_vflip_disable(struct ov2680_dev *sensor)
-+static int ov2680_set_hflip(struct ov2680_dev *sensor, s32 val)
- {
- 	int ret;
- 
--	ret = ov2680_mod_reg(sensor, OV2680_REG_FORMAT1, BIT(2), BIT(0));
--	if (ret < 0)
--		return ret;
-+	if (sensor->is_streaming)
-+		return -EBUSY;
- 
--	return ov2680_bayer_order(sensor);
--}
--
--static int ov2680_hflip_enable(struct ov2680_dev *sensor)
--{
--	int ret;
--
--	ret = ov2680_mod_reg(sensor, OV2680_REG_FORMAT2, BIT(2), BIT(2));
--	if (ret < 0)
--		return ret;
--
--	return ov2680_bayer_order(sensor);
--}
--
--static int ov2680_hflip_disable(struct ov2680_dev *sensor)
--{
--	int ret;
--
--	ret = ov2680_mod_reg(sensor, OV2680_REG_FORMAT2, BIT(2), BIT(0));
-+	ret = ov2680_mod_reg(sensor, OV2680_REG_FORMAT2,
-+			     BIT(2), val ? BIT(2) : 0);
+@@ -356,7 +372,7 @@ static int ov2680_set_hflip(struct ov2680_dev *sensor, s32 val)
  	if (ret < 0)
  		return ret;
  
-@@ -720,19 +706,9 @@ static int ov2680_s_ctrl(struct v4l2_ctrl *ctrl)
- 	case V4L2_CID_EXPOSURE:
- 		return ov2680_exposure_set(sensor, ctrl->val);
- 	case V4L2_CID_VFLIP:
--		if (sensor->is_streaming)
--			return -EBUSY;
--		if (ctrl->val)
--			return ov2680_vflip_enable(sensor);
--		else
--			return ov2680_vflip_disable(sensor);
-+		return ov2680_set_vflip(sensor, ctrl->val);
- 	case V4L2_CID_HFLIP:
--		if (sensor->is_streaming)
--			return -EBUSY;
--		if (ctrl->val)
--			return ov2680_hflip_enable(sensor);
--		else
--			return ov2680_hflip_disable(sensor);
-+		return ov2680_set_hflip(sensor, ctrl->val);
- 	case V4L2_CID_TEST_PATTERN:
- 		return ov2680_test_pattern_set(sensor, ctrl->val);
- 	default:
+-	ov2680_set_bayer_order(sensor);
++	ov2680_set_bayer_order(sensor, &sensor->fmt);
+ 	return 0;
+ }
+ 
+@@ -614,10 +630,7 @@ static int ov2680_set_fmt(struct v4l2_subdev *sd,
+ 		goto unlock;
+ 	}
+ 
+-	fmt->width = mode->width;
+-	fmt->height = mode->height;
+-	fmt->code = sensor->fmt.code;
+-	fmt->colorspace = sensor->fmt.colorspace;
++	ov2680_fill_format(sensor, fmt, mode->width, mode->height);
+ 
+ 	sensor->current_mode = mode;
+ 	sensor->fmt = format->format;
+@@ -632,16 +645,11 @@ static int ov2680_set_fmt(struct v4l2_subdev *sd,
+ static int ov2680_init_cfg(struct v4l2_subdev *sd,
+ 			   struct v4l2_subdev_state *sd_state)
+ {
+-	struct v4l2_subdev_format fmt = {
+-		.which = sd_state ? V4L2_SUBDEV_FORMAT_TRY
+-		: V4L2_SUBDEV_FORMAT_ACTIVE,
+-		.format = {
+-			.width = 800,
+-			.height = 600,
+-		}
+-	};
++	struct ov2680_dev *sensor = to_ov2680_dev(sd);
+ 
+-	return ov2680_set_fmt(sd, sd_state, &fmt);
++	ov2680_fill_format(sensor, &sd_state->pads[0].try_fmt,
++			   OV2680_DEFAULT_WIDTH, OV2680_DEFAULT_HEIGHT);
++	return 0;
+ }
+ 
+ static int ov2680_enum_frame_size(struct v4l2_subdev *sd,
+@@ -740,11 +748,8 @@ static int ov2680_mode_init(struct ov2680_dev *sensor)
+ 	const struct ov2680_mode_info *init_mode;
+ 
+ 	/* set initial mode */
+-	sensor->fmt.code = MEDIA_BUS_FMT_SBGGR10_1X10;
+-	sensor->fmt.width = 800;
+-	sensor->fmt.height = 600;
+-	sensor->fmt.field = V4L2_FIELD_NONE;
+-	sensor->fmt.colorspace = V4L2_COLORSPACE_SRGB;
++	ov2680_fill_format(sensor, &sensor->fmt,
++			   OV2680_DEFAULT_WIDTH, OV2680_DEFAULT_HEIGHT);
+ 
+ 	sensor->frame_interval.denominator = OV2680_FRAME_RATE;
+ 	sensor->frame_interval.numerator = 1;
 -- 
 2.41.0
 
