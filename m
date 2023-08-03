@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86A19C001DF
-	for <linux-media@archiver.kernel.org>; Thu,  3 Aug 2023 12:16:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E9D0C04FDF
+	for <linux-media@archiver.kernel.org>; Thu,  3 Aug 2023 12:16:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235861AbjHCMQ0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Aug 2023 08:16:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34920 "EHLO
+        id S235864AbjHCMQ2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Aug 2023 08:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235354AbjHCMQZ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Aug 2023 08:16:25 -0400
+        with ESMTP id S235863AbjHCMQ1 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Aug 2023 08:16:27 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1511C1716;
-        Thu,  3 Aug 2023 05:16:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2CF5B1;
+        Thu,  3 Aug 2023 05:16:25 -0700 (PDT)
 Received: from [127.0.1.1] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 996E7C67;
-        Thu,  3 Aug 2023 14:15:16 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 06090EEA;
+        Thu,  3 Aug 2023 14:15:17 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1691064917;
-        bh=FUF1g+cBUsdEqKfbNzez2Hokd0GxCCbEB2o0a2KNDys=;
+        s=mail; t=1691064918;
+        bh=X/zAB0Jj0qtm9fUujGG3j4YnlOSerudhleIY+ZFE7Pk=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=kHNnALG85T2UZ9jsxoPBGsCRJi8ddcr/Id9vLH7RjLzbukpEAryOpBqYfR6YF9fXO
-         Undu76W6QJLqayq/vpNOAMFhF78Nep7yb9+U/CLZuWW5tCk0ODZbbIQffsicwZenem
-         pHncreFTgP9wIKUIe5cJC/3yDlK7Qu6HiJUS+W1U=
+        b=pDakRJGS/sF3EpPJcPIuJYXGMRiWHbk47Puxtkb+cID4P0jbPwXt+fCWVbVM99tDd
+         zrcb22Zcbs+nG8/mXPTqdZIksgQswYnA1o6yP3mB2EYFcvqsL7tNF5bIt30Dyu2T3O
+         afAsozyQqTDxm5oQniH+C0rxCdRjOLlES7PuwntM=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Date:   Thu, 03 Aug 2023 15:15:45 +0300
-Subject: [PATCH v2 1/3] media: i2c: ds90ub913: Fix use of uninitialized
- variables
+Date:   Thu, 03 Aug 2023 15:15:47 +0300
+Subject: [PATCH v2 3/3] media: i2c: ds90ub960: Fix PLL config for 1200 MHz
+ CSI rate
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230803-ub9xx-uninit-vars-v2-1-512570ecb798@ideasonboard.com>
+Message-Id: <20230803-ub9xx-uninit-vars-v2-3-512570ecb798@ideasonboard.com>
 References: <20230803-ub9xx-uninit-vars-v2-0-512570ecb798@ideasonboard.com>
 In-Reply-To: <20230803-ub9xx-uninit-vars-v2-0-512570ecb798@ideasonboard.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -42,58 +42,54 @@ To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
 Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1323;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=958;
  i=tomi.valkeinen@ideasonboard.com; h=from:subject:message-id;
- bh=FUF1g+cBUsdEqKfbNzez2Hokd0GxCCbEB2o0a2KNDys=;
- b=owEBbQKS/ZANAwAIAfo9qoy8lh71AcsmYgBky5qSirgPH9zPThBDC93DQo5bx72emrcDGxbpv
- ac30JTkfx+JAjMEAAEIAB0WIQTEOAw+ll79gQef86f6PaqMvJYe9QUCZMuakgAKCRD6PaqMvJYe
- 9RopEACtjE3K40xcWVdMWnD6/aLAj3cGmLF6yGhjC6N2i/GcuHm1WFBIT4zM76hgJdHt0eL/GF7
- 0hGtPuKBgB11Q9nP5/H0VGZwZE7Q9d+lBOsYPogkQhhz/AUFBoBXrvJ0+Sc0XZH76pR8hHF/3QS
- nF5fOVIs86jL5vPzbrSgpqBEEm/abJTJNX4RHv/0aZbWsNZSLIiIqWIEWzEUkwlOOSC97pd2wSh
- JKXgnCwaeGpbcsFn26Vx5NTS3tSV2GA7XrnK7u/cUZNjp1LBtZfGGcyxAmT9OfLlHv4wXghRuVA
- hmHRRxe9nU94njr+L08gjP2c47k0YjZevaJPBqUGjp3ZS4mm6Pc9kLe5DR2fjiht2SyDofK8Elm
- TerHWe/07ft2/eAg0swQ7C3cRVnX/jr10w5K5wGGrfVQwVI6yhSo3abgIt76cKbA/ThKlv9pIgB
- aS0E5XIlVXfL+lFhwcfjvS7qitY5TuBVTNWuoMMGgkz9AEyo6mIeH698fa76RLz42ak6HUBgd3L
- 5nz4FurbhtbB7lYzAJrbPGr7VW8PYE4x89aeBogxLq65YGsM2CpY4UdyUf5bpw9yEkpN5pbrsdq
- ffZkeGnOzw/XY0J4H1Qxc7UtGOmPoB7sB/7NopIkmcUp6QQS1qencSSyMPzy8X7xz3FsnMWr3iU
- y7BgeQ0Ihbqkq9g==
+ bh=X/zAB0Jj0qtm9fUujGG3j4YnlOSerudhleIY+ZFE7Pk=;
+ b=owEBbQKS/ZANAwAIAfo9qoy8lh71AcsmYgBky5qTlwogM7bSwQkRLy7uH14HFuTygXBUZ/UFm
+ RoihrGzwX+JAjMEAAEIAB0WIQTEOAw+ll79gQef86f6PaqMvJYe9QUCZMuakwAKCRD6PaqMvJYe
+ 9WjID/sEMMwT0p0hDZLH8aL8mh3obRi+owyf43NC174eD0THUq+pyJoTCff0+maEGVri/JvL+EA
+ V3NfvuysUJnQ9hbw/iNVqrEAcoRH9nbfePhp919njbqbYOEb5hTN3BdrFPpWvuOsxBdM6e/ub3J
+ o/kSPmhgBAv7aS+CnxUHq3gkVBgVXrVasIhrq7VugEBbmZosK1iAvkaRixzSVbjsvqkA0lI8+yD
+ BHGasMrR/bZtrk5OEvmNzNPOeNluC4HQxx3bCdKjqZUnYsXb9bZLrP7+C4xmuh+C4kw5Ia3qo2s
+ Dm6MBemKuiDkOCj5bD7yPkKowOQP2eFWjYZfMMb0fFwIk8sVgFh3YKPNWHOvztH97vHjafH721o
+ j5N8b1KW84wyOqTn0LxxueJOlJVIyWsdhkBS+UrMb6D+igCesY0R1CYR6wqI8AaJDuBL/DZHPe8
+ 54X+JVz3D8Vxp0ccGUArl+pHIH/7jbZjET9TOK/2Cd50PGzNNhJ1IvHhzpgh4RQUEoxer8fDxI8
+ UGhfZQWAU15ryf/qsRFCfqXSj7RV+1TjyEw3DGmZeIcOwLzcPqDxjRNsvq6TAVfSh7i5t0xPh4W
+ Rhsef5JJjz1NyJ8z4IUWXs/qfaJzCuDEPq4ryeN9Rwwxy8UbImfWQKpQhGxMj2vyoLJGU9XkY+Z
+ 6ujGJUociowXRIw==
 X-Developer-Key: i=tomi.valkeinen@ideasonboard.com; a=openpgp;
  fpr=C4380C3E965EFD81079FF3A7FA3DAA8CBC961EF5
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-smatch reports some uninitialized variables:
+smatch reports:
 
-drivers/media/i2c/ds90ub913.c:481 ub913_log_status() error: uninitialized symbol 'v1'.
-drivers/media/i2c/ds90ub913.c:481 ub913_log_status() error: uninitialized symbol 'v2'.
+drivers/media/i2c/ds90ub960.c:1788 ub960_init_tx_ports() error: uninitialized symbol 'pll_div'.
 
-These are used only for printing debug information, and the use of an
-uninitialized variable only happens if an i2c transaction has failed,
-which will print an error. Thus, fix the errors just by initializing the
-variables to 0.
+This is caused by 'pll_div' not being set for 1200 MHz CSI rate. Set the
+'pll_div' correctly.
 
-Fixes: c158d0d4ff15 ("media: i2c: add DS90UB913 driver")
+Fixes: afe267f2d368 ("media: i2c: add DS90UB960 driver")
 Reported-by: Hans Verkuil <hverkuil@xs4all.nl>
 Closes: https://lore.kernel.org/all/8d6daeb1-b62a-bbb2-b840-8759c84f2085@xs4all.nl/
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 ---
- drivers/media/i2c/ds90ub913.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/i2c/ds90ub960.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/i2c/ds90ub913.c b/drivers/media/i2c/ds90ub913.c
-index 80d9cf6dd945..b2115e3519e2 100644
---- a/drivers/media/i2c/ds90ub913.c
-+++ b/drivers/media/i2c/ds90ub913.c
-@@ -469,7 +469,7 @@ static int ub913_log_status(struct v4l2_subdev *sd)
- {
- 	struct ub913_data *priv = sd_to_ub913(sd);
- 	struct device *dev = &priv->client->dev;
--	u8 v = 0, v1, v2;
-+	u8 v = 0, v1 = 0, v2 = 0;
- 
- 	ub913_read(priv, UB913_REG_MODE_SEL, &v);
- 	dev_info(dev, "MODE_SEL %#02x\n", v);
+diff --git a/drivers/media/i2c/ds90ub960.c b/drivers/media/i2c/ds90ub960.c
+index 4833b39b9178..4ab45e326d80 100644
+--- a/drivers/media/i2c/ds90ub960.c
++++ b/drivers/media/i2c/ds90ub960.c
+@@ -1763,6 +1763,7 @@ static int ub960_init_tx_ports(struct ub960_data *priv)
+ 		break;
+ 	case MHZ(1200):
+ 		speed_select = 1;
++		pll_div = 0x18;
+ 		break;
+ 	case MHZ(800):
+ 		speed_select = 2;
 
 -- 
 2.34.1
