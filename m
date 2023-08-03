@@ -2,41 +2,41 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FE93C0015E
-	for <linux-media@archiver.kernel.org>; Thu,  3 Aug 2023 09:37:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E68E0C00528
+	for <linux-media@archiver.kernel.org>; Thu,  3 Aug 2023 09:37:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235104AbjHCJhL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Aug 2023 05:37:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33770 "EHLO
+        id S235109AbjHCJhN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Aug 2023 05:37:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235138AbjHCJgR (ORCPT
+        with ESMTP id S235139AbjHCJgR (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Thu, 3 Aug 2023 05:36:17 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECB135B7
-        for <linux-media@vger.kernel.org>; Thu,  3 Aug 2023 02:34:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F3735B0
+        for <linux-media@vger.kernel.org>; Thu,  3 Aug 2023 02:34:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1691055273;
+        s=mimecast20190719; t=1691055269;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=e/4G+Iar7zAzMOaOjmTmeuOnrpmRWKwrPGzL8rR9lfw=;
-        b=Ur15C8XTyna68mhMM4mMtJBF3o5Cq11W7O8q1uptgA46vXUHELi2CSIRs0vqB+Rq5LalAx
-        IBhdW9cWqlacqDjgSxPpzSi7pYF9N9HT1h/fqr1zTjba18dPVw5cXFqQ5x8ExOnBInekxO
-        90RzqbkdBjqNxIkU3YlmSbDvAGZ7Ncc=
+        bh=1yLiZDQY4dJFD3aJcbyYyYnyvguSbvVE31Ylk6aHR6w=;
+        b=E6a4qSGi9Itb+uh5Ta8Z4NDDRpkLhICUJtrXA/3/XWXHqd17o8Urk/KeVMxZ8TaKjh1iTw
+        7coub1AVt8DV7SM+qE0Jf4TnsjBevSnly0VMEIOSdEavvYeeFyFXaVwo3duDkfwYuN5zZQ
+        pnuITPypwD1ocDN7OjcqVYoNEmHs8XM=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-140-J2KisxYqMnuTxzS-75j8tg-1; Thu, 03 Aug 2023 05:34:29 -0400
-X-MC-Unique: J2KisxYqMnuTxzS-75j8tg-1
+ us-mta-50-Ia-bJXq_OQuPPyqbxhagWw-1; Thu, 03 Aug 2023 05:34:26 -0400
+X-MC-Unique: Ia-bJXq_OQuPPyqbxhagWw-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 094A5101A54E;
-        Thu,  3 Aug 2023 09:34:29 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B6901800159;
+        Thu,  3 Aug 2023 09:34:25 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.193.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8F8CD2166B25;
-        Thu,  3 Aug 2023 09:34:27 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 508882166B25;
+        Thu,  3 Aug 2023 09:34:24 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -48,9 +48,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Dave Stevenson <dave.stevenson@raspberrypi.com>,
         Tommaso Merciai <tomm.merciai@gmail.com>,
         linux-media@vger.kernel.org
-Subject: [PATCH v5 23/32] media: ov2680: Implement selection support
-Date:   Thu,  3 Aug 2023 11:33:38 +0200
-Message-ID: <20230803093348.15679-24-hdegoede@redhat.com>
+Subject: [PATCH v5 21/32] media: ov2680: Make setting the mode algorithm based
+Date:   Thu,  3 Aug 2023 11:33:36 +0200
+Message-ID: <20230803093348.15679-22-hdegoede@redhat.com>
 In-Reply-To: <20230803093348.15679-1-hdegoede@redhat.com>
 References: <20230803093348.15679-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,275 +60,495 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Implement selection support. Modelled after ov5693 selection support,
-but allow setting sizes smaller than crop-size through set_fmt() since
-that was already allowed.
+Instead of using a long fixed register settings list for each resolution,
+calculate the register settings based on the requested width + height.
+
+This is based on atomisp-ov2680 commit 0611888592df ("media: atomisp:
+ov2680: Make setting the modes algorithm based").
+
+This will allow future enhancements like adding hblank and vblank controls
+and adding selection support.
+
+This also adds properly programming the ISP window and setting
+the manual ISP window control bit in register 0x5708, this is
+necessary for the hflip and vflip conrols to work properly.
 
 Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
-Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
 Changes in v4:
-- Make enum_frame_size() take the crop target into account
-
-Changes in v2:
-- Use clamp_val() instead of clamp() / clamp_t()
+- Make enum_frame_size() returned full-size + binned-/quarter-size,
+  like the ov5693 code does
 ---
- drivers/media/i2c/ov2680.c | 153 ++++++++++++++++++++++++++++++++++---
- 1 file changed, 141 insertions(+), 12 deletions(-)
+ drivers/media/i2c/ov2680.c | 334 +++++++++++++++++--------------------
+ 1 file changed, 157 insertions(+), 177 deletions(-)
 
 diff --git a/drivers/media/i2c/ov2680.c b/drivers/media/i2c/ov2680.c
-index 87c4c5ea47c9..ecd99e6669bd 100644
+index 76f97d053e45..012b95f90c1d 100644
 --- a/drivers/media/i2c/ov2680.c
 +++ b/drivers/media/i2c/ov2680.c
-@@ -65,8 +65,14 @@
+@@ -38,27 +38,48 @@
+ #define OV2680_REG_EXPOSURE_PK			CCI_REG24(0x3500)
+ #define OV2680_REG_R_MANUAL			CCI_REG8(0x3503)
+ #define OV2680_REG_GAIN_PK			CCI_REG16(0x350a)
++
++#define OV2680_REG_SENSOR_CTRL_0A		CCI_REG8(0x370a)
++
++#define OV2680_REG_HORIZONTAL_START		CCI_REG16(0x3800)
++#define OV2680_REG_VERTICAL_START		CCI_REG16(0x3802)
++#define OV2680_REG_HORIZONTAL_END		CCI_REG16(0x3804)
++#define OV2680_REG_VERTICAL_END			CCI_REG16(0x3806)
++#define OV2680_REG_HORIZONTAL_OUTPUT_SIZE	CCI_REG16(0x3808)
++#define OV2680_REG_VERTICAL_OUTPUT_SIZE		CCI_REG16(0x380a)
+ #define OV2680_REG_TIMING_HTS			CCI_REG16(0x380c)
+ #define OV2680_REG_TIMING_VTS			CCI_REG16(0x380e)
++#define OV2680_REG_ISP_X_WIN			CCI_REG16(0x3810)
++#define OV2680_REG_ISP_Y_WIN			CCI_REG16(0x3812)
++#define OV2680_REG_X_INC			CCI_REG8(0x3814)
++#define OV2680_REG_Y_INC			CCI_REG8(0x3815)
+ #define OV2680_REG_FORMAT1			CCI_REG8(0x3820)
+ #define OV2680_REG_FORMAT2			CCI_REG8(0x3821)
  
- #define OV2680_NATIVE_WIDTH			1616
- #define OV2680_NATIVE_HEIGHT			1216
-+#define OV2680_NATIVE_START_LEFT		0
-+#define OV2680_NATIVE_START_TOP			0
- #define OV2680_ACTIVE_WIDTH			1600
- #define OV2680_ACTIVE_HEIGHT			1200
-+#define OV2680_ACTIVE_START_LEFT		8
-+#define OV2680_ACTIVE_START_TOP			8
-+#define OV2680_MIN_CROP_WIDTH			2
-+#define OV2680_MIN_CROP_HEIGHT			2
+ #define OV2680_REG_ISP_CTRL00			CCI_REG8(0x5080)
  
- /* 66MHz pixel clock: 66MHz / 1704 * 1294 = 30fps */
- #define OV2680_PIXELS_PER_LINE			1704
-@@ -114,6 +120,7 @@ struct ov2680_ctrls {
++#define OV2680_REG_X_WIN			CCI_REG16(0x5704)
++#define OV2680_REG_Y_WIN			CCI_REG16(0x5706)
++
+ #define OV2680_FRAME_RATE			30
+ 
+-#define OV2680_WIDTH_MAX			1600
+-#define OV2680_HEIGHT_MAX			1200
++#define OV2680_NATIVE_WIDTH			1616
++#define OV2680_NATIVE_HEIGHT			1216
++#define OV2680_ACTIVE_WIDTH			1600
++#define OV2680_ACTIVE_HEIGHT			1200
++
++/* 66MHz pixel clock: 66MHz / 1704 * 1294 = 30fps */
++#define OV2680_PIXELS_PER_LINE			1704
++#define OV2680_LINES_PER_FRAME			1294
++
++/* If possible send 16 extra rows / lines to the ISP as padding */
++#define OV2680_END_MARGIN			16
+ 
+ #define OV2680_DEFAULT_WIDTH			800
+ #define OV2680_DEFAULT_HEIGHT			600
+ 
+-enum ov2680_mode_id {
+-	OV2680_MODE_QUXGA_800_600,
+-	OV2680_MODE_720P_1280_720,
+-	OV2680_MODE_UXGA_1600_1200,
+-	OV2680_MODE_MAX,
+-};
++/* For enum_frame_size() full-size + binned-/quarter-size */
++#define OV2680_FRAME_SIZES			2
+ 
+ static const char * const ov2680_supply_name[] = {
+ 	"DOVDD",
+@@ -83,15 +104,6 @@ static const u8 ov2680_pll_multipliers[] = {
+ 	[OV2680_24_MHZ] = 55,
  };
  
+-struct ov2680_mode_info {
+-	const char *name;
+-	enum ov2680_mode_id id;
+-	u32 width;
+-	u32 height;
+-	const struct reg_sequence *reg_data;
+-	u32 reg_data_size;
+-};
+-
+ struct ov2680_ctrls {
+ 	struct v4l2_ctrl_handler handler;
+ 	struct v4l2_ctrl *exposure;
+@@ -104,6 +116,15 @@ struct ov2680_ctrls {
  struct ov2680_mode {
-+	struct v4l2_rect		crop;
  	struct v4l2_mbus_framefmt	fmt;
  	struct v4l2_fract		frame_interval;
- 	bool				binning;
-@@ -147,6 +154,13 @@ struct ov2680_dev {
- 	struct ov2680_mode		mode;
++	bool				binning;
++	u16				h_start;
++	u16				v_start;
++	u16				h_end;
++	u16				v_end;
++	u16				h_output_size;
++	u16				v_output_size;
++	u16				hts;
++	u16				vts;
  };
  
-+static const struct v4l2_rect ov2680_default_crop = {
-+	.left = OV2680_ACTIVE_START_LEFT,
-+	.top = OV2680_ACTIVE_START_TOP,
-+	.width = OV2680_ACTIVE_WIDTH,
-+	.height = OV2680_ACTIVE_HEIGHT,
-+};
-+
+ struct ov2680_dev {
+@@ -124,8 +145,6 @@ struct ov2680_dev {
+ 
+ 	struct ov2680_ctrls		ctrls;
+ 	struct ov2680_mode		mode;
+-
+-	const struct ov2680_mode_info	*current_mode;
+ };
+ 
  static const char * const test_pattern_menu[] = {
- 	"Disabled",
- 	"Color Bars",
-@@ -232,6 +246,18 @@ __ov2680_get_pad_format(struct ov2680_dev *sensor,
- 	return &sensor->mode.fmt;
+@@ -143,136 +162,19 @@ static const int ov2680_hv_flip_bayer_order[] = {
+ 	MEDIA_BUS_FMT_SRGGB10_1X10,
+ };
+ 
+-static const struct reg_sequence ov2680_setting_30fps_QUXGA_800_600[] = {
+-	/* Set PLL SP DIV to 1 for binning mode */
+-	{0x3086, 0x01},
+-
+-	/* Sensor control register 0x0a to 0x23 for binning mode */
+-	{0x370a, 0x23},
+-
+-	/* Set X and Y output size to 800x600 */
+-	{0x3808, 0x03},
+-	{0x3809, 0x20},
+-	{0x380a, 0x02},
+-	{0x380b, 0x58},
+-
+-	/* Set HTS + VTS to 1708x644 */
+-	{0x380c, 0x06},
+-	{0x380d, 0xac},
+-	{0x380e, 0x02},
+-	{0x380f, 0x84},
+-
+-	/* Set ISP WIN X and Y start to 4x4 */
+-	{0x3811, 0x04},
+-	{0x3813, 0x04},
+-
+-	/* Set X INC and Y INC for binning */
+-	{0x3814, 0x31},
+-	{0x3815, 0x31},
+-
+-	/* Initialize FORMAT1 to default/reset value (vflip disabled) */
+-	{0x3820, 0xc0},
++static const struct reg_sequence ov2680_global_setting[] = {
++	/* R MANUAL set exposure and gain to manual (hw does not do auto) */
++	{0x3503, 0x03},
+ 
+ 	/* Set black level compensation range to 0 - 3 (default 0 - 11) */
+ 	{0x4008, 0x00},
+ 	{0x4009, 0x03},
+ 
+-	/* Set MIPI pclk period to 0x1e (default/reset is 0x18) */
+-	{0x4837, 0x1e},
+-
+-	/* Initialize exposure to 0x4ee (overridden by the ctrl, drop this */
+-	{0x3501, 0x4e},
+-	{0x3502, 0xe0},
+-
+-	/* R MANUAL set exposure and gain to manual (hw does not do auto) */
+-	{0x3503, 0x03},
+-};
+-
+-static const struct reg_sequence ov2680_setting_30fps_720P_1280_720[] = {
+-	/* Set PLL SP DIV to 0 for not binning mode */
+-	{0x3086, 0x00},
+-
+-	/* Set X and Y output size to 1280x720 */
+-	{0x3808, 0x05},
+-	{0x3809, 0x00},
+-	{0x380a, 0x02},
+-	{0x380b, 0xd0},
+-
+-	/* Set HTS + VTS to 1704x1294 */
+-	{0x380c, 0x06},
+-	{0x380d, 0xa8},
+-	{0x380e, 0x05},
+-	{0x380f, 0x0e},
+-
+-	/* Set ISP WIN X and Y start to 8x6 */
+-	{0x3811, 0x08},
+-	{0x3813, 0x06},
+-
+-	/* Set X INC and Y INC for non binning */
+-	{0x3814, 0x11},
+-	{0x3815, 0x11},
+-
+-	/* Initialize FORMAT1 to default/reset value (vflip disabled) */
+-	{0x3820, 0xc0},
+-
+-	/* Set backlight compensation range start to 0 */
+-	{0x4008, 0x00},
+-};
+-
+-static const struct reg_sequence ov2680_setting_30fps_UXGA_1600_1200[] = {
+-	/* Set PLL SP DIV to 0 for not binning mode */
+-	{0x3086, 0x00},
+-
+-	/* Initialize exposure to 0x4ee (overridden by the ctrl, drop this */
+-	{0x3501, 0x4e},
+-	{0x3502, 0xe0},
+-
+-	/* Set X and Y output size to 1600x1200 */
+-	{0x3808, 0x06},
+-	{0x3809, 0x40},
+-	{0x380a, 0x04},
+-	{0x380b, 0xb0},
+-
+-	/* Set HTS + VTS to 1704x1294 */
+-	{0x380c, 0x06},
+-	{0x380d, 0xa8},
+-	{0x380e, 0x05},
+-	{0x380f, 0x0e},
+-
+-	/* Set ISP WIN X and Y start to 0x0 */
+-	{0x3811, 0x00},
+-	{0x3813, 0x00},
+-
+-	/* Set X INC and Y INC for non binning */
+-	{0x3814, 0x11},
+-	{0x3815, 0x11},
+-
+-	/* Initialize FORMAT1 to default/reset value (vflip disabled) */
+-	{0x3820, 0xc0},
+-
+-	/* Set backlight compensation range start to 0 */
+-	{0x4008, 0x00},
+-
+-	/* Set MIPI pclk period to default/reset value of 0x18 */
+-	{0x4837, 0x18}
+-};
+-
+-static const struct ov2680_mode_info ov2680_mode_init_data = {
+-	"mode_quxga_800_600", OV2680_MODE_QUXGA_800_600, 800, 600,
+-	ov2680_setting_30fps_QUXGA_800_600,
+-	ARRAY_SIZE(ov2680_setting_30fps_QUXGA_800_600),
+-};
+-
+-static const struct ov2680_mode_info ov2680_mode_data[OV2680_MODE_MAX] = {
+-	{"mode_quxga_800_600", OV2680_MODE_QUXGA_800_600,
+-	 800, 600, ov2680_setting_30fps_QUXGA_800_600,
+-	 ARRAY_SIZE(ov2680_setting_30fps_QUXGA_800_600)},
+-	{"mode_720p_1280_720", OV2680_MODE_720P_1280_720,
+-	 1280, 720, ov2680_setting_30fps_720P_1280_720,
+-	 ARRAY_SIZE(ov2680_setting_30fps_720P_1280_720)},
+-	{"mode_uxga_1600_1200", OV2680_MODE_UXGA_1600_1200,
+-	 1600, 1200, ov2680_setting_30fps_UXGA_1600_1200,
+-	 ARRAY_SIZE(ov2680_setting_30fps_UXGA_1600_1200)},
++	/*
++	 * Window CONTROL 0x00 -> 0x01, enable manual window control,
++	 * this is necessary for full size flip and mirror support.
++	 */
++	{0x5708, 0x01},
+ };
+ 
+ static struct ov2680_dev *to_ov2680_dev(struct v4l2_subdev *sd)
+@@ -330,6 +232,85 @@ static void ov2680_fill_format(struct ov2680_dev *sensor,
+ 	ov2680_set_bayer_order(sensor, fmt);
  }
  
-+static struct v4l2_rect *
-+__ov2680_get_pad_crop(struct ov2680_dev *sensor,
-+		      struct v4l2_subdev_state *state,
-+		      unsigned int pad,
-+		      enum v4l2_subdev_format_whence which)
++static void ov2680_calc_mode(struct ov2680_dev *sensor)
 +{
-+	if (which == V4L2_SUBDEV_FORMAT_TRY)
-+		return v4l2_subdev_get_try_crop(&sensor->sd, state, pad);
++	int width = sensor->mode.fmt.width;
++	int height = sensor->mode.fmt.height;
++	int orig_width = width;
++	int orig_height = height;
 +
-+	return &sensor->mode.crop;
++	if (width  <= (OV2680_NATIVE_WIDTH / 2) &&
++	    height <= (OV2680_NATIVE_HEIGHT / 2)) {
++		sensor->mode.binning = true;
++		width *= 2;
++		height *= 2;
++	} else {
++		sensor->mode.binning = false;
++	}
++
++	sensor->mode.h_start = ((OV2680_NATIVE_WIDTH - width) / 2) & ~1;
++	sensor->mode.v_start = ((OV2680_NATIVE_HEIGHT - height) / 2) & ~1;
++	sensor->mode.h_end =
++		min(sensor->mode.h_start + width + OV2680_END_MARGIN - 1,
++		    OV2680_NATIVE_WIDTH - 1);
++	sensor->mode.v_end =
++		min(sensor->mode.v_start + height + OV2680_END_MARGIN - 1,
++		    OV2680_NATIVE_HEIGHT - 1);
++	sensor->mode.h_output_size = orig_width;
++	sensor->mode.v_output_size = orig_height;
++	sensor->mode.hts = OV2680_PIXELS_PER_LINE;
++	sensor->mode.vts = OV2680_LINES_PER_FRAME;
 +}
 +
- static void ov2680_fill_format(struct ov2680_dev *sensor,
- 			       struct v4l2_mbus_framefmt *fmt,
- 			       unsigned int width, unsigned int height)
-@@ -251,8 +277,8 @@ static void ov2680_calc_mode(struct ov2680_dev *sensor)
- 	int orig_width = width;
- 	int orig_height = height;
++static int ov2680_set_mode(struct ov2680_dev *sensor)
++{
++	u8 sensor_ctrl_0a, inc, fmt1, fmt2;
++	int ret = 0;
++
++	if (sensor->mode.binning) {
++		sensor_ctrl_0a = 0x23;
++		inc = 0x31;
++		fmt1 = 0xc2;
++		fmt2 = 0x01;
++	} else {
++		sensor_ctrl_0a = 0x21;
++		inc = 0x11;
++		fmt1 = 0xc0;
++		fmt2 = 0x00;
++	}
++
++	cci_write(sensor->regmap, OV2680_REG_SENSOR_CTRL_0A,
++		  sensor_ctrl_0a, &ret);
++	cci_write(sensor->regmap, OV2680_REG_HORIZONTAL_START,
++		  sensor->mode.h_start, &ret);
++	cci_write(sensor->regmap, OV2680_REG_VERTICAL_START,
++		  sensor->mode.v_start, &ret);
++	cci_write(sensor->regmap, OV2680_REG_HORIZONTAL_END,
++		  sensor->mode.h_end, &ret);
++	cci_write(sensor->regmap, OV2680_REG_VERTICAL_END,
++		  sensor->mode.v_end, &ret);
++	cci_write(sensor->regmap, OV2680_REG_HORIZONTAL_OUTPUT_SIZE,
++		  sensor->mode.h_output_size, &ret);
++	cci_write(sensor->regmap, OV2680_REG_VERTICAL_OUTPUT_SIZE,
++		  sensor->mode.v_output_size, &ret);
++	cci_write(sensor->regmap, OV2680_REG_TIMING_HTS,
++		  sensor->mode.hts, &ret);
++	cci_write(sensor->regmap, OV2680_REG_TIMING_VTS,
++		  sensor->mode.vts, &ret);
++	cci_write(sensor->regmap, OV2680_REG_ISP_X_WIN, 0, &ret);
++	cci_write(sensor->regmap, OV2680_REG_ISP_Y_WIN, 0, &ret);
++	cci_write(sensor->regmap, OV2680_REG_X_INC, inc, &ret);
++	cci_write(sensor->regmap, OV2680_REG_Y_INC, inc, &ret);
++	cci_write(sensor->regmap, OV2680_REG_X_WIN,
++		  sensor->mode.h_output_size, &ret);
++	cci_write(sensor->regmap, OV2680_REG_Y_WIN,
++		  sensor->mode.v_output_size, &ret);
++	cci_write(sensor->regmap, OV2680_REG_FORMAT1, fmt1, &ret);
++	cci_write(sensor->regmap, OV2680_REG_FORMAT2, fmt2, &ret);
++
++	return ret;
++}
++
+ static int ov2680_set_vflip(struct ov2680_dev *sensor, s32 val)
+ {
+ 	int ret;
+@@ -399,14 +380,12 @@ static int ov2680_stream_enable(struct ov2680_dev *sensor)
+ 		return ret;
  
--	if (width  <= (OV2680_NATIVE_WIDTH / 2) &&
--	    height <= (OV2680_NATIVE_HEIGHT / 2)) {
-+	if (width  <= (sensor->mode.crop.width / 2) &&
-+	    height <= (sensor->mode.crop.height / 2)) {
- 		sensor->mode.binning = true;
- 		width *= 2;
- 		height *= 2;
-@@ -260,8 +286,10 @@ static void ov2680_calc_mode(struct ov2680_dev *sensor)
- 		sensor->mode.binning = false;
- 	}
+ 	ret = regmap_multi_reg_write(sensor->regmap,
+-				     ov2680_mode_init_data.reg_data,
+-				     ov2680_mode_init_data.reg_data_size);
++				     ov2680_global_setting,
++				     ARRAY_SIZE(ov2680_global_setting));
+ 	if (ret < 0)
+ 		return ret;
  
--	sensor->mode.h_start = ((OV2680_NATIVE_WIDTH - width) / 2) & ~1;
--	sensor->mode.v_start = ((OV2680_NATIVE_HEIGHT - height) / 2) & ~1;
-+	sensor->mode.h_start = (sensor->mode.crop.left +
-+				(sensor->mode.crop.width - width) / 2) & ~1;
-+	sensor->mode.v_start = (sensor->mode.crop.top +
-+				(sensor->mode.crop.height - height) / 2) & ~1;
- 	sensor->mode.h_end =
- 		min(sensor->mode.h_start + width + OV2680_END_MARGIN - 1,
- 		    OV2680_NATIVE_WIDTH - 1);
-@@ -541,16 +569,21 @@ static int ov2680_set_fmt(struct v4l2_subdev *sd,
+-	ret = regmap_multi_reg_write(sensor->regmap,
+-				     sensor->current_mode->reg_data,
+-				     sensor->current_mode->reg_data_size);
++	ret = ov2680_set_mode(sensor);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -556,21 +535,18 @@ static int ov2680_set_fmt(struct v4l2_subdev *sd,
  {
  	struct ov2680_dev *sensor = to_ov2680_dev(sd);
  	struct v4l2_mbus_framefmt *try_fmt;
-+	const struct v4l2_rect *crop;
- 	unsigned int width, height;
+-	const struct ov2680_mode_info *mode;
++	unsigned int width, height;
  	int ret = 0;
  
  	if (format->pad != 0)
  		return -EINVAL;
  
--	width = min_t(unsigned int, ALIGN(format->format.width, 2),
--		      OV2680_NATIVE_WIDTH);
--	height = min_t(unsigned int, ALIGN(format->format.height, 2),
--		       OV2680_NATIVE_HEIGHT);
-+	crop = __ov2680_get_pad_crop(sensor, sd_state, format->pad,
-+				     format->which);
-+
-+	/* Limit set_fmt max size to crop width / height */
-+	width = clamp_val(ALIGN(format->format.width, 2),
-+			  OV2680_MIN_CROP_WIDTH, crop->width);
-+	height = clamp_val(ALIGN(format->format.height, 2),
-+			   OV2680_MIN_CROP_HEIGHT, crop->height);
+-	mode = v4l2_find_nearest_size(ov2680_mode_data,
+-				      ARRAY_SIZE(ov2680_mode_data),
+-				      width, height,
+-				      format->format.width,
+-				      format->format.height);
+-	if (!mode)
+-		return -EINVAL;
++	width = min_t(unsigned int, ALIGN(format->format.width, 2),
++		      OV2680_NATIVE_WIDTH);
++	height = min_t(unsigned int, ALIGN(format->format.height, 2),
++		       OV2680_NATIVE_HEIGHT);
  
- 	ov2680_fill_format(sensor, &format->format, width, height);
+-	ov2680_fill_format(sensor, &format->format, mode->width, mode->height);
++	ov2680_fill_format(sensor, &format->format, width, height);
  
-@@ -576,11 +609,97 @@ static int ov2680_set_fmt(struct v4l2_subdev *sd,
- 	return ret;
- }
+ 	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
+ 		try_fmt = v4l2_subdev_get_try_format(sd, sd_state, 0);
+@@ -585,8 +561,8 @@ static int ov2680_set_fmt(struct v4l2_subdev *sd,
+ 		goto unlock;
+ 	}
  
-+static int ov2680_get_selection(struct v4l2_subdev *sd,
-+				struct v4l2_subdev_state *state,
-+				struct v4l2_subdev_selection *sel)
-+{
-+	struct ov2680_dev *sensor = to_ov2680_dev(sd);
-+
-+	switch (sel->target) {
-+	case V4L2_SEL_TGT_CROP:
-+		mutex_lock(&sensor->lock);
-+		sel->r = *__ov2680_get_pad_crop(sensor, state, sel->pad,
-+						sel->which);
-+		mutex_unlock(&sensor->lock);
-+		break;
-+	case V4L2_SEL_TGT_NATIVE_SIZE:
-+	case V4L2_SEL_TGT_CROP_BOUNDS:
-+		sel->r.top = 0;
-+		sel->r.left = 0;
-+		sel->r.width = OV2680_NATIVE_WIDTH;
-+		sel->r.height = OV2680_NATIVE_HEIGHT;
-+		break;
-+	case V4L2_SEL_TGT_CROP_DEFAULT:
-+		sel->r = ov2680_default_crop;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ov2680_set_selection(struct v4l2_subdev *sd,
-+				struct v4l2_subdev_state *state,
-+				struct v4l2_subdev_selection *sel)
-+{
-+	struct ov2680_dev *sensor = to_ov2680_dev(sd);
-+	struct v4l2_mbus_framefmt *format;
-+	struct v4l2_rect *crop;
-+	struct v4l2_rect rect;
-+
-+	if (sel->target != V4L2_SEL_TGT_CROP)
-+		return -EINVAL;
-+
-+	/*
-+	 * Clamp the boundaries of the crop rectangle to the size of the sensor
-+	 * pixel array. Align to multiples of 2 to ensure Bayer pattern isn't
-+	 * disrupted.
-+	 */
-+	rect.left = clamp_val(ALIGN(sel->r.left, 2),
-+			      OV2680_NATIVE_START_LEFT, OV2680_NATIVE_WIDTH);
-+	rect.top = clamp_val(ALIGN(sel->r.top, 2),
-+			     OV2680_NATIVE_START_TOP, OV2680_NATIVE_HEIGHT);
-+	rect.width = clamp_val(ALIGN(sel->r.width, 2),
-+			       OV2680_MIN_CROP_WIDTH, OV2680_NATIVE_WIDTH);
-+	rect.height = clamp_val(ALIGN(sel->r.height, 2),
-+				OV2680_MIN_CROP_HEIGHT, OV2680_NATIVE_HEIGHT);
-+
-+	/* Make sure the crop rectangle isn't outside the bounds of the array */
-+	rect.width = min_t(unsigned int, rect.width,
-+			   OV2680_NATIVE_WIDTH - rect.left);
-+	rect.height = min_t(unsigned int, rect.height,
-+			    OV2680_NATIVE_HEIGHT - rect.top);
-+
-+	crop = __ov2680_get_pad_crop(sensor, state, sel->pad, sel->which);
-+
-+	mutex_lock(&sensor->lock);
-+	if (rect.width != crop->width || rect.height != crop->height) {
-+		/*
-+		 * Reset the output image size if the crop rectangle size has
-+		 * been modified.
-+		 */
-+		format = __ov2680_get_pad_format(sensor, state, sel->pad,
-+						 sel->which);
-+		format->width = rect.width;
-+		format->height = rect.height;
-+	}
-+
-+	*crop = rect;
-+	mutex_unlock(&sensor->lock);
-+
-+	sel->r = rect;
-+
-+	return 0;
-+}
-+
- static int ov2680_init_cfg(struct v4l2_subdev *sd,
- 			   struct v4l2_subdev_state *sd_state)
- {
- 	struct ov2680_dev *sensor = to_ov2680_dev(sd);
+-	sensor->current_mode = mode;
+ 	sensor->mode.fmt = format->format;
++	ov2680_calc_mode(sensor);
  
-+	sd_state->pads[0].try_crop = ov2680_default_crop;
-+
- 	ov2680_fill_format(sensor, &sd_state->pads[0].try_fmt,
- 			   OV2680_DEFAULT_WIDTH, OV2680_DEFAULT_HEIGHT);
- 	return 0;
-@@ -590,11 +709,18 @@ static int ov2680_enum_frame_size(struct v4l2_subdev *sd,
+ unlock:
+ 	mutex_unlock(&sensor->lock);
+@@ -608,26 +584,35 @@ static int ov2680_enum_frame_size(struct v4l2_subdev *sd,
  				  struct v4l2_subdev_state *sd_state,
  				  struct v4l2_subdev_frame_size_enum *fse)
  {
-+	struct ov2680_dev *sensor = to_ov2680_dev(sd);
-+	struct v4l2_rect *crop;
-+
- 	if (fse->index >= OV2680_FRAME_SIZES)
+-	int index = fse->index;
+-
+-	if (index >= OV2680_MODE_MAX || index < 0)
++	if (fse->index >= OV2680_FRAME_SIZES)
  		return -EINVAL;
  
--	fse->min_width = OV2680_ACTIVE_WIDTH / (fse->index + 1);
--	fse->min_height = OV2680_ACTIVE_HEIGHT / (fse->index + 1);
-+	crop = __ov2680_get_pad_crop(sensor, sd_state, fse->pad, fse->which);
-+	if (!crop)
-+		return -EINVAL;
+-	fse->min_width = ov2680_mode_data[index].width;
+-	fse->min_height = ov2680_mode_data[index].height;
+-	fse->max_width = ov2680_mode_data[index].width;
+-	fse->max_height = ov2680_mode_data[index].height;
++	fse->min_width = OV2680_ACTIVE_WIDTH / (fse->index + 1);
++	fse->min_height = OV2680_ACTIVE_HEIGHT / (fse->index + 1);
++	fse->max_width = fse->min_width;
++	fse->max_height = fse->min_height;
+ 
+ 	return 0;
+ }
+ 
+-static bool ov2680_valid_frame_size(struct v4l2_subdev_frame_interval_enum *fie)
++static bool ov2680_valid_frame_size(struct v4l2_subdev *sd,
++				    struct v4l2_subdev_state *sd_state,
++				    struct v4l2_subdev_frame_interval_enum *fie)
+ {
++	struct v4l2_subdev_frame_size_enum fse = {
++		.pad = fie->pad,
++		.which = fie->which,
++	};
+ 	int i;
+ 
+-	for (i = 0; i < OV2680_MODE_MAX; i++) {
+-		if (fie->width == ov2680_mode_data[i].width &&
+-		    fie->height == ov2680_mode_data[i].height)
++	for (i = 0; i < OV2680_FRAME_SIZES; i++) {
++		fse.index = i;
 +
-+	fse->min_width = crop->width / (fse->index + 1);
-+	fse->min_height = crop->height / (fse->index + 1);
- 	fse->max_width = fse->min_width;
- 	fse->max_height = fse->min_height;
++		if (ov2680_enum_frame_size(sd, sd_state, &fse))
++			return false;
++
++		if (fie->width == fse.min_width &&
++		    fie->height == fse.min_height)
+ 			return true;
+ 	}
  
-@@ -690,10 +816,12 @@ static const struct v4l2_subdev_video_ops ov2680_video_ops = {
- static const struct v4l2_subdev_pad_ops ov2680_pad_ops = {
- 	.init_cfg		= ov2680_init_cfg,
- 	.enum_mbus_code		= ov2680_enum_mbus_code,
--	.get_fmt		= ov2680_get_fmt,
--	.set_fmt		= ov2680_set_fmt,
- 	.enum_frame_size	= ov2680_enum_frame_size,
- 	.enum_frame_interval	= ov2680_enum_frame_interval,
-+	.get_fmt		= ov2680_get_fmt,
-+	.set_fmt		= ov2680_set_fmt,
-+	.get_selection		= ov2680_get_selection,
-+	.set_selection		= ov2680_set_selection,
- };
+@@ -641,7 +626,7 @@ static int ov2680_enum_frame_interval(struct v4l2_subdev *sd,
+ 	struct ov2680_dev *sensor = to_ov2680_dev(sd);
  
- static const struct v4l2_subdev_ops ov2680_subdev_ops = {
-@@ -704,6 +832,7 @@ static const struct v4l2_subdev_ops ov2680_subdev_ops = {
+ 	/* Only 1 framerate */
+-	if (fie->index || !ov2680_valid_frame_size(fie))
++	if (fie->index || !ov2680_valid_frame_size(sd, sd_state, fie))
+ 		return -EINVAL;
+ 
+ 	fie->interval = sensor->mode.frame_interval;
+@@ -712,19 +697,14 @@ static const struct v4l2_subdev_ops ov2680_subdev_ops = {
+ 
  static int ov2680_mode_init(struct ov2680_dev *sensor)
  {
+-	const struct ov2680_mode_info *init_mode;
+-
  	/* set initial mode */
-+	sensor->mode.crop = ov2680_default_crop;
  	ov2680_fill_format(sensor, &sensor->mode.fmt,
  			   OV2680_DEFAULT_WIDTH, OV2680_DEFAULT_HEIGHT);
- 	ov2680_calc_mode(sensor);
++	ov2680_calc_mode(sensor);
+ 
+ 	sensor->mode.frame_interval.denominator = OV2680_FRAME_RATE;
+ 	sensor->mode.frame_interval.numerator = 1;
+ 
+-	init_mode = &ov2680_mode_init_data;
+-
+-	sensor->current_mode = init_mode;
+-
+ 	return 0;
+ }
+ 
 -- 
 2.41.0
 
