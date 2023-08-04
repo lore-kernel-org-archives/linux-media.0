@@ -2,87 +2,68 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A03D6EB64DD
-	for <linux-media@archiver.kernel.org>; Fri,  4 Aug 2023 01:43:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 508F6EB64DD
+	for <linux-media@archiver.kernel.org>; Fri,  4 Aug 2023 03:16:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232141AbjHDBnZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Aug 2023 21:43:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55522 "EHLO
+        id S233746AbjHDDQp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Aug 2023 23:16:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232338AbjHDBnZ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Aug 2023 21:43:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9691710D
-        for <linux-media@vger.kernel.org>; Thu,  3 Aug 2023 18:43:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 296D161ED0
-        for <linux-media@vger.kernel.org>; Fri,  4 Aug 2023 01:43:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39709C433C8
-        for <linux-media@vger.kernel.org>; Fri,  4 Aug 2023 01:43:22 +0000 (UTC)
-Date:   Fri, 04 Aug 2023 03:43:20 +0200
-Message-ID: <5ae7c142df84f5c5e48d3b064efb03c6.hverkuil@xs4all.nl>
-From:   "Hans Verkuil" <hverkuil-cisco@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
+        with ESMTP id S233894AbjHDDPf (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Aug 2023 23:15:35 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D194EDD
+        for <linux-media@vger.kernel.org>; Thu,  3 Aug 2023 20:14:14 -0700 (PDT)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RH9hS5zQ9ztRmS;
+        Fri,  4 Aug 2023 11:10:48 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by kwepemi500008.china.huawei.com
+ (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 4 Aug
+ 2023 11:14:12 +0800
+From:   Ruan Jinjie <ruanjinjie@huawei.com>
+To:     <mchehab@kernel.org>, <hverkuil-cisco@xs4all.nl>,
+        <j.neuschaefer@gmx.net>, <u.kleine-koenig@pengutronix.de>,
+        <linux-media@vger.kernel.org>
+CC:     <ruanjinjie@huawei.com>
+Subject: [PATCH -next 2/3] media: radio-wl1273: Remove an unnecessary ternary operator
+Date:   Fri, 4 Aug 2023 11:13:22 +0800
+Message-ID: <20230804031323.2105187-3-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230804031323.2105187-1-ruanjinjie@huawei.com>
+References: <20230804031323.2105187-1-ruanjinjie@huawei.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.90.53.73]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500008.china.huawei.com (7.221.188.139)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the architectures in the list below.
+There is a ternary operator, the true or false judgement of which
+is unnecessary in C language semantics.
 
-Results of the daily build of media_tree:
+Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
+---
+ drivers/media/radio/radio-wl1273.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-date:			Fri Aug  4 03:00:10 CEST 2023
-media-tree git branch:	media_stage/master
-media-tree git hash:	a0e657a03ffbd26332f316f13c3e5dbc98cb1fca
-v4l-utils git hash:	a0c26a97308ea1c5e809245df570e2f04e668168
-edid-decode git hash:	a31e680438789d45207497bf999a20cf6e2c0ec1
-gcc version:		i686-linux-gcc (GCC) 13.2.0
-sparse repo:            git://git.kernel.org/pub/scm/devel/sparse/sparse.git
-sparse version:		v0.6.4-39-gce1a6720
-smatch repo:            git://repo.or.cz/smatch.git
-smatch version:		v0.5.0-8446-g178bea2c
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: 62307f000de00d7fb26343003dea10c805fc8a24
-host hardware:		x86_64
-host os:		6.1.0-5-amd64
+diff --git a/drivers/media/radio/radio-wl1273.c b/drivers/media/radio/radio-wl1273.c
+index e8166eac9efe..f6b98c304b72 100644
+--- a/drivers/media/radio/radio-wl1273.c
++++ b/drivers/media/radio/radio-wl1273.c
+@@ -1020,7 +1020,7 @@ static int wl1273_fm_set_rds(struct wl1273_device *radio, unsigned int new_mode)
+ 	}
+ 
+ 	if (!r)
+-		radio->rds_on = (new_mode == WL1273_RDS_ON) ? true : false;
++		radio->rds_on = new_mode == WL1273_RDS_ON;
+ 
+ 	return r;
+ }
+-- 
+2.34.1
 
-linux-git-powerpc64: OK
-linux-git-arm: OK
-linux-git-arm64: OK
-linux-git-i686: OK
-linux-git-x86_64: OK
-no-of.config: OK
-no-pm.config: OK
-no-pm-sleep.config: OK
-no-debug-fs.config: OK
-Check COMPILE_TEST: WARNINGS: VIDEOBUF_VMALLOC VIDEOBUF_DMA_CONTIG
-Check for strcpy/strncpy/strlcpy: OK
-utils: OK
-spec-git: OK
-virtme: WARNINGS: Final Summary: 3080, Succeeded: 3080, Failed: 0, Warnings: 4
-virtme-32: OK: Final Summary: 3193, Succeeded: 3193, Failed: 0, Warnings: 0
-Check pahole: ABI OK
-kerneldoc: OK
-
-Detailed results are available here:
-
-https://hverkuil.home.xs4all.nl/logs/Friday.log
-
-Detailed regression test results are available here:
-
-https://hverkuil.home.xs4all.nl/logs/Friday-test-media.log
-https://hverkuil.home.xs4all.nl/logs/Friday-test-media-32.log
-https://hverkuil.home.xs4all.nl/logs/Friday-test-media-dmesg.log
-
-Full logs are available here:
-
-https://hverkuil.home.xs4all.nl/logs/Friday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-https://hverkuil.home.xs4all.nl/spec/index.html
