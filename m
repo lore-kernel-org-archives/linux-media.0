@@ -2,88 +2,119 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4A49EB64DD
-	for <linux-media@archiver.kernel.org>; Mon,  7 Aug 2023 10:09:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76F60C41513
+	for <linux-media@archiver.kernel.org>; Mon,  7 Aug 2023 10:24:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230495AbjHGKJt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Aug 2023 06:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48032 "EHLO
+        id S231246AbjHGKYd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Aug 2023 06:24:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbjHGKJt (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Aug 2023 06:09:49 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0755D10F1
-        for <linux-media@vger.kernel.org>; Mon,  7 Aug 2023 03:09:47 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3FB002C6;
-        Mon,  7 Aug 2023 12:08:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1691402919;
-        bh=r7n5d8aQgUNNQvScA/F/aKOfTnT3JKxcZ9aAJ3LCwd0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lwyUJFiiIBNTdI6HWqbGCAvVMShKo+buafbl4Lc7r9x3owDeiv4s5FLt/4P0SDXpK
-         F9dyhxCFPyxWT46fdOCov9aAXEmSstIUgOKpi1LTTSSv6UQbxN49kSksZ35pBTevN1
-         wOz43d//pjrZP/0m8NVNBId8UcbG8OSgXDkuwG0s=
-Date:   Mon, 7 Aug 2023 13:09:51 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-media@vger.kernel.org, wentong.wu@intel.com
-Subject: Re: [PATCH v2 1/1] media: ivsc: Improve Kconfig help text
-Message-ID: <20230807100951.GK12951@pendragon.ideasonboard.com>
-References: <20230807074059.3028144-1-sakari.ailus@linux.intel.com>
+        with ESMTP id S229787AbjHGKYc (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Aug 2023 06:24:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EEE510F4;
+        Mon,  7 Aug 2023 03:24:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B738C6178A;
+        Mon,  7 Aug 2023 10:24:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91344C433C8;
+        Mon,  7 Aug 2023 10:24:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691403870;
+        bh=kIxXXpUAI67ManDrcGXE3YDE4EVMXn6NSEkXJ/fOOpc=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=J9MfkH41er9naJzIKmcUvOMwb+y45aHUagRy050m1jH5jq0vWRz9z+qJpVXi2KvpR
+         hCwoIssCZ06zgHKlWimHqw6LEbN7IbKkc92cu4rUsrirFuBgMEgXFQwoJb0r3SOv5L
+         2u94SOUH1q2fqdVAMEhnE7CjTLhNWzcLkGsuGir2NE2nS3UG8gWMdaaIyVkVzjH/DJ
+         dvHQeQ8rEYS7Ecu7sK2RDVAV+6LixGftRs5imgYosYbsNb+GLJwxlB+FweRV4B6rcO
+         V8mlURxgh0HN+dj0VQKUf82CUi+Hknx5ChATup/VNmFcKZaqpPdNaJrPLvotdcgp5z
+         5L5Z4IFV/hNdQ==
+Received: (nullmailer pid 791243 invoked by uid 1000);
+        Mon, 07 Aug 2023 10:24:27 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230807074059.3028144-1-sakari.ailus@linux.intel.com>
+From:   Rob Herring <robh@kernel.org>
+To:     Julien Stephan <jstephan@baylibre.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        Florian Sylvestre <fsylvestre@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Phi-Bang Nguyen <pnguyen@baylibre.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Hsieh <andy.hsieh@mediatek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Louis Kuo <louis.kuo@mediatek.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Moudy Ho <moudy.ho@mediatek.com>
+In-Reply-To: <20230807094940.329165-2-jstephan@baylibre.com>
+References: <20230807094940.329165-1-jstephan@baylibre.com>
+ <20230807094940.329165-2-jstephan@baylibre.com>
+Message-Id: <169140386586.791137.15518824950356939117.robh@kernel.org>
+Subject: Re: [PATCH v3 1/4] dt-bindings: media: add mediatek ISP3.0 sensor
+ interface
+Date:   Mon, 07 Aug 2023 04:24:27 -0600
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sakari,
 
-Thank you for the patch.
-
-On Mon, Aug 07, 2023 at 10:40:59AM +0300, Sakari Ailus wrote:
-> Improve the Kconfig help text to convey the ACE is for changing camera
-> sensor ownership and CSI for configuring the CSI-2 rx and tx.
+On Mon, 07 Aug 2023 11:48:10 +0200, Julien Stephan wrote:
+> From: Louis Kuo <louis.kuo@mediatek.com>
 > 
-> Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> This adds the bindings, for the mediatek ISP3.0 SENINF module embedded in
+> some Mediatek SoC, such as the mt8365
+> 
+> Signed-off-by: Louis Kuo <louis.kuo@mediatek.com>
+> Signed-off-by: Phi-Bang Nguyen <pnguyen@baylibre.com>
+> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Signed-off-by: Julien Stephan <jstephan@baylibre.com>
 > ---
-> since v1:
+>  .../media/mediatek,mt8365-seninf.yaml         | 259 ++++++++++++++++++
+>  MAINTAINERS                                   |   7 +
+>  2 files changed, 266 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mt8365-seninf.yaml
 > 
-> - Reworded most of the help text.
-> 
->  drivers/media/pci/intel/ivsc/Kconfig | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/media/pci/intel/ivsc/Kconfig b/drivers/media/pci/intel/ivsc/Kconfig
-> index 9535ac10f4f7..ec4ade92f583 100644
-> --- a/drivers/media/pci/intel/ivsc/Kconfig
-> +++ b/drivers/media/pci/intel/ivsc/Kconfig
-> @@ -7,6 +7,12 @@ config INTEL_VSC
->  	help
->  	  This adds support for Intel Visual Sensing Controller (IVSC).
->  
-> -	  Enables the IVSC firmware services required for controlling
-> -	  camera sensor ownership and CSI-2 link through Image Processing
-> -	  Unit(IPU) driver of Intel.
-> +	  The IVSC support is split into two devices, ACE (Algorithm
-> +	  Context Engine) and CSI (Camera Serial Interface), each of which
-> +	  have their own drivers. The ACE is used to select the ownership
-> +	  of the sensor between the IVSC and the host CPU while the CSI is
-> +	  used to both select the routing destination for the data the
-> +	  sensor transmits over the CSI-2 bus between the IVSC and the
-> +	  host CPU and to configure the CSI-2 bus itself.
-> +
-> +	  The modules will be called ivsc-ace and ivsc-csi.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Side question though: as those two modules are always used together,
-could they be squashed into a single module ?
+yamllint warnings/errors:
 
--- 
-Regards,
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/media/mediatek,mt8365-seninf.example.dts:28:18: fatal error: dt-bindings/power/mediatek,mt8365-power.h: No such file or directory
+   28 |         #include <dt-bindings/power/mediatek,mt8365-power.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[2]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/media/mediatek,mt8365-seninf.example.dtb] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [/builds/robherring/dt-review-ci/linux/Makefile:1500: dt_binding_check] Error 2
+make: *** [Makefile:234: __sub-make] Error 2
 
-Laurent Pinchart
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230807094940.329165-2-jstephan@baylibre.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
