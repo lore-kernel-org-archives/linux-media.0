@@ -2,205 +2,365 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD9F5C001DE
-	for <linux-media@archiver.kernel.org>; Tue,  8 Aug 2023 16:41:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DB3DC001B0
+	for <linux-media@archiver.kernel.org>; Tue,  8 Aug 2023 16:43:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233256AbjHHQlR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 8 Aug 2023 12:41:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39222 "EHLO
+        id S232488AbjHHQni (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Aug 2023 12:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231899AbjHHQkX (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Aug 2023 12:40:23 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0989B15BA8
-        for <linux-media@vger.kernel.org>; Tue,  8 Aug 2023 08:54:39 -0700 (PDT)
+        with ESMTP id S232490AbjHHQms (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Aug 2023 12:42:48 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EBB216568
+        for <linux-media@vger.kernel.org>; Tue,  8 Aug 2023 08:55:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691510079; x=1723046079;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Hx11XmaiU2/u/WWDrt4UMPCOITZ2kZMzTc86vWMpghU=;
-  b=grQYbtCc7/vymrzsYE936kgNHWO1t62xKDg9jrpIwKBNSYurXUZ54GMX
-   NykMOW7eCsL4axkpaFbrV+RVJ8nlMtekwNZr0E3GDjly2FbmcR+u1o9mv
-   JJxW0jdH5HdVTWJNOAu7V4NSUalrxCST8qz6qZoCgJ1WmLRhsMiNwa+Tn
-   X4/WFV8RphxmgYVycVroPf0jOgLs8mYxOkVJKWKVvASjDSemDrKtXXne4
-   /idK3rcJ3ex29ZN5kfr7zMgo5/klVSiJfsRD/HN69R9ChXU1FyaI06GEF
-   wz8VbQfd5JrWA/ZLS8wBXKGnYBWvUmSi7wibC/rKtouVmLg4i28yvIJYe
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="437078442"
+  t=1691510126; x=1723046126;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=B/UTzExT+AA5PHDSza/sBvtJLnsA/4Al/m8pE6Z6jdk=;
+  b=Lpj25K0W9flM9N8blocPzltjb2KPOtjffm4J6T7pt/tqBwASx+XBWqKu
+   44KHxCdA5MVQkDaqnt4NyzFUM0sAwu70FHJllDnC8+KHpOH/FFbOfWMKY
+   OOkRm6MVnD048cyAdeKswspEGvtKM4IJaMgPlhrGwICSQUVc4BHuLxref
+   CtNV5u0sN+aGsr1Hrwx4uu2txqijNTjSJ7HBszsBQNqyN3tHZ3dajbPJy
+   ffSGgiqDZc+QzJ+DRT/i9kpUK1Wg2ysmAxZFeZCd6/vXQHFIyGGfQ95NZ
+   weGtImK1/hN3COl1R2mS5XQrKCBYl8jeYT6MdHzMAaapposBBCxKUt4kM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="369648840"
 X-IronPort-AV: E=Sophos;i="6.01,263,1684825200"; 
-   d="scan'208";a="437078442"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2023 00:48:53 -0700
+   d="scan'208";a="369648840"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2023 00:56:05 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="681145974"
-X-IronPort-AV: E=Sophos;i="6.01,263,1684825200"; 
-   d="scan'208";a="681145974"
+X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
+   d="scan'208";a="874627372"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2023 00:48:51 -0700
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id BC6F811FAE0;
-        Tue,  8 Aug 2023 10:48:48 +0300 (EEST)
-Date:   Tue, 8 Aug 2023 07:48:48 +0000
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2023 00:56:06 -0700
+Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 970B512033A;
+        Tue,  8 Aug 2023 10:56:00 +0300 (EEST)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
+        (envelope-from <sakari.ailus@linux.intel.com>)
+        id 1qTHZE-00ClsX-0g;
+        Tue, 08 Aug 2023 10:55:48 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     linux-media@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+To:     linux-media@vger.kernel.org
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         tomi.valkeinen@ideasonboard.com, bingbu.cao@intel.com,
-        hongju.wang@intel.com,
+        hongju.wang@intel.com, hverkuil@xs4all.nl,
         Andrey Konovalov <andrey.konovalov@linaro.org>,
         Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
         Dmitry Perchanov <dmitry.perchanov@intel.com>
-Subject: Re: [PATCH v2 0/9] Generic line based metadata support, internal pads
-Message-ID: <ZNHzYEemlKpGmqM8@kekkonen.localdomain>
-References: <20230802214556.180589-1-sakari.ailus@linux.intel.com>
- <68805434-dd30-8da8-d4b6-48b5cf669633@xs4all.nl>
+Subject: [PATCH v3 04/10] media: uapi: Add generic serial metadata mbus formats
+Date:   Tue,  8 Aug 2023 10:55:32 +0300
+Message-Id: <20230808075538.3043934-5-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230808075538.3043934-1-sakari.ailus@linux.intel.com>
+References: <20230808075538.3043934-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <68805434-dd30-8da8-d4b6-48b5cf669633@xs4all.nl>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans,
+Add generic serial metadata mbus formats. These formats describe data
+width and packing but not the content itself. The reason for specifying
+such formats is that the formats as such are fairly device specific but
+they are still handled by CSI-2 receiver drivers that should not be aware
+of device specific formats. What makes generic metadata formats possible
+is that these formats are parsed by software only, after capturing the
+data to system memory.
 
-On Tue, Aug 08, 2023 at 09:42:07AM +0200, Hans Verkuil wrote:
-> On 02/08/2023 23:45, Sakari Ailus wrote:
-> > Hi folks,
-> > 
-> > Here are a few patches to add support generic, line based metadata as well
-> > as internal pads. While the amount of code is not very large, to the
-> > contrary it is quite small actually IMO, I presume what this is about and
-> > why it is being proposed requires some explaining.
-> > 
-> > Metadata mbus codes and formats have existed for some time in V4L2. They
-> > however have been only used by drivers that produce the data itself and
-> > effectively this metadata has always been statistics of some sort (at
-> > least when it comes to ISPs). What is different here is that we intend to
-> > add support for metadata originating from camera sensors.
-> > 
-> > Camera sensors produce different kinds of metadata, embedded data (usually
-> > register address--value pairs used to capture the frame, in a more or less
-> > sensor specific format), histograms (in a very sensor specific format),
-> > dark pixels etc. The number of these formats is probably going to be about
-> > as large as image data formats if not larger, as the image data formats
-> > are much better standardised but a smaller subset of them will be
-> > supported by V4L2, at least initially but possibly much more in the long
-> > run.
-> > 
-> > Having this many device specific formats would be a major problem for all
-> > the other drivers along that pipeline (not to mention the users of those
-> > drivers), including bridge (e.g. CSI-2 to parallel) but especially CSI-2
-> > receiver drivers that have DMA: the poor driver developer would not only
-> > need to know camera sensor specific formats but to choose the specific
-> > packing of that format suitable for the DMA used by the hardware. It is
-> > unlikely many of these would ever get tested while being present on the
-> > driver API. Also adding new sensors with new embedded data formats would
-> > involve updating all bridge and CSI-2 receiver drivers. I don't expect
-> > this to be a workable approach.
-> > 
-> > Instead what I'm proposing is to use specific metadata formats on the
-> > sensor devices only, on internal pads (more about those soon) of the
-> > sensors, only visible in the UAPI, and then generic mbus formats along the
-> > pipeline and finally generic V4L2 metadata formats on the DMAs (specific
-> > to bit depth and packing). This would unsnarl the two, defining what data
-> > there is (specific mbus code) and how that is transported and packed
-> > (generic mbus codes and V4L2 formats).
-> > 
-> > The user space would be required to "know" the path of that data from the
-> > sensor's internal pad to the V4L2 video node. I do not see this as these
-> > devices require at least some knowledge of the pipeline, i.e. hardware at
-> > hand. Separating what the data means and how it is packed may even be
-> > beneficial: it allows separating code that interprets the data (sensor
-> > internal mbus code) from the code that accesses it (packing).
-> > 
-> > These formats are in practice line based, meaning that there may be
-> > padding at the end of the line, depending on the bus as well as the DMA.
-> > If non-line based formats are needed, it is always possible to set the
-> > "height" field to 1.
-> > 
-> > The internal (source) pads are an alternative to source routes [1]. The
-> > source routes were not universally liked and I do have to say I like
-> > re-using existing interface concepts (pads and everything you can do with
-> > pads, including access format, selections etc.) wherever it makes sense,
-> > instead of duplicating functionality.
-> > 
-> > Effectively internal source pads behave mostly just like sink pads, but
-> > they describe a flow of data that originates from a sub-device instead of
-> > arriving to a sub-device. The SUBDEV_S_ROUTING IOCTLs are used to enable
-> > and disable routes from internal source pads to sub-device's source pads.
-> > The subdev format IOCTLs are usable, too, so one can find which subdev
-> > format is available on given internal source pad.
-> > 
-> > This set depends on these patches:
-> > 
-> > <URL:https://lore.kernel.org/linux-media/20230505205416.55002-1-sakari.ailus@linux.intel.com/T/#t>
-> > 
-> > I've also pushed these here and I'll keep updating the branch:
-> > 
-> > <URL:https://git.linuxtv.org/sailus/media_tree.git/log/?h=metadata>
-> > 
-> > Questions and comments are most welcome.
-> > 
-> > Driver support is to be added, as well as an example.
-> > 
-> > [1] <URL:https://lore.kernel.org/linux-media/20220831141357.1396081-20-tomi.valkeinen@ideasonboard.com/>
-> > 
-> > since v2:
-> > 
-> > - Added an example demonstrating the use of internal pads. --- Is the
-> >   level of detail enough for the purpose?
-> > 
-> > - Improved documentation.
-> > 
-> > - Added a macro to tell whether a format is a metadata format.
-> >   (Documentation could be added.)
-> > 
-> > - A small ReST syntax fix in the same section.
-> > 
-> > - Drop leftovers of a patch checking for the INTERNAL_SOURCE flag.
-> > 
-> > since v1:
-> > 
-> > - Make the new pad flag just "INTERNAL", requiring either SINK or SOURCE
-> >   pad flag to accompany it. Removed the union in struct v4l2_subdev_route.
-> > 
-> > - Add the term "stream" to MC glossary.
-> > 
-> > - Improved and fixed documentation (according to comments).
-> > 
-> > - Note these formats are little endian.
-> > 
-> > - Remove 1X8 from the names of the mbus codes. These formats have generally
-> >   8 bits per pixel.
-> > 
-> > - Fix mbus code numbering (had holes in RFC).
-> > 
-> > - Add new metadata fields to debug prints.
-> > 
-> > - Fix a minor documentation build issue.
-> > 
-> > Sakari Ailus (9):
-> >   media: Documentation: Align numbered list
-> >   media: mc: Check pad flag validity
-> >   media: mc: Add INTERNAL pad flag
-> >   media: uapi: v4l: Document source routes
-> >   media: uapi: Add generic serial metadata mbus formats
-> >   media: uapi: Document which mbus format fields are valid for metadata
-> >   media: uapi: Add a macro to tell whether an mbus code is metadata
-> >   media: uapi: Add generic 8-bit metadata format definitions
-> >   media: v4l: Support line-based metadata capture
-> 
-> FYI: building the documentation results in these warnings:
-> 
-> Documentation/media/userspace-api/glossary.rst:117: WARNING: term not in glossary: 'V4L2 API'
-> Documentation/media/userspace-api/glossary.rst:130: WARNING: term not in glossary: 'V4L2 Hardware'
-> Documentation/media/userspace-api/glossary.rst:194: WARNING: term not in glossary: 'V4L2 API'
-> Documentation/media/userspace-api/glossary.rst:207: WARNING: term not in glossary: 'V4L2 API'
-> Documentation/media/userspace-api/glossary.rst:207: WARNING: term not in glossary: 'V4L2 Sub-device'
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ .../media/v4l/subdev-formats.rst              | 257 ++++++++++++++++++
+ include/uapi/linux/media-bus-format.h         |   9 +
+ 2 files changed, 266 insertions(+)
 
-I've seen them, too. I'll post fixes some time soon...
-
+diff --git a/Documentation/userspace-api/media/v4l/subdev-formats.rst b/Documentation/userspace-api/media/v4l/subdev-formats.rst
+index a3a35eeed708..c615da08502d 100644
+--- a/Documentation/userspace-api/media/v4l/subdev-formats.rst
++++ b/Documentation/userspace-api/media/v4l/subdev-formats.rst
+@@ -8234,3 +8234,260 @@ The following table lists the existing metadata formats.
+ 	both sides of the link and the bus format is a fixed
+ 	metadata format that is not configurable from userspace.
+ 	Width and height will be set to 0 for this format.
++
++Generic Serial Metadata Formats
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++
++Generic serial metadata formats are used on serial busses where the actual data
++content is more or less device specific but the data is transmitted and received
++by multiple devices that do not process the data in any way, simply writing
++it to system memory for processing in software at the end of the pipeline.
++
++The more specific variant describing the actual data is used on the internal
++source pad of the originating sub-device.
++
++"b" in an array cell signifies a byte of data, followed by the number of byte
++and finally the bit number in subscript. "p" indicates a padding bit.
++
++.. _media-bus-format-generic-meta:
++
++.. cssclass: longtable
++
++.. flat-table:: Generic Serial Metadata Formats
++    :header-rows:  2
++    :stub-columns: 0
++
++    * - Identifier
++      - Code
++      -
++      - :cspan:`23` Data organization
++    * -
++      -
++      - Bit
++      - 23
++      - 22
++      - 21
++      - 20
++      - 19
++      - 18
++      - 17
++      - 16
++      - 15
++      - 14
++      - 13
++      - 12
++      - 11
++      - 10
++      - 9
++      - 8
++      - 7
++      - 6
++      - 5
++      - 4
++      - 3
++      - 2
++      - 1
++      - 0
++    * .. _MEDIA-BUS-FMT-META-8:
++
++      - MEDIA_BUS_FMT_META_8
++      - 0x8001
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      - b0\ :sub:`7`
++      - b0\ :sub:`6`
++      - b0\ :sub:`5`
++      - b0\ :sub:`4`
++      - b0\ :sub:`3`
++      - b0\ :sub:`2`
++      - b0\ :sub:`1`
++      - b0\ :sub:`0`
++    * .. _MEDIA-BUS-FMT-META-10:
++
++      - MEDIA_BUS_FMT_META_10
++      - 0x8002
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      - b0\ :sub:`7`
++      - b0\ :sub:`6`
++      - b0\ :sub:`5`
++      - b0\ :sub:`4`
++      - b0\ :sub:`3`
++      - b0\ :sub:`2`
++      - b0\ :sub:`1`
++      - b0\ :sub:`0`
++      - p
++      - p
++    * .. _MEDIA-BUS-FMT-META-12:
++
++      - MEDIA_BUS_FMT_META_12
++      - 0x8003
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      - b0\ :sub:`7`
++      - b0\ :sub:`6`
++      - b0\ :sub:`5`
++      - b0\ :sub:`4`
++      - b0\ :sub:`3`
++      - b0\ :sub:`2`
++      - b0\ :sub:`1`
++      - b0\ :sub:`0`
++      - p
++      - p
++      - p
++      - p
++    * .. _MEDIA-BUS-FMT-META-14:
++
++      - MEDIA_BUS_FMT_META_14
++      - 0x8004
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      - b0\ :sub:`7`
++      - b0\ :sub:`6`
++      - b0\ :sub:`5`
++      - b0\ :sub:`4`
++      - b0\ :sub:`3`
++      - b0\ :sub:`2`
++      - b0\ :sub:`1`
++      - b0\ :sub:`0`
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++    * .. _MEDIA-BUS-FMT-META-16:
++
++      - MEDIA_BUS_FMT_META_16
++      - 0x8005
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      - b0\ :sub:`7`
++      - b0\ :sub:`6`
++      - b0\ :sub:`5`
++      - b0\ :sub:`4`
++      - b0\ :sub:`3`
++      - b0\ :sub:`2`
++      - b0\ :sub:`1`
++      - b0\ :sub:`0`
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++    * .. _MEDIA-BUS-FMT-META-20:
++
++      - MEDIA_BUS_FMT_META_20
++      - 0x8007
++      -
++      -
++      -
++      -
++      -
++      - b0\ :sub:`7`
++      - b0\ :sub:`6`
++      - b0\ :sub:`5`
++      - b0\ :sub:`4`
++      - b0\ :sub:`3`
++      - b0\ :sub:`2`
++      - b0\ :sub:`1`
++      - b0\ :sub:`0`
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++    * .. _MEDIA-BUS-FMT-META-24:
++
++      - MEDIA_BUS_FMT_META_24
++      - 0x8009
++      -
++      - b0\ :sub:`7`
++      - b0\ :sub:`6`
++      - b0\ :sub:`5`
++      - b0\ :sub:`4`
++      - b0\ :sub:`3`
++      - b0\ :sub:`2`
++      - b0\ :sub:`1`
++      - b0\ :sub:`0`
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
+diff --git a/include/uapi/linux/media-bus-format.h b/include/uapi/linux/media-bus-format.h
+index a03c543cb072..9ee031397372 100644
+--- a/include/uapi/linux/media-bus-format.h
++++ b/include/uapi/linux/media-bus-format.h
+@@ -173,4 +173,13 @@
+  */
+ #define MEDIA_BUS_FMT_METADATA_FIXED		0x7001
+ 
++/* Generic line based metadata formats for serial buses. Next is 0x8008. */
++#define MEDIA_BUS_FMT_META_8			0x8001
++#define MEDIA_BUS_FMT_META_10			0x8002
++#define MEDIA_BUS_FMT_META_12			0x8003
++#define MEDIA_BUS_FMT_META_14			0x8004
++#define MEDIA_BUS_FMT_META_16			0x8005
++#define MEDIA_BUS_FMT_META_20			0x8006
++#define MEDIA_BUS_FMT_META_24			0x8007
++
+ #endif /* __LINUX_MEDIA_BUS_FORMAT_H */
 -- 
-Sakari Ailus
+2.39.2
+
