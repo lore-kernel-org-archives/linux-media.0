@@ -2,229 +2,264 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79C5AC04A94
-	for <linux-media@archiver.kernel.org>; Tue,  8 Aug 2023 19:22:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CEB4C04A94
+	for <linux-media@archiver.kernel.org>; Tue,  8 Aug 2023 20:23:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235991AbjHHTWg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 8 Aug 2023 15:22:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47120 "EHLO
+        id S234719AbjHHUXu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Aug 2023 16:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236273AbjHHTWK (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Aug 2023 15:22:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D32410F218
-        for <linux-media@vger.kernel.org>; Tue,  8 Aug 2023 09:45:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 711C362384
-        for <linux-media@vger.kernel.org>; Tue,  8 Aug 2023 07:15:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41822C433C8;
-        Tue,  8 Aug 2023 07:15:46 +0000 (UTC)
-Message-ID: <155a002b-49fd-3af2-c005-895eab63016d@xs4all.nl>
-Date:   Tue, 8 Aug 2023 09:15:44 +0200
+        with ESMTP id S233036AbjHHUX3 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Aug 2023 16:23:29 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003A86F496;
+        Tue,  8 Aug 2023 12:32:44 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 378AKTV7058696;
+        Tue, 8 Aug 2023 05:20:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1691490029;
+        bh=Za0MR4v1fVOF2qHn0ewCYkUS5wpEICwto9vMGMpyJpQ=;
+        h=Date:Subject:From:To:CC:References:In-Reply-To;
+        b=D7rwNMDnZ06kElLOcu30L/VbcKK1hjUnlhcJ4CumEwM+xSsjXF1MI/JeqhZSBDm0y
+         eWE4OCl66SbQxSRFD+/acdxeDFEcaKyn/CNnCvbRUUPNb0Bla9u8raR9DDXvX/oS3z
+         obnV7nSS47kO1c2UQy/fLUDtJHBgg3YtXHOY+IMk=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 378AKTBY130443
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 8 Aug 2023 05:20:29 -0500
+Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 8
+ Aug 2023 05:20:29 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 8 Aug 2023 05:20:29 -0500
+Received: from [172.24.227.6] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 378AKO4I007292;
+        Tue, 8 Aug 2023 05:20:24 -0500
+Message-ID: <50d97c30-4926-0bbf-1209-dfd25043e359@ti.com>
+Date:   Tue, 8 Aug 2023 15:50:23 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v6 5/8] v4l2-ctl/compliance: Add simple routing test
-Content-Language: en-US, nl
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
-        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        niklas.soderlund+renesas@ragnatech.se,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        satish.nagireddy@getcruise.com
-References: <20230720075044.442021-1-tomi.valkeinen@ideasonboard.com>
- <20230720075044.442021-6-tomi.valkeinen@ideasonboard.com>
- <2c282976-5890-8da9-ac6b-cdc642ab9d99@xs4all.nl>
- <94fefde1-02c9-6034-72cc-e6a30aa3f786@ideasonboard.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <94fefde1-02c9-6034-72cc-e6a30aa3f786@ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] dt-bindings: media: Add bindings for Imagination E5010
+ JPEG Encoder driver
+Content-Language: en-US
+From:   Devarsh Thakkar <devarsht@ti.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <mchehab@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <praneeth@ti.com>, <nm@ti.com>, <vigneshr@ti.com>,
+        <a-bhatia1@ti.com>, <j-luthra@ti.com>, <b-brnich@ti.com>,
+        <detheridge@ti.com>, <p-mantena@ti.com>, <vijayp@ti.com>
+References: <20230726162615.1270075-1-devarsht@ti.com>
+ <b6bddd59-ac78-3f75-828e-cff54766fc72@linaro.org>
+ <8fef77fb-d3bf-eab1-0734-919ebf2e61af@ti.com>
+In-Reply-To: <8fef77fb-d3bf-eab1-0734-919ebf2e61af@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 08/08/2023 07:56, Tomi Valkeinen wrote:
-> On 02/08/2023 16:54, Hans Verkuil wrote:
->> On 20/07/2023 09:50, Tomi Valkeinen wrote:
->>> Add a simple test for VIDIOC_SUBDEV_G_ROUTING/VIDIOC_SUBDEV_S_ROUTING.
+Hi Krzysztof,
+
+On 27/07/23 19:58, Devarsh Thakkar wrote:
+> Hi Krzysztof,
+> 
+> Thanks for the quick review.
+> 
+> On 26/07/23 22:03, Krzysztof Kozlowski wrote:
+>> On 26/07/2023 18:26, Devarsh Thakkar wrote:
+>>> Add dt-bindings for Imagination E5010 JPEG Encoder driver which is
+>>> implemented as stateful V4L2 M2M driver.
 >>>
->>> We can't (at least at the moment) really know here what kind of routings
->>> the driver would accept, but we can test a VIDIOC_SUBDEV_G_ROUTING call,
->>> followed by a VIDIOC_SUBDEV_S_ROUTING call with the routing we
->>> received.
->>>
->>> Additionally, we can check that the returned pads and flags look fine,
->>> and also that setting obviously invalid routing will fail.
->>>
->>> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+>>> Co-developed-by: David Huang <d-huang@ti.com>
+>>> Signed-off-by: David Huang <d-huang@ti.com>
+>>
+>> A nit, subject: drop second/last, redundant "bindings for". The
+>> "dt-bindings" prefix is already stating that these are bindings.
+>>
+>> Drop also "driver". Bindings are for hardware, not drivers.
+>>
+>> Prefix starts with media and then dt-bindings.
+>>
+> 
+> Agreed.
+>>
+>>> Signed-off-by: Devarsh Thakkar <devarsht@ti.com>
 >>> ---
->>>   utils/v4l2-compliance/v4l2-compliance.cpp   | 12 ++++
->>>   utils/v4l2-compliance/v4l2-compliance.h     |  1 +
->>>   utils/v4l2-compliance/v4l2-test-subdevs.cpp | 74 +++++++++++++++++++++
->>>   3 files changed, 87 insertions(+)
+>>>  .../bindings/media/img,e5010-jpeg-enc.yaml    | 79 +++++++++++++++++++
+>>>  MAINTAINERS                                   |  5 ++
+>>>  2 files changed, 84 insertions(+)
+>>>  create mode 100644 Documentation/devicetree/bindings/media/img,e5010-jpeg-enc.yaml
 >>>
->>> diff --git a/utils/v4l2-compliance/v4l2-compliance.cpp b/utils/v4l2-compliance/v4l2-compliance.cpp
->>> index e8359b2f..4b232314 100644
->>> --- a/utils/v4l2-compliance/v4l2-compliance.cpp
->>> +++ b/utils/v4l2-compliance/v4l2-compliance.cpp
->>> @@ -1249,6 +1249,18 @@ void testNode(struct node &node, struct node &node_m2m_cap, struct node &expbuf_
->>>           node.is_passthrough_subdev = has_source && has_sink;
->>>             if (has_routes) {
->>> +            printf("Sub-Device routing ioctls:\n");
+>>> diff --git a/Documentation/devicetree/bindings/media/img,e5010-jpeg-enc.yaml b/Documentation/devicetree/bindings/media/img,e5010-jpeg-enc.yaml
+>>> new file mode 100644
+>>> index 000000000000..0060373eace7
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/media/img,e5010-jpeg-enc.yaml
+>>> @@ -0,0 +1,79 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/media/img,e5010-jpeg-enc.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 >>> +
->>> +            for (unsigned which = V4L2_SUBDEV_FORMAT_TRY;
->>> +                which <= V4L2_SUBDEV_FORMAT_ACTIVE; which++) {
+>>> +title: Imagination E5010 JPEG Encoder
 >>> +
->>> +                printf("\ttest %s VIDIOC_SUBDEV_G_ROUTING/VIDIOC_SUBDEV_S_ROUTING: %s\n",
->>> +                       which ? "Active" : "Try",
->>> +                       ok(testSubDevRouting(&node, which)));
->>> +            }
+>>> +maintainers:
+>>> +  - Devarsh Thakkar <devarsht@ti.com>
 >>> +
->>> +            printf("\n");
+>>> +description: |
+>>> +  The E5010 is a JPEG encoder from Imagination Technologies implemented on
+>>> +  TI's AM62A SoC. It is capable of real time encoding of YUV420 and YUV422
+>>> +  inputs to JPEG and M-JPEG. It supports baseline JPEG Encoding up to
+>>> +  8Kx8K resolution.
 >>> +
->>>               for (unsigned which = V4L2_SUBDEV_FORMAT_TRY;
->>>                   which <= V4L2_SUBDEV_FORMAT_ACTIVE; which++) {
->>>   diff --git a/utils/v4l2-compliance/v4l2-compliance.h b/utils/v4l2-compliance/v4l2-compliance.h
->>> index 0cd43980..35b2274b 100644
->>> --- a/utils/v4l2-compliance/v4l2-compliance.h
->>> +++ b/utils/v4l2-compliance/v4l2-compliance.h
->>> @@ -375,6 +375,7 @@ int testSubDevEnum(struct node *node, unsigned which, unsigned pad, unsigned str
->>>   int testSubDevFormat(struct node *node, unsigned which, unsigned pad, unsigned stream);
->>>   int testSubDevSelection(struct node *node, unsigned which, unsigned pad, unsigned stream);
->>>   int testSubDevFrameInterval(struct node *node, unsigned pad, unsigned stream);
->>> +int testSubDevRouting(struct node *node, unsigned which);
->>>     // Buffer ioctl tests
->>>   int testReqBufs(struct node *node);
->>> diff --git a/utils/v4l2-compliance/v4l2-test-subdevs.cpp b/utils/v4l2-compliance/v4l2-test-subdevs.cpp
->>> index 5545b0dc..e59d67f7 100644
->>> --- a/utils/v4l2-compliance/v4l2-test-subdevs.cpp
->>> +++ b/utils/v4l2-compliance/v4l2-test-subdevs.cpp
->>> @@ -551,3 +551,77 @@ int testSubDevSelection(struct node *node, unsigned which, unsigned pad, unsigne
->>>         return have_sel ? 0 : ENOTTY;
->>>   }
->>> +
->>> +int testSubDevRouting(struct node *node, unsigned which)
->>> +{
->>> +    const uint32_t all_route_flags_mask = V4L2_SUBDEV_ROUTE_FL_ACTIVE;
->>> +    struct v4l2_subdev_routing routing = {};
->>> +    struct v4l2_subdev_route routes[NUM_ROUTES_MAX] = {};
->>> +    unsigned int i;
->>> +    int ret;
->>> +
->>> +    routing.which = which;
->>> +    routing.routes = (__u64)&routes;
->>> +    routing.num_routes = 0;
->>> +    memset(routing.reserved, 0xff, sizeof(routing.reserved));
->>> +
->>> +    /*
->>> +     * First test that G_ROUTING either returns success, or ENOSPC and
->>> +     * updates num_routes.
->>> +     */
->>> +
->>> +    ret = doioctl(node, VIDIOC_SUBDEV_G_ROUTING, &routing);
->>> +    fail_on_test(ret && ret != ENOSPC);
->>> +    fail_on_test(ret == ENOSPC && routing.num_routes == 0);
->>> +    fail_on_test(check_0(routing.reserved, sizeof(routing.reserved)));
->>> +
->>> +    if (routing.num_routes)
->>> +        return 0;
+>>> +properties:
+>>> +  compatible:
+>>> +    const: img,e5010-jpeg-enc
 >>
->> Shouldn't this be 'if (!routing.num_routes)'?
-> 
-> Yes...
-> 
->>> +
->>> +    /* Then get the actual routes */
->>> +
->>> +    routing.num_routes = NUM_ROUTES_MAX;
->>> +    fail_on_test(doioctl(node, VIDIOC_SUBDEV_G_ROUTING, &routing));
+>> Your description suggests that this is part of TI SoC. Pretty often
+>> licensed blocks cannot be used on their own and need some
+>> customizations. Are you sure your block does not need any customization
+>> thus no dedicated compatible is needed?
 >>
->> I assume that num_routes is always updated to the actual number of routes, right?
 > 
-> If VIDIOC_SUBDEV_G_ROUTING succeeds, yes, num_routes is updated.
+> There is a wrapper for interfacing this core with TI SoC, I will recheck this
+> interfacing but I believe nothing changes from programming perspective as
+> there is 1-to-1 maintained between the clocks and signals w.r.t actual E5010
+> core.
 > 
->> That's not actually explained clearly in the spec. It says that if the app provided
->> num_routes is too small, then it is updated, but it says nothing about what happens
->> if the app provided value is too large.
-> 
-> Ok. I need to update the doc.
-> 
->> Assuming I am right, then I would rewrite this code as follows:
+
+Just to add to above, on a second thought we think it would be  better to
+still have a separate compatible for TI as you suggested (since we have a
+wrapper) so that it allows any customization needed for future. So compatible
+enum would look like :
+
+    oneOf:
+      - items:
+        - const: ti,e5010-jpeg-enc
+        - const: img,e5010-jpeg-enc
+      - const: img,e5010-jpeg-enc
+
+Thanks for the suggestion.
+
+Regards
+Devarsh
+
+>>> +
+>>> +  reg:
+>>> +    items:
+>>> +      - description: The E5010 main register region
+>>> +      - description: The E5010 mmu register region
+>>> +
+>>> +  reg-names:
+>>> +    items:
+>>> +      - const: regjasper
+>>> +      - const: regmmu
+>>> +
 >>
->>     __u32 num_routes = routing.num_routes;
->>     routing.num_routes = num_routes + 1;
->>     fail_on_test(doioctl(node, VIDIOC_SUBDEV_G_ROUTING, &routing));
->>     fail_on_test(routing.num_routes != num_routes);
-> 
-> Yes, I think this looks fine.
-> 
-> Btw, you use __u32 above. Is there any style guide for these? I used uint32_t in this function for another variable, and I'd use it here too.
-
-It is derived from a kernel structure, and the kernel API uses __u32. So I prefer to
-use __u32 for such things. I personally think that is good practice since it helps
-indicate that it is a kernel-API-related variable.
-
-I also like it because it is shorter than uint32_t :-)
-
-Regards,
-
-	Hans
-
-> 
->>> +
->>> +    /* Check the validity of route pads and flags */
->>> +
->>> +    if (node->pads) {
->>> +        for (i = 0; i < routing.num_routes; ++i) {
->>> +            const struct v4l2_subdev_route *route = &routes[i];
->>> +            const struct media_pad_desc *sink;
->>> +            const struct media_pad_desc *source;
->>> +
->>> +            fail_on_test(route->sink_pad >= node->entity.pads);
->>> +            fail_on_test(route->source_pad >= node->entity.pads);
->>> +
->>> +            sink = &node->pads[route->sink_pad];
->>> +            source = &node->pads[route->source_pad];
->>> +
->>> +            fail_on_test(!(sink->flags & MEDIA_PAD_FL_SINK));
->>> +            fail_on_test(!(source->flags & MEDIA_PAD_FL_SOURCE));
->>> +            fail_on_test(route->flags & ~all_route_flags_mask);
->>> +        }
->>> +    }
->>> +
->>> +    /* Set the same routes back, which should always succeed. */
->>> +
->>> +    memset(routing.reserved, 0xff, sizeof(routing.reserved));
->>> +    fail_on_test(doioctl(node, VIDIOC_SUBDEV_S_ROUTING, &routing));
->>> +    fail_on_test(check_0(routing.reserved, sizeof(routing.reserved)));
->>> +
->>> +    /* Test setting invalid pads */
->>> +
->>> +    if (node->pads) {
->>> +        for (i = 0; i < routing.num_routes; ++i) {
->>> +            struct v4l2_subdev_route *route = &routes[i];
->>> +
->>> +            route->sink_pad = node->entity.pads + 1;
->>> +        }
->>> +
->>> +        memset(routing.reserved, 0xff, sizeof(routing.reserved));
->>> +        fail_on_test(doioctl(node, VIDIOC_SUBDEV_S_ROUTING, &routing) != EINVAL);
->>> +        fail_on_test(check_0(routing.reserved, sizeof(routing.reserved)));
-> 
-> After fixing the num_routes check, I noticed that this one is broken too. If S_ROUTING fails early enough, the reserved field won't get cleared, so we can't have this check here.
-> 
->>> +    }
->>> +
->>> +    return 0;
->>> +}
+>> Drop reg from both
 >>
->> Regards,
->>
->>     Hans
 > 
-
+> Agreed.
+> 
+>>> +  power-domains:
+>>> +    maxItems: 1
+>>> +
+>>> +  resets:
+>>> +    maxItems: 1
+>>> +
+>>> +  clocks:
+>>> +    minItems: 1
+>>> +    maxItems: 2
+>>
+>> You need to specify the items. Also, no variable number of clocks. Why
+>> would they vary if block is strictly defined?
+>>
+> 
+> Agreed, I believe this version of E5010 core only supports single clock, so we
+> can get rid of maxItems: 2.
+> 
+>>> +
+>>> +  clock-names:
+>>> +    minItems: 1
+>>> +    maxItems: 2
+>>
+>> Instead list the names.
+>>
+> 
+> Agreed.
+> 
+>>> +
+>>> +  interrupts:
+>>> +    maxItems: 1
+>>> +
+>>> +required:
+>>> +  - compatible
+>>> +  - reg
+>>> +  - reg-names
+>>> +  - interrupts
+>>> +  - clocks
+>>> +  - clock-names
+>>> +  - power-domains
+>>> +
+>>> +additionalProperties: false
+>>> +
+>>> +examples:
+>>> +  - |
+>>> +    #include <dt-bindings/soc/ti,sci_pm_domain.h>
+>>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>>> +
+>>> +    cbass_main {
+>>
+>> That's some weird name. Probably you meant soc. Anyway, underscores are
+>> not allowed.
+> 
+> Yes, I think I can put soc. cbass_main is specific to TI (soc interconnect bus).
+> 
+>>
+>>> +      #address-cells = <2>;
+>>> +      #size-cells = <2>;
+>>> +      e5010: e5010@fd20000 {
+>>
+>> Node names should be generic. See also an explanation and list of
+>> examples (not exhaustive) in DT specification:
+>> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+>>
+> 
+> Yes, video-codec is the nearest one, but this is not really a codec as it only
+> supports encoding, is it fine to name node as jpeg-enc ?
+> 
+>>
+>> Drop the label.
+>>
+> 
+> Agreed.
+> 
+> Best Regards,
+> Devarsh
+> 
+>>> +          compatible = "img,e5010-jpeg-enc";
+>>> +          reg = <0x00 0xfd20000 0x00 0x100>,
+>>> +                <0x00 0xfd20200 0x00 0x200>;
+>>> +          reg-names = "regjasper", "regmmu";
+>>> +          clocks = <&k3_clks 201 0>;
+>>> +          clock-names = "core_clk";
+>>> +          power-domains = <&k3_pds 201 TI_SCI_PD_EXCLUSIVE>;
+>>> +          interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
+>>> +      };
+>>> +    };
+>>
+>>
+>> Best regards,
+>> Krzysztof
+>>
