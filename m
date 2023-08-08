@@ -2,35 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9520C04FDF
-	for <linux-media@archiver.kernel.org>; Tue,  8 Aug 2023 16:15:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09850C04FE1
+	for <linux-media@archiver.kernel.org>; Tue,  8 Aug 2023 16:15:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232332AbjHHQPA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 8 Aug 2023 12:15:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57598 "EHLO
+        id S232195AbjHHQO7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Aug 2023 12:14:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232181AbjHHQN0 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Aug 2023 12:13:26 -0400
+        with ESMTP id S232133AbjHHQNX (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Aug 2023 12:13:23 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04DA93C0E
-        for <linux-media@vger.kernel.org>; Tue,  8 Aug 2023 08:47:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD103C11
+        for <linux-media@vger.kernel.org>; Tue,  8 Aug 2023 08:47:32 -0700 (PDT)
 Received: from [127.0.1.1] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 63DA32090;
-        Tue,  8 Aug 2023 08:18:48 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id F2B273348;
+        Tue,  8 Aug 2023 08:18:49 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1691475528;
-        bh=E3JGyBVQU2JsqzU8CPu88Pxvdao6yJRYM+76tiyNuJA=;
+        s=mail; t=1691475530;
+        bh=GsspOjXZfVUwLjEEzLRR1gtnOd9Ywcd84/KazWpZWvM=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=S6kQH+dCr011qcX+q9p7K9zN+E5BRFLT4Nc2LH4ZF7NwMOwkwubij/voWpcsiIcBB
-         +n+WGD06MS2Vt1RSBYAk0dwUnHuJL7K0G+1PE9Bt2C+6agwIDmlovY7M7M4PD4AvBg
-         De/3y1kXBjFGlORJMae6AXxnTluaOGins5p/jlOc=
+        b=FQ84imOI6+dC5FDwPeD5uvoPY9Z/3Dmp9TNwsA+lWaFfmd7ZzHBeisZd2VuAmjRJl
+         Jy3iSfgj5Ex06FhPscMgt3lj+1jBFrwoJaoJgdH4gFWy8K/+CDNZDMHNCR+wvDNawB
+         jn04VpspXeqORIiRplvASs68ZvQoTy8HRv5grOTA=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Date:   Tue, 08 Aug 2023 09:19:24 +0300
-Subject: [PATCH v7 5/8] v4l2-ctl/compliance: Add simple routing test
+Date:   Tue, 08 Aug 2023 09:19:26 +0300
+Subject: [PATCH v7 7/8] utils/common: Set V4L2_SUBDEV_CLIENT_CAP_STREAMS
+ for subdevs
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230808-streams-support-v7-5-bd0b42a5826d@ideasonboard.com>
+Message-Id: <20230808-streams-support-v7-7-bd0b42a5826d@ideasonboard.com>
 References: <20230808-streams-support-v7-0-bd0b42a5826d@ideasonboard.com>
 In-Reply-To: <20230808-streams-support-v7-0-bd0b42a5826d@ideasonboard.com>
 To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
@@ -40,167 +41,104 @@ To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         satish.nagireddy@getcruise.com
-Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5173;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2607;
  i=tomi.valkeinen@ideasonboard.com; h=from:subject:message-id;
- bh=E3JGyBVQU2JsqzU8CPu88Pxvdao6yJRYM+76tiyNuJA=;
- b=owEBbQKS/ZANAwAIAfo9qoy8lh71AcsmYgBk0d6GYa3LOEAftMrjPpL1888/syyOPIL9gavJB
- zZr6KlcGyqJAjMEAAEIAB0WIQTEOAw+ll79gQef86f6PaqMvJYe9QUCZNHehgAKCRD6PaqMvJYe
- 9RN+D/4/JEL7TZ+f4gVmBOFATRRf7n9aYt0G0CV3h7gOJkLL3PYbf5G54BOymX9KT12xu40Vo+e
- /jiS5GuElUae0Ew43Uqc1ITQDCQLlHvSJ2XoNczTnRLue4m3E/SgtEWBTTMqKBuviVPvVbOQnoN
- ianj6MVPNlUc5Ex2gzgBfNCGXtARAr+pF3xTYooHg6QksUZSqHSfxP5Z3rYPlBdOGul6UiEH3qn
- w33iv3wcWB7vVS29rVNWUVGbR4faxgIBytFLlRW5/qU7GB+1QncFoihkGjrUx7GNxBiF9ey+z10
- ZCfciYvlqL9ajhsbN7S5NCxsFJIf3wOpFrtx1s7yooE4pL+twYCj0AU9l9xGapIJ0x8SRUFd+r9
- QspRxcjKRxmYg0YpzhFZY9C+PGv7ugWVuGaIsgdEmHdd/ad6D4e5qxvFyRZvEX6wLstMe6bXU6E
- ghDPu947uUvXoJSfitEqHGMpZtbbIF3+hF0QbaKaS8H9i5cd3uBZ9DAKBCS1FzsXt3kHVdL+GqM
- f6ZLvCq1/kHrMJiXHNGfzST8kWgt7G872FbeH0jgLlMIGPu4EVSeMA6RGqWXP/6AkuBV5bPBc2Y
- 9lsFLsR/w02c+/FQeDrRNaXBdSnSyuUDuDc/8+TrKNjxc5AdajLagMghzRG/RcLSNms8hCdbZMk
- iTmz2NqHwKJA45A==
+ bh=GsspOjXZfVUwLjEEzLRR1gtnOd9Ywcd84/KazWpZWvM=;
+ b=owEBbQKS/ZANAwAIAfo9qoy8lh71AcsmYgBk0d6Gjs5kwsuPAF5CzqhIs7PXSepbpr8kn+wLZ
+ qftrhl3OzWJAjMEAAEIAB0WIQTEOAw+ll79gQef86f6PaqMvJYe9QUCZNHehgAKCRD6PaqMvJYe
+ 9TYCD/9Z2xFMA/AEvT+Y09tMwLnojf6PVTTINYUk+cB61GSF2ksMKh/i4dy2By0gHwi+b5ILoKO
+ A/K91E+CPNWSC+PqXzMeLJTPdxmndzvCX1paXVQLzNBFTgAMfBKyV69PwzNn4H0RYz3eVzv8lv5
+ Uphf6xGu8FwJuSEiELVCFVSMbmHUh83RmaBjUKI0hEdypDQILI4eS4kuGRDW8GhVyTF60A4t3AY
+ RxP5NHsnMzHN/scEt9QvWLoFPyj7PQPZMtBoIHi9FcpMt1P+CnYTTQLPSUE1q+F8dvXEBsd2wv4
+ g/V9AibzmS5ssmzIJC015/NlRjnoj/sUyVztBPwyLCDHMEVUzQgqlbz/dHW8wUVYkLGHtugSjx4
+ Che89O7DBoQDf0ial3UDmiPL4BYbWJSrEWy1D5YxWsq+E/yZ5J7V1lIwHwlXL6O2jEo8JGDpBdy
+ Bj8v7pLaWVeFMrmc5rX2h5mhZEbjqM2ShWY6Zb7HqQZCH2nBdDD12tKuTiZKaPt8lAM1FsE20jP
+ b1z+eLXKNgGpeQxuwPZ5qxkBUbN6emoaFgOVKDlJZjHclpTNVM5Ob3AT/JN64RSXMR9yskuRq/w
+ Z7domN0Xr8IUcr8DpBYm4LSgS5vIs19aIdXBcMl2NB2Pq4YBxd5zSGkXxpXuaQwx+2CDVLR/07d
+ kPrrYHUu4MCFQ6Q==
 X-Developer-Key: i=tomi.valkeinen@ideasonboard.com; a=openpgp;
  fpr=C4380C3E965EFD81079FF3A7FA3DAA8CBC961EF5
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a simple test for VIDIOC_SUBDEV_G_ROUTING/VIDIOC_SUBDEV_S_ROUTING.
-
-We can't (at least at the moment) really know here what kind of routings
-the driver would accept, but we can test a VIDIOC_SUBDEV_G_ROUTING call,
-followed by a VIDIOC_SUBDEV_S_ROUTING call with the routing we
-received.
-
-Additionally, we can check that the returned pads and flags look fine,
-and also that setting obviously invalid routing will fail.
+Use the new VIDIOC_SUBDEV_S_CLIENT_CAP ioctl to inform the kernel that
+we support streams, and use the return values of
+VIDIOC_SUBDEV_S_CLIENT_CAP and VIDIOC_SUBDEV_QUERYCAP to decide if the
+entity supports streams.
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 ---
- utils/v4l2-compliance/v4l2-compliance.cpp   | 12 +++++
- utils/v4l2-compliance/v4l2-compliance.h     |  1 +
- utils/v4l2-compliance/v4l2-test-subdevs.cpp | 78 +++++++++++++++++++++++++++++
- 3 files changed, 91 insertions(+)
+ utils/common/cv4l-helpers.h |  1 +
+ utils/common/v4l-helpers.h  | 18 ++++++++++++++++++
+ 2 files changed, 19 insertions(+)
 
-diff --git a/utils/v4l2-compliance/v4l2-compliance.cpp b/utils/v4l2-compliance/v4l2-compliance.cpp
-index e8359b2f..4b232314 100644
---- a/utils/v4l2-compliance/v4l2-compliance.cpp
-+++ b/utils/v4l2-compliance/v4l2-compliance.cpp
-@@ -1249,6 +1249,18 @@ void testNode(struct node &node, struct node &node_m2m_cap, struct node &expbuf_
- 		node.is_passthrough_subdev = has_source && has_sink;
+diff --git a/utils/common/cv4l-helpers.h b/utils/common/cv4l-helpers.h
+index 3cee372b..91a04146 100644
+--- a/utils/common/cv4l-helpers.h
++++ b/utils/common/cv4l-helpers.h
+@@ -82,6 +82,7 @@ public:
+ 	bool has_rw() const { return v4l_has_rw(this); }
+ 	bool has_streaming() const { return v4l_has_streaming(this); }
+ 	bool has_ext_pix_format() const { return v4l_has_ext_pix_format(this); }
++	bool has_streams() const { return have_streams; }
  
- 		if (has_routes) {
-+			printf("Sub-Device routing ioctls:\n");
-+
-+			for (unsigned which = V4L2_SUBDEV_FORMAT_TRY;
-+				which <= V4L2_SUBDEV_FORMAT_ACTIVE; which++) {
-+
-+				printf("\ttest %s VIDIOC_SUBDEV_G_ROUTING/VIDIOC_SUBDEV_S_ROUTING: %s\n",
-+				       which ? "Active" : "Try",
-+				       ok(testSubDevRouting(&node, which)));
-+			}
-+
-+			printf("\n");
-+
- 			for (unsigned which = V4L2_SUBDEV_FORMAT_TRY;
- 				which <= V4L2_SUBDEV_FORMAT_ACTIVE; which++) {
+ 	int querycap(v4l2_capability &cap, bool force = false)
+ 	{
+diff --git a/utils/common/v4l-helpers.h b/utils/common/v4l-helpers.h
+index c09cd987..f8e96d58 100644
+--- a/utils/common/v4l-helpers.h
++++ b/utils/common/v4l-helpers.h
+@@ -9,6 +9,7 @@
+ #ifndef _V4L_HELPERS_H_
+ #define _V4L_HELPERS_H_
  
-diff --git a/utils/v4l2-compliance/v4l2-compliance.h b/utils/v4l2-compliance/v4l2-compliance.h
-index 0cd43980..35b2274b 100644
---- a/utils/v4l2-compliance/v4l2-compliance.h
-+++ b/utils/v4l2-compliance/v4l2-compliance.h
-@@ -375,6 +375,7 @@ int testSubDevEnum(struct node *node, unsigned which, unsigned pad, unsigned str
- int testSubDevFormat(struct node *node, unsigned which, unsigned pad, unsigned stream);
- int testSubDevSelection(struct node *node, unsigned which, unsigned pad, unsigned stream);
- int testSubDevFrameInterval(struct node *node, unsigned pad, unsigned stream);
-+int testSubDevRouting(struct node *node, unsigned which);
++#include <linux/v4l2-subdev.h>
+ #include <linux/videodev2.h>
+ #include <string.h>
+ #include <stdlib.h>
+@@ -39,6 +40,7 @@ struct v4l_fd {
+ 	bool have_selection;
+ 	bool is_subdev;
+ 	bool is_media;
++	bool have_streams;
  
- // Buffer ioctl tests
- int testReqBufs(struct node *node);
-diff --git a/utils/v4l2-compliance/v4l2-test-subdevs.cpp b/utils/v4l2-compliance/v4l2-test-subdevs.cpp
-index 5545b0dc..38339ee3 100644
---- a/utils/v4l2-compliance/v4l2-test-subdevs.cpp
-+++ b/utils/v4l2-compliance/v4l2-test-subdevs.cpp
-@@ -551,3 +551,81 @@ int testSubDevSelection(struct node *node, unsigned which, unsigned pad, unsigne
+ 	int (*open)(struct v4l_fd *f, const char *file, int oflag, ...);
+ 	int (*close)(struct v4l_fd *f);
+@@ -507,6 +509,12 @@ static inline int v4l_open(struct v4l_fd *f, const char *devname, bool non_block
  
- 	return have_sel ? 0 : ENOTTY;
- }
-+
-+int testSubDevRouting(struct node *node, unsigned which)
-+{
-+	const uint32_t all_route_flags_mask = V4L2_SUBDEV_ROUTE_FL_ACTIVE;
-+	struct v4l2_subdev_routing routing = {};
-+	struct v4l2_subdev_route routes[NUM_ROUTES_MAX] = {};
-+	unsigned int i;
+ static inline int v4l_subdev_s_fd(struct v4l_fd *f, int fd, const char *devname)
+ {
++	struct v4l2_subdev_client_capability clientcap = {};
++	struct v4l2_subdev_capability subdevcap = {};
++	bool subdev_streams;
++	bool client_streams;
 +	int ret;
 +
-+	routing.which = which;
-+	routing.routes = (__u64)&routes;
-+	routing.num_routes = 0;
-+	memset(routing.reserved, 0xff, sizeof(routing.reserved));
+ 	if (f->fd >= 0)
+ 		f->close(f);
+ 
+@@ -528,6 +536,16 @@ static inline int v4l_subdev_s_fd(struct v4l_fd *f, int fd, const char *devname)
+ 	f->have_next_ctrl = false;
+ 	f->have_selection = false;
+ 
++	ret = ioctl(f->fd, VIDIOC_SUBDEV_QUERYCAP, &subdevcap);
++	subdev_streams = !ret && (subdevcap.capabilities & V4L2_SUBDEV_CAP_STREAMS);
 +
-+	/*
-+	 * First test that G_ROUTING either returns success, or ENOSPC and
-+	 * updates num_routes.
-+	 */
++	clientcap.capabilities = V4L2_SUBDEV_CLIENT_CAP_STREAMS;
 +
-+	ret = doioctl(node, VIDIOC_SUBDEV_G_ROUTING, &routing);
-+	fail_on_test(ret && ret != ENOSPC);
-+	fail_on_test(ret == ENOSPC && routing.num_routes == 0);
-+	fail_on_test(check_0(routing.reserved, sizeof(routing.reserved)));
++	ret = ioctl(f->fd, VIDIOC_SUBDEV_S_CLIENT_CAP, &clientcap);
++	client_streams = !ret && (clientcap.capabilities & V4L2_SUBDEV_CLIENT_CAP_STREAMS);
 +
-+	if (!routing.num_routes)
-+		return 0;
++	f->have_streams = subdev_streams && client_streams;
 +
-+	/*
-+	 * Then get the actual routes, and verify that the num_routes gets
-+	 * updated to the correct number.
-+	 */
-+
-+	uint32_t num_routes = routing.num_routes;
-+	routing.num_routes = num_routes + 1;
-+	fail_on_test(doioctl(node, VIDIOC_SUBDEV_G_ROUTING, &routing));
-+	fail_on_test(routing.num_routes != num_routes);
-+
-+	/* Check the validity of route pads and flags */
-+
-+	if (node->pads) {
-+		for (i = 0; i < routing.num_routes; ++i) {
-+			const struct v4l2_subdev_route *route = &routes[i];
-+			const struct media_pad_desc *sink;
-+			const struct media_pad_desc *source;
-+
-+			fail_on_test(route->sink_pad >= node->entity.pads);
-+			fail_on_test(route->source_pad >= node->entity.pads);
-+
-+			sink = &node->pads[route->sink_pad];
-+			source = &node->pads[route->source_pad];
-+
-+			fail_on_test(!(sink->flags & MEDIA_PAD_FL_SINK));
-+			fail_on_test(!(source->flags & MEDIA_PAD_FL_SOURCE));
-+			fail_on_test(route->flags & ~all_route_flags_mask);
-+		}
-+	}
-+
-+	/* Set the same routes back, which should always succeed. */
-+
-+	memset(routing.reserved, 0xff, sizeof(routing.reserved));
-+	fail_on_test(doioctl(node, VIDIOC_SUBDEV_S_ROUTING, &routing));
-+	fail_on_test(check_0(routing.reserved, sizeof(routing.reserved)));
-+
-+	/* Test setting invalid pads */
-+
-+	if (node->pads) {
-+		for (i = 0; i < routing.num_routes; ++i) {
-+			struct v4l2_subdev_route *route = &routes[i];
-+
-+			route->sink_pad = node->entity.pads + 1;
-+		}
-+
-+		memset(routing.reserved, 0xff, sizeof(routing.reserved));
-+		fail_on_test(doioctl(node, VIDIOC_SUBDEV_S_ROUTING, &routing) != EINVAL);
-+	}
-+
-+	return 0;
-+}
+ 	return f->fd;
+ }
+ 
 
 -- 
 2.34.1
