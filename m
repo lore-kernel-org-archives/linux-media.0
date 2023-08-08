@@ -2,32 +2,32 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1FDBC04E69
-	for <linux-media@archiver.kernel.org>; Tue,  8 Aug 2023 17:13:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE5F4C04FE0
+	for <linux-media@archiver.kernel.org>; Tue,  8 Aug 2023 17:13:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234155AbjHHRNO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S234163AbjHHRNO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 8 Aug 2023 13:13:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52022 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232555AbjHHRMh (ORCPT
+        with ESMTP id S232489AbjHHRMh (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Tue, 8 Aug 2023 13:12:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014411BAF9
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5990C1BAFB
         for <linux-media@vger.kernel.org>; Tue,  8 Aug 2023 09:05:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 37B4D62414
-        for <linux-media@vger.kernel.org>; Tue,  8 Aug 2023 08:55:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCC4CC433C8;
-        Tue,  8 Aug 2023 08:55:25 +0000 (UTC)
-Message-ID: <b91681ec-89e0-4347-c289-51498d8b3788@xs4all.nl>
-Date:   Tue, 8 Aug 2023 10:55:24 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D98C6241B
+        for <linux-media@vger.kernel.org>; Tue,  8 Aug 2023 07:42:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE6B2C433C7;
+        Tue,  8 Aug 2023 07:42:09 +0000 (UTC)
+Message-ID: <68805434-dd30-8da8-d4b6-48b5cf669633@xs4all.nl>
+Date:   Tue, 8 Aug 2023 09:42:07 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v3 10/10] media: uapi: v4l: Document source routes
+Subject: Re: [PATCH v2 0/9] Generic line based metadata support, internal pads
 Content-Language: en-US, nl
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         linux-media@vger.kernel.org
@@ -37,255 +37,170 @@ Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Andrey Konovalov <andrey.konovalov@linaro.org>,
         Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
         Dmitry Perchanov <dmitry.perchanov@intel.com>
-References: <20230808075538.3043934-1-sakari.ailus@linux.intel.com>
- <20230808075538.3043934-11-sakari.ailus@linux.intel.com>
+References: <20230802214556.180589-1-sakari.ailus@linux.intel.com>
 From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20230808075538.3043934-11-sakari.ailus@linux.intel.com>
+In-Reply-To: <20230802214556.180589-1-sakari.ailus@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 08/08/2023 09:55, Sakari Ailus wrote:
-> Document how internal pads are used on source routes.
+On 02/08/2023 23:45, Sakari Ailus wrote:
+> Hi folks,
 > 
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
->  .../userspace-api/media/v4l/dev-subdev.rst    | 179 ++++++++++++++++++
->  1 file changed, 179 insertions(+)
+> Here are a few patches to add support generic, line based metadata as well
+> as internal pads. While the amount of code is not very large, to the
+> contrary it is quite small actually IMO, I presume what this is about and
+> why it is being proposed requires some explaining.
 > 
-> diff --git a/Documentation/userspace-api/media/v4l/dev-subdev.rst b/Documentation/userspace-api/media/v4l/dev-subdev.rst
-> index b023918177b5..27b0fe2dc83a 100644
-> --- a/Documentation/userspace-api/media/v4l/dev-subdev.rst
-> +++ b/Documentation/userspace-api/media/v4l/dev-subdev.rst
-> @@ -551,6 +551,27 @@ A stream at a specific point in the media pipeline is identified by the
->  sub-device and a (pad, stream) pair. For sub-devices that do not support
->  multiplexed streams the 'stream' field is always 0.
->  
-> +.. _v4l2-subdev-source-routes:
-> +
-> +Internal pads and source routes
-> +^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> +
-> +Cases where a single sub-device source pad is traversed by multiple streams one
-> +or more of which originate from within the sub-device itself are special as
-> +there is no external sink pad for such routes. In those cases, the sources of
-> +the internally generated streams are represented by internal sink pads, which
-> +are sink pads that have the :ref:`MEDIA_PAD_FL_INTERNAL <MEDIA-PAD-FL-INTERNAL>`
-> +pad flag set.
-> +
-> +Internal pads have all the properties of an external pad, including formats and
-> +selections. The format in this case is the source format of the stream. An
-> +internal pad always has a single stream only (0).
-> +
-> +/Source routes/ are routes from an internal sink pad to a(n external) source
+> Metadata mbus codes and formats have existed for some time in V4L2. They
+> however have been only used by drivers that produce the data itself and
+> effectively this metadata has always been statistics of some sort (at
+> least when it comes to ISPs). What is different here is that we intend to
+> add support for metadata originating from camera sensors.
+> 
+> Camera sensors produce different kinds of metadata, embedded data (usually
+> register address--value pairs used to capture the frame, in a more or less
+> sensor specific format), histograms (in a very sensor specific format),
+> dark pixels etc. The number of these formats is probably going to be about
+> as large as image data formats if not larger, as the image data formats
+> are much better standardised but a smaller subset of them will be
+> supported by V4L2, at least initially but possibly much more in the long
+> run.
+> 
+> Having this many device specific formats would be a major problem for all
+> the other drivers along that pipeline (not to mention the users of those
+> drivers), including bridge (e.g. CSI-2 to parallel) but especially CSI-2
+> receiver drivers that have DMA: the poor driver developer would not only
+> need to know camera sensor specific formats but to choose the specific
+> packing of that format suitable for the DMA used by the hardware. It is
+> unlikely many of these would ever get tested while being present on the
+> driver API. Also adding new sensors with new embedded data formats would
+> involve updating all bridge and CSI-2 receiver drivers. I don't expect
+> this to be a workable approach.
+> 
+> Instead what I'm proposing is to use specific metadata formats on the
+> sensor devices only, on internal pads (more about those soon) of the
+> sensors, only visible in the UAPI, and then generic mbus formats along the
+> pipeline and finally generic V4L2 metadata formats on the DMAs (specific
+> to bit depth and packing). This would unsnarl the two, defining what data
+> there is (specific mbus code) and how that is transported and packed
+> (generic mbus codes and V4L2 formats).
+> 
+> The user space would be required to "know" the path of that data from the
+> sensor's internal pad to the V4L2 video node. I do not see this as these
+> devices require at least some knowledge of the pipeline, i.e. hardware at
+> hand. Separating what the data means and how it is packed may even be
+> beneficial: it allows separating code that interprets the data (sensor
+> internal mbus code) from the code that accesses it (packing).
+> 
+> These formats are in practice line based, meaning that there may be
+> padding at the end of the line, depending on the bus as well as the DMA.
+> If non-line based formats are needed, it is always possible to set the
+> "height" field to 1.
+> 
+> The internal (source) pads are an alternative to source routes [1]. The
+> source routes were not universally liked and I do have to say I like
+> re-using existing interface concepts (pads and everything you can do with
+> pads, including access format, selections etc.) wherever it makes sense,
+> instead of duplicating functionality.
+> 
+> Effectively internal source pads behave mostly just like sink pads, but
+> they describe a flow of data that originates from a sub-device instead of
+> arriving to a sub-device. The SUBDEV_S_ROUTING IOCTLs are used to enable
+> and disable routes from internal source pads to sub-device's source pads.
+> The subdev format IOCTLs are usable, too, so one can find which subdev
+> format is available on given internal source pad.
+> 
+> This set depends on these patches:
+> 
+> <URL:https://lore.kernel.org/linux-media/20230505205416.55002-1-sakari.ailus@linux.intel.com/T/#t>
+> 
+> I've also pushed these here and I'll keep updating the branch:
+> 
+> <URL:https://git.linuxtv.org/sailus/media_tree.git/log/?h=metadata>
+> 
+> Questions and comments are most welcome.
+> 
+> Driver support is to be added, as well as an example.
+> 
+> [1] <URL:https://lore.kernel.org/linux-media/20220831141357.1396081-20-tomi.valkeinen@ideasonboard.com/>
+> 
+> since v2:
+> 
+> - Added an example demonstrating the use of internal pads. --- Is the
+>   level of detail enough for the purpose?
+> 
+> - Improved documentation.
+> 
+> - Added a macro to tell whether a format is a metadata format.
+>   (Documentation could be added.)
+> 
+> - A small ReST syntax fix in the same section.
+> 
+> - Drop leftovers of a patch checking for the INTERNAL_SOURCE flag.
+> 
+> since v1:
+> 
+> - Make the new pad flag just "INTERNAL", requiring either SINK or SOURCE
+>   pad flag to accompany it. Removed the union in struct v4l2_subdev_route.
+> 
+> - Add the term "stream" to MC glossary.
+> 
+> - Improved and fixed documentation (according to comments).
+> 
+> - Note these formats are little endian.
+> 
+> - Remove 1X8 from the names of the mbus codes. These formats have generally
+>   8 bits per pixel.
+> 
+> - Fix mbus code numbering (had holes in RFC).
+> 
+> - Add new metadata fields to debug prints.
+> 
+> - Fix a minor documentation build issue.
+> 
+> Sakari Ailus (9):
+>   media: Documentation: Align numbered list
+>   media: mc: Check pad flag validity
+>   media: mc: Add INTERNAL pad flag
+>   media: uapi: v4l: Document source routes
+>   media: uapi: Add generic serial metadata mbus formats
+>   media: uapi: Document which mbus format fields are valid for metadata
+>   media: uapi: Add a macro to tell whether an mbus code is metadata
+>   media: uapi: Add generic 8-bit metadata format definitions
+>   media: v4l: Support line-based metadata capture
 
-'/Source routes/' appears just like that in the generated documentation, that's
-probably not what you intended.
+FYI: building the documentation results in these warnings:
 
-> +pad. Generally source routes are not modifiable but they can be activated and
-> +deactivated using the :ref:`V4L2_SUBDEV_ROUTE_FL_ACTIVE
-> +<v4l2-subdev-routing-flags>` flag, depending on driver capabilities.
-> +
->  Interaction between routes, streams, formats and selections
->  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->  
-> @@ -666,3 +687,161 @@ A common way to accomplish this is to start from the sensors and propagate the
->  configurations along the stream towards the receiver,
->  using :ref:`VIDIOC_SUBDEV_S_FMT <VIDIOC_SUBDEV_G_FMT>` ioctls to configure each
->  stream endpoint in each sub-device.
-> +
-> +Internal pads setup example
-> +^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> +
-> +A simple example of a multiplexed stream setup might be as follows:
-> +
-> +- A CCS camera sensor source sub-device, with one sink pad (0), one source pad
-
-Explain what 'CCS' means: probably a link to MIPI CCS is sufficient, but for newbies
-'CCS' doesn't provide any information.
-
-> +  (1), an internal sink pad (2) that represents the source of embedded
-
-So since the INTERNAL flag is associated with a sink pad, this is now called an
-'internal sink' instead of 'internal source' as it was before. I agree with that,
-but note that the phrase 'internal source' is still used in several places,
-including the cover letter. For the next version you post, please check for that
-and change the terminology since mixing the two is very confusing :-)
-
-> +  data. There are two routes, one from the sink pad to the source, and another
-> +  from the internal sink pad to the source pad. The embedded data stream needs
-> +  to be enabled by activating the related route. The configuration of the rest
-> +  of the CCS sub-devices is omitted from this example.
-> +
-> +- Multiplexer bridge (Bridge). The bridge has one sink pad, connected to the
-> +  sensor (pad 0), and one source pad (pad 1), which outputs two streams.
-> +
-> +- Receiver in the SoC (Receiver). The receiver has a single sink pad (pad 0),
-> +  connected to the bridge, and two source pads (pads 1-2), going to the DMA
-> +  engine. The receiver demultiplexes the incoming streams to the source pads.
-> +
-> +- DMA Engines in the SoC (DMA Engine), one for each stream. Each DMA engine is
-> +  connected to a single source pad in the receiver.
-> +
-> +The sensor, the bridge and the receiver are modeled as V4L2 sub-devices,
-> +exposed to userspace via /dev/v4l-subdevX device nodes. The DMA engines are
-> +modeled as V4L2 devices, exposed to userspace via /dev/videoX nodes.
-> +
-> +To configure this pipeline, the userspace must take the following steps:
-> +
-> +1) Set up media links between entities: connect the sensors to the bridge,
-> +   bridge to the receiver, and the receiver to the DMA engines. This step does
-> +   not differ from normal non-multiplexed media controller setup.
-> +
-> +2) Configure routing
-> +
-> +.. flat-table:: Camera sensor
-> +    :header-rows: 1
-> +
-> +    * - Sink Pad/Stream
-> +      - Source Pad/Stream
-> +      - Routing Flags
-> +      - Comments
-> +    * - 0/0
-> +      - 1/0
-> +      - V4L2_SUBDEV_ROUTE_FL_ACTIVE
-> +      - Pixel data stream from the sink pad
-
-Huh? It is a sensor subdev, so aren't both pixel data and metadata
-coming from an internal sink?
-
-I think you are actually describing the internal subdev of a CCS
-sensor here, but that is not clear from the description at all.
-
-Since CCS sensors are relatively common (I think), it might be
-good to give a fully fledged example.
-
-But suppose you have a non-CCS sensor that generates the pixel data
-and metadata, then you would have two internal sink pads and one
-source pad for two streams, right?
-
-And very simple sensors that currently just have a single source pad
-could be describes as having an internal sink pad connected to the
-source pad by a fixed route. But we don't do that, because it is
-overkill. Correct? If so, then this might be useful information to add
-to answer the question why some sensors have internal sinks and others
-do not.
-
-> +    * - 2/0
-> +      - 1/1
-> +      - **V4L2_SUBDEV_ROUTE_FL_ACTIVE**
-> +      - Metadata stream from the internal sink pad
-> +
-> +.. flat-table:: Bridge routing table
-> +    :header-rows: 1
-> +
-> +    * - Sink Pad/Stream
-> +      - Source Pad/Stream
-> +      - Routing Flags
-> +      - Comments
-> +    * - 0/0
-> +      - 1/0
-> +      - V4L2_SUBDEV_ROUTE_FL_ACTIVE
-> +      - Pixel data stream from camera sensor
-> +    * - 0/1
-> +      - 1/1
-> +      - V4L2_SUBDEV_ROUTE_FL_ACTIVE
-> +      - Metadata stream from camera sensor
-> +
-> +.. flat-table:: Receiver routing table
-> +    :header-rows:  1
-> +
-> +    * - Sink Pad/Stream
-> +      - Source Pad/Stream
-> +      - Routing Flags
-> +      - Comments
-> +    * - 0/0
-> +      - 1/0
-> +      - V4L2_SUBDEV_ROUTE_FL_ACTIVE
-> +      - Pixel data stream from camera sensor
-> +    * - 0/1
-> +      - 2/0
-> +      - V4L2_SUBDEV_ROUTE_FL_ACTIVE
-> +      - Metadata stream from camera sensor
-> +
-> +The options available in sensor's routing configuration are dictated by hardware
-> +capabilities: typically camera sensors always produce image data stream while
-> +the embedded data stream typically can be either enabled or disabled.
-> +
-> +3) Configure formats and selections
-> +
-> +This example assumes that the formats are propagated from sink pad to the source
-> +pad as-is. The tables contain fields of both struct v4l2_subdev_format and
-> +struct v4l2_mbus_framefmt. The full configuration of CCS camera sensor is out of
-> +scope of this example.
-> +
-> +.. flat-table:: Formats set on the sub-devices. Bold values are set, others are
-> +                static or propagated.
-> +    :header-rows: 1
-> +    :fill-cells:
-> +
-> +    * - Sub-device
-> +      - Pad/Stream
-> +      - Width
-> +      - Height
-> +      - Code
-> +    * - :rspan:`3` Camera sensor sub-device (CCS source sub-device)
-> +      - 0/0
-> +      - 640
-> +      - 480
-> +      - MEDIA_BUS_FMT_SGRBG10
-> +    * - 1/0
-> +      - 640
-> +      - 480
-> +      - **MEDIA_BUS_FMT_SGRBG10**
-> +    * - 2/0
-> +      - 640
-> +      - 2
-> +      - MEDIA_BUS_FMT_CCS_EMBEDDED_10
-> +    * - 1/1
-> +      - 640
-> +      - 2
-> +      - MEDIA_BUS_FMT_META_10
-> +    * - :rspan:`3` Bridge
-> +      - 0/0
-> +      - **640**
-> +      - **480**
-> +      - **MEDIA_BUS_FMT_SGRBG10**
-> +    * - 1/0
-> +      - 640
-> +      - 480
-> +      - MEDIA_BUS_FMT_SGRBG10
-> +    * - 0/1
-> +      - **640**
-> +      - **2**
-> +      - **MEDIA_BUS_FMT_META_10**
-> +    * - 1/1
-> +      - 640
-> +      - 2
-> +      - MEDIA_BUS_FMT_META_10
-> +    * - :rspan:`3` Receiver
-> +      - 0/0
-> +      - **640**
-> +      - **480**
-> +      - **MEDIA_BUS_FMT_SGRBG10**
-> +    * - 1/0
-> +      - 640
-> +      - 480
-> +      - MEDIA_BUS_FMT_SGRBG10
-> +    * - 0/1
-> +      - **640**
-> +      - **2**
-> +      - **MEDIA_BUS_FMT_META_10**
-> +    * - 2/0
-> +      - 640
-> +      - 2
-> +      - MEDIA_BUS_FMT_META_10
-> +
-> +The embedded data format does not need to be configured as the format is
-> +dictated by the pixel data format in this case.
+Documentation/media/userspace-api/glossary.rst:117: WARNING: term not in glossary: 'V4L2 API'
+Documentation/media/userspace-api/glossary.rst:130: WARNING: term not in glossary: 'V4L2 Hardware'
+Documentation/media/userspace-api/glossary.rst:194: WARNING: term not in glossary: 'V4L2 API'
+Documentation/media/userspace-api/glossary.rst:207: WARNING: term not in glossary: 'V4L2 API'
+Documentation/media/userspace-api/glossary.rst:207: WARNING: term not in glossary: 'V4L2 Sub-device'
 
 Regards,
 
 	Hans
+
+> 
+>  .../userspace-api/media/glossary.rst          |   6 +
+>  .../media/mediactl/media-types.rst            |   6 +
+>  .../userspace-api/media/v4l/dev-meta.rst      |  15 +
+>  .../userspace-api/media/v4l/dev-subdev.rst    | 144 +++++++-
+>  .../userspace-api/media/v4l/meta-formats.rst  |   1 +
+>  .../media/v4l/metafmt-generic.rst             | 331 ++++++++++++++++++
+>  .../media/v4l/subdev-formats.rst              | 257 ++++++++++++++
+>  .../media/v4l/vidioc-enum-fmt.rst             |   7 +
+>  .../media/videodev2.h.rst.exceptions          |   1 +
+>  drivers/media/mc/mc-entity.c                  |  17 +-
+>  drivers/media/v4l2-core/v4l2-ioctl.c          |  13 +-
+>  include/uapi/linux/media-bus-format.h         |  12 +
+>  include/uapi/linux/media.h                    |   1 +
+>  include/uapi/linux/v4l2-mediabus.h            |  18 +-
+>  include/uapi/linux/videodev2.h                |  19 +
+>  15 files changed, 824 insertions(+), 24 deletions(-)
+>  create mode 100644 Documentation/userspace-api/media/v4l/metafmt-generic.rst
+> 
+
