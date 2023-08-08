@@ -2,119 +2,112 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4338DC001B0
-	for <linux-media@archiver.kernel.org>; Tue,  8 Aug 2023 16:53:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7662CC04A6A
+	for <linux-media@archiver.kernel.org>; Tue,  8 Aug 2023 17:08:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233685AbjHHQxo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 8 Aug 2023 12:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
+        id S234061AbjHHRIa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Aug 2023 13:08:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233650AbjHHQxH (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Aug 2023 12:53:07 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1FC8E5F
-        for <linux-media@vger.kernel.org>; Tue,  8 Aug 2023 08:58:30 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-31763b2c5a4so5007391f8f.3
-        for <linux-media@vger.kernel.org>; Tue, 08 Aug 2023 08:58:30 -0700 (PDT)
+        with ESMTP id S229737AbjHHRHg (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Aug 2023 13:07:36 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082F75F87E
+        for <linux-media@vger.kernel.org>; Tue,  8 Aug 2023 09:03:07 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-99bc9e3cbf1so113366b.0
+        for <linux-media@vger.kernel.org>; Tue, 08 Aug 2023 09:03:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691510309; x=1692115109;
+        d=linaro.org; s=google; t=1691510560; x=1692115360;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=7/neN/3MAwPWtJfwm6LVkhUVNl60rPtJxXyh7+fqe70=;
-        b=i7BBwkdXriQoAwyGhuQNoP8pToL0dZV7LFjE8qeyJBfD88LbrSvqdc7y5Bclmr9jko
-         FB2AQYE6WSrTIV1TR5hjvpBst1TGzo2GsRjld/wt/FheicLSOmS5p1XZmpRDIKVwmGC8
-         du7lkJvVkznrW8KPrIfEF7StF56K0bACPlefK0cx84xSZA4oUcmsRVp3xySOSTaO2Ek1
-         FjbbSxFcz64NTE7vn7e2/Ua6rDRlZ7nwG1r+DCGWaLI0RFXScLSr6C9/kwvU3/ywAZvf
-         L06mDJsIxh280Kme4TpkdzziNuy7S7FH5xyi5k+PzGnrethKgXouTW3O06znNXrzQgRg
-         VwqA==
+        bh=6UQwIyuye8mYS0km2qczmsMo0G4UsG0TMMEf3YJ5cAk=;
+        b=Uf4YpY2v2+FPBFO/yaXyCXV5V6tQ/AeNJ//X7OQEKtMMFbFG8SW5zedXAED5VvJwPo
+         v+6DcV4SFuQZQjhORvGFOd5247g30vK9+AwayxoDrQ58EugWg/FwtlbgQCmXMxPGh3ps
+         8DyQmkI+FGlUOsQVaNeODDRFeJ3T8tKLNW+wWVPkynqbok/hMqK5bqTri6pWYUaHIa4b
+         c7GfoZpePDeSvQs7MzTYQvMdTd0vwnNsWlHjOhtEmlyec/Wapc5cQnSBoSvzBsmjxCSo
+         RnPTvXyINIW6zTlf0h8KsCpJj+sAgduNUnJRaujsN9/6Rz8Dd2A/dbDO3yvqPdHM50ja
+         AHiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691510309; x=1692115109;
+        d=1e100.net; s=20221208; t=1691510560; x=1692115360;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7/neN/3MAwPWtJfwm6LVkhUVNl60rPtJxXyh7+fqe70=;
-        b=LLP8NhHma1EPpMfHDbElbVDZ0zm1nR/PiQhbvJTi2HcewKHvraE9hylHZTE8Wtf/Dw
-         eNyfm9hIC/NiQQ+zGlNT4zHbx2XwBMsEBm51ImL8CGiGTswMZ+1OSrxP+54BDbxTo/3F
-         vuVMHFBobWjWthHETsdoI15aY04z0HKlPy/RU2IhOcmGjm8/Dial1K2ztdA3pIF7jwbz
-         H/Y+0QInCNqLCIIfa/xx97zLYZAZvfOy05F9VzaBtRjCcO8LMxJJ8Psgpx7RsHCArdRz
-         y/E+q8p1yrkK3Oc+GrvlhuSzTXuE9TeTRBwSZv3L/kx6LAtvbdoBO2kBs4OZ9mCXfjEu
-         obug==
-X-Gm-Message-State: AOJu0YwbYOyncVtRI73OyXnosrEA4FgB6lkl1yzcRhO3akOToiY+PE1T
-        GKNazHEXsCaueFKwTSta8KnRf8fq/PHzxEOwIGQ=
-X-Google-Smtp-Source: AGHT+IEhz/h88VbIK+Uxv8RtvehzJEb4HtJYyKbQA5Ljg8jQq5fhiYybRtK6Z0XyqhDAHfl5BtRxaw==
-X-Received: by 2002:a17:906:ca:b0:994:47a5:a377 with SMTP id 10-20020a17090600ca00b0099447a5a377mr10240779eji.24.1691475723704;
-        Mon, 07 Aug 2023 23:22:03 -0700 (PDT)
+        bh=6UQwIyuye8mYS0km2qczmsMo0G4UsG0TMMEf3YJ5cAk=;
+        b=Tj0FVMmqvxH//ghptjLaCINMYXDL9e43zreUMYLGQUULgNUooF3qBZ1pjaBkuSWq8Z
+         Dpf3c9aGAW6S6IPuA5SiTH/EJdvEQbnKMip0vzyiuK8hgxebLlk0FaseCdeaDIMsvAyi
+         JpzIwnSM3HzpaC4+v/++cUBAiDU7LjngRzZeN//o6v4pzwYFFIbG2MFf7ytTB8nP/GaA
+         YsLixbEIJooITWw31QfjUr4GKtmn+4HesnWVOuVq5OP2H3q7UYuUNT8XpmRk7GLc7+CT
+         dO/0pGlU6ZZuoeXY4u1BdZAlHcncgbVb7f2c1eBR6cwnTukB1bFQG/T4qSLPP2cFJ7Pw
+         zV5A==
+X-Gm-Message-State: AOJu0YyjkLwY5Y8NWqja4uImhcqJAuPhiC/e8ab3KhXVAwxUCtk6LuX7
+        5nwZQ9Q6zNiU8VnWcQrvAihHEuZBD/SS19w4Vn8=
+X-Google-Smtp-Source: AGHT+IEAWtqj6IGMQaxg9T1mvEziRnQ63AxagirqrvclWjlQA6LYi5Gwjfcee2RpFhk/TpTKnyzDKg==
+X-Received: by 2002:a5d:5265:0:b0:317:5dcc:b7d4 with SMTP id l5-20020a5d5265000000b003175dccb7d4mr7125084wrc.33.1691490380266;
+        Tue, 08 Aug 2023 03:26:20 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.222.113])
-        by smtp.gmail.com with ESMTPSA id bw5-20020a170906c1c500b00988f168811bsm6194300ejb.135.2023.08.07.23.22.02
+        by smtp.gmail.com with ESMTPSA id d18-20020adffbd2000000b003176c6e87b1sm13123307wrs.81.2023.08.08.03.26.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Aug 2023 23:22:03 -0700 (PDT)
-Message-ID: <84fbcc37-d226-b637-caa1-b24ebaf03d58@linaro.org>
-Date:   Tue, 8 Aug 2023 08:22:01 +0200
+        Tue, 08 Aug 2023 03:26:19 -0700 (PDT)
+Message-ID: <d8e79173-1f73-0ae1-f698-90cd551dde1a@linaro.org>
+Date:   Tue, 8 Aug 2023 12:26:17 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.14.0
-Subject: Re: [PATCH v2 3/3] media: exynos4-is: fimc-is: replace duplicate pmu
- node with phandle
+Subject: Re: [PATCH] dt-bindings: media: Add bindings for Imagination E5010
+ JPEG Encoder driver
 Content-Language: en-US
-To:     Andi Shyti <andi.shyti@kernel.org>
-Cc:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230807131256.254243-1-krzysztof.kozlowski@linaro.org>
- <20230807131256.254243-3-krzysztof.kozlowski@linaro.org>
- <20230807231320.svssge6uymw3jiho@intel.intel>
+To:     Devarsh Thakkar <devarsht@ti.com>, mchehab@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     praneeth@ti.com, nm@ti.com, vigneshr@ti.com, a-bhatia1@ti.com,
+        j-luthra@ti.com, b-brnich@ti.com, detheridge@ti.com,
+        p-mantena@ti.com, vijayp@ti.com
+References: <20230726162615.1270075-1-devarsht@ti.com>
+ <b6bddd59-ac78-3f75-828e-cff54766fc72@linaro.org>
+ <8fef77fb-d3bf-eab1-0734-919ebf2e61af@ti.com>
+ <50d97c30-4926-0bbf-1209-dfd25043e359@ti.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230807231320.svssge6uymw3jiho@intel.intel>
+In-Reply-To: <50d97c30-4926-0bbf-1209-dfd25043e359@ti.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 08/08/2023 01:13, Andi Shyti wrote:
-> Hi Krzysztof,
+On 08/08/2023 12:20, Devarsh Thakkar wrote:
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    const: img,e5010-jpeg-enc
+>>>
+>>> Your description suggests that this is part of TI SoC. Pretty often
+>>> licensed blocks cannot be used on their own and need some
+>>> customizations. Are you sure your block does not need any customization
+>>> thus no dedicated compatible is needed?
+>>>
+>>
+>> There is a wrapper for interfacing this core with TI SoC, I will recheck this
+>> interfacing but I believe nothing changes from programming perspective as
+>> there is 1-to-1 maintained between the clocks and signals w.r.t actual E5010
+>> core.
+>>
 > 
-> [...]
+> Just to add to above, on a second thought we think it would be  better to
+> still have a separate compatible for TI as you suggested (since we have a
+> wrapper) so that it allows any customization needed for future. So compatible
+> enum would look like :
 > 
->> +static void __iomem *fimc_is_get_pmu_regs(struct device *dev)
->> +{
->> +	struct device_node *node;
->> +	void __iomem *regs;
->> +
->> +	node = of_parse_phandle(dev->of_node, "samsung,pmu-syscon", 0);
->> +	if (!node) {
->> +		dev_warn(dev, "Finding PMU node via deprecated method, update your DTB\n");
->> +		node = of_get_child_by_name(dev->of_node, "pmu");
->> +		if (!node)
->> +			return IOMEM_ERR_PTR(-ENODEV);
+>     oneOf:
+>       - items:
+>         - const: ti,e5010-jpeg-enc
+>         - const: img,e5010-jpeg-enc
+>       - const: img,e5010-jpeg-enc
 > 
-> in my opinion this should be:
-> 
-> 		...
-> 		if (!node)
-> 			return IOMEM_ERR_PTR(-ENODEV);
-> 
-> 		dev_warn(dev, "Finding PMU node via deprecated method, update your DTB\n");
-> 
-> Because if you don't have both "samsung,pmu-syscon and "pmu" then
-> the warning should not be printed and you need to return -ENODEV.
+> Thanks for the suggestion.
 
-Why not? Warning is correct - the driver is trying to find, thus
-continuous tense "Finding", PMU node via old method.
-
-> 
-> ... and... "*please* update your DTB", the user might get upset
-> and out of sheer spite, decides not to do it – just because! :)
-
-The message is already long enough, why making it longer? Anyone who
-ships DTS outside of Linux kernel is doomed anyway...
+Yeah, it's fine, assuming block can be used as img,e5010-jpeg-enc on its
+own.
 
 Best regards,
 Krzysztof
