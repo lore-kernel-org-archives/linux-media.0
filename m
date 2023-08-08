@@ -2,47 +2,47 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AEE1FC001B0
-	for <linux-media@archiver.kernel.org>; Tue,  8 Aug 2023 16:45:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4766C001B0
+	for <linux-media@archiver.kernel.org>; Tue,  8 Aug 2023 16:46:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbjHHQp1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 8 Aug 2023 12:45:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33684 "EHLO
+        id S232586AbjHHQqR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Aug 2023 12:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232513AbjHHQoe (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Aug 2023 12:44:34 -0400
+        with ESMTP id S233351AbjHHQpW (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Aug 2023 12:45:22 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E99E16BDB
-        for <linux-media@vger.kernel.org>; Tue,  8 Aug 2023 08:56:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61CA44452
+        for <linux-media@vger.kernel.org>; Tue,  8 Aug 2023 08:56:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691510168; x=1723046168;
+  t=1691510181; x=1723046181;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=x+LP+4lfNYxrrkLWfRafgulLicRZ0Ly2LjAWyJO66Mc=;
-  b=bjGmftVL5GLSqV9y+8Zjd9g475+speulmYnGv6XlnNHITLftc1816Zo6
-   ixVVDFy+o4eIKjHG13GW3f0GCTXSWEfNdpZK3wxyiA+5f8UUYVR1WGL+m
-   QTKLP/GK4lutI4oxr/TanR9tYBqIf21rfnXRsvP8MJU28Pe1J6cXZpVpo
-   l77/rnyjZiaEFhJqcKIBDLBK504hRwcSimTJBTzUM90d8MlDl2mjRq9ji
-   KBfK1DhHlIpvtXUYkVjqdJIHimFz3kFIbfblsrUgATjkVm9DdkW56A2wr
-   S5gdiVmMh8BWwslwdJOYJM/4YIvLt880yDorfshPaNV1O7sfZhfxUoYT6
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="369648855"
+  bh=zLZsEP9m7c0aA3XJAE3/+rd++V0bB/KkiYVa0+jwjCY=;
+  b=lav3FDk5fkbgipFOb275CmH5ekKZrNM5KUbTW9VP5phtyjch8+dzp9o0
+   p6l+6cDfeZ7id+SZyLB98W5sPTcpWj1JaQNvqJHLoHUcw2NKA0hmUwrTR
+   AbMHtd7qgsbeRj4cFtG7zzZwONtRvg0iLb9wUWlgUObuQcIQAlDuBSccx
+   aUwo9pNd4X8bAkw1/rIU3msQZuNXXewpK1YSn1rbIcPwsLZ5M8ZPYza9P
+   eosixhGU1TIPWvg1h78mMoEBp5t4j4sTHQI3BVUCNMUz+zDO87YY1kN4q
+   nXCyTrS1XPcS8EvLwsUF9iu5+CO+vjNYH0rL5NJu4d9+jKTZPn1Rh3eWW
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="369648883"
 X-IronPort-AV: E=Sophos;i="6.01,263,1684825200"; 
-   d="scan'208";a="369648855"
+   d="scan'208";a="369648883"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2023 00:56:06 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2023 00:56:09 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
-   d="scan'208";a="874627378"
+   d="scan'208";a="874627392"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2023 00:56:06 -0700
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2023 00:56:10 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id 912D912023A;
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 9E112120AB3;
         Tue,  8 Aug 2023 10:56:00 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1qTHZE-00ClsM-0b;
+        id 1qTHZE-00Clsh-0l;
         Tue, 08 Aug 2023 10:55:48 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
@@ -52,9 +52,9 @@ Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Andrey Konovalov <andrey.konovalov@linaro.org>,
         Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
         Dmitry Perchanov <dmitry.perchanov@intel.com>
-Subject: [PATCH v3 02/10] media: mc: Check pad flag validity
-Date:   Tue,  8 Aug 2023 10:55:30 +0300
-Message-Id: <20230808075538.3043934-3-sakari.ailus@linux.intel.com>
+Subject: [PATCH v3 06/10] media: uapi: Add a macro to tell whether an mbus code is metadata
+Date:   Tue,  8 Aug 2023 10:55:34 +0300
+Message-Id: <20230808075538.3043934-7-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230808075538.3043934-1-sakari.ailus@linux.intel.com>
 References: <20230808075538.3043934-1-sakari.ailus@linux.intel.com>
@@ -64,50 +64,25 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Check the validity of pad flags on entity init. Exactly one of the flags
-must be set.
+Add a macro to tell whether a given mbus code is metadata.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/mc/mc-entity.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ include/uapi/linux/media-bus-format.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
-index 83468d4a440b..4991281dcccc 100644
---- a/drivers/media/mc/mc-entity.c
-+++ b/drivers/media/mc/mc-entity.c
-@@ -197,6 +197,7 @@ int media_entity_pads_init(struct media_entity *entity, u16 num_pads,
- 	struct media_device *mdev = entity->graph_obj.mdev;
- 	struct media_pad *iter;
- 	unsigned int i = 0;
-+	int ret = 0;
+diff --git a/include/uapi/linux/media-bus-format.h b/include/uapi/linux/media-bus-format.h
+index 9ee031397372..2486b4178c5f 100644
+--- a/include/uapi/linux/media-bus-format.h
++++ b/include/uapi/linux/media-bus-format.h
+@@ -182,4 +182,7 @@
+ #define MEDIA_BUS_FMT_META_20			0x8006
+ #define MEDIA_BUS_FMT_META_24			0x8007
  
- 	if (num_pads >= MEDIA_ENTITY_MAX_PADS)
- 		return -E2BIG;
-@@ -210,6 +211,14 @@ int media_entity_pads_init(struct media_entity *entity, u16 num_pads,
- 	media_entity_for_each_pad(entity, iter) {
- 		iter->entity = entity;
- 		iter->index = i++;
++#define MEDIA_BUS_FMT_IS_META(code)		\
++	((code) & 0xf000 == 0x7000 || (code) & 0xf000 == 0x8000)
 +
-+		if (hweight32(iter->flags & (MEDIA_PAD_FL_SINK |
-+					     MEDIA_PAD_FL_SOURCE))
-+		    != 1) {
-+			ret = -EINVAL;
-+			break;
-+		}
-+
- 		if (mdev)
- 			media_gobj_create(mdev, MEDIA_GRAPH_PAD,
- 					  &iter->graph_obj);
-@@ -218,7 +227,7 @@ int media_entity_pads_init(struct media_entity *entity, u16 num_pads,
- 	if (mdev)
- 		mutex_unlock(&mdev->graph_mutex);
- 
--	return 0;
-+	return ret;
- }
- EXPORT_SYMBOL_GPL(media_entity_pads_init);
- 
+ #endif /* __LINUX_MEDIA_BUS_FORMAT_H */
 -- 
 2.39.2
 
