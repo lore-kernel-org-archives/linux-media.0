@@ -2,99 +2,71 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C398EEB64DD
-	for <linux-media@archiver.kernel.org>; Tue,  8 Aug 2023 01:43:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21830C04FDF
+	for <linux-media@archiver.kernel.org>; Tue,  8 Aug 2023 16:13:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjHHBnb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Aug 2023 21:43:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36302 "EHLO
+        id S232096AbjHHQNX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Aug 2023 12:13:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjHHBna (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Aug 2023 21:43:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9ED310F3
-        for <linux-media@vger.kernel.org>; Mon,  7 Aug 2023 18:43:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 57F236233B
-        for <linux-media@vger.kernel.org>; Tue,  8 Aug 2023 01:43:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B617C433C8
-        for <linux-media@vger.kernel.org>; Tue,  8 Aug 2023 01:43:27 +0000 (UTC)
-Date:   Tue, 08 Aug 2023 03:43:25 +0200
-Message-ID: <8f00bccf45f8f74434afb5f0fc16c40a.hverkuil@xs4all.nl>
-From:   "Hans Verkuil" <hverkuil-cisco@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: ERRORS
+        with ESMTP id S232099AbjHHQL4 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Aug 2023 12:11:56 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F04527DAD
+        for <linux-media@vger.kernel.org>; Tue,  8 Aug 2023 08:46:53 -0700 (PDT)
+Received: from [192.168.88.20] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 474749B4;
+        Tue,  8 Aug 2023 08:07:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1691474821;
+        bh=wMMir2MBx/x58TfNiF/Re7Hd1Pph3u7M5xTUcwOTjLg=;
+        h=Date:Subject:From:To:References:In-Reply-To:From;
+        b=bzEcBROcWc5c6nzOedfdt/O03zhkfCtuUNKWc3E6PF0tOYWndaGyNmaP2zd41spDa
+         NmKe6Cqyj8eZTxwxmxKuosAJidpNNVSrEArHjg5wQbUuRnyxaqonFLCeYjG416+TVH
+         8cl79seMrsEsf1Ma+TGoT80BzgwhS2MYJx5XJ9jE=
+Message-ID: <9270b0c4-5d40-7df2-0441-4f86d8783832@ideasonboard.com>
+Date:   Tue, 8 Aug 2023 09:08:06 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v6 5/8] v4l2-ctl/compliance: Add simple routing test
+Content-Language: en-US
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        niklas.soderlund+renesas@ragnatech.se,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        satish.nagireddy@getcruise.com
+References: <20230720075044.442021-1-tomi.valkeinen@ideasonboard.com>
+ <20230720075044.442021-6-tomi.valkeinen@ideasonboard.com>
+ <2c282976-5890-8da9-ac6b-cdc642ab9d99@xs4all.nl>
+ <94fefde1-02c9-6034-72cc-e6a30aa3f786@ideasonboard.com>
+In-Reply-To: <94fefde1-02c9-6034-72cc-e6a30aa3f786@ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the architectures in the list below.
+On 08/08/2023 08:56, Tomi Valkeinen wrote:
 
-Results of the daily build of media_tree:
+>> I assume that num_routes is always updated to the actual number of 
+>> routes, right?
+> 
+> If VIDIOC_SUBDEV_G_ROUTING succeeds, yes, num_routes is updated.
+> 
+>> That's not actually explained clearly in the spec. It says that if the 
+>> app provided
+>> num_routes is too small, then it is updated, but it says nothing about 
+>> what happens
+>> if the app provided value is too large.
+> 
+> Ok. I need to update the doc.
 
-date:			Tue Aug  8 03:00:09 CEST 2023
-media-tree git branch:	media_stage/master
-media-tree git hash:	c0f209bc6ce60d4662436100a263e82dfae76a8e
-v4l-utils git hash:	a0c26a97308ea1c5e809245df570e2f04e668168
-edid-decode git hash:	5f723267e04deb3aa9610483514a02bcee10d9c2
-gcc version:		i686-linux-gcc (GCC) 13.2.0
-sparse repo:            git://git.kernel.org/pub/scm/devel/sparse/sparse.git
-sparse version:		v0.6.4-39-gce1a6720
-smatch repo:            git://repo.or.cz/smatch.git
-smatch version:		v0.5.0-8446-g178bea2c
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: d2bafc06e218e0ddadb9cd84d02297959be0a60c
-host hardware:		x86_64
-host os:		6.1.0-5-amd64
+Actually, I have already sent a patch for that, "[PATCH] media: 
+Documentation: Fix [GS]_ROUTING documentation" on 20th July.
 
-linux-git-arm: OK
-linux-git-powerpc64: OK
-linux-git-arm64: OK
-linux-git-i686: OK
-linux-git-x86_64: OK
-no-of.config: OK
-no-pm.config: OK
-no-pm-sleep.config: OK
-no-debug-fs.config: OK
-sparse: WARNINGS:
+  Tomi
 
-drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
-
-smatch: ERRORS:
-
-drivers/media/i2c/ccs/ccs-data.c:524 ccs_data_parse_rules() warn: address of NULL pointer 'rules'
-drivers/media/v4l2-core/videobuf-core.c:66 videobuf_alloc_vb() error: we previously assumed 'q->int_ops' could be null (see line 61)
-drivers/staging/media/atomisp/i2c/atomisp-ov2680.c:476 ov2680_init_cfg() error: we previously assumed 'sd_state' could be null (see line 468)
-drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
-
-COMPILE_TEST: WARNINGS: VIDEOBUF_VMALLOC VIDEOBUF_DMA_CONTIG
-strcpy/strncpy/strlcpy: OK
-abi-compliance: ABI OK
-pahole: ABI OK
-utils: OK
-spec-git: OK
-kerneldoc: OK
-virtme: WARNINGS: Final Summary: 3080, Succeeded: 3080, Failed: 0, Warnings: 2
-virtme-32: WARNINGS: Final Summary: 3193, Succeeded: 3193, Failed: 0, Warnings: 2
-
-Detailed results are available here:
-
-https://hverkuil.home.xs4all.nl/logs/Tuesday.log
-
-Detailed regression test results are available here:
-
-https://hverkuil.home.xs4all.nl/logs/Tuesday-test-media.log
-https://hverkuil.home.xs4all.nl/logs/Tuesday-test-media-32.log
-https://hverkuil.home.xs4all.nl/logs/Tuesday-test-media-dmesg.log
-
-Full logs are available here:
-
-https://hverkuil.home.xs4all.nl/logs/Tuesday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-https://hverkuil.home.xs4all.nl/spec/index.html
