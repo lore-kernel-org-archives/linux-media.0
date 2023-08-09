@@ -2,143 +2,215 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76374C001B0
-	for <linux-media@archiver.kernel.org>; Wed,  9 Aug 2023 12:18:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68043EB64DD
+	for <linux-media@archiver.kernel.org>; Wed,  9 Aug 2023 12:32:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231216AbjHIMSy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 9 Aug 2023 08:18:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50094 "EHLO
+        id S231597AbjHIMcn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 9 Aug 2023 08:32:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbjHIMSy (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Aug 2023 08:18:54 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCB61BF0
-        for <linux-media@vger.kernel.org>; Wed,  9 Aug 2023 05:18:52 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id af79cd13be357-76c8dd2ce79so620533785a.1
-        for <linux-media@vger.kernel.org>; Wed, 09 Aug 2023 05:18:52 -0700 (PDT)
+        with ESMTP id S230340AbjHIMcm (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Aug 2023 08:32:42 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59CB91FCC
+        for <linux-media@vger.kernel.org>; Wed,  9 Aug 2023 05:32:41 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-51e24210395so10066a12.0
+        for <linux-media@vger.kernel.org>; Wed, 09 Aug 2023 05:32:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1691583531; x=1692188331;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CGkTKfm+Uq4LLX887DXfqTuYIIcyhKeb0nnxvNyvAtM=;
-        b=BNULxWjVFdDuFnoeDKobWAsW5K56zTyF+W0c63P0QNkAkeB4IGILrZE1i5eifwgS8W
-         YjFcx+Pd1AlcWI91kpcfNJT136uNsil/k4WNpTNAz2fuVh4YvRiPnV2gqGFm8M4i4naI
-         gIzsgB2HZ/LuzfRQEZSpmxIucq6q7O9PQ4weU=
+        d=google.com; s=20221208; t=1691584360; x=1692189160;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9wJF5qYZkkJRo48mYs8g8OpkvAWmV8+sSDDl+5AVElI=;
+        b=0Bb5PUM/nxkxf82rEIh+gnC+nTOHYUcGLioXIH8eeN0rqpP3xf5AyoKhPSNM2nCpPm
+         gaKH4kI2JS5eEdvWHuBDDQrHKcnUWlvb+qW730756OdLEyG9wp2Hv+dU0q5038ZDxkJT
+         Jrh6SctkLYJv0EqLGGEXTcsmkAj1YmBd+RrM7jrdME30ESVqgMFSkc+DigogcPZZr45H
+         kaqORLHFM6ldvUKVjnjd6TgI6M0qCzME5crt4epaFnHoH5DE7L+PgQ2ElGFQRy7b0Pmu
+         mLeNyTz6fIaleIJQ+wE0XAtOjTengY60ZFFAtp8LVGrl0JiT795yJX2RbBJYpKQ1+Vfb
+         rWmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691583531; x=1692188331;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CGkTKfm+Uq4LLX887DXfqTuYIIcyhKeb0nnxvNyvAtM=;
-        b=elWedUhI4AqJi1Q/WMO4LoFyjqMpggrQ7RiBH21LSmBSUQsq9oxuj748Z6CgT3ZkKW
-         en4MEtx8XLvUPliL2jcAxN4+DJpOZ0AluTDBhmQOa+4GZxK+PEN2ycTaq3GKGq1Z7KZf
-         2dlaOAxbAFV3z6eZ1PZ3AWib8c9c2mOgqtN7XQ62MOorBDixtzkUwZPnymHVfVBM8EnY
-         3a3Yz4PSrEGFKEF0gtlcJToHt+qeZ7sh8rQ2zt/lft+hWRY39d2ZVUSHFbvkU9t9KdnN
-         I/wJL2LfZyNISMNlpuogChH1aqc7ooKgPXb6zlDsa24Dt0gYRUCLZ5e3GWbzwEvoPrCN
-         oA2g==
-X-Gm-Message-State: AOJu0YzHuN2XXqbsa7/n4JdPHIJDAFprGxda0jvIi0zimB+kosaRuh6o
-        x9jygaDOafV56spyNebJEBO3rXnaH1jr7QeumOvy/w==
-X-Google-Smtp-Source: AGHT+IFvxdve/YkNQcjJk3V5MkHkcaQo86TobG22bREO6rAt9O3VmK1uv2x9dUUOcTzaMMi4YB+3MA==
-X-Received: by 2002:a05:620a:44c6:b0:76c:d5e0:f93c with SMTP id y6-20020a05620a44c600b0076cd5e0f93cmr3575948qkp.56.1691583530912;
-        Wed, 09 Aug 2023 05:18:50 -0700 (PDT)
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com. [209.85.219.52])
-        by smtp.gmail.com with ESMTPSA id d26-20020a05620a167a00b00767d00d10e9sm3910329qko.58.2023.08.09.05.18.49
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Aug 2023 05:18:50 -0700 (PDT)
-Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-63c70dc7ed2so45309386d6.0
-        for <linux-media@vger.kernel.org>; Wed, 09 Aug 2023 05:18:49 -0700 (PDT)
-X-Received: by 2002:a05:6214:2302:b0:62f:d00c:7f41 with SMTP id
- gc2-20020a056214230200b0062fd00c7f41mr2960303qvb.26.1691583529618; Wed, 09
- Aug 2023 05:18:49 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1691584360; x=1692189160;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9wJF5qYZkkJRo48mYs8g8OpkvAWmV8+sSDDl+5AVElI=;
+        b=DhmDlwvWdeNnYaE2ZEEW5aXXed2QWHZfY/b0nWywcNKi/Xq1r+OVgbv6mD6pj7USDs
+         PjsAARPRZN08gHfK+JLPRG8GmIp8tLrCdknx23SpgtZpaUFAibiFkZXAKK8bz3zf058+
+         uDVGwNXz26uAiKRHCJcku84ZacojjPc9O19yMlX95GU9m2tAHuQmTGnIBTbRI7DgSXiu
+         N8JCQzBpWdYwqvxSfVut6bta/VKygbh1ijtUsjDTlo/EPyk50lqwfYxxRd+m+DLFY03J
+         Bq+fAxGE1garinXtd8ul5wQHFYY95X79Sz7q1effAaEVHIIxqVxDYnB/RjJfqInfa4r/
+         nq6Q==
+X-Gm-Message-State: AOJu0YyjCprG2Jfte0WSVEnTsOOwMFbd5D4GpPB+WxY53zksXOA79RuB
+        snkRtWrvkUvstGaNuSf6UZuyZjjl1sZh6VBRxhriHA==
+X-Google-Smtp-Source: AGHT+IGg2aTQV7LuZlqTpRbsGBmgOpWhhOjCFBbYO3C+sZaWSV5YTkOzFSxYEKrdhuaC6T36lRAJXYG1tPoUsXrmB5U=
+X-Received: by 2002:a50:d683:0:b0:522:cc9c:f5a4 with SMTP id
+ r3-20020a50d683000000b00522cc9cf5a4mr82236edi.4.1691584359704; Wed, 09 Aug
+ 2023 05:32:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAMtCRKLwmShiw8PcxD=g6mrPJznUYpPuRogh32oD-sOMmGzxpg@mail.gmail.com>
-In-Reply-To: <CAMtCRKLwmShiw8PcxD=g6mrPJznUYpPuRogh32oD-sOMmGzxpg@mail.gmail.com>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Wed, 9 Aug 2023 14:18:38 +0200
-X-Gmail-Original-Message-ID: <CANiDSCskuAmnks2QWMfMDBH6ba9vW0LGaWX262TNF+3uR2v0rg@mail.gmail.com>
-Message-ID: <CANiDSCskuAmnks2QWMfMDBH6ba9vW0LGaWX262TNF+3uR2v0rg@mail.gmail.com>
-Subject: Re: Unknown UVC Camera
-To:     Larry Stewart <wanslenowski@gmail.com>
-Cc:     linux-media@vger.kernel.org
+References: <20230426082923.132909-1-yunkec@google.com> <20230426082923.132909-7-yunkec@google.com>
+ <da90bdb2-45f4-2ffe-2d62-1190b43fccd5@xs4all.nl> <CANqU6Fds77JBjkq5epiL5iyEBgC-goVAXXfFGK_-fnZx04z8WQ@mail.gmail.com>
+ <04a11648-fc00-bb29-774d-d1ba0f199872@xs4all.nl> <20230809101535.GA5737@pendragon.ideasonboard.com>
+ <caefa8ad-7ae4-6ef0-e247-fcc5d49d6c54@xs4all.nl>
+In-Reply-To: <caefa8ad-7ae4-6ef0-e247-fcc5d49d6c54@xs4all.nl>
+From:   Yunke Cao <yunkec@google.com>
+Date:   Wed, 9 Aug 2023 21:32:28 +0900
+Message-ID: <CANqU6FeRUkDr0ssAbXVBBgPzxThCEU0H5yCGOVda_3P5s3nb9A@mail.gmail.com>
+Subject: Re: [PATCH v11 06/11] v4l2-ctrls: add support for V4L2_CTRL_WHICH_MIN/MAX_VAL
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Daniel Scally <dan.scally@ideasonboard.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        linux-media@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-HI Larry
-
-Looks like your device needs to modeswitch. You probably want to ask
-at this forum:
-https://www.draisberghof.de/usb_modeswitch/bb/
-
-Regards!
-
-On Mon, 31 Jul 2023 at 20:24, Larry Stewart <wanslenowski@gmail.com> wrote:
+On Wed, Aug 9, 2023 at 7:59=E2=80=AFPM Hans Verkuil <hverkuil-cisco@xs4all.=
+nl> wrote:
 >
-> Hello,
->      I have an unknown UVC Camera, Brand on the camera is "Ourlife".
+> On 8/9/23 12:15, Laurent Pinchart wrote:
+> > Hello,
+> >
+> > On Wed, Aug 09, 2023 at 10:36:16AM +0200, Hans Verkuil wrote:
+> >> On 8/9/23 09:34, Yunke Cao wrote:
+> >>> On Wed, Aug 9, 2023 at 4:05=E2=80=AFPM Hans Verkuil wrote:
+> >>>> On 26/04/2023 10:29, Yunke Cao wrote:
+> >>>>> From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+> >>>>>
+> >>>>> Add the capability of retrieving the min and max values of a
+> >>>>> compound control.
+> >>>>>
+> >>>>> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+> >>>>> Signed-off-by: Yunke Cao <yunkec@google.com>
+> >>>>> ---
+> >>>>> Changelog since v10:
+> >>>>> - No change.
+> >>>>> Changelog since v9:
+> >>>>> - No change.
+> >>>>> Changelog since v8:
+> >>>>> - Return ENODATA when min/max is not implemented. Document this beh=
+avior.
+> >>>>> - Created a shared helper function __v4l2_ctrl_type_op_init that ta=
+kes "which"
+> >>>>>   as a parameter. Call it in def, min and max operations.
+> >>>>> Changelog since v7:
+> >>>>> - Document that the definition of the min/max are provided by compo=
+und controls
+> >>>>>   are defined in control documentation.
+> >>>>> - Return error, instead of zeroed memory for v4l2_ctrl_ptr_create(N=
+ULL).
+> >>>>>
+> >>>>> git am from https://lore.kernel.org/all/20191119113457.57833-3-hver=
+kuil-cisco@xs4all.nl/
+> >>>>> - Fixed some merge conflits.
+> >>>>> - Fixed the build error in drivers/media/platform/qcom/venus.
+> >>>>>
+> >>>>>  .../media/v4l/vidioc-g-ext-ctrls.rst          |  11 +-
+> >>>>>  .../media/videodev2.h.rst.exceptions          |   2 +
+> >>>>>  drivers/media/i2c/imx214.c                    |   5 +-
+> >>>>>  .../media/platform/qcom/venus/venc_ctrls.c    |   9 +-
+> >>>>>  drivers/media/v4l2-core/v4l2-ctrls-api.c      |  57 +++++--
+> >>>>>  drivers/media/v4l2-core/v4l2-ctrls-core.c     | 156 ++++++++++++++=
++---
+> >>>>>  drivers/media/v4l2-core/v4l2-ioctl.c          |   4 +-
+> >>>>>  include/media/v4l2-ctrls.h                    |  34 +++-
+> >>>>>  include/uapi/linux/videodev2.h                |   2 +
+> >>>>>  9 files changed, 236 insertions(+), 44 deletions(-)
+> >>>>>
+> >>>>> diff --git a/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctr=
+ls.rst b/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
+> >>>>> index 927ef397f1ce..1cc21ee229aa 100644
+> >>>>> --- a/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
+> >>>>> +++ b/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
+> >>>>> @@ -304,14 +304,21 @@ still cause this situation.
+> >>>>>        - Which value of the control to get/set/try.
+> >>>>>      * - :cspan:`2` ``V4L2_CTRL_WHICH_CUR_VAL`` will return the cur=
+rent value of
+> >>>>>       the control, ``V4L2_CTRL_WHICH_DEF_VAL`` will return the defa=
+ult
+> >>>>> +     value of the control, ``V4L2_CTRL_WHICH_MIN_VAL`` will return=
+ the minimum
+> >>>>> +     value of the control, ``V4L2_CTRL_WHICH_MAX_VAL`` will return=
+ the maximum
+> >>>>>       value of the control and ``V4L2_CTRL_WHICH_REQUEST_VAL`` indi=
+cates that
+> >>>>>       these controls have to be retrieved from a request or tried/s=
+et for
+> >>>>>       a request. In the latter case the ``request_fd`` field contai=
+ns the
+> >>>>>       file descriptor of the request that should be used. If the de=
+vice
+> >>>>>       does not support requests, then ``EACCES`` will be returned.
+> >>>>>
+> >>>>> -     When using ``V4L2_CTRL_WHICH_DEF_VAL`` be aware that you can =
+only
+> >>>>> -     get the default value of the control, you cannot set or try i=
+t.
+> >>>>> +     When using ``V4L2_CTRL_WHICH_DEF_VAL``, ``V4L2_CTRL_WHICH_MIN=
+_VAL``
+> >>>>> +     or ``V4L2_CTRL_WHICH_MAX_VAL`` be aware that you can only get=
+ the
+> >>>>> +     default/minimum/maximum value of the control, you cannot set =
+or try it.
+> >>>>> +     The definition of minimum/maximum values for compound types a=
+re provided by
+> >>>>> +     the control documentation. If the control documentation does =
+not
+> >>>>> +     document the meaning of minimum/maximum value, then it is not=
+ supported.
+> >>>>> +     Querying its minmimum/maximum value will result in -ENODATA.
+> >>>>
+> >>>> typo: minmimum -> minimum
+> >>>>
+> >>>> That last line is a bit ambiguous, I suggest this:
+> >>>>
+> >>>> If  ``V4L2_CTRL_WHICH_MIN_VAL`` and ``V4L2_CTRL_WHICH_MAX_VAL`` are =
+not supported,
+> >>>> then querying the minimum or maximum value will result in -ENODATA.
+> >>>
+> >>> This sounds clearer indeed! I will change it in the next version.
+> >>
+> >> Thinking some more about this, I believe it would be better to add a f=
+lag
+> >> indicating WHICH_MIN/MAX support. I never like relying on an error to
+> >> discover a feature. You still need this error, but in addition we need=
+ a new
+> >> flag:
+> >>
+> >> #define V4L2_CTRL_FLAG_HAS_WHICH_MIN_MAX 0x1000
+> >>
+> >> that is set for any control that supports this.
+> >
+> > I think the intent here was to indicate that drivers must return
+> > -ENODATA for V4L2_CTRL_WHICH_MIN_VAL and V4L2_CTRL_WHICH_MAX_VAL if the
+> > control's documentation doesn't specify the meaning of minimum and
+> > maximum for a control. A flag to indicate support for this new API is
+> > likely a good idea, but the documentation here should still clearly
+> > indicate that only controls that have defined minimum and maximum
+> > concepts in the API documentation can implement this API.
 >
-> When I plug in lsusb shows
-> Bus 003 Device 015: ID 1f3a:1002 Allwinner Technology mediacom XPRO 415
-> when i switch to PCCamera on device lsusb shows
-> Bus 003 Device 014: ID 1f3a:100e Allwinner Technology Android
+> This flag is specific to the control ID: so if set, then you can get
+> the min/max value using V4L2_CTRL_WHICH_MIN/MAX_VAL for that control ID.
 >
-> when I plug in dmesg shows
-> [  142.809927] usb 3-5: new high-speed USB device number 8 using xhci_hcd
-> [  142.958438] usb 3-5: New USB device found, idVendor=1f3a,
-> idProduct=1002, bcdDevice= 2.33
-> [  142.958451] usb 3-5: New USB device strings: Mfr=2, Product=3, SerialNumber=4
-> [  142.958456] usb 3-5: Product: Android
-> [  142.958461] usb 3-5: Manufacturer: USB Developer
-> [  142.958465] usb 3-5: SerialNumber: 20080411
-> [  148.294287] usb 3-1: reset high-speed USB device number 2 using xhci_hcd
-> [  149.260771] usb-storage 3-5:1.0: USB Mass Storage device detected
-> [  149.260942] scsi host4: usb-storage 3-5:1.0
-> [  149.261019] usbcore: registered new interface driver usb-storage
-> [  149.262371] usbcore: registered new interface driver uas
-> [  150.292847] scsi 4:0:0:0: Direct-Access     USB 2.0  USB Flash
-> Driver 0100 PQ: 0 ANSI: 2
-> [  150.293426] sd 4:0:0:0: Attached scsi generic sg2 type 0
-> [  150.293772] sd 4:0:0:0: Power-on or device reset occurred
-> [  150.293983] sd 4:0:0:0: [sdb] Media removed, stopped polling
-> [  150.296022] sd 4:0:0:0: [sdb] Attached SCSI removable disk
->
-> when I click PCCamera on device dmesg shows
->
-> [  164.962071] usb 3-5: USB disconnect, device number 8
-> [  165.294356] usb 3-5: new high-speed USB device number 9 using xhci_hcd
-> [  165.442934] usb 3-5: New USB device found, idVendor=1f3a,
-> idProduct=100e, bcdDevice= 2.33
-> [  165.442946] usb 3-5: New USB device strings: Mfr=2, Product=3, SerialNumber=4
-> [  165.442952] usb 3-5: Product: Android
-> [  165.442956] usb 3-5: Manufacturer: USB Developer
-> [  165.442960] usb 3-5: SerialNumber: 20080411
-> [  165.444949] usb 3-5: Found UVC 1.00 device Android (1f3a:100e)
-> [  165.445107] usb 3-5: Failed to query (GET_INFO) UVC control 2 on
-> unit 2: -32 (exp. 1).
-> [  165.445288] usb 3-5: Failed to query (GET_INFO) UVC control 2 on
-> unit 1: -32 (exp. 1).
-> [  165.446367] input: Android: UVC Camera as
-> /devices/pci0000:00/0000:00:14.0/usb3/3-5/3-5:1.0/input/input22
-> [  167.962413] usb 3-5: USB disconnect, device number 9
-> [  168.754380] usb 3-5: new high-speed USB device number 10 using xhci_hcd
-> [  168.908317] usb 3-5: New USB device found, idVendor=1f3a,
-> idProduct=1002, bcdDevice= 2.33
-> [  168.908329] usb 3-5: New USB device strings: Mfr=2, Product=3, SerialNumber=4
-> [  168.908335] usb 3-5: Product: Android
-> [  168.908339] usb 3-5: Manufacturer: USB Developer
-> [  168.908343] usb 3-5: SerialNumber: 20080411
-> [  168.910482] usb-storage 3-5:1.0: USB Mass Storage device detected
-> [  168.910727] scsi host4: usb-storage 3-5:1.0
-> [  169.938974] scsi 4:0:0:0: Direct-Access     USB 2.0  USB Flash
-> Driver 0100 PQ: 0 ANSI: 2
-> [  169.939421] sd 4:0:0:0: Attached scsi generic sg2 type 0
-> [  169.939717] sd 4:0:0:0: Power-on or device reset occurred
-> [  169.940008] sd 4:0:0:0: [sdb] Media removed, stopped polling
-> [  169.940685] sd 4:0:0:0: [sdb] Attached SCSI removable disk
+> This flag must be set for any control that uses the s64 minimum/maximum
+> fields in struct v4l2_ext_query_ctrl, and for any compound control that
+> has explicit support for MIN/MAX_VAL (the UVC rectangle control in this
+> case).
 
+> any control that uses the s64 minimum/maximum fields
+Noob question: does this include all the non-compound controls?
+Are drivers responsible for setting this flag for these controls?
 
+Best,
+Yunke
 
--- 
-Ricardo Ribalda
+>
+> Regards,
+>
+>         Hans
+>
+>
