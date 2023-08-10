@@ -2,79 +2,122 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B62EC001E0
-	for <linux-media@archiver.kernel.org>; Thu, 10 Aug 2023 15:49:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FCB2C001B0
+	for <linux-media@archiver.kernel.org>; Thu, 10 Aug 2023 16:09:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236245AbjHJPte (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 10 Aug 2023 11:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57000 "EHLO
+        id S233002AbjHJQI7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 10 Aug 2023 12:08:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234829AbjHJPtd (ORCPT
+        with ESMTP id S236612AbjHJQIo (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 10 Aug 2023 11:49:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A46E76;
-        Thu, 10 Aug 2023 08:49:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B9C7660EF;
-        Thu, 10 Aug 2023 15:49:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8047EC433C7;
-        Thu, 10 Aug 2023 15:49:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1691682572;
-        bh=7JZ+hjiGnW6zlgnmFdgRvS45F6iLlcnWLPDgR5IUKPU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hRrAvjEGrOfwyKQm5uaZj1BWRp0OibK4wDpl/exdaLQEATqBt/bTkHphCxjUyc983
-         T/hqV+eu+Y6kEbPvq8rdci27BgFTSvEi2trukbFD+4dOci13LG1YzZ8nCs6Fe4eZpS
-         zNDaydwuH9FowoERk/VycQ6pZC3JyQsQJwv/P+ME=
-Date:   Thu, 10 Aug 2023 17:49:29 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Eugen Hristev <eugen.hristev@collabora.com>
-Cc:     Wei Chen <harperchen1110@gmail.com>, tiffany.lin@mediatek.com,
-        andrew-ct.chen@mediatek.com, yunfei.dong@mediatek.com,
-        mchehab@kernel.org, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] media: vcodec: Fix potential array out-of-bounds in
- encoder queue_setup
-Message-ID: <2023081004-stout-blanching-6f17@gregkh>
-References: <20230810082333.972165-1-harperchen1110@gmail.com>
- <45d0f538-9769-f4eb-7479-cf676337ff55@collabora.com>
+        Thu, 10 Aug 2023 12:08:44 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0502F46AE
+        for <linux-media@vger.kernel.org>; Thu, 10 Aug 2023 09:07:26 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1bbc64f9a91so9669335ad.0
+        for <linux-media@vger.kernel.org>; Thu, 10 Aug 2023 09:07:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1691683619; x=1692288419;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Bkl7A8nIZ4dLxOcY6GpHpFtX+viPmkaZX3wq6XxPfxg=;
+        b=JL9PB5YetmewwFt4dDybaPdzwmRNljhoEiaIvSyobmvxBnbUSrib0/OLZrInyO+/1c
+         WxEb27kvGab0U19ny3qjovhvp4KPMhmrM2Jqtl/Sybe5g/zIKFpOOF62rMgIkHHf4UbB
+         VKhhEHQLs4ges87nYRT9ch0zp7xExv1gT874o21HXlD6fq1w4HfWb5w6aIB4k6n17BS6
+         sHwCkyxjqIF/8NI5kQBcfC3SRO7xYSESm9CyKct1e2y0kTPD1OEFcZVOieF6bi0mgKVN
+         nkDDYLgPl8A0tzyRQn+5DPmETmTTMEvWVvuuyb3zFt2rluHyUxJ0uPc6WGGARgxW4JyZ
+         JPcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691683619; x=1692288419;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bkl7A8nIZ4dLxOcY6GpHpFtX+viPmkaZX3wq6XxPfxg=;
+        b=ZdUm5nRQJ1cELDoANw06gbx2hyf6KUrV4Kf5H0pznR7hsBgRwVrJaUgB2ijAvBRkI0
+         egVYm946vni+9MsxeeMCnY2NYBevGgFb9AFilHcHfdvjxMW6pYHwo4MMR1i5neiisCAx
+         btWW4rep9I0VQAU4ZiMHkQhdm9F2nnqCDFBLE0Y/UoQt1yZLpS6G4uO4bZ1a24pvCKZX
+         bcGIb+EBLsNUNwXZxklJmtPtq+rrjtGmILg5yIrkvA69RoO5anNQM1EfSTRwDcJbmsnN
+         9O9+us+MxCsQB7YSLKZB1rJ7cflXmQdXvc04n5dxQcxxfQdX9f83YUJVuUvtwaRccQ++
+         cMQg==
+X-Gm-Message-State: AOJu0YwHQfT8UC4NjOZHcQsXyGWqePrcK5QuMWnk1ebblGGvyMbsXNFI
+        cthXOk35IPImqV1d7DCv+jlstA==
+X-Google-Smtp-Source: AGHT+IF4hyqWBe3EdaSGly2P8UCzQ7nDhJe1xj0NdzWbJpW3WsvHw4tGYB8oXfKwdLOgDTGQE6RMzw==
+X-Received: by 2002:a17:903:182:b0:1bb:ed65:5e0d with SMTP id z2-20020a170903018200b001bbed655e0dmr3656999plg.56.1691683619216;
+        Thu, 10 Aug 2023 09:06:59 -0700 (PDT)
+Received: from ziepe.ca ([206.223.160.26])
+        by smtp.gmail.com with ESMTPSA id j16-20020a170902da9000b001b8a1a25e6asm1955107plx.128.2023.08.10.09.06.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Aug 2023 09:06:57 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1qU8Bc-005Glp-95;
+        Thu, 10 Aug 2023 13:06:56 -0300
+Date:   Thu, 10 Aug 2023 13:06:56 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>
+Cc:     Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Ahern <dsahern@kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Hari Ramakrishnan <rharix@google.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andy Lutomirski <luto@kernel.org>, stephen@networkplumber.org,
+        sdf@google.com
+Subject: Re: [RFC PATCH v2 00/11] Device Memory TCP
+Message-ID: <ZNULIDzuVVyfyMq2@ziepe.ca>
+References: <20230810015751.3297321-1-almasrymina@google.com>
+ <1009bd5b-d577-ca7b-8eff-192ee89ad67d@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <45d0f538-9769-f4eb-7479-cf676337ff55@collabora.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1009bd5b-d577-ca7b-8eff-192ee89ad67d@amd.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Aug 10, 2023 at 12:12:39PM +0300, Eugen Hristev wrote:
-> Hi Wei,
+On Thu, Aug 10, 2023 at 12:29:08PM +0200, Christian König wrote:
+> Am 10.08.23 um 03:57 schrieb Mina Almasry:
+> > Changes in RFC v2:
+> > ------------------
+> > 
+> > The sticking point in RFC v1[1] was the dma-buf pages approach we used to
+> > deliver the device memory to the TCP stack. RFC v2 is a proof-of-concept
+> > that attempts to resolve this by implementing scatterlist support in the
+> > networking stack, such that we can import the dma-buf scatterlist
+> > directly.
 > 
-> On 8/10/23 11:23, Wei Chen wrote:
-> > variable *nplanes is provided by user via system call argument. The
-> > possible value of q_data->fmt->num_planes is 1-3, while the value
-> > of *nplanes can be 1-8. The array access by index i can cause array
-> > out-of-bounds.
-> > 
-> > Fix this bug by checking *nplanes against the array size.
-> > 
-> > Fixes: 4e855a6efa54 ("[media] vcodec: mediatek: Add Mediatek V4L2 Video Encoder Driver")
-> > Signed-off-by: Wei Chen <harperchen1110@gmail.com>
-> > Cc: stable@vger.kernel.org
-> > ---
-> > Changes in v2:
-> > - Add Fixes tag and CC stable email address
-> I guess stable needs to be added by the maintainer, not by the submitter
+> Impressive work, I didn't thought that this would be possible that "easily".
+> 
+> Please note that we have considered replacing scatterlists with simple
+> arrays of DMA-addresses in the DMA-buf framework to avoid people trying to
+> access the struct page inside the scatterlist.
+> 
+> It might be a good idea to push for that first before this here is finally
+> implemented.
+> 
+> GPU drivers already convert the scatterlist used to arrays of DMA-addresses
+> as soon as they get them. This leaves RDMA and V4L as the other two main
+> users which would need to be converted.
 
-It's easiest if it is added by the submitter, makes the maintainer's job
-much easier.
+Oh that would be a nightmare for RDMA.
 
-thanks,
+We need a standard based way to have scalable lists of DMA addresses :(
 
-greg k-h
+> > 2. Netlink API (Patch 1 & 2).
+> 
+> How does netlink manage the lifetime of objects?
+
+And access control..
+
+Jason
