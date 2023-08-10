@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4166C001E0
-	for <linux-media@archiver.kernel.org>; Thu, 10 Aug 2023 02:26:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0342BEB64DD
+	for <linux-media@archiver.kernel.org>; Thu, 10 Aug 2023 02:26:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232031AbjHJC0A (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 9 Aug 2023 22:26:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32846 "EHLO
+        id S232296AbjHJC0D (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 9 Aug 2023 22:26:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjHJCZ7 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Aug 2023 22:25:59 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D681999;
-        Wed,  9 Aug 2023 19:25:58 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37A2Pa9T028958;
-        Thu, 10 Aug 2023 02:25:45 GMT
+        with ESMTP id S231787AbjHJC0B (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Aug 2023 22:26:01 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44AF31BCF;
+        Wed,  9 Aug 2023 19:26:01 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37A2JCqQ010471;
+        Thu, 10 Aug 2023 02:25:56 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=qcppdkim1;
- bh=fybLsQntBjDPeIINYbmncAJXzI627HXW3R0ZrjRa2fg=;
- b=R9v4bwZ2Ec7+Y7USOvYOhIOX7akrPTserUD10lc8FF+Gt6OPJkQCOpnxH8WekgWZ7rzP
- A01ooGTa2j1V/xcUIyXzj5oQcr+YWf+zcqOq/s1EGWvxqDRBpcpTjL/4YbrCkuOUtzTN
- y2WD3E3mv23aNn7r2woXu5ICIKIvLIEBrpjtr0UGDh7d9H/XCP4ijblpUlDwM7znEm4s
- 3gCZkjbM/XeeCa6b7TPqW14kdipUzPXw08vWYruPp5e6ok94bYobo3wnLWZlZu4OER2n
- boGtdklLhfZlQkrhBlmPRLL9j9R+7Pb1PPuf+eThNkrC/hLU367pzAxlNnvjpX6280qs /Q== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3sbmrqm84w-1
+ bh=Id3qv/5ZcdycMZ8v5o4bZF4k+g39Mbe/s38TYj1GJkI=;
+ b=iag/iiCz3X8WQ/KoASNhlaMyNTqnMunQxUNIg0xU5ls+avuv9rlKn1bJxTxxV65RMnKr
+ 0cggecLiUekr85WOD9KCbdHCLApX7F4WPwk8tWnbgFtUyb3BRwh7AmeH7EvAiNkeSplW
+ zwAU5051GVPns+VM4GuSuIPGMcW9pR675gEtRG6uwZJkf4wT7BwjLtdCKI3XyLBly6+h
+ wdxwMWE3zQmckX+byqpzEAvyC7SFEsLxFytKYVCgepojev3ls3q7ebkIQHvHcc0XB2pX
+ lhYHeElQrwsY3NyNbM567ai/ziTDnFj+PFSXazzDiDTWMB4TD1Qql/2R4EfbvPDixvln rQ== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3scnsf83v5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Aug 2023 02:25:44 +0000
+        Thu, 10 Aug 2023 02:25:56 +0000
 Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37A2PiAK011953
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37A2Ptg6010223
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Aug 2023 02:25:44 GMT
+        Thu, 10 Aug 2023 02:25:55 GMT
 Received: from hu-vgarodia-hyd.qualcomm.com (10.80.80.8) by
  nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Wed, 9 Aug 2023 19:25:40 -0700
+ 15.2.1118.30; Wed, 9 Aug 2023 19:25:51 -0700
 From:   Vikash Garodia <quic_vgarodia@quicinc.com>
 To:     <stanimir.k.varbanov@gmail.com>, <bryan.odonoghue@linaro.org>,
         <agross@kernel.org>, <andersson@kernel.org>,
@@ -46,9 +46,9 @@ To:     <stanimir.k.varbanov@gmail.com>, <bryan.odonoghue@linaro.org>,
 CC:     <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
         Vikash Garodia <quic_vgarodia@quicinc.com>
-Subject: [PATCH v2 1/4] venus: hfi: add checks to perform sanity on queue pointers
-Date:   Thu, 10 Aug 2023 07:55:01 +0530
-Message-ID: <1691634304-2158-2-git-send-email-quic_vgarodia@quicinc.com>
+Subject: [PATCH v2 3/4] venus: hfi: add checks to handle capabilities from firmware
+Date:   Thu, 10 Aug 2023 07:55:03 +0530
+Message-ID: <1691634304-2158-4-git-send-email-quic_vgarodia@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1691634304-2158-1-git-send-email-quic_vgarodia@quicinc.com>
 References: <1691634304-2158-1-git-send-email-quic_vgarodia@quicinc.com>
@@ -59,60 +59,79 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nasanex01a.na.qualcomm.com (10.52.223.231)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: OSnrjtdp5uGQiV8Z9Wc4K0Kz8tqYjBvi
-X-Proofpoint-ORIG-GUID: OSnrjtdp5uGQiV8Z9Wc4K0Kz8tqYjBvi
+X-Proofpoint-GUID: ilFCVncCkjlMY-_iU9vbPejh-4ZgEk8J
+X-Proofpoint-ORIG-GUID: ilFCVncCkjlMY-_iU9vbPejh-4ZgEk8J
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-08-10_01,2023-08-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
- adultscore=0 mlxscore=0 suspectscore=0 phishscore=0 mlxlogscore=769
- impostorscore=0 priorityscore=1501 clxscore=1015 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ impostorscore=0 mlxscore=0 spamscore=0 lowpriorityscore=0 adultscore=0
+ mlxlogscore=999 malwarescore=0 priorityscore=1501 clxscore=1015
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2306200000 definitions=main-2308100019
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Read and write pointers are used to track the packet index in the memory
-shared between video driver and firmware. There is a possibility of OOB
-access if the read or write pointer goes beyond the queue memory size.
-Add checks for the read and write pointer to avoid OOB access.
+The hfi parser, parses the capabilities received from venus firmware and
+copies them to core capabilities. Consider below api, for example,
+fill_caps - In this api, caps in core structure gets updated with the
+number of capabilities received in firmware data payload. If the same api
+is called multiple times, there is a possibility of copying beyond the max
+allocated size in core caps.
+Similar possibilities in fill_raw_fmts and fill_profile_level functions.
 
 Cc: stable@vger.kernel.org
-Fixes: d96d3f30c0f2 ("[media] media: venus: hfi: add Venus HFI files")
+Fixes: 1a73374a04e5 ("media: venus: hfi_parser: add common capability parser")
 Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
 ---
- drivers/media/platform/qcom/venus/hfi_venus.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/media/platform/qcom/venus/hfi_parser.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/drivers/media/platform/qcom/venus/hfi_venus.c b/drivers/media/platform/qcom/venus/hfi_venus.c
-index f0b4638..4ddabb1 100644
---- a/drivers/media/platform/qcom/venus/hfi_venus.c
-+++ b/drivers/media/platform/qcom/venus/hfi_venus.c
-@@ -206,6 +206,11 @@ static int venus_write_queue(struct venus_hfi_device *hdev,
+diff --git a/drivers/media/platform/qcom/venus/hfi_parser.c b/drivers/media/platform/qcom/venus/hfi_parser.c
+index 6cf74b2..9d6ba22 100644
+--- a/drivers/media/platform/qcom/venus/hfi_parser.c
++++ b/drivers/media/platform/qcom/venus/hfi_parser.c
+@@ -86,6 +86,9 @@ static void fill_profile_level(struct hfi_plat_caps *cap, const void *data,
+ {
+ 	const struct hfi_profile_level *pl = data;
  
- 	new_wr_idx = wr_idx + dwords;
- 	wr_ptr = (u32 *)(queue->qmem.kva + (wr_idx << 2));
++	if (cap->num_pl + num >= HFI_MAX_PROFILE_COUNT)
++		return;
 +
-+	if (wr_ptr < (u32 *)queue->qmem.kva ||
-+	    wr_ptr > (u32 *)(queue->qmem.kva + queue->qmem.size - sizeof(*wr_ptr)))
-+		return -EINVAL;
-+
- 	if (new_wr_idx < qsize) {
- 		memcpy(wr_ptr, packet, dwords << 2);
- 	} else {
-@@ -273,6 +278,11 @@ static int venus_read_queue(struct venus_hfi_device *hdev,
- 	}
+ 	memcpy(&cap->pl[cap->num_pl], pl, num * sizeof(*pl));
+ 	cap->num_pl += num;
+ }
+@@ -111,6 +114,9 @@ fill_caps(struct hfi_plat_caps *cap, const void *data, unsigned int num)
+ {
+ 	const struct hfi_capability *caps = data;
  
- 	rd_ptr = (u32 *)(queue->qmem.kva + (rd_idx << 2));
++	if (cap->num_caps + num >= MAX_CAP_ENTRIES)
++		return;
 +
-+	if (rd_ptr < (u32 *)queue->qmem.kva ||
-+	    rd_ptr > (u32 *)(queue->qmem.kva + queue->qmem.size - sizeof(*rd_ptr)))
-+		return -EINVAL;
+ 	memcpy(&cap->caps[cap->num_caps], caps, num * sizeof(*caps));
+ 	cap->num_caps += num;
+ }
+@@ -137,6 +143,9 @@ static void fill_raw_fmts(struct hfi_plat_caps *cap, const void *fmts,
+ {
+ 	const struct raw_formats *formats = fmts;
+ 
++	if (cap->num_fmts + num_fmts >= MAX_FMT_ENTRIES)
++		return;
 +
- 	dwords = *rd_ptr >> 2;
- 	if (!dwords)
- 		return -EINVAL;
+ 	memcpy(&cap->fmts[cap->num_fmts], formats, num_fmts * sizeof(*formats));
+ 	cap->num_fmts += num_fmts;
+ }
+@@ -159,6 +168,9 @@ parse_raw_formats(struct venus_core *core, u32 codecs, u32 domain, void *data)
+ 		rawfmts[i].buftype = fmt->buffer_type;
+ 		i++;
+ 
++		if (i >= MAX_FMT_ENTRIES)
++			return;
++
+ 		if (pinfo->num_planes > MAX_PLANES)
+ 			break;
+ 
 -- 
 2.7.4
 
