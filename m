@@ -2,327 +2,148 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DFA19C001B0
-	for <linux-media@archiver.kernel.org>; Fri, 11 Aug 2023 10:44:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06163C41513
+	for <linux-media@archiver.kernel.org>; Fri, 11 Aug 2023 10:48:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234975AbjHKKos (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 11 Aug 2023 06:44:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54056 "EHLO
+        id S235573AbjHKKsR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 11 Aug 2023 06:48:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234069AbjHKKoq (ORCPT
+        with ESMTP id S232691AbjHKKsP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 11 Aug 2023 06:44:46 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF3E12C
-        for <linux-media@vger.kernel.org>; Fri, 11 Aug 2023 03:44:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691750686; x=1723286686;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LEQrvtoib1rbvRYfpkhq9+Wnda+vuEaahoHEU5oSvu8=;
-  b=n/0/QJksE4bZBaJQIf2OBQH8TeTg5Cfbi+wZtYi2ggR4U/pBfG0rHgHv
-   0F2Iw6nSvGBTgC6WRkEKzasv980XnvaP81ZzaXgXICPkZYtcDm/DCh55N
-   qAykOwyyIATjs3AOrqeI8AqVixNTPGX01eVtMhS99dD86d4YaXc5T+6cB
-   1rQX3iDcgH4uwt8BI7pHPSuoefvo+YGkRm2mu6F3Y3cpo5w108Zi/UWmx
-   FqKbL/RPvY9iGsBadkT0hf+1PRk81SFDRAQvlmiKGP0f4TBoFI1QOqypP
-   Gvt1QWXuwvAd8mn/tNAQoQl+UEWQlGaLP9aoMpRZGmys934vz6BhsgpDU
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10798"; a="356610355"
-X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="356610355"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2023 03:44:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10798"; a="762161782"
-X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="762161782"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2023 03:44:43 -0700
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id A6A8B11FAE0;
-        Fri, 11 Aug 2023 13:44:40 +0300 (EEST)
-Date:   Fri, 11 Aug 2023 10:44:40 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     linux-media@vger.kernel.org,
+        Fri, 11 Aug 2023 06:48:15 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A6BE52;
+        Fri, 11 Aug 2023 03:48:13 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 37BAloMi088936;
+        Fri, 11 Aug 2023 05:47:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1691750870;
+        bh=Jt/CtUJuvXw143SkqQX5c8m1ZObK6v0lOQaL9M+GqKw=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=p4wfv6ojuUec7N/hdWdI3pYKP0uTZmj/QRklyuANk5+KwNBRoznYTW2LQyUWrYX31
+         ExcJdQQ8+ndaOkgBEl5czBlZaHqNijkgxSyBtqqbe+1xHC1OJJqxovfX52574bTfv7
+         ms7gdWmYrM8TKRjNtl5CXO1LZcxeFK6uOBDOkSaY=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 37BAlocc041945
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 11 Aug 2023 05:47:50 -0500
+Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 11
+ Aug 2023 05:47:50 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Fri, 11 Aug 2023 05:47:50 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 37BAln0w008272;
+        Fri, 11 Aug 2023 05:47:49 -0500
+From:   Jai Luthra <j-luthra@ti.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        tomi.valkeinen@ideasonboard.com, bingbu.cao@intel.com,
-        hongju.wang@intel.com,
-        Andrey Konovalov <andrey.konovalov@linaro.org>,
-        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-        Dmitry Perchanov <dmitry.perchanov@intel.com>
-Subject: Re: [PATCH v3 10/10] media: uapi: v4l: Document source routes
-Message-ID: <ZNYRGA1KAzTrBmkX@kekkonen.localdomain>
-References: <20230808075538.3043934-1-sakari.ailus@linux.intel.com>
- <20230808075538.3043934-11-sakari.ailus@linux.intel.com>
- <b91681ec-89e0-4347-c289-51498d8b3788@xs4all.nl>
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Benoit Parrot <bparrot@ti.com>,
+        Vaishnav Achath <vaishnav.a@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>, <nm@ti.com>,
+        <devarsht@ti.com>, <j-luthra@ti.com>, <a-bhatia1@ti.com>,
+        Martyn Welch <martyn.welch@collabora.com>,
+        Julien Massot <julien.massot@collabora.com>
+Subject: [PATCH v9 07/13] media: cadence: csi2rx: Soft reset the streams before starting capture
+Date:   Fri, 11 Aug 2023 16:17:29 +0530
+Message-ID: <20230811-upstream_csi-v9-7-8943f7a68a81@ti.com>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230811-upstream_csi-v9-0-8943f7a68a81@ti.com>
+References: <20230811-upstream_csi-v9-0-8943f7a68a81@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b91681ec-89e0-4347-c289-51498d8b3788@xs4all.nl>
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1998; i=j-luthra@ti.com;
+ h=from:subject:message-id; bh=ND2+AeL/8naVEz1dLhGdl9YP2oZXLbJkqWDu7tykgBY=;
+ b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBk1g8BdvyE3kkHeBUT1BHxluyU5iP4UDye9dIGD
+ PHmzrG9lVKJAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZNYPAQAKCRBD3pH5JJpx
+ RdFRD/4xFvP4EG7d7m365bT1NpU3doOJKtBE57fyECqryuflTFrskWMNJzvdsFjxXt/i5j1oF//
+ pGYQGTlk3jxI5HR8Lo477dkD0cKsDk7yWzfqZd06uH3Cjs6Qan/nfyaXQYFVQDQZBnOq56TPbMm
+ AUCfg0ubTuJAXEov7N03WtpPDLVyEt81iRpkmrCz1XAFi5SaWJOcsoORzDQxNE1QQ4+XFxfq+n0
+ hYcuX3JjFStbI1fsb0ARhPLxibhqjkGcOEIC9u36en9sg1K+WLDOkS6VhQV3JkmR1w5+Y0I/7eg
+ k9LIMaik4VEqZXv0UfF5GIIZw1mWGB2m8Gn7BUZ560+oFcY6emjjtpm5YiIA4SbXebZYx+UP+lO
+ y9JH9ipz/6s2Ec1yM7xH4lG7Jc2b96DyosqEmtXNiS3ZFXIFP1nbGr7XTqTnz5mRQ9hB2WArrTT
+ YB0WmXuKnUIYJskBXolm6HYSApkQUUunTlVfPpUViBgYy+sC63v8crXWmvqJqRY7MGG3cq9JSo6
+ Q1VEN6WCJu8AjOOluYDC4oMwRSKkeOHzXt63qX0fAgkTr7eyVUP4xy1k1Yi2tJcnM4w2a+I2/tm
+ 2abHZMAS8MWLh9vZQ6Wvq7Trpa52Y4Lj69/UbwQiIhvEUC4Pa2KmOFLcz5Sktb3ap6tZ8RmC94e
+ kgqIgDUs2OmClSQ==
+X-Developer-Key: i=j-luthra@ti.com; a=openpgp; fpr=4DE0D818E5D575E8D45AAFC543DE91F9249A7145
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans,
+From: Pratyush Yadav <p.yadav@ti.com>
 
-Thank you for the review.
+This resets the stream state machines and FIFOs, giving them a clean
+slate. On J721E if the streams are not reset before starting the
+capture, the captured frame gets wrapped around vertically on every run
+after the first.
 
-On Tue, Aug 08, 2023 at 10:55:24AM +0200, Hans Verkuil wrote:
-> On 08/08/2023 09:55, Sakari Ailus wrote:
-> > Document how internal pads are used on source routes.
-> > 
-> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > ---
-> >  .../userspace-api/media/v4l/dev-subdev.rst    | 179 ++++++++++++++++++
-> >  1 file changed, 179 insertions(+)
-> > 
-> > diff --git a/Documentation/userspace-api/media/v4l/dev-subdev.rst b/Documentation/userspace-api/media/v4l/dev-subdev.rst
-> > index b023918177b5..27b0fe2dc83a 100644
-> > --- a/Documentation/userspace-api/media/v4l/dev-subdev.rst
-> > +++ b/Documentation/userspace-api/media/v4l/dev-subdev.rst
-> > @@ -551,6 +551,27 @@ A stream at a specific point in the media pipeline is identified by the
-> >  sub-device and a (pad, stream) pair. For sub-devices that do not support
-> >  multiplexed streams the 'stream' field is always 0.
-> >  
-> > +.. _v4l2-subdev-source-routes:
-> > +
-> > +Internal pads and source routes
-> > +^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> > +
-> > +Cases where a single sub-device source pad is traversed by multiple streams one
-> > +or more of which originate from within the sub-device itself are special as
-> > +there is no external sink pad for such routes. In those cases, the sources of
-> > +the internally generated streams are represented by internal sink pads, which
-> > +are sink pads that have the :ref:`MEDIA_PAD_FL_INTERNAL <MEDIA-PAD-FL-INTERNAL>`
-> > +pad flag set.
-> > +
-> > +Internal pads have all the properties of an external pad, including formats and
-> > +selections. The format in this case is the source format of the stream. An
-> > +internal pad always has a single stream only (0).
-> > +
-> > +/Source routes/ are routes from an internal sink pad to a(n external) source
-> 
-> '/Source routes/' appears just like that in the generated documentation, that's
-> probably not what you intended.
+Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Maxime Ripard <mripard@kernel.org>
+Signed-off-by: Jai Luthra <j-luthra@ti.com>
+---
+Changes from v8:
+    - Simplify reset sequence, minimizing delays
 
-This was intended to be *Source routes*. I'll address it in v4.
+ drivers/media/platform/cadence/cdns-csi2rx.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-> 
-> > +pad. Generally source routes are not modifiable but they can be activated and
-> > +deactivated using the :ref:`V4L2_SUBDEV_ROUTE_FL_ACTIVE
-> > +<v4l2-subdev-routing-flags>` flag, depending on driver capabilities.
-> > +
-> >  Interaction between routes, streams, formats and selections
-> >  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> >  
-> > @@ -666,3 +687,161 @@ A common way to accomplish this is to start from the sensors and propagate the
-> >  configurations along the stream towards the receiver,
-> >  using :ref:`VIDIOC_SUBDEV_S_FMT <VIDIOC_SUBDEV_G_FMT>` ioctls to configure each
-> >  stream endpoint in each sub-device.
-> > +
-> > +Internal pads setup example
-> > +^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> > +
-> > +A simple example of a multiplexed stream setup might be as follows:
-> > +
-> > +- A CCS camera sensor source sub-device, with one sink pad (0), one source pad
-> 
-> Explain what 'CCS' means: probably a link to MIPI CCS is sufficient, but for newbies
-> 'CCS' doesn't provide any information.
-> 
-> > +  (1), an internal sink pad (2) that represents the source of embedded
-> 
-> So since the INTERNAL flag is associated with a sink pad, this is now called an
-> 'internal sink' instead of 'internal source' as it was before. I agree with that,
-> but note that the phrase 'internal source' is still used in several places,
-> including the cover letter. For the next version you post, please check for that
-> and change the terminology since mixing the two is very confusing :-)
-
-Are you referring to this patch? There don't seem to be any references to
-"intenal source pads" left.
-
-> 
-> > +  data. There are two routes, one from the sink pad to the source, and another
-> > +  from the internal sink pad to the source pad. The embedded data stream needs
-> > +  to be enabled by activating the related route. The configuration of the rest
-> > +  of the CCS sub-devices is omitted from this example.
-> > +
-> > +- Multiplexer bridge (Bridge). The bridge has one sink pad, connected to the
-> > +  sensor (pad 0), and one source pad (pad 1), which outputs two streams.
-> > +
-> > +- Receiver in the SoC (Receiver). The receiver has a single sink pad (pad 0),
-> > +  connected to the bridge, and two source pads (pads 1-2), going to the DMA
-> > +  engine. The receiver demultiplexes the incoming streams to the source pads.
-> > +
-> > +- DMA Engines in the SoC (DMA Engine), one for each stream. Each DMA engine is
-> > +  connected to a single source pad in the receiver.
-> > +
-> > +The sensor, the bridge and the receiver are modeled as V4L2 sub-devices,
-> > +exposed to userspace via /dev/v4l-subdevX device nodes. The DMA engines are
-> > +modeled as V4L2 devices, exposed to userspace via /dev/videoX nodes.
-> > +
-> > +To configure this pipeline, the userspace must take the following steps:
-> > +
-> > +1) Set up media links between entities: connect the sensors to the bridge,
-> > +   bridge to the receiver, and the receiver to the DMA engines. This step does
-> > +   not differ from normal non-multiplexed media controller setup.
-> > +
-> > +2) Configure routing
-> > +
-> > +.. flat-table:: Camera sensor
-> > +    :header-rows: 1
-> > +
-> > +    * - Sink Pad/Stream
-> > +      - Source Pad/Stream
-> > +      - Routing Flags
-> > +      - Comments
-> > +    * - 0/0
-> > +      - 1/0
-> > +      - V4L2_SUBDEV_ROUTE_FL_ACTIVE
-> > +      - Pixel data stream from the sink pad
-> 
-> Huh? It is a sensor subdev, so aren't both pixel data and metadata
-> coming from an internal sink?
-
-The CCS driver exposes three sub-devices, so in this case the sink pad
-isn't internal. Almost (?) all other sensor drivers have a single
-sub-device only, perhaps I'll change the example to align with one of
-those.
-
-> 
-> I think you are actually describing the internal subdev of a CCS
-> sensor here, but that is not clear from the description at all.
-> 
-> Since CCS sensors are relatively common (I think), it might be
-> good to give a fully fledged example.
-> 
-> But suppose you have a non-CCS sensor that generates the pixel data
-> and metadata, then you would have two internal sink pads and one
-> source pad for two streams, right?
-> 
-> And very simple sensors that currently just have a single source pad
-> could be describes as having an internal sink pad connected to the
-> source pad by a fixed route. But we don't do that, because it is
-> overkill. Correct? If so, then this might be useful information to add
-> to answer the question why some sensors have internal sinks and others
-> do not.
-> 
-> > +    * - 2/0
-> > +      - 1/1
-> > +      - **V4L2_SUBDEV_ROUTE_FL_ACTIVE**
-> > +      - Metadata stream from the internal sink pad
-> > +
-> > +.. flat-table:: Bridge routing table
-> > +    :header-rows: 1
-> > +
-> > +    * - Sink Pad/Stream
-> > +      - Source Pad/Stream
-> > +      - Routing Flags
-> > +      - Comments
-> > +    * - 0/0
-> > +      - 1/0
-> > +      - V4L2_SUBDEV_ROUTE_FL_ACTIVE
-> > +      - Pixel data stream from camera sensor
-> > +    * - 0/1
-> > +      - 1/1
-> > +      - V4L2_SUBDEV_ROUTE_FL_ACTIVE
-> > +      - Metadata stream from camera sensor
-> > +
-> > +.. flat-table:: Receiver routing table
-> > +    :header-rows:  1
-> > +
-> > +    * - Sink Pad/Stream
-> > +      - Source Pad/Stream
-> > +      - Routing Flags
-> > +      - Comments
-> > +    * - 0/0
-> > +      - 1/0
-> > +      - V4L2_SUBDEV_ROUTE_FL_ACTIVE
-> > +      - Pixel data stream from camera sensor
-> > +    * - 0/1
-> > +      - 2/0
-> > +      - V4L2_SUBDEV_ROUTE_FL_ACTIVE
-> > +      - Metadata stream from camera sensor
-> > +
-> > +The options available in sensor's routing configuration are dictated by hardware
-> > +capabilities: typically camera sensors always produce image data stream while
-> > +the embedded data stream typically can be either enabled or disabled.
-> > +
-> > +3) Configure formats and selections
-> > +
-> > +This example assumes that the formats are propagated from sink pad to the source
-> > +pad as-is. The tables contain fields of both struct v4l2_subdev_format and
-> > +struct v4l2_mbus_framefmt. The full configuration of CCS camera sensor is out of
-> > +scope of this example.
-> > +
-> > +.. flat-table:: Formats set on the sub-devices. Bold values are set, others are
-> > +                static or propagated.
-> > +    :header-rows: 1
-> > +    :fill-cells:
-> > +
-> > +    * - Sub-device
-> > +      - Pad/Stream
-> > +      - Width
-> > +      - Height
-> > +      - Code
-> > +    * - :rspan:`3` Camera sensor sub-device (CCS source sub-device)
-> > +      - 0/0
-> > +      - 640
-> > +      - 480
-> > +      - MEDIA_BUS_FMT_SGRBG10
-> > +    * - 1/0
-> > +      - 640
-> > +      - 480
-> > +      - **MEDIA_BUS_FMT_SGRBG10**
-> > +    * - 2/0
-> > +      - 640
-> > +      - 2
-> > +      - MEDIA_BUS_FMT_CCS_EMBEDDED_10
-> > +    * - 1/1
-> > +      - 640
-> > +      - 2
-> > +      - MEDIA_BUS_FMT_META_10
-> > +    * - :rspan:`3` Bridge
-> > +      - 0/0
-> > +      - **640**
-> > +      - **480**
-> > +      - **MEDIA_BUS_FMT_SGRBG10**
-> > +    * - 1/0
-> > +      - 640
-> > +      - 480
-> > +      - MEDIA_BUS_FMT_SGRBG10
-> > +    * - 0/1
-> > +      - **640**
-> > +      - **2**
-> > +      - **MEDIA_BUS_FMT_META_10**
-> > +    * - 1/1
-> > +      - 640
-> > +      - 2
-> > +      - MEDIA_BUS_FMT_META_10
-> > +    * - :rspan:`3` Receiver
-> > +      - 0/0
-> > +      - **640**
-> > +      - **480**
-> > +      - **MEDIA_BUS_FMT_SGRBG10**
-> > +    * - 1/0
-> > +      - 640
-> > +      - 480
-> > +      - MEDIA_BUS_FMT_SGRBG10
-> > +    * - 0/1
-> > +      - **640**
-> > +      - **2**
-> > +      - **MEDIA_BUS_FMT_META_10**
-> > +    * - 2/0
-> > +      - 640
-> > +      - 2
-> > +      - MEDIA_BUS_FMT_META_10
-> > +
-> > +The embedded data format does not need to be configured as the format is
-> > +dictated by the pixel data format in this case.
+diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
+index 933edec89520..b57e0c3b1944 100644
+--- a/drivers/media/platform/cadence/cdns-csi2rx.c
++++ b/drivers/media/platform/cadence/cdns-csi2rx.c
+@@ -40,6 +40,7 @@
+ #define CSI2RX_STREAM_BASE(n)		(((n) + 1) * 0x100)
+ 
+ #define CSI2RX_STREAM_CTRL_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x000)
++#define CSI2RX_STREAM_CTRL_SOFT_RST			BIT(4)
+ #define CSI2RX_STREAM_CTRL_START			BIT(0)
+ 
+ #define CSI2RX_STREAM_DATA_CFG_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x008)
+@@ -134,12 +135,23 @@ struct csi2rx_priv *v4l2_subdev_to_csi2rx(struct v4l2_subdev *subdev)
+ 
+ static void csi2rx_reset(struct csi2rx_priv *csi2rx)
+ {
++	unsigned int i;
++
++	/* Reset module */
+ 	writel(CSI2RX_SOFT_RESET_PROTOCOL | CSI2RX_SOFT_RESET_FRONT,
+ 	       csi2rx->base + CSI2RX_SOFT_RESET_REG);
++	/* Reset individual streams. */
++	for (i = 0; i < csi2rx->max_streams; i++) {
++		writel(CSI2RX_STREAM_CTRL_SOFT_RST,
++		       csi2rx->base + CSI2RX_STREAM_CTRL_REG(i));
++	}
+ 
+-	udelay(10);
++	usleep_range(10, 20);
+ 
++	/* Clear resets */
+ 	writel(0, csi2rx->base + CSI2RX_SOFT_RESET_REG);
++	for (i = 0; i < csi2rx->max_streams; i++)
++		writel(0, csi2rx->base + CSI2RX_STREAM_CTRL_REG(i));
+ }
+ 
+ static int csi2rx_configure_ext_dphy(struct csi2rx_priv *csi2rx)
 
 -- 
-Kind regards,
-
-Sakari Ailus
+2.41.0
