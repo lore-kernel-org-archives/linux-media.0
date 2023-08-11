@@ -2,44 +2,44 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42D29C001B0
-	for <linux-media@archiver.kernel.org>; Fri, 11 Aug 2023 10:48:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48B4EC04A6A
+	for <linux-media@archiver.kernel.org>; Fri, 11 Aug 2023 10:48:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235819AbjHKKsY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 11 Aug 2023 06:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57288 "EHLO
+        id S235987AbjHKKsr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 11 Aug 2023 06:48:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235615AbjHKKsS (ORCPT
+        with ESMTP id S235649AbjHKKsS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 11 Aug 2023 06:48:18 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157E2E5C;
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 595CCE5D;
         Fri, 11 Aug 2023 03:48:17 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 37BAlrR1092962;
-        Fri, 11 Aug 2023 05:47:53 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 37BAlio3078824;
+        Fri, 11 Aug 2023 05:47:44 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1691750873;
-        bh=Tp2QgrB8tCvb/QQfth0MGxz7+7yJ6LRuOrdjwNQ12Po=;
+        s=ti-com-17Q1; t=1691750864;
+        bh=xOfFgp8W5fa2PrVW5Oxz961LyqTn+PRmPvgKBmd/s84=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=hggH12wexSmj/KBcq+bWY8DGcZPfo9WjnPzYm1efobHI/5MAU7kLq18vd9e+4He1B
-         yrLg8HyqOFtlYlGNGAGl7Q3++zMPZ3J4cyCdIGwvds0eaVeWuu9FXpEIt+N34JCEL7
-         GMNIVNFJkU13SoQQAq6iqChD5njsvhqb0dQVmQAI=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 37BAlrot041968
+        b=udT5D8zvGt8PyPhvY+Prccj7biKvc7ezdbenWGvjWzQcNY65QYXoJU1D/JRcmkwvc
+         D6CmzrIZJmm3YPY5zSJlOQijhwJFdvzja6dxu99Qv03QuHZF/TlqfvEOzZLSfMcGG+
+         jSDQhtuAV5UonUL/V1BzIbcNPOnMt0ydsD3iqGRg=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 37BAliMD001677
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 11 Aug 2023 05:47:53 -0500
-Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+        Fri, 11 Aug 2023 05:47:44 -0500
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 11
- Aug 2023 05:47:53 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ Aug 2023 05:47:44 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 11 Aug 2023 05:47:52 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 37BAlq5H008299;
-        Fri, 11 Aug 2023 05:47:52 -0500
+ Frontend Transport; Fri, 11 Aug 2023 05:47:44 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 37BAlh7D003039;
+        Fri, 11 Aug 2023 05:47:44 -0500
 From:   Jai Luthra <j-luthra@ti.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -60,28 +60,28 @@ CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <devarsht@ti.com>, <j-luthra@ti.com>, <a-bhatia1@ti.com>,
         Martyn Welch <martyn.welch@collabora.com>,
         Julien Massot <julien.massot@collabora.com>
-Subject: [PATCH v9 09/13] media: cadence: csi2rx: Fix stream data configuration
-Date:   Fri, 11 Aug 2023 16:17:31 +0530
-Message-ID: <20230811-upstream_csi-v9-9-8943f7a68a81@ti.com>
+Subject: [PATCH v9 03/13] media: cadence: csi2rx: Unregister v4l2 async notifier
+Date:   Fri, 11 Aug 2023 16:17:25 +0530
+Message-ID: <20230811-upstream_csi-v9-3-8943f7a68a81@ti.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230811-upstream_csi-v9-0-8943f7a68a81@ti.com>
 References: <20230811-upstream_csi-v9-0-8943f7a68a81@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2122; i=j-luthra@ti.com;
- h=from:subject:message-id; bh=RlcrrehLFe+hG3TiUpTHm5QtZkOc/RxB0DZpu5hgOzE=;
- b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBk1g8FkvbYM1oPinCX7J7OhxCS6I4Q32BaAUX3m
- HTvoux/tjaJAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZNYPBQAKCRBD3pH5JJpx
- RWGLD/9W3wJCa9x6e8TacMw3ePUHN9NEVN0ffLIPBHKAOSf8tPLdSWwRvCcBatlBIohLpWEiTeG
- LgDVZNEom4Vii82olxMzUHJCjHkkXtijEk01G4j37N+leDZhgNTjVEWFOQBlz6nFeT5I2FpJZV0
- iPcpR5lPewxr0XE/EOMaboLjsEODH0e2oCXGup7d52hprmgOq7jcSmlJ9md36Ul5EJZX1cdk+HL
- TprUswGRCuF4xevBBu3x62KOo/3CsQbUQ/W8WkHoWkvnQCK8Ka+cE8Al7ajrDuoD6RURCfOcVAx
- blRxWsPBMZ9dSvvDOuyEQCkm8kN5mDiwfrxZIapAXhMUGZEnjFzDZi9Uhw/n6C7GP+DS1pN5Xgt
- 0BB9t+/9Nyfcodk8kMdqqAsOHU1pNAGsR75txf/vrXIZuTD0rbDTqI+Eh19vOs2fr1Se6sP75Vg
- IiXwM+LqBMsCWO3Vxp1QQtB05tDuGazqsBL5LAZzzgz/x2AGNV21xgfc6VA4XoT9x9J50qX1/gz
- HbO4SEVhy9ZM4ai0Vt+LL9BKfvoX2QRwS3J+6Vz7S5Vk3Azp9EXmNPCme74ELPDk3DItnXu86WU
- a8+9kN3LUZ5cqDpfnzJwFXIioIBEZdzB5btZbTtlPXOQ3t+JNYJlmLvnVlKu6RIOgg3JeVuyziN
- Smo5A+6kBd7vTnA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2066; i=j-luthra@ti.com;
+ h=from:subject:message-id; bh=gMUqU3pgEA8SQEGG1sb5POX0tVGOuheDoKNlnkYS9JE=;
+ b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBk1g74RxMBQh+RbAG6DMqbNXyxXGNMKn4M7E8Zg
+ koskETnoy6JAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZNYO+AAKCRBD3pH5JJpx
+ Rav3D/0ZAmAisNVb9ByYM+RfX4iS+8yBkfCvF+yHuBR27567425nrFZyIaQJ+4lHKP5JYmiWvRj
+ 53GgdEdvSGAza787xjO6p1G+j3W2sEe3SO/+pIwXZ0NhKkuORYeQ7qn0ADGyeiqic19Ce9jOHVu
+ keUM1l/r4AroH6bfjGln3MfBKmdPAUNeX84DJSLwxbpoqQT6vLetvomD8tv+iXgGK4LeGSRLcYV
+ sSsYimoR4IY2KpVfPjfq+3oz9xYjF9UWYWDBypGNFPDOA45JZHrkXy8FFgggpZyKvZrqZQgtbjr
+ RYLAzFBsH0dqoJf5rDll21BTUNUaoCfOpaGDes7M2pAC5w9VBLH98qoqpNmCvx9rbaxC4xo4dCf
+ kqFevY8+/tD5f7nGb6mt9ALAHERwNYcE4iAhW9Pq4kfM0fYaTPEqliZVhra8uf154T0OV2OigqY
+ Pzq9TnFDHb00IaKBNlP3tOyrvhRGHbGQiskoj36H3kMvbg7UzJaNt+O344VepuNelwgaL0FxR7e
+ 5MsZnc99TfaPzWGod4GuOCer12e67TdVcSO6HqKbYyZ7pzV56kngHbLIMgwMEBTGZiteE8iQOab
+ fJVidIwItNcHW6+uWTQEPOJ2knElE1gtJACyu40CawUtxrq+zVROYfvtzhldcZFMmJ93Jl/zCjq
+ bJGWFH0sTwJBR2A==
 X-Developer-Key: i=j-luthra@ti.com; a=openpgp; fpr=4DE0D818E5D575E8D45AAFC543DE91F9249A7145
 Content-Transfer-Encoding: 8bit
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
@@ -91,16 +91,14 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Pratyush Yadav <p.yadav@ti.com>
 
-Firstly, there is no VC_EN bit present in the STREAM_DATA_CFG register.
-Bit 31 is part of the VL_SELECT field. Remove it completely.
+The notifier is added to the global notifier list when registered. When
+the module is removed, the struct csi2rx_priv in which the notifier is
+embedded, is destroyed. As a result the notifier list has a reference to
+a notifier that no longer exists. This causes invalid memory accesses
+when the list is iterated over. Similar for when the probe fails.
+Unregister and clean up the notifier to avoid this.
 
-Secondly, it makes little sense to enable ith virtual channel for ith
-stream. Sure, there might be a use-case that demands it. But there might
-also be a use case that demands all streams to use the 0th virtual
-channel. Prefer this case over the former because it is less arbitrary
-and also makes it very clear what the limitations of the current driver
-is instead of giving a false impression that multiple virtual channels
-are supported.
+Fixes: 1fc3b37f34f6 ("media: v4l: cadence: Add Cadence MIPI-CSI2 RX driver")
 
 Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
@@ -108,35 +106,42 @@ Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Reviewed-by: Maxime Ripard <mripard@kernel.org>
 Signed-off-by: Jai Luthra <j-luthra@ti.com>
 ---
- drivers/media/platform/cadence/cdns-csi2rx.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/media/platform/cadence/cdns-csi2rx.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
-index f8205c3a28c0..46effbbe580d 100644
+index 0d879d71d818..9231ee7e9b3a 100644
 --- a/drivers/media/platform/cadence/cdns-csi2rx.c
 +++ b/drivers/media/platform/cadence/cdns-csi2rx.c
-@@ -49,7 +49,6 @@
- #define CSI2RX_STREAM_STATUS_RDY			BIT(31)
+@@ -479,8 +479,10 @@ static int csi2rx_parse_dt(struct csi2rx_priv *csi2rx)
+ 	asd = v4l2_async_nf_add_fwnode_remote(&csi2rx->notifier, fwh,
+ 					      struct v4l2_async_connection);
+ 	of_node_put(ep);
+-	if (IS_ERR(asd))
++	if (IS_ERR(asd)) {
++		v4l2_async_nf_cleanup(&csi2rx->notifier);
+ 		return PTR_ERR(asd);
++	}
  
- #define CSI2RX_STREAM_DATA_CFG_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x008)
--#define CSI2RX_STREAM_DATA_CFG_EN_VC_SELECT		BIT(31)
- #define CSI2RX_STREAM_DATA_CFG_VC_SELECT(n)		BIT((n) + 16)
+ 	csi2rx->notifier.ops = &csi2rx_notifier_ops;
  
- #define CSI2RX_STREAM_CFG_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x00c)
-@@ -271,8 +270,11 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
- 		writel(CSI2RX_STREAM_CFG_FIFO_MODE_LARGE_BUF,
- 		       csi2rx->base + CSI2RX_STREAM_CFG_REG(i));
+@@ -543,6 +545,7 @@ static int csi2rx_probe(struct platform_device *pdev)
+ 	return 0;
  
--		writel(CSI2RX_STREAM_DATA_CFG_EN_VC_SELECT |
--		       CSI2RX_STREAM_DATA_CFG_VC_SELECT(i),
-+		/*
-+		 * Enable one virtual channel. When multiple virtual channels
-+		 * are supported this will have to be changed.
-+		 */
-+		writel(CSI2RX_STREAM_DATA_CFG_VC_SELECT(0),
- 		       csi2rx->base + CSI2RX_STREAM_DATA_CFG_REG(i));
+ err_cleanup:
++	v4l2_async_nf_unregister(&csi2rx->notifier);
+ 	v4l2_async_nf_cleanup(&csi2rx->notifier);
+ err_free_priv:
+ 	kfree(csi2rx);
+@@ -553,6 +556,8 @@ static void csi2rx_remove(struct platform_device *pdev)
+ {
+ 	struct csi2rx_priv *csi2rx = platform_get_drvdata(pdev);
  
- 		writel(CSI2RX_STREAM_CTRL_START,
++	v4l2_async_nf_unregister(&csi2rx->notifier);
++	v4l2_async_nf_cleanup(&csi2rx->notifier);
+ 	v4l2_async_unregister_subdev(&csi2rx->subdev);
+ 	kfree(csi2rx);
+ }
 
 -- 
 2.41.0
