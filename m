@@ -2,44 +2,44 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5D5FC04FDF
-	for <linux-media@archiver.kernel.org>; Fri, 11 Aug 2023 10:48:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8FBBC001B0
+	for <linux-media@archiver.kernel.org>; Fri, 11 Aug 2023 10:48:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235605AbjHKKsR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 11 Aug 2023 06:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57252 "EHLO
+        id S235651AbjHKKsS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 11 Aug 2023 06:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234802AbjHKKsP (ORCPT
+        with ESMTP id S235333AbjHKKsP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 11 Aug 2023 06:48:15 -0400
 Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4767EE53;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B124E54;
         Fri, 11 Aug 2023 03:48:15 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 37BAlsJY088947;
-        Fri, 11 Aug 2023 05:47:54 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 37BAlvgY088961;
+        Fri, 11 Aug 2023 05:47:57 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1691750874;
-        bh=nPQpmhNAXW1LLTA0fwWZZgXRKUR2pBfrHqGeSLZDgv0=;
+        s=ti-com-17Q1; t=1691750877;
+        bh=k/A7YqeoKUIIsFnL9gFHEsGEuAJrBb/WhWE43Oc5uyk=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=WbNtdYl/Umv1lR2HOnz2W0WJ3IhBhcvQOiA840zV/8LyjYKZp5wSUuuy8EBq52ycg
-         /FpVnrTC0wnAeeSPj57QyG7wRTDmlJEtuOgRnUHO7ZNMWQM0HqHWcBREbv3HAg3gfM
-         YD/ErpiFF6YVmFZ6KptX34upkS+esH9UUdYjnpZ4=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 37BAlsfS014243
+        b=CTuiH/cFVR/qNZrQU3weKsqk5ExiTJ9CZygNxwcDQwrJ1MI36JANZTO2K/HIFafk/
+         UZWKtiIevyOOeTH+RwFO3TTwdUC0jI7q4jn/UuxlJUwdEjmy6GhWE1ihSvzR2hRUgD
+         GAyyEaeNAQ455TrRqpzrAcUMwuPFEscj0rdiCKm0=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 37BAlv7X042003
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 11 Aug 2023 05:47:54 -0500
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+        Fri, 11 Aug 2023 05:47:57 -0500
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 11
- Aug 2023 05:47:54 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ Aug 2023 05:47:57 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 11 Aug 2023 05:47:54 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 37BAlrVi060441;
-        Fri, 11 Aug 2023 05:47:54 -0500
+ Frontend Transport; Fri, 11 Aug 2023 05:47:57 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 37BAlud0003199;
+        Fri, 11 Aug 2023 05:47:57 -0500
 From:   Jai Luthra <j-luthra@ti.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -60,28 +60,28 @@ CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <devarsht@ti.com>, <j-luthra@ti.com>, <a-bhatia1@ti.com>,
         Martyn Welch <martyn.welch@collabora.com>,
         Julien Massot <julien.massot@collabora.com>
-Subject: [PATCH v9 10/13] media: cadence: csi2rx: Populate subdev devnode
-Date:   Fri, 11 Aug 2023 16:17:32 +0530
-Message-ID: <20230811-upstream_csi-v9-10-8943f7a68a81@ti.com>
+Subject: [PATCH v9 12/13] media: dt-bindings: Add TI J721E CSI2RX
+Date:   Fri, 11 Aug 2023 16:17:34 +0530
+Message-ID: <20230811-upstream_csi-v9-12-8943f7a68a81@ti.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230811-upstream_csi-v9-0-8943f7a68a81@ti.com>
 References: <20230811-upstream_csi-v9-0-8943f7a68a81@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1223; i=j-luthra@ti.com;
- h=from:subject:message-id; bh=b203Ekoz40FxqbxpktukhK/Sg/vekYHMnhpda+3LVRw=;
- b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBk1g8HxPqkCyZReRH1HE9/cqvE7aD6AuMoBhzye
- UXjCdMcJO2JAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZNYPBwAKCRBD3pH5JJpx
- RdxEEACiH1MKgnmqWyEZWM5u3Do86SFGaJ4ZHzCY16lNThS71JkrXaFTGMvbztN4+v8kVjM6zIg
- 483Hei7vC4N6XxyWN7+C7A7frJs8JZ9Ko3xKn9k/vsTOltmvLLGp/SnOD+J2P4WAglHMsPCaRRt
- JwxFtg88fcRV13ZOnOJ5YLTa0hLiGV04xPXk7hA9vRvTcxmTRtJMFOfpP8kVcSQnCGO3zPnvxE8
- dg823nrU2Y33V8TFRb2qGX+6mz3KUzK8lQ3j0Y6i4UZWtK2Hjb1BgWY50cQrKwaEj7wYU++DkXJ
- rItUE1x6/VZpE8vDNU2KCJsmtbONMMeEwg1KT3hBqtdNk2YLN0nTE7ibL0mDLSQdXN1S2jA9vjG
- 4266P9OiZs4+7ePSJmt3XAwW9u4ZOS1sNR8Fnba047s5xEMu1iEEbi0geQT2T1Kmwnh+wcrZLuo
- +57JLv7gwF26x20Sokt1/yYhgWgDkPxcD2S/l8+te5Yrf1AicJqu9GIox3z6RfIp1+8xU5Ea8g2
- b6wa+e1DTuAPK6gLi1h+u7q+Fw9fjO8BcqSumE+wzO3teQmV9JCpQ0tAzpkMs76nvKv3yJ8qtQy
- CUPgKKGnF7g/La92HFL0Z1/irj3rwy/jrSsKtw21D8OQaO8XJ96+SVMVgn2rRXkCyVLCsCMFJzw
- S9ShLwothYx0gew==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3540; i=j-luthra@ti.com;
+ h=from:subject:message-id; bh=KhrJ6PSvXWrFSyVDAGdNqpVcjWzkUWqIMwHh59uJtxI=;
+ b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBk1g8LtpCcYkRYYIY6+nZeEEqTSr9e0FezRzPi2
+ LfwWwjBAHOJAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZNYPCwAKCRBD3pH5JJpx
+ ReEPD/9OcEHDDHZ8yq96rbu3iQ3Vht3LCWf3rVUWMlUH6JrmGV8PbcM1E6fcafu8yKnYPVeAZbv
+ xlz5AAGts1reND9qiWGeexuAgnWwSeIfcAp2JDSTp9HfSCKFfuUBQsZJZ9uviuVbKh3/nCyV3RA
+ pWG3gGjsQNUzaH+Xb2GJPyw5TWd0Y+fQ4ppy5ikLa9+oWQLLl396u3/95NyCBLjAYAhJ2cMkjxW
+ eac09hZ/PAw259tVY4DyIrPseLM+Ozrlaly/JxSWYVoz5WTFnMFto98t9ETcpu1DBHJmKwtC37o
+ 9Xo85XbAdxmDSidOM/aAf03/anmcJtFjQC4l4cogl2S/m18PYcY/At+outWXCzJnrwpYBff3Bg3
+ TPnDF0cv6xS4idAr8v6cMKJe1jBZtiP5v/4cB6/9i0e44tcul3a7EKjvFOrEtdaQHVyY8wpiVVD
+ HA4+RDpnvrp3r9LZB1KRviNBB8XHjVy5EGIdNDUcbMRWEEC2VqvgXh46jibPxyBvFX44CFs+WEo
+ OkhYBCAP3bd01pUvx5tZtZJXZ5J0pRyzo+E8Qm8vFDq8SSE0VhyN4PoKSUY+ZHgCMNaXesdE8Xy
+ D4f1ossYbz1jxsF1Xz905U/jUufPjGtcVw2XD6Ao6rD5rMw4sQUgPMNw+hM0xcCkhl2SskRgFWx
+ a5s36lZ07u5jy/g==
 X-Developer-Key: i=j-luthra@ti.com; a=openpgp; fpr=4DE0D818E5D575E8D45AAFC543DE91F9249A7145
 Content-Transfer-Encoding: 8bit
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
@@ -91,31 +91,130 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Pratyush Yadav <p.yadav@ti.com>
 
-The devnode can be used by media-ctl and other userspace tools to
-perform configurations on the subdev. Without it, media-ctl returns
-ENOENT when setting format on the sensor subdev.
+TI's J721E uses the Cadence CSI2RX and DPHY peripherals to facilitate
+capture over a CSI-2 bus. The TI CSI2RX platform driver glues all the
+parts together.
 
 Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Reviewed-by: Maxime Ripard <mripard@kernel.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Jai Luthra <j-luthra@ti.com>
 ---
- drivers/media/platform/cadence/cdns-csi2rx.c | 1 +
- 1 file changed, 1 insertion(+)
+NOTE:
 
-diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
-index 46effbbe580d..0947b112a573 100644
---- a/drivers/media/platform/cadence/cdns-csi2rx.c
-+++ b/drivers/media/platform/cadence/cdns-csi2rx.c
-@@ -673,6 +673,7 @@ static int csi2rx_probe(struct platform_device *pdev)
- 	csi2rx->pads[CSI2RX_PAD_SINK].flags = MEDIA_PAD_FL_SINK;
- 	for (i = CSI2RX_PAD_SOURCE_STREAM0; i < CSI2RX_PAD_MAX; i++)
- 		csi2rx->pads[i].flags = MEDIA_PAD_FL_SOURCE;
-+	csi2rx->subdev.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
- 
- 	ret = media_entity_pads_init(&csi2rx->subdev.entity, CSI2RX_PAD_MAX,
- 				     csi2rx->pads);
+This patch depends on
+9536cc949235 ("media: dt-bindings: cadence-csi2rx: Convert to DT schema") 
+which is part of linux-next.
+
+ .../bindings/media/ti,j721e-csi2rx-shim.yaml       | 100 +++++++++++++++++++++
+ 1 file changed, 100 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/media/ti,j721e-csi2rx-shim.yaml b/Documentation/devicetree/bindings/media/ti,j721e-csi2rx-shim.yaml
+new file mode 100644
+index 000000000000..f762fdc05e4d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/ti,j721e-csi2rx-shim.yaml
+@@ -0,0 +1,100 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/ti,j721e-csi2rx-shim.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: TI J721E CSI2RX Shim
++
++description: |
++  The TI J721E CSI2RX Shim is a wrapper around Cadence CSI2RX bridge that
++  enables sending captured frames to memory over PSI-L DMA. In the J721E
++  Technical Reference Manual (SPRUIL1B) it is referred to as "SHIM" under the
++  CSI_RX_IF section.
++
++maintainers:
++  - Jai Luthra <j-luthra@ti.com>
++
++properties:
++  compatible:
++    const: ti,j721e-csi2rx-shim
++
++  dmas:
++    maxItems: 1
++
++  dma-names:
++    items:
++      - const: rx0
++
++  reg:
++    maxItems: 1
++
++  power-domains:
++    maxItems: 1
++
++  ranges: true
++
++  "#address-cells": true
++
++  "#size-cells": true
++
++patternProperties:
++  "^csi-bridge@":
++    type: object
++    description: CSI2 bridge node.
++    $ref: cdns,csi2rx.yaml#
++
++required:
++  - compatible
++  - reg
++  - dmas
++  - dma-names
++  - power-domains
++  - ranges
++  - "#address-cells"
++  - "#size-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/soc/ti,sci_pm_domain.h>
++
++    ti_csi2rx0: ticsi2rx@4500000 {
++        compatible = "ti,j721e-csi2rx-shim";
++        dmas = <&main_udmap 0x4940>;
++        dma-names = "rx0";
++        reg = <0x4500000 0x1000>;
++        power-domains = <&k3_pds 26 TI_SCI_PD_EXCLUSIVE>;
++        #address-cells = <1>;
++        #size-cells = <1>;
++        ranges;
++
++        cdns_csi2rx: csi-bridge@4504000 {
++            compatible = "ti,j721e-csi2rx", "cdns,csi2rx";
++            reg = <0x4504000 0x1000>;
++            clocks = <&k3_clks 26 2>, <&k3_clks 26 0>, <&k3_clks 26 2>,
++              <&k3_clks 26 2>, <&k3_clks 26 3>, <&k3_clks 26 3>;
++            clock-names = "sys_clk", "p_clk", "pixel_if0_clk",
++              "pixel_if1_clk", "pixel_if2_clk", "pixel_if3_clk";
++            phys = <&dphy0>;
++            phy-names = "dphy";
++
++            ports {
++                #address-cells = <1>;
++                #size-cells = <0>;
++
++                csi2_0: port@0 {
++
++                    reg = <0>;
++
++                    csi2rx0_in_sensor: endpoint {
++                        remote-endpoint = <&csi2_cam0>;
++                        bus-type = <4>; /* CSI2 DPHY. */
++                        clock-lanes = <0>;
++                        data-lanes = <1 2>;
++                    };
++                };
++            };
++        };
++    };
 
 -- 
 2.41.0
