@@ -2,26 +2,26 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E214C04A94
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE8D3C001E0
 	for <linux-media@archiver.kernel.org>; Fri, 11 Aug 2023 02:50:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbjHKCuU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 10 Aug 2023 22:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59754 "EHLO
+        id S231617AbjHKCuV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 10 Aug 2023 22:50:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjHKCuT (ORCPT
+        with ESMTP id S231603AbjHKCuU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 10 Aug 2023 22:50:19 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F0B2D5F
-        for <linux-media@vger.kernel.org>; Thu, 10 Aug 2023 19:50:19 -0700 (PDT)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RMSt737FhzrRy0;
-        Fri, 11 Aug 2023 10:49:03 +0800 (CST)
+        Thu, 10 Aug 2023 22:50:20 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FDF52D60
+        for <linux-media@vger.kernel.org>; Thu, 10 Aug 2023 19:50:20 -0700 (PDT)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RMSt92Km4z1L9Kn;
+        Fri, 11 Aug 2023 10:49:05 +0800 (CST)
 Received: from huawei.com (10.90.53.73) by kwepemi500008.china.huawei.com
  (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 11 Aug
- 2023 10:50:16 +0800
+ 2023 10:50:17 +0800
 From:   Ruan Jinjie <ruanjinjie@huawei.com>
 To:     <TheSven73@gmail.com>, <gregkh@linuxfoundation.org>,
         <mripard@kernel.org>, <paul.kocialkowski@bootlin.com>,
@@ -31,9 +31,9 @@ To:     <TheSven73@gmail.com>, <gregkh@linuxfoundation.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-sunxi@lists.linux.dev>
 CC:     <ruanjinjie@huawei.com>
-Subject: [PATCH -next 1/2] staging: fieldbus: arcx-anybus: Remove redundant of_match_ptr()
-Date:   Fri, 11 Aug 2023 10:49:44 +0800
-Message-ID: <20230811024945.2256437-2-ruanjinjie@huawei.com>
+Subject: [PATCH -next 2/2] media: staging: media: sunxi: cedrus: Remove redundant of_match_ptr()
+Date:   Fri, 11 Aug 2023 10:49:45 +0800
+Message-ID: <20230811024945.2256437-3-ruanjinjie@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230811024945.2256437-1-ruanjinjie@huawei.com>
 References: <20230811024945.2256437-1-ruanjinjie@huawei.com>
@@ -53,22 +53,22 @@ of_match_ptr() here.
 
 Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
 ---
- drivers/staging/fieldbus/anybuss/arcx-anybus.c | 2 +-
+ drivers/staging/media/sunxi/cedrus/cedrus.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/fieldbus/anybuss/arcx-anybus.c b/drivers/staging/fieldbus/anybuss/arcx-anybus.c
-index be28165b4f05..6f69758a8b27 100644
---- a/drivers/staging/fieldbus/anybuss/arcx-anybus.c
-+++ b/drivers/staging/fieldbus/anybuss/arcx-anybus.c
-@@ -343,7 +343,7 @@ static struct platform_driver controller_driver = {
- 	.remove_new = controller_remove,
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c b/drivers/staging/media/sunxi/cedrus/cedrus.c
+index 8e248d4a0aec..f52df6836045 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
+@@ -708,7 +708,7 @@ static struct platform_driver cedrus_driver = {
+ 	.remove_new	= cedrus_remove,
  	.driver		= {
- 		.name   = "arcx-anybus-controller",
--		.of_match_table	= of_match_ptr(controller_of_match),
-+		.of_match_table	= controller_of_match,
+ 		.name		= CEDRUS_NAME,
+-		.of_match_table	= of_match_ptr(cedrus_dt_match),
++		.of_match_table	= cedrus_dt_match,
+ 		.pm		= &cedrus_dev_pm_ops,
  	},
  };
- 
 -- 
 2.34.1
 
