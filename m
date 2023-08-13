@@ -2,53 +2,53 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CEF4C001DB
-	for <linux-media@archiver.kernel.org>; Sun, 13 Aug 2023 16:02:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD1A6C001DB
+	for <linux-media@archiver.kernel.org>; Sun, 13 Aug 2023 16:07:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232099AbjHMQCf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 13 Aug 2023 12:02:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44638 "EHLO
+        id S231504AbjHMQHR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 13 Aug 2023 12:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231609AbjHMQC3 (ORCPT
+        with ESMTP id S232483AbjHMQGv (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 13 Aug 2023 12:02:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC8419A9;
-        Sun, 13 Aug 2023 09:02:10 -0700 (PDT)
+        Sun, 13 Aug 2023 12:06:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B816435AE;
+        Sun, 13 Aug 2023 09:06:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 88050625CA;
-        Sun, 13 Aug 2023 16:00:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37242C433C8;
-        Sun, 13 Aug 2023 16:00:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 98B3763849;
+        Sun, 13 Aug 2023 16:06:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ABEEC433C7;
+        Sun, 13 Aug 2023 16:06:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691942443;
-        bh=7Khc9vfFBkIaBOHJP+OeyEeGfiAB6ghqHA9PLGdGa4U=;
+        s=k20201202; t=1691942790;
+        bh=elW1jLJwVWJkgpd8haFuvCKQa8FvWco5uNliWRgube0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lHpVETYKqgjDfn9hbQksyadYE1cHmJfsRQQxK+frMP96yINbEcyNkwI/7Yi3ypu2U
-         HVZeGF3Dn/zUHbVgNDl8yJM26xhL4ivFtyQGdABRX1EAMOXvedT8+60VcrUkT/gXmx
-         Wrtx7ohV1xPUwTJuqGb1EEahDfk1cikEgvA0h1PhPizDXEa14i60JnvY7RVGHe1RFa
-         DwGjDwhdVC8FKkFxmkL9wLfMIW7M+inCT1hte2fFAsRogv3Tve5eZxsoF/dw1MrVcx
-         XjFXL9+N3MxquO0LkIP2TapkYeAHOIpd+XGGa47N0vZvZkc/Se5cAfrrSt2hLdASmo
-         Nub2mUwVUd9cQ==
+        b=kLNEzDd2yxFtBq6nQed/OaqooYNHb87sVqFfIDm0rbVo3IkwJNYbmNcZKe9E4rvOv
+         VN3Mvfr75gJ4r03tr5IsKPm16BxjhWd7j7oIRjr95LKAyCqBxY7A2kX3OKsYG2i2VD
+         r/HlqH7+H2NgIKpR64X60W6N3t9UxAPjyO8M6fXKkCadBVAEt2FoS9lzxWeuHEwhis
+         aS/PZTvB2f1Sb9iTRlpwl7ABzFbGWv06NDTaznYnZRR3EP5uhR71zOEDmXzUODmxWM
+         e0SIm52zCJe7qfskSyE8KeqgihNY+Km8SQyc34GdN46bZYw5hlFqlBNm8of4ApbRBH
+         N0faHD0WdUaEg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Nikolay Burykin <burikin@ivk.ru>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 05/47] media: pci: cx23885: fix error handling for cx23885 ATSC boards
-Date:   Sun, 13 Aug 2023 11:59:00 -0400
-Message-Id: <20230813160006.1073695-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 04/31] media: pci: cx23885: fix error handling for cx23885 ATSC boards
+Date:   Sun, 13 Aug 2023 12:05:37 -0400
+Message-Id: <20230813160605.1080385-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230813160006.1073695-1-sashal@kernel.org>
-References: <20230813160006.1073695-1-sashal@kernel.org>
+In-Reply-To: <20230813160605.1080385-1-sashal@kernel.org>
+References: <20230813160605.1080385-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.45
+X-stable-base: Linux 5.15.126
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -72,7 +72,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 12 deletions(-)
 
 diff --git a/drivers/media/pci/cx23885/cx23885-dvb.c b/drivers/media/pci/cx23885/cx23885-dvb.c
-index 8fd5b6ef24282..7551ca4a322a4 100644
+index 45c2f4afceb82..9b437faf2c3f6 100644
 --- a/drivers/media/pci/cx23885/cx23885-dvb.c
 +++ b/drivers/media/pci/cx23885/cx23885-dvb.c
 @@ -2459,16 +2459,10 @@ static int dvb_register(struct cx23885_tsport *port)
