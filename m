@@ -2,48 +2,47 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CD12C001DE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CA37C04E69
 	for <linux-media@archiver.kernel.org>; Sun, 13 Aug 2023 15:49:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231586AbjHMPto (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 13 Aug 2023 11:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49490 "EHLO
+        id S231613AbjHMPtq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 13 Aug 2023 11:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231576AbjHMPtk (ORCPT
+        with ESMTP id S231592AbjHMPtn (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 13 Aug 2023 11:49:40 -0400
+        Sun, 13 Aug 2023 11:49:43 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881F9E73;
-        Sun, 13 Aug 2023 08:49:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F6810FC;
+        Sun, 13 Aug 2023 08:49:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 270C86303A;
-        Sun, 13 Aug 2023 15:49:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BEAAC433CC;
-        Sun, 13 Aug 2023 15:49:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 15F0C63150;
+        Sun, 13 Aug 2023 15:49:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6B91C433C8;
+        Sun, 13 Aug 2023 15:49:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691941781;
-        bh=uewy2yNn9F65oLxAQMXFZszdhFU20SCYbOo+3oaOn84=;
+        s=k20201202; t=1691941784;
+        bh=uIkzi3MpeaquzFsir9NCDcM8HNJILcdPwSbHMHvylpw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HKVu05NAoCPzu84IAiOyH4dker3NEwHFZC84r/4+tHskKVQirkcClq4Q3ZeJAU0hg
-         KLdkB+3GYgNryfqZdd1nIMUtP3Z8iZTeqD3MdvOf8pkmwvri3t9JfCA6gzoJ0ehEbf
-         f8+u/JYdtgkpW6pAOwR2VaSQCnnkgroF8c3WHjzMpz2bUPKlPoEUoPhWYka/4m4dUz
-         W7LvS1rNFHrYvXELSFBu2009wdnpqRwkiAPu554mkjftPSSJMF4wZyzwWzzMkJ+TBM
-         5a2OYTnS5044Q2RK7ApUyxGR91fmng0BI2v5T0ctWxWBXapCZyq5QrWHTbhErjILxF
-         pp+mDvjDzdkJQ==
+        b=Yo8sH+BJndU4520cQ3y/dD3lSWamwwxNvD1ZiZNGF3mi1HgfxMwZPudRFozJfDnQC
+         enZhrdMexGL1JJ+9GKaWcGMsUhkHg47TjdmcfEUjl7BVrtXVL2HmkdfWvF5siw4qOi
+         iP5jv/sBjORwB4rSezS2yJ9rBIUB0hQnJ26UbKpWU3xqJf2+nUTftSfvPopK3EZQOk
+         lvC0YX1pNPu9LKZk4NM08bKbLVAHuHPP1euWbFuUk7HqPVNt16egq1/0iF/DE+D8rD
+         4KIpZDkmdUeMFCfzHTOXF4s0ZgoF8coM5fhC9/TGN8YCoZxRzmlCVSHQjOsVnLMcXX
+         ig7wHDtEhHC5A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        ming_qian <ming.qian@nxp.com>,
+Cc:     Dmitry Antipov <dmantipov@yandex.ru>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, shijie.qin@nxp.com,
-        eagle.zhou@nxp.com, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.4 04/54] media: amphion: use dev_err_probe
-Date:   Sun, 13 Aug 2023 11:48:43 -0400
-Message-Id: <20230813154934.1067569-4-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, hverkuil@xs4all.nl,
+        linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.4 06/54] media: pulse8-cec: handle possible ping error
+Date:   Sun, 13 Aug 2023 11:48:45 -0400
+Message-Id: <20230813154934.1067569-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230813154934.1067569-1-sashal@kernel.org>
 References: <20230813154934.1067569-1-sashal@kernel.org>
@@ -56,42 +55,40 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
+From: Dmitry Antipov <dmantipov@yandex.ru>
 
-[ Upstream commit 517f088385e1b8015606143e6212cb30f8714070 ]
+[ Upstream commit 92cbf865ea2e0f2997ff97815c6db182eb23df1b ]
 
-This simplifies the code and silences -517 error messages. Also
-the reason is listed in /sys/kernel/debug/devices_deferred.
+Handle (and warn about) possible error waiting for MSGCODE_PING result.
 
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-Reviewed-by: ming_qian <ming.qian@nxp.com>
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
+
+Signed-off-by: Dmitry Antipov <dmantipov@yandex.ru>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/amphion/vpu_mbox.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/media/cec/usb/pulse8/pulse8-cec.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/amphion/vpu_mbox.c b/drivers/media/platform/amphion/vpu_mbox.c
-index bf759eb2fd46d..b6d5b4844f672 100644
---- a/drivers/media/platform/amphion/vpu_mbox.c
-+++ b/drivers/media/platform/amphion/vpu_mbox.c
-@@ -46,11 +46,10 @@ static int vpu_mbox_request_channel(struct device *dev, struct vpu_mbox *mbox)
- 	cl->rx_callback = vpu_mbox_rx_callback;
+diff --git a/drivers/media/cec/usb/pulse8/pulse8-cec.c b/drivers/media/cec/usb/pulse8/pulse8-cec.c
+index 04b13cdc38d2c..ba67587bd43ec 100644
+--- a/drivers/media/cec/usb/pulse8/pulse8-cec.c
++++ b/drivers/media/cec/usb/pulse8/pulse8-cec.c
+@@ -809,8 +809,11 @@ static void pulse8_ping_eeprom_work_handler(struct work_struct *work)
  
- 	ch = mbox_request_channel_byname(cl, mbox->name);
--	if (IS_ERR(ch)) {
--		dev_err(dev, "Failed to request mbox chan %s, ret : %ld\n",
--			mbox->name, PTR_ERR(ch));
--		return PTR_ERR(ch);
--	}
-+	if (IS_ERR(ch))
-+		return dev_err_probe(dev, PTR_ERR(ch),
-+				     "Failed to request mbox chan %s\n",
-+				     mbox->name);
+ 	mutex_lock(&pulse8->lock);
+ 	cmd = MSGCODE_PING;
+-	pulse8_send_and_wait(pulse8, &cmd, 1,
+-			     MSGCODE_COMMAND_ACCEPTED, 0);
++	if (pulse8_send_and_wait(pulse8, &cmd, 1,
++				 MSGCODE_COMMAND_ACCEPTED, 0)) {
++		dev_warn(pulse8->dev, "failed to ping EEPROM\n");
++		goto unlock;
++	}
  
- 	mbox->ch = ch;
- 	return 0;
+ 	if (pulse8->vers < 2)
+ 		goto unlock;
 -- 
 2.40.1
 
