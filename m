@@ -2,37 +2,37 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06367C04A94
-	for <linux-media@archiver.kernel.org>; Sun, 13 Aug 2023 16:07:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 544D3C04A6A
+	for <linux-media@archiver.kernel.org>; Sun, 13 Aug 2023 16:11:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbjHMQHS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 13 Aug 2023 12:07:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48404 "EHLO
+        id S232767AbjHMQL0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 13 Aug 2023 12:11:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232037AbjHMQGr (ORCPT
+        with ESMTP id S232958AbjHMQLE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 13 Aug 2023 12:06:47 -0400
+        Sun, 13 Aug 2023 12:11:04 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2DB7358B;
-        Sun, 13 Aug 2023 09:06:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D9735AF;
+        Sun, 13 Aug 2023 09:10:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF1766383D;
-        Sun, 13 Aug 2023 16:06:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86217C433C8;
-        Sun, 13 Aug 2023 16:06:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BDAAE63A65;
+        Sun, 13 Aug 2023 16:09:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83F7BC433CA;
+        Sun, 13 Aug 2023 16:09:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691942779;
+        s=k20201202; t=1691942988;
         bh=uIkzi3MpeaquzFsir9NCDcM8HNJILcdPwSbHMHvylpw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M0qm35IoJHA3xgA0JCFi6R6pXl/HCF1D+R72tL8YwtP60CcLafKEwdcFlSOVXQM8Z
-         3qDeY13sc6Blu+7J7RAOHiWO2PSNcMTe701dIp0DfstANq+To3SsnmK86EO3ZiwFeS
-         dtt/5ub6miQYxnLJlUGh7t9E2oRKv07Sx1lAeARUlVTk2uUd3dUyOaycigSFojh5gD
-         yRd1tfUkzccohADFY4ehfbbclyKsrhqedBA+G/1D04LraLsIOG8foWgHLO3ZHSLblP
-         ROt8M6sAa0PPGdaEL+H85tby8pPtmEG4pnsacnKODljIm0zEjONfEDZq787aOREwE9
-         ElarrFPe1pM9w==
+        b=fmkl6OxGUAlipAbTdJZjxJkAp7pDzEAzWk+LaC6jsRyCNSNR2o0UJTL7ODvDQdnM4
+         HFTRaMMiNNeSSMXUTXaOFFOUpCl2jOk5TqbxiHoLXISh2+vKpe4sCv+OgoqelKdtY/
+         OGPCPRbvIBNDEW2cjzYpBtEaCotloNGVarUmwJMFNlqhaosGDgXBPR/l9tdwG9Bbeb
+         uxgel/cXDBAhClLA9rZqumbDcfkU9ZSwNuHXR10s8REmt+6rBQYXVL8a7SHqBKaKo6
+         z+Mkp/6Vuw6RlWRVM/RZo97+//XqDnSmWmfTb8hNHoudcGQJT2PcZjKrmtLaXUVpU9
+         7kdshVIZ4sFWw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Dmitry Antipov <dmantipov@yandex.ru>,
@@ -40,16 +40,16 @@ Cc:     Dmitry Antipov <dmantipov@yandex.ru>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>, hverkuil@xs4all.nl,
         linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 03/31] media: pulse8-cec: handle possible ping error
-Date:   Sun, 13 Aug 2023 12:05:36 -0400
-Message-Id: <20230813160605.1080385-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 03/25] media: pulse8-cec: handle possible ping error
+Date:   Sun, 13 Aug 2023 12:09:14 -0400
+Message-Id: <20230813160936.1082758-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230813160605.1080385-1-sashal@kernel.org>
-References: <20230813160605.1080385-1-sashal@kernel.org>
+In-Reply-To: <20230813160936.1082758-1-sashal@kernel.org>
+References: <20230813160936.1082758-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.126
+X-stable-base: Linux 5.10.190
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
