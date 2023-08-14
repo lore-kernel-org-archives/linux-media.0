@@ -2,205 +2,157 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71EBEC41513
-	for <linux-media@archiver.kernel.org>; Mon, 14 Aug 2023 04:37:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 447FCC41513
+	for <linux-media@archiver.kernel.org>; Mon, 14 Aug 2023 06:35:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233153AbjHNEgo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Aug 2023 00:36:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46602 "EHLO
+        id S233332AbjHNGef (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Aug 2023 02:34:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233142AbjHNEgU (ORCPT
+        with ESMTP id S233130AbjHNGeb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Aug 2023 00:36:20 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902ACE73
-        for <linux-media@vger.kernel.org>; Sun, 13 Aug 2023 21:36:19 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1bdba48eccdso21534415ad.3
-        for <linux-media@vger.kernel.org>; Sun, 13 Aug 2023 21:36:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1691987779; x=1692592579;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Rb7jjFlFBeiFtDhi82C+yA5IC7ctDIMYcDjyXscM6+U=;
-        b=RZvtVRADYrGV2dY0sTy4VXojVTw8w7cJxh8W0jxGK864I7waMUc/qcRBfQVmnP6+1E
-         QlTJpNsL5N8G0A4N0oyPJ9D0AqiBj7mj2L59UCaJd2aLjugGuHY/9ZpbkG4gucVW3SF8
-         oUz1AjNv0P5EgKHXmOomAtZD69ucp01EcQ+tk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691987779; x=1692592579;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Rb7jjFlFBeiFtDhi82C+yA5IC7ctDIMYcDjyXscM6+U=;
-        b=Ss+s4xNFdggq3hj2GIaE4DYCid+VBD3Af/RSWeAnxO7ijK2mqgQFQbTBCwy7d0OAu+
-         kPxYQdFFUisPAJZnojcCJEMjPvjlCM7u3VIjSiGe0vEWnnjBuQDi80hmhE6ZJijLVa2t
-         ZiYnEjK1IBkJJjnY7IqkaLp/sYIuOof2kJleByiYLxnkFuVC3g7JoaxFOxHThA68BAPd
-         apF8XSzKI7ZjKpvq75/8796aVygCYeq8uRtbwE1LB2X3ph0xwNl5mcJYPXpoEjzFfsoB
-         B8UQSguADX7aUu56kXArC2gU+Dz1J3XncWNNT0cXyhfxHB6Pc1i/KhIfvFls6U9YYFfv
-         Yrpw==
-X-Gm-Message-State: AOJu0Yy1rKPk3GI6AY6/P6HTaqKLksFSNuiCLXF1ejv8Eu4Uy8l8tgya
-        YkKGPRh3TSmKrbxKuq5WDZ75aA==
-X-Google-Smtp-Source: AGHT+IFFOeB7bcX8lAGCZbD58ClWUlth4TAktXycek44ttpNJJcIE+/tUgmQPJT2SUn5/ez9oz3igw==
-X-Received: by 2002:a17:902:ea04:b0:1bc:978f:5d26 with SMTP id s4-20020a170902ea0400b001bc978f5d26mr10766021plg.7.1691987779058;
-        Sun, 13 Aug 2023 21:36:19 -0700 (PDT)
-Received: from rekanorman3.syd.corp.google.com ([2401:fa00:9:14:4ae6:d1a4:27c2:80ff])
-        by smtp.gmail.com with ESMTPSA id ju17-20020a170903429100b001bdb0483e65sm6761865plb.265.2023.08.13.21.36.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Aug 2023 21:36:18 -0700 (PDT)
-From:   Reka Norman <rekanorman@chromium.org>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        Daisuke Nojiri <dnojiri@chromium.org>,
-        Stefan Adolfsson <sadolfsson@google.com>,
-        Reka Norman <rekanorman@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH 7/9] media: cros-ec-cec: Allow specifying multiple HDMI connectors
-Date:   Mon, 14 Aug 2023 14:29:16 +1000
-Message-ID: <20230814043140.1108917-8-rekanorman@chromium.org>
-X-Mailer: git-send-email 2.41.0.640.ga95def55d0-goog
-In-Reply-To: <20230814043140.1108917-1-rekanorman@chromium.org>
-References: <20230814043140.1108917-1-rekanorman@chromium.org>
+        Mon, 14 Aug 2023 02:34:31 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB53E58;
+        Sun, 13 Aug 2023 23:34:30 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37E5xMeO030172;
+        Mon, 14 Aug 2023 06:34:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=8sFcUBqscEAtTfXD1uBYjjPigAsx8tDFUS0y/Zs0+28=;
+ b=hdq0CFrz7vAl9Q29cMnhUr+9CJ9qyUrHzPH/rItODeLcYQjgpwu4ZtVS9gQWHRsPjSJN
+ b7VeeNnA45Op39SMsWiuxdB/y62oeM8z7gu8VjSFA11cq4Wpl1y958Rje/Cywdot/F5a
+ bLiQSlubfxD15uBgncH4GXL3DDZZdH29nc7wcN/iEVTi58Try8JsN3nuMzpUZGwU5FV5
+ ++kggc9QdkQmho7EB/oiNP/QqijVN27SpgVS5FhwHmd8FLjPOa8ET2Y8msEx/16+H20c
+ ZEHFSYRKSs+I43cgIw8oge4m4/zRkRMgFZZVPydbuE/TnJw/J3XS2Gq4OfYK47m08eXc vA== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3se40rk0n9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Aug 2023 06:34:25 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37E6YOpG022690
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Aug 2023 06:34:24 GMT
+Received: from [10.50.5.32] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Sun, 13 Aug
+ 2023 23:34:20 -0700
+Message-ID: <cd9da205-ccdb-dc71-16a4-83b22ca7fcae@quicinc.com>
+Date:   Mon, 14 Aug 2023 12:04:17 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v2 4/4] venus: hfi_parser: Add check to keep the number of
+ codecs within range
+Content-Language: en-US
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        <stanimir.k.varbanov@gmail.com>, <agross@kernel.org>,
+        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <mchehab@kernel.org>, <hans.verkuil@cisco.com>,
+        <tfiga@chromium.org>
+CC:     <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
+References: <1691634304-2158-1-git-send-email-quic_vgarodia@quicinc.com>
+ <1691634304-2158-5-git-send-email-quic_vgarodia@quicinc.com>
+ <fec4a8c7-206f-7af8-4ea9-c919a677bf7e@linaro.org>
+ <2214c31b-eca2-012e-a100-21252a724e7c@quicinc.com>
+ <8b72ce47-c338-2061-f11a-c0a608686d8c@linaro.org>
+ <e880da07-ccd4-e427-ed34-20b284dc7838@quicinc.com>
+ <8f1a4ca0-dde8-fa5d-bca3-d317886609de@linaro.org>
+ <060f4dbe-63d6-1c60-14ca-553bf1536e5a@quicinc.com>
+ <c5f912a9-cc08-1645-ad04-c7a58c1e47ce@linaro.org>
+From:   Vikash Garodia <quic_vgarodia@quicinc.com>
+In-Reply-To: <c5f912a9-cc08-1645-ad04-c7a58c1e47ce@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Qs27kyNOHaoN28RHM1rXlZMa5A3_sFwE
+X-Proofpoint-GUID: Qs27kyNOHaoN28RHM1rXlZMa5A3_sFwE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-14_01,2023-08-10_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 impostorscore=0 priorityscore=1501 spamscore=0 bulkscore=0
+ mlxlogscore=579 suspectscore=0 clxscore=1015 adultscore=0 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2308140059
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Update the cec_dmi_match_table to allow specifying multiple HDMI
-connectors for each device.
 
-Signed-off-by: Reka Norman <rekanorman@chromium.org>
----
+On 8/12/2023 12:21 AM, Bryan O'Donoghue wrote:
+> On 11/08/2023 17:02, Vikash Garodia wrote:
+>>
+>>
+>> On 8/11/2023 4:11 PM, Bryan O'Donoghue wrote:
+>>> On 11/08/2023 09:49, Vikash Garodia wrote:
+>>>>
+>>>> On 8/11/2023 2:12 PM, Bryan O'Donoghue wrote:
+>>>>> On 11/08/2023 07:04, Vikash Garodia wrote:
+>>>>>>
+>>>>>> On 8/10/2023 5:03 PM, Bryan O'Donoghue wrote:
+>>>>>>> On 10/08/2023 03:25, Vikash Garodia wrote:
+>>>>>>>> +    if (hweight_long(core->dec_codecs) + hweight_long(core->enc_codecs) >
+>>>>>>>> MAX_CODEC_NUM)
+>>>>>>>> +        return;
+>>>>>>>> +
+>>>>>>>
+>>>>>>> Shouldn't this be >= ?
+>>>>>> Not needed. Lets take a hypothetical case when core->dec_codecs has
+>>>>>> initial 16
+>>>>>> (0-15) bits set and core->enc_codecs has next 16 bits (16-31) set. The bit
+>>>>>> count
+>>>>>> would be 32. The codec loop after this check would run on caps array index
+>>>>>> 0-31.
+>>>>>> I do not see a possibility for OOB access in this case.
+>>>>>>
+>>>>>>>
+>>>>>>> struct hfi_plat_caps caps[MAX_CODEC_NUM];
+>>>>>>>
+>>>>>>> ---
+>>>>>>> bod
+>>>>>>>
+>>>>>
+>>>>> Are you not doing a general defensive coding pass in this series ie
+>>>>>
+>>>>> "[PATCH v2 2/4] venus: hfi: fix the check to handle session buffer
+>>>>> requirement"
+>>>>
+>>>> In "PATCH v2 2/4", there is a possibility if the check does not consider "=".
+>>>> Here in this patch, I do not see a possibility.
+>>>>
+>>>>>
+>>>>> ---
+>>>>> bod
+>>>
+>>> But surely hweight_long(core->dec_codecs) + hweight_long(core->enc_codecs) ==
+>>> MAX_CODEC_NUM is an invalid offset ?
+>>
+>> No, it isn't. Please run through the loop with the bitmasks added upto 32 and
+>> see if there is a possibility of OOB.
+> 
+> IDK Vikash, the logic here seems suspect.
+> 
+> We have two loops that check for up to 32 indexes per loop. Why not have a
+> capabilities index that can accommodate all 64 bits ?
+Max codecs supported can be 32, which is also a very high number. At max the
+hardware supports 5-6 codecs, including both decoder and encoder. 64 indices is
+would not be needed.
 
- .../media/cec/platform/cros-ec/cros-ec-cec.c  | 47 +++++++++++--------
- 1 file changed, 28 insertions(+), 19 deletions(-)
+> Why is it valid to have 16 encoder bits and 16 decoder bits but invalid to have
+> 16 encoder bits with 17 decoder bits ? While at the same time valid to have 0
+> encoder bits but 17 decoder bits ?
+The addition of the encoder and decoder should be 32. Any combination which adds
+to it, would go through. For ex, (17 dec + 15 enc) OR (32 dec + 0 enc) OR (0 dec
++ 32 enc) etc are valid combination theoretically, though there are only few
+decoders and encoders actually supported by hardware.
 
-diff --git a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-index c68ed5d4bda0..f2f397d9a6d8 100644
---- a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-+++ b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-@@ -284,38 +284,41 @@ static SIMPLE_DEV_PM_OPS(cros_ec_cec_pm_ops,
- #if IS_ENABLED(CONFIG_PCI) && IS_ENABLED(CONFIG_DMI)
- 
- /*
-- * The Firmware only handles a single CEC interface tied to a single HDMI
-- * connector we specify along with the DRM device name handling the HDMI output
-+ * Specify the DRM device name handling the HDMI output and the HDMI connector
-+ * corresponding to each CEC port. The order of connectors must match the order
-+ * in the EC (first connector is EC port 0, ...), and the number of connectors
-+ * must match the number of ports in the EC (which can be queried using the
-+ * EC_CMD_CEC_PORT_COUNT host command).
-  */
- 
- struct cec_dmi_match {
- 	const char *sys_vendor;
- 	const char *product_name;
- 	const char *devname;
--	const char *conn;
-+	const char *conns[EC_CEC_MAX_PORTS];
- };
- 
- static const struct cec_dmi_match cec_dmi_match_table[] = {
- 	/* Google Fizz */
--	{ "Google", "Fizz", "0000:00:02.0", "Port B" },
-+	{ "Google", "Fizz", "0000:00:02.0", { "Port B" } },
- 	/* Google Brask */
--	{ "Google", "Brask", "0000:00:02.0", "Port B" },
-+	{ "Google", "Brask", "0000:00:02.0", { "Port B" } },
- 	/* Google Moli */
--	{ "Google", "Moli", "0000:00:02.0", "Port B" },
-+	{ "Google", "Moli", "0000:00:02.0", { "Port B" } },
- 	/* Google Kinox */
--	{ "Google", "Kinox", "0000:00:02.0", "Port B" },
-+	{ "Google", "Kinox", "0000:00:02.0", { "Port B" } },
- 	/* Google Kuldax */
--	{ "Google", "Kuldax", "0000:00:02.0", "Port B" },
-+	{ "Google", "Kuldax", "0000:00:02.0", { "Port B" } },
- 	/* Google Aurash */
--	{ "Google", "Aurash", "0000:00:02.0", "Port B" },
-+	{ "Google", "Aurash", "0000:00:02.0", { "Port B" } },
- 	/* Google Gladios */
--	{ "Google", "Gladios", "0000:00:02.0", "Port B" },
-+	{ "Google", "Gladios", "0000:00:02.0", { "Port B" } },
- 	/* Google Lisbon */
--	{ "Google", "Lisbon", "0000:00:02.0", "Port B" },
-+	{ "Google", "Lisbon", "0000:00:02.0", { "Port B" } },
- };
- 
- static struct device *cros_ec_cec_find_hdmi_dev(struct device *dev,
--						const char **conn)
-+						const char * const **conns)
- {
- 	int i;
- 
-@@ -332,7 +335,7 @@ static struct device *cros_ec_cec_find_hdmi_dev(struct device *dev,
- 			if (!d)
- 				return ERR_PTR(-EPROBE_DEFER);
- 			put_device(d);
--			*conn = m->conn;
-+			*conns = m->conns;
- 			return d;
- 		}
- 	}
-@@ -346,7 +349,7 @@ static struct device *cros_ec_cec_find_hdmi_dev(struct device *dev,
- #else
- 
- static struct device *cros_ec_cec_find_hdmi_dev(struct device *dev,
--						const char **conn)
-+						const char * const **conns)
- {
- 	return ERR_PTR(-ENODEV);
- }
-@@ -388,7 +391,7 @@ static int cros_ec_cec_get_write_cmd_version(struct cros_ec_cec *cros_ec_cec)
- static int cros_ec_cec_init_port(struct device *dev,
- 				 struct cros_ec_cec *cros_ec_cec,
- 				 int port_num, struct device *hdmi_dev,
--				 const char *conn)
-+				 const char * const *conns)
- {
- 	struct cros_ec_cec_port *port;
- 	int ret;
-@@ -406,7 +409,13 @@ static int cros_ec_cec_init_port(struct device *dev,
- 	if (IS_ERR(port->adap))
- 		return PTR_ERR(port->adap);
- 
--	port->notify = cec_notifier_cec_adap_register(hdmi_dev, conn,
-+	if (!conns[port_num]) {
-+		dev_err(dev, "no conn for port %d\n", port_num);
-+		ret = -ENODEV;
-+		goto out_probe_adapter;
-+	}
-+
-+	port->notify = cec_notifier_cec_adap_register(hdmi_dev, conns[port_num],
- 						      port->adap);
- 	if (!port->notify) {
- 		ret = -ENOMEM;
-@@ -435,10 +444,10 @@ static int cros_ec_cec_probe(struct platform_device *pdev)
- 	struct cros_ec_cec *cros_ec_cec;
- 	struct cros_ec_cec_port *port;
- 	struct device *hdmi_dev;
--	const char *conn = NULL;
-+	const char * const *conns = NULL;
- 	int ret;
- 
--	hdmi_dev = cros_ec_cec_find_hdmi_dev(&pdev->dev, &conn);
-+	hdmi_dev = cros_ec_cec_find_hdmi_dev(&pdev->dev, &conns);
- 	if (IS_ERR(hdmi_dev))
- 		return PTR_ERR(hdmi_dev);
- 
-@@ -460,7 +469,7 @@ static int cros_ec_cec_probe(struct platform_device *pdev)
- 
- 	for (int i = 0; i < cros_ec_cec->num_ports; i++) {
- 		ret = cros_ec_cec_init_port(&pdev->dev, cros_ec_cec, i,
--					    hdmi_dev, conn);
-+					    hdmi_dev, conns);
- 		if (ret)
- 			goto unregister_ports;
- 	}
--- 
-2.41.0.640.ga95def55d0-goog
-
+Regards,
+Vikash
