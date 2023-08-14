@@ -2,54 +2,54 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6F0FC25B5F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8DE0C001B0
 	for <linux-media@archiver.kernel.org>; Mon, 14 Aug 2023 14:11:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232054AbjHNOKr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Aug 2023 10:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50850 "EHLO
+        id S232062AbjHNOKs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Aug 2023 10:10:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231996AbjHNOK0 (ORCPT
+        with ESMTP id S231992AbjHNOK0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 14 Aug 2023 10:10:26 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DC621710
-        for <linux-media@vger.kernel.org>; Mon, 14 Aug 2023 07:10:22 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3fe8a1591c8so28892925e9.3
-        for <linux-media@vger.kernel.org>; Mon, 14 Aug 2023 07:10:22 -0700 (PDT)
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD90F10F4
+        for <linux-media@vger.kernel.org>; Mon, 14 Aug 2023 07:10:19 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fe9c20f449so9892215e9.3
+        for <linux-media@vger.kernel.org>; Mon, 14 Aug 2023 07:10:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692022221; x=1692627021;
+        d=linaro.org; s=google; t=1692022218; x=1692627018;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9HGhoQh+Cc1QnhiJuF+fRUaLv4iTYPEYMts/sNpzsFg=;
-        b=q1/n7+K4ipJ+tYmMshBiWs8UFexzbspwBdc9ZCpYUYLlsNKUPdUE7XnFw6RuBdLqNy
-         v18ohU22Co4Wl4pabLqUcgicdRJkgvsmxbdJFjwPpNnj1z+1wqQx1zNg0WCYMUJKVQrA
-         Mv2C97gY7qilWDANjiz4ufA83ERqMLcheTbDHadv0qk200LiHUiv2ITjphLMuILd17BR
-         /+gvfp0YErQntLe/yWsqZqKpBvnq4RaQ3gBzgcIWZo/j3vQt1JVoDqBK7r6yNeLeIYih
-         sqkl7r916TX2NGndd8elM8QBEkUGh9I+KokcQKbOWTP2VDzKk70zng3MU5HsKsfUTB6j
-         okvw==
+        bh=iJ2VKKNJcWBxsnE8fA4GSZFE3NOH8fxJi08OtAhPrEw=;
+        b=Mn22HERcpXlroDs+/FCJiePaeXEKHCWXSFLGmImAWK4EQdFb957K1GNW7MJC9a5AcK
+         tnC/erJ33wphzNwgqQ8EoY2aXND8VWPXJxN61GTG2d3OrxCGtyjqKq4TZLqQjBnR879l
+         gkKBTcCzDpH80lFnBn49hEWD0gGlEQIBB2/dVetvx6eVzrEFZ3vRjNCh9k3VDkxUq5HV
+         M/3DmfgxPF4gCkeWRpkJV4f4Y1dxfBB0l8fuayEpXsdTpI6vOzd52iP3Fdjd/8TpdHJn
+         XRlhmqUx4hSVdbIi6YFSq1KlyII8OL1J8BJYLclSvyKTzLAjPPR6sLUryM4r1AwkfSwI
+         +wCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692022221; x=1692627021;
+        d=1e100.net; s=20221208; t=1692022218; x=1692627018;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9HGhoQh+Cc1QnhiJuF+fRUaLv4iTYPEYMts/sNpzsFg=;
-        b=dbidQ6ZwcYNUA3KCr9Ob55r9qmbGIfnGa9lFBe45spQ6A+I+gT+RBknx46ciHRbumR
-         LEXIy7Gn/zYuCIXekYmQ4cOy8Ui/eF4KIOiBZ13teS/AUZMi56C71FQjTuPnYnVMgGr3
-         ieIwkSSEXVOvFveqxjFLcLaKrUADGY3db1oP3WKGTyMoc5kvRkSF+n22ByLR+F8ZzDDX
-         mfNIdTUyE/q+Oq8cGeUe9AIvecUAfJo3ZGDmCNWKdZJd3bbv1N0TFtYcQsfW8fEqd9R2
-         U9DXJtqWAFf1vUDnnxjFPd+5G6gKcJ3D82OTNnk4TU0w4M6+ca3egxDtEzWlYrJ++isT
-         1E2A==
-X-Gm-Message-State: AOJu0YwOoe2K69cZn8Z4V2tvOrV1/ZJWxP0tqMgyYclE+NG1ykh32Hjy
-        6+wuq6xXxoLh+UigVuSb1F1eNw==
-X-Google-Smtp-Source: AGHT+IFD3EH24917DWNuG+tFsT60ozdbcomaexWmGlHGkqMp2ssZOZrDp1HJXZ1mKSZN47v/jZDbKA==
-X-Received: by 2002:a1c:7910:0:b0:3fc:f9c:a3ed with SMTP id l16-20020a1c7910000000b003fc0f9ca3edmr8283076wme.22.1692022221036;
-        Mon, 14 Aug 2023 07:10:21 -0700 (PDT)
+        bh=iJ2VKKNJcWBxsnE8fA4GSZFE3NOH8fxJi08OtAhPrEw=;
+        b=BWr9NiKBp08nKoTwUiRteeD3QEE5dTlwti8qn1NSmVBevjUiex1bwXqGIfZTt+hkwS
+         pJHZrAByzA5f2dXj/m8HqwkviR/D1oEUcOImL8s3GpIo3ZI/KOZ5+MKHu7mUf+FVrzJU
+         4lI3WQ++HjFTqGKAtIJJH+JrmktqGevYsRHqFVM1WM4W+f9kW6/cloAEcfUy7o/8t8wN
+         V0t+j26OXXxuYLtTv7EM93UhkavPOl3gNJtgWCkNX5UJD5WVcX2XfJnPu2i/lCuPc9Wx
+         xFMl85k/FklZ5MdWqCYahsLdCbfS/NauKHCj0pr9zhOjGdkYfdGX2BUhAARqp2NdmPKb
+         O+5g==
+X-Gm-Message-State: AOJu0YyPkB5vQDdujPymZMwTgykcSlLjF2sNeEX+Cy9fuCzKcKovbvvv
+        61ol1C5xUfbrSlxW7058Nx6miA==
+X-Google-Smtp-Source: AGHT+IFBODyBcaHpUIUBsRveoyGgE4rZK//R7LLNqO2VFTzPcHJ89A56sccojLran65gr6mgI+prhA==
+X-Received: by 2002:a7b:ca59:0:b0:3fe:6640:f536 with SMTP id m25-20020a7bca59000000b003fe6640f536mr6619428wml.40.1692022218483;
+        Mon, 14 Aug 2023 07:10:18 -0700 (PDT)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id p5-20020a1c7405000000b003fe1630a8f0sm17232749wmc.24.2023.08.14.07.10.19
+        by smtp.gmail.com with ESMTPSA id p5-20020a1c7405000000b003fe1630a8f0sm17232749wmc.24.2023.08.14.07.10.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Aug 2023 07:10:20 -0700 (PDT)
+        Mon, 14 Aug 2023 07:10:17 -0700 (PDT)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
         agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
@@ -57,9 +57,9 @@ To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
         sakari.ailus@linux.intel.com, andrey.konovalov@linaro.org
 Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH v0 7/9] media: qcom: camss: Fix invalid clock enable bit disjunction
-Date:   Mon, 14 Aug 2023 15:10:05 +0100
-Message-ID: <20230814141007.3721197-8-bryan.odonoghue@linaro.org>
+Subject: [PATCH v0 5/9] media: qcom: camss: Fix VFE-480 vfe_disable_output()
+Date:   Mon, 14 Aug 2023 15:10:03 +0100
+Message-ID: <20230814141007.3721197-6-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230814141007.3721197-1-bryan.odonoghue@linaro.org>
 References: <20230814141007.3721197-1-bryan.odonoghue@linaro.org>
@@ -69,30 +69,54 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-define CSIPHY_3PH_CMN_CSI_COMMON_CTRL5_CLK_ENABLE BIT(7)
+vfe-480 is copied from vfe-17x and has the same racy idle timeout bug as in
+17x.
 
-disjunction for gen2 ? BIT(7) : is a nop we are setting the same bit
-either way.
+Fix the vfe_disable_output() logic to no longer be racy and to conform
+to the 17x way of quiescing and then resetting the VFE.
 
-Fixes: 4abb21309fda ("media: camss: csiphy: Move to hardcode CSI Clock Lane number")
+Fixes: 4edc8eae715c ("media: camss: Add initial support for VFE hardware version Titan 480")
 Cc: stable@vger.kernel.org
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../media/platform/qcom/camss/camss-vfe-480.c | 19 +++----------------
+ 1 file changed, 3 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
-index 04baa80494c66..4dba61b8d3f2a 100644
---- a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
-+++ b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
-@@ -476,7 +476,7 @@ static void csiphy_lanes_enable(struct csiphy_device *csiphy,
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-480.c b/drivers/media/platform/qcom/camss/camss-vfe-480.c
+index f70aad2e8c237..a64d660abc538 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe-480.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-480.c
+@@ -334,28 +334,15 @@ static int vfe_disable_output(struct vfe_line *line)
+ 	struct vfe_output *output = &line->output;
+ 	unsigned long flags;
+ 	unsigned int i;
+-	bool done;
+-	int timeout = 0;
+-
+-	do {
+-		spin_lock_irqsave(&vfe->output_lock, flags);
+-		done = !output->gen2.active_num;
+-		spin_unlock_irqrestore(&vfe->output_lock, flags);
+-		usleep_range(10000, 20000);
+-
+-		if (timeout++ == 100) {
+-			dev_err(vfe->camss->dev, "VFE idle timeout - resetting\n");
+-			vfe_reset(vfe);
+-			output->gen2.active_num = 0;
+-			return 0;
+-		}
+-	} while (!done);
  
- 	settle_cnt = csiphy_settle_cnt_calc(link_freq, csiphy->timer_clk_rate);
+ 	spin_lock_irqsave(&vfe->output_lock, flags);
+ 	for (i = 0; i < output->wm_num; i++)
+ 		vfe_wm_stop(vfe, output->wm_idx[i]);
++	output->gen2.active_num = 0;
+ 	spin_unlock_irqrestore(&vfe->output_lock, flags);
  
--	val = is_gen2 ? BIT(7) : CSIPHY_3PH_CMN_CSI_COMMON_CTRL5_CLK_ENABLE;
-+	val = CSIPHY_3PH_CMN_CSI_COMMON_CTRL5_CLK_ENABLE;
- 	for (i = 0; i < c->num_data; i++)
- 		val |= BIT(c->data[i].pos * 2);
++	vfe_reset(vfe);
++
+ 	return 0;
+ }
  
 -- 
 2.41.0
