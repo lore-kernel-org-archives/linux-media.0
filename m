@@ -2,54 +2,54 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FACFC04A94
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 401B0C25B74
 	for <linux-media@archiver.kernel.org>; Mon, 14 Aug 2023 14:11:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232083AbjHNOKs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Aug 2023 10:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52254 "EHLO
+        id S231737AbjHNOKt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Aug 2023 10:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231877AbjHNOKP (ORCPT
+        with ESMTP id S232029AbjHNOK1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Aug 2023 10:10:15 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47A194
-        for <linux-media@vger.kernel.org>; Mon, 14 Aug 2023 07:10:14 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3fe8242fc4dso35760075e9.1
-        for <linux-media@vger.kernel.org>; Mon, 14 Aug 2023 07:10:14 -0700 (PDT)
+        Mon, 14 Aug 2023 10:10:27 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C418510FA
+        for <linux-media@vger.kernel.org>; Mon, 14 Aug 2023 07:10:23 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3fe4a89e8c4so39969105e9.3
+        for <linux-media@vger.kernel.org>; Mon, 14 Aug 2023 07:10:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692022213; x=1692627013;
+        d=linaro.org; s=google; t=1692022222; x=1692627022;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uRW3uVyacKVMz0n3X0Q3Lp2slVRo4x30QDLpyV/AFPs=;
-        b=y5qonWQOj74q+4miQrLJ3794iiCdJAkuwQT8UPSLzik2G94eC7vqSmcxlM+LWZbbJh
-         aGTXagyl3w3zF5+TC2SSrAMy9W9GdcstTCUMeBXDJfsse9dSkTCqp0h3WWpTTbSvxyq2
-         1aVOt3bW6f4Pg0CNtNziXZA3kvcENup09KOPfkz0Lypfs6jWo4rOwXDySA3Y8yT8/nYQ
-         gWaX//S+8J0NbDFnLC9a7ws9QiV56JJJ2U87FhClxf+WU5htN+ny2V5PZkaRncVdicRu
-         FyQHDAF47LAk6X2veqAJ9OA368/GY421/EMIrW31s0UgxKWVOkGp07K4fpzOKAjvHcJY
-         1hbw==
+        bh=Rz1zrGGONNkngfkoUA1t5vIxlWnYkYs5EA/aRamoKao=;
+        b=GM5bZ+i/YC9L6vOUhfHcXEpmYiKmLT9PnXAieBJnaaLn8c3LJqE0PwtV+vxqV6TGSm
+         e11wYA7PSCbBSHizzthtz74FZt3bS2iE2MmTGaMGc2eB5WqbUJRNfMxWJhwtCk15obP7
+         IjZIolAguBVCMgHqB+6Q3VCHQkHW6N6f6o8QsptAnYGfrGoMym8QCDWfh+QgGPLrIEnM
+         jszXS2LvKCLCbCwG0R2lCo4Aw76jDYlKoHMIg1Ra4tYuSc+/0AFdml3zj4cZHUnKJPBH
+         kEyh6GaGfNb7Ab5axvfNRayguNAlx6KP4e+3OI5wtz7ufPckdFZxZzDX0JuW67jFDxc2
+         0ChA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692022213; x=1692627013;
+        d=1e100.net; s=20221208; t=1692022222; x=1692627022;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uRW3uVyacKVMz0n3X0Q3Lp2slVRo4x30QDLpyV/AFPs=;
-        b=WRzalX1rFTqOoNNtcbHQ3m2XGDBx87HZFt/2dn6fVkqHITCvZTxKraDAdELNrNvm5P
-         lIClne8Z8MGBbXiusmB8bkxrX8SMqUWZQ5uCYnD+K2jmCpH7V5HbQndl8JvGw0Btlqj+
-         RYY0blPMverKU4dn144yjfQYAqisuND+1/OcxqqAxBRWG3GucosXtTFhEzwQmQ03sHWd
-         Ji22jARojwKPEhYgiP5i6/I0qd6ZRULCEXT8xum0WUJhT/aJj3mPCIflGCZqgKHdYdZM
-         gxssoJeL+/Um+3uqpeViY4aG+wJazLpQAviEcnUEUz7yoCYnAc0BAIV5q3+2I5sJVEfC
-         NxdQ==
-X-Gm-Message-State: AOJu0Yyy6TOkk4GWihrF/68kINTLu1ZZ6dmPhSm7t2UXC3ZGN7BGRPGB
-        6LlvJUB6pDE/zKsMx4TsuPfq4g==
-X-Google-Smtp-Source: AGHT+IElcvFhO4oc6hXDyWfIeD96YZsuBnOqteXXIU1uTizJIh8oDmCC8uiZ9wWrMjrI9OJNpVYtLw==
-X-Received: by 2002:a1c:f707:0:b0:3fe:5501:d284 with SMTP id v7-20020a1cf707000000b003fe5501d284mr8140217wmh.11.1692022213145;
-        Mon, 14 Aug 2023 07:10:13 -0700 (PDT)
+        bh=Rz1zrGGONNkngfkoUA1t5vIxlWnYkYs5EA/aRamoKao=;
+        b=F8r7+Q+oFhQxHA/VD7+DjTdNp3+Ua2TGJfkvRjmLj68Vff5epWgx4CcsTU3T36Ug5t
+         DVDB91RblmvBc6S29i27pXbgUTz3v1Xz00qoJ78y8mT4cwaJjaWFuI0Rc15jRjeyMWMq
+         k3Y4k/AfprZAOt/XWztTdTivvSaIZauzJMHfobHLUO6RjapYDcTaZKP5K0bZl3PkeZvY
+         D9lphdVyvnaIIbsvclaK8BC7M661Bj8AhqdAePb3hqdS8vf9slL5rJLrV7mmzoaF2B5y
+         RCdy3c9YdAUEqTolA8+eanKCFuiHHHzIif9dTSlW4s/ZImWGC8iep1yr9aB+rHxGPI7c
+         E1aA==
+X-Gm-Message-State: AOJu0Yx8XUWtTrLE7raUw/C8C7UancFHYE5qm5fYKZmIT4qPwXqAOIbW
+        AcxzVIoB/UlWb+GNayp7uZZLFA==
+X-Google-Smtp-Source: AGHT+IH4lmR4Jq258PPpXzeSJjiXBAi1Ej7YMvp05OASmR/BQW1itlDNeNtxzgOd1xlFJF1azKbmog==
+X-Received: by 2002:a1c:721a:0:b0:3f9:82f:bad1 with SMTP id n26-20020a1c721a000000b003f9082fbad1mr6879452wmc.40.1692022222419;
+        Mon, 14 Aug 2023 07:10:22 -0700 (PDT)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id p5-20020a1c7405000000b003fe1630a8f0sm17232749wmc.24.2023.08.14.07.10.11
+        by smtp.gmail.com with ESMTPSA id p5-20020a1c7405000000b003fe1630a8f0sm17232749wmc.24.2023.08.14.07.10.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Aug 2023 07:10:12 -0700 (PDT)
+        Mon, 14 Aug 2023 07:10:21 -0700 (PDT)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
         agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
@@ -57,9 +57,9 @@ To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
         sakari.ailus@linux.intel.com, andrey.konovalov@linaro.org
 Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH v0 1/9] media: qcom: camss: Fix pm_domain_on sequence in probe
-Date:   Mon, 14 Aug 2023 15:09:59 +0100
-Message-ID: <20230814141007.3721197-2-bryan.odonoghue@linaro.org>
+Subject: [PATCH v0 8/9] media: qcom: camss: Fix set CSI2_RX_CFG1_VC_MODE when VC is greater than 3
+Date:   Mon, 14 Aug 2023 15:10:06 +0100
+Message-ID: <20230814141007.3721197-9-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230814141007.3721197-1-bryan.odonoghue@linaro.org>
 References: <20230814141007.3721197-1-bryan.odonoghue@linaro.org>
@@ -69,55 +69,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-We need to make sure camss_configure_pd() happens before
-camss_register_entities() as the vfe_get() path relies on the pointer
-provided by camss_configure_pd().
+VC_MODE = 0 implies a two bit VC address.
+VC_MODE = 1 is required for VCs with a larger address than two bits.
 
-Fix the ordering sequence in probe to ensure the pointers vfe_get() demands
-are present by the time camss_register_entities() runs.
-
-In order to facilitate backporting to stable kernels I've moved the
-configure_pd() call pretty early on the probe() function so that
-irrespective of the existence of the old error handling jump labels this
-patch should still apply to -next circa Aug 2023 to v5.13 inclusive.
-
-Fixes: 2f6f8af67203 ("media: camss: Refactor VFE power domain toggling")
+Fixes: eebe6d00e9bf ("media: camss: Add support for CSID hardware version Titan 170")
 Cc: stable@vger.kernel.org
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- drivers/media/platform/qcom/camss/camss.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/media/platform/qcom/camss/camss-csid-gen2.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
-index f11dc59135a5a..75991d849b571 100644
---- a/drivers/media/platform/qcom/camss/camss.c
-+++ b/drivers/media/platform/qcom/camss/camss.c
-@@ -1619,6 +1619,12 @@ static int camss_probe(struct platform_device *pdev)
- 	if (ret < 0)
- 		goto err_cleanup;
+diff --git a/drivers/media/platform/qcom/camss/camss-csid-gen2.c b/drivers/media/platform/qcom/camss/camss-csid-gen2.c
+index 45c7986d4a8d0..9ac253111e572 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid-gen2.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-gen2.c
+@@ -352,7 +352,7 @@ static void __csid_configure_stream(struct csid_device *csid, u8 enable, u8 vc)
+ 		phy_sel = csid->phy.csiphy_id;
  
-+	ret = camss_configure_pd(camss);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to configure power domains: %d\n", ret);
-+		goto err_cleanup;
-+	}
-+
- 	ret = camss_init_subdevices(camss);
- 	if (ret < 0)
- 		goto err_cleanup;
-@@ -1678,12 +1684,6 @@ static int camss_probe(struct platform_device *pdev)
- 		}
- 	}
+ 	if (enable) {
+-		u8 dt_id = vc;
++		u8 dt_id = vc * 4;
  
--	ret = camss_configure_pd(camss);
--	if (ret < 0) {
--		dev_err(dev, "Failed to configure power domains: %d\n", ret);
--		return ret;
--	}
--
- 	pm_runtime_enable(dev);
+ 		if (tg->enabled) {
+ 			/* Config Test Generator */
+@@ -449,6 +449,8 @@ static void __csid_configure_stream(struct csid_device *csid, u8 enable, u8 vc)
+ 	writel_relaxed(val, csid->base + CSID_CSI2_RX_CFG0);
  
- 	return 0;
+ 	val = 1 << CSI2_RX_CFG1_PACKET_ECC_CORRECTION_EN;
++	if (vc > 3)
++		val |= 1 << CSI2_RX_CFG1_VC_MODE;
+ 	val |= 1 << CSI2_RX_CFG1_MISR_EN;
+ 	writel_relaxed(val, csid->base + CSID_CSI2_RX_CFG1);
+ 
 -- 
 2.41.0
 
