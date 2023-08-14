@@ -2,54 +2,54 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8DE0C001B0
-	for <linux-media@archiver.kernel.org>; Mon, 14 Aug 2023 14:11:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FACFC04A94
+	for <linux-media@archiver.kernel.org>; Mon, 14 Aug 2023 14:11:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232062AbjHNOKs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S232083AbjHNOKs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 14 Aug 2023 10:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50838 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231992AbjHNOK0 (ORCPT
+        with ESMTP id S231877AbjHNOKP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Aug 2023 10:10:26 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD90F10F4
-        for <linux-media@vger.kernel.org>; Mon, 14 Aug 2023 07:10:19 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fe9c20f449so9892215e9.3
-        for <linux-media@vger.kernel.org>; Mon, 14 Aug 2023 07:10:19 -0700 (PDT)
+        Mon, 14 Aug 2023 10:10:15 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47A194
+        for <linux-media@vger.kernel.org>; Mon, 14 Aug 2023 07:10:14 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3fe8242fc4dso35760075e9.1
+        for <linux-media@vger.kernel.org>; Mon, 14 Aug 2023 07:10:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692022218; x=1692627018;
+        d=linaro.org; s=google; t=1692022213; x=1692627013;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iJ2VKKNJcWBxsnE8fA4GSZFE3NOH8fxJi08OtAhPrEw=;
-        b=Mn22HERcpXlroDs+/FCJiePaeXEKHCWXSFLGmImAWK4EQdFb957K1GNW7MJC9a5AcK
-         tnC/erJ33wphzNwgqQ8EoY2aXND8VWPXJxN61GTG2d3OrxCGtyjqKq4TZLqQjBnR879l
-         gkKBTcCzDpH80lFnBn49hEWD0gGlEQIBB2/dVetvx6eVzrEFZ3vRjNCh9k3VDkxUq5HV
-         M/3DmfgxPF4gCkeWRpkJV4f4Y1dxfBB0l8fuayEpXsdTpI6vOzd52iP3Fdjd/8TpdHJn
-         XRlhmqUx4hSVdbIi6YFSq1KlyII8OL1J8BJYLclSvyKTzLAjPPR6sLUryM4r1AwkfSwI
-         +wCw==
+        bh=uRW3uVyacKVMz0n3X0Q3Lp2slVRo4x30QDLpyV/AFPs=;
+        b=y5qonWQOj74q+4miQrLJ3794iiCdJAkuwQT8UPSLzik2G94eC7vqSmcxlM+LWZbbJh
+         aGTXagyl3w3zF5+TC2SSrAMy9W9GdcstTCUMeBXDJfsse9dSkTCqp0h3WWpTTbSvxyq2
+         1aVOt3bW6f4Pg0CNtNziXZA3kvcENup09KOPfkz0Lypfs6jWo4rOwXDySA3Y8yT8/nYQ
+         gWaX//S+8J0NbDFnLC9a7ws9QiV56JJJ2U87FhClxf+WU5htN+ny2V5PZkaRncVdicRu
+         FyQHDAF47LAk6X2veqAJ9OA368/GY421/EMIrW31s0UgxKWVOkGp07K4fpzOKAjvHcJY
+         1hbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692022218; x=1692627018;
+        d=1e100.net; s=20221208; t=1692022213; x=1692627013;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iJ2VKKNJcWBxsnE8fA4GSZFE3NOH8fxJi08OtAhPrEw=;
-        b=BWr9NiKBp08nKoTwUiRteeD3QEE5dTlwti8qn1NSmVBevjUiex1bwXqGIfZTt+hkwS
-         pJHZrAByzA5f2dXj/m8HqwkviR/D1oEUcOImL8s3GpIo3ZI/KOZ5+MKHu7mUf+FVrzJU
-         4lI3WQ++HjFTqGKAtIJJH+JrmktqGevYsRHqFVM1WM4W+f9kW6/cloAEcfUy7o/8t8wN
-         V0t+j26OXXxuYLtTv7EM93UhkavPOl3gNJtgWCkNX5UJD5WVcX2XfJnPu2i/lCuPc9Wx
-         xFMl85k/FklZ5MdWqCYahsLdCbfS/NauKHCj0pr9zhOjGdkYfdGX2BUhAARqp2NdmPKb
-         O+5g==
-X-Gm-Message-State: AOJu0YyPkB5vQDdujPymZMwTgykcSlLjF2sNeEX+Cy9fuCzKcKovbvvv
-        61ol1C5xUfbrSlxW7058Nx6miA==
-X-Google-Smtp-Source: AGHT+IFBODyBcaHpUIUBsRveoyGgE4rZK//R7LLNqO2VFTzPcHJ89A56sccojLran65gr6mgI+prhA==
-X-Received: by 2002:a7b:ca59:0:b0:3fe:6640:f536 with SMTP id m25-20020a7bca59000000b003fe6640f536mr6619428wml.40.1692022218483;
-        Mon, 14 Aug 2023 07:10:18 -0700 (PDT)
+        bh=uRW3uVyacKVMz0n3X0Q3Lp2slVRo4x30QDLpyV/AFPs=;
+        b=WRzalX1rFTqOoNNtcbHQ3m2XGDBx87HZFt/2dn6fVkqHITCvZTxKraDAdELNrNvm5P
+         lIClne8Z8MGBbXiusmB8bkxrX8SMqUWZQ5uCYnD+K2jmCpH7V5HbQndl8JvGw0Btlqj+
+         RYY0blPMverKU4dn144yjfQYAqisuND+1/OcxqqAxBRWG3GucosXtTFhEzwQmQ03sHWd
+         Ji22jARojwKPEhYgiP5i6/I0qd6ZRULCEXT8xum0WUJhT/aJj3mPCIflGCZqgKHdYdZM
+         gxssoJeL+/Um+3uqpeViY4aG+wJazLpQAviEcnUEUz7yoCYnAc0BAIV5q3+2I5sJVEfC
+         NxdQ==
+X-Gm-Message-State: AOJu0Yyy6TOkk4GWihrF/68kINTLu1ZZ6dmPhSm7t2UXC3ZGN7BGRPGB
+        6LlvJUB6pDE/zKsMx4TsuPfq4g==
+X-Google-Smtp-Source: AGHT+IElcvFhO4oc6hXDyWfIeD96YZsuBnOqteXXIU1uTizJIh8oDmCC8uiZ9wWrMjrI9OJNpVYtLw==
+X-Received: by 2002:a1c:f707:0:b0:3fe:5501:d284 with SMTP id v7-20020a1cf707000000b003fe5501d284mr8140217wmh.11.1692022213145;
+        Mon, 14 Aug 2023 07:10:13 -0700 (PDT)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id p5-20020a1c7405000000b003fe1630a8f0sm17232749wmc.24.2023.08.14.07.10.17
+        by smtp.gmail.com with ESMTPSA id p5-20020a1c7405000000b003fe1630a8f0sm17232749wmc.24.2023.08.14.07.10.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Aug 2023 07:10:17 -0700 (PDT)
+        Mon, 14 Aug 2023 07:10:12 -0700 (PDT)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
         agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
@@ -57,9 +57,9 @@ To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
         sakari.ailus@linux.intel.com, andrey.konovalov@linaro.org
 Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH v0 5/9] media: qcom: camss: Fix VFE-480 vfe_disable_output()
-Date:   Mon, 14 Aug 2023 15:10:03 +0100
-Message-ID: <20230814141007.3721197-6-bryan.odonoghue@linaro.org>
+Subject: [PATCH v0 1/9] media: qcom: camss: Fix pm_domain_on sequence in probe
+Date:   Mon, 14 Aug 2023 15:09:59 +0100
+Message-ID: <20230814141007.3721197-2-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230814141007.3721197-1-bryan.odonoghue@linaro.org>
 References: <20230814141007.3721197-1-bryan.odonoghue@linaro.org>
@@ -69,55 +69,55 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-vfe-480 is copied from vfe-17x and has the same racy idle timeout bug as in
-17x.
+We need to make sure camss_configure_pd() happens before
+camss_register_entities() as the vfe_get() path relies on the pointer
+provided by camss_configure_pd().
 
-Fix the vfe_disable_output() logic to no longer be racy and to conform
-to the 17x way of quiescing and then resetting the VFE.
+Fix the ordering sequence in probe to ensure the pointers vfe_get() demands
+are present by the time camss_register_entities() runs.
 
-Fixes: 4edc8eae715c ("media: camss: Add initial support for VFE hardware version Titan 480")
+In order to facilitate backporting to stable kernels I've moved the
+configure_pd() call pretty early on the probe() function so that
+irrespective of the existence of the old error handling jump labels this
+patch should still apply to -next circa Aug 2023 to v5.13 inclusive.
+
+Fixes: 2f6f8af67203 ("media: camss: Refactor VFE power domain toggling")
 Cc: stable@vger.kernel.org
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- .../media/platform/qcom/camss/camss-vfe-480.c | 19 +++----------------
- 1 file changed, 3 insertions(+), 16 deletions(-)
+ drivers/media/platform/qcom/camss/camss.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe-480.c b/drivers/media/platform/qcom/camss/camss-vfe-480.c
-index f70aad2e8c237..a64d660abc538 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe-480.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe-480.c
-@@ -334,28 +334,15 @@ static int vfe_disable_output(struct vfe_line *line)
- 	struct vfe_output *output = &line->output;
- 	unsigned long flags;
- 	unsigned int i;
--	bool done;
--	int timeout = 0;
--
--	do {
--		spin_lock_irqsave(&vfe->output_lock, flags);
--		done = !output->gen2.active_num;
--		spin_unlock_irqrestore(&vfe->output_lock, flags);
--		usleep_range(10000, 20000);
--
--		if (timeout++ == 100) {
--			dev_err(vfe->camss->dev, "VFE idle timeout - resetting\n");
--			vfe_reset(vfe);
--			output->gen2.active_num = 0;
--			return 0;
--		}
--	} while (!done);
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+index f11dc59135a5a..75991d849b571 100644
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -1619,6 +1619,12 @@ static int camss_probe(struct platform_device *pdev)
+ 	if (ret < 0)
+ 		goto err_cleanup;
  
- 	spin_lock_irqsave(&vfe->output_lock, flags);
- 	for (i = 0; i < output->wm_num; i++)
- 		vfe_wm_stop(vfe, output->wm_idx[i]);
-+	output->gen2.active_num = 0;
- 	spin_unlock_irqrestore(&vfe->output_lock, flags);
- 
-+	vfe_reset(vfe);
++	ret = camss_configure_pd(camss);
++	if (ret < 0) {
++		dev_err(dev, "Failed to configure power domains: %d\n", ret);
++		goto err_cleanup;
++	}
 +
- 	return 0;
- }
+ 	ret = camss_init_subdevices(camss);
+ 	if (ret < 0)
+ 		goto err_cleanup;
+@@ -1678,12 +1684,6 @@ static int camss_probe(struct platform_device *pdev)
+ 		}
+ 	}
  
+-	ret = camss_configure_pd(camss);
+-	if (ret < 0) {
+-		dev_err(dev, "Failed to configure power domains: %d\n", ret);
+-		return ret;
+-	}
+-
+ 	pm_runtime_enable(dev);
+ 
+ 	return 0;
 -- 
 2.41.0
 
