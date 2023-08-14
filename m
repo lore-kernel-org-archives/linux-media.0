@@ -2,54 +2,54 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4E8DC07E8B
-	for <linux-media@archiver.kernel.org>; Mon, 14 Aug 2023 15:13:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EE10C10F19
+	for <linux-media@archiver.kernel.org>; Mon, 14 Aug 2023 15:13:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232804AbjHNPNQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Aug 2023 11:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49774 "EHLO
+        id S232884AbjHNPNV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Aug 2023 11:13:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232787AbjHNPMx (ORCPT
+        with ESMTP id S232824AbjHNPM6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Aug 2023 11:12:53 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4056E18F
-        for <linux-media@vger.kernel.org>; Mon, 14 Aug 2023 08:12:52 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b962c226ceso68670711fa.3
-        for <linux-media@vger.kernel.org>; Mon, 14 Aug 2023 08:12:52 -0700 (PDT)
+        Mon, 14 Aug 2023 11:12:58 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48AAE10C1
+        for <linux-media@vger.kernel.org>; Mon, 14 Aug 2023 08:12:57 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b9bb097c1bso66716461fa.0
+        for <linux-media@vger.kernel.org>; Mon, 14 Aug 2023 08:12:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692025970; x=1692630770;
+        d=linaro.org; s=google; t=1692025975; x=1692630775;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qqmcrIOgwT4P/m/Qo0pGRwGzeNac3H+8rfjS3Os1OQE=;
-        b=za+f3pRtJG0rthDi5azffRqi/A06+IPasCTBle2NC/Bm/aznOXiFyp9Ig7FB9wMQxW
-         TVlgFlEZtqhAA5Jf4UCYqw7VStHHj0SDJHU1PMjBz3NqVbeAi5KoRuigXQEJupNeVzuD
-         P7/nQ4N+kyQSJNaHr9MxtKXMrxbeC9334qc4rP45XDFQPyrrhQ/pRIbXECzcM0RzHc7R
-         /SSA9W+LVG7KRObt37zdGiO6zrdGI1HyG+avmDmCjyRoBjtgaLhIcXNOauMNYMLYMCkD
-         e4XT2XaPSLloQ5c97fgAkHLpCQiqzU8mp285sjxs/aMrswG+Bul+CF9769pD29lj/5vj
-         wwXw==
+        bh=Tu5wgrby+aWezgOUb3gHoMCl+XR0Y7Fji2fknL0oJ5Q=;
+        b=vjcLYDP61hU7VME07h7zl4x07VmWeOyVjlag6OshKhFfj+Ynp2HzTFOLxgiYdzNq4L
+         qiZhrGTRAUN/kZHD8I5cmqsFiUii1xznAPn14I0neq4F1dXhIHBIOkJcptU0VThW4Ram
+         bk/qarbDSx637L+OIQ1wAF3vUVocl+TuA7A0zGv0UJj9y2lA1T2YXUjcqRP54oT6dEpO
+         reJ4SLVg7ZcpbyS+0EOwBDKRXCjTneP+yDwJz60J6tDrawcDa9DowT0W+YfOu28uV6yv
+         CMf8fjTMqDBgl8bs2XqN5/C4t69NnVPBYNKlp2rqRs42ALZYMGrO9OGy51ig7qmU75tV
+         3uXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692025970; x=1692630770;
+        d=1e100.net; s=20221208; t=1692025975; x=1692630775;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qqmcrIOgwT4P/m/Qo0pGRwGzeNac3H+8rfjS3Os1OQE=;
-        b=BFTnWyjLsiiW17FWYRrc6Z9M7drLeXIZC0R8w6KQOhXXdnQN8Iclcv67tYGx9/Esre
-         osVViL+KvMKGEXoKVmcPF4CARZCz26aBEpSrcvC8L/fmiQDs5flknaVQ1nWl9jHwTRiO
-         254Z+i0j2QCj5i6tkTBqvEdCS1MqeFUFBrSCbjRzXagPZUcxBfSH+m2wR/K4NwyVQvsN
-         0gOD9wU+VgHPPq9UvOM4JAmon84yedpAu/M9lejFkbXY7In1xEYIjRmr4F1RXEt72pSK
-         Ss7/QmOcVEIFcJLJF1Oj2uMgvTk0umjSCOYiggYQyOmSwTp3ColNyzqwYv5++zg6D3RX
-         q0Jg==
-X-Gm-Message-State: AOJu0YzoeGXDOo/OMbRrTQ5tAOBgiPUBhVThW8dMXFPjMC3HdowwsZtM
-        N/boeKNQzAbyecghiILMweESnA==
-X-Google-Smtp-Source: AGHT+IFP2/JfYkQLXDXM6RMvej5FYQ0Il9A4TqLJszbuZPWvX9l59q1ZFCk4VaLKQg7n15XSrxrKsQ==
-X-Received: by 2002:a2e:a174:0:b0:2b0:297c:cbdf with SMTP id u20-20020a2ea174000000b002b0297ccbdfmr7452279ljl.1.1692025970497;
-        Mon, 14 Aug 2023 08:12:50 -0700 (PDT)
+        bh=Tu5wgrby+aWezgOUb3gHoMCl+XR0Y7Fji2fknL0oJ5Q=;
+        b=B0sA/ohiqe1Exqb4IUtb9FncTJJLVRgNVkZJ6alhYvg6Of63JsHXzxG2TEjJox8pcs
+         bAqUBTsI05/05jLfOZB7Q9vDj4BrOy/1e+/DBMUkVwJgx3sArNcK6YtcMho1Akj6KyEb
+         WXEchSNGzF/C5XHXU+LlJ3qioitDHfSYrWHK1xhEzB8oNcNjrPj+2Qgcq6Gmsb1Etbwp
+         QB9dblGhElqH7A5vbmKj0ASNYPaT0ks1B3sLXAajPMvJrS1ejFXDjQIy4lG+Bb9E2uj6
+         ZrSohQKTzi8xBjYMHmP1J/H51Br6AvKm6koRmnO6YMAApAu19YIwCNGZvJJfch0KTPnu
+         o0zA==
+X-Gm-Message-State: AOJu0YzE0pzXNThjMw8Ub3Iyo4NHPc1vEAL18MhIyujtuCTNpZd/pP1L
+        +hWHdg+/QKUjzXPEBE3eKWR6FA==
+X-Google-Smtp-Source: AGHT+IFZHTTYDCNMVdAnggwH+bH0hlimo9VZAlH0SWZbdqRoddr5Wl4rRJITKc0lO0lzM1X8LMxBmw==
+X-Received: by 2002:a05:6512:3da0:b0:4f8:71cc:2b6e with SMTP id k32-20020a0565123da000b004f871cc2b6emr8958353lfv.33.1692025975644;
+        Mon, 14 Aug 2023 08:12:55 -0700 (PDT)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id 17-20020a05600c021100b003fe1c332810sm17644572wmi.33.2023.08.14.08.12.49
+        by smtp.gmail.com with ESMTPSA id 17-20020a05600c021100b003fe1c332810sm17644572wmi.33.2023.08.14.08.12.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Aug 2023 08:12:49 -0700 (PDT)
+        Mon, 14 Aug 2023 08:12:54 -0700 (PDT)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
         agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
@@ -58,9 +58,9 @@ To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
         andrey.konovalov@linaro.org
 Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v0 03/13] media: qcom: camss: Drop useless NULL assignment for ispif resources
-Date:   Mon, 14 Aug 2023 16:12:33 +0100
-Message-ID: <20230814151243.3801456-4-bryan.odonoghue@linaro.org>
+Subject: [PATCH v0 07/13] media: qcom: camss: Assign the correct number of RDIs per VFE
+Date:   Mon, 14 Aug 2023 16:12:37 +0100
+Message-ID: <20230814151243.3801456-8-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230814151243.3801456-1-bryan.odonoghue@linaro.org>
 References: <20230814151243.3801456-1-bryan.odonoghue@linaro.org>
@@ -70,34 +70,157 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The NULL pointer assignement is a redundant step our compiler will
-initialize unpopulated fields as zero. We check for logical ! later on
-in the code as opposed to NULL anyway.
+Each Video Front End - VFE - has a variable number of Raw Data Interfaces -
+RDIs associated with it.
+
+The CAMSS code started from a naive implementation where a fixed define was
+used as a control in a for(){} loop iterating through RDIs.
+
+That model scales badly. An attempt was made with  VFE_LINE_NUM_GEN2 and
+VFE_LINE_NUM_GEN1 to differentiate between SoCs but, the problem with that
+is "gen1" and "gen2" have no meaning in the silicon. There is no fixed
+constraint in the silicon between VFE and RDI, it is entirely up to the SoC
+designers how many VFEs are populated and how many RDIs to associate with
+each VFE.
+
+As an example sdm845 has VFE version 175 and sm8250 VFE version 480.
+sdm845 has 2 VFEs with 4 RDIs and 1 VFE Lite with 4 RDIs.
+sm8250 has 2 VFEs with 3 RDIs and 2 VFE Lite with 4 RDIs.
+
+Clearly then we need a more granular model to capture the necessary data.
+
+The defines have gone away to be replaced with per-SoC data but, we haven't
+populated the parameter data with the real values.
+
+Let's call those values out now
+
+msm8916:
+1 x VFE
+3 x RDI per VFE (not 4)
+
+msm8996:
+2 x VFE
+3 x RDI per VFE (not 4)
+
+sdm660:
+2 x VFE
+3 x RDI per VFE (not 4)
+
+sdm845:
+2 x VFE
+4 x RDI per VFE (not 3)
+1 x VFE Lite
+4 x RDI per VFE Lite (not 3)
+
+sm8250:
+2 x VFE
+3 x RDI per VFE (not 4)
+2 x VFE Lite
+4 x RDI per VFE
+
+This more complex and correct mapping was not possible prior to passing
+values via driver data. Now that we have that change in place we can
+correctly map VFEs to RDIs for each VFE.
 
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- drivers/media/platform/qcom/camss/camss.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/media/platform/qcom/camss/camss.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
-index d9e1672b74bd7..68eb45b2c0aaa 100644
+index 0e39d123a2113..6114ea15fd4a0 100644
 --- a/drivers/media/platform/qcom/camss/camss.c
 +++ b/drivers/media/platform/qcom/camss/camss.c
-@@ -1729,14 +1729,12 @@ static const struct camss_resources sdm660_resources = {
- static const struct camss_resources sdm845_resources = {
- 	.csiphy_res = csiphy_res_845,
- 	.csid_res = csid_res_845,
--	.ispif_res = NULL,
- 	.vfe_res = vfe_res_845,
+@@ -124,7 +124,7 @@ static const struct resources vfe_res_8x16[] = {
+ 				{ 0 } },
+ 		.reg = { "vfe0" },
+ 		.interrupt = { "vfe0" },
+-		.line_num = VFE_LINE_NUM_GEN1,
++		.line_num = 3,
+ 	}
  };
  
- static const struct camss_resources sm8250_resources = {
- 	.csiphy_res = csiphy_res_8250,
- 	.csid_res = csid_res_8250,
--	.ispif_res = NULL,
- 	.vfe_res = vfe_res_8250,
+@@ -265,7 +265,7 @@ static const struct resources vfe_res_8x96[] = {
+ 				{ 0 } },
+ 		.reg = { "vfe0" },
+ 		.interrupt = { "vfe0" },
+-		.line_num = VFE_LINE_NUM_GEN1,
++		.line_num = 3,
+ 	},
+ 
+ 	/* VFE1 */
+@@ -284,7 +284,7 @@ static const struct resources vfe_res_8x96[] = {
+ 				{ 0 } },
+ 		.reg = { "vfe1" },
+ 		.interrupt = { "vfe1" },
+-		.line_num = VFE_LINE_NUM_GEN1,
++		.line_num = 3,
+ 	}
  };
  
+@@ -446,7 +446,7 @@ static const struct resources vfe_res_660[] = {
+ 				{ 0 } },
+ 		.reg = { "vfe0" },
+ 		.interrupt = { "vfe0" },
+-		.line_num = VFE_LINE_NUM_GEN1,
++		.line_num = 3,
+ 	},
+ 
+ 	/* VFE1 */
+@@ -468,7 +468,7 @@ static const struct resources vfe_res_660[] = {
+ 				{ 0 } },
+ 		.reg = { "vfe1" },
+ 		.interrupt = { "vfe1" },
+-		.line_num = VFE_LINE_NUM_GEN1,
++		.line_num = 3,
+ 	}
+ };
+ 
+@@ -627,7 +627,7 @@ static const struct resources vfe_res_845[] = {
+ 				{ 384000000 } },
+ 		.reg = { "vfe0" },
+ 		.interrupt = { "vfe0" },
+-		.line_num = VFE_LINE_NUM_GEN2,
++		.line_num = 4,
+ 	},
+ 
+ 	/* VFE1 */
+@@ -648,7 +648,7 @@ static const struct resources vfe_res_845[] = {
+ 				{ 384000000 } },
+ 		.reg = { "vfe1" },
+ 		.interrupt = { "vfe1" },
+-		.line_num = VFE_LINE_NUM_GEN2,
++		.line_num = 4,
+ 	},
+ 
+ 	/* VFE-lite */
+@@ -668,7 +668,7 @@ static const struct resources vfe_res_845[] = {
+ 				{ 384000000 } },
+ 		.reg = { "vfe_lite" },
+ 		.interrupt = { "vfe_lite" },
+-		.line_num = VFE_LINE_NUM_GEN2,
++		.line_num = 4,
+ 	}
+ };
+ 
+@@ -796,7 +796,7 @@ static const struct resources vfe_res_8250[] = {
+ 				{ 0 } },
+ 		.reg = { "vfe0" },
+ 		.interrupt = { "vfe0" },
+-		.line_num = 4,
++		.line_num = 3,
+ 	},
+ 	/* VFE1 */
+ 	{
+@@ -815,7 +815,7 @@ static const struct resources vfe_res_8250[] = {
+ 				{ 0 } },
+ 		.reg = { "vfe1" },
+ 		.interrupt = { "vfe1" },
+-		.line_num = 4,
++		.line_num = 3,
+ 	},
+ 	/* VFE2 (lite) */
+ 	{
 -- 
 2.41.0
 
