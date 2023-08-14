@@ -2,152 +2,147 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7611C04A94
-	for <linux-media@archiver.kernel.org>; Mon, 14 Aug 2023 16:30:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0D43C04A94
+	for <linux-media@archiver.kernel.org>; Mon, 14 Aug 2023 16:42:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232521AbjHNQ3r (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Aug 2023 12:29:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52280 "EHLO
+        id S230137AbjHNQld (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Aug 2023 12:41:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232516AbjHNQ3a (ORCPT
+        with ESMTP id S232072AbjHNQlL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Aug 2023 12:29:30 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A1510FB
-        for <linux-media@vger.kernel.org>; Mon, 14 Aug 2023 09:29:26 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3fe8242fc4dso37271915e9.1
-        for <linux-media@vger.kernel.org>; Mon, 14 Aug 2023 09:29:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692030565; x=1692635365;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l9FgIR5BO1ZA/xwnNK7HzsY7163eVVAl221xkKgdSQ4=;
-        b=t0DrTBKAUnZsOhKTySRBhIZjBEyiCu6lrIZbKlxcEhX6zO1Ez+fk0jM/I6CoLWplDS
-         ntt6v5+8AXCoamgE9CwhyNauIGGhB5vI+AUO6towiMb7WC/K62f7Tw69AyzUY5Mmu+ck
-         4TqxDvSRKcyTu1c3YonMVg/VVhb6f/FF6NQi54/GTMeuSXqikJpYaLrAix5rsPjDFP7a
-         xxOebx1jx3FWvnIfSbh0Mbc5CNX2ZseiM0RbbtmOP7RTPhfCp8sX7ADwJmmZ02MvBins
-         oexMWOyPM46Y7BI/3IaFBT5msykygWtnD7W2JiHoGS/xWY14wFfdMJETFskRv0N9Mtkk
-         /97g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692030565; x=1692635365;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=l9FgIR5BO1ZA/xwnNK7HzsY7163eVVAl221xkKgdSQ4=;
-        b=AxBJjoB/Ul5wbauxHVe5EmRANAK8gbYnpMdD9Q/ltef324y+Qdt7LHMq2eteDFp6Cn
-         zqhsPuy8JO5HXLyQ/Iij6Q9H9iu5dNFD4JQLWKBwURAjiW8xTO0/eMCtN/KY7+8AxYiS
-         QmulHuLESWNs75R/PGmf6nIYNkolFRrM8KlII+xeVZXfBIBMh9RxJ9lIGurjW9/MdloD
-         mPUZuO2cZHabT+vS6DIgRsbXMD9Gjpt7dZ/SX5QuacKqEn7g+V8ywZWBIzjX3Lonkp1R
-         zvO+pf2/j7Yal+i3fwy1JJz2+/TpJtVHvQeJ9x0hO2j/Za56smnPHiNV+RB9WWVaU/1E
-         MntA==
-X-Gm-Message-State: AOJu0YwekcqbRqIKXlADZPAh/Qb1hEW+J4uuS2+zDT72S2pY4EMjsloF
-        JHbkHcbEBhSPTBoTwYr9Zt3gtg==
-X-Google-Smtp-Source: AGHT+IFlFBtMXWXtNjBPfw8b8tvKeO1O7fSNRBA1UJ1pf4U/UG4KqA5s8MZcofKggbrJ3oqsyE9+Bw==
-X-Received: by 2002:a05:600c:82c5:b0:3fe:90f:8496 with SMTP id eo5-20020a05600c82c500b003fe090f8496mr7756053wmb.1.1692030564860;
-        Mon, 14 Aug 2023 09:29:24 -0700 (PDT)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id l14-20020a1c790e000000b003fc16ee2864sm14743475wme.48.2023.08.14.09.29.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Aug 2023 09:29:24 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
-        andrey.konovalov@linaro.org
-Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 12/14] media: qcom: camss: Functionally decompose CSIPHY clock lookups
-Date:   Mon, 14 Aug 2023 17:29:05 +0100
-Message-ID: <20230814162907.3878421-13-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230814162907.3878421-1-bryan.odonoghue@linaro.org>
-References: <20230814162907.3878421-1-bryan.odonoghue@linaro.org>
+        Mon, 14 Aug 2023 12:41:11 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B29B110;
+        Mon, 14 Aug 2023 09:41:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692031268; x=1723567268;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8MrcBM4tKoWS6xIUlDV8zq9ctfX+FSX6Tt5r5uFYa1g=;
+  b=S17QJ87TzBsCML0gKrhBfBt3SaRTe2y2/DG+H3yNNdB2LwYHaW0wuTsI
+   /ak/j3XPNsrluWiJDZRp7HAk2x+Awhe99c08U/tvKPKSACmu/JTM7lEiT
+   85g/1Czp4JF17P7NUH0FI8rBE8SquNftDoXntpvPP0aIirgBLNgWknY1g
+   cwOhjxZRfga2HEeulaZr2SCyxvLREMeC0WoRLd4NbVHpZC6RUdQ8JxJ5q
+   Y6ok54U4vNNzZZ40CpY3IOCV/N0U4Xw/6vzSK44h2UcaQY+wiJJ3Kw5GK
+   KPm8eit7djbU0cJtoKFKNBHC4xb6O+h56Ie/oCPJ1Ybe0A1TGV7N1D9Gv
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10802"; a="435970474"
+X-IronPort-AV: E=Sophos;i="6.01,173,1684825200"; 
+   d="scan'208";a="435970474"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2023 09:36:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
+   d="scan'208";a="877028715"
+Received: from lkp-server02.sh.intel.com (HELO b5fb8d9e1ffc) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 14 Aug 2023 09:36:19 -0700
+Received: from kbuild by b5fb8d9e1ffc with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qVaYB-0000Hl-1G;
+        Mon, 14 Aug 2023 16:36:15 +0000
+Date:   Tue, 15 Aug 2023 00:36:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: versioncheck:
+ ./drivers/staging/media/atomisp/include/linux/atomisp.h: 25 linux/version.h
+ not needed.
+Message-ID: <202308150038.FRryjgG9-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The csiphyX_timer and csiX_phy values need not be hard-coded. We can
-functionally decompose the string matching inside of a loop.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   2ccdd1b13c591d306f0401d98dedc4bdcd02b421
+commit: ad85094b293e40e7a2f831b0311a389d952ebd5e Revert "media: staging: atomisp: Remove driver"
+date:   3 years, 3 months ago
+reproduce: (https://download.01.org/0day-ci/archive/20230815/202308150038.FRryjgG9-lkp@intel.com/reproduce)
 
-Static string values are brittle, difficult to extend and not required
-anyway since the camss->res->csiphy_num value informs us of the number
-of CSIPHYs and hence the set of potential clocks for a given CSIPHY.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308150038.FRryjgG9-lkp@intel.com/
 
-In simple terms if we have five CSIPHYs we can have no more and no less
-than five csiphy_timer clocks. Similarly csi_phy core clocks have a 1:1
-relationship with the PHY they clock.
+versioncheck warnings: (new ones prefixed by >>)
+   INFO PATH=/opt/cross/clang/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+   /usr/bin/timeout -k 100 3h /usr/bin/make W=1 --keep-going HOSTCC=gcc-12 CC=gcc-12 -j32 ARCH=x86_64 versioncheck
+   find ./* \( -name SCCS -o -name BitKeeper -o -name .svn -o -name CVS -o -name .pc -o -name .hg -o -name .git \) -prune -o \
+   	-name '*.[hcS]' -type f -print | sort \
+   	| xargs perl -w ./scripts/checkversion.pl
+   ./arch/arm64/kernel/hibernate.c: 24 linux/version.h not needed.
+   ./arch/csky/include/asm/atomic.h: 6 linux/version.h not needed.
+   ./arch/csky/include/asm/io.h: 9 linux/version.h not needed.
+   ./arch/csky/include/asm/thread_info.h: 9 linux/version.h not needed.
+   ./arch/csky/include/asm/uaccess.h: 15 linux/version.h not needed.
+   ./arch/csky/kernel/process.c: 5 linux/version.h not needed.
+   ./arch/csky/mm/dma-mapping.c: 14 linux/version.h not needed.
+   ./arch/csky/mm/fault.c: 16 linux/version.h not needed.
+   ./arch/s390/include/asm/setup.h: 182: need linux/version.h
+   ./arch/um/drivers/vector_kern.c: 11 linux/version.h not needed.
+   ./drivers/block/rsxx/rsxx_priv.h: 14 linux/version.h not needed.
+   ./drivers/block/skd_main.c: 28 linux/version.h not needed.
+   ./drivers/crypto/cavium/cpt/cptpf_main.c: 13 linux/version.h not needed.
+   ./drivers/crypto/cavium/zip/common.h: 59 linux/version.h not needed.
+   ./drivers/crypto/ccree/cc_driver.h: 25 linux/version.h not needed.
+   ./drivers/gpio/gpio-mlxbf2.c: 17 linux/version.h not needed.
+   ./drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c: 62 linux/version.h not needed.
+   ./drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c: 28 linux/version.h not needed.
+   ./drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c: 26 linux/version.h not needed.
+   ./drivers/gpu/drm/pl111/pl111_display.c: 15 linux/version.h not needed.
+   ./drivers/gpu/drm/pl111/pl111_drv.c: 58 linux/version.h not needed.
+   ./drivers/gpu/drm/tve200/tve200_display.c: 14 linux/version.h not needed.
+   ./drivers/gpu/drm/tve200/tve200_drv.c: 38 linux/version.h not needed.
+   ./drivers/hv/hv.c: 16 linux/version.h not needed.
+   ./drivers/i2c/busses/i2c-brcmstb.c: 25 linux/version.h not needed.
+   ./drivers/i2c/busses/i2c-xgene-slimpro.c: 22 linux/version.h not needed.
+   ./drivers/media/dvb-frontends/mxl5xx.c: 30 linux/version.h not needed.
+   ./drivers/media/pci/cx25821/cx25821.h: 31 linux/version.h not needed.
+   ./drivers/media/platform/s3c-camif/camif-core.c: 26 linux/version.h not needed.
+   ./drivers/media/platform/sti/c8sectpfe/c8sectpfe-common.h: 16 linux/version.h not needed.
+   ./drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c: 31 linux/version.h not needed.
+   ./drivers/media/platform/sti/c8sectpfe/c8sectpfe-dvb.c: 14 linux/version.h not needed.
+   ./drivers/media/usb/uvc/uvc_driver.c: 18 linux/version.h not needed.
+   ./drivers/mtd/nand/raw/brcmnand/brcmnand.c: 7 linux/version.h not needed.
+   ./drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c: 21 linux/version.h not needed.
+   ./drivers/net/ethernet/qlogic/qede/qede.h: 35 linux/version.h not needed.
+   ./drivers/net/ethernet/qlogic/qede/qede_ethtool.c: 32 linux/version.h not needed.
+   ./drivers/net/ethernet/qlogic/qede/qede_main.c: 34 linux/version.h not needed.
+   ./drivers/net/usb/lan78xx.c: 5 linux/version.h not needed.
+   ./drivers/net/wireless/rsi/rsi_91x_ps.c: 19 linux/version.h not needed.
+   ./drivers/scsi/cxgbi/libcxgbi.h: 27 linux/version.h not needed.
+   ./drivers/scsi/qedf/qedf.h: 15 linux/version.h not needed.
+   ./drivers/scsi/qedf/qedf_dbg.h: 13 linux/version.h not needed.
+   ./drivers/scsi/qedi/qedi_dbg.h: 14 linux/version.h not needed.
+   ./drivers/soc/tegra/powergate-bpmp.c: 10 linux/version.h not needed.
+>> ./drivers/staging/media/atomisp/include/linux/atomisp.h: 25 linux/version.h not needed.
+   ./drivers/staging/rtl8723bs/include/drv_types.h: 17 linux/version.h not needed.
+   ./drivers/staging/rtl8723bs/include/ioctl_cfg80211.h: 10 linux/version.h not needed.
+   ./drivers/usb/early/xhci-dbc.c: 21 linux/version.h not needed.
+   ./drivers/watchdog/ziirave_wdt.c: 21 linux/version.h not needed.
+   ./fs/ext4/ext4.h: 30 linux/version.h not needed.
+   ./include/linux/qed/qed_ll2_if.h: 41 linux/version.h not needed.
+   ./kernel/bpf/syscall.c: 19 linux/version.h not needed.
+   ./samples/bpf/sampleip_kern.c: 7 linux/version.h not needed.
+   ./samples/bpf/trace_event_kern.c: 8 linux/version.h not needed.
+   ./samples/mic/mpssd/mpssd.c: 29 linux/version.h not needed.
+   ./sound/soc/codecs/cs35l35.c: 12 linux/version.h not needed.
+   ./sound/soc/codecs/cs42l42.c: 14 linux/version.h not needed.
+   ./tools/perf/include/bpf/bpf.h: 70: need linux/version.h
+   ./tools/perf/tests/bpf-script-example.c: 49: need linux/version.h
+   ./tools/perf/tests/bpf-script-test-kbuild.c: 21: need linux/version.h
+   ./tools/perf/tests/bpf-script-test-prologue.c: 47: need linux/version.h
+   ./tools/perf/tests/bpf-script-test-relocation.c: 51: need linux/version.h
+   ./tools/testing/selftests/bpf/progs/test_map_lock.c: 4 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_send_signal_kern.c: 4 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_spin_lock.c: 4 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_tcp_estats.c: 37 linux/version.h not needed.
+   ./tools/testing/selftests/wireguard/qemu/init.c: 25 linux/version.h not needed.
 
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- .../media/platform/qcom/camss/camss-csiphy.c  | 37 ++++++++++++-------
- 1 file changed, 23 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.c b/drivers/media/platform/qcom/camss/camss-csiphy.c
-index 0e8c2a59ea241..baf78c525fbfc 100644
---- a/drivers/media/platform/qcom/camss/camss-csiphy.c
-+++ b/drivers/media/platform/qcom/camss/camss-csiphy.c
-@@ -536,6 +536,15 @@ static int csiphy_init_formats(struct v4l2_subdev *sd,
- 	return csiphy_set_format(sd, fh ? fh->state : NULL, &format);
- }
- 
-+static bool csiphy_match_clock_name(const char *clock_name, const char *format,
-+				    int index)
-+{
-+	char name[CAMSS_RES_MAX];
-+
-+	snprintf(name, sizeof(name), format, index);
-+	return !strcmp(clock_name, name);
-+}
-+
- /*
-  * msm_csiphy_subdev_init - Initialize CSIPHY device structure and resources
-  * @csiphy: CSIPHY device
-@@ -550,7 +559,7 @@ int msm_csiphy_subdev_init(struct camss *camss,
- {
- 	struct device *dev = camss->dev;
- 	struct platform_device *pdev = to_platform_device(dev);
--	int i, j;
-+	int i, j, k;
- 	int ret;
- 
- 	csiphy->camss = camss;
-@@ -666,19 +675,19 @@ int msm_csiphy_subdev_init(struct camss *camss,
- 		for (j = 0; j < clock->nfreqs; j++)
- 			clock->freq[j] = res->clock_rate[i][j];
- 
--		if (!strcmp(clock->name, "csiphy0_timer") ||
--		    !strcmp(clock->name, "csiphy1_timer") ||
--		    !strcmp(clock->name, "csiphy2_timer") ||
--		    !strcmp(clock->name, "csiphy3_timer") ||
--		    !strcmp(clock->name, "csiphy4_timer") ||
--		    !strcmp(clock->name, "csiphy5_timer"))
--			csiphy->rate_set[i] = true;
--
--		if (camss->res->version == CAMSS_660 &&
--		    (!strcmp(clock->name, "csi0_phy") ||
--		     !strcmp(clock->name, "csi1_phy") ||
--		     !strcmp(clock->name, "csi2_phy")))
--			csiphy->rate_set[i] = true;
-+		for (k = 0; k < camss->res->csiphy_num; k++) {
-+			csiphy->rate_set[i] = csiphy_match_clock_name(clock->name,
-+								      "csiphy%d_timer", k);
-+			if (csiphy->rate_set[i])
-+				break;
-+
-+			if (camss->res->version == CAMSS_660) {
-+				csiphy->rate_set[i] = csiphy_match_clock_name(clock->name,
-+									      "csi%d_phy", k);
-+				if (csiphy->rate_set[i])
-+					break;
-+			}
-+		}
- 	}
- 
- 	return 0;
 -- 
-2.41.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
