@@ -2,84 +2,77 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CE5BC04A6A
-	for <linux-media@archiver.kernel.org>; Tue, 15 Aug 2023 14:37:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48008C001DB
+	for <linux-media@archiver.kernel.org>; Tue, 15 Aug 2023 14:38:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237678AbjHOOgq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 15 Aug 2023 10:36:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50050 "EHLO
+        id S237683AbjHOOiX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 15 Aug 2023 10:38:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237642AbjHOOgO (ORCPT
+        with ESMTP id S237753AbjHOOiR (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 15 Aug 2023 10:36:14 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D529210C0;
-        Tue, 15 Aug 2023 07:36:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692110173; x=1723646173;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uolZPzp2tuPUqrZ0q/yneHxITak3Z/XlPYPr1KhmZE4=;
-  b=T4807CaWhYI1tL/IWTyuKsr0C1ozWIeYo2WuROOvcRumVy0zRsmlM9XR
-   Wok3RAPY49RAgyGfbDktlsgS99dIrMdgiG3+6cG2azHlxWfbg/63YlmZP
-   23c/kau+1jGrANnI/kgGj/wy80CJvWr3lNGxVPJFWveetxqVvGCtmh7Wh
-   MCWsZMIXIDgi9rPAzmQZelFkrwzDBdQX80fCLM2SYwCHj4kIKZ8etkJn5
-   vAbB5/iFDbLR10OxoykJYh+fjFBHPLmxL/qkfa8EP8ZYNAbKrY5zaRZj6
-   VOzDuy+0tC7ccpW1DrPWoY9I3XjQaq3/lC6GLMwMjOjWoQz80fa1JXOiU
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="352616824"
-X-IronPort-AV: E=Sophos;i="6.01,174,1684825200"; 
-   d="scan'208";a="352616824"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2023 07:36:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="823861243"
-X-IronPort-AV: E=Sophos;i="6.01,174,1684825200"; 
-   d="scan'208";a="823861243"
-Received: from lkp-server02.sh.intel.com (HELO b5fb8d9e1ffc) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 15 Aug 2023 07:36:11 -0700
-Received: from kbuild by b5fb8d9e1ffc with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qVv9W-00011Z-2j;
-        Tue, 15 Aug 2023 14:36:10 +0000
-Date:   Tue, 15 Aug 2023 22:34:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexandre Courbot <acourbot@chromium.org>
-Cc:     oe-kbuild-all@lists.linux.dev, Hans Verkuil <hverkuil@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, Tomasz Figa <tfiga@chromium.org>,
-        linux-doc@vger.kernel.org
-Subject: [jsarha:topic/cros-sof-v4.19 1264/6555] spdxcheck:
- Documentation/media/uapi/mediactl/media-ioc-request-alloc.rst: 1:39 Invalid
- License ID: GFDL-1.1-or-later
-Message-ID: <202308152237.2qoXL6Yk-lkp@intel.com>
+        Tue, 15 Aug 2023 10:38:17 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E153493
+        for <linux-media@vger.kernel.org>; Tue, 15 Aug 2023 07:38:15 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id 46e09a7af769-6bcd4b5ebbaso4769540a34.1
+        for <linux-media@vger.kernel.org>; Tue, 15 Aug 2023 07:38:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1692110295; x=1692715095;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cAjN5VYYLu/zUPsz5SLD65K+s9r/2epOWr9SL7xLgo8=;
+        b=bkMWMFbZS8ZqqGEqYJjheEvIdGbOb45G7/SEAPO8hD6Py8K3qwduxzer0etIps3Vgm
+         qmJbobC9dXoCKLJ3+zi/OykoJzZmKa6LpJ1P0FvwLS5+L5eojVTUCanFFD2wOL2xIzZj
+         6ZN6UIBoBS3VTrf7N6h3D1nqq5rkdo8/1Ywqk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692110295; x=1692715095;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cAjN5VYYLu/zUPsz5SLD65K+s9r/2epOWr9SL7xLgo8=;
+        b=YUn2znOVX/WJd+EQWKAbzmKRhfhTgxQQwcPyeWN6aD2Bkr47WgRZxCptgXY74P3arC
+         urNTDO9G6BpESlXx0Za7c9KEnTdkL9xcWy+eeyXs3ztQJdKSUiD1Gy0plYdoYTQ0fXXH
+         P5xvuSUbvjeUh7Xx1KFShB5ZlqzEoXQIH+wBOqWgBGJ0XgFcw39K05UPCJAvKafG+RwM
+         zOQuyar9Dgf5Eu4TL6xPL3aRTQIpwLC+z+cRUBdU87y4ultW3OI0l7LLx8plYYDK8eFs
+         DtRdYne7SkzgmE8sk2FUoWBo8dMrx+W/bDPYR4n5B4QqpUV6Po4An1VyUEtHNawPBKNU
+         4VaQ==
+X-Gm-Message-State: AOJu0YzOd/JWITFJ8YTPu06ObyWUeKJHtGOHwpZuYnk7L52TRX4Ei2m6
+        ezWlf2qtscF2tqfEF7BXsdHWdBAvbBIGGHIhvDo=
+X-Google-Smtp-Source: AGHT+IEBurOrfHyFPUrSiDIvo5h3IDF2Tg4tASanqFCy/XHMe8vPhn699zZUC0IG8eYZajzGfGvdHA==
+X-Received: by 2002:a9d:798b:0:b0:6b9:50a8:1e76 with SMTP id h11-20020a9d798b000000b006b950a81e76mr13422555otm.17.1692110294870;
+        Tue, 15 Aug 2023 07:38:14 -0700 (PDT)
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com. [209.85.167.182])
+        by smtp.gmail.com with ESMTPSA id m13-20020a9d6acd000000b006b466ed0484sm5213846otq.67.2023.08.15.07.38.13
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Aug 2023 07:38:14 -0700 (PDT)
+Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-3a3efebcc24so4668372b6e.1
+        for <linux-media@vger.kernel.org>; Tue, 15 Aug 2023 07:38:13 -0700 (PDT)
+X-Received: by 2002:a05:6808:1309:b0:3a7:ae9c:4d53 with SMTP id
+ y9-20020a056808130900b003a7ae9c4d53mr18605920oiv.46.1692110293152; Tue, 15
+ Aug 2023 07:38:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220920-resend-hwtimestamp-v7-0-cf1d78bb8821@chromium.org>
+In-Reply-To: <20220920-resend-hwtimestamp-v7-0-cf1d78bb8821@chromium.org>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Tue, 15 Aug 2023 13:26:30 +0200
+X-Gmail-Original-Message-ID: <CANiDSCtC2zOKtopkuuqJYqi6+FQ1Kav6LfMH5gGhKrnDeG7GYw@mail.gmail.com>
+Message-ID: <CANiDSCtC2zOKtopkuuqJYqi6+FQ1Kav6LfMH5gGhKrnDeG7GYw@mail.gmail.com>
+Subject: Re: [PATCH v7 0/6] uvcvideo: Fixes for hw timestamping
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        "hn.chen" <hn.chen@sunplusit.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-tree:   https://github.com/jsarha/linux topic/cros-sof-v4.19
-head:   d7a3e91d8d16d1ef8653deec5a1fffc4de034a0c
-commit: fafd43c288ef4de7f385fde1dd59e45aec303d45 [1264/6555] UPSTREAM: media: Documentation: v4l: document request API
-reproduce: (https://download.01.org/0day-ci/archive/20230815/202308152237.2qoXL6Yk-lkp@intel.com/reproduce)
+Hi Laurent
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308152237.2qoXL6Yk-lkp@intel.com/
+Could you give a look to this patchset?
 
-spdxcheck warnings: (new ones prefixed by >>)
-   include/dt-bindings/reset/amlogic,meson-axg-reset.h: 9:41 Invalid License ID: BSD
->> Documentation/media/uapi/mediactl/media-ioc-request-alloc.rst: 1:39 Invalid License ID: GFDL-1.1-or-later
->> Documentation/media/uapi/mediactl/media-request-ioc-queue.rst: 1:39 Invalid License ID: GFDL-1.1-or-later
->> Documentation/media/uapi/mediactl/media-request-ioc-reinit.rst: 1:39 Invalid License ID: GFDL-1.1-or-later
->> Documentation/media/uapi/mediactl/request-api.rst: 1:39 Invalid License ID: GFDL-1.1-or-later
->> Documentation/media/uapi/mediactl/request-func-close.rst: 1:39 Invalid License ID: GFDL-1.1-or-later
->> Documentation/media/uapi/mediactl/request-func-ioctl.rst: 1:39 Invalid License ID: GFDL-1.1-or-later
->> Documentation/media/uapi/mediactl/request-func-poll.rst: 1:39 Invalid License ID: GFDL-1.1-or-later
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks!
