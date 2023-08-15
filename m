@@ -2,65 +2,56 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 603F2C001B0
-	for <linux-media@archiver.kernel.org>; Tue, 15 Aug 2023 06:03:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61F42C001B0
+	for <linux-media@archiver.kernel.org>; Tue, 15 Aug 2023 06:10:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234796AbjHOGCk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 15 Aug 2023 02:02:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54054 "EHLO
+        id S234978AbjHOGJh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 15 Aug 2023 02:09:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234787AbjHOGCK (ORCPT
+        with ESMTP id S235066AbjHOGI7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 15 Aug 2023 02:02:10 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3422B106
-        for <linux-media@vger.kernel.org>; Mon, 14 Aug 2023 23:02:04 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3fe5c0e5747so29737185e9.0
-        for <linux-media@vger.kernel.org>; Mon, 14 Aug 2023 23:02:04 -0700 (PDT)
+        Tue, 15 Aug 2023 02:08:59 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 387B91FE0
+        for <linux-media@vger.kernel.org>; Mon, 14 Aug 2023 23:07:48 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4fe28e4671dso7935697e87.0
+        for <linux-media@vger.kernel.org>; Mon, 14 Aug 2023 23:07:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692079323; x=1692684123;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=o6wjkIKXmOaC3qza9ogWX1PomwYcyCLkZwNgjvdvmF0=;
-        b=FqTAU0K1pTfh5WW9XG7/+VbWaNfxNE0P1Cgd7FNwP+5Kit3dZqstnLRbm5EVOiLBPB
-         HXb4GjGcGfzsfJQIsnjMa7niQEnd4GfQOl/ntuRTxXnzL+sLBzCrOMDqOAOQBCVsd67l
-         SP+gPQWmoH1oNOjwezxaKNMl+MM7xgXBAWlwVBebPL8fG0wlaQpzATWjgKhprw4Z6yRD
-         toXiUiJuQF1rB0Crq50oF9ypUXkLbJiTXbx/RyHBPA5Civjxn+jX7J7kGwLof4oWmzOn
-         Vf9BpD3SaIjpV8FNhqsmL9yiWAe8bWGjLf8ENiv7bMSbO2FWL0PolRcWjKLBckmjQMwh
-         RVqA==
+        d=linaro.org; s=google; t=1692079666; x=1692684466;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KVnFJiMRFz78ILhOUZDeG2BsOXYQ6IIoucdYjDSoZck=;
+        b=ux9EU2te+pnF27RxeJooc1JFE42D9LgEkZ2ZnZNaRNmMU/MdYm5I/WOjXN5wWc5XJw
+         KxiiRwiTeEWBCMn4tCdMZRpoqxR4efsO3S4SUIkpEdE3mzWTcmnjgKjpXPICQeMkEkYv
+         RV3yqfbn07fxqkCs6gtgVbG7c4svgBnGAxOe0PaLP4lswOmJh5SHRxIGw2K9oF/qqdw4
+         kskGGJ2MDI03gV7dMi/CGWHvS+rvLb61oyzlfTUSQtzR1ZfTTvlbyIpPCwCF2Ip0yw41
+         xKzFqxq0dXXKw9TBDlkT0XzEiUiRFrBejBitXo6mT3UameP3IJHKmRdbOT6Ohywv/pnD
+         3fHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692079323; x=1692684123;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o6wjkIKXmOaC3qza9ogWX1PomwYcyCLkZwNgjvdvmF0=;
-        b=fSuP1nGg76agt4JT56XouV4RpPrTbCCzKKEAc2VfkI2FXKJ6zrXLfzGvpNTwq0RNcv
-         1MHnpfoU9DpiyeWWiqUECp9XtQTip1Ezf+PQyY0yjxd6UoJy1lSJlyK0B/uraTiJsyfZ
-         FkO+pf39d/5jZ00Xw0+dkKkEWp8r5H6GkHL1X5RwvYJIrF2kiOq0z+HlhauxVtrRQbkk
-         ITwk/rImGsccTkf9BKqSStGEgohSxT6BnJPHMD5OxOiN71FvG0N4wuoAM7gtV3C3Yzjp
-         3lhmOTsVgSdNXDd3Vafgdt4QurfVuL6Z15PHBVCOy3fKFIx/LZ99s7PvdKLDmpcWDdT8
-         dmEw==
-X-Gm-Message-State: AOJu0Yw9FGbw1dS/3o6A2ZhODjUOMzBHt7cReLTVmxE+/K543f+kxslZ
-        2FsYrcJOx7Ej2+Xc1ehFGtRp+g==
-X-Google-Smtp-Source: AGHT+IHgHo0QXSlNn4F4uyvrQSqk9Lo79B56aRJmWoK2BovwZJenEVz07aEzcZNE1duJw8q8vT/y0w==
-X-Received: by 2002:a7b:c04d:0:b0:3fe:4341:a5aa with SMTP id u13-20020a7bc04d000000b003fe4341a5aamr782291wmc.8.1692079322615;
-        Mon, 14 Aug 2023 23:02:02 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.214.188])
-        by smtp.gmail.com with ESMTPSA id a9-20020a5d5089000000b0031434c08bb7sm16733802wrt.105.2023.08.14.23.02.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Aug 2023 23:02:02 -0700 (PDT)
-Message-ID: <552c1bd6-0c91-071e-bd11-8d7c8feb7bc5@linaro.org>
-Date:   Tue, 15 Aug 2023 08:02:00 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH v2 3/3] media: exynos4-is: fimc-is: replace duplicate pmu
- node with phandle
-Content-Language: en-US
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Andi Shyti <andi.shyti@kernel.org>
-Cc:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        d=1e100.net; s=20221208; t=1692079666; x=1692684466;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KVnFJiMRFz78ILhOUZDeG2BsOXYQ6IIoucdYjDSoZck=;
+        b=hh4lyJnyY3SGMLe+PTIe/y8l+w92pny1VaMeKwpDw6Q9xOfmDWWoWYX0Jw04sHh3Ok
+         I10ilA50i8CmKb5/QklpY7Znev779kluHLbUaGgfynkuNHCqEdJJrYB5DDUkuo/NlUN+
+         v0ko6QP75T0ybXOI/lAC7y8F4GDPejBILkcEP3nVAULejXX7icJPDtTAFm0HlVbWOUuo
+         xRydYErB2MgRf5l9Tow11TIkWD0AXdEXFu+UrmpU2+8yJhmWRoR+Ke7XJtOpckChU1cs
+         EbajMRlkOHJfGDlM6wBLG92ir8p52DB7tsKZrT1YnOkcI1zHqSEyW2gRW8890ybgYiIj
+         oRoQ==
+X-Gm-Message-State: AOJu0YzxTzkRQ1ckYhHDL+oKvvxK/EUJPbddpe3ljcHFTVrXaVt1ydiZ
+        T0Ra4tzZrACb36hHLG8Vd7TgrAV46BXQnGOyKEs=
+X-Google-Smtp-Source: AGHT+IEU8GZRCKc+uj+gjwiht9Ao/Ja/R6voPLEfx7IHejJ8qPJgWiAfPI7J2oLEh5VRT/2VcidT2w==
+X-Received: by 2002:a05:6512:304d:b0:4ff:74e2:4268 with SMTP id b13-20020a056512304d00b004ff74e24268mr5037814lfb.56.1692079666243;
+        Mon, 14 Aug 2023 23:07:46 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.214.188])
+        by smtp.gmail.com with ESMTPSA id gw4-20020a170906f14400b00993b381f808sm6528093ejb.38.2023.08.14.23.07.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Aug 2023 23:07:45 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -69,57 +60,110 @@ Cc:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
         linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230807131256.254243-1-krzysztof.kozlowski@linaro.org>
- <20230807131256.254243-3-krzysztof.kozlowski@linaro.org>
- <20230807231320.svssge6uymw3jiho@intel.intel>
- <9520cdcb-5262-f429-b7bc-35c4cda08c12@xs4all.nl>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <9520cdcb-5262-f429-b7bc-35c4cda08c12@xs4all.nl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v3 2/3] media: dt-bindings: samsung,fimc: correct unit addresses in DTS example
+Date:   Tue, 15 Aug 2023 08:07:38 +0200
+Message-Id: <20230815060739.30160-2-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230815060739.30160-1-krzysztof.kozlowski@linaro.org>
+References: <20230815060739.30160-1-krzysztof.kozlowski@linaro.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 11/08/2023 11:49, Hans Verkuil wrote:
-> Hi Krzysztof,
-> 
-> On 08/08/2023 01:13, Andi Shyti wrote:
->> Hi Krzysztof,
->>
->> [...]
->>
->>> +static void __iomem *fimc_is_get_pmu_regs(struct device *dev)
->>> +{
->>> +	struct device_node *node;
->>> +	void __iomem *regs;
->>> +
->>> +	node = of_parse_phandle(dev->of_node, "samsung,pmu-syscon", 0);
->>> +	if (!node) {
->>> +		dev_warn(dev, "Finding PMU node via deprecated method, update your DTB\n");
->>> +		node = of_get_child_by_name(dev->of_node, "pmu");
->>> +		if (!node)
->>> +			return IOMEM_ERR_PTR(-ENODEV);
->>
->> in my opinion this should be:
->>
->> 		...
->> 		if (!node)
->> 			return IOMEM_ERR_PTR(-ENODEV);
->>
->> 		dev_warn(dev, "Finding PMU node via deprecated method, update your DTB\n");
->>
->> Because if you don't have both "samsung,pmu-syscon and "pmu" then
->> the warning should not be printed and you need to return -ENODEV.
-> 
-> I agree with Andi for this part.
-> 
-> The only time you want to see this message is if samsung,pmu-syscon is
-> missing AND pmu is present. If both are missing, then just return ENODEV as
-> it was before.
+The camera node's ranges property and unit addresses of its children
+were not correct.  If camera is @11800000, then its fimc child is @0.
 
-OK, understood. I will send a v3.
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Best regards,
-Krzysztof
+---
+
+Changes in v3:
+1. None
+
+Changes in v2:
+1. Add Ab tag.
+---
+ .../bindings/media/samsung,fimc.yaml          | 22 +++++++++----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/media/samsung,fimc.yaml b/Documentation/devicetree/bindings/media/samsung,fimc.yaml
+index 530a08f5d3fe..88b176d594e2 100644
+--- a/Documentation/devicetree/bindings/media/samsung,fimc.yaml
++++ b/Documentation/devicetree/bindings/media/samsung,fimc.yaml
+@@ -117,7 +117,7 @@ examples:
+         #clock-cells = <1>;
+         #address-cells = <1>;
+         #size-cells = <1>;
+-        ranges = <0x0 0x0 0x18000000>;
++        ranges = <0x0 0x0 0xba1000>;
+ 
+         clocks = <&clock CLK_SCLK_CAM0>, <&clock CLK_SCLK_CAM1>,
+                  <&clock CLK_PIXELASYNCM0>, <&clock CLK_PIXELASYNCM1>;
+@@ -132,9 +132,9 @@ examples:
+         pinctrl-0 = <&cam_port_a_clk_active &cam_port_b_clk_active>;
+         pinctrl-names = "default";
+ 
+-        fimc@11800000 {
++        fimc@0 {
+             compatible = "samsung,exynos4212-fimc";
+-            reg = <0x11800000 0x1000>;
++            reg = <0x00000000 0x1000>;
+             interrupts = <GIC_SPI 84 IRQ_TYPE_LEVEL_HIGH>;
+             clocks = <&clock CLK_FIMC0>,
+                      <&clock CLK_SCLK_FIMC0>;
+@@ -151,9 +151,9 @@ examples:
+ 
+         /* ... FIMC 1-3 */
+ 
+-        csis@11880000 {
++        csis@80000 {
+             compatible = "samsung,exynos4210-csis";
+-            reg = <0x11880000 0x4000>;
++            reg = <0x00080000 0x4000>;
+             interrupts = <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
+             clocks = <&clock CLK_CSIS0>,
+                      <&clock CLK_SCLK_CSIS0>;
+@@ -186,9 +186,9 @@ examples:
+ 
+         /* ... CSIS 1 */
+ 
+-        fimc-lite@12390000 {
++        fimc-lite@b90000 {
+               compatible = "samsung,exynos4212-fimc-lite";
+-              reg = <0x12390000 0x1000>;
++              reg = <0xb90000 0x1000>;
+               interrupts = <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>;
+               power-domains = <&pd_isp>;
+               clocks = <&isp_clock CLK_ISP_FIMC_LITE0>;
+@@ -198,9 +198,9 @@ examples:
+ 
+         /* ... FIMC-LITE 1 */
+ 
+-        fimc-is@12000000 {
++        fimc-is@800000 {
+             compatible = "samsung,exynos4212-fimc-is";
+-            reg = <0x12000000 0x260000>;
++            reg = <0x00800000 0x260000>;
+             interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>,
+                          <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>;
+             clocks = <&isp_clock CLK_ISP_FIMC_LITE0>,
+@@ -242,9 +242,9 @@ examples:
+             #size-cells = <1>;
+             ranges;
+ 
+-            i2c-isp@12140000 {
++            i2c-isp@940000 {
+                 compatible = "samsung,exynos4212-i2c-isp";
+-                reg = <0x12140000 0x100>;
++                reg = <0x00940000 0x100>;
+                 clocks = <&isp_clock CLK_ISP_I2C1_ISP>;
+                 clock-names = "i2c_isp";
+                 pinctrl-0 = <&fimc_is_i2c1>;
+-- 
+2.34.1
 
