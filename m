@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0738C04E69
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 691EFC04A94
 	for <linux-media@archiver.kernel.org>; Tue, 15 Aug 2023 18:25:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239098AbjHOSZM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 15 Aug 2023 14:25:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59676 "EHLO
+        id S239078AbjHOSZL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 15 Aug 2023 14:25:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239096AbjHOSYo (ORCPT
+        with ESMTP id S239080AbjHOSYk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 15 Aug 2023 14:24:44 -0400
+        Tue, 15 Aug 2023 14:24:40 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56CD91BC5
-        for <linux-media@vger.kernel.org>; Tue, 15 Aug 2023 11:24:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD8A1BC5
+        for <linux-media@vger.kernel.org>; Tue, 15 Aug 2023 11:24:39 -0700 (PDT)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8419487DD;
-        Tue, 15 Aug 2023 20:23:28 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E62B08610;
+        Tue, 15 Aug 2023 20:23:25 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1692123808;
-        bh=EoiwsvejL7+cuZCqkGG5Ec+xfdCM9jKMQ2xKjUvSoTM=;
+        s=mail; t=1692123806;
+        bh=tgjuW/C/ItKa9Eaxo2774Tn36ojnOLChqEZUz86RgDw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bQMaISrYDrv6rb4rf55Iu2qqsWYndoDXFL7m8q546lVRYIc/mF/ZbD7ceAGBSK2S9
-         As0Fwlz3DX0pRt5KvU489PQlTHtEDOw4ONwkFdydHGIIForh/l79yopGDn1Qsh/0t6
-         cs5xo4OYEUZ1Rorhe2rggrraem6NEUcwIyeSAnzg=
+        b=imn7IyX/kLv9FiaLV9QH70K2s803Pak0Kgj2TsLT9019+ocJIWg6y2QBngLPlF4SI
+         lPYbQW6Z2NsboFbv5SA6Wj4TfXZjIAVttZTHd+fNxg+1XvNYP9NGqln77aSX/tGVB1
+         7A+yqb3kv4R3Q7fPgZ+C1qdB0rdgFfR9dlzYwPvY=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
@@ -32,9 +32,9 @@ Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
         Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Hans de Goede <hdegoede@redhat.com>
-Subject: [PATCH v1 12/12] media: i2c: imx219: Drop IMX219_VTS_* macros
-Date:   Tue, 15 Aug 2023 21:24:31 +0300
-Message-ID: <20230815182431.18409-13-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v1 10/12] media: i2c: imx219: Access height from active format in imx219_set_ctrl
+Date:   Tue, 15 Aug 2023 21:24:29 +0300
+Message-ID: <20230815182431.18409-11-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230815182431.18409-1-laurent.pinchart@ideasonboard.com>
 References: <20230815182431.18409-1-laurent.pinchart@ideasonboard.com>
@@ -44,67 +44,51 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The IMX219_VTS_* macros define default VTS values for the modes
-supported by the driver. They are used in a single place, and hinder
-readability compared to using the value directly as a decimal number.
-Drop them.
+Use the active format height instead of the mode height in
+imx219_set_ctrl(). This prepares for dropping the mode field from the
+imx219 structure.
+
+The state is retrieved using v4l2_subdev_get_locked_active_state() as
+the subdev active state and the control handler share the same lock.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/i2c/imx219.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+ drivers/media/i2c/imx219.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-index c9c68a0f3b46..3a742716ddd6 100644
+index 71edb100e877..85b7e3f4f4d0 100644
 --- a/drivers/media/i2c/imx219.c
 +++ b/drivers/media/i2c/imx219.c
-@@ -71,10 +71,6 @@
+@@ -401,13 +401,18 @@ static int imx219_set_ctrl(struct v4l2_ctrl *ctrl)
+ 	struct imx219 *imx219 =
+ 		container_of(ctrl->handler, struct imx219, ctrl_handler);
+ 	struct i2c_client *client = v4l2_get_subdevdata(&imx219->sd);
++	const struct v4l2_mbus_framefmt *format;
++	struct v4l2_subdev_state *state;
+ 	int ret = 0;
  
- /* V_TIMING internal */
- #define IMX219_REG_VTS			CCI_REG16(0x0160)
--#define IMX219_VTS_15FPS		0x0dc6
--#define IMX219_VTS_30FPS_1080P		0x06e3
--#define IMX219_VTS_30FPS_BINNED		0x06e3
--#define IMX219_VTS_30FPS_640x480	0x06e3
- #define IMX219_VTS_MAX			0xffff
++	state = v4l2_subdev_get_locked_active_state(&imx219->sd);
++	format = v4l2_subdev_get_pad_format(&imx219->sd, state, 0);
++
+ 	if (ctrl->id == V4L2_CID_VBLANK) {
+ 		int exposure_max, exposure_def;
  
- #define IMX219_VBLANK_MIN		4
-@@ -302,7 +298,7 @@ static const struct imx219_mode supported_modes[] = {
- 			.width = 3280,
- 			.height = 2464
- 		},
--		.vts_def = IMX219_VTS_15FPS,
-+		.vts_def = 3526,
- 	},
- 	{
- 		/* 1080P 30fps cropped */
-@@ -314,7 +310,7 @@ static const struct imx219_mode supported_modes[] = {
- 			.width = 1920,
- 			.height = 1080
- 		},
--		.vts_def = IMX219_VTS_30FPS_1080P,
-+		.vts_def = 1763,
- 	},
- 	{
- 		/* 2x2 binned 30fps mode */
-@@ -326,7 +322,7 @@ static const struct imx219_mode supported_modes[] = {
- 			.width = 3280,
- 			.height = 2464
- 		},
--		.vts_def = IMX219_VTS_30FPS_BINNED,
-+		.vts_def = 1763,
- 	},
- 	{
- 		/* 640x480 30fps mode */
-@@ -338,7 +334,7 @@ static const struct imx219_mode supported_modes[] = {
- 			.width = 1280,
- 			.height = 960
- 		},
--		.vts_def = IMX219_VTS_30FPS_640x480,
-+		.vts_def = 1763,
- 	},
- };
- 
+ 		/* Update max exposure while meeting expected vblanking */
+-		exposure_max = imx219->mode->height + ctrl->val - 4;
++		exposure_max = format->height + ctrl->val - 4;
+ 		exposure_def = (exposure_max < IMX219_EXPOSURE_DEFAULT) ?
+ 			exposure_max : IMX219_EXPOSURE_DEFAULT;
+ 		__v4l2_ctrl_modify_range(imx219->exposure,
+@@ -447,7 +452,7 @@ static int imx219_set_ctrl(struct v4l2_ctrl *ctrl)
+ 		break;
+ 	case V4L2_CID_VBLANK:
+ 		cci_write(imx219->regmap, IMX219_REG_VTS,
+-			  imx219->mode->height + ctrl->val, &ret);
++			  format->height + ctrl->val, &ret);
+ 		break;
+ 	case V4L2_CID_TEST_PATTERN_RED:
+ 		cci_write(imx219->regmap, IMX219_REG_TESTP_RED,
 -- 
 Regards,
 
