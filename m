@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6670CC04A94
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77A71C04A6A
 	for <linux-media@archiver.kernel.org>; Tue, 15 Aug 2023 18:25:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239076AbjHOSYj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S239056AbjHOSYj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 15 Aug 2023 14:24:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54018 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239068AbjHOSYf (ORCPT
+        with ESMTP id S239061AbjHOSY3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 15 Aug 2023 14:24:35 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA10EE52
-        for <linux-media@vger.kernel.org>; Tue, 15 Aug 2023 11:24:33 -0700 (PDT)
+        Tue, 15 Aug 2023 14:24:29 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC26319AF
+        for <linux-media@vger.kernel.org>; Tue, 15 Aug 2023 11:24:28 -0700 (PDT)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4F6EEC85;
-        Tue, 15 Aug 2023 20:23:19 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2C1E83B3C;
+        Tue, 15 Aug 2023 20:23:15 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1692123799;
-        bh=M+uq4nH28REkmL6YGSOUbTKYVQaVxaW8JPGTvJhMefw=;
+        s=mail; t=1692123795;
+        bh=SXJlWJ3OBEisHVX6tN0rr/fZsIOnKuANOFgZZGol1ZM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ApecNub2ZSoAMRWNA97Qd7KoiOxzd/BgQ+bdJT9W1fJ6ivN0vT57s1GGHCxN4a6S4
-         JNJRWGMexgdVrCNB2m3McCCw+BfEjwhirtSZ3l/KQPgk5EJZy/y82A8PRhlbkCIj7v
-         b7c56p/eFwZkPxk8+Jr34uUl0GVYzNl2Vr1BORwc=
+        b=h4lGLLAuMiqFEbUgOHiUkzokUqULsEvpghwlV1/yOOhvjiMte/GZoR6RofY9JId+Y
+         wX44Tnys1EYfI+qk+JjT+OWpnANesQG/b/Ax46vZNr1Yxlz4zJ5BTRHR7KzZhOxMg+
+         7jST1kEPOqU2JQ9rN3u1ZTTASYvHmUawF3hJ9cX8=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
@@ -32,9 +32,9 @@ Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
         Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Hans de Goede <hdegoede@redhat.com>
-Subject: [PATCH v1 05/12] media: i2c: imx219: Set mode registers programmatically
-Date:   Tue, 15 Aug 2023 21:24:24 +0300
-Message-ID: <20230815182431.18409-6-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v1 02/12] media: i2c: imx219: Drop unused macros
+Date:   Tue, 15 Aug 2023 21:24:21 +0300
+Message-ID: <20230815182431.18409-3-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230815182431.18409-1-laurent.pinchart@ideasonboard.com>
 References: <20230815182431.18409-1-laurent.pinchart@ideasonboard.com>
@@ -44,238 +44,41 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Replace the per-mode register arrays with code that sets the same
-register values using the mode definitions. This avoids duplicating
-information in two different places.
-
-The error check for invalid formats in imx219_set_framefmt() is dropped
-as the format is guaranteed to be valid.
+Drop a handful of macros that are not used and don't provide any value.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/i2c/imx219.c | 134 ++++++++++---------------------------
- 1 file changed, 36 insertions(+), 98 deletions(-)
+ drivers/media/i2c/imx219.c | 10 ----------
+ 1 file changed, 10 deletions(-)
 
 diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-index a0b746447df2..9f1656bc3302 100644
+index 39695b0e6537..26ee33c09e6a 100644
 --- a/drivers/media/i2c/imx219.c
 +++ b/drivers/media/i2c/imx219.c
-@@ -149,11 +149,6 @@
- #define IMX219_PIXEL_ARRAY_WIDTH	3280U
- #define IMX219_PIXEL_ARRAY_HEIGHT	2464U
+@@ -72,12 +72,6 @@
  
--struct imx219_reg_list {
--	unsigned int num_of_regs;
--	const struct cci_reg_sequence *regs;
--};
--
- /* Mode : resolution and related config&values */
- struct imx219_mode {
- 	/* Frame width */
-@@ -167,9 +162,6 @@ struct imx219_mode {
- 	/* V-timing */
- 	unsigned int vts_def;
+ #define IMX219_VBLANK_MIN		4
  
--	/* Default register values */
--	struct imx219_reg_list reg_list;
+-/*Frame Length Line*/
+-#define IMX219_FLL_MIN			0x08a6
+-#define IMX219_FLL_MAX			0xffff
+-#define IMX219_FLL_STEP			1
+-#define IMX219_FLL_DEFAULT		0x0c98
 -
- 	/* 2x2 binning is used */
- 	bool binning;
- };
-@@ -219,65 +211,6 @@ static const struct cci_reg_sequence imx219_common_regs[] = {
- 	{ IMX219_REG_EXCK_FREQ, IMX219_EXCK_FREQ(24) },
- };
+ /* HBLANK control - read only */
+ #define IMX219_PPL_DEFAULT		3448
  
--/*
-- * Register sets lifted off the i2C interface from the Raspberry Pi firmware
-- * driver.
-- * 3280x2464 = mode 2, 1920x1080 = mode 1, 1640x1232 = mode 4, 640x480 = mode 7.
-- */
--static const struct cci_reg_sequence mode_3280x2464_regs[] = {
--	{ IMX219_REG_X_ADD_STA_A, 0 },
--	{ IMX219_REG_X_ADD_END_A, 3279 },
--	{ IMX219_REG_Y_ADD_STA_A, 0 },
--	{ IMX219_REG_Y_ADD_END_A, 2463 },
--	{ IMX219_REG_X_OUTPUT_SIZE, 3280 },
--	{ IMX219_REG_Y_OUTPUT_SIZE, 2464 },
--	{ IMX219_REG_TP_WINDOW_WIDTH, 3280 },
--	{ IMX219_REG_TP_WINDOW_HEIGHT, 2464 },
--};
--
--static const struct cci_reg_sequence mode_1920_1080_regs[] = {
--	{ IMX219_REG_X_ADD_STA_A, 680 },
--	{ IMX219_REG_X_ADD_END_A, 2599 },
--	{ IMX219_REG_Y_ADD_STA_A, 692 },
--	{ IMX219_REG_Y_ADD_END_A, 1771 },
--	{ IMX219_REG_X_OUTPUT_SIZE, 1920 },
--	{ IMX219_REG_Y_OUTPUT_SIZE, 1080 },
--	{ IMX219_REG_TP_WINDOW_WIDTH, 1920 },
--	{ IMX219_REG_TP_WINDOW_HEIGHT, 1080 },
--};
--
--static const struct cci_reg_sequence mode_1640_1232_regs[] = {
--	{ IMX219_REG_X_ADD_STA_A, 0 },
--	{ IMX219_REG_X_ADD_END_A, 3279 },
--	{ IMX219_REG_Y_ADD_STA_A, 0 },
--	{ IMX219_REG_Y_ADD_END_A, 2463 },
--	{ IMX219_REG_X_OUTPUT_SIZE, 1640 },
--	{ IMX219_REG_Y_OUTPUT_SIZE, 1232 },
--	{ IMX219_REG_TP_WINDOW_WIDTH, 1640 },
--	{ IMX219_REG_TP_WINDOW_HEIGHT, 1232 },
--};
--
--static const struct cci_reg_sequence mode_640_480_regs[] = {
--	{ IMX219_REG_X_ADD_STA_A, 1000 },
--	{ IMX219_REG_X_ADD_END_A, 2279 },
--	{ IMX219_REG_Y_ADD_STA_A, 752 },
--	{ IMX219_REG_Y_ADD_END_A, 1711 },
--	{ IMX219_REG_X_OUTPUT_SIZE, 640 },
--	{ IMX219_REG_Y_OUTPUT_SIZE, 480 },
--	{ IMX219_REG_TP_WINDOW_WIDTH, 640 },
--	{ IMX219_REG_TP_WINDOW_HEIGHT, 480 },
--};
--
--static const struct cci_reg_sequence raw8_framefmt_regs[] = {
--	{ IMX219_REG_CSI_DATA_FORMAT_A, 0x0808 },
--	{ IMX219_REG_OPPXCK_DIV, 8 },
--};
--
--static const struct cci_reg_sequence raw10_framefmt_regs[] = {
--	{ IMX219_REG_CSI_DATA_FORMAT_A, 0x0a0a },
--	{ IMX219_REG_OPPXCK_DIV, 10 },
--};
--
- static const s64 imx219_link_freq_menu[] = {
- 	IMX219_DEFAULT_LINK_FREQ,
- };
-@@ -373,10 +306,6 @@ static const struct imx219_mode supported_modes[] = {
- 			.height = 2464
- 		},
- 		.vts_def = IMX219_VTS_15FPS,
--		.reg_list = {
--			.num_of_regs = ARRAY_SIZE(mode_3280x2464_regs),
--			.regs = mode_3280x2464_regs,
--		},
- 		.binning = false,
- 	},
- 	{
-@@ -390,10 +319,6 @@ static const struct imx219_mode supported_modes[] = {
- 			.height = 1080
- 		},
- 		.vts_def = IMX219_VTS_30FPS_1080P,
--		.reg_list = {
--			.num_of_regs = ARRAY_SIZE(mode_1920_1080_regs),
--			.regs = mode_1920_1080_regs,
--		},
- 		.binning = false,
- 	},
- 	{
-@@ -407,10 +332,6 @@ static const struct imx219_mode supported_modes[] = {
- 			.height = 2464
- 		},
- 		.vts_def = IMX219_VTS_30FPS_BINNED,
--		.reg_list = {
--			.num_of_regs = ARRAY_SIZE(mode_1640_1232_regs),
--			.regs = mode_1640_1232_regs,
--		},
- 		.binning = true,
- 	},
- 	{
-@@ -424,10 +345,6 @@ static const struct imx219_mode supported_modes[] = {
- 			.height = 960
- 		},
- 		.vts_def = IMX219_VTS_30FPS_640x480,
--		.reg_list = {
--			.num_of_regs = ARRAY_SIZE(mode_640_480_regs),
--			.regs = mode_640_480_regs,
--		},
- 		.binning = true,
- 	},
- };
-@@ -699,23 +616,53 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
- static int imx219_set_framefmt(struct imx219 *imx219,
- 			       const struct v4l2_mbus_framefmt *format)
- {
-+	const struct imx219_mode *mode = imx219->mode;
-+	unsigned int bpp;
-+	int ret = 0;
-+
- 	switch (format->code) {
- 	case MEDIA_BUS_FMT_SRGGB8_1X8:
- 	case MEDIA_BUS_FMT_SGRBG8_1X8:
- 	case MEDIA_BUS_FMT_SGBRG8_1X8:
- 	case MEDIA_BUS_FMT_SBGGR8_1X8:
--		return cci_multi_reg_write(imx219->regmap, raw8_framefmt_regs,
--					   ARRAY_SIZE(raw8_framefmt_regs), NULL);
-+		bpp = 8;
-+		break;
+@@ -105,10 +99,6 @@
+ #define IMX219_TESTP_COLOUR_MIN		0
+ #define IMX219_TESTP_COLOUR_MAX		0x03ff
+ #define IMX219_TESTP_COLOUR_STEP	1
+-#define IMX219_TESTP_RED_DEFAULT	IMX219_TESTP_COLOUR_MAX
+-#define IMX219_TESTP_GREENR_DEFAULT	0
+-#define IMX219_TESTP_BLUE_DEFAULT	0
+-#define IMX219_TESTP_GREENB_DEFAULT	0
  
- 	case MEDIA_BUS_FMT_SRGGB10_1X10:
- 	case MEDIA_BUS_FMT_SGRBG10_1X10:
- 	case MEDIA_BUS_FMT_SGBRG10_1X10:
- 	case MEDIA_BUS_FMT_SBGGR10_1X10:
--		return cci_multi_reg_write(imx219->regmap, raw10_framefmt_regs,
--					   ARRAY_SIZE(raw10_framefmt_regs), NULL);
-+	default:
-+		bpp = 10;
-+		break;
- 	}
- 
--	return -EINVAL;
-+	cci_write(imx219->regmap, IMX219_REG_X_ADD_STA_A,
-+		  mode->crop.left - IMX219_PIXEL_ARRAY_LEFT, &ret);
-+	cci_write(imx219->regmap, IMX219_REG_X_ADD_END_A,
-+		  mode->crop.left - IMX219_PIXEL_ARRAY_LEFT + mode->crop.width - 1,
-+		  &ret);
-+	cci_write(imx219->regmap, IMX219_REG_Y_ADD_STA_A,
-+		  mode->crop.top - IMX219_PIXEL_ARRAY_TOP, &ret);
-+	cci_write(imx219->regmap, IMX219_REG_Y_ADD_END_A,
-+		  mode->crop.top - IMX219_PIXEL_ARRAY_TOP + mode->crop.height - 1,
-+		  &ret);
-+
-+	cci_write(imx219->regmap, IMX219_REG_X_OUTPUT_SIZE,
-+		  format->width, &ret);
-+	cci_write(imx219->regmap, IMX219_REG_Y_OUTPUT_SIZE,
-+		  format->height, &ret);
-+
-+	cci_write(imx219->regmap, IMX219_REG_TP_WINDOW_WIDTH,
-+		  format->width, &ret);
-+	cci_write(imx219->regmap, IMX219_REG_TP_WINDOW_HEIGHT,
-+		  format->height, &ret);
-+
-+	cci_write(imx219->regmap, IMX219_REG_CSI_DATA_FORMAT_A,
-+		  (bpp << 8) | bpp, &ret);
-+	cci_write(imx219->regmap, IMX219_REG_OPPXCK_DIV, bpp, &ret);
-+
-+	return ret;
- }
- 
- static int imx219_set_binning(struct imx219 *imx219,
-@@ -787,7 +734,6 @@ static int imx219_start_streaming(struct imx219 *imx219,
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(&imx219->sd);
- 	const struct v4l2_mbus_framefmt *format;
--	const struct imx219_reg_list *reg_list;
- 	int ret;
- 
- 	ret = pm_runtime_resume_and_get(&client->dev);
-@@ -809,15 +755,7 @@ static int imx219_start_streaming(struct imx219 *imx219,
- 		goto err_rpm_put;
- 	}
- 
--	/* Apply default values of current mode */
--	reg_list = &imx219->mode->reg_list;
--	ret = cci_multi_reg_write(imx219->regmap, reg_list->regs,
--				  reg_list->num_of_regs, NULL);
--	if (ret) {
--		dev_err(&client->dev, "%s failed to set mode\n", __func__);
--		goto err_rpm_put;
--	}
--
-+	/* Apply format and crop settings. */
- 	format = v4l2_subdev_get_pad_format(&imx219->sd, state, 0);
- 	ret = imx219_set_framefmt(imx219, format);
- 	if (ret) {
+ /* External clock frequency is 24.0M */
+ #define IMX219_XCLK_FREQ		24000000
 -- 
 Regards,
 
