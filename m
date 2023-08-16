@@ -2,49 +2,49 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AB7CC04FDF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB62CC05052
 	for <linux-media@archiver.kernel.org>; Wed, 16 Aug 2023 13:36:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245539AbjHPNgN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Aug 2023 09:36:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57670 "EHLO
+        id S245568AbjHPNgO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 16 Aug 2023 09:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245362AbjHPNgK (ORCPT
+        with ESMTP id S245366AbjHPNgL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 16 Aug 2023 09:36:10 -0400
+        Wed, 16 Aug 2023 09:36:11 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC51123;
-        Wed, 16 Aug 2023 06:36:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610502135;
+        Wed, 16 Aug 2023 06:36:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692192968; x=1723728968;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=X/n3jAC4OpdWfbT27/3ZLDkC3kaHfVSwAJpqmX0EKVk=;
-  b=FeFjXIAm860aeMxif6eEiHD6IcQwYSgxdI9TPAA6S1hY6ww4MyFwh1qx
-   TbccLKgDCg3HICqDj4VL5LofBJUtf8dTKuc1eMy+QanzFdKkGPYOeyeAg
-   qymGhP+QuY+oaQKt38ZNV9s/UlivfZPK7k2VQ162JzXgwm708VcwGNK5K
-   AAO1x1fGpqyavLmOWeIc0T95zunQbwRpBnYoTVENIaBf/JyNXYto7lz+2
-   JmXtY36qpZXMQVdmRV2pZJXZ6VztAag9miIYnOUA+BcaqyMpBjCoHUz5l
-   hWqC8V6Mf0+kcGlVanbRGQsNlWfTW7p/4YXeEnS1hTHRDbySSo3nw/HSA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="372537572"
+  t=1692192970; x=1723728970;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=TE8xFz46eSdiuejrPPY/FLyzDqCT21o+NFLRZALGZD8=;
+  b=PCAMOQDGMd/OurCit0MLFTj21Lkget9uCvfJt/eYe35g7LZQbBaZi/sG
+   hC/fE+mTedIBS48Q0W0bQ4WkYW6E7pyf/5hgEiYI2pVeBezrLXHsmNn1g
+   Z8imgct3TOZf84D4GNA/UPSW3tLai8AYIyXr5ZxetydZMS6hzDdpsdSfJ
+   JjPFaNzEhXXRWf9JnyBjESkG4JqMcTiTJHp7Oes1jotXii7DqptLtWX6i
+   GFaOLW0ZtU9Fc9Vs7rgrK6Cpf/xJS6PbNPNeXch9KyexT3MsdLZD3R71g
+   j+4iX3D94sjfsYHUlSYvJZqYlPT2rrojeOkdTkZWPSASP4rFdP91kzgTo
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="372537580"
 X-IronPort-AV: E=Sophos;i="6.01,177,1684825200"; 
-   d="scan'208";a="372537572"
+   d="scan'208";a="372537580"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
   by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2023 06:36:08 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="980748911"
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="980748915"
 X-IronPort-AV: E=Sophos;i="6.01,177,1684825200"; 
-   d="scan'208";a="980748911"
+   d="scan'208";a="980748915"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
   by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2023 06:36:06 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id CA53F1209A1;
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id CE9031209F7;
         Wed, 16 Aug 2023 16:36:03 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1qWGgS-00GC1Y-2n;
+        id 1qWGgS-00GC1f-30;
         Wed, 16 Aug 2023 16:35:36 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
@@ -53,29 +53,42 @@ Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         linux-next@vger.kernel.org, Wentong Wu <wentong.wu@intel.com>,
         Zhifeng Wang <zhifeng.wang@intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH 0/2] Media Kconfig fixes
-Date:   Wed, 16 Aug 2023 16:35:24 +0300
-Message-Id: <20230816133526.3859456-1-sakari.ailus@linux.intel.com>
+Subject: [PATCH 2/2] media: ivsc: Add ACPI dependency
+Date:   Wed, 16 Aug 2023 16:35:26 +0300
+Message-Id: <20230816133526.3859456-3-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230816133526.3859456-1-sakari.ailus@linux.intel.com>
+References: <20230816133526.3859456-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Randy, others,
+The IVSC driver only works in ACPI systems so make it depend on ACPI.
 
-These should address the Kconfig-derived build issues you found yesterday.
+Compiling it elsewhere has little if any value.
 
-Sakari Ailus (2):
-  media: v4l: usb: Use correct dependency for camera sensor drivers
-  media: ivsc: Add ACPI dependency
-
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Fixes: 29006e196a56 ("media: pci: intel: ivsc: Add CSI submodule")
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
  drivers/media/pci/intel/ivsc/Kconfig | 2 +-
- drivers/media/usb/em28xx/Kconfig     | 4 ++--
- drivers/media/usb/go7007/Kconfig     | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/media/pci/intel/ivsc/Kconfig b/drivers/media/pci/intel/ivsc/Kconfig
+index ec4ade92f583..413053175df7 100644
+--- a/drivers/media/pci/intel/ivsc/Kconfig
++++ b/drivers/media/pci/intel/ivsc/Kconfig
+@@ -3,7 +3,7 @@
+ 
+ config INTEL_VSC
+ 	tristate "Intel Visual Sensing Controller"
+-	depends on INTEL_MEI
++	depends on INTEL_MEI && ACPI
+ 	help
+ 	  This adds support for Intel Visual Sensing Controller (IVSC).
+ 
 -- 
 2.39.2
 
