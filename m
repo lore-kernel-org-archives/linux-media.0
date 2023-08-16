@@ -2,97 +2,181 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 986DCC04A94
-	for <linux-media@archiver.kernel.org>; Wed, 16 Aug 2023 10:42:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85CF4C04A94
+	for <linux-media@archiver.kernel.org>; Wed, 16 Aug 2023 10:46:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243558AbjHPKmX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Aug 2023 06:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48412 "EHLO
+        id S243951AbjHPKpg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 16 Aug 2023 06:45:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244004AbjHPKmN (ORCPT
+        with ESMTP id S244060AbjHPKpW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 16 Aug 2023 06:42:13 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BC92690
-        for <linux-media@vger.kernel.org>; Wed, 16 Aug 2023 03:42:02 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4fe655796faso10269008e87.2
-        for <linux-media@vger.kernel.org>; Wed, 16 Aug 2023 03:42:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1692182521; x=1692787321;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=EEOhlysOvfWNJvIb70cjtnJmAujK5omEn+wIvkrC/Ww=;
-        b=Bbk0jbkCUL6Bw7ExFSdT/GvvQxOPYqWu2Qi9kKF3x77YR8kVSYKCk2aIpdDS+r6Cee
-         uIuFolqUeIt/637IudG876aHUsAzoB2GYFQ+QZOoav2V7ANQtv29i6BhiBYK3WM4MeRt
-         V9o3xWJFwXbTSpcbMFrWGLzNUakLQs//XQFb4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692182521; x=1692787321;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EEOhlysOvfWNJvIb70cjtnJmAujK5omEn+wIvkrC/Ww=;
-        b=kjqAE1H8HDElf7vO+PzpMhsQndsmaBNNe7Pz9oIgtiMBLPnnacs33Q+gO1QT4sylfY
-         dOmmqxmB672wHrZcpuDZTzmVjg4zDBYR4TfYd36zN7lrT/3r4QtYv/9BXddCvBk2Fldv
-         ca0KMYQyC8Z+0LG4gW0Ea6Qjlm3tCOewx4UCbYhrdzDdQBdUMdFoupUrrTl6MyHB1LSM
-         e1gwLBJKiIphX/vpyfhrATYm1ggQ83hfBCM/s3kLUY71JBS4nEvCtGEKEcW2eapH6UL/
-         aYGJi5hySBEdiAsFIV2bcac+TexivhbQsMFi4uKBv4uYlZ/CySkIWM3f2guJuNEaCSqP
-         gSoA==
-X-Gm-Message-State: AOJu0YysT4qvxF8OvoUO9vA0V20tmGo5nC887alvzMx7dt5KyMb+2vaj
-        6TV8yIyL5ZYp9qPIJYfbzG+Ssg==
-X-Google-Smtp-Source: AGHT+IE0uEVDF8E5jme7kg4yNkE/yuuga1yCAg5iZ5Ktjjzp7BITPW2cpxAD8XTiTR9FW2SVEFDFYQ==
-X-Received: by 2002:a05:6512:3d20:b0:4fb:8eec:ce49 with SMTP id d32-20020a0565123d2000b004fb8eecce49mr1765492lfv.31.1692182520687;
-        Wed, 16 Aug 2023 03:42:00 -0700 (PDT)
-Received: from localhost ([2620:0:1043:12:eef1:eea9:c836:8ed9])
-        by smtp.gmail.com with UTF8SMTPSA id k20-20020ac257d4000000b004fe4d122a66sm2861403lfo.187.2023.08.16.03.41.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Aug 2023 03:42:00 -0700 (PDT)
-From:   Stefan Adolfsson <sadolfsson@chromium.org>
-X-Google-Original-From: Stefan Adolfsson <sadolfsson@google.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Reka Norman <rekanorman@chromium.org>,
-        linux-media@vger.kernel.org, chrome-platform@lists.linux.dev,
+        Wed, 16 Aug 2023 06:45:22 -0400
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04141212B
+        for <linux-media@vger.kernel.org>; Wed, 16 Aug 2023 03:45:11 -0700 (PDT)
+Received: from ramsan.of.borg ([84.195.187.55])
+        by laurent.telenet-ops.be with bizsmtp
+        id aAki2A00N1C8whw01AkiVg; Wed, 16 Aug 2023 12:44:46 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1qWE0x-000otE-SG;
+        Wed, 16 Aug 2023 12:44:42 +0200
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1qWDAw-00674J-Cr;
+        Wed, 16 Aug 2023 11:50:50 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Magnus Damm <magnus.damm@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Stefan Adolfsson <sadolfsson@chromium.org>
-Subject: [PATCH] media: cros-ec-cec: Add Constitution to the match table
-Date:   Wed, 16 Aug 2023 12:41:25 +0200
-Message-ID: <20230816104125.712370-1-sadolfsson@google.com>
-X-Mailer: git-send-email 2.41.0.694.ge786442a9b-goog
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org
+Subject: [PATCH v3 03/41] media: uapi: Add MEDIA_BUS_FMT_RGB666_2X9_BE format
+Date:   Wed, 16 Aug 2023 11:50:10 +0200
+Message-Id: <a8b8d8763c6d9e6c285e6c540051871816e17823.1692178020.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1692178020.git.geert+renesas@glider.be>
+References: <cover.1692178020.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Stefan Adolfsson <sadolfsson@chromium.org>
+Add the RGB666 9:9 format MEDIA_BUS_FMT_RGB666_2X9_BE, which is
+supported by the SH-Mobile LCD Controller.
 
-Constitution has two HDMI ports which support CEC:
-    Port B is EC port 0
-    Port A is EC port 1
-
-This patch depends on "media: cros-ec-cec: Add Dibbi to the match
-table".
-
-Signed-off-by: Stefan Adolfsson <sadolfsson@chromium.org>
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 ---
- drivers/media/cec/platform/cros-ec/cros-ec-cec.c | 2 ++
- 1 file changed, 2 insertions(+)
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Hans Verkuil <hverkuil@xs4all.nl>
+Cc: linux-media@vger.kernel.org
 
-diff --git a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-index 29f9a464857b..3c27349ce1d6 100644
---- a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-+++ b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-@@ -313,6 +313,8 @@ static const struct cec_dmi_match cec_dmi_match_table[] = {
- 	{ "Google", "Lisbon", "0000:00:02.0", { "Port B" } },
- 	/* Google Dibbi */
- 	{ "Google", "Dibbi", "0000:00:02.0", { "Port D", "Port B" } },
-+	/* Google Constitution */
-+	{ "Google", "Constitution", "0000:00:02.0", { "Port B", "Port A" } },
- };
+v3:
+  - No changes,
+
+v2:
+  - Add Reviewed-by,
+  - Drop unused MEDIA_BUS_FMT_RGB666_2X9_LE, as requested by Laurent.
+---
+ .../media/v4l/subdev-formats.rst              | 72 +++++++++++++++++++
+ include/uapi/linux/media-bus-format.h         |  3 +-
+ 2 files changed, 74 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/userspace-api/media/v4l/subdev-formats.rst b/Documentation/userspace-api/media/v4l/subdev-formats.rst
+index a3a35eeed70846ba..eb3cd20b0cf2e3d6 100644
+--- a/Documentation/userspace-api/media/v4l/subdev-formats.rst
++++ b/Documentation/userspace-api/media/v4l/subdev-formats.rst
+@@ -949,6 +949,78 @@ The following tables list existing packed RGB formats.
+       - b\ :sub:`2`
+       - b\ :sub:`1`
+       - b\ :sub:`0`
++    * .. _MEDIA-BUS-FMT-RGB666-2X9-BE:
++
++      - MEDIA_BUS_FMT_RGB666_2X9_BE
++      - 0x1025
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      - r\ :sub:`5`
++      - r\ :sub:`4`
++      - r\ :sub:`3`
++      - r\ :sub:`2`
++      - r\ :sub:`1`
++      - r\ :sub:`0`
++      - g\ :sub:`5`
++      - g\ :sub:`4`
++      - g\ :sub:`3`
++    * -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      - g\ :sub:`2`
++      - g\ :sub:`1`
++      - g\ :sub:`0`
++      - b\ :sub:`5`
++      - b\ :sub:`4`
++      - b\ :sub:`3`
++      - b\ :sub:`2`
++      - b\ :sub:`1`
++      - b\ :sub:`0`
+     * .. _MEDIA-BUS-FMT-BGR666-1X18:
  
- static struct device *cros_ec_cec_find_hdmi_dev(struct device *dev,
+       - MEDIA_BUS_FMT_BGR666_1X18
+diff --git a/include/uapi/linux/media-bus-format.h b/include/uapi/linux/media-bus-format.h
+index a03c543cb072de30..f05f747e444d6686 100644
+--- a/include/uapi/linux/media-bus-format.h
++++ b/include/uapi/linux/media-bus-format.h
+@@ -34,7 +34,7 @@
+ 
+ #define MEDIA_BUS_FMT_FIXED			0x0001
+ 
+-/* RGB - next is	0x1025 */
++/* RGB - next is	0x1026 */
+ #define MEDIA_BUS_FMT_RGB444_1X12		0x1016
+ #define MEDIA_BUS_FMT_RGB444_2X8_PADHI_BE	0x1001
+ #define MEDIA_BUS_FMT_RGB444_2X8_PADHI_LE	0x1002
+@@ -46,6 +46,7 @@
+ #define MEDIA_BUS_FMT_RGB565_2X8_BE		0x1007
+ #define MEDIA_BUS_FMT_RGB565_2X8_LE		0x1008
+ #define MEDIA_BUS_FMT_RGB666_1X18		0x1009
++#define MEDIA_BUS_FMT_RGB666_2X9_BE		0x1025
+ #define MEDIA_BUS_FMT_BGR666_1X18		0x1023
+ #define MEDIA_BUS_FMT_RBG888_1X24		0x100e
+ #define MEDIA_BUS_FMT_RGB666_1X24_CPADHI	0x1015
 -- 
-2.41.0.694.ge786442a9b-goog
+2.34.1
 
