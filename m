@@ -2,133 +2,110 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 68FFCC04E69
-	for <linux-media@archiver.kernel.org>; Wed, 16 Aug 2023 13:15:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 130FCC001B0
+	for <linux-media@archiver.kernel.org>; Wed, 16 Aug 2023 13:36:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245418AbjHPNOp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Aug 2023 09:14:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57290 "EHLO
+        id S245565AbjHPNgO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 16 Aug 2023 09:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245429AbjHPNOi (ORCPT
+        with ESMTP id S245413AbjHPNgL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 16 Aug 2023 09:14:38 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752D32123
-        for <linux-media@vger.kernel.org>; Wed, 16 Aug 2023 06:14:34 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-d3d729a08e4so6182754276.3
-        for <linux-media@vger.kernel.org>; Wed, 16 Aug 2023 06:14:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692191673; x=1692796473;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ps0ezi6BbE/dOQS5Zv8WHPzCnGOgQGimydMZPi3OwEA=;
-        b=UHQsMab+UKQiY/x4Cvucj/6jRnXY5zYFK2PSNTZNBGfZDXjTsBo9ccfazJjcGGN+AL
-         hfrHdNs0SyBWb7hDrvjoe8aFe9XX75C1CrTdFbjQJouEBBT532gnWK0zj3sIqhV0GJ9c
-         zU9+3u56Eo67easSPJ0ULJ42cRGjSW9zTWQfR2lbkV0hYQowzonlXOgk3lbP+24gHeC7
-         A7kd02YCaSESRQafEid7jn3sinNprYibkrE/+kDGaKlvI0yjxO8AV8ztvg/8hk0Xo/c5
-         TJqdK+CEDIQnIxqYJpu11riGaaIcdtbGLv2p+Frvrw+bOnD3m9fCjCki8a5ns9G1nEYh
-         nWIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692191673; x=1692796473;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ps0ezi6BbE/dOQS5Zv8WHPzCnGOgQGimydMZPi3OwEA=;
-        b=Vq70qEuHA2ndpW8tWTTEAQc0AiMpbVY5lXRnCjrIvGfIRmwrDb4lnwbSSOJWEj5ot/
-         NwXQx10Yb7W8EB4nxu0ithvVqSitp5x5RlD9qIsoBie9X3kzT6yR1YBRN0K65nWBJ+iR
-         GrDRLlsnHtwg5hCvjkcldbXjz4tz9ovARqAw4ogLWy2RxPGz8CjRahnJCrqE23OhC/nl
-         knfnyWhOJ3pTDpzWjLtkjWcp9BdcND6LD/iflAgwOogNgMhFMfOBd1jHX9pGv+a8WLW6
-         MRXv6G/0XWntpNPLXrg/5Zzpn/Fpv6g+boIFg8GvAcyOpi0OMzBEgmkQl/S2UOw1yTzr
-         ietw==
-X-Gm-Message-State: AOJu0YxH+CCqxdAZykDa3KzFXm+Ud/ynwZEYxWQTiRd819svAiLGG2IA
-        +2z1jzudr5PXAuM0tAiC2vUnFx+S0K4Ss9O3gavtkQ==
-X-Google-Smtp-Source: AGHT+IGKZ4RWnzjsWo4DnKHE3xoKinJgbhJCua6rwHR/iEng6W17crQo1AvKOP5s6UKzGEoNDQw+sgBOpsYORz89Njo=
-X-Received: by 2002:a25:dbc1:0:b0:d62:b91b:10e3 with SMTP id
- g184-20020a25dbc1000000b00d62b91b10e3mr1670653ybf.48.1692191673659; Wed, 16
- Aug 2023 06:14:33 -0700 (PDT)
+        Wed, 16 Aug 2023 09:36:11 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7026F2136;
+        Wed, 16 Aug 2023 06:36:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692192970; x=1723728970;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=4GR5uM0r2IXARSeo3eQq0DsLiDyIiKq3U4ASSd4oGac=;
+  b=NPfnmkGQzUjrrUh4lqyYm4Hgj657+AZO+IqYWSuTW+fceC4UOI7qhiRG
+   pa0c/HYIc/pELCpRvm6zXurS12C+lr8h7DnD3MWxMbXGyJ+UnXFfP4Hvw
+   mMa9dC0N8tUjTkj/9SoW2onN6jQ/lhPkyVVp6YJNJ/qAXX8XHU9d6Y6UO
+   DMbDoR6hUyY0pBNpzvIYv51PoDvyEzhoMReCXF/3KG2Enhh8KD1g+slAA
+   XioXtfLO2IKIhYCCnF8hPOxj4uc58s3mKWVwttA8aCLD/o7iLz7C3ud6o
+   6v1jQzqszV32ECWYS3wCBCitStQciD8xR1+0Mwn0PTHRfeAjLW3vvxsWf
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="372537576"
+X-IronPort-AV: E=Sophos;i="6.01,177,1684825200"; 
+   d="scan'208";a="372537576"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2023 06:36:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="980748913"
+X-IronPort-AV: E=Sophos;i="6.01,177,1684825200"; 
+   d="scan'208";a="980748913"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2023 06:36:06 -0700
+Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id CB2401209BD;
+        Wed, 16 Aug 2023 16:36:03 +0300 (EEST)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
+        (envelope-from <sakari.ailus@linux.intel.com>)
+        id 1qWGgS-00GC1b-2t;
+        Wed, 16 Aug 2023 16:35:36 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-media@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-next@vger.kernel.org, Wentong Wu <wentong.wu@intel.com>,
+        Zhifeng Wang <zhifeng.wang@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH 1/2] media: v4l: usb: Use correct dependency for camera sensor drivers
+Date:   Wed, 16 Aug 2023 16:35:25 +0300
+Message-Id: <20230816133526.3859456-2-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230816133526.3859456-1-sakari.ailus@linux.intel.com>
+References: <20230816133526.3859456-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-References: <1690550624-14642-1-git-send-email-quic_vgarodia@quicinc.com>
- <1690550624-14642-2-git-send-email-quic_vgarodia@quicinc.com>
- <c29d5e28-5b9d-1327-0feb-e5ed27afcd3a@infradead.org> <b4de638e-9cab-2662-92b0-e2d1a18018a1@quicinc.com>
- <540b263a-3a1e-fd09-c6c2-18371e460e5e@linaro.org>
-In-Reply-To: <540b263a-3a1e-fd09-c6c2-18371e460e5e@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 16 Aug 2023 16:14:22 +0300
-Message-ID: <CAA8EJpq1o3VRMTgWb-uFf7qTQ897ishiJ9HTNWcxHgLyyfpAOg@mail.gmail.com>
-Subject: Re: [PATCH 01/33] MAINTAINERS: Add Qualcomm Iris video accelerator driver
-To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
-Cc:     Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        stanimir.k.varbanov@gmail.com, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, mchehab@kernel.org,
-        hans.verkuil@cisco.com, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+The Kconfig option that enables compiling camera sensor drivers is
+VIDEO_CAMERA_SENSOR rather than MEDIA_CAMERA_SUPPORT as it was previously.
+Fix this.
 
-On Wed, 16 Aug 2023 at 15:00, Bryan O'Donoghue
-<bryan.odonoghue@linaro.org> wrote:
->
-> On 14/08/2023 19:44, Dikshita Agarwal wrote:
-> >
-> >
-> > On 7/29/2023 4:18 AM, Randy Dunlap wrote:
-> >>
-> >>
-> >> On 7/28/23 06:23, Vikash Garodia wrote:
-> >>> Add an entry for Iris video encoder/decoder accelerator driver.
-> >>>
-> >>> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
-> >>> Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
-> >>> ---
-> >>>   MAINTAINERS | 10 ++++++++++
-> >>>   1 file changed, 10 insertions(+)
-> >>>
-> >>> diff --git a/MAINTAINERS b/MAINTAINERS
-> >>> index 3be1bdf..ea633b2 100644
-> >>> --- a/MAINTAINERS
-> >>> +++ b/MAINTAINERS
-> >>> @@ -17671,6 +17671,16 @@ T: git git://linuxtv.org/media_tree.git
-> >>>   F:        Documentation/devicetree/bindings/media/*venus*
-> >>>   F:        drivers/media/platform/qcom/venus/
-> >>>
-> >>> +QUALCOMM IRIS VIDEO ACCELERATOR DRIVER
-> >>
-> >> This entry should immediately follow:
-> >> QUALCOMM IPQ4019 VQMMC REGULATOR DRIVER
-> >>
-> >> to keep the file in alphabetical order.
-> >>
-> > Sure, will fix this in next version.
->
-> I think TBH before we see a next version, there needs to be a conclusive
-> argument on why a new driver - instead of an update to the existing
-> venus - is the way to go.
->
-> We have an ongoing corpus of working code that people use. The attempt
-> to at least _try_ to integrate 8550 and beyond to upstream venus should
-> be made.
->
-> If it fails, then we can discuss a branched driver.
->
-> Its not up to me but, that's certainly my honest and unvarnished input.
->
-> Instead of investing time in V2 - please invest time in upstream venus
-> or make the technical argument conclusively _prior_ to V2 as to why V2
-> and beyond is the "only" way forward for 8550 and beyond.
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Fixes: 7d3c7d2a2914 ("media: i2c: Add a camera sensor top level menu")
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ drivers/media/usb/em28xx/Kconfig | 4 ++--
+ drivers/media/usb/go7007/Kconfig | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I'd second this request. At the very least (as I wrote in response to
-another email), consider reworking venus into core and interface
-specific parts and making iris3 use a common base layer.
-We already have drivers which work across multiple platforms, taking
-care of differences. Few to name: GPU, display, sound, DSP, camss.
-
-
+diff --git a/drivers/media/usb/em28xx/Kconfig b/drivers/media/usb/em28xx/Kconfig
+index b3c472b8c5a9..cb61fd6cc6c6 100644
+--- a/drivers/media/usb/em28xx/Kconfig
++++ b/drivers/media/usb/em28xx/Kconfig
+@@ -12,8 +12,8 @@ config VIDEO_EM28XX_V4L2
+ 	select VIDEO_SAA711X if MEDIA_SUBDRV_AUTOSELECT
+ 	select VIDEO_TVP5150 if MEDIA_SUBDRV_AUTOSELECT
+ 	select VIDEO_MSP3400 if MEDIA_SUBDRV_AUTOSELECT
+-	select VIDEO_MT9V011 if MEDIA_SUBDRV_AUTOSELECT && MEDIA_CAMERA_SUPPORT
+-	select VIDEO_OV2640 if MEDIA_SUBDRV_AUTOSELECT && MEDIA_CAMERA_SUPPORT
++	select VIDEO_MT9V011 if MEDIA_SUBDRV_AUTOSELECT && VIDEO_CAMERA_SENSOR
++	select VIDEO_OV2640 if MEDIA_SUBDRV_AUTOSELECT && VIDEO_CAMERA_SENSOR
+ 	help
+ 	  This is a video4linux driver for Empia 28xx based TV cards.
+ 
+diff --git a/drivers/media/usb/go7007/Kconfig b/drivers/media/usb/go7007/Kconfig
+index 4ff79940ad8d..b2a15d9fb1f3 100644
+--- a/drivers/media/usb/go7007/Kconfig
++++ b/drivers/media/usb/go7007/Kconfig
+@@ -12,8 +12,8 @@ config VIDEO_GO7007
+ 	select VIDEO_TW2804 if MEDIA_SUBDRV_AUTOSELECT
+ 	select VIDEO_TW9903 if MEDIA_SUBDRV_AUTOSELECT
+ 	select VIDEO_TW9906 if MEDIA_SUBDRV_AUTOSELECT
+-	select VIDEO_OV7640 if MEDIA_SUBDRV_AUTOSELECT && MEDIA_CAMERA_SUPPORT
+ 	select VIDEO_UDA1342 if MEDIA_SUBDRV_AUTOSELECT
++	select VIDEO_OV7640 if MEDIA_SUBDRV_AUTOSELECT && VIDEO_CAMERA_SENSOR
+ 	help
+ 	  This is a video4linux driver for the WIS GO7007 MPEG
+ 	  encoder chip.
 -- 
-With best wishes
-Dmitry
+2.39.2
+
