@@ -2,98 +2,75 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19E8EC001DF
-	for <linux-media@archiver.kernel.org>; Wed, 16 Aug 2023 06:25:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AEF80C001E0
+	for <linux-media@archiver.kernel.org>; Wed, 16 Aug 2023 06:36:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242111AbjHPGZV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Aug 2023 02:25:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32826 "EHLO
+        id S238566AbjHPGfl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 16 Aug 2023 02:35:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242122AbjHPGZB (ORCPT
+        with ESMTP id S242172AbjHPGfd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 16 Aug 2023 02:25:01 -0400
+        Wed, 16 Aug 2023 02:35:33 -0400
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2D31FC1
-        for <linux-media@vger.kernel.org>; Tue, 15 Aug 2023 23:24:58 -0700 (PDT)
-Received: from dggpeml500003.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RQdLs07GdzNmsZ;
-        Wed, 16 Aug 2023 14:21:25 +0800 (CST)
-Received: from [10.174.177.173] (10.174.177.173) by
- dggpeml500003.china.huawei.com (7.185.36.200) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.31; Wed, 16 Aug 2023 14:24:56 +0800
-Message-ID: <ca3a97d6-79a0-0d0f-d7fb-bd5dc3ca4380@huawei.com>
-Date:   Wed, 16 Aug 2023 14:24:55 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH -next] media: use struct_size() helper
-Content-Language: en-US
-To:     Tomasz Figa <tfiga@chromium.org>
-CC:     <m.szyprowski@samsung.com>, <mchehab@kernel.org>,
-        <linux-media@vger.kernel.org>, <liwei391@huawei.com>
-References: <20230816014921.2990087-1-liaoyu15@huawei.com>
- <CAAFQd5Cua7mF5o1ewVz-O7GGoJ5gms1L_qXtdsfnqU0wVgQGPQ@mail.gmail.com>
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A17D21B2
+        for <linux-media@vger.kernel.org>; Tue, 15 Aug 2023 23:35:31 -0700 (PDT)
+Received: from dggpeml500003.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RQdb219dyzNmln;
+        Wed, 16 Aug 2023 14:31:58 +0800 (CST)
+Received: from huawei.com (10.175.103.91) by dggpeml500003.china.huawei.com
+ (7.185.36.200) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Wed, 16 Aug
+ 2023 14:35:29 +0800
 From:   Yu Liao <liaoyu15@huawei.com>
-In-Reply-To: <CAAFQd5Cua7mF5o1ewVz-O7GGoJ5gms1L_qXtdsfnqU0wVgQGPQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.173]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+To:     <tfiga@chromium.org>
+CC:     <liaoyu15@huawei.com>, <liwei391@huawei.com>,
+        <m.szyprowski@samsung.com>, <mchehab@kernel.org>,
+        <linux-media@vger.kernel.org>
+Subject: [PATCH v2 -next] media: use struct_size() helper
+Date:   Wed, 16 Aug 2023 14:31:43 +0800
+Message-ID: <20230816063143.1003676-1-liaoyu15@huawei.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
  dggpeml500003.china.huawei.com (7.185.36.200)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 2023/8/16 13:12, Tomasz Figa wrote:
-> Hi Yu,
-> 
-> 
-> On Wed, Aug 16, 2023 at 10:52 AM Yu Liao <liaoyu15@huawei.com> wrote:
->>
->> Prefer struct_size_t() over open-coded versions of idiom:
->>
->> sizeof(struct-with-flex-array) + sizeof(typeof-flex-array-elements) * count
->>
->> where count is the max number of items the flexible array is supposed to
->> contain.
-> 
-> Thanks for the patch. Please see my comment inline.
-> 
->>
->> Signed-off-by: Yu Liao <liaoyu15@huawei.com>
->> ---
->>  drivers/media/common/videobuf2/frame_vector.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/media/common/videobuf2/frame_vector.c b/drivers/media/common/videobuf2/frame_vector.c
->> index 0f430ddc1f67..c6bb88859e2a 100644
->> --- a/drivers/media/common/videobuf2/frame_vector.c
->> +++ b/drivers/media/common/videobuf2/frame_vector.c
->> @@ -157,7 +157,7 @@ EXPORT_SYMBOL(frame_vector_to_pfns);
->>  struct frame_vector *frame_vector_create(unsigned int nr_frames)
->>  {
->>         struct frame_vector *vec;
->> -       int size = sizeof(struct frame_vector) + sizeof(void *) * nr_frames;
->> +       int size = struct_size_t(struct frame_vector, ptrs, nr_frames);
-> 
-> Would struct_size() be more appropriate here, since we have vec declared above?
-> 
-> Best regards,
-> Tomasz
-Hi Tomasz,
+Prefer struct_size() over open-coded versions of idiom:
 
-Thank you for the review. I'll make the suggested changes and send you
-the V2.
+sizeof(struct-with-flex-array) + sizeof(typeof-flex-array-elements) * count
 
-Best regards,
-Yu
-> 
->>
->>         if (WARN_ON_ONCE(nr_frames == 0))
->>                 return NULL;
->> --
->> 2.25.1
->>
+where count is the max number of items the flexible array is supposed to
+contain.
+
+Signed-off-by: Yu Liao <liaoyu15@huawei.com>
+---
+
+v1 -> v2:
+- use struct_size() since vec is declared
+
+ drivers/media/common/videobuf2/frame_vector.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/common/videobuf2/frame_vector.c b/drivers/media/common/videobuf2/frame_vector.c
+index 0f430ddc1f67..ff1c3ebee4b0 100644
+--- a/drivers/media/common/videobuf2/frame_vector.c
++++ b/drivers/media/common/videobuf2/frame_vector.c
+@@ -157,7 +157,7 @@ EXPORT_SYMBOL(frame_vector_to_pfns);
+ struct frame_vector *frame_vector_create(unsigned int nr_frames)
+ {
+ 	struct frame_vector *vec;
+-	int size = sizeof(struct frame_vector) + sizeof(void *) * nr_frames;
++	int size = struct_size(vec, ptrs, nr_frames);
+ 
+ 	if (WARN_ON_ONCE(nr_frames == 0))
+ 		return NULL;
+-- 
+2.25.1
 
