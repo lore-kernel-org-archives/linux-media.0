@@ -2,152 +2,86 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F702C3DA4F
-	for <linux-media@archiver.kernel.org>; Thu, 17 Aug 2023 14:39:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69133C3064E
+	for <linux-media@archiver.kernel.org>; Thu, 17 Aug 2023 14:57:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352094AbjHQOiv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Aug 2023 10:38:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51824 "EHLO
+        id S1352443AbjHQO5D (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Aug 2023 10:57:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352065AbjHQOic (ORCPT
+        with ESMTP id S1352493AbjHQO4s (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Aug 2023 10:38:32 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA4D30D6
-        for <linux-media@vger.kernel.org>; Thu, 17 Aug 2023 07:38:30 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-317c3ac7339so6623222f8f.0
-        for <linux-media@vger.kernel.org>; Thu, 17 Aug 2023 07:38:30 -0700 (PDT)
+        Thu, 17 Aug 2023 10:56:48 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B82A2D7E
+        for <linux-media@vger.kernel.org>; Thu, 17 Aug 2023 07:56:34 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-99df11828c6so218175366b.1
+        for <linux-media@vger.kernel.org>; Thu, 17 Aug 2023 07:56:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692283109; x=1692887909;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l9FgIR5BO1ZA/xwnNK7HzsY7163eVVAl221xkKgdSQ4=;
-        b=gHn1w7/7/kZJJa+BfagaRBl9isCxX045mRuFkFIvYM4FnMedoT9l3/wrFOJtzhbqRX
-         9QQJrVOc/+XjKALVj5AzpPOLeaY86TBTWkrfr/QNpn6v+/QE9eI+QKs0e/7XaMKhvcbo
-         n+7PuO9HsJAviH8YIoe1ss4C0dWig7w+pCpmT9NV2DOHQfHZbBc30XG9CR17ifdoA80d
-         Kl3HOhU/lLiuL25gIufh+cISF7MnyLNvPgC+gTXtoynCtGfEZ91x5BhLoq/4OCWCzF87
-         00WsK1ew81/qvZdk911dboHl6CKdbimOAIghLJf9GnerkvYZmIcfZUvFLp8GWxRS7hLE
-         XGCw==
+        d=linux-foundation.org; s=google; t=1692284192; x=1692888992;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vz8AzeclrbAtQHTVxmwRIMfUys2iPiXzHBgxBLhu+CI=;
+        b=dwziQM2+Yt9ERHVwknRtALisO2aqZA7rC/jWFI8wN3p6hwllcInP7Uz8/Y4CAIoB0B
+         iEl+47doPnCTVeFhdMs0Di2PU3ybn6pJEwpHOt5DggUbdtZQDnuoNEXl6xl07ez36e8l
+         0qopaeU9Q9lsfOy/xYc337FEEau0Cd2VbclQE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692283109; x=1692887909;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=l9FgIR5BO1ZA/xwnNK7HzsY7163eVVAl221xkKgdSQ4=;
-        b=ReI/n2qpWeM6y295f6RC4YEqjDoNJRsxUv5agDdUnACQT02XaH+akWrNJGYMorxBRv
-         rXiVce5dp75vMOhv3J04EjdvARrKAZ1hOQjHv189IZva9yB2Ciapj0AOViqmsk2qFk06
-         uGmsA4ACXWaC7qe4EIWM10U2PePpFkFW6Q71KohYl2xW5X/BfaU/lbhEQ8Y1YJaIt3Dg
-         z1d1R79tH8zWWWpkwdqfvsmLTcxiypc7IPc+cWEquDKTM5xzs9kyp8Qkl5uoMI95MmgW
-         RJsuD2OEYgzQSAKjWwnhWUBNfhvBD7LGX5JvYKm3+uYqMkB7Z4f/fhxT7QGjiG/UJzny
-         zMeQ==
-X-Gm-Message-State: AOJu0Yz7gygNgluylUjqUOBIqTDgFlVkn7bUBwAHc84x5waxThcZZDYy
-        rlGHFX+NQN7mfH28JfLZvU569g==
-X-Google-Smtp-Source: AGHT+IG/eZvxOjp+PkSiSxu0cR90gEMe0y3FwMtpT7CulsWnV/I1wCr6YWATi8HlHSiSxq/sxIuSMA==
-X-Received: by 2002:a5d:55c7:0:b0:315:ad1a:5abc with SMTP id i7-20020a5d55c7000000b00315ad1a5abcmr5683508wrw.5.1692283109407;
-        Thu, 17 Aug 2023 07:38:29 -0700 (PDT)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id i8-20020a5d4388000000b0030647449730sm25218232wrq.74.2023.08.17.07.38.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Aug 2023 07:38:28 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
-        andrey.konovalov@linaro.org
-Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 11/13] media: qcom: camss: Functionally decompose CSIPHY clock lookups
-Date:   Thu, 17 Aug 2023 15:38:10 +0100
-Message-ID: <20230817143812.677554-12-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230817143812.677554-1-bryan.odonoghue@linaro.org>
-References: <20230817143812.677554-1-bryan.odonoghue@linaro.org>
+        d=1e100.net; s=20221208; t=1692284192; x=1692888992;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vz8AzeclrbAtQHTVxmwRIMfUys2iPiXzHBgxBLhu+CI=;
+        b=alvPKt5CqROZIuP0OUwY0vkTwaaHVNvBL9oQraNHkB0VflDAkiSFdzFml5rVaFvBVp
+         kBm9lMOYbuhhXboedLXFTXoddr3mAz2MGIeFcbMXxZ6aXky2xP8GtDQINJin1QZlaUtJ
+         uZxV2oo1bnXtkyNHpH9eLd/M+x6Gxm4dVIGZ5AzwfLlKOGcbRgi6kzW7CQ2LXbqAPNdr
+         2bsEnQ753IyJQ3uWfBBvcqafP0Ju/Yu4n1jg4JGuPYH/wQuTB0CZIcLcljBHjSGfLBJE
+         7ry++TJ8iBCNFJ4fQ25SXEkdwUljEvZj50JRKbZ8oZl0YQ0POvEArqG9pTDbwj7RNZdM
+         rQTg==
+X-Gm-Message-State: AOJu0YyT9ewfrx3u1jroDaJ0YLCKfCh8e7ohfU3TRpa5sESz920s+Ama
+        GBN9Uxvzgm/gMYItf7bD5H/EzOHxLD2EpAEaN+NWdn4f
+X-Google-Smtp-Source: AGHT+IGIzFT23rEJFBEY2nxUNoK3BILkk3fkDJGJKUi067ohP0QNPpOs1apmOHXSre0bGPWDGYZyZw==
+X-Received: by 2002:a17:907:c23:b0:988:d841:7f90 with SMTP id ga35-20020a1709070c2300b00988d8417f90mr3626096ejc.27.1692284192496;
+        Thu, 17 Aug 2023 07:56:32 -0700 (PDT)
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com. [209.85.218.51])
+        by smtp.gmail.com with ESMTPSA id s6-20020a170906454600b0099cd1c0cb21sm10099701ejq.129.2023.08.17.07.56.31
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Aug 2023 07:56:31 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-99df11828c6so218169566b.1
+        for <linux-media@vger.kernel.org>; Thu, 17 Aug 2023 07:56:31 -0700 (PDT)
+X-Received: by 2002:a17:907:3f8f:b0:99c:572:c0e4 with SMTP id
+ hr15-20020a1709073f8f00b0099c0572c0e4mr3620309ejc.7.1692284191332; Thu, 17
+ Aug 2023 07:56:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <d5e1ee76-75b3-26cb-23ae-cf6ab40597b7@xs4all.nl>
+In-Reply-To: <d5e1ee76-75b3-26cb-23ae-cf6ab40597b7@xs4all.nl>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 17 Aug 2023 16:56:14 +0200
+X-Gmail-Original-Message-ID: <CAHk-=wgR3JSopXha1pJh4dRDH-U+jHgqp1zy1nR8OovUQTJgWw@mail.gmail.com>
+Message-ID: <CAHk-=wgR3JSopXha1pJh4dRDH-U+jHgqp1zy1nR8OovUQTJgWw@mail.gmail.com>
+Subject: Re: [PATCH] media: vb2: frame_vector.c: replace WARN_ONCE with a comment
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        Jan Kara <jack@suse.cz>, David Hildenbrand <david@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The csiphyX_timer and csiX_phy values need not be hard-coded. We can
-functionally decompose the string matching inside of a loop.
+On Thu, 17 Aug 2023 at 12:41, Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
+>
+> There are no reports of WARN_ONCE being issued for actual VM_IO cases, so
+> just drop it and instead add a note to the comment before the function.
 
-Static string values are brittle, difficult to extend and not required
-anyway since the camss->res->csiphy_num value informs us of the number
-of CSIPHYs and hence the set of potential clocks for a given CSIPHY.
+Ack. That was meant to catch any (unlikely) strange users, but yeah,
+it can obviously be triggered by "intentional" strange users, ie
+syzbot and friends, so since there seems to be no sign of actual
+real-world use, just removing the WARN_ONCE() is the right thing to
+do.
 
-In simple terms if we have five CSIPHYs we can have no more and no less
-than five csiphy_timer clocks. Similarly csi_phy core clocks have a 1:1
-relationship with the PHY they clock.
+I'm assuming I'll get this eventually through the regular media pulls?
 
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- .../media/platform/qcom/camss/camss-csiphy.c  | 37 ++++++++++++-------
- 1 file changed, 23 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.c b/drivers/media/platform/qcom/camss/camss-csiphy.c
-index 0e8c2a59ea241..baf78c525fbfc 100644
---- a/drivers/media/platform/qcom/camss/camss-csiphy.c
-+++ b/drivers/media/platform/qcom/camss/camss-csiphy.c
-@@ -536,6 +536,15 @@ static int csiphy_init_formats(struct v4l2_subdev *sd,
- 	return csiphy_set_format(sd, fh ? fh->state : NULL, &format);
- }
- 
-+static bool csiphy_match_clock_name(const char *clock_name, const char *format,
-+				    int index)
-+{
-+	char name[CAMSS_RES_MAX];
-+
-+	snprintf(name, sizeof(name), format, index);
-+	return !strcmp(clock_name, name);
-+}
-+
- /*
-  * msm_csiphy_subdev_init - Initialize CSIPHY device structure and resources
-  * @csiphy: CSIPHY device
-@@ -550,7 +559,7 @@ int msm_csiphy_subdev_init(struct camss *camss,
- {
- 	struct device *dev = camss->dev;
- 	struct platform_device *pdev = to_platform_device(dev);
--	int i, j;
-+	int i, j, k;
- 	int ret;
- 
- 	csiphy->camss = camss;
-@@ -666,19 +675,19 @@ int msm_csiphy_subdev_init(struct camss *camss,
- 		for (j = 0; j < clock->nfreqs; j++)
- 			clock->freq[j] = res->clock_rate[i][j];
- 
--		if (!strcmp(clock->name, "csiphy0_timer") ||
--		    !strcmp(clock->name, "csiphy1_timer") ||
--		    !strcmp(clock->name, "csiphy2_timer") ||
--		    !strcmp(clock->name, "csiphy3_timer") ||
--		    !strcmp(clock->name, "csiphy4_timer") ||
--		    !strcmp(clock->name, "csiphy5_timer"))
--			csiphy->rate_set[i] = true;
--
--		if (camss->res->version == CAMSS_660 &&
--		    (!strcmp(clock->name, "csi0_phy") ||
--		     !strcmp(clock->name, "csi1_phy") ||
--		     !strcmp(clock->name, "csi2_phy")))
--			csiphy->rate_set[i] = true;
-+		for (k = 0; k < camss->res->csiphy_num; k++) {
-+			csiphy->rate_set[i] = csiphy_match_clock_name(clock->name,
-+								      "csiphy%d_timer", k);
-+			if (csiphy->rate_set[i])
-+				break;
-+
-+			if (camss->res->version == CAMSS_660) {
-+				csiphy->rate_set[i] = csiphy_match_clock_name(clock->name,
-+									      "csi%d_phy", k);
-+				if (csiphy->rate_set[i])
-+					break;
-+			}
-+		}
- 	}
- 
- 	return 0;
--- 
-2.41.0
-
+                Linus
