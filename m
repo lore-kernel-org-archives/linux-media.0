@@ -2,58 +2,58 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1C59C2FC0E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2CCDC2FC1C
 	for <linux-media@archiver.kernel.org>; Thu, 17 Aug 2023 07:18:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348432AbjHQHS0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Aug 2023 03:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45546 "EHLO
+        id S1348424AbjHQHSZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Aug 2023 03:18:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348437AbjHQHSW (ORCPT
+        with ESMTP id S1348432AbjHQHSL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Aug 2023 03:18:22 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE8FFE
-        for <linux-media@vger.kernel.org>; Thu, 17 Aug 2023 00:18:20 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-58c8cbf0a0dso12515777b3.1
-        for <linux-media@vger.kernel.org>; Thu, 17 Aug 2023 00:18:20 -0700 (PDT)
+        Thu, 17 Aug 2023 03:18:11 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4EC13E
+        for <linux-media@vger.kernel.org>; Thu, 17 Aug 2023 00:18:10 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-57320c10635so96098197b3.3
+        for <linux-media@vger.kernel.org>; Thu, 17 Aug 2023 00:18:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692256700; x=1692861500;
+        d=google.com; s=20221208; t=1692256689; x=1692861489;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CWbjQYyOPR/xIx3cv2/RxYcbcO3Yixp3KZZGKISEQ04=;
-        b=4oIV7MUU91GiHZHO4mdvymEiw2cBxNNHufziIqBa7wX7a0L3ZeKmtcIeo1rQJTgVEP
-         lEqw8sSeMO2haDM22zB2rzhsLo3M+7U26RtQkG93Jk+gQ0l3W2IIVujk+BEheUCaYRrA
-         jk8atnAFZafOB+aT8iA55h/QSZ8bl8uyI67nyV4upCotFLWAbJ1mZ2GuyF6N5/ksrsLW
-         eLkOaouyaIJF1zfkKbqJBStcKNtFDyygboxFxtQal37M/fvMJ2yWISXEdaBDddCwYrMV
-         it9bH9pw//Bn2AnJYwLlIfMSMu4vfU+xeLmlL8Q6dlHhhRWqqNuDuSd/rZQJxE0usMit
-         TIRA==
+        bh=5DRGm2kmYhzGJ+i9VS3h8aGln+DN2heaG8HdrAAhzqc=;
+        b=qI3GTWNhGYWTvxrrk3TmO/1EG6XJVEFQc/KjAuAmpHzWL2+M2gsllyRIarZ3HO939/
+         KBv0QRuSb0ASgWNT2NSATJCWRhLjTMHbXAULyUsUekoLjF7YIJF6LpkomccNZuy9fuoO
+         URQuZta9V2kMHQrH0/dVvzfbTFIxXWFbeQVXwXu/s82dZQjJaxz3B2G0p0oWPBL19MJo
+         RGbmuKBY146Y/0BBp2evcfb2HqVheKbxTIRxSPVGVtPFmfIVkFZ8LsbpeKyodQi54cLm
+         52FFWxmaIUCW0NQu0Lxesm4fpIUlpDZc0LwAlIp5nPma+RCmwhG+cwxvSMrrsXel95Qt
+         gNSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692256700; x=1692861500;
+        d=1e100.net; s=20221208; t=1692256689; x=1692861489;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CWbjQYyOPR/xIx3cv2/RxYcbcO3Yixp3KZZGKISEQ04=;
-        b=gUZW30miFZLnCJeTEnpwFkwXLv/bcboEIwHghvFtJPwXsX5aJ59JSZnLxNnFMQAFR+
-         F3Y4xnjounhMzAfFQiY43DsTgb+vFjhw6U1R94mm3noBFtml+/Fijci6Xshq+aOAHNQI
-         fTcTuDq7K/tSkChZc1GYag4PK/W0b3M93aSfbl7I9qqAWYxZ1mX59jp7r1hcy/6tS7hB
-         qYgnNQzdYJjJBS466v2lLPB/TnJsood7E8OUmzVo8dXlyxpuMvqDeUOvV2p/yjhHiQTv
-         /PWG8qYl/9tagtOkVhSk9D6Gc1JH3Pydoqo8gFjPCA7nLEcwjAkbxZXJOr48LcFpFVxY
-         p0XA==
-X-Gm-Message-State: AOJu0Yy9rJPqqxKEdXXBAj5chFudbWVVH0WIUUysHLDk3A9QsMg368x6
-        PE8DfqvIeXCyWoNc95Mi/XnhD4U4w7g=
-X-Google-Smtp-Source: AGHT+IEewpwW61TwdUHHCprwPGs9dODHoxh4LXLj4EtDyxOElzuiUKDlz02hvGP+GE3TjfLsLjxJGybj9Sk=
+        bh=5DRGm2kmYhzGJ+i9VS3h8aGln+DN2heaG8HdrAAhzqc=;
+        b=b5vcaol1DdUxZEQ54855Iofj6GeyFgfEuObQzMECgY4WJeAkGHr1sG1POVMMedzyC/
+         wvVjI6By2JtjXHoJrwnnmWxWlEGm5JG4+RjVqsBl8GvkjtQf5IzVE3L8rdhsexI53cXF
+         CvWZFoZ/eZD9bQgA2KPsuZBfIaxR/sbQGZKIY+yA+sLuOYUHXA/DyPO8XYH3pKqWkO1a
+         ooYLIGSL3FQ8Otcm/0dStbN+oKva67BnmTPeelM35rKmJYrcdLmtTHxk3mO57AZvsO3x
+         gHkUqSpQP/wlADTXDw744WIn3foNQQtzY+wu9EvLBwLOgs61OPmx4Z3RVQe19QoT/8YM
+         JjFg==
+X-Gm-Message-State: AOJu0Yy2KyN0sOGwU870jG1Ep3iMUnZTQcnGpIOioN6A2lBszXk1qcx0
+        4zMUzjdL44EI3EXR176MG6Xt8Rl9t5I=
+X-Google-Smtp-Source: AGHT+IFb2mfUKv8mKQ4cPw2J6aLaFYyaPhS19VfRw+zfUX7v1Fc4TrAMyH9GB9KD1V+asK8ywnAcxDvcBx0=
 X-Received: from yunkec1.tok.corp.google.com ([2401:fa00:8f:203:cb5f:f997:f2a2:88c6])
- (user=yunkec job=sendgmr) by 2002:a05:690c:460a:b0:58c:bab1:cd23 with SMTP id
- gw10-20020a05690c460a00b0058cbab1cd23mr29431ywb.2.1692256699787; Thu, 17 Aug
- 2023 00:18:19 -0700 (PDT)
-Date:   Thu, 17 Aug 2023 16:17:32 +0900
+ (user=yunkec job=sendgmr) by 2002:a81:af15:0:b0:586:a689:eb69 with SMTP id
+ n21-20020a81af15000000b00586a689eb69mr50040ywh.2.1692256689264; Thu, 17 Aug
+ 2023 00:18:09 -0700 (PDT)
+Date:   Thu, 17 Aug 2023 16:17:30 +0900
 In-Reply-To: <20230817071750.2830271-1-yunkec@google.com>
 Mime-Version: 1.0
 References: <20230817071750.2830271-1-yunkec@google.com>
 X-Mailer: git-send-email 2.41.0.694.ge786442a9b-goog
-Message-ID: <20230817071750.2830271-5-yunkec@google.com>
-Subject: [PATCH v12 04/11] media: uvcvideo: Split uvc_control_mapping.size to
- v4l2 and data size
+Message-ID: <20230817071750.2830271-3-yunkec@google.com>
+Subject: [PATCH v12 02/11] media: uvcvideo: add uvc_ctrl_get_boundary for
+ getting default value
 From:   Yunke Cao <yunkec@google.com>
 To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -67,429 +67,142 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Rename the existing size to data_size to represent uvc control data size,
-add a separate field for v4l2 control size. v4l2 control size will be
-used the compound controls.
+Introduce uvc_ctrl_get_boundary(), making it easier to extend to
+support compound controls and V4L2_CTRL_WHICH_MIN/MAX_VAL in the
+following patches.
 
-Also modify the uvc driver documents to clarify the size in
-uvc_xu_control_mapping corresponds to the uvc control data size.
+For now, it simply returns EINVAL for compound controls and calls
+__query_v4l2_ctrl() for non-compound controls.
 
-Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
+Reviewed-by: Ricardo Ribalda <ribalda@chromium.org>
+Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 Signed-off-by: Yunke Cao <yunkec@google.com>
 ---
+An alternative name is uvc_ctrl_get_statc(). Let me know if that's better.
+
 Changelog since v11:
 - No change.
 Changelog since v10:
-- Added Reviewed-by from Daniel Scally.
+- Fix __uvc_ctrl_get_boundary_std() typo causing build error.
+- Added Reviewed-by from Sergey.
 Changelog since v9:
-- No change.
+- Make __uvc_ctrl_get_boundary_std() static.
 Changelog since v8:
-- No change.
+- No Change.
 Changelog since v7:
-- Newly added patch.
+- Rename uvc_ctrl_get_fixed() to uvc_ctrl_get_boundary().
+- Move refactor (introduce  __uvc_ctrl_get_boundary_std()) in this patch
+  instead of in the patch where we implement compound control.
+- Fix locking. uvc_ctrl_get_boundary() now acquires ctrl_mutex.
+  __uvc_ctrl_get_boundary_std() calls __uvc_query_v4l2_ctrl() while
+  holding the mutex.
+- Define a uvc_ctrl_mapping_is_compound() for readability.
 
- .../userspace-api/media/drivers/uvcvideo.rst  |  2 +-
- drivers/media/usb/uvc/uvc_ctrl.c              | 80 +++++++++----------
- drivers/media/usb/uvc/uvc_v4l2.c              |  2 +-
- drivers/media/usb/uvc/uvcvideo.h              |  6 +-
- 4 files changed, 47 insertions(+), 43 deletions(-)
+ drivers/media/usb/uvc/uvc_ctrl.c | 48 ++++++++++++++++++++++++++++++++
+ drivers/media/usb/uvc/uvc_v4l2.c |  6 +---
+ drivers/media/usb/uvc/uvcvideo.h |  2 ++
+ 3 files changed, 51 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/drivers/uvcvideo.rst b/Documentation/userspace-api/media/drivers/uvcvideo.rst
-index a290f9fadae9..aab4304e6bb5 100644
---- a/Documentation/userspace-api/media/drivers/uvcvideo.rst
-+++ b/Documentation/userspace-api/media/drivers/uvcvideo.rst
-@@ -157,7 +157,7 @@ Argument: struct uvc_xu_control_mapping
- 	__u8	name[32]	V4L2 control name
- 	__u8	entity[16]	UVC extension unit GUID
- 	__u8	selector	UVC control selector
--	__u8	size		V4L2 control size (in bits)
-+	__u8	size		UVC control data size (in bits)
- 	__u8	offset		V4L2 control offset (in bits)
- 	enum v4l2_ctrl_type
- 		v4l2_type	V4L2 control type
 diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-index b73a7e3812cf..fe1245ccea15 100644
+index 5e9d3da862dd..4a4ceb6289f5 100644
 --- a/drivers/media/usb/uvc/uvc_ctrl.c
 +++ b/drivers/media/usb/uvc/uvc_ctrl.c
-@@ -464,7 +464,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.id		= V4L2_CID_BRIGHTNESS,
- 		.entity		= UVC_GUID_UVC_PROCESSING,
- 		.selector	= UVC_PU_BRIGHTNESS_CONTROL,
--		.size		= 16,
-+		.data_size	= 16,
- 		.offset		= 0,
- 		.v4l2_type	= V4L2_CTRL_TYPE_INTEGER,
- 		.data_type	= UVC_CTRL_DATA_TYPE_SIGNED,
-@@ -473,7 +473,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.id		= V4L2_CID_CONTRAST,
- 		.entity		= UVC_GUID_UVC_PROCESSING,
- 		.selector	= UVC_PU_CONTRAST_CONTROL,
--		.size		= 16,
-+		.data_size	= 16,
- 		.offset		= 0,
- 		.v4l2_type	= V4L2_CTRL_TYPE_INTEGER,
- 		.data_type	= UVC_CTRL_DATA_TYPE_UNSIGNED,
-@@ -482,7 +482,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.id		= V4L2_CID_HUE,
- 		.entity		= UVC_GUID_UVC_PROCESSING,
- 		.selector	= UVC_PU_HUE_CONTROL,
--		.size		= 16,
-+		.data_size	= 16,
- 		.offset		= 0,
- 		.v4l2_type	= V4L2_CTRL_TYPE_INTEGER,
- 		.data_type	= UVC_CTRL_DATA_TYPE_SIGNED,
-@@ -493,7 +493,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.id		= V4L2_CID_SATURATION,
- 		.entity		= UVC_GUID_UVC_PROCESSING,
- 		.selector	= UVC_PU_SATURATION_CONTROL,
--		.size		= 16,
-+		.data_size	= 16,
- 		.offset		= 0,
- 		.v4l2_type	= V4L2_CTRL_TYPE_INTEGER,
- 		.data_type	= UVC_CTRL_DATA_TYPE_UNSIGNED,
-@@ -502,7 +502,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.id		= V4L2_CID_SHARPNESS,
- 		.entity		= UVC_GUID_UVC_PROCESSING,
- 		.selector	= UVC_PU_SHARPNESS_CONTROL,
--		.size		= 16,
-+		.data_size	= 16,
- 		.offset		= 0,
- 		.v4l2_type	= V4L2_CTRL_TYPE_INTEGER,
- 		.data_type	= UVC_CTRL_DATA_TYPE_UNSIGNED,
-@@ -511,7 +511,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.id		= V4L2_CID_GAMMA,
- 		.entity		= UVC_GUID_UVC_PROCESSING,
- 		.selector	= UVC_PU_GAMMA_CONTROL,
--		.size		= 16,
-+		.data_size	= 16,
- 		.offset		= 0,
- 		.v4l2_type	= V4L2_CTRL_TYPE_INTEGER,
- 		.data_type	= UVC_CTRL_DATA_TYPE_UNSIGNED,
-@@ -520,7 +520,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.id		= V4L2_CID_BACKLIGHT_COMPENSATION,
- 		.entity		= UVC_GUID_UVC_PROCESSING,
- 		.selector	= UVC_PU_BACKLIGHT_COMPENSATION_CONTROL,
--		.size		= 16,
-+		.data_size	= 16,
- 		.offset		= 0,
- 		.v4l2_type	= V4L2_CTRL_TYPE_INTEGER,
- 		.data_type	= UVC_CTRL_DATA_TYPE_UNSIGNED,
-@@ -529,7 +529,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.id		= V4L2_CID_GAIN,
- 		.entity		= UVC_GUID_UVC_PROCESSING,
- 		.selector	= UVC_PU_GAIN_CONTROL,
--		.size		= 16,
-+		.data_size	= 16,
- 		.offset		= 0,
- 		.v4l2_type	= V4L2_CTRL_TYPE_INTEGER,
- 		.data_type	= UVC_CTRL_DATA_TYPE_UNSIGNED,
-@@ -538,7 +538,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.id		= V4L2_CID_HUE_AUTO,
- 		.entity		= UVC_GUID_UVC_PROCESSING,
- 		.selector	= UVC_PU_HUE_AUTO_CONTROL,
--		.size		= 1,
-+		.data_size	= 1,
- 		.offset		= 0,
- 		.v4l2_type	= V4L2_CTRL_TYPE_BOOLEAN,
- 		.data_type	= UVC_CTRL_DATA_TYPE_BOOLEAN,
-@@ -548,7 +548,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.id		= V4L2_CID_EXPOSURE_AUTO,
- 		.entity		= UVC_GUID_UVC_CAMERA,
- 		.selector	= UVC_CT_AE_MODE_CONTROL,
--		.size		= 4,
-+		.data_size	= 4,
- 		.offset		= 0,
- 		.v4l2_type	= V4L2_CTRL_TYPE_MENU,
- 		.data_type	= UVC_CTRL_DATA_TYPE_BITMASK,
-@@ -561,7 +561,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.id		= V4L2_CID_EXPOSURE_AUTO_PRIORITY,
- 		.entity		= UVC_GUID_UVC_CAMERA,
- 		.selector	= UVC_CT_AE_PRIORITY_CONTROL,
--		.size		= 1,
-+		.data_size	= 1,
- 		.offset		= 0,
- 		.v4l2_type	= V4L2_CTRL_TYPE_BOOLEAN,
- 		.data_type	= UVC_CTRL_DATA_TYPE_BOOLEAN,
-@@ -570,7 +570,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.id		= V4L2_CID_EXPOSURE_ABSOLUTE,
- 		.entity		= UVC_GUID_UVC_CAMERA,
- 		.selector	= UVC_CT_EXPOSURE_TIME_ABSOLUTE_CONTROL,
--		.size		= 32,
-+		.data_size	= 32,
- 		.offset		= 0,
- 		.v4l2_type	= V4L2_CTRL_TYPE_INTEGER,
- 		.data_type	= UVC_CTRL_DATA_TYPE_UNSIGNED,
-@@ -581,7 +581,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.id		= V4L2_CID_AUTO_WHITE_BALANCE,
- 		.entity		= UVC_GUID_UVC_PROCESSING,
- 		.selector	= UVC_PU_WHITE_BALANCE_TEMPERATURE_AUTO_CONTROL,
--		.size		= 1,
-+		.data_size	= 1,
- 		.offset		= 0,
- 		.v4l2_type	= V4L2_CTRL_TYPE_BOOLEAN,
- 		.data_type	= UVC_CTRL_DATA_TYPE_BOOLEAN,
-@@ -591,7 +591,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.id		= V4L2_CID_WHITE_BALANCE_TEMPERATURE,
- 		.entity		= UVC_GUID_UVC_PROCESSING,
- 		.selector	= UVC_PU_WHITE_BALANCE_TEMPERATURE_CONTROL,
--		.size		= 16,
-+		.data_size	= 16,
- 		.offset		= 0,
- 		.v4l2_type	= V4L2_CTRL_TYPE_INTEGER,
- 		.data_type	= UVC_CTRL_DATA_TYPE_UNSIGNED,
-@@ -602,7 +602,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.id		= V4L2_CID_AUTO_WHITE_BALANCE,
- 		.entity		= UVC_GUID_UVC_PROCESSING,
- 		.selector	= UVC_PU_WHITE_BALANCE_COMPONENT_AUTO_CONTROL,
--		.size		= 1,
-+		.data_size	= 1,
- 		.offset		= 0,
- 		.v4l2_type	= V4L2_CTRL_TYPE_BOOLEAN,
- 		.data_type	= UVC_CTRL_DATA_TYPE_BOOLEAN,
-@@ -613,7 +613,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.id		= V4L2_CID_BLUE_BALANCE,
- 		.entity		= UVC_GUID_UVC_PROCESSING,
- 		.selector	= UVC_PU_WHITE_BALANCE_COMPONENT_CONTROL,
--		.size		= 16,
-+		.data_size	= 16,
- 		.offset		= 0,
- 		.v4l2_type	= V4L2_CTRL_TYPE_INTEGER,
- 		.data_type	= UVC_CTRL_DATA_TYPE_SIGNED,
-@@ -624,7 +624,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.id		= V4L2_CID_RED_BALANCE,
- 		.entity		= UVC_GUID_UVC_PROCESSING,
- 		.selector	= UVC_PU_WHITE_BALANCE_COMPONENT_CONTROL,
--		.size		= 16,
-+		.data_size	= 16,
- 		.offset		= 16,
- 		.v4l2_type	= V4L2_CTRL_TYPE_INTEGER,
- 		.data_type	= UVC_CTRL_DATA_TYPE_SIGNED,
-@@ -635,7 +635,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.id		= V4L2_CID_FOCUS_ABSOLUTE,
- 		.entity		= UVC_GUID_UVC_CAMERA,
- 		.selector	= UVC_CT_FOCUS_ABSOLUTE_CONTROL,
--		.size		= 16,
-+		.data_size	= 16,
- 		.offset		= 0,
- 		.v4l2_type	= V4L2_CTRL_TYPE_INTEGER,
- 		.data_type	= UVC_CTRL_DATA_TYPE_UNSIGNED,
-@@ -646,7 +646,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.id		= V4L2_CID_FOCUS_AUTO,
- 		.entity		= UVC_GUID_UVC_CAMERA,
- 		.selector	= UVC_CT_FOCUS_AUTO_CONTROL,
--		.size		= 1,
-+		.data_size	= 1,
- 		.offset		= 0,
- 		.v4l2_type	= V4L2_CTRL_TYPE_BOOLEAN,
- 		.data_type	= UVC_CTRL_DATA_TYPE_BOOLEAN,
-@@ -656,7 +656,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.id		= V4L2_CID_IRIS_ABSOLUTE,
- 		.entity		= UVC_GUID_UVC_CAMERA,
- 		.selector	= UVC_CT_IRIS_ABSOLUTE_CONTROL,
--		.size		= 16,
-+		.data_size	= 16,
- 		.offset		= 0,
- 		.v4l2_type	= V4L2_CTRL_TYPE_INTEGER,
- 		.data_type	= UVC_CTRL_DATA_TYPE_UNSIGNED,
-@@ -665,7 +665,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.id		= V4L2_CID_IRIS_RELATIVE,
- 		.entity		= UVC_GUID_UVC_CAMERA,
- 		.selector	= UVC_CT_IRIS_RELATIVE_CONTROL,
--		.size		= 8,
-+		.data_size	= 8,
- 		.offset		= 0,
- 		.v4l2_type	= V4L2_CTRL_TYPE_INTEGER,
- 		.data_type	= UVC_CTRL_DATA_TYPE_SIGNED,
-@@ -674,7 +674,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.id		= V4L2_CID_ZOOM_ABSOLUTE,
- 		.entity		= UVC_GUID_UVC_CAMERA,
- 		.selector	= UVC_CT_ZOOM_ABSOLUTE_CONTROL,
--		.size		= 16,
-+		.data_size	= 16,
- 		.offset		= 0,
- 		.v4l2_type	= V4L2_CTRL_TYPE_INTEGER,
- 		.data_type	= UVC_CTRL_DATA_TYPE_UNSIGNED,
-@@ -683,7 +683,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.id		= V4L2_CID_ZOOM_CONTINUOUS,
- 		.entity		= UVC_GUID_UVC_CAMERA,
- 		.selector	= UVC_CT_ZOOM_RELATIVE_CONTROL,
--		.size		= 0,
-+		.data_size	= 0,
- 		.offset		= 0,
- 		.v4l2_type	= V4L2_CTRL_TYPE_INTEGER,
- 		.data_type	= UVC_CTRL_DATA_TYPE_SIGNED,
-@@ -694,7 +694,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.id		= V4L2_CID_PAN_ABSOLUTE,
- 		.entity		= UVC_GUID_UVC_CAMERA,
- 		.selector	= UVC_CT_PANTILT_ABSOLUTE_CONTROL,
--		.size		= 32,
-+		.data_size	= 32,
- 		.offset		= 0,
- 		.v4l2_type	= V4L2_CTRL_TYPE_INTEGER,
- 		.data_type	= UVC_CTRL_DATA_TYPE_SIGNED,
-@@ -703,7 +703,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.id		= V4L2_CID_TILT_ABSOLUTE,
- 		.entity		= UVC_GUID_UVC_CAMERA,
- 		.selector	= UVC_CT_PANTILT_ABSOLUTE_CONTROL,
--		.size		= 32,
-+		.data_size	= 32,
- 		.offset		= 32,
- 		.v4l2_type	= V4L2_CTRL_TYPE_INTEGER,
- 		.data_type	= UVC_CTRL_DATA_TYPE_SIGNED,
-@@ -712,7 +712,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.id		= V4L2_CID_PAN_SPEED,
- 		.entity		= UVC_GUID_UVC_CAMERA,
- 		.selector	= UVC_CT_PANTILT_RELATIVE_CONTROL,
--		.size		= 16,
-+		.data_size	= 16,
- 		.offset		= 0,
- 		.v4l2_type	= V4L2_CTRL_TYPE_INTEGER,
- 		.data_type	= UVC_CTRL_DATA_TYPE_SIGNED,
-@@ -723,7 +723,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.id		= V4L2_CID_TILT_SPEED,
- 		.entity		= UVC_GUID_UVC_CAMERA,
- 		.selector	= UVC_CT_PANTILT_RELATIVE_CONTROL,
--		.size		= 16,
-+		.data_size	= 16,
- 		.offset		= 16,
- 		.v4l2_type	= V4L2_CTRL_TYPE_INTEGER,
- 		.data_type	= UVC_CTRL_DATA_TYPE_SIGNED,
-@@ -734,7 +734,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.id		= V4L2_CID_PRIVACY,
- 		.entity		= UVC_GUID_UVC_CAMERA,
- 		.selector	= UVC_CT_PRIVACY_CONTROL,
--		.size		= 1,
-+		.data_size	= 1,
- 		.offset		= 0,
- 		.v4l2_type	= V4L2_CTRL_TYPE_BOOLEAN,
- 		.data_type	= UVC_CTRL_DATA_TYPE_BOOLEAN,
-@@ -743,7 +743,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.id		= V4L2_CID_PRIVACY,
- 		.entity		= UVC_GUID_EXT_GPIO_CONTROLLER,
- 		.selector	= UVC_CT_PRIVACY_CONTROL,
--		.size		= 1,
-+		.data_size	= 1,
- 		.offset		= 0,
- 		.v4l2_type	= V4L2_CTRL_TYPE_BOOLEAN,
- 		.data_type	= UVC_CTRL_DATA_TYPE_BOOLEAN,
-@@ -754,7 +754,7 @@ const struct uvc_control_mapping uvc_ctrl_power_line_mapping_limited = {
- 	.id		= V4L2_CID_POWER_LINE_FREQUENCY,
- 	.entity		= UVC_GUID_UVC_PROCESSING,
- 	.selector	= UVC_PU_POWER_LINE_FREQUENCY_CONTROL,
--	.size		= 2,
-+	.data_size	= 2,
- 	.offset		= 0,
- 	.v4l2_type	= V4L2_CTRL_TYPE_MENU,
- 	.data_type	= UVC_CTRL_DATA_TYPE_ENUM,
-@@ -766,7 +766,7 @@ const struct uvc_control_mapping uvc_ctrl_power_line_mapping_uvc11 = {
- 	.id		= V4L2_CID_POWER_LINE_FREQUENCY,
- 	.entity		= UVC_GUID_UVC_PROCESSING,
- 	.selector	= UVC_PU_POWER_LINE_FREQUENCY_CONTROL,
--	.size		= 2,
-+	.data_size	= 2,
- 	.offset		= 0,
- 	.v4l2_type	= V4L2_CTRL_TYPE_MENU,
- 	.data_type	= UVC_CTRL_DATA_TYPE_ENUM,
-@@ -783,7 +783,7 @@ static const struct uvc_control_mapping uvc_ctrl_power_line_mapping_uvc15 = {
- 	.id		= V4L2_CID_POWER_LINE_FREQUENCY,
- 	.entity		= UVC_GUID_UVC_PROCESSING,
- 	.selector	= UVC_PU_POWER_LINE_FREQUENCY_CONTROL,
--	.size		= 2,
-+	.data_size	= 2,
- 	.offset		= 0,
- 	.v4l2_type	= V4L2_CTRL_TYPE_MENU,
- 	.data_type	= UVC_CTRL_DATA_TYPE_ENUM,
-@@ -816,7 +816,7 @@ static inline void uvc_clear_bit(u8 *data, int bit)
+@@ -884,6 +884,12 @@ static void uvc_set_le_value(struct uvc_control_mapping *mapping,
+ 	}
  }
  
- /*
-- * Extract the bit string specified by mapping->offset and mapping->size
-+ * Extract the bit string specified by mapping->offset and mapping->data_size
-  * from the little-endian data stored at 'data' and return the result as
-  * a signed 32bit integer. Sign extension will be performed if the mapping
-  * references a signed data type.
-@@ -824,7 +824,7 @@ static inline void uvc_clear_bit(u8 *data, int bit)
- static s32 uvc_get_le_value(struct uvc_control_mapping *mapping,
- 	u8 query, const u8 *data)
- {
--	int bits = mapping->size;
-+	int bits = mapping->data_size;
- 	int offset = mapping->offset;
- 	s32 value = 0;
- 	u8 mask;
-@@ -847,19 +847,19 @@ static s32 uvc_get_le_value(struct uvc_control_mapping *mapping,
- 
- 	/* Sign-extend the value if needed. */
- 	if (mapping->data_type == UVC_CTRL_DATA_TYPE_SIGNED)
--		value |= -(value & (1 << (mapping->size - 1)));
-+		value |= -(value & (1 << (mapping->data_size - 1)));
- 
- 	return value;
- }
- 
- /*
-- * Set the bit string specified by mapping->offset and mapping->size
-+ * Set the bit string specified by mapping->offset and mapping->data_size
-  * in the little-endian data stored at 'data' to the value 'value'.
++static bool
++uvc_ctrl_mapping_is_compound(const struct uvc_control_mapping *mapping)
++{
++	return mapping->v4l2_type >= V4L2_CTRL_COMPOUND_TYPES;
++}
++
+ /* ------------------------------------------------------------------------
+  * Terminal and unit management
   */
- static void uvc_set_le_value(struct uvc_control_mapping *mapping,
- 	s32 value, u8 *data)
+@@ -1877,6 +1883,48 @@ int uvc_ctrl_get(struct uvc_video_chain *chain,
+ 	return __uvc_ctrl_get(chain, ctrl, mapping, &xctrl->value);
+ }
+ 
++static int __uvc_ctrl_get_boundary_std(struct uvc_video_chain *chain,
++				       struct uvc_control *ctrl,
++				       struct uvc_control_mapping *mapping,
++				       struct v4l2_ext_control *xctrl)
++{
++	struct v4l2_queryctrl qc = { .id = xctrl->id };
++
++	int ret = __uvc_query_v4l2_ctrl(chain, ctrl, mapping, &qc);
++
++	if (ret < 0)
++		return ret;
++
++	xctrl->value = qc.default_value;
++	return 0;
++}
++
++int uvc_ctrl_get_boundary(struct uvc_video_chain *chain,
++			  struct v4l2_ext_control *xctrl)
++{
++	struct uvc_control *ctrl;
++	struct uvc_control_mapping *mapping;
++	int ret;
++
++	if (mutex_lock_interruptible(&chain->ctrl_mutex))
++		return -ERESTARTSYS;
++
++	ctrl = uvc_find_control(chain, xctrl->id, &mapping);
++	if (!ctrl) {
++		ret = -EINVAL;
++		goto done;
++	}
++
++	if (uvc_ctrl_mapping_is_compound(mapping))
++		ret = -EINVAL;
++	else
++		ret = __uvc_ctrl_get_boundary_std(chain, ctrl, mapping, xctrl);
++
++done:
++	mutex_unlock(&chain->ctrl_mutex);
++	return ret;
++}
++
+ int uvc_ctrl_set(struct uvc_fh *handle,
+ 	struct v4l2_ext_control *xctrl)
  {
--	int bits = mapping->size;
-+	int bits = mapping->data_size;
- 	int offset = mapping->offset;
- 	u8 mask;
- 
-@@ -2036,7 +2036,7 @@ int uvc_ctrl_set(struct uvc_fh *handle,
- 	 * needs to be loaded from the device to perform the read-modify-write
- 	 * operation.
- 	 */
--	if ((ctrl->info.size * 8) != mapping->size) {
-+	if ((ctrl->info.size * 8) != mapping->data_size) {
- 		ret = __uvc_ctrl_load_cur(chain, ctrl);
- 		if (ret < 0)
- 			return ret;
-@@ -2543,8 +2543,8 @@ int uvc_ctrl_add_mapping(struct uvc_video_chain *chain,
- 	}
- 
- 	/* Validate the user-provided bit-size and offset */
--	if (mapping->size > 32 ||
--	    mapping->offset + mapping->size > ctrl->info.size * 8) {
-+	if (mapping->data_size > 32 ||
-+	    mapping->offset + mapping->data_size > ctrl->info.size * 8) {
- 		ret = -EINVAL;
- 		goto done;
- 	}
 diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-index 656cf0fbf7a3..dee3151ff6c4 100644
+index 5ac2a424b13d..656cf0fbf7a3 100644
 --- a/drivers/media/usb/uvc/uvc_v4l2.c
 +++ b/drivers/media/usb/uvc/uvc_v4l2.c
-@@ -122,7 +122,7 @@ static int uvc_ioctl_xu_ctrl_map(struct uvc_video_chain *chain,
- 	}
- 	memcpy(map->entity, xmap->entity, sizeof(map->entity));
- 	map->selector = xmap->selector;
--	map->size = xmap->size;
-+	map->data_size = xmap->size;
- 	map->offset = xmap->offset;
- 	map->v4l2_type = xmap->v4l2_type;
- 	map->data_type = xmap->data_type;
+@@ -1096,15 +1096,11 @@ static int uvc_ioctl_g_ext_ctrls(struct file *file, void *fh,
+ 
+ 	if (ctrls->which == V4L2_CTRL_WHICH_DEF_VAL) {
+ 		for (i = 0; i < ctrls->count; ++ctrl, ++i) {
+-			struct v4l2_queryctrl qc = { .id = ctrl->id };
+-
+-			ret = uvc_query_v4l2_ctrl(chain, &qc);
++			ret = uvc_ctrl_get_boundary(chain, ctrl);
+ 			if (ret < 0) {
+ 				ctrls->error_idx = i;
+ 				return ret;
+ 			}
+-
+-			ctrl->value = qc.default_value;
+ 		}
+ 
+ 		return 0;
 diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index 5091085fcfb0..7bc41270ed94 100644
+index 6fb0a78b1b00..5091085fcfb0 100644
 --- a/drivers/media/usb/uvc/uvcvideo.h
 +++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -110,7 +110,11 @@ struct uvc_control_mapping {
- 	u8 entity[16];
- 	u8 selector;
+@@ -781,6 +781,8 @@ static inline int uvc_ctrl_rollback(struct uvc_fh *handle)
+ }
  
--	u8 size;
-+	/* Size of the v4l2 control. Required for compound controls. */
-+	u8 v4l2_size;
-+	/* UVC data size. Required for all controls. */
-+	u8 data_size;
-+
- 	u8 offset;
- 	enum v4l2_ctrl_type v4l2_type;
- 	u32 data_type;
+ int uvc_ctrl_get(struct uvc_video_chain *chain, struct v4l2_ext_control *xctrl);
++int uvc_ctrl_get_boundary(struct uvc_video_chain *chain,
++			  struct v4l2_ext_control *xctrl);
+ int uvc_ctrl_set(struct uvc_fh *handle, struct v4l2_ext_control *xctrl);
+ int uvc_ctrl_is_accessible(struct uvc_video_chain *chain, u32 v4l2_id,
+ 			   const struct v4l2_ext_controls *ctrls,
 -- 
 2.41.0.694.ge786442a9b-goog
 
