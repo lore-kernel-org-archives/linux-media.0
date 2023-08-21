@@ -2,206 +2,263 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AB00EE4993
-	for <linux-media@archiver.kernel.org>; Mon, 21 Aug 2023 12:19:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3B05EE49AA
+	for <linux-media@archiver.kernel.org>; Mon, 21 Aug 2023 12:28:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232306AbjHUMTG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Aug 2023 08:19:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36480 "EHLO
+        id S234893AbjHUM2Y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Aug 2023 08:28:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbjHUMTF (ORCPT
+        with ESMTP id S233017AbjHUM2W (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Aug 2023 08:19:05 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7514CBE
-        for <linux-media@vger.kernel.org>; Mon, 21 Aug 2023 05:19:03 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1278D741;
-        Mon, 21 Aug 2023 14:17:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1692620265;
-        bh=5KePzG/O6w2+kgYF+Cw6Wne+11R+x1O3yUf15F9o78c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nb5Hc8I43DSrMfzq7Y7nQMjt769Ym+AHomV31xSMtM2zd88IWeofXbSHGRU8+7P1U
-         qkKarptW5ucxNEjWKky7g02HEgaU+mdCFcr7frSnp1LGFvU0TSyiPkt9YOWkGSjVlH
-         SY0q2OO4Ije0HCqVIXespKSZOD3mq+Qx6gTRECrM=
-Date:   Mon, 21 Aug 2023 15:19:08 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Claus Stovgaard <claus.stovgaard@gmail.com>
-Cc:     Bingbu Cao <bingbu.cao@linux.intel.com>, bingbu.cao@intel.com,
-        linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
-        ilpo.jarvinen@linux.intel.com, tfiga@chromium.org,
-        senozhatsky@chromium.org, andriy.shevchenko@linux.intel.com,
-        hdegoede@redhat.com, tomi.valkeinen@ideasonboard.com,
-        tian.shu.qiu@intel.com, hongju.wang@intel.com
-Subject: Re: [PATCH 00/15] Intel IPU6 and IPU6 input system drivers
-Message-ID: <20230821121908.GD10135@pendragon.ideasonboard.com>
-References: <20230727071558.1148653-1-bingbu.cao@intel.com>
- <769ebe9f8eb88b2c07eae5910fc7d79c1ff888cb.camel@gmail.com>
- <5fb07c7d-390c-d7ae-c74b-8e03c75f636c@linux.intel.com>
- <0a381077-c07a-ed40-c53e-5e36177bd5f2@linux.intel.com>
- <907f992d4e333f090418f39ebd59bf8ac1fb5e3f.camel@gmail.com>
- <d451bbec67358373ca8495544cc0802233108a03.camel@gmail.com>
+        Mon, 21 Aug 2023 08:28:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDFF4D9;
+        Mon, 21 Aug 2023 05:28:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 817F86341E;
+        Mon, 21 Aug 2023 12:28:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E7B6C433C8;
+        Mon, 21 Aug 2023 12:28:13 +0000 (UTC)
+Message-ID: <d2925a76-ab66-9d76-803b-3e3a421411d9@xs4all.nl>
+Date:   Mon, 21 Aug 2023 14:28:11 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d451bbec67358373ca8495544cc0802233108a03.camel@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v7 3/5] media: add V4L2 vendor specific control handlers
+Content-Language: en-US, nl
+To:     Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230714015059.18775-1-yuji2.ishikawa@toshiba.co.jp>
+ <20230714015059.18775-4-yuji2.ishikawa@toshiba.co.jp>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20230714015059.18775-4-yuji2.ishikawa@toshiba.co.jp>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Claus,
+On 14/07/2023 03:50, Yuji Ishikawa wrote:
+> Add support to Image Signal Processors of Visconti's Video Input Interface.
+> This patch adds vendor specific compound controls
+> to configure the image signal processor.
+> 
+> Signed-off-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
+> ---
+> Changelog v2:
+> - Resend v1 because a patch exceeds size limit.
+> 
+> Changelog v3:
+> - Adapted to media control framework
+> - Introduced ISP subdevice, capture device
+> - Remove private IOCTLs and add vendor specific V4L2 controls
+> - Change function name avoiding camelcase and uppercase letters
+> 
+> Changelog v4:
+> - Split patches because the v3 patch exceeds size limit
+> - Stop using ID number to identify driver instance:
+>   - Use dynamically allocated structure to hold HW specific context,
+>     instead of static one.
+>   - Call HW layer functions with the context structure instead of ID number
+> 
+> Changelog v5:
+> - no change
+> 
+> Changelog v6:
+> - remove unused macros
+> - removed hwd_ and HWD_ prefix
+> - update source code documentation
+> - Suggestion from Hans Verkuil
+>   - pointer to userland memory is removed from uAPI arguments
+>     - style of structure is now "nested" instead of "chained by pointer";
+>   - use div64_u64 for 64bit division
+>   - vendor specific controls support TRY_EXT_CTRLS
+>   - add READ_ONLY flag to GET_CALIBRATION_STATUS control and similar ones
+>   - human friendry control names for vendor specific controls
+>   - add initial value to each vendor specific control
+>   - GET_LAST_CAPTURE_STATUS control is updated asyncnously from workqueue
+>   - remove EXECUTE_ON_WRITE flag of vendor specific control
+>   - uAPI: return value of GET_CALIBRATION_STATUS follows common rules of error codes
+>   - applied v4l2-compliance
+> - Suggestion from Sakari Ailus
+>   - use div64_u64 for 64bit division
+>   - update copyright's year
+>   - remove redandunt cast
+>   - use bool instead of HWD_VIIF_ENABLE/DISABLE
+>   - simplify comparison to 0
+>   - simplify statements with trigram operator
+>   - remove redundant local variables
+>   - use general integer types instead of u32/s32
+> - Suggestion from Laurent Pinchart
+>   - moved VIIF driver to driver/platform/toshiba/visconti
+>   - change register access: struct-style to macro-style
+>   - remove unused type definitions
+>   - define enums instead of successive macro constants
+>   - remove redundant parenthesis of macro constant
+>   - embed struct hwd_res into struct viif_device
+>   - use xxx_dma instead of xxx_paddr for variable names of IOVA
+>   - literal value: just 0 instead of 0x0
+>   - use literal 1 or 0 instead of HWD_VIIF_ENABLE, DISABLE for register access
+>   - use true or false instead of HWD_VIIF_ENABLE, DISABLE for function calls
+>   - uAPI: return value of GET_CALIBRATION_STATUS follows common rules of error codes
+> 
+> Changelog v7:
+> - remove unused variables
+> - split long statements which have multiple logical-OR and trigram operators
+> 
+>  .../media/platform/toshiba/visconti/Makefile  |    2 +-
+>  .../media/platform/toshiba/visconti/viif.c    |   10 +-
+>  .../platform/toshiba/visconti/viif_controls.c | 3407 +++++++++++++++++
+>  .../platform/toshiba/visconti/viif_controls.h |   18 +
+>  .../platform/toshiba/visconti/viif_isp.c      |   15 +-
+>  5 files changed, 3435 insertions(+), 17 deletions(-)
+>  create mode 100644 drivers/media/platform/toshiba/visconti/viif_controls.c
+>  create mode 100644 drivers/media/platform/toshiba/visconti/viif_controls.h
+> 
+> diff --git a/drivers/media/platform/toshiba/visconti/Makefile b/drivers/media/platform/toshiba/visconti/Makefile
+> index 5f2f9199c..a28e6fa84 100644
+> --- a/drivers/media/platform/toshiba/visconti/Makefile
+> +++ b/drivers/media/platform/toshiba/visconti/Makefile
+> @@ -3,6 +3,6 @@
+>  # Makefile for the Visconti video input device driver
+>  #
+>  
+> -visconti-viif-objs = viif.o viif_capture.o viif_isp.o viif_csi2rx.o viif_common.o
+> +visconti-viif-objs = viif.o viif_capture.o viif_controls.o viif_isp.o viif_csi2rx.o viif_common.o
+>  
+>  obj-$(CONFIG_VIDEO_VISCONTI_VIIF) += visconti-viif.o
+> diff --git a/drivers/media/platform/toshiba/visconti/viif.c b/drivers/media/platform/toshiba/visconti/viif.c
+> index c07dc2626..1b3d61abf 100644
+> --- a/drivers/media/platform/toshiba/visconti/viif.c
+> +++ b/drivers/media/platform/toshiba/visconti/viif.c
+> @@ -18,6 +18,7 @@
+>  
+>  #include "viif.h"
+>  #include "viif_capture.h"
+> +#include "viif_controls.h"
+>  #include "viif_csi2rx.h"
+>  #include "viif_common.h"
+>  #include "viif_isp.h"
+> @@ -178,12 +179,9 @@ static struct viif_subdev *to_viif_subdev(struct v4l2_async_subdev *asd)
+>  /* before a userland capture application is trigered by vb2_buffer_done() */
+>  static void visconti_viif_wthread_l1info(struct work_struct *work)
+>  {
+> -	/* called function is implemented by the next patch */
+> -/*
+> - *	struct viif_device *viif_dev = container_of(work, struct viif_device, work);
+> - *
+> - *	visconti_viif_save_l1_info(viif_dev);
+> - */
+> +	struct viif_device *viif_dev = container_of(work, struct viif_device, work);
+> +
+> +	visconti_viif_save_l1_info(viif_dev);
+>  }
+>  
+>  static void viif_vsync_irq_handler_w_isp(struct viif_device *viif_dev)
+> diff --git a/drivers/media/platform/toshiba/visconti/viif_controls.c b/drivers/media/platform/toshiba/visconti/viif_controls.c
+> new file mode 100644
+> index 000000000..3cf10e15c
+> --- /dev/null
+> +++ b/drivers/media/platform/toshiba/visconti/viif_controls.c
+> @@ -0,0 +1,3407 @@
 
-On Mon, Aug 21, 2023 at 12:07:59PM +0200, Claus Stovgaard wrote:
-> On Mon, 2023-08-21 at 08:55 +0200, Claus Stovgaard wrote:
-> > On Mon, 2023-08-21 at 14:22 +0800, Bingbu Cao wrote:
-> > > 
-> > > Claus,
-> > > 
-> > > 
-> > > On 8/21/23 11:14 AM, Bingbu Cao wrote:
-> > > 
-> > > 
-> > > I see that the ivsc driver has not been in master branch. Before
-> > > that,
-> > > could you try several hack to check whether camera can work on
-> > > master?
-> > > 
-> > > https://github.com/bingbucao/linux/commits/ipu_dev
-> > > 
-> > > 7ebff51284d9 media: ov01a10: hack ivsc to make camera can work
-> > > 01cc9f3d1b61 i2c: ljca: Call acpi_dev_clear_dependencies()
-> > > 92e5d122e105 vsc: Defer firmware loading to avoid long probing time
-> > > 5f5d5f0df06b driver: ivsc: add intel ivsc driver
-> > > 0f4819dec533 Revert "gpio: Add support for Intel LJCA USB GPIO
-> > > driver"
-> > 
-> > Thanks for your quick reply.
-> > 
-> > I was missing understanding of ivsc when I wrote the mail yesterday.
-> > Got some basic understanding yesterday after I wrote, and big thanks
-> > for confirming it, and also thanks for your ipu_dev branch. Has just
-> > cloned it, and is building as I write.
-> > 
-> > Just fyi, I was trying to hack something together yesterday, and got
-> > further, but not yet working.
-> > 
-> > My hack was to combine the out-of-tree ivsc drivers and firmware from
-> > 
-> > * https://github.com/intel/ivsc-firmware.git
-> > * https://github.com/intel/ivsc-driver.git
-> > 
-> > Though noticed that I need some changes to the sensor driver so was
-> > also building all the drivers from ipu6-drivers (with minor changes
-> > to
-> > get_pages) as out-of-tree modules.
-> > 
-> > * https://github.com/intel/ipu6-drivers.git 
-> > 
-> > Here I used everything beside media/pci/*.ko files. I could see the
-> > sensor and got further, but was missing the last.
-> > 
-> > Looking forward to try your branch. Looks much cleaner, and would be
-> > nice to get working :)
-> 
-> I got it to work on Dell XPS 9320.
+<snip>
 
-I'm glad to hear this ! Even if PSYS support will be needed to make the
-IPU6 truly usable, it is a very nice step in the right direction.
+> +static int visconti_viif_isp_try_ctrl(struct v4l2_ctrl *ctrl)
+> +{
+> +	struct viif_device *viif_dev = ctrl->priv;
+> +
+> +	switch (ctrl->id) {
+> +	case V4L2_CID_VISCONTI_VIIF_MAIN_SET_RAWPACK_MODE:
+> +		return viif_main_set_rawpack_mode_try(viif_dev, ctrl->p_new.p);
+> +	case V4L2_CID_VISCONTI_VIIF_ISP_L1_SET_INPUT_MODE:
+> +		return viif_l1_set_input_mode_try(viif_dev, ctrl->p_new.p);
+> +	case V4L2_CID_VISCONTI_VIIF_ISP_L1_SET_RGB_TO_Y_COEF:
+> +		return viif_l1_set_rgb_to_y_coef_try(viif_dev, ctrl->p_new.p);
+> +	case V4L2_CID_VISCONTI_VIIF_ISP_L1_SET_AG_MODE:
+> +		return viif_l1_set_ag_mode_try(viif_dev, ctrl->p_new.p);
+> +	case V4L2_CID_VISCONTI_VIIF_ISP_L1_SET_AG:
+> +		return 0; //no need to check
+> +	case V4L2_CID_VISCONTI_VIIF_ISP_L1_SET_HDRE:
+> +		return viif_l1_set_hdre_try(viif_dev, ctrl->p_new.p);
+> +	case V4L2_CID_VISCONTI_VIIF_ISP_L1_SET_IMG_EXTRACTION:
+> +		return viif_l1_set_img_extraction_try(viif_dev, ctrl->p_new.p);
+> +	case V4L2_CID_VISCONTI_VIIF_ISP_L1_SET_DPC:
+> +		return viif_l1_set_dpc_try(viif_dev, ctrl->p_new.p);
+> +	case V4L2_CID_VISCONTI_VIIF_ISP_L1_SET_PRESET_WHITE_BALANCE:
+> +		return viif_l1_set_preset_white_balance_try(viif_dev, ctrl->p_new.p);
+> +	case V4L2_CID_VISCONTI_VIIF_ISP_L1_SET_RAW_COLOR_NOISE_REDUCTION:
+> +		return viif_l1_set_raw_color_noise_reduction_try(viif_dev, ctrl->p_new.p);
+> +	case V4L2_CID_VISCONTI_VIIF_ISP_L1_SET_HDRS:
+> +		return viif_l1_set_hdrs_try(viif_dev, ctrl->p_new.p);
+> +	case V4L2_CID_VISCONTI_VIIF_ISP_L1_SET_BLACK_LEVEL_CORRECTION:
+> +		return viif_l1_set_black_level_correction_try(viif_dev, ctrl->p_new.p);
+> +	case V4L2_CID_VISCONTI_VIIF_ISP_L1_SET_LSC:
+> +		return viif_l1_set_lsc_try(viif_dev, ctrl->p_new.p);
+> +	case V4L2_CID_VISCONTI_VIIF_ISP_L1_SET_MAIN_PROCESS:
+> +		return viif_l1_set_main_process_try(viif_dev, ctrl->p_new.p);
+> +	case V4L2_CID_VISCONTI_VIIF_ISP_L1_SET_AWB:
+> +		return viif_l1_set_awb_try(viif_dev, ctrl->p_new.p);
+> +	case V4L2_CID_VISCONTI_VIIF_ISP_L1_LOCK_AWB_GAIN:
+> +		return 0;
+> +	case V4L2_CID_VISCONTI_VIIF_ISP_L1_SET_HDRC:
+> +		return viif_l1_set_hdrc_try(viif_dev, ctrl->p_new.p);
+> +	case V4L2_CID_VISCONTI_VIIF_ISP_L1_SET_HDRC_LTM:
+> +		return viif_l1_set_hdrc_ltm_try(viif_dev, ctrl->p_new.p);
+> +	case V4L2_CID_VISCONTI_VIIF_ISP_L1_SET_GAMMA:
+> +		return viif_l1_set_gamma_try(viif_dev, ctrl->p_new.p);
+> +	case V4L2_CID_VISCONTI_VIIF_ISP_L1_SET_IMG_QUALITY_ADJUSTMENT:
+> +		return viif_l1_set_img_quality_adjustment_try(viif_dev, ctrl->p_new.p);
+> +	case V4L2_CID_VISCONTI_VIIF_ISP_L1_SET_AVG_LUM_GENERATION:
+> +		return viif_l1_set_avg_lum_generation_try(viif_dev, ctrl->p_new.p);
+> +	case V4L2_CID_VISCONTI_VIIF_ISP_L2_SET_UNDIST:
+> +		return viif_l2_set_undist_try(viif_dev, ctrl->p_new.p);
+> +	case V4L2_CID_VISCONTI_VIIF_ISP_L2_SET_ROI:
+> +		return viif_l2_set_roi_try(viif_dev, ctrl->p_new.p);
+> +	case V4L2_CID_VISCONTI_VIIF_ISP_L2_SET_GAMMA:
+> +		return viif_l2_set_gamma_try(viif_dev, ctrl->p_new.p);
+> +	case V4L2_CID_VISCONTI_VIIF_GET_LAST_CAPTURE_STATUS:
+> +		return 0;
+> +	default:
+> +		pr_info("unknown_ctrl:t: id=%08X val=%d", ctrl->id, ctrl->val);
+> +		break;
+> +	}
+> +	return -EINVAL;
+> +}
+> +
+> +static int visconti_viif_isp_set_ctrl(struct v4l2_ctrl *ctrl)
+> +{
+> +	struct viif_device *viif_dev = ctrl->priv;
+> +	int ret;
+> +
+> +	pr_info("isp_set_ctrl: %s", ctrl->name);
 
-Would you be interested in adding initial support for the IPU6 in
-libcamera ? :-) Given that only the ISYS is currently available, and
-given the simplicity of the hardware, it may be as easy as a single line
-addition.
+Don't use pr_info for what is just a debug message! Either drop it, or
+replace it with dev_dbg.
 
-> With some minor changes compared to your guide in Documentation/admin-
-> guide/media/ipu6-isys.rst
-> 
-> [root@xps-1 ]# uname -a
-> Linux xps-1 6.5.0-rc7-g7ebff51284d9 #1 SMP PREEMPT_DYNAMIC Mon Aug 21
-> 09:02:20 CEST 2023 x86_64 GNU/Linux
-> 
-> [root@xps-1 ]# media-ctl -d /dev/media0 -p | tail -n10
-> 
-> - entity 2149: ov01a10 16-0036 (1 pad, 1 link)
->                type V4L2 subdev subtype Sensor flags 0
->                device node name /dev/v4l-subdev4
->         pad0: Source
->                 [fmt:SBGGR10_1X10/1280x800 field:none colorspace:raw
->                  crop.bounds:(0,0)/1296x816
->                  crop:(8,8)/1280x800]
->                 -> "Intel IPU6 CSI2 2":0 []
-> 
-> So i2c is 16-0036 - and we use it for setup like your guide.
-> 
-> export MDEV=/dev/media0
-> 
-> media-ctl -d $MDEV -l "\"ov01a10 17-0036\":0 -> \"Intel IPU6 CSI2
-> 2\":0[1]"
-> 
-> media-ctl -d $MDEV -V "\"ov01a10 17-0036\":0 [fmt:SBGGR10/1280x800]"
-> media-ctl -d $MDEV -V "\"Intel IPU6 CSI2 2\":0 [fmt:SBGGR10/1280x800]"
-> media-ctl -d $MDEV -V "\"Intel IPU6 CSI2 2\":1 [fmt:SBGGR10/1280x800]"
-> 
-> media-ctl -d $MDEV -l "\"ov01a10 17-0036\":0 -> \"Intel IPU6 CSI2
-> 2\":0[1]"
-> media-ctl -d $MDEV -l "\"Intel IPU6 CSI2 2\":1 ->\"Intel IPU6 ISYS
-> Capture 0\":0[5]"
-> 
-> Though yavta does not work in the way as described in the guide.
-> 
-> [root@xps-1 ]# yavta --data-prefix -u -c10 -n5 -I -s 1280x800 --
-> file=/tmp/frame-#.bin -f SBGGR10 /dev/video0
-> Device /dev/video0 opened.
-> Device `ipu6' on `PCI:0000:00:05.0' (driver 'isys') supports video,
-> capture, with mplanes.
-> Video format set: SBGGR10 (30314742) 1280x800 field none, 1 planes: 
->  * Stride 2560, buffer size 2050560
-> Video format: SBGGR10 (30314742) 1280x800 field none, 1 planes: 
->  * Stride 2560, buffer size 2050560
-> Unable to request buffers: Invalid argument (22).
-> 
-> 
-> So I changed to use v4l2-ctl
-> 
-> [root@xps-1 ]# v4l2-ctl -d /dev/video0 --set-fmt-video
-> width=1280,height=800,pixelformat=BG10 --stream-mmap --stream-count=1 -
-> -stream-to=frame.bin
-> 
-> With this I created raw data in BG10 format, and later used a small
-> python script with numpy and opencv to look at the data.
-> 
-> #!/usr/bin/env python3
-> # Demosaicing Bayer Raw image
-> 
-> import cv2
-> import numpy as np
-> 
-> width = 1280
-> height = 800
-> 
-> with open("frame.bin", "rb") as rawimg:
->     # Read the bayer data
->     data = np.fromfile(rawimg, np.uint16, width * height)
->     bayer = np.reshape(data, (height, width))
-> 
->     # Just a offset gain to be able to see something
->     for x in range(0, len(bayer)):
->         for y in range(0, len(bayer[0])):
->             bayer[x, y] = (bayer[x,y] << 8)
-> 
->     rgb = cv2.cvtColor(bayer, cv2.COLOR_BayerBGGR2RGB)
-> 
->     cv2.imshow('rgb', rgb)
->     cv2.waitKey()
->     cv2.destroyAllWindows()
-> 
-> 
-> Thanks for the help, and now we know what is needed to make it work on
-> top of yesterdays rc7
+> +	if (pm_runtime_status_suspended(viif_dev->dev)) {
+> +		pr_info("warning: visconti viif HW is not powered");
 
--- 
+And here pr_info is used for a warning, so shouldn't this be dev_warn?
+
+I see pr_info being used in a lot of places where it doesn't belong and
+would just spam the kernel log.
+
+Something to go through for v8.
+
 Regards,
 
-Laurent Pinchart
+	Hans
