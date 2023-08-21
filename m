@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1777EEE4996
-	for <linux-media@archiver.kernel.org>; Mon, 21 Aug 2023 22:30:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6F50EE49A6
+	for <linux-media@archiver.kernel.org>; Mon, 21 Aug 2023 22:30:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231583AbjHUWa3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Aug 2023 18:30:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34796 "EHLO
+        id S231590AbjHUWai (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Aug 2023 18:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231575AbjHUWa2 (ORCPT
+        with ESMTP id S231589AbjHUWaf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Aug 2023 18:30:28 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED544132
-        for <linux-media@vger.kernel.org>; Mon, 21 Aug 2023 15:30:24 -0700 (PDT)
+        Mon, 21 Aug 2023 18:30:35 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B728B189
+        for <linux-media@vger.kernel.org>; Mon, 21 Aug 2023 15:30:31 -0700 (PDT)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E8A0336B0;
-        Tue, 22 Aug 2023 00:28:54 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2EAE087F4;
+        Tue, 22 Aug 2023 00:28:59 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1692656935;
-        bh=6sZRcwFHnMnC2rIYbnx4/7x1mZzsYCzO0LiGWRLyHQo=;
+        s=mail; t=1692656939;
+        bh=fmE8kvSiGPUvcBXXTx/9/aHNT4B+KkM3dj8vF0/IFp8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DnuANdvEp14f6nYywYpFxFlQUx8MeJyHo4+LOJgEVsbwAUfbBY7CT6hlr/LBxChGH
-         kPCdRobn0Akl3A5Kijd21viEfYl220/VgXyttxMQ4siP2dMaw19E77aQMCUt/rl/3z
-         Qos4Hc7eRnWZ2sxVPDWEM9zMqBVJfuKTYq5MrGtU=
+        b=AOn8snF9uvZQojL1FBpEVUJt4cR0skdm0hq8LmrlJjPjMEeNzIIsZAJtrEyzgESGZ
+         oha/fkKhCDAZpVqHfvbZ/anBSNx3WcO+fJaywY2S6UoFW7z1FejMRsGTEl+A2t1VJw
+         RhFRAr2llnAgZ7rNEylIIC4kLqcm8URRDpDfv9oY=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
@@ -32,9 +32,9 @@ Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
         Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Hans de Goede <hdegoede@redhat.com>
-Subject: [PATCH v2 11/18] media: i2c: imx219: Don't store the current mode in the imx219 structure
-Date:   Tue, 22 Aug 2023 01:29:54 +0300
-Message-ID: <20230821223001.28480-12-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 14/18] media: i2c: imx219: Drop system suspend/resume operations
+Date:   Tue, 22 Aug 2023 01:29:57 +0300
+Message-ID: <20230821223001.28480-15-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230821223001.28480-1-laurent.pinchart@ideasonboard.com>
 References: <20230821223001.28480-1-laurent.pinchart@ideasonboard.com>
@@ -44,81 +44,108 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The mode field of the imx219 structure is only used in
-imx219_init_controls(), after the probe function sets it to point to the
-default mode. Use the default mode directly when initializing controls,
-and drop the mode field from the imx219 structure.
+There is no need to stop streaming at system suspend time, or restart it
+when the system is resumed, as the host-side driver is responsible for
+stopping and restarting the pipeline in a controlled way by calling the
+.s_stream() operation. Drop the system suspend and resume handlers, and
+simplify the .s_stream() handler as a result.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/i2c/imx219.c | 20 +++++++-------------
- 1 file changed, 7 insertions(+), 13 deletions(-)
+ drivers/media/i2c/imx219.c | 56 ++------------------------------------
+ 1 file changed, 2 insertions(+), 54 deletions(-)
 
 diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-index 4e9a50117a0a..67a30dc39641 100644
+index 227c227cf4ce..da2a8d0210fa 100644
 --- a/drivers/media/i2c/imx219.c
 +++ b/drivers/media/i2c/imx219.c
-@@ -363,9 +363,6 @@ struct imx219 {
+@@ -359,9 +359,6 @@ struct imx219 {
  	struct v4l2_ctrl *vblank;
  	struct v4l2_ctrl *hblank;
  
--	/* Current mode */
--	const struct imx219_mode *mode;
+-	/* Streaming on/off */
+-	bool streaming;
 -
- 	/* Streaming on/off */
- 	bool streaming;
+ 	/* Two or Four lanes */
+ 	u8 lanes;
+ };
+@@ -764,24 +761,11 @@ static int imx219_set_stream(struct v4l2_subdev *sd, int enable)
  
-@@ -584,7 +581,6 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
- 	*crop = mode->crop;
+ 	state = v4l2_subdev_lock_and_get_active_state(sd);
  
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
--		imx219->mode = mode;
- 		/* Update limits and set FPS to default */
- 		__v4l2_ctrl_modify_range(imx219->vblank, IMX219_VBLANK_MIN,
- 					 IMX219_VTS_MAX - mode->height, 1,
-@@ -967,8 +963,8 @@ static unsigned long imx219_get_pixel_rate(struct imx219 *imx219)
- static int imx219_init_controls(struct imx219 *imx219)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(&imx219->sd);
-+	const struct imx219_mode *mode = &supported_modes[0];
- 	struct v4l2_ctrl_handler *ctrl_hdlr;
--	unsigned int height = imx219->mode->height;
- 	struct v4l2_fwnode_device_properties props;
- 	int exposure_max, exposure_def, hblank;
- 	int i, ret;
-@@ -997,15 +993,15 @@ static int imx219_init_controls(struct imx219 *imx219)
- 	/* Initial vblank/hblank/exposure parameters based on current mode */
- 	imx219->vblank = v4l2_ctrl_new_std(ctrl_hdlr, &imx219_ctrl_ops,
- 					   V4L2_CID_VBLANK, IMX219_VBLANK_MIN,
--					   IMX219_VTS_MAX - height, 1,
--					   imx219->mode->vts_def - height);
--	hblank = IMX219_PPL_DEFAULT - imx219->mode->width;
-+					   IMX219_VTS_MAX - mode->height, 1,
-+					   mode->vts_def - mode->height);
-+	hblank = IMX219_PPL_DEFAULT - mode->width;
- 	imx219->hblank = v4l2_ctrl_new_std(ctrl_hdlr, &imx219_ctrl_ops,
- 					   V4L2_CID_HBLANK, hblank, hblank,
- 					   1, hblank);
- 	if (imx219->hblank)
- 		imx219->hblank->flags |= V4L2_CTRL_FLAG_READ_ONLY;
--	exposure_max = imx219->mode->vts_def - 4;
-+	exposure_max = mode->vts_def - 4;
- 	exposure_def = (exposure_max < IMX219_EXPOSURE_DEFAULT) ?
- 		exposure_max : IMX219_EXPOSURE_DEFAULT;
- 	imx219->exposure = v4l2_ctrl_new_std(ctrl_hdlr, &imx219_ctrl_ops,
-@@ -1192,10 +1188,8 @@ static int imx219_probe(struct i2c_client *client)
- 	if (ret)
- 		goto error_power_off;
- 
--	/* Set default mode to max resolution */
--	imx219->mode = &supported_modes[0];
+-	if (imx219->streaming == enable)
+-		goto unlock;
 -
--	/* sensor doesn't enter LP-11 state upon power up until and unless
-+	/*
-+	 * Sensor doesn't enter LP-11 state upon power up until and unless
- 	 * streaming is started, so upon power up switch the modes to:
- 	 * streaming -> standby
- 	 */
+-	if (enable) {
+-		/*
+-		 * Apply default & customized values
+-		 * and then start streaming.
+-		 */
++	if (enable)
+ 		ret = imx219_start_streaming(imx219, state);
+-		if (ret)
+-			goto unlock;
+-	} else {
++	else
+ 		imx219_stop_streaming(imx219);
+-	}
+ 
+-	imx219->streaming = enable;
+-
+-unlock:
+ 	v4l2_subdev_unlock_state(state);
+ 	return ret;
+ }
+@@ -1015,41 +999,6 @@ static int imx219_power_off(struct device *dev)
+ 	return 0;
+ }
+ 
+-static int __maybe_unused imx219_suspend(struct device *dev)
+-{
+-	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+-	struct imx219 *imx219 = to_imx219(sd);
+-
+-	if (imx219->streaming)
+-		imx219_stop_streaming(imx219);
+-
+-	return 0;
+-}
+-
+-static int __maybe_unused imx219_resume(struct device *dev)
+-{
+-	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+-	struct imx219 *imx219 = to_imx219(sd);
+-	struct v4l2_subdev_state *state;
+-	int ret;
+-
+-	if (imx219->streaming) {
+-		state = v4l2_subdev_lock_and_get_active_state(sd);
+-		ret = imx219_start_streaming(imx219, state);
+-		v4l2_subdev_unlock_state(state);
+-		if (ret)
+-			goto error;
+-	}
+-
+-	return 0;
+-
+-error:
+-	imx219_stop_streaming(imx219);
+-	imx219->streaming = false;
+-
+-	return ret;
+-}
+-
+ /* -----------------------------------------------------------------------------
+  * Probe & remove
+  */
+@@ -1295,7 +1244,6 @@ static const struct of_device_id imx219_dt_ids[] = {
+ MODULE_DEVICE_TABLE(of, imx219_dt_ids);
+ 
+ static const struct dev_pm_ops imx219_pm_ops = {
+-	SET_SYSTEM_SLEEP_PM_OPS(imx219_suspend, imx219_resume)
+ 	SET_RUNTIME_PM_OPS(imx219_power_off, imx219_power_on, NULL)
+ };
+ 
 -- 
 Regards,
 
