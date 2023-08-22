@@ -2,54 +2,54 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8E0DEE49B2
-	for <linux-media@archiver.kernel.org>; Tue, 22 Aug 2023 20:06:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95F7BEE49B8
+	for <linux-media@archiver.kernel.org>; Tue, 22 Aug 2023 20:06:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbjHVUGq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 22 Aug 2023 16:06:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57242 "EHLO
+        id S230357AbjHVUGt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 22 Aug 2023 16:06:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230365AbjHVUGk (ORCPT
+        with ESMTP id S230371AbjHVUGq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 22 Aug 2023 16:06:40 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3253AE47
-        for <linux-media@vger.kernel.org>; Tue, 22 Aug 2023 13:06:37 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-31aeedbb264so3036032f8f.0
-        for <linux-media@vger.kernel.org>; Tue, 22 Aug 2023 13:06:37 -0700 (PDT)
+        Tue, 22 Aug 2023 16:06:46 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43C4E67
+        for <linux-media@vger.kernel.org>; Tue, 22 Aug 2023 13:06:40 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-31768ce2e81so4356111f8f.1
+        for <linux-media@vger.kernel.org>; Tue, 22 Aug 2023 13:06:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692734795; x=1693339595;
+        d=linaro.org; s=google; t=1692734799; x=1693339599;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iJ2VKKNJcWBxsnE8fA4GSZFE3NOH8fxJi08OtAhPrEw=;
-        b=mNvKMnHZpUgmIcopeD8Ka6HB1CjCaeg+3MBlLKAp1ZqKrBObHsIPnVrfx1b5hRhbpz
-         D0MLXlrdnZDOx84YsDHdM+cRxcAoxTEVLSbmwmxRoEr8MlSu00ZtwQhH0AD/zRxwli78
-         N/xMgAo4M4oyi7noM4hABWRVGDLATi4cVqsUW7TaLP1QtEk5OZHnUKlfR9o8VQ8d1k9O
-         xyZSbvX0lDcl4hKiOi609HrYUfYT8XsO08THJhYYdjC64yTA61eMjd9uX5FZNHgf9RsY
-         PHXoEWY31uvEo9KTd3WBnSwfZEmuC4trhFGqmudUwcDHfoLMXQZK6RhXphf9+tirGaph
-         VDdg==
+        bh=WOQ9tyjj8WPoyJd2gELXd60f8pMhiSuAdrU1RFxkiK0=;
+        b=NRhWoYGl0vaT1VIpGGLxKM0Az3O6eyGSWin2QHJltHbcXtFLWNL/eIARNs4iquTENl
+         OD1JEEfPCVQfZBSuUlj7Lv3Bq7eFpcus/babkN0CPfVFowgzekJj/FYoSFG3GoXsDG2q
+         fF5wVyfCyWwb1Ktv7B7L+jotqvj+dIWc/WUgpOyqIRoRdl8IV0ASYVVHab4fQXqjbN7b
+         S8lcBih0bImNUg2iab4eduB3tX95ASYRjamRXzYJHj7mpTNDTzYaPcQ8lut1NySM+88D
+         KXxEgfeJIQEFpn24iStw0DX3S8nLZ5SAtkYmcwl3VT6YuxScgl6U1FxUcwWGxno3VMxK
+         w4EA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692734796; x=1693339596;
+        d=1e100.net; s=20221208; t=1692734799; x=1693339599;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iJ2VKKNJcWBxsnE8fA4GSZFE3NOH8fxJi08OtAhPrEw=;
-        b=gIptqYSAygDT/ocU60UaAFkP8/bijx6Ls9a3rAMrZ4rH5tJgCrWjQEhBKpGxIeJaGD
-         r8FpVGFgIAFysITNo3wa7ZoXInZiz1MXRAgJZGS12mJTRGqkQqCwDJSHRqJB/8A2FVy5
-         hvF3+7FTgXHupq8wgJKuiG3KJLd3jDvIbW8q97pZq46X9raTypYUB4+dQn0mUt4Sbwhc
-         ZrydhPsDfgLgWR1GnrfdPfgEqYdl429LZsosMHIf3A2QFxjpXJW6BG68VqfRcm3YbI2S
-         husrhbfgE300KjO4I81p2hyEl2c0MtGbW06LyDM+RdmkgPiUwzKPSSTRimV60RVtrHpz
-         PlvQ==
-X-Gm-Message-State: AOJu0Ywm12bUmAhRWWHtnPsmbkzxuXiz1zad0weKfnxsul4hbMgPP65F
-        Ih0x8BoD2Hi2tGgwpaSBKAAynQ==
-X-Google-Smtp-Source: AGHT+IHqSqIZ1/zkCPCh2/tNtxOXi0IsYdOY9eaoZrSN7DLj6sqQC7PCqYRiWK35jeH26vmbqfBvNg==
-X-Received: by 2002:a5d:44d1:0:b0:31a:d2b2:f29d with SMTP id z17-20020a5d44d1000000b0031ad2b2f29dmr7643714wrr.8.1692734795807;
-        Tue, 22 Aug 2023 13:06:35 -0700 (PDT)
+        bh=WOQ9tyjj8WPoyJd2gELXd60f8pMhiSuAdrU1RFxkiK0=;
+        b=kRucel/XJF1L3XrxL5kwTveqsUiyLSzQur18x0PmYX0IchfBbMueZYiKY9VAewmYbt
+         e1vOVf5Tcj8dog2AXrNIcODYbztCBK3ZBN8ra+eFD2TOioxVNqF3OKeytOtKFBTqL1qN
+         YHVh/sG4BfaFqQlhrfocTGvsA9MZDf4rjD7hQiG1JU8hTtf1XtP7o/P+Q7BTA6hg4N0Y
+         VsSMKp7BqI8zCVrBPXffQ2m2WLce2p6UWDXXqLwVPFPsfsy2CLvPD49wFNX//7IOJkdN
+         5w6tQCtj0e5tgoh2sII1x2+2Tyfhu1TDvGp37YiedTGAspvvhLHUncAw5jxOCPhmjEYo
+         CgFQ==
+X-Gm-Message-State: AOJu0YzxEZSyZLr7kjNYhzdL6+jFz4KN6v52pWbgJzTV49SJmiAc1XX9
+        1QBnxEkQeASBfAAxGf2dpZ6Y0Q==
+X-Google-Smtp-Source: AGHT+IGLEjPVvjc3K5kuGPMXw6er1xUF0tDZxVmWr4odTXx7JDkfQBeB7q+0zyHxz79mdzhHnTEq7w==
+X-Received: by 2002:adf:fcca:0:b0:319:85e2:6972 with SMTP id f10-20020adffcca000000b0031985e26972mr7500261wrs.42.1692734799351;
+        Tue, 22 Aug 2023 13:06:39 -0700 (PDT)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id y12-20020adfee0c000000b0031aeca90e1fsm12873690wrn.70.2023.08.22.13.06.34
+        by smtp.gmail.com with ESMTPSA id y12-20020adfee0c000000b0031aeca90e1fsm12873690wrn.70.2023.08.22.13.06.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Aug 2023 13:06:35 -0700 (PDT)
+        Tue, 22 Aug 2023 13:06:38 -0700 (PDT)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
         agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
@@ -58,9 +58,9 @@ To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
         andrey.konovalov@linaro.org
 Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH v2 5/9] media: qcom: camss: Fix VFE-480 vfe_disable_output()
-Date:   Tue, 22 Aug 2023 21:06:22 +0100
-Message-ID: <20230822200626.1931129-6-bryan.odonoghue@linaro.org>
+Subject: [PATCH v2 8/9] media: qcom: camss: Fix set CSI2_RX_CFG1_VC_MODE when VC is greater than 3
+Date:   Tue, 22 Aug 2023 21:06:25 +0100
+Message-ID: <20230822200626.1931129-9-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230822200626.1931129-1-bryan.odonoghue@linaro.org>
 References: <20230822200626.1931129-1-bryan.odonoghue@linaro.org>
@@ -70,54 +70,28 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-vfe-480 is copied from vfe-17x and has the same racy idle timeout bug as in
-17x.
+VC_MODE = 0 implies a two bit VC address.
+VC_MODE = 1 is required for VCs with a larger address than two bits.
 
-Fix the vfe_disable_output() logic to no longer be racy and to conform
-to the 17x way of quiescing and then resetting the VFE.
-
-Fixes: 4edc8eae715c ("media: camss: Add initial support for VFE hardware version Titan 480")
+Fixes: eebe6d00e9bf ("media: camss: Add support for CSID hardware version Titan 170")
 Cc: stable@vger.kernel.org
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- .../media/platform/qcom/camss/camss-vfe-480.c | 19 +++----------------
- 1 file changed, 3 insertions(+), 16 deletions(-)
+ drivers/media/platform/qcom/camss/camss-csid-gen2.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe-480.c b/drivers/media/platform/qcom/camss/camss-vfe-480.c
-index f70aad2e8c237..a64d660abc538 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe-480.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe-480.c
-@@ -334,28 +334,15 @@ static int vfe_disable_output(struct vfe_line *line)
- 	struct vfe_output *output = &line->output;
- 	unsigned long flags;
- 	unsigned int i;
--	bool done;
--	int timeout = 0;
--
--	do {
--		spin_lock_irqsave(&vfe->output_lock, flags);
--		done = !output->gen2.active_num;
--		spin_unlock_irqrestore(&vfe->output_lock, flags);
--		usleep_range(10000, 20000);
--
--		if (timeout++ == 100) {
--			dev_err(vfe->camss->dev, "VFE idle timeout - resetting\n");
--			vfe_reset(vfe);
--			output->gen2.active_num = 0;
--			return 0;
--		}
--	} while (!done);
+diff --git a/drivers/media/platform/qcom/camss/camss-csid-gen2.c b/drivers/media/platform/qcom/camss/camss-csid-gen2.c
+index 45c7986d4a8d0..140c584bfb8b1 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid-gen2.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-gen2.c
+@@ -449,6 +449,8 @@ static void __csid_configure_stream(struct csid_device *csid, u8 enable, u8 vc)
+ 	writel_relaxed(val, csid->base + CSID_CSI2_RX_CFG0);
  
- 	spin_lock_irqsave(&vfe->output_lock, flags);
- 	for (i = 0; i < output->wm_num; i++)
- 		vfe_wm_stop(vfe, output->wm_idx[i]);
-+	output->gen2.active_num = 0;
- 	spin_unlock_irqrestore(&vfe->output_lock, flags);
- 
-+	vfe_reset(vfe);
-+
- 	return 0;
- }
+ 	val = 1 << CSI2_RX_CFG1_PACKET_ECC_CORRECTION_EN;
++	if (vc > 3)
++		val |= 1 << CSI2_RX_CFG1_VC_MODE;
+ 	val |= 1 << CSI2_RX_CFG1_MISR_EN;
+ 	writel_relaxed(val, csid->base + CSID_CSI2_RX_CFG1);
  
 -- 
 2.41.0
