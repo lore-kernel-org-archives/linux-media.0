@@ -2,54 +2,54 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95F7BEE49B8
-	for <linux-media@archiver.kernel.org>; Tue, 22 Aug 2023 20:06:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D573EE49B2
+	for <linux-media@archiver.kernel.org>; Tue, 22 Aug 2023 20:06:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230357AbjHVUGt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 22 Aug 2023 16:06:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40610 "EHLO
+        id S230383AbjHVUGv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 22 Aug 2023 16:06:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230371AbjHVUGq (ORCPT
+        with ESMTP id S230373AbjHVUGp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 22 Aug 2023 16:06:46 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43C4E67
-        for <linux-media@vger.kernel.org>; Tue, 22 Aug 2023 13:06:40 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-31768ce2e81so4356111f8f.1
-        for <linux-media@vger.kernel.org>; Tue, 22 Aug 2023 13:06:40 -0700 (PDT)
+        Tue, 22 Aug 2023 16:06:45 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF1FE4E
+        for <linux-media@vger.kernel.org>; Tue, 22 Aug 2023 13:06:38 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3fee06efd6bso21973415e9.0
+        for <linux-media@vger.kernel.org>; Tue, 22 Aug 2023 13:06:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692734799; x=1693339599;
+        d=linaro.org; s=google; t=1692734797; x=1693339597;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WOQ9tyjj8WPoyJd2gELXd60f8pMhiSuAdrU1RFxkiK0=;
-        b=NRhWoYGl0vaT1VIpGGLxKM0Az3O6eyGSWin2QHJltHbcXtFLWNL/eIARNs4iquTENl
-         OD1JEEfPCVQfZBSuUlj7Lv3Bq7eFpcus/babkN0CPfVFowgzekJj/FYoSFG3GoXsDG2q
-         fF5wVyfCyWwb1Ktv7B7L+jotqvj+dIWc/WUgpOyqIRoRdl8IV0ASYVVHab4fQXqjbN7b
-         S8lcBih0bImNUg2iab4eduB3tX95ASYRjamRXzYJHj7mpTNDTzYaPcQ8lut1NySM+88D
-         KXxEgfeJIQEFpn24iStw0DX3S8nLZ5SAtkYmcwl3VT6YuxScgl6U1FxUcwWGxno3VMxK
-         w4EA==
+        bh=4W80DDZNGe/khXLl1P1oJD7Ws9Jxxl4GH65wXpEW+I0=;
+        b=gTgztgGy9pUJimfjEmJCOR3TUuzn1C7SM2NY3p8LtYt+KnIKh7AehQAxjyi1MRdSjz
+         2AEHZASUrXMVYy/hNBrWxRbJAGj7ohemsnfX0vU/OpVAqh5yOkalG/UdFSt6wdmExEEH
+         XRI1kWt/3AAuv/C4MeeYaRbCKA/H4tOAConUOH7Dqm00vFbLtO0RR0QdL9IwwE26+FsW
+         W1aD1CqZ1keskTyVKWz2NVsA+nxFO2rIPiUU3Gb0iZ4sTkiWtlVEhORtsT7mJ7IKLPBP
+         5BNkyDnFKgT4ELI56wGD7x1wWGwO68Ow5qS1xDO0HJ1k0y0+Dg1EmTSGmHjZ2uHL9c39
+         Y4/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692734799; x=1693339599;
+        d=1e100.net; s=20221208; t=1692734797; x=1693339597;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WOQ9tyjj8WPoyJd2gELXd60f8pMhiSuAdrU1RFxkiK0=;
-        b=kRucel/XJF1L3XrxL5kwTveqsUiyLSzQur18x0PmYX0IchfBbMueZYiKY9VAewmYbt
-         e1vOVf5Tcj8dog2AXrNIcODYbztCBK3ZBN8ra+eFD2TOioxVNqF3OKeytOtKFBTqL1qN
-         YHVh/sG4BfaFqQlhrfocTGvsA9MZDf4rjD7hQiG1JU8hTtf1XtP7o/P+Q7BTA6hg4N0Y
-         VsSMKp7BqI8zCVrBPXffQ2m2WLce2p6UWDXXqLwVPFPsfsy2CLvPD49wFNX//7IOJkdN
-         5w6tQCtj0e5tgoh2sII1x2+2Tyfhu1TDvGp37YiedTGAspvvhLHUncAw5jxOCPhmjEYo
-         CgFQ==
-X-Gm-Message-State: AOJu0YzxEZSyZLr7kjNYhzdL6+jFz4KN6v52pWbgJzTV49SJmiAc1XX9
-        1QBnxEkQeASBfAAxGf2dpZ6Y0Q==
-X-Google-Smtp-Source: AGHT+IGLEjPVvjc3K5kuGPMXw6er1xUF0tDZxVmWr4odTXx7JDkfQBeB7q+0zyHxz79mdzhHnTEq7w==
-X-Received: by 2002:adf:fcca:0:b0:319:85e2:6972 with SMTP id f10-20020adffcca000000b0031985e26972mr7500261wrs.42.1692734799351;
-        Tue, 22 Aug 2023 13:06:39 -0700 (PDT)
+        bh=4W80DDZNGe/khXLl1P1oJD7Ws9Jxxl4GH65wXpEW+I0=;
+        b=AX7Fl+4zwZqeRwBLQxZHnG6FeurjyHQnsgAaRIEgGdXqIU3/tfgELPw9ZtFC3v0Qlq
+         sUJlJnBfRUY8jyE3KVoKg0hiE9aSpc1+uFFJroJocncPeohonBRNpeNXtOhAWMFHf5wY
+         ymaYsawJRXVxqSqZeUULa8tLxrpzhi5DOqVf+EWJH0A/yhBzum5t41cS/bTB7++LcBSC
+         ZW+ifmMY8YkxkOVbDdD62oGDULyjDTv4vrXn7yLQVQCN/ndNKIcBb3YSconIa8WUa41t
+         WYoquP+N9hGH6VntGV4pcqqUbyBSyGok4Lv/suUEmPgpYzkxBthHg3Gof86VDkSlKSaA
+         iKjQ==
+X-Gm-Message-State: AOJu0Yx8v/cxy/FsQL/TxzGvwOXQkxNhZFqGHGoaHZgHZtzlxCq4MQxO
+        a34zoF6Sz9y5QybmZ82uRI9kQA==
+X-Google-Smtp-Source: AGHT+IFBYUFGxtIAxAk2uSJPPGQrrPrF9Iw6Oo1/N2yschbv9Ni528UmOdOalKcEfFMz8WMOqf1ujg==
+X-Received: by 2002:adf:de07:0:b0:319:6b56:94d9 with SMTP id b7-20020adfde07000000b003196b5694d9mr11658665wrm.2.1692734796970;
+        Tue, 22 Aug 2023 13:06:36 -0700 (PDT)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id y12-20020adfee0c000000b0031aeca90e1fsm12873690wrn.70.2023.08.22.13.06.38
+        by smtp.gmail.com with ESMTPSA id y12-20020adfee0c000000b0031aeca90e1fsm12873690wrn.70.2023.08.22.13.06.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Aug 2023 13:06:38 -0700 (PDT)
+        Tue, 22 Aug 2023 13:06:36 -0700 (PDT)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
         agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
@@ -58,9 +58,9 @@ To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
         andrey.konovalov@linaro.org
 Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH v2 8/9] media: qcom: camss: Fix set CSI2_RX_CFG1_VC_MODE when VC is greater than 3
-Date:   Tue, 22 Aug 2023 21:06:25 +0100
-Message-ID: <20230822200626.1931129-9-bryan.odonoghue@linaro.org>
+Subject: [PATCH v2 6/9] media: qcom: camss: Fix missing vfe_lite clocks check
+Date:   Tue, 22 Aug 2023 21:06:23 +0100
+Message-ID: <20230822200626.1931129-7-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230822200626.1931129-1-bryan.odonoghue@linaro.org>
 References: <20230822200626.1931129-1-bryan.odonoghue@linaro.org>
@@ -70,28 +70,30 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-VC_MODE = 0 implies a two bit VC address.
-VC_MODE = 1 is required for VCs with a larger address than two bits.
+check_clock doesn't account for vfe_lite which means that vfe_lite will
+never get validated by this routine. Add the clock name to the expected set
+to remediate.
 
-Fixes: eebe6d00e9bf ("media: camss: Add support for CSID hardware version Titan 170")
+Fixes: 7319cdf189bb ("media: camss: Add support for VFE hardware version Titan 170")
 Cc: stable@vger.kernel.org
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- drivers/media/platform/qcom/camss/camss-csid-gen2.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/platform/qcom/camss/camss-vfe.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-csid-gen2.c b/drivers/media/platform/qcom/camss/camss-csid-gen2.c
-index 45c7986d4a8d0..140c584bfb8b1 100644
---- a/drivers/media/platform/qcom/camss/camss-csid-gen2.c
-+++ b/drivers/media/platform/qcom/camss/camss-csid-gen2.c
-@@ -449,6 +449,8 @@ static void __csid_configure_stream(struct csid_device *csid, u8 enable, u8 vc)
- 	writel_relaxed(val, csid->base + CSID_CSI2_RX_CFG0);
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
+index 938f373bcd1fd..b021f81cef123 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe.c
+@@ -535,7 +535,8 @@ static int vfe_check_clock_rates(struct vfe_device *vfe)
+ 		struct camss_clock *clock = &vfe->clock[i];
  
- 	val = 1 << CSI2_RX_CFG1_PACKET_ECC_CORRECTION_EN;
-+	if (vc > 3)
-+		val |= 1 << CSI2_RX_CFG1_VC_MODE;
- 	val |= 1 << CSI2_RX_CFG1_MISR_EN;
- 	writel_relaxed(val, csid->base + CSID_CSI2_RX_CFG1);
+ 		if (!strcmp(clock->name, "vfe0") ||
+-		    !strcmp(clock->name, "vfe1")) {
++		    !strcmp(clock->name, "vfe1") ||
++		    !strcmp(clock->name, "vfe_lite")) {
+ 			u64 min_rate = 0;
+ 			unsigned long rate;
  
 -- 
 2.41.0
