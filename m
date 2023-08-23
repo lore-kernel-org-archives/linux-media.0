@@ -2,117 +2,214 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3779EE49B0
-	for <linux-media@archiver.kernel.org>; Wed, 23 Aug 2023 10:45:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37C4AEE49A3
+	for <linux-media@archiver.kernel.org>; Wed, 23 Aug 2023 13:16:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234126AbjHWKp7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Aug 2023 06:45:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59384 "EHLO
+        id S235478AbjHWNQT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Aug 2023 09:16:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234127AbjHWKpi (ORCPT
+        with ESMTP id S234149AbjHWNQO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Aug 2023 06:45:38 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C9710E6
-        for <linux-media@vger.kernel.org>; Wed, 23 Aug 2023 03:45:09 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-31c5c06e8bbso2115182f8f.1
-        for <linux-media@vger.kernel.org>; Wed, 23 Aug 2023 03:45:09 -0700 (PDT)
+        Wed, 23 Aug 2023 09:16:14 -0400
+Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87FB5E7C
+        for <linux-media@vger.kernel.org>; Wed, 23 Aug 2023 06:15:47 -0700 (PDT)
+Received: by mail-ua1-x931.google.com with SMTP id a1e0cc1a2514c-79df12ff0f0so1915017241.3
+        for <linux-media@vger.kernel.org>; Wed, 23 Aug 2023 06:15:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692787508; x=1693392308;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=chromium.org; s=google; t=1692796530; x=1693401330;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FIu4eWCkEOSVtI8FoLJRLwwONGivM5mrULXtY5Z5HVI=;
-        b=iR1HQqxeBsupmS+Favm4zTSidm2aT6bx7ajaAl8rBuLII87IivTUcR2VWpznpsDE+R
-         MCfdnWtCmOsEpUaFAl5mFZdQSr8nzotudFoQksQixrFdAXdx+r+oGFa8gWcd6vfaQqsH
-         cVvlFANnHEouAyGGiZvq3xN0gruYNTynKcNGRwn4atmVlAZ8QnqQypDcdx2Qqc2Z0EWz
-         RjY67jKMvacBJSfoIgHgxlCjphiFK106NYNXL14qgECQ67n5RjKd9cLiE7X+L30ngvis
-         eil+bTCkEjRUoc1+IzIpjGuQFZp/chrfKSJ2Q6nrTaVUdpR94GxUzhjg/lx22O4He6hQ
-         rQww==
+        bh=/G4PBhoXP1LYQ2AlkCcJ3ZNZ43XaQmRKac+McL4CLhE=;
+        b=USkM1wPnbKAO9A1ucEyk5mzrVyjGOHAlWrDkX0ej6NRS7PXcnImyFy/ipTLZcBeEof
+         AzJNhc0fciwjeA/z6TiZe6ecKZQy4PGEEXAe2JWSSQ+0pZmZkizYS+GKwbfDLg6/ggCd
+         NuwXkw+aDJxq4kFi8yqGWIwKjLSL3Y52/MREo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692787508; x=1693392308;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1692796530; x=1693401330;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FIu4eWCkEOSVtI8FoLJRLwwONGivM5mrULXtY5Z5HVI=;
-        b=Reo/dPzJgm2Ku7Z0ZWpRTaCKBR23enQjXG2WFSmTJC+hdPP+GgKz6twXtdagKvAEL8
-         khQ9To2Yb43JKMc6rbj42/TVJY/yvt5u07JGm+rUsYDl3Yf8lOV/DjvHMlWGdoSnHkUP
-         REYWdtH6ezhdrDK/kd0QN8nh92R6bNd036WlGxwZHEoWJT2u/3VBUFeIs4WSQAV+8pq0
-         F7fM3cyLFBEqnYZe/2L8QPfLvN1trr05lundvIUZiFtZ1nIeds2BKKdRGUqGKl+QRymF
-         UC9Dnrz0/gb2xc8ZruoHYSgf+PifP4/EhBSzJ8RoNA9WgqEYxsuxY+zyIuXJ39zk5lKS
-         jf8A==
-X-Gm-Message-State: AOJu0YwcxJldcVbhl45AoxFm3+HUMQOApNc9IriSlG24Fxv41N14d81B
-        GMewI5V1nKHF+qWD8+C+LUiocQ==
-X-Google-Smtp-Source: AGHT+IETgiaFMcrE1JfWFkGdddTyYkNG6PjtSRuCyiFhrM+u1c/VD06R+stwPw8nbB17oeoE3yvOFQ==
-X-Received: by 2002:a5d:6949:0:b0:319:7471:2965 with SMTP id r9-20020a5d6949000000b0031974712965mr9485144wrw.21.1692787508218;
-        Wed, 23 Aug 2023 03:45:08 -0700 (PDT)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id n4-20020a5d4204000000b0031c5dda3aedsm6281213wrq.95.2023.08.23.03.45.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Aug 2023 03:45:07 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
-        andrey.konovalov@linaro.org
-Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 15/15] media: qcom: camss: Comment CSID dt_id field
-Date:   Wed, 23 Aug 2023 11:44:44 +0100
-Message-ID: <20230823104444.1954663-16-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230823104444.1954663-1-bryan.odonoghue@linaro.org>
-References: <20230823104444.1954663-1-bryan.odonoghue@linaro.org>
+        bh=/G4PBhoXP1LYQ2AlkCcJ3ZNZ43XaQmRKac+McL4CLhE=;
+        b=aPsdab4HzODp3/GlresJWz7DwfwR7IawDOrgqrnv75muPAJH/WDBxJj0+Q0jgZpMtQ
+         nJDdFS6T+zTew70pmYHFH/ROwp3JUV1HeHk/fjdBHlpzblhC79LQZGrbcrh87m8vLUBw
+         2Yg4i9XpYgC8P16R7wrLZJRzAORWDKYcyCgRjCDd9xxsOw98MpyY1msl/WAuc+aF6ws/
+         OZX0aT0ant6kb4s4lmlBSRetVxTVOMEa3kR+4TgZNc33arxx9ct8svDsRspQ2G9F0qIE
+         gToHB/8+CL2FmwDFMA/+DfEwmN6YqueHPzXvFhFXwpCLZlL6eT3gOLTAfVRvZix0GzZL
+         FHfQ==
+X-Gm-Message-State: AOJu0YzWg4DmBfuEMR+Eihjkiz8a75Nf0uimxpsIpKbY2SckZ9nsP39D
+        1dHAFzI2HDPThkGTvuBA6ortk3fMbYzDWR/i305LVA==
+X-Google-Smtp-Source: AGHT+IHN/YaA7l4VKt/or7nHCjLSnC0Kq1g022S/QCaaik/PWV8njARQrdznReCZTcl1gX046ukGSw==
+X-Received: by 2002:a67:f2d5:0:b0:44d:4160:4f81 with SMTP id a21-20020a67f2d5000000b0044d41604f81mr11056502vsn.1.1692796530274;
+        Wed, 23 Aug 2023 06:15:30 -0700 (PDT)
+Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com. [209.85.222.53])
+        by smtp.gmail.com with ESMTPSA id s8-20020ab04a88000000b007a01f889620sm2028454uae.21.2023.08.23.06.15.29
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Aug 2023 06:15:29 -0700 (PDT)
+Received: by mail-ua1-f53.google.com with SMTP id a1e0cc1a2514c-76d846a4b85so1921374241.1
+        for <linux-media@vger.kernel.org>; Wed, 23 Aug 2023 06:15:29 -0700 (PDT)
+X-Received: by 2002:a67:f988:0:b0:44d:63a3:4be4 with SMTP id
+ b8-20020a67f988000000b0044d63a34be4mr4337218vsq.29.1692796528899; Wed, 23 Aug
+ 2023 06:15:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <029b982f-da62-4fa8-66c4-ab11a515574a@synaptics.com>
+ <CAAFQd5CqAvr7ZUdDSYPEOWSgvbttTBjHa0YWDomxJJSaiZxGog@mail.gmail.com> <f8a168e8-1a23-c6b3-0f68-baa73396d594@synaptics.com>
+In-Reply-To: <f8a168e8-1a23-c6b3-0f68-baa73396d594@synaptics.com>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Wed, 23 Aug 2023 22:15:11 +0900
+X-Gmail-Original-Message-ID: <CAAFQd5A3YKjt03zLQBRvw1QNNqbCyhVzHNo+2mG6uhXJvGv-Wg@mail.gmail.com>
+Message-ID: <CAAFQd5A3YKjt03zLQBRvw1QNNqbCyhVzHNo+2mG6uhXJvGv-Wg@mail.gmail.com>
+Subject: Re: [RFC]: shmem fd for non-DMA buffer sharing cross drivers
+To:     Hsia-Jun Li <Randy.Li@synaptics.com>
+Cc:     linux-mm@kvack.org, dri-devel@lists.freedesktop.org,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        hughd@google.com, akpm@linux-foundation.org,
+        Simon Ser <contact@emersion.fr>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>, daniels@collabora.com,
+        ayaka <ayaka@soulik.info>, linux-kernel@vger.kernel.org,
+        Nicolas Dufresne <nicolas@ndufresne.ca>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Digging into the documentation we find that the DT_ID bitfield is used to
-map the six bit DT to a two bit ID code. This value is concatenated to the
-VC bitfield to create a CID value. DT_ID is the two least significant bits
-of CID and VC the most significant bits.
+On Wed, Aug 23, 2023 at 4:11=E2=80=AFPM Hsia-Jun Li <Randy.Li@synaptics.com=
+> wrote:
+>
+>
+>
+> On 8/23/23 12:46, Tomasz Figa wrote:
+> > CAUTION: Email originated externally, do not click links or open attach=
+ments unless you recognize the sender and know the content is safe.
+> >
+> >
+> > Hi Hsia-Jun,
+> >
+> > On Tue, Aug 22, 2023 at 8:14=E2=80=AFPM Hsia-Jun Li <Randy.Li@synaptics=
+.com> wrote:
+> >>
+> >> Hello
+> >>
+> >> I would like to introduce a usage of SHMEM slimier to DMA-buf, the maj=
+or
+> >> purpose of that is sharing metadata or just a pure container for cross
+> >> drivers.
+> >>
+> >> We need to exchange some sort of metadata between drivers, likes dynam=
+ic
+> >> HDR data between video4linux2 and DRM.
+> >
+> > If the metadata isn't too big, would it be enough to just have the
+> > kernel copy_from_user() to a kernel buffer in the ioctl code?
+> >
+> >> Or the graphics frame buffer is
+> >> too complex to be described with plain plane's DMA-buf fd.
+> >> An issue between DRM and V4L2 is that DRM could only support 4 planes
+> >> while it is 8 for V4L2. It would be pretty hard for DRM to expend its
+> >> interface to support that 4 more planes which would lead to revision o=
+f
+> >> many standard likes Vulkan, EGL.
+> >
+> > Could you explain how a shmem buffer could be used to support frame
+> > buffers with more than 4 planes?
+> > If you are asking why we need this:
 
-Originally we set dt_id = vc * 4 in and then subsequently set dt_id = vc.
+I'm asking how your proposal to use shmem FD solves the problem for those c=
+ases.
 
-commit 3c4ed72a16bc ("media: camss: sm8250: Virtual channels for CSID")
-silently fixed the multiplication by four which would give a better
-value for the generated CID without mentioning what was being done or why.
+> 1. metadata likes dynamic HDR tone data
+> 2. DRM also challenges with this problem, let me quote what sima said:
+> "another trick that we iirc used for afbc is that sometimes the planes
+> have a fixed layout
+> like nv12
+> and so logically it's multiple planes, but you only need one plane slot
+> to describe the buffer
+> since I think afbc had the "we need more than 4 planes" issue too"
+>
+> Unfortunately, there are vendor pixel formats are not fixed layout.
+>
+> 3. Secure(REE, trusted video piepline) info.
+>
+> For how to assign such metadata data.
+> In case with a drm fb_id, it is simple, we just add a drm plane property
+> for it. The V4L2 interface is not flexible, we could only leave into
+> CAPTURE request_fd as a control.
+> >>
+> >> Also, there is no reason to consume a device's memory for the content
+> >> that device can't read it, or wasting an entry of IOMMU for such data.
+> >
+> > That's right, but DMA-buf doesn't really imply any of those. DMA-buf
+> > is just a kernel object with some backing memory. It's up to the
+> > allocator to decide how the backing memory is allocated and up to the
+> > importer on whether it would be mapped into an IOMMU.
+> >
+> I just want to say it can't be allocated at the same place which was for
+> those DMA bufs(graphics or compressed bitstream).
+> This also could be answer for your first question, if we place this kind
+> of buffer in a plane for DMABUF(importing) in V4L2, V4L2 core would try
+> to prepare it, which could map it into IOMMU.
+>
 
-Next up I haplessly changed the value back to "dt_id = vc * 4" since there
-didn't appear to be any logic behind it.
+V4L2 core will prepare it according to the struct device that is given
+to it. For the planes that don't have to go to the hardware a struct
+device could be given that doesn't require any DMA mapping. Also you
+can check how the uvcvideo driver handles it. It doesn't use the vb2
+buffers directly, but always writes to them using CPU (due to how the
+UVC protocol is designed).
 
-Hans asked what the change was for and I honestly couldn't remember the
-provenance of it, so I dug in.
+> >> Usually, such a metadata would be the value should be written to a
+> >> hardware's registers, a 4KiB page would be 1024 items of 32 bits regis=
+ters.
+> >>
+> >> Still, I have some problems with SHMEM:
+> >> 1. I don't want the userspace modify the context of the SHMEM allocate=
+d
+> >> by the kernel, is there a way to do so?
+> >
+> > This is generally impossible without doing any of the two:
+> > 1) copying the contents to an internal buffer not accessible to the
+> > userspace, OR
+> > 2) modifying any of the buffer mappings to read-only
+> >
+> > 2) can actually be more costly than 1) (depending on the architecture,
+> > data size, etc.), so we shouldn't just discard the option of a simple
+> > copy_from_user() in the ioctl.
+> >
+> I don't want the userspace access it at all. So that won't be a problem.
 
-Link: https://lore.kernel.org/linux-arm-msm/edd4bf9b-0e1b-883c-1a4d-50f4102c3924@xs4all.nl/
+In this case, wouldn't it be enough to have a DMA-buf exporter that
+doesn't provide the mmap op?
 
-Add a comment so the next hapless programmer doesn't make this same
-mistake.
+> >> 2. Should I create a helper function for installing the SHMEM file as =
+a fd?
+> >
+> > We already have the udmabuf device [1] to turn a memfd into a DMA-buf,
+> > so maybe that would be enough?
+> >
+> > [1] https://elixir.bootlin.com/linux/v6.5-rc7/source/drivers/dma-buf/ud=
+mabuf.c
+> >
+> It is the kernel driver that allocate this buffer. For example, v4l2
+> CAPTURE allocate a buffer for metadata when VIDIOC_REQBUFS.
+> Or GBM give you a fd which is assigned with a surface.
+>
+> So we need a kernel interface.
 
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- drivers/media/platform/qcom/camss/camss-csid-gen2.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Sorry, I'm confused. If we're talking about buffers allocated by the
+specific allocators like V4L2 or GBM, why do we need SHMEM at all?
 
-diff --git a/drivers/media/platform/qcom/camss/camss-csid-gen2.c b/drivers/media/platform/qcom/camss/camss-csid-gen2.c
-index 6ba2b10326444..cee50fc87e9de 100644
---- a/drivers/media/platform/qcom/camss/camss-csid-gen2.c
-+++ b/drivers/media/platform/qcom/camss/camss-csid-gen2.c
-@@ -352,6 +352,11 @@ static void __csid_configure_stream(struct csid_device *csid, u8 enable, u8 vc)
- 		phy_sel = csid->phy.csiphy_id;
- 
- 	if (enable) {
-+		/*
-+		 * A value caled 'CID' gets generated internal to CAMSS logic
-+		 * which is a concatenation of [vc:6 | dt_id:2] hence we reuse
-+		 * the least significant two bits of the VC to 'stuff' the CID value.
-+		 */
- 		u8 dt_id = vc;
- 
- 		if (tg->enabled) {
--- 
-2.41.0
+Best,
+Tomasz
 
+> > Best,
+> > Tomasz
+> >
+> >>
+> >> --
+> >> Hsia-Jun(Randy) Li
+>
+> --
+> Hsia-Jun(Randy) Li
