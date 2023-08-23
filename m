@@ -2,90 +2,89 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E7B9EE49AE
-	for <linux-media@archiver.kernel.org>; Wed, 23 Aug 2023 09:20:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16C0DEE4993
+	for <linux-media@archiver.kernel.org>; Wed, 23 Aug 2023 09:21:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234966AbjHWJUX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Aug 2023 05:20:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54792 "EHLO
+        id S234920AbjHWJVW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Aug 2023 05:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235484AbjHWJSV (ORCPT
+        with ESMTP id S233121AbjHWJTe (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Aug 2023 05:18:21 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C57351FF3
-        for <linux-media@vger.kernel.org>; Wed, 23 Aug 2023 01:56:14 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-986d8332f50so715314566b.0
-        for <linux-media@vger.kernel.org>; Wed, 23 Aug 2023 01:56:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692780973; x=1693385773;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vs7TYRhEZae23BHcIvi2Ln4wVlirirYZRQLMvBSgBWU=;
-        b=qan7IvYVFvpkudj1oCiCGUjwxzOASjonXBBDFM8N4bBUqjb2EjGk3gkublwDEuHFYM
-         93f1UR1UGYryn5tHmLwJuKpyHblWld0eglXTmc8jaaGS+59lpKV6X2mMRN0w+Hi7w7n3
-         B4AgxIpo2jacUJSDl9r9s0byvqoP8q8O4jXDq7NHFJR3fysMXBGuqxADvI2UmZgrYgWL
-         Cx+iIItLq6/+R7BcykLQEa3m8MjMSOUvi5/L/mMXH79apUk/QrmH877zMl3M/q5/5btd
-         OrIUNiEy0s9YJlciBJeBe8FRdbPDo6u/AFBln797VUpKRTGPWt+N7pM3gvqlnUaAxHwq
-         xu0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692780973; x=1693385773;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vs7TYRhEZae23BHcIvi2Ln4wVlirirYZRQLMvBSgBWU=;
-        b=GXV2Z4FKsUFTD7FGVZW0srvBah0Q76CjS+FkAlDOiENJ0bte01vPWTfTyyBq+BIhbj
-         DlDMGr5C1fuyYnN69k1lb8MUsCzJCGISDH1NiEkSIwaWWoAvrlITlOfT9iSL2G611yTs
-         JihA/weFU0vV7Jiv8rtxxP0/ZhbnW2mlq94FUJgO5iPWi6NsovDMK7qASZGYxf9RY5cK
-         WX39LhZrMPCYXVUSFwwDzV3tivlagQBkDsDz3qwDlNMRcBrRYyVByem+psKW/N53juTL
-         FC5lg+dv+P4BgV7hAs1cCDHQOhMWxlP8lxzlKkHs7gKcTx2sc7hrzqPEyLYeBAQEu28Z
-         rDrg==
-X-Gm-Message-State: AOJu0YyJz3eI3shpAKk53RcgxCOwNitenPod+hP7nsKYrf17kGDSPRPv
-        yXE/0XcACtBz52iMlbFF39wtig==
-X-Google-Smtp-Source: AGHT+IFl4ErBydRgH3o+szBhieEObFyJk2W1qgdlEGWyQ2DuJPK2W+Wat1TPa0oQjMvvp+JQX7n08Q==
-X-Received: by 2002:a17:907:2bf7:b0:9a1:ad87:1354 with SMTP id gv55-20020a1709072bf700b009a1ad871354mr4511261ejc.34.1692780973398;
-        Wed, 23 Aug 2023 01:56:13 -0700 (PDT)
-Received: from krzk-bin.. ([77.252.47.198])
-        by smtp.gmail.com with ESMTPSA id lc21-20020a170906dff500b0099cc15f09a0sm9525260ejc.55.2023.08.23.01.56.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Aug 2023 01:56:12 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] media: platform: use capital "OR" for multiple licenses in SPDX
-Date:   Wed, 23 Aug 2023 10:56:10 +0200
-Message-Id: <20230823085610.116607-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Wed, 23 Aug 2023 05:19:34 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA3AE79
+        for <linux-media@vger.kernel.org>; Wed, 23 Aug 2023 02:09:17 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 509D75A4;
+        Wed, 23 Aug 2023 11:07:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1692781677;
+        bh=zFXXiGAHYuEfcmAXLQrkjv/SBwm9OA2kUrIpDzKuqJU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rVl9Hby4ptd1QmIs4WWmDd4Z0oD5fqPATfsa7W3y51CghDK+W0LVkwD803ZUWA5jS
+         jBfk4BtsQXIr5YqH22qGN6Pfrr2UarIvk/VSaXMBULfSw+/yRCb6ATYRcd1UKu0YwX
+         h3svZSzxdfe8QSuyPMw98vyLVleR32JYIakCZmSQ=
+Date:   Wed, 23 Aug 2023 12:09:21 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-media@vger.kernel.org, hverkuil@xs4all.nl
+Subject: Re: [PATCH 1/1] media: v4l2-mc: Make v4l2_pipeline_pm_{get,put}
+ deprecated
+Message-ID: <20230823090921.GF4143@pendragon.ideasonboard.com>
+References: <20230823090600.3872867-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230823090600.3872867-1-sakari.ailus@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Documentation/process/license-rules.rst and checkpatch expect the SPDX
-identifier syntax for multiple licenses to use capital "OR".  Correct it
-to keep consistent format and avoid copy-paste issues.
+Hi Sakari,
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/media/platform/verisilicon/rockchip_av1_filmgrain.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thank you for the patch.
 
-diff --git a/drivers/media/platform/verisilicon/rockchip_av1_filmgrain.c b/drivers/media/platform/verisilicon/rockchip_av1_filmgrain.c
-index f2ae84f0b436..f64dea797eff 100644
---- a/drivers/media/platform/verisilicon/rockchip_av1_filmgrain.c
-+++ b/drivers/media/platform/verisilicon/rockchip_av1_filmgrain.c
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0-only or Apache-2.0
-+// SPDX-License-Identifier: GPL-2.0-only OR Apache-2.0
- 
- #include "rockchip_av1_filmgrain.h"
- 
+On Wed, Aug 23, 2023 at 12:06:00PM +0300, Sakari Ailus wrote:
+> The v4l2_pipeline_pm_get() and v4l2_pipeline_pm_put() functions were
+> needed to control sub-devices' power states before runtime PM. These
+> functions should no longer be used, and instead sub-device drivers should
+> use runtime PM.
+> 
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> ---
+>  include/media/v4l2-mc.h | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/include/media/v4l2-mc.h b/include/media/v4l2-mc.h
+> index b39586dfba35..ed0a44b6eada 100644
+> --- a/include/media/v4l2-mc.h
+> +++ b/include/media/v4l2-mc.h
+> @@ -143,6 +143,9 @@ int v4l2_create_fwnode_links(struct v4l2_subdev *src_sd,
+>   * v4l2_pipeline_pm_get - Increase the use count of a pipeline
+>   * @entity: The root entity of a pipeline
+>   *
+> + * THIS FUNCTION IS DEPRECATED. DO NOT USE IN NEW DRIVERS. USE RUNTIME PM
+> + * ON SUB-DEVICE DRIVERS INSTEAD.
+> + *
+>   * Update the use count of all entities in the pipeline and power entities on.
+>   *
+>   * This function is intended to be called in video node open. It uses
+> @@ -157,6 +160,9 @@ int v4l2_pipeline_pm_get(struct media_entity *entity);
+>   * v4l2_pipeline_pm_put - Decrease the use count of a pipeline
+>   * @entity: The root entity of a pipeline
+>   *
+> + * THIS FUNCTION IS DEPRECATED. DO NOT USE IN NEW DRIVERS. USE RUNTIME PM
+> + * ON SUB-DEVICE DRIVERS INSTEAD.
+> + *
+>   * Update the use count of all entities in the pipeline and power entities off.
+>   *
+>   * This function is intended to be called in video node release. It uses
+
 -- 
-2.34.1
+Regards,
 
+Laurent Pinchart
