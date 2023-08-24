@@ -2,121 +2,108 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7AB4C3DA6F
-	for <linux-media@archiver.kernel.org>; Thu, 24 Aug 2023 07:43:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 577B0C6FA8F
+	for <linux-media@archiver.kernel.org>; Thu, 24 Aug 2023 08:02:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235958AbjHXHnF convert rfc822-to-8bit (ORCPT
+        id S234549AbjHXIBt convert rfc822-to-8bit (ORCPT
         <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 24 Aug 2023 03:43:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40662 "EHLO
+        Thu, 24 Aug 2023 04:01:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240429AbjHXHml (ORCPT
+        with ESMTP id S234205AbjHXIBT (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 24 Aug 2023 03:42:41 -0400
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C7A170A;
-        Thu, 24 Aug 2023 00:42:26 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-bcb6dbc477eso5955730276.1;
-        Thu, 24 Aug 2023 00:42:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692862929; x=1693467729;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dhv4Bg1fdD4fcuHP4DlJnIZ9JdHOfbSov1NYQWp3Ek8=;
-        b=AUkWWfX/zFe56Yxj+BNMG9GYZd670gyfSKx962grd7skql98XJFT6sYafeF+K5Z5UT
-         uOSKmvz4SSZIBuz5mqlJIuCg1m7IThElJhOyVuw3ickhoASJp57LSq/vhONcjoAzu5DS
-         fJuAxaKSWp9TpgL6jR3raPzeb5LyRJKMzifsIEdYLoKXmiPpU6Qfxu/lmAHFtsYOm+cL
-         DA26NRyOTLp4V8sfKm1CH9KnnpgoD1ArDN88uQ2GUXJ/q7zmPf9FaW3o0Ws2OXLChTub
-         FKdW2N+Kp3V2QocRbp7vgkdQBkENXTXCCyC8bqGPrQelFUg6dYk1WS8VekSuws3VXTt9
-         ipig==
-X-Gm-Message-State: AOJu0Yx9vL8zg2n+aLaEmW1xcn/9o7fif0DG/MxgpsxjIpyozYQSjt2+
-        1CGVEXxp2jYf0iYPVcQKqxHj8MGbeILy8w==
-X-Google-Smtp-Source: AGHT+IFHvPS0ch0Ft+QoIRmYP0ssAD5Obu+K54gJyP4DyMVpin6CXenCeFQLr0zMO2e8H5nv/tKibg==
-X-Received: by 2002:a81:dd02:0:b0:58f:afe5:4c16 with SMTP id e2-20020a81dd02000000b0058fafe54c16mr15233630ywn.30.1692862928821;
-        Thu, 24 Aug 2023 00:42:08 -0700 (PDT)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id i127-20020a819185000000b0058c4e33b2d6sm3798266ywg.90.2023.08.24.00.42.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Aug 2023 00:42:08 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-d77f614243aso478610276.0;
-        Thu, 24 Aug 2023 00:42:08 -0700 (PDT)
-X-Received: by 2002:a25:ae92:0:b0:d3b:e659:5331 with SMTP id
- b18-20020a25ae92000000b00d3be6595331mr14472125ybj.58.1692862928507; Thu, 24
- Aug 2023 00:42:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230823183749.2609013-1-robh@kernel.org>
-In-Reply-To: <20230823183749.2609013-1-robh@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 24 Aug 2023 09:41:56 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWSrpjUK4Fa9cBiRqsnhh2GxyXK5fCt8B-RmaDgEy6OeA@mail.gmail.com>
-Message-ID: <CAMuHMdWSrpjUK4Fa9cBiRqsnhh2GxyXK5fCt8B-RmaDgEy6OeA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Drop remaining unneeded quotes
-To:     Rob Herring <robh@kernel.org>
-Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        James Clark <james.clark@arm.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thu, 24 Aug 2023 04:01:19 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FAC170B;
+        Thu, 24 Aug 2023 01:01:15 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 5DF998159;
+        Thu, 24 Aug 2023 16:01:13 +0800 (CST)
+Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 24 Aug
+ 2023 16:01:13 +0800
+Received: from xiaofei.localdomain (180.164.60.184) by EXMBX073.cuchost.com
+ (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 24 Aug
+ 2023 16:01:12 +0800
+From:   Jack Zhu <jack.zhu@starfivetech.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        <bryan.odonoghue@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andy@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Corey Minyard <minyard@acm.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        M ark Brown <broonie@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org,
-        linux-iio@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        alsa-devel@alsa-project.org, linux-scsi@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-staging@lists.linux.dev>,
+        <jack.zhu@starfivetech.com>, <changhuang.liang@starfivetech.com>
+Subject: [PATCH v8 7/8] media: staging: media: starfive: camss: Add interrupt handling
+Date:   Thu, 24 Aug 2023 16:01:08 +0800
+Message-ID: <20230824080109.89613-8-jack.zhu@starfivetech.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230824080109.89613-1-jack.zhu@starfivetech.com>
+References: <20230824080109.89613-1-jack.zhu@starfivetech.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [180.164.60.184]
+X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX073.cuchost.com
+ (172.16.6.83)
+X-YovoleRuleAgent: yovoleflag
 Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Aug 23, 2023 at 8:38 PM Rob Herring <robh@kernel.org> wrote:
-> Cleanup bindings dropping the last remaining unneeded quotes. With this,
-> the check for this can be enabled in yamllint.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
+Parse interrupt resources and register interrupt handlers.
 
->  .../bindings/soc/renesas/renesas,rzg2l-sysc.yaml     |  4 ++--
+Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
+---
+ .../staging/media/starfive/camss/stf_camss.c  | 21 +++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
+diff --git a/drivers/staging/media/starfive/camss/stf_camss.c b/drivers/staging/media/starfive/camss/stf_camss.c
+index 75ebc3a35218..918b8b2a7713 100644
+--- a/drivers/staging/media/starfive/camss/stf_camss.c
++++ b/drivers/staging/media/starfive/camss/stf_camss.c
+@@ -35,6 +35,12 @@ static const char * const stfcamss_resets[] = {
+ 	"rst_isp_top_axi",
+ };
+ 
++static const struct stf_isr_data stf_isrs[] = {
++	{"wr_irq", stf_wr_irq_handler},
++	{"isp_irq", stf_isp_irq_handler},
++	{"line_irq", stf_line_irq_handler},
++};
++
+ static int stfcamss_get_mem_res(struct stfcamss *stfcamss)
+ {
+ 	struct platform_device *pdev = to_platform_device(stfcamss->dev);
+@@ -157,6 +163,21 @@ static int stfcamss_probe(struct platform_device *pdev)
+ 
+ 	stfcamss->dev = dev;
+ 
++	for (i = 0; i < ARRAY_SIZE(stf_isrs); ++i) {
++		int irq;
++
++		irq = platform_get_irq(pdev, i);
++		if (irq < 0)
++			return irq;
++
++		ret = devm_request_irq(stfcamss->dev, irq, stf_isrs[i].isr, 0,
++				       stf_isrs[i].name, stfcamss);
++		if (ret) {
++			dev_err(dev, "request irq failed: %d\n", ret);
++			return ret;
++		}
++	}
++
+ 	stfcamss->nclks = ARRAY_SIZE(stfcamss->sys_clk);
+ 	for (i = 0; i < stfcamss->nclks; ++i)
+ 		stfcamss->sys_clk[i].id = stfcamss_clocks[i];
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.34.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
