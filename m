@@ -2,28 +2,28 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 943E1EE49B2
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 616F1EE49A6
 	for <linux-media@archiver.kernel.org>; Thu, 24 Aug 2023 08:02:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240265AbjHXIBw convert rfc822-to-8bit (ORCPT
+        id S239358AbjHXIBv convert rfc822-to-8bit (ORCPT
         <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 24 Aug 2023 04:01:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36756 "EHLO
+        Thu, 24 Aug 2023 04:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236847AbjHXIBV (ORCPT
+        with ESMTP id S237043AbjHXIBV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 24 Aug 2023 04:01:21 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7EDF1724;
-        Thu, 24 Aug 2023 01:01:18 -0700 (PDT)
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 165A2171C;
+        Thu, 24 Aug 2023 01:01:16 -0700 (PDT)
 Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
         (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id EE9BB814B;
-        Thu, 24 Aug 2023 16:01:11 +0800 (CST)
+        by ex01.ufhost.com (Postfix) with ESMTP id 9267C24E33E;
+        Thu, 24 Aug 2023 16:01:12 +0800 (CST)
 Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX165.cuchost.com
  (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 24 Aug
- 2023 16:01:11 +0800
+ 2023 16:01:12 +0800
 Received: from xiaofei.localdomain (180.164.60.184) by EXMBX073.cuchost.com
  (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 24 Aug
  2023 16:01:11 +0800
@@ -41,9 +41,9 @@ To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
 CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-staging@lists.linux.dev>,
         <jack.zhu@starfivetech.com>, <changhuang.liang@starfivetech.com>
-Subject: [PATCH v8 2/8] media: admin-guide: Add starfive_camss.rst for Starfive Camera Subsystem
-Date:   Thu, 24 Aug 2023 16:01:03 +0800
-Message-ID: <20230824080109.89613-3-jack.zhu@starfivetech.com>
+Subject: [PATCH v8 4/8] media: staging: media: starfive: camss: Add video driver
+Date:   Thu, 24 Aug 2023 16:01:05 +0800
+Message-ID: <20230824080109.89613-5-jack.zhu@starfivetech.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230824080109.89613-1-jack.zhu@starfivetech.com>
 References: <20230824080109.89613-1-jack.zhu@starfivetech.com>
@@ -58,139 +58,699 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add starfive_camss.rst file that documents the Starfive Camera
-Subsystem driver which is used for handing image sensor data.
+Add video driver for StarFive Camera Subsystem.
 
 Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
 ---
- .../admin-guide/media/starfive_camss.rst      | 72 +++++++++++++++++++
- .../media/starfive_camss_graph.dot            | 12 ++++
- .../admin-guide/media/v4l-drivers.rst         |  1 +
- MAINTAINERS                                   |  1 +
- 4 files changed, 86 insertions(+)
- create mode 100644 Documentation/admin-guide/media/starfive_camss.rst
- create mode 100644 Documentation/admin-guide/media/starfive_camss_graph.dot
+ drivers/staging/media/starfive/camss/Makefile |   3 +-
+ .../staging/media/starfive/camss/stf_video.c  | 557 ++++++++++++++++++
+ .../staging/media/starfive/camss/stf_video.h  | 100 ++++
+ 3 files changed, 659 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/staging/media/starfive/camss/stf_video.c
+ create mode 100644 drivers/staging/media/starfive/camss/stf_video.h
 
-diff --git a/Documentation/admin-guide/media/starfive_camss.rst b/Documentation/admin-guide/media/starfive_camss.rst
-new file mode 100644
-index 000000000000..ca42e9447c47
---- /dev/null
-+++ b/Documentation/admin-guide/media/starfive_camss.rst
-@@ -0,0 +1,72 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+.. include:: <isonum.txt>
-+
-+================================
-+Starfive Camera Subsystem driver
-+================================
-+
-+Introduction
-+------------
-+
-+This file documents the driver for the Starfive Camera Subsystem found on
-+Starfive JH7110 SoC. The driver is located under drivers/staging/media/starfive/
-+camss.
-+
-+The driver implements V4L2, Media controller and v4l2_subdev interfaces. Camera
-+sensor using V4L2 subdev interface in the kernel is supported.
-+
-+The driver has been successfully used on the Gstreamer 1.18.5 with v4l2src
-+plugin.
-+
-+
-+Starfive Camera Subsystem hardware
-+----------------------------------
-+
-+The Starfive Camera Subsystem hardware consists of::
-+
-+                    |\         +---------------+      +-----------+
-+  +----------+      |  \       |               |      |           |
-+  |          |      |   |      |               |      |           |
-+  |   MIPI   |----->|   |----->|      ISP      |----->|           |
-+  |          |      |   |      |               |      |           |
-+  +----------+      |   |      |               |      |  Memory   |
-+                    |MUX|      +---------------+      | Interface |
-+  +----------+      |   |                             |           |
-+  |          |      |   |---------------------------->|           |
-+  | Parallel |----->|   |                             |           |
-+  |          |      |   |                             |           |
-+  +----------+      |  /                              |           |
-+                    |/                                +-----------+
-+
-+- MIPI: The MIPI interface, receiving data from a MIPI CSI-2 camera sensor.
-+
-+- Parallel: The parallel interface,  receiving data from a parallel sensor.
-+
-+- ISP: The ISP, processing raw Bayer data from an image sensor and producing
-+  YUV frames.
-+
-+
-+Topology
-+--------
-+
-+The media controller pipeline graph is as follows:
-+
-+.. _starfive_camss_graph:
-+
-+.. kernel-figure:: starfive_camss_graph.dot
-+    :alt:   starfive_camss_graph.dot
-+    :align: center
-+
-+The driver has 2 video devices:
-+
-+- capture_raw: The capture device, capturing image data directly from a sensor.
-+- capture_yuv: The capture device, capturing YUV frame data processed by the
-+  ISP module
-+
-+The driver has 3 subdevices:
-+
-+- stf_isp: is responsible for all the isp operations, outputs YUV frames.
-+- cdns_csi2rx: a CSI-2 bridge supporting up to 4 CSI lanes in input, and 4
-+  different pixel streams in output.
-+- imx219: an image sensor, image data is sent through MIPI CSI-2.
-diff --git a/Documentation/admin-guide/media/starfive_camss_graph.dot b/Documentation/admin-guide/media/starfive_camss_graph.dot
-new file mode 100644
-index 000000000000..8eff1f161ac7
---- /dev/null
-+++ b/Documentation/admin-guide/media/starfive_camss_graph.dot
-@@ -0,0 +1,12 @@
-+digraph board {
-+	rankdir=TB
-+	n00000001 [label="{{<port0> 0} | stf_isp\n/dev/v4l-subdev0 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
-+	n00000001:port1 -> n00000008 [style=dashed]
-+	n00000004 [label="capture_raw\n/dev/video0", shape=box, style=filled, fillcolor=yellow]
-+	n00000008 [label="capture_yuv\n/dev/video1", shape=box, style=filled, fillcolor=yellow]
-+	n0000000e [label="{{<port0> 0} | cdns_csi2rx.19800000.csi-bridge\n | {<port1> 1 | <port2> 2 | <port3> 3 | <port4> 4}}", shape=Mrecord, style=filled, fillcolor=green]
-+	n0000000e:port1 -> n00000001:port0 [style=dashed]
-+	n0000000e:port1 -> n00000004 [style=dashed]
-+	n00000018 [label="{{} | imx219 6-0010\n/dev/v4l-subdev1 | {<port0> 0}}", shape=Mrecord, style=filled, fillcolor=green]
-+	n00000018:port0 -> n0000000e:port0 [style=bold]
-+}
-diff --git a/Documentation/admin-guide/media/v4l-drivers.rst b/Documentation/admin-guide/media/v4l-drivers.rst
-index 1c41f87c3917..2274fd29c1d7 100644
---- a/Documentation/admin-guide/media/v4l-drivers.rst
-+++ b/Documentation/admin-guide/media/v4l-drivers.rst
-@@ -27,6 +27,7 @@ Video4Linux (V4L) driver-specific documentation
- 	si470x
- 	si4713
- 	si476x
-+	starfive_camss
- 	vimc
- 	visl
- 	vivid
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a2263f9bbead..4c63c0a85301 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -20256,6 +20256,7 @@ M:	Jack Zhu <jack.zhu@starfivetech.com>
- M:	Changhuang Liang <changhuang.liang@starfivetech.com>
- L:	linux-media@vger.kernel.org
- S:	Maintained
-+F:	Documentation/admin-guide/media/starfive_camss.rst
- F:	Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+diff --git a/drivers/staging/media/starfive/camss/Makefile b/drivers/staging/media/starfive/camss/Makefile
+index f53c5cbe958f..eb457917a914 100644
+--- a/drivers/staging/media/starfive/camss/Makefile
++++ b/drivers/staging/media/starfive/camss/Makefile
+@@ -4,6 +4,7 @@
+ #
  
- STARFIVE CRYPTO DRIVER
+ starfive-camss-objs += \
+-		stf_camss.o
++		stf_camss.o \
++		stf_video.o
+ 
+ obj-$(CONFIG_VIDEO_STARFIVE_CAMSS) += starfive-camss.o
+diff --git a/drivers/staging/media/starfive/camss/stf_video.c b/drivers/staging/media/starfive/camss/stf_video.c
+new file mode 100644
+index 000000000000..bf00f6a1e611
+--- /dev/null
++++ b/drivers/staging/media/starfive/camss/stf_video.c
+@@ -0,0 +1,557 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * stf_video.c
++ *
++ * StarFive Camera Subsystem - V4L2 device node
++ *
++ * Copyright (C) 2021-2023 StarFive Technology Co., Ltd.
++ */
++
++#include <linux/pm_runtime.h>
++#include <media/v4l2-ctrls.h>
++#include <media/v4l2-event.h>
++#include <media/v4l2-mc.h>
++#include <media/videobuf2-dma-contig.h>
++
++#include "stf_camss.h"
++#include "stf_video.h"
++
++/* -----------------------------------------------------------------------------
++ * Helper functions
++ */
++
++static inline struct stfcamss_buffer *
++to_stfcamss_buffer(struct vb2_v4l2_buffer *vbuf)
++{
++	return container_of(vbuf, struct stfcamss_buffer, vb);
++}
++
++static const struct stfcamss_format_info *
++video_g_fi_by_index(struct stfcamss_video *video, int index)
++{
++	if (index >= video->nformats)
++		return NULL;
++
++	return &video->formats[index];
++}
++
++static const struct stfcamss_format_info *
++video_g_fi_by_mcode(struct stfcamss_video *video, u32 mcode)
++{
++	unsigned int i;
++
++	for (i = 0; i < video->nformats; i++) {
++		if (video->formats[i].code == mcode)
++			return &video->formats[i];
++	}
++
++	return NULL;
++}
++
++static const struct stfcamss_format_info *
++video_g_fi_by_pfmt(struct stfcamss_video *video, u32 pixelformat)
++{
++	unsigned int i;
++
++	for (i = 0; i < video->nformats; i++) {
++		if (video->formats[i].pixelformat == pixelformat)
++			return &video->formats[i];
++	}
++
++	return NULL;
++}
++
++static int __video_try_fmt(struct stfcamss_video *video, struct v4l2_format *f)
++{
++	struct v4l2_pix_format *pix = &f->fmt.pix;
++	const struct stfcamss_format_info *fi;
++	u32 width, height;
++	u32 bpl;
++	unsigned int i;
++
++	fi = video_g_fi_by_pfmt(video, pix->pixelformat);
++	if (!fi)
++		fi = &video->formats[0]; /* default format */
++
++	width = pix->width;
++	height = pix->height;
++
++	memset(pix, 0, sizeof(*pix));
++
++	pix->pixelformat = fi->pixelformat;
++	pix->width = clamp_t(u32, width, STFCAMSS_FRAME_MIN_WIDTH,
++			     STFCAMSS_FRAME_MAX_WIDTH);
++	pix->height = clamp_t(u32, height, STFCAMSS_FRAME_MIN_HEIGHT,
++			      STFCAMSS_FRAME_MAX_HEIGHT);
++	bpl = pix->width * fi->bpp / 8;
++	bpl = ALIGN(bpl, video->bpl_alignment);
++	pix->bytesperline = bpl;
++
++	for (i = 0; i < fi->planes; ++i)
++		pix->sizeimage += bpl * pix->height / fi->vsub[i];
++
++	pix->field = V4L2_FIELD_NONE;
++	pix->colorspace = V4L2_COLORSPACE_SRGB;
++	pix->flags = 0;
++	pix->ycbcr_enc =
++		V4L2_MAP_YCBCR_ENC_DEFAULT(pix->colorspace);
++	pix->quantization = V4L2_MAP_QUANTIZATION_DEFAULT(true,
++							  pix->colorspace,
++							  pix->ycbcr_enc);
++	pix->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(pix->colorspace);
++
++	return 0;
++}
++
++static int stf_video_init_format(struct stfcamss_video *video)
++{
++	int ret;
++	struct v4l2_format format = {
++		.type = video->type,
++		.fmt.pix = {
++			.width = 1920,
++			.height = 1080,
++			.pixelformat = V4L2_PIX_FMT_NV12,
++		},
++	};
++
++	ret = __video_try_fmt(video, &format);
++
++	if (ret < 0)
++		return ret;
++
++	video->active_fmt = format;
++
++	return 0;
++}
++
++/* -----------------------------------------------------------------------------
++ * Video queue operations
++ */
++
++static int video_queue_setup(struct vb2_queue *q,
++			     unsigned int *num_buffers,
++			     unsigned int *num_planes,
++			     unsigned int sizes[],
++			     struct device *alloc_devs[])
++{
++	struct stfcamss_video *video = vb2_get_drv_priv(q);
++	const struct v4l2_pix_format *format = &video->active_fmt.fmt.pix;
++
++	if (*num_planes) {
++		if (*num_planes != 1)
++			return -EINVAL;
++
++		if (sizes[0] < format->sizeimage)
++			return -EINVAL;
++	}
++
++	*num_planes = 1;
++	sizes[0] = format->sizeimage;
++	if (!sizes[0]) {
++		dev_dbg(video->stfcamss->dev,
++			"%s: error size is zero.\n", __func__);
++		return -EINVAL;
++	}
++
++	dev_dbg(video->stfcamss->dev, "planes = %d, size = %d\n",
++		*num_planes, sizes[0]);
++
++	return 0;
++}
++
++static int video_buf_init(struct vb2_buffer *vb)
++{
++	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++	struct stfcamss_video *video = vb2_get_drv_priv(vb->vb2_queue);
++	struct stfcamss_buffer *buffer = to_stfcamss_buffer(vbuf);
++	const struct v4l2_pix_format *fmt = &video->active_fmt.fmt.pix;
++	dma_addr_t *paddr;
++
++	paddr = vb2_plane_cookie(vb, 0);
++	buffer->addr[0] = *paddr;
++
++	if (fmt->pixelformat == V4L2_PIX_FMT_NV12)
++		buffer->addr[1] =
++			buffer->addr[0] + fmt->bytesperline * fmt->height;
++
++	return 0;
++}
++
++static int video_buf_prepare(struct vb2_buffer *vb)
++{
++	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++	struct stfcamss_video *video = vb2_get_drv_priv(vb->vb2_queue);
++	const struct v4l2_pix_format *fmt = &video->active_fmt.fmt.pix;
++
++	if (fmt->sizeimage > vb2_plane_size(vb, 0)) {
++		dev_dbg(video->stfcamss->dev,
++			"sizeimage = %u, plane size = %u\n",
++			fmt->sizeimage, (unsigned int)vb2_plane_size(vb, 0));
++		return -EINVAL;
++	}
++	vb2_set_plane_payload(vb, 0, fmt->sizeimage);
++
++	vbuf->field = V4L2_FIELD_NONE;
++
++	return 0;
++}
++
++static void video_buf_queue(struct vb2_buffer *vb)
++{
++	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++	struct stfcamss_video *video = vb2_get_drv_priv(vb->vb2_queue);
++	struct stfcamss_buffer *buffer = to_stfcamss_buffer(vbuf);
++
++	video->ops->queue_buffer(video, buffer);
++}
++
++static int video_get_subdev_format(struct stfcamss_video *video,
++				   struct v4l2_subdev_format *fmt)
++{
++	struct v4l2_subdev *subdev;
++	struct media_pad *pad;
++	struct media_entity *entity;
++	int ret;
++
++	entity = &video->vdev.entity;
++	while (1) {
++		pad = &entity->pads[0];
++		if (!(pad->flags & MEDIA_PAD_FL_SINK))
++			break;
++
++		pad = media_pad_remote_pad_first(pad);
++		if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
++			break;
++
++		entity = pad->entity;
++		subdev = media_entity_to_v4l2_subdev(entity);
++
++		fmt->pad = pad->index;
++		fmt->which = V4L2_SUBDEV_FORMAT_ACTIVE;
++
++		ret = v4l2_subdev_call_state_active(subdev, pad, get_fmt, fmt);
++		if (ret < 0 && ret != -ENOIOCTLCMD)
++			return ret;
++		else if (!ret)
++			break;
++	}
++
++	return 0;
++}
++
++static int video_check_format(struct stfcamss_video *video)
++{
++	struct v4l2_pix_format *pix = &video->active_fmt.fmt.pix;
++	struct v4l2_subdev_format sd_fmt;
++	const struct stfcamss_format_info *fi;
++	int ret;
++
++	ret = video_get_subdev_format(video, &sd_fmt);
++	if (ret < 0)
++		return ret;
++
++	fi = video_g_fi_by_mcode(video, sd_fmt.format.code);
++	if (!fi)
++		return -EINVAL;
++
++	if (pix->pixelformat != fi->pixelformat ||
++	    pix->height != sd_fmt.format.height ||
++	    pix->width != sd_fmt.format.width ||
++	    pix->field != sd_fmt.format.field)
++		return -EPIPE;
++
++	return 0;
++}
++
++static int video_start_streaming(struct vb2_queue *q, unsigned int count)
++{
++	struct stfcamss_video *video = vb2_get_drv_priv(q);
++	struct video_device *vdev = &video->vdev;
++	int ret;
++
++	ret = video_device_pipeline_start(vdev, &video->stfcamss->pipe);
++	if (ret < 0) {
++		dev_err(video->stfcamss->dev,
++			"Failed to media_pipeline_start: %d\n", ret);
++		goto err_ret_buffers;
++	}
++
++	ret = video_check_format(video);
++	if (ret < 0)
++		goto err_pipeline_stop;
++
++	ret = pm_runtime_resume_and_get(video->stfcamss->dev);
++	if (ret < 0) {
++		dev_err(video->stfcamss->dev, "power up failed %d\n", ret);
++		goto err_pipeline_stop;
++	}
++
++	video->ops->start_streaming(video);
++
++	ret = v4l2_subdev_call(video->source_subdev, video, s_stream, true);
++	if (ret) {
++		dev_err(video->stfcamss->dev, "stream on failed\n");
++		goto err_pm_put;
++	}
++
++	return 0;
++
++err_pm_put:
++	pm_runtime_put(video->stfcamss->dev);
++err_pipeline_stop:
++	video_device_pipeline_stop(vdev);
++err_ret_buffers:
++	video->ops->flush_buffers(video, VB2_BUF_STATE_QUEUED);
++	return ret;
++}
++
++static void video_stop_streaming(struct vb2_queue *q)
++{
++	struct stfcamss_video *video = vb2_get_drv_priv(q);
++	struct video_device *vdev = &video->vdev;
++
++	video->ops->stop_streaming(video);
++
++	v4l2_subdev_call(video->source_subdev, video, s_stream, false);
++
++	pm_runtime_put(video->stfcamss->dev);
++
++	video_device_pipeline_stop(vdev);
++	video->ops->flush_buffers(video, VB2_BUF_STATE_ERROR);
++}
++
++static const struct vb2_ops stf_video_vb2_q_ops = {
++	.queue_setup     = video_queue_setup,
++	.wait_prepare    = vb2_ops_wait_prepare,
++	.wait_finish     = vb2_ops_wait_finish,
++	.buf_init        = video_buf_init,
++	.buf_prepare     = video_buf_prepare,
++	.buf_queue       = video_buf_queue,
++	.start_streaming = video_start_streaming,
++	.stop_streaming  = video_stop_streaming,
++};
++
++/* -----------------------------------------------------------------------------
++ * V4L2 ioctls
++ */
++
++static int video_querycap(struct file *file, void *fh,
++			  struct v4l2_capability *cap)
++{
++	strscpy(cap->driver, "stf camss", sizeof(cap->driver));
++	strscpy(cap->card, "Starfive Camera Subsystem", sizeof(cap->card));
++
++	return 0;
++}
++
++static int video_enum_fmt(struct file *file, void *fh, struct v4l2_fmtdesc *f)
++{
++	struct stfcamss_video *video = video_drvdata(file);
++	const struct stfcamss_format_info *fi;
++
++	if (f->index >= video->nformats)
++		return -EINVAL;
++
++	if (f->mbus_code) {
++		/* Each entry in formats[] table has unique mbus_code */
++		if (f->index > 0)
++			return -EINVAL;
++
++		fi = video_g_fi_by_mcode(video, f->mbus_code);
++	} else {
++		fi = video_g_fi_by_index(video, f->index);
++	}
++
++	if (!fi)
++		return -EINVAL;
++
++	f->pixelformat = fi->pixelformat;
++
++	return 0;
++}
++
++static int video_enum_framesizes(struct file *file, void *fh,
++				 struct v4l2_frmsizeenum *fsize)
++{
++	struct stfcamss_video *video = video_drvdata(file);
++	unsigned int i;
++
++	if (fsize->index)
++		return -EINVAL;
++
++	for (i = 0; i < video->nformats; i++) {
++		if (video->formats[i].pixelformat == fsize->pixel_format)
++			break;
++	}
++
++	if (i == video->nformats)
++		return -EINVAL;
++
++	fsize->type = V4L2_FRMSIZE_TYPE_CONTINUOUS;
++	fsize->stepwise.min_width = STFCAMSS_FRAME_MIN_WIDTH;
++	fsize->stepwise.max_width = STFCAMSS_FRAME_MAX_WIDTH;
++	fsize->stepwise.min_height = STFCAMSS_FRAME_MIN_HEIGHT;
++	fsize->stepwise.max_height = STFCAMSS_FRAME_MAX_HEIGHT;
++	fsize->stepwise.step_width = 1;
++	fsize->stepwise.step_height = 1;
++
++	return 0;
++}
++
++static int video_g_fmt(struct file *file, void *fh, struct v4l2_format *f)
++{
++	struct stfcamss_video *video = video_drvdata(file);
++
++	*f = video->active_fmt;
++
++	return 0;
++}
++
++static int video_s_fmt(struct file *file, void *fh, struct v4l2_format *f)
++{
++	struct stfcamss_video *video = video_drvdata(file);
++	int ret;
++
++	if (vb2_is_busy(&video->vb2_q))
++		return -EBUSY;
++
++	ret = __video_try_fmt(video, f);
++	if (ret < 0)
++		return ret;
++
++	video->active_fmt = *f;
++
++	return 0;
++}
++
++static int video_try_fmt(struct file *file, void *fh, struct v4l2_format *f)
++{
++	struct stfcamss_video *video = video_drvdata(file);
++
++	return __video_try_fmt(video, f);
++}
++
++static const struct v4l2_ioctl_ops stf_vid_ioctl_ops = {
++	.vidioc_querycap                = video_querycap,
++	.vidioc_enum_fmt_vid_cap        = video_enum_fmt,
++	.vidioc_enum_framesizes         = video_enum_framesizes,
++	.vidioc_g_fmt_vid_cap           = video_g_fmt,
++	.vidioc_s_fmt_vid_cap           = video_s_fmt,
++	.vidioc_try_fmt_vid_cap         = video_try_fmt,
++	.vidioc_reqbufs                 = vb2_ioctl_reqbufs,
++	.vidioc_querybuf                = vb2_ioctl_querybuf,
++	.vidioc_qbuf                    = vb2_ioctl_qbuf,
++	.vidioc_expbuf                  = vb2_ioctl_expbuf,
++	.vidioc_dqbuf                   = vb2_ioctl_dqbuf,
++	.vidioc_create_bufs             = vb2_ioctl_create_bufs,
++	.vidioc_prepare_buf             = vb2_ioctl_prepare_buf,
++	.vidioc_streamon                = vb2_ioctl_streamon,
++	.vidioc_streamoff               = vb2_ioctl_streamoff,
++};
++
++/* -----------------------------------------------------------------------------
++ * V4L2 file operations
++ */
++
++static const struct v4l2_file_operations stf_vid_fops = {
++	.owner          = THIS_MODULE,
++	.unlocked_ioctl = video_ioctl2,
++	.open           = v4l2_fh_open,
++	.release        = vb2_fop_release,
++	.poll           = vb2_fop_poll,
++	.mmap           = vb2_fop_mmap,
++	.read           = vb2_fop_read,
++};
++
++/* -----------------------------------------------------------------------------
++ * STFCAMSS video core
++ */
++
++static void stf_video_release(struct video_device *vdev)
++{
++	struct stfcamss_video *video = video_get_drvdata(vdev);
++
++	media_entity_cleanup(&vdev->entity);
++
++	mutex_destroy(&video->q_lock);
++	mutex_destroy(&video->lock);
++}
++
++int stf_video_register(struct stfcamss_video *video,
++		       struct v4l2_device *v4l2_dev, const char *name)
++{
++	struct video_device *vdev = &video->vdev;
++	struct vb2_queue *q;
++	struct media_pad *pad = &video->pad;
++	int ret;
++
++	mutex_init(&video->q_lock);
++	mutex_init(&video->lock);
++
++	q = &video->vb2_q;
++	q->drv_priv = video;
++	q->mem_ops = &vb2_dma_contig_memops;
++	q->ops = &stf_video_vb2_q_ops;
++	q->type = video->type;
++	q->io_modes = VB2_DMABUF | VB2_MMAP;
++	q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
++	q->buf_struct_size = sizeof(struct stfcamss_buffer);
++	q->dev = video->stfcamss->dev;
++	q->lock = &video->q_lock;
++	q->min_buffers_needed = STFCAMSS_MIN_BUFFERS;
++	ret = vb2_queue_init(q);
++	if (ret < 0) {
++		dev_err(video->stfcamss->dev,
++			"Failed to init vb2 queue: %d\n", ret);
++		goto err_mutex_destroy;
++	}
++
++	pad->flags = MEDIA_PAD_FL_SINK;
++	ret = media_entity_pads_init(&vdev->entity, 1, pad);
++	if (ret < 0) {
++		dev_err(video->stfcamss->dev,
++			"Failed to init video entity: %d\n", ret);
++		goto err_mutex_destroy;
++	}
++
++	ret = stf_video_init_format(video);
++	if (ret < 0) {
++		dev_err(video->stfcamss->dev,
++			"Failed to init format: %d\n", ret);
++		goto err_media_cleanup;
++	}
++
++	vdev->fops = &stf_vid_fops;
++	vdev->ioctl_ops = &stf_vid_ioctl_ops;
++	vdev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
++	vdev->vfl_dir = VFL_DIR_RX;
++	vdev->release = stf_video_release;
++	vdev->v4l2_dev = v4l2_dev;
++	vdev->queue = &video->vb2_q;
++	vdev->lock = &video->lock;
++	strscpy(vdev->name, name, sizeof(vdev->name));
++
++	video_set_drvdata(vdev, video);
++
++	ret = video_register_device(vdev, VFL_TYPE_VIDEO, -1);
++	if (ret < 0) {
++		dev_err(video->stfcamss->dev,
++			"Failed to register video device: %d\n", ret);
++		goto err_media_cleanup;
++	}
++
++	return 0;
++
++err_media_cleanup:
++	media_entity_cleanup(&vdev->entity);
++err_mutex_destroy:
++	mutex_destroy(&video->lock);
++	mutex_destroy(&video->q_lock);
++	return ret;
++}
++
++void stf_video_unregister(struct stfcamss_video *video)
++{
++	vb2_video_unregister_device(&video->vdev);
++}
+diff --git a/drivers/staging/media/starfive/camss/stf_video.h b/drivers/staging/media/starfive/camss/stf_video.h
+new file mode 100644
+index 000000000000..8052b77e3ad8
+--- /dev/null
++++ b/drivers/staging/media/starfive/camss/stf_video.h
+@@ -0,0 +1,100 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * stf_video.h
++ *
++ * StarFive Camera Subsystem - V4L2 device node
++ *
++ * Copyright (C) 2021-2023 StarFive Technology Co., Ltd.
++ */
++
++#ifndef STF_VIDEO_H
++#define STF_VIDEO_H
++
++#include <linux/list.h>
++#include <linux/mutex.h>
++#include <linux/videodev2.h>
++#include <media/v4l2-dev.h>
++#include <media/v4l2-fh.h>
++#include <media/v4l2-ioctl.h>
++#include <media/videobuf2-v4l2.h>
++
++#define STFCAMSS_FRAME_MIN_WIDTH		64
++#define STFCAMSS_FRAME_MAX_WIDTH		1920
++#define STFCAMSS_FRAME_MIN_HEIGHT		64
++#define STFCAMSS_FRAME_MAX_HEIGHT		1080
++#define STFCAMSS_FRAME_WIDTH_ALIGN_8		8
++#define STFCAMSS_FRAME_WIDTH_ALIGN_128		128
++#define STFCAMSS_MIN_BUFFERS			2
++
++#define STFCAMSS_MAX_ENTITY_NAME_LEN		27
++
++enum stf_v_line_id {
++	STF_V_LINE_WR = 0,
++	STF_V_LINE_ISP,
++	STF_V_LINE_MAX,
++};
++
++enum stf_capture_type {
++	STF_CAPTURE_RAW = 0,
++	STF_CAPTURE_YUV,
++	STF_CAPTURE_NUM,
++};
++
++struct stfcamss_buffer {
++	struct vb2_v4l2_buffer vb;
++	dma_addr_t addr[2];
++	struct list_head queue;
++};
++
++struct fract {
++	u8 numerator;
++	u8 denominator;
++};
++
++/*
++ * struct stfcamss_format_info - ISP media bus format information
++ * @code: V4L2 media bus format code
++ * @pixelformat: V4L2 pixel format FCC identifier
++ * @planes: Number of planes
++ * @vsub: Vertical subsampling (for each plane)
++ * @bpp: Bits per pixel when stored in memory (for each plane)
++ */
++struct stfcamss_format_info {
++	u32 code;
++	u32 pixelformat;
++	u8 planes;
++	u8 vsub[3];
++	u8 bpp;
++};
++
++struct stfcamss_video {
++	struct stfcamss *stfcamss;
++	struct vb2_queue vb2_q;
++	struct video_device vdev;
++	struct media_pad pad;
++	struct v4l2_format active_fmt;
++	enum v4l2_buf_type type;
++	const struct stfcamss_video_ops *ops;
++	struct mutex lock;	 /* serialize device access */
++	struct mutex q_lock;	 /* protects the queue */
++	unsigned int bpl_alignment;
++	const struct stfcamss_format_info *formats;
++	unsigned int nformats;
++	struct v4l2_subdev *source_subdev;
++};
++
++struct stfcamss_video_ops {
++	int (*queue_buffer)(struct stfcamss_video *video,
++			    struct stfcamss_buffer *buf);
++	int (*flush_buffers)(struct stfcamss_video *video,
++			     enum vb2_buffer_state state);
++	void (*start_streaming)(struct stfcamss_video *video);
++	void (*stop_streaming)(struct stfcamss_video *video);
++};
++
++int stf_video_register(struct stfcamss_video *video,
++		       struct v4l2_device *v4l2_dev, const char *name);
++
++void stf_video_unregister(struct stfcamss_video *video);
++
++#endif /* STF_VIDEO_H */
 -- 
 2.34.1
 
