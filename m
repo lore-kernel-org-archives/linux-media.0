@@ -2,57 +2,50 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE584C88CB9
-	for <linux-media@archiver.kernel.org>; Thu, 24 Aug 2023 09:22:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DC0FEE4993
+	for <linux-media@archiver.kernel.org>; Thu, 24 Aug 2023 09:22:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240641AbjHXJVv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 24 Aug 2023 05:21:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36134 "EHLO
+        id S240660AbjHXJVw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 24 Aug 2023 05:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240658AbjHXJVX (ORCPT
+        with ESMTP id S239423AbjHXJVq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 24 Aug 2023 05:21:23 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1757419A8
-        for <linux-media@vger.kernel.org>; Thu, 24 Aug 2023 02:21:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692868882; x=1724404882;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=FZbtXylU6y2odnUF/pGe9Z8+2LA5gjecDS84E04EayE=;
-  b=Qf0kXa+8PQch359bRUNYtZ8hW3AYc83gXdM4M4MSoh92qH7CRTWhxVh2
-   4Ah7NrOK1nOV1pnGVhugmrkZjD+WZB9wnw5qf9Wuig/8jMifpJe6kwHxH
-   +OHzUrVFTNRsQUclU2s/hKWbxLUoV3SB/5A3kslHHXaU4yEr1tP1DFaiF
-   0tTp8UvDc84BXXaO3yrfrpCnbUjKLUMIKGXAWShQkkbnX7agmjRAjf9pl
-   ikNLgN0cOAOKU7zVMQjaELmyVbXkZFYRV5AidXmccCmIgSdramOSeQ2W5
-   SLaywyR2b/09hX+JU6LBGoFyenO5/Med2mlT4jcggcF6AkCLWNCLuZyo1
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="438325595"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="438325595"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2023 02:21:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="910837467"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="910837467"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2023 02:21:15 -0700
-Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id E4D7B11F9B6;
-        Thu, 24 Aug 2023 12:14:57 +0300 (EEST)
-Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
-        (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1qZ6Px-00GIGl-0D;
-        Thu, 24 Aug 2023 12:14:17 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Cc:     laurent.pinchart@ideasonboard.com, tomi.valkeinen@ideasonboard.com,
-        jacopo.mondi@ideasonboard.com, hongju.wang@intel.com
-Subject: [yavta RFC 0/2] Generic line based metadata support
-Date:   Thu, 24 Aug 2023 12:14:05 +0300
-Message-Id: <20230824091407.3883461-1-sakari.ailus@linux.intel.com>
+        Thu, 24 Aug 2023 05:21:46 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64102198A;
+        Thu, 24 Aug 2023 02:21:44 -0700 (PDT)
+Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:672:c310:4c8a:3a97])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9541A6607258;
+        Thu, 24 Aug 2023 10:21:41 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1692868902;
+        bh=97a+g3efIidtGcTZHHeZ+X2jVG7x/bgfTKTTmbRUcvY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Orh/iAMx3/nUXWSytzs0WnKL/qlPvNmhlqtiScLvTQv/Ywb+RxROkkv5eebgqZ6mw
+         Jh7r3H2IAZRGwuSQl3DmqBr9jpjZNihpnYpLuE2+gmVwOIpkWLTZu1aFLoz71P5nKV
+         /im5/p1sMMnEiT3lwvyAC3Z8GGrXIkVJTTBsd+p5mw/5vEawfHenv66TvfBOoMjO7e
+         zZhkqxgMxUy6NspJwLu8nJpOfXB2ZHJHKTSDRjeHi/3GQ7ZKdU+RQv0HP8E/WMw4OI
+         whhReVWqe9ZOpf85AS9JBpM66odPQ699+EtZ6AgxGmDNF+JOE1/lUv9NX+zlQg+xHI
+         WLJt+PEBxR8dQ==
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
+        ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        kernel@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v5 00/10] Add DELETE_BUF ioctl
+Date:   Thu, 24 Aug 2023 11:21:23 +0200
+Message-Id: <20230824092133.39510-1-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -60,20 +53,100 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi folks,
+Unlike when resolution change on keyframes, dynamic resolution change
+on inter frames doesn't allow to do a stream off/on sequence because
+it is need to keep all previous references alive to decode inter frames.
+This constraint have two main problems:
+- more memory consumption.
+- more buffers in use.
+To solve these issue this series introduce DELETE_BUFS ioctl and remove
+the 32 buffers limit per queue.
 
-This set adds the generic line based metadata support for yavta. Untested,
-hence posting this as RFC.
+VP9 conformance tests using fluster give a score of 210/305.
+The 24 resize inter tests (vp90-2-21-resize_inter_* files) are ok
+but require to use postprocessor.
 
-Sakari Ailus (2):
-  Update kernel headers
-  Add support for generic metadata formats
+Kernel branch is available here:
+https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/commits/remove_vb2_queue_limit_v5
 
- include/linux/v4l2-common.h   |   39 -
- include/linux/v4l2-controls.h | 1545 ++++++++++++++++++++++++++++++++-
- include/linux/videodev2.h     |  102 ++-
- yavta.c                       |   10 +
- 4 files changed, 1611 insertions(+), 85 deletions(-)
+GStreamer branch to use DELETE_BUF ioctl and testing dynamic resolution
+change is here:
+https://gitlab.freedesktop.org/benjamin.gaignard1/gstreamer/-/commits/VP9_drc
+
+changes in version 5
+- Rework offset cookie encoding pattern is n ow the first patch of the
+  serie.
+- Use static array instead of allocated one for postprocessor buffers.
+
+changes in version 4:
+- Stop using Xarray, instead let queues decide about their own maximum
+  number of buffer and allocate bufs array given that value.
+- Rework offset cookie encoding pattern.
+- Change DELETE_BUF to DELETE_BUFS because it now usable for
+  range of buffer to be symetrical of CREATE_BUFS.
+- Add fixes tags on couple of Verisilicon related patches.
+- Be smarter in Verisilicon postprocessor buffers management.
+- Rebase on top of v6.4
+
+changes in version 3:
+- Use Xarray API to store allocated video buffers.
+- No module parameter to limit the number of buffer per queue.
+- Use Xarray inside Verisilicon driver to store postprocessor buffers
+  and remove VB2_MAX_FRAME limit.
+- Allow Versilicon driver to change of resolution while streaming
+- Various fixes the Verisilicon VP9 code to improve fluster score.
+ 
+changes in version 2:
+- Use a dynamic array and not a list to keep trace of allocated buffers.
+  Not use IDR interface because it is marked as deprecated in kernel
+  documentation.
+- Add a module parameter to limit the number of buffer per queue.
+- Add DELETE_BUF ioctl and m2m helpers.
+
+Regards,
+Benjamin
+ 
+Benjamin Gaignard (10):
+  media: videobuf2: Rework offset 'cookie' encoding pattern
+  media: videobuf2: Access vb2_queue bufs array through helper functions
+  media: videobuf2: Be more flexible on the number of queue stored
+    buffers
+  media: verisilicon: Refactor postprocessor to store more buffers
+  media: verisilicon: Store chroma and motion vectors offset
+  media: verisilicon: vp9: Use destination buffer height to compute
+    chroma offset
+  media: verisilicon: postproc: Fix down scale test
+  media: verisilicon: vp9: Allow to change resolution while streaming
+  media: v4l2: Add DELETE_BUFS ioctl
+  media: v4l2: Add mem2mem helpers for DELETE_BUFS ioctl
+
+ .../userspace-api/media/v4l/user-func.rst     |   1 +
+ .../media/v4l/vidioc-delete-bufs.rst          |  73 +++++
+ .../media/common/videobuf2/videobuf2-core.c   | 304 +++++++++++++-----
+ .../media/common/videobuf2/videobuf2-v4l2.c   |  44 ++-
+ drivers/media/platform/amphion/vpu_dbg.c      |  22 +-
+ .../platform/mediatek/jpeg/mtk_jpeg_core.c    |   6 +-
+ .../vcodec/decoder/vdec/vdec_vp9_req_lat_if.c |   2 +-
+ drivers/media/platform/st/sti/hva/hva-v4l2.c  |   4 +
+ drivers/media/platform/verisilicon/hantro.h   |   9 +-
+ .../media/platform/verisilicon/hantro_drv.c   |   4 +-
+ .../platform/verisilicon/hantro_g2_vp9_dec.c  |  10 +-
+ .../media/platform/verisilicon/hantro_hw.h    |   4 +-
+ .../platform/verisilicon/hantro_postproc.c    |  95 ++++--
+ .../media/platform/verisilicon/hantro_v4l2.c  |  27 +-
+ drivers/media/test-drivers/vim2m.c            |   1 +
+ drivers/media/test-drivers/visl/visl-dec.c    |  28 +-
+ drivers/media/v4l2-core/v4l2-dev.c            |   1 +
+ drivers/media/v4l2-core/v4l2-ioctl.c          |  17 +
+ drivers/media/v4l2-core/v4l2-mem2mem.c        |  20 ++
+ .../staging/media/atomisp/pci/atomisp_ioctl.c |   2 +-
+ include/media/v4l2-ioctl.h                    |   4 +
+ include/media/v4l2-mem2mem.h                  |  12 +
+ include/media/videobuf2-core.h                |  13 +-
+ include/media/videobuf2-v4l2.h                |  11 +
+ include/uapi/linux/videodev2.h                |  17 +
+ 25 files changed, 584 insertions(+), 147 deletions(-)
+ create mode 100644 Documentation/userspace-api/media/v4l/vidioc-delete-bufs.rst
 
 -- 
 2.39.2
