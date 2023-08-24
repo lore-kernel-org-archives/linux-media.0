@@ -2,94 +2,119 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DA8FC71153
-	for <linux-media@archiver.kernel.org>; Thu, 24 Aug 2023 01:50:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69B10C3DA6F
+	for <linux-media@archiver.kernel.org>; Thu, 24 Aug 2023 02:46:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239145AbjHXBuS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Aug 2023 21:50:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40226 "EHLO
+        id S239201AbjHXCqA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Aug 2023 22:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239237AbjHXBtr (ORCPT
+        with ESMTP id S239313AbjHXCpi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Aug 2023 21:49:47 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E35B1733
-        for <linux-media@vger.kernel.org>; Wed, 23 Aug 2023 18:49:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692841767; x=1724377767;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=UJW4vGbeRBFsjcVSbIjIcDp4j+qb7q2e3F+Im+sDJes=;
-  b=hwFbQlnIg8tmW5yscdMBoSJutLXVsxDSumyoUDD9l0tU5ias1e4oZn8G
-   3vIWyjdIqSzjL+yTQhFXnQ5dYevN3QkDA/dijNab00uGZod4EsGJNvKX9
-   NeihlvaWmUG3ljFGhuLhhZPaarVwkoHPFgSma3duOwVLp9hGIXoZ3dJCB
-   DIWivlWm7p0QYHW71B6BG+O/Dx1o3M6T3tdvKarZmo9YZ2zm7NnpVHO6q
-   aMmGu3RuTe4vAckqFpozuhasMRyC3ihaoaWP5md1q6Axz3zPPwcM4e//p
-   s4ThxeNz8B0FhJiHHCr3BOHPP3HxPjxSClcjNiPEI39DFjZY2OcSAlMIs
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="364491546"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="364491546"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2023 18:49:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="806909395"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="806909395"
-Received: from shsensorbuild2.sh.intel.com ([10.239.134.197])
-  by fmsmga004.fm.intel.com with ESMTP; 23 Aug 2023 18:49:24 -0700
-From:   Wentong Wu <wentong.wu@intel.com>
-To:     sakari.ailus@linux.intel.com, linux-media@vger.kernel.org
-Cc:     Wentong Wu <wentong.wu@intel.com>
-Subject: [PATCH v1 2/3] media: ivsc: ace: remove name identifier
-Date:   Thu, 24 Aug 2023 09:48:52 +0800
-Message-Id: <1692841733-20766-2-git-send-email-wentong.wu@intel.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1692841733-20766-1-git-send-email-wentong.wu@intel.com>
-References: <1692841733-20766-1-git-send-email-wentong.wu@intel.com>
+        Wed, 23 Aug 2023 22:45:38 -0400
+Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B104198
+        for <linux-media@vger.kernel.org>; Wed, 23 Aug 2023 19:45:36 -0700 (PDT)
+Received: by mail-ua1-x932.google.com with SMTP id a1e0cc1a2514c-79969c14964so2062880241.2
+        for <linux-media@vger.kernel.org>; Wed, 23 Aug 2023 19:45:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1692845135; x=1693449935;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SD4TQ7iFy4umItwAy6F4yebqR++5XFnrcQyodHwrQaQ=;
+        b=W9CcXSSet115VxTXRZ3tM8/x884+5TCrfC9nMZ45lA1cQCVDSjPlnRcSrJciSJ3dPR
+         lV7SDqDYCh2UJSjvxeCkplrgFt9IhqliDiamp9o3GLpkjmwUrrKpIsdFuCeLLX2yMav0
+         180ORlqKAgw7be9fV9c/5AgCxetLn+tnE/LMg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692845135; x=1693449935;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SD4TQ7iFy4umItwAy6F4yebqR++5XFnrcQyodHwrQaQ=;
+        b=YwQkbgvbEPaujhJbcC9ShOL0lSsqx2p3dgBcA6VSOdvU88BWkzUf5NPmhQMBZrhNQg
+         qZh9/Pacj6zXJZyV7vt+gsqJuaMb3Vt5vjffJ2veFrnR6VDSBv/Wvk+7AyhgJVK2zfFi
+         x6lj5/T8CAhytv53T+4+YZ2WKOsNL+8hDNNgH6WFnvxOm+LMm76uJzJHfkKDRGY5X4kC
+         MjtGlRAzU3KXpOSKFxxhZEgKmA560W7kZeJcLtZjj/9S6nzYeRGKuNdVKu1x0oti7rlU
+         AFjTXHtvB88kB61DCQHQvm0wFfKb11/jehVp6m7yBEmMjkIIdobOJkrnWH9WGPzuU/Tp
+         0PKQ==
+X-Gm-Message-State: AOJu0YwlvRkVh0zjk/0Iw4XHuRiLVDQXcqgMVt+ImS5hGM+dxRh1PQGg
+        hWq/kr05ISAwMrwJciz0tDt5GpO6HGFk84KxF1ofOg==
+X-Google-Smtp-Source: AGHT+IFOkdQtxNMt4CsJCo2OZQTZvDWYBNUVlTl6BoCEgnO2Ko4EXUfqlGJE5mXI6L57yQi3OKMBseYeJsKxCR6QeZ0=
+X-Received: by 2002:a05:6102:3655:b0:44e:906d:58b with SMTP id
+ s21-20020a056102365500b0044e906d058bmr2166335vsu.14.1692845135099; Wed, 23
+ Aug 2023 19:45:35 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230824013858.303105-1-marex@denx.de>
+In-Reply-To: <20230824013858.303105-1-marex@denx.de>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Thu, 24 Aug 2023 10:45:23 +0800
+Message-ID: <CAGXv+5HpmdNv40=vyHONsVq=Y868eDpy6iaLjoPFqhHvGqi1rA@mail.gmail.com>
+Subject: Re: [PATCH] media: hantro: Check whether reset op is defined before use
+To:     Marek Vasut <marex@denx.de>
+Cc:     linux-media@vger.kernel.org, Adam Ford <aford173@gmail.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-rockchip@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Remove name identifier to match the device with the
-defined UUID when load driver module.
+On Thu, Aug 24, 2023 at 9:39=E2=80=AFAM Marek Vasut <marex@denx.de> wrote:
+>
+> The i.MX8MM/N/P does not define the .reset op since reset of the VPU is
+> done by genpd. Check whether the .reset op is defined before calling it
+> to avoid NULL pointer dereference.
+>
+> Note that the Fixes tag is set to the commit which removed the reset op
+> from i.MX8M Hantro G2 implementation, this is because before this commit
+> all the implementations did define the .reset op.
+>
+> Fixes: 6971efb70ac3 ("media: hantro: Allow i.MX8MQ G1 and G2 to run indep=
+endently")
+> Signed-off-by: Marek Vasut <marex@denx.de>
 
-Signed-off-by: Wentong Wu <wentong.wu@intel.com>
----
- drivers/media/pci/intel/ivsc/mei_ace.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+Had the same change in my local tree, so
 
-diff --git a/drivers/media/pci/intel/ivsc/mei_ace.c b/drivers/media/pci/intel/ivsc/mei_ace.c
-index bc37f6d..7879f1f 100644
---- a/drivers/media/pci/intel/ivsc/mei_ace.c
-+++ b/drivers/media/pci/intel/ivsc/mei_ace.c
-@@ -30,8 +30,6 @@
- #include <linux/uuid.h>
- #include <linux/workqueue.h>
- 
--#define	MEI_ACE_DRIVER_NAME	"ivsc_ace"
--
- /* indicating driver message */
- #define	ACE_DRV_MSG		1
- /* indicating set command */
-@@ -554,14 +552,14 @@ static const struct dev_pm_ops mei_ace_pm_ops = {
- 			     0x9B, 0x78, 0x03, 0x61, 0x63, 0x5E, 0x24, 0x47)
- 
- static const struct mei_cl_device_id mei_ace_tbl[] = {
--	{ MEI_ACE_DRIVER_NAME, MEI_ACE_UUID, MEI_CL_VERSION_ANY },
-+	{ .uuid = MEI_ACE_UUID, .version = MEI_CL_VERSION_ANY },
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(mei, mei_ace_tbl);
- 
- static struct mei_cl_driver mei_ace_driver = {
- 	.id_table = mei_ace_tbl,
--	.name = MEI_ACE_DRIVER_NAME,
-+	.name = KBUILD_MODNAME,
- 
- 	.probe = mei_ace_probe,
- 	.remove = mei_ace_remove,
--- 
-2.7.4
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+Tested-by: Chen-Yu Tsai <wenst@chromium.org>
 
+> ---
+> Cc: Adam Ford <aford173@gmail.com>
+> Cc: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> Cc: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: linux-media@vger.kernel.org
+> Cc: linux-rockchip@lists.infradead.org
+> ---
+>  drivers/media/platform/verisilicon/hantro_drv.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/me=
+dia/platform/verisilicon/hantro_drv.c
+> index 423fc85d79ee3..50ec24c753e9e 100644
+> --- a/drivers/media/platform/verisilicon/hantro_drv.c
+> +++ b/drivers/media/platform/verisilicon/hantro_drv.c
+> @@ -125,7 +125,8 @@ void hantro_watchdog(struct work_struct *work)
+>         ctx =3D v4l2_m2m_get_curr_priv(vpu->m2m_dev);
+>         if (ctx) {
+>                 vpu_err("frame processing timed out!\n");
+> -               ctx->codec_ops->reset(ctx);
+> +               if (ctx->codec_ops->reset)
+> +                       ctx->codec_ops->reset(ctx);
+>                 hantro_job_finish(vpu, ctx, VB2_BUF_STATE_ERROR);
+>         }
+>  }
+> --
+> 2.40.1
+>
+>
+> _______________________________________________
+> Linux-rockchip mailing list
+> Linux-rockchip@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-rockchip
