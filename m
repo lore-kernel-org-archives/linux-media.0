@@ -2,91 +2,99 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5277C6FA8F
-	for <linux-media@archiver.kernel.org>; Thu, 24 Aug 2023 01:40:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8060BC27C40
+	for <linux-media@archiver.kernel.org>; Thu, 24 Aug 2023 01:44:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239107AbjHXBj6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Aug 2023 21:39:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39374 "EHLO
+        id S239110AbjHXBoT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Aug 2023 21:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239128AbjHXBja (ORCPT
+        with ESMTP id S239129AbjHXBoO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Aug 2023 21:39:30 -0400
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D900610FC
-        for <linux-media@vger.kernel.org>; Wed, 23 Aug 2023 18:39:11 -0700 (PDT)
-Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        Wed, 23 Aug 2023 21:44:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A57CE3
+        for <linux-media@vger.kernel.org>; Wed, 23 Aug 2023 18:44:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 78638807C4;
-        Thu, 24 Aug 2023 03:39:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1692841149;
-        bh=66jlWYI6u7UpHycVpxDeaFTO7Z2w8Drh+F3eeYqhcqk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=t8/Ey5ppHIIVgGvVVTFGdBlSeXtxzhEjZ6+QvYAzTjE36HCs80yxXcdFrlpd0gTYO
-         9sa6WCUaIoNsoKjjE/FEK/kk0EJH1SR/qpGd3o9v1lHs0mzf0bxW7E8nJks+zUDsFk
-         51sklLBAe6pmyetqhJLzj9WwA4p7xC2q5gqnwDXJmtSdN44OmGqNYdHFIEOjFdiYcm
-         7aS5+m3Wi3gi8ZPoCgC1z8tHC4NNXgPR60xqh2dzoJhmHJ5ppPowwnOIJMxzDKrj7T
-         ZW1Siwb0Os44EOmZswgvoaOqwbxfLP6Yn8XKxicd4ZqReV0C2B822d7cSsK3qDkZLu
-         ogmbky8r3rWjA==
-From:   Marek Vasut <marex@denx.de>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 001CB6155D
+        for <linux-media@vger.kernel.org>; Thu, 24 Aug 2023 01:44:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0432CC433C7
+        for <linux-media@vger.kernel.org>; Thu, 24 Aug 2023 01:44:10 +0000 (UTC)
+Date:   Thu, 24 Aug 2023 03:44:09 +0200
+Message-ID: <10924b0d3ccb4990aecc2c8b0c8bba7b.hverkuil@xs4all.nl>
+From:   "Hans Verkuil" <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Cc:     Marek Vasut <marex@denx.de>, Adam Ford <aford173@gmail.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-rockchip@lists.infradead.org
-Subject: [PATCH] media: hantro: Check whether reset op is defined before use
-Date:   Thu, 24 Aug 2023 03:38:58 +0200
-Message-Id: <20230824013858.303105-1-marex@denx.de>
-X-Mailer: git-send-email 2.40.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
+Subject: cron job: media_tree daily build: WARNINGS
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The i.MX8MM/N/P does not define the .reset op since reset of the VPU is
-done by genpd. Check whether the .reset op is defined before calling it
-to avoid NULL pointer dereference.
+This message is generated daily by a cron job that builds media_tree for
+the architectures in the list below.
 
-Note that the Fixes tag is set to the commit which removed the reset op
-from i.MX8M Hantro G2 implementation, this is because before this commit
-all the implementations did define the .reset op.
+Results of the daily build of media_tree:
 
-Fixes: 6971efb70ac3 ("media: hantro: Allow i.MX8MQ G1 and G2 to run independently")
-Signed-off-by: Marek Vasut <marex@denx.de>
----
-Cc: Adam Ford <aford173@gmail.com>
-Cc: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: linux-media@vger.kernel.org
-Cc: linux-rockchip@lists.infradead.org
----
- drivers/media/platform/verisilicon/hantro_drv.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+date:			Thu Aug 24 03:00:09 CEST 2023
+media-tree git branch:	media_stage/master
+media-tree git hash:	f59933e8b1d1aaceb19ea191fe57b715ce5cf2d7
+v4l-utils git hash:	dcbaba173ec7446487fa042902627ad64143eb53
+edid-decode git hash:	5f723267e04deb3aa9610483514a02bcee10d9c2
+gcc version:		i686-linux-gcc (GCC) 13.2.0
+sparse repo:            git://git.kernel.org/pub/scm/devel/sparse/sparse.git
+sparse version:		v0.6.4-39-gce1a6720
+smatch repo:            git://repo.or.cz/smatch.git
+smatch version:		v0.5.0-8455-g78e3bddd
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: c407f8c221e7e7692762fd317c10d949490d9411
+host hardware:		x86_64
+host os:		6.1.0-5-amd64
 
-diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
-index 423fc85d79ee3..50ec24c753e9e 100644
---- a/drivers/media/platform/verisilicon/hantro_drv.c
-+++ b/drivers/media/platform/verisilicon/hantro_drv.c
-@@ -125,7 +125,8 @@ void hantro_watchdog(struct work_struct *work)
- 	ctx = v4l2_m2m_get_curr_priv(vpu->m2m_dev);
- 	if (ctx) {
- 		vpu_err("frame processing timed out!\n");
--		ctx->codec_ops->reset(ctx);
-+		if (ctx->codec_ops->reset)
-+			ctx->codec_ops->reset(ctx);
- 		hantro_job_finish(vpu, ctx, VB2_BUF_STATE_ERROR);
- 	}
- }
--- 
-2.40.1
+linux-git-powerpc64: OK
+linux-git-arm: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+no-acpi.config: OK
+no-of.config: OK
+no-pm.config: OK
+no-pm-sleep.config: OK
+no-debug-fs.config: OK
+sparse: WARNINGS:
 
+drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
+
+smatch: WARNINGS:
+
+drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
+
+COMPILE_TEST: WARNINGS: VIDEOBUF_GEN VIDEOBUF_DMA_SG VIDEOBUF_VMALLOC VIDEOBUF_DMA_CONTIG
+strcpy/strncpy/strlcpy: OK
+abi-compliance: ABI OK
+pahole: ABI OK
+utils: OK
+spec-git: OK
+kerneldoc: OK
+virtme: OK: Final Summary: 3080, Succeeded: 3080, Failed: 0, Warnings: 0
+virtme-32: WARNINGS: Final Summary: 3193, Succeeded: 3193, Failed: 0, Warnings: 4
+
+Detailed results are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Thursday.log
+
+Detailed regression test results are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Thursday-test-media.log
+https://hverkuil.home.xs4all.nl/logs/Thursday-test-media-dmesg.log
+https://hverkuil.home.xs4all.nl/logs/Thursday-test-media-32.log
+https://hverkuil.home.xs4all.nl/logs/Thursday-test-media-32-dmesg.log
+
+Full logs are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Thursday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+https://hverkuil.home.xs4all.nl/spec/index.html
