@@ -2,95 +2,87 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D212C6FA8F
-	for <linux-media@archiver.kernel.org>; Thu, 24 Aug 2023 13:09:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15DFAC6FA8F
+	for <linux-media@archiver.kernel.org>; Thu, 24 Aug 2023 13:35:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238945AbjHXNIy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 24 Aug 2023 09:08:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38378 "EHLO
+        id S235899AbjHXNel (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 24 Aug 2023 09:34:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239004AbjHXNI0 (ORCPT
+        with ESMTP id S241234AbjHXNei (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 24 Aug 2023 09:08:26 -0400
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A15E7198A
-        for <linux-media@vger.kernel.org>; Thu, 24 Aug 2023 06:08:23 -0700 (PDT)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id F1C1D86418;
-        Thu, 24 Aug 2023 15:08:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1692882501;
-        bh=nO7zXAD+fh+afIFBfu7isdOiAx5EKoa5ejHe8jheNz8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=pRGyFn1iuyON8Kt63CjHWRnzePy/vHXXGJFylekjJsCwLQq3lWPBjU5q3bzx0CO03
-         F6P0Ju/R/AdnGWDUjV8ZU8WJ5+b7EkKX6LTEilV38+uDWWLkQyChpwHEtdWTPXruFn
-         vHno+axKUv5A6HGaHl3ikM16T0KD1zBtMc1m0gE0aP0lyFGMRTiF23UFsx7zFCGcSl
-         nqJWKfKvF2Z1+l1seJE+Fpn0Z6SE1LSgeS2Tl3y0YgT0iHLTqR0XLp38TrJaZRNvpE
-         XKUbHDkcnmIZaZV8RGoTC0ROeL7zi5i4x+vdjwC0zYiZPLd0s9r+jvttgmMsuNA6es
-         LUl4DfMyoKLew==
-Message-ID: <80d9a66f-c703-6057-e084-1a6d2214d775@denx.de>
-Date:   Thu, 24 Aug 2023 15:08:20 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH] media: hantro: Check whether reset op is defined before
- use
-To:     Adam Ford <aford173@gmail.com>
-Cc:     linux-media@vger.kernel.org,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Thu, 24 Aug 2023 09:34:38 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9AFE78;
+        Thu, 24 Aug 2023 06:34:36 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 48D7E87F3;
+        Thu, 24 Aug 2023 15:33:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1692883996;
+        bh=RtNbFIR0XA7+6sM+MvEk7hEJmH/z0Dgzl+g1Q9EPiCw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uPuSFwPzsj0pgdNy1El4Td8QW11v72tF62hBjZQ4LWneTpB4KVpChDuOHTgl8V/bK
+         uhyUGLY53+FCzCGv+gCF62uvQBSmSYkKBsCmyj1/j2O2FycUYzG93/5mTZTHo2vqsf
+         PrdWcKk+nbYQt+9VJMnEdX0yV/LlApMTqz01Fo8k=
+Date:   Thu, 24 Aug 2023 16:34:41 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jack Zhu <jack.zhu@starfivetech.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>, bryan.odonoghue@linaro.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-rockchip@lists.infradead.org
-References: <20230824013858.303105-1-marex@denx.de>
- <CAHCN7xLDmMv7T_fT7vY3iq+KMWuPM9tBP_2AJ-X04L7ZTRWPOw@mail.gmail.com>
-Content-Language: en-US
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <CAHCN7xLDmMv7T_fT7vY3iq+KMWuPM9tBP_2AJ-X04L7ZTRWPOw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-staging@lists.linux.dev,
+        changhuang.liang@starfivetech.com
+Subject: Re: [PATCH v8 0/8] Add StarFive Camera Subsystem driver
+Message-ID: <20230824133441.GC27092@pendragon.ideasonboard.com>
+References: <20230824080109.89613-1-jack.zhu@starfivetech.com>
+ <2023082436-spendable-reshuffle-878d@gregkh>
+ <a6f60dfc-ffbf-da4d-a81c-06caf92955d6@starfivetech.com>
+ <2023082416-flanking-requisite-a8ed@gregkh>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <2023082416-flanking-requisite-a8ed@gregkh>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 8/24/23 12:39, Adam Ford wrote:
-> On Wed, Aug 23, 2023 at 8:39 PM Marek Vasut <marex@denx.de> wrote:
->>
->> The i.MX8MM/N/P does not define the .reset op since reset of the VPU is
->> done by genpd. Check whether the .reset op is defined before calling it
->> to avoid NULL pointer dereference.
->>
->> Note that the Fixes tag is set to the commit which removed the reset op
->> from i.MX8M Hantro G2 implementation, this is because before this commit
->> all the implementations did define the .reset op.
+On Thu, Aug 24, 2023 at 03:08:33PM +0200, Greg Kroah-Hartman wrote:
+> On Thu, Aug 24, 2023 at 08:23:33PM +0800, Jack Zhu wrote:
+> > On 2023/8/24 19:37, Greg Kroah-Hartman wrote:
+> > > On Thu, Aug 24, 2023 at 04:01:01PM +0800, Jack Zhu wrote:
+> > >> Hi,
+> > >> 
+> > >> This series is the v8 series that attempts to support the Camera Subsystem
+> > >> found on StarFive JH7110 SoC.
+> > > 
+> > > I don't see anything here about why this is in drivers/staging/media/
+> > > now and not just in drivers/media/.  What is preventing this to be put
+> > > into the correct place to start with?  What needs to be done to the code
+> > > to get it out of drivers/staging/media/ and who is going to do that
+> > > work?
+> > 
+> > The series does not contain 3A interface. According to Laurent's suggestion,
+> > we put the driver in the staging directory first. In the next stage, we will
+> > continue to submit the 3A interface in the way of incremental development,
+> > and finally expect the code to be placed in the drivers/media/.
 > 
-> I am surprised I didn't have issues when I was testing the 8MQ and
-> 8MM, but this makes sense.
+> Can you please say that in the changelog text for when you are adding
+> the driver so that we know this?
 
-You need to trigger the VPU watchdog to trigger the crash, that means 
-you have to get the VPU into some weird state where it fails to decode 
-frame. Then it triggers the reset and ... boom.
+It's also customary to add a TODO file in the driver directory to list
+the work needed before moving the code to drivers/media/. Jack, could
+you please do so ?
 
-See this patch, that contains a gstreamer invocation to generate such 
-trigger condition input data:
 
-[PATCH] media: verisilicon: Do not enable G2 postproc downscale if 
-source is narrower than destination
+-- 
+Regards,
 
-"
-To generate input test data to trigger this bug, use e.g.:
-$ gst-launch-1.0 videotestsrc ! 
-video/x-raw,width=272,height=256,format=I420 ! \
-                  vp9enc ! matroskamux ! filesink location=/tmp/test.vp9
-To trigger the bug upon decoding (note that the NV12 must be forced, as
-that assures the output data would pass the G2 postproc):
-$ gst-launch-1.0 filesrc location=/tmp/test.vp9 ! matroskademux ! 
-vp9parse ! \
-                  v4l2slvp9dec ! video/x-raw,format=NV12 ! videoconvert 
-! fbdevsink
-"
+Laurent Pinchart
