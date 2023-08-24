@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09980C83003
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90F01EE49AB
 	for <linux-media@archiver.kernel.org>; Thu, 24 Aug 2023 09:22:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238302AbjHXJWV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 24 Aug 2023 05:22:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57400 "EHLO
+        id S240706AbjHXJWY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 24 Aug 2023 05:22:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240719AbjHXJVt (ORCPT
+        with ESMTP id S240715AbjHXJVt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 24 Aug 2023 05:21:49 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47DAC19A3;
-        Thu, 24 Aug 2023 02:21:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6308419A2;
+        Thu, 24 Aug 2023 02:21:46 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:672:c310:4c8a:3a97])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C6EE46607340;
-        Thu, 24 Aug 2023 10:21:45 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BCF0A6607308;
+        Thu, 24 Aug 2023 10:21:44 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1692868906;
-        bh=WDraZOgWi0izES0K9FdWnGrtWWF6tf7zOBBP/EoWBNg=;
+        s=mail; t=1692868905;
+        bh=PWkYPK7UJF1YmVd+lrdWvCWfZPTYmEC52Q6H6L/2CpY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Zq9oiDXUjZcdi9+7nMSjADzQn8H64qzRmsMgacOvIpUXGf8y0ICuEm9Xqb4im9sUF
-         pKfE95AJtjfFIwNGSF0gm4P3pXcTi0LrGqMfKE2HZ/jiXDXzOfVK/6at/WKYNrSnnU
-         n92uen5xlNd7B4cYgy/q/c6JSkvcQlxf+OnweOKN37FT+06nx56F2awaSXUFXOmBKk
-         /eRQwbANk83lM6PMixAYlmYeP5jkb7eKhLBnXEmaC0Wff5AZEHwjj2ELaH2NHAsrNb
-         SGFqxz8R8WiMJ/KD7B74Ig7/cdSZGDCBFj2FoBoi8eyr0/j9jrQcupPWVEvVVYV2Kq
-         pnZXs+BDx1Qpw==
+        b=R/SPv0Dy0iBRcsZbWmQFlUA6N4JHkxVqimQXCK3Lrr/717kH60Foss4GfNKFEBoSD
+         1eodB6aWnxkSYjmgQj1eb6RxTj5F2+wRcc/I9JdPUKSNqbnC0U0I2sUda+Orre4sdq
+         BRXGCoqrWFY9E49TGHO0geQ8pmo9Mp2I+G9cghz6PzPFO7+OvbR4r8x9OJPYwGfVDk
+         Mdlx2jizNtqDtc5/LEbHtQ2bcwG/zow8v5zRXt948YmcJ/wG9wfJfPDy5bpD+sHjET
+         LY34+TAEByasLjenXpSJNT+0qjHJzwhFyT9W6vWYpSuTh1Uox7OFoMGrp6GFp5PzFe
+         jixgUT6/iNg+A==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -43,9 +43,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v5 08/10] media: verisilicon: vp9: Allow to change resolution while streaming
-Date:   Thu, 24 Aug 2023 11:21:31 +0200
-Message-Id: <20230824092133.39510-9-benjamin.gaignard@collabora.com>
+Subject: [PATCH v5 06/10] media: verisilicon: vp9: Use destination buffer height to compute chroma offset
+Date:   Thu, 24 Aug 2023 11:21:29 +0200
+Message-Id: <20230824092133.39510-7-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230824092133.39510-1-benjamin.gaignard@collabora.com>
 References: <20230824092133.39510-1-benjamin.gaignard@collabora.com>
@@ -55,64 +55,32 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Remove all checks that prohibit to set a new format while streaming.
-This allow to change dynamically the resolution if the pixel format
-remains the same.
+Source and destination buffer height may not be the same because
+alignment constraint are different.
+Use destination height to compute chroma offset because we target
+this buffer as hardware output.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Fixes: e2da465455ce ("media: hantro: Support VP9 on the G2 core")
 ---
- .../media/platform/verisilicon/hantro_v4l2.c  | 24 +++----------------
- 1 file changed, 3 insertions(+), 21 deletions(-)
+ drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
-index f0d8b165abcd..27a1e77cca38 100644
---- a/drivers/media/platform/verisilicon/hantro_v4l2.c
-+++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
-@@ -514,25 +514,14 @@ static int hantro_set_fmt_out(struct hantro_ctx *ctx,
- 		return ret;
- 
- 	if (!ctx->is_encoder) {
--		struct vb2_queue *peer_vq;
--
- 		/*
- 		 * In order to support dynamic resolution change,
- 		 * the decoder admits a resolution change, as long
--		 * as the pixelformat remains. Can't be done if streaming.
--		 */
--		if (vb2_is_streaming(vq) || (vb2_is_busy(vq) &&
--		    pix_mp->pixelformat != ctx->src_fmt.pixelformat))
--			return -EBUSY;
--		/*
--		 * Since format change on the OUTPUT queue will reset
--		 * the CAPTURE queue, we can't allow doing so
--		 * when the CAPTURE queue has buffers allocated.
-+		 * as the pixelformat remains.
- 		 */
--		peer_vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx,
--					  V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
--		if (vb2_is_busy(peer_vq))
-+		if (vb2_is_streaming(vq) && pix_mp->pixelformat != ctx->src_fmt.pixelformat) {
- 			return -EBUSY;
-+		}
- 	} else {
- 		/*
- 		 * The encoder doesn't admit a format change if
-@@ -577,15 +566,8 @@ static int hantro_set_fmt_out(struct hantro_ctx *ctx,
- static int hantro_set_fmt_cap(struct hantro_ctx *ctx,
- 			      struct v4l2_pix_format_mplane *pix_mp)
+diff --git a/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c b/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
+index 6db1c32fce4d..1f3f5e7ce978 100644
+--- a/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
++++ b/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
+@@ -93,9 +93,7 @@ static int start_prepare_run(struct hantro_ctx *ctx, const struct v4l2_ctrl_vp9_
+ static size_t chroma_offset(const struct hantro_ctx *ctx,
+ 			    const struct v4l2_ctrl_vp9_frame *dec_params)
  {
--	struct vb2_queue *vq;
- 	int ret;
- 
--	/* Change not allowed if queue is busy. */
--	vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx,
--			     V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
--	if (vb2_is_busy(vq))
--		return -EBUSY;
+-	int bytes_per_pixel = dec_params->bit_depth == 8 ? 1 : 2;
 -
- 	if (ctx->is_encoder) {
- 		struct vb2_queue *peer_vq;
+-	return ctx->src_fmt.width * ctx->src_fmt.height * bytes_per_pixel;
++	return ctx->dst_fmt.width * ctx->dst_fmt.height * ctx->bit_depth / 8;
+ }
  
+ static size_t mv_offset(const struct hantro_ctx *ctx,
 -- 
 2.39.2
 
