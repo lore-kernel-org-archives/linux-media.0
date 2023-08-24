@@ -2,97 +2,81 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53387C71145
-	for <linux-media@archiver.kernel.org>; Thu, 24 Aug 2023 03:22:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4640C71153
+	for <linux-media@archiver.kernel.org>; Thu, 24 Aug 2023 03:36:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239591AbjHXDV3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Aug 2023 23:21:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33180 "EHLO
+        id S235523AbjHXDgL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Aug 2023 23:36:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239588AbjHXDVK (ORCPT
+        with ESMTP id S239626AbjHXDfm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Aug 2023 23:21:10 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B756E10EC
-        for <linux-media@vger.kernel.org>; Wed, 23 Aug 2023 20:21:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692847268; x=1724383268;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=0K1zaID0Cy2m1KDJ8X+yDFu8N3Ps/srMRZkPAOJw6WI=;
-  b=U2aVljAlOeDONmHTo5xjv/OVjjbyeuQZPsvT9DKHDMx2jNWzmG/L0LUk
-   KJ/9mp9neprZMS/qUCm+oRPbL4s0fJpAI5tiJ90danXmChjfgR/oiNYRM
-   kUwZ+ugYJlBAWbRd/fjgktwwBTKz9cuv2yidjKkG7CXGNEEwfgpJ+1igI
-   eRiN/Zf6qXFetTQdGlnsafXDj0CIBDwPfpX6qAknkAqPg8YVK3PYEa4XK
-   coGqLs8OEkIOL2hiN926QskrrNE9+NsvWybmapk042V+BRzrMu0/Q8rfB
-   Xm/9lDNAlF41IgZXvDjlvbJL/iyGgpzxa42230VMqgl8XRbcFBi1zXhnH
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="354665516"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="354665516"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2023 20:21:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="826972879"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="826972879"
-Received: from shsensorbuild2.sh.intel.com ([10.239.134.197])
-  by FMSMGA003.fm.intel.com with ESMTP; 23 Aug 2023 20:21:07 -0700
-From:   Wentong Wu <wentong.wu@intel.com>
-To:     sakari.ailus@linux.intel.com, linux-media@vger.kernel.org
-Cc:     Wentong Wu <wentong.wu@intel.com>
-Subject: [PATCH v2 2/3] media: ivsc: ace: remove name identifier
-Date:   Thu, 24 Aug 2023 11:21:01 +0800
-Message-Id: <1692847262-31790-2-git-send-email-wentong.wu@intel.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1692847262-31790-1-git-send-email-wentong.wu@intel.com>
-References: <1692847262-31790-1-git-send-email-wentong.wu@intel.com>
+        Wed, 23 Aug 2023 23:35:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFAA310F0
+        for <linux-media@vger.kernel.org>; Wed, 23 Aug 2023 20:35:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D465619B5
+        for <linux-media@vger.kernel.org>; Thu, 24 Aug 2023 03:35:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA5CEC433C8;
+        Thu, 24 Aug 2023 03:35:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692848139;
+        bh=sbR7aCuEj5eVbg6IJIuBs2lOlk3UoQ5wAtQPtb6P5QM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=jdrlxtOciSK86Gccra7HgdQaq1QwQaIOy9bYBMypzD2OXPxtnudOXVnhXuK1985n8
+         UAPnVephZah7ctxQWK0qv55AyqQNHsotbvD5W9/+CDoLhIXfMZsL3gaS9chfJLew7C
+         uqbrT81BNoO1nfWEWunMj73EWmXxCYS2pTX/MaikwKnonlvDpbbCvrbeBpBqPoFqxj
+         Qcf+p93aXmJfe1DjqP9nGzh0imagLIKRa2w5NWjsaq6CZ2okUFAkQdI6V6ZD4EESuH
+         39OVMRQ7P0ZQzP7SQHJTwOVtquxT+/nKulB+/vQtftoNRKH/dTlF63SfdIZlS/qYFt
+         aVM59Q8oQY+YA==
+Message-ID: <84bd646f-0e83-63ff-7374-822ad328af0e@kernel.org>
+Date:   Wed, 23 Aug 2023 20:35:38 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.14.0
+Subject: Re: [RFC PATCH v2 00/11] Device Memory TCP
+Content-Language: en-US
+To:     David Wei <dw@davidwei.uk>, Mina Almasry <almasrymina@google.com>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Hari Ramakrishnan <rharix@google.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andy Lutomirski <luto@kernel.org>, stephen@networkplumber.org,
+        sdf@google.com
+References: <20230810015751.3297321-1-almasrymina@google.com>
+ <7dc4427f-ee99-e401-9ff8-d554999e60ca@kernel.org>
+ <7889b4f8-78d9-9a0a-e2cc-aae4ed8a80fd@gmail.com>
+ <CAHS8izNZ1pJAFqa-3FPiUdMWEPE_md2vP1-6t-KPT6CPbO03+g@mail.gmail.com>
+ <1693f35a-b01d-f67c-fb4e-7311c153df4a@davidwei.uk>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <1693f35a-b01d-f67c-fb4e-7311c153df4a@davidwei.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Remove name identifier to match the device with the
-defined UUID when load driver module.
+On 8/23/23 3:52 PM, David Wei wrote:
+> I'm also preparing a submission for NetDev conf. I wonder if you and others at
+> Google plan to present there as well? If so, then we may want to coordinate our
+> submissions and talks (if accepted).
 
-Signed-off-by: Wentong Wu <wentong.wu@intel.com>
----
-v2:
- - no changed compared with v1
-
- drivers/media/pci/intel/ivsc/mei_ace.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/media/pci/intel/ivsc/mei_ace.c b/drivers/media/pci/intel/ivsc/mei_ace.c
-index bc37f6d..7879f1f 100644
---- a/drivers/media/pci/intel/ivsc/mei_ace.c
-+++ b/drivers/media/pci/intel/ivsc/mei_ace.c
-@@ -30,8 +30,6 @@
- #include <linux/uuid.h>
- #include <linux/workqueue.h>
- 
--#define	MEI_ACE_DRIVER_NAME	"ivsc_ace"
--
- /* indicating driver message */
- #define	ACE_DRV_MSG		1
- /* indicating set command */
-@@ -554,14 +552,14 @@ static const struct dev_pm_ops mei_ace_pm_ops = {
- 			     0x9B, 0x78, 0x03, 0x61, 0x63, 0x5E, 0x24, 0x47)
- 
- static const struct mei_cl_device_id mei_ace_tbl[] = {
--	{ MEI_ACE_DRIVER_NAME, MEI_ACE_UUID, MEI_CL_VERSION_ANY },
-+	{ .uuid = MEI_ACE_UUID, .version = MEI_CL_VERSION_ANY },
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(mei, mei_ace_tbl);
- 
- static struct mei_cl_driver mei_ace_driver = {
- 	.id_table = mei_ace_tbl,
--	.name = MEI_ACE_DRIVER_NAME,
-+	.name = KBUILD_MODNAME,
- 
- 	.probe = mei_ace_probe,
- 	.remove = mei_ace_remove,
--- 
-2.7.4
-
+personally, I see them as related but separate topics. Mina's proposal
+as infra that io_uring builds on. Both are interesting and needed
+discussions.
