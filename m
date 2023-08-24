@@ -2,130 +2,87 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 589CEC6FA8F
-	for <linux-media@archiver.kernel.org>; Thu, 24 Aug 2023 13:05:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DAF0C3DA6F
+	for <linux-media@archiver.kernel.org>; Thu, 24 Aug 2023 13:09:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235566AbjHXNEf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 24 Aug 2023 09:04:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52212 "EHLO
+        id S239244AbjHXNI4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 24 Aug 2023 09:08:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239004AbjHXNEb (ORCPT
+        with ESMTP id S240933AbjHXNIj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 24 Aug 2023 09:04:31 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38559E79;
-        Thu, 24 Aug 2023 06:04:29 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C4E7B87F3;
-        Thu, 24 Aug 2023 15:03:07 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1692882188;
-        bh=lmURSCwOgg+aQoQ721pMBdHJuBeAn08oT40y6zo6TFo=;
+        Thu, 24 Aug 2023 09:08:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0CE91988;
+        Thu, 24 Aug 2023 06:08:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FCB263FF3;
+        Thu, 24 Aug 2023 13:08:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 294F8C433C8;
+        Thu, 24 Aug 2023 13:08:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1692882516;
+        bh=tVE1QYOXv6IpCCh+hH800wxS4nGPdh//Y3mgj0IDueU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nhLxMlpiJQnligF7VzMZbyIZ479Gf5a9oQPN1MQ1JhV7umyyImZPnqz2phU5NPO6R
-         zPFdbE6PSH0i6vBC1G24MqZa+ymQNZMdAMc/IXS6mHXp8w7TpO0SQ962ReglrRTc5n
-         xRQ3eqs5mNSqKwlsunRR8VMGN+Nt67RSOXOW6ML4=
-Date:   Thu, 24 Aug 2023 16:04:32 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Hugues Fruchet <hugues.fruchet@foss.st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Philippe CORNU <philippe.cornu@foss.st.com>,
-        Dan Scally <dan.scally@ideasonboard.com>
-Subject: Re: [PATCH v1 3/5] media: stm32-dcmipp: STM32 DCMIPP camera
- interface driver
-Message-ID: <20230824130432.GB27092@pendragon.ideasonboard.com>
-References: <20220910144010.34272-1-hugues.fruchet@foss.st.com>
- <20220910144010.34272-4-hugues.fruchet@foss.st.com>
- <ZNC5k3PynnEWL/ou@kekkonen.localdomain>
- <20230824110934.GA18226@gnbcxd0016.gnb.st.com>
- <ZOdMghQXfNgKZ6cN@kekkonen.localdomain>
+        b=J2DGqBgSMvbtNuu+cWBZM5UgH/OgvS6+0B1hBEnP2KZETszBm8ZtMJU5Pz/gLGIlk
+         Tqn815A4fxSu65k0ftGzVK+nexTf8NWMNUwpw/GPKEp0UT3XeahzmMSZgno+yUolK0
+         uV54E+0PQK5/PQqmwkhNMr4ZU7TqX/au1w7iEUPs=
+Date:   Thu, 24 Aug 2023 15:08:33 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jack Zhu <jack.zhu@starfivetech.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>, bryan.odonoghue@linaro.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-staging@lists.linux.dev,
+        changhuang.liang@starfivetech.com
+Subject: Re: [PATCH v8 0/8] Add StarFive Camera Subsystem driver
+Message-ID: <2023082416-flanking-requisite-a8ed@gregkh>
+References: <20230824080109.89613-1-jack.zhu@starfivetech.com>
+ <2023082436-spendable-reshuffle-878d@gregkh>
+ <a6f60dfc-ffbf-da4d-a81c-06caf92955d6@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZOdMghQXfNgKZ6cN@kekkonen.localdomain>
+In-Reply-To: <a6f60dfc-ffbf-da4d-a81c-06caf92955d6@starfivetech.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Aug 24, 2023 at 12:26:42PM +0000, Sakari Ailus wrote:
-> On Thu, Aug 24, 2023 at 01:09:34PM +0200, Alain Volmat wrote:
-> > Hi Sakari,
+On Thu, Aug 24, 2023 at 08:23:33PM +0800, Jack Zhu wrote:
+> Hi Greg,
+> 
+> On 2023/8/24 19:37, Greg Kroah-Hartman wrote:
+> > On Thu, Aug 24, 2023 at 04:01:01PM +0800, Jack Zhu wrote:
+> >> Hi,
+> >> 
+> >> This series is the v8 series that attempts to support the Camera Subsystem
+> >> found on StarFive JH7110 SoC.
 > > 
-> > thanks a lot for the review.  I've already taken care of the comments I got
-> > from Dan and will also add fixes for your comments as well before
-> > pushing the v2.  Before going into that I thought I'd better clarify the
-> > framerate part which seems the most tricky part.
+> > I don't see anything here about why this is in drivers/staging/media/
+> > now and not just in drivers/media/.  What is preventing this to be put
+> > into the correct place to start with?  What needs to be done to the code
+> > to get it out of drivers/staging/media/ and who is going to do that
+> > work?
 > > 
-> > On Mon, Aug 07, 2023 at 09:29:55AM +0000, Sakari Ailus wrote:
 > 
-> ...
-> 
-> > > > +static int dcmipp_byteproc_g_frame_interval(struct v4l2_subdev *sd,
-> > > > +					    struct v4l2_subdev_frame_interval *fi)
-> > > > +{
-> > > > +	struct dcmipp_byteproc_device *byteproc = v4l2_get_subdevdata(sd);
-> > > > +
-> > > > +	if (IS_SINK(fi->pad))
-> > > > +		fi->interval = byteproc->sink_interval;
-> > > > +	else
-> > > > +		fi->interval = byteproc->src_interval;
-> > > > +
-> > > > +	return 0;
-> > > > +}
-> > > > +
-> > > > +static int dcmipp_byteproc_s_frame_interval(struct v4l2_subdev *sd,
-> > > > +					    struct v4l2_subdev_frame_interval *fi)
-> > > > +{
-> > > > +	struct dcmipp_byteproc_device *byteproc = v4l2_get_subdevdata(sd);
-> > > > +
-> > > > +	mutex_lock(&byteproc->lock);
-> > > > +
-> > > > +	if (byteproc->streaming) {
-> > > > +		mutex_unlock(&byteproc->lock);
-> > > > +		return -EBUSY;
-> > > > +	}
-> > > > +
-> > > > +	if (fi->interval.numerator == 0 || fi->interval.denominator == 0)
-> > > > +		fi->interval = byteproc->sink_interval;
-> > > > +
-> > > > +	if (IS_SINK(fi->pad)) {
-> > > > +		/*
-> > > > +		 * Setting sink frame interval resets frame skipping.
-> > > > +		 * Sink frame interval is propagated to src.
-> > > > +		 */
-> > > > +		byteproc->frate = 0;
-> > > > +		byteproc->sink_interval = fi->interval;
-> > > > +		byteproc->src_interval = byteproc->sink_interval;
-> > > 
-> > > Is this used for anything else than configure skipping?
-> > > 
-> > > I think I'd just have a control for it in that case.
-> > > 
-> > > I don't think exposing frame interval configuration is necessarily even
-> > > meaningful for a device that just processes data but does not produce it.
-> > 
-> > The DCMIPP is able to perform frame drop, 1/2, 1/4, 1/8 basically.
-> > As Dan pointed me out, indeed setting frame interval as we did on both
-> > sink and source pad isn't a defined behavior.  I first thought that
-> > using the frame interval was the proper way to do that but that is
-> > indeed only used on producers such as sensors ....
-> > Which ctrl would you propose in such case ?
-> 
-> We don't have one, AFAIK, and I think it may be unlikely this will be
-> needed elsewhere. So I'd use a private control.
-> 
-> I wonder what others think. Cc Laurent as well.
+> The series does not contain 3A interface. According to Laurent's suggestion,
+> we put the driver in the staging directory first. In the next stage, we will
+> continue to submit the 3A interface in the way of incremental development,
+> and finally expect the code to be placed in the drivers/media/.
 
-What are the use cases for this feature ?
+Can you please say that in the changelog text for when you are adding
+the driver so that we know this?
 
--- 
-Regards,
+thanks,
 
-Laurent Pinchart
+greg k-h
