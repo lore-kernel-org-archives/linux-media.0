@@ -2,99 +2,79 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CC90DC7EE43
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE584C88CB9
 	for <linux-media@archiver.kernel.org>; Thu, 24 Aug 2023 09:22:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235158AbjHXJVu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 24 Aug 2023 05:21:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46246 "EHLO
+        id S240641AbjHXJVv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 24 Aug 2023 05:21:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236386AbjHXJVS (ORCPT
+        with ESMTP id S240658AbjHXJVX (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 24 Aug 2023 05:21:18 -0400
+        Thu, 24 Aug 2023 05:21:23 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D520CE67
-        for <linux-media@vger.kernel.org>; Thu, 24 Aug 2023 02:21:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1757419A8
+        for <linux-media@vger.kernel.org>; Thu, 24 Aug 2023 02:21:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692868876; x=1724404876;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=kVrCTSwcWBPMYc4oC7NTJ0T36dkQTx7zqf6Vxvo26Uc=;
-  b=lkkcaKW+rQz1FLtZqPLGLE5mKKrGpBkZa7oaB+vvUAbrMsJTriVBbo5I
-   bttWUPqmREIB5BaRbkI22zY+j2Kvwc9qJlZog6SR638guVkOXWs9pbL4D
-   tcwXbW+0Q3GGqk1MrYHxJaE89M9OW2AIho66CiRyZdGHmzsXAgpkwYExZ
-   xjFKlh1+RTY2sfVi2RgkX7eyDjD3QDBzkaHGx3mdPDTnAvF6POkAoHNLj
-   Qw20oIql7ZPfJOwYLmeg/5VeGPRESfmi4P+ynYgR3GG65cIOfiuUBgPyq
-   oj3q0sNloe/CVcAFkkowtAI4djXuywuZ/IHs1SovG+5hkhpxJPaseiPbU
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="438325591"
+  t=1692868882; x=1724404882;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FZbtXylU6y2odnUF/pGe9Z8+2LA5gjecDS84E04EayE=;
+  b=Qf0kXa+8PQch359bRUNYtZ8hW3AYc83gXdM4M4MSoh92qH7CRTWhxVh2
+   4Ah7NrOK1nOV1pnGVhugmrkZjD+WZB9wnw5qf9Wuig/8jMifpJe6kwHxH
+   +OHzUrVFTNRsQUclU2s/hKWbxLUoV3SB/5A3kslHHXaU4yEr1tP1DFaiF
+   0tTp8UvDc84BXXaO3yrfrpCnbUjKLUMIKGXAWShQkkbnX7agmjRAjf9pl
+   ikNLgN0cOAOKU7zVMQjaELmyVbXkZFYRV5AidXmccCmIgSdramOSeQ2W5
+   SLaywyR2b/09hX+JU6LBGoFyenO5/Med2mlT4jcggcF6AkCLWNCLuZyo1
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="438325595"
 X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="438325591"
+   d="scan'208";a="438325595"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
   by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2023 02:21:16 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="910837460"
+X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="910837467"
 X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="910837460"
+   d="scan'208";a="910837467"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2023 02:21:14 -0700
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2023 02:21:15 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id E99781204CF;
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id E4D7B11F9B6;
         Thu, 24 Aug 2023 12:14:57 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1qZ6Px-00GIGs-0O;
+        id 1qZ6Px-00GIGl-0D;
         Thu, 24 Aug 2023 12:14:17 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com, tomi.valkeinen@ideasonboard.com,
         jacopo.mondi@ideasonboard.com, hongju.wang@intel.com
-Subject: [yavta RFC 2/2] Add support for generic metadata formats
-Date:   Thu, 24 Aug 2023 12:14:07 +0300
-Message-Id: <20230824091407.3883461-3-sakari.ailus@linux.intel.com>
+Subject: [yavta RFC 0/2] Generic line based metadata support
+Date:   Thu, 24 Aug 2023 12:14:05 +0300
+Message-Id: <20230824091407.3883461-1-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230824091407.3883461-1-sakari.ailus@linux.intel.com>
-References: <20230824091407.3883461-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- yavta.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Hi folks,
 
-diff --git a/yavta.c b/yavta.c
-index d5628632c1f8..fb91b146a6c7 100644
---- a/yavta.c
-+++ b/yavta.c
-@@ -278,6 +278,7 @@ static struct v4l2_format_info {
- 	unsigned int fourcc;
- 	unsigned char n_planes;
- } pixel_formats[] = {
-+	/* Pixel data formats */
- 	{ "RGB332", V4L2_PIX_FMT_RGB332, 1 },
- 	{ "RGB444", V4L2_PIX_FMT_RGB444, 1 },
- 	{ "ARGB444", V4L2_PIX_FMT_ARGB444, 1 },
-@@ -359,6 +360,15 @@ static struct v4l2_format_info {
- 	{ "DV", V4L2_PIX_FMT_DV, 1 },
- 	{ "MJPEG", V4L2_PIX_FMT_MJPEG, 1 },
- 	{ "MPEG", V4L2_PIX_FMT_MPEG, 1 },
-+	/* Metadata formats */
-+	{ "GENERIC_8", V4L2_META_FMT_GENERIC_8, 1 },
-+	{ "GENERIC_CSI2_10", V4L2_META_FMT_GENERIC_CSI2_10, 1 },
-+	{ "GENERIC_CSI2_12", V4L2_META_FMT_GENERIC_CSI2_12, 1 },
-+	{ "GENERIC_CSI2_14", V4L2_META_FMT_GENERIC_CSI2_14, 1 },
-+	{ "GENERIC_CSI2_16", V4L2_META_FMT_GENERIC_CSI2_16, 1 },
-+	{ "GENERIC_CSI2_20", V4L2_META_FMT_GENERIC_CSI2_20, 1 },
-+	{ "GENERIC_CSI2_24", V4L2_META_FMT_GENERIC_CSI2_24, 1 },
-+	{ "GENERIC_CSI2_2_24", V4L2_META_FMT_GENERIC_CSI2_2_24, 1 },
- };
- 
- static void list_formats(void)
+This set adds the generic line based metadata support for yavta. Untested,
+hence posting this as RFC.
+
+Sakari Ailus (2):
+  Update kernel headers
+  Add support for generic metadata formats
+
+ include/linux/v4l2-common.h   |   39 -
+ include/linux/v4l2-controls.h | 1545 ++++++++++++++++++++++++++++++++-
+ include/linux/videodev2.h     |  102 ++-
+ yavta.c                       |   10 +
+ 4 files changed, 1611 insertions(+), 85 deletions(-)
+
 -- 
 2.39.2
 
