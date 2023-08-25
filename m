@@ -2,72 +2,206 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6336C3DA6F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6A29C6FA8F
 	for <linux-media@archiver.kernel.org>; Fri, 25 Aug 2023 02:52:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240701AbjHYCwB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 24 Aug 2023 22:52:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46060 "EHLO
+        id S241310AbjHYCwC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 24 Aug 2023 22:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242577AbjHYCvw (ORCPT
+        with ESMTP id S242617AbjHYCv4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 24 Aug 2023 22:51:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1AF5211D;
+        Thu, 24 Aug 2023 22:51:56 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143F82128
+        for <linux-media@vger.kernel.org>; Thu, 24 Aug 2023 19:51:22 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1c0d5b16aacso2828905ad.1
+        for <linux-media@vger.kernel.org>; Thu, 24 Aug 2023 19:51:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1692931880; x=1693536680;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=d39TfJDQpMKkFpdB9oQY3MYsthNxEY5fmlt/kOu0zbY=;
+        b=hfGZqD9To6qCBphRqf6VDsKXyPLekIyvGVJX89tfvNPW6y8Qr+9U7njbsx6ECh7bK8
+         CRR/ICu2LV7K6XYJmQnrl8fnNDf1Es898tOGOScz+/hHenz32dg2iOUJWCyn7nXI5WvR
+         Je54fJhAOGUZ3c3I8LcOp3LrUsiLiQebenUms=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692931880; x=1693536680;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=d39TfJDQpMKkFpdB9oQY3MYsthNxEY5fmlt/kOu0zbY=;
+        b=L1N5MSQwUMPlzTu0xlG/Bo43/ZOcWxt2Xsd1NnBdEaalN1Ii75HVcTUjRbV+iLefUO
+         WlPcppl2moKK8xNaHwhcCLo82+c2Gk2yz+Ced6CUXzSCXh87SaC2mIjBQWbOXq+W2t6C
+         YZq4PoSCAUbkYHAheJiJJwovpCeaNBPDM96RyF018zCuoc2pz3hqJ3lPfkTjLp9use7G
+         t1ydRpaRruTa/yYIpnMkP7kwXbXBz97Ebh7yom7797HRZtRxfVj92adTz/nPDCyue+6C
+         pMp1MyZo8CJ2C0NMhuaQtfinWoGx4X8oEJAXlHqhtNzuOvZzjF0HFBjn0EXk2wP243b7
+         q3vA==
+X-Gm-Message-State: AOJu0YwiBtNwi+99GZkZDlaV3ee7z4Zl11dqyK7EkYJ3CI+1975YXTv2
+        SreE1fzVMYZAcIWRx1YQwPWMXA==
+X-Google-Smtp-Source: AGHT+IGKaEmBN2CUW201gX/b8UH6PvTksEYJ4zA03HaBivXE2dQTcfLHRxnu6Y6z9DlAtwzFSgWFEA==
+X-Received: by 2002:a17:903:2792:b0:1bd:d141:f02d with SMTP id jw18-20020a170903279200b001bdd141f02dmr12240585plb.68.1692931879817;
+        Thu, 24 Aug 2023 19:51:19 -0700 (PDT)
+Received: from rekanorman3.syd.corp.google.com ([2401:fa00:9:14:9fe1:d4b1:42cc:882f])
+        by smtp.gmail.com with ESMTPSA id q10-20020a170902a3ca00b001bb0eebd90asm420847plb.245.2023.08.24.19.51.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 24 Aug 2023 19:51:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 03F5064542;
-        Fri, 25 Aug 2023 02:51:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6D1FEC433C8;
-        Fri, 25 Aug 2023 02:51:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692931872;
-        bh=4wthcCGK7UTEQggqK3+XS02OsVrGnYqqLtMdj3/SRxQ=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=Z6SBrzS6PFZy8neDiEhxfmJqZR5HDhHhkWxumjDXHD2HLLzommJz6j+XVLbFqOv60
-         UIx8jz3LeWLqFfwBYMhQwivxqKMK+LG5K0JupCpTrEJ7mxRoaokVcfW/Y86D5qDd58
-         PEA0XGbh2LI5+EocK/WkMJ5lazEPFKeoNYHIrrOMJQmSUuCMK+2XjsDSCTCUWgYsir
-         QZdKgr9F5XQDVt7SbeFYH0GAjKuIlSj/O+AW4aC9EEEd6oL7tm4ZJig5lt1fWjwAdR
-         CNONwM/SyWnFM2/BgP9lu5Sz4rI7BXnsjX826mQkVkT8qdWu7SqWoqQ/AwqJFvZaRF
-         7nqHDjmfXMXlw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 51680E21EDF;
-        Fri, 25 Aug 2023 02:51:12 +0000 (UTC)
-Subject: Re: [GIT PULL for v6.5] media fixes
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230825015419.0848a4bc@coco.lan>
-References: <20230825015419.0848a4bc@coco.lan>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230825015419.0848a4bc@coco.lan>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v6.5-4
-X-PR-Tracked-Commit-Id: e7f2e65699e2290fd547ec12a17008764e5d9620
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 14ddccc8a647f0e6b268858c4fe2804ae42aabb0
-Message-Id: <169293187232.29499.8466139975370857444.pr-tracker-bot@kernel.org>
-Date:   Fri, 25 Aug 2023 02:51:12 +0000
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+From:   Reka Norman <rekanorman@chromium.org>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Daisuke Nojiri <dnojiri@chromium.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Stefan Adolfsson <sadolfsson@google.com>,
+        Reka Norman <rekanorman@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH v2 4/9] media: cros-ec-cec: Support multiple ports in write command
+Date:   Fri, 25 Aug 2023 12:43:57 +1000
+Message-ID: <20230825024735.1443836-5-rekanorman@chromium.org>
+X-Mailer: git-send-email 2.42.0.rc2.253.gd59a3bf2b4-goog
+In-Reply-To: <20230825024735.1443836-1-rekanorman@chromium.org>
+References: <20230825024735.1443836-1-rekanorman@chromium.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The pull request you sent on Fri, 25 Aug 2023 01:54:19 +0200:
+Add a v1 of the CEC write command which contains a port parameter. Check
+which versions of the write command the EC supports and use the highest
+supported version. If it only supports v0, check that there is only one
+port. With v0, the EC will assume all write commands are for port 0.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v6.5-4
+Signed-off-by: Reka Norman <rekanorman@chromium.org>
+---
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/14ddccc8a647f0e6b268858c4fe2804ae42aabb0
+(no changes since v1)
 
-Thank you!
+ .../media/cec/platform/cros-ec/cros-ec-cec.c  | 54 +++++++++++++++++--
+ .../linux/platform_data/cros_ec_commands.h    | 12 +++++
+ 2 files changed, 63 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+index e969031e1e0e..d674a432dfdd 100644
+--- a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
++++ b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+@@ -47,12 +47,14 @@ struct cros_ec_cec_port {
+  *
+  * @cros_ec: Pointer to EC device
+  * @notifier: Notifier info for responding to EC events
++ * @write_cmd_version: Highest supported version of EC_CMD_CEC_WRITE_MSG.
+  * @num_ports: Number of CEC ports
+  * @ports: Array of ports
+  */
+ struct cros_ec_cec {
+ 	struct cros_ec_device *cros_ec;
+ 	struct notifier_block notifier;
++	int write_cmd_version;
+ 	int num_ports;
+ 	struct cros_ec_cec_port *ports[EC_CEC_MAX_PORTS];
+ };
+@@ -141,12 +143,22 @@ static int cros_ec_cec_transmit(struct cec_adapter *adap, u8 attempts,
+ 	struct cros_ec_cec *cros_ec_cec = port->cros_ec_cec;
+ 	struct cros_ec_device *cros_ec = cros_ec_cec->cros_ec;
+ 	struct ec_params_cec_write params;
++	struct ec_params_cec_write_v1 params_v1;
+ 	int ret;
+ 
+-	memcpy(params.msg, cec_msg->msg, cec_msg->len);
++	if (cros_ec_cec->write_cmd_version == 0) {
++		memcpy(params.msg, cec_msg->msg, cec_msg->len);
++		ret = cros_ec_cmd(cros_ec, 0, EC_CMD_CEC_WRITE_MSG, &params,
++				  cec_msg->len, NULL, 0);
++	} else {
++		params_v1.port = port->port_num;
++		params_v1.msg_len = cec_msg->len;
++		memcpy(params_v1.msg, cec_msg->msg, cec_msg->len);
++		ret = cros_ec_cmd(cros_ec, cros_ec_cec->write_cmd_version,
++				  EC_CMD_CEC_WRITE_MSG, &params_v1,
++				  sizeof(params_v1), NULL, 0);
++	}
+ 
+-	ret = cros_ec_cmd(cros_ec, 0, EC_CMD_CEC_WRITE_MSG, &params,
+-			  cec_msg->len, NULL, 0);
+ 	if (ret < 0) {
+ 		dev_err(cros_ec->dev,
+ 			"error writing CEC msg on EC: %d\n", ret);
+@@ -285,6 +297,38 @@ static struct device *cros_ec_cec_find_hdmi_dev(struct device *dev,
+ 
+ #endif
+ 
++static int cros_ec_cec_get_write_cmd_version(struct cros_ec_cec *cros_ec_cec)
++{
++	struct cros_ec_device *cros_ec = cros_ec_cec->cros_ec;
++	struct ec_params_get_cmd_versions_v1 params = {
++		.cmd = EC_CMD_CEC_WRITE_MSG,
++	};
++	struct ec_response_get_cmd_versions response;
++	int ret;
++
++	ret = cros_ec_cmd(cros_ec, 1, EC_CMD_GET_CMD_VERSIONS, &params,
++			  sizeof(params), &response, sizeof(response));
++	if (ret < 0) {
++		dev_err(cros_ec->dev,
++			"error getting CEC write command version: %d\n", ret);
++		return ret;
++	}
++
++	if (response.version_mask & EC_VER_MASK(1)) {
++		cros_ec_cec->write_cmd_version = 1;
++	} else {
++		if (cros_ec_cec->num_ports != 1) {
++			dev_err(cros_ec->dev,
++				"v0 write command only supports 1 port, %d reported\n",
++				cros_ec_cec->num_ports);
++			return -EINVAL;
++		}
++		cros_ec_cec->write_cmd_version = 0;
++	}
++
++	return 0;
++}
++
+ static int cros_ec_cec_init_port(struct device *dev,
+ 				 struct cros_ec_cec *cros_ec_cec,
+ 				 int port_num, struct device *hdmi_dev,
+@@ -354,6 +398,10 @@ static int cros_ec_cec_probe(struct platform_device *pdev)
+ 
+ 	cros_ec_cec->num_ports = CEC_NUM_PORTS;
+ 
++	ret = cros_ec_cec_get_write_cmd_version(cros_ec_cec);
++	if (ret)
++		return ret;
++
+ 	for (int i = 0; i < cros_ec_cec->num_ports; i++) {
+ 		ret = cros_ec_cec_init_port(&pdev->dev, cros_ec_cec, i,
+ 					    hdmi_dev, conn);
+diff --git a/include/linux/platform_data/cros_ec_commands.h b/include/linux/platform_data/cros_ec_commands.h
+index e8bb05db360f..9a0c6e28f370 100644
+--- a/include/linux/platform_data/cros_ec_commands.h
++++ b/include/linux/platform_data/cros_ec_commands.h
+@@ -4451,6 +4451,18 @@ struct ec_params_cec_write {
+ 	uint8_t msg[MAX_CEC_MSG_LEN];
+ } __ec_align1;
+ 
++/**
++ * struct ec_params_cec_write_v1 - Message to write to the CEC bus
++ * @port: CEC port to write the message on
++ * @msg_len: length of msg in bytes
++ * @msg: message content to write to the CEC bus
++ */
++struct ec_params_cec_write_v1 {
++	uint8_t port;
++	uint8_t msg_len;
++	uint8_t msg[MAX_CEC_MSG_LEN];
++} __ec_align1;
++
+ /* Set various CEC parameters */
+ #define EC_CMD_CEC_SET 0x00BA
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.42.0.rc2.253.gd59a3bf2b4-goog
+
