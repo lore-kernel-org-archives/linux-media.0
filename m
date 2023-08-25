@@ -2,51 +2,51 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E96AC88CB2
-	for <linux-media@archiver.kernel.org>; Fri, 25 Aug 2023 02:53:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EEA61C6FA8F
+	for <linux-media@archiver.kernel.org>; Fri, 25 Aug 2023 02:54:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238161AbjHYCxF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 24 Aug 2023 22:53:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59474 "EHLO
+        id S232147AbjHYCyH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 24 Aug 2023 22:54:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242416AbjHYCwo (ORCPT
+        with ESMTP id S236009AbjHYCxl (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 24 Aug 2023 22:52:44 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F511FEC
-        for <linux-media@vger.kernel.org>; Thu, 24 Aug 2023 19:52:14 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1bf3a2f44ffso4627395ad.1
-        for <linux-media@vger.kernel.org>; Thu, 24 Aug 2023 19:52:14 -0700 (PDT)
+        Thu, 24 Aug 2023 22:53:41 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A7D31FF7
+        for <linux-media@vger.kernel.org>; Thu, 24 Aug 2023 19:53:15 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1bdbf10333bso4672785ad.1
+        for <linux-media@vger.kernel.org>; Thu, 24 Aug 2023 19:53:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1692931932; x=1693536732;
+        d=chromium.org; s=google; t=1692931994; x=1693536794;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jYcbBdAIrsQLNnjQMklJ793CjZQNy73htJnU1NwxXiU=;
-        b=C8kuC1LL98oeM8aIMmk+MXgZ9217C7GVnktd+aRxZm4Gyq7e5QYfJaMR85aC+HeyP/
-         ZUPTdw5pPo9qjtoC4cQP7gHsmyrEOenLPTe/0UMe8GUOQp/OSzZawxCUDVdcszWHBPJi
-         Id3KSe8uQd6eocAd6J/3wo4U0g4lcO0r+WLSk=
+        bh=7dugPNPrpRp20Yd0O9nctENrWeeR3ORCR/xP4x4RAic=;
+        b=kUsFiECEZpTrPQFc8F/uDF4rHYH4vybiNaFnPghtvyBKKmZ9Bje+SEjmmjEerhmzCl
+         CYVBghYEA1/TUoIx5EEUOkcuwx53A+/kBvFdIoh711qp6sbLW0dgQqSjk9DiamKGlit+
+         6vj+hK0sMuyscmmRkQ01q9gFDoU77NtaBIcYA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692931932; x=1693536732;
+        d=1e100.net; s=20221208; t=1692931994; x=1693536794;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jYcbBdAIrsQLNnjQMklJ793CjZQNy73htJnU1NwxXiU=;
-        b=b83rNBJnHjc3q9fBVTalDVsN3UTWL76DfsJ1OyZ+nxHpe9bfzYctK4bZ2Ct6pivlD3
-         A/ZcId7BXrYoDEKztrZL7KRbumIGqR1Bg0qwr0oB2LUK6D8XeID0DyYs22AhgS3v/nwG
-         6rCOh+ODtIjzY8UmA++xUEib5TUJFRGX6ATEXN37/rJ3Wy/oHYH6W/uvWgLdciIkCxbt
-         wPm8WQ3AA+e47ugaXJysBZZUEipPHEH0lNX6DXJHaNFy/jQPdRlZQxDUx0S7i/cRp/Xa
-         iZSO/FIci186OpLJBH8u2K1ajoIZ6nPfJ6pKfN55Va+61swlvkQUWgZPu4baTLnlF2Sj
-         ZHsA==
-X-Gm-Message-State: AOJu0YypROhYSQvdE6RvZwDeZk21ca8bcxDcRuvudfdTP6oVaO077jUH
-        7m/NinFSDXb2qMIeAdS4dMGuEA==
-X-Google-Smtp-Source: AGHT+IGJOPJ+CKWfPlqb86VYhTSiWBWSDpetoBBpmiTm1a4wgATGmNdDfSTC4SdW10SucR1xUBDCtw==
-X-Received: by 2002:a17:902:c612:b0:1bb:7b6c:983a with SMTP id r18-20020a170902c61200b001bb7b6c983amr15263225plr.59.1692931931907;
-        Thu, 24 Aug 2023 19:52:11 -0700 (PDT)
+        bh=7dugPNPrpRp20Yd0O9nctENrWeeR3ORCR/xP4x4RAic=;
+        b=O6nngeOQhaU0l18it2s/Mjzw0KZVDFyZyZaRRlF+Xm2cbEV91dE/CSLCKtVAaYSbZ/
+         vdOobkRcFsn09puXa+g/nyAPGmKx8HHQctk9/vFFoQG6DMCaf27D7Dr8itKKrXxhqlFR
+         D+M7MzAlwVLkp/V8orDg6E9jIUBaouC6Eyj2CII/HTyGDoYy3IztD8vjyT6QnFSSq0JO
+         4J7Ql2uNU4T5P7Q2zyy9N5g8VEIr8bk6+ItnfSe+adcDWrcuF5MX/D2VBTBzsJ0CR3gV
+         y8kLk840QD6cj/QD4riesrYu2WNAlFRvZU26ELcl9H22j2+IX0+cuqZbWs6ea+47cAF8
+         E0nw==
+X-Gm-Message-State: AOJu0Yy7PZ3N5ZiimtBB4Oe+8IYawXL/bo0Vpl09yaIBq6ed2cbNtjtR
+        HDGp9vk8UHzRgCPhMQ/pYagD8A==
+X-Google-Smtp-Source: AGHT+IEkc7Xs+45n58w3dsFPGkMtOXljc3EaX3VUWt/vtWRbIjVktIboj9yBRphEmhsRVco1KvBeAg==
+X-Received: by 2002:a17:903:187:b0:1bd:b7ad:a584 with SMTP id z7-20020a170903018700b001bdb7ada584mr22007289plg.44.1692931994207;
+        Thu, 24 Aug 2023 19:53:14 -0700 (PDT)
 Received: from rekanorman3.syd.corp.google.com ([2401:fa00:9:14:9fe1:d4b1:42cc:882f])
-        by smtp.gmail.com with ESMTPSA id q10-20020a170902a3ca00b001bb0eebd90asm420847plb.245.2023.08.24.19.52.07
+        by smtp.gmail.com with ESMTPSA id q10-20020a170902a3ca00b001bb0eebd90asm420847plb.245.2023.08.24.19.53.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Aug 2023 19:52:10 -0700 (PDT)
+        Thu, 24 Aug 2023 19:53:13 -0700 (PDT)
 From:   Reka Norman <rekanorman@chromium.org>
 To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Cc:     Daisuke Nojiri <dnojiri@chromium.org>,
@@ -58,9 +58,9 @@ Cc:     Daisuke Nojiri <dnojiri@chromium.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org
-Subject: [PATCH v2 6/9] media: cros-ec-cec: Support receiving messages from multiple ports
-Date:   Fri, 25 Aug 2023 12:43:59 +1000
-Message-ID: <20230825024735.1443836-7-rekanorman@chromium.org>
+Subject: [PATCH v2 8/9] media: cros-ec-cec: Get number of CEC ports from EC
+Date:   Fri, 25 Aug 2023 12:44:01 +1000
+Message-ID: <20230825024735.1443836-9-rekanorman@chromium.org>
 X-Mailer: git-send-email 2.42.0.rc2.253.gd59a3bf2b4-goog
 In-Reply-To: <20230825024735.1443836-1-rekanorman@chromium.org>
 References: <20230825024735.1443836-1-rekanorman@chromium.org>
@@ -70,153 +70,109 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Currently, received messages are sent from the EC in the cec_message
-MKBP event. Since the size of ec_response_get_next_data_v1 is 16 bytes,
-which is also the maximum size of a CEC message, there is no space to
-add a port parameter. Increasing the size of
-ec_response_get_next_data_v1 is an option, but this would increase
-EC-kernel traffic for all MKBP event types.
+Add a new CEC port count host command and use it to query the number of
+CEC ports from the EC. If the host command is not supported then it must
+be old EC firmware which only supports one port, so fall back to
+assuming one port.
 
-Instead, use an event to notify that data is ready, and add a new read
-command to read the data.
-
-For backwards compatibility with old EC firmware, continue to handle
-cec_message events as well.
+This patch completes support for multiple ports in cros-ec-cec.
 
 Signed-off-by: Reka Norman <rekanorman@chromium.org>
 ---
 
 (no changes since v1)
 
- .../media/cec/platform/cros-ec/cros-ec-cec.c  | 59 +++++++++++++++++--
- .../linux/platform_data/cros_ec_commands.h    | 23 ++++++++
- 2 files changed, 76 insertions(+), 6 deletions(-)
+ .../media/cec/platform/cros-ec/cros-ec-cec.c  | 40 ++++++++++++++++---
+ .../linux/platform_data/cros_ec_commands.h    | 11 +++++
+ 2 files changed, 46 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-index 18f78b7e034a..6989e63c05be 100644
+index 371699d599de..993deb85d3e2 100644
 --- a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
 +++ b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-@@ -59,19 +59,63 @@ struct cros_ec_cec {
- 	struct cros_ec_cec_port *ports[EC_CEC_MAX_PORTS];
- };
+@@ -21,10 +21,6 @@
  
-+static void cros_ec_cec_received_message(struct cros_ec_cec_port *port,
-+					 uint8_t *msg, uint8_t len)
+ #define DRV_NAME	"cros-ec-cec"
+ 
+-/* Only one port is supported for now */
+-#define CEC_NUM_PORTS	1
+-#define CEC_PORT	0
+-
+ /**
+  * struct cros_ec_cec_port - Driver data for a single EC CEC port
+  *
+@@ -358,6 +354,38 @@ static struct device *cros_ec_cec_find_hdmi_dev(struct device *dev,
+ 
+ #endif
+ 
++static int cros_ec_cec_get_num_ports(struct cros_ec_cec *cros_ec_cec)
 +{
-+	if (len > CEC_MAX_MSG_SIZE)
-+		len = CEC_MAX_MSG_SIZE;
-+
-+	port->rx_msg.len = len;
-+	memcpy(port->rx_msg.msg, msg, len);
-+
-+	cec_received_msg(port->adap, &port->rx_msg);
-+}
-+
- static void handle_cec_message(struct cros_ec_cec *cros_ec_cec)
- {
- 	struct cros_ec_device *cros_ec = cros_ec_cec->cros_ec;
- 	uint8_t *cec_message = cros_ec->event_data.data.cec_message;
- 	unsigned int len = cros_ec->event_size;
--	struct cros_ec_cec_port *port = cros_ec_cec->ports[CEC_PORT];
-+	struct cros_ec_cec_port *port;
-+	/*
-+	 * There are two ways of receiving CEC messages:
-+	 * 1. Old EC firmware which only supports one port sends the data in a
-+	 *    cec_message MKBP event.
-+	 * 2. New EC firmware which supports multiple ports uses
-+	 *    EC_MKBP_CEC_HAVE_DATA to notify that data is ready and
-+	 *    EC_CMD_CEC_READ_MSG to read it.
-+	 * Check that the EC only has one CEC port, and then we can assume the
-+	 * message is from port 0.
-+	 */
-+	if (cros_ec_cec->num_ports != 1) {
-+		dev_err(cros_ec->dev,
-+			"received cec_message on device with %d ports\n",
-+			cros_ec_cec->num_ports);
-+		return;
-+	}
-+	port = cros_ec_cec->ports[0];
- 
--	if (len > CEC_MAX_MSG_SIZE)
--		len = CEC_MAX_MSG_SIZE;
--	port->rx_msg.len = len;
--	memcpy(port->rx_msg.msg, cec_message, len);
-+	cros_ec_cec_received_message(port, cec_message, len);
-+}
- 
--	cec_received_msg(port->adap, &port->rx_msg);
-+static void cros_ec_cec_read_message(struct cros_ec_cec_port *port)
-+{
-+	struct cros_ec_device *cros_ec = port->cros_ec_cec->cros_ec;
-+	struct ec_params_cec_read params = {
-+		.port = port->port_num,
-+	};
-+	struct ec_response_cec_read response;
++	struct ec_response_cec_port_count response;
 +	int ret;
 +
-+	ret = cros_ec_cmd(cros_ec, 0, EC_CMD_CEC_READ_MSG, &params,
-+			  sizeof(params), &response, sizeof(response));
++	ret = cros_ec_cmd(cros_ec_cec->cros_ec, 0, EC_CMD_CEC_PORT_COUNT, NULL,
++			  0, &response, sizeof(response));
 +	if (ret < 0) {
-+		dev_err(cros_ec->dev,
-+			"error reading CEC message on EC: %d\n", ret);
-+		return;
++		/*
++		 * Old EC firmware only supports one port and does not support
++		 * the port count command, so fall back to assuming one port.
++		 */
++		cros_ec_cec->num_ports = 1;
++		return 0;
 +	}
 +
-+	cros_ec_cec_received_message(port, response.msg, response.msg_len);
- }
- 
- static void handle_cec_event(struct cros_ec_cec *cros_ec_cec)
-@@ -97,6 +141,9 @@ static void handle_cec_event(struct cros_ec_cec *cros_ec_cec)
- 		cec_transmit_attempt_done(port->adap,
- 					  CEC_TX_STATUS_MAX_RETRIES |
- 					  CEC_TX_STATUS_NACK);
++	if (response.port_count == 0) {
++		dev_err(cros_ec_cec->cros_ec->dev,
++			"EC reports 0 CEC ports\n");
++		return -ENODEV;
++	}
 +
-+	if (events & EC_MKBP_CEC_HAVE_DATA)
-+		cros_ec_cec_read_message(port);
- }
++	if (response.port_count > EC_CEC_MAX_PORTS) {
++		dev_err(cros_ec_cec->cros_ec->dev,
++			"EC reports too many ports: %d\n", response.port_count);
++		return -EINVAL;
++	}
++
++	cros_ec_cec->num_ports = response.port_count;
++	return 0;
++}
++
+ static int cros_ec_cec_get_write_cmd_version(struct cros_ec_cec *cros_ec_cec)
+ {
+ 	struct cros_ec_device *cros_ec = cros_ec_cec->cros_ec;
+@@ -463,7 +491,9 @@ static int cros_ec_cec_probe(struct platform_device *pdev)
  
- static int cros_ec_cec_event(struct notifier_block *nb,
+ 	device_init_wakeup(&pdev->dev, 1);
+ 
+-	cros_ec_cec->num_ports = CEC_NUM_PORTS;
++	ret = cros_ec_cec_get_num_ports(cros_ec_cec);
++	if (ret)
++		return ret;
+ 
+ 	ret = cros_ec_cec_get_write_cmd_version(cros_ec_cec);
+ 	if (ret)
 diff --git a/include/linux/platform_data/cros_ec_commands.h b/include/linux/platform_data/cros_ec_commands.h
-index b7e8573a8a49..ad61c7ff0b28 100644
+index ad61c7ff0b28..7dae17b62a4d 100644
 --- a/include/linux/platform_data/cros_ec_commands.h
 +++ b/include/linux/platform_data/cros_ec_commands.h
-@@ -4473,6 +4473,27 @@ struct ec_params_cec_write_v1 {
- 	uint8_t msg[MAX_CEC_MSG_LEN];
+@@ -4536,6 +4536,17 @@ struct ec_response_cec_get {
+ 	uint8_t val;
  } __ec_align1;
  
-+/* CEC message read from a CEC bus reported back to the AP */
-+#define EC_CMD_CEC_READ_MSG 0x00B9
++/* Get the number of CEC ports */
++#define EC_CMD_CEC_PORT_COUNT 0x00C1
 +
 +/**
-+ * struct ec_params_cec_read - Read a message from the CEC bus
-+ * @port: CEC port to read a message on
++ * struct ec_response_cec_port_count - CEC port count response
++ * @port_count: number of CEC ports
 + */
-+struct ec_params_cec_read {
-+	uint8_t port;
++struct ec_response_cec_port_count {
++	uint8_t port_count;
 +} __ec_align1;
 +
-+/**
-+ * struct ec_response_cec_read - Message read from the CEC bus
-+ * @msg_len: length of msg in bytes
-+ * @msg: message content read from the CEC bus
-+ */
-+struct ec_response_cec_read {
-+	uint8_t msg_len;
-+	uint8_t msg[MAX_CEC_MSG_LEN];
-+} __ec_align1;
-+
- /* Set various CEC parameters */
- #define EC_CMD_CEC_SET 0x00BA
- 
-@@ -4529,6 +4550,8 @@ enum mkbp_cec_event {
- 	EC_MKBP_CEC_SEND_OK			= BIT(0),
- 	/* Outgoing message was not acknowledged */
- 	EC_MKBP_CEC_SEND_FAILED			= BIT(1),
-+	/* Incoming message can be read out by AP */
-+	EC_MKBP_CEC_HAVE_DATA			= BIT(2),
- };
- 
- /*****************************************************************************/
+ /* CEC parameters command */
+ enum cec_command {
+ 	/* CEC reading, writing and events enable */
 -- 
 2.42.0.rc2.253.gd59a3bf2b4-goog
 
