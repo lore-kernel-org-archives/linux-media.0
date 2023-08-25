@@ -2,143 +2,72 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FFEEC3DA6F
-	for <linux-media@archiver.kernel.org>; Fri, 25 Aug 2023 02:51:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6336C3DA6F
+	for <linux-media@archiver.kernel.org>; Fri, 25 Aug 2023 02:52:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238075AbjHYCv1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 24 Aug 2023 22:51:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33374 "EHLO
+        id S240701AbjHYCwB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 24 Aug 2023 22:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242463AbjHYCvO (ORCPT
+        with ESMTP id S242577AbjHYCvw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 24 Aug 2023 22:51:14 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881231FFE
-        for <linux-media@vger.kernel.org>; Thu, 24 Aug 2023 19:51:05 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-68a56401b9aso431231b3a.1
-        for <linux-media@vger.kernel.org>; Thu, 24 Aug 2023 19:51:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1692931865; x=1693536665;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Y4EGzm9bw0XByI1m8+dZAvw1r82ELdr/2MKF8VZnDhM=;
-        b=L/peUxfv5ek1T9o7T4v/BvKO3klCtt5UyahYL2j2G6cWn+PuHUyKzkMFohwOPvt6cE
-         hvdVtBIHC04XCH9bmcBvDAvr3SKql2+OHyX7CrprdBHGfQvQRTGxgHxTEkjtj3+3hzv3
-         /KSYrOS8DSJLx9HIpLQJVR1l6cNPvJIAwjjt8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692931865; x=1693536665;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Y4EGzm9bw0XByI1m8+dZAvw1r82ELdr/2MKF8VZnDhM=;
-        b=CTraZtgUYKOrk79n2ytoCAyoBav9DOSlypVwWcR1WRp7eqbqKi/PmwybUa2riQme8l
-         TW3pPxE/eLL/8kNPyaBBbIXtIokZ0WL2lA0EXIwcLqC1Zk0dQROOePhF0wdU8BoQif8o
-         T/uFcdQLJL0XfpWofR8luMSU9b4B45Xf2hFvVlgZiBnP6ZiuxbZp95t+jWjG/qriOtAO
-         AWFA6VPRV4DwH71woutVtoQLfaFpiQmnfqm7FY64ynkO/tB8I4HuKciTj0jaMHV/NBSR
-         +5dCbnruWuDiRLvLZB5iuU0dBJCCuyXOnn41zI3g5PO7UND3i8YFGQxj+iD8VU5bNaOM
-         CqMQ==
-X-Gm-Message-State: AOJu0YxVVEa/3RMWiwZ0enfPiSDKz2UBVdxZuacLlcfnr2Q2f5ka5W/M
-        Yrw6PmdRXzgnBFBpQmVcx8b2/g==
-X-Google-Smtp-Source: AGHT+IGNvt6/DD1lGIo+aVfNdQV4LtnbDVTQ3+AyPfWDl8BKFxGOBCCuVYRHGLggtterkcO3Ny3whg==
-X-Received: by 2002:a05:6a20:2449:b0:13f:3d25:d83 with SMTP id t9-20020a056a20244900b0013f3d250d83mr18540213pzc.19.1692931864876;
-        Thu, 24 Aug 2023 19:51:04 -0700 (PDT)
-Received: from rekanorman3.syd.corp.google.com ([2401:fa00:9:14:9fe1:d4b1:42cc:882f])
-        by smtp.gmail.com with ESMTPSA id q10-20020a170902a3ca00b001bb0eebd90asm420847plb.245.2023.08.24.19.51.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Aug 2023 19:51:03 -0700 (PDT)
-From:   Reka Norman <rekanorman@chromium.org>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Daisuke Nojiri <dnojiri@chromium.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Stefan Adolfsson <sadolfsson@google.com>,
-        Reka Norman <rekanorman@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH v2 3/9] media: cros-ec-cec: Support multiple ports in set/get host commands
-Date:   Fri, 25 Aug 2023 12:43:56 +1000
-Message-ID: <20230825024735.1443836-4-rekanorman@chromium.org>
-X-Mailer: git-send-email 2.42.0.rc2.253.gd59a3bf2b4-goog
-In-Reply-To: <20230825024735.1443836-1-rekanorman@chromium.org>
-References: <20230825024735.1443836-1-rekanorman@chromium.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Thu, 24 Aug 2023 22:51:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1AF5211D;
+        Thu, 24 Aug 2023 19:51:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 03F5064542;
+        Fri, 25 Aug 2023 02:51:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6D1FEC433C8;
+        Fri, 25 Aug 2023 02:51:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692931872;
+        bh=4wthcCGK7UTEQggqK3+XS02OsVrGnYqqLtMdj3/SRxQ=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Z6SBrzS6PFZy8neDiEhxfmJqZR5HDhHhkWxumjDXHD2HLLzommJz6j+XVLbFqOv60
+         UIx8jz3LeWLqFfwBYMhQwivxqKMK+LG5K0JupCpTrEJ7mxRoaokVcfW/Y86D5qDd58
+         PEA0XGbh2LI5+EocK/WkMJ5lazEPFKeoNYHIrrOMJQmSUuCMK+2XjsDSCTCUWgYsir
+         QZdKgr9F5XQDVt7SbeFYH0GAjKuIlSj/O+AW4aC9EEEd6oL7tm4ZJig5lt1fWjwAdR
+         CNONwM/SyWnFM2/BgP9lu5Sz4rI7BXnsjX826mQkVkT8qdWu7SqWoqQ/AwqJFvZaRF
+         7nqHDjmfXMXlw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 51680E21EDF;
+        Fri, 25 Aug 2023 02:51:12 +0000 (UTC)
+Subject: Re: [GIT PULL for v6.5] media fixes
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230825015419.0848a4bc@coco.lan>
+References: <20230825015419.0848a4bc@coco.lan>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230825015419.0848a4bc@coco.lan>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v6.5-4
+X-PR-Tracked-Commit-Id: e7f2e65699e2290fd547ec12a17008764e5d9620
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 14ddccc8a647f0e6b268858c4fe2804ae42aabb0
+Message-Id: <169293187232.29499.8466139975370857444.pr-tracker-bot@kernel.org>
+Date:   Fri, 25 Aug 2023 02:51:12 +0000
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Reuse the top four bits of the cmd field to specify the port number.
-The reason for doing this as opposed to adding a separate uint8_t field
-is it avoids the need to add new versions of these commands. The change
-is backwards compatible since these bits were previously always zero, so
-the default behaviour is to always operate on port 0.
+The pull request you sent on Fri, 25 Aug 2023 01:54:19 +0200:
 
-Signed-off-by: Reka Norman <rekanorman@chromium.org>
----
+> git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v6.5-4
 
-(no changes since v1)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/14ddccc8a647f0e6b268858c4fe2804ae42aabb0
 
- drivers/media/cec/platform/cros-ec/cros-ec-cec.c | 2 ++
- include/linux/platform_data/cros_ec_commands.h   | 8 ++++++--
- 2 files changed, 8 insertions(+), 2 deletions(-)
+Thank you!
 
-diff --git a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-index d76a25ae0cf1..e969031e1e0e 100644
---- a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-+++ b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-@@ -118,6 +118,7 @@ static int cros_ec_cec_set_log_addr(struct cec_adapter *adap, u8 logical_addr)
- 	struct cros_ec_device *cros_ec = cros_ec_cec->cros_ec;
- 	struct ec_params_cec_set params = {
- 		.cmd = CEC_CMD_LOGICAL_ADDRESS,
-+		.port = port->port_num,
- 		.val = logical_addr,
- 	};
- 	int ret;
-@@ -162,6 +163,7 @@ static int cros_ec_cec_adap_enable(struct cec_adapter *adap, bool enable)
- 	struct cros_ec_device *cros_ec = cros_ec_cec->cros_ec;
- 	struct ec_params_cec_set params = {
- 		.cmd = CEC_CMD_ENABLE,
-+		.port = port->port_num,
- 		.val = enable,
- 	};
- 	int ret;
-diff --git a/include/linux/platform_data/cros_ec_commands.h b/include/linux/platform_data/cros_ec_commands.h
-index cb2ddd10a613..e8bb05db360f 100644
---- a/include/linux/platform_data/cros_ec_commands.h
-+++ b/include/linux/platform_data/cros_ec_commands.h
-@@ -4457,13 +4457,15 @@ struct ec_params_cec_write {
- /**
-  * struct ec_params_cec_set - CEC parameters set
-  * @cmd: parameter type, can be CEC_CMD_ENABLE or CEC_CMD_LOGICAL_ADDRESS
-+ * @port: CEC port to set the parameter on
-  * @val: in case cmd is CEC_CMD_ENABLE, this field can be 0 to disable CEC
-  *	or 1 to enable CEC functionality, in case cmd is
-  *	CEC_CMD_LOGICAL_ADDRESS, this field encodes the requested logical
-  *	address between 0 and 15 or 0xff to unregister
-  */
- struct ec_params_cec_set {
--	uint8_t cmd; /* enum cec_command */
-+	uint8_t cmd : 4; /* enum cec_command */
-+	uint8_t port : 4;
- 	uint8_t val;
- } __ec_align1;
- 
-@@ -4473,9 +4475,11 @@ struct ec_params_cec_set {
- /**
-  * struct ec_params_cec_get - CEC parameters get
-  * @cmd: parameter type, can be CEC_CMD_ENABLE or CEC_CMD_LOGICAL_ADDRESS
-+ * @port: CEC port to get the parameter on
-  */
- struct ec_params_cec_get {
--	uint8_t cmd; /* enum cec_command */
-+	uint8_t cmd : 4; /* enum cec_command */
-+	uint8_t port : 4;
- } __ec_align1;
- 
- /**
 -- 
-2.42.0.rc2.253.gd59a3bf2b4-goog
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
