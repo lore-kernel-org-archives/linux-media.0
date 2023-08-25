@@ -2,108 +2,151 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80557EE49A0
-	for <linux-media@archiver.kernel.org>; Fri, 25 Aug 2023 02:54:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4F9FC7EE2C
+	for <linux-media@archiver.kernel.org>; Fri, 25 Aug 2023 02:59:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236086AbjHYCyI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 24 Aug 2023 22:54:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47358 "EHLO
+        id S229599AbjHYC6y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 24 Aug 2023 22:58:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242516AbjHYCxw (ORCPT
+        with ESMTP id S231736AbjHYC6s (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 24 Aug 2023 22:53:52 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A6E1FD3
-        for <linux-media@vger.kernel.org>; Thu, 24 Aug 2023 19:53:32 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1bf078d5f33so4732395ad.3
-        for <linux-media@vger.kernel.org>; Thu, 24 Aug 2023 19:53:32 -0700 (PDT)
+        Thu, 24 Aug 2023 22:58:48 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE499E7A
+        for <linux-media@vger.kernel.org>; Thu, 24 Aug 2023 19:58:46 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2bbad32bc79so6904521fa.0
+        for <linux-media@vger.kernel.org>; Thu, 24 Aug 2023 19:58:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1692932008; x=1693536808;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=chromium.org; s=google; t=1692932325; x=1693537125;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ka8P5b/GzyZWqOM50pHONHl9tEIZnwSQ0LsDJccYJvI=;
-        b=BzlEs8cAdigCMb3vJPqRNzIb1J1HMXhrk6+GbBQGA0k1l767wGfP7XvKmyt9yAyOSA
-         4etFUTYoIV32HK7WWxK7y/MW35VnO29t51VsENsZjk8D0lNdCawf9uRWsfhEM9kerzDP
-         pqrTeOgtNfEw/WuzoRZxu8+I4r+gFLu83Og5A=
+        bh=i3zX4Zb+/ffsYg6eBe+TNid4MG/g6LStWIhoKJPVbas=;
+        b=QF971O+bJsLvZ9A2DhNJTQBhjQiiG7vmdQxDxtALAwt1S3XJCKuBQWbZZMAeEWjHiY
+         IOZcpB2pcxcDjQLP0j3gAakDNA7gfDXXNAV5n/R2bT2i1T6mcj4p7VP+RB6dGBz53Tba
+         UBZFoyZNvcXAdk6SNSr6L4g+7vDHss0vKT7HE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692932008; x=1693536808;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1692932325; x=1693537125;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ka8P5b/GzyZWqOM50pHONHl9tEIZnwSQ0LsDJccYJvI=;
-        b=ZpcM7wCXbK6RDJBx/EaG1lg08gVTfVwZ8802nqCaIOCGfBHZRMtU0nIHStQRy4YJfE
-         Y2kLg7w6Jjs2DeYdzpHFx02e80NGkpB27rNK86IeE2nXQE9aIlZzn7DOaxH4iU3IMjnU
-         po3cfiTYtAowz11vxiWnLEvU4fwe98GTRKLxrOGfB/3I9GNEjXfdK9w3HQLA/y6F37TX
-         baO+DJ0JySIrsBHeM0yQ/tl5FQzVpMvDA6fnjq20/7+HKmAUfzAjn+L7SCNpTzMqpsIB
-         eNtqq3ckBqJqgqOZvIo3HzCbp6GwqOMDon4e3mflDFRJ97KgSz8IXgct7mrhUGWukkSw
-         p34w==
-X-Gm-Message-State: AOJu0Yzkn7euc1E0PlmueKZTyQbExOgVan206Sn7AFbBpeJ+kTmfUsax
-        bA4bI18rkj7xG2dY2i9qpuDTBA==
-X-Google-Smtp-Source: AGHT+IH938af/Jkw37fRHmw130aKNQYszXvCGp+5zNX3Tkto4r7N0993i9603PTTX5fDrm5uQLkqvg==
-X-Received: by 2002:a17:902:f54b:b0:1b8:92fc:7429 with SMTP id h11-20020a170902f54b00b001b892fc7429mr20923761plf.53.1692932008269;
-        Thu, 24 Aug 2023 19:53:28 -0700 (PDT)
-Received: from rekanorman3.syd.corp.google.com ([2401:fa00:9:14:9fe1:d4b1:42cc:882f])
-        by smtp.gmail.com with ESMTPSA id q10-20020a170902a3ca00b001bb0eebd90asm420847plb.245.2023.08.24.19.53.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Aug 2023 19:53:27 -0700 (PDT)
+        bh=i3zX4Zb+/ffsYg6eBe+TNid4MG/g6LStWIhoKJPVbas=;
+        b=N4SXBwyrz+pWUjNho2YUWIE6pSk6/BDSFnFii3uaROj8yHYp1hTg0PXfh0rACsCoTg
+         JiKEprihkuVX5iHWwPX5V8kkX8/Qll/gAYrm38NPCmRie6AmctVA7Hi8Oy6RtXx6egyC
+         YFbHtxhoU+EqTA4K/Zmk8sqycXxridy+AgEqbCzGBPGl0HbuM2L5twYuCMubXtHrk3yl
+         0DpDSLF8z1suZEoQolgxNbMv8sIP1fsrfkxoXnela8fjB+NpQnpmeF0GT7tBOoR9BUkE
+         XwLYrR40nxmNNoKlJ7cMWF77G6wTln6WUKezqQQNu74YnBGnvHhr6a1CZbPT8DJwji9b
+         xnuQ==
+X-Gm-Message-State: AOJu0YxdGU6O0lt5qfGKas8x23LJQE58+l7xXbAdujisfpJAFfV32wLW
+        yrTtU00AA64ous9EM9UAPrXesowSBbnM8NlJ5EJKZGc8ntxVGOUO
+X-Google-Smtp-Source: AGHT+IFuAJ8RQxzqoJv6ilDeUOdyzRsdkgYgw1Ez/KEf+jHlvOd98qy2c7Bflc9X1+/D4C1D82gUS0YG3A1fj2lC6uU=
+X-Received: by 2002:a2e:988d:0:b0:2b9:4413:864e with SMTP id
+ b13-20020a2e988d000000b002b94413864emr12811186ljj.53.1692932325114; Thu, 24
+ Aug 2023 19:58:45 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230814043140.1108917-1-rekanorman@chromium.org>
+ <20230814043140.1108917-6-rekanorman@chromium.org> <67a1657a-e8f4-683c-375d-5ca6b1e75b9a@xs4all.nl>
+In-Reply-To: <67a1657a-e8f4-683c-375d-5ca6b1e75b9a@xs4all.nl>
 From:   Reka Norman <rekanorman@chromium.org>
+Date:   Fri, 25 Aug 2023 12:58:32 +1000
+Message-ID: <CAEmPcwssUgayw4B9Wemr818_zSQB5ir3Hpbvm5vFt8S7cLSE_g@mail.gmail.com>
+Subject: Re: [PATCH 5/9] media: cros-ec-cec: Support multiple ports in MKBP cec_events
 To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Daisuke Nojiri <dnojiri@chromium.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        Daisuke Nojiri <dnojiri@chromium.org>,
         Stefan Adolfsson <sadolfsson@google.com>,
-        Reka Norman <rekanorman@chromium.org>,
         Benson Leung <bleung@chromium.org>,
         Guenter Roeck <groeck@chromium.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org
-Subject: [PATCH v2 9/9] media: cros-ec-cec: Add Dibbi to the match table
-Date:   Fri, 25 Aug 2023 12:44:02 +1000
-Message-ID: <20230825024735.1443836-10-rekanorman@chromium.org>
-X-Mailer: git-send-email 2.42.0.rc2.253.gd59a3bf2b4-goog
-In-Reply-To: <20230825024735.1443836-1-rekanorman@chromium.org>
-References: <20230825024735.1443836-1-rekanorman@chromium.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Dibbi has two HDMI ports which support CEC:
-Port D is EC port 0
-Port B is EC port 1
+Hi Hans,
 
-Signed-off-by: Reka Norman <rekanorman@chromium.org>
----
+Thanks for the review.
 
-Changes in v2:
-- Use a NULL-terminated conns array for the Dibbi match table entry
+On Mon, Aug 21, 2023 at 6:51=E2=80=AFPM Hans Verkuil <hverkuil-cisco@xs4all=
+.nl> wrote:
+>
+> Hi Reka,
+>
+> On 14/08/2023 06:29, Reka Norman wrote:
+> > Use the top four bits of the cec_events MKBP event to store the port
+> > number.
+> >
+> > Signed-off-by: Reka Norman <rekanorman@chromium.org>
+> > ---
+> >
+> >  drivers/media/cec/platform/cros-ec/cros-ec-cec.c | 13 +++++++++++--
+> >  include/linux/platform_data/cros_ec_commands.h   | 10 ++++++++++
+> >  2 files changed, 21 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c b/drivers=
+/media/cec/platform/cros-ec/cros-ec-cec.c
+> > index d674a432dfdd..eb4b778f83e9 100644
+> > --- a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+> > +++ b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+> > @@ -77,8 +77,17 @@ static void handle_cec_message(struct cros_ec_cec *c=
+ros_ec_cec)
+> >  static void handle_cec_event(struct cros_ec_cec *cros_ec_cec)
+> >  {
+> >       struct cros_ec_device *cros_ec =3D cros_ec_cec->cros_ec;
+> > -     uint32_t events =3D cros_ec->event_data.data.cec_events;
+> > -     struct cros_ec_cec_port *port =3D cros_ec_cec->ports[CEC_PORT];
+> > +     uint32_t cec_events =3D cros_ec->event_data.data.cec_events;
+> > +     int port_num =3D EC_MKBP_EVENT_CEC_GET_PORT(cec_events);
+> > +     uint32_t events =3D EC_MKBP_EVENT_CEC_GET_EVENTS(cec_events);
+> > +     struct cros_ec_cec_port *port;
+> > +
+> > +     if (port_num < 0 || port_num >=3D cros_ec_cec->num_ports) {
+>
+> Since cec_events is unsigned, then I would also keep port_num unsigned.
+> Mixing signed and unsigned for bit shifting is a bit dangerous.
+>
+> That will also mean that you can skip the 'port_num < 0' check.
 
- drivers/media/cec/platform/cros-ec/cros-ec-cec.c | 3 +++
- 1 file changed, 3 insertions(+)
+Done in v2.
 
-diff --git a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-index 993deb85d3e2..21361eff50ff 100644
---- a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-+++ b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-@@ -295,6 +295,7 @@ struct cec_dmi_match {
- };
- 
- static const char *const fizz_conns[] = { "Port B", NULL };
-+static const char *const dibbi_conns[] = { "Port D", "Port B", NULL };
- 
- static const struct cec_dmi_match cec_dmi_match_table[] = {
- 	/* Google Fizz */
-@@ -313,6 +314,8 @@ static const struct cec_dmi_match cec_dmi_match_table[] = {
- 	{ "Google", "Gladios", "0000:00:02.0", fizz_conns },
- 	/* Google Lisbon */
- 	{ "Google", "Lisbon", "0000:00:02.0", fizz_conns },
-+	/* Google Dibbi */
-+	{ "Google", "Dibbi", "0000:00:02.0", dibbi_conns },
- };
- 
- static struct device *cros_ec_cec_find_hdmi_dev(struct device *dev,
--- 
-2.42.0.rc2.253.gd59a3bf2b4-goog
-
+>
+> Regards,
+>
+>         Hans
+>
+> > +             dev_err(cros_ec->dev,
+> > +                     "received CEC event for invalid port %d\n", port_=
+num);
+> > +             return;
+> > +     }
+> > +     port =3D cros_ec_cec->ports[port_num];
+> >
+> >       if (events & EC_MKBP_CEC_SEND_OK)
+> >               cec_transmit_attempt_done(port->adap, CEC_TX_STATUS_OK);
+> > diff --git a/include/linux/platform_data/cros_ec_commands.h b/include/l=
+inux/platform_data/cros_ec_commands.h
+> > index 9a0c6e28f370..b7e8573a8a49 100644
+> > --- a/include/linux/platform_data/cros_ec_commands.h
+> > +++ b/include/linux/platform_data/cros_ec_commands.h
+> > @@ -4440,6 +4440,16 @@ struct ec_response_i2c_passthru_protect {
+> >
+> >  #define MAX_CEC_MSG_LEN 16
+> >
+> > +/*
+> > + * Helper macros for packing/unpacking cec_events.
+> > + * bits[27:0] : bitmask of events from enum mkbp_cec_event
+> > + * bits[31:28]: port number
+> > + */
+> > +#define EC_MKBP_EVENT_CEC_PACK(events, port) \
+> > +             (((events) & GENMASK(27, 0)) | (((port) & 0xf) << 28))
+> > +#define EC_MKBP_EVENT_CEC_GET_EVENTS(event) ((event) & GENMASK(27, 0))
+> > +#define EC_MKBP_EVENT_CEC_GET_PORT(event) (((event) >> 28) & 0xf)
+> > +
+> >  /* CEC message from the AP to be written on the CEC bus */
+> >  #define EC_CMD_CEC_WRITE_MSG 0x00B8
+> >
+>
