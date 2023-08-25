@@ -2,51 +2,51 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45502C3DA6F
-	for <linux-media@archiver.kernel.org>; Fri, 25 Aug 2023 02:53:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F030AC3DA6F
+	for <linux-media@archiver.kernel.org>; Fri, 25 Aug 2023 02:53:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233035AbjHYCwb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 24 Aug 2023 22:52:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49244 "EHLO
+        id S233969AbjHYCxD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 24 Aug 2023 22:53:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242365AbjHYCwR (ORCPT
+        with ESMTP id S242725AbjHYCw4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 24 Aug 2023 22:52:17 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A532685
-        for <linux-media@vger.kernel.org>; Thu, 24 Aug 2023 19:51:44 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-68a529e1974so406584b3a.3
-        for <linux-media@vger.kernel.org>; Thu, 24 Aug 2023 19:51:44 -0700 (PDT)
+        Thu, 24 Aug 2023 22:52:56 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76D42125
+        for <linux-media@vger.kernel.org>; Thu, 24 Aug 2023 19:52:28 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-53fa455cd94so243804a12.2
+        for <linux-media@vger.kernel.org>; Thu, 24 Aug 2023 19:52:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1692931901; x=1693536701;
+        d=chromium.org; s=google; t=1692931948; x=1693536748;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UoorNgyABvybX2N9IoeEyWhrUT8xIewGPwdORVnknF0=;
-        b=K8Lf4oK6ktUjrkQ68iwm6vPV8GIRczhwBm429iWOBzINCynZyca6b3meAALHmNhsiT
-         3xLO4pWxeMBDLLiMC7ZL5vSuU6Vc8ZIO/0pLW/bgsZLRPutSUL22aw/VMbxJOH5bDy1V
-         4hOnKpX5ZVIHfNMu7KTDTPkHuscv4C2QUNsIA=
+        bh=m3+URBqZpZF2x77jWPMvlepFC5eyrNLor5lT2YRYaCA=;
+        b=jwSGOFVLVU0xCoY5pLfoOIfVqNP8RbKX7XksFTPUAFAqV6iwheXJgNjC8ZtGGe6m1x
+         CotQ0N88c1rbuo3NZtpi8JoLZhjBMz8TjxRUUiYVCMASj9wYBBpvCU/Yhl9LNYZRpeqt
+         sNA4eLMBgnzgSrLHMhAFDs6rXjqpsxbWgdoVg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692931901; x=1693536701;
+        d=1e100.net; s=20221208; t=1692931948; x=1693536748;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UoorNgyABvybX2N9IoeEyWhrUT8xIewGPwdORVnknF0=;
-        b=cTSGrC2GU6in03Oa0svFJw15iaJg+pfizE8mFsF9MTxyV3+ydsDHD0Cyio/7j7ibCi
-         hp/ll13OcgYhK0ZJ61PFJwmFfRf4vWdpmvwtwHxflqqYg+AOFKWBkTJFlHuXWLDMFlLY
-         yVRboat42LXUJHcpUa5PY+ELFlRDpt8YHrh1ZyvxqxmBcuYxN2+taLVmAe7pPKqEykzR
-         6ciMwIoP0H3OZwYb61O+FKNpSP5Ce+xZbpLdUVh/PNUDoU+9zQHsLbxKjPcTCJfdsyHK
-         cbojSg/Q80geTPTg9zFhtFeWTYYWc+2DIfqciLNNUokgxaGbKBQBcLnHwPd98pnq1H33
-         yhtw==
-X-Gm-Message-State: AOJu0Yyq5OBvTVDzz6P01QXTuCvUF4w620Q9irJ3frCxwRsFmwc/vXu7
-        4N1w6LdbYw7P3nzLeompH0eWfg==
-X-Google-Smtp-Source: AGHT+IHJEWkbTkPNvjUmAuW8N3dHFgd6FLUeujMwWF6UFo7ranfDCfQ0KEffXNcO3qtYPsIntNy+Zg==
-X-Received: by 2002:a05:6a20:4910:b0:141:d54e:a90a with SMTP id ft16-20020a056a20491000b00141d54ea90amr13229510pzb.56.1692931901197;
-        Thu, 24 Aug 2023 19:51:41 -0700 (PDT)
+        bh=m3+URBqZpZF2x77jWPMvlepFC5eyrNLor5lT2YRYaCA=;
+        b=Aji4YEUphYQO8onBksDGxtTNj9AhnYSnBx3Izxyg6+Gjaw7B5fkSYHo29tJFJi9fUn
+         FcObiaBK1oGVhdpbjWGtHOkcR/Y6AErJvTtMMbe/pEZxeHmKX8O/2qs95vkn8qew/vO4
+         FKv5g4R+Gx6IdxbTMlrt4GkVPmNSSCSjOBfy2JK/GiJtpn8gebRRDQzxOYFjhAbzYMNG
+         DH7YD+e+rzy6z+VFwFS+ZUPLJFwYn5FzkteSvH19qLo1uEP6BcSUUqkAlyqxmsbBpqrS
+         jnMwcMgPx3Azp5b+Vs9QUK9LSpfoyDQZxqXBBAis/Gfki3jwGpPCl0G31f28NnrovDXE
+         uIPA==
+X-Gm-Message-State: AOJu0YyjXKlgybzutDE/ZdK35b8y8E9K0lkrqBMONqpsImbWnDC5svc2
+        TGlZ2u7UIIhxrCzqxdQfrjS5jg==
+X-Google-Smtp-Source: AGHT+IEC1VIJWj32bHEOO6xQnrTuBhX+AC88P89p+LUarmfmkZr7HIRKlDIkSrMR0GjJYmfbF0GsRw==
+X-Received: by 2002:a05:6a20:1447:b0:148:40cf:b832 with SMTP id a7-20020a056a20144700b0014840cfb832mr18251618pzi.18.1692931948099;
+        Thu, 24 Aug 2023 19:52:28 -0700 (PDT)
 Received: from rekanorman3.syd.corp.google.com ([2401:fa00:9:14:9fe1:d4b1:42cc:882f])
-        by smtp.gmail.com with ESMTPSA id q10-20020a170902a3ca00b001bb0eebd90asm420847plb.245.2023.08.24.19.51.36
+        by smtp.gmail.com with ESMTPSA id q10-20020a170902a3ca00b001bb0eebd90asm420847plb.245.2023.08.24.19.52.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Aug 2023 19:51:40 -0700 (PDT)
+        Thu, 24 Aug 2023 19:52:27 -0700 (PDT)
 From:   Reka Norman <rekanorman@chromium.org>
 To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Cc:     Daisuke Nojiri <dnojiri@chromium.org>,
@@ -58,9 +58,9 @@ Cc:     Daisuke Nojiri <dnojiri@chromium.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org
-Subject: [PATCH v2 5/9] media: cros-ec-cec: Support multiple ports in MKBP cec_events
-Date:   Fri, 25 Aug 2023 12:43:58 +1000
-Message-ID: <20230825024735.1443836-6-rekanorman@chromium.org>
+Subject: [PATCH v2 7/9] media: cros-ec-cec: Allow specifying multiple HDMI connectors
+Date:   Fri, 25 Aug 2023 12:44:00 +1000
+Message-ID: <20230825024735.1443836-8-rekanorman@chromium.org>
 X-Mailer: git-send-email 2.42.0.rc2.253.gd59a3bf2b4-goog
 In-Reply-To: <20230825024735.1443836-1-rekanorman@chromium.org>
 References: <20230825024735.1443836-1-rekanorman@chromium.org>
@@ -70,64 +70,142 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use the top four bits of the cec_events MKBP event to store the port
-number.
+Update the cec_dmi_match_table to allow specifying multiple HDMI
+connectors for each device.
 
 Signed-off-by: Reka Norman <rekanorman@chromium.org>
 ---
 
 Changes in v2:
-- Make port_num unsigned in handle_cec_event
+- Use NULL-terminated arrays for the conns field of cec_dmi_match
 
- drivers/media/cec/platform/cros-ec/cros-ec-cec.c | 13 +++++++++++--
- include/linux/platform_data/cros_ec_commands.h   | 10 ++++++++++
- 2 files changed, 21 insertions(+), 2 deletions(-)
+ .../media/cec/platform/cros-ec/cros-ec-cec.c  | 49 ++++++++++++-------
+ 1 file changed, 30 insertions(+), 19 deletions(-)
 
 diff --git a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-index d674a432dfdd..18f78b7e034a 100644
+index 6989e63c05be..371699d599de 100644
 --- a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
 +++ b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-@@ -77,8 +77,17 @@ static void handle_cec_message(struct cros_ec_cec *cros_ec_cec)
- static void handle_cec_event(struct cros_ec_cec *cros_ec_cec)
+@@ -284,38 +284,43 @@ static SIMPLE_DEV_PM_OPS(cros_ec_cec_pm_ops,
+ #if IS_ENABLED(CONFIG_PCI) && IS_ENABLED(CONFIG_DMI)
+ 
+ /*
+- * The Firmware only handles a single CEC interface tied to a single HDMI
+- * connector we specify along with the DRM device name handling the HDMI output
++ * Specify the DRM device name handling the HDMI output and the HDMI connector
++ * corresponding to each CEC port. The order of connectors must match the order
++ * in the EC (first connector is EC port 0, ...), and the number of connectors
++ * must match the number of ports in the EC (which can be queried using the
++ * EC_CMD_CEC_PORT_COUNT host command).
+  */
+ 
+ struct cec_dmi_match {
+ 	const char *sys_vendor;
+ 	const char *product_name;
+ 	const char *devname;
+-	const char *conn;
++	const char *const *conns;
+ };
+ 
++static const char *const fizz_conns[] = { "Port B", NULL };
++
+ static const struct cec_dmi_match cec_dmi_match_table[] = {
+ 	/* Google Fizz */
+-	{ "Google", "Fizz", "0000:00:02.0", "Port B" },
++	{ "Google", "Fizz", "0000:00:02.0", fizz_conns },
+ 	/* Google Brask */
+-	{ "Google", "Brask", "0000:00:02.0", "Port B" },
++	{ "Google", "Brask", "0000:00:02.0", fizz_conns },
+ 	/* Google Moli */
+-	{ "Google", "Moli", "0000:00:02.0", "Port B" },
++	{ "Google", "Moli", "0000:00:02.0", fizz_conns },
+ 	/* Google Kinox */
+-	{ "Google", "Kinox", "0000:00:02.0", "Port B" },
++	{ "Google", "Kinox", "0000:00:02.0", fizz_conns },
+ 	/* Google Kuldax */
+-	{ "Google", "Kuldax", "0000:00:02.0", "Port B" },
++	{ "Google", "Kuldax", "0000:00:02.0", fizz_conns },
+ 	/* Google Aurash */
+-	{ "Google", "Aurash", "0000:00:02.0", "Port B" },
++	{ "Google", "Aurash", "0000:00:02.0", fizz_conns },
+ 	/* Google Gladios */
+-	{ "Google", "Gladios", "0000:00:02.0", "Port B" },
++	{ "Google", "Gladios", "0000:00:02.0", fizz_conns },
+ 	/* Google Lisbon */
+-	{ "Google", "Lisbon", "0000:00:02.0", "Port B" },
++	{ "Google", "Lisbon", "0000:00:02.0", fizz_conns },
+ };
+ 
+ static struct device *cros_ec_cec_find_hdmi_dev(struct device *dev,
+-						const char **conn)
++						const char * const **conns)
  {
- 	struct cros_ec_device *cros_ec = cros_ec_cec->cros_ec;
--	uint32_t events = cros_ec->event_data.data.cec_events;
--	struct cros_ec_cec_port *port = cros_ec_cec->ports[CEC_PORT];
-+	uint32_t cec_events = cros_ec->event_data.data.cec_events;
-+	uint32_t port_num = EC_MKBP_EVENT_CEC_GET_PORT(cec_events);
-+	uint32_t events = EC_MKBP_EVENT_CEC_GET_EVENTS(cec_events);
-+	struct cros_ec_cec_port *port;
-+
-+	if (port_num >= cros_ec_cec->num_ports) {
-+		dev_err(cros_ec->dev,
-+			"received CEC event for invalid port %d\n", port_num);
-+		return;
+ 	int i;
+ 
+@@ -332,7 +337,7 @@ static struct device *cros_ec_cec_find_hdmi_dev(struct device *dev,
+ 			if (!d)
+ 				return ERR_PTR(-EPROBE_DEFER);
+ 			put_device(d);
+-			*conn = m->conn;
++			*conns = m->conns;
+ 			return d;
+ 		}
+ 	}
+@@ -346,7 +351,7 @@ static struct device *cros_ec_cec_find_hdmi_dev(struct device *dev,
+ #else
+ 
+ static struct device *cros_ec_cec_find_hdmi_dev(struct device *dev,
+-						const char **conn)
++						const char * const **conns)
+ {
+ 	return ERR_PTR(-ENODEV);
+ }
+@@ -388,7 +393,7 @@ static int cros_ec_cec_get_write_cmd_version(struct cros_ec_cec *cros_ec_cec)
+ static int cros_ec_cec_init_port(struct device *dev,
+ 				 struct cros_ec_cec *cros_ec_cec,
+ 				 int port_num, struct device *hdmi_dev,
+-				 const char *conn)
++				 const char * const *conns)
+ {
+ 	struct cros_ec_cec_port *port;
+ 	int ret;
+@@ -406,7 +411,13 @@ static int cros_ec_cec_init_port(struct device *dev,
+ 	if (IS_ERR(port->adap))
+ 		return PTR_ERR(port->adap);
+ 
+-	port->notify = cec_notifier_cec_adap_register(hdmi_dev, conn,
++	if (!conns[port_num]) {
++		dev_err(dev, "no conn for port %d\n", port_num);
++		ret = -ENODEV;
++		goto out_probe_adapter;
 +	}
-+	port = cros_ec_cec->ports[port_num];
- 
- 	if (events & EC_MKBP_CEC_SEND_OK)
- 		cec_transmit_attempt_done(port->adap, CEC_TX_STATUS_OK);
-diff --git a/include/linux/platform_data/cros_ec_commands.h b/include/linux/platform_data/cros_ec_commands.h
-index 9a0c6e28f370..b7e8573a8a49 100644
---- a/include/linux/platform_data/cros_ec_commands.h
-+++ b/include/linux/platform_data/cros_ec_commands.h
-@@ -4440,6 +4440,16 @@ struct ec_response_i2c_passthru_protect {
- 
- #define MAX_CEC_MSG_LEN 16
- 
-+/*
-+ * Helper macros for packing/unpacking cec_events.
-+ * bits[27:0] : bitmask of events from enum mkbp_cec_event
-+ * bits[31:28]: port number
-+ */
-+#define EC_MKBP_EVENT_CEC_PACK(events, port) \
-+		(((events) & GENMASK(27, 0)) | (((port) & 0xf) << 28))
-+#define EC_MKBP_EVENT_CEC_GET_EVENTS(event) ((event) & GENMASK(27, 0))
-+#define EC_MKBP_EVENT_CEC_GET_PORT(event) (((event) >> 28) & 0xf)
 +
- /* CEC message from the AP to be written on the CEC bus */
- #define EC_CMD_CEC_WRITE_MSG 0x00B8
++	port->notify = cec_notifier_cec_adap_register(hdmi_dev, conns[port_num],
+ 						      port->adap);
+ 	if (!port->notify) {
+ 		ret = -ENOMEM;
+@@ -435,10 +446,10 @@ static int cros_ec_cec_probe(struct platform_device *pdev)
+ 	struct cros_ec_cec *cros_ec_cec;
+ 	struct cros_ec_cec_port *port;
+ 	struct device *hdmi_dev;
+-	const char *conn = NULL;
++	const char * const *conns = NULL;
+ 	int ret;
  
+-	hdmi_dev = cros_ec_cec_find_hdmi_dev(&pdev->dev, &conn);
++	hdmi_dev = cros_ec_cec_find_hdmi_dev(&pdev->dev, &conns);
+ 	if (IS_ERR(hdmi_dev))
+ 		return PTR_ERR(hdmi_dev);
+ 
+@@ -460,7 +471,7 @@ static int cros_ec_cec_probe(struct platform_device *pdev)
+ 
+ 	for (int i = 0; i < cros_ec_cec->num_ports; i++) {
+ 		ret = cros_ec_cec_init_port(&pdev->dev, cros_ec_cec, i,
+-					    hdmi_dev, conn);
++					    hdmi_dev, conns);
+ 		if (ret)
+ 			goto unregister_ports;
+ 	}
 -- 
 2.42.0.rc2.253.gd59a3bf2b4-goog
 
