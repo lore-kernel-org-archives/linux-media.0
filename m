@@ -2,22 +2,22 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76BF1C88CB2
-	for <linux-media@archiver.kernel.org>; Fri, 25 Aug 2023 11:54:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E37CEE49A6
+	for <linux-media@archiver.kernel.org>; Fri, 25 Aug 2023 11:54:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244379AbjHYLxp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 25 Aug 2023 07:53:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48966 "EHLO
+        id S244462AbjHYLyR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 25 Aug 2023 07:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243757AbjHYLxT (ORCPT
+        with ESMTP id S244437AbjHYLyG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 25 Aug 2023 07:53:19 -0400
+        Fri, 25 Aug 2023 07:54:06 -0400
 Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9807810FF;
-        Fri, 25 Aug 2023 04:53:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F9151BFA;
+        Fri, 25 Aug 2023 04:53:21 -0700 (PDT)
 Received: from droid10-sz.amlogic.com (10.28.11.69) by mail-sh.amlogic.com
  (10.18.11.5) with Microsoft SMTP Server id 15.1.2507.13; Fri, 25 Aug 2023
- 19:53:13 +0800
+ 19:53:18 +0800
 From:   zelong dong <zelong.dong@amlogic.com>
 To:     Neil Armstrong <neil.armstrong@linaro.org>,
         Sean Young <sean@mess.org>,
@@ -33,10 +33,12 @@ CC:     <linux-media@vger.kernel.org>, <linux-amlogic@lists.infradead.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <Qianggui.Song@amlogic.com>, <Yonghui.Yu@amlogic.com>,
         <kelvin.zhang@amlogic.com>, Zelong Dong <zelong.dong@amlogic.com>
-Subject: [PATCH 0/3] This patchset adds IR controller driver support for
-Date:   Fri, 25 Aug 2023 19:53:07 +0800
-Message-ID: <20230825115310.39993-1-zelong.dong@amlogic.com>
+Subject: [PATCH 2/3] dt-bindings: media: Add compatible for Meson-S4 IR Controller
+Date:   Fri, 25 Aug 2023 19:53:09 +0800
+Message-ID: <20230825115310.39993-3-zelong.dong@amlogic.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20230825115310.39993-1-zelong.dong@amlogic.com>
+References: <20230825115310.39993-1-zelong.dong@amlogic.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -47,20 +49,26 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Zelong Dong <zelong.dong@amlogic.com>
 
-Meson IR Controller supports hardware decoder in Meson-S4 and later
-SoC. So far, protocol NEC could be decoded by hardware decoder.
+Add new compatible for Amlogic's Meson-S4 IR Controller.
+Meson IR Controller supports hardware decoder in Meson-S4 and later SoC.
 
-Zelong Dong (3):
-  media: rc: meson-ir: support rc driver type RC_DRIVER_SCANCODE
-  dt-bindings: media: Add compatible for Meson-S4 IR Controller
-  arm64: dts: meson: add IR controller for Meson-S4 SoC
+Signed-off-by: Zelong Dong <zelong.dong@amlogic.com>
+---
+ Documentation/devicetree/bindings/media/amlogic,meson6-ir.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
- .../bindings/media/amlogic,meson6-ir.yaml     |   1 +
- .../dts/amlogic/meson-s4-s805x2-aq222.dts     |   6 +
- arch/arm64/boot/dts/amlogic/meson-s4.dtsi     |  15 +
- drivers/media/rc/meson-ir.c                   | 522 +++++++++++++++---
- 4 files changed, 473 insertions(+), 71 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/media/amlogic,meson6-ir.yaml b/Documentation/devicetree/bindings/media/amlogic,meson6-ir.yaml
+index 3f9fa92703bb..0f95fe8dd9ac 100644
+--- a/Documentation/devicetree/bindings/media/amlogic,meson6-ir.yaml
++++ b/Documentation/devicetree/bindings/media/amlogic,meson6-ir.yaml
+@@ -19,6 +19,7 @@ properties:
+           - amlogic,meson6-ir
+           - amlogic,meson8b-ir
+           - amlogic,meson-gxbb-ir
++          - amlogic,meson-s4-ir
+       - items:
+           - const: amlogic,meson-gx-ir
+           - const: amlogic,meson-gxbb-ir
 -- 
 2.35.1
 
