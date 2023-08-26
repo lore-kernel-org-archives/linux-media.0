@@ -2,45 +2,35 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5104AC83F16
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81AC8C83F18
 	for <linux-media@archiver.kernel.org>; Sat, 26 Aug 2023 17:18:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230404AbjHZRRb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 26 Aug 2023 13:17:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54022 "EHLO
+        id S230402AbjHZRRa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 26 Aug 2023 13:17:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230031AbjHZRRP (ORCPT
+        with ESMTP id S229523AbjHZRRO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 26 Aug 2023 13:17:15 -0400
+        Sat, 26 Aug 2023 13:17:14 -0400
 Received: from gofer.mess.org (gofer.mess.org [88.97.38.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3633E1BDB;
-        Sat, 26 Aug 2023 10:17:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 803B1E5C
+        for <linux-media@vger.kernel.org>; Sat, 26 Aug 2023 10:17:11 -0700 (PDT)
 Received: by gofer.mess.org (Postfix, from userid 1000)
-        id C134B1000D0; Sat, 26 Aug 2023 18:17:11 +0100 (BST)
+        id A18051000CD; Sat, 26 Aug 2023 18:17:09 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
-        t=1693070231; bh=Lbm8wzOKC2M9GeSPbw06e8KPiOFgpvPECNpJXbRnIo4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=j9u+3HNFtL/ansIVY+kJ3/2edhhGvGpGn6BYGnX27uq8OmsPe8Y19TZW7+NgLx6g5
-         9cdoJ+efWCPyt4YPyi2KRjsqxHa+lxtqIYlIlY+hX9KqLyzbwx1891j7C3pTynEs6J
-         H2ErMmFPJttjPT8iXlbCT4Mp/mKFedFttF86kgGsZSPXLqvAvTxY/rVG8aubFlDPqO
-         xVwicVAj5iHnWZnl6PnQcXNPjXRvf/WIZEnY7qVKLI6hFeAEov860KW3ZoXSnOFZTm
-         5+QuPlFkCALmT3AJOaaAcsKzZ655Djqrt4rs4JJ50f6ebSo2v6cJ1zqm1aCJZ8ku+x
-         oVqbnUtBMdh4Q==
+        t=1693070229; bh=bIxfSfrsQswZJ5Cafjvp8CwnzR3aQdJBXWXtz8PG/U0=;
+        h=From:To:Subject:Date:From;
+        b=PBAFiZC6lKEseoa+3JaJpCO8pwVLLHzBAtGR4rLrWID/SBuQGYg6oIaHbjYToWdWD
+         W496E4r1ERSkHcXliVp+Hqq1nA5lqFS526PY3wh1bcc26rh80ZpDTu8ebGT4A9dUdV
+         QPizojiTU30W4FHbNc8BRCePtS0B5EOWG/hSx+ph4xZtQq0ustVa3R5uEM86yjM/o3
+         YPFk/BJM6qOUyUCY1vMjdwr3oLpivG10NXl7tbTSgpk6KVk5e4H9fGFIWym98+Qndv
+         qpL53gm5UQWRzXATloY0vSMOdrPfa4izBqA7x4tQ6dM36WG50Mp5/xsBNWrv9GFPiK
+         FQH50S5wP7ftg==
 From:   Sean Young <sean@mess.org>
 To:     linux-media@vger.kernel.org
-Cc:     Tony Lindgren <tony@atomide.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-omap@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pwm@vger.kernel.org,
-        Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali.rohar@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Timo Kokkonen <timo.t.kokkonen@iki.fi>
-Subject: [PATCH v4 2/2] dt-bindings: media: remove nokia,n900-ir as pwm-ir-tx is compatible
-Date:   Sat, 26 Aug 2023 18:17:11 +0100
-Message-Id: <20230826171711.366710-1-sean@mess.org>
+Subject: [PATCH v4 0/2] Remove ir-rx51 driver
+Date:   Sat, 26 Aug 2023 18:17:09 +0100
+Message-Id: <20230826171709.366607-1-sean@mess.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -48,58 +38,36 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The generic pwm-ir-tx driver works for the Nokia n900, so nokia,n900-ir
-can be removed.
+The ir-rx51 driver is no longer necessary, pwm-ir-tx does the same job
+and is more generic.
 
-Signed-off-by: Sean Young <sean@mess.org>
----
- .../bindings/leds/irled/pwm-ir-tx.yaml        |  5 ++++-
- .../devicetree/bindings/media/nokia,n900-ir   | 20 -------------------
- 2 files changed, 4 insertions(+), 21 deletions(-)
+changes:
+ v4:
+  - Fixed issues with pwm-ir-tx.yaml and did some more testing
+
+ v3:
+  - Fixed issues with pwm-ir-tx.yaml
+
+ v2:
+  - Made pwm-ir-tx compatible with nokia,n900-ir rather than changing
+    the n900 devicetree
+
+
+Sean Young (2):
+  media: rc: remove ir-rx51 in favour of generic pwm-ir-tx
+  dt-bindings: media: remove nokia,n900-ir as pwm-ir-tx is compatible
+
+ .../bindings/leds/irled/pwm-ir-tx.yaml        |   5 +-
+ .../devicetree/bindings/media/nokia,n900-ir   |  20 --
+ arch/arm/configs/omap2plus_defconfig          |   1 -
+ drivers/media/rc/Kconfig                      |  10 -
+ drivers/media/rc/Makefile                     |   1 -
+ drivers/media/rc/ir-rx51.c                    | 285 ------------------
+ drivers/media/rc/pwm-ir-tx.c                  |   1 +
+ 7 files changed, 5 insertions(+), 318 deletions(-)
  delete mode 100644 Documentation/devicetree/bindings/media/nokia,n900-ir
+ delete mode 100644 drivers/media/rc/ir-rx51.c
 
-diff --git a/Documentation/devicetree/bindings/leds/irled/pwm-ir-tx.yaml b/Documentation/devicetree/bindings/leds/irled/pwm-ir-tx.yaml
-index f2a6fa140f38..7526e3149f72 100644
---- a/Documentation/devicetree/bindings/leds/irled/pwm-ir-tx.yaml
-+++ b/Documentation/devicetree/bindings/leds/irled/pwm-ir-tx.yaml
-@@ -15,7 +15,10 @@ description:
- 
- properties:
-   compatible:
--    const: pwm-ir-tx
-+    oneOf:
-+      - const: pwm-ir-tx
-+      - const: nokia,n900-ir
-+        deprecated: true
- 
-   pwms:
-     maxItems: 1
-diff --git a/Documentation/devicetree/bindings/media/nokia,n900-ir b/Documentation/devicetree/bindings/media/nokia,n900-ir
-deleted file mode 100644
-index 13a18ce37dd1..000000000000
---- a/Documentation/devicetree/bindings/media/nokia,n900-ir
-+++ /dev/null
-@@ -1,20 +0,0 @@
--Device-Tree bindings for LIRC TX driver for Nokia N900(RX51)
--
--Required properties:
--	- compatible: should be "nokia,n900-ir".
--	- pwms: specifies PWM used for IR signal transmission.
--
--Example node:
--
--	pwm9: dmtimer-pwm@9 {
--		compatible = "ti,omap-dmtimer-pwm";
--		ti,timers = <&timer9>;
--		ti,clock-source = <0x00>; /* timer_sys_ck */
--		#pwm-cells = <3>;
--	};
--
--	ir: n900-ir {
--		compatible = "nokia,n900-ir";
--
--		pwms = <&pwm9 0 26316 0>; /* 38000 Hz */
--	};
 -- 
 2.42.0
 
