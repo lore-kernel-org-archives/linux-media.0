@@ -2,127 +2,107 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F3A6C83F17
-	for <linux-media@archiver.kernel.org>; Mon, 28 Aug 2023 19:08:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC4ADC83F11
+	for <linux-media@archiver.kernel.org>; Mon, 28 Aug 2023 19:15:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233206AbjH1TH6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 28 Aug 2023 15:07:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41396 "EHLO
+        id S233312AbjH1TPb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 28 Aug 2023 15:15:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233217AbjH1Srg (ORCPT
+        with ESMTP id S230325AbjH1TPA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 28 Aug 2023 14:47:36 -0400
+        Mon, 28 Aug 2023 15:15:00 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAEC1AA;
-        Mon, 28 Aug 2023 11:47:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F5A102
+        for <linux-media@vger.kernel.org>; Mon, 28 Aug 2023 12:14:58 -0700 (PDT)
 Received: from pendragon.ideasonboard.com (117.145-247-81.adsl-dyn.isp.belgacom.be [81.247.145.117])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1013A2D8;
-        Mon, 28 Aug 2023 20:45:46 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A2D2DE51;
+        Mon, 28 Aug 2023 21:13:35 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1693248346;
-        bh=gVvmU76kknIwWC7IkiRDPkM1JXVIOmaVSiqt1exNYfY=;
+        s=mail; t=1693250015;
+        bh=NHz3Zqa0FujfMqMNjNS1wgdk9st6IC+BNQmPpJx/9O8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hhYK2Emzm+nPvs0DBQyvKoaRFW8B5Sp4Ae/7YYqcr2PpVJcQ3QR6nOPWP5/WAJnCd
-         mhco2RQMrmIfCRS6IxN9Og/lnvcHSeng8G10oJKxVTpuNyVPd+90tLAUw7BrIocVfq
-         JjORoolmLQwtcEmGMsljFYKVpfVrNJBcXQ0Bc5fc=
-Date:   Mon, 28 Aug 2023 21:47:16 +0300
+        b=RoOQNXCjWvgNv6/79Dq3RvUUzW3WK/csellxTB0w7dYD750HhR40kmQBLvNOAK/nf
+         JZzqz3ZuFBlcMNoBgmTGbGaFrgCfjGe6b124Y7QqHwXsCU3eSSAWYssmukxxsxY24t
+         QnTFehPjUEd/RklWtSU1Ue0WcMQYquQ6MSJbQYlA=
+Date:   Mon, 28 Aug 2023 22:15:06 +0300
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     rfoss@kernel.org, todor.too@gmail.com, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, mchehab@kernel.org,
-        hverkuil-cisco@xs4all.nl, sakari.ailus@linux.intel.com,
-        andrey.konovalov@linaro.org, linux-media@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 07/15] media: qcom: camss: Capture VFE CSID dependency
- in a helper function
-Message-ID: <20230828184716.GM14596@pendragon.ideasonboard.com>
-References: <20230823104444.1954663-1-bryan.odonoghue@linaro.org>
- <20230823104444.1954663-8-bryan.odonoghue@linaro.org>
+To:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, Sakari Ailus <sakari.ailus@iki.fi>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>
+Subject: Re: [PATCH v1 2/2] media: i2c: imx219: Fix crop rectangle setting
+ when changing format
+Message-ID: <20230828191506.GA17083@pendragon.ideasonboard.com>
+References: <20230814193435.24158-1-laurent.pinchart@ideasonboard.com>
+ <20230814193435.24158-3-laurent.pinchart@ideasonboard.com>
+ <ujpugw52leros2siag4wtvxhwkmnsazwdiofvpvtugjrvc5zvv@v4u26p6a7dnj>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230823104444.1954663-8-bryan.odonoghue@linaro.org>
+In-Reply-To: <ujpugw52leros2siag4wtvxhwkmnsazwdiofvpvtugjrvc5zvv@v4u26p6a7dnj>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Bryan,
+Hi Jacopo,
 
-Thank you for the patch.
+On Mon, Aug 28, 2023 at 02:19:54PM +0200, Jacopo Mondi wrote:
+> On Mon, Aug 14, 2023 at 10:34:35PM +0300, Laurent Pinchart wrote:
+> > When moving the imx219 driver to the subdev active state, commit
+> > e8a5b1df000e ("media: i2c: imx219: Use subdev active state") used the
+> > pad crop rectangle stored in the subdev state to report the crop
+> > rectangle of the active mode. That crop rectangle was however not set in
+> > the state when setting the format, which resulted in reporting an
+> > incorrect crop rectangle to userspace. Fix it.
+> >
+> > Fixes: e8a5b1df000e ("media: i2c: imx219: Use subdev active state")
+> > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > ---
+> >  drivers/media/i2c/imx219.c | 11 ++++++-----
+> >  1 file changed, 6 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
+> > index 6f88e002c8d8..ec53abe2e84e 100644
+> > --- a/drivers/media/i2c/imx219.c
+> > +++ b/drivers/media/i2c/imx219.c
+> > @@ -750,6 +750,7 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
+> >  	const struct imx219_mode *mode;
+> >  	int exposure_max, exposure_def, hblank;
+> >  	struct v4l2_mbus_framefmt *format;
+> > +	struct v4l2_rect *crop;
+> >
+> >  	mode = v4l2_find_nearest_size(supported_modes,
+> >  				      ARRAY_SIZE(supported_modes),
+> > @@ -757,10 +758,12 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
+> >  				      fmt->format.width, fmt->format.height);
+> >
+> >  	imx219_update_pad_format(imx219, mode, &fmt->format, fmt->format.code);
+> > -	format = v4l2_subdev_get_pad_format(sd, sd_state, 0);
+> >
+> > -	if (imx219->mode == mode && format->code == fmt->format.code)
+> > -		return 0;
+> 
+> Has this check been lost ?
 
-On Wed, Aug 23, 2023 at 11:44:36AM +0100, Bryan O'Donoghue wrote:
-> From sdm845 onwards we need to ensure the VFE is powered on prior to
-> switching on the CSID.
+It has. Is it an issue ?
 
-Based on the discussions with Konrad in the mail thread, I would record
-here the reason for this requirement.
-
-What happens if you unconditionally power up the VFE prior to switching
-the CSID on ? Will this break something on platforms older than SDM845 ?
-
-> Alternatively we could model up the GDSCs and clocks the CSID needs
-> without the VFE but, there's a real question of the legitimacy of such a
-> use-case.
-> 
-> For now drawing a line at sdm845 and switching on the associated VFEs is
-> a perfectly valid thing to do.
-> 
-> Rather than continually extend out this clause for at least two new SoCs
-> with this same model - making the vfe_get/vfe_put path start to look
-> like spaghetti we can encoded the dependency in a helper function.
-> 
-> Use csid_depends_vfe() for this purpose.
-> 
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> ---
->  .../media/platform/qcom/camss/camss-csid.c    | 20 +++++++++++++++++--
->  1 file changed, 18 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
-> index 08991b070bd61..fd04ed112b564 100644
-> --- a/drivers/media/platform/qcom/camss/camss-csid.c
-> +++ b/drivers/media/platform/qcom/camss/camss-csid.c
-> @@ -146,6 +146,22 @@ static int csid_set_clock_rates(struct csid_device *csid)
->  	return 0;
->  }
->  
-> +static bool csid_depends_vfe(u32 version)
-> +{
-> +	bool ret = false;
-> +
-> +	switch (version) {
-> +	case CAMSS_845:
-> +	case CAMSS_8250:
-> +		ret = true;
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
->  /*
->   * csid_set_power - Power on/off CSID module
->   * @sd: CSID V4L2 subdevice
-> @@ -163,7 +179,7 @@ static int csid_set_power(struct v4l2_subdev *sd, int on)
->  	int ret = 0;
->  
->  	if (on) {
-> -		if (version == CAMSS_8250 || version == CAMSS_845) {
-> +		if (csid_depends_vfe(version)) {
->  			ret = vfe_get(vfe);
->  			if (ret < 0)
->  				return ret;
-> @@ -217,7 +233,7 @@ static int csid_set_power(struct v4l2_subdev *sd, int on)
->  		regulator_bulk_disable(csid->num_supplies,
->  				       csid->supplies);
->  		pm_runtime_put_sync(dev);
-> -		if (version == CAMSS_8250 || version == CAMSS_845)
-> +		if (csid_depends_vfe(version))
->  			vfe_put(vfe);
->  	}
->  
+> > +	format = v4l2_subdev_get_pad_format(sd, sd_state, 0);
+> > +	crop = v4l2_subdev_get_pad_crop(sd, sd_state, 0);
+> > +
+> > +	*format = fmt->format;
+> > +	*crop = mode->crop;
+> >
+> >  	if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
+> >  		imx219->mode = mode;
+> > @@ -788,8 +791,6 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
+> >  					 hblank);
+> >  	}
+> >
+> > -	*format = fmt->format;
+> > -
+> >  	return 0;
+> >  }
+> >
 
 -- 
 Regards,
