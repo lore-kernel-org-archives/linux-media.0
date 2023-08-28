@@ -2,30 +2,30 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 560FDC83F11
-	for <linux-media@archiver.kernel.org>; Mon, 28 Aug 2023 19:04:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F3A6C83F17
+	for <linux-media@archiver.kernel.org>; Mon, 28 Aug 2023 19:08:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233262AbjH1TEJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 28 Aug 2023 15:04:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40228 "EHLO
+        id S233206AbjH1TH6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 28 Aug 2023 15:07:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233305AbjH1TDq (ORCPT
+        with ESMTP id S233217AbjH1Srg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 28 Aug 2023 15:03:46 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7458F191;
-        Mon, 28 Aug 2023 12:03:42 -0700 (PDT)
+        Mon, 28 Aug 2023 14:47:36 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAEC1AA;
+        Mon, 28 Aug 2023 11:47:14 -0700 (PDT)
 Received: from pendragon.ideasonboard.com (117.145-247-81.adsl-dyn.isp.belgacom.be [81.247.145.117])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 88ED7741;
-        Mon, 28 Aug 2023 21:02:18 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1013A2D8;
+        Mon, 28 Aug 2023 20:45:46 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1693249338;
-        bh=EQ5Ed7YSUu9pnyDqHnRnEXM2hGzRvbt5Ebt+ytf7N64=;
+        s=mail; t=1693248346;
+        bh=gVvmU76kknIwWC7IkiRDPkM1JXVIOmaVSiqt1exNYfY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gCtDnkhdUy7M5KwcMvRC241ho+8Tq6PJkEuAhQ0F9SouSyP6PvkS32HgZd627J05F
-         AWXb53lvxm/sARULaWXsFUFPq2+sC+XAJE7/ADtFVk+I1Yd7d8mtUvm+xSclXgEhvA
-         0+W7oBkLYi9BAntE+xEVo37475TnDOL1CCOCZxP8=
-Date:   Mon, 28 Aug 2023 22:03:49 +0300
+        b=hhYK2Emzm+nPvs0DBQyvKoaRFW8B5Sp4Ae/7YYqcr2PpVJcQ3QR6nOPWP5/WAJnCd
+         mhco2RQMrmIfCRS6IxN9Og/lnvcHSeng8G10oJKxVTpuNyVPd+90tLAUw7BrIocVfq
+         JjORoolmLQwtcEmGMsljFYKVpfVrNJBcXQ0Bc5fc=
+Date:   Mon, 28 Aug 2023 21:47:16 +0300
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 Cc:     rfoss@kernel.org, todor.too@gmail.com, agross@kernel.org,
@@ -33,14 +33,15 @@ Cc:     rfoss@kernel.org, todor.too@gmail.com, agross@kernel.org,
         hverkuil-cisco@xs4all.nl, sakari.ailus@linux.intel.com,
         andrey.konovalov@linaro.org, linux-media@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 13/15] media: qcom: camss: Support RDI3 for VFE 17x
-Message-ID: <20230828190349.GQ14596@pendragon.ideasonboard.com>
+Subject: Re: [PATCH v3 07/15] media: qcom: camss: Capture VFE CSID dependency
+ in a helper function
+Message-ID: <20230828184716.GM14596@pendragon.ideasonboard.com>
 References: <20230823104444.1954663-1-bryan.odonoghue@linaro.org>
- <20230823104444.1954663-14-bryan.odonoghue@linaro.org>
+ <20230823104444.1954663-8-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230823104444.1954663-14-bryan.odonoghue@linaro.org>
+In-Reply-To: <20230823104444.1954663-8-bryan.odonoghue@linaro.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
@@ -49,68 +50,78 @@ Hi Bryan,
 
 Thank you for the patch.
 
-On Wed, Aug 23, 2023 at 11:44:42AM +0100, Bryan O'Donoghue wrote:
-> Some VFEs have four RDIs apiece. Right now the ISR code has a hard-coded
-> value which tops-out at RDI2 meaning only three RDIs can be utilised in
-> practice.
+On Wed, Aug 23, 2023 at 11:44:36AM +0100, Bryan O'Donoghue wrote:
+> From sdm845 onwards we need to ensure the VFE is powered on prior to
+> switching on the CSID.
+
+Based on the discussions with Konrad in the mail thread, I would record
+here the reason for this requirement.
+
+What happens if you unconditionally power up the VFE prior to switching
+the CSID on ? Will this break something on platforms older than SDM845 ?
+
+> Alternatively we could model up the GDSCs and clocks the CSID needs
+> without the VFE but, there's a real question of the legitimacy of such a
+> use-case.
 > 
-> Extend out the various routines in camss-vfe-17x.c to support the higher
-> RDI count.
+> For now drawing a line at sdm845 and switching on the associated VFEs is
+> a perfectly valid thing to do.
+> 
+> Rather than continually extend out this clause for at least two new SoCs
+> with this same model - making the vfe_get/vfe_put path start to look
+> like spaghetti we can encoded the dependency in a helper function.
+> 
+> Use csid_depends_vfe() for this purpose.
 > 
 > Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
 > ---
->  drivers/media/platform/qcom/camss/camss-vfe-170.c | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
+>  .../media/platform/qcom/camss/camss-csid.c    | 20 +++++++++++++++++--
+>  1 file changed, 18 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/media/platform/qcom/camss/camss-vfe-170.c b/drivers/media/platform/qcom/camss/camss-vfe-170.c
-> index 8aa921400ded0..c2487a8196db7 100644
-> --- a/drivers/media/platform/qcom/camss/camss-vfe-170.c
-> +++ b/drivers/media/platform/qcom/camss/camss-vfe-170.c
-> @@ -210,7 +210,8 @@ static void vfe_global_reset(struct vfe_device *vfe)
->  			 GLOBAL_RESET_CMD_IDLE_CGC	|
->  			 GLOBAL_RESET_CMD_RDI0		|
->  			 GLOBAL_RESET_CMD_RDI1		|
-> -			 GLOBAL_RESET_CMD_RDI2;
-> +			 GLOBAL_RESET_CMD_RDI2		|
-> +			 GLOBAL_RESET_CMD_RDI3;
+> diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
+> index 08991b070bd61..fd04ed112b564 100644
+> --- a/drivers/media/platform/qcom/camss/camss-csid.c
+> +++ b/drivers/media/platform/qcom/camss/camss-csid.c
+> @@ -146,6 +146,22 @@ static int csid_set_clock_rates(struct csid_device *csid)
+>  	return 0;
+>  }
 >  
->  	writel_relaxed(BIT(31), vfe->base + VFE_IRQ_MASK_0);
+> +static bool csid_depends_vfe(u32 version)
+> +{
+> +	bool ret = false;
+> +
+> +	switch (version) {
+> +	case CAMSS_845:
+> +	case CAMSS_8250:
+> +		ret = true;
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+>  /*
+>   * csid_set_power - Power on/off CSID module
+>   * @sd: CSID V4L2 subdevice
+> @@ -163,7 +179,7 @@ static int csid_set_power(struct v4l2_subdev *sd, int on)
+>  	int ret = 0;
 >  
-> @@ -344,7 +345,7 @@ static void vfe_violation_read(struct vfe_device *vfe)
->  static irqreturn_t vfe_isr(int irq, void *dev)
->  {
->  	struct vfe_device *vfe = dev;
-> -	u32 status0, status1, vfe_bus_status[3];
-> +	u32 status0, status1, vfe_bus_status[VFE_LINE_NUM_MAX];
->  	int i, wm;
->  
->  	status0 = readl_relaxed(vfe->base + VFE_IRQ_STATUS_0);
-> @@ -353,7 +354,7 @@ static irqreturn_t vfe_isr(int irq, void *dev)
->  	writel_relaxed(status0, vfe->base + VFE_IRQ_CLEAR_0);
->  	writel_relaxed(status1, vfe->base + VFE_IRQ_CLEAR_1);
->  
-> -	for (i = VFE_LINE_RDI0; i <= VFE_LINE_RDI2; i++) {
-> +	for (i = VFE_LINE_RDI0; i < vfe->line_num; i++) {
->  		vfe_bus_status[i] = readl_relaxed(vfe->base + VFE_BUS_IRQ_STATUS(i));
->  		writel_relaxed(vfe_bus_status[i], vfe->base + VFE_BUS_IRQ_CLEAR(i));
+>  	if (on) {
+> -		if (version == CAMSS_8250 || version == CAMSS_845) {
+> +		if (csid_depends_vfe(version)) {
+>  			ret = vfe_get(vfe);
+>  			if (ret < 0)
+>  				return ret;
+> @@ -217,7 +233,7 @@ static int csid_set_power(struct v4l2_subdev *sd, int on)
+>  		regulator_bulk_disable(csid->num_supplies,
+>  				       csid->supplies);
+>  		pm_runtime_put_sync(dev);
+> -		if (version == CAMSS_8250 || version == CAMSS_845)
+> +		if (csid_depends_vfe(version))
+>  			vfe_put(vfe);
 >  	}
-> @@ -367,11 +368,11 @@ static irqreturn_t vfe_isr(int irq, void *dev)
->  	if (status0 & STATUS_0_RESET_ACK)
->  		vfe->isr_ops.reset_ack(vfe);
->  
-> -	for (i = VFE_LINE_RDI0; i <= VFE_LINE_RDI2; i++)
-> +	for (i = VFE_LINE_RDI0; i < vfe->line_num; i++)
->  		if (status0 & STATUS_0_RDI_REG_UPDATE(i))
->  			vfe->isr_ops.reg_update(vfe, i);
->  
-> -	for (i = VFE_LINE_RDI0; i <= VFE_LINE_RDI2; i++)
-> +	for (i = VFE_LINE_RDI0; i < vfe->line_num; i++)
->  		if (status0 & STATUS_1_RDI_SOF(i))
->  			vfe->isr_ops.sof(vfe, i);
 >  
 
 -- 
