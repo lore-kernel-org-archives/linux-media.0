@@ -2,54 +2,54 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16506C83F1A
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58E5EC83F1D
 	for <linux-media@archiver.kernel.org>; Mon, 28 Aug 2023 09:20:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbjH1JUJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 28 Aug 2023 05:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59536 "EHLO
+        id S230076AbjH1JUM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 28 Aug 2023 05:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbjH1JTy (ORCPT
+        with ESMTP id S230077AbjH1JT7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 28 Aug 2023 05:19:54 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ACCA10E;
-        Mon, 28 Aug 2023 02:19:51 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1bdf4752c3cso15844695ad.2;
-        Mon, 28 Aug 2023 02:19:51 -0700 (PDT)
+        Mon, 28 Aug 2023 05:19:59 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69BF810C;
+        Mon, 28 Aug 2023 02:19:57 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1c0c6d4d650so23361145ad.0;
+        Mon, 28 Aug 2023 02:19:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693214390; x=1693819190;
+        d=gmail.com; s=20221208; t=1693214397; x=1693819197;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6OHbfvvmaSbzlb/vBLJ9aFEGcvRSExJ6vAXO7h1XWQ4=;
-        b=mh7Hp0R/kf8Ws+jTMclnO2QDTU/wesK2pROJO9sHkrEaWW0eIPii5oiVQORAAFS9No
-         rzrXQYT1PPug9skQf+6QNijsN/MzCHyQTzPLGX8YP+gKN6FZlN3sP3yNmwVc5HRpg79F
-         R4un3r4WjfVIlCiY1icU6nS86Mg6s7AxgP5zHquH2TuXyGTWgeTmKOTJ4hGZW2M25Ofa
-         RkL6tFuLET1WyuSlvIM3GLukK/yCHUUp7rxXvJBuxhgAtSc4IeGT4BITkX+Cc++fieUh
-         J5Z9pLVTxEA773GsTHUyswClufBpoLPPDdORTH/lFxhcajJERDHEJL2GCpgUcPbWQ5/b
-         2GUQ==
+        bh=czUvoB2YphHxinmpy35aY7rZVy/pXgKwXq7ZvtF0H2o=;
+        b=KtfxJlLq2da8xTFKGL07onU+phdbVJYfopLOIgC1oCiWeIMNZc/srqIeIF/c5KnnWN
+         rBeynEHATH1W1+jov/WZcLbDfWNMqKsW4T7qMdMk+bfaj4AszqCRb+dCaAb0BA2uMHDb
+         iHAzt3vtP3NDbKZl5QZ9evKvcpgDdUwh1pQGSdWWbGtEzWOFn38yaOI7ka77eoxN1J95
+         cXYXH1iSkKhwrdQkT5lifIcsKQt3zh6CVxU0ITRVQJJsXaXczIn+eR/FUTNsqq2QXcGO
+         8sAyFaFrUvfnXIFMg0xCYKIXoJRPj2WqO7KRYTIX6+kiE4nijtBxBkVQZted0xKL++el
+         b5sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693214390; x=1693819190;
+        d=1e100.net; s=20221208; t=1693214397; x=1693819197;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6OHbfvvmaSbzlb/vBLJ9aFEGcvRSExJ6vAXO7h1XWQ4=;
-        b=NdjqDbOd8DjUo2lGx8MT4041GXhCJCIzU3VMvuacd6aoQFVrkJCdq3mlCExOMUkhgn
-         O6qW5XmEXWUq2XheV1xATJJuaHkBf2+VYihnhkjRJHej91f8IXSfNMCRqWFfUg54/Zwx
-         P991R9vpPyHMX2atHu153B+8mRfhaVZtBJfIpgAdszYvnGyyOW1IvYqCDg/E8MJKcj+k
-         FAvqbQo3JGDxPBznP8kAMPIe3y6PBqw8XQfRLpNtfpf4E4mEwqKynyvSbWl9qeCS8wvs
-         00rxA+Bg9dbzad5/HYpSXuYb1fA2j4ICIa9ZFN6LOOHDyVC48dGCL0KlTacOJFHoy0r5
-         LI+g==
-X-Gm-Message-State: AOJu0YwffJmp9jKI4NpzZmDjHaBfhhHVQHHd5A5D9O66kSv82h6lG/5U
-        XNM7CqaP9nhZ3lAbClPFn/s=
-X-Google-Smtp-Source: AGHT+IHOC5XdHJ8CtmcsbvcH3h1wkF6dmjhu/NfrVoER9ICsuph4ojjJIRDBeNQTrQc9gzwgTuR46g==
-X-Received: by 2002:a17:903:234e:b0:1b5:64a4:bea0 with SMTP id c14-20020a170903234e00b001b564a4bea0mr20910114plh.10.1693214390421;
-        Mon, 28 Aug 2023 02:19:50 -0700 (PDT)
+        bh=czUvoB2YphHxinmpy35aY7rZVy/pXgKwXq7ZvtF0H2o=;
+        b=Mj/pFcboRU5Gc6NHNhVCgGe8BCbD/HiL8l3TaNqwDEvUHTMIBgt0gaiXju5lmBnFgd
+         O9UATcdiJWwJwEk1TpG508lQWMA2zM47ulTw/s7nKIgpH2x1lmGtmG519fHG8KK3lSY9
+         1Sdta3ykpsxa4HfEHCpiuXxJRiauajsM3gPJXgaexhkcj2kzPI5Ai3RFTcDWpYhemycB
+         XKUKq5zHLHZgOpmWJnIg8nShh0W9nFTn+xrbqGhfqXJ0csNwbWXS69xEtcMZhgzKUj32
+         W1swU1EVl6WBbcDukuPlbqrz4kOEDEl598XDf24bG6alO817yH3w3KFM/dOu2zuUvAj6
+         AH8w==
+X-Gm-Message-State: AOJu0YxnC6bJVXLllZf5hEQbAkgHVbgX/sRd83+6Bg1mvYcGNUzr3V9N
+        zB4F+l6gJUghk3vUt8vmUAqw6olYkLyk8Q==
+X-Google-Smtp-Source: AGHT+IHY36XFt0VstHzp1KS4I2+sBZqCcWlOjpWKoh/gOkIqxF3dcxCclfcnddEDA8S8+CBpzqDr6Q==
+X-Received: by 2002:a17:902:8f97:b0:1b8:400a:48f2 with SMTP id z23-20020a1709028f9700b001b8400a48f2mr26168545plo.62.1693214396894;
+        Mon, 28 Aug 2023 02:19:56 -0700 (PDT)
 Received: from hcdev-d520mt2.. (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id t9-20020a170902e84900b001bf8779e051sm6749403plg.289.2023.08.28.02.19.47
+        by smtp.gmail.com with ESMTPSA id t9-20020a170902e84900b001bf8779e051sm6749403plg.289.2023.08.28.02.19.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Aug 2023 02:19:50 -0700 (PDT)
+        Mon, 28 Aug 2023 02:19:56 -0700 (PDT)
 From:   Marvin Lin <milkfafa@gmail.com>
 To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
         avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
@@ -59,11 +59,10 @@ To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
 Cc:     devicetree@vger.kernel.org, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
         kwliu@nuvoton.com, kflin@nuvoton.com,
-        Marvin Lin <milkfafa@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v14 3/7] dt-bindings: soc: nuvoton: Add NPCM GFXI
-Date:   Mon, 28 Aug 2023 17:18:55 +0800
-Message-Id: <20230828091859.3889817-4-milkfafa@gmail.com>
+        Marvin Lin <milkfafa@gmail.com>
+Subject: [PATCH v14 5/7] media: v4l2-ctrls: Add user control base for Nuvoton NPCM controls
+Date:   Mon, 28 Aug 2023 17:18:57 +0800
+Message-Id: <20230828091859.3889817-6-milkfafa@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230828091859.3889817-1-milkfafa@gmail.com>
 References: <20230828091859.3889817-1-milkfafa@gmail.com>
@@ -73,61 +72,31 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add dt-bindings document for Graphics Core Information (GFXI) node. It
-is used by NPCM video driver to retrieve Graphics core information.
+Add a control base for Nuvoton NPCM driver controls, and reserve 16
+controls.
 
 Signed-off-by: Marvin Lin <milkfafa@gmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../bindings/soc/nuvoton/nuvoton,gfxi.yaml    | 39 +++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/soc/nuvoton/nuvoton,gfxi.yaml
+ include/uapi/linux/v4l2-controls.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/soc/nuvoton/nuvoton,gfxi.yaml b/Documentation/devicetree/bindings/soc/nuvoton/nuvoton,gfxi.yaml
-new file mode 100644
-index 000000000000..0222a43977ab
---- /dev/null
-+++ b/Documentation/devicetree/bindings/soc/nuvoton/nuvoton,gfxi.yaml
-@@ -0,0 +1,39 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/soc/nuvoton/nuvoton,gfxi.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index c3604a0a3e30..68db66d4aae8 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -203,6 +203,12 @@ enum v4l2_colorfx {
+  */
+ #define V4L2_CID_USER_ASPEED_BASE		(V4L2_CID_USER_BASE + 0x11a0)
+ 
++/*
++ * The base for Nuvoton NPCM driver controls.
++ * We reserve 16 controls for this driver.
++ */
++#define V4L2_CID_USER_NPCM_BASE			(V4L2_CID_USER_BASE + 0x11b0)
 +
-+title: Graphics Core Information block in Nuvoton SoCs
-+
-+maintainers:
-+  - Joseph Liu <kwliu@nuvoton.com>
-+  - Marvin Lin <kflin@nuvoton.com>
-+
-+description:
-+  The Graphics Core Information (GFXI) are a block of registers in Nuvoton SoCs
-+  that analyzes Graphics core behavior and provides information in registers.
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - nuvoton,npcm750-gfxi
-+          - nuvoton,npcm845-gfxi
-+      - const: syscon
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    gfxi: gfxi@e000 {
-+      compatible = "nuvoton,npcm750-gfxi", "syscon";
-+      reg = <0xe000 0x100>;
-+    };
+ /* MPEG-class control IDs */
+ /* The MPEG controls are applicable to all codec controls
+  * and the 'MPEG' part of the define is historical */
 -- 
 2.34.1
 
