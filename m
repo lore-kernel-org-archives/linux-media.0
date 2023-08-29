@@ -2,77 +2,119 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86ECEC83F19
-	for <linux-media@archiver.kernel.org>; Tue, 29 Aug 2023 05:27:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FCDCC83F17
+	for <linux-media@archiver.kernel.org>; Tue, 29 Aug 2023 06:32:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235619AbjH2FY4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 29 Aug 2023 01:24:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38642 "EHLO
+        id S232511AbjH2Gbn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 29 Aug 2023 02:31:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235727AbjH2FYh (ORCPT
+        with ESMTP id S233328AbjH2Gbl (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 29 Aug 2023 01:24:37 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8D619A
-        for <linux-media@vger.kernel.org>; Mon, 28 Aug 2023 22:24:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693286675; x=1724822675;
-  h=from:to:cc:subject:date:message-id;
-  bh=ZhIomhZ04fOaJX+TOWycQN8ZiSw5hTnfafiJlngXBew=;
-  b=OaX4neciH0zaRjnY2lqTBuqXSHaIi7ZIvo00+LoMj8JNpcOs1ezQuYNz
-   tN1ZkgGHyqHyoj1VeqCAtC5Ph1g1/zqhZP+0k0C2jIv8GAUXq6cZAiwQ/
-   PJXdHMdVbtU5syaJVGvE7nLW/DVN3/RPuZrbdC3g+YCDlvA5VR92o7cJv
-   MVKJZbt8xHK9SAZOYM/cRfFInmurfL+UCXKiBkxgWZL2BpVWJcZ8GnI1+
-   EX56uQ78CGZF8BeRByqXcnA6z3CGywcY0Y2S69fDSX3g1vmnd+Y5Ok1MN
-   QyjvyPpYEb4wPLb51qXoe+Bh9Wgn+uympN5t3eXbSCHwfmWJC2Uxuc4C3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10816"; a="354792601"
-X-IronPort-AV: E=Sophos;i="6.02,208,1688454000"; 
-   d="scan'208";a="354792601"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2023 22:24:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10816"; a="688370881"
-X-IronPort-AV: E=Sophos;i="6.02,208,1688454000"; 
-   d="scan'208";a="688370881"
-Received: from shsensorbuild2.sh.intel.com ([10.239.134.197])
-  by orsmga003.jf.intel.com with ESMTP; 28 Aug 2023 22:24:31 -0700
-From:   Wentong Wu <wentong.wu@intel.com>
-To:     sakari.ailus@linux.intel.com, linux-media@vger.kernel.org
-Cc:     zhifeng.wang@intel.com, Wentong Wu <wentong.wu@intel.com>
-Subject: [PATCH v4 0/3] load ivsc driver modules automatically
-Date:   Tue, 29 Aug 2023 13:24:25 +0800
-Message-Id: <1693286668-13055-1-git-send-email-wentong.wu@intel.com>
-X-Mailer: git-send-email 2.7.4
+        Tue, 29 Aug 2023 02:31:41 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F15F107
+        for <linux-media@vger.kernel.org>; Mon, 28 Aug 2023 23:31:37 -0700 (PDT)
+Received: from ideasonboard.com (mob-5-90-48-16.net.vodafone.it [5.90.48.16])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7E5A22D8;
+        Tue, 29 Aug 2023 08:30:14 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1693290614;
+        bh=ifuonolpPhBBJBib7sJLRfWK/wcmOA3iD7vA/1SeMBU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mw2QcL1JlL6sOBLIbCP6JZFnvXcyGc+LaE8yuy1GHtu/Vv7MGPUkXOasOsz/cpx0V
+         tvvFSEj0yYwKh+StMsuafpJi2iYI1ykK/lj/oJWShkCfcX66zU6QAcGa70F3SinuSI
+         FDNz6y//ngmrmEdeLQ/2gh3VAb7KM75Ssdi8FCns=
+Date:   Tue, 29 Aug 2023 08:31:27 +0200
+From:   Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        linux-media@vger.kernel.org, Sakari Ailus <sakari.ailus@iki.fi>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>
+Subject: Re: [PATCH v1 2/2] media: i2c: imx219: Fix crop rectangle setting
+ when changing format
+Message-ID: <6wdfupwaev2pchwuyh27kn4rj26rtrs6xqhiefu5tn24qymali@t2mjl5bdaa5v>
+References: <20230814193435.24158-1-laurent.pinchart@ideasonboard.com>
+ <20230814193435.24158-3-laurent.pinchart@ideasonboard.com>
+ <ujpugw52leros2siag4wtvxhwkmnsazwdiofvpvtugjrvc5zvv@v4u26p6a7dnj>
+ <20230828191506.GA17083@pendragon.ideasonboard.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230828191506.GA17083@pendragon.ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The modalias of ivsc mei devices are built based only on its own
-UUID. But with additional name identifier, the driver module alias
-can't match with ivsc devices' modalias, so remove name identifier
-to help depmod loading ivsc driver modules automatically.
-At the same time, this patch makes sure IPU bridge is initialized
-before probing ace device to fix probe order problem founded after
-automatically loading ivsc driver modules is enabled.
+Hi Laurent
 
----
-v4:
- - add cover letter
+On Mon, Aug 28, 2023 at 10:15:06PM +0300, Laurent Pinchart wrote:
+> Hi Jacopo,
+>
+> On Mon, Aug 28, 2023 at 02:19:54PM +0200, Jacopo Mondi wrote:
+> > On Mon, Aug 14, 2023 at 10:34:35PM +0300, Laurent Pinchart wrote:
+> > > When moving the imx219 driver to the subdev active state, commit
+> > > e8a5b1df000e ("media: i2c: imx219: Use subdev active state") used the
+> > > pad crop rectangle stored in the subdev state to report the crop
+> > > rectangle of the active mode. That crop rectangle was however not set in
+> > > the state when setting the format, which resulted in reporting an
+> > > incorrect crop rectangle to userspace. Fix it.
+> > >
+> > > Fixes: e8a5b1df000e ("media: i2c: imx219: Use subdev active state")
+> > > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > > ---
+> > >  drivers/media/i2c/imx219.c | 11 ++++++-----
+> > >  1 file changed, 6 insertions(+), 5 deletions(-)
+> > >
+> > > diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
+> > > index 6f88e002c8d8..ec53abe2e84e 100644
+> > > --- a/drivers/media/i2c/imx219.c
+> > > +++ b/drivers/media/i2c/imx219.c
+> > > @@ -750,6 +750,7 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
+> > >  	const struct imx219_mode *mode;
+> > >  	int exposure_max, exposure_def, hblank;
+> > >  	struct v4l2_mbus_framefmt *format;
+> > > +	struct v4l2_rect *crop;
+> > >
+> > >  	mode = v4l2_find_nearest_size(supported_modes,
+> > >  				      ARRAY_SIZE(supported_modes),
+> > > @@ -757,10 +758,12 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
+> > >  				      fmt->format.width, fmt->format.height);
+> > >
+> > >  	imx219_update_pad_format(imx219, mode, &fmt->format, fmt->format.code);
+> > > -	format = v4l2_subdev_get_pad_format(sd, sd_state, 0);
+> > >
+> > > -	if (imx219->mode == mode && format->code == fmt->format.code)
+> > > -		return 0;
+> >
+> > Has this check been lost ?
+>
+> It has. Is it an issue ?
+>
 
-v3:
- - make commit message more clear
+well, the check ensure we exit earlier if the sensor configuration
+doesn't change.. as the newly introduced crop rectangle comes from the
+mode as well, I'm missing why it should now be dropped...
 
-Wentong Wu (3):
-  media: ivsc: csi: remove name identifier
-  media: ivsc: ace: remove name identifier
-  media: ivsc: ace: probe ace device after IPU bridge is initialized.
-
- drivers/media/pci/intel/ivsc/mei_ace.c | 9 +++++----
- drivers/media/pci/intel/ivsc/mei_csi.c | 5 ++---
- 2 files changed, 7 insertions(+), 7 deletions(-)
-
--- 
-2.7.4
-
+> > > +	format = v4l2_subdev_get_pad_format(sd, sd_state, 0);
+> > > +	crop = v4l2_subdev_get_pad_crop(sd, sd_state, 0);
+> > > +
+> > > +	*format = fmt->format;
+> > > +	*crop = mode->crop;
+> > >
+> > >  	if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
+> > >  		imx219->mode = mode;
+> > > @@ -788,8 +791,6 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
+> > >  					 hblank);
+> > >  	}
+> > >
+> > > -	*format = fmt->format;
+> > > -
+> > >  	return 0;
+> > >  }
+> > >
+>
+> --
+> Regards,
+>
+> Laurent Pinchart
