@@ -2,100 +2,83 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37B44C83F15
-	for <linux-media@archiver.kernel.org>; Tue, 29 Aug 2023 01:46:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96C3AC83F18
+	for <linux-media@archiver.kernel.org>; Tue, 29 Aug 2023 05:27:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234899AbjH2BqD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 28 Aug 2023 21:46:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45154 "EHLO
+        id S235781AbjH2FZA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 29 Aug 2023 01:25:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235030AbjH2Bp7 (ORCPT
+        with ESMTP id S235750AbjH2FYo (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 28 Aug 2023 21:45:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CFC1A2
-        for <linux-media@vger.kernel.org>; Mon, 28 Aug 2023 18:45:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A666260B04
-        for <linux-media@vger.kernel.org>; Tue, 29 Aug 2023 01:45:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACEA0C433C7
-        for <linux-media@vger.kernel.org>; Tue, 29 Aug 2023 01:45:45 +0000 (UTC)
-Date:   Tue, 29 Aug 2023 03:45:43 +0200
-Message-ID: <052cd076f78926d8d96ba20ce0985f1c.hverkuil@xs4all.nl>
-From:   "Hans Verkuil" <hverkuil-cisco@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
+        Tue, 29 Aug 2023 01:24:44 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE05198
+        for <linux-media@vger.kernel.org>; Mon, 28 Aug 2023 22:24:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693286681; x=1724822681;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=1f0RgzpA0h99w+S9RZCzdmHxXCKbrvYqy6tXUg+zwPg=;
+  b=VoP7mkesHqmbr3Wd55NAg6DcjJNBV5UoK1ajqqj6JlZUWQ1sgn/pFJ8I
+   9YFVOwoHGTmQtFj2q3P5mgIjm9OW/3CxoLWyWM/NtRxXSP1hOkT6sY6ZZ
+   mVp+7h6fF+jo/TNJ2fBOy/6ArMfA8YslAEGb/cL0qtZxRfCFVl4yse4bD
+   6p4JBT1do5SYWKffR6L8ErXumXN8Pijvtp45L7n8N2XlRuW3XuRn1S576
+   6pfdymmaNRz3G2fr68qBPr+g/pTvmewWIvBQn1C0G0EoVXgva27NkWspN
+   Z7PiEd9tPd3e4uyDx4Hur2JZIItGGc/0U8DkOasaGkciWjCsP9e1dzcdG
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10816"; a="354792623"
+X-IronPort-AV: E=Sophos;i="6.02,208,1688454000"; 
+   d="scan'208";a="354792623"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2023 22:24:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10816"; a="688370918"
+X-IronPort-AV: E=Sophos;i="6.02,208,1688454000"; 
+   d="scan'208";a="688370918"
+Received: from shsensorbuild2.sh.intel.com ([10.239.134.197])
+  by orsmga003.jf.intel.com with ESMTP; 28 Aug 2023 22:24:39 -0700
+From:   Wentong Wu <wentong.wu@intel.com>
+To:     sakari.ailus@linux.intel.com, linux-media@vger.kernel.org
+Cc:     zhifeng.wang@intel.com, Wentong Wu <wentong.wu@intel.com>
+Subject: [PATCH v4 3/3] media: ivsc: ace: probe ace device after IPU bridge is initialized.
+Date:   Tue, 29 Aug 2023 13:24:28 +0800
+Message-Id: <1693286668-13055-4-git-send-email-wentong.wu@intel.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1693286668-13055-1-git-send-email-wentong.wu@intel.com>
+References: <1693286668-13055-1-git-send-email-wentong.wu@intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the architectures in the list below.
+During probe ivsc ace device, acpi_dev_clear_dependencies() will be
+called to clear the consumer and supplier relationship between camera
+sensor device and ivsc device. But IPU bridge will setup the connection
+swnodes for ivsc device and camera sensor device based on this consumer
+and supplier relationship. This patch defers ivsc ace's probe to make
+sure IPU bridge is initialized before this consumer and supplier
+relationship between camera sensor device and IVSC device is cleared.
 
-Results of the daily build of media_tree:
+Signed-off-by: Wentong Wu <wentong.wu@intel.com>
+---
+ drivers/media/pci/intel/ivsc/mei_ace.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-date:			Tue Aug 29 03:00:10 CEST 2023
-media-tree git repo:	git://linuxtv.org/hverkuil/media_tree.git
-media-tree git branch:	media_stage/master
-media-tree git hash:	bf01dd96201a9430372c414e2efd6cef5cdc5c51
-v4l-utils git hash:	75283d9ec59122ff52e3ccc6d59cdd6f8577ae76
-edid-decode git hash:	5f723267e04deb3aa9610483514a02bcee10d9c2
-gcc version:		i686-linux-gcc (GCC) 13.2.0
-sparse repo:            git://git.kernel.org/pub/scm/devel/sparse/sparse.git
-sparse version:		v0.6.4-39-gce1a6720
-smatch repo:            git://repo.or.cz/smatch.git
-smatch version:		v0.5.0-8455-g78e3bddd
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: 34cb998aab09b747e0985bd42a56e1619928d05d
-host hardware:		x86_64
-host os:		6.1.0-5-amd64
+diff --git a/drivers/media/pci/intel/ivsc/mei_ace.c b/drivers/media/pci/intel/ivsc/mei_ace.c
+index 7879f1f..627ec40 100644
+--- a/drivers/media/pci/intel/ivsc/mei_ace.c
++++ b/drivers/media/pci/intel/ivsc/mei_ace.c
+@@ -406,6 +406,9 @@ static int mei_ace_setup_dev_link(struct mei_ace *ace)
+ 	if (!csi_dev) {
+ 		ret = -EPROBE_DEFER;
+ 		goto err;
++	} else if (!dev_fwnode(csi_dev)) {
++		ret = -EPROBE_DEFER;
++		goto err_put;
+ 	}
+ 
+ 	/* setup link between mei_ace and mei_csi */
+-- 
+2.7.4
 
-linux-git-arm: OK
-linux-git-arm64: OK
-linux-git-powerpc64: OK
-linux-git-i686: OK
-linux-git-x86_64: OK
-no-acpi.config: OK
-no-of.config: OK
-no-pm.config: OK
-no-pm-sleep.config: OK
-no-debug-fs.config: OK
-sparse: WARNINGS:
-
-drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
-
-smatch: WARNINGS:
-
-drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
-
-COMPILE_TEST: WARNINGS: VIDEOBUF_GEN VIDEOBUF_DMA_SG VIDEOBUF_VMALLOC VIDEOBUF_DMA_CONTIG
-strcpy/strncpy/strlcpy: OK
-abi-compliance: ABI OK
-pahole: ABI OK
-utils: OK
-spec-git: OK
-kerneldoc: OK
-virtme: WARNINGS: Final Summary: 3080, Succeeded: 3080, Failed: 0, Warnings: 3
-virtme-32: WARNINGS: Final Summary: 3193, Succeeded: 3193, Failed: 0, Warnings: 4
-
-Detailed results are available here:
-
-https://hverkuil.home.xs4all.nl/logs/Tuesday.log
-
-Detailed regression test results are available here:
-
-https://hverkuil.home.xs4all.nl/logs/Tuesday-test-media.log
-https://hverkuil.home.xs4all.nl/logs/Tuesday-test-media-dmesg.log
-https://hverkuil.home.xs4all.nl/logs/Tuesday-test-media-32.log
-https://hverkuil.home.xs4all.nl/logs/Tuesday-test-media-32-dmesg.log
-
-Full logs are available here:
-
-https://hverkuil.home.xs4all.nl/logs/Tuesday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-https://hverkuil.home.xs4all.nl/spec/index.html
