@@ -2,100 +2,50 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA132C83F1B
-	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:29:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47D71C83F18
+	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:30:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232824AbjH3S36 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Aug 2023 14:29:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48936 "EHLO
+        id S232876AbjH3S37 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Aug 2023 14:29:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245459AbjH3PQb (ORCPT
+        with ESMTP id S245135AbjH3Ods (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Aug 2023 11:16:31 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A761A4
-        for <linux-media@vger.kernel.org>; Wed, 30 Aug 2023 08:16:28 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-401b393ddd2so54552905e9.0
-        for <linux-media@vger.kernel.org>; Wed, 30 Aug 2023 08:16:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693408586; x=1694013386; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4KIMxr1F1MR2h2+mqKRkXjNnFpbeeayJcHKqoZjQQsY=;
-        b=OXKAZpB0h6XHYMdCyW8RfBKPaxcvifWODJragGxgv+4JwJ6zciVUHhY/PJJjldcUgA
-         JC7/9suujVrrQJm/xzO986OwQK1IyLqzUIsrBfgmYq3ycHGfKYedGwcJ58Pe1wYxIg0J
-         ZTKV9GAutm+QsI94JpHGNE3YgYILk1QTLgPdRILt5M1pFkL1Y1sc+gPDmLe11CIdWaMu
-         WChBXQaV8UOTGgmTux+2ELPxU75tmwD7idCUJrhi8QdPBXlajLCQSqI4mG3upSUs0Laa
-         srej5dY0UuoBQBf3nq0mVBB1RQY9gYOPHKLlF/nfrA2LhLLlt/yubaFQxX3jNfNCq25f
-         DM1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693408586; x=1694013386;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4KIMxr1F1MR2h2+mqKRkXjNnFpbeeayJcHKqoZjQQsY=;
-        b=R5F1uk46YjvCz67u2iQ9/f1HBbqyndAFnNV0X2VujlO9cIOZKbdJGTTifBScRn+SkG
-         R2jR2MlzHS89JRYMSULjcqHKFKPxnXZZZV4B7ZSvtWCz6vQlCZ3Dp5WCVbA0FySDAzBi
-         ETh/2tki+T1aSRdwtbkpgdnHQYPD0TuocyvMOA/DDdDBamlVF3g/75MYnsvrd0VDHeP5
-         Q7fkvnr3GdzIcjFR1sqM9iVr3z57GMdWTmHgogOyO6h4PJ4A4ykk+aIz82hkbeidsHY0
-         ex1KUOKS2c1koPLo2olgurapSfsDlp10nFb7pqAzEoPzqPQJ+30kE0D+aslUzwPAopTN
-         EjBA==
-X-Gm-Message-State: AOJu0YyYJUpUwcD6Scfn//Yl+AvrXWyVRdUypba6aCfXp+uYTMd2mkj6
-        /wCjFJ+6pFZPLIGLcogXwHkJ9Q==
-X-Google-Smtp-Source: AGHT+IGLGy4V+kOvzFjlyXUBjO/5UGTdiimSA44ymzUkR2RS+k/8pZ74R8cLnKUxO+YtC/mxTDFJww==
-X-Received: by 2002:adf:deca:0:b0:317:5a3c:ed28 with SMTP id i10-20020adfdeca000000b003175a3ced28mr1981661wrn.6.1693408586673;
-        Wed, 30 Aug 2023 08:16:26 -0700 (PDT)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id b16-20020a5d4d90000000b0030fd03e3d25sm16989961wru.75.2023.08.30.08.16.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Aug 2023 08:16:26 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
-        andrey.konovalov@linaro.org
-Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH v3 07/10] media: qcom: camss: Fix missing vfe_lite clocks check
-Date:   Wed, 30 Aug 2023 16:16:12 +0100
-Message-ID: <20230830151615.3012325-8-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230830151615.3012325-1-bryan.odonoghue@linaro.org>
-References: <20230830151615.3012325-1-bryan.odonoghue@linaro.org>
+        Wed, 30 Aug 2023 10:33:48 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D29193;
+        Wed, 30 Aug 2023 07:33:46 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 0957867373; Wed, 30 Aug 2023 16:33:42 +0200 (CEST)
+Date:   Wed, 30 Aug 2023 16:33:41 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Tomasz Figa <tfiga@chromium.org>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Anle Pan <anle.pan@nxp.com>, m.szyprowski@samsung.com,
+        mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hui.fang@nxp.com,
+        Jason Gunthorpe <jgg@ziepe.ca>
+Subject: Re: [PATCH] media: videobuf2-dma-sg: limit the sg segment size
+Message-ID: <20230830143341.GA25574@lst.de>
+References: <20230828075420.2009568-1-anle.pan@nxp.com> <CAAFQd5Cn3xQroyYtC+m+pk1jOE5i3H+FGr-y8zqhaf0Yo5p-1Q@mail.gmail.com> <deb735ce-7de1-e59a-9de4-1365b374b417@arm.com> <20230829150442.GA3929@lst.de> <CAAFQd5CiHXvsJugSi+hXY9ESsmxUzBzmbhF6G48iVsOcL5eMtQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAFQd5CiHXvsJugSi+hXY9ESsmxUzBzmbhF6G48iVsOcL5eMtQ@mail.gmail.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-check_clock doesn't account for vfe_lite which means that vfe_lite will
-never get validated by this routine. Add the clock name to the expected set
-to remediate.
+On Wed, Aug 30, 2023 at 12:47:57PM +0900, Tomasz Figa wrote:
+> Do we see anything replacing it widely anywhere on the short-middle
+> term horizon? I think we could possibly migrate vb2 to use that new
+> thing internally and just provide some compatibility X to scatterlist
+> conversion function for the drivers.
 
-Fixes: 7319cdf189bb ("media: camss: Add support for VFE hardware version Titan 170")
-Cc: stable@vger.kernel.org
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
- drivers/media/platform/qcom/camss/camss-vfe.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Jason said at LSF/MM that he had a prototype for a mapping API that
+takes a phys/len array as input and dma_addr/len a output, which really
+is the right thing to do, especially for dmabuf.
 
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
-index 938f373bcd1fd..b021f81cef123 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe.c
-@@ -535,7 +535,8 @@ static int vfe_check_clock_rates(struct vfe_device *vfe)
- 		struct camss_clock *clock = &vfe->clock[i];
- 
- 		if (!strcmp(clock->name, "vfe0") ||
--		    !strcmp(clock->name, "vfe1")) {
-+		    !strcmp(clock->name, "vfe1") ||
-+		    !strcmp(clock->name, "vfe_lite")) {
- 			u64 min_rate = 0;
- 			unsigned long rate;
- 
--- 
-2.41.0
-
+Jason, what's the status of your work?
