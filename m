@@ -2,113 +2,98 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E60BDC83F1E
-	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:30:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 826A7C83F19
+	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:30:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233583AbjH3SaO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S233740AbjH3SaO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Wed, 30 Aug 2023 14:30:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43258 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343773AbjH3Qvp (ORCPT
+        with ESMTP id S245467AbjH3PQd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Aug 2023 12:51:45 -0400
-Received: from kozue.soulik.info (kozue.soulik.info [IPv6:2001:19f0:7000:8404:5400:ff:fe00:d7d6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143F61A2
-        for <linux-media@vger.kernel.org>; Wed, 30 Aug 2023 09:51:43 -0700 (PDT)
-Received: from [192.168.10.7] (unknown [10.0.12.132])
-        by kozue.soulik.info (Postfix) with ESMTPSA id 94C17300258;
-        Thu, 31 Aug 2023 01:51:33 +0900 (JST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 kozue.soulik.info 94C17300258
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=soulik.info; s=mail;
-        t=1693414296; bh=/p9VbuiL48VdjIKgkEFVOwtf0FRTsbtp/z+i1lPIXp4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=iOG+SETOO2liVEdglTsDBAsW0Y93hYVT8hy0hjuMXEyzPcVkUrSMbacRWuYnPDiDu
-         w6849G+MeYHtGkbZXKqwOE4tTS+7UR9AprY+0uMCtqWlT6DEWoh3S/eF76I1xV1i22
-         e97JjPwyom0slXk7kvtj7XrFwBPF/4sGuOosTfJs=
-Message-ID: <e9f01000-d2ed-8193-420c-fb80f0b96f8f@soulik.info>
-Date:   Thu, 31 Aug 2023 00:51:33 +0800
+        Wed, 30 Aug 2023 11:16:33 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EABE1A2
+        for <linux-media@vger.kernel.org>; Wed, 30 Aug 2023 08:16:30 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-31c8a710545so3825161f8f.3
+        for <linux-media@vger.kernel.org>; Wed, 30 Aug 2023 08:16:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1693408589; x=1694013389; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mDUjhNsZiKuiQHQHANm264fa/+Px+b5VJ7MlnK/AAX8=;
+        b=HQzHNxAPNqgPUiCbt2Mb/fHWWjH1lEu3w9iT0MiF7ZaUrpPL4VpcU3wdgROTAbDtif
+         BBiuetDGn+FyV/f/A44dPXbTncbEfu95DB7pJviL9UWjQY1eDlMFYK4UPxsAi6FhuH3/
+         65Q2WePwRm498+VOVrgQpYBOgnZqJ4EJGFZ0oMJcmeE0eZrkIDosYc6eiwj/UaM8pjn+
+         FbP90e1GYiRqsHkW9ilf/gd66lOXaERd5vUJWtd9vRBffLxyTcycHFQqM093nzkfWVax
+         /utKuj0E4GN0OmuX9MT4iOCtQJOJ7SumXdDP+hE42n7yTlb1gi8O5jUG3TVH/i7fwxk4
+         C5tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693408589; x=1694013389;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mDUjhNsZiKuiQHQHANm264fa/+Px+b5VJ7MlnK/AAX8=;
+        b=FpRqsC+s+CzyhKWBMcOBLB8l8rS60JTmfaXjzctc9udMzK6rpw8BkgYPBld2NQZsgS
+         pH+/zZL1SC59Swo4P9GCTJ+vL1kGzssAnu53Eq2E1lYxLkeDd22AXQZFxHwMKpc7nnnd
+         Bul3zC/2inifqQXqMAVp/CdtvYvrCuz1ZnzLEl3WkBVDYFibJCp806d8vtetRGHdq1Md
+         x2gCG+ZZxDduZh6omqQGIZ1Z7+SG+xdwHncdMaDCkCBBGM8/ItaDenJbrHu+d9cUTNXD
+         cfVMmXTKVSy5KkX7/QDQ2uGIkgP+Zmea5Vt7Qwlu5yf9afbriF1hGmljVspP6JVhnHud
+         WoPQ==
+X-Gm-Message-State: AOJu0Yz6fC+JtWwSjUNAPrwAl7QGGHCjAw6C//NXucS/IMh216EXjgQh
+        4qjZ4smjd59KLfpWgWQcU66bjw==
+X-Google-Smtp-Source: AGHT+IE9UqrL+pPJP8W2yTx9xqQ4WDHOKHVlKEroNve58lNQAMRLQBg5uzkYo4wAbnbWJdjNwG1UjQ==
+X-Received: by 2002:a5d:4e43:0:b0:317:5182:7b55 with SMTP id r3-20020a5d4e43000000b0031751827b55mr1910128wrt.42.1693408589200;
+        Wed, 30 Aug 2023 08:16:29 -0700 (PDT)
+Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id b16-20020a5d4d90000000b0030fd03e3d25sm16989961wru.75.2023.08.30.08.16.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Aug 2023 08:16:28 -0700 (PDT)
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
+        andrey.konovalov@linaro.org
+Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: [PATCH v3 09/10] media: qcom: camss: Fix set CSI2_RX_CFG1_VC_MODE when VC is greater than 3
+Date:   Wed, 30 Aug 2023 16:16:14 +0100
+Message-ID: <20230830151615.3012325-10-bryan.odonoghue@linaro.org>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230830151615.3012325-1-bryan.odonoghue@linaro.org>
+References: <20230830151615.3012325-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: Stateless Encoding uAPI Discussion and Proposal
-To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Hsia-Jun Li <Randy.Li@synaptics.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <ZK2NiQd1KnraAr20@aptenodytes> <ZNTp1e4gJ2zeYmS-@aptenodytes>
- <a2e8e01ea754232dd3562b34702b6600d7358605.camel@collabora.com>
- <ZNaVQ-zxIuCpGGha@aptenodytes>
- <720c476189552596cbd61dd74d6fa12818718036.camel@collabora.com>
- <39270c5e-24ab-8ff6-d925-7718b1fef3c4@synaptics.com>
- <a0fa6559c3933a5a4c8b7502282adae3429e0b57.camel@collabora.com>
- <52e9b710-5011-656b-aebf-8d57e6496ddd@synaptics.com>
- <4d08d98d853d78bbb6dba826d30c3386fe0b31e8.camel@collabora.com>
-Content-Language: en-US
-From:   Randy Li <ayaka@soulik.info>
-In-Reply-To: <4d08d98d853d78bbb6dba826d30c3386fe0b31e8.camel@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+VC_MODE = 0 implies a two bit VC address.
+VC_MODE = 1 is required for VCs with a larger address than two bits.
 
-On 2023/8/30 23:10, Nicolas Dufresne wrote:
-> CAUTION: Email originated externally, do not click links or open attachments unless you recognize the sender and know the content is safe.
->
->
-> Le mercredi 23 août 2023 à 11:04 +0800, Hsia-Jun Li a écrit :
->>> Though, if we drop the GOP structure and favour this approach, the latency could
->>> be regain later by introducing fence base streaming. The technique would be for
->>> a video source (like a capture driver) to pass dmabuf that aren't filled yet,
->>> but have a companion fence. This would allow queuing requests ahead of time, and
->>> all we need is enough pre-allocation to accommodate the desired look ahead. Only
->>> issue is that perhaps this violates the fundamental of "short term" delivery of
->>> fences. But fences can also fail I think, in case the capture was stopped.
->>>
->> I don't think it would help. Fence is a thing for DRM/GPU without a queue.
->> Even with a fence, would the video sink tell us the motion delta here?
-> It helps with the latency since the encoder can start its search and analyzes as
-> soon as frames are available, instead of until you have all N frames available
-> (refer to the MIN_BUFFER_FOR controls used when lookahead is needed).
+Fixes: eebe6d00e9bf ("media: camss: Add support for CSID hardware version Titan 170")
+Cc: stable@vger.kernel.org
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ drivers/media/platform/qcom/camss/camss-csid-gen2.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-I think the fence in GPU is something attached to per frame 
-buffer(IN_FENCE) or completing the render(OUT_FENCE).
+diff --git a/drivers/media/platform/qcom/camss/camss-csid-gen2.c b/drivers/media/platform/qcom/camss/camss-csid-gen2.c
+index 45c7986d4a8d0..140c584bfb8b1 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid-gen2.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-gen2.c
+@@ -449,6 +449,8 @@ static void __csid_configure_stream(struct csid_device *csid, u8 enable, u8 vc)
+ 	writel_relaxed(val, csid->base + CSID_CSI2_RX_CFG0);
+ 
+ 	val = 1 << CSI2_RX_CFG1_PACKET_ECC_CORRECTION_EN;
++	if (vc > 3)
++		val |= 1 << CSI2_RX_CFG1_VC_MODE;
+ 	val |= 1 << CSI2_RX_CFG1_MISR_EN;
+ 	writel_relaxed(val, csid->base + CSID_CSI2_RX_CFG1);
+ 
+-- 
+2.41.0
 
-So when we enqueue a buffer, what are expecting from the fence?
-
-I think in KMS, you can't enqueue two buffers for the same plane, you 
-have to wait the OUT_FENCE.
-
->
->>> We can certainly move forward with this as a future solution, or just don't
->>> implement future aware RC algorithm in term to avoid the huge task this involves
->>> (and possibly patents?)
->>>
->> I think we should not restrict how the userspace(vendor) operate the
->> hardware.
-> Omitting is not restricting. Vendors have to learn to be community members and
-> propose/add the tools and APIs they need to support their features. We cannot
-> fix vendors in this regard, those who jumps over that fence are wining.
-
-That is not about what vendor would do. I was thinking we are planning 
-how we manage the lifetime of the reconstruction buffer, reference 
-selecting based on a simple GOP model.
-What was designed here would become a barrier for a vendor whose 
-hardware has a little capability than this.
-
-All I want to do here is offer my ideas about how we could achieve an 
-open interfaces that could cover the future need.
-
-Especially it is hard to expand the V4L2 uAPIs.
-
->
-> Nicolas
