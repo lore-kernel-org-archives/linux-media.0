@@ -2,121 +2,156 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB133C83F2B
-	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:29:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2720C6FA8F
+	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:29:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231853AbjH3S3d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Aug 2023 14:29:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53074 "EHLO
+        id S231920AbjH3S3e (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Aug 2023 14:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242262AbjH3HoK (ORCPT
+        with ESMTP id S245450AbjH3PQ2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Aug 2023 03:44:10 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7756BCD8;
-        Wed, 30 Aug 2023 00:44:08 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-68a520dba33so4193828b3a.0;
-        Wed, 30 Aug 2023 00:44:08 -0700 (PDT)
+        Wed, 30 Aug 2023 11:16:28 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810E71A6
+        for <linux-media@vger.kernel.org>; Wed, 30 Aug 2023 08:16:25 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-307d58b3efbso4579928f8f.0
+        for <linux-media@vger.kernel.org>; Wed, 30 Aug 2023 08:16:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693381448; x=1693986248; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KaI3PfD8joR99TjMB7Mb3TjzWqZ8IotMwduAcjhk/lk=;
-        b=gf77cZ800GC40FJrd0lVKsSlrFpSewybhTXRscHHqeTx6zAvxpnNlaisMmWkFl4Osl
-         M3UxNwQkLofiOajnFYKqof3AxLkkW/7/PJrIR9pXfHSoZzSXxVXJcEqYkIXEDTDFXB3O
-         rZ/fogGfH9kmY9r4k+Z0SzKrbEi1pQVMs8XxsH69xIHEV4l1dPmbOwG1VoxkPFAZoPfa
-         Av877gjC9oTym1LNQ+z9BbT1325IdtMYQ/sFanedqitrnUDXwbsOze5Hq6t2RYXwd6mt
-         90LVEyp6JduYOa/EwKL0oFVu48WbpGlkDMPE5XYFtdmJliT7z0NqOzmz3KCIoQPrmgcn
-         QRww==
+        d=linaro.org; s=google; t=1693408584; x=1694013384; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m/8j8dFWn4s/DJNCKaCJuJGk5oWKKJv4/UvwcNEFGrs=;
+        b=qpkwBkQ3VyojMZYvkSJLkM5q6ej6Rm+sDrrv+6MaXQ9Zlm/K3pdlPzFCDz29iKncaY
+         RM7EyZ8trn1bVUDCA1335SugdWSUIyISzC54eUFJmIfm3uSTmTH3nBLmkx1ZWECmd/BY
+         G6V9TnUOkDLaJ0c6+F0UDUXmOTL9Abrnf3EBNWyr0phBfou9hJQctdI2MBnrAbCLeJyr
+         LNgJFKSg1XpcF31G1nj9wvQBIvZKs8GOApX2fnM/MAjvNnLYGmsAHTaOpilsBsCh6KD4
+         07moVWVCmvnreX8JBaU+/tvet0gLfhrlT5TAP1Kq/Z3O0B3+msPIaEhTqi3F8CcLLSxv
+         tTTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693381448; x=1693986248;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KaI3PfD8joR99TjMB7Mb3TjzWqZ8IotMwduAcjhk/lk=;
-        b=YhGdIU0JR26B5CydR3A9vwD0oty1BCgJiQ+e0+hhigPNKWel8jQTXLm3rh/tJwMZ9M
-         9tPVJhVb3kdmycjwTPNfbnqUllIC+J0xPK9yYvdPDVqVg9SvDgkgdik8Zs2ixLzhSKzB
-         zIAYFjxIjb8Ag/c7zSOqarTAq5lgPgBRn/22d6yUdoWI1YRcIzddgkiRnOwxewx1FRtM
-         S5cWoiObxr78V68JknP9JilkJn6ej7ZuWqF2LpklMHUmKmWkXMRoMV+mSQBKPTBTcFvF
-         KPO1gDPcqrT0ZQA7XLBm95HGxM2OUn6q+Vq9P6Md8NO1OvR8uCtwhNCCJgasMJbQZp3q
-         UZsA==
-X-Gm-Message-State: AOJu0YwKsgRd+TXnTe8XhBb7p00eonVHCFyZs23QxRG1Xkf+cDRIO4AN
-        DkDg9ZlXjzGpUQrFzDc6qcs=
-X-Google-Smtp-Source: AGHT+IGaQ4P8EvC7PlpIhxszpNMfsVh9XWh9SaGCCo1nYYOFuxiN9tKA8ohVp4yCvqqpSXyx313liA==
-X-Received: by 2002:a05:6a21:7784:b0:14d:f41c:435a with SMTP id bd4-20020a056a21778400b0014df41c435amr1839509pzc.39.1693381447705;
-        Wed, 30 Aug 2023 00:44:07 -0700 (PDT)
-Received: from localhost.localdomain ([2409:40c2:1033:772c:a5cb:ea8f:e44:ec54])
-        by smtp.gmail.com with ESMTPSA id i19-20020a170902eb5300b001b8b26fa6c1sm10467189pli.115.2023.08.30.00.44.04
+        d=1e100.net; s=20221208; t=1693408584; x=1694013384;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=m/8j8dFWn4s/DJNCKaCJuJGk5oWKKJv4/UvwcNEFGrs=;
+        b=bJwFw4sBhjd5VR8DFksFHPmDHEKsWOjqLefTXp6VF12BSN59mfIEEjw20BCJ70T62G
+         4JfxDs5Bc/pqUCaxXdsJH/QMNaMUr8nvfqYsustuDtkSD/hvVxWTT3yBrmTgYynmOJdi
+         Cd+nWSQlOefFaTKTjTnIuNN/m825gg+3XafmN+tBTZrNpgugrDUB3Oz0qFB/hRYH8Ody
+         dMAokBHuqcLCtruDslDACloCFMS/cvjdurmWlC2UMabGEi/dtcvmQngyQUdH0qzmguCu
+         40Js2lCQ9YG2GNW9u+PRs89M1jEAqr7R45XOImOhRI0y25Ydj9KJFfMpFFZr9k5vrbzf
+         0q2A==
+X-Gm-Message-State: AOJu0YwaoYhdxfm/ui99s8+JFBS4PFDOPXX7755QlgVOwq3Ulo1WgsqL
+        9qrBdRdh2ANxC0g3rCoygIaUSw==
+X-Google-Smtp-Source: AGHT+IEXmtGoZReYyF800HatJ95OPCGdEjoJ2blpLdJZ/AsPzPDgYIujuHZyamPuVoaTQIobAYwcfA==
+X-Received: by 2002:a05:6000:1188:b0:319:72f8:7244 with SMTP id g8-20020a056000118800b0031972f87244mr2241616wrx.45.1693408584096;
+        Wed, 30 Aug 2023 08:16:24 -0700 (PDT)
+Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id b16-20020a5d4d90000000b0030fd03e3d25sm16989961wru.75.2023.08.30.08.16.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Aug 2023 00:44:07 -0700 (PDT)
-From:   coolrrsh@gmail.com
-To:     hverkuil@xs4all.nl, mchehab@kernel.org, slark_xiao@163.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
-        Rajeshwar R Shinde <coolrrsh@gmail.com>,
-        syzbot+e27f3dbdab04e43b9f73@syzkaller.appspotmail.com
-Subject: [PATCH v5] media: gspca: cpia1: shift-out-of-bounds in set_flicker
-Date:   Wed, 30 Aug 2023 13:14:01 +0530
-Message-Id: <20230830074401.7696-1-coolrrsh@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 30 Aug 2023 08:16:23 -0700 (PDT)
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
+        andrey.konovalov@linaro.org
+Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: [PATCH v3 05/10] media: qcom: camss: Fix VFE-17x vfe_disable_output()
+Date:   Wed, 30 Aug 2023 16:16:10 +0100
+Message-ID: <20230830151615.3012325-6-bryan.odonoghue@linaro.org>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230830151615.3012325-1-bryan.odonoghue@linaro.org>
+References: <20230830151615.3012325-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Rajeshwar R Shinde <coolrrsh@gmail.com>
+There are two problems with the current vfe_disable_output() routine.
 
-Syzkaller reported the following issue:
-UBSAN: shift-out-of-bounds in drivers/media/usb/gspca/cpia1.c:1031:27
-shift exponent 245 is too large for 32-bit type 'int'
+Firstly we rightly use a spinlock to protect output->gen2.active_num
+everywhere except for in the IDLE timeout path of vfe_disable_output().
+Even if that is not racy "in practice" somehow it is by happenstance not
+by design.
 
-When the value of the variable "sd->params.exposure.gain" exceeds the
-number of bits in an integer, a shift-out-of-bounds error is reported. It
-is triggered because the variable "currentexp" cannot be left-shifted by
-more than the number of bits in an integer. In order to avoid invalid
-range during left-shift, the conditional expression is added.
+Secondly we do not get consistent behaviour from this routine. On
+sc8280xp 50% of the time I get "VFE idle timeout - resetting". In this
+case the subsequent capture will succeed. The other 50% of the time, we
+don't hit the idle timeout, never do the VFE reset and subsequent
+captures stall indefinitely.
 
+Rewrite the vfe_disable_output() routine to
 
-Reported-by: syzbot+e27f3dbdab04e43b9f73@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/all/20230818164522.12806-1-coolrrsh@gmail.com
-Link: https://syzkaller.appspot.com/bug?extid=e27f3dbdab04e43b9f73
-Signed-off-by: Rajeshwar R Shinde <coolrrsh@gmail.com>
+- Quiesce write masters with vfe_wm_stop()
+- Set active_num = 0
+
+remembering to hold the spinlock when we do so followed by
+
+- Reset the VFE
+
+Testing on sc8280xp and sdm845 shows this to be a valid fix.
+
+Fixes: 7319cdf189bb ("media: camss: Add support for VFE hardware version Titan 170")
+Cc: stable@vger.kernel.org
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
-v1->v2
-Changed the patch. Instead of avoiding shift operation for invalid
-input of 'exposure.gain', throw an error for invalid range.
-v2->v3
-Changed the commit message details
-v3->v4
-Removed the trailing spaces in commit message
-v4->v5
-Replaced the hardcoded value with inbuilt macro
----
- drivers/media/usb/gspca/cpia1.c | 3 +++
- 1 file changed, 3 insertions(+)
+ .../media/platform/qcom/camss/camss-vfe-170.c | 22 +++----------------
+ 1 file changed, 3 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/media/usb/gspca/cpia1.c b/drivers/media/usb/gspca/cpia1.c
-index 46ed95483e22..5f5fa851ca64 100644
---- a/drivers/media/usb/gspca/cpia1.c
-+++ b/drivers/media/usb/gspca/cpia1.c
-@@ -18,6 +18,7 @@
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-170.c b/drivers/media/platform/qcom/camss/camss-vfe-170.c
+index 02494c89da91c..168baaa80d4e6 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe-170.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-170.c
+@@ -7,7 +7,6 @@
+  * Copyright (C) 2020-2021 Linaro Ltd.
+  */
  
- #include <linux/input.h>
- #include <linux/sched/signal.h>
-+#include <linux/bitops.h>
+-#include <linux/delay.h>
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
+ #include <linux/iopoll.h>
+@@ -494,35 +493,20 @@ static int vfe_enable_output(struct vfe_line *line)
+ 	return 0;
+ }
  
- #include "gspca.h"
+-static int vfe_disable_output(struct vfe_line *line)
++static void vfe_disable_output(struct vfe_line *line)
+ {
+ 	struct vfe_device *vfe = to_vfe(line);
+ 	struct vfe_output *output = &line->output;
+ 	unsigned long flags;
+ 	unsigned int i;
+-	bool done;
+-	int timeout = 0;
+-
+-	do {
+-		spin_lock_irqsave(&vfe->output_lock, flags);
+-		done = !output->gen2.active_num;
+-		spin_unlock_irqrestore(&vfe->output_lock, flags);
+-		usleep_range(10000, 20000);
+-
+-		if (timeout++ == 100) {
+-			dev_err(vfe->camss->dev, "VFE idle timeout - resetting\n");
+-			vfe_reset(vfe);
+-			output->gen2.active_num = 0;
+-			return 0;
+-		}
+-	} while (!done);
  
-@@ -1028,6 +1029,8 @@ static int set_flicker(struct gspca_dev *gspca_dev, int on, int apply)
- 			sd->params.exposure.expMode = 2;
- 			sd->exposure_status = EXPOSURE_NORMAL;
- 		}
-+		if (sd->params.exposure.gain >= BITS_PER_TYPE(currentexp))
-+			return -EINVAL;
- 		currentexp = currentexp << sd->params.exposure.gain;
- 		sd->params.exposure.gain = 0;
- 		/* round down current exposure to nearest value */
+ 	spin_lock_irqsave(&vfe->output_lock, flags);
+ 	for (i = 0; i < output->wm_num; i++)
+ 		vfe_wm_stop(vfe, output->wm_idx[i]);
++	output->gen2.active_num = 0;
+ 	spin_unlock_irqrestore(&vfe->output_lock, flags);
+ 
+-	return 0;
++	vfe_reset(vfe);
+ }
+ 
+ /*
 -- 
-2.25.1
+2.41.0
 
