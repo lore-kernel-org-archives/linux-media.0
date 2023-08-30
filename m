@@ -2,164 +2,101 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C86E8C83F01
-	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:30:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8384C83F17
+	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:30:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233041AbjH3SaJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Aug 2023 14:30:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47854 "EHLO
+        id S231496AbjH3SaL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Aug 2023 14:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243323AbjH3Kli (ORCPT
+        with ESMTP id S245462AbjH3PQc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Aug 2023 06:41:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C70721B3;
-        Wed, 30 Aug 2023 03:41:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5CEB760F83;
-        Wed, 30 Aug 2023 10:41:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFFD6C433C8;
-        Wed, 30 Aug 2023 10:41:31 +0000 (UTC)
-Message-ID: <29f7f201-13eb-0150-91e9-ab68b2bba13a@xs4all.nl>
-Date:   Wed, 30 Aug 2023 12:41:30 +0200
+        Wed, 30 Aug 2023 11:16:32 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C9C41A6
+        for <linux-media@vger.kernel.org>; Wed, 30 Aug 2023 08:16:29 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-31c73c21113so5069645f8f.1
+        for <linux-media@vger.kernel.org>; Wed, 30 Aug 2023 08:16:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1693408588; x=1694013388; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1zt4EZs7eZDJHyWyeQeAf0MtBSdiw6c6eDKc6JR9WTg=;
+        b=TAHJwBfWd4+GN1O9kilABrT9lwqWGFe7VpkTBqBQF99CtcyXcZNHA0KMfJ7FBAB3wv
+         ZmbTXR8eYuugW2JBiJ4Gs8o3Xxdc3iZBkvq2oYPdC4VQRAV8NxeJs7JH4gyAYZ2KlqHi
+         CE6vPJhItehhPwrl1p8UbenzSmVi6lWl8v8l1Za4Y7TuI0o/kEDKND1we1MxntBp8Z/Y
+         2k6slRPA3SVxWv7lTYPGGmVEdGJ4gZ9z7hqdkX7Ur7iVAEhDAmVYCS7RwKh0dRGmJ0/X
+         NnN9sh9lFJjQ+x1yHgo+zVjzEbW10x9aJDZn70lom0Nr21y1195+jPfWOg12GJD/tLso
+         KRLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693408588; x=1694013388;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1zt4EZs7eZDJHyWyeQeAf0MtBSdiw6c6eDKc6JR9WTg=;
+        b=ZRVJ+TE1ywhhurVO/lzkbnklDyaFVjFNebtkupYR/b+4llEV+VGybT/T007BojGFWq
+         qhLcTso0Mx8ACaB6MoYFFiorbgq0snvPeaK0uK1nvQPV6r+/ARZS99LtLg5yxOQH1Nbk
+         4G32uhjaZwJpH4V550bXO1k3k/PKuqWlP9tNkePZPtI5teOcjXDVXKfRAiNK4hCWL6c0
+         uELeap5XcidG98GhQG5VXqUMS47Wp8JzC3hLzfiZ+fdwm4blBl7tk9Go2KemaV6QEaIm
+         ETefG0w+R+ZQTgEGZGIguSmHHX6JPROxzKM7msdqRUKSH1P6f3+P/NONIGJ/hctYa47S
+         vQNg==
+X-Gm-Message-State: AOJu0YzI0EoxGgEE0qkYXLXdrRH0vBU7iMY9xZCEobvI/wYO0B1HlNdE
+        uVMV5XdyKNAEvh6y46K70rbq3BkGQSD5OCG4TZU=
+X-Google-Smtp-Source: AGHT+IGU+2wE9af9RhhGkjwitXKlTqt4fa5DMpISe4UaxwVC14k1Bi5rske0B9oO1Rfduvv8kMzeJw==
+X-Received: by 2002:a5d:6a4a:0:b0:31a:d8be:d6f4 with SMTP id t10-20020a5d6a4a000000b0031ad8bed6f4mr1823941wrw.10.1693408587975;
+        Wed, 30 Aug 2023 08:16:27 -0700 (PDT)
+Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id b16-20020a5d4d90000000b0030fd03e3d25sm16989961wru.75.2023.08.30.08.16.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Aug 2023 08:16:27 -0700 (PDT)
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
+        andrey.konovalov@linaro.org
+Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: [PATCH v3 08/10] media: qcom: camss: Fix invalid clock enable bit disjunction
+Date:   Wed, 30 Aug 2023 16:16:13 +0100
+Message-ID: <20230830151615.3012325-9-bryan.odonoghue@linaro.org>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230830151615.3012325-1-bryan.odonoghue@linaro.org>
+References: <20230830151615.3012325-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v8 3/8] media: staging: media: starfive: camss: Add core
- driver
-Content-Language: en-US, nl
-To:     Jack Zhu <jack.zhu@starfivetech.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>, bryan.odonoghue@linaro.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-staging@lists.linux.dev,
-        changhuang.liang@starfivetech.com
-References: <20230824080109.89613-1-jack.zhu@starfivetech.com>
- <20230824080109.89613-4-jack.zhu@starfivetech.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20230824080109.89613-4-jack.zhu@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 24/08/2023 10:01, Jack Zhu wrote:
-> Add core driver for StarFive Camera Subsystem. The code parses
-> the device platform resources and registers related devices.
-> 
-> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
-> ---
->  MAINTAINERS                                   |   1 +
->  drivers/staging/media/Kconfig                 |   2 +
->  drivers/staging/media/Makefile                |   1 +
->  drivers/staging/media/starfive/Kconfig        |   5 +
->  drivers/staging/media/starfive/Makefile       |   2 +
->  drivers/staging/media/starfive/camss/Kconfig  |  17 +
->  drivers/staging/media/starfive/camss/Makefile |   9 +
->  .../staging/media/starfive/camss/stf_camss.c  | 316 ++++++++++++++++++
->  .../staging/media/starfive/camss/stf_camss.h  | 129 +++++++
->  9 files changed, 482 insertions(+)
->  create mode 100644 drivers/staging/media/starfive/Kconfig
->  create mode 100644 drivers/staging/media/starfive/Makefile
->  create mode 100644 drivers/staging/media/starfive/camss/Kconfig
->  create mode 100644 drivers/staging/media/starfive/camss/Makefile
->  create mode 100644 drivers/staging/media/starfive/camss/stf_camss.c
->  create mode 100644 drivers/staging/media/starfive/camss/stf_camss.h
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 4c63c0a85301..97d3054416ed 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -20258,6 +20258,7 @@ L:	linux-media@vger.kernel.org
->  S:	Maintained
->  F:	Documentation/admin-guide/media/starfive_camss.rst
->  F:	Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
-> +F:	drivers/staging/media/starfive/camss
->  
->  STARFIVE CRYPTO DRIVER
->  M:	Jia Jie Ho <jiajie.ho@starfivetech.com>
-> diff --git a/drivers/staging/media/Kconfig b/drivers/staging/media/Kconfig
-> index bc6c7b248f86..554c2e475ce3 100644
-> --- a/drivers/staging/media/Kconfig
-> +++ b/drivers/staging/media/Kconfig
-> @@ -36,6 +36,8 @@ source "drivers/staging/media/omap4iss/Kconfig"
->  
->  source "drivers/staging/media/rkvdec/Kconfig"
->  
-> +source "drivers/staging/media/starfive/Kconfig"
-> +
->  source "drivers/staging/media/sunxi/Kconfig"
->  
->  source "drivers/staging/media/tegra-video/Kconfig"
-> diff --git a/drivers/staging/media/Makefile b/drivers/staging/media/Makefile
-> index 1a4c3a062e3d..dcaeeca0ee6d 100644
-> --- a/drivers/staging/media/Makefile
-> +++ b/drivers/staging/media/Makefile
-> @@ -6,6 +6,7 @@ obj-$(CONFIG_VIDEO_MAX96712)	+= max96712/
->  obj-$(CONFIG_VIDEO_MESON_VDEC)	+= meson/vdec/
->  obj-$(CONFIG_VIDEO_OMAP4)	+= omap4iss/
->  obj-$(CONFIG_VIDEO_ROCKCHIP_VDEC)	+= rkvdec/
-> +obj-$(CONFIG_VIDEO_STARFIVE_CAMSS)	+= starfive/
->  obj-$(CONFIG_VIDEO_SUNXI)	+= sunxi/
->  obj-$(CONFIG_VIDEO_TEGRA)	+= tegra-video/
->  obj-$(CONFIG_VIDEO_IPU3_IMGU)	+= ipu3/
-> diff --git a/drivers/staging/media/starfive/Kconfig b/drivers/staging/media/starfive/Kconfig
-> new file mode 100644
-> index 000000000000..34727cf56072
-> --- /dev/null
-> +++ b/drivers/staging/media/starfive/Kconfig
-> @@ -0,0 +1,5 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +
-> +comment "StarFive media platform drivers"
-> +
-> +source "drivers/staging/media/starfive/camss/Kconfig"
-> diff --git a/drivers/staging/media/starfive/Makefile b/drivers/staging/media/starfive/Makefile
-> new file mode 100644
-> index 000000000000..4639fa1bca32
-> --- /dev/null
-> +++ b/drivers/staging/media/starfive/Makefile
-> @@ -0,0 +1,2 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +obj-y += camss/
-> diff --git a/drivers/staging/media/starfive/camss/Kconfig b/drivers/staging/media/starfive/camss/Kconfig
-> new file mode 100644
-> index 000000000000..8d20e2bd2559
-> --- /dev/null
-> +++ b/drivers/staging/media/starfive/camss/Kconfig
-> @@ -0,0 +1,17 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +config VIDEO_STARFIVE_CAMSS
-> +	tristate "Starfive Camera Subsystem driver"
-> +	depends on V4L_PLATFORM_DRIVERS
-> +	depends on VIDEO_DEV && OF
-> +	depends on HAS_DMA
-> +	depends on PM
-> +	select MEDIA_CONTROLLER
-> +	select VIDEO_V4L2_SUBDEV_API
-> +	select VIDEOBUF2_DMA_CONTIG
-> +	select V4L2_FWNODE
-> +	help
-> +	   Enable this to support for the Starfive Camera subsystem
-> +	   found on Starfive JH7110 SoC.
-> +
-> +	   To compile this driver as a module, choose M here: the
-> +	   module will be called stf-camss.
+define CSIPHY_3PH_CMN_CSI_COMMON_CTRL5_CLK_ENABLE BIT(7)
 
-Erm, isn't it called starfive-camss.ko?
+disjunction for gen2 ? BIT(7) : is a nop we are setting the same bit
+either way.
 
-Regards,
+Fixes: 4abb21309fda ("media: camss: csiphy: Move to hardcode CSI Clock Lane number")
+Cc: stable@vger.kernel.org
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-	Hans
+diff --git a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+index 04baa80494c66..4dba61b8d3f2a 100644
+--- a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
++++ b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+@@ -476,7 +476,7 @@ static void csiphy_lanes_enable(struct csiphy_device *csiphy,
+ 
+ 	settle_cnt = csiphy_settle_cnt_calc(link_freq, csiphy->timer_clk_rate);
+ 
+-	val = is_gen2 ? BIT(7) : CSIPHY_3PH_CMN_CSI_COMMON_CTRL5_CLK_ENABLE;
++	val = CSIPHY_3PH_CMN_CSI_COMMON_CTRL5_CLK_ENABLE;
+ 	for (i = 0; i < c->num_data; i++)
+ 		val |= BIT(c->data[i].pos * 2);
+ 
+-- 
+2.41.0
+
