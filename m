@@ -2,223 +2,113 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A12CC83F1F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10BAAC83F18
 	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:29:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231643AbjH3S3n (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Aug 2023 14:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50428 "EHLO
+        id S230188AbjH3S3R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Aug 2023 14:29:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242384AbjH3IU6 (ORCPT
+        with ESMTP id S244665AbjH3Nlu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Aug 2023 04:20:58 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EEA7113;
-        Wed, 30 Aug 2023 01:20:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693383654; x=1724919654;
-  h=date:from:to:subject:message-id:references:mime-version:
-   in-reply-to;
-  bh=qCGMFtQfgwR1F9QTDNMJxmJP2VuKJ61eRyS0eGjsPSY=;
-  b=Jt0rTajMwlMmJH8d4HWDdR/d1zwoT2NqXmJqgpj8sCsAGvkdcgc+TGVM
-   5HEcRnPd9JtwPlAzNzOTXQch24dAWLl75Swh3eumjqqpkYKGaV0zvLWLp
-   KjRtYWKz2ttVlChh8mA05Ip44aC78ze8Rn895sha6jQZkPM31Ect3WfNG
-   CtD3vUdULV55jQ6dO9YTLgR75hJ8x+gMtXmCaLxTqwcEqtNDH/2Ztk98D
-   3zPwyRzIt9ghDelUhTho6syKSaVS0rNY0emfh8UVbrexC+YO1u0C9Olq7
-   AHVeyWtx+dM6718jljVRDVk2+ewLM2DbjRUE7vvYG2fw8bbCBVDTfVmkj
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="374488114"
-X-IronPort-AV: E=Sophos;i="6.02,213,1688454000"; 
-   d="scan'208";a="374488114"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 01:20:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="853643153"
-X-IronPort-AV: E=Sophos;i="6.02,213,1688454000"; 
-   d="scan'208";a="853643153"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 01:20:40 -0700
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id 4CA1111FAB1;
-        Wed, 30 Aug 2023 11:20:37 +0300 (EEST)
-Date:   Wed, 30 Aug 2023 08:20:37 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Hugues Fruchet <hugues.fruchet@foss.st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Philippe CORNU <philippe.cornu@foss.st.com>
-Subject: Re: [PATCH v1 3/5] media: stm32-dcmipp: STM32 DCMIPP camera
- interface driver
-Message-ID: <ZO771VvxPREnoyOY@kekkonen.localdomain>
-References: <20220910144010.34272-1-hugues.fruchet@foss.st.com>
- <20220910144010.34272-4-hugues.fruchet@foss.st.com>
- <ZNC5k3PynnEWL/ou@kekkonen.localdomain>
- <20230825110903.GA30381@gnbcxd0016.gnb.st.com>
+        Wed, 30 Aug 2023 09:41:50 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 791BD1B0;
+        Wed, 30 Aug 2023 06:41:46 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9ECE72F4;
+        Wed, 30 Aug 2023 06:42:25 -0700 (PDT)
+Received: from [10.57.4.99] (unknown [10.57.4.99])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D02AC3F738;
+        Wed, 30 Aug 2023 06:41:44 -0700 (PDT)
+Message-ID: <d99ebaf2-bd95-1213-6c33-584a8c944b33@arm.com>
+Date:   Wed, 30 Aug 2023 14:41:34 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230825110903.GA30381@gnbcxd0016.gnb.st.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [EXT] Re: [PATCH] media: videobuf2-dma-sg: limit the sg segment
+ size
+Content-Language: en-GB
+To:     Hui Fang <hui.fang@nxp.com>, Christoph Hellwig <hch@lst.de>
+Cc:     Tomasz Figa <tfiga@chromium.org>, Anle Pan <anle.pan@nxp.com>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jindong Yue <jindong.yue@nxp.com>
+References: <20230828075420.2009568-1-anle.pan@nxp.com>
+ <CAAFQd5Cn3xQroyYtC+m+pk1jOE5i3H+FGr-y8zqhaf0Yo5p-1Q@mail.gmail.com>
+ <deb735ce-7de1-e59a-9de4-1365b374b417@arm.com> <20230829150442.GA3929@lst.de>
+ <DB9PR04MB92841D8BC1122D5A4210F78987E6A@DB9PR04MB9284.eurprd04.prod.outlook.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <DB9PR04MB92841D8BC1122D5A4210F78987E6A@DB9PR04MB9284.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Alain,
+On 2023-08-30 04:22, Hui Fang wrote:
+> Hi, guys
+>   Thanks for your time.
+>   I wonder if only NXP met the "swiotlb buffer full" issue.
+>   In theory, when format is YUYV, those resolutions no greater than 320x240 (153600 bytes, which less than the max mapping size 256K ) can't meet the issue.
+>   But resolutions no less than 640x480 (307200 bytes), may have chances to trigger the issue.
+>   On our side, we tested on 1080p, easy to reproduce.
+>   Or maybe "dma_max_mapping_size(dev)" is much bigger than 256K on your side?
 
-On Fri, Aug 25, 2023 at 01:09:03PM +0200, Alain Volmat wrote:
-...
-> > > +static int dcmipp_pipeline_s_stream(struct dcmipp_bytecap_device *vcap,
-> > > +				    int state)
-> > > +{
-> > > +	struct media_entity *entity = &vcap->vdev.entity;
-> > > +	struct v4l2_subdev *subdev;
-> > > +	struct media_pad *pad;
-> > > +	int ret;
-> > > +
-> > > +	/* Start/stop all entities within pipeline */
-> > > +	while (1) {
-> > > +		pad = &entity->pads[0];
-> > > +		if (!(pad->flags & MEDIA_PAD_FL_SINK))
-> > > +			break;
-> > > +
-> > > +		pad = media_pad_remote_pad_first(pad);
-> > > +		if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
-> > > +			break;
-> > > +
-> > > +		entity = pad->entity;
-> > > +		subdev = media_entity_to_v4l2_subdev(entity);
-> > > +
-> > > +		ret = v4l2_subdev_call(subdev, video, s_stream, state);
-> > 
-> > Does this driver handle multiple sub-devices in the same pipeline?
-> > 
-> > If not, then you don't need a loop here.
-> 
-> The idea was to enable one after the other each subdevs part of the
-> pipeline (aka: sensor -> bridge -> parallel -> byteproc -> bytecap)
-> however following a discussion with Laurent in Prague I changed that
-> so that each subdev call each other in cascade, quite like I already did
-> the following patch for the dcmi driver:
+I would imagine that in most cases, people either have an IOMMU, or they 
+don't have more RAM than the device can access directly.
 
-Ack!
+And in fact I think we've missed looking deep enough and that's the real 
+problem here - the overall context is a buffer allocator, so if SWIOTLB 
+is bouncing anything in that dma_map_sg() call, then it means we're 
+allocating a buffer for a device out of pages that that device can't 
+actually access, which seems fundamentally bad. Unfortunately there 
+isn't currently an easy way to do the right thing - dma-debug would 
+probably get very unhappy about scraping a bunch of dma_alloc_pages() 
+allocations into a scatterlist and subsequently calling dma_sync_sg() on 
+it, while dma_alloc_noncontiguous() does at least return a scatterlist 
+but would be overly restrictive since we don't need it to be 
+dma-contiguous either. I guess we could do with some sort of 
+dma_alloc_sgt() API that joins the relevant internal bits together to 
+replace vb2_dma_sg_alloc_compacted() with proper DMA-mask-aware 
+allocation, and probably also allocates the sg_table as well?
+
+Thanks,
+Robin.
 
 > 
-> commit 525011d84a3f547d0643c10bbfc01d32e26a9963
-> Author: Alain Volmat <alain.volmat@foss.st.com>
-> Date:   Fri Jul 21 14:03:15 2023 +0200
+> BRs,
+> Fang Hui
+> ________________________________
+> From: Christoph Hellwig <hch@lst.de>
+> Sent: Tuesday, August 29, 2023 11:04 PM
+> To: Robin Murphy <robin.murphy@arm.com>
+> Cc: Tomasz Figa <tfiga@chromium.org>; Anle Pan <anle.pan@nxp.com>; Christoph Hellwig <hch@lst.de>; m.szyprowski@samsung.com <m.szyprowski@samsung.com>; mchehab@kernel.org <mchehab@kernel.org>; linux-media@vger.kernel.org <linux-media@vger.kernel.org>; linux-kernel@vger.kernel.org <linux-kernel@vger.kernel.org>; Hui Fang <hui.fang@nxp.com>
+> Subject: [EXT] Re: [PATCH] media: videobuf2-dma-sg: limit the sg segment size
 > 
->     media: stm32: dcmi: only call s_stream on the source subdev
+> Caution: This is an external email. Please take care when clicking links or opening attachments. When in doubt, report the message using the 'Report this email' button
 > 
->     Avoid calling s_stream on each subdev until reaching the sensor and
->     instead call s_stream on the source subdev only (which will in turn
->     do whatever needed to start the stream).
 > 
->     Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
->     Reviewed-by: Hugues FRUCHET <hugues.fruchet@foss.st.com>
->     Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-
-...
-
-> > > +#define STOP_TIMEOUT_US 1000
-> > > +#define POLL_INTERVAL_US  50
-> > > +static int dcmipp_byteproc_s_stream(struct v4l2_subdev *sd, int enable)
-> > > +{
-> > > +	struct dcmipp_byteproc_device *byteproc = v4l2_get_subdevdata(sd);
-> > > +	int ret = 0;
-> > > +
-> > > +	mutex_lock(&byteproc->lock);
-> > > +	if (enable) {
-> > > +		dcmipp_byteproc_configure_framerate(byteproc);
-> > > +
-> > > +		ret = dcmipp_byteproc_configure_scale_crop(byteproc);
-> > > +		if (ret)
-> > > +			goto err;
-> > 
-> > This does nothing.
+> On Tue, Aug 29, 2023 at 12:14:44PM +0100, Robin Murphy wrote:
+>> dma_get_max_seg_size() represents a capability of the device itself, namely
+>> the largest contiguous range it can be programmed to access in a single DMA
+>> descriptor/register/whatever.
 > 
-> Not sure to understand your point here.  The s_stream callback of this
-> subdev is used to configure the registers (here the ones controlling
-> decimation and cropping) of the byteproc subdev.
-
-I was referring to the last two lines --- you're jumping to essentially the
-same location here.
-
+> Yes.  In a way it's a bit odd that it ended up in a field in
+> struct device, as the feature might actually be different for different
+> DMA engines or features in a device.  If I was to redesign it from
+> scratch I'd just pass it to dma_map_sg.
 > 
-> > 
-> > > +	}
-> > > +
-> > > +err:
-> > > +	mutex_unlock(&byteproc->lock);
-> > > +
-> > > +	return ret;
-> > > +}
-
-...
-
-> > > diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
-> > > new file mode 100644
-> > > index 000000000000..aa7ae9a5b1a8
-> > > --- /dev/null
-> > > +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
-> > > @@ -0,0 +1,682 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/*
-> > > + * Driver for STM32 Digital Camera Memory Interface Pixel Processor
-> > > + *
-> > > + * Copyright (C) STMicroelectronics SA 2022
-> > > + * Authors: Hugues Fruchet <hugues.fruchet@foss.st.com>
-> > > + *          Alain Volmat <alain.volmat@foss.st.com>
-> > > + *          for STMicroelectronics.
-> > > + */
-> > > +
-> > > +#include <linux/clk.h>
-> > > +#include <linux/component.h>
-> > > +#include <linux/delay.h>
-> > > +#include <linux/init.h>
-> > > +#include <linux/module.h>
-> > > +#include <linux/of.h>
-> > > +#include <linux/of_device.h>
-> > > +#include <linux/of_graph.h>
-> > 
-> > #include <linux/property.h> instead of these three.
+>>> Generally looking at videobuf2-dma-sg, I feel like we would benefit
+>>> from some kind of dma_alloc_table_from_pages() that simply takes the
+>>> struct dev pointer and does everything necessary.
+>>
+>> Possibly; this code already looks lifted from drm_prime_pages_to_sg(), and
+>> if it's needed here then presumably vb2_dma_sg_get_userptr() also needs it,
+>> at the very least.
 > 
-> Added linux/property.h however kept of_graph.h which is still necessary.
+> Yes, there's tons of them.  But I'd feel really bad adding even more
+> struct scatterlist based APIs given how bad of a data structure that is.
 > 
-
-You should switch to fwnode graph API as you're already using fwnodes in
-the driver --- due to V4L2 fwnode.
-
-...
-
-> > > +static int dcmipp_graph_notify_bound(struct v4l2_async_notifier *notifier,
-> > > +				     struct v4l2_subdev *subdev,
-> > > +				     struct v4l2_async_subdev *asd)
-> > > +{
-> > > +	struct dcmipp_device *dcmipp = notifier_to_dcmipp(notifier);
-> > > +	unsigned int ret;
-> > > +	int src_pad;
-> > > +	struct dcmipp_ent_device *sink;
-> > > +	struct device_node *np = dcmipp->dev->of_node;
-> > > +	struct v4l2_fwnode_endpoint ep = { .bus_type = 0 };
-> > 
-> > Please set bus_type explicitly (DPHY)?
-> 
-> My understanding is that I cannot set the bus_type here to have the
-> framework check for me since we support both V4L2_MBUS_PARALLEL and
-> V4L2_MBUS_BT656.
-
-Ah, I missed this was using a parallel bus.
-
-As you have a default in bindings, then you'll need to parse this assuming
-that bus-type first. I.e. set the bus type to the default and if parsing
-fails, try the other one.
-
--- 
-Kind regards,
-
-Sakari Ailus
