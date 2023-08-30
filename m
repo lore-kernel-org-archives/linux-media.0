@@ -2,125 +2,182 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4869BC83F20
-	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:29:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85869C83F17
+	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:29:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232248AbjH3S3j (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Aug 2023 14:29:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39838 "EHLO
+        id S229574AbjH3S3s (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Aug 2023 14:29:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343734AbjH3QoD (ORCPT
+        with ESMTP id S241409AbjH3Gyb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Aug 2023 12:44:03 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2971A1
-        for <linux-media@vger.kernel.org>; Wed, 30 Aug 2023 09:43:59 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1c1f7f7151fso19605525ad.1
-        for <linux-media@vger.kernel.org>; Wed, 30 Aug 2023 09:43:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1693413839; x=1694018639; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lys1zqL5/DflOY2CEUv0l1jES6B5BHfh+5mdgRFaHc0=;
-        b=ntbkGJohnq2XiW0I7u5T7Q03wI2URgpZlXyZrEuCKaZXTL20wzvXjK/322qf5U+47I
-         rJ67qJiNxdCcfhTgQaDSKkgH1ZNMwaj6qF6F0HQ6fr/eS89DKEDQ+Jz3JEl8KuXH7+zv
-         O3mg+bb6gjNUvvSpd/t6h/eDTzxaiNQKgNcUekFruP9EpAahPBo9wXco3hgfDpltYglA
-         yqIXlrnlRRAoBxH2Kyi47NvyVgRxObfyWh410kwb0iSXje6nDN5/Ray2/J5zivoIQVSO
-         9s55bgrT/1nXQt0poinw2DU0kvnoMc2tptog5BxPqMwPwM5Tj5zhr/8djliM/xwuERI7
-         Gtdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693413839; x=1694018639;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Lys1zqL5/DflOY2CEUv0l1jES6B5BHfh+5mdgRFaHc0=;
-        b=ErKP/aj6ApuTA2h+6vGAn1ufFnWulIMI1J2QN7JX2KUl7Cr4Wvm+cMNY4k0Y//1ONw
-         g/6ARvTdvGUSJRG4StXcHT/iMR+wDQViNhOQgf2B1qEZPMdS3qqhMTPpkxeu+leL8WxF
-         sMcTS626jkZ2JYVnzW7EDvPbufHY5iXAyB37JDt/vQq4VddLK7sazT+VQXem0eCgt/H9
-         5/cBOt+1vz2+NdgojRLHC5DAiBbHpP/w3xIRS9Xg3I53R3K+rm/xc1lhRFlp36EAUaco
-         AveSxIiAbAIkIsAKn0qBVz4Qa4JYReejR1kYH3Qmn32PreQTXZlom3SCaa439pXSxZNq
-         lx1A==
-X-Gm-Message-State: AOJu0YwQvM6IxjvhYd1BF+UtaYQt4ZDo5bVX75/IimdbYBdAx1gvauP6
-        CXFSV0qhR0/yrOHFOeiMOk+UGg==
-X-Google-Smtp-Source: AGHT+IEgvTm6ZPGyWF9D7X3ASVWWGrWtPIK9lG2unX/1lX5zpfNCJ9O15xyfLMCZkZhVk6ehLCACdA==
-X-Received: by 2002:a17:903:22ca:b0:1bf:d92e:c5a7 with SMTP id y10-20020a17090322ca00b001bfd92ec5a7mr3002630plg.28.1693413839424;
-        Wed, 30 Aug 2023 09:43:59 -0700 (PDT)
-Received: from ziepe.ca ([206.223.160.26])
-        by smtp.gmail.com with ESMTPSA id b18-20020a170902d31200b001b53c8659fesm11280968plc.30.2023.08.30.09.43.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Aug 2023 09:43:58 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1qbOIP-0005rb-8y;
-        Wed, 30 Aug 2023 13:43:57 -0300
-Date:   Wed, 30 Aug 2023 13:43:57 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Tomasz Figa <tfiga@chromium.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Anle Pan <anle.pan@nxp.com>, m.szyprowski@samsung.com,
-        mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hui.fang@nxp.com
-Subject: Re: [PATCH] media: videobuf2-dma-sg: limit the sg segment size
-Message-ID: <ZO9xzf727b/YvZB/@ziepe.ca>
-References: <20230828075420.2009568-1-anle.pan@nxp.com>
- <CAAFQd5Cn3xQroyYtC+m+pk1jOE5i3H+FGr-y8zqhaf0Yo5p-1Q@mail.gmail.com>
- <deb735ce-7de1-e59a-9de4-1365b374b417@arm.com>
- <20230829150442.GA3929@lst.de>
- <CAAFQd5CiHXvsJugSi+hXY9ESsmxUzBzmbhF6G48iVsOcL5eMtQ@mail.gmail.com>
- <20230830143341.GA25574@lst.de>
+        Wed, 30 Aug 2023 02:54:31 -0400
+Received: from EUR02-DB5-obe.outbound.protection.outlook.com (mail-db5eur02on2048.outbound.protection.outlook.com [40.107.249.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF631194;
+        Tue, 29 Aug 2023 23:54:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KD/HKk/CjoG470L+8DAwAP78L9vg2RW4Nt8DCUQ7C5wPUNqXJx1FwPN1JzuunwlDdSSEEavgZlDxDDpgsiSJN3yqAbOLrwfS9OFkck8E7f2jLxvyLXaNEtaQA0DhazWoSG+U2nGUkZux+YkEOmHR1FZwJHZom/D42F0fE5LndvtvqWoKAc0Oz+LWKJK1jwfxq9Q6CR8EGs/5PAdFb8wwTSXWp9qL5hZ4o8QwHqOqe/9eIWZYgEgMfK1L1XKSMGYQ3eJ7LjMlF+Fgb2jXLXtM6S1h1QAK/wrSU1DAaQM6sNBwuF8KZjBo+rGlakclwa//mnobskB5KdSxrN8Bi2GzUw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=moNvha9n8NKuRnXLmFtRO8CPcTytCV/jXETHhObgA/Y=;
+ b=Otjhc+uv2YzwnjafhUAQiPdmlQYcJEfTWtPbTf0/ZZe65oEMdMuLaNivu+MliML9rHQMpkBYy2cB5g1pI+MI2hxQ8qdqqk+n74Ffp6HP0AVDYPpSvS0VClIOGDIFfv7NRBpfhcLZRLaUyYwa2BXzIwRFlbMTHfm9r/Regzq0/a62gJhHI1ESdmCTOyw3wcWEJhoydmGvakRC3tJ2sJZ0uv3mPPRBqpbcZoe7iQDlkL9hNG9CTlFG0z7HFfgfJ0KOeBp02g18+uqGhrmO/Ave3NzeS4dSfkU09MoumtJgOjWmqgapqenhTh0eJfTy4zA7Y+LYEaWCKmoyE6vWf3RHJg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wolfvision.net; dmarc=pass action=none
+ header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=moNvha9n8NKuRnXLmFtRO8CPcTytCV/jXETHhObgA/Y=;
+ b=gJAk7jQBe2yPR+N2yR1+l+O9mhlVKcMshFUjzpNxDUmVXVpjLc+UEi90dWXQYew2k48XzIRQ/oVC/kn1sahmaY5mXdkt6CXRrgq4alH1Lqn6sBZ90VopS/vbOx7g5/e22DyDV5+ciT2rdP1YVtOMqDjIO/UiOuFyJNVg1XNUxgQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wolfvision.net;
+Received: from DU0PR08MB9155.eurprd08.prod.outlook.com (2603:10a6:10:416::5)
+ by AS2PR08MB9834.eurprd08.prod.outlook.com (2603:10a6:20b:605::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.36; Wed, 30 Aug
+ 2023 06:54:21 +0000
+Received: from DU0PR08MB9155.eurprd08.prod.outlook.com
+ ([fe80::8c2e:9706:f4c0:e3f4]) by DU0PR08MB9155.eurprd08.prod.outlook.com
+ ([fe80::8c2e:9706:f4c0:e3f4%4]) with mapi id 15.20.6699.034; Wed, 30 Aug 2023
+ 06:54:21 +0000
+Message-ID: <224f2a1b-f06b-73c2-364b-4b72cc26b2d8@wolfvision.net>
+Date:   Wed, 30 Aug 2023 08:54:19 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH 2/2] media: i2c: imx415: Use v4l2_subdev_get_fmt()
+Content-Language: en-US
+To:     Umang Jain <umang.jain@ideasonboard.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ricardo Ribalda <ribalda@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Gerald Loacker <Gerald.Loacker@wolfvision.net>
+References: <20230830045323.71768-1-umang.jain@ideasonboard.com>
+ <20230830045323.71768-3-umang.jain@ideasonboard.com>
+From:   Michael Riesch <michael.riesch@wolfvision.net>
+Organization: WolfVision GmbH
+In-Reply-To: <20230830045323.71768-3-umang.jain@ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: VI1PR08CA0246.eurprd08.prod.outlook.com
+ (2603:10a6:803:dc::19) To DU0PR08MB9155.eurprd08.prod.outlook.com
+ (2603:10a6:10:416::5)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230830143341.GA25574@lst.de>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR08MB9155:EE_|AS2PR08MB9834:EE_
+X-MS-Office365-Filtering-Correlation-Id: fdb855a9-956a-49bd-6a84-08dba925f05e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NBwHBQUapLbyVBgg1OBMM3Z3GN6vg6VbMA5PGdGN87EqML9/VQAgq6JrkP848NGlo5YtYFmhLyGpeXaz7qqJwU/b88GSswDkMVECfzmSj2TI3SYQAnzHlpwIKYsBMe8NkIGqymoSP7lj/M3oswNcRXAAKsG6foYedXCapzEa7b9zr5eHzr5NUR71/FswRsPPVZEYxAbj6Rw5IK8XHJJ2F3qGiZneVjM1nGamwme8Ri76egm/uxL4sYMDkK7++JkFP7zRtKIHe0fp+kbAlbtdmfzvA0raS3PaKrvrBaGLXIowcwjxDJRD8Ub9KZ6j+/bHm/64+ERobtF7kM/QCM1ySK2jdAMs+T/ar/fhohJ9dFtcarV7NFT3RdJwLa8WhfwoKrNtO7faxDRTulFrrv+aUSB6x+rSPsh0wWN1o+JMM/14eOenzkAjUI2WxNKr2n//yRQawKOgmhxaNrjF2swuY8qCqFZ/1pmk0ZikAs1RLzYOELx71WuIzwrlVMtGw1OVLAHx/TRMd3/h3tWQk4kYRFKwrPLtrnK4wVDi/e9m5LO/o35C6879fBrGE9h0J1tE7WYJiRClWkSdfgzz1Yzt39HTYjCJDpmTchwY5pGMc1ImQUEQEj5CQeBycrNf2D7Sr1q3pIGighJ+L1Gy8TnfFA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9155.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(136003)(366004)(376002)(396003)(39850400004)(1800799009)(186009)(451199024)(8936002)(53546011)(478600001)(31686004)(66556008)(6506007)(66946007)(66476007)(54906003)(36916002)(6486002)(316002)(38100700002)(41300700001)(6512007)(26005)(44832011)(5660300002)(8676002)(36756003)(107886003)(83380400001)(2906002)(31696002)(2616005)(86362001)(4326008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZlFkWWZxWS95R0l3RnVQYW4xeUc5dFp2Z1ZObDMrUmk2cDBsTUpzbksyUHlw?=
+ =?utf-8?B?MHNEelNXN3FaWEtJM1BKMFNjZVA0bmgyNDBGM3ZMRWF3UFNyaVdVakFqR29a?=
+ =?utf-8?B?YSthTExId1lqc2swZy9GZ3JtaCtRbTZ1OEJ5dUt1aGJjMjJDbGZvTmpudGxz?=
+ =?utf-8?B?eWR5MmxLenhhbVc4RUJQdnkrb3lJakRFZjlLSE8wTVFVWlorVEZIcjQwTXlD?=
+ =?utf-8?B?M2RhaVg0Yk5MQVlYNWM4WGxFUmE1QVl4UnlyaXdXbDV0Uk95NjRacFM4NDVQ?=
+ =?utf-8?B?MlphN0R4dW4vQjViY090WGVrTnFGODBGc09nTU9abUpMNmxxNmdyU2pJRFMv?=
+ =?utf-8?B?bVFkc0NpYmJ2RkNvMUhLaHB3MTljeUMyQVZyT1dFZUdjWkdXM1hBSjZWa2dh?=
+ =?utf-8?B?OSsraGFiUlR2M3hoNjIvM2l6TTVJa2VLU0k0VG05R2FBWXBmQUZBVWZLMnpH?=
+ =?utf-8?B?cTZUa2tSK3F1cGJTNENqSnBwdlF0Y214cGh3c29XemZodDFZSmZVRldNNjQw?=
+ =?utf-8?B?cGl5WWRwOVZZRzMycUh6d09NbU93NjVadzZIclpzK1BZaDRGTXJLSjlPTjVq?=
+ =?utf-8?B?MXVDTDhkTmxUbWJVSFJmQi9aMUpidkkzZXVNS2tGclEzSTI0ZHdvUmJnbGgw?=
+ =?utf-8?B?Nmo4Tml1ZlJQVmdJdk9yQm9Yd0Y0SFFtNWRJY1B2L0NSMDhtOExhcllrT3FS?=
+ =?utf-8?B?T2wzT1ZsOXJONXlocnN3L3pscmMyZEFDQ25JUEdQNnZkaFpLTFRkbHNtci9L?=
+ =?utf-8?B?L1JlT3FTNHJwcFV5Z2F5c2Q4MThCZEVxaXRyQUVUUVJkYUNBQ0p3bWRzazBK?=
+ =?utf-8?B?SitYZWRVNDBLc2ZFdHpvSTF6VVBiUlA3K0VvVjVhZWY5WTdTeC8reUJkaUdZ?=
+ =?utf-8?B?VDYxRVdtY2l5WStUN1VzRElyYWxTcVMwaVNxbm9JRWpKaXhDMmlNUzhidUNh?=
+ =?utf-8?B?bmlnbzRzaGpDSTBVZ2svc3E0TmoxcDd5aHh1ZDVrSWs4Zm5BV1VpT3ZtZG5t?=
+ =?utf-8?B?QmFaT0lhakdPMlpKeEN6N1h3WUE4RUFNdVhLYlJ4dmRWZitYbU1LcW1BUjBG?=
+ =?utf-8?B?N0RWQjdMZTRia3pJZi8zNGtkcEEvUjVUOHdDd0JHMWZtVHc4N0FVYkM5VWJz?=
+ =?utf-8?B?UUY4NjRaWU5kcjdBVzZ1S0VBTEhFNEhCdlNHYklvazF6bTFlSnB1ZzBVTnFK?=
+ =?utf-8?B?bkcrTVpBMVlEeHJhTFpNeGljZjQwRWZmakZWTkpDSEVTN25YNjVDRSs5a0Fr?=
+ =?utf-8?B?OVd0NFk4aXZBcldndlV1Vm9MVTNxY0l1VURielFpQVNMbEc2MFlzQmtrUWZE?=
+ =?utf-8?B?NlIwMFZLb3dad3RvNXd3akRoT3QwZTY2QlRWR2NKMjJxRUZjbHBDWU1WdzZt?=
+ =?utf-8?B?c2cyZXYzam93cEpVL3Uzc3BCZCt3eFpyRlVucjdrTW5HWGxOYjVwMTA3Tm90?=
+ =?utf-8?B?RVdSeU9oTFFueG9BMUdYUzkzSjVpcEVSdWZWTkoxWUMrR3o5RElRaGk5Z0dK?=
+ =?utf-8?B?TEtaRm1ZRjZjdHhUSGF1UHdTVEVFVDBXTk5VY2J1V0RPUE9FaWUxMjBFR3ds?=
+ =?utf-8?B?aGp3WDBSWVFWV2tCa2J3Z1JvT3hLNUEvRFVsSEplUk04TUVNd2xXM21nS2d0?=
+ =?utf-8?B?RS9tVmJmbytZU3Zkb2d6Z3RqVjJtcVVZbGdwNkNPTXlTTVkwY1VUcWFPU1Nu?=
+ =?utf-8?B?QWdJU004UktQeHhrNkZORlk0U3pneXJ4V0pVemdlM1RCSnlWbWU1TzlJaG10?=
+ =?utf-8?B?ZnBzSVE1dEpXalFTVWVZdWVrdjcrZU1udXBFMmJtT0xzWTNXMy9CeEQ5NVB5?=
+ =?utf-8?B?V2tDbWtrY05BOXN5Tjc2cnRMazd3MjZpWFltN21BV1ZJOXhoNWdzUVFuNkh0?=
+ =?utf-8?B?WGZCOEJ6WU43aU9SVnJmcUR5dGwvaGJPeWE1MUZCaFdDb1FPTmxXQWQ5c0Nl?=
+ =?utf-8?B?aGJaNk4yUVNsVXRYTkJhY2ladWd3TXQxWXptWURaNTJuQXZndjF6aDl2Z1RY?=
+ =?utf-8?B?Z0R5Rkx0YVNxY2lQVDFMOXdXU09kYTdkd0FVQVZFUnVyNXVVUzhtK243VFo4?=
+ =?utf-8?B?V2EyTENDZVAycmM1R09TNzJSV0Nod1gvWnZ1RWhUZGM2Q2M2YjV3TENsOExW?=
+ =?utf-8?B?ck5XR1BJWTZacXUySTRBVURaNVJvUEtTaHdpWEhJOS8yZnZldHhtbWlxQS9G?=
+ =?utf-8?B?Zmc9PQ==?=
+X-OriginatorOrg: wolfvision.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: fdb855a9-956a-49bd-6a84-08dba925f05e
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9155.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Aug 2023 06:54:21.6206
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5oKIy6mpKU1KDQjtijdChlA/DO1Z0yfJLt4z6BC3/FECZq4He3vizLEAsJQrapjWI7CBsLKDQeDCqOtXeS0RHJUnHQs2nITttOcuH7waG/I=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR08MB9834
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Aug 30, 2023 at 04:33:41PM +0200, Christoph Hellwig wrote:
-> On Wed, Aug 30, 2023 at 12:47:57PM +0900, Tomasz Figa wrote:
-> > Do we see anything replacing it widely anywhere on the short-middle
-> > term horizon? I think we could possibly migrate vb2 to use that new
-> > thing internally and just provide some compatibility X to scatterlist
-> > conversion function for the drivers.
+Hi Umang,
+
+On 8/30/23 06:53, Umang Jain wrote:
+> The imx415 driver uses the subdev active state, there's
+> no need to implement the .get_fmt() operation manually. Use
+> the v4l2_subdev_get_fmt() helper instead.
 > 
-> Jason said at LSF/MM that he had a prototype for a mapping API that
-> takes a phys/len array as input and dma_addr/len a output, which really
-> is the right thing to do, especially for dmabuf.
+> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
 
-Yes, still a prototype. Given the change in direction some of the
-assumptions of the list design will need some adjusting.
+Thanks for the patch, we'll try to give it a test. Due to time
+constraints this might take a bit, though :-/
 
-I felt there wasn't much justification to add a list without also
-supporting the P2P and it was not looking very good to give the DMA
-API proper p2p support without also connecting it to lists somehow.
+Cc: Gerald
 
-Anyhow, I had drafted a basic list datastructure and starting
-implementation that is sort of structured in away that is similar to
-xarray (eg with fixed chunks, generic purpose, etc)
+That said, without having it tested the patch LGTM:
 
-https://github.com/jgunthorpe/linux/commit/58d7e0578a09d9cd2360be515208bcd74ade5958
+Reviewed-by: Michael Riesch <michael.riesch@wolfvision.net>
 
-I would still call it an experiment as the auto-sizing entry approach
-needs benchmarking to see what it costs.
+Best regards,
+Michael
 
-> Jason, what's the status of your work?
-
-After we talked I changed the order of the work, instead of starting
-with the SG list side, I wanted to progress on the DMA API side and
-then build any list infrastructure on that new API.
-
-Your idea to use a new API that could allocate IOVA and then map phys
-to IOVA as a DMA API entry point looked good to me, and it is a
-perfect map for what RDMA's ODP stuff needs. So I changed direction to
-rework ODP and introduce the DMA API parts as the first step.
-
-I had to put it aside due to the volume of iommu/vfio stuff going on
-right now. However, I think I will have someone who can work on the
-ODP driver part this month
-
-Regardless, RDMA really needs some kind of generic lists to hold CPU
-and physical address ranges, so I still see that as being part of the
-ultimate solution.
-
-Jason
+> ---
+>  drivers/media/i2c/imx415.c | 11 +----------
+>  1 file changed, 1 insertion(+), 10 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/imx415.c b/drivers/media/i2c/imx415.c
+> index 3f00172df3cc..9a7ac81edc28 100644
+> --- a/drivers/media/i2c/imx415.c
+> +++ b/drivers/media/i2c/imx415.c
+> @@ -842,15 +842,6 @@ static int imx415_enum_frame_size(struct v4l2_subdev *sd,
+>  	return 0;
+>  }
+>  
+> -static int imx415_get_format(struct v4l2_subdev *sd,
+> -			     struct v4l2_subdev_state *state,
+> -			     struct v4l2_subdev_format *fmt)
+> -{
+> -	fmt->format = *v4l2_subdev_get_pad_format(sd, state, fmt->pad);
+> -
+> -	return 0;
+> -}
+> -
+>  static int imx415_set_format(struct v4l2_subdev *sd,
+>  			     struct v4l2_subdev_state *state,
+>  			     struct v4l2_subdev_format *fmt)
+> @@ -913,7 +904,7 @@ static const struct v4l2_subdev_video_ops imx415_subdev_video_ops = {
+>  static const struct v4l2_subdev_pad_ops imx415_subdev_pad_ops = {
+>  	.enum_mbus_code = imx415_enum_mbus_code,
+>  	.enum_frame_size = imx415_enum_frame_size,
+> -	.get_fmt = imx415_get_format,
+> +	.get_fmt = v4l2_subdev_get_fmt,
+>  	.set_fmt = imx415_set_format,
+>  	.get_selection = imx415_get_selection,
+>  	.init_cfg = imx415_init_cfg,
