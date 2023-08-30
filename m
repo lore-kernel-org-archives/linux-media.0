@@ -2,165 +2,155 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D87CFC83F1A
-	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:29:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F783C6FA8F
+	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:29:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230417AbjH3S3U (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Aug 2023 14:29:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52052 "EHLO
+        id S231279AbjH3S3W (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Aug 2023 14:29:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243333AbjH3KpG (ORCPT
+        with ESMTP id S245474AbjH3PQh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Aug 2023 06:45:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5C81BB;
-        Wed, 30 Aug 2023 03:45:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 82D5360FE8;
-        Wed, 30 Aug 2023 10:45:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECBC4C433C7;
-        Wed, 30 Aug 2023 10:44:58 +0000 (UTC)
-Message-ID: <d4b12bc1-65b8-6881-3648-85099d9319ec@xs4all.nl>
-Date:   Wed, 30 Aug 2023 12:44:57 +0200
+        Wed, 30 Aug 2023 11:16:37 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46AC81B1
+        for <linux-media@vger.kernel.org>; Wed, 30 Aug 2023 08:16:32 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-40037db2fe7so53959265e9.0
+        for <linux-media@vger.kernel.org>; Wed, 30 Aug 2023 08:16:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1693408591; x=1694013391; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2IkRunNGFvIUJfzmN6ZAOdQYKxHXQcRYO09oUxFh850=;
+        b=c3PT7U7Lj/4oiPhQ21wVDQxLw+K5NmnFvzFWXxuVoicCp/kIimH1f54x7DPy3qq64Y
+         oTJF5m56wLrVPrM6PWqesduc+aSrFEgWRaARLjbxxi3EAR1kl2fUkPf48Qmwvb4uepQo
+         y5axITUR+o2zP6RYewb/0Ge8JjEEpAoloBGpM8/S4OGvTIgCgUJNdFGMLjlGnqYFRcpI
+         CuPYeO2Uy++VYwXNqFwrYs8M9ZO+VsYzOleJ2tq/vnGWs72Vg4M4oIPMGbpHqDIGsB1b
+         GkerDeYyCqIzIiiHHPmfCRdmoO9LbkXYEVyZ50FHWFieWggPzUt99B9ye66W0Wt9O9p2
+         dszg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693408591; x=1694013391;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2IkRunNGFvIUJfzmN6ZAOdQYKxHXQcRYO09oUxFh850=;
+        b=dyY5VrBz7gVHS6SGcISaicVLMWlCPvA7EijXgoxGJSdXbzqqFvJQOdoSQNg/e+FD6i
+         0qya7Re/tWuFm82h5rau4XBF4z0rwjearOpJiJkjrwDxHGUitg87crT5YFDU9B3nw0nq
+         7ZaWbuLnYgMU6F8Cr49/iBTj9RWcxtKa0eHTL6gXsvRB/gzZmzFh/2L5vg+0TT4xYrPU
+         uXaD3/N70QJBGsTn+nrtzEOmgTl2pQqeEvTHWt5RYQGPNSCB1Snw7a1e+CDEndHL26MV
+         kyEzPbX8uaf2p0C5SwwOJZ+f0eOJx5Qo5Gqx9vhfjoCcL5jeL/Q/RgyHqtj+w+0O527B
+         aHJw==
+X-Gm-Message-State: AOJu0Yybu6GoXX8XQW94nGX1yn1pHVwcJ4cvL2VA4seELTTpFdMrT68I
+        fMg1Dl3D6VHwFnlrtwkw2Ztgsw==
+X-Google-Smtp-Source: AGHT+IHFl1yrh0ovBa90KE0kq0+ttmyMeRKswrgsfajAr7QL3hpxWJxBE3YovtaB1CnKt0Tfj4M63Q==
+X-Received: by 2002:a7b:c7c7:0:b0:401:bf62:9456 with SMTP id z7-20020a7bc7c7000000b00401bf629456mr2507971wmk.8.1693408590646;
+        Wed, 30 Aug 2023 08:16:30 -0700 (PDT)
+Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id b16-20020a5d4d90000000b0030fd03e3d25sm16989961wru.75.2023.08.30.08.16.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Aug 2023 08:16:29 -0700 (PDT)
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
+        andrey.konovalov@linaro.org
+Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: [PATCH v3 10/10] media: qcom: camss: Fix csid-gen2 for test pattern generator
+Date:   Wed, 30 Aug 2023 16:16:15 +0100
+Message-ID: <20230830151615.3012325-11-bryan.odonoghue@linaro.org>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230830151615.3012325-1-bryan.odonoghue@linaro.org>
+References: <20230830151615.3012325-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v8 3/8] media: staging: media: starfive: camss: Add core
- driver
-Content-Language: en-US, nl
-To:     Jack Zhu <jack.zhu@starfivetech.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>, bryan.odonoghue@linaro.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-staging@lists.linux.dev,
-        changhuang.liang@starfivetech.com
-References: <20230824080109.89613-1-jack.zhu@starfivetech.com>
- <20230824080109.89613-4-jack.zhu@starfivetech.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20230824080109.89613-4-jack.zhu@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 24/08/2023 10:01, Jack Zhu wrote:
-> Add core driver for StarFive Camera Subsystem. The code parses
-> the device platform resources and registers related devices.
-> 
-> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
-> ---
->  MAINTAINERS                                   |   1 +
->  drivers/staging/media/Kconfig                 |   2 +
->  drivers/staging/media/Makefile                |   1 +
->  drivers/staging/media/starfive/Kconfig        |   5 +
->  drivers/staging/media/starfive/Makefile       |   2 +
->  drivers/staging/media/starfive/camss/Kconfig  |  17 +
->  drivers/staging/media/starfive/camss/Makefile |   9 +
->  .../staging/media/starfive/camss/stf_camss.c  | 316 ++++++++++++++++++
->  .../staging/media/starfive/camss/stf_camss.h  | 129 +++++++
->  9 files changed, 482 insertions(+)
->  create mode 100644 drivers/staging/media/starfive/Kconfig
->  create mode 100644 drivers/staging/media/starfive/Makefile
->  create mode 100644 drivers/staging/media/starfive/camss/Kconfig
->  create mode 100644 drivers/staging/media/starfive/camss/Makefile
->  create mode 100644 drivers/staging/media/starfive/camss/stf_camss.c
->  create mode 100644 drivers/staging/media/starfive/camss/stf_camss.h
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 4c63c0a85301..97d3054416ed 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -20258,6 +20258,7 @@ L:	linux-media@vger.kernel.org
->  S:	Maintained
->  F:	Documentation/admin-guide/media/starfive_camss.rst
->  F:	Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
-> +F:	drivers/staging/media/starfive/camss
->  
->  STARFIVE CRYPTO DRIVER
->  M:	Jia Jie Ho <jiajie.ho@starfivetech.com>
-> diff --git a/drivers/staging/media/Kconfig b/drivers/staging/media/Kconfig
-> index bc6c7b248f86..554c2e475ce3 100644
-> --- a/drivers/staging/media/Kconfig
-> +++ b/drivers/staging/media/Kconfig
-> @@ -36,6 +36,8 @@ source "drivers/staging/media/omap4iss/Kconfig"
->  
->  source "drivers/staging/media/rkvdec/Kconfig"
->  
-> +source "drivers/staging/media/starfive/Kconfig"
-> +
->  source "drivers/staging/media/sunxi/Kconfig"
->  
->  source "drivers/staging/media/tegra-video/Kconfig"
-> diff --git a/drivers/staging/media/Makefile b/drivers/staging/media/Makefile
-> index 1a4c3a062e3d..dcaeeca0ee6d 100644
-> --- a/drivers/staging/media/Makefile
-> +++ b/drivers/staging/media/Makefile
-> @@ -6,6 +6,7 @@ obj-$(CONFIG_VIDEO_MAX96712)	+= max96712/
->  obj-$(CONFIG_VIDEO_MESON_VDEC)	+= meson/vdec/
->  obj-$(CONFIG_VIDEO_OMAP4)	+= omap4iss/
->  obj-$(CONFIG_VIDEO_ROCKCHIP_VDEC)	+= rkvdec/
-> +obj-$(CONFIG_VIDEO_STARFIVE_CAMSS)	+= starfive/
->  obj-$(CONFIG_VIDEO_SUNXI)	+= sunxi/
->  obj-$(CONFIG_VIDEO_TEGRA)	+= tegra-video/
->  obj-$(CONFIG_VIDEO_IPU3_IMGU)	+= ipu3/
-> diff --git a/drivers/staging/media/starfive/Kconfig b/drivers/staging/media/starfive/Kconfig
-> new file mode 100644
-> index 000000000000..34727cf56072
-> --- /dev/null
-> +++ b/drivers/staging/media/starfive/Kconfig
-> @@ -0,0 +1,5 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +
-> +comment "StarFive media platform drivers"
-> +
-> +source "drivers/staging/media/starfive/camss/Kconfig"
-> diff --git a/drivers/staging/media/starfive/Makefile b/drivers/staging/media/starfive/Makefile
-> new file mode 100644
-> index 000000000000..4639fa1bca32
-> --- /dev/null
-> +++ b/drivers/staging/media/starfive/Makefile
-> @@ -0,0 +1,2 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +obj-y += camss/
-> diff --git a/drivers/staging/media/starfive/camss/Kconfig b/drivers/staging/media/starfive/camss/Kconfig
-> new file mode 100644
-> index 000000000000..8d20e2bd2559
-> --- /dev/null
-> +++ b/drivers/staging/media/starfive/camss/Kconfig
-> @@ -0,0 +1,17 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +config VIDEO_STARFIVE_CAMSS
-> +	tristate "Starfive Camera Subsystem driver"
-> +	depends on V4L_PLATFORM_DRIVERS
-> +	depends on VIDEO_DEV && OF
-> +	depends on HAS_DMA
-> +	depends on PM
-> +	select MEDIA_CONTROLLER
-> +	select VIDEO_V4L2_SUBDEV_API
-> +	select VIDEOBUF2_DMA_CONTIG
-> +	select V4L2_FWNODE
-> +	help
-> +	   Enable this to support for the Starfive Camera subsystem
-> +	   found on Starfive JH7110 SoC.
-> +
-> +	   To compile this driver as a module, choose M here: the
-> +	   module will be called stf-camss.
+From: Andrey Konovalov <andrey.konovalov@linaro.org>
 
-This is actually called starfive-camss.ko!
+In the current driver csid Test Pattern Generator (TPG) doesn't work.
+This change:
+- fixes writing frame width and height values into CSID_TPG_DT_n_CFG_0
+- fixes the shift by one between test_pattern control value and the
+  actual pattern.
+- drops fixed VC of 0x0a which testing showed prohibited some test
+  patterns in the CSID to produce output.
+So that TPG starts working, but with the below limitations:
+- only test_pattern=9 works as it should
+- test_pattern=8 and test_pattern=7 produce black frame (all zeroes)
+- the rest of test_pattern's don't work (yavta doesn't get the data)
+- regardless of the CFA pattern set by 'media-ctl -V' the actual pixel
+  order is always the same (RGGB for any RAW8 or RAW10P format in
+  4608x2592 resolution).
 
-Regards,
+Tested with:
 
-	Hans
+RAW10P format, VC0:
+ media-ctl -V '"msm_csid0":0[fmt:SRGGB10/4608x2592 field:none]'
+ media-ctl -V '"msm_vfe0_rdi0":0[fmt:SRGGB10/4608x2592 field:none]'
+ media-ctl -l '"msm_csid0":1->"msm_vfe0_rdi0":0[1]'
+ v4l2-ctl -d /dev/v4l-subdev6 -c test_pattern=9
+ yavta -B capture-mplane --capture=3 -n 3 -f SRGGB10P -s 4608x2592 /dev/video0
+
+RAW10P format, VC1:
+ media-ctl -V '"msm_csid0":2[fmt:SRGGB10/4608x2592 field:none]'
+ media-ctl -V '"msm_vfe0_rdi1":0[fmt:SRGGB10/4608x2592 field:none]'
+ media-ctl -l '"msm_csid0":2->"msm_vfe0_rdi1":0[1]'
+ v4l2-ctl -d /dev/v4l-subdev6 -c test_pattern=9
+ yavta -B capture-mplane --capture=3 -n 3 -f SRGGB10P -s 4608x2592 /dev/video1
+
+RAW8 format, VC0:
+ media-ctl --reset
+ media-ctl -V '"msm_csid0":0[fmt:SRGGB8/4608x2592 field:none]'
+ media-ctl -V '"msm_vfe0_rdi0":0[fmt:SRGGB8/4608x2592 field:none]'
+ media-ctl -l '"msm_csid0":1->"msm_vfe0_rdi0":0[1]'
+ yavta -B capture-mplane --capture=3 -n 3 -f SRGGB8 -s 4608x2592 /dev/video0
+
+Fixes: eebe6d00e9bf ("media: camss: Add support for CSID hardware version Titan 170")
+Cc: stable@vger.kernel.org
+Signed-off-by: Andrey Konovalov <andrey.konovalov@linaro.org>
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ drivers/media/platform/qcom/camss/camss-csid-gen2.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/media/platform/qcom/camss/camss-csid-gen2.c b/drivers/media/platform/qcom/camss/camss-csid-gen2.c
+index 140c584bfb8b1..6ba2b10326444 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid-gen2.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-gen2.c
+@@ -355,9 +355,6 @@ static void __csid_configure_stream(struct csid_device *csid, u8 enable, u8 vc)
+ 		u8 dt_id = vc;
+ 
+ 		if (tg->enabled) {
+-			/* Config Test Generator */
+-			vc = 0xa;
+-
+ 			/* configure one DT, infinite frames */
+ 			val = vc << TPG_VC_CFG0_VC_NUM;
+ 			val |= INTELEAVING_MODE_ONE_SHOT << TPG_VC_CFG0_LINE_INTERLEAVING_MODE;
+@@ -370,14 +367,14 @@ static void __csid_configure_stream(struct csid_device *csid, u8 enable, u8 vc)
+ 
+ 			writel_relaxed(0x12345678, csid->base + CSID_TPG_LFSR_SEED);
+ 
+-			val = input_format->height & 0x1fff << TPG_DT_n_CFG_0_FRAME_HEIGHT;
+-			val |= input_format->width & 0x1fff << TPG_DT_n_CFG_0_FRAME_WIDTH;
++			val = (input_format->height & 0x1fff) << TPG_DT_n_CFG_0_FRAME_HEIGHT;
++			val |= (input_format->width & 0x1fff) << TPG_DT_n_CFG_0_FRAME_WIDTH;
+ 			writel_relaxed(val, csid->base + CSID_TPG_DT_n_CFG_0(0));
+ 
+ 			val = format->data_type << TPG_DT_n_CFG_1_DATA_TYPE;
+ 			writel_relaxed(val, csid->base + CSID_TPG_DT_n_CFG_1(0));
+ 
+-			val = tg->mode << TPG_DT_n_CFG_2_PAYLOAD_MODE;
++			val = (tg->mode - 1) << TPG_DT_n_CFG_2_PAYLOAD_MODE;
+ 			val |= 0xBE << TPG_DT_n_CFG_2_USER_SPECIFIED_PAYLOAD;
+ 			val |= format->decode_format << TPG_DT_n_CFG_2_ENCODE_FORMAT;
+ 			writel_relaxed(val, csid->base + CSID_TPG_DT_n_CFG_2(0));
+-- 
+2.41.0
 
