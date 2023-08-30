@@ -2,53 +2,54 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9787DC83F18
-	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:29:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB6F4C6FA8F
+	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:29:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbjH3S3M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Aug 2023 14:29:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48658 "EHLO
+        id S230132AbjH3S3P (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Aug 2023 14:29:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245432AbjH3PQW (ORCPT
+        with ESMTP id S245444AbjH3PQ0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Aug 2023 11:16:22 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1D91A2
-        for <linux-media@vger.kernel.org>; Wed, 30 Aug 2023 08:16:19 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-401bbfc05fcso50691975e9.3
-        for <linux-media@vger.kernel.org>; Wed, 30 Aug 2023 08:16:19 -0700 (PDT)
+        Wed, 30 Aug 2023 11:16:26 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3F71B1
+        for <linux-media@vger.kernel.org>; Wed, 30 Aug 2023 08:16:23 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-31dca134c83so2977142f8f.3
+        for <linux-media@vger.kernel.org>; Wed, 30 Aug 2023 08:16:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693408578; x=1694013378; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=15QT7FaWOs6RuBKa+Vz9gCDzoPPBTXEEtlQ0POIH58Q=;
-        b=fy6XrOjgj2LIt5Y3ZnhYopKUMJPyYP5CpBiQoXh6ywLi7cFSXmpyyNfqIfnVN7z5Cw
-         a407lOJwn6pD61+sxpdw7mcRgzaXmIkiKx9gHz0VNsbch7e4VSRU6Ey8s8ooszxbknfI
-         DYS0zPFHTDdtOmbaqwEVPa4fqfLlvk5nn8lYBJ+w7Tsxj2Iqn02nNXY45WZ33ZPIJTKq
-         GmaGNhHaYlH4YtZlUUur/YUVEsGlhEDCjtCpuSjAlGn4+QAa5M5Lf6x2k7E1bp6XJGW0
-         wm1Ho4gKnx5wncbBtP8U1FUjpcF38Hu0x8my9XVxBPjz9tXYmACOxLloNfGB1SM6J8H0
-         qt0g==
+        d=linaro.org; s=google; t=1693408581; x=1694013381; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7rrt4a699i+AvDDfDTXr/DAFWWKZxU5rCQSifRowm6A=;
+        b=MiU9PuHoC41K2mRXN8hvvomlXuhate2gxkFIWa0rjmbfbBoBRc5+Xk4hiKDLz6x5TE
+         DQwO/doqKKQ0/4u6OIsAUzVwqVV74lVtT7LIAjz5TvCRldXxgxhJhDpaCfiOLMxhQKMe
+         Z5mabpGxO2bJVEoQNV0TPV5KpzIlVSN7ZuZgYNbIDjoIWnJhXAhA/HRApCANLDbZuFI+
+         vgBQrUUR50TS50dsu8lkZqdEuGvMsHQIKKJ6zKOklXarf0GAcDB7TjNhUrsrVrgDRbif
+         exocSLMMJFFXmz7NuhwKXuGmT+GUGoxrulDovXu4kAclehze1UeBOLME7+NYuOxKZWYI
+         61lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693408578; x=1694013378;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=15QT7FaWOs6RuBKa+Vz9gCDzoPPBTXEEtlQ0POIH58Q=;
-        b=JUuaAsK7wcCE2IAkhSAph8kzMrJGQtLZbZVFHllxIgvR50vObEWCv+cZAo60EklIpB
-         osyKAVDPjafvNRNb1plIt9ShKCt0LFwPIOyNqrBQcyauHjL5/Qife53MAaMmpOMdhf9R
-         mcYEL1HzV5D38Iue63irdt7sX/i32F3dm6j1/Mi7GXX6LIUxNk/1ktVhEXCYOxOkmv/Q
-         v98Qz+OaQnyzug/V098QBshljzxxkL7jdosQ6LYsC6y9yvJY0yvFkSxUv+vrIPKc+Y5V
-         LrUR1ehVmANl92IHQY87Q7Me4t0ir/dhDBnQfTTHBQYNGmtp1014a6Y6ZLkZvVOqC2rf
-         yuoA==
-X-Gm-Message-State: AOJu0Yx3n4fX4Uqd5K2QbD4rMuu2sJcjO8+t6jXK/PCWvs7E5JHX3vyS
-        A6bhsg3pdihddfaXsiX4Z1iYFw==
-X-Google-Smtp-Source: AGHT+IE6588PqEkrgn+wjL++tLnfWxX9DzYo0tqWXZEgHSAexO9ogm7ql+owEjT4/MIYqQlp2GEWWA==
-X-Received: by 2002:a05:600c:20d:b0:400:57d1:4913 with SMTP id 13-20020a05600c020d00b0040057d14913mr2022835wmi.9.1693408577965;
-        Wed, 30 Aug 2023 08:16:17 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1693408581; x=1694013381;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7rrt4a699i+AvDDfDTXr/DAFWWKZxU5rCQSifRowm6A=;
+        b=bWzNVz3gKaFMZI+vC1LRdZaPDcBGgC0wWdM4kkhyuLh4jai6mHczBbCv3s2H6DetM9
+         9A8Gt5lOSqPStWCcCbTAHiFd5h4oCOw+dLMrp92pxFS/o7Ypepiv9fpTzN5dCvwq+lxY
+         ZL93+2VdGlkiyjzthskaWXUqE6ekf1L+9+uKSXr28O5S3kk1IU4Mt4YTxAOTK0T7KKEG
+         PzngdN8pS7LdxyiYpwJZ5ai1ZNcAHioeiAeoiKeVfrkR3YL5lLUIHvOnSmg0KwYFbswx
+         U0YGv69do79Y6V1NykFvRBZzPIaVM7PzllAMnTPee/FSZw7fBOp5k1wAFXiYa88TPjOS
+         vL6Q==
+X-Gm-Message-State: AOJu0Yyjf8VtOmvC0MFmBX3v9mqhPnBycbHy684H1V5bfQ4bwXNZQMh9
+        CBVl/+o6eQT0BGSuj7RHaVpBoQ==
+X-Google-Smtp-Source: AGHT+IFnjoXKkeWNfEEbs7aWoUiJxuX3OYd4ptVg9EBd8GX7/EKqFsAH/EkyMd9uRUbyj4VqXmVdQA==
+X-Received: by 2002:adf:e54f:0:b0:31c:6591:d40d with SMTP id z15-20020adfe54f000000b0031c6591d40dmr1959708wrm.29.1693408581696;
+        Wed, 30 Aug 2023 08:16:21 -0700 (PDT)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id b16-20020a5d4d90000000b0030fd03e3d25sm16989961wru.75.2023.08.30.08.16.16
+        by smtp.gmail.com with ESMTPSA id b16-20020a5d4d90000000b0030fd03e3d25sm16989961wru.75.2023.08.30.08.16.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Aug 2023 08:16:17 -0700 (PDT)
+        Wed, 30 Aug 2023 08:16:21 -0700 (PDT)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
         agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
@@ -56,82 +57,118 @@ To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
         laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
         andrey.konovalov@linaro.org
 Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 00/10] media: qcom: camss: Bugfix series
-Date:   Wed, 30 Aug 2023 16:16:05 +0100
-Message-ID: <20230830151615.3012325-1-bryan.odonoghue@linaro.org>
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: [PATCH v3 03/10] media: qcom: camss: Fix genpd cleanup
+Date:   Wed, 30 Aug 2023 16:16:08 +0100
+Message-ID: <20230830151615.3012325-4-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230830151615.3012325-1-bryan.odonoghue@linaro.org>
+References: <20230830151615.3012325-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-V3:
-- Adds Reviewed-by where indicated - Laurent
-- Adds a new patch for genpd cleanup. TBH I completely missed this so thanks ! - Laurent
-- "media: qcom: camss: Fix V4L2 async notifier error path" stays the same fixes spalt in -next
-  Fixes: 51397a4ec75d ("media: qcom: Initialise V4L2 async notifier later")
-- I like the suggesting of using a common fix for vfe-17x and vfe-480 however, I believe
-  we need to support multiple write-master/RDI => VCs in 17x which currently we only do
-  in vfe-480 so sharing the code between the two here right now, is	n't possible.
-- Included other suggestions on vfe-17x and vfe-480 - Laurent
-- I didn't change the val |= 1 << CSI2_RX_CFG1_VC_MODE to BIT(2)
-  The reason for that is all of the code uses this odd bit-shifting and I'd rather do
-  the conversion from shifting to BIT(x) as a distinct series instead of piecemeal - bod
+Right now we never release the power-domains properly on the error path.
+Add a routine to be reused for this purpose and appropriate jumps in
+probe() to run that routine where necessary.
 
-V2:
-- Amends commit log for TPG fix to cover dropping of fixed
-  VC when setting up a TPG - Konrad
+Fixes: 2f6f8af67203 ("media: camss: Refactor VFE power domain toggling")
+Cc: stable@vger.kernel.org
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+---
+ drivers/media/platform/qcom/camss/camss.c | 35 ++++++++++++++---------
+ 1 file changed, 21 insertions(+), 14 deletions(-)
 
-- Leaves GENMASK etc out. I'm happy to do a "make it pretty"
-  series later on. - bod
-
-Link: https://git.codelinaro.org/bryan.odonoghue/kernel/-/commits/Bugfix-series-v2?ref_type=tags
-
-V1:
-- Drops dt_id = vc * 4 in favour of a patch in a later series - Hans
-  Link: https://git.codelinaro.org/bryan.odonoghue/kernel/-/commit/d4c382c5d6ee153b410a01e172b3e811011d0b14
-- Adds Konrad's Acked-by as indicated
-
-V0:
-This series covers a number of Fixes: all of which are for application to
-stable as well as -next with the exception of the second patch which is a
-fix for a SHA that is still in -next.
-
-Link: https://git.codelinaro.org/bryan.odonoghue/kernel/-/tree/linux-next-23-08-07-db410c-rb3-camss-dts-v3
-
-This series is part of a larger set of fixes, improvements developed/found
-when adding a new SoC.
-
-Link: https://git.codelinaro.org/bryan.odonoghue/kernel/-/tree/lenovo-x13s-v6.5-rc4-x13s-camss-patches
-
-First pass on that larger series is to get all of the current Fixes: in the
-branch out.
-
-Andrey Konovalov (1):
-  media: qcom: camss: Fix csid-gen2 for test pattern generator
-
-Bryan O'Donoghue (9):
-  media: qcom: camss: Fix pm_domain_on sequence in probe
-  media: qcom: camss: Fix V4L2 async notifier error path
-  media: qcom: camss: Fix genpd cleanup
-  media: qcom: camss: Fix vfe_get() error jump
-  media: qcom: camss: Fix VFE-17x vfe_disable_output()
-  media: qcom: camss: Fix VFE-480 vfe_disable_output()
-  media: qcom: camss: Fix missing vfe_lite clocks check
-  media: qcom: camss: Fix invalid clock enable bit disjunction
-  media: qcom: camss: Fix set CSI2_RX_CFG1_VC_MODE when VC is greater
-    than 3
-
- .../platform/qcom/camss/camss-csid-gen2.c     | 11 ++--
- .../qcom/camss/camss-csiphy-3ph-1-0.c         |  2 +-
- .../media/platform/qcom/camss/camss-vfe-170.c | 22 +-------
- .../media/platform/qcom/camss/camss-vfe-480.c | 22 +-------
- drivers/media/platform/qcom/camss/camss-vfe.c |  5 +-
- drivers/media/platform/qcom/camss/camss.c     | 55 +++++++++++--------
- 6 files changed, 46 insertions(+), 71 deletions(-)
-
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+index a925b2bfd8989..c6df862c79e39 100644
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -1538,6 +1538,20 @@ static int camss_icc_get(struct camss *camss)
+ 	return 0;
+ }
+ 
++static void camss_genpd_cleanup(struct camss *camss)
++{
++	int i;
++
++	if (camss->genpd_num == 1)
++		return;
++
++	if (camss->genpd_num > camss->vfe_num)
++		device_link_del(camss->genpd_link[camss->genpd_num - 1]);
++
++	for (i = 0; i < camss->genpd_num; i++)
++		dev_pm_domain_detach(camss->genpd[i], true);
++}
++
+ /*
+  * camss_probe - Probe CAMSS platform device
+  * @pdev: Pointer to CAMSS platform device
+@@ -1627,11 +1641,11 @@ static int camss_probe(struct platform_device *pdev)
+ 
+ 	ret = camss_init_subdevices(camss);
+ 	if (ret < 0)
+-		return ret;
++		goto err_genpd_cleanup;
+ 
+ 	ret = dma_set_mask_and_coherent(dev, 0xffffffff);
+ 	if (ret)
+-		return ret;
++		goto err_genpd_cleanup;
+ 
+ 	camss->media_dev.dev = camss->dev;
+ 	strscpy(camss->media_dev.model, "Qualcomm Camera Subsystem",
+@@ -1643,7 +1657,7 @@ static int camss_probe(struct platform_device *pdev)
+ 	ret = v4l2_device_register(camss->dev, &camss->v4l2_dev);
+ 	if (ret < 0) {
+ 		dev_err(dev, "Failed to register V4L2 device: %d\n", ret);
+-		return ret;
++		goto err_genpd_cleanup;
+ 	}
+ 
+ 	v4l2_async_nf_init(&camss->notifier, &camss->v4l2_dev);
+@@ -1693,28 +1707,19 @@ static int camss_probe(struct platform_device *pdev)
+ err_v4l2_device_unregister:
+ 	v4l2_device_unregister(&camss->v4l2_dev);
+ 	v4l2_async_nf_cleanup(&camss->notifier);
++err_genpd_cleanup:
++	camss_genpd_cleanup(camss);
+ 
+ 	return ret;
+ }
+ 
+ void camss_delete(struct camss *camss)
+ {
+-	int i;
+-
+ 	v4l2_device_unregister(&camss->v4l2_dev);
+ 	media_device_unregister(&camss->media_dev);
+ 	media_device_cleanup(&camss->media_dev);
+ 
+ 	pm_runtime_disable(camss->dev);
+-
+-	if (camss->genpd_num == 1)
+-		return;
+-
+-	if (camss->genpd_num > camss->vfe_num)
+-		device_link_del(camss->genpd_link[camss->genpd_num - 1]);
+-
+-	for (i = 0; i < camss->genpd_num; i++)
+-		dev_pm_domain_detach(camss->genpd[i], true);
+ }
+ 
+ /*
+@@ -1733,6 +1738,8 @@ static void camss_remove(struct platform_device *pdev)
+ 
+ 	if (atomic_read(&camss->ref_count) == 0)
+ 		camss_delete(camss);
++
++	camss_genpd_cleanup(camss);
+ }
+ 
+ static const struct of_device_id camss_dt_match[] = {
 -- 
 2.41.0
 
