@@ -2,156 +2,163 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2720C6FA8F
-	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:29:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97DA7C83F1B
+	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:29:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231920AbjH3S3e (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Aug 2023 14:29:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48848 "EHLO
+        id S231962AbjH3S3g (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Aug 2023 14:29:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245450AbjH3PQ2 (ORCPT
+        with ESMTP id S244051AbjH3MZV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Aug 2023 11:16:28 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810E71A6
-        for <linux-media@vger.kernel.org>; Wed, 30 Aug 2023 08:16:25 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-307d58b3efbso4579928f8f.0
-        for <linux-media@vger.kernel.org>; Wed, 30 Aug 2023 08:16:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693408584; x=1694013384; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m/8j8dFWn4s/DJNCKaCJuJGk5oWKKJv4/UvwcNEFGrs=;
-        b=qpkwBkQ3VyojMZYvkSJLkM5q6ej6Rm+sDrrv+6MaXQ9Zlm/K3pdlPzFCDz29iKncaY
-         RM7EyZ8trn1bVUDCA1335SugdWSUIyISzC54eUFJmIfm3uSTmTH3nBLmkx1ZWECmd/BY
-         G6V9TnUOkDLaJ0c6+F0UDUXmOTL9Abrnf3EBNWyr0phBfou9hJQctdI2MBnrAbCLeJyr
-         LNgJFKSg1XpcF31G1nj9wvQBIvZKs8GOApX2fnM/MAjvNnLYGmsAHTaOpilsBsCh6KD4
-         07moVWVCmvnreX8JBaU+/tvet0gLfhrlT5TAP1Kq/Z3O0B3+msPIaEhTqi3F8CcLLSxv
-         tTTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693408584; x=1694013384;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=m/8j8dFWn4s/DJNCKaCJuJGk5oWKKJv4/UvwcNEFGrs=;
-        b=bJwFw4sBhjd5VR8DFksFHPmDHEKsWOjqLefTXp6VF12BSN59mfIEEjw20BCJ70T62G
-         4JfxDs5Bc/pqUCaxXdsJH/QMNaMUr8nvfqYsustuDtkSD/hvVxWTT3yBrmTgYynmOJdi
-         Cd+nWSQlOefFaTKTjTnIuNN/m825gg+3XafmN+tBTZrNpgugrDUB3Oz0qFB/hRYH8Ody
-         dMAokBHuqcLCtruDslDACloCFMS/cvjdurmWlC2UMabGEi/dtcvmQngyQUdH0qzmguCu
-         40Js2lCQ9YG2GNW9u+PRs89M1jEAqr7R45XOImOhRI0y25Ydj9KJFfMpFFZr9k5vrbzf
-         0q2A==
-X-Gm-Message-State: AOJu0YwaoYhdxfm/ui99s8+JFBS4PFDOPXX7755QlgVOwq3Ulo1WgsqL
-        9qrBdRdh2ANxC0g3rCoygIaUSw==
-X-Google-Smtp-Source: AGHT+IEXmtGoZReYyF800HatJ95OPCGdEjoJ2blpLdJZ/AsPzPDgYIujuHZyamPuVoaTQIobAYwcfA==
-X-Received: by 2002:a05:6000:1188:b0:319:72f8:7244 with SMTP id g8-20020a056000118800b0031972f87244mr2241616wrx.45.1693408584096;
-        Wed, 30 Aug 2023 08:16:24 -0700 (PDT)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id b16-20020a5d4d90000000b0030fd03e3d25sm16989961wru.75.2023.08.30.08.16.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Aug 2023 08:16:23 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
-        andrey.konovalov@linaro.org
-Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH v3 05/10] media: qcom: camss: Fix VFE-17x vfe_disable_output()
-Date:   Wed, 30 Aug 2023 16:16:10 +0100
-Message-ID: <20230830151615.3012325-6-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230830151615.3012325-1-bryan.odonoghue@linaro.org>
-References: <20230830151615.3012325-1-bryan.odonoghue@linaro.org>
+        Wed, 30 Aug 2023 08:25:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42450CCB;
+        Wed, 30 Aug 2023 05:25:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C13A462641;
+        Wed, 30 Aug 2023 12:25:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0634BC433C8;
+        Wed, 30 Aug 2023 12:25:10 +0000 (UTC)
+Message-ID: <01c299f2-8118-5d86-e9b6-a459c1b6c467@xs4all.nl>
+Date:   Wed, 30 Aug 2023 14:25:09 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v5 01/10] media: videobuf2: Rework offset 'cookie'
+ encoding pattern
+Content-Language: en-US, nl
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
+        ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        nicolas.dufresne@collabora.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        kernel@collabora.com
+References: <20230824092133.39510-1-benjamin.gaignard@collabora.com>
+ <20230824092133.39510-2-benjamin.gaignard@collabora.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20230824092133.39510-2-benjamin.gaignard@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There are two problems with the current vfe_disable_output() routine.
+On 24/08/2023 11:21, Benjamin Gaignard wrote:
+> Change how offset 'cookie' field value is computed to make possible
+> to use more buffers (up to 0xffff).
+> With this encoding pattern we know the maximum number that a queue
+> could store so we can check ing at queue init time.
+> It also make easier and faster to find buffer and plane from using
+> the offset field.
+> 
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> ---
+> v5:
+> - I haven't change DST_QUEUE_OFF_BASE definition because it used in
+>   v4l2-mem2mem and s5p_mfc driver with a shift.
+> 
+>  .../media/common/videobuf2/videobuf2-core.c   | 48 +++++++++----------
+>  1 file changed, 24 insertions(+), 24 deletions(-)
+> 
+> diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
+> index cf6727d9c81f..e06905533ef4 100644
+> --- a/drivers/media/common/videobuf2/videobuf2-core.c
+> +++ b/drivers/media/common/videobuf2/videobuf2-core.c
+> @@ -31,6 +31,10 @@
+>  
+>  #include <trace/events/vb2.h>
+>  
+> +#define PLANE_INDEX_SHIFT	3
+> +#define PLANE_INDEX_MASK	0x7
+> +#define MAX_BUFFERS		0xffff
 
-Firstly we rightly use a spinlock to protect output->gen2.active_num
-everywhere except for in the IDLE timeout path of vfe_disable_output().
-Even if that is not racy "in practice" somehow it is by happenstance not
-by design.
+Very poor name, see below.
 
-Secondly we do not get consistent behaviour from this routine. On
-sc8280xp 50% of the time I get "VFE idle timeout - resetting". In this
-case the subsequent capture will succeed. The other 50% of the time, we
-don't hit the idle timeout, never do the VFE reset and subsequent
-captures stall indefinitely.
+> +
+>  static int debug;
+>  module_param(debug, int, 0644);
+>  
+> @@ -358,21 +362,23 @@ static void __setup_offsets(struct vb2_buffer *vb)
+>  	unsigned int plane;
+>  	unsigned long off = 0;
+>  
+> -	if (vb->index) {
+> -		struct vb2_buffer *prev = q->bufs[vb->index - 1];
+> -		struct vb2_plane *p = &prev->planes[prev->num_planes - 1];
+> -
+> -		off = PAGE_ALIGN(p->m.offset + p->length);
+> -	}
+> +	/*
+> +	 * Offsets cookies value have the following constraints:
+> +	 * - a buffer could have up to 8 planes.
+> +	 * - v4l2 mem2mem use bit 30 to distinguish between source and destination buffers.
+> +	 * - must be page aligned
+> +	 * That led to this bit mapping:
+> +	 * |30                |29        15|14       12|11 0|
+> +	 * |DST_QUEUE_OFF_BASE|buffer index|plane index| 0  |
+> +	 * where there is 16 bits to store buffer index.
 
-Rewrite the vfe_disable_output() routine to
+16 -> 15: there are 15 (not 16!) bits available for buffer indices. So the maximum
+number of buffers is 32768, given that the indices start at 0.
 
-- Quiesce write masters with vfe_wm_stop()
-- Set active_num = 0
+> +	 */
+> +	off = vb->index << (PLANE_INDEX_SHIFT + PAGE_SHIFT);
+>  
+>  	for (plane = 0; plane < vb->num_planes; ++plane) {
+> -		vb->planes[plane].m.offset = off;
+> +		vb->planes[plane].m.offset = off + (plane << PAGE_SHIFT);
+>  
+>  		dprintk(q, 3, "buffer %d, plane %d offset 0x%08lx\n",
+>  				vb->index, plane, off);
+> -
+> -		off += vb->planes[plane].length;
+> -		off = PAGE_ALIGN(off);
+>  	}
+>  }
+>  
+> @@ -2209,21 +2215,15 @@ static int __find_plane_by_offset(struct vb2_queue *q, unsigned long off,
+>  		return -EBUSY;
+>  	}
+>  
+> -	/*
+> -	 * Go over all buffers and their planes, comparing the given offset
+> -	 * with an offset assigned to each plane. If a match is found,
+> -	 * return its buffer and plane numbers.
+> -	 */
+> -	for (buffer = 0; buffer < q->num_buffers; ++buffer) {
+> -		vb = q->bufs[buffer];
+> +	/* Get buffer and plane from the offset */
+> +	buffer = (off >> (PLANE_INDEX_SHIFT + PAGE_SHIFT)) & MAX_BUFFERS;
 
-remembering to hold the spinlock when we do so followed by
+Hmm, you use it as a mask. The name MAX_BUFFERS is really confusing.
+How about BUFFER_INDEX_MASK? That is consistent with PLANE_INDEX_MASK.
 
-- Reset the VFE
+> +	plane = (off >> PAGE_SHIFT) & PLANE_INDEX_MASK;
+>  
+> -		for (plane = 0; plane < vb->num_planes; ++plane) {
+> -			if (vb->planes[plane].m.offset == off) {
+> -				*_buffer = buffer;
+> -				*_plane = plane;
+> -				return 0;
+> -			}
+> -		}
+> +	vb = q->bufs[buffer];
+> +	if (vb->planes[plane].m.offset == off) {
+> +		*_buffer = buffer;
+> +		*_plane = plane;
+> +		return 0;
+>  	}
+>  
+>  	return -EINVAL;
 
-Testing on sc8280xp and sdm845 shows this to be a valid fix.
+Regards,
 
-Fixes: 7319cdf189bb ("media: camss: Add support for VFE hardware version Titan 170")
-Cc: stable@vger.kernel.org
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- .../media/platform/qcom/camss/camss-vfe-170.c | 22 +++----------------
- 1 file changed, 3 insertions(+), 19 deletions(-)
-
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe-170.c b/drivers/media/platform/qcom/camss/camss-vfe-170.c
-index 02494c89da91c..168baaa80d4e6 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe-170.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe-170.c
-@@ -7,7 +7,6 @@
-  * Copyright (C) 2020-2021 Linaro Ltd.
-  */
- 
--#include <linux/delay.h>
- #include <linux/interrupt.h>
- #include <linux/io.h>
- #include <linux/iopoll.h>
-@@ -494,35 +493,20 @@ static int vfe_enable_output(struct vfe_line *line)
- 	return 0;
- }
- 
--static int vfe_disable_output(struct vfe_line *line)
-+static void vfe_disable_output(struct vfe_line *line)
- {
- 	struct vfe_device *vfe = to_vfe(line);
- 	struct vfe_output *output = &line->output;
- 	unsigned long flags;
- 	unsigned int i;
--	bool done;
--	int timeout = 0;
--
--	do {
--		spin_lock_irqsave(&vfe->output_lock, flags);
--		done = !output->gen2.active_num;
--		spin_unlock_irqrestore(&vfe->output_lock, flags);
--		usleep_range(10000, 20000);
--
--		if (timeout++ == 100) {
--			dev_err(vfe->camss->dev, "VFE idle timeout - resetting\n");
--			vfe_reset(vfe);
--			output->gen2.active_num = 0;
--			return 0;
--		}
--	} while (!done);
- 
- 	spin_lock_irqsave(&vfe->output_lock, flags);
- 	for (i = 0; i < output->wm_num; i++)
- 		vfe_wm_stop(vfe, output->wm_idx[i]);
-+	output->gen2.active_num = 0;
- 	spin_unlock_irqrestore(&vfe->output_lock, flags);
- 
--	return 0;
-+	vfe_reset(vfe);
- }
- 
- /*
--- 
-2.41.0
-
+	Hans
