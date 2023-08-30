@@ -2,116 +2,124 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0475DC83F18
-	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:30:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60109C6FA8F
+	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:30:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234073AbjH3SaY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Aug 2023 14:30:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38518 "EHLO
+        id S234112AbjH3Sa0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Aug 2023 14:30:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242866AbjH3Jyb (ORCPT
+        with ESMTP id S242574AbjH3JFC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Aug 2023 05:54:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C611C1B0
-        for <linux-media@vger.kernel.org>; Wed, 30 Aug 2023 02:54:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 608286136A
-        for <linux-media@vger.kernel.org>; Wed, 30 Aug 2023 09:54:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9F47C433C9;
-        Wed, 30 Aug 2023 09:54:26 +0000 (UTC)
-Message-ID: <9a344111-483c-0883-9685-0d571e2295b2@xs4all.nl>
-Date:   Wed, 30 Aug 2023 11:54:25 +0200
+        Wed, 30 Aug 2023 05:05:02 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72566CCB
+        for <linux-media@vger.kernel.org>; Wed, 30 Aug 2023 02:04:59 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (117.145-247-81.adsl-dyn.isp.belgacom.be [81.247.145.117])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B8D814E6;
+        Wed, 30 Aug 2023 11:03:35 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1693386215;
+        bh=d5WOyqJyL2AkT7IfYlqucY9V54//ZubQUyMylnruSTg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nImZFyk81RolnbttykEc1qEeEUS2itIHGzAqSKbrf9nvIB8qn37tRpn7q3yLPU8pg
+         VHUVjUuv01EDZe2iDMQs2pyK0PCBWKh76p8JVmPbfcjfYN/vsmOGSIHEC5tEP14xcU
+         feLdlnRjwLgzh1Gzh0SvyCZ+RgVJVphD+/ATPFkI=
+Date:   Wed, 30 Aug 2023 12:05:07 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, Sakari Ailus <sakari.ailus@iki.fi>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>
+Subject: Re: [PATCH v1 2/2] media: i2c: imx219: Fix crop rectangle setting
+ when changing format
+Message-ID: <20230830090507.GM6477@pendragon.ideasonboard.com>
+References: <20230814193435.24158-1-laurent.pinchart@ideasonboard.com>
+ <20230814193435.24158-3-laurent.pinchart@ideasonboard.com>
+ <ujpugw52leros2siag4wtvxhwkmnsazwdiofvpvtugjrvc5zvv@v4u26p6a7dnj>
+ <20230828191506.GA17083@pendragon.ideasonboard.com>
+ <6wdfupwaev2pchwuyh27kn4rj26rtrs6xqhiefu5tn24qymali@t2mjl5bdaa5v>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 3/6] drm/edid: parse source physical address
-Content-Language: en-US, nl
-To:     Jani Nikula <jani.nikula@intel.com>,
-        dri-devel@lists.freedesktop.org
-Cc:     intel-gfx@lists.freedesktop.org, linux-media@vger.kernel.org
-References: <cover.1692884619.git.jani.nikula@intel.com>
- <8c6b6403932536b6849e0b44e1ee6e7ebdbe4a69.1692884619.git.jani.nikula@intel.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <8c6b6403932536b6849e0b44e1ee6e7ebdbe4a69.1692884619.git.jani.nikula@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <6wdfupwaev2pchwuyh27kn4rj26rtrs6xqhiefu5tn24qymali@t2mjl5bdaa5v>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 24/08/2023 15:46, Jani Nikula wrote:
-> CEC needs the source physical address. Parsing it is trivial with the
-> existing EDID CEA DB infrastructure.
-> 
-> Default to CEC_PHYS_ADDR_INVALID (0xffff) instead of 0 to cater for
-> easier CEC usage.
-> 
-> Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-> Cc: linux-media@vger.kernel.org
-> Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+Hi Jacopo,
 
-Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+On Tue, Aug 29, 2023 at 08:31:27AM +0200, Jacopo Mondi wrote:
+> On Mon, Aug 28, 2023 at 10:15:06PM +0300, Laurent Pinchart wrote:
+> > On Mon, Aug 28, 2023 at 02:19:54PM +0200, Jacopo Mondi wrote:
+> > > On Mon, Aug 14, 2023 at 10:34:35PM +0300, Laurent Pinchart wrote:
+> > > > When moving the imx219 driver to the subdev active state, commit
+> > > > e8a5b1df000e ("media: i2c: imx219: Use subdev active state") used the
+> > > > pad crop rectangle stored in the subdev state to report the crop
+> > > > rectangle of the active mode. That crop rectangle was however not set in
+> > > > the state when setting the format, which resulted in reporting an
+> > > > incorrect crop rectangle to userspace. Fix it.
+> > > >
+> > > > Fixes: e8a5b1df000e ("media: i2c: imx219: Use subdev active state")
+> > > > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > > > ---
+> > > >  drivers/media/i2c/imx219.c | 11 ++++++-----
+> > > >  1 file changed, 6 insertions(+), 5 deletions(-)
+> > > >
+> > > > diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
+> > > > index 6f88e002c8d8..ec53abe2e84e 100644
+> > > > --- a/drivers/media/i2c/imx219.c
+> > > > +++ b/drivers/media/i2c/imx219.c
+> > > > @@ -750,6 +750,7 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
+> > > >  	const struct imx219_mode *mode;
+> > > >  	int exposure_max, exposure_def, hblank;
+> > > >  	struct v4l2_mbus_framefmt *format;
+> > > > +	struct v4l2_rect *crop;
+> > > >
+> > > >  	mode = v4l2_find_nearest_size(supported_modes,
+> > > >  				      ARRAY_SIZE(supported_modes),
+> > > > @@ -757,10 +758,12 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
+> > > >  				      fmt->format.width, fmt->format.height);
+> > > >
+> > > >  	imx219_update_pad_format(imx219, mode, &fmt->format, fmt->format.code);
+> > > > -	format = v4l2_subdev_get_pad_format(sd, sd_state, 0);
+> > > >
+> > > > -	if (imx219->mode == mode && format->code == fmt->format.code)
+> > > > -		return 0;
+> > >
+> > > Has this check been lost ?
+> >
+> > It has. Is it an issue ?
+> 
+> well, the check ensure we exit earlier if the sensor configuration
+> doesn't change.. as the newly introduced crop rectangle comes from the
+> mode as well, I'm missing why it should now be dropped...
 
+This is a minor optimization, and most drivers don't have similar code.
+I would like to eventually improve consistency between camera sensor
+drivers, so I thought I would drop the check here.
+
+You're right that it should at least be mentioned in the commit message,
+and likely split to a separate patch.
+
+> > > > +	format = v4l2_subdev_get_pad_format(sd, sd_state, 0);
+> > > > +	crop = v4l2_subdev_get_pad_crop(sd, sd_state, 0);
+> > > > +
+> > > > +	*format = fmt->format;
+> > > > +	*crop = mode->crop;
+> > > >
+> > > >  	if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
+> > > >  		imx219->mode = mode;
+> > > > @@ -788,8 +791,6 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
+> > > >  					 hblank);
+> > > >  	}
+> > > >
+> > > > -	*format = fmt->format;
+> > > > -
+> > > >  	return 0;
+> > > >  }
+> > > >
+
+-- 
 Regards,
 
-	Hans
-
-> ---
->  drivers/gpu/drm/drm_edid.c  | 5 +++++
->  include/drm/drm_connector.h | 8 ++++++++
->  2 files changed, 13 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
-> index 1dbb15439468..39dd3f694544 100644
-> --- a/drivers/gpu/drm/drm_edid.c
-> +++ b/drivers/gpu/drm/drm_edid.c
-> @@ -29,6 +29,7 @@
->   */
->  
->  #include <linux/bitfield.h>
-> +#include <linux/cec.h>
->  #include <linux/hdmi.h>
->  #include <linux/i2c.h>
->  #include <linux/kernel.h>
-> @@ -6192,6 +6193,8 @@ drm_parse_hdmi_vsdb_video(struct drm_connector *connector, const u8 *db)
->  
->  	info->is_hdmi = true;
->  
-> +	info->source_physical_address = (db[4] << 8) | db[5];
-> +
->  	if (len >= 6)
->  		info->dvi_dual = db[6] & 1;
->  	if (len >= 7)
-> @@ -6470,6 +6473,8 @@ static void drm_reset_display_info(struct drm_connector *connector)
->  	info->vics_len = 0;
->  
->  	info->quirks = 0;
-> +
-> +	info->source_physical_address = CEC_PHYS_ADDR_INVALID;
->  }
->  
->  static void update_displayid_info(struct drm_connector *connector,
-> diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
-> index d300fde6c1a4..40a5e7acf2fa 100644
-> --- a/include/drm/drm_connector.h
-> +++ b/include/drm/drm_connector.h
-> @@ -816,6 +816,14 @@ struct drm_display_info {
->  	 * @quirks: EDID based quirks. Internal to EDID parsing.
->  	 */
->  	u32 quirks;
-> +
-> +	/**
-> +	 * @source_physical_address: Source Physical Address from HDMI
-> +	 * Vendor-Specific Data Block, for CEC usage.
-> +	 *
-> +	 * Defaults to CEC_PHYS_ADDR_INVALID (0xffff).
-> +	 */
-> +	u16 source_physical_address;
->  };
->  
->  int drm_display_info_set_bus_formats(struct drm_display_info *info,
-
+Laurent Pinchart
