@@ -2,178 +2,102 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16E39C83F22
-	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:29:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C766C83F26
+	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:29:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232138AbjH3S3i (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Aug 2023 14:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52734 "EHLO
+        id S232266AbjH3S3l (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Aug 2023 14:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244283AbjH3Mvh (ORCPT
+        with ESMTP id S242110AbjH3HTZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Aug 2023 08:51:37 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70950132;
-        Wed, 30 Aug 2023 05:51:34 -0700 (PDT)
-Received: from [IPV6:2a01:e0a:120:3210:3c80:2375:ed1d:19ee] (unknown [IPv6:2a01:e0a:120:3210:3c80:2375:ed1d:19ee])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 78F0A660722B;
-        Wed, 30 Aug 2023 13:51:32 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1693399892;
-        bh=ATFNlFErqZ0DT6q6oV6nUkS2hS/qdeMG0yqOrN3MSgk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=grBQL/Me/AQSKnGXDsM+f85KJNzEEFJDfQbBeuzCklPS0k9B0cmtilehE5zKRYu/t
-         TtV/dyQfppH74lB05sAV/VsXWgaDexMHs1RPCOCcCNZ+wkVPBEIymWDEX96+OSBOvZ
-         hcvl4UYaMfBYhNM1TzhmuweEvku6Ox/K8F+a+Y/mmO6tvueqjLpjoq+aE2OcT1m9Nh
-         qeR4oxhg+yIrXzde+Z+KiMuxBZaSgAZ4XQRFzOzuntRs5PJ/DpzBObPWs1gTGFe/i5
-         GqNZhQWD0fukRTvVQKnmo3zaxLeESSifUnsZr63gW6bt1RPa2UNzAUrnR3pwaYDVEi
-         BQwFKwll1kpHw==
-Message-ID: <643a7811-60ff-6ac9-be3d-edcd9a0b95cc@collabora.com>
-Date:   Wed, 30 Aug 2023 14:51:30 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v5 01/10] media: videobuf2: Rework offset 'cookie'
- encoding pattern
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>, mchehab@kernel.org,
-        tfiga@chromium.org, m.szyprowski@samsung.com, ming.qian@nxp.com,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, nicolas.dufresne@collabora.com
+        Wed, 30 Aug 2023 03:19:25 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926441BB;
+        Wed, 30 Aug 2023 00:19:22 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (117.145-247-81.adsl-dyn.isp.belgacom.be [81.247.145.117])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 34C654E6;
+        Wed, 30 Aug 2023 09:17:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1693379877;
+        bh=ebYMIXSud5++a5TF9waHihcGKaRw+z3M0sYuJ7iKXlE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IoFOVVsZvrsw3nPoP4ayfGt6FAoG8dZHmmBaxx1AUkRVnE+T5vPNOxTB2yrPoWgmY
+         rLaDciZw3GEYUZXsljjBFHJ8bXvCBsSUBFoY6C68qL6I8X29xbsFWWUTbqGqcNVte4
+         hPD7E2UFKSE3ccvymA+oojg4RufaQEhEVp6LJEug=
+Date:   Wed, 30 Aug 2023 10:19:29 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Umang Jain <umang.jain@ideasonboard.com>
 Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        kernel@collabora.com
-References: <20230824092133.39510-1-benjamin.gaignard@collabora.com>
- <20230824092133.39510-2-benjamin.gaignard@collabora.com>
- <01c299f2-8118-5d86-e9b6-a459c1b6c467@xs4all.nl>
-Content-Language: en-US
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-In-Reply-To: <01c299f2-8118-5d86-e9b6-a459c1b6c467@xs4all.nl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ricardo Ribalda <ribalda@kernel.org>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>
+Subject: Re: [PATCH 1/2] media: i2c: imx214: Use v4l2_subdev_get_fmt()
+Message-ID: <20230830071929.GI6477@pendragon.ideasonboard.com>
+References: <20230830045323.71768-1-umang.jain@ideasonboard.com>
+ <20230830045323.71768-2-umang.jain@ideasonboard.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230830045323.71768-2-umang.jain@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+On Wed, Aug 30, 2023 at 10:23:22AM +0530, Umang Jain wrote:
+> The imx214 driver uses the subdev active state, there's no
 
-Le 30/08/2023 à 14:25, Hans Verkuil a écrit :
-> On 24/08/2023 11:21, Benjamin Gaignard wrote:
->> Change how offset 'cookie' field value is computed to make possible
->> to use more buffers (up to 0xffff).
->> With this encoding pattern we know the maximum number that a queue
->> could store so we can check ing at queue init time.
->> It also make easier and faster to find buffer and plane from using
->> the offset field.
->>
->> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->> ---
->> v5:
->> - I haven't change DST_QUEUE_OFF_BASE definition because it used in
->>    v4l2-mem2mem and s5p_mfc driver with a shift.
->>
->>   .../media/common/videobuf2/videobuf2-core.c   | 48 +++++++++----------
->>   1 file changed, 24 insertions(+), 24 deletions(-)
->>
->> diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
->> index cf6727d9c81f..e06905533ef4 100644
->> --- a/drivers/media/common/videobuf2/videobuf2-core.c
->> +++ b/drivers/media/common/videobuf2/videobuf2-core.c
->> @@ -31,6 +31,10 @@
->>   
->>   #include <trace/events/vb2.h>
->>   
->> +#define PLANE_INDEX_SHIFT	3
->> +#define PLANE_INDEX_MASK	0x7
->> +#define MAX_BUFFERS		0xffff
-> Very poor name, see below.
->
->> +
->>   static int debug;
->>   module_param(debug, int, 0644);
->>   
->> @@ -358,21 +362,23 @@ static void __setup_offsets(struct vb2_buffer *vb)
->>   	unsigned int plane;
->>   	unsigned long off = 0;
->>   
->> -	if (vb->index) {
->> -		struct vb2_buffer *prev = q->bufs[vb->index - 1];
->> -		struct vb2_plane *p = &prev->planes[prev->num_planes - 1];
->> -
->> -		off = PAGE_ALIGN(p->m.offset + p->length);
->> -	}
->> +	/*
->> +	 * Offsets cookies value have the following constraints:
->> +	 * - a buffer could have up to 8 planes.
->> +	 * - v4l2 mem2mem use bit 30 to distinguish between source and destination buffers.
->> +	 * - must be page aligned
->> +	 * That led to this bit mapping:
->> +	 * |30                |29        15|14       12|11 0|
->> +	 * |DST_QUEUE_OFF_BASE|buffer index|plane index| 0  |
->> +	 * where there is 16 bits to store buffer index.
-> 16 -> 15: there are 15 (not 16!) bits available for buffer indices. So the maximum
-> number of buffers is 32768, given that the indices start at 0.
->
->> +	 */
->> +	off = vb->index << (PLANE_INDEX_SHIFT + PAGE_SHIFT);
->>   
->>   	for (plane = 0; plane < vb->num_planes; ++plane) {
->> -		vb->planes[plane].m.offset = off;
->> +		vb->planes[plane].m.offset = off + (plane << PAGE_SHIFT);
->>   
->>   		dprintk(q, 3, "buffer %d, plane %d offset 0x%08lx\n",
->>   				vb->index, plane, off);
->> -
->> -		off += vb->planes[plane].length;
->> -		off = PAGE_ALIGN(off);
->>   	}
->>   }
->>   
->> @@ -2209,21 +2215,15 @@ static int __find_plane_by_offset(struct vb2_queue *q, unsigned long off,
->>   		return -EBUSY;
->>   	}
->>   
->> -	/*
->> -	 * Go over all buffers and their planes, comparing the given offset
->> -	 * with an offset assigned to each plane. If a match is found,
->> -	 * return its buffer and plane numbers.
->> -	 */
->> -	for (buffer = 0; buffer < q->num_buffers; ++buffer) {
->> -		vb = q->bufs[buffer];
->> +	/* Get buffer and plane from the offset */
->> +	buffer = (off >> (PLANE_INDEX_SHIFT + PAGE_SHIFT)) & MAX_BUFFERS;
-> Hmm, you use it as a mask. The name MAX_BUFFERS is really confusing.
-> How about BUFFER_INDEX_MASK? That is consistent with PLANE_INDEX_MASK.
+Does it ? I don't see a call to v4l2_subdev_init_finalize(), and the
+imx214 struct has fmt and crop fields in which it stores the active
+format.
 
-I will follow your advice and fix that in next version.
-I will until you have finish your review in this series before send it.
+> need to implement the .get_fmt() operation manually. Use the
+> v4l2_subdev_get_fmt() helper instead.
+> 
+> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+> ---
+>  drivers/media/i2c/imx214.c | 17 +----------------
+>  1 file changed, 1 insertion(+), 16 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/imx214.c b/drivers/media/i2c/imx214.c
+> index 2f9c8582f940..d8bdc52f552a 100644
+> --- a/drivers/media/i2c/imx214.c
+> +++ b/drivers/media/i2c/imx214.c
+> @@ -548,21 +548,6 @@ __imx214_get_pad_format(struct imx214 *imx214,
+>  	}
+>  }
+>  
+> -static int imx214_get_format(struct v4l2_subdev *sd,
+> -			     struct v4l2_subdev_state *sd_state,
+> -			     struct v4l2_subdev_format *format)
+> -{
+> -	struct imx214 *imx214 = to_imx214(sd);
+> -
+> -	mutex_lock(&imx214->mutex);
+> -	format->format = *__imx214_get_pad_format(imx214, sd_state,
+> -						  format->pad,
+> -						  format->which);
+> -	mutex_unlock(&imx214->mutex);
+> -
+> -	return 0;
+> -}
+> -
+>  static struct v4l2_rect *
+>  __imx214_get_pad_crop(struct imx214 *imx214,
+>  		      struct v4l2_subdev_state *sd_state,
+> @@ -842,7 +827,7 @@ static const struct v4l2_subdev_pad_ops imx214_subdev_pad_ops = {
+>  	.enum_mbus_code = imx214_enum_mbus_code,
+>  	.enum_frame_size = imx214_enum_frame_size,
+>  	.enum_frame_interval = imx214_enum_frame_interval,
+> -	.get_fmt = imx214_get_format,
+> +	.get_fmt = v4l2_subdev_get_fmt,
+>  	.set_fmt = imx214_set_format,
+>  	.get_selection = imx214_get_selection,
+>  	.init_cfg = imx214_entity_init_cfg,
 
+-- 
 Regards,
-Benjamin
 
->
->> +	plane = (off >> PAGE_SHIFT) & PLANE_INDEX_MASK;
->>   
->> -		for (plane = 0; plane < vb->num_planes; ++plane) {
->> -			if (vb->planes[plane].m.offset == off) {
->> -				*_buffer = buffer;
->> -				*_plane = plane;
->> -				return 0;
->> -			}
->> -		}
->> +	vb = q->bufs[buffer];
->> +	if (vb->planes[plane].m.offset == off) {
->> +		*_buffer = buffer;
->> +		*_plane = plane;
->> +		return 0;
->>   	}
->>   
->>   	return -EINVAL;
-> Regards,
->
-> 	Hans
->
+Laurent Pinchart
