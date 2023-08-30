@@ -2,92 +2,231 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7EB5C83F18
-	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:29:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85F08C83F22
+	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:29:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231341AbjH3S3Y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Aug 2023 14:29:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34450 "EHLO
+        id S231509AbjH3S31 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Aug 2023 14:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245486AbjH3PTH (ORCPT
+        with ESMTP id S244172AbjH3Miu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Aug 2023 11:19:07 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92DAE8;
-        Wed, 30 Aug 2023 08:19:03 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (unknown [IPv6:2606:6d00:15:bae9::7a9])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: nicolas)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7C8EB66071BE;
-        Wed, 30 Aug 2023 16:19:01 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1693408742;
-        bh=zp4dOKYj5P2tbc9SOBi3zKYc8MACLC/blDAk7LSJAeU=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=ixeFWC8byNhVcaT8civxVnZbjC3jmIwMDdi5VCHpDwpEJ3oRDENR8qLz5DeCOhFOs
-         Lp1mFL2VzQ99Hw+ATRij+Ne41vFsV9nFpeHcEKzDD0I5cKTzWtbC1hc9Gzljrwemta
-         JR0hc2u/GJaJ1bozL7o8xH4fcHYe1OszsVpAZDSiO9tx/XwOqWbfTDtI6nuLttR6PY
-         oY494YhspwrH8KFmb+HjeKHFF0CrU5logWvPI9kbaTckVsBrjr7/aciPgESqu0+kZJ
-         zwO9o3sRf9DcFcz27ZXaeCXbu/UN6ptg6zyuccJnyom0OjURDwbN3IlVrr+l1aNj+p
-         nkz2AZFeQCqiA==
-Message-ID: <e5b416f54fb18363c88813ab3240e6f9c48081f9.camel@collabora.com>
-Subject: Re: Stateless Encoding uAPI Discussion and Proposal
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Hsia-Jun Li <Randy.Li@synaptics.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Jernej =?UTF-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date:   Wed, 30 Aug 2023 11:18:52 -0400
-In-Reply-To: <52e9b710-5011-656b-aebf-8d57e6496ddd@synaptics.com>
-References: <ZK2NiQd1KnraAr20@aptenodytes> <ZNTp1e4gJ2zeYmS-@aptenodytes>
-         <a2e8e01ea754232dd3562b34702b6600d7358605.camel@collabora.com>
-         <ZNaVQ-zxIuCpGGha@aptenodytes>
-         <720c476189552596cbd61dd74d6fa12818718036.camel@collabora.com>
-         <39270c5e-24ab-8ff6-d925-7718b1fef3c4@synaptics.com>
-         <a0fa6559c3933a5a4c8b7502282adae3429e0b57.camel@collabora.com>
-         <52e9b710-5011-656b-aebf-8d57e6496ddd@synaptics.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+        Wed, 30 Aug 2023 08:38:50 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C30E8;
+        Wed, 30 Aug 2023 05:38:45 -0700 (PDT)
+Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RbP1q4vDGz1L8Vq;
+        Wed, 30 Aug 2023 20:37:03 +0800 (CST)
+Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Wed, 30 Aug
+ 2023 20:38:42 +0800
+Subject: Re: [RFC PATCH v2 02/11] netdev: implement netlink api to bind
+ dma-buf to netdevice
+To:     Mina Almasry <almasrymina@google.com>, <netdev@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Ahern <dsahern@kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Hari Ramakrishnan <rharix@google.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        <stephen@networkplumber.org>, <sdf@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20230810015751.3297321-1-almasrymina@google.com>
+ <20230810015751.3297321-3-almasrymina@google.com>
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <fc501cbd-1630-4140-e5b4-c7b147c82831@huawei.com>
+Date:   Wed, 30 Aug 2023 20:38:41 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
+In-Reply-To: <20230810015751.3297321-3-almasrymina@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.69.30.204]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Le mercredi 23 ao=C3=BBt 2023 =C3=A0 11:04 +0800, Hsia-Jun Li a =C3=A9crit=
-=C2=A0:
-> > It was suggested so far to leave h264 slice headers writing to the driv=
-er. This
-> > is motivated by H264 slice header not being byte aligned in size, so th=
-e
-> H.264, H.265 has the byte_alignment() in nalu. You don't need skip bits=
-=20
-> feature which could be found in H1.
-
-As you said so, I rechecked the H.264 grammar.
+On 2023/8/10 9:57, Mina Almasry wrote:
 
 ...
-  slice_header( )
-  slice_data( )
-...
 
-There is lot of variable size items in the slice_header() syntax and no pad=
-ding
-bits. And no padding at the start of any of the slice_data types. So no, th=
-e
-slice_header() syntax in H.264 is not byte aligned like you are claiming he=
-re.
-Its important to be super accurate about these things, as it will cause err=
-ors
-to be made. Please always double check.
+> +
+> +int netdev_bind_dmabuf_to_queue(struct net_device *dev, unsigned int dmabuf_fd,
+> +				u32 rxq_idx, struct netdev_dmabuf_binding **out)
+> +{
+> +	struct netdev_dmabuf_binding *binding;
+> +	struct netdev_rx_queue *rxq;
+> +	struct scatterlist *sg;
+> +	struct dma_buf *dmabuf;
+> +	unsigned int sg_idx, i;
+> +	unsigned long virtual;
+> +	u32 xa_idx;
+> +	int err;
+> +
+> +	rxq = __netif_get_rx_queue(dev, rxq_idx);
+> +
+> +	if (rxq->binding)
+> +		return -EEXIST;
+> +
+> +	dmabuf = dma_buf_get(dmabuf_fd);
+> +	if (IS_ERR_OR_NULL(dmabuf))
+> +		return -EBADFD;
+> +
+> +	binding = kzalloc_node(sizeof(*binding), GFP_KERNEL,
+> +			       dev_to_node(&dev->dev));
+> +	if (!binding) {
+> +		err = -ENOMEM;
+> +		goto err_put_dmabuf;
+> +	}
+> +
+> +	xa_init_flags(&binding->bound_rxq_list, XA_FLAGS_ALLOC);
+> +
+> +	refcount_set(&binding->ref, 1);
+> +
+> +	binding->dmabuf = dmabuf;
+> +
+> +	binding->attachment = dma_buf_attach(binding->dmabuf, dev->dev.parent);
+> +	if (IS_ERR(binding->attachment)) {
+> +		err = PTR_ERR(binding->attachment);
+> +		goto err_free_binding;
+> +	}
+> +
+> +	binding->sgt = dma_buf_map_attachment(binding->attachment,
+> +					      DMA_BIDIRECTIONAL);
+> +	if (IS_ERR(binding->sgt)) {
+> +		err = PTR_ERR(binding->sgt);
+> +		goto err_detach;
+> +	}
+> +
+> +	/* For simplicity we expect to make PAGE_SIZE allocations, but the
+> +	 * binding can be much more flexible than that. We may be able to
+> +	 * allocate MTU sized chunks here. Leave that for future work...
+> +	 */
+> +	binding->chunk_pool = gen_pool_create(PAGE_SHIFT,
+> +					      dev_to_node(&dev->dev));
+> +	if (!binding->chunk_pool) {
+> +		err = -ENOMEM;
+> +		goto err_unmap;
+> +	}
+> +
+> +	virtual = 0;
+> +	for_each_sgtable_dma_sg(binding->sgt, sg, sg_idx) {
+> +		dma_addr_t dma_addr = sg_dma_address(sg);
+> +		struct dmabuf_genpool_chunk_owner *owner;
+> +		size_t len = sg_dma_len(sg);
+> +		struct page_pool_iov *ppiov;
+> +
+> +		owner = kzalloc_node(sizeof(*owner), GFP_KERNEL,
+> +				     dev_to_node(&dev->dev));
+> +		owner->base_virtual = virtual;
+> +		owner->base_dma_addr = dma_addr;
+> +		owner->num_ppiovs = len / PAGE_SIZE;
+> +		owner->binding = binding;
+> +
+> +		err = gen_pool_add_owner(binding->chunk_pool, dma_addr,
+> +					 dma_addr, len, dev_to_node(&dev->dev),
+> +					 owner);
+> +		if (err) {
+> +			err = -EINVAL;
+> +			goto err_free_chunks;
+> +		}
+> +
+> +		owner->ppiovs = kvmalloc_array(owner->num_ppiovs,
+> +					       sizeof(*owner->ppiovs),
+> +					       GFP_KERNEL);
 
-Nicolas
+I guess the 'struct page_pool_iov' is the metadat for each chunk, just
+like the 'struct page' for each page?
+Do we want to make it cache line aligned as 'struct page' does, so that
+there is no cache bouncing between different ppiov when freeing and
+allocating?
+
+And we may be able to get rid of the gen_pool if we add more field
+to store the dma addree, the binding, etc in 'struct page_pool_iov'
+as devmem is not usable by other subsystem other than net stack
+and we can use a big page_pool->ring as the backing for all the
+devmem chunks to replace the gen_pool, at least for current
+implemention, dmabuf:page_pool/queue is 1:1. If we want to have
+the same dmabuf shared by different page_pool, it seems better
+to implement it in page_pool core instead of specific provider,
+so that other provider or native page pool can make use of that
+too.
+
+As far as we go here, I am not sure if it is possible and reasonable
+to reuse 'struct page' used by normal memory as much as possible,
+and add some specific union fields for devmem like page pool does,
+so that we can have more common handling between devmem and normal
+memory?
+
+I think we may need to split out metadata used by page pool
+currently from 'struct page', something like the netmem patch
+set does, as willy was trying to avoid more users using the
+'struct page' directly instead of adding more direct users to it:
+
+https://lore.kernel.org/linux-mm/20230111042214.907030-1-willy@infradead.org/
+
+> +		if (!owner->ppiovs) {
+> +			err = -ENOMEM;
+> +			goto err_free_chunks;
+> +		}
+> +
+> +		for (i = 0; i < owner->num_ppiovs; i++) {
+> +			ppiov = &owner->ppiovs[i];
+> +			ppiov->owner = owner;
+> +			refcount_set(&ppiov->refcount, 1);
+> +		}
+> +
+> +		dma_addr += len;
+> +		virtual += len;
+> +	}
+> +
+> +	/* TODO: need to be able to bind to multiple rx queues on the same
+> +	 * netdevice. The code should already be able to handle that with
+> +	 * minimal changes, but the netlink API currently allows for 1 rx
+> +	 * queue.
+> +	 */
+> +	err = xa_alloc(&binding->bound_rxq_list, &xa_idx, rxq, xa_limit_32b,
+> +		       GFP_KERNEL);
+> +	if (err)
+> +		goto err_free_chunks;
+> +
+> +	rxq->binding = binding;
+> +	*out = binding;
+> +
+> +	return 0;
+> +
+> +err_free_chunks:
+> +	gen_pool_for_each_chunk(binding->chunk_pool,
+> +				netdev_devmem_free_chunk_owner, NULL);
+> +	gen_pool_destroy(binding->chunk_pool);
+> +err_unmap:
+> +	dma_buf_unmap_attachment(binding->attachment, binding->sgt,
+> +				 DMA_BIDIRECTIONAL);
+> +err_detach:
+> +	dma_buf_detach(dmabuf, binding->attachment);
+> +err_free_binding:
+> +	kfree(binding);
+> +err_put_dmabuf:
+> +	dma_buf_put(dmabuf);
+> +	return err;
+> +}
+> +
+
