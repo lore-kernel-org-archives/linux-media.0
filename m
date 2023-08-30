@@ -2,107 +2,382 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98CC8C83F1B
-	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:30:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6317AC83F1A
+	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:30:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233144AbjH3SaC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Aug 2023 14:30:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48630 "EHLO
+        id S233204AbjH3SaE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Aug 2023 14:30:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242997AbjH3KDL (ORCPT
+        with ESMTP id S243248AbjH3KaW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Aug 2023 06:03:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0B81B0
-        for <linux-media@vger.kernel.org>; Wed, 30 Aug 2023 03:03:08 -0700 (PDT)
+        Wed, 30 Aug 2023 06:30:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09FFC0;
+        Wed, 30 Aug 2023 03:30:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 648CB61248
-        for <linux-media@vger.kernel.org>; Wed, 30 Aug 2023 10:03:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 044CDC433C7;
-        Wed, 30 Aug 2023 10:03:06 +0000 (UTC)
-Message-ID: <343ed7f5-194a-805c-5608-b9000a868d5f@xs4all.nl>
-Date:   Wed, 30 Aug 2023 12:03:05 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 483126236B;
+        Wed, 30 Aug 2023 10:30:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 835A5C433C8;
+        Wed, 30 Aug 2023 10:30:14 +0000 (UTC)
+Message-ID: <393ee19f-22a3-d309-11ba-51710015b518@xs4all.nl>
+Date:   Wed, 30 Aug 2023 12:30:13 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH 6/6] media: cec: core: add note about *_from_edid()
- function usage in drm
+Subject: Re: [PATCH v8 0/8] Add StarFive Camera Subsystem driver
 Content-Language: en-US, nl
-To:     Jani Nikula <jani.nikula@intel.com>,
-        dri-devel@lists.freedesktop.org
-Cc:     intel-gfx@lists.freedesktop.org, linux-media@vger.kernel.org
-References: <cover.1692884619.git.jani.nikula@intel.com>
- <7cebfea8f999d2d0d49533f9849d109830c5d1b6.1692884619.git.jani.nikula@intel.com>
+To:     Jack Zhu <jack.zhu@starfivetech.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>, bryan.odonoghue@linaro.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-staging@lists.linux.dev,
+        changhuang.liang@starfivetech.com
+References: <20230824080109.89613-1-jack.zhu@starfivetech.com>
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <7cebfea8f999d2d0d49533f9849d109830c5d1b6.1692884619.git.jani.nikula@intel.com>
+In-Reply-To: <20230824080109.89613-1-jack.zhu@starfivetech.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 24/08/2023 15:46, Jani Nikula wrote:
-> In the drm subsystem, the source physical address is, in most cases,
-> available without having to parse the EDID again. Add notes about
-> preferring to use the pre-parsed address instead.
+Hi Jack,
+
+On 24/08/2023 10:01, Jack Zhu wrote:
+> Hi,
 > 
-> Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-> Cc: linux-media@vger.kernel.org
-> Signed-off-by: Jani Nikula <jani.nikula@intel.com>
-> ---
->  drivers/media/cec/core/cec-adap.c     | 4 ++++
->  drivers/media/cec/core/cec-notifier.c | 4 ++++
->  2 files changed, 8 insertions(+)
+> This series is the v8 series that attempts to support the Camera Subsystem
+> found on StarFive JH7110 SoC.
 > 
-> diff --git a/drivers/media/cec/core/cec-adap.c b/drivers/media/cec/core/cec-adap.c
-> index 241b1621b197..2c627ed611ed 100644
-> --- a/drivers/media/cec/core/cec-adap.c
-> +++ b/drivers/media/cec/core/cec-adap.c
-> @@ -1688,6 +1688,10 @@ void cec_s_phys_addr(struct cec_adapter *adap, u16 phys_addr, bool block)
->  }
->  EXPORT_SYMBOL_GPL(cec_s_phys_addr);
->  
-> +/*
-> + * Note: In the drm subsystem, prefer calling cec_s_phys_addr() with
-> + * connector->display_info.source_physical_address if possible.
-> + */
+> The following are the media graph for the device and the v4l2-compliance
+> output.
 
-I would rephrase this:
+Please note that this driver no longer compiles after v4l2-async changes were
+merged to our media_stage tree.
 
-/*
- * Note: in the drm subsystem, prefer calling (if possible):
- *
- * cec_s_phys_addr(adap, connector->display_info.source_physical_address, false);
- */
-
-I think it is important to indicate that the last argument should be 'false'.
-
->  void cec_s_phys_addr_from_edid(struct cec_adapter *adap,
->  			       const struct edid *edid)
->  {
-> diff --git a/drivers/media/cec/core/cec-notifier.c b/drivers/media/cec/core/cec-notifier.c
-> index 389dc664b211..13f043b3025b 100644
-> --- a/drivers/media/cec/core/cec-notifier.c
-> +++ b/drivers/media/cec/core/cec-notifier.c
-> @@ -195,6 +195,10 @@ void cec_notifier_set_phys_addr(struct cec_notifier *n, u16 pa)
->  }
->  EXPORT_SYMBOL_GPL(cec_notifier_set_phys_addr);
->  
-> +/*
-> + * Note: In the drm subsystem, prefer calling cec_notifier_set_phys_addr() with
-> + * connector->display_info.source_physical_address if possible.
-> + */
-
-This comment is fine, there is no similar last argument here. But perhaps
-it is good to use a similar format as above. Up to you.
-
->  void cec_notifier_set_phys_addr_from_edid(struct cec_notifier *n,
->  					  const struct edid *edid)
->  {
+Make sure you base your v9 on top of the master branch of
+https://git.linuxtv.org/media_stage.git/
 
 Regards,
 
 	Hans
+
+> 
+> ===========================================================================
+> [the media graph]:
+> 
+> digraph board {
+> 	rankdir=TB
+> 	n00000001 [label="{{<port0> 0} | stf_isp\n/dev/v4l-subdev0 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
+> 	n00000001:port1 -> n00000008 [style=dashed]
+> 	n00000004 [label="capture_raw\n/dev/video0", shape=box, style=filled, fillcolor=yellow]
+> 	n00000008 [label="capture_yuv\n/dev/video1", shape=box, style=filled, fillcolor=yellow]
+> 	n0000000e [label="{{<port0> 0} | cdns_csi2rx.19800000.csi-bridge\n | {<port1> 1 | <port2> 2 | <port3> 3 | <port4> 4}}", shape=Mrecord, style=filled, fillcolor=green]
+> 	n0000000e:port1 -> n00000001:port0 [style=dashed]
+> 	n0000000e:port1 -> n00000004 [style=dashed]
+> 	n00000018 [label="{{} | imx219 6-0010\n/dev/v4l-subdev1 | {<port0> 0}}", shape=Mrecord, style=filled, fillcolor=green]
+> 	n00000018:port0 -> n0000000e:port0 [style=bold]
+> }
+> 
+> [the device topology]:
+> 
+> Media controller API version 6.5.0
+> 
+> Media device information
+> ------------------------
+> driver          starfive-camss
+> model           Starfive Camera Subsystem
+> serial          
+> bus info        platform:19840000.camss
+> hw revision     0x0
+> driver version  6.5.0
+> 
+> Device topology
+> - entity 1: stf_isp (2 pads, 2 links)
+>             type V4L2 subdev subtype Unknown flags 0
+>             device node name /dev/v4l-subdev0
+> 	pad0: Sink
+> 		[fmt:SRGGB10_1X10/1920x1080 field:none colorspace:srgb
+> 		 crop.bounds:(0,0)/1920x1080
+> 		 crop:(0,0)/1920x1080]
+> 		<- "cdns_csi2rx.19800000.csi-bridge":1 []
+> 	pad1: Source
+> 		[fmt:YUYV8_1_5X8/1920x1080 field:none colorspace:srgb
+> 		 crop.bounds:(0,0)/1920x1080
+> 		 crop:(0,0)/1920x1080]
+> 		-> "capture_yuv":0 []
+> 
+> - entity 4: capture_raw (1 pad, 1 link)
+>             type Node subtype V4L flags 0
+>             device node name /dev/video0
+> 	pad0: Sink
+> 		<- "cdns_csi2rx.19800000.csi-bridge":1 []
+> 
+> - entity 8: capture_yuv (1 pad, 1 link)
+>             type Node subtype V4L flags 0
+>             device node name /dev/video1
+> 	pad0: Sink
+> 		<- "stf_isp":1 []
+> 
+> - entity 14: cdns_csi2rx.19800000.csi-bridge (5 pads, 3 links)
+>              type V4L2 subdev subtype Unknown flags 0
+> 	pad0: Sink
+> 		<- "imx219 6-0010":0 [ENABLED,IMMUTABLE]
+> 	pad1: Source
+> 		-> "stf_isp":0 []
+> 		-> "capture_raw":0 []
+> 	pad2: Source
+> 	pad3: Source
+> 	pad4: Source
+> 
+> - entity 24: imx219 6-0010 (1 pad, 1 link)
+>              type V4L2 subdev subtype Sensor flags 0
+>              device node name /dev/v4l-subdev1
+> 	pad0: Source
+> 		[fmt:SRGGB10_1X10/3280x2464 field:none colorspace:srgb xfer:srgb ycbcr:601 quantization:full-range
+> 		 crop.bounds:(8,8)/3280x2464
+> 		 crop:(8,8)/3280x2464]
+> 		-> "cdns_csi2rx.19800000.csi-bridge":0 [ENABLED,IMMUTABLE]
+> 
+> ===========================================================================
+> [the v4l2-compliance output]:
+> 
+> v4l2-compliance 1.24.1, 64 bits, 64-bit time_t
+> 
+> Compliance test for stf camss device /dev/video1:
+> 
+> Driver Info:
+> 	Driver name      : stf camss
+> 	Card type        : Starfive Camera Subsystem
+> 	Bus info         : platform:19840000.camss
+> 	Driver version   : 6.5.0
+> 	Capabilities     : 0x84200001
+> 		Video Capture
+> 		Streaming
+> 		Extended Pix Format
+> 		Device Capabilities
+> 	Device Caps      : 0x04200001
+> 		Video Capture
+> 		Streaming
+> 		Extended Pix Format
+> Media Driver Info:
+> 	Driver name      : starfive-camss
+> 	Model            : Starfive Camera Subsystem
+> 	Serial           : 
+> 	Bus info         : platform:19840000.camss
+> 	Media version    : 6.5.0
+> 	Hardware revision: 0x00000000 (0)
+> 	Driver version   : 6.5.0
+> Interface Info:
+> 	ID               : 0x0300000a
+> 	Type             : V4L Video
+> Entity Info:
+> 	ID               : 0x00000008 (8)
+> 	Name             : capture_yuv
+> 	Function         : V4L2 I/O
+> 	Pad 0x01000009   : 0: Sink
+> 	  Link 0x0200000c: from remote pad 0x1000003 of entity 'stf_isp' (Unknown Function (00004009)): Data, Enabled
+> 
+> Required ioctls:
+> 	test MC information (see 'Media Driver Info' above): OK
+> 	test VIDIOC_QUERYCAP: OK
+> 	test invalid ioctls: OK
+> 
+> Allow for multiple opens:
+> 	test second /dev/video1 open: OK
+> 	test VIDIOC_QUERYCAP: OK
+> 	test VIDIOC_G/S_PRIORITY: OK
+> 	test for unlimited opens: OK
+> 
+> Debug ioctls:
+> 	test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
+> 	test VIDIOC_LOG_STATUS: OK (Not Supported)
+> 
+> Input ioctls:
+> 	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+> 	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+> 	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+> 	test VIDIOC_ENUMAUDIO: OK (Not Supported)
+> 	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
+> 	test VIDIOC_G/S_AUDIO: OK (Not Supported)
+> 	Inputs: 0 Audio Inputs: 0 Tuners: 0
+> 
+> Output ioctls:
+> 	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+> 	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+> 	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+> 	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+> 	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+> 	Outputs: 0 Audio Outputs: 0 Modulators: 0
+> 
+> Input/Output configuration ioctls:
+> 	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+> 	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
+> 	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
+> 	test VIDIOC_G/S_EDID: OK (Not Supported)
+> 
+> Control ioctls:
+> 	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK (Not Supported)
+> 	test VIDIOC_QUERYCTRL: OK (Not Supported)
+> 	test VIDIOC_G/S_CTRL: OK (Not Supported)
+> 	test VIDIOC_G/S/TRY_EXT_CTRLS: OK (Not Supported)
+> 	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK (Not Supported)
+> 	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+> 	Standard Controls: 0 Private Controls: 0
+> 
+> Format ioctls:
+> 	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+> 	test VIDIOC_G/S_PARM: OK (Not Supported)
+> 	test VIDIOC_G_FBUF: OK (Not Supported)
+> 	test VIDIOC_G_FMT: OK
+> 	test VIDIOC_TRY_FMT: OK
+> 	test VIDIOC_S_FMT: OK
+> 	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+> 	test Cropping: OK (Not Supported)
+> 	test Composing: OK (Not Supported)
+> 	test Scaling: OK
+> 
+> Codec ioctls:
+> 	test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
+> 	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+> 	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
+> 
+> Buffer ioctls:
+> 	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+> 	test VIDIOC_EXPBUF: OK
+> 	test Requests: OK (Not Supported)
+> 
+> Test input 0:
+> 
+> Streaming ioctls:
+> 	test read/write: OK (Not Supported)
+> 	test blocking wait: OK
+> 	test MMAP (no poll): OK                           
+> 	test MMAP (select): OK                            
+> 	test MMAP (epoll): OK                             
+> 	test USERPTR (no poll): OK (Not Supported)
+> 	test USERPTR (select): OK (Not Supported)
+> 	test DMABUF: Cannot test, specify --expbuf-device
+> 
+> Total for stf camss device /dev/video1: 53, Succeeded: 53, Failed: 0, Warnings: 0
+> 
+> ===========================================================================
+> 
+> Changes in v8:
+> - Rebased on v6.5-rc7.
+> - Dropped VIN subdev.
+> - Created two new video devices: capture_raw and capture_yuv, to replace
+>   the previous video devices.
+> - Dropped VB2_READ io methods.
+> - Recursively called .s_stream() on subdevs.
+> 
+> v7 link: https://lore.kernel.org/all/20230619112838.19797-1-jack.zhu@starfivetech.com/
+> 
+> Changes in v7:
+> - HAS_DMA is used instead of DMA_CMA in Kconfig.
+> - Dropped some non-essential member variables.
+> - Used v4l2_async_nf_add_fwnode_remote() to simplify the relevant code.
+> - Modified some Local variable types in the function.
+> - Used v4l2_create_fwnode_links_to_pad() to simplify the relevant code.
+> - Added error handling for clk_prepare_enable().
+> - Simplified stfcamss_format_info struct and modified the relevant code.
+> - Dropped enum_input, g_input and s_input.
+> - Unified v4l2_ioctl_ops struct.
+> - Used v4l2_fh_open()/vb2_fop_release to replace deprecated APIs.
+> - Added a camss directory under the starfive directory and modified the
+>   patch title.
+> 
+> v6 link: https://lore.kernel.org/all/20230525083202.67933-1-jack.zhu@starfivetech.com/
+> 
+> Changes in v6:
+> - Added 'bus-type' in bindings example.
+> - Corrected spelling errors.
+> - As reviewed by Bryan, used 'nclks' and 'nrsts' variables.
+> - Added lccf config for ISP.
+> 
+> v5 link: https://lore.kernel.org/all/20230512102844.51084-1-jack.zhu@starfivetech.com/
+> 
+> Changes in v5:
+> - Rebased on v6.4-rc1.
+> - Added new patch.
+> - Modified ISP driver.
+> 
+> v4 link: https://lore.kernel.org/all/20230413035541.62129-1-jack.zhu@starfivetech.com/
+> 
+> Previous cover letter from v4:
+> 
+> This patch series adds support for the StarFive Camera Subsystem
+> found on StarFive JH7110 SoC.
+> 
+> The driver implements V4L2, Media controller and V4L2 subdev interfaces.
+> Camera sensor using V4L2 subdev interface in the kernel is supported.
+> 
+> The driver is tested on VisionFive V2 board with IMX219 camera sensor.
+> GStreamer 1.18.5 with v4l2src plugin is supported.
+> 
+> Previous version link, missing v1 version:
+> 
+>   v3: https://lore.kernel.org/all/20230331121826.96973-1-jack.zhu@starfivetech.com/
+>   v2: https://lore.kernel.org/all/20230310120553.60586-1-jack.zhu@starfivetech.com/
+> 
+> Jack Zhu (8):
+>   media: dt-bindings: Add JH7110 Camera Subsystem
+>   media: admin-guide: Add starfive_camss.rst for Starfive Camera
+>     Subsystem
+>   media: staging: media: starfive: camss: Add core driver
+>   media: staging: media: starfive: camss: Add video driver
+>   media: staging: media: starfive: camss: Add ISP driver
+>   media: staging: media: starfive: camss: Add capture driver
+>   media: staging: media: starfive: camss: Add interrupt handling
+>   media: staging: media: starfive: camss: Register devices
+> 
+>  .../admin-guide/media/starfive_camss.rst      |  72 +++
+>  .../media/starfive_camss_graph.dot            |  12 +
+>  .../admin-guide/media/v4l-drivers.rst         |   1 +
+>  .../bindings/media/starfive,jh7110-camss.yaml | 180 ++++++
+>  MAINTAINERS                                   |   9 +
+>  drivers/staging/media/Kconfig                 |   2 +
+>  drivers/staging/media/Makefile                |   1 +
+>  drivers/staging/media/starfive/Kconfig        |   5 +
+>  drivers/staging/media/starfive/Makefile       |   2 +
+>  drivers/staging/media/starfive/camss/Kconfig  |  17 +
+>  drivers/staging/media/starfive/camss/Makefile |  13 +
+>  .../staging/media/starfive/camss/stf_camss.c  | 432 +++++++++++++
+>  .../staging/media/starfive/camss/stf_camss.h  | 134 ++++
+>  .../media/starfive/camss/stf_capture.c        | 603 ++++++++++++++++++
+>  .../media/starfive/camss/stf_capture.h        |  87 +++
+>  .../staging/media/starfive/camss/stf_isp.c    | 407 ++++++++++++
+>  .../staging/media/starfive/camss/stf_isp.h    | 428 +++++++++++++
+>  .../media/starfive/camss/stf_isp_hw_ops.c     | 445 +++++++++++++
+>  .../staging/media/starfive/camss/stf_video.c  | 557 ++++++++++++++++
+>  .../staging/media/starfive/camss/stf_video.h  | 100 +++
+>  20 files changed, 3507 insertions(+)
+>  create mode 100644 Documentation/admin-guide/media/starfive_camss.rst
+>  create mode 100644 Documentation/admin-guide/media/starfive_camss_graph.dot
+>  create mode 100644 Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+>  create mode 100644 drivers/staging/media/starfive/Kconfig
+>  create mode 100644 drivers/staging/media/starfive/Makefile
+>  create mode 100644 drivers/staging/media/starfive/camss/Kconfig
+>  create mode 100644 drivers/staging/media/starfive/camss/Makefile
+>  create mode 100644 drivers/staging/media/starfive/camss/stf_camss.c
+>  create mode 100644 drivers/staging/media/starfive/camss/stf_camss.h
+>  create mode 100644 drivers/staging/media/starfive/camss/stf_capture.c
+>  create mode 100644 drivers/staging/media/starfive/camss/stf_capture.h
+>  create mode 100644 drivers/staging/media/starfive/camss/stf_isp.c
+>  create mode 100644 drivers/staging/media/starfive/camss/stf_isp.h
+>  create mode 100644 drivers/staging/media/starfive/camss/stf_isp_hw_ops.c
+>  create mode 100644 drivers/staging/media/starfive/camss/stf_video.c
+>  create mode 100644 drivers/staging/media/starfive/camss/stf_video.h
+> 
+
