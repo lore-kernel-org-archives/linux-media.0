@@ -2,185 +2,150 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0048DC83F26
-	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:29:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7E05C83F28
+	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:29:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231223AbjH3S3V (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Aug 2023 14:29:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52266 "EHLO
+        id S231699AbjH3S3b (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Aug 2023 14:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244604AbjH3N11 (ORCPT
+        with ESMTP id S242892AbjH3J5M (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Aug 2023 09:27:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A284137;
-        Wed, 30 Aug 2023 06:27:24 -0700 (PDT)
+        Wed, 30 Aug 2023 05:57:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BCF1B0
+        for <linux-media@vger.kernel.org>; Wed, 30 Aug 2023 02:57:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DC9C6221F;
-        Wed, 30 Aug 2023 13:27:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8EC7C433C7;
-        Wed, 30 Aug 2023 13:27:19 +0000 (UTC)
-Message-ID: <fbeb4316-462a-1e20-581d-a6c2d2c9a1c9@xs4all.nl>
-Date:   Wed, 30 Aug 2023 15:27:18 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B0C86136A
+        for <linux-media@vger.kernel.org>; Wed, 30 Aug 2023 09:57:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BD5AC433C7;
+        Wed, 30 Aug 2023 09:57:07 +0000 (UTC)
+Message-ID: <8b6af8fa-8f43-1f68-4f9f-399576d61153@xs4all.nl>
+Date:   Wed, 30 Aug 2023 11:57:06 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v5 03/10] media: videobuf2: Be more flexible on the number
- of queue stored buffers
+Subject: Re: [PATCH 4/6] drm/cec: add drm_dp_cec_attach() as the non-edid
+ version of set edid
 Content-Language: en-US, nl
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
-        ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        nicolas.dufresne@collabora.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        kernel@collabora.com
-References: <20230824092133.39510-1-benjamin.gaignard@collabora.com>
- <20230824092133.39510-4-benjamin.gaignard@collabora.com>
+To:     Jani Nikula <jani.nikula@intel.com>,
+        dri-devel@lists.freedesktop.org
+Cc:     intel-gfx@lists.freedesktop.org, linux-media@vger.kernel.org
+References: <cover.1692884619.git.jani.nikula@intel.com>
+ <f8ed9b38fd2ebcd8344a1889a6c0f288969454ea.1692884619.git.jani.nikula@intel.com>
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20230824092133.39510-4-benjamin.gaignard@collabora.com>
+In-Reply-To: <f8ed9b38fd2ebcd8344a1889a6c0f288969454ea.1692884619.git.jani.nikula@intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 24/08/2023 11:21, Benjamin Gaignard wrote:
-> Add 'max_allowed_buffers' field in vb2_queue struct to let drivers decide
-> how many buffers could be stored in a queue.
-> This request 'bufs' array to be allocated at queue init time and freed
-> when releasing the queue.
-> By default VB2_MAX_FRAME remains the limit.
+On 24/08/2023 15:46, Jani Nikula wrote:
+> Connectors have source physical address available in display
+> info. There's no need to parse the EDID again for this. Add
+> drm_dp_cec_attach() to do this.
 > 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> Seems like the set_edid/unset_edid naming is a bit specific now that
+> there's no need to pass the EDID at all, so aim for attach/detach going
+> forward.
+> 
+> Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+> Cc: linux-media@vger.kernel.org
+> Signed-off-by: Jani Nikula <jani.nikula@intel.com>
 > ---
->  .../media/common/videobuf2/videobuf2-core.c   | 25 +++++++++++++------
->  include/media/videobuf2-core.h                |  4 ++-
->  2 files changed, 20 insertions(+), 9 deletions(-)
+>  drivers/gpu/drm/display/drm_dp_cec.c | 22 +++++++++++++++++++---
+>  include/drm/display/drm_dp_helper.h  |  6 ++++++
+>  2 files changed, 25 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
-> index 8aa13591b782..70e36389b704 100644
-> --- a/drivers/media/common/videobuf2/videobuf2-core.c
-> +++ b/drivers/media/common/videobuf2/videobuf2-core.c
-> @@ -411,7 +411,7 @@ static void init_buffer_cache_hints(struct vb2_queue *q, struct vb2_buffer *vb)
+> diff --git a/drivers/gpu/drm/display/drm_dp_cec.c b/drivers/gpu/drm/display/drm_dp_cec.c
+> index ae39dc794190..da7a7d357446 100644
+> --- a/drivers/gpu/drm/display/drm_dp_cec.c
+> +++ b/drivers/gpu/drm/display/drm_dp_cec.c
+> @@ -297,7 +297,7 @@ static void drm_dp_cec_unregister_work(struct work_struct *work)
+>   * were unchanged and just update the CEC physical address. Otherwise
+>   * unregister the old CEC adapter and create a new one.
 >   */
->  static bool vb2_queue_add_buffer(struct vb2_queue *q, struct vb2_buffer *vb, int index)
-
-Let's use 'unsigned int index' to avoid signedness issues.
-
+> -void drm_dp_cec_set_edid(struct drm_dp_aux *aux, const struct edid *edid)
+> +void drm_dp_cec_attach(struct drm_dp_aux *aux, u16 source_physical_address)
 >  {
-> -	if (index < VB2_MAX_FRAME && !q->bufs[index]) {
-> +	if (index < q->max_allowed_buffers && !q->bufs[index]) {
->  		q->bufs[index] = vb;
->  		vb->index = index;
->  		vb->vb2_queue = q;
-> @@ -428,7 +428,7 @@ static bool vb2_queue_add_buffer(struct vb2_queue *q, struct vb2_buffer *vb, int
->   */
->  static void vb2_queue_remove_buffer(struct vb2_queue *q, struct vb2_buffer *vb)
->  {
-> -	if (vb->index < VB2_MAX_FRAME) {
-> +	if (vb->index < q->max_allowed_buffers) {
->  		q->bufs[vb->index] = NULL;
->  		vb->vb2_queue = NULL;
->  	}
-> @@ -449,9 +449,9 @@ static int __vb2_queue_alloc(struct vb2_queue *q, enum vb2_memory memory,
->  	struct vb2_buffer *vb;
->  	int ret;
->  
-> -	/* Ensure that q->num_buffers+num_buffers is below VB2_MAX_FRAME */
-> +	/* Ensure that q->num_buffers+num_buffers is below q->max_allowed_buffers */
->  	num_buffers = min_t(unsigned int, num_buffers,
-> -			    VB2_MAX_FRAME - q->num_buffers);
-> +			    q->max_allowed_buffers - q->num_buffers);
->  
->  	for (buffer = 0; buffer < num_buffers; ++buffer) {
->  		/* Allocate vb2 buffer structures */
-> @@ -852,9 +852,9 @@ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
->  	/*
->  	 * Make sure the requested values and current defaults are sane.
->  	 */
-> -	WARN_ON(q->min_buffers_needed > VB2_MAX_FRAME);
-> +	WARN_ON(q->min_buffers_needed > q->max_allowed_buffers);
->  	num_buffers = max_t(unsigned int, *count, q->min_buffers_needed);
-> -	num_buffers = min_t(unsigned int, num_buffers, VB2_MAX_FRAME);
-> +	num_buffers = min_t(unsigned int, num_buffers, q->max_allowed_buffers);
->  	memset(q->alloc_devs, 0, sizeof(q->alloc_devs));
->  	/*
->  	 * Set this now to ensure that drivers see the correct q->memory value
-> @@ -970,7 +970,7 @@ int vb2_core_create_bufs(struct vb2_queue *q, enum vb2_memory memory,
->  	bool no_previous_buffers = !q->num_buffers;
->  	int ret;
->  
-> -	if (q->num_buffers == VB2_MAX_FRAME) {
-> +	if (q->num_buffers == q->max_allowed_buffers) {
->  		dprintk(q, 1, "maximum number of buffers already allocated\n");
->  		return -ENOBUFS;
->  	}
-> @@ -999,7 +999,7 @@ int vb2_core_create_bufs(struct vb2_queue *q, enum vb2_memory memory,
->  			return -EINVAL;
->  	}
->  
-> -	num_buffers = min(*count, VB2_MAX_FRAME - q->num_buffers);
-> +	num_buffers = min(*count, q->max_allowed_buffers - q->num_buffers);
->  
->  	if (requested_planes && requested_sizes) {
->  		num_planes = requested_planes;
-> @@ -2541,6 +2541,14 @@ int vb2_core_queue_init(struct vb2_queue *q)
->  
->  	q->memory = VB2_MEMORY_UNKNOWN;
->  
-> +	if (!q->max_allowed_buffers)
-> +		q->max_allowed_buffers = VB2_MAX_FRAME;
-> +
-> +	/* The maximum is limited by offset cookie encoding pattern */
-> +	q->max_allowed_buffers = min_t(unsigned int, q->max_allowed_buffers, MAX_BUFFERS);
+>  	struct drm_connector *connector = aux->cec.connector;
+>  	u32 cec_caps = CEC_CAP_DEFAULTS | CEC_CAP_NEEDS_HPD |
+> @@ -339,7 +339,7 @@ void drm_dp_cec_set_edid(struct drm_dp_aux *aux, const struct edid *edid)
+>  		if (aux->cec.adap->capabilities == cec_caps &&
+>  		    aux->cec.adap->available_log_addrs == num_las) {
+>  			/* Unchanged, so just set the phys addr */
+> -			cec_s_phys_addr_from_edid(aux->cec.adap, edid);
+> +			cec_s_phys_addr(adap, source_physical_address, false);
 
-With the new MAX_BUFFERS define this probably will need to be adjusted.
+As the kernel test robot indicated, this does not compile, this should
+be aux->cec.adap.
 
-> +
-> +	q->bufs = kcalloc(q->max_allowed_buffers, sizeof(*q->bufs), GFP_KERNEL);
-> +
->  	if (q->buf_struct_size == 0)
->  		q->buf_struct_size = sizeof(struct vb2_buffer);
->  
-> @@ -2565,6 +2573,7 @@ void vb2_core_queue_release(struct vb2_queue *q)
->  	__vb2_queue_cancel(q);
->  	mutex_lock(&q->mmap_lock);
->  	__vb2_queue_free(q, q->num_buffers);
-> +	kfree(q->bufs);
->  	mutex_unlock(&q->mmap_lock);
+>  			goto unlock;
+>  		}
+>  		/*
+> @@ -370,11 +370,27 @@ void drm_dp_cec_set_edid(struct drm_dp_aux *aux, const struct edid *edid)
+>  		 * from drm_dp_cec_register_connector() edid == NULL, so in
+>  		 * that case the phys addr is just invalidated.
+>  		 */
+> -		cec_s_phys_addr_from_edid(aux->cec.adap, edid);
+> +		cec_s_phys_addr(adap, source_physical_address, false);
+>  	}
+>  unlock:
+>  	mutex_unlock(&aux->cec.lock);
 >  }
->  EXPORT_SYMBOL_GPL(vb2_core_queue_release);
-> diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
-> index 4b6a9d2ea372..ee9161b9fd64 100644
-> --- a/include/media/videobuf2-core.h
-> +++ b/include/media/videobuf2-core.h
-> @@ -558,6 +558,7 @@ struct vb2_buf_ops {
->   * @dma_dir:	DMA mapping direction.
->   * @bufs:	videobuf2 buffer structures
->   * @num_buffers: number of allocated/used buffers
-> + * @max_allowed_buffers: upper limit of number of allocated/used buffers
->   * @queued_list: list of buffers currently queued from userspace
->   * @queued_count: number of buffers queued and ready for streaming.
->   * @owned_by_drv_count: number of buffers owned by the driver
-> @@ -619,8 +620,9 @@ struct vb2_queue {
->  	struct mutex			mmap_lock;
->  	unsigned int			memory;
->  	enum dma_data_direction		dma_dir;
-> -	struct vb2_buffer		*bufs[VB2_MAX_FRAME];
-> +	struct vb2_buffer		**bufs;
->  	unsigned int			num_buffers;
-> +	unsigned int			max_allowed_buffers;
->  
->  	struct list_head		queued_list;
->  	unsigned int			queued_count;
+> +EXPORT_SYMBOL(drm_dp_cec_attach);
+> +
+> +/*
+> + * Note: Prefer calling drm_dp_cec_attach() with
+> + * connector->display_info.source_physical_address if possible.
+> + */
+> +void drm_dp_cec_set_edid(struct drm_dp_aux *aux, const struct edid *edid)
+> +{
+> +	u16 source_physical_address = CEC_PHYS_ADDR_INVALID;
+> +
+> +	if (edid && edid->extensions)
+
+And this source needs to include <drm/drm_edid.h>, also as found by
+the kernel test robot.
 
 Regards,
 
 	Hans
+
+> +		pa = cec_get_edid_phys_addr((const u8 *)edid,
+> +					    EDID_LENGTH * (edid->extensions + 1), NULL);
+> +
+> +	drm_dp_cec_attach(aux, source_physical_address);
+> +}
+>  EXPORT_SYMBOL(drm_dp_cec_set_edid);
+>  
+>  /*
+> diff --git a/include/drm/display/drm_dp_helper.h b/include/drm/display/drm_dp_helper.h
+> index 86f24a759268..3369104e2d25 100644
+> --- a/include/drm/display/drm_dp_helper.h
+> +++ b/include/drm/display/drm_dp_helper.h
+> @@ -699,6 +699,7 @@ void drm_dp_cec_irq(struct drm_dp_aux *aux);
+>  void drm_dp_cec_register_connector(struct drm_dp_aux *aux,
+>  				   struct drm_connector *connector);
+>  void drm_dp_cec_unregister_connector(struct drm_dp_aux *aux);
+> +void drm_dp_cec_attach(struct drm_dp_aux *aux, u16 source_physical_address);
+>  void drm_dp_cec_set_edid(struct drm_dp_aux *aux, const struct edid *edid);
+>  void drm_dp_cec_unset_edid(struct drm_dp_aux *aux);
+>  #else
+> @@ -716,6 +717,11 @@ static inline void drm_dp_cec_unregister_connector(struct drm_dp_aux *aux)
+>  {
+>  }
+>  
+> +static inline void drm_dp_cec_attach(struct drm_dp_aux *aux,
+> +				     u16 source_physical_address)
+> +{
+> +}
+> +
+>  static inline void drm_dp_cec_set_edid(struct drm_dp_aux *aux,
+>  				       const struct edid *edid)
+>  {
+
