@@ -2,124 +2,165 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F6E9C83F21
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D87CFC83F1A
 	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:29:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbjH3S3T (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Aug 2023 14:29:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48702 "EHLO
+        id S230417AbjH3S3U (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Aug 2023 14:29:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245435AbjH3PQX (ORCPT
+        with ESMTP id S243333AbjH3KpG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Aug 2023 11:16:23 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96AF41AE
-        for <linux-media@vger.kernel.org>; Wed, 30 Aug 2023 08:16:20 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-401b3ea0656so51977995e9.0
-        for <linux-media@vger.kernel.org>; Wed, 30 Aug 2023 08:16:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693408579; x=1694013379; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IOr+4Q4O8js5VPsFrpRsc5FODaqo2yqRB7TUWvv+VpU=;
-        b=noBAXhEn3o98uPhUDQ1ZVei3wMoy3M8xK6oX1ujv5YrKlMyXzO0ycF2nO7pLvHZzQt
-         v3OV9TNFHJa/8Yop6NzknEkjO5PqNjXpdj25bK4Gecx3HebahUYuECeaf+HD+iquV5lP
-         Qswlj8ruVi90A2R/g79oc/PiiEMCKJO8A0BcIBrEXFqjZuMV6dECl3l7JwoPRY9Brqxc
-         fw+cRFiQJrb5gWHbuY0t1TVLxCADgVdwLbf3RXxHiIoCQrcgbzJdXuyHjaOCy43ns+QK
-         lWhkd1r96fHh161zijQyEhdcmoWWUzAyfE7E9G0QveAZbD81K2EPtaB7xVbeww58LNWd
-         JPEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693408579; x=1694013379;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IOr+4Q4O8js5VPsFrpRsc5FODaqo2yqRB7TUWvv+VpU=;
-        b=WkkHpyGU3yNwMfnrz9qqO0p9lex9Lw3m82TLBlcsmghkdBZKfDzsVtiRqAKQyl7eCr
-         pwVMcV5Zy97QCEyfNJoQFl9G8a08UVubj/PIBe42uk4eA0mgB9+qczEDv56YY9Zpjnqn
-         5fTnSOKJfqa6u6oiewj07EzotktrcyPSBcfmtSv9ZYyLzNSW348QsqA5e6uyrY1TDxBh
-         vN50ddOjZpJmWSuIw8IPte/judK3bC7d32hcdco5CC8xc9x37f+n/Dm8dMdEqZOPetMN
-         lwstHWmO7mgO5f6nRMoSUv5+tv4H0Gg5nXEhViKI0wZgL6vbSb5eUust+z3Qhu8PQDS9
-         Mh8A==
-X-Gm-Message-State: AOJu0YwFhg3nvu95IOAQRLmaoazniMD6iH4RP1bTemIJdJDcxwu+VmFv
-        9hunTuWvUJ5+gcEzNQFqCUDsyQ==
-X-Google-Smtp-Source: AGHT+IEKC6cOxtJYGq6gCbsSJ0Xm7p8iCIMIWMiCrClAhVF2NUHbJVoSqh/MG5NPh4r+YOmIm2Wtwg==
-X-Received: by 2002:a05:600c:20d5:b0:401:b493:f7c0 with SMTP id y21-20020a05600c20d500b00401b493f7c0mr2197409wmm.2.1693408579146;
-        Wed, 30 Aug 2023 08:16:19 -0700 (PDT)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id b16-20020a5d4d90000000b0030fd03e3d25sm16989961wru.75.2023.08.30.08.16.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Aug 2023 08:16:18 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
-        andrey.konovalov@linaro.org
-Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH v3 01/10] media: qcom: camss: Fix pm_domain_on sequence in probe
-Date:   Wed, 30 Aug 2023 16:16:06 +0100
-Message-ID: <20230830151615.3012325-2-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230830151615.3012325-1-bryan.odonoghue@linaro.org>
-References: <20230830151615.3012325-1-bryan.odonoghue@linaro.org>
+        Wed, 30 Aug 2023 06:45:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5C81BB;
+        Wed, 30 Aug 2023 03:45:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 82D5360FE8;
+        Wed, 30 Aug 2023 10:45:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECBC4C433C7;
+        Wed, 30 Aug 2023 10:44:58 +0000 (UTC)
+Message-ID: <d4b12bc1-65b8-6881-3648-85099d9319ec@xs4all.nl>
+Date:   Wed, 30 Aug 2023 12:44:57 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v8 3/8] media: staging: media: starfive: camss: Add core
+ driver
+Content-Language: en-US, nl
+To:     Jack Zhu <jack.zhu@starfivetech.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>, bryan.odonoghue@linaro.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-staging@lists.linux.dev,
+        changhuang.liang@starfivetech.com
+References: <20230824080109.89613-1-jack.zhu@starfivetech.com>
+ <20230824080109.89613-4-jack.zhu@starfivetech.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20230824080109.89613-4-jack.zhu@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-We need to make sure camss_configure_pd() happens before
-camss_register_entities() as the vfe_get() path relies on the pointer
-provided by camss_configure_pd().
+On 24/08/2023 10:01, Jack Zhu wrote:
+> Add core driver for StarFive Camera Subsystem. The code parses
+> the device platform resources and registers related devices.
+> 
+> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
+> ---
+>  MAINTAINERS                                   |   1 +
+>  drivers/staging/media/Kconfig                 |   2 +
+>  drivers/staging/media/Makefile                |   1 +
+>  drivers/staging/media/starfive/Kconfig        |   5 +
+>  drivers/staging/media/starfive/Makefile       |   2 +
+>  drivers/staging/media/starfive/camss/Kconfig  |  17 +
+>  drivers/staging/media/starfive/camss/Makefile |   9 +
+>  .../staging/media/starfive/camss/stf_camss.c  | 316 ++++++++++++++++++
+>  .../staging/media/starfive/camss/stf_camss.h  | 129 +++++++
+>  9 files changed, 482 insertions(+)
+>  create mode 100644 drivers/staging/media/starfive/Kconfig
+>  create mode 100644 drivers/staging/media/starfive/Makefile
+>  create mode 100644 drivers/staging/media/starfive/camss/Kconfig
+>  create mode 100644 drivers/staging/media/starfive/camss/Makefile
+>  create mode 100644 drivers/staging/media/starfive/camss/stf_camss.c
+>  create mode 100644 drivers/staging/media/starfive/camss/stf_camss.h
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 4c63c0a85301..97d3054416ed 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -20258,6 +20258,7 @@ L:	linux-media@vger.kernel.org
+>  S:	Maintained
+>  F:	Documentation/admin-guide/media/starfive_camss.rst
+>  F:	Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+> +F:	drivers/staging/media/starfive/camss
+>  
+>  STARFIVE CRYPTO DRIVER
+>  M:	Jia Jie Ho <jiajie.ho@starfivetech.com>
+> diff --git a/drivers/staging/media/Kconfig b/drivers/staging/media/Kconfig
+> index bc6c7b248f86..554c2e475ce3 100644
+> --- a/drivers/staging/media/Kconfig
+> +++ b/drivers/staging/media/Kconfig
+> @@ -36,6 +36,8 @@ source "drivers/staging/media/omap4iss/Kconfig"
+>  
+>  source "drivers/staging/media/rkvdec/Kconfig"
+>  
+> +source "drivers/staging/media/starfive/Kconfig"
+> +
+>  source "drivers/staging/media/sunxi/Kconfig"
+>  
+>  source "drivers/staging/media/tegra-video/Kconfig"
+> diff --git a/drivers/staging/media/Makefile b/drivers/staging/media/Makefile
+> index 1a4c3a062e3d..dcaeeca0ee6d 100644
+> --- a/drivers/staging/media/Makefile
+> +++ b/drivers/staging/media/Makefile
+> @@ -6,6 +6,7 @@ obj-$(CONFIG_VIDEO_MAX96712)	+= max96712/
+>  obj-$(CONFIG_VIDEO_MESON_VDEC)	+= meson/vdec/
+>  obj-$(CONFIG_VIDEO_OMAP4)	+= omap4iss/
+>  obj-$(CONFIG_VIDEO_ROCKCHIP_VDEC)	+= rkvdec/
+> +obj-$(CONFIG_VIDEO_STARFIVE_CAMSS)	+= starfive/
+>  obj-$(CONFIG_VIDEO_SUNXI)	+= sunxi/
+>  obj-$(CONFIG_VIDEO_TEGRA)	+= tegra-video/
+>  obj-$(CONFIG_VIDEO_IPU3_IMGU)	+= ipu3/
+> diff --git a/drivers/staging/media/starfive/Kconfig b/drivers/staging/media/starfive/Kconfig
+> new file mode 100644
+> index 000000000000..34727cf56072
+> --- /dev/null
+> +++ b/drivers/staging/media/starfive/Kconfig
+> @@ -0,0 +1,5 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +
+> +comment "StarFive media platform drivers"
+> +
+> +source "drivers/staging/media/starfive/camss/Kconfig"
+> diff --git a/drivers/staging/media/starfive/Makefile b/drivers/staging/media/starfive/Makefile
+> new file mode 100644
+> index 000000000000..4639fa1bca32
+> --- /dev/null
+> +++ b/drivers/staging/media/starfive/Makefile
+> @@ -0,0 +1,2 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +obj-y += camss/
+> diff --git a/drivers/staging/media/starfive/camss/Kconfig b/drivers/staging/media/starfive/camss/Kconfig
+> new file mode 100644
+> index 000000000000..8d20e2bd2559
+> --- /dev/null
+> +++ b/drivers/staging/media/starfive/camss/Kconfig
+> @@ -0,0 +1,17 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +config VIDEO_STARFIVE_CAMSS
+> +	tristate "Starfive Camera Subsystem driver"
+> +	depends on V4L_PLATFORM_DRIVERS
+> +	depends on VIDEO_DEV && OF
+> +	depends on HAS_DMA
+> +	depends on PM
+> +	select MEDIA_CONTROLLER
+> +	select VIDEO_V4L2_SUBDEV_API
+> +	select VIDEOBUF2_DMA_CONTIG
+> +	select V4L2_FWNODE
+> +	help
+> +	   Enable this to support for the Starfive Camera subsystem
+> +	   found on Starfive JH7110 SoC.
+> +
+> +	   To compile this driver as a module, choose M here: the
+> +	   module will be called stf-camss.
 
-Fix the ordering sequence in probe to ensure the pointers vfe_get() demands
-are present by the time camss_register_entities() runs.
+This is actually called starfive-camss.ko!
 
-In order to facilitate backporting to stable kernels I've moved the
-configure_pd() call pretty early on the probe() function so that
-irrespective of the existence of the old error handling jump labels this
-patch should still apply to -next circa Aug 2023 to v5.13 inclusive.
+Regards,
 
-Fixes: 2f6f8af67203 ("media: camss: Refactor VFE power domain toggling")
-Cc: stable@vger.kernel.org
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
- drivers/media/platform/qcom/camss/camss.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
-index f11dc59135a5a..75991d849b571 100644
---- a/drivers/media/platform/qcom/camss/camss.c
-+++ b/drivers/media/platform/qcom/camss/camss.c
-@@ -1619,6 +1619,12 @@ static int camss_probe(struct platform_device *pdev)
- 	if (ret < 0)
- 		goto err_cleanup;
- 
-+	ret = camss_configure_pd(camss);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to configure power domains: %d\n", ret);
-+		goto err_cleanup;
-+	}
-+
- 	ret = camss_init_subdevices(camss);
- 	if (ret < 0)
- 		goto err_cleanup;
-@@ -1678,12 +1684,6 @@ static int camss_probe(struct platform_device *pdev)
- 		}
- 	}
- 
--	ret = camss_configure_pd(camss);
--	if (ret < 0) {
--		dev_err(dev, "Failed to configure power domains: %d\n", ret);
--		return ret;
--	}
--
- 	pm_runtime_enable(dev);
- 
- 	return 0;
--- 
-2.41.0
+	Hans
 
