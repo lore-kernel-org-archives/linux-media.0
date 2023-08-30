@@ -2,51 +2,54 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5EA1C83F15
-	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 21:12:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EB18C83F14
+	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 22:49:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240844AbjH3VMG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Aug 2023 17:12:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33910 "EHLO
+        id S244119AbjH3Wti (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Aug 2023 18:49:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240865AbjH3VMF (ORCPT
+        with ESMTP id S233612AbjH3Wth (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Aug 2023 17:12:05 -0400
-Received: from smtp.smtpout.orange.fr (smtp-27.smtpout.orange.fr [80.12.242.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 051A3CE7
-        for <linux-media@vger.kernel.org>; Wed, 30 Aug 2023 14:11:28 -0700 (PDT)
+        Wed, 30 Aug 2023 18:49:37 -0400
+Received: from smtp.smtpout.orange.fr (smtp-25.smtpout.orange.fr [80.12.242.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0402EE58
+        for <linux-media@vger.kernel.org>; Wed, 30 Aug 2023 15:49:18 -0700 (PDT)
 Received: from pop-os.home ([86.243.2.178])
         by smtp.orange.fr with ESMTPA
-        id bRtwq9Cq9LJHlbRtxqZvkj; Wed, 30 Aug 2023 22:34:59 +0200
+        id bSOGqx2PaDlJebSOGqE9lA; Wed, 30 Aug 2023 23:06:20 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1693427699;
-        bh=ukX6nIzTyaosUbrTkIXJsNBtFe8mTALHzfMVVvM42bc=;
+        s=t20230301; t=1693429580;
+        bh=RzybfU0boxWYJNuGa1CY2Ynec75IhyC3G31hAEGouPc=;
         h=From:To:Cc:Subject:Date;
-        b=tU2kvuBiW/eMCF/tn/6aangRq7DihAInl+uRWuVrVN6dJggGpARY3DvpgCM+yCtwC
-         vba8qjDthJoeGKkNKxh2tlEhFKVIaUzW0irEWjA8IVUcbY7Ln89PQxzCpc/nfLmjBf
-         uHcaOo78+807a8dM9rj7uHizW915ThG0BjY1bGnjpU4V6mOxJX514C92zu58N/tQY9
-         EqXgPtDLws83Lku51aBt9/uwLU4/RSxBLH7E2YeSL1ZSbjQ6p+hCYPVEcqsX5XICmS
-         5SPxqwmXJ0kKeMDrGHrYbBwlGWn428Ekau1G7pcupynJVG938rH9aweYLbIhmLfUP2
-         eqH7LVw/cOn3g==
+        b=mPrO5hn5GG5LU77t1k7/5WO5l+CvjJ29N7m9UBTflaCTVNouFpmoUL4y4lf3E3h8m
+         ovmhshCs/5nFfv+13c172HABJvt+Mycl8lymXklGe4kDwQZbwx7GhsuNVENRtPpJCi
+         s+UjqoGzWyHK+pAqfhfhP/VMgN0NZDYoMZEGUaZ+pi0N25nLmnsi+JLOVY1A5Uyiy+
+         Loj8GV28MUlbOiOJ55JPXeS0v/lrF/NC83cg82rQbBA92VoZYCfwrBVL+xBpstl8/t
+         NSC1RCgTCI2l66yzce+gpfX+5v/nGoRQqZl9rfjnrHHjdAqd0AR2WYxTPo2UBp5wpt
+         oz9s9SiN9iAvA==
 X-ME-Helo: pop-os.home
 X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 30 Aug 2023 22:34:59 +0200
+X-ME-Date: Wed, 30 Aug 2023 23:06:20 +0200
 X-ME-IP: 86.243.2.178
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
+To:     Rui Miguel Silva <rmfrfs@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Martin Kepplinger <martink@posteo.de>,
+        Purism Kernel Team <kernel@puri.sm>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>
 Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-        linux-media@vger.kernel.org
-Subject: [PATCH v2] media: i2c: rdacm21: Remove an incorrect fwnode_handle_put() call
-Date:   Wed, 30 Aug 2023 22:34:51 +0200
-Message-Id: <d9230082a1f5b7bab6363c51408508ec5ab6acfc.1693037086.git.christophe.jaillet@wanadoo.fr>
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] media: imx-mipi-csis: Remove an incorrect fwnode_handle_put() call
+Date:   Wed, 30 Aug 2023 23:06:14 +0200
+Message-Id: <dd5b741f496d074d342958f14baff5bae8c71531.1693429556.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -54,37 +57,39 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The commit in Fixes has removed an fwnode_handle_put() call in the error
-handling path of the probe.
+The commit in Fixes has removed an fwnode_graph_get_endpoint_by_id() call
+in mipi_csis_subdev_init().
+So the reference that was taken should not be released anymore in the
+error handling path of the probe and in the remove function.
 
-Remove the same call from the remove function.
+Remove the now incorrect fwnode_handle_put() calls.
 
 Fixes: 1029939b3782 ("media: v4l: async: Simplify async sub-device fwnode matching")
 Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 ---
-v2: s/rdacm2/rdacm21/ in the subject    [Laurent Pinchart]
-    Add R-b tags
+ drivers/media/platform/nxp/imx-mipi-csis.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-v1:
-   https://lore.kernel.org/all/d9230082aefcb7bab6363c51c08598eb5ab62cfc.1693037086.git.christophe.jaillet@wanadoo.fr/
----
- drivers/media/i2c/rdacm21.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/media/i2c/rdacm21.c b/drivers/media/i2c/rdacm21.c
-index a36a709243fd..3e22df36354f 100644
---- a/drivers/media/i2c/rdacm21.c
-+++ b/drivers/media/i2c/rdacm21.c
-@@ -608,7 +608,6 @@ static void rdacm21_remove(struct i2c_client *client)
- 	v4l2_async_unregister_subdev(&dev->sd);
- 	v4l2_ctrl_handler_free(&dev->ctrls);
- 	i2c_unregister_device(dev->isp);
--	fwnode_handle_put(dev->sd.fwnode);
+diff --git a/drivers/media/platform/nxp/imx-mipi-csis.c b/drivers/media/platform/nxp/imx-mipi-csis.c
+index 16f19a640130..5f93712bf485 100644
+--- a/drivers/media/platform/nxp/imx-mipi-csis.c
++++ b/drivers/media/platform/nxp/imx-mipi-csis.c
+@@ -1490,7 +1490,6 @@ static int mipi_csis_probe(struct platform_device *pdev)
+ 	v4l2_async_unregister_subdev(&csis->sd);
+ err_disable_clock:
+ 	mipi_csis_clk_disable(csis);
+-	fwnode_handle_put(csis->sd.fwnode);
+ 
+ 	return ret;
+ }
+@@ -1510,7 +1509,6 @@ static void mipi_csis_remove(struct platform_device *pdev)
+ 	mipi_csis_clk_disable(csis);
+ 	v4l2_subdev_cleanup(&csis->sd);
+ 	media_entity_cleanup(&csis->sd.entity);
+-	fwnode_handle_put(csis->sd.fwnode);
+ 	pm_runtime_set_suspended(&pdev->dev);
  }
  
- static const struct of_device_id rdacm21_of_ids[] = {
 -- 
 2.34.1
 
