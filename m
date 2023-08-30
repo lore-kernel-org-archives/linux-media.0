@@ -2,107 +2,121 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92046C83F19
-	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:29:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB133C83F2B
+	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:29:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbjH3S3V (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Aug 2023 14:29:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45610 "EHLO
+        id S231853AbjH3S3d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Aug 2023 14:29:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245328AbjH3PLJ (ORCPT
+        with ESMTP id S242262AbjH3HoK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Aug 2023 11:11:09 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80214E8;
-        Wed, 30 Aug 2023 08:11:03 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (unknown [IPv6:2606:6d00:15:bae9::7a9])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nicolas)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E13B566071BE;
-        Wed, 30 Aug 2023 16:11:00 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1693408262;
-        bh=VnXf1LaCN72XTFXRU9tqw/+twmKCXDqgk1FTB/JX2wQ=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=iWZwhEKAM2fxzFVH//VHX0A9ouso0+PgDThTmLUeC86oMtb/TeiMBJQaKk/zUqof0
-         vlsHZozBjM6QXQK7Xruf6WaHlL9ijIspEsuPY/mvkBirK/OmhtC1JQmwSxqDMpbjT2
-         pbQETIq3qzRLrjeSpRgHKPtpjjHur//skEbiNj8wmdEO8SBs6+9bCnwpVyfxRnhTRm
-         qMNLIh38R44ySTG093OyIV0GgxNp/D/RFxjjzM32bfwM/E2L+c0nmAGasemml1Y4x8
-         r+C81rHe16uMQo3Q0uRRKb6dn1NgPp6/HrcIEZPRgvz/VtdxYS1oC+XDCh7iUGCxO5
-         NFi6S2zkqG3ug==
-Message-ID: <4d08d98d853d78bbb6dba826d30c3386fe0b31e8.camel@collabora.com>
-Subject: Re: Stateless Encoding uAPI Discussion and Proposal
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Hsia-Jun Li <Randy.Li@synaptics.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Jernej =?UTF-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date:   Wed, 30 Aug 2023 11:10:52 -0400
-In-Reply-To: <52e9b710-5011-656b-aebf-8d57e6496ddd@synaptics.com>
-References: <ZK2NiQd1KnraAr20@aptenodytes> <ZNTp1e4gJ2zeYmS-@aptenodytes>
-         <a2e8e01ea754232dd3562b34702b6600d7358605.camel@collabora.com>
-         <ZNaVQ-zxIuCpGGha@aptenodytes>
-         <720c476189552596cbd61dd74d6fa12818718036.camel@collabora.com>
-         <39270c5e-24ab-8ff6-d925-7718b1fef3c4@synaptics.com>
-         <a0fa6559c3933a5a4c8b7502282adae3429e0b57.camel@collabora.com>
-         <52e9b710-5011-656b-aebf-8d57e6496ddd@synaptics.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+        Wed, 30 Aug 2023 03:44:10 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7756BCD8;
+        Wed, 30 Aug 2023 00:44:08 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-68a520dba33so4193828b3a.0;
+        Wed, 30 Aug 2023 00:44:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1693381448; x=1693986248; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KaI3PfD8joR99TjMB7Mb3TjzWqZ8IotMwduAcjhk/lk=;
+        b=gf77cZ800GC40FJrd0lVKsSlrFpSewybhTXRscHHqeTx6zAvxpnNlaisMmWkFl4Osl
+         M3UxNwQkLofiOajnFYKqof3AxLkkW/7/PJrIR9pXfHSoZzSXxVXJcEqYkIXEDTDFXB3O
+         rZ/fogGfH9kmY9r4k+Z0SzKrbEi1pQVMs8XxsH69xIHEV4l1dPmbOwG1VoxkPFAZoPfa
+         Av877gjC9oTym1LNQ+z9BbT1325IdtMYQ/sFanedqitrnUDXwbsOze5Hq6t2RYXwd6mt
+         90LVEyp6JduYOa/EwKL0oFVu48WbpGlkDMPE5XYFtdmJliT7z0NqOzmz3KCIoQPrmgcn
+         QRww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693381448; x=1693986248;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KaI3PfD8joR99TjMB7Mb3TjzWqZ8IotMwduAcjhk/lk=;
+        b=YhGdIU0JR26B5CydR3A9vwD0oty1BCgJiQ+e0+hhigPNKWel8jQTXLm3rh/tJwMZ9M
+         9tPVJhVb3kdmycjwTPNfbnqUllIC+J0xPK9yYvdPDVqVg9SvDgkgdik8Zs2ixLzhSKzB
+         zIAYFjxIjb8Ag/c7zSOqarTAq5lgPgBRn/22d6yUdoWI1YRcIzddgkiRnOwxewx1FRtM
+         S5cWoiObxr78V68JknP9JilkJn6ej7ZuWqF2LpklMHUmKmWkXMRoMV+mSQBKPTBTcFvF
+         KPO1gDPcqrT0ZQA7XLBm95HGxM2OUn6q+Vq9P6Md8NO1OvR8uCtwhNCCJgasMJbQZp3q
+         UZsA==
+X-Gm-Message-State: AOJu0YwKsgRd+TXnTe8XhBb7p00eonVHCFyZs23QxRG1Xkf+cDRIO4AN
+        DkDg9ZlXjzGpUQrFzDc6qcs=
+X-Google-Smtp-Source: AGHT+IGaQ4P8EvC7PlpIhxszpNMfsVh9XWh9SaGCCo1nYYOFuxiN9tKA8ohVp4yCvqqpSXyx313liA==
+X-Received: by 2002:a05:6a21:7784:b0:14d:f41c:435a with SMTP id bd4-20020a056a21778400b0014df41c435amr1839509pzc.39.1693381447705;
+        Wed, 30 Aug 2023 00:44:07 -0700 (PDT)
+Received: from localhost.localdomain ([2409:40c2:1033:772c:a5cb:ea8f:e44:ec54])
+        by smtp.gmail.com with ESMTPSA id i19-20020a170902eb5300b001b8b26fa6c1sm10467189pli.115.2023.08.30.00.44.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Aug 2023 00:44:07 -0700 (PDT)
+From:   coolrrsh@gmail.com
+To:     hverkuil@xs4all.nl, mchehab@kernel.org, slark_xiao@163.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
+        Rajeshwar R Shinde <coolrrsh@gmail.com>,
+        syzbot+e27f3dbdab04e43b9f73@syzkaller.appspotmail.com
+Subject: [PATCH v5] media: gspca: cpia1: shift-out-of-bounds in set_flicker
+Date:   Wed, 30 Aug 2023 13:14:01 +0530
+Message-Id: <20230830074401.7696-1-coolrrsh@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Le mercredi 23 ao=C3=BBt 2023 =C3=A0 11:04 +0800, Hsia-Jun Li a =C3=A9crit=
-=C2=A0:
-> > Though, if we drop the GOP structure and favour this approach, the late=
-ncy could
-> > be regain later by introducing fence base streaming. The technique woul=
-d be for
-> > a video source (like a capture driver) to pass dmabuf that aren't fille=
-d yet,
-> > but have a companion fence. This would allow queuing requests ahead of =
-time, and
-> > all we need is enough pre-allocation to accommodate the desired look ah=
-ead. Only
-> > issue is that perhaps this violates the fundamental of "short term" del=
-ivery of
-> > fences. But fences can also fail I think, in case the capture was stopp=
-ed.
-> >=20
-> I don't think it would help. Fence is a thing for DRM/GPU without a queue=
-.
-> Even with a fence, would the video sink tell us the motion delta here?
+From: Rajeshwar R Shinde <coolrrsh@gmail.com>
 
-It helps with the latency since the encoder can start its search and analyz=
-es as
-soon as frames are available, instead of until you have all N frames availa=
-ble
-(refer to the MIN_BUFFER_FOR controls used when lookahead is needed).
+Syzkaller reported the following issue:
+UBSAN: shift-out-of-bounds in drivers/media/usb/gspca/cpia1.c:1031:27
+shift exponent 245 is too large for 32-bit type 'int'
 
-> > We can certainly move forward with this as a future solution, or just d=
-on't
-> > implement future aware RC algorithm in term to avoid the huge task this=
- involves
-> > (and possibly patents?)
-> >=20
-> I think we should not restrict how the userspace(vendor) operate the=20
-> hardware.
+When the value of the variable "sd->params.exposure.gain" exceeds the
+number of bits in an integer, a shift-out-of-bounds error is reported. It
+is triggered because the variable "currentexp" cannot be left-shifted by
+more than the number of bits in an integer. In order to avoid invalid
+range during left-shift, the conditional expression is added.
 
-Omitting is not restricting. Vendors have to learn to be community members =
-and
-propose/add the tools and APIs they need to support their features. We cann=
-ot
-fix vendors in this regard, those who jumps over that fence are wining.
 
-Nicolas
+Reported-by: syzbot+e27f3dbdab04e43b9f73@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/all/20230818164522.12806-1-coolrrsh@gmail.com
+Link: https://syzkaller.appspot.com/bug?extid=e27f3dbdab04e43b9f73
+Signed-off-by: Rajeshwar R Shinde <coolrrsh@gmail.com>
+---
+v1->v2
+Changed the patch. Instead of avoiding shift operation for invalid
+input of 'exposure.gain', throw an error for invalid range.
+v2->v3
+Changed the commit message details
+v3->v4
+Removed the trailing spaces in commit message
+v4->v5
+Replaced the hardcoded value with inbuilt macro
+---
+ drivers/media/usb/gspca/cpia1.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/media/usb/gspca/cpia1.c b/drivers/media/usb/gspca/cpia1.c
+index 46ed95483e22..5f5fa851ca64 100644
+--- a/drivers/media/usb/gspca/cpia1.c
++++ b/drivers/media/usb/gspca/cpia1.c
+@@ -18,6 +18,7 @@
+ 
+ #include <linux/input.h>
+ #include <linux/sched/signal.h>
++#include <linux/bitops.h>
+ 
+ #include "gspca.h"
+ 
+@@ -1028,6 +1029,8 @@ static int set_flicker(struct gspca_dev *gspca_dev, int on, int apply)
+ 			sd->params.exposure.expMode = 2;
+ 			sd->exposure_status = EXPOSURE_NORMAL;
+ 		}
++		if (sd->params.exposure.gain >= BITS_PER_TYPE(currentexp))
++			return -EINVAL;
+ 		currentexp = currentexp << sd->params.exposure.gain;
+ 		sd->params.exposure.gain = 0;
+ 		/* round down current exposure to nearest value */
+-- 
+2.25.1
+
