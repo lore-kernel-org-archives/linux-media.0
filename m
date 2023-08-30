@@ -2,112 +2,165 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4871C83F1A
-	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:30:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E74B5C83F1A
+	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 18:30:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233814AbjH3SaU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Aug 2023 14:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54174 "EHLO
+        id S234007AbjH3SaW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Aug 2023 14:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242176AbjH3HWg (ORCPT
+        with ESMTP id S244756AbjH3Nxh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Aug 2023 03:22:36 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F01F1BE;
-        Wed, 30 Aug 2023 00:22:32 -0700 (PDT)
-Received: from [192.168.1.110] (unknown [103.251.226.104])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5592EE4;
-        Wed, 30 Aug 2023 09:21:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1693380066;
-        bh=F2nGmB1UG3evPTDDcWso39hwyLzIhuxO2BI6OO2Pi+Y=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Z9FqDaEP8P4aOcP88r/iZLjd3ciBk/UzHVOsdLy8KzpG250/90osEOhQ/uw+wHBrb
-         cJKwISNNlCrI5Qb+e7TxagVObySgN8qI7ShaCzzRTvE2dLP8OyJu1TbbSW1S0T7ozg
-         /urT4HY+fUMcBR9AhVG4eEvTh7vIEBdJZSnUbP64=
-Message-ID: <4efee746-f59c-fc61-7811-fc3c7ceb1e7f@ideasonboard.com>
-Date:   Wed, 30 Aug 2023 12:52:21 +0530
+        Wed, 30 Aug 2023 09:53:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E02BE8;
+        Wed, 30 Aug 2023 06:53:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 35781611DD;
+        Wed, 30 Aug 2023 13:53:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74B49C433C8;
+        Wed, 30 Aug 2023 13:53:30 +0000 (UTC)
+Message-ID: <8ee883bf-f8f8-29cb-c034-13bd142fe9f8@xs4all.nl>
+Date:   Wed, 30 Aug 2023 15:53:29 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 1/2] media: i2c: imx214: Use v4l2_subdev_get_fmt()
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v5 10/10] media: v4l2: Add mem2mem helpers for DELETE_BUFS
+ ioctl
+Content-Language: en-US, nl
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
+        ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        nicolas.dufresne@collabora.com
 Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ricardo Ribalda <ribalda@kernel.org>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>
-References: <20230830045323.71768-1-umang.jain@ideasonboard.com>
- <20230830045323.71768-2-umang.jain@ideasonboard.com>
- <20230830071929.GI6477@pendragon.ideasonboard.com>
-Content-Language: en-US
-From:   Umang Jain <umang.jain@ideasonboard.com>
-In-Reply-To: <20230830071929.GI6477@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        kernel@collabora.com
+References: <20230824092133.39510-1-benjamin.gaignard@collabora.com>
+ <20230824092133.39510-11-benjamin.gaignard@collabora.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20230824092133.39510-11-benjamin.gaignard@collabora.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Laurent,
+On 24/08/2023 11:21, Benjamin Gaignard wrote:
+> Create v4l2-mem2mem helpers for VIDIOC_DELETE_BUFS ioctl.
+> 
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> ---
+>  .../media/platform/verisilicon/hantro_v4l2.c  |  1 +
+>  drivers/media/test-drivers/vim2m.c            |  1 +
+>  drivers/media/v4l2-core/v4l2-mem2mem.c        | 20 +++++++++++++++++++
+>  include/media/v4l2-mem2mem.h                  | 12 +++++++++++
+>  4 files changed, 34 insertions(+)
+> 
+> diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
+> index 27a1e77cca38..0fd1c2fc78c8 100644
+> --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
+> +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
+> @@ -756,6 +756,7 @@ const struct v4l2_ioctl_ops hantro_ioctl_ops = {
+>  	.vidioc_dqbuf = v4l2_m2m_ioctl_dqbuf,
+>  	.vidioc_prepare_buf = v4l2_m2m_ioctl_prepare_buf,
+>  	.vidioc_create_bufs = v4l2_m2m_ioctl_create_bufs,
+> +	.vidioc_delete_bufs = v4l2_m2m_ioctl_delete_bufs,
+>  	.vidioc_expbuf = v4l2_m2m_ioctl_expbuf,
+>  
+>  	.vidioc_subscribe_event = v4l2_ctrl_subscribe_event,
+> diff --git a/drivers/media/test-drivers/vim2m.c b/drivers/media/test-drivers/vim2m.c
+> index 3e3b424b4860..3014b8ee13d0 100644
+> --- a/drivers/media/test-drivers/vim2m.c
+> +++ b/drivers/media/test-drivers/vim2m.c
+> @@ -960,6 +960,7 @@ static const struct v4l2_ioctl_ops vim2m_ioctl_ops = {
+>  	.vidioc_dqbuf		= v4l2_m2m_ioctl_dqbuf,
+>  	.vidioc_prepare_buf	= v4l2_m2m_ioctl_prepare_buf,
+>  	.vidioc_create_bufs	= v4l2_m2m_ioctl_create_bufs,
+> +	.vidioc_delete_buf	= v4l2_m2m_ioctl_delete_buf,
 
-On 8/30/23 12:49 PM, Laurent Pinchart wrote:
-> On Wed, Aug 30, 2023 at 10:23:22AM +0530, Umang Jain wrote:
->> The imx214 driver uses the subdev active state, there's no
-> Does it ? I don't see a call to v4l2_subdev_init_finalize(), and the
-> imx214 struct has fmt and crop fields in which it stores the active
-> format.
+I suspect you didn't enable vim2m in your kernel config, since this
+should be:
 
-Yes, It doesn't. Got confused with one of the pad ops (.init_cfg) which 
-led me thinking this driver uses active state, whereas I should have 
-checked v4l2_subdev_init_finalize()
+	.vidioc_delete_bufs = v4l2_m2m_ioctl_delete_bufs,
 
-Apologies for the noise.
+>  	.vidioc_expbuf		= v4l2_m2m_ioctl_expbuf,
+>  
+>  	.vidioc_streamon	= v4l2_m2m_ioctl_streamon,
+> diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
+> index 0cc30397fbad..d1d59943680f 100644
+> --- a/drivers/media/v4l2-core/v4l2-mem2mem.c
+> +++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
+> @@ -831,6 +831,17 @@ int v4l2_m2m_prepare_buf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+>  }
+>  EXPORT_SYMBOL_GPL(v4l2_m2m_prepare_buf);
+>  
+> +int v4l2_m2m_delete_bufs(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+> +			 struct v4l2_delete_buffers *d)
+> +{
+> +	struct vb2_queue *vq;
+> +
+> +	vq = v4l2_m2m_get_vq(m2m_ctx, d->type);
+> +
+> +	return vb2_delete_bufs(vq, d);
+> +}
+> +EXPORT_SYMBOL_GPL(v4l2_m2m_delete_bufs);
+> +
+>  int v4l2_m2m_create_bufs(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+>  			 struct v4l2_create_buffers *create)
+>  {
+> @@ -1377,6 +1388,15 @@ int v4l2_m2m_ioctl_create_bufs(struct file *file, void *priv,
+>  }
+>  EXPORT_SYMBOL_GPL(v4l2_m2m_ioctl_create_bufs);
+>  
+> +int v4l2_m2m_ioctl_delete_bufs(struct file *file, void *priv,
+> +			       struct v4l2_delete_buffers *d)
+> +{
+> +	struct v4l2_fh *fh = file->private_data;
+> +
+> +	return v4l2_m2m_delete_bufs(file, fh->m2m_ctx, d);
+> +}
+> +EXPORT_SYMBOL_GPL(v4l2_m2m_ioctl_delete_bufs);
+> +
+>  int v4l2_m2m_ioctl_querybuf(struct file *file, void *priv,
+>  				struct v4l2_buffer *buf)
+>  {
+> diff --git a/include/media/v4l2-mem2mem.h b/include/media/v4l2-mem2mem.h
+> index d6c8eb2b5201..161f85c42dc8 100644
+> --- a/include/media/v4l2-mem2mem.h
+> +++ b/include/media/v4l2-mem2mem.h
+> @@ -381,6 +381,16 @@ int v4l2_m2m_dqbuf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+>  int v4l2_m2m_prepare_buf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+>  			 struct v4l2_buffer *buf);
+>  
+> +/**
+> + * v4l2_m2m_delete_bufs() - delete buffers from the queue
+> + *
+> + * @file: pointer to struct &file
+> + * @m2m_ctx: m2m context assigned to the instance given by struct &v4l2_m2m_ctx
+> + * @d: pointer to struct &v4l2_delete_buffers
+> + */
+> +int v4l2_m2m_delete_bufs(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+> +			 struct v4l2_delete_buffers *d);
+> +
+>  /**
+>   * v4l2_m2m_create_bufs() - create a source or destination buffer, depending
+>   * on the type
+> @@ -860,6 +870,8 @@ int v4l2_m2m_ioctl_reqbufs(struct file *file, void *priv,
+>  				struct v4l2_requestbuffers *rb);
+>  int v4l2_m2m_ioctl_create_bufs(struct file *file, void *fh,
+>  				struct v4l2_create_buffers *create);
+> +int v4l2_m2m_ioctl_delete_bufs(struct file *file, void *priv,
+> +			       struct v4l2_delete_buffers *d);
+>  int v4l2_m2m_ioctl_querybuf(struct file *file, void *fh,
+>  				struct v4l2_buffer *buf);
+>  int v4l2_m2m_ioctl_expbuf(struct file *file, void *fh,
 
-This patch should be discarded.
->
->> need to implement the .get_fmt() operation manually. Use the
->> v4l2_subdev_get_fmt() helper instead.
->>
->> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
->> ---
->>   drivers/media/i2c/imx214.c | 17 +----------------
->>   1 file changed, 1 insertion(+), 16 deletions(-)
->>
->> diff --git a/drivers/media/i2c/imx214.c b/drivers/media/i2c/imx214.c
->> index 2f9c8582f940..d8bdc52f552a 100644
->> --- a/drivers/media/i2c/imx214.c
->> +++ b/drivers/media/i2c/imx214.c
->> @@ -548,21 +548,6 @@ __imx214_get_pad_format(struct imx214 *imx214,
->>   	}
->>   }
->>   
->> -static int imx214_get_format(struct v4l2_subdev *sd,
->> -			     struct v4l2_subdev_state *sd_state,
->> -			     struct v4l2_subdev_format *format)
->> -{
->> -	struct imx214 *imx214 = to_imx214(sd);
->> -
->> -	mutex_lock(&imx214->mutex);
->> -	format->format = *__imx214_get_pad_format(imx214, sd_state,
->> -						  format->pad,
->> -						  format->which);
->> -	mutex_unlock(&imx214->mutex);
->> -
->> -	return 0;
->> -}
->> -
->>   static struct v4l2_rect *
->>   __imx214_get_pad_crop(struct imx214 *imx214,
->>   		      struct v4l2_subdev_state *sd_state,
->> @@ -842,7 +827,7 @@ static const struct v4l2_subdev_pad_ops imx214_subdev_pad_ops = {
->>   	.enum_mbus_code = imx214_enum_mbus_code,
->>   	.enum_frame_size = imx214_enum_frame_size,
->>   	.enum_frame_interval = imx214_enum_frame_interval,
->> -	.get_fmt = imx214_get_format,
->> +	.get_fmt = v4l2_subdev_get_fmt,
->>   	.set_fmt = imx214_set_format,
->>   	.get_selection = imx214_get_selection,
->>   	.init_cfg = imx214_entity_init_cfg,
+Regards,
 
+	Hans
