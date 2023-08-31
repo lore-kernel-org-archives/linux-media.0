@@ -2,122 +2,123 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F726C6FA8F
-	for <linux-media@archiver.kernel.org>; Wed, 30 Aug 2023 23:06:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C827EC83F14
+	for <linux-media@archiver.kernel.org>; Thu, 31 Aug 2023 00:12:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344389AbjH3XGL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Aug 2023 19:06:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34738 "EHLO
+        id S1345436AbjHaAMh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Aug 2023 20:12:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239837AbjH3XGJ (ORCPT
+        with ESMTP id S1345041AbjHaAMf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Aug 2023 19:06:09 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB8DB4;
-        Wed, 30 Aug 2023 16:05:58 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (117.145-247-81.adsl-dyn.isp.belgacom.be [81.247.145.117])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CF14F49E;
-        Wed, 30 Aug 2023 22:46:00 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1693428360;
-        bh=Bx/zpBUhhZyosNZ2b7fzwuoLB8bEbcqVVp1q3fYfrIE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NFTCe0YD8qbooPdrMYfHCtKe2HbtToC2TTMwtWHG9+Z1ZdkroT1M0NUlbGajzv2Um
-         G9kbQbxzJwEmoE6HREdpAbNP/GQSpTSFblW3dhN/a4e1ri3znK7JuEvuQms36TwE1O
-         DnyuQGmaZJY9ibQSEH3mMx/1r/IpzNeafsEukMcA=
-Date:   Wed, 30 Aug 2023 23:47:32 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     rfoss@kernel.org, todor.too@gmail.com, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, mchehab@kernel.org,
-        hverkuil-cisco@xs4all.nl, sakari.ailus@linux.intel.com,
-        andrey.konovalov@linaro.org, linux-media@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 00/10] media: qcom: camss: Bugfix series
-Message-ID: <20230830204732.GQ6477@pendragon.ideasonboard.com>
-References: <20230830151615.3012325-1-bryan.odonoghue@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230830151615.3012325-1-bryan.odonoghue@linaro.org>
+        Wed, 30 Aug 2023 20:12:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70320CD2;
+        Wed, 30 Aug 2023 17:12:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 13ABDB8212A;
+        Thu, 31 Aug 2023 00:12:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AB14C433CA;
+        Thu, 31 Aug 2023 00:12:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693440749;
+        bh=LKbULXMgbDL2vsGKUpqOR2SUqLelDscSHdr1xJHh9eY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=QmHiD/tSJMM9tTtxOzVchxvZwWdFBIKtOPcTkggQioP3qsbL+oO11ThCw5gkNOv45
+         MJMEy6vpM7dZ+WeXJmBMHlkGq60PYQdkVjTIDQjM1ZxfP3vLZaYYkX905H91MrZvIs
+         5J3e7XV56ZvF03u+9EhiIccUapNg2AWIRFYXYUKsi11s4jvS0Qbe4TFCbf/0H7ik4k
+         GocemrLAnCFYsl5MtJESdHaRp+vOnx+qVo8paU5hkQdatneqBpCszQJLQ7z0nXWKhT
+         uMfAeLr9rf6RcWUutYPQt0wf7bmWIrRR4/ZdJWEnTqoj/7FG/7SmBsKQMpA34AsNZK
+         C/AwNYWmtU9xw==
+Date:   Thu, 31 Aug 2023 09:12:23 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Ross Zwisler <zwisler@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Ross Zwisler <zwisler@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-media@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: Re: [PATCH] visl: use canonical ftrace path
+Message-Id: <20230831091223.40252af58605862f9ef5726b@kernel.org>
+In-Reply-To: <20230829204600.3210276-2-zwisler@kernel.org>
+References: <20230829204600.3210276-2-zwisler@kernel.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Bryan,
+On Tue, 29 Aug 2023 14:46:01 -0600
+Ross Zwisler <zwisler@kernel.org> wrote:
 
-I wanted to let you know that I will likely not be able to review this
-v3 in a timely manner. v2 was quite fine overall, I trust that you've
-taken my review comments into account in this new version. Maybe someone
-else could give it another look, in order to get it merged in v6.7 ?
+> From: Ross Zwisler <zwisler@google.com>
+> 
+> The canonical location for the tracefs filesystem is at /sys/kernel/tracing.
+> 
+> But, from Documentation/trace/ftrace.rst:
+> 
+>   Before 4.1, all ftrace tracing control files were within the debugfs
+>   file system, which is typically located at /sys/kernel/debug/tracing.
+>   For backward compatibility, when mounting the debugfs file system,
+>   the tracefs file system will be automatically mounted at:
+> 
+>   /sys/kernel/debug/tracing
+> 
+> Update the visl decoder driver documentation to use this tracefs path.
+> 
+> Signed-off-by: Ross Zwisler <zwisler@google.com>
 
-On Wed, Aug 30, 2023 at 04:16:05PM +0100, Bryan O'Donoghue wrote:
-> V3:
-> - Adds Reviewed-by where indicated - Laurent
-> - Adds a new patch for genpd cleanup. TBH I completely missed this so thanks ! - Laurent
-> - "media: qcom: camss: Fix V4L2 async notifier error path" stays the same fixes spalt in -next
->   Fixes: 51397a4ec75d ("media: qcom: Initialise V4L2 async notifier later")
-> - I like the suggesting of using a common fix for vfe-17x and vfe-480 however, I believe
->   we need to support multiple write-master/RDI => VCs in 17x which currently we only do
->   in vfe-480 so sharing the code between the two here right now, is	n't possible.
-> - Included other suggestions on vfe-17x and vfe-480 - Laurent
-> - I didn't change the val |= 1 << CSI2_RX_CFG1_VC_MODE to BIT(2)
->   The reason for that is all of the code uses this odd bit-shifting and I'd rather do
->   the conversion from shifting to BIT(x) as a distinct series instead of piecemeal - bod
+Looks good to me.
+
+Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+Thanks!
+
+> ---
+>  Documentation/admin-guide/media/visl.rst | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> V2:
-> - Amends commit log for TPG fix to cover dropping of fixed
->   VC when setting up a TPG - Konrad
+> diff --git a/Documentation/admin-guide/media/visl.rst b/Documentation/admin-guide/media/visl.rst
+> index 7d2dc78341c9..4328c6c72d30 100644
+> --- a/Documentation/admin-guide/media/visl.rst
+> +++ b/Documentation/admin-guide/media/visl.rst
+> @@ -78,7 +78,7 @@ The trace events are defined on a per-codec basis, e.g.:
+>  
+>  .. code-block:: bash
+>  
+> -        $ ls /sys/kernel/debug/tracing/events/ | grep visl
+> +        $ ls /sys/kernel/tracing/events/ | grep visl
+>          visl_fwht_controls
+>          visl_h264_controls
+>          visl_hevc_controls
+> @@ -90,13 +90,13 @@ For example, in order to dump HEVC SPS data:
+>  
+>  .. code-block:: bash
+>  
+> -        $ echo 1 >  /sys/kernel/debug/tracing/events/visl_hevc_controls/v4l2_ctrl_hevc_sps/enable
+> +        $ echo 1 >  /sys/kernel/tracing/events/visl_hevc_controls/v4l2_ctrl_hevc_sps/enable
+>  
+>  The SPS data will be dumped to the trace buffer, i.e.:
+>  
+>  .. code-block:: bash
+>  
+> -        $ cat /sys/kernel/debug/tracing/trace
+> +        $ cat /sys/kernel/tracing/trace
+>          video_parameter_set_id 0
+>          seq_parameter_set_id 0
+>          pic_width_in_luma_samples 1920
+> -- 
+> 2.42.0.rc2.253.gd59a3bf2b4-goog
 > 
-> - Leaves GENMASK etc out. I'm happy to do a "make it pretty"
->   series later on. - bod
-> 
-> Link: https://git.codelinaro.org/bryan.odonoghue/kernel/-/commits/Bugfix-series-v2?ref_type=tags
-> 
-> V1:
-> - Drops dt_id = vc * 4 in favour of a patch in a later series - Hans
->   Link: https://git.codelinaro.org/bryan.odonoghue/kernel/-/commit/d4c382c5d6ee153b410a01e172b3e811011d0b14
-> - Adds Konrad's Acked-by as indicated
-> 
-> V0:
-> This series covers a number of Fixes: all of which are for application to
-> stable as well as -next with the exception of the second patch which is a
-> fix for a SHA that is still in -next.
-> 
-> Link: https://git.codelinaro.org/bryan.odonoghue/kernel/-/tree/linux-next-23-08-07-db410c-rb3-camss-dts-v3
-> 
-> This series is part of a larger set of fixes, improvements developed/found
-> when adding a new SoC.
-> 
-> Link: https://git.codelinaro.org/bryan.odonoghue/kernel/-/tree/lenovo-x13s-v6.5-rc4-x13s-camss-patches
-> 
-> First pass on that larger series is to get all of the current Fixes: in the
-> branch out.
-> 
-> Andrey Konovalov (1):
->   media: qcom: camss: Fix csid-gen2 for test pattern generator
-> 
-> Bryan O'Donoghue (9):
->   media: qcom: camss: Fix pm_domain_on sequence in probe
->   media: qcom: camss: Fix V4L2 async notifier error path
->   media: qcom: camss: Fix genpd cleanup
->   media: qcom: camss: Fix vfe_get() error jump
->   media: qcom: camss: Fix VFE-17x vfe_disable_output()
->   media: qcom: camss: Fix VFE-480 vfe_disable_output()
->   media: qcom: camss: Fix missing vfe_lite clocks check
->   media: qcom: camss: Fix invalid clock enable bit disjunction
->   media: qcom: camss: Fix set CSI2_RX_CFG1_VC_MODE when VC is greater
->     than 3
-> 
->  .../platform/qcom/camss/camss-csid-gen2.c     | 11 ++--
->  .../qcom/camss/camss-csiphy-3ph-1-0.c         |  2 +-
->  .../media/platform/qcom/camss/camss-vfe-170.c | 22 +-------
->  .../media/platform/qcom/camss/camss-vfe-480.c | 22 +-------
->  drivers/media/platform/qcom/camss/camss-vfe.c |  5 +-
->  drivers/media/platform/qcom/camss/camss.c     | 55 +++++++++++--------
->  6 files changed, 46 insertions(+), 71 deletions(-)
+
 
 -- 
-Regards,
-
-Laurent Pinchart
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
