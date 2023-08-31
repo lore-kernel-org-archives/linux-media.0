@@ -2,61 +2,81 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 54945C83F01
-	for <linux-media@archiver.kernel.org>; Thu, 31 Aug 2023 13:57:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D30EC83F32
+	for <linux-media@archiver.kernel.org>; Thu, 31 Aug 2023 13:57:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238570AbjHaN5m (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 31 Aug 2023 09:57:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55764 "EHLO
+        id S239660AbjHaN5o (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 31 Aug 2023 09:57:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235410AbjHaN5l (ORCPT
+        with ESMTP id S235410AbjHaN5o (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 31 Aug 2023 09:57:41 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894351A4
-        for <linux-media@vger.kernel.org>; Thu, 31 Aug 2023 06:57:38 -0700 (PDT)
+        Thu, 31 Aug 2023 09:57:44 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB57A91
+        for <linux-media@vger.kernel.org>; Thu, 31 Aug 2023 06:57:41 -0700 (PDT)
 Received: from pendragon.ideasonboard.com (117.145-247-81.adsl-dyn.isp.belgacom.be [81.247.145.117])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B5A552D8;
-        Thu, 31 Aug 2023 15:56:13 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4A33516C4;
+        Thu, 31 Aug 2023 15:56:16 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1693490173;
-        bh=870s9uBYQPZ6K56u/Q4tdyenFpmyld6tbBZEoOxOxH8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=gL1fljpkqeNoyhkYyXde1bs0VmuY6IdtA+rQ4UVmVIZc46pLbKOzSQeFY1pblu/Wu
-         vkV1SypnIBZ67bKkIMtcR007uTCEUQYk77X6Gi7+dPZgL/L15Fdt85K7GVxHn7i1oM
-         FGu6VZXkaPxPPjWDXe2hdIvkVzOjuFYFI4bFDWY8=
+        s=mail; t=1693490176;
+        bh=80cYYpa00p/3jFalTmvze9DMpSpwyMhSaZrYGGL6j3o=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=pGVrE+nD+obQNJYXRkn20nsK4kuZWwr6CzbURmdfAT1sMmWJcL7WvUlYK9aCOHBiO
+         psarARzDBymyS+zLqZptLlZy/Ew6lGtuipydpIyyNvOk421zAsCyyyu7cZv4u+QnIp
+         s+Z3kI8H6tOhryiGBtohgqIwbZIwqgwBamrWaCWo=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
         Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
         Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: [PATCH v2 0/3] media: i2c: imx219: Miscellaneous fixes
-Date:   Thu, 31 Aug 2023 16:57:44 +0300
-Message-ID: <20230831135747.23148-1-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 3/3] media: i2c: imx219: Perform a full mode set unconditionally
+Date:   Thu, 31 Aug 2023 16:57:47 +0300
+Message-ID: <20230831135747.23148-4-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230831135747.23148-1-laurent.pinchart@ideasonboard.com>
+References: <20230831135747.23148-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+The .set_fmt() handler tries to avoid updating the sensor configuration
+when the mode hasn't changed. It does so by comparing both the mode and
+the media bus code. While the latter correctly uses the media bus code
+stored in the subdev state, the former compares the mode being set with
+the active mode, regardless of whether .set_fmt() is called for the
+ACTIVE or TRY format. This can lead to .set_fmt() returning early when
+operating on TRY formats.
 
-This small series fixes three issues introduced by the "[PATCH v2 0/7]
-media: i2c: imx219: Use subdev active state" series, merged in the stage
-tree and scheduled for upstream merge in v6.6. Please see individual
-patches for details.
+This could be fixed by replacing the mode comparison with width and
+height comparisons, using the frame size stored in the subdev state.
+However, the optimization that avoids updates to the sensor
+configuration is not very useful, and is not commonly found in sensor
+drivers. To improve consistency across sensor drivers, it is better, in
+addition to being easier, to simply drop it. Do so.
 
-Laurent Pinchart (3):
-  media: i2c: imx219: Fix a typo referring to a wrong variable
-  media: i2c: imx219: Fix crop rectangle setting when changing format
-  media: i2c: imx219: Perform a full mode set unconditionally
+Fixes: e8a5b1df000e ("media: i2c: imx219: Use subdev active state")
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ drivers/media/i2c/imx219.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
- drivers/media/i2c/imx219.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
-
-
-base-commit: 4c420b729238696d06d39f31fc85a287629a0304
+diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
+index f19c828b6943..ec53abe2e84e 100644
+--- a/drivers/media/i2c/imx219.c
++++ b/drivers/media/i2c/imx219.c
+@@ -762,9 +762,6 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
+ 	format = v4l2_subdev_get_pad_format(sd, sd_state, 0);
+ 	crop = v4l2_subdev_get_pad_crop(sd, sd_state, 0);
+ 
+-	if (imx219->mode == mode && format->code == fmt->format.code)
+-		return 0;
+-
+ 	*format = fmt->format;
+ 	*crop = mode->crop;
+ 
 -- 
 Regards,
 
