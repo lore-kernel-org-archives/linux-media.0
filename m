@@ -2,35 +2,35 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B267CA0FE6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 991AACA0FEE
 	for <linux-media@archiver.kernel.org>; Fri,  1 Sep 2023 12:44:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349516AbjIAMoe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 1 Sep 2023 08:44:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
+        id S1349520AbjIAMof (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 1 Sep 2023 08:44:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242569AbjIAMoc (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 1 Sep 2023 08:44:32 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15C610E0;
-        Fri,  1 Sep 2023 05:44:27 -0700 (PDT)
+        with ESMTP id S1345967AbjIAMod (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 1 Sep 2023 08:44:33 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50AD10EB;
+        Fri,  1 Sep 2023 05:44:28 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:4d01:31d2:de6b:d217])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 17EFA66072B3;
-        Fri,  1 Sep 2023 13:44:26 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1F85866072B7;
+        Fri,  1 Sep 2023 13:44:27 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1693572266;
-        bh=bDxoCVrgkkslUTC3/A4sXjht13gHLhW1pnMTtL9oD5Q=;
+        s=mail; t=1693572267;
+        bh=swS7yYiqBxggjIra2XX2pXDY4PPq3f683TK0rKa6DhQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N1QlWBvHR2MD395YvuL9t72sZWsJParz0AIIHK+NmrVCqENkLLW0zZ5wOeT2nB/Vp
-         3fRVSVn4QVZpvmeHg7ffa2kJYXt6MDNsPwypZsfwLfjU5bFCMgIlAONJYG+sdy19CX
-         m8aHWSIxlmQWRCI9220tyhywiiPUKCwBIkVHHCbtm4s+dKGvXl+GedoKrfW1U2RMKI
-         PJZJ6avNy1EBi21iqqQ/s/IhPM4dBfeqegT1OMr9xp8FpbMirIAIk5kxtDwa3ucW1L
-         kzj+XfP99NBKKKNgVz335ZwBF+pEaU+gWbFn5ZJrk14fYJ98kWaxj3GfgtbdGTJT6y
-         cHhrwK8Qvx1mQ==
+        b=XCA1Oaz5DjS6kBeRp5mhjD9JZ5zaUevWlkLivlCVo4hTv4mvRw4HQM46Ph0vN14jo
+         5LFBuHbl0vvg+WoFcs1iKwpdywnKoBTWrVsM5uFZtMfuypN9FduTJBKSnfQM5cxkTe
+         4mwQcJW95/ZIM/qP5NLqCQsej+xEfc/9P8v8cJ41Hlm0HH9HIWXDm67rfknoIC3cq/
+         8NzkJDiEj/jbTm5xxsOTyC9+UL1VejMyMLW67z76QUjT09zFdUGJmL2Q22xp0Z+trj
+         6PFgD1gcCyUvFyo3tg+Niy27rcZBvQdRdoDSUhZuTBEI9cD5yMsSEHJKyg1S2nmVpg
+         VDGga3RSJ+qIQ==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -42,9 +42,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v6 02/18] media: videobuf2: Stop spamming kernel log with all queue counter
-Date:   Fri,  1 Sep 2023 14:43:58 +0200
-Message-Id: <20230901124414.48497-3-benjamin.gaignard@collabora.com>
+Subject: [PATCH v6 04/18] media: amphion: Use vb2_get_buffer() instead of directly access to buffers array
+Date:   Fri,  1 Sep 2023 14:44:00 +0200
+Message-Id: <20230901124414.48497-5-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230901124414.48497-1-benjamin.gaignard@collabora.com>
 References: <20230901124414.48497-1-benjamin.gaignard@collabora.com>
@@ -54,101 +54,63 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Only report unbalanced queue counters do avoid spamming kernel log
-with useless information.
+Use vb2_get_buffer() instead of directly access to vb2_buffer buffer array.
+This could allow to change the type bufs[] field of vb2_buffer structure if
+needed.
+After each call to vb2_get_buffer() we need to be sure that we get
+a valid pointer so check the return value of all of them.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- .../media/common/videobuf2/videobuf2-core.c   | 69 +++++++++++--------
- 1 file changed, 41 insertions(+), 28 deletions(-)
+ drivers/media/platform/amphion/vpu_dbg.c | 22 ++++++++++++++++++----
+ 1 file changed, 18 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
-index cf3b9f5b69b7..85e561e46899 100644
---- a/drivers/media/common/videobuf2/videobuf2-core.c
-+++ b/drivers/media/common/videobuf2/videobuf2-core.c
-@@ -537,16 +537,18 @@ static void __vb2_queue_free(struct vb2_queue *q, unsigned int buffers)
- 				  q->cnt_prepare_streaming != q->cnt_unprepare_streaming ||
- 				  q->cnt_wait_prepare != q->cnt_wait_finish;
+diff --git a/drivers/media/platform/amphion/vpu_dbg.c b/drivers/media/platform/amphion/vpu_dbg.c
+index 982c2c777484..a462d6fe4ea9 100644
+--- a/drivers/media/platform/amphion/vpu_dbg.c
++++ b/drivers/media/platform/amphion/vpu_dbg.c
+@@ -140,11 +140,18 @@ static int vpu_dbg_instance(struct seq_file *s, void *data)
  
--		if (unbalanced || debug) {
--			pr_info("counters for queue %p:%s\n", q,
--				unbalanced ? " UNBALANCED!" : "");
--			pr_info("     setup: %u start_streaming: %u stop_streaming: %u\n",
--				q->cnt_queue_setup, q->cnt_start_streaming,
--				q->cnt_stop_streaming);
--			pr_info("     prepare_streaming: %u unprepare_streaming: %u\n",
--				q->cnt_prepare_streaming, q->cnt_unprepare_streaming);
--			pr_info("     wait_prepare: %u wait_finish: %u\n",
--				q->cnt_wait_prepare, q->cnt_wait_finish);
-+		if (unbalanced) {
-+			pr_info("unbalanced counters for queue %p\n", q);
-+			if (q->cnt_start_streaming != q->cnt_stop_streaming)
-+				pr_info("     setup: %u start_streaming: %u stop_streaming: %u\n",
-+					q->cnt_queue_setup, q->cnt_start_streaming,
-+					q->cnt_stop_streaming);
-+			if (q->cnt_prepare_streaming != q->cnt_unprepare_streaming)
-+				pr_info("     prepare_streaming: %u unprepare_streaming: %u\n",
-+					q->cnt_prepare_streaming, q->cnt_unprepare_streaming);
-+			if (q->cnt_wait_prepare != q->cnt_wait_finish)
-+				pr_info("     wait_prepare: %u wait_finish: %u\n",
-+					q->cnt_wait_prepare, q->cnt_wait_finish);
- 		}
- 		q->cnt_queue_setup = 0;
- 		q->cnt_wait_prepare = 0;
-@@ -567,24 +569,35 @@ static void __vb2_queue_free(struct vb2_queue *q, unsigned int buffers)
- 				  vb->cnt_buf_prepare != vb->cnt_buf_finish ||
- 				  vb->cnt_buf_init != vb->cnt_buf_cleanup;
+ 	vq = v4l2_m2m_get_src_vq(inst->fh.m2m_ctx);
+ 	for (i = 0; i < vq->num_buffers; i++) {
+-		struct vb2_buffer *vb = vq->bufs[i];
+-		struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++		struct vb2_buffer *vb;
++		struct vb2_v4l2_buffer *vbuf;
++
++		vb = vb2_get_buffer(vq, i);
++		if (!vb)
++			continue;
  
--		if (unbalanced || debug) {
--			pr_info("   counters for queue %p, buffer %d:%s\n",
--				q, buffer, unbalanced ? " UNBALANCED!" : "");
--			pr_info("     buf_init: %u buf_cleanup: %u buf_prepare: %u buf_finish: %u\n",
--				vb->cnt_buf_init, vb->cnt_buf_cleanup,
--				vb->cnt_buf_prepare, vb->cnt_buf_finish);
--			pr_info("     buf_out_validate: %u buf_queue: %u buf_done: %u buf_request_complete: %u\n",
--				vb->cnt_buf_out_validate, vb->cnt_buf_queue,
--				vb->cnt_buf_done, vb->cnt_buf_request_complete);
--			pr_info("     alloc: %u put: %u prepare: %u finish: %u mmap: %u\n",
--				vb->cnt_mem_alloc, vb->cnt_mem_put,
--				vb->cnt_mem_prepare, vb->cnt_mem_finish,
--				vb->cnt_mem_mmap);
--			pr_info("     get_userptr: %u put_userptr: %u\n",
--				vb->cnt_mem_get_userptr, vb->cnt_mem_put_userptr);
--			pr_info("     attach_dmabuf: %u detach_dmabuf: %u map_dmabuf: %u unmap_dmabuf: %u\n",
--				vb->cnt_mem_attach_dmabuf, vb->cnt_mem_detach_dmabuf,
--				vb->cnt_mem_map_dmabuf, vb->cnt_mem_unmap_dmabuf);
-+		if (unbalanced) {
-+			pr_info("unbalanced counters for queue %p, buffer %d\n",
-+				q, buffer);
-+			if (vb->cnt_buf_init != vb->cnt_buf_cleanup)
-+				pr_info("     buf_init: %u buf_cleanup: %u\n",
-+					vb->cnt_buf_init, vb->cnt_buf_cleanup);
-+			if (vb->cnt_buf_prepare != vb->cnt_buf_finish)
-+				pr_info("     buf_prepare: %u buf_finish: %u\n",
-+					vb->cnt_buf_prepare, vb->cnt_buf_finish);
-+			if (vb->cnt_buf_queue != vb->cnt_buf_done)
-+				pr_info("     buf_out_validate: %u buf_queue: %u buf_done: %u buf_request_complete: %u\n",
-+					vb->cnt_buf_out_validate, vb->cnt_buf_queue,
-+					vb->cnt_buf_done, vb->cnt_buf_request_complete);
-+			if (vb->cnt_mem_alloc != vb->cnt_mem_put)
-+				pr_info("     alloc: %u put: %u\n",
-+					vb->cnt_mem_alloc, vb->cnt_mem_put);
-+			if (vb->cnt_mem_prepare != vb->cnt_mem_finish)
-+				pr_info("     prepare: %u finish: %u\n",
-+					vb->cnt_mem_prepare, vb->cnt_mem_finish);
-+			pr_info("     mmap: %u\n", vb->cnt_mem_mmap);
-+			if (vb->cnt_mem_get_userptr != vb->cnt_mem_put_userptr)
-+				pr_info("     get_userptr: %u put_userptr: %u\n",
-+					vb->cnt_mem_get_userptr, vb->cnt_mem_put_userptr);
-+			if (vb->cnt_mem_attach_dmabuf != vb->cnt_mem_detach_dmabuf)
-+				pr_info("     attach_dmabuf: %u detach_dmabuf: %u\n",
-+					vb->cnt_mem_attach_dmabuf, vb->cnt_mem_detach_dmabuf);
-+			if (vb->cnt_mem_map_dmabuf != vb->cnt_mem_unmap_dmabuf)
-+				pr_info("     map_dmabuf: %u unmap_dmabuf: %u\n",
-+					vb->cnt_mem_map_dmabuf, vb->cnt_mem_unmap_dmabuf);
- 			pr_info("     get_dmabuf: %u num_users: %u vaddr: %u cookie: %u\n",
- 				vb->cnt_mem_get_dmabuf,
- 				vb->cnt_mem_num_users,
+ 		if (vb->state == VB2_BUF_STATE_DEQUEUED)
+ 			continue;
++
++		vbuf = to_vb2_v4l2_buffer(vb);
++
+ 		num = scnprintf(str, sizeof(str),
+ 				"output [%2d] state = %10s, %8s\n",
+ 				i, vb2_stat_name[vb->state],
+@@ -155,11 +162,18 @@ static int vpu_dbg_instance(struct seq_file *s, void *data)
+ 
+ 	vq = v4l2_m2m_get_dst_vq(inst->fh.m2m_ctx);
+ 	for (i = 0; i < vq->num_buffers; i++) {
+-		struct vb2_buffer *vb = vq->bufs[i];
+-		struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++		struct vb2_buffer *vb;
++		struct vb2_v4l2_buffer *vbuf;
++
++		vb = vb2_get_buffer(vq, i);
++		if (!vb)
++			continue;
+ 
+ 		if (vb->state == VB2_BUF_STATE_DEQUEUED)
+ 			continue;
++
++		vbuf = to_vb2_v4l2_buffer(vb);
++
+ 		num = scnprintf(str, sizeof(str),
+ 				"capture[%2d] state = %10s, %8s\n",
+ 				i, vb2_stat_name[vb->state],
 -- 
 2.39.2
 
