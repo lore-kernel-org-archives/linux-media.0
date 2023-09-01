@@ -2,115 +2,89 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23E5ECA0FEC
-	for <linux-media@archiver.kernel.org>; Fri,  1 Sep 2023 12:44:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20493CA0FE5
+	for <linux-media@archiver.kernel.org>; Fri,  1 Sep 2023 14:19:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240535AbjIAMo6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 1 Sep 2023 08:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44760 "EHLO
+        id S1349937AbjIAOTf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 1 Sep 2023 10:19:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349538AbjIAMoi (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 1 Sep 2023 08:44:38 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301DE10EB;
-        Fri,  1 Sep 2023 05:44:33 -0700 (PDT)
-Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:4d01:31d2:de6b:d217])
+        with ESMTP id S231482AbjIAOTe (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 1 Sep 2023 10:19:34 -0400
+Received: from gofer.mess.org (gofer.mess.org [88.97.38.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC9C10FC
+        for <linux-media@vger.kernel.org>; Fri,  1 Sep 2023 07:19:25 -0700 (PDT)
+Received: by gofer.mess.org (Postfix, from userid 501)
+        id 93DF9100051; Fri,  1 Sep 2023 15:19:23 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
+        t=1693577963; bh=1+AS8VgTF0D8Fb2qH/JEjjvHZ/Tb2Ldqs3q8XHRnqGs=;
+        h=From:To:Subject:Date:From;
+        b=odpbeRl9r14O3JnZZmgROHdm/7Ov9KyrJBXTvFgXM+pFHCagb0rRFrkk1g3y4ijXx
+         LFAdQaMn3BJlGRfmXptw0O/eGTySfXkbjs3+k4sJtUeCOzF11z50/oVPfMJwe+tfzW
+         NXCi5XlpNiG1moAzGPzwWnWBoiH4yntFgPr3LNkdITY4q7FHB6qPRVPfCgt69NmfJS
+         qhWC2ythZJTaq6e5EbSvHEH0R/y1U96NkkYkXgBniPeFVZFf5BEiwsx0b+AZ47JwU/
+         NCg8YfTCJqsvMHrQ3qFFLLpNdM5vZZ0bq/p2mol8gbgEnG3laUD48WnCqrKhE3mEnf
+         djb2DioLZIODg==
+Received: from localhost.localdomain (bigcore.mess.org [IPv6:2a02:8011:d000:212:44e0:1480:5a2d:d8ed])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id AC7E966072E5;
-        Fri,  1 Sep 2023 13:44:31 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1693572272;
-        bh=gAzQ/SGzIm4inZNC+PXcs+p3IPzDsrNiBUGyKW1mkfg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GBA7EDC7fCw0oVP2tGuPtqoWuNpESJVxXAP3Q735p2+fUfZp1Ss39L8C6fEFudlEA
-         Lcc3RoRs6YRF5Lz1EsmdZTpawibG2OLmEZUbDNgEdmIQT7x9LfQYLx3Mv61VaYDDYO
-         h7vYutpMgiQNT4EE4prKrNmuEwZvsHGXCMuhuaDcjYJGAmKWBgr53JN3/zdt2P+bxV
-         2DwmgOKMqxNpXErwY1j4hN7Y+AQjmnQw04fM9D1q8z9wQtD9+6W9N688+pYHNll8N/
-         O4+e0RrSsiEa3iedqpwv1lBfjn3Zu7m+QofU1/4Z7YXETOsRxk4pYZUJE3kzg9BLy0
-         ejlpTqHdnsYZA==
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
-        ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v6 13/18] media: verisilicon: Store chroma and motion vectors offset
-Date:   Fri,  1 Sep 2023 14:44:09 +0200
-Message-Id: <20230901124414.48497-14-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230901124414.48497-1-benjamin.gaignard@collabora.com>
-References: <20230901124414.48497-1-benjamin.gaignard@collabora.com>
+        by gofer.mess.org (Postfix) with ESMTPSA id 80E2D100051
+        for <linux-media@vger.kernel.org>; Fri,  1 Sep 2023 15:19:22 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
+        t=1693577962; bh=1+AS8VgTF0D8Fb2qH/JEjjvHZ/Tb2Ldqs3q8XHRnqGs=;
+        h=From:To:Subject:Date:From;
+        b=AAyw6SNcDih/Q7srZwaervXq6m7hymfVHmryeWboPTHFpv1uXoXYniagvVMcugpgi
+         M1cz9j0nZjh6KBuDOnGsHzeaJxrQ1Zk4ro4mw/FH04HWHGQtRIy8Ni48kzp51frHW0
+         MP8rsGDk1k6FkgRJM2XPz+K7d7oCeaSMuj73P+75KM/fqWXkuFX8QensI6v7G6vJAT
+         +u7FwqY99yEDRKdyK79wCwCxerKV0YDPgH4lYAYJYpjfS4Eo/1wJYdKVQ9bgai8CXd
+         4Hk1y9ZQxd+1LphK2i8RoS6RBUgWyATDuldYcZTyA9oHSSlf2cqZzejswkvlCahPfN
+         2IZ5lXwPzOUVg==
+From:   Sean Young <sean@mess.org>
+To:     linux-media@vger.kernel.org
+Subject: [PATCH v5 0/2] Remove ir-rx51 driver
+Date:   Fri,  1 Sep 2023 15:18:54 +0100
+Message-ID: <cover.1693577725.git.sean@mess.org>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Store computed values of chroma and motion vectors offset because
-they depends on width and height values which change if the resolution
-change.
+The ir-rx51 driver is no longer necessary, pwm-ir-tx does the same job
+and is more generic.
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
----
- drivers/media/platform/verisilicon/hantro.h            | 2 ++
- drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c | 6 ++++--
- 2 files changed, 6 insertions(+), 2 deletions(-)
+changes:
+ v5:
+  - Fix cc/to lists
+ v4:
+  - Fixed issues with pwm-ir-tx.yaml and did some more testing
 
-diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/media/platform/verisilicon/hantro.h
-index 0948b04a9f8d..6f5eb975d0e3 100644
---- a/drivers/media/platform/verisilicon/hantro.h
-+++ b/drivers/media/platform/verisilicon/hantro.h
-@@ -328,6 +328,8 @@ struct hantro_vp9_decoded_buffer_info {
- 	/* Info needed when the decoded frame serves as a reference frame. */
- 	unsigned short width;
- 	unsigned short height;
-+	size_t chroma_offset;
-+	size_t mv_offset;
- 	u32 bit_depth : 4;
- };
- 
-diff --git a/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c b/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
-index 6fc4b555517f..6db1c32fce4d 100644
---- a/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
-+++ b/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
-@@ -158,9 +158,11 @@ static void config_output(struct hantro_ctx *ctx,
- 
- 	chroma_addr = luma_addr + chroma_offset(ctx, dec_params);
- 	hantro_write_addr(ctx->dev, G2_OUT_CHROMA_ADDR, chroma_addr);
-+	dst->vp9.chroma_offset = chroma_offset(ctx, dec_params);
- 
- 	mv_addr = luma_addr + mv_offset(ctx, dec_params);
- 	hantro_write_addr(ctx->dev, G2_OUT_MV_ADDR, mv_addr);
-+	dst->vp9.mv_offset = mv_offset(ctx, dec_params);
- }
- 
- struct hantro_vp9_ref_reg {
-@@ -195,7 +197,7 @@ static void config_ref(struct hantro_ctx *ctx,
- 	luma_addr = hantro_get_dec_buf_addr(ctx, &buf->base.vb.vb2_buf);
- 	hantro_write_addr(ctx->dev, ref_reg->y_base, luma_addr);
- 
--	chroma_addr = luma_addr + chroma_offset(ctx, dec_params);
-+	chroma_addr = luma_addr + buf->vp9.chroma_offset;
- 	hantro_write_addr(ctx->dev, ref_reg->c_base, chroma_addr);
- }
- 
-@@ -238,7 +240,7 @@ static void config_ref_registers(struct hantro_ctx *ctx,
- 	config_ref(ctx, dst, &ref_regs[2], dec_params, dec_params->alt_frame_ts);
- 
- 	mv_addr = hantro_get_dec_buf_addr(ctx, &mv_ref->base.vb.vb2_buf) +
--		  mv_offset(ctx, dec_params);
-+		  mv_ref->vp9.mv_offset;
- 	hantro_write_addr(ctx->dev, G2_REF_MV_ADDR(0), mv_addr);
- 
- 	hantro_reg_write(ctx->dev, &vp9_last_sign_bias,
+ v3:
+  - Fixed issues with pwm-ir-tx.yaml
+
+ v2:
+  - Made pwm-ir-tx compatible with nokia,n900-ir rather than changing
+    the n900 devicetree
+
+
+Sean Young (2):
+  dt-bindings: media: remove nokia,n900-ir as pwm-ir-tx is compatible
+  media: rc: remove ir-rx51 in favour of generic pwm-ir-tx
+
+ .../bindings/leds/irled/pwm-ir-tx.yaml        |   5 +-
+ .../devicetree/bindings/media/nokia,n900-ir   |  20 --
+ arch/arm/configs/omap2plus_defconfig          |   1 -
+ drivers/media/rc/Kconfig                      |  10 -
+ drivers/media/rc/Makefile                     |   1 -
+ drivers/media/rc/ir-rx51.c                    | 285 ------------------
+ drivers/media/rc/pwm-ir-tx.c                  |   1 +
+ 7 files changed, 5 insertions(+), 318 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/media/nokia,n900-ir
+ delete mode 100644 drivers/media/rc/ir-rx51.c
+
 -- 
-2.39.2
+2.42.0
 
