@@ -2,210 +2,95 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42918C83F2C
-	for <linux-media@archiver.kernel.org>; Mon,  4 Sep 2023 11:46:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FA69C83F2C
+	for <linux-media@archiver.kernel.org>; Mon,  4 Sep 2023 11:55:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352846AbjIDLqr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 4 Sep 2023 07:46:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58664 "EHLO
+        id S238901AbjIDLzZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 Sep 2023 07:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233683AbjIDLqq (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Sep 2023 07:46:46 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED951B7;
-        Mon,  4 Sep 2023 04:46:42 -0700 (PDT)
-Received: from [IPV6:2a01:e0a:120:3210:382e:6df3:d37b:1eec] (unknown [IPv6:2a01:e0a:120:3210:382e:6df3:d37b:1eec])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id AFBA966071DF;
-        Mon,  4 Sep 2023 12:46:40 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1693828001;
-        bh=hQCO/xIio/kzurNq5RHTyCe1+1RPeZDWD4ArPdOFymM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=lORf1Ehz7gHlTgeKDEfjbHuFgW+yGIQ13UKius5aSk6JaTYUtDMidD40/vTQnRy+X
-         OZUn3kpBU1mQouqD5OGT2E4BSzPmxo/p1IE8BYcV8iV0nwsmfWbom3BOEZuJaTrIFG
-         SssTBe4iPUfKtME6tkzXMkXBKDDixXPYB4XpSHs58PpEIU7Vu/TqIhl43njputAg/9
-         x/OgKHvcVSGc4BXtXrvL5dCj2nKxtHAfuM7Lhgn01Cy1OUyOmxyRdZq5NqoLGmWwxE
-         R0BurJpwSNsllPMKLxw0xlwmWjUx/Xp0qMgvGtrQFaE+TsxUYCEaAi93EiCdOyRPP5
-         T++4vKqsCm94g==
-Message-ID: <319d6103-26c3-bc02-3f80-90e653c8ee37@collabora.com>
-Date:   Mon, 4 Sep 2023 13:46:38 +0200
+        with ESMTP id S230301AbjIDLzY (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Sep 2023 07:55:24 -0400
+Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB602195
+        for <linux-media@vger.kernel.org>; Mon,  4 Sep 2023 04:55:21 -0700 (PDT)
+Received: by mail-vk1-xa2a.google.com with SMTP id 71dfb90a1353d-490cd6db592so372389e0c.1
+        for <linux-media@vger.kernel.org>; Mon, 04 Sep 2023 04:55:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1693828520; x=1694433320; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sSGdH7aN8yTo6ZaPJwceLOZ7XnBN+We7swViqH33ceo=;
+        b=HYXb+TwxqR/0m5FFJXnPQCpzG/cZpdWjuY1LNPHTwznviX6HfM6jdlKrsJnNjy9cOG
+         rdC5nv3vXULJDBZ69FU6Al/dXq1E6mbiEuuEoy9eQf0cbLRrlpA/dPL8D393jxLotycC
+         dgBAbbIBJuqsnIldPXwoI8ngJkgPdN0pWEU+k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693828520; x=1694433320;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sSGdH7aN8yTo6ZaPJwceLOZ7XnBN+We7swViqH33ceo=;
+        b=B7gdhNa/rO4i/qmqrvQ3JuIyBxBK9oXohAR7VyhEuBcz3QlqjfhnaKcFj8asIfLfwo
+         UMreVpm6R93CdRpOW8VrS8Yqn8zLbulIF551aia2XXGVm2Q+YHHHpFVi9acqB1GmRYHS
+         r4K9zFCbXlOTjq0yZs0Yfw7kHdnaOaCIbcywrvq6ICxchhKQ2nm7e1fhzm6U+OjPsyXx
+         IFK1vELLJkWfL5ICRkpkHPl8qL2/9cjSVbki7ToKtKuh4L0n0eRxuATsGJFxiaZooW1t
+         1WdjPgEROuTFLgTprvF1yGt8IgNDVAvA0hpurL9vr7yiEYGQEEo2TPdI1MNyBT0koXtu
+         Cthw==
+X-Gm-Message-State: AOJu0YyTYYY5rppiig6Bb04ZsoMobx4xVBQWl8kytOxZBLgjSr4B4s5E
+        Wffkb/IxEiVkCqerHf+aIn3RSZbf6n7Ri68ZVU8=
+X-Google-Smtp-Source: AGHT+IEhUPFJg9AGKv7NVC2XBYqj51UrpDihXVicES+RPixlocNxG9QqQGbN2T1pfpMO/cE3xFSN0Q==
+X-Received: by 2002:a67:f993:0:b0:44e:8b91:5cdf with SMTP id b19-20020a67f993000000b0044e8b915cdfmr8248714vsq.3.1693828520598;
+        Mon, 04 Sep 2023 04:55:20 -0700 (PDT)
+Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com. [209.85.221.177])
+        by smtp.gmail.com with ESMTPSA id g20-20020ab01054000000b007a019cb1287sm1561522uab.3.2023.09.04.04.55.19
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Sep 2023 04:55:20 -0700 (PDT)
+Received: by mail-vk1-f177.google.com with SMTP id 71dfb90a1353d-48d11d1a251so375691e0c.3
+        for <linux-media@vger.kernel.org>; Mon, 04 Sep 2023 04:55:19 -0700 (PDT)
+X-Received: by 2002:a1f:4884:0:b0:48d:1e9:2707 with SMTP id
+ v126-20020a1f4884000000b0048d01e92707mr7816746vka.7.1693828519402; Mon, 04
+ Sep 2023 04:55:19 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH v6 11/18] media: videobuf2: Be more flexible on the number
- of queue stored buffers
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>, mchehab@kernel.org,
-        tfiga@chromium.org, m.szyprowski@samsung.com, ming.qian@nxp.com,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, nicolas.dufresne@collabora.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        kernel@collabora.com
-References: <20230901124414.48497-1-benjamin.gaignard@collabora.com>
- <20230901124414.48497-12-benjamin.gaignard@collabora.com>
- <37e5e418-c38a-b863-ffdf-72ce300cf227@xs4all.nl>
-Content-Language: en-US
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-In-Reply-To: <37e5e418-c38a-b863-ffdf-72ce300cf227@xs4all.nl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20220920-resend-hwtimestamp-v7-0-cf1d78bb8821@chromium.org> <CANiDSCtC2zOKtopkuuqJYqi6+FQ1Kav6LfMH5gGhKrnDeG7GYw@mail.gmail.com>
+In-Reply-To: <CANiDSCtC2zOKtopkuuqJYqi6+FQ1Kav6LfMH5gGhKrnDeG7GYw@mail.gmail.com>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Mon, 4 Sep 2023 13:55:07 +0200
+X-Gmail-Original-Message-ID: <CANiDSCteBUraA0UrLM-cU_GqDSWcWERJNV_xhsi3LNQZNvX5dA@mail.gmail.com>
+Message-ID: <CANiDSCteBUraA0UrLM-cU_GqDSWcWERJNV_xhsi3LNQZNvX5dA@mail.gmail.com>
+Subject: Re: [PATCH v7 0/6] uvcvideo: Fixes for hw timestamping
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        "hn.chen" <hn.chen@sunplusit.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Hi Again
 
-Le 04/09/2023 à 13:24, Hans Verkuil a écrit :
-> Hi Benjamin,
->
-> On 01/09/2023 14:44, Benjamin Gaignard wrote:
->> Add 'max_allowed_buffers' field in vb2_queue struct to let drivers decide
->> how many buffers could be stored in a queue.
->> This request 'bufs' array to be allocated at queue init time and freed
->> when releasing the queue.
->> By default VB2_MAX_FRAME remains the limit.
->>
->> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->> ---
->>   .../media/common/videobuf2/videobuf2-core.c   | 25 +++++++++++++------
->>   include/media/videobuf2-core.h                |  4 ++-
->>   2 files changed, 20 insertions(+), 9 deletions(-)
->>
-> This patch breaks v4l2-compliance. I see lots of issues when running the
-> test-media script in v4l-utils, contrib/test, among them memory leaks
-> and use-after-free.
->
-> I actually tested using virtme with the build scripts, but that in turn
-> calls the test-media script in a qemu environment, and it is at the moment
-> a bit tricky to set up, unless you run a debian 12 distro.
->
-> I will email the test logs directly to you since they are a bit large (>5000 lines).
+This has been waiting from March, and it has been already been
 
-I will try to reproduce this error on my side to fix it.
+Reviewed-by: Sergey
+and
+Tested-by: Sunplus
 
-Regards,
-Benjamin
+Is there something that I can do to help merging this patchset?
 
+Thanks!
+
+On Tue, 15 Aug 2023 at 13:26, Ricardo Ribalda <ribalda@chromium.org> wrote:
 >
-> Regards,
+> Hi Laurent
 >
-> 	Hans
+> Could you give a look to this patchset?
 >
->
->
->> diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
->> index 15b583ce0c69..dc7f6b59d237 100644
->> --- a/drivers/media/common/videobuf2/videobuf2-core.c
->> +++ b/drivers/media/common/videobuf2/videobuf2-core.c
->> @@ -411,7 +411,7 @@ static void init_buffer_cache_hints(struct vb2_queue *q, struct vb2_buffer *vb)
->>    */
->>   static bool vb2_queue_add_buffer(struct vb2_queue *q, struct vb2_buffer *vb, unsigned int index)
->>   {
->> -	if (index < VB2_MAX_FRAME && !q->bufs[index]) {
->> +	if (index < q->max_allowed_buffers && !q->bufs[index]) {
->>   		q->bufs[index] = vb;
->>   		vb->index = index;
->>   		vb->vb2_queue = q;
->> @@ -428,7 +428,7 @@ static bool vb2_queue_add_buffer(struct vb2_queue *q, struct vb2_buffer *vb, uns
->>    */
->>   static void vb2_queue_remove_buffer(struct vb2_queue *q, struct vb2_buffer *vb)
->>   {
->> -	if (vb->index < VB2_MAX_FRAME) {
->> +	if (vb->index < q->max_allowed_buffers) {
->>   		q->bufs[vb->index] = NULL;
->>   		vb->vb2_queue = NULL;
->>   	}
->> @@ -449,9 +449,9 @@ static int __vb2_queue_alloc(struct vb2_queue *q, enum vb2_memory memory,
->>   	struct vb2_buffer *vb;
->>   	int ret;
->>   
->> -	/* Ensure that q->num_buffers+num_buffers is below VB2_MAX_FRAME */
->> +	/* Ensure that q->num_buffers+num_buffers is below q->max_allowed_buffers */
->>   	num_buffers = min_t(unsigned int, num_buffers,
->> -			    VB2_MAX_FRAME - q->num_buffers);
->> +			    q->max_allowed_buffers - q->num_buffers);
->>   
->>   	for (buffer = 0; buffer < num_buffers; ++buffer) {
->>   		/* Allocate vb2 buffer structures */
->> @@ -862,9 +862,9 @@ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
->>   	/*
->>   	 * Make sure the requested values and current defaults are sane.
->>   	 */
->> -	WARN_ON(q->min_buffers_needed > VB2_MAX_FRAME);
->> +	WARN_ON(q->min_buffers_needed > q->max_allowed_buffers);
->>   	num_buffers = max_t(unsigned int, *count, q->min_buffers_needed);
->> -	num_buffers = min_t(unsigned int, num_buffers, VB2_MAX_FRAME);
->> +	num_buffers = min_t(unsigned int, num_buffers, q->max_allowed_buffers);
->>   	memset(q->alloc_devs, 0, sizeof(q->alloc_devs));
->>   	/*
->>   	 * Set this now to ensure that drivers see the correct q->memory value
->> @@ -980,7 +980,7 @@ int vb2_core_create_bufs(struct vb2_queue *q, enum vb2_memory memory,
->>   	bool no_previous_buffers = !q->num_buffers;
->>   	int ret;
->>   
->> -	if (q->num_buffers == VB2_MAX_FRAME) {
->> +	if (q->num_buffers == q->max_allowed_buffers) {
->>   		dprintk(q, 1, "maximum number of buffers already allocated\n");
->>   		return -ENOBUFS;
->>   	}
->> @@ -1009,7 +1009,7 @@ int vb2_core_create_bufs(struct vb2_queue *q, enum vb2_memory memory,
->>   			return -EINVAL;
->>   	}
->>   
->> -	num_buffers = min(*count, VB2_MAX_FRAME - q->num_buffers);
->> +	num_buffers = min(*count, q->max_allowed_buffers - q->num_buffers);
->>   
->>   	if (requested_planes && requested_sizes) {
->>   		num_planes = requested_planes;
->> @@ -2519,6 +2519,14 @@ int vb2_core_queue_init(struct vb2_queue *q)
->>   
->>   	q->memory = VB2_MEMORY_UNKNOWN;
->>   
->> +	if (!q->max_allowed_buffers)
->> +		q->max_allowed_buffers = VB2_MAX_FRAME;
->> +
->> +	/* The maximum is limited by offset cookie encoding pattern */
->> +	q->max_allowed_buffers = min_t(unsigned int, q->max_allowed_buffers, BUFFER_INDEX_MASK);
->> +
->> +	q->bufs = kcalloc(q->max_allowed_buffers, sizeof(*q->bufs), GFP_KERNEL);
->> +
->>   	if (q->buf_struct_size == 0)
->>   		q->buf_struct_size = sizeof(struct vb2_buffer);
->>   
->> @@ -2543,6 +2551,7 @@ void vb2_core_queue_release(struct vb2_queue *q)
->>   	__vb2_queue_cancel(q);
->>   	mutex_lock(&q->mmap_lock);
->>   	__vb2_queue_free(q, q->num_buffers);
->> +	kfree(q->bufs);
->>   	mutex_unlock(&q->mmap_lock);
->>   }
->>   EXPORT_SYMBOL_GPL(vb2_core_queue_release);
->> diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
->> index cd3ff1cd759d..97153c69583f 100644
->> --- a/include/media/videobuf2-core.h
->> +++ b/include/media/videobuf2-core.h
->> @@ -558,6 +558,7 @@ struct vb2_buf_ops {
->>    * @dma_dir:	DMA mapping direction.
->>    * @bufs:	videobuf2 buffer structures
->>    * @num_buffers: number of allocated/used buffers
->> + * @max_allowed_buffers: upper limit of number of allocated/used buffers
->>    * @queued_list: list of buffers currently queued from userspace
->>    * @queued_count: number of buffers queued and ready for streaming.
->>    * @owned_by_drv_count: number of buffers owned by the driver
->> @@ -619,8 +620,9 @@ struct vb2_queue {
->>   	struct mutex			mmap_lock;
->>   	unsigned int			memory;
->>   	enum dma_data_direction		dma_dir;
->> -	struct vb2_buffer		*bufs[VB2_MAX_FRAME];
->> +	struct vb2_buffer		**bufs;
->>   	unsigned int			num_buffers;
->> +	unsigned int			max_allowed_buffers;
->>   
->>   	struct list_head		queued_list;
->>   	unsigned int			queued_count;
->
+> Thanks!
+
+
+
+-- 
+Ricardo Ribalda
