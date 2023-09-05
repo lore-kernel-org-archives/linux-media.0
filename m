@@ -2,101 +2,66 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBE73CA0FFA
-	for <linux-media@archiver.kernel.org>; Tue,  5 Sep 2023 16:01:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9023ACA0FF8
+	for <linux-media@archiver.kernel.org>; Tue,  5 Sep 2023 16:01:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235032AbjIEQBo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Sep 2023 12:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52272 "EHLO
+        id S235128AbjIEQBx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Sep 2023 12:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245041AbjIEBqz (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Sep 2023 21:46:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E742CC5
-        for <linux-media@vger.kernel.org>; Mon,  4 Sep 2023 18:46:50 -0700 (PDT)
+        with ESMTP id S1353937AbjIEInK (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Sep 2023 04:43:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BDEBCCB;
+        Tue,  5 Sep 2023 01:43:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 181C8B80F52
-        for <linux-media@vger.kernel.org>; Tue,  5 Sep 2023 01:46:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A482C433C7
-        for <linux-media@vger.kernel.org>; Tue,  5 Sep 2023 01:46:47 +0000 (UTC)
-Date:   Tue, 05 Sep 2023 03:46:45 +0200
-Message-ID: <628881f1a9b2ac154f997ebd76720150.hverkuil@xs4all.nl>
-From:   "Hans Verkuil" <hverkuil-cisco@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EDCB660AFA;
+        Tue,  5 Sep 2023 08:43:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6649AC433C8;
+        Tue,  5 Sep 2023 08:43:03 +0000 (UTC)
+Message-ID: <b756b302-41bc-4e5f-f788-bf61b7f2bae4@xs4all.nl>
+Date:   Tue, 5 Sep 2023 10:43:01 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v6 17/18] media: v4l2: Add DELETE_BUFS ioctl
+Content-Language: en-US, nl
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
+        ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        nicolas.dufresne@collabora.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        kernel@collabora.com
+References: <20230901124414.48497-1-benjamin.gaignard@collabora.com>
+ <20230901124414.48497-18-benjamin.gaignard@collabora.com>
+ <814130d1-8597-d567-ddea-cb82cadea00f@xs4all.nl>
+In-Reply-To: <814130d1-8597-d567-ddea-cb82cadea00f@xs4all.nl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the architectures in the list below.
+On 05/09/2023 10:17, Hans Verkuil wrote:
 
-Results of the daily build of media_tree:
+> 
+> You need much more extensive compliance checks for this, esp. mixing
+> create_bufs and delete_bufs. And test it with the test-media test script.
 
-date:			Tue Sep  5 03:00:13 CEST 2023
-media-tree git repo:	git://linuxtv.org/hverkuil/media_tree.git
-media-tree git branch:	media_stage/master
-media-tree git hash:	4c420b729238696d06d39f31fc85a287629a0304
-v4l-utils git hash:	20b941802f76fd0ccce79a1c9ff4331503926ed7
-edid-decode git hash:	e59b8a2ffd690d6576639365a67e890d91ca443d
-gcc version:		i686-linux-gcc (GCC) 13.2.0
-sparse repo:            git://git.kernel.org/pub/scm/devel/sparse/sparse.git
-sparse version:		v0.6.4-39-gce1a6720
-smatch repo:            git://repo.or.cz/smatch.git
-smatch version:		v0.5.0-8455-g78e3bddd
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: 4ed06391466e815fd6c8197bc02ec2348d8ca735
-host hardware:		x86_64
-host os:		6.4.0-3-amd64
+This also means that you need to add patches adding delete_bufs support to
+vivid, vim2m, vimc, vicodec, visl.
 
-linux-git-powerpc64: OK
-linux-git-arm: OK
-linux-git-arm64: OK
-linux-git-i686: OK
-linux-git-x86_64: OK
-no-acpi.config: OK
-no-of.config: OK
-no-pm.config: OK
-no-pm-sleep.config: OK
-no-debug-fs.config: OK
-sparse: WARNINGS:
+That allows test-media together with v4l2-compliance to do a good job of
+regression testing this new ioctl.
 
-drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
+Regards,
 
-smatch: WARNINGS:
-
-drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
-
-COMPILE_TEST: WARNINGS: VIDEOBUF_GEN VIDEOBUF_DMA_SG VIDEOBUF_VMALLOC VIDEOBUF_DMA_CONTIG
-strcpy/strncpy/strlcpy: OK
-abi-compliance: ABI OK
-pahole: ABI OK
-utils: OK
-spec-git: OK
-kerneldoc: OK
-virtme: WARNINGS: Final Summary: 3080, Succeeded: 3080, Failed: 0, Warnings: 2
-virtme-32: WARNINGS: Final Summary: 3193, Succeeded: 3193, Failed: 0, Warnings: 2
-
-date:			Tue Sep  5 03:45:07 CEST 2023
-
-Detailed results are available here:
-
-https://hverkuil.home.xs4all.nl/logs/Tuesday.log
-
-Detailed regression test results are available here:
-
-https://hverkuil.home.xs4all.nl/logs/Tuesday-test-media.log
-https://hverkuil.home.xs4all.nl/logs/Tuesday-test-media-dmesg.log
-https://hverkuil.home.xs4all.nl/logs/Tuesday-test-media-32.log
-https://hverkuil.home.xs4all.nl/logs/Tuesday-test-media-32-dmesg.log
-
-Full logs are available here:
-
-https://hverkuil.home.xs4all.nl/logs/Tuesday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-https://hverkuil.home.xs4all.nl/spec/index.html
+	Hans
