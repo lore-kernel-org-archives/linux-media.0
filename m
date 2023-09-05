@@ -2,66 +2,157 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9023ACA0FF8
-	for <linux-media@archiver.kernel.org>; Tue,  5 Sep 2023 16:01:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AE00CA0FE2
+	for <linux-media@archiver.kernel.org>; Tue,  5 Sep 2023 16:02:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235128AbjIEQBx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Sep 2023 12:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60628 "EHLO
+        id S232866AbjIEQB4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Sep 2023 12:01:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353937AbjIEInK (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Sep 2023 04:43:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BDEBCCB;
-        Tue,  5 Sep 2023 01:43:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EDCB660AFA;
-        Tue,  5 Sep 2023 08:43:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6649AC433C8;
-        Tue,  5 Sep 2023 08:43:03 +0000 (UTC)
-Message-ID: <b756b302-41bc-4e5f-f788-bf61b7f2bae4@xs4all.nl>
-Date:   Tue, 5 Sep 2023 10:43:01 +0200
+        with ESMTP id S1354719AbjIENuP (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Sep 2023 09:50:15 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D78A9191
+        for <linux-media@vger.kernel.org>; Tue,  5 Sep 2023 06:50:11 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (ftip006315900.acc1.colindale.21cn-nte.bt.net [81.134.214.249])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9F64AAF2;
+        Tue,  5 Sep 2023 15:48:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1693921723;
+        bh=xuwVQeEDBgqPSv1v/WcwQ3SzzjktLBTCE+E9IhAyHXQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TONqdxnxJHnfr2JMlDd83lLDyTICAMac6REkcx+L+yraN29eRc5Rbird/28RZkgj/
+         Prk7wqFt+XRNTsoDGLN89iYoZkaH76wA7z8qr964ZWCLrWUSEMiwgYPtSwUKilYv0f
+         VtxTS1tnRheMizoQGztJ9UhXe1sHS5DTyquyii+I=
+Date:   Tue, 5 Sep 2023 16:50:22 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-media@vger.kernel.org, tomi.valkeinen@ideasonboard.com,
+        bingbu.cao@intel.com, hongju.wang@intel.com, hverkuil@xs4all.nl,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Dmitry Perchanov <dmitry.perchanov@intel.com>
+Subject: Re: [PATCH v3 03/10] media: mc: Add INTERNAL pad flag
+Message-ID: <20230905135022.GH11700@pendragon.ideasonboard.com>
+References: <20230808075538.3043934-1-sakari.ailus@linux.intel.com>
+ <20230808075538.3043934-4-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v6 17/18] media: v4l2: Add DELETE_BUFS ioctl
-Content-Language: en-US, nl
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
-        ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        nicolas.dufresne@collabora.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        kernel@collabora.com
-References: <20230901124414.48497-1-benjamin.gaignard@collabora.com>
- <20230901124414.48497-18-benjamin.gaignard@collabora.com>
- <814130d1-8597-d567-ddea-cb82cadea00f@xs4all.nl>
-In-Reply-To: <814130d1-8597-d567-ddea-cb82cadea00f@xs4all.nl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230808075538.3043934-4-sakari.ailus@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 05/09/2023 10:17, Hans Verkuil wrote:
+Hi Sakari,
 
+Thank you for the patch.
+
+On Tue, Aug 08, 2023 at 10:55:31AM +0300, Sakari Ailus wrote:
+> Internal source pads will be used as routing endpoints in V4L2
+> [GS]_ROUTING IOCTLs, to indicate that the stream begins in the entity.
 > 
-> You need much more extensive compliance checks for this, esp. mixing
-> create_bufs and delete_bufs. And test it with the test-media test script.
+> Also prevent creating links to pads that have been flagged as internal.
+> 
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> ---
+>  Documentation/userspace-api/media/glossary.rst             | 6 ++++++
+>  Documentation/userspace-api/media/mediactl/media-types.rst | 6 ++++++
+>  drivers/media/mc/mc-entity.c                               | 6 +++++-
+>  include/uapi/linux/media.h                                 | 1 +
+>  4 files changed, 18 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/userspace-api/media/glossary.rst b/Documentation/userspace-api/media/glossary.rst
+> index 96a360edbf3b..f7b99a4527c7 100644
+> --- a/Documentation/userspace-api/media/glossary.rst
+> +++ b/Documentation/userspace-api/media/glossary.rst
+> @@ -173,6 +173,12 @@ Glossary
+>  	An integrated circuit that integrates all components of a computer
+>  	or other electronic systems.
+>  
+> +_media-glossary-stream:
+> +    Stream
+> +	A distinct flow of data (image data or metadata) over a media pipeline
+> +	from source to sink. A source may be e.g. an image sensor and a sink
+> +	e.g. a memory buffer.
+> +
+>      V4L2 API
+>  	**V4L2 userspace API**
+>  
+> diff --git a/Documentation/userspace-api/media/mediactl/media-types.rst b/Documentation/userspace-api/media/mediactl/media-types.rst
+> index 0ffeece1e0c8..28941da27790 100644
+> --- a/Documentation/userspace-api/media/mediactl/media-types.rst
+> +++ b/Documentation/userspace-api/media/mediactl/media-types.rst
+> @@ -361,6 +361,7 @@ Types and flags used to represent the media graph elements
+>  .. _MEDIA-PAD-FL-SINK:
+>  .. _MEDIA-PAD-FL-SOURCE:
+>  .. _MEDIA-PAD-FL-MUST-CONNECT:
+> +.. _MEDIA-PAD-FL-INTERNAL:
+>  
+>  .. flat-table:: Media pad flags
+>      :header-rows:  0
+> @@ -382,6 +383,11 @@ Types and flags used to represent the media graph elements
+>  	  when this flag isn't set; the absence of the flag doesn't imply
+>  	  there is none.
+>  
+> +    *  -  ``MEDIA_PAD_FL_INTERNAL``
+> +       -  The internal flag indicates an internal pad that has no external
+> +	  connections. Such a pad shall not be connected with a link. The
+> +	  internal flag indicates that the :ref:``stream
+> +	  <media-glossary-stream>`` either starts or ends in the entity.
+>  
+>  One and only one of ``MEDIA_PAD_FL_SINK`` and ``MEDIA_PAD_FL_SOURCE``
+>  must be set for every pad.
 
-This also means that you need to add patches adding delete_bufs support to
-vivid, vim2m, vimc, vicodec, visl.
+You also need to update the definition of "pad" in
+media-controller-model.rst. That's where you should explain what an
+internal pad *is*, with enough information to make it understandable to
+people who haven't worked on this patches series :-) You'll probably
+need a couple of paragraphs, or possibly adding text below the list of
+objects.
 
-That allows test-media together with v4l2-compliance to do a good job of
-regression testing this new ioctl.
+It would be nice to fix the indentation inconsistency in that file by
+the way. I'd send a patch, but it will conflict, it would be easier if
+you could handle it.
 
+> diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
+> index 4991281dcccc..03a9e0b8ebab 100644
+> --- a/drivers/media/mc/mc-entity.c
+> +++ b/drivers/media/mc/mc-entity.c
+> @@ -1071,7 +1071,8 @@ int media_get_pad_index(struct media_entity *entity, u32 pad_type,
+>  
+>  	for (i = 0; i < entity->num_pads; i++) {
+>  		if ((entity->pads[i].flags &
+> -		     (MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_SOURCE)) != pad_type)
+> +		     (MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_SOURCE |
+> +		      MEDIA_PAD_FL_INTERNAL)) != pad_type)
+>  			continue;
+>  
+>  		if (entity->pads[i].sig_type == sig_type)
+> @@ -1094,6 +1095,9 @@ media_create_pad_link(struct media_entity *source, u16 source_pad,
+>  		return -EINVAL;
+>  	if (WARN_ON(!(source->pads[source_pad].flags & MEDIA_PAD_FL_SOURCE)))
+>  		return -EINVAL;
+> +	if (WARN_ON(source->pads[source_pad].flags & MEDIA_PAD_FL_SOURCE &&
+> +		    source->pads[source_pad].flags & MEDIA_PAD_FL_INTERNAL))
+> +		return -EINVAL;
+>  	if (WARN_ON(!(sink->pads[sink_pad].flags & MEDIA_PAD_FL_SINK)))
+>  		return -EINVAL;
+>  
+> diff --git a/include/uapi/linux/media.h b/include/uapi/linux/media.h
+> index 1c80b1d6bbaf..80cfd12a43fc 100644
+> --- a/include/uapi/linux/media.h
+> +++ b/include/uapi/linux/media.h
+> @@ -208,6 +208,7 @@ struct media_entity_desc {
+>  #define MEDIA_PAD_FL_SINK			(1U << 0)
+>  #define MEDIA_PAD_FL_SOURCE			(1U << 1)
+>  #define MEDIA_PAD_FL_MUST_CONNECT		(1U << 2)
+> +#define MEDIA_PAD_FL_INTERNAL			(1U << 3)
+>  
+>  struct media_pad_desc {
+>  	__u32 entity;		/* entity ID */
+
+-- 
 Regards,
 
-	Hans
+Laurent Pinchart
