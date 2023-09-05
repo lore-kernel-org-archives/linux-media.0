@@ -2,125 +2,100 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F088C83F2C
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AC29CA1000
 	for <linux-media@archiver.kernel.org>; Tue,  5 Sep 2023 16:02:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233358AbjIEQCI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Sep 2023 12:02:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60058 "EHLO
+        id S234984AbjIEQBm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Sep 2023 12:01:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354882AbjIEPaI (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Sep 2023 11:30:08 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2290128
-        for <linux-media@vger.kernel.org>; Tue,  5 Sep 2023 08:30:03 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-411f5dd7912so17897811cf.3
-        for <linux-media@vger.kernel.org>; Tue, 05 Sep 2023 08:30:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1693927803; x=1694532603; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6W+TfrXmtjK34RUfVd7nGUPmJuAkk0DxWpwHLygpJ3U=;
-        b=OZudrJW53VISzHcSQ22P4UL4IoATzRwCV561vMFCBB0S1O1pfKWlzc1lN1DpSlvwbr
-         o111Po6X2gKWlwbvoV4ronrrz0TqveBv64wqI5j9AtjSPauvGI9CJwPTiHMbyVSa1WL1
-         HvEF9HGicQOdha8PrsSrkI9ceGJzqhXyRhNX0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693927803; x=1694532603;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6W+TfrXmtjK34RUfVd7nGUPmJuAkk0DxWpwHLygpJ3U=;
-        b=kdYfwOSYgrjNh2z2cxBsaXC4hh6Y9dmL7Ft5V60PYNY7W6ZpulQxmRfT7ztmVKgotW
-         mggZb1rFdCEfAL9fE5W2dENCqHVG0MSA5EouVAEQ0+8SmSsBQi7Eo6sM8S08k25zqEmM
-         ssx+Iq5ownWZG6/8mypU4xldWpeBTuLKTbvD6ZA3scZZmdS8gC7RhwN+PAx0xvwiwCgM
-         HipVvcoAMifXEzXtXK8TkqjtmmVJsIK0jTUC80VCrllLfh1gDx87712W7riZjyHmpnXX
-         pmjx5qp0PPPLt3mYvSgfowONQgHfMXMPueZFHaa8J5KmEIdW8lklEDOWJqAVBy96WWA7
-         VlUg==
-X-Gm-Message-State: AOJu0Yyl5Uds7waeOPUhDYy9AV4cXBHqMIHBSkdgEyNZ98CNnl8H2omp
-        wOTX06AcQvoBWOcqAzHw2h4s1Q==
-X-Google-Smtp-Source: AGHT+IEQFo3g2YFqBxE2kIB03JTfw9xkEk6xbsE4/FEYCt0KvdZMdDVV1Yv6YqMq8bu3dlKWF0b62A==
-X-Received: by 2002:a05:622a:110:b0:412:6db3:eda9 with SMTP id u16-20020a05622a011000b004126db3eda9mr18573275qtw.58.1693927802873;
-        Tue, 05 Sep 2023 08:30:02 -0700 (PDT)
-Received: from denia.c.googlers.com (122.213.145.34.bc.googleusercontent.com. [34.145.213.122])
-        by smtp.gmail.com with ESMTPSA id d4-20020ac84e24000000b0040ff1b4b400sm2642301qtw.73.2023.09.05.08.30.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Sep 2023 08:30:02 -0700 (PDT)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Tue, 05 Sep 2023 15:29:52 +0000
-Subject: [PATCH v2] media: uvcvideo: Fix power line control for a Chicony
- camera
+        with ESMTP id S1354300AbjIEKh7 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Sep 2023 06:37:59 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B2C199
+        for <linux-media@vger.kernel.org>; Tue,  5 Sep 2023 03:37:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693910276; x=1725446276;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bCNUggdWx1PJeaIl+1eBpOhj/1atfAAhdHrR5yR/FFM=;
+  b=WoePA/hbxbCI6jxJJBbLH4u57W0n6SVPY8cojl6cU1vbOec9jVm4E993
+   r3rblfR9SyOEOSp0GDVLGhKQb2UA0b6ynCvbrTR8sKB0N1OOevSoFMvmm
+   cSIbCnPyiyMZXEit6M+C22+fSd7yGNiU5nJR4fY7dTo+D9naA+Ums3wc7
+   z6rtO0/T/kWtf6GVZYUWEAvsV3lcuBOaZ6sKO4waa4vvJqPsYMmX48Bmi
+   f8xQXxNlrJdMSf3L4JPpn1/zSYfQjfAYPRy9Jgm4syTtIPTAAdBtBHuim
+   18b2ZhXEqsfNsF+UGnpajO8YpOBUg4Mcf22WVB/otGahxHF752mcCtFEV
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10823"; a="375654474"
+X-IronPort-AV: E=Sophos;i="6.02,229,1688454000"; 
+   d="scan'208";a="375654474"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2023 03:37:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10823"; a="811183963"
+X-IronPort-AV: E=Sophos;i="6.02,229,1688454000"; 
+   d="scan'208";a="811183963"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2023 03:37:48 -0700
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id 1138511FC2C;
+        Tue,  5 Sep 2023 13:37:45 +0300 (EEST)
+Date:   Tue, 5 Sep 2023 10:37:45 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        bingbu.cao@intel.com, hongju.wang@intel.com, hverkuil@xs4all.nl,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Dmitry Perchanov <dmitry.perchanov@intel.com>
+Subject: Re: [PATCH v3 06/10] media: uapi: Add a macro to tell whether an
+ mbus code is metadata
+Message-ID: <ZPcE+b3EYWM8G8vE@kekkonen.localdomain>
+References: <20230808075538.3043934-1-sakari.ailus@linux.intel.com>
+ <20230808075538.3043934-7-sakari.ailus@linux.intel.com>
+ <98069c4c-d2fd-9117-08cd-eb595df77d4a@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230817-chicony-v2-1-88335519989d@chromium.org>
-X-B4-Tracking: v=1; b=H4sIAHBJ92QC/2WNQQ6DIBREr2JYl0bQYttV79G4APzITyqYT0tqj
- Hcvuu3yzbzMrCwBISR2r1ZGkDFhDAXkqWLW6zACx6Ewk7Vs6qvouPVoY1j4zTYXJ+tWWeVYsY1
- OwA3pYP3uzy/HSWcIezcTOPweL8++sMf0jrQcp1ns6f9+FlzwTpkB2kE5p8zDeooTfqZzpJH12
- 7b9AKWuN8G9AAAA
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ricardo Ribalda <ribalda@chromium.org>
-X-Mailer: b4 0.12.2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <98069c4c-d2fd-9117-08cd-eb595df77d4a@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The device does not implement the control properly.
+Moi,
 
-Fixes v4l2-compliance error:
+On Tue, Sep 05, 2023 at 12:47:21PM +0300, Tomi Valkeinen wrote:
+> Hi,
+> 
+> On 08/08/2023 10:55, Sakari Ailus wrote:
+> > Add a macro to tell whether a given mbus code is metadata.
+> > 
+> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > ---
+> >   include/uapi/linux/media-bus-format.h | 3 +++
+> >   1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/include/uapi/linux/media-bus-format.h b/include/uapi/linux/media-bus-format.h
+> > index 9ee031397372..2486b4178c5f 100644
+> > --- a/include/uapi/linux/media-bus-format.h
+> > +++ b/include/uapi/linux/media-bus-format.h
+> > @@ -182,4 +182,7 @@
+> >   #define MEDIA_BUS_FMT_META_20			0x8006
+> >   #define MEDIA_BUS_FMT_META_24			0x8007
+> > +#define MEDIA_BUS_FMT_IS_META(code)		\
+> > +	((code) & 0xf000 == 0x7000 || (code) & 0xf000 == 0x8000)
+> > +
+> >   #endif /* __LINUX_MEDIA_BUS_FORMAT_H */
+> 
+> mbus code seems to be u32, so the above won't work. Maybe:
+> 
+> (((code) & ~0xfffULL) == 0x7000 || ((code) & ~0xfffULL) == 0x8000)
+> 
+> Also, embedded formats with 0x9nnn codes are added later in the series.
 
-info: checking control 'Power Line Frequency' (0x00980918)
-fail: v4l2-test-controls.cpp(552): could not set valid menu item 3
+Thanks, I'll address these for v4.
 
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
-This camera, like other Chicony devices, do not implement properly the
-Power Line Frequency control.
-
-This time, I do not have direct access to the device, just to the
-report, but since other devices from the same family are showing the
-same error, it is safe to assume that the same fix will work here.
----
-Changes in v2:
-- Fix IntefaceProtocol, the camera is uvc1.5
-- I managed to write 0 to the control, so the proper quirk is uvc11 not
-  limited
-- Changes by Laurent:
-	- Rename device
-	- s/v4l/v4l2
-- Link to v1: https://lore.kernel.org/r/20230817-chicony-v1-1-76bde4d6ff6b@chromium.org
----
- drivers/media/usb/uvc/uvc_driver.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 08fcd2ffa727..4b5ea3501753 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -2592,6 +2592,15 @@ static const struct usb_device_id uvc_ids[] = {
- 	  .bInterfaceSubClass	= 1,
- 	  .bInterfaceProtocol	= 0,
- 	  .driver_info		= (kernel_ulong_t)&uvc_ctrl_power_line_limited },
-+	/* Chicony Electronics Co., Ltd Integrated Camera */
-+	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
-+				| USB_DEVICE_ID_MATCH_INT_INFO,
-+	  .idVendor		= 0x04f2,
-+	  .idProduct		= 0xb67c,
-+	  .bInterfaceClass	= USB_CLASS_VIDEO,
-+	  .bInterfaceSubClass	= 1,
-+	  .bInterfaceProtocol	= UVC_PC_PROTOCOL_15,
-+	  .driver_info		= (kernel_ulong_t)&uvc_ctrl_power_line_uvc11 },
- 	/* Chicony EasyCamera */
- 	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
- 				| USB_DEVICE_ID_MATCH_INT_INFO,
-
----
-base-commit: 4853c74bd7ab7fdb83f319bd9ace8a08c031e9b6
-change-id: 20230817-chicony-9c35f2046c6f
-
-Best regards,
 -- 
-Ricardo Ribalda <ribalda@chromium.org>
-
+Sakari Ailus
