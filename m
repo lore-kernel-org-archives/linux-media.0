@@ -2,117 +2,117 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3E20CA0FF8
-	for <linux-media@archiver.kernel.org>; Tue,  5 Sep 2023 16:01:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE3DDCA0FFB
+	for <linux-media@archiver.kernel.org>; Tue,  5 Sep 2023 16:01:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235089AbjIEQBp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Sep 2023 12:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49102 "EHLO
+        id S235103AbjIEQBt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Sep 2023 12:01:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354631AbjIENGd (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Sep 2023 09:06:33 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC1B1AE
-        for <linux-media@vger.kernel.org>; Tue,  5 Sep 2023 06:06:29 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (ftip006315900.acc1.colindale.21cn-nte.bt.net [81.134.214.249])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 44D67AF2;
-        Tue,  5 Sep 2023 15:05:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1693919101;
-        bh=jFuen25Z7ypsc5BzO2lrHHAwiA1ESfjuoJ90MHPSXi0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H9X+Gr4R/PwnCzizOAL6G1jkYROSAoV6xLnBqzddvSReu/4COvqYvvClh9nvjp8Hf
-         oEbvB1mYr+yHiME9JB4/wzmCVVz0YWHqWIyBj7nGqYEK5AX+bgJYF3AeoyYusEQXic
-         DkHZbhWZbnvn+j89xpzqir2HH7i1mG9MojC4+nd0=
-Date:   Tue, 5 Sep 2023 16:06:40 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-media@vger.kernel.org, tomi.valkeinen@ideasonboard.com,
-        bingbu.cao@intel.com, hongju.wang@intel.com, hverkuil@xs4all.nl,
-        Andrey Konovalov <andrey.konovalov@linaro.org>,
-        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-        Dmitry Perchanov <dmitry.perchanov@intel.com>
-Subject: Re: [PATCH v3 01/10] media: Documentation: Align numbered list
-Message-ID: <20230905130640.GF11700@pendragon.ideasonboard.com>
-References: <20230808075538.3043934-1-sakari.ailus@linux.intel.com>
- <20230808075538.3043934-2-sakari.ailus@linux.intel.com>
+        with ESMTP id S1344469AbjIEDoQ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Sep 2023 23:44:16 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46958CC7
+        for <linux-media@vger.kernel.org>; Mon,  4 Sep 2023 20:44:12 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id af79cd13be357-76da0ed3b7aso130118285a.1
+        for <linux-media@vger.kernel.org>; Mon, 04 Sep 2023 20:44:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1693885451; x=1694490251; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lAZHJuenxcHpAilGOcCYgpTDOCH9+ws/HIfnUtOnAtU=;
+        b=J8l8wDdHabzfac0jkMIe3eU8GR0PfomtQ8NupJZ/95WVie4VchlCbCJB69ybk2O5GT
+         Vzl8++6EBe9cK1uS6GEQ/G/gqUcFRGE5F6Zn8pkOmbP19of4frrrtLMExkanvx9Nt/1T
+         82F0fCQlY101qxAQuvuemMKGcksFAGpaHhKmU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693885451; x=1694490251;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lAZHJuenxcHpAilGOcCYgpTDOCH9+ws/HIfnUtOnAtU=;
+        b=T5RQ+Ty0e5zFX/vzRc0BzfsMICnhPQxc5XSEwgIW5c47SNoVp0K4vE7BdbKEng/wBF
+         uiygEPY/j9cY33orEkjfDxJxc+W/qx3AP6+OKkrWFdW6Et+Y9+7gGKdufr+BoGZIu+pn
+         Wt1x93cT55btarNajaQPh5fGRCujlTnUjFXjZLKBAnd+siVSfdQxYLJ7jtl9cxyoBKLd
+         RTequNq461plHCL7PQXhgpMvQ78AiysKp2KJbAzTLPYJMAakio3IbV5ybfrWkcJ7bBcm
+         Vf4BIsVFDBTZvPaXLge5Xm7p4CNVXLKa4TQ6QfzNFMwRXV4wRI7QNEU9fwhZgDP82bvU
+         WKRg==
+X-Gm-Message-State: AOJu0Yx7+j2GgRgRaSowowJ+pJKd6udOK4d4jI7L67E6p28ENkZv3eaF
+        hAfpMBLKap+1zYUB+4FM1EmkFtT1iim+qToeU2o7Ow==
+X-Google-Smtp-Source: AGHT+IG9cD/bwYK1VtdcLnHoCKJ6L7yb1QS3/C5VFnna3ZprVnfEsLWrL8MKuOsK72qV2WLKMo3Y4w==
+X-Received: by 2002:a05:620a:f96:b0:76c:c1cf:7a35 with SMTP id b22-20020a05620a0f9600b0076cc1cf7a35mr9663317qkn.46.1693885450938;
+        Mon, 04 Sep 2023 20:44:10 -0700 (PDT)
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com. [209.85.219.45])
+        by smtp.gmail.com with ESMTPSA id h19-20020a05620a13f300b007659935ce64sm3779746qkl.71.2023.09.04.20.44.10
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Sep 2023 20:44:10 -0700 (PDT)
+Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-64aaf3c16c2so12493766d6.3
+        for <linux-media@vger.kernel.org>; Mon, 04 Sep 2023 20:44:10 -0700 (PDT)
+X-Received: by 2002:ad4:42af:0:b0:651:735c:26f1 with SMTP id
+ e15-20020ad442af000000b00651735c26f1mr11597948qvr.55.1693885449698; Mon, 04
+ Sep 2023 20:44:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230808075538.3043934-2-sakari.ailus@linux.intel.com>
+References: <20230828075420.2009568-1-anle.pan@nxp.com> <DB9PR04MB9284AA58AA71655C9C0C7C9A87E6A@DB9PR04MB9284.eurprd04.prod.outlook.com>
+ <CAAFQd5DYxwX+JdXQ_-ba5B9y+gyWPjvUpCBnKM1zz1W2EkO_vA@mail.gmail.com> <DB9PR04MB928460023FB3CCCBC3EACE1487E9A@DB9PR04MB9284.eurprd04.prod.outlook.com>
+In-Reply-To: <DB9PR04MB928460023FB3CCCBC3EACE1487E9A@DB9PR04MB9284.eurprd04.prod.outlook.com>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Tue, 5 Sep 2023 12:43:50 +0900
+X-Gmail-Original-Message-ID: <CAAFQd5BGJX7=Z1ukFRq_ktaQ0d7FbvV-ob5gs8hfGaNHUXPTww@mail.gmail.com>
+Message-ID: <CAAFQd5BGJX7=Z1ukFRq_ktaQ0d7FbvV-ob5gs8hfGaNHUXPTww@mail.gmail.com>
+Subject: Re: [EXT] Re: [PATCH] media: videobuf2-dma-sg: limit the sg segment size
+To:     Hui Fang <hui.fang@nxp.com>
+Cc:     Anle Pan <anle.pan@nxp.com>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jindong Yue <jindong.yue@nxp.com>,
+        Xuegang Liu <xuegang.liu@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sakari,
+On Mon, Sep 4, 2023 at 4:10=E2=80=AFPM Hui Fang <hui.fang@nxp.com> wrote:
+>
+> On Wed, Aug 30, 2023 at 6:20=E2=80=AFPM Tomasz Figa <tfiga@chromium.org> =
+wrote:
+> > On Wed, Aug 30, 2023 at 5:50=E2=80=AFPM Hui Fang <hui.fang@nxp.com> wro=
+te:
+> ......
+> > > I wonder if only NXP met the "swiotlb buffer full" issue. In theory,
+> > > when format is YUYV, those resolutions no greater than 320x240 (15360=
+0
+> > > bytes, which less than the max mapping size 256K ) can't meet the iss=
+ue.
+> > > But resolutions no less than 640x480 (307200 bytes), may have chances
+> > > to trigger the issue.
+> >
+> > I think a combination of a device that can support scatter-gather, but =
+requires
+> > swiotlb is kind of rare. Most drivers would require a single contiguous=
+ DMA
+> > address (and thus use videobuf2-dma-contig) and physical discontinuity =
+would
+> > be handled by an IOMMU (transparently to vb2).
+> >
+> > I guess one thing to ask you about your specific setup is whether it's =
+expected
+> > that the swiotlb ends up being used at all?
+>
+> Yes, the swiotlb ends up being used. We met the issue when bring up
+> DeviceAsWebCam (android-14 new feature, android device works as a usb cam=
+era).
 
-Thank you for the patch.
+I see. I guess the mapping is done by the USB gadget controller
+driver? Could you point us to the exact driver that's used?
 
-On Tue, Aug 08, 2023 at 10:55:29AM +0300, Sakari Ailus wrote:
-> Align lines for numbered list so that Sphinx produces an uniform output
-> for all list entries.
-> 
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
->  .../userspace-api/media/v4l/dev-subdev.rst    | 27 +++++++++----------
->  1 file changed, 13 insertions(+), 14 deletions(-)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/dev-subdev.rst b/Documentation/userspace-api/media/v4l/dev-subdev.rst
-> index a4f1df7093e8..b023918177b5 100644
-> --- a/Documentation/userspace-api/media/v4l/dev-subdev.rst
-> +++ b/Documentation/userspace-api/media/v4l/dev-subdev.rst
-> @@ -579,20 +579,19 @@ is started.
->  
->  There are three steps in configuring the streams:
->  
-> -1) Set up links. Connect the pads between sub-devices using the :ref:`Media
-> -Controller API <media_controller>`
-> +1) Set up links. Connect the pads between sub-devices using the
-> +   :ref:`Media Controller API <media_controller>`
+Just to clarify, swiotlb should only be needed in the very extreme
+fallback case, because of the performance impact of the memory copy
+back and forth. The right approach would depend on the DMA
+capabilities of your device, though.
 
-While at it, could we standardize on 1. vs. 1) ? Both are used in the
-same file. After this patch they both render to "1.", but it would be
-nice to be consistent in the source too.
-
->  
-> -2) Streams. Streams are declared and their routing is configured by
-> -setting the routing table for the sub-device using
-> -:ref:`VIDIOC_SUBDEV_S_ROUTING <VIDIOC_SUBDEV_G_ROUTING>` ioctl. Note that
-> -setting the routing table will reset formats and selections in the
-> -sub-device to default values.
-> +2) Streams. Streams are declared and their routing is configured by setting the
-> +   routing table for the sub-device using :ref:`VIDIOC_SUBDEV_S_ROUTING
-> +   <VIDIOC_SUBDEV_G_ROUTING>` ioctl. Note that setting the routing table will
-> +   reset formats and selections in the sub-device to default values.
->  
-> -3) Configure formats and selections. Formats and selections of each stream
-> -are configured separately as documented for plain sub-devices in
-> -:ref:`format-propagation`. The stream ID is set to the same stream ID
-> -associated with either sink or source pads of routes configured using the
-> -:ref:`VIDIOC_SUBDEV_S_ROUTING <VIDIOC_SUBDEV_G_ROUTING>` ioctl.
-> +3) Configure formats and selections. Formats and selections of each stream are
-> +   configured separately as documented for plain sub-devices in
-> +   :ref:`format-propagation`. The stream ID is set to the same stream ID
-> +   associated with either sink or source pads of routes configured using the
-> +   :ref:`VIDIOC_SUBDEV_S_ROUTING <VIDIOC_SUBDEV_G_ROUTING>` ioctl.
->  
->  Multiplexed streams setup example
->  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> @@ -619,8 +618,8 @@ modeled as V4L2 devices, exposed to userspace via /dev/videoX nodes.
->  To configure this pipeline, the userspace must take the following steps:
->  
->  1) Set up media links between entities: connect the sensors to the bridge,
-> -bridge to the receiver, and the receiver to the DMA engines. This step does
-> -not differ from normal non-multiplexed media controller setup.
-> +   bridge to the receiver, and the receiver to the DMA engines. This step does
-> +   not differ from normal non-multiplexed media controller setup.
->  
->  2) Configure routing
->  
-
-3) below contains two paragraphs that are not indented.
-
--- 
-Regards,
-
-Laurent Pinchart
+Best regards,
+Tomasz
