@@ -2,171 +2,125 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CA28CA0FFD
-	for <linux-media@archiver.kernel.org>; Tue,  5 Sep 2023 16:02:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F088C83F2C
+	for <linux-media@archiver.kernel.org>; Tue,  5 Sep 2023 16:02:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233776AbjIEQCE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Sep 2023 12:02:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49610 "EHLO
+        id S233358AbjIEQCI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Sep 2023 12:02:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353969AbjIEI6I (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Sep 2023 04:58:08 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA156184;
-        Tue,  5 Sep 2023 01:58:03 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (ftip006315900.acc1.colindale.21cn-nte.bt.net [81.134.214.249])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7A2F610FE;
-        Tue,  5 Sep 2023 10:56:35 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1693904195;
-        bh=CEfJ5B7GYScrvKciZArVaQtY9njQRmml6KbxPfNxMr0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VSJ+CQNm7i1hzp8OTXh07Rkr+BR0y2/7qVCkkFaRlnESR5I52J6nZLH84eQYJn7FM
-         sEsUu/N51ql8T+K0NxD1pLHSBBNH11eGqaM0fUxhBtyi7EWmGl4wCTVARTRKWrO8NV
-         1DGHHqQ0GCtikXSjsmwM/oTTAxH4vgTreZ8K50go=
-Date:   Tue, 5 Sep 2023 11:58:14 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Alain Volmat <alain.volmat@foss.st.com>
-Cc:     Hugues Fruchet <hugues.fruchet@foss.st.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Dan Scally <dan.scally@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/5] dt-bindings: media: add bindings for stm32 dcmipp
-Message-ID: <20230905085814.GA31594@pendragon.ideasonboard.com>
-References: <20230901155732.252436-1-alain.volmat@foss.st.com>
- <20230901155732.252436-2-alain.volmat@foss.st.com>
+        with ESMTP id S1354882AbjIEPaI (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Sep 2023 11:30:08 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2290128
+        for <linux-media@vger.kernel.org>; Tue,  5 Sep 2023 08:30:03 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-411f5dd7912so17897811cf.3
+        for <linux-media@vger.kernel.org>; Tue, 05 Sep 2023 08:30:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1693927803; x=1694532603; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6W+TfrXmtjK34RUfVd7nGUPmJuAkk0DxWpwHLygpJ3U=;
+        b=OZudrJW53VISzHcSQ22P4UL4IoATzRwCV561vMFCBB0S1O1pfKWlzc1lN1DpSlvwbr
+         o111Po6X2gKWlwbvoV4ronrrz0TqveBv64wqI5j9AtjSPauvGI9CJwPTiHMbyVSa1WL1
+         HvEF9HGicQOdha8PrsSrkI9ceGJzqhXyRhNX0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693927803; x=1694532603;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6W+TfrXmtjK34RUfVd7nGUPmJuAkk0DxWpwHLygpJ3U=;
+        b=kdYfwOSYgrjNh2z2cxBsaXC4hh6Y9dmL7Ft5V60PYNY7W6ZpulQxmRfT7ztmVKgotW
+         mggZb1rFdCEfAL9fE5W2dENCqHVG0MSA5EouVAEQ0+8SmSsBQi7Eo6sM8S08k25zqEmM
+         ssx+Iq5ownWZG6/8mypU4xldWpeBTuLKTbvD6ZA3scZZmdS8gC7RhwN+PAx0xvwiwCgM
+         HipVvcoAMifXEzXtXK8TkqjtmmVJsIK0jTUC80VCrllLfh1gDx87712W7riZjyHmpnXX
+         pmjx5qp0PPPLt3mYvSgfowONQgHfMXMPueZFHaa8J5KmEIdW8lklEDOWJqAVBy96WWA7
+         VlUg==
+X-Gm-Message-State: AOJu0Yyl5Uds7waeOPUhDYy9AV4cXBHqMIHBSkdgEyNZ98CNnl8H2omp
+        wOTX06AcQvoBWOcqAzHw2h4s1Q==
+X-Google-Smtp-Source: AGHT+IEQFo3g2YFqBxE2kIB03JTfw9xkEk6xbsE4/FEYCt0KvdZMdDVV1Yv6YqMq8bu3dlKWF0b62A==
+X-Received: by 2002:a05:622a:110:b0:412:6db3:eda9 with SMTP id u16-20020a05622a011000b004126db3eda9mr18573275qtw.58.1693927802873;
+        Tue, 05 Sep 2023 08:30:02 -0700 (PDT)
+Received: from denia.c.googlers.com (122.213.145.34.bc.googleusercontent.com. [34.145.213.122])
+        by smtp.gmail.com with ESMTPSA id d4-20020ac84e24000000b0040ff1b4b400sm2642301qtw.73.2023.09.05.08.30.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Sep 2023 08:30:02 -0700 (PDT)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Tue, 05 Sep 2023 15:29:52 +0000
+Subject: [PATCH v2] media: uvcvideo: Fix power line control for a Chicony
+ camera
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230901155732.252436-2-alain.volmat@foss.st.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230817-chicony-v2-1-88335519989d@chromium.org>
+X-B4-Tracking: v=1; b=H4sIAHBJ92QC/2WNQQ6DIBREr2JYl0bQYttV79G4APzITyqYT0tqj
+ Hcvuu3yzbzMrCwBISR2r1ZGkDFhDAXkqWLW6zACx6Ewk7Vs6qvouPVoY1j4zTYXJ+tWWeVYsY1
+ OwA3pYP3uzy/HSWcIezcTOPweL8++sMf0jrQcp1ns6f9+FlzwTpkB2kE5p8zDeooTfqZzpJH12
+ 7b9AKWuN8G9AAAA
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ricardo Ribalda <ribalda@chromium.org>
+X-Mailer: b4 0.12.2
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Alain,
+The device does not implement the control properly.
 
-Thank you for the patch.
+Fixes v4l2-compliance error:
 
-On Fri, Sep 01, 2023 at 05:57:20PM +0200, Alain Volmat wrote:
-> Add the yaml binding for the ST Microelectronics STM32 DCMIPP
-> (Digital Camera Memory Interface Pixel Processor)
-> 
-> Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+info: checking control 'Power Line Frequency' (0x00980918)
+fail: v4l2-test-controls.cpp(552): could not set valid menu item 3
 
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+This camera, like other Chicony devices, do not implement properly the
+Power Line Frequency control.
 
-> ---
->  .../bindings/media/st,stm32-dcmipp.yaml       | 89 +++++++++++++++++++
->  1 file changed, 89 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml b/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml
-> new file mode 100644
-> index 000000000000..87731f3ce7bd
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml
-> @@ -0,0 +1,89 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/st,stm32-dcmipp.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: STMicroelectronics STM32 DCMIPP Digital Camera Memory Interface Pixel Processor
-> +
-> +maintainers:
-> +  - Hugues Fruchet <hugues.fruchet@foss.st.com>
-> +  - Alain Volmat <alain.volmat@foss.st.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: st,stm32mp13-dcmipp
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  port:
-> +    $ref: /schemas/graph.yaml#/$defs/port-base
-> +    unevaluatedProperties: false
-> +    description:
-> +      DCMIPP supports a single port node with parallel bus.
-> +
-> +    properties:
-> +      endpoint:
-> +        $ref: video-interfaces.yaml#
-> +        unevaluatedProperties: false
-> +
-> +        properties:
-> +          bus-type:
-> +            enum: [5, 6]
-> +            default: 5
-> +
-> +          bus-width:
-> +            enum: [8, 10, 12, 14]
-> +            default: 8
-> +
-> +          pclk-sample: true
-> +          hsync-active: true
-> +          vsync-active: true
-> +
-> +        required:
-> +          - pclk-sample
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - resets
-> +  - port
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/clock/stm32mp13-clks.h>
-> +    #include <dt-bindings/reset/stm32mp13-resets.h>
-> +    dcmipp@5a000000 {
-> +        compatible = "st,stm32mp13-dcmipp";
-> +        reg = <0x5a000000 0x400>;
-> +        interrupts = <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>;
-> +        resets = <&rcc DCMIPP_R>;
-> +        clocks = <&rcc DCMIPP_K>;
-> +
-> +        port {
-> +             endpoint {
-> +                   remote-endpoint = <&mipid02_2>;
-> +                   bus-width = <8>;
-> +                   hsync-active = <0>;
-> +                   vsync-active = <0>;
-> +                   pclk-sample = <0>;
-> +             };
-> +        };
-> +    };
-> +
-> +...
+This time, I do not have direct access to the device, just to the
+report, but since other devices from the same family are showing the
+same error, it is safe to assume that the same fix will work here.
+---
+Changes in v2:
+- Fix IntefaceProtocol, the camera is uvc1.5
+- I managed to write 0 to the control, so the proper quirk is uvc11 not
+  limited
+- Changes by Laurent:
+	- Rename device
+	- s/v4l/v4l2
+- Link to v1: https://lore.kernel.org/r/20230817-chicony-v1-1-76bde4d6ff6b@chromium.org
+---
+ drivers/media/usb/uvc/uvc_driver.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index 08fcd2ffa727..4b5ea3501753 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -2592,6 +2592,15 @@ static const struct usb_device_id uvc_ids[] = {
+ 	  .bInterfaceSubClass	= 1,
+ 	  .bInterfaceProtocol	= 0,
+ 	  .driver_info		= (kernel_ulong_t)&uvc_ctrl_power_line_limited },
++	/* Chicony Electronics Co., Ltd Integrated Camera */
++	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
++				| USB_DEVICE_ID_MATCH_INT_INFO,
++	  .idVendor		= 0x04f2,
++	  .idProduct		= 0xb67c,
++	  .bInterfaceClass	= USB_CLASS_VIDEO,
++	  .bInterfaceSubClass	= 1,
++	  .bInterfaceProtocol	= UVC_PC_PROTOCOL_15,
++	  .driver_info		= (kernel_ulong_t)&uvc_ctrl_power_line_uvc11 },
+ 	/* Chicony EasyCamera */
+ 	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+ 				| USB_DEVICE_ID_MATCH_INT_INFO,
+
+---
+base-commit: 4853c74bd7ab7fdb83f319bd9ace8a08c031e9b6
+change-id: 20230817-chicony-9c35f2046c6f
+
+Best regards,
 -- 
-Regards,
+Ricardo Ribalda <ribalda@chromium.org>
 
-Laurent Pinchart
