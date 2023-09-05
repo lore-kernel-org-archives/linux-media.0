@@ -2,63 +2,87 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FC35C83F2C
-	for <linux-media@archiver.kernel.org>; Tue,  5 Sep 2023 16:07:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D38B1CA0FFA
+	for <linux-media@archiver.kernel.org>; Tue,  5 Sep 2023 17:37:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234914AbjIEQBi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Sep 2023 12:01:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44912 "EHLO
+        id S235742AbjIERh3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Sep 2023 13:37:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354047AbjIEJ2T (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Sep 2023 05:28:19 -0400
-X-Greylist: delayed 4049 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Sep 2023 02:28:16 PDT
-Received: from mail.equinoxrise.pl (mail.equinoxrise.pl [217.61.112.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBB119B
-        for <linux-media@vger.kernel.org>; Tue,  5 Sep 2023 02:28:16 -0700 (PDT)
-Received: by mail.equinoxrise.pl (Postfix, from userid 1002)
-        id D03F28373D; Mon,  4 Sep 2023 09:41:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=equinoxrise.pl;
-        s=mail; t=1693813389;
-        bh=v6OgBfK5dN7P5dQ0wCu59rOfZaiqziJeLNblJ8dOcGI=;
-        h=Date:From:To:Subject:From;
-        b=IB8MlebvW2EpyRrya6NfiqSRRLVhNtnEK5ijorFAwAO2H1loEztR9bEKIAQ0SU1Ul
-         jwR4l+amUvpJoNDCsBpaixns0NuSwBuYBVCACTKXUQnOA8adGPHqHBCjLn/VqGgvD6
-         HXkyKBAEA0+5ZiGLzt1i30ttW5sZxT4qLPnPveMDJrOHC3OT/Pe8uG5WKE9wJWRUnY
-         z/ZxeFlyHvhe5MzSQS2KgOrXpvuaThEXxPGTdXawcsoMi4Kajcjz4pFgEBsx/6rjCs
-         j+EjDL35XvqWYnh1uFeYwn8hx05uwNESqNHngJp3f+1VKYqnIz7mHEYk9elYh0pkPD
-         fbOWl4uiNB2mQ==
-Received: by mail.equinoxrise.pl for <linux-media@vger.kernel.org>; Mon,  4 Sep 2023 07:40:34 GMT
-Message-ID: <20230904084500-0.1.7.rjs.0.whb5f83cp5@equinoxrise.pl>
-Date:   Mon,  4 Sep 2023 07:40:34 GMT
-From:   "Mateusz Talaga" <mateusz.talaga@equinoxrise.pl>
-To:     <linux-media@vger.kernel.org>
-Subject: Prezentacja
-X-Mailer: mail.equinoxrise.pl
+        with ESMTP id S237851AbjIERhM (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Sep 2023 13:37:12 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E064288E6
+        for <linux-media@vger.kernel.org>; Tue,  5 Sep 2023 10:07:47 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (ftip006315900.acc1.colindale.21cn-nte.bt.net [81.134.214.249])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 39C82128D;
+        Tue,  5 Sep 2023 19:04:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1693933465;
+        bh=8Ti4/gzfum+T+LTcRF/WdytwZzTvwavKFVQbbcteMac=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H2R9R2gMQNHSDF4GS80ClNE3HMa9bknTQoflQhXjorSF7M1ZUb4Ui+QXQh+V/R1wD
+         3AHbcYAd0nxzNSRLf5YJzwy0+5FJ0wV83qTTYbu4ROZlWG+eQxSqQqSVuG+Np9ieFo
+         wvklT3Y8czoc0CVAE+DVm+Ct1Zu3ScpB4oaOq43w=
+Date:   Tue, 5 Sep 2023 20:06:04 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        linux-media@vger.kernel.org, bingbu.cao@intel.com,
+        hongju.wang@intel.com, hverkuil@xs4all.nl,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Dmitry Perchanov <dmitry.perchanov@intel.com>
+Subject: Re: [PATCH v3 06/10] media: uapi: Add a macro to tell whether an
+ mbus code is metadata
+Message-ID: <20230905170604.GG7971@pendragon.ideasonboard.com>
+References: <20230808075538.3043934-1-sakari.ailus@linux.intel.com>
+ <20230808075538.3043934-7-sakari.ailus@linux.intel.com>
+ <98069c4c-d2fd-9117-08cd-eb595df77d4a@ideasonboard.com>
+ <ZPcE+b3EYWM8G8vE@kekkonen.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZPcE+b3EYWM8G8vE@kekkonen.localdomain>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Dzie=C5=84 dobry!
+On Tue, Sep 05, 2023 at 10:37:45AM +0000, Sakari Ailus wrote:
+> On Tue, Sep 05, 2023 at 12:47:21PM +0300, Tomi Valkeinen wrote:
+> > On 08/08/2023 10:55, Sakari Ailus wrote:
+> > > Add a macro to tell whether a given mbus code is metadata.
+> > > 
+> > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > > ---
+> > >   include/uapi/linux/media-bus-format.h | 3 +++
+> > >   1 file changed, 3 insertions(+)
+> > > 
+> > > diff --git a/include/uapi/linux/media-bus-format.h b/include/uapi/linux/media-bus-format.h
+> > > index 9ee031397372..2486b4178c5f 100644
+> > > --- a/include/uapi/linux/media-bus-format.h
+> > > +++ b/include/uapi/linux/media-bus-format.h
+> > > @@ -182,4 +182,7 @@
+> > >   #define MEDIA_BUS_FMT_META_20			0x8006
+> > >   #define MEDIA_BUS_FMT_META_24			0x8007
+> > > +#define MEDIA_BUS_FMT_IS_META(code)		\
+> > > +	((code) & 0xf000 == 0x7000 || (code) & 0xf000 == 0x8000)
+> > > +
+> > >   #endif /* __LINUX_MEDIA_BUS_FORMAT_H */
+> > 
+> > mbus code seems to be u32, so the above won't work. Maybe:
+> > 
+> > (((code) & ~0xfffULL) == 0x7000 || ((code) & ~0xfffULL) == 0x8000)
+> > 
+> > Also, embedded formats with 0x9nnn codes are added later in the series.
+> 
+> Thanks, I'll address these for v4.
 
-Czy m=C3=B3g=C5=82bym przedstawi=C4=87 rozwi=C4=85zanie, kt=C3=B3re umo=C5=
-=BCliwia monitoring ka=C5=BCdego auta w czasie rzeczywistym w tym jego po=
-zycj=C4=99, zu=C5=BCycie paliwa i przebieg?
+It would be nice to make this an inline function, to avoid evaluating
+the code twice. I think you can move it to an internal kernel header, it
+doesn't need to be exposed to userspace.
 
-Dodatkowo nasze narz=C4=99dzie minimalizuje koszty utrzymania samochod=C3=
-=B3w, skraca czas przejazd=C3=B3w, a tak=C5=BCe tworzenie planu tras czy =
-dostaw.
+-- 
+Regards,
 
-Z naszej wiedzy i do=C5=9Bwiadczenia korzysta ju=C5=BC ponad 49 tys. Klie=
-nt=C3=B3w. Monitorujemy 809 000 pojazd=C3=B3w na ca=C5=82ym =C5=9Bwiecie,=
- co jest nasz=C4=85 najlepsz=C4=85 wizyt=C3=B3wk=C4=85.
-
-Bardzo prosz=C4=99 o e-maila zwrotnego, je=C5=9Bli mogliby=C5=9Bmy wsp=C3=
-=B3lnie om=C3=B3wi=C4=87 potencja=C5=82 wykorzystania takiego rozwi=C4=85=
-zania w Pa=C5=84stwa firmie.
-
-
-Pozdrawiam
-Mateusz Talaga
+Laurent Pinchart
