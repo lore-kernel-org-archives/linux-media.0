@@ -2,100 +2,100 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AC29CA1000
-	for <linux-media@archiver.kernel.org>; Tue,  5 Sep 2023 16:02:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11ECCCA1002
+	for <linux-media@archiver.kernel.org>; Tue,  5 Sep 2023 16:02:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234984AbjIEQBm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Sep 2023 12:01:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60088 "EHLO
+        id S232101AbjIEQCJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Sep 2023 12:02:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354300AbjIEKh7 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Sep 2023 06:37:59 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B2C199
-        for <linux-media@vger.kernel.org>; Tue,  5 Sep 2023 03:37:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693910276; x=1725446276;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bCNUggdWx1PJeaIl+1eBpOhj/1atfAAhdHrR5yR/FFM=;
-  b=WoePA/hbxbCI6jxJJBbLH4u57W0n6SVPY8cojl6cU1vbOec9jVm4E993
-   r3rblfR9SyOEOSp0GDVLGhKQb2UA0b6ynCvbrTR8sKB0N1OOevSoFMvmm
-   cSIbCnPyiyMZXEit6M+C22+fSd7yGNiU5nJR4fY7dTo+D9naA+Ums3wc7
-   z6rtO0/T/kWtf6GVZYUWEAvsV3lcuBOaZ6sKO4waa4vvJqPsYMmX48Bmi
-   f8xQXxNlrJdMSf3L4JPpn1/zSYfQjfAYPRy9Jgm4syTtIPTAAdBtBHuim
-   18b2ZhXEqsfNsF+UGnpajO8YpOBUg4Mcf22WVB/otGahxHF752mcCtFEV
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10823"; a="375654474"
-X-IronPort-AV: E=Sophos;i="6.02,229,1688454000"; 
-   d="scan'208";a="375654474"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2023 03:37:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10823"; a="811183963"
-X-IronPort-AV: E=Sophos;i="6.02,229,1688454000"; 
-   d="scan'208";a="811183963"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2023 03:37:48 -0700
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id 1138511FC2C;
-        Tue,  5 Sep 2023 13:37:45 +0300 (EEST)
-Date:   Tue, 5 Sep 2023 10:37:45 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        bingbu.cao@intel.com, hongju.wang@intel.com, hverkuil@xs4all.nl,
-        Andrey Konovalov <andrey.konovalov@linaro.org>,
-        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-        Dmitry Perchanov <dmitry.perchanov@intel.com>
-Subject: Re: [PATCH v3 06/10] media: uapi: Add a macro to tell whether an
- mbus code is metadata
-Message-ID: <ZPcE+b3EYWM8G8vE@kekkonen.localdomain>
-References: <20230808075538.3043934-1-sakari.ailus@linux.intel.com>
- <20230808075538.3043934-7-sakari.ailus@linux.intel.com>
- <98069c4c-d2fd-9117-08cd-eb595df77d4a@ideasonboard.com>
+        with ESMTP id S1353990AbjIEJCu (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Sep 2023 05:02:50 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6538FBF;
+        Tue,  5 Sep 2023 02:02:47 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (ftip006315900.acc1.colindale.21cn-nte.bt.net [81.134.214.249])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8CDDE128D;
+        Tue,  5 Sep 2023 11:01:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1693904479;
+        bh=i5xgoAvknUQnAeBrZlobtbTH4p/BfgvRHjqgFdrRzAo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mOHafGtT3Q36EEF7HniHebrGl8NFSP2+8LDoiWnYIVMmqAIhnixtIXnLXR5cQc8ut
+         1w+tfxF0njauRH3r2BNE5GvHe3n0pybRvFN97mj1wlB85q1LqHnnq8qPXNIOePtBzS
+         NN64tVqdxLSHqtJbpHR0azVqWOTCO2azMVlmxZVQ=
+Date:   Tue, 5 Sep 2023 12:02:58 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Alain Volmat <alain.volmat@foss.st.com>
+Cc:     Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Dan Scally <dan.scally@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 4/5] ARM: dts: stm32: add dcmipp support to stm32mp135
+Message-ID: <20230905090258.GC31594@pendragon.ideasonboard.com>
+References: <20230901155732.252436-1-alain.volmat@foss.st.com>
+ <20230901155732.252436-5-alain.volmat@foss.st.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <98069c4c-d2fd-9117-08cd-eb595df77d4a@ideasonboard.com>
+In-Reply-To: <20230901155732.252436-5-alain.volmat@foss.st.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Moi,
+Hi Alain,
 
-On Tue, Sep 05, 2023 at 12:47:21PM +0300, Tomi Valkeinen wrote:
-> Hi,
-> 
-> On 08/08/2023 10:55, Sakari Ailus wrote:
-> > Add a macro to tell whether a given mbus code is metadata.
-> > 
-> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > ---
-> >   include/uapi/linux/media-bus-format.h | 3 +++
-> >   1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/include/uapi/linux/media-bus-format.h b/include/uapi/linux/media-bus-format.h
-> > index 9ee031397372..2486b4178c5f 100644
-> > --- a/include/uapi/linux/media-bus-format.h
-> > +++ b/include/uapi/linux/media-bus-format.h
-> > @@ -182,4 +182,7 @@
-> >   #define MEDIA_BUS_FMT_META_20			0x8006
-> >   #define MEDIA_BUS_FMT_META_24			0x8007
-> > +#define MEDIA_BUS_FMT_IS_META(code)		\
-> > +	((code) & 0xf000 == 0x7000 || (code) & 0xf000 == 0x8000)
-> > +
-> >   #endif /* __LINUX_MEDIA_BUS_FORMAT_H */
-> 
-> mbus code seems to be u32, so the above won't work. Maybe:
-> 
-> (((code) & ~0xfffULL) == 0x7000 || ((code) & ~0xfffULL) == 0x8000)
-> 
-> Also, embedded formats with 0x9nnn codes are added later in the series.
+Thank you for the patch.
 
-Thanks, I'll address these for v4.
+On Fri, Sep 01, 2023 at 05:57:23PM +0200, Alain Volmat wrote:
+> From: Hugues Fruchet <hugues.fruchet@foss.st.com>
+> 
+> Add dcmipp support to STM32MP135.
+> 
+> Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
+> Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+> ---
+>  arch/arm/boot/dts/st/stm32mp135.dtsi | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/st/stm32mp135.dtsi b/arch/arm/boot/dts/st/stm32mp135.dtsi
+> index abf2acd37b4e..beee9ec7ed0d 100644
+> --- a/arch/arm/boot/dts/st/stm32mp135.dtsi
+> +++ b/arch/arm/boot/dts/st/stm32mp135.dtsi
+> @@ -8,5 +8,13 @@
+>  
+>  / {
+>  	soc {
+> +		dcmipp: dcmipp@5a000000 {
+> +			compatible = "st,stm32mp13-dcmipp";
+> +			reg = <0x5a000000 0x400>;
+> +			interrupts = <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>;
+> +			resets = <&rcc DCMIPP_R>;
+> +			clocks = <&rcc DCMIPP_K>;
+> +			status = "disabled";
+
+This needs a port, as it's marked as required in the bindings. You can
+leave the endpoint out.
+
+With this fixed,
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> +		};
+>  	};
+>  };
 
 -- 
-Sakari Ailus
+Regards,
+
+Laurent Pinchart
