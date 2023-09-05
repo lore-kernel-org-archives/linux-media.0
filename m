@@ -2,124 +2,89 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3901DC83F3E
-	for <linux-media@archiver.kernel.org>; Tue,  5 Sep 2023 17:58:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F42FCA0FFA
+	for <linux-media@archiver.kernel.org>; Tue,  5 Sep 2023 18:11:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235654AbjIER6f (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Sep 2023 13:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49870 "EHLO
+        id S238294AbjIESL3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Sep 2023 14:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240588AbjIER6B (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Sep 2023 13:58:01 -0400
+        with ESMTP id S239315AbjIESHm (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Sep 2023 14:07:42 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E4E8695
-        for <linux-media@vger.kernel.org>; Tue,  5 Sep 2023 10:53:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C249E1E8F7
+        for <linux-media@vger.kernel.org>; Tue,  5 Sep 2023 10:23:52 -0700 (PDT)
 Received: from pendragon.ideasonboard.com (ftip006315900.acc1.colindale.21cn-nte.bt.net [81.134.214.249])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 23891AF2;
-        Tue,  5 Sep 2023 18:42:25 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 557D7D8B;
+        Tue,  5 Sep 2023 18:45:41 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1693932145;
-        bh=1dQJDIPvpHwTECVb0TQPMnQFxhiYSGO8WkAcs0GVvCo=;
+        s=mail; t=1693932341;
+        bh=bChNDkKa4a+ObEinooP2i2uBJXCAvSjfDakubWHx6gA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fcCqAuNKbwkzwK/g/uW1jspZlsQ7Qw4r0p0WEII+wAQmhmWX49LgbcR4SIOPXCdhA
-         qaz2hacDml7Xd/OCrywh1fSZteAFrDxYbXYv9t07js6foa2JCoAQQR2CaPUrUVRMZz
-         M1QPsYBi318qMhNGfB7+mbFyq7hCdrq6gq8YqOS8=
-Date:   Tue, 5 Sep 2023 19:44:04 +0300
+        b=LjWsG/D3DLDlHFx4rdXHzRNH9v7Q5qBXH472DgUhA/e8a6V2aDVza37EywDiDAfCH
+         bcffCcTn58kFAPj+atnuu0sL4dMDX2TxMGJBuKqpAc/SyIc4T3eQyzXr9XLv3nETkd
+         cBTUwByi1mql1pBzPOqwsegG5zoOc1O6Aj8Jd2kI=
+Date:   Tue, 5 Sep 2023 19:47:20 +0300
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>
 Cc:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-        linux-media@vger.kernel.org, tomi.valkeinen@ideasonboard.com,
-        bingbu.cao@intel.com, hongju.wang@intel.com, hverkuil@xs4all.nl,
+        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        tomi.valkeinen@ideasonboard.com, bingbu.cao@intel.com,
+        hongju.wang@intel.com,
         Andrey Konovalov <andrey.konovalov@linaro.org>,
         Dmitry Perchanov <dmitry.perchanov@intel.com>
-Subject: Re: [PATCH v3 05/10] media: uapi: Document which mbus format fields
- are valid for metadata
-Message-ID: <20230905164404.GB7971@pendragon.ideasonboard.com>
+Subject: Re: [PATCH v3 07/10] media: uapi: Add generic 8-bit metadata format
+ definitions
+Message-ID: <20230905164720.GC7971@pendragon.ideasonboard.com>
 References: <20230808075538.3043934-1-sakari.ailus@linux.intel.com>
- <20230808075538.3043934-6-sakari.ailus@linux.intel.com>
- <xh5qpzbzamydaanlmfcqzlpwd7dfaawpxabsnejuoupsbx2yx7@dk3s6zuujtvf>
- <ZNoAv4i1hG7DBayi@kekkonen.localdomain>
+ <20230808075538.3043934-8-sakari.ailus@linux.intel.com>
+ <9d3f512c-69c6-3789-83af-d151acd58ebe@xs4all.nl>
+ <decr6lkgqk3fuxsyq4v3q46idmsfp6mlwfm6zm4fwcnlzcr5tw@ryikjpaazhzp>
+ <ZNX7S7zh0RG2vQOA@kekkonen.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZNoAv4i1hG7DBayi@kekkonen.localdomain>
+In-Reply-To: <ZNX7S7zh0RG2vQOA@kekkonen.localdomain>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Aug 14, 2023 at 10:23:59AM +0000, Sakari Ailus wrote:
-> On Thu, Aug 10, 2023 at 05:19:02PM +0200, Jacopo Mondi wrote:
-> > On Tue, Aug 08, 2023 at 10:55:33AM +0300, Sakari Ailus wrote:
-> > > Now that metadata mbus formats have been added, it is necessary to define
-> > > which fields in struct v4l2_mbus_format are applicable to them (not many).
-> > >
-> > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > > ---
-> > >  include/uapi/linux/v4l2-mediabus.h | 18 ++++++++++++------
-> > >  1 file changed, 12 insertions(+), 6 deletions(-)
-> > >
-> > > diff --git a/include/uapi/linux/v4l2-mediabus.h b/include/uapi/linux/v4l2-mediabus.h
-> > > index 6b07b73473b5..3cadb3b58b85 100644
-> > > --- a/include/uapi/linux/v4l2-mediabus.h
-> > > +++ b/include/uapi/linux/v4l2-mediabus.h
-> > > @@ -19,12 +19,18 @@
-> > >   * @width:	image width
-> > >   * @height:	image height
-> > >   * @code:	data format code (from enum v4l2_mbus_pixelcode)
-> > > - * @field:	used interlacing type (from enum v4l2_field)
-> > > - * @colorspace:	colorspace of the data (from enum v4l2_colorspace)
-> > > - * @ycbcr_enc:	YCbCr encoding of the data (from enum v4l2_ycbcr_encoding)
-> > > - * @hsv_enc:	HSV encoding of the data (from enum v4l2_hsv_encoding)
-> > > - * @quantization: quantization of the data (from enum v4l2_quantization)
-> > > - * @xfer_func:  transfer function of the data (from enum v4l2_xfer_func)
-> > > + * @field:	used interlacing type (from enum v4l2_field), not applicable
-> > > + *		to metadata mbus codes
-> > 
-> > "not applicable" is a bit geeric. Should this be set to
-> > V4L2_FIELD_NONE (for metadata, and progressive image formats maybe ?)
-> 
-> I actually intended to have the same wording here than for the other fields
-> but missed changing this.
-> 
-> 0 corresponds to V4L2_FIELD_ANY.
-> 
-> > > + * @colorspace:	colorspace of the data (from enum v4l2_colorspace), zero on
-> > > + *		metadata mbus codes
-> > > + * @ycbcr_enc:	YCbCr encoding of the data (from enum v4l2_ycbcr_encoding), zero
-> > > + *		on metadata mbus codes
-> > > + * @hsv_enc:	HSV encoding of the data (from enum v4l2_hsv_encoding), zero on
-> > > + *		metadata mbus codes
-> > 
-> > Can this be zero ?
-> > 
-> > enum v4l2_hsv_encoding {
-> > 
-> > 	/* Hue mapped to 0 - 179 */
-> > 	V4L2_HSV_ENC_180		= 128,
-> > 
-> > 	/* Hue mapped to 0-255 */
-> > 	V4L2_HSV_ENC_256		= 129,
-> > };
-> 
-> Good question. Neither value is meaningful for metadata.
-> 
-> The values appear to be such in the enum to avoid colliding with ycbcr
-> encoding values (another field above).
-> 
-> Generally, what doesn't matter will be zero. These fields have been added
-> at some point and a lot of drivers do not set them, even for pixel data.
-> 
-> I wonder what Hans and Laurent think.
+Hi Sakari,
 
-ycbcr_enc and hsv_enc are stored in an unnamed union.
+On Fri, Aug 11, 2023 at 09:11:39AM +0000, Sakari Ailus wrote:
+> On Fri, Aug 11, 2023 at 08:31:16AM +0200, Jacopo Mondi wrote:
+> > > > +V4L2_META_FMT_GENERIC_CSI2_10
+> > > > +-----------------------------
+> > > > +
+> > > > +V4L2_META_FMT_GENERIC_CSI2_10 contains packed 8-bit generic metadata, 10 bits
+> > > > +for each 8 bits of data. Every four bytes of metadata is followed by a single
+> > > > +byte of padding. The way the data is stored follows the CSI-2 specification.
+> > > > +
+> > > > +This format is also used on CSI-2 on 20 bits per sample format that packs two
+> > > > +bytes of metadata into one sample.
+> > > > +
+> > > > +This format is little endian.
+> > > > +
+> > > > +**Byte Order Of V4L2_META_FMT_GENERIC_CSI2_10.**
+> > > > +Each cell is one byte. "M" denotes a byte of metadata and "p" a byte of padding.
+> > >
+> > > I think you should document whether the padding is always 0 or can be any value.
+> > > Perhaps 'X' is a better 'name' for the padding byte in the latter case.
+> > 
+> > Did I get this right that this format is supposed to work as the RAW10
+> > CSI-2 packed image format, where 4 bytes contain the higher 8 bits of
+> > the 10 bits sample and the 5th byte every 4 contains the lower 2 bits of
+> > the previous 4 sample ?
+> > 
+> > If that's the case, is 'padding' the correct term here ?
+> 
+> What else would you call it? It'll be zeros that exist just due to the bit
+> depth used and as such not interesting at all.
 
-> > > + * @quantization: quantization of the data (from enum v4l2_quantization), zero
-> > > + *		on metadata mbus codes
-> > > + * @xfer_func:  transfer function of the data (from enum v4l2_xfer_func), zero
-> > > + *		on metadata mbus codes
-> > >   * @flags:	flags (V4L2_MBUS_FRAMEFMT_*)
-> > >   * @reserved:  reserved bytes that can be later used
-> > >   */
+It's actually not 0, CCS requires the padding bytes to be 0x55.
+
+I wonder if the conformance test suite tests the contents of the padding
+bytes.
 
 -- 
 Regards,
