@@ -2,75 +2,122 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B401FEC8743
-	for <linux-media@archiver.kernel.org>; Thu,  7 Sep 2023 17:17:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9EE1EC8742
+	for <linux-media@archiver.kernel.org>; Thu,  7 Sep 2023 17:22:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242768AbjIGRRj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 7 Sep 2023 13:17:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53888 "EHLO
+        id S237076AbjIGRWb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 7 Sep 2023 13:22:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242780AbjIGRRi (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Sep 2023 13:17:38 -0400
-Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4DA10F9;
-        Thu,  7 Sep 2023 10:17:09 -0700 (PDT)
+        with ESMTP id S229379AbjIGRW3 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Sep 2023 13:22:29 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4E01FCE
+        for <linux-media@vger.kernel.org>; Thu,  7 Sep 2023 10:22:01 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2bcc4347d2dso20550201fa.0
+        for <linux-media@vger.kernel.org>; Thu, 07 Sep 2023 10:22:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=uSXuGn3O+qqWl5LwJxGEkPc7y1T0Fvv+zmkZqiAv3bo=;
-  b=Hx88vk+kZ/st88XSOfMxLqrNvqFC5gz0Rjsu9FnmuxDb6Ey9n9iNx7X3
-   5mvlWqUzb578CukZIhvBvScfv1YGt5HhmEmohAMwtUhRjDPRCDgZnwHdn
-   65YFgxzTg0Odnf7stkK+lMg7TbECQQOmUA50DEcI4rbfx/H5A9Ng9f7GJ
-   w=;
-Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="6.02,234,1688421600"; 
-   d="scan'208";a="65324671"
-Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2023 11:55:32 +0200
-From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     kernel-janitors@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH 11/11] media: platform: mtk-mdp3: add missing of_node_put
-Date:   Thu,  7 Sep 2023 11:55:21 +0200
-Message-Id: <20230907095521.14053-12-Julia.Lawall@inria.fr>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230907095521.14053-1-Julia.Lawall@inria.fr>
-References: <20230907095521.14053-1-Julia.Lawall@inria.fr>
+        d=linaro.org; s=google; t=1694107268; x=1694712068; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zSVSANzjwjWJL58JqdMOyxf39JxdZOjplNSWyv8wvaY=;
+        b=B0cHCGCxJ99yqqUbAOGyNbHGzCDSiIBrOblkdL0I7V4nPhOjhqlHlISeTfL+jbvpiq
+         HosLOPRuHwbLmlAmBAyGkNkwqFPTExGHDAF4jEhC1tubKTmCDxGvQ2rx/W4HvfuZrBJv
+         4yIBx/e9KK1jn3lcrExZaKwQOHfQ3LnZhkZvqLkj8mL5gOWhnHQsTfthoWPufCUtXW9v
+         Km9R1KiFAgRDZmTWhJyJHX4Uv/+vrPAmqCG/c2pQGVV2nl6yIu6yh79praKaOkOi5E2X
+         fHovi5UD9uk/Q2WwnQSlJW4b33sWLMp33+tvjbIdeK6jqtiCR6pqzylFYRUPaB/30vbh
+         I8nQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1694107268; x=1694712068;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zSVSANzjwjWJL58JqdMOyxf39JxdZOjplNSWyv8wvaY=;
+        b=dMvgBXtq/xDfgSfbiX8PcwJPd/U25RGC0dXsGS6TRoXIiochLPpo/R045sGgdKKQzZ
+         nEDXdKrJi4dRTrobpbkoCl7fVr3PCrMeushd4UlkT+MsGkBFeL1KC4pKzZ+AIsn/ZsNr
+         re6bgQy1Qpzip6jEqkozYRJANxDQCLyQEGK+F3qx2m9Hzr3G5gWRIiyZmNDCJPkeJwvq
+         BoJ2g5N5rSlavHuZ9gAJZYTU/9gRja4fNfgAp0YifRxD4Al6egG2ZR4P6lhz/005Pmhq
+         30yhOAk4wK0Oub0RN3LRc/elu3TAEVqy5akJLsyYJZGWMQSSc9NcMciYTphdigW2Zrbk
+         AZPw==
+X-Gm-Message-State: AOJu0Yw4XaJVKikGD7ewSodyYuDfniTWGW79OJXIO0O6Z5I1G2kk7tA5
+        W/i1+8mHP56lViZ1tA/2HQPKWAIhGa3C/1AKSOQ=
+X-Google-Smtp-Source: AGHT+IHKo1JmOMb4+djt+NKGu6fxIHBbTNo3gqmI+h53oZDKltsofVpbHkVMvWTKSuUVVecRTOFMHQ==
+X-Received: by 2002:a5d:5643:0:b0:319:7471:2965 with SMTP id j3-20020a5d5643000000b0031974712965mr5838wrw.21.1694105066449;
+        Thu, 07 Sep 2023 09:44:26 -0700 (PDT)
+Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id d15-20020adffd8f000000b00317ab75748bsm23822145wrr.49.2023.09.07.09.44.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Sep 2023 09:44:26 -0700 (PDT)
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
+        andrey.konovalov@linaro.org
+Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 09/17] media: qcom: camss: Remove special case for VFE get/put
+Date:   Thu,  7 Sep 2023 17:44:02 +0100
+Message-ID: <20230907164410.36651-10-bryan.odonoghue@linaro.org>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20230907164410.36651-1-bryan.odonoghue@linaro.org>
+References: <20230907164410.36651-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-for_each_child_of_node performs an of_node_get on each
-iteration, so a break out of the loop requires an
-of_node_put.
+From sdm845 onwards we need to ensure the VFE is powered on prior to
+switching on the CSID.
 
-This was done using the Coccinelle semantic patch
-iterators/for_each_child.cocci
+Currently the code tests for sdm845, sm8250 and then does get/set. This is
+not extensible and it turns out is not necessary either since vfe_get and
+vfe_set reference count.
 
-Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+Remove the over-conservative SoC version check.
 
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org> # rb3 # db410c
 ---
- drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/platform/qcom/camss/camss-csid.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
-diff -u -p a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
---- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
-@@ -1137,6 +1137,7 @@ int mdp_comp_config(struct mdp_dev *mdp)
- 		comp = mdp_comp_create(mdp, node, id);
- 		if (IS_ERR(comp)) {
- 			ret = PTR_ERR(comp);
-+			of_node_put(node);
- 			goto err_init_comps;
- 		}
+diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
+index 99f651e2021cb..02ae3f5cb0c0e 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid.c
++++ b/drivers/media/platform/qcom/camss/camss-csid.c
+@@ -159,15 +159,12 @@ static int csid_set_power(struct v4l2_subdev *sd, int on)
+ 	struct camss *camss = csid->camss;
+ 	struct device *dev = camss->dev;
+ 	struct vfe_device *vfe = &camss->vfe[csid->id];
+-	u32 version = camss->res->version;
+ 	int ret = 0;
  
+ 	if (on) {
+-		if (version == CAMSS_8250 || version == CAMSS_845) {
+-			ret = vfe_get(vfe);
+-			if (ret < 0)
+-				return ret;
+-		}
++		ret = vfe_get(vfe);
++		if (ret < 0)
++			return ret;
+ 
+ 		ret = pm_runtime_resume_and_get(dev);
+ 		if (ret < 0)
+@@ -217,8 +214,7 @@ static int csid_set_power(struct v4l2_subdev *sd, int on)
+ 		regulator_bulk_disable(csid->num_supplies,
+ 				       csid->supplies);
+ 		pm_runtime_put_sync(dev);
+-		if (version == CAMSS_8250 || version == CAMSS_845)
+-			vfe_put(vfe);
++		vfe_put(vfe);
+ 	}
+ 
+ 	return ret;
+-- 
+2.41.0
 
