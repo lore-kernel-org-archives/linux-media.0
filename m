@@ -2,53 +2,53 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AD81EC873E
-	for <linux-media@archiver.kernel.org>; Thu,  7 Sep 2023 16:52:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60B09EC8747
+	for <linux-media@archiver.kernel.org>; Thu,  7 Sep 2023 16:54:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244298AbjIGQwH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 7 Sep 2023 12:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34392 "EHLO
+        id S244045AbjIGQyr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 7 Sep 2023 12:54:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244272AbjIGQwG (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Sep 2023 12:52:06 -0400
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC0331BFD
-        for <linux-media@vger.kernel.org>; Thu,  7 Sep 2023 09:51:34 -0700 (PDT)
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-40061928e5aso13170035e9.3
-        for <linux-media@vger.kernel.org>; Thu, 07 Sep 2023 09:51:34 -0700 (PDT)
+        with ESMTP id S244679AbjIGQyq (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Sep 2023 12:54:46 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3281BFB
+        for <linux-media@vger.kernel.org>; Thu,  7 Sep 2023 09:54:16 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-52889bc61b6so1648019a12.0
+        for <linux-media@vger.kernel.org>; Thu, 07 Sep 2023 09:54:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694105061; x=1694709861; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1694105584; x=1694710384; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OEHv0MdkX93VAwCi1pNsQdwYRCrC3ZMgoibqw+TRjPw=;
-        b=J58ksav4mPwF7fDql0Le6dUT7clKNxWSO/9+SXFPPutQZIXucvk87PR+2bBUUKtouY
-         iy5FcVVdwcsSaudk5FfW3bdBDUKGuq+7bCO3Z6VIXeStzGXHa+OM+vFJU+hWuoJE9oA8
-         LaZGl+nUhy3fiKz7GrhxkeQkd3RRr1H+B2RX68dhxgApVIeS1f6kjPwYldFK4jApMNPQ
-         +APmGjzjMdufL7kxFZ0GLM9MUx+lFZkKuarbAVgVNviGzbDTMd3CAXA/uJ37qIpz6prC
-         ie72sZX7seI4mo2KUz3Mm6IUA84LOlO7hWoNGm+mJv7CXt0w3u1gMGFnMHTyZY6d+6BP
-         q7Xg==
+        bh=FA5jwmfCSlNH83mfRCiNqnTglrB8xLWvA9YsruFheoo=;
+        b=Gq/zkd5xU4cnWdJ2I44s4BJop5yLSMrqwG9hMDJVvS9/NbRPOoiXVTDRgbK8/FL9mU
+         M+KBJLgStUKGT9tbxlxbnn1dI0NZQOHE9jHvn0GhObQm5L/hdohm8v146h7ms97tq/OZ
+         31GoUGpd+Alg7HFbKRyXZXrDvMOJbHWs0YJ8DTcpZGvyj8Dxc+EOH7AH9KiwPYTbRwYs
+         6Uc7MshR1LZKmJlCg17MDKdNbsb8zuenWHK9q9xwg3zDl0DCyrF+xEj+KsoB2XwpGYZq
+         SQWWyJxSk1J8nhq/76IceHXsxPiNfGyvvWDsFW8U4+FQTAdvyxnIb6lnAkIjLQUSscaW
+         5T0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1694105061; x=1694709861;
+        d=1e100.net; s=20221208; t=1694105584; x=1694710384;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OEHv0MdkX93VAwCi1pNsQdwYRCrC3ZMgoibqw+TRjPw=;
-        b=b1DFikQVWJN1fL1s7xsdZIjsZq3chkzJyeeWZFlH3S4QeJkHZcU5QXiHBrDN+PAolk
-         qn+a6odoe3DNQ8X3aSVg5pWelZkomHjGhM64tgvliOFxbo0nehCbzPj0IywtsSR95MnE
-         66/O370xtoTEBvY7dNVcAgrIYjBvMVrwPwlvCX6bQUoPsKAlrVINt2VyHsMe35jyrctK
-         0j2Z1HYqgG9LUetj67gbwN3WHGckCKvX6qVg9Mux+cbWjrEd3JIcKRccNbYJ7NZzn0uc
-         GM3UWukB3BdLhxGGd3OFi+cGcIzwPHO85W7IShewZULMb3Pf7uD5YaNM60zyJ7jjK9Wr
-         uTkw==
-X-Gm-Message-State: AOJu0Yxja1dTmuh/fg8ETxz7aaIXqEzrfDuB3hFPG4Jo2J09AUnYbpAB
-        scHkXZEswDap0RLgvyYMTUbp8g==
-X-Google-Smtp-Source: AGHT+IFkzdTbzhr5MEuwRGNQuvx0ZAuPI3EQQBj3a/RoaT81dJU4eHj0yVwXL+761H1AaYu7u0Ri6Q==
-X-Received: by 2002:adf:cd0a:0:b0:317:cdc4:762e with SMTP id w10-20020adfcd0a000000b00317cdc4762emr6008892wrm.63.1694105061207;
-        Thu, 07 Sep 2023 09:44:21 -0700 (PDT)
+        bh=FA5jwmfCSlNH83mfRCiNqnTglrB8xLWvA9YsruFheoo=;
+        b=jqZjqaYppQ6KoNfe+WEIRFSpp+f0Ti9eZwcdc/RkIgbq2BSTaNbNdbCe9qI+bV1r4s
+         K6e4S6XTWbFbv41nCp1DtQZtLkOwTNs669g1Jls8LpWWMlxacfKLCzvh5PEUpnGoLpVE
+         UQyjBZ5vTKn7TDvH+tvBZtaENfSvVejWOOvAsCOca0+qLcsqBtBWSuzYWws9KKTwUDmA
+         3LXotFS8YDxxkzhByaer8K/x47o/LtRvLIE89II9/fOG2Wg/up43JoxnCFI/BizQ0xbB
+         lyNRYbwDh/FL3MHMIPPhOQPHecca+ZvBUn9fkToFOA3vETIdHbYxaMRCOCKipZgTdnwn
+         FHUA==
+X-Gm-Message-State: AOJu0YxeBJ5awO+I7RQVn19mUyro5ApeqjAoo+qjUoc4rt3OunprzFKy
+        0Vi066RfbXcF9QRUWt+w/EX+CCq9wb40TrC0zkk=
+X-Google-Smtp-Source: AGHT+IFroVO8G3mbET4JOoWsuUdk2z+EQkzfg9MqOG6q51gWHzzSYhkYXfwGQSn9ILQzuo7RsAP0eA==
+X-Received: by 2002:a5d:4204:0:b0:31a:d2b2:f28f with SMTP id n4-20020a5d4204000000b0031ad2b2f28fmr4918993wrq.51.1694105075012;
+        Thu, 07 Sep 2023 09:44:35 -0700 (PDT)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id d15-20020adffd8f000000b00317ab75748bsm23822145wrr.49.2023.09.07.09.44.20
+        by smtp.gmail.com with ESMTPSA id d15-20020adffd8f000000b00317ab75748bsm23822145wrr.49.2023.09.07.09.44.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Sep 2023 09:44:20 -0700 (PDT)
+        Thu, 07 Sep 2023 09:44:34 -0700 (PDT)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
         agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
@@ -57,9 +57,9 @@ To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
         andrey.konovalov@linaro.org
 Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 06/17] media: qcom: camss: Pass line_num from compat resources
-Date:   Thu,  7 Sep 2023 17:43:59 +0100
-Message-ID: <20230907164410.36651-7-bryan.odonoghue@linaro.org>
+Subject: [PATCH v4 15/17] media: qcom: camss: Move vfe_disable into a common routine where applicable
+Date:   Thu,  7 Sep 2023 17:44:08 +0100
+Message-ID: <20230907164410.36651-16-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20230907164410.36651-1-bryan.odonoghue@linaro.org>
 References: <20230907164410.36651-1-bryan.odonoghue@linaro.org>
@@ -69,255 +69,227 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-line_num indicates the number of RDI - raw data interface channels which
-are associated with a given IFE/VFE - image/video front end.
+We can move vfe_disable() into a common routine in the core VFE file
+provided we make wm_stop() a VFE specific callback.
 
-On several SoCs the RDI number is not static for each VFE - for example
-on sm8250 VFE Lite has four RDIs where regular VFE has three.
+The callback is required to capture the case where VFE 17x currently isn't
+VC enabled where as VFE 480 is.
 
-Assigning line_num statically in the subdev_init() phase initialises
-each VFE to the lower number, meaning in practical terms that we are
-lobbing off one RDI on some VFEs.
-
-Interrupt handling uses static for (i = RDI0; i < RDI2; i++) {} in some
-of our VFE blocks but this can't work for situations where we have a
-mixture of VFE @ 3 RDI and VFE-lite @ 4 RDI blocks.
-
-First step to remediate is to pass line_num from a compat string
-controlled data-structure and do so on a per-VFE basis.
-
-Later patches will assign the correct number of RDI blocks per VFE.
-
+Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- .../media/platform/qcom/camss/camss-vfe-170.c |  2 --
- .../media/platform/qcom/camss/camss-vfe-4-1.c |  2 --
- .../media/platform/qcom/camss/camss-vfe-4-7.c |  2 --
- .../media/platform/qcom/camss/camss-vfe-4-8.c |  2 --
- .../media/platform/qcom/camss/camss-vfe-480.c |  1 -
- drivers/media/platform/qcom/camss/camss-vfe.c |  5 +++
- drivers/media/platform/qcom/camss/camss.c     | 36 ++++++++++++-------
- drivers/media/platform/qcom/camss/camss.h     |  1 +
- 8 files changed, 30 insertions(+), 21 deletions(-)
+ .../media/platform/qcom/camss/camss-vfe-170.c | 40 +-----------------
+ .../media/platform/qcom/camss/camss-vfe-480.c | 40 +-----------------
+ drivers/media/platform/qcom/camss/camss-vfe.c | 42 +++++++++++++++++++
+ drivers/media/platform/qcom/camss/camss-vfe.h |  9 ++++
+ 4 files changed, 53 insertions(+), 78 deletions(-)
 
 diff --git a/drivers/media/platform/qcom/camss/camss-vfe-170.c b/drivers/media/platform/qcom/camss/camss-vfe-170.c
-index 82d2392022dd1..2ba7160b3bd1e 100644
+index a5aa799501861..0b211fed12760 100644
 --- a/drivers/media/platform/qcom/camss/camss-vfe-170.c
 +++ b/drivers/media/platform/qcom/camss/camss-vfe-170.c
-@@ -753,8 +753,6 @@ static void vfe_subdev_init(struct device *dev, struct vfe_device *vfe)
- {
- 	vfe->isr_ops = vfe_isr_ops_170;
- 	vfe->video_ops = vfe_video_ops_170;
--
--	vfe->line_num = VFE_LINE_NUM_GEN2;
+@@ -494,22 +494,6 @@ static int vfe_enable_output(struct vfe_line *line)
+ 	return 0;
  }
  
- const struct vfe_hw_ops vfe_ops_170 = {
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe-4-1.c b/drivers/media/platform/qcom/camss/camss-vfe-4-1.c
-index bc309f326f519..2911e4126e7ad 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe-4-1.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe-4-1.c
-@@ -992,8 +992,6 @@ static void vfe_subdev_init(struct device *dev, struct vfe_device *vfe)
- 	vfe->isr_ops = vfe_isr_ops_gen1;
- 	vfe->ops_gen1 = &vfe_ops_gen1_4_1;
- 	vfe->video_ops = vfe_video_ops_gen1;
+-static void vfe_disable_output(struct vfe_line *line)
+-{
+-	struct vfe_device *vfe = to_vfe(line);
+-	struct vfe_output *output = &line->output;
+-	unsigned long flags;
+-	unsigned int i;
 -
--	vfe->line_num = VFE_LINE_NUM_GEN1;
+-	spin_lock_irqsave(&vfe->output_lock, flags);
+-	for (i = 0; i < output->wm_num; i++)
+-		vfe_wm_stop(vfe, output->wm_idx[i]);
+-	output->gen2.active_num = 0;
+-	spin_unlock_irqrestore(&vfe->output_lock, flags);
+-
+-	vfe_reset(vfe);
+-}
+-
+ /*
+  * vfe_enable - Enable streaming on VFE line
+  * @line: VFE line
+@@ -555,29 +539,6 @@ static int vfe_enable(struct vfe_line *line)
+ 	return ret;
  }
  
- const struct vfe_hw_ops vfe_ops_4_1 = {
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe-4-7.c b/drivers/media/platform/qcom/camss/camss-vfe-4-7.c
-index 8acd76c9746ba..b65ed0fef595e 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe-4-7.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe-4-7.c
-@@ -1188,8 +1188,6 @@ static void vfe_subdev_init(struct device *dev, struct vfe_device *vfe)
- 	vfe->isr_ops = vfe_isr_ops_gen1;
- 	vfe->ops_gen1 = &vfe_ops_gen1_4_7;
- 	vfe->video_ops = vfe_video_ops_gen1;
+-/*
+- * vfe_disable - Disable streaming on VFE line
+- * @line: VFE line
+- *
+- * Return 0 on success or a negative error code otherwise
+- */
+-static int vfe_disable(struct vfe_line *line)
+-{
+-	struct vfe_device *vfe = to_vfe(line);
 -
--	vfe->line_num = VFE_LINE_NUM_GEN1;
- }
- 
- const struct vfe_hw_ops vfe_ops_4_7 = {
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe-4-8.c b/drivers/media/platform/qcom/camss/camss-vfe-4-8.c
-index 3a0167ecf873a..7b3805177f037 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe-4-8.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe-4-8.c
-@@ -1173,8 +1173,6 @@ static void vfe_subdev_init(struct device *dev, struct vfe_device *vfe)
- 	vfe->isr_ops = vfe_isr_ops_gen1;
- 	vfe->ops_gen1 = &vfe_ops_gen1_4_8;
- 	vfe->video_ops = vfe_video_ops_gen1;
+-	vfe_disable_output(line);
 -
--	vfe->line_num = VFE_LINE_NUM_GEN1;
- }
- 
- const struct vfe_hw_ops vfe_ops_4_8 = {
+-	vfe_put_output(line);
+-
+-	mutex_lock(&vfe->stream_lock);
+-
+-	vfe->stream_count--;
+-
+-	mutex_unlock(&vfe->stream_lock);
+-
+-	return 0;
+-}
+-
+ /*
+  * vfe_isr_sof - Process start of frame interrupt
+  * @vfe: VFE Device
+@@ -770,4 +731,5 @@ const struct vfe_hw_ops vfe_ops_170 = {
+ 	.vfe_enable = vfe_enable,
+ 	.vfe_halt = vfe_halt,
+ 	.violation_read = vfe_violation_read,
++	.vfe_wm_stop = vfe_wm_stop,
+ };
 diff --git a/drivers/media/platform/qcom/camss/camss-vfe-480.c b/drivers/media/platform/qcom/camss/camss-vfe-480.c
-index 074fa4e38163e..43a2964121f22 100644
+index 43a2964121f22..f2368b77fc6d6 100644
 --- a/drivers/media/platform/qcom/camss/camss-vfe-480.c
 +++ b/drivers/media/platform/qcom/camss/camss-vfe-480.c
-@@ -569,7 +569,6 @@ static const struct camss_video_ops vfe_video_ops_480 = {
- static void vfe_subdev_init(struct device *dev, struct vfe_device *vfe)
- {
- 	vfe->video_ops = vfe_video_ops_480;
--	vfe->line_num = MAX_VFE_OUTPUT_LINES;
+@@ -327,22 +327,6 @@ static int vfe_enable_output(struct vfe_line *line)
+ 	return 0;
  }
  
- const struct vfe_hw_ops vfe_ops_480 = {
+-static void vfe_disable_output(struct vfe_line *line)
+-{
+-	struct vfe_device *vfe = to_vfe(line);
+-	struct vfe_output *output = &line->output;
+-	unsigned long flags;
+-	unsigned int i;
+-
+-	spin_lock_irqsave(&vfe->output_lock, flags);
+-	for (i = 0; i < output->wm_num; i++)
+-		vfe_wm_stop(vfe, output->wm_idx[i]);
+-	output->gen2.active_num = 0;
+-	spin_unlock_irqrestore(&vfe->output_lock, flags);
+-
+-	vfe_reset(vfe);
+-}
+-
+ /*
+  * vfe_enable - Enable streaming on VFE line
+  * @line: VFE line
+@@ -390,29 +374,6 @@ static int vfe_enable(struct vfe_line *line)
+ 	return ret;
+ }
+ 
+-/*
+- * vfe_disable - Disable streaming on VFE line
+- * @line: VFE line
+- *
+- * Return 0 on success or a negative error code otherwise
+- */
+-static int vfe_disable(struct vfe_line *line)
+-{
+-	struct vfe_device *vfe = to_vfe(line);
+-
+-	vfe_disable_output(line);
+-
+-	vfe_put_output(line);
+-
+-	mutex_lock(&vfe->stream_lock);
+-
+-	vfe->stream_count--;
+-
+-	mutex_unlock(&vfe->stream_lock);
+-
+-	return 0;
+-}
+-
+ /*
+  * vfe_isr_reg_update - Process reg update interrupt
+  * @vfe: VFE Device
+@@ -581,4 +542,5 @@ const struct vfe_hw_ops vfe_ops_480 = {
+ 	.vfe_disable = vfe_disable,
+ 	.vfe_enable = vfe_enable,
+ 	.vfe_halt = vfe_halt,
++	.vfe_wm_stop = vfe_wm_stop,
+ };
 diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
-index 94ee7c7039eb3..f381c82f1f877 100644
+index f3cf387e4907e..26817f9ca4f1a 100644
 --- a/drivers/media/platform/qcom/camss/camss-vfe.c
 +++ b/drivers/media/platform/qcom/camss/camss-vfe.c
-@@ -1305,6 +1305,11 @@ int msm_vfe_subdev_init(struct camss *camss, struct vfe_device *vfe,
- 	default:
- 		return -EINVAL;
- 	}
+@@ -410,6 +410,48 @@ int vfe_put_output(struct vfe_line *line)
+ 	return 0;
+ }
+ 
++static int vfe_disable_output(struct vfe_line *line)
++{
++	struct vfe_device *vfe = to_vfe(line);
++	struct vfe_output *output = &line->output;
++	unsigned long flags;
++	unsigned int i;
++	int ret;
 +
-+	if (!res->line_num)
-+		return -EINVAL;
++	spin_lock_irqsave(&vfe->output_lock, flags);
++	for (i = 0; i < output->wm_num; i++)
++		vfe->ops->vfe_wm_stop(vfe, output->wm_idx[i]);
++	output->gen2.active_num = 0;
++	spin_unlock_irqrestore(&vfe->output_lock, flags);
 +
-+	vfe->line_num = res->line_num;
- 	vfe->ops->subdev_init(dev, vfe);
- 
- 	/* Memory */
-diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
-index d1152a7db9cd2..54886a2a449b0 100644
---- a/drivers/media/platform/qcom/camss/camss.c
-+++ b/drivers/media/platform/qcom/camss/camss.c
-@@ -123,7 +123,8 @@ static const struct camss_subdev_resources vfe_res_8x16[] = {
- 				{ 0 },
- 				{ 0 } },
- 		.reg = { "vfe0" },
--		.interrupt = { "vfe0" }
-+		.interrupt = { "vfe0" },
-+		.line_num = VFE_LINE_NUM_GEN1,
- 	}
++	ret = vfe_reset(vfe);
++
++	return ret;
++}
++
++/*
++ * vfe_disable - Disable streaming on VFE line
++ * @line: VFE line
++ *
++ * Return 0 on success or a negative error code otherwise
++ */
++int vfe_disable(struct vfe_line *line)
++{
++	struct vfe_device *vfe = to_vfe(line);
++
++	vfe_disable_output(line);
++
++	vfe_put_output(line);
++
++	mutex_lock(&vfe->stream_lock);
++
++	vfe->stream_count--;
++
++	mutex_unlock(&vfe->stream_lock);
++
++	return 0;
++}
++
+ /**
+  * vfe_isr_comp_done() - Process composite image done interrupt
+  * @vfe: VFE Device
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe.h b/drivers/media/platform/qcom/camss/camss-vfe.h
+index 4783afa73a365..09baded0dcdd6 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe.h
++++ b/drivers/media/platform/qcom/camss/camss-vfe.h
+@@ -114,6 +114,7 @@ struct vfe_hw_ops {
+ 	int (*vfe_enable)(struct vfe_line *line);
+ 	int (*vfe_halt)(struct vfe_device *vfe);
+ 	void (*violation_read)(struct vfe_device *vfe);
++	void (*vfe_wm_stop)(struct vfe_device *vfe, u8 wm);
  };
  
-@@ -263,7 +264,8 @@ static const struct camss_subdev_resources vfe_res_8x96[] = {
- 				{ 0 },
- 				{ 0 } },
- 		.reg = { "vfe0" },
--		.interrupt = { "vfe0" }
-+		.interrupt = { "vfe0" },
-+		.line_num = VFE_LINE_NUM_GEN1,
- 	},
+ struct vfe_isr_ops {
+@@ -192,6 +193,14 @@ int vfe_reserve_wm(struct vfe_device *vfe, enum vfe_line_id line_id);
+  */
+ int vfe_reset(struct vfe_device *vfe);
  
- 	/* VFE1 */
-@@ -281,7 +283,8 @@ static const struct camss_subdev_resources vfe_res_8x96[] = {
- 				{ 0 },
- 				{ 0 } },
- 		.reg = { "vfe1" },
--		.interrupt = { "vfe1" }
-+		.interrupt = { "vfe1" },
-+		.line_num = VFE_LINE_NUM_GEN1,
- 	}
- };
- 
-@@ -442,7 +445,8 @@ static const struct camss_subdev_resources vfe_res_660[] = {
- 				{ 0 },
- 				{ 0 } },
- 		.reg = { "vfe0" },
--		.interrupt = { "vfe0" }
-+		.interrupt = { "vfe0" },
-+		.line_num = VFE_LINE_NUM_GEN1,
- 	},
- 
- 	/* VFE1 */
-@@ -463,7 +467,8 @@ static const struct camss_subdev_resources vfe_res_660[] = {
- 				{ 0 },
- 				{ 0 } },
- 		.reg = { "vfe1" },
--		.interrupt = { "vfe1" }
-+		.interrupt = { "vfe1" },
-+		.line_num = VFE_LINE_NUM_GEN1,
- 	}
- };
- 
-@@ -621,7 +626,8 @@ static const struct camss_subdev_resources vfe_res_845[] = {
- 				{ 19200000, 75000000, 384000000, 538666667 },
- 				{ 384000000 } },
- 		.reg = { "vfe0" },
--		.interrupt = { "vfe0" }
-+		.interrupt = { "vfe0" },
-+		.line_num = VFE_LINE_NUM_GEN2,
- 	},
- 
- 	/* VFE1 */
-@@ -641,7 +647,8 @@ static const struct camss_subdev_resources vfe_res_845[] = {
- 				{ 19200000, 75000000, 384000000, 538666667 },
- 				{ 384000000 } },
- 		.reg = { "vfe1" },
--		.interrupt = { "vfe1" }
-+		.interrupt = { "vfe1" },
-+		.line_num = VFE_LINE_NUM_GEN2,
- 	},
- 
- 	/* VFE-lite */
-@@ -660,7 +667,8 @@ static const struct camss_subdev_resources vfe_res_845[] = {
- 				{ 19200000, 75000000, 384000000, 538666667 },
- 				{ 384000000 } },
- 		.reg = { "vfe_lite" },
--		.interrupt = { "vfe_lite" }
-+		.interrupt = { "vfe_lite" },
-+		.line_num = VFE_LINE_NUM_GEN2,
- 	}
- };
- 
-@@ -787,7 +795,8 @@ static const struct camss_subdev_resources vfe_res_8250[] = {
- 				{ 0 },
- 				{ 0 } },
- 		.reg = { "vfe0" },
--		.interrupt = { "vfe0" }
-+		.interrupt = { "vfe0" },
-+		.line_num = 4,
- 	},
- 	/* VFE1 */
- 	{
-@@ -805,7 +814,8 @@ static const struct camss_subdev_resources vfe_res_8250[] = {
- 				{ 0 },
- 				{ 0 } },
- 		.reg = { "vfe1" },
--		.interrupt = { "vfe1" }
-+		.interrupt = { "vfe1" },
-+		.line_num = 4,
- 	},
- 	/* VFE2 (lite) */
- 	{
-@@ -822,7 +832,8 @@ static const struct camss_subdev_resources vfe_res_8250[] = {
- 				{ 400000000, 480000000 },
- 				{ 0 } },
- 		.reg = { "vfe_lite0" },
--		.interrupt = { "vfe_lite0" }
-+		.interrupt = { "vfe_lite0" },
-+		.line_num = 4,
- 	},
- 	/* VFE3 (lite) */
- 	{
-@@ -839,7 +850,8 @@ static const struct camss_subdev_resources vfe_res_8250[] = {
- 				{ 400000000, 480000000 },
- 				{ 0 } },
- 		.reg = { "vfe_lite1" },
--		.interrupt = { "vfe_lite1" }
-+		.interrupt = { "vfe_lite1" },
-+		.line_num = 4,
- 	},
- };
- 
-diff --git a/drivers/media/platform/qcom/camss/camss.h b/drivers/media/platform/qcom/camss/camss.h
-index 3b6562b515d46..fc02aa84a5dd7 100644
---- a/drivers/media/platform/qcom/camss/camss.h
-+++ b/drivers/media/platform/qcom/camss/camss.h
-@@ -48,6 +48,7 @@ struct camss_subdev_resources {
- 	u32 clock_rate[CAMSS_RES_MAX][CAMSS_RES_MAX];
- 	char *reg[CAMSS_RES_MAX];
- 	char *interrupt[CAMSS_RES_MAX];
-+	u8 line_num;
- };
- 
- struct icc_bw_tbl {
++/*
++ * vfe_disable - Disable streaming on VFE line
++ * @line: VFE line
++ *
++ * Return 0 on success or a negative error code otherwise
++ */
++int vfe_disable(struct vfe_line *line);
++
+ extern const struct vfe_hw_ops vfe_ops_4_1;
+ extern const struct vfe_hw_ops vfe_ops_4_7;
+ extern const struct vfe_hw_ops vfe_ops_4_8;
 -- 
 2.41.0
 
