@@ -2,289 +2,271 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52E95EC8744
-	for <linux-media@archiver.kernel.org>; Thu,  7 Sep 2023 16:44:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E407EC8743
+	for <linux-media@archiver.kernel.org>; Thu,  7 Sep 2023 16:46:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237607AbjIGQoY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 7 Sep 2023 12:44:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54336 "EHLO
+        id S241967AbjIGQqE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 7 Sep 2023 12:46:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242183AbjIGQoN (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Sep 2023 12:44:13 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8A7CE7;
-        Thu,  7 Sep 2023 09:43:46 -0700 (PDT)
-Received: from pyrite.rasen.tech (h175-177-042-159.catv02.itscom.jp [175.177.42.159])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 43F531ADE;
-        Thu,  7 Sep 2023 16:51:50 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1694098313;
-        bh=+8I162w2nEOkL5N3DXTubzTuwiWJ25oKxq6jy5tywCc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NweUCK+cvDtmpu/mITNwfNnJyvH9J8d8nzBgdEEwO60YM10b7TP0aWwIwxQsfGFni
-         kwavcmAmrjIdQc7F307l9nVIhl0K+ekn36iV55+EhtY6DIYk2WiYc4mKz2yQv/xNAO
-         2+acyWrrGOf9kLGmG+wWbL1DB6qWEPogWONspijY=
-Date:   Thu, 7 Sep 2023 23:53:12 +0900
-From:   Paul Elder <paul.elder@ideasonboard.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] dt-bindings: media: Add THine THP7312 ISP
-Message-ID: <ZPnj2OyHEUuTrH53@pyrite.rasen.tech>
-References: <20230905233118.183140-1-paul.elder@ideasonboard.com>
- <20230905233118.183140-2-paul.elder@ideasonboard.com>
- <f023767c-aa74-87ca-d333-3dba8a481cb6@linaro.org>
+        with ESMTP id S239205AbjIGQpz (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Sep 2023 12:45:55 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882122132
+        for <linux-media@vger.kernel.org>; Thu,  7 Sep 2023 09:45:27 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-402d0eda361so13947165e9.0
+        for <linux-media@vger.kernel.org>; Thu, 07 Sep 2023 09:45:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694105057; x=1694709857; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sYC+BO4g5oTHRDZDWzjxJL3LHVv+wyIe2Onv6IGcb8w=;
+        b=fVV6Jxj1VJX3sg2tc2RoJxuCnUpkSPcfeBIQ0rkK/IDmZnSohn5k7Z5X/Ajcbhqggz
+         ZKVJ1sYe+vkY1MPgcQsKymLTnpkg/BYrgB50Zq0BJ892KRKk/WCUlexwLmOAcbSm08nS
+         2+vSw2jDGPmTRp+nx7ALFXJfys7406P5l4NDxHdwDf54sdy4rwhfpZsaw/lkUvdxjWQF
+         MUlD1iWEjsbqEpUm5N8v1fjOrWxnRwWeDts0PODLvI1nlNhUJMs331s1QR3ABLAHVDZW
+         gvh7URwYOpeFrf9eawHxWef05QJuHY+dGS+Mw1TS+yqwRtfRbYDAQGzePGEqzq7KVVxC
+         efpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1694105057; x=1694709857;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sYC+BO4g5oTHRDZDWzjxJL3LHVv+wyIe2Onv6IGcb8w=;
+        b=lBPbQZeurE2CHpMHG2kc0M6nDm4aAVezaenu7ymRgeIeWphEMnVP+yr4kKRW7Ull54
+         oJQX1cm//uB7KzgfwBHAaIU0Ds81uWOuqDSwQ5mkcjy8Ww5ROPSPXzXeM9eqSRHOjmX/
+         IRmm0NUmTVmA/a4EGMXRQwuv2iIzOpQkqV6rq9pqK/qpglC71h/Vdthv9YjZ/l04ojul
+         j3+srcKK+9dvGxnr+X1ylnU6ztn5DfM6A6tYKTSsDWGrVfQ7ZEJxuAxiqoy5qe1I//w9
+         ClJ9k1TCR4JpTFBn8j+n2VrESjqooKG+2dBGBlSKFqxVB6wKvIIB+A57014aqjsUYTmU
+         GHtg==
+X-Gm-Message-State: AOJu0Yyb1Bu+6hS9GQoRDpqb5zEOMllXbMxyTxn2/8s0qYMNZShDfV8E
+        E1WwGx0CYDJWbvUg9BIkDITuFQ==
+X-Google-Smtp-Source: AGHT+IH58JOMVJkJQTXziWMLSctU7Mh0KznBuqW0N3Bdt4Kffvekz45e17vGsrqKjrzQSNllW+7xCA==
+X-Received: by 2002:a7b:c7cd:0:b0:3fe:2b8c:9f0b with SMTP id z13-20020a7bc7cd000000b003fe2b8c9f0bmr187266wmk.23.1694105057223;
+        Thu, 07 Sep 2023 09:44:17 -0700 (PDT)
+Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id d15-20020adffd8f000000b00317ab75748bsm23822145wrr.49.2023.09.07.09.44.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Sep 2023 09:44:16 -0700 (PDT)
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
+        andrey.konovalov@linaro.org
+Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 03/17] media: qcom: camss: Start to move to module compat matched resources
+Date:   Thu,  7 Sep 2023 17:43:56 +0100
+Message-ID: <20230907164410.36651-4-bryan.odonoghue@linaro.org>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20230907164410.36651-1-bryan.odonoghue@linaro.org>
+References: <20230907164410.36651-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f023767c-aa74-87ca-d333-3dba8a481cb6@linaro.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Sep 06, 2023 at 09:18:30AM +0200, Krzysztof Kozlowski wrote:
-> On 06/09/2023 01:31, Paul Elder wrote:
-> > Add bindings for the THine THP7312 ISP.
-> > 
-> > Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
-> > ---
-> > Since the THP7312 supports multiple sensors, thine,rx-data-lanes alone
-> > might not be enough. I was consdering using sensor nodes like what the
-> > AP1302 does [1]. This way we can also move the power supplies that only
-> > concern the sensor in there as well. I was wondering what to do about
-> > the model name, though, as the thp7312 completely isolates that from the 
-> > rest of the system.
-> > 
-> > I'm planning to add sensor nodes in somehow in a v2.
-> > 
-> > [1] https://lore.kernel.org/linux-media/20211006113254.3470-2-anil.mamidala@xilinx.com/
-> > 
-> >  .../bindings/media/thine,thp7312.yaml         | 170 ++++++++++++++++++
-> >  1 file changed, 170 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/media/thine,thp7312.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/media/thine,thp7312.yaml b/Documentation/devicetree/bindings/media/thine,thp7312.yaml
-> > new file mode 100644
-> > index 000000000000..e8d203dcda81
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/media/thine,thp7312.yaml
-> > @@ -0,0 +1,170 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +# Copyright (c) 2023 Ideas on Board
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/media/thine,thp7312.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: THine THP7312
-> > +
-> > +maintainers:
-> > +  - Paul Elder <paul.elder@@ideasonboard.com>
-> > +
-> > +description:
-> > +  The THP7312 is a standalone ISP controlled over i2c, and is capable of
-> > +  various image processing and correction functions, including 3A control. It
-> > +  can be connected to CMOS image sensors from various vendors, supporting both
-> > +  MIPI CSI-2 and parallel interfaces. It can also output on either MIPI CSI-2
-> > +  or parallel. The hardware is capable of transmitting and receiving MIPI
-> > +  interlaved data strams with data types or multiple virtual channel
-> > +  identifiers.
-> > +
-> > +allOf:
-> > +  - $ref: ../video-interface-devices.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: thine,thp7312
-> > +
-> > +  reg:
-> > +    description: I2C device address
-> 
-> You can skip description. It is obvious.
+There is a lot of unnecessary if/elsing in this code that arguably
+should never have made it upstream when adding a second let alone
+subsequent SoC.
 
-ack
+I'm guilty of not fixing the mess myself when adding in the sm8250.
+Before adding in any new SoCs or resources lets take the time to cleanup
+the resource passing.
 
-> 
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    maxItems: 1
-> > +      - description: CLKI clock input
-> 
-> This was absolutely never tested.
+First step is to pass the generic struct camss_resources as a parameter
+per the compatible list.
 
-I'll admit, yes, I forgot to run the checks. But I did test it on
-hardware; it's just that this camera module is always powered and the
-clock is always connected so it wouldn't have been caught :/
+Subsequent patches will address the other somewhat disparate strutures
+which we are also doing if/else on and assigning statically.
 
-> 
-> > +
-> > +  reset-gpios:
-> > +    maxItems: 1
-> > +    description: |-
-> > +      Reference to the GPIO connected to the RESET_N pin, if any.
-> > +      Must be released (set high) after all supplies are applied.
-> > +
-> > +  vddcore-supply:
-> > +    description:
-> > +      1.2V supply for core, PLL, MIPI rx and MIPI tx.
-> > +
-> > +  vhtermnx-supply:
-> > +    description:
-> > +      Supply for input (rx). 1.8V for MIPI, or 1.8/2.8/3.3V for parallel.
-> > +
-> > +  vddtx-supply:
-> > +    description:
-> > +      Supply for output (tx). 1.8V for MIPI, or 1.8/2.8/3.3V for parallel.
-> > +
-> > +  vddhost-supply:
-> > +    description:
-> > +      Supply for host interface. 1.8V, 2.8V, or 3.3V.
-> > +
-> > +  vddcmos-supply:
-> > +    description:
-> > +      Supply for sensor interface. 1.8V, 2.8V, or 3.3V.
-> > +
-> > +  vddgpio_0-supply:
-> 
-> No, underscores are not allowed in names.
-> 
-> > +    description:
-> > +      Supply for GPIO_0. 1.8V, 2.8V, or 3.3V.
-> > +
-> > +  vddgpio_1-supply:
-> > +    description:
-> > +      Supply for GPIO_1. 1.8V, 2.8V, or 3.3V.
-> > +
-> > +  DOVDD-supply:
-> 
-> lowercase. Look at your other supplies. VDD is spelled there "vdd", so
-> do not introduce random style.
-> 
-> 
-> > +    description:
-> > +      Digital I/O (1.8V) supply for image sensor.
-> > +
-> > +  AVDD-supply:
-> 
-> lowercase
-> 
-> > +    description:
-> > +      Analog (2.8V) supply for image sensor.
-> > +
-> > +  DVDD-supply:
-> 
-> lowercase
-> 
-> > +    description:
-> > +      Digital Core (1.2V) supply for image sensor.
-> > +
-> > +  orientation: true
-> > +  rotation: true
-> > +
-> > +  thine,rx,data-lanes:
-> 
-> Why are you duplicating properties? With wrong name? No, that's not a
-> property of a device node, but endpoint.
+Squashed down a commit to drop useless NULL assignment for ispif resources.
 
-As mentioned elsewhere, it is not duplicated; it's for the input to the
-ISP. The data-lanes below is for the output of the ISP. And since the
-input to the ISP is completely isolated from the rest of the system
-(besides power, I suppose), it's kind of overkill to make an entire
-endpoint for it. I suppose the description that I wrote for this
-property was slightly too concise to convey that.
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ drivers/media/platform/qcom/camss/camss.c | 90 ++++++++++++-----------
+ drivers/media/platform/qcom/camss/camss.h |  8 ++
+ 2 files changed, 54 insertions(+), 44 deletions(-)
 
-I quite like the sensors node introduced in the AP1302; I hope that's a
-more acceptable solution?
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+index 718ef8e4f5938..8fa5dee75672d 100644
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -14,6 +14,7 @@
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ #include <linux/of.h>
++#include <linux/of_device.h>
+ #include <linux/of_graph.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/pm_domain.h>
+@@ -1120,47 +1121,13 @@ static int camss_of_parse_ports(struct camss *camss)
+  */
+ static int camss_init_subdevices(struct camss *camss)
+ {
+-	const struct camss_subdev_resources *csiphy_res;
+-	const struct camss_subdev_resources *csid_res;
+-	const struct camss_subdev_resources *ispif_res;
+-	const struct camss_subdev_resources *vfe_res;
++	const struct camss_resources *res = camss->res;
+ 	unsigned int i;
+ 	int ret;
+ 
+-	if (camss->version == CAMSS_8x16) {
+-		csiphy_res = csiphy_res_8x16;
+-		csid_res = csid_res_8x16;
+-		ispif_res = &ispif_res_8x16;
+-		vfe_res = vfe_res_8x16;
+-	} else if (camss->version == CAMSS_8x96) {
+-		csiphy_res = csiphy_res_8x96;
+-		csid_res = csid_res_8x96;
+-		ispif_res = &ispif_res_8x96;
+-		vfe_res = vfe_res_8x96;
+-	} else if (camss->version == CAMSS_660) {
+-		csiphy_res = csiphy_res_660;
+-		csid_res = csid_res_660;
+-		ispif_res = &ispif_res_660;
+-		vfe_res = vfe_res_660;
+-	}  else if (camss->version == CAMSS_845) {
+-		csiphy_res = csiphy_res_845;
+-		csid_res = csid_res_845;
+-		/* Titan VFEs don't have an ISPIF  */
+-		ispif_res = NULL;
+-		vfe_res = vfe_res_845;
+-	} else if (camss->version == CAMSS_8250) {
+-		csiphy_res = csiphy_res_8250;
+-		csid_res = csid_res_8250;
+-		/* Titan VFEs don't have an ISPIF  */
+-		ispif_res = NULL;
+-		vfe_res = vfe_res_8250;
+-	} else {
+-		return -EINVAL;
+-	}
+-
+ 	for (i = 0; i < camss->csiphy_num; i++) {
+ 		ret = msm_csiphy_subdev_init(camss, &camss->csiphy[i],
+-					     &csiphy_res[i], i);
++					     &res->csiphy_res[i], i);
+ 		if (ret < 0) {
+ 			dev_err(camss->dev,
+ 				"Failed to init csiphy%d sub-device: %d\n",
+@@ -1172,7 +1139,7 @@ static int camss_init_subdevices(struct camss *camss)
+ 	/* note: SM8250 requires VFE to be initialized before CSID */
+ 	for (i = 0; i < camss->vfe_num + camss->vfe_lite_num; i++) {
+ 		ret = msm_vfe_subdev_init(camss, &camss->vfe[i],
+-					  &vfe_res[i], i);
++					  &res->vfe_res[i], i);
+ 		if (ret < 0) {
+ 			dev_err(camss->dev,
+ 				"Fail to init vfe%d sub-device: %d\n", i, ret);
+@@ -1182,7 +1149,7 @@ static int camss_init_subdevices(struct camss *camss)
+ 
+ 	for (i = 0; i < camss->csid_num; i++) {
+ 		ret = msm_csid_subdev_init(camss, &camss->csid[i],
+-					   &csid_res[i], i);
++					   &res->csid_res[i], i);
+ 		if (ret < 0) {
+ 			dev_err(camss->dev,
+ 				"Failed to init csid%d sub-device: %d\n",
+@@ -1191,7 +1158,7 @@ static int camss_init_subdevices(struct camss *camss)
+ 		}
+ 	}
+ 
+-	ret = msm_ispif_subdev_init(camss, ispif_res);
++	ret = msm_ispif_subdev_init(camss, res->ispif_res);
+ 	if (ret < 0) {
+ 		dev_err(camss->dev, "Failed to init ispif sub-device: %d\n",
+ 		ret);
+@@ -1568,6 +1535,8 @@ static int camss_probe(struct platform_device *pdev)
+ 	if (!camss)
+ 		return -ENOMEM;
+ 
++	camss->res = of_device_get_match_data(dev);
++
+ 	atomic_set(&camss->ref_count, 0);
+ 	camss->dev = dev;
+ 	platform_set_drvdata(pdev, camss);
+@@ -1742,12 +1711,45 @@ static void camss_remove(struct platform_device *pdev)
+ 	camss_genpd_cleanup(camss);
+ }
+ 
++static const struct camss_resources msm8916_resources = {
++	.csiphy_res = csiphy_res_8x16,
++	.csid_res = csid_res_8x16,
++	.ispif_res = &ispif_res_8x16,
++	.vfe_res = vfe_res_8x16,
++};
++
++static const struct camss_resources msm8996_resources = {
++	.csiphy_res = csiphy_res_8x96,
++	.csid_res = csid_res_8x96,
++	.ispif_res = &ispif_res_8x96,
++	.vfe_res = vfe_res_8x96,
++};
++
++static const struct camss_resources sdm660_resources = {
++	.csiphy_res = csiphy_res_660,
++	.csid_res = csid_res_660,
++	.ispif_res = &ispif_res_660,
++	.vfe_res = vfe_res_660,
++};
++
++static const struct camss_resources sdm845_resources = {
++	.csiphy_res = csiphy_res_845,
++	.csid_res = csid_res_845,
++	.vfe_res = vfe_res_845,
++};
++
++static const struct camss_resources sm8250_resources = {
++	.csiphy_res = csiphy_res_8250,
++	.csid_res = csid_res_8250,
++	.vfe_res = vfe_res_8250,
++};
++
+ static const struct of_device_id camss_dt_match[] = {
+-	{ .compatible = "qcom,msm8916-camss" },
+-	{ .compatible = "qcom,msm8996-camss" },
+-	{ .compatible = "qcom,sdm660-camss" },
+-	{ .compatible = "qcom,sdm845-camss" },
+-	{ .compatible = "qcom,sm8250-camss" },
++	{ .compatible = "qcom,msm8916-camss", .data = &msm8916_resources },
++	{ .compatible = "qcom,msm8996-camss", .data = &msm8996_resources },
++	{ .compatible = "qcom,sdm660-camss", .data = &sdm660_resources },
++	{ .compatible = "qcom,sdm845-camss", .data = &sdm845_resources },
++	{ .compatible = "qcom,sm8250-camss", .data = &sm8250_resources },
+ 	{ }
+ };
+ 
+diff --git a/drivers/media/platform/qcom/camss/camss.h b/drivers/media/platform/qcom/camss/camss.h
+index 9d6ba7b17ff02..20c84e8328880 100644
+--- a/drivers/media/platform/qcom/camss/camss.h
++++ b/drivers/media/platform/qcom/camss/camss.h
+@@ -79,6 +79,13 @@ enum icc_count {
+ 	ICC_SM8250_COUNT = 4,
+ };
+ 
++struct camss_resources {
++	const struct camss_subdev_resources *csiphy_res;
++	const struct camss_subdev_resources *csid_res;
++	const struct camss_subdev_resources *ispif_res;
++	const struct camss_subdev_resources *vfe_res;
++};
++
+ struct camss {
+ 	enum camss_version version;
+ 	struct v4l2_device v4l2_dev;
+@@ -99,6 +106,7 @@ struct camss {
+ 	struct device_link **genpd_link;
+ 	struct icc_path *icc_path[ICC_SM8250_COUNT];
+ 	struct icc_bw_tbl icc_bw_tbl[ICC_SM8250_COUNT];
++	const struct camss_resources *res;
+ };
+ 
+ struct camss_camera_interface {
+-- 
+2.41.0
 
-
-Paul
-
-> 
-> > +    minItems: 4
-> > +    maxItems: 4
-> > +    $ref: /schemas/media/video-interfaces.yaml#data-lanes
-> > +    description: |-
-> 
-> Drop |- where not needed.
-> 
-> > +      This property is for lane reordering between the THP7312 and the imaging
-> > +      sensor that it is connected to.
-> > +
-> > +  port:
-> > +    $ref: /schemas/graph.yaml#/$defs/port-base
-> > +    additionalProperties: false
-> > +
-> > +    properties:
-> > +      endpoint:
-> > +        $ref: /schemas/media/video-interfaces.yaml#
-> > +        unevaluatedProperties: false
-> > +
-> > +        properties:
-> > +          data-lanes:
-> > +            description: |-
-> > +              The sensor supports either two-lane, or four-lane operation.
-> > +              This property is for lane reordering between the THP7312 and
-> > +              the SoC. If this property is omitted four-lane operation is
-> > +              assumed. For two-lane operation the property must be set to <1 2>.
-> > +            minItems: 2
-> > +            maxItems: 4
-> > +            items:
-> > +              maximum: 4
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - reset-gpios
-> > +  - clocks
-> > +  - vddcore-supply
-> > +  - vhtermrx-supply
-> > +  - vddtx-supply
-> > +  - vddhost-supply
-> > +  - vddcmos-supply
-> > +  - vddgpio_0-supply
-> > +  - vddgpio_1-supply
-> > +  - DOVDD-supply
-> > +  - AVDD-supply
-> > +  - DVDD-supply
-> > +  - thine,rx,data-lanes
-> > +  - port
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/gpio/gpio.h>
-> > +
-> > +    i2c {
-> > +        #address-cells = <1>;
-> > +        #size-cells = <0>;
-> > +
-> > +        camera@61 {
-> > +            compatible = "thine,thp7312";
-> > +            reg = <0x61>;
-> > +
-> > +            pinctrl-names = "default";
-> > +            pinctrl-0 = <&cam1_pins_default>;
-> > +
-> > +            reset-gpios = <&pio 119 GPIO_ACTIVE_LOW>;
-> > +            clocks = <&camera61_clk>;
-> > +
-> > +            vddcore-supply = <&vsys_v4p2>;
-> > +            AVDD-supply = <&vsys_v4p2>;
-> > +            DVDD-supply = <&vsys_v4p2>;
-> 
-> Srlsy, test it before sending. Look how many supplies you require and
-> what is provided here. How any of this could possibly work?
-> 
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
