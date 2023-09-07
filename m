@@ -2,447 +2,165 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA8D0EE14D8
-	for <linux-media@archiver.kernel.org>; Thu,  7 Sep 2023 04:16:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3261EC8740
+	for <linux-media@archiver.kernel.org>; Thu,  7 Sep 2023 15:40:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239601AbjIGEQC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 7 Sep 2023 00:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59356 "EHLO
+        id S235829AbjIGPkI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 7 Sep 2023 11:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232432AbjIGEPu (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Sep 2023 00:15:50 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84A4CF2
-        for <linux-media@vger.kernel.org>; Wed,  6 Sep 2023 21:15:43 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-414b3a1a24aso3989861cf.2
-        for <linux-media@vger.kernel.org>; Wed, 06 Sep 2023 21:15:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1694060142; x=1694664942; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QHSZVsclUSPq3qNI//pbigdakyCDFL1AOVrJMm5Sok8=;
-        b=M1/LqbIQKejRCgHUVoysXSDbM7GxeUJ52S0fhqkGlZsdU9yS+yCuMOTaflMo6wmCj3
-         wAJ/jp2PnGFIfyPnP2LrpVk6WKEHLKZ7UcnJWW7uV5/z+jatoDuelB7AF+eefFq1U75I
-         v1DeUnhQfVG/EvKwN+7I0P7RoYU0PxEU7vkCM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1694060142; x=1694664942;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QHSZVsclUSPq3qNI//pbigdakyCDFL1AOVrJMm5Sok8=;
-        b=NDnENzuu1udcTBnZbdtSpBn4LH/L1hbhAoNxi2GeTURQarl6snUUbGzI07Co3ipvxo
-         lwWXtYvLs6OE6ILYjIWY6MHr6Jy+SoA6870IxA91+6S4TmlvabEaBLkSwhfjaAPZa7la
-         x8d0cfITSlJqA6pnsrwreptDPWeKh/Qx2Fa7jmlWGP/IalHRYmsCQhMvJQHFmKg1GMTz
-         xZ/XDMThdPSEhRnrjW8wXlxnLBalGPJssnoAAqu1GPJTYsgaO32TmemENayfI3n9w4LB
-         KSKSaSgoJPr/YWWs6V7xaPWTzeg4zdHo94yyhqmwxPcuQUMaf4Hdi50qaV3mX30pL3tg
-         Eqig==
-X-Gm-Message-State: AOJu0YwIceG5hDcFEd0HmSba1r/9ZT4VOvxttlgvqxon2CjNzTpnED1J
-        gNKMJnYfyxQitOFvVHMhYlE3KSN5bQq7F+rVJXuINA==
-X-Google-Smtp-Source: AGHT+IFt/jPLfB/boFcssmGghwqlj5KGzjrTgP7zeQezMQI2e15NmK32abZARIAeJgqLle+9wI8svw==
-X-Received: by 2002:ac8:5f12:0:b0:410:9a31:58e7 with SMTP id x18-20020ac85f12000000b004109a3158e7mr22694614qta.40.1694060142419;
-        Wed, 06 Sep 2023 21:15:42 -0700 (PDT)
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com. [209.85.219.52])
-        by smtp.gmail.com with ESMTPSA id x9-20020ac85389000000b00403ff38d855sm5848884qtp.4.2023.09.06.21.15.40
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Sep 2023 21:15:41 -0700 (PDT)
-Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-64cca551ae2so3491686d6.0
-        for <linux-media@vger.kernel.org>; Wed, 06 Sep 2023 21:15:40 -0700 (PDT)
-X-Received: by 2002:a0c:f0d4:0:b0:64f:9361:6b19 with SMTP id
- d20-20020a0cf0d4000000b0064f93616b19mr14561910qvl.9.1694060140283; Wed, 06
- Sep 2023 21:15:40 -0700 (PDT)
+        with ESMTP id S244356AbjIGPbj (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Sep 2023 11:31:39 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F681BFC
+        for <linux-media@vger.kernel.org>; Thu,  7 Sep 2023 08:31:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694100667; x=1725636667;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IOU4ddKaWmyCC55M4zgocRDIofOcwrhs2Nj9M4l8/Nk=;
+  b=SgNpbFIgjnsxubCYT1BsvQ92yMq7ql4BO8+j93U7j3vV3+SLTFdpA6EB
+   fZh8uz8OlqXgeLGv0E4EyK6nvrAb5aIuvTvUQaRfYOzeJ8Vo86jo/quOH
+   0w64wzdh0xEnAUHDDfZm/HXXO4hMEONln8iqK6KZmNfBNu4ukqaCR99nJ
+   SV8FYUSxfx0Jzlpj2b75duxqfcpU3uKWun7Jj4Su3XWRRcSeQrBPKhoJg
+   Es4fYYQGVejk3RVHMmZsrUNn/IN6EToTPkLZ94r4sh2cm2Q1xWgwh8vlz
+   xyrtYzTWeOqBoIOY/F3xaCAkFsAM1XAD5aJNZ43x4hifKXrii+7iIesU+
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="362320307"
+X-IronPort-AV: E=Sophos;i="6.02,234,1688454000"; 
+   d="scan'208";a="362320307"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2023 01:16:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="988675848"
+X-IronPort-AV: E=Sophos;i="6.02,234,1688454000"; 
+   d="scan'208";a="988675848"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2023 01:16:26 -0700
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id B929811FAE0;
+        Thu,  7 Sep 2023 11:16:23 +0300 (EEST)
+Date:   Thu, 7 Sep 2023 08:16:23 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        tomi.valkeinen@ideasonboard.com, bingbu.cao@intel.com,
+        hongju.wang@intel.com,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Dmitry Perchanov <dmitry.perchanov@intel.com>,
+        Naushir Patuck <naush@raspberrypi.com>,
+        David Plowman <david.plowman@raspberrypi.com>
+Subject: Re: [PATCH v3 07/10] media: uapi: Add generic 8-bit metadata format
+ definitions
+Message-ID: <ZPmG17Q/tK61xNMT@kekkonen.localdomain>
+References: <decr6lkgqk3fuxsyq4v3q46idmsfp6mlwfm6zm4fwcnlzcr5tw@ryikjpaazhzp>
+ <ZNX7S7zh0RG2vQOA@kekkonen.localdomain>
+ <20230905164720.GC7971@pendragon.ideasonboard.com>
+ <ZPhkTZSGMzGIPgrm@kekkonen.localdomain>
+ <20230906123658.GF17308@pendragon.ideasonboard.com>
+ <ZPh94dy2UA9MRSSU@kekkonen.localdomain>
+ <20230906133057.GN17308@pendragon.ideasonboard.com>
+ <ZPiBL4gK6FP4Tp/v@kekkonen.localdomain>
+ <20230906134737.GA25420@pendragon.ideasonboard.com>
+ <ZPmEcqvw5Gh3h+bx@kekkonen.localdomain>
 MIME-Version: 1.0
-References: <20230622131349.144160-1-benjamin.gaignard@collabora.com>
- <20230622131349.144160-5-benjamin.gaignard@collabora.com> <e7444263-0ce5-1575-8cca-1e51b1cfbe9a@synaptics.com>
- <5cb3f216-5041-a155-5d2c-059dc1f15024@collabora.com> <25b21252-0d3a-3e50-0012-57055f386fee@synaptics.com>
- <20230712104801.tgawhexpm53ocgd6@chromium.org> <2d239d33-b05d-1b51-2268-43b2839b64ea@synaptics.com>
- <CAAFQd5D7oNG8oZB66qEW720fR79paw_q0LGBg7X4jK-ZkgYD_g@mail.gmail.com>
- <f6a3e3e5-14be-6d5c-48d3-009424e1a49a@synaptics.com> <CAAFQd5D3NUqvkJFYgystFVFRQvq-5S0ZNUOrv1LJqmCA_8+a_w@mail.gmail.com>
- <9bc67e88-bce1-b812-aa57-76eca764cb38@synaptics.com>
-In-Reply-To: <9bc67e88-bce1-b812-aa57-76eca764cb38@synaptics.com>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Thu, 7 Sep 2023 13:15:23 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5DpCfS7RyTbd_kfFz+wQ41=gnLosMMNK_GcH8JO=DbzSQ@mail.gmail.com>
-Message-ID: <CAAFQd5DpCfS7RyTbd_kfFz+wQ41=gnLosMMNK_GcH8JO=DbzSQ@mail.gmail.com>
-Subject: Re: [PATCH v3 04/11] media: videobuf2: Stop define VB2_MAX_FRAME as global
-To:     Hsia-Jun Li <Randy.Li@synaptics.com>
-Cc:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, m.szyprowski@samsung.com,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        hverkuil-cisco@xs4all.nl, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, linux-rockchip@lists.infradead.org,
-        mchehab@kernel.org, linux-staging@lists.linux.dev,
-        ming.qian@nxp.com, kernel@collabora.com,
-        gregkh@linuxfoundation.org, nicolas.dufresne@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZPmEcqvw5Gh3h+bx@kekkonen.localdomain>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Jul 28, 2023 at 4:25=E2=80=AFPM Hsia-Jun Li <Randy.Li@synaptics.com=
-> wrote:
->
->
->
-> On 7/28/23 15:03, Tomasz Figa wrote:
-> > CAUTION: Email originated externally, do not click links or open attach=
-ments unless you recognize the sender and know the content is safe.
-> >
-> >
-> > On Fri, Jul 28, 2023 at 3:55=E2=80=AFPM Hsia-Jun Li <Randy.Li@synaptics=
-.com> wrote:
-> >>
-> >>
-> >>
-> >> On 7/28/23 14:46, Tomasz Figa wrote:
-> >>> CAUTION: Email originated externally, do not click links or open atta=
-chments unless you recognize the sender and know the content is safe.
-> >>>
-> >>>
-> >>> On Mon, Jul 17, 2023 at 4:44=E2=80=AFPM Hsia-Jun Li <Randy.Li@synapti=
-cs.com> wrote:
-> >>>>
-> >>>>
-> >>>> On 7/12/23 18:48, Tomasz Figa wrote:
-> >>>>> CAUTION: Email originated externally, do not click links or open at=
-tachments unless you recognize the sender and know the content is safe.
-> >>>>>
-> >>>>>
-> >>>>> On Mon, Jul 03, 2023 at 04:35:30PM +0800, Hsia-Jun Li wrote:
-> >>>>>> On 7/3/23 16:09, Benjamin Gaignard wrote:
-> >>>>>>> CAUTION: Email originated externally, do not click links or open
-> >>>>>>> attachments unless you recognize the sender and know the content =
-is
-> >>>>>>> safe.
-> >>>>>>>
-> >>>>>>>
-> >>>>>>> Le 30/06/2023 =C3=A0 11:51, Hsia-Jun Li a =C3=A9crit :
-> >>>>>>>> On 6/22/23 21:13, Benjamin Gaignard wrote:
-> >>>>>>>>> CAUTION: Email originated externally, do not click links or ope=
-n
-> >>>>>>>>> attachments unless you recognize the sender and know the conten=
-t is
-> >>>>>>>>> safe.
-> >>>>>>>>>
-> >>>>>>>>>
-> >>>>>>>>> After changing bufs arrays to a dynamic allocated array
-> >>>>>>>>> VB2_MAX_FRAME doesn't mean anything for videobuf2 core.
-> >>>>>>>> I think make it 64 which is the VB2_MAX_FRAME in Android GKI ker=
-nel is
-> >>>>>>>> more reasonable.
-> >>>>>>>>
-> >>>>>>>> It would be hard to iterate the whole array, it would go worse w=
-ith a
-> >>>>>>>> filter. Such iterate may need to go twice because you mix
-> >>>>>>>> post-processing buffer and decoding buffer(with MV) in the same =
-array.
-> >>>>>>> Here I don't want to change drivers behavior so I keep the same v=
-alue.
-> >>>>>>> If it happens that they need more buffers, like for dynamic resol=
-ution
-> >>>>>>> change
-> >>>>>>> feature for Verisilicon VP9 decoder, case by case patches will be=
- needed.
-> >>>>>>>
-> >>>>>> I just don't like the idea that using a variant length array here.
-> >>>>>>
-> >>>>> "I don't like" is not an argument. We had a number of arguments for
-> >>>>> using a generic helper (originally idr, but later decided to go wit=
-h
-> >>>>> XArray, because the former is now deprecated) that we pointed out i=
-n
-> >>>>> our review comments for previous revisions. It wasn't really about =
-the
-> >>>>> size being variable, but rather avoiding open coding things in vb2 =
-and
-> >>>>> duplicating what's already implemented in generic code.
-> >>>>
-> >>>> I just want to say I don't think we need a variable length array to
-> >>>> store the buffer here.
-> >>>>
-> >>>> And the below is the reason that such a case could be avoided in the
-> >>>> first place.
-> >>>>
-> >>>>>
-> >>>>>> And I could explain why you won't need so many buffers for the per=
-formance
-> >>>>>> of decoding.
-> >>>>>>
-> >>>>>> VP9 could support 10 reference frames in dpb.
-> >>>>>>
-> >>>>>> Even for those frequent resolution changing test set, it would onl=
-y happen
-> >>>>>> to two resolutions,
-> >>>>>>
-> >>>>>> 32 would be enough for 20 buffers of two resolution plus golden fr=
-ames. It
-> >>>>>> also leaves enough slots for re-order latency.
-> >>>>>>
-> >>>>>> If your case had more two resolutions, likes low->medium->high.
-> >>>>>>
-> >>>>>> I would suggest just skip the medium resolutions, just allocate th=
-e lower
-> >>>>>> one first for fast playback then the highest for all the possible
-> >>>>>>
-> >>>>>> medium cases. Reallocation happens frequently would only cause mem=
-ory
-> >>>>>> fragment, nothing benefits your performance.
-> >>>>>>
-> >>>>> We have mechanisms in the kernel to deal with memory fragmentation
-> >>>>> (migration/compaction) and it would still only matters for the
-> >>>>> pathologic cases of hardware that require physically contiguous mem=
-ory.
-> >>>>> Modern hardware with proper DMA capabilities can either scatter-gat=
-her
-> >>>>> or are equipped with an IOMMU, so the allocation always happens in =
-page
-> >>>>> granularity and fragmentation is avoided.
-> >>>>
-> >>>> Unfortunately, there are more devices that didn't have a IOMMU attac=
-hed
-> >>>> to it, supporting scatter gather is more odd.
-> >>>>
-> >>>> It would be more likely that IOMMU would be disabled for the perform=
-ance
-> >>>> reason.
-> >>>
-> >>> These days IOMMU is totally mandatory if you want to think about
-> >>> having any level of security in your system. Sure, there could be som=
-e
-> >>> systems that are completely isolated from any external environment,
-> >>> like some offline industry automation machines, but then arguably
-> >>> their running conditions would also be quite static and require very
-> >>> little memory re-allocation.
-> >> Vendor just decided not to included such hardware.
-> >> That is why From ION to DMA-heap, people like to allocate from a cavou=
-t
-> >> out memory.
-> >>>
-> >>> I also don't buy the performance reason. CPUs have been behind MMUs
-> >>> for ages and nobody is running them with paging disabled for
-> >>> performance reasons. Similarly, most of the modern consumer systems
-> >> Page lookup would increase the delay. Besides a few upstream devices
-> >> prove them only use a level 1 page table without TBL.
-> >
-> > That's just an excuse for a bad hardware design/implementation. As I
-> > said, there are good IOMMU implementations out there that don't suffer
-> > from performance issues.
-> >
-> I could do nothing about that.
-> Besides, even with TLB, cache missing could happen frequently,
-> especially we need to access many (5~16, 10 usually) buffers and more
-> 11MBytes each in a hardware processing.
-> You can't have a very large TLB.
+On Thu, Sep 07, 2023 at 08:06:10AM +0000, Sakari Ailus wrote:
+> Hi Laurent,
+> 
+> On Wed, Sep 06, 2023 at 04:47:37PM +0300, Laurent Pinchart wrote:
+> > On Wed, Sep 06, 2023 at 01:39:59PM +0000, Sakari Ailus wrote:
+> > > Hi Laurent,
+> > > 
+> > > On Wed, Sep 06, 2023 at 04:30:57PM +0300, Laurent Pinchart wrote:
+> > > > On Wed, Sep 06, 2023 at 01:25:53PM +0000, Sakari Ailus wrote:
+> > > > > On Wed, Sep 06, 2023 at 03:36:58PM +0300, Laurent Pinchart wrote:
+> > > > > > On Wed, Sep 06, 2023 at 11:36:45AM +0000, Sakari Ailus wrote:
+> > > > > > > On Tue, Sep 05, 2023 at 07:47:20PM +0300, Laurent Pinchart wrote:
+> > > > > > > > On Fri, Aug 11, 2023 at 09:11:39AM +0000, Sakari Ailus wrote:
+> > > > > > > > > On Fri, Aug 11, 2023 at 08:31:16AM +0200, Jacopo Mondi wrote:
+> > > > > > > > > > > > +V4L2_META_FMT_GENERIC_CSI2_10
+> > > > > > > > > > > > +-----------------------------
+> > > > > > > > > > > > +
+> > > > > > > > > > > > +V4L2_META_FMT_GENERIC_CSI2_10 contains packed 8-bit generic metadata, 10 bits
+> > > > > > > > > > > > +for each 8 bits of data. Every four bytes of metadata is followed by a single
+> > > > > > > > > > > > +byte of padding. The way the data is stored follows the CSI-2 specification.
+> > > > > > > > > > > > +
+> > > > > > > > > > > > +This format is also used on CSI-2 on 20 bits per sample format that packs two
+> > > > > > > > > > > > +bytes of metadata into one sample.
+> > > > > > > > > > > > +
+> > > > > > > > > > > > +This format is little endian.
+> > > > > > > > > > > > +
+> > > > > > > > > > > > +**Byte Order Of V4L2_META_FMT_GENERIC_CSI2_10.**
+> > > > > > > > > > > > +Each cell is one byte. "M" denotes a byte of metadata and "p" a byte of padding.
+> > > > > > > > > > >
+> > > > > > > > > > > I think you should document whether the padding is always 0 or can be any value.
+> > > > > > > > > > > Perhaps 'X' is a better 'name' for the padding byte in the latter case.
+> > > > > > > > > > 
+> > > > > > > > > > Did I get this right that this format is supposed to work as the RAW10
+> > > > > > > > > > CSI-2 packed image format, where 4 bytes contain the higher 8 bits of
+> > > > > > > > > > the 10 bits sample and the 5th byte every 4 contains the lower 2 bits of
+> > > > > > > > > > the previous 4 sample ?
+> > > > > > > > > > 
+> > > > > > > > > > If that's the case, is 'padding' the correct term here ?
+> > > > > > > > > 
+> > > > > > > > > What else would you call it? It'll be zeros that exist just due to the bit
+> > > > > > > > > depth used and as such not interesting at all.
+> > > > > > > > 
+> > > > > > > > It's actually not 0, CCS requires the padding bytes to be 0x55.
+> > > > > > > > 
+> > > > > > > > I wonder if the conformance test suite tests the contents of the padding
+> > > > > > > > bytes.
+> > > > > > > 
+> > > > > > > I don't know. I could add the value is unspecified but as it has not been
+> > > > > > > specified, there's no change in meaning (just size).
+> > > > > > 
+> > > > > > I started writing that I don't see how it could help applications to
+> > > > > > know that the padding byte is 0x55, but the SMIA++ embedded data parser
+> > > > > > in libcamera actually checks for it, and considers the embedded data to
+> > > > > > be erroneous if it has a different value.
+> > > > > 
+> > > > > I think it's fine to check for it if you know it's CCS/SMIA++/SMIA embedded
+> > > > > data. But documenting it here isn't a great idea as then other uses of this
+> > > > > format definition would be excluded.
+> > > > 
+> > > > I'm OK with that, but note that you've mentioned in a different patch in
+> > > > the same series that you wouldn't use the CCS media bus code for sensors
+> > > > that are compliant with the CCS packing and encoding but not the CCS
+> > > > register set. That's not very consistent :-)
+> > > 
+> > > Which specific patch are you referring to?
+> > 
+> > "[PATCH v3 09/10] media: Add media bus codes for MIPI CCS embedded data"
+> > 
+> > You wrote
+> > 
+> > "There are sensors that aren't fully compatible with CCS (including
+> > those compatible with SMIA and SMIA++) but I wouldn't expect the format
+> > to be used by devices that are entirely incompatible with CCS."
+> 
+> Ah, right.
+> 
+> I meant that if a sensor implementation isn't related to any of these
+> standards, it's highly unlikely to use the same embedded data format. Of
+> course, if it does, then I think we should use the mbus code, too. But I'm
+> not holding my breath.
 
-Right, but as I wrote in my previous emails, we have the right methods
-in the kernel for providing drivers with contiguous memory and those
-can be used for those special cases.
+To clarify: to use that format, I'd expect the sensor to use standard CCS
+registers. If it doesn't, a new mbus code should be added and documented.
+The CCS embedded data header isn't enough to justify the use of the mbus
+code --- the documentation here also says "which is used to store the
+register configuration used for capturing a given frame".
 
-> >>> (mobile phones, PCs) run with IOMMUs enabled for pretty much anything
-> >>> because of the security reason and they don't seem to be having any
-> >> If the page is secure, you can't operate it in a insecure IOMMU or MMU=
-.
-> >> The most security way here, we should use a dedicated memory(or a zone
-> >> in unified memory).
-> >
-> > You still need something to enforce that the hardware is not accessing
-> > memory that it's not supposed to access. How do you do that without an
-> > IOMMU?
-> >
-> If you know the arm security pipeline and security controller, you could
-> found we could reserved a range of memory for a security id(devices in
-> secure world may be a different security domain).
-> Besides, a MMU or security MPU could mark some pages for the secure
-> world access only, it doesn't mean the device need an IOMMU to access
-> them. The MPU could filter the access through the AXI id.
-> >> I believe there are more users in mobile for DMA-heap than kernel's dm=
-a
-> >> allocation API.
-> >
-> > Yes, but that's completely separate from whether there is an IOMMU or
-> > not. It's just a different allocation API.
-> >
-> The memory heap would mean a dedicated memory usually(we don't talk
-> about system heap or why there are many vendor heaps). Dedicated memory
-> means contiguous memory in the most of cases.
+-- 
+Regards,
 
-No, and no.
-First no - DMA-buf heap doesn't imply dedicated memory and usually one
-wants to completely avoid carving out memory, because it becomes
-useless if specific use case is not active.
-Second no - there are ways to provide dedicated memory regions to the
-DMA mapping API, such as shared or restricted DMA pool [1].
-
-[1] https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree=
-/bindings/reserved-memory/shared-dma-pool.yaml
-
-Best regards,
-Tomasz
-
-> >>> performance issues. In fact, it can improve the performance, because
-> >>> memory allocation is much easier and without contiguous careouts (as
-> >>> we used to have long ago on Android devices) the extra memory can be
-> >>> used for buffers and caches to improve system performance.
-> >>>
-> >>> Best regards,
-> >>> Tomasz
-> >>>
-> >>>>
-> >>>>>
-> >>>>> Best regards,
-> >>>>> Tomasz
-> >>>>>
-> >>>>>>>>> Remove it from the core definitions but keep it for drivers int=
-ernal
-> >>>>>>>>> needs.
-> >>>>>>>>>
-> >>>>>>>>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.c=
-om>
-> >>>>>>>>> ---
-> >>>>>>>>>      drivers/media/common/videobuf2/videobuf2-core.c | 2 ++
-> >>>>>>>>>      drivers/media/platform/amphion/vdec.c | 1 +
-> >>>>>>>>> .../media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c |=
- 2 ++
-> >>>>>>>>>      drivers/media/platform/qcom/venus/hfi.h | 2 ++
-> >>>>>>>>>      drivers/media/platform/verisilicon/hantro_hw.h | 2 ++
-> >>>>>>>>>      drivers/staging/media/ipu3/ipu3-v4l2.c | 2 ++
-> >>>>>>>>>      include/media/videobuf2-core.h | 1 -
-> >>>>>>>>>      include/media/videobuf2-v4l2.h | 4 ----
-> >>>>>>>>>      8 files changed, 11 insertions(+), 5 deletions(-)
-> >>>>>>>>>
-> >>>>>>>>> diff --git a/drivers/media/common/videobuf2/videobuf2-core.c
-> >>>>>>>>> b/drivers/media/common/videobuf2/videobuf2-core.c
-> >>>>>>>>> index 86e1e926fa45..899783f67580 100644
-> >>>>>>>>> --- a/drivers/media/common/videobuf2/videobuf2-core.c
-> >>>>>>>>> +++ b/drivers/media/common/videobuf2/videobuf2-core.c
-> >>>>>>>>> @@ -31,6 +31,8 @@
-> >>>>>>>>>
-> >>>>>>>>>      #include <trace/events/vb2.h>
-> >>>>>>>>>
-> >>>>>>>>> +#define VB2_MAX_FRAME  32
-> >>>>>>>>> +
-> >>>>>>>>>      static int debug;
-> >>>>>>>>>      module_param(debug, int, 0644);
-> >>>>>>>>>
-> >>>>>>>>> diff --git a/drivers/media/platform/amphion/vdec.c
-> >>>>>>>>> b/drivers/media/platform/amphion/vdec.c
-> >>>>>>>>> index 3fa1a74a2e20..b3219f6d17fa 100644
-> >>>>>>>>> --- a/drivers/media/platform/amphion/vdec.c
-> >>>>>>>>> +++ b/drivers/media/platform/amphion/vdec.c
-> >>>>>>>>> @@ -28,6 +28,7 @@
-> >>>>>>>>>
-> >>>>>>>>>      #define VDEC_MIN_BUFFER_CAP            8
-> >>>>>>>>>      #define VDEC_MIN_BUFFER_OUT            8
-> >>>>>>>>> +#define VB2_MAX_FRAME                  32
-> >>>>>>>>>
-> >>>>>>>>>      struct vdec_fs_info {
-> >>>>>>>>>             char name[8];
-> >>>>>>>>> diff --git
-> >>>>>>>>> a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_=
-if.c
-> >>>>>>>>> b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_=
-if.c
-> >>>>>>>>> index 6532a69f1fa8..a1e0f24bb91c 100644
-> >>>>>>>>> --- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_=
-lat_if.c
-> >>>>>>>>> +++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_=
-lat_if.c
-> >>>>>>>>> @@ -16,6 +16,8 @@
-> >>>>>>>>>      #include "../vdec_drv_if.h"
-> >>>>>>>>>      #include "../vdec_vpu_if.h"
-> >>>>>>>>>
-> >>>>>>>>> +#define VB2_MAX_FRAME  32
-> >>>>>>>>> +
-> >>>>>>>>>      /* reset_frame_context defined in VP9 spec */
-> >>>>>>>>>      #define VP9_RESET_FRAME_CONTEXT_NONE0 0
-> >>>>>>>>>      #define VP9_RESET_FRAME_CONTEXT_NONE1 1
-> >>>>>>>>> diff --git a/drivers/media/platform/qcom/venus/hfi.h
-> >>>>>>>>> b/drivers/media/platform/qcom/venus/hfi.h
-> >>>>>>>>> index f25d412d6553..bd5ca5a8b945 100644
-> >>>>>>>>> --- a/drivers/media/platform/qcom/venus/hfi.h
-> >>>>>>>>> +++ b/drivers/media/platform/qcom/venus/hfi.h
-> >>>>>>>>> @@ -10,6 +10,8 @@
-> >>>>>>>>>
-> >>>>>>>>>      #include "hfi_helper.h"
-> >>>>>>>>>
-> >>>>>>>>> +#define VB2_MAX_FRAME                          32
-> >>>>>>>>> +
-> >>>>>>>>>      #define VIDC_SESSION_TYPE_VPE                  0
-> >>>>>>>>>      #define VIDC_SESSION_TYPE_ENC                  1
-> >>>>>>>>>      #define VIDC_SESSION_TYPE_DEC                  2
-> >>>>>>>>> diff --git a/drivers/media/platform/verisilicon/hantro_hw.h
-> >>>>>>>>> b/drivers/media/platform/verisilicon/hantro_hw.h
-> >>>>>>>>> index e83f0c523a30..9e8faf7ba6fb 100644
-> >>>>>>>>> --- a/drivers/media/platform/verisilicon/hantro_hw.h
-> >>>>>>>>> +++ b/drivers/media/platform/verisilicon/hantro_hw.h
-> >>>>>>>>> @@ -15,6 +15,8 @@
-> >>>>>>>>>      #include <media/v4l2-vp9.h>
-> >>>>>>>>>      #include <media/videobuf2-core.h>
-> >>>>>>>>>
-> >>>>>>>>> +#define VB2_MAX_FRAME  32
-> >>>>>>>>> +
-> >>>>>>>>>      #define DEC_8190_ALIGN_MASK    0x07U
-> >>>>>>>>>
-> >>>>>>>>>      #define MB_DIM                 16
-> >>>>>>>>> diff --git a/drivers/staging/media/ipu3/ipu3-v4l2.c
-> >>>>>>>>> b/drivers/staging/media/ipu3/ipu3-v4l2.c
-> >>>>>>>>> index e530767e80a5..6627b5c2d4d6 100644
-> >>>>>>>>> --- a/drivers/staging/media/ipu3/ipu3-v4l2.c
-> >>>>>>>>> +++ b/drivers/staging/media/ipu3/ipu3-v4l2.c
-> >>>>>>>>> @@ -10,6 +10,8 @@
-> >>>>>>>>>      #include "ipu3.h"
-> >>>>>>>>>      #include "ipu3-dmamap.h"
-> >>>>>>>>>
-> >>>>>>>>> +#define VB2_MAX_FRAME  32
-> >>>>>>>>> +
-> >>>>>>>>>      /******************** v4l2_subdev_ops ********************=
-/
-> >>>>>>>>>
-> >>>>>>>>>      #define IPU3_RUNNING_MODE_VIDEO                0
-> >>>>>>>>> diff --git a/include/media/videobuf2-core.h
-> >>>>>>>>> b/include/media/videobuf2-core.h
-> >>>>>>>>> index 77921cf894ef..080b783d608d 100644
-> >>>>>>>>> --- a/include/media/videobuf2-core.h
-> >>>>>>>>> +++ b/include/media/videobuf2-core.h
-> >>>>>>>>> @@ -20,7 +20,6 @@
-> >>>>>>>>>      #include <media/media-request.h>
-> >>>>>>>>>      #include <media/frame_vector.h>
-> >>>>>>>>>
-> >>>>>>>>> -#define VB2_MAX_FRAME  (32)
-> >>>>>>>>>      #define VB2_MAX_PLANES (8)
-> >>>>>>>>>
-> >>>>>>>>>      /**
-> >>>>>>>>> diff --git a/include/media/videobuf2-v4l2.h
-> >>>>>>>>> b/include/media/videobuf2-v4l2.h
-> >>>>>>>>> index 5a845887850b..88a7a565170e 100644
-> >>>>>>>>> --- a/include/media/videobuf2-v4l2.h
-> >>>>>>>>> +++ b/include/media/videobuf2-v4l2.h
-> >>>>>>>>> @@ -15,10 +15,6 @@
-> >>>>>>>>>      #include <linux/videodev2.h>
-> >>>>>>>>>      #include <media/videobuf2-core.h>
-> >>>>>>>>>
-> >>>>>>>>> -#if VB2_MAX_FRAME !=3D VIDEO_MAX_FRAME
-> >>>>>>>>> -#error VB2_MAX_FRAME !=3D VIDEO_MAX_FRAME
-> >>>>>>>>> -#endif
-> >>>>>>>>> -
-> >>>>>>>>>      #if VB2_MAX_PLANES !=3D VIDEO_MAX_PLANES
-> >>>>>>>>>      #error VB2_MAX_PLANES !=3D VIDEO_MAX_PLANES
-> >>>>>>>>>      #endif
-> >>>>>>>>> --
-> >>>>>>>>> 2.39.2
-> >>>>>>>>>
-> >>>>>> --
-> >>>>>> Hsia-Jun(Randy) Li
-> >>>>>>
-> >>>> --
-> >>>> Hsia-Jun(Randy) Li
-> >>>>
-> >>
-> >> --
-> >> Hsia-Jun(Randy) Li
->
-> --
-> Hsia-Jun(Randy) Li
+Sakari Ailus
