@@ -2,205 +2,175 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71442EC8738
-	for <linux-media@archiver.kernel.org>; Thu,  7 Sep 2023 16:05:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9952EC8738
+	for <linux-media@archiver.kernel.org>; Thu,  7 Sep 2023 16:11:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231219AbjIGQFo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 7 Sep 2023 12:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42194 "EHLO
+        id S237621AbjIGQL5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 7 Sep 2023 12:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237715AbjIGQFS (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Sep 2023 12:05:18 -0400
-X-Greylist: delayed 217 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 07 Sep 2023 08:55:39 PDT
-Received: from mo6-p00-ob.smtp.rzone.de (mo6-p00-ob.smtp.rzone.de [IPv6:2a01:238:400:100::5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E54BE86BD
-        for <linux-media@vger.kernel.org>; Thu,  7 Sep 2023 08:55:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1694101777; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=JI3FEdA9Zg7+kjt4RT0M7QKIrMpFcOPvUaDPTSJzt7gMgmhmIER3cNgA9iOvS7nyOF
-    IEAyyzTihHvi9cHqzvZS8onVHPO5xWUGLWczep9oB6vDQzzkjdMq04cQKsgJK5BYXSXi
-    G2+qUGKpnmaYuv/lePxvoj5Fs0zBqoXlr0tM6ab7Vep8JZLuNm/0P/H39v/Z175+sJum
-    Gn2YtTgeq1+5WXHLNzic5soNv5GfU4l6GB0yF9Km24aJ5JS9bQVnR+N9RWe5U7MGXk9N
-    GudcQEdAN5Ls2+5Jh6jGADu0AKSiUmTm+B/OSPaozaXm3Oqy864CFmdQkAxEEZNOrLK6
-    wP6g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1694101777;
-    s=strato-dkim-0002; d=strato.com;
-    h=To:In-Reply-To:Cc:References:Message-Id:Date:Subject:From:Cc:Date:
-    From:Subject:Sender;
-    bh=3rKGw27TN9+S9TbxIx8o4iJIYzSzPaQH4zMebDhdxHQ=;
-    b=mHLqSQ4pFxtCcWmDjYTj1+7eUCbr1F0kag8GUFXmCZeQa0STUJOHBTnsG33G0kyRZw
-    /JbTXDmVXlCqN+/CuxQhvw6yzp0X+UixOSCLsMeWb5HzSXqyeuTVMrM2IgJHKA8EV4sy
-    lNtLA6A4U87ezsSB7adegxVuYGQQ6Lq77VlA/U2Ku9jIQKuoLkDDG/2z572hH/WT067W
-    rb80SUY2hN9l5fRUaoKnh5+goW7mHnzk0yVwMWQl2KW8ez97bgWp0jUtbcP9++SOPdsh
-    zTSy4ZILbohS9iWXr+JQfAcdivE1ZtOLerBuRscHdl6NP6Tvzp7rtjhx/xsVORCtKuHf
-    PfFA==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1694101777;
-    s=strato-dkim-0002; d=xenosoft.de;
-    h=To:In-Reply-To:Cc:References:Message-Id:Date:Subject:From:Cc:Date:
-    From:Subject:Sender;
-    bh=3rKGw27TN9+S9TbxIx8o4iJIYzSzPaQH4zMebDhdxHQ=;
-    b=nJ7QgBccIIePdqaq5lBmh5OB+YyCUphCnDCt/Tr3m6DxuFXakULe8djBFbiqg7d8C6
-    NEYlCN1r3nS+C1I+e6jnP8AkNrvEpT5jEAO2KQzzXo9IalebtOZwSLfKvl5E5jiBN6BM
-    DpOiZi+UtDszGz8v1joe+P/mL2i/OREeSbI8vUPgMfTA2O1nIRe7K3g8GZGsleuOrxge
-    VbTuuiI0QMc5T4o3OM2zfclS8WMXmtWR4wtrYcPFBdvCtIXOvD2Vi1wYk97kUMYdwNuv
-    oQXOPxT9K3NwMIiVu4MMLS1zB29Ksk3gwHUIMOOMulXigNu4fG4aP5co7h1CeluKLm/2
-    76wQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1694101777;
-    s=strato-dkim-0003; d=xenosoft.de;
-    h=To:In-Reply-To:Cc:References:Message-Id:Date:Subject:From:Cc:Date:
-    From:Subject:Sender;
-    bh=3rKGw27TN9+S9TbxIx8o4iJIYzSzPaQH4zMebDhdxHQ=;
-    b=pA/b6mWfzU9hH8kSVs/GCC+T3qOEGz4q1av17qpyBBr/N25udcjlgHN1VnE6/1mB+x
-    v0AXad7bYCIbH7vXpjBQ==
-X-RZG-AUTH: ":L2QefEenb+UdBJSdRCXu93KJ1bmSGnhMdmOod1DhGN0rBVhd9dFr6KxrfO5Oh7V7Vpi8s37ECC6+MJ21gh4qDWMGQa18rzqdHU2PnRc="
-Received: from smtpclient.apple
-    by smtp.strato.de (RZmta 49.8.2 AUTH)
-    with ESMTPSA id 3b5276z87FnbZW9
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Thu, 7 Sep 2023 17:49:37 +0200 (CEST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Christian Zigotzky <chzigotzky@xenosoft.de>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [BTTV] [FSL P50x0] [PASEMI] TV Time doesn't work anymore after dropping the overlay support
-Date:   Thu, 7 Sep 2023 17:49:26 +0200
-Message-Id: <D8076819-73AC-40D8-82DE-11EC0DA3874E@xenosoft.de>
-References: <0e7d6689-d522-4438-9acb-952995c57f32@xs4all.nl>
-Cc:     Deborah Brouwer <deborahbrouwer3563@gmail.com>,
-        Darren Stevens <darren@stevens-zone.net>,
-        mad skateman <madskateman@gmail.com>,
-        "R.T.Dickinson" <rtd2@xtra.co.nz>,
-        Christian Zigotzky <info@xenosoft.de>,
-        linux-media@vger.kernel.org
-In-Reply-To: <0e7d6689-d522-4438-9acb-952995c57f32@xs4all.nl>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-X-Mailer: iPhone Mail (20G75)
+        with ESMTP id S237653AbjIGQLb (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Sep 2023 12:11:31 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400FB358A
+        for <linux-media@vger.kernel.org>; Thu,  7 Sep 2023 09:08:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694102889; x=1725638889;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wmZoioqUcHceV8ibJFxNkH8dVefBlEEXtwpsfoQKvsU=;
+  b=bkdxyyb0SBtCPLwhtt39aq/OZ/7Oq1HWNn0GQoNKFI9utEAYNCSAm7hM
+   oN/5hF4HOsJ9u5sRrpZidOxXyTn3R+KYwAWU3PF92bhIynh2o6NtSA1Z2
+   czM4NTo90A90Bkd/HmVFdf7d+vbQ6GSbF/fQ5tK4b0yp5e92QPfXCagpv
+   yTHNU+ZLgDzUU4khQrYoQjEIoYrY/INy1sdqhnrAnwbi9Ko3Pj3eLBskE
+   3LjymWSPmEDd4OWfKbNuIIXJaZT5GhmJXYB3lEWyTIEU0nN9+DMWad1JZ
+   Mh27+jqMpBfMqacb32qUv9L70+mbubIYtsN0tc6tknGQxQ1V01cUsyV8+
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="380042664"
+X-IronPort-AV: E=Sophos;i="6.02,235,1688454000"; 
+   d="scan'208";a="380042664"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2023 04:04:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="865595207"
+X-IronPort-AV: E=Sophos;i="6.02,235,1688454000"; 
+   d="scan'208";a="865595207"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2023 04:04:22 -0700
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id 0665811F9DF;
+        Thu,  7 Sep 2023 14:04:20 +0300 (EEST)
+Date:   Thu, 7 Sep 2023 11:04:19 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        linux-media@vger.kernel.org, bingbu.cao@intel.com,
+        hongju.wang@intel.com, hverkuil@xs4all.nl,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Dmitry Perchanov <dmitry.perchanov@intel.com>
+Subject: Re: [PATCH v3 04/10] media: uapi: Add generic serial metadata mbus
+ formats
+Message-ID: <ZPmuM3+tMJLun2c5@kekkonen.localdomain>
+References: <20230808075538.3043934-1-sakari.ailus@linux.intel.com>
+ <20230808075538.3043934-5-sakari.ailus@linux.intel.com>
+ <0d022884-366d-4df0-caa6-2406714d5e07@ideasonboard.com>
+ <ZOcFpbLmZHh1d6Vt@kekkonen.localdomain>
+ <d16ebd3e-4837-3300-1e6b-4bf3e866e312@ideasonboard.com>
+ <20230905163827.GA7971@pendragon.ideasonboard.com>
+ <5e9c8fb5-6ae1-5f2c-2c1d-0a948c901dce@ideasonboard.com>
+ <20230906113117.GD17308@pendragon.ideasonboard.com>
+ <ZPhxwvkQO59gAjwQ@kekkonen.localdomain>
+ <20230906125009.GG17308@pendragon.ideasonboard.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230906125009.GG17308@pendragon.ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Hi Laurent,
 
+On Wed, Sep 06, 2023 at 03:50:09PM +0300, Laurent Pinchart wrote:
+> Hi Sakari,
+> 
+> On Wed, Sep 06, 2023 at 12:34:10PM +0000, Sakari Ailus wrote:
+> > On Wed, Sep 06, 2023 at 02:31:17PM +0300, Laurent Pinchart wrote:
+> > > On Wed, Sep 06, 2023 at 11:28:37AM +0300, Tomi Valkeinen wrote:
+> > > > On 05/09/2023 19:38, Laurent Pinchart wrote:
+> > > > > On Thu, Aug 24, 2023 at 11:26:56AM +0300, Tomi Valkeinen wrote:
+> > > > >> On 24/08/2023 10:24, Sakari Ailus wrote:
+> > > > >>> On Wed, Aug 23, 2023 at 04:16:13PM +0300, Tomi Valkeinen wrote:
+> > > > >>>> On 08/08/2023 10:55, Sakari Ailus wrote:
+> > > > >>>>> Add generic serial metadata mbus formats. These formats describe data
+> > > > >>>>> width and packing but not the content itself. The reason for specifying
+> > > > >>>>> such formats is that the formats as such are fairly device specific but
+> > > > >>>>> they are still handled by CSI-2 receiver drivers that should not be aware
+> > > > > 
+> > > > > Do we want these formats to be CSI-2-specific ?
+> > > > >
+> > > > >>>>> of device specific formats. What makes generic metadata formats possible
+> > > > >>>>> is that these formats are parsed by software only, after capturing the
+> > > > >>>>> data to system memory.
+> > > > >>>>
+> > > > >>>> If I'm not mistaken, the CSI-2 spec doesn't say much about embedded data,
+> > > > >>>> except that it may exist. Afaics, in CSI-2, the embedded data is split into
+> > > > >>>> "lines", although the amount of data can be different than in the video
+> > > > >>>> lines.
+> > > > >>>>
+> > > > >>>> The CCS specs talks more about embedded data. Some of it is quite odd, like:
+> > > > >>>> "The length of the embedded data line shall not exceed the length of the
+> > > > >>>> image data line. The embedded data line should have the same length as the
+> > > > >>>> image data line.". I think it means the embedded line can be shorter than
+> > > > >>>> image line, but not longer.
+> > > > >>>
+> > > > >>> That's what it means, yes. The CCS also has means to obtain the actual
+> > > > >>> length --- frame format descriptors.
+> > > > >>>
+> > > > >>>> CCS also says that an embedded line should use 0x07 as padding at the end of
+> > > > >>>> the line, if there's less data than the image line.
+> > > > >>>>
+> > > > >>>> CCS also talks about how the embedded data would be packed, and in some
+> > > > >>>> cases that packing would be the same as for pixel data.
+> > > > >>>
+> > > > >>> In fact the packing is the same as for pixel data: the CSI-2 does not
+> > > > >>> really differentiate there.
+> > > > >>
+> > > > >> If I understand the CCS spec right, the packing is not the same as for
+> > > > >> the pixel data. You can have RAW12 pixel data but 8-byte embedded data.
+> > > > >> But if you meant that the different packing style options are the same
+> > > > >> for pixel and embedded data, yes.
+> > > > > 
+> > > > > The idea is to allow CSI-2 receivers to unpack embedded data the same
+> > > > > way as pixel data at the hardware level, and guarantee that no embedded
+> > > > 
+> > > > Yes, but my comment was to Sakari's "the packing is the same as for 
+> > > > pixel data" comment. Afaics, there's nothing in CSI-2 or CCS that says 
+> > > > the packing is the same for pixel data and embedded data.
+> > > > 
+> > > > In fact, the CSS says "By default, top-embedded data shall use the same 
+> > > > data packing as the Visible pixel data with one embedded data byte per 
+> > > > pixel", implying that it would not always be the case. It continues that 
+> > > > for RAW16/RAW20/RAW24 pixels the embedded data could be sent with 
+> > > > RAW8/RAW10/RAW12.
+> > > 
+> > > The spec if a bit ambiguous :-S "by default" implies that something else
+> > > could be done, but it's not clear what the other options are.
+> > 
+> > The options for packing are detailed in the spec. For higher bit depths
+> > there are options (as detailed by Tomi above).
+> 
+> The "by default" wording could be construed as allowing any packing. I
+> think the intent was to only allow an alternative packing for RAW16 and
+> higher, but it's not very clear.
 
-> On 7. Sep 2023, at 17:23, Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
->=20
-> =EF=BB=BFHi Deb,
->=20
->> On 04/09/2023 13:51, Christian Zigotzky wrote:
->>> On 05 May 2023 at 09:20 am, Christian Zigotzky wrote:
->>> On 05 May 2023 at 08:45 am, Hans Verkuil wrote:
->>>> On 05/05/2023 08:25, Christian Zigotzky wrote:
->>>>> On 02 May 2023 at 08:57 am, Hans Verkuil wrote:
->>>>>> If v4l2-ctl fails, then try again
->>>>>> after applying this series:
->>>>>>=20
->>>>>> https://patchwork.linuxtv.org/project/linux-media/cover/cover.1682995=
-256.git.deborah.brouwer@collabora.com/
->>>>> Your patch series solved the issue. Thanks a lot!
->>>> Nice, but somewhat unexpected :-)
->>>>=20
->>>> I'm a little bit unsure how to proceed: the 6.4 kernel will remove dest=
-ructive overlay
->>>> support, but it won't have this series yet, that's for 6.5. But that wo=
-uld make 6.4
->>>> unusable for you.
->>>>=20
->>>> I might have to revert the overlay removal, at least for bttv.
->>>>=20
->>>> Regards,
->>>>=20
->>>>     Hans
->>> Hans,
->>>=20
->>> You don't need to revert the overlay removal because your patch series w=
-ork with the latest git kernel (6.4).
->>>=20
->>> Thanks for your help,
->>>=20
->>> Christian
->>=20
->> Hello Hans,
->>=20
->> I successfully used your patches for the kernel 6.5. Everything works wit=
-hout any problems with your patch series from May.
->>=20
->> Your patches have been added with the latest Media updates [1] for the ke=
-rnel 6.6.
->>=20
->> The patches works but I have a green bar in the bottum of the window if I=
- use the composite input. [2]
->>=20
->> I don't have this green bar with your May patch series.
->>=20
->> Could you please check your latest patches?
->>=20
->> Thanks,
->>=20
->> Christian
->>=20
->> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/co=
-mmit/?id=3D307d59039fb26212a84a9aa6a134a7d2bdea34ca
->> [2] https://i.ibb.co/D4K6j2c/Kernel-6-6-alpha2-Power-PC.png
->>=20
->>=20
->=20
-> After some testing and debugging I found this change in the bttv vb2 conve=
-rsion
-> patch:
->=20
-> https://patchwork.linuxtv.org/project/linux-media/patch/d785cd8b0d8c19c05f=
-caa1536622e2fdd9f8ede3.1689379982.git.deborah.brouwer@collabora.com/
->=20
->> diff --git a/drivers/media/pci/bt8xx/bttv-risc.c b/drivers/media/pci/bt8x=
-x/bttv-risc.c
->> index 3e0dac56de54..436baf6c8b08 100644
->> --- a/drivers/media/pci/bt8xx/bttv-risc.c
->> +++ b/drivers/media/pci/bt8xx/bttv-risc.c
->> @@ -67,8 +67,10 @@ bttv_risc_packed(struct bttv *btv, struct btcx_riscmem=
- *risc,
->>    /* scan lines */
->>    sg =3D sglist;
->>    for (line =3D 0; line < store_lines; line++) {
->> -        if ((btv->opt_vcr_hack) &&
->> -            (line >=3D (store_lines - VCR_HACK_LINES)))
->> +        if ((line >=3D (store_lines - VCR_HACK_LINES)) &&
->> +            (btv->opt_vcr_hack ||
->> +            (V4L2_FIELD_HAS_BOTH(btv->field) ||
->> +             btv->field =3D=3D V4L2_FIELD_ALTERNATE)))
->>            continue;
->>        while (offset && offset >=3D sg_dma_len(sg)) {
->>            offset -=3D sg_dma_len(sg);
->=20
-> It is this change that causes the issue: basically the condition
-> (V4L2_FIELD_HAS_BOTH(btv->field) || btv->field =3D=3D V4L2_FIELD_ALTERNATE=
-)
-> is almost always true (it is only false for FIELD_TOP/BOTTOM), so it is
-> as if vcr_hack is always turned on.
->=20
-> It looks to me like some debug code accidentally ended up in this patch.
-> Reverting this change makes everything look good again (Christian, it woul=
-d
-> be great if you can confirm that this also fixes the issue for you!).
->=20
-> Deb, can you remember anything about this change?
->=20
-> Regards,
->=20
->    Hans
->=20
->=20
-Hi Hans,
+The optimised packing convention is only available for RAW16 and higher ---
+otherwise you won't have enough bits needed to carry two bytes of data. The
+packing used is configured using emb_data_ctrl register.
 
-Thanks a lot for your answer.  I will test it as soon as possible.
+Maybe annex A could be merged to section 7.15 in order to make things
+clearer.
 
-It=E2=80=99s great, that you support the BTTV driver for old TV cards.
+> 
+> > > > That was just for top-embedded data, and I couldn't right away see 
+> > > > mention of other embedded data.
+> > > 
+> > > The specification also mentions PDAF data for instance.
+> > 
+> > The bottom PDAF data is vendor defined (as it's processed) so the vendor is
+> > free to do whatever there. Note that the better way to support PDAF is via
+> > embedded PDAF pixels, not via separate bottom embedded (PDAF) data. The
+> > bottom embedded data could also be different kinds of statistics.
+> 
+> Lots of ISPs don't support hardware processing of embedded PDAF pixels,
+> so sensor-side processing is often nice to have. I wouldn't consider the
+> embedded PDAF lines to be always worse than embedded PDAF pixels.
 
-Have a nice day.
+Not necessarily, indeed, but these formats tend not to be documented. :-(
 
-Cheers,
-Christian
+-- 
+Regards,
 
+Sakari Ailus
