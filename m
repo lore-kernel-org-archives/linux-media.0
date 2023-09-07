@@ -2,123 +2,115 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBA98EC8726
-	for <linux-media@archiver.kernel.org>; Thu,  7 Sep 2023 18:01:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D029EC874B
+	for <linux-media@archiver.kernel.org>; Thu,  7 Sep 2023 18:11:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234083AbjIGSBR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 7 Sep 2023 14:01:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
+        id S239762AbjIGSLy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 7 Sep 2023 14:11:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245689AbjIGSBP (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Sep 2023 14:01:15 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 071E21FF5
-        for <linux-media@vger.kernel.org>; Thu,  7 Sep 2023 11:00:53 -0700 (PDT)
+        with ESMTP id S237977AbjIGSLx (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Sep 2023 14:11:53 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5476F10CA
+        for <linux-media@vger.kernel.org>; Thu,  7 Sep 2023 11:11:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694109654; x=1725645654;
+  t=1694110289; x=1725646289;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=p6s/ghMXMV68Kdag5Vu/r94gOoWNmhl0k+5ya8EbzIU=;
-  b=KBW/ze4B/nZm/sI8Cu6dWovPcPnH8nZXgxqdJIFh4l6YOhvY3ARrzK+n
-   tS4Gt0nN+xHbOMGmxo8exqcNlx4f0E8Seizmp4B6Xf7fiaXBe0wgjNhYp
-   ENYQW9+0BEFQlX46aiZ6SYLHepDubUkFB6YksdJ68avRemK7JTt/TY+3F
-   8K4e8boLv79EwAJ+4Mmsf9gX5QSlUWEoJj9LDe091ID7nWkOyJiEhKLeO
-   +CgdD1og2kyrj0keiy4cI5NoVS7E+X7AdyfjSXpkUG54cnWu5mKzBZZxf
-   MH+n0GhSf7atl9JsoFzziXA1Q2XhX7j9Pn+XfIXWUHwu2zAIHQ8AqHCRd
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="443678299"
-X-IronPort-AV: E=Sophos;i="6.02,234,1688454000"; 
-   d="scan'208";a="443678299"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2023 01:20:35 -0700
+  bh=pqmhLkCPQV1XfA/CF4Yq2EehojQ2cj1SHXjPRTQSHZs=;
+  b=g4xN+PDwPcxK/iXwtKUHaM/u+6cuCjxBI43t5tLj56KWW0HI3RhvBhJ1
+   4kiGNEQUuq0voGsRMYLWs2JCk5TIeILq5wTxYnzWwzs+NlY9LUpHxjDp5
+   fL/avIGNe8vIZWQwllWVjTkZcN5i7Bt1NuzKrfGzhPp7Szt57/5Sbr1ag
+   NT2u7mcPhNbfdN6EAuKjdsmU+ffxf/DJt+309dgcqBxca85Y6LSIEiboS
+   pmsJ4Q/VS1H6JWJVCaSV23VYsu9/RC03YjxWO33hb887sRfmofJ6Oq9fQ
+   myrKpLt120sVnv97kT7Qgk4jbyvee/CxEYxCkam2ZuOQhJitLaUsKXZOG
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="374713112"
+X-IronPort-AV: E=Sophos;i="6.02,235,1688454000"; 
+   d="scan'208";a="374713112"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2023 03:58:08 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="691693182"
-X-IronPort-AV: E=Sophos;i="6.02,234,1688454000"; 
-   d="scan'208";a="691693182"
+X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="741981347"
+X-IronPort-AV: E=Sophos;i="6.02,235,1688454000"; 
+   d="scan'208";a="741981347"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2023 01:20:32 -0700
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2023 03:58:05 -0700
 Received: from kekkonen.localdomain (localhost [127.0.0.1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id 1892911FAE0;
-        Thu,  7 Sep 2023 11:20:30 +0300 (EEST)
-Date:   Thu, 7 Sep 2023 08:20:30 +0000
+        by kekkonen.fi.intel.com (Postfix) with SMTP id DEEBB11F9DF;
+        Thu,  7 Sep 2023 13:58:02 +0300 (EEST)
+Date:   Thu, 7 Sep 2023 10:58:02 +0000
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        linux-media@vger.kernel.org, bingbu.cao@intel.com,
-        hongju.wang@intel.com, hverkuil@xs4all.nl,
+Cc:     linux-media@vger.kernel.org, tomi.valkeinen@ideasonboard.com,
+        bingbu.cao@intel.com, hongju.wang@intel.com, hverkuil@xs4all.nl,
         Andrey Konovalov <andrey.konovalov@linaro.org>,
         Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
         Dmitry Perchanov <dmitry.perchanov@intel.com>
-Subject: Re: [PATCH v3 06/10] media: uapi: Add a macro to tell whether an
- mbus code is metadata
-Message-ID: <ZPmHzg/vFHoM4Cui@kekkonen.localdomain>
+Subject: Re: [PATCH v3 01/10] media: Documentation: Align numbered list
+Message-ID: <ZPmsuiWm1iruuw0M@kekkonen.localdomain>
 References: <20230808075538.3043934-1-sakari.ailus@linux.intel.com>
- <20230808075538.3043934-7-sakari.ailus@linux.intel.com>
- <98069c4c-d2fd-9117-08cd-eb595df77d4a@ideasonboard.com>
- <ZPcE+b3EYWM8G8vE@kekkonen.localdomain>
- <20230905170604.GG7971@pendragon.ideasonboard.com>
- <ZPhjipPedxYHxXni@kekkonen.localdomain>
- <20230906122308.GE17308@pendragon.ideasonboard.com>
- <ZPh5XLsacpmOu8OF@kekkonen.localdomain>
+ <20230808075538.3043934-2-sakari.ailus@linux.intel.com>
+ <20230905130640.GF11700@pendragon.ideasonboard.com>
+ <ZPh0ALJSBxcE4QP8@kekkonen.localdomain>
+ <20230906125057.GH17308@pendragon.ideasonboard.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZPh5XLsacpmOu8OF@kekkonen.localdomain>
+In-Reply-To: <20230906125057.GH17308@pendragon.ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Sep 06, 2023 at 01:06:36PM +0000, Sakari Ailus wrote:
-> On Wed, Sep 06, 2023 at 03:23:08PM +0300, Laurent Pinchart wrote:
-> > On Wed, Sep 06, 2023 at 11:33:30AM +0000, Sakari Ailus wrote:
-> > > On Tue, Sep 05, 2023 at 08:06:04PM +0300, Laurent Pinchart wrote:
-> > > > On Tue, Sep 05, 2023 at 10:37:45AM +0000, Sakari Ailus wrote:
-> > > > > On Tue, Sep 05, 2023 at 12:47:21PM +0300, Tomi Valkeinen wrote:
-> > > > > > On 08/08/2023 10:55, Sakari Ailus wrote:
-> > > > > > > Add a macro to tell whether a given mbus code is metadata.
-> > > > > > > 
-> > > > > > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > > > > > > ---
-> > > > > > >   include/uapi/linux/media-bus-format.h | 3 +++
-> > > > > > >   1 file changed, 3 insertions(+)
-> > > > > > > 
-> > > > > > > diff --git a/include/uapi/linux/media-bus-format.h b/include/uapi/linux/media-bus-format.h
-> > > > > > > index 9ee031397372..2486b4178c5f 100644
-> > > > > > > --- a/include/uapi/linux/media-bus-format.h
-> > > > > > > +++ b/include/uapi/linux/media-bus-format.h
-> > > > > > > @@ -182,4 +182,7 @@
-> > > > > > >   #define MEDIA_BUS_FMT_META_20			0x8006
-> > > > > > >   #define MEDIA_BUS_FMT_META_24			0x8007
-> > > > > > > +#define MEDIA_BUS_FMT_IS_META(code)		\
-> > > > > > > +	((code) & 0xf000 == 0x7000 || (code) & 0xf000 == 0x8000)
-> > > > > > > +
-> > > > > > >   #endif /* __LINUX_MEDIA_BUS_FORMAT_H */
-> > > > > > 
-> > > > > > mbus code seems to be u32, so the above won't work. Maybe:
-> > > > > > 
-> > > > > > (((code) & ~0xfffULL) == 0x7000 || ((code) & ~0xfffULL) == 0x8000)
-> > > > > > 
-> > > > > > Also, embedded formats with 0x9nnn codes are added later in the series.
-> > > > > 
-> > > > > Thanks, I'll address these for v4.
-> > > > 
-> > > > It would be nice to make this an inline function, to avoid evaluating
-> > > > the code twice. I think you can move it to an internal kernel header, it
-> > > > doesn't need to be exposed to userspace.
+On Wed, Sep 06, 2023 at 03:50:57PM +0300, Laurent Pinchart wrote:
+> On Wed, Sep 06, 2023 at 12:43:44PM +0000, Sakari Ailus wrote:
+> > > > -2) Streams. Streams are declared and their routing is configured by
+> > > > -setting the routing table for the sub-device using
+> > > > -:ref:`VIDIOC_SUBDEV_S_ROUTING <VIDIOC_SUBDEV_G_ROUTING>` ioctl. Note that
+> > > > -setting the routing table will reset formats and selections in the
+> > > > -sub-device to default values.
+> > > > +2) Streams. Streams are declared and their routing is configured by setting the
+> > > > +   routing table for the sub-device using :ref:`VIDIOC_SUBDEV_S_ROUTING
+> > > > +   <VIDIOC_SUBDEV_G_ROUTING>` ioctl. Note that setting the routing table will
+> > > > +   reset formats and selections in the sub-device to default values.
+> > > >  
+> > > > -3) Configure formats and selections. Formats and selections of each stream
+> > > > -are configured separately as documented for plain sub-devices in
+> > > > -:ref:`format-propagation`. The stream ID is set to the same stream ID
+> > > > -associated with either sink or source pads of routes configured using the
+> > > > -:ref:`VIDIOC_SUBDEV_S_ROUTING <VIDIOC_SUBDEV_G_ROUTING>` ioctl.
+> > > > +3) Configure formats and selections. Formats and selections of each stream are
+> > > > +   configured separately as documented for plain sub-devices in
+> > > > +   :ref:`format-propagation`. The stream ID is set to the same stream ID
+> > > > +   associated with either sink or source pads of routes configured using the
+> > > > +   :ref:`VIDIOC_SUBDEV_S_ROUTING <VIDIOC_SUBDEV_G_ROUTING>` ioctl.
+> > > >  
+> > > >  Multiplexed streams setup example
+> > > >  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> > > > @@ -619,8 +618,8 @@ modeled as V4L2 devices, exposed to userspace via /dev/videoX nodes.
+> > > >  To configure this pipeline, the userspace must take the following steps:
+> > > >  
+> > > >  1) Set up media links between entities: connect the sensors to the bridge,
+> > > > -bridge to the receiver, and the receiver to the DMA engines. This step does
+> > > > -not differ from normal non-multiplexed media controller setup.
+> > > > +   bridge to the receiver, and the receiver to the DMA engines. This step does
+> > > > +   not differ from normal non-multiplexed media controller setup.
+> > > >  
+> > > >  2) Configure routing
+> > > >  
 > > > 
-> > > This was meant for user space consumption for setting the buffer type to
-> > > the video node accordingly. It's certainly possible to do that without this
-> > > macro, too.
+> > > 3) below contains two paragraphs that are not indented.
 > > 
-> > I think userspace would be fine without it :-)
+> > From the documentation output this does not matter. Or was your comment
+> > about aligning the formatting in the source? (I prefer it as-is but no
+> > strong opinion about it either. Just slightly easier to edit that way. :-))
 > 
-> I'll see if this would seem useful in yavta support before dropping it: the
-> buffer type needs to be specified correctly and knowing the format is a
-> metadata format maybe helpful. Let's see.
+> I like consistency, both in the source and the output :-)
 
-As yavta doesn't deal with mbus codes, this isn't useful for it. I'll drop
-it for now.
+This doesn't seem to be possible in all cases --- Sphinx thinks the
+paragraph is part of the preceding table if it's indented.
 
 -- 
 Sakari Ailus
