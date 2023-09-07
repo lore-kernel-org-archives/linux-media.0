@@ -2,53 +2,53 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A8F5EC8748
-	for <linux-media@archiver.kernel.org>; Thu,  7 Sep 2023 16:47:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DECDEC8743
+	for <linux-media@archiver.kernel.org>; Thu,  7 Sep 2023 16:47:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242953AbjIGQrH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 7 Sep 2023 12:47:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37838 "EHLO
+        id S244289AbjIGQrO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 7 Sep 2023 12:47:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240963AbjIGQqf (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Sep 2023 12:46:35 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA82A1BFD
-        for <linux-media@vger.kernel.org>; Thu,  7 Sep 2023 09:46:09 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-40061928e5aso13171365e9.3
-        for <linux-media@vger.kernel.org>; Thu, 07 Sep 2023 09:46:09 -0700 (PDT)
+        with ESMTP id S234922AbjIGQqx (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Sep 2023 12:46:53 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DCD92125
+        for <linux-media@vger.kernel.org>; Thu,  7 Sep 2023 09:46:20 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-402cc6b8bedso13271075e9.1
+        for <linux-media@vger.kernel.org>; Thu, 07 Sep 2023 09:46:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694105070; x=1694709870; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1694105077; x=1694709877; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=12+DTZFXkG2owWWbljTCuZqxlyIGQ8q+rzU2uqt9NvI=;
-        b=CKPyUg0AGv2P3xp3vVuwDvBo1WmoFHUWcbRWK7pK6J76iG8tRx9rwvBYN/oNsOArgO
-         OPbSQu5cBB+rkEmqCklcWVwF/URCp/HeviqnP8av776UPLR9CmWAi6YgY+NTX3z7/15n
-         Unkc8lsdSmEQxxnUD1oRgw+3fSZS0xtQ5Qckprs1XBcRgNWVst7qQ8b7iGtPogJzFhWx
-         EpnagFMOWv6N0pJwrDqmEU7S3Uix3Pn6T3uBjf2SX+LX9oy2UBPqcfxlLj+stX2T14TP
-         B9c0yjYg3iyURAmy84R7U40NGsMgI0ROqiv9dEjdyOxzWZX+PLJJ37IwsZc4ys9Lrlje
-         UnYQ==
+        bh=FIu4eWCkEOSVtI8FoLJRLwwONGivM5mrULXtY5Z5HVI=;
+        b=Zg6OBfUH4MExpnSfXQB3UVHFUUKI1ixC15c3XqL5WZQYf7FpAURcJgiicPUwFSPWW/
+         uGclQ0DZhVIdeOxNG9hHhUpSa/AokckeED6ffsXDxU3qe7wDUGVAPL+AMnk1pF+f7la3
+         rY2ckNU3ZY2Y3amh+5ghwswnX9LqVIpQDdKeB1VkHevANpGXiOHNQHPYOfzp3+1Ob61P
+         4AVQImJ41RKowwuM4L87uGGiTM4Mam3uw0pv/AhsVIj6CsyuGUd7AoSzq8rOpRAXB9VF
+         bCs2DGj44UOkg9ckKD7B+LyQTSI70SLa5XXKJLwDyzZQ8tEAlPC3H53PVygCYuXQ8p0q
+         sjnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1694105070; x=1694709870;
+        d=1e100.net; s=20221208; t=1694105077; x=1694709877;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=12+DTZFXkG2owWWbljTCuZqxlyIGQ8q+rzU2uqt9NvI=;
-        b=l7sPlAkIL2HBLAfe2hXjWNv1sJbkx830ay0IKazkn2Y8wqfslJ3oIHk+jynzG+ADEm
-         21jxuVUO9zu8Yh4mROFqO9MtWL2R+im6QaY1HUS7E7E0H/CAdml6PH4ymCbJTh+1623g
-         qFqrQN8lTchLg+NzPED+sA3DOzr27vTIxPjWERC5sTU2qjOqjexrCk5DFRGMFfz9QI6D
-         f3vDoAcu/BIPFe5jCkycM/HuGbOLSXdSXwNze+qcNmL+uLBnUUzdXhGn9aLJTDHfYkAn
-         c1uUd6F9e+KqJOkdN779G5OLVEjxx2hvud+TvGdG8b6e4RHVy39XCr0y4XcM1Fgh4mMm
-         WJjg==
-X-Gm-Message-State: AOJu0YyWO/caHr7oM3+idhkQxATYyzmkd6tn+vDLqC36x6LzRK831MMt
-        i2sH0QEQR00OjPBh+uHmtEHsIQ==
-X-Google-Smtp-Source: AGHT+IEmqQIeynZQq8tWIXW+dw0WlocG78ZMWRShFxQCtRvuNcFwkxJ1oTDZoxEq9Fho2wtuqLBuVQ==
-X-Received: by 2002:a5d:4538:0:b0:31c:e933:9590 with SMTP id j24-20020a5d4538000000b0031ce9339590mr5053146wra.33.1694105070513;
-        Thu, 07 Sep 2023 09:44:30 -0700 (PDT)
+        bh=FIu4eWCkEOSVtI8FoLJRLwwONGivM5mrULXtY5Z5HVI=;
+        b=OaX/mQq9riEz2Z2nZNx7RksQn2ZTGpRgix/DKgTP25m2mJo7ymU9yx1JTiqyIJtDOR
+         SvisbDSetIaGTeocz5/+XyCy/sQx4mQPlVvKd3IEnU6DDgH9FUPKWSf8TNziCaNmVloe
+         zZRv4k8bCx+r5FECkI2oahMbitDifQpODc8EWrOgToCiaWcoCdbdfxcrH+FB/oUroqx4
+         VYsfsILpfMHLDztZbViaO0FGJPdcBKY6S1yTvzUlXDsIC1i30omMm7Nu+PjWHMLFu4ys
+         l+K3KhVjoTH9ZoNf0zITB6mjT6ctklAF4HR+8KuhrNdTbY0FFhaBTodjUpdb+Bp+KJm4
+         /+UA==
+X-Gm-Message-State: AOJu0YypE4XvZZPR3MXVLzjWcZ58EA5KnCEtj8jHvhpUunO2XBibWxl6
+        OGQqROJqxdW7yeUpvauzuM9v/w==
+X-Google-Smtp-Source: AGHT+IHYQm/x1ttHvlb4nOLzsoqtQcWa1sflGXM/+Y5olsT43jMQsj+a+Uw0WpuUCkC0LtSmUtNegg==
+X-Received: by 2002:adf:d0ca:0:b0:317:e1fb:d56a with SMTP id z10-20020adfd0ca000000b00317e1fbd56amr5095651wrh.40.1694105077152;
+        Thu, 07 Sep 2023 09:44:37 -0700 (PDT)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id d15-20020adffd8f000000b00317ab75748bsm23822145wrr.49.2023.09.07.09.44.29
+        by smtp.gmail.com with ESMTPSA id d15-20020adffd8f000000b00317ab75748bsm23822145wrr.49.2023.09.07.09.44.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Sep 2023 09:44:29 -0700 (PDT)
+        Thu, 07 Sep 2023 09:44:36 -0700 (PDT)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
         agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
@@ -57,9 +57,9 @@ To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
         andrey.konovalov@linaro.org
 Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 12/17] media: qcom: camss: Functionally decompose CSIPHY clock lookups
-Date:   Thu,  7 Sep 2023 17:44:05 +0100
-Message-ID: <20230907164410.36651-13-bryan.odonoghue@linaro.org>
+Subject: [PATCH v4 17/17] media: qcom: camss: Comment CSID dt_id field
+Date:   Thu,  7 Sep 2023 17:44:10 +0100
+Message-ID: <20230907164410.36651-18-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20230907164410.36651-1-bryan.odonoghue@linaro.org>
 References: <20230907164410.36651-1-bryan.odonoghue@linaro.org>
@@ -69,84 +69,49 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The csiphyX_timer and csiX_phy values need not be hard-coded. We can
-functionally decompose the string matching inside of a loop.
+Digging into the documentation we find that the DT_ID bitfield is used to
+map the six bit DT to a two bit ID code. This value is concatenated to the
+VC bitfield to create a CID value. DT_ID is the two least significant bits
+of CID and VC the most significant bits.
 
-Static string values are brittle, difficult to extend and not required
-anyway since the camss->res->csiphy_num value informs us of the number
-of CSIPHYs and hence the set of potential clocks for a given CSIPHY.
+Originally we set dt_id = vc * 4 in and then subsequently set dt_id = vc.
 
-In simple terms if we have five CSIPHYs we can have no more and no less
-than five csiphy_timer clocks. Similarly csi_phy core clocks have a 1:1
-relationship with the PHY they clock.
+commit 3c4ed72a16bc ("media: camss: sm8250: Virtual channels for CSID")
+silently fixed the multiplication by four which would give a better
+value for the generated CID without mentioning what was being done or why.
+
+Next up I haplessly changed the value back to "dt_id = vc * 4" since there
+didn't appear to be any logic behind it.
+
+Hans asked what the change was for and I honestly couldn't remember the
+provenance of it, so I dug in.
+
+Link: https://lore.kernel.org/linux-arm-msm/edd4bf9b-0e1b-883c-1a4d-50f4102c3924@xs4all.nl/
+
+Add a comment so the next hapless programmer doesn't make this same
+mistake.
 
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- .../media/platform/qcom/camss/camss-csiphy.c  | 37 ++++++++++++-------
- 1 file changed, 23 insertions(+), 14 deletions(-)
+ drivers/media/platform/qcom/camss/camss-csid-gen2.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.c b/drivers/media/platform/qcom/camss/camss-csiphy.c
-index 18f9a4defb2a4..87d6d65aa90cf 100644
---- a/drivers/media/platform/qcom/camss/camss-csiphy.c
-+++ b/drivers/media/platform/qcom/camss/camss-csiphy.c
-@@ -536,6 +536,15 @@ static int csiphy_init_formats(struct v4l2_subdev *sd,
- 	return csiphy_set_format(sd, fh ? fh->state : NULL, &format);
- }
+diff --git a/drivers/media/platform/qcom/camss/camss-csid-gen2.c b/drivers/media/platform/qcom/camss/camss-csid-gen2.c
+index 6ba2b10326444..cee50fc87e9de 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid-gen2.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-gen2.c
+@@ -352,6 +352,11 @@ static void __csid_configure_stream(struct csid_device *csid, u8 enable, u8 vc)
+ 		phy_sel = csid->phy.csiphy_id;
  
-+static bool csiphy_match_clock_name(const char *clock_name, const char *format,
-+				    int index)
-+{
-+	char name[15]; /* csiphyXX_timer\0 */
-+
-+	snprintf(name, sizeof(name), format, index);
-+	return !strcmp(clock_name, name);
-+}
-+
- /*
-  * msm_csiphy_subdev_init - Initialize CSIPHY device structure and resources
-  * @csiphy: CSIPHY device
-@@ -550,7 +559,7 @@ int msm_csiphy_subdev_init(struct camss *camss,
- {
- 	struct device *dev = camss->dev;
- 	struct platform_device *pdev = to_platform_device(dev);
--	int i, j;
-+	int i, j, k;
- 	int ret;
+ 	if (enable) {
++		/*
++		 * A value caled 'CID' gets generated internal to CAMSS logic
++		 * which is a concatenation of [vc:6 | dt_id:2] hence we reuse
++		 * the least significant two bits of the VC to 'stuff' the CID value.
++		 */
+ 		u8 dt_id = vc;
  
- 	csiphy->camss = camss;
-@@ -656,19 +665,19 @@ int msm_csiphy_subdev_init(struct camss *camss,
- 		for (j = 0; j < clock->nfreqs; j++)
- 			clock->freq[j] = res->clock_rate[i][j];
- 
--		if (!strcmp(clock->name, "csiphy0_timer") ||
--		    !strcmp(clock->name, "csiphy1_timer") ||
--		    !strcmp(clock->name, "csiphy2_timer") ||
--		    !strcmp(clock->name, "csiphy3_timer") ||
--		    !strcmp(clock->name, "csiphy4_timer") ||
--		    !strcmp(clock->name, "csiphy5_timer"))
--			csiphy->rate_set[i] = true;
--
--		if (camss->res->version == CAMSS_660 &&
--		    (!strcmp(clock->name, "csi0_phy") ||
--		     !strcmp(clock->name, "csi1_phy") ||
--		     !strcmp(clock->name, "csi2_phy")))
--			csiphy->rate_set[i] = true;
-+		for (k = 0; k < camss->res->csiphy_num; k++) {
-+			csiphy->rate_set[i] = csiphy_match_clock_name(clock->name,
-+								      "csiphy%d_timer", k);
-+			if (csiphy->rate_set[i])
-+				break;
-+
-+			if (camss->res->version == CAMSS_660) {
-+				csiphy->rate_set[i] = csiphy_match_clock_name(clock->name,
-+									      "csi%d_phy", k);
-+				if (csiphy->rate_set[i])
-+					break;
-+			}
-+		}
- 	}
- 
- 	return 0;
+ 		if (tg->enabled) {
 -- 
 2.41.0
 
