@@ -2,107 +2,289 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BB2EEC873E
-	for <linux-media@archiver.kernel.org>; Thu,  7 Sep 2023 16:27:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52E95EC8744
+	for <linux-media@archiver.kernel.org>; Thu,  7 Sep 2023 16:44:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231514AbjIGQ1G (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 7 Sep 2023 12:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33528 "EHLO
+        id S237607AbjIGQoY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 7 Sep 2023 12:44:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238557AbjIGQZf (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Sep 2023 12:25:35 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C13A59C3;
-        Thu,  7 Sep 2023 09:21:52 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B859C433B8;
-        Thu,  7 Sep 2023 09:30:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1694079052;
-        bh=TiT32MSj3JgzYk5BqsCOQEiIdDx5M2GTmRAd61MVr/c=;
+        with ESMTP id S242183AbjIGQoN (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Sep 2023 12:44:13 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8A7CE7;
+        Thu,  7 Sep 2023 09:43:46 -0700 (PDT)
+Received: from pyrite.rasen.tech (h175-177-042-159.catv02.itscom.jp [175.177.42.159])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 43F531ADE;
+        Thu,  7 Sep 2023 16:51:50 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1694098313;
+        bh=+8I162w2nEOkL5N3DXTubzTuwiWJ25oKxq6jy5tywCc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NtmptFt7CZxUCwzDgfsKsOiT32m5Si5FKAR0ogW+EzRFOCFC0FgYO2FtoYoIp7YpM
-         zbn7CXxNH0mtEw+3N6P0ogEhTQ6+cXJsHqdaqMQ2w6I9fvmyQbiIy2Gbh68h69K9LY
-         UR627ly2qJQkQUS2mmYA4J4R1uU8Cc87wiiJ48bQ=
-Date:   Thu, 7 Sep 2023 10:30:50 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Stefan Lippers-Hollmann <s.l-h@gmx.de>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        Christoph Hellwig <hch@lst.de>,
-        Luis Chamberlain <mcgrof@kernel.org>,
+        b=NweUCK+cvDtmpu/mITNwfNnJyvH9J8d8nzBgdEEwO60YM10b7TP0aWwIwxQsfGFni
+         kwavcmAmrjIdQc7F307l9nVIhl0K+ekn36iV55+EhtY6DIYk2WiYc4mKz2yQv/xNAO
+         2+acyWrrGOf9kLGmG+wWbL1DB6qWEPogWONspijY=
+Date:   Thu, 7 Sep 2023 23:53:12 +0900
+From:   Paul Elder <paul.elder@ideasonboard.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-media@vger.kernel.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6.5 11/34] modules: only allow symbol_get of
- EXPORT_SYMBOL_GPL modules
-Message-ID: <2023090719-virtuous-snowflake-d015@gregkh>
-References: <20230904182948.594404081@linuxfoundation.org>
- <20230904182949.104100132@linuxfoundation.org>
- <20230907084135.02d97441@mir>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: media: Add THine THP7312 ISP
+Message-ID: <ZPnj2OyHEUuTrH53@pyrite.rasen.tech>
+References: <20230905233118.183140-1-paul.elder@ideasonboard.com>
+ <20230905233118.183140-2-paul.elder@ideasonboard.com>
+ <f023767c-aa74-87ca-d333-3dba8a481cb6@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230907084135.02d97441@mir>
+In-Reply-To: <f023767c-aa74-87ca-d333-3dba8a481cb6@linaro.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Sep 07, 2023 at 08:41:35AM +0200, Stefan Lippers-Hollmann wrote:
-> Hi
+On Wed, Sep 06, 2023 at 09:18:30AM +0200, Krzysztof Kozlowski wrote:
+> On 06/09/2023 01:31, Paul Elder wrote:
+> > Add bindings for the THine THP7312 ISP.
+> > 
+> > Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
+> > ---
+> > Since the THP7312 supports multiple sensors, thine,rx-data-lanes alone
+> > might not be enough. I was consdering using sensor nodes like what the
+> > AP1302 does [1]. This way we can also move the power supplies that only
+> > concern the sensor in there as well. I was wondering what to do about
+> > the model name, though, as the thp7312 completely isolates that from the 
+> > rest of the system.
+> > 
+> > I'm planning to add sensor nodes in somehow in a v2.
+> > 
+> > [1] https://lore.kernel.org/linux-media/20211006113254.3470-2-anil.mamidala@xilinx.com/
+> > 
+> >  .../bindings/media/thine,thp7312.yaml         | 170 ++++++++++++++++++
+> >  1 file changed, 170 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/media/thine,thp7312.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/media/thine,thp7312.yaml b/Documentation/devicetree/bindings/media/thine,thp7312.yaml
+> > new file mode 100644
+> > index 000000000000..e8d203dcda81
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/media/thine,thp7312.yaml
+> > @@ -0,0 +1,170 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +# Copyright (c) 2023 Ideas on Board
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/media/thine,thp7312.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: THine THP7312
+> > +
+> > +maintainers:
+> > +  - Paul Elder <paul.elder@@ideasonboard.com>
+> > +
+> > +description:
+> > +  The THP7312 is a standalone ISP controlled over i2c, and is capable of
+> > +  various image processing and correction functions, including 3A control. It
+> > +  can be connected to CMOS image sensors from various vendors, supporting both
+> > +  MIPI CSI-2 and parallel interfaces. It can also output on either MIPI CSI-2
+> > +  or parallel. The hardware is capable of transmitting and receiving MIPI
+> > +  interlaved data strams with data types or multiple virtual channel
+> > +  identifiers.
+> > +
+> > +allOf:
+> > +  - $ref: ../video-interface-devices.yaml#
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: thine,thp7312
+> > +
+> > +  reg:
+> > +    description: I2C device address
 > 
-> On 2023-09-04, Greg Kroah-Hartman wrote:
-> > 6.5-stable review patch.  If anyone has any objections, please let me know.
-> >
-> > ------------------
-> >
-> > From: Christoph Hellwig <hch@lst.de>
-> >
-> > commit 9011e49d54dcc7653ebb8a1e05b5badb5ecfa9f9 upstream.
-> >
-> > It has recently come to my attention that nvidia is circumventing the
-> > protection added in 262e6ae7081d ("modules: inherit
-> > TAINT_PROPRIETARY_MODULE") by importing exports from their proprietary
-> > modules into an allegedly GPL licensed module and then rexporting them.
-> >
-> > Given that symbol_get was only ever intended for tightly cooperating
-> > modules using very internal symbols it is logical to restrict it to
-> > being used on EXPORT_SYMBOL_GPL and prevent nvidia from costly DMCA
-> > Circumvention of Access Controls law suites.
-> >
-> > All symbols except for four used through symbol_get were already exported
-> > as EXPORT_SYMBOL_GPL, and the remaining four ones were switched over in
-> > the preparation patches.
+> You can skip description. It is obvious.
+
+ack
+
 > 
-> This patch, as part of v6.5.2, breaks the in-kernel ds3000 module
-> (for a TeVii s480 v2 DVB-S2 card, which is a PCIe card attaching two
-> onboard TeVii s660 cards via an onboard USB2 controller (MCS9990),
-> https://www.linuxtv.org/wiki/index.php/TeVii_S480) from loading.
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    maxItems: 1
+> > +      - description: CLKI clock input
+> 
+> This was absolutely never tested.
 
-This is also broken in Linus's tree, right?
+I'll admit, yes, I forgot to run the checks. But I did test it on
+hardware; it's just that this camera module is always powered and the
+clock is always connected so it wouldn't have been caught :/
 
-> [    2.896589] dvbdev: dvb_create_media_entity: media entity 'dvb-demux' registered.
-> [    2.901085] failing symbol_get of non-GPLONLY symbol ds3000_attach.
-> [    2.901089] DVB: Unable to find symbol ds3000_attach()
+> 
+> > +
+> > +  reset-gpios:
+> > +    maxItems: 1
+> > +    description: |-
+> > +      Reference to the GPIO connected to the RESET_N pin, if any.
+> > +      Must be released (set high) after all supplies are applied.
+> > +
+> > +  vddcore-supply:
+> > +    description:
+> > +      1.2V supply for core, PLL, MIPI rx and MIPI tx.
+> > +
+> > +  vhtermnx-supply:
+> > +    description:
+> > +      Supply for input (rx). 1.8V for MIPI, or 1.8/2.8/3.3V for parallel.
+> > +
+> > +  vddtx-supply:
+> > +    description:
+> > +      Supply for output (tx). 1.8V for MIPI, or 1.8/2.8/3.3V for parallel.
+> > +
+> > +  vddhost-supply:
+> > +    description:
+> > +      Supply for host interface. 1.8V, 2.8V, or 3.3V.
+> > +
+> > +  vddcmos-supply:
+> > +    description:
+> > +      Supply for sensor interface. 1.8V, 2.8V, or 3.3V.
+> > +
+> > +  vddgpio_0-supply:
+> 
+> No, underscores are not allowed in names.
+> 
+> > +    description:
+> > +      Supply for GPIO_0. 1.8V, 2.8V, or 3.3V.
+> > +
+> > +  vddgpio_1-supply:
+> > +    description:
+> > +      Supply for GPIO_1. 1.8V, 2.8V, or 3.3V.
+> > +
+> > +  DOVDD-supply:
+> 
+> lowercase. Look at your other supplies. VDD is spelled there "vdd", so
+> do not introduce random style.
+> 
+> 
+> > +    description:
+> > +      Digital I/O (1.8V) supply for image sensor.
+> > +
+> > +  AVDD-supply:
+> 
+> lowercase
+> 
+> > +    description:
+> > +      Analog (2.8V) supply for image sensor.
+> > +
+> > +  DVDD-supply:
+> 
+> lowercase
+> 
+> > +    description:
+> > +      Digital Core (1.2V) supply for image sensor.
+> > +
+> > +  orientation: true
+> > +  rotation: true
+> > +
+> > +  thine,rx,data-lanes:
+> 
+> Why are you duplicating properties? With wrong name? No, that's not a
+> property of a device node, but endpoint.
 
-This is odd, where is that call coming from?  I don't see any call to
-symbol_get in the dvb code, where is this happening?
+As mentioned elsewhere, it is not duplicated; it's for the input to the
+ISP. The data-lanes below is for the output of the ISP. And since the
+input to the ISP is completely isolated from the rest of the system
+(besides power, I suppose), it's kind of overkill to make an entire
+endpoint for it. I suppose the description that I wrote for this
+property was slightly too concise to convey that.
 
-Anyway, does the patch below fix this?
+I quite like the sensors node introduced in the AP1302; I hope that's a
+more acceptable solution?
 
-thanks,
 
-greg k-h
+Paul
 
-----------------
-
-diff --git a/drivers/media/dvb-frontends/ds3000.c b/drivers/media/dvb-frontends/ds3000.c
-index 20fcf31af165..515aa7c7baf2 100644
---- a/drivers/media/dvb-frontends/ds3000.c
-+++ b/drivers/media/dvb-frontends/ds3000.c
-@@ -859,7 +859,7 @@ struct dvb_frontend *ds3000_attach(const struct ds3000_config *config,
- 	ds3000_set_voltage(&state->frontend, SEC_VOLTAGE_OFF);
- 	return &state->frontend;
- }
--EXPORT_SYMBOL(ds3000_attach);
-+EXPORT_SYMBOL_GPL(ds3000_attach);
- 
- static int ds3000_set_carrier_offset(struct dvb_frontend *fe,
- 					s32 carrier_offset_khz)
+> 
+> > +    minItems: 4
+> > +    maxItems: 4
+> > +    $ref: /schemas/media/video-interfaces.yaml#data-lanes
+> > +    description: |-
+> 
+> Drop |- where not needed.
+> 
+> > +      This property is for lane reordering between the THP7312 and the imaging
+> > +      sensor that it is connected to.
+> > +
+> > +  port:
+> > +    $ref: /schemas/graph.yaml#/$defs/port-base
+> > +    additionalProperties: false
+> > +
+> > +    properties:
+> > +      endpoint:
+> > +        $ref: /schemas/media/video-interfaces.yaml#
+> > +        unevaluatedProperties: false
+> > +
+> > +        properties:
+> > +          data-lanes:
+> > +            description: |-
+> > +              The sensor supports either two-lane, or four-lane operation.
+> > +              This property is for lane reordering between the THP7312 and
+> > +              the SoC. If this property is omitted four-lane operation is
+> > +              assumed. For two-lane operation the property must be set to <1 2>.
+> > +            minItems: 2
+> > +            maxItems: 4
+> > +            items:
+> > +              maximum: 4
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - reset-gpios
+> > +  - clocks
+> > +  - vddcore-supply
+> > +  - vhtermrx-supply
+> > +  - vddtx-supply
+> > +  - vddhost-supply
+> > +  - vddcmos-supply
+> > +  - vddgpio_0-supply
+> > +  - vddgpio_1-supply
+> > +  - DOVDD-supply
+> > +  - AVDD-supply
+> > +  - DVDD-supply
+> > +  - thine,rx,data-lanes
+> > +  - port
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/gpio/gpio.h>
+> > +
+> > +    i2c {
+> > +        #address-cells = <1>;
+> > +        #size-cells = <0>;
+> > +
+> > +        camera@61 {
+> > +            compatible = "thine,thp7312";
+> > +            reg = <0x61>;
+> > +
+> > +            pinctrl-names = "default";
+> > +            pinctrl-0 = <&cam1_pins_default>;
+> > +
+> > +            reset-gpios = <&pio 119 GPIO_ACTIVE_LOW>;
+> > +            clocks = <&camera61_clk>;
+> > +
+> > +            vddcore-supply = <&vsys_v4p2>;
+> > +            AVDD-supply = <&vsys_v4p2>;
+> > +            DVDD-supply = <&vsys_v4p2>;
+> 
+> Srlsy, test it before sending. Look how many supplies you require and
+> what is provided here. How any of this could possibly work?
+> 
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
