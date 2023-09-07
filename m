@@ -2,110 +2,503 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5C48EC8743
-	for <linux-media@archiver.kernel.org>; Thu,  7 Sep 2023 17:04:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14E60EC8743
+	for <linux-media@archiver.kernel.org>; Thu,  7 Sep 2023 17:09:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236013AbjIGRE1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 7 Sep 2023 13:04:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57442 "EHLO
+        id S240747AbjIGRJP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 7 Sep 2023 13:09:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232375AbjIGRE1 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Sep 2023 13:04:27 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075AF1BF
-        for <linux-media@vger.kernel.org>; Thu,  7 Sep 2023 10:03:58 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-50078eba7afso2061189e87.0
-        for <linux-media@vger.kernel.org>; Thu, 07 Sep 2023 10:03:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694106173; x=1694710973; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3IGORlEL+j7QOCTKX6XyQpE4GsPUdQpP3Lht2awpSqA=;
-        b=pXE1ZlHTW0yF4o5eNXpsm94SoAe8nE4e82QMqxatSypfoEq5E1nbQ3O6bWLq/GT6n4
-         icA4l9r/dxF45DHEzbnjQJgunDeWRRfRzuofCQnKf2aYq7StrO29i3CE1CANr2i4DDeR
-         tBPX4sc2dzMIV4xAevYXq7wYagkEIHx7ZuNWXoHw8Mj+V5sqCljr6QZb3yA1s6GngPGg
-         /OAFNX0NxhmFxXgCtCeMUX1axHmZCTwc2dtTfEQyBeQ+sS21r0WUydr6B2q+oej69WeV
-         PIEcr3a5T/ifIYkwf503ouhv9FAEwGe8czSoZNRY0QtHTJ+R1ysppHV5jL0pww54gTcc
-         8iUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1694106173; x=1694710973;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3IGORlEL+j7QOCTKX6XyQpE4GsPUdQpP3Lht2awpSqA=;
-        b=PIyWnINamvrri9F/J5EH0Z9TU5oI/WdnH1gKMpVcIoF9euIH4kAECKclVCWPXOm9R+
-         2qr3NZ4qesS1gXRkVSft1RCX6raJx15k2oB8V50TOuWWglaWHpJESJcOjfNLjvF4ajld
-         z+raRgAPqnnBPQIJiJviW4nrSrv+vqTpHmJ7OdiqKYQ+RbzDie461p/R5rXbM20ZGs/9
-         IQHwKNQraybKDQbcRaxReuQmb8mWBNeQV3MzAcMAiPnLe5IDeUhTpqVAvJlL7mf488pm
-         8JfV4H2S9MR2oznvVISljEka+kNWABKv631t1vvhIizEY+8UzEm59Vq+A+wp7aSHsbQ2
-         gBPg==
-X-Gm-Message-State: AOJu0YzQ15IMI8U8UiO3fCaFLyhmIrFlIVvhJwTOZEGBLychhvj/E+Mc
-        6EQHNbHU+kzugShAO6ObY6l6byFvf41sGO0kUos=
-X-Google-Smtp-Source: AGHT+IFFhtFOfyjIUjTQaoISN3ahU3GulYsY3a4nJuObsLIa20hRbGZNlKWDpuep8zKWObREFaQEoQ==
-X-Received: by 2002:a5d:6504:0:b0:31a:d4a9:bdac with SMTP id x4-20020a5d6504000000b0031ad4a9bdacmr948wru.11.1694105072392;
-        Thu, 07 Sep 2023 09:44:32 -0700 (PDT)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id d15-20020adffd8f000000b00317ab75748bsm23822145wrr.49.2023.09.07.09.44.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Sep 2023 09:44:31 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
-        andrey.konovalov@linaro.org
-Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 13/17] media: qcom: camss: Fix support for setting CSIPHY clock name csiphyX
-Date:   Thu,  7 Sep 2023 17:44:06 +0100
-Message-ID: <20230907164410.36651-14-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20230907164410.36651-1-bryan.odonoghue@linaro.org>
-References: <20230907164410.36651-1-bryan.odonoghue@linaro.org>
+        with ESMTP id S240548AbjIGRJO (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Sep 2023 13:09:14 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E65CE73
+        for <linux-media@vger.kernel.org>; Thu,  7 Sep 2023 10:08:43 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (ftip006315900.acc1.colindale.21cn-nte.bt.net [81.134.214.249])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D6D0E836;
+        Thu,  7 Sep 2023 10:45:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1694076332;
+        bh=5OTHqE7hFJYoIxs0YQgnpdHJFEBUVpoOL37SPUQKGXQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cv24DMKdJDllupKtGOAbl6lGT5Ztgb1hhLwzmrcGZpKI3nXQmci0oRPr5+8b+u9te
+         Jd1t5k7JcD9PN9uJv5ecM4Xz/55+aVodchaVYrnajKGher3mecI7Hvt5sYxw/gupxw
+         Wge/PT9CDKS8o4Z1f5VhHxKP0AwqaUBu+U7XwkB8=
+Date:   Thu, 7 Sep 2023 11:47:12 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-media@vger.kernel.org, tomi.valkeinen@ideasonboard.com,
+        bingbu.cao@intel.com, hongju.wang@intel.com, hverkuil@xs4all.nl,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Dmitry Perchanov <dmitry.perchanov@intel.com>
+Subject: Re: [PATCH v3 07/10] media: uapi: Add generic 8-bit metadata format
+ definitions
+Message-ID: <20230907084712.GB25940@pendragon.ideasonboard.com>
+References: <20230808075538.3043934-1-sakari.ailus@linux.intel.com>
+ <20230808075538.3043934-8-sakari.ailus@linux.intel.com>
+ <20230905165558.GD7971@pendragon.ideasonboard.com>
+ <ZPho//Cib9DtXx0o@kekkonen.localdomain>
+ <ZPmLm1QyK4gbrHPx@kekkonen.localdomain>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZPmLm1QyK4gbrHPx@kekkonen.localdomain>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Several of our upstream and soon-to-be upstream SoC CAMSS dtsi declare
-csiphyX as opposed to the older clock name csiX_phy.
+On Thu, Sep 07, 2023 at 08:36:43AM +0000, Sakari Ailus wrote:
+> On Wed, Sep 06, 2023 at 11:56:47AM +0000, Sakari Ailus wrote:
+> > On Tue, Sep 05, 2023 at 07:55:58PM +0300, Laurent Pinchart wrote:
+> > > On Tue, Aug 08, 2023 at 10:55:35AM +0300, Sakari Ailus wrote:
+> > > > Generic 8-bit metadata formats define the in-memory data layout but not
+> > > > the format of the data itself. The reasoning for having such formats is to
+> > > > allow CSI-2 receiver drivers to receive and DMA drivers to write the data
+> > > > to memory without knowing a large number of device specific formats.
+> > > > 
+> > > > These formats may be used only in conjunction of a Media controller
+> > > > pipeline where the internal pad of the source sub-device defines the
+> > > > specific format of the data (using an mbus code).
+> > > > 
+> > > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > > > ---
+> > > >  .../userspace-api/media/v4l/meta-formats.rst  |   1 +
+> > > >  .../media/v4l/metafmt-generic.rst             | 331 ++++++++++++++++++
+> > > >  drivers/media/v4l2-core/v4l2-ioctl.c          |   8 +
+> > > >  include/uapi/linux/videodev2.h                |   9 +
+> > > >  4 files changed, 349 insertions(+)
+> > > >  create mode 100644 Documentation/userspace-api/media/v4l/metafmt-generic.rst
+> > > > 
+> > > > diff --git a/Documentation/userspace-api/media/v4l/meta-formats.rst b/Documentation/userspace-api/media/v4l/meta-formats.rst
+> > > > index 0bb61fc5bc00..919f595576b9 100644
+> > > > --- a/Documentation/userspace-api/media/v4l/meta-formats.rst
+> > > > +++ b/Documentation/userspace-api/media/v4l/meta-formats.rst
+> > > > @@ -19,3 +19,4 @@ These formats are used for the :ref:`metadata` interface only.
+> > > >      metafmt-vsp1-hgo
+> > > >      metafmt-vsp1-hgt
+> > > >      metafmt-vivid
+> > > > +    metafmt-generic
+> > > > diff --git a/Documentation/userspace-api/media/v4l/metafmt-generic.rst b/Documentation/userspace-api/media/v4l/metafmt-generic.rst
+> > > > new file mode 100644
+> > > > index 000000000000..a27bfc721edf
+> > > > --- /dev/null
+> > > > +++ b/Documentation/userspace-api/media/v4l/metafmt-generic.rst
+> > > > @@ -0,0 +1,331 @@
+> > > > +.. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later
+> > > > +
+> > > > +**************************************************************************************************************************************************************************************************************************************************************************************************************************
+> > > > +V4L2_META_FMT_GENERIC_8 ('MET8'), V4L2_META_FMT_GENERIC_CSI2_10 ('MC1A'), V4L2_META_FMT_GENERIC_CSI2_12 ('MC1C'), V4L2_META_FMT_GENERIC_CSI2_14 ('MC1E'), V4L2_META_FMT_GENERIC_CSI2_16 ('MC1G'), V4L2_META_FMT_GENERIC_CSI2_20 ('MC1K'), V4L2_META_FMT_GENERIC_CSI2_24 ('MC1O'), V4L2_META_FMT_GENERIC_CSI2_2_24 ('MC2O')
+> > > > +**************************************************************************************************************************************************************************************************************************************************************************************************************************
+> > > > +
+> > > > +
+> > > > +Generic line-based metadata formats
+> > > > +
+> > > > +
+> > > > +Description
+> > > > +===========
+> > > > +
+> > > > +These generic line-based metadata formats define the memory layout of the data
+> > > > +without defining the format or meaning of the metadata itself. These formats may
+> > > > +only be used with a Media controller pipeline where the more specific format is
+> > > > +defined in an :ref:`internal source pad <MEDIA-PAD-FL-INTERNAL>` of the source
+> > > > +sub-device. See also :ref:`source routes <v4l2-subdev-source-routes>`.
+> > > > +
+> > > > +.. _v4l2-meta-fmt-generic-8:
+> > > > +
+> > > > +V4L2_META_FMT_GENERIC_8
+> > > > +-----------------------
+> > > > +
+> > > > +The V4L2_META_FMT_GENERIC_8 format is a plain 8-bit metadata format.
+> > > > +
+> > > > +This format is also used on CSI-2 on both 8 bits per sample as well as on
+> > > 
+> > > s/also on/by/
+> > > 
+> > > I would also mention "MIPI CCS" instead of "CSI-2".
+> > 
+> > If CCS were to be mentioned here, then all uses of this format should be
+> > included as well.
+> > 
+> > > > +16 bits per sample when two bytes of metadata are packed into one sample.
+> > > 
+> > > "bits per sample" is very ill-defined for metadata, as there's no
+> > > sample. I would write "for both the RAW8 packing and the 2 bytes RAW16
+> > > packing" or something similar.
+> > > 
+> > > Similar comments for below.
+> > 
+> > From CSI-2 bus point of view there's no difference between pixel and
+> > embedded data when it comes to encoding that data. "Sample" is the next
+> > best term beyond "pixel", as the bus can carry samples that may or may not
+> > be pixel data. But I'm fine with changing the wording if you think it makes
+> > it more understandable.
+> 
+> I'll use "data unit" in v4.
 
-Right now the CAMSS code will fail to set the csiphyX clock even if we have
-declared it in our list of clocks. For sdm845 and sm8250 we appear to "get
-away" with this error, however on sc8280xp we don't.
+Please define the term :-)
 
-The right approach here is to set the clock when it is declared. If a SoC
-doesn't require or a SoC driver implementer doesn't think we need, then the
-clock ought to simply be omitted from the clock list.
+> > > > +
+> > > > +**Byte Order Of V4L2_META_FMT_GENERIC_8.**
+> > > > +Each cell is one byte. "M" denotes a byte of metadata.
+> > > > +
+> > > > +.. tabularcolumns:: |p{2.4cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|
+> > > > +
+> > > > +.. flat-table::
+> > > > +    :header-rows:  0
+> > > > +    :stub-columns: 0
+> > > > +    :widths: 12 8 8 8 8
+> > > > +
+> > > > +    * - start + 0:
+> > > > +      - M\ :sub:`00`
+> > > > +      - M\ :sub:`10`
+> > > > +      - M\ :sub:`20`
+> > > > +      - M\ :sub:`30`
+> > > > +    * - start + 4:
+> > > > +      - M\ :sub:`01`
+> > > > +      - M\ :sub:`11`
+> > > > +      - M\ :sub:`21`
+> > > > +      - M\ :sub:`31`
+> > > > +
+> > > > +.. _v4l2-meta-fmt-generic-csi2-10:
+> > > > +
+> > > > +V4L2_META_FMT_GENERIC_CSI2_10
+> > > > +-----------------------------
+> > > > +
+> > > > +V4L2_META_FMT_GENERIC_CSI2_10 contains packed 8-bit generic metadata, 10 bits
+> > > > +for each 8 bits of data. Every four bytes of metadata is followed by a single
+> > > > +byte of padding.
+> > > 
+> > > It sounds really weird to write that this format writes 10 bits for each
+> > > 8 bits of data, when essentially it adds a packing byte every four
+> > > bytes.
+> > 
+> > That's how the hardware has been implemented and probably there is a
+> > hardware implementation related reason for this.
+> > 
+> > > 
+> > > > The way the data is stored follows the CSI-2 specification.
+> > > 
+> > > Again, it's CCS, not CSI-2.
+> > 
+> > The packing comes from CSI-2 but CCS adds padding. I'll add this
+> > information.
+> > 
+> > > 
+> > > > +
+> > > > +This format is also used on CSI-2 on 20 bits per sample format that packs two
+> > > > +bytes of metadata into one sample.
+> > > > +
+> > > > +This format is little endian.
+> > > > +
+> > > > +**Byte Order Of V4L2_META_FMT_GENERIC_CSI2_10.**
+> > > > +Each cell is one byte. "M" denotes a byte of metadata and "p" a byte of padding.
+> > > > +
+> > > > +.. tabularcolumns:: |p{2.4cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{.8cm}|
+> > > > +
+> > > > +.. flat-table::
+> > > > +    :header-rows:  0
+> > > > +    :stub-columns: 0
+> > > > +    :widths: 12 8 8 8 8 8
+> > > > +
+> > > > +    * - start + 0:
+> > > > +      - M\ :sub:`00`
+> > > > +      - M\ :sub:`10`
+> > > > +      - M\ :sub:`20`
+> > > > +      - M\ :sub:`30`
+> > > > +      - p
+> > > > +    * - start + 5:
+> > > > +      - M\ :sub:`01`
+> > > > +      - M\ :sub:`11`
+> > > > +      - M\ :sub:`21`
+> > > > +      - M\ :sub:`31`
+> > > > +      - p
+> > > > +
+> > > > +.. _v4l2-meta-fmt-generic-csi2-12:
+> > > > +
+> > > > +V4L2_META_FMT_GENERIC_CSI2_12
+> > > > +-----------------------------
+> > > > +
+> > > > +V4L2_META_FMT_GENERIC_CSI2_12 contains packed 8-bit generic metadata, 12 bits
+> > > > +for each 8 bits of data. Every four bytes of metadata is followed by two bytes
+> > > > +of padding. The way the data is stored follows the CSI-2 specification.
+> > > > +
+> > > > +This format is little endian.
+> > > > +
+> > > > +**Byte Order Of V4L2_META_FMT_GENERIC_CSI2_12.**
+> > > > +Each cell is one byte. "M" denotes a byte of metadata and "p" a byte of padding.
+> > > > +
+> > > > +.. tabularcolumns:: |p{2.4cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{.8cm}|p{.8cm}|
+> > > > +
+> > > > +.. flat-table::
+> > > > +    :header-rows:  0
+> > > > +    :stub-columns: 0
+> > > > +    :widths: 12 8 8 8 8 8 8
+> > > > +
+> > > > +    * - start + 0:
+> > > > +      - M\ :sub:`00`
+> > > > +      - M\ :sub:`10`
+> > > > +      - M\ :sub:`20`
+> > > > +      - M\ :sub:`30`
+> > > > +      - p
+> > > > +      - p
+> > > > +    * - start + 6:
+> > > > +      - M\ :sub:`01`
+> > > > +      - M\ :sub:`11`
+> > > > +      - M\ :sub:`21`
+> > > > +      - M\ :sub:`31`
+> > > > +      - p
+> > > > +      - p
+> > > > +
+> > > > +.. _v4l2-meta-fmt-generic-csi2-14:
+> > > > +
+> > > > +V4L2_META_FMT_GENERIC_CSI2_14
+> > > > +-----------------------------
+> > > > +
+> > > > +V4L2_META_FMT_GENERIC_CSI2_14 contains packed 8-bit generic metadata, 14 bits
+> > > > +for each 8 bits of data. Every four bytes of metadata is followed by three
+> > > > +bytes of padding. The way the data is stored follows the CSI-2 specification.
+> > > > +
+> > > > +This format is little endian.
+> > > > +
+> > > > +**Byte Order Of V4L2_META_FMT_GENERIC_CSI2_14.**
+> > > > +Each cell is one byte. "M" denotes a byte of metadata and "p" a byte of padding.
+> > > > +
+> > > > +.. tabularcolumns:: |p{2.4cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{.8cm}|p{.8cm}|p{.8cm}|
+> > > > +
+> > > > +.. flat-table::
+> > > > +    :header-rows:  0
+> > > > +    :stub-columns: 0
+> > > > +    :widths: 12 8 8 8 8 8 8 8
+> > > > +
+> > > > +    * - start + 0:
+> > > > +      - M\ :sub:`00`
+> > > > +      - M\ :sub:`10`
+> > > > +      - M\ :sub:`20`
+> > > > +      - M\ :sub:`30`
+> > > > +      - p
+> > > > +      - p
+> > > > +      - p
+> > > > +    * - start + 7:
+> > > > +      - M\ :sub:`01`
+> > > > +      - M\ :sub:`11`
+> > > > +      - M\ :sub:`21`
+> > > > +      - M\ :sub:`31`
+> > > > +      - p
+> > > > +      - p
+> > > > +      - p
+> > > > +
+> > > > +.. _v4l2-meta-fmt-generic-csi2-16:
+> > > > +
+> > > > +V4L2_META_FMT_GENERIC_CSI2_16
+> > > > +-----------------------------
+> > > > +
+> > > > +V4L2_META_FMT_GENERIC_CSI2_16 contains packed 8-bit generic metadata, 16 bits
+> > > > +for each 8 bits of data. Every byte of metadata is followed by one byte of
+> > > > +padding. The way the data is stored follows the CSI-2 specification.
+> > > > +
+> > > > +This format is little endian.
+> > > > +
+> > > > +**Byte Order Of V4L2_META_FMT_GENERIC_CSI2_16.**
+> > > > +Each cell is one byte. "M" denotes a byte of metadata and "p" a byte of padding.
+> > > > +
+> > > > +.. tabularcolumns:: |p{2.4cm}|p{1.2cm}|p{.8cm}|p{1.2cm}|p{.8cm}|p{1.2cm}|p{.8cm}|p{1.2cm}|p{.8cm}|
+> > > > +
+> > > > +.. flat-table::
+> > > > +    :header-rows:  0
+> > > > +    :stub-columns: 0
+> > > > +    :widths: 12 8 8 8 8 8 8 8 8
+> > > > +
+> > > > +    * - start + 0:
+> > > > +      - M\ :sub:`00`
+> > > > +      - p
+> > > > +      - M\ :sub:`10`
+> > > > +      - p
+> > > > +      - M\ :sub:`20`
+> > > > +      - p
+> > > > +      - M\ :sub:`30`
+> > > > +      - p
+> > > > +    * - start + 8:
+> > > > +      - M\ :sub:`01`
+> > > > +      - p
+> > > > +      - M\ :sub:`11`
+> > > > +      - p
+> > > > +      - M\ :sub:`21`
+> > > > +      - p
+> > > > +      - M\ :sub:`31`
+> > > > +      - p
+> > > > +
+> > > > +.. _v4l2-meta-fmt-generic-csi2-20:
+> > > > +
+> > > > +V4L2_META_FMT_GENERIC_CSI2_20
+> > > > +-----------------------------
+> > > > +
+> > > > +V4L2_META_FMT_GENERIC_CSI2_20 contains packed 8-bit generic metadata, 20 bits
+> > > > +for each 8 bits of data. Every byte of metadata is followed by alternating one
+> > > > +and two bytes of padding. The way the data is stored follows the CSI-2
+> > > > +specification.
+> > > > +
+> > > > +This format is little endian.
+> > > > +
+> > > > +**Byte Order Of V4L2_META_FMT_GENERIC_CSI2_20.**
+> > > > +Each cell is one byte. "M" denotes a byte of metadata and "p" a byte of padding.
+> > > > +
+> > > > +.. tabularcolumns:: |p{2.4cm}|p{1.2cm}|p{.8cm}|p{1.2cm}|p{.8cm}|p{.8cm}|p{1.2cm}|p{.8cm}|p{1.2cm}|p{.8cm}|p{.8cm}|
+> > > > +
+> > > > +.. flat-table::
+> > > > +    :header-rows:  0
+> > > > +    :stub-columns: 0
+> > > > +    :widths: 12 8 8 8 8 8 8 8 8 8 8
+> > > > +
+> > > > +    * - start + 0:
+> > > > +      - M\ :sub:`00`
+> > > > +      - p
+> > > > +      - M\ :sub:`10`
+> > > > +      - p
+> > > > +      - p
+> > > > +      - M\ :sub:`20`
+> > > > +      - p
+> > > > +      - M\ :sub:`30`
+> > > > +      - p
+> > > > +      - p
+> > > > +    * - start + 10:
+> > > > +      - M\ :sub:`01`
+> > > > +      - p
+> > > > +      - M\ :sub:`11`
+> > > > +      - p
+> > > > +      - p
+> > > > +      - M\ :sub:`21`
+> > > > +      - p
+> > > > +      - M\ :sub:`31`
+> > > > +      - p
+> > > > +      - p
+> > > > +
+> > > > +.. _v4l2-meta-fmt-generic-csi2-24:
+> > > > +
+> > > > +V4L2_META_FMT_GENERIC_CSI2_24
+> > > > +-----------------------------
+> > > > +
+> > > > +V4L2_META_FMT_GENERIC_CSI2_24 contains packed 8-bit generic metadata, 24 bits
+> > > > +for each 8 bits of data. Every byte of metadata is followed by two bytes of
+> > > > +padding. The way the data is stored follows the CSI-2 specification.
+> > > > +
+> > > > +This format is little endian.
+> > > > +
+> > > > +**Byte Order Of V4L2_META_FMT_GENERIC_CSI2_24.**
+> > > > +Each cell is one byte. "M" denotes a byte of metadata and "p" a byte of padding.
+> > > > +
+> > > > +.. tabularcolumns:: |p{2.4cm}|p{1.2cm}|p{.8cm}|p{.8cm}|p{1.2cm}|p{.8cm}|p{.8cm}|p{1.2cm}|p{.8cm}|p{.8cm}|p{1.2cm}|p{.8cm}|p{.8cm}|
+> > > > +
+> > > > +.. flat-table::
+> > > > +    :header-rows:  0
+> > > > +    :stub-columns: 0
+> > > > +    :widths: 12 8 8 8 8 8 8 8 8 8 8 8 8
+> > > > +
+> > > > +    * - start + 0:
+> > > > +      - M\ :sub:`00`
+> > > > +      - p
+> > > > +      - p
+> > > > +      - M\ :sub:`10`
+> > > > +      - p
+> > > > +      - p
+> > > > +      - M\ :sub:`20`
+> > > > +      - p
+> > > > +      - p
+> > > > +      - M\ :sub:`30`
+> > > > +      - p
+> > > > +      - p
+> > > > +    * - start + 12:
+> > > > +      - M\ :sub:`01`
+> > > > +      - p
+> > > > +      - p
+> > > > +      - M\ :sub:`11`
+> > > > +      - p
+> > > > +      - p
+> > > > +      - M\ :sub:`21`
+> > > > +      - p
+> > > > +      - p
+> > > > +      - M\ :sub:`31`
+> > > > +      - p
+> > > > +      - p
+> > > > +
+> > > > +.. _v4l2-meta-fmt-generic-csi2-2-24:
+> > > > +
+> > > > +V4L2_META_FMT_GENERIC_CSI2_2_24
+> > > > +-------------------------------
+> > > > +
+> > > > +V4L2_META_FMT_GENERIC_CSI2_2_24 contains packed 8-bit generic metadata, 24 bits
+> > > > +for each two times 8 bits of data. Every two bytes of metadata are followed by
+> > > > +one byte of padding. The way the data is stored follows the CSI-2
+> > > > +specification.
+> > > > +
+> > > > +This format is little endian.
+> > > > +
+> > > > +**Byte Order Of V4L2_META_FMT_GENERIC_CSI2_2_24.**
+> > > > +Each cell is one byte. "M" denotes a byte of metadata and "p" a byte of padding.
+> > > > +
+> > > > +.. tabularcolumns:: |p{2.4cm}|p{1.2cm}|p{1.2cm}|p{.8cm}|p{1.2cm}|p{1.2cm}|p{.8cm}|
+> > > > +
+> > > > +.. flat-table::
+> > > > +    :header-rows:  0
+> > > > +    :stub-columns: 0
+> > > > +    :widths: 12 8 8 8 8 8 8
+> > > > +
+> > > > +    * - start + 0:
+> > > > +      - M\ :sub:`00`
+> > > > +      - M\ :sub:`10`
+> > > > +      - p
+> > > > +      - M\ :sub:`20`
+> > > > +      - M\ :sub:`30`
+> > > > +      - p
+> > > > +    * - start + 6:
+> > > > +      - M\ :sub:`01`
+> > > > +      - M\ :sub:`11`
+> > > > +      - p
+> > > > +      - M\ :sub:`21`
+> > > > +      - M\ :sub:`31`
+> > > > +      - p
+> > > > +
+> > > > diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+> > > > index f4d9d6279094..fbbddc333a30 100644
+> > > > --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+> > > > +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+> > > > @@ -1452,6 +1452,14 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+> > > >  	case V4L2_PIX_FMT_Y210:		descr = "10-bit YUYV Packed"; break;
+> > > >  	case V4L2_PIX_FMT_Y212:		descr = "12-bit YUYV Packed"; break;
+> > > >  	case V4L2_PIX_FMT_Y216:		descr = "16-bit YUYV Packed"; break;
+> > > > +	case V4L2_META_FMT_GENERIC_8:	descr = "8-bit Generic Metadata"; break;
+> > > > +	case V4L2_META_FMT_GENERIC_CSI2_10:	descr = "8b Generic Meta, 10b CSI-2"; break;
+> > > > +	case V4L2_META_FMT_GENERIC_CSI2_12:	descr = "8b Generic Meta, 12b CSI-2"; break;
+> > > > +	case V4L2_META_FMT_GENERIC_CSI2_14:	descr = "8b Generic Meta, 14b CSI-2"; break;
+> > > > +	case V4L2_META_FMT_GENERIC_CSI2_16:	descr = "8b Generic Meta, 16b CSI-2"; break;
+> > > > +	case V4L2_META_FMT_GENERIC_CSI2_20:	descr = "8b Generic Meta, 20b CSI-2"; break;
+> > > > +	case V4L2_META_FMT_GENERIC_CSI2_24:	descr = "8b Generic Meta, 24b CSI-2"; break;
+> > > > +	case V4L2_META_FMT_GENERIC_CSI2_2_24:	descr = "2x8b Generic Meta, 24b CSI-2"; break;
+> > > >  
+> > > >  	default:
+> > > >  		/* Compressed formats */
+> > > > diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+> > > > index 78260e5d9985..b4284a564025 100644
+> > > > --- a/include/uapi/linux/videodev2.h
+> > > > +++ b/include/uapi/linux/videodev2.h
+> > > > @@ -838,6 +838,15 @@ struct v4l2_pix_format {
+> > > >  #define V4L2_META_FMT_RK_ISP1_PARAMS	v4l2_fourcc('R', 'K', '1', 'P') /* Rockchip ISP1 3A Parameters */
+> > > >  #define V4L2_META_FMT_RK_ISP1_STAT_3A	v4l2_fourcc('R', 'K', '1', 'S') /* Rockchip ISP1 3A Statistics */
+> > > >  
+> > > > +#define V4L2_META_FMT_GENERIC_8		v4l2_fourcc('M', 'E', 'T', '8') /* Generic 8-bit metadata */
+> > > > +#define V4L2_META_FMT_GENERIC_CSI2_10	v4l2_fourcc('M', 'C', '1', 'A') /* 10-bit CSI-2 packed 8-bit metadata */
+> > > > +#define V4L2_META_FMT_GENERIC_CSI2_12	v4l2_fourcc('M', 'C', '1', 'C') /* 12-bit CSI-2 packed 8-bit metadata */
+> > > > +#define V4L2_META_FMT_GENERIC_CSI2_14	v4l2_fourcc('M', 'C', '1', 'E') /* 14-bit CSI-2 packed 8-bit metadata */
+> > > > +#define V4L2_META_FMT_GENERIC_CSI2_16	v4l2_fourcc('M', 'C', '1', 'G') /* 16-bit CSI-2 packed 8-bit metadata */
+> > > > +#define V4L2_META_FMT_GENERIC_CSI2_20	v4l2_fourcc('M', 'C', '1', 'K') /* 20-bit CSI-2 packed 8-bit metadata */
+> > > > +#define V4L2_META_FMT_GENERIC_CSI2_24	v4l2_fourcc('M', 'C', '1', 'O') /* 24-bit CSI-2 packed 8-bit metadata */
+> > > > +#define V4L2_META_FMT_GENERIC_CSI2_2_24	v4l2_fourcc('M', 'C', '2', 'O') /* 2 bytes of 8-bit metadata, 24-bit CSI-2 packed */
+> > > > +
+> > > >  /* priv field value to indicates that subsequent fields are valid. */
+> > > >  #define V4L2_PIX_FMT_PRIV_MAGIC		0xfeedcafe
+> > > >  
 
-Include csiphyX in the set of permissible strings which will subsequently
-lead to the csiphyX clock being set during csiphy_set_clock_rates() phase.
-
-sdm845 and sm8250 will work with the code as-is so I've omitted this from a
-suggested Fixes list.
-
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- drivers/media/platform/qcom/camss/camss-csiphy.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.c b/drivers/media/platform/qcom/camss/camss-csiphy.c
-index 87d6d65aa90cf..5202bfcdbc35a 100644
---- a/drivers/media/platform/qcom/camss/camss-csiphy.c
-+++ b/drivers/media/platform/qcom/camss/camss-csiphy.c
-@@ -677,6 +677,10 @@ int msm_csiphy_subdev_init(struct camss *camss,
- 				if (csiphy->rate_set[i])
- 					break;
- 			}
-+
-+			csiphy->rate_set[i] = csiphy_match_clock_name(clock->name, "csiphy%d", k);
-+			if (csiphy->rate_set[i])
-+				break;
- 		}
- 	}
- 
 -- 
-2.41.0
+Regards,
 
+Laurent Pinchart
