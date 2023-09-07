@@ -2,156 +2,173 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C9DFEC8741
-	for <linux-media@archiver.kernel.org>; Thu,  7 Sep 2023 15:40:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6ADBEC873E
+	for <linux-media@archiver.kernel.org>; Thu,  7 Sep 2023 15:40:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233664AbjIGPk1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 7 Sep 2023 11:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36112 "EHLO
+        id S231231AbjIGPkc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 7 Sep 2023 11:40:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245239AbjIGP2O (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Sep 2023 11:28:14 -0400
+        with ESMTP id S242813AbjIGP3F (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Sep 2023 11:29:05 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9501BF4
-        for <linux-media@vger.kernel.org>; Thu,  7 Sep 2023 08:27:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792FE19B4
+        for <linux-media@vger.kernel.org>; Thu,  7 Sep 2023 08:28:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694100469; x=1725636469;
+  t=1694100515; x=1725636515;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=4FUhumchq8hxl90i+w8+h8PxzaUfLJQu9V287AomMVc=;
-  b=NHxgWOMAJMu1utAHomyAXx3zlhdr2WIrsMPykmFcd/u8Qkujx2FSSm5M
-   8CR2Xh6INdPe15FWB/Y87hLzG+WxMI3wEZkN93QqHwTEnY/gm50TBeesA
-   0C9LS04bNOHoTmN11SC/C7/CTFNlp4VRUkXwQzKy05qHzm7TEdzEUAzRY
-   OsLN6D522GSKxH1k+yaMly59h33yrFa/yj/t4d1MDauyvg/d/qmwSejc0
-   FDQTIrrCoNeEJJiDUudw6QcBV3jyQAqIkk4kTlIcaHhut7UPGi4FJCvTU
-   PdSfjqLZHxCS29jdvYORec3ribnlerxmMez8K5yrBgAbM84kWIf6q4aht
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="381077323"
+  bh=5eFw9jyc9/fD2vuNTIcDW/HKQHccsNMrod8reAKMRW4=;
+  b=UI4tg4KzNbZrnqCoKnEkjdWBuSzPa5MZ806hYDAkuJMyeorMaE+VktgW
+   nZhXnq600SoMuOd4OZhg1YoqnrtAA8sjHLZeLT+y8lqVNpHYStdHoOWej
+   ZH18syr3Je23RbHDY4WtejAIjhLwbV0YQP2c2JjmdbQIvxuamIGSvDlsX
+   fCv/RpBC8fdcjxQODN28N+wgJyy7u+MsXj0YdAIVzegebJ3p7XsNTEpBw
+   QDUvTpw5XDmwrWwvCxm6O4zk7Oa+Nd0F042Qh3B/TbCa/PAzIQlBbCcLi
+   VoHCSRivRCBv/GdcIFCyuYP7kOUlc3FYgrgzDC8JsJqsn/p58pG5jOAPS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="381086434"
 X-IronPort-AV: E=Sophos;i="6.02,234,1688454000"; 
-   d="scan'208";a="381077323"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2023 01:13:28 -0700
+   d="scan'208";a="381086434"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2023 01:58:28 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="865540349"
+X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="807441596"
 X-IronPort-AV: E=Sophos;i="6.02,234,1688454000"; 
-   d="scan'208";a="865540349"
+   d="scan'208";a="807441596"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2023 01:13:25 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2023 01:58:26 -0700
 Received: from kekkonen.localdomain (localhost [127.0.0.1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id 9CDB011FAE0;
-        Thu,  7 Sep 2023 11:06:10 +0300 (EEST)
-Date:   Thu, 7 Sep 2023 08:06:10 +0000
+        by kekkonen.fi.intel.com (Postfix) with SMTP id 7AFA611F9DF;
+        Thu,  7 Sep 2023 11:48:12 +0300 (EEST)
+Date:   Thu, 7 Sep 2023 08:48:12 +0000
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
-        tomi.valkeinen@ideasonboard.com, bingbu.cao@intel.com,
-        hongju.wang@intel.com,
+To:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, tomi.valkeinen@ideasonboard.com,
+        bingbu.cao@intel.com, hongju.wang@intel.com, hverkuil@xs4all.nl,
         Andrey Konovalov <andrey.konovalov@linaro.org>,
-        Dmitry Perchanov <dmitry.perchanov@intel.com>,
-        Naushir Patuck <naush@raspberrypi.com>,
-        David Plowman <david.plowman@raspberrypi.com>
-Subject: Re: [PATCH v3 07/10] media: uapi: Add generic 8-bit metadata format
- definitions
-Message-ID: <ZPmEcqvw5Gh3h+bx@kekkonen.localdomain>
-References: <9d3f512c-69c6-3789-83af-d151acd58ebe@xs4all.nl>
- <decr6lkgqk3fuxsyq4v3q46idmsfp6mlwfm6zm4fwcnlzcr5tw@ryikjpaazhzp>
- <ZNX7S7zh0RG2vQOA@kekkonen.localdomain>
- <20230905164720.GC7971@pendragon.ideasonboard.com>
- <ZPhkTZSGMzGIPgrm@kekkonen.localdomain>
- <20230906123658.GF17308@pendragon.ideasonboard.com>
- <ZPh94dy2UA9MRSSU@kekkonen.localdomain>
- <20230906133057.GN17308@pendragon.ideasonboard.com>
- <ZPiBL4gK6FP4Tp/v@kekkonen.localdomain>
- <20230906134737.GA25420@pendragon.ideasonboard.com>
+        Dmitry Perchanov <dmitry.perchanov@intel.com>
+Subject: Re: [PATCH v3 08/10] media: v4l: Support line-based metadata capture
+Message-ID: <ZPmOTLIYvLcZdHFk@kekkonen.localdomain>
+References: <20230808075538.3043934-1-sakari.ailus@linux.intel.com>
+ <20230808075538.3043934-9-sakari.ailus@linux.intel.com>
+ <ejo4a5dhvdukmle6lqddhsmvge6krezx5mhfq2ghoy23cnjygb@byo2u34seqz3>
+ <ZNoJ0Fv/3Ir+sdyf@kekkonen.localdomain>
+ <20230905171533.GH7971@pendragon.ideasonboard.com>
+ <23xi3pdbcuzzdkus6xumdu4z6aue7dwcqdlmazqqzpchnjqyid@lb7zbgmi3ybp>
+ <ZPhveqkcfkQfcXFE@kekkonen.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230906134737.GA25420@pendragon.ideasonboard.com>
+In-Reply-To: <ZPhveqkcfkQfcXFE@kekkonen.localdomain>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Laurent,
-
-On Wed, Sep 06, 2023 at 04:47:37PM +0300, Laurent Pinchart wrote:
-> On Wed, Sep 06, 2023 at 01:39:59PM +0000, Sakari Ailus wrote:
-> > Hi Laurent,
+On Wed, Sep 06, 2023 at 12:24:26PM +0000, Sakari Ailus wrote:
+> Hi Laurent,
+> 
+> On Wed, Sep 06, 2023 at 09:21:42AM +0200, Jacopo Mondi wrote:
+> > Hi Laurent
 > > 
-> > On Wed, Sep 06, 2023 at 04:30:57PM +0300, Laurent Pinchart wrote:
-> > > On Wed, Sep 06, 2023 at 01:25:53PM +0000, Sakari Ailus wrote:
-> > > > On Wed, Sep 06, 2023 at 03:36:58PM +0300, Laurent Pinchart wrote:
-> > > > > On Wed, Sep 06, 2023 at 11:36:45AM +0000, Sakari Ailus wrote:
-> > > > > > On Tue, Sep 05, 2023 at 07:47:20PM +0300, Laurent Pinchart wrote:
-> > > > > > > On Fri, Aug 11, 2023 at 09:11:39AM +0000, Sakari Ailus wrote:
-> > > > > > > > On Fri, Aug 11, 2023 at 08:31:16AM +0200, Jacopo Mondi wrote:
-> > > > > > > > > > > +V4L2_META_FMT_GENERIC_CSI2_10
-> > > > > > > > > > > +-----------------------------
-> > > > > > > > > > > +
-> > > > > > > > > > > +V4L2_META_FMT_GENERIC_CSI2_10 contains packed 8-bit generic metadata, 10 bits
-> > > > > > > > > > > +for each 8 bits of data. Every four bytes of metadata is followed by a single
-> > > > > > > > > > > +byte of padding. The way the data is stored follows the CSI-2 specification.
-> > > > > > > > > > > +
-> > > > > > > > > > > +This format is also used on CSI-2 on 20 bits per sample format that packs two
-> > > > > > > > > > > +bytes of metadata into one sample.
-> > > > > > > > > > > +
-> > > > > > > > > > > +This format is little endian.
-> > > > > > > > > > > +
-> > > > > > > > > > > +**Byte Order Of V4L2_META_FMT_GENERIC_CSI2_10.**
-> > > > > > > > > > > +Each cell is one byte. "M" denotes a byte of metadata and "p" a byte of padding.
-> > > > > > > > > >
-> > > > > > > > > > I think you should document whether the padding is always 0 or can be any value.
-> > > > > > > > > > Perhaps 'X' is a better 'name' for the padding byte in the latter case.
-> > > > > > > > > 
-> > > > > > > > > Did I get this right that this format is supposed to work as the RAW10
-> > > > > > > > > CSI-2 packed image format, where 4 bytes contain the higher 8 bits of
-> > > > > > > > > the 10 bits sample and the 5th byte every 4 contains the lower 2 bits of
-> > > > > > > > > the previous 4 sample ?
-> > > > > > > > > 
-> > > > > > > > > If that's the case, is 'padding' the correct term here ?
-> > > > > > > > 
-> > > > > > > > What else would you call it? It'll be zeros that exist just due to the bit
-> > > > > > > > depth used and as such not interesting at all.
-> > > > > > > 
-> > > > > > > It's actually not 0, CCS requires the padding bytes to be 0x55.
-> > > > > > > 
-> > > > > > > I wonder if the conformance test suite tests the contents of the padding
-> > > > > > > bytes.
-> > > > > > 
-> > > > > > I don't know. I could add the value is unspecified but as it has not been
-> > > > > > specified, there's no change in meaning (just size).
-> > > > > 
-> > > > > I started writing that I don't see how it could help applications to
-> > > > > know that the padding byte is 0x55, but the SMIA++ embedded data parser
-> > > > > in libcamera actually checks for it, and considers the embedded data to
-> > > > > be erroneous if it has a different value.
-> > > > 
-> > > > I think it's fine to check for it if you know it's CCS/SMIA++/SMIA embedded
-> > > > data. But documenting it here isn't a great idea as then other uses of this
-> > > > format definition would be excluded.
-> > > 
-> > > I'm OK with that, but note that you've mentioned in a different patch in
-> > > the same series that you wouldn't use the CCS media bus code for sensors
-> > > that are compliant with the CCS packing and encoding but not the CCS
-> > > register set. That's not very consistent :-)
+> > On Tue, Sep 05, 2023 at 08:15:33PM +0300, Laurent Pinchart wrote:
+> > > Hi Sakari,
+> > >
+> > > On Mon, Aug 14, 2023 at 11:02:40AM +0000, Sakari Ailus wrote:
+> > > > On Thu, Aug 10, 2023 at 05:24:14PM +0200, Jacopo Mondi wrote:
+> > > > > On Tue, Aug 08, 2023 at 10:55:36AM +0300, Sakari Ailus wrote:
+> > > > > > many camera sensors, among other devices, transmit embedded data and image
+> > >
+> > > s/many/Many/
+> > >
+> > > > > > data for each CSI-2 frame. This embedded data typically contains register
+> > > > > > configuration of the sensor that has been used to capture the image data
+> > > > > > of the same frame.
+> > > > > >
+> > > > > > The embedded data is received by the CSI-2 receiver and has the same
+> > > > > > properties as the image data, including that it is line based: it has
+> > > > > > width, height and bytesperline (stride).
+> > > > > >
+> > > > > > Add these fields to struct v4l2_meta_format and document them.
+> > > > > >
+> > > > > > Also add V4L2_FMT_FLAG_META_LINE_BASED to tell a given format is
+> > > > > > line-based i.e. these fields of struct v4l2_meta_format are valid for it.
+> > > > > >
+> > > > > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > > > > > ---
+> > > > > >  .../userspace-api/media/v4l/dev-meta.rst          | 15 +++++++++++++++
+> > > > > >  .../userspace-api/media/v4l/vidioc-enum-fmt.rst   |  7 +++++++
+> > > > > >  .../media/videodev2.h.rst.exceptions              |  1 +
+> > > > > >  drivers/media/v4l2-core/v4l2-ioctl.c              |  5 +++--
+> > > > > >  include/uapi/linux/videodev2.h                    | 10 ++++++++++
+> > > > > >  5 files changed, 36 insertions(+), 2 deletions(-)
+> > > > > >
+> > > > > > diff --git a/Documentation/userspace-api/media/v4l/dev-meta.rst b/Documentation/userspace-api/media/v4l/dev-meta.rst
+> > > > > > index 0e7e1ee1471a..4b24bae6e171 100644
+> > > > > > --- a/Documentation/userspace-api/media/v4l/dev-meta.rst
+> > > > > > +++ b/Documentation/userspace-api/media/v4l/dev-meta.rst
+> > > > > > @@ -65,3 +65,18 @@ to 0.
+> > > > > >        - ``buffersize``
+> > > > > >        - Maximum buffer size in bytes required for data. The value is set by the
+> > > > > >          driver.
+> > > > > > +    * - __u32
+> > > > > > +      - ``width``
+> > > > > > +      - Width of a line of metadata in samples. Valid when :c:type`v4l2_fmtdesc`
+> > > > > > +	flag ``V4L2_FMT_FLAG_META_LINE_BASED`` is set, otherwise zero. See
+> > > > > > +	:c:func:`VIDIOC_ENUM_FMT`.
+> > > > > > +    * - __u32
+> > > > > > +      - ``height``
+> > > > > > +      - Number of rows of metadata. Valid when :c:type`v4l2_fmtdesc` flag
+> > > > > > +	``V4L2_FMT_FLAG_META_LINE_BASED`` is set, otherwise zero. See
+> > > > > > +	:c:func:`VIDIOC_ENUM_FMT`.
+> > > > > > +    * - __u32
+> > > > > > +      - ``bytesperline``
+> > > > > > +      - Offset in bytes between the beginning of two consecutive lines. Valid
+> > > > > > +	when :c:type`v4l2_fmtdesc` flag ``V4L2_FMT_FLAG_META_LINE_BASED`` is
+> > > > > > +	set, otherwise zero. See :c:func:`VIDIOC_ENUM_FMT`.
+> > > > > > diff --git a/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst b/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
+> > > > > > index 000c154b0f98..6d7664345a4e 100644
+> > > > > > --- a/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
+> > > > > > +++ b/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
+> > > > > > @@ -227,6 +227,13 @@ the ``mbus_code`` field is handled differently:
+> > > > > >  	The application can ask to configure the quantization of the capture
+> > > > > >  	device when calling the :ref:`VIDIOC_S_FMT <VIDIOC_G_FMT>` ioctl with
+> > > > > >  	:ref:`V4L2_PIX_FMT_FLAG_SET_CSC <v4l2-pix-fmt-flag-set-csc>` set.
+> > > > > > +    * - ``V4L2_FMT_FLAG_META_LINE_BASED``
+> > > > > > +      - 0x0200
+> > > > > > +      - The metadata format is line-based. In this case the ``width``,
+> > > > > > +	``height`` and ``bytesperline`` fields of :c:type:`v4l2_meta_format` are
+> > > > > > +	valid. The buffer consists of ``height`` lines, each having ``width``
+> > > > > > +	bytes of data and offset between the beginning of each two consecutive
+> > > > >
+> > > > > Isn't ``width`` in samples ?
+> > > >
+> > > > Indeed, it's better to refer to samples for clarity. I'll fix for v4.
+> > >
+> > > How do you define a "sample" in this case ? I wonder if it wouldn't be
+> > > simpler for both userspace and kernel drivers if the width was specified
+> > > in bytes, including the padding bytes.
 > > 
-> > Which specific patch are you referring to?
+> > Wouldn't this make the image line length (expressed in 'samples')
+> > different than the embedded data line length ? Would this confuse
+> > userspace or is it fine ?
 > 
-> "[PATCH v3 09/10] media: Add media bus codes for MIPI CCS embedded data"
-> 
-> You wrote
-> 
-> "There are sensors that aren't fully compatible with CCS (including
-> those compatible with SMIA and SMIA++) but I wouldn't expect the format
-> to be used by devices that are entirely incompatible with CCS."
+> If padding is included to width, then the user needs to calculate how many
+> bytes of metadata there is, apart from the padding (which is redundant).
+> That value is provided to the user for this purpose --- just like for image
+> data.
 
-Ah, right.
+Think of this: the embedded data parser is split into two, the access
+function that accesses metadata bytes depending on the generic V4L2
+metadata format and the rest, which cares about the specific mbus code. The
+latter will need the information how many bytes of metadata there is,
+instead it calculates the position in the buffer based on bytesperline,
+width and the format itself.
 
-I meant that if a sensor implementation isn't related to any of these
-standards, it's highly unlikely to use the same embedded data format. Of
-course, if it does, then I think we should use the mbus code, too. But I'm
-not holding my breath.
+Of course, the amount of padding can be calculated from the total amount,
+by adding a second function that does it, but still it's somehow backwards
+way to do that. (Makes me think of negabinaries.)
 
 -- 
 Regards,
