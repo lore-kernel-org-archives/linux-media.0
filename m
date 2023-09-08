@@ -2,594 +2,605 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 651CAEC8758
-	for <linux-media@archiver.kernel.org>; Thu,  7 Sep 2023 20:49:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64500EB8FB1
+	for <linux-media@archiver.kernel.org>; Fri,  8 Sep 2023 00:48:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234798AbjIGUtM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 7 Sep 2023 16:49:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45402 "EHLO
+        id S231886AbjIHAsJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 7 Sep 2023 20:48:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjIGUtK (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Sep 2023 16:49:10 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91EB11BCB;
-        Thu,  7 Sep 2023 13:49:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
- s=s31663417; t=1694119744; x=1694724544; i=s.l-h@gmx.de;
- bh=MtXqy4RdyS/achTFtmU3C7IbOQZC319wHC/pSZl6Tm4=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=i5arviMqP9xrR7+ew22ivgKSt7jl6Iag7B9/4Z2CgE3vNwfKaZK9YiEEG3/KSBqJu/rs4OU
- SU9A7s3VmJDX1XnChiKxH8rvEGMRV4vui8uBkmNJ0YyAY0WK+WYUVUL5VeFy0+m7VPFLdx3+N
- UJ4Ndw+kYjzAAGC4dUF/FQmHmfoorrxMwCC9n5ALUQCCuhK6GWYTs/bc02Dq3rvTgtQyhcpFr
- U0c9J1GDcOz+RtTrswnJhZt7EQYi5FciODcwcn8/oRFT8DNNun+J3viC5shK16XRdgAQvi9Ew
- JUc949J2KNNjz3/tPZbXmEeESbc2U8Mf/4ga+wMVl10wAEWPgdlg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from mir ([94.31.85.155]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mf07E-1pz1T10vNa-00gbdB; Thu, 07
- Sep 2023 08:41:45 +0200
-Date:   Thu, 7 Sep 2023 08:41:35 +0200
-From:   Stefan Lippers-Hollmann <s.l-h@gmx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        Christoph Hellwig <hch@lst.de>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6.5 11/34] modules: only allow symbol_get of
- EXPORT_SYMBOL_GPL modules
-Message-ID: <20230907084135.02d97441@mir>
-In-Reply-To: <20230904182949.104100132@linuxfoundation.org>
-References: <20230904182948.594404081@linuxfoundation.org>
-        <20230904182949.104100132@linuxfoundation.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+        with ESMTP id S229973AbjIHAsI (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Sep 2023 20:48:08 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07A91BD3
+        for <linux-media@vger.kernel.org>; Thu,  7 Sep 2023 17:48:02 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1bf55a81eeaso11919265ad.0
+        for <linux-media@vger.kernel.org>; Thu, 07 Sep 2023 17:48:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1694134082; x=1694738882; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8CN2bMdaZb0aAVGEP2PYIwhTV4otwHmZXTPwLRyPKws=;
+        b=rLWec+Kw4bdgM1ALqRF1xSp2Vfw4eXXs/D305UDVFjnBmN8gLXZvfTg6ZDXFHoqzXc
+         GL8E11RBU+p01QMFQ+zYP9F7IRBxaJAncXKqWA6AiwiCyk/rKSQqX7EM/h5KM59MuxEo
+         ToZi/kHeMUHemZDAMolLvjKVt62iMed412RTUOmksBm5yrrT1AD2vymMW/SiXgrO3dPs
+         9XanaTgy66FGys4uHKXqU0H6aGaMalBHS/kb8H5XPzrfRvQRrlLyXtwi/NhtYWOehMA9
+         r3S2rxBF/uZ49m66enugnhGBQ8sYRa9LynGcP+Jk+uncmL1JBEKbiqwZjZsdmso4/DT0
+         OPwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694134082; x=1694738882;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=8CN2bMdaZb0aAVGEP2PYIwhTV4otwHmZXTPwLRyPKws=;
+        b=jOW6GGXBSK4sJ5d8p55321+hu6nBaXZgRVAtUQKjCMH+kM0jHI2k7YF+rVUDgZ31BN
+         +sQvJNvUevEkHYVQlR/pwJiq85UOpsCZcm5d3IwzIj4er+JZbL0UhYVyK7kRo7fE6tN4
+         i3NP3BqOgn8Q7wwSLKw3O0p0/7gxyw4uOmW4M+DJzhpn9XAcWUXF6vxaKvX6Y0jlzE/A
+         ZXOxzd260ydx42FB0k20KWTkrmExFAlwW2R8XBkECCKKkixn+MSyxbLbYvIz6NCoWY1V
+         Lq5z0QC/GS4kzW852MnpXY9jRBNFpp3rK4YglJ6nMxOx833xc4me/0VYdKdbNrCZLSXI
+         aHGA==
+X-Gm-Message-State: AOJu0Yx/ljQ8uAIlWf7euzRkiFSkGN6goqmXQJ2ckpw0w5b7OEMs4h+6
+        Vh20sFZOpDuH6kU3BBe9RzwrJw==
+X-Google-Smtp-Source: AGHT+IErqQyiwInovuOn6RCz96wVwGbsIlZN3/D5WbgzgOmws9AnPjo58ycdKgMhTT50+7Vo98ByGw==
+X-Received: by 2002:a17:903:18a:b0:1bf:728:7458 with SMTP id z10-20020a170903018a00b001bf07287458mr1464259plg.58.1694134082012;
+        Thu, 07 Sep 2023 17:48:02 -0700 (PDT)
+Received: from ?IPV6:2a03:83e0:1151:15:40a:5eb5:8916:33a4? ([2620:10d:c090:500::7:4620])
+        by smtp.gmail.com with ESMTPSA id ix13-20020a170902f80d00b001b5247cac3dsm335876plb.110.2023.09.07.17.48.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Sep 2023 17:48:01 -0700 (PDT)
+Message-ID: <3413efe8-159b-1ee9-5cff-d3c8df0b4c8e@davidwei.uk>
+Date:   Thu, 7 Sep 2023 17:47:59 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:2Fy5toPkMEYQqq4loPz4mBFk8T1GnH3q6lOrZmBJOUnNmotKBqr
- acOEkqAmMW1Mn3C0a8Db8s7O6jJuE/1jgx9XjMCoe8whZNm0ym/C6KBcUfzJdyN4CNYN5lF
- KYDkSNy0guWcTxJPz8Aq5vWgJ8+YYaUUBed3BrM5dkz3YFqsQjA1k3G0LHPwjCswN8zpLlz
- bL+PLJK9BoDJjCbj7fnmQ==
-UI-OutboundReport: notjunk:1;M01:P0:REDGyp8qDmU=;o4ltwlfC0cDDJ1VTGaSGZRAYex/
- 16tDVbKlAzpk9iGf3HEQ+Qd4w/H5+6mnrvPZ9G+X4fM77Bc1MDzaYEh6pKyYOgWNcZ09mupx2
- AludiAw4y9ZzOi2v3neoSx+q8pcAJB5BwuHPITop2P2+PnZ0Lc9PKaW9yx/UozBLL5NfZPYO1
- LY4oVcApboV0MAacWiSyJrrZX5+KpW9SdR5eytUadQ0jQQSnTmGURdhn5HvfUPbJazx8pIWJ1
- uY3FXFUGhGLzUsOO2RPOSpYFWBSU7kPVjPFPxOqkjfjzrHb2qobk92jbPdSqvpnw6Zg0KjlgM
- cOzDlW3Al8eL5yqWg/mB4QF/MgE/w9cladNRVYl6nbUnDCQRH8BsBF4a231RlFlWxaVA/QOmf
- FtdxMmpPfxKXBzGpxsOMK4BbsYJJJl3w/t/kajn6c1+JPCMlEDUHAHk5Uu2IY9yTVJXyqBZY6
- u5komuMf6Y3WXdpFwgpqKhRld65IvC2CaE/uuTI31RC6q4ZvpWqsjxd+l2X8O+H7zUzf/JUIs
- 7OXiadFLemrivnGezSGAviCJPsaq4f3C6K1I0B6DsyyTYXLtCYWkJIQr96v8DlBGduTgFPeRg
- hKJrrC1gGEqmqEipi9rUDPvjrNLl/ZWR2HNrGGCZRi6qMTu7CJiJZ4+/6luEZvvYAVRUnE13K
- K6dw7J4urgfEJCKkhtD+w+1Qzgh7N5sJ9YCF89w2AjVRTblsWBXu2W/65XEMcKxcnsgzlt5xq
- VwORDsBUieHuI+/8OGhUPpFRxC2KA4Z1X8fiFOUH6CPAvkjsT4kQvmm+UXSqyl5md2xFykeXx
- 4bLP94/U16wrwWtxzQEKL1pR9hjvUbI/1/iVRqa2FYxveAgglp1TMpRtFq5RMUC6TschU3N7+
- KwEjj6gcDJGz8tC2/IkhFJ/Y8vEAOqciSy1w7NgXGiRpR8MDRPDy+ftT5nTYckkVcTLryfPgA
- GKF4WZN+vMH4ltGzdKhW6to8bMw=
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.14.0
+Subject: Re: [RFC PATCH v2 02/11] netdev: implement netlink api to bind
+ dma-buf to netdevice
+To:     Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Ahern <dsahern@kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Hari Ramakrishnan <rharix@google.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andy Lutomirski <luto@kernel.org>, stephen@networkplumber.org,
+        sdf@google.com, Willem de Bruijn <willemb@google.com>,
+        Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20230810015751.3297321-1-almasrymina@google.com>
+ <20230810015751.3297321-3-almasrymina@google.com>
+From:   David Wei <dw@davidwei.uk>
+In-Reply-To: <20230810015751.3297321-3-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi
+On 09/08/2023 18:57, Mina Almasry wrote:
+> Add a netdev_dmabuf_binding struct which represents the
+> dma-buf-to-netdevice binding. The netlink API will bind the dma-buf to
+> an rx queue on the netdevice. On the binding, the dma_buf_attach
+> & dma_buf_map_attachment will occur. The entries in the sg_table from
+> mapping will be inserted into a genpool to make it ready
+> for allocation.
+> 
+> The chunks in the genpool are owned by a dmabuf_chunk_owner struct which
+> holds the dma-buf offset of the base of the chunk and the dma_addr of
+> the chunk. Both are needed to use allocations that come from this chunk.
+> 
+> We create a new type that represents an allocation from the genpool:
+> page_pool_iov. We setup the page_pool_iov allocation size in the
+> genpool to PAGE_SIZE for simplicity: to match the PAGE_SIZE normally
+> allocated by the page pool and given to the drivers.
+> 
+> The user can unbind the dmabuf from the netdevice by closing the netlink
+> socket that established the binding. We do this so that the binding is
+> automatically unbound even if the userspace process crashes.
+> 
+> The binding and unbinding leaves an indicator in struct netdev_rx_queue
+> that the given queue is bound, but the binding doesn't take effect until
+> the driver actually reconfigures its queues, and re-initializes its page
+> pool. This issue/weirdness is highlighted in the memory provider
+> proposal[1], and I'm hoping that some generic solution for all
+> memory providers will be discussed; this patch doesn't address that
+> weirdness again.
+> 
+> The netdev_dmabuf_binding struct is refcounted, and releases its
+> resources only when all the refs are released.
+> 
+> [1] https://lore.kernel.org/netdev/20230707183935.997267-1-kuba@kernel.org/
+> 
+> Signed-off-by: Willem de Bruijn <willemb@google.com>
+> Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
+> 
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
+> ---
+>  include/linux/netdevice.h |  57 ++++++++++++
+>  include/net/page_pool.h   |  27 ++++++
+>  net/core/dev.c            | 178 ++++++++++++++++++++++++++++++++++++++
+>  net/core/netdev-genl.c    | 101 ++++++++++++++++++++-
+>  4 files changed, 361 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> index 3800d0479698..1b7c5966d2ca 100644
+> --- a/include/linux/netdevice.h
+> +++ b/include/linux/netdevice.h
+> @@ -53,6 +53,8 @@
+>  #include <net/net_trackers.h>
+>  #include <net/net_debug.h>
+>  #include <net/dropreason-core.h>
+> +#include <linux/xarray.h>
+> +#include <linux/refcount.h>
+> 
+>  struct netpoll_info;
+>  struct device;
+> @@ -782,6 +784,55 @@ bool rps_may_expire_flow(struct net_device *dev, u16 rxq_index, u32 flow_id,
+>  #endif
+>  #endif /* CONFIG_RPS */
+> 
+> +struct netdev_dmabuf_binding {
+> +	struct dma_buf *dmabuf;
+> +	struct dma_buf_attachment *attachment;
+> +	struct sg_table *sgt;
+> +	struct net_device *dev;
+> +	struct gen_pool *chunk_pool;
+> +
+> +	/* The user holds a ref (via the netlink API) for as long as they want
+> +	 * the binding to remain alive. Each page pool using this binding holds
+> +	 * a ref to keep the binding alive. Each allocated page_pool_iov holds a
+> +	 * ref.
+> +	 *
+> +	 * The binding undos itself and unmaps the underlying dmabuf once all
+> +	 * those refs are dropped and the binding is no longer desired or in
+> +	 * use.
+> +	 */
+> +	refcount_t ref;
+> +
+> +	/* The portid of the user that owns this binding. Used for netlink to
+> +	 * notify us of the user dropping the bind.
+> +	 */
+> +	u32 owner_nlportid;
+> +
+> +	/* The list of bindings currently active. Used for netlink to notify us
+> +	 * of the user dropping the bind.
+> +	 */
+> +	struct list_head list;
+> +
+> +	/* rxq's this binding is active on. */
+> +	struct xarray bound_rxq_list;
+> +};
+> +
+> +void __netdev_devmem_binding_free(struct netdev_dmabuf_binding *binding);
+> +
+> +static inline void
+> +netdev_devmem_binding_get(struct netdev_dmabuf_binding *binding)
+> +{
+> +	refcount_inc(&binding->ref);
+> +}
+> +
+> +static inline void
+> +netdev_devmem_binding_put(struct netdev_dmabuf_binding *binding)
+> +{
+> +	if (!refcount_dec_and_test(&binding->ref))
+> +		return;
+> +
+> +	__netdev_devmem_binding_free(binding);
+> +}
+> +
+>  /* This structure contains an instance of an RX queue. */
+>  struct netdev_rx_queue {
+>  	struct xdp_rxq_info		xdp_rxq;
+> @@ -796,6 +847,7 @@ struct netdev_rx_queue {
+>  #ifdef CONFIG_XDP_SOCKETS
+>  	struct xsk_buff_pool            *pool;
+>  #endif
+> +	struct netdev_dmabuf_binding	*binding;
+>  } ____cacheline_aligned_in_smp;
+> 
+>  /*
+> @@ -5026,6 +5078,11 @@ void netif_set_tso_max_segs(struct net_device *dev, unsigned int segs);
+>  void netif_inherit_tso_max(struct net_device *to,
+>  			   const struct net_device *from);
+> 
+> +void netdev_unbind_dmabuf_to_queue(struct netdev_dmabuf_binding *binding);
+> +int netdev_bind_dmabuf_to_queue(struct net_device *dev, unsigned int dmabuf_fd,
+> +				u32 rxq_idx,
+> +				struct netdev_dmabuf_binding **out);
+> +
+>  static inline bool netif_is_macsec(const struct net_device *dev)
+>  {
+>  	return dev->priv_flags & IFF_MACSEC;
+> diff --git a/include/net/page_pool.h b/include/net/page_pool.h
+> index 364fe6924258..61b2066d32b5 100644
+> --- a/include/net/page_pool.h
+> +++ b/include/net/page_pool.h
+> @@ -170,6 +170,33 @@ extern const struct pp_memory_provider_ops hugesp_ops;
+>  extern const struct pp_memory_provider_ops huge_ops;
+>  extern const struct pp_memory_provider_ops huge_1g_ops;
+> 
+> +/* page_pool_iov support */
+> +
+> +/* Owner of the dma-buf chunks inserted into the gen pool. Each scatterlist
+> + * entry from the dmabuf is inserted into the genpool as a chunk, and needs
+> + * this owner struct to keep track of some metadata necessary to create
+> + * allocations from this chunk.
+> + */
+> +struct dmabuf_genpool_chunk_owner {
+> +	/* Offset into the dma-buf where this chunk starts.  */
+> +	unsigned long base_virtual;
+> +
+> +	/* dma_addr of the start of the chunk.  */
+> +	dma_addr_t base_dma_addr;
+> +
+> +	/* Array of page_pool_iovs for this chunk. */
+> +	struct page_pool_iov *ppiovs;
+> +	size_t num_ppiovs;
+> +
+> +	struct netdev_dmabuf_binding *binding;
+> +};
+> +
+> +struct page_pool_iov {
+> +	struct dmabuf_genpool_chunk_owner *owner;
+> +
+> +	refcount_t refcount;
+> +};
+> +
 
-On 2023-09-04, Greg Kroah-Hartman wrote:
-> 6.5-stable review patch.  If anyone has any objections, please let me kn=
-ow.
->
-> ------------------
->
-> From: Christoph Hellwig <hch@lst.de>
->
-> commit 9011e49d54dcc7653ebb8a1e05b5badb5ecfa9f9 upstream.
->
-> It has recently come to my attention that nvidia is circumventing the
-> protection added in 262e6ae7081d ("modules: inherit
-> TAINT_PROPRIETARY_MODULE") by importing exports from their proprietary
-> modules into an allegedly GPL licensed module and then rexporting them.
->
-> Given that symbol_get was only ever intended for tightly cooperating
-> modules using very internal symbols it is logical to restrict it to
-> being used on EXPORT_SYMBOL_GPL and prevent nvidia from costly DMCA
-> Circumvention of Access Controls law suites.
->
-> All symbols except for four used through symbol_get were already exporte=
-d
-> as EXPORT_SYMBOL_GPL, and the remaining four ones were switched over in
-> the preparation patches.
+Hi Mina, we're working on ZC RX to host memory [1] and have a similar need for
+a page pool memory provider (backed by userspace host memory instead of GPU
+memory) that hands out generic page_pool_iov buffers. The current differences
+are that we hold a page ptr and its dma_addr_t directly as we are backed by
+real pages; we still need a refcount for lifetime management. See struct
+io_zc_rx_buf in [2].
 
-This patch, as part of v6.5.2, breaks the in-kernel ds3000 module
-(for a TeVii s480 v2 DVB-S2 card, which is a PCIe card attaching two
-onboard TeVii s660 cards via an onboard USB2 controller (MCS9990),
-https://www.linuxtv.org/wiki/index.php/TeVii_S480) from loading.
+It would be great to align on page_pool_iov such that it will work for both of
+us. Would a union work here?
 
-[    2.896589] dvbdev: dvb_create_media_entity: media entity 'dvb-demux' r=
-egistered.
-[    2.901085] failing symbol_get of non-GPLONLY symbol ds3000_attach.
-[    2.901089] DVB: Unable to find symbol ds3000_attach()
-[    2.901091] dvb-usb: no frontend was attached by 'TeVii S480.2 USB'
+[1] https://lore.kernel.org/io-uring/20230826011954.1801099-1-dw@davidwei.uk/
+[2] https://lore.kernel.org/io-uring/20230826011954.1801099-6-dw@davidwei.uk/
 
-$ dmesg | grep -i -e dvb -e dw21 -e ds3000 -e symbol
-[    2.739710] dvb-usb: found a 'TeVii S480.2 USB' in cold state, will try=
- to load a firmware
-[    2.740232] dvb-usb: downloading firmware from file 'dvb-usb-s660.fw'
-[    2.740233] dw2102: start downloading DW210X firmware
-[    2.743090] dvb-usb: found a 'Microsoft Xbox One Digital TV Tuner' in c=
-old state, will try to load a firmware
-[    2.743217] dvb-usb: downloading firmware from file 'dvb-usb-dib0700-1.=
-20.fw'
-[    2.896066] dvb-usb: found a 'TeVii S480.2 USB' in warm state.
-[    2.896297] dvb-usb: will pass the complete MPEG2 transport stream to t=
-he software demuxer.
-[    2.896344] dvbdev: DVB: registering new adapter (TeVii S480.2 USB)
-[    2.896450] dvb-usb: MAC address: 9f:9f:9f:9f:9f:9f
-[    2.896589] dvbdev: dvb_create_media_entity: media entity 'dvb-demux' r=
-egistered.
-[    2.901085] failing symbol_get of non-GPLONLY symbol ds3000_attach.
-[    2.901089] DVB: Unable to find symbol ds3000_attach()
-[    2.901091] dvb-usb: no frontend was attached by 'TeVii S480.2 USB'
-[    2.925255] rc rc0: lirc_dev: driver dw2102 registered at minor =3D 0, =
-scancode receiver, no transmitter
-[    2.925398] dvb-usb: schedule remote query interval to 150 msecs.
-[    2.925401] dvb-usb: TeVii S480.2 USB successfully initialized and conn=
-ected.
-[    2.925458] dvb-usb: found a 'TeVii S480.1 USB' in cold state, will try=
- to load a firmware
-[    2.925488] dvb-usb: downloading firmware from file 'dvb-usb-s660.fw'
-[    2.925489] dw2102: start downloading DW210X firmware
-[    2.959695] dvb-usb: TeVii S480.2 USB successfully deinitialized and di=
-sconnected.
-[    3.079102] dvb-usb: found a 'TeVii S480.1 USB' in warm state.
-[    3.079416] dvb-usb: will pass the complete MPEG2 transport stream to t=
-he software demuxer.
-[    3.079486] dvbdev: DVB: registering new adapter (TeVii S480.1 USB)
-[    3.079777] dvb-usb: MAC address: 2f:2f:2f:2f:2f:2f
-[    3.080123] dvbdev: dvb_create_media_entity: media entity 'dvb-demux' r=
-egistered.
-[    3.080622] failing symbol_get of non-GPLONLY symbol ds3000_attach.
-[    3.083513] failing symbol_get of non-GPLONLY symbol ds3000_attach.
-[    3.083516] DVB: Unable to find symbol ds3000_attach()
-[    3.085420] dvb-usb: no frontend was attached by 'TeVii S480.1 USB'
-[    3.087260] rc rc1: lirc_dev: driver dw2102 registered at minor =3D 0, =
-scancode receiver, no transmitter
-[    3.087362] dvb-usb: schedule remote query interval to 150 msecs.
-[    3.087365] dvb-usb: TeVii S480.1 USB successfully initialized and conn=
-ected.
-[    3.087451] usbcore: registered new interface driver dw2102
-[    3.115445] dvb-usb: TeVii S480.1 USB successfully deinitialized and di=
-sconnected.
-[    3.319289] dvb-usb: found a 'Microsoft Xbox One Digital TV Tuner' in w=
-arm state.
-[    3.319543] dvb-usb: will pass the complete MPEG2 transport stream to t=
-he software demuxer.
-[    3.320133] dvbdev: DVB: registering new adapter (Microsoft Xbox One Di=
-gital TV Tuner)
-[    3.320350] dvbdev: dvb_create_media_entity: media entity 'dvb-demux' r=
-egistered.
-[    3.498941] usb 5-5: DVB: registering adapter 0 frontend 0 (Panasonic M=
-N88472)...
-[    3.498948] dvbdev: dvb_create_media_entity: media entity 'Panasonic MN=
-88472' registered.
-[    3.499264] dvb-usb: Microsoft Xbox One Digital TV Tuner successfully i=
-nitialized and connected.
-[    3.499437] usbcore: registered new interface driver dvb_usb_dib0700
-[    4.667281] usb 1-1: Product: DVBS2BOX
-[    4.667833] dvb-usb: found a 'TeVii S660 USB' in cold state, will try t=
-o load a firmware
-[    4.667883] dvb-usb: downloading firmware from file 'dvb-usb-s660.fw'
-[    4.667885] dw2102: start downloading DW210X firmware
-[    4.823196] dvb-usb: found a 'TeVii S660 USB' in warm state.
-[    4.823520] dvb-usb: will pass the complete MPEG2 transport stream to t=
-he software demuxer.
-[    4.823950] dvbdev: DVB: registering new adapter (TeVii S660 USB)
-[    4.851318] usb 4-1: Product: DVBS2BOX
-[    4.851853] dvb-usb: found a 'TeVii S660 USB' in cold state, will try t=
-o load a firmware
-[    4.851898] dvb-usb: downloading firmware from file 'dvb-usb-s660.fw'
-[    4.851900] dw2102: start downloading DW210X firmware
-[    5.007159] dvb-usb: found a 'TeVii S660 USB' in warm state.
-[    5.007469] dvb-usb: will pass the complete MPEG2 transport stream to t=
-he software demuxer.
-[    5.007837] dvbdev: DVB: registering new adapter (TeVii S660 USB)
-[    5.067116] dvb-usb: MAC address: 00:18:XX:XX:XX:XX
-[    5.067337] dvbdev: dvb_create_media_entity: media entity 'dvb-demux' r=
-egistered.
-[    5.067802] failing symbol_get of non-GPLONLY symbol ds3000_attach.
-[    5.071091] failing symbol_get of non-GPLONLY symbol ds3000_attach.
-[    5.071094] DVB: Unable to find symbol ds3000_attach()
-[    5.072124] dvb-usb: no frontend was attached by 'TeVii S660 USB'
-[    5.074041] rc rc1: lirc_dev: driver dw2102 registered at minor =3D 0, =
-scancode receiver, no transmitter
-[    5.074244] dvb-usb: schedule remote query interval to 150 msecs.
-[    5.074254] dvb-usb: TeVii S660 USB successfully initialized and connec=
-ted.
-[    5.250767] dvb-usb: MAC address: 00:18:XX:XX:XX:XX
-[    5.250985] dvbdev: dvb_create_media_entity: media entity 'dvb-demux' r=
-egistered.
-[    5.251599] failing symbol_get of non-GPLONLY symbol ds3000_attach.
-[    5.254664] failing symbol_get of non-GPLONLY symbol ds3000_attach.
-[    5.254666] DVB: Unable to find symbol ds3000_attach()
-[    5.255871] dvb-usb: no frontend was attached by 'TeVii S660 USB'
-[    5.257962] rc rc2: lirc_dev: driver dw2102 registered at minor =3D 2, =
-scancode receiver, no transmitter
-[    5.258132] dvb-usb: schedule remote query interval to 150 msecs.
-[    5.258135] dvb-usb: TeVii S660 USB successfully initialized and connec=
-ted.
-[   13.070175] mn88472 12-0018: downloading firmware from file 'dvb-demod-=
-mn88472-02.fw'
+>  struct page_pool {
+>  	struct page_pool_params p;
+> 
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index 8e7d0cb540cd..02a25ccf771a 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -151,6 +151,8 @@
+>  #include <linux/pm_runtime.h>
+>  #include <linux/prandom.h>
+>  #include <linux/once_lite.h>
+> +#include <linux/genalloc.h>
+> +#include <linux/dma-buf.h>
+> 
+>  #include "dev.h"
+>  #include "net-sysfs.h"
+> @@ -2037,6 +2039,182 @@ static int call_netdevice_notifiers_mtu(unsigned long val,
+>  	return call_netdevice_notifiers_info(val, &info.info);
+>  }
+> 
+> +/* Device memory support */
+> +
+> +static void netdev_devmem_free_chunk_owner(struct gen_pool *genpool,
+> +					   struct gen_pool_chunk *chunk,
+> +					   void *not_used)
+> +{
+> +	struct dmabuf_genpool_chunk_owner *owner = chunk->owner;
+> +
+> +	kvfree(owner->ppiovs);
+> +	kfree(owner);
+> +}
+> +
+> +void __netdev_devmem_binding_free(struct netdev_dmabuf_binding *binding)
+> +{
+> +	size_t size, avail;
+> +
+> +	gen_pool_for_each_chunk(binding->chunk_pool,
+> +				netdev_devmem_free_chunk_owner, NULL);
+> +
+> +	size = gen_pool_size(binding->chunk_pool);
+> +	avail = gen_pool_avail(binding->chunk_pool);
+> +
+> +	if (!WARN(size != avail, "can't destroy genpool. size=%lu, avail=%lu",
+> +		  size, avail))
+> +		gen_pool_destroy(binding->chunk_pool);
+> +
+> +	dma_buf_unmap_attachment(binding->attachment, binding->sgt,
+> +				 DMA_BIDIRECTIONAL);
+> +	dma_buf_detach(binding->dmabuf, binding->attachment);
+> +	dma_buf_put(binding->dmabuf);
+> +	kfree(binding);
+> +}
+> +
+> +void netdev_unbind_dmabuf_to_queue(struct netdev_dmabuf_binding *binding)
+> +{
+> +	struct netdev_rx_queue *rxq;
+> +	unsigned long xa_idx;
+> +
+> +	list_del_rcu(&binding->list);
+> +
+> +	xa_for_each(&binding->bound_rxq_list, xa_idx, rxq)
+> +		if (rxq->binding == binding)
+> +			rxq->binding = NULL;
+> +
+> +	netdev_devmem_binding_put(binding);
+> +}
+> +
+> +int netdev_bind_dmabuf_to_queue(struct net_device *dev, unsigned int dmabuf_fd,
+> +				u32 rxq_idx, struct netdev_dmabuf_binding **out)
+> +{
+> +	struct netdev_dmabuf_binding *binding;
+> +	struct netdev_rx_queue *rxq;
+> +	struct scatterlist *sg;
+> +	struct dma_buf *dmabuf;
+> +	unsigned int sg_idx, i;
+> +	unsigned long virtual;
+> +	u32 xa_idx;
+> +	int err;
+> +
+> +	rxq = __netif_get_rx_queue(dev, rxq_idx);
+> +
+> +	if (rxq->binding)
+> +		return -EEXIST;
+> +
+> +	dmabuf = dma_buf_get(dmabuf_fd);
+> +	if (IS_ERR_OR_NULL(dmabuf))
+> +		return -EBADFD;
+> +
+> +	binding = kzalloc_node(sizeof(*binding), GFP_KERNEL,
+> +			       dev_to_node(&dev->dev));
+> +	if (!binding) {
+> +		err = -ENOMEM;
+> +		goto err_put_dmabuf;
+> +	}
+> +
+> +	xa_init_flags(&binding->bound_rxq_list, XA_FLAGS_ALLOC);
+> +
+> +	refcount_set(&binding->ref, 1);
+> +
+> +	binding->dmabuf = dmabuf;
+> +
+> +	binding->attachment = dma_buf_attach(binding->dmabuf, dev->dev.parent);
+> +	if (IS_ERR(binding->attachment)) {
+> +		err = PTR_ERR(binding->attachment);
+> +		goto err_free_binding;
+> +	}
+> +
+> +	binding->sgt = dma_buf_map_attachment(binding->attachment,
+> +					      DMA_BIDIRECTIONAL);
+> +	if (IS_ERR(binding->sgt)) {
+> +		err = PTR_ERR(binding->sgt);
+> +		goto err_detach;
+> +	}
+> +
+> +	/* For simplicity we expect to make PAGE_SIZE allocations, but the
+> +	 * binding can be much more flexible than that. We may be able to
+> +	 * allocate MTU sized chunks here. Leave that for future work...
+> +	 */
+> +	binding->chunk_pool = gen_pool_create(PAGE_SHIFT,
+> +					      dev_to_node(&dev->dev));
+> +	if (!binding->chunk_pool) {
+> +		err = -ENOMEM;
+> +		goto err_unmap;
+> +	}
+> +
+> +	virtual = 0;
+> +	for_each_sgtable_dma_sg(binding->sgt, sg, sg_idx) {
+> +		dma_addr_t dma_addr = sg_dma_address(sg);
+> +		struct dmabuf_genpool_chunk_owner *owner;
+> +		size_t len = sg_dma_len(sg);
+> +		struct page_pool_iov *ppiov;
+> +
+> +		owner = kzalloc_node(sizeof(*owner), GFP_KERNEL,
+> +				     dev_to_node(&dev->dev));
+> +		owner->base_virtual = virtual;
+> +		owner->base_dma_addr = dma_addr;
+> +		owner->num_ppiovs = len / PAGE_SIZE;
+> +		owner->binding = binding;
+> +
+> +		err = gen_pool_add_owner(binding->chunk_pool, dma_addr,
+> +					 dma_addr, len, dev_to_node(&dev->dev),
+> +					 owner);
+> +		if (err) {
+> +			err = -EINVAL;
+> +			goto err_free_chunks;
+> +		}
+> +
+> +		owner->ppiovs = kvmalloc_array(owner->num_ppiovs,
+> +					       sizeof(*owner->ppiovs),
+> +					       GFP_KERNEL);
+> +		if (!owner->ppiovs) {
+> +			err = -ENOMEM;
+> +			goto err_free_chunks;
+> +		}
+> +
+> +		for (i = 0; i < owner->num_ppiovs; i++) {
+> +			ppiov = &owner->ppiovs[i];
+> +			ppiov->owner = owner;
+> +			refcount_set(&ppiov->refcount, 1);
+> +		}
+> +
+> +		dma_addr += len;
+> +		virtual += len;
+> +	}
+> +
+> +	/* TODO: need to be able to bind to multiple rx queues on the same
+> +	 * netdevice. The code should already be able to handle that with
+> +	 * minimal changes, but the netlink API currently allows for 1 rx
+> +	 * queue.
+> +	 */
+> +	err = xa_alloc(&binding->bound_rxq_list, &xa_idx, rxq, xa_limit_32b,
+> +		       GFP_KERNEL);
+> +	if (err)
+> +		goto err_free_chunks;
+> +
+> +	rxq->binding = binding;
+> +	*out = binding;
+> +
+> +	return 0;
+> +
+> +err_free_chunks:
+> +	gen_pool_for_each_chunk(binding->chunk_pool,
+> +				netdev_devmem_free_chunk_owner, NULL);
+> +	gen_pool_destroy(binding->chunk_pool);
+> +err_unmap:
+> +	dma_buf_unmap_attachment(binding->attachment, binding->sgt,
+> +				 DMA_BIDIRECTIONAL);
+> +err_detach:
+> +	dma_buf_detach(dmabuf, binding->attachment);
+> +err_free_binding:
+> +	kfree(binding);
+> +err_put_dmabuf:
+> +	dma_buf_put(dmabuf);
+> +	return err;
+> +}
+> +
+>  #ifdef CONFIG_NET_INGRESS
+>  static DEFINE_STATIC_KEY_FALSE(ingress_needed_key);
+> 
+> diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
+> index bf7324dd6c36..288ed0112995 100644
+> --- a/net/core/netdev-genl.c
+> +++ b/net/core/netdev-genl.c
+> @@ -141,10 +141,74 @@ int netdev_nl_dev_get_dumpit(struct sk_buff *skb, struct netlink_callback *cb)
+>  	return skb->len;
+>  }
+> 
+> -/* Stub */
+> +static LIST_HEAD(netdev_rbinding_list);
+> +
+>  int netdev_nl_bind_rx_doit(struct sk_buff *skb, struct genl_info *info)
+>  {
+> -	return 0;
+> +	struct netdev_dmabuf_binding *out_binding;
+> +	u32 ifindex, dmabuf_fd, rxq_idx;
+> +	struct net_device *netdev;
+> +	struct sk_buff *rsp;
+> +	int err = 0;
+> +	void *hdr;
+> +
+> +	if (GENL_REQ_ATTR_CHECK(info, NETDEV_A_DEV_IFINDEX) ||
+> +	    GENL_REQ_ATTR_CHECK(info, NETDEV_A_BIND_DMABUF_DMABUF_FD) ||
+> +	    GENL_REQ_ATTR_CHECK(info, NETDEV_A_BIND_DMABUF_QUEUE_IDX))
+> +		return -EINVAL;
+> +
+> +	ifindex = nla_get_u32(info->attrs[NETDEV_A_DEV_IFINDEX]);
+> +	dmabuf_fd = nla_get_u32(info->attrs[NETDEV_A_BIND_DMABUF_DMABUF_FD]);
+> +	rxq_idx = nla_get_u32(info->attrs[NETDEV_A_BIND_DMABUF_QUEUE_IDX]);
+> +
+> +	rtnl_lock();
+> +
+> +	netdev = __dev_get_by_index(genl_info_net(info), ifindex);
+> +	if (!netdev) {
+> +		err = -ENODEV;
+> +		goto err_unlock;
+> +	}
+> +
+> +	if (rxq_idx >= netdev->num_rx_queues) {
+> +		err = -ERANGE;
+> +		goto err_unlock;
+> +	}
+> +
+> +	if (netdev_bind_dmabuf_to_queue(netdev, dmabuf_fd, rxq_idx,
+> +					&out_binding)) {
+> +		err = -EINVAL;
+> +		goto err_unlock;
+> +	}
+> +
+> +	out_binding->owner_nlportid = info->snd_portid;
+> +	list_add_rcu(&out_binding->list, &netdev_rbinding_list);
+> +
+> +	rsp = genlmsg_new(GENLMSG_DEFAULT_SIZE, GFP_KERNEL);
+> +	if (!rsp) {
+> +		err = -ENOMEM;
+> +		goto err_unbind;
+> +	}
+> +
+> +	hdr = genlmsg_put(rsp, info->snd_portid, info->snd_seq,
+> +			  &netdev_nl_family, 0, info->genlhdr->cmd);
+> +	if (!hdr) {
+> +		err = -EMSGSIZE;
+> +		goto err_genlmsg_free;
+> +	}
+> +
+> +	genlmsg_end(rsp, hdr);
+> +
+> +	rtnl_unlock();
+> +
+> +	return genlmsg_reply(rsp, info);
+> +
+> +err_genlmsg_free:
+> +	nlmsg_free(rsp);
+> +err_unbind:
+> +	netdev_unbind_dmabuf_to_queue(out_binding);
+> +err_unlock:
+> +	rtnl_unlock();
+> +	return err;
+>  }
+> 
+>  static int netdev_genl_netdevice_event(struct notifier_block *nb,
+> @@ -167,10 +231,37 @@ static int netdev_genl_netdevice_event(struct notifier_block *nb,
+>  	return NOTIFY_OK;
+>  }
+> 
+> +static int netdev_netlink_notify(struct notifier_block *nb, unsigned long state,
+> +				 void *_notify)
+> +{
+> +	struct netlink_notify *notify = _notify;
+> +	struct netdev_dmabuf_binding *rbinding;
+> +
+> +	if (state != NETLINK_URELEASE || notify->protocol != NETLINK_GENERIC)
+> +		return NOTIFY_DONE;
+> +
+> +	rcu_read_lock();
+> +
+> +	list_for_each_entry_rcu(rbinding, &netdev_rbinding_list, list) {
+> +		if (rbinding->owner_nlportid == notify->portid) {
+> +			netdev_unbind_dmabuf_to_queue(rbinding);
+> +			break;
+> +		}
+> +	}
+> +
+> +	rcu_read_unlock();
+> +
+> +	return NOTIFY_OK;
+> +}
+> +
+>  static struct notifier_block netdev_genl_nb = {
+>  	.notifier_call	= netdev_genl_netdevice_event,
+>  };
+> 
+> +static struct notifier_block netdev_netlink_notifier = {
+> +	.notifier_call = netdev_netlink_notify,
+> +};
+> +
+>  static int __init netdev_genl_init(void)
+>  {
+>  	int err;
+> @@ -183,8 +274,14 @@ static int __init netdev_genl_init(void)
+>  	if (err)
+>  		goto err_unreg_ntf;
+> 
+> +	err = netlink_register_notifier(&netdev_netlink_notifier);
+> +	if (err)
+> +		goto err_unreg_family;
+> +
+>  	return 0;
+> 
+> +err_unreg_family:
+> +	genl_unregister_family(&netdev_nl_family);
+>  err_unreg_ntf:
+>  	unregister_netdevice_notifier(&netdev_genl_nb);
+>  	return err;
+> --
+> 2.41.0.640.ga95def55d0-goog
 
-This is a self built version of v6.5.2, without any out-of-tree-,
-backports- or proprietary modules being loaded.
-
-$ lspci -nn
-00:00.0 Host bridge [0600]: Intel Corporation Device [8086:a703] (rev 01)
-00:02.0 VGA compatible controller [0300]: Intel Corporation Raptor Lake-S =
-GT1 [UHD Graphics 770] [8086:a780] (rev 04)
-00:06.0 PCI bridge [0604]: Intel Corporation Raptor Lake PCIe 4.0 Graphics=
- Port [8086:a74d] (rev 01)
-00:08.0 System peripheral [0880]: Intel Corporation GNA Scoring Accelerato=
-r module [8086:a74f] (rev 01)
-00:0a.0 Signal processing controller [1180]: Intel Corporation Raptor Lake=
- Crashlog and Telemetry [8086:a77d] (rev 01)
-00:0e.0 RAID bus controller [0104]: Intel Corporation Volume Management De=
-vice NVMe RAID Controller Intel Corporation [8086:a77f]
-00:14.0 USB controller [0c03]: Intel Corporation Device [8086:7a60] (rev 1=
-1)
-00:14.2 RAM memory [0500]: Intel Corporation Device [8086:7a27] (rev 11)
-00:14.3 Network controller [0280]: Intel Corporation Device [8086:7a70] (r=
-ev 11)
-00:15.0 Serial bus controller [0c80]: Intel Corporation Device [8086:7a4c]=
- (rev 11)
-00:16.0 Communication controller [0780]: Intel Corporation Device [8086:7a=
-68] (rev 11)
-00:17.0 SATA controller [0106]: Intel Corporation Device [8086:7a62] (rev =
-11)
-00:1a.0 PCI bridge [0604]: Intel Corporation Device [8086:7a48] (rev 11)
-00:1c.0 PCI bridge [0604]: Intel Corporation Device [8086:7a38] (rev 11)
-00:1c.2 PCI bridge [0604]: Intel Corporation Device [8086:7a3a] (rev 11)
-00:1c.4 PCI bridge [0604]: Intel Corporation Device [8086:7a3c] (rev 11)
-00:1d.0 PCI bridge [0604]: Intel Corporation Device [8086:7a36] (rev 11)
-00:1f.0 ISA bridge [0601]: Intel Corporation Device [8086:7a06] (rev 11)
-00:1f.3 Audio device [0403]: Intel Corporation Device [8086:7a50] (rev 11)
-00:1f.4 SMBus [0c05]: Intel Corporation Device [8086:7a23] (rev 11)
-00:1f.5 Serial bus controller [0c80]: Intel Corporation Device [8086:7a24]=
- (rev 11)
-01:00.0 Non-Volatile memory controller [0108]: Micron/Crucial Technology P=
-5 Plus NVMe PCIe SSD [c0a9:5407]
-04:00.0 Ethernet controller [0200]: Realtek Semiconductor Co., Ltd. RTL812=
-5 2.5GbE Controller [10ec:8125] (rev 05)
-05:00.0 SATA controller [0106]: ASMedia Technology Inc. ASM1062 Serial ATA=
- Controller [1b21:0612] (rev 02)
-06:00.0 USB controller [0c03]: MosChip Semiconductor Technology Ltd. MCS99=
-90 PCIe to 4-Port USB 2.0 Host Controller [9710:9990]
-06:00.1 USB controller [0c03]: MosChip Semiconductor Technology Ltd. MCS99=
-90 PCIe to 4-Port USB 2.0 Host Controller [9710:9990]
-06:00.2 USB controller [0c03]: MosChip Semiconductor Technology Ltd. MCS99=
-90 PCIe to 4-Port USB 2.0 Host Controller [9710:9990]
-06:00.3 USB controller [0c03]: MosChip Semiconductor Technology Ltd. MCS99=
-90 PCIe to 4-Port USB 2.0 Host Controller [9710:9990]
-06:00.4 USB controller [0c03]: MosChip Semiconductor Technology Ltd. MCS99=
-90 PCIe to 4-Port USB 2.0 Host Controller [9710:9990]
-06:00.5 USB controller [0c03]: MosChip Semiconductor Technology Ltd. MCS99=
-90 PCIe to 4-Port USB 2.0 Host Controller [9710:9990]
-06:00.6 USB controller [0c03]: MosChip Semiconductor Technology Ltd. MCS99=
-90 PCIe to 4-Port USB 2.0 Host Controller [9710:9990]
-06:00.7 USB controller [0c03]: MosChip Semiconductor Technology Ltd. MCS99=
-90 PCIe to 4-Port USB 2.0 Host Controller [9710:9990]
-
-$ lsusb
-Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-Bus 010 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
-Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-Bus 009 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
-Bus 001 Device 003: ID 9022:d660 TeVii Technology Ltd. DVB-S2 S660
-Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-Bus 008 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
-Bus 004 Device 003: ID 9022:d660 TeVii Technology Ltd. DVB-S2 S660
-Bus 004 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-Bus 007 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
-Bus 006 Device 002: ID 174c:3074 ASMedia Technology Inc. ASM1074 SuperSpee=
-d hub
-Bus 006 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-Bus 005 Device 003: ID 174c:2074 ASMedia Technology Inc. ASM1074 High-Spee=
-d hub
-Bus 005 Device 002: ID 045e:02d5 Microsoft Corp. Xbox One Digital TV Tuner
-Bus 005 Device 007: ID 8087:0026 Intel Corp. AX201 Bluetooth
-Bus 005 Device 005: ID 0b05:19af ASUSTek Computer, Inc. AURA LED Controlle=
-r
-Bus 005 Device 010: ID 0609:0334 SMK Manufacturing, Inc. eHome Infrared Re=
-ceiver
-Bus 005 Device 009: ID 04d9:1603 Holtek Semiconductor, Inc. Keyboard
-Bus 005 Device 008: ID 046d:c069 Logitech, Inc. M-U0007 [Corded Mouse M500=
-]
-Bus 005 Device 006: ID 147e:2016 Upek Biometric Touchchip/Touchstrip Finge=
-rprint Sensor
-Bus 005 Device 004: ID 05e3:0608 Genesys Logic, Inc. Hub
-Bus 005 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-
-$ ls -1 /sys/module/
-8250
-842_compress
-842_decompress
-ac97_bus
-acpi
-acpi_pad
-acpiphp
-acpi_tad
-aesni_intel
-af_alg
-af_packet
-ahci
-algif_hash
-algif_skcipher
-asus_nb_wmi
-asus_wmi
-async_memcpy
-async_pq
-async_raid6_recov
-async_tx
-async_xor
-autofs4
-battery
-binder
-binder_alloc
-binfmt_misc
-blk_cgroup
-blk_crypto
-block
-bluetooth
-bnep
-bridge
-btbcm
-btintel
-btmtk
-btrtl
-btusb
-button
-ccp
-cec
-cfg80211
-clocksource
-cmac
-configfs
-coretemp
-cpufreq
-cpufreq_conservative
-cpufreq_powersave
-cpuid
-cpuidle
-cpuidle_haltpoll
-crc16
-crc32c_generic
-crc32c_intel
-crc32_pclmul
-crc64_rocksoft
-crc_t10dif
-crct10dif_pclmul
-cryptd
-cryptomgr
-crypto_simd
-device_hmem
-dib0070
-dib0090
-dib3000mc
-dib7000m
-dibx000_common
-dm_mod
-dns_resolver
-drm
-drm_buddy
-drm_display_helper
-drm_kms_helper
-ds3000
-dvb_core
-dvb_usb
-dvb_usb_dib0700
-dvb_usb_dw2102
-edac_core
-ee1004
-eeepc_wmi
-efi_pstore
-ehci_hcd
-ehci_pci
-evdev
-ext4
-fan
-fat
-fb
-firmware_class
-fscrypto
-fuse
-ghash_clmulni_intel
-gpiolib_acpi
-grant_table
-haltpoll
-hid
-hid_generic
-hwmon_vid
-i2c_algo_bit
-i2c_core
-i2c_designware_core
-i2c_designware_platform
-i2c_dev
-i2c_i801
-i2c_smbus
-i8042
-i915
-idma64
-ima
-intel_cstate
-intel_gtt
-intel_idle
-intel_lpss
-intel_lpss_pci
-intel_pmc_bxt
-intel_pmc_core
-intel_powerclamp
-intel_rapl_common
-intel_rapl_msr
-intel_tcc_cooling
-intel_uncore_frequency
-intel_uncore_frequency_common
-intel_vsec
-ip_tables
-ipv6
-irqbypass
-ir_rc6_decoder
-iTCO_vendor_support
-iTCO_wdt
-iwlmvm
-iwlwifi
-jbd2
-kernel
-keyboard
-kfence
-kvm
-kvm_intel
-ledtrig_audio
-libahci
-libarc4
-libata
-libcrc32c
-linear
-llc
-loop
-lp
-mac80211
-mbcache
-mc
-mceusb
-md_mod
-mei
-mei_hdcp
-mei_me
-mei_pxp
-memory_hotplug
-mfd_core
-mn88472
-module
-mousedev
-msr
-multipath
-nct6775
-nct6775_core
-netpoll
-nls_cp437
-nls_utf8
-nmi_backtrace
-nvme
-nvme_core
-ohci_hcd
-ohci_pci
-page_alloc
-page_reporting
-parport
-parport_pc
-pcie_aspm
-pciehp
-pci_hotplug
-pcspkr
-pinctrl_alderlake
-platform_profile
-pmt_class
-pmt_telemetry
-polyval_clmulni
-polyval_generic
-ppdev
-printk
-processor
-pstore
-r8169
-raid0
-raid1
-raid10
-raid456
-raid6_pq
-random
-rapl
-rc_core
-rc_rc6_mce
-rc_tevii_nec
-rcupdate
-rcutree
-realtek
-regmap_i2c
-rfcomm
-rfkill
-rng_core
-rtc_cmos
-scsi_common
-scsi_mod
-sd_mod
-secretmem
-sg
-sha512_ssse3
-snd
-snd_compress
-snd_hda_codec
-snd_hda_codec_generic
-snd_hda_codec_hdmi
-snd_hda_codec_realtek
-snd_hda_core
-snd_hda_ext_core
-snd_hda_intel
-snd_hwdep
-snd_intel_dspcfg
-snd_intel_sdw_acpi
-snd_pcm
-snd_pcm_dmaengine
-snd_soc_acpi
-snd_soc_acpi_intel_match
-snd_soc_core
-snd_soc_hdac_hda
-snd_sof
-snd_sof_intel_hda
-snd_sof_intel_hda_common
-snd_sof_intel_hda_mlink
-snd_sof_pci
-snd_sof_pci_intel_tgl
-snd_sof_utils
-snd_sof_xtensa_dsp
-snd_timer
-soundcore
-soundwire_cadence
-soundwire_generic_allocation
-soundwire_intel
-sparse_keymap
-spurious
-srcutree
-stp
-sysrq
-tcp_cubic
-tda18250
-thermal
-tpm
-tpm_crb
-tpm_tis
-tpm_tis_core
-ttm
-tun
-udmabuf
-usb_common
-usbcore
-usbhid
-vfat
-video
-videobuf2_common
-videobuf2_memops
-videobuf2_vmalloc
-vmd
-vt
-watchdog
-wmi
-wmi_bmof
-workqueue
-x86_pkg_temp_thermal
-xen
-xhci_hcd
-xhci_pci
-xhci_pci_renesas
-xor
-x_tables
-xz_dec
-zswap
-
-Regards
-	Stefan Lippers-Hollmann
