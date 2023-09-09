@@ -2,104 +2,88 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29A28EEB57A
-	for <linux-media@archiver.kernel.org>; Sat,  9 Sep 2023 00:51:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44780EEB57A
+	for <linux-media@archiver.kernel.org>; Sat,  9 Sep 2023 00:51:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343973AbjIIAvh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 Sep 2023 20:51:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37138 "EHLO
+        id S239783AbjIIAwA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 8 Sep 2023 20:52:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346155AbjIIAva (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Sep 2023 20:51:30 -0400
+        with ESMTP id S241399AbjIIAv7 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Sep 2023 20:51:59 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8522705;
-        Fri,  8 Sep 2023 17:51:00 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E6A4C4339A;
-        Sat,  9 Sep 2023 00:39:43 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E65E1FFF;
+        Fri,  8 Sep 2023 17:51:26 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ECB5C07616;
+        Sat,  9 Sep 2023 00:40:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694219984;
-        bh=EbRTu68l7CoTclu4VW0nVDgrnioDSPpbHzI5/mes7ug=;
-        h=From:To:Cc:Subject:Date:From;
-        b=RinFJHQ2ceBKyR4a0IAGXVlpl6qSI5MZVwChd8NTFmK7lAK/aOaaKRl3bIsxP0VaO
-         dQYmyoBGjQB9DG/79F1Ov5gerylgFtLrQoLNOUZsii0u/2/WNNJQwNc6zKzOYkM49s
-         lSpiKVVnj0TulUDt2myp9GPk5GpnU2sqKxHvH/eOEToZMNfE1Dn7A/3UZ/+HEwx5Fq
-         wSjog9xERMpUjnOIMX67AkMI1wTumlZxhM1TJDiQroD7qb0lVig1dI37wb0lREow0N
-         +Toqu/3Q2KYUO1FuMVH9NEdkHzuj1upKH1isIRR5hVI6n4bqvnOoo53L8nUq7z0teK
-         cvOTonxLCV2uQ==
+        s=k20201202; t=1694220029;
+        bh=AhEs6vY+78I9JdY7xnb1aTPitXnMUmJ1Fz3Jl4w0ULs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=MgveaEQ4Ih0zsjV7poUr2lmUT/+ddR1osniYOZvpRXXV9VMq/f6W0Bz3JM/u96Gbk
+         BUO0BCRvqmgJRcJ6RkinyaoWLvL7Tusod5w1iKJ/eHskquWYGNSPPmzJ461b9tmtEp
+         HZdLfKm8T24QCi14H+DNKlLGPDOSDDUaAqotLZrvs0SNv4xrXFNLzjlpjXSBw7OoOx
+         L12Erme/+TnRPR/x8N1kEnCNjmlhjErHAR/THO0jcpThXGcTJ7uSS/5vYVvXJvNmfk
+         gRNgxaaPRSIehBicTGnjndV5zaXZoxI5V3jtbq90qYRw4sdgLIwgTPrw7AJv1G7Ep3
+         P5jOvA5Y7jLUA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Zhang Shurong <zhang_shurong@foxmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Sasha Levin <sashal@kernel.org>, crope@iki.fi,
         mchehab@kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 01/16] media: dvb-usb-v2: af9035: Fix null-ptr-deref in af9035_i2c_master_xfer
-Date:   Fri,  8 Sep 2023 20:39:26 -0400
-Message-Id: <20230909003941.3580631-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 07/14] media: tuners: qt1010: replace BUG_ON with a regular error
+Date:   Fri,  8 Sep 2023 20:40:07 -0400
+Message-Id: <20230909004015.3580832-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230909004015.3580832-1-sashal@kernel.org>
+References: <20230909004015.3580832-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.194
+X-stable-base: Linux 5.4.256
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Zhang Shurong <zhang_shurong@foxmail.com>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit 7bf744f2de0a848fb1d717f5831b03db96feae89 ]
+[ Upstream commit ee630b29ea44d1851bb6c903f400956604834463 ]
 
-In af9035_i2c_master_xfer, msg is controlled by user. When msg[i].buf
-is null and msg[i].len is zero, former checks on msg[i].buf would be
-passed. Malicious data finally reach af9035_i2c_master_xfer. If accessing
-msg[i].buf[0] without sanity check, null ptr deref would happen.
-We add check on msg[i].len to prevent crash.
+BUG_ON is unnecessary here, and in addition it confuses smatch.
+Replacing this with an error return help resolve this smatch
+warning:
 
-Similar commit:
-commit 0ed554fd769a
-("media: dvb-usb: az6027: fix null-ptr-deref in az6027_i2c_xfer()")
+drivers/media/tuners/qt1010.c:350 qt1010_init() error: buffer overflow 'i2c_data' 34 <= 34
 
-Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/dvb-usb-v2/af9035.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/media/tuners/qt1010.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/usb/dvb-usb-v2/af9035.c b/drivers/media/usb/dvb-usb-v2/af9035.c
-index b1f69c11c8395..218c06da2a469 100644
---- a/drivers/media/usb/dvb-usb-v2/af9035.c
-+++ b/drivers/media/usb/dvb-usb-v2/af9035.c
-@@ -321,6 +321,8 @@ static int af9035_i2c_master_xfer(struct i2c_adapter *adap,
- 			ret = -EOPNOTSUPP;
- 		} else if ((msg[0].addr == state->af9033_i2c_addr[0]) ||
- 			   (msg[0].addr == state->af9033_i2c_addr[1])) {
-+			if (msg[0].len < 3 || msg[1].len < 1)
-+				return -EOPNOTSUPP;
- 			/* demod access via firmware interface */
- 			u32 reg = msg[0].buf[0] << 16 | msg[0].buf[1] << 8 |
- 					msg[0].buf[2];
-@@ -380,6 +382,8 @@ static int af9035_i2c_master_xfer(struct i2c_adapter *adap,
- 			ret = -EOPNOTSUPP;
- 		} else if ((msg[0].addr == state->af9033_i2c_addr[0]) ||
- 			   (msg[0].addr == state->af9033_i2c_addr[1])) {
-+			if (msg[0].len < 3)
-+				return -EOPNOTSUPP;
- 			/* demod access via firmware interface */
- 			u32 reg = msg[0].buf[0] << 16 | msg[0].buf[1] << 8 |
- 					msg[0].buf[2];
-@@ -387,10 +391,7 @@ static int af9035_i2c_master_xfer(struct i2c_adapter *adap,
- 			if (msg[0].addr == state->af9033_i2c_addr[1])
- 				reg |= 0x100000;
+diff --git a/drivers/media/tuners/qt1010.c b/drivers/media/tuners/qt1010.c
+index e48faf942830c..624499fb71b92 100644
+--- a/drivers/media/tuners/qt1010.c
++++ b/drivers/media/tuners/qt1010.c
+@@ -342,11 +342,12 @@ static int qt1010_init(struct dvb_frontend *fe)
+ 			else
+ 				valptr = &tmpval;
  
--			ret = (msg[0].len >= 3) ? af9035_wr_regs(d, reg,
--							         &msg[0].buf[3],
--							         msg[0].len - 3)
--					        : -EOPNOTSUPP;
-+			ret = af9035_wr_regs(d, reg, &msg[0].buf[3], msg[0].len - 3);
- 		} else {
- 			/* I2C write */
- 			u8 buf[MAX_XFER_SIZE];
+-			BUG_ON(i >= ARRAY_SIZE(i2c_data) - 1);
+-
+-			err = qt1010_init_meas1(priv, i2c_data[i+1].reg,
+-						i2c_data[i].reg,
+-						i2c_data[i].val, valptr);
++			if (i >= ARRAY_SIZE(i2c_data) - 1)
++				err = -EIO;
++			else
++				err = qt1010_init_meas1(priv, i2c_data[i + 1].reg,
++							i2c_data[i].reg,
++							i2c_data[i].val, valptr);
+ 			i++;
+ 			break;
+ 		}
 -- 
 2.40.1
 
