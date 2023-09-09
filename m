@@ -2,30 +2,30 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46910EEB57A
-	for <linux-media@archiver.kernel.org>; Sat,  9 Sep 2023 00:41:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D82EEEB57C
+	for <linux-media@archiver.kernel.org>; Sat,  9 Sep 2023 00:42:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346019AbjIIAlR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 Sep 2023 20:41:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33154 "EHLO
+        id S1346047AbjIIAmI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 8 Sep 2023 20:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345954AbjIIAk2 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Sep 2023 20:40:28 -0400
+        with ESMTP id S1345991AbjIIAks (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Sep 2023 20:40:48 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B517D2D77;
-        Fri,  8 Sep 2023 17:39:25 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8734C43391;
-        Sat,  9 Sep 2023 00:37:54 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430551FFD;
+        Fri,  8 Sep 2023 17:39:38 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B2D4C433C7;
+        Sat,  9 Sep 2023 00:39:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694219875;
-        bh=JyutuEkvzWWYmS16NSQQlRKqp2/RxlEIO30qQ4FAv/w=;
+        s=k20201202; t=1694219978;
+        bh=HKx0qFfB6qal0FsOrYF4xhh4j/5DJ61BIogF21Ky2jA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E3fd1UkqkTJcJLm+aupLbtRrc3lfKNgn9Y5YN7eKp4mb0qijPLpx1tpS6KACArfx5
-         9G1zn0bmtsdAFevromNtT4gc7t24ebXTR5qgazBemE+Zj5bZ1rMQY9OmpTpU4Qqw8Z
-         fn1dx8GU1qTKBEivcj+2YHQLpjEvPFum8PX0/yx3GZkZn67fNB99PZD2g+i5R5z5Bb
-         5V4ln1b3nRVkqASWUaur3jtT+hE8XQnoNAtqa+T64GlMT+Syv9XNwe0HmCMEtaxzbl
-         z/2tAW95Aa3a8w//l0k0xAvrFkTwqgk+8tHQkhbAlgbgbUPd64RIK1puC8Y7vFQ8Dk
-         mE8o9cEnLLgZQ==
+        b=ToF4DQmyBFYqokLMxqtLKS97HbSX9XGWIOfvUME54leQcHXcZQTMzvXhk2s+uQnxA
+         EfxPmykBgXCC/oqtpiClzeoq1CCjeK+jO6WmiM9E5zIpP5doV/TCWDkCkXfqPBby2I
+         mORcFlpfjEf4E6QQHSiieJ+YOSKASmpvI1pnRglND2auwxhJ05AGGZ56+58+/a5hgl
+         gd1TDYazraZ9ed9Mp/qRBmgVWtOroye0/FHBpZDT2Z2ucAubftTgN0+Rwl2ZTzTu9U
+         VBKYkLxeglGPQ1yWbZH5YCjIMK5XNm709qJhNWK9RVyd2xP2sv94oC37vmv23mjCEe
+         2HZ1WtHixoaog==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -33,16 +33,16 @@ Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>, yong.zhi@intel.com,
         bingbu.cao@intel.com, djrscally@gmail.com, mchehab@kernel.org,
         linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.4 21/25] media: pci: ipu3-cio2: Initialise timing struct to avoid a compiler warning
-Date:   Fri,  8 Sep 2023 20:37:09 -0400
-Message-Id: <20230909003715.3579761-21-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 17/19] media: pci: ipu3-cio2: Initialise timing struct to avoid a compiler warning
+Date:   Fri,  8 Sep 2023 20:39:01 -0400
+Message-Id: <20230909003903.3580394-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230909003715.3579761-1-sashal@kernel.org>
-References: <20230909003715.3579761-1-sashal@kernel.org>
+In-Reply-To: <20230909003903.3580394-1-sashal@kernel.org>
+References: <20230909003903.3580394-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.4.15
+X-stable-base: Linux 5.15.131
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -64,10 +64,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c b/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
-index 3c84cb1216320..e3609cb7c4128 100644
+index 3a8af3936e93a..162ab089124f3 100644
 --- a/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
 +++ b/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
-@@ -354,7 +354,7 @@ static int cio2_hw_init(struct cio2_device *cio2, struct cio2_queue *q)
+@@ -345,7 +345,7 @@ static int cio2_hw_init(struct cio2_device *cio2, struct cio2_queue *q)
  	void __iomem *const base = cio2->base;
  	u8 lanes, csi2bus = q->csi2.port;
  	u8 sensor_vc = SENSOR_VIR_CH_DFLT;
