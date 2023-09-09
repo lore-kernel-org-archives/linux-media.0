@@ -2,40 +2,38 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7E54EEB57E
-	for <linux-media@archiver.kernel.org>; Sat,  9 Sep 2023 01:23:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 677D4EEB57E
+	for <linux-media@archiver.kernel.org>; Sat,  9 Sep 2023 01:37:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233706AbjIIBXb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 Sep 2023 21:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
+        id S1343609AbjIIBhX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 8 Sep 2023 21:37:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241187AbjIIAml (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Sep 2023 20:42:41 -0400
+        with ESMTP id S241979AbjIIBhU (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Sep 2023 21:37:20 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB63135AE;
-        Fri,  8 Sep 2023 17:40:11 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F109C433C9;
-        Sat,  9 Sep 2023 00:40:10 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9943D1FE3;
+        Fri,  8 Sep 2023 18:37:16 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABE77C433CC;
+        Sat,  9 Sep 2023 00:39:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694220011;
-        bh=uGkWjbdDZA+AkW4pOvc2aD4sjvfJPza5GLoiUUdKlG4=;
+        s=k20201202; t=1694220000;
+        bh=AljRBhaFoFCacH/8SWMydugkK6rFIWiRGkU6lEB9WYY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lp74xtFqKu7mK6gCFbkI9uEJCXMVLN8v7+bK+TP5/LaaKTQ+9ZL9GP8seNETtpCrk
-         Wv1swBmNgEMWAmD82QPqslDtRmrhphj8NWpWYYq1vt0FVslXM9BR+EDzwDBU8DRHYd
-         THZprtZWJ0SaOX6wwllnAI/p2hF0gYJ+HSdMiUKYdCLEBybuutpy6BhH8ZvhRw6878
-         oIAHVk+01YYIdzMctvC/o6buW+/q9oYb0NeEl9BK447RjDE0mKTdBHKNmpUITiKtB4
-         v0MUsmPOOtQfG5fED4H5BgJYwcEH9bDIMDnR2IsQbfbN7Gw9WMzwor4HILqxLADKjt
-         Xr+zWW/+Yxtlg==
+        b=E6TQYChTp/fUowPIO5HnMbhQrdtBQ5F4IgaFSCW47cyMnA8F+BbTzS4Qvk7ReKZHA
+         bq1WtITFF/wB8FEQJnU8egyUl6n0/p0XRZcjj0cDDYmgNrNSVt3b+O4oxZbvWc/iWH
+         yCA7DqIpUyK5tKWGdk7znKniBJyWvokeb0lUFqBJ2nWejb9Crqy91cg4Y8hajmdNvt
+         dfsjiOXdQUMj/gmTsvUtoBdelFdO5AJB/zusesQ6Y1ecU1AgyyodYM5XF52JPP39ED
+         Rtc5OiUM4DgxEn3EQjCZfOAfkD+tBCyJ/YGm16M1LTSKaxhjAJ0aEgN2utzPnlU5eD
+         gnpatqoA9HLmw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sasha Levin <sashal@kernel.org>, yong.zhi@intel.com,
-        bingbu.cao@intel.com, djrscally@gmail.com, mchehab@kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 14/16] media: pci: ipu3-cio2: Initialise timing struct to avoid a compiler warning
-Date:   Fri,  8 Sep 2023 20:39:39 -0400
-Message-Id: <20230909003941.3580631-14-sashal@kernel.org>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sasha Levin <sashal@kernel.org>, mchehab@kernel.org,
+        harperchen1110@gmail.com, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 09/16] media: pci: cx23885: replace BUG with error return
+Date:   Fri,  8 Sep 2023 20:39:34 -0400
+Message-Id: <20230909003941.3580631-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230909003941.3580631-1-sashal@kernel.org>
 References: <20230909003941.3580631-1-sashal@kernel.org>
@@ -48,34 +46,34 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit 9d7531be3085a8f013cf173ccc4e72e3cf493538 ]
+[ Upstream commit 2e1796fd4904fdd6062a8e4589778ea899ea0c8d ]
 
-Initialise timing struct in cio2_hw_init() to zero in order to avoid a
-compiler warning. The warning was a false positive.
+It was completely unnecessary to use BUG in buffer_prepare().
+Just replace it with an error return. This also fixes a smatch warning:
 
-Reported-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+drivers/media/pci/cx23885/cx23885-video.c:422 buffer_prepare() error: uninitialized symbol 'ret'.
+
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/intel/ipu3/ipu3-cio2.c | 2 +-
+ drivers/media/pci/cx23885/cx23885-video.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-index d6838c8ebd7e8..f8dca47904766 100644
---- a/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-+++ b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-@@ -355,7 +355,7 @@ static int cio2_hw_init(struct cio2_device *cio2, struct cio2_queue *q)
- 	void __iomem *const base = cio2->base;
- 	u8 lanes, csi2bus = q->csi2.port;
- 	u8 sensor_vc = SENSOR_VIR_CH_DFLT;
--	struct cio2_csi2_timing timing;
-+	struct cio2_csi2_timing timing = { 0 };
- 	int i, r;
- 
- 	fmt = cio2_find_format(NULL, &q->subdev_fmt.code);
+diff --git a/drivers/media/pci/cx23885/cx23885-video.c b/drivers/media/pci/cx23885/cx23885-video.c
+index a380e0920a21f..86e3bb5903712 100644
+--- a/drivers/media/pci/cx23885/cx23885-video.c
++++ b/drivers/media/pci/cx23885/cx23885-video.c
+@@ -412,7 +412,7 @@ static int buffer_prepare(struct vb2_buffer *vb)
+ 				dev->height >> 1);
+ 		break;
+ 	default:
+-		BUG();
++		return -EINVAL; /* should not happen */
+ 	}
+ 	dprintk(2, "[%p/%d] buffer_init - %dx%d %dbpp 0x%08x - dma=0x%08lx\n",
+ 		buf, buf->vb.vb2_buf.index,
 -- 
 2.40.1
 
