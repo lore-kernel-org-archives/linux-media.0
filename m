@@ -2,78 +2,98 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A24C7EEB57A
-	for <linux-media@archiver.kernel.org>; Sat,  9 Sep 2023 00:52:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E1E7EEB57A
+	for <linux-media@archiver.kernel.org>; Sat,  9 Sep 2023 00:59:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238977AbjIIAwY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 Sep 2023 20:52:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42780 "EHLO
+        id S244371AbjIIA7T (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 8 Sep 2023 20:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236186AbjIIAwX (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Sep 2023 20:52:23 -0400
+        with ESMTP id S243466AbjIIA7S (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Sep 2023 20:59:18 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4996E26BC;
-        Fri,  8 Sep 2023 17:51:52 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26FEAC433C9;
-        Sat,  9 Sep 2023 00:41:02 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D26269D;
+        Fri,  8 Sep 2023 17:58:37 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1CD8C116A7;
+        Sat,  9 Sep 2023 00:41:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694220062;
-        bh=adWemKLuYoZR+Xq33zSLeEVQUCeyfpA79XMbYW4+b4I=;
+        s=k20201202; t=1694220088;
+        bh=qgelfo5C6ra/rx6P1dhiFF9EHbNWy8ZX8KbBsFGd6AU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OnDMyAcSytf0HB2x4UcsCRY1taBdnnQSp2UsTwsFF+w991xITP+MWHLsBJ4iQD9kh
-         GIS3uqheU2QdxBSSp7ekxpEImgjWSBlmGNWWEzmMWJMrUSEAuzoWBXP2rZS4/6aKuN
-         1PWbvQCZnqPdfemAXcpknOz9grFm9jmVhXCoacVYNCwvkv1Lz9KFisnrG628w6BQnU
-         OD8VaNkQ9IgNMzjkltEU+IXr81swEdRmkUbZgLf0g3q2eVjItjpGchi1lfTqpcNn/d
-         jNJX5X9/8F+/JuL7H7SiHnQrXhmeoSj8HYkP4ykA3iRjNv85HeVNgC3/zi3jTvbL78
-         PbRbwhOIt6c6w==
+        b=s/MPl1wgW9cnIk83PLjgiFgrkVGAx3A/7w6CXLlYacdolDz65IXJJ0TcZ1cpo7f7v
+         Pbp6N0r6pQxrXbeXqDHQz85NmXACgIYc4BuVwA5oGv7hr0fsTRAsnO/FnmJAo22Eay
+         goFZLMzGzz4jtXxu1GcegfoDp2FuLoqgdqarqldKuUehU7r6eVL3Rok/fhzFH3hszI
+         oULrmvg8DhVSpW5yTh+UzMU/Z5SBnM2cePtvSVuGXiyrAjJqbJ2/lMVxo3v8Yo7UMq
+         2MCLsJbfK8oYfIvqKaHIF9h/VqdNX6D+Lm3Wz9Is1nT74EdTikF4VbTlTAVWZPFnOL
+         M2zwK/3QFbD5A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Zhang Shurong <zhang_shurong@foxmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Sasha Levin <sashal@kernel.org>, mchehab@kernel.org,
-        harperchen1110@gmail.com, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 08/14] media: pci: cx23885: replace BUG with error return
-Date:   Fri,  8 Sep 2023 20:40:39 -0400
-Message-Id: <20230909004045.3581014-8-sashal@kernel.org>
+        linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 05/12] media: az6007: Fix null-ptr-deref in az6007_i2c_xfer()
+Date:   Fri,  8 Sep 2023 20:41:08 -0400
+Message-Id: <20230909004115.3581195-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230909004045.3581014-1-sashal@kernel.org>
-References: <20230909004045.3581014-1-sashal@kernel.org>
+In-Reply-To: <20230909004115.3581195-1-sashal@kernel.org>
+References: <20230909004115.3581195-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 4.19.294
+X-stable-base: Linux 4.14.325
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+From: Zhang Shurong <zhang_shurong@foxmail.com>
 
-[ Upstream commit 2e1796fd4904fdd6062a8e4589778ea899ea0c8d ]
+[ Upstream commit 1047f9343011f2cedc73c64829686206a7e9fc3f ]
 
-It was completely unnecessary to use BUG in buffer_prepare().
-Just replace it with an error return. This also fixes a smatch warning:
+In az6007_i2c_xfer, msg is controlled by user. When msg[i].buf
+is null and msg[i].len is zero, former checks on msg[i].buf would be
+passed. Malicious data finally reach az6007_i2c_xfer. If accessing
+msg[i].buf[0] without sanity check, null ptr deref would happen.
+We add check on msg[i].len to prevent crash.
 
-drivers/media/pci/cx23885/cx23885-video.c:422 buffer_prepare() error: uninitialized symbol 'ret'.
+Similar commit:
+commit 0ed554fd769a
+("media: dvb-usb: az6027: fix null-ptr-deref in az6027_i2c_xfer()")
 
+Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/cx23885/cx23885-video.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/usb/dvb-usb-v2/az6007.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/media/pci/cx23885/cx23885-video.c b/drivers/media/pci/cx23885/cx23885-video.c
-index 2a20c7165e1e8..16564899f1141 100644
---- a/drivers/media/pci/cx23885/cx23885-video.c
-+++ b/drivers/media/pci/cx23885/cx23885-video.c
-@@ -420,7 +420,7 @@ static int buffer_prepare(struct vb2_buffer *vb)
- 				dev->height >> 1);
- 		break;
- 	default:
--		BUG();
-+		return -EINVAL; /* should not happen */
- 	}
- 	dprintk(2, "[%p/%d] buffer_init - %dx%d %dbpp \"%s\" - dma=0x%08lx\n",
- 		buf, buf->vb.vb2_buf.index,
+diff --git a/drivers/media/usb/dvb-usb-v2/az6007.c b/drivers/media/usb/dvb-usb-v2/az6007.c
+index 1830badb180d8..668b6091b4423 100644
+--- a/drivers/media/usb/dvb-usb-v2/az6007.c
++++ b/drivers/media/usb/dvb-usb-v2/az6007.c
+@@ -796,6 +796,10 @@ static int az6007_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
+ 			if (az6007_xfer_debug)
+ 				printk(KERN_DEBUG "az6007: I2C W addr=0x%x len=%d\n",
+ 				       addr, msgs[i].len);
++			if (msgs[i].len < 1) {
++				ret = -EIO;
++				goto err;
++			}
+ 			req = AZ6007_I2C_WR;
+ 			index = msgs[i].buf[0];
+ 			value = addr | (1 << 8);
+@@ -810,6 +814,10 @@ static int az6007_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
+ 			if (az6007_xfer_debug)
+ 				printk(KERN_DEBUG "az6007: I2C R addr=0x%x len=%d\n",
+ 				       addr, msgs[i].len);
++			if (msgs[i].len < 1) {
++				ret = -EIO;
++				goto err;
++			}
+ 			req = AZ6007_I2C_RD;
+ 			index = msgs[i].buf[0];
+ 			value = addr;
 -- 
 2.40.1
 
