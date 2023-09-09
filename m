@@ -2,42 +2,43 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32E61EEB580
-	for <linux-media@archiver.kernel.org>; Sat,  9 Sep 2023 00:38:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 811E9EEB582
+	for <linux-media@archiver.kernel.org>; Sat,  9 Sep 2023 00:38:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345705AbjIIAiT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 Sep 2023 20:38:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37666 "EHLO
+        id S1345777AbjIIAiW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 8 Sep 2023 20:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345707AbjIIAiH (ORCPT
+        with ESMTP id S1345676AbjIIAiH (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Fri, 8 Sep 2023 20:38:07 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8645C26AB;
-        Fri,  8 Sep 2023 17:37:45 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1CDBC433CD;
-        Sat,  9 Sep 2023 00:37:26 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F29C2105;
+        Fri,  8 Sep 2023 17:37:44 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16909C433CB;
+        Sat,  9 Sep 2023 00:37:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694219847;
-        bh=PoqB7G9Vfikam0GR9KERBfdi5X+OnD1jcrHBQlZ5In4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ovNhHL15b2nxjtlsBg03QOBYIdbSj1c9uhcrO9m18xEo492SaTXV5qPdFSTXBj5IB
-         R/APYCfGUjrnFnTdV8v2RXuN7VNINQNuQmh0NsatWesLiu3QOr9ylbPyvwn03TgfZg
-         O/DzPtSldDMgFZ/RtVyAB98yzIcqVcKCpxViohWRLv89E1N4b8RoJpRAo/RWJ+qPr6
-         meAoJlJgfWO8JTDnYfebmJkinMRaLVdIBtjKv2rGQ/wheIjauWQkymt0/ZlS/IEixw
-         3s/YCTOQZSdq1E9QZK1xyIAwSQX5M5+fXnxHaawuSmNk3jDFKj5R0UjdpkqPVqE8Ua
-         syLZLUTIqhqcQ==
+        s=k20201202; t=1694219838;
+        bh=8FQ5miKYPRyNfQwyR/VE0KAeVwlRfmYE3qnqZyRfi6Y=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MEsuYaZ6KON5uZiLU20Ni03Wt9YMl9vAgxCCSKSvPV+flrEmdywaz2gBg8CePdvB8
+         d3ZqbZ7FUrvHElOMuSjBn7ullQUazTAfXcgWLB7H3rtay0f/Li0kjQ/Qtevnc8jYY0
+         xUcuVtPPnRID5mAUB6TdH2845BI3BK4ZnitV4ZCQzeRaH8dunurwiSXSvUtW4KQpeE
+         1+26Is3pdRgkmI7NyA5bq0Jmx31qejI/o8+7WXDoxE8KJW/BQ4CrxGZHdwNivsSIPn
+         W6WEKek8DYeqGVcKsuPWv/jwSVg8J+57RTTEpJF5TNzGKn2JU2cyGeDoFpHbmPhw42
+         k16YA1NzqTGkg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Zhang Shurong <zhang_shurong@foxmail.com>,
+Cc:     Lu Hongfei <luhongfei@vivo.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sasha Levin <sashal@kernel.org>, crope@iki.fi,
-        mchehab@kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.4 05/25] media: anysee: fix null-ptr-deref in anysee_master_xfer
-Date:   Fri,  8 Sep 2023 20:36:53 -0400
-Message-Id: <20230909003715.3579761-5-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, mchehab@kernel.org,
+        matthias.bgg@gmail.com, moudy.ho@mediatek.com, sunke32@huawei.com,
+        arnd@arndb.de, krzysztof.kozlowski@linaro.org, drv@mailo.com,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.4 01/25] media: mdp3: Fix resource leaks in of_find_device_by_node
+Date:   Fri,  8 Sep 2023 20:36:49 -0400
+Message-Id: <20230909003715.3579761-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230909003715.3579761-1-sashal@kernel.org>
-References: <20230909003715.3579761-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -47,41 +48,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Zhang Shurong <zhang_shurong@foxmail.com>
+From: Lu Hongfei <luhongfei@vivo.com>
 
-[ Upstream commit c30411266fd67ea3c02a05c157231654d5a3bdc9 ]
+[ Upstream commit 35ca8ce495366909b4c2e701d1356570dd40c4e2 ]
 
-In anysee_master_xfer, msg is controlled by user. When msg[i].buf
-is null and msg[i].len is zero, former checks on msg[i].buf would be
-passed. Malicious data finally reach anysee_master_xfer. If accessing
-msg[i].buf[0] without sanity check, null ptr deref would happen.
-We add check on msg[i].len to prevent crash.
+Use put_device to release the object get through of_find_device_by_node,
+avoiding resource leaks.
 
-Similar commit:
-commit 0ed554fd769a
-("media: dvb-usb: az6027: fix null-ptr-deref in az6027_i2c_xfer()")
-
-Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
+Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-[hverkuil: add spaces around +]
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/dvb-usb-v2/anysee.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/usb/dvb-usb-v2/anysee.c b/drivers/media/usb/dvb-usb-v2/anysee.c
-index aa45b5d263f6b..a1235d0cce92f 100644
---- a/drivers/media/usb/dvb-usb-v2/anysee.c
-+++ b/drivers/media/usb/dvb-usb-v2/anysee.c
-@@ -202,7 +202,7 @@ static int anysee_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msg,
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
+index 19a4a085f73a1..1fe10a21e395a 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
+@@ -892,11 +892,13 @@ static int mdp_get_subsys_id(struct mdp_dev *mdp, struct device *dev,
+ 	ret = cmdq_dev_get_client_reg(&comp_pdev->dev, &cmdq_reg, index);
+ 	if (ret != 0) {
+ 		dev_err(&comp_pdev->dev, "cmdq_dev_get_subsys fail!\n");
++		put_device(&comp_pdev->dev);
+ 		return -EINVAL;
+ 	}
  
- 	while (i < num) {
- 		if (num > i + 1 && (msg[i+1].flags & I2C_M_RD)) {
--			if (msg[i].len > 2 || msg[i+1].len > 60) {
-+			if (msg[i].len != 2 || msg[i + 1].len > 60) {
- 				ret = -EOPNOTSUPP;
- 				break;
- 			}
+ 	comp->subsys_id = cmdq_reg.subsys;
+ 	dev_dbg(&comp_pdev->dev, "subsys id=%d\n", cmdq_reg.subsys);
++	put_device(&comp_pdev->dev);
+ 
+ 	return 0;
+ }
 -- 
 2.40.1
 
