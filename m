@@ -2,39 +2,38 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19D70EEB57C
-	for <linux-media@archiver.kernel.org>; Sat,  9 Sep 2023 00:44:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9DE6EEB57A
+	for <linux-media@archiver.kernel.org>; Sat,  9 Sep 2023 00:44:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344349AbjIIAou (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 Sep 2023 20:44:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43324 "EHLO
+        id S232651AbjIIAo4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 8 Sep 2023 20:44:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343620AbjIIAoN (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Sep 2023 20:44:13 -0400
+        with ESMTP id S1346094AbjIIAoP (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Sep 2023 20:44:15 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237C8469D;
-        Fri,  8 Sep 2023 17:41:39 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3804CC116B1;
-        Sat,  9 Sep 2023 00:41:26 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8476B46B6;
+        Fri,  8 Sep 2023 17:41:46 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E36FC116AA;
+        Sat,  9 Sep 2023 00:41:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694220087;
-        bh=shA24TvF1qh5fZrwtCNqmihAD9Z9Ku+iFVEu3/+rc5o=;
+        s=k20201202; t=1694220091;
+        bh=0MgmUr+0rvyOwhHlKfOEyvJLQWR0hSq/OqTYGa+Hync=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OaCiMtVZW3i8bu6WgvG38ry6BGsdkeqXq2U+24ZtnA64EUAn69kAfQCTzvegEuuke
-         CIVmtxBBSAeLssyVo6ajkPuW8s1/I6yXmB8BHroXQX2a7VXq0c3HNRJpw80/e/S9tX
-         /b2jw7ol6PHrZe6PC88FIX54ec/FBh799Hj/q83WG3NxaHrBQRxN844ZTGFXX1TBkS
-         FElt/xCky0RbBI8s6x4YabSWSTQ9SsDbZcFxgOwmW+SiuYpMYwZMkY5wIF2zqh23aG
-         tHPUEdu30jz1gq+up2N5vGP7ZGtHxGloDOhphYF9cjYYQDT3UUp2MyhQSKJatW3/ED
-         Z0AKC/wTti5XA==
+        b=Vlo1FPDxGskJur7oLKFAMDocx4nQ/Q6eILIUYVKRpO2wLSla1sdcg3xUX55uWvOto
+         m/tz/lfBsqtlR1pycoIsDOiWCqUD4S/fgrTR0C5o7vNrk2/XiZ6tTXXHQOgb2DbBKR
+         gyVukYrfBAlHajNo8vmp8W9Bfr6j3VsMiApFZEd6YqkNHQNLZrhIJVS84bR1Kw0qHr
+         AKWQS7J83C1JYQ0BEaC3C7RUiEw34t7P/yeOlXXU3qpWZrrQKi21NtxqQJNQ+jIPWL
+         MnZng5tpeCpv5/NRCRBOvo2QHoMuzCFWloWWMgKeoV2yFxoi42yfGs3WE3MRlWSQRF
+         ZbmvkwrIi+WHQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Zhang Shurong <zhang_shurong@foxmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Sasha Levin <sashal@kernel.org>, crope@iki.fi,
         mchehab@kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 04/12] media: anysee: fix null-ptr-deref in anysee_master_xfer
-Date:   Fri,  8 Sep 2023 20:41:07 -0400
-Message-Id: <20230909004115.3581195-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 07/12] media: tuners: qt1010: replace BUG_ON with a regular error
+Date:   Fri,  8 Sep 2023 20:41:10 -0400
+Message-Id: <20230909004115.3581195-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230909004115.3581195-1-sashal@kernel.org>
 References: <20230909004115.3581195-1-sashal@kernel.org>
@@ -47,41 +46,44 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Zhang Shurong <zhang_shurong@foxmail.com>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit c30411266fd67ea3c02a05c157231654d5a3bdc9 ]
+[ Upstream commit ee630b29ea44d1851bb6c903f400956604834463 ]
 
-In anysee_master_xfer, msg is controlled by user. When msg[i].buf
-is null and msg[i].len is zero, former checks on msg[i].buf would be
-passed. Malicious data finally reach anysee_master_xfer. If accessing
-msg[i].buf[0] without sanity check, null ptr deref would happen.
-We add check on msg[i].len to prevent crash.
+BUG_ON is unnecessary here, and in addition it confuses smatch.
+Replacing this with an error return help resolve this smatch
+warning:
 
-Similar commit:
-commit 0ed554fd769a
-("media: dvb-usb: az6027: fix null-ptr-deref in az6027_i2c_xfer()")
+drivers/media/tuners/qt1010.c:350 qt1010_init() error: buffer overflow 'i2c_data' 34 <= 34
 
-Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-[hverkuil: add spaces around +]
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/dvb-usb-v2/anysee.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/tuners/qt1010.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/usb/dvb-usb-v2/anysee.c b/drivers/media/usb/dvb-usb-v2/anysee.c
-index 20ee7eea2a91e..83af86505363b 100644
---- a/drivers/media/usb/dvb-usb-v2/anysee.c
-+++ b/drivers/media/usb/dvb-usb-v2/anysee.c
-@@ -211,7 +211,7 @@ static int anysee_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msg,
+diff --git a/drivers/media/tuners/qt1010.c b/drivers/media/tuners/qt1010.c
+index ee33b7cc76824..b33f2321c94ce 100644
+--- a/drivers/media/tuners/qt1010.c
++++ b/drivers/media/tuners/qt1010.c
+@@ -351,11 +351,12 @@ static int qt1010_init(struct dvb_frontend *fe)
+ 			else
+ 				valptr = &tmpval;
  
- 	while (i < num) {
- 		if (num > i + 1 && (msg[i+1].flags & I2C_M_RD)) {
--			if (msg[i].len > 2 || msg[i+1].len > 60) {
-+			if (msg[i].len != 2 || msg[i + 1].len > 60) {
- 				ret = -EOPNOTSUPP;
- 				break;
- 			}
+-			BUG_ON(i >= ARRAY_SIZE(i2c_data) - 1);
+-
+-			err = qt1010_init_meas1(priv, i2c_data[i+1].reg,
+-						i2c_data[i].reg,
+-						i2c_data[i].val, valptr);
++			if (i >= ARRAY_SIZE(i2c_data) - 1)
++				err = -EIO;
++			else
++				err = qt1010_init_meas1(priv, i2c_data[i + 1].reg,
++							i2c_data[i].reg,
++							i2c_data[i].val, valptr);
+ 			i++;
+ 			break;
+ 		}
 -- 
 2.40.1
 
