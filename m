@@ -2,43 +2,41 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 811E9EEB582
-	for <linux-media@archiver.kernel.org>; Sat,  9 Sep 2023 00:38:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81E40EEB565
+	for <linux-media@archiver.kernel.org>; Sat,  9 Sep 2023 00:38:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345777AbjIIAiW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 Sep 2023 20:38:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37802 "EHLO
+        id S1345789AbjIIAil (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 8 Sep 2023 20:38:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345676AbjIIAiH (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Sep 2023 20:38:07 -0400
+        with ESMTP id S236122AbjIIAi3 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Sep 2023 20:38:29 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F29C2105;
-        Fri,  8 Sep 2023 17:37:44 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16909C433CB;
-        Sat,  9 Sep 2023 00:37:16 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C66213F;
+        Fri,  8 Sep 2023 17:38:01 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D45A6C4936D;
+        Sat,  9 Sep 2023 00:37:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694219838;
-        bh=8FQ5miKYPRyNfQwyR/VE0KAeVwlRfmYE3qnqZyRfi6Y=;
-        h=From:To:Cc:Subject:Date:From;
-        b=MEsuYaZ6KON5uZiLU20Ni03Wt9YMl9vAgxCCSKSvPV+flrEmdywaz2gBg8CePdvB8
-         d3ZqbZ7FUrvHElOMuSjBn7ullQUazTAfXcgWLB7H3rtay0f/Li0kjQ/Qtevnc8jYY0
-         xUcuVtPPnRID5mAUB6TdH2845BI3BK4ZnitV4ZCQzeRaH8dunurwiSXSvUtW4KQpeE
-         1+26Is3pdRgkmI7NyA5bq0Jmx31qejI/o8+7WXDoxE8KJW/BQ4CrxGZHdwNivsSIPn
-         W6WEKek8DYeqGVcKsuPWv/jwSVg8J+57RTTEpJF5TNzGKn2JU2cyGeDoFpHbmPhw42
-         k16YA1NzqTGkg==
+        s=k20201202; t=1694219854;
+        bh=AkuarkZMuJJZPf+ahKIOj9/X2xOBJEBgJWmh7M136CE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=D+mKphG1wYGoBb8mJ8UJkMjZTV6XJOAYLXQ+IReony3qh8sTIzl/xHOk7KeXmJ8Br
+         0+pto/x07UU5dJGIsVendMP5Dua+koa6KqhnN1g+oPBeIC3rWAeg+jHTLJb5vZW5rA
+         siXI+l7jKRjohY/QXrSIerpZGchHTLtcANSI7kYT79V1RlS997tFmK00xd4MnDtGt4
+         86HUUcXFhxKGrlyR0PrTVaxp/UMweigw7RtNF4lY7PSKVOHEbtEVtboGvHTUkImGJm
+         bvfeqXhf6lQautq7S1nHkHwLtfyjI5eJxQgiUxdSh+EOpwNF8d4+TUiObVdO+ATHP5
+         jVvlppW/ZaF1g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Lu Hongfei <luhongfei@vivo.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sasha Levin <sashal@kernel.org>, mchehab@kernel.org,
-        matthias.bgg@gmail.com, moudy.ho@mediatek.com, sunke32@huawei.com,
-        arnd@arndb.de, krzysztof.kozlowski@linaro.org, drv@mailo.com,
-        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.4 01/25] media: mdp3: Fix resource leaks in of_find_device_by_node
-Date:   Fri,  8 Sep 2023 20:36:49 -0400
-Message-Id: <20230909003715.3579761-1-sashal@kernel.org>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sasha Levin <sashal@kernel.org>, crope@iki.fi,
+        mchehab@kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.4 10/25] media: tuners: qt1010: replace BUG_ON with a regular error
+Date:   Fri,  8 Sep 2023 20:36:58 -0400
+Message-Id: <20230909003715.3579761-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230909003715.3579761-1-sashal@kernel.org>
+References: <20230909003715.3579761-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -48,38 +46,44 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Lu Hongfei <luhongfei@vivo.com>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit 35ca8ce495366909b4c2e701d1356570dd40c4e2 ]
+[ Upstream commit ee630b29ea44d1851bb6c903f400956604834463 ]
 
-Use put_device to release the object get through of_find_device_by_node,
-avoiding resource leaks.
+BUG_ON is unnecessary here, and in addition it confuses smatch.
+Replacing this with an error return help resolve this smatch
+warning:
 
-Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
+drivers/media/tuners/qt1010.c:350 qt1010_init() error: buffer overflow 'i2c_data' 34 <= 34
+
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/tuners/qt1010.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
-index 19a4a085f73a1..1fe10a21e395a 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
-@@ -892,11 +892,13 @@ static int mdp_get_subsys_id(struct mdp_dev *mdp, struct device *dev,
- 	ret = cmdq_dev_get_client_reg(&comp_pdev->dev, &cmdq_reg, index);
- 	if (ret != 0) {
- 		dev_err(&comp_pdev->dev, "cmdq_dev_get_subsys fail!\n");
-+		put_device(&comp_pdev->dev);
- 		return -EINVAL;
- 	}
+diff --git a/drivers/media/tuners/qt1010.c b/drivers/media/tuners/qt1010.c
+index 3853a3d43d4f2..a7b19863f489e 100644
+--- a/drivers/media/tuners/qt1010.c
++++ b/drivers/media/tuners/qt1010.c
+@@ -345,11 +345,12 @@ static int qt1010_init(struct dvb_frontend *fe)
+ 			else
+ 				valptr = &tmpval;
  
- 	comp->subsys_id = cmdq_reg.subsys;
- 	dev_dbg(&comp_pdev->dev, "subsys id=%d\n", cmdq_reg.subsys);
-+	put_device(&comp_pdev->dev);
- 
- 	return 0;
- }
+-			BUG_ON(i >= ARRAY_SIZE(i2c_data) - 1);
+-
+-			err = qt1010_init_meas1(priv, i2c_data[i+1].reg,
+-						i2c_data[i].reg,
+-						i2c_data[i].val, valptr);
++			if (i >= ARRAY_SIZE(i2c_data) - 1)
++				err = -EIO;
++			else
++				err = qt1010_init_meas1(priv, i2c_data[i + 1].reg,
++							i2c_data[i].reg,
++							i2c_data[i].val, valptr);
+ 			i++;
+ 			break;
+ 		}
 -- 
 2.40.1
 
