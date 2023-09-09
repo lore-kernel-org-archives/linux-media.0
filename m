@@ -2,46 +2,46 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A773EEB582
-	for <linux-media@archiver.kernel.org>; Sat,  9 Sep 2023 00:39:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF9E5EEB57A
+	for <linux-media@archiver.kernel.org>; Sat,  9 Sep 2023 00:39:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240152AbjIIAjq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 Sep 2023 20:39:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37474 "EHLO
+        id S1345845AbjIIAj7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 8 Sep 2023 20:39:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345902AbjIIAjW (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Sep 2023 20:39:22 -0400
+        with ESMTP id S1345927AbjIIAjk (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Sep 2023 20:39:40 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E674C2114;
-        Fri,  8 Sep 2023 17:38:43 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 120BBC433C7;
-        Sat,  9 Sep 2023 00:37:18 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78BE22690;
+        Fri,  8 Sep 2023 17:38:53 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E76ECC43215;
+        Sat,  9 Sep 2023 00:38:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694219839;
-        bh=jQRjJqCxiS2xgnYhcH7Xbo+FN0aoh/RMEQ2iSadk/4c=;
+        s=k20201202; t=1694219910;
+        bh=PoqB7G9Vfikam0GR9KERBfdi5X+OnD1jcrHBQlZ5In4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mrIqvPvOqxbxgjkJXrGixZZHGW1kEOkdeJ0mPle9+8M3DWA/qRowC6xhduBq2ScDT
-         Ol984mA7/I8BSHIlDhGCRvizcUOOZgkdPi33U1oqr1krnn98QffQWfP/hPu7Xa8dTR
-         AkgC5pkKB5qAmy12JTMDf24JD/afp+gfnMf4wJhJTfxhdvshmaXUIcbE7Bgi+DY84Q
-         +FRaS0GihDINlaEUjaErcHXCNGuVhAQONptMxsUH+qrorypchWUIhAiCCB89XGTmRX
-         QxJoX5AngVj6QfQvTDhAL50+2PrzSl5ARF5GngRNG2qXpbEVbBDJo+lz8iASinUfIV
-         GDLV+3+aTjacw==
+        b=QW1EkZ+VwZrDPSDKQ7ZgR7OrL0HT/8k9I26M/KVokbNchMVk+ROqxUX46J/sckLd6
+         kukLzwgd0cRSRfcBUI/FRiHnO2VdbQqbeq8D0Bt57XyAnfrifSVpYUGJoeHZthSaUv
+         KvT+NULhTuEmlWZF5RjTXyQuonTxCLLEIau655rzmclk+LGXbp0sKJkeoOAtAjn2Tf
+         xsJi4Udq1cQzqN0sjCRy0ON1Vf33yticE/gTaCYjFXXKDbPvEv63H9fbIz/4ppLuk6
+         gX6sLn1BzZfqBxsO09yBV6VJdtTjrr/Zrt487s1OH0lTbqKSpSONvlCFh7cT/gD++m
+         efsbDzc+T2adg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Zhang Shurong <zhang_shurong@foxmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Sasha Levin <sashal@kernel.org>, crope@iki.fi,
         mchehab@kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.4 02/25] media: dvb-usb-v2: af9035: Fix null-ptr-deref in af9035_i2c_master_xfer
-Date:   Fri,  8 Sep 2023 20:36:50 -0400
-Message-Id: <20230909003715.3579761-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 05/24] media: anysee: fix null-ptr-deref in anysee_master_xfer
+Date:   Fri,  8 Sep 2023 20:37:57 -0400
+Message-Id: <20230909003818.3580081-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230909003715.3579761-1-sashal@kernel.org>
-References: <20230909003715.3579761-1-sashal@kernel.org>
+In-Reply-To: <20230909003818.3580081-1-sashal@kernel.org>
+References: <20230909003818.3580081-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.4.15
+X-stable-base: Linux 6.1.52
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -49,11 +49,11 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Zhang Shurong <zhang_shurong@foxmail.com>
 
-[ Upstream commit 7bf744f2de0a848fb1d717f5831b03db96feae89 ]
+[ Upstream commit c30411266fd67ea3c02a05c157231654d5a3bdc9 ]
 
-In af9035_i2c_master_xfer, msg is controlled by user. When msg[i].buf
+In anysee_master_xfer, msg is controlled by user. When msg[i].buf
 is null and msg[i].len is zero, former checks on msg[i].buf would be
-passed. Malicious data finally reach af9035_i2c_master_xfer. If accessing
+passed. Malicious data finally reach anysee_master_xfer. If accessing
 msg[i].buf[0] without sanity check, null ptr deref would happen.
 We add check on msg[i].len to prevent crash.
 
@@ -63,45 +63,25 @@ commit 0ed554fd769a
 
 Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+[hverkuil: add spaces around +]
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/dvb-usb-v2/af9035.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/media/usb/dvb-usb-v2/anysee.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/dvb-usb-v2/af9035.c b/drivers/media/usb/dvb-usb-v2/af9035.c
-index 1e9c8d01523be..33a2aa8907e65 100644
---- a/drivers/media/usb/dvb-usb-v2/af9035.c
-+++ b/drivers/media/usb/dvb-usb-v2/af9035.c
-@@ -322,6 +322,8 @@ static int af9035_i2c_master_xfer(struct i2c_adapter *adap,
- 			ret = -EOPNOTSUPP;
- 		} else if ((msg[0].addr == state->af9033_i2c_addr[0]) ||
- 			   (msg[0].addr == state->af9033_i2c_addr[1])) {
-+			if (msg[0].len < 3 || msg[1].len < 1)
-+				return -EOPNOTSUPP;
- 			/* demod access via firmware interface */
- 			u32 reg = msg[0].buf[0] << 16 | msg[0].buf[1] << 8 |
- 					msg[0].buf[2];
-@@ -381,6 +383,8 @@ static int af9035_i2c_master_xfer(struct i2c_adapter *adap,
- 			ret = -EOPNOTSUPP;
- 		} else if ((msg[0].addr == state->af9033_i2c_addr[0]) ||
- 			   (msg[0].addr == state->af9033_i2c_addr[1])) {
-+			if (msg[0].len < 3)
-+				return -EOPNOTSUPP;
- 			/* demod access via firmware interface */
- 			u32 reg = msg[0].buf[0] << 16 | msg[0].buf[1] << 8 |
- 					msg[0].buf[2];
-@@ -388,10 +392,7 @@ static int af9035_i2c_master_xfer(struct i2c_adapter *adap,
- 			if (msg[0].addr == state->af9033_i2c_addr[1])
- 				reg |= 0x100000;
+diff --git a/drivers/media/usb/dvb-usb-v2/anysee.c b/drivers/media/usb/dvb-usb-v2/anysee.c
+index aa45b5d263f6b..a1235d0cce92f 100644
+--- a/drivers/media/usb/dvb-usb-v2/anysee.c
++++ b/drivers/media/usb/dvb-usb-v2/anysee.c
+@@ -202,7 +202,7 @@ static int anysee_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msg,
  
--			ret = (msg[0].len >= 3) ? af9035_wr_regs(d, reg,
--							         &msg[0].buf[3],
--							         msg[0].len - 3)
--					        : -EOPNOTSUPP;
-+			ret = af9035_wr_regs(d, reg, &msg[0].buf[3], msg[0].len - 3);
- 		} else {
- 			/* I2C write */
- 			u8 buf[MAX_XFER_SIZE];
+ 	while (i < num) {
+ 		if (num > i + 1 && (msg[i+1].flags & I2C_M_RD)) {
+-			if (msg[i].len > 2 || msg[i+1].len > 60) {
++			if (msg[i].len != 2 || msg[i + 1].len > 60) {
+ 				ret = -EOPNOTSUPP;
+ 				break;
+ 			}
 -- 
 2.40.1
 
