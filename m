@@ -2,39 +2,39 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64E33EEB57A
-	for <linux-media@archiver.kernel.org>; Sat,  9 Sep 2023 00:37:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED18FEEB565
+	for <linux-media@archiver.kernel.org>; Sat,  9 Sep 2023 00:37:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345584AbjIIAhW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 Sep 2023 20:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60470 "EHLO
+        id S1345614AbjIIAhp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 8 Sep 2023 20:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344658AbjIIAhS (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Sep 2023 20:37:18 -0400
+        with ESMTP id S241829AbjIIAho (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Sep 2023 20:37:44 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC18626AB;
-        Fri,  8 Sep 2023 17:36:50 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB0FBC433C9;
-        Sat,  9 Sep 2023 00:36:14 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E8E726AE;
+        Fri,  8 Sep 2023 17:37:19 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90BD8C433A9;
+        Sat,  9 Sep 2023 00:36:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694219775;
-        bh=Qd5o1b4jwJ1my+Tga8LmjbFt+S3Q+DRExWx15qkTncc=;
+        s=k20201202; t=1694219779;
+        bh=lD0W62Gb89XMInZipeZtZ+rDmFvBX28Qm4aq9zgBHK8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oJl0NlFVkddlZtnrpY1dDe90priNW8+Hp05K6O4Z32MLBKrIwGqIKStI213Qpzdpb
-         gBPwyypylYIJdYYkuga9vHjXHYmUEHPRELcBo+McW7nYnITLC81LEfOmCLfNyD0mXA
-         uFwcSIyVDLnBou7/9nqyN+eNcDb7AAtRkDCZv8TUqW2BbZscDWk6tsMnrYhegDwKjl
-         fEquVwIxbloifQ+idNj+7s5FKnEsNIKiUeW7Ut4JtLMMP9+9CIAmNnIKF6N/KUZV0J
-         x3NsKfwcLpHGXbQsPnUp3pVbFYiVSP2nC87UzITnH7MfoX6lyrhyYUgQtvKdcIB94Z
-         5KZoJkDq0DMfg==
+        b=kJqIZFttf6CnObyzXR32BUukZTFnCPXhGXRA+oaE4pJPKNUChZYEjdDd8V3bPs7s5
+         Z24YPxN2wqcDPsvKM/eHKWy2nfr+qAFky4BqAbUdFORsukchT86YrMRiWc/yvrYopW
+         9wey/7TBibX7+4azBG1JJjfw5aBD8D8D1qHbKjWpAXq87NVVx1vCzUxQSm4aAuG9Tb
+         w1vSqWN/aMRWV5C/hhj7XV5NMQYrSi60v0/iJQbhMWzjIUzz7afFM/h1AL3yi3Phb6
+         y2dsHknhuyavHp4v6G0AxFBRIoeoZSIZM6Aq/16S26wWUHOZWKkp+kezTcmL6q74jT
+         BWzmFAf9suMcQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Zhang Shurong <zhang_shurong@foxmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sasha Levin <sashal@kernel.org>, mchehab@kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.5 04/28] media: af9005: Fix null-ptr-deref in af9005_i2c_xfer
-Date:   Fri,  8 Sep 2023 20:35:38 -0400
-Message-Id: <20230909003604.3579407-4-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, crope@iki.fi,
+        mchehab@kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.5 07/28] media: dvb-usb-v2: gl861: Fix null-ptr-deref in gl861_i2c_master_xfer
+Date:   Fri,  8 Sep 2023 20:35:41 -0400
+Message-Id: <20230909003604.3579407-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230909003604.3579407-1-sashal@kernel.org>
 References: <20230909003604.3579407-1-sashal@kernel.org>
@@ -49,11 +49,11 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Zhang Shurong <zhang_shurong@foxmail.com>
 
-[ Upstream commit f4ee84f27625ce1fdf41e8483fa0561a1b837d10 ]
+[ Upstream commit b97719a66970601cd3151a3e2020f4454a1c4ff6 ]
 
-In af9005_i2c_xfer, msg is controlled by user. When msg[i].buf
+In gl861_i2c_master_xfer, msg is controlled by user. When msg[i].buf
 is null and msg[i].len is zero, former checks on msg[i].buf would be
-passed. Malicious data finally reach af9005_i2c_xfer. If accessing
+passed. Malicious data finally reach gl861_i2c_master_xfer. If accessing
 msg[i].buf[0] without sanity check, null ptr deref would happen.
 We add check on msg[i].len to prevent crash.
 
@@ -65,32 +65,22 @@ Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/dvb-usb/af9005.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/media/usb/dvb-usb-v2/gl861.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/dvb-usb/af9005.c b/drivers/media/usb/dvb-usb/af9005.c
-index 0827bf3d4e8c7..13604e6acdb83 100644
---- a/drivers/media/usb/dvb-usb/af9005.c
-+++ b/drivers/media/usb/dvb-usb/af9005.c
-@@ -422,6 +422,10 @@ static int af9005_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
- 		if (ret == 0)
- 			ret = 2;
- 	} else {
-+		if (msg[0].len < 2) {
-+			ret = -EOPNOTSUPP;
-+			goto unlock;
-+		}
- 		/* write one or more registers */
- 		reg = msg[0].buf[0];
- 		addr = msg[0].addr;
-@@ -431,6 +435,7 @@ static int af9005_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
- 			ret = 1;
- 	}
- 
-+unlock:
- 	mutex_unlock(&d->i2c_mutex);
- 	return ret;
- }
+diff --git a/drivers/media/usb/dvb-usb-v2/gl861.c b/drivers/media/usb/dvb-usb-v2/gl861.c
+index 0c434259c36f1..c71e7b93476de 100644
+--- a/drivers/media/usb/dvb-usb-v2/gl861.c
++++ b/drivers/media/usb/dvb-usb-v2/gl861.c
+@@ -120,7 +120,7 @@ static int gl861_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
+ 	} else if (num == 2 && !(msg[0].flags & I2C_M_RD) &&
+ 		   (msg[1].flags & I2C_M_RD)) {
+ 		/* I2C write + read */
+-		if (msg[0].len > 1 || msg[1].len > sizeof(ctx->buf)) {
++		if (msg[0].len != 1 || msg[1].len > sizeof(ctx->buf)) {
+ 			ret = -EOPNOTSUPP;
+ 			goto err;
+ 		}
 -- 
 2.40.1
 
