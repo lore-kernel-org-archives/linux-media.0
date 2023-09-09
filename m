@@ -2,40 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05D53EEB57D
-	for <linux-media@archiver.kernel.org>; Sat,  9 Sep 2023 00:44:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5464EEB57B
+	for <linux-media@archiver.kernel.org>; Sat,  9 Sep 2023 00:44:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346166AbjIIAoQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 Sep 2023 20:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33090 "EHLO
+        id S1344476AbjIIAo0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 8 Sep 2023 20:44:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346201AbjIIAni (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Sep 2023 20:43:38 -0400
+        with ESMTP id S1346240AbjIIAnn (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Sep 2023 20:43:43 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B98B8422A;
-        Fri,  8 Sep 2023 17:41:02 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DBEAC4160E;
-        Sat,  9 Sep 2023 00:40:47 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7EB42D78;
+        Fri,  8 Sep 2023 17:41:13 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77561C433CD;
+        Sat,  9 Sep 2023 00:40:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694220048;
-        bh=+P//p41L4AtomOnxSnRhn0lU105Wn2sA2lUZ9XmQegQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Pmy+chKKcvb5vGhN6LAFynhn+4HT5Fl9MYQr727q1SkFKZpFZ5DQTv8CFLwMuJ6k3
-         ut45u7YWpewptN6swDObmXPlBcOYlEteMajOy12JSBdKonHk1usjxuMcMXj+jUXXRu
-         jQLB0vkHVULgyWKcTW9nA4mG6RWHJNS9rsUKe0p8xofq302mOuWSl9Pqg74Thy4hzw
-         XXScsfCBhgJnspdkCKLy22Erhwp3aRwDDCVg+6IMc9YQvlqMwWJLixLwJiLJcHs543
-         z451CXXI5qhVFLRuaWip0PiRqMQ/xZixAMBdX/MNijd5Fc+hGOcpN4iklLtVeqFBFC
-         zYuCTBDBgwKCw==
+        s=k20201202; t=1694220057;
+        bh=Dr4kmbd/nBLjPEX7DVEU2QK+WQj2BZS5H87ZSAfXG/o=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=nh7NngvJi78APi6s49X5WeIm0nIiTlb0ATQWmdv1WAo7/5I4lK/WKNMvlfI+eTJgb
+         ZpDDJfrjbXmO1bSk93Nono3t01YIJuiY2+sOxuGg7VuRY88bBcnQ3xPWPijNRPAlt3
+         Xx5c1hrxiTKzaWgIlrOiobVZJsofLqS8RfbLRtg9cgsqUPv7xtltKd/k8b6nBvZ90K
+         7xWEBWE+I7w4RtbmkW2t4ygeXW5+gOMG1hJxWAOC+S45JLNgg2ycvfC/NMKYqCzVc2
+         FWHQ0D5Pjh+nCiqLlSqFSSXnu9reIGmIKtPpnmihHfGmBGgg1fadjLkVGttK3WrEhE
+         wreZVJjo0sq1g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Zhang Shurong <zhang_shurong@foxmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sasha Levin <sashal@kernel.org>, crope@iki.fi,
-        mchehab@kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 01/14] media: dvb-usb-v2: af9035: Fix null-ptr-deref in af9035_i2c_master_xfer
-Date:   Fri,  8 Sep 2023 20:40:32 -0400
-Message-Id: <20230909004045.3581014-1-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, mchehab@kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 05/14] media: az6007: Fix null-ptr-deref in az6007_i2c_xfer()
+Date:   Fri,  8 Sep 2023 20:40:36 -0400
+Message-Id: <20230909004045.3581014-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230909004045.3581014-1-sashal@kernel.org>
+References: <20230909004045.3581014-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -47,11 +49,11 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Zhang Shurong <zhang_shurong@foxmail.com>
 
-[ Upstream commit 7bf744f2de0a848fb1d717f5831b03db96feae89 ]
+[ Upstream commit 1047f9343011f2cedc73c64829686206a7e9fc3f ]
 
-In af9035_i2c_master_xfer, msg is controlled by user. When msg[i].buf
+In az6007_i2c_xfer, msg is controlled by user. When msg[i].buf
 is null and msg[i].len is zero, former checks on msg[i].buf would be
-passed. Malicious data finally reach af9035_i2c_master_xfer. If accessing
+passed. Malicious data finally reach az6007_i2c_xfer. If accessing
 msg[i].buf[0] without sanity check, null ptr deref would happen.
 We add check on msg[i].len to prevent crash.
 
@@ -63,43 +65,35 @@ Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/dvb-usb-v2/af9035.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/media/usb/dvb-usb-v2/az6007.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/media/usb/dvb-usb-v2/af9035.c b/drivers/media/usb/dvb-usb-v2/af9035.c
-index 1f6c1eefe3892..55c7e7348869b 100644
---- a/drivers/media/usb/dvb-usb-v2/af9035.c
-+++ b/drivers/media/usb/dvb-usb-v2/af9035.c
-@@ -336,6 +336,8 @@ static int af9035_i2c_master_xfer(struct i2c_adapter *adap,
- 			ret = -EOPNOTSUPP;
- 		} else if ((msg[0].addr == state->af9033_i2c_addr[0]) ||
- 			   (msg[0].addr == state->af9033_i2c_addr[1])) {
-+			if (msg[0].len < 3 || msg[1].len < 1)
-+				return -EOPNOTSUPP;
- 			/* demod access via firmware interface */
- 			u32 reg = msg[0].buf[0] << 16 | msg[0].buf[1] << 8 |
- 					msg[0].buf[2];
-@@ -395,6 +397,8 @@ static int af9035_i2c_master_xfer(struct i2c_adapter *adap,
- 			ret = -EOPNOTSUPP;
- 		} else if ((msg[0].addr == state->af9033_i2c_addr[0]) ||
- 			   (msg[0].addr == state->af9033_i2c_addr[1])) {
-+			if (msg[0].len < 3)
-+				return -EOPNOTSUPP;
- 			/* demod access via firmware interface */
- 			u32 reg = msg[0].buf[0] << 16 | msg[0].buf[1] << 8 |
- 					msg[0].buf[2];
-@@ -402,10 +406,7 @@ static int af9035_i2c_master_xfer(struct i2c_adapter *adap,
- 			if (msg[0].addr == state->af9033_i2c_addr[1])
- 				reg |= 0x100000;
- 
--			ret = (msg[0].len >= 3) ? af9035_wr_regs(d, reg,
--							         &msg[0].buf[3],
--							         msg[0].len - 3)
--					        : -EOPNOTSUPP;
-+			ret = af9035_wr_regs(d, reg, &msg[0].buf[3], msg[0].len - 3);
- 		} else {
- 			/* I2C write */
- 			u8 buf[MAX_XFER_SIZE];
+diff --git a/drivers/media/usb/dvb-usb-v2/az6007.c b/drivers/media/usb/dvb-usb-v2/az6007.c
+index 8e914be5b7c5e..2f40eb6bdbb83 100644
+--- a/drivers/media/usb/dvb-usb-v2/az6007.c
++++ b/drivers/media/usb/dvb-usb-v2/az6007.c
+@@ -796,6 +796,10 @@ static int az6007_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
+ 			if (az6007_xfer_debug)
+ 				printk(KERN_DEBUG "az6007: I2C W addr=0x%x len=%d\n",
+ 				       addr, msgs[i].len);
++			if (msgs[i].len < 1) {
++				ret = -EIO;
++				goto err;
++			}
+ 			req = AZ6007_I2C_WR;
+ 			index = msgs[i].buf[0];
+ 			value = addr | (1 << 8);
+@@ -810,6 +814,10 @@ static int az6007_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
+ 			if (az6007_xfer_debug)
+ 				printk(KERN_DEBUG "az6007: I2C R addr=0x%x len=%d\n",
+ 				       addr, msgs[i].len);
++			if (msgs[i].len < 1) {
++				ret = -EIO;
++				goto err;
++			}
+ 			req = AZ6007_I2C_RD;
+ 			index = msgs[i].buf[0];
+ 			value = addr;
 -- 
 2.40.1
 
