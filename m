@@ -2,40 +2,38 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E487EEB583
-	for <linux-media@archiver.kernel.org>; Sat,  9 Sep 2023 00:40:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A027EEB57C
+	for <linux-media@archiver.kernel.org>; Sat,  9 Sep 2023 00:40:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235187AbjIIAkv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 Sep 2023 20:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36504 "EHLO
+        id S235018AbjIIAk7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 8 Sep 2023 20:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346004AbjIIAj5 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Sep 2023 20:39:57 -0400
+        with ESMTP id S1346011AbjIIAkJ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Sep 2023 20:40:09 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B322700;
-        Fri,  8 Sep 2023 17:39:19 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6840CC433C7;
-        Sat,  9 Sep 2023 00:39:09 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620F32D5A;
+        Fri,  8 Sep 2023 17:39:21 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07F8AC433C9;
+        Sat,  9 Sep 2023 00:39:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694219950;
-        bh=1hRxAN+Xlen9LM1cdkRbhC2JYb/Imb0G+/2oG9SqDHM=;
+        s=k20201202; t=1694219959;
+        bh=AkuarkZMuJJZPf+ahKIOj9/X2xOBJEBgJWmh7M136CE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OTOLpt0qwb70PN815aaXeNTvpBLQ83K5OYyXmJrVJhQiGVbxOsLS+lmrNjr+iK/aF
-         NyNReb7I6v9UNnQ9itaBmyJIZ1Yc/Wghg747vjb52TXJk3ZJMw+boVSauP0KwVk2wt
-         Phq8rOS4XGHRVLm4XSwAyOOjFkY1xtfUDx8ixWWV4zOfyii1wmX9VwDkc7Q7I6cZhL
-         SVk3NU1JuLl8yYOkPL8ePkAoaHoRmp0jrvXOMRN/tKwhkIYPF6UhMkGcyVpKw5QfzA
-         PlrsAj7zS/KsIiOL/eYYWqiyMXHRIyjbjzUr/iTjxaJA1+2tuzorOvOfQNZAtBLaLz
-         yHiCtBPL9RY5w==
+        b=Zdkdyw2+cp09QE/8QL7XPBVtkSBrHGt6DHWmS15Ub8KufsRR7dFFl6Y8UfmnIwx/V
+         PrlcHweM7XZtRYxre6JaseGyIYkWl3wEOSCHZC63NYkv90gIDpfdVm5fRsLwXwlW9P
+         dVoNZCgj2me+QkkZqZ26Fx1Kx7zGA3Zy3+tfo1JUGaiEULJRCK97k/NalmoOSErAMb
+         uFEVabCE/hCmqev7SaNJZNZufqyuKiCHNMJ4jy9aLT795p+0huu2suhcqmAekKZwcq
+         0IYVOVFr2rigDWu+gMFNQzeSuiBo+YR4jqVTId/JkUcAa3omfDCeVQkKeYajG7btQu
+         xkh65oNbtmTCg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Zhang Shurong <zhang_shurong@foxmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sasha Levin <sashal@kernel.org>, mchehab@kernel.org,
-        yuzhe@nfschina.com, harperchen1110@gmail.com,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 02/19] media: dw2102: Fix null-ptr-deref in dw2102_i2c_transfer()
-Date:   Fri,  8 Sep 2023 20:38:46 -0400
-Message-Id: <20230909003903.3580394-2-sashal@kernel.org>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sasha Levin <sashal@kernel.org>, crope@iki.fi,
+        mchehab@kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 08/19] media: tuners: qt1010: replace BUG_ON with a regular error
+Date:   Fri,  8 Sep 2023 20:38:52 -0400
+Message-Id: <20230909003903.3580394-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230909003903.3580394-1-sashal@kernel.org>
 References: <20230909003903.3580394-1-sashal@kernel.org>
@@ -48,96 +46,44 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Zhang Shurong <zhang_shurong@foxmail.com>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit 5ae544d94abc8ff77b1b9bf8774def3fa5689b5b ]
+[ Upstream commit ee630b29ea44d1851bb6c903f400956604834463 ]
 
-In dw2102_i2c_transfer, msg is controlled by user. When msg[i].buf
-is null and msg[i].len is zero, former checks on msg[i].buf would be
-passed. Malicious data finally reach dw2102_i2c_transfer. If accessing
-msg[i].buf[0] without sanity check, null ptr deref would happen.
-We add check on msg[i].len to prevent crash.
+BUG_ON is unnecessary here, and in addition it confuses smatch.
+Replacing this with an error return help resolve this smatch
+warning:
 
-Similar commit:
-commit 950e252cb469
-("[media] dw2102: limit messages to buffer size")
+drivers/media/tuners/qt1010.c:350 qt1010_init() error: buffer overflow 'i2c_data' 34 <= 34
 
-Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/dvb-usb/dw2102.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ drivers/media/tuners/qt1010.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/usb/dvb-usb/dw2102.c b/drivers/media/usb/dvb-usb/dw2102.c
-index 1ed62a80067c6..253d13bdb63e5 100644
---- a/drivers/media/usb/dvb-usb/dw2102.c
-+++ b/drivers/media/usb/dvb-usb/dw2102.c
-@@ -128,6 +128,10 @@ static int dw2102_i2c_transfer(struct i2c_adapter *adap, struct i2c_msg msg[],
+diff --git a/drivers/media/tuners/qt1010.c b/drivers/media/tuners/qt1010.c
+index 3853a3d43d4f2..a7b19863f489e 100644
+--- a/drivers/media/tuners/qt1010.c
++++ b/drivers/media/tuners/qt1010.c
+@@ -345,11 +345,12 @@ static int qt1010_init(struct dvb_frontend *fe)
+ 			else
+ 				valptr = &tmpval;
  
- 	switch (num) {
- 	case 2:
-+		if (msg[0].len < 1) {
-+			num = -EOPNOTSUPP;
-+			break;
-+		}
- 		/* read stv0299 register */
- 		value = msg[0].buf[0];/* register */
- 		for (i = 0; i < msg[1].len; i++) {
-@@ -139,6 +143,10 @@ static int dw2102_i2c_transfer(struct i2c_adapter *adap, struct i2c_msg msg[],
- 	case 1:
- 		switch (msg[0].addr) {
- 		case 0x68:
-+			if (msg[0].len < 2) {
-+				num = -EOPNOTSUPP;
-+				break;
-+			}
- 			/* write to stv0299 register */
- 			buf6[0] = 0x2a;
- 			buf6[1] = msg[0].buf[0];
-@@ -148,6 +156,10 @@ static int dw2102_i2c_transfer(struct i2c_adapter *adap, struct i2c_msg msg[],
+-			BUG_ON(i >= ARRAY_SIZE(i2c_data) - 1);
+-
+-			err = qt1010_init_meas1(priv, i2c_data[i+1].reg,
+-						i2c_data[i].reg,
+-						i2c_data[i].val, valptr);
++			if (i >= ARRAY_SIZE(i2c_data) - 1)
++				err = -EIO;
++			else
++				err = qt1010_init_meas1(priv, i2c_data[i + 1].reg,
++							i2c_data[i].reg,
++							i2c_data[i].val, valptr);
+ 			i++;
  			break;
- 		case 0x60:
- 			if (msg[0].flags == 0) {
-+				if (msg[0].len < 4) {
-+					num = -EOPNOTSUPP;
-+					break;
-+				}
- 			/* write to tuner pll */
- 				buf6[0] = 0x2c;
- 				buf6[1] = 5;
-@@ -159,6 +171,10 @@ static int dw2102_i2c_transfer(struct i2c_adapter *adap, struct i2c_msg msg[],
- 				dw210x_op_rw(d->udev, 0xb2, 0, 0,
- 						buf6, 7, DW210X_WRITE_MSG);
- 			} else {
-+				if (msg[0].len < 1) {
-+					num = -EOPNOTSUPP;
-+					break;
-+				}
- 			/* read from tuner */
- 				dw210x_op_rw(d->udev, 0xb5, 0, 0,
- 						buf6, 1, DW210X_READ_MSG);
-@@ -166,12 +182,20 @@ static int dw2102_i2c_transfer(struct i2c_adapter *adap, struct i2c_msg msg[],
- 			}
- 			break;
- 		case (DW2102_RC_QUERY):
-+			if (msg[0].len < 2) {
-+				num = -EOPNOTSUPP;
-+				break;
-+			}
- 			dw210x_op_rw(d->udev, 0xb8, 0, 0,
- 					buf6, 2, DW210X_READ_MSG);
- 			msg[0].buf[0] = buf6[0];
- 			msg[0].buf[1] = buf6[1];
- 			break;
- 		case (DW2102_VOLTAGE_CTRL):
-+			if (msg[0].len < 1) {
-+				num = -EOPNOTSUPP;
-+				break;
-+			}
- 			buf6[0] = 0x30;
- 			buf6[1] = msg[0].buf[0];
- 			dw210x_op_rw(d->udev, 0xb2, 0, 0,
+ 		}
 -- 
 2.40.1
 
