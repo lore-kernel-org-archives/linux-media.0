@@ -2,80 +2,142 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AAECEEB57D
-	for <linux-media@archiver.kernel.org>; Sat,  9 Sep 2023 00:39:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9D9EEEB581
+	for <linux-media@archiver.kernel.org>; Sat,  9 Sep 2023 00:39:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345978AbjIIAjn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 Sep 2023 20:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33208 "EHLO
+        id S1345996AbjIIAjp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 8 Sep 2023 20:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345878AbjIIAjL (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Sep 2023 20:39:11 -0400
+        with ESMTP id S1345903AbjIIAjW (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Sep 2023 20:39:22 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C00210B;
-        Fri,  8 Sep 2023 17:38:43 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9606FC116A3;
-        Sat,  9 Sep 2023 00:36:48 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5AC3211F;
+        Fri,  8 Sep 2023 17:38:44 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F250C433D9;
+        Sat,  9 Sep 2023 00:37:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694219809;
-        bh=tyLfA26Su5SUa9ELKfbpRcUrKpvkFBOm/ChXORuzIzQ=;
+        s=k20201202; t=1694219843;
+        bh=W8FV9U1Bm8BWPB401jizjWaYN7aMZpEld/A2A0A0IYU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MMkkfJQ0ZYOVp3AYLjx4l/XQo5Zby2eL41u7dPR8A/YLz2A78mxt68DI9jXiaAmXv
-         NtJBYoJXhO78gZZZf1ObbVmAEKnvwPCiTRuHmvabDHY+krjKSD/2kO9W9ovJZyYpjT
-         ez0vHuq0UZktnOu20NnXBKp8aWQHWa6ZclJTeR75gt+D9CPJrtr663EJVIX2NAYur1
-         BandWYpVjKvZbQCj9NBSu4fKIOpjRpsGFjNaJRWVsg5z464t6sep4msmjIWJw8xexa
-         9EdbWXoKcxCtVJLjw5rgU9mLKUR4h77x5mw9sEwdWl8oghj2xT5IG2clZcolHVUoB7
-         j2vjeR5zrZrFw==
+        b=ZKe8bNIvyL8Ed9RkCDt5QZZWpnYA5Yr60WKucXgLkUpUg7BzmkgRxoDdpMVRsyGEh
+         y/i9oRW7CsvRyQPuECjwR5SdeFTNU/mjFaW7SrcQb6HXfgJBK6dFBveOeVuKRe5cfo
+         8AWHFhnPkodwf1SFjLAXqwW8dRID2Rb6kbpTwnJO4M8O2tD/Gx+UA5hHEjAn1jAvg2
+         A+s29k6hFHeEysRVyKShV6T/z4eZGowJyYLwq3+IUGa0Je8d+7fqr8WUbcQAGQcdBn
+         uHeM24M4zc2yhdr1wH6Nk4WYkDMpXZHUt51aMPjxAqrp2Njrpq2fYjE0S0yPV/ZzHH
+         cVAjk8WqgijZg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+Cc:     Zhang Shurong <zhang_shurong@foxmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sasha Levin <sashal@kernel.org>, yong.zhi@intel.com,
-        bingbu.cao@intel.com, djrscally@gmail.com, mchehab@kernel.org,
+        Sasha Levin <sashal@kernel.org>, mchehab@kernel.org,
+        harperchen1110@gmail.com, yuzhe@nfschina.com,
         linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.5 23/28] media: pci: ipu3-cio2: Initialise timing struct to avoid a compiler warning
-Date:   Fri,  8 Sep 2023 20:35:57 -0400
-Message-Id: <20230909003604.3579407-23-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.4 03/25] media: dw2102: Fix null-ptr-deref in dw2102_i2c_transfer()
+Date:   Fri,  8 Sep 2023 20:36:51 -0400
+Message-Id: <20230909003715.3579761-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230909003604.3579407-1-sashal@kernel.org>
-References: <20230909003604.3579407-1-sashal@kernel.org>
+In-Reply-To: <20230909003715.3579761-1-sashal@kernel.org>
+References: <20230909003715.3579761-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.5.2
+X-stable-base: Linux 6.4.15
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
+From: Zhang Shurong <zhang_shurong@foxmail.com>
 
-[ Upstream commit 9d7531be3085a8f013cf173ccc4e72e3cf493538 ]
+[ Upstream commit 5ae544d94abc8ff77b1b9bf8774def3fa5689b5b ]
 
-Initialise timing struct in cio2_hw_init() to zero in order to avoid a
-compiler warning. The warning was a false positive.
+In dw2102_i2c_transfer, msg is controlled by user. When msg[i].buf
+is null and msg[i].len is zero, former checks on msg[i].buf would be
+passed. Malicious data finally reach dw2102_i2c_transfer. If accessing
+msg[i].buf[0] without sanity check, null ptr deref would happen.
+We add check on msg[i].len to prevent crash.
 
-Reported-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Similar commit:
+commit 950e252cb469
+("[media] dw2102: limit messages to buffer size")
+
+Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/intel/ipu3/ipu3-cio2-main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/usb/dvb-usb/dw2102.c | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c b/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
-index 34984a7474ed8..15af4af7b445b 100644
---- a/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
-+++ b/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
-@@ -354,7 +354,7 @@ static int cio2_hw_init(struct cio2_device *cio2, struct cio2_queue *q)
- 	void __iomem *const base = cio2->base;
- 	u8 lanes, csi2bus = q->csi2.port;
- 	u8 sensor_vc = SENSOR_VIR_CH_DFLT;
--	struct cio2_csi2_timing timing;
-+	struct cio2_csi2_timing timing = { 0 };
- 	int i, r;
+diff --git a/drivers/media/usb/dvb-usb/dw2102.c b/drivers/media/usb/dvb-usb/dw2102.c
+index 8747960e61461..356fc728d59a8 100644
+--- a/drivers/media/usb/dvb-usb/dw2102.c
++++ b/drivers/media/usb/dvb-usb/dw2102.c
+@@ -128,6 +128,10 @@ static int dw2102_i2c_transfer(struct i2c_adapter *adap, struct i2c_msg msg[],
  
- 	fmt = cio2_find_format(NULL, &q->subdev_fmt.code);
+ 	switch (num) {
+ 	case 2:
++		if (msg[0].len < 1) {
++			num = -EOPNOTSUPP;
++			break;
++		}
+ 		/* read stv0299 register */
+ 		value = msg[0].buf[0];/* register */
+ 		for (i = 0; i < msg[1].len; i++) {
+@@ -139,6 +143,10 @@ static int dw2102_i2c_transfer(struct i2c_adapter *adap, struct i2c_msg msg[],
+ 	case 1:
+ 		switch (msg[0].addr) {
+ 		case 0x68:
++			if (msg[0].len < 2) {
++				num = -EOPNOTSUPP;
++				break;
++			}
+ 			/* write to stv0299 register */
+ 			buf6[0] = 0x2a;
+ 			buf6[1] = msg[0].buf[0];
+@@ -148,6 +156,10 @@ static int dw2102_i2c_transfer(struct i2c_adapter *adap, struct i2c_msg msg[],
+ 			break;
+ 		case 0x60:
+ 			if (msg[0].flags == 0) {
++				if (msg[0].len < 4) {
++					num = -EOPNOTSUPP;
++					break;
++				}
+ 			/* write to tuner pll */
+ 				buf6[0] = 0x2c;
+ 				buf6[1] = 5;
+@@ -159,6 +171,10 @@ static int dw2102_i2c_transfer(struct i2c_adapter *adap, struct i2c_msg msg[],
+ 				dw210x_op_rw(d->udev, 0xb2, 0, 0,
+ 						buf6, 7, DW210X_WRITE_MSG);
+ 			} else {
++				if (msg[0].len < 1) {
++					num = -EOPNOTSUPP;
++					break;
++				}
+ 			/* read from tuner */
+ 				dw210x_op_rw(d->udev, 0xb5, 0, 0,
+ 						buf6, 1, DW210X_READ_MSG);
+@@ -166,12 +182,20 @@ static int dw2102_i2c_transfer(struct i2c_adapter *adap, struct i2c_msg msg[],
+ 			}
+ 			break;
+ 		case (DW2102_RC_QUERY):
++			if (msg[0].len < 2) {
++				num = -EOPNOTSUPP;
++				break;
++			}
+ 			dw210x_op_rw(d->udev, 0xb8, 0, 0,
+ 					buf6, 2, DW210X_READ_MSG);
+ 			msg[0].buf[0] = buf6[0];
+ 			msg[0].buf[1] = buf6[1];
+ 			break;
+ 		case (DW2102_VOLTAGE_CTRL):
++			if (msg[0].len < 1) {
++				num = -EOPNOTSUPP;
++				break;
++			}
+ 			buf6[0] = 0x30;
+ 			buf6[1] = msg[0].buf[0];
+ 			dw210x_op_rw(d->udev, 0xb2, 0, 0,
 -- 
 2.40.1
 
