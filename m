@@ -2,39 +2,38 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9DF3EEB57C
-	for <linux-media@archiver.kernel.org>; Sat,  9 Sep 2023 00:43:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA8E1EEB57B
+	for <linux-media@archiver.kernel.org>; Sat,  9 Sep 2023 00:43:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346125AbjIIAn1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 Sep 2023 20:43:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43368 "EHLO
+        id S1345614AbjIIAnl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 8 Sep 2023 20:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346273AbjIIAm6 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Sep 2023 20:42:58 -0400
+        with ESMTP id S1344958AbjIIAnU (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Sep 2023 20:43:20 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0AE9212B;
-        Fri,  8 Sep 2023 17:40:25 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E8EEC433BF;
-        Sat,  9 Sep 2023 00:40:24 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557AB3C3B;
+        Fri,  8 Sep 2023 17:40:41 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C36DEC433C9;
+        Sat,  9 Sep 2023 00:40:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694220025;
-        bh=vjqPjYwiKx9Kf17NPqio0EMpMXed6tFRsTbANUy3ceU=;
+        s=k20201202; t=1694220032;
+        bh=6bMlvEPeEqUTG7glKjMyl1iDesJ2uJQAP14I+uqgCxs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kdJ/A0nEfpsMWSqZV6domnLUedB1H2O12seP0G3Anlz11t9jmU2KzuJne2cNLb5qj
-         jAi6w549y4BpD5yKVKKnaPHHpz/7zohmVEwHPhZVktHgIZoKafYPapq6diUix97MSg
-         0g6Nwz/jG/TQDZp6VYL4yoUpz8ZWPyEdDCxZZAWp3HVbkGKCovuKhvEG8fKAVW+hgn
-         f3vZPTIYHrh4dP8LtDPD7aQlVi6W41xATVv5KZFEJ6CLz6N7UAjpYACE5YC3lSD4ht
-         ckLpcVioFyRzgv24wnAH+fYOLn5DmzsiBW8A9WgKMK/N4p/KrCepKm1rxXXxy9mjdP
-         omSNMmPYYapjw==
+        b=IGOGT+Mu5v9Wxy7hozQo84+mpRGO+myo1hwLD3t87hm1scK4JSIYYXjKUzy/HjXur
+         8QPIpSYznyWD0B8Z2w9EAPV0u6Zrz18Q5URWJNRsoAYDb11Mdua9jhPWZFQY78jFfP
+         ZUA2RTjLRAaaFonxbKbn73KNAJrKdw3HivrmZqV880dUi+0AQm1FFixQycujKw55D7
+         AS4q7sbI1Me0wtHv6Q8Fg0idey9lx/gImu/E1sSbsRDlnG8caIfTyxPiN1+AKM4k/3
+         ZeZmNo/Zf/queT28viBC9vl58pxiu3gUY3iP1tJ5DyjH+Hu/gx6Uz3jiSt88amiY+q
+         lyDvwxYzjBwxw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Zhang Shurong <zhang_shurong@foxmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sasha Levin <sashal@kernel.org>, crope@iki.fi,
-        mchehab@kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 04/14] media: anysee: fix null-ptr-deref in anysee_master_xfer
-Date:   Fri,  8 Sep 2023 20:40:04 -0400
-Message-Id: <20230909004015.3580832-4-sashal@kernel.org>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sasha Levin <sashal@kernel.org>, mchehab@kernel.org,
+        harperchen1110@gmail.com, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 08/14] media: pci: cx23885: replace BUG with error return
+Date:   Fri,  8 Sep 2023 20:40:08 -0400
+Message-Id: <20230909004015.3580832-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230909004015.3580832-1-sashal@kernel.org>
 References: <20230909004015.3580832-1-sashal@kernel.org>
@@ -47,41 +46,34 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Zhang Shurong <zhang_shurong@foxmail.com>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit c30411266fd67ea3c02a05c157231654d5a3bdc9 ]
+[ Upstream commit 2e1796fd4904fdd6062a8e4589778ea899ea0c8d ]
 
-In anysee_master_xfer, msg is controlled by user. When msg[i].buf
-is null and msg[i].len is zero, former checks on msg[i].buf would be
-passed. Malicious data finally reach anysee_master_xfer. If accessing
-msg[i].buf[0] without sanity check, null ptr deref would happen.
-We add check on msg[i].len to prevent crash.
+It was completely unnecessary to use BUG in buffer_prepare().
+Just replace it with an error return. This also fixes a smatch warning:
 
-Similar commit:
-commit 0ed554fd769a
-("media: dvb-usb: az6027: fix null-ptr-deref in az6027_i2c_xfer()")
+drivers/media/pci/cx23885/cx23885-video.c:422 buffer_prepare() error: uninitialized symbol 'ret'.
 
-Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-[hverkuil: add spaces around +]
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/dvb-usb-v2/anysee.c | 2 +-
+ drivers/media/pci/cx23885/cx23885-video.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/dvb-usb-v2/anysee.c b/drivers/media/usb/dvb-usb-v2/anysee.c
-index fb6d99dea31aa..08fdb9e5e3a22 100644
---- a/drivers/media/usb/dvb-usb-v2/anysee.c
-+++ b/drivers/media/usb/dvb-usb-v2/anysee.c
-@@ -202,7 +202,7 @@ static int anysee_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msg,
- 
- 	while (i < num) {
- 		if (num > i + 1 && (msg[i+1].flags & I2C_M_RD)) {
--			if (msg[i].len > 2 || msg[i+1].len > 60) {
-+			if (msg[i].len != 2 || msg[i + 1].len > 60) {
- 				ret = -EOPNOTSUPP;
- 				break;
- 			}
+diff --git a/drivers/media/pci/cx23885/cx23885-video.c b/drivers/media/pci/cx23885/cx23885-video.c
+index 7fc408ee4934f..f56b271db8bea 100644
+--- a/drivers/media/pci/cx23885/cx23885-video.c
++++ b/drivers/media/pci/cx23885/cx23885-video.c
+@@ -409,7 +409,7 @@ static int buffer_prepare(struct vb2_buffer *vb)
+ 				dev->height >> 1);
+ 		break;
+ 	default:
+-		BUG();
++		return -EINVAL; /* should not happen */
+ 	}
+ 	dprintk(2, "[%p/%d] buffer_init - %dx%d %dbpp 0x%08x - dma=0x%08lx\n",
+ 		buf, buf->vb.vb2_buf.index,
 -- 
 2.40.1
 
