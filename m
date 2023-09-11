@@ -2,212 +2,123 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 912EFCA0ED5
-	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 21:06:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E735CA0EC1
+	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 21:06:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231766AbjIKUrW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Sep 2023 16:47:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59988 "EHLO
+        id S230477AbjIKUrK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Sep 2023 16:47:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241616AbjIKPLA (ORCPT
+        with ESMTP id S235935AbjIKJqj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Sep 2023 11:11:00 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43854FA
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:10:56 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-501bd6f7d11so7431577e87.1
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:10:56 -0700 (PDT)
+        Mon, 11 Sep 2023 05:46:39 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E087E52
+        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 02:46:35 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-31dca134c83so4201515f8f.3
+        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 02:46:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694445054; x=1695049854; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yvaPKLQHScYQL75NptLuZiJ3oU9JIQjkuER4G14i9nw=;
-        b=QX3bWFBY/D9qPrzP8I/jl0O0jOHrSGNCbAQe+YUrEnHM0XWx9uw3VnFkVhBGkE1hAC
-         wtLNSCKIHh1EnvWAlYi+HvoFHIcxKKbQnp3N2/f6GckazCRD5tPZ8rwUgBMTDVAomI1V
-         xUehEVhKGnLqAxo7zDCeunK4a+PYrbZh23QoqZi0I331ttC9sgaMv0yPZTESWtVPbz/C
-         l5B9Ap07iV/QrctrBSqz62bPnRWalW9a5J0hTdWv9XaNUvhdASsND0yMc3yZCTv6H9JH
-         1PSQOvOf8ghmzOAyB0MhRdG3oh8BDGHGu1nzTAr5TlaiITnmExqCpIa/8wO9yn5ubqhY
-         00/g==
+        d=linaro.org; s=google; t=1694425594; x=1695030394; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AR5r3g93Rem7DNpxCNPYXtJX7SM5cWGRWdjy8kq3JwA=;
+        b=Zi7/STSV9/g+grLvAxzksLGbxGcNM1rEHZQIPLG8zq6DY0ndvXYAdnnymoVaQzrVu7
+         YxmwBSoupqVMP9P6q7HPckZBTC+M4u4fqXnLAmvKhCh0mucQGmNWg/7HU/Dgp+wjzwKI
+         PjB2J9Ob/9x4y1szPPDwkpVfjBC8btaZPKY5XqB21xabaHx8HQf8C+AXCxGxImAgHo6l
+         ke3ZbUapLFDB3+iBSOY+lbOTjHpubu96F6xSeycY1kSCWKHKpcGpuAXinI44+TqfnUBg
+         PJW4p2mYSjhh8HTZN1OmqxVaBXRq/mRR+ckPj9B+oC2L7uVUMGO2fl/m3O0gFiCXalxa
+         QdLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694445054; x=1695049854;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1694425594; x=1695030394;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yvaPKLQHScYQL75NptLuZiJ3oU9JIQjkuER4G14i9nw=;
-        b=MnHmZ3ufHR3QPFRKZRmRbTH6xY60EyFKa3VT1/WC7iGrVaHur+rv8Qb3jXYxTCd4jq
-         b/6l1VM2j79tuM+HXgE4iauhQfLBo6ZHpLfFcUCo+emdg+HwNkGYcp+vB3hS+R87O4nK
-         COKmoyNxJvU9LMVoHIKvPUldduzPhYebJBi6jwBfoIFu3ZCtCDBrFCUaEc1ZeBVVqt6K
-         t8bEonS9QiGlsslU91x2mTg8GavE3dR0QWomdNVAKx/FYhrkWCYrURD0nvpcbcnV9gsW
-         QF5BXZ9mDvaV1RZPLwfpP6JP1rdzqjhd1fvHUclcsZ6pOI6gGe4nO+f87Pj26I2I/ynj
-         XuNQ==
-X-Gm-Message-State: AOJu0YxxIAtnN2uk41zZ/gHMtw94UTiomewcOY+kcmrH8Wd6ngwbC69x
-        Q5o5vAAZidy+j8jTTE2pMDNizQ==
-X-Google-Smtp-Source: AGHT+IFRjHjMg9FMe97CBZIsu6FfosSdU73i223AsKTo+cLsnJy2LpkS9EDuYbzgskvudOnK3RPUrg==
-X-Received: by 2002:a05:6512:33cf:b0:502:a942:d7a8 with SMTP id d15-20020a05651233cf00b00502a942d7a8mr6878275lfg.69.1694445054562;
-        Mon, 11 Sep 2023 08:10:54 -0700 (PDT)
-Received: from [10.167.154.1] (178235177061.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.61])
-        by smtp.gmail.com with ESMTPSA id n4-20020a056402060400b0052a3ad836basm4681281edv.41.2023.09.11.08.10.52
+        bh=AR5r3g93Rem7DNpxCNPYXtJX7SM5cWGRWdjy8kq3JwA=;
+        b=I4aMazRpC31FHlb2bl7it781MwzyaCef+8h85mVEHgFMlIX89cwxKKnVLD/oxjXdqe
+         uMQzngTp8nNWbY6Kvlx520UE7HKX+q8D1IcB9+neSu5zjHf2buX15hpmGXoKJIzY7gFh
+         pRmezSSkNuzqfI29WZekzU6FK3U/dehxZ5iNOHMpD2NnrTjJJbHoz6AnF/Wb4VSGs1sK
+         eDX8Sg7mB+e65g6QYCkuymS4mKMa2IAzYch4psA1VcHFDQWykuoix0uygb4YVZnR1qkM
+         h1tm61ClN7xOivKKubVQpgnN5xe21CG42N05mpgexCKHqYCZ3F4ChhGmtFImXAQyqNSa
+         MKgw==
+X-Gm-Message-State: AOJu0YxHPgWaU69ymvjsXLQRblTVjTdbCG23cfhhQ7Vlykn0GXG8t2hn
+        rZ0s9kAqWep9Tf1h/3alYAjz/w==
+X-Google-Smtp-Source: AGHT+IHIeeGTixGVLQ3w8IGwO+JDDdkg+e9WcxFRAhz+oDKZn61/9t8brHl2PDw0+BRylOKbkUPiTg==
+X-Received: by 2002:adf:ed12:0:b0:317:4cf8:35f9 with SMTP id a18-20020adfed12000000b003174cf835f9mr7111697wro.16.1694425593928;
+        Mon, 11 Sep 2023 02:46:33 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id d13-20020adff84d000000b00317909f9985sm9503496wrq.113.2023.09.11.02.46.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Sep 2023 08:10:54 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 11 Sep 2023 17:10:29 +0200
-Subject: [PATCH RFT 15/20] media: venus: pm_helpers: Remove
- pm_ops->core_put
+        Mon, 11 Sep 2023 02:46:33 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+To:     Sean Young <sean@mess.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        zelong dong <zelong.dong@amlogic.com>
+Cc:     linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Qianggui.Song@amlogic.com, Yonghui.Yu@amlogic.com,
+        kelvin.zhang@amlogic.com
+In-Reply-To: <20230825115310.39993-1-zelong.dong@amlogic.com>
+References: <20230825115310.39993-1-zelong.dong@amlogic.com>
+Subject: Re: (subset) [PATCH 0/3] This patchset adds IR controller driver
+ support for
+Message-Id: <169442559302.3235506.15361466537260729684.b4-ty@linaro.org>
+Date:   Mon, 11 Sep 2023 11:46:33 +0200
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230911-topic-mars-v1-15-a7d38bf87bdb@linaro.org>
-References: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
-In-Reply-To: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
-To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1694445027; l=3955;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=VFHAXP0bCqoE65EEy0HuBDwB4xJnqOaz01+cugNoC1s=;
- b=qbXg229K/TQjVjjbaca1jaxrvPPICpMOZ4V4ZMrNygnlbBOWJzI3VWWWe5SuTxoa4tyjwpJUu
- XqtCLLeSD8oC7PoC59MdQWmft1EKPBCfADaFVTRKfm+nHV0K2oL+zvH
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Mailer: b4 0.12.3
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Without and OPP table and with vcodec_pmdomains_num (so, v1, v3 and
-sdm845_legacy targets), core_put_v4 is a NOP, jut like core_put_v1.
-Unify them!
+Hi,
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/media/platform/qcom/venus/core.c       |  8 +++-----
- drivers/media/platform/qcom/venus/pm_helpers.c | 17 +----------------
- drivers/media/platform/qcom/venus/pm_helpers.h |  2 +-
- 3 files changed, 5 insertions(+), 22 deletions(-)
+On Fri, 25 Aug 2023 19:53:07 +0800, zelong dong wrote:
+> From: Zelong Dong <zelong.dong@amlogic.com>
+> 
+> Meson IR Controller supports hardware decoder in Meson-S4 and later
+> SoC. So far, protocol NEC could be decoded by hardware decoder.
+> 
+> Zelong Dong (3):
+>   media: rc: meson-ir: support rc driver type RC_DRIVER_SCANCODE
+>   dt-bindings: media: Add compatible for Meson-S4 IR Controller
+>   arm64: dts: meson: add IR controller for Meson-S4 SoC
+> 
+> [...]
 
-diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
-index 0ae118257296..9a1b0be5d067 100644
---- a/drivers/media/platform/qcom/venus/core.c
-+++ b/drivers/media/platform/qcom/venus/core.c
-@@ -429,15 +429,14 @@ static int venus_probe(struct platform_device *pdev)
- err_core_deinit:
- 	hfi_core_deinit(core, false);
- err_core_put:
--	if (core->pm_ops->core_put)
--		core->pm_ops->core_put(core);
-+	vcodec_domains_put(core);
-+
- 	return ret;
- }
- 
- static void venus_remove(struct platform_device *pdev)
- {
- 	struct venus_core *core = platform_get_drvdata(pdev);
--	const struct venus_pm_ops *pm_ops = core->pm_ops;
- 	struct device *dev = core->dev;
- 	int ret;
- 
-@@ -455,8 +454,7 @@ static void venus_remove(struct platform_device *pdev)
- 	pm_runtime_put_sync(dev);
- 	pm_runtime_disable(dev);
- 
--	if (pm_ops->core_put)
--		pm_ops->core_put(core);
-+	vcodec_domains_put(core);
- 
- 	v4l2_device_unregister(&core->v4l2_dev);
- 
-diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
-index ddaa9944fa44..9a0e2a00f383 100644
---- a/drivers/media/platform/qcom/venus/pm_helpers.c
-+++ b/drivers/media/platform/qcom/venus/pm_helpers.c
-@@ -318,13 +318,8 @@ static int load_scale_v1(struct venus_inst *inst)
- 	return ret;
- }
- 
--static void core_put_v1(struct venus_core *core)
--{
--}
--
- static const struct venus_pm_ops pm_ops_v1 = {
- 	.core_get = venus_clks_get,
--	.core_put = core_put_v1,
- 	.load_scale = load_scale_v1,
- };
- 
-@@ -396,7 +391,6 @@ static int venc_power_v3(struct device *dev, int on)
- 
- static const struct venus_pm_ops pm_ops_v3 = {
- 	.core_get = venus_clks_get,
--	.core_put = core_put_v1,
- 	.vdec_get = vdec_get_v3,
- 	.vdec_power = vdec_power_v3,
- 	.venc_get = venc_get_v3,
-@@ -899,7 +893,7 @@ static int vcodec_domains_get(struct venus_core *core)
- 	return ret;
- }
- 
--static void vcodec_domains_put(struct venus_core *core)
-+void vcodec_domains_put(struct venus_core *core)
- {
- 	const struct venus_resources *res = core->res;
- 	unsigned int i;
-@@ -974,14 +968,6 @@ static int core_get_v4(struct venus_core *core)
- 	return 0;
- }
- 
--static void core_put_v4(struct venus_core *core)
--{
--	if (legacy_binding)
--		return;
--
--	vcodec_domains_put(core);
--}
--
- int venus_core_power(struct venus_core *core, int on)
- {
- 	struct device *dev = core->dev;
-@@ -1128,7 +1114,6 @@ static int load_scale_v4(struct venus_inst *inst)
- 
- static const struct venus_pm_ops pm_ops_v4 = {
- 	.core_get = core_get_v4,
--	.core_put = core_put_v4,
- 	.vdec_get = vdec_get_v4,
- 	.vdec_put = vdec_put_v4,
- 	.vdec_power = vdec_power_v4,
-diff --git a/drivers/media/platform/qcom/venus/pm_helpers.h b/drivers/media/platform/qcom/venus/pm_helpers.h
-index 77db940a265c..3014b39aa6e3 100644
---- a/drivers/media/platform/qcom/venus/pm_helpers.h
-+++ b/drivers/media/platform/qcom/venus/pm_helpers.h
-@@ -11,7 +11,6 @@ struct venus_core;
- 
- struct venus_pm_ops {
- 	int (*core_get)(struct venus_core *core);
--	void (*core_put)(struct venus_core *core);
- 
- 	int (*vdec_get)(struct device *dev);
- 	void (*vdec_put)(struct device *dev);
-@@ -28,6 +27,7 @@ struct venus_pm_ops {
- 
- const struct venus_pm_ops *venus_pm_get(enum hfi_version version);
- int venus_core_power(struct venus_core *core, int on);
-+void vcodec_domains_put(struct venus_core *core);
- 
- static inline int venus_pm_load_scale(struct venus_inst *inst)
- {
+Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.7/arm64-dt)
+
+[3/3] arm64: dts: meson: add IR controller for Meson-S4 SoC
+      https://git.kernel.org/amlogic/c/dc8bc779feb5e855421215384f23de90a4fcd622
+
+These changes has been applied on the intermediate git tree [1].
+
+The v6.7/arm64-dt branch will then be sent via a formal Pull Request to the Linux SoC maintainers
+for inclusion in their intermediate git branches in order to be sent to Linus during
+the next merge window, or sooner if it's a set of fixes.
+
+In the cases of fixes, those will be merged in the current release candidate
+kernel and as soon they appear on the Linux master branch they will be
+backported to the previous Stable and Long-Stable kernels [2].
+
+The intermediate git branches are merged daily in the linux-next tree [3],
+people are encouraged testing these pre-release kernels and report issues on the
+relevant mailing-lists.
+
+If problems are discovered on those changes, please submit a signed-off-by revert
+patch followed by a corrective changeset.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 
 -- 
-2.42.0
+Neil
 
