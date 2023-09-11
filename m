@@ -2,123 +2,212 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57328EEB590
-	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:48:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C7EDEEB581
+	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:48:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234402AbjIKUsQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Sep 2023 16:48:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40404 "EHLO
+        id S234550AbjIKUsU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Sep 2023 16:48:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237795AbjIKNOc (ORCPT
+        with ESMTP id S237573AbjIKM7y (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Sep 2023 09:14:32 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7895E9
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:25 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-99bed101b70so556507166b.3
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694438064; x=1695042864; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0TCXlkx9FBx7XbMn7VMNDwyuOtzJKgBsRO7jREukP4c=;
-        b=Y56b8e+YU9PnufBoGgPTApzgOXcK+2g8EuHQ6pN8bzRIIHBormuQdUdQGGYtp6JAii
-         9lRh8htmjCpb9vGYNhTHrB0uN36c60/tnX3rWrQq/6kh2AdMhWVFtosDRP5xnDNKa5p+
-         lkhVYlNCHpQcrOJ8wFhp99gL0wIuh9axnDgEI9g+zGw1LTczB33ocgoudJ07Wee8aqsH
-         6ZDoTPtp7TOiavw2vSgnpb/YT81scTSm4a6XwSJpc0nha8svVjdcfXll33JAroDBeaHe
-         sQJ6ZzluurGOhRgMhPKFbgDp1NmoJxuMTLbbe3KOBhnP4j5UU5eQYH3Y8ylhZdQh2sia
-         6uFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694438064; x=1695042864;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0TCXlkx9FBx7XbMn7VMNDwyuOtzJKgBsRO7jREukP4c=;
-        b=Y9HdGYsk/y7icsefrV1+loSRnV8rteTeQX2dTYbcmW3rD3V6xSU5ILdYAY/5rrDvwt
-         CHYwuQbAH9PwtWT5NPzzpzZf4IF9xtajEBuPDUv/HMeoEt1qPYo94mlQfNzo6oj4BjQ1
-         ElM00+7IGH9Ap+Am1UgNI08CPYrQxev/2+o0LoMmrucVFi6foYBeO7IojJIp9gyDPm9H
-         biEJ++8Mhr34/OqLRS2J3gbLD0hQJ0sGTV6XUzG4B2hzQYDJzQmHkgR833tF4cFMAmxr
-         cAnmFDHCrJJ3ejY7+PbUqt5TOiD6IBT9ioJvx0BdTyU3QhiJU3j1xaQET1abUq1aXhC0
-         cCkw==
-X-Gm-Message-State: AOJu0Yzhv4z5VlPxw0iZ4qo1TWyjLMFA/OKFO9GFkgWYuaQmi0sA9RSW
-        SUhYsIXBTqbkEzWjs6Br6rb+Vw==
-X-Google-Smtp-Source: AGHT+IFZzXhiNfwKFMF6Zm2cRmio9F67gVYIwv8DcTVRfvwtJ3y2kR4pCcWDGQrHs17pzDMQ4a2NaA==
-X-Received: by 2002:a17:907:2cd8:b0:9a1:c357:c743 with SMTP id hg24-20020a1709072cd800b009a1c357c743mr8074375ejc.52.1694438063804;
-        Mon, 11 Sep 2023 06:14:23 -0700 (PDT)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id kt8-20020a170906aac800b00988e953a586sm5313648ejb.61.2023.09.11.06.14.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Sep 2023 06:14:23 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
-        andrey.konovalov@linaro.org
-Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 09/17] media: qcom: camss: Remove special case for VFE get/put
-Date:   Mon, 11 Sep 2023 14:14:03 +0100
-Message-ID: <20230911131411.196033-10-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20230911131411.196033-1-bryan.odonoghue@linaro.org>
-References: <20230911131411.196033-1-bryan.odonoghue@linaro.org>
+        Mon, 11 Sep 2023 08:59:54 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37591E50;
+        Mon, 11 Sep 2023 05:59:48 -0700 (PDT)
+X-UUID: 137c5a0a50a311ee8051498923ad61e6-20230911
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=wGn84tUw6N50Fk0lJ6JBeezeFPrSfi9xsdZA9/LXQDc=;
+        b=EYoTRttnVl/TXzO+cQiKckIr/LniWEBWwt/eUKUr0TRCV2p+9DQ/qhzATKKA+OO9I0WigV4FmrG7cDPNISsYVEslsplmdkQJZADp6zIa5s4+R8w8ryMy8bagesLmWNSK/Y4VOuCY4yidI+1Az3vmqVSDZGoFknhDhoGIlqKrJB0=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.31,REQID:e72671e2-76a2-4514-93a8-72df6433663e,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:-25
+X-CID-META: VersionHash:0ad78a4,CLOUDID:dfc3e4c2-1e57-4345-9d31-31ad9818b39f,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,
+        DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 137c5a0a50a311ee8051498923ad61e6-20230911
+Received: from mtkmbs14n2.mediatek.inc [(172.21.101.76)] by mailgw02.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1601039962; Mon, 11 Sep 2023 20:59:43 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.194) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Mon, 11 Sep 2023 20:59:42 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Mon, 11 Sep 2023 20:59:41 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
+        <nfraprado@collabora.com>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Nathan Hebert <nhebert@chromium.org>
+CC:     Chen-Yu Tsai <wenst@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH 04/14] media: mediatek: vcodec: initialize msg and vsi information
+Date:   Mon, 11 Sep 2023 20:59:26 +0800
+Message-ID: <20230911125936.10648-5-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230911125936.10648-1-yunfei.dong@mediatek.com>
+References: <20230911125936.10648-1-yunfei.dong@mediatek.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From sdm845 onwards we need to ensure the VFE is powered on prior to
-switching on the CSID.
+Need to initialize msg and vsi information before sending to optee-os, then
+calling optee invoke command to send the information to optee-os.
 
-Currently the code tests for sdm845, sm8250 and then does get/set. This is
-not extensible and it turns out is not necessary either since vfe_get and
-vfe_set reference count.
+For the optee communication interface is different with scp, using
+flag to separate them.
 
-Remove the over-conservative SoC version check.
-
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org> # rb3 # db410c
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 ---
- drivers/media/platform/qcom/camss/camss-csid.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+ .../vcodec/decoder/mtk_vcodec_dec_drv.h       |  2 +
+ .../mediatek/vcodec/decoder/vdec_vpu_if.c     | 46 ++++++++++++++++---
+ .../mediatek/vcodec/decoder/vdec_vpu_if.h     |  4 ++
+ 3 files changed, 46 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
-index 99f651e2021cb..02ae3f5cb0c0e 100644
---- a/drivers/media/platform/qcom/camss/camss-csid.c
-+++ b/drivers/media/platform/qcom/camss/camss-csid.c
-@@ -159,15 +159,12 @@ static int csid_set_power(struct v4l2_subdev *sd, int on)
- 	struct camss *camss = csid->camss;
- 	struct device *dev = camss->dev;
- 	struct vfe_device *vfe = &camss->vfe[csid->id];
--	u32 version = camss->res->version;
- 	int ret = 0;
+diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
+index 061542c3852c..20e534151f69 100644
+--- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
++++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
+@@ -165,6 +165,7 @@ struct mtk_vcodec_dec_pdata {
+  * @vpu_inst: vpu instance pointer.
+  *
+  * @is_10bit_bitstream: set to true if it's 10bit bitstream
++ * @is_svp_mode: secure video playback
+  */
+ struct mtk_vcodec_dec_ctx {
+ 	enum mtk_instance_type type;
+@@ -210,6 +211,7 @@ struct mtk_vcodec_dec_ctx {
+ 	void *vpu_inst;
  
- 	if (on) {
--		if (version == CAMSS_8250 || version == CAMSS_845) {
--			ret = vfe_get(vfe);
--			if (ret < 0)
--				return ret;
--		}
-+		ret = vfe_get(vfe);
-+		if (ret < 0)
-+			return ret;
+ 	bool is_10bit_bitstream;
++	bool is_svp_mode;
+ };
  
- 		ret = pm_runtime_resume_and_get(dev);
- 		if (ret < 0)
-@@ -217,8 +214,7 @@ static int csid_set_power(struct v4l2_subdev *sd, int on)
- 		regulator_bulk_disable(csid->num_supplies,
- 				       csid->supplies);
- 		pm_runtime_put_sync(dev);
--		if (version == CAMSS_8250 || version == CAMSS_845)
--			vfe_put(vfe);
-+		vfe_put(vfe);
+ /**
+diff --git a/drivers/media/platform/mediatek/vcodec/decoder/vdec_vpu_if.c b/drivers/media/platform/mediatek/vcodec/decoder/vdec_vpu_if.c
+index 82e57ae983d5..c1a1bddf99d8 100644
+--- a/drivers/media/platform/mediatek/vcodec/decoder/vdec_vpu_if.c
++++ b/drivers/media/platform/mediatek/vcodec/decoder/vdec_vpu_if.c
+@@ -148,7 +148,10 @@ static void vpu_dec_ipi_handler(void *data, unsigned int len, void *priv)
+ 
+ static int vcodec_vpu_send_msg(struct vdec_vpu_inst *vpu, void *msg, int len)
+ {
+-	int err, id, msgid;
++	int err, id, hw_id, msgid;
++	struct mtk_vdec_optee_data_to_shm *optee_data;
++	void *ack_msg, *data_msg;
++	int data_size;
+ 
+ 	msgid = *(uint32_t *)msg;
+ 	mtk_vdec_debug(vpu->ctx, "id=%X", msgid);
+@@ -158,16 +161,46 @@ static int vcodec_vpu_send_msg(struct vdec_vpu_inst *vpu, void *msg, int len)
+ 
+ 	if (vpu->ctx->dev->vdec_pdata->hw_arch == MTK_VDEC_LAT_SINGLE_CORE) {
+ 		if (msgid == AP_IPIMSG_DEC_CORE ||
+-		    msgid == AP_IPIMSG_DEC_CORE_END)
++		    msgid == AP_IPIMSG_DEC_CORE_END) {
++			optee_data = &vpu->core_optee_info;
+ 			id = vpu->core_id;
+-		else
++		} else {
++			optee_data = &vpu->lat_optee_info;
+ 			id = vpu->id;
++		}
+ 	} else {
++		optee_data = &vpu->lat_optee_info;
+ 		id = vpu->id;
  	}
  
- 	return ret;
+-	err = mtk_vcodec_fw_ipi_send(vpu->ctx->dev->fw_handler, id, msg,
+-				     len, 2000);
++	if (!vpu->ctx->is_svp_mode) {
++		err = mtk_vcodec_fw_ipi_send(vpu->ctx->dev->fw_handler, id, msg, len, 2000);
++	} else {
++		hw_id = (id == SCP_IPI_VDEC_LAT) ? MTK_VDEC_LAT0 : MTK_VDEC_CORE;
++
++		mtk_vcodec_dec_optee_set_data(optee_data, msg, len, OPTEE_MSG_INDEX);
++
++		/* No need copy data(vsi) msg to share memory, set the buffer size to non zero
++		 * value.
++		 */
++		if (msgid == AP_IPIMSG_DEC_CORE || msgid == AP_IPIMSG_DEC_START) {
++			data_msg = mtk_vcodec_dec_get_shm_buffer_va(vpu->ctx->dev->optee_private,
++								    hw_id, OPTEE_DATA_INDEX);
++			data_size = mtk_vcodec_dec_get_shm_buffer_size(vpu->ctx->dev->optee_private,
++								       hw_id, OPTEE_DATA_INDEX);
++			mtk_vcodec_dec_optee_set_data(optee_data, data_msg, data_size,
++						      OPTEE_DATA_INDEX);
++		}
++
++		err = mtk_vcodec_dec_optee_invokd_cmd(vpu->ctx->dev->optee_private,
++						      hw_id, optee_data);
++		vpu->failure = err;
++
++		ack_msg = mtk_vcodec_dec_get_shm_buffer_va(vpu->ctx->dev->optee_private, hw_id,
++							   OPTEE_MSG_INDEX);
++		vpu_dec_ipi_handler(ack_msg, 0, vpu->ctx->dev);
++	}
++
+ 	if (err) {
+ 		mtk_vdec_err(vpu->ctx, "send fail vpu_id=%d msg_id=%X status=%d",
+ 			     id, msgid, err);
+@@ -213,7 +246,8 @@ int vpu_dec_init(struct vdec_vpu_inst *vpu)
+ 		return err;
+ 	}
+ 
+-	if (vpu->ctx->dev->vdec_pdata->hw_arch == MTK_VDEC_LAT_SINGLE_CORE) {
++	if (vpu->ctx->dev->vdec_pdata->hw_arch == MTK_VDEC_LAT_SINGLE_CORE &&
++	    !vpu->ctx->is_svp_mode) {
+ 		err = mtk_vcodec_fw_ipi_register(vpu->ctx->dev->fw_handler,
+ 						 vpu->core_id, vpu->handler,
+ 						 "vdec", vpu->ctx->dev);
+diff --git a/drivers/media/platform/mediatek/vcodec/decoder/vdec_vpu_if.h b/drivers/media/platform/mediatek/vcodec/decoder/vdec_vpu_if.h
+index fbb3f34a73f0..946e5abcc7d3 100644
+--- a/drivers/media/platform/mediatek/vcodec/decoder/vdec_vpu_if.h
++++ b/drivers/media/platform/mediatek/vcodec/decoder/vdec_vpu_if.h
+@@ -28,6 +28,8 @@ struct mtk_vcodec_dec_ctx;
+  * @codec_type     : use codec type to separate different codecs
+  * @capture_type:	used capture type to separate different capture format
+  * @fb_sz  : frame buffer size of each plane
++ * @lat_optee_info  : used to send msg to optee shm buffer
++ * @core_optee_info  : used to send msg to optee shm buffer
+  */
+ struct vdec_vpu_inst {
+ 	int id;
+@@ -44,6 +46,8 @@ struct vdec_vpu_inst {
+ 	unsigned int codec_type;
+ 	unsigned int capture_type;
+ 	unsigned int fb_sz[2];
++	struct mtk_vdec_optee_data_to_shm lat_optee_info;
++	struct mtk_vdec_optee_data_to_shm core_optee_info;
+ };
+ 
+ /**
 -- 
-2.42.0
+2.18.0
 
