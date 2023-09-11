@@ -2,153 +2,221 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6650EE3F04
-	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:50:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B50DCEE3F00
+	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:50:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231345AbjIKUuA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Sep 2023 16:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60380 "EHLO
+        id S236848AbjIKUuF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Sep 2023 16:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241624AbjIKPLF (ORCPT
+        with ESMTP id S237757AbjIKNOW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Sep 2023 11:11:05 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD471CCC
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:10:58 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-502984f5018so6136025e87.3
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:10:58 -0700 (PDT)
+        Mon, 11 Sep 2023 09:14:22 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27532CF0
+        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:16 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-52a49a42353so5797122a12.2
+        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694445057; x=1695049857; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0gNkaBIazgKT+Y/aaQW0Dp8svWdByrrW7NRejS4t2Ug=;
-        b=A5NXoSZwLCUoQ8zAjf6cEtcTmCKAuGGrtcWXWGyThsaeaB6lDRGc0WiOnJcVGtvNac
-         pQlb1PQHamhoAoHdxmGotjByvy9fDDifIPJKtBrR/yU1uyoXjKcwJv6WwcXiPAbTIMGj
-         DhDfSe2uFwKv6uKHuJTBU73wFIQqs5fPtTKgtfzUSGbV7D2ZTjW76CNIl/nzW4UbuzGi
-         7A14BOrQv3dbWHa9d40TpmyKJNflzxG+oIgSlZ0BuitzD9PwvzDTEJ2vbRZ4vj15MZRw
-         pzhswA666hpq7eQAfT84y1ewKa/5bjdef8Qal/f5szLT4I52AV24Rz59NtAGURRIDYo5
-         koEA==
+        d=linaro.org; s=google; t=1694438054; x=1695042854; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bEExl+Qnlpbjs/kQF5vqHTfDAzymWTPDJmQL5fGoUhU=;
+        b=O30Nefz8IpD/EzKpngLHnY7JAJMowqEtJBDBz6EbidBVShxjVVg18fwco1dm0yuV7J
+         8ufMa9xmKmpXXA/RIHFfoEG2iw/iOZkSSjzB+rny5fA3WXivYciCqlYdBYvlMKr/UjpT
+         1VaUDwXvjKhGq8+siWytucN8W+t8VTeIIpbfJ2i/U1EypxYanz2GV5BXBbK/rBia3333
+         4itCSPPZ/nE4FsFWkaHlp63Al6XLJsnyK8UNcvFdNt9VBKe0269sXCdjoEuBupY9sm9y
+         h85BgXWvnzqDUPMEDZQRN+Fz7olCfPx2FNTUruMvjOf4Kdi6UBB388Yovt14i/cornY7
+         RkEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694445057; x=1695049857;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1694438054; x=1695042854;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0gNkaBIazgKT+Y/aaQW0Dp8svWdByrrW7NRejS4t2Ug=;
-        b=RYJLXshNMDmHCaYIqrAd3zSaTTX9xykrfLnWYVmYoU5w6gizu+luiajWMfpT27HroT
-         hXggaCOZKfwVk7i8n2ezfz81HLhFmayQbuqDTQkt1CabOPTjReJDHZiEkSpTDAY5P8Dn
-         iedYihqQUCVs1Y+ohheCl5Q/+QxssA4jt8YGyzqoYTFyXG1feNDkpFGSUoL0lqHl0Ecr
-         EETQal29euHeBMjUIXzbEmUdWdGmMVvI98YglRy66CSvddsCWhkVfoxXlEGgWrCzSlY6
-         lgpwfjvXquWMNl90XfoUJAbxE76PNx8kNhD6sYcSFW3xkLsZR+ViPNW1eO2wvgZHyxOz
-         UgoQ==
-X-Gm-Message-State: AOJu0YznnNfauBYZVoJP6aNxbGx+U/s6LwGMur2YKxcuxR01579T4lw9
-        exT6OX0KlmpEUWcgakGj6IQw6A==
-X-Google-Smtp-Source: AGHT+IGRRmd9cbWKL2C+2j8g6d3N2j7KaPpQujwQ3kO7WmwflLukyxC/cY9y2L25hhkwWSAoqRej/A==
-X-Received: by 2002:a05:6512:3f12:b0:500:ae85:726a with SMTP id y18-20020a0565123f1200b00500ae85726amr9371919lfa.50.1694445056295;
-        Mon, 11 Sep 2023 08:10:56 -0700 (PDT)
-Received: from [10.167.154.1] (178235177061.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.61])
-        by smtp.gmail.com with ESMTPSA id n4-20020a056402060400b0052a3ad836basm4681281edv.41.2023.09.11.08.10.54
+        bh=bEExl+Qnlpbjs/kQF5vqHTfDAzymWTPDJmQL5fGoUhU=;
+        b=LgiTnXfimOPqR2rV5sfMakFtAI2fandcC93ThP9MaYqezR6GMHdYNZMm6UZWmtU9ZC
+         sIC9IyqXDS3b5RvGSlMKCLeyioz10L6p7u0Tlfa9uYIY0yy71WI3zykMXJilVFxmCAj1
+         MSLGyXYTyEvfwXjwQZzlrhRZLaS2Jm0s0Fslb+42KO0dVu+rXYY+MYRoBAwAmspSqz54
+         Xmk7/RTezeg6ORBL9/KqGNzlaAIoMLuTUW6T28tpPZwSOquKlh+DOzS1+Asn392eyqIo
+         XTqHnLjz1LV+/oPcbitHodJbCKSUfsRtMGtxr/+ysyZ8bhksUCnS91mV6P9h8d+LBvuf
+         o/+w==
+X-Gm-Message-State: AOJu0YzS6YEi+Crrx0QmCwo4UZs3bWyqGf+eFytIhwyklLF3YdJdDowZ
+        OMiX7W9ScUEZoZ8XFKaBtSObfQ==
+X-Google-Smtp-Source: AGHT+IEUw9IMod0ZXSwWnw531y8CCVcRYkIXJE/IS9VPSsi86yb58qunvIeGkEFV1EIPP7YnvjXyMQ==
+X-Received: by 2002:a17:906:535d:b0:9a3:c4f4:12de with SMTP id j29-20020a170906535d00b009a3c4f412demr5993428ejo.37.1694438054637;
+        Mon, 11 Sep 2023 06:14:14 -0700 (PDT)
+Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id kt8-20020a170906aac800b00988e953a586sm5313648ejb.61.2023.09.11.06.14.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Sep 2023 08:10:55 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 11 Sep 2023 17:10:30 +0200
-Subject: [PATCH RFT 16/20] media: venus: core: Define a pointer to
- core->res
+        Mon, 11 Sep 2023 06:14:14 -0700 (PDT)
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
+        andrey.konovalov@linaro.org
+Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 01/17] media: qcom: camss: Amalgamate struct resource with struct resource_ispif
+Date:   Mon, 11 Sep 2023 14:13:55 +0100
+Message-ID: <20230911131411.196033-2-bryan.odonoghue@linaro.org>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20230911131411.196033-1-bryan.odonoghue@linaro.org>
+References: <20230911131411.196033-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230911-topic-mars-v1-16-a7d38bf87bdb@linaro.org>
-References: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
-In-Reply-To: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
-To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1694445027; l=2168;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=h0rj/gVk7sNYWd0OnhVJyfmqxcpbrM1z4NX1ZnW541Y=;
- b=ZTp+yrpjwxhoaPMuA3VDx8wXXn68xxaAwLIajdjPm4nahBeYbl/yf7S7ls/PvJL8MDwmdK5Gx
- U20wG71OwSuCLVxUYbZ+B4uDxt3mZjXMOnoc1tapNNiGX8OBrhjUiUA
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-To make the code more concise, define a new variable 'res' pointing to
-the abundantly referenced core->res.
+There is no good reason to differentiate the two resource structures
+here. As part of a general tidyup of the declaration and passing of
+resources within in the CAMSS driver it will be advantageous to have
+one unified resource structure.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+The two structures are very similar anyway thus leading more credence
+still to the argument there should be only one.
+
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/platform/qcom/venus/core.c | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+ drivers/media/platform/qcom/camss/camss-ispif.c |  4 ++--
+ drivers/media/platform/qcom/camss/camss-ispif.h |  4 ++--
+ drivers/media/platform/qcom/camss/camss.c       | 14 +++++++-------
+ drivers/media/platform/qcom/camss/camss.h       |  8 +-------
+ 4 files changed, 12 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
-index 9a1b0be5d067..435f6f10a905 100644
---- a/drivers/media/platform/qcom/venus/core.c
-+++ b/drivers/media/platform/qcom/venus/core.c
-@@ -283,6 +283,7 @@ static irqreturn_t venus_isr_thread(int irq, void *dev_id)
- 
- static int venus_probe(struct platform_device *pdev)
+diff --git a/drivers/media/platform/qcom/camss/camss-ispif.c b/drivers/media/platform/qcom/camss/camss-ispif.c
+index 1c7e4b1b49401..61765b874b9a2 100644
+--- a/drivers/media/platform/qcom/camss/camss-ispif.c
++++ b/drivers/media/platform/qcom/camss/camss-ispif.c
+@@ -1095,7 +1095,7 @@ static int ispif_init_formats(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+  * Return 0 on success or a negative error code otherwise
+  */
+ int msm_ispif_subdev_init(struct camss *camss,
+-			  const struct resources_ispif *res)
++			  const struct resources *res)
  {
-+	const struct venus_resources *res;
- 	struct device *dev = &pdev->dev;
- 	struct venus_core *core;
- 	int i, ret;
-@@ -313,9 +314,11 @@ static int venus_probe(struct platform_device *pdev)
- 	if (!core->res)
- 		return -ENODEV;
+ 	struct device *dev = camss->dev;
+ 	struct ispif_device *ispif = camss->ispif;
+@@ -1152,7 +1152,7 @@ int msm_ispif_subdev_init(struct camss *camss,
  
-+	res = core->res;
-+
- 	mutex_init(&core->pm_lock);
+ 	/* Interrupt */
  
--	core->pm_ops = venus_pm_get(core->res->hfi_version);
-+	core->pm_ops = venus_pm_get(res->hfi_version);
- 	if (!core->pm_ops)
- 		return -ENODEV;
- 
-@@ -323,14 +326,14 @@ static int venus_probe(struct platform_device *pdev)
- 	if (ret)
+-	ret = platform_get_irq_byname(pdev, res->interrupt);
++	ret = platform_get_irq_byname(pdev, res->interrupt[0]);
+ 	if (ret < 0)
  		return ret;
  
--	core->resets = devm_kcalloc(dev, core->res->resets_num, sizeof(*core->resets), GFP_KERNEL);
--	if (core->res->resets_num && !core->resets)
-+	core->resets = devm_kcalloc(dev, res->resets_num, sizeof(*core->resets), GFP_KERNEL);
-+	if (res->resets_num && !core->resets)
- 		return -ENOMEM;
+diff --git a/drivers/media/platform/qcom/camss/camss-ispif.h b/drivers/media/platform/qcom/camss/camss-ispif.h
+index fdf28e68cc7d8..c7c41f7afcaad 100644
+--- a/drivers/media/platform/qcom/camss/camss-ispif.h
++++ b/drivers/media/platform/qcom/camss/camss-ispif.h
+@@ -66,10 +66,10 @@ struct ispif_device {
+ 	struct camss *camss;
+ };
  
--	for (i = 0; i < core->res->resets_num; i++)
--		core->resets[i].id = core->res->resets[i];
-+	for (i = 0; i < res->resets_num; i++)
-+		core->resets[i].id = res->resets[i];
+-struct resources_ispif;
++struct resources;
  
--	ret = devm_reset_control_bulk_get_exclusive(dev, core->res->resets_num, core->resets);
-+	ret = devm_reset_control_bulk_get_exclusive(dev, res->resets_num, core->resets);
- 	if (ret)
- 		return ret;
+ int msm_ispif_subdev_init(struct camss *camss,
+-			  const struct resources_ispif *res);
++			  const struct resources *res);
  
-@@ -340,7 +343,7 @@ static int venus_probe(struct platform_device *pdev)
- 			return ret;
+ int msm_ispif_register_entities(struct ispif_device *ispif,
+ 				struct v4l2_device *v4l2_dev);
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+index c6df862c79e39..fa0eb30d77c26 100644
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -93,14 +93,14 @@ static const struct resources csid_res_8x16[] = {
+ 	},
+ };
+ 
+-static const struct resources_ispif ispif_res_8x16 = {
++static const struct resources ispif_res_8x16 = {
+ 	/* ISPIF */
+ 	.clock = { "top_ahb", "ahb", "ispif_ahb",
+ 		   "csi0", "csi0_pix", "csi0_rdi",
+ 		   "csi1", "csi1_pix", "csi1_rdi" },
+ 	.clock_for_reset = { "vfe0", "csi_vfe0" },
+ 	.reg = { "ispif", "csi_clk_mux" },
+-	.interrupt = "ispif"
++	.interrupt = { "ispif" }
+ 
+ };
+ 
+@@ -234,7 +234,7 @@ static const struct resources csid_res_8x96[] = {
  	}
+ };
  
--	ret = dma_set_mask_and_coherent(dev, core->res->dma_mask);
-+	ret = dma_set_mask_and_coherent(dev, res->dma_mask);
- 	if (ret)
- 		goto err_core_put;
+-static const struct resources_ispif ispif_res_8x96 = {
++static const struct resources ispif_res_8x96 = {
+ 	/* ISPIF */
+ 	.clock = { "top_ahb", "ahb", "ispif_ahb",
+ 		   "csi0", "csi0_pix", "csi0_rdi",
+@@ -243,7 +243,7 @@ static const struct resources_ispif ispif_res_8x96 = {
+ 		   "csi3", "csi3_pix", "csi3_rdi" },
+ 	.clock_for_reset = { "vfe0", "csi_vfe0", "vfe1", "csi_vfe1" },
+ 	.reg = { "ispif", "csi_clk_mux" },
+-	.interrupt = "ispif"
++	.interrupt = { "ispif" }
+ };
  
-
+ static const struct resources vfe_res_8x96[] = {
+@@ -410,7 +410,7 @@ static const struct resources csid_res_660[] = {
+ 	}
+ };
+ 
+-static const struct resources_ispif ispif_res_660 = {
++static const struct resources ispif_res_660 = {
+ 	/* ISPIF */
+ 	.clock = { "top_ahb", "ahb", "ispif_ahb",
+ 		   "csi0", "csi0_pix", "csi0_rdi",
+@@ -419,7 +419,7 @@ static const struct resources_ispif ispif_res_660 = {
+ 		   "csi3", "csi3_pix", "csi3_rdi" },
+ 	.clock_for_reset = { "vfe0", "csi_vfe0", "vfe1", "csi_vfe1" },
+ 	.reg = { "ispif", "csi_clk_mux" },
+-	.interrupt = "ispif"
++	.interrupt = { "ispif" }
+ };
+ 
+ static const struct resources vfe_res_660[] = {
+@@ -1122,7 +1122,7 @@ static int camss_init_subdevices(struct camss *camss)
+ {
+ 	const struct resources *csiphy_res;
+ 	const struct resources *csid_res;
+-	const struct resources_ispif *ispif_res;
++	const struct resources *ispif_res;
+ 	const struct resources *vfe_res;
+ 	unsigned int i;
+ 	int ret;
+diff --git a/drivers/media/platform/qcom/camss/camss.h b/drivers/media/platform/qcom/camss/camss.h
+index f6c326cb853b8..e95211cdb1fd6 100644
+--- a/drivers/media/platform/qcom/camss/camss.h
++++ b/drivers/media/platform/qcom/camss/camss.h
+@@ -44,18 +44,12 @@
+ struct resources {
+ 	char *regulators[CAMSS_RES_MAX];
+ 	char *clock[CAMSS_RES_MAX];
++	char *clock_for_reset[CAMSS_RES_MAX];
+ 	u32 clock_rate[CAMSS_RES_MAX][CAMSS_RES_MAX];
+ 	char *reg[CAMSS_RES_MAX];
+ 	char *interrupt[CAMSS_RES_MAX];
+ };
+ 
+-struct resources_ispif {
+-	char *clock[CAMSS_RES_MAX];
+-	char *clock_for_reset[CAMSS_RES_MAX];
+-	char *reg[CAMSS_RES_MAX];
+-	char *interrupt;
+-};
+-
+ struct icc_bw_tbl {
+ 	u32 avg;
+ 	u32 peak;
 -- 
 2.42.0
 
