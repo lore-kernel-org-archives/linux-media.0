@@ -2,631 +2,246 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 63CB7EEB58C
-	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:48:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3B7FEEB58F
+	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:48:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233878AbjIKUsF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Sep 2023 16:48:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45068 "EHLO
+        id S234047AbjIKUsI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Sep 2023 16:48:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237783AbjIKNOa (ORCPT
+        with ESMTP id S237590AbjIKNAC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Sep 2023 09:14:30 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2484CE4D
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:23 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2b974031aeaso75953351fa.0
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694438061; x=1695042861; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7RcC5Z13/zUqK69N/so6eHAgcugzjOcvez6QkwUNOkw=;
-        b=e608DI5MeHuewZICLaYIMTA3PLHsCNdeHaBJicx5TJA2t3PBjIiURUTppjEnk8vOJk
-         PuiiEo0osu6Xm98rd4UOoaki65MDVGCZeEyCzWtK9RzO/KKVzBTpTwCNC4gxFkZmERyr
-         n9spqVxObhxtiTSmvSUQySliglj5ZN9SBQvPb7Cb4O3js0Myfp9br+P33Bqmklj/mQL7
-         7oTG49CoXllUKf50T4oz8BcaVV5omEkDt2Quo+IlgGQH6Q/EnTyf/kRdMJvo0iLbBBXf
-         +FMG7Y7XNg2YyL1ETQPTxWvUGtNsqYITPZ6qBBp1dQ5o/orqL3vIUBoA0xy59v1gmAky
-         d08A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694438061; x=1695042861;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7RcC5Z13/zUqK69N/so6eHAgcugzjOcvez6QkwUNOkw=;
-        b=nQPC4aRIV7++i1zP0V69fhATNomQ4grN2ZifTO/9HQgsNi0tEAGK6fZ124moyC3MV4
-         8dQLPvilz2Qd3FKcyerKnodN7iXqwV8jD/BUuhUDLJJtEWcYj8plkhVA+c67bor4xiV9
-         AsuFIuS0J8e95mvjM+/AoXWPBTcRfCAhmPupsEdywXa0+k+qCcekRq+wexFJ6pGUx2lL
-         /qKqsPt1ATIp9DEHh5mo278MVbwVpgVfEBtocojxB7Pd7S7iNIKt6kkIdiYPKoXBfG2J
-         xIi7kBFtA9T+YnZFEt/agMTeAQ7torBIxMntLi3BglECC1me5kueLlnJgbgHCkjE93ZT
-         IjGg==
-X-Gm-Message-State: AOJu0Yzwu2sRvrv40DfW4y3NOgbA0GNkg2cLu0hQZ5gCfbDIP8DCRWIK
-        BeOFkKelqiDc/VUI2j48QinztA==
-X-Google-Smtp-Source: AGHT+IEBSitRF+GReY4YEQ7PXo00HY0hbbrEP0K4D/6MFcaM/1B615RZDjmTKOPu8g1QV3IQGb968g==
-X-Received: by 2002:a2e:88c6:0:b0:2b9:e317:ec4d with SMTP id a6-20020a2e88c6000000b002b9e317ec4dmr8277127ljk.39.1694438061421;
-        Mon, 11 Sep 2023 06:14:21 -0700 (PDT)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id kt8-20020a170906aac800b00988e953a586sm5313648ejb.61.2023.09.11.06.14.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Sep 2023 06:14:21 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
-        andrey.konovalov@linaro.org
-Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 07/17] media: qcom: camss: Pass CAMSS subdev callbacks via resource ops pointer
-Date:   Mon, 11 Sep 2023 14:14:01 +0100
-Message-ID: <20230911131411.196033-8-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20230911131411.196033-1-bryan.odonoghue@linaro.org>
-References: <20230911131411.196033-1-bryan.odonoghue@linaro.org>
+        Mon, 11 Sep 2023 09:00:02 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B652BE58;
+        Mon, 11 Sep 2023 05:59:56 -0700 (PDT)
+X-UUID: 17fb1cb050a311ee8051498923ad61e6-20230911
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=i8lf/NQkzqcIVQSywOYprcMBzCK/pk6C1DTn4KOOSno=;
+        b=X0gx9aQ/p5/JiTK8FqIJduCAeVnzm8jpeTN1GdySvXrubHshipc4F6ZbsqJxE8/OJlXCCNM4mLn/goXTd3OS6qtRpfNhBTBj5MpzVgDbGlYDsyQ5gvEB9SCXba9coQJoyXOHnaBwZ8BJ9BbmJZHRULYbO5X116AQNV4aQggkVOI=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.31,REQID:259c6499-b2ae-49a2-9392-f086b9c7ac76,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:-25
+X-CID-META: VersionHash:0ad78a4,CLOUDID:19c4e4c2-1e57-4345-9d31-31ad9818b39f,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,
+        DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 17fb1cb050a311ee8051498923ad61e6-20230911
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 291558597; Mon, 11 Sep 2023 20:59:50 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.194) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Mon, 11 Sep 2023 20:59:49 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Mon, 11 Sep 2023 20:59:48 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
+        <nfraprado@collabora.com>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Nathan Hebert <nhebert@chromium.org>
+CC:     Chen-Yu Tsai <wenst@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Steve Cho" <stevecho@chromium.org>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH 11/14] media: medkatek: vcodec: covert secure fd to secure handle
+Date:   Mon, 11 Sep 2023 20:59:33 +0800
+Message-ID: <20230911125936.10648-12-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230911125936.10648-1-yunfei.dong@mediatek.com>
+References: <20230911125936.10648-1-yunfei.dong@mediatek.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-AS-Result: No-10--12.534500-8.000000
+X-TMASE-MatchedRID: P/hT4jlJcUSvVT6bfkFW/hafLXbshfog0uu9IYFQ6w7wTO+AdP0/mjcG
+        i0cOVVasTiQecD9aKoRYo3G+rvxrNVc6r+JSY5jbtw+xHnsmQjNbAoaK+wS4jV6Ic79Y87/7tqn
+        6zdLiUfc1C2f8ND2KYOY2eV25VpuBroQgRZf2+t7nx2TmxvCbKCi16p3/NdojZ5yuplze9pt6Ra
+        SpHJq/AIiyX6xrn0xcn5u7YzlPkLcm4SY1UdFN+ZA6S0SjvcYU1M2UyPXKJXkUtdRZTmEaIQOku
+        VkkJKW7Ntt/7UYCnkS1L0WZKCITP3uLfgSBmtT0dXu122+iJtqFKXsoBdprwpsoi2XrUn/Jn6Kd
+        MrRsL14qtq5d3cxkNZd/mwLf2BVUgrupyzvJJhmo24LNhuZ3v3/2nGZwJmNDFPsCg1345/BgO21
+        BQaodlQ==
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--12.534500-8.000000
+X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-SNTS-SMTP: AA197EF0F13D4AED8583911B1312E64C584D5BAA8073AC167BEE49505D876A7A2000:8
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-It is possible to pass all of the CAMSS subdevice internal operations
-pointers from the controlling resources structure with an additional
-pointer added to the resources structure.
+User driver will fill or parse data in optee-os with secure handle,
+need to covert secure fd to secure handle in kernel.
 
-This allows for the removal of most of the probe-time control structures.
-
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 ---
- .../media/platform/qcom/camss/camss-csid.c    |  12 +-
- .../media/platform/qcom/camss/camss-csiphy.c  |   4 +-
- drivers/media/platform/qcom/camss/camss-vfe.c |  20 +--
- drivers/media/platform/qcom/camss/camss.c     | 117 ++++++++++++------
- drivers/media/platform/qcom/camss/camss.h     |   1 +
- 5 files changed, 86 insertions(+), 68 deletions(-)
+ .../vcodec/decoder/mtk_vcodec_dec_drv.c       |  1 +
+ .../vcodec/decoder/mtk_vcodec_dec_stateless.c | 54 ++++++++++++++++++-
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  5 ++
+ include/uapi/linux/v4l2-controls.h            |  4 ++
+ 4 files changed, 62 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
-index 14abb7a7ceb47..99f651e2021cb 100644
---- a/drivers/media/platform/qcom/camss/camss-csid.c
-+++ b/drivers/media/platform/qcom/camss/camss-csid.c
-@@ -575,18 +575,8 @@ int msm_csid_subdev_init(struct camss *camss, struct csid_device *csid,
+diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c
+index 0a89ce452ac3..64e006820f43 100644
+--- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c
++++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c
+@@ -571,3 +571,4 @@ module_platform_driver(mtk_vcodec_dec_driver);
  
- 	csid->camss = camss;
- 	csid->id = id;
-+	csid->ops = res->ops;
+ MODULE_LICENSE("GPL v2");
+ MODULE_DESCRIPTION("Mediatek video codec V4L2 decoder driver");
++MODULE_IMPORT_NS(DMA_BUF);
+diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_stateless.c
+index 2ea517883a86..d2b09ce9f1cf 100644
+--- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_stateless.c
++++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_stateless.c
+@@ -426,6 +426,46 @@ static int mtk_vcodec_get_pic_info(struct mtk_vcodec_dec_ctx *ctx)
+ 	return ret;
+ }
  
--	if (camss->res->version == CAMSS_8x16) {
--		csid->ops = &csid_ops_4_1;
--	} else if (camss->res->version == CAMSS_8x96 ||
--		   camss->res->version == CAMSS_660) {
--		csid->ops = &csid_ops_4_7;
--	} else if (camss->res->version == CAMSS_845 ||
--		   camss->res->version == CAMSS_8250) {
--		csid->ops = &csid_ops_gen2;
--	} else {
--		return -EINVAL;
--	}
- 	csid->ops->subdev_init(csid);
++static int mtk_dma_contig_get_secure_handle(struct mtk_vcodec_dec_ctx *ctx, int fd)
++{
++	int secure_handle = 0;
++	struct dma_buf *buf;
++	struct dma_buf_attachment *dba;
++	struct sg_table *sgt;
++	struct device *dev = &ctx->dev->plat_dev->dev;
++
++	buf = dma_buf_get(fd);
++	if (IS_ERR(buf)) {
++		mtk_v4l2_vdec_err(ctx, "dma_buf_get fail fd:%d", fd);
++		return 0;
++	}
++
++	dba = dma_buf_attach(buf, dev);
++	if (IS_ERR(dba)) {
++		mtk_v4l2_vdec_err(ctx, "dma_buf_attach fail fd:%d", fd);
++		goto err_attach;
++	}
++
++	sgt = dma_buf_map_attachment(dba, DMA_BIDIRECTIONAL);
++	if (IS_ERR(sgt)) {
++		mtk_v4l2_vdec_err(ctx, "dma_buf_map_attachment fail fd:%d", fd);
++		goto err_map;
++	}
++	secure_handle = sg_dma_address(sgt->sgl);
++
++	dma_buf_unmap_attachment(dba, sgt, DMA_BIDIRECTIONAL);
++	dma_buf_detach(buf, dba);
++	dma_buf_put(buf);
++
++	return secure_handle;
++err_map:
++	dma_buf_detach(buf, dba);
++err_attach:
++	dma_buf_put(buf);
++
++	return 0;
++}
++
+ static int mtk_vdec_s_ctrl(struct v4l2_ctrl *ctrl)
+ {
+ 	struct mtk_vcodec_dec_ctx *ctx = ctrl_to_dec_ctx(ctrl);
+@@ -436,7 +476,7 @@ static int mtk_vdec_s_ctrl(struct v4l2_ctrl *ctrl)
+ 	struct v4l2_ctrl *hdr_ctrl;
+ 	const struct mtk_vcodec_dec_pdata *dec_pdata = ctx->dev->vdec_pdata;
+ 	const struct mtk_video_fmt *fmt;
+-	int i = 0, ret = 0;
++	int i = 0, ret = 0, sec_fd;
  
- 	/* Memory */
-diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.c b/drivers/media/platform/qcom/camss/camss-csiphy.c
-index 48e6a101ec9c9..4310a132dcbe2 100644
---- a/drivers/media/platform/qcom/camss/camss-csiphy.c
-+++ b/drivers/media/platform/qcom/camss/camss-csiphy.c
-@@ -556,19 +556,17 @@ int msm_csiphy_subdev_init(struct camss *camss,
- 	csiphy->camss = camss;
- 	csiphy->id = id;
- 	csiphy->cfg.combo_mode = 0;
-+	csiphy->ops = res->ops;
+ 	hdr_ctrl = ctrl;
+ 	if (!hdr_ctrl || !hdr_ctrl->p_new.p)
+@@ -489,6 +529,12 @@ static int mtk_vdec_s_ctrl(struct v4l2_ctrl *ctrl)
+ 			return -EINVAL;
+ 		}
+ 		break;
++	case V4L2_CID_MPEG_MTK_GET_SECURE_HANDLE:
++		sec_fd = ctrl->val;
++
++		ctrl->val = mtk_dma_contig_get_secure_handle(ctx, ctrl->val);
++		mtk_v4l2_vdec_dbg(3, ctx, "get secure handle: %d => 0x%x", sec_fd, ctrl->val);
++		break;
+ 	default:
+ 		mtk_v4l2_vdec_dbg(3, ctx, "Not supported to set ctrl id: 0x%x\n", hdr_ctrl->id);
+ 		return ret;
+@@ -525,8 +571,9 @@ static const struct v4l2_ctrl_ops mtk_vcodec_dec_ctrl_ops = {
+ static int mtk_vcodec_dec_ctrls_setup(struct mtk_vcodec_dec_ctx *ctx)
+ {
+ 	unsigned int i;
++	struct v4l2_ctrl *ctrl;
  
- 	if (camss->res->version == CAMSS_8x16) {
--		csiphy->ops = &csiphy_ops_2ph_1_0;
- 		csiphy->formats = csiphy_formats_8x16;
- 		csiphy->nformats = ARRAY_SIZE(csiphy_formats_8x16);
- 	} else if (camss->res->version == CAMSS_8x96 ||
- 		   camss->res->version == CAMSS_660) {
--		csiphy->ops = &csiphy_ops_3ph_1_0;
- 		csiphy->formats = csiphy_formats_8x96;
- 		csiphy->nformats = ARRAY_SIZE(csiphy_formats_8x96);
- 	} else if (camss->res->version == CAMSS_845 ||
- 		   camss->res->version == CAMSS_8250) {
--		csiphy->ops = &csiphy_ops_3ph_1_0;
- 		csiphy->formats = csiphy_formats_sdm845;
- 		csiphy->nformats = ARRAY_SIZE(csiphy_formats_sdm845);
- 	} else {
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
-index f381c82f1f877..4d5c32d3dddbf 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe.c
-@@ -1286,25 +1286,7 @@ int msm_vfe_subdev_init(struct camss *camss, struct vfe_device *vfe,
- 	int i, j;
- 	int ret;
- 
--	switch (camss->res->version) {
--	case CAMSS_8x16:
--		vfe->ops = &vfe_ops_4_1;
--		break;
--	case CAMSS_8x96:
--		vfe->ops = &vfe_ops_4_7;
--		break;
--	case CAMSS_660:
--		vfe->ops = &vfe_ops_4_8;
--		break;
--	case CAMSS_845:
--		vfe->ops = &vfe_ops_170;
--		break;
--	case CAMSS_8250:
--		vfe->ops = &vfe_ops_480;
--		break;
--	default:
--		return -EINVAL;
--	}
-+	vfe->ops = res->ops;
- 
- 	if (!res->line_num)
- 		return -EINVAL;
-diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
-index 54886a2a449b0..12131d9ea7ca8 100644
---- a/drivers/media/platform/qcom/camss/camss.c
-+++ b/drivers/media/platform/qcom/camss/camss.c
-@@ -42,7 +42,8 @@ static const struct camss_subdev_resources csiphy_res_8x16[] = {
- 				{ 0 },
- 				{ 100000000, 200000000 } },
- 		.reg = { "csiphy0", "csiphy0_clk_mux" },
--		.interrupt = { "csiphy0" }
-+		.interrupt = { "csiphy0" },
-+		.ops = &csiphy_ops_2ph_1_0
- 	},
- 
- 	/* CSIPHY1 */
-@@ -54,7 +55,8 @@ static const struct camss_subdev_resources csiphy_res_8x16[] = {
- 				{ 0 },
- 				{ 100000000, 200000000 } },
- 		.reg = { "csiphy1", "csiphy1_clk_mux" },
--		.interrupt = { "csiphy1" }
-+		.interrupt = { "csiphy1" },
-+		.ops = &csiphy_ops_2ph_1_0
+-	v4l2_ctrl_handler_init(&ctx->ctrl_hdl, NUM_CTRLS);
++	v4l2_ctrl_handler_init(&ctx->ctrl_hdl, NUM_CTRLS + 1);
+ 	if (ctx->ctrl_hdl.error) {
+ 		mtk_v4l2_vdec_err(ctx, "v4l2_ctrl_handler_init failed\n");
+ 		return ctx->ctrl_hdl.error;
+@@ -543,6 +590,9 @@ static int mtk_vcodec_dec_ctrls_setup(struct mtk_vcodec_dec_ctx *ctx)
+ 		}
  	}
- };
  
-@@ -73,7 +75,8 @@ static const struct camss_subdev_resources csid_res_8x16[] = {
- 				{ 0 },
- 				{ 0 } },
- 		.reg = { "csid0" },
--		.interrupt = { "csid0" }
-+		.interrupt = { "csid0" },
-+		.ops = &csid_ops_4_1,
- 	},
++	ctrl = v4l2_ctrl_new_std(&ctx->ctrl_hdl, &mtk_vcodec_dec_ctrl_ops,
++				 V4L2_CID_MPEG_MTK_GET_SECURE_HANDLE, 0, 65535, 1, 0);
++
+ 	v4l2_ctrl_handler_setup(&ctx->ctrl_hdl);
  
- 	/* CSID1 */
-@@ -90,7 +93,8 @@ static const struct camss_subdev_resources csid_res_8x16[] = {
- 				{ 0 },
- 				{ 0 } },
- 		.reg = { "csid1" },
--		.interrupt = { "csid1" }
-+		.interrupt = { "csid1" },
-+		.ops = &csid_ops_4_1,
- 	},
- };
+ 	return 0;
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+index 8696eb1cdd61..d8cf01f76aab 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+@@ -1041,6 +1041,7 @@ const char *v4l2_ctrl_get_name(u32 id)
+ 	case V4L2_CID_MPEG_VIDEO_HEVC_SIZE_OF_LENGTH_FIELD:	return "HEVC Size of Length Field";
+ 	case V4L2_CID_MPEG_VIDEO_REF_NUMBER_FOR_PFRAMES:	return "Reference Frames for a P-Frame";
+ 	case V4L2_CID_MPEG_VIDEO_PREPEND_SPSPPS_TO_IDR:		return "Prepend SPS and PPS to IDR";
++	case V4L2_CID_MPEG_MTK_GET_SECURE_HANDLE:		return "MediaTek Decoder get secure handle";
  
-@@ -125,6 +129,7 @@ static const struct camss_subdev_resources vfe_res_8x16[] = {
- 		.reg = { "vfe0" },
- 		.interrupt = { "vfe0" },
- 		.line_num = VFE_LINE_NUM_GEN1,
-+		.ops = &vfe_ops_4_1
- 	}
- };
+ 	/* AV1 controls */
+ 	case V4L2_CID_MPEG_VIDEO_AV1_PROFILE:			return "AV1 Profile";
+@@ -1437,6 +1438,10 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
+ 	case V4L2_CID_MPEG_VIDEO_VPX_NUM_REF_FRAMES:
+ 		*type = V4L2_CTRL_TYPE_INTEGER_MENU;
+ 		break;
++	case V4L2_CID_MPEG_MTK_GET_SECURE_HANDLE:
++		*type = V4L2_CTRL_TYPE_INTEGER;
++		*flags |= V4L2_CTRL_FLAG_WRITE_ONLY;
++		break;
+ 	case V4L2_CID_USER_CLASS:
+ 	case V4L2_CID_CAMERA_CLASS:
+ 	case V4L2_CID_CODEC_CLASS:
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index c3604a0a3e30..7b3694985366 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -954,6 +954,10 @@ enum v4l2_mpeg_mfc51_video_force_frame_type {
+ #define V4L2_CID_MPEG_MFC51_VIDEO_H264_ADAPTIVE_RC_STATIC		(V4L2_CID_CODEC_MFC51_BASE+53)
+ #define V4L2_CID_MPEG_MFC51_VIDEO_H264_NUM_REF_PIC_FOR_P		(V4L2_CID_CODEC_MFC51_BASE+54)
  
-@@ -138,7 +143,8 @@ static const struct camss_subdev_resources csiphy_res_8x96[] = {
- 				{ 0 },
- 				{ 100000000, 200000000, 266666667 } },
- 		.reg = { "csiphy0", "csiphy0_clk_mux" },
--		.interrupt = { "csiphy0" }
-+		.interrupt = { "csiphy0" },
-+		.ops = &csiphy_ops_3ph_1_0
- 	},
++/*  MPEG-class control IDs specific to the MediaTek Decoder driver as defined by V4L2 */
++#define V4L2_CID_MPEG_MTK_BASE			(V4L2_CTRL_CLASS_CODEC | 0x2000)
++#define V4L2_CID_MPEG_MTK_GET_SECURE_HANDLE	(V4L2_CID_MPEG_MTK_BASE+8)
++
+ /*  Camera class control IDs */
  
- 	/* CSIPHY1 */
-@@ -150,7 +156,8 @@ static const struct camss_subdev_resources csiphy_res_8x96[] = {
- 				{ 0 },
- 				{ 100000000, 200000000, 266666667 } },
- 		.reg = { "csiphy1", "csiphy1_clk_mux" },
--		.interrupt = { "csiphy1" }
-+		.interrupt = { "csiphy1" },
-+		.ops = &csiphy_ops_3ph_1_0
- 	},
- 
- 	/* CSIPHY2 */
-@@ -162,7 +169,8 @@ static const struct camss_subdev_resources csiphy_res_8x96[] = {
- 				{ 0 },
- 				{ 100000000, 200000000, 266666667 } },
- 		.reg = { "csiphy2", "csiphy2_clk_mux" },
--		.interrupt = { "csiphy2" }
-+		.interrupt = { "csiphy2" },
-+		.ops = &csiphy_ops_3ph_1_0
- 	}
- };
- 
-@@ -181,7 +189,8 @@ static const struct camss_subdev_resources csid_res_8x96[] = {
- 				{ 0 },
- 				{ 0 } },
- 		.reg = { "csid0" },
--		.interrupt = { "csid0" }
-+		.interrupt = { "csid0" },
-+		.ops = &csid_ops_4_7,
- 	},
- 
- 	/* CSID1 */
-@@ -198,7 +207,8 @@ static const struct camss_subdev_resources csid_res_8x96[] = {
- 				{ 0 },
- 				{ 0 } },
- 		.reg = { "csid1" },
--		.interrupt = { "csid1" }
-+		.interrupt = { "csid1" },
-+		.ops = &csid_ops_4_7,
- 	},
- 
- 	/* CSID2 */
-@@ -215,7 +225,8 @@ static const struct camss_subdev_resources csid_res_8x96[] = {
- 				{ 0 },
- 				{ 0 } },
- 		.reg = { "csid2" },
--		.interrupt = { "csid2" }
-+		.interrupt = { "csid2" },
-+		.ops = &csid_ops_4_7,
- 	},
- 
- 	/* CSID3 */
-@@ -232,7 +243,8 @@ static const struct camss_subdev_resources csid_res_8x96[] = {
- 				{ 0 },
- 				{ 0 } },
- 		.reg = { "csid3" },
--		.interrupt = { "csid3" }
-+		.interrupt = { "csid3" },
-+		.ops = &csid_ops_4_7,
- 	}
- };
- 
-@@ -266,6 +278,7 @@ static const struct camss_subdev_resources vfe_res_8x96[] = {
- 		.reg = { "vfe0" },
- 		.interrupt = { "vfe0" },
- 		.line_num = VFE_LINE_NUM_GEN1,
-+		.ops = &vfe_ops_4_7
- 	},
- 
- 	/* VFE1 */
-@@ -285,6 +298,7 @@ static const struct camss_subdev_resources vfe_res_8x96[] = {
- 		.reg = { "vfe1" },
- 		.interrupt = { "vfe1" },
- 		.line_num = VFE_LINE_NUM_GEN1,
-+		.ops = &vfe_ops_4_7
- 	}
- };
- 
-@@ -300,7 +314,8 @@ static const struct camss_subdev_resources csiphy_res_660[] = {
- 				{ 100000000, 200000000, 269333333 },
- 				{ 0 } },
- 		.reg = { "csiphy0", "csiphy0_clk_mux" },
--		.interrupt = { "csiphy0" }
-+		.interrupt = { "csiphy0" },
-+		.ops = &csiphy_ops_3ph_1_0
- 	},
- 
- 	/* CSIPHY1 */
-@@ -314,7 +329,8 @@ static const struct camss_subdev_resources csiphy_res_660[] = {
- 				{ 100000000, 200000000, 269333333 },
- 				{ 0 } },
- 		.reg = { "csiphy1", "csiphy1_clk_mux" },
--		.interrupt = { "csiphy1" }
-+		.interrupt = { "csiphy1" },
-+		.ops = &csiphy_ops_3ph_1_0
- 	},
- 
- 	/* CSIPHY2 */
-@@ -328,7 +344,8 @@ static const struct camss_subdev_resources csiphy_res_660[] = {
- 				{ 100000000, 200000000, 269333333 },
- 				{ 0 } },
- 		.reg = { "csiphy2", "csiphy2_clk_mux" },
--		.interrupt = { "csiphy2" }
-+		.interrupt = { "csiphy2" },
-+		.ops = &csiphy_ops_3ph_1_0
- 	}
- };
- 
-@@ -350,7 +367,8 @@ static const struct camss_subdev_resources csid_res_660[] = {
- 				{ 0 },
- 				{ 0 } },
- 		.reg = { "csid0" },
--		.interrupt = { "csid0" }
-+		.interrupt = { "csid0" },
-+		.ops = &csid_ops_4_7,
- 	},
- 
- 	/* CSID1 */
-@@ -370,7 +388,8 @@ static const struct camss_subdev_resources csid_res_660[] = {
- 				{ 0 },
- 				{ 0 } },
- 		.reg = { "csid1" },
--		.interrupt = { "csid1" }
-+		.interrupt = { "csid1" },
-+		.ops = &csid_ops_4_7,
- 	},
- 
- 	/* CSID2 */
-@@ -390,7 +409,8 @@ static const struct camss_subdev_resources csid_res_660[] = {
- 				{ 0 },
- 				{ 0 } },
- 		.reg = { "csid2" },
--		.interrupt = { "csid2" }
-+		.interrupt = { "csid2" },
-+		.ops = &csid_ops_4_7,
- 	},
- 
- 	/* CSID3 */
-@@ -410,7 +430,8 @@ static const struct camss_subdev_resources csid_res_660[] = {
- 				{ 0 },
- 				{ 0 } },
- 		.reg = { "csid3" },
--		.interrupt = { "csid3" }
-+		.interrupt = { "csid3" },
-+		.ops = &csid_ops_4_7,
- 	}
- };
- 
-@@ -447,6 +468,7 @@ static const struct camss_subdev_resources vfe_res_660[] = {
- 		.reg = { "vfe0" },
- 		.interrupt = { "vfe0" },
- 		.line_num = VFE_LINE_NUM_GEN1,
-+		.ops = &vfe_ops_4_8
- 	},
- 
- 	/* VFE1 */
-@@ -469,6 +491,7 @@ static const struct camss_subdev_resources vfe_res_660[] = {
- 		.reg = { "vfe1" },
- 		.interrupt = { "vfe1" },
- 		.line_num = VFE_LINE_NUM_GEN1,
-+		.ops = &vfe_ops_4_8
- 	}
- };
- 
-@@ -488,7 +511,8 @@ static const struct camss_subdev_resources csiphy_res_845[] = {
- 				{ 0 },
- 				{ 19200000, 240000000, 269333333 } },
- 		.reg = { "csiphy0" },
--		.interrupt = { "csiphy0" }
-+		.interrupt = { "csiphy0" },
-+		.ops = &csiphy_ops_3ph_1_0
- 	},
- 
- 	/* CSIPHY1 */
-@@ -506,7 +530,8 @@ static const struct camss_subdev_resources csiphy_res_845[] = {
- 				{ 0 },
- 				{ 19200000, 240000000, 269333333 } },
- 		.reg = { "csiphy1" },
--		.interrupt = { "csiphy1" }
-+		.interrupt = { "csiphy1" },
-+		.ops = &csiphy_ops_3ph_1_0
- 	},
- 
- 	/* CSIPHY2 */
-@@ -524,7 +549,8 @@ static const struct camss_subdev_resources csiphy_res_845[] = {
- 				{ 0 },
- 				{ 19200000, 240000000, 269333333 } },
- 		.reg = { "csiphy2" },
--		.interrupt = { "csiphy2" }
-+		.interrupt = { "csiphy2" },
-+		.ops = &csiphy_ops_3ph_1_0
- 	},
- 
- 	/* CSIPHY3 */
-@@ -542,7 +568,8 @@ static const struct camss_subdev_resources csiphy_res_845[] = {
- 				{ 0 },
- 				{ 19200000, 240000000, 269333333 } },
- 		.reg = { "csiphy3" },
--		.interrupt = { "csiphy3" }
-+		.interrupt = { "csiphy3" },
-+		.ops = &csiphy_ops_3ph_1_0
- 	}
- };
- 
-@@ -564,7 +591,8 @@ static const struct camss_subdev_resources csid_res_845[] = {
- 				{ 19200000, 75000000, 384000000, 538666667 },
- 				{ 384000000 } },
- 		.reg = { "csid0" },
--		.interrupt = { "csid0" }
-+		.interrupt = { "csid0" },
-+		.ops = &csid_ops_gen2
- 	},
- 
- 	/* CSID1 */
-@@ -584,7 +612,8 @@ static const struct camss_subdev_resources csid_res_845[] = {
- 				{ 19200000, 75000000, 384000000, 538666667 },
- 				{ 384000000 } },
- 		.reg = { "csid1" },
--		.interrupt = { "csid1" }
-+		.interrupt = { "csid1" },
-+		.ops = &csid_ops_gen2
- 	},
- 
- 	/* CSID2 */
-@@ -604,7 +633,8 @@ static const struct camss_subdev_resources csid_res_845[] = {
- 				{ 19200000, 75000000, 384000000, 538666667 },
- 				{ 384000000 } },
- 		.reg = { "csid2" },
--		.interrupt = { "csid2" }
-+		.interrupt = { "csid2" },
-+		.ops = &csid_ops_gen2
- 	}
- };
- 
-@@ -628,6 +658,7 @@ static const struct camss_subdev_resources vfe_res_845[] = {
- 		.reg = { "vfe0" },
- 		.interrupt = { "vfe0" },
- 		.line_num = VFE_LINE_NUM_GEN2,
-+		.ops = &vfe_ops_170
- 	},
- 
- 	/* VFE1 */
-@@ -649,6 +680,7 @@ static const struct camss_subdev_resources vfe_res_845[] = {
- 		.reg = { "vfe1" },
- 		.interrupt = { "vfe1" },
- 		.line_num = VFE_LINE_NUM_GEN2,
-+		.ops = &vfe_ops_170
- 	},
- 
- 	/* VFE-lite */
-@@ -669,6 +701,7 @@ static const struct camss_subdev_resources vfe_res_845[] = {
- 		.reg = { "vfe_lite" },
- 		.interrupt = { "vfe_lite" },
- 		.line_num = VFE_LINE_NUM_GEN2,
-+		.ops = &vfe_ops_170
- 	}
- };
- 
-@@ -680,7 +713,8 @@ static const struct camss_subdev_resources csiphy_res_8250[] = {
- 		.clock_rate = { { 400000000 },
- 				{ 300000000 } },
- 		.reg = { "csiphy0" },
--		.interrupt = { "csiphy0" }
-+		.interrupt = { "csiphy0" },
-+		.ops = &csiphy_ops_3ph_1_0
- 	},
- 	/* CSIPHY1 */
- 	{
-@@ -689,7 +723,8 @@ static const struct camss_subdev_resources csiphy_res_8250[] = {
- 		.clock_rate = { { 400000000 },
- 				{ 300000000 } },
- 		.reg = { "csiphy1" },
--		.interrupt = { "csiphy1" }
-+		.interrupt = { "csiphy1" },
-+		.ops = &csiphy_ops_3ph_1_0
- 	},
- 	/* CSIPHY2 */
- 	{
-@@ -698,7 +733,8 @@ static const struct camss_subdev_resources csiphy_res_8250[] = {
- 		.clock_rate = { { 400000000 },
- 				{ 300000000 } },
- 		.reg = { "csiphy2" },
--		.interrupt = { "csiphy2" }
-+		.interrupt = { "csiphy2" },
-+		.ops = &csiphy_ops_3ph_1_0
- 	},
- 	/* CSIPHY3 */
- 	{
-@@ -707,7 +743,8 @@ static const struct camss_subdev_resources csiphy_res_8250[] = {
- 		.clock_rate = { { 400000000 },
- 				{ 300000000 } },
- 		.reg = { "csiphy3" },
--		.interrupt = { "csiphy3" }
-+		.interrupt = { "csiphy3" },
-+		.ops = &csiphy_ops_3ph_1_0
- 	},
- 	/* CSIPHY4 */
- 	{
-@@ -716,7 +753,8 @@ static const struct camss_subdev_resources csiphy_res_8250[] = {
- 		.clock_rate = { { 400000000 },
- 				{ 300000000 } },
- 		.reg = { "csiphy4" },
--		.interrupt = { "csiphy4" }
-+		.interrupt = { "csiphy4" },
-+		.ops = &csiphy_ops_3ph_1_0
- 	},
- 	/* CSIPHY5 */
- 	{
-@@ -725,7 +763,8 @@ static const struct camss_subdev_resources csiphy_res_8250[] = {
- 		.clock_rate = { { 400000000 },
- 				{ 300000000 } },
- 		.reg = { "csiphy5" },
--		.interrupt = { "csiphy5" }
-+		.interrupt = { "csiphy5" },
-+		.ops = &csiphy_ops_3ph_1_0
- 	}
- };
- 
-@@ -740,7 +779,8 @@ static const struct camss_subdev_resources csid_res_8250[] = {
- 				{ 100000000, 200000000, 300000000, 400000000 },
- 				{ 0 } },
- 		.reg = { "csid0" },
--		.interrupt = { "csid0" }
-+		.interrupt = { "csid0" },
-+		.ops = &csid_ops_gen2
- 	},
- 	/* CSID1 */
- 	{
-@@ -752,7 +792,8 @@ static const struct camss_subdev_resources csid_res_8250[] = {
- 				{ 100000000, 200000000, 300000000, 400000000 },
- 				{ 0 } },
- 		.reg = { "csid1" },
--		.interrupt = { "csid1" }
-+		.interrupt = { "csid1" },
-+		.ops = &csid_ops_gen2
- 	},
- 	/* CSID2 */
- 	{
-@@ -763,7 +804,8 @@ static const struct camss_subdev_resources csid_res_8250[] = {
- 				{ 400000000, 480000000 },
- 				{ 0 } },
- 		.reg = { "csid2" },
--		.interrupt = { "csid2" }
-+		.interrupt = { "csid2" },
-+		.ops = &csid_ops_gen2
- 	},
- 	/* CSID3 */
- 	{
-@@ -774,7 +816,8 @@ static const struct camss_subdev_resources csid_res_8250[] = {
- 				{ 400000000, 480000000 },
- 				{ 0 } },
- 		.reg = { "csid3" },
--		.interrupt = { "csid3" }
-+		.interrupt = { "csid3" },
-+		.ops = &csid_ops_gen2
- 	}
- };
- 
-@@ -797,6 +840,7 @@ static const struct camss_subdev_resources vfe_res_8250[] = {
- 		.reg = { "vfe0" },
- 		.interrupt = { "vfe0" },
- 		.line_num = 4,
-+		.ops = &vfe_ops_480
- 	},
- 	/* VFE1 */
- 	{
-@@ -816,6 +860,7 @@ static const struct camss_subdev_resources vfe_res_8250[] = {
- 		.reg = { "vfe1" },
- 		.interrupt = { "vfe1" },
- 		.line_num = 4,
-+		.ops = &vfe_ops_480
- 	},
- 	/* VFE2 (lite) */
- 	{
-@@ -834,6 +879,7 @@ static const struct camss_subdev_resources vfe_res_8250[] = {
- 		.reg = { "vfe_lite0" },
- 		.interrupt = { "vfe_lite0" },
- 		.line_num = 4,
-+		.ops = &vfe_ops_480
- 	},
- 	/* VFE3 (lite) */
- 	{
-@@ -852,6 +898,7 @@ static const struct camss_subdev_resources vfe_res_8250[] = {
- 		.reg = { "vfe_lite1" },
- 		.interrupt = { "vfe_lite1" },
- 		.line_num = 4,
-+		.ops = &vfe_ops_480
- 	},
- };
- 
-diff --git a/drivers/media/platform/qcom/camss/camss.h b/drivers/media/platform/qcom/camss/camss.h
-index fc02aa84a5dd7..8acad7321c09d 100644
---- a/drivers/media/platform/qcom/camss/camss.h
-+++ b/drivers/media/platform/qcom/camss/camss.h
-@@ -49,6 +49,7 @@ struct camss_subdev_resources {
- 	char *reg[CAMSS_RES_MAX];
- 	char *interrupt[CAMSS_RES_MAX];
- 	u8 line_num;
-+	const void *ops;
- };
- 
- struct icc_bw_tbl {
+ #define V4L2_CID_CAMERA_CLASS_BASE	(V4L2_CTRL_CLASS_CAMERA | 0x900)
 -- 
-2.42.0
+2.18.0
 
