@@ -2,156 +2,278 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DDB29EE3F01
-	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:50:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3CF2EE3F02
+	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:50:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236876AbjIKUuG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Sep 2023 16:50:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55910 "EHLO
+        id S236892AbjIKUuH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Sep 2023 16:50:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242953AbjIKQg2 (ORCPT
+        with ESMTP id S235782AbjIKJgo (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Sep 2023 12:36:28 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37734D3;
-        Mon, 11 Sep 2023 09:36:23 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-986d8332f50so622213066b.0;
-        Mon, 11 Sep 2023 09:36:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694450181; x=1695054981; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tn6ORcYdF7wmn9zYudPCVDeUReDbRM6yHR4pM4CXkGQ=;
-        b=nl5SiwbyX54Hy0jNU+vPyEf2BEHaaAAd9i1P3I2vwU1OLziQBT3fzU/cOsxfZsbsmQ
-         VyLrwQBFVYR63f6gOIkVeTuNNIZGWO2IhhjYmIMqSOwjpDS8FwR6zL+kcgk6EYmS7ElV
-         eWVqgx6SJWsCTYrJaLRGEBMt/Bdtfurq7m9ljkkPsGv4E3MDKgArQQLh5mfeuE0y1IQK
-         0QihY1yWabQutSzCp2U+KV7FeaYgLooYjYJIN+kEZOFWonk0J0TOjEHzFYZoEu0gxe00
-         t8cnev2XHmJoL4DTTVbr+HXNqjRjukjrGs7RPhQinAYnJe01kligiwMaMgXZLp7A1fBM
-         SX3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694450181; x=1695054981;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tn6ORcYdF7wmn9zYudPCVDeUReDbRM6yHR4pM4CXkGQ=;
-        b=M6FNdumC4Wd6AFBx5txdWPgaNTVvQHL8JhMWFV+hGTjR3jO0hdTslKG4Bs8TogilTv
-         qJeKmi/Jr1EQQQzSddlttG/efSHz8l75aaqxhETSJM/LzbVQrMDefjdbGBmuUAVueNfa
-         oojVFBFr0vvVQmQx38TI3J3iTF+2r510pZdE99LM61AC2rwge8yhsGbROubvEgs19FYY
-         RKP/TFBgAu6ly3x898tyAFijZ/iS4EPjFplkRbVScLvzA3bELXoIEpiHyCg9ILtskw9p
-         +Kd/ti5SwxjRxTLbAoZFts4kB+fn4QTwA8DE1L1mxDpz2sG71ZJRlzLHjrtbWxZHcnAM
-         oGaw==
-X-Gm-Message-State: AOJu0YwckpsVrfym9YeXvK9yb2Dr1MYsoBL2CHXxJ7JbTcbZf6+eEs+q
-        ZLaMyuhAMSKxZvF7ytkd7XA=
-X-Google-Smtp-Source: AGHT+IEZkDEwJehDR4fKggLpjoJhnXiAupV9qorq7MLXFhFfk7fRQqvtYUP3Mho6rsQ4juPA6IGloQ==
-X-Received: by 2002:a17:906:224a:b0:9a9:e6c3:ad28 with SMTP id 10-20020a170906224a00b009a9e6c3ad28mr9042772ejr.69.1694450181242;
-        Mon, 11 Sep 2023 09:36:21 -0700 (PDT)
-Received: from jernej-laptop.localnet (82-149-12-148.dynamic.telemach.net. [82.149.12.148])
-        by smtp.gmail.com with ESMTPSA id h17-20020a170906261100b00999bb1e01dfsm5534149ejc.52.2023.09.11.09.36.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Sep 2023 09:36:20 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
-        ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mon, 11 Sep 2023 05:36:44 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2089.outbound.protection.outlook.com [40.107.93.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD7C8EE;
+        Mon, 11 Sep 2023 02:36:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LGBp2h3UrOEeP4aIgkCyDAcYly7Rvu4gcG4YDm/QIC78o4DCtztUpB1JRwi2WzUIBct0an6Sr6Zzznrn0vlRK0y9qUDJV+EtACWPgmYPWZW+ZDj9EFipcL4PgoZseo4qwEs0Cvu9YBfZW/KAycawrmc5wCnO6vpScnvf29dSpxW+WHE8B5V6QFFUi7M7EDx0PR+LxSZ8V6JWDp7IogAptfLeprmZo4vYFknAVQkCtMK3XCKujGmDjmBIBo6iG/eeERlTc578rFfVV7Ra8i57yKIGwwJjdvFfsMKj3rUOaY3FtSDl0XXdrGHKFVBQm/KSHBMt6pVoZPx+E6y7n4uUfg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YSJWijDAIXOwwc7SCmxmXIcPnlUkIEVZAB5v1yecs50=;
+ b=kBzoFC3kKtunDVAT34ZsKf+sNImdtdq5cDhaYaUZCXTrr4qQYVG80Glo8jrZmEnAPhETunodOEiJMVLwdUpv8FnUOwkkjQUuVbBVBc3Y5raX3CsKBqjnW+rTT5MzrNNx4tGekhFmtR3WZJvzWvbKmgyP7VX9PqLsbrBpg4RMuWqiu+xcdtYBHM/JsACwUjHDwEoI/RieARP6xA+Ws+F0esbClD1OS46Bt2O/NSunshLv4hC5k1zVPBAdRrUdnQR+ZRptla2DOn2BCCoxMtNbjfYiJZyTVsfh2u97CyXHSUBZmES5LZ+0StZhSu1ByYjka/qpQmPJ0Vc5fcunI6uB3A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YSJWijDAIXOwwc7SCmxmXIcPnlUkIEVZAB5v1yecs50=;
+ b=ZwB2vbXeFe7w9Xfvto5iTYWaBe3RFf4FA0rqUkdFSQPuRr9n+6A2JRa1LKqIWc6L1FrEtzEFcloSICLUTkoUHcH1ujFYQ2Qdmx9kx9Fg1I+dDOQgl4Id7eZJ6JFSVKxKg9+CwVB1TBjmzteBslRuJPRsanq2+DOayyQqeaNjLzE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by SJ0PR12MB5455.namprd12.prod.outlook.com (2603:10b6:a03:3ba::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.34; Mon, 11 Sep
+ 2023 09:36:35 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::55cb:215b:389e:eced]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::55cb:215b:389e:eced%5]) with mapi id 15.20.6768.029; Mon, 11 Sep 2023
+ 09:36:35 +0000
+Message-ID: <46532644-a38b-98d5-13a1-8b51b9276a1d@amd.com>
+Date:   Mon, 11 Sep 2023 11:36:27 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH 1/9] dma-buf: heaps: Deduplicate docs and adopt common
+ format
+Content-Language: en-US
+To:     Yong Wu <yong.wu@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <jstultz@google.com>, tjmercier@google.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        kernel@collabora.com
-Subject: Re: [PATCH v6 14/18] media: verisilicon: vp9: Use destination buffer height
- to compute chroma offset
-Date:   Mon, 11 Sep 2023 18:36:19 +0200
-Message-ID: <3248154.aeNJFYEL58@jernej-laptop>
-In-Reply-To: <7da0a2ab-032a-9de9-e136-58f973238c5b@collabora.com>
-References: <20230901124414.48497-1-benjamin.gaignard@collabora.com>
- <4856958.31r3eYUQgx@jernej-laptop>
- <7da0a2ab-032a-9de9-e136-58f973238c5b@collabora.com>
+        linux-mediatek@lists.infradead.org, jianjiao.zeng@mediatek.com,
+        kuohong.wang@mediatek.com
+References: <20230911023038.30649-1-yong.wu@mediatek.com>
+ <20230911023038.30649-2-yong.wu@mediatek.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20230911023038.30649-2-yong.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0168.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a0::20) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|SJ0PR12MB5455:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9c775f60-3539-4e69-439f-08dbb2aa9706
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: eBPbPFxO52HhErnj0f2dKbdkRKJPw5h8I1OxJzwzEQfRekexBMOg9Fig+czmWyB74E/1xKe1/6vbD5YNhDCPRekvp2FDDqd6cNlE+jLyvf3nFxQ55MQmu1hgjS5qac7wqxBHbGDX/fZYxv/prWo3XELr0I5iGZtfzAud+XNjnR2hXMGwX1aajfjujtEDAKdsP+m0Wxy5GUYEoKXSNcjDBn4FlCFnBr3GZlnT2uc7jeJOB+LmZx1xpiBsNsf/cJW9isU901wDmjC+8HdZLQuNs8h7BN3xf6xMC85Tmoi0VOY1dTzz4yJcIfYh7eIcfjOj85Qkk3uar0lDqu9ivZryhjNQ0qzJxKRxKyIasMp1rbUn8/cDO35tkynFoHkeaw0BtGAQfcZruMuF1Mq5bCdHUjeUaQerDLHOKAD56zszpPNt9vEN5TToQEjLNeQ7rZueUWJRpKsfJ9yCm/Qc8EeiB4SkhKPkYLLDLRGMDabvxSLHgiPHzVcudg8MPhxD8fvFYZrz8i06RdvhfJdpV8FCkLzDeg2CErXZc6ibWjqn1KjKRsKVDZrqakW3cmyZfVxsn/P411j+MphuHZaK9v0BOEqDVQkn5VfhVUPtaxXeXC96NkOWrPGrXkCjHUD8fCxAJRj88aL7+pnsPFlsMaSz/A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(346002)(396003)(39860400002)(136003)(366004)(451199024)(186009)(1800799009)(31686004)(6506007)(6486002)(6666004)(41300700001)(36756003)(31696002)(86362001)(38100700002)(2616005)(2906002)(6512007)(83380400001)(478600001)(5660300002)(316002)(110136005)(4326008)(8936002)(8676002)(26005)(7416002)(54906003)(66476007)(66556008)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TWNacEMxUm5rdVNDUVgzdVAwemlMRU5ZdVpWbXNEcWxBUDV5TFRXVjVtdzc5?=
+ =?utf-8?B?Z0xrTGRUV28yaVo0aTdFSWVWbzBEQ3JJUGFjZVlQT1VLSDJPdUFXQXdNdXdN?=
+ =?utf-8?B?ck9DT1ZsakJidWw4dk5ZVE9ISGh4em5YTVJNamRXMUNZUTk2bXV2bUptZW9h?=
+ =?utf-8?B?Q0ZxVWRxQUlJZEs5QklzNUlueTcwNnp0bXpkRlNGREV4QUlldFRhZHA5U29r?=
+ =?utf-8?B?UDd3NTRPeElLblVZMEFzSkg1dmtOVEdOVUErU25xTUVEOEUvNWlhNG51bS9R?=
+ =?utf-8?B?eVNJZ0hNODJPVFBFYTB6cEFiZ1E1TlR5anhFdWtTZFcyakpWOUU0TXhaeHhQ?=
+ =?utf-8?B?am1BSmlLbnB1blFaSm13WHJGSXlOQ3QrYlBaT3VhTUNIdERuN0w5NE9QYTBl?=
+ =?utf-8?B?SzdESlRHQW9nSG5PMHZMY0dQN2ZKZGlyN0RUVkZLYTVveXM0U1FBS1ViT3ZP?=
+ =?utf-8?B?SEtxdEZ3aCthZ1U2VGRWeDJoTTVVSGNQUWZGcHF2Q3dzOG5sUDd3Z0N5ZmZB?=
+ =?utf-8?B?QkxCMVgwd053bkplOGxSSDdxN0t6Smh6QlNnbkJ4clUxWjgzTTA0WXQzY3V5?=
+ =?utf-8?B?Q1lOdnRvL0FGejcyOE9aeTNIeWY1Qnh1SWFhQ2ZUWmNaZW5Kb05VRGszVlZu?=
+ =?utf-8?B?by9Ka2gza0MwZkdESnorUG1ZUy90QzVxb0FqejY5VHJRYW0zRDM0VkNCQlRJ?=
+ =?utf-8?B?aHh0cU8vSitxbzVDNEtSQ3VoMWF2VVNXTEg4NXZ3TU51Vm1XeEt2Q3pBQytn?=
+ =?utf-8?B?TlcyUUZGb0VZWVIrOHBSbXlsSm1lQUgxT3NvYmpKTGo4cHFHN01pN2JtMndN?=
+ =?utf-8?B?M3ZzaXI3ZkZEMk5CTFVTSGFTT09EUS8ySGxDUXE2RFZXVVhtcFV5aFhRbTc3?=
+ =?utf-8?B?bHExZWFBOEtheTJKREE5QiszQ2dvTkhiUmtzRnRTcUd6RWZVby83Wm9vaWNB?=
+ =?utf-8?B?OXdWVnNFZFRQL1FBMmt0SXdrYmdhUjd5d1VGc1orREFicWZ0RE5ITUdoY1Jx?=
+ =?utf-8?B?VU1UUW44U3NKZm9ISHorNEhhM3BPelkwMy85YmNrWHlBRWxsS2xMYURFRnZN?=
+ =?utf-8?B?ZkJPcGVBMU96VHJEeElFeW1vcnV0K0tGQUlHTnM4WFYvM0pjT2ZBVnl0M0wy?=
+ =?utf-8?B?YVExSHd0NWU0MFhRWmFoZjI1czNwNnE0bnR4czBJbjFtL2NrdGk4ZVpKenY3?=
+ =?utf-8?B?dmlRQ3N3WThiR1NiWm8xT2dST2pJSHVMdUV4TzdzOXo1TDBSaWM5YkNhbEJM?=
+ =?utf-8?B?azEra01ldlNRL1BCY2VsYitWYWs3elJyL0tyLzVJR3ZQbHBXRldQbVcxR3h2?=
+ =?utf-8?B?VEwvaksrazBHb0F1a2hPM3VULzZpNnVwcnpkTGZGN1dzL3VZczQxUWMyaWRr?=
+ =?utf-8?B?NjF5RzgrSGlkUGVEejBKVW1LOHlvWjh4d3FuWHpwWFd0Y2s3K09UM3FVSmVR?=
+ =?utf-8?B?OXFnQUZjS0JYdkhFTm41SFJLOWdZMnNLQ2Z5MnZmdlNtL25aa3BzYTlSZTRR?=
+ =?utf-8?B?aEdDSFFTMWJpc2Rlc090NFFRWEJlN1ZjMllrVHVFelV2MmNYWWRSeWF1UWhR?=
+ =?utf-8?B?MTltYnp0SVU3eE1EOGZvMU5XajVxU05ROVdYd3Z0SG92cm1IdzRuT1lVSG5X?=
+ =?utf-8?B?dmxJMThZNGgvZXNmQjVHMXVsdEd3ZmVicFl4Tjh3OUFTY2VWbjJ3SHpqSVVa?=
+ =?utf-8?B?UjJ0WlY1VGVZMG84Z1cvcTZNRUpXbnFtWmJNSi9qbnJ1UHE3YUE4U3g1NVRF?=
+ =?utf-8?B?K3hHMkJQQUZwbWM5QjRZVmFGK054UFhFcmtLbVVLTGJ0bzk3YThNcW5LSXAw?=
+ =?utf-8?B?eWFDZGtvd0RzbVMzaHJiN1h4azArOW5HcEM5TW9YeGVWVEJZVDRSaUxiYTg2?=
+ =?utf-8?B?aS9RSmF2K2tJNXI3YXdLeS9SeFdNdnU0NFBobFd1bEJ6bGREUE4zSytoWW9k?=
+ =?utf-8?B?d25pTS9mSmY4Vld1OW4zcDIvRzBXb2owb1duWlI3Z0lLYno4VTdDMEd6ZzAv?=
+ =?utf-8?B?c1VaMUVMVkJiSTJrM3VtbTdFUTZqQ1gxMFBNT1FWdUZBNjBEbHBVMTNyRlZR?=
+ =?utf-8?B?Wm5LaWwxSmVySDh6K2dqVkMzYTBXdEx5MXJXVk9VYUR5VkMvVWlZbnFTMkpZ?=
+ =?utf-8?Q?l3LscITCPgw1jQZNklv6KpT9s?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9c775f60-3539-4e69-439f-08dbb2aa9706
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Sep 2023 09:36:35.2939
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GOMpsTvrz/VtuBFxsXD+tKOsrijc65Uj/8WFPAo67+ankSMniXPSd/0+jko00N5x
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5455
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Dne ponedeljek, 11. september 2023 ob 10:55:02 CEST je Benjamin Gaignard=20
-napisal(a):
-> Le 10/09/2023 =C3=A0 15:21, Jernej =C5=A0krabec a =C3=A9crit :
-> > Hi Benjamin!
-> >=20
-> > Dne petek, 01. september 2023 ob 14:44:10 CEST je Benjamin Gaignard
-> >=20
-> > napisal(a):
-> >> Source and destination buffer height may not be the same because
-> >> alignment constraint are different.
-> >> Use destination height to compute chroma offset because we target
-> >> this buffer as hardware output.
-> >>=20
-> >> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> >> Fixes: e2da465455ce ("media: hantro: Support VP9 on the G2 core")
-> >> ---
-> >>=20
-> >>   drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c | 4 +---
-> >>   1 file changed, 1 insertion(+), 3 deletions(-)
-> >>=20
-> >> diff --git a/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
-> >> b/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c index
-> >> 6db1c32fce4d..1f3f5e7ce978 100644
-> >> --- a/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
-> >> +++ b/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
-> >> @@ -93,9 +93,7 @@ static int start_prepare_run(struct hantro_ctx *ctx,
-> >> const struct v4l2_ctrl_vp9_ static size_t chroma_offset(const struct
-> >> hantro_ctx *ctx,
-> >>=20
-> >>   			    const struct v4l2_ctrl_vp9_frame
-> >=20
-> > *dec_params)
-> >=20
-> >>   {
-> >>=20
-> >> -	int bytes_per_pixel =3D dec_params->bit_depth =3D=3D 8 ? 1 : 2;
-> >> -
-> >> -	return ctx->src_fmt.width * ctx->src_fmt.height * bytes_per_pixel;
-> >> +	return ctx->dst_fmt.width * ctx->dst_fmt.height * ctx->bit_depth /
-> >=20
-> > 8;
-> >=20
-> > Commit message doesn't mention bit_depth change at all. While I think
-> > there is no difference between dec_params->bit_depth and ctx->bit_depth,
-> > you shouldn't just use ordinary division. If bit_depth is 10, it will be
-> > rounded down. And if you decide to use bit_depth from context, please
-> > remove dec_params argument.
->=20
-> I will change this patch and create a helpers function for chroma and mot=
-ion
-> vectors offsets that VP9 and HEVC code will use since they are identical.
-> I don't see issue with the division. If you have in mind a solution please
-> write it so I could test it.
+m 11.09.23 um 04:30 schrieb Yong Wu:
+> From: "T.J. Mercier" <tjmercier@google.com>
+>
+> The docs for dma_heap_get_name were incorrect, and since they were
+> duplicated in the implementation file they were wrong there too.
+>
+> The docs formatting was inconsistent so I tried to make it more
+> consistent across functions since I'm already in here doing cleanup.
+>
+> Remove multiple unused includes.
+>
+> Signed-off-by: T.J. Mercier <tjmercier@google.com>
+> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+> [Yong: Just add a comment for "priv" to mute build warning]
+> ---
+>   drivers/dma-buf/dma-heap.c | 29 +++++++----------------------
+>   include/linux/dma-heap.h   | 11 +++++------
+>   2 files changed, 12 insertions(+), 28 deletions(-)
+>
+> diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.c
+> index 84ae708fafe7..51030f6c9d6e 100644
+> --- a/drivers/dma-buf/dma-heap.c
+> +++ b/drivers/dma-buf/dma-heap.c
+> @@ -7,17 +7,15 @@
+>    */
+>   
+>   #include <linux/cdev.h>
+> -#include <linux/debugfs.h>
+>   #include <linux/device.h>
+>   #include <linux/dma-buf.h>
+> +#include <linux/dma-heap.h>
+>   #include <linux/err.h>
+> -#include <linux/xarray.h>
+>   #include <linux/list.h>
+> -#include <linux/slab.h>
+>   #include <linux/nospec.h>
+> -#include <linux/uaccess.h>
+>   #include <linux/syscalls.h>
+> -#include <linux/dma-heap.h>
+> +#include <linux/uaccess.h>
+> +#include <linux/xarray.h>
+>   #include <uapi/linux/dma-heap.h>
+>   
+>   #define DEVNAME "dma_heap"
+> @@ -28,9 +26,10 @@
+>    * struct dma_heap - represents a dmabuf heap in the system
+>    * @name:		used for debugging/device-node name
+>    * @ops:		ops struct for this heap
+> - * @heap_devt		heap device node
+> - * @list		list head connecting to list of heaps
+> - * @heap_cdev		heap char device
+> + * @priv:		private data for this heap
+> + * @heap_devt:		heap device node
+> + * @list:		list head connecting to list of heaps
+> + * @heap_cdev:		heap char device
+>    *
+>    * Represents a heap of memory from which buffers can be made.
+>    */
+> @@ -192,25 +191,11 @@ static const struct file_operations dma_heap_fops = {
+>   #endif
+>   };
+>   
+> -/**
+> - * dma_heap_get_drvdata() - get per-subdriver data for the heap
+> - * @heap: DMA-Heap to retrieve private data for
+> - *
+> - * Returns:
+> - * The per-subdriver data for the heap.
+> - */
 
-Solution is same as the code that you removed:
-int bytes_per_pixel =3D dec_params->bit_depth =3D=3D 8 ? 1 : 2;
+Kernel documentation is usually kept on the implementation and not the 
+definition.
 
-Or alternatively:
-int bytes_per_pixel =3D DIV_ROUND_UP(dec_params->bit_depth, 8);
+So I strongly suggest to remove the documentation from the header 
+instead and if there is any additional information in there add it here.
 
-Consider bit_depth being 10. With old code you get 2, with yours you get 1.
+Regards,
+Christian.
 
-Best regards,
-Jernej
-
->=20
-> Regards,
-> Benjamin
->=20
-> > Best regards,
-> > Jernej
-> >=20
-> >>   }
-> >>  =20
-> >>   static size_t mv_offset(const struct hantro_ctx *ctx,
-
-
-
+>   void *dma_heap_get_drvdata(struct dma_heap *heap)
+>   {
+>   	return heap->priv;
+>   }
+>   
+> -/**
+> - * dma_heap_get_name() - get heap name
+> - * @heap: DMA-Heap to retrieve private data for
+> - *
+> - * Returns:
+> - * The char* for the heap name.
+> - */
+>   const char *dma_heap_get_name(struct dma_heap *heap)
+>   {
+>   	return heap->name;
+> diff --git a/include/linux/dma-heap.h b/include/linux/dma-heap.h
+> index 0c05561cad6e..c7c29b724ad6 100644
+> --- a/include/linux/dma-heap.h
+> +++ b/include/linux/dma-heap.h
+> @@ -9,14 +9,13 @@
+>   #ifndef _DMA_HEAPS_H
+>   #define _DMA_HEAPS_H
+>   
+> -#include <linux/cdev.h>
+>   #include <linux/types.h>
+>   
+>   struct dma_heap;
+>   
+>   /**
+>    * struct dma_heap_ops - ops to operate on a given heap
+> - * @allocate:		allocate dmabuf and return struct dma_buf ptr
+> + * @allocate: allocate dmabuf and return struct dma_buf ptr
+>    *
+>    * allocate returns dmabuf on success, ERR_PTR(-errno) on error.
+>    */
+> @@ -42,7 +41,7 @@ struct dma_heap_export_info {
+>   };
+>   
+>   /**
+> - * dma_heap_get_drvdata() - get per-heap driver data
+> + * dma_heap_get_drvdata - get per-heap driver data
+>    * @heap: DMA-Heap to retrieve private data for
+>    *
+>    * Returns:
+> @@ -51,8 +50,8 @@ struct dma_heap_export_info {
+>   void *dma_heap_get_drvdata(struct dma_heap *heap);
+>   
+>   /**
+> - * dma_heap_get_name() - get heap name
+> - * @heap: DMA-Heap to retrieve private data for
+> + * dma_heap_get_name - get heap name
+> + * @heap: DMA-Heap to retrieve the name of
+>    *
+>    * Returns:
+>    * The char* for the heap name.
+> @@ -61,7 +60,7 @@ const char *dma_heap_get_name(struct dma_heap *heap);
+>   
+>   /**
+>    * dma_heap_add - adds a heap to dmabuf heaps
+> - * @exp_info:		information needed to register this heap
+> + * @exp_info: information needed to register this heap
+>    */
+>   struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info);
+>   
 
