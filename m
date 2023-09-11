@@ -2,113 +2,252 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A85AEEB590
-	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:49:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78186EEB596
+	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:49:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235330AbjIKUtN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Sep 2023 16:49:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40556 "EHLO
+        id S235789AbjIKUt0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Sep 2023 16:49:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237829AbjIKNOh (ORCPT
+        with ESMTP id S242552AbjIKPsC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Sep 2023 09:14:37 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8657EEB
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:33 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-98377c5d53eso557210866b.0
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694438072; x=1695042872; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GfLToWi3s74VODYQYeWzaHVcZfMPmR2S8GE/8a2Ka6s=;
-        b=E7nUKy0AiHgN6Fc8wC6A1vHTYuWffz2BCoTvao40CCgCqo9URGTDd3xz9YTeI/y0L4
-         3c/fNzpeieyODxNiTSQWjhGaCGDfjHJyKWLUzbox76OvsqP5os9xWEeqjQDwxMhEJfsn
-         DHdB3rs+mG10VgAVQyvd1jLngmMNgVuFXCdjPSb5jWUbTfzEb1tOBKPykfwbjSgIHCbl
-         FTROLeT4bpEyrQ42E3NJoeTv3afbkK/scRlcuf75NBAC9nDS4T0ROPDHDkZA6iRfcqVW
-         P1I0ZDZg6znTXfhKi0Rz7vqtPUnouZoBiAnvoHPWTkVPT85LULm8sTvKOeAYMBLmtB6S
-         kWTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694438072; x=1695042872;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GfLToWi3s74VODYQYeWzaHVcZfMPmR2S8GE/8a2Ka6s=;
-        b=UCrdm63Wr5nghT3fux62jcp3v42ecK8nRuIyA3U10TuSI7QvcDfTzcaRKgMB0EihKz
-         BmczUicYSW4iYL5tXAlCM4IYGPsbaIlGEktlCMyRyLW89xc0xDNBUDv9fwLTQPAyB8VM
-         MW4i04dAEbnH1AxnT1qyQX3x5G7fR/lyT+Jq9k8Y64Bme7d/2YzDk9pjYsRW4gblDLeM
-         7ANWH/dIP3RipLtYK4N8vlBm7s+zHcGHv25vYHZqWvfyRLLOP5RdGX3M/oYU4Szz+JgG
-         rFzprjQCDqnVEdwKvmhVHRRlDGoZFYiOwz1isL8wAmT/6THAvKoIwwkXf/6HXfYguB8A
-         ZDKQ==
-X-Gm-Message-State: AOJu0Yzd6CPar+c+iGuKKu/HlMTY1OLjGMwxKvT+f+NOeOjpv+X/GiVx
-        bfePGXrcVwvZbrYVKI92LSh0Ag==
-X-Google-Smtp-Source: AGHT+IEEXheHwzN33v3HwqxOhbU/PlFfynn+5Wt6jZP5dXrzEYUXQud1rZBRHKBTagAFH+9tmkAJEg==
-X-Received: by 2002:a17:907:1dcb:b0:99d:dd43:d427 with SMTP id og11-20020a1709071dcb00b0099ddd43d427mr7988343ejc.10.1694438071424;
-        Mon, 11 Sep 2023 06:14:31 -0700 (PDT)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id kt8-20020a170906aac800b00988e953a586sm5313648ejb.61.2023.09.11.06.14.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Sep 2023 06:14:31 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
-        andrey.konovalov@linaro.org
-Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 16/17] media: qcom: camss: Propagate vfe_reset error up the callstack
-Date:   Mon, 11 Sep 2023 14:14:10 +0100
-Message-ID: <20230911131411.196033-17-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20230911131411.196033-1-bryan.odonoghue@linaro.org>
-References: <20230911131411.196033-1-bryan.odonoghue@linaro.org>
+        Mon, 11 Sep 2023 11:48:02 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE21E121;
+        Mon, 11 Sep 2023 08:47:55 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (unknown [IPv6:2606:6d00:15:bae9::7a9])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: nicolas)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A76EE660730D;
+        Mon, 11 Sep 2023 16:47:52 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1694447274;
+        bh=E4HBHzn8alNm5fzzwR5QnPhLQJgodALjT2MB97bXQk4=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=MwU/aQawRxER/8Dix/c7+2LXDW30p1G80OlPZRDfzPT/h1UCGM74ibXR5wNpfw1zT
+         drc1dgS8k3asnVw+gyVjDxTVPCfYd/tQHuGR5w7Uk22+Q+uH+tKeKeVwuoffZCaL40
+         J0WNRYAYBPeMjoAVUBMLJDglfcY9W5+CbrIGcI9iVttA6cTcTUESUEXLh3kfu/DWFC
+         Jk6GCYYM8csYJTeUUoh0HUAziNW4csDkTZDzo1sz6yhymerKXC53g58VfXxmgoCfBv
+         ShEzFAmLG+7wteHBWMtLG6oHl1qDm/jtRbs1qMB4+49uTIepD24f7HG58BxnBma37J
+         Gp4xOsFOGhqFw==
+Message-ID: <4867b91b3bbc9267982dd80ad79f3e73a7bab6fc.camel@collabora.com>
+Subject: Re: [PATCH 11/14] media: medkatek: vcodec: covert secure fd to
+ secure handle
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        =?ISO-8859-1?Q?N=EDcolas?= "F . R . A . Prado" 
+        <nfraprado@collabora.com>, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Nathan Hebert <nhebert@chromium.org>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Date:   Mon, 11 Sep 2023 11:47:44 -0400
+In-Reply-To: <20230911125936.10648-12-yunfei.dong@mediatek.com>
+References: <20230911125936.10648-1-yunfei.dong@mediatek.com>
+         <20230911125936.10648-12-yunfei.dong@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-A previous patch I had removed the returns from vfe_disable() since we
-didn't trap any meaningful errors. Konrad pointed out vfe_reset() could
-return an error, which is true.
+Hi,
 
-Trap the vfe_reset() error code and throw it up the callstack.
+Le lundi 11 septembre 2023 =C3=A0 20:59 +0800, Yunfei Dong a =C3=A9crit=C2=
+=A0:
+> User driver will fill or parse data in optee-os with secure handle,
+> need to covert secure fd to secure handle in kernel.
 
-Suggested-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- drivers/media/platform/qcom/camss/camss-vfe.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+A major rework of the wording is needed in this patchset, to fix the obviou=
+s
+typos like covert->convert, but also to stop calling dmabuf allocated from
+secure heap, secure fd, its not precise enough to understand what this patc=
+h is
+going to be about.
 
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
-index 3d542ac93b1c2..8d23ca99eed35 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe.c
-@@ -435,8 +435,11 @@ static int vfe_disable_output(struct vfe_line *line)
- int vfe_disable(struct vfe_line *line)
- {
- 	struct vfe_device *vfe = to_vfe(line);
-+	int ret;
- 
--	vfe_disable_output(line);
-+	ret = vfe_disable_output(line);
-+	if (ret)
-+		goto error;
- 
- 	vfe_put_output(line);
- 
-@@ -446,7 +449,8 @@ int vfe_disable(struct vfe_line *line)
- 
- 	mutex_unlock(&vfe->stream_lock);
- 
--	return 0;
-+error:
-+	return ret;
- }
- 
- /**
--- 
-2.42.0
+>=20
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+> ---
+>  .../vcodec/decoder/mtk_vcodec_dec_drv.c       |  1 +
+>  .../vcodec/decoder/mtk_vcodec_dec_stateless.c | 54 ++++++++++++++++++-
+>  drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  5 ++
+>  include/uapi/linux/v4l2-controls.h            |  4 ++
+>  4 files changed, 62 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_de=
+c_drv.c b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv=
+.c
+> index 0a89ce452ac3..64e006820f43 100644
+> --- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c
+> +++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c
+> @@ -571,3 +571,4 @@ module_platform_driver(mtk_vcodec_dec_driver);
+> =20
+>  MODULE_LICENSE("GPL v2");
+>  MODULE_DESCRIPTION("Mediatek video codec V4L2 decoder driver");
+> +MODULE_IMPORT_NS(DMA_BUF);
+> diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_de=
+c_stateless.c b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_d=
+ec_stateless.c
+> index 2ea517883a86..d2b09ce9f1cf 100644
+> --- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_state=
+less.c
+> +++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_state=
+less.c
+> @@ -426,6 +426,46 @@ static int mtk_vcodec_get_pic_info(struct mtk_vcodec=
+_dec_ctx *ctx)
+>  	return ret;
+>  }
+> =20
+> +static int mtk_dma_contig_get_secure_handle(struct mtk_vcodec_dec_ctx *c=
+tx, int fd)
+> +{
+> +	int secure_handle =3D 0;
+> +	struct dma_buf *buf;
+> +	struct dma_buf_attachment *dba;
+> +	struct sg_table *sgt;
+> +	struct device *dev =3D &ctx->dev->plat_dev->dev;
+> +
+> +	buf =3D dma_buf_get(fd);
+> +	if (IS_ERR(buf)) {
+> +		mtk_v4l2_vdec_err(ctx, "dma_buf_get fail fd:%d", fd);
+> +		return 0;
+> +	}
+> +
+> +	dba =3D dma_buf_attach(buf, dev);
+> +	if (IS_ERR(dba)) {
+> +		mtk_v4l2_vdec_err(ctx, "dma_buf_attach fail fd:%d", fd);
+> +		goto err_attach;
+> +	}
+> +
+> +	sgt =3D dma_buf_map_attachment(dba, DMA_BIDIRECTIONAL);
+> +	if (IS_ERR(sgt)) {
+> +		mtk_v4l2_vdec_err(ctx, "dma_buf_map_attachment fail fd:%d", fd);
+> +		goto err_map;
+> +	}
+> +	secure_handle =3D sg_dma_address(sgt->sgl);
+> +
+> +	dma_buf_unmap_attachment(dba, sgt, DMA_BIDIRECTIONAL);
+> +	dma_buf_detach(buf, dba);
+> +	dma_buf_put(buf);
+> +
+> +	return secure_handle;
+> +err_map:
+> +	dma_buf_detach(buf, dba);
+> +err_attach:
+> +	dma_buf_put(buf);
+> +
+> +	return 0;
+> +}
+> +
+>  static int mtk_vdec_s_ctrl(struct v4l2_ctrl *ctrl)
+>  {
+>  	struct mtk_vcodec_dec_ctx *ctx =3D ctrl_to_dec_ctx(ctrl);
+> @@ -436,7 +476,7 @@ static int mtk_vdec_s_ctrl(struct v4l2_ctrl *ctrl)
+>  	struct v4l2_ctrl *hdr_ctrl;
+>  	const struct mtk_vcodec_dec_pdata *dec_pdata =3D ctx->dev->vdec_pdata;
+>  	const struct mtk_video_fmt *fmt;
+> -	int i =3D 0, ret =3D 0;
+> +	int i =3D 0, ret =3D 0, sec_fd;
+> =20
+>  	hdr_ctrl =3D ctrl;
+>  	if (!hdr_ctrl || !hdr_ctrl->p_new.p)
+> @@ -489,6 +529,12 @@ static int mtk_vdec_s_ctrl(struct v4l2_ctrl *ctrl)
+>  			return -EINVAL;
+>  		}
+>  		break;
+> +	case V4L2_CID_MPEG_MTK_GET_SECURE_HANDLE:
+> +		sec_fd =3D ctrl->val;
+> +
+> +		ctrl->val =3D mtk_dma_contig_get_secure_handle(ctx, ctrl->val);
+> +		mtk_v4l2_vdec_dbg(3, ctx, "get secure handle: %d =3D> 0x%x", sec_fd, c=
+trl->val);
+> +		break;
+>  	default:
+>  		mtk_v4l2_vdec_dbg(3, ctx, "Not supported to set ctrl id: 0x%x\n", hdr_=
+ctrl->id);
+>  		return ret;
+> @@ -525,8 +571,9 @@ static const struct v4l2_ctrl_ops mtk_vcodec_dec_ctrl=
+_ops =3D {
+>  static int mtk_vcodec_dec_ctrls_setup(struct mtk_vcodec_dec_ctx *ctx)
+>  {
+>  	unsigned int i;
+> +	struct v4l2_ctrl *ctrl;
+> =20
+> -	v4l2_ctrl_handler_init(&ctx->ctrl_hdl, NUM_CTRLS);
+> +	v4l2_ctrl_handler_init(&ctx->ctrl_hdl, NUM_CTRLS + 1);
+>  	if (ctx->ctrl_hdl.error) {
+>  		mtk_v4l2_vdec_err(ctx, "v4l2_ctrl_handler_init failed\n");
+>  		return ctx->ctrl_hdl.error;
+> @@ -543,6 +590,9 @@ static int mtk_vcodec_dec_ctrls_setup(struct mtk_vcod=
+ec_dec_ctx *ctx)
+>  		}
+>  	}
+> =20
+> +	ctrl =3D v4l2_ctrl_new_std(&ctx->ctrl_hdl, &mtk_vcodec_dec_ctrl_ops,
+> +				 V4L2_CID_MPEG_MTK_GET_SECURE_HANDLE, 0, 65535, 1, 0);
+> +
+>  	v4l2_ctrl_handler_setup(&ctx->ctrl_hdl);
+> =20
+>  	return 0;
+> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4=
+l2-core/v4l2-ctrls-defs.c
+> index 8696eb1cdd61..d8cf01f76aab 100644
+> --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+> +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+> @@ -1041,6 +1041,7 @@ const char *v4l2_ctrl_get_name(u32 id)
+>  	case V4L2_CID_MPEG_VIDEO_HEVC_SIZE_OF_LENGTH_FIELD:	return "HEVC Size o=
+f Length Field";
+>  	case V4L2_CID_MPEG_VIDEO_REF_NUMBER_FOR_PFRAMES:	return "Reference Fram=
+es for a P-Frame";
+>  	case V4L2_CID_MPEG_VIDEO_PREPEND_SPSPPS_TO_IDR:		return "Prepend SPS an=
+d PPS to IDR";
+> +	case V4L2_CID_MPEG_MTK_GET_SECURE_HANDLE:		return "MediaTek Decoder get=
+ secure handle";
+> =20
+>  	/* AV1 controls */
+>  	case V4L2_CID_MPEG_VIDEO_AV1_PROFILE:			return "AV1 Profile";
+> @@ -1437,6 +1438,10 @@ void v4l2_ctrl_fill(u32 id, const char **name, enu=
+m v4l2_ctrl_type *type,
+>  	case V4L2_CID_MPEG_VIDEO_VPX_NUM_REF_FRAMES:
+>  		*type =3D V4L2_CTRL_TYPE_INTEGER_MENU;
+>  		break;
+> +	case V4L2_CID_MPEG_MTK_GET_SECURE_HANDLE:
+> +		*type =3D V4L2_CTRL_TYPE_INTEGER;
+> +		*flags |=3D V4L2_CTRL_FLAG_WRITE_ONLY;
+> +		break;
+>  	case V4L2_CID_USER_CLASS:
+>  	case V4L2_CID_CAMERA_CLASS:
+>  	case V4L2_CID_CODEC_CLASS:
+> diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2=
+-controls.h
+> index c3604a0a3e30..7b3694985366 100644
+> --- a/include/uapi/linux/v4l2-controls.h
+> +++ b/include/uapi/linux/v4l2-controls.h
+> @@ -954,6 +954,10 @@ enum v4l2_mpeg_mfc51_video_force_frame_type {
+>  #define V4L2_CID_MPEG_MFC51_VIDEO_H264_ADAPTIVE_RC_STATIC		(V4L2_CID_COD=
+EC_MFC51_BASE+53)
+>  #define V4L2_CID_MPEG_MFC51_VIDEO_H264_NUM_REF_PIC_FOR_P		(V4L2_CID_CODE=
+C_MFC51_BASE+54)
+> =20
+> +/*  MPEG-class control IDs specific to the MediaTek Decoder driver as de=
+fined by V4L2 */
+> +#define V4L2_CID_MPEG_MTK_BASE			(V4L2_CTRL_CLASS_CODEC | 0x2000)
+> +#define V4L2_CID_MPEG_MTK_GET_SECURE_HANDLE	(V4L2_CID_MPEG_MTK_BASE+8)
+> +
+>  /*  Camera class control IDs */
+> =20
+>  #define V4L2_CID_CAMERA_CLASS_BASE	(V4L2_CTRL_CLASS_CAMERA | 0x900)
 
