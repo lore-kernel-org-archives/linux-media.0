@@ -2,176 +2,326 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A72F9CA0EE3
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD1B7CA0ED0
 	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 21:05:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233836AbjIKUsD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Sep 2023 16:48:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51268 "EHLO
+        id S233486AbjIKUry (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Sep 2023 16:47:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241562AbjIKPKp (ORCPT
+        with ESMTP id S236313AbjIKKOE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Sep 2023 11:10:45 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD1E9E4D
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:10:40 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-52c4d3ff424so5992858a12.0
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:10:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694445039; x=1695049839; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rgZree7XzpnUt+LTvm3ELxdMecDcHuNrPgAPFwwrlDc=;
-        b=HfLJPspUIOYNlxqjTf6haE4L3OKKIt45rqYpRPXihauSxAXaOMlMLYBLONtGQXj0/X
-         5s7H+iegg3zpdHZufOaxrsLh3XhluTpnijUHUkbmsND9jvBGC/iAk5RpAGvOaA7zqVTg
-         JWld6t3dAZq+J5h3jI4fyNkisU6WkdUJr37ksp2LoLRYalYQr6GeNY68S/6wPb7FWsWV
-         p+3pRypVJDsD7jPHDm2gE2ya66l/oMJsEuhwSA62E8RVNorsULsfxbXyC38oL2KzvYwp
-         QQv9IU1UG1eoMYHhLvSrc1TOOGog4Bbz6XbCErSoEEFVKT6uA05X61G9XKFy+JupHCf8
-         iExA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694445039; x=1695049839;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rgZree7XzpnUt+LTvm3ELxdMecDcHuNrPgAPFwwrlDc=;
-        b=K48ZFIx0zvl0zx7BdrMTP6H7IJ0PNEWdCAYQy5R9DnollNhIF+yp4n8fUkK+i1tgqp
-         zTqNeHyR/MLdOGbvPsw3Klcz2I6fkGXtfbo3e6+rYnN4LRfxodzn5HJBB9DO8yMyipWG
-         8O/55fBlFoLG40GQa7++cAkeq6gxVYIV0P84iZMJDVI0AHamBuZPVdoaHEiIL3Ht9c7l
-         bL3UVsGYxp7/595jZwvrq0mvfCmblB+vWRXLaLEvxarLyWIkZD6wZBC6uWq6e5Wfqn9c
-         JqitqxJCvxAncwjIPlV5uA4pgu0QumFUztJEGnLeeoKvUkh03RHJM0aDjh/+f9sl20gc
-         2qIg==
-X-Gm-Message-State: AOJu0YzIW0SjVeSLfBdrOW6f+sYiNQLlFnNJFyx7HC+YL/LM0o3vXWrN
-        wg8TX1nthWTaxn6uQr+KOhYdSw==
-X-Google-Smtp-Source: AGHT+IF6Autm6BEvISkfscmZhEQqCMFFMuaMCAzipStVpgAhuvU5zXf4w1yK4J40FXA+U9ObrHJAsg==
-X-Received: by 2002:a05:6402:2027:b0:529:4457:92ea with SMTP id ay7-20020a056402202700b00529445792eamr7948487edb.8.1694445039213;
-        Mon, 11 Sep 2023 08:10:39 -0700 (PDT)
-Received: from [10.167.154.1] (178235177061.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.61])
-        by smtp.gmail.com with ESMTPSA id n4-20020a056402060400b0052a3ad836basm4681281edv.41.2023.09.11.08.10.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Sep 2023 08:10:38 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 11 Sep 2023 17:10:20 +0200
-Subject: [PATCH RFT 06/20] media: venus: pm_helpers: Move reset acquisition
- to common code
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+        Mon, 11 Sep 2023 06:14:04 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2055.outbound.protection.outlook.com [40.107.100.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E557BE5F;
+        Mon, 11 Sep 2023 03:13:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MCKX13hn6u39iZBft0F+NxDIg/zFIyh5loETF8Du6kZb9SPR5RrcMb/UOOjCbS5ITJhIC4n7AdaDfWl5xAUZgHRLGImfODdvhu07nqPU5HlgHmcRj35w59j/z9NiPGCU51MmNkCFnZFWnPToyKm+nyFNdJZAqY5jgJwHOIG8zKRLfZj74cVjBkU1FHJiPM0XawkKU0bKzjlj5+NNUWwb2vqYidpSa3u2SBEYU/ydq3C52ViasUQMISIgHqbXVOXPxmAJcWpn4JYettpipQJMO/fiER4GpBjB8YLmQt3oCwn2ak9aNmXaazYjgMjkkGqIeV1gxm9IjMC+BnrORF1mFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=82WS5ze9mfKQ3VMJE6VR/FyRpYWCAMKAza5KvnDrfho=;
+ b=lu0r56Z60oXZq8+ndWg1h708aO8xLaQJNp969Gn2abCiaqeK/SwBXu9GKk9eagvcAgnU0mRqg9/0y/+2IYf0q51A95zKuRPwwLtj0pJLfYPEaAlSbaOBM7mUnjG31Y6AECdWrjEgkE4I4C29blCT5Z8w7m5vg1zsaQEXNfA5hZQGFcGN/kT0Ulcv4ruk4+IiclpZ4uGPKU6hVwqrt0OEclp1ebhCzxDn7Lo7I4AQPR76bYZgCFO28DcLhqhrwVgDgnfk8j0anNKZ6yXfQA5GyCzfnF2a+epigHfsf/5ZVpvHBaz1rceJPjTEm4gpuiUOqb9tmw7linwHL4mFysTFOA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=82WS5ze9mfKQ3VMJE6VR/FyRpYWCAMKAza5KvnDrfho=;
+ b=F/IRdCO4e2ijMQifGTNxtlDgm/CgjdZg49ImOQLPdocNnax+osr0ru/5ZbbXquzXBfXrxae8oEKn3gQWmghsttdHevYL1j4Z5gK7jQUVgypXmREaCSWIB1vtE8zatCD9n+/SZSyjcIC6ACbo+L4UvPSkIObKHbYDIGATVJ+6Zo8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by DM6PR12MB4562.namprd12.prod.outlook.com (2603:10b6:5:2aa::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.34; Mon, 11 Sep
+ 2023 10:13:55 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::55cb:215b:389e:eced]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::55cb:215b:389e:eced%5]) with mapi id 15.20.6768.029; Mon, 11 Sep 2023
+ 10:13:55 +0000
+Message-ID: <803846bc-fd1d-d2ec-2855-456af22c82f8@amd.com>
+Date:   Mon, 11 Sep 2023 12:13:47 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH 3/9] dma-heap: Provide accessors so that in-kernel drivers
+ can allocate dmabufs from specific heaps
+Content-Language: en-US
+To:     Yong Wu <yong.wu@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <jstultz@google.com>, tjmercier@google.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, jianjiao.zeng@mediatek.com,
+        kuohong.wang@mediatek.com
+References: <20230911023038.30649-1-yong.wu@mediatek.com>
+ <20230911023038.30649-4-yong.wu@mediatek.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20230911023038.30649-4-yong.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230911-topic-mars-v1-6-a7d38bf87bdb@linaro.org>
-References: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
-In-Reply-To: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
-To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1694445027; l=2552;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=PPoQc4dWxK9IfdAY7guj4bitRzCDNn4oxWqLDhFKXac=;
- b=FZ9N6btphy5IyNxFeo26cRZ7A+FoWhLl00Ms967tW3PwzNaN2mpOeDvWI4FHkyMzPdVQ1I8m7
- FvaHtLL+VZeDOyU38CHcpwhkyuFVIZxuTq5o9sYz4ulCmz0tCN6Ly9k
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-ClientProxiedBy: FR3P281CA0131.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:94::14) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|DM6PR12MB4562:EE_
+X-MS-Office365-Filtering-Correlation-Id: 117cffd2-7960-42a8-807d-08dbb2afcdfc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 4gmDjXmT8Pdf+3Ef1KOA7ckvmucguKgJgtMKtdF2NluS9LAXKIeHIjzCJsLiCrvnElcrrVGB48SYrol0Nq6D1X1LtfgRMsixpEE8+cmeQ+MoUi2zk837ITDIkDfMa+lOHWvQM79JXYbQzvdTKjI9qfzZFGCJZD4EkVK7HkXZmjagIBk8xx7yGyGOPj4rYDXcwjo4AeR11wfIaqwzaBaxdHGv3j9c0krTDrylf7JOy4k+eYlYdErO4EdlNpcw/lY2gp4payccWBK1K0mFgVBKtV04e4nCqr62/nTA7Uektp0ytZgdKs91RbMWHaJnAkHmIePTtVnfNm7OCF4pDJQ7duDSmRcoEBPLe80UvWe8fH2yxD6+baRat8ldPRCCDxbzHoe5yBlQTAUhQhO+uLRG88uR17vZkxeApkvNiZ2XMnDXWt8TulJ4YcgEtBqx6S4Muvl3cPLioICQUeKJYsK1KictBm0T1CTP0bQ2KsohYYUmDS9mb66oTUwxxmd5sjvBHmJiou4gwm+360pFhH4Slf2ma9L7NgUW4POMh9zND9QepuaUsjxw/sdbodetEC8pJJHdx61iYdLvZTKKv0YeeL/68hst/Cdoq+3XJYrI5WXlU5cZSNUZK7Yteat1ZN7Hj8HT7CWIcDR9tniCVGPKHw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(376002)(136003)(39860400002)(366004)(346002)(1800799009)(186009)(451199024)(110136005)(6506007)(6486002)(6666004)(966005)(6512007)(478600001)(83380400001)(2616005)(26005)(7416002)(54906003)(66476007)(66556008)(66946007)(4326008)(316002)(2906002)(41300700001)(5660300002)(8676002)(8936002)(86362001)(36756003)(31696002)(38100700002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UkZ2UXFhSEMvcUQxWVJKdmtEeE52MllVS3B0dTZ5eFBydnpENjU5NmRYRmRr?=
+ =?utf-8?B?M0JaM1NXVFFYeVpQcnJmWFc0akowd1hJL1Z3N3M0OEIwWGIxaSs1amtpZUdy?=
+ =?utf-8?B?MGo3U2ZOSGlRdHpDWFVEa3ZFelpxYzVTQk9xR3ZvMlRFQThpSitmUFhvSWZU?=
+ =?utf-8?B?WlFoUFVkQ3UxWGRVVWU1S1ZTWk5xL0hDcXJEVWF1Vld6VXpmTTZlS0dZTjdO?=
+ =?utf-8?B?Tk15ZWY3TEdWbWJleG54cUhWS1pkTEFreGRoTG9CY3RVRVlFT1JybCs3VkpK?=
+ =?utf-8?B?elNyUTF6Z1FJUHo3MWRhT3ppVVlLUGF0cHFlNmt1U2JzMDNtSmJ6ekVIZEc2?=
+ =?utf-8?B?TnJCMnNWQU5jRVFwcVBUZmtGTmtUak1idjNjOGgyVmljcGJHa3dMb3B0Rity?=
+ =?utf-8?B?S3ZONlEzSmFhUWZmRFNCYjdNalhqNXA1R2ZiOUNIbTdnL3VGV1NDQm9lYVUz?=
+ =?utf-8?B?ZTFudnpEeGZTZlpjRUxCMmVqUTBUa284SFBzRm0vN3hNQm01WEJlNjhQRmVr?=
+ =?utf-8?B?UHFrTTJaL0o5OEdVU1ZIVUZnWnRaNy8wNEtGck5xeUpLOXE4M3BMSXpBdEJ2?=
+ =?utf-8?B?TXNQekt5RjdJV3BrN3ZUMG9YT3QxbEx6ejU2Y0lpeUNzczI3U081OWJCZW5v?=
+ =?utf-8?B?T1NXLytRZWNLb1Qrc2F0ZGR1c0JZZUtCYlZYbzNjbzJKWnc5dGR3Y3c1RExs?=
+ =?utf-8?B?WklrSXF1ZGpHN3pOZmVRNTRoMkJMTHYvOXlSeTdNNFU0L2wrTDJaNFBXK3ZF?=
+ =?utf-8?B?eUxoRitLVmplSWFIdllwYlQxaXNJUGNYb1ZxaWdYS21lT0JUUW9wdmp3NDV2?=
+ =?utf-8?B?U0ZUREZ4dUFVWmc5Tk9BY3dPRlczN2Y5N1JFZ2gvaC9GS0lQR2wxbnJkQmJk?=
+ =?utf-8?B?Ym9rQmliVmFmeVZ6d2luVHNMVWxpY1FDSExPb1JwR3FicWpqd0d0L2l2bDVw?=
+ =?utf-8?B?OFpra09QS1pxSTY4SW9MSUx6MHdxY2RzNWw4ZU9PenlUY0x2d0U5NTNsUFA2?=
+ =?utf-8?B?SlZiaFR3dzRab1V2aG1samI0K0x4ZXVlZlJ4SXVEQVRqcldUb2I5RDBpcEtD?=
+ =?utf-8?B?QnhEcTBDS3dFME5lRlRubEhuTWtDZlVrOU5rRExLb2E0NGx2Y2ZXd01jTVlh?=
+ =?utf-8?B?anJBUzg2NE5LLzIrRlVkVnJ2NlVrbTFXQ2poblJJVk51UC9KSXZJeVVoU0R2?=
+ =?utf-8?B?NER3ck1CWEVCNXlnTzdrZm1vbVdyWndveVBWN1hHaW40WWdoeVQzUlFKR0I1?=
+ =?utf-8?B?WkY2RU9rVzliaE5IT0hCOW1rdTlFNytOaUtUc0NiYjlLZ2JLS0x4azYwTnV6?=
+ =?utf-8?B?TEVnNzZjNTRHK3ErWVZWVGpTbXhidGppM3N4MFdrUllzRGJDaFNiTklnejA3?=
+ =?utf-8?B?ZFp5NUdvdkJmbWZKait5SHcxRDB3RVlvb1VDV1p1WWpaMVlPM3JEa2NNaGVQ?=
+ =?utf-8?B?azZIQitpUm9JY0Z1TEVuYndPek1JQ0pTRlV0dUk3R2tNalBGWEV3THJvV0pM?=
+ =?utf-8?B?Z09kUU9tMHYzczJkZGJLQnB3bmthZmx1V3AwbCswYWRXVXkyZ0gxQ3RDWGIv?=
+ =?utf-8?B?ekd3SEE4RFFkbTR4dk0wRXhhcGhudnVURWVFVWVNYlNLWitnZisvamhBREVY?=
+ =?utf-8?B?d25kYmwvYUxiMDN1V0hhUFpiaUY3WXlMVzlVUFMremZLdFVMT0pvemJEbWo1?=
+ =?utf-8?B?MHNEY2d2M0pHZEdiQ0VRZVE1cUxGeitVa0ZjVFVBRFpWUHRuYjNuNm9UTlhx?=
+ =?utf-8?B?SFM0MElkU2NrSUxFMmxKQTh0R1dyUWlDN05lZG8yRHZkZlhrWmJGR1p4L3N1?=
+ =?utf-8?B?ZldsUHpWVVFOVmRzUEFLWTlkZENIQlBTT0liTk1rQnVrMjFaNU1kcWdzeDNO?=
+ =?utf-8?B?VVRzWDdyOUxWZHlwUHdRT2NKOWh6bjlJLzYyVUFSVkFHWS8zazhRTldvU2RT?=
+ =?utf-8?B?ZXUrZTFZYlRTZ29UbDJ4ZzBRcE43MzZGd29HYTJoRzJzN2kwZ0txMFViRTNs?=
+ =?utf-8?B?Y2VtUUtYeXl1MGU3WnJ3UWxPYUUyQTN3eGNvbnY3ZVhkcUkrQUhHVnEvaWZP?=
+ =?utf-8?B?UmxFSldseTRvWkg2MElaSFdzMmJJMy9PV1ZsOXNOa0xTYm9kaTZreHJLck9x?=
+ =?utf-8?Q?NDv19ZMRZnXemwh9AUk7MGzU3?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 117cffd2-7960-42a8-807d-08dbb2afcdfc
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Sep 2023 10:13:55.0746
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: i7OZCHNyCNYebOTp/Jo8bbhHpBOlg1jsWELeYHwf3AbariSw1wIkrL+/Z9pxvYs7
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4562
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There is no reason to keep reset_get code local to HFIv4/v6.
+Am 11.09.23 um 04:30 schrieb Yong Wu:
+> From: John Stultz <jstultz@google.com>
+>
+> This allows drivers who don't want to create their own
+> DMA-BUF exporter to be able to allocate DMA-BUFs directly
+> from existing DMA-BUF Heaps.
+>
+> There is some concern that the premise of DMA-BUF heaps is
+> that userland knows better about what type of heap memory
+> is needed for a pipeline, so it would likely be best for
+> drivers to import and fill DMA-BUFs allocated by userland
+> instead of allocating one themselves, but this is still
+> up for debate.
 
-Move it to the common part.
+The main design goal of having DMA-heaps in the first place is to avoid 
+per driver allocation and this is not necessary because userland know 
+better what type of memory it wants.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/media/platform/qcom/venus/core.c       |  9 ++++++++-
- drivers/media/platform/qcom/venus/pm_helpers.c | 23 -----------------------
- 2 files changed, 8 insertions(+), 24 deletions(-)
+The background is rather that we generally want to decouple allocation 
+from having a device driver connection so that we have better chance 
+that multiple devices can work with the same memory.
 
-diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
-index f32b20c3a565..2445a814b39f 100644
---- a/drivers/media/platform/qcom/venus/core.c
-+++ b/drivers/media/platform/qcom/venus/core.c
-@@ -15,6 +15,7 @@
- #include <linux/of_platform.h>
- #include <linux/platform_device.h>
- #include <linux/pm_opp.h>
-+#include <linux/reset.h>
- #include <linux/slab.h>
- #include <linux/types.h>
- #include <linux/pm_runtime.h>
-@@ -284,7 +285,7 @@ static int venus_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct venus_core *core;
--	int ret;
-+	int i, ret;
- 
- 	core = devm_kzalloc(dev, sizeof(*core), GFP_KERNEL);
- 	if (!core)
-@@ -322,6 +323,12 @@ static int venus_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
-+	for (i = 0; i < core->res->resets_num; i++) {
-+		core->resets[i] = devm_reset_control_get_exclusive(dev, core->res->resets[i]);
-+		if (IS_ERR(core->resets[i]))
-+			return PTR_ERR(core->resets[i]);
-+	}
-+
- 	if (core->pm_ops->core_get) {
- 		ret = core->pm_ops->core_get(core);
- 		if (ret)
-diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
-index f5130aa3ddfc..0e04da8d7eb5 100644
---- a/drivers/media/platform/qcom/venus/pm_helpers.c
-+++ b/drivers/media/platform/qcom/venus/pm_helpers.c
-@@ -952,25 +952,6 @@ static int core_resets_reset(struct venus_core *core)
- 	return ret;
- }
- 
--static int core_resets_get(struct venus_core *core)
--{
--	struct device *dev = core->dev;
--	const struct venus_resources *res = core->res;
--	unsigned int i;
--	int ret;
--
--	for (i = 0; i < res->resets_num; i++) {
--		core->resets[i] =
--			devm_reset_control_get_exclusive(dev, res->resets[i]);
--		if (IS_ERR(core->resets[i])) {
--			ret = PTR_ERR(core->resets[i]);
--			return ret;
--		}
--	}
--
--	return 0;
--}
--
- static int core_get_v4(struct venus_core *core)
- {
- 	struct device *dev = core->dev;
-@@ -994,10 +975,6 @@ static int core_get_v4(struct venus_core *core)
- 	if (ret)
- 		return ret;
- 
--	ret = core_resets_get(core);
--	if (ret)
--		return ret;
--
- 	if (legacy_binding)
- 		return 0;
- 
+I once create a prototype which gives userspace a hint which DMA-heap to 
+user for which device: 
+https://patchwork.kernel.org/project/linux-media/patch/20230123123756.401692-2-christian.koenig@amd.com/
 
--- 
-2.42.0
+Problem is that I don't really have time to look into it and maintain 
+that stuff, but I think from the high level design that is rather the 
+general direction we should push at.
+
+Regards,
+Christian.
+
+>
+> Signed-off-by: John Stultz <jstultz@google.com>
+> Signed-off-by: T.J. Mercier <tjmercier@google.com>
+> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+> [Yong: Fix the checkpatch alignment warning]
+> ---
+>   drivers/dma-buf/dma-heap.c | 60 ++++++++++++++++++++++++++++----------
+>   include/linux/dma-heap.h   | 25 ++++++++++++++++
+>   2 files changed, 69 insertions(+), 16 deletions(-)
+>
+> diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.c
+> index dcc0e38c61fa..908bb30dc864 100644
+> --- a/drivers/dma-buf/dma-heap.c
+> +++ b/drivers/dma-buf/dma-heap.c
+> @@ -53,12 +53,15 @@ static dev_t dma_heap_devt;
+>   static struct class *dma_heap_class;
+>   static DEFINE_XARRAY_ALLOC(dma_heap_minors);
+>   
+> -static int dma_heap_buffer_alloc(struct dma_heap *heap, size_t len,
+> -				 unsigned int fd_flags,
+> -				 unsigned int heap_flags)
+> +struct dma_buf *dma_heap_buffer_alloc(struct dma_heap *heap, size_t len,
+> +				      unsigned int fd_flags,
+> +				      unsigned int heap_flags)
+>   {
+> -	struct dma_buf *dmabuf;
+> -	int fd;
+> +	if (fd_flags & ~DMA_HEAP_VALID_FD_FLAGS)
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	if (heap_flags & ~DMA_HEAP_VALID_HEAP_FLAGS)
+> +		return ERR_PTR(-EINVAL);
+>   
+>   	/*
+>   	 * Allocations from all heaps have to begin
+> @@ -66,9 +69,20 @@ static int dma_heap_buffer_alloc(struct dma_heap *heap, size_t len,
+>   	 */
+>   	len = PAGE_ALIGN(len);
+>   	if (!len)
+> -		return -EINVAL;
+> +		return ERR_PTR(-EINVAL);
+>   
+> -	dmabuf = heap->ops->allocate(heap, len, fd_flags, heap_flags);
+> +	return heap->ops->allocate(heap, len, fd_flags, heap_flags);
+> +}
+> +EXPORT_SYMBOL_GPL(dma_heap_buffer_alloc);
+> +
+> +static int dma_heap_bufferfd_alloc(struct dma_heap *heap, size_t len,
+> +				   unsigned int fd_flags,
+> +				   unsigned int heap_flags)
+> +{
+> +	struct dma_buf *dmabuf;
+> +	int fd;
+> +
+> +	dmabuf = dma_heap_buffer_alloc(heap, len, fd_flags, heap_flags);
+>   	if (IS_ERR(dmabuf))
+>   		return PTR_ERR(dmabuf);
+>   
+> @@ -106,15 +120,9 @@ static long dma_heap_ioctl_allocate(struct file *file, void *data)
+>   	if (heap_allocation->fd)
+>   		return -EINVAL;
+>   
+> -	if (heap_allocation->fd_flags & ~DMA_HEAP_VALID_FD_FLAGS)
+> -		return -EINVAL;
+> -
+> -	if (heap_allocation->heap_flags & ~DMA_HEAP_VALID_HEAP_FLAGS)
+> -		return -EINVAL;
+> -
+> -	fd = dma_heap_buffer_alloc(heap, heap_allocation->len,
+> -				   heap_allocation->fd_flags,
+> -				   heap_allocation->heap_flags);
+> +	fd = dma_heap_bufferfd_alloc(heap, heap_allocation->len,
+> +				     heap_allocation->fd_flags,
+> +				     heap_allocation->heap_flags);
+>   	if (fd < 0)
+>   		return fd;
+>   
+> @@ -205,6 +213,7 @@ const char *dma_heap_get_name(struct dma_heap *heap)
+>   {
+>   	return heap->name;
+>   }
+> +EXPORT_SYMBOL_GPL(dma_heap_get_name);
+>   
+>   struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info)
+>   {
+> @@ -290,6 +299,24 @@ struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info)
+>   	kfree(heap);
+>   	return err_ret;
+>   }
+> +EXPORT_SYMBOL_GPL(dma_heap_add);
+> +
+> +struct dma_heap *dma_heap_find(const char *name)
+> +{
+> +	struct dma_heap *h;
+> +
+> +	mutex_lock(&heap_list_lock);
+> +	list_for_each_entry(h, &heap_list, list) {
+> +		if (!strcmp(h->name, name)) {
+> +			kref_get(&h->refcount);
+> +			mutex_unlock(&heap_list_lock);
+> +			return h;
+> +		}
+> +	}
+> +	mutex_unlock(&heap_list_lock);
+> +	return NULL;
+> +}
+> +EXPORT_SYMBOL_GPL(dma_heap_find);
+>   
+>   static void dma_heap_release(struct kref *ref)
+>   {
+> @@ -315,6 +342,7 @@ void dma_heap_put(struct dma_heap *h)
+>   	kref_put(&h->refcount, dma_heap_release);
+>   	mutex_unlock(&heap_list_lock);
+>   }
+> +EXPORT_SYMBOL_GPL(dma_heap_put);
+>   
+>   static char *dma_heap_devnode(const struct device *dev, umode_t *mode)
+>   {
+> diff --git a/include/linux/dma-heap.h b/include/linux/dma-heap.h
+> index f3c678892c5c..59e70f6c7a60 100644
+> --- a/include/linux/dma-heap.h
+> +++ b/include/linux/dma-heap.h
+> @@ -64,10 +64,35 @@ const char *dma_heap_get_name(struct dma_heap *heap);
+>    */
+>   struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info);
+>   
+> +/**
+> + * dma_heap_find - get the heap registered with the specified name
+> + * @name: Name of the DMA-Heap to find
+> + *
+> + * Returns:
+> + * The DMA-Heap with the provided name.
+> + *
+> + * NOTE: DMA-Heaps returned from this function MUST be released using
+> + * dma_heap_put() when the user is done to enable the heap to be unloaded.
+> + */
+> +struct dma_heap *dma_heap_find(const char *name);
+> +
+>   /**
+>    * dma_heap_put - drops a reference to a dmabuf heap, potentially freeing it
+>    * @heap: the heap whose reference count to decrement
+>    */
+>   void dma_heap_put(struct dma_heap *heap);
+>   
+> +/**
+> + * dma_heap_buffer_alloc - Allocate dma-buf from a dma_heap
+> + * @heap:	DMA-Heap to allocate from
+> + * @len:	size to allocate in bytes
+> + * @fd_flags:	flags to set on returned dma-buf fd
+> + * @heap_flags: flags to pass to the dma heap
+> + *
+> + * This is for internal dma-buf allocations only. Free returned buffers with dma_buf_put().
+> + */
+> +struct dma_buf *dma_heap_buffer_alloc(struct dma_heap *heap, size_t len,
+> +				      unsigned int fd_flags,
+> +				      unsigned int heap_flags);
+> +
+>   #endif /* _DMA_HEAPS_H */
 
