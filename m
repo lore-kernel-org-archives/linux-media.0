@@ -2,173 +2,164 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4221DEEB590
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53DECEEB593
 	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:49:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235287AbjIKUtH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Sep 2023 16:49:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49598 "EHLO
+        id S235302AbjIKUtK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Sep 2023 16:49:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235753AbjIKJ3c (ORCPT
+        with ESMTP id S235617AbjIKJHE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Sep 2023 05:29:32 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE373100;
-        Mon, 11 Sep 2023 02:29:26 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C395966072F0;
-        Mon, 11 Sep 2023 10:29:24 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1694424565;
-        bh=PEkfGXDLYefkrpep6+K+sw4moQH4wOvu/m6wtn7s7qE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=hD8i4A7ygMbHzKh2hK4C8OTl2GKieKyk8xGbRPMbHh+6Zkrg0lQgfgxlDZy0HRUJd
-         hEdTk0obzK2Soq+CEJ+T+JLcwnOMUikk0wnKdLVr2vxOLzr9He7w7SYn4K1l3xO6fr
-         /9XwtvQteamqKIqH0Ua418zxn8O/3reRef2Tn5cfAgKXi2NjXIa4UZKoN2ylJKTJve
-         z8tii5c5OgY29mGF7N6lHal7ve+g93RN6lfW2DYL289Pg0knfDSwOkmhpzzOtW8o76
-         EsghCr6u9IYosm3Za/H5v2jfmV2KXgyoLBzSszsENieOawR8bwBqutUX73tcjMXs2U
-         3EGGiwISa2Ncg==
-Message-ID: <d0373c02-9b22-661f-9930-ca720053c2a0@collabora.com>
-Date:   Mon, 11 Sep 2023 11:29:22 +0200
+        Mon, 11 Sep 2023 05:07:04 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1E3CCC;
+        Mon, 11 Sep 2023 02:07:00 -0700 (PDT)
+Received: from ideasonboard.com (mob-5-90-67-213.net.vodafone.it [5.90.67.213])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4A8759D5;
+        Mon, 11 Sep 2023 11:05:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1694423128;
+        bh=utX+Op13Fe9EGAGC9XEG9IAkVjy7Od+HkcYT4kcMl38=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LTsPbcDdmCSI9XiVoAlH7+KmnsTK6GK6VG5tlh6gTEV+WBlmPJe+/kVxH7y9HjpOf
+         m4D04lbDLTYyuCOCSQk2wLicIRLWESPPdW+jM154YFL4enHMEiVHSDHK2WgkUveCtz
+         XrnpPfJGFlqwpMedk97rYC0Jwa6JJqeU8RofD73M=
+Date:   Mon, 11 Sep 2023 11:06:55 +0200
+From:   Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.au@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH 1/2] media: mt9p031: Extend match support for OF tables
+Message-ID: <tlaikk73c5gc6y3bk6evuwtlizletaws7tuc5nk36hz2adkydp@duv2tjpqnios>
+References: <20230910160126.70122-1-biju.das.jz@bp.renesas.com>
+ <20230910160126.70122-2-biju.das.jz@bp.renesas.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH 5/9] dma-buf: heaps: mtk_sec_heap: Initialise tee session
-Content-Language: en-US
-To:     Yong Wu <yong.wu@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        christian.koenig@amd.com, Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <jstultz@google.com>, tjmercier@google.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, jianjiao.zeng@mediatek.com,
-        kuohong.wang@mediatek.com
-References: <20230911023038.30649-1-yong.wu@mediatek.com>
- <20230911023038.30649-6-yong.wu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230911023038.30649-6-yong.wu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230910160126.70122-2-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Il 11/09/23 04:30, Yong Wu ha scritto:
-> The TEE probe later than dma-buf heap, and PROBE_DEDER doesn't work
-> here since this is not a platform driver, therefore initialise the TEE
-> context/session while we allocate the first secure buffer.
-> 
-> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+Hi Biju
+
+On Sun, Sep 10, 2023 at 05:01:25PM +0100, Biju Das wrote:
+> The driver has an OF match table, still, it uses an ID lookup table for
+> retrieving match data. Currently, the driver is working on the
+> assumption that an I2C device registered via OF will always match a
+> legacy I2C device ID. The correct approach is to have an OF device ID
+> table using i2c_get_match_data() if the devices are registered via OF/ID.
+>
+> Unify the OF/ID table by using MEDIA_BUS_FMT as match data for both these
+> tables and replace the ID lookup table for the match data by
+> i2c_get_match_data() and simplifly probe() and mt9p031_init_cfg()
+>
+> Drop mt9p031_init_cfg as there is no user.
+>
+> While at it, remove the trailing comma in the terminator entry for the OF
+> table making code robust against (theoretical) misrebases or other similar
+> things where the new entry goes _after_ the termination without the
+> compiler noticing.
+>
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 > ---
->   drivers/dma-buf/heaps/mtk_secure_heap.c | 61 +++++++++++++++++++++++++
->   1 file changed, 61 insertions(+)
-> 
-> diff --git a/drivers/dma-buf/heaps/mtk_secure_heap.c b/drivers/dma-buf/heaps/mtk_secure_heap.c
-> index bbf1c8dce23e..e3da33a3d083 100644
-> --- a/drivers/dma-buf/heaps/mtk_secure_heap.c
-> +++ b/drivers/dma-buf/heaps/mtk_secure_heap.c
-> @@ -10,6 +10,12 @@
->   #include <linux/err.h>
->   #include <linux/module.h>
->   #include <linux/slab.h>
-> +#include <linux/tee_drv.h>
-> +#include <linux/uuid.h>
-> +
-> +#define TZ_TA_MEM_UUID		"4477588a-8476-11e2-ad15-e41f1390d676"
-> +
+>  drivers/media/i2c/mt9p031.c | 33 +++++++++++----------------------
+>  1 file changed, 11 insertions(+), 22 deletions(-)
+>
+> diff --git a/drivers/media/i2c/mt9p031.c b/drivers/media/i2c/mt9p031.c
+> index 348f1e1098fb..540cb519915c 100644
+> --- a/drivers/media/i2c/mt9p031.c
+> +++ b/drivers/media/i2c/mt9p031.c
+> @@ -112,11 +112,6 @@
+>  #define MT9P031_TEST_PATTERN_RED			0xa2
+>  #define MT9P031_TEST_PATTERN_BLUE			0xa3
+>
+> -enum mt9p031_model {
+> -	MT9P031_MODEL_COLOR,
+> -	MT9P031_MODEL_MONOCHROME,
+> -};
+> -
+>  struct mt9p031 {
+>  	struct v4l2_subdev subdev;
+>  	struct media_pad pad;
+> @@ -129,7 +124,7 @@ struct mt9p031 {
+>  	struct clk *clk;
+>  	struct regulator_bulk_data regulators[3];
+>
+> -	enum mt9p031_model model;
+> +	u32 code;
+>  	struct aptina_pll pll;
+>  	unsigned int clk_div;
+>  	bool use_pll;
+> @@ -714,12 +709,7 @@ static int mt9p031_init_cfg(struct v4l2_subdev *subdev,
+>  	crop->height = MT9P031_WINDOW_HEIGHT_DEF;
+>
+>  	format = __mt9p031_get_pad_format(mt9p031, sd_state, 0, which);
+> -
+> -	if (mt9p031->model == MT9P031_MODEL_MONOCHROME)
+> -		format->code = MEDIA_BUS_FMT_Y12_1X12;
+> -	else
+> -		format->code = MEDIA_BUS_FMT_SGRBG12_1X12;
+> -
+> +	format->code = mt9p031->code;
+>  	format->width = MT9P031_WINDOW_WIDTH_DEF;
+>  	format->height = MT9P031_WINDOW_HEIGHT_DEF;
+>  	format->field = V4L2_FIELD_NONE;
+> @@ -1104,7 +1094,6 @@ mt9p031_get_pdata(struct i2c_client *client)
+>
+>  static int mt9p031_probe(struct i2c_client *client)
+>  {
+> -	const struct i2c_device_id *did = i2c_client_get_device_id(client);
+>  	struct mt9p031_platform_data *pdata = mt9p031_get_pdata(client);
+>  	struct i2c_adapter *adapter = client->adapter;
+>  	struct mt9p031 *mt9p031;
+> @@ -1129,7 +1118,7 @@ static int mt9p031_probe(struct i2c_client *client)
+>  	mt9p031->pdata = pdata;
+>  	mt9p031->output_control	= MT9P031_OUTPUT_CONTROL_DEF;
+>  	mt9p031->mode2 = MT9P031_READ_MODE_2_ROW_BLC;
+> -	mt9p031->model = did->driver_data;
+> +	mt9p031->code = (uintptr_t)i2c_get_match_data(client);
+>
+>  	mt9p031->regulators[0].supply = "vdd";
+>  	mt9p031->regulators[1].supply = "vdd_io";
+> @@ -1226,19 +1215,19 @@ static void mt9p031_remove(struct i2c_client *client)
+>  }
+>
+>  static const struct i2c_device_id mt9p031_id[] = {
+> -	{ "mt9p006", MT9P031_MODEL_COLOR },
+> -	{ "mt9p031", MT9P031_MODEL_COLOR },
+> -	{ "mt9p031m", MT9P031_MODEL_MONOCHROME },
+> -	{ }
+> +	{ "mt9p006", MEDIA_BUS_FMT_SGRBG12_1X12 },
+> +	{ "mt9p031", MEDIA_BUS_FMT_SGRBG12_1X12 },
+> +	{ "mt9p031m", MEDIA_BUS_FMT_Y12_1X12 },
+> +	{ /* sentinel */ }
+>  };
+>  MODULE_DEVICE_TABLE(i2c, mt9p031_id);
+>
+>  #if IS_ENABLED(CONFIG_OF)
+>  static const struct of_device_id mt9p031_of_match[] = {
+> -	{ .compatible = "aptina,mt9p006", },
+> -	{ .compatible = "aptina,mt9p031", },
+> -	{ .compatible = "aptina,mt9p031m", },
+> -	{ /* sentinel */ },
+> +	{ .compatible = "aptina,mt9p006", .data = (void *)MEDIA_BUS_FMT_SGRBG12_1X12 },
+> +	{ .compatible = "aptina,mt9p031", .data = (void *)MEDIA_BUS_FMT_SGRBG12_1X12 },
+> +	{ .compatible = "aptina,mt9p031m", .data = (void *)MEDIA_BUS_FMT_Y12_1X12 },
+> +	{ /* sentinel */ }
 
-Is this UUID the same for all SoCs and all TZ versions?
+I know it might sound not necessary, but isn't it better to wrap the
+format in some sort of per-model structure. It would avoid a few type
+casts too. Up to you thouhg
 
-Thanks,
-Angelo
-
-
-> +#define MTK_TEE_PARAM_NUM		4
->   
->   /*
->    * MediaTek secure (chunk) memory type
-> @@ -28,17 +34,72 @@ struct mtk_secure_heap_buffer {
->   struct mtk_secure_heap {
->   	const char		*name;
->   	const enum kree_mem_type mem_type;
-> +	u32			 mem_session;
-> +	struct tee_context	*tee_ctx;
->   };
->   
-> +static int mtk_optee_ctx_match(struct tee_ioctl_version_data *ver, const void *data)
-> +{
-> +	return ver->impl_id == TEE_IMPL_ID_OPTEE;
-> +}
-> +
-> +static int mtk_kree_secure_session_init(struct mtk_secure_heap *sec_heap)
-> +{
-> +	struct tee_param t_param[MTK_TEE_PARAM_NUM] = {0};
-> +	struct tee_ioctl_open_session_arg arg = {0};
-> +	uuid_t ta_mem_uuid;
-> +	int ret;
-> +
-> +	sec_heap->tee_ctx = tee_client_open_context(NULL, mtk_optee_ctx_match,
-> +						    NULL, NULL);
-> +	if (IS_ERR(sec_heap->tee_ctx)) {
-> +		pr_err("%s: open context failed, ret=%ld\n", sec_heap->name,
-> +		       PTR_ERR(sec_heap->tee_ctx));
-> +		return -ENODEV;
-> +	}
-> +
-> +	arg.num_params = MTK_TEE_PARAM_NUM;
-> +	arg.clnt_login = TEE_IOCTL_LOGIN_PUBLIC;
-> +	ret = uuid_parse(TZ_TA_MEM_UUID, &ta_mem_uuid);
-> +	if (ret)
-> +		goto close_context;
-> +	memcpy(&arg.uuid, &ta_mem_uuid.b, sizeof(ta_mem_uuid));
-> +
-> +	ret = tee_client_open_session(sec_heap->tee_ctx, &arg, t_param);
-> +	if (ret < 0 || arg.ret) {
-> +		pr_err("%s: open session failed, ret=%d:%d\n",
-> +		       sec_heap->name, ret, arg.ret);
-> +		ret = -EINVAL;
-> +		goto close_context;
-> +	}
-> +	sec_heap->mem_session = arg.session;
-> +	return 0;
-> +
-> +close_context:
-> +	tee_client_close_context(sec_heap->tee_ctx);
-> +	return ret;
-> +}
-> +
->   static struct dma_buf *
->   mtk_sec_heap_allocate(struct dma_heap *heap, size_t size,
->   		      unsigned long fd_flags, unsigned long heap_flags)
->   {
-> +	struct mtk_secure_heap *sec_heap = dma_heap_get_drvdata(heap);
->   	struct mtk_secure_heap_buffer *sec_buf;
->   	DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
->   	struct dma_buf *dmabuf;
->   	int ret;
->   
-> +	/*
-> +	 * TEE probe may be late. Initialise the secure session in the first
-> +	 * allocating secure buffer.
-> +	 */
-> +	if (!sec_heap->mem_session) {
-> +		ret = mtk_kree_secure_session_init(sec_heap);
-> +		if (ret)
-> +			return ERR_PTR(ret);
-> +	}
-> +
->   	sec_buf = kzalloc(sizeof(*sec_buf), GFP_KERNEL);
->   	if (!sec_buf)
->   		return ERR_PTR(-ENOMEM);
-
+>  };
+>  MODULE_DEVICE_TABLE(of, mt9p031_of_match);
+>  #endif
+> --
+> 2.25.1
+>
