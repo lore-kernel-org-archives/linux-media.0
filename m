@@ -2,159 +2,183 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A366CA0EC4
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 897F3CA0EC7
 	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 21:06:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbjIKUrF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Sep 2023 16:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47602 "EHLO
+        id S230086AbjIKUrG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Sep 2023 16:47:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237561AbjIKM7v (ORCPT
+        with ESMTP id S241647AbjIKPLK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Sep 2023 08:59:51 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ABBFE40;
-        Mon, 11 Sep 2023 05:59:45 -0700 (PDT)
-X-UUID: 11da3b7250a311eea33bb35ae8d461a2-20230911
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=h5MlQeYSjp2j/LB9w519bAWy3e+QI9O2SLovvv9dKIs=;
-        b=AbWCZ/B+EqhLS09j9YpCnGhj0+pTRo97qKwvdELJzy3d6N0DqxCc5EpwSjJDERwQy3idDh6CwwilG2/SpRozIKYM8kMFjSVgqpXzruB/47TxmFV1oOrXT6ddtp5NA8lNoQEe0UJrwFAGDxKLqGmVkP+x2bslxf2OB2KSji5zLVw=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.31,REQID:b4850ba6-ae1c-4709-84c7-43bbf7766511,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:0ad78a4,CLOUDID:cbc3e4c2-1e57-4345-9d31-31ad9818b39f,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,
-        DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 11da3b7250a311eea33bb35ae8d461a2-20230911
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 585064307; Mon, 11 Sep 2023 20:59:40 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.194) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 11 Sep 2023 20:59:38 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Mon, 11 Sep 2023 20:59:37 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
-        <nfraprado@collabora.com>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Nathan Hebert <nhebert@chromium.org>
-CC:     Chen-Yu Tsai <wenst@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "Steve Cho" <stevecho@chromium.org>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH 00/14] add driver to support secure video decoder
-Date:   Mon, 11 Sep 2023 20:59:22 +0800
-Message-ID: <20230911125936.10648-1-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 11 Sep 2023 11:11:10 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94F0CCC
+        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:11:05 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-529fb04a234so6049402a12.3
+        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:11:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694445064; x=1695049864; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HVLqCA/ecvInY4c6THAO1tIs6dKSTPnQEjLvdL4WYHk=;
+        b=pBXgNVDCIDhRiCpll+KwCkJAwuYSnUBAmSmJ2RfBzA0adoxzdEzuS/07u00GO10jmc
+         1nprwi6uHOxrzAEg/aZf9oCALcvKChIMjEaHOyKw9NJ3uYCN0/G6RT1Tky2OTPi51IZ0
+         5OgtAA3Z+q1MGLr168WDWdR7MMZVeZO8DS/mH5trz/QficRIvIXFBwSNeHF6QST+nwk4
+         ScEHvVcNBkihiUg+W2vm2OUIGBVFIS+u1VWwfd+wvHGLxrBMnBaj64aHqMMecxUPwNVE
+         +bfCLeZCT3dXUzmuuoZC2H2qiE2UWh74DpC9oAzJCfDYZUFOu6hqGjh26LfS0/em0HQb
+         qPBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694445064; x=1695049864;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HVLqCA/ecvInY4c6THAO1tIs6dKSTPnQEjLvdL4WYHk=;
+        b=jqXSbJyCI5uGp6n3bE0qMTtndXIVnkdYl7gWQZ/46gCHiGmwBZFxhWo48cYU8HfRUw
+         o+Pb6c4c+AlRLOgHG/jTFpUyDJA0i7Of3jEzseOCIycGAC+ef5gm9lp7AxJVfwzg8kPO
+         Wl7+FEqyoONIGflYnZ6wLXhLI/W5D7Ku4XWnZ2QY9SJTqan5LwSX4jQZX1lRptgdSXt2
+         v4/HqdK8wrh9FrfexE/5GoVGuPtqTJ7fdwX1/K6zEUocS6buhGsbKdphlX4vRTnWJE5z
+         d+e3vs9yUWL1LCdmkTqq71W/tx1zxye3EaqoLXTSWnr5xBUQFXmDapzxvBpEI/fIxw3o
+         b6jA==
+X-Gm-Message-State: AOJu0Yzk78eP1jnnMY3/zr02Ygs0vgOH6kU7zda6EMqRvSfQ/RMYPik7
+        tnrdjxVqoiwEJXhK/eg4R0KVzQ==
+X-Google-Smtp-Source: AGHT+IHNS4PmdSp7TCHy+BYzxHt4JAK6ZnEugthWVcBVLN+hPi2VGwGiI2QReNZ350wvDNw4TdzY3Q==
+X-Received: by 2002:aa7:c904:0:b0:525:70b3:72c2 with SMTP id b4-20020aa7c904000000b0052570b372c2mr8260935edt.14.1694445064234;
+        Mon, 11 Sep 2023 08:11:04 -0700 (PDT)
+Received: from [10.167.154.1] (178235177061.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.61])
+        by smtp.gmail.com with ESMTPSA id n4-20020a056402060400b0052a3ad836basm4681281edv.41.2023.09.11.08.11.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Sep 2023 08:11:03 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Date:   Mon, 11 Sep 2023 17:10:34 +0200
+Subject: [PATCH RFT 20/20] media: venus: pm_helpers: Commonize venc_get()
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-AS-Result: No-10--8.569700-8.000000
-X-TMASE-MatchedRID: /kvX+BAyhRdLbaTfilVXfZqrexa4CbEQUAjrAJWsTe8KA2OoGAlTk54d
-        VMHTNaMULOOktaHND2iW4kxGbzOebKo77AcuQhw7o65WJt1k1O9YMtqMzbYRNmfYlY6RxyOvXA6
-        qLXqEbYuwDEIJD1Y7K9r7qQBGAlkIi8ICQO6ibxQVglQa/gMvfDFcf92WG8u/EvoxTu3fj1s3Bo
-        tHDlVWrHZmxDzqJ8rQkgebTBpa5lDwOTPseUY5HB+WEMjoO9WWfS0Ip2eEHnz3IzXlXlpamPoLR
-        4+zsDTtgUicvJ4MChmMp7Dr14nIYnrpZk2SoHtre7MWlND3CeQUtK2l9hQpvBM3tVf09E8l
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--8.569700-8.000000
-X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-SNTS-SMTP: B9A27BB1E74839D8447AA282BB12001D619C9E13CF4D50EEB8FA142406C08CEE2000:8
-X-MTK:  N
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230911-topic-mars-v1-20-a7d38bf87bdb@linaro.org>
+References: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
+In-Reply-To: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
+To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Dikshita Agarwal <quic_dikshita@quicinc.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1694445027; l=3254;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=vxb2w5wVyktQxR9j1Q6sGaFooRnQRJnrKSI6AeZH57o=;
+ b=33oCSwwyUM3j+SIJKcWOvs5hYfI+HUSZ161Pxwvi8UnJdtfQsPyPhxkcIPoZoYyPRQOt5RpZ5
+ YIhCik1ceBvCJQ7lLPtb6OObauaxfo62YuhZh+REfQNU9nFAd5JdjmU
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In order to support secure video decoder for mt8195/mt8188 h264 driver,
-need to use tee client interface to communicate with optee-os. Firstly,
-open tee context and tee session for each hardware.
+This function can be very easily commonized between the supported gens.
+Do so!
 
-Secondly, allocate two shared memory msg and vsi, msg used to send ipi to
-optee-os and get ack msg from optee-os, vsi used to store syntax for
-hardware decoder.
-
-Thirdly, adding two CID controls: V4L2_CID_MPEG_MTK_SET_SECURE_MODE and
-V4L2_CID_MPEG_MTK_GET_SECURE_HANDLE, get secure handle used for user space
-to convert secure fd to secure handle, set secure mode used to tell decoder
-driver to initialize tee interface to decode secure video.
-
-Lastly, re-construct h264 driver to support secure video decoder.
-
-Patch 1~4  initialize tee related interface and parameters.
-Patch 5~6  allocate/free secure memory.
-Patch 7    map vsi for secure mode.
-Patch 8    support one plane capture buffer.
-Patch 9~10 re-construct h264 driver to support secure mode.
-patch 11   used to convert secure fd to secure handle.
-Patch 12   used to set secure decoder mode.
-Patch 13   disable interrupt.
-Patch 14   support tee decode
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
-Reference series:
-[1]: v1 of this series is submitted by Yong Wu.
-	message-id: 20230911023038.30649-1-yong.wu@mediatek.com
+ drivers/media/platform/qcom/venus/pm_helpers.c | 19 -------------------
+ drivers/media/platform/qcom/venus/pm_helpers.h |  1 -
+ drivers/media/platform/qcom/venus/venc.c       |  9 +++++++--
+ 3 files changed, 7 insertions(+), 22 deletions(-)
 
-Yunfei Dong (14):
-  media: mediatek: vcodec: add tee client interface to communiate with
-    optee-os
-  media: mediatek: vcodec: allocate tee share memory
-  media: mediatek: vcodec: send share memory data to optee
-  media: mediatek: vcodec: initialize msg and vsi information
-  media: mediatek: vcodec: using encoder's device to alloc/free memory
-  media: mediatek: vcodec: add interface to allocate/free secure memory
-  media: mediatek: vcodec: using shared memory as vsi address
-  media: medkatek: vcodec: support one plane capture buffer
-  media: medkatek: vcodec: re-construct h264 driver to support svp mode
-  media: medkatek: vcodec: remove parse nal_info in kernel
-  media: medkatek: vcodec: covert secure fd to secure handle
-  media: medkatek: vcodec: set secure mode to decoder driver
-  media: medkatek: vcodec: disable wait interrupt for svp mode
-  media: medkatek: vcodec: support tee decoder
-
- .../media/platform/mediatek/vcodec/Kconfig    |   1 +
- .../mediatek/vcodec/common/mtk_vcodec_util.c  | 177 ++++++++-
- .../mediatek/vcodec/common/mtk_vcodec_util.h  |   3 +
- .../platform/mediatek/vcodec/decoder/Makefile |   1 +
- .../mediatek/vcodec/decoder/mtk_vcodec_dec.c  |  24 +-
- .../vcodec/decoder/mtk_vcodec_dec_drv.c       |   9 +
- .../vcodec/decoder/mtk_vcodec_dec_drv.h       |   7 +
- .../vcodec/decoder/mtk_vcodec_dec_hw.c        |  34 +-
- .../vcodec/decoder/mtk_vcodec_dec_optee.c     | 373 ++++++++++++++++++
- .../vcodec/decoder/mtk_vcodec_dec_optee.h     | 156 ++++++++
- .../vcodec/decoder/mtk_vcodec_dec_stateless.c |  80 +++-
- .../decoder/vdec/vdec_h264_req_common.c       |  16 +-
- .../decoder/vdec/vdec_h264_req_multi_if.c     | 334 +++++++++-------
- .../mediatek/vcodec/decoder/vdec_drv_if.c     |   4 +-
- .../mediatek/vcodec/decoder/vdec_msg_queue.c  |   9 +-
- .../mediatek/vcodec/decoder/vdec_vpu_if.c     |  54 ++-
- .../mediatek/vcodec/decoder/vdec_vpu_if.h     |   4 +
- drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  10 +
- include/uapi/linux/v4l2-controls.h            |   5 +
- 19 files changed, 1110 insertions(+), 191 deletions(-)
- create mode 100644 drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_optee.c
- create mode 100644 drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_optee.h
+diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
+index dfb89d2e7387..9546ad577b5d 100644
+--- a/drivers/media/platform/qcom/venus/pm_helpers.c
++++ b/drivers/media/platform/qcom/venus/pm_helpers.c
+@@ -362,13 +362,6 @@ static int vdec_power_v3(struct device *dev, int on)
+ 	return ret;
+ }
+ 
+-static int venc_get_v3(struct device *dev)
+-{
+-	struct venus_core *core = dev_get_drvdata(dev);
+-
+-	return vcodec_clks_get(core, dev, 1);
+-}
+-
+ static int venc_power_v3(struct device *dev, int on)
+ {
+ 	struct venus_core *core = dev_get_drvdata(dev);
+@@ -388,7 +381,6 @@ static int venc_power_v3(struct device *dev, int on)
+ 
+ static const struct venus_pm_ops pm_ops_v3 = {
+ 	.vdec_power = vdec_power_v3,
+-	.venc_get = venc_get_v3,
+ 	.venc_power = venc_power_v3,
+ 	.load_scale = load_scale_v1,
+ };
+@@ -784,16 +776,6 @@ static int vdec_power_v4(struct device *dev, int on)
+ 	return ret;
+ }
+ 
+-static int venc_get_v4(struct device *dev)
+-{
+-	struct venus_core *core = dev_get_drvdata(dev);
+-
+-	if (!legacy_binding)
+-		return 0;
+-
+-	return vcodec_clks_get(core, dev, 1);
+-}
+-
+ static void venc_put_v4(struct device *dev)
+ {
+ 	struct venus_core *core = dev_get_drvdata(dev);
+@@ -1096,7 +1078,6 @@ static int load_scale_v4(struct venus_inst *inst)
+ static const struct venus_pm_ops pm_ops_v4 = {
+ 	.vdec_put = vdec_put_v4,
+ 	.vdec_power = vdec_power_v4,
+-	.venc_get = venc_get_v4,
+ 	.venc_put = venc_put_v4,
+ 	.venc_power = venc_power_v4,
+ 	.coreid_power = coreid_power_v4,
+diff --git a/drivers/media/platform/qcom/venus/pm_helpers.h b/drivers/media/platform/qcom/venus/pm_helpers.h
+index 4afc57dac865..cbf54e6c6eab 100644
+--- a/drivers/media/platform/qcom/venus/pm_helpers.h
++++ b/drivers/media/platform/qcom/venus/pm_helpers.h
+@@ -13,7 +13,6 @@ struct venus_pm_ops {
+ 	void (*vdec_put)(struct device *dev);
+ 	int (*vdec_power)(struct device *dev, int on);
+ 
+-	int (*venc_get)(struct device *dev);
+ 	void (*venc_put)(struct device *dev);
+ 	int (*venc_power)(struct device *dev, int on);
+ 
+diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
+index 44b13696cf82..fd3a1dd7f16c 100644
+--- a/drivers/media/platform/qcom/venus/venc.c
++++ b/drivers/media/platform/qcom/venus/venc.c
+@@ -1557,8 +1557,13 @@ static int venc_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, core);
+ 
+-	if (core->pm_ops->venc_get) {
+-		ret = core->pm_ops->venc_get(dev);
++	/*
++	 * If the vcodec core clock is missing by now, it either doesn't exist
++	 * (8916) or deprecated bindings with pre-assigned core functions and
++	 * resources under the decoder node are in use.
++	 */
++	if (!core->vcodec_core_clks[1]) {
++		ret = vcodec_clks_get(core, dev, 1);
+ 		if (ret)
+ 			return ret;
+ 	}
 
 -- 
-2.18.0
+2.42.0
 
