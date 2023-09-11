@@ -2,142 +2,254 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F39D2EEB593
-	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:47:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6B10EEB590
+	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:48:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233634AbjIKUr4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Sep 2023 16:47:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51468 "EHLO
+        id S233829AbjIKUsB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Sep 2023 16:48:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241529AbjIKPKg (ORCPT
+        with ESMTP id S236322AbjIKKQL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Sep 2023 11:10:36 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A03E40
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:10:30 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-500b66f8b27so7875551e87.3
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:10:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694445029; x=1695049829; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+4Lw6en/G7eAY/dXOQleYutXgMqbiITZjDVkgmCPcXc=;
-        b=XIoN9zrkBukCmC60RH79NC8oB2q/SqLP76jZQYSJciPQiCC3FMYjaHKSj3OJrSHYL4
-         6QsyRMqtDNTqeHPBLId9tNcN1Xsu61JBE8LrR1sxARj4oZmGJgBztbaKfXvPrT26jI+n
-         m6kC9hk3zI4E4NVAMRts8yafxicYHEx8pArRf8SgJzPyVUMTAZIBexTc3+3i+h9V5opS
-         FhRraWZjpsMEYpt++tPoz0HR+dYQkWwD+hWWvkCPl8fTvGkVHQ9VwPBus1frRhDv/qrj
-         +44dyYiVWGVz+map16JErrGGTiDrE65ZVLGPmoy193vXkgQLZuL4CfH7ay/AW/WOwNo6
-         cziQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694445029; x=1695049829;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+4Lw6en/G7eAY/dXOQleYutXgMqbiITZjDVkgmCPcXc=;
-        b=ATLEEIRkWJPCDgCGIjkucBe4S81exDaYhLBOyPIJTaGMv4+mo8po5lBdXA/LGgB+2v
-         1iVooeqO8mPVcpYcNVVTB5TATdIzStSy5gi7yOBXmJA48WgYmPgrjm/8ycuTI7m+Nn9k
-         lpQDW5FPl4c/Z1vMpmS6xxmn7GXm9wl67Z4hAwSf9Tz2IlxkskdeeEPAto5gHuK0wh9f
-         3VdyPDwx54vqeGyQdUqaz5Pv3oLO51WoFwFpDK0rCK/2jREmFwFLZFIw56UzjAcET+ms
-         jtsIi6kwErtKM3zaXqf3dX1r5mgiDXV0y0LSrGrjrh7gMVyATNWfD/sEJtVEFSk+MY28
-         PMCA==
-X-Gm-Message-State: AOJu0YyILKY/3G+uiX/APU1uG8a8RNHdPzEK93N/mXuAjWwwixU0PeH3
-        MpvkcXZf/bBgUdY/nXNBC+EUKw==
-X-Google-Smtp-Source: AGHT+IFavcP94e32HF7Ncr/TqfycXZ3Hpk2vzXMbvmM1aRvi8nVzNpi7jKEmhTGTl3eXL9LybNfS/Q==
-X-Received: by 2002:a19:e008:0:b0:4fd:f889:b9d2 with SMTP id x8-20020a19e008000000b004fdf889b9d2mr7447694lfg.38.1694445028827;
-        Mon, 11 Sep 2023 08:10:28 -0700 (PDT)
-Received: from [10.167.154.1] (178235177061.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.61])
-        by smtp.gmail.com with ESMTPSA id n4-20020a056402060400b0052a3ad836basm4681281edv.41.2023.09.11.08.10.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Sep 2023 08:10:28 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: [PATCH RFT 00/20] Venus cleanups
-Date:   Mon, 11 Sep 2023 17:10:14 +0200
-Message-Id: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
+        Mon, 11 Sep 2023 06:16:11 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2044.outbound.protection.outlook.com [40.107.100.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F53CE5F;
+        Mon, 11 Sep 2023 03:16:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Zv9u40g74I7QnqgAsPVWHcgwdaa7ryfHkDBrS6QW7H2FnElU6lCsSCKvcgh0IRkSKMAbtEBy8bfhk4PR6UCmAiHsoS/AfbiezLdynJIJWVBnrlYqAemr2Cbfharc/8FRL3zaTcU2sCL8iLdux7+JCA7C+Wwv4UlYW3Yvp1qclvAJBtnCF7D7b/cdiuhTlbc7Y7rtXTDiO1/2ole1DZaZiJiY3whl0D1pBBWxHTIAHf1DXHvZwymqRxhkHVEQ3fCUbcDdAcMEAP4A3BsvmY4HpvrBPFI5PMeVp72zQS5q804dsoWSe1aI//PNu0J0ig22LMdJh39mQzls5DYEqhKU/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ooo8ioFCP+b9WvVddnNqQaH/D2/zFEi/HdvcudfM4Y4=;
+ b=cjv4y0yyKmtFse9x5kyN+lxQ/zlwvYiFu7a8SqHAJAhk8Wf6LhFxrBrOUhAO9aYKHQ3O5QxldtjsiDmBzJhypIWyhphcxNw5r+fXDe4pdAPY6MHNeznSY5lY8GLZ0vQ1wCY702z8S7xKDaRfnBYt7tuJJwyN8GTIZLeu11jHhQF50zR2+eebBI3/8D2eAr2ljykqVrPx8US89x127z/suh79/hNbBeBxBKO42/8ftLqBS3IRC4CGT66OX9eCQZgysk5wRi5vI8K5pbg/eXHR/h0D7+zL1xaLE7I+Dw1DottR65GTOeazapq3qsUDVGWgVIWQT0iT8h7hy5L+GXxkHA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ooo8ioFCP+b9WvVddnNqQaH/D2/zFEi/HdvcudfM4Y4=;
+ b=FYCS5jhv91ybmBdp2knCsdcIWg4eEr4yyBXaQNXsH+Zrq9OGfpRqy8fCGCNRS0TYMFF+Vf8gR+EhOHmzBJ4/DGceLIbz0210aQX9x4+4e/Z++n2xCgz61H52QgpLKgc2hyID5kXQ9fr1y25i6gSETuv0riRI4+az0avOXx79zDI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by DM6PR12MB4562.namprd12.prod.outlook.com (2603:10b6:5:2aa::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.34; Mon, 11 Sep
+ 2023 10:16:04 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::55cb:215b:389e:eced]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::55cb:215b:389e:eced%5]) with mapi id 15.20.6768.029; Mon, 11 Sep 2023
+ 10:16:04 +0000
+Message-ID: <da7ffae5-3b57-71d1-b09e-fdb297936632@amd.com>
+Date:   Mon, 11 Sep 2023 12:15:57 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH 5/9] dma-buf: heaps: mtk_sec_heap: Initialise tee session
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Yong Wu <yong.wu@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <jstultz@google.com>, tjmercier@google.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, jianjiao.zeng@mediatek.com,
+        kuohong.wang@mediatek.com
+References: <20230911023038.30649-1-yong.wu@mediatek.com>
+ <20230911023038.30649-6-yong.wu@mediatek.com>
+ <d0373c02-9b22-661f-9930-ca720053c2a0@collabora.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <d0373c02-9b22-661f-9930-ca720053c2a0@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR4P281CA0060.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:cc::20) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIANYt/2QC/x2NQQrCQAwAv1JyNrBZS6E+wAeIt+Jhd402ULclU
- RFK/97gcQaGWcFYhQ1OzQrKXzGZqwMdGihjqk9GuTtDDPEYeiJ8z4sUfCU15C7kHGPXt0TgQU7
- GmDXVMnpSP9PkclF+yO9/GOByvsJt23b7REY+dgAAAA==
-To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1694445027; l=2393;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=kUihnr3ZTmtZ2B2pbfbzaaqupk7a/XPe2QfW6jyVH9Q=;
- b=HpjqF1C79k4CoJ8tEjV5C9YAm1P261qYSnuFU8utUBwi4VqYWOZzeQCsX/hjaLTlVi+/FbzZt
- ingx3n9qDFFDBdAFESqNWmGyljiYhLUrcLnjFTXBw/Xl/44FPgEyvZg
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|DM6PR12MB4562:EE_
+X-MS-Office365-Filtering-Correlation-Id: f0d55335-5750-449d-e202-08dbb2b01aea
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: G4ZWPlIizHfuLKDF0s4UUMeSwwSS3wV8Ffrk4MEXP8L6REB4sa0WAZR6Zxu89nQONcr0R1U4TqLI9hKIiFalC9Zk5M7Wkz7lX36Y5aJVwFYWBuBA7YjGNilC6tdV7mbSDhbh5c3J8SLY4pjMP1BI5JVEKCYHwTbXFIxStfDBRSOWhoxkCVtGNOr2qVr3BzrhaYbeISefTfwpmPebbe6yS27q30LUNfnovboWg9ceXvCG6RUwCuGGbPQwTLL558OEGrh5t7AwIZZcxWNAuyIdsWrSjPfzBDdv8GgRNfYB5o7Ef2gqqnBkLVA7lfALCW46p11GzQQNBXMtLBwepA4DsHvL3WuPYKFacytgEuTflikIw9KQiTeT+QHe3RAOqNZFSd1pHr9xjJ5E3vTXU/EtERNCYHM+GXQpVS/PrvVG02KeZEq3qBBE/J1Cq4H3cZKoBNxXwmFEb7vRvkGZH1Tp/GA/edFtPgWnVi/so/zuLc5HI/h8xk+14mP2tNtZ6DQ39ueN+RVJ+03papD+aSYTcakTNm1DyDvX0bZdRwlmKz9PNUNc4BKojuv/+yCxXfxpyE7Hq0CjzcIJTGYIjX+b4eTfVyV03bbZPl8q6pYsb9Dr/L4VMLNJ49FyZvsfhV4aYfaBuzlQTO4ECQZYGepWbw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(376002)(136003)(39860400002)(366004)(346002)(1800799009)(186009)(451199024)(110136005)(6506007)(6486002)(6666004)(6512007)(478600001)(83380400001)(2616005)(26005)(7416002)(54906003)(66476007)(66556008)(66946007)(4326008)(316002)(2906002)(41300700001)(5660300002)(8676002)(8936002)(86362001)(36756003)(31696002)(38100700002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z2cwZlhheXdlMjhxYkY4bXplNmk5Z3hUdVlxSkdjTHVwVStGT2JFeHF3Nm9n?=
+ =?utf-8?B?cUZ4S1R3YVF3cjBMOHZZOUdkRFZheTdza1dNVEhUdENOQmlhR0pXOWljaEdC?=
+ =?utf-8?B?Y3A3ckdzdnM5OGl3OWE4UC90ejVRS0tVWWtjazZVQ3c5Q3NBa29XWEN4ZzJS?=
+ =?utf-8?B?NVV5NlBSd3Fna015N0dzVldEMVp4clhOZExPTUMzQkx2L3V1cXJKWVVpSU1C?=
+ =?utf-8?B?b2FrSHRkVXhwSGZPcllkaW1ZYlBwczVkc1UvUUlqMk5FT0FoZ2dZWTdZSEU0?=
+ =?utf-8?B?V3A5K0lKWEZoYURvaWtPMmJkWlVqUXFnc2pHUkpRSE80dzA2dFU0b1RqT1hV?=
+ =?utf-8?B?eFBRNEM3c2JYSTdPaDI3UEtYSFhpV2pXUmFTSzRSMy9LM1dmRzVvMVZDYmVW?=
+ =?utf-8?B?Q2lFalZXUkJKVlpwOXZyVSt6aWxyRVFERTRBdGd4Vm1MR3A5TFl3Yi9vdldC?=
+ =?utf-8?B?VE9ZNFJSKzI4QWE5Uy9jeVdZTVpYamkzc0VodGRmRzFBRUY5MFBtczJqUGdG?=
+ =?utf-8?B?QmdMZnhnNGcrSWh2ZmsxYk4yWXZjTkVvTFdFTnJJRzRTdmlpL0Z1Q0ZIcEtt?=
+ =?utf-8?B?UmlEQTZyY1I0NzNUdFNBUkRyeWlZUGV2WGtSNDB0RVIyM2dlZXVseGNDaHNN?=
+ =?utf-8?B?VXFCQW1sUTBSbDVPYUJva05ja2JKUFF6Y1FqRzZFT1AzcW5KbU5rS21hRWdm?=
+ =?utf-8?B?b3lMeE9QTjZpVSs5cGN1T0E1eHdGUWZQT2dwTUlVMllBR0xEQ2dVSjk4MElk?=
+ =?utf-8?B?MGVnbUZaRXNPSTgxdXpYMlpCSmljTFpqakl3YkY5UG1HV3IyWVZrdjBacDla?=
+ =?utf-8?B?NFZ2WDBieUx5YnBmRXkwalB6UmVQZk1KaTY4NG81bUlGb1pmU2FDdzVHTi9P?=
+ =?utf-8?B?bGhmVEhScmF3cDBQSHV6OFZNYXpWazhZeVV1RStIdStJWUo5Z1c0WE9ESnRN?=
+ =?utf-8?B?N1BtaVNjTS83YWJjWUFWV24vRkJWTDlBQ0VtWHBCbC83OU1vR1BqK2lQUjVu?=
+ =?utf-8?B?UDduRUdTTFJXSFI5a0RpMndOSHFRajlDeFE5YklKdW5EVUJ2QUYwcWYwNnVX?=
+ =?utf-8?B?S3VTeW5JYkJsSnU3RDlsZ2V0WWpDYmxHakRkVGtwLzNqTlRlYTBlOUFCZUNK?=
+ =?utf-8?B?alltZjhjSzZOcldEZmNjRDJQcW5CQ3hIOGlMdkhQQytadStkcFRVNURCMXpm?=
+ =?utf-8?B?UFQ5SlBMU0N5QWtrcU5vc2dyMUhFbHBjaUlUSGdSWlB4OHNIaFk5d0NzS3E4?=
+ =?utf-8?B?T21YVjZkWXhOSFhtSnJmaEJLc1EwVG1pU3U2SUgzakNvT21mQWdSK1BqYjBh?=
+ =?utf-8?B?UmxPL0kvVWNtdEJtYkEybmxHcHc0K0FrYi9wN3dGejRZUXlGNzZuYmNWQXJt?=
+ =?utf-8?B?czlPUTFZeTdKcVVwZWRzRDRNSzFCMlhpM0V6WHFiVFFPMEZmZTkrenorR3Nu?=
+ =?utf-8?B?T3ZvL1RqQy9DWGVSMWhHVVBpUjJEakZuU3JWWGVnM3JKb25CcEhDekFRSnEz?=
+ =?utf-8?B?eUhrcGNONU5MNWdLT0o1L21qeDA1aVE0WFhsNjBhdUczL2xHVExyYXkvTUxB?=
+ =?utf-8?B?Zm1qeUlSY3dPMUR2TEJ6Y04wdm5DM0xhOXVDOGVJaXdzYkt5Y041MmZtVW4w?=
+ =?utf-8?B?a1hNb3ZJTUlYaHhQZmtJcGhqQ2lISkNLWng5S0d1bVIrelJ1ZktXYXM5NzVE?=
+ =?utf-8?B?K0dGZXFEYWx0ZWtUVmpZV2NvV1BsMFBTRlBLZE1IWFV4WVdLRXFWbGMyN1Zt?=
+ =?utf-8?B?L2FyQy9ESzN2VVJJSlJnM2tWTTdJazZvdVM1ZTFhekt4S0cxWUlnaTh5bXZa?=
+ =?utf-8?B?Zk42dEJhTlZieUJhQXQwTWpFZmIzb3piSGNWb2M1VWdtT2pBRnc1ZEpYVkdK?=
+ =?utf-8?B?RkRzV0NBbDFUc1JwVmlUNGZnNmsrWWlRWXhWd2NGRm40SDUwUVhWQjhTQmRm?=
+ =?utf-8?B?VU95bWZYMEdSVThINW5vblBEeERHSW1Fd1l5RDRyei9oTGpVTGt2VUtLSnRL?=
+ =?utf-8?B?S0pnenpxNzRlR1dUajBQcVB3YzFpckxXZHZGSjZjdnU2QjkrMlhzbDdEYWZT?=
+ =?utf-8?B?SVBHbjUvclhDcnp1RzBjOUN1SjdyS1VUVEltNGJBcTJXK25xVnhhMzNKWEdV?=
+ =?utf-8?Q?COZxmHEr7BYD83xNNA4D2npjN?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f0d55335-5750-449d-e202-08dbb2b01aea
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Sep 2023 10:16:04.0652
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lAchpY3xiWxG0VhhBwxWThMvnEKeHR4Nf1NlkOGtjlF2Clnc6BHmJNXDzjlHuZaD
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4562
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-With the driver supporting multiple generations of hardware, some mold
-has definitely grown over the code..
+Am 11.09.23 um 11:29 schrieb AngeloGioacchino Del Regno:
+> Il 11/09/23 04:30, Yong Wu ha scritto:
+>> The TEE probe later than dma-buf heap, and PROBE_DEDER doesn't work
+>> here since this is not a platform driver, therefore initialise the TEE
+>> context/session while we allocate the first secure buffer.
+>>
+>> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+>> ---
+>>   drivers/dma-buf/heaps/mtk_secure_heap.c | 61 +++++++++++++++++++++++++
+>>   1 file changed, 61 insertions(+)
+>>
+>> diff --git a/drivers/dma-buf/heaps/mtk_secure_heap.c 
+>> b/drivers/dma-buf/heaps/mtk_secure_heap.c
+>> index bbf1c8dce23e..e3da33a3d083 100644
+>> --- a/drivers/dma-buf/heaps/mtk_secure_heap.c
+>> +++ b/drivers/dma-buf/heaps/mtk_secure_heap.c
+>> @@ -10,6 +10,12 @@
+>>   #include <linux/err.h>
+>>   #include <linux/module.h>
+>>   #include <linux/slab.h>
+>> +#include <linux/tee_drv.h>
+>> +#include <linux/uuid.h>
+>> +
+>> +#define TZ_TA_MEM_UUID "4477588a-8476-11e2-ad15-e41f1390d676"
+>> +
+>
+> Is this UUID the same for all SoCs and all TZ versions?
 
-This series attempts to amend this situation a bit by commonizing some
-code paths and fixing some bugs while at it.
+And how is this exposed? If it's part of the UAPI then it should 
+probably better be defined somewhere in include/uapi.
 
-Only tested on SM8250.
+Regards,
+Christian.
 
-Definitely needs testing on:
-
-- SDM845 with old bindings
-- SDM845 with new bindings or 7180
-- MSM8916
-- MSM8996
-
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
-Konrad Dybcio (20):
-      media: venus: pm_helpers: Only set rate of the core clock in core_clks_enable
-      media: venus: pm_helpers: Rename core_clks_get to venus_clks_get
-      media: venus: pm_helpers: Add kerneldoc to venus_clks_get()
-      media: venus: core: Set OPP clkname in a common code path
-      media: venus: pm_helpers: Kill dead code
-      media: venus: pm_helpers: Move reset acquisition to common code
-      media: venus: pm_helpers: Use reset_bulk API
-      media: venus: core: Constify all members of the resource struct
-      media: venus: core: Deduplicate OPP genpd names
-      media: venus: core: Get rid of vcodec_num
-      media: venus: core: Drop cache properties in resource struct
-      media: venus: core: Use GENMASK for dma_mask
-      media: venus: core: Remove cp_start
-      media: venus: pm_helpers: Commonize core_power
-      media: venus: pm_helpers: Remove pm_ops->core_put
-      media: venus: core: Define a pointer to core->res
-      media: venus: pm_helpers: Simplify vcodec clock handling
-      media: venus: pm_helpers: Commonize getting clocks and GenPDs
-      media: venus: pm_helpers: Commonize vdec_get()
-      media: venus: pm_helpers: Commonize venc_get()
-
- drivers/media/platform/qcom/venus/core.c       | 138 ++++-------
- drivers/media/platform/qcom/venus/core.h       |  64 +++--
- drivers/media/platform/qcom/venus/firmware.c   |   3 +-
- drivers/media/platform/qcom/venus/hfi_venus.c  |   7 +-
- drivers/media/platform/qcom/venus/pm_helpers.c | 328 +++++++++----------------
- drivers/media/platform/qcom/venus/pm_helpers.h |  10 +-
- drivers/media/platform/qcom/venus/vdec.c       |   9 +-
- drivers/media/platform/qcom/venus/venc.c       |   9 +-
- 8 files changed, 213 insertions(+), 355 deletions(-)
----
-base-commit: 7bc675554773f09d88101bf1ccfc8537dc7c0be9
-change-id: 20230911-topic-mars-e60bb2269411
-
-Best regards,
--- 
-Konrad Dybcio <konrad.dybcio@linaro.org>
+>
+> Thanks,
+> Angelo
+>
+>
+>> +#define MTK_TEE_PARAM_NUM        4
+>>     /*
+>>    * MediaTek secure (chunk) memory type
+>> @@ -28,17 +34,72 @@ struct mtk_secure_heap_buffer {
+>>   struct mtk_secure_heap {
+>>       const char        *name;
+>>       const enum kree_mem_type mem_type;
+>> +    u32             mem_session;
+>> +    struct tee_context    *tee_ctx;
+>>   };
+>>   +static int mtk_optee_ctx_match(struct tee_ioctl_version_data *ver, 
+>> const void *data)
+>> +{
+>> +    return ver->impl_id == TEE_IMPL_ID_OPTEE;
+>> +}
+>> +
+>> +static int mtk_kree_secure_session_init(struct mtk_secure_heap 
+>> *sec_heap)
+>> +{
+>> +    struct tee_param t_param[MTK_TEE_PARAM_NUM] = {0};
+>> +    struct tee_ioctl_open_session_arg arg = {0};
+>> +    uuid_t ta_mem_uuid;
+>> +    int ret;
+>> +
+>> +    sec_heap->tee_ctx = tee_client_open_context(NULL, 
+>> mtk_optee_ctx_match,
+>> +                            NULL, NULL);
+>> +    if (IS_ERR(sec_heap->tee_ctx)) {
+>> +        pr_err("%s: open context failed, ret=%ld\n", sec_heap->name,
+>> +               PTR_ERR(sec_heap->tee_ctx));
+>> +        return -ENODEV;
+>> +    }
+>> +
+>> +    arg.num_params = MTK_TEE_PARAM_NUM;
+>> +    arg.clnt_login = TEE_IOCTL_LOGIN_PUBLIC;
+>> +    ret = uuid_parse(TZ_TA_MEM_UUID, &ta_mem_uuid);
+>> +    if (ret)
+>> +        goto close_context;
+>> +    memcpy(&arg.uuid, &ta_mem_uuid.b, sizeof(ta_mem_uuid));
+>> +
+>> +    ret = tee_client_open_session(sec_heap->tee_ctx, &arg, t_param);
+>> +    if (ret < 0 || arg.ret) {
+>> +        pr_err("%s: open session failed, ret=%d:%d\n",
+>> +               sec_heap->name, ret, arg.ret);
+>> +        ret = -EINVAL;
+>> +        goto close_context;
+>> +    }
+>> +    sec_heap->mem_session = arg.session;
+>> +    return 0;
+>> +
+>> +close_context:
+>> +    tee_client_close_context(sec_heap->tee_ctx);
+>> +    return ret;
+>> +}
+>> +
+>>   static struct dma_buf *
+>>   mtk_sec_heap_allocate(struct dma_heap *heap, size_t size,
+>>                 unsigned long fd_flags, unsigned long heap_flags)
+>>   {
+>> +    struct mtk_secure_heap *sec_heap = dma_heap_get_drvdata(heap);
+>>       struct mtk_secure_heap_buffer *sec_buf;
+>>       DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
+>>       struct dma_buf *dmabuf;
+>>       int ret;
+>>   +    /*
+>> +     * TEE probe may be late. Initialise the secure session in the 
+>> first
+>> +     * allocating secure buffer.
+>> +     */
+>> +    if (!sec_heap->mem_session) {
+>> +        ret = mtk_kree_secure_session_init(sec_heap);
+>> +        if (ret)
+>> +            return ERR_PTR(ret);
+>> +    }
+>> +
+>>       sec_buf = kzalloc(sizeof(*sec_buf), GFP_KERNEL);
+>>       if (!sec_buf)
+>>           return ERR_PTR(-ENOMEM);
+>
 
