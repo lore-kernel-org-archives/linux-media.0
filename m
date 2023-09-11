@@ -2,152 +2,161 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16AB8EEB59E
-	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:49:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10DC2EE3F03
+	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:49:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233931AbjIKUtf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Sep 2023 16:49:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40404 "EHLO
+        id S234528AbjIKUtm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Sep 2023 16:49:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237807AbjIKNOd (ORCPT
+        with ESMTP id S241603AbjIKPK5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Sep 2023 09:14:33 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FBEBE4D
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:28 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-9a648f9d8e3so562262966b.1
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:28 -0700 (PDT)
+        Mon, 11 Sep 2023 11:10:57 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07CF3CCC
+        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:10:52 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-52683da3f5cso5893231a12.3
+        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:10:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694438067; x=1695042867; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MHtDr8xYhXwGqBJmtIj0tvF8SPL/tjbZCKIvzLXh3+Y=;
-        b=xLRr6Lht8sE0J66Esx8teJ13dD38fWIXBUmYq6YLTqEgGSly1o/QjV0Jaey2lhRAkr
-         DrHDLBUn/lMQlvT0m6DmfWEXHdkkXkVUyzy152ALZwnFHKOw3ai3AQLys5P2BzUqFmN/
-         iBewcXhXmZUaxglzp7zVtC5f4Br/rKHNRkG0Z1oxxam8yNODlZJc3DpV+ITtmI3oB8Cc
-         SpRkd8N5JWiitAdD8Fte5cx3HT0oa3zlDjNEFIJMGb8uGnJpvXDtqzzvV2Wu6OgA6ACn
-         WdRn80Z/2zaHhNWZ5Txy86UiAJF0vx2G6LziCl8cyLT5yWN+Kh7l+/EsfkB7I+5619Kj
-         XY6w==
+        d=linaro.org; s=google; t=1694445050; x=1695049850; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dl99i48dgkFaFiuiu5aVJ8kJhbaWRuqEuatgk+IWw2o=;
+        b=bB3xlBfauwKWWh6/VqQaM0saC7TVMEgb8exvJY+TC2Ll4kYlFjolOF0jhadlMEMFTZ
+         tVd3b1rMiQlpIm208lr0IrvotSsC+c8xy9lzdDUTiX/gQBxo8WEaaQSKHTAQLSUkrp/b
+         Lj70KCI6B7iQGmzmFzLgMHshxxhHzb9ltKZtloIvoSVUt/a2QcsP0FqykMtWOGUA3Jy+
+         mbcocYFWgSTpnvwK4OqM0FiBRAA4AyxRinXy8I8mGJlBa7RCW1YPtweMJNd6UDVo3N/m
+         0wG1j2lwILOR7qtPDog/Q4LUQ7PmNmZ5ScFkTcDRi61nnEAlPAomqLMOJ6pXZeXJOCAm
+         SWcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694438067; x=1695042867;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1694445050; x=1695049850;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MHtDr8xYhXwGqBJmtIj0tvF8SPL/tjbZCKIvzLXh3+Y=;
-        b=IrEbtGUHkJ2M9IGDr4zIGywO0DBiPRVUrYMOdjz72+AB6WQcCH25bR/T69dAOJRMfG
-         UjlBPMd76WZu9VA1rZaWEh5S9mZlezZHfXBndMzZ1NqgkNBQ4nBWyOEzETBOYug57+T6
-         85wj+B56IvAS4/5pfi/q4lxQmX7LgMzaFhf2MDSprMP15XuClg0Vtmmi0Ldwy/kCWM1+
-         F9EcPJ4kEIwfNIC3YLK1EpPdHeA3CUHD0dy3Dxg1Bys4mmgPKuqgs31Wy85u70xeLQ2M
-         P1Zr1efn/ruEcmHu7TxSq98d3wdrpDfJbd2OJy8yCOX38Hhh0qLvaF+PuaFHzPwYMETR
-         2Kag==
-X-Gm-Message-State: AOJu0Yw9+QTMRhG4HGAhrL62/BFk2gaspvFe5fJMLwyuwyP5yv5dD51I
-        R+sB9uUWdrJSQHw4cIzy694Zag==
-X-Google-Smtp-Source: AGHT+IEJZEhw/8MjyR5Bg/evKvO1z4rIjCAlxCJ+ycLj2cifs6WrOrzLnSR4rYggt+PToKj7F6w++g==
-X-Received: by 2002:a17:906:8a54:b0:99d:6b3c:3d40 with SMTP id gx20-20020a1709068a5400b0099d6b3c3d40mr8212956ejc.6.1694438067102;
-        Mon, 11 Sep 2023 06:14:27 -0700 (PDT)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id kt8-20020a170906aac800b00988e953a586sm5313648ejb.61.2023.09.11.06.14.26
+        bh=dl99i48dgkFaFiuiu5aVJ8kJhbaWRuqEuatgk+IWw2o=;
+        b=o/Clvz4OXPD9Oja7suC9WoWq1qUWZPexzZ/g4hO8r/YirBIVcO6PuSF4caLFBsg0jE
+         pd4lBXR+AfderbO507FEIAej3bL+r7BxQ0vJDu3ES/vbtCI19QleLGblNtzw1G0uzEXZ
+         qlPy0RkKIAkKbdGLTIeU5xzBkwaMmWGietVwbl06tGbJVj95/wBynaAVsxajeuOJYoju
+         JHFs6nDkFGojdaQ21E/AgqDo9ntRC+SU9inoxSNGk5saFLlZBZi+DZj2zHSvxuwR53Ai
+         1h+cwb/kOmtwP6hcKqVYNARlXZe8hjCJUG9xifXdD3lxcnqZuNkIda1oNe+RMFQoUvgf
+         9RFQ==
+X-Gm-Message-State: AOJu0YwwPsJ7wsBCXsntBqwIBOzjKhSiQ3H/tqXgqfp4KzzwHxbWMXA5
+        oGeHY4VupssQ817DZKYos9UKVg==
+X-Google-Smtp-Source: AGHT+IGjTwoKuO/nF9f+giZJp6zZCYwNV0et/hED8EkqY7QJ0N5afC2ym6nB9rOu5fmSKCdB4pPe6w==
+X-Received: by 2002:aa7:d753:0:b0:522:2711:863 with SMTP id a19-20020aa7d753000000b0052227110863mr8641195eds.1.1694445050506;
+        Mon, 11 Sep 2023 08:10:50 -0700 (PDT)
+Received: from [10.167.154.1] (178235177061.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.61])
+        by smtp.gmail.com with ESMTPSA id n4-20020a056402060400b0052a3ad836basm4681281edv.41.2023.09.11.08.10.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Sep 2023 06:14:26 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
-        andrey.konovalov@linaro.org
-Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 12/17] media: qcom: camss: Functionally decompose CSIPHY clock lookups
-Date:   Mon, 11 Sep 2023 14:14:06 +0100
-Message-ID: <20230911131411.196033-13-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20230911131411.196033-1-bryan.odonoghue@linaro.org>
-References: <20230911131411.196033-1-bryan.odonoghue@linaro.org>
+        Mon, 11 Sep 2023 08:10:50 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Date:   Mon, 11 Sep 2023 17:10:27 +0200
+Subject: [PATCH RFT 13/20] media: venus: core: Remove cp_start
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230911-topic-mars-v1-13-a7d38bf87bdb@linaro.org>
+References: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
+In-Reply-To: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
+To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Dikshita Agarwal <quic_dikshita@quicinc.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1694445027; l=2989;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=h53ZKh/yNo0bLYPAMV5n1Zw9RfUgxMBrX/Tc7gbPrsU=;
+ b=MyR4nzOnMYNiQhw1jH6W3MyPjnn9iMncEi0lurWq1TO1u8q7eGsXCtmFz5wNbn4MLq1ZYMleS
+ 2DmBMguD4EUCFp4kFzbiIdckpfA+/Nsvm4/o53Hzrpc+oIcI4AflYkB
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The csiphyX_timer and csiX_phy values need not be hard-coded. We can
-functionally decompose the string matching inside of a loop.
+It's hardcoded to be zero. Always. Ever since msm-3.10. Or maybe
+even before. Remove it!
 
-Static string values are brittle, difficult to extend and not required
-anyway since the camss->res->csiphy_num value informs us of the number
-of CSIPHYs and hence the set of potential clocks for a given CSIPHY.
-
-In simple terms if we have five CSIPHYs we can have no more and no less
-than five csiphy_timer clocks. Similarly csi_phy core clocks have a 1:1
-relationship with the PHY they clock.
-
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- .../media/platform/qcom/camss/camss-csiphy.c  | 37 ++++++++++++-------
- 1 file changed, 23 insertions(+), 14 deletions(-)
+ drivers/media/platform/qcom/venus/core.c     | 3 ---
+ drivers/media/platform/qcom/venus/core.h     | 1 -
+ drivers/media/platform/qcom/venus/firmware.c | 3 +--
+ 3 files changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.c b/drivers/media/platform/qcom/camss/camss-csiphy.c
-index 18f9a4defb2a4..87d6d65aa90cf 100644
---- a/drivers/media/platform/qcom/camss/camss-csiphy.c
-+++ b/drivers/media/platform/qcom/camss/camss-csiphy.c
-@@ -536,6 +536,15 @@ static int csiphy_init_formats(struct v4l2_subdev *sd,
- 	return csiphy_set_format(sd, fh ? fh->state : NULL, &format);
- }
- 
-+static bool csiphy_match_clock_name(const char *clock_name, const char *format,
-+				    int index)
-+{
-+	char name[15]; /* csiphyXX_timer\0 */
-+
-+	snprintf(name, sizeof(name), format, index);
-+	return !strcmp(clock_name, name);
-+}
-+
- /*
-  * msm_csiphy_subdev_init - Initialize CSIPHY device structure and resources
-  * @csiphy: CSIPHY device
-@@ -550,7 +559,7 @@ int msm_csiphy_subdev_init(struct camss *camss,
- {
- 	struct device *dev = camss->dev;
- 	struct platform_device *pdev = to_platform_device(dev);
--	int i, j;
-+	int i, j, k;
- 	int ret;
- 
- 	csiphy->camss = camss;
-@@ -656,19 +665,19 @@ int msm_csiphy_subdev_init(struct camss *camss,
- 		for (j = 0; j < clock->nfreqs; j++)
- 			clock->freq[j] = res->clock_rate[i][j];
- 
--		if (!strcmp(clock->name, "csiphy0_timer") ||
--		    !strcmp(clock->name, "csiphy1_timer") ||
--		    !strcmp(clock->name, "csiphy2_timer") ||
--		    !strcmp(clock->name, "csiphy3_timer") ||
--		    !strcmp(clock->name, "csiphy4_timer") ||
--		    !strcmp(clock->name, "csiphy5_timer"))
--			csiphy->rate_set[i] = true;
--
--		if (camss->res->version == CAMSS_660 &&
--		    (!strcmp(clock->name, "csi0_phy") ||
--		     !strcmp(clock->name, "csi1_phy") ||
--		     !strcmp(clock->name, "csi2_phy")))
--			csiphy->rate_set[i] = true;
-+		for (k = 0; k < camss->res->csiphy_num; k++) {
-+			csiphy->rate_set[i] = csiphy_match_clock_name(clock->name,
-+								      "csiphy%d_timer", k);
-+			if (csiphy->rate_set[i])
-+				break;
-+
-+			if (camss->res->version == CAMSS_660) {
-+				csiphy->rate_set[i] = csiphy_match_clock_name(clock->name,
-+									      "csi%d_phy", k);
-+				if (csiphy->rate_set[i])
-+					break;
-+			}
-+		}
- 	}
- 
- 	return 0;
+diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
+index 4dec10d21b05..bd624e965a92 100644
+--- a/drivers/media/platform/qcom/venus/core.c
++++ b/drivers/media/platform/qcom/venus/core.c
+@@ -650,7 +650,6 @@ static const struct venus_resources sdm660_res = {
+ 	.vcodec_clks_num = 1,
+ 	.max_load = 1036800,
+ 	.hfi_version = HFI_VERSION_3XX,
+-	.cp_start = 0,
+ 	.cp_size = 0x79000000,
+ 	.cp_nonpixel_start = 0x1000000,
+ 	.cp_nonpixel_size = 0x28000000,
+@@ -719,7 +718,6 @@ static const struct venus_resources sdm845_res_v2 = {
+ 	.hfi_version = HFI_VERSION_4XX,
+ 	.vpu_version = VPU_VERSION_AR50,
+ 	.dma_mask = GENMASK(31, 29) - 1,
+-	.cp_start = 0,
+ 	.cp_size = 0x70800000,
+ 	.cp_nonpixel_start = 0x1000000,
+ 	.cp_nonpixel_size = 0x24800000,
+@@ -763,7 +761,6 @@ static const struct venus_resources sc7180_res = {
+ 	.hfi_version = HFI_VERSION_4XX,
+ 	.vpu_version = VPU_VERSION_AR50,
+ 	.dma_mask = GENMASK(31, 29) - 1,
+-	.cp_start = 0,
+ 	.cp_size = 0x70800000,
+ 	.cp_nonpixel_start = 0x1000000,
+ 	.cp_nonpixel_size = 0x24800000,
+diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
+index fe4cb566d8e9..16acf738fd6c 100644
+--- a/drivers/media/platform/qcom/venus/core.h
++++ b/drivers/media/platform/qcom/venus/core.h
+@@ -81,7 +81,6 @@ struct venus_resources {
+ 	const enum vpu_version vpu_version;
+ 	const u8 num_vpp_pipes;
+ 	const u32 max_load;
+-	const u32 cp_start;
+ 	const u32 cp_size;
+ 	const u32 cp_nonpixel_start;
+ 	const u32 cp_nonpixel_size;
+diff --git a/drivers/media/platform/qcom/venus/firmware.c b/drivers/media/platform/qcom/venus/firmware.c
+index fe7da2b30482..16e578780be7 100644
+--- a/drivers/media/platform/qcom/venus/firmware.c
++++ b/drivers/media/platform/qcom/venus/firmware.c
+@@ -245,7 +245,6 @@ int venus_boot(struct venus_core *core)
+ 	if (core->use_tz && res->cp_size) {
+ 		/*
+ 		 * Clues for porting using downstream data:
+-		 * cp_start = 0
+ 		 * cp_size = venus_ns/virtual-addr-pool[0] - yes, address and not size!
+ 		 *   This works, as the non-secure context bank is placed
+ 		 *   contiguously right after the Content Protection region.
+@@ -253,7 +252,7 @@ int venus_boot(struct venus_core *core)
+ 		 * cp_nonpixel_start = venus_sec_non_pixel/virtual-addr-pool[0]
+ 		 * cp_nonpixel_size = venus_sec_non_pixel/virtual-addr-pool[1]
+ 		 */
+-		ret = qcom_scm_mem_protect_video_var(res->cp_start,
++		ret = qcom_scm_mem_protect_video_var(0,
+ 						     res->cp_size,
+ 						     res->cp_nonpixel_start,
+ 						     res->cp_nonpixel_size);
+
 -- 
 2.42.0
 
