@@ -2,223 +2,272 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7CBEEE3F1A
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8EC0EE3F19
 	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:52:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235795AbjIKUt2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Sep 2023 16:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59908 "EHLO
+        id S235822AbjIKUtc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Sep 2023 16:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241591AbjIKPKx (ORCPT
+        with ESMTP id S237770AbjIKNOY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Sep 2023 11:10:53 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6AAAE50
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:10:48 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-500c37d479aso7367400e87.2
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:10:48 -0700 (PDT)
+        Mon, 11 Sep 2023 09:14:24 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73F5E54
+        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:18 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-50078eba7afso7666426e87.0
+        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694445047; x=1695049847; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KoRoq/DrVvkmjCXseaDmK4CEsiQOZW3LoyiqrnjQB9s=;
-        b=FL7EHe9/CZuMCn13KeDyBF2tco7gj9DSQ98KZqSXvcHD5jc7RJ3C9nRJubp9FJx9gN
-         cjd2DrbiiU2nixHyI/s1/ny/xrha7MsqOeHVNf3srOTKQe6+d8sH45EkSOVcLdTwGRZe
-         ncb8rkVgQr1wxxlJX5dWtvKcMC41EVn2vVkrVM/ESmxeBkZtw98+9zVERmTbpFEd52qB
-         12SGYPcSQUHoaPi0olbZQwHgazt3I0m6/XGMVfJeiycK6N6ddEcNz/6jjypbnCkxxWLt
-         wJ1JmlyjEYyhtJXi5jk/xcMHg4ieMISoaeG6nS42eDcfJrqb1jf57qVLnqvTNPEEibBa
-         Bvtw==
+        d=linaro.org; s=google; t=1694438057; x=1695042857; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WtUvABqn7deJbHXIvivNsqSlJTQ17oV+fRU19/L86bw=;
+        b=c8IZq14I3RbGXZuQs/Qu5Sjrzr6V/bfDAT6AACBO0Oq/Gg53ksOPog9YIqGnOHtovm
+         92xCofT/EC6FDfl2OZMrA4FQUj3p778lQhR3sSut+SRSAodp8xFMg5cGwexGwTaviVjM
+         V0jE3oBtsE7IC7bOButaQ1SJY765A3kW1SSb9YXC8hge5NrSyWSXlB1G5Na3/LFqhAm9
+         faAzkRbxvpbdvZuEBrvtOmR5SosAujERxQcVCr5lnT6Y+usVQkWsESm8r7k5fy/RdWoR
+         LvBbBsolb561Z16XRJqJ3UJ+OeWA4p/Riqs4pwYJINhySxr/59qfWb+Mq0YO6Q+204/N
+         8W8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694445047; x=1695049847;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1694438057; x=1695042857;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KoRoq/DrVvkmjCXseaDmK4CEsiQOZW3LoyiqrnjQB9s=;
-        b=g/NC6uSoL7X/806FWX5h+l01XOgugmGuNVDN+qXSqw62Jhu2DLsTxfmEQ2U8mY82yQ
-         Tye1t7K8Mf5T/5vuGxMEvYca+WifW5xqNnARykd/pDux+MI31Of/csCzw1iv6IehbDVy
-         dGEEM4p6osRR/MbudxdkF+FZQM5tUdeTJQbBHHCB2mp3IjMPEvmpnIYAFCfCJfbcQmqi
-         Eeggwc+DQgyPhA5t1toJt2PfHax/zhM5L0bVjohrgJZSGJzQHTYBk84AI/W2+ebh3vR3
-         rNIPd/ZJ5akrPzPFupta3IMRK9tfwX/vXBNZVhpxFyb42omVRfDrnTrAXUAeJ8Q5jGHM
-         WSWw==
-X-Gm-Message-State: AOJu0Yxi/JZcG6ytr+ZhfoCpG0jehV46YTbA213t3X9FMJ2O2Z9WoZOU
-        yoIng19Wtyi5lYjs5vgk/3OI6A==
-X-Google-Smtp-Source: AGHT+IHoUjK7egly+lD/FRgwIWWwd0EnDIrheAdA1IHTTas5hH3dS+VKbAAlXhaXrbGwZUjKW8W1UA==
-X-Received: by 2002:a05:6512:32ce:b0:500:8725:1351 with SMTP id f14-20020a05651232ce00b0050087251351mr9174605lfg.47.1694445047031;
-        Mon, 11 Sep 2023 08:10:47 -0700 (PDT)
-Received: from [10.167.154.1] (178235177061.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.61])
-        by smtp.gmail.com with ESMTPSA id n4-20020a056402060400b0052a3ad836basm4681281edv.41.2023.09.11.08.10.45
+        bh=WtUvABqn7deJbHXIvivNsqSlJTQ17oV+fRU19/L86bw=;
+        b=M0XlRaZIXZufe6L5N3PDWnF0ejI7jluBwO9/Q6/laiOynLvB9JbXZIiHMItUp8ZRiP
+         JMyMMoUxKmjJf0St2HmNxT3jKDhK9qVmQwiS4Od8xMB94uxSx7oJvcrHslfloX0sF2x9
+         M4asmuBzvF8JSU6barflER7IhfkOToPOIaNXnhxOdNWoQ33NgoEfejFggJ0RjsTMEphj
+         cL9mVe2biDgI6ThREtXYFNyK/jki6kE7660RdTyZ8qNpB9WeqNF4Y1xYRIoMIz5bQTEf
+         AoXz7a/ZUddFeGLQSbInt+GOVHp3jTbRIC+b0CiXMzy08K2GjtPIYSipQWIbQW/sTl5G
+         D74w==
+X-Gm-Message-State: AOJu0Yx37rWUkHAWPCc+CVFlgHtatNGRI6tdV5BwvV+ont+ENY01u5rx
+        Vcmncxg3mtx8EgKEzIQ6l9CFDA==
+X-Google-Smtp-Source: AGHT+IHtv/RoP3ZK/A1nzWckUyyflARRlFvRedTz977+fc5u3KUN5Nf8RqECggG/GHQxpE1IExsVHQ==
+X-Received: by 2002:a19:435d:0:b0:500:a408:dbd with SMTP id m29-20020a19435d000000b00500a4080dbdmr6796141lfj.55.1694438057105;
+        Mon, 11 Sep 2023 06:14:17 -0700 (PDT)
+Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id kt8-20020a170906aac800b00988e953a586sm5313648ejb.61.2023.09.11.06.14.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Sep 2023 08:10:46 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 11 Sep 2023 17:10:25 +0200
-Subject: [PATCH RFT 11/20] media: venus: core: Drop cache properties in
- resource struct
+        Mon, 11 Sep 2023 06:14:16 -0700 (PDT)
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
+        andrey.konovalov@linaro.org
+Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 03/17] media: qcom: camss: Start to move to module compat matched resources
+Date:   Mon, 11 Sep 2023 14:13:57 +0100
+Message-ID: <20230911131411.196033-4-bryan.odonoghue@linaro.org>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20230911131411.196033-1-bryan.odonoghue@linaro.org>
+References: <20230911131411.196033-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230911-topic-mars-v1-11-a7d38bf87bdb@linaro.org>
-References: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
-In-Reply-To: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
-To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1694445027; l=4750;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=57eNoVLc7ASkVVxqDox1DzeFGbIIkYlRHNb+x5nOma8=;
- b=jh0ibHJFu9sbgdYfiEbIJxIc6y4/EIqdz8xPYnEoE30HDEuwsQsATcGFHDvoManghaUvQqknx
- tuH6SMDJpJND4u6j71qqgAPPFNZbaCnLbKuS1YyYgEXNjLUb3PW8hU7
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Currently VMEM/OCMEM/LLCC is disabled on all platforms.
+There is a lot of unnecessary if/elsing in this code that arguably
+should never have made it upstream when adding a second let alone
+subsequent SoC.
 
-Make it unconditional to save on space.
+I'm guilty of not fixing the mess myself when adding in the sm8250.
+Before adding in any new SoCs or resources lets take the time to cleanup
+the resource passing.
 
-These caches will not be enabled until the Venus driver can reference
-them as chunks of SRAM (they're modelled as separate devices) to avoid
-hardcoding magic addresses and rougely accessing the hardware,
-bypassing the normal accessors.
+First step is to pass the generic struct camss_resources as a parameter
+per the compatible list.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Subsequent patches will address the other somewhat disparate strutures
+which we are also doing if/else on and assigning statically.
+
+Squashed down a commit to drop useless NULL assignment for ispif resources.
+
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/media/platform/qcom/venus/core.c      | 24 ------------------------
- drivers/media/platform/qcom/venus/core.h      |  3 ---
- drivers/media/platform/qcom/venus/hfi_venus.c |  7 ++++---
- 3 files changed, 4 insertions(+), 30 deletions(-)
+ drivers/media/platform/qcom/camss/camss.c | 90 ++++++++++++-----------
+ drivers/media/platform/qcom/camss/camss.h |  8 ++
+ 2 files changed, 54 insertions(+), 44 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
-index e83c790ccc80..5d4d62751357 100644
---- a/drivers/media/platform/qcom/venus/core.c
-+++ b/drivers/media/platform/qcom/venus/core.c
-@@ -565,9 +565,6 @@ static const struct venus_resources msm8916_res = {
- 	.clks_num = 3,
- 	.max_load = 352800, /* 720p@30 + 1080p@30 */
- 	.hfi_version = HFI_VERSION_1XX,
--	.vmem_id = VIDC_RESOURCE_NONE,
--	.vmem_size = 0,
--	.vmem_addr = 0,
- 	.dma_mask = 0xddc00000 - 1,
- 	.fwname = "qcom/venus-1.8/venus.mdt",
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+index 718ef8e4f5938..8fa5dee75672d 100644
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -14,6 +14,7 @@
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ #include <linux/of.h>
++#include <linux/of_device.h>
+ #include <linux/of_graph.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/pm_domain.h>
+@@ -1120,47 +1121,13 @@ static int camss_of_parse_ports(struct camss *camss)
+  */
+ static int camss_init_subdevices(struct camss *camss)
+ {
+-	const struct camss_subdev_resources *csiphy_res;
+-	const struct camss_subdev_resources *csid_res;
+-	const struct camss_subdev_resources *ispif_res;
+-	const struct camss_subdev_resources *vfe_res;
++	const struct camss_resources *res = camss->res;
+ 	unsigned int i;
+ 	int ret;
+ 
+-	if (camss->version == CAMSS_8x16) {
+-		csiphy_res = csiphy_res_8x16;
+-		csid_res = csid_res_8x16;
+-		ispif_res = &ispif_res_8x16;
+-		vfe_res = vfe_res_8x16;
+-	} else if (camss->version == CAMSS_8x96) {
+-		csiphy_res = csiphy_res_8x96;
+-		csid_res = csid_res_8x96;
+-		ispif_res = &ispif_res_8x96;
+-		vfe_res = vfe_res_8x96;
+-	} else if (camss->version == CAMSS_660) {
+-		csiphy_res = csiphy_res_660;
+-		csid_res = csid_res_660;
+-		ispif_res = &ispif_res_660;
+-		vfe_res = vfe_res_660;
+-	}  else if (camss->version == CAMSS_845) {
+-		csiphy_res = csiphy_res_845;
+-		csid_res = csid_res_845;
+-		/* Titan VFEs don't have an ISPIF  */
+-		ispif_res = NULL;
+-		vfe_res = vfe_res_845;
+-	} else if (camss->version == CAMSS_8250) {
+-		csiphy_res = csiphy_res_8250;
+-		csid_res = csid_res_8250;
+-		/* Titan VFEs don't have an ISPIF  */
+-		ispif_res = NULL;
+-		vfe_res = vfe_res_8250;
+-	} else {
+-		return -EINVAL;
+-	}
+-
+ 	for (i = 0; i < camss->csiphy_num; i++) {
+ 		ret = msm_csiphy_subdev_init(camss, &camss->csiphy[i],
+-					     &csiphy_res[i], i);
++					     &res->csiphy_res[i], i);
+ 		if (ret < 0) {
+ 			dev_err(camss->dev,
+ 				"Failed to init csiphy%d sub-device: %d\n",
+@@ -1172,7 +1139,7 @@ static int camss_init_subdevices(struct camss *camss)
+ 	/* note: SM8250 requires VFE to be initialized before CSID */
+ 	for (i = 0; i < camss->vfe_num + camss->vfe_lite_num; i++) {
+ 		ret = msm_vfe_subdev_init(camss, &camss->vfe[i],
+-					  &vfe_res[i], i);
++					  &res->vfe_res[i], i);
+ 		if (ret < 0) {
+ 			dev_err(camss->dev,
+ 				"Fail to init vfe%d sub-device: %d\n", i, ret);
+@@ -1182,7 +1149,7 @@ static int camss_init_subdevices(struct camss *camss)
+ 
+ 	for (i = 0; i < camss->csid_num; i++) {
+ 		ret = msm_csid_subdev_init(camss, &camss->csid[i],
+-					   &csid_res[i], i);
++					   &res->csid_res[i], i);
+ 		if (ret < 0) {
+ 			dev_err(camss->dev,
+ 				"Failed to init csid%d sub-device: %d\n",
+@@ -1191,7 +1158,7 @@ static int camss_init_subdevices(struct camss *camss)
+ 		}
+ 	}
+ 
+-	ret = msm_ispif_subdev_init(camss, ispif_res);
++	ret = msm_ispif_subdev_init(camss, res->ispif_res);
+ 	if (ret < 0) {
+ 		dev_err(camss->dev, "Failed to init ispif sub-device: %d\n",
+ 		ret);
+@@ -1568,6 +1535,8 @@ static int camss_probe(struct platform_device *pdev)
+ 	if (!camss)
+ 		return -ENOMEM;
+ 
++	camss->res = of_device_get_match_data(dev);
++
+ 	atomic_set(&camss->ref_count, 0);
+ 	camss->dev = dev;
+ 	platform_set_drvdata(pdev, camss);
+@@ -1742,12 +1711,45 @@ static void camss_remove(struct platform_device *pdev)
+ 	camss_genpd_cleanup(camss);
+ }
+ 
++static const struct camss_resources msm8916_resources = {
++	.csiphy_res = csiphy_res_8x16,
++	.csid_res = csid_res_8x16,
++	.ispif_res = &ispif_res_8x16,
++	.vfe_res = vfe_res_8x16,
++};
++
++static const struct camss_resources msm8996_resources = {
++	.csiphy_res = csiphy_res_8x96,
++	.csid_res = csid_res_8x96,
++	.ispif_res = &ispif_res_8x96,
++	.vfe_res = vfe_res_8x96,
++};
++
++static const struct camss_resources sdm660_resources = {
++	.csiphy_res = csiphy_res_660,
++	.csid_res = csid_res_660,
++	.ispif_res = &ispif_res_660,
++	.vfe_res = vfe_res_660,
++};
++
++static const struct camss_resources sdm845_resources = {
++	.csiphy_res = csiphy_res_845,
++	.csid_res = csid_res_845,
++	.vfe_res = vfe_res_845,
++};
++
++static const struct camss_resources sm8250_resources = {
++	.csiphy_res = csiphy_res_8250,
++	.csid_res = csid_res_8250,
++	.vfe_res = vfe_res_8250,
++};
++
+ static const struct of_device_id camss_dt_match[] = {
+-	{ .compatible = "qcom,msm8916-camss" },
+-	{ .compatible = "qcom,msm8996-camss" },
+-	{ .compatible = "qcom,sdm660-camss" },
+-	{ .compatible = "qcom,sdm845-camss" },
+-	{ .compatible = "qcom,sm8250-camss" },
++	{ .compatible = "qcom,msm8916-camss", .data = &msm8916_resources },
++	{ .compatible = "qcom,msm8996-camss", .data = &msm8996_resources },
++	{ .compatible = "qcom,sdm660-camss", .data = &sdm660_resources },
++	{ .compatible = "qcom,sdm845-camss", .data = &sdm845_resources },
++	{ .compatible = "qcom,sm8250-camss", .data = &sm8250_resources },
+ 	{ }
  };
-@@ -598,9 +595,6 @@ static const struct venus_resources msm8996_res = {
- 	.vcodec_clks_num = 1,
- 	.max_load = 2563200,
- 	.hfi_version = HFI_VERSION_3XX,
--	.vmem_id = VIDC_RESOURCE_NONE,
--	.vmem_size = 0,
--	.vmem_addr = 0,
- 	.dma_mask = 0xddc00000 - 1,
- 	.fwname = "qcom/venus-4.2/venus.mdt",
+ 
+diff --git a/drivers/media/platform/qcom/camss/camss.h b/drivers/media/platform/qcom/camss/camss.h
+index 9d6ba7b17ff02..20c84e8328880 100644
+--- a/drivers/media/platform/qcom/camss/camss.h
++++ b/drivers/media/platform/qcom/camss/camss.h
+@@ -79,6 +79,13 @@ enum icc_count {
+ 	ICC_SM8250_COUNT = 4,
  };
-@@ -656,9 +650,6 @@ static const struct venus_resources sdm660_res = {
- 	.vcodec_clks_num = 1,
- 	.max_load = 1036800,
- 	.hfi_version = HFI_VERSION_3XX,
--	.vmem_id = VIDC_RESOURCE_NONE,
--	.vmem_size = 0,
--	.vmem_addr = 0,
- 	.cp_start = 0,
- 	.cp_size = 0x79000000,
- 	.cp_nonpixel_start = 0x1000000,
-@@ -705,9 +696,6 @@ static const struct venus_resources sdm845_res = {
- 	.max_load = 3110400,	/* 4096x2160@90 */
- 	.hfi_version = HFI_VERSION_4XX,
- 	.vpu_version = VPU_VERSION_AR50,
--	.vmem_id = VIDC_RESOURCE_NONE,
--	.vmem_size = 0,
--	.vmem_addr = 0,
- 	.dma_mask = 0xe0000000 - 1,
- 	.fwname = "qcom/venus-5.2/venus.mdt",
+ 
++struct camss_resources {
++	const struct camss_subdev_resources *csiphy_res;
++	const struct camss_subdev_resources *csid_res;
++	const struct camss_subdev_resources *ispif_res;
++	const struct camss_subdev_resources *vfe_res;
++};
++
+ struct camss {
+ 	enum camss_version version;
+ 	struct v4l2_device v4l2_dev;
+@@ -99,6 +106,7 @@ struct camss {
+ 	struct device_link **genpd_link;
+ 	struct icc_path *icc_path[ICC_SM8250_COUNT];
+ 	struct icc_bw_tbl icc_bw_tbl[ICC_SM8250_COUNT];
++	const struct camss_resources *res;
  };
-@@ -730,9 +718,6 @@ static const struct venus_resources sdm845_res_v2 = {
- 	.max_load = 3110400,	/* 4096x2160@90 */
- 	.hfi_version = HFI_VERSION_4XX,
- 	.vpu_version = VPU_VERSION_AR50,
--	.vmem_id = VIDC_RESOURCE_NONE,
--	.vmem_size = 0,
--	.vmem_addr = 0,
- 	.dma_mask = 0xe0000000 - 1,
- 	.cp_start = 0,
- 	.cp_size = 0x70800000,
-@@ -777,9 +762,6 @@ static const struct venus_resources sc7180_res = {
- 	.opp_pmdomain = pd_names_cx,
- 	.hfi_version = HFI_VERSION_4XX,
- 	.vpu_version = VPU_VERSION_AR50,
--	.vmem_id = VIDC_RESOURCE_NONE,
--	.vmem_size = 0,
--	.vmem_addr = 0,
- 	.dma_mask = 0xe0000000 - 1,
- 	.cp_start = 0,
- 	.cp_size = 0x70800000,
-@@ -835,9 +817,6 @@ static const struct venus_resources sm8250_res = {
- 	.hfi_version = HFI_VERSION_6XX,
- 	.vpu_version = VPU_VERSION_IRIS2,
- 	.num_vpp_pipes = 4,
--	.vmem_id = VIDC_RESOURCE_NONE,
--	.vmem_size = 0,
--	.vmem_addr = 0,
- 	.dma_mask = 0xe0000000 - 1,
- 	.fwname = "qcom/vpu-1.0/venus.mbn",
- };
-@@ -892,9 +871,6 @@ static const struct venus_resources sc7280_res = {
- 	.hfi_version = HFI_VERSION_6XX,
- 	.vpu_version = VPU_VERSION_IRIS2_1,
- 	.num_vpp_pipes = 1,
--	.vmem_id = VIDC_RESOURCE_NONE,
--	.vmem_size = 0,
--	.vmem_addr = 0,
- 	.dma_mask = 0xe0000000 - 1,
- 	.fwname = "qcom/vpu-2.0/venus.mbn",
- };
-diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
-index de180f8e7973..fe4cb566d8e9 100644
---- a/drivers/media/platform/qcom/venus/core.h
-+++ b/drivers/media/platform/qcom/venus/core.h
-@@ -81,9 +81,6 @@ struct venus_resources {
- 	const enum vpu_version vpu_version;
- 	const u8 num_vpp_pipes;
- 	const u32 max_load;
--	const unsigned int vmem_id;
--	const u32 vmem_size;
--	const u32 vmem_addr;
- 	const u32 cp_start;
- 	const u32 cp_size;
- 	const u32 cp_nonpixel_start;
-diff --git a/drivers/media/platform/qcom/venus/hfi_venus.c b/drivers/media/platform/qcom/venus/hfi_venus.c
-index 19fc6575a489..e6db820a1d5e 100644
---- a/drivers/media/platform/qcom/venus/hfi_venus.c
-+++ b/drivers/media/platform/qcom/venus/hfi_venus.c
-@@ -1075,9 +1075,10 @@ static irqreturn_t venus_isr_thread(struct venus_core *core)
- 			venus_process_msg_sys_error(hdev, pkt);
- 			break;
- 		case HFI_MSG_SYS_INIT:
--			venus_hfi_core_set_resource(core, res->vmem_id,
--						    res->vmem_size,
--						    res->vmem_addr,
-+			/* Disable OCMEM/VMEM unconditionally until support is added */
-+			venus_hfi_core_set_resource(core, VIDC_RESOURCE_NONE,
-+						    0,
-+						    0,
- 						    hdev);
- 			break;
- 		case HFI_MSG_SYS_RELEASE_RESOURCE:
-
+ 
+ struct camss_camera_interface {
 -- 
 2.42.0
 
