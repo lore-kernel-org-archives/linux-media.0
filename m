@@ -2,117 +2,143 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D4CEEEB590
-	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:48:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DAADEEB590
+	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:48:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234592AbjIKUsV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Sep 2023 16:48:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46232 "EHLO
+        id S231262AbjIKUsY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Sep 2023 16:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235635AbjIKJK5 (ORCPT
+        with ESMTP id S244022AbjIKSq2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Sep 2023 05:10:57 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1217ACCD;
-        Mon, 11 Sep 2023 02:10:52 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22B6DC433C8;
-        Mon, 11 Sep 2023 09:10:48 +0000 (UTC)
-Message-ID: <be6b41e0-c610-49c3-ae6c-e811b56aca30@xs4all.nl>
-Date:   Mon, 11 Sep 2023 11:10:47 +0200
+        Mon, 11 Sep 2023 14:46:28 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10E1125;
+        Mon, 11 Sep 2023 11:46:23 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2b9c907bc68so81355461fa.2;
+        Mon, 11 Sep 2023 11:46:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1694457982; x=1695062782; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8TBr4EN5rldaZkHvkd2rnKKqYjv2Um5C+H0942voyCA=;
+        b=HiHPzOiQPoEKiFNMSgeA9fR8GW2TvD4hcfaDPSuQJX/Mqqfv9zdDbyTYHhQ9RDs1+Q
+         QtLGK+IRb10HIuVxDQNs56obVPwSwNzz4nT7uE9EqRaLVtmTJqoKvU+g9iISqp/7M1Su
+         aIQNjvK6Ahn80SL6lXNzWNyrT6Ys92u5lgkGEy8odbYo6d3geNslWIS6w//uCB4m6TwJ
+         tXEOgCGazS/9y+RLs+o41E15tnwutPUSGPNmSYidOF8qwVHk51fWtOmGVKQxOunBjRkU
+         FHdr7CywQns3DQlpSqiNWGJh652rNa8WqbPUVOecuSq0zi4sx4yH/Yep2wYFjUwZo+ZT
+         MfUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694457982; x=1695062782;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8TBr4EN5rldaZkHvkd2rnKKqYjv2Um5C+H0942voyCA=;
+        b=aAPq70oJCv/Y5gnKqWBXJBr9Tu048fZVQ5mRgeepwuZnzV0iKQ427FKcPVbbQuwSaw
+         YUg52PaLB31sNW9Z0Z0FtPsMqdshLsDhliVJ5xVYCqbY8xlcnL4vmhR0QKsXqNE9trsY
+         EojN6yBM6RmNs2H/AhqqmoMVfgBHiSRcwPfglwPWwVYqHi0jmgSEYQLEH4t7rRgw+fj4
+         VuB2CQpx6YubPNhX9JTpZusniAOB5U4brH3mPlKRpGNx03dat61EqHf/HIdZemj3Qp5k
+         76H9GmiVXgdiyhPMg48Kh2RtKYjszCWcFdZU4oPq3vUDXsylHDnjc2daGT5/e233q1a/
+         ALqQ==
+X-Gm-Message-State: AOJu0YxzrhYbNB0xQS7NdDbWKLPeC78NxzbecFoHVo7tN7k+GneZHX6X
+        oVpoDNpgZBx817K6J23ZnQA=
+X-Google-Smtp-Source: AGHT+IEFtUwssM3Wz0EWQngKzY2DsMzQtci8zO+mdro+nrwGTnYM5m/LPUyRsxrerapH+WT+2kbMfQ==
+X-Received: by 2002:a2e:980e:0:b0:2bc:dd96:147d with SMTP id a14-20020a2e980e000000b002bcdd96147dmr9353782ljj.28.1694457981836;
+        Mon, 11 Sep 2023 11:46:21 -0700 (PDT)
+Received: from localhost.localdomain (82-149-12-148.dynamic.telemach.net. [82.149.12.148])
+        by smtp.gmail.com with ESMTPSA id x16-20020a170906135000b009a9f00bdf8dsm5733764ejb.191.2023.09.11.11.46.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Sep 2023 11:46:21 -0700 (PDT)
+From:   Jernej Skrabec <jernej.skrabec@gmail.com>
+To:     mripard@kernel.org, paul.kocialkowski@bootlin.com
+Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org, wens@csie.org,
+        samuel@sholland.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Subject: [PATCH] media: cedrus: Fix clock/reset sequence
+Date:   Mon, 11 Sep 2023 20:46:12 +0200
+Message-ID: <20230911184612.1754373-1-jernej.skrabec@gmail.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 15/17] media: qcom: camss: Move vfe_disable into a
- common routine where applicable
-Content-Language: en-US, nl
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>, rfoss@kernel.org,
-        todor.too@gmail.com, agross@kernel.org, andersson@kernel.org,
-        mchehab@kernel.org, laurent.pinchart@ideasonboard.com,
-        sakari.ailus@linux.intel.com, andrey.konovalov@linaro.org
-Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230907164410.36651-1-bryan.odonoghue@linaro.org>
- <20230907164410.36651-16-bryan.odonoghue@linaro.org>
- <8b424303-09c9-4270-abfd-4f209f5c41e0@linaro.org>
- <41d1e364-40a4-48b2-97ef-6c76d238002e@linaro.org>
- <c9570c8e-c9a5-43f5-8b69-d5c38d214061@linaro.org>
- <c5d64d12-668a-4d70-85ee-e4111d85a1be@linaro.org>
- <e1ab1df4-8431-483d-8f20-74de5349cfbc@linaro.org>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <e1ab1df4-8431-483d-8f20-74de5349cfbc@linaro.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 08/09/2023 12:36, Bryan O'Donoghue wrote:
-> On 08/09/2023 11:24, Konrad Dybcio wrote:
->> On 8.09.2023 12:21, Bryan O'Donoghue wrote:
->>> On 08/09/2023 11:04, Konrad Dybcio wrote:
->>>> On 8.09.2023 12:02, Konrad Dybcio wrote:
->>>>> On 7.09.2023 18:44, Bryan O'Donoghue wrote:
->>>>>> We can move vfe_disable() into a common routine in the core VFE file
->>>>>> provided we make wm_stop() a VFE specific callback.
->>>>>>
->>>>>> The callback is required to capture the case where VFE 17x currently isn't
->>>>>> VC enabled where as VFE 480 is.
->>>>>>
->>>>>> Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->>>>>> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
->>>>>> ---
->>>>> Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>>>>
->>>>> Konrad
->>>> Actually there's
->>>>
->>>> ret = vfe_reset(vfe);
->>>>
->>>> return ret;
->>>>
->>>>
->>>> which could just be
->>>>
->>>> return vfe_reset(vfe);
->>>>
->>>>
->>>> Konrad
->>>
->>> On purpose.
->>>
->>> I prefer the ret = ; return ret; pattern since it makes it easier / less work to
->>>
->>> ret = fn();
->>> if (ret)
->>>      goto error;
->>>
->>> error:
->>>      return ret;
->> There's no error label in vfe_disable_output
->>
->> Konrad
-> 
-> No there is not. Its a pattern I use to make adding jump labels easier later on.
+According to H6 user manual, resets should always be de-asserted before
+clocks are enabled. This is also consistent with vendor driver.
 
-This adds a bunch of extra lines just in case something might happen in the
-future. That is generally a bad idea, so please change this. As you can see
-it just causes reviewers to trip over this with exactly the question you got
-here.
+Fixes: d5aecd289bab ("media: cedrus: Implement runtime PM")
+Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+---
+ .../staging/media/sunxi/cedrus/cedrus_hw.c    | 24 +++++++++----------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-> 
-> Just like you use the pattern of appending "," to aggregate initialisation.
-
-Adding a comma at the end doesn't add extra lines. To be honest, I don't
-have a strong opinion on this either way. Personally I would probably use a
-comma if it is likely that the list would be extended in the future, and
-leave it out if I am pretty certain that won't happen. In any case, I don't
-mind either way.
-
-Regards,
-
-	Hans
-
-> 
-> ---
-> bod
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_hw.c b/drivers/staging/media/sunxi/cedrus/cedrus_hw.c
+index b696bf884cbd..32af0e96e762 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_hw.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_hw.c
+@@ -172,12 +172,12 @@ int cedrus_hw_suspend(struct device *device)
+ {
+ 	struct cedrus_dev *dev = dev_get_drvdata(device);
+ 
+-	reset_control_assert(dev->rstc);
+-
+ 	clk_disable_unprepare(dev->ram_clk);
+ 	clk_disable_unprepare(dev->mod_clk);
+ 	clk_disable_unprepare(dev->ahb_clk);
+ 
++	reset_control_assert(dev->rstc);
++
+ 	return 0;
+ }
+ 
+@@ -186,11 +186,18 @@ int cedrus_hw_resume(struct device *device)
+ 	struct cedrus_dev *dev = dev_get_drvdata(device);
+ 	int ret;
+ 
++	ret = reset_control_reset(dev->rstc);
++	if (ret) {
++		dev_err(dev->dev, "Failed to apply reset\n");
++
++		return ret;
++	}
++
+ 	ret = clk_prepare_enable(dev->ahb_clk);
+ 	if (ret) {
+ 		dev_err(dev->dev, "Failed to enable AHB clock\n");
+ 
+-		return ret;
++		goto err_rst;
+ 	}
+ 
+ 	ret = clk_prepare_enable(dev->mod_clk);
+@@ -207,21 +214,14 @@ int cedrus_hw_resume(struct device *device)
+ 		goto err_mod_clk;
+ 	}
+ 
+-	ret = reset_control_reset(dev->rstc);
+-	if (ret) {
+-		dev_err(dev->dev, "Failed to apply reset\n");
+-
+-		goto err_ram_clk;
+-	}
+-
+ 	return 0;
+ 
+-err_ram_clk:
+-	clk_disable_unprepare(dev->ram_clk);
+ err_mod_clk:
+ 	clk_disable_unprepare(dev->mod_clk);
+ err_ahb_clk:
+ 	clk_disable_unprepare(dev->ahb_clk);
++err_rst:
++	reset_control_assert(dev->rstc);
+ 
+ 	return ret;
+ }
+-- 
+2.42.0
 
