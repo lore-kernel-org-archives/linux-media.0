@@ -2,174 +2,173 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DFFAEEB58C
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4221DEEB590
 	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:49:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235260AbjIKUtF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Sep 2023 16:49:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51244 "EHLO
+        id S235287AbjIKUtH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Sep 2023 16:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241557AbjIKPKp (ORCPT
+        with ESMTP id S235753AbjIKJ3c (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Sep 2023 11:10:45 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A09AE40
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:10:39 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-52889bc61b6so6062577a12.0
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:10:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694445037; x=1695049837; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hB07AWQ6+/HjqLThhLj5XIDObxfEfer4Yjs2PDgZbco=;
-        b=ZOtQyqzyDIvSBpOgiZn5wCN03fcMB8DKKexIkzt9gck0m4rhhhRweF+RLj+E1x22b0
-         W7HTTlJx9v73qxNjbP4ARBv8I6j2nnXKPllW0xMgQ+HZ4HL0XNtKfm4CFi0gE31dmSp4
-         zdxnYymR6lcOQwNj0Hqg05RxA8xM0qHorJY4Vlp7uS53wpywrg93uT0fC5ndfp/K4iI5
-         ep9jV30RkrC5j3AJFzrmgI62IxTAHcjLDnNsZg1E8BdX+b6tliC/h2X7i1ss8XP70NWV
-         NjAJ3ozguAZdqlaV5LELJY3LgGJPBO8jH3t3y+D2zNCwP8M5lbtNE808bhdwumgTSsax
-         oFUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694445037; x=1695049837;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hB07AWQ6+/HjqLThhLj5XIDObxfEfer4Yjs2PDgZbco=;
-        b=UNp/hr4CLPcVUlKj5tI0CF/nWu/sMyLD4fqFwmN5sKY1+MvPcTpZw3l//AIrg5JcWM
-         SZW2d90Xvz+EkV2Z3iHKYyJdRAg8NI34So0vP71oqylvjk0Pv6dxaUMEoG76EWOeMcu3
-         iZFud0QnfJ7saNjY1Mq0vUr68fQyrD+phhNoqnEg6eeZ2JPzryw/JZgEiLDFzDg2yf45
-         fM7vEIV/x+5RdTGECLwL8IuFQNFRJnyYRj/58/ipjdtdis2+dISBE2Whi0DzmD5EWZbV
-         OVjkdQPoYb7TlvPlGW/1boV7i6rLDvVuWmMa+40Qh4IQ/hdyX5xdhFBYGYy6ENuRVNdC
-         gOVg==
-X-Gm-Message-State: AOJu0Yx1mmUDgLzN5PM5voVyskCxeIhq4hLsn9EDJICZy9OxFCq5TH1U
-        //45zZLBRTFu9p6JEeVuJRfY7g==
-X-Google-Smtp-Source: AGHT+IHJPABWpI7Eq8rnPAY/s+Tohmf2Ji1RKKVtBhUqvuYbf4fo8qwJMluBqGhBSsrvs20bqX1bFg==
-X-Received: by 2002:a05:6402:8c3:b0:522:20a0:7eb8 with SMTP id d3-20020a05640208c300b0052220a07eb8mr7959403edz.33.1694445037678;
-        Mon, 11 Sep 2023 08:10:37 -0700 (PDT)
-Received: from [10.167.154.1] (178235177061.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.61])
-        by smtp.gmail.com with ESMTPSA id n4-20020a056402060400b0052a3ad836basm4681281edv.41.2023.09.11.08.10.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Sep 2023 08:10:37 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 11 Sep 2023 17:10:19 +0200
-Subject: [PATCH RFT 05/20] media: venus: pm_helpers: Kill dead code
+        Mon, 11 Sep 2023 05:29:32 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE373100;
+        Mon, 11 Sep 2023 02:29:26 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C395966072F0;
+        Mon, 11 Sep 2023 10:29:24 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1694424565;
+        bh=PEkfGXDLYefkrpep6+K+sw4moQH4wOvu/m6wtn7s7qE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=hD8i4A7ygMbHzKh2hK4C8OTl2GKieKyk8xGbRPMbHh+6Zkrg0lQgfgxlDZy0HRUJd
+         hEdTk0obzK2Soq+CEJ+T+JLcwnOMUikk0wnKdLVr2vxOLzr9He7w7SYn4K1l3xO6fr
+         /9XwtvQteamqKIqH0Ua418zxn8O/3reRef2Tn5cfAgKXi2NjXIa4UZKoN2ylJKTJve
+         z8tii5c5OgY29mGF7N6lHal7ve+g93RN6lfW2DYL289Pg0knfDSwOkmhpzzOtW8o76
+         EsghCr6u9IYosm3Za/H5v2jfmV2KXgyoLBzSszsENieOawR8bwBqutUX73tcjMXs2U
+         3EGGiwISa2Ncg==
+Message-ID: <d0373c02-9b22-661f-9930-ca720053c2a0@collabora.com>
+Date:   Mon, 11 Sep 2023 11:29:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH 5/9] dma-buf: heaps: mtk_sec_heap: Initialise tee session
+Content-Language: en-US
+To:     Yong Wu <yong.wu@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        christian.koenig@amd.com, Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <jstultz@google.com>, tjmercier@google.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, jianjiao.zeng@mediatek.com,
+        kuohong.wang@mediatek.com
+References: <20230911023038.30649-1-yong.wu@mediatek.com>
+ <20230911023038.30649-6-yong.wu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230911023038.30649-6-yong.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230911-topic-mars-v1-5-a7d38bf87bdb@linaro.org>
-References: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
-In-Reply-To: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
-To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1694445027; l=2141;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=QMvOYSIDhNKQG6pzBZaUv6e9JhH/er8ZMPeUWk6srGI=;
- b=XK0JQo551H+KBf+i/fiVuIM7cxliwEN1dSWCIJuOIUFCAvdHNT1EBk3XeoIB/hy/oghd/Gh6b
- LIBRGGfXgMcCgxb3Vkt4cp666O9latCD1vNrsCFGEnccpEky0ql/Vv1
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-A situation like:
+Il 11/09/23 04:30, Yong Wu ha scritto:
+> The TEE probe later than dma-buf heap, and PROBE_DEDER doesn't work
+> here since this is not a platform driver, therefore initialise the TEE
+> context/session while we allocate the first secure buffer.
+> 
+> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+> ---
+>   drivers/dma-buf/heaps/mtk_secure_heap.c | 61 +++++++++++++++++++++++++
+>   1 file changed, 61 insertions(+)
+> 
+> diff --git a/drivers/dma-buf/heaps/mtk_secure_heap.c b/drivers/dma-buf/heaps/mtk_secure_heap.c
+> index bbf1c8dce23e..e3da33a3d083 100644
+> --- a/drivers/dma-buf/heaps/mtk_secure_heap.c
+> +++ b/drivers/dma-buf/heaps/mtk_secure_heap.c
+> @@ -10,6 +10,12 @@
+>   #include <linux/err.h>
+>   #include <linux/module.h>
+>   #include <linux/slab.h>
+> +#include <linux/tee_drv.h>
+> +#include <linux/uuid.h>
+> +
+> +#define TZ_TA_MEM_UUID		"4477588a-8476-11e2-ad15-e41f1390d676"
+> +
 
-if (!foo)
-	goto bar;
+Is this UUID the same for all SoCs and all TZ versions?
 
-for (i = 0; i < foo; i++)
-	...1...
+Thanks,
+Angelo
 
-bar:
-	...2...
 
-is totally identical to:
-
-for (i = 0; i < 0; i++) // === if (0)
-	...1...
-
-...2...
-
-Get rid of such boilerplate.
-
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/media/platform/qcom/venus/pm_helpers.c | 14 --------------
- 1 file changed, 14 deletions(-)
-
-diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
-index 9bedb3bc7223..f5130aa3ddfc 100644
---- a/drivers/media/platform/qcom/venus/pm_helpers.c
-+++ b/drivers/media/platform/qcom/venus/pm_helpers.c
-@@ -875,9 +875,6 @@ static int vcodec_domains_get(struct venus_core *core)
- 	struct device *pd;
- 	unsigned int i;
- 
--	if (!res->vcodec_pmdomains_num)
--		goto skip_pmdomains;
--
- 	for (i = 0; i < res->vcodec_pmdomains_num; i++) {
- 		pd = dev_pm_domain_attach_by_name(dev,
- 						  res->vcodec_pmdomains[i]);
-@@ -886,7 +883,6 @@ static int vcodec_domains_get(struct venus_core *core)
- 		core->pmdomains[i] = pd;
- 	}
- 
--skip_pmdomains:
- 	if (!core->res->opp_pmdomain)
- 		return 0;
- 
-@@ -922,16 +918,12 @@ static void vcodec_domains_put(struct venus_core *core)
- 	const struct venus_resources *res = core->res;
- 	unsigned int i;
- 
--	if (!res->vcodec_pmdomains_num)
--		goto skip_pmdomains;
--
- 	for (i = 0; i < res->vcodec_pmdomains_num; i++) {
- 		if (IS_ERR_OR_NULL(core->pmdomains[i]))
- 			continue;
- 		dev_pm_domain_detach(core->pmdomains[i], true);
- 	}
- 
--skip_pmdomains:
- 	if (!core->has_opp_table)
- 		return;
- 
-@@ -945,9 +937,6 @@ static int core_resets_reset(struct venus_core *core)
- 	unsigned int i;
- 	int ret;
- 
--	if (!res->resets_num)
--		return 0;
--
- 	for (i = 0; i < res->resets_num; i++) {
- 		ret = reset_control_assert(core->resets[i]);
- 		if (ret)
-@@ -970,9 +959,6 @@ static int core_resets_get(struct venus_core *core)
- 	unsigned int i;
- 	int ret;
- 
--	if (!res->resets_num)
--		return 0;
--
- 	for (i = 0; i < res->resets_num; i++) {
- 		core->resets[i] =
- 			devm_reset_control_get_exclusive(dev, res->resets[i]);
-
--- 
-2.42.0
+> +#define MTK_TEE_PARAM_NUM		4
+>   
+>   /*
+>    * MediaTek secure (chunk) memory type
+> @@ -28,17 +34,72 @@ struct mtk_secure_heap_buffer {
+>   struct mtk_secure_heap {
+>   	const char		*name;
+>   	const enum kree_mem_type mem_type;
+> +	u32			 mem_session;
+> +	struct tee_context	*tee_ctx;
+>   };
+>   
+> +static int mtk_optee_ctx_match(struct tee_ioctl_version_data *ver, const void *data)
+> +{
+> +	return ver->impl_id == TEE_IMPL_ID_OPTEE;
+> +}
+> +
+> +static int mtk_kree_secure_session_init(struct mtk_secure_heap *sec_heap)
+> +{
+> +	struct tee_param t_param[MTK_TEE_PARAM_NUM] = {0};
+> +	struct tee_ioctl_open_session_arg arg = {0};
+> +	uuid_t ta_mem_uuid;
+> +	int ret;
+> +
+> +	sec_heap->tee_ctx = tee_client_open_context(NULL, mtk_optee_ctx_match,
+> +						    NULL, NULL);
+> +	if (IS_ERR(sec_heap->tee_ctx)) {
+> +		pr_err("%s: open context failed, ret=%ld\n", sec_heap->name,
+> +		       PTR_ERR(sec_heap->tee_ctx));
+> +		return -ENODEV;
+> +	}
+> +
+> +	arg.num_params = MTK_TEE_PARAM_NUM;
+> +	arg.clnt_login = TEE_IOCTL_LOGIN_PUBLIC;
+> +	ret = uuid_parse(TZ_TA_MEM_UUID, &ta_mem_uuid);
+> +	if (ret)
+> +		goto close_context;
+> +	memcpy(&arg.uuid, &ta_mem_uuid.b, sizeof(ta_mem_uuid));
+> +
+> +	ret = tee_client_open_session(sec_heap->tee_ctx, &arg, t_param);
+> +	if (ret < 0 || arg.ret) {
+> +		pr_err("%s: open session failed, ret=%d:%d\n",
+> +		       sec_heap->name, ret, arg.ret);
+> +		ret = -EINVAL;
+> +		goto close_context;
+> +	}
+> +	sec_heap->mem_session = arg.session;
+> +	return 0;
+> +
+> +close_context:
+> +	tee_client_close_context(sec_heap->tee_ctx);
+> +	return ret;
+> +}
+> +
+>   static struct dma_buf *
+>   mtk_sec_heap_allocate(struct dma_heap *heap, size_t size,
+>   		      unsigned long fd_flags, unsigned long heap_flags)
+>   {
+> +	struct mtk_secure_heap *sec_heap = dma_heap_get_drvdata(heap);
+>   	struct mtk_secure_heap_buffer *sec_buf;
+>   	DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
+>   	struct dma_buf *dmabuf;
+>   	int ret;
+>   
+> +	/*
+> +	 * TEE probe may be late. Initialise the secure session in the first
+> +	 * allocating secure buffer.
+> +	 */
+> +	if (!sec_heap->mem_session) {
+> +		ret = mtk_kree_secure_session_init(sec_heap);
+> +		if (ret)
+> +			return ERR_PTR(ret);
+> +	}
+> +
+>   	sec_buf = kzalloc(sizeof(*sec_buf), GFP_KERNEL);
+>   	if (!sec_buf)
+>   		return ERR_PTR(-ENOMEM);
 
