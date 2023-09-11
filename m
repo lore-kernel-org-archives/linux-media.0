@@ -2,129 +2,85 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BDBE1EE3F04
-	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:50:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38C3BEE3F01
+	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:50:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236941AbjIKUuR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Sep 2023 16:50:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39404 "EHLO
+        id S234473AbjIKUuD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Sep 2023 16:50:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242512AbjIKPo5 (ORCPT
+        with ESMTP id S238835AbjIKOFt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Sep 2023 11:44:57 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B27218D;
-        Mon, 11 Sep 2023 08:44:52 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 208B9C433C8;
-        Mon, 11 Sep 2023 15:44:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694447091;
-        bh=UypZKzekW0Fnyf/smilvBj2pL+glSdtZ2s73jeqIa1U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KeFuPBsx5eG593nKlIqcbZckZNxJOEEWxbPFIgnX1pqMeBsyDlT0J4/elUxqs8uGw
-         319DNMooXPc1YxiFXes6YWrgimtBwvCdbQDSWraDVqjIduYr+yItGP2o/Bk6LCtUBG
-         9c7wAGtZBSZ7lS3tYpdRGX1XV6EW8hKIyadGhk+8XrqQX/qJA3i3pB3MbDCN+pLjkN
-         ANBdfpsd6v+pbUezujnXqEKfaWEBk07zeD8PCfFa+IZJe3x8ZGlrC8wnyckx7HH3vT
-         XSu3biW8py3ETqCF6rMlRW764U5RTVQDmHb0ajfh7qG2B/2kb5JHmmxx/lczXeeMDy
-         OoW5AY0nLzs8Q==
-Received: (nullmailer pid 1295173 invoked by uid 1000);
-        Mon, 11 Sep 2023 15:44:48 -0000
-Date:   Mon, 11 Sep 2023 10:44:48 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Yong Wu <yong.wu@mediatek.com>
-Cc:     Sumit Semwal <sumit.semwal@linaro.org>, christian.koenig@amd.com,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <jstultz@google.com>, tjmercier@google.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, jianjiao.zeng@mediatek.com,
-        kuohong.wang@mediatek.com
-Subject: Re: [PATCH 8/9] dt-bindings: reserved-memory: MediaTek: Add reserved
- memory for SVP
-Message-ID: <20230911154448.GA1279317-robh@kernel.org>
-References: <20230911023038.30649-1-yong.wu@mediatek.com>
- <20230911023038.30649-9-yong.wu@mediatek.com>
+        Mon, 11 Sep 2023 10:05:49 -0400
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BE8CE54
+        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 07:05:44 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1qfhXq-0006nq-F8; Mon, 11 Sep 2023 16:05:42 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1qfhXq-005ZVA-2S; Mon, 11 Sep 2023 16:05:42 +0200
+Received: from mgr by dude04.red.stw.pengutronix.de with local (Exim 4.96)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1qfhXp-002tVf-0u;
+        Mon, 11 Sep 2023 16:05:41 +0200
+From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
+To:     laurent.pinchart@ideasonboard.com
+Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        dan.scally@ideasonboard.com, gregkh@linuxfoundation.org,
+        nicolas@ndufresne.ca, kernel@pengutronix.de
+Subject: [PATCH v2 2/3] usb: gadget: uvc: cleanup request when not in correct state
+Date:   Mon, 11 Sep 2023 16:05:29 +0200
+Message-Id: <20230911140530.2995138-3-m.grzeschik@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230911140530.2995138-1-m.grzeschik@pengutronix.de>
+References: <20230911140530.2995138-1-m.grzeschik@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230911023038.30649-9-yong.wu@mediatek.com>
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Sep 11, 2023 at 10:30:37AM +0800, Yong Wu wrote:
-> This adds the binding for describing a CMA memory for MediaTek SVP(Secure
-> Video Path).
+The uvc_video_enable function of the uvc-gadget driver is dequeing and
+immediately deallocs all requests on its disable codepath. This is not
+save since the dequeue function is async and does not ensure that the
+requests are left unlinked in the controller driver.
 
-CMA is a Linux thing. How is this related to CMA?
+By adding the ep_free_request into the completion path of the requests
+we ensure that the request will be properly deallocated.
 
-> 
-> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
-> ---
->  .../mediatek,secure_cma_chunkmem.yaml         | 42 +++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/reserved-memory/mediatek,secure_cma_chunkmem.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/reserved-memory/mediatek,secure_cma_chunkmem.yaml b/Documentation/devicetree/bindings/reserved-memory/mediatek,secure_cma_chunkmem.yaml
-> new file mode 100644
-> index 000000000000..cc10e00d35c4
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/reserved-memory/mediatek,secure_cma_chunkmem.yaml
-> @@ -0,0 +1,42 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/reserved-memory/mediatek,secure_cma_chunkmem.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek Secure Video Path Reserved Memory
+Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+---
+v1 == v2
 
-What makes this specific to Mediatek? Secure video path is fairly 
-common, right?
+ drivers/usb/gadget/function/uvc_video.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> +
-> +description:
-> +  This binding describes the reserved memory for secure video path.
-> +
-> +maintainers:
-> +  - Yong Wu <yong.wu@mediatek.com>
-> +
-> +allOf:
-> +  - $ref: reserved-memory.yaml
-> +
-> +properties:
-> +  compatible:
-> +    const: mediatek,secure_cma_chunkmem
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - reusable
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +
-> +    reserved-memory {
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +        ranges;
-> +
-> +        reserved-memory@80000000 {
-> +            compatible = "mediatek,secure_cma_chunkmem";
-> +            reusable;
-> +            reg = <0x80000000 0x18000000>;
-> +        };
-> +    };
-> -- 
-> 2.25.1
-> 
+diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+index 4b68a3a9815d73..c48c904f500fff 100644
+--- a/drivers/usb/gadget/function/uvc_video.c
++++ b/drivers/usb/gadget/function/uvc_video.c
+@@ -256,6 +256,12 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
+ 	struct uvc_device *uvc = video->uvc;
+ 	unsigned long flags;
+ 
++	if (uvc->state == UVC_STATE_CONNECTED) {
++		usb_ep_free_request(video->ep, ureq->req);
++		ureq->req = NULL;
++		return;
++	}
++
+ 	switch (req->status) {
+ 	case 0:
+ 		break;
+-- 
+2.39.2
+
