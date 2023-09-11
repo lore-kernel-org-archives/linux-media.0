@@ -2,165 +2,116 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 560D4EEB581
-	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:48:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB561EEB592
+	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:48:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234922AbjIKUsb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Sep 2023 16:48:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59954 "EHLO
+        id S235039AbjIKUsd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Sep 2023 16:48:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241601AbjIKPKz (ORCPT
+        with ESMTP id S236274AbjIKKFz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Sep 2023 11:10:55 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001DAE4B
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:10:49 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-52a250aa012so6000995a12.3
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:10:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694445048; x=1695049848; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JB7dev33CQqq2PRU515LRyfUHgQkgO8/svwIwjBxrso=;
-        b=nXBvtg2cYBFaYKERUnVFQptVoWCmSUKpDt+wIKO1oTai6FfArVnq2T1YLT9ZZpdsdX
-         RRWLEZ7II/wav8FWN1yUU9HXh3pa7Vn75G6AM1fFrcEfQWK2zuMnIH3BD78XGdbCdzgw
-         MsK4dn9DeGiRETAcSsw+H0hBzW9qLnqa9ggd8o1yGHhyyxM6/BB5k8ljDOaXcSOyhqOJ
-         SutHGuhrNQDIVFY6fTgm4nDXw+nAN5eTYru7nSOEwzRcy3eQUOiuMM5OsMInezlxfb7k
-         aA31VW3sNiC1BEbiZp2lRDEqVwsHdxtSJHzAqNvIvgBzzci34zNEQ9TKUME+39PRHDiM
-         /46g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694445048; x=1695049848;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JB7dev33CQqq2PRU515LRyfUHgQkgO8/svwIwjBxrso=;
-        b=Ws49uZTjLxA2vS260m1vkcjhxf8qMNy7XbqgvfiKJp/OxMDQGRbYna3g66OojH5ByC
-         /ORYyhti5W1P9ijOqUK5Om2te6+LKZc18wcKEU//4MoaoqH7kiSV1LUJuxK8CFqKzv4a
-         IDbNksGlEIDfqMuajU46qnmcnuSzibclLj4oxokSL2PVd1UJT3mYu8PGD9jtxIlE0spc
-         Q3E3ZKC8q+4qE8DKVxO1HL7JaKoHuVzfnryQrC1vdJyG3/pN7PcbF/IhhvCWmO3S9609
-         OhfpsKr1nnsQzOzkM7SzBR5C0kr4bZMtg73eQoWVFzlFeVzUNtYt/xEcUA2G5vRF15wm
-         UzbQ==
-X-Gm-Message-State: AOJu0Yw58/85YFr0c9Tb2tH1GBv4kaspi06IOj/mYEYh5ID1MeCUwUyX
-        +n79b4gRXK2MHNYjuKS64lh77w==
-X-Google-Smtp-Source: AGHT+IHOrUawuw+u7QVtpnfwQLDVGjW95dOdTx3R9QAqJJ8vsJmZNzqMq3h8nCnS59f0knKZHoFyuw==
-X-Received: by 2002:a50:fc08:0:b0:522:31d5:ee8e with SMTP id i8-20020a50fc08000000b0052231d5ee8emr7942862edr.8.1694445048504;
-        Mon, 11 Sep 2023 08:10:48 -0700 (PDT)
-Received: from [10.167.154.1] (178235177061.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.61])
-        by smtp.gmail.com with ESMTPSA id n4-20020a056402060400b0052a3ad836basm4681281edv.41.2023.09.11.08.10.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Sep 2023 08:10:48 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 11 Sep 2023 17:10:26 +0200
-Subject: [PATCH RFT 12/20] media: venus: core: Use GENMASK for dma_mask
+        Mon, 11 Sep 2023 06:05:55 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F7CE68
+        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 03:05:50 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8EF6C433C7;
+        Mon, 11 Sep 2023 10:05:49 +0000 (UTC)
+Message-ID: <015ad590-979a-4815-b60a-7506c70e9ee7@xs4all.nl>
+Date:   Mon, 11 Sep 2023 12:05:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US, nl
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc:     Deborah Brouwer <deborahbrouwer3563@gmail.com>,
+        Christian Zigotzky <chzigotzky@xenosoft.de>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [PATCH for v6.6] media: bt8xx: bttv_risc_packed(): remove field
+ checks
+Autocrypt: addr=hverkuil@xs4all.nl; keydata=
+ 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
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230911-topic-mars-v1-12-a7d38bf87bdb@linaro.org>
-References: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
-In-Reply-To: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
-To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1694445027; l=2674;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=0i/wL/gXye6AMRW7xTiL3gEDEa6DSycySKcFuITtV7c=;
- b=9njRxETBp6BVf2eTPJnydMws8pDjU9hmhMA9EAXKj2fwspYSCUtrrbXXXzUDtbMNERpTc4XGC
- o9auiXwoKyfB6CwEhwV+FjPvOlFqusbM8zqbH2pm+pJ/7Xq5t3xAfWW
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The raw literals mean very little. Substitute it with more telling
-bitops macros.
+Do not turn on the vcr_hack based on the btv->field value.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+This was a change in the bttv vb2 conversion that caused
+green lines at the bottom of the picture in tvtime.
+
+It was originally added to the vb2 conversion based on
+faulty information that without this there would be glitches
+in the video. However, later tests suggest that this is a
+problem in the utilities used to test this since tvtime
+behaves fine.
+
+This patch reverts the bttv driver to the original pre-vb2
+behavior w.r.t. vcr_hack.
+
+Fixes: b7ec3212a73a ("media: bttv: convert to vb2")
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/platform/qcom/venus/core.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/media/pci/bt8xx/bttv-risc.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
-index 5d4d62751357..4dec10d21b05 100644
---- a/drivers/media/platform/qcom/venus/core.c
-+++ b/drivers/media/platform/qcom/venus/core.c
-@@ -565,7 +565,7 @@ static const struct venus_resources msm8916_res = {
- 	.clks_num = 3,
- 	.max_load = 352800, /* 720p@30 + 1080p@30 */
- 	.hfi_version = HFI_VERSION_1XX,
--	.dma_mask = 0xddc00000 - 1,
-+	.dma_mask = (GENMASK(31, 30) | GENMASK(28, 26) | GENMASK(24, 22)) - 1,
- 	.fwname = "qcom/venus-1.8/venus.mdt",
- };
- 
-@@ -595,7 +595,7 @@ static const struct venus_resources msm8996_res = {
- 	.vcodec_clks_num = 1,
- 	.max_load = 2563200,
- 	.hfi_version = HFI_VERSION_3XX,
--	.dma_mask = 0xddc00000 - 1,
-+	.dma_mask = (GENMASK(31, 30) | GENMASK(28, 26) | GENMASK(24, 22)) - 1,
- 	.fwname = "qcom/venus-4.2/venus.mdt",
- };
- 
-@@ -696,7 +696,7 @@ static const struct venus_resources sdm845_res = {
- 	.max_load = 3110400,	/* 4096x2160@90 */
- 	.hfi_version = HFI_VERSION_4XX,
- 	.vpu_version = VPU_VERSION_AR50,
--	.dma_mask = 0xe0000000 - 1,
-+	.dma_mask = GENMASK(31, 29) - 1,
- 	.fwname = "qcom/venus-5.2/venus.mdt",
- };
- 
-@@ -718,7 +718,7 @@ static const struct venus_resources sdm845_res_v2 = {
- 	.max_load = 3110400,	/* 4096x2160@90 */
- 	.hfi_version = HFI_VERSION_4XX,
- 	.vpu_version = VPU_VERSION_AR50,
--	.dma_mask = 0xe0000000 - 1,
-+	.dma_mask = GENMASK(31, 29) - 1,
- 	.cp_start = 0,
- 	.cp_size = 0x70800000,
- 	.cp_nonpixel_start = 0x1000000,
-@@ -762,7 +762,7 @@ static const struct venus_resources sc7180_res = {
- 	.opp_pmdomain = pd_names_cx,
- 	.hfi_version = HFI_VERSION_4XX,
- 	.vpu_version = VPU_VERSION_AR50,
--	.dma_mask = 0xe0000000 - 1,
-+	.dma_mask = GENMASK(31, 29) - 1,
- 	.cp_start = 0,
- 	.cp_size = 0x70800000,
- 	.cp_nonpixel_start = 0x1000000,
-@@ -817,7 +817,7 @@ static const struct venus_resources sm8250_res = {
- 	.hfi_version = HFI_VERSION_6XX,
- 	.vpu_version = VPU_VERSION_IRIS2,
- 	.num_vpp_pipes = 4,
--	.dma_mask = 0xe0000000 - 1,
-+	.dma_mask = GENMASK(31, 29) - 1,
- 	.fwname = "qcom/vpu-1.0/venus.mbn",
- };
- 
-@@ -871,7 +871,7 @@ static const struct venus_resources sc7280_res = {
- 	.hfi_version = HFI_VERSION_6XX,
- 	.vpu_version = VPU_VERSION_IRIS2_1,
- 	.num_vpp_pipes = 1,
--	.dma_mask = 0xe0000000 - 1,
-+	.dma_mask = GENMASK(31, 29) - 1,
- 	.fwname = "qcom/vpu-2.0/venus.mbn",
- };
- 
-
+diff --git a/drivers/media/pci/bt8xx/bttv-risc.c b/drivers/media/pci/bt8xx/bttv-risc.c
+index 436baf6c8b08..241a696e374a 100644
+--- a/drivers/media/pci/bt8xx/bttv-risc.c
++++ b/drivers/media/pci/bt8xx/bttv-risc.c
+@@ -68,9 +68,7 @@ bttv_risc_packed(struct bttv *btv, struct btcx_riscmem *risc,
+ 	sg = sglist;
+ 	for (line = 0; line < store_lines; line++) {
+ 		if ((line >= (store_lines - VCR_HACK_LINES)) &&
+-		    (btv->opt_vcr_hack ||
+-		    (V4L2_FIELD_HAS_BOTH(btv->field) ||
+-		     btv->field == V4L2_FIELD_ALTERNATE)))
++		    btv->opt_vcr_hack)
+ 			continue;
+ 		while (offset && offset >= sg_dma_len(sg)) {
+ 			offset -= sg_dma_len(sg);
 -- 
-2.42.0
+2.40.1
 
