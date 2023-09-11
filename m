@@ -2,130 +2,181 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01186CA0EE7
-	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 21:05:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3083CA0ED2
+	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 21:05:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232318AbjIKUr2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Sep 2023 16:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
+        id S233333AbjIKUru (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Sep 2023 16:47:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235637AbjIKJOR (ORCPT
+        with ESMTP id S237773AbjIKNOZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Sep 2023 05:14:17 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918CBCCD;
-        Mon, 11 Sep 2023 02:14:11 -0700 (PDT)
-Received: from ideasonboard.com (mob-5-90-67-213.net.vodafone.it [5.90.67.213])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0B4689D5;
-        Mon, 11 Sep 2023 11:12:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1694423559;
-        bh=PQvgBMFVfg9p0JkaGeZRDd/KuQauwd1zf6vIWL9FQFg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=teWm55eaNuD4/5A3smPnlFZTavXt0xP4a3VMtTKdgRLcJZgWNmFC7qAwkzwQf57xG
-         mujiE/ZDuk8o3PQAF0j96xzJVvWzBGES1A4ZwT+xDNSXPQiuOgy9ipetdnltAR4Is6
-         qT/IqTBPLYC4yqOquDpBczSIRrwicDsxI3+4hP4U=
-Date:   Mon, 11 Sep 2023 11:14:06 +0200
-From:   Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.au@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH 1/2] media: i2c: mt9v032: Extend match support for OF
- tables
-Message-ID: <zikxzzjvfcrxdvjkx3sfu3hpkpd26k3empbqakx2ko35vw2tpo@zzvnnnhmbwl4>
-References: <20230910165432.76378-1-biju.das.jz@bp.renesas.com>
- <20230910165432.76378-2-biju.das.jz@bp.renesas.com>
+        Mon, 11 Sep 2023 09:14:25 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC9FCF0
+        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:19 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-52a4737a08fso5569139a12.3
+        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694438058; x=1695042858; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sc3QrJ7bPpNquzpdbmPtMRrT+D/boaJ7K4FKMOV9GkU=;
+        b=N/wMwyh3f/uKh+dWFQlAgk4SFpPcPV+d2t5MZ3i3GeMdyKiOqpa8gCHlDorT1w3hrV
+         k+iU5aLpeAv8t6VttBigIjvhqFHclvdY2alHIuaYh4+XkopkMjPBlwdDKi1Nkht6ahxN
+         IZH6wGy+BZ/kqwGhmkWe6I30XVQh8D+wsZK1fjiAijGZOTZkWUn+GMjJb1rCG6Tv6PqG
+         cFz9ZzQz3HvHcKBNcSTf/v9P+35P0m2kcHYDOHKHTgD5FHwblbABTXcgN9PbhOuknCeJ
+         GOPQRNqD7UXi53ZgGjWU9xePu0dwi6ABs1w65aMc+AhaiDIbCEC9aY0ta3GZ5lmJ3mip
+         8DCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694438058; x=1695042858;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sc3QrJ7bPpNquzpdbmPtMRrT+D/boaJ7K4FKMOV9GkU=;
+        b=Zx6HvwM1L9q1Fkk5TpJ5EDhhzsRBcBXqekQ4rbokhGCOZVuiPbizAkYVnVNLw+uCGX
+         12gwoPw50cDGBfqDwS5xq/qDaDhkN7ha2/I4DSEm/UwQkbgnCbjRtdZcIfiT2RcP7clj
+         yyu6DnYPdir/yySnsL8NJxMrl06XjGfGBG3td1T65J6iK0ey7Nl1mlbPaqOOVk5ZjBhO
+         StBhkRcq6YqWVZrJazhdn/qOH7dz8umyEoM+QxcPWCnG3iUbmElrlRnJeUqYuJsaaqor
+         nyAfdR8VP5gstfxwXPnfRoUsg9/UYzZ31+3jVLTP4ogrK2UAb4Cr8IVgpQPGwibhSj+M
+         aixg==
+X-Gm-Message-State: AOJu0YycxtxrjxTkRi/BQ10Xv/DCkJgkPWotzyyqml460r8fN6I3VOM5
+        olKQJV1WXQBOPhcevlMJkzGR1Q==
+X-Google-Smtp-Source: AGHT+IETsKLf/4N3NNhqBQeB07DP4YHuaiaE5s6Acmum5qaov4i6lbSgL7iB6T+xFstVAM93OmogwQ==
+X-Received: by 2002:a17:906:538f:b0:9aa:1e31:98b3 with SMTP id g15-20020a170906538f00b009aa1e3198b3mr4299247ejo.8.1694438058183;
+        Mon, 11 Sep 2023 06:14:18 -0700 (PDT)
+Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id kt8-20020a170906aac800b00988e953a586sm5313648ejb.61.2023.09.11.06.14.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Sep 2023 06:14:17 -0700 (PDT)
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
+        andrey.konovalov@linaro.org
+Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 04/17] media: qcom: camss: Pass icc bandwidth table as a platform parameter
+Date:   Mon, 11 Sep 2023 14:13:58 +0100
+Message-ID: <20230911131411.196033-5-bryan.odonoghue@linaro.org>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20230911131411.196033-1-bryan.odonoghue@linaro.org>
+References: <20230911131411.196033-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230910165432.76378-2-biju.das.jz@bp.renesas.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Biju
+Pass the bandwidth table as a platform parameter not if/else derived
+pointer to the static table.
 
-On Sun, Sep 10, 2023 at 05:54:31PM +0100, Biju Das wrote:
-> The driver has an OF match table, still, it uses an ID lookup table for
-> retrieving match data. Currently, the driver is working on the
-> assumption that an I2C device registered via OF will always match a
-> legacy I2C device ID. The correct approach is to have an OF device ID
-> table using i2c_get_match_data() if the devices are registered via OF/ID.
->
-> Unify the OF/ID table by using mt9v032_model_info as match data for both
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ drivers/media/platform/qcom/camss/camss.c | 29 +++++++----------------
+ drivers/media/platform/qcom/camss/camss.h |  3 ++-
+ 2 files changed, 11 insertions(+), 21 deletions(-)
 
-s/Unify/Align ? As the tables are still separate..
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+index 8fa5dee75672d..f502b4d9e07c5 100644
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -1485,21 +1485,15 @@ static int camss_configure_pd(struct camss *camss)
+ static int camss_icc_get(struct camss *camss)
+ {
+ 	const struct resources_icc *icc_res;
+-	int nbr_icc_paths = 0;
+ 	int i;
+ 
+-	if (camss->version == CAMSS_8250) {
+-		icc_res = &icc_res_sm8250[0];
+-		nbr_icc_paths =	ICC_SM8250_COUNT;
+-	}
++	icc_res = camss->res->icc_res;
+ 
+-	for (i = 0; i < nbr_icc_paths; i++) {
++	for (i = 0; i < camss->res->icc_path_num; i++) {
+ 		camss->icc_path[i] = devm_of_icc_get(camss->dev,
+ 						     icc_res[i].name);
+ 		if (IS_ERR(camss->icc_path[i]))
+ 			return PTR_ERR(camss->icc_path[i]);
+-
+-		camss->icc_bw_tbl[i] = icc_res[i].icc_bw_tbl;
+ 	}
+ 
+ 	return 0;
+@@ -1742,6 +1736,8 @@ static const struct camss_resources sm8250_resources = {
+ 	.csiphy_res = csiphy_res_8250,
+ 	.csid_res = csid_res_8250,
+ 	.vfe_res = vfe_res_8250,
++	.icc_res = icc_res_sm8250,
++	.icc_path_num = ARRAY_SIZE(icc_res_sm8250),
+ };
+ 
+ static const struct of_device_id camss_dt_match[] = {
+@@ -1758,14 +1754,10 @@ MODULE_DEVICE_TABLE(of, camss_dt_match);
+ static int __maybe_unused camss_runtime_suspend(struct device *dev)
+ {
+ 	struct camss *camss = dev_get_drvdata(dev);
+-	int nbr_icc_paths = 0;
+ 	int i;
+ 	int ret;
+ 
+-	if (camss->version == CAMSS_8250)
+-		nbr_icc_paths =	ICC_SM8250_COUNT;
+-
+-	for (i = 0; i < nbr_icc_paths; i++) {
++	for (i = 0; i < camss->res->icc_path_num; i++) {
+ 		ret = icc_set_bw(camss->icc_path[i], 0, 0);
+ 		if (ret)
+ 			return ret;
+@@ -1777,17 +1769,14 @@ static int __maybe_unused camss_runtime_suspend(struct device *dev)
+ static int __maybe_unused camss_runtime_resume(struct device *dev)
+ {
+ 	struct camss *camss = dev_get_drvdata(dev);
+-	int nbr_icc_paths = 0;
++	const struct resources_icc *icc_res = camss->res->icc_res;
+ 	int i;
+ 	int ret;
+ 
+-	if (camss->version == CAMSS_8250)
+-		nbr_icc_paths =	ICC_SM8250_COUNT;
+-
+-	for (i = 0; i < nbr_icc_paths; i++) {
++	for (i = 0; i < camss->res->icc_path_num; i++) {
+ 		ret = icc_set_bw(camss->icc_path[i],
+-				 camss->icc_bw_tbl[i].avg,
+-				 camss->icc_bw_tbl[i].peak);
++				 icc_res[i].icc_bw_tbl.avg,
++				 icc_res[i].icc_bw_tbl.peak);
+ 		if (ret)
+ 			return ret;
+ 	}
+diff --git a/drivers/media/platform/qcom/camss/camss.h b/drivers/media/platform/qcom/camss/camss.h
+index 20c84e8328880..8b2e4adb923ef 100644
+--- a/drivers/media/platform/qcom/camss/camss.h
++++ b/drivers/media/platform/qcom/camss/camss.h
+@@ -84,6 +84,8 @@ struct camss_resources {
+ 	const struct camss_subdev_resources *csid_res;
+ 	const struct camss_subdev_resources *ispif_res;
+ 	const struct camss_subdev_resources *vfe_res;
++	const struct resources_icc *icc_res;
++	const unsigned int icc_path_num;
+ };
+ 
+ struct camss {
+@@ -105,7 +107,6 @@ struct camss {
+ 	struct device **genpd;
+ 	struct device_link **genpd_link;
+ 	struct icc_path *icc_path[ICC_SM8250_COUNT];
+-	struct icc_bw_tbl icc_bw_tbl[ICC_SM8250_COUNT];
+ 	const struct camss_resources *res;
+ };
+ 
+-- 
+2.42.0
 
-> these tables and replace the ID lookup table for the match data by
-> i2c_get_match_data() and simplifly probe().
->
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-
-Reviewed-by: Jacopo Mondi <jacopo.mondi+renesas@ideasonboard.com>
-
-Thanks
-  j
-
-
-> ---
->  drivers/media/i2c/mt9v032.c | 21 ++++++++++-----------
->  1 file changed, 10 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/media/i2c/mt9v032.c b/drivers/media/i2c/mt9v032.c
-> index 00e7bc6e3235..0f448aa27e53 100644
-> --- a/drivers/media/i2c/mt9v032.c
-> +++ b/drivers/media/i2c/mt9v032.c
-> @@ -1046,7 +1046,6 @@ mt9v032_get_pdata(struct i2c_client *client)
->
->  static int mt9v032_probe(struct i2c_client *client)
->  {
-> -	const struct i2c_device_id *did = i2c_client_get_device_id(client);
->  	struct mt9v032_platform_data *pdata = mt9v032_get_pdata(client);
->  	struct mt9v032 *mt9v032;
->  	unsigned int i;
-> @@ -1076,7 +1075,7 @@ static int mt9v032_probe(struct i2c_client *client)
->
->  	mutex_init(&mt9v032->power_lock);
->  	mt9v032->pdata = pdata;
-> -	mt9v032->model = (const void *)did->driver_data;
-> +	mt9v032->model = i2c_get_match_data(client);
->
->  	v4l2_ctrl_handler_init(&mt9v032->ctrls, 11 +
->  			       ARRAY_SIZE(mt9v032_aegc_controls));
-> @@ -1272,20 +1271,20 @@ static const struct i2c_device_id mt9v032_id[] = {
->  	{ "mt9v032m", (kernel_ulong_t)&mt9v032_models[MT9V032_MODEL_V032_MONO] },
->  	{ "mt9v034", (kernel_ulong_t)&mt9v032_models[MT9V032_MODEL_V034_COLOR] },
->  	{ "mt9v034m", (kernel_ulong_t)&mt9v032_models[MT9V032_MODEL_V034_MONO] },
-> -	{ }
-> +	{ /* Sentinel */ }
->  };
->  MODULE_DEVICE_TABLE(i2c, mt9v032_id);
->
->  #if IS_ENABLED(CONFIG_OF)
->  static const struct of_device_id mt9v032_of_match[] = {
-> -	{ .compatible = "aptina,mt9v022" },
-> -	{ .compatible = "aptina,mt9v022m" },
-> -	{ .compatible = "aptina,mt9v024" },
-> -	{ .compatible = "aptina,mt9v024m" },
-> -	{ .compatible = "aptina,mt9v032" },
-> -	{ .compatible = "aptina,mt9v032m" },
-> -	{ .compatible = "aptina,mt9v034" },
-> -	{ .compatible = "aptina,mt9v034m" },
-> +	{ .compatible = "aptina,mt9v022", .data = &mt9v032_models[MT9V032_MODEL_V022_COLOR] },
-> +	{ .compatible = "aptina,mt9v022m", .data = &mt9v032_models[MT9V032_MODEL_V022_MONO] },
-> +	{ .compatible = "aptina,mt9v024", .data = &mt9v032_models[MT9V032_MODEL_V024_COLOR] },
-> +	{ .compatible = "aptina,mt9v024m", .data = &mt9v032_models[MT9V032_MODEL_V024_MONO] },
-> +	{ .compatible = "aptina,mt9v032", .data = &mt9v032_models[MT9V032_MODEL_V032_COLOR] },
-> +	{ .compatible = "aptina,mt9v032m", .data = &mt9v032_models[MT9V032_MODEL_V032_MONO] },
-> +	{ .compatible = "aptina,mt9v034", .data = &mt9v032_models[MT9V032_MODEL_V034_COLOR] },
-> +	{ .compatible = "aptina,mt9v034m", .data = &mt9v032_models[MT9V032_MODEL_V034_MONO] },
->  	{ /* Sentinel */ }
->  };
->  MODULE_DEVICE_TABLE(of, mt9v032_of_match);
-> --
-> 2.25.1
->
