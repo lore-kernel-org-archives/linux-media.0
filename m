@@ -2,248 +2,121 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A04E6EE57DF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B004BEEB58C
 	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:46:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbjIKUq6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Sep 2023 16:46:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40434 "EHLO
+        id S229630AbjIKUq7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Sep 2023 16:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237803AbjIKNOd (ORCPT
+        with ESMTP id S237209AbjIKMPX (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Sep 2023 09:14:33 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9B2E6B
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:26 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-9a645e54806so550117566b.0
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694438065; x=1695042865; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=379UQYxpAxza5TcrO1uyZtcU91VH4r4NWvGfZfDBNQU=;
-        b=tNVQ4nGsU6PR/CwerNGT9oGENinDJCCte8VLg1pfptWR6/VmtQKXV1xAhp4dhjWF2o
-         DKPUgk04PsJPJG5pJHeHlXWQvE+YoomHX60NuG7/1uVGhRqBcA7TuRyk9q2OKZ75ZUE/
-         HlrtaaRJs9yflWQfB+FH60+WoxSRNcKzUsCYZy/58TgKXYnZ31DHd1lCV4SoO6Nj1UKG
-         4xfD/tvj2XAH57DUo0wcbBrMSk3XbHMPGFjm0wARODR1yhQkpDa9DjF1T6Lf1bQ3Q2by
-         BLVcyPHYTvt3C4p/NcfYeB9AdZaFeIVOLMzkb+tI6jLEPeaVd2DngkRw0mj21KkQuHVq
-         FUIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694438065; x=1695042865;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=379UQYxpAxza5TcrO1uyZtcU91VH4r4NWvGfZfDBNQU=;
-        b=WzB07DTLCvpfpAouBlVLfn7CVxfixQSzstxbOD8p3ywwpu2pCuKvChcWdapTt73+MK
-         +rBbqWTMyVUqGxykCtbD44E6TYCHZ0iEDckOCOeRLibs8+My3U4mU7BTEjZJ/kVTV/i2
-         fk5nSrVYqNhlcHJjZZLzk8oTiFaRVUTYB9jymT1cOHMCP5zN84FLzcRIAqAIvZkQkP0A
-         XAtWS6dGol046MBWrNZwH4CBwmPE+74QTxeRzuZWdxVCA/mLueTVQL/dMBJ6BHvVa0pN
-         g+O3ffJHAluOuhC8HsQ68aChApzZ5l+hmKeOif7UxMcd9TsSY3zEx6aA5qVahjnwi5ev
-         GR+g==
-X-Gm-Message-State: AOJu0YxjBtXtc4a0fHaQvmBtZ1MJalZE9gqgoHxwqVxFOoui4k3GZr5H
-        +avc7MB9FfE67SdyvP2FISpg3w==
-X-Google-Smtp-Source: AGHT+IFW/BeHj4BsF45zeLrM3V2+VcezcA54mS2dqsyrgNTiGUKG5AXFvFoFU3ljp5mA3sEDX2GtbQ==
-X-Received: by 2002:a17:906:53cb:b0:9a9:d5e7:5531 with SMTP id p11-20020a17090653cb00b009a9d5e75531mr6551644ejo.74.1694438065062;
-        Mon, 11 Sep 2023 06:14:25 -0700 (PDT)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id kt8-20020a170906aac800b00988e953a586sm5313648ejb.61.2023.09.11.06.14.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Sep 2023 06:14:24 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
-        andrey.konovalov@linaro.org
-Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 10/17] media: qcom: camss: Untangle if/else spaghetti in camss
-Date:   Mon, 11 Sep 2023 14:14:04 +0100
-Message-ID: <20230911131411.196033-11-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20230911131411.196033-1-bryan.odonoghue@linaro.org>
-References: <20230911131411.196033-1-bryan.odonoghue@linaro.org>
+        Mon, 11 Sep 2023 08:15:23 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 712E3198;
+        Mon, 11 Sep 2023 05:15:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694434518; x=1725970518;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=vNTSAGXmwOlVOUYjZEZNHYyqgouEHbaugoCgRtuF0B0=;
+  b=XVQOP2olsx3/GXjzO11w5DY9mVd+RhG3h0fLDcwOvpfxs9dX+o0CkG8f
+   0aXWDa1w/ySZaEv5rH6GhDiB1pYzY4Fuj1lsg6Q+dVJLoEiINZ1QrNt8p
+   ZSqFuOv9JGyJLLvIVYA0+beauGxPvWt+nF5VTvhGzYlQEtgJioq1Ff3XN
+   bnZX2B4F7qku8+QL58Ww4RrFNK28y3fwnDsJJwO5z216hsIFrPpqVytVN
+   oiti1AC//Ch1Fgw79DuM5E7Zxgpu8XNVOJWoqt/6Nii7TCrV4/WojdAm5
+   mg8wNcKrFvoBF7uZuW4u8Wy4a/OJ40E6vPFLKdJ8jq1CPlENnLgX24Vrq
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="381863461"
+X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
+   d="scan'208";a="381863461"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 05:15:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="746383272"
+X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
+   d="scan'208";a="746383272"
+Received: from mzarkov-mobl3.ger.corp.intel.com (HELO ijarvine-mobl2.ger.corp.intel.com) ([10.252.36.200])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 05:15:16 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 2/8] media: cobalt: Use FIELD_GET() to extract Link Width
+Date:   Mon, 11 Sep 2023 15:14:55 +0300
+Message-Id: <20230911121501.21910-3-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230911121501.21910-1-ilpo.jarvinen@linux.intel.com>
+References: <20230911121501.21910-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-We have a very convoluted if/else legacy here which needs to be
-rationalised to make it more sustainable.
+Use FIELD_GET() to extract PCIe Negotiated and Maximum Link Width fields
+instead of custom masking and shifting.
 
-Adding in another Soc or two will make some of these if statements into
-increasingly large multi-clause behemoths.
-
-Introduce switches in the obvious places to despaghetiify.
-
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- .../media/platform/qcom/camss/camss-csiphy.c  | 16 +++++----
- drivers/media/platform/qcom/camss/camss-vfe.c | 33 +++++++++++--------
- .../media/platform/qcom/camss/camss-video.c   | 17 +++++-----
- 3 files changed, 37 insertions(+), 29 deletions(-)
+ drivers/media/pci/cobalt/cobalt-driver.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.c b/drivers/media/platform/qcom/camss/camss-csiphy.c
-index 4310a132dcbe2..18f9a4defb2a4 100644
---- a/drivers/media/platform/qcom/camss/camss-csiphy.c
-+++ b/drivers/media/platform/qcom/camss/camss-csiphy.c
-@@ -558,19 +558,21 @@ int msm_csiphy_subdev_init(struct camss *camss,
- 	csiphy->cfg.combo_mode = 0;
- 	csiphy->ops = res->ops;
+diff --git a/drivers/media/pci/cobalt/cobalt-driver.c b/drivers/media/pci/cobalt/cobalt-driver.c
+index 74edcc76d12f..6e1a0614e6d0 100644
+--- a/drivers/media/pci/cobalt/cobalt-driver.c
++++ b/drivers/media/pci/cobalt/cobalt-driver.c
+@@ -8,6 +8,7 @@
+  *  All rights reserved.
+  */
  
--	if (camss->res->version == CAMSS_8x16) {
-+	switch (camss->res->version) {
-+	case CAMSS_8x16:
- 		csiphy->formats = csiphy_formats_8x16;
- 		csiphy->nformats = ARRAY_SIZE(csiphy_formats_8x16);
--	} else if (camss->res->version == CAMSS_8x96 ||
--		   camss->res->version == CAMSS_660) {
-+		break;
-+	case CAMSS_8x96:
-+	case CAMSS_660:
- 		csiphy->formats = csiphy_formats_8x96;
- 		csiphy->nformats = ARRAY_SIZE(csiphy_formats_8x96);
--	} else if (camss->res->version == CAMSS_845 ||
--		   camss->res->version == CAMSS_8250) {
-+		break;
-+	case CAMSS_845:
-+	case CAMSS_8250:
- 		csiphy->formats = csiphy_formats_sdm845;
- 		csiphy->nformats = ARRAY_SIZE(csiphy_formats_sdm845);
--	} else {
--		return -EINVAL;
-+		break;
- 	}
++#include <linux/bitfield.h>
+ #include <linux/delay.h>
+ #include <media/i2c/adv7604.h>
+ #include <media/i2c/adv7842.h>
+@@ -210,17 +211,17 @@ void cobalt_pcie_status_show(struct cobalt *cobalt)
+ 	pcie_capability_read_word(pci_dev, PCI_EXP_LNKSTA, &stat);
+ 	cobalt_info("PCIe link capability 0x%08x: %s per lane and %u lanes\n",
+ 			capa, get_link_speed(capa),
+-			(capa & PCI_EXP_LNKCAP_MLW) >> 4);
++			FIELD_GET(PCI_EXP_LNKCAP_MLW, capa));
+ 	cobalt_info("PCIe link control 0x%04x\n", ctrl);
+ 	cobalt_info("PCIe link status 0x%04x: %s per lane and %u lanes\n",
+ 		    stat, get_link_speed(stat),
+-		    (stat & PCI_EXP_LNKSTA_NLW) >> 4);
++		    FIELD_GET(PCI_EXP_LNKSTA_NLW, stat));
  
- 	/* Memory */
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
-index 4d5c32d3dddbf..db8f68819ded9 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe.c
-@@ -170,7 +170,8 @@ static u32 vfe_src_pad_code(struct vfe_line *line, u32 sink_code,
- {
- 	struct vfe_device *vfe = to_vfe(line);
+ 	/* Bus */
+ 	pcie_capability_read_dword(pci_bus_dev, PCI_EXP_LNKCAP, &capa);
+ 	cobalt_info("PCIe bus link capability 0x%08x: %s per lane and %u lanes\n",
+ 			capa, get_link_speed(capa),
+-			(capa & PCI_EXP_LNKCAP_MLW) >> 4);
++			FIELD_GET(PCI_EXP_LNKCAP_MLW, capa));
  
--	if (vfe->camss->res->version == CAMSS_8x16)
-+	switch (vfe->camss->res->version) {
-+	case CAMSS_8x16:
- 		switch (sink_code) {
- 		case MEDIA_BUS_FMT_YUYV8_1X16:
- 		{
-@@ -218,10 +219,11 @@ static u32 vfe_src_pad_code(struct vfe_line *line, u32 sink_code,
- 
- 			return sink_code;
- 		}
--	else if (vfe->camss->res->version == CAMSS_8x96 ||
--		 vfe->camss->res->version == CAMSS_660 ||
--		 vfe->camss->res->version == CAMSS_845 ||
--		 vfe->camss->res->version == CAMSS_8250)
-+		break;
-+	case CAMSS_8x96:
-+	case CAMSS_660:
-+	case CAMSS_845:
-+	case CAMSS_8250:
- 		switch (sink_code) {
- 		case MEDIA_BUS_FMT_YUYV8_1X16:
- 		{
-@@ -281,8 +283,9 @@ static u32 vfe_src_pad_code(struct vfe_line *line, u32 sink_code,
- 
- 			return sink_code;
- 		}
--	else
--		return 0;
-+		break;
-+	}
-+	return 0;
+ 	/* Slot */
+ 	pcie_capability_read_dword(pci_dev, PCI_EXP_SLTCAP, &capa);
+@@ -239,7 +240,7 @@ static unsigned pcie_link_get_lanes(struct cobalt *cobalt)
+ 	if (!pci_is_pcie(pci_dev))
+ 		return 0;
+ 	pcie_capability_read_word(pci_dev, PCI_EXP_LNKSTA, &link);
+-	return (link & PCI_EXP_LNKSTA_NLW) >> 4;
++	return FIELD_GET(PCI_EXP_LNKSTA_NLW, link);
  }
  
- int vfe_reset(struct vfe_device *vfe)
-@@ -1379,7 +1382,8 @@ int msm_vfe_subdev_init(struct camss *camss, struct vfe_device *vfe,
- 		init_completion(&l->output.sof);
- 		init_completion(&l->output.reg_update);
+ static unsigned pcie_bus_link_get_lanes(struct cobalt *cobalt)
+@@ -250,7 +251,7 @@ static unsigned pcie_bus_link_get_lanes(struct cobalt *cobalt)
+ 	if (!pci_is_pcie(pci_dev))
+ 		return 0;
+ 	pcie_capability_read_dword(pci_dev, PCI_EXP_LNKCAP, &link);
+-	return (link & PCI_EXP_LNKCAP_MLW) >> 4;
++	return FIELD_GET(PCI_EXP_LNKCAP_MLW, link);
+ }
  
--		if (camss->res->version == CAMSS_8x16) {
-+		switch (camss->res->version) {
-+		case CAMSS_8x16:
- 			if (i == VFE_LINE_PIX) {
- 				l->formats = formats_pix_8x16;
- 				l->nformats = ARRAY_SIZE(formats_pix_8x16);
-@@ -1387,8 +1391,9 @@ int msm_vfe_subdev_init(struct camss *camss, struct vfe_device *vfe,
- 				l->formats = formats_rdi_8x16;
- 				l->nformats = ARRAY_SIZE(formats_rdi_8x16);
- 			}
--		} else if (camss->res->version == CAMSS_8x96 ||
--			   camss->res->version == CAMSS_660) {
-+			break;
-+		case CAMSS_8x96:
-+		case CAMSS_660:
- 			if (i == VFE_LINE_PIX) {
- 				l->formats = formats_pix_8x96;
- 				l->nformats = ARRAY_SIZE(formats_pix_8x96);
-@@ -1396,12 +1401,12 @@ int msm_vfe_subdev_init(struct camss *camss, struct vfe_device *vfe,
- 				l->formats = formats_rdi_8x96;
- 				l->nformats = ARRAY_SIZE(formats_rdi_8x96);
- 			}
--		} else if (camss->res->version == CAMSS_845 ||
--			   camss->res->version == CAMSS_8250) {
-+			break;
-+		case CAMSS_845:
-+		case CAMSS_8250:
- 			l->formats = formats_rdi_845;
- 			l->nformats = ARRAY_SIZE(formats_rdi_845);
--		} else {
--			return -EINVAL;
-+			break;
- 		}
- 	}
- 
-diff --git a/drivers/media/platform/qcom/camss/camss-video.c b/drivers/media/platform/qcom/camss/camss-video.c
-index 46a89b5f6c171..a89da5ef47109 100644
---- a/drivers/media/platform/qcom/camss/camss-video.c
-+++ b/drivers/media/platform/qcom/camss/camss-video.c
-@@ -1006,7 +1006,8 @@ int msm_video_register(struct camss_video *video, struct v4l2_device *v4l2_dev,
- 
- 	mutex_init(&video->lock);
- 
--	if (video->camss->res->version == CAMSS_8x16) {
-+	switch (video->camss->res->version) {
-+	case CAMSS_8x16:
- 		if (is_pix) {
- 			video->formats = formats_pix_8x16;
- 			video->nformats = ARRAY_SIZE(formats_pix_8x16);
-@@ -1014,8 +1015,9 @@ int msm_video_register(struct camss_video *video, struct v4l2_device *v4l2_dev,
- 			video->formats = formats_rdi_8x16;
- 			video->nformats = ARRAY_SIZE(formats_rdi_8x16);
- 		}
--	} else if (video->camss->res->version == CAMSS_8x96 ||
--		   video->camss->res->version == CAMSS_660) {
-+		break;
-+	case CAMSS_8x96:
-+	case CAMSS_660:
- 		if (is_pix) {
- 			video->formats = formats_pix_8x96;
- 			video->nformats = ARRAY_SIZE(formats_pix_8x96);
-@@ -1023,13 +1025,12 @@ int msm_video_register(struct camss_video *video, struct v4l2_device *v4l2_dev,
- 			video->formats = formats_rdi_8x96;
- 			video->nformats = ARRAY_SIZE(formats_rdi_8x96);
- 		}
--	}  else if (video->camss->res->version == CAMSS_845 ||
--		    video->camss->res->version == CAMSS_8250) {
-+		break;
-+	case CAMSS_845:
-+	case CAMSS_8250:
- 		video->formats = formats_rdi_845;
- 		video->nformats = ARRAY_SIZE(formats_rdi_845);
--	} else {
--		ret = -EINVAL;
--		goto error_video_register;
-+		break;
- 	}
- 
- 	ret = msm_video_init_format(video);
+ static void msi_config_show(struct cobalt *cobalt, struct pci_dev *pci_dev)
 -- 
-2.42.0
+2.30.2
 
