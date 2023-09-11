@@ -2,171 +2,106 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8FF0CA0ECB
-	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 21:06:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 243C9CA0ECD
+	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 21:06:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbjIKUrB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Sep 2023 16:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51306 "EHLO
+        id S229605AbjIKUq7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Sep 2023 16:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241578AbjIKPKs (ORCPT
+        with ESMTP id S235624AbjIKJHr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Sep 2023 11:10:48 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4C5E50
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:10:43 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-52bcd4db4cbso5749697a12.1
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:10:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694445042; x=1695049842; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Y+Ee+p0MgR8f6mi4LN6zTW+Ly80MKvHlH7hIzIx/iCU=;
-        b=Aqshvo2VtW5e0tfNPzDCC6ikf6iuO9yq9RI2WZlC7DF2r1jRGFiAWydnaYYYit5/Tu
-         hH+yqAnblkvW03+OFHPD2kFzugN0OHusgDSGt9tl+2mSKn9FeH6AIIQGj5bUyieCy8aK
-         GAA6gbbklHl0k99/Bdar3ERNdGacgMLfcNK/qnoWDnEOMvc13bYlSct0ovzXBbbT4CWT
-         x5P1jUgW3z4Ife2h8ghgctbioosFDCIb5KAb0eP/OlmkfZWhjcKmL99a2myPZk/KirmM
-         8EobZMqOrvchPNdteVmJ8SuQKymx05+BdK4MyRfl+lPbW9BUFvPXSMFIAMJ80+WeFxVi
-         C54w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694445042; x=1695049842;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Y+Ee+p0MgR8f6mi4LN6zTW+Ly80MKvHlH7hIzIx/iCU=;
-        b=sy1DEjPanyvpW5Yfb5aVml1HBIK+aPqoe4+abEr060IzlFxLtKbtnWFCBF7ZwG+Fli
-         oBUotVNyixsoVHJhXqBEGDUsAZg3QPFgxgAOJRrWl1ZR8hu8bQc7ka7XLIfXl90reqCX
-         t4Lhrk7LzbeG0LytQN47/N/j8DeA8uSC1f9nOOIhL973dmeXKCri9sbObNvD7FklyjyT
-         uu86eH+m3plrNTQelKH5UUvOx7gObAxyuDs9XLPaAyy7/w1qx4RBg1GkOq82iGINkAvv
-         zcFb3Orwk/cqDUyiWwlq6pmmqcD8WNR3eZ0jlPxh4YkTMsqwRzhA4+YNpJ9YCJkMJJiA
-         y4yw==
-X-Gm-Message-State: AOJu0Ywls2C8c3RLQEERFxo62sxnMpwsgFdsGSldWF4Sn5tewTwTqA7B
-        X9oCJALAPpd4kLVTPsR97hBuMJ15GFhW7sSFh8Hp+g==
-X-Google-Smtp-Source: AGHT+IHX+V1ZfRnb2p4Ait7p0NyTMhK+xnoPHBwMKdGlpVFN5o5gm33rn7JA6oNx0OyzZg92Pk+OTA==
-X-Received: by 2002:aa7:d9c8:0:b0:525:6666:3551 with SMTP id v8-20020aa7d9c8000000b0052566663551mr7753512eds.27.1694445042122;
-        Mon, 11 Sep 2023 08:10:42 -0700 (PDT)
-Received: from [10.167.154.1] (178235177061.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.61])
-        by smtp.gmail.com with ESMTPSA id n4-20020a056402060400b0052a3ad836basm4681281edv.41.2023.09.11.08.10.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Sep 2023 08:10:41 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 11 Sep 2023 17:10:22 +0200
-Subject: [PATCH RFT 08/20] media: venus: core: Constify all members of the
- resource struct
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230911-topic-mars-v1-8-a7d38bf87bdb@linaro.org>
-References: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
-In-Reply-To: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
-To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
+        Mon, 11 Sep 2023 05:07:47 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70C27CCC;
+        Mon, 11 Sep 2023 02:07:42 -0700 (PDT)
+Received: from ideasonboard.com (mob-5-90-67-213.net.vodafone.it [5.90.67.213])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C9C1C9D5;
+        Mon, 11 Sep 2023 11:06:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1694423171;
+        bh=dB3BAFn1tvsxsRIUshagD2Y62dXixykRmP5IatNzS/k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=h9ducT+tCgVKKj2LoRNLZxnWo0jmgFjKp9kXI2vWDubJEC/0wXqXt7JGGkEiNU0BU
+         lKoq7HH6k0a5wSC611dLgAQNAmNaWKOYLbi/dvVQVxWiDGPr7XfsPX+H702fZkF+Px
+         W8BuV2Vtf02IgpkuhMboV6Siv6kM8sYPp1ojpZCU=
+Date:   Mon, 11 Sep 2023 11:07:38 +0200
+From:   Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1694445027; l=2695;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=W0g0byTl6c4puFfQRs30LwSqiMEXDbtkmuwi72umncI=;
- b=h+Lq+Zn8i1er1pX71A5d9g50NTac8o2WQ32FO2tyoRiMIEanxulG/HCnQs9kEGCslGEsXACs1
- S5RLewuAk2JDxlr5PAQwqtuJGb+EIBjLWo3Vlc/hYGQBhvKN7+QaJ7r
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.au@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH 2/2] media: mt9p031: Drop CONFIG_OF ifdeffery
+Message-ID: <tgsuqxirofyrbz4cg2ougwa2auhs57qzlheqj4sbt36rxi4o5r@gfi3mypt2rdv>
+References: <20230910160126.70122-1-biju.das.jz@bp.renesas.com>
+ <20230910160126.70122-3-biju.das.jz@bp.renesas.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230910160126.70122-3-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Nothing inside the resource struct needs to be mutable. Sprinkle
-'const' all over it. A lot of 'const'.
+Hi Biju
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/media/platform/qcom/venus/core.h | 56 ++++++++++++++++----------------
- 1 file changed, 28 insertions(+), 28 deletions(-)
+On Sun, Sep 10, 2023 at 05:01:26PM +0100, Biju Das wrote:
+> Drop of_match_ptr() from mt9p031_i2c_driver and get rid of ugly CONFIG_OF
+> if check. This slightly increases the size of mt9p031_i2c_driver on non-OF
+> system and shouldn't be an issue.
+>
+> Add mod_devicetable.h include.
+>
+> It also allows, in case if needed, to enumerate this device via ACPI with
+> PRP0001 magic.
+>
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 
-diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
-index 515e7d78b7ab..9a38d568117a 100644
---- a/drivers/media/platform/qcom/venus/core.h
-+++ b/drivers/media/platform/qcom/venus/core.h
-@@ -57,39 +57,39 @@ enum vpu_version {
- };
- 
- struct venus_resources {
--	u64 dma_mask;
--	const struct freq_tbl *freq_tbl;
--	unsigned int freq_tbl_size;
--	const struct bw_tbl *bw_tbl_enc;
--	unsigned int bw_tbl_enc_size;
--	const struct bw_tbl *bw_tbl_dec;
--	unsigned int bw_tbl_dec_size;
--	const struct reg_val *reg_tbl;
--	unsigned int reg_tbl_size;
--	const struct hfi_ubwc_config *ubwc_conf;
-+	const u64 dma_mask;
-+	const struct freq_tbl * const freq_tbl;
-+	const unsigned int freq_tbl_size;
-+	const struct bw_tbl * const bw_tbl_enc;
-+	const unsigned int bw_tbl_enc_size;
-+	const struct bw_tbl * const bw_tbl_dec;
-+	const unsigned int bw_tbl_dec_size;
-+	const struct reg_val * const reg_tbl;
-+	const unsigned int reg_tbl_size;
-+	const struct hfi_ubwc_config * const ubwc_conf;
- 	const char * const clks[VIDC_CLKS_NUM_MAX];
--	unsigned int clks_num;
-+	const unsigned int clks_num;
- 	const char * const vcodec0_clks[VIDC_VCODEC_CLKS_NUM_MAX];
- 	const char * const vcodec1_clks[VIDC_VCODEC_CLKS_NUM_MAX];
--	unsigned int vcodec_clks_num;
-+	const unsigned int vcodec_clks_num;
- 	const char * const vcodec_pmdomains[VIDC_PMDOMAINS_NUM_MAX];
--	unsigned int vcodec_pmdomains_num;
--	const char **opp_pmdomain;
--	unsigned int vcodec_num;
-+	const unsigned int vcodec_pmdomains_num;
-+	const char * const * const opp_pmdomain;
-+	const unsigned int vcodec_num;
- 	const char * const resets[VIDC_RESETS_NUM_MAX];
--	unsigned int resets_num;
--	enum hfi_version hfi_version;
--	enum vpu_version vpu_version;
--	u8 num_vpp_pipes;
--	u32 max_load;
--	unsigned int vmem_id;
--	u32 vmem_size;
--	u32 vmem_addr;
--	u32 cp_start;
--	u32 cp_size;
--	u32 cp_nonpixel_start;
--	u32 cp_nonpixel_size;
--	const char *fwname;
-+	const unsigned int resets_num;
-+	const enum hfi_version hfi_version;
-+	const enum vpu_version vpu_version;
-+	const u8 num_vpp_pipes;
-+	const u32 max_load;
-+	const unsigned int vmem_id;
-+	const u32 vmem_size;
-+	const u32 vmem_addr;
-+	const u32 cp_start;
-+	const u32 cp_size;
-+	const u32 cp_nonpixel_start;
-+	const u32 cp_nonpixel_size;
-+	const char * const fwname;
- };
- 
- enum venus_fmt {
+Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 
--- 
-2.42.0
+Thanks
+  j
 
+> ---
+>  drivers/media/i2c/mt9p031.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/media/i2c/mt9p031.c b/drivers/media/i2c/mt9p031.c
+> index 540cb519915c..91d5de5b95f0 100644
+> --- a/drivers/media/i2c/mt9p031.c
+> +++ b/drivers/media/i2c/mt9p031.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/gpio/consumer.h>
+>  #include <linux/i2c.h>
+>  #include <linux/log2.h>
+> +#include <linux/mod_devicetable.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/of_graph.h>
+> @@ -1222,7 +1223,6 @@ static const struct i2c_device_id mt9p031_id[] = {
+>  };
+>  MODULE_DEVICE_TABLE(i2c, mt9p031_id);
+>
+> -#if IS_ENABLED(CONFIG_OF)
+>  static const struct of_device_id mt9p031_of_match[] = {
+>  	{ .compatible = "aptina,mt9p006", .data = (void *)MEDIA_BUS_FMT_SGRBG12_1X12 },
+>  	{ .compatible = "aptina,mt9p031", .data = (void *)MEDIA_BUS_FMT_SGRBG12_1X12 },
+> @@ -1230,11 +1230,10 @@ static const struct of_device_id mt9p031_of_match[] = {
+>  	{ /* sentinel */ }
+>  };
+>  MODULE_DEVICE_TABLE(of, mt9p031_of_match);
+> -#endif
+>
+>  static struct i2c_driver mt9p031_i2c_driver = {
+>  	.driver = {
+> -		.of_match_table = of_match_ptr(mt9p031_of_match),
+> +		.of_match_table = mt9p031_of_match,
+>  		.name = "mt9p031",
+>  	},
+>  	.probe          = mt9p031_probe,
+> --
+> 2.25.1
+>
