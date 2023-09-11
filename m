@@ -2,259 +2,223 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 923ADEE3F15
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7CBEEE3F1A
 	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:52:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235522AbjIKUtV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Sep 2023 16:49:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57806 "EHLO
+        id S235795AbjIKUt2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Sep 2023 16:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237572AbjIKM7y (ORCPT
+        with ESMTP id S241591AbjIKPKx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Sep 2023 08:59:54 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A261E67;
-        Mon, 11 Sep 2023 05:59:47 -0700 (PDT)
-X-UUID: 12be2d8250a311eea33bb35ae8d461a2-20230911
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=dIRe74TYCLjaq9wviyrRI/aMg0ZS6PQ9Eb7/EwRV9LQ=;
-        b=VARvlywUsVPIaz+AeFb9wQr6BJdmuHLXNi8xuEvOqGQqVO+krCGClyxB6ffdg/OETP2ug4uAOcCUjV443CSaMqn671jdTQAT68vR+o80OqN+CyF/qyZDibtGn8WUeKcMK7d9KhxtZAuLChpB2pBEzDgn5EdLL45lKpC5Q9WeKhY=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.31,REQID:165a37fb-a613-48ca-a52c-8bf6143eff5f,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:0ad78a4,CLOUDID:686b90ef-9a6e-4c39-b73e-f2bc08ca3dc5,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,
-        DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 12be2d8250a311eea33bb35ae8d461a2-20230911
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1904092212; Mon, 11 Sep 2023 20:59:41 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.194) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 11 Sep 2023 20:59:40 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Mon, 11 Sep 2023 20:59:39 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
-        <nfraprado@collabora.com>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Nathan Hebert <nhebert@chromium.org>
-CC:     Chen-Yu Tsai <wenst@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH 02/14] media: mediatek: vcodec: allocate tee share memory
-Date:   Mon, 11 Sep 2023 20:59:24 +0800
-Message-ID: <20230911125936.10648-3-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230911125936.10648-1-yunfei.dong@mediatek.com>
-References: <20230911125936.10648-1-yunfei.dong@mediatek.com>
+        Mon, 11 Sep 2023 11:10:53 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6AAAE50
+        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:10:48 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-500c37d479aso7367400e87.2
+        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:10:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694445047; x=1695049847; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KoRoq/DrVvkmjCXseaDmK4CEsiQOZW3LoyiqrnjQB9s=;
+        b=FL7EHe9/CZuMCn13KeDyBF2tco7gj9DSQ98KZqSXvcHD5jc7RJ3C9nRJubp9FJx9gN
+         cjd2DrbiiU2nixHyI/s1/ny/xrha7MsqOeHVNf3srOTKQe6+d8sH45EkSOVcLdTwGRZe
+         ncb8rkVgQr1wxxlJX5dWtvKcMC41EVn2vVkrVM/ESmxeBkZtw98+9zVERmTbpFEd52qB
+         12SGYPcSQUHoaPi0olbZQwHgazt3I0m6/XGMVfJeiycK6N6ddEcNz/6jjypbnCkxxWLt
+         wJ1JmlyjEYyhtJXi5jk/xcMHg4ieMISoaeG6nS42eDcfJrqb1jf57qVLnqvTNPEEibBa
+         Bvtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694445047; x=1695049847;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KoRoq/DrVvkmjCXseaDmK4CEsiQOZW3LoyiqrnjQB9s=;
+        b=g/NC6uSoL7X/806FWX5h+l01XOgugmGuNVDN+qXSqw62Jhu2DLsTxfmEQ2U8mY82yQ
+         Tye1t7K8Mf5T/5vuGxMEvYca+WifW5xqNnARykd/pDux+MI31Of/csCzw1iv6IehbDVy
+         dGEEM4p6osRR/MbudxdkF+FZQM5tUdeTJQbBHHCB2mp3IjMPEvmpnIYAFCfCJfbcQmqi
+         Eeggwc+DQgyPhA5t1toJt2PfHax/zhM5L0bVjohrgJZSGJzQHTYBk84AI/W2+ebh3vR3
+         rNIPd/ZJ5akrPzPFupta3IMRK9tfwX/vXBNZVhpxFyb42omVRfDrnTrAXUAeJ8Q5jGHM
+         WSWw==
+X-Gm-Message-State: AOJu0Yxi/JZcG6ytr+ZhfoCpG0jehV46YTbA213t3X9FMJ2O2Z9WoZOU
+        yoIng19Wtyi5lYjs5vgk/3OI6A==
+X-Google-Smtp-Source: AGHT+IHoUjK7egly+lD/FRgwIWWwd0EnDIrheAdA1IHTTas5hH3dS+VKbAAlXhaXrbGwZUjKW8W1UA==
+X-Received: by 2002:a05:6512:32ce:b0:500:8725:1351 with SMTP id f14-20020a05651232ce00b0050087251351mr9174605lfg.47.1694445047031;
+        Mon, 11 Sep 2023 08:10:47 -0700 (PDT)
+Received: from [10.167.154.1] (178235177061.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.61])
+        by smtp.gmail.com with ESMTPSA id n4-20020a056402060400b0052a3ad836basm4681281edv.41.2023.09.11.08.10.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Sep 2023 08:10:46 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Date:   Mon, 11 Sep 2023 17:10:25 +0200
+Subject: [PATCH RFT 11/20] media: venus: core: Drop cache properties in
+ resource struct
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230911-topic-mars-v1-11-a7d38bf87bdb@linaro.org>
+References: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
+In-Reply-To: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
+To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Dikshita Agarwal <quic_dikshita@quicinc.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1694445027; l=4750;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=57eNoVLc7ASkVVxqDox1DzeFGbIIkYlRHNb+x5nOma8=;
+ b=jh0ibHJFu9sbgdYfiEbIJxIc6y4/EIqdz8xPYnEoE30HDEuwsQsATcGFHDvoManghaUvQqknx
+ tuH6SMDJpJND4u6j71qqgAPPFNZbaCnLbKuS1YyYgEXNjLUb3PW8hU7
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Allocate two share memory for each lat and core hardware used to share
-information with optee-os. Msg buffer used to send ipi command and get ack
-command with optee-os, data buffer used to store vsi information which
-used for hardware decode.
+Currently VMEM/OCMEM/LLCC is disabled on all platforms.
 
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+Make it unconditional to save on space.
+
+These caches will not be enabled until the Venus driver can reference
+them as chunks of SRAM (they're modelled as separate devices) to avoid
+hardcoding magic addresses and rougely accessing the hardware,
+bypassing the normal accessors.
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- .../vcodec/decoder/mtk_vcodec_dec_optee.c     | 79 ++++++++++++++++++-
- .../vcodec/decoder/mtk_vcodec_dec_optee.h     | 32 ++++++++
- 2 files changed, 110 insertions(+), 1 deletion(-)
+ drivers/media/platform/qcom/venus/core.c      | 24 ------------------------
+ drivers/media/platform/qcom/venus/core.h      |  3 ---
+ drivers/media/platform/qcom/venus/hfi_venus.c |  7 ++++---
+ 3 files changed, 4 insertions(+), 30 deletions(-)
 
-diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_optee.c b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_optee.c
-index 3ee9039d2a5b..806ca87c8de7 100644
---- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_optee.c
-+++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_optee.c
-@@ -47,12 +47,67 @@ int mtk_vcodec_dec_optee_private_init(struct mtk_vcodec_dec_dev *vcodec_dev)
- }
- EXPORT_SYMBOL_GPL(mtk_vcodec_dec_optee_private_init);
- 
-+static void mtk_vcodec_dec_optee_deinit_memref(struct mtk_vdec_optee_ca_info *ca_info,
-+					       enum mtk_vdec_optee_data_index data_index)
-+{
-+	tee_shm_free(ca_info->shm_memref[data_index].msg_shm);
-+}
-+
-+static int mtk_vcodec_dec_optee_init_memref(struct tee_context *tee_vdec_ctx,
-+					    struct mtk_vdec_optee_ca_info *ca_info,
-+					    enum mtk_vdec_optee_data_index data_index)
-+{
-+	struct mtk_vdec_optee_shm_memref *shm_memref;
-+	int alloc_size = 0, err = 0;
-+	u64 shm_param_type = 0;
-+	bool copy_buffer;
-+
-+	if (data_index >= OPTEE_MAX_INDEX) {
-+		pr_err(MTK_DBG_VCODEC_STR "tee invalid data_index: %d.\n", data_index);
-+		return -EINVAL;
-+	} else if (data_index == OPTEE_MSG_INDEX) {
-+		shm_param_type = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INOUT;
-+		alloc_size = MTK_VDEC_OPTEE_MSG_SIZE;
-+		copy_buffer = true;
-+	} else {
-+		shm_param_type = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INOUT;
-+		alloc_size = MTK_VDEC_OPTEE_HW_SIZE;
-+		copy_buffer = false;
-+	}
-+
-+	shm_memref = &ca_info->shm_memref[data_index];
-+
-+	/* Allocate dynamic shared memory with decoder TA */
-+	shm_memref->msg_shm_size = alloc_size;
-+	shm_memref->param_type = shm_param_type;
-+	shm_memref->copy_to_ta = copy_buffer;
-+	shm_memref->msg_shm =
-+		tee_shm_alloc_kernel_buf(tee_vdec_ctx, shm_memref->msg_shm_size);
-+	if (IS_ERR(shm_memref->msg_shm)) {
-+		pr_err(MTK_DBG_VCODEC_STR "tee alloc buf fail: data_index:%d.\n", data_index);
-+		return -ENOMEM;
-+	}
-+
-+	shm_memref->msg_shm_ca_buf = tee_shm_get_va(shm_memref->msg_shm, 0);
-+	if (IS_ERR(shm_memref->msg_shm_ca_buf)) {
-+		pr_err(MTK_DBG_VCODEC_STR "tee get shm va fail: data_index:%d.\n", data_index);
-+		err = PTR_ERR(shm_memref->msg_shm_ca_buf);
-+		goto err_get_msg_va;
-+	}
-+
-+	return err;
-+
-+err_get_msg_va:
-+	tee_shm_free(shm_memref->msg_shm);
-+	return err;
-+}
-+
- static int mtk_vcodec_dec_optee_init_hw_info(struct mtk_vdec_optee_private *optee_private,
- 					     enum mtk_vdec_hw_id hardware_index)
- {
- 	struct tee_ioctl_open_session_arg session_arg;
- 	struct mtk_vdec_optee_ca_info *ca_info;
--	int err = 0, session_func;
-+	int err = 0, i = 0, j = 0, session_func;
- 
- 	/* Open lat and core session with vdec TA. */
- 	if (hardware_index == MTK_VDEC_LAT0) {
-@@ -81,6 +136,24 @@ static int mtk_vcodec_dec_optee_init_hw_info(struct mtk_vdec_optee_private *opte
- 	pr_debug(MTK_DBG_VCODEC_STR "open vdec tee session: hw_id(%d) session_id=%x.\n",
- 		 hardware_index, ca_info->vdec_session_id);
- 
-+	/* Allocate dynamic shared memory with decoder TA */
-+	for (; i < OPTEE_MAX_INDEX; i++) {
-+		err = mtk_vcodec_dec_optee_init_memref(optee_private->tee_vdec_ctx, ca_info, i);
-+		if (err) {
-+			pr_err(MTK_DBG_VCODEC_STR "init vdec memref failed: %d.\n", i);
-+			goto err_init_memref;
-+		}
-+	}
-+
-+	return err;
-+err_init_memref:
-+	if (i != 0) {
-+		for (; j < i; j++)
-+			mtk_vcodec_dec_optee_deinit_memref(ca_info, j);
-+	}
-+
-+	tee_client_close_session(optee_private->tee_vdec_ctx, ca_info->vdec_session_id);
-+
- 	return err;
- }
- 
-@@ -88,12 +161,16 @@ static void mtk_vcodec_dec_optee_deinit_hw_info(struct mtk_vdec_optee_private *o
- 						enum mtk_vdec_hw_id hw_id)
- {
- 	struct mtk_vdec_optee_ca_info *ca_info;
-+	int i = 0;
- 
- 	if (hw_id == MTK_VDEC_LAT0)
- 		ca_info = &optee_private->lat_ca;
- 	else
- 		ca_info = &optee_private->core_ca;
- 
-+	for (; i < OPTEE_MAX_INDEX; i++)
-+		mtk_vcodec_dec_optee_deinit_memref(ca_info, i);
-+
- 	tee_client_close_session(optee_private->tee_vdec_ctx, ca_info->vdec_session_id);
- }
- 
-diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_optee.h b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_optee.h
-index 8b1dca49331e..79b4ec890655 100644
---- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_optee.h
-+++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_optee.h
-@@ -18,16 +18,48 @@
- 
- #define MTK_OPTEE_MAX_TEE_PARAMS 4
- 
-+#define MTK_VDEC_OPTEE_MSG_SIZE     128
-+#define MTK_VDEC_OPTEE_HW_SIZE      (8 * SZ_1K)
-+
-+/**
-+ * struct mtk_vdec_optee_shm_memref - share memory reference params
-+ * @msg_shm:        message shared with TA in TEE.
-+ * @msg_shm_ca_buf: ca buffer.
-+ *
-+ * @msg_shm_size:   share message size.
-+ * @param_type:     each tee param types.
-+ * @copy_to_ta:     need to copy data from ca to share memory.
-+ */
-+struct mtk_vdec_optee_shm_memref {
-+	struct tee_shm *msg_shm;
-+	u8 *msg_shm_ca_buf;
-+
-+	u32 msg_shm_size;
-+	u64 param_type;
-+	bool copy_to_ta;
-+};
-+
- /**
-  * struct mtk_vdec_optee_ca_info - ca related param
-  * @vdec_session_id:   optee TA session identifier.
-  * @hw_id:             hardware index.
-  * @vdec_session_func: trusted application function id used specific to the TA.
-+ * @shm_memref:        share memory reference params.
-  */
- struct mtk_vdec_optee_ca_info {
- 	u32 vdec_session_id;
- 	enum mtk_vdec_hw_id hw_id;
- 	u32 vdec_session_func;
-+	struct mtk_vdec_optee_shm_memref shm_memref[MTK_OPTEE_MAX_TEE_PARAMS];
-+};
-+
-+/*
-+ * enum mtk_vdec_optee_data_index - used to indentify each share memory informaiton
-+ */
-+enum mtk_vdec_optee_data_index {
-+	OPTEE_MSG_INDEX = 0,
-+	OPTEE_DATA_INDEX,
-+	OPTEE_MAX_INDEX,
+diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
+index e83c790ccc80..5d4d62751357 100644
+--- a/drivers/media/platform/qcom/venus/core.c
++++ b/drivers/media/platform/qcom/venus/core.c
+@@ -565,9 +565,6 @@ static const struct venus_resources msm8916_res = {
+ 	.clks_num = 3,
+ 	.max_load = 352800, /* 720p@30 + 1080p@30 */
+ 	.hfi_version = HFI_VERSION_1XX,
+-	.vmem_id = VIDC_RESOURCE_NONE,
+-	.vmem_size = 0,
+-	.vmem_addr = 0,
+ 	.dma_mask = 0xddc00000 - 1,
+ 	.fwname = "qcom/venus-1.8/venus.mdt",
  };
- 
- /**
+@@ -598,9 +595,6 @@ static const struct venus_resources msm8996_res = {
+ 	.vcodec_clks_num = 1,
+ 	.max_load = 2563200,
+ 	.hfi_version = HFI_VERSION_3XX,
+-	.vmem_id = VIDC_RESOURCE_NONE,
+-	.vmem_size = 0,
+-	.vmem_addr = 0,
+ 	.dma_mask = 0xddc00000 - 1,
+ 	.fwname = "qcom/venus-4.2/venus.mdt",
+ };
+@@ -656,9 +650,6 @@ static const struct venus_resources sdm660_res = {
+ 	.vcodec_clks_num = 1,
+ 	.max_load = 1036800,
+ 	.hfi_version = HFI_VERSION_3XX,
+-	.vmem_id = VIDC_RESOURCE_NONE,
+-	.vmem_size = 0,
+-	.vmem_addr = 0,
+ 	.cp_start = 0,
+ 	.cp_size = 0x79000000,
+ 	.cp_nonpixel_start = 0x1000000,
+@@ -705,9 +696,6 @@ static const struct venus_resources sdm845_res = {
+ 	.max_load = 3110400,	/* 4096x2160@90 */
+ 	.hfi_version = HFI_VERSION_4XX,
+ 	.vpu_version = VPU_VERSION_AR50,
+-	.vmem_id = VIDC_RESOURCE_NONE,
+-	.vmem_size = 0,
+-	.vmem_addr = 0,
+ 	.dma_mask = 0xe0000000 - 1,
+ 	.fwname = "qcom/venus-5.2/venus.mdt",
+ };
+@@ -730,9 +718,6 @@ static const struct venus_resources sdm845_res_v2 = {
+ 	.max_load = 3110400,	/* 4096x2160@90 */
+ 	.hfi_version = HFI_VERSION_4XX,
+ 	.vpu_version = VPU_VERSION_AR50,
+-	.vmem_id = VIDC_RESOURCE_NONE,
+-	.vmem_size = 0,
+-	.vmem_addr = 0,
+ 	.dma_mask = 0xe0000000 - 1,
+ 	.cp_start = 0,
+ 	.cp_size = 0x70800000,
+@@ -777,9 +762,6 @@ static const struct venus_resources sc7180_res = {
+ 	.opp_pmdomain = pd_names_cx,
+ 	.hfi_version = HFI_VERSION_4XX,
+ 	.vpu_version = VPU_VERSION_AR50,
+-	.vmem_id = VIDC_RESOURCE_NONE,
+-	.vmem_size = 0,
+-	.vmem_addr = 0,
+ 	.dma_mask = 0xe0000000 - 1,
+ 	.cp_start = 0,
+ 	.cp_size = 0x70800000,
+@@ -835,9 +817,6 @@ static const struct venus_resources sm8250_res = {
+ 	.hfi_version = HFI_VERSION_6XX,
+ 	.vpu_version = VPU_VERSION_IRIS2,
+ 	.num_vpp_pipes = 4,
+-	.vmem_id = VIDC_RESOURCE_NONE,
+-	.vmem_size = 0,
+-	.vmem_addr = 0,
+ 	.dma_mask = 0xe0000000 - 1,
+ 	.fwname = "qcom/vpu-1.0/venus.mbn",
+ };
+@@ -892,9 +871,6 @@ static const struct venus_resources sc7280_res = {
+ 	.hfi_version = HFI_VERSION_6XX,
+ 	.vpu_version = VPU_VERSION_IRIS2_1,
+ 	.num_vpp_pipes = 1,
+-	.vmem_id = VIDC_RESOURCE_NONE,
+-	.vmem_size = 0,
+-	.vmem_addr = 0,
+ 	.dma_mask = 0xe0000000 - 1,
+ 	.fwname = "qcom/vpu-2.0/venus.mbn",
+ };
+diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
+index de180f8e7973..fe4cb566d8e9 100644
+--- a/drivers/media/platform/qcom/venus/core.h
++++ b/drivers/media/platform/qcom/venus/core.h
+@@ -81,9 +81,6 @@ struct venus_resources {
+ 	const enum vpu_version vpu_version;
+ 	const u8 num_vpp_pipes;
+ 	const u32 max_load;
+-	const unsigned int vmem_id;
+-	const u32 vmem_size;
+-	const u32 vmem_addr;
+ 	const u32 cp_start;
+ 	const u32 cp_size;
+ 	const u32 cp_nonpixel_start;
+diff --git a/drivers/media/platform/qcom/venus/hfi_venus.c b/drivers/media/platform/qcom/venus/hfi_venus.c
+index 19fc6575a489..e6db820a1d5e 100644
+--- a/drivers/media/platform/qcom/venus/hfi_venus.c
++++ b/drivers/media/platform/qcom/venus/hfi_venus.c
+@@ -1075,9 +1075,10 @@ static irqreturn_t venus_isr_thread(struct venus_core *core)
+ 			venus_process_msg_sys_error(hdev, pkt);
+ 			break;
+ 		case HFI_MSG_SYS_INIT:
+-			venus_hfi_core_set_resource(core, res->vmem_id,
+-						    res->vmem_size,
+-						    res->vmem_addr,
++			/* Disable OCMEM/VMEM unconditionally until support is added */
++			venus_hfi_core_set_resource(core, VIDC_RESOURCE_NONE,
++						    0,
++						    0,
+ 						    hdev);
+ 			break;
+ 		case HFI_MSG_SYS_RELEASE_RESOURCE:
+
 -- 
-2.18.0
+2.42.0
 
