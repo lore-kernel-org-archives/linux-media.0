@@ -2,134 +2,194 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F9EDEE3F06
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF642EE3F05
 	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:50:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234072AbjIKUuN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Sep 2023 16:50:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40484 "EHLO
+        id S236931AbjIKUuQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Sep 2023 16:50:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237815AbjIKNOf (ORCPT
+        with ESMTP id S237576AbjIKM7z (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Sep 2023 09:14:35 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C2DCF0
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:30 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-99bdeae1d0aso564424766b.1
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694438069; x=1695042869; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3XAtVUAyBOvnRtU7QZlyMg2OvJJmAGTuY+WdBD311GM=;
-        b=cPtdC0pwWsQvtGhN7POjiqr2i20d7TbLDvCi34jnfBusqydetaRfmwbfnxuM8v+JyQ
-         qyAfVtovwUimLSc1S/B8BKD6qjrZbuaI/Hrslf7UWxbY8uf6tKyvgH4YaX+tSzIovII6
-         Ry3xukEUeHfoktCl1xEcKFOGdC2vG9OSBQTBelrDNWtW3ObaE1mV6TwwrT7ZgQCMZDqy
-         HmnAmMJroFC5G9ACshats8r+cPO+MMvCm6eSLFbnQwgD7Hn4aa2CN1biYO7tFUyPng8+
-         wWGSzRNwe+QqCZHPmmNG54hurwYgUGk3EWcrJBIngSXMbH9FKX2mWaT+R5VsXBZ4BWFm
-         Oayw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694438069; x=1695042869;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3XAtVUAyBOvnRtU7QZlyMg2OvJJmAGTuY+WdBD311GM=;
-        b=R+M8W/VLR5Z/EAFvBaW7fsdCMVF/Cgu7vzFZGVQji8zaQYBwFzaPUrirEAwoKrbxFS
-         XusatXph4yKIUAmvWIknz17Zv1RXxHhEvX8EnEb42kjOPzK9AFG7b1wwgkpLzqMghIKn
-         jbPZUZoE4nD/jsXWoenRHWlQXE81+mlKDdGPC2IubGrHc+VpM3grP3veP9IjzL7DciXr
-         DsgUFW5U4DXLVBVL8t1XKuI6TGpiyAJTK9w+Gyd/rlYXa2Dfc5XrmvfBAUQlHz4OKxb0
-         MUmD9Io0DI7VJNSerU5cDVsvn5GhpDIE6j4tLLnOki64YFkDVHistezom9oHKL+JBNyx
-         ZYsw==
-X-Gm-Message-State: AOJu0YxHeZMuSRbHS1aB+THaxyJbN9df+WovX4slZS4gWFyL/1P7cmvo
-        E1gldHkB0QcVq2JpM9YT+FCoEA==
-X-Google-Smtp-Source: AGHT+IFUcyRm5SPFoxyVmnZ9MYesGgV7U4jcD+0ykckHs/EKmwcAsWQHdxC1SEXItfkQV7GAHZpBMg==
-X-Received: by 2002:a17:907:75fc:b0:9a5:ca42:f3a9 with SMTP id jz28-20020a17090775fc00b009a5ca42f3a9mr8029922ejc.2.1694438069246;
-        Mon, 11 Sep 2023 06:14:29 -0700 (PDT)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id kt8-20020a170906aac800b00988e953a586sm5313648ejb.61.2023.09.11.06.14.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Sep 2023 06:14:28 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
-        andrey.konovalov@linaro.org
-Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 14/17] media: qcom: camss: Support RDI3 for VFE 17x
-Date:   Mon, 11 Sep 2023 14:14:08 +0100
-Message-ID: <20230911131411.196033-15-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20230911131411.196033-1-bryan.odonoghue@linaro.org>
-References: <20230911131411.196033-1-bryan.odonoghue@linaro.org>
+        Mon, 11 Sep 2023 08:59:55 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFCDBE40;
+        Mon, 11 Sep 2023 05:59:50 -0700 (PDT)
+X-UUID: 14c0c5c250a311ee8051498923ad61e6-20230911
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=CPMWACJAgviKQmxWnosmzeeZGzhy0KOH7WEjCylhAbA=;
+        b=UXrlXGnLtlvmK/Ecl0mGTFJZNqLesmpcXlsLvHcOQGs3HCRSgUGtC0n0nQRP6tjhvz1TSrV26aDflrIBrUiwbiXwpoVnCB9ov62gQVe9wc1BzpnU4x7Mixh0Cvis4+IcWixwuqGpUp2b+kLlDugHzo7vSKTaM4fzGkSsR4yZnkk=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.31,REQID:93868120-3ad3-4977-87d1-055a39356b7a,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:0ad78a4,CLOUDID:ba17b4be-14cc-44ca-b657-2d2783296e72,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,
+        DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 14c0c5c250a311ee8051498923ad61e6-20230911
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1323316282; Mon, 11 Sep 2023 20:59:45 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.194) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Mon, 11 Sep 2023 20:59:43 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Mon, 11 Sep 2023 20:59:42 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
+        <nfraprado@collabora.com>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Nathan Hebert <nhebert@chromium.org>
+CC:     Chen-Yu Tsai <wenst@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Steve Cho" <stevecho@chromium.org>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH 05/14] media: mediatek: vcodec: using encoder's device to alloc/free memory
+Date:   Mon, 11 Sep 2023 20:59:27 +0800
+Message-ID: <20230911125936.10648-6-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230911125936.10648-1-yunfei.dong@mediatek.com>
+References: <20230911125936.10648-1-yunfei.dong@mediatek.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-AS-Result: No-10--4.085200-8.000000
+X-TMASE-MatchedRID: zZxKUkmlWrQ/IVzSvtxQYQI0yP/uoH+DxKAxBgoYewn2MjGUf5GHscRr
+        vjvFKTaxteurRsMx+tiioN2/kJflOJCoy9iDotiwDB+ErBr0bAMoUVkB7ifJngFfXDffRHpWo8W
+        MkQWv6iXBcIE78YqRWvcUt5lc1lLgjMejjvPkBr48VX82z7b6LJCqOkDtL4siGdAHOCGgtWJQ+s
+        FRlQzcIsYGgHVcQ3yHEgBWaZYZAD/VgtwXM1+7jEdjxzx4+7OW49jp+6BdmVYc/j4aI5S1Lnr9G
+        D0zfOvEAaqvv/mhgrEIcy9ODq9nmVZca9RSYo/b
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--4.085200-8.000000
+X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-SNTS-SMTP: 0048BDD6841D6C775C768961CDCE27A7FD85A2B3FAE2FF121962545F219E47C02000:8
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Some VFEs have four RDIs apiece. Right now the ISR code has a hard-coded
-value which tops-out at RDI2 meaning only three RDIs can be utilised in
-practice.
+Using encoder's device to allocate/free secure memory calling:
+mtk_vcodec_mem_alloc/mtk_vcodec_mem_free, not decoder's.
 
-Extend out the various routines in camss-vfe-17x.c to support the higher
-RDI count.
-
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+'Fixes: 01abf5fbb081c ("media: mediatek: vcodec: separate struct 'mtk_vcodec_ctx'")'
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 ---
- drivers/media/platform/qcom/camss/camss-vfe-170.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ .../mediatek/vcodec/common/mtk_vcodec_util.c  | 66 ++++++++++++++++++-
+ 1 file changed, 64 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe-170.c b/drivers/media/platform/qcom/camss/camss-vfe-170.c
-index 2ba7160b3bd1e..a5aa799501861 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe-170.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe-170.c
-@@ -209,7 +209,8 @@ static void vfe_global_reset(struct vfe_device *vfe)
- 			 GLOBAL_RESET_CMD_IDLE_CGC	|
- 			 GLOBAL_RESET_CMD_RDI0		|
- 			 GLOBAL_RESET_CMD_RDI1		|
--			 GLOBAL_RESET_CMD_RDI2;
-+			 GLOBAL_RESET_CMD_RDI2		|
-+			 GLOBAL_RESET_CMD_RDI3;
+diff --git a/drivers/media/platform/mediatek/vcodec/common/mtk_vcodec_util.c b/drivers/media/platform/mediatek/vcodec/common/mtk_vcodec_util.c
+index 908602031fd0..62bb7290c56d 100644
+--- a/drivers/media/platform/mediatek/vcodec/common/mtk_vcodec_util.c
++++ b/drivers/media/platform/mediatek/vcodec/common/mtk_vcodec_util.c
+@@ -45,7 +45,7 @@ int mtk_vcodec_write_vdecsys(struct mtk_vcodec_dec_ctx *ctx, unsigned int reg,
+ }
+ EXPORT_SYMBOL(mtk_vcodec_write_vdecsys);
  
- 	writel_relaxed(BIT(31), vfe->base + VFE_IRQ_MASK_0);
- 
-@@ -343,7 +344,7 @@ static void vfe_violation_read(struct vfe_device *vfe)
- static irqreturn_t vfe_isr(int irq, void *dev)
+-int mtk_vcodec_mem_alloc(void *priv, struct mtk_vcodec_mem *mem)
++static int mtk_vcodec_mem_dec_alloc(void *priv, struct mtk_vcodec_mem *mem)
  {
- 	struct vfe_device *vfe = dev;
--	u32 status0, status1, vfe_bus_status[3];
-+	u32 status0, status1, vfe_bus_status[VFE_LINE_NUM_MAX];
- 	int i, wm;
+ 	unsigned long size = mem->size;
+ 	struct mtk_vcodec_dec_ctx *ctx = priv;
+@@ -64,9 +64,39 @@ int mtk_vcodec_mem_alloc(void *priv, struct mtk_vcodec_mem *mem)
  
- 	status0 = readl_relaxed(vfe->base + VFE_IRQ_STATUS_0);
-@@ -352,7 +353,7 @@ static irqreturn_t vfe_isr(int irq, void *dev)
- 	writel_relaxed(status0, vfe->base + VFE_IRQ_CLEAR_0);
- 	writel_relaxed(status1, vfe->base + VFE_IRQ_CLEAR_1);
+ 	return 0;
+ }
++
++static int mtk_vcodec_mem_enc_alloc(void *priv, struct mtk_vcodec_mem *mem)
++{
++	unsigned long size = mem->size;
++	struct mtk_vcodec_enc_ctx *ctx = priv;
++	struct device *dev = &ctx->dev->plat_dev->dev;
++
++	mem->va = dma_alloc_coherent(dev, size, &mem->dma_addr, GFP_KERNEL);
++	if (!mem->va) {
++		mtk_v4l2_venc_err(ctx, "%s dma_alloc size=%ld failed!", dev_name(dev), size);
++		return -ENOMEM;
++	}
++
++	mtk_v4l2_venc_dbg(3, ctx, "[%d]  - va      = %p", ctx->id, mem->va);
++	mtk_v4l2_venc_dbg(3, ctx, "[%d]  - dma     = 0x%lx", ctx->id,
++			  (unsigned long)mem->dma_addr);
++	mtk_v4l2_venc_dbg(3, ctx, "[%d]    size = 0x%lx", ctx->id, size);
++
++	return 0;
++}
++
++int mtk_vcodec_mem_alloc(void *priv, struct mtk_vcodec_mem *mem)
++{
++	enum mtk_instance_type inst_type = *((unsigned int *)priv);
++
++	if (inst_type == MTK_INST_ENCODER)
++		return mtk_vcodec_mem_enc_alloc(priv, mem);
++	else
++		return mtk_vcodec_mem_dec_alloc(priv, mem);
++}
+ EXPORT_SYMBOL(mtk_vcodec_mem_alloc);
  
--	for (i = VFE_LINE_RDI0; i <= VFE_LINE_RDI2; i++) {
-+	for (i = VFE_LINE_RDI0; i < vfe->line_num; i++) {
- 		vfe_bus_status[i] = readl_relaxed(vfe->base + VFE_BUS_IRQ_STATUS(i));
- 		writel_relaxed(vfe_bus_status[i], vfe->base + VFE_BUS_IRQ_CLEAR(i));
- 	}
-@@ -366,11 +367,11 @@ static irqreturn_t vfe_isr(int irq, void *dev)
- 	if (status0 & STATUS_0_RESET_ACK)
- 		vfe->isr_ops.reset_ack(vfe);
+-void mtk_vcodec_mem_free(void *priv, struct mtk_vcodec_mem *mem)
++static void mtk_vcodec_mem_dec_free(void *priv, struct mtk_vcodec_mem *mem)
+ {
+ 	unsigned long size = mem->size;
+ 	struct mtk_vcodec_dec_ctx *ctx = priv;
+@@ -87,6 +117,38 @@ void mtk_vcodec_mem_free(void *priv, struct mtk_vcodec_mem *mem)
+ 	mem->dma_addr = 0;
+ 	mem->size = 0;
+ }
++
++static void mtk_vcodec_mem_enc_free(void *priv, struct mtk_vcodec_mem *mem)
++{
++	unsigned long size = mem->size;
++	struct mtk_vcodec_enc_ctx *ctx = priv;
++	struct device *dev = &ctx->dev->plat_dev->dev;
++
++	if (!mem->va) {
++		mtk_v4l2_venc_err(ctx, "%s dma_free size=%ld failed!", dev_name(dev), size);
++		return;
++	}
++
++	mtk_v4l2_venc_dbg(3, ctx, "[%d]  - va      = %p", ctx->id, mem->va);
++	mtk_v4l2_venc_dbg(3, ctx, "[%d]  - dma     = 0x%lx", ctx->id,
++			  (unsigned long)mem->dma_addr);
++	mtk_v4l2_venc_dbg(3, ctx, "[%d]    size = 0x%lx", ctx->id, size);
++
++	dma_free_coherent(dev, size, mem->va, mem->dma_addr);
++	mem->va = NULL;
++	mem->dma_addr = 0;
++	mem->size = 0;
++}
++
++void mtk_vcodec_mem_free(void *priv, struct mtk_vcodec_mem *mem)
++{
++	enum mtk_instance_type inst_type = *((unsigned int *)priv);
++
++	if (inst_type == MTK_INST_ENCODER)
++		mtk_vcodec_mem_enc_free(priv, mem);
++	else
++		mtk_vcodec_mem_dec_free(priv, mem);
++}
+ EXPORT_SYMBOL(mtk_vcodec_mem_free);
  
--	for (i = VFE_LINE_RDI0; i <= VFE_LINE_RDI2; i++)
-+	for (i = VFE_LINE_RDI0; i < vfe->line_num; i++)
- 		if (status0 & STATUS_0_RDI_REG_UPDATE(i))
- 			vfe->isr_ops.reg_update(vfe, i);
- 
--	for (i = VFE_LINE_RDI0; i <= VFE_LINE_RDI2; i++)
-+	for (i = VFE_LINE_RDI0; i < vfe->line_num; i++)
- 		if (status0 & STATUS_1_RDI_SOF(i))
- 			vfe->isr_ops.sof(vfe, i);
- 
+ void *mtk_vcodec_get_hw_dev(struct mtk_vcodec_dec_dev *dev, int hw_idx)
 -- 
-2.42.0
+2.18.0
 
