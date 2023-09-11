@@ -2,54 +2,54 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C92B4EEB59B
-	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:49:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16AB8EEB59E
+	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:49:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235938AbjIKUte (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Sep 2023 16:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40546 "EHLO
+        id S233931AbjIKUtf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Sep 2023 16:49:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237825AbjIKNOh (ORCPT
+        with ESMTP id S237807AbjIKNOd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Sep 2023 09:14:37 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B08EE
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:31 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9a6190af24aso554648366b.0
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:31 -0700 (PDT)
+        Mon, 11 Sep 2023 09:14:33 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FBEBE4D
+        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:28 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-9a648f9d8e3so562262966b.1
+        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694438070; x=1695042870; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1694438067; x=1695042867; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tmmIFS2GsvUhYHjMDD0wvEsdZNEsSt4tmle0ldKlqCs=;
-        b=gyncj+wwTzKmikglWPWnSN1r5bA9Dg6TDQzB7R0J90ZrUR2URW1kXrfMoZ8/qqKTef
-         /Q3kXtzGbelh+lqb2k6CjPRKS31MHWnYfukoJ0NmNVLMPx/oUzpjQKG5ZjcAzgyT1Szh
-         D6Dm/bf7Np2fmBLy+tLPCqQ1UdhtsY+heF+PPrV/0EcCnBuDFkMt7sqkIFeycBi4+p1l
-         e6Sv0fdrP9AWriUgmOVa1hfddIs9nSLGed7cJoxGmNzZEPthQxt0D8qBmrGpVXX7I3Td
-         78ZQasDFD6TMg8vSq5HFN5QTnsMV+Bf0OiVbtDTytOmG831uTOaWPZ9PapWILgjPVbTc
-         1xpg==
+        bh=MHtDr8xYhXwGqBJmtIj0tvF8SPL/tjbZCKIvzLXh3+Y=;
+        b=xLRr6Lht8sE0J66Esx8teJ13dD38fWIXBUmYq6YLTqEgGSly1o/QjV0Jaey2lhRAkr
+         DrHDLBUn/lMQlvT0m6DmfWEXHdkkXkVUyzy152ALZwnFHKOw3ai3AQLys5P2BzUqFmN/
+         iBewcXhXmZUaxglzp7zVtC5f4Br/rKHNRkG0Z1oxxam8yNODlZJc3DpV+ITtmI3oB8Cc
+         SpRkd8N5JWiitAdD8Fte5cx3HT0oa3zlDjNEFIJMGb8uGnJpvXDtqzzvV2Wu6OgA6ACn
+         WdRn80Z/2zaHhNWZ5Txy86UiAJF0vx2G6LziCl8cyLT5yWN+Kh7l+/EsfkB7I+5619Kj
+         XY6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694438070; x=1695042870;
+        d=1e100.net; s=20230601; t=1694438067; x=1695042867;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tmmIFS2GsvUhYHjMDD0wvEsdZNEsSt4tmle0ldKlqCs=;
-        b=pXHApBFN0VmXEgo1sM37rhkvT0nF1f6zhUYDQjCfrOmTSJSf9OGaaYwAIFnH1jlMfr
-         1nppeAZpc8AxW9VDjhPPeuYe2v8q8O9SiXoeWnrty0UFvc5VdZIVIm6zEK2xsl0R0r9B
-         RW9qWFhBfVXN7pYZT1TV1+IlHvdkGrXcGRusBpSdR91bx8OlGBNTR8m4A8J0ZH5gyGP1
-         lIwIjA8tebOeLm7x9neM/Yw9rHlHZNl6mELRoUlnJMvqc585q7akigYlkuv2vb7InqFd
-         bOGe/ODmR3LR6BJLYAO7rlcE2MW+7W+UVchKetbmONubKC/kiPtxY74nqkVQAoqLVY4e
-         BuAw==
-X-Gm-Message-State: AOJu0Yzw9D6iHUBXU1q7YMrmAnLv1AhWzy0iN+R6TDGj50w7zllY7ie3
-        in63tZoi2vs0NmeNQa9rjr2dOA==
-X-Google-Smtp-Source: AGHT+IGhuxr4vSNK9pUHdEX30IVpyboInhXL/zX02dW6lafZlOonCKHjvpQJlDfg5snir97qcrUiGw==
-X-Received: by 2002:a17:906:6411:b0:9a2:295a:9bc5 with SMTP id d17-20020a170906641100b009a2295a9bc5mr7839683ejm.21.1694438070402;
-        Mon, 11 Sep 2023 06:14:30 -0700 (PDT)
+        bh=MHtDr8xYhXwGqBJmtIj0tvF8SPL/tjbZCKIvzLXh3+Y=;
+        b=IrEbtGUHkJ2M9IGDr4zIGywO0DBiPRVUrYMOdjz72+AB6WQcCH25bR/T69dAOJRMfG
+         UjlBPMd76WZu9VA1rZaWEh5S9mZlezZHfXBndMzZ1NqgkNBQ4nBWyOEzETBOYug57+T6
+         85wj+B56IvAS4/5pfi/q4lxQmX7LgMzaFhf2MDSprMP15XuClg0Vtmmi0Ldwy/kCWM1+
+         F9EcPJ4kEIwfNIC3YLK1EpPdHeA3CUHD0dy3Dxg1Bys4mmgPKuqgs31Wy85u70xeLQ2M
+         P1Zr1efn/ruEcmHu7TxSq98d3wdrpDfJbd2OJy8yCOX38Hhh0qLvaF+PuaFHzPwYMETR
+         2Kag==
+X-Gm-Message-State: AOJu0Yw9+QTMRhG4HGAhrL62/BFk2gaspvFe5fJMLwyuwyP5yv5dD51I
+        R+sB9uUWdrJSQHw4cIzy694Zag==
+X-Google-Smtp-Source: AGHT+IEJZEhw/8MjyR5Bg/evKvO1z4rIjCAlxCJ+ycLj2cifs6WrOrzLnSR4rYggt+PToKj7F6w++g==
+X-Received: by 2002:a17:906:8a54:b0:99d:6b3c:3d40 with SMTP id gx20-20020a1709068a5400b0099d6b3c3d40mr8212956ejc.6.1694438067102;
+        Mon, 11 Sep 2023 06:14:27 -0700 (PDT)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id kt8-20020a170906aac800b00988e953a586sm5313648ejb.61.2023.09.11.06.14.29
+        by smtp.gmail.com with ESMTPSA id kt8-20020a170906aac800b00988e953a586sm5313648ejb.61.2023.09.11.06.14.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Sep 2023 06:14:29 -0700 (PDT)
+        Mon, 11 Sep 2023 06:14:26 -0700 (PDT)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
         agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
@@ -58,9 +58,9 @@ To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
         andrey.konovalov@linaro.org
 Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 15/17] media: qcom: camss: Move vfe_disable into a common routine where applicable
-Date:   Mon, 11 Sep 2023 14:14:09 +0100
-Message-ID: <20230911131411.196033-16-bryan.odonoghue@linaro.org>
+Subject: [PATCH v5 12/17] media: qcom: camss: Functionally decompose CSIPHY clock lookups
+Date:   Mon, 11 Sep 2023 14:14:06 +0100
+Message-ID: <20230911131411.196033-13-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20230911131411.196033-1-bryan.odonoghue@linaro.org>
 References: <20230911131411.196033-1-bryan.odonoghue@linaro.org>
@@ -70,224 +70,84 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-We can move vfe_disable() into a common routine in the core VFE file
-provided we make wm_stop() a VFE specific callback.
+The csiphyX_timer and csiX_phy values need not be hard-coded. We can
+functionally decompose the string matching inside of a loop.
 
-The callback is required to capture the case where VFE 17x currently isn't
-VC enabled where as VFE 480 is.
+Static string values are brittle, difficult to extend and not required
+anyway since the camss->res->csiphy_num value informs us of the number
+of CSIPHYs and hence the set of potential clocks for a given CSIPHY.
 
-Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+In simple terms if we have five CSIPHYs we can have no more and no less
+than five csiphy_timer clocks. Similarly csi_phy core clocks have a 1:1
+relationship with the PHY they clock.
+
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- .../media/platform/qcom/camss/camss-vfe-170.c | 40 +------------------
- .../media/platform/qcom/camss/camss-vfe-480.c | 40 +------------------
- drivers/media/platform/qcom/camss/camss-vfe.c | 39 ++++++++++++++++++
- drivers/media/platform/qcom/camss/camss-vfe.h |  9 +++++
- 4 files changed, 50 insertions(+), 78 deletions(-)
+ .../media/platform/qcom/camss/camss-csiphy.c  | 37 ++++++++++++-------
+ 1 file changed, 23 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe-170.c b/drivers/media/platform/qcom/camss/camss-vfe-170.c
-index a5aa799501861..0b211fed12760 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe-170.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe-170.c
-@@ -494,22 +494,6 @@ static int vfe_enable_output(struct vfe_line *line)
- 	return 0;
+diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.c b/drivers/media/platform/qcom/camss/camss-csiphy.c
+index 18f9a4defb2a4..87d6d65aa90cf 100644
+--- a/drivers/media/platform/qcom/camss/camss-csiphy.c
++++ b/drivers/media/platform/qcom/camss/camss-csiphy.c
+@@ -536,6 +536,15 @@ static int csiphy_init_formats(struct v4l2_subdev *sd,
+ 	return csiphy_set_format(sd, fh ? fh->state : NULL, &format);
  }
  
--static void vfe_disable_output(struct vfe_line *line)
--{
--	struct vfe_device *vfe = to_vfe(line);
--	struct vfe_output *output = &line->output;
--	unsigned long flags;
--	unsigned int i;
--
--	spin_lock_irqsave(&vfe->output_lock, flags);
--	for (i = 0; i < output->wm_num; i++)
--		vfe_wm_stop(vfe, output->wm_idx[i]);
--	output->gen2.active_num = 0;
--	spin_unlock_irqrestore(&vfe->output_lock, flags);
--
--	vfe_reset(vfe);
--}
--
- /*
-  * vfe_enable - Enable streaming on VFE line
-  * @line: VFE line
-@@ -555,29 +539,6 @@ static int vfe_enable(struct vfe_line *line)
- 	return ret;
- }
- 
--/*
-- * vfe_disable - Disable streaming on VFE line
-- * @line: VFE line
-- *
-- * Return 0 on success or a negative error code otherwise
-- */
--static int vfe_disable(struct vfe_line *line)
--{
--	struct vfe_device *vfe = to_vfe(line);
--
--	vfe_disable_output(line);
--
--	vfe_put_output(line);
--
--	mutex_lock(&vfe->stream_lock);
--
--	vfe->stream_count--;
--
--	mutex_unlock(&vfe->stream_lock);
--
--	return 0;
--}
--
- /*
-  * vfe_isr_sof - Process start of frame interrupt
-  * @vfe: VFE Device
-@@ -770,4 +731,5 @@ const struct vfe_hw_ops vfe_ops_170 = {
- 	.vfe_enable = vfe_enable,
- 	.vfe_halt = vfe_halt,
- 	.violation_read = vfe_violation_read,
-+	.vfe_wm_stop = vfe_wm_stop,
- };
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe-480.c b/drivers/media/platform/qcom/camss/camss-vfe-480.c
-index 43a2964121f22..f2368b77fc6d6 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe-480.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe-480.c
-@@ -327,22 +327,6 @@ static int vfe_enable_output(struct vfe_line *line)
- 	return 0;
- }
- 
--static void vfe_disable_output(struct vfe_line *line)
--{
--	struct vfe_device *vfe = to_vfe(line);
--	struct vfe_output *output = &line->output;
--	unsigned long flags;
--	unsigned int i;
--
--	spin_lock_irqsave(&vfe->output_lock, flags);
--	for (i = 0; i < output->wm_num; i++)
--		vfe_wm_stop(vfe, output->wm_idx[i]);
--	output->gen2.active_num = 0;
--	spin_unlock_irqrestore(&vfe->output_lock, flags);
--
--	vfe_reset(vfe);
--}
--
- /*
-  * vfe_enable - Enable streaming on VFE line
-  * @line: VFE line
-@@ -390,29 +374,6 @@ static int vfe_enable(struct vfe_line *line)
- 	return ret;
- }
- 
--/*
-- * vfe_disable - Disable streaming on VFE line
-- * @line: VFE line
-- *
-- * Return 0 on success or a negative error code otherwise
-- */
--static int vfe_disable(struct vfe_line *line)
--{
--	struct vfe_device *vfe = to_vfe(line);
--
--	vfe_disable_output(line);
--
--	vfe_put_output(line);
--
--	mutex_lock(&vfe->stream_lock);
--
--	vfe->stream_count--;
--
--	mutex_unlock(&vfe->stream_lock);
--
--	return 0;
--}
--
- /*
-  * vfe_isr_reg_update - Process reg update interrupt
-  * @vfe: VFE Device
-@@ -581,4 +542,5 @@ const struct vfe_hw_ops vfe_ops_480 = {
- 	.vfe_disable = vfe_disable,
- 	.vfe_enable = vfe_enable,
- 	.vfe_halt = vfe_halt,
-+	.vfe_wm_stop = vfe_wm_stop,
- };
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
-index f3cf387e4907e..3d542ac93b1c2 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe.c
-@@ -410,6 +410,45 @@ int vfe_put_output(struct vfe_line *line)
- 	return 0;
- }
- 
-+static int vfe_disable_output(struct vfe_line *line)
++static bool csiphy_match_clock_name(const char *clock_name, const char *format,
++				    int index)
 +{
-+	struct vfe_device *vfe = to_vfe(line);
-+	struct vfe_output *output = &line->output;
-+	unsigned long flags;
-+	unsigned int i;
++	char name[15]; /* csiphyXX_timer\0 */
 +
-+	spin_lock_irqsave(&vfe->output_lock, flags);
-+	for (i = 0; i < output->wm_num; i++)
-+		vfe->ops->vfe_wm_stop(vfe, output->wm_idx[i]);
-+	output->gen2.active_num = 0;
-+	spin_unlock_irqrestore(&vfe->output_lock, flags);
-+
-+	return vfe_reset(vfe);
++	snprintf(name, sizeof(name), format, index);
++	return !strcmp(clock_name, name);
 +}
 +
-+/*
-+ * vfe_disable - Disable streaming on VFE line
-+ * @line: VFE line
-+ *
-+ * Return 0 on success or a negative error code otherwise
-+ */
-+int vfe_disable(struct vfe_line *line)
-+{
-+	struct vfe_device *vfe = to_vfe(line);
-+
-+	vfe_disable_output(line);
-+
-+	vfe_put_output(line);
-+
-+	mutex_lock(&vfe->stream_lock);
-+
-+	vfe->stream_count--;
-+
-+	mutex_unlock(&vfe->stream_lock);
-+
-+	return 0;
-+}
-+
- /**
-  * vfe_isr_comp_done() - Process composite image done interrupt
-  * @vfe: VFE Device
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe.h b/drivers/media/platform/qcom/camss/camss-vfe.h
-index 4783afa73a365..09baded0dcdd6 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe.h
-+++ b/drivers/media/platform/qcom/camss/camss-vfe.h
-@@ -114,6 +114,7 @@ struct vfe_hw_ops {
- 	int (*vfe_enable)(struct vfe_line *line);
- 	int (*vfe_halt)(struct vfe_device *vfe);
- 	void (*violation_read)(struct vfe_device *vfe);
-+	void (*vfe_wm_stop)(struct vfe_device *vfe, u8 wm);
- };
+ /*
+  * msm_csiphy_subdev_init - Initialize CSIPHY device structure and resources
+  * @csiphy: CSIPHY device
+@@ -550,7 +559,7 @@ int msm_csiphy_subdev_init(struct camss *camss,
+ {
+ 	struct device *dev = camss->dev;
+ 	struct platform_device *pdev = to_platform_device(dev);
+-	int i, j;
++	int i, j, k;
+ 	int ret;
  
- struct vfe_isr_ops {
-@@ -192,6 +193,14 @@ int vfe_reserve_wm(struct vfe_device *vfe, enum vfe_line_id line_id);
-  */
- int vfe_reset(struct vfe_device *vfe);
+ 	csiphy->camss = camss;
+@@ -656,19 +665,19 @@ int msm_csiphy_subdev_init(struct camss *camss,
+ 		for (j = 0; j < clock->nfreqs; j++)
+ 			clock->freq[j] = res->clock_rate[i][j];
  
-+/*
-+ * vfe_disable - Disable streaming on VFE line
-+ * @line: VFE line
-+ *
-+ * Return 0 on success or a negative error code otherwise
-+ */
-+int vfe_disable(struct vfe_line *line);
+-		if (!strcmp(clock->name, "csiphy0_timer") ||
+-		    !strcmp(clock->name, "csiphy1_timer") ||
+-		    !strcmp(clock->name, "csiphy2_timer") ||
+-		    !strcmp(clock->name, "csiphy3_timer") ||
+-		    !strcmp(clock->name, "csiphy4_timer") ||
+-		    !strcmp(clock->name, "csiphy5_timer"))
+-			csiphy->rate_set[i] = true;
+-
+-		if (camss->res->version == CAMSS_660 &&
+-		    (!strcmp(clock->name, "csi0_phy") ||
+-		     !strcmp(clock->name, "csi1_phy") ||
+-		     !strcmp(clock->name, "csi2_phy")))
+-			csiphy->rate_set[i] = true;
++		for (k = 0; k < camss->res->csiphy_num; k++) {
++			csiphy->rate_set[i] = csiphy_match_clock_name(clock->name,
++								      "csiphy%d_timer", k);
++			if (csiphy->rate_set[i])
++				break;
 +
- extern const struct vfe_hw_ops vfe_ops_4_1;
- extern const struct vfe_hw_ops vfe_ops_4_7;
- extern const struct vfe_hw_ops vfe_ops_4_8;
++			if (camss->res->version == CAMSS_660) {
++				csiphy->rate_set[i] = csiphy_match_clock_name(clock->name,
++									      "csi%d_phy", k);
++				if (csiphy->rate_set[i])
++					break;
++			}
++		}
+ 	}
+ 
+ 	return 0;
 -- 
 2.42.0
 
