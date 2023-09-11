@@ -2,231 +2,114 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C073ECA0EC0
-	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 21:05:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 741FBCA0ECE
+	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 21:05:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234649AbjIKUs1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Sep 2023 16:48:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59976 "EHLO
+        id S233958AbjIKUsG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Sep 2023 16:48:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241609AbjIKPK6 (ORCPT
+        with ESMTP id S235771AbjIKJeG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Sep 2023 11:10:58 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF24CCC
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:10:54 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-52f3ba561d9so3787691a12.1
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:10:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694445052; x=1695049852; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0/rSrL3Jo8Jpc/t8ZAB7UTOHWQcf4GkFtv3a0VomhNM=;
-        b=K57uOnbpeorjFFXAGnAYpF7u5ZBIkPY3aVkTJfdW6+1lBoFkxbm+BDGlY6AqXbHVX9
-         n3iySFntAEFDhsJCON8WF4tvSY1Z07KvUXcL56UhvxF/uG294xWLdST/E5Wapn2aHbC8
-         NOdcJ/AeuDQUeY4KjIZO4wgWnSylo6YwJd1OQBm+LUmnWGfIenUnJLYvm9iUyKY+PV2i
-         uytgIO1spitbi5P9Lmk1RrXStxYQ+BP4tiBY7p+LTENjyPA1q2+s3BMywiEe/k0qkJiq
-         yP1Ko5n94efy2VhzcVf0dyKNA//XZB4WcdQ1uvnsWb8lJ0f1uT5JE1demc9SnpVsA/DS
-         VHZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694445052; x=1695049852;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0/rSrL3Jo8Jpc/t8ZAB7UTOHWQcf4GkFtv3a0VomhNM=;
-        b=azoWA0/sofgffIlxtlmSh4KJ/hmaz7/YaUmb4EAtk29Z1j0NfIed6acwNtkxE4Ecoe
-         keqOjHmJZ3x9ic+BxFgA7ZFnt4oAiPL/b1zr2xost+i0ZTxE3vcnkEwbCfcyvxStz/09
-         9hvgaj4bjKbCRg60my6G9vOEJpmjIpPhcI5IJguuPQFTDEbZDrBVnR+/RYJY7B5VdU8g
-         QYzE/uKlyaqHJITWnu9sK/JkbHOdimiPSXlIIoWojWcRsCcBbCck/zfJlrOmp82umzXb
-         UJ8Ma/lCiBq7+yngzirrPYOZcRJ2JJ1Q265p9XmnAIpgFHdsAYUtuVUR81GFna9cXfce
-         XbhA==
-X-Gm-Message-State: AOJu0YyIFNM+krGw6SSGlPJfreDfU3T4LvlVes8EUrmi8zACw+m1SfAb
-        9xgC0+tsg8V4q23Pvqv/XuaORw==
-X-Google-Smtp-Source: AGHT+IEbHBYlsbEpKU5/53azlsQctYiikFwyyZJfwzmVd1ZxSwJ1OZjEUyLdZoi/YOdV2fu2bsZbdg==
-X-Received: by 2002:aa7:d858:0:b0:521:d2ab:e4df with SMTP id f24-20020aa7d858000000b00521d2abe4dfmr12498198eds.19.1694445052439;
-        Mon, 11 Sep 2023 08:10:52 -0700 (PDT)
-Received: from [10.167.154.1] (178235177061.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.61])
-        by smtp.gmail.com with ESMTPSA id n4-20020a056402060400b0052a3ad836basm4681281edv.41.2023.09.11.08.10.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Sep 2023 08:10:52 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 11 Sep 2023 17:10:28 +0200
-Subject: [PATCH RFT 14/20] media: venus: pm_helpers: Commonize core_power
+        Mon, 11 Sep 2023 05:34:06 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA80F3;
+        Mon, 11 Sep 2023 02:34:02 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C3CF966072F0;
+        Mon, 11 Sep 2023 10:33:59 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1694424840;
+        bh=rHHHuF02A5nvt+AXbCIowWRbwndRguiS4v+mhK3ndws=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=hdEWKVqo2v+9z5TdmS3rsrer803Qt2ExqloC2R16vDBb7HzzZm8InCiQhzTKEB5jV
+         h/GZcp87wLWxXngKvN3N6LFft7Z9rOzIEzICp1S2uOvBNiT8QLjnSj1sOQGxGCxtl+
+         b3R9QGOcOM1GUQfQPgxDD9SordElS28hYwIO6Axb3HOH0zh/3jTIgD4k/m9/LCuC25
+         waPj7xE0dpPGBLtYjoZUVWSOyfphK2L/xqTN0syYLACpTujIeg/T7T0YmH6d2+SxRO
+         8RZtgPaUop56crCMOSYatDaTZfv/2i4IETmyUQQla/KkNb4IWL7JpM1X4Ewdd1QgXg
+         WcMMM3kRqLYeg==
+Message-ID: <dd418409-1c91-f58d-f8ed-a0c8d42a26be@collabora.com>
+Date:   Mon, 11 Sep 2023 11:33:57 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH 9/9] dma_buf: heaps: mtk_sec_heap: Add a new CMA heap
+Content-Language: en-US
+To:     Yong Wu <yong.wu@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        christian.koenig@amd.com, Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <jstultz@google.com>, tjmercier@google.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, jianjiao.zeng@mediatek.com,
+        kuohong.wang@mediatek.com
+References: <20230911023038.30649-1-yong.wu@mediatek.com>
+ <20230911023038.30649-10-yong.wu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230911023038.30649-10-yong.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230911-topic-mars-v1-14-a7d38bf87bdb@linaro.org>
-References: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
-In-Reply-To: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
-To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1694445027; l=4719;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=mQbHMS1CDlisVrikZ5YTbX8/UuzAFEtVfQ4RIqbJfoc=;
- b=ifOwzefBF+9s0GX9pPmiv0R+TszTLyxnkyiWw1XYYUYmOGigta0/hS2A2f34zh5uy6c7s4pUo
- hEQaodokYMBAU/3LxOUfMLYRkEjFgxGVj5Ilmk3H96n1r4MLBMB+OwS
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-core_power_v4 called with num_resets = 0 and core->pmdomains[0] == NULL
-does exactly the same thing as core_power_v1. Unify them!
+Il 11/09/23 04:30, Yong Wu ha scritto:
+> Create a new mtk_svp_cma heap from the CMA reserved buffer.
+> 
+> When the first allocating buffer, use cma_alloc to prepare whole the
+> CMA range, then send its range to TEE to protect and manage.
+> For the later allocating, we just adds the cma_used_size.
+> 
+> When SVP done, cma_release will release the buffer, then kernel may
+> reuse it.
+> 
+> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+> ---
+>   drivers/dma-buf/heaps/Kconfig           |   2 +-
+>   drivers/dma-buf/heaps/mtk_secure_heap.c | 121 +++++++++++++++++++++++-
+>   2 files changed, 119 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/dma-buf/heaps/Kconfig b/drivers/dma-buf/heaps/Kconfig
+> index 729c0cf3eb7c..e101f788ecbf 100644
+> --- a/drivers/dma-buf/heaps/Kconfig
+> +++ b/drivers/dma-buf/heaps/Kconfig
+> @@ -15,7 +15,7 @@ config DMABUF_HEAPS_CMA
+>   
+>   config DMABUF_HEAPS_MTK_SECURE
+>   	bool "DMA-BUF MediaTek Secure Heap"
+> -	depends on DMABUF_HEAPS && TEE
+> +	depends on DMABUF_HEAPS && TEE && CMA
+>   	help
+>   	  Choose this option to enable dma-buf MediaTek secure heap for Secure
+>   	  Video Path. This heap is backed by TEE client interfaces. If in
+> diff --git a/drivers/dma-buf/heaps/mtk_secure_heap.c b/drivers/dma-buf/heaps/mtk_secure_heap.c
+> index daf6cf2121a1..3f568fe6b569 100644
+> --- a/drivers/dma-buf/heaps/mtk_secure_heap.c
+> +++ b/drivers/dma-buf/heaps/mtk_secure_heap.c
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/media/platform/qcom/venus/core.c       | 21 +++++++--------------
- drivers/media/platform/qcom/venus/pm_helpers.c | 17 +----------------
- drivers/media/platform/qcom/venus/pm_helpers.h |  2 +-
- 3 files changed, 9 insertions(+), 31 deletions(-)
+..snip..
 
-diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
-index bd624e965a92..0ae118257296 100644
---- a/drivers/media/platform/qcom/venus/core.c
-+++ b/drivers/media/platform/qcom/venus/core.c
-@@ -480,18 +480,15 @@ static void venus_core_shutdown(struct platform_device *pdev)
- static __maybe_unused int venus_runtime_suspend(struct device *dev)
- {
- 	struct venus_core *core = dev_get_drvdata(dev);
--	const struct venus_pm_ops *pm_ops = core->pm_ops;
- 	int ret;
- 
- 	ret = hfi_core_suspend(core);
- 	if (ret)
- 		return ret;
- 
--	if (pm_ops->core_power) {
--		ret = pm_ops->core_power(core, POWER_OFF);
--		if (ret)
--			return ret;
--	}
-+	ret = venus_core_power(core, POWER_OFF);
-+	if (ret)
-+		return ret;
- 
- 	ret = icc_set_bw(core->cpucfg_path, 0, 0);
- 	if (ret)
-@@ -506,8 +503,7 @@ static __maybe_unused int venus_runtime_suspend(struct device *dev)
- err_video_path:
- 	icc_set_bw(core->cpucfg_path, kbps_to_icc(1000), 0);
- err_cpucfg_path:
--	if (pm_ops->core_power)
--		pm_ops->core_power(core, POWER_ON);
-+	venus_core_power(core, POWER_ON);
- 
- 	return ret;
- }
-@@ -515,7 +511,6 @@ static __maybe_unused int venus_runtime_suspend(struct device *dev)
- static __maybe_unused int venus_runtime_resume(struct device *dev)
- {
- 	struct venus_core *core = dev_get_drvdata(dev);
--	const struct venus_pm_ops *pm_ops = core->pm_ops;
- 	int ret;
- 
- 	ret = icc_set_bw(core->video_path, kbps_to_icc(20000), 0);
-@@ -526,11 +521,9 @@ static __maybe_unused int venus_runtime_resume(struct device *dev)
- 	if (ret)
- 		return ret;
- 
--	if (pm_ops->core_power) {
--		ret = pm_ops->core_power(core, POWER_ON);
--		if (ret)
--			return ret;
--	}
-+	ret = venus_core_power(core, POWER_ON);
-+	if (ret)
-+		return ret;
- 
- 	return hfi_core_resume(core, false);
- }
-diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
-index 816d16f9153a..ddaa9944fa44 100644
---- a/drivers/media/platform/qcom/venus/pm_helpers.c
-+++ b/drivers/media/platform/qcom/venus/pm_helpers.c
-@@ -322,22 +322,9 @@ static void core_put_v1(struct venus_core *core)
- {
- }
- 
--static int core_power_v1(struct venus_core *core, int on)
--{
--	int ret = 0;
--
--	if (on == POWER_ON)
--		ret = core_clks_enable(core);
--	else
--		core_clks_disable(core);
--
--	return ret;
--}
--
- static const struct venus_pm_ops pm_ops_v1 = {
- 	.core_get = venus_clks_get,
- 	.core_put = core_put_v1,
--	.core_power = core_power_v1,
- 	.load_scale = load_scale_v1,
- };
- 
-@@ -410,7 +397,6 @@ static int venc_power_v3(struct device *dev, int on)
- static const struct venus_pm_ops pm_ops_v3 = {
- 	.core_get = venus_clks_get,
- 	.core_put = core_put_v1,
--	.core_power = core_power_v1,
- 	.vdec_get = vdec_get_v3,
- 	.vdec_power = vdec_power_v3,
- 	.venc_get = venc_get_v3,
-@@ -996,7 +982,7 @@ static void core_put_v4(struct venus_core *core)
- 	vcodec_domains_put(core);
- }
- 
--static int core_power_v4(struct venus_core *core, int on)
-+int venus_core_power(struct venus_core *core, int on)
- {
- 	struct device *dev = core->dev;
- 	struct device *pmctrl = core->pmdomains[0];
-@@ -1143,7 +1129,6 @@ static int load_scale_v4(struct venus_inst *inst)
- static const struct venus_pm_ops pm_ops_v4 = {
- 	.core_get = core_get_v4,
- 	.core_put = core_put_v4,
--	.core_power = core_power_v4,
- 	.vdec_get = vdec_get_v4,
- 	.vdec_put = vdec_put_v4,
- 	.vdec_power = vdec_power_v4,
-diff --git a/drivers/media/platform/qcom/venus/pm_helpers.h b/drivers/media/platform/qcom/venus/pm_helpers.h
-index a492c50c5543..77db940a265c 100644
---- a/drivers/media/platform/qcom/venus/pm_helpers.h
-+++ b/drivers/media/platform/qcom/venus/pm_helpers.h
-@@ -12,7 +12,6 @@ struct venus_core;
- struct venus_pm_ops {
- 	int (*core_get)(struct venus_core *core);
- 	void (*core_put)(struct venus_core *core);
--	int (*core_power)(struct venus_core *core, int on);
- 
- 	int (*vdec_get)(struct device *dev);
- 	void (*vdec_put)(struct device *dev);
-@@ -28,6 +27,7 @@ struct venus_pm_ops {
- };
- 
- const struct venus_pm_ops *venus_pm_get(enum hfi_version version);
-+int venus_core_power(struct venus_core *core, int on);
- 
- static inline int venus_pm_load_scale(struct venus_inst *inst)
- {
+> +}
+> +
+> +RESERVEDMEM_OF_DECLARE(mtk_secure_cma, "mediatek,secure_cma_chunkmem",
 
--- 
-2.42.0
+I'd suggest "mediatek,secure-heap" as compatible name.
+
+> +		       mtk_secure_cma_init);
+> +
+
+Regards,
+Angelo
+
 
