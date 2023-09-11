@@ -2,221 +2,156 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B50DCEE3F00
-	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:50:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DDB29EE3F01
+	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:50:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236848AbjIKUuF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Sep 2023 16:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36038 "EHLO
+        id S236876AbjIKUuG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Sep 2023 16:50:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237757AbjIKNOW (ORCPT
+        with ESMTP id S242953AbjIKQg2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Sep 2023 09:14:22 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27532CF0
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:16 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-52a49a42353so5797122a12.2
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:16 -0700 (PDT)
+        Mon, 11 Sep 2023 12:36:28 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37734D3;
+        Mon, 11 Sep 2023 09:36:23 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-986d8332f50so622213066b.0;
+        Mon, 11 Sep 2023 09:36:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694438054; x=1695042854; darn=vger.kernel.org;
+        d=gmail.com; s=20221208; t=1694450181; x=1695054981; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bEExl+Qnlpbjs/kQF5vqHTfDAzymWTPDJmQL5fGoUhU=;
-        b=O30Nefz8IpD/EzKpngLHnY7JAJMowqEtJBDBz6EbidBVShxjVVg18fwco1dm0yuV7J
-         8ufMa9xmKmpXXA/RIHFfoEG2iw/iOZkSSjzB+rny5fA3WXivYciCqlYdBYvlMKr/UjpT
-         1VaUDwXvjKhGq8+siWytucN8W+t8VTeIIpbfJ2i/U1EypxYanz2GV5BXBbK/rBia3333
-         4itCSPPZ/nE4FsFWkaHlp63Al6XLJsnyK8UNcvFdNt9VBKe0269sXCdjoEuBupY9sm9y
-         h85BgXWvnzqDUPMEDZQRN+Fz7olCfPx2FNTUruMvjOf4Kdi6UBB388Yovt14i/cornY7
-         RkEA==
+        bh=tn6ORcYdF7wmn9zYudPCVDeUReDbRM6yHR4pM4CXkGQ=;
+        b=nl5SiwbyX54Hy0jNU+vPyEf2BEHaaAAd9i1P3I2vwU1OLziQBT3fzU/cOsxfZsbsmQ
+         VyLrwQBFVYR63f6gOIkVeTuNNIZGWO2IhhjYmIMqSOwjpDS8FwR6zL+kcgk6EYmS7ElV
+         eWVqgx6SJWsCTYrJaLRGEBMt/Bdtfurq7m9ljkkPsGv4E3MDKgArQQLh5mfeuE0y1IQK
+         0QihY1yWabQutSzCp2U+KV7FeaYgLooYjYJIN+kEZOFWonk0J0TOjEHzFYZoEu0gxe00
+         t8cnev2XHmJoL4DTTVbr+HXNqjRjukjrGs7RPhQinAYnJe01kligiwMaMgXZLp7A1fBM
+         SX3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694438054; x=1695042854;
+        d=1e100.net; s=20230601; t=1694450181; x=1695054981;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bEExl+Qnlpbjs/kQF5vqHTfDAzymWTPDJmQL5fGoUhU=;
-        b=LgiTnXfimOPqR2rV5sfMakFtAI2fandcC93ThP9MaYqezR6GMHdYNZMm6UZWmtU9ZC
-         sIC9IyqXDS3b5RvGSlMKCLeyioz10L6p7u0Tlfa9uYIY0yy71WI3zykMXJilVFxmCAj1
-         MSLGyXYTyEvfwXjwQZzlrhRZLaS2Jm0s0Fslb+42KO0dVu+rXYY+MYRoBAwAmspSqz54
-         Xmk7/RTezeg6ORBL9/KqGNzlaAIoMLuTUW6T28tpPZwSOquKlh+DOzS1+Asn392eyqIo
-         XTqHnLjz1LV+/oPcbitHodJbCKSUfsRtMGtxr/+ysyZ8bhksUCnS91mV6P9h8d+LBvuf
-         o/+w==
-X-Gm-Message-State: AOJu0YzS6YEi+Crrx0QmCwo4UZs3bWyqGf+eFytIhwyklLF3YdJdDowZ
-        OMiX7W9ScUEZoZ8XFKaBtSObfQ==
-X-Google-Smtp-Source: AGHT+IEUw9IMod0ZXSwWnw531y8CCVcRYkIXJE/IS9VPSsi86yb58qunvIeGkEFV1EIPP7YnvjXyMQ==
-X-Received: by 2002:a17:906:535d:b0:9a3:c4f4:12de with SMTP id j29-20020a170906535d00b009a3c4f412demr5993428ejo.37.1694438054637;
-        Mon, 11 Sep 2023 06:14:14 -0700 (PDT)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id kt8-20020a170906aac800b00988e953a586sm5313648ejb.61.2023.09.11.06.14.13
+        bh=tn6ORcYdF7wmn9zYudPCVDeUReDbRM6yHR4pM4CXkGQ=;
+        b=M6FNdumC4Wd6AFBx5txdWPgaNTVvQHL8JhMWFV+hGTjR3jO0hdTslKG4Bs8TogilTv
+         qJeKmi/Jr1EQQQzSddlttG/efSHz8l75aaqxhETSJM/LzbVQrMDefjdbGBmuUAVueNfa
+         oojVFBFr0vvVQmQx38TI3J3iTF+2r510pZdE99LM61AC2rwge8yhsGbROubvEgs19FYY
+         RKP/TFBgAu6ly3x898tyAFijZ/iS4EPjFplkRbVScLvzA3bELXoIEpiHyCg9ILtskw9p
+         +Kd/ti5SwxjRxTLbAoZFts4kB+fn4QTwA8DE1L1mxDpz2sG71ZJRlzLHjrtbWxZHcnAM
+         oGaw==
+X-Gm-Message-State: AOJu0YwckpsVrfym9YeXvK9yb2Dr1MYsoBL2CHXxJ7JbTcbZf6+eEs+q
+        ZLaMyuhAMSKxZvF7ytkd7XA=
+X-Google-Smtp-Source: AGHT+IEZkDEwJehDR4fKggLpjoJhnXiAupV9qorq7MLXFhFfk7fRQqvtYUP3Mho6rsQ4juPA6IGloQ==
+X-Received: by 2002:a17:906:224a:b0:9a9:e6c3:ad28 with SMTP id 10-20020a170906224a00b009a9e6c3ad28mr9042772ejr.69.1694450181242;
+        Mon, 11 Sep 2023 09:36:21 -0700 (PDT)
+Received: from jernej-laptop.localnet (82-149-12-148.dynamic.telemach.net. [82.149.12.148])
+        by smtp.gmail.com with ESMTPSA id h17-20020a170906261100b00999bb1e01dfsm5534149ejc.52.2023.09.11.09.36.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Sep 2023 06:14:14 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
-        andrey.konovalov@linaro.org
-Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 01/17] media: qcom: camss: Amalgamate struct resource with struct resource_ispif
-Date:   Mon, 11 Sep 2023 14:13:55 +0100
-Message-ID: <20230911131411.196033-2-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20230911131411.196033-1-bryan.odonoghue@linaro.org>
-References: <20230911131411.196033-1-bryan.odonoghue@linaro.org>
+        Mon, 11 Sep 2023 09:36:20 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
+        ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        kernel@collabora.com
+Subject: Re: [PATCH v6 14/18] media: verisilicon: vp9: Use destination buffer height
+ to compute chroma offset
+Date:   Mon, 11 Sep 2023 18:36:19 +0200
+Message-ID: <3248154.aeNJFYEL58@jernej-laptop>
+In-Reply-To: <7da0a2ab-032a-9de9-e136-58f973238c5b@collabora.com>
+References: <20230901124414.48497-1-benjamin.gaignard@collabora.com>
+ <4856958.31r3eYUQgx@jernej-laptop>
+ <7da0a2ab-032a-9de9-e136-58f973238c5b@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There is no good reason to differentiate the two resource structures
-here. As part of a general tidyup of the declaration and passing of
-resources within in the CAMSS driver it will be advantageous to have
-one unified resource structure.
+Dne ponedeljek, 11. september 2023 ob 10:55:02 CEST je Benjamin Gaignard=20
+napisal(a):
+> Le 10/09/2023 =C3=A0 15:21, Jernej =C5=A0krabec a =C3=A9crit :
+> > Hi Benjamin!
+> >=20
+> > Dne petek, 01. september 2023 ob 14:44:10 CEST je Benjamin Gaignard
+> >=20
+> > napisal(a):
+> >> Source and destination buffer height may not be the same because
+> >> alignment constraint are different.
+> >> Use destination height to compute chroma offset because we target
+> >> this buffer as hardware output.
+> >>=20
+> >> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> >> Fixes: e2da465455ce ("media: hantro: Support VP9 on the G2 core")
+> >> ---
+> >>=20
+> >>   drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c | 4 +---
+> >>   1 file changed, 1 insertion(+), 3 deletions(-)
+> >>=20
+> >> diff --git a/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
+> >> b/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c index
+> >> 6db1c32fce4d..1f3f5e7ce978 100644
+> >> --- a/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
+> >> +++ b/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
+> >> @@ -93,9 +93,7 @@ static int start_prepare_run(struct hantro_ctx *ctx,
+> >> const struct v4l2_ctrl_vp9_ static size_t chroma_offset(const struct
+> >> hantro_ctx *ctx,
+> >>=20
+> >>   			    const struct v4l2_ctrl_vp9_frame
+> >=20
+> > *dec_params)
+> >=20
+> >>   {
+> >>=20
+> >> -	int bytes_per_pixel =3D dec_params->bit_depth =3D=3D 8 ? 1 : 2;
+> >> -
+> >> -	return ctx->src_fmt.width * ctx->src_fmt.height * bytes_per_pixel;
+> >> +	return ctx->dst_fmt.width * ctx->dst_fmt.height * ctx->bit_depth /
+> >=20
+> > 8;
+> >=20
+> > Commit message doesn't mention bit_depth change at all. While I think
+> > there is no difference between dec_params->bit_depth and ctx->bit_depth,
+> > you shouldn't just use ordinary division. If bit_depth is 10, it will be
+> > rounded down. And if you decide to use bit_depth from context, please
+> > remove dec_params argument.
+>=20
+> I will change this patch and create a helpers function for chroma and mot=
+ion
+> vectors offsets that VP9 and HEVC code will use since they are identical.
+> I don't see issue with the division. If you have in mind a solution please
+> write it so I could test it.
 
-The two structures are very similar anyway thus leading more credence
-still to the argument there should be only one.
+Solution is same as the code that you removed:
+int bytes_per_pixel =3D dec_params->bit_depth =3D=3D 8 ? 1 : 2;
 
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
- drivers/media/platform/qcom/camss/camss-ispif.c |  4 ++--
- drivers/media/platform/qcom/camss/camss-ispif.h |  4 ++--
- drivers/media/platform/qcom/camss/camss.c       | 14 +++++++-------
- drivers/media/platform/qcom/camss/camss.h       |  8 +-------
- 4 files changed, 12 insertions(+), 18 deletions(-)
+Or alternatively:
+int bytes_per_pixel =3D DIV_ROUND_UP(dec_params->bit_depth, 8);
 
-diff --git a/drivers/media/platform/qcom/camss/camss-ispif.c b/drivers/media/platform/qcom/camss/camss-ispif.c
-index 1c7e4b1b49401..61765b874b9a2 100644
---- a/drivers/media/platform/qcom/camss/camss-ispif.c
-+++ b/drivers/media/platform/qcom/camss/camss-ispif.c
-@@ -1095,7 +1095,7 @@ static int ispif_init_formats(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
-  * Return 0 on success or a negative error code otherwise
-  */
- int msm_ispif_subdev_init(struct camss *camss,
--			  const struct resources_ispif *res)
-+			  const struct resources *res)
- {
- 	struct device *dev = camss->dev;
- 	struct ispif_device *ispif = camss->ispif;
-@@ -1152,7 +1152,7 @@ int msm_ispif_subdev_init(struct camss *camss,
- 
- 	/* Interrupt */
- 
--	ret = platform_get_irq_byname(pdev, res->interrupt);
-+	ret = platform_get_irq_byname(pdev, res->interrupt[0]);
- 	if (ret < 0)
- 		return ret;
- 
-diff --git a/drivers/media/platform/qcom/camss/camss-ispif.h b/drivers/media/platform/qcom/camss/camss-ispif.h
-index fdf28e68cc7d8..c7c41f7afcaad 100644
---- a/drivers/media/platform/qcom/camss/camss-ispif.h
-+++ b/drivers/media/platform/qcom/camss/camss-ispif.h
-@@ -66,10 +66,10 @@ struct ispif_device {
- 	struct camss *camss;
- };
- 
--struct resources_ispif;
-+struct resources;
- 
- int msm_ispif_subdev_init(struct camss *camss,
--			  const struct resources_ispif *res);
-+			  const struct resources *res);
- 
- int msm_ispif_register_entities(struct ispif_device *ispif,
- 				struct v4l2_device *v4l2_dev);
-diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
-index c6df862c79e39..fa0eb30d77c26 100644
---- a/drivers/media/platform/qcom/camss/camss.c
-+++ b/drivers/media/platform/qcom/camss/camss.c
-@@ -93,14 +93,14 @@ static const struct resources csid_res_8x16[] = {
- 	},
- };
- 
--static const struct resources_ispif ispif_res_8x16 = {
-+static const struct resources ispif_res_8x16 = {
- 	/* ISPIF */
- 	.clock = { "top_ahb", "ahb", "ispif_ahb",
- 		   "csi0", "csi0_pix", "csi0_rdi",
- 		   "csi1", "csi1_pix", "csi1_rdi" },
- 	.clock_for_reset = { "vfe0", "csi_vfe0" },
- 	.reg = { "ispif", "csi_clk_mux" },
--	.interrupt = "ispif"
-+	.interrupt = { "ispif" }
- 
- };
- 
-@@ -234,7 +234,7 @@ static const struct resources csid_res_8x96[] = {
- 	}
- };
- 
--static const struct resources_ispif ispif_res_8x96 = {
-+static const struct resources ispif_res_8x96 = {
- 	/* ISPIF */
- 	.clock = { "top_ahb", "ahb", "ispif_ahb",
- 		   "csi0", "csi0_pix", "csi0_rdi",
-@@ -243,7 +243,7 @@ static const struct resources_ispif ispif_res_8x96 = {
- 		   "csi3", "csi3_pix", "csi3_rdi" },
- 	.clock_for_reset = { "vfe0", "csi_vfe0", "vfe1", "csi_vfe1" },
- 	.reg = { "ispif", "csi_clk_mux" },
--	.interrupt = "ispif"
-+	.interrupt = { "ispif" }
- };
- 
- static const struct resources vfe_res_8x96[] = {
-@@ -410,7 +410,7 @@ static const struct resources csid_res_660[] = {
- 	}
- };
- 
--static const struct resources_ispif ispif_res_660 = {
-+static const struct resources ispif_res_660 = {
- 	/* ISPIF */
- 	.clock = { "top_ahb", "ahb", "ispif_ahb",
- 		   "csi0", "csi0_pix", "csi0_rdi",
-@@ -419,7 +419,7 @@ static const struct resources_ispif ispif_res_660 = {
- 		   "csi3", "csi3_pix", "csi3_rdi" },
- 	.clock_for_reset = { "vfe0", "csi_vfe0", "vfe1", "csi_vfe1" },
- 	.reg = { "ispif", "csi_clk_mux" },
--	.interrupt = "ispif"
-+	.interrupt = { "ispif" }
- };
- 
- static const struct resources vfe_res_660[] = {
-@@ -1122,7 +1122,7 @@ static int camss_init_subdevices(struct camss *camss)
- {
- 	const struct resources *csiphy_res;
- 	const struct resources *csid_res;
--	const struct resources_ispif *ispif_res;
-+	const struct resources *ispif_res;
- 	const struct resources *vfe_res;
- 	unsigned int i;
- 	int ret;
-diff --git a/drivers/media/platform/qcom/camss/camss.h b/drivers/media/platform/qcom/camss/camss.h
-index f6c326cb853b8..e95211cdb1fd6 100644
---- a/drivers/media/platform/qcom/camss/camss.h
-+++ b/drivers/media/platform/qcom/camss/camss.h
-@@ -44,18 +44,12 @@
- struct resources {
- 	char *regulators[CAMSS_RES_MAX];
- 	char *clock[CAMSS_RES_MAX];
-+	char *clock_for_reset[CAMSS_RES_MAX];
- 	u32 clock_rate[CAMSS_RES_MAX][CAMSS_RES_MAX];
- 	char *reg[CAMSS_RES_MAX];
- 	char *interrupt[CAMSS_RES_MAX];
- };
- 
--struct resources_ispif {
--	char *clock[CAMSS_RES_MAX];
--	char *clock_for_reset[CAMSS_RES_MAX];
--	char *reg[CAMSS_RES_MAX];
--	char *interrupt;
--};
--
- struct icc_bw_tbl {
- 	u32 avg;
- 	u32 peak;
--- 
-2.42.0
+Consider bit_depth being 10. With old code you get 2, with yours you get 1.
+
+Best regards,
+Jernej
+
+>=20
+> Regards,
+> Benjamin
+>=20
+> > Best regards,
+> > Jernej
+> >=20
+> >>   }
+> >>  =20
+> >>   static size_t mv_offset(const struct hantro_ctx *ctx,
+
+
+
 
