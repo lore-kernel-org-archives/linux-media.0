@@ -2,496 +2,315 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B33E6CA0ED3
-	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 21:06:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58765CA0EC6
+	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 21:06:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231908AbjIKUrZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Sep 2023 16:47:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60434 "EHLO
+        id S230398AbjIKUrJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Sep 2023 16:47:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241635AbjIKPLI (ORCPT
+        with ESMTP id S237569AbjIKM7y (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Sep 2023 11:11:08 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33ADE4D
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:11:00 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-52889bc61b6so6063186a12.0
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:11:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694445059; x=1695049859; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7Go8soGhozFyZDdpekIDfsnoJQHz3sv19mqRqwFidsQ=;
-        b=upDxVrujiJPei1qqYtTVWI1jVYpExNjNSDi2PlePpNnisPlLKPMla5yu35E4t8/Nyb
-         jyPQVX1/w4+fPLwTWvXLdFrq3bPFT4g3rRkIGmgHHHHz2St+l45cYSRIAiqm+lzebCbc
-         0p/ro69HqkEP2bWTHvAM/bIV82XZvYum1zMhMP/jJ0viUCDY8yMfDCs3V1X4kd3k0LTq
-         PlUzekWInp/omvFJMfAvUsb/v7KH4EdWKvGEzdOEO8wQaw9rKop1DbJvYe87Lh1uE5cQ
-         w3pocIdbmtindNNSjs0bBpHXNSFNAiUwZf4X3Kdj2HrQrZcuA7qjY2HTIgaMnPOgJAVH
-         VpCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694445059; x=1695049859;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7Go8soGhozFyZDdpekIDfsnoJQHz3sv19mqRqwFidsQ=;
-        b=jJVwAYqeBDe/3gdbomrRlOyPqUmru9VfNDRm1MeVSBDtsbyK9DwJJn3ksQw21AIIbZ
-         9BMd6YzA4FQ51tn/wkO0WXB5IjBrRig4RDGXCZYgQjJqj23OjUd+UoWEtxTiEVolo7qN
-         qmdaY2ATzsxf/Q3asBH2i81+Lf4K5Ea5qmb0kUpLIxQbusuEWye1AFcZPW4JGalM0OK+
-         hj0ESQoc4F98n98W39LdLvk2KPjf9XTPxQOs17PG1EsLkZlFjg29jxeThp/6jj2RaDe4
-         KIfkc+HpY8WLG2cCB0spselCVGjc3yMZwACM/3+pPr/UBXuhitkoyYMvKkQEJ/Ic6Uyd
-         yUvw==
-X-Gm-Message-State: AOJu0Yx5nm34uDDn7DawpqjcUjdDeSFf/dX5TqU2NHtFZ0BiOvRVMw4m
-        Q5H5E/mY+QVyyOds81imWa4U3g==
-X-Google-Smtp-Source: AGHT+IHiYhxr+24cOk8gE+cu96H02Re+vpcUfn80D1q6RN1itKvte/hfail/Rq+AMq5HFWUU2P0c+g==
-X-Received: by 2002:aa7:d402:0:b0:52b:c980:43f3 with SMTP id z2-20020aa7d402000000b0052bc98043f3mr8132781edq.28.1694445059295;
-        Mon, 11 Sep 2023 08:10:59 -0700 (PDT)
-Received: from [10.167.154.1] (178235177061.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.61])
-        by smtp.gmail.com with ESMTPSA id n4-20020a056402060400b0052a3ad836basm4681281edv.41.2023.09.11.08.10.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Sep 2023 08:10:58 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 11 Sep 2023 17:10:31 +0200
-Subject: [PATCH RFT 17/20] media: venus: pm_helpers: Simplify vcodec clock
- handling
+        Mon, 11 Sep 2023 08:59:54 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378C9E54;
+        Mon, 11 Sep 2023 05:59:48 -0700 (PDT)
+X-UUID: 13765a1050a311ee8051498923ad61e6-20230911
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=4JWFEuqz8qtYGSJpFhb36WSTg0b83rNqZObuJx15lCk=;
+        b=d+TWgGEi49KL+bv5cUmeopJP9ZyzAYA4cTbALmvjvch1B+ucRKbgN6h2WbWAIdynFH1/mWVyxgkSS277v20ZiAGwfOJSJ7I94XmsYg42+PTjJ4DA395lA7Razb6sAisifexyFeuh6QrrGhM8Z6f/9xiuiOfeVCjpaD3aLBxDdj8=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.31,REQID:057a369d-bcdb-4099-a7f7-a197a4e65a97,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:0ad78a4,CLOUDID:a117b4be-14cc-44ca-b657-2d2783296e72,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,
+        DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 13765a1050a311ee8051498923ad61e6-20230911
+Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1962854686; Mon, 11 Sep 2023 20:59:43 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.194) by
+ MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Mon, 11 Sep 2023 20:59:41 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Mon, 11 Sep 2023 20:59:40 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
+        <nfraprado@collabora.com>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Nathan Hebert <nhebert@chromium.org>
+CC:     Chen-Yu Tsai <wenst@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Steve Cho" <stevecho@chromium.org>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH 03/14] media: mediatek: vcodec: send share memory data to optee
+Date:   Mon, 11 Sep 2023 20:59:25 +0800
+Message-ID: <20230911125936.10648-4-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230911125936.10648-1-yunfei.dong@mediatek.com>
+References: <20230911125936.10648-1-yunfei.dong@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230911-topic-mars-v1-17-a7d38bf87bdb@linaro.org>
-References: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
-In-Reply-To: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
-To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1694445027; l=13444;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=6BGfkN0sVdRCleGUxSZssA0BPUP+ZuPOYmY/oEbAozY=;
- b=1nCUwuuaILLiPkIDfKcwswHQCilUZTknH7v5plrM7EyGYYQ8lsMzOj3KlcHD/1ZBTK8ZztY8O
- 31gjj1nxPffDZikPYdJC7+f9GZOJ7qK6CX2dlayHvw4Ts9C6ODVbdoj
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-AS-Result: No-10--11.362300-8.000000
+X-TMASE-MatchedRID: Hhq/idUUseWQG6Uyrf0PKFVN8laWo90MTJDl9FKHbrk1LB46LFAAkotf
+        Mtu9FfbrPcGjGTU7TnemGallF1XuaEDn8NFEhJAcDB+ErBr0bAPAmOfzKotTohL6MU7t349b3vY
+        rsfFYjWsgY9Nu1Ql6APqPSFsdX1B029aHfVG01jzJ1E39jKDimArefVId6fzVng4VduaO4Wk7/K
+        pRfhl7HJ+A2XixGIT00kdqLoZ8YVUfE8yM4pjsDwtuKBGekqUpOlxBO2IcOBZd547Lxd1BZ6mqa
+        uGo4hT1z1AsEapbgMkr9/Px/7I2Mdr9/QDQ9iFc
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--11.362300-8.000000
+X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-SNTS-SMTP: 239BA06F8F436BAB47FE864C2C42A0CB915863E46DE17F3ACF737EB5D815FB002000:8
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Currently the infrastructure is set up for vast expandability, but
-it's far too complex for what is just 0-2 clocks. Categorize the
-clocks and simplify their getting.
+Setting msg and vsi information to shared buffer, then call tee invoke
+function to send it to optee-os.
 
-One notable change is that vcodec clocks are switched to use
-devm_clk_get_optional, which will let us commonize the code further
-while leaving the burden of figuring out which SoCs need codec-specific
-clocks and which don't to the bindings checker.
-
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 ---
- drivers/media/platform/qcom/venus/core.c       |  18 ----
- drivers/media/platform/qcom/venus/core.h       |   9 +-
- drivers/media/platform/qcom/venus/pm_helpers.c | 129 +++++++++++++------------
- 3 files changed, 69 insertions(+), 87 deletions(-)
+ .../vcodec/decoder/mtk_vcodec_dec_optee.c     | 139 ++++++++++++++++++
+ .../vcodec/decoder/mtk_vcodec_dec_optee.h     |  51 +++++++
+ 2 files changed, 190 insertions(+)
 
-diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
-index 435f6f10a905..42bfcef9449a 100644
---- a/drivers/media/platform/qcom/venus/core.c
-+++ b/drivers/media/platform/qcom/venus/core.c
-@@ -584,9 +584,6 @@ static const struct venus_resources msm8996_res = {
- 	.reg_tbl_size = ARRAY_SIZE(msm8996_reg_preset),
- 	.clks = {"core", "iface", "bus", "mbus" },
- 	.clks_num = 4,
--	.vcodec0_clks = { "core" },
--	.vcodec1_clks = { "core" },
--	.vcodec_clks_num = 1,
- 	.max_load = 2563200,
- 	.hfi_version = HFI_VERSION_3XX,
- 	.dma_mask = (GENMASK(31, 30) | GENMASK(28, 26) | GENMASK(24, 22)) - 1,
-@@ -639,9 +636,6 @@ static const struct venus_resources sdm660_res = {
- 	.bw_tbl_dec_size = ARRAY_SIZE(sdm660_bw_table_dec),
- 	.clks = {"core", "iface", "bus", "bus_throttle" },
- 	.clks_num = 4,
--	.vcodec0_clks = { "vcodec0_core" },
--	.vcodec1_clks = { "vcodec0_core" },
--	.vcodec_clks_num = 1,
- 	.max_load = 1036800,
- 	.hfi_version = HFI_VERSION_3XX,
- 	.cp_size = 0x79000000,
-@@ -683,9 +677,6 @@ static const struct venus_resources sdm845_res = {
- 	.bw_tbl_dec_size = ARRAY_SIZE(sdm845_bw_table_dec),
- 	.clks = {"core", "iface", "bus" },
- 	.clks_num = 3,
--	.vcodec0_clks = { "core", "bus" },
--	.vcodec1_clks = { "core", "bus" },
--	.vcodec_clks_num = 2,
- 	.max_load = 3110400,	/* 4096x2160@90 */
- 	.hfi_version = HFI_VERSION_4XX,
- 	.vpu_version = VPU_VERSION_AR50,
-@@ -702,9 +693,6 @@ static const struct venus_resources sdm845_res_v2 = {
- 	.bw_tbl_dec_size = ARRAY_SIZE(sdm845_bw_table_dec),
- 	.clks = {"core", "iface", "bus" },
- 	.clks_num = 3,
--	.vcodec0_clks = { "vcodec0_core", "vcodec0_bus" },
--	.vcodec1_clks = { "vcodec1_core", "vcodec1_bus" },
--	.vcodec_clks_num = 2,
- 	.vcodec_pmdomains = { "venus", "vcodec0", "vcodec1" },
- 	.vcodec_pmdomains_num = 3,
- 	.opp_pmdomain = pd_names_cx,
-@@ -747,8 +735,6 @@ static const struct venus_resources sc7180_res = {
- 	.bw_tbl_dec_size = ARRAY_SIZE(sc7180_bw_table_dec),
- 	.clks = {"core", "iface", "bus" },
- 	.clks_num = 3,
--	.vcodec0_clks = { "vcodec0_core", "vcodec0_bus" },
--	.vcodec_clks_num = 2,
- 	.vcodec_pmdomains = { "venus", "vcodec0" },
- 	.vcodec_pmdomains_num = 2,
- 	.opp_pmdomain = pd_names_cx,
-@@ -799,8 +785,6 @@ static const struct venus_resources sm8250_res = {
- 	.clks_num = 2,
- 	.resets = { "bus", "core" },
- 	.resets_num = 2,
--	.vcodec0_clks = { "vcodec0_core" },
--	.vcodec_clks_num = 1,
- 	.vcodec_pmdomains = { "venus", "vcodec0" },
- 	.vcodec_pmdomains_num = 2,
- 	.opp_pmdomain = pd_names_mx,
-@@ -854,8 +838,6 @@ static const struct venus_resources sc7280_res = {
- 	.ubwc_conf = &sc7280_ubwc_config,
- 	.clks = {"core", "bus", "iface"},
- 	.clks_num = 3,
--	.vcodec0_clks = {"vcodec_core", "vcodec_bus"},
--	.vcodec_clks_num = 2,
- 	.vcodec_pmdomains = { "venus", "vcodec0" },
- 	.vcodec_pmdomains_num = 2,
- 	.opp_pmdomain = pd_names_cx,
-diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
-index 16acf738fd6c..fd78f17c12d8 100644
---- a/drivers/media/platform/qcom/venus/core.h
-+++ b/drivers/media/platform/qcom/venus/core.h
-@@ -24,10 +24,11 @@
- #define VDBGFW	"VenusFW  : "
- 
- #define VIDC_CLKS_NUM_MAX		4
--#define VIDC_VCODEC_CLKS_NUM_MAX	2
- #define VIDC_PMDOMAINS_NUM_MAX		3
- #define VIDC_RESETS_NUM_MAX		2
- 
-+#define MAX_NUM_VCODECS			2
+diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_optee.c b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_optee.c
+index 806ca87c8de7..d16496003a39 100644
+--- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_optee.c
++++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_optee.c
+@@ -232,3 +232,142 @@ void mtk_vcodec_dec_optee_release(struct mtk_vdec_optee_private *optee_private)
+ 	mutex_unlock(&optee_private->tee_mutex);
+ }
+ EXPORT_SYMBOL_GPL(mtk_vcodec_dec_optee_release);
 +
- extern int venus_fw_debug;
- 
- struct freq_tbl {
-@@ -69,8 +70,6 @@ struct venus_resources {
- 	const struct hfi_ubwc_config * const ubwc_conf;
- 	const char * const clks[VIDC_CLKS_NUM_MAX];
- 	const unsigned int clks_num;
--	const char * const vcodec0_clks[VIDC_VCODEC_CLKS_NUM_MAX];
--	const char * const vcodec1_clks[VIDC_VCODEC_CLKS_NUM_MAX];
- 	const unsigned int vcodec_clks_num;
- 	const char * const vcodec_pmdomains[VIDC_PMDOMAINS_NUM_MAX];
- 	const unsigned int vcodec_pmdomains_num;
-@@ -177,8 +176,8 @@ struct venus_core {
- 	void __iomem *aon_base;
- 	int irq;
- 	struct clk *clks[VIDC_CLKS_NUM_MAX];
--	struct clk *vcodec0_clks[VIDC_VCODEC_CLKS_NUM_MAX];
--	struct clk *vcodec1_clks[VIDC_VCODEC_CLKS_NUM_MAX];
-+	struct clk *vcodec_core_clks[MAX_NUM_VCODECS];
-+	struct clk *vcodec_bus_clks[MAX_NUM_VCODECS];
- 	struct icc_path *video_path;
- 	struct icc_path *cpucfg_path;
- 	bool has_opp_table;
-diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
-index 9a0e2a00f383..741b29cc76c9 100644
---- a/drivers/media/platform/qcom/venus/pm_helpers.c
-+++ b/drivers/media/platform/qcom/venus/pm_helpers.c
-@@ -110,67 +110,74 @@ static void core_clks_disable(struct venus_core *core)
- 
- static int core_clks_set_rate(struct venus_core *core, unsigned long freq)
- {
--	int ret;
-+	int i, ret;
- 
- 	ret = dev_pm_opp_set_rate(core->dev, freq);
- 	if (ret)
- 		return ret;
- 
--	ret = clk_set_rate(core->vcodec0_clks[0], freq);
--	if (ret)
--		return ret;
--
--	ret = clk_set_rate(core->vcodec1_clks[0], freq);
--	if (ret)
--		return ret;
-+	for (i = 0; i < MAX_NUM_VCODECS; i++) {
-+		ret = clk_set_rate(core->vcodec_core_clks[i], freq);
++static int mtk_vcodec_dec_optee_fill_shm(struct tee_param *command_params,
++					 struct mtk_vdec_optee_shm_memref *shm_memref,
++					 struct mtk_vdec_optee_data_to_shm *data,
++					 int index)
++{
++	if (!data->msg_buf_size[index] || !data->msg_buf[index]) {
++		pr_err(MTK_DBG_VCODEC_STR "tee invalid buf param: %d.\n", index);
++		return -EINVAL;
++	}
++
++	*command_params = (struct tee_param) {
++		.attr = shm_memref->param_type,
++		.u.memref = {
++			.shm = shm_memref->msg_shm,
++			.size = data->msg_buf_size[index],
++			.shm_offs = 0,
++		},
++	};
++
++	if (!shm_memref->copy_to_ta) {
++		pr_debug(MTK_DBG_VCODEC_STR "share memref data: 0x%x param_type:%llu.\n",
++			 *((unsigned int *)shm_memref->msg_shm_ca_buf), shm_memref->param_type);
++		return 0;
++	}
++
++	memset(shm_memref->msg_shm_ca_buf, 0, shm_memref->msg_shm_size);
++	memcpy(shm_memref->msg_shm_ca_buf, data->msg_buf[index], data->msg_buf_size[index]);
++
++	pr_debug(MTK_DBG_VCODEC_STR "share memref data => msg id:0x%x 0x%x param_type:%llu.\n",
++		 *((unsigned int *)data->msg_buf[index]),
++		 *((unsigned int *)shm_memref->msg_shm_ca_buf),
++		 shm_memref->param_type);
++
++	return 0;
++}
++
++void mtk_vcodec_dec_optee_set_data(struct mtk_vdec_optee_data_to_shm *data,
++				   void *buf, int buf_size,
++				   enum mtk_vdec_optee_data_index index)
++{
++	data->msg_buf[index] = buf;
++	data->msg_buf_size[index] = buf_size;
++}
++EXPORT_SYMBOL_GPL(mtk_vcodec_dec_optee_set_data);
++
++int mtk_vcodec_dec_optee_invokd_cmd(struct mtk_vdec_optee_private *optee_private,
++				    enum mtk_vdec_hw_id hw_id,
++				    struct mtk_vdec_optee_data_to_shm *data)
++{
++	struct tee_ioctl_invoke_arg trans_args;
++	struct tee_param command_params[MTK_OPTEE_MAX_TEE_PARAMS];
++	struct mtk_vdec_optee_ca_info *ca_info;
++	struct mtk_vdec_optee_shm_memref *shm_memref;
++	int ret = 0, index;
++
++	if (hw_id == MTK_VDEC_LAT0)
++		ca_info = &optee_private->lat_ca;
++	else
++		ca_info = &optee_private->core_ca;
++
++	memset(&trans_args, 0, sizeof(trans_args));
++	memset(command_params, 0, sizeof(command_params));
++
++	trans_args = (struct tee_ioctl_invoke_arg) {
++		.func = ca_info->vdec_session_func,
++		.session = ca_info->vdec_session_id,
++		.num_params = MTK_OPTEE_MAX_TEE_PARAMS,
++	};
++
++	/* Fill msg command parameters */
++	for (index = 0; index < MTK_OPTEE_MAX_TEE_PARAMS; index++) {
++		shm_memref = &ca_info->shm_memref[index];
++
++		if (shm_memref->param_type == TEE_IOCTL_PARAM_ATTR_TYPE_NONE ||
++		    data->msg_buf_size[index] == 0)
++			continue;
++
++		pr_debug(MTK_DBG_VCODEC_STR "tee share memory data size: %d -> %d.\n",
++			 data->msg_buf_size[index], shm_memref->msg_shm_size);
++
++		if (data->msg_buf_size[index] > shm_memref->msg_shm_size) {
++			pr_err(MTK_DBG_VCODEC_STR "tee buf size big then shm size(%d -> %d).\n",
++			       data->msg_buf_size[index], shm_memref->msg_shm_size);
++			return -EINVAL;
++		}
++
++		ret = mtk_vcodec_dec_optee_fill_shm(&command_params[index], shm_memref,
++						    data, index);
 +		if (ret)
 +			return ret;
 +	}
- 
- 	return 0;
- }
- 
--static int vcodec_clks_get(struct venus_core *core, struct device *dev,
--			   struct clk **clks, const char * const *id)
-+static int vcodec_clks_get(struct venus_core *core, struct device *dev, u8 id)
- {
--	const struct venus_resources *res = core->res;
--	unsigned int i;
-+	char buf[13] = { 0 }; /* vcodecX_core\0 */
- 
--	for (i = 0; i < res->vcodec_clks_num; i++) {
--		if (!id[i])
--			continue;
--		clks[i] = devm_clk_get(dev, id[i]);
--		if (IS_ERR(clks[i]))
--			return PTR_ERR(clks[i]);
-+	/* Best we can do is 2 cores */
-+	if (id > MAX_NUM_VCODECS - 1) {
-+		dev_err(dev, "Got impossible vcodec id %u\n", id);
-+		return -EINVAL;
-+	};
 +
-+	snprintf(buf, sizeof(buf), "vcodec%u_core", id);
-+
-+	/* First try the non-legacy name */
-+	core->vcodec_core_clks[id] = devm_clk_get_optional(dev, buf);
-+	if (IS_ERR(core->vcodec_core_clks[id])) {
-+		/* Try again, with the legacy name */
-+		core->vcodec_core_clks[id] = devm_clk_get_optional(dev, "core");
-+		if (IS_ERR(core->vcodec_core_clks[id]))
-+			return PTR_ERR(core->vcodec_core_clks[id]);
++	ret = tee_client_invoke_func(optee_private->tee_vdec_ctx, &trans_args, command_params);
++	if (ret < 0 || trans_args.ret != 0) {
++		pr_err(MTK_DBG_VCODEC_STR "tee submit command fail: 0x%x 0x%x.\n",
++		       trans_args.ret, ret);
++		return (ret < 0) ? ret : trans_args.ret;
 +	}
 +
-+	memset(buf, 0, sizeof(buf));
-+	snprintf(buf, sizeof(buf), "vcodec%u_bus", id);
++	/* clear all attrs, set all command param to unused */
++	for (index = 0; index < MTK_OPTEE_MAX_TEE_PARAMS; index++) {
++		data->msg_buf[index] = NULL;
++		data->msg_buf_size[index] = 0;
++	}
 +
-+	core->vcodec_bus_clks[id] = devm_clk_get_optional(dev, buf);
-+	if (IS_ERR(core->vcodec_bus_clks[id])) {
-+		core->vcodec_bus_clks[id] = devm_clk_get_optional(dev, "bus");
-+		if (IS_ERR(core->vcodec_bus_clks[id]))
-+			return PTR_ERR(core->vcodec_bus_clks[id]);
- 	}
++	return 0;
++}
++EXPORT_SYMBOL_GPL(mtk_vcodec_dec_optee_invokd_cmd);
++
++void *mtk_vcodec_dec_get_shm_buffer_va(struct mtk_vdec_optee_private *optee_private,
++				       enum mtk_vdec_hw_id hw_id,
++				       enum mtk_vdec_optee_data_index data_index)
++{
++	struct mtk_vdec_optee_ca_info *ca_info;
++
++	if (hw_id == MTK_VDEC_LAT0)
++		ca_info = &optee_private->lat_ca;
++	else
++		ca_info = &optee_private->core_ca;
++
++	return ca_info->shm_memref[data_index].msg_shm_ca_buf;
++}
++EXPORT_SYMBOL_GPL(mtk_vcodec_dec_get_shm_buffer_va);
++
++int mtk_vcodec_dec_get_shm_buffer_size(struct mtk_vdec_optee_private *optee_private,
++				       enum mtk_vdec_hw_id hw_id,
++				       enum mtk_vdec_optee_data_index data_index)
++{
++	struct mtk_vdec_optee_ca_info *ca_info;
++
++	if (hw_id == MTK_VDEC_LAT0)
++		ca_info = &optee_private->lat_ca;
++	else
++		ca_info = &optee_private->core_ca;
++
++	return ca_info->shm_memref[data_index].msg_shm_size;
++}
++EXPORT_SYMBOL_GPL(mtk_vcodec_dec_get_shm_buffer_size);
+diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_optee.h b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_optee.h
+index 79b4ec890655..3905db856376 100644
+--- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_optee.h
++++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_optee.h
+@@ -62,6 +62,16 @@ enum mtk_vdec_optee_data_index {
+ 	OPTEE_MAX_INDEX,
+ };
  
- 	return 0;
- }
++/**
++ * struct mtk_vdec_optee_data_to_shm - shm data used for TA
++ * @msg_buf:     msg information to TA.
++ * @msg_buf_len: length of msg information.
++ */
++struct mtk_vdec_optee_data_to_shm {
++	void *msg_buf[MTK_OPTEE_MAX_TEE_PARAMS];
++	int msg_buf_size[MTK_OPTEE_MAX_TEE_PARAMS];
++};
++
+ /**
+  * struct mtk_vdec_optee_private - optee private data
+  * @vcodec_dev:     pointer to the mtk_vcodec_dev of the device
+@@ -102,4 +112,45 @@ int mtk_vcodec_dec_optee_private_init(struct mtk_vcodec_dec_dev *vcodec_dev);
+  */
+ void mtk_vcodec_dec_optee_release(struct mtk_vdec_optee_private *optee_private);
  
--static int vcodec_clks_enable(struct venus_core *core, struct clk **clks)
-+static int vcodec_clks_enable(struct venus_core *core, u8 id)
- {
--	const struct venus_resources *res = core->res;
--	unsigned int i;
- 	int ret;
- 
--	for (i = 0; i < res->vcodec_clks_num; i++) {
--		ret = clk_prepare_enable(clks[i]);
--		if (ret)
--			goto err;
--	}
-+	ret = clk_prepare_enable(core->vcodec_core_clks[id]);
-+	if (ret)
-+		return ret;
- 
--	return 0;
--err:
--	while (i--)
--		clk_disable_unprepare(clks[i]);
-+	ret = clk_prepare_enable(core->vcodec_bus_clks[id]);
-+	if (ret)
-+		clk_disable_unprepare(core->vcodec_core_clks[id]);
- 
- 	return ret;
- }
- 
--static void vcodec_clks_disable(struct venus_core *core, struct clk **clks)
-+static void vcodec_clks_disable(struct venus_core *core, u8 id)
- {
--	const struct venus_resources *res = core->res;
--	unsigned int i = res->vcodec_clks_num;
--
--	while (i--)
--		clk_disable_unprepare(clks[i]);
-+	clk_disable_unprepare(core->vcodec_bus_clks[id]);
-+	clk_disable_unprepare(core->vcodec_core_clks[id]);
- }
- 
- static u32 load_per_instance(struct venus_inst *inst)
-@@ -343,8 +350,7 @@ static int vdec_get_v3(struct device *dev)
- {
- 	struct venus_core *core = dev_get_drvdata(dev);
- 
--	return vcodec_clks_get(core, dev, core->vcodec0_clks,
--			       core->res->vcodec0_clks);
-+	return vcodec_clks_get(core, dev, 0);
- }
- 
- static int vdec_power_v3(struct device *dev, int on)
-@@ -355,9 +361,9 @@ static int vdec_power_v3(struct device *dev, int on)
- 	vcodec_control_v3(core, VIDC_SESSION_TYPE_DEC, true);
- 
- 	if (on == POWER_ON)
--		ret = vcodec_clks_enable(core, core->vcodec0_clks);
-+		ret = vcodec_clks_enable(core, 0);
- 	else
--		vcodec_clks_disable(core, core->vcodec0_clks);
-+		vcodec_clks_disable(core, 0);
- 
- 	vcodec_control_v3(core, VIDC_SESSION_TYPE_DEC, false);
- 
-@@ -368,8 +374,7 @@ static int venc_get_v3(struct device *dev)
- {
- 	struct venus_core *core = dev_get_drvdata(dev);
- 
--	return vcodec_clks_get(core, dev, core->vcodec1_clks,
--			       core->res->vcodec1_clks);
-+	return vcodec_clks_get(core, dev, 1);
- }
- 
- static int venc_power_v3(struct device *dev, int on)
-@@ -380,9 +385,9 @@ static int venc_power_v3(struct device *dev, int on)
- 	vcodec_control_v3(core, VIDC_SESSION_TYPE_ENC, true);
- 
- 	if (on == POWER_ON)
--		ret = vcodec_clks_enable(core, core->vcodec1_clks);
-+		ret = vcodec_clks_enable(core, 1);
- 	else
--		vcodec_clks_disable(core, core->vcodec1_clks);
-+		vcodec_clks_disable(core, 1);
- 
- 	vcodec_control_v3(core, VIDC_SESSION_TYPE_ENC, false);
- 
-@@ -441,7 +446,7 @@ static int poweroff_coreid(struct venus_core *core, unsigned int coreid_mask)
- 		if (ret)
- 			return ret;
- 
--		vcodec_clks_disable(core, core->vcodec0_clks);
-+		vcodec_clks_disable(core, 0);
- 
- 		ret = vcodec_control_v4(core, VIDC_CORE_ID_1, false);
- 		if (ret)
-@@ -457,7 +462,7 @@ static int poweroff_coreid(struct venus_core *core, unsigned int coreid_mask)
- 		if (ret)
- 			return ret;
- 
--		vcodec_clks_disable(core, core->vcodec1_clks);
-+		vcodec_clks_disable(core, 1);
- 
- 		ret = vcodec_control_v4(core, VIDC_CORE_ID_2, false);
- 		if (ret)
-@@ -484,7 +489,7 @@ static int poweron_coreid(struct venus_core *core, unsigned int coreid_mask)
- 		if (ret)
- 			return ret;
- 
--		ret = vcodec_clks_enable(core, core->vcodec0_clks);
-+		ret = vcodec_clks_enable(core, 0);
- 		if (ret)
- 			return ret;
- 
-@@ -502,7 +507,7 @@ static int poweron_coreid(struct venus_core *core, unsigned int coreid_mask)
- 		if (ret)
- 			return ret;
- 
--		ret = vcodec_clks_enable(core, core->vcodec1_clks);
-+		ret = vcodec_clks_enable(core, 1);
- 		if (ret)
- 			return ret;
- 
-@@ -763,20 +768,18 @@ static int vdec_get_v4(struct device *dev)
- 	if (!legacy_binding)
- 		return 0;
- 
--	return vcodec_clks_get(core, dev, core->vcodec0_clks,
--			       core->res->vcodec0_clks);
-+	return vcodec_clks_get(core, dev, 0);
- }
- 
- static void vdec_put_v4(struct device *dev)
- {
- 	struct venus_core *core = dev_get_drvdata(dev);
--	unsigned int i;
- 
- 	if (!legacy_binding)
- 		return;
- 
--	for (i = 0; i < core->res->vcodec_clks_num; i++)
--		core->vcodec0_clks[i] = NULL;
-+	core->vcodec_core_clks[0] = NULL;
-+	core->vcodec_bus_clks[0] = NULL;
- }
- 
- static int vdec_power_v4(struct device *dev, int on)
-@@ -792,9 +795,9 @@ static int vdec_power_v4(struct device *dev, int on)
- 		return ret;
- 
- 	if (on == POWER_ON)
--		ret = vcodec_clks_enable(core, core->vcodec0_clks);
-+		ret = vcodec_clks_enable(core, 0);
- 	else
--		vcodec_clks_disable(core, core->vcodec0_clks);
-+		vcodec_clks_disable(core, 0);
- 
- 	vcodec_control_v4(core, VIDC_CORE_ID_1, false);
- 
-@@ -808,20 +811,18 @@ static int venc_get_v4(struct device *dev)
- 	if (!legacy_binding)
- 		return 0;
- 
--	return vcodec_clks_get(core, dev, core->vcodec1_clks,
--			       core->res->vcodec1_clks);
-+	return vcodec_clks_get(core, dev, 1);
- }
- 
- static void venc_put_v4(struct device *dev)
- {
- 	struct venus_core *core = dev_get_drvdata(dev);
--	unsigned int i;
- 
- 	if (!legacy_binding)
- 		return;
- 
--	for (i = 0; i < core->res->vcodec_clks_num; i++)
--		core->vcodec1_clks[i] = NULL;
-+	core->vcodec_core_clks[1] = NULL;
-+	core->vcodec_bus_clks[1] = NULL;
- }
- 
- static int venc_power_v4(struct device *dev, int on)
-@@ -837,9 +838,9 @@ static int venc_power_v4(struct device *dev, int on)
- 		return ret;
- 
- 	if (on == POWER_ON)
--		ret = vcodec_clks_enable(core, core->vcodec1_clks);
-+		ret = vcodec_clks_enable(core, 1);
- 	else
--		vcodec_clks_disable(core, core->vcodec1_clks);
-+		vcodec_clks_disable(core, 1);
- 
- 	vcodec_control_v4(core, VIDC_CORE_ID_2, false);
- 
-@@ -940,11 +941,11 @@ static int core_get_v4(struct venus_core *core)
- 
- 	dev_info(dev, "%s legacy binding\n", legacy_binding ? "" : "non");
- 
--	ret = vcodec_clks_get(core, dev, core->vcodec0_clks, res->vcodec0_clks);
-+	ret = vcodec_clks_get(core, dev, 0);
- 	if (ret)
- 		return ret;
- 
--	ret = vcodec_clks_get(core, dev, core->vcodec1_clks, res->vcodec1_clks);
-+	ret = vcodec_clks_get(core, dev, 1);
- 	if (ret)
- 		return ret;
- 
-
++/**
++ * mtk_vcodec_dec_optee_set_data - set buffer to share memref.
++ * @vcodec_dev: normal world data used to init optee share memory
++ * @buf: normal world buffer address
++ * @buf_size: buf size
++ * @data_index: indentify each share memory informaiton
++ */
++void mtk_vcodec_dec_optee_set_data(struct mtk_vdec_optee_data_to_shm *data,
++				   void *buf, int buf_size,
++				   enum mtk_vdec_optee_data_index data_index);
++
++/**
++ * mtk_vcodec_dec_optee_invokd_cmd - send share memory data to optee .
++ * @optee_private: optee private context
++ * @hw_id: hardware index
++ * @data: normal world data used to init optee share memory
++ */
++int mtk_vcodec_dec_optee_invokd_cmd(struct mtk_vdec_optee_private *optee_private,
++				    enum mtk_vdec_hw_id hw_id,
++				    struct mtk_vdec_optee_data_to_shm *data);
++
++/**
++ * mtk_vcodec_dec_get_shm_buffer_va - close the communication channels with TA.
++ * @optee_private: optee private context
++ * @hw_id:         hardware index
++ * @@data_index: indentify each share memory informaiton
++ */
++void *mtk_vcodec_dec_get_shm_buffer_va(struct mtk_vdec_optee_private *optee_private,
++				       enum mtk_vdec_hw_id hw_id,
++				       enum mtk_vdec_optee_data_index data_index);
++
++/**
++ * mtk_vcodec_dec_get_shm_buffer_size - close the communication channels with TA.
++ * @optee_private: optee private context
++ * @hw_id:         hardware index
++ * @@data_index: indentify each share memory informaiton
++ */
++int mtk_vcodec_dec_get_shm_buffer_size(struct mtk_vdec_optee_private *optee_private,
++				       enum mtk_vdec_hw_id hw_id,
++				       enum mtk_vdec_optee_data_index data_index);
++
+ #endif /* _MTK_VCODEC_FW_OPTEE_H_ */
 -- 
-2.42.0
+2.18.0
 
