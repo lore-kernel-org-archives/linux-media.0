@@ -2,129 +2,165 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7086AEEB58C
-	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:48:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 560D4EEB581
+	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:48:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234803AbjIKUs3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Sep 2023 16:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44688 "EHLO
+        id S234922AbjIKUsb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Sep 2023 16:48:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238894AbjIKOHb (ORCPT
+        with ESMTP id S241601AbjIKPKz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Sep 2023 10:07:31 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDEFCF0;
-        Mon, 11 Sep 2023 07:07:25 -0700 (PDT)
-Received: from www.ideasonboard.com (unknown [103.238.109.17])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 74296D51;
-        Mon, 11 Sep 2023 16:05:48 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1694441152;
-        bh=r1n7/4lPzB2GT8jcfXBHIKcAzHyqSpSu9d7J76LCGrQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=S32Xd4x5wQmnD5utvcQjihwTjgSPWnEEqHBdEcqHIbSBnFTvtJs5OfsCQnWKkuLQJ
-         oKUtix42m1bLL+FR4sYZ8H5Ky8Ll7NZSCwSUe1IbNJioNmXF60oWheC9gJfUyHnisb
-         KxbNyAdPTv3xGgp3hJxpgdTdE9HN/+vfgACd1OmI=
-From:   Umang Jain <umang.jain@ideasonboard.com>
-To:     linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     stefan.wahren@i2se.com, gregkh@linuxfoundation.org,
-        f.fainelli@gmail.com, athierry@redhat.com, error27@gmail.com,
-        kieran.bingham@ideasonboard.com, laurent.pinchart@ideasonboard.com,
-        dave.stevenson@raspberrypi.com,
-        Umang Jain <umang.jain@ideasonboard.com>
-Subject: [PATCH v10 0/5] staging: vc04_services: vchiq: Register devices with a custom bus_type
-Date:   Mon, 11 Sep 2023 10:07:07 -0400
-Message-ID: <20230911140712.180751-1-umang.jain@ideasonboard.com>
-X-Mailer: git-send-email 2.41.0
+        Mon, 11 Sep 2023 11:10:55 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001DAE4B
+        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:10:49 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-52a250aa012so6000995a12.3
+        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:10:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694445048; x=1695049848; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JB7dev33CQqq2PRU515LRyfUHgQkgO8/svwIwjBxrso=;
+        b=nXBvtg2cYBFaYKERUnVFQptVoWCmSUKpDt+wIKO1oTai6FfArVnq2T1YLT9ZZpdsdX
+         RRWLEZ7II/wav8FWN1yUU9HXh3pa7Vn75G6AM1fFrcEfQWK2zuMnIH3BD78XGdbCdzgw
+         MsK4dn9DeGiRETAcSsw+H0hBzW9qLnqa9ggd8o1yGHhyyxM6/BB5k8ljDOaXcSOyhqOJ
+         SutHGuhrNQDIVFY6fTgm4nDXw+nAN5eTYru7nSOEwzRcy3eQUOiuMM5OsMInezlxfb7k
+         aA31VW3sNiC1BEbiZp2lRDEqVwsHdxtSJHzAqNvIvgBzzci34zNEQ9TKUME+39PRHDiM
+         /46g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694445048; x=1695049848;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JB7dev33CQqq2PRU515LRyfUHgQkgO8/svwIwjBxrso=;
+        b=Ws49uZTjLxA2vS260m1vkcjhxf8qMNy7XbqgvfiKJp/OxMDQGRbYna3g66OojH5ByC
+         /ORYyhti5W1P9ijOqUK5Om2te6+LKZc18wcKEU//4MoaoqH7kiSV1LUJuxK8CFqKzv4a
+         IDbNksGlEIDfqMuajU46qnmcnuSzibclLj4oxokSL2PVd1UJT3mYu8PGD9jtxIlE0spc
+         Q3E3ZKC8q+4qE8DKVxO1HL7JaKoHuVzfnryQrC1vdJyG3/pN7PcbF/IhhvCWmO3S9609
+         OhfpsKr1nnsQzOzkM7SzBR5C0kr4bZMtg73eQoWVFzlFeVzUNtYt/xEcUA2G5vRF15wm
+         UzbQ==
+X-Gm-Message-State: AOJu0Yw58/85YFr0c9Tb2tH1GBv4kaspi06IOj/mYEYh5ID1MeCUwUyX
+        +n79b4gRXK2MHNYjuKS64lh77w==
+X-Google-Smtp-Source: AGHT+IHOrUawuw+u7QVtpnfwQLDVGjW95dOdTx3R9QAqJJ8vsJmZNzqMq3h8nCnS59f0knKZHoFyuw==
+X-Received: by 2002:a50:fc08:0:b0:522:31d5:ee8e with SMTP id i8-20020a50fc08000000b0052231d5ee8emr7942862edr.8.1694445048504;
+        Mon, 11 Sep 2023 08:10:48 -0700 (PDT)
+Received: from [10.167.154.1] (178235177061.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.61])
+        by smtp.gmail.com with ESMTPSA id n4-20020a056402060400b0052a3ad836basm4681281edv.41.2023.09.11.08.10.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Sep 2023 08:10:48 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Date:   Mon, 11 Sep 2023 17:10:26 +0200
+Subject: [PATCH RFT 12/20] media: venus: core: Use GENMASK for dma_mask
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230911-topic-mars-v1-12-a7d38bf87bdb@linaro.org>
+References: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
+In-Reply-To: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
+To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Dikshita Agarwal <quic_dikshita@quicinc.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1694445027; l=2674;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=0i/wL/gXye6AMRW7xTiL3gEDEa6DSycySKcFuITtV7c=;
+ b=9njRxETBp6BVf2eTPJnydMws8pDjU9hmhMA9EAXKj2fwspYSCUtrrbXXXzUDtbMNERpTc4XGC
+ o9auiXwoKyfB6CwEhwV+FjPvOlFqusbM8zqbH2pm+pJ/7Xq5t3xAfWW
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The patch series added a new bus type vchiq_bus_type and registers
-child devices in order to move them away from using platform
-device/driver.
+The raw literals mean very little. Substitute it with more telling
+bitops macros.
 
-Tested on RPi-3-b with media tree master branch.
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ drivers/media/platform/qcom/venus/core.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-Patch 1/5 and 2/5 adds a new bus_type and registers them to vchiq
-interface
+diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
+index 5d4d62751357..4dec10d21b05 100644
+--- a/drivers/media/platform/qcom/venus/core.c
++++ b/drivers/media/platform/qcom/venus/core.c
+@@ -565,7 +565,7 @@ static const struct venus_resources msm8916_res = {
+ 	.clks_num = 3,
+ 	.max_load = 352800, /* 720p@30 + 1080p@30 */
+ 	.hfi_version = HFI_VERSION_1XX,
+-	.dma_mask = 0xddc00000 - 1,
++	.dma_mask = (GENMASK(31, 30) | GENMASK(28, 26) | GENMASK(24, 22)) - 1,
+ 	.fwname = "qcom/venus-1.8/venus.mdt",
+ };
+ 
+@@ -595,7 +595,7 @@ static const struct venus_resources msm8996_res = {
+ 	.vcodec_clks_num = 1,
+ 	.max_load = 2563200,
+ 	.hfi_version = HFI_VERSION_3XX,
+-	.dma_mask = 0xddc00000 - 1,
++	.dma_mask = (GENMASK(31, 30) | GENMASK(28, 26) | GENMASK(24, 22)) - 1,
+ 	.fwname = "qcom/venus-4.2/venus.mdt",
+ };
+ 
+@@ -696,7 +696,7 @@ static const struct venus_resources sdm845_res = {
+ 	.max_load = 3110400,	/* 4096x2160@90 */
+ 	.hfi_version = HFI_VERSION_4XX,
+ 	.vpu_version = VPU_VERSION_AR50,
+-	.dma_mask = 0xe0000000 - 1,
++	.dma_mask = GENMASK(31, 29) - 1,
+ 	.fwname = "qcom/venus-5.2/venus.mdt",
+ };
+ 
+@@ -718,7 +718,7 @@ static const struct venus_resources sdm845_res_v2 = {
+ 	.max_load = 3110400,	/* 4096x2160@90 */
+ 	.hfi_version = HFI_VERSION_4XX,
+ 	.vpu_version = VPU_VERSION_AR50,
+-	.dma_mask = 0xe0000000 - 1,
++	.dma_mask = GENMASK(31, 29) - 1,
+ 	.cp_start = 0,
+ 	.cp_size = 0x70800000,
+ 	.cp_nonpixel_start = 0x1000000,
+@@ -762,7 +762,7 @@ static const struct venus_resources sc7180_res = {
+ 	.opp_pmdomain = pd_names_cx,
+ 	.hfi_version = HFI_VERSION_4XX,
+ 	.vpu_version = VPU_VERSION_AR50,
+-	.dma_mask = 0xe0000000 - 1,
++	.dma_mask = GENMASK(31, 29) - 1,
+ 	.cp_start = 0,
+ 	.cp_size = 0x70800000,
+ 	.cp_nonpixel_start = 0x1000000,
+@@ -817,7 +817,7 @@ static const struct venus_resources sm8250_res = {
+ 	.hfi_version = HFI_VERSION_6XX,
+ 	.vpu_version = VPU_VERSION_IRIS2,
+ 	.num_vpp_pipes = 4,
+-	.dma_mask = 0xe0000000 - 1,
++	.dma_mask = GENMASK(31, 29) - 1,
+ 	.fwname = "qcom/vpu-1.0/venus.mbn",
+ };
+ 
+@@ -871,7 +871,7 @@ static const struct venus_resources sc7280_res = {
+ 	.hfi_version = HFI_VERSION_6XX,
+ 	.vpu_version = VPU_VERSION_IRIS2_1,
+ 	.num_vpp_pipes = 1,
+-	.dma_mask = 0xe0000000 - 1,
++	.dma_mask = GENMASK(31, 29) - 1,
+ 	.fwname = "qcom/vpu-2.0/venus.mbn",
+ };
+ 
 
-Patch 3/5 and 4/5 moves the bcm2835-camera and bcm2835-audio
-to the new bus respectively
-
-Patch 5/5 removes a platform registeration helper which is no
-longer required.
-
-Changes in v10:
-- fix dma_attr WARN issue with bcm2835-audio module loading
-- Unregister bus on parent platform device fails to register
-- Reword commit to highlight bcm2835_audio to bcm2835-audio name change
-
-Changes in v9:
-- Fix module autoloading
-- Implement bus_type's probe() callback to load drivers
-- Implement bus_type's uevent() to make sure appropriate drivers are
-  loaded when device are registed from vchiq.
-
-Changes in v8:
-- Drop dual licensing. Instead use GPL-2.0 only for patch 1/5
-
-Changes in v7:
-(5 out of 6 patches from v6 merged)
-- Split the main patch (6/6) as requested.
-- Use struct vchiq_device * instead of struct device * in
-  all bus functions.
-- Drop additional name attribute displayed in sysfs (redundant info)
-- Document vchiq_interface doesn't enumerate device discovery
-- remove EXPORT_SYMBOL_GPL(vchiq_bus_type)
-
-Changes in v6:
-- Split struct device and struct driver wrappers in vchiq_device.[ch]
-- Move vchiq_bus_type definition to vchiq_device.[ch] as well
-- return error on bus_register() failure
-- drop dma_set_mask_and_coherent
-- trivial variable name change
-
-Changes in v5:
-- Fixup missing "staging: " in commits' subject line
-- No code changes from v4
-
-Changes in v4:
-- Introduce patches to drop include directives from Makefile
-
-Changes in v3:
-- Rework entirely to replace platform devices/driver model
-
--v2:
-https://lore.kernel.org/all/20221222191500.515795-1-umang.jain@ideasonboard.com/
-
--v1:
-https://lore.kernel.org/all/20221220084404.19280-1-umang.jain@ideasonboard.com/
-
-Umang Jain (5):
-  staging: vc04_services: vchiq_arm: Add new bus type and device type
-  staging: vc04_services: vchiq_arm: Register vchiq_bus_type
-  staging: bcm2835-camera: Register bcm2835-camera with vchiq_bus_type
-  staging: bcm2835-audio: Register bcm2835-audio with vchiq_bus_type
-  staging: vc04_services: vchiq_arm: Remove vchiq_register_child()
-
- drivers/staging/vc04_services/Makefile        |   1 +
- .../vc04_services/bcm2835-audio/bcm2835.c     |  20 ++--
- .../bcm2835-camera/bcm2835-camera.c           |  17 +--
- .../interface/vchiq_arm/vchiq_arm.c           |  52 ++++----
- .../interface/vchiq_arm/vchiq_device.c        | 111 ++++++++++++++++++
- .../interface/vchiq_arm/vchiq_device.h        |  54 +++++++++
- 6 files changed, 208 insertions(+), 47 deletions(-)
- create mode 100644 drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
- create mode 100644 drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.h
-
-
-base-commit: 9a5d660fdb25d20748d7f9e9559c86073c3bb368
 -- 
-2.41.0
+2.42.0
 
