@@ -2,314 +2,231 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9653CA0EC3
-	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 21:05:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C073ECA0EC0
+	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 21:05:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235098AbjIKUsk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Sep 2023 16:48:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42290 "EHLO
+        id S234649AbjIKUs1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Sep 2023 16:48:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244402AbjIKUXK (ORCPT
+        with ESMTP id S241609AbjIKPK6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Sep 2023 16:23:10 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B78185;
-        Mon, 11 Sep 2023 13:23:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=s31663417; t=1694463764; x=1695068564; i=wahrenst@gmx.net;
- bh=zG5Vmw3qiXN8IClSARt1XGb9sZT76BbpMWIHv9WvXs0=;
- h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
- b=QqfndfSj46qyTmWtdGJ3SprEE9JK+s61mMT69AeawtU+6nKJAgOAQSYg4wn8gXIfcsg9jQ1
- ET3bNAujCeJLr4oN4NGYZo/A32YCw4GhuQ70VD1gR0goYZAvhDexfd9XTuVbNeoFNsYJe0iiQ
- B5Oz87Wd7vRw+LkzNnT7pSXnCx/mHvduibRGvLev3ecQfdJSTqefM8ij3YH8h1Y8SSqtICexQ
- G6LUur6EKzzgquWDzC22bgWjKijDjKXhBz+p/6alsnj9xAHqZI6YjaNe6qAik3OPkrvsNVuFv
- mcyVFaee3mepTNCuP72q4syKKTOdrYEKkZj1L0Feq6oAuOq/AIGw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.1.129] ([37.4.248.43]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MZkpb-1q8whn0pJH-00Wqjl; Mon, 11
- Sep 2023 22:22:44 +0200
-Message-ID: <c96262e7-9bd9-c75d-7584-e6ff62f69530@gmx.net>
-Date:   Mon, 11 Sep 2023 22:22:43 +0200
+        Mon, 11 Sep 2023 11:10:58 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF24CCC
+        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:10:54 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-52f3ba561d9so3787691a12.1
+        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:10:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694445052; x=1695049852; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0/rSrL3Jo8Jpc/t8ZAB7UTOHWQcf4GkFtv3a0VomhNM=;
+        b=K57uOnbpeorjFFXAGnAYpF7u5ZBIkPY3aVkTJfdW6+1lBoFkxbm+BDGlY6AqXbHVX9
+         n3iySFntAEFDhsJCON8WF4tvSY1Z07KvUXcL56UhvxF/uG294xWLdST/E5Wapn2aHbC8
+         NOdcJ/AeuDQUeY4KjIZO4wgWnSylo6YwJd1OQBm+LUmnWGfIenUnJLYvm9iUyKY+PV2i
+         uytgIO1spitbi5P9Lmk1RrXStxYQ+BP4tiBY7p+LTENjyPA1q2+s3BMywiEe/k0qkJiq
+         yP1Ko5n94efy2VhzcVf0dyKNA//XZB4WcdQ1uvnsWb8lJ0f1uT5JE1demc9SnpVsA/DS
+         VHZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694445052; x=1695049852;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0/rSrL3Jo8Jpc/t8ZAB7UTOHWQcf4GkFtv3a0VomhNM=;
+        b=azoWA0/sofgffIlxtlmSh4KJ/hmaz7/YaUmb4EAtk29Z1j0NfIed6acwNtkxE4Ecoe
+         keqOjHmJZ3x9ic+BxFgA7ZFnt4oAiPL/b1zr2xost+i0ZTxE3vcnkEwbCfcyvxStz/09
+         9hvgaj4bjKbCRg60my6G9vOEJpmjIpPhcI5IJguuPQFTDEbZDrBVnR+/RYJY7B5VdU8g
+         QYzE/uKlyaqHJITWnu9sK/JkbHOdimiPSXlIIoWojWcRsCcBbCck/zfJlrOmp82umzXb
+         UJ8Ma/lCiBq7+yngzirrPYOZcRJ2JJ1Q265p9XmnAIpgFHdsAYUtuVUR81GFna9cXfce
+         XbhA==
+X-Gm-Message-State: AOJu0YyIFNM+krGw6SSGlPJfreDfU3T4LvlVes8EUrmi8zACw+m1SfAb
+        9xgC0+tsg8V4q23Pvqv/XuaORw==
+X-Google-Smtp-Source: AGHT+IEbHBYlsbEpKU5/53azlsQctYiikFwyyZJfwzmVd1ZxSwJ1OZjEUyLdZoi/YOdV2fu2bsZbdg==
+X-Received: by 2002:aa7:d858:0:b0:521:d2ab:e4df with SMTP id f24-20020aa7d858000000b00521d2abe4dfmr12498198eds.19.1694445052439;
+        Mon, 11 Sep 2023 08:10:52 -0700 (PDT)
+Received: from [10.167.154.1] (178235177061.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.61])
+        by smtp.gmail.com with ESMTPSA id n4-20020a056402060400b0052a3ad836basm4681281edv.41.2023.09.11.08.10.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Sep 2023 08:10:52 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Date:   Mon, 11 Sep 2023 17:10:28 +0200
+Subject: [PATCH RFT 14/20] media: venus: pm_helpers: Commonize core_power
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH v10 1/5] staging: vc04_services: vchiq_arm: Add new bus
- type and device type
-To:     Umang Jain <umang.jain@ideasonboard.com>,
-        Robin Murphy <robin.murphy@arm.com>
-Cc:     gregkh@linuxfoundation.org, f.fainelli@gmail.com,
-        athierry@redhat.com, error27@gmail.com,
-        kieran.bingham@ideasonboard.com, laurent.pinchart@ideasonboard.com,
-        dave.stevenson@raspberrypi.com, linux-kernel@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
-References: <20230911140712.180751-1-umang.jain@ideasonboard.com>
- <20230911140712.180751-2-umang.jain@ideasonboard.com>
-Content-Language: en-US
-From:   Stefan Wahren <wahrenst@gmx.net>
-In-Reply-To: <20230911140712.180751-2-umang.jain@ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:++NzSYrVvw3FDACteBIJlbHPCAhvUjPXq4BhR+qkmLZ600Lln2S
- MaWpfdF84BNqhW6XXbk5Nk19u/8JEHcdG3/lEWq2usC6Gu4CBGkXEFGGVp1fz6+2VM450zi
- vY/482c7epOoefiA3Gz8lC4IWTrQSmzeRjnTj9WepcFQcJ5C1fng7mRu38yirQjs7pBylzL
- +9m3lO28BootWFGLvf9Jg==
-UI-OutboundReport: notjunk:1;M01:P0:ztWtLMMskKc=;wxi/aOEAJSmHSypM+1dCpadJ/4/
- F/KhDDJ/Z46rny+nY/XLwx07J/ozEJ/Qdpfby1ooXkkYQ5e/vyUIx9l4CsCYDc4yOvsQDOdhb
- OEl1SQNypi+jU6xsz5W73bkOLLk48HJ/X3bY1yFz0I7mZnxBGPoHG7/wh2+mXpd5CPEZOh9Rv
- tepXreGP6gugPfIe+BZRJf123hOFp8ZI4tssNKt+VnYYZxPy+cOSU0l+PV+DKZ/YGfLumxfEg
- uN7vJZ5MFAOyChYjT6SQBBHdL339FT7dr1ZvGjVp+7GksAG4Kng9XxNn9xcotUMfxEdEQsP/s
- /WMO0GbSfPJ/vh5P8vvNxO99Wnlrk47wXeCwx8Q9KJmxYxmxDSbBJ9MRph6VyxROVRFcFfhHK
- cYJoHAyy6MtqMXsRL0R/3CJjI6TtyI3ptw6zmZAV2WcXApwgMf39FG5HoPdxyEBe+fVwG9ILR
- w2R3nwn++M9Ird/ycNnq7LKCX9ZikCtjcQ8V6W4zPTg8ojhUCqrncBjU5CNe5e0y03gOahQ/n
- Q2G2GmLSLH4sSnIBGPNWdjHguE+9WBitE3Zuc2Ad+KjKyUsDN0B+Q+ESLwTui/ntpn1QluMBk
- w7wOMes+mAkt4JrWiu68zKFYJwpz45nCi2RwgnjlonpYXVfpTUAe0EK4YjL70vmAeEtyNV+7q
- q8jV+wXihWm44FZzwj4RAVAKgwhLkjnK16lbBG6XWndyZ1aVwjfXc7RsQhb0gcI3jVRoXxc3d
- 7ncIZl7xxYyzDZdY9tnxUME2tT7NUOLltoEiRNMljzmpP4p4jf5vUXZadVC3nRZQTs85wg9ju
- JCWjy0NXW6hvFfMYJLDCWmFntcadnjMc9ZCrcW9T16JVY5x0oCjZcF25/TkwOPgOSOg7e/U0E
- a1f0WFbKagJHtw0ju+16ii6zh4ylAijKMMaPjZmvM163rtt6NHAS8VaskT9j6Pyfx3Wznorw/
- ywqGAXEoEWJdCs9GB19p9sIiuKM=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230911-topic-mars-v1-14-a7d38bf87bdb@linaro.org>
+References: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
+In-Reply-To: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
+To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Dikshita Agarwal <quic_dikshita@quicinc.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1694445027; l=4719;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=mQbHMS1CDlisVrikZ5YTbX8/UuzAFEtVfQ4RIqbJfoc=;
+ b=ifOwzefBF+9s0GX9pPmiv0R+TszTLyxnkyiWw1XYYUYmOGigta0/hS2A2f34zh5uy6c7s4pUo
+ hEQaodokYMBAU/3LxOUfMLYRkEjFgxGVj5Ilmk3H96n1r4MLBMB+OwS
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Umang,
+core_power_v4 called with num_resets = 0 and core->pmdomains[0] == NULL
+does exactly the same thing as core_power_v1. Unify them!
 
-Am 11.09.23 um 16:07 schrieb Umang Jain:
-> The devices that the vchiq interface registers (bcm2835-audio,
-> bcm2835-camera) are implemented and exposed by the VC04 firmware.
-> The device tree describes the VC04 itself with the resources required
-> to communicate with it through a mailbox interface. However, the
-> vchiq interface registers these devices as platform devices. This
-> also means the specific drivers for these devices are getting
-> registered as platform drivers. This is not correct and a blatant
-> abuse of platform device/driver.
->
-> Add a new bus type, vchiq_bus_type and device type (struct vchiq_device)
-> which will be used to migrate child devices that the vchiq interfaces
-> creates/registers from the platform device/driver.
->
-> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
-> ---
->   drivers/staging/vc04_services/Makefile        |   1 +
->   .../interface/vchiq_arm/vchiq_device.c        | 111 ++++++++++++++++++
->   .../interface/vchiq_arm/vchiq_device.h        |  54 +++++++++
->   3 files changed, 166 insertions(+)
->   create mode 100644 drivers/staging/vc04_services/interface/vchiq_arm/v=
-chiq_device.c
->   create mode 100644 drivers/staging/vc04_services/interface/vchiq_arm/v=
-chiq_device.h
->
-> diff --git a/drivers/staging/vc04_services/Makefile b/drivers/staging/vc=
-04_services/Makefile
-> index 44794bdf6173..2d071e55e175 100644
-> --- a/drivers/staging/vc04_services/Makefile
-> +++ b/drivers/staging/vc04_services/Makefile
-> @@ -5,6 +5,7 @@ vchiq-objs :=3D \
->      interface/vchiq_arm/vchiq_core.o  \
->      interface/vchiq_arm/vchiq_arm.o \
->      interface/vchiq_arm/vchiq_debugfs.o \
-> +   interface/vchiq_arm/vchiq_device.o \
->      interface/vchiq_arm/vchiq_connected.o \
->
->   ifdef CONFIG_VCHIQ_CDEV
-> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_dev=
-ice.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
-> new file mode 100644
-> index 000000000000..aad55c461905
-> --- /dev/null
-> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
-> @@ -0,0 +1,111 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * vchiq_device.c - VCHIQ generic device and bus-type
-> + *
-> + * Copyright (c) 2023 Ideas On Board Oy
-> + */
-> +
-> +#include <linux/device/bus.h>
-> +#include <linux/dma-mapping.h>
-> +#include <linux/of_device.h>
-> +#include <linux/slab.h>
-> +#include <linux/string.h>
-> +
-> +#include "vchiq_device.h"
-> +
-> +static int vchiq_bus_type_match(struct device *dev, struct device_drive=
-r *drv)
-> +{
-> +	if (dev->bus =3D=3D &vchiq_bus_type &&
-> +	    strcmp(dev_name(dev), drv->name) =3D=3D 0)
-> +		return 1;
-> +
-> +	return 0;
-> +}
-> +
-> +static int vchiq_bus_uevent(const struct device *dev, struct kobj_ueven=
-t_env *env)
-> +{
-> +	const struct vchiq_device *device =3D container_of_const(dev, struct v=
-chiq_device, dev);
-> +
-> +	return add_uevent_var(env, "MODALIAS=3D%s", dev_name(&device->dev));
-> +}
-> +
-> +static int vchiq_bus_probe(struct device *dev)
-> +{
-> +	struct vchiq_device *device =3D to_vchiq_device(dev);
-> +	struct vchiq_driver *driver =3D to_vchiq_driver(dev->driver);
-> +	int ret;
-> +
-> +	ret =3D driver->probe(device);
-> +	if (ret =3D=3D 0)
-> +		return 0;
-> +
-> +	return ret;
-> +}
-> +
-> +struct bus_type vchiq_bus_type =3D {
-> +	.name   =3D "vchiq-bus",
-> +	.match  =3D vchiq_bus_type_match,
-> +	.uevent =3D vchiq_bus_uevent,
-> +	.probe  =3D vchiq_bus_probe,
-> +};
-> +
-> +static void vchiq_device_release(struct device *dev)
-> +{
-> +	struct vchiq_device *device =3D to_vchiq_device(dev);
-> +
-> +	kfree(device);
-> +}
-> +
-> +struct vchiq_device *
-> +vchiq_device_register(struct device *parent, const char *name)
-> +{
-> +	struct vchiq_device *device;
-> +	int ret;
-> +
-> +	device =3D kzalloc(sizeof(*device), GFP_KERNEL);
-> +	if (!device) {
-> +		dev_err(parent, "Cannot register %s: Insufficient memory\n",
-> +			name);
-> +		return NULL;
-> +	}
-> +
-> +	device->dev.init_name =3D name;
-> +	device->dev.parent =3D parent;
-> +	device->dev.bus =3D &vchiq_bus_type;
-> +	device->dev.release =3D vchiq_device_release;
-> +
-> +	of_dma_configure(&device->dev, parent->of_node, true);
-> +	ret =3D dma_set_mask_and_coherent(&device->dev, DMA_BIT_MASK(32));
-> +	if (ret) {
-> +		dev_err(&device->dev, "32-bit DMA enable failed\n");
-> +		return NULL;
-> +	}
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ drivers/media/platform/qcom/venus/core.c       | 21 +++++++--------------
+ drivers/media/platform/qcom/venus/pm_helpers.c | 17 +----------------
+ drivers/media/platform/qcom/venus/pm_helpers.h |  2 +-
+ 3 files changed, 9 insertions(+), 31 deletions(-)
 
-Unfortunately the call of of_dma_configure() generates warnings likes
-this (Raspberry Pi 3A+ with multi_v7_defconfig + VCHIQ):
+diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
+index bd624e965a92..0ae118257296 100644
+--- a/drivers/media/platform/qcom/venus/core.c
++++ b/drivers/media/platform/qcom/venus/core.c
+@@ -480,18 +480,15 @@ static void venus_core_shutdown(struct platform_device *pdev)
+ static __maybe_unused int venus_runtime_suspend(struct device *dev)
+ {
+ 	struct venus_core *core = dev_get_drvdata(dev);
+-	const struct venus_pm_ops *pm_ops = core->pm_ops;
+ 	int ret;
+ 
+ 	ret = hfi_core_suspend(core);
+ 	if (ret)
+ 		return ret;
+ 
+-	if (pm_ops->core_power) {
+-		ret = pm_ops->core_power(core, POWER_OFF);
+-		if (ret)
+-			return ret;
+-	}
++	ret = venus_core_power(core, POWER_OFF);
++	if (ret)
++		return ret;
+ 
+ 	ret = icc_set_bw(core->cpucfg_path, 0, 0);
+ 	if (ret)
+@@ -506,8 +503,7 @@ static __maybe_unused int venus_runtime_suspend(struct device *dev)
+ err_video_path:
+ 	icc_set_bw(core->cpucfg_path, kbps_to_icc(1000), 0);
+ err_cpucfg_path:
+-	if (pm_ops->core_power)
+-		pm_ops->core_power(core, POWER_ON);
++	venus_core_power(core, POWER_ON);
+ 
+ 	return ret;
+ }
+@@ -515,7 +511,6 @@ static __maybe_unused int venus_runtime_suspend(struct device *dev)
+ static __maybe_unused int venus_runtime_resume(struct device *dev)
+ {
+ 	struct venus_core *core = dev_get_drvdata(dev);
+-	const struct venus_pm_ops *pm_ops = core->pm_ops;
+ 	int ret;
+ 
+ 	ret = icc_set_bw(core->video_path, kbps_to_icc(20000), 0);
+@@ -526,11 +521,9 @@ static __maybe_unused int venus_runtime_resume(struct device *dev)
+ 	if (ret)
+ 		return ret;
+ 
+-	if (pm_ops->core_power) {
+-		ret = pm_ops->core_power(core, POWER_ON);
+-		if (ret)
+-			return ret;
+-	}
++	ret = venus_core_power(core, POWER_ON);
++	if (ret)
++		return ret;
+ 
+ 	return hfi_core_resume(core, false);
+ }
+diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
+index 816d16f9153a..ddaa9944fa44 100644
+--- a/drivers/media/platform/qcom/venus/pm_helpers.c
++++ b/drivers/media/platform/qcom/venus/pm_helpers.c
+@@ -322,22 +322,9 @@ static void core_put_v1(struct venus_core *core)
+ {
+ }
+ 
+-static int core_power_v1(struct venus_core *core, int on)
+-{
+-	int ret = 0;
+-
+-	if (on == POWER_ON)
+-		ret = core_clks_enable(core);
+-	else
+-		core_clks_disable(core);
+-
+-	return ret;
+-}
+-
+ static const struct venus_pm_ops pm_ops_v1 = {
+ 	.core_get = venus_clks_get,
+ 	.core_put = core_put_v1,
+-	.core_power = core_power_v1,
+ 	.load_scale = load_scale_v1,
+ };
+ 
+@@ -410,7 +397,6 @@ static int venc_power_v3(struct device *dev, int on)
+ static const struct venus_pm_ops pm_ops_v3 = {
+ 	.core_get = venus_clks_get,
+ 	.core_put = core_put_v1,
+-	.core_power = core_power_v1,
+ 	.vdec_get = vdec_get_v3,
+ 	.vdec_power = vdec_power_v3,
+ 	.venc_get = venc_get_v3,
+@@ -996,7 +982,7 @@ static void core_put_v4(struct venus_core *core)
+ 	vcodec_domains_put(core);
+ }
+ 
+-static int core_power_v4(struct venus_core *core, int on)
++int venus_core_power(struct venus_core *core, int on)
+ {
+ 	struct device *dev = core->dev;
+ 	struct device *pmctrl = core->pmdomains[0];
+@@ -1143,7 +1129,6 @@ static int load_scale_v4(struct venus_inst *inst)
+ static const struct venus_pm_ops pm_ops_v4 = {
+ 	.core_get = core_get_v4,
+ 	.core_put = core_put_v4,
+-	.core_power = core_power_v4,
+ 	.vdec_get = vdec_get_v4,
+ 	.vdec_put = vdec_put_v4,
+ 	.vdec_power = vdec_power_v4,
+diff --git a/drivers/media/platform/qcom/venus/pm_helpers.h b/drivers/media/platform/qcom/venus/pm_helpers.h
+index a492c50c5543..77db940a265c 100644
+--- a/drivers/media/platform/qcom/venus/pm_helpers.h
++++ b/drivers/media/platform/qcom/venus/pm_helpers.h
+@@ -12,7 +12,6 @@ struct venus_core;
+ struct venus_pm_ops {
+ 	int (*core_get)(struct venus_core *core);
+ 	void (*core_put)(struct venus_core *core);
+-	int (*core_power)(struct venus_core *core, int on);
+ 
+ 	int (*vdec_get)(struct device *dev);
+ 	void (*vdec_put)(struct device *dev);
+@@ -28,6 +27,7 @@ struct venus_pm_ops {
+ };
+ 
+ const struct venus_pm_ops *venus_pm_get(enum hfi_version version);
++int venus_core_power(struct venus_core *core, int on);
+ 
+ static inline int venus_pm_load_scale(struct venus_inst *inst)
+ {
 
-[    9.206802] vchiq-bus bcm2835-audio: DMA mask not set
-[    9.206892] vchiq-bus bcm2835-camera: DMA mask not set
+-- 
+2.42.0
 
-In the old platform driver code we had something like
-
-   pdevinfo.dma_mask =3D DMA_BIT_MASK(32);
-
-So there is still something missing for our new bus driver.
-
-> +
-> +	ret =3D device_register(&device->dev);
-> +	if (ret) {
-> +		dev_err(parent, "Cannot register %s: %d\n", name, ret);
-> +		put_device(&device->dev);
-> +		return NULL;
-> +	}
-> +
-> +	return device;
-> +}
-> +
-> +void vchiq_device_unregister(struct vchiq_device *vchiq_dev)
-> +{
-> +	device_unregister(&vchiq_dev->dev);
-> +}
-> +
-> +int vchiq_driver_register(struct vchiq_driver *vchiq_drv)
-> +{
-> +	vchiq_drv->driver.bus =3D &vchiq_bus_type;
-> +
-> +	return driver_register(&vchiq_drv->driver);
-> +}
-> +EXPORT_SYMBOL_GPL(vchiq_driver_register);
-> +
-> +void vchiq_driver_unregister(struct vchiq_driver *vchiq_drv)
-> +{
-> +	driver_unregister(&vchiq_drv->driver);
-> +}
-> +EXPORT_SYMBOL_GPL(vchiq_driver_unregister);
-> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_dev=
-ice.h b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.h
-> new file mode 100644
-> index 000000000000..7eaaf9a91cda
-> --- /dev/null
-> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.h
-> @@ -0,0 +1,54 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (c) 2023 Ideas On Board Oy
-> + */
-> +
-> +#ifndef _VCHIQ_DEVICE_H
-> +#define _VCHIQ_DEVICE_H
-> +
-> +#include <linux/device.h>
-> +
-> +struct vchiq_device {
-> +	struct device dev;
-> +};
-> +
-> +struct vchiq_driver {
-> +	int		(*probe)(struct vchiq_device *device);
-> +	void		(*remove)(struct vchiq_device *device);
-> +	int		(*resume)(struct vchiq_device *device);
-> +	int		(*suspend)(struct vchiq_device *device,
-> +				   pm_message_t state);
-> +	struct device_driver driver;
-> +};
-> +
-> +static inline struct vchiq_device *to_vchiq_device(struct device *d)
-> +{
-> +	return container_of(d, struct vchiq_device, dev);
-> +}
-> +
-> +static inline struct vchiq_driver *to_vchiq_driver(struct device_driver=
- *d)
-> +{
-> +	return container_of(d, struct vchiq_driver, driver);
-> +}
-> +
-> +extern struct bus_type vchiq_bus_type;
-> +
-> +struct vchiq_device *
-> +vchiq_device_register(struct device *parent, const char *name);
-> +void vchiq_device_unregister(struct vchiq_device *dev);
-> +
-> +int vchiq_driver_register(struct vchiq_driver *vchiq_drv);
-> +void vchiq_driver_unregister(struct vchiq_driver *vchiq_drv);
-> +
-> +/**
-> + * module_vchiq_driver() - Helper macro for registering a vchiq driver
-> + * @__vchiq_driver: vchiq driver struct
-> + *
-> + * Helper macro for vchiq drivers which do not do anything special in
-> + * module init/exit. This eliminates a lot of boilerplate. Each module =
-may only
-> + * use this macro once, and calling it replaces module_init() and modul=
-e_exit()
-> + */
-> +#define module_vchiq_driver(__vchiq_driver) \
-> +	module_driver(__vchiq_driver, vchiq_driver_register, vchiq_driver_unre=
-gister)
-> +
-> +#endif /* _VCHIQ_DEVICE_H */
