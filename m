@@ -2,54 +2,53 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DEF6EEB581
-	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:48:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E2D9EEB581
+	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:49:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235179AbjIKUs4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Sep 2023 16:48:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44944 "EHLO
+        id S235226AbjIKUs7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Sep 2023 16:48:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237760AbjIKNOW (ORCPT
+        with ESMTP id S237755AbjIKNOW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 11 Sep 2023 09:14:22 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B4FE4B
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:17 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-52bcd4db4e6so5806337a12.0
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:17 -0700 (PDT)
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36BA0EE
+        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:15 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-52a23227567so5697220a12.0
+        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694438056; x=1695042856; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hWSBg2m/DFeH+pSop6GqXEz6uLfYv88RDnyNFoEgOcM=;
-        b=jxVn70YRsNZwmomWMm63Ty5/BHsHYO6Xu5bmh7B5fmRp4lhawwvH0MZ3P50o9UsToG
-         aErVSymVDqgXhJ7oGXj9bvM++ARDlD6BiaF6eplgY3VYvX7tRmQPJyPvXb7+2/LErHSA
-         9D1ZRtbUW1i0o8cQfYlyAQoM7h8gkNfIsLo8YSZP43dBcAAQjngZQmBWEY/Na+UiWo0w
-         59fyS8YNcMpn1U82eREAGzfqK3XYpd9hTpYlEOzwKamaOKM00z+1qVowvTpayh6172HQ
-         1ok4K6M+pSv5FWMiARQf6WmBuGBtC6Qb7zQKWPPEIgBosH5tWDcnlz9xgmQH6jQAKKmo
-         sSJg==
+        d=linaro.org; s=google; t=1694438053; x=1695042853; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bzg1j4l+T9SlvjeUrT1btKedodryHP6lWwaPR4x8CXY=;
+        b=sHY61oXBUBArw1Jbi+F58+Kf17Rw7wLgrSgGbQqBPu6EvsQv/QUezqkYjm4DNUuOpZ
+         ZIKxB+GnGG6nBVlV+kaWx+5Rq2Lt/G41LPxDyuNeokdqx2nGuShfs0dFMgudMDe2zH35
+         UgE+tLnEJrE9No3M//QRjW2JLCMyCPJqpyK1eFoPHKKpPPmlJhGMzGDswDpk0mDWaChw
+         +tl0fTftdPsR3bkonqw+TbVuIJrkikYzVuwAvm9QXh4Y0ITou+VafYfnWkdGYWSXN65a
+         TpWRpsIlKw0hn7jzr21admZdaH70EhB6zy0Txxvn5qWsqca3evYPMfwnPkZUxQsDm5QV
+         3wmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694438056; x=1695042856;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hWSBg2m/DFeH+pSop6GqXEz6uLfYv88RDnyNFoEgOcM=;
-        b=QA3Rg1bUqawae3eYWJJOrnTxpbOHY1EtsC2L5v9gP4dMB+xuJDhjJ7ZhpDHCxZaihk
-         EgeMP58ul8iOYWBYz3NrLEddq+xfFMmm0c1nglfMNw8hucJDrov2oyy3bxh3MyWqagYu
-         Mnsw7r4BGBZyGBrNTAVKg1Hy05+VSwI2nERfhqPxUCCE1xEhIcUCluNHcH86pUADutYm
-         2umvt638/Ecvar4cqvXD+aUmjMlFRv91x4gNnWbqPhczVIobJjnHM64LCYsaH6Cnz4RS
-         rVC4zCZPpRO13F/Lf9om8rF/1Mn8QyO7kKXdorKOFZDdHfYZGlEpCalst7+PSo5miQgy
-         ICDg==
-X-Gm-Message-State: AOJu0YyCn3huFxLFc3AR7dwmXl/HEp/Fcew5aOADGLOwnMiH6Kpkkgqz
-        RRd318pTgd8/fQcVlrrQH1QSxw==
-X-Google-Smtp-Source: AGHT+IGYCXemrhj8aJqa9udV4YnDokNhFiwufrPafQvWkkAFQKCRQCUxnoJ/pvLn3HAF4gTH2IE89Q==
-X-Received: by 2002:a17:906:106:b0:9a1:c352:b6a2 with SMTP id 6-20020a170906010600b009a1c352b6a2mr8650202eje.52.1694438056087;
-        Mon, 11 Sep 2023 06:14:16 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1694438053; x=1695042853;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Bzg1j4l+T9SlvjeUrT1btKedodryHP6lWwaPR4x8CXY=;
+        b=cOdDbsmgYf3QVnpqJVAGyGSEkadOo3kHO4n/K2iIFtbLBeP42IqqVnYmTNN3+2UfME
+         P49wfoDJJbQ/6u95hvSwo7DjxB1Rg/PqOyFabaVIo17cnnxWeoyr451Vjgh/+41PRYnk
+         vea8dy7E+iAOxl90zPNEqvQHWxcIxEROxCcCAUNjOSafvO7EFQCClccIsmF10sfLcSaL
+         CA33DzADcSe+X4j0LSAZDN61iPyrpxd+XXltxHya/+3AzgAOkCGz1PRIxnKDwIK+SYOj
+         +mFTQrs5GDjU2L4B3ID9JUlRnF14POPndH3FZayDbjXXeTyetaVJvdU06hJ15xJ+FgmT
+         2IRw==
+X-Gm-Message-State: AOJu0Yw0U0C2TceZIT2dFta5guOFwJrGVbtNnah9xH1a0yNzhGX8YEAh
+        vkJn3sm41YvkERqwjT+nHNNY8g==
+X-Google-Smtp-Source: AGHT+IFj5+4CXTSkggw+7E+WKQwCfPGMicwOZyOZAcCpdAagzmFGkR8AQFbMmiMrOoOYJaf+r+zbzg==
+X-Received: by 2002:a17:906:2dc:b0:9a6:4f23:9d8f with SMTP id 28-20020a17090602dc00b009a64f239d8fmr8478768ejk.47.1694438053554;
+        Mon, 11 Sep 2023 06:14:13 -0700 (PDT)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id kt8-20020a170906aac800b00988e953a586sm5313648ejb.61.2023.09.11.06.14.14
+        by smtp.gmail.com with ESMTPSA id kt8-20020a170906aac800b00988e953a586sm5313648ejb.61.2023.09.11.06.14.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Sep 2023 06:14:15 -0700 (PDT)
+        Mon, 11 Sep 2023 06:14:13 -0700 (PDT)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
         agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
@@ -58,361 +57,182 @@ To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
         andrey.konovalov@linaro.org
 Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 02/17] media: qcom: camss: Rename camss struct resources to camss_subdev_resources
-Date:   Mon, 11 Sep 2023 14:13:56 +0100
-Message-ID: <20230911131411.196033-3-bryan.odonoghue@linaro.org>
+Subject: [PATCH v5 00/17] media: qcom: camss: Add parameter passing to remove several outstanding bugs
+Date:   Mon, 11 Sep 2023 14:13:54 +0100
+Message-ID: <20230911131411.196033-1-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20230911131411.196033-1-bryan.odonoghue@linaro.org>
-References: <20230911131411.196033-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Rename non-specific struct resources {} to struct camss_subdev_resources {}
+V5:
+- drops ret = fn(); return ret; for return fn(); - Hans, Konrad
+Link: https://lore.kernel.org/linux-arm-msm/20230907164410.36651-16-bryan.odonoghue@linaro.org/
 
-Each logical block in CAMSS has a number of regulators, clocks and resets
-associated with it. We represent these blocks as v4l subdevices.
+Bootable:
+Link: https://git.codelinaro.org/bryan.odonoghue/kernel/-/tree/linux-next-23-09-06-lenovo-x13s-v6.5-rc7-x13s-camss-patches-v5
 
-The name "struct camss_subdev_resources" is a more descriptive and accurate
-name.
+V4:
+- Adds additional Reviewed-by / Acked-by from Laurent and Konrad as indicated
 
-Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- .../media/platform/qcom/camss/camss-csid.c    |  2 +-
- .../media/platform/qcom/camss/camss-csid.h    |  4 +-
- .../media/platform/qcom/camss/camss-csiphy.c  |  2 +-
- .../media/platform/qcom/camss/camss-csiphy.h  |  4 +-
- .../media/platform/qcom/camss/camss-ispif.c   |  2 +-
- .../media/platform/qcom/camss/camss-ispif.h   |  4 +-
- drivers/media/platform/qcom/camss/camss-vfe.c |  2 +-
- drivers/media/platform/qcom/camss/camss-vfe.h |  4 +-
- drivers/media/platform/qcom/camss/camss.c     | 44 +++++++++----------
- drivers/media/platform/qcom/camss/camss.h     |  2 +-
- 10 files changed, 35 insertions(+), 35 deletions(-)
+- Updates commit log per Laurent suggestion not go on hunger strike
+  Link: https://lore.kernel.org/linux-arm-msm/20230828185110.GN14596@pendragon.ideasonboard.com/
 
-diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
-index 9d7fb1adebb98..b1113decdb305 100644
---- a/drivers/media/platform/qcom/camss/camss-csid.c
-+++ b/drivers/media/platform/qcom/camss/camss-csid.c
-@@ -566,7 +566,7 @@ static const struct v4l2_ctrl_ops csid_ctrl_ops = {
-  * Return 0 on success or a negative error code otherwise
-  */
- int msm_csid_subdev_init(struct camss *camss, struct csid_device *csid,
--			 const struct resources *res, u8 id)
-+			 const struct camss_subdev_resources *res, u8 id)
- {
- 	struct device *dev = camss->dev;
- 	struct platform_device *pdev = to_platform_device(dev);
-diff --git a/drivers/media/platform/qcom/camss/camss-csid.h b/drivers/media/platform/qcom/camss/camss-csid.h
-index d4b48432a0973..30d94eb2eb041 100644
---- a/drivers/media/platform/qcom/camss/camss-csid.h
-+++ b/drivers/media/platform/qcom/camss/camss-csid.h
-@@ -172,7 +172,7 @@ struct csid_device {
- 	const struct csid_hw_ops *ops;
- };
- 
--struct resources;
-+struct camss_subdev_resources;
- 
- /*
-  * csid_find_code - Find a format code in an array using array index or format code
-@@ -200,7 +200,7 @@ const struct csid_format *csid_get_fmt_entry(const struct csid_format *formats,
- 					     u32 code);
- 
- int msm_csid_subdev_init(struct camss *camss, struct csid_device *csid,
--			 const struct resources *res, u8 id);
-+			 const struct camss_subdev_resources *res, u8 id);
- 
- int msm_csid_register_entity(struct csid_device *csid,
- 			     struct v4l2_device *v4l2_dev);
-diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.c b/drivers/media/platform/qcom/camss/camss-csiphy.c
-index c5ae9c61ee0b1..b1b6c4cf18385 100644
---- a/drivers/media/platform/qcom/camss/camss-csiphy.c
-+++ b/drivers/media/platform/qcom/camss/camss-csiphy.c
-@@ -546,7 +546,7 @@ static int csiphy_init_formats(struct v4l2_subdev *sd,
-  */
- int msm_csiphy_subdev_init(struct camss *camss,
- 			   struct csiphy_device *csiphy,
--			   const struct resources *res, u8 id)
-+			   const struct camss_subdev_resources *res, u8 id)
- {
- 	struct device *dev = camss->dev;
- 	struct platform_device *pdev = to_platform_device(dev);
-diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.h b/drivers/media/platform/qcom/camss/camss-csiphy.h
-index 1c14947f92d35..c9b7fe82b1f0d 100644
---- a/drivers/media/platform/qcom/camss/camss-csiphy.h
-+++ b/drivers/media/platform/qcom/camss/camss-csiphy.h
-@@ -83,11 +83,11 @@ struct csiphy_device {
- 	unsigned int nformats;
- };
- 
--struct resources;
-+struct camss_subdev_resources;
- 
- int msm_csiphy_subdev_init(struct camss *camss,
- 			   struct csiphy_device *csiphy,
--			   const struct resources *res, u8 id);
-+			   const struct camss_subdev_resources *res, u8 id);
- 
- int msm_csiphy_register_entity(struct csiphy_device *csiphy,
- 			       struct v4l2_device *v4l2_dev);
-diff --git a/drivers/media/platform/qcom/camss/camss-ispif.c b/drivers/media/platform/qcom/camss/camss-ispif.c
-index 61765b874b9a2..75b8a60806b22 100644
---- a/drivers/media/platform/qcom/camss/camss-ispif.c
-+++ b/drivers/media/platform/qcom/camss/camss-ispif.c
-@@ -1095,7 +1095,7 @@ static int ispif_init_formats(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
-  * Return 0 on success or a negative error code otherwise
-  */
- int msm_ispif_subdev_init(struct camss *camss,
--			  const struct resources *res)
-+			  const struct camss_subdev_resources *res)
- {
- 	struct device *dev = camss->dev;
- 	struct ispif_device *ispif = camss->ispif;
-diff --git a/drivers/media/platform/qcom/camss/camss-ispif.h b/drivers/media/platform/qcom/camss/camss-ispif.h
-index c7c41f7afcaad..dff6d5b35c72e 100644
---- a/drivers/media/platform/qcom/camss/camss-ispif.h
-+++ b/drivers/media/platform/qcom/camss/camss-ispif.h
-@@ -66,10 +66,10 @@ struct ispif_device {
- 	struct camss *camss;
- };
- 
--struct resources;
-+struct camss_subdev_resources;
- 
- int msm_ispif_subdev_init(struct camss *camss,
--			  const struct resources *res);
-+			  const struct camss_subdev_resources *res);
- 
- int msm_ispif_register_entities(struct ispif_device *ispif,
- 				struct v4l2_device *v4l2_dev);
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
-index b021f81cef123..e84dcf0f4b2da 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe.c
-@@ -1279,7 +1279,7 @@ static int vfe_init_formats(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
-  * Return 0 on success or a negative error code otherwise
-  */
- int msm_vfe_subdev_init(struct camss *camss, struct vfe_device *vfe,
--			const struct resources *res, u8 id)
-+			const struct camss_subdev_resources *res, u8 id)
- {
- 	struct device *dev = camss->dev;
- 	struct platform_device *pdev = to_platform_device(dev);
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe.h b/drivers/media/platform/qcom/camss/camss-vfe.h
-index cbc314c4e244b..b4bae9f65c68f 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe.h
-+++ b/drivers/media/platform/qcom/camss/camss-vfe.h
-@@ -153,10 +153,10 @@ struct vfe_device {
- 	struct camss_video_ops video_ops;
- };
- 
--struct resources;
-+struct camss_subdev_resources;
- 
- int msm_vfe_subdev_init(struct camss *camss, struct vfe_device *vfe,
--			const struct resources *res, u8 id);
-+			const struct camss_subdev_resources *res, u8 id);
- 
- int msm_vfe_register_entities(struct vfe_device *vfe,
- 			      struct v4l2_device *v4l2_dev);
-diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
-index fa0eb30d77c26..718ef8e4f5938 100644
---- a/drivers/media/platform/qcom/camss/camss.c
-+++ b/drivers/media/platform/qcom/camss/camss.c
-@@ -31,7 +31,7 @@
- #define CAMSS_CLOCK_MARGIN_NUMERATOR 105
- #define CAMSS_CLOCK_MARGIN_DENOMINATOR 100
- 
--static const struct resources csiphy_res_8x16[] = {
-+static const struct camss_subdev_resources csiphy_res_8x16[] = {
- 	/* CSIPHY0 */
- 	{
- 		.regulators = {},
-@@ -57,7 +57,7 @@ static const struct resources csiphy_res_8x16[] = {
- 	}
- };
- 
--static const struct resources csid_res_8x16[] = {
-+static const struct camss_subdev_resources csid_res_8x16[] = {
- 	/* CSID0 */
- 	{
- 		.regulators = { "vdda" },
-@@ -93,7 +93,7 @@ static const struct resources csid_res_8x16[] = {
- 	},
- };
- 
--static const struct resources ispif_res_8x16 = {
-+static const struct camss_subdev_resources ispif_res_8x16 = {
- 	/* ISPIF */
- 	.clock = { "top_ahb", "ahb", "ispif_ahb",
- 		   "csi0", "csi0_pix", "csi0_rdi",
-@@ -104,7 +104,7 @@ static const struct resources ispif_res_8x16 = {
- 
- };
- 
--static const struct resources vfe_res_8x16[] = {
-+static const struct camss_subdev_resources vfe_res_8x16[] = {
- 	/* VFE0 */
- 	{
- 		.regulators = {},
-@@ -126,7 +126,7 @@ static const struct resources vfe_res_8x16[] = {
- 	}
- };
- 
--static const struct resources csiphy_res_8x96[] = {
-+static const struct camss_subdev_resources csiphy_res_8x96[] = {
- 	/* CSIPHY0 */
- 	{
- 		.regulators = {},
-@@ -164,7 +164,7 @@ static const struct resources csiphy_res_8x96[] = {
- 	}
- };
- 
--static const struct resources csid_res_8x96[] = {
-+static const struct camss_subdev_resources csid_res_8x96[] = {
- 	/* CSID0 */
- 	{
- 		.regulators = { "vdda" },
-@@ -234,7 +234,7 @@ static const struct resources csid_res_8x96[] = {
- 	}
- };
- 
--static const struct resources ispif_res_8x96 = {
-+static const struct camss_subdev_resources ispif_res_8x96 = {
- 	/* ISPIF */
- 	.clock = { "top_ahb", "ahb", "ispif_ahb",
- 		   "csi0", "csi0_pix", "csi0_rdi",
-@@ -246,7 +246,7 @@ static const struct resources ispif_res_8x96 = {
- 	.interrupt = { "ispif" }
- };
- 
--static const struct resources vfe_res_8x96[] = {
-+static const struct camss_subdev_resources vfe_res_8x96[] = {
- 	/* VFE0 */
- 	{
- 		.regulators = {},
-@@ -284,7 +284,7 @@ static const struct resources vfe_res_8x96[] = {
- 	}
- };
- 
--static const struct resources csiphy_res_660[] = {
-+static const struct camss_subdev_resources csiphy_res_660[] = {
- 	/* CSIPHY0 */
- 	{
- 		.regulators = {},
-@@ -328,7 +328,7 @@ static const struct resources csiphy_res_660[] = {
- 	}
- };
- 
--static const struct resources csid_res_660[] = {
-+static const struct camss_subdev_resources csid_res_660[] = {
- 	/* CSID0 */
- 	{
- 		.regulators = { "vdda", "vdd_sec" },
-@@ -410,7 +410,7 @@ static const struct resources csid_res_660[] = {
- 	}
- };
- 
--static const struct resources ispif_res_660 = {
-+static const struct camss_subdev_resources ispif_res_660 = {
- 	/* ISPIF */
- 	.clock = { "top_ahb", "ahb", "ispif_ahb",
- 		   "csi0", "csi0_pix", "csi0_rdi",
-@@ -422,7 +422,7 @@ static const struct resources ispif_res_660 = {
- 	.interrupt = { "ispif" }
- };
- 
--static const struct resources vfe_res_660[] = {
-+static const struct camss_subdev_resources vfe_res_660[] = {
- 	/* VFE0 */
- 	{
- 		.regulators = {},
-@@ -466,7 +466,7 @@ static const struct resources vfe_res_660[] = {
- 	}
- };
- 
--static const struct resources csiphy_res_845[] = {
-+static const struct camss_subdev_resources csiphy_res_845[] = {
- 	/* CSIPHY0 */
- 	{
- 		.regulators = {},
-@@ -540,7 +540,7 @@ static const struct resources csiphy_res_845[] = {
- 	}
- };
- 
--static const struct resources csid_res_845[] = {
-+static const struct camss_subdev_resources csid_res_845[] = {
- 	/* CSID0 */
- 	{
- 		.regulators = { "vdda-phy", "vdda-pll" },
-@@ -602,7 +602,7 @@ static const struct resources csid_res_845[] = {
- 	}
- };
- 
--static const struct resources vfe_res_845[] = {
-+static const struct camss_subdev_resources vfe_res_845[] = {
- 	/* VFE0 */
- 	{
- 		.regulators = {},
-@@ -663,7 +663,7 @@ static const struct resources vfe_res_845[] = {
- 	}
- };
- 
--static const struct resources csiphy_res_8250[] = {
-+static const struct camss_subdev_resources csiphy_res_8250[] = {
- 	/* CSIPHY0 */
- 	{
- 		.regulators = {},
-@@ -720,7 +720,7 @@ static const struct resources csiphy_res_8250[] = {
- 	}
- };
- 
--static const struct resources csid_res_8250[] = {
-+static const struct camss_subdev_resources csid_res_8250[] = {
- 	/* CSID0 */
- 	{
- 		.regulators = { "vdda-phy", "vdda-pll" },
-@@ -769,7 +769,7 @@ static const struct resources csid_res_8250[] = {
- 	}
- };
- 
--static const struct resources vfe_res_8250[] = {
-+static const struct camss_subdev_resources vfe_res_8250[] = {
- 	/* VFE0 */
- 	{
- 		.regulators = {},
-@@ -1120,10 +1120,10 @@ static int camss_of_parse_ports(struct camss *camss)
-  */
- static int camss_init_subdevices(struct camss *camss)
- {
--	const struct resources *csiphy_res;
--	const struct resources *csid_res;
--	const struct resources *ispif_res;
--	const struct resources *vfe_res;
-+	const struct camss_subdev_resources *csiphy_res;
-+	const struct camss_subdev_resources *csid_res;
-+	const struct camss_subdev_resources *ispif_res;
-+	const struct camss_subdev_resources *vfe_res;
- 	unsigned int i;
- 	int ret;
- 
-diff --git a/drivers/media/platform/qcom/camss/camss.h b/drivers/media/platform/qcom/camss/camss.h
-index e95211cdb1fd6..9d6ba7b17ff02 100644
---- a/drivers/media/platform/qcom/camss/camss.h
-+++ b/drivers/media/platform/qcom/camss/camss.h
-@@ -41,7 +41,7 @@
- 
- #define CAMSS_RES_MAX 17
- 
--struct resources {
-+struct camss_subdev_resources {
- 	char *regulators[CAMSS_RES_MAX];
- 	char *clock[CAMSS_RES_MAX];
- 	char *clock_for_reset[CAMSS_RES_MAX];
+- Includes suggested changes to switch {} statements - Laurent
+  Link: https://lore.kernel.org/linux-media/d7745ece-bea1-f8f9-a1d2-0f01aa221ade@linaro.org/
+
+- Drops SoC specific vfe_get()/vfe_put() we have been using.
+  There is no need to differentiate on SoC since get/put reference count.
+  Link: https://lore.kernel.org/linux-media/62f78aac-c1e4-018c-93c2-4dac1ec7c688@linaro.org/
+
+- Changes the name of the generic struct resources to struct camss_subdev_resources - Laurent
+  Link: https://lore.kernel.org/lkml/20230828173055.GF14596@pendragon.ideasonboard.com/
+
+- media: qcom: camss: media: qcom: camss: Move vfe_disable into a common routine where applicable
+  Follows up on a comment from Laurent
+  Link: https://lore.kernel.org/linux-media/20230828171725.GZ14596@pendragon.ideasonboard.com/
+
+- media: qcom: camss: Propagate vfe_reset error up the callstack
+  Take the different approach to fixing the vfe_disable() routine doing nothing but returning 0
+  Per Konrad's correct comment on vfe_reset() error
+  Link: https://lore.kernel.org/linux-media/aaf9db49-54c4-4c27-8206-61e86ad560c2@linaro.org/
+
+- Restricts the length of buffer size for clock name string lookups - Konrad
+  Link: https://lore.kernel.org/linux-arm-msm/076d958f-2cf3-4a52-99a2-52a6cdd5443c@linaro.org/
+
+- Some outstanding issues not addressed in this series
+
+  * Clock name string lookups.
+    This warrants a standalone series - which will need yaml and dts changes to group clocks
+    by name across all supported SoCs.
+    This will then negate the string matching for clocks.
+    Link: https://lore.kernel.org/linux-arm-msm/3b3682be-5dbd-5e2d-a6c1-7bdf6d3ff8cd@linaro.org/
+
+  * Pixel formats are assigned via control strucutres not pointers from compat params
+    The struct resources stuff is still sub-optimal and it feels to me as if we should
+    do a bigger intervention to break away from a generic structure to subdevice specific
+    parameter structures. Such a subdevice specific structure would support passing pxiel
+    formats.
+
+  * We still need to follow up on having named genpds instead of magic indexes
+    Link: https://lore.kernel.org/lkml/b7e1d035-ee79-77c9-e81f-56fa8c2cf1df@linaro.org/
+
+  * More generally this driver allows for arbitrary connection of CSID, RDI
+    and VFE but, that is not how the hardware works. I believe other people
+    have works in progress to address some of this shortcoming separately.
+
+Bootable - includes tag for patches queued in Hans staging tree
+Link: https://git.codelinaro.org/bryan.odonoghue/kernel/-/commits/22ed4a935d6d323e71b014a69bafd638ad53cb5c 
+
+V3:
+- Adds RB/AB as indicated - Konrad
+- Replaces >= SDM845 with helper function per discussion - bod/Konrad
+- Leaves out constraining VFE clock names sizes. A full pass for resource strings will happen later. - bod
+- Clarifies commit log resulting in updated patch title also
+  "Add support for setting CSIPHY clock name csiphyX"
+  ->
+  "Fix support for setting CSIPHY clock name csiphyX"
+- Adds patch to remove dead integer return type in vfe_disable()
+- Adds patch to comment CSID dt_id meanining which I personally find non-obvious right now - bod
+
+Link: https://git.codelinaro.org/bryan.odonoghue/kernel/-/commits/09e7805a733b488c5dc19b301eb3b77cb0fad3d6
+
+V2:
+- Replaces &camss->res with pointer to res - Konrad
+- Squashes patch for NULL removal - Konrad
+- Left suggestion on ICC initialisation points alone, doesn't seem to fit Konrad/bod
+
+Link: https://git.codelinaro.org/bryan.odonoghue/kernel/-/tree/linux-next-23-08-07-db410c-rb3-camss-dts-v3+maintenance-bugfixes-v2
+
+V1:
+- I forgot to include patch # 14 in V0 of this series.
+  This patch leverages previous changes to unwind the fixed polling of
+  RDI[0..2] allowing driver data to articulate on a per-VFE basis how many
+  RDIs to poll.
+
+Link: https://git.codelinaro.org/bryan.odonoghue/kernel/-/tree/linux-next-23-08-07-db410c-rb3-camss-dts-v3+maintenance-bugfixes-v1
+
+V0:
+This second series of bugfixes stacks ontop of the Fixes series sent earlier.
+
+Link: https://lore.kernel.org/linux-arm-msm/20230814141007.3721197-1-bryan.odonoghue@linaro.org/T/#t
+
+Rather than send both series as one giant series, I opted to send a pure
+Fixes series above, with this second series a non-backport series i.e. no
+Fixes tags in this series.
+
+The existing CAMSS code relies on some hard-coded parameters buried inside
+of the driver, instead of passed via compat .data as arguably ought to be
+the case.
+
+This brittle model is an extending morass of spaghetti code. More than that
+in CAMSS Video Front Ends (VFEs) and the number of Raw Data Interfaces
+(RDIs) per VFE can vary from SoC to SoC. Indeed sm8250 has VFE and VFE Lite
+blocks which have a different number of RDIs per block.
+
+The use of defines as opposed to per-compat parameters inside of ISRs leads
+to either under-polling or over-polling the number of RDIs.
+
+On top of all of that we have some hard-coded statements for clock names
+which breaks easily.
+
+We can solve the under/over polling loop problem by transitioning loop
+controls from macros to parameters passed via probe().
+
+Similarly and unsurprisingly we can also solve the hard-coded clock problem
+by adding some string processing routines that take passed arguments.
+
+There is still some additional maintenance work to be done in this driver
+but before adding one more SoC the code needs to be made more extensible
+and less brittle.
+
+Link: https://git.codelinaro.org/bryan.odonoghue/kernel/-/commits/dc346c7f46c0680bcfb84fded6db97497fffe49a
+
+Bryan O'Donoghue (17):
+  media: qcom: camss: Amalgamate struct resource with struct
+    resource_ispif
+  media: qcom: camss: Rename camss struct resources to
+    camss_subdev_resources
+  media: qcom: camss: Start to move to module compat matched resources
+  media: qcom: camss: Pass icc bandwidth table as a platform parameter
+  media: qcom: camss: Pass remainder of variables as resources
+  media: qcom: camss: Pass line_num from compat resources
+  media: qcom: camss: Pass CAMSS subdev callbacks via resource ops
+    pointer
+  media: qcom: camss: Assign the correct number of RDIs per VFE
+  media: qcom: camss: Remove special case for VFE get/put
+  media: qcom: camss: Untangle if/else spaghetti in camss
+  media: qcom: camss: Allow clocks vfeN vfe_liteN or vfe_lite
+  media: qcom: camss: Functionally decompose CSIPHY clock lookups
+  media: qcom: camss: Fix support for setting CSIPHY clock name csiphyX
+  media: qcom: camss: Support RDI3 for VFE 17x
+  media: qcom: camss: Move vfe_disable into a common routine where
+    applicable
+  media: qcom: camss: Propagate vfe_reset error up the callstack
+  media: qcom: camss: Comment CSID dt_id field
+
+ .../platform/qcom/camss/camss-csid-gen2.c     |   5 +
+ .../media/platform/qcom/camss/camss-csid.c    |  28 +-
+ .../media/platform/qcom/camss/camss-csid.h    |   4 +-
+ .../qcom/camss/camss-csiphy-3ph-1-0.c         |   8 +-
+ .../media/platform/qcom/camss/camss-csiphy.c  |  67 +--
+ .../media/platform/qcom/camss/camss-csiphy.h  |   4 +-
+ .../media/platform/qcom/camss/camss-ispif.c   |  32 +-
+ .../media/platform/qcom/camss/camss-ispif.h   |   4 +-
+ .../media/platform/qcom/camss/camss-vfe-170.c |  57 +--
+ .../media/platform/qcom/camss/camss-vfe-4-1.c |   2 -
+ .../media/platform/qcom/camss/camss-vfe-4-7.c |   2 -
+ .../media/platform/qcom/camss/camss-vfe-4-8.c |   2 -
+ .../media/platform/qcom/camss/camss-vfe-480.c |  45 +-
+ drivers/media/platform/qcom/camss/camss-vfe.c | 127 ++++--
+ drivers/media/platform/qcom/camss/camss-vfe.h |  15 +-
+ .../media/platform/qcom/camss/camss-video.c   |  17 +-
+ drivers/media/platform/qcom/camss/camss.c     | 429 ++++++++++--------
+ drivers/media/platform/qcom/camss/camss.h     |  34 +-
+ 18 files changed, 450 insertions(+), 432 deletions(-)
+
 -- 
 2.42.0
 
