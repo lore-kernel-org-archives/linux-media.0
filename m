@@ -2,138 +2,323 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86408EEB581
-	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:48:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75EB0EEB58F
+	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:48:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231431AbjIKUsl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Sep 2023 16:48:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57802 "EHLO
+        id S231949AbjIKUsq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Sep 2023 16:48:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237584AbjIKM75 (ORCPT
+        with ESMTP id S237780AbjIKNO3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Sep 2023 08:59:57 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442F4E40;
-        Mon, 11 Sep 2023 05:59:53 -0700 (PDT)
-X-UUID: 15b3d7e450a311eea33bb35ae8d461a2-20230911
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=gXBKNDr97s3QJ0WyGSQ30l29SD94Q5protITE1K+x2k=;
-        b=bcOReLJJn0SWEHnDT1wswP/+7ytnpgpbYbyBLNfdKo1t6Wcw7ZwankWTici7ne6xXN5xZJMUCYlHPeLuJ3+5qKerGTmDlzmzMRMPVe5lzop4Krke8YDPLYQDSVpaKQoD+3H8y0AI2MI5o2q0wEvrwmvQaVVEBaB1T22d+5DjVfk=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.31,REQID:bf3f2bf0-2c15-4007-924b-e7e6e73e9540,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-META: VersionHash:0ad78a4,CLOUDID:3a3fce13-4929-4845-9571-38c601e9c3c9,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,
-        DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 15b3d7e450a311eea33bb35ae8d461a2-20230911
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1382096573; Mon, 11 Sep 2023 20:59:46 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.194) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 11 Sep 2023 20:59:45 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Mon, 11 Sep 2023 20:59:44 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
-        <nfraprado@collabora.com>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Nathan Hebert <nhebert@chromium.org>
-CC:     Chen-Yu Tsai <wenst@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "Steve Cho" <stevecho@chromium.org>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH 07/14] media: mediatek: vcodec: using shared memory as vsi address
-Date:   Mon, 11 Sep 2023 20:59:29 +0800
-Message-ID: <20230911125936.10648-8-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230911125936.10648-1-yunfei.dong@mediatek.com>
-References: <20230911125936.10648-1-yunfei.dong@mediatek.com>
+        Mon, 11 Sep 2023 09:14:29 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B18CF0
+        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:22 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2b9338e4695so72622301fa.2
+        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694438060; x=1695042860; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZNmLk2/hMJ8q4cG9CX8+EYjM5qVrNntkoJGG0Zi7eVo=;
+        b=DsyMJ5ME93ipaALhkqr/zGh1C3VTw2AD5ko0p1gpqGCgMO1Du5KxKHQYp4MrcomBiQ
+         sx0tftav9WA19IN98LSZQ6QsBu4t2od+NnfWI4AH3FLsytv1d46gzUteAkQPEjCNFTrq
+         OUYBnjkk46if5zRNUWHenjhDAxNTfMuJYKo2HpwznEKyFet6Ymkz1BPPqE12Xgki3V9u
+         swrTELxdSEvtYWxQMhgup6lG+q32CL7jETMLU5YtCNEf1nGQrZjY3hwaanTvrcyqdseN
+         lNs8129rOmbbNyP0ObTCLGwr7BZyzzBXO4h0FYdcfHLtzI0o57cqCC9hw8eucKVPHP/v
+         DHlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694438060; x=1695042860;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZNmLk2/hMJ8q4cG9CX8+EYjM5qVrNntkoJGG0Zi7eVo=;
+        b=ZvnlJ8xPOa5vhcuYpsaDIVtiFd+TxLyihA1HFtNYX2EwENey/P/7KF0gVYjURFJgrp
+         K4XkAEM3vuuMNC23Rgx0QnpyvRak990eGfBhHQP7hnFAmrCLGL9I7dCRSSJ5TAXVOojI
+         jtIFl3qzwWM75/lC33jG6Ubaf2gHrladtVQmErCSMv3R2DEt3bFNh4EpFUjIYFfKdFJ5
+         jxPMPJGFJENXP7n5BCvM2KOLYwR8MuGWfTTwA8tSxwYs+vGXfu9Cwm2okJZVsPlcTgqM
+         eSWfi7c6MNxOoCnrzhnrMffFi5smnVatWmy990MC8OuJ6n0e0Yzldq1KBLF0i1AXc6+X
+         qGLg==
+X-Gm-Message-State: AOJu0YxkbKtxNGRmlzBcFwO/qlLyA3QXqqyzqne0OAK0OSckIYfU1Ant
+        RrHxEXkhHQyhRLJ/sn61T7NY6g==
+X-Google-Smtp-Source: AGHT+IGt5Rjm4p0+DVyi0lup0Vowe/SRu7EJp8zMmjIXiT7NpMa+xUopjQtDv+eRxe/8UD5qNeRZ9Q==
+X-Received: by 2002:a2e:b618:0:b0:2b5:9778:7ce2 with SMTP id r24-20020a2eb618000000b002b597787ce2mr8180833ljn.15.1694438060329;
+        Mon, 11 Sep 2023 06:14:20 -0700 (PDT)
+Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id kt8-20020a170906aac800b00988e953a586sm5313648ejb.61.2023.09.11.06.14.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Sep 2023 06:14:19 -0700 (PDT)
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
+        andrey.konovalov@linaro.org
+Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 06/17] media: qcom: camss: Pass line_num from compat resources
+Date:   Mon, 11 Sep 2023 14:14:00 +0100
+Message-ID: <20230911131411.196033-7-bryan.odonoghue@linaro.org>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20230911131411.196033-1-bryan.odonoghue@linaro.org>
+References: <20230911131411.196033-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-AS-Result: No-10--5.467500-8.000000
-X-TMASE-MatchedRID: 0E73q8rCjvw0Z9sXcK7F6QPZZctd3P4BK2i9pofGVSsKogmGusPLb/z8
-        vajouc6Xgn1a0E4VtJ41HKQEfcE+6mA2IAXETeuKngIgpj8eDcAZ1CdBJOsoY8RB0bsfrpPIHm9
-        ggFVoCcCrD3ZhSg6+vLZKSSDGpcR2jzadsA9tVfeYDewIYahwU5DDlUdN3vCsftwZ3X11IV0=
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--5.467500-8.000000
-X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-SNTS-SMTP: BAFA93C5A3974CC3DE0FF5C4F43E74C4072E6BD07D7B630DEAEB9D8BD8FD0D592000:8
-X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The vsi buffer is allocated by tee share memory for svp mode, need to
-use the share memory as the vsi address to store vsi data.
+line_num indicates the number of RDI - raw data interface channels which
+are associated with a given IFE/VFE - image/video front end.
 
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+On several SoCs the RDI number is not static for each VFE - for example
+on sm8250 VFE Lite has four RDIs where regular VFE has three.
+
+Assigning line_num statically in the subdev_init() phase initialises
+each VFE to the lower number, meaning in practical terms that we are
+lobbing off one RDI on some VFEs.
+
+Interrupt handling uses static for (i = RDI0; i < RDI2; i++) {} in some
+of our VFE blocks but this can't work for situations where we have a
+mixture of VFE @ 3 RDI and VFE-lite @ 4 RDI blocks.
+
+First step to remediate is to pass line_num from a compat string
+controlled data-structure and do so on a per-VFE basis.
+
+Later patches will assign the correct number of RDI blocks per VFE.
+
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- .../vcodec/decoder/vdec/vdec_h264_req_multi_if.c         | 9 +++++++--
- .../media/platform/mediatek/vcodec/decoder/vdec_vpu_if.c | 8 ++++++--
- 2 files changed, 13 insertions(+), 4 deletions(-)
+ .../media/platform/qcom/camss/camss-vfe-170.c |  2 --
+ .../media/platform/qcom/camss/camss-vfe-4-1.c |  2 --
+ .../media/platform/qcom/camss/camss-vfe-4-7.c |  2 --
+ .../media/platform/qcom/camss/camss-vfe-4-8.c |  2 --
+ .../media/platform/qcom/camss/camss-vfe-480.c |  1 -
+ drivers/media/platform/qcom/camss/camss-vfe.c |  5 +++
+ drivers/media/platform/qcom/camss/camss.c     | 36 ++++++++++++-------
+ drivers/media/platform/qcom/camss/camss.h     |  1 +
+ 8 files changed, 30 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_h264_req_multi_if.c b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_h264_req_multi_if.c
-index 0e741e0dc8ba..7017217022b1 100644
---- a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_h264_req_multi_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_h264_req_multi_if.c
-@@ -417,8 +417,13 @@ static int vdec_h264_slice_init(struct mtk_vcodec_dec_ctx *ctx)
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-170.c b/drivers/media/platform/qcom/camss/camss-vfe-170.c
+index 82d2392022dd1..2ba7160b3bd1e 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe-170.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-170.c
+@@ -753,8 +753,6 @@ static void vfe_subdev_init(struct device *dev, struct vfe_device *vfe)
+ {
+ 	vfe->isr_ops = vfe_isr_ops_170;
+ 	vfe->video_ops = vfe_video_ops_170;
+-
+-	vfe->line_num = VFE_LINE_NUM_GEN2;
+ }
  
- 	vsi_size = round_up(sizeof(struct vdec_h264_slice_vsi), VCODEC_DEC_ALIGNED_64);
- 	inst->vsi = inst->vpu.vsi;
--	inst->vsi_core =
--		(struct vdec_h264_slice_vsi *)(((char *)inst->vpu.vsi) + vsi_size);
-+	if (ctx->is_svp_mode)
-+		inst->vsi_core =
-+			mtk_vcodec_dec_get_shm_buffer_va(ctx->dev->optee_private, MTK_VDEC_CORE,
-+							 OPTEE_DATA_INDEX);
-+	else
-+		inst->vsi_core =
-+			(struct vdec_h264_slice_vsi *)(((char *)inst->vpu.vsi) + vsi_size);
- 	inst->resolution_changed = true;
- 	inst->realloc_mv_buf = true;
+ const struct vfe_hw_ops vfe_ops_170 = {
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-4-1.c b/drivers/media/platform/qcom/camss/camss-vfe-4-1.c
+index bc309f326f519..2911e4126e7ad 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe-4-1.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-4-1.c
+@@ -992,8 +992,6 @@ static void vfe_subdev_init(struct device *dev, struct vfe_device *vfe)
+ 	vfe->isr_ops = vfe_isr_ops_gen1;
+ 	vfe->ops_gen1 = &vfe_ops_gen1_4_1;
+ 	vfe->video_ops = vfe_video_ops_gen1;
+-
+-	vfe->line_num = VFE_LINE_NUM_GEN1;
+ }
  
-diff --git a/drivers/media/platform/mediatek/vcodec/decoder/vdec_vpu_if.c b/drivers/media/platform/mediatek/vcodec/decoder/vdec_vpu_if.c
-index c1a1bddf99d8..d63ba20214fb 100644
---- a/drivers/media/platform/mediatek/vcodec/decoder/vdec_vpu_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/decoder/vdec_vpu_if.c
-@@ -18,8 +18,12 @@ static void handle_init_ack_msg(const struct vdec_vpu_ipi_init_ack *msg)
+ const struct vfe_hw_ops vfe_ops_4_1 = {
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-4-7.c b/drivers/media/platform/qcom/camss/camss-vfe-4-7.c
+index 8acd76c9746ba..b65ed0fef595e 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe-4-7.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-4-7.c
+@@ -1188,8 +1188,6 @@ static void vfe_subdev_init(struct device *dev, struct vfe_device *vfe)
+ 	vfe->isr_ops = vfe_isr_ops_gen1;
+ 	vfe->ops_gen1 = &vfe_ops_gen1_4_7;
+ 	vfe->video_ops = vfe_video_ops_gen1;
+-
+-	vfe->line_num = VFE_LINE_NUM_GEN1;
+ }
  
- 	/* mapping VPU address to kernel virtual address */
- 	/* the content in vsi is initialized to 0 in VPU */
--	vpu->vsi = mtk_vcodec_fw_map_dm_addr(vpu->ctx->dev->fw_handler,
--					     msg->vpu_inst_addr);
-+	if (vpu->ctx->is_svp_mode)
-+		vpu->vsi = mtk_vcodec_dec_get_shm_buffer_va(vpu->ctx->dev->optee_private,
-+							    MTK_VDEC_LAT0, OPTEE_DATA_INDEX);
-+	else
-+		vpu->vsi = mtk_vcodec_fw_map_dm_addr(vpu->ctx->dev->fw_handler,
-+						     msg->vpu_inst_addr);
- 	vpu->inst_addr = msg->vpu_inst_addr;
+ const struct vfe_hw_ops vfe_ops_4_7 = {
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-4-8.c b/drivers/media/platform/qcom/camss/camss-vfe-4-8.c
+index 3a0167ecf873a..7b3805177f037 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe-4-8.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-4-8.c
+@@ -1173,8 +1173,6 @@ static void vfe_subdev_init(struct device *dev, struct vfe_device *vfe)
+ 	vfe->isr_ops = vfe_isr_ops_gen1;
+ 	vfe->ops_gen1 = &vfe_ops_gen1_4_8;
+ 	vfe->video_ops = vfe_video_ops_gen1;
+-
+-	vfe->line_num = VFE_LINE_NUM_GEN1;
+ }
  
- 	mtk_vdec_debug(vpu->ctx, "- vpu_inst_addr = 0x%x", vpu->inst_addr);
+ const struct vfe_hw_ops vfe_ops_4_8 = {
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-480.c b/drivers/media/platform/qcom/camss/camss-vfe-480.c
+index 074fa4e38163e..43a2964121f22 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe-480.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-480.c
+@@ -569,7 +569,6 @@ static const struct camss_video_ops vfe_video_ops_480 = {
+ static void vfe_subdev_init(struct device *dev, struct vfe_device *vfe)
+ {
+ 	vfe->video_ops = vfe_video_ops_480;
+-	vfe->line_num = MAX_VFE_OUTPUT_LINES;
+ }
+ 
+ const struct vfe_hw_ops vfe_ops_480 = {
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
+index 94ee7c7039eb3..f381c82f1f877 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe.c
+@@ -1305,6 +1305,11 @@ int msm_vfe_subdev_init(struct camss *camss, struct vfe_device *vfe,
+ 	default:
+ 		return -EINVAL;
+ 	}
++
++	if (!res->line_num)
++		return -EINVAL;
++
++	vfe->line_num = res->line_num;
+ 	vfe->ops->subdev_init(dev, vfe);
+ 
+ 	/* Memory */
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+index d1152a7db9cd2..54886a2a449b0 100644
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -123,7 +123,8 @@ static const struct camss_subdev_resources vfe_res_8x16[] = {
+ 				{ 0 },
+ 				{ 0 } },
+ 		.reg = { "vfe0" },
+-		.interrupt = { "vfe0" }
++		.interrupt = { "vfe0" },
++		.line_num = VFE_LINE_NUM_GEN1,
+ 	}
+ };
+ 
+@@ -263,7 +264,8 @@ static const struct camss_subdev_resources vfe_res_8x96[] = {
+ 				{ 0 },
+ 				{ 0 } },
+ 		.reg = { "vfe0" },
+-		.interrupt = { "vfe0" }
++		.interrupt = { "vfe0" },
++		.line_num = VFE_LINE_NUM_GEN1,
+ 	},
+ 
+ 	/* VFE1 */
+@@ -281,7 +283,8 @@ static const struct camss_subdev_resources vfe_res_8x96[] = {
+ 				{ 0 },
+ 				{ 0 } },
+ 		.reg = { "vfe1" },
+-		.interrupt = { "vfe1" }
++		.interrupt = { "vfe1" },
++		.line_num = VFE_LINE_NUM_GEN1,
+ 	}
+ };
+ 
+@@ -442,7 +445,8 @@ static const struct camss_subdev_resources vfe_res_660[] = {
+ 				{ 0 },
+ 				{ 0 } },
+ 		.reg = { "vfe0" },
+-		.interrupt = { "vfe0" }
++		.interrupt = { "vfe0" },
++		.line_num = VFE_LINE_NUM_GEN1,
+ 	},
+ 
+ 	/* VFE1 */
+@@ -463,7 +467,8 @@ static const struct camss_subdev_resources vfe_res_660[] = {
+ 				{ 0 },
+ 				{ 0 } },
+ 		.reg = { "vfe1" },
+-		.interrupt = { "vfe1" }
++		.interrupt = { "vfe1" },
++		.line_num = VFE_LINE_NUM_GEN1,
+ 	}
+ };
+ 
+@@ -621,7 +626,8 @@ static const struct camss_subdev_resources vfe_res_845[] = {
+ 				{ 19200000, 75000000, 384000000, 538666667 },
+ 				{ 384000000 } },
+ 		.reg = { "vfe0" },
+-		.interrupt = { "vfe0" }
++		.interrupt = { "vfe0" },
++		.line_num = VFE_LINE_NUM_GEN2,
+ 	},
+ 
+ 	/* VFE1 */
+@@ -641,7 +647,8 @@ static const struct camss_subdev_resources vfe_res_845[] = {
+ 				{ 19200000, 75000000, 384000000, 538666667 },
+ 				{ 384000000 } },
+ 		.reg = { "vfe1" },
+-		.interrupt = { "vfe1" }
++		.interrupt = { "vfe1" },
++		.line_num = VFE_LINE_NUM_GEN2,
+ 	},
+ 
+ 	/* VFE-lite */
+@@ -660,7 +667,8 @@ static const struct camss_subdev_resources vfe_res_845[] = {
+ 				{ 19200000, 75000000, 384000000, 538666667 },
+ 				{ 384000000 } },
+ 		.reg = { "vfe_lite" },
+-		.interrupt = { "vfe_lite" }
++		.interrupt = { "vfe_lite" },
++		.line_num = VFE_LINE_NUM_GEN2,
+ 	}
+ };
+ 
+@@ -787,7 +795,8 @@ static const struct camss_subdev_resources vfe_res_8250[] = {
+ 				{ 0 },
+ 				{ 0 } },
+ 		.reg = { "vfe0" },
+-		.interrupt = { "vfe0" }
++		.interrupt = { "vfe0" },
++		.line_num = 4,
+ 	},
+ 	/* VFE1 */
+ 	{
+@@ -805,7 +814,8 @@ static const struct camss_subdev_resources vfe_res_8250[] = {
+ 				{ 0 },
+ 				{ 0 } },
+ 		.reg = { "vfe1" },
+-		.interrupt = { "vfe1" }
++		.interrupt = { "vfe1" },
++		.line_num = 4,
+ 	},
+ 	/* VFE2 (lite) */
+ 	{
+@@ -822,7 +832,8 @@ static const struct camss_subdev_resources vfe_res_8250[] = {
+ 				{ 400000000, 480000000 },
+ 				{ 0 } },
+ 		.reg = { "vfe_lite0" },
+-		.interrupt = { "vfe_lite0" }
++		.interrupt = { "vfe_lite0" },
++		.line_num = 4,
+ 	},
+ 	/* VFE3 (lite) */
+ 	{
+@@ -839,7 +850,8 @@ static const struct camss_subdev_resources vfe_res_8250[] = {
+ 				{ 400000000, 480000000 },
+ 				{ 0 } },
+ 		.reg = { "vfe_lite1" },
+-		.interrupt = { "vfe_lite1" }
++		.interrupt = { "vfe_lite1" },
++		.line_num = 4,
+ 	},
+ };
+ 
+diff --git a/drivers/media/platform/qcom/camss/camss.h b/drivers/media/platform/qcom/camss/camss.h
+index 3b6562b515d46..fc02aa84a5dd7 100644
+--- a/drivers/media/platform/qcom/camss/camss.h
++++ b/drivers/media/platform/qcom/camss/camss.h
+@@ -48,6 +48,7 @@ struct camss_subdev_resources {
+ 	u32 clock_rate[CAMSS_RES_MAX][CAMSS_RES_MAX];
+ 	char *reg[CAMSS_RES_MAX];
+ 	char *interrupt[CAMSS_RES_MAX];
++	u8 line_num;
+ };
+ 
+ struct icc_bw_tbl {
 -- 
-2.18.0
+2.42.0
 
