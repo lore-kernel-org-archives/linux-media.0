@@ -2,138 +2,242 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CB22EEB58C
-	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:47:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50327EEB590
+	for <linux-media@archiver.kernel.org>; Mon, 11 Sep 2023 20:47:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232775AbjIKUrf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Sep 2023 16:47:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51580 "EHLO
+        id S232906AbjIKUrk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Sep 2023 16:47:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241544AbjIKPKk (ORCPT
+        with ESMTP id S237794AbjIKNOc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Sep 2023 11:10:40 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82D47E4D
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:10:35 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-307d58b3efbso4169983f8f.0
-        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 08:10:35 -0700 (PDT)
+        Mon, 11 Sep 2023 09:14:32 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7347DE5F
+        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:24 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-9aa0495f9cfso565819266b.1
+        for <linux-media@vger.kernel.org>; Mon, 11 Sep 2023 06:14:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694445034; x=1695049834; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7ht2UJ2SrAZEBCW6MQUWYMxu5nJ3shvvrcqqoVglcXI=;
-        b=TzZ3f7VlRPGg7/misLMDmmMiGHgCXV0MOieoPxMZNZeG6oPgaQ/cyw4AB9K/9+ybOJ
-         49quPh6n7b4ZcAdzjzObrGAMBTLBMIBJZIpUwl/PzpZOwb/Ub0tjHuA+bVCOdKQXGTgW
-         bLZZ9XreQQro/fKY3ERiGvYpU45MpbD5aI0qORkm389GDUBbzvSZ9vMvvKLdi0iXZyNZ
-         XuEcdxKnFwsZOaDEerfHotGWK0kztBnaFImPiLc4uSDgR6sI8yLo7HQtcng2WR1PBBIa
-         LjfEfTy36RFefoN4ltX03Pewa7jE8o6DaRiQB4hjzoRRXJqrbxDpX06mx5Mm3WCXB1h5
-         Szeg==
+        d=linaro.org; s=google; t=1694438062; x=1695042862; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XhSKtn1WWoetbFcEPefpk8WL/CMtB2nONd2TgD1HTnc=;
+        b=TxOQngcuQrk9neSYpXpEWDetgRy86M7BgRbVcvi/jBzsjedlSFxqKtxI4oTlPyoXpj
+         Pm6x4/OIkO0zX1fme7BX4cpRCqurJMXUXxzpgG6BnhsGmAN6nJWuIJuXlVG1HEvVCDsN
+         0+r1x+TC6MXPu+YL4c1BiuvKs4EMe2oKK4O2nFhmoGHrsNO7GdL7udiJUUbSrHHUa2Jf
+         8ZhZ+y9WvzwJg5AGL9aO2XQfK6ipjn8nhpPT9AZZ2eNCQeetX2/ZQ/OABrHlGhiOcC5h
+         CcITVGUR3+pdy755Jm89Pld3/0m4fulYoWTYH3e3CapCbZUbigtJJ92kNZjvpG4iSsXg
+         EJdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694445034; x=1695049834;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1694438062; x=1695042862;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7ht2UJ2SrAZEBCW6MQUWYMxu5nJ3shvvrcqqoVglcXI=;
-        b=AigvsW9MYOmREMsWPO9XB0XosjjU3ydYjplWQVOcmaS20qikjBHWGTZbPDCod+TJPY
-         OVz7Q/w8ig8zrahELuk01ksCddqXRCCZd1TGmWVF4wyNBSeThfBwGAQ8OOOzMNxkifRR
-         ML8kqnWXWhVLRJ7dFrJSlV+fsY6n2bLyB9qH8qltwOJCE7Y1ZWz+QWNindRxtRzBGr+d
-         ZA76d5C5gfE0+0/p4GRtMDtdOvVqGPF77fBknca7VRW5nbccDgiImcWgsFT4K6okmNHX
-         QHFtlO+QODsv83f722UsNECMTCDoQOd59JbvD7yUrtjP5Dw/+P+LRg8m8R+7MTnYLMg4
-         kuYw==
-X-Gm-Message-State: AOJu0YyHaa2ZTN0OWFXgRZk7GLmjETNDE6wVEl4wI8M8LkDWu0YHXqV6
-        +JgmoxoDWCZj33T1GiW5U6tNsg==
-X-Google-Smtp-Source: AGHT+IE4nKR0UaC4vAJTRWZ8UGSUUnfSj9OlxBtzCtbNOI2rCiLWLB5iH0M/MLPczrSSHlDGkLqR7g==
-X-Received: by 2002:adf:ec42:0:b0:31c:6420:ff4 with SMTP id w2-20020adfec42000000b0031c64200ff4mr7695847wrn.36.1694445033966;
-        Mon, 11 Sep 2023 08:10:33 -0700 (PDT)
-Received: from [10.167.154.1] (178235177061.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.61])
-        by smtp.gmail.com with ESMTPSA id n4-20020a056402060400b0052a3ad836basm4681281edv.41.2023.09.11.08.10.32
+        bh=XhSKtn1WWoetbFcEPefpk8WL/CMtB2nONd2TgD1HTnc=;
+        b=t2S64fc9u4NqOKs/NkSCPJ7JBRhnZz9WTFuDbs9rPNOiG7hW2yDFgvWuAYjp6PEA6e
+         OworiAJCzoGGgroKOALFNRfC6ZBSbOE+orDuAmSmXl2M8DQ77ugvsSPCzZOYWcmPRc0+
+         0L2h65kGkg/J7xZnaD6ngU6xe4748M43VM3F1osHEWxoyaXdUEhNoBXRrNiye9zRQtPF
+         hAWaSK5eLGQWEz8r09GbBe7//4gT3kjzmwDyDzdy4sPSF+rZMoKeAuJ0LhipIYwneYCu
+         Q8Tr9klTIq/8eKo5xuLZjPHvMR7jlwLTuiaLHNNKnFdenA8vliPiRGfpNxCTIfqvhPEb
+         b3Ig==
+X-Gm-Message-State: AOJu0YwIZ7ff70xomeUeQ17TxL9dGEbSxqEhxGVomjGGIHLo9doAs+qX
+        9NXWYQIV2W9rE58JTaOYBaLh6g==
+X-Google-Smtp-Source: AGHT+IEFbf3WidJFJmKCbSDnTfUZx1nsd3kx3inUQt+W2uUry3n4S5gz+/xikpS3GNUDhEB5vi7IFw==
+X-Received: by 2002:a17:906:8a7a:b0:9a9:fa4a:5a4e with SMTP id hy26-20020a1709068a7a00b009a9fa4a5a4emr10218566ejc.13.1694438062745;
+        Mon, 11 Sep 2023 06:14:22 -0700 (PDT)
+Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id kt8-20020a170906aac800b00988e953a586sm5313648ejb.61.2023.09.11.06.14.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Sep 2023 08:10:33 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 11 Sep 2023 17:10:17 +0200
-Subject: [PATCH RFT 03/20] media: venus: pm_helpers: Add kerneldoc to
- venus_clks_get()
+        Mon, 11 Sep 2023 06:14:22 -0700 (PDT)
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     rfoss@kernel.org, todor.too@gmail.com, bryan.odonoghue@linaro.org,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
+        andrey.konovalov@linaro.org
+Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 08/17] media: qcom: camss: Assign the correct number of RDIs per VFE
+Date:   Mon, 11 Sep 2023 14:14:02 +0100
+Message-ID: <20230911131411.196033-9-bryan.odonoghue@linaro.org>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20230911131411.196033-1-bryan.odonoghue@linaro.org>
+References: <20230911131411.196033-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230911-topic-mars-v1-3-a7d38bf87bdb@linaro.org>
-References: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
-In-Reply-To: <20230911-topic-mars-v1-0-a7d38bf87bdb@linaro.org>
-To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1694445027; l=2105;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=Vha5xF+p9BTPxJus7eqd6sGp8qGoiJe2/C4TA/PBKzk=;
- b=f8G7+PSq8vQ8m0fwoFb7lhAeXAZZFKJlZ2K2ok59naEqYbofKKp6JrLJUliGcyJWrNRkL2vPp
- 0z5kabW6X0jC391xXkpaCqPIoGArBX9faLYDIv0ZpDgQu4zdI6vQRHx
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-To make it easier to understand the various clock requirements within
-this driver, add kerneldoc to venus_clk_get() explaining the fluff.
+Each Video Front End - VFE - has a variable number of Raw Data Interfaces -
+RDIs associated with it.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+The CAMSS code started from a naive implementation where a fixed define was
+used as a control in a for(){} loop iterating through RDIs.
+
+That model scales badly. An attempt was made with  VFE_LINE_NUM_GEN2 and
+VFE_LINE_NUM_GEN1 to differentiate between SoCs but, the problem with that
+is "gen1" and "gen2" have no meaning in the silicon. There is no fixed
+constraint in the silicon between VFE and RDI, it is entirely up to the SoC
+designers how many VFEs are populated and how many RDIs to associate with
+each VFE.
+
+As an example sdm845 has VFE version 175 and sm8250 VFE version 480.
+sdm845 has 2 VFEs with 4 RDIs and 1 VFE Lite with 4 RDIs.
+sm8250 has 2 VFEs with 3 RDIs and 2 VFE Lite with 4 RDIs.
+
+Clearly then we need a more granular model to capture the necessary data.
+
+The defines have gone away to be replaced with per-SoC data but, we haven't
+populated the parameter data with the real values.
+
+Let's call those values out now
+
+msm8916:
+1 x VFE
+3 x RDI per VFE (not 4)
+
+msm8996:
+2 x VFE
+3 x RDI per VFE (not 4)
+
+sdm660:
+2 x VFE
+3 x RDI per VFE (not 4)
+
+sdm845:
+2 x VFE
+4 x RDI per VFE (not 3)
+1 x VFE Lite
+4 x RDI per VFE Lite (not 3)
+
+sm8250:
+2 x VFE
+3 x RDI per VFE (not 4)
+2 x VFE Lite
+4 x RDI per VFE Lite
+
+This more complex and correct mapping was not possible prior to passing
+values via driver data. Now that we have that change in place we can
+correctly map VFEs to RDIs for each VFE.
+
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/platform/qcom/venus/pm_helpers.c | 28 ++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ drivers/media/platform/qcom/camss/camss-vfe.h |  2 --
+ drivers/media/platform/qcom/camss/camss.c     | 20 +++++++++----------
+ 2 files changed, 10 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
-index e2aec0b46126..59e3eaad97ed 100644
---- a/drivers/media/platform/qcom/venus/pm_helpers.c
-+++ b/drivers/media/platform/qcom/venus/pm_helpers.c
-@@ -23,6 +23,34 @@
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe.h b/drivers/media/platform/qcom/camss/camss-vfe.h
+index b4bae9f65c68f..4783afa73a365 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe.h
++++ b/drivers/media/platform/qcom/camss/camss-vfe.h
+@@ -52,9 +52,7 @@ enum vfe_line_id {
+ 	VFE_LINE_RDI0 = 0,
+ 	VFE_LINE_RDI1 = 1,
+ 	VFE_LINE_RDI2 = 2,
+-	VFE_LINE_NUM_GEN2 = 3,
+ 	VFE_LINE_PIX = 3,
+-	VFE_LINE_NUM_GEN1 = 4,
+ 	VFE_LINE_NUM_MAX = 4
+ };
  
- static bool legacy_binding;
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+index 12131d9ea7ca8..8e78dd8d5961e 100644
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -128,7 +128,7 @@ static const struct camss_subdev_resources vfe_res_8x16[] = {
+ 				{ 0 } },
+ 		.reg = { "vfe0" },
+ 		.interrupt = { "vfe0" },
+-		.line_num = VFE_LINE_NUM_GEN1,
++		.line_num = 3,
+ 		.ops = &vfe_ops_4_1
+ 	}
+ };
+@@ -277,7 +277,7 @@ static const struct camss_subdev_resources vfe_res_8x96[] = {
+ 				{ 0 } },
+ 		.reg = { "vfe0" },
+ 		.interrupt = { "vfe0" },
+-		.line_num = VFE_LINE_NUM_GEN1,
++		.line_num = 3,
+ 		.ops = &vfe_ops_4_7
+ 	},
  
-+/**
-+ * venus_clks_get() - Get Venus clocks that are not bound to a vcodec
-+ * @core: A pointer to the venus core resource
-+ *
-+ * The Venus block (depending on the generation) can be split into a couple
-+ * of clock domains: one for "main logic" and one for each video core (0-2pcs).
-+ *
-+ * MSM8916 (and possibly other HFIv1 users) only feature the "main logic"
-+ * domain, so this function is the only kind if clk_get necessary there.
-+ *
-+ * MSM8996 (and other HFIv3 users) feature two video cores, with core0 being
-+ * statically proclaimed a decoder and core1 an encoder, with both having
-+ * their own clock domains.
-+ *
-+ * SDM845 features two video cores, each one of which may or may not be
-+ * subdivided into 2 enc/dec threads.
-+ *
-+ * Other SoCs either feature a single video core (with its own clock domain)
-+ * or 1 video core and 1 CVP (Computer Vision Processor) core. In both cases
-+ * we treat it the same (CVP only happens to live near-by Venus on the SoC).
-+ *
-+ * Due to unfortunate developments in the past, we have to support bindings
-+ * (MSM8996, SDM660, SDM845) that require specifying the clocks and
-+ * power-domains associated with a video core domain in a bogus subnode,
-+ * which means that additional fluff is necessary..
-+ *
-+ * Return: 0 on success, negative errno on failure.
-+ */
- static int venus_clks_get(struct venus_core *core)
- {
- 	const struct venus_resources *res = core->res;
-
+@@ -297,7 +297,7 @@ static const struct camss_subdev_resources vfe_res_8x96[] = {
+ 				{ 0 } },
+ 		.reg = { "vfe1" },
+ 		.interrupt = { "vfe1" },
+-		.line_num = VFE_LINE_NUM_GEN1,
++		.line_num = 3,
+ 		.ops = &vfe_ops_4_7
+ 	}
+ };
+@@ -467,7 +467,7 @@ static const struct camss_subdev_resources vfe_res_660[] = {
+ 				{ 0 } },
+ 		.reg = { "vfe0" },
+ 		.interrupt = { "vfe0" },
+-		.line_num = VFE_LINE_NUM_GEN1,
++		.line_num = 3,
+ 		.ops = &vfe_ops_4_8
+ 	},
+ 
+@@ -490,7 +490,7 @@ static const struct camss_subdev_resources vfe_res_660[] = {
+ 				{ 0 } },
+ 		.reg = { "vfe1" },
+ 		.interrupt = { "vfe1" },
+-		.line_num = VFE_LINE_NUM_GEN1,
++		.line_num = 3,
+ 		.ops = &vfe_ops_4_8
+ 	}
+ };
+@@ -657,7 +657,7 @@ static const struct camss_subdev_resources vfe_res_845[] = {
+ 				{ 384000000 } },
+ 		.reg = { "vfe0" },
+ 		.interrupt = { "vfe0" },
+-		.line_num = VFE_LINE_NUM_GEN2,
++		.line_num = 4,
+ 		.ops = &vfe_ops_170
+ 	},
+ 
+@@ -679,7 +679,7 @@ static const struct camss_subdev_resources vfe_res_845[] = {
+ 				{ 384000000 } },
+ 		.reg = { "vfe1" },
+ 		.interrupt = { "vfe1" },
+-		.line_num = VFE_LINE_NUM_GEN2,
++		.line_num = 4,
+ 		.ops = &vfe_ops_170
+ 	},
+ 
+@@ -700,7 +700,7 @@ static const struct camss_subdev_resources vfe_res_845[] = {
+ 				{ 384000000 } },
+ 		.reg = { "vfe_lite" },
+ 		.interrupt = { "vfe_lite" },
+-		.line_num = VFE_LINE_NUM_GEN2,
++		.line_num = 4,
+ 		.ops = &vfe_ops_170
+ 	}
+ };
+@@ -839,7 +839,7 @@ static const struct camss_subdev_resources vfe_res_8250[] = {
+ 				{ 0 } },
+ 		.reg = { "vfe0" },
+ 		.interrupt = { "vfe0" },
+-		.line_num = 4,
++		.line_num = 3,
+ 		.ops = &vfe_ops_480
+ 	},
+ 	/* VFE1 */
+@@ -859,7 +859,7 @@ static const struct camss_subdev_resources vfe_res_8250[] = {
+ 				{ 0 } },
+ 		.reg = { "vfe1" },
+ 		.interrupt = { "vfe1" },
+-		.line_num = 4,
++		.line_num = 3,
+ 		.ops = &vfe_ops_480
+ 	},
+ 	/* VFE2 (lite) */
 -- 
 2.42.0
 
