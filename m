@@ -2,46 +2,46 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E8E1CA0ED5
-	for <linux-media@archiver.kernel.org>; Tue, 12 Sep 2023 07:59:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7869FCA0ED6
+	for <linux-media@archiver.kernel.org>; Tue, 12 Sep 2023 07:59:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232038AbjILH7R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 Sep 2023 03:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60772 "EHLO
+        id S231925AbjILH7T (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 Sep 2023 03:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232192AbjILH6s (ORCPT
+        with ESMTP id S231843AbjILH6u (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 Sep 2023 03:58:48 -0400
+        Tue, 12 Sep 2023 03:58:50 -0400
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 870E32127;
-        Tue, 12 Sep 2023 00:58:14 -0700 (PDT)
-X-UUID: 1c478d2c514211eea33bb35ae8d461a2-20230912
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9E910D0;
+        Tue, 12 Sep 2023 00:58:15 -0700 (PDT)
+X-UUID: 1c4906b6514211eea33bb35ae8d461a2-20230912
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=qVXAH/IOPlb4ZbYsnEi9BR7Q1+6g1xboU/NAeYRoxmk=;
-        b=lfP8lUxrezwZcRIASUH+o8MfLK2UiDn2DrfALs5gpf0bqpi11KT6XHWG41UwUUJRTX773sJyrO2vCXaK5L73x0iwknMdlyxXRYxWxY4c+pcHIxNiZve0gq1zsiR+vW684hqxgvZ+fvtZBI0MqTMTr28EE1ya+m8U778ww6XOB44=;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=fUWnanIaV2FqUi1Q3/OGK9oB0/EvDHBwvcsVqVbtqzU=;
+        b=vCj9px5+EuEZhMUmJ+12+i4U24YUI2tjuE/1FZuaQlfMtq9sweQs1CLL1Jj0RgKFA+vb/WRPSrnVSH+HaVXh8cq0//LtpgU9gvWHGe7U/P5inNxFv2akwMTYDsUaDsWAEqE6l6bM2j9MBwZMuQ9H0B/e1AgMBxlE3PflBLRB3SY=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.31,REQID:8e00f6b9-940c-48f6-bb05-6a06e8cf910a,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:0ad78a4,CLOUDID:cb29d713-4929-4845-9571-38c601e9c3c9,B
+X-CID-O-INFO: VERSION:1.1.31,REQID:ea9b0274-61e4-4453-87f8-86328ea63693,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:-25
+X-CID-META: VersionHash:0ad78a4,CLOUDID:e35199ef-9a6e-4c39-b73e-f2bc08ca3dc5,B
         ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
         RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,
         DKR:0,DKP:0,BRR:0,BRE:0
 X-CID-BVR: 0,NGT
 X-CID-BAS: 0,NGT,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 1c478d2c514211eea33bb35ae8d461a2-20230912
+X-UUID: 1c4906b6514211eea33bb35ae8d461a2-20230912
 Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
         (envelope-from <moudy.ho@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 2129602178; Tue, 12 Sep 2023 15:58:07 +0800
+        with ESMTP id 121330445; Tue, 12 Sep 2023 15:58:07 +0800
 Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
  mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 12 Sep 2023 15:58:06 +0800
+ 15.2.1118.26; Tue, 12 Sep 2023 15:58:07 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Tue, 12 Sep 2023 15:58:06 +0800
+ 15.2.1118.26 via Frontend Transport; Tue, 12 Sep 2023 15:58:07 +0800
 From:   Moudy Ho <moudy.ho@mediatek.com>
 To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         Philipp Zabel <p.zabel@pengutronix.de>,
@@ -60,298 +60,110 @@ CC:     AngeloGioacchino Del Regno
         <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         "Moudy Ho" <moudy.ho@mediatek.com>
-Subject: [PATCH v5 03/14] media: platform: mtk-mdp3: add support second sets of MMSYS
-Date:   Tue, 12 Sep 2023 15:57:54 +0800
-Message-ID: <20230912075805.11432-4-moudy.ho@mediatek.com>
+Subject: [PATCH v5 09/14] media: platform: mtk-mdp3: extend GCE event waiting in RDMA and WROT
+Date:   Tue, 12 Sep 2023 15:58:00 +0800
+Message-ID: <20230912075805.11432-10-moudy.ho@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20230912075805.11432-1-moudy.ho@mediatek.com>
 References: <20230912075805.11432-1-moudy.ho@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-AS-Result: No-10--5.899000-8.000000
-X-TMASE-MatchedRID: SLF7MkaTajMmiXUXx9FN5QPZZctd3P4BK2i9pofGVSsKogmGusPLbw6B
-        lGN0WKrNVYAhfitWUenIwrufi9pnN8ZR5zLxbV5qFYJUGv4DL3yscK/K2Dlvjsnc0Uc0m8WZEUS
-        33ulD4Ly5T7dW/d57L2mevJVqJe6AHxPMjOKY7A8LbigRnpKlKTpcQTtiHDgWy7OVZWMu5NZ/bD
-        wXTjqInPOyt166k3k81j4ehKdGTHzAKdUOVLwMLg==
+X-TM-AS-Result: No-10--9.856400-8.000000
+X-TMASE-MatchedRID: DMsOoTK7WFAmNHlC7DQV5eKXavbHY/C1dG7bDJL8qEe0rcU5V/oSe/dQ
+        3ETtBTk8CTzLWkg2tvC1JEhwlIePJTA9KOtcb1F9t1AhvyEKdj67nrAU9KQxUWJkJOQVCIpw8Fh
+        GjTp5WPdMtAAmLKD7vIAy6p60ZV62fJ5/bZ6npdjKayT/BQTiGohS5vGKvvanaBPBOobB3vg8XG
+        hjTOWSBh8yxqhXzeGESjlR+zOVjW7AvpLE+mvX8g==
 X-TM-AS-User-Approved-Sender: No
 X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--5.899000-8.000000
+X-TMASE-Result: 10--9.856400-8.000000
 X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-SNTS-SMTP: 38FA8BBB71F6830F7D47BCA2FFC102881C19403BF40A429C0E903C70A7621EDA2000:8
+X-TM-SNTS-SMTP: 0D034B29F556A55893767E51807D5009250057978E92ED49296CFC242AD4FB442000:8
 X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-MT8195 has two MMSYS sets, VPPSYS0 and VPPSYS1.
-These sets coordinate and control the clock, power, and
-register settings needed for the components of MDP3.
+Support for multiple RDMA/WROT waits for GCE events.
 
 Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
 ---
- .../platform/mediatek/mdp3/mdp_cfg_data.c     | 44 +++++++++----------
- .../platform/mediatek/mdp3/mtk-mdp3-comp.h    |  1 +
- .../platform/mediatek/mdp3/mtk-mdp3-core.c    | 40 +++++++++++------
- .../platform/mediatek/mdp3/mtk-mdp3-core.h    |  3 ++
- 4 files changed, 53 insertions(+), 35 deletions(-)
+ .../media/platform/mediatek/mdp3/mdp_cfg_data.c |  2 ++
+ .../platform/mediatek/mdp3/mtk-mdp3-comp.c      | 17 +++++++++++------
+ .../platform/mediatek/mdp3/mtk-mdp3-core.h      |  2 ++
+ 3 files changed, 15 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/media/platform/mediatek/mdp3/mdp_cfg_data.c b/drivers/media/platform/mediatek/mdp3/mdp_cfg_data.c
-index 502eeae0bfdc..58792902abb5 100644
+index 8eac09f9d3dd..b69fa0452612 100644
 --- a/drivers/media/platform/mediatek/mdp3/mdp_cfg_data.c
 +++ b/drivers/media/platform/mediatek/mdp3/mdp_cfg_data.c
-@@ -73,75 +73,75 @@ static const u32 mt8183_mutex_idx[MDP_MAX_COMP_COUNT] = {
- 
- static const struct mdp_comp_data mt8183_mdp_comp_data[MDP_MAX_COMP_COUNT] = {
- 	[MDP_COMP_WPEI] = {
--		{MDP_COMP_TYPE_WPEI, 0, MT8183_MDP_COMP_WPEI},
-+		{MDP_COMP_TYPE_WPEI, 0, MT8183_MDP_COMP_WPEI, 0},
- 		{0, 0, 0}
- 	},
- 	[MDP_COMP_WPEO] = {
--		{MDP_COMP_TYPE_EXTO, 2, MT8183_MDP_COMP_WPEO},
-+		{MDP_COMP_TYPE_EXTO, 2, MT8183_MDP_COMP_WPEO, 0},
- 		{0, 0, 0}
- 	},
- 	[MDP_COMP_WPEI2] = {
--		{MDP_COMP_TYPE_WPEI, 1, MT8183_MDP_COMP_WPEI2},
-+		{MDP_COMP_TYPE_WPEI, 1, MT8183_MDP_COMP_WPEI2, 0},
- 		{0, 0, 0}
- 	},
- 	[MDP_COMP_WPEO2] = {
--		{MDP_COMP_TYPE_EXTO, 3, MT8183_MDP_COMP_WPEO2},
-+		{MDP_COMP_TYPE_EXTO, 3, MT8183_MDP_COMP_WPEO2, 0},
- 		{0, 0, 0}
- 	},
- 	[MDP_COMP_ISP_IMGI] = {
--		{MDP_COMP_TYPE_IMGI, 0, MT8183_MDP_COMP_ISP_IMGI},
-+		{MDP_COMP_TYPE_IMGI, 0, MT8183_MDP_COMP_ISP_IMGI, 0},
- 		{0, 0, 4}
- 	},
- 	[MDP_COMP_ISP_IMGO] = {
--		{MDP_COMP_TYPE_EXTO, 0, MT8183_MDP_COMP_ISP_IMGO},
-+		{MDP_COMP_TYPE_EXTO, 0, MT8183_MDP_COMP_ISP_IMGO, 0},
- 		{0, 0, 4}
- 	},
- 	[MDP_COMP_ISP_IMG2O] = {
--		{MDP_COMP_TYPE_EXTO, 1, MT8183_MDP_COMP_ISP_IMG2O},
-+		{MDP_COMP_TYPE_EXTO, 1, MT8183_MDP_COMP_ISP_IMG2O, 0},
- 		{0, 0, 0}
- 	},
- 	[MDP_COMP_CAMIN] = {
--		{MDP_COMP_TYPE_DL_PATH, 0, MT8183_MDP_COMP_CAMIN},
-+		{MDP_COMP_TYPE_DL_PATH, 0, MT8183_MDP_COMP_CAMIN, 0},
- 		{2, 2, 1}
- 	},
- 	[MDP_COMP_CAMIN2] = {
--		{MDP_COMP_TYPE_DL_PATH, 1, MT8183_MDP_COMP_CAMIN2},
-+		{MDP_COMP_TYPE_DL_PATH, 1, MT8183_MDP_COMP_CAMIN2, 0},
- 		{2, 4, 1}
- 	},
- 	[MDP_COMP_RDMA0] = {
--		{MDP_COMP_TYPE_RDMA, 0, MT8183_MDP_COMP_RDMA0},
-+		{MDP_COMP_TYPE_RDMA, 0, MT8183_MDP_COMP_RDMA0, 0},
- 		{2, 0, 0}
- 	},
- 	[MDP_COMP_CCORR0] = {
--		{MDP_COMP_TYPE_CCORR, 0, MT8183_MDP_COMP_CCORR0},
-+		{MDP_COMP_TYPE_CCORR, 0, MT8183_MDP_COMP_CCORR0, 0},
- 		{1, 0, 0}
- 	},
- 	[MDP_COMP_RSZ0] = {
--		{MDP_COMP_TYPE_RSZ, 0, MT8183_MDP_COMP_RSZ0},
-+		{MDP_COMP_TYPE_RSZ, 0, MT8183_MDP_COMP_RSZ0, 0},
- 		{1, 0, 0}
- 	},
- 	[MDP_COMP_RSZ1] = {
--		{MDP_COMP_TYPE_RSZ, 1, MT8183_MDP_COMP_RSZ1},
-+		{MDP_COMP_TYPE_RSZ, 1, MT8183_MDP_COMP_RSZ1, 0},
- 		{1, 0, 0}
- 	},
- 	[MDP_COMP_TDSHP0] = {
--		{MDP_COMP_TYPE_TDSHP, 0, MT8183_MDP_COMP_TDSHP0},
-+		{MDP_COMP_TYPE_TDSHP, 0, MT8183_MDP_COMP_TDSHP0, 0},
- 		{0, 0, 0}
- 	},
- 	[MDP_COMP_PATH0_SOUT] = {
--		{MDP_COMP_TYPE_PATH, 0, MT8183_MDP_COMP_PATH0_SOUT},
-+		{MDP_COMP_TYPE_PATH, 0, MT8183_MDP_COMP_PATH0_SOUT, 0},
- 		{0, 0, 0}
- 	},
- 	[MDP_COMP_PATH1_SOUT] = {
--		{MDP_COMP_TYPE_PATH, 1, MT8183_MDP_COMP_PATH1_SOUT},
-+		{MDP_COMP_TYPE_PATH, 1, MT8183_MDP_COMP_PATH1_SOUT, 0},
- 		{0, 0, 0}
- 	},
- 	[MDP_COMP_WROT0] = {
--		{MDP_COMP_TYPE_WROT, 0, MT8183_MDP_COMP_WROT0},
-+		{MDP_COMP_TYPE_WROT, 0, MT8183_MDP_COMP_WROT0, 0},
- 		{1, 0, 0}
- 	},
- 	[MDP_COMP_WDMA] = {
--		{MDP_COMP_TYPE_WDMA, 0, MT8183_MDP_COMP_WDMA},
-+		{MDP_COMP_TYPE_WDMA, 0, MT8183_MDP_COMP_WDMA, 0},
- 		{1, 0, 0}
- 	},
- };
-@@ -402,10 +402,10 @@ static const struct mdp_limit mt8183_mdp_def_limit = {
+@@ -56,8 +56,10 @@ static const struct mdp_platform_config mt8183_plat_cfg = {
+ 	.rdma_support_10bit		= true,
+ 	.rdma_rsz1_sram_sharing		= true,
+ 	.rdma_upsample_repeat_only	= true,
++	.rdma_event_num			= 1,
+ 	.rsz_disable_dcm_small_sample	= false,
+ 	.wrot_filter_constraint		= false,
++	.wrot_event_num			= 1,
  };
  
- static const struct mdp_pipe_info mt8183_pipe_info[] = {
--	[MDP_PIPE_WPEI] = {MDP_PIPE_WPEI, 0},
--	[MDP_PIPE_WPEI2] = {MDP_PIPE_WPEI2, 1},
--	[MDP_PIPE_IMGI] = {MDP_PIPE_IMGI, 2},
--	[MDP_PIPE_RDMA0] = {MDP_PIPE_RDMA0, 3}
-+	[MDP_PIPE_WPEI] = {MDP_PIPE_WPEI, 0, 0},
-+	[MDP_PIPE_WPEI2] = {MDP_PIPE_WPEI2, 0, 1},
-+	[MDP_PIPE_IMGI] = {MDP_PIPE_IMGI, 0, 2},
-+	[MDP_PIPE_RDMA0] = {MDP_PIPE_RDMA0, 0, 3}
- };
+ static const u32 mt8183_mutex_idx[MDP_MAX_COMP_COUNT] = {
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
+index 667933ea15f4..ec296d4fd0c5 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
+@@ -251,14 +251,17 @@ static int config_rdma_subfrm(struct mdp_comp_ctx *ctx,
  
- const struct mtk_mdp_driver_data mt8183_mdp_driver_data = {
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.h b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.h
-index 20d2bcb77ef9..ddc6b654864a 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.h
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.h
-@@ -138,6 +138,7 @@ struct mdp_comp_match {
- 	enum mdp_comp_type type;
- 	u32 alias_id;
- 	s32 inner_id;
-+	u32 mmsys_id;
- };
- 
- /* Used to describe the item order in MDP property */
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
-index cc44be10fdb7..9c33d3aaf9cd 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
-@@ -26,39 +26,45 @@ static const struct of_device_id mdp_of_ids[] = {
- MODULE_DEVICE_TABLE(of, mdp_of_ids);
- 
- static struct platform_device *__get_pdev_by_id(struct platform_device *pdev,
-+						struct platform_device *from,
- 						enum mdp_infra_id id)
+ static int wait_rdma_event(struct mdp_comp_ctx *ctx, struct mdp_cmdq_cmd *cmd)
  {
--	struct device_node *node;
-+	struct device_node *node, *f = NULL;
- 	struct platform_device *mdp_pdev = NULL;
- 	const struct mtk_mdp_driver_data *mdp_data;
- 	const char *compat;
++	const struct mdp_platform_config *mdp_cfg = __get_plat_cfg(ctx);
+ 	struct device *dev = &ctx->comp->mdp_dev->pdev->dev;
+ 	phys_addr_t base = ctx->comp->reg_base;
+ 	u8 subsys_id = ctx->comp->subsys_id;
  
- 	if (!pdev)
--		return NULL;
-+		return ERR_PTR(-ENODEV);
- 
- 	if (id < MDP_INFRA_MMSYS || id >= MDP_INFRA_MAX) {
- 		dev_err(&pdev->dev, "Illegal infra id %d\n", id);
--		return NULL;
-+		return ERR_PTR(-ENODEV);
- 	}
- 
- 	mdp_data = of_device_get_match_data(&pdev->dev);
- 	if (!mdp_data) {
- 		dev_err(&pdev->dev, "have no driver data to find node\n");
--		return NULL;
-+		return ERR_PTR(-ENODEV);
- 	}
-+
- 	compat = mdp_data->mdp_probe_infra[id].compatible;
-+	if (strlen(compat) == 0)
-+		return NULL;
- 
--	node = of_find_compatible_node(NULL, NULL, compat);
-+	if (from)
-+		f = from->dev.of_node;
-+	node = of_find_compatible_node(f, NULL, compat);
- 	if (WARN_ON(!node)) {
- 		dev_err(&pdev->dev, "find node from id %d failed\n", id);
--		return NULL;
-+		return ERR_PTR(-ENODEV);
- 	}
- 
- 	mdp_pdev = of_find_device_by_node(node);
- 	of_node_put(node);
- 	if (WARN_ON(!mdp_pdev)) {
- 		dev_err(&pdev->dev, "find pdev from id %d failed\n", id);
--		return NULL;
-+		return ERR_PTR(-ENODEV);
- 	}
- 
- 	return mdp_pdev;
-@@ -152,7 +158,7 @@ static int mdp_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct mdp_dev *mdp;
--	struct platform_device *mm_pdev;
-+	struct platform_device *mm_pdev, *mm2_pdev;
- 	int ret, i, mutex_id;
- 
- 	mdp = kzalloc(sizeof(*mdp), GFP_KERNEL);
-@@ -164,15 +170,23 @@ static int mdp_probe(struct platform_device *pdev)
- 	mdp->pdev = pdev;
- 	mdp->mdp_data = of_device_get_match_data(&pdev->dev);
- 
--	mm_pdev = __get_pdev_by_id(pdev, MDP_INFRA_MMSYS);
--	if (!mm_pdev) {
-+	mm_pdev = __get_pdev_by_id(pdev, NULL, MDP_INFRA_MMSYS);
-+	if (IS_ERR_OR_NULL(mm_pdev)) {
- 		ret = -ENODEV;
- 		goto err_destroy_device;
- 	}
- 	mdp->mdp_mmsys = &mm_pdev->dev;
- 
--	mm_pdev = __get_pdev_by_id(pdev, MDP_INFRA_MUTEX);
--	if (WARN_ON(!mm_pdev)) {
-+	/* MMSYS2 is not available on all chips, so the config may be null. */
-+	mm2_pdev = __get_pdev_by_id(pdev, mm_pdev, MDP_INFRA_MMSYS2);
-+	if (IS_ERR(mm2_pdev)) {
-+		ret = PTR_ERR(mm2_pdev);
-+		goto err_destroy_device;
+-	if (ctx->comp->alias_id == 0)
++	if (ctx->comp->alias_id < mdp_cfg->rdma_event_num) {
+ 		MM_REG_WAIT(cmd, ctx->comp->gce_event[MDP_GCE_EVENT_EOF]);
+-	else
+-		dev_err(dev, "Do not support RDMA1_DONE event\n");
++	} else {
++		dev_err(dev, "Invalid RDMA event %d\n", ctx->comp->alias_id);
++		return -EINVAL;
 +	}
-+	mdp->mdp_mmsys2 = &mm2_pdev->dev;
-+
-+	mm_pdev = __get_pdev_by_id(pdev, NULL, MDP_INFRA_MUTEX);
-+	if (IS_ERR_OR_NULL(mm_pdev)) {
- 		ret = -ENODEV;
- 		goto err_destroy_device;
- 	}
-@@ -208,7 +222,7 @@ static int mdp_probe(struct platform_device *pdev)
- 		goto err_destroy_job_wq;
- 	}
  
--	mm_pdev = __get_pdev_by_id(pdev, MDP_INFRA_SCP);
-+	mm_pdev = __get_pdev_by_id(pdev, NULL, MDP_INFRA_SCP);
- 	if (WARN_ON(!mm_pdev)) {
- 		dev_err(&pdev->dev, "Could not get scp device\n");
- 		ret = -ENODEV;
+ 	/* Disable RDMA */
+ 	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_EN, 0x0, BIT(0));
+@@ -553,10 +556,12 @@ static int wait_wrot_event(struct mdp_comp_ctx *ctx, struct mdp_cmdq_cmd *cmd)
+ 	phys_addr_t base = ctx->comp->reg_base;
+ 	u8 subsys_id = ctx->comp->subsys_id;
+ 
+-	if (ctx->comp->alias_id == 0)
++	if (ctx->comp->alias_id < mdp_cfg->wrot_event_num) {
+ 		MM_REG_WAIT(cmd, ctx->comp->gce_event[MDP_GCE_EVENT_EOF]);
+-	else
+-		dev_err(dev, "Do not support WROT1_DONE event\n");
++	} else {
++		dev_err(dev, "Invalid WROT event %d!\n", ctx->comp->alias_id);
++		return -EINVAL;
++	}
+ 
+ 	if (mdp_cfg && mdp_cfg->wrot_filter_constraint)
+ 		MM_REG_WRITE(cmd, subsys_id, base, VIDO_MAIN_BUF_SIZE, 0x0,
 diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
-index 7e21d226ceb8..0434b70e1fc9 100644
+index a063a655248c..b2a3e4b2ee1a 100644
 --- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
 +++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
-@@ -20,6 +20,7 @@
- 
- enum mdp_infra_id {
- 	MDP_INFRA_MMSYS,
-+	MDP_INFRA_MMSYS2,
- 	MDP_INFRA_MUTEX,
- 	MDP_INFRA_SCP,
- 	MDP_INFRA_MAX
-@@ -68,6 +69,7 @@ struct mtk_mdp_driver_data {
- struct mdp_dev {
- 	struct platform_device			*pdev;
- 	struct device				*mdp_mmsys;
-+	struct device				*mdp_mmsys2;
- 	struct mtk_mutex			*mdp_mutex[MDP_PIPE_MAX];
- 	struct mdp_comp				*comp[MDP_MAX_COMP_COUNT];
- 	const struct mtk_mdp_driver_data	*mdp_data;
-@@ -96,6 +98,7 @@ struct mdp_dev {
- 
- struct mdp_pipe_info {
- 	enum mdp_pipe_id pipe_id;
-+	u32 mmsys_id;
- 	u32 mutex_id;
+@@ -39,8 +39,10 @@ struct mdp_platform_config {
+ 	bool	rdma_support_10bit;
+ 	bool	rdma_rsz1_sram_sharing;
+ 	bool	rdma_upsample_repeat_only;
++	u32	rdma_event_num;
+ 	bool	rsz_disable_dcm_small_sample;
+ 	bool	wrot_filter_constraint;
++	u32	wrot_event_num;
  };
  
+ /* indicate which mutex is used by each pipepline */
 -- 
 2.18.0
 
