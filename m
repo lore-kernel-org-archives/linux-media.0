@@ -2,411 +2,278 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FD04CA0ECA
-	for <linux-media@archiver.kernel.org>; Tue, 12 Sep 2023 07:59:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9B4FCA0EC3
+	for <linux-media@archiver.kernel.org>; Tue, 12 Sep 2023 08:07:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232334AbjILH7e (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 Sep 2023 03:59:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49766 "EHLO
+        id S232002AbjILIHU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 Sep 2023 04:07:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232196AbjILH6x (ORCPT
+        with ESMTP id S233046AbjILIGo (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 Sep 2023 03:58:53 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8444610E5;
-        Tue, 12 Sep 2023 00:58:17 -0700 (PDT)
-X-UUID: 1c9587ac514211ee8051498923ad61e6-20230912
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=RNTVy9AacJES7wW9DpJtDoveuOJt0uOZcybu2/uFRUw=;
-        b=d1plwFeitzGoujtOOacVwiXXDN98UjDO6xKoBNu0HXOL4e5/j7Qde88AfGG7LVb051dfSPxf6mRPbWv7vB06o2cwQaIzFIyxq6qAXBoup9r2RcMwKzWryAgnznK9sHY+54BXfLHz5+Uv0h39oAyOTXtLy3z+TlQ4kuivRhCeDvw=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.31,REQID:7cde598e-4838-4594-bad6-8ccb71de092a,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:0ad78a4,CLOUDID:d3a9edc2-1e57-4345-9d31-31ad9818b39f,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,
-        DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 1c9587ac514211ee8051498923ad61e6-20230912
-Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
-        (envelope-from <moudy.ho@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 628305077; Tue, 12 Sep 2023 15:58:08 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 12 Sep 2023 15:58:08 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Tue, 12 Sep 2023 15:58:08 +0800
-From:   Moudy Ho <moudy.ho@mediatek.com>
-To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-CC:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Moudy Ho <moudy.ho@mediatek.com>
-Subject: [PATCH v5 12/14] media: platform: mtk-mdp3: add mt8195 shared memory configurations
-Date:   Tue, 12 Sep 2023 15:58:03 +0800
-Message-ID: <20230912075805.11432-13-moudy.ho@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230912075805.11432-1-moudy.ho@mediatek.com>
-References: <20230912075805.11432-1-moudy.ho@mediatek.com>
+        Tue, 12 Sep 2023 04:06:44 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774E010C6;
+        Tue, 12 Sep 2023 01:04:57 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1F4E0660731D;
+        Tue, 12 Sep 2023 09:04:55 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1694505895;
+        bh=691+u/eVfRRkkKiJaSzVcjnxIWbJX7ogA9Ey0F8h108=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=iyoimOBRkb0IP9gPISVEAtopEWFBHXimo8XBbW/1M5wnLdoZV0deT5xibD6z/rYQs
+         KybC7WWeIAsU+lZDA+V8hCIDvfzU8bdT24YHGHuH3B5b51DlNoxHffOEaO0IWb/sxS
+         p4i+DQm5QM5Q+eFvHsWHLAKbI2efmXpXwsT79qHpL7rt0PZGGBSc2YpewYtxypTx98
+         J3/FmVOBnBIkrB6NS1bMNQoxViurRydcWgr9//GkBpPBzbcNBeQis5MmqqXJzylZeg
+         xsx/QrCChyk9u/z4Kr+080Aeh/+evekEiljoduBRqJ9XtZFIe+2N7TyxTaev80lCbC
+         FB6rI+btIUpNw==
+Message-ID: <a8a32bb7-7993-10ed-ec09-cd2db49f2436@collabora.com>
+Date:   Tue, 12 Sep 2023 10:04:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH 02/14] media: mediatek: vcodec: allocate tee share memory
+Content-Language: en-US
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
+        <nfraprado@collabora.com>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Nathan Hebert <nhebert@chromium.org>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20230911125936.10648-1-yunfei.dong@mediatek.com>
+ <20230911125936.10648-3-yunfei.dong@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230911125936.10648-3-yunfei.dong@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The configuration of the MT8195 components in the shared memory
-is defined in the header file "mdp_sm_mt8195.h".
+Il 11/09/23 14:59, Yunfei Dong ha scritto:
+> Allocate two share memory for each lat and core hardware used to share
+> information with optee-os. Msg buffer used to send ipi command and get ack
+> command with optee-os, data buffer used to store vsi information which
+> used for hardware decode.
+> 
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+> ---
+>   .../vcodec/decoder/mtk_vcodec_dec_optee.c     | 79 ++++++++++++++++++-
+>   .../vcodec/decoder/mtk_vcodec_dec_optee.h     | 32 ++++++++
+>   2 files changed, 110 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_optee.c b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_optee.c
+> index 3ee9039d2a5b..806ca87c8de7 100644
+> --- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_optee.c
+> +++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_optee.c
+> @@ -47,12 +47,67 @@ int mtk_vcodec_dec_optee_private_init(struct mtk_vcodec_dec_dev *vcodec_dev)
+>   }
+>   EXPORT_SYMBOL_GPL(mtk_vcodec_dec_optee_private_init);
+>   
+> +static void mtk_vcodec_dec_optee_deinit_memref(struct mtk_vdec_optee_ca_info *ca_info,
+> +					       enum mtk_vdec_optee_data_index data_index)
+> +{
+> +	tee_shm_free(ca_info->shm_memref[data_index].msg_shm);
+> +}
+> +
+> +static int mtk_vcodec_dec_optee_init_memref(struct tee_context *tee_vdec_ctx,
+> +					    struct mtk_vdec_optee_ca_info *ca_info,
+> +					    enum mtk_vdec_optee_data_index data_index)
+> +{
+> +	struct mtk_vdec_optee_shm_memref *shm_memref;
+> +	int alloc_size = 0, err = 0;
+> +	u64 shm_param_type = 0;
+> +	bool copy_buffer;
+> +
+> +	if (data_index >= OPTEE_MAX_INDEX) {
+> +		pr_err(MTK_DBG_VCODEC_STR "tee invalid data_index: %d.\n", data_index);
+> +		return -EINVAL;
+> +	} else if (data_index == OPTEE_MSG_INDEX) {
+> +		shm_param_type = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INOUT;
+> +		alloc_size = MTK_VDEC_OPTEE_MSG_SIZE;
+> +		copy_buffer = true;
+> +	} else {
+> +		shm_param_type = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INOUT;
+> +		alloc_size = MTK_VDEC_OPTEE_HW_SIZE;
+> +		copy_buffer = false;
+> +	}
 
-Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
----
- .../platform/mediatek/mdp3/mdp_sm_mt8195.h    | 283 ++++++++++++++++++
- .../platform/mediatek/mdp3/mtk-img-ipi.h      |   4 +
- 2 files changed, 287 insertions(+)
- create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_sm_mt8195.h
+This is another good usecase for a switch.
 
-diff --git a/drivers/media/platform/mediatek/mdp3/mdp_sm_mt8195.h b/drivers/media/platform/mediatek/mdp3/mdp_sm_mt8195.h
-new file mode 100644
-index 000000000000..b09f48222d24
---- /dev/null
-+++ b/drivers/media/platform/mediatek/mdp3/mdp_sm_mt8195.h
-@@ -0,0 +1,283 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (c) 2023 MediaTek Inc.
-+ * Author: Ping-Hsun Wu <ping-hsun.wu@mediatek.com>
-+ */
-+
-+#ifndef __MDP_SM_MT8195_H__
-+#define __MDP_SM_MT8195_H__
-+
-+#include "mtk-mdp3-type.h"
-+
-+/*
-+ * ISP-MDP generic output information
-+ * MD5 of the target SCP prebuild:
-+ *     a49ec487e458b5971880f1b63dc2a9d5
-+ */
-+
-+#define IMG_MAX_SUBFRAMES_8195	20
-+
-+struct img_comp_frame_8195 {
-+	u32 output_disable;
-+	u32 bypass;
-+	u32 in_width;
-+	u32 in_height;
-+	u32 out_width;
-+	u32 out_height;
-+	struct img_crop crop;
-+	u32 in_total_width;
-+	u32 out_total_width;
-+} __packed;
-+
-+struct img_comp_subfrm_8195 {
-+	u32 tile_disable;
-+	struct img_region in;
-+	struct img_region out;
-+	struct img_offset luma;
-+	struct img_offset chroma;
-+	s32 out_vertical; /* Output vertical index */
-+	s32 out_horizontal; /* Output horizontal index */
-+} __packed;
-+
-+struct mdp_rdma_subfrm_8195 {
-+	u32 offset[IMG_MAX_PLANES];
-+	u32 offset_0_p;
-+	u32 src;
-+	u32 clip;
-+	u32 clip_ofst;
-+	u32 in_tile_xleft;
-+	u32 in_tile_ytop;
-+} __packed;
-+
-+struct mdp_rdma_data_8195 {
-+	u32 src_ctrl;
-+	u32 comp_ctrl;
-+	u32 control;
-+	u32 iova[IMG_MAX_PLANES];
-+	u32 iova_end[IMG_MAX_PLANES];
-+	u32 mf_bkgd;
-+	u32 mf_bkgd_in_pxl;
-+	u32 sf_bkgd;
-+	u32 ufo_dec_y;
-+	u32 ufo_dec_c;
-+	u32 transform;
-+	u32 dmabuf_con0;
-+	u32 ultra_th_high_con0;
-+	u32 ultra_th_low_con0;
-+	u32 dmabuf_con1;
-+	u32 ultra_th_high_con1;
-+	u32 ultra_th_low_con1;
-+	u32 dmabuf_con2;
-+	u32 ultra_th_high_con2;
-+	u32 ultra_th_low_con2;
-+	u32 dmabuf_con3;
-+	struct mdp_rdma_subfrm_8195 subfrms[IMG_MAX_SUBFRAMES_8195];
-+} __packed;
-+
-+struct mdp_fg_subfrm_8195 {
-+	u32 info_0;
-+	u32 info_1;
-+} __packed;
-+
-+struct mdp_fg_data_8195 {
-+	u32 ctrl_0;
-+	u32 ck_en;
-+	struct mdp_fg_subfrm_8195 subfrms[IMG_MAX_SUBFRAMES_8195];
-+} __packed;
-+
-+struct mdp_hdr_subfrm_8195 {
-+	u32 win_size;
-+	u32 src;
-+	u32 clip_ofst0;
-+	u32 clip_ofst1;
-+	u32 hist_ctrl_0;
-+	u32 hist_ctrl_1;
-+	u32 hdr_top;
-+	u32 hist_addr;
-+} __packed;
-+
-+struct mdp_hdr_data_8195 {
-+	u32 top;
-+	u32 relay;
-+	struct mdp_hdr_subfrm_8195   subfrms[IMG_MAX_SUBFRAMES_8195];
-+} __packed;
-+
-+struct mdp_aal_subfrm_8195 {
-+	u32 src;
-+	u32 clip;
-+	u32 clip_ofst;
-+} __packed;
-+
-+struct mdp_aal_data_8195 {
-+	u32 cfg_main;
-+	u32 cfg;
-+	struct mdp_aal_subfrm_8195   subfrms[IMG_MAX_SUBFRAMES_8195];
-+} __packed;
-+
-+struct mdp_rsz_subfrm_8195 {
-+	u32 control2;
-+	u32 src;
-+	u32 clip;
-+	u32 hdmirx_en;
-+	u32 luma_h_int_ofst;
-+	u32 luma_h_sub_ofst;
-+	u32 luma_v_int_ofst;
-+	u32 luma_v_sub_ofst;
-+	u32 chroma_h_int_ofst;
-+	u32 chroma_h_sub_ofst;
-+	u32 rsz_switch;
-+	u32 merge_cfg;
-+} __packed;
-+
-+struct mdp_rsz_data_8195 {
-+	u32 coeff_step_x;
-+	u32 coeff_step_y;
-+	u32 control1;
-+	u32 control2;
-+	u32 etc_control;
-+	u32 prz_enable;
-+	u32 ibse_softclip;
-+	u32 tap_adapt;
-+	u32 ibse_gaincontrol1;
-+	u32 ibse_gaincontrol2;
-+	u32 ibse_ylevel_1;
-+	u32 ibse_ylevel_2;
-+	u32 ibse_ylevel_3;
-+	u32 ibse_ylevel_4;
-+	u32 ibse_ylevel_5;
-+	struct mdp_rsz_subfrm_8195 subfrms[IMG_MAX_SUBFRAMES_8195];
-+} __packed;
-+
-+struct mdp_tdshp_subfrm_8195 {
-+	u32 src;
-+	u32 clip;
-+	u32 clip_ofst;
-+	u32 hist_cfg_0;
-+	u32 hist_cfg_1;
-+} __packed;
-+
-+struct mdp_tdshp_data_8195 {
-+	u32 cfg;
-+	struct mdp_tdshp_subfrm_8195 subfrms[IMG_MAX_SUBFRAMES_8195];
-+} __packed;
-+
-+struct mdp_color_subfrm_8195 {
-+	u32 in_hsize;
-+	u32 in_vsize;
-+} __packed;
-+
-+struct mdp_color_data_8195 {
-+	u32 start;
-+	struct mdp_color_subfrm_8195 subfrms[IMG_MAX_SUBFRAMES_8195];
-+} __packed;
-+
-+struct mdp_ovl_subfrm_8195 {
-+	u32 L0_src_size;
-+	u32 roi_size;
-+} __packed;
-+
-+struct mdp_ovl_data_8195 {
-+	u32 L0_con;
-+	u32 src_con;
-+	struct mdp_ovl_subfrm_8195 subfrms[IMG_MAX_SUBFRAMES_8195];
-+} __packed;
-+
-+struct mdp_pad_subfrm_8195 {
-+	u32 pic_size;
-+} __packed;
-+
-+struct mdp_pad_data_8195 {
-+	struct mdp_pad_subfrm_8195 subfrms[IMG_MAX_SUBFRAMES_8195];
-+} __packed;
-+
-+struct mdp_tcc_subfrm_8195 {
-+	u32 pic_size;
-+} __packed;
-+
-+struct mdp_tcc_data_8195 {
-+	struct mdp_tcc_subfrm_8195 subfrms[IMG_MAX_SUBFRAMES_8195];
-+} __packed;
-+
-+struct mdp_wrot_subfrm_8195 {
-+	u32 offset[IMG_MAX_PLANES];
-+	u32 src;
-+	u32 clip;
-+	u32 clip_ofst;
-+	u32 main_buf;
-+} __packed;
-+
-+struct mdp_wrot_data_8195 {
-+	u32 iova[IMG_MAX_PLANES];
-+	u32 control;
-+	u32 stride[IMG_MAX_PLANES];
-+	u32 mat_ctrl;
-+	u32 fifo_test;
-+	u32 filter;
-+	u32 pre_ultra;
-+	u32 framesize;
-+	u32 afbc_yuvtrans;
-+	u32 scan_10bit;
-+	u32 pending_zero;
-+	u32 bit_number;
-+	u32 pvric;
-+	u32 vpp02vpp1;
-+	struct mdp_wrot_subfrm_8195 subfrms[IMG_MAX_SUBFRAMES_8195];
-+} __packed;
-+
-+struct mdp_wdma_subfrm_8195 {
-+	u32 offset[IMG_MAX_PLANES];
-+	u32 src;
-+	u32 clip;
-+	u32 clip_ofst;
-+} __packed;
-+
-+struct mdp_wdma_data_8195 {
-+	u32 wdma_cfg;
-+	u32 iova[IMG_MAX_PLANES];
-+	u32 w_in_byte;
-+	u32 uv_stride;
-+	struct mdp_wdma_subfrm_8195 subfrms[IMG_MAX_SUBFRAMES_8195];
-+} __packed;
-+
-+struct isp_data_8195 {
-+	u64 dl_flags; /* 1 << (enum mdp_comp_type) */
-+	u32 smxi_iova[4];
-+	u32 cq_idx;
-+	u32 cq_iova;
-+	u32 tpipe_iova[IMG_MAX_SUBFRAMES_8195];
-+} __packed;
-+
-+struct img_compparam_8195 {
-+	u32 type; /* enum mdp_comp_id */
-+	u32 id; /* engine alias_id */
-+	u32 input;
-+	u32 outputs[IMG_MAX_HW_OUTPUTS];
-+	u32 num_outputs;
-+	struct img_comp_frame_8195 frame;
-+	struct img_comp_subfrm_8195 subfrms[IMG_MAX_SUBFRAMES_8195];
-+	u32 num_subfrms;
-+	union {
-+		struct mdp_rdma_data_8195 rdma;
-+		struct mdp_fg_data_8195 fg;
-+		struct mdp_hdr_data_8195 hdr;
-+		struct mdp_aal_data_8195 aal;
-+		struct mdp_rsz_data_8195 rsz;
-+		struct mdp_tdshp_data_8195 tdshp;
-+		struct mdp_color_data_8195 color;
-+		struct mdp_ovl_data_8195 ovl;
-+		struct mdp_pad_data_8195 pad;
-+		struct mdp_tcc_data_8195 tcc;
-+		struct mdp_wrot_data_8195 wrot;
-+		struct mdp_wdma_data_8195 wdma;
-+		struct isp_data_8195 isp;
-+	};
-+} __packed;
-+
-+struct img_config_8195 {
-+	struct img_compparam_8195 components[IMG_MAX_COMPONENTS];
-+	u32 num_components;
-+	struct img_mmsys_ctrl ctrls[IMG_MAX_SUBFRAMES_8195];
-+	u32 num_subfrms;
-+} __packed;
-+
-+#endif  /* __MDP_SM_MT8195_H__ */
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-img-ipi.h b/drivers/media/platform/mediatek/mdp3/mtk-img-ipi.h
-index 22b8b9a10ef7..f83ac408306e 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-img-ipi.h
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-img-ipi.h
-@@ -10,6 +10,7 @@
- 
- #include <linux/err.h>
- #include "mdp_sm_mt8183.h"
-+#include "mdp_sm_mt8195.h"
- #include "mtk-mdp3-type.h"
- 
- /* ISP-MDP generic input information */
-@@ -115,6 +116,7 @@ struct img_frameparam {
- 
- /* Platform config indicator */
- #define MT8183 8183
-+#define MT8195 8195
- 
- #define CFG_CHECK(plat, p_id) ((plat) == (p_id))
- 
-@@ -137,12 +139,14 @@ struct img_frameparam {
- struct img_config {
- 	union {
- 		struct img_config_8183 config_8183;
-+		struct img_config_8195 config_8195;
- 	};
- } __packed;
- 
- struct img_compparam {
- 	union {
- 		struct img_compparam_8183 comp_8183;
-+		struct img_compparam_8195 comp_8195;
- 	};
- } __packed;
- 
--- 
-2.18.0
+	switch (data_index) {
+	case OPTEE_MSG_INDEX:
+		......
+	case OPTEE_DATA_INDEX:
+		......
+	default:
+		invalid data_index; return....
+	}
 
+> +
+> +	shm_memref = &ca_info->shm_memref[data_index];
+> +
+> +	/* Allocate dynamic shared memory with decoder TA */
+> +	shm_memref->msg_shm_size = alloc_size;
+> +	shm_memref->param_type = shm_param_type;
+> +	shm_memref->copy_to_ta = copy_buffer;
+> +	shm_memref->msg_shm =
+> +		tee_shm_alloc_kernel_buf(tee_vdec_ctx, shm_memref->msg_shm_size);
+
+That'd be 96 columns, one line is ok.
+
+> +	if (IS_ERR(shm_memref->msg_shm)) {
+> +		pr_err(MTK_DBG_VCODEC_STR "tee alloc buf fail: data_index:%d.\n", data_index);
+> +		return -ENOMEM;
+> +	}
+> +
+> +	shm_memref->msg_shm_ca_buf = tee_shm_get_va(shm_memref->msg_shm, 0);
+> +	if (IS_ERR(shm_memref->msg_shm_ca_buf)) {
+> +		pr_err(MTK_DBG_VCODEC_STR "tee get shm va fail: data_index:%d.\n", data_index);
+> +		err = PTR_ERR(shm_memref->msg_shm_ca_buf);
+> +		goto err_get_msg_va;
+> +	}
+> +
+> +	return err;
+> +
+> +err_get_msg_va:
+> +	tee_shm_free(shm_memref->msg_shm);
+> +	return err;
+> +}
+> +
+>   static int mtk_vcodec_dec_optee_init_hw_info(struct mtk_vdec_optee_private *optee_private,
+>   					     enum mtk_vdec_hw_id hardware_index)
+>   {
+>   	struct tee_ioctl_open_session_arg session_arg;
+>   	struct mtk_vdec_optee_ca_info *ca_info;
+> -	int err = 0, session_func;
+> +	int err = 0, i = 0, j = 0, session_func;
+
+Please don't initialize `i` and `j` here, you can do that in the for loop as
+per common practice.
+
+>   
+>   	/* Open lat and core session with vdec TA. */
+>   	if (hardware_index == MTK_VDEC_LAT0) {
+> @@ -81,6 +136,24 @@ static int mtk_vcodec_dec_optee_init_hw_info(struct mtk_vdec_optee_private *opte
+>   	pr_debug(MTK_DBG_VCODEC_STR "open vdec tee session: hw_id(%d) session_id=%x.\n",
+>   		 hardware_index, ca_info->vdec_session_id);
+>   
+> +	/* Allocate dynamic shared memory with decoder TA */
+> +	for (; i < OPTEE_MAX_INDEX; i++) {
+> +		err = mtk_vcodec_dec_optee_init_memref(optee_private->tee_vdec_ctx, ca_info, i);
+> +		if (err) {
+> +			pr_err(MTK_DBG_VCODEC_STR "init vdec memref failed: %d.\n", i);
+> +			goto err_init_memref;
+> +		}
+> +	}
+> +
+> +	return err;
+> +err_init_memref:
+> +	if (i != 0) {
+> +		for (; j < i; j++)
+> +			mtk_vcodec_dec_optee_deinit_memref(ca_info, j);
+> +	}
+> +
+> +	tee_client_close_session(optee_private->tee_vdec_ctx, ca_info->vdec_session_id);
+> +
+>   	return err;
+>   }
+>   
+> @@ -88,12 +161,16 @@ static void mtk_vcodec_dec_optee_deinit_hw_info(struct mtk_vdec_optee_private *o
+>   						enum mtk_vdec_hw_id hw_id)
+>   {
+>   	struct mtk_vdec_optee_ca_info *ca_info;
+> +	int i = 0;
+
+int i;
+
+>   
+>   	if (hw_id == MTK_VDEC_LAT0)
+>   		ca_info = &optee_private->lat_ca;
+>   	else
+>   		ca_info = &optee_private->core_ca;
+>   
+> +	for (; i < OPTEE_MAX_INDEX; i++)
+
+for (i = 0; i < OPTEE_MAX_INDEX; i++)
+
+> +		mtk_vcodec_dec_optee_deinit_memref(ca_info, i);
+> +
+>   	tee_client_close_session(optee_private->tee_vdec_ctx, ca_info->vdec_session_id);
+>   }
+>   
+> diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_optee.h b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_optee.h
+> index 8b1dca49331e..79b4ec890655 100644
+> --- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_optee.h
+> +++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_optee.h
+> @@ -18,16 +18,48 @@
+>   
+>   #define MTK_OPTEE_MAX_TEE_PARAMS 4
+>   
+> +#define MTK_VDEC_OPTEE_MSG_SIZE     128
+> +#define MTK_VDEC_OPTEE_HW_SIZE      (8 * SZ_1K)
+> +
+> +/**
+> + * struct mtk_vdec_optee_shm_memref - share memory reference params
+> + * @msg_shm:        message shared with TA in TEE.
+> + * @msg_shm_ca_buf: ca buffer.
+> + *
+> + * @msg_shm_size:   share message size.
+> + * @param_type:     each tee param types.
+> + * @copy_to_ta:     need to copy data from ca to share memory.
+> + */
+> +struct mtk_vdec_optee_shm_memref {
+> +	struct tee_shm *msg_shm;
+> +	u8 *msg_shm_ca_buf;
+> +
+> +	u32 msg_shm_size;
+> +	u64 param_type;
+> +	bool copy_to_ta;
+> +};
+> +
+>   /**
+>    * struct mtk_vdec_optee_ca_info - ca related param
+>    * @vdec_session_id:   optee TA session identifier.
+>    * @hw_id:             hardware index.
+>    * @vdec_session_func: trusted application function id used specific to the TA.
+> + * @shm_memref:        share memory reference params.
+>    */
+>   struct mtk_vdec_optee_ca_info {
+>   	u32 vdec_session_id;
+>   	enum mtk_vdec_hw_id hw_id;
+>   	u32 vdec_session_func;
+> +	struct mtk_vdec_optee_shm_memref shm_memref[MTK_OPTEE_MAX_TEE_PARAMS];
+> +};
+> +
+> +/*
+> + * enum mtk_vdec_optee_data_index - used to indentify each share memory informaiton
+
+Typo: informaiton -> information
+
+> + */
+> +enum mtk_vdec_optee_data_index {
+> +	OPTEE_MSG_INDEX = 0,
+> +	OPTEE_DATA_INDEX,
+> +	OPTEE_MAX_INDEX,
+>   };
+>   
+>   /**
+
+Regards,
+Angelo
