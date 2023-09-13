@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78917EDEC52
-	for <linux-media@archiver.kernel.org>; Wed, 13 Sep 2023 13:56:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C648EDEC56
+	for <linux-media@archiver.kernel.org>; Wed, 13 Sep 2023 13:56:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241180AbjIMN4t (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 13 Sep 2023 09:56:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37756 "EHLO
+        id S241184AbjIMN4w (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 13 Sep 2023 09:56:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241174AbjIMN4s (ORCPT
+        with ESMTP id S241183AbjIMN4v (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 13 Sep 2023 09:56:48 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FCB319B6
-        for <linux-media@vger.kernel.org>; Wed, 13 Sep 2023 06:56:44 -0700 (PDT)
+        Wed, 13 Sep 2023 09:56:51 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B26E19BF
+        for <linux-media@vger.kernel.org>; Wed, 13 Sep 2023 06:56:47 -0700 (PDT)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 733C2755;
-        Wed, 13 Sep 2023 15:55:11 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 59BF916C4;
+        Wed, 13 Sep 2023 15:55:14 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1694613311;
-        bh=GD42IdkmN7LLZz9QXgZMPLMUJHsdO5N/GdKYf1UM3O8=;
+        s=mail; t=1694613314;
+        bh=dQUSD/YYCY9h3IZ+acUf3duigGsGxUMIM7n6OkCy7dc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qfJFBTmFuIOh5iAxcwUXFHnX9zLid/E7uHOCPRQfeOw94OtqfFgy1pmL//bbszwpf
-         unEnMBmWDqCDskHt+FE23Rgjb+SIOlEycpymtPg80i/mWnM8jas6sCRDtZoWY5LAfK
-         bnHK7sCKPadfG14krG29a0HJmLCI8hTWFPAI1Nv4=
+        b=FybeT2XA+zfVmCJO6hdNjgbpIHmhqOPmqUh28p7vZTySxmNV+UWVdk4L2CLegbX5a
+         3Rg5fSO4hbR0PgUQOGvi5EIgT79fRL81zxerzXEEDRsmM2blj1fnQYqA36Af6bY97N
+         rL5hfoEOH6yWMh2xh0YaqFIiKCYpjcnV6CM4MNbY=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
@@ -32,9 +32,9 @@ Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
         Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Hans de Goede <hdegoede@redhat.com>
-Subject: [PATCH v3 13/20] media: i2c: imx219: Drop IMX219_VTS_* macros
-Date:   Wed, 13 Sep 2023 16:56:31 +0300
-Message-ID: <20230913135638.26277-14-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v3 15/20] media: i2c: imx219: Drop system suspend/resume operations
+Date:   Wed, 13 Sep 2023 16:56:33 +0300
+Message-ID: <20230913135638.26277-16-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230913135638.26277-1-laurent.pinchart@ideasonboard.com>
 References: <20230913135638.26277-1-laurent.pinchart@ideasonboard.com>
@@ -44,67 +44,106 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The IMX219_VTS_* macros define default VTS values for the modes
-supported by the driver. They are used in a single place, and hinder
-readability compared to using the value directly as a decimal number.
-Drop them.
+There is no need to stop streaming at system suspend time, or restart it
+when the system is resumed, as the host-side driver is responsible for
+stopping and restarting the pipeline in a controlled way by calling the
+.s_stream() operation. Drop the system suspend and resume handlers, and
+simplify the .s_stream() handler as a result.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 ---
- drivers/media/i2c/imx219.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+ drivers/media/i2c/imx219.c | 56 ++------------------------------------
+ 1 file changed, 2 insertions(+), 54 deletions(-)
 
 diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-index f30befa3a7aa..c417af68b00d 100644
+index 8c928202a23b..a12ebf288dd2 100644
 --- a/drivers/media/i2c/imx219.c
 +++ b/drivers/media/i2c/imx219.c
-@@ -71,10 +71,6 @@
+@@ -358,9 +358,6 @@ struct imx219 {
+ 	struct v4l2_ctrl *vblank;
+ 	struct v4l2_ctrl *hblank;
  
- /* V_TIMING internal */
- #define IMX219_REG_VTS			CCI_REG16(0x0160)
--#define IMX219_VTS_15FPS		0x0dc6
--#define IMX219_VTS_30FPS_1080P		0x06e3
--#define IMX219_VTS_30FPS_BINNED		0x06e3
--#define IMX219_VTS_30FPS_640x480	0x06e3
- #define IMX219_VTS_MAX			0xffff
+-	/* Streaming on/off */
+-	bool streaming;
+-
+ 	/* Two or Four lanes */
+ 	u8 lanes;
+ };
+@@ -763,24 +760,11 @@ static int imx219_set_stream(struct v4l2_subdev *sd, int enable)
  
- #define IMX219_VBLANK_MIN		4
-@@ -301,7 +297,7 @@ static const struct imx219_mode supported_modes[] = {
- 			.width = 3280,
- 			.height = 2464
- 		},
--		.vts_def = IMX219_VTS_15FPS,
-+		.vts_def = 3526,
- 	},
- 	{
- 		/* 1080P 30fps cropped */
-@@ -313,7 +309,7 @@ static const struct imx219_mode supported_modes[] = {
- 			.width = 1920,
- 			.height = 1080
- 		},
--		.vts_def = IMX219_VTS_30FPS_1080P,
-+		.vts_def = 1763,
- 	},
- 	{
- 		/* 2x2 binned 30fps mode */
-@@ -325,7 +321,7 @@ static const struct imx219_mode supported_modes[] = {
- 			.width = 3280,
- 			.height = 2464
- 		},
--		.vts_def = IMX219_VTS_30FPS_BINNED,
-+		.vts_def = 1763,
- 	},
- 	{
- 		/* 640x480 30fps mode */
-@@ -337,7 +333,7 @@ static const struct imx219_mode supported_modes[] = {
- 			.width = 1280,
- 			.height = 960
- 		},
--		.vts_def = IMX219_VTS_30FPS_640x480,
-+		.vts_def = 1763,
- 	},
+ 	state = v4l2_subdev_lock_and_get_active_state(sd);
+ 
+-	if (imx219->streaming == enable)
+-		goto unlock;
+-
+-	if (enable) {
+-		/*
+-		 * Apply default & customized values
+-		 * and then start streaming.
+-		 */
++	if (enable)
+ 		ret = imx219_start_streaming(imx219, state);
+-		if (ret)
+-			goto unlock;
+-	} else {
++	else
+ 		imx219_stop_streaming(imx219);
+-	}
+ 
+-	imx219->streaming = enable;
+-
+-unlock:
+ 	v4l2_subdev_unlock_state(state);
+ 	return ret;
+ }
+@@ -1014,41 +998,6 @@ static int imx219_power_off(struct device *dev)
+ 	return 0;
+ }
+ 
+-static int __maybe_unused imx219_suspend(struct device *dev)
+-{
+-	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+-	struct imx219 *imx219 = to_imx219(sd);
+-
+-	if (imx219->streaming)
+-		imx219_stop_streaming(imx219);
+-
+-	return 0;
+-}
+-
+-static int __maybe_unused imx219_resume(struct device *dev)
+-{
+-	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+-	struct imx219 *imx219 = to_imx219(sd);
+-	struct v4l2_subdev_state *state;
+-	int ret;
+-
+-	if (imx219->streaming) {
+-		state = v4l2_subdev_lock_and_get_active_state(sd);
+-		ret = imx219_start_streaming(imx219, state);
+-		v4l2_subdev_unlock_state(state);
+-		if (ret)
+-			goto error;
+-	}
+-
+-	return 0;
+-
+-error:
+-	imx219_stop_streaming(imx219);
+-	imx219->streaming = false;
+-
+-	return ret;
+-}
+-
+ /* -----------------------------------------------------------------------------
+  * Probe & remove
+  */
+@@ -1294,7 +1243,6 @@ static const struct of_device_id imx219_dt_ids[] = {
+ MODULE_DEVICE_TABLE(of, imx219_dt_ids);
+ 
+ static const struct dev_pm_ops imx219_pm_ops = {
+-	SET_SYSTEM_SLEEP_PM_OPS(imx219_suspend, imx219_resume)
+ 	SET_RUNTIME_PM_OPS(imx219_power_off, imx219_power_on, NULL)
  };
  
 -- 
