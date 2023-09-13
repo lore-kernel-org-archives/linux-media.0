@@ -2,167 +2,148 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77FAFEDEC71
-	for <linux-media@archiver.kernel.org>; Wed, 13 Sep 2023 15:01:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71CC4EDEC70
+	for <linux-media@archiver.kernel.org>; Wed, 13 Sep 2023 15:04:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232750AbjIMPBZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 13 Sep 2023 11:01:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50622 "EHLO
+        id S241013AbjIMPED (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 13 Sep 2023 11:04:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241305AbjIMPBT (ORCPT
+        with ESMTP id S239071AbjIMPED (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 13 Sep 2023 11:01:19 -0400
+        Wed, 13 Sep 2023 11:04:03 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A199EAF
-        for <linux-media@vger.kernel.org>; Wed, 13 Sep 2023 08:01:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D5CB3
+        for <linux-media@vger.kernel.org>; Wed, 13 Sep 2023 08:03:59 -0700 (PDT)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2099C741;
-        Wed, 13 Sep 2023 16:59:40 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6D57E755;
+        Wed, 13 Sep 2023 17:02:25 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1694617180;
-        bh=ti+JrQ0C6R9YlgotJjDiUy9c7QYHZF6l5JFEhuE/dpo=;
+        s=mail; t=1694617345;
+        bh=mHq/ygIoGWCCfopo0ZWoTbXIQPi6MujEw+qyR0ZyM54=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T1cBMvB71+wRR4wSUddXFexgV8vA5O4yw7o3HiCEnuMn1Ry45MMSqGkSOG0PrOGy1
-         6bIbF+G7YVIHB6akkxBQGeGbpMu7WCjMiknivR6wBqTWf2Mt/StZPm8qtkCxAGtLhL
-         OvmJ8/SapDc3Km/SucI/P7GPqY4tjc6xKAEXlorQ=
-Date:   Wed, 13 Sep 2023 18:01:25 +0300
+        b=RQudWMKsE2R2uvLPF9l34SkMp0fGWcNBEQqetecF7eVUlFFDzUYhh4YCZz1NVv8jc
+         nJ/1WxaxSbeVO0Z4d06UKmlgNTOLb60OXWTt6Dz5FSAwgOLPbcQNjqmXPbPO7ToroI
+         5cHvBqy/REqlOCBHJ+ht556+C5BioYvFTFawNqiQ=
+Date:   Wed, 13 Sep 2023 18:04:10 +0300
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 Cc:     linux-media@vger.kernel.org, Sakari Ailus <sakari.ailus@iki.fi>,
         Dave Stevenson <dave.stevenson@raspberrypi.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH v3 15/20] media: i2c: imx219: Drop system suspend/resume
- operations
-Message-ID: <20230913150125.GA17108@pendragon.ideasonboard.com>
+Subject: Re: [PATCH v3 17/20] media: i2c: imx219: Separate horizontal and
+ vertical binning
+Message-ID: <20230913150410.GB17108@pendragon.ideasonboard.com>
 References: <20230913135638.26277-1-laurent.pinchart@ideasonboard.com>
- <20230913135638.26277-16-laurent.pinchart@ideasonboard.com>
- <j6hz2zblvwidmesilzr7phx37holtl6dhsr4zcrku3b2dferoe@72ruk2wbq2dr>
+ <20230913135638.26277-18-laurent.pinchart@ideasonboard.com>
+ <dptztdhugb45attj7jfpfg4yn3zh7lh3qpwywrfnoneozyhrde@ussyblvnfnge>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <j6hz2zblvwidmesilzr7phx37holtl6dhsr4zcrku3b2dferoe@72ruk2wbq2dr>
+In-Reply-To: <dptztdhugb45attj7jfpfg4yn3zh7lh3qpwywrfnoneozyhrde@ussyblvnfnge>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Sep 13, 2023 at 04:44:15PM +0200, Jacopo Mondi wrote:
-> Hi Laurent
-> 
-> On Wed, Sep 13, 2023 at 04:56:33PM +0300, Laurent Pinchart wrote:
-> > There is no need to stop streaming at system suspend time, or restart it
-> > when the system is resumed, as the host-side driver is responsible for
-> > stopping and restarting the pipeline in a controlled way by calling the
-> > .s_stream() operation. Drop the system suspend and resume handlers, and
-> > simplify the .s_stream() handler as a result.
-> 
-> I wish we could remove these from all drivers in media/i2c ..
+Hi Jacopo,
 
-I got fed up by cargo cult, so I'm cooking a patch to do this.
+On Wed, Sep 13, 2023 at 04:54:56PM +0200, Jacopo Mondi wrote:
+> On Wed, Sep 13, 2023 at 04:56:35PM +0300, Laurent Pinchart wrote:
+> > The IMX219 has distinct binning registers for the horizontal and
+> > vertical directions. Calculate their value and write them separately.
+> 
+> Do you expect different binning factors in horizontal and vertical
+> directions ?
+
+It should work, should someone decide they need to do so. I thus see no
+reason to disallow it.
 
 > > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 > > ---
-> >  drivers/media/i2c/imx219.c | 56 ++------------------------------------
-> >  1 file changed, 2 insertions(+), 54 deletions(-)
+> >  drivers/media/i2c/imx219.c | 39 ++++++++++++++++++++++++++------------
+> >  1 file changed, 27 insertions(+), 12 deletions(-)
 > >
 > > diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-> > index 8c928202a23b..a12ebf288dd2 100644
+> > index 6bfdceaf5044..bf1c2a1dad95 100644
 > > --- a/drivers/media/i2c/imx219.c
 > > +++ b/drivers/media/i2c/imx219.c
-> > @@ -358,9 +358,6 @@ struct imx219 {
-> >  	struct v4l2_ctrl *vblank;
-> >  	struct v4l2_ctrl *hblank;
+> > @@ -90,10 +90,11 @@
+> >  #define IMX219_REG_ORIENTATION		CCI_REG8(0x0172)
 > >
-> > -	/* Streaming on/off */
-> > -	bool streaming;
-> > -
-> >  	/* Two or Four lanes */
-> >  	u8 lanes;
-> >  };
-> > @@ -763,24 +760,11 @@ static int imx219_set_stream(struct v4l2_subdev *sd, int enable)
+> >  /* Binning  Mode */
+> > -#define IMX219_REG_BINNING_MODE		CCI_REG16(0x0174)
+> > -#define IMX219_BINNING_NONE		0x0000
+> > -#define IMX219_BINNING_2X2		0x0101
+> > -#define IMX219_BINNING_2X2_ANALOG	0x0303
+> > +#define IMX219_REG_BINNING_MODE_H	CCI_REG8(0x0174)
+> > +#define IMX219_REG_BINNING_MODE_V	CCI_REG8(0x0175)
+> > +#define IMX219_BINNING_NONE		0x00
+> > +#define IMX219_BINNING_X2		0x01
+> > +#define IMX219_BINNING_X2_ANALOG	0x03
 > >
-> >  	state = v4l2_subdev_lock_and_get_active_state(sd);
+> >  #define IMX219_REG_CSI_DATA_FORMAT_A	CCI_REG16(0x018c)
 > >
-> > -	if (imx219->streaming == enable)
-> > -		goto unlock;
-> > -
-> > -	if (enable) {
-> > -		/*
-> > -		 * Apply default & customized values
-> > -		 * and then start streaming.
-> > -		 */
-> > +	if (enable)
-> >  		ret = imx219_start_streaming(imx219, state);
-> > -		if (ret)
-> > -			goto unlock;
-> > -	} else {
-> > +	else
-> >  		imx219_stop_streaming(imx219);
-> > -	}
+> > @@ -615,7 +616,7 @@ static int imx219_set_framefmt(struct imx219 *imx219,
+> >  	const struct v4l2_mbus_framefmt *format;
+> >  	const struct v4l2_rect *crop;
+> >  	unsigned int bpp;
+> > -	u64 bin_mode;
+> > +	u64 bin_h, bin_v;
+> >  	int ret = 0;
 > >
-> > -	imx219->streaming = enable;
-> > -
-> > -unlock:
-> >  	v4l2_subdev_unlock_state(state);
+> >  	format = v4l2_subdev_get_pad_format(&imx219->sd, state, 0);
+> > @@ -647,14 +648,28 @@ static int imx219_set_framefmt(struct imx219 *imx219,
+> >  	cci_write(imx219->regmap, IMX219_REG_Y_ADD_END_A,
+> >  		  crop->top - IMX219_PIXEL_ARRAY_TOP + crop->height - 1, &ret);
+> >
+> > -	if (format->width == crop->width && format->height == crop->height)
+> > -		bin_mode = IMX219_BINNING_NONE;
+> > -	else if (bpp == 8)
+> > -		bin_mode = IMX219_BINNING_2X2_ANALOG;
+> > -	else
+> > -		bin_mode = IMX219_BINNING_2X2;
+> > +	switch (crop->width / format->width) {
+> > +	case 1:
+> > +	default:
 > 
-> Maybe an empty line now that this is not an error path anymore
+> With the currently supported modes nothing but 1 or 2 can be obtained.
+> I would have kept default: out, or used it to WARN developers adding
+> new modes they have to support other binning factors (4x is the only
+> not supported one). A minor though.
 
-If that's all it takes to make you happy, sure :-)
+The crop rectangle gets removed from the mode data in a latter patch, so
+potential for errors will disappear :-)
 
+> > +		bin_h = IMX219_BINNING_NONE;
+> > +		break;
+> > +	case 2:
+> > +		bin_h = bpp == 8 ? IMX219_BINNING_X2_ANALOG : IMX219_BINNING_X2;
+> > +		break;
+> > +	}
+> >
+> > -	cci_write(imx219->regmap, IMX219_REG_BINNING_MODE, bin_mode, &ret);
+> > +	switch (crop->height / format->height) {
+> > +	case 1:
+> > +	default:
+> > +		bin_v = IMX219_BINNING_NONE;
+> > +		break;
+> > +	case 2:
+> > +		bin_v = bpp == 8 ? IMX219_BINNING_X2_ANALOG : IMX219_BINNING_X2;
+> > +		break;
+> > +	}
+> > +
+> > +	cci_write(imx219->regmap, IMX219_REG_BINNING_MODE_H, bin_h, &ret);
+> > +	cci_write(imx219->regmap, IMX219_REG_BINNING_MODE_V, bin_v, &ret);
+> 
+> With the currently supported mode, this could have been a single
+> switch(). Doesn't hurt though
+> 
 > Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 > 
-> >  	return ret;
-> >  }
-> > @@ -1014,41 +998,6 @@ static int imx219_power_off(struct device *dev)
-> >  	return 0;
-> >  }
 > >
-> > -static int __maybe_unused imx219_suspend(struct device *dev)
-> > -{
-> > -	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-> > -	struct imx219 *imx219 = to_imx219(sd);
-> > -
-> > -	if (imx219->streaming)
-> > -		imx219_stop_streaming(imx219);
-> > -
-> > -	return 0;
-> > -}
-> > -
-> > -static int __maybe_unused imx219_resume(struct device *dev)
-> > -{
-> > -	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-> > -	struct imx219 *imx219 = to_imx219(sd);
-> > -	struct v4l2_subdev_state *state;
-> > -	int ret;
-> > -
-> > -	if (imx219->streaming) {
-> > -		state = v4l2_subdev_lock_and_get_active_state(sd);
-> > -		ret = imx219_start_streaming(imx219, state);
-> > -		v4l2_subdev_unlock_state(state);
-> > -		if (ret)
-> > -			goto error;
-> > -	}
-> > -
-> > -	return 0;
-> > -
-> > -error:
-> > -	imx219_stop_streaming(imx219);
-> > -	imx219->streaming = false;
-> > -
-> > -	return ret;
-> > -}
-> > -
-> >  /* -----------------------------------------------------------------------------
-> >   * Probe & remove
-> >   */
-> > @@ -1294,7 +1243,6 @@ static const struct of_device_id imx219_dt_ids[] = {
-> >  MODULE_DEVICE_TABLE(of, imx219_dt_ids);
-> >
-> >  static const struct dev_pm_ops imx219_pm_ops = {
-> > -	SET_SYSTEM_SLEEP_PM_OPS(imx219_suspend, imx219_resume)
-> >  	SET_RUNTIME_PM_OPS(imx219_power_off, imx219_power_on, NULL)
-> >  };
-> >
+> >  	cci_write(imx219->regmap, IMX219_REG_X_OUTPUT_SIZE,
+> >  		  format->width, &ret);
 
 -- 
 Regards,
