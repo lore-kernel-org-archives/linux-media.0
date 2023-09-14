@@ -2,171 +2,428 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CC95EEAA62
-	for <linux-media@archiver.kernel.org>; Thu, 14 Sep 2023 18:50:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41418EEAA5D
+	for <linux-media@archiver.kernel.org>; Thu, 14 Sep 2023 18:50:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240748AbjINSuo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 14 Sep 2023 14:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42994 "EHLO
+        id S241745AbjINSup (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 14 Sep 2023 14:50:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240743AbjINSue (ORCPT
+        with ESMTP id S239351AbjINSuf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 14 Sep 2023 14:50:34 -0400
+        Thu, 14 Sep 2023 14:50:35 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37ACA144FFC
-        for <linux-media@vger.kernel.org>; Thu, 14 Sep 2023 11:44:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA4D30EF
+        for <linux-media@vger.kernel.org>; Thu, 14 Sep 2023 11:44:25 -0700 (PDT)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BCF6E15EF;
-        Thu, 14 Sep 2023 20:42:48 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B8E2815EF;
+        Thu, 14 Sep 2023 20:42:51 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1694716969;
-        bh=1x/krJbBaWEcTmS0Hmfr3v6bjo/J1oI90VyUhAYrtB4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=XVg+b3yV9eUmPyAfPtA5KxMLAZLeebSA0HXFr+Xreo3oyjmKgGmragz101dg0oLdD
-         5qzlxWu7aebgnfj6u/FBgo2ssnYSkrH8wB86oV5V5ODwLU494O9KO6AbvXXZqdlEw4
-         rqmSDfYEV3ACY4dFFbTjdC5RQ+CAFyHfL3s690s8=
+        s=mail; t=1694716972;
+        bh=PNEErvkWvlkXjAVCf9SA4nyBaKQq5kRdJwuxp9SBjCk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=IoNWlODEIJ4FmP60etHJedM7dafxumWWJVdsTtvH5sivWtVVSaNHzmrAcUDIZLSZ5
+         OqVHRfiAnCmcClVKxtm5ojVWvLS95zfje3FcL3w4rTWoDxgaedIcj3ZJAMfCpr9kBN
+         Br9pf08OkbtM7yxUMSLT7IENC5np3Ph84zg01bCs=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH v2 0/2] media: v4l2-fwnode: Provide device context in endpoint parsing messages
-Date:   Thu, 14 Sep 2023 21:44:33 +0300
-Message-ID: <20230914184435.7807-1-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 2/2] media: v4l2-fwnode: Replace pr_*() with dev_*()
+Date:   Thu, 14 Sep 2023 21:44:35 +0300
+Message-ID: <20230914184435.7807-3-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230914184435.7807-1-laurent.pinchart@ideasonboard.com>
+References: <20230914184435.7807-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+v4l2-fwnode prints a large number of debug and warning messages without
+linking them to a device context. Use the device pointer available to
+the functions to replace the pr_*() calls with dev_*() in order to
+indicate better which device the messages relate to.
 
-This patch series improves (in my opinion) messages logged by
-v4l2-fwnode when parsing endpoints by adding a device context. Patch 1/2
-prepares for the change by passing a struct device pointer to the
-v4l2_fwnode_endpoint_parse() and v4l2_fwnode_endpoint_alloc_parse()
-functions, mass-patching all the callers. Patch 2/2 then makes use of
-the device internally to switch from pr_*() to dev_*().
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ drivers/media/v4l2-core/v4l2-fwnode.c | 121 ++++++++++++++------------
+ 1 file changed, 63 insertions(+), 58 deletions(-)
 
-I haven't created a mailbomb by CC'ing individual maintainers of all the
-drivers touched, as I would like to have feedback on the idea first.
-get_maintainer.pl returns 109 addresses, which may be over the limit
-that some mailing lists may accept before classifying the message as
-spam.
-
-The series has been rebased on top ov v6.6-rc1 (or, more exactly, on top
-of Sakari's master branch available at
-https://git.linuxtv.org/sailus/media_tree.git/log/). There are otherwise
-no other update.
-
-Laurent Pinchart (2):
-  media: Pass struct device pointer to fwnode endpoint parsing functions
-  media: v4l2-fwnode: Replace pr_*() with dev_*()
-
- drivers/media/i2c/adv748x/adv748x-core.c      |   2 +-
- drivers/media/i2c/adv7604.c                   |   3 +-
- drivers/media/i2c/ar0521.c                    |   2 +-
- drivers/media/i2c/ccs/ccs-core.c              |   2 +-
- drivers/media/i2c/ds90ub913.c                 |   2 +-
- drivers/media/i2c/ds90ub953.c                 |   2 +-
- drivers/media/i2c/ds90ub960.c                 |   4 +-
- drivers/media/i2c/hi556.c                     |   2 +-
- drivers/media/i2c/hi846.c                     |   2 +-
- drivers/media/i2c/hi847.c                     |   2 +-
- drivers/media/i2c/imx214.c                    |   2 +-
- drivers/media/i2c/imx219.c                    |   2 +-
- drivers/media/i2c/imx274.c                    |   2 +-
- drivers/media/i2c/imx290.c                    |   2 +-
- drivers/media/i2c/imx319.c                    |   2 +-
- drivers/media/i2c/imx334.c                    |   2 +-
- drivers/media/i2c/imx335.c                    |   2 +-
- drivers/media/i2c/imx355.c                    |   2 +-
- drivers/media/i2c/imx412.c                    |   2 +-
- drivers/media/i2c/imx415.c                    |   2 +-
- drivers/media/i2c/isl7998x.c                  |   2 +-
- drivers/media/i2c/max9286.c                   |   2 +-
- drivers/media/i2c/mt9m111.c                   |   2 +-
- drivers/media/i2c/mt9p031.c                   |   3 +-
- drivers/media/i2c/mt9v032.c                   |   3 +-
- drivers/media/i2c/og01a1b.c                   |   2 +-
- drivers/media/i2c/ov02a10.c                   |   2 +-
- drivers/media/i2c/ov08d10.c                   |   2 +-
- drivers/media/i2c/ov08x40.c                   |   2 +-
- drivers/media/i2c/ov13b10.c                   |   2 +-
- drivers/media/i2c/ov2659.c                    |   3 +-
- drivers/media/i2c/ov2680.c                    |   2 +-
- drivers/media/i2c/ov2740.c                    |   2 +-
- drivers/media/i2c/ov4689.c                    |   2 +-
- drivers/media/i2c/ov5640.c                    |   2 +-
- drivers/media/i2c/ov5645.c                    |   2 +-
- drivers/media/i2c/ov5647.c                    |   6 +-
- drivers/media/i2c/ov5648.c                    |   2 +-
- drivers/media/i2c/ov5670.c                    |   3 +-
- drivers/media/i2c/ov5675.c                    |   2 +-
- drivers/media/i2c/ov5693.c                    |   2 +-
- drivers/media/i2c/ov7251.c                    |   2 +-
- drivers/media/i2c/ov7670.c                    |   2 +-
- drivers/media/i2c/ov772x.c                    |   5 +-
- drivers/media/i2c/ov8856.c                    |   2 +-
- drivers/media/i2c/ov8858.c                    |   2 +-
- drivers/media/i2c/ov8865.c                    |   2 +-
- drivers/media/i2c/ov9282.c                    |   2 +-
- drivers/media/i2c/ov9734.c                    |   2 +-
- drivers/media/i2c/s5c73m3/s5c73m3-core.c      |   2 +-
- drivers/media/i2c/s5k5baf.c                   |   2 +-
- drivers/media/i2c/st-mipid02.c                |   6 +-
- drivers/media/i2c/st-vgxy61.c                 |   2 +-
- drivers/media/i2c/tc358743.c                  |   3 +-
- drivers/media/i2c/tc358746.c                  |   4 +-
- drivers/media/i2c/tda1997x.c                  |   3 +-
- drivers/media/i2c/tvp514x.c                   |   3 +-
- drivers/media/i2c/tvp5150.c                   |   2 +-
- drivers/media/i2c/tvp7002.c                   |   3 +-
- drivers/media/pci/intel/ipu3/ipu3-cio2.c      |   2 +-
- drivers/media/pci/intel/ivsc/mei_csi.c        |   4 +-
- drivers/media/platform/atmel/atmel-isi.c      |   2 +-
- drivers/media/platform/cadence/cdns-csi2rx.c  |   2 +-
- drivers/media/platform/cadence/cdns-csi2tx.c  |   3 +-
- drivers/media/platform/intel/pxa_camera.c     |   2 +-
- .../platform/microchip/microchip-csi2dc.c     |   5 +-
- .../microchip/microchip-sama5d2-isc.c         |   2 +-
- .../microchip/microchip-sama7g5-isc.c         |   2 +-
- drivers/media/platform/nxp/imx-mipi-csis.c    |   2 +-
- drivers/media/platform/nxp/imx8mq-mipi-csi2.c |   2 +-
- drivers/media/platform/qcom/camss/camss.c     |   2 +-
- .../platform/renesas/rcar-vin/rcar-core.c     |   4 +-
- .../platform/renesas/rcar-vin/rcar-csi2.c     |   2 +-
- drivers/media/platform/renesas/renesas-ceu.c  |   3 +-
- .../platform/renesas/rzg2l-cru/rzg2l-core.c   |   2 +-
- .../platform/renesas/rzg2l-cru/rzg2l-csi2.c   |   2 +-
- .../platform/rockchip/rkisp1/rkisp1-dev.c     |   2 +-
- .../platform/samsung/exynos4-is/media-dev.c   |   3 +-
- .../platform/samsung/exynos4-is/mipi-csis.c   |   3 +-
- drivers/media/platform/st/stm32/stm32-dcmi.c  |   2 +-
- .../platform/sunxi/sun4i-csi/sun4i_csi.c      |   2 +-
- .../sunxi/sun6i-csi/sun6i_csi_bridge.c        |   2 +-
- .../sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c   |   2 +-
- .../sun8i_a83t_mipi_csi2.c                    |   2 +-
- .../media/platform/ti/am437x/am437x-vpfe.c    |   2 +-
- drivers/media/platform/ti/cal/cal-camerarx.c  |   3 +-
- .../media/platform/ti/davinci/vpif_capture.c  |   3 +-
- drivers/media/platform/ti/omap3isp/isp.c      |   8 +-
- .../media/platform/xilinx/xilinx-csi2rxss.c   |   2 +-
- drivers/media/v4l2-core/v4l2-fwnode.c         | 126 +++++++++---------
- .../media/atomisp/pci/atomisp_csi2_bridge.c   |   2 +-
- .../deprecated/atmel/atmel-sama5d2-isc.c      |   2 +-
- .../deprecated/atmel/atmel-sama7g5-isc.c      |   2 +-
- drivers/staging/media/imx/imx6-mipi-csi2.c    |   2 +-
- drivers/staging/media/max96712/max96712.c     |   2 +-
- .../media/sunxi/sun6i-isp/sun6i_isp_proc.c    |   2 +-
- drivers/staging/media/tegra-video/csi.c       |   2 +-
- drivers/staging/media/tegra-video/vi.c        |   2 +-
- drivers/staging/media/tegra-video/vip.c       |   2 +-
- include/media/v4l2-fwnode.h                   |  12 +-
- 100 files changed, 207 insertions(+), 170 deletions(-)
-
-
-base-commit: 48533e9034e3350043655258ec443d79be84255a
+diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/v4l2-core/v4l2-fwnode.c
+index 99bac45f570b..e747099bc07b 100644
+--- a/drivers/media/v4l2-core/v4l2-fwnode.c
++++ b/drivers/media/v4l2-core/v4l2-fwnode.c
+@@ -121,7 +121,8 @@ v4l2_fwnode_mbus_type_to_string(enum v4l2_mbus_type type)
+ 	return conv ? conv->name : "not found";
+ }
+ 
+-static int v4l2_fwnode_endpoint_parse_csi2_bus(struct fwnode_handle *fwnode,
++static int v4l2_fwnode_endpoint_parse_csi2_bus(struct device *dev,
++					       struct fwnode_handle *fwnode,
+ 					       struct v4l2_fwnode_endpoint *vep,
+ 					       enum v4l2_mbus_type bus_type)
+ {
+@@ -155,7 +156,7 @@ static int v4l2_fwnode_endpoint_parse_csi2_bus(struct fwnode_handle *fwnode,
+ 		}
+ 
+ 		if (use_default_lane_mapping)
+-			pr_debug("no lane mapping given, using defaults\n");
++			dev_dbg(dev, "no lane mapping given, using defaults\n");
+ 	}
+ 
+ 	rval = fwnode_property_count_u32(fwnode, "data-lanes");
+@@ -168,7 +169,7 @@ static int v4l2_fwnode_endpoint_parse_csi2_bus(struct fwnode_handle *fwnode,
+ 
+ 		have_data_lanes = true;
+ 		if (use_default_lane_mapping) {
+-			pr_debug("data-lanes property exists; disabling default mapping\n");
++			dev_dbg(dev, "data-lanes property exists; disabling default mapping\n");
+ 			use_default_lane_mapping = false;
+ 		}
+ 	}
+@@ -176,21 +177,21 @@ static int v4l2_fwnode_endpoint_parse_csi2_bus(struct fwnode_handle *fwnode,
+ 	for (i = 0; i < num_data_lanes; i++) {
+ 		if (lanes_used & BIT(array[i])) {
+ 			if (have_data_lanes || !use_default_lane_mapping)
+-				pr_warn("duplicated lane %u in data-lanes, using defaults\n",
+-					array[i]);
++				dev_warn(dev, "duplicated lane %u in data-lanes, using defaults\n",
++					 array[i]);
+ 			use_default_lane_mapping = true;
+ 		}
+ 		lanes_used |= BIT(array[i]);
+ 
+ 		if (have_data_lanes)
+-			pr_debug("lane %u position %u\n", i, array[i]);
++			dev_dbg(dev, "lane %u position %u\n", i, array[i]);
+ 	}
+ 
+ 	rval = fwnode_property_count_u32(fwnode, "lane-polarities");
+ 	if (rval > 0) {
+ 		if (rval != 1 + num_data_lanes /* clock+data */) {
+-			pr_warn("invalid number of lane-polarities entries (need %u, got %u)\n",
+-				1 + num_data_lanes, rval);
++			dev_warn(dev, "invalid number of lane-polarities entries (need %u, got %u)\n",
++				 1 + num_data_lanes, rval);
+ 			return -EINVAL;
+ 		}
+ 
+@@ -199,20 +200,20 @@ static int v4l2_fwnode_endpoint_parse_csi2_bus(struct fwnode_handle *fwnode,
+ 
+ 	if (!fwnode_property_read_u32(fwnode, "clock-lanes", &v)) {
+ 		clock_lane = v;
+-		pr_debug("clock lane position %u\n", v);
++		dev_dbg(dev, "clock lane position %u\n", v);
+ 		have_clk_lane = true;
+ 	}
+ 
+ 	if (have_clk_lane && lanes_used & BIT(clock_lane) &&
+ 	    !use_default_lane_mapping) {
+-		pr_warn("duplicated lane %u in clock-lanes, using defaults\n",
+-			v);
++		dev_warn(dev, "duplicated lane %u in clock-lanes, using defaults\n",
++			 v);
+ 		use_default_lane_mapping = true;
+ 	}
+ 
+ 	if (fwnode_property_present(fwnode, "clock-noncontinuous")) {
+ 		flags |= V4L2_MBUS_CSI2_NONCONTINUOUS_CLOCK;
+-		pr_debug("non-continuous clock\n");
++		dev_dbg(dev, "non-continuous clock\n");
+ 	}
+ 
+ 	if (bus_type == V4L2_MBUS_CSI2_DPHY ||
+@@ -244,11 +245,11 @@ static int v4l2_fwnode_endpoint_parse_csi2_bus(struct fwnode_handle *fwnode,
+ 
+ 			for (i = 0; i < 1 + num_data_lanes; i++) {
+ 				bus->lane_polarities[i] = array[i];
+-				pr_debug("lane %u polarity %sinverted",
+-					 i, array[i] ? "" : "not ");
++				dev_dbg(dev, "lane %u polarity %sinverted",
++					i, array[i] ? "" : "not ");
+ 			}
+ 		} else {
+-			pr_debug("no lane polarities defined, assuming not inverted\n");
++			dev_dbg(dev, "no lane polarities defined, assuming not inverted\n");
+ 		}
+ 	}
+ 
+@@ -263,7 +264,8 @@ static int v4l2_fwnode_endpoint_parse_csi2_bus(struct fwnode_handle *fwnode,
+ 			     V4L2_MBUS_FIELD_EVEN_LOW)
+ 
+ static void
+-v4l2_fwnode_endpoint_parse_parallel_bus(struct fwnode_handle *fwnode,
++v4l2_fwnode_endpoint_parse_parallel_bus(struct device *dev,
++					struct fwnode_handle *fwnode,
+ 					struct v4l2_fwnode_endpoint *vep,
+ 					enum v4l2_mbus_type bus_type)
+ {
+@@ -279,7 +281,7 @@ v4l2_fwnode_endpoint_parse_parallel_bus(struct fwnode_handle *fwnode,
+ 			   V4L2_MBUS_HSYNC_ACTIVE_LOW);
+ 		flags |= v ? V4L2_MBUS_HSYNC_ACTIVE_HIGH :
+ 			V4L2_MBUS_HSYNC_ACTIVE_LOW;
+-		pr_debug("hsync-active %s\n", v ? "high" : "low");
++		dev_dbg(dev, "hsync-active %s\n", v ? "high" : "low");
+ 	}
+ 
+ 	if (!fwnode_property_read_u32(fwnode, "vsync-active", &v)) {
+@@ -287,7 +289,7 @@ v4l2_fwnode_endpoint_parse_parallel_bus(struct fwnode_handle *fwnode,
+ 			   V4L2_MBUS_VSYNC_ACTIVE_LOW);
+ 		flags |= v ? V4L2_MBUS_VSYNC_ACTIVE_HIGH :
+ 			V4L2_MBUS_VSYNC_ACTIVE_LOW;
+-		pr_debug("vsync-active %s\n", v ? "high" : "low");
++		dev_dbg(dev, "vsync-active %s\n", v ? "high" : "low");
+ 	}
+ 
+ 	if (!fwnode_property_read_u32(fwnode, "field-even-active", &v)) {
+@@ -295,7 +297,7 @@ v4l2_fwnode_endpoint_parse_parallel_bus(struct fwnode_handle *fwnode,
+ 			   V4L2_MBUS_FIELD_EVEN_LOW);
+ 		flags |= v ? V4L2_MBUS_FIELD_EVEN_HIGH :
+ 			V4L2_MBUS_FIELD_EVEN_LOW;
+-		pr_debug("field-even-active %s\n", v ? "high" : "low");
++		dev_dbg(dev, "field-even-active %s\n", v ? "high" : "low");
+ 	}
+ 
+ 	if (!fwnode_property_read_u32(fwnode, "pclk-sample", &v)) {
+@@ -305,18 +307,18 @@ v4l2_fwnode_endpoint_parse_parallel_bus(struct fwnode_handle *fwnode,
+ 		switch (v) {
+ 		case 0:
+ 			flags |= V4L2_MBUS_PCLK_SAMPLE_FALLING;
+-			pr_debug("pclk-sample low\n");
++			dev_dbg(dev, "pclk-sample low\n");
+ 			break;
+ 		case 1:
+ 			flags |= V4L2_MBUS_PCLK_SAMPLE_RISING;
+-			pr_debug("pclk-sample high\n");
++			dev_dbg(dev, "pclk-sample high\n");
+ 			break;
+ 		case 2:
+ 			flags |= V4L2_MBUS_PCLK_SAMPLE_DUALEDGE;
+-			pr_debug("pclk-sample dual edge\n");
++			dev_dbg(dev, "pclk-sample dual edge\n");
+ 			break;
+ 		default:
+-			pr_warn("invalid argument for pclk-sample");
++			dev_warn(dev, "invalid argument for pclk-sample");
+ 			break;
+ 		}
+ 	}
+@@ -326,11 +328,11 @@ v4l2_fwnode_endpoint_parse_parallel_bus(struct fwnode_handle *fwnode,
+ 			   V4L2_MBUS_DATA_ACTIVE_LOW);
+ 		flags |= v ? V4L2_MBUS_DATA_ACTIVE_HIGH :
+ 			V4L2_MBUS_DATA_ACTIVE_LOW;
+-		pr_debug("data-active %s\n", v ? "high" : "low");
++		dev_dbg(dev, "data-active %s\n", v ? "high" : "low");
+ 	}
+ 
+ 	if (fwnode_property_present(fwnode, "slave-mode")) {
+-		pr_debug("slave mode\n");
++		dev_dbg(dev, "slave mode\n");
+ 		flags &= ~V4L2_MBUS_MASTER;
+ 		flags |= V4L2_MBUS_SLAVE;
+ 	} else {
+@@ -340,12 +342,12 @@ v4l2_fwnode_endpoint_parse_parallel_bus(struct fwnode_handle *fwnode,
+ 
+ 	if (!fwnode_property_read_u32(fwnode, "bus-width", &v)) {
+ 		bus->bus_width = v;
+-		pr_debug("bus-width %u\n", v);
++		dev_dbg(dev, "bus-width %u\n", v);
+ 	}
+ 
+ 	if (!fwnode_property_read_u32(fwnode, "data-shift", &v)) {
+ 		bus->data_shift = v;
+-		pr_debug("data-shift %u\n", v);
++		dev_dbg(dev, "data-shift %u\n", v);
+ 	}
+ 
+ 	if (!fwnode_property_read_u32(fwnode, "sync-on-green-active", &v)) {
+@@ -353,7 +355,7 @@ v4l2_fwnode_endpoint_parse_parallel_bus(struct fwnode_handle *fwnode,
+ 			   V4L2_MBUS_VIDEO_SOG_ACTIVE_LOW);
+ 		flags |= v ? V4L2_MBUS_VIDEO_SOG_ACTIVE_HIGH :
+ 			V4L2_MBUS_VIDEO_SOG_ACTIVE_LOW;
+-		pr_debug("sync-on-green-active %s\n", v ? "high" : "low");
++		dev_dbg(dev, "sync-on-green-active %s\n", v ? "high" : "low");
+ 	}
+ 
+ 	if (!fwnode_property_read_u32(fwnode, "data-enable-active", &v)) {
+@@ -361,7 +363,7 @@ v4l2_fwnode_endpoint_parse_parallel_bus(struct fwnode_handle *fwnode,
+ 			   V4L2_MBUS_DATA_ENABLE_LOW);
+ 		flags |= v ? V4L2_MBUS_DATA_ENABLE_HIGH :
+ 			V4L2_MBUS_DATA_ENABLE_LOW;
+-		pr_debug("data-enable-active %s\n", v ? "high" : "low");
++		dev_dbg(dev, "data-enable-active %s\n", v ? "high" : "low");
+ 	}
+ 
+ 	switch (bus_type) {
+@@ -384,7 +386,8 @@ v4l2_fwnode_endpoint_parse_parallel_bus(struct fwnode_handle *fwnode,
+ }
+ 
+ static void
+-v4l2_fwnode_endpoint_parse_csi1_bus(struct fwnode_handle *fwnode,
++v4l2_fwnode_endpoint_parse_csi1_bus(struct device *dev,
++				    struct fwnode_handle *fwnode,
+ 				    struct v4l2_fwnode_endpoint *vep,
+ 				    enum v4l2_mbus_type bus_type)
+ {
+@@ -393,22 +396,22 @@ v4l2_fwnode_endpoint_parse_csi1_bus(struct fwnode_handle *fwnode,
+ 
+ 	if (!fwnode_property_read_u32(fwnode, "clock-inv", &v)) {
+ 		bus->clock_inv = v;
+-		pr_debug("clock-inv %u\n", v);
++		dev_dbg(dev, "clock-inv %u\n", v);
+ 	}
+ 
+ 	if (!fwnode_property_read_u32(fwnode, "strobe", &v)) {
+ 		bus->strobe = v;
+-		pr_debug("strobe %u\n", v);
++		dev_dbg(dev, "strobe %u\n", v);
+ 	}
+ 
+ 	if (!fwnode_property_read_u32(fwnode, "data-lanes", &v)) {
+ 		bus->data_lane = v;
+-		pr_debug("data-lanes %u\n", v);
++		dev_dbg(dev, "data-lanes %u\n", v);
+ 	}
+ 
+ 	if (!fwnode_property_read_u32(fwnode, "clock-lanes", &v)) {
+ 		bus->clock_lane = v;
+-		pr_debug("clock-lanes %u\n", v);
++		dev_dbg(dev, "clock-lanes %u\n", v);
+ 	}
+ 
+ 	if (bus_type == V4L2_MBUS_CCP2)
+@@ -417,31 +420,32 @@ v4l2_fwnode_endpoint_parse_csi1_bus(struct fwnode_handle *fwnode,
+ 		vep->bus_type = V4L2_MBUS_CSI1;
+ }
+ 
+-static int __v4l2_fwnode_endpoint_parse(struct fwnode_handle *fwnode,
++static int __v4l2_fwnode_endpoint_parse(struct device *dev,
++					struct fwnode_handle *fwnode,
+ 					struct v4l2_fwnode_endpoint *vep)
+ {
+ 	u32 bus_type = V4L2_FWNODE_BUS_TYPE_GUESS;
+ 	enum v4l2_mbus_type mbus_type;
+ 	int rval;
+ 
+-	pr_debug("===== begin parsing endpoint %pfw\n", fwnode);
++	dev_dbg(dev, "===== begin parsing endpoint %pfw\n", fwnode);
+ 
+ 	fwnode_property_read_u32(fwnode, "bus-type", &bus_type);
+-	pr_debug("fwnode video bus type %s (%u), mbus type %s (%u)\n",
+-		 v4l2_fwnode_bus_type_to_string(bus_type), bus_type,
+-		 v4l2_fwnode_mbus_type_to_string(vep->bus_type),
+-		 vep->bus_type);
++	dev_dbg(dev, "fwnode video bus type %s (%u), mbus type %s (%u)\n",
++		v4l2_fwnode_bus_type_to_string(bus_type), bus_type,
++		v4l2_fwnode_mbus_type_to_string(vep->bus_type),
++		vep->bus_type);
+ 	mbus_type = v4l2_fwnode_bus_type_to_mbus(bus_type);
+ 	if (mbus_type == V4L2_MBUS_INVALID) {
+-		pr_debug("unsupported bus type %u\n", bus_type);
++		dev_dbg(dev, "unsupported bus type %u\n", bus_type);
+ 		return -EINVAL;
+ 	}
+ 
+ 	if (vep->bus_type != V4L2_MBUS_UNKNOWN) {
+ 		if (mbus_type != V4L2_MBUS_UNKNOWN &&
+ 		    vep->bus_type != mbus_type) {
+-			pr_debug("expecting bus type %s\n",
+-				 v4l2_fwnode_mbus_type_to_string(vep->bus_type));
++			dev_dbg(dev, "expecting bus type %s\n",
++				v4l2_fwnode_mbus_type_to_string(vep->bus_type));
+ 			return -ENXIO;
+ 		}
+ 	} else {
+@@ -450,28 +454,29 @@ static int __v4l2_fwnode_endpoint_parse(struct fwnode_handle *fwnode,
+ 
+ 	switch (vep->bus_type) {
+ 	case V4L2_MBUS_UNKNOWN:
+-		rval = v4l2_fwnode_endpoint_parse_csi2_bus(fwnode, vep,
++		rval = v4l2_fwnode_endpoint_parse_csi2_bus(dev, fwnode, vep,
+ 							   V4L2_MBUS_UNKNOWN);
+ 		if (rval)
+ 			return rval;
+ 
+ 		if (vep->bus_type == V4L2_MBUS_UNKNOWN)
+-			v4l2_fwnode_endpoint_parse_parallel_bus(fwnode, vep,
++			v4l2_fwnode_endpoint_parse_parallel_bus(dev, fwnode, vep,
+ 								V4L2_MBUS_UNKNOWN);
+ 
+-		pr_debug("assuming media bus type %s (%u)\n",
+-			 v4l2_fwnode_mbus_type_to_string(vep->bus_type),
+-			 vep->bus_type);
++		dev_dbg(dev, "assuming media bus type %s (%u)\n",
++			v4l2_fwnode_mbus_type_to_string(vep->bus_type),
++			vep->bus_type);
+ 
+ 		break;
+ 	case V4L2_MBUS_CCP2:
+ 	case V4L2_MBUS_CSI1:
+-		v4l2_fwnode_endpoint_parse_csi1_bus(fwnode, vep, vep->bus_type);
++		v4l2_fwnode_endpoint_parse_csi1_bus(dev, fwnode, vep,
++						    vep->bus_type);
+ 
+ 		break;
+ 	case V4L2_MBUS_CSI2_DPHY:
+ 	case V4L2_MBUS_CSI2_CPHY:
+-		rval = v4l2_fwnode_endpoint_parse_csi2_bus(fwnode, vep,
++		rval = v4l2_fwnode_endpoint_parse_csi2_bus(dev, fwnode, vep,
+ 							   vep->bus_type);
+ 		if (rval)
+ 			return rval;
+@@ -479,12 +484,12 @@ static int __v4l2_fwnode_endpoint_parse(struct fwnode_handle *fwnode,
+ 		break;
+ 	case V4L2_MBUS_PARALLEL:
+ 	case V4L2_MBUS_BT656:
+-		v4l2_fwnode_endpoint_parse_parallel_bus(fwnode, vep,
++		v4l2_fwnode_endpoint_parse_parallel_bus(dev, fwnode, vep,
+ 							vep->bus_type);
+ 
+ 		break;
+ 	default:
+-		pr_warn("unsupported bus type %u\n", mbus_type);
++		dev_warn(dev, "unsupported bus type %u\n", mbus_type);
+ 		return -EINVAL;
+ 	}
+ 
+@@ -498,9 +503,9 @@ int v4l2_fwnode_endpoint_parse(struct device *dev, struct fwnode_handle *fwnode,
+ {
+ 	int ret;
+ 
+-	ret = __v4l2_fwnode_endpoint_parse(fwnode, vep);
++	ret = __v4l2_fwnode_endpoint_parse(dev, fwnode, vep);
+ 
+-	pr_debug("===== end parsing endpoint %pfw\n", fwnode);
++	dev_dbg(dev, "===== end parsing endpoint %pfw\n", fwnode);
+ 
+ 	return ret;
+ }
+@@ -522,7 +527,7 @@ int v4l2_fwnode_endpoint_alloc_parse(struct device *dev,
+ {
+ 	int rval;
+ 
+-	rval = __v4l2_fwnode_endpoint_parse(fwnode, vep);
++	rval = __v4l2_fwnode_endpoint_parse(dev, fwnode, vep);
+ 	if (rval < 0)
+ 		return rval;
+ 
+@@ -548,11 +553,11 @@ int v4l2_fwnode_endpoint_alloc_parse(struct device *dev,
+ 		}
+ 
+ 		for (i = 0; i < vep->nr_of_link_frequencies; i++)
+-			pr_debug("link-frequencies %u value %llu\n", i,
+-				 vep->link_frequencies[i]);
++			dev_dbg(dev, "link-frequencies %u value %llu\n", i,
++				vep->link_frequencies[i]);
+ 	}
+ 
+-	pr_debug("===== end parsing endpoint %pfw\n", fwnode);
++	dev_dbg(dev, "===== end parsing endpoint %pfw\n", fwnode);
+ 
+ 	return 0;
+ }
 -- 
 Regards,
 
