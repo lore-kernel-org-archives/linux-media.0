@@ -2,31 +2,30 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F1A8EDE9BF
-	for <linux-media@archiver.kernel.org>; Thu, 14 Sep 2023 12:41:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58BE7EDE9BC
+	for <linux-media@archiver.kernel.org>; Thu, 14 Sep 2023 12:41:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238444AbjINMlc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S238451AbjINMlc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 14 Sep 2023 08:41:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41516 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238217AbjINMla (ORCPT
+        with ESMTP id S230120AbjINMla (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 14 Sep 2023 08:41:30 -0400
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18AEF1FD4
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 188F81FC9
         for <linux-media@vger.kernel.org>; Thu, 14 Sep 2023 05:41:26 -0700 (PDT)
 Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
         by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <m.tretter@pengutronix.de>)
-        id 1qglet-0008Mc-Bk; Thu, 14 Sep 2023 14:41:23 +0200
+        id 1qglet-0008Mc-3Q; Thu, 14 Sep 2023 14:41:23 +0200
 From:   Michael Tretter <m.tretter@pengutronix.de>
-Date:   Thu, 14 Sep 2023 14:40:41 +0200
-Subject: [PATCH 09/13] media: rockchip: rga: add local variable for
- pix_format
+Date:   Thu, 14 Sep 2023 14:40:38 +0200
+Subject: [PATCH 06/13] media: rockchip: rga: set dma mask to 32 bits
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230914-rockchip-rga-multiplanar-v1-9-abfd77260ae3@pengutronix.de>
+Message-Id: <20230914-rockchip-rga-multiplanar-v1-6-abfd77260ae3@pengutronix.de>
 References: <20230914-rockchip-rga-multiplanar-v1-0-abfd77260ae3@pengutronix.de>
 In-Reply-To: <20230914-rockchip-rga-multiplanar-v1-0-abfd77260ae3@pengutronix.de>
 To:     Jacob Chen <jacob-chen@iotwrt.com>,
@@ -49,125 +48,35 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The local variable allows to simplify the accessed to the format and
-makes it easier to change the type of the format.
+The RGA DMA descriptor list contains only 32-bit addresses. Set the
+dma_mask to only allocate memory that is addressable by the descriptors.
+
+This prevents errors when preparing vb2 buffers that were allocated by
+the RGA. Imported buffers may still fail the preparation, as they may be
+allocated above the 4 GB boundary.
 
 Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
 ---
- drivers/media/platform/rockchip/rga/rga.c | 55 ++++++++++++++++++-------------
- 1 file changed, 32 insertions(+), 23 deletions(-)
+ drivers/media/platform/rockchip/rga/rga.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/drivers/media/platform/rockchip/rga/rga.c b/drivers/media/platform/rockchip/rga/rga.c
-index 4579023af2ff..303ee762bec4 100644
+index f18fccc7b204..149deb1f1e03 100644
 --- a/drivers/media/platform/rockchip/rga/rga.c
 +++ b/drivers/media/platform/rockchip/rga/rga.c
-@@ -446,6 +446,7 @@ static int vidioc_enum_fmt(struct file *file, void *prv, struct v4l2_fmtdesc *f)
+@@ -824,6 +824,12 @@ static int rga_probe(struct platform_device *pdev)
+ 		goto err_put_clk;
+ 	}
  
- static int vidioc_g_fmt(struct file *file, void *prv, struct v4l2_format *f)
- {
-+	struct v4l2_pix_format *pix_fmt = &f->fmt.pix;
- 	struct rga_ctx *ctx = prv;
- 	struct vb2_queue *vq;
- 	struct rga_frame *frm;
-@@ -457,47 +458,49 @@ static int vidioc_g_fmt(struct file *file, void *prv, struct v4l2_format *f)
- 	if (IS_ERR(frm))
- 		return PTR_ERR(frm);
- 
--	f->fmt.pix.width = frm->width;
--	f->fmt.pix.height = frm->height;
--	f->fmt.pix.field = V4L2_FIELD_NONE;
--	f->fmt.pix.pixelformat = frm->fmt->fourcc;
--	f->fmt.pix.bytesperline = frm->stride;
--	f->fmt.pix.sizeimage = frm->size;
--	f->fmt.pix.colorspace = frm->colorspace;
-+	pix_fmt->width = frm->width;
-+	pix_fmt->height = frm->height;
-+	pix_fmt->field = V4L2_FIELD_NONE;
-+	pix_fmt->pixelformat = frm->fmt->fourcc;
-+	pix_fmt->bytesperline = frm->stride;
-+	pix_fmt->sizeimage = frm->size;
-+	pix_fmt->colorspace = frm->colorspace;
- 
- 	return 0;
- }
- 
- static int vidioc_try_fmt(struct file *file, void *prv, struct v4l2_format *f)
- {
-+	struct v4l2_pix_format *pix_fmt = &f->fmt.pix;
- 	struct rga_fmt *fmt;
- 
- 	fmt = rga_fmt_find(f->fmt.pix.pixelformat);
- 	if (!fmt)
- 		fmt = &formats[0];
- 
--	f->fmt.pix.pixelformat = fmt->fourcc;
-+	pix_fmt->pixelformat = fmt->fourcc;
- 
--	f->fmt.pix.field = V4L2_FIELD_NONE;
-+	pix_fmt->field = V4L2_FIELD_NONE;
- 
--	f->fmt.pix.width = clamp(f->fmt.pix.width,
--				 (u32)MIN_WIDTH, (u32)MAX_WIDTH);
--	f->fmt.pix.height = clamp(f->fmt.pix.height,
--				  (u32)MIN_HEIGHT, (u32)MAX_HEIGHT);
-+	pix_fmt->width = clamp(pix_fmt->width,
-+			       (u32)MIN_WIDTH, (u32)MAX_WIDTH);
-+	pix_fmt->height = clamp(pix_fmt->height,
-+				(u32)MIN_HEIGHT, (u32)MAX_HEIGHT);
- 
- 	if (fmt->hw_format >= RGA_COLOR_FMT_YUV422SP)
--		f->fmt.pix.bytesperline = f->fmt.pix.width;
-+		pix_fmt->bytesperline = pix_fmt->width;
- 	else
--		f->fmt.pix.bytesperline = (f->fmt.pix.width * fmt->depth) >> 3;
-+		pix_fmt->bytesperline = (pix_fmt->width * fmt->depth) >> 3;
- 
--	f->fmt.pix.sizeimage =
--		f->fmt.pix.height * (f->fmt.pix.width * fmt->depth) >> 3;
-+	pix_fmt->sizeimage =
-+		pix_fmt->height * (pix_fmt->width * fmt->depth) >> 3;
- 
- 	return 0;
- }
- 
- static int vidioc_s_fmt(struct file *file, void *prv, struct v4l2_format *f)
- {
-+	struct v4l2_pix_format *pix_fmt = &f->fmt.pix;
- 	struct rga_ctx *ctx = prv;
- 	struct rockchip_rga *rga = ctx->rga;
- 	struct vb2_queue *vq;
-@@ -518,12 +521,12 @@ static int vidioc_s_fmt(struct file *file, void *prv, struct v4l2_format *f)
- 	frm = rga_get_frame(ctx, f->type);
- 	if (IS_ERR(frm))
- 		return PTR_ERR(frm);
--	frm->width = f->fmt.pix.width;
--	frm->height = f->fmt.pix.height;
--	frm->size = f->fmt.pix.sizeimage;
--	frm->fmt = rga_fmt_find(f->fmt.pix.pixelformat);
--	frm->stride = f->fmt.pix.bytesperline;
--	frm->colorspace = f->fmt.pix.colorspace;
-+	frm->width = pix_fmt->width;
-+	frm->height = pix_fmt->height;
-+	frm->size = pix_fmt->sizeimage;
-+	frm->fmt = rga_fmt_find(pix_fmt->pixelformat);
-+	frm->stride = pix_fmt->bytesperline;
-+	frm->colorspace = pix_fmt->colorspace;
- 
- 	/* Reset crop settings */
- 	frm->crop.left = 0;
-@@ -531,6 +534,12 @@ static int vidioc_s_fmt(struct file *file, void *prv, struct v4l2_format *f)
- 	frm->crop.width = frm->width;
- 	frm->crop.height = frm->height;
- 
-+	v4l2_dbg(debug, 1, &rga->v4l2_dev,
-+		 "[%s] fmt - %p4cc %dx%d (stride %d, sizeimage %d)\n",
-+		  V4L2_TYPE_IS_OUTPUT(f->type) ? "OUTPUT" : "CAPTURE",
-+		  &frm->fmt->fourcc, frm->width, frm->height,
-+		  frm->stride, frm->size);
++	ret = dma_set_mask(rga->dev, DMA_BIT_MASK(32));
++	if (ret) {
++		dev_err(rga->dev, "32-bit DMA not supported");
++		goto err_put_clk;
++	}
 +
- 	return 0;
- }
- 
+ 	ret = v4l2_device_register(&pdev->dev, &rga->v4l2_dev);
+ 	if (ret)
+ 		goto err_put_clk;
 
 -- 
 2.39.2
