@@ -2,28 +2,28 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E09DBEDE983
-	for <linux-media@archiver.kernel.org>; Thu, 14 Sep 2023 06:39:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B216EDE987
+	for <linux-media@archiver.kernel.org>; Thu, 14 Sep 2023 06:39:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235679AbjINGkC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S235541AbjINGkC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 14 Sep 2023 02:40:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47574 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235530AbjINGkA (ORCPT
+        with ESMTP id S235548AbjINGkA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 14 Sep 2023 02:40:00 -0400
 Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083EEE50
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081A3E4B
         for <linux-media@vger.kernel.org>; Wed, 13 Sep 2023 23:39:55 -0700 (PDT)
 Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 99C2F1A0640;
-        Thu, 14 Sep 2023 08:30:46 +0200 (CEST)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 1E6151A0641;
+        Thu, 14 Sep 2023 08:30:49 +0200 (CEST)
 Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 622241A0641;
-        Thu, 14 Sep 2023 08:30:46 +0200 (CEST)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id DAF361A0649;
+        Thu, 14 Sep 2023 08:30:48 +0200 (CEST)
 Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 742091834869;
-        Thu, 14 Sep 2023 14:30:44 +0800 (+08)
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 5456F1820F59;
+        Thu, 14 Sep 2023 14:30:47 +0800 (+08)
 From:   Shengjiu Wang <shengjiu.wang@nxp.com>
 To:     hverkuil@xs4all.nl, sakari.ailus@iki.fi, tfiga@chromium.org,
         m.szyprowski@samsung.com, mchehab@kernel.org,
@@ -32,9 +32,9 @@ To:     hverkuil@xs4all.nl, sakari.ailus@iki.fi, tfiga@chromium.org,
         nicoleotsuka@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
         perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
         linuxppc-dev@lists.ozlabs.org
-Subject: [RFC PATCH v3 5/9] ASoC: fsl_easrc: register m2m platform device
-Date:   Thu, 14 Sep 2023 13:54:01 +0800
-Message-Id: <1694670845-17070-6-git-send-email-shengjiu.wang@nxp.com>
+Subject: [RFC PATCH v3 7/9] media: uapi: Add V4L2_CID_USER_IMX_ASRC_RATIO_MOD control
+Date:   Thu, 14 Sep 2023 13:54:03 +0800
+Message-Id: <1694670845-17070-8-git-send-email-shengjiu.wang@nxp.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1694670845-17070-1-git-send-email-shengjiu.wang@nxp.com>
 References: <1694670845-17070-1-git-send-email-shengjiu.wang@nxp.com>
@@ -43,50 +43,61 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Register m2m platform device,that user can
-use M2M feature.
+The input clock and output clock may not be the accurate
+rate as the sample rate, there is some drift, so the convert
+ratio of i.MX ASRC module need to be changed according to
+actual clock rate.
+
+Add V4L2_CID_USER_IMX_ASRC_RATIO_MOD control for user to
+adjust the ratio.
 
 Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
 ---
- sound/soc/fsl/fsl_easrc.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ Documentation/userspace-api/media/v4l/control.rst | 5 +++++
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c         | 1 +
+ include/uapi/linux/v4l2-controls.h                | 1 +
+ 3 files changed, 7 insertions(+)
 
-diff --git a/sound/soc/fsl/fsl_easrc.c b/sound/soc/fsl/fsl_easrc.c
-index f517b407672d..b719d517f9b4 100644
---- a/sound/soc/fsl/fsl_easrc.c
-+++ b/sound/soc/fsl/fsl_easrc.c
-@@ -2084,6 +2084,7 @@ MODULE_DEVICE_TABLE(of, fsl_easrc_dt_ids);
- static int fsl_easrc_probe(struct platform_device *pdev)
- {
- 	struct fsl_easrc_priv *easrc_priv;
-+	struct fsl_asrc_m2m_pdata m2m_pdata;
- 	struct device *dev = &pdev->dev;
- 	struct fsl_asrc *easrc;
- 	struct resource *res;
-@@ -2202,11 +2203,23 @@ static int fsl_easrc_probe(struct platform_device *pdev)
- 		return ret;
+diff --git a/Documentation/userspace-api/media/v4l/control.rst b/Documentation/userspace-api/media/v4l/control.rst
+index 4463fce694b0..2bc175900a34 100644
+--- a/Documentation/userspace-api/media/v4l/control.rst
++++ b/Documentation/userspace-api/media/v4l/control.rst
+@@ -318,6 +318,11 @@ Control IDs
+     depending on particular custom controls should check the driver name
+     and version, see :ref:`querycap`.
+ 
++.. _v4l2-audio-imx:
++
++``V4L2_CID_USER_IMX_ASRC_RATIO_MOD``
++    sets the rasampler ratio modifier of i.MX asrc module.
++
+ Applications can enumerate the available controls with the
+ :ref:`VIDIOC_QUERYCTRL` and
+ :ref:`VIDIOC_QUERYMENU <VIDIOC_QUERYCTRL>` ioctls, get and set a
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+index 8696eb1cdd61..16f66f66198c 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+@@ -1242,6 +1242,7 @@ const char *v4l2_ctrl_get_name(u32 id)
+ 	case V4L2_CID_COLORIMETRY_CLASS:	return "Colorimetry Controls";
+ 	case V4L2_CID_COLORIMETRY_HDR10_CLL_INFO:		return "HDR10 Content Light Info";
+ 	case V4L2_CID_COLORIMETRY_HDR10_MASTERING_DISPLAY:	return "HDR10 Mastering Display";
++	case V4L2_CID_USER_IMX_ASRC_RATIO_MOD:			return "ASRC RATIO MOD";
+ 	default:
+ 		return NULL;
  	}
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index c3604a0a3e30..b1c319906d12 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -162,6 +162,7 @@ enum v4l2_colorfx {
+ /* The base for the imx driver controls.
+  * We reserve 16 controls for this driver. */
+ #define V4L2_CID_USER_IMX_BASE			(V4L2_CID_USER_BASE + 0x10b0)
++#define V4L2_CID_USER_IMX_ASRC_RATIO_MOD	(V4L2_CID_USER_IMX_BASE + 0)
  
-+	m2m_pdata.asrc = easrc;
-+	easrc->m2m_pdev = platform_device_register_data(&pdev->dev,
-+							M2M_DRV_NAME,
-+							PLATFORM_DEVID_AUTO,
-+							&m2m_pdata,
-+							sizeof(m2m_pdata));
-+
- 	return 0;
- }
- 
- static void fsl_easrc_remove(struct platform_device *pdev)
- {
-+	struct fsl_asrc *easrc = dev_get_drvdata(&pdev->dev);
-+
-+	if (easrc->m2m_pdev && !IS_ERR(easrc->m2m_pdev))
-+		platform_device_unregister(easrc->m2m_pdev);
-+
- 	pm_runtime_disable(&pdev->dev);
- }
- 
+ /*
+  * The base for the atmel isc driver controls.
 -- 
 2.34.1
 
