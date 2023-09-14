@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76C7DEE0215
-	for <linux-media@archiver.kernel.org>; Thu, 14 Sep 2023 13:34:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76F34EEB59D
+	for <linux-media@archiver.kernel.org>; Thu, 14 Sep 2023 13:34:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239382AbjINNeG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 14 Sep 2023 09:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39846 "EHLO
+        id S239431AbjINNeK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 14 Sep 2023 09:34:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239216AbjINNdx (ORCPT
+        with ESMTP id S239277AbjINNd7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 14 Sep 2023 09:33:53 -0400
+        Thu, 14 Sep 2023 09:33:59 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A0FD1FEE;
-        Thu, 14 Sep 2023 06:33:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3401FFD;
+        Thu, 14 Sep 2023 06:33:44 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:36f2:37bd:ccbb:373f])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0044F660736E;
-        Thu, 14 Sep 2023 14:33:39 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9577B6607377;
+        Thu, 14 Sep 2023 14:33:42 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1694698420;
-        bh=WDraZOgWi0izES0K9FdWnGrtWWF6tf7zOBBP/EoWBNg=;
+        s=mail; t=1694698423;
+        bh=N8F0TVW71sKqYIUdg2i7jHGXNNiGuYTWU5qjY+j8Vz4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G4xnHH0KcQzrC++tnJyG3so3XikK6AMopnyr12kJ1wAl7ovGny4ZMEhuefe8pv1tH
-         4DdUp/W7t5x3xMd+04fSvwy9n8XsNYY+dt0PnD/c8Y2QDnAC0nHQCguxOz9ZvDgZlK
-         3xjag9k+Y6F6gST25smLN5FawKJk6JX5CSqJt124SX2S9xCgNlE8jxnXKJf0HYey7q
-         TlazMshotZRaBXptW8QO+fqiJw4dTFH60pdgdtlQLLMjBat/nTHqLs8nnHcdFakSh/
-         gxf6fVrWpSVksVC3jYOcDCSHfT96Nj2MNctttv9owfpV/YwmJ+4FU3Qml9jSWMZ012
-         Tcq5AJnNGkAyQ==
+        b=oFsDgzTcyrpxAlQlpxQ/2P4j2Ix+qcXNOxuNIVTdX9cEOU+1AnhgoyFAZ0JP9REkC
+         Q/fUx+vRTrNK0B5SGzPHltRe+aGb05x/P1VLmP196NpE4zMd5ivunjMB3JiKPIfpA7
+         ic1mCSv88L0jXh2UPG+oa497ijOIHDnmES/OdCKiI1Zasm7r4Zp2XQaJyY9MOXxpwO
+         Zh24HgChuFlwTu+pHvKEEtFlJOx8adD7d+6aB3ueY4OTlpLgP/R+QqSXsHtpYDeTgc
+         pIWUvnhR1K3jSDqGfAsdOaAiZJyqksjDbycmJPq0yYAWHWMloYhfbkZDkhHGgbvqet
+         nD03lIDSkdM0g==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -43,9 +43,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v7 17/49] media: verisilicon: vp9: Allow to change resolution while streaming
-Date:   Thu, 14 Sep 2023 15:32:51 +0200
-Message-Id: <20230914133323.198857-18-benjamin.gaignard@collabora.com>
+Subject: [PATCH v7 22/49] media: i2c: Stop direct calls to queue num_buffers field
+Date:   Thu, 14 Sep 2023 15:32:56 +0200
+Message-Id: <20230914133323.198857-23-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230914133323.198857-1-benjamin.gaignard@collabora.com>
 References: <20230914133323.198857-1-benjamin.gaignard@collabora.com>
@@ -55,64 +55,26 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Remove all checks that prohibit to set a new format while streaming.
-This allow to change dynamically the resolution if the pixel format
-remains the same.
+Use vb2_get_num_buffers() to avoid using queue num_buffer field directly.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- .../media/platform/verisilicon/hantro_v4l2.c  | 24 +++----------------
- 1 file changed, 3 insertions(+), 21 deletions(-)
+ drivers/media/i2c/video-i2c.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
-index f0d8b165abcd..27a1e77cca38 100644
---- a/drivers/media/platform/verisilicon/hantro_v4l2.c
-+++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
-@@ -514,25 +514,14 @@ static int hantro_set_fmt_out(struct hantro_ctx *ctx,
- 		return ret;
+diff --git a/drivers/media/i2c/video-i2c.c b/drivers/media/i2c/video-i2c.c
+index 537ebd9fa8d7..60d3e2f35afe 100644
+--- a/drivers/media/i2c/video-i2c.c
++++ b/drivers/media/i2c/video-i2c.c
+@@ -406,7 +406,7 @@ static int queue_setup(struct vb2_queue *vq,
+ 	struct video_i2c_data *data = vb2_get_drv_priv(vq);
+ 	unsigned int size = data->chip->buffer_size;
  
- 	if (!ctx->is_encoder) {
--		struct vb2_queue *peer_vq;
--
- 		/*
- 		 * In order to support dynamic resolution change,
- 		 * the decoder admits a resolution change, as long
--		 * as the pixelformat remains. Can't be done if streaming.
--		 */
--		if (vb2_is_streaming(vq) || (vb2_is_busy(vq) &&
--		    pix_mp->pixelformat != ctx->src_fmt.pixelformat))
--			return -EBUSY;
--		/*
--		 * Since format change on the OUTPUT queue will reset
--		 * the CAPTURE queue, we can't allow doing so
--		 * when the CAPTURE queue has buffers allocated.
-+		 * as the pixelformat remains.
- 		 */
--		peer_vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx,
--					  V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
--		if (vb2_is_busy(peer_vq))
-+		if (vb2_is_streaming(vq) && pix_mp->pixelformat != ctx->src_fmt.pixelformat) {
- 			return -EBUSY;
-+		}
- 	} else {
- 		/*
- 		 * The encoder doesn't admit a format change if
-@@ -577,15 +566,8 @@ static int hantro_set_fmt_out(struct hantro_ctx *ctx,
- static int hantro_set_fmt_cap(struct hantro_ctx *ctx,
- 			      struct v4l2_pix_format_mplane *pix_mp)
- {
--	struct vb2_queue *vq;
- 	int ret;
+-	if (vq->num_buffers + *nbuffers < 2)
++	if (vb2_get_num_buffers(vq) + *nbuffers < 2)
+ 		*nbuffers = 2;
  
--	/* Change not allowed if queue is busy. */
--	vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx,
--			     V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
--	if (vb2_is_busy(vq))
--		return -EBUSY;
--
- 	if (ctx->is_encoder) {
- 		struct vb2_queue *peer_vq;
- 
+ 	if (*nplanes)
 -- 
 2.39.2
 
