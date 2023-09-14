@@ -2,113 +2,125 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4355EDE99C
-	for <linux-media@archiver.kernel.org>; Thu, 14 Sep 2023 10:19:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98D37EDE99C
+	for <linux-media@archiver.kernel.org>; Thu, 14 Sep 2023 10:29:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238074AbjINKTI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 14 Sep 2023 06:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45052 "EHLO
+        id S236937AbjINK3G (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 14 Sep 2023 06:29:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238067AbjINKTH (ORCPT
+        with ESMTP id S230141AbjINK3F (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 14 Sep 2023 06:19:07 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B7C1BE8;
-        Thu, 14 Sep 2023 03:19:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694686744; x=1726222744;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=O1LLvMPKGNc5ZFEUOpVx7SNJUHBbUo3ACKo6XHAjDn8=;
-  b=SZ/IwTk/JBtcrbnUWIewn+srlKHoTrayar6iVcO7lMtfmSDT//8bm0Em
-   VUeDuWO9tN+xsF1aO3GXL1tBhkcO1ukq5PIoY+H+4VJvDDECvaDO0iqnB
-   QV3p6I0RNDzOzMcUKvbsXovf0uJR3QOZCbsG9BFJ7z/44TUb1bw2GQEIG
-   ElKlBJWnCwDZXXSCwjT5whp2266t6Po98FP8ujYOOoYdG+trCgYrIQBE4
-   OidZkxRO1gtW8FylSp0FK+TG/CPbMfj/hZN2J2BGIMImPij9VCI6pN1gp
-   rMXaqgVZMLMZ3ke4yp/wJl6JTodUC7nZj7e6R/dBa0GWUGjw6fO0+0Nc2
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="363949201"
-X-IronPort-AV: E=Sophos;i="6.02,145,1688454000"; 
-   d="scan'208";a="363949201"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2023 03:18:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="773840738"
-X-IronPort-AV: E=Sophos;i="6.02,145,1688454000"; 
-   d="scan'208";a="773840738"
-Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 14 Sep 2023 03:18:44 -0700
-Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qgjQo-0001Tp-0F;
-        Thu, 14 Sep 2023 10:18:42 +0000
-Date:   Thu, 14 Sep 2023 18:18:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yong Wu <yong.wu@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        christian.koenig@amd.com, Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     oe-kbuild-all@lists.linux.dev, Anan Sun <anan.sun@mediatek.com>,
-        devicetree@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
-        jianjiao.zeng@mediatek.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        kuohong.wang@mediatek.com, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, tjmercier@google.com,
-        linaro-mm-sig@lists.linaro.org, John Stultz <jstultz@google.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
-        Yong Wu <yong.wu@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH 6/9] dma-buf: heaps: mtk_sec_heap: Add tee service call
- for buffer allocating/freeing
-Message-ID: <202309141707.zdT0yuMT-lkp@intel.com>
-References: <20230911023038.30649-7-yong.wu@mediatek.com>
+        Thu, 14 Sep 2023 06:29:05 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EEF41BE9;
+        Thu, 14 Sep 2023 03:29:01 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (82-181-192-243.bb.dnainternet.fi [82.181.192.243])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4RmYT70x8Jz49Q2P;
+        Thu, 14 Sep 2023 13:28:59 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1694687339;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WtaGqx5GLqOEJpsE/wQo6ET6eiXrk4gLftnj+VCpbJo=;
+        b=XFio6yfYKTZkvEBSHiw15j5+pY2W7TW682lrxe+uPFBTVTkiQfnsu6kzWq4G/izweztnns
+        KN++liK8ZfNoByMXGXEYmRZ9w8uCxxxEbbcUpWELGeUbFGKyP7GPd4ijkZ+PanhB9hSHG3
+        cNn46xAKpPiXHKmn7OT2vcktXsyOFHt3LxdhlIZHXlncQar+nw3HVxyyRnHSjr1WFrjP9I
+        KMQ+NB03nGc6wzPYZ9ZkheSWsiZmwSnNl7FV2S2rMBmcgz6IpKMxtbEtW1R6TYz2dUXbr7
+        HCq41YEAvQGHUvEvDpca/7PvFNoQC5yNSsa+IYLIYTCVkJvcx4u8UjoIS85mfw==
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1694687339; a=rsa-sha256;
+        cv=none;
+        b=tq++DlDlXFEm+byNMExaafhAq0wVtDj16f6fdB3zZyxdgTdbQEvqasmUk/Qne+TEbygZYY
+        1den4cQCfYSctZb2ILayW0ilEWC2TZWE6yT7NQeccKIrzyR2L7Q2ZUGL3OQ8CmOLkYVurg
+        /Uh5Gjg4ACb0lbMisiKiOkGAg3D7AOeAskycmmGxqo/1+9fLl1VTfSsIAcU9u01zhf1O+3
+        MkOKYMqQ2Q1pkRImCJrdxzqOIjys0UKIfP4GxgeZnnnYXWZ/9DE7ViCTet2T0mP4ec86NO
+        ikhPF+lPVjDImFpiQryYm2Dl198sjFVQ0mnCd+6OhuynzrvmltYtaghYB0PMMQ==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1694687339;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WtaGqx5GLqOEJpsE/wQo6ET6eiXrk4gLftnj+VCpbJo=;
+        b=Nv4DXPQHXFM0ENdf6M25YuSB9QgibSPLzvcau+zrZCDvZdDhiX1RjzEbGibcvz+7kTo6WI
+        Yy9mk4s0BRpJ19InYZrGbNURcwqhZbevXJwjh6LQZnZfvMDVHmV39lgWPM3HOLCyxIbfk9
+        Ahpil8pQyJk0979yyhce550Cm8qeyDx/riB3vs7QiCSZoDOUEiPa+oXw4u1JKc/W3oPtkf
+        nvIq1L37wNHhQOJWYZZQmua9CWq9FfSVAiTMldCwZtP+rIiIvXvO1pAUQ2vqaV7a4VU5Mn
+        Us8VQ6+eDuldsOOMBeBfD/Nq/d5+lmsn+WKDO4kg18Gz3u32a6+CXAUelYRdEg==
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id A74B7634C93;
+        Thu, 14 Sep 2023 13:28:58 +0300 (EEST)
+Date:   Thu, 14 Sep 2023 10:28:58 +0000
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        Fabio Estevam <festevam@denx.de>, jacopo.mondi@ideasonboard.com
+Subject: Re: [PATCH] media: dt-bindings: ovti,ov772x: Make powerdown-gpios
+ active-high
+Message-ID: <ZQLgauEc3VtRQUMm@valkosipuli.retiisi.eu>
+References: <20230913193932.1947918-1-festevam@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230911023038.30649-7-yong.wu@mediatek.com>
+In-Reply-To: <20230913193932.1947918-1-festevam@gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Yong,
+Hi Fabio,
 
-kernel test robot noticed the following build errors:
+On Wed, Sep 13, 2023 at 04:39:32PM -0300, Fabio Estevam wrote:
+> From: Fabio Estevam <festevam@denx.de>
+> 
+> The powerdown-gpios description mentions:
+> 
+> "Reference to the GPIO connected to the PWDN pin which is active high."
+> 
+> Improve the example by making powerdown-gpios active-high for consistency.
+> 
+> Signed-off-by: Fabio Estevam <festevam@denx.de>
+> ---
+>  Documentation/devicetree/bindings/media/i2c/ovti,ov772x.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov772x.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov772x.yaml
+> index 5d24edba8f99..5aec65b053af 100644
+> --- a/Documentation/devicetree/bindings/media/i2c/ovti,ov772x.yaml
+> +++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov772x.yaml
+> @@ -114,7 +114,7 @@ examples:
+>              compatible = "ovti,ov7725";
+>              reg = <0x21>;
+>              reset-gpios = <&axi_gpio_0 0 GPIO_ACTIVE_LOW>;
+> -            powerdown-gpios = <&axi_gpio_0 1 GPIO_ACTIVE_LOW>;
+> +            powerdown-gpios = <&axi_gpio_0 1 GPIO_ACTIVE_HIGH>;
+>              clocks = <&xclk>;
+>  
+>              port {
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on robh/for-next linus/master v6.6-rc1 next-20230914]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Looking at the driver code, it seems the powerdown GPIO is set to state 1
+when the device is powered on and to 0 when it's powered down. This looks
+like a driver bug.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yong-Wu/dma-buf-heaps-Deduplicate-docs-and-adopt-common-format/20230911-103308
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20230911023038.30649-7-yong.wu%40mediatek.com
-patch subject: [PATCH 6/9] dma-buf: heaps: mtk_sec_heap: Add tee service call for buffer allocating/freeing
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20230914/202309141707.zdT0yuMT-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230914/202309141707.zdT0yuMT-lkp@intel.com/reproduce)
+But what happens if you fix something like this after five years in
+existence? Maybe just leave it as-is, and document it??? Then again,
+there's a single Renesas board that appears to have such a device, added
+two and half years ago.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309141707.zdT0yuMT-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   loongarch64-linux-ld: drivers/dma-buf/heaps/mtk_secure_heap.o: in function `mtk_kree_secure_session_init':
-   mtk_secure_heap.c:(.text+0x130): undefined reference to `tee_client_open_context'
-   loongarch64-linux-ld: drivers/dma-buf/heaps/mtk_secure_heap.o: in function `.L10':
-   mtk_secure_heap.c:(.text+0x19c): undefined reference to `tee_client_open_session'
-   loongarch64-linux-ld: drivers/dma-buf/heaps/mtk_secure_heap.o: in function `.L12':
-   mtk_secure_heap.c:(.text+0x1dc): undefined reference to `tee_client_close_context'
-   loongarch64-linux-ld: drivers/dma-buf/heaps/mtk_secure_heap.o: in function `mtk_sec_mem_tee_service_call.constprop.0':
->> mtk_secure_heap.c:(.text+0x274): undefined reference to `tee_client_invoke_func'
-   loongarch64-linux-ld: drivers/dma-buf/heaps/mtk_secure_heap.o: in function `mtk_sec_mem_release.isra.0':
-   mtk_secure_heap.c:(.text+0x464): undefined reference to `tee_client_invoke_func'
+Also cc Jacopo.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+
+Sakari Ailus
