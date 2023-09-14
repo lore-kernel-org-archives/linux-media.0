@@ -2,30 +2,31 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05865CA0EF6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B91D8CA0EF3
 	for <linux-media@archiver.kernel.org>; Thu, 14 Sep 2023 12:41:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238452AbjINMld (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 14 Sep 2023 08:41:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41512 "EHLO
+        id S238454AbjINMle (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 14 Sep 2023 08:41:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238211AbjINMla (ORCPT
+        with ESMTP id S238434AbjINMla (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 14 Sep 2023 08:41:30 -0400
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189A41FCC
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18DFA1FD7
         for <linux-media@vger.kernel.org>; Thu, 14 Sep 2023 05:41:26 -0700 (PDT)
 Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
         by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <m.tretter@pengutronix.de>)
-        id 1qglet-0008Mc-7S; Thu, 14 Sep 2023 14:41:23 +0200
+        id 1qglet-0008Mc-59; Thu, 14 Sep 2023 14:41:23 +0200
 From:   Michael Tretter <m.tretter@pengutronix.de>
-Date:   Thu, 14 Sep 2023 14:40:40 +0200
-Subject: [PATCH 08/13] media: rockchip: rga: use pixelformat to find format
+Date:   Thu, 14 Sep 2023 14:40:39 +0200
+Subject: [PATCH 07/13] media: rockchip: rga: use clamp() to clamp size to
+ limits
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230914-rockchip-rga-multiplanar-v1-8-abfd77260ae3@pengutronix.de>
+Message-Id: <20230914-rockchip-rga-multiplanar-v1-7-abfd77260ae3@pengutronix.de>
 References: <20230914-rockchip-rga-multiplanar-v1-0-abfd77260ae3@pengutronix.de>
 In-Reply-To: <20230914-rockchip-rga-multiplanar-v1-0-abfd77260ae3@pengutronix.de>
 To:     Jacob Chen <jacob-chen@iotwrt.com>,
@@ -48,78 +49,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use the pixelformat instead of the v4l2_format to find the rga_fmt. This
-avoids knowing the structure and type of v4l2_format in rga_fmt_find and
-simplifies the function.
-
-Also cleanup the users of the function. In try_fmt always return the
-found pixel format to make sure that the pixel format is always set.
-Thus, we can be sure that we will find the rga_fmt in s_fmt and can drop
-the check if a given format has been found.
+The try_fmt should limit the width and height to the know limits of the
+RGA. Use the clamp() helper instead of open coding the clamping.
 
 Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
 ---
- drivers/media/platform/rockchip/rga/rga.c | 18 +++++++-----------
- 1 file changed, 7 insertions(+), 11 deletions(-)
+ drivers/media/platform/rockchip/rga/rga.c | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/media/platform/rockchip/rga/rga.c b/drivers/media/platform/rockchip/rga/rga.c
-index 49403498bc17..4579023af2ff 100644
+index 149deb1f1e03..49403498bc17 100644
 --- a/drivers/media/platform/rockchip/rga/rga.c
 +++ b/drivers/media/platform/rockchip/rga/rga.c
-@@ -318,12 +318,12 @@ static struct rga_fmt formats[] = {
- 
- #define NUM_FORMATS ARRAY_SIZE(formats)
- 
--static struct rga_fmt *rga_fmt_find(struct v4l2_format *f)
-+static struct rga_fmt *rga_fmt_find(u32 pixelformat)
- {
- 	unsigned int i;
- 
- 	for (i = 0; i < NUM_FORMATS; i++) {
--		if (formats[i].fourcc == f->fmt.pix.pixelformat)
-+		if (formats[i].fourcc == pixelformat)
- 			return &formats[i];
- 	}
- 	return NULL;
-@@ -472,11 +472,11 @@ static int vidioc_try_fmt(struct file *file, void *prv, struct v4l2_format *f)
- {
- 	struct rga_fmt *fmt;
- 
--	fmt = rga_fmt_find(f);
--	if (!fmt) {
-+	fmt = rga_fmt_find(f->fmt.pix.pixelformat);
-+	if (!fmt)
- 		fmt = &formats[0];
--		f->fmt.pix.pixelformat = fmt->fourcc;
--	}
-+
-+	f->fmt.pix.pixelformat = fmt->fourcc;
+@@ -480,15 +480,10 @@ static int vidioc_try_fmt(struct file *file, void *prv, struct v4l2_format *f)
  
  	f->fmt.pix.field = V4L2_FIELD_NONE;
  
-@@ -502,7 +502,6 @@ static int vidioc_s_fmt(struct file *file, void *prv, struct v4l2_format *f)
- 	struct rockchip_rga *rga = ctx->rga;
- 	struct vb2_queue *vq;
- 	struct rga_frame *frm;
--	struct rga_fmt *fmt;
- 	int ret = 0;
+-	if (f->fmt.pix.width > MAX_WIDTH)
+-		f->fmt.pix.width = MAX_WIDTH;
+-	if (f->fmt.pix.height > MAX_HEIGHT)
+-		f->fmt.pix.height = MAX_HEIGHT;
+-
+-	if (f->fmt.pix.width < MIN_WIDTH)
+-		f->fmt.pix.width = MIN_WIDTH;
+-	if (f->fmt.pix.height < MIN_HEIGHT)
+-		f->fmt.pix.height = MIN_HEIGHT;
++	f->fmt.pix.width = clamp(f->fmt.pix.width,
++				 (u32)MIN_WIDTH, (u32)MAX_WIDTH);
++	f->fmt.pix.height = clamp(f->fmt.pix.height,
++				  (u32)MIN_HEIGHT, (u32)MAX_HEIGHT);
  
- 	/* Adjust all values accordingly to the hardware capabilities
-@@ -519,13 +518,10 @@ static int vidioc_s_fmt(struct file *file, void *prv, struct v4l2_format *f)
- 	frm = rga_get_frame(ctx, f->type);
- 	if (IS_ERR(frm))
- 		return PTR_ERR(frm);
--	fmt = rga_fmt_find(f);
--	if (!fmt)
--		return -EINVAL;
- 	frm->width = f->fmt.pix.width;
- 	frm->height = f->fmt.pix.height;
- 	frm->size = f->fmt.pix.sizeimage;
--	frm->fmt = fmt;
-+	frm->fmt = rga_fmt_find(f->fmt.pix.pixelformat);
- 	frm->stride = f->fmt.pix.bytesperline;
- 	frm->colorspace = f->fmt.pix.colorspace;
- 
+ 	if (fmt->hw_format >= RGA_COLOR_FMT_YUV422SP)
+ 		f->fmt.pix.bytesperline = f->fmt.pix.width;
 
 -- 
 2.39.2
