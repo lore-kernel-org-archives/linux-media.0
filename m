@@ -2,87 +2,88 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13CE7EE0204
-	for <linux-media@archiver.kernel.org>; Wed, 13 Sep 2023 21:11:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D924EE0203
+	for <linux-media@archiver.kernel.org>; Thu, 14 Sep 2023 01:43:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232759AbjIMVL2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 13 Sep 2023 17:11:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36052 "EHLO
+        id S233456AbjINBnL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 13 Sep 2023 21:43:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232359AbjIMVL1 (ORCPT
+        with ESMTP id S233482AbjINBnL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 13 Sep 2023 17:11:27 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 070421724
-        for <linux-media@vger.kernel.org>; Wed, 13 Sep 2023 14:11:22 -0700 (PDT)
-Received: (qmail 969791 invoked by uid 1000); 13 Sep 2023 17:11:22 -0400
-Date:   Wed, 13 Sep 2023 17:11:22 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Randy Li <ayaka@soulik.info>, linux-usb@vger.kernel.org,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-doc@vger.kernel.org
-Subject: Re: USB: DMA: mapping existing buffer is not supported?
-Message-ID: <52643326-3a43-43b3-9be1-f13a255a7fc8@rowland.harvard.edu>
-References: <1e783efe-8659-8be1-82b7-15186302e88c@soulik.info>
- <2023091323-trombone-storeroom-cbd3@gregkh>
- <c0f75cbb-4d5d-0954-4bb6-20a82cfe5e2f@soulik.info>
- <2023091306-affection-lifter-3d9d@gregkh>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2023091306-affection-lifter-3d9d@gregkh>
+        Wed, 13 Sep 2023 21:43:11 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F17E1BD0
+        for <linux-media@vger.kernel.org>; Wed, 13 Sep 2023 18:43:07 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8220DC433C8
+        for <linux-media@vger.kernel.org>; Thu, 14 Sep 2023 01:43:06 +0000 (UTC)
+Date:   Thu, 14 Sep 2023 03:43:04 +0200
+Message-ID: <1678187c669127469ab12178b8571e28.hverkuil@xs4all.nl>
+From:   "Hans Verkuil" <hverkuil-cisco@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: WARNINGS
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Sep 13, 2023 at 10:32:12PM +0200, Greg KH wrote:
-> On Thu, Sep 14, 2023 at 04:09:06AM +0800, Randy Li wrote:
-> > 
-> > On 2023/9/14 03:19, Greg KH wrote:
-> > > On Thu, Sep 14, 2023 at 03:06:58AM +0800, Randy Li wrote:
-> > > > Hello
-> > > > 
-> > > > I was trying to understand why USB webcams (UVC) have to copy video data
-> > > > through the CPU (uvc_video_complete() schedules uvc_video_copy_data_work()
-> > > > for this purpose). During my investigation, I noticed that functions
-> > > > like|usb_sg_*() and |usb_buffer_*() are not available since kernel version
-> > > > 2.6.12.
-> > > What do you mean by "not available"?  I see them in the tree today, why
-> > > do you think they are not present?
-> > > 
-> > usb_buffer_dmasync_sg(), usb_buffer_map(), usb_buffer_dmasync() and usb_buffer_unmap() are all disabled
-> > by #if 0 in include/usb/usb.h
-> > 
-> > usb_buffer_map_sg() and usb_buffer_unmap_sg() are just declaration without definition.
-> 
-> Sorry, I was looking at the usb_sg_* calls, those are there if you want
-> to use them.
-> 
-> But again, why not just use the normal sg field in the urb itself for
-> the scatter-gather pointer?  Will that not work for you?
-> 
-> > > > If the USB subsystem can no longer work with existing buffers, I propose
-> > > > that we consider removing the remaining documentation in the "Working with
-> > > > existing buffers" section of Documentation/driver-api/usb/dma.rst.
-> > > I don't understand, what is wrong with the information there exactly?
-> > > Have you tried following the suggestions there?
-> > Besides my answer to first question, I found no code use them today.
+This message is generated daily by a cron job that builds media_tree for
+the architectures in the list below.
 
-That's exactly what it says at the end of the file:
+Results of the daily build of media_tree:
 
-----------------------------------------------------------------------------
-Note that several of those interfaces are currently commented out, since
-they don't have current users.  See the source code.  Other than the dmasync
-calls (where the underlying DMA primitives have changed), most of them can
-easily be commented back in if you want to use them.
-----------------------------------------------------------------------------
+date:			Thu Sep 14 03:00:09 CEST 2023
+media-tree git repo:	git://linuxtv.org/hverkuil/media_tree.git
+media-tree git branch:	media_stage/master
+media-tree git hash:	0835b195d034ab98b148b8e9c81a862c0c557bb7
+v4l-utils git hash:	b79e00a74fde35d0c0bb801b78b15664d3f10309
+edid-decode git hash:	e59b8a2ffd690d6576639365a67e890d91ca443d
+gcc version:		i686-linux-gcc (GCC) 13.2.0
+sparse repo:            git://git.kernel.org/pub/scm/devel/sparse/sparse.git
+sparse version:		v0.6.4-39-gce1a6720
+smatch repo:            git://repo.or.cz/smatch.git
+smatch version:		v0.5.0-8463-g52e9a454
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 6914effe706a1aae6c1b80c34dd03990ef343dbd
+host hardware:		x86_64
+host os:		6.4.13-cobaltpc1
 
-So Randy, the answer to your question is that those routines are not 
-available any more because nothing needs to use them.  If you would like 
-to submit a patch removing the "Working with existing buffers" section 
-from the documentation file, feel free to do so.
+linux-git-arm: WARNINGS:
+linux-git-arm64: WARNINGS:
+linux-git-powerpc64: WARNINGS:
+linux-git-i686: OK
+linux-git-x86_64: WARNINGS:
+no-acpi.config: WARNINGS:
+no-of.config: WARNINGS:
+no-pm.config: WARNINGS:
+no-pm-sleep.config: WARNINGS:
+no-debug-fs.config: WARNINGS:
+sparse: WARNINGS:
+smatch: WARNINGS:
+COMPILE_TEST: WARNINGS: VIDEOBUF_GEN VIDEOBUF_DMA_SG VIDEOBUF_VMALLOC VIDEOBUF_DMA_CONTIG
+strcpy/strncpy/strlcpy: OK
+abi-compliance: ABI OK
+pahole: ABI OK
+utils: OK
+spec-git: OK
+kerneldoc: OK
+virtme: WARNINGS: Final Summary: 3080, Succeeded: 3080, Failed: 0, Warnings: 5
+virtme-32: WARNINGS: Final Summary: 3193, Succeeded: 3193, Failed: 0, Warnings: 6
 
-Alan Stern
+Detailed results are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Thursday.log
+
+Detailed regression test results are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Thursday-test-media.log
+https://hverkuil.home.xs4all.nl/logs/Thursday-test-media-dmesg.log
+https://hverkuil.home.xs4all.nl/logs/Thursday-test-media-32.log
+https://hverkuil.home.xs4all.nl/logs/Thursday-test-media-32-dmesg.log
+
+Full logs are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Thursday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+https://hverkuil.home.xs4all.nl/spec/index.html
