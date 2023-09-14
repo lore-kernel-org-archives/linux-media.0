@@ -2,304 +2,98 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84A23EDE99F
-	for <linux-media@archiver.kernel.org>; Thu, 14 Sep 2023 10:17:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E9C3EDE99F
+	for <linux-media@archiver.kernel.org>; Thu, 14 Sep 2023 10:18:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238141AbjINKRt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 14 Sep 2023 06:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52704 "EHLO
+        id S238139AbjINKSd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 14 Sep 2023 06:18:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238139AbjINKRs (ORCPT
+        with ESMTP id S237922AbjINKSd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 14 Sep 2023 06:17:48 -0400
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989F21BE5;
-        Thu, 14 Sep 2023 03:17:44 -0700 (PDT)
+        Thu, 14 Sep 2023 06:18:33 -0400
+Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA38E1BE3;
+        Thu, 14 Sep 2023 03:18:28 -0700 (PDT)
 Received: from hillosipuli.retiisi.eu (82-181-192-243.bb.dnainternet.fi [82.181.192.243])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: sailus)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4RmYD52Fyxz49Q2t;
-        Thu, 14 Sep 2023 13:17:41 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1694686662;
+        by meesny.iki.fi (Postfix) with ESMTPSA id 4RmYDv5p6dzyWJ;
+        Thu, 14 Sep 2023 13:18:23 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1694686705;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=ROG//h33L4gcarp0kEAKqAx8IqwYzYLfNFC2B4kqyfY=;
-        b=uyrIY+Fvm9pT+mWFvCZ+stXrFsf0Zqb/bRLyn9XocU/8d1Ks0w/mP4OaGuiYLJwuQvE+Ei
-        LS87+QxMOGfjJ6jmvofxYz1CZdg2Ai53dFHiCP4zIBne2m8KLDM0hS3J+vE4D+0PtMxJSi
-        kyBPPtDfC7cC4X76w/aGHK1W8worwuHwAen0Rlyri+eVa2zoOEgyrDiJcXhi6HzGkqBK0f
-        XYyHArEyfyrg0Sz5TFoJoMTEpCbzPAex0rpyr/I13Zi8EhOweF78yOcwZyS67RwCz2GjX9
-        0HrTPteLbIXraGsotACzK8fQCbP2GetUlObqiZCNm5t6m0Vtke8dONfhrl2Rsg==
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1694686662; a=rsa-sha256;
-        cv=none;
-        b=A3lqBLT2YiDygcWEYDuw8cIV0djpIm1643GlapLWq6kXmZWOGP9LGgoovM2DRGHVUFgxw0
-        3sgeJJON+INCdi4wRPigZXvW/yl6/hnokvW8/uti6wjCXspGX9Js3qfN0ix2d680Mx3Yvy
-        TiVXbgIagzBAZJby4aai3aLQsmGa9QBlJYPPRh3KIiptt8QxPuzcJ5TXqYyDvAfXmiIi5P
-        YUR0SKFBz4756TUrD+Zo37Tp0igs2k4DF5sN7qESu48zmCc3og3l477mhKX9QC/w4PLaLt
-        eNy4eftd0r9ZRc1YeJSr62QwwXm1A/xljnP3a/HeuBogq3PxbmAADTW3MkDeLA==
+        bh=icMC27BzeY6SN2EXUotyJ+BK0dx4eNWCSZ4I3xj8aTU=;
+        b=Y2QiSpib/nAQz+mKuXKs+r1Z1KuNVM3UnVSYLwbGY3GpsUNP9kTysIyIAmy4MQ0I4Gpixq
+        1Z2JQI3uDZr2GmAoOUS3RXMo2EtgVifZWO/X7aqwMRs1BVupM22cdSYJGQkgFIlcYlqgs1
+        bmuEjgrpiysRkdMfO5X5VhwF1fJP3c8=
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1694686705; a=rsa-sha256; cv=none;
+        b=qfZMJHDuh+FhXq0zZ2Z8UMQ5hPrIuU7qjPTUVsOrRuDRqdrM6EhP1kv50wKUN8q3WCcFw0
+        CnN3uJIaN9iV4NP8TOWl3f3nfZj5CBzByU2NfmT8KQiFBT153HGlk3FEM7bk3tLX7K4TQF
+        Sk0rhQemWDPacjUZXOek5E6tfbg1eL0=
 ARC-Authentication-Results: i=1;
         ORIGINATING;
         auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1694686662;
+        s=meesny; t=1694686705;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=ROG//h33L4gcarp0kEAKqAx8IqwYzYLfNFC2B4kqyfY=;
-        b=gDUQ2dpjDetw4rX/gTPKZ2rTQjsg8FqmiLYpKfVb1F0L3HrlIpAlBl2k2RTmd0nJxFrKxO
-        l+IdzXUZxXvso/Ddb3nGHEE/Li6QGOV+yWFurekjuY+cm7NoA3yGH9zMIP3s72s5WlNu3H
-        2IJV7GHJYHu3oqPuStsT5doKXGQNMtfIqEJwxQnQ4AcTuAh4LxtBusHPbUC54pYoEF1DQk
-        4EogUOdfkdD/BoNnx4xIzsdkaBCqxqlWAcn3Ynk6jvOoWmNbM+a97i4J5xx7GDIxCU1LtT
-        ccPkJqYr+UYjrXAFZMjQbAVdq+vlXyebGdn71SVuw9MI7fkRbmx71C2IiI+gFw==
+        bh=icMC27BzeY6SN2EXUotyJ+BK0dx4eNWCSZ4I3xj8aTU=;
+        b=FGXPkUyP4O7zvZ+QxqaxvSriyG8lYJ6HhucxNmEB9g/jwSKMlJQxmgyhYI+8TGe9F4Dfsu
+        dtpoGTwl81ygLlC+dMD9mR0NoTb1fszmbNxZ+DFyyMnFx3TUHIHLQrA1Owo/Jlgo03+yzI
+        Sba4mDPowWJ9V57fWhSAWyWKPG/3m1w=
 Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 9B2B9634C93;
-        Thu, 14 Sep 2023 13:17:40 +0300 (EEST)
-Date:   Thu, 14 Sep 2023 10:17:40 +0000
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 54800634C93;
+        Thu, 14 Sep 2023 13:18:23 +0300 (EEST)
+Date:   Thu, 14 Sep 2023 10:18:23 +0000
 From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Shengjiu Wang <shengjiu.wang@nxp.com>
-Cc:     hverkuil@xs4all.nl, tfiga@chromium.org, m.szyprowski@samsung.com,
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Fabio Estevam <festevam@denx.de>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, shengjiu.wang@gmail.com,
-        Xiubo.Lee@gmail.com, festevam@gmail.com, nicoleotsuka@gmail.com,
-        lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, alsa-devel@alsa-project.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [RFC PATCH v3 6/9] media: v4l2: Add audio capture and output
- support
-Message-ID: <ZQLdxMaqFYUukt4J@valkosipuli.retiisi.eu>
-References: <1694670845-17070-1-git-send-email-shengjiu.wang@nxp.com>
- <1694670845-17070-7-git-send-email-shengjiu.wang@nxp.com>
+        Conor Dooley <conor.dooley@microchip.com>
+Subject: Re: [PATCH v3] dt-bindings: media: Add OV5642
+Message-ID: <ZQLd74RoAyx8S1d2@valkosipuli.retiisi.eu>
+References: <20230802160326.293420-1-festevam@denx.de>
+ <ZQHbm4K6tDs6ILo+@valkosipuli.retiisi.eu>
+ <19523723a202647d0ab5135581f5090f@denx.de>
+ <20230913-undocked-geek-757dddbbabd7@spud>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1694670845-17070-7-git-send-email-shengjiu.wang@nxp.com>
+In-Reply-To: <20230913-undocked-geek-757dddbbabd7@spud>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Shenjiu,
-
-Thanks for the update.
-
-On Thu, Sep 14, 2023 at 01:54:02PM +0800, Shengjiu Wang wrote:
-> Audio signal processing has the requirement for memory to
-> memory similar as Video.
+On Wed, Sep 13, 2023 at 07:26:48PM +0100, Conor Dooley wrote:
+> On Wed, Sep 13, 2023 at 01:04:06PM -0300, Fabio Estevam wrote:
+> > Hi Sakari,
+> > 
+> > On 13/09/2023 12:56, Sakari Ailus wrote:
+> > 
+> > > One more little thing. Do you have a driver for this device? In upstream
+> > > there doesn't seem to be any.
+> > 
+> > Correct. There is no driver for OV5642 upstream.
+> > 
+> > The DT folks asked me to document the OV5642 binding even without an
+> > existing driver.
 > 
-> This patch is to add this support in v4l2 framework, defined
-> new buffer type V4L2_BUF_TYPE_AUDIO_CAPTURE and
-> V4L2_BUF_TYPE_AUDIO_OUTPUT, defined new format v4l2_audio_format
-> for audio case usage.
-> 
-> Defined V4L2_AUDIO_FMT_LPCM format type for audio.
+> IIRC, Fabio wanted to delete it from trivial-devices, and Krzysztof and
+> I both felt it was more suitable to document it properly rather than
+> delete it.
 
-This would be nicer as a separate patch. Also see the related comments
-below.
-
-> 
-> Defined V4L2_CAP_AUDIO_M2M capability type for audio memory
-> to memory case.
-> 
-> The created audio device is named "/dev/v4l-audioX".
-> 
-> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
-> ---
->  .../userspace-api/media/v4l/audio-formats.rst | 15 +++++
->  .../userspace-api/media/v4l/buffer.rst        |  6 ++
->  .../userspace-api/media/v4l/dev-audio.rst     | 63 +++++++++++++++++++
->  .../userspace-api/media/v4l/devices.rst       |  1 +
->  .../media/v4l/pixfmt-aud-lpcm.rst             | 31 +++++++++
->  .../userspace-api/media/v4l/pixfmt.rst        |  1 +
->  .../media/v4l/vidioc-enum-fmt.rst             |  2 +
->  .../userspace-api/media/v4l/vidioc-g-fmt.rst  |  4 ++
->  .../media/v4l/vidioc-querycap.rst             |  3 +
->  .../media/videodev2.h.rst.exceptions          |  2 +
->  .../media/common/videobuf2/videobuf2-v4l2.c   |  4 ++
->  drivers/media/v4l2-core/v4l2-dev.c            | 17 +++++
->  drivers/media/v4l2-core/v4l2-ioctl.c          | 53 ++++++++++++++++
->  include/media/v4l2-dev.h                      |  2 +
->  include/media/v4l2-ioctl.h                    | 34 ++++++++++
->  include/uapi/linux/videodev2.h                | 25 ++++++++
->  16 files changed, 263 insertions(+)
->  create mode 100644 Documentation/userspace-api/media/v4l/audio-formats.rst
->  create mode 100644 Documentation/userspace-api/media/v4l/dev-audio.rst
->  create mode 100644 Documentation/userspace-api/media/v4l/pixfmt-aud-lpcm.rst
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/audio-formats.rst b/Documentation/userspace-api/media/v4l/audio-formats.rst
-> new file mode 100644
-> index 000000000000..bc52712d20d3
-> --- /dev/null
-> +++ b/Documentation/userspace-api/media/v4l/audio-formats.rst
-> @@ -0,0 +1,15 @@
-> +.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
-> +
-> +.. _audio-formats:
-> +
-> +*************
-> +Audio Formats
-> +*************
-> +
-> +These formats are used for :ref:`audio` interface only.
-> +
-> +
-> +.. toctree::
-> +    :maxdepth: 1
-> +
-> +    pixfmt-aud-lpcm
-> diff --git a/Documentation/userspace-api/media/v4l/buffer.rst b/Documentation/userspace-api/media/v4l/buffer.rst
-> index 04dec3e570ed..80cf2cb20dfe 100644
-> --- a/Documentation/userspace-api/media/v4l/buffer.rst
-> +++ b/Documentation/userspace-api/media/v4l/buffer.rst
-> @@ -438,6 +438,12 @@ enum v4l2_buf_type
->      * - ``V4L2_BUF_TYPE_META_OUTPUT``
->        - 14
->        - Buffer for metadata output, see :ref:`metadata`.
-> +    * - ``V4L2_BUF_TYPE_AUDIO_CAPTURE``
-> +      - 15
-> +      - Buffer for audio capture, see :ref:`audio`.
-> +    * - ``V4L2_BUF_TYPE_AUDIO_OUTPUT``
-> +      - 16
-> +      - Buffer for audio output, see :ref:`audio`.
->  
->  
->  .. _buffer-flags:
-> diff --git a/Documentation/userspace-api/media/v4l/dev-audio.rst b/Documentation/userspace-api/media/v4l/dev-audio.rst
-> new file mode 100644
-> index 000000000000..f9bcf0c7b056
-> --- /dev/null
-> +++ b/Documentation/userspace-api/media/v4l/dev-audio.rst
-> @@ -0,0 +1,63 @@
-> +.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
-> +
-> +.. _audiodev:
-> +
-> +******************
-> +audio Interface
-
-Capital "A"?
-
-> +******************
-
-Too many asterisks (same a few lines above, too).
-
-> +
-> +The audio interface is implemented on audio device nodes. The audio device
-> +which uses application software for modulation or demodulation. This
-> +interface is intended for controlling and data streaming of such devices
-> +
-> +Audio devices are accessed through character device special files named
-> +``/dev/v4l-audio``
-> +
-> +Querying Capabilities
-> +=====================
-> +
-> +Device nodes supporting the audio capture and output interface set the
-> +``V4L2_CAP_AUDIO_M2M`` flag in the ``device_caps`` field of the
-> +:c:type:`v4l2_capability` structure returned by the :c:func:`VIDIOC_QUERYCAP`
-> +ioctl.
-> +
-> +At least one of the read/write or streaming I/O methods must be supported.
-> +
-> +
-> +Data Format Negotiation
-> +=======================
-> +
-> +The audio device uses the :ref:`format` ioctls to select the capture format.
-> +The audio buffer content format is bound to that selected format. In addition
-> +to the basic :ref:`format` ioctls, the :c:func:`VIDIOC_ENUM_FMT` ioctl must be
-> +supported as well.
-> +
-> +To use the :ref:`format` ioctls applications set the ``type`` field of the
-> +:c:type:`v4l2_format` structure to ``V4L2_BUF_TYPE_AUDIO_CAPTURE`` or to
-> +``V4L2_BUF_TYPE_AUDIO_OUTPUT``. Both drivers and applications must set the
-> +remainder of the :c:type:`v4l2_format` structure to 0.
-> +
-> +.. c:type:: v4l2_audio_format
-> +
-> +.. tabularcolumns:: |p{1.4cm}|p{2.4cm}|p{13.5cm}|
-> +
-> +.. flat-table:: struct v4l2_audio_format
-> +    :header-rows:  0
-> +    :stub-columns: 0
-> +    :widths:       1 1 2
-> +
-> +    * - __u32
-> +      - ``rate``
-> +      - The sample rate, set by the application. The range is [5512, 768000].
-> +    * - __u32
-> +      - ``format``
-> +      - The sample format, set by the application. format is defined as
-> +        SNDRV_PCM_FORMAT_S8, SNDRV_PCM_FORMAT_U8, ...,
-> +    * - __u32
-> +      - ``channels``
-> +      - The channel number, set by the application. channel number range is
-> +        [1, 32].
-> +    * - __u32
-> +      - ``buffersize``
-> +      - Maximum buffer size in bytes required for data. The value is set by the
-> +        driver.
-> diff --git a/Documentation/userspace-api/media/v4l/devices.rst b/Documentation/userspace-api/media/v4l/devices.rst
-> index 8bfbad65a9d4..8261f3468489 100644
-> --- a/Documentation/userspace-api/media/v4l/devices.rst
-> +++ b/Documentation/userspace-api/media/v4l/devices.rst
-> @@ -24,3 +24,4 @@ Interfaces
->      dev-event
->      dev-subdev
->      dev-meta
-> +    dev-audio
-> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-aud-lpcm.rst b/Documentation/userspace-api/media/v4l/pixfmt-aud-lpcm.rst
-> new file mode 100644
-> index 000000000000..f9ebe2a05f69
-> --- /dev/null
-> +++ b/Documentation/userspace-api/media/v4l/pixfmt-aud-lpcm.rst
-> @@ -0,0 +1,31 @@
-> +.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
-> +
-> +.. _v4l2-aud-fmt-lpcm:
-> +
-> +*************************
-> +V4L2_AUDIO_FMT_LPCM ('LPCM')
-> +*************************
-> +
-> +Linear Pulse-Code Modulation (LPCM)
-> +
-> +
-> +Description
-> +===========
-> +
-> +This describes audio format used by the audio memory to memory driver.
-> +
-> +It contains the following fields:
-> +
-> +.. flat-table::
-> +    :widths: 1 4
-> +    :header-rows:  1
-> +    :stub-columns: 0
-> +
-> +    * - Field
-> +      - Description
-> +    * - u32 samplerate;
-> +      - which is the number of times per second that samples are taken.
-> +    * - u32 sampleformat;
-> +      - which determines the number of possible digital values that can be used to represent each sample
-
-80 characters (or less) per line, please.
-
-Which values could this field have and what do they signify?
-
-> +    * - u32 channels;
-> +      - channel number for each sample.
-
-I suppose the rest of the buffer would be samples? This should be
-documented. I think there are also different ways the data could be
-arrangeed and this needs to be documented, too.
+Ack, works for me.
 
 -- 
-Kind regards,
-
 Sakari Ailus
