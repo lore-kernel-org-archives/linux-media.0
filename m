@@ -2,43 +2,43 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5BD7C46CA1
-	for <linux-media@archiver.kernel.org>; Fri, 15 Sep 2023 21:13:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7287BCD37B1
+	for <linux-media@archiver.kernel.org>; Fri, 15 Sep 2023 21:13:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237893AbjIOVMf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 15 Sep 2023 17:12:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39706 "EHLO
+        id S237966AbjIOVMi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Sep 2023 17:12:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237932AbjIOVMF (ORCPT
+        with ESMTP id S238027AbjIOVMP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 15 Sep 2023 17:12:05 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38668C1;
-        Fri, 15 Sep 2023 14:11:59 -0700 (PDT)
+        Fri, 15 Sep 2023 17:12:15 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C01115;
+        Fri, 15 Sep 2023 14:12:08 -0700 (PDT)
 Received: from localhost (89-26-75-29.dyn.cablelink.at [89.26.75.29])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: sebastianfricke)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D259C66072A7;
-        Fri, 15 Sep 2023 22:11:57 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0D09966072A7;
+        Fri, 15 Sep 2023 22:12:07 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1694812318;
-        bh=If4vu2Ws8/gwGYsmHKm3MkWRUPRVWs7H1YZDOH40N14=;
+        s=mail; t=1694812327;
+        bh=7Lxtjmk1/qRcWsB4o2wXEaxqVLu5DK3Ks2Ix8VDhYnY=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=CG8ue8VzhD3WEMMQqev68MEu1plN6GNKodZVs+vkdwx2B+KLZmQWWCyQpfgyLWtCs
-         YHR087l+k2MDoRC5uhUlasKzqMBdEXuhdYStaCWjOxyr3OyHVCywlZ6OezktXVJFRD
-         AEbP2YgA+pnfcXsCZqJ9kqwUanppc4ypSiu3KlH04twCbjyZovjuUCAD/YVDKQIXQb
-         rXUVLO+/r2QXE6vgJ30rRu8hNcd7sAFcFTy3/FxPP2c2+hurqUoMWiA34w3gw5dNk5
-         /PClQs5MhuL+imqjzDmv74Ul9K6ORyYNCqwYQ9PgvMf4Th4qBzhncfDzPn2Z6humO2
-         NOzIMxrmtNG+g==
+        b=nXnu/kKBknnhxvjhroSt3laffiYwhM7aUrfg3UvC39Gyx6zpOMOwSXI4KGoo0YfFt
+         tD9L6Lf+gEk1Eu8PtTt5cngU53auVkaNccb5NoQuc2ILCSc+fNrq8EU4S6w9TucYEE
+         9cq6TlkI7CfAk7Lo+urJ63+r1YVBzNk6cmNTvu5L2YCztjr7MdotkDPzWiROVYtK0b
+         2UqiAbCEvKQnvCFPd8GB4e/JqUTumxCGrdv50DQryN/mCsqfuRUndijJqAgcKARI42
+         dbuf+AOaG2iAtZEZJWjfDPAfU9sy+vRYBg03nZMWmhi8ikMX2yywjLzpI0YQvb6nTy
+         YDaL5zxPg9SZw==
 From:   Sebastian Fricke <sebastian.fricke@collabora.com>
-Date:   Fri, 15 Sep 2023 23:11:32 +0200
-Subject: [PATCH v12 3/7] media: platform: chips-media: Move Coda to separate folder
+Date:   Fri, 15 Sep 2023 23:11:35 +0200
+Subject: [PATCH v12 6/7] dt-bindings: media: wave5: add yaml devicetree bindings
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230915-wave5_v12_on_media_master-v12-3-92fc66cd685d@collabora.com>
+Message-Id: <20230915-wave5_v12_on_media_master-v12-6-92fc66cd685d@collabora.com>
 References: <20230915-wave5_v12_on_media_master-v12-0-92fc66cd685d@collabora.com>
 In-Reply-To: <20230915-wave5_v12_on_media_master-v12-0-92fc66cd685d@collabora.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -61,187 +61,100 @@ Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         kernel@collabora.com,
         Nicolas Dufresne <nicolas.dufresne@collabora.com>
 X-Mailer: b4 0.11.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1694812307; l=8113;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1694812307; l=2098;
  i=sebastian.fricke@collabora.com; s=linux-media; h=from:subject:message-id;
- bh=If4vu2Ws8/gwGYsmHKm3MkWRUPRVWs7H1YZDOH40N14=;
- b=+gSmoXnSCVbhtPGNlskJ3QFwpNq6Ym+M66gMsMEckOWDHe7l870WuGmGxmMlOdxOdp52ZeCvuNxs
- Uz7+gOwDD5LtmNoHJZ13/uC399KMzwIPduI+fZu2LiHsBSj67dZk
+ bh=esedjOY8SBHPSIyc227QY3kx3X1eSB383IkfTQhD+aI=;
+ b=rxl3rh1h5yM8veA3az7YDZOlgIGzEGmEvbUNghxisJ6Z6Rq0IZUK95mgmMNscyxIHhXDvCw9pr0z
+ wAVIpt68CUCtaFBmkGiUo+we7X2tcpyPT9p5C/yIL6mlPA5fXbCs
 X-Developer-Key: i=sebastian.fricke@collabora.com; a=ed25519;
  pk=pYXedPwrTtErcj7ERYeo/IpTrpe4QbJuEzSB52fslBg=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Prepare the folder structure for a second Chips&Media driver.
-Move the Coda driver to a sub-directory.
+From: Robert Beckett <bob.beckett@collabora.com>
 
+Add bindings for the wave5 chips&media codec driver
+
+Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
 ---
- MAINTAINERS                                            |  2 +-
- drivers/media/platform/chips-media/Kconfig             | 17 +----------------
- drivers/media/platform/chips-media/Makefile            |  5 +----
- drivers/media/platform/chips-media/coda/Kconfig        | 18 ++++++++++++++++++
- drivers/media/platform/chips-media/coda/Makefile       |  6 ++++++
- .../media/platform/chips-media/{ => coda}/coda-bit.c   |  0
- .../platform/chips-media/{ => coda}/coda-common.c      |  0
- .../media/platform/chips-media/{ => coda}/coda-gdi.c   |  0
- .../media/platform/chips-media/{ => coda}/coda-h264.c  |  0
- .../media/platform/chips-media/{ => coda}/coda-jpeg.c  |  0
- .../media/platform/chips-media/{ => coda}/coda-mpeg2.c |  0
- .../media/platform/chips-media/{ => coda}/coda-mpeg4.c |  0
- drivers/media/platform/chips-media/{ => coda}/coda.h   |  0
- .../media/platform/chips-media/{ => coda}/coda_regs.h  |  0
- .../media/platform/chips-media/{ => coda}/imx-vdoa.c   |  0
- .../media/platform/chips-media/{ => coda}/imx-vdoa.h   |  0
- drivers/media/platform/chips-media/{ => coda}/trace.h  |  2 +-
- 17 files changed, 28 insertions(+), 22 deletions(-)
+ .../devicetree/bindings/media/cnm,wave5.yaml       | 66 ++++++++++++++++++++++
+ 1 file changed, 66 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 90f13281d297..063a11791bbf 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5093,7 +5093,7 @@ M:	Philipp Zabel <p.zabel@pengutronix.de>
- L:	linux-media@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/media/coda.yaml
--F:	drivers/media/platform/chips-media/
-+F:	drivers/media/platform/chips-media/coda
- 
- CODE OF CONDUCT
- M:	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-diff --git a/drivers/media/platform/chips-media/Kconfig b/drivers/media/platform/chips-media/Kconfig
-index 57f8f8a22df8..f87a0d693df7 100644
---- a/drivers/media/platform/chips-media/Kconfig
-+++ b/drivers/media/platform/chips-media/Kconfig
-@@ -2,19 +2,4 @@
- 
- comment "Chips&Media media platform drivers"
- 
--config VIDEO_CODA
--	tristate "Chips&Media Coda multi-standard codec IP"
--	depends on V4L_MEM2MEM_DRIVERS
--	depends on VIDEO_DEV && OF && (ARCH_MXC || COMPILE_TEST)
--	select SRAM
--	select VIDEOBUF2_DMA_CONTIG
--	select VIDEOBUF2_VMALLOC
--	select V4L2_JPEG_HELPER
--	select V4L2_MEM2MEM_DEV
--	select GENERIC_ALLOCATOR
--	help
--	   Coda is a range of video codec IPs that supports
--	   H.264, MPEG-4, and other video formats.
--
--config VIDEO_IMX_VDOA
--	def_tristate VIDEO_CODA if SOC_IMX6Q || COMPILE_TEST
-+source "drivers/media/platform/chips-media/coda/Kconfig"
-diff --git a/drivers/media/platform/chips-media/Makefile b/drivers/media/platform/chips-media/Makefile
-index bbb16425a875..5ee693f651c1 100644
---- a/drivers/media/platform/chips-media/Makefile
-+++ b/drivers/media/platform/chips-media/Makefile
-@@ -1,6 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0-only
- 
--coda-vpu-objs := coda-common.o coda-bit.o coda-gdi.o coda-h264.o coda-mpeg2.o coda-mpeg4.o coda-jpeg.o
--
--obj-$(CONFIG_VIDEO_CODA) += coda-vpu.o
--obj-$(CONFIG_VIDEO_IMX_VDOA) += imx-vdoa.o
-+obj-y += coda/
-diff --git a/drivers/media/platform/chips-media/coda/Kconfig b/drivers/media/platform/chips-media/coda/Kconfig
+diff --git a/Documentation/devicetree/bindings/media/cnm,wave5.yaml b/Documentation/devicetree/bindings/media/cnm,wave5.yaml
 new file mode 100644
-index 000000000000..cb7b66c71380
+index 000000000000..b8f383621805
 --- /dev/null
-+++ b/drivers/media/platform/chips-media/coda/Kconfig
-@@ -0,0 +1,18 @@
-+# SPDX-License-Identifier: GPL-2.0-only
++++ b/Documentation/devicetree/bindings/media/cnm,wave5.yaml
+@@ -0,0 +1,66 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/cnm,wave5.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+config VIDEO_CODA
-+	tristate "Chips&Media Coda multi-standard codec IP"
-+	depends on V4L_MEM2MEM_DRIVERS
-+	depends on VIDEO_DEV && OF && (ARCH_MXC || COMPILE_TEST)
-+	select SRAM
-+	select VIDEOBUF2_DMA_CONTIG
-+	select VIDEOBUF2_VMALLOC
-+	select V4L2_JPEG_HELPER
-+	select V4L2_MEM2MEM_DEV
-+	select GENERIC_ALLOCATOR
-+	help
-+	   Coda is a range of video codec IPs that supports
-+	   H.264, MPEG-4, and other video formats.
++title: Chips&Media Wave 5 Series multi-standard codec IP
 +
-+config VIDEO_IMX_VDOA
-+	def_tristate VIDEO_CODA if SOC_IMX6Q || COMPILE_TEST
-diff --git a/drivers/media/platform/chips-media/coda/Makefile b/drivers/media/platform/chips-media/coda/Makefile
-new file mode 100644
-index 000000000000..bbb16425a875
---- /dev/null
-+++ b/drivers/media/platform/chips-media/coda/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0-only
++maintainers:
++  - Nas Chung <nas.chung@chipsnmedia.com>
++  - Jackson Lee <jackson.lee@chipsnmedia.com>
 +
-+coda-vpu-objs := coda-common.o coda-bit.o coda-gdi.o coda-h264.o coda-mpeg2.o coda-mpeg4.o coda-jpeg.o
++description: |-
++  The Chips&Media WAVE codec IP is a multi format video encoder/decoder
 +
-+obj-$(CONFIG_VIDEO_CODA) += coda-vpu.o
-+obj-$(CONFIG_VIDEO_IMX_VDOA) += imx-vdoa.o
-diff --git a/drivers/media/platform/chips-media/coda-bit.c b/drivers/media/platform/chips-media/coda/coda-bit.c
-similarity index 100%
-rename from drivers/media/platform/chips-media/coda-bit.c
-rename to drivers/media/platform/chips-media/coda/coda-bit.c
-diff --git a/drivers/media/platform/chips-media/coda-common.c b/drivers/media/platform/chips-media/coda/coda-common.c
-similarity index 100%
-rename from drivers/media/platform/chips-media/coda-common.c
-rename to drivers/media/platform/chips-media/coda/coda-common.c
-diff --git a/drivers/media/platform/chips-media/coda-gdi.c b/drivers/media/platform/chips-media/coda/coda-gdi.c
-similarity index 100%
-rename from drivers/media/platform/chips-media/coda-gdi.c
-rename to drivers/media/platform/chips-media/coda/coda-gdi.c
-diff --git a/drivers/media/platform/chips-media/coda-h264.c b/drivers/media/platform/chips-media/coda/coda-h264.c
-similarity index 100%
-rename from drivers/media/platform/chips-media/coda-h264.c
-rename to drivers/media/platform/chips-media/coda/coda-h264.c
-diff --git a/drivers/media/platform/chips-media/coda-jpeg.c b/drivers/media/platform/chips-media/coda/coda-jpeg.c
-similarity index 100%
-rename from drivers/media/platform/chips-media/coda-jpeg.c
-rename to drivers/media/platform/chips-media/coda/coda-jpeg.c
-diff --git a/drivers/media/platform/chips-media/coda-mpeg2.c b/drivers/media/platform/chips-media/coda/coda-mpeg2.c
-similarity index 100%
-rename from drivers/media/platform/chips-media/coda-mpeg2.c
-rename to drivers/media/platform/chips-media/coda/coda-mpeg2.c
-diff --git a/drivers/media/platform/chips-media/coda-mpeg4.c b/drivers/media/platform/chips-media/coda/coda-mpeg4.c
-similarity index 100%
-rename from drivers/media/platform/chips-media/coda-mpeg4.c
-rename to drivers/media/platform/chips-media/coda/coda-mpeg4.c
-diff --git a/drivers/media/platform/chips-media/coda.h b/drivers/media/platform/chips-media/coda/coda.h
-similarity index 100%
-rename from drivers/media/platform/chips-media/coda.h
-rename to drivers/media/platform/chips-media/coda/coda.h
-diff --git a/drivers/media/platform/chips-media/coda_regs.h b/drivers/media/platform/chips-media/coda/coda_regs.h
-similarity index 100%
-rename from drivers/media/platform/chips-media/coda_regs.h
-rename to drivers/media/platform/chips-media/coda/coda_regs.h
-diff --git a/drivers/media/platform/chips-media/imx-vdoa.c b/drivers/media/platform/chips-media/coda/imx-vdoa.c
-similarity index 100%
-rename from drivers/media/platform/chips-media/imx-vdoa.c
-rename to drivers/media/platform/chips-media/coda/imx-vdoa.c
-diff --git a/drivers/media/platform/chips-media/imx-vdoa.h b/drivers/media/platform/chips-media/coda/imx-vdoa.h
-similarity index 100%
-rename from drivers/media/platform/chips-media/imx-vdoa.h
-rename to drivers/media/platform/chips-media/coda/imx-vdoa.h
-diff --git a/drivers/media/platform/chips-media/trace.h b/drivers/media/platform/chips-media/coda/trace.h
-similarity index 99%
-rename from drivers/media/platform/chips-media/trace.h
-rename to drivers/media/platform/chips-media/coda/trace.h
-index 19f98e6dafb9..abc6a01a74e9 100644
---- a/drivers/media/platform/chips-media/trace.h
-+++ b/drivers/media/platform/chips-media/coda/trace.h
-@@ -167,7 +167,7 @@ DEFINE_EVENT(coda_buf_class, coda_jpeg_done,
- #endif /* __CODA_TRACE_H__ */
- 
- #undef TRACE_INCLUDE_PATH
--#define TRACE_INCLUDE_PATH ../../drivers/media/platform/chips-media
-+#define TRACE_INCLUDE_PATH ../../drivers/media/platform/chips-media/coda
- #undef TRACE_INCLUDE_FILE
- #define TRACE_INCLUDE_FILE trace
- 
++properties:
++  compatible:
++    enum:
++        - cnm,cm521c-vpu
++  reg:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: VCODEC clock
++
++  clock-names:
++    items:
++      - const: vcodec
++
++  interrupts:
++    maxItems: 1
++
++  power-domains:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++  sram:
++    $ref: /schemas/types.yaml#/definitions/phandle
++
++    description:
++      The VPU uses the SRAM to store some of the reference data instead of
++      storing it on DMA memory. It is mainly used for the purpose of reducing
++      bandwidth.
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++
++additionalProperties: false
++
++examples:
++  - |
++    vpu: video-codec@12345678 {
++        compatible = "cnm,cm521c-vpu";
++        reg = <0x12345678 0x1000>;
++        interrupts = <42>;
++        clocks = <&clks 42>;
++        clock-names = "vcodec";
++        sram = <&sram>;
++    };
 
 -- 
 2.25.1
