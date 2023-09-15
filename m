@@ -2,452 +2,380 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6ADAFEE644A
-	for <linux-media@archiver.kernel.org>; Fri, 15 Sep 2023 09:05:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA920EE644A
+	for <linux-media@archiver.kernel.org>; Fri, 15 Sep 2023 09:05:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233311AbjIOJFL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 15 Sep 2023 05:05:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53048 "EHLO
+        id S232919AbjIOJFi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Sep 2023 05:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233302AbjIOJFK (ORCPT
+        with ESMTP id S232335AbjIOJFf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 15 Sep 2023 05:05:10 -0400
-X-Greylist: delayed 548 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 15 Sep 2023 02:03:37 PDT
-Received: from cantor.telenet-ops.be (cantor.telenet-ops.be [IPv6:2a02:1800:120:4::f00:10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04547272D
-        for <linux-media@vger.kernel.org>; Fri, 15 Sep 2023 02:03:36 -0700 (PDT)
-Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
-        by cantor.telenet-ops.be (Postfix) with ESMTPS id 4Rn7KY0Ns8z4xHdd
-        for <linux-media@vger.kernel.org>; Fri, 15 Sep 2023 10:54:25 +0200 (CEST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:7135:da8b:ba1d:1a7c])
-        by andre.telenet-ops.be with bizsmtp
-        id m8uE2A0073q21w7018uEem; Fri, 15 Sep 2023 10:54:24 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1qh4aJ-003lFs-3L;
-        Fri, 15 Sep 2023 10:54:14 +0200
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1qh4ac-00Gdag-2x;
-        Fri, 15 Sep 2023 10:54:14 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Magnus Damm <magnus.damm@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>, devicetree@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-sh@vger.kernel.org
-Subject: [PATCH v4 00/41] drm: renesas: shmobile: Atomic conversion + DT support
-Date:   Fri, 15 Sep 2023 10:53:15 +0200
-Message-Id: <cover.1694767208.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
+        Fri, 15 Sep 2023 05:05:35 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6CB3C3B;
+        Fri, 15 Sep 2023 02:04:01 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D849C433C7;
+        Fri, 15 Sep 2023 09:02:30 +0000 (UTC)
+Message-ID: <179c7dd2-1d72-4a95-bab5-326188554b98@xs4all.nl>
+Date:   Fri, 15 Sep 2023 11:02:28 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RESEND PATCH v9 0/2] Digiteq Automotive MGB4 driver
+Content-Language: en-US, nl
+To:     tumic@gpxsee.org, Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Martin_T=C5=AFma?= <martin.tuma@digiteqautomotive.com>
+References: <20230912120745.902-1-tumic@gpxsee.org>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20230912120745.902-1-tumic@gpxsee.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-	Hi all,
+Hi Martin,
 
-It has been 3 years since the last conversion of a DRM driver to atomic
-modesetting, so I guess it's time for another one? ;-)
+On 12/09/2023 14:07, tumic@gpxsee.org wrote:
+> From: Martin Tůma <martin.tuma@digiteqautomotive.com>
+> 
+> Hi,
+> This patch adds a driver for the Digiteq Automotive MGB4 grabber card.
+> MGB4 is a modular frame grabber PCIe card for automotive video interfaces
+> (FPD-Link and GMSL for now). It is based on a Xilinx FPGA and uses their
+> XDMA IP core for DMA transfers. Additionally, Xilinx I2C and SPI IP cores
+> which already have drivers in linux are used in the design.
+> 
+> The driver is a quite standard v4l2 driver, with one exception - there are
+> a lot of sysfs options that may/must be set before opening the v4l2 device
+> to adapt the card on a specific signal (see mgb4.rst for details)
+> as the card must be able to work with various signal sources (or displays)
+> that can not be auto-detected.
 
-Currently, there are two drivers for the LCD controller on Renesas
-SuperH-based and ARM-based SH-Mobile and R-Mobile SoCs:
-  1. sh_mobile_lcdcfb, using the fbdev framework,
-  2. shmob_drm, using the DRM framework.
-However, only the former driver is used, as all platform support
-integrates the former.  None of these drivers support DT-based systems.
+First of all, there is no need to resend patches. Just check if they are in
+patchwork.linuxtv.org. It is fine to ping me, but resending just means the
+same patches end up twice in patchwork.
 
-This patch series converts the SH-Mobile DRM driver to atomic
-modesetting, and adds DT support, complemented by the customary set of
-fixes and improvements.
+Secondly, when running my build script I found a number of issues:
 
-Overview:
-  - Patch 1 adds a separate maintainer entry.
-  - Patch 2 adds DT bindings for the SH-Mobile LCD controller,
-  - Patch 3 adds definitions for RGB666 9:9 media bus formats,
-  - Patches 4-35 contains miscellaneous fixes, improvements, and
-    cleanups for the SH-Mobile DRM driver,
-  - Patches 36-40 convert the SH-Mobile DRM driver to atomic
-    modesetting,
-  - Patch 41 adds DT support to the SH-Mobile DRM driver.
+sparse: WARNINGS:
 
-To reduce strain on the audience, I have CCed the DT and media people
-only on the cover letter and the DT resp. media patches.  If interested,
-the full series should be available through lore.kernel.org.
+drivers/media/pci/mgb4/mgb4_core.c:572:78: warning: Using plain integer as NULL pointer
+drivers/media/pci/mgb4/mgb4_vin.c:605:41: warning: Using plain integer as NULL pointer
+drivers/media/pci/mgb4/mgb4_vout.c:336:41: warning: Using plain integer as NULL pointer
+drivers/media/pci/mgb4/mgb4_sysfs_out.c:67:43: warning: Using plain integer as NULL pointer
+drivers/media/pci/mgb4/mgb4_sysfs_out.c:67:60: warning: Using plain integer as NULL pointer
+drivers/media/pci/mgb4/mgb4_sysfs_out.c:83:9: warning: context imbalance in 'video_source_store' - different lock contexts for basic block
 
-Some comments and questions can be found in the individual patches.
+smatch: WARNINGS:
 
-Changes compared to v3[1]:
-  - Rebase on top of v6.6-rc1 and commit 775b0669e19f2e4a
-    ("drm/shmobile: Convert to platform remove callback returning void")
-    in drm-misc/for-linux-next.
+drivers/media/pci/mgb4/mgb4_cmt.c:187 freq_srch() error: uninitialized symbol 'm'.
 
-Changes compared to v2[2]:
-  - Add Reviewed-by.
+Those should be fixed.
 
-Changes compared to v1[3]:
-  - New patches:
-      - "[PATCH v2 01/41] MAINTAINER: Create entry for Renesas SH-Mobile
-	 DRM drivers",
-      - "[PATCH v2 18/41] drm: renesas: shmobile: Remove custom plane
-	 destroy callback",
-  - Add myself as co-maintainer,
-  - Make fck clock required,
-  - Drop ports description referring to obsolete graph.txt,
-  - Condition ports to compatible strings,
-  - Drop label and status from example,
-  - Add Reviewed-by,
-  - Drop unused MEDIA_BUS_FMT_RGB666_2X9_LE, as requested by Laurent,
-  - Move explicit clock handling to Runtime PM callbacks,
-  - Move devm_pm_runtime_enable() after shmob_drm_setup_clocks(),
-  - Depend on PM,
-  - Split off removal of call to drm_plane_force_disable(),
-  - Select VIDEOMODE_HELPERS,
-  - Keep table instead of replacing it by a switch() statement,
-  - Fix shmob_drm_interface_data.bus_fmt comment,
-  - Drop superfluous blank lines,
-  - Keep initialization of info fields together,
-  - Use shmob_drm_bus_fmts[],
-  - Keep bus format validation at probe time,
-  - Pass plane type to shmob_drm_plane_create() to avoid having to shift
-    all overlay plane indices by one,
-  - Rename primary_plane_funcs to shmob_drm_primary_plane_funcs,
-  - Rename shmob_drm_plane_funcs to shmob_drm_overlay_plane_funcs,
-  - Move shmob_drm_crtc_finish_page_flip() further up,
-  - Inline shmob_drm_crtc_st{art,op}(),
-  - Use devm_drm_of_get_bridge(),
-  - Don't print bridge->of_node on failure, as this field depends on
-    CONFIG_OF.
+You can run the same tests yourself, see this announcement:
 
-This has been tested on the R-Mobile A1-based Atmark Techno
-Armadillo-800-EVA development board, using both legacy[4] and
-DT-based[5] instantiation, with the fbdev-emulated text console, fbset,
-and modetest, a.o.
+https://lore.kernel.org/linux-media/18989016-6392-a77b-6cf7-1223c9161def@xs4all.nl/
 
-    modetest -M shmob-drm -s 43:800x480@RG16 -P 33@41:640x320+80+80@RG16
-    modetest -M shmob-drm -s 43:800x480@RG16
+Regards,
 
-The output of "modetest -M shmob-drm" can be found below[6].
+	Hans
 
-Not much activity has happened since v2, how can we move this forward?
-Thanks!
+> 
+> Changes in v9:
+> * Renamed all sysfs show/store functions using the propper naming convention.
+> * Now using device_add_groups() when initializing the sysfs properties.
+> * Fixed build without debugfs support.
+> * Fixed documentation (vsync/hsync) + added default values where applicable.
+> * Fixed the rest of minor issues from v8 review.
+> 
+> Changes in v8:
+> * Fixed broken video buffer size computation.
+> * Fixed switched I2C deserializers addresses.
+> * Do not depend on hwmon.
+> 
+> Changes in v7:
+> * Now using hwmon for FPGA temperature reporting.
+> * Now using VIDIOC_S_FMT and v4l2_pix_format.bytesperline for setting
+>   the alignment.
+> * Removed the magic sleep when loading the i2c/spi adapter modules (solved by
+>   request_module() calls with propper - "platform:" prefixed - module
+>   names).
+> * Now properly reporting all the timings info in the VIDIOC_G_DV_TIMINGS
+>   ioctls.
+> * Updated the documentation.
+> * Minor fixes as discussed in the v6 review.
+> * Added debugfs access to the FPGA registers.
+> 
+> Changes in v6:
+> * Rebased to current master that includes the Xilinx XDMA driver.
+> 
+> Changes in v5:
+> * Removed unused <linux/version.h> includes
+> 
+> Changes in v4:
+> * Redesigned the signal change handling logic. Now using the propper timings
+>   API in the video input driver and a propper open() syscall check/logic in
+>   the video output driver.
+> * Fixed all minor issues from v3 review.
+> * 'checkpatch.pl --strict' used for checking the code.
+> 
+> Changes in v3:
+> * Rebased the DMA transfers part to use the new XDMA driver from Xilinx/AMD
+> 
+> Changes in v2:
+> * Completely rewritten the original Xilinx's XDMA driver to meet kernel code
+>   standards.
+> * Added all required "to" and "cc" mail addresses.
+> 
+> 
+> ===== v4l2-compliance results - input =====
+> 
+> v4l2-compliance 1.24.1, 64 bits, 64-bit time_t
+> 
+> Compliance test for mgb4 device /dev/video0:
+> 
+> Driver Info:
+>         Driver name      : mgb4
+>         Card type        : MGB4 PCIe Card
+>         Bus info         : PCI:0000:01:00.0
+>         Driver version   : 6.4.0
+>         Capabilities     : 0x85200001
+>                 Video Capture
+>                 Read/Write
+>                 Streaming
+>                 Extended Pix Format
+>                 Device Capabilities
+>         Device Caps      : 0x05200001
+>                 Video Capture
+>                 Read/Write
+>                 Streaming
+>                 Extended Pix Format
+> 
+> Required ioctls:
+>         test VIDIOC_QUERYCAP: OK
+>         test invalid ioctls: OK
+> 
+> Allow for multiple opens:
+>         test second /dev/video0 open: OK
+>         test VIDIOC_QUERYCAP: OK
+>         test VIDIOC_G/S_PRIORITY: OK
+>         test for unlimited opens: OK
+> 
+> Debug ioctls:
+>         test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
+>         test VIDIOC_LOG_STATUS: OK (Not Supported)
+> 
+> Input ioctls:
+>         test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+>         test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+>         test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+>         test VIDIOC_ENUMAUDIO: OK (Not Supported)
+>         test VIDIOC_G/S/ENUMINPUT: OK
+>         test VIDIOC_G/S_AUDIO: OK (Not Supported)
+>         Inputs: 1 Audio Inputs: 0 Tuners: 0
+> 
+> Output ioctls:
+>         test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+>         test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+>         test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+>         test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+>         test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+>         Outputs: 0 Audio Outputs: 0 Modulators: 0
+> 
+> Input/Output configuration ioctls:
+>         test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+>         test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK
+>         test VIDIOC_DV_TIMINGS_CAP: OK
+>         test VIDIOC_G/S_EDID: OK (Not Supported)
+> 
+> Control ioctls (Input 0):
+>         test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK (Not Supported)
+>         test VIDIOC_QUERYCTRL: OK (Not Supported)
+>         test VIDIOC_G/S_CTRL: OK (Not Supported)
+>         test VIDIOC_G/S/TRY_EXT_CTRLS: OK (Not Supported)
+>                 warn: v4l2-test-controls.cpp(1139): V4L2_CID_DV_RX_POWER_PRESENT not found for input 0
+>         test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK (Not Supported)
+>         test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+>         Standard Controls: 0 Private Controls: 0
+> 
+> Format ioctls (Input 0):
+>         test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+>         test VIDIOC_G/S_PARM: OK
+>         test VIDIOC_G_FBUF: OK (Not Supported)
+>         test VIDIOC_G_FMT: OK
+>         test VIDIOC_TRY_FMT: OK
+>         test VIDIOC_S_FMT: OK
+>         test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+>         test Cropping: OK (Not Supported)
+>         test Composing: OK (Not Supported)
+>         test Scaling: OK (Not Supported)
+> 
+> Codec ioctls (Input 0):
+>         test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
+>         test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+>         test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
+> 
+> Buffer ioctls (Input 0):
+>         test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+>         test VIDIOC_EXPBUF: OK
+>         test Requests: OK (Not Supported)
+> 
+> Total for mgb4 device /dev/video0: 45, Succeeded: 45, Failed: 0, Warnings: 1
+> 
+> ===== v4l2-compliance results - output =====
+> 
+> v4l2-compliance 1.24.1, 64 bits, 64-bit time_t
+> 
+> Compliance test for mgb4 device /dev/video2:
+> 
+> Driver Info:
+>         Driver name      : mgb4
+>         Card type        : MGB4 PCIe Card
+>         Bus info         : PCI:0000:01:00.0
+>         Driver version   : 6.4.0
+>         Capabilities     : 0x85200002
+>                 Video Output
+>                 Read/Write
+>                 Streaming
+>                 Extended Pix Format
+>                 Device Capabilities
+>         Device Caps      : 0x05200002
+>                 Video Output
+>                 Read/Write
+>                 Streaming
+>                 Extended Pix Format
+> 
+> Required ioctls:
+>         test VIDIOC_QUERYCAP: OK
+>         test invalid ioctls: OK
+> 
+> Allow for multiple opens:
+>         test second /dev/video2 open: OK
+>         test VIDIOC_QUERYCAP: OK
+>         test VIDIOC_G/S_PRIORITY: OK
+>         test for unlimited opens: OK
+> 
+> Debug ioctls:
+>         test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
+>         test VIDIOC_LOG_STATUS: OK (Not Supported)
+> 
+> Input ioctls:
+>         test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+>         test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+>         test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+>         test VIDIOC_ENUMAUDIO: OK (Not Supported)
+>         test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
+>         test VIDIOC_G/S_AUDIO: OK (Not Supported)
+>         Inputs: 0 Audio Inputs: 0 Tuners: 0
+> 
+> Output ioctls:
+>         test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+>         test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+>         test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+>         test VIDIOC_G/S/ENUMOUTPUT: OK
+>         test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+>         Outputs: 1 Audio Outputs: 0 Modulators: 0
+> 
+> Input/Output configuration ioctls:
+>         test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+>         test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
+>         test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
+>         test VIDIOC_G/S_EDID: OK (Not Supported)
+> 
+> Control ioctls (Output 0):
+>         test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK (Not Supported)
+>         test VIDIOC_QUERYCTRL: OK (Not Supported)
+>         test VIDIOC_G/S_CTRL: OK (Not Supported)
+>         test VIDIOC_G/S/TRY_EXT_CTRLS: OK (Not Supported)
+>         test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK (Not Supported)
+>         test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+>         Standard Controls: 0 Private Controls: 0
+> 
+> Format ioctls (Output 0):
+>         test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+>         test VIDIOC_G/S_PARM: OK (Not Supported)
+>         test VIDIOC_G_FBUF: OK (Not Supported)
+>         test VIDIOC_G_FMT: OK
+>         test VIDIOC_TRY_FMT: OK
+>         test VIDIOC_S_FMT: OK
+>         test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+>         test Cropping: OK (Not Supported)
+>         test Composing: OK (Not Supported)
+>         test Scaling: OK (Not Supported)
+> 
+> Codec ioctls (Output 0):
+>         test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
+>         test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+>         test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
+> 
+> Buffer ioctls (Output 0):
+>         test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+>         test VIDIOC_EXPBUF: OK
+>         test Requests: OK (Not Supported)
+> 
+> Total for mgb4 device /dev/video2: 45, Succeeded: 45, Failed: 0, Warnings: 0
+> 
+> Martin Tůma (2):
+>   Added Digiteq Automotive MGB4 driver
+>   Added Digiteq Automotive MGB4 driver documentation
+> 
+>  Documentation/admin-guide/media/mgb4.rst      | 374 +++++++
+>  .../admin-guide/media/pci-cardlist.rst        |   1 +
+>  .../admin-guide/media/v4l-drivers.rst         |   1 +
+>  MAINTAINERS                                   |   7 +
+>  drivers/media/pci/Kconfig                     |   1 +
+>  drivers/media/pci/Makefile                    |   1 +
+>  drivers/media/pci/mgb4/Kconfig                |  17 +
+>  drivers/media/pci/mgb4/Makefile               |   6 +
+>  drivers/media/pci/mgb4/mgb4_cmt.c             | 244 +++++
+>  drivers/media/pci/mgb4/mgb4_cmt.h             |  17 +
+>  drivers/media/pci/mgb4/mgb4_core.c            | 685 +++++++++++++
+>  drivers/media/pci/mgb4/mgb4_core.h            |  72 ++
+>  drivers/media/pci/mgb4/mgb4_dma.c             | 123 +++
+>  drivers/media/pci/mgb4/mgb4_dma.h             |  18 +
+>  drivers/media/pci/mgb4/mgb4_i2c.c             | 140 +++
+>  drivers/media/pci/mgb4/mgb4_i2c.h             |  35 +
+>  drivers/media/pci/mgb4/mgb4_io.h              |  33 +
+>  drivers/media/pci/mgb4/mgb4_regs.c            |  30 +
+>  drivers/media/pci/mgb4/mgb4_regs.h            |  35 +
+>  drivers/media/pci/mgb4/mgb4_sysfs.h           |  18 +
+>  drivers/media/pci/mgb4/mgb4_sysfs_in.c        | 753 ++++++++++++++
+>  drivers/media/pci/mgb4/mgb4_sysfs_out.c       | 693 +++++++++++++
+>  drivers/media/pci/mgb4/mgb4_sysfs_pci.c       |  71 ++
+>  drivers/media/pci/mgb4/mgb4_trigger.c         | 208 ++++
+>  drivers/media/pci/mgb4/mgb4_trigger.h         |   8 +
+>  drivers/media/pci/mgb4/mgb4_vin.c             | 932 ++++++++++++++++++
+>  drivers/media/pci/mgb4/mgb4_vin.h             |  69 ++
+>  drivers/media/pci/mgb4/mgb4_vout.c            | 594 +++++++++++
+>  drivers/media/pci/mgb4/mgb4_vout.h            |  65 ++
+>  29 files changed, 5251 insertions(+)
+>  create mode 100644 Documentation/admin-guide/media/mgb4.rst
+>  create mode 100644 drivers/media/pci/mgb4/Kconfig
+>  create mode 100644 drivers/media/pci/mgb4/Makefile
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_cmt.c
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_cmt.h
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_core.c
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_core.h
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_dma.c
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_dma.h
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_i2c.c
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_i2c.h
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_io.h
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_regs.c
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_regs.h
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs.h
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_in.c
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_out.c
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_pci.c
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_trigger.c
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_trigger.h
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_vin.c
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_vin.h
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_vout.c
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_vout.h
+> 
+> 
+> base-commit: 374a7f47bf401441edff0a64465e61326bf70a82
 
-[1] "[PATCH v3 00/41] drm: renesas: shmobile: Atomic conversion + DT
-     support"
-    https://lore.kernel.org/r/cover.1692178020.git.geert+renesas@glider.be
-
-[2] "[PATCH v2 00/41] drm: renesas: shmobile: Atomic conversion + DT
-     support"
-    https://lore.kernel.org/r/cover.1689698048.git.geert+renesas@glider.be
-
-[3] "[PATCH 00/39] drm: renesas: shmobile: Atomic conversion + DT
-     support"
-    https://lore.kernel.org/r/cover.1687423204.git.geert+renesas@glider.be/
-
-[4] "[PATCH/RFC] staging: board: armadillo800eva: Add DRM support"
-    https://lore.kernel.org/r/f7874a9da4bcb20fbc9cd133147b67862ebcf0b9.1687418281.git.geert+renesas@glider.be
-
-[5] "[PATCH 0/2] ARM: dts: r8a7740/armadillo800eva: Add LCD support"
-    https://lore.kernel.org/r/cover.1687417585.git.geert+renesas@glider.be
-
-[6] Encoders:
-    id	crtc	type	possible crtcs	possible clones	
-    42	41	DPI	0x00000001	0x00000001
-
-    Connectors:
-    id	encoder	status		name		size (mm)	modes	encoders
-    43	42	connected	DPI-1          	111x67		1	42
-      modes:
-	    index name refresh (Hz) hdisp hss hse htot vdisp vss vse vtot
-      #0 800x480 59.99 800 840 968 1056 480 515 517 525 33260 flags: nhsync, nvsync; type: preferred, driver
-      props:
-	    1 EDID:
-		    flags: immutable blob
-		    blobs:
-
-		    value:
-	    2 DPMS:
-		    flags: enum
-		    enums: On=0 Standby=1 Suspend=2 Off=3
-		    value: 0
-	    5 link-status:
-		    flags: enum
-		    enums: Good=0 Bad=1
-		    value: 0
-	    6 non-desktop:
-		    flags: immutable range
-		    values: 0 1
-		    value: 0
-	    4 TILE:
-		    flags: immutable blob
-		    blobs:
-
-		    value:
-
-    CRTCs:
-    id	fb	pos	size
-    41	44	(0,0)	(800x480)
-      #0 800x480 59.99 800 840 968 1056 480 515 517 525 33260 flags: nhsync, nvsync; type: preferred, driver
-      props:
-	    24 VRR_ENABLED:
-		    flags: range
-		    values: 0 1
-		    value: 0
-
-    Planes:
-    id	crtc	fb	CRTC x,y	x,y	gamma size	possible crtcs
-    31	41	44	0,0		0,0	0       	0x00000001
-      formats: RG16 RG24 AR24 XR24 NV12 NV21 NV16 NV61 NV24 NV42
-      props:
-	    8 type:
-		    flags: immutable enum
-		    enums: Overlay=0 Primary=1 Cursor=2
-		    value: 1
-	    30 IN_FORMATS:
-		    flags: immutable blob
-		    blobs:
-
-		    value:
-			    01000000000000000a00000018000000
-			    01000000400000005247313652473234
-			    41523234585232344e5631324e563231
-			    4e5631364e5636314e5632344e563432
-			    ff030000000000000000000000000000
-			    0000000000000000
-		    in_formats blob decoded:
-			     RG16:  LINEAR
-			     RG24:  LINEAR
-			     AR24:  LINEAR
-			     XR24:  LINEAR
-			     NV12:  LINEAR
-			     NV21:  LINEAR
-			     NV16:  LINEAR
-			     NV61:  LINEAR
-			     NV24:  LINEAR
-			     NV42:  LINEAR
-    33	0	0	0,0		0,0	0       	0x00000001
-      formats: RG16 RG24 AR24 XR24 NV12 NV21 NV16 NV61 NV24 NV42
-      props:
-	    8 type:
-		    flags: immutable enum
-		    enums: Overlay=0 Primary=1 Cursor=2
-		    value: 0
-	    30 IN_FORMATS:
-		    flags: immutable blob
-		    blobs:
-
-		    value:
-			    01000000000000000a00000018000000
-			    01000000400000005247313652473234
-			    41523234585232344e5631324e563231
-			    4e5631364e5636314e5632344e563432
-			    ff030000000000000000000000000000
-			    0000000000000000
-		    in_formats blob decoded:
-			     RG16:  LINEAR
-			     RG24:  LINEAR
-			     AR24:  LINEAR
-			     XR24:  LINEAR
-			     NV12:  LINEAR
-			     NV21:  LINEAR
-			     NV16:  LINEAR
-			     NV61:  LINEAR
-			     NV24:  LINEAR
-			     NV42:  LINEAR
-    35	0	0	0,0		0,0	0       	0x00000001
-      formats: RG16 RG24 AR24 XR24 NV12 NV21 NV16 NV61 NV24 NV42
-      props:
-	    8 type:
-		    flags: immutable enum
-		    enums: Overlay=0 Primary=1 Cursor=2
-		    value: 0
-	    30 IN_FORMATS:
-		    flags: immutable blob
-		    blobs:
-
-		    value:
-			    01000000000000000a00000018000000
-			    01000000400000005247313652473234
-			    41523234585232344e5631324e563231
-			    4e5631364e5636314e5632344e563432
-			    ff030000000000000000000000000000
-			    0000000000000000
-		    in_formats blob decoded:
-			     RG16:  LINEAR
-			     RG24:  LINEAR
-			     AR24:  LINEAR
-			     XR24:  LINEAR
-			     NV12:  LINEAR
-			     NV21:  LINEAR
-			     NV16:  LINEAR
-			     NV61:  LINEAR
-			     NV24:  LINEAR
-			     NV42:  LINEAR
-    37	0	0	0,0		0,0	0       	0x00000001
-      formats: RG16 RG24 AR24 XR24 NV12 NV21 NV16 NV61 NV24 NV42
-      props:
-	    8 type:
-		    flags: immutable enum
-		    enums: Overlay=0 Primary=1 Cursor=2
-		    value: 0
-	    30 IN_FORMATS:
-		    flags: immutable blob
-		    blobs:
-
-		    value:
-			    01000000000000000a00000018000000
-			    01000000400000005247313652473234
-			    41523234585232344e5631324e563231
-			    4e5631364e5636314e5632344e563432
-			    ff030000000000000000000000000000
-			    0000000000000000
-		    in_formats blob decoded:
-			     RG16:  LINEAR
-			     RG24:  LINEAR
-			     AR24:  LINEAR
-			     XR24:  LINEAR
-			     NV12:  LINEAR
-			     NV21:  LINEAR
-			     NV16:  LINEAR
-			     NV61:  LINEAR
-			     NV24:  LINEAR
-			     NV42:  LINEAR
-    39	0	0	0,0		0,0	0       	0x00000001
-      formats: RG16 RG24 AR24 XR24 NV12 NV21 NV16 NV61 NV24 NV42
-      props:
-	    8 type:
-		    flags: immutable enum
-		    enums: Overlay=0 Primary=1 Cursor=2
-		    value: 0
-	    30 IN_FORMATS:
-		    flags: immutable blob
-		    blobs:
-
-		    value:
-			    01000000000000000a00000018000000
-			    01000000400000005247313652473234
-			    41523234585232344e5631324e563231
-			    4e5631364e5636314e5632344e563432
-			    ff030000000000000000000000000000
-			    0000000000000000
-		    in_formats blob decoded:
-			     RG16:  LINEAR
-			     RG24:  LINEAR
-			     AR24:  LINEAR
-			     XR24:  LINEAR
-			     NV12:  LINEAR
-			     NV21:  LINEAR
-			     NV16:  LINEAR
-			     NV61:  LINEAR
-			     NV24:  LINEAR
-			     NV42:  LINEAR
-
-    Frame buffers:
-    id	size	pitch
-
-Geert Uytterhoeven (36):
-  MAINTAINER: Create entry for Renesas SH-Mobile DRM drivers
-  dt-bindings: display: Add Renesas SH-Mobile LCDC bindings
-  media: uapi: Add MEDIA_BUS_FMT_RGB666_2X9_BE format
-  drm: renesas: shmobile: Fix overlay plane disable
-  drm: renesas: shmobile: Fix ARGB32 overlay format typo
-  drm: renesas: shmobile: Correct encoder/connector types
-  drm: renesas: shmobile: Add support for Runtime PM
-  drm: renesas: shmobile: Restore indentation of
-    shmob_drm_setup_clocks()
-  drm: renesas: shmobile: Use %p4cc to print fourcc code
-  drm: renesas: shmobile: Add missing YCbCr formats
-  drm: renesas: shmobile: Improve shmob_drm_format_info table
-  drm: renesas: shmobile: Improve error handling
-  drm: renesas: shmobile: Convert to use devm_request_irq()
-  drm: renesas: shmobile: Remove custom plane destroy callback
-  drm: renesas: shmobile: Use drmm_universal_plane_alloc()
-  drm: renesas: shmobile: Embed drm_device in shmob_drm_device
-  drm: renesas: shmobile: Convert container helpers to static inline
-    functions
-  drm: renesas: shmobile: Replace .dev_private with container_of()
-  drm: renesas: shmobile: Use media bus formats in platform data
-  drm: renesas: shmobile: Move interface handling to connector setup
-  drm: renesas: shmobile: Unify plane allocation
-  drm: renesas: shmobile: Rename shmob_drm_crtc.crtc
-  drm: renesas: shmobile: Rename shmob_drm_connector.connector
-  drm: renesas: shmobile: Rename shmob_drm_plane.plane
-  drm: renesas: shmobile: Use drm_crtc_handle_vblank()
-  drm: renesas: shmobile: Move shmob_drm_crtc_finish_page_flip()
-  drm: renesas: shmobile: Wait for page flip when turning CRTC off
-  drm: renesas: shmobile: Turn vblank on/off when enabling/disabling
-    CRTC
-  drm: renesas: shmobile: Shutdown the display on remove
-  drm: renesas: shmobile: Cleanup encoder
-  drm: renesas: shmobile: Atomic conversion part 1
-  drm: renesas: shmobile: Atomic conversion part 2
-  drm: renesas: shmobile: Use suspend/resume helpers
-  drm: renesas: shmobile: Remove internal CRTC state tracking
-  drm: renesas: shmobile: Atomic conversion part 3
-  drm: renesas: shmobile: Add DT support
-
-Laurent Pinchart (5):
-  drm: renesas: shmobile: Remove backlight support
-  drm: renesas: shmobile: Don't set display info width and height twice
-  drm: renesas: shmobile: Rename input clocks
-  drm: renesas: shmobile: Remove support for SYS panels
-  drm: renesas: shmobile: Use struct videomode in platform data
-
- .../display/renesas,shmobile-lcdc.yaml        | 130 ++++
- .../media/v4l/subdev-formats.rst              |  72 ++
- MAINTAINERS                                   |  13 +-
- drivers/gpu/drm/renesas/shmobile/Kconfig      |   3 +-
- drivers/gpu/drm/renesas/shmobile/Makefile     |   3 +-
- .../renesas/shmobile/shmob_drm_backlight.c    |  82 ---
- .../renesas/shmobile/shmob_drm_backlight.h    |  19 -
- .../gpu/drm/renesas/shmobile/shmob_drm_crtc.c | 650 ++++++++----------
- .../gpu/drm/renesas/shmobile/shmob_drm_crtc.h |  27 +-
- .../gpu/drm/renesas/shmobile/shmob_drm_drv.c  | 179 +++--
- .../gpu/drm/renesas/shmobile/shmob_drm_drv.h  |  18 +-
- .../gpu/drm/renesas/shmobile/shmob_drm_kms.c  |  77 ++-
- .../gpu/drm/renesas/shmobile/shmob_drm_kms.h  |   9 +-
- .../drm/renesas/shmobile/shmob_drm_plane.c    | 326 +++++----
- .../drm/renesas/shmobile/shmob_drm_plane.h    |   5 +-
- include/linux/platform_data/shmob_drm.h       |  57 +-
- include/uapi/linux/media-bus-format.h         |   3 +-
- 17 files changed, 860 insertions(+), 813 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/display/renesas,shmobile-lcdc.yaml
- delete mode 100644 drivers/gpu/drm/renesas/shmobile/shmob_drm_backlight.c
- delete mode 100644 drivers/gpu/drm/renesas/shmobile/shmob_drm_backlight.h
-
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: Conor Dooley <conor+dt@kernel.org>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Hans Verkuil <hverkuil@xs4all.nl>
-Cc: devicetree@vger.kernel.org
-Cc: linux-media@vger.kernel.org
-Cc: linux-fbdev@vger.kernel.org
-Cc: linux-sh@vger.kernel.org
--- 
-2.34.1
-
-Gr{oetje,eeting}s,
-
-						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
