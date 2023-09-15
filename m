@@ -2,149 +2,187 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB9BDEE6449
-	for <linux-media@archiver.kernel.org>; Fri, 15 Sep 2023 08:46:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37836EE644B
+	for <linux-media@archiver.kernel.org>; Fri, 15 Sep 2023 08:55:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232435AbjIOIqH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 15 Sep 2023 04:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39618 "EHLO
+        id S233713AbjIOIzl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Sep 2023 04:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233093AbjIOIqD (ORCPT
+        with ESMTP id S233394AbjIOIzL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 15 Sep 2023 04:46:03 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB8C2717
-        for <linux-media@vger.kernel.org>; Fri, 15 Sep 2023 01:45:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694767558; x=1726303558;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=N4U1xEY/L/XxPa+S6RoX5i0piSYYryWIM3J9u6Q8Ip8=;
-  b=nTTL9MXbimaLBCjIhIc+voFY6Nfbjff66bhOghx+r1wJL0jHTstqiJyC
-   XU2V0YkCXjcaK07czBru/5v5CAlwIkJ5HUrxfmrPC++ZGI93Kg41EadlZ
-   oIo3eXI7LkTGF8zA//dOtIN0j51l6Sh2Zt40wj+bxOsxLE/BbN0qQZ6XC
-   MPuR7t2SWibDTd6H3xkHwLof8GJq8N02iWvF01CEtOFsUAVoa3u5jBEaf
-   a6v9bNT6EP20OboCtO8B00IgRRqujFYay8Y1g6x7YMzRzjFET934oMEON
-   EnFYE2SXZw7xCHuhA4NQUPI4DG53txnn/VU/YAuClxzXuyBajXYsv5+mn
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="465564174"
-X-IronPort-AV: E=Sophos;i="6.02,148,1688454000"; 
-   d="scan'208";a="465564174"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2023 01:45:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="810447505"
-X-IronPort-AV: E=Sophos;i="6.02,148,1688454000"; 
-   d="scan'208";a="810447505"
-Received: from haoyao-desk.bj.intel.com ([10.238.232.41])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2023 01:45:56 -0700
-From:   Hao Yao <hao.yao@intel.com>
-To:     linux-media@vger.kernel.org, arec.kao@intel.com
-Cc:     sakari.ailus@intel.com, bingbu.cao@intel.com, arun.t@intel.com,
-        daxing.li@intel.com, Hao Yao <hao.yao@intel.com>
-Subject: [PATCH] media: ov13b10: Add 1364x768 register settings
-Date:   Fri, 15 Sep 2023 16:45:27 +0800
-Message-Id: <20230915084527.170824-1-hao.yao@intel.com>
+        Fri, 15 Sep 2023 04:55:11 -0400
+Received: from riemann.telenet-ops.be (riemann.telenet-ops.be [IPv6:2a02:1800:110:4::f00:10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D737272D
+        for <linux-media@vger.kernel.org>; Fri, 15 Sep 2023 01:54:27 -0700 (PDT)
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
+        by riemann.telenet-ops.be (Postfix) with ESMTPS id 4Rn7KR4CvPz4xn2b
+        for <linux-media@vger.kernel.org>; Fri, 15 Sep 2023 10:54:19 +0200 (CEST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:7135:da8b:ba1d:1a7c])
+        by baptiste.telenet-ops.be with bizsmtp
+        id m8uE2A00C3q21w7018uE1r; Fri, 15 Sep 2023 10:54:19 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1qh4aJ-003lG3-52;
+        Fri, 15 Sep 2023 10:54:14 +0200
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1qh4ac-00Gdar-5k;
+        Fri, 15 Sep 2023 10:54:14 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Magnus Damm <magnus.damm@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org
+Subject: [PATCH v4 03/41] media: uapi: Add MEDIA_BUS_FMT_RGB666_2X9_BE format
+Date:   Fri, 15 Sep 2023 10:53:18 +0200
+Message-Id: <8b421cc391ac511c07cb1e243c1ba18bb95f7f98.1694767209.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1694767208.git.geert+renesas@glider.be>
+References: <cover.1694767208.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This commit adds support for:
+Add the RGB666 9:9 format MEDIA_BUS_FMT_RGB666_2X9_BE, which is
+supported by the SH-Mobile LCD Controller.
 
-- 1364x768 at 120 FPS
-
-Signed-off-by: Hao Yao <hao.yao@intel.com>
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 ---
- drivers/media/i2c/ov13b10.c | 58 ++++++++++++++++++++++++++++++++++++-
- 1 file changed, 57 insertions(+), 1 deletion(-)
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Hans Verkuil <hverkuil@xs4all.nl>
+Cc: linux-media@vger.kernel.org
 
-diff --git a/drivers/media/i2c/ov13b10.c b/drivers/media/i2c/ov13b10.c
-index dbc642c5995b..d6e672042b39 100644
---- a/drivers/media/i2c/ov13b10.c
-+++ b/drivers/media/i2c/ov13b10.c
-@@ -31,6 +31,7 @@
- #define OV13B10_REG_VTS			0x380e
- #define OV13B10_VTS_30FPS		0x0c7c
- #define OV13B10_VTS_60FPS		0x063e
-+#define OV13B10_VTS_120FPS		0x0320
- #define OV13B10_VTS_MAX			0x7fff
- 
- /* HBLANK control - read only */
-@@ -468,6 +469,50 @@ static const struct ov13b10_reg mode_2080x1170_regs[] = {
- 	{0x5001, 0x0d},
- };
- 
-+static const struct ov13b10_reg mode_1364x768_120fps_regs[] = {
-+	{0x0305, 0xaf},
-+	{0x3011, 0x7c},
-+	{0x3501, 0x03},
-+	{0x3502, 0x00},
-+	{0x3662, 0x88},
-+	{0x3714, 0x28},
-+	{0x3739, 0x10},
-+	{0x37c2, 0x14},
-+	{0x37d9, 0x06},
-+	{0x37e2, 0x0c},
-+	{0x37e4, 0x00},
-+	{0x3800, 0x02},
-+	{0x3801, 0xe4},
-+	{0x3802, 0x03},
-+	{0x3803, 0x48},
-+	{0x3804, 0x0d},
-+	{0x3805, 0xab},
-+	{0x3806, 0x09},
-+	{0x3807, 0x60},
-+	{0x3808, 0x05},
-+	{0x3809, 0x54},
-+	{0x380a, 0x03},
-+	{0x380b, 0x00},
-+	{0x380c, 0x04},
-+	{0x380d, 0x8e},
-+	{0x380e, 0x03},
-+	{0x380f, 0x20},
-+	{0x3811, 0x07},
-+	{0x3813, 0x07},
-+	{0x3814, 0x03},
-+	{0x3816, 0x03},
-+	{0x3820, 0x8b},
-+	{0x3c8c, 0x18},
-+	{0x4008, 0x00},
-+	{0x4009, 0x05},
-+	{0x4050, 0x00},
-+	{0x4051, 0x05},
-+	{0x4501, 0x08},
-+	{0x4505, 0x04},
-+	{0x5000, 0xfd},
-+	{0x5001, 0x0d},
-+};
+v4:
+  - No changes,
+
+v3:
+  - No changes,
+
+v2:
+  - Add Reviewed-by,
+  - Drop unused MEDIA_BUS_FMT_RGB666_2X9_LE, as requested by Laurent.
+---
+ .../media/v4l/subdev-formats.rst              | 72 +++++++++++++++++++
+ include/uapi/linux/media-bus-format.h         |  3 +-
+ 2 files changed, 74 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/userspace-api/media/v4l/subdev-formats.rst b/Documentation/userspace-api/media/v4l/subdev-formats.rst
+index a3a35eeed70846ba..eb3cd20b0cf2e3d6 100644
+--- a/Documentation/userspace-api/media/v4l/subdev-formats.rst
++++ b/Documentation/userspace-api/media/v4l/subdev-formats.rst
+@@ -949,6 +949,78 @@ The following tables list existing packed RGB formats.
+       - b\ :sub:`2`
+       - b\ :sub:`1`
+       - b\ :sub:`0`
++    * .. _MEDIA-BUS-FMT-RGB666-2X9-BE:
 +
- static const char * const ov13b10_test_pattern_menu[] = {
- 	"Disabled",
- 	"Vertical Color Bar Type 1",
-@@ -568,7 +613,18 @@ static const struct ov13b10_mode supported_modes[] = {
- 			.regs = mode_2080x1170_regs,
- 		},
- 		.link_freq_index = OV13B10_LINK_FREQ_INDEX_0,
--	}
-+	},
-+	{
-+		.width = 1364,
-+		.height = 768,
-+		.vts_def = OV13B10_VTS_120FPS,
-+		.vts_min = OV13B10_VTS_120FPS,
-+		.link_freq_index = OV13B10_LINK_FREQ_INDEX_0,
-+		.reg_list = {
-+			.num_of_regs = ARRAY_SIZE(mode_1364x768_120fps_regs),
-+			.regs = mode_1364x768_120fps_regs,
-+		},
-+	},
- };
++      - MEDIA_BUS_FMT_RGB666_2X9_BE
++      - 0x1025
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      - r\ :sub:`5`
++      - r\ :sub:`4`
++      - r\ :sub:`3`
++      - r\ :sub:`2`
++      - r\ :sub:`1`
++      - r\ :sub:`0`
++      - g\ :sub:`5`
++      - g\ :sub:`4`
++      - g\ :sub:`3`
++    * -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      - g\ :sub:`2`
++      - g\ :sub:`1`
++      - g\ :sub:`0`
++      - b\ :sub:`5`
++      - b\ :sub:`4`
++      - b\ :sub:`3`
++      - b\ :sub:`2`
++      - b\ :sub:`1`
++      - b\ :sub:`0`
+     * .. _MEDIA-BUS-FMT-BGR666-1X18:
  
- struct ov13b10 {
+       - MEDIA_BUS_FMT_BGR666_1X18
+diff --git a/include/uapi/linux/media-bus-format.h b/include/uapi/linux/media-bus-format.h
+index a03c543cb072de30..f05f747e444d6686 100644
+--- a/include/uapi/linux/media-bus-format.h
++++ b/include/uapi/linux/media-bus-format.h
+@@ -34,7 +34,7 @@
+ 
+ #define MEDIA_BUS_FMT_FIXED			0x0001
+ 
+-/* RGB - next is	0x1025 */
++/* RGB - next is	0x1026 */
+ #define MEDIA_BUS_FMT_RGB444_1X12		0x1016
+ #define MEDIA_BUS_FMT_RGB444_2X8_PADHI_BE	0x1001
+ #define MEDIA_BUS_FMT_RGB444_2X8_PADHI_LE	0x1002
+@@ -46,6 +46,7 @@
+ #define MEDIA_BUS_FMT_RGB565_2X8_BE		0x1007
+ #define MEDIA_BUS_FMT_RGB565_2X8_LE		0x1008
+ #define MEDIA_BUS_FMT_RGB666_1X18		0x1009
++#define MEDIA_BUS_FMT_RGB666_2X9_BE		0x1025
+ #define MEDIA_BUS_FMT_BGR666_1X18		0x1023
+ #define MEDIA_BUS_FMT_RBG888_1X24		0x100e
+ #define MEDIA_BUS_FMT_RGB666_1X24_CPADHI	0x1015
 -- 
 2.34.1
 
