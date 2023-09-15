@@ -2,43 +2,43 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 881A5C46CA1
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6D82CD37B0
 	for <linux-media@archiver.kernel.org>; Fri, 15 Sep 2023 21:12:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237933AbjIOVMF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 15 Sep 2023 17:12:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57318 "EHLO
+        id S237935AbjIOVMG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Sep 2023 17:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237936AbjIOVL7 (ORCPT
+        with ESMTP id S237945AbjIOVMB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 15 Sep 2023 17:11:59 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF0EA1;
-        Fri, 15 Sep 2023 14:11:53 -0700 (PDT)
+        Fri, 15 Sep 2023 17:12:01 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3874BA0;
+        Fri, 15 Sep 2023 14:11:56 -0700 (PDT)
 Received: from localhost (89-26-75-29.dyn.cablelink.at [89.26.75.29])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: sebastianfricke)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A149466072F6;
-        Fri, 15 Sep 2023 22:11:52 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id EC5DD660731C;
+        Fri, 15 Sep 2023 22:11:54 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1694812312;
-        bh=bfjXNTEUGOV/V9xi2T+58cboEq+YPmOFqHLsOLFZbPw=;
+        s=mail; t=1694812315;
+        bh=10L+mW/hGohZLpaKH+R8m7hSr+3EWsY0PRUN1tnoT/c=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=BNrhrDp8xDg1sOY0ZzZSw0/z+hUHhX32F5Km6n2Q/2J8jTNIBATFr0RqgBYO3Kf5/
-         j/FQ88xSWFyYi637zcWtKz/0I7s0ibi8H/6yy+bEbX61pR5Q9FYmU0SsP73lTs0mAI
-         zjDojvchHDN1c+t3vz3bZfP8VHHLsRtX99U/uRqrCLuZ1NaXy7EHnJAGZ9VYtAeDbt
-         L6s1bF7aoN4N4Qqwmi02QbgIpAZb8RZ5M61mQ8NEPioykwX9jU7NJ6XXryitmfdzp8
-         BtfAjGoJgNUQog0/x/R3T8tqPziDTsA5MUK1qxZdiZIJAwRObvPN8Cppxh1MRLzBlf
-         7tUXYngQxluhQ==
+        b=luJd27SFRJewaQNV4dtRjlYcK3YYG0+yrP7S3Ejo+aHUzl6PYjmX1iLhRIMibyAI0
+         LEw3K2Nob6R45JR9IcjkofDvbUI84oQQ7bkXyqxXzkybxqluoOK3ReU+npZTh2mba1
+         BAq5lGgRyWRWq4qHOeKom5WKhlTB3AfDLrH+LaSyD90Ea0XCzXZoqH/xcvtOPLBqF+
+         WesNW0bkB8TO3jxxVJI93Co7qhRb86cGtwy7oD/WWojCA80YAhyQA/UstsmU5on9DJ
+         MfSwpeFLMtrwUbFPlHOgwaK+nzbPiXhWg8yVPmDgtu2Jy6gERBfKUj7S9jSCqrXdao
+         mypczTAlLEo5A==
 From:   Sebastian Fricke <sebastian.fricke@collabora.com>
-Date:   Fri, 15 Sep 2023 23:11:30 +0200
-Subject: [PATCH v12 1/7] media: v4l2: Add ignore_streaming flag
+Date:   Fri, 15 Sep 2023 23:11:31 +0200
+Subject: [PATCH v12 2/7] media: v4l2: Allow M2M job queuing w/o streaming CAP queue
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230915-wave5_v12_on_media_master-v12-1-92fc66cd685d@collabora.com>
+Message-Id: <20230915-wave5_v12_on_media_master-v12-2-92fc66cd685d@collabora.com>
 References: <20230915-wave5_v12_on_media_master-v12-0-92fc66cd685d@collabora.com>
 In-Reply-To: <20230915-wave5_v12_on_media_master-v12-0-92fc66cd685d@collabora.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -61,72 +61,48 @@ Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         kernel@collabora.com,
         Nicolas Dufresne <nicolas.dufresne@collabora.com>
 X-Mailer: b4 0.11.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1694812307; l=2295;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1694812307; l=1354;
  i=sebastian.fricke@collabora.com; s=linux-media; h=from:subject:message-id;
- bh=bfjXNTEUGOV/V9xi2T+58cboEq+YPmOFqHLsOLFZbPw=;
- b=VbAFE35JG3ToaRlhTlsQQfjMPC3TontsrKvcvUyDnHfCVp53Y08nftaFNUIlpaVT9Q2ZOn9XQpjG
- DO/9V4kyAbx025A/fEK2RLlocnBrmDQV2PBOE3EtYKX8h/TamVMl
+ bh=10L+mW/hGohZLpaKH+R8m7hSr+3EWsY0PRUN1tnoT/c=;
+ b=WsenXnltqRAyMoRQG6+C77rrc/du2DWnzPMg8BN3t0PH7d0f1LxxPeOZkqgpxEGWILK3t6f7o3q4
+ FVh3ZxNUBWlHE+gFBsaJr3cRFKWABwn6t4/AtcDRc4Bx2Ph82omb
 X-Developer-Key: i=sebastian.fricke@collabora.com; a=ed25519;
  pk=pYXedPwrTtErcj7ERYeo/IpTrpe4QbJuEzSB52fslBg=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a new flag to the `struct v4l2_m2m_dev` to toggle whether a queue
-must be streaming in order to allow queuing jobs to the ready queue.
-Currently, both queues (CAPTURE & OUTPUT) must be streaming in order to
-allow adding new jobs. This behavior limits the usability of M2M for
-some drivers, as these have to be able, to perform analysis of the
-sequence to ensure, that userspace prepares the CAPTURE queue correctly.
+Allow decoder drivers to enable set the ignore_streaming flag on their
+CAPTURE queue, to allow queuing jobs to the M2M ready queue and perform
+firmware sequence analysis with just a streaming OUTPUT queue and
+available bitstream data.
 
 Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
 Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 ---
- include/media/v4l2-mem2mem.h | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ drivers/media/v4l2-core/v4l2-mem2mem.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/include/media/v4l2-mem2mem.h b/include/media/v4l2-mem2mem.h
-index d6c8eb2b5201..97a48e61e358 100644
---- a/include/media/v4l2-mem2mem.h
-+++ b/include/media/v4l2-mem2mem.h
-@@ -57,6 +57,16 @@ struct v4l2_m2m_dev;
-  * @rdy_spinlock: spin lock to protect the struct usage
-  * @num_rdy:	number of buffers ready to be processed
-  * @buffered:	is the queue buffered?
-+ * @ignore_streaming: Dictates whether the queue must be streaming for a job to
-+ *		      be queued.
-+ *		      This is useful, for example, when the driver requires to
-+ *		      initialize the sequence with a firmware, where only a
-+ *		      queued OUTPUT queue buffer and STREAMON on the OUTPUT
-+ *		      queue is required to perform the anlysis of the bitstream
-+ *		      header.
-+ *		      This means the driver is responsible for implementing the
-+ *		      job_ready callback correctly to make sure that requirements
-+ *		      for actual decoding are met.
-  *
-  * Queue for buffers ready to be processed as soon as this
-  * instance receives access to the device.
-@@ -69,6 +79,7 @@ struct v4l2_m2m_queue_ctx {
- 	spinlock_t		rdy_spinlock;
- 	u8			num_rdy;
- 	bool			buffered;
-+	bool			ignore_streaming;
- };
+diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
+index 0cc30397fbad..2dbbe93be257 100644
+--- a/drivers/media/v4l2-core/v4l2-mem2mem.c
++++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
+@@ -301,9 +301,12 @@ static void __v4l2_m2m_try_queue(struct v4l2_m2m_dev *m2m_dev,
  
- /**
-@@ -564,6 +575,12 @@ static inline void v4l2_m2m_set_dst_buffered(struct v4l2_m2m_ctx *m2m_ctx,
- 	m2m_ctx->cap_q_ctx.buffered = buffered;
- }
+ 	dprintk("Trying to schedule a job for m2m_ctx: %p\n", m2m_ctx);
  
-+static inline void v4l2_m2m_set_dst_ignore_streaming(struct v4l2_m2m_ctx *m2m_ctx,
-+						     bool ignore_streaming)
-+{
-+	m2m_ctx->cap_q_ctx.ignore_streaming = ignore_streaming;
-+}
-+
- /**
-  * v4l2_m2m_ctx_release() - release m2m context
-  *
+-	if (!m2m_ctx->out_q_ctx.q.streaming
+-	    || !m2m_ctx->cap_q_ctx.q.streaming) {
+-		dprintk("Streaming needs to be on for both queues\n");
++	if (!m2m_ctx->out_q_ctx.q.streaming ||
++	    (!m2m_ctx->cap_q_ctx.q.streaming && !m2m_ctx->cap_q_ctx.ignore_streaming)) {
++		if (!m2m_ctx->cap_q_ctx.ignore_streaming)
++			dprintk("Streaming needs to be on for both queues\n");
++		else
++			dprintk("Streaming needs to be on for the OUTPUT queue\n");
+ 		return;
+ 	}
+ 
 
 -- 
 2.25.1
