@@ -2,30 +2,30 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB6B4CD37B0
-	for <linux-media@archiver.kernel.org>; Mon, 18 Sep 2023 16:36:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4861CCD37B0
+	for <linux-media@archiver.kernel.org>; Mon, 18 Sep 2023 16:45:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbjIRQgV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 18 Sep 2023 12:36:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37040 "EHLO
+        id S229993AbjIRQp5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 18 Sep 2023 12:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230359AbjIRQfy (ORCPT
+        with ESMTP id S229955AbjIRQpi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 18 Sep 2023 12:35:54 -0400
+        Mon, 18 Sep 2023 12:45:38 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D302C23CD2
-        for <linux-media@vger.kernel.org>; Mon, 18 Sep 2023 09:14:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF7535BB
+        for <linux-media@vger.kernel.org>; Mon, 18 Sep 2023 08:59:34 -0700 (PDT)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A3FFD880D;
-        Mon, 18 Sep 2023 15:46:14 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 934E91288;
+        Mon, 18 Sep 2023 15:25:37 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1695044774;
-        bh=7SX4NBZGv/KIc9VDRZTQguXMQ/C7k8NXunTfKw0QkCE=;
+        s=mail; t=1695043537;
+        bh=iVTF3YYBQxtep2muBWlISvn6dVioDkLLNN99TCS6cyM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vuIL4YVsMfTuLWsQ+MDA5eY4ZqKrzK2SLPxr7Qkz5+Hr+k+vDw1qZewuSyL3zDnFC
-         1/jxEAHnpQMJsUXCIfczSSr2OdA3Lrz0F3BT4PYxltqL/dnCjZToiHWbrQdSbg3QL9
-         tEw4T5k1I1cxda850sKryTIppunY+p1WYyshCtk8=
-Date:   Mon, 18 Sep 2023 16:48:02 +0300
+        b=W4WqLt9Fp8b73Ff22Zr0LqNJ2eeriQ+JguSvd3WR2lPeVlK9VfJ6srqxAwuWKHWMZ
+         sSHNM8GCIcfca/ZTSeJNEnLL++9pkAzGaf+5ZhOwug+WQE1eGTLZSf77zrtUCmJHDf
+         sVUYmOlIMdUH4lgYFK+HPywUc7ih6IW115PnU7bk=
+Date:   Mon, 18 Sep 2023 16:27:25 +0300
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>
 Cc:     linux-media@vger.kernel.org, Tianshu Qiu <tian.shu.qiu@intel.com>,
@@ -34,14 +34,15 @@ Cc:     linux-media@vger.kernel.org, Tianshu Qiu <tian.shu.qiu@intel.com>,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
         Rui Miguel Silva <rmfrfs@gmail.com>,
         Martin Kepplinger <martink@posteo.de>
-Subject: Re: [PATCH v2 12/12] media: mc: Check pad flag validity
-Message-ID: <20230918134802.GH28874@pendragon.ideasonboard.com>
+Subject: Re: [PATCH v2 07/12] media: ov2740: Enable runtime PM before
+ registering the async subdev
+Message-ID: <20230918132725.GE28874@pendragon.ideasonboard.com>
 References: <20230918125138.90002-1-sakari.ailus@linux.intel.com>
- <20230918125138.90002-13-sakari.ailus@linux.intel.com>
+ <20230918125138.90002-8-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230918125138.90002-13-sakari.ailus@linux.intel.com>
+In-Reply-To: <20230918125138.90002-8-sakari.ailus@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
@@ -50,69 +51,55 @@ Hi Sakari,
 
 Thank you for the patch.
 
-On Mon, Sep 18, 2023 at 03:51:38PM +0300, Sakari Ailus wrote:
-> Check the validity of pad flags on entity init. Exactly one of the flags
-> must be set.
+On Mon, Sep 18, 2023 at 03:51:33PM +0300, Sakari Ailus wrote:
+> Enable runtime PM before registering the async subdev as the driver UAPI
+> may become accessible immediately after the registration. Runtime PM needs
+> to be enabled by that time.
 > 
 > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
 > ---
->  drivers/media/mc/mc-entity.c | 20 ++++++++++++++++++--
->  1 file changed, 18 insertions(+), 2 deletions(-)
+>  drivers/media/i2c/ov2740.c | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
-> index 83468d4a440b..38d5bbae33d7 100644
-> --- a/drivers/media/mc/mc-entity.c
-> +++ b/drivers/media/mc/mc-entity.c
-> @@ -195,8 +195,9 @@ int media_entity_pads_init(struct media_entity *entity, u16 num_pads,
->  			   struct media_pad *pads)
->  {
->  	struct media_device *mdev = entity->graph_obj.mdev;
-> -	struct media_pad *iter;
-> +	struct media_pad *iter, *iter2;
->  	unsigned int i = 0;
-> +	int ret = 0;
->  
->  	if (num_pads >= MEDIA_ENTITY_MAX_PADS)
->  		return -E2BIG;
-> @@ -210,15 +211,30 @@ int media_entity_pads_init(struct media_entity *entity, u16 num_pads,
->  	media_entity_for_each_pad(entity, iter) {
->  		iter->entity = entity;
->  		iter->index = i++;
-> +
-> +		if (hweight32(iter->flags & (MEDIA_PAD_FL_SINK |
-> +					     MEDIA_PAD_FL_SOURCE)) != 1) {
-> +			ret = -EINVAL;
-> +			break;
-> +		}
-> +
->  		if (mdev)
->  			media_gobj_create(mdev, MEDIA_GRAPH_PAD,
->  					  &iter->graph_obj);
+> diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
+> index 41d4f85470fd..319dc00e47b4 100644
+> --- a/drivers/media/i2c/ov2740.c
+> +++ b/drivers/media/i2c/ov2740.c
+> @@ -1172,6 +1172,12 @@ static int ov2740_probe(struct i2c_client *client)
+>  		goto probe_error_v4l2_ctrl_handler_free;
 >  	}
 >  
-> +	if (ret && mdev) {
-> +		media_entity_for_each_pad(entity, iter2) {
-> +			if (iter2 == iter)
-> +				break;
-> +			media_gobj_destroy(&iter->graph_obj);
-
-Wrong iterator.
-
-Instead of using a second iterator, which can be error-prone as shown
-here, how about breaking when !iter->graph_obj.mdev, which indicates an
-uninitialized object ?
-
-> +		}
-> +	}
+> +	/* Set the device's state to active if it's in D0 state. */
+> +	if (full_power)
+> +		pm_runtime_set_active(&client->dev);
+> +	pm_runtime_enable(&client->dev);
+> +	pm_runtime_idle(&client->dev);
 > +
->  	if (mdev)
->  		mutex_unlock(&mdev->graph_mutex);
+>  	ret = v4l2_async_register_subdev_sensor(&ov2740->sd);
+>  	if (ret < 0) {
+>  		dev_err_probe(dev, ret, "failed to register V4L2 subdev\n");
+> @@ -1182,16 +1188,12 @@ static int ov2740_probe(struct i2c_client *client)
+>  	if (ret)
+>  		dev_warn(&client->dev, "register nvmem failed, ret %d\n", ret);
 >  
-> -	return 0;
-> +	return ret;
->  }
->  EXPORT_SYMBOL_GPL(media_entity_pads_init);
+> -	/* Set the device's state to active if it's in D0 state. */
+> -	if (full_power)
+> -		pm_runtime_set_active(&client->dev);
+> -	pm_runtime_enable(&client->dev);
+> -	pm_runtime_idle(&client->dev);
+> -
+>  	return 0;
 >  
+>  probe_error_media_entity_cleanup:
+>  	media_entity_cleanup(&ov2740->sd.entity);
+> +	pm_runtime_disable(&client->dev);
+> +	pm_runtime_set_suspended(&client->dev);
+>  
+>  probe_error_v4l2_ctrl_handler_free:
+>  	v4l2_ctrl_handler_free(ov2740->sd.ctrl_handler);
 
 -- 
 Regards,
