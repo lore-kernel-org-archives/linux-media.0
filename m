@@ -2,206 +2,153 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7585CCD37B0
-	for <linux-media@archiver.kernel.org>; Mon, 18 Sep 2023 19:04:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15D5CCD37B0
+	for <linux-media@archiver.kernel.org>; Mon, 18 Sep 2023 19:09:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbjIRTEu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 18 Sep 2023 15:04:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53832 "EHLO
+        id S229936AbjIRTJK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 18 Sep 2023 15:09:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbjIRTEl (ORCPT
+        with ESMTP id S229770AbjIRTJJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 18 Sep 2023 15:04:41 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE642D54
-        for <linux-media@vger.kernel.org>; Mon, 18 Sep 2023 12:02:16 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1c43fe0c0bfso20064525ad.1
-        for <linux-media@vger.kernel.org>; Mon, 18 Sep 2023 12:02:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695063734; x=1695668534; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=G6c9Dw+H6bZNAtp6nyetpcWDVm9T7feZvhUEFUNvPro=;
-        b=suF1G+4fpQZVz0VAsaLyanBNMnWd7sEMOg1VT2nkIEuDAPcCI5SYzVYd2GiKnm2B37
-         HFooJw8RlMjq5Tlo0cny8LfB7ZCZVxz/J1aFf9HiFb0ZOmm/TVPzlzbtY60aS1xjej0K
-         9IGb4urjUO+qrc8amcRcs9RAsEH9pKsI9ktP44prDMSBalPZzEbJuZKKorH1qbNFTGaq
-         ougVrFrZkf9/hRVHbycvVV+leeb46fSAO5A057xKnFiG7QWwyDWhpwdrRjgjADHhR16z
-         glN8H0NhCeEsQJG860ygVLxAvPcWdiYrCN19Wrg4X5jgQJjb9+QSHjU4gIRIC43QIydi
-         hLXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695063734; x=1695668534;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=G6c9Dw+H6bZNAtp6nyetpcWDVm9T7feZvhUEFUNvPro=;
-        b=lwEtTiB+H4Fdrvd2FSnQQRfcT2wyBgRTW3mIrhRynrsmucntXJOyDqIKSjD8vWlzkh
-         8MeGjB0sh1j+h2Zsmr5ZlenG+5n63KixJxHzkvNWeBMzhqrvoszBUHwrcm0QQaXsmQ6i
-         yADI28w5jLFbncNKCELFdQn7pDXAC6UY0QCsmGozr6yJ+F6I8/h/JsjBvm/8fCxrkI/4
-         mw6PSs3Oal396EbiXbcQqCVGofrL0xNrjO+NGmVknHOMUVICAG1yIGJBvQ+h6S7TTbp8
-         O4na1erTpye4O5vCLu7aSLBvl2UR39vOuWuL/UijZuo7jn8RfBdcRcnpuB1jsah8anwO
-         Z7ug==
-X-Gm-Message-State: AOJu0Yz1ZgMUGx3gHw8YhA7aI+KClQMgRwqyz24wE0PQhWOesc1wx4Bt
-        I9eZkXJ5KvSRu3XziQuZfh1+ig==
-X-Google-Smtp-Source: AGHT+IFgvI8Gx7pJQuu+4F35rTPcO0HTycpb3vyegabZKdF1s/i8Ak7x8KvboiAT+yhu6mkpeswZJA==
-X-Received: by 2002:a17:903:2783:b0:1b5:561a:5ca9 with SMTP id jw3-20020a170903278300b001b5561a5ca9mr8111664plb.50.1695063734035;
-        Mon, 18 Sep 2023 12:02:14 -0700 (PDT)
-Received: from [192.168.60.239] (124.190.199.35.bc.googleusercontent.com. [35.199.190.124])
-        by smtp.gmail.com with ESMTPSA id b7-20020a170902d50700b001a80ad9c599sm8613261plg.294.2023.09.18.12.02.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Sep 2023 12:02:13 -0700 (PDT)
-Message-ID: <d678b644-5f66-4c23-b2ba-6c84ba56012f@google.com>
-Date:   Mon, 18 Sep 2023 12:02:11 -0700
+        Mon, 18 Sep 2023 15:09:09 -0400
+Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC0D10F
+        for <linux-media@vger.kernel.org>; Mon, 18 Sep 2023 12:09:03 -0700 (PDT)
+Received: from eig-obgw-6006a.ext.cloudfilter.net ([10.0.30.182])
+        by cmsmtp with ESMTP
+        id iIHBqw2VHQFHRiJcFqD8jX; Mon, 18 Sep 2023 19:09:03 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with ESMTPS
+        id iJcEqg4zqjefgiJcEq4hXN; Mon, 18 Sep 2023 19:09:02 +0000
+X-Authority-Analysis: v=2.4 cv=Aqf9YcxP c=1 sm=1 tr=0 ts=6508a04e
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=P7XfKmiOJ4/qXqHZrN7ymg==:17
+ a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
+ a=VSjF23E3Ok2ZiNtq:21 a=IkcTkHD0fZMA:10 a=zNV7Rl7Rt7sA:10 a=wYkD_t78qR0A:10
+ a=Z0r0GRSmFf-DnjB3DMoA:9 a=QEXdDO2ut3YA:10 a=m8lDLIEVUrKgScV2SIex:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=B5tMPsVfntUMhpYWlnMiaWsyGXw6mb8koJoFx0gfO7o=; b=R5stTqN9xsgrwySPbtSX0O9i5C
+        QSXuTu1SYXfR2ATKJiqLloT737kEr+VHOUSROOe+SqonHTpduxrILJFZITReMz0V7AJKC8gPXobXh
+        0Lm80V938IYFqLDoH4OOx5utnFMKK3wtZ2QU5N/V7kb8wk2MDkp8nAhBQ2y7yagexWD3d489w8jbh
+        sukPkV8YB4hICJgIAdIy4h2WMrWtFa+DoKNeXa8xr2rszFNbYMUehImHzgvi3otIFdDlGM3mApiTW
+        cC28tfr7BXK/TgMPFka4DdmtMKSQrBVlO03OWWt495psWkdTXQV39LiONiRc30iYzRJauvyYrQoAb
+        93C5X22A==;
+Received: from [94.239.20.48] (port=51062 helo=[192.168.1.98])
+        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.96)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1qiJcD-003BP8-0d;
+        Mon, 18 Sep 2023 14:09:01 -0500
+Message-ID: <7043f179-b670-db3c-3ab0-a1f3e991add9@embeddedor.com>
+Date:   Sun, 17 Sep 2023 21:10:05 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] usb: gadget: uvc: cleanup request when not in correct
- state
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] udmabuf: Fix a potential (and unlikely) access to
+ unallocated memory
 Content-Language: en-US
-To:     Michael Grzeschik <mgr@pengutronix.de>
-Cc:     laurent.pinchart@ideasonboard.com, linux-usb@vger.kernel.org,
-        linux-media@vger.kernel.org, dan.scally@ideasonboard.com,
-        gregkh@linuxfoundation.org, nicolas@ndufresne.ca,
-        kernel@pengutronix.de, Jayant Chowdhary <jchowdhary@google.com>
-References: <20230911002451.2860049-1-m.grzeschik@pengutronix.de>
- <20230911002451.2860049-3-m.grzeschik@pengutronix.de>
- <a55b3b0c-2306-4591-8613-7be4927f0d4e@google.com>
- <ZQTpnJvTV+8Ye1si@pengutronix.de>
- <587c9b95-a80c-4bf9-b1a0-fe7ef0f4cd60@google.com>
- <ZQY5Ab+YB9FLHoQq@pengutronix.de>
-From:   Avichal Rakesh <arakesh@google.com>
-In-Reply-To: <ZQY5Ab+YB9FLHoQq@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+References: <3e37f05c7593f1016f0a46de188b3357cbbd0c0b.1695060389.git.christophe.jaillet@wanadoo.fr>
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <3e37f05c7593f1016f0a46de188b3357cbbd0c0b.1695060389.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 94.239.20.48
+X-Source-L: No
+X-Exim-ID: 1qiJcD-003BP8-0d
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([192.168.1.98]) [94.239.20.48]:51062
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 2
+X-Org:  HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfDY8mKfTHrpv3/sH+MSsvAwZUkubSiphKxWT5eLtqeOnICvJ2khqLx+halP0+Qub1AGgEtY1GQ19eD8g/C7UXClucSFABCqxWgh/iLxyU4ZcJ6jnjlZr
+ 2sFBjZPQ04mkomsT2QEJT1bKzWZeLwWKdHztTSHOfyhaWeMhlcKKUX2gUaCzfOhEjRZtRatOAsCSjOYqbPreYTg0lM4+YloryOWWqC45ykGNzI5p+lV5iZcd
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 
 
-On 9/16/23 16:23, Michael Grzeschik wrote:
-> On Fri, Sep 15, 2023 at 07:41:05PM -0700, Avichal Rakesh wrote:
->> On 9/15/23 16:32, Michael Grzeschik wrote:
->>> On Mon, Sep 11, 2023 at 09:52:22PM -0700, Avichal Rakesh wrote:
->>>> On 9/10/23 17:24, Michael Grzeschik wrote:
->>>>> The uvc_video_enable function of the uvc-gadget driver is dequeing and
->>>>> immediately deallocs all requests on its disable codepath. This is not
->>>>> save since the dequeue function is async and does not ensure that the
->>>>> requests are left unlinked in the controller driver.
->>>>>
->>>>> By adding the ep_free_request into the completion path of the requests
->>>>> we ensure that the request will be properly deallocated.
->>>>>
->>>>> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->>>>> ---
->>>>>  drivers/usb/gadget/function/uvc_video.c | 6 ++++++
->>>>>  1 file changed, 6 insertions(+)
->>>>>
->>>>> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
->>>>> index 4b6e854e30c58c..52e3666b51f743 100644
->>>>> --- a/drivers/usb/gadget/function/uvc_video.c
->>>>> +++ b/drivers/usb/gadget/function/uvc_video.c
->>>>> @@ -256,6 +256,12 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
->>>>>      struct uvc_device *uvc = video->uvc;
->>>>>      unsigned long flags;
->>>>>
->>>>> +    if (uvc->state == UVC_STATE_CONNECTED) {
->>>>> +        usb_ep_free_request(video->ep, ureq->req);
->>>> nit: You can probably just call usb_ep_free_request with req instead of ureq->req.
->>>
->>> Thanks, thats a good point.
->>>
->>>>> +        ureq->req = NULL;
->>>>> +        return;
->>>>> +    }
->>>>> +
->>>>>      switch (req->status) {
->>>>>      case 0:
->>>>>          break;
->>>>
->>>> Perhaps I am missing something here, but I am not sure how this alone
->>>> fixes the use-after-free issue. uvcg_video_enable still deallocates
->>>> _all_ usb_requests right after calling usb_ep_dequeue, so it is still
->>>> possible that an unreturned request is deallocated, and now it is
->>>> possible that the complete callback accesses a deallocated ureq :(
->>>
->>> Since the issue I saw was usually coming from the list_del_entry_valid check in
->>> the list_del_entry of the giveback function, the issue was probably just not
->>> triggered anymore as the complete function did exit early.
->>>
->>> So this fix alone is actually bogus without a second patch I had in the stack.
->>> The second patch I am refering should change the actual overall issue:
->>>
->>> https://lore.kernel.org/linux-usb/20230915233113.2903645-1-m.grzeschik@pengutronix.de/T/#u
->>>
->>> This early list_del and this patch here should ensure that the
->>> concurrent functions are not handling already freed memory.
->>
->> Oh, the patch linked above is interesting. It effectively force removes the dwc3_request
->> from whatever list it belongs to? So if DWC3's interrupt handler is delayed past
->> UVC gadget's ep_free_request call, then it won't see the requests in its cancelled
->> list at all. However, this setup is still prone to errors. For example, there is now
->> a chance that gadget_ep_free_request is called twice for one request. A scheduling
->> like the following might cause double kfree:
->>
->> 1. uvcg_video_enable calls usb_ep_dequeue for all usb_requests
->> 2. While the usb_ep_dequeues are being processed, dwc3's interrupt handler starts
->>   calling the complete callbacks.
->> 3. The complete callback calls gadget_ep_free_request (calling kfree as a result)
->> 4. Meanwhile, uvcg_video_enable has moved to uvc_video_free_requests which also
->>   calls gadget_ep_free_request (calling kfree).
->>
->> There is currently (even in your patches) no synchronization between calls to
->> gadget_ep_free_request via complete callback and uvcg_video_enable, which will
->> inevitably call usb_ep_free_request twice for one request.
->>
->> Does that make sense, or am I misunderstanding some part of the patch?
+On 9/18/23 12:46, Christophe JAILLET wrote:
+> If 'list_limit' is set to a very high value, 'lsize' computation could
+> overflow if 'head.count' is big enough.
 > 
-> The overall concept is correct. But in detail the
-> uvc_video_free_requests is checking that video->ureq[i].req is not NULL.
+> In such a case, udmabuf_create() will access to memory beyond 'list'.
 > 
-> With our previous call of ep_free_request in the complete handler, the
-> ureq->req pointer in focus was already set to NULL. So the
-> uvc_video_free_requests function will skip that extra free.
+> Use size_mul() to saturate the value, and have memdup_user() fail.
 > 
+> Fixes: fbb0de795078 ("Add udmabuf misc device")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+>   drivers/dma-buf/udmabuf.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
+> index c40645999648..fb4c4b5b3332 100644
+> --- a/drivers/dma-buf/udmabuf.c
+> +++ b/drivers/dma-buf/udmabuf.c
+> @@ -314,13 +314,13 @@ static long udmabuf_ioctl_create_list(struct file *filp, unsigned long arg)
+>   	struct udmabuf_create_list head;
+>   	struct udmabuf_create_item *list;
+>   	int ret = -EINVAL;
+> -	u32 lsize;
+> +	size_t lsize;
+>   
+>   	if (copy_from_user(&head, (void __user *)arg, sizeof(head)))
+>   		return -EFAULT;
+>   	if (head.count > list_limit)
+>   		return -EINVAL;
+> -	lsize = sizeof(struct udmabuf_create_item) * head.count;
+> +	lsize = size_mul(sizeof(struct udmabuf_create_item), head.count);
+>   	list = memdup_user((void __user *)(arg + sizeof(head)), lsize);
+>   	if (IS_ERR(list))
+>   		return PTR_ERR(list);
 
-Is there any form of synchronization between uvc_video_request and the 
-complete callback? As I see it, the dwc3 interrupt thread and the v4l2 
-ioctl thread (which calls uvcg_video_enable) are fully independent, so
-the calls made by them are free to be interleaved arbitrarily, so an
-interleaving like this is technically possible:
+How about this, and we get rid of `lsize`:
 
-+------+------------------------------------+---------------------------------------------+
-| time |            ioctl_thread            |            dwc3 interrupt handler           |
-+======+====================================+=============================================+
-|   1  | -uvc_v4l2_streamoff                |                                             |
-|   2  | |-uvcg_video_enable                |                                             |
-|   3  | ||-usb_ep_dequeue                  |                                             |
-|   4  | ||                                 | -dwc3_process_event_buf                     |
-|   5  | ||-uvc_video_free_requests         | |                                           |
-|   6  | |||                                | |-dwc3_gadget_ep_cleanup_cancelled_requests |
-|   7  | |||                                | ||-dwc3_gadget_giveback                     |
-|   8  | |||                                | |||-uvc_video_complete                      |
-|   9  | |||-check ureq->req != NULL [true] | ||||                                        |
-|  10  | ||||-usb_ep_free_request           | ||||                                        |
-|  11  | |||||-dwc3_ep_free_request         | ||||                                        |
-|  12  | ||||||-kfree [first call]          | ||||                                        |
-|  13  | ||||                               | ||||-usb_ep_free_request                    |
-|  14  | ||||                               | |||||-dwc3_ep_free_request                  |
-|  15  | ||||                               | ||||||-kfree [second call]                  |
-|  16  | ||||                               | ||||-set ureq->req = NULL                   |
-|  17  | ||||-set ureq->req = NULL          |                                             |
-+------+------------------------------------+---------------------------------------------+
+diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
+index c40645999648..5cf9d849aaa8 100644
+--- a/drivers/dma-buf/udmabuf.c
++++ b/drivers/dma-buf/udmabuf.c
+@@ -314,14 +314,13 @@ static long udmabuf_ioctl_create_list(struct file *filp, unsigned long arg)
+         struct udmabuf_create_list head;
+         struct udmabuf_create_item *list;
+         int ret = -EINVAL;
+-       u32 lsize;
 
-A situation like this means that dwc3_ep_free_request can be called
-twice for a particular usb_request. This is obviously low probability,
-but a race condition here means we'll start seeing very vague and hard 
-to repro crashes or memory inconsistencies when using the uvc gadget.
+         if (copy_from_user(&head, (void __user *)arg, sizeof(head)))
+                 return -EFAULT;
+         if (head.count > list_limit)
+                 return -EINVAL;
+-       lsize = sizeof(struct udmabuf_create_item) * head.count;
+-       list = memdup_user((void __user *)(arg + sizeof(head)), lsize);
++       list = memdup_user((void __user *)(arg + sizeof(head)),
++                          size_mul(sizeof(*list), head.count));
+         if (IS_ERR(list))
+                 return PTR_ERR(list);
 
-I do apologize if I've missed something obvious with your changes that 
-prevents such interleaving. I don't currently see any locking or 
-other synchronization mechanism in your changes. Is there something
-in dwc3 that prevents this situation?
 
-Best Regards,
-Avi. 
-
+--
+Gustavo
