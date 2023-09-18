@@ -2,46 +2,46 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E52EFC46CA1
-	for <linux-media@archiver.kernel.org>; Mon, 18 Sep 2023 12:52:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38AB4CD13D9
+	for <linux-media@archiver.kernel.org>; Mon, 18 Sep 2023 12:52:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240485AbjIRMwF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 18 Sep 2023 08:52:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57334 "EHLO
+        id S241508AbjIRMwH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 18 Sep 2023 08:52:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241966AbjIRMwB (ORCPT
+        with ESMTP id S241991AbjIRMwD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 18 Sep 2023 08:52:01 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2CDD1
-        for <linux-media@vger.kernel.org>; Mon, 18 Sep 2023 05:51:45 -0700 (PDT)
+        Mon, 18 Sep 2023 08:52:03 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4452C7
+        for <linux-media@vger.kernel.org>; Mon, 18 Sep 2023 05:51:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695041505; x=1726577505;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ltVupa4yBGfNSj6Vyll6GyPmLFg9VOaieET5jl+OkV8=;
-  b=bVp+72Rp9QX97D5HY1jBrbhvpsZznlyImC/LJxizQQyPzUxPP0A7ITqn
-   A+pEXTORTsKl3moc/JZAFj2vhhnH2mnfBwiLSXGyd0qOECBboZ2vReoh3
-   CKakluEEkhnKJbMJm6pss8IMirEC6oookqnEal3a6RMexqSvjNY5cf3kc
-   uZTkKSCv6408TpG3yTPRJAT1/sWl0nRWTjkeXisoxhDqd6Grt+qn2/Fra
-   gcY0nlnuXxRr9ubYIiAgz9I+Ze/gzElsLu+IZR0XcDnU6NlPWovwfRqqk
-   baxliH7vu93vjwSHPuW/Ivczl5jP9USx9kVGGaqqVcJ6d9cSxqbknXYe/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10837"; a="359062374"
+  t=1695041509; x=1726577509;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=8cbVggliCMljz4AR3Wi4DOr+gzhqEOMJDtqBOtP9z5Y=;
+  b=hcVO/w/ovanW2T7lP/1RJb/+qR0GyM3RshUPNtC5H9eAXA5Rgx934G/t
+   oxdOGDzj8nCwYxtF/wSAxyWQr22SphNVjucXO5/Y62+s/YkPcu3jh4D6a
+   j+7VjoEPOJP6nxDUF/m+bpjtrkeSegi+lDwMYzMK4s76Ce8dRyBYC1Pab
+   iPY1q67QEG+cH3sefdKPx3rXv2+IQjFSqIvHUJXliKpdWruKEIQCI11Mp
+   I6uXPbk9AvGdGBT8NALMnOEB1UBjdbwLqpTldK978KrY9IuCCEzCBShWq
+   e7sUm/ZxPn5d+434OapRg8fgycVuv8ZIXCJAOHXnjh4B0PldXUxnRCV4p
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10837"; a="364688938"
 X-IronPort-AV: E=Sophos;i="6.02,156,1688454000"; 
-   d="scan'208";a="359062374"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2023 05:51:45 -0700
+   d="scan'208";a="364688938"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2023 05:51:47 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10837"; a="861057577"
+X-IronPort-AV: E=McAfee;i="6600,9927,10837"; a="836005437"
 X-IronPort-AV: E=Sophos;i="6.02,156,1688454000"; 
-   d="scan'208";a="861057577"
+   d="scan'208";a="836005437"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2023 05:51:42 -0700
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2023 05:51:45 -0700
 Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id 08DF711F854;
-        Mon, 18 Sep 2023 15:51:38 +0300 (EEST)
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 877D711FC2C;
+        Mon, 18 Sep 2023 15:51:42 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com,
@@ -51,59 +51,44 @@ Cc:     laurent.pinchart@ideasonboard.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
         Rui Miguel Silva <rmfrfs@gmail.com>,
         Martin Kepplinger <martink@posteo.de>
-Subject: [PATCH v2 00/12] Small fixes and cleanups (ov2740 and ccs)
-Date:   Mon, 18 Sep 2023 15:51:26 +0300
-Message-Id: <20230918125138.90002-1-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 03/12] media: ccs: Correctly initialise try compose rectangle
+Date:   Mon, 18 Sep 2023 15:51:29 +0300
+Message-Id: <20230918125138.90002-4-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230918125138.90002-1-sakari.ailus@linux.intel.com>
+References: <20230918125138.90002-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi folks,
+Initialise the try sink compose rectangle size to the sink compose
+rectangle for binner and scaler sub-devices. This was missed due to the
+faulty condition that lead to the compose rectangles to be initialised for
+the pixel array sub-device where it is not relevant.
 
-This small set contains fixes and cleanups, mainly for the ccs and ov2740
-drivers. I wrote these while working on the metadata set, but these could
-and should be merged earlier.
+Fixes: ccfc97bdb5ae ("[media] smiapp: Add driver")
+Cc: stable@vger.kernel.org
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ drivers/media/i2c/ccs/ccs-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-since v1:
-
-- Add a comment on ov2740 active state patch on serialising sensor access.
-
-- Improved commit message of ov2740 patch enabling runtime PM earlier.
-
-- Added patches for printing and zeroing frame descriptor, (debug)
-  printing of frame descriptor, switching ccs to init_cfg and sub-device
-  state and checking pad flag validity.
-
-Sakari Ailus (12):
-  media: Documentation: Align numbered list, make it a proper ReST
-  media: ccs: Fix driver quirk struct documentation
-  media: ccs: Correctly initialise try compose rectangle
-  media: ccs: Correct error handling in ccs_register_subdev
-  media: ccs: Switch to init_cfg
-  media: ccs: Use sub-device active state
-  media: ov2740: Enable runtime PM before registering the async subdev
-  media: ov2740: Use sub-device active state
-  media: ov2740: Return -EPROBE_DEFER if no endpoint is found
-  media: v4l: subdev: Clear frame descriptor before get_frame_desc
-  media: v4l: subdev: Print debug information on frame descriptor
-  media: mc: Check pad flag validity
-
- .../userspace-api/media/v4l/dev-subdev.rst    |  49 ++-
- drivers/media/i2c/ccs/ccs-core.c              | 301 +++++++-----------
- drivers/media/i2c/ccs/ccs-quirk.h             |   4 +-
- drivers/media/i2c/ccs/ccs.h                   |   4 +-
- drivers/media/i2c/ds90ub913.c                 |   2 -
- drivers/media/i2c/ds90ub953.c                 |   2 -
- drivers/media/i2c/ds90ub960.c                 |   2 -
- drivers/media/i2c/ov2740.c                    | 138 ++++----
- drivers/media/mc/mc-entity.c                  |  20 +-
- drivers/media/platform/nxp/imx-mipi-csis.c    |   2 -
- drivers/media/v4l2-core/v4l2-subdev.c         |  42 +++
- 11 files changed, 259 insertions(+), 307 deletions(-)
-
+diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
+index 49e0d9a09530..6f8fbd82e21c 100644
+--- a/drivers/media/i2c/ccs/ccs-core.c
++++ b/drivers/media/i2c/ccs/ccs-core.c
+@@ -3097,7 +3097,7 @@ static int ccs_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+ 		try_fmt->code = sensor->internal_csi_format->code;
+ 		try_fmt->field = V4L2_FIELD_NONE;
+ 
+-		if (ssd != sensor->pixel_array)
++		if (ssd == sensor->pixel_array)
+ 			continue;
+ 
+ 		try_comp = v4l2_subdev_get_try_compose(sd, fh->state, i);
 -- 
 2.39.2
 
