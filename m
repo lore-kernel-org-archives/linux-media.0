@@ -2,153 +2,123 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15D5CCD37B0
-	for <linux-media@archiver.kernel.org>; Mon, 18 Sep 2023 19:09:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85505CD37B0
+	for <linux-media@archiver.kernel.org>; Mon, 18 Sep 2023 19:16:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbjIRTJK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 18 Sep 2023 15:09:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54660 "EHLO
+        id S229988AbjIRTQ6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 18 Sep 2023 15:16:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjIRTJJ (ORCPT
+        with ESMTP id S229770AbjIRTQ5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 18 Sep 2023 15:09:09 -0400
-Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC0D10F
-        for <linux-media@vger.kernel.org>; Mon, 18 Sep 2023 12:09:03 -0700 (PDT)
-Received: from eig-obgw-6006a.ext.cloudfilter.net ([10.0.30.182])
-        by cmsmtp with ESMTP
-        id iIHBqw2VHQFHRiJcFqD8jX; Mon, 18 Sep 2023 19:09:03 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with ESMTPS
-        id iJcEqg4zqjefgiJcEq4hXN; Mon, 18 Sep 2023 19:09:02 +0000
-X-Authority-Analysis: v=2.4 cv=Aqf9YcxP c=1 sm=1 tr=0 ts=6508a04e
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=P7XfKmiOJ4/qXqHZrN7ymg==:17
- a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
- a=VSjF23E3Ok2ZiNtq:21 a=IkcTkHD0fZMA:10 a=zNV7Rl7Rt7sA:10 a=wYkD_t78qR0A:10
- a=Z0r0GRSmFf-DnjB3DMoA:9 a=QEXdDO2ut3YA:10 a=m8lDLIEVUrKgScV2SIex:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=B5tMPsVfntUMhpYWlnMiaWsyGXw6mb8koJoFx0gfO7o=; b=R5stTqN9xsgrwySPbtSX0O9i5C
-        QSXuTu1SYXfR2ATKJiqLloT737kEr+VHOUSROOe+SqonHTpduxrILJFZITReMz0V7AJKC8gPXobXh
-        0Lm80V938IYFqLDoH4OOx5utnFMKK3wtZ2QU5N/V7kb8wk2MDkp8nAhBQ2y7yagexWD3d489w8jbh
-        sukPkV8YB4hICJgIAdIy4h2WMrWtFa+DoKNeXa8xr2rszFNbYMUehImHzgvi3otIFdDlGM3mApiTW
-        cC28tfr7BXK/TgMPFka4DdmtMKSQrBVlO03OWWt495psWkdTXQV39LiONiRc30iYzRJauvyYrQoAb
-        93C5X22A==;
-Received: from [94.239.20.48] (port=51062 helo=[192.168.1.98])
-        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.96)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1qiJcD-003BP8-0d;
-        Mon, 18 Sep 2023 14:09:01 -0500
-Message-ID: <7043f179-b670-db3c-3ab0-a1f3e991add9@embeddedor.com>
-Date:   Sun, 17 Sep 2023 21:10:05 -0600
+        Mon, 18 Sep 2023 15:16:57 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66EFF7;
+        Mon, 18 Sep 2023 12:16:51 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (unknown [IPv6:2606:6d00:15:bae9::7a9])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nicolas)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 57D646607186;
+        Mon, 18 Sep 2023 20:16:48 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1695064610;
+        bh=ghwssrv6LMhLjo/fzK7LxIyO3gF6PBgn2BzLfbzm+Mo=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=ID2KRBKYLpI/a9zZTJxdwIpFGXEC2fMdhddvY4ujyhojlYJE193QalJIvWrvISLFa
+         toBU/GtVYBe1KY4V3YOmIWcTnT8KrNfSefQ/uPR+TlahTk1Lbl6jbHm0cvMofPLTdT
+         QwYAixFqImhO6XzGkRuFdlWj0gaWjpdbAqDK1SH7ughvLgVx9hdsjt8ysFIW6bCtuP
+         ZCQEQaeqyDToXvfBgPBAxEvq98IxEWcmdZ7b38c5cQe7QDPV3UwYNxk8LKcg/NxJGH
+         +QC5FJJNlUrHbf5cFoS+/j5OYBX32aSMsQcTD/GG2ngB0VULiQrwMR9P6N1PA4h8/J
+         /lzwI7J7Sn5lw==
+Message-ID: <7412a756ee4c83c62b3dc866b5a351e1bc4afa33.camel@collabora.com>
+Subject: Re: [PATCH v12 6/7] dt-bindings: media: wave5: add yaml devicetree
+ bindings
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sebastian Fricke <sebastian.fricke@collabora.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Nas Chung <nas.chung@chipsnmedia.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jackson Lee <jackson.lee@chipsnmedia.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Robert Beckett <bob.beckett@collabora.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+Date:   Mon, 18 Sep 2023 15:16:39 -0400
+In-Reply-To: <6d87034e-6727-09fd-60fc-10f8ca47f85b@linaro.org>
+References: <20230915-wave5_v12_on_media_master-v12-0-92fc66cd685d@collabora.com>
+         <20230915-wave5_v12_on_media_master-v12-6-92fc66cd685d@collabora.com>
+         <30384744-94d7-2675-63ad-d8531e3156d1@linaro.org>
+         <20230918064954.iuomunsckduawiay@basti-XPS-13-9310>
+         <6d87034e-6727-09fd-60fc-10f8ca47f85b@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] udmabuf: Fix a potential (and unlikely) access to
- unallocated memory
-Content-Language: en-US
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-References: <3e37f05c7593f1016f0a46de188b3357cbbd0c0b.1695060389.git.christophe.jaillet@wanadoo.fr>
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <3e37f05c7593f1016f0a46de188b3357cbbd0c0b.1695060389.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 94.239.20.48
-X-Source-L: No
-X-Exim-ID: 1qiJcD-003BP8-0d
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.1.98]) [94.239.20.48]:51062
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 2
-X-Org:  HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfDY8mKfTHrpv3/sH+MSsvAwZUkubSiphKxWT5eLtqeOnICvJ2khqLx+halP0+Qub1AGgEtY1GQ19eD8g/C7UXClucSFABCqxWgh/iLxyU4ZcJ6jnjlZr
- 2sFBjZPQ04mkomsT2QEJT1bKzWZeLwWKdHztTSHOfyhaWeMhlcKKUX2gUaCzfOhEjRZtRatOAsCSjOYqbPreYTg0lM4+YloryOWWqC45ykGNzI5p+lV5iZcd
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Le lundi 18 septembre 2023 =C3=A0 14:02 +0200, Krzysztof Kozlowski a =C3=A9=
+crit=C2=A0:
+> On 18/09/2023 08:49, Sebastian Fricke wrote:
+> > Hey Krzysztof,
+> >=20
+> > thanks for your review.
+> >=20
+> > On 17.09.2023 09:56, Krzysztof Kozlowski wrote:
+> > > On 15/09/2023 23:11, Sebastian Fricke wrote:
+> > > > From: Robert Beckett <bob.beckett@collabora.com>
+> > > >=20
+> > > > Add bindings for the wave5 chips&media codec driver
+> > > >=20
+> > > > Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+> > > > Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+> > > > Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+> > >=20
+> > > So this is v12 and still no tested?
+> >=20
+> > I have tested it, multiple times actually since V11. (For some reason
+> > that indentation issue slipped by me though ...)
+> > If you mean the tested by tag, the patch was completely unnoticed until
+> > v10 by the community, which was partially because me and the previous
+> > commiters didn't use the right recipients for this patch. So from that
+> > point of view this is more like v2.
+> >=20
+> > >=20
+> > > A nit, subject: drop second/last, redundant "yaml devicetree indings"=
+.
+> > > The "dt-bindings" prefix is already stating that these are bindings.
+> > > Basically three words bringing zero information.
+> >=20
+> > Okay so:
+> > `dt-bindings: media: wave5: add devicetree`
+>=20
+> Still not, because devicetree is duplicating "dt". It's redundant.
+>=20
+> Instead should be (with correct order of prefixes):
+>=20
+> media: dt-bindings: wave5: add AzureWaveFooBar XYL ABC10 (whatever
+> company and full product name it is)
 
+So maybe this one ?
 
-On 9/18/23 12:46, Christophe JAILLET wrote:
-> If 'list_limit' is set to a very high value, 'lsize' computation could
-> overflow if 'head.count' is big enough.
-> 
-> In such a case, udmabuf_create() will access to memory beyond 'list'.
-> 
-> Use size_mul() to saturate the value, and have memdup_user() fail.
-> 
-> Fixes: fbb0de795078 ("Add udmabuf misc device")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->   drivers/dma-buf/udmabuf.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
-> index c40645999648..fb4c4b5b3332 100644
-> --- a/drivers/dma-buf/udmabuf.c
-> +++ b/drivers/dma-buf/udmabuf.c
-> @@ -314,13 +314,13 @@ static long udmabuf_ioctl_create_list(struct file *filp, unsigned long arg)
->   	struct udmabuf_create_list head;
->   	struct udmabuf_create_item *list;
->   	int ret = -EINVAL;
-> -	u32 lsize;
-> +	size_t lsize;
->   
->   	if (copy_from_user(&head, (void __user *)arg, sizeof(head)))
->   		return -EFAULT;
->   	if (head.count > list_limit)
->   		return -EINVAL;
-> -	lsize = sizeof(struct udmabuf_create_item) * head.count;
-> +	lsize = size_mul(sizeof(struct udmabuf_create_item), head.count);
->   	list = memdup_user((void __user *)(arg + sizeof(head)), lsize);
->   	if (IS_ERR(list))
->   		return PTR_ERR(list);
+  media: dt-bindings: wave5: add Chips&Media 521c codec IP support
 
-How about this, and we get rid of `lsize`:
+>=20
+>=20
+> Best regards,
+> Krzysztof
+>=20
 
-diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
-index c40645999648..5cf9d849aaa8 100644
---- a/drivers/dma-buf/udmabuf.c
-+++ b/drivers/dma-buf/udmabuf.c
-@@ -314,14 +314,13 @@ static long udmabuf_ioctl_create_list(struct file *filp, unsigned long arg)
-         struct udmabuf_create_list head;
-         struct udmabuf_create_item *list;
-         int ret = -EINVAL;
--       u32 lsize;
-
-         if (copy_from_user(&head, (void __user *)arg, sizeof(head)))
-                 return -EFAULT;
-         if (head.count > list_limit)
-                 return -EINVAL;
--       lsize = sizeof(struct udmabuf_create_item) * head.count;
--       list = memdup_user((void __user *)(arg + sizeof(head)), lsize);
-+       list = memdup_user((void __user *)(arg + sizeof(head)),
-+                          size_mul(sizeof(*list), head.count));
-         if (IS_ERR(list))
-                 return PTR_ERR(list);
-
-
---
-Gustavo
