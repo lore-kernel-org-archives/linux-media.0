@@ -2,91 +2,77 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E0A7CD54B6
-	for <linux-media@archiver.kernel.org>; Tue, 19 Sep 2023 11:16:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E10ECD54AF
+	for <linux-media@archiver.kernel.org>; Tue, 19 Sep 2023 11:17:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232169AbjISLQa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 19 Sep 2023 07:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52592 "EHLO
+        id S231522AbjISLR2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 19 Sep 2023 07:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232161AbjISLQQ (ORCPT
+        with ESMTP id S229497AbjISLR1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 19 Sep 2023 07:16:16 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740CAFC;
-        Tue, 19 Sep 2023 04:16:09 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 544B8C433C8;
-        Tue, 19 Sep 2023 11:16:05 +0000 (UTC)
-Message-ID: <cbfef598-8faa-40e6-8dc2-a1efd03f9560@xs4all.nl>
-Date:   Tue, 19 Sep 2023 13:16:03 +0200
+        Tue, 19 Sep 2023 07:17:27 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0705DA9
+        for <linux-media@vger.kernel.org>; Tue, 19 Sep 2023 04:17:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695122242; x=1726658242;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=VKXhmJ10IepMpDGpEVyfgy/1/d1r8ZLFWovDs+MdkDA=;
+  b=QsZQpaeIpCHEg9kAuFMyrJJQiQPCUEVBnIU4WxsWGgWOsbrtwoGr2Yov
+   DVSUvFoSC9Vy9k4nl6wRL36rnM+d2ZDFeWwCVB4TvaXKBFHb/fuUnlTdv
+   KVDGZeHMjuZapRn8j3Ajy1gaKDyqDZk+oJqn8HAKGC8U8GUopL07XAF5w
+   C0EMNnRTVuyLrfkw1jSKd4kNv+8HelH7g/u5iNklL8diFYVMkoXh4o1df
+   ls8L5dzuGsyo/pa1M3+LmoZpo5oPdBmdqYEgejlWbTM/DU/3wqqMjO4Vc
+   0Jux5uwOGioXAdN0RFfkfJzXapnAT7vE9x01UkpQy0vLlUxmu0nisO92Z
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10837"; a="383736947"
+X-IronPort-AV: E=Sophos;i="6.02,159,1688454000"; 
+   d="scan'208";a="383736947"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2023 04:17:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10837"; a="781273096"
+X-IronPort-AV: E=Sophos;i="6.02,159,1688454000"; 
+   d="scan'208";a="781273096"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2023 04:17:20 -0700
+Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 68485120BE5;
+        Tue, 19 Sep 2023 14:17:17 +0300 (EEST)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
+        (envelope-from <sakari.ailus@linux.intel.com>)
+        id 1qiYhq-009pyz-1z;
+        Tue, 19 Sep 2023 14:15:50 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     "Alessandrelli, Daniele" <daniele.alessandrelli@intel.com>,
+        "Murphy, Paul J" <paul.j.murphy@intel.com>
+Subject: [PATCH 0/4] Orphan sensor drivers
+Date:   Tue, 19 Sep 2023 14:15:36 +0300
+Message-Id: <20230919111540.2344757-1-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 16/49] media: verisilicon: postproc: Fix down scale
- test
-Content-Language: en-US, nl
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
-        ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        nicolas.dufresne@collabora.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        kernel@collabora.com
-References: <20230914133323.198857-1-benjamin.gaignard@collabora.com>
- <20230914133323.198857-17-benjamin.gaignard@collabora.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20230914133323.198857-17-benjamin.gaignard@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 14/09/2023 15:32, Benjamin Gaignard wrote:
-> Do not allow down scaling if the source buffer resolution is
-> smaller  than destination one.
-> 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> Fixes: fbb6c848dd89 ("media: destage Hantro VPU driver")
+Hi folks,
 
-Is this really a fix? I gather that this relies on "VP9 resolution change without
-doing stream off/on" support, and support for that is added by these patches.
+This set marks four drivers as orphan.
 
-Adding the Fixes tag would cause stable maintainers to queue this patch up for
-older kernels, but I don't think that is needed here at all.
+Sakari Ailus (4):
+  media: ov9282: Orphan the driver
+  media: imx412: Orphan the driver
+  media: imx335: Orphan the driver
+  media: imx335: Orphan the driver
 
-And related I also think that this really does not belong to this patch series.
+ MAINTAINERS | 16 ++++------------
+ 1 file changed, 4 insertions(+), 12 deletions(-)
 
-As I understand it, patch 13/49 extends the verisilicon driver to support more
-than 32 buffers, so that one makes sense in the context of this series.
-
-But the other verisilicon patches appear to be unrelated and instead add a new
-feature, and I don't believe it relates to this series at all.
-
-If I am right, then please post this as a separate series, possibly mentioning
-that it sits on top of this series.
-
-Regards,
-
-	Hans
-
-> ---
->  drivers/media/platform/verisilicon/hantro_postproc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/platform/verisilicon/hantro_postproc.c b/drivers/media/platform/verisilicon/hantro_postproc.c
-> index e624cd98f41b..77d8ecfbe12f 100644
-> --- a/drivers/media/platform/verisilicon/hantro_postproc.c
-> +++ b/drivers/media/platform/verisilicon/hantro_postproc.c
-> @@ -107,7 +107,7 @@ static void hantro_postproc_g1_enable(struct hantro_ctx *ctx)
->  
->  static int down_scale_factor(struct hantro_ctx *ctx)
->  {
-> -	if (ctx->src_fmt.width == ctx->dst_fmt.width)
-> +	if (ctx->src_fmt.width <= ctx->dst_fmt.width)
->  		return 0;
->  
->  	return DIV_ROUND_CLOSEST(ctx->src_fmt.width, ctx->dst_fmt.width);
+-- 
+2.39.2
 
