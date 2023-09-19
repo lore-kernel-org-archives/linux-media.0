@@ -2,57 +2,57 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 885EACD54B7
-	for <linux-media@archiver.kernel.org>; Tue, 19 Sep 2023 11:17:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CFB66CD54B8
+	for <linux-media@archiver.kernel.org>; Tue, 19 Sep 2023 11:17:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231808AbjISLRa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S231799AbjISLRa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 19 Sep 2023 07:17:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45878 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231665AbjISLR3 (ORCPT
+        with ESMTP id S231253AbjISLR3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 19 Sep 2023 07:17:29 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A95B8
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5963A9
         for <linux-media@vger.kernel.org>; Tue, 19 Sep 2023 04:17:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1695122243; x=1726658243;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=fNdI/YoALkBJJRW8kjLvxbOS6A0J7uDXxbEHUzzEKCk=;
-  b=QvKCNB3fbM3FI9Hv6ZhrcTzHjSLqN9W5gipozxpD8+ZxFCVDZPeCyqbd
-   jisD9k5iuNA55z8xrSIXEj01VntAnOdKDQnsUNEyHDPG9tKVzhrQfozX4
-   o331AR903J1s50Cgn9iPsFzZ+jDH9HDtyi9bqnLpnkn5I+N7WDeOpxcHo
-   WOKTdEvawUPQ5JFCln/J38Q+5TXzR0jlYhdo5zrGQyjvsvnE35LM93vFQ
-   5wR0/A2VxFaZcmCP3QAA5AQLSAjHrfXpPEpeF35jzvKpyl5vnuUnCRtGR
-   7fWYnYUkdcyBgP1RAGkwQn7aGVy1DcGyS9ziek+DAymOWzGTS4Bv+XZWe
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10837"; a="383736950"
+  bh=ShLOPPVhx7ByHWiyTSHsmL5p7VKweZJSjU+TdGax5JM=;
+  b=bk7pCqw8n1xbTVN2S4HRd6y+ZU+b1Zb0QPgaWcomGyzvSue6fpTm5ebY
+   Z8Hj6fMLlQ+ukqu0MGWIlAOLIroaJAPoHM0MGLLhpBMtKR+lwnl1aj1HL
+   OmOQai/6Sh5ukiCHL+q5+zUD4R+p9ns9UDqUR/7qCsVEmsMJ0eURWjteb
+   HWq50yLq0WWUQ9YZMFMsMuojGtvityvixFClqKlJPoeiYBp06Gg/LlW+G
+   ADpeDIlSHIYrjryJrv4Q/LMZEpbS6g63GkwDUBTjphJIXBTbY8ynT2Uwt
+   M6pIHYCeWArOpg1ixE0p8Jpmeq6f6Dlw5hiOQwUi6JoIuFQY+h6dYzvWM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10837"; a="383736951"
 X-IronPort-AV: E=Sophos;i="6.02,159,1688454000"; 
-   d="scan'208";a="383736950"
+   d="scan'208";a="383736951"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
   by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2023 04:17:21 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10837"; a="781273100"
+X-IronPort-AV: E=McAfee;i="6600,9927,10837"; a="781273103"
 X-IronPort-AV: E=Sophos;i="6.02,159,1688454000"; 
-   d="scan'208";a="781273100"
+   d="scan'208";a="781273103"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
   by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2023 04:17:20 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id 68F04120C1C;
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 71C0A121380;
         Tue, 19 Sep 2023 14:17:17 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1qiYhq-009pz2-23;
+        id 1qiYhq-009pzH-2B;
         Tue, 19 Sep 2023 14:15:50 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     "Alessandrelli, Daniele" <daniele.alessandrelli@intel.com>,
         "Murphy, Paul J" <paul.j.murphy@intel.com>
-Subject: [PATCH 1/4] media: ov9282: Orphan the driver
-Date:   Tue, 19 Sep 2023 14:15:37 +0300
-Message-Id: <20230919111540.2344757-2-sakari.ailus@linux.intel.com>
+Subject: [PATCH 4/4] media: imx335: Orphan the driver
+Date:   Tue, 19 Sep 2023 14:15:40 +0300
+Message-Id: <20230919111540.2344757-5-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230919111540.2344757-1-sakari.ailus@linux.intel.com>
 References: <20230919111540.2344757-1-sakari.ailus@linux.intel.com>
@@ -71,21 +71,21 @@ Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
  1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 980b141856e1..9705557b39d4 100644
+index 311678b44d71..5a4b68cfad21 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -15862,10 +15862,8 @@ F:	Documentation/devicetree/bindings/media/i2c/ovti,ov8858.yaml
- F:	drivers/media/i2c/ov8858.c
+@@ -20000,10 +20000,8 @@ T:	git git://linuxtv.org/media_tree.git
+ F:	drivers/media/i2c/imx319.c
  
- OMNIVISION OV9282 SENSOR DRIVER
+ SONY IMX334 SENSOR DRIVER
 -M:	Paul J. Murphy <paul.j.murphy@intel.com>
 -M:	Daniele Alessandrelli <daniele.alessandrelli@intel.com>
  L:	linux-media@vger.kernel.org
 -S:	Maintained
 +S:	Orphan
  T:	git git://linuxtv.org/media_tree.git
- F:	Documentation/devicetree/bindings/media/i2c/ovti,ov9282.yaml
- F:	drivers/media/i2c/ov9282.c
+ F:	Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml
+ F:	drivers/media/i2c/imx334.c
 -- 
 2.39.2
 
