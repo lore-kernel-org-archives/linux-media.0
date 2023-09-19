@@ -2,493 +2,319 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE8D9CE79A8
-	for <linux-media@archiver.kernel.org>; Tue, 19 Sep 2023 21:16:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 199B4CE79A9
+	for <linux-media@archiver.kernel.org>; Tue, 19 Sep 2023 22:16:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233342AbjISVQf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 19 Sep 2023 17:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33748 "EHLO
+        id S233578AbjISWQZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 19 Sep 2023 18:16:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233252AbjISVQe (ORCPT
+        with ESMTP id S233436AbjISWQY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 19 Sep 2023 17:16:34 -0400
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B7BAF
-        for <linux-media@vger.kernel.org>; Tue, 19 Sep 2023 14:16:27 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1qii53-0005lQ-GP; Tue, 19 Sep 2023 23:16:25 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1qii52-007Xif-RW; Tue, 19 Sep 2023 23:16:24 +0200
-Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1qii52-009oOf-6l; Tue, 19 Sep 2023 23:16:24 +0200
-Date:   Tue, 19 Sep 2023 23:16:24 +0200
-From:   Michael Grzeschik <mgr@pengutronix.de>
-To:     Avichal Rakesh <arakesh@google.com>
-Cc:     laurent.pinchart@ideasonboard.com, linux-usb@vger.kernel.org,
-        linux-media@vger.kernel.org, dan.scally@ideasonboard.com,
-        gregkh@linuxfoundation.org, nicolas@ndufresne.ca,
-        kernel@pengutronix.de, Jayant Chowdhary <jchowdhary@google.com>
-Subject: Re: [PATCH 2/3] usb: gadget: uvc: cleanup request when not in
- correct state
-Message-ID: <ZQoPqLUfDBaO9VIh@pengutronix.de>
-References: <ZQTpnJvTV+8Ye1si@pengutronix.de>
- <587c9b95-a80c-4bf9-b1a0-fe7ef0f4cd60@google.com>
- <ZQY5Ab+YB9FLHoQq@pengutronix.de>
- <d678b644-5f66-4c23-b2ba-6c84ba56012f@google.com>
- <ZQjEZlk2UFQgA0TF@pengutronix.de>
- <7cd81649-2795-45b6-8c10-b7df1055020d@google.com>
- <ZQnyxA1WldcqQ+k5@pengutronix.de>
- <1d32914c-3a67-439f-b15d-7c7b7d6fc99b@google.com>
- <ZQn/eSaSqd8cgux5@pengutronix.de>
- <45add13c-ffa4-4cd1-be1b-6888fb011534@google.com>
+        Tue, 19 Sep 2023 18:16:24 -0400
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E233CE
+        for <linux-media@vger.kernel.org>; Tue, 19 Sep 2023 15:16:12 -0700 (PDT)
+Received: by mail-il1-x12f.google.com with SMTP id e9e14a558f8ab-34fa117f92bso19685ab.1
+        for <linux-media@vger.kernel.org>; Tue, 19 Sep 2023 15:16:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1695161771; x=1695766571; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qx6X0xE/S4amLJCM7NtzEUWnlj33ZBkwhJLGl58E30c=;
+        b=HZ630ZmEX+22F3LjchOtzuB9xi6f+TB//pWtQbYis/gOUlil765R9CYh50J9vHjvbZ
+         Ozpb2i29aMFqlHdWTt4VrfcHs74DvlN9+E57DvfuFst4Sab6FF9ZLfVIPAzqQmQQPVXF
+         qEiDQ6AjG1nvKVWZ07Q5PhDZs5hPkH0zm0kvcxv7Jc6PjMVi6FC6sN78XBh6/n7EavBQ
+         41u+jCQ6ghigqupWX/Tvy8O6p2SNqg047W53sbVWLUaL3MIqggjskSYGStgZz3Je4B0d
+         ZIxWYNAzL4/091Ps8TYIk39kvdLV1FUU6I+NSQGLx5Ev4Is0tA32kttNJlWWR38Kem6i
+         t4fA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695161771; x=1695766571;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qx6X0xE/S4amLJCM7NtzEUWnlj33ZBkwhJLGl58E30c=;
+        b=ebguC1qyDS58l9qyEDZn1sQFQ9dIDJL/gb7R6wRKL9ytTRfUFRvaISAizWWSWHkKa6
+         GXgL77u7CRJo8tB3FKbvF64acgQf6X9It8q5cuA7xHWcwXzUVqbXAyqhbujbccH3F1OO
+         37wzSifUwMoKIcL3My0mYdZ/hPBNgBaIcKlcujM9gLMhHE+KZ2EErCfU8/RDqh+yjLBF
+         S2PWSVde6uvWeeaViqF0RcfNDg6J2mmMM6w94Hnx/mZpfT6J7JYkEAExk5Pr3kjTLQnY
+         rcWmnlnZvQi4duFsjFypx7xr+nFWQn7aaf/erhs09KAs3Ve47wviQ5+v83InMliL6apZ
+         M6NQ==
+X-Gm-Message-State: AOJu0YxaO6RYqCnkz34mOI0/vNUBBrrDdN4gvSl8JjpuzbbK0q5/a+YI
+        pQvqZD1L733HH38hW7IfXmSwksbRUHz7+WpgIDYB
+X-Google-Smtp-Source: AGHT+IFu656+dV482iOm4cZxrrexPRdD0DlnR8zGkINMB46WE10oFo6V8aYZJV2oIbzlETIcCyiXYFcp0DlRO0Dyrxg=
+X-Received: by 2002:a05:6e02:b21:b0:34f:ec9f:dd75 with SMTP id
+ e1-20020a056e020b2100b0034fec9fdd75mr90136ilu.28.1695161770968; Tue, 19 Sep
+ 2023 15:16:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nb24PsWMp4VK9kjT"
-Content-Disposition: inline
-In-Reply-To: <45add13c-ffa4-4cd1-be1b-6888fb011534@google.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+References: <20230911023038.30649-1-yong.wu@mediatek.com> <20230911023038.30649-9-yong.wu@mediatek.com>
+ <20230911154448.GA1279317-robh@kernel.org> <c2f1df12cc2dc25b342029e49c6d3f120d380b47.camel@mediatek.com>
+ <c62a7ed8-d80a-3a82-040a-d4c74a71285a@linaro.org> <95f9dd3b-1f33-4af5-8757-a97e8b9bb216@arm.com>
+ <20230912155338.GA842444-robh@kernel.org> <a63ab61fbf4d2bdadeb68441050ff5187c93ba96.camel@mediatek.com>
+In-Reply-To: <a63ab61fbf4d2bdadeb68441050ff5187c93ba96.camel@mediatek.com>
+From:   Jeffrey Kardatzke <jkardatzke@google.com>
+Date:   Tue, 19 Sep 2023 15:15:59 -0700
+Message-ID: <CA+ddPcPFFpDA2qtxMg6BNztsXi3mVFRghBwe6556mAL54jB06g@mail.gmail.com>
+Subject: Re: [PATCH 8/9] dt-bindings: reserved-memory: MediaTek: Add reserved
+ memory for SVP
+To:     =?UTF-8?B?WW9uZyBXdSAo5ZC05YuHKQ==?= <Yong.Wu@mediatek.com>
+Cc:     "robh@kernel.org" <robh@kernel.org>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "jstultz@google.com" <jstultz@google.com>,
+        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
+        "christian.koenig@amd.com" <christian.koenig@amd.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        =?UTF-8?B?SmlhbmppYW8gWmVuZyAo5pu+5YGl5aejKQ==?= 
+        <Jianjiao.Zeng@mediatek.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        =?UTF-8?B?S3VvaG9uZyBXYW5nICjnjovlnIvptLsp?= 
+        <kuohong.wang@mediatek.com>,
+        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
+        "krzysztof.kozlow.ski+dt@linaro.org" 
+        <krzysztof.kozlow.ski+dt@linaro.org>,
+        "Brian.Starkey@arm.com" <Brian.Starkey@arm.com>,
+        "conor+dt@kernel.org" <conor+dt@kernel.org>,
+        "benjamin.gaignard@collabora.com" <benjamin.gaignard@collabora.com>,
+        "tjmercier@google.com" <tjmercier@google.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-
---nb24PsWMp4VK9kjT
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Sep 19, 2023 at 01:22:42PM -0700, Avichal Rakesh wrote:
+On Mon, Sep 18, 2023 at 3:47=E2=80=AFAM Yong Wu (=E5=90=B4=E5=8B=87) <Yong.=
+Wu@mediatek.com> wrote:
 >
+> On Tue, 2023-09-12 at 10:53 -0500, Rob Herring wrote:
+> >
+> > External email : Please do not click links or open attachments until
+> > you have verified the sender or the content.
+> >  On Tue, Sep 12, 2023 at 11:13:50AM +0100, Robin Murphy wrote:
+> > > On 12/09/2023 9:28 am, Krzysztof Kozlowski wrote:
+> > > > On 12/09/2023 08:16, Yong Wu (=E5=90=B4=E5=8B=87) wrote:
+> > > > > Hi Rob,
+> > > > >
+> > > > > Thanks for your review.
+> > > > >
+> > > > > On Mon, 2023-09-11 at 10:44 -0500, Rob Herring wrote:
+> > > > > >
+> > > > > > External email : Please do not click links or open
+> > attachments until
+> > > > > > you have verified the sender or the content.
+> > > > > >   On Mon, Sep 11, 2023 at 10:30:37AM +0800, Yong Wu wrote:
+> > > > > > > This adds the binding for describing a CMA memory for
+> > MediaTek
+> > > > > > SVP(Secure
+> > > > > > > Video Path).
+> > > > > >
+> > > > > > CMA is a Linux thing. How is this related to CMA?
+> > > > >
+> > > > > > >
+> > > > > > > Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+> > > > > > > ---
+> > > > > > >   .../mediatek,secure_cma_chunkmem.yaml         | 42
+> > > > > > +++++++++++++++++++
+> > > > > > >   1 file changed, 42 insertions(+)
+> > > > > > >   create mode 100644
+> > Documentation/devicetree/bindings/reserved-
+> > > > > > memory/mediatek,secure_cma_chunkmem.yaml
+> > > > > > >
+> > > > > > > diff --git a/Documentation/devicetree/bindings/reserved-
+> > > > > > memory/mediatek,secure_cma_chunkmem.yaml
+> > > > > > b/Documentation/devicetree/bindings/reserved-
+> > > > > > memory/mediatek,secure_cma_chunkmem.yaml
+> > > > > > > new file mode 100644
+> > > > > > > index 000000000000..cc10e00d35c4
+> > > > > > > --- /dev/null
+> > > > > > > +++ b/Documentation/devicetree/bindings/reserved-
+> > > > > > memory/mediatek,secure_cma_chunkmem.yaml
+> > > > > > > @@ -0,0 +1,42 @@
+> > > > > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > > > > > +%YAML 1.2
+> > > > > > > +---
+> > > > > > > +$id:
+> > > > > >
+> > http://devicetree.org/schemas/reserved-memory/mediatek,secure_cma_chunk=
+mem.yaml#
+> > > > > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > > > > +
+> > > > > > > +title: MediaTek Secure Video Path Reserved Memory
+> > > > > >
+> > > > > > What makes this specific to Mediatek? Secure video path is
+> > fairly
+> > > > > > common, right?
+> > > > >
+> > > > > Here we just reserve a buffer and would like to create a dma-
+> > buf secure
+> > > > > heap for SVP, then the secure engines(Vcodec and DRM) could
+> > prepare
+> > > > > secure buffer through it.
+> > > > > But the heap driver is pure SW driver, it is not platform
+> > device and
+> > > >
+> > > > All drivers are pure SW.
+> > > >
+> > > > > we don't have a corresponding HW unit for it. Thus I don't
+> > think I
+> > > > > could create a platform dtsi node and use "memory-region"
+> > pointer to
+> > > > > the region. I used RESERVEDMEM_OF_DECLARE currently(The code is
+> > in
+> > > > > [9/9]). Sorry if this is not right.
+> > > >
+> > > > If this is not for any hardware and you already understand this
+> > (since
+> > > > you cannot use other bindings) then you cannot have custom
+> > bindings for
+> > > > it either.
+> > > >
+> > > > >
+> > > > > Then in our usage case, is there some similar method to do
+> > this? or
+> > > > > any other suggestion?
+> > > >
+> > > > Don't stuff software into DTS.
+> > >
+> > > Aren't most reserved-memory bindings just software policy if you
+> > look at it
+> > > that way, though? IIUC this is a pool of memory that is visible and
+> > > available to the Non-Secure OS, but is fundamentally owned by the
+> > Secure
+> > > TEE, and pages that the TEE allocates from it will become
+> > physically
+> > > inaccessible to the OS. Thus the platform does impose constraints
+> > on how the
+> > > Non-Secure OS may use it, and per the rest of the reserved-memory
+> > bindings,
+> > > describing it as a "reusable" reservation seems entirely
+> > appropriate. If
+> > > anything that's *more* platform-related and so DT-relevant than
+> > typical
+> > > arbitrary reservations which just represent "save some memory to
+> > dedicate to
+> > > a particular driver" and don't actually bear any relationship to
+> > firmware or
+> > > hardware at all.
+> >
+> > Yes, a memory range defined by hardware or firmware is within scope
+> > of
+> > DT. (CMA at aribitrary address was questionable.)
 >
->On 9/19/23 13:07, Michael Grzeschik wrote:
->> On Tue, Sep 19, 2023 at 12:55:02PM -0700, Avichal Rakesh wrote:
->>> On 9/19/23 12:13, Michael Grzeschik wrote:
->>>> On Mon, Sep 18, 2023 at 04:40:07PM -0700, Avichal Rakesh wrote:
->>>>>
->>>>>
->>>>> On 9/18/23 14:43, Michael Grzeschik wrote:
->>>>>> On Mon, Sep 18, 2023 at 12:02:11PM -0700, Avichal Rakesh wrote:
->>>>>>> On 9/16/23 16:23, Michael Grzeschik wrote:
->>>>>>>> On Fri, Sep 15, 2023 at 07:41:05PM -0700, Avichal Rakesh wrote:
->>>>>>>>> On 9/15/23 16:32, Michael Grzeschik wrote:
->>>>>>>>>> On Mon, Sep 11, 2023 at 09:52:22PM -0700, Avichal Rakesh wrote:
->>>>>>>>>>> On 9/10/23 17:24, Michael Grzeschik wrote:
->>>>>>>>>>>> The uvc_video_enable function of the uvc-gadget driver is dequ=
-eing and
->>>>>>>>>>>> immediately deallocs all requests on its disable codepath. Thi=
-s is not
->>>>>>>>>>>> save since the dequeue function is async and does not ensure t=
-hat the
->>>>>>>>>>>> requests are left unlinked in the controller driver.
->>>>>>>>>>>>
->>>>>>>>>>>> By adding the ep_free_request into the completion path of the =
-requests
->>>>>>>>>>>> we ensure that the request will be properly deallocated.
->>>>>>>>>>>>
->>>>>>>>>>>> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->>>>>>>>>>>> ---
->>>>>>>>>>>> =A0drivers/usb/gadget/function/uvc_video.c | 6 ++++++
->>>>>>>>>>>> =A01 file changed, 6 insertions(+)
->>>>>>>>>>>>
->>>>>>>>>>>> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers=
-/usb/gadget/function/uvc_video.c
->>>>>>>>>>>> index 4b6e854e30c58c..52e3666b51f743 100644
->>>>>>>>>>>> --- a/drivers/usb/gadget/function/uvc_video.c
->>>>>>>>>>>> +++ b/drivers/usb/gadget/function/uvc_video.c
->>>>>>>>>>>> @@ -256,6 +256,12 @@ uvc_video_complete(struct usb_ep *ep, str=
-uct usb_request *req)
->>>>>>>>>>>> =A0=A0=A0=A0 struct uvc_device *uvc =3D video->uvc;
->>>>>>>>>>>> =A0=A0=A0=A0 unsigned long flags;
->>>>>>>>>>>>
->>>>>>>>>>>> +=A0=A0=A0 if (uvc->state =3D=3D UVC_STATE_CONNECTED) {
->>>>>>>>>>>> +=A0=A0=A0=A0=A0=A0=A0 usb_ep_free_request(video->ep, ureq->re=
-q);
->>>>>>>>>>> nit: You can probably just call usb_ep_free_request with req in=
-stead of ureq->req.
->>>>>>>>>>
->>>>>>>>>> Thanks, thats a good point.
->>>>>>>>>>
->>>>>>>>>>>> +=A0=A0=A0=A0=A0=A0=A0 ureq->req =3D NULL;
->>>>>>>>>>>> +=A0=A0=A0=A0=A0=A0=A0 return;
->>>>>>>>>>>> +=A0=A0=A0 }
->>>>>>>>>>>> +
->>>>>>>>>>>> =A0=A0=A0=A0 switch (req->status) {
->>>>>>>>>>>> =A0=A0=A0=A0 case 0:
->>>>>>>>>>>> =A0=A0=A0=A0=A0=A0=A0=A0 break;
->>>>>>>>>>>
->>>>>>>>>>> Perhaps I am missing something here, but I am not sure how this=
- alone
->>>>>>>>>>> fixes the use-after-free issue. uvcg_video_enable still dealloc=
-ates
->>>>>>>>>>> _all_ usb_requests right after calling usb_ep_dequeue, so it is=
- still
->>>>>>>>>>> possible that an unreturned request is deallocated, and now it =
-is
->>>>>>>>>>> possible that the complete callback accesses a deallocated ureq=
- :(
->>>>>>>>>>
->>>>>>>>>> Since the issue I saw was usually coming from the list_del_entry=
-_valid check in
->>>>>>>>>> the list_del_entry of the giveback function, the issue was proba=
-bly just not
->>>>>>>>>> triggered anymore as the complete function did exit early.
->>>>>>>>>>
->>>>>>>>>> So this fix alone is actually bogus without a second patch I had=
- in the stack.
->>>>>>>>>> The second patch I am refering should change the actual overall =
-issue:
->>>>>>>>>>
->>>>>>>>>> https://lore.kernel.org/linux-usb/20230915233113.2903645-1-m.grz=
-eschik@pengutronix.de/T/#u
->>>>>>>>>>
->>>>>>>>>> This early list_del and this patch here should ensure that the
->>>>>>>>>> concurrent functions are not handling already freed memory.
->>>>>>>>>
->>>>>>>>> Oh, the patch linked above is interesting. It effectively force r=
-emoves the dwc3_request
->>>>>>>>> from whatever list it belongs to? So if DWC3's interrupt handler =
-is delayed past
->>>>>>>>> UVC gadget's ep_free_request call, then it won't see the requests=
- in its cancelled
->>>>>>>>> list at all. However, this setup is still prone to errors. For ex=
-ample, there is now
->>>>>>>>> a chance that gadget_ep_free_request is called twice for one requ=
-est. A scheduling
->>>>>>>>> like the following might cause double kfree:
->>>>>>>>>
->>>>>>>>> 1. uvcg_video_enable calls usb_ep_dequeue for all usb_requests
->>>>>>>>> 2. While the usb_ep_dequeues are being processed, dwc3's interrup=
-t handler starts
->>>>>>>>> =A0 calling the complete callbacks.
->>>>>>>>> 3. The complete callback calls gadget_ep_free_request (calling kf=
-ree as a result)
->>>>>>>>> 4. Meanwhile, uvcg_video_enable has moved to uvc_video_free_reque=
-sts which also
->>>>>>>>> =A0 calls gadget_ep_free_request (calling kfree).
->>>>>>>>>
->>>>>>>>> There is currently (even in your patches) no synchronization betw=
-een calls to
->>>>>>>>> gadget_ep_free_request via complete callback and uvcg_video_enabl=
-e, which will
->>>>>>>>> inevitably call usb_ep_free_request twice for one request.
->>>>>>>>>
->>>>>>>>> Does that make sense, or am I misunderstanding some part of the p=
-atch?
->>>>>>>>
->>>>>>>> The overall concept is correct. But in detail the
->>>>>>>> uvc_video_free_requests is checking that video->ureq[i].req is not=
- NULL.
->>>>>>>>
->>>>>>>> With our previous call of ep_free_request in the complete handler,=
- the
->>>>>>>> ureq->req pointer in focus was already set to NULL. So the
->>>>>>>> uvc_video_free_requests function will skip that extra free.
->>>>>>>>
->>>>>>>
->>>>>>> Is there any form of synchronization between uvc_video_request and =
-the
->>>>>>> complete callback? As I see it, the dwc3 interrupt thread and the v=
-4l2
->>>>>>> ioctl thread (which calls uvcg_video_enable) are fully independent,=
- so
->>>>>>> the calls made by them are free to be interleaved arbitrarily, so an
->>>>>>> interleaving like this is technically possible:
->>>>>>>
->>>>>>> +------+------------------------------------+----------------------=
------------------------+
->>>>>>> | time |=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 ioctl_thread=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0 |=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 dwc3 interrupt han=
-dler=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
->>>>>>> +=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+
->>>>>>> |=A0=A0 1=A0 | -uvc_v4l2_streamoff=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0 |=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
->>>>>>> |=A0=A0 2=A0 | |-uvcg_video_enable=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0 |=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
->>>>>>> |=A0=A0 3=A0 | ||-usb_ep_dequeue=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0 |=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0 |
->>>>>>> |=A0=A0 4=A0 | ||=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 | -dwc3_process_event_buf=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
->>>>>>> |=A0=A0 5=A0 | ||-uvc_video_free_requests=A0=A0=A0=A0=A0=A0=A0=A0 |=
- |=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
->>>>>>> |=A0=A0 6=A0 | |||=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 | |-dwc3_gadget_ep_cleanup_ca=
-ncelled_requests |
->>>>>>> |=A0=A0 7=A0 | |||=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 | ||-dwc3_gadget_giveback=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
->>>>>>> |=A0=A0 8=A0 | |||=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 | |||-uvc_video_complete=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
->>>>>>> |=A0=A0 9=A0 | |||-check ureq->req !=3D NULL [true] | ||||=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
->>>>>>> |=A0 10=A0 | ||||-usb_ep_free_request=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
- | ||||=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
->>>>>>> |=A0 11=A0 | |||||-dwc3_ep_free_request=A0=A0=A0=A0=A0=A0=A0=A0 | |=
-|||=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
->>>>>>> |=A0 12=A0 | ||||||-kfree [first call]=A0=A0=A0=A0=A0=A0=A0=A0=A0 |=
- ||||=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
->>>>>>> |=A0 13=A0 | ||||=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 | ||||-usb_ep_free_request=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
->>>>>>> |=A0 14=A0 | ||||=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 | |||||-dwc3_ep_free_request=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
->>>>>>> |=A0 15=A0 | ||||=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 | ||||||-kfree [second call]=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
->>>>>>> |=A0 16=A0 | ||||=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 | ||||-set ureq->req =3D NULL=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
->>>>>>> |=A0 17=A0 | ||||-set ureq->req =3D NULL=A0=A0=A0=A0=A0=A0=A0=A0=A0=
- |=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
->>>>>>> +------+------------------------------------+----------------------=
------------------------+
->>>>>>>
->>>>>>> A situation like this means that dwc3_ep_free_request can be called
->>>>>>> twice for a particular usb_request. This is obviously low probabili=
-ty,
->>>>>>> but a race condition here means we'll start seeing very vague and h=
-ard
->>>>>>> to repro crashes or memory inconsistencies when using the uvc gadge=
-t.
->>>>>>>
->>>>>>> I do apologize if I've missed something obvious with your changes t=
-hat
->>>>>>> prevents such interleaving. I don't currently see any locking or
->>>>>>> other synchronization mechanism in your changes. Is there something
->>>>>>> in dwc3 that prevents this situation?
->>>>>>
->>>>>> I think you have pointed it out totally clear. This is obviously the
->>>>>> case. It just did not trigger here. But the window is there and has =
-to
->>>>>> be locked in some way.
->>>>>>
->>>>>> For now we have two options to solve it.
->>>>>>
->>>>>> 1) Trying to avoid this double code path of the complete callback and
->>>>>> uvc_video_free_requests. This is what your patches are already doing.
->>>>>>
->>>>>> But for now I am not so pleased with the timeout concept by waiting =
-for
->>>>>> the complete interrupt to be called. This is also a shot in the dark=
- as
->>>>>> the latency depends on the scheduler and the amount of potential
->>>>>> requests that are being handled.
->>>>>
->>>>> I agree, a timeout is not the most elegant of solutions and given a
->>>>> weird enough scheduler, will run into issues as well.
->>>>>
->>>>>>
->>>>>> 2) Locking both codepathes around the resource in question so the is=
-sue
->>>>>> is avoided.
->>>>>>
->>>>>> However, I am also not a fried of many locks.
->>>>>>
->>>>>> Perhaps it is possible to use a combination of wait_for_completion in
->>>>>> the uvc_video_free_requests and a complete callback in
->>>>>> uvc_video_complete for those requests that are not listed in the
->>>>>> req_free list.
->>>>>>
->>>>>> What do you think?
->>>>>>
->>>>> There might be a way that builds on your idea of cleaning up in the c=
-omplete callback.
->>>>> It would rely on having a uvc_requests that aren't bulk allocated, wh=
-ich may have a
->>>>> performance impact.
->>>>
->>>> Since the allocation will only be done once, this performance impact is
->>>> should not be critical.
->>>>
->>>>> I am imagining something like the following:
->>>>> =A01. Instead of allocating a bulk of uvc_requests, we allocate them
->>>>> =A0=A0=A0 one at a time and add them to uvc_video.ureq
->>>>> =A02. uvc_video.ureq becomes a list_head containing all the individual
->>>>> =A0=A0=A0 requests
->>>>> =A03. We add a sentinel flag in uvc_request that says the request is
->>>>> =A0=A0=A0 now stale. This flag is protected by uvc_video->req_lock
->>>>> =A04. uvc_video_complete looks at=A0 this flag to deallocate both
->>>>> =A0=A0=A0 usb_request and uvc_request.
->>>>> =A05. uvcg_video_enable looks something like the following:
->>>>> =A0=A0=A0=A0=A0 uvcg_video_enable(...) {
->>>>> =A0=A0=A0=A0=A0=A0=A0 ...
->>>>> =A0=A0=A0=A0=A0=A0=A0 lock(req_lock);
->>>>> =A0=A0=A0=A0=A0=A0=A0 forall (uvc_requests->ureqs) {ureq->stale =3D t=
-rue}
->>>>> =A0=A0=A0=A0=A0=A0=A0 unlock(req_lock);
->>>>> =A0=A0=A0=A0=A0=A0=A0 usb_ep_dequeue all reqs
->>>>>
->>>>> =A0=A0=A0=A0=A0=A0=A0 uvc_video_free_requests(...)
->>>>> =A0=A0=A0=A0=A0=A0=A0 ...
->>>>> =A0=A0=A0=A0=A0 }
->>>>> =A06. uvc_video_complete looks something like:
->>>>> =A0=A0=A0=A0=A0 uvc_video_complete(...) {
->>>>> =A0=A0=A0=A0=A0=A0=A0 // at the start
->>>>> =A0=A0=A0=A0=A0=A0=A0 lock(req_lock)
->>>>> =A0=A0=A0=A0=A0=A0=A0 is_stale =3D ureq->stale;
->>>>> =A0=A0=A0=A0=A0=A0=A0 unlock(req_lock);
->>>>>
->>>>> =A0=A0=A0=A0=A0=A0=A0 if (is_stale) {
->>>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0 usb_ep_free_request();
->>>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0 dealloc corresponding uvc_request();
->>>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0 return;
->>>>> =A0=A0=A0=A0=A0=A0=A0 }
->>>>>
->>>>> =A0=A0=A0=A0=A0=A0=A0 ...
->>>>>
->>>>> =A0=A0=A0=A0=A0=A0=A0 lock(req_lock);
->>>>> =A0=A0=A0=A0=A0=A0=A0 // possible that request became stale while we =
-were handling stuff
->>>>> =A0=A0=A0=A0=A0=A0=A0 if (!ureq->stale) {
->>>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0 list_add_tail(&req->list, &video->req_fre=
-e);
->>>>> =A0=A0=A0=A0=A0=A0=A0 } else {
->>>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0 usb_ep_free_request();
->>>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0 dealloc corresponding uvc_request();
->>>>> =A0=A0=A0=A0=A0=A0=A0 }
->>>>> =A0=A0=A0=A0=A0=A0=A0 unlock(req_lock);
->>>>> =A0=A0=A0=A0=A0 }
->>>>> =A07. uvc_video_free_requests can freely dealloc usb_requests/uvc_req=
-uests in
->>>>> =A0=A0=A0 req_free because we can be certain that uvc_video_complete =
-won't modify
->>>>> =A0=A0=A0 it once requests have been marked stale, and the stale requ=
-ests in flight
->>>>> =A0=A0=A0 will be cleaned up by the complete callback.
->>>>>
->>>>> Effectively, we freeze the state of req_free before dequeuing, and all
->>>>> inflight requests are considered the responsibility of the complete h=
-andler
->>>>> from that point onwards. The gadget is only responsible for freeing r=
-equests it
->>>>> currently owns.
->>>>>
->>>>> I think this should ensure that we never have a situation where the o=
-wnership of the
->>>>> requests are undefined, and only one thread is responsible for freein=
-g any given request.
->>>>>
->>>>> Hope that makes sense!
->>>>
->>>> So you found a way to secure this also with the already available
->>>> req_lock then. Nice!
->>>>
->>>> Also what you suggest is to move from the array model we currently have
->>>> to dynamic allocation in a linked list.
->>>>
->>>> I would suggest some more adaptions.
->>>>
->>>> Keep to allocate all requests dynamicaly as you suggest instead of the
->>>> bulk array.
->>>>
->>>> Rewrite the uvc_video_free_requests to iterate over the video->req_free
->>>> list instead of all available requests to take care of all requests
->>>> that are truely freed.
->>>>
->>>> Take this patch we started this thread with and expand it to
->>>> clean up not only the usb_request but also the uvc_request
->>>> like you suggested in your pseudo code.
->>>>
->>>> Since we check for UVC_STATE_CONNECTED already in the comlete handler
->>>> this is a superset of your stale flag anyway. And every request
->>>> that is currently in flight is not part of the req_free list, which
->>>> makes the uvc_video_free_requests function free to run without making
->>>> no harm.
->>>
->>> The downside of freeing based on UVC_STATE_CONNECTED and why it might be
->>> problematic is that without any other synchronization method, the compl=
-ete
->>> callback can be arbitrarily delayed for a given usb_request.
->>>
->>> A STREAMOFF quickly followed by a STREAMON, might set uvc->state to
->>> UVC_STATE_STREAMING before the controller has had a chance to return the
->>> stale requests. This won't cause any functional issues AFAICT, but will
->>> cause a memory "leak" of sorts where every successive quick
->>> STREAMOFF-->STREAMON will lead to some extra usb_requests sticking arou=
-nd.
->>> They'll eventually get freed, but it doesn't seem very responsible to i=
-ncrease
->>> the memory load unless required.
->>>
->>> The stale flag ensures that this situation never happens and even if the
->>> complete callbacks comes back well after=A0 the new STREAMON event, we =
-correctly
->>> free the associated usb_request and uvc_request.
->>
->> In that case we could use stale then, but I would suggest also keeping
->> the change the functionality of uvc_video_free_requests aswell to loop
->> over the requests in req_free list.
+
+Before I reply, my context is that I'm using these patches from
+Mediatek on ChromeOS to implement secure video playback.
+
+> I guess the memory range is not "defined" by HW in our case, but this
+> reserve buffer is indeed prepared for and used by HW.
 >
->Agreed, uvc_video_free_requests should only free the requests in
->req_free.
+The memory range is defined in the firmware. The TEE is configured
+with the same address/size that is being set in this DT node. (so
+based on comments already, this is appropriate to put in the DT).
+
+> If this is a normal reserved buffer for some device, we could define a
+> reserved-memory with "shared-dma-pool", then the device use it via
+> "memory-region" property, is this right?
 >
->Just to clear any confusion: are you working on incorporating these changes
->into your patchset, or do you want me to include them in
->https://lore.kernel.org/20230912041910.726442-3-arakesh@google.com/
->instead?
+> Here it is a secure buffer case and this usage relationship is
+> indirect. We create a new heap for this new secure type memory, other
+> users such as VCODEC and DRM allocate secure memory through the new
+> heap.
+>
+> About the aribitrary address is because we have HW register for it. As
+> long as this is a legal dram address, it is fine. When this address is
+> passed into TEE, it will be protected by HW.
+>
+> >
+> > My issue here is more that 'secure video memory' is not any way
+> > Mediatek
+> > specific.
+>
+> Sorry, I don't know if there already is an SVP case in the current
+> kernel. If so, could you help share it?
 
-As I am busy on a different topic at the moment, and you have suggested
-the main walkthrough for the solution, it would be great if you could
-come up with the proper patch.
+I don't think there is any SVP (Secure Video Path) case in the current
+kernel. I agree this shouldn't be a Mediatek specific setting, as this
+could be usable to other SVP implementations.
 
-But it would be great to find my Suggested-by in the patches. :)
+I do think this should have 'cma' in the DT description, as it does
+relate to what the driver is going to do with this memory region. It
+will establish it as a CMA region in Linux. The reason it needs to be
+a CMA region is that the entire memory region will need to transition
+between secure (i.e. TEE owned) and non-secure (i.e. kernel owned).
+Some chipsets have the ability to change memory states between secure
+& non-secure at page level granularity, and in these cases you don't
+need to worry about having a CMA region like this. That is not the
+case on the Mediatek chips where there is a limit to how many regions
+you can mark as secure. In order to deal with that limitation, once a
+secure allocation needs to be performed, the kernel driver allocates
+the entire CMA region so nothing else will use it. Then it marks that
+whole region secure and the TEE can do its own allocations from that
+region. When all those allocations are freed, it can mark that region
+as non-secure again, drop the whole CMA allocation and the kernel can
+make use of that CMA region again.  (there is the other dma-heap in
+their patches, which is for a smaller region that can always be
+secure...but that one is a permanent carveout, the CMA region is
+available to the kernel while not in use for secure memory)
 
-Thanks!
-Michael
+So maybe something like:
 
++title:Secure Reserved CMA Region
++
++description:
++  This binding describes a CMA region that can dynamically transition
+between secure and non-secure states that a TEE can allocate memory
+from.
++
++maintainers:
++  - Yong Wu <yong.wu@mediatek.com>
++
++allOf:
++  - $ref: reserved-memory.yaml
++
++properties:
++  compatible:
++    const: secure_cma_region
++
++required:
++  - compatible
++  - reg
++  - reusable
++
++unevaluatedProperties: false
++
++examples:
++  - |
++
++    reserved-memory {
++        #address-cells =3D <1>;
++        #size-cells =3D <1>;
++        ranges;
++
++        reserved-memory@80000000 {
++            compatible =3D "secure_cma_region";
++            reusable;
++            reg =3D <0x80000000 0x18000000>;
++        };
++    };
 --=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
---nb24PsWMp4VK9kjT
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmUKD6QACgkQC+njFXoe
-LGQTahAAtAyTGgsArl6me6DFgXKpD1T3gkOBUOxwqb9tXA3whECMw57pDkSoQy4h
-+7d+AdHMjSwq87c8QqZnG8BPaR+W7EEe+OjGOrSLe2Bd5CdOm6kLVAXuikvwrmu9
-/9kz5kswMy6Hl7JthYAJtePGh9ZDJvZ0raTKPjWBGRg/mRCpF8JTBysfypcjwIO9
-T1uIFM+/qTp30YHAUJYn4BPt9HcoYqB/4w1UgTXE/5o6yIZ9Lvyxlw0CWCa8klEV
-LW4uMI5Sv6nvhPlxwkzestCb20OGlM5L77TW/j8+igNSmiUIVKhG2ppLqewXr34I
-bGvlFgHQ2WeX42L8Oc6X0gwBFt9N+u51lwNQCh5dtJ0xNDuSVFIpnl79R1T/poo2
-oKKXgwP6oG4+IC+hXaJWMwWs0pPAecRVaqTatiQsW9whm1ayjo3pjNGZK8I0HNEt
-fElpq9OJIaCdo9GWjQMg+NpbXDjKpMd0gOgS6rk0dA3LJvTQM5Z5T87Mtrx8QG1t
-cBW55sT3mMoH6Xy9rcLI5FglMR1R9UZhnZJzrmJv9AAUdkZp+BNlz4ymqMFIDDx5
-YetTxi6zWEDy6Y5H/kbbb0V2iQzqFW4AcRWJOEBUKGUfkBa3I+lLiCauyHXcIqyC
-e5gqSdElYkNpv7Um9a+t817ADoWvqz3kLfUraS6jUyJuEjW4ENE=
-=zcrT
------END PGP SIGNATURE-----
-
---nb24PsWMp4VK9kjT--
+>
+> Regarding our special, the new heap driver may be different, and other
+> HWs share this reserve buffer and manage it through this pure SW heap.
+>
+> >  AIUI, it's a requirement from certain content providers for
+> > video playback to work. So why the Mediatek specific binding?
+> >
+> > Rob
