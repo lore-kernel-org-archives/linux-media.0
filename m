@@ -2,113 +2,100 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1D6DCD54AF
-	for <linux-media@archiver.kernel.org>; Tue, 19 Sep 2023 10:28:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DF64CD54AF
+	for <linux-media@archiver.kernel.org>; Tue, 19 Sep 2023 10:29:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231765AbjISK2g (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 19 Sep 2023 06:28:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32994 "EHLO
+        id S229988AbjISK34 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 19 Sep 2023 06:29:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231754AbjISK2f (ORCPT
+        with ESMTP id S229641AbjISK3y (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 19 Sep 2023 06:28:35 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE83F1
-        for <linux-media@vger.kernel.org>; Tue, 19 Sep 2023 03:28:28 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-502934c88b7so9110800e87.2
-        for <linux-media@vger.kernel.org>; Tue, 19 Sep 2023 03:28:28 -0700 (PDT)
+        Tue, 19 Sep 2023 06:29:54 -0400
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB471E8
+        for <linux-media@vger.kernel.org>; Tue, 19 Sep 2023 03:29:48 -0700 (PDT)
+Received: by mail-ua1-x92a.google.com with SMTP id a1e0cc1a2514c-7a5170c78e6so1868720241.2
+        for <linux-media@vger.kernel.org>; Tue, 19 Sep 2023 03:29:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1695119307; x=1695724107; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SQHjsvNbiZrx4g9lfYTl98XMHQ/DiEm4zN7iWnjsvMo=;
-        b=KZGJ6CH4iq25DEmAKzPGRYj0I20z1IFga8p1XZO6WqoxdrcfJBI36vIwCkLgKJuPsc
-         8SrRo+dldj9q0wVhuLoeBYUc6yoLgKJLfl2vBiQm5Q3Lqs1X6VtyIVf82+7olN2XMwI0
-         +V7HYUHFMSlPlrS09odX8WY4hFwRM/M18Gi7Q=
+        d=raspberrypi.com; s=google; t=1695119388; x=1695724188; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=NfxPDW+vPkltnLjD2VI/PBxlpL3DCiPqQl8Beikpz4o=;
+        b=fBSYJDWo0bO4fuW227q332xPp+mxb4gu2+BbddmiWWUV9cud8oeOoEDrjmwRW2nePb
+         N0fyv8LwpfW1z5zZOgrxeTQgZHqgmaiGE8Qhlcc05Ia5pfKRVD0mF35OYvGd1c4Me4mC
+         1GSoiSwlY0ET3ETn7fnbFvWvltRX/y7CZ8fHdx2z4zp2uQZVAFPc6tojURAj+C2MPKm3
+         z/uufKnFOBLOblPBpxJcvYxQWXCF2MUblnuKWOlCI77iUJF3UzDvjUkA4kxW455N15bS
+         2BgYcZ1yPAd9feu5TcuJUqgicXRGlWl/pLsrxD/tfCzzcZcDspBcfXxk8M17++k+YGpF
+         MpNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695119307; x=1695724107;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SQHjsvNbiZrx4g9lfYTl98XMHQ/DiEm4zN7iWnjsvMo=;
-        b=nMuxZMCie5t8ePJZC+KVi2CLLmUX4CEtvtnrfX+8G5p/05K/W/VX+pyNzesA/ubRTE
-         Yp7TxRB+cUA7cJiAx2MrMOQlktaEgpn/i4mD3KlqmGBb/tKIGJVzrztD2mSGWPDONGq7
-         6C2zOFLR1ysv3OgzMgtYa3Xoyzsh8MAUlvx8u4hyeqHyTmVu/yrXqa/1Gm6zD2qHNoI6
-         RLTC1ICKZtGsq0UooFQUJB8sY7gE28g4owiqnDADh1sEUAC6/oj9y5zu/+rxCDltAe1o
-         APTfS7EXkG5l80xvN/yCGCOYqyVmF9g2OLIFTXtW/LOIZv7xwr6yB9dvtbES5V+Ybevh
-         HNfg==
-X-Gm-Message-State: AOJu0Yx5r0Gw047YZR5JCzWvDWt/WvshSE6TrwpFQhGhJK0uy7s+T60T
-        LJzC+w1VmB8mqtkMRfpd1+YNnx0QVJPuuaqRbB/KKg3QL/YBEwBypQU=
-X-Google-Smtp-Source: AGHT+IGM6xnlFEOYsGOy4vaMQaQCBEdxtKKl8J/sGO588nMpavoXIoMxtEAICrfWJ2kSxArbOreXBVnaWhrKp8Pal9c=
-X-Received: by 2002:a05:6512:36c1:b0:503:3245:6eda with SMTP id
- e1-20020a05651236c100b0050332456edamr833333lfs.40.1695119306913; Tue, 19 Sep
- 2023 03:28:26 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1695119388; x=1695724188;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NfxPDW+vPkltnLjD2VI/PBxlpL3DCiPqQl8Beikpz4o=;
+        b=jKcGnICfEjYHS6OIU4YYDnz0SYmnZw3+cw58vNjoqmB3kA7FucYi/Y1Q45WP7LnfEM
+         I5TL4y5KmNWYecCU0YpxW7IkSEpQS4zorBTKh14m6tctUL2Ugeoud2vuBvclDWn9rkKk
+         DNxCfJ3VCztNjxrEO30KWyFgdtuWBu4dbAApKRBX+ya+RU350U9UNLHHpbOgdrivsBHR
+         AesoHvmPvEGkAa+8T1PORBTAOsdBmYBeGAXZNdXjWC46C8TMr9Sao0O2Y4dtjdbBR5eD
+         1bN1WnISx/dTtXbTVFiQA7hlSQ3DwaR2F2sYiHcjIKepRuPaAZKJTDaV7Qh2TyQz9Tyk
+         psHw==
+X-Gm-Message-State: AOJu0Yy6wC2DBJYXn2ruwAGCz258vFbnW8zb/fkJyxEqMhCFf+fuzefM
+        oG8JA/u1sTwZ6knxqv2kxsc9fQcRpnNYcbp0cbjf+g==
+X-Google-Smtp-Source: AGHT+IH9CmJmxXO/C5WRODWwXPtT/h6lVboEGcDB2FJ7bSLF6HwY8HbIcTolfBd7t/BcdqZb/4XL0zq5k9CK19tZpDA=
+X-Received: by 2002:a67:b103:0:b0:44d:41bc:705f with SMTP id
+ w3-20020a67b103000000b0044d41bc705fmr10277925vsl.16.1695119387809; Tue, 19
+ Sep 2023 03:29:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230919095938.70679-1-angelogioacchino.delregno@collabora.com> <20230919095938.70679-2-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230919095938.70679-2-angelogioacchino.delregno@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Tue, 19 Sep 2023 18:28:15 +0800
-Message-ID: <CAGXv+5Hk2Hd_GPk8WerpyZ0NGtoWOiMPY-LquJxLGbG2Wo6FMA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] media: dt-bindings: mediatek: Add phandle to
- mediatek,scp on MDP3 RDMA
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        matthias.bgg@gmail.com, moudy.ho@mediatek.com,
-        hverkuil-cisco@xs4all.nl, sakari.ailus@linux.intel.com,
-        u.kleine-koenig@pengutronix.de, linqiheng@huawei.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com
+References: <20230913135638.26277-1-laurent.pinchart@ideasonboard.com> <20230913135638.26277-5-laurent.pinchart@ideasonboard.com>
+In-Reply-To: <20230913135638.26277-5-laurent.pinchart@ideasonboard.com>
+From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
+Date:   Tue, 19 Sep 2023 11:29:32 +0100
+Message-ID: <CAPY8ntAx5FKWe2M+oZ+42ry6E7P54psUyieNBi5iQ2veOHJuaQ@mail.gmail.com>
+Subject: Re: [PATCH v3 04/20] media: i2c: imx219: Drop IMX219_REG_CSI_LANE_MODE
+ from common regs array
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, Sakari Ailus <sakari.ailus@iki.fi>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Hans de Goede <hdegoede@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Sep 19, 2023 at 5:59=E2=80=AFPM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
+On Wed, 13 Sept 2023 at 14:56, Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
 >
-> The MDP3 RDMA needs to communicate with the SCP remote processor: allow
-> specifying a phandle to a SCP core.
+> The IMX219_REG_CSI_LANE_MODE is configured twice, once with a hardcoded
+> value in the imx219_common_regs registers array, and once with the value
+> appropriate for the system in imx219_configure_lanes(). The latter is
+> enough, drop the former.
 >
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
+> Fixes: ceddfd4493b3 ("media: i2c: imx219: Support four-lane operation")
+> Suggested-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
 > ---
->  .../devicetree/bindings/media/mediatek,mdp3-rdma.yaml       | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  drivers/media/i2c/imx219.c | 1 -
+>  1 file changed, 1 deletion(-)
 >
-> diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.y=
-aml b/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml
-> index d639a1461143..0e5ce2e77e99 100644
-> --- a/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml
-> +++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml
-> @@ -46,6 +46,11 @@ properties:
->        include/dt-bindings/gce/<chip>-gce.h of each chips.
->      $ref: /schemas/types.yaml#/definitions/uint32-array
+> diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
+> index fbf4c69577f7..d8840aa67c42 100644
+> --- a/drivers/media/i2c/imx219.c
+> +++ b/drivers/media/i2c/imx219.c
+> @@ -214,7 +214,6 @@ static const struct cci_reg_sequence imx219_common_regs[] = {
+>         { IMX219_REG_Y_ODD_INC_A, 1 },
 >
-> +  mediatek,scp:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description:
-> +      Phandle to the System Control Processor (SCP) node
-> +
->    power-domains:
->      oneOf:
->        - items:
-> @@ -98,6 +103,7 @@ examples:
->          mediatek,gce-client-reg =3D <&gce SUBSYS_1400XXXX 0x1000 0x1000>=
-;
->          mediatek,gce-events =3D <CMDQ_EVENT_MDP_RDMA0_SOF>,
->                                <CMDQ_EVENT_MDP_RDMA0_EOF>;
-> +        mediatek,scp =3D <&scp>;
->          power-domains =3D <&spm MT8183_POWER_DOMAIN_DISP>;
->          clocks =3D <&mmsys CLK_MM_MDP_RDMA0>,
->                   <&mmsys CLK_MM_MDP_RSZ1>;
+>         /* Output setup registers */
+> -       { IMX219_REG_CSI_LANE_MODE, IMX219_CSI_2_LANE_MODE },
+>         { IMX219_REG_DPHY_CTRL, IMX219_DPHY_CTRL_TIMING_AUTO },
+>         { IMX219_REG_EXCK_FREQ, IMX219_EXCK_FREQ(IMX219_XCLK_FREQ / 1000000) },
+>  };
 > --
-> 2.42.0
+> Regards,
+>
+> Laurent Pinchart
 >
