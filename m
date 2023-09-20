@@ -2,43 +2,40 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3454CE79DE
-	for <linux-media@archiver.kernel.org>; Wed, 20 Sep 2023 14:35:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CD67C004D6
+	for <linux-media@archiver.kernel.org>; Wed, 20 Sep 2023 14:35:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235111AbjITOfs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Sep 2023 10:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40820 "EHLO
+        id S235199AbjITOfz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Sep 2023 10:35:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232318AbjITOfr (ORCPT
+        with ESMTP id S235178AbjITOfy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 Sep 2023 10:35:47 -0400
+        Wed, 20 Sep 2023 10:35:54 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB20AD;
-        Wed, 20 Sep 2023 07:35:42 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71722C433C7;
-        Wed, 20 Sep 2023 14:35:41 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73419E6;
+        Wed, 20 Sep 2023 07:35:48 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4B92C433C9;
+        Wed, 20 Sep 2023 14:35:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695220542;
-        bh=HFDW8UoD5QLd6nTbuqGijlmAZk0/AapjhKvVeBKKueU=;
-        h=From:Subject:Date:To:Cc:From;
-        b=G+iqEvtI91oD9Gvhu+88PxzS8E24ExbtGQ5fcakyWpDsmhiFwhb0RUSjNDOw8GBoY
-         37EFpMiql+e16zqxJJuPvMkvRKCPmlolTlzAUSznrPjoiDaNbl/UnXmOH4aMFSed4Y
-         CJUh5T/3jVp+BqdeOufDkILWisc2pHuCSHiFSskri3CxtYvRiT1/wRS7fBzCN9sLSp
-         44pIHJyxK7DutAdStUiI75mJQy4B3LJwM3qgjwrfDA4aIAgKqHbitfqn0NAlVF18dF
-         pI44W4LmbLZg9Bu4qdmblOSTDmWj7y/MxikAEim6JJbFxzfFV3fthz3V5KtLyn/nhu
-         dui7/UIfveZjA==
+        s=k20201202; t=1695220548;
+        bh=nepQLLKsrdqR+bFLGLuPmm3JeqsJJl9xSfF4WgZmnUM=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=PJo4p+FKomVp8MnMFEaG64GHE7rJW9lCLDOTXplFKz4P3A22ptWJxqitTyL6fpQOg
+         Gene/nllC7GFRIZN6EWDlfGMBFjStd3CpV6a4kA0JgJJHJPdISYVvSSnF7VlanBrau
+         eHd8zVfC2bBcwhH3hZVKtYii4LrLpZetG2lxb678ndSOuvzTuwLr3yfOTYQRd4JIGL
+         nf9foLOv7W2Ny8vJ0hL6IzDr5r2JsZMFTyhII/widdC/jE5XzFbEPxTbfYa+Gn+Br8
+         HqP7e+KIoq6VQ2X24PNKELyW/x9V0L9blrAGZ2yOZ4ebZ/gOEGsZoG27tFoYmYYXPi
+         lncfHMh0jrGhg==
 From:   Maxime Ripard <mripard@kernel.org>
-Subject: [PATCH RFC v2 00/37] drm/connector: Create HDMI Connector
- infrastructure
-Date:   Wed, 20 Sep 2023 16:35:15 +0200
-Message-Id: <20230920-kms-hdmi-connector-state-v2-0-17932daddd7d@kernel.org>
+Date:   Wed, 20 Sep 2023 16:35:17 +0200
+Subject: [PATCH RFC v2 02/37] drm/connector: hdmi: Create a custom state
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIACMDC2UC/4WNQQqDMBBFryKz7pQkxsR2VSj0AN0WF6KjDmpSE
- pEW8e4NXqDL/z/v/Q0iBaYI12yDQCtH9i4FdcqgGWrXE3KbMiihclFKjeMccWhnxsY7R83iA8a
- lXgiNNLa0ZOxFWUj4O1DHn0P9gufjDlUqB46J+B53qzym/+ZVokChS1HotstNoW8jBUfT2Yceq
- n3ff/7/jnPGAAAA
+Message-Id: <20230920-kms-hdmi-connector-state-v2-2-17932daddd7d@kernel.org>
+References: <20230920-kms-hdmi-connector-state-v2-0-17932daddd7d@kernel.org>
+In-Reply-To: <20230920-kms-hdmi-connector-state-v2-0-17932daddd7d@kernel.org>
 To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Thomas Zimmermann <tzimmermann@suse.de>,
         David Airlie <airlied@gmail.com>,
@@ -55,137 +52,115 @@ Cc:     Hans Verkuil <hverkuil@xs4all.nl>, dri-devel@lists.freedesktop.org,
         linux-rockchip@lists.infradead.org, linux-sunxi@lists.linux.dev,
         Maxime Ripard <mripard@kernel.org>
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5802; i=mripard@kernel.org;
- h=from:subject:message-id; bh=HFDW8UoD5QLd6nTbuqGijlmAZk0/AapjhKvVeBKKueU=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDKnczBZcvZvWvvnx9OB3fnaN/W8nFaj9Oz5dIO7b2kjDS
- baeucd2dJSyMIhxMciKKbLECJsviTs163UnG988mDmsTCBDGLg4BWAiPl8ZGe6lP2ufnP3PYeFl
- tv7ZBlaV2b6t0usis3xFq2/JeNee9mT4H1tSKODo+Wy7bMD8ZXsip8zcqlN23W1leYiYb7r9yaQ
- URgA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4019; i=mripard@kernel.org;
+ h=from:subject:message-id; bh=nepQLLKsrdqR+bFLGLuPmm3JeqsJJl9xSfF4WgZmnUM=;
+ b=owGbwMvMwCX2+D1vfrpE4FHG02pJDKnczJYe8d+//7n17YZN+IX6D6y/75qeXH+zL/9fmeuz8
+ lTXc6qFHaUsDGJcDLJiiiwxwuZL4k7Net3JxjcPZg4rE8gQBi5OAZhIThXD/+iwRcd/xyue2Vym
+ zn9esWrx3KAJ278mu50NWP6N/WVV4HKGf5pGYht6uPdzBKZnHG3Yuztjk+di19O6T/3l39f/CTn
+ 9jAMA
 X-Developer-Key: i=mripard@kernel.org; a=openpgp;
  fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+The next features we will need to share across drivers will need to
+store some parameters for drivers to use, such as the selected output
+format.
 
-Here's a series that creates a subclass of drm_connector specifically
-targeted at HDMI controllers.
-
-The idea behind this series came from a recent discussion on IRC during
-which we discussed infoframes generation of i915 vs everything else. 
-
-Infoframes generation code still requires some decent boilerplate, with
-each driver doing some variation of it.
-
-In parallel, while working on vc4, we ended up converting a lot of i915
-logic (mostly around format / bpc selection, and scrambler setup) to
-apply on top of a driver that relies only on helpers.
-
-While currently sitting in the vc4 driver, none of that logic actually
-relies on any driver or hardware-specific behaviour.
-
-The only missing piece to make it shareable are a bunch of extra
-variables stored in a state (current bpc, format, RGB range selection,
-etc.).
-
-The initial implementation was relying on some generic subclass of
-drm_connector to address HDMI connectors, with a bunch of helpers that
-will take care of all the "HDMI Spec" related code. Scrambler setup is
-missing at the moment but can easily be plugged in.
-
-The feedback was that creating a connector subclass like was done for
-writeback would prevent the adoption of those helpers since it couldn't
-be used in all situations (like when the connector driver can implement
-multiple output) and required more churn to cast between the
-drm_connector and its subclass. The decision was thus to provide a set
-of helper and to store the required variables in drm_connector and
-drm_connector_state. This what has been implemented now.
-
-Hans Verkuil also expressed interest in implementing a mechanism in v4l2
-to retrieve infoframes from HDMI receiver and implementing an
-infoframe-decode tool.
-
-This series thus leverages the infoframe generation code to expose it
-through debugfs.
-
-This entire series is only build-tested at the moment. Let me know what
-you think,
-Maxime
+Let's create a new connector state dedicated to HDMI controllers, that
+will eventually store everything we need.
 
 Signed-off-by: Maxime Ripard <mripard@kernel.org>
 ---
-Changes in v2:
-- Change from a subclass to a set of helpers for drm_connector and
-  drm_connector state
-- Don't assume that all drivers support RGB, YUV420 and YUV422 but make
-  them provide a bitfield instead.
-- Don't assume that all drivers support the Broadcast RGB property but
-  make them call the registration helper.
-- Document the Broacast RGB property
-- Convert the inno_hdmi and sun4i_hdmi driver.
-- Link to v1: https://lore.kernel.org/r/20230814-kms-hdmi-connector-state-v1-0-048054df3654@kernel.org
+ drivers/gpu/drm/drm_atomic_state_helper.c | 34 +++++++++++++++++++++++++++++++
+ include/drm/drm_atomic_state_helper.h     |  4 ++++
+ include/drm/drm_connector.h               |  3 +++
+ 3 files changed, 41 insertions(+)
 
----
-Maxime Ripard (37):
-      drm/connector: Introduce an HDMI connector
-      drm/connector: hdmi: Create a custom state
-      drm/connector: hdmi: Add Broadcast RGB property
-      drm/connector: hdmi: Add helper to get the RGB range
-      drm/connector: hdmi: Add output BPC to the connector state
-      drm/connector: hdmi: Add support for output format
-      drm/connector: hdmi: Add HDMI compute clock helper
-      drm/connector: hdmi: Calculate TMDS character rate
-      drm/connector: hdmi: Add custom hook to filter TMDS character rate
-      drm/connector: hdmi: Compute bpc and format automatically
-      drm/connector: hdmi: Add Infoframes generation
-      drm/connector: hdmi: Create Infoframe DebugFS entries
-      drm/vc4: hdmi: Create destroy state implementation
-      drm/vc4: hdmi: Switch to HDMI connector
-      drm/rockchip: inno_hdmi: Remove useless mode_fixup
-      drm/rockchip: inno_hdmi: Remove useless copy of drm_display_mode
-      drm/rockchip: inno_hdmi: Switch encoder hooks to atomic
-      drm/rockchip: inno_hdmi: Get rid of mode_set
-      drm/rockchip: inno_hdmi: no need to store vic
-      drm/rockchip: inno_hdmi: Remove unneeded has audio flag
-      drm/rockchip: inno_hdmi: Remove useless input format
-      drm/rockchip: inno_hdmi: Remove useless output format
-      drm/rockchip: inno_hdmi: Remove useless colorimetry
-      drm/rockchip: inno_hdmi: Remove useless enum
-      drm/rockchip: inno_hdmi: Remove tmds rate from structure
-      drm/rockchip: inno_hdmi: Remove useless coeff_csc matrix
-      drm/rockchip: inno_hdmi: Remove useless mode_valid
-      drm/rockchip: inno_hdmi: Move infoframe disable to separate function
-      drm/rockchip: inno_hdmi: Create mask retrieval functions
-      drm/rockchip: inno_hdmi: Switch to infoframe type
-      drm/rockchip: inno_hdmi: Remove unused drm device pointer
-      drm/rockchip: inno_hdmi: Switch to HDMI connector
-      drm/sun4i: hdmi: Convert encoder to atomic
-      drm/sun4i: hdmi: Move mode_set into enable
-      drm/sun4i: hdmi: Switch to container_of_const
-      drm/sun4i: hdmi: Consolidate atomic_check and mode_valid
-      drm/sun4i: hdmi: Switch to HDMI connector
+diff --git a/drivers/gpu/drm/drm_atomic_state_helper.c b/drivers/gpu/drm/drm_atomic_state_helper.c
+index 784e63d70a42..972710a9fd49 100644
+--- a/drivers/gpu/drm/drm_atomic_state_helper.c
++++ b/drivers/gpu/drm/drm_atomic_state_helper.c
+@@ -556,6 +556,21 @@ void drm_atomic_helper_connector_tv_reset(struct drm_connector *connector)
+ }
+ EXPORT_SYMBOL(drm_atomic_helper_connector_tv_reset);
+ 
++/**
++ * __drm_atomic_helper_connector_hdmi_reset() - Initializes all HDMI @drm_connector_state resources
++ * @connector: DRM connector
++ *
++ * Initializes all HDMI resources from a @drm_connector_state without
++ * actually allocating it. This is useful for HDMI drivers, in
++ * combination with __drm_atomic_helper_connector_reset() or
++ * drm_atomic_helper_connector_reset().
++ */
++void __drm_atomic_helper_connector_hdmi_reset(struct drm_connector *connector,
++					      struct drm_connector_state *new_state)
++{
++}
++EXPORT_SYMBOL(__drm_atomic_helper_connector_hdmi_reset);
++
+ /**
+  * drm_atomic_helper_connector_tv_check - Validate an analog TV connector state
+  * @connector: DRM Connector
+@@ -605,6 +620,25 @@ int drm_atomic_helper_connector_tv_check(struct drm_connector *connector,
+ }
+ EXPORT_SYMBOL(drm_atomic_helper_connector_tv_check);
+ 
++/**
++ * drm_atomic_helper_connector_hdmi_check() - Helper to check HDMI connector atomic state
++ * @connector: DRM Connector
++ * @state: the DRM State object
++ *
++ * Provides a default connector state check handler for HDMI connectors.
++ * Checks that a desired connector update is valid, and updates various
++ * fields of derived state.
++ *
++ * RETURNS:
++ * Zero on success, or an errno code otherwise.
++ */
++int drm_atomic_helper_connector_hdmi_check(struct drm_connector *connector,
++					   struct drm_atomic_state *state)
++{
++	return 0;
++}
++EXPORT_SYMBOL(drm_atomic_helper_connector_hdmi_check);
++
+ /**
+  * __drm_atomic_helper_connector_duplicate_state - copy atomic connector state
+  * @connector: connector object
+diff --git a/include/drm/drm_atomic_state_helper.h b/include/drm/drm_atomic_state_helper.h
+index b9740edb2658..d59d2b3aef9a 100644
+--- a/include/drm/drm_atomic_state_helper.h
++++ b/include/drm/drm_atomic_state_helper.h
+@@ -71,7 +71,11 @@ void __drm_atomic_helper_connector_state_reset(struct drm_connector_state *conn_
+ void __drm_atomic_helper_connector_reset(struct drm_connector *connector,
+ 					 struct drm_connector_state *conn_state);
+ void drm_atomic_helper_connector_reset(struct drm_connector *connector);
++void __drm_atomic_helper_connector_hdmi_reset(struct drm_connector *connector,
++					      struct drm_connector_state *new_state);
+ void drm_atomic_helper_connector_tv_reset(struct drm_connector *connector);
++int drm_atomic_helper_connector_hdmi_check(struct drm_connector *connector,
++					   struct drm_atomic_state *state);
+ int drm_atomic_helper_connector_tv_check(struct drm_connector *connector,
+ 					 struct drm_atomic_state *state);
+ void drm_atomic_helper_connector_tv_margins_reset(struct drm_connector *connector);
+diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
+index c86cd363d652..5961f2ad48b1 100644
+--- a/include/drm/drm_connector.h
++++ b/include/drm/drm_connector.h
+@@ -1022,6 +1022,9 @@ struct drm_connector_state {
+ 	 * DRM blob property for HDR output metadata
+ 	 */
+ 	struct drm_property_blob *hdr_output_metadata;
++
++	struct {
++	} hdmi;
+ };
+ 
+ /**
 
- Documentation/gpu/kms-properties.csv      |   1 -
- drivers/gpu/drm/Kconfig                   |   1 +
- drivers/gpu/drm/drm_atomic.c              |  10 +
- drivers/gpu/drm/drm_atomic_state_helper.c | 634 ++++++++++++++++++++++++++++++
- drivers/gpu/drm/drm_atomic_uapi.c         |   4 +
- drivers/gpu/drm/drm_connector.c           | 196 +++++++++
- drivers/gpu/drm/drm_debugfs.c             | 110 ++++++
- drivers/gpu/drm/rockchip/inno_hdmi.c      | 409 +++++++------------
- drivers/gpu/drm/sun4i/sun4i_hdmi_enc.c    | 203 +++++-----
- drivers/gpu/drm/vc4/vc4_hdmi.c            | 624 ++++-------------------------
- drivers/gpu/drm/vc4/vc4_hdmi.h            |  44 +--
- drivers/gpu/drm/vc4/vc4_hdmi_phy.c        |   6 +-
- include/drm/drm_atomic_state_helper.h     |  15 +
- include/drm/drm_connector.h               | 245 ++++++++++++
- 14 files changed, 1557 insertions(+), 945 deletions(-)
----
-base-commit: 0bb80ecc33a8fb5a682236443c1e740d5c917d1d
-change-id: 20230814-kms-hdmi-connector-state-616787e67927
-
-Best regards,
 -- 
-Maxime Ripard <mripard@kernel.org>
+2.41.0
 
