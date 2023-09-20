@@ -2,39 +2,39 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90322CE79DC
-	for <linux-media@archiver.kernel.org>; Wed, 20 Sep 2023 14:36:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC9A0CE79DD
+	for <linux-media@archiver.kernel.org>; Wed, 20 Sep 2023 14:37:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236654AbjITOg7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Sep 2023 10:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55710 "EHLO
+        id S236697AbjITOhV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Sep 2023 10:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236645AbjITOg3 (ORCPT
+        with ESMTP id S236741AbjITOgt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 Sep 2023 10:36:29 -0400
+        Wed, 20 Sep 2023 10:36:49 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903A0F5;
-        Wed, 20 Sep 2023 07:36:20 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C65CC433CA;
-        Wed, 20 Sep 2023 14:36:19 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF3981AB;
+        Wed, 20 Sep 2023 07:36:31 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB04BC433CA;
+        Wed, 20 Sep 2023 14:36:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695220579;
-        bh=3urbyxJOhBJnxOpaqPUf/XFZGd3bz5XAd4Th75mEdek=;
+        s=k20201202; t=1695220591;
+        bh=M2G6LOjWKL55s6a+6IU/6bn6CB2qn7/s2odBTDcEBoM=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=QA6dcO5hgsrhvaSYtc6Acv+WH5nkWa12uDeImfMIESGkgKHy2cz/t15gXiZRccQ5W
-         hrs8neU8UHn4sURyJ+Oewb+xFVgmRn8LODsAUzdOWhIKsVNZaIn1ehicdGfR2AP6OE
-         L3miUDE14h/lhKViOQz647nMHgQa/WHQmT74kVC4fJME+VFCbsvwv9T7xIKSeFHCeJ
-         A4rM5zlyDYqmNFFdfmVNcNxn+6I1HJdMdLWIP2eVvneeGXrZfx/Sn1hN+xT2bKQQ+V
-         1SXMhVYK/zdRp5AlBfLyflagcpedUQit867jtsmg2dAff0Tymm0v8gY+LylUDSZkEA
-         18EY+NFBg7Ocw==
+        b=VG6HXzEJjtHNlREEXb+KlWhW8N8tg+/g4J5oZFgY6CMqXyawkmlGFx6afBVlftbm2
+         QAN3ejUw5Qki1aigMuDZP6YE2pxsoRb7fZ/uKH0n7dsMDyz+dyCIjMwrlKdpaFluUs
+         Sey8pjkvVmjNilcgqLRDkMZrUS3QDfLBX2uynPQ0w/785xtFmDSWhukAk40MlsZ7Wo
+         O60ULnHF5B7AGvcDsCk0hd4LZYkaMT0J6jfNODwqvoHQ1xnj4iUhi7Fw16gK6QCdHO
+         G6v+W4roW9NYOyKn9+pali3nCGZY+lXuh8eLHa2JI2NRnXCWM4soGsOPU2Yg2f40m3
+         QOIKkES9+QPjQ==
 From:   Maxime Ripard <mripard@kernel.org>
-Date:   Wed, 20 Sep 2023 16:35:28 +0200
-Subject: [PATCH RFC v2 13/37] drm/vc4: hdmi: Create destroy state
- implementation
+Date:   Wed, 20 Sep 2023 16:35:32 +0200
+Subject: [PATCH RFC v2 17/37] drm/rockchip: inno_hdmi: Switch encoder hooks
+ to atomic
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230920-kms-hdmi-connector-state-v2-13-17932daddd7d@kernel.org>
+Message-Id: <20230920-kms-hdmi-connector-state-v2-17-17932daddd7d@kernel.org>
 References: <20230920-kms-hdmi-connector-state-v2-0-17932daddd7d@kernel.org>
 In-Reply-To: <20230920-kms-hdmi-connector-state-v2-0-17932daddd7d@kernel.org>
 To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
@@ -53,58 +53,75 @@ Cc:     Hans Verkuil <hverkuil@xs4all.nl>, dri-devel@lists.freedesktop.org,
         linux-rockchip@lists.infradead.org, linux-sunxi@lists.linux.dev,
         Maxime Ripard <mripard@kernel.org>
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1640; i=mripard@kernel.org;
- h=from:subject:message-id; bh=3urbyxJOhBJnxOpaqPUf/XFZGd3bz5XAd4Th75mEdek=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDKnczJa/qjR2Xoo1rDJ82BJhdHSik+fxIisW7dKW88Wqi
- 68e8vzaUcrCIMbFICumyBIjbL4k7tSs151sfPNg5rAygQxh4OIUgInIdDD8U+Q3qJ1p9DP8+cvT
- y282V/zgXql2cGuUT8eur+/uyKX+XsjwP/6b4Icb4Ve5brvnHT5wcMaW22HVdyad3qx9JfJK2rm
- p4kwA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2182; i=mripard@kernel.org;
+ h=from:subject:message-id; bh=M2G6LOjWKL55s6a+6IU/6bn6CB2qn7/s2odBTDcEBoM=;
+ b=owGbwMvMwCX2+D1vfrpE4FHG02pJDKnczJaq4o+8FodPkG5TsuSra9xrXJI9ZfEuH6XJdQEvh
+ dKsKpU6SlkYxLgYZMUUWWKEzZfEnZr1upONbx7MHFYmkCEMXJwCMJFvpxj+B89jTmpZmPFjodS5
+ s06ajbImncuXRWls3vVX01075b56AMM/Q62VOaUna67se90dEjGjze7/iVvfNMt67pxunHhpVjg
+ nKwA=
 X-Developer-Key: i=mripard@kernel.org; a=openpgp;
  fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Even though we were rolling our own custom state for the vc4 HDMI
-controller driver, we were still using the generic helper to destroy
-that state.
-
-It was mostly working since the underlying state is the first member of
-our state so the pointers are probably equal in all relevant cases, but
-it's still fragile so let's fix this properly.
+The inno_hdmi encoder still uses the !atomic variants of enable, disable
+and modeset. Convert to their atomic equivalents.
 
 Signed-off-by: Maxime Ripard <mripard@kernel.org>
 ---
- drivers/gpu/drm/vc4/vc4_hdmi.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/rockchip/inno_hdmi.c | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
-index 25c9c71256d3..f05e2c95a60d 100644
---- a/drivers/gpu/drm/vc4/vc4_hdmi.c
-+++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
-@@ -672,11 +672,21 @@ vc4_hdmi_connector_duplicate_state(struct drm_connector *connector)
- 	return &new_state->base;
+diff --git a/drivers/gpu/drm/rockchip/inno_hdmi.c b/drivers/gpu/drm/rockchip/inno_hdmi.c
+index 4f5844fc115a..cc86d273ca4a 100644
+--- a/drivers/gpu/drm/rockchip/inno_hdmi.c
++++ b/drivers/gpu/drm/rockchip/inno_hdmi.c
+@@ -491,22 +491,25 @@ static int inno_hdmi_setup(struct inno_hdmi *hdmi,
  }
  
-+static void vc4_hdmi_connector_destroy_state(struct drm_connector *connector,
-+					     struct drm_connector_state *state)
-+{
-+	struct vc4_hdmi_connector_state *vc4_state =
-+		conn_state_to_vc4_hdmi_conn_state(state);
-+
-+	__drm_atomic_helper_connector_destroy_state(state);
-+	kfree(vc4_state);
-+}
-+
- static const struct drm_connector_funcs vc4_hdmi_connector_funcs = {
- 	.fill_modes = drm_helper_probe_single_connector_modes,
- 	.reset = vc4_hdmi_connector_reset,
- 	.atomic_duplicate_state = vc4_hdmi_connector_duplicate_state,
--	.atomic_destroy_state = drm_atomic_helper_connector_destroy_state,
-+	.atomic_destroy_state = vc4_hdmi_connector_destroy_state,
- 	.atomic_get_property = vc4_hdmi_connector_get_property,
- 	.atomic_set_property = vc4_hdmi_connector_set_property,
+ static void inno_hdmi_encoder_mode_set(struct drm_encoder *encoder,
+-				       struct drm_display_mode *mode,
+-				       struct drm_display_mode *adj_mode)
++				       struct drm_crtc_state *crtc_state,
++				       struct drm_connector_state *conn_state)
+ {
++	struct drm_display_mode *adj_mode = &crtc_state->adjusted_mode;
+ 	struct inno_hdmi *hdmi = encoder_to_inno_hdmi(encoder);
+ 
+ 	inno_hdmi_setup(hdmi, adj_mode);
+ }
+ 
+-static void inno_hdmi_encoder_enable(struct drm_encoder *encoder)
++static void inno_hdmi_encoder_enable(struct drm_encoder *encoder,
++				     struct drm_atomic_state *state)
+ {
+ 	struct inno_hdmi *hdmi = encoder_to_inno_hdmi(encoder);
+ 
+ 	inno_hdmi_set_pwr_mode(hdmi, NORMAL);
+ }
+ 
+-static void inno_hdmi_encoder_disable(struct drm_encoder *encoder)
++static void inno_hdmi_encoder_disable(struct drm_encoder *encoder,
++				      struct drm_atomic_state *state)
+ {
+ 	struct inno_hdmi *hdmi = encoder_to_inno_hdmi(encoder);
+ 
+@@ -527,10 +530,10 @@ inno_hdmi_encoder_atomic_check(struct drm_encoder *encoder,
+ }
+ 
+ static struct drm_encoder_helper_funcs inno_hdmi_encoder_helper_funcs = {
+-	.enable     = inno_hdmi_encoder_enable,
+-	.disable    = inno_hdmi_encoder_disable,
+-	.mode_set   = inno_hdmi_encoder_mode_set,
+-	.atomic_check = inno_hdmi_encoder_atomic_check,
++	.atomic_check	= inno_hdmi_encoder_atomic_check,
++	.atomic_enable	= inno_hdmi_encoder_enable,
++	.atomic_disable	= inno_hdmi_encoder_disable,
++	.atomic_mode_set	= inno_hdmi_encoder_mode_set,
  };
+ 
+ static enum drm_connector_status
 
 -- 
 2.41.0
