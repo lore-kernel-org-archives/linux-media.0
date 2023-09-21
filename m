@@ -2,336 +2,353 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA4FDE7D0A4
-	for <linux-media@archiver.kernel.org>; Thu, 21 Sep 2023 18:36:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96346E7D0A4
+	for <linux-media@archiver.kernel.org>; Thu, 21 Sep 2023 18:40:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbjIUSg7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 21 Sep 2023 14:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53514 "EHLO
+        id S230403AbjIUSkQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 21 Sep 2023 14:40:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjIUSgh (ORCPT
+        with ESMTP id S230398AbjIUSkD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 21 Sep 2023 14:36:37 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C42D4F925;
-        Thu, 21 Sep 2023 10:15:15 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-532c81b9adbso1431353a12.1;
-        Thu, 21 Sep 2023 10:15:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695316513; x=1695921313; darn=vger.kernel.org;
-        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=do13wE1NZGvZdh+vY8gzmZTIIEx/P59A/WkG5M6tfxM=;
-        b=e5KkzxHFQSgx/+tneHXb5A+CFDPl9D+1i+xG5Jzo1AflZggwZMRD7r1YMP1lv6YN68
-         HVtdDwWR7T/krBSp68EbGU0gmqJ5/j/TxwKLaCdEujz5iVCI6jozMJWTpeX+OYHDEQSi
-         1n9pGMSB2NlEtmo8q3RuXFtG7T9bc5JEz8CjKc9UAoZfMhmrVLhadaiW+S3xF/9CYWrA
-         4KjFA+yOZ5ECt68PgW2LB6v7s9fSBfXqtzcIhDzmO8sQj3HTL6I/6yc4BUNZBwR9ycbC
-         VMCmHRcPoMEfE0ZBU9nxvqbOKkWrFkNriOa2KlfJzKe4waLl3s9O2ZRmlmbERFp2pJte
-         vIjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695316513; x=1695921313;
-        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=do13wE1NZGvZdh+vY8gzmZTIIEx/P59A/WkG5M6tfxM=;
-        b=YJduwPabirzDdwTH4K5ocLwViDXIu/o5n3ALn03Q1LSYhncAo7sUl/S8/znkQXqSkW
-         xJN4EkRMk5RxSQjC74jENJZvFf2+8GXc5PNfT39M96Tm6LFaT5o55Hs2HlQZLVP0LETF
-         MpIMJhsYBPvGczU2xcBzwEem1eM+lgwlKfZZUJ/pzIY7peW6KfMLT01nEDcyAV2vUKl7
-         OwpHi2AMLUWuUsqqCcjIqFQlfgSwdyJuW+R65cN+K0eGqMphAAOFAJ2e/93hAtUhSoTT
-         AVT3S3JeaieAF0dkMIXv0w6D9nI7K9353PtsmlPIa7yU/1Vmo9v5TuOD723JU+T4hSyE
-         zz1w==
-X-Gm-Message-State: AOJu0YxhD+asVII+Fd7+FnsejgWF+mNJh3HYoHdQn8tOjhYMt6qBMia1
-        b1Z8pVs12N2KrH9WYWPOkk8=
-X-Google-Smtp-Source: AGHT+IEg+Q5URv4DOIHpsqZ5z/w2kZYXI9iypMN4HV1bJyRLV6UA2HEdGUB18nSebb4ZlpNiEyGH2w==
-X-Received: by 2002:a2e:8ed4:0:b0:2bf:fa16:2787 with SMTP id e20-20020a2e8ed4000000b002bffa162787mr3966289ljl.39.1695285568444;
-        Thu, 21 Sep 2023 01:39:28 -0700 (PDT)
-Received: from eldfell ([194.136.85.206])
-        by smtp.gmail.com with ESMTPSA id a24-20020a05651c011800b002b9de06f119sm224076ljb.67.2023.09.21.01.39.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Sep 2023 01:39:27 -0700 (PDT)
-Date:   Thu, 21 Sep 2023 11:39:11 +0300
-From:   Pekka Paalanen <ppaalanen@gmail.com>
-To:     Maxime Ripard <mripard@kernel.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sandy Huang <hjc@rock-chips.com>,
-        Heiko =?UTF-8?B?U3Q=?= =?UTF-8?B?w7xibmVy?= <heiko@sntech.de>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH RFC v2 03/37] drm/connector: hdmi: Add Broadcast RGB
- property
-Message-ID: <20230921113911.7799583d@eldfell>
-In-Reply-To: <20230920-kms-hdmi-connector-state-v2-3-17932daddd7d@kernel.org>
-References: <20230920-kms-hdmi-connector-state-v2-0-17932daddd7d@kernel.org>
-        <20230920-kms-hdmi-connector-state-v2-3-17932daddd7d@kernel.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Thu, 21 Sep 2023 14:40:03 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3816BB0590;
+        Thu, 21 Sep 2023 11:39:29 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (unknown [IPv6:2606:6d00:15:bae9::7a9])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nicolas)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E39766607298;
+        Thu, 21 Sep 2023 19:39:22 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1695321564;
+        bh=a9w6Nq4Jq+CiIItmdQmNdUTXQeCnQw026LO9PbyOm2A=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=UWr1uXRIecF5pkPQgoLvo9uiTqB5Rf/c/15gZVFjfENO36zN2wBi8dZIvEnb0GP8g
+         F01s+6Hl19OpxLVnlEq+nOj3vKonSJpOmMHCq3p83fcb7oGZa6hDlOMcNXvM1aZf2p
+         DqKWyd6xD55q3sEoxzznAhbnETEgQLmD/f1UbQ6JMuNIJu8GhJBBlPUd/pTLsD42xS
+         92OrXlN9ixFvMWU/9CNq9bIH2YDciPx1zHDsjyiB0wjy0V3r2ClS4pRczkyJ0C4Oct
+         tMGY5CO78/nH0fyu30dgIfzMv9yPy7kWq2L4Rp5vHt9vM8AhRyhsHBz0CKWVaSteCX
+         4kgZvBYVZk3Fw==
+Message-ID: <522e5f3bd4f43a5718ae88133b8d5d187c470f74.camel@collabora.com>
+Subject: Re: [PATCH v12 1/7] media: v4l2: Add ignore_streaming flag
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Sebastian Fricke <sebastian.fricke@collabora.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Nas Chung <nas.chung@chipsnmedia.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jackson Lee <jackson.lee@chipsnmedia.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Robert Beckett <bob.beckett@collabora.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, Tomasz Figa <tfiga@chromium.org>
+Date:   Thu, 21 Sep 2023 14:39:13 -0400
+In-Reply-To: <f50a8fe3-b42f-41a9-918d-825e1110a5ac@xs4all.nl>
+References: <20230915-wave5_v12_on_media_master-v12-0-92fc66cd685d@collabora.com>
+         <20230915-wave5_v12_on_media_master-v12-1-92fc66cd685d@collabora.com>
+         <a3c61e5a-e5cb-43d5-a3dc-80806f8da672@xs4all.nl>
+         <179e88f04257f21b6b723e935231de70415b3301.camel@collabora.com>
+         <f50a8fe3-b42f-41a9-918d-825e1110a5ac@xs4all.nl>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/whNYN0BaPvA7+2Dd9n3sm9G";
- protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
---Sig_/whNYN0BaPvA7+2Dd9n3sm9G
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, 20 Sep 2023 16:35:18 +0200
-Maxime Ripard <mripard@kernel.org> wrote:
-
-> The i915 driver has a property to force the RGB range of an HDMI output.
-> The vc4 driver then implemented the same property with the same
-> semantics. KWin has support for it, and a PR for mutter is also there to
-> support it.
+Le mercredi 20 septembre 2023 =C3=A0 16:49 +0200, Hans Verkuil a =C3=A9crit=
+=C2=A0:
+> On 20/09/2023 16:08, Nicolas Dufresne wrote:
+> > cc Tomasz Figa
+> >=20
+> > Le mercredi 20 septembre 2023 =C3=A0 14:59 +0200, Hans Verkuil a =C3=A9=
+crit=C2=A0:
+> > > On 15/09/2023 23:11, Sebastian Fricke wrote:
+> > > > Add a new flag to the `struct v4l2_m2m_dev` to toggle whether a que=
+ue
+> > > > must be streaming in order to allow queuing jobs to the ready queue=
+.
+> > > > Currently, both queues (CAPTURE & OUTPUT) must be streaming in orde=
+r to
+> > > > allow adding new jobs. This behavior limits the usability of M2M fo=
+r
+> > > > some drivers, as these have to be able, to perform analysis of the
+> > >=20
+> > > able, to -> able to
+> > >=20
+> > > > sequence to ensure, that userspace prepares the CAPTURE queue corre=
+ctly.
+> > >=20
+> > > ensure, that -> ensure that
+> > >=20
+> > > >=20
+> > > > Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+> > > > Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> > > > ---
+> > > >  include/media/v4l2-mem2mem.h | 17 +++++++++++++++++
+> > > >  1 file changed, 17 insertions(+)
+> > > >=20
+> > > > diff --git a/include/media/v4l2-mem2mem.h b/include/media/v4l2-mem2=
+mem.h
+> > > > index d6c8eb2b5201..97a48e61e358 100644
+> > > > --- a/include/media/v4l2-mem2mem.h
+> > > > +++ b/include/media/v4l2-mem2mem.h
+> > > > @@ -57,6 +57,16 @@ struct v4l2_m2m_dev;
+> > > >   * @rdy_spinlock: spin lock to protect the struct usage
+> > > >   * @num_rdy:	number of buffers ready to be processed
+> > > >   * @buffered:	is the queue buffered?
+> > > > + * @ignore_streaming: Dictates whether the queue must be streaming=
+ for a job to
+> > > > + *		      be queued.
+> > > > + *		      This is useful, for example, when the driver requires to
+> > > > + *		      initialize the sequence with a firmware, where only a
+> > > > + *		      queued OUTPUT queue buffer and STREAMON on the OUTPUT
+> > > > + *		      queue is required to perform the anlysis of the bitstrea=
+m
+> > > > + *		      header.
+> > > > + *		      This means the driver is responsible for implementing th=
+e
+> > > > + *		      job_ready callback correctly to make sure that requireme=
+nts
+> > > > + *		      for actual decoding are met.
+> > >=20
+> > > This is a bad description and field name.
+> >=20
+> > I wonder what's your opinion about the buffered one then :-D
 >=20
-> Both drivers implementing the same property with the same semantics,
-> plus the userspace having support for it, is proof enough that it's
-> pretty much a de-facto standard now and we can provide helpers for it.
+> Even worse :-)
 >=20
-> Let's plumb it into the newly created HDMI connector.
+> I still don't really understand what that does. Patches welcome.
 >=20
-> Signed-off-by: Maxime Ripard <mripard@kernel.org>
-> ---
->  Documentation/gpu/kms-properties.csv      |  1 -
->  drivers/gpu/drm/drm_atomic.c              |  5 +++
->  drivers/gpu/drm/drm_atomic_state_helper.c | 17 +++++++
->  drivers/gpu/drm/drm_atomic_uapi.c         |  4 ++
->  drivers/gpu/drm/drm_connector.c           | 74 +++++++++++++++++++++++++=
-++++++
->  include/drm/drm_connector.h               | 39 ++++++++++++++++
->  6 files changed, 139 insertions(+), 1 deletion(-)
+> >=20
+> > >=20
+> > > Basically what this field does is that, if true, the streaming state =
+of the
+> > > capture queue is ignored. So just call it that: ignore_cap_streaming.
+> > >=20
+> > > And explain that, if true, job_ready() will be called even if the cap=
+ture
+> > > queue is not streaming, and that that can be used to allow hardware t=
+o
+> > > analyze the bitstream header that arrives on the OUTPUT queue.
+> >=20
+> > Ack.
+> >=20
+> > >=20
+> > > Also, doesn't this field belong to struct v4l2_m2m_ctx? It makes no s=
+ense
+> > > for the output queue, this is really a configuration for the m2m cont=
+ext as
+> > > a whole.
+> >=20
+> > Unless we come up with a completely new type of M2M that can behave lik=
+e a gap
+> > filler (like a video rate m2m), it indeed makes no sense for output. I'=
+m just
+> > illustrating that this is true "now" but someone can come up with valid
+> > expectation. So I agree with you, we can move it up in the hierarchy.
+> >=20
+> > Recently over IRC and other threads, Tomasz raised a concern that CODEC=
+s where
+> > introducing too much complexity into M2M. And I believe buffered (which=
+ is
+> > barely documented) and this mechanism was being pointed.
+> >=20
+> > My take on that is that adding boolean configuration is what introduce
+> > complexity, and we can fix it by doing less in the m2m. After this disc=
+ussion, I
+> > came with the idea that we should remove buffered and ignore_streaming.=
+ For
+> > drivers that don't implement job_ready, this logic would be moved insid=
+e the
+> > default implementation. We can then add a helper to check the common co=
+nditions.
+> >=20
+> > The alternative suggested by Tomasz, was to layer two ops. We'd have a
+> > device_ready() ops and its default implementation would include the che=
+ck we
+> > have and would call job_ready(). Personally, I'd rather remove then add=
+, but I
+> > understadt the reasoning and would be fine committing to that instead.
+> >=20
+> > I'd like your feedback on this proposal. If this is something we want, =
+I'll do
+> > this prior to V13, otherwise we will address your comments and fix the =
+added
+> > mechanism. I think though that we agree that for decoders, this is nice=
+ addition
+> > to not have to trigger work manually from vb2 ops.
 >=20
-> diff --git a/Documentation/gpu/kms-properties.csv b/Documentation/gpu/kms=
--properties.csv
-> index 0f9590834829..caef14c532d4 100644
-> --- a/Documentation/gpu/kms-properties.csv
-> +++ b/Documentation/gpu/kms-properties.csv
-> @@ -17,7 +17,6 @@ Owner Module/Drivers,Group,Property Name,Type,Property =
-Values,Object attached,De
->  ,Virtual GPU,=E2=80=9Csuggested X=E2=80=9D,RANGE,"Min=3D0, Max=3D0xfffff=
-fff",Connector,property to suggest an X offset for a connector
->  ,,=E2=80=9Csuggested Y=E2=80=9D,RANGE,"Min=3D0, Max=3D0xffffffff",Connec=
-tor,property to suggest an Y offset for a connector
->  ,Optional,"""aspect ratio""",ENUM,"{ ""None"", ""4:3"", ""16:9"" }",Conn=
-ector,TDB
-> -i915,Generic,"""Broadcast RGB""",ENUM,"{ ""Automatic"", ""Full"", ""Limi=
-ted 16:235"" }",Connector,"When this property is set to Limited 16:235 and =
-CTM is set, the hardware will be programmed with the result of the multipli=
-cation of CTM by the limited range matrix to ensure the pixels normally in =
-the range 0..1.0 are remapped to the range 16/255..235/255."
+> It comes down to a matter of taste, I guess. I personally think that usin=
+g bools
+> to tweak the behavior of a framework does not necessarily increase comple=
+xity,
+> provided it is clearly documented what it does and why it is needed.
+>=20
+> I think an ignore_cap_streaming bool is pretty straightforward and has mi=
+nimal
+> impact in the code. As long as there are good comments.
 
-Hi,
+So for wave5 we will opt for this and apply your suggested changes. And I m=
+ay
+come back later on the subject.
 
-have a look at this old doc for the property, and...
+>=20
+> The 'buffered' flag is were this clearly failed completely, since I could=
+n't figure
+> out what it is supposed to do. But that is not because it makes the code =
+more
+> complex, it is just because of shoddy documentation and naming.
+>=20
+> Quite often implementing tweaks like that are quite easy in a framework, =
+since
+> you have all the information readily available. In a driver it can quickl=
+y become
+> messy.
 
->  ,,=E2=80=9Caudio=E2=80=9D,ENUM,"{ ""force-dvi"", ""off"", ""auto"", ""on=
-"" }",Connector,TBD
->  ,SDVO-TV,=E2=80=9Cmode=E2=80=9D,ENUM,"{ ""NTSC_M"", ""NTSC_J"", ""NTSC_4=
-43"", ""PAL_B"" } etc.",Connector,TBD
->  ,,"""left_margin""",RANGE,"Min=3D0, Max=3D SDVO dependent",Connector,TBD
+In this case, "buffered" is used to disable the checks for having at least =
+one
+buffer in the ready queues. In most cases, if you don't have at least 1 pen=
+ding
+capture and 1 pending output buffer, there is no point in calling device_ru=
+n.
 
-...
+In reality, drivers will add use case specific checks in their job_ready()
+implementation. For decoders, the cases I can think of are:
 
-> diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connec=
-tor.c
-> index d9a7e101e4e5..b45471d540ac 100644
-> --- a/drivers/gpu/drm/drm_connector.c
-> +++ b/drivers/gpu/drm/drm_connector.c
-> @@ -1174,6 +1174,29 @@ static const u32 dp_colorspaces =3D
->  	BIT(DRM_MODE_COLORIMETRY_BT2020_CYCC) |
->  	BIT(DRM_MODE_COLORIMETRY_BT2020_YCC);
-> =20
-> +static const struct drm_prop_enum_list broadcast_rgb_names[] =3D {
-> +	{ DRM_HDMI_BROADCAST_RGB_AUTO, "Automatic" },
-> +	{ DRM_HDMI_BROADCAST_RGB_FULL, "Full" },
-> +	{ DRM_HDMI_BROADCAST_RGB_LIMITED, "Limited 16:235" },
-> +};
-> +
-> +/*
-> + * drm_hdmi_connector_get_broadcast_rgb_name - Return a string for HDMI =
-connector RGB broadcast selection
-> + * @broadcast_rgb: Broadcast RGB selection to compute name of
-> + *
-> + * Returns: the name of the Broadcast RGB selection, or NULL if the type
-> + * is not valid.
-> + */
-> +const char *
-> +drm_hdmi_connector_get_broadcast_rgb_name(enum drm_hdmi_broadcast_rgb br=
-oadcast_rgb)
-> +{
-> +	if (broadcast_rgb > DRM_HDMI_BROADCAST_RGB_LIMITED)
-> +		return NULL;
-> +
-> +	return broadcast_rgb_names[broadcast_rgb].name;
-> +}
-> +EXPORT_SYMBOL(drm_hdmi_connector_get_broadcast_rgb_name);
-> +
->  /**
->   * DOC: standard connector properties
->   *
-> @@ -1640,6 +1663,24 @@ EXPORT_SYMBOL(drm_connector_attach_dp_subconnector=
-_property);
->  /**
->   * DOC: HDMI connector properties
->   *
-> + * Broadcast RGB (HDMI Specific):
-> + *      Indicates the RGB Range (Full vs Limited) used.
-> + *
-> + *      The value of this property can be one of the following:
-> + *
-> + *      Automatic:
-> + *              RGB Range is selected automatically based on the mode
-> + *              according to the HDMI specifications.
-> + *
-> + *      Full:
-> + *              Full RGB Range is forced.
-> + *
-> + *      Limited 16:235:
-> + *              Limited RGB Range is forced.
-> + *
-> + *      Drivers can set up this property by calling
-> + *      drm_connector_attach_broadcast_rgb_property().
+- On capture if you haven't parsed the stream header
+- On capture if the driver removes them from ready queue as a way to track =
+which
+one are considered free and may be used at any time by the firmware
+- On output queue, if you need device_run() to be called to complete the dr=
+ain
+the reorder queue
 
-...compare it to this. There is one crucial detail lost: setting this
-property does two or three things: it clips conversion input values to
-[0.0, 1.0] range, programs a conversion matrix to convert full-range
-RGB to destination RGB, and sends infoframes to indicate the chosen
-destination RGB.
+Yet, you want this check after stream headers are parsed, or whenever a new
+bitstream decode operation is to be queued in the firmware. So this check g=
+ets
+re-implemented, but dynamically, in all decoders.
 
-The distinction is important, because use cases like PLUGE calibration
-(Rec. ITU-R BT.814-4) rely on indicating limited range while pixel
-values are still able to carry sub-black values. Other procedures might
-also want to use super-whites. This is impossible with the existing
-"Broadcast RGB" property, but that is a different matter.
+Deinterlacers may needs this too with some algorithms (the one that introdu=
+ce
+delays at least). Its not clear to me why it was called buffered,
+ignore_rdy_queue might have been an option, though I'm not fully confident.=
+ Note
+that M2M can be confusing, since whenever you ask for last something, its a=
+lways
+relative to the ready queue, and may not make a lot of sense in the context=
+ it
+is used.
 
-The old doc didn't exactly say it sets the infoframe fields either, but
-I presume it does.
+>=20
+> For codec support there are a number of issues that increase complexity:
+> implementing support for the LAST flag and events, and supporting buffers
+> that can be held. Especially since driver implementations tend to vary.
+>=20
+> I've been experimenting with some cleanups and changes in v4l2-mem2mem.c
+> (https://git.linuxtv.org/hverkuil/media_tree.git/log/?h=3Denc-dec-cmd), m=
+ainly
+> surrounding the handling of the LAST flag. Note: this is failing the comp=
+liance
+> tests, I haven't had the time to pursue this further.
+>=20
+> I'm not sure whether the best approach is to move things out of the m2m f=
+ramework,
+> or move things into the m2m framework, or add a more codec-specific layer=
+ on top
+> of the m2m framework, or a combination of all of these.
+>=20
+> It is something that needs experimentation, just see what works.
 
-I feel the documentation needs to be much more explicit here.
+I can see you have omitted mark_stopped() calles when refactoring, which ma=
+kes
+these patches change the behaviour. Could be related.
 
-> + *
->   * content type (HDMI specific):
->   *	Indicates content type setting to be used in HDMI infoframes to indic=
-ate
->   *	content type for the external device, so that it adjusts its display
-> @@ -2500,6 +2541,39 @@ int drm_connector_attach_hdr_output_metadata_prope=
-rty(struct drm_connector *conn
->  }
->  EXPORT_SYMBOL(drm_connector_attach_hdr_output_metadata_property);
-> =20
-> +/**
-> + * drm_connector_attach_broadcast_rgb_property - attach "Broadcast RGB" =
-property
-> + * @connector: connector to attach max bpc property on.
+This is no longer strictly related to this patch, but I think cmd_stop()
+implementation (even after your changes) are miss-fit for driver that speak=
+s to
+firmware. As the firmware is being made aware of the free buffers, you can'=
+t
+just cherry-pick from the capture queue, you have to synchronise your state=
+ with
+the firmware while draining. The helper should be split in two parts I supp=
+ose,
+but cutting the line isn't easy.
 
-"max bpc" pasta.
+Thread safe usage of the numerous boolean implicated in the draining state =
+is
+also difficult. There is no other option then introduce a mutex or spinlock=
+ (if
+the state is needed in job_ready() implementation) to make this thread safe=
+ and
+reliable.
 
-> + *
-> + * This is used to add support for forcing the RGB range on a connector
-> + *
-> + * Returns:
-> + * Zero on success, negative errno on failure.
-> + */
-> +int drm_connector_attach_broadcast_rgb_property(struct drm_connector *co=
-nnector)
-> +{
-> +	struct drm_device *dev =3D connector->dev;
-> +	struct drm_property *prop;
-> +
-> +	prop =3D connector->broadcast_rgb_property;
-> +	if (!prop) {
-> +		prop =3D drm_property_create_enum(dev, DRM_MODE_PROP_ENUM,
-> +						"Broadcast RGB",
-> +						broadcast_rgb_names,
-> +						ARRAY_SIZE(broadcast_rgb_names));
-> +		if (!prop)
-> +			return -EINVAL;
-> +
-> +		connector->broadcast_rgb_property =3D prop;
-> +	}
-> +
-> +	drm_object_attach_property(&connector->base, prop,
-> +				   DRM_HDMI_BROADCAST_RGB_AUTO);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL(drm_connector_attach_broadcast_rgb_property);
-> +
->  /**
->   * drm_connector_attach_colorspace_property - attach "Colorspace" proper=
-ty
->   * @connector: connector to attach the property on.
-> diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
-> index 5961f2ad48b1..fdcf64ab91a9 100644
-> --- a/include/drm/drm_connector.h
-> +++ b/include/drm/drm_connector.h
-> @@ -368,6 +368,33 @@ enum drm_panel_orientation {
->  	DRM_MODE_PANEL_ORIENTATION_RIGHT_UP,
->  };
-> =20
-> +/**
-> + * enum drm_hdmi_broadcast_rgb - Broadcast RGB Selection for a @drm_hdmi=
-_connector
-> + *
-> + * This enum is used to track broadcast RGB selection. There are no
-> + * separate #defines for the uapi!
+>=20
+> But for this specific flag: I think it is fine to put that in the m2m fra=
+mework,
+> just document and name it well.
 
-Why the "no separate defines" comment? That's the norm.
+Ack.
 
-The KMS property UAPI works by string names for enum values. Some enum
-properties might expose C enums for the values, but that is an
-exception that cannot be fixed due to stable UAPI.
+>=20
+> Regards,
+>=20
+> 	Hans
+>=20
+> >=20
+> > regards,
+> > Nicolas
+> >=20
+> > >=20
+> > > >   *
+> > > >   * Queue for buffers ready to be processed as soon as this
+> > > >   * instance receives access to the device.
+> > > > @@ -69,6 +79,7 @@ struct v4l2_m2m_queue_ctx {
+> > > >  	spinlock_t		rdy_spinlock;
+> > > >  	u8			num_rdy;
+> > > >  	bool			buffered;
+> > > > +	bool			ignore_streaming;
+> > > >  };
+> > > > =20
+> > > >  /**
+> > > > @@ -564,6 +575,12 @@ static inline void v4l2_m2m_set_dst_buffered(s=
+truct v4l2_m2m_ctx *m2m_ctx,
+> > > >  	m2m_ctx->cap_q_ctx.buffered =3D buffered;
+> > > >  }
+> > > > =20
+> > > > +static inline void v4l2_m2m_set_dst_ignore_streaming(struct v4l2_m=
+2m_ctx *m2m_ctx,
+> > > > +						     bool ignore_streaming)
+> > > > +{
+> > > > +	m2m_ctx->cap_q_ctx.ignore_streaming =3D ignore_streaming;
+> > > > +}
+> > > > +
+> > >=20
+> > > I think this is overkill, esp. when the field is moved to m2m_ctx. Ju=
+st clearly
+> > > document that drivers can set this.
+> > >=20
+> > > Regards,
+> > >=20
+> > > 	Hans
+> > >=20
+> > > >  /**
+> > > >   * v4l2_m2m_ctx_release() - release m2m context
+> > > >   *
+> > > >=20
+> > >=20
+> >=20
+>=20
 
-
-Thanks,
-pq
-
-> + */
-> +enum drm_hdmi_broadcast_rgb {
-> +	/**
-> +	 * @DRM_HDMI_BROADCAST_RGB_AUTO: The RGB range is selected
-> +	 * automatically based on the mode.
-> +	 */
-> +	DRM_HDMI_BROADCAST_RGB_AUTO,
-> +
-> +	/**
-> +	 * @DRM_HDMI_BROADCAST_RGB_FULL: Full range RGB is forced.
-> +	 */
-> +	DRM_HDMI_BROADCAST_RGB_FULL,
-> +
-> +	/**
-> +	 * @DRM_HDMI_BROADCAST_RGB_LIMITED: Limited range RGB is forced.
-> +	 */
-> +	DRM_HDMI_BROADCAST_RGB_LIMITED,
-> +};
-
---Sig_/whNYN0BaPvA7+2Dd9n3sm9G
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmUMAS8ACgkQI1/ltBGq
-qqc3XA/9ECTVC9T0gCqODWNk5wpTe/rrNuuHwqZsSzh3lDAK8NrTGSnuIuMXWGSj
-vljtNwo3HH3V9o/dn5AsgBH6W2TQkFAeth05KqFVSXbcNO4eNSNNxmFlWl+fZ8HA
-ePTbRN2FWZ1FWujVDZEWBetPxs3a662dH7YOjZrhh6dMxU0PbgKgOaUVoUrimRht
-Lh3VJUfi3utYySd2kHSqO7/yaT8M7hC2wVfSk1OcD3PNb9w6ntBMAfzDQ/Nubo6V
-nNGZsB+DrKkSYa7q7LDienXuonsPyVpLw9e90tZJcHmzD6gUYDymEoTdy4rv6u2N
-Gn2kTUbPFPCNlEuBpe0lQhRrTJcl2oqF19zllvRSrEgwBX1c8PSx8C6RUlqd0l7c
-btRB6rNODtr52ySQLOHWUjaQ/xAT8pbswadOilUFRJFrNJHSkXxR2Ij21L7TbLpb
-KstqX3IAk33IVQzafw5fdXfofU/PvUvLiFYJV/5nsbSeU409buZu+p7kCjvNaG5R
-385N6MTELzTD5fjvZn7OtAjdmsRlb2opYASo5vU9F4zw/NqDUFEqzRj3IeOZ7SAe
-orEitPwAzPSsS4+6D4bJbzutcvHLpScQ8go7iZzeY/idr2BcsCkpNGlDZ89uk6Lu
-wIH7tiRHk8r/2akYDa2Sl1zPnU/ELxUrbbWCWyjJSeE1CF5LZpc=
-=A8/v
------END PGP SIGNATURE-----
-
---Sig_/whNYN0BaPvA7+2Dd9n3sm9G--
