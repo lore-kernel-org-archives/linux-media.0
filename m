@@ -2,219 +2,270 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44CFBE7D0A6
-	for <linux-media@archiver.kernel.org>; Thu, 21 Sep 2023 18:12:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 068DAE7D0A4
+	for <linux-media@archiver.kernel.org>; Thu, 21 Sep 2023 18:15:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbjIUSMl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 21 Sep 2023 14:12:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48154 "EHLO
+        id S230190AbjIUSPM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 21 Sep 2023 14:15:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230486AbjIUSM1 (ORCPT
+        with ESMTP id S230063AbjIUSPA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 21 Sep 2023 14:12:27 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1620D7B45D;
-        Thu, 21 Sep 2023 10:37:09 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D701C433A9;
-        Thu, 21 Sep 2023 07:11:16 +0000 (UTC)
-Message-ID: <5292ce53-643e-44f0-b2cc-cb66efee9712@xs4all.nl>
-Date:   Thu, 21 Sep 2023 09:11:14 +0200
+        Thu, 21 Sep 2023 14:15:00 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309EEB0F79;
+        Thu, 21 Sep 2023 11:10:10 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2c108e106f0so21937591fa.1;
+        Thu, 21 Sep 2023 11:10:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695319808; x=1695924608; darn=vger.kernel.org;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=k4kPbAvXqYWCjQtm/jTtJ1li9AEbZqWafTDz226oJdI=;
+        b=HyW1ySaOYwx7yRSykO8SXgAdM+zjuMDEpBZ2iK7ou+9OtVJbyU3quv7EmukevAq/eB
+         hbNBSXFGYfqiLVdidnxUlB4QRZs+PGMJECYyTt139pAE4nhI/QxdbwGydDVsQnZcv5dn
+         Ei++gAWRD6x8MBddj8GsOhwj7Xs1yQ8lSXHC3FioQMbw3CECewchvziJseGPxvuwDHkk
+         ZWEWAzNSi8DOg9WZ2cm6uteTah+zdwDt74osOE4t0FjUSWoE6cDrA2ORacIv7XiUguIL
+         k0TUwJHyTrPlkROG+6QZ2GzeBPe+5W40udQozuldaSaWTa02RmMGSWntxWwDHHmS2Um9
+         YcxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695319808; x=1695924608;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=k4kPbAvXqYWCjQtm/jTtJ1li9AEbZqWafTDz226oJdI=;
+        b=lexDUwOEjXMWKwh/OuzvtjKOJpBlUpSCddaa9P02lmnAESLS+lUMmcORl0hQwY3e67
+         K7qdB5htFvaX4K+tYNi/Ut6g91qTkeFUL4zX4bprMWr12F/wGD0lYTkfO2CwLPMssTBb
+         HMSg6y6RXjHduhRzL5FeBRY8CibrMzmvkaQJRcC9LNQVkjqKWBToRF7Mx9Jj+wapxxIT
+         ToBwv2O/g6yx6Yu4ep0QPLvjBgqstBUu6p63yF7C0P3D+ckFEWYPitrt2BvWjYXiKuq6
+         knNhWeW3riRYZVbRZXIt9Dk87FNDH8lhHBEy/pMm/4GgCboDxonGUA0VsTxpMAB7EXML
+         i4NA==
+X-Gm-Message-State: AOJu0YwAwoCnXRFjPoNlXNvDWhl7Rz+bBfMfULKGjY7qC+YbGv/BYehO
+        28Mp5Vk+QtINgQI1AqxTEJ0=
+X-Google-Smtp-Source: AGHT+IECgI0x8NqVEUwF8vAB/HRCbCPTukfPzQhaF2jXn5JCb5+dUTi6Rg3yqEOYh76bvzU4KraLtw==
+X-Received: by 2002:ac2:5224:0:b0:503:1d46:6f29 with SMTP id i4-20020ac25224000000b005031d466f29mr4160892lfl.37.1695286128519;
+        Thu, 21 Sep 2023 01:48:48 -0700 (PDT)
+Received: from eldfell ([194.136.85.206])
+        by smtp.gmail.com with ESMTPSA id h16-20020a197010000000b004fbddb14020sm205979lfc.56.2023.09.21.01.48.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Sep 2023 01:48:48 -0700 (PDT)
+Date:   Thu, 21 Sep 2023 11:48:45 +0300
+From:   Pekka Paalanen <ppaalanen@gmail.com>
+To:     Maxime Ripard <mripard@kernel.org>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sandy Huang <hjc@rock-chips.com>,
+        Heiko =?UTF-8?B?U3Q=?= =?UTF-8?B?w7xibmVy?= <heiko@sntech.de>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH RFC v2 05/37] drm/connector: hdmi: Add output BPC to the
+ connector state
+Message-ID: <20230921114845.7edb1d37@eldfell>
+In-Reply-To: <20230920-kms-hdmi-connector-state-v2-5-17932daddd7d@kernel.org>
+References: <20230920-kms-hdmi-connector-state-v2-0-17932daddd7d@kernel.org>
+        <20230920-kms-hdmi-connector-state-v2-5-17932daddd7d@kernel.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v4 09/11] media: uapi: Add
- V4L2_CID_USER_IMX_ASRC_RATIO_MOD control
-Content-Language: en-US, nl
-To:     Shengjiu Wang <shengjiu.wang@gmail.com>
-Cc:     Shengjiu Wang <shengjiu.wang@nxp.com>, sakari.ailus@iki.fi,
-        tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiubo.Lee@gmail.com, festevam@gmail.com, nicoleotsuka@gmail.com,
-        lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, alsa-devel@alsa-project.org,
-        linuxppc-dev@lists.ozlabs.org
-References: <1695202370-24678-1-git-send-email-shengjiu.wang@nxp.com>
- <1695202370-24678-10-git-send-email-shengjiu.wang@nxp.com>
- <fbedcbf1-d925-47d6-b9fb-c9e15263c117@xs4all.nl>
- <CAA+D8APyNGFSry1GUv6TOW0nKYHKSwQd5bTcRNuT7cu0Xf8eUA@mail.gmail.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Autocrypt: addr=hverkuil@xs4all.nl; keydata=
- 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
-In-Reply-To: <CAA+D8APyNGFSry1GUv6TOW0nKYHKSwQd5bTcRNuT7cu0Xf8eUA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/1wJwHY6yZH5_elgENzeqr8U";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 21/09/2023 08:55, Shengjiu Wang wrote:
-> On Wed, Sep 20, 2023 at 6:19 PM Hans Verkuil <hverkuil@xs4all.nl> wrote:
->>
->> On 20/09/2023 11:32, Shengjiu Wang wrote:
->>> The input clock and output clock may not be the accurate
->>> rate as the sample rate, there is some drift, so the convert
->>> ratio of i.MX ASRC module need to be changed according to
->>> actual clock rate.
->>>
->>> Add V4L2_CID_USER_IMX_ASRC_RATIO_MOD control for user to
->>> adjust the ratio.
->>>
->>> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
->>> ---
->>>  Documentation/userspace-api/media/v4l/control.rst | 5 +++++
->>>  drivers/media/v4l2-core/v4l2-ctrls-defs.c         | 1 +
->>>  include/uapi/linux/v4l2-controls.h                | 1 +
->>>  3 files changed, 7 insertions(+)
->>>
->>> diff --git a/Documentation/userspace-api/media/v4l/control.rst b/Documentation/userspace-api/media/v4l/control.rst
->>> index 4463fce694b0..2bc175900a34 100644
->>> --- a/Documentation/userspace-api/media/v4l/control.rst
->>> +++ b/Documentation/userspace-api/media/v4l/control.rst
->>> @@ -318,6 +318,11 @@ Control IDs
->>>      depending on particular custom controls should check the driver name
->>>      and version, see :ref:`querycap`.
->>>
->>> +.. _v4l2-audio-imx:
->>> +
->>> +``V4L2_CID_USER_IMX_ASRC_RATIO_MOD``
->>> +    sets the rasampler ratio modifier of i.MX asrc module.
->>
->> rasampler -> resampler (I think?)
->>
->> This doesn't document at all what the type of the control is or how to interpret it.
->>
->>> +
->>>  Applications can enumerate the available controls with the
->>>  :ref:`VIDIOC_QUERYCTRL` and
->>>  :ref:`VIDIOC_QUERYMENU <VIDIOC_QUERYCTRL>` ioctls, get and set a
->>> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
->>> index 8696eb1cdd61..16f66f66198c 100644
->>> --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
->>> +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
->>> @@ -1242,6 +1242,7 @@ const char *v4l2_ctrl_get_name(u32 id)
->>>       case V4L2_CID_COLORIMETRY_CLASS:        return "Colorimetry Controls";
->>>       case V4L2_CID_COLORIMETRY_HDR10_CLL_INFO:               return "HDR10 Content Light Info";
->>>       case V4L2_CID_COLORIMETRY_HDR10_MASTERING_DISPLAY:      return "HDR10 Mastering Display";
->>> +     case V4L2_CID_USER_IMX_ASRC_RATIO_MOD:                  return "ASRC RATIO MOD";
->>
->> Let's stay consistent with the other control names:
->>
->> "ASRC Ratio Modifier"
->>
->> But if this is a driver specific control, then this doesn't belong here.
->>
->> Driver specific controls are defined in the driver itself, including this
->> description.
->>
->> Same for the control documentation: if it is driver specific, then that
->> typically is documented either in a driver-specific public header, or
->> possibly in driver-specific documentation (Documentation/admin-guide/media/).
->>
->> But is this imx specific? Wouldn't other similar devices need this?
-> 
-> It is imx specific.
+--Sig_/1wJwHY6yZH5_elgENzeqr8U
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Why? I'm not opposed to this, but I wonder if you looked at datasheets of
-similar devices from other vendors: would they use something similar?
+On Wed, 20 Sep 2023 16:35:20 +0200
+Maxime Ripard <mripard@kernel.org> wrote:
 
-And the very short description you gave in the commit log refers to input
-and output clock: how would userspace know those clock frequencies? In
-other words, what information does userspace need in order to set this
-control correctly? And is that information actually available? How would
-you use this control?
+> We'll add automatic selection of the output BPC in a following patch,
+> but let's add it to the HDMI connector state already.
+>=20
+> Signed-off-by: Maxime Ripard <mripard@kernel.org>
+> ---
+>  drivers/gpu/drm/drm_atomic.c              |  4 +++-
+>  drivers/gpu/drm/drm_atomic_state_helper.c |  6 +++++-
+>  drivers/gpu/drm/drm_connector.c           | 13 ++++++++++++-
+>  include/drm/drm_connector.h               | 13 ++++++++++++-
+>  4 files changed, 32 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/drm_atomic.c b/drivers/gpu/drm/drm_atomic.c
+> index b1b56dcaa76b..8dce0a2f2ac3 100644
+> --- a/drivers/gpu/drm/drm_atomic.c
+> +++ b/drivers/gpu/drm/drm_atomic.c
+> @@ -1143,9 +1143,11 @@ static void drm_atomic_connector_print_state(struc=
+t drm_printer *p,
+>  	drm_printf(p, "\tcolorspace=3D%s\n", drm_get_colorspace_name(state->col=
+orspace));
+> =20
+>  	if (connector->connector_type =3D=3D DRM_MODE_CONNECTOR_HDMIA ||
+> -	    connector->connector_type =3D=3D DRM_MODE_CONNECTOR_HDMIB)
+> +	    connector->connector_type =3D=3D DRM_MODE_CONNECTOR_HDMIB) {
+>  		drm_printf(p, "\tbroadcast_rgb=3D%s\n",
+>  			   drm_hdmi_connector_get_broadcast_rgb_name(state->hdmi.broadcast_rg=
+b));
+> +		drm_printf(p, "\toutput_bpc=3D%u\n", state->hdmi.output_bpc);
+> +	}
+> =20
+>  	if (connector->connector_type =3D=3D DRM_MODE_CONNECTOR_WRITEBACK)
+>  		if (state->writeback_job && state->writeback_job->fb)
+> diff --git a/drivers/gpu/drm/drm_atomic_state_helper.c b/drivers/gpu/drm/=
+drm_atomic_state_helper.c
+> index 0f7e5ba555b8..2c9b52ae1b56 100644
+> --- a/drivers/gpu/drm/drm_atomic_state_helper.c
+> +++ b/drivers/gpu/drm/drm_atomic_state_helper.c
+> @@ -569,6 +569,9 @@ EXPORT_SYMBOL(drm_atomic_helper_connector_tv_reset);
+>  void __drm_atomic_helper_connector_hdmi_reset(struct drm_connector *conn=
+ector,
+>  					      struct drm_connector_state *new_state)
+>  {
+> +	new_state->max_bpc =3D 8;
+> +	new_state->max_requested_bpc =3D 8;
+> +	new_state->hdmi.output_bpc =3D 8;
 
-I don't really understand how this is supposed to be used.
+Hi,
 
-> 
-> Does this mean that I need to create a header file in include/uapi/linux
-> folder to put this definition?  I just hesitate if this is necessary.
+will this be forcing all drivers using these helpers to default to max bpc =
+=3D 8?
 
-Yes, put it there. There are some examples of this already:
+I believe at least amdgpu would disagree. The defaults were changed in
+the recent years, IIRC to avoid extra modesets during boot-up when
+desktops prefer highest possible bpc for a mode.
 
-include/uapi/linux/aspeed-video.h
-include/uapi/linux/max2175.h
+The 'max bpc' property itself is a manual workaround for faulty
+hardware that does not correctly indicate the max bpc it can handle. It
+should not default to be a limiting factor.
 
-> 
-> There is folder Documentation/userspace-api/media/drivers/ for drivers
-> Should this document in this folder, not in the
-> Documentation/admin-guide/media/?
+>  	new_state->hdmi.broadcast_rgb =3D DRM_HDMI_BROADCAST_RGB_AUTO;
+>  }
+>  EXPORT_SYMBOL(__drm_atomic_helper_connector_hdmi_reset);
+> @@ -651,7 +654,8 @@ int drm_atomic_helper_connector_hdmi_check(struct drm=
+_connector *connector,
+>  	struct drm_connector_state *new_state =3D
+>  		drm_atomic_get_new_connector_state(state, connector);
+> =20
+> -	if (old_state->hdmi.broadcast_rgb !=3D new_state->hdmi.broadcast_rgb) {
+> +	if (old_state->hdmi.broadcast_rgb !=3D new_state->hdmi.broadcast_rgb ||
+> +	    old_state->hdmi.output_bpc !=3D new_state->hdmi.output_bpc) {
+>  		struct drm_crtc *crtc =3D new_state->crtc;
+>  		struct drm_crtc_state *crtc_state;
+> =20
+> diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connec=
+tor.c
+> index b45471d540ac..f55f5918411c 100644
+> --- a/drivers/gpu/drm/drm_connector.c
+> +++ b/drivers/gpu/drm/drm_connector.c
+> @@ -459,6 +459,7 @@ EXPORT_SYMBOL(drmm_connector_init);
+>   * @funcs: callbacks for this connector
+>   * @connector_type: user visible type of the connector
+>   * @ddc: optional pointer to the associated ddc adapter
+> + * @max_bpc: Maximum bits per char the HDMI connector supports
+>   *
+>   * Initialises a preallocated HDMI connector. Connectors can be
+>   * subclassed as part of driver connector objects.
+> @@ -475,7 +476,8 @@ int drmm_connector_hdmi_init(struct drm_device *dev,
+>  			     struct drm_connector *connector,
+>  			     const struct drm_connector_funcs *funcs,
+>  			     int connector_type,
+> -			     struct i2c_adapter *ddc)
+> +			     struct i2c_adapter *ddc,
+> +			     unsigned int max_bpc)
+>  {
+>  	int ret;
+> =20
+> @@ -487,6 +489,15 @@ int drmm_connector_hdmi_init(struct drm_device *dev,
+>  	if (ret)
+>  		return ret;
+> =20
+> +	if (max_bpc) {
+> +		if (!(max_bpc =3D=3D 8 || max_bpc =3D=3D 10 || max_bpc =3D=3D 12))
+> +			return -EINVAL;
+> +
+> +		drm_connector_attach_hdr_output_metadata_property(connector);
+> +		drm_connector_attach_max_bpc_property(connector, 8, max_bpc);
+> +		connector->max_bpc =3D max_bpc;
+> +	}
+> +
+>  	return 0;
+>  }
+>  EXPORT_SYMBOL(drmm_connector_hdmi_init);
+> diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
+> index fdcf64ab91a9..d0bcb835c857 100644
+> --- a/include/drm/drm_connector.h
+> +++ b/include/drm/drm_connector.h
+> @@ -1056,6 +1056,11 @@ struct drm_connector_state {
+>  		 * Broadcast RGB selection value.
+>  		 */
+>  		enum drm_hdmi_broadcast_rgb broadcast_rgb;
+> +
+> +		/**
+> +		 * @output_bpc: Bits per character to output.
 
-Yes, you are correct. For the headers above, the corresponding documentation
-is in:
+Is it not bits per channel?
 
-Documentation/userspace-api/media/drivers/aspeed-video.rst
-Documentation/userspace-api/media/drivers/max2175.rst
+> +		 */
+> +		unsigned int output_bpc;
+>  	} hdmi;
+>  };
+> =20
+> @@ -1700,6 +1705,11 @@ struct drm_connector {
+>  	 */
+>  	struct drm_property_blob *path_blob_ptr;
+> =20
+> +	/**
+> +	 * @max_bpc: Maximum bits per character the connector supports.
 
-So you have some examples as reference.
+channel?
 
-Frankly, what is in admin-guide and in userspace-api is a bit random, it
-probably could use a cleanup.
+> +	 */
+> +	unsigned int max_bpc;
+> +
+>  	/**
+>  	 * @max_bpc_property: Default connector property for the max bpc to be
+>  	 * driven out of the connector.
+> @@ -1939,7 +1949,8 @@ int drmm_connector_hdmi_init(struct drm_device *dev,
+>  			     struct drm_connector *connector,
+>  			     const struct drm_connector_funcs *funcs,
+>  			     int connector_type,
+> -			     struct i2c_adapter *ddc);
+> +			     struct i2c_adapter *ddc,
+> +			     unsigned int max_bpc);
+>  void drm_connector_attach_edid_property(struct drm_connector *connector);
+>  int drm_connector_register(struct drm_connector *connector);
+>  void drm_connector_unregister(struct drm_connector *connector);
+>=20
 
-Regards,
+Thanks,
+pq
 
-	Hans
+--Sig_/1wJwHY6yZH5_elgENzeqr8U
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-> 
-> Best regards
-> Wang shengjiu
->>
->>>       default:
->>>               return NULL;
->>>       }
->>> diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
->>> index c3604a0a3e30..b1c319906d12 100644
->>> --- a/include/uapi/linux/v4l2-controls.h
->>> +++ b/include/uapi/linux/v4l2-controls.h
->>> @@ -162,6 +162,7 @@ enum v4l2_colorfx {
->>>  /* The base for the imx driver controls.
->>>   * We reserve 16 controls for this driver. */
->>>  #define V4L2_CID_USER_IMX_BASE                       (V4L2_CID_USER_BASE + 0x10b0)
->>> +#define V4L2_CID_USER_IMX_ASRC_RATIO_MOD     (V4L2_CID_USER_IMX_BASE + 0)
->>>
->>>  /*
->>>   * The base for the atmel isc driver controls.
->>
->> Regards,
->>
->>         Hans
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmUMA20ACgkQI1/ltBGq
+qqdaQRAAjfKbi0w7oddJriljZUDUoI1Xd4FCUc54o8hNaouY4GMPo8BjlHTUGHxT
+oHxATfX6EO5a4wWK3ceBWFhBpLETGmIpqn5wdcG2+84vhIVHXgPn/l1MwShFkzcD
+5WQjnEnFvGqg8eZ05Cc545omaAiLZbqGKeXw2piYUd2+cZmBDZroK3BQXgZlM6JV
+62/0mx3eR3juCdwGR9PlWHnoPdsVQA8REfaR62C33rF4ZP52tp0x/OiXa0D7tcxl
+bj7XqZ3iuK9lCArc8GGZZdSuyEK8oobA7j6SDvbY6KqNGoE4DLNkKHVp1Cm7x7X/
+xvexGK/FiQ3QLSn7KUXFK3MFk5X14Zr5P83bLFnEL78MqSdz0KCgeZFhJ9Hs6PkS
+y3FuV7YcM8PNsPwvJIElTRnMpby7LpweEPD2mohJENK22b3bfFWU5o+sGVGotCKq
+Y3BRrJnjWZrXq6mkcKhFwq2YM7+oFasQrG74Afn8SFvfu9lnRfXnveYp8tpyR/Jz
+CIH/X57kHsgZJeZaPVD86aGmEq5UFjynjuLbwznoJYVcJrwAtvbVwNzcrTO3x4ea
+P8PRUxUwROJGWuLKSRKosmmoMIjpqSBIsQ2UDaWEwv0UIbKA2jivnb9vGkbBVEGZ
+rAzfC0oo7clq9sikn0v8UMgbIkzWSYYy5ycZVl1KQ7xxXQtbHr4=
+=JFuq
+-----END PGP SIGNATURE-----
+
+--Sig_/1wJwHY6yZH5_elgENzeqr8U--
