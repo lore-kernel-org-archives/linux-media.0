@@ -2,137 +2,125 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48640E7D0AA
-	for <linux-media@archiver.kernel.org>; Thu, 21 Sep 2023 21:13:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B90EE7D0B1
+	for <linux-media@archiver.kernel.org>; Thu, 21 Sep 2023 21:15:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232574AbjIUVNi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 21 Sep 2023 17:13:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57870 "EHLO
+        id S232348AbjIUVPs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 21 Sep 2023 17:15:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231674AbjIUVNJ (ORCPT
+        with ESMTP id S232969AbjIUVPG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 21 Sep 2023 17:13:09 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB655279;
-        Thu, 21 Sep 2023 10:08:21 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (unknown [IPv6:2606:6d00:15:bae9::7a9])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nicolas)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8589D660731D;
-        Thu, 21 Sep 2023 16:46:49 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1695311211;
-        bh=qmLDWY/AuDZBwTiEH6bdhLx9MgWdAsDslzLfx3DOK4A=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=AAgC+As4Cy0TIyhqMYWvMkMILzrYGP2tdMFpvtrvDNPf0KcxzcZjzMOSK4Rq+GWMQ
-         EIpWb+TvGWirRWMOZCnECZJb8onvByXZBGwfeB6ZhIC0oO7BjgjViiHxqwDixdY78Z
-         K42MnJB5KJsEJ7fPabAtJvrBf8vDCD1DZ6xRKVOKXgDp7Ecy6k7Slj/HvSyvE2VWMK
-         QntErYDk3VwsgkkGUd4sx9fDC1P8XVhFchzQ+LnlHzDVJAEldAUAFC1OeR/4l+Gdi4
-         F7SL1J42s1DO+HX9UVMY1uNhlaX6g2/4RjNBE3XNQIveR7GF+dQxCVD4Z0bz0/rViQ
-         EvIPcMHnu1ptg==
-Message-ID: <c7cd83c49a9226e72c272365653dc8b998b6adcb.camel@collabora.com>
-Subject: Re: [PATCH 12/14] media: medkatek: vcodec: set secure mode to
- decoder driver
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Jeffrey Kardatzke <jkardatzke@google.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Yunfei Dong =?UTF-8?Q?=28=E8=91=A3=E4=BA=91=E9=A3=9E=29?= 
-        <Yunfei.Dong@mediatek.com>,
-        "nhebert@chromium.org" <nhebert@chromium.org>,
-        "benjamin.gaignard@collabora.com" <benjamin.gaignard@collabora.com>,
-        "nfraprado@collabora.com" <nfraprado@collabora.com>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "frkoenig@chromium.org" <frkoenig@chromium.org>,
-        "stevecho@chromium.org" <stevecho@chromium.org>,
-        "wenst@chromium.org" <wenst@chromium.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "hsinyi@chromium.org" <hsinyi@chromium.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Date:   Thu, 21 Sep 2023 11:46:40 -0400
-In-Reply-To: <CA+ddPcPbox=mknpmDkwfYTfDMca49wU10SNF3mJspYu=5T64FQ@mail.gmail.com>
-References: <20230911125936.10648-1-yunfei.dong@mediatek.com>
-         <20230911125936.10648-13-yunfei.dong@mediatek.com>
-         <1df3e79b84933dda0313d0d9719220dbc06c9022.camel@collabora.com>
-         <d4cedcb0-32ed-495d-a8cd-a635d5105824@xs4all.nl>
-         <5307203d79c0d90cc742a315bb161fa796b9960f.camel@mediatek.com>
-         <bafc37e8-96e8-41c0-b805-c6477f0d7c4a@xs4all.nl>
-         <CA+ddPcN6EaFERC60_Z_-ZmWzqyUEwxiDCZwt_U6Y-gpaAu76tA@mail.gmail.com>
-         <ff7aa575-c820-4dfa-853f-77438b8b149a@xs4all.nl>
-         <b7d661637eacbda3e83d192b1126fc3970c4f50d.camel@collabora.com>
-         <c3d14f64-bf04-46b9-ac7b-af7ef9014335@xs4all.nl>
-         <CA+ddPcPbox=mknpmDkwfYTfDMca49wU10SNF3mJspYu=5T64FQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+        Thu, 21 Sep 2023 17:15:06 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B78F15FFE
+        for <linux-media@vger.kernel.org>; Thu, 21 Sep 2023 10:09:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1695292746; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=IKmv+uVyPDCXNNfztfed3Fdh3fMfPsdovRhi2UDuv4DIVplvp58k1anX0e7CwvOuFo
+    7oy+mEST3wE8k2fTR9hDQhhN5P/Z6XjFPO7u+UiNAgO/r7bGcPLfnTSNosfGMjgZlAZR
+    5umv6509KxaeOxWyAiLEM9NQJQVf0kihHYH7mhsIuE+fuq13NVVs3Lqsc5nLFr/mj5Us
+    JJrXW+NvyE65pguRpMRJNhcayRLfHxhk4EPsuiVvQq5iXfOkfU4HY0usHWQCq9BifzAo
+    YTB2HEPEPdP8K86dOuaKl0i04Os10SoaRFpEKiTJVF4IM6gZM/vAjnTPzwwJTL5ciyJz
+    UPtw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1695292746;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=rxb+23p0XNCAatukZbXt7qOrtjlXcBgXArbK5R9Oq+w=;
+    b=creuaXnWw67G+zYhVf36xhaW+FvpD43h3CY8LZrb+najbthbAIwcVEkS2cb7fHS94c
+    unzioF7zkpbuoJql7nZHvDmDrCbWYgAwybUVqllycIAGIfKTpdJE2A2d3MknM3fThEaJ
+    Hsn01TGbJf2/w7GjcXgVzBIxA66tKynzD1YApjBY+0zEVpw2xJpNJz/7WZ0ytBmFDULr
+    RQdrzluWFEz+KFv9RShbkVun0sur9WFljsKwKR2kQVbMbNewxYy50pYc19HsysV2fBtP
+    djn4YHf78+Rb0omp6BnCV3D4Av1oEzVlPMRclY4fIVWFA7LJ0Hh03lHo9Z5huZ0+8XHD
+    5wZA==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1695292746;
+    s=strato-dkim-0002; d=xenosoft.de;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=rxb+23p0XNCAatukZbXt7qOrtjlXcBgXArbK5R9Oq+w=;
+    b=Z1n1PEsXoDdczX293bzsRFl1SBwKjVZFBPP5AGLjZ0fg8TGuTmRBNU/xNf8+6teOWJ
+    UIk+Bb5wPbKf4vBRciGJ5soZaRCtA4vd1MjydL8JdQMX4xy1sdHfWkL8o4PT8iP/gTa1
+    KfI3AWX85GHy3d6DjZQAlVxtlFxLHq++NUcLE5cCreIjis37l2MILYbIVPpGpaCFjabH
+    gLuL6g2g+IIkPqTKQQQcO2o9QaDyVQkbwh0mMG4V5wRbpKzUuMQWAy8KecHPla9iY4C5
+    +113fECcn4U+mccXWp6I41QZHNk6W2lr4BqHrXqFcn4s0BZRtkLyh51QQe/4bZ62PNTQ
+    te6w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1695292746;
+    s=strato-dkim-0003; d=xenosoft.de;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=rxb+23p0XNCAatukZbXt7qOrtjlXcBgXArbK5R9Oq+w=;
+    b=L0S79Wt3io6hM1tzTYpvG2ZY7rszVu4QTL7oN9lxi6MM+ZcxZh7cVN5LM7ER9NYT2H
+    7xbAfoxK3QKQK9EHr/CA==
+X-RZG-AUTH: ":L2QefEenb+UdBJSdRCXu93KJ1bmSGnhMdmOod1DhGM4l4Hio94KKxRySfLxnHfJ+Dkjp5DdBfio0GngadwiA7QoPhxvAQuuD/2u3dWiwq26LKQ=="
+Received: from [IPV6:2a02:8109:8980:4474:e40e:6344:a5cd:676b]
+    by smtp.strato.de (RZmta 49.8.2 AUTH)
+    with ESMTPSA id w03f88z8LAd5Bps
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 21 Sep 2023 12:39:05 +0200 (CEST)
+Message-ID: <5a184393-69de-4820-b411-f8494898634d@xenosoft.de>
+Date:   Thu, 21 Sep 2023 12:39:04 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH for v6.6] media: bt8xx: bttv_risc_packed(): remove field
+ checks
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc:     Deborah Brouwer <deborahbrouwer3563@gmail.com>,
+        mad skateman <madskateman@gmail.com>,
+        "R.T.Dickinson" <rtd2@xtra.co.nz>,
+        Darren Stevens <darren@stevens-zone.net>
+References: <015ad590-979a-4815-b60a-7506c70e9ee7@xs4all.nl>
+Content-Language: de-DE
+From:   Christian Zigotzky <chzigotzky@xenosoft.de>
+In-Reply-To: <015ad590-979a-4815-b60a-7506c70e9ee7@xs4all.nl>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Le mercredi 20 septembre 2023 =C3=A0 11:20 -0700, Jeffrey Kardatzke a =C3=
-=A9crit=C2=A0:
-> > >=20
-> > > Also, regarding MTK, these are stateless decoders. I think it would b=
-e nice to
-> > > show use example code that can properly parse the un-encrypted header=
-, pass the
-> > > data to the decryptor and decode. There is a bit of mechanic in there=
- that lacks
-> > > clarification, a reference implementation would clearly help. Finally=
-, does this
-> > > platform offers some clearkey implementation (or other alternative) s=
-o we can do
-> > > validation and regression testing? It would be very unfortunate to ad=
-d feature
-> > > upstream that can only be tested by proprietary CDM software.
-> >=20
->=20
-> It would be possible to use this with clearkey w/ some additional work
-> on our end. If this is then part of the public ChromiumOS build, would
-> that be satisfactory? (the TEE would have some binary blob components
-> like firmware does though)
+On 11 September 2023 at 12:05 pm, Hans Verkuil wrote:
+> Do not turn on the vcr_hack based on the btv->field value.
+>
+> This was a change in the bttv vb2 conversion that caused
+> green lines at the bottom of the picture in tvtime.
+>
+> It was originally added to the vb2 conversion based on
+> faulty information that without this there would be glitches
+> in the video. However, later tests suggest that this is a
+> problem in the utilities used to test this since tvtime
+> behaves fine.
+>
+> This patch reverts the bttv driver to the original pre-vb2
+> behavior w.r.t. vcr_hack.
+>
+> Fixes: b7ec3212a73a ("media: bttv: convert to vb2")
+> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+> ---
+>   drivers/media/pci/bt8xx/bttv-risc.c | 4 +---
+>   1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/drivers/media/pci/bt8xx/bttv-risc.c b/drivers/media/pci/bt8xx/bttv-risc.c
+> index 436baf6c8b08..241a696e374a 100644
+> --- a/drivers/media/pci/bt8xx/bttv-risc.c
+> +++ b/drivers/media/pci/bt8xx/bttv-risc.c
+> @@ -68,9 +68,7 @@ bttv_risc_packed(struct bttv *btv, struct btcx_riscmem *risc,
+>   	sg = sglist;
+>   	for (line = 0; line < store_lines; line++) {
+>   		if ((line >= (store_lines - VCR_HACK_LINES)) &&
+> -		    (btv->opt_vcr_hack ||
+> -		    (V4L2_FIELD_HAS_BOTH(btv->field) ||
+> -		     btv->field == V4L2_FIELD_ALTERNATE)))
+> +		    btv->opt_vcr_hack)
+>   			continue;
+>   		while (offset && offset >= sg_dma_len(sg)) {
+>   			offset -= sg_dma_len(sg);
+It works! Thank you!
 
-From my point of view, this would fully cover my concern. To clarify this
-concern, the  decryption into secure memory currently only ever take place =
-in
-proprietary code that implements the protection (Widewine CDM). With clear =
-key,
-we can have an open source CDM (made for testing purpose) so that we don't =
-have
-to have hidden code to test the entire pipeline. So appart from the TEE
-firmware, which is just a firmware like all the others, we could have open
-source tests in kernelCI and other CI, and we could extend these test to
-eventually support other vendors.
-
-Note that currently, with other proposal, one could allocate and fill a nor=
-mal
-buffer, and "secure" that buffer to test the CODECs and display, but on thi=
-s
-specific architecture, with the limitation on the number of secure regions,=
- this
-feature isn't available.
-
-Alternatives to this end-to-end solution, we could consider a TA (Trusted
-Application) that simply copy data from a untrusted chunk of memory into a
-trusted chunk of memory. That seems like a cross-platform solution. It woul=
-d be
-even better if this get standardized in TEEs for course (or at least requir=
-ed
-with all secure memory implementation). Then copying from untrusted to trus=
-ted
-could easily become an ioctl generic to all TEE drivers. That to me would b=
-e
-equally acceptable, and perhaps easier to use.
-
-Nicolas=20
+Tested-by: Christian Zigotzky <chzigotzky@xenosoft.de>
