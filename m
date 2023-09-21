@@ -2,349 +2,87 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 174CDE7D0A6
-	for <linux-media@archiver.kernel.org>; Thu, 21 Sep 2023 20:02:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D299E7D0A6
+	for <linux-media@archiver.kernel.org>; Thu, 21 Sep 2023 20:20:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231204AbjIUUCp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 21 Sep 2023 16:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46632 "EHLO
+        id S230294AbjIUUUT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 21 Sep 2023 16:20:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231529AbjIUUCO (ORCPT
+        with ESMTP id S230227AbjIUUTb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 21 Sep 2023 16:02:14 -0400
-Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F5543AB5;
-        Thu, 21 Sep 2023 10:26:05 -0700 (PDT)
-Received: from [192.168.42.133] (host-178-72-203-90.ip.nej.cz [178.72.203.90])
-        by mx.gpxsee.org (Postfix) with ESMTPSA id 5045D725;
-        Thu, 21 Sep 2023 13:27:34 +0200 (CEST)
-Message-ID: <1d6ccf7f-a2d5-4cb5-a9aa-18538d32ce32@gpxsee.org>
-Date:   Thu, 21 Sep 2023 13:27:34 +0200
+        Thu, 21 Sep 2023 16:19:31 -0400
+Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A70170F
+        for <linux-media@vger.kernel.org>; Thu, 21 Sep 2023 10:26:28 -0700 (PDT)
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 7B9A31000CC; Thu, 21 Sep 2023 15:58:38 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
+        t=1695308318; bh=3d5HdeuHuJ1K6nYiTJtu49tjTIQ5XBa7dsWx7S1eHBc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tK/ucnwdFBIWUMWRf9rXias5seMQ/YiDHQOkrHPo0KEtSS5TDSrVcwNn8KsFlc/Le
+         XfBIORTZhhhFdcH60EutLVSok9EXwAHJRVouXwb8f0gne+GykGqFawUsbOes3TAhMU
+         o2TSuQ2EuM9kuQXresXqJIc4nvbT9sz0RD4GaxXaV7yOcYWuT/ZOFpvaaYvSK0QznJ
+         nEiBI7u8RttYaob5IFtFhHBHn9OoNJpnru99ybto55wcsgn/t+LAYhwD09yF+OsK6h
+         mnKRX1XBxF9FkkoNvgkVd5Cw7PKW+OYupRQOmhbahRltyA7vzx9bltb94/nhR7Xq+L
+         xuZR+ixMEFcFQ==
+Date:   Thu, 21 Sep 2023 15:58:38 +0100
+From:   Sean Young <sean@mess.org>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     linux-media@vger.kernel.org
+Subject: Re: [GIT PULL FOR v6.7] RC fixes
+Message-ID: <ZQxaHijem7LhVEyv@gofer.mess.org>
+References: <ZQAK1UxQlcx2ExWr@gofer.mess.org>
+ <48385e32-f161-4f6c-b039-7fb4816998ba@xs4all.nl>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 1/2] Added Digiteq Automotive MGB4 driver
-Content-Language: en-US
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Martin_T=C5=AFma?= <martin.tuma@digiteqautomotive.com>
-References: <20230919165923.2509-1-tumic@gpxsee.org>
- <20230919165923.2509-2-tumic@gpxsee.org>
- <84ecbf4e-79eb-4ab4-851d-cdd998201534@xs4all.nl>
- <91d2eb26-f4de-4b83-816e-d7b8ada5a225@gpxsee.org>
- <b4fc7e06-d9d4-482c-b83d-ab2de29f34f3@xs4all.nl>
-From:   =?UTF-8?Q?Martin_T=C5=AFma?= <tumic@gpxsee.org>
-In-Reply-To: <b4fc7e06-d9d4-482c-b83d-ab2de29f34f3@xs4all.nl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <48385e32-f161-4f6c-b039-7fb4816998ba@xs4all.nl>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 21. 09. 23 12:49, Hans Verkuil wrote:
-> On 21/09/2023 12:43, Martin Tůma wrote:
->> On 21. 09. 23 9:28, Hans Verkuil wrote:
->>> On 19/09/2023 18:59, tumic@gpxsee.org wrote:
->>>> From: Martin Tůma <martin.tuma@digiteqautomotive.com>
->>>>
->>>> Digiteq Automotive MGB4 is a modular frame grabber PCIe card for automotive
->>>> video interfaces. As for now, two modules - FPD-Link and GMSL - are
->>>> available and supported by the driver. The card has two inputs and two
->>>> outputs (FPD-Link only).
->>>>
->>>> In addition to the video interfaces it also provides a trigger signal
->>>> interface and a MTD interface for FPGA firmware upload.
->>>>
->>>> Signed-off-by: Martin Tůma <martin.tuma@digiteqautomotive.com>
->>>> ---
->>>>    MAINTAINERS                             |   7 +
->>>>    drivers/media/pci/Kconfig               |   1 +
->>>>    drivers/media/pci/Makefile              |   1 +
->>>>    drivers/media/pci/mgb4/Kconfig          |  17 +
->>>>    drivers/media/pci/mgb4/Makefile         |   6 +
->>>>    drivers/media/pci/mgb4/mgb4_cmt.c       | 244 +++++++
->>>>    drivers/media/pci/mgb4/mgb4_cmt.h       |  17 +
->>>>    drivers/media/pci/mgb4/mgb4_core.c      | 686 +++++++++++++++++
->>>>    drivers/media/pci/mgb4/mgb4_core.h      |  74 ++
->>>>    drivers/media/pci/mgb4/mgb4_dma.c       | 123 ++++
->>>>    drivers/media/pci/mgb4/mgb4_dma.h       |  18 +
->>>>    drivers/media/pci/mgb4/mgb4_i2c.c       | 140 ++++
->>>>    drivers/media/pci/mgb4/mgb4_i2c.h       |  35 +
->>>>    drivers/media/pci/mgb4/mgb4_io.h        |  33 +
->>>>    drivers/media/pci/mgb4/mgb4_regs.c      |  30 +
->>>>    drivers/media/pci/mgb4/mgb4_regs.h      |  35 +
->>>>    drivers/media/pci/mgb4/mgb4_sysfs.h     |  18 +
->>>>    drivers/media/pci/mgb4/mgb4_sysfs_in.c  | 744 +++++++++++++++++++
->>>>    drivers/media/pci/mgb4/mgb4_sysfs_out.c | 681 +++++++++++++++++
->>>>    drivers/media/pci/mgb4/mgb4_sysfs_pci.c |  71 ++
->>>>    drivers/media/pci/mgb4/mgb4_trigger.c   | 208 ++++++
->>>>    drivers/media/pci/mgb4/mgb4_trigger.h   |   8 +
->>>>    drivers/media/pci/mgb4/mgb4_vin.c       | 934 ++++++++++++++++++++++++
->>>>    drivers/media/pci/mgb4/mgb4_vin.h       |  69 ++
->>>>    drivers/media/pci/mgb4/mgb4_vout.c      | 597 +++++++++++++++
->>>>    drivers/media/pci/mgb4/mgb4_vout.h      |  65 ++
->>>>    26 files changed, 4862 insertions(+)
->>>>    create mode 100644 drivers/media/pci/mgb4/Kconfig
->>>>    create mode 100644 drivers/media/pci/mgb4/Makefile
->>>>    create mode 100644 drivers/media/pci/mgb4/mgb4_cmt.c
->>>>    create mode 100644 drivers/media/pci/mgb4/mgb4_cmt.h
->>>>    create mode 100644 drivers/media/pci/mgb4/mgb4_core.c
->>>>    create mode 100644 drivers/media/pci/mgb4/mgb4_core.h
->>>>    create mode 100644 drivers/media/pci/mgb4/mgb4_dma.c
->>>>    create mode 100644 drivers/media/pci/mgb4/mgb4_dma.h
->>>>    create mode 100644 drivers/media/pci/mgb4/mgb4_i2c.c
->>>>    create mode 100644 drivers/media/pci/mgb4/mgb4_i2c.h
->>>>    create mode 100644 drivers/media/pci/mgb4/mgb4_io.h
->>>>    create mode 100644 drivers/media/pci/mgb4/mgb4_regs.c
->>>>    create mode 100644 drivers/media/pci/mgb4/mgb4_regs.h
->>>>    create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs.h
->>>>    create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_in.c
->>>>    create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_out.c
->>>>    create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_pci.c
->>>>    create mode 100644 drivers/media/pci/mgb4/mgb4_trigger.c
->>>>    create mode 100644 drivers/media/pci/mgb4/mgb4_trigger.h
->>>>    create mode 100644 drivers/media/pci/mgb4/mgb4_vin.c
->>>>    create mode 100644 drivers/media/pci/mgb4/mgb4_vin.h
->>>>    create mode 100644 drivers/media/pci/mgb4/mgb4_vout.c
->>>>    create mode 100644 drivers/media/pci/mgb4/mgb4_vout.h
->>>>
->>>
->>> <snip>
->>>
->>>> diff --git a/drivers/media/pci/mgb4/mgb4_sysfs_in.c b/drivers/media/pci/mgb4/mgb4_sysfs_in.c
->>>> new file mode 100644
->>>> index 000000000000..61b1ee969ed0
->>>> --- /dev/null
->>>> +++ b/drivers/media/pci/mgb4/mgb4_sysfs_in.c
->>>> @@ -0,0 +1,744 @@
->>>> +// SPDX-License-Identifier: GPL-2.0-only
->>>> +/*
->>>> + * Copyright (C) 2021-2023 Digiteq Automotive
->>>> + *     author: Martin Tuma <martin.tuma@digiteqautomotive.com>
->>>> + *
->>>> + * This module handles all the sysfs info/configuration that is related to the
->>>> + * v4l2 input devices.
->>>> + */
->>>> +
->>>> +#include <linux/device.h>
->>>> +#include "mgb4_core.h"
->>>> +#include "mgb4_i2c.h"
->>>> +#include "mgb4_vin.h"
->>>> +#include "mgb4_cmt.h"
->>>> +#include "mgb4_sysfs.h"
->>>> +
->>>> +/* Common for both FPDL3 and GMSL */
->>>> +
->>>> +static ssize_t input_id_show(struct device *dev,
->>>> +                 struct device_attribute *attr, char *buf)
->>>> +{
->>>> +    struct video_device *vdev = to_video_device(dev);
->>>> +    struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
->>>> +
->>>> +    return sprintf(buf, "%d\n", vindev->config->id);
->>>> +}
->>>> +
->>>> +static ssize_t oldi_lane_width_show(struct device *dev,
->>>> +                    struct device_attribute *attr, char *buf)
->>>> +{
->>>> +    struct video_device *vdev = to_video_device(dev);
->>>> +    struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
->>>> +    struct mgb4_dev *mgbdev = vindev->mgbdev;
->>>> +    u16 i2c_reg;
->>>> +    u8 i2c_mask, i2c_single_val, i2c_dual_val;
->>>> +    u32 config;
->>>> +    int ret;
->>>> +
->>>> +    i2c_reg = MGB4_IS_GMSL(mgbdev) ? 0x1CE : 0x49;
->>>> +    i2c_mask = MGB4_IS_GMSL(mgbdev) ? 0x0E : 0x03;
->>>> +    i2c_single_val = MGB4_IS_GMSL(mgbdev) ? 0x00 : 0x02;
->>>> +    i2c_dual_val = MGB4_IS_GMSL(mgbdev) ? 0x0E : 0x00;
->>>> +
->>>> +    mutex_lock(&mgbdev->i2c_lock);
->>>> +    ret = mgb4_i2c_read_byte(&vindev->deser, i2c_reg);
->>>> +    mutex_unlock(&mgbdev->i2c_lock);
->>>> +    if (ret < 0)
->>>> +        return -EIO;
->>>> +
->>>> +    config = mgb4_read_reg(&mgbdev->video, vindev->config->regs.config);
->>>> +
->>>> +    if (((config & (1U << 9)) && ((ret & i2c_mask) != i2c_dual_val)) ||
->>>> +        (!(config & (1U << 9)) && ((ret & i2c_mask) != i2c_single_val))) {
->>>> +        dev_err(dev, "I2C/FPGA register value mismatch\n");
->>>> +        return -EINVAL;
->>>> +    }
->>>> +
->>>> +    return sprintf(buf, "%s\n", config & (1U << 9) ? "1" : "0");
->>>> +}
->>>> +
->>>> +static ssize_t oldi_lane_width_store(struct device *dev,
->>>> +                     struct device_attribute *attr,
->>>> +                     const char *buf, size_t count)
->>>> +{
->>>> +    struct video_device *vdev = to_video_device(dev);
->>>> +    struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
->>>> +    struct mgb4_dev *mgbdev = vindev->mgbdev;
->>>> +    u32 fpga_data;
->>>> +    u16 i2c_reg;
->>>> +    u8 i2c_mask, i2c_data;
->>>> +    unsigned long val;
->>>> +    int ret;
->>>> +
->>>> +    ret = kstrtoul(buf, 10, &val);
->>>> +    if (ret)
->>>> +        return ret;
->>>> +
->>>> +    switch (val) {
->>>> +    case 0: /* single */
->>>> +        fpga_data = 0;
->>>> +        i2c_data = MGB4_IS_GMSL(mgbdev) ? 0x00 : 0x02;
->>>> +        break;
->>>> +    case 1: /* dual */
->>>> +        fpga_data = 1U << 9;
->>>> +        i2c_data = MGB4_IS_GMSL(mgbdev) ? 0x0E : 0x00;
->>>> +        break;
->>>> +    default:
->>>> +        return -EINVAL;
->>>> +    }
->>>> +
->>>> +    i2c_reg = MGB4_IS_GMSL(mgbdev) ? 0x1CE : 0x49;
->>>> +    i2c_mask = MGB4_IS_GMSL(mgbdev) ? 0x0E : 0x03;
->>>
->>> Isn't this sequence needed as well?
->>>
->>>      mutex_lock(vindev->vdev.lock);
->>>      if (vb2_is_busy(vindev->vdev.queue)) {
->>>          mutex_unlock(vindev->vdev.lock);
->>>          return -EBUSY;
->>>      }
->>>
->>> I would expect this to be present in almost all store functions.
->>> You don't want to change a setting like this when the queue is busy.
->>>
->>> If a store function doesn't need the lock, then perhaps add a comment
->>> like: 'This can be changed at any time, even if vb2_is_busy() is true.'
->>>
->>> Can you go through all the store functions and verify this?
->>>
->>> Basically any store function that changes timings/video source/buffer size
->>> needs this check.
->>>
->>> Similar to VIDIOC_S_FMT and VIDIOC_S_DV_TIMINGS ioctls: you can't change
->>> those while buffers are allocated.
->>>
->>
->> Any store function, that could change the video source/size and thus would require new buffers is guarded by this check. In the admin guide documentation, all those functions have the "This parameter
->> can not be changed while the output v4l2 device is open." note.
->>
->> Functions that change the signal "on the wire" like oldi_lane_width_store() do however not have this guard as for me it seems that those can not break anything in v4l2 - the queue remains the same.
->> Also when practically tested, nothing seemed to break. But I can of course add those checks to some more functions if you think they are necessary. Not having this restrictions makes it possible to
->> fiddle with the parameters on live streams to set the correct parameters. For example in this case (oldi_lane_width) the image switches between "two images in one" and "the correct image" if you
->> switch it during playback, but the queue (buffer size) is the same. The FPGA is also designed to be capable of changing those parameters "live".
+On Thu, Sep 21, 2023 at 02:55:32PM +0200, Hans Verkuil wrote:
+> Hi Sean,
 > 
-> Ah, OK. Then this should be documented in the source code. Basically you want
-> to see in the code that it is intentional that no locking takes place and that
-> it is safe to do so.
+> On 12/09/2023 08:53, Sean Young wrote:
+> > The following changes since commit f32b68cd3604a824769ffeb02d2adea492a9d221:
+> > 
+> >   media: cx231xx: Add EP5_BUF_SIZE and EP5_TIMEOUT_MS macros (2023-09-06 12:29:09 +0200)
+> > 
+> > are available in the Git repository at:
+> > 
+> >   git://linuxtv.org/syoung/media_tree.git tags/v6.7a
+> > 
+> > for you to fetch changes up to c6ab671c3b08b7b5231346ec7a7f06ff2b22bf07:
+> > 
+> >   arm64: dts: meson: add IR controller for Meson-S4 SoC (2023-09-11 11:49:43 +0100)
+> > 
+> > ----------------------------------------------------------------
+> > v6.7a
+> > 
+> > ----------------------------------------------------------------
+> > Sean Young (2):
+> >       dt-bindings: media: remove nokia,n900-ir as pwm-ir-tx is compatible
+> >       media: rc: remove ir-rx51 in favour of generic pwm-ir-tx
+> > 
+> > Zelong Dong (2):
+> >       media: rc: meson-ir: support rc driver type RC_DRIVER_SCANCODE
+> >       arm64: dts: meson: add IR controller for Meson-S4 SoC
 > 
-> Most devices are not able to handle this, at minimum you will see video glitches.
+> I think you accidentally picked the dts patch instead of the bindings
+> patch (1), since that one is missing, leading to a checkpatch warning:
 > 
+> WARNING: DT compatible string "amlogic,meson-s4-ir" appears un-documented -- check ./Documentation/devicetree/bindings/
+> #56: FILE: arch/arm64/boot/dts/amlogic/meson-s4.dtsi:146:
+> +                               compatible = "amlogic,meson-s4-ir";
+> 
+> I'll mark this PR as 'Changes Requested', since this can't be right.
 
-Well, you get video/image glitches in this case too, but they are 
-expected. Fiddling with this parameters is expected to be done while 
-"exploring" the radio/display (getting some documentation on the device 
-is usually harder than to "trial and error" it - yes, it's crazy, but 
-that's how it works in the VW group...). After that you create the 
-appropriate udev rules for the signal parameters and access the device 
-through the standard v4l2 API.
+Yes, you're right, that's my bad. Thanks for catching that early. 
 
-As this "trial and error" phase is the expected use-case, the FPGA is 
-designed not to break the buffer queue wherever possible. But I do 
-understand that "normal" devices do not work that way and people looking 
-into the code may find that suspicious. I will add a comment like "this 
-change can only break the image, not the buffer queue and is expected to 
-be called on live streams" and submit a v11 patch.
+I'll respin.
 
-M.
+Thanks,
 
-> With that change I should be able to merge v11.
-> 
-> Regards,
-> 
-> 	Hans
-> 
->>
->>>> +
->>>> +    mutex_lock(&mgbdev->i2c_lock);
->>>> +    ret = mgb4_i2c_mask_byte(&vindev->deser, i2c_reg, i2c_mask, i2c_data);
->>>> +    mutex_unlock(&mgbdev->i2c_lock);
->>>> +    if (ret < 0)
->>>> +        return -EIO;
->>>> +    mgb4_mask_reg(&mgbdev->video, vindev->config->regs.config, 1U << 9,
->>>> +              fpga_data);
->>>> +    if (MGB4_IS_GMSL(mgbdev)) {
->>>> +        /* reset input link */
->>>> +        mutex_lock(&mgbdev->i2c_lock);
->>>> +        ret = mgb4_i2c_mask_byte(&vindev->deser, 0x10, 1U << 5, 1U << 5);
->>>> +        mutex_unlock(&mgbdev->i2c_lock);
->>>> +        if (ret < 0)
->>>> +            return -EIO;
->>>> +    }
->>>> +
->>>> +    return count;
->>>> +}
->>>> +
->>>> +static ssize_t color_mapping_show(struct device *dev,
->>>> +                  struct device_attribute *attr, char *buf)
->>>> +{
->>>> +    struct video_device *vdev = to_video_device(dev);
->>>> +    struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
->>>> +    u32 config = mgb4_read_reg(&vindev->mgbdev->video,
->>>> +      vindev->config->regs.config);
->>>> +
->>>> +    return sprintf(buf, "%s\n", config & (1U << 8) ? "0" : "1");
->>>> +}
->>>> +
->>>> +static ssize_t color_mapping_store(struct device *dev,
->>>> +                   struct device_attribute *attr,
->>>> +                   const char *buf, size_t count)
->>>> +{
->>>> +    struct video_device *vdev = to_video_device(dev);
->>>> +    struct mgb4_vin_dev *vindev = video_get_drvdata(vdev);
->>>> +    u32 fpga_data;
->>>> +    unsigned long val;
->>>> +    int ret;
->>>> +
->>>> +    ret = kstrtoul(buf, 10, &val);
->>>> +    if (ret)
->>>> +        return ret;
->>>> +
->>>> +    switch (val) {
->>>> +    case 0: /* OLDI/JEIDA */
->>>> +        fpga_data = (1U << 8);
->>>> +        break;
->>>> +    case 1: /* SPWG/VESA */
->>>> +        fpga_data = 0;
->>>> +        break;
->>>> +    default:
->>>> +        return -EINVAL;
->>>> +    }
->>>> +
->>>> +    mgb4_mask_reg(&vindev->mgbdev->video, vindev->config->regs.config,
->>>> +              1U << 8, fpga_data);
->>>
->>> This is likely a store function that can be called at any time as this
->>> doesn't interrupt video streaming or changes buffer sizes.
->>>
->>
->> Yes, this parameter definitely does not break anything else than the color scheme of the image and is without doubt safe to do on running streams. But the others should be as well.
->>
->>>> +
->>>> +    return count;
->>>> +}
->>>> +
->>>
->>> Regards,
->>>
->>>      Hans
->>
-> 
-
+Sean
