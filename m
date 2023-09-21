@@ -2,172 +2,156 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA123E71096
-	for <linux-media@archiver.kernel.org>; Thu, 21 Sep 2023 17:06:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88D03E71096
+	for <linux-media@archiver.kernel.org>; Thu, 21 Sep 2023 17:08:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbjIURGN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 21 Sep 2023 13:06:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54388 "EHLO
+        id S229908AbjIURIH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 21 Sep 2023 13:08:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231132AbjIURFT (ORCPT
+        with ESMTP id S229904AbjIURHw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 21 Sep 2023 13:05:19 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2081.outbound.protection.outlook.com [40.107.22.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA222132;
-        Thu, 21 Sep 2023 10:03:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Bz+kJ1McC4G0UGlIZYL5TdzDNEXtCA/b/TEkIKeAffXKIuHu441XpkHMGW0GOCKrZ60wn2plnne8kspxp6EobzaxGrBbE2pnp8oazH2ZpjHivzLUeu4GIs+Fv97uqAHQDn94e5Ftnq9WAR6epAIkNI/2LY/iEDMNzDYu+2r9ETrjxbMx5ghtTqebdo/yplwMQjHDirOQRUkJqYLjITTC7pk6s3n79isfuRZI+yD24Zi6XJ+UGj7rWfh0KvKNL6soF0xIqE2vyYCL71f+j7AN+ZuBqubv0B3wzQEFN2AMdDBCvkayHfdIEUR4HzsPJhOZk8gRUChZxJpxPRAo8lB9tg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8bEuT3Akp62ZfYHy6luVNNKX9T0bttqvL2nGd1nvaRw=;
- b=e3owzuXksOowFq5g+ccWGLCmudEhC33KLdpTGzQpGR9IfNwMZ98Y/Ghcz43hInQkc4WJxxkE1ZIaApygoa+rOGkRbDAamfe09ogrzXGT1aa9aHFFVYmJ8eBvqAc5Lsq73gJTcXLaRys3nh2Em+lmc1T+yaYChou1yWe2IKPWDfaKaci1DxKaEIQQFgLUf/XHjIkqfdjzmTlygMOUGy2RBWuj1xJP/0NHASEgFW0Z+ydcaNJ+Teyx3ynBY7eswjmv8ayJbspINZcM+/fXDAW9r7VRoy5vUlYBwSfY/TLoB+h9purQ3owNGc6ciJg2t05EhHEqsg+chbjhQhqIFRuu4A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8bEuT3Akp62ZfYHy6luVNNKX9T0bttqvL2nGd1nvaRw=;
- b=hn6lIcjYP4+lEc3MPfgEnK0HXOH1FpeC33iGwtIECqsT9428Sm7ELRgKtLnSCFhvoK2vwuL14N7B4jUj2dEWhEK7zmF+K6jaEQ2Iw5AgCv1O2ap6l/KM1nUvzn7X6Q+ffkhPTf77xou9UR6ui3webTO0zYb+OQRIB6+vKBLCgoU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
- by AM9PR04MB8414.eurprd04.prod.outlook.com (2603:10a6:20b:3ef::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.27; Thu, 21 Sep
- 2023 06:36:47 +0000
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::71e6:21de:ecb2:560f]) by AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::71e6:21de:ecb2:560f%4]) with mapi id 15.20.6813.017; Thu, 21 Sep 2023
- 06:36:47 +0000
-From:   Ming Qian <ming.qian@nxp.com>
-To:     mirela.rabulea@oss.nxp.com, robh+dt@kernel.org, shawnguo@kernel.org
-Cc:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        xiahong.bao@nxp.com, eagle.zhou@nxp.com, tao.jiang_2@nxp.com,
-        linux-imx@nxp.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 1/2] arm64: dts: imx8-ss-img: Assign slot for imx jpeg encoder/decoder
-Date:   Thu, 21 Sep 2023 14:36:19 +0800
-Message-Id: <20230921063620.22962-1-ming.qian@nxp.com>
-X-Mailer: git-send-email 2.38.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR01CA0027.apcprd01.prod.exchangelabs.com
- (2603:1096:4:192::7) To AM6PR04MB6341.eurprd04.prod.outlook.com
- (2603:10a6:20b:d8::14)
+        Thu, 21 Sep 2023 13:07:52 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3EB273A
+        for <linux-media@vger.kernel.org>; Thu, 21 Sep 2023 10:05:14 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A2EFC4E682;
+        Thu, 21 Sep 2023 13:24:06 +0000 (UTC)
+Message-ID: <143aedaf-aaed-4c2b-b4a3-86be93bf3184@xs4all.nl>
+Date:   Thu, 21 Sep 2023 15:24:05 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM6PR04MB6341:EE_|AM9PR04MB8414:EE_
-X-MS-Office365-Filtering-Correlation-Id: ecfa275b-f6f9-43a6-e321-08dbba6d2113
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7fzrwvFw3yr/6+zPPHcol9simBdkVInK/zjrffqmXjweb7yvFnL6/+v0i5B3Pky6MMAEKQ8b+jAv0m5X9yTVA8p/IjQ82CgN/j37lzNWSO4S7P0hrR/ZW/DTVhlIXpvxdIgud1Ph4QtB8C/Yf4ruV8SbajV4Ta0/ZQ0rSXkaIpw+HakaPwnKj5/4Dt0tynJCQCyaHaD3ZOCxHo9SUELkA7QrGE4emn+m/mcBhjR2K8AmT9RX/4m74+pbS7jyu0IW1DtSPvhlPZqy6EykRya1MKlCC9HLwS39E7xrvw5DYDl6z2zdD2sj/JZPkWIVAq3Ythj0Ex1aAjouVYtjPYMb8B58J7V5s+jAoLK0qx/1M5UcbkZBMmnFUOvg9n6AkXQh85MPNuLmw4EwHQzQ9g8ow1VYfCBnP2BH/DCrRSJKwr4IAYfYlLjO7M7E6mDdjTv/jizQpRwtStbyxwDMJQUTMeGKBe4M8WMvkwlmQfmU2rtxCTXrXmmwR+Ri40lVdoLyzjHIPwM+qIvn4z9pRmfxkeTovDfd7UWUqobiS2ZwwYyZJRfF0q62gMsiOMqrscs+LCqV3Bzw9nV8TjaZOISNDjlIBPExhVPF1wC4pb6+IUK2w76MR/pr3zVdcz8XSrx8
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(366004)(39860400002)(396003)(136003)(346002)(1800799009)(451199024)(186009)(26005)(316002)(8936002)(8676002)(1076003)(41300700001)(2616005)(52116002)(6486002)(36756003)(6666004)(6512007)(86362001)(83380400001)(38350700002)(38100700002)(4326008)(66476007)(66946007)(66556008)(6506007)(478600001)(2906002)(7416002)(44832011)(5660300002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?OyXi91qpXcBEYjesbYzAn5rcuuO0nwrYBN9TjlGnJhCDWsZ7J8vUZ82gZEnP?=
- =?us-ascii?Q?R3IwZojucBhHdglhwAcTUg2+b0h6Wlf7paPzBd8OvAFkHUTR2z8T7CMHsrd1?=
- =?us-ascii?Q?+DdEKSQ6OOumh1k8jiSuFUQOJm5t7eVAtROkU3yeDpFvNpZbvarv9kZz/Qdy?=
- =?us-ascii?Q?heZJyVm3wWXD6F4qYJ4QHCR4SOIx5qhX+ktvpSMcbn9/u+VOVBSFlrQuvUQj?=
- =?us-ascii?Q?dT39xUMmP4EP4crYN1xS7lAlcnEu7EkK6nfRfJf5TYXSvQcGwmBnUWHHX6Nn?=
- =?us-ascii?Q?Zttlo/1g4p69uGDodEUkPBRcAB6sv6jJ6Uz5DLQ6iokKPU0PCAgd2lpxz683?=
- =?us-ascii?Q?iuD8cqw3mf+kh1bO+b73dhe5h6UcrNLl2q4bRrsn1eAicB618QLrJESJE+ay?=
- =?us-ascii?Q?PNOSlN/ALa0+kPuSrZqsS5hKjWxz+qWsTqFA1sXk/HaojYEY7rwgk464lceN?=
- =?us-ascii?Q?DIqv13R27daAtWeiUMf5Ow3825W/nliMlQYOVBT8COrUNF13GadavXVT0XXB?=
- =?us-ascii?Q?Dtxis0rxmd/2wkKvFMTkrAyv/gHiVddGlJtXqhOmgcceMD2ynJD74M1oLfrA?=
- =?us-ascii?Q?htYKi/PkNTrzh6eMfWsFt9tN4lPVDq/+BuphoSTVc8J4Q7JbbmpzBKrg4eEV?=
- =?us-ascii?Q?0zxm0AHvFOGikqZ2q9cN06kpHYgpKB8w5qY4D/QGM3J4iKoJ9Z2TLlIduzEA?=
- =?us-ascii?Q?uQLYaFobOJB+C7TGxkbHJCptwsciy73Jl48Q4a6tUdNUNFdxqklaVpsPx8aN?=
- =?us-ascii?Q?RUB2jI9faPZbu+WM2YDbgZTxKIGiXVXSykZVBqe02C062i9VXXJMYVS/wgyX?=
- =?us-ascii?Q?ZhjDeWUdxVp0XUr4p89FBx/H122Dztw0+HeK0kfo7un3P97Mo6q5/6KQ1eQ4?=
- =?us-ascii?Q?Wl6g21KQmxjMRdXbiIW0ydpgjD/vYhOLZowi7auTU95yFhD2EXyKqkFmgEpt?=
- =?us-ascii?Q?GBmafFm9WFLJ+MTNB67JXEbnPCxauuoPitKcC+j0EqSg/polKLz/hHjZeNVt?=
- =?us-ascii?Q?3oWeYmx+0/TqzNql+1LVvnrDCLvegn+FQ0jQ1r0F93/H7Ykah5OTrn6cyjYv?=
- =?us-ascii?Q?GYPlMB+r3YEEvefsdwSTkJCdrQG5frRAxUkVunLcT3VxDHutnnoUT5pLwcKk?=
- =?us-ascii?Q?GhkXJAs6kqUw5c7U7+3t1NB/sNyn+W8n2kqDlymaHj03rcWwsKRXR05jlmtp?=
- =?us-ascii?Q?507NriqBJLc2DsfwJCfHpc5lVQXalR9ZdzlpdyIU29cB8iDs7HMoPggtLWvs?=
- =?us-ascii?Q?EHG1m492coBZOWgXnPci80nl3rqBlSE3kPhZLYEGzh3gMdGu7rTLbacVUxEm?=
- =?us-ascii?Q?mzfvN9Q13KRj5phf09RF0BQSkn+a1B7JFpTAgYOD87EOsm7TNupBq6YFb9Fo?=
- =?us-ascii?Q?WNUGG0MKZlnPjV9rcAY7wmUmq51jlLEFBxXEg4WbMhmfIcQ3uULRFKCKkM5b?=
- =?us-ascii?Q?hj+rLQE9d29BovMd4LzOol6159ljvgIDFAEsgcsN/FveUQLd8n2DAhvcbo6t?=
- =?us-ascii?Q?NStjo3F69tyRHF7FcUbDhTrW0hnemMc+hr10JWyEavl9ymP3a7UrRUmHG9Q2?=
- =?us-ascii?Q?2o6aetT5lJQtWUzfug3C6ckM0MX62wmAZ8NNqhRK?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ecfa275b-f6f9-43a6-e321-08dbba6d2113
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Sep 2023 06:36:47.4895
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Moi6k7N6czf4uvTchL7IjdFX96yK8W9nzBd5h8uFLvCSqQJixjJI6Wl2uWF3DQv9JMTOUgru5maplT3gqYVptA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8414
+User-Agent: Mozilla Thunderbird
+Subject: Re: [Jenkins] stage-drivers-build #90: build failed for x86_64
+ allyesconfig x86_64 allmodconfig x86_64 no PM
+Content-Language: en-US, nl
+To:     mchehab@kernel.org, media-committers@linuxtv.org,
+        linux-media@vger.kernel.org, mchehab@linuxtv.org
+References: <1290169131.3.1695300707458@builder.linuxtv.org>
+ <1300942645.5.1695301504759@builder.linuxtv.org>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Autocrypt: addr=hverkuil@xs4all.nl; keydata=
+ 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
+In-Reply-To: <1300942645.5.1695301504759@builder.linuxtv.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-assign a single slot,
-configure interrupt and power domain only for 1 slot,
-not for the all 4 slots.
+On 21/09/2023 15:05, Jenkins Builder Robot wrote:
+> Some tests failed:
+> 	PASS: arm32 allmodconfig
+> 	PASS: arm32 allyesconfig
+> 	FAIL: x86_64 allyesconfig
+> 	FAIL: x86_64 allmodconfig
+> 	FAIL: x86_64 no PM
+> 	PASS: arm64 allyesconfig
+> 	PASS: arm64 allmodconfig
+> 	PASS: clang15 allmodconfig
+> 
 
-Signed-off-by: Ming Qian <ming.qian@nxp.com>
----
- .../arm64/boot/dts/freescale/imx8-ss-img.dtsi | 22 +++++--------------
- 1 file changed, 6 insertions(+), 16 deletions(-)
+These build errors are due to this:
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8-ss-img.dtsi b/arch/arm64/boot/dts/freescale/imx8-ss-img.dtsi
-index a90654155a88..176dcce24b64 100644
---- a/arch/arm64/boot/dts/freescale/imx8-ss-img.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8-ss-img.dtsi
-@@ -18,10 +18,7 @@ img_ipg_clk: clock-img-ipg {
- 
- 	jpegdec: jpegdec@58400000 {
- 		reg = <0x58400000 0x00050000>;
--		interrupts = <GIC_SPI 309 IRQ_TYPE_LEVEL_HIGH>,
--			     <GIC_SPI 310 IRQ_TYPE_LEVEL_HIGH>,
--			     <GIC_SPI 311 IRQ_TYPE_LEVEL_HIGH>,
--			     <GIC_SPI 312 IRQ_TYPE_LEVEL_HIGH>;
-+		interrupts = <GIC_SPI 309 IRQ_TYPE_LEVEL_HIGH>;
- 		clocks = <&img_jpeg_dec_lpcg IMX_LPCG_CLK_0>,
- 			 <&img_jpeg_dec_lpcg IMX_LPCG_CLK_4>;
- 		clock-names = "per", "ipg";
-@@ -29,18 +26,13 @@ jpegdec: jpegdec@58400000 {
- 				  <&img_jpeg_dec_lpcg IMX_LPCG_CLK_4>;
- 		assigned-clock-rates = <200000000>, <200000000>;
- 		power-domains = <&pd IMX_SC_R_MJPEG_DEC_MP>,
--				<&pd IMX_SC_R_MJPEG_DEC_S0>,
--				<&pd IMX_SC_R_MJPEG_DEC_S1>,
--				<&pd IMX_SC_R_MJPEG_DEC_S2>,
--				<&pd IMX_SC_R_MJPEG_DEC_S3>;
-+				<&pd IMX_SC_R_MJPEG_DEC_S0>;
-+		slot = <0>;
- 	};
- 
- 	jpegenc: jpegenc@58450000 {
- 		reg = <0x58450000 0x00050000>;
--		interrupts = <GIC_SPI 305 IRQ_TYPE_LEVEL_HIGH>,
--			     <GIC_SPI 306 IRQ_TYPE_LEVEL_HIGH>,
--			     <GIC_SPI 307 IRQ_TYPE_LEVEL_HIGH>,
--			     <GIC_SPI 308 IRQ_TYPE_LEVEL_HIGH>;
-+		interrupts = <GIC_SPI 305 IRQ_TYPE_LEVEL_HIGH>;
- 		clocks = <&img_jpeg_enc_lpcg IMX_LPCG_CLK_0>,
- 			 <&img_jpeg_enc_lpcg IMX_LPCG_CLK_4>;
- 		clock-names = "per", "ipg";
-@@ -48,10 +40,8 @@ jpegenc: jpegenc@58450000 {
- 				  <&img_jpeg_enc_lpcg IMX_LPCG_CLK_4>;
- 		assigned-clock-rates = <200000000>, <200000000>;
- 		power-domains = <&pd IMX_SC_R_MJPEG_ENC_MP>,
--				<&pd IMX_SC_R_MJPEG_ENC_S0>,
--				<&pd IMX_SC_R_MJPEG_ENC_S1>,
--				<&pd IMX_SC_R_MJPEG_ENC_S2>,
--				<&pd IMX_SC_R_MJPEG_ENC_S3>;
-+				<&pd IMX_SC_R_MJPEG_ENC_S0>;
-+		slot = <0>;
- 	};
- 
- 	img_jpeg_dec_lpcg: clock-controller@585d0000 {
--- 
-2.38.1
+../drivers/staging/media/omap4iss/iss_csi2.c: In function ‘csi2_init_entities’:
+../drivers/staging/media/omap4iss/iss_csi2.c:1268:57: error: ‘%s’ directive output may be truncated writing up to 31 bytes into a region of size 22 [-Werror=format-truncation=]
+ 1268 |         snprintf(sd->name, sizeof(sd->name), "OMAP4 ISS %s", name);
+      |                                                         ^~   ~~~~
+../drivers/staging/media/omap4iss/iss_csi2.c:1268:9: note: ‘snprintf’ output between 11 and 42 bytes into a destination of size 32
+ 1268 |         snprintf(sd->name, sizeof(sd->name), "OMAP4 ISS %s", name);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+
+Since these "may be truncated" warnings are now enabled, and apparently the kernel configs
+for these targets have warnings being treated as errors, this now fails.
+
+Regards,
+
+	Hans
+
+
+> GENERAL INFO
+> 
+> BUILD SUCCESSFUL
+> Build URL: https://builder.linuxtv.org/job/stage-drivers-build/90/
+> Project: stage-drivers-build
+> Date of build: Thu, 21 Sep 2023 13:00:10 +0000
+> Build duration: 4 min 54 sec and counting
+> 
+> 
+> CHANGE SET
+> 
+>   	 Revision  by hverkuil: (media: atomisp: remove left-over videobuf include)
+> 
+> 	 change: edit drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
+> 
+>   	 Revision  by hverkuil: (media: remove the old videobuf framework)
+> 
+> 	 change: edit Documentation/driver-api/media/v4l2-core.rst
+> 
+> 	 change: delete drivers/media/v4l2-core/videobuf-dma-contig.c
+> 
+> 	 change: delete drivers/media/v4l2-core/videobuf-core.c
+> 
+> 	 change: delete drivers/media/v4l2-core/videobuf-dma-sg.c
+> 
+> 	 change: delete include/media/videobuf-dma-sg.h
+> 
+> 	 change: edit Documentation/translations/zh_CN/video4linux/v4l2-framework.txt
+> 
+> 	 change: edit Documentation/driver-api/media/v4l2-dev.rst
+> 
+> 	 change: edit drivers/media/v4l2-core/Makefile
+> 
+> 	 change: delete include/media/videobuf-core.h
+> 
+> 	 change: delete include/media/videobuf-dma-contig.h
+> 
+> 	 change: delete drivers/media/v4l2-core/videobuf-vmalloc.c
+> 
+> 	 change: delete Documentation/driver-api/media/v4l2-videobuf.rst
+> 
+> 	 change: edit drivers/media/v4l2-core/Kconfig
+> 
+> 	 change: delete include/media/videobuf-vmalloc.h
 
