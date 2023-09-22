@@ -2,29 +2,28 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1A37E6FE24
-	for <linux-media@archiver.kernel.org>; Fri, 22 Sep 2023 12:58:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89EECE6FE22
+	for <linux-media@archiver.kernel.org>; Fri, 22 Sep 2023 12:58:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232760AbjIVM6t (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 22 Sep 2023 08:58:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45242 "EHLO
+        id S233133AbjIVM6w (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 22 Sep 2023 08:58:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbjIVM6s (ORCPT
+        with ESMTP id S233237AbjIVM6v (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 22 Sep 2023 08:58:48 -0400
+        Fri, 22 Sep 2023 08:58:51 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC24CE
-        for <linux-media@vger.kernel.org>; Fri, 22 Sep 2023 05:58:42 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78B3FC433CB;
-        Fri, 22 Sep 2023 12:58:41 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82FA7CE
+        for <linux-media@vger.kernel.org>; Fri, 22 Sep 2023 05:58:45 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 542F9C433CB;
+        Fri, 22 Sep 2023 12:58:44 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Subject: [PATCH 2/6] media: renesas-ceu: keep input name simple
-Date:   Fri, 22 Sep 2023 14:58:33 +0200
-Message-Id: <20230922125837.3290073-3-hverkuil-cisco@xs4all.nl>
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 4/6] media: v4l2-dev.h: increase struct video_device name size
+Date:   Fri, 22 Sep 2023 14:58:35 +0200
+Message-Id: <20230922125837.3290073-5-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230922125837.3290073-1-hverkuil-cisco@xs4all.nl>
 References: <20230922125837.3290073-1-hverkuil-cisco@xs4all.nl>
@@ -34,65 +33,27 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Just show the Camera index as input name in VIDIOC_ENUM_INPUT,
-no need to show the subdev name as well as that is meaningless for
-users anyway.
-
-This fixes this compiler warning:
-
-drivers/media/platform/renesas/renesas-ceu.c: In function 'ceu_enum_input':
-drivers/media/platform/renesas/renesas-ceu.c:1195:59: warning: '%s' directive output may be truncated writing up to 47 bytes into a region of size between 14 and 23 [-Wformat-truncation=]
- 1195 |         snprintf(inp->name, sizeof(inp->name), "Camera%u: %s",
-      |                                                           ^~
-drivers/media/platform/renesas/renesas-ceu.c:1195:9: note: 'snprintf' output between 10 and 66 bytes into a destination of size 32
- 1195 |         snprintf(inp->name, sizeof(inp->name), "Camera%u: %s",
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 1196 |                  inp->index, ceusd->v4l2_sd->name);
-      |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Increase the size of the name field to prevent a lot of
+string truncate compiler warnings.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc: Jacopo Mondi <jacopo@jmondi.org>
 ---
- drivers/media/pci/zoran/zoran.h              | 2 +-
- drivers/media/platform/renesas/renesas-ceu.c | 6 +-----
- 2 files changed, 2 insertions(+), 6 deletions(-)
+ include/media/v4l2-dev.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/pci/zoran/zoran.h b/drivers/media/pci/zoran/zoran.h
-index 56340553b282..efbb1466595f 100644
---- a/drivers/media/pci/zoran/zoran.h
-+++ b/drivers/media/pci/zoran/zoran.h
-@@ -173,7 +173,7 @@ struct card_info {
- 	int inputs;		/* number of video inputs */
- 	struct input {
- 		int muxsel;
--		char name[32];
-+		char name[42];
- 	} input[BUZ_MAX_INPUT];
+diff --git a/include/media/v4l2-dev.h b/include/media/v4l2-dev.h
+index e0a13505f88d..d82dfdbf6e58 100644
+--- a/include/media/v4l2-dev.h
++++ b/include/media/v4l2-dev.h
+@@ -284,7 +284,7 @@ struct video_device {
+ 	struct v4l2_prio_state *prio;
  
- 	v4l2_std_id norms;
-diff --git a/drivers/media/platform/renesas/renesas-ceu.c b/drivers/media/platform/renesas/renesas-ceu.c
-index ec631c6e2a57..2562b30acfb9 100644
---- a/drivers/media/platform/renesas/renesas-ceu.c
-+++ b/drivers/media/platform/renesas/renesas-ceu.c
-@@ -1183,17 +1183,13 @@ static int ceu_enum_input(struct file *file, void *priv,
- 			  struct v4l2_input *inp)
- {
- 	struct ceu_device *ceudev = video_drvdata(file);
--	struct ceu_subdev *ceusd;
- 
- 	if (inp->index >= ceudev->num_sd)
- 		return -EINVAL;
- 
--	ceusd = ceudev->subdevs[inp->index];
--
- 	inp->type = V4L2_INPUT_TYPE_CAMERA;
- 	inp->std = 0;
--	snprintf(inp->name, sizeof(inp->name), "Camera%u: %s",
--		 inp->index, ceusd->v4l2_sd->name);
-+	snprintf(inp->name, sizeof(inp->name), "Camera %u", inp->index);
- 
- 	return 0;
- }
+ 	/* device info */
+-	char name[32];
++	char name[64];
+ 	enum vfl_devnode_type vfl_type;
+ 	enum vfl_devnode_direction vfl_dir;
+ 	int minor;
 -- 
 2.40.1
 
