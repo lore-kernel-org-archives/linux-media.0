@@ -2,82 +2,98 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9760CD4F5B
-	for <linux-media@archiver.kernel.org>; Fri, 22 Sep 2023 11:49:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AA6FCD4F5B
+	for <linux-media@archiver.kernel.org>; Fri, 22 Sep 2023 11:55:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233817AbjIVLte (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 22 Sep 2023 07:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37206 "EHLO
+        id S233709AbjIVLz2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 22 Sep 2023 07:55:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbjIVLtb (ORCPT
+        with ESMTP id S229644AbjIVLz1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 22 Sep 2023 07:49:31 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E390FB;
-        Fri, 22 Sep 2023 04:49:24 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (aztw-30-b2-v4wan-166917-cust845.vm26.cable.virginm.net [82.37.23.78])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0E814B53;
-        Fri, 22 Sep 2023 13:47:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1695383265;
-        bh=RsEjlGqls7ExAHNWGeGdLiTI5G08Gf1eQy4YrWddtf0=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=dmtN1uk0cAOHTkjh8sbEJohdGgZhAXZtvZpPJ1WeYYA5/L+9jej0agOPFZdu9I949
-         u3HPWqnB/KRV9v6FkSOflvleP+CMrwoy8HfbLywBreZln1ASEZzOqY1GBZGBDjqPBb
-         I9GZMbn2zjW/tcADMB/fIbIe/DRJaP/BhqglUyiE=
-Content-Type: text/plain; charset="utf-8"
+        Fri, 22 Sep 2023 07:55:27 -0400
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0E3100
+        for <linux-media@vger.kernel.org>; Fri, 22 Sep 2023 04:55:21 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1qjekh-0000wh-TW; Fri, 22 Sep 2023 13:55:19 +0200
+Received: from [2a0a:edc0:2:b01:1d::c0] (helo=ptx.whiteo.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1qjekh-0089V0-Ch; Fri, 22 Sep 2023 13:55:19 +0200
+Received: from mtr by ptx.whiteo.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1qjekh-00AxJZ-AS; Fri, 22 Sep 2023 13:55:19 +0200
+Date:   Fri, 22 Sep 2023 13:55:19 +0200
+From:   Michael Tretter <m.tretter@pengutronix.de>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     linux-media@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>
+Subject: Re: [PATCH 1/7] media: allegro-dvt: increase buffer size in
+ msg_type_name()
+Message-ID: <20230922115519.GC2564188@pengutronix.de>
+Mail-Followup-To: Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>
+References: <20230922105036.3148784-1-hverkuil-cisco@xs4all.nl>
+ <20230922105036.3148784-2-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230922080421.35145-4-wsa+renesas@sang-engineering.com>
-References: <20230922080421.35145-1-wsa+renesas@sang-engineering.com> <20230922080421.35145-4-wsa+renesas@sang-engineering.com>
-Subject: Re: [PATCH 3/3] media: dvb-frontends: drop check because i2c_unregister_device() is NULL safe
-From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Antti Palosaari <crope@iki.fi>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-renesas-soc@vger.kernel.org
-Date:   Fri, 22 Sep 2023 12:49:19 +0100
-Message-ID: <169538335996.2915094.5298425556148305413@ping.linuxembedded.co.uk>
-User-Agent: alot/0.10
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230922105036.3148784-2-hverkuil-cisco@xs4all.nl>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mtr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Quoting Wolfram Sang (2023-09-22 09:04:20)
-> No need to check the argument of i2c_unregister_device() because the
-> function itself does it.
->=20
+On Fri, 22 Sep 2023 12:50:30 +0200, Hans Verkuil wrote:
+> Fixes this compile error
+> 
+> drivers/media/platform/allegro-dvt/allegro-mail.c: In function 'msg_type_name':
+> drivers/media/platform/allegro-dvt/allegro-mail.c:37:48: warning: '%04x' directive output may be truncated writing between 4 and 8 bytes into a region of size 6 [-Wformat-truncation=]
+>    37 |                 snprintf(buf, sizeof(buf), "(0x%04x)", type);
+>       |                                                ^~~~
+> drivers/media/platform/allegro-dvt/allegro-mail.c:37:44: note: directive argument in the range [1, 4294967295]
+>    37 |                 snprintf(buf, sizeof(buf), "(0x%04x)", type);
+>       |                                            ^~~~~~~~~~
+> drivers/media/platform/allegro-dvt/allegro-mail.c:37:17: note: 'snprintf' output between 9 and 13 bytes into a destination of size 9
+>    37 |                 snprintf(buf, sizeof(buf), "(0x%04x)", type);
+>       |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+> Cc: Michael Tretter <m.tretter@pengutronix.de>
 
-Having reviewed the RDACM20 patch, I think I can say this looks accurate
-too.
+Reviewed-by: Michael Tretter <m.tretter@pengutronix.de>
 
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 > ---
-> Build tested only. Please apply to your tree.
->=20
->  drivers/media/dvb-frontends/m88ds3103.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->=20
-> diff --git a/drivers/media/dvb-frontends/m88ds3103.c b/drivers/media/dvb-=
-frontends/m88ds3103.c
-> index cf037b61b226..26c67ef05d13 100644
-> --- a/drivers/media/dvb-frontends/m88ds3103.c
-> +++ b/drivers/media/dvb-frontends/m88ds3103.c
-> @@ -1920,8 +1920,7 @@ static void m88ds3103_remove(struct i2c_client *cli=
-ent)
-> =20
->         dev_dbg(&client->dev, "\n");
-> =20
-> -       if (dev->dt_client)
-> -               i2c_unregister_device(dev->dt_client);
-> +       i2c_unregister_device(dev->dt_client);
-> =20
->         i2c_mux_del_adapters(dev->muxc);
-> =20
-> --=20
-> 2.30.2
->
+>  drivers/media/platform/allegro-dvt/allegro-mail.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/platform/allegro-dvt/allegro-mail.c b/drivers/media/platform/allegro-dvt/allegro-mail.c
+> index 16effad10746..aadc947a77ae 100644
+> --- a/drivers/media/platform/allegro-dvt/allegro-mail.c
+> +++ b/drivers/media/platform/allegro-dvt/allegro-mail.c
+> @@ -16,7 +16,7 @@
+>  
+>  const char *msg_type_name(enum mcu_msg_type type)
+>  {
+> -	static char buf[9];
+> +	static char buf[13];
+>  
+>  	switch (type) {
+>  	case MCU_MSG_TYPE_INIT:
+> -- 
+> 2.40.1
+> 
+> 
