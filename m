@@ -2,106 +2,118 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FD56E6FE20
-	for <linux-media@archiver.kernel.org>; Fri, 22 Sep 2023 12:59:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCC56E6FE27
+	for <linux-media@archiver.kernel.org>; Fri, 22 Sep 2023 13:19:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232618AbjIVNAC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 22 Sep 2023 09:00:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44090 "EHLO
+        id S233274AbjIVNTv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 22 Sep 2023 09:19:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbjIVNAA (ORCPT
+        with ESMTP id S229634AbjIVNTu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 22 Sep 2023 09:00:00 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC2ACE
-        for <linux-media@vger.kernel.org>; Fri, 22 Sep 2023 05:59:54 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84B5FC433C8;
-        Fri, 22 Sep 2023 12:59:53 +0000 (UTC)
-Message-ID: <a36dabd9-fdc8-4c86-a6b4-ea6b16b51d2e@xs4all.nl>
-Date:   Fri, 22 Sep 2023 14:59:51 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/6] media: string truncate warnings: increase name fields
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@kernel.org>
+        Fri, 22 Sep 2023 09:19:50 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59947CE
+        for <linux-media@vger.kernel.org>; Fri, 22 Sep 2023 06:19:44 -0700 (PDT)
+Received: from ideasonboard.com (93-46-82-201.ip106.fastwebnet.it [93.46.82.201])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3AF1D968;
+        Fri, 22 Sep 2023 15:18:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1695388683;
+        bh=BB2LoB0dDBI2UT9nsZVWziKQjPodUCEFcYDfPzMb3Bs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VmWqO15jZxMw9GPRlggikgtXTmKSrArH1/zqKVWbEdW2jHg3j788B7+MvSJEcrcHs
+         +oIpLcOBuVPf99qrqkb0f/rxuXpX5HDseEfrRGW5J2de9j2Wy7GaaQPWJlH5KQKhdB
+         Punx63gKcLB0SiaXUCkh0ZqiXpS3nTWStdSFI2B8=
+Date:   Fri, 22 Sep 2023 15:19:38 +0200
+From:   Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     linux-media@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Subject: Re: [PATCH 2/6] media: renesas-ceu: keep input name simple
+Message-ID: <zyxaejup3wyc6yo2vvih5f3m5rpx6iff53nicqxlqudh2orbae@rxcdrucytd35>
 References: <20230922125837.3290073-1-hverkuil-cisco@xs4all.nl>
-Content-Language: en-US, nl
-In-Reply-To: <20230922125837.3290073-1-hverkuil-cisco@xs4all.nl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ <20230922125837.3290073-3-hverkuil-cisco@xs4all.nl>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230922125837.3290073-3-hverkuil-cisco@xs4all.nl>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 22/09/2023 14:58, Hans Verkuil wrote:
-> This is a second batch of patches: the first 3 fix some more low-hanging
-> fruit that I missed in the first round.
-> 
-> The next two patches increase two internal name fields: one
-> in struct video_device and one in struct v4l2_subdev.
-> 
-> Generally speaking: 
->  
-> sizeof(v4l2_device.name) < sizeof(v4l2_subdev.name) < sizeof(video_device.name)
-> 
-> With this patch series these become:
-> 
-> 36 < 52 < 64.
-> 
-> The exact sizes are a bit trial and error, I'm afraid.
-> 
-> Typically v4l2_subdev.name uses v4l2_device.name with some extra text,
-> and the same happens for video_device.name.
-> 
-> The last patch removes V4L2_SUBDEV_NAME_SIZE and replaces all uses of
-> it by sizeof(), which is much safer than relying on a define.
-> 
-> With these changes I am left with 11 warnings, 10 of which are bus_info
-> related (uAPI). Especially for the platform devices this can likely
-> be dropped altogether since today it is filled in by the core for
-> platform devices.
-> 
-> Something to look at in the next round.
+Hi Hans
 
-I forgot to mention, this series sits on top of the previous set
-of patches.
+On Fri, Sep 22, 2023 at 02:58:33PM +0200, Hans Verkuil wrote:
+> Just show the Camera index as input name in VIDIOC_ENUM_INPUT,
+> no need to show the subdev name as well as that is meaningless for
+> users anyway.
+>
+> This fixes this compiler warning:
+>
+> drivers/media/platform/renesas/renesas-ceu.c: In function 'ceu_enum_input':
+> drivers/media/platform/renesas/renesas-ceu.c:1195:59: warning: '%s' directive output may be truncated writing up to 47 bytes into a region of size between 14 and 23 [-Wformat-truncation=]
+>  1195 |         snprintf(inp->name, sizeof(inp->name), "Camera%u: %s",
+>       |                                                           ^~
+> drivers/media/platform/renesas/renesas-ceu.c:1195:9: note: 'snprintf' output between 10 and 66 bytes into a destination of size 32
+>  1195 |         snprintf(inp->name, sizeof(inp->name), "Camera%u: %s",
+>       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>  1196 |                  inp->index, ceusd->v4l2_sd->name);
+>       |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>
+> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+> Cc: Jacopo Mondi <jacopo@jmondi.org>
+> ---
+>  drivers/media/pci/zoran/zoran.h              | 2 +-
+>  drivers/media/platform/renesas/renesas-ceu.c | 6 +-----
+>  2 files changed, 2 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/media/pci/zoran/zoran.h b/drivers/media/pci/zoran/zoran.h
+> index 56340553b282..efbb1466595f 100644
+> --- a/drivers/media/pci/zoran/zoran.h
+> +++ b/drivers/media/pci/zoran/zoran.h
+> @@ -173,7 +173,7 @@ struct card_info {
+>  	int inputs;		/* number of video inputs */
+>  	struct input {
+>  		int muxsel;
+> -		char name[32];
+> +		char name[42];
 
-The git repo is here:
+Seems unrelated ?
 
-https://git.linuxtv.org/hverkuil/media_tree.git/log/?h=trunc1
+>  	} input[BUZ_MAX_INPUT];
+>
+>  	v4l2_std_id norms;
+> diff --git a/drivers/media/platform/renesas/renesas-ceu.c b/drivers/media/platform/renesas/renesas-ceu.c
+> index ec631c6e2a57..2562b30acfb9 100644
+> --- a/drivers/media/platform/renesas/renesas-ceu.c
+> +++ b/drivers/media/platform/renesas/renesas-ceu.c
+> @@ -1183,17 +1183,13 @@ static int ceu_enum_input(struct file *file, void *priv,
+>  			  struct v4l2_input *inp)
+>  {
+>  	struct ceu_device *ceudev = video_drvdata(file);
+> -	struct ceu_subdev *ceusd;
+>
+>  	if (inp->index >= ceudev->num_sd)
+>  		return -EINVAL;
+>
+> -	ceusd = ceudev->subdevs[inp->index];
+> -
+>  	inp->type = V4L2_INPUT_TYPE_CAMERA;
+>  	inp->std = 0;
+> -	snprintf(inp->name, sizeof(inp->name), "Camera%u: %s",
+> -		 inp->index, ceusd->v4l2_sd->name);
+> +	snprintf(inp->name, sizeof(inp->name), "Camera %u", inp->index);
 
-Regards,
+For the renesas-ceu part
+Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 
-	Hans
+Thanks
+  j
 
-> 
-> Regards,
-> 
-> 	Hans
-> 
-> Hans Verkuil (6):
->   media: cec.h: increase input_phys buffer
->   media: renesas-ceu: keep input name simple
->   media: zoran: increase name size
->   media: v4l2-dev.h: increase struct video_device name size
->   media: v4l2-subdev.h: increase struct v4l2_subdev name size
->   media: use sizeof() instead of V4L2_SUBDEV_NAME_SIZE
-> 
->  drivers/media/i2c/msp3400-driver.c                  | 2 +-
->  drivers/media/pci/zoran/zoran.h                     | 2 +-
->  drivers/media/platform/cadence/cdns-csi2rx.c        | 4 ++--
->  drivers/media/platform/cadence/cdns-csi2tx.c        | 4 ++--
->  drivers/media/platform/renesas/rcar-isp.c           | 2 +-
->  drivers/media/platform/renesas/rcar-vin/rcar-csi2.c | 2 +-
->  drivers/media/platform/renesas/renesas-ceu.c        | 6 +-----
->  drivers/media/platform/ti/omap3isp/ispstat.c        | 2 +-
->  drivers/staging/media/omap4iss/iss_csi2.c           | 2 +-
->  drivers/staging/media/tegra-video/csi.c             | 4 ++--
->  drivers/staging/media/tegra-video/vip.c             | 2 +-
->  include/media/cec.h                                 | 2 +-
->  include/media/v4l2-dev.h                            | 2 +-
->  include/media/v4l2-subdev.h                         | 4 +---
->  14 files changed, 17 insertions(+), 23 deletions(-)
-> 
-
+>
+>  	return 0;
+>  }
+> --
+> 2.40.1
+>
