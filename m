@@ -2,46 +2,46 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9551DC04AAB
-	for <linux-media@archiver.kernel.org>; Fri, 22 Sep 2023 11:57:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3FCFCD4945
+	for <linux-media@archiver.kernel.org>; Fri, 22 Sep 2023 11:57:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233838AbjIVL5s (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 22 Sep 2023 07:57:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60368 "EHLO
+        id S233868AbjIVL5t (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 22 Sep 2023 07:57:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbjIVL5r (ORCPT
+        with ESMTP id S233857AbjIVL5s (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 22 Sep 2023 07:57:47 -0400
+        Fri, 22 Sep 2023 07:57:48 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C80F102
-        for <linux-media@vger.kernel.org>; Fri, 22 Sep 2023 04:57:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F56122
+        for <linux-media@vger.kernel.org>; Fri, 22 Sep 2023 04:57:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695383861; x=1726919861;
+  t=1695383862; x=1726919862;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=amPuXQda1vVqXbclqO8XS1HZOwP5mrrowZQ1oBcSNY4=;
-  b=PmNKV/++KrxjdXhVppkeT4BEQQLJHtG6ot+6asI5o2YK7EsRQymWAnq1
-   MQpXqIL5aPJ6Ji8UzSO4/uUW/dUJo78FEJ3pCy4Uvc2066FgcUTB9GDBB
-   f2F8KkYshzYbL88htYktr50QzK5Po0Q7wRBtBfuaUu1oTwMPJMgtpR1Gc
-   mgYKmr+KX78IduAI+ArwnDgJZ25wLfSKU0Kprs5NaojuB4350Z1iu65JF
-   MmeEmvSfxrQcKiIvXWw2hITGCq2ifHa99X+12yagxTWV8hp1d+v4/xRR6
-   cR+PLMFBfu9y9JVd5WkDUepE/LsY4mcktmd8K0E3i4M0wZ4Ftig/uQUzg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10840"; a="383558571"
+  bh=aT4pYhBzrkwrq+wXt4wM5+30kGGY1hcpc5dMcXccWAk=;
+  b=UfXoaTtICNOduWhhN3RW3ibjeZn0yWfzIEpIeJ06OyMTjVOfUrjEkaFd
+   0DLve2LOT6D4Y3XuiIc7NorIAbELumzddBL7EB0p49cKNNaPoMFsnIn4z
+   Q/gg3mEIDTZXRFGxUPpK3dHGszMgSyhKU771QeGadrRLCWfmv3vV8wpvK
+   zm68oG1IExx5HsYX1TWgthb31wqqt6cLcu8qhyWR+buTTtPi6zUSaAGNb
+   SwvxzrieeL0qVZxeU8jtDL4lbDwnxb+NzWQTH6rI1CbgGPTvzlZsf9cSH
+   2onOcCjuGSwXr46bvI11naMVOgX/CXFdzTjc8QaDcim/gVv2hsHnptWw5
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10840"; a="383558583"
 X-IronPort-AV: E=Sophos;i="6.03,167,1694761200"; 
-   d="scan'208";a="383558571"
+   d="scan'208";a="383558583"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2023 04:57:40 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2023 04:57:41 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10840"; a="837714643"
+X-IronPort-AV: E=McAfee;i="6600,9927,10840"; a="837714657"
 X-IronPort-AV: E=Sophos;i="6.03,167,1694761200"; 
-   d="scan'208";a="837714643"
+   d="scan'208";a="837714657"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2023 04:57:37 -0700
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2023 04:57:39 -0700
 Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id B0E1E1208F8;
-        Fri, 22 Sep 2023 14:57:33 +0300 (EEST)
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 4EEBC1209B0;
+        Fri, 22 Sep 2023 14:57:36 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com,
@@ -51,9 +51,9 @@ Cc:     laurent.pinchart@ideasonboard.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
         Rui Miguel Silva <rmfrfs@gmail.com>,
         Martin Kepplinger <martink@posteo.de>
-Subject: [PATCH v4 02/12] media: ccs: Fix driver quirk struct documentation
-Date:   Fri, 22 Sep 2023 14:57:20 +0300
-Message-Id: <20230922115730.251779-3-sakari.ailus@linux.intel.com>
+Subject: [PATCH v4 04/12] media: ccs: Correct error handling in ccs_register_subdev
+Date:   Fri, 22 Sep 2023 14:57:22 +0300
+Message-Id: <20230922115730.251779-5-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230922115730.251779-1-sakari.ailus@linux.intel.com>
 References: <20230922115730.251779-1-sakari.ailus@linux.intel.com>
@@ -63,34 +63,49 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fix documentation for struct ccs_quirk, a device specific struct for
-managing deviations from the standard. The flags field was drifted away
-from where it should have been.
+ccs_register_subdev() did not clean up the media entity in error case, do
+that now. Also switch to goto based error handling.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/i2c/ccs/ccs-quirk.h | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/media/i2c/ccs/ccs-core.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/i2c/ccs/ccs-quirk.h b/drivers/media/i2c/ccs/ccs-quirk.h
-index 5838fcda92fd..0b1a64958d71 100644
---- a/drivers/media/i2c/ccs/ccs-quirk.h
-+++ b/drivers/media/i2c/ccs/ccs-quirk.h
-@@ -32,12 +32,10 @@ struct ccs_sensor;
-  *		@reg: Pointer to the register to access
-  *		@value: Register value, set by the caller on write, or
-  *			by the quirk on read
-- *
-- * @flags: Quirk flags
-- *
-  *		@return: 0 on success, -ENOIOCTLCMD if no register
-  *			 access may be done by the caller (default read
-  *			 value is zero), else negative error code on error
-+ * @flags: Quirk flags
-  */
- struct ccs_quirk {
- 	int (*limits)(struct ccs_sensor *sensor);
+diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
+index 6f8fbd82e21c..3fed071b65ab 100644
+--- a/drivers/media/i2c/ccs/ccs-core.c
++++ b/drivers/media/i2c/ccs/ccs-core.c
+@@ -2968,7 +2968,7 @@ static int ccs_register_subdev(struct ccs_sensor *sensor,
+ 	rval = v4l2_device_register_subdev(sensor->src->sd.v4l2_dev, &ssd->sd);
+ 	if (rval) {
+ 		dev_err(&client->dev, "v4l2_device_register_subdev failed\n");
+-		return rval;
++		goto out_media_entity_cleanup;
+ 	}
+ 
+ 	rval = media_create_pad_link(&ssd->sd.entity, source_pad,
+@@ -2976,11 +2976,18 @@ static int ccs_register_subdev(struct ccs_sensor *sensor,
+ 				     link_flags);
+ 	if (rval) {
+ 		dev_err(&client->dev, "media_create_pad_link failed\n");
+-		v4l2_device_unregister_subdev(&ssd->sd);
+-		return rval;
++		goto out_v4l2_device_unregister_subdev;
+ 	}
+ 
+ 	return 0;
++
++out_v4l2_device_unregister_subdev:
++	v4l2_device_unregister_subdev(&ssd->sd);
++
++out_media_entity_cleanup:
++	media_entity_cleanup(&ssd->sd.entity);
++
++	return rval;
+ }
+ 
+ static void ccs_unregistered(struct v4l2_subdev *subdev)
 -- 
 2.39.2
 
