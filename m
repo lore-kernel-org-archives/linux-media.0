@@ -2,46 +2,46 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0971CD4F5B
-	for <linux-media@archiver.kernel.org>; Fri, 22 Sep 2023 11:57:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49EE0C04AAB
+	for <linux-media@archiver.kernel.org>; Fri, 22 Sep 2023 11:57:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233879AbjIVL5t (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 22 Sep 2023 07:57:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60400 "EHLO
+        id S233910AbjIVL5x (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 22 Sep 2023 07:57:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233864AbjIVL5t (ORCPT
+        with ESMTP id S233384AbjIVL5w (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 22 Sep 2023 07:57:49 -0400
+        Fri, 22 Sep 2023 07:57:52 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF91FB
-        for <linux-media@vger.kernel.org>; Fri, 22 Sep 2023 04:57:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DE4100
+        for <linux-media@vger.kernel.org>; Fri, 22 Sep 2023 04:57:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695383863; x=1726919863;
+  t=1695383866; x=1726919866;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=jPUQfYZpMu4dDF/qgkcx1DHbxhRRl3Fk2GemjArNuxw=;
-  b=JZGwN3+dJHTS2UzIufODOndK7wEyL+57kfzwJyC1UKHMRjkSU5RvnDP1
-   WQSnMtcG+6QS9lxTSlS3KNrqYQ85db3Ds+xuVpxeO27SECht1ZNeio2Kt
-   g5bFAWQRu0hjG/wHClho9LmpN365A7P1iJKuLGCYRHPBV1R/r/8GIb5fA
-   pV8Jf2NdduO0MVbvCNxt9VK6CNZlnQWARgNOo/LYy8D5gf1xjihz0KD3J
-   oz1ZrfTMPZeW/ChRaa1Nt8jZYaVvtf5tNKYpXNmefqNzArzyHQFL8a/c1
-   7tCq4gNEI8c0mlJ8LOjqoPxQ8hy5s0dGYGjrsbPHbLQ2sJKQ2c+lVlWLO
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10840"; a="383558588"
+  bh=PxAyAhmtwlVVtrGn2TOWLvT4xuTSUiE6B42b9tKv0xs=;
+  b=ikkqayh5QjgiCLpZxtq7Uv27OmXu28ibNe+oc+g7uIhzjC5S15TsRORU
+   vWLQ+CMt8Yx/qNq65cboNVSyk2GSnSz+M8qhAdugsu82zcWRKpS49t7Er
+   14xOWMdawNuKHQZDT6DRfTp4edIOmnenOgr8sykmoCxEOC1aFLPIdzYsF
+   ly9OxSRPmKWc5S+geP9OBcn1KGyVUso2clNiboDYXAGE7fpgBUEkBgjPo
+   zlnvMJCMzC/uIBY518xiNycDOItayCnoUWjG3IRy8Vy/XkV9xtSKUF5Lq
+   4z2eiczwhRgHLG3pvHMqzIdDLKTZVTklPX/hYR9upYFchtxbork5g4PxH
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10840"; a="383558599"
 X-IronPort-AV: E=Sophos;i="6.03,167,1694761200"; 
-   d="scan'208";a="383558588"
+   d="scan'208";a="383558599"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2023 04:57:43 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2023 04:57:45 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10840"; a="837714663"
+X-IronPort-AV: E=McAfee;i="6600,9927,10840"; a="837714672"
 X-IronPort-AV: E=Sophos;i="6.03,167,1694761200"; 
-   d="scan'208";a="837714663"
+   d="scan'208";a="837714672"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2023 04:57:40 -0700
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2023 04:57:43 -0700
 Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id AAD181209D0;
-        Fri, 22 Sep 2023 14:57:37 +0300 (EEST)
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 34675120810;
+        Fri, 22 Sep 2023 14:57:40 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com,
@@ -51,9 +51,9 @@ Cc:     laurent.pinchart@ideasonboard.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
         Rui Miguel Silva <rmfrfs@gmail.com>,
         Martin Kepplinger <martink@posteo.de>
-Subject: [PATCH v4 05/12] media: ccs: Switch to init_cfg
-Date:   Fri, 22 Sep 2023 14:57:23 +0300
-Message-Id: <20230922115730.251779-6-sakari.ailus@linux.intel.com>
+Subject: [PATCH v4 07/12] media: ov2740: Enable runtime PM before registering the async subdev
+Date:   Fri, 22 Sep 2023 14:57:25 +0300
+Message-Id: <20230922115730.251779-8-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230922115730.251779-1-sakari.ailus@linux.intel.com>
 References: <20230922115730.251779-1-sakari.ailus@linux.intel.com>
@@ -63,84 +63,52 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use init_cfg() instead of manually setting up defaults in file handle
-open.
+Enable runtime PM before registering the async subdev as the driver UAPI
+may become accessible immediately after the registration. Runtime PM needs
+to be enabled by that time.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 17 ++++++-----------
- 1 file changed, 6 insertions(+), 11 deletions(-)
+ drivers/media/i2c/ov2740.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 3fed071b65ab..a4f593866ad6 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -2945,7 +2945,6 @@ static int ccs_identify_module(struct ccs_sensor *sensor)
- }
- 
- static const struct v4l2_subdev_ops ccs_ops;
--static const struct v4l2_subdev_internal_ops ccs_internal_ops;
- static const struct media_entity_operations ccs_entity_ops;
- 
- static int ccs_register_subdev(struct ccs_sensor *sensor,
-@@ -3076,13 +3075,13 @@ static void ccs_create_subdev(struct ccs_sensor *sensor,
- 	if (ssd == sensor->src)
- 		return;
- 
--	ssd->sd.internal_ops = &ccs_internal_ops;
- 	ssd->sd.owner = THIS_MODULE;
- 	ssd->sd.dev = &client->dev;
- 	v4l2_set_subdevdata(&ssd->sd, client);
- }
- 
--static int ccs_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
-+static int ccs_init_cfg(struct v4l2_subdev *sd,
-+			struct v4l2_subdev_state *sd_state)
- {
- 	struct ccs_subdev *ssd = to_ccs_subdev(sd);
- 	struct ccs_sensor *sensor = ssd->sensor;
-@@ -3092,9 +3091,9 @@ static int ccs_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- 
- 	for (i = 0; i < ssd->npads; i++) {
- 		struct v4l2_mbus_framefmt *try_fmt =
--			v4l2_subdev_get_try_format(sd, fh->state, i);
-+			v4l2_subdev_get_try_format(sd, sd_state, i);
- 		struct v4l2_rect *try_crop =
--			v4l2_subdev_get_try_crop(sd, fh->state, i);
-+			v4l2_subdev_get_try_crop(sd, sd_state, i);
- 		struct v4l2_rect *try_comp;
- 
- 		ccs_get_native_size(ssd, try_crop);
-@@ -3107,7 +3106,7 @@ static int ccs_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- 		if (ssd == sensor->pixel_array)
- 			continue;
- 
--		try_comp = v4l2_subdev_get_try_compose(sd, fh->state, i);
-+		try_comp = v4l2_subdev_get_try_compose(sd, sd_state, i);
- 		*try_comp = *try_crop;
+diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
+index 41d4f85470fd..319dc00e47b4 100644
+--- a/drivers/media/i2c/ov2740.c
++++ b/drivers/media/i2c/ov2740.c
+@@ -1172,6 +1172,12 @@ static int ov2740_probe(struct i2c_client *client)
+ 		goto probe_error_v4l2_ctrl_handler_free;
  	}
  
-@@ -3123,6 +3122,7 @@ static const struct v4l2_subdev_video_ops ccs_video_ops = {
- };
++	/* Set the device's state to active if it's in D0 state. */
++	if (full_power)
++		pm_runtime_set_active(&client->dev);
++	pm_runtime_enable(&client->dev);
++	pm_runtime_idle(&client->dev);
++
+ 	ret = v4l2_async_register_subdev_sensor(&ov2740->sd);
+ 	if (ret < 0) {
+ 		dev_err_probe(dev, ret, "failed to register V4L2 subdev\n");
+@@ -1182,16 +1188,12 @@ static int ov2740_probe(struct i2c_client *client)
+ 	if (ret)
+ 		dev_warn(&client->dev, "register nvmem failed, ret %d\n", ret);
  
- static const struct v4l2_subdev_pad_ops ccs_pad_ops = {
-+	.init_cfg = ccs_init_cfg,
- 	.enum_mbus_code = ccs_enum_mbus_code,
- 	.get_fmt = ccs_get_format,
- 	.set_fmt = ccs_set_format,
-@@ -3148,11 +3148,6 @@ static const struct media_entity_operations ccs_entity_ops = {
- static const struct v4l2_subdev_internal_ops ccs_internal_src_ops = {
- 	.registered = ccs_registered,
- 	.unregistered = ccs_unregistered,
--	.open = ccs_open,
--};
+-	/* Set the device's state to active if it's in D0 state. */
+-	if (full_power)
+-		pm_runtime_set_active(&client->dev);
+-	pm_runtime_enable(&client->dev);
+-	pm_runtime_idle(&client->dev);
 -
--static const struct v4l2_subdev_internal_ops ccs_internal_ops = {
--	.open = ccs_open,
- };
+ 	return 0;
  
- /* -----------------------------------------------------------------------------
+ probe_error_media_entity_cleanup:
+ 	media_entity_cleanup(&ov2740->sd.entity);
++	pm_runtime_disable(&client->dev);
++	pm_runtime_set_suspended(&client->dev);
+ 
+ probe_error_v4l2_ctrl_handler_free:
+ 	v4l2_ctrl_handler_free(ov2740->sd.ctrl_handler);
 -- 
 2.39.2
 
