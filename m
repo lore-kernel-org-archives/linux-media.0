@@ -2,54 +2,54 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B0A8E7D0CE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DBB0E7D0D0
 	for <linux-media@archiver.kernel.org>; Fri, 22 Sep 2023 06:24:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231464AbjIVGYk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 22 Sep 2023 02:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49192 "EHLO
+        id S231480AbjIVGYl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 22 Sep 2023 02:24:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231368AbjIVGYg (ORCPT
+        with ESMTP id S231352AbjIVGYh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 22 Sep 2023 02:24:36 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DE383;
-        Thu, 21 Sep 2023 23:24:24 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id 98e67ed59e1d1-2767378ae15so1211625a91.1;
-        Thu, 21 Sep 2023 23:24:24 -0700 (PDT)
+        Fri, 22 Sep 2023 02:24:37 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C331B1A1;
+        Thu, 21 Sep 2023 23:24:30 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-692ada71d79so152539b3a.1;
+        Thu, 21 Sep 2023 23:24:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695363864; x=1695968664; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1695363870; x=1695968670; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Sr4EPKJxuJJJu4QkdICBYMaj0v525kEVWP7yq9+OnDo=;
-        b=TNyKe9Ov1QLo+aUcUJhUxmBsIfjpDReO69X+n3GJJqrfuFNSLK2aB260zi6hClf8Vf
-         i2YWGUb5QJmLahOYFqLYaa54a7gHRfzFe8gyD51vLgzFMhzwm9MteiXTF2LDEngtRF82
-         hU7W83auol3Uzn6tQGEi7kuhYLgvOqlK+Qe+OPZUZUJckvPTD34TaQ6RT/ikNX0/PqB4
-         fgwKyaHvhQMebJyrhSqAzZUSygbpqgf6qnT2RnlXkLwt1E18DnWk2x3DuhC91YsD0eGQ
-         YUH76Vioy/N6kpDsT1XqmEnIZykUnSnQQ/slAFGmJQ58So7TUQpiuEOMQPpT8il5FxsU
-         wuvg==
+        bh=MwbtYXnybBb97SoCFL69GICK++fjeLJoanazsQv4oQE=;
+        b=BnM94DqYWYL6US+1UU/yEFnWFTuia6k7MTucJ//NknNK6cQMdac2OEFcaVMJMGlNo0
+         UQUNlKOTywP627GGuBgQox/pCcVUtKby8KPbLUAHfQQ0HIX2qCJfcIS51R9Oj673sst4
+         /8yXkHPWTIj7s17GyhcOKQyMoePxAupnr817gaoGu7Ej/Ovm45pamRKDE/z1/P2mjL9g
+         zhIIBuTT4HK4QSTOBwe4Nq4VyM1Gfv9hiWiXlxYy2Tic9XpjMtIRSd/x18YetpeuUaVI
+         MCmGisRmMGqY8fzYmY8WymwQlVG7vB0M2gGsJof5rLnIjA1Dgphb1DnBnrzgj8HZWFQo
+         PqDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695363864; x=1695968664;
+        d=1e100.net; s=20230601; t=1695363870; x=1695968670;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Sr4EPKJxuJJJu4QkdICBYMaj0v525kEVWP7yq9+OnDo=;
-        b=QU2/G5VIuiyTH/+8Sn464DODT2zunEUqvBiweF5rfwSQjuFwovXiRXUMGLQ3MeoW1I
-         Y5br62m+hchPW4oD3uORH9ITrxEGD+4s342/1mkXmAvxDmsHpoyKRPfrAxq7g6Qp74nm
-         nCWNtao2jDmfIUEyzbDMuCwTam7gFwW7VB9DhDXklWEgLfk1jSq745Z93scPDqHSbzh0
-         vrLnT5RFq4l/eOVfJBb2mKP6OtjqlZjqoy3bSoUz5cLH6iSpmu6rcjhVySm+rssItbOm
-         MkazZolRF18rhdmr3qTHPYpyKaSAJc/7nbxTLAFTYc8sOFmd84MSKTBusT+K0rPeQwtz
-         Zi8g==
-X-Gm-Message-State: AOJu0Ywm9NWTpkAdgPyC5MEMWCiPMI8mEDYHCrwW98IXgn2RSD1kL9Wi
-        E0Xb6I1CfD4t6Mibhr0Fd0Y=
-X-Google-Smtp-Source: AGHT+IEqL32YcpyAQ4wjr60dursrD4yQEnjgSJaDG4jmvpwH7Y8Hd/xq1K76gukbhlbruBSAoyr0ww==
-X-Received: by 2002:a17:90b:148b:b0:268:2500:b17e with SMTP id js11-20020a17090b148b00b002682500b17emr7884898pjb.23.1695363863750;
-        Thu, 21 Sep 2023 23:24:23 -0700 (PDT)
+        bh=MwbtYXnybBb97SoCFL69GICK++fjeLJoanazsQv4oQE=;
+        b=YuR+xjNxyc+0GplBkxRuyTj5Ux3GqKQ+tu06aNcdPXPk/sDymqwJy3HrOqPPM2EFi0
+         AcSzG6llcCz/oyB7zvywowz3Kk1KvuOnwR1be0WcJETf0+kg2RXXIg/O4Cq4p+BbnjWN
+         4oXqn3TZtrv3cdxA1ws4LbmWuqSflEi4Bt0Vj11oMVdZJpIC/bE2Oid105O/P34vC69x
+         h9XBgLVBlUB5Xw8LIgT21FzKQTZoj14xV/D61sNfYYM9yqC+VbQf1RTrvtwesEmd8YhC
+         IZhjxUBwiNVPqrXDGtWiACq7vn/9sAyaHEkGOaGknLKtDlbjpi24Dxgg56hsWlLNyRbw
+         lM2Q==
+X-Gm-Message-State: AOJu0YzOw0WHhpX1Kt0ZtQvew3Pc/z54ZgieO8TVNdpQpvGUsgTa91t+
+        66fHW6pVbawEm+lfvf7IjON3G+UQ0KEVbg==
+X-Google-Smtp-Source: AGHT+IGjJ/lGi2ldN3E+TLfQOmoRwDd/IiBE1Wqc41iQsZNfJTLcqQg2r3SgxkTiR7gy/ipXxIbLqg==
+X-Received: by 2002:a05:6a20:325a:b0:153:73dd:282c with SMTP id hm26-20020a056a20325a00b0015373dd282cmr6678561pzc.58.1695363870144;
+        Thu, 21 Sep 2023 23:24:30 -0700 (PDT)
 Received: from hcdev-d520mt2.. (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id m11-20020a17090ade0b00b00274de7c8aacsm4157417pjv.45.2023.09.21.23.24.20
+        by smtp.gmail.com with ESMTPSA id m11-20020a17090ade0b00b00274de7c8aacsm4157417pjv.45.2023.09.21.23.24.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Sep 2023 23:24:23 -0700 (PDT)
+        Thu, 21 Sep 2023 23:24:29 -0700 (PDT)
 From:   Marvin Lin <milkfafa@gmail.com>
 To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
         avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
@@ -60,10 +60,10 @@ Cc:     devicetree@vger.kernel.org, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
         kwliu@nuvoton.com, kflin@nuvoton.com,
         Marvin Lin <milkfafa@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v16 2/7] media: dt-bindings: nuvoton: Add NPCM VCD and ECE engine
-Date:   Fri, 22 Sep 2023 14:24:00 +0800
-Message-Id: <20230922062405.2571850-3-milkfafa@gmail.com>
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Subject: [PATCH v16 4/7] media: v4l: Add HEXTILE compressed format
+Date:   Fri, 22 Sep 2023 14:24:02 +0800
+Message-Id: <20230922062405.2571850-5-milkfafa@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230922062405.2571850-1-milkfafa@gmail.com>
 References: <20230922062405.2571850-1-milkfafa@gmail.com>
@@ -73,146 +73,60 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add dt-bindings document for Video Capture/Differentiation Engine
-(VCD) and Encoding Compression Engine (ECE) present on Nuvoton NPCM
-SoCs.
+Add HEXTILE compressed format which is defined in Remote Framebuffer
+Protocol (RFC 6143, chapter 7.7.4 Hextile Encoding) and is used by
+Encoding Compression Engine (ECE) present on Nuvoton NPCM SoCs.
 
 Signed-off-by: Marvin Lin <milkfafa@gmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 ---
- .../bindings/media/nuvoton,npcm-ece.yaml      | 43 +++++++++++
- .../bindings/media/nuvoton,npcm-vcd.yaml      | 72 +++++++++++++++++++
- 2 files changed, 115 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/nuvoton,npcm-ece.yaml
- create mode 100644 Documentation/devicetree/bindings/media/nuvoton,npcm-vcd.yaml
+ Documentation/userspace-api/media/v4l/pixfmt-reserved.rst | 7 +++++++
+ drivers/media/v4l2-core/v4l2-ioctl.c                      | 1 +
+ include/uapi/linux/videodev2.h                            | 1 +
+ 3 files changed, 9 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/nuvoton,npcm-ece.yaml b/Documentation/devicetree/bindings/media/nuvoton,npcm-ece.yaml
-new file mode 100644
-index 000000000000..b47468e54504
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/nuvoton,npcm-ece.yaml
-@@ -0,0 +1,43 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/nuvoton,npcm-ece.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst b/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
+index 296ad2025e8d..886ba7b08d6b 100644
+--- a/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
++++ b/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
+@@ -288,6 +288,13 @@ please make a proposal on the linux-media mailing list.
+       - 'MT2110R'
+       - This format is two-planar 10-Bit raster mode and having similitude with
+         ``V4L2_PIX_FMT_MM21`` in term of alignment and tiling. Used for AVC.
++    * .. _V4L2-PIX-FMT-HEXTILE:
 +
-+title: Nuvoton NPCM Encoding Compression Engine
-+
-+maintainers:
-+  - Joseph Liu <kwliu@nuvoton.com>
-+  - Marvin Lin <kflin@nuvoton.com>
-+
-+description: |
-+  Video Encoding Compression Engine (ECE) present on Nuvoton NPCM SoCs.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - nuvoton,npcm750-ece
-+      - nuvoton,npcm845-ece
-+
-+  reg:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - resets
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/reset/nuvoton,npcm7xx-reset.h>
-+
-+    ece: video-codec@f0820000 {
-+        compatible = "nuvoton,npcm750-ece";
-+        reg = <0xf0820000 0x2000>;
-+        resets = <&rstc NPCM7XX_RESET_IPSRST2 NPCM7XX_RESET_ECE>;
-+    };
-diff --git a/Documentation/devicetree/bindings/media/nuvoton,npcm-vcd.yaml b/Documentation/devicetree/bindings/media/nuvoton,npcm-vcd.yaml
-new file mode 100644
-index 000000000000..c885f559d2e5
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/nuvoton,npcm-vcd.yaml
-@@ -0,0 +1,72 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/nuvoton,npcm-vcd.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Nuvoton NPCM Video Capture/Differentiation Engine
-+
-+maintainers:
-+  - Joseph Liu <kwliu@nuvoton.com>
-+  - Marvin Lin <kflin@nuvoton.com>
-+
-+description: |
-+  Video Capture/Differentiation Engine (VCD) present on Nuvoton NPCM SoCs.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - nuvoton,npcm750-vcd
-+      - nuvoton,npcm845-vcd
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+  nuvoton,sysgcr:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: phandle to access GCR (Global Control Register) registers.
-+
-+  nuvoton,sysgfxi:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: phandle to access GFXI (Graphics Core Information) registers.
-+
-+  nuvoton,ece:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: phandle to access ECE (Encoding Compression Engine) registers.
-+
-+  memory-region:
-+    maxItems: 1
-+    description:
-+      CMA pool to use for buffers allocation instead of the default CMA pool.
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - resets
-+  - nuvoton,sysgcr
-+  - nuvoton,sysgfxi
-+  - nuvoton,ece
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/reset/nuvoton,npcm7xx-reset.h>
-+
-+    vcd: vcd@f0810000 {
-+        compatible = "nuvoton,npcm750-vcd";
-+        reg = <0xf0810000 0x10000>;
-+        interrupts = <GIC_SPI 22 IRQ_TYPE_LEVEL_HIGH>;
-+        resets = <&rstc NPCM7XX_RESET_IPSRST2 NPCM7XX_RESET_VCD>;
-+        nuvoton,sysgcr = <&gcr>;
-+        nuvoton,sysgfxi = <&gfxi>;
-+        nuvoton,ece = <&ece>;
-+    };
++      - ``V4L2_PIX_FMT_HEXTILE``
++      - 'HXTL'
++      - Compressed format used by Nuvoton NPCM video driver. This format is
++        defined in Remote Framebuffer Protocol (RFC 6143, chapter 7.7.4 Hextile
++        Encoding).
+ .. raw:: latex
+ 
+     \normalsize
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index f4d9d6279094..9b1de54ce379 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -1510,6 +1510,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+ 		case V4L2_PIX_FMT_AV1_FRAME:	descr = "AV1 Frame"; break;
+ 		case V4L2_PIX_FMT_MT2110T:	descr = "Mediatek 10bit Tile Mode"; break;
+ 		case V4L2_PIX_FMT_MT2110R:	descr = "Mediatek 10bit Raster Mode"; break;
++		case V4L2_PIX_FMT_HEXTILE:	descr = "Hextile Compressed Format"; break;
+ 		default:
+ 			if (fmt->description[0])
+ 				return;
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index 78260e5d9985..c3d4e490ce7c 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -804,6 +804,7 @@ struct v4l2_pix_format {
+ #define V4L2_PIX_FMT_QC08C    v4l2_fourcc('Q', '0', '8', 'C') /* Qualcomm 8-bit compressed */
+ #define V4L2_PIX_FMT_QC10C    v4l2_fourcc('Q', '1', '0', 'C') /* Qualcomm 10-bit compressed */
+ #define V4L2_PIX_FMT_AJPG     v4l2_fourcc('A', 'J', 'P', 'G') /* Aspeed JPEG */
++#define V4L2_PIX_FMT_HEXTILE  v4l2_fourcc('H', 'X', 'T', 'L') /* Hextile compressed */
+ 
+ /* 10bit raw packed, 32 bytes for every 25 pixels, last LSB 6 bits unused */
+ #define V4L2_PIX_FMT_IPU3_SBGGR10	v4l2_fourcc('i', 'p', '3', 'b') /* IPU3 packed 10-bit BGGR bayer */
 -- 
 2.34.1
 
