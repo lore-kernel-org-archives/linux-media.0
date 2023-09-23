@@ -2,36 +2,29 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 457DCCE7A89
-	for <linux-media@archiver.kernel.org>; Sat, 23 Sep 2023 09:39:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF094CE7A89
+	for <linux-media@archiver.kernel.org>; Sat, 23 Sep 2023 10:27:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbjIWJjw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 23 Sep 2023 05:39:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42666 "EHLO
+        id S231346AbjIWK1S (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 23 Sep 2023 06:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231313AbjIWJjs (ORCPT
+        with ESMTP id S231448AbjIWK1M (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 23 Sep 2023 05:39:48 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF60196;
-        Sat, 23 Sep 2023 02:39:40 -0700 (PDT)
-Received: from [IPV6:2001:818:e7d2:8300:2412:6733:7e63:fb46] (unknown [IPv6:2001:818:e7d2:8300:2412:6733:7e63:fb46])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5EDF1DE2;
-        Sat, 23 Sep 2023 11:37:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1695461879;
-        bh=5rwlDgb18LMeY6PGIIJDEvGpiQq5OlIONr+fS/lgUek=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=CAVJ32rItefld/CVJeWF3kknOncqbkl/dVP+UY1mUPtkblGiMPQ7X7k7EmDFeEjeb
-         wpm7IlcB+e0NQRHZsjp9zdLHdGULQ1VYJKNmp5XLlJdnayesIRnhbind0sH+Bm7uNv
-         V1XkfDVEafukNtLhIgk1GP5YkReXKQenpDdTdYgM=
-Message-ID: <3f040e44-3bdc-b09c-58b3-ea3b0ac6d5dd@ideasonboard.com>
-Date:   Sat, 23 Sep 2023 15:09:33 +0530
+        Sat, 23 Sep 2023 06:27:12 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A15CD9;
+        Sat, 23 Sep 2023 03:20:04 -0700 (PDT)
+Received: from [192.168.1.129] ([37.4.248.43]) by mrelayeu.kundenserver.de
+ (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MysFQ-1reYJ00JV4-00vvV2; Sat, 23 Sep 2023 12:19:44 +0200
+Message-ID: <21893e62-2a93-af84-a004-5bebc9916627@i2se.com>
+Date:   Sat, 23 Sep 2023 12:19:42 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
+ Thunderbird/102.15.1
 Subject: Re: [RFC PATCH v2 0/4] staging: vc04: Drop custom logging
-To:     Stefan Wahren <stefan.wahren@i2se.com>,
+To:     Umang Jain <umang.jain@ideasonboard.com>,
         Dan Carpenter <dan.carpenter@linaro.org>
 Cc:     linux-staging@lists.linux.dev,
         linux-arm-kernel@lists.infradead.org,
@@ -48,72 +41,110 @@ Cc:     linux-staging@lists.linux.dev,
 References: <20230913185528.770634-1-umang.jain@ideasonboard.com>
  <1d54715d-25f9-4937-bdff-de0136c95fe8@kadam.mountain>
  <d8395455-44eb-6762-d978-e912bf2cfe73@i2se.com>
+ <3f040e44-3bdc-b09c-58b3-ea3b0ac6d5dd@ideasonboard.com>
 Content-Language: en-US
-From:   Umang Jain <umang.jain@ideasonboard.com>
-In-Reply-To: <d8395455-44eb-6762-d978-e912bf2cfe73@i2se.com>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <3f040e44-3bdc-b09c-58b3-ea3b0ac6d5dd@ideasonboard.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:OFXh+SWAalxlA/BKarJEaKNh9elJf6QmZksB0h43QjpisjqGtPb
+ P4dwfYkn0nxOJNRDcn+08zW0B50MOIcgT10MmI3ri06XRKELcujsGfJiJmNklFw7aTIEiqR
+ O54kv1Rip8jhf20KE+df8IvZMrl8YiIldtOaqiK72Q5CQ2E6+gQeeRof4+poGtxuLrsEGhy
+ fDjnHo+JYxMGWfb006x0w==
+UI-OutboundReport: notjunk:1;M01:P0:wxOQh8MJRw8=;/OXycivT0mp7vH58Q7/B3taAhpO
+ IvofYFeT2GzPwAz9phoOngRC+wamU1M/I3UF07JboQKWm9BQ/3WNxvzuZFB8dmHLbe2eDFo4G
+ q1QF10VsWolLf6mkBp4qsOVhauvoIDnuO9sOuQl8ZRi4Ni4LDYaP3MQKrdB0vYdv9tuNNStu8
+ BMZbTP4MmSSAa7VT09inq0ClzyuZzfc/iewKgSGEtGwXigIJW6B/7Rzl5TYe9kSdVv+c4QK3e
+ f1yUsZH7aIbRuG6IxA+T7WQlf7YzlsIAdTf8Fqq/yP/n8jHZDAA38JCI4fXkwIvTDvePpevRr
+ WLoAyKcDXeIWPOZlBnz3uU1hoVI0JDILSZSGTrFU8Aw5zuTktH/9BdkpWmEiIsYbvsMzZEP49
+ fJoc4hPHEr45QkXIE/o23DT+o38TW+4U9UVD5IjOMcuFRFIkEnstm6Ho//c2Pgt4PGdlfEPp9
+ /0fg66PflRf3letiUQjXgdbO6kz5x/mR88Ewnv9nl1ZyrwkgHCjQVPvMAHaRDOSQPAafwKPlJ
+ 6TA3cHAt1jdfvr2NoSg8zm8y6HiCr1Fm3WXzA9l3mffBaTKpoySahH1dORtxHTvTk9KsvvCiy
+ ssAaRGK8xke5HW//eQrxqQrojOeiyTQINsZSLirmbWlEuu+mh3n+oIGyaa1slvFlD0X5UFspb
+ w/5lb3XUkcN/PcPx6lFgNZsuafUzlxM2EjY0AKiNpKkINP3QOMG+RMUYPti4p9oJqm56pqdBH
+ +SG31DqhXPwthfyd/FCuYn01OmCwqMgRnSztVMw4E7VaigRKwQSb6hFrIB9fCCZ6y6vgX076X
+ DkgKgjXMuBp2puTQBd+4ifvBEnmLGPdEqVXUfhLy7mmC4kv/Y21EjYwLTosvpuV9kErT+HT/W
+ hJDzImYbNHdCbIQ==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Stefan,
+Hi Umang,
 
-On 9/17/23 9:06 PM, Stefan Wahren wrote:
-> Hi,
->
-> Am 14.09.23 um 08:35 schrieb Dan Carpenter:
->> On Thu, Sep 14, 2023 at 12:25:24AM +0530, Umang Jain wrote:
->>> Hello,
->>>
->>> This series attempts to restart the discussion on custom logging used
->>> in VC04. In the last feedback gathered in [1] it seems that the logging
->>> would rather be moved to use dynamic debug. The series tries to move
->>> in that direction.
->>>
->>> The elephant in the room is the ability of turning on/off log levels,
->>> which this series just drops. Compensated by a crude strings
->>> ("error", "warning", "info"... etc) for easier grepping.
->>>
->>> The log category are also just strings (which probably can be 
->>> transformed
->>> to dynamic debug class names moving forwards?).
->>>
->>> To move forwards, I would like feedback on the broader direction.
->>> There are couple of TODOs in each of the patch (summarised in commit
->>> messages) which require case-by-case discussion.
->>>
->>> Additional high-level questions to move forwards:
->>> 1. Is loss of log levels by moving to dynamic debug, is actually a
->>>     concern? Is dynamic debug a valid replacement?
+Am 23.09.23 um 11:39 schrieb Umang Jain:
+> Hi Stefan,
+> 
+> On 9/17/23 9:06 PM, Stefan Wahren wrote:
+>> Hi,
 >>
->> Dynamic debug is honestly going to be an improvement.  I guess, Greg and
->> I said this back in Jan.
+>> Am 14.09.23 um 08:35 schrieb Dan Carpenter:
+>>> On Thu, Sep 14, 2023 at 12:25:24AM +0530, Umang Jain wrote:
+>>>> Hello,
+>>>>
+>>>> This series attempts to restart the discussion on custom logging used
+>>>> in VC04. In the last feedback gathered in [1] it seems that the logging
+>>>> would rather be moved to use dynamic debug. The series tries to move
+>>>> in that direction.
+>>>>
+>>>> The elephant in the room is the ability of turning on/off log levels,
+>>>> which this series just drops. Compensated by a crude strings
+>>>> ("error", "warning", "info"... etc) for easier grepping.
+>>>>
+>>>> The log category are also just strings (which probably can be 
+>>>> transformed
+>>>> to dynamic debug class names moving forwards?).
+>>>>
+>>>> To move forwards, I would like feedback on the broader direction.
+>>>> There are couple of TODOs in each of the patch (summarised in commit
+>>>> messages) which require case-by-case discussion.
+>>>>
+>>>> Additional high-level questions to move forwards:
+>>>> 1. Is loss of log levels by moving to dynamic debug, is actually a
+>>>>     concern? Is dynamic debug a valid replacement?
+>>>
+>>> Dynamic debug is honestly going to be an improvement.  I guess, Greg and
+>>> I said this back in Jan.
+> 
+> +1
+>>>
+>>>> 2. Whether debugfs should be dropped as well, found vestigial in [2]
+>>>
+>>> Yes. The "vchiq/log" should be removed.  Ideally as part of this
+>>> patchset so it's easier to understand.
+>>
+>> Yes, but please do not remote vchiq_debugfs entirely. I'm working on a 
+>> patch to move the state dump (debug feature) from the character device 
+>> /dev/vchiq to debugfs /sys/kernel/debug/vchiq/dump_state.
+> 
+> Can't the state dump be printed to dev_dbg() ? Will it pollute the 
+> kernel log?  Having debugfs for a single dump doesn't seem worthwhile if 
+> the state dump can be incorporated to dev_dbg() too.
 
-+1
->>
->>> 2. Whether debugfs should be dropped as well, found vestigial in [2]
->>
->> Yes. The "vchiq/log" should be removed.  Ideally as part of this
->> patchset so it's easier to understand.
->
-> Yes, but please do not remote vchiq_debugfs entirely. I'm working on a 
-> patch to move the state dump (debug feature) from the character device 
-> /dev/vchiq to debugfs /sys/kernel/debug/vchiq/dump_state.
+debugfs was created for a good reason. dev_dbg() is a nice tool, but it 
+isn't useful in every situation. In case of communication the usage of 
+counter is quite popular and removing this ability would make debugging 
+not easier.
 
-Can't the state dump be printed to dev_dbg() ? Will it pollute the 
-kernel log?  Having debugfs for a single dump doesn't seem worthwhile if 
-the state dump can be incorporated to dev_dbg() too.
->
->>
->>> 3. whether vchiq_log_trace() should actually be tracing support for 
->>> VC04
->>
->> That can be done later if people want.  No need to discuss it now.
+Try to make "cat /dev/vchiq" you will see you don't want pollute the 
+kernel log with this kind of information.
 
-Thanks Dan.
->>
->> regards,
->> dan carpenter
->>
+Actually i don't see a problem with have a single dump in debugfs.
 
+Let me send a draft of my changes for a better discussion ...
+
+Regards
+Stefan
+
+>>
+>>>
+>>>> 3. whether vchiq_log_trace() should actually be tracing support for 
+>>>> VC04
+>>>
+>>> That can be done later if people want.  No need to discuss it now.
+> 
+> Thanks Dan.
+>>>
+>>> regards,
+>>> dan carpenter
+>>>
+> 
