@@ -2,29 +2,28 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A50BCE7A88
-	for <linux-media@archiver.kernel.org>; Sat, 23 Sep 2023 15:21:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 484CFCE7A90
+	for <linux-media@archiver.kernel.org>; Sat, 23 Sep 2023 15:21:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231969AbjIWPVc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 23 Sep 2023 11:21:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52580 "EHLO
+        id S231972AbjIWPVe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 23 Sep 2023 11:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231959AbjIWPVa (ORCPT
+        with ESMTP id S231949AbjIWPVc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 23 Sep 2023 11:21:30 -0400
+        Sat, 23 Sep 2023 11:21:32 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC09192
-        for <linux-media@vger.kernel.org>; Sat, 23 Sep 2023 08:21:24 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7903DC433C8;
-        Sat, 23 Sep 2023 15:21:23 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF75192
+        for <linux-media@vger.kernel.org>; Sat, 23 Sep 2023 08:21:27 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 080E2C433C9;
+        Sat, 23 Sep 2023 15:21:25 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCHv2 10/23] media: zoran: increase name size
-Date:   Sat, 23 Sep 2023 17:20:54 +0200
-Message-Id: <20230923152107.283289-11-hverkuil-cisco@xs4all.nl>
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv2 12/23] media: v4l2-subdev.h: increase struct v4l2_subdev name size
+Date:   Sat, 23 Sep 2023 17:20:56 +0200
+Message-Id: <20230923152107.283289-13-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230923152107.283289-1-hverkuil-cisco@xs4all.nl>
 References: <20230923152107.283289-1-hverkuil-cisco@xs4all.nl>
@@ -34,40 +33,40 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fixes this compiler warning:
-
-drivers/media/pci/zoran/zoran_card.c: In function 'zoran_probe':
-drivers/media/pci/zoran/zoran_card.c:1316:62: warning: '%u' directive output may be truncated writing between 1 and 5 bytes into a region of size between 0 and 31 [-Wformat-truncation=]
- 1316 |         snprintf(ZR_DEVNAME(zr), sizeof(ZR_DEVNAME(zr)), "%s[%u]",
-      |                                                              ^~
-drivers/media/pci/zoran/zoran_card.c:1316:58: note: directive argument in the range [0, 65535]
- 1316 |         snprintf(ZR_DEVNAME(zr), sizeof(ZR_DEVNAME(zr)), "%s[%u]",
-      |                                                          ^~~~~~~~
-drivers/media/pci/zoran/zoran_card.c:1316:9: note: 'snprintf' output between 4 and 39 bytes into a destination of size 32
- 1316 |         snprintf(ZR_DEVNAME(zr), sizeof(ZR_DEVNAME(zr)), "%s[%u]",
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 1317 |                  zr->card.name, zr->id);
-      |                  ~~~~~~~~~~~~~~~~~~~~~~
+This resolves a lot of the string truncate compiler warnings.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc: Corentin Labbe <clabbe@baylibre.com>
 ---
- drivers/media/pci/zoran/zoran.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/staging/media/omap4iss/iss_csi2.c | 2 +-
+ include/media/v4l2-subdev.h               | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/pci/zoran/zoran.h b/drivers/media/pci/zoran/zoran.h
-index 56340553b282..1cd990468d3d 100644
---- a/drivers/media/pci/zoran/zoran.h
-+++ b/drivers/media/pci/zoran/zoran.h
-@@ -219,7 +219,7 @@ struct zoran {
- 	const struct tvnorm *timing;
+diff --git a/drivers/staging/media/omap4iss/iss_csi2.c b/drivers/staging/media/omap4iss/iss_csi2.c
+index 04ce0e7eb557..d2844414de4f 100644
+--- a/drivers/staging/media/omap4iss/iss_csi2.c
++++ b/drivers/staging/media/omap4iss/iss_csi2.c
+@@ -1260,7 +1260,7 @@ static int csi2_init_entities(struct iss_csi2_device *csi2, const char *subname)
+ 	struct media_pad *pads = csi2->pads;
+ 	struct media_entity *me = &sd->entity;
+ 	int ret;
+-	char name[V4L2_SUBDEV_NAME_SIZE];
++	char name[32];
  
- 	unsigned short id;	/* number of this device */
--	char name[32];		/* name of this device */
-+	char name[40];		/* name of this device */
- 	struct pci_dev *pci_dev;	/* PCI device */
- 	unsigned char revision;	/* revision of zr36057 */
- 	unsigned char __iomem *zr36057_mem;/* pointer to mapped IO memory */
+ 	v4l2_subdev_init(sd, &csi2_ops);
+ 	sd->internal_ops = &csi2_internal_ops;
+diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+index 5f59ff0796b7..5711354056b9 100644
+--- a/include/media/v4l2-subdev.h
++++ b/include/media/v4l2-subdev.h
+@@ -951,7 +951,7 @@ struct v4l2_subdev_internal_ops {
+ 	void (*release)(struct v4l2_subdev *sd);
+ };
+ 
+-#define V4L2_SUBDEV_NAME_SIZE 32
++#define V4L2_SUBDEV_NAME_SIZE 52
+ 
+ /* Set this flag if this subdev is a i2c device. */
+ #define V4L2_SUBDEV_FL_IS_I2C			(1U << 0)
 -- 
 2.40.1
 
