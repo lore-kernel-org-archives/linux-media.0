@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E65BFCE7A8C
-	for <linux-media@archiver.kernel.org>; Sun, 24 Sep 2023 15:33:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 257F9CE7A90
+	for <linux-media@archiver.kernel.org>; Sun, 24 Sep 2023 15:33:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbjIXPdf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 24 Sep 2023 11:33:35 -0400
+        id S230109AbjIXPdg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 24 Sep 2023 11:33:36 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230045AbjIXPdc (ORCPT
+        with ESMTP id S230103AbjIXPdd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 24 Sep 2023 11:33:32 -0400
+        Sun, 24 Sep 2023 11:33:33 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A953CF
-        for <linux-media@vger.kernel.org>; Sun, 24 Sep 2023 08:33:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C461101
+        for <linux-media@vger.kernel.org>; Sun, 24 Sep 2023 08:33:27 -0700 (PDT)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0AA9B33CD;
-        Sun, 24 Sep 2023 17:31:41 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CE7373715;
+        Sun, 24 Sep 2023 17:31:44 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1695569502;
-        bh=CKoYulRdcVnZFFzw2us8ejkQnO7XT5z4zfvkQ2UJBYI=;
+        s=mail; t=1695569505;
+        bh=/2QtMsQkavY1FTAGbkOSbFx7qZyxasXpBVu49l2mak0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cT971gO0im4/JapJ2g1XYiENoNMQNfhgR11jt2xJf5Z/tEnjtTBy17Qy3BOBaSTO8
-         fWwLayzMcwJdl3UItTSadjtDeJ5hYIeaB0Fj4dBht9mbhBxyn6N+ECZ61O9Pk69jdt
-         MT9Nn7guUuWf3pIfS7KdK6gjlSGR4K7a7ssgPS44=
+        b=GmdIHChqg0r8D0xYqTlWzgrfKazwis3aUEnz5AMUUNV6hRg/VCZDMUiC+T4sCWfU/
+         sgh44wO/8KQYzBZ2lilomJRG8kBZh07McCUmq7tb+fZA67sYL158F3MFeqb1rxuNk4
+         Th3aRfdcJ7Dp4XDHxCYfX5GIb6fQE1xytZfxMcWs=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
@@ -32,9 +32,9 @@ Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
         Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Hans de Goede <hdegoede@redhat.com>
-Subject: [PATCH v4 18/20] media: i2c: imx219: Calculate crop rectangle dynamically
-Date:   Sun, 24 Sep 2023 18:33:07 +0300
-Message-ID: <20230924153309.12423-19-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v4 20/20] media: i2c: imx219: Move variables to inner scope
+Date:   Sun, 24 Sep 2023 18:33:09 +0300
+Message-ID: <20230924153309.12423-21-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230924153309.12423-1-laurent.pinchart@ideasonboard.com>
 References: <20230924153309.12423-1-laurent.pinchart@ideasonboard.com>
@@ -44,123 +44,39 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Calculate the crop rectangle size and location dynamically when setting
-the format, instead of storing it in the imx219_mode structure. This
-removes duplicated information from the mode, to guarantee consistency.
+The exposure_max, exposure_def and hblank variables are only used in an
+inner scope in the imx219_set_pad_format() function. Move them to that
+scope to keep them closer to their usage and improve readability.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 ---
-Changes since v2:
-
-- Handle horizontal and vertical binning separately
----
- drivers/media/i2c/imx219.c | 45 +++++++++++++-------------------------
- 1 file changed, 15 insertions(+), 30 deletions(-)
+ drivers/media/i2c/imx219.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-index bf1c2a1dad95..2b88c5b8a7bf 100644
+index 358a6d77d88c..8436880dcf7a 100644
 --- a/drivers/media/i2c/imx219.c
 +++ b/drivers/media/i2c/imx219.c
-@@ -18,6 +18,7 @@
- #include <linux/delay.h>
- #include <linux/gpio/consumer.h>
- #include <linux/i2c.h>
-+#include <linux/minmax.h>
- #include <linux/module.h>
- #include <linux/pm_runtime.h>
- #include <linux/regulator/consumer.h>
-@@ -153,9 +154,6 @@ struct imx219_mode {
- 	/* Frame height */
- 	unsigned int height;
- 
--	/* Analog crop rectangle. */
--	struct v4l2_rect crop;
--
- 	/* V-timing */
- 	unsigned int vts_def;
- };
-@@ -292,48 +290,24 @@ static const struct imx219_mode supported_modes[] = {
- 		/* 8MPix 15fps mode */
- 		.width = 3280,
- 		.height = 2464,
--		.crop = {
--			.left = IMX219_PIXEL_ARRAY_LEFT,
--			.top = IMX219_PIXEL_ARRAY_TOP,
--			.width = 3280,
--			.height = 2464
--		},
- 		.vts_def = 3526,
- 	},
- 	{
- 		/* 1080P 30fps cropped */
- 		.width = 1920,
- 		.height = 1080,
--		.crop = {
--			.left = 688,
--			.top = 700,
--			.width = 1920,
--			.height = 1080
--		},
- 		.vts_def = 1763,
- 	},
- 	{
- 		/* 2x2 binned 30fps mode */
- 		.width = 1640,
- 		.height = 1232,
--		.crop = {
--			.left = IMX219_PIXEL_ARRAY_LEFT,
--			.top = IMX219_PIXEL_ARRAY_TOP,
--			.width = 3280,
--			.height = 2464
--		},
- 		.vts_def = 1763,
- 	},
- 	{
- 		/* 640x480 30fps mode */
- 		.width = 640,
- 		.height = 480,
--		.crop = {
--			.left = 1008,
--			.top = 760,
--			.width = 1280,
--			.height = 960
--		},
- 		.vts_def = 1763,
- 	},
- };
-@@ -844,6 +818,7 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
- 	int exposure_max, exposure_def, hblank;
+@@ -815,7 +815,6 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
+ {
+ 	struct imx219 *imx219 = to_imx219(sd);
+ 	const struct imx219_mode *mode;
+-	int exposure_max, exposure_def, hblank;
  	struct v4l2_mbus_framefmt *format;
  	struct v4l2_rect *crop;
-+	unsigned int bin_h, bin_v;
- 
- 	mode = v4l2_find_nearest_size(supported_modes,
- 				      ARRAY_SIZE(supported_modes),
-@@ -853,10 +828,20 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
- 	imx219_update_pad_format(imx219, mode, &fmt->format, fmt->format.code);
- 
- 	format = v4l2_subdev_get_pad_format(sd, sd_state, 0);
--	crop = v4l2_subdev_get_pad_crop(sd, sd_state, 0);
--
- 	*format = fmt->format;
--	*crop = mode->crop;
-+
-+	/*
-+	 * Use binning to maximize the crop rectangle size, and centre it in the
-+	 * sensor.
-+	 */
-+	bin_h = min(IMX219_PIXEL_ARRAY_WIDTH / format->width, 2U);
-+	bin_v = min(IMX219_PIXEL_ARRAY_HEIGHT / format->height, 2U);
-+
-+	crop = v4l2_subdev_get_pad_crop(sd, sd_state, 0);
-+	crop->width = format->width * bin_h;
-+	crop->height = format->height * bin_v;
-+	crop->left = (IMX219_NATIVE_WIDTH - crop->width) / 2;
-+	crop->top = (IMX219_NATIVE_HEIGHT - crop->height) / 2;
+ 	unsigned int bin_h, bin_v;
+@@ -844,6 +843,10 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
+ 	crop->top = (IMX219_NATIVE_HEIGHT - crop->height) / 2;
  
  	if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
++		int exposure_max;
++		int exposure_def;
++		int hblank;
++
  		/* Update limits and set FPS to default */
+ 		__v4l2_ctrl_modify_range(imx219->vblank, IMX219_VBLANK_MIN,
+ 					 IMX219_VTS_MAX - mode->height, 1,
 -- 
 Regards,
 
