@@ -2,54 +2,54 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CD66CE7A99
-	for <linux-media@archiver.kernel.org>; Mon, 25 Sep 2023 15:47:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC7D2CE7A9F
+	for <linux-media@archiver.kernel.org>; Mon, 25 Sep 2023 15:47:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232911AbjIYPrj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 25 Sep 2023 11:47:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58054 "EHLO
+        id S233051AbjIYPrl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 25 Sep 2023 11:47:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232816AbjIYPrd (ORCPT
+        with ESMTP id S232118AbjIYPrf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 25 Sep 2023 11:47:33 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACEF1AD
-        for <linux-media@vger.kernel.org>; Mon, 25 Sep 2023 08:47:21 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-3226cc3e324so5756660f8f.3
-        for <linux-media@vger.kernel.org>; Mon, 25 Sep 2023 08:47:21 -0700 (PDT)
+        Mon, 25 Sep 2023 11:47:35 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32C4CDC
+        for <linux-media@vger.kernel.org>; Mon, 25 Sep 2023 08:47:24 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-4050bd2e33aso70703375e9.2
+        for <linux-media@vger.kernel.org>; Mon, 25 Sep 2023 08:47:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695656839; x=1696261639; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1695656843; x=1696261643; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XhSKtn1WWoetbFcEPefpk8WL/CMtB2nONd2TgD1HTnc=;
-        b=a+qYhljL1C/V066XBe5dZ7FqjupeM+qrarX+trLPW9j+kyO1yoRxCMQfHK1vn8USlR
-         d2Hq/16C3cJ1KmEym1zi8vgJbVRQwsWIJC4PTP/+WZAaPRyYTkq0iP3hAiZm8fJ90+kZ
-         qxZTpcrevIV3WUnakufumRaGJnBBNRLRnGECHb+cn2DClVBt++88c67zabJ4Ly3QNnzx
-         lYiyw1dplBHSyC1DAnMK8oBTxhe16BeKSbsezaDL47s1zkgxODiu3TLvCOytVoXcusop
-         ss+7n+5+uktxBNDVANe1h04qz+3grk91vaztPwaWl2NDyxiD/wEtmrgHUsYJPCKKB/u1
-         kWJA==
+        bh=5ULa3MlvTg8hdkVamNSIOKh6gGISQMp+o/MnpLuMkMw=;
+        b=CoIa8wF5+G+9paPu3DsV7tlZQlCYsdgLjYXarfRsMUMMSlUJ113jQD1esOz1w1qWR0
+         ZhJ8wd2FkHqfnJVlgaCTsMF4mklKJ0m3cRIUh9VDOPBtRIY7jyShsaPI20PZ4amb371E
+         AbUVdktik3vvr6dyde9Xaqdot/MbmtGk8J9NAJhFOOpw7hELDV+ajXSsyyd8O61xD/rl
+         X0AS72R2scCBe5LA2hytAkZNA1Ut6RjnbaAipDwxnSgrrc9+cjSdZRfFuKjd6hasacc4
+         VVMXi03IZoDONXtJi53Aj23xpr7aRnw9rDWaDSCAj4teToIwQOXoSxPWnaqTrrc/R0H9
+         6lDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695656840; x=1696261640;
+        d=1e100.net; s=20230601; t=1695656843; x=1696261643;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XhSKtn1WWoetbFcEPefpk8WL/CMtB2nONd2TgD1HTnc=;
-        b=T8G4Fbk51rPddBMO1y70blf+YP5laCw+wLJuT+f0CXspyPAkZ39aPZ9qrXI9JP6w76
-         Pi7BN9708hXRR31JDmlQFxRxeHBWNkaMjIWBtLmDmbCiGAkvLMpKkRs99ePY6cK++brh
-         X8QPA0APUPESnKgCYFpakMVsOt1ps0y7Tc3PCl4r69a/e3Cdt/JPMFRsYGa5hnPSLAY0
-         wWHHexEVtiCun/rl5IJG4KVp3HTTIUFgG7XhXWWAlQ1ao0l1W/0HGru3dQ1m9g1uAwB/
-         vIJs9A21h+ALLUdCgPJLlm0HOrWsMYa/pS42vS0jb5QnbaziGLjYJnpF7UFabOxMQY2f
-         XKuA==
-X-Gm-Message-State: AOJu0YwQdxnQg0/3olOVz167CH4ktaDONr8FGUTNmzO4n1THUYGsefX8
-        JTxKCS1XpGyTsVS76Nhbq86SJQ==
-X-Google-Smtp-Source: AGHT+IF3/kX/IsfEDqGbANuV/GKw0nYXoU2maXmedXQCLdb4WJ8/qOgQ3XPyAznzEKF/1EpXttn29A==
-X-Received: by 2002:a5d:6382:0:b0:319:8c35:378 with SMTP id p2-20020a5d6382000000b003198c350378mr6188318wru.44.1695656839745;
-        Mon, 25 Sep 2023 08:47:19 -0700 (PDT)
+        bh=5ULa3MlvTg8hdkVamNSIOKh6gGISQMp+o/MnpLuMkMw=;
+        b=gqTwocFwlgUO8an18mrGuRv5J+jhxs7TYOkUKrAhm7LDbHBMAURZl7o9EnICK8xoHA
+         YfH/vfYDAcht3kDXaLT7y0pmctX+dQ69/A5v85ZAwI13R4eWsOGXTM+fiBVJDohCbbhn
+         zGYNC4i77mNyxnogqqynIlKs+aFd8XwUmNFz7xTPNsb6YdVh47Zvi0oZ+RokXNQERzRo
+         GC01ksphZbwyZWvcjy++gIfvkQMH1QbQlYzgcfvvSNf/3P43z0MDzy68RIiEMeKt2u4O
+         StGr+4xpFoob9XaCNH/+cFt1D4urb5VfDZIASFyJdm6vnyZ/HrmN8FxjxbbLFSjYCOs4
+         qu4A==
+X-Gm-Message-State: AOJu0YyBvgfaqQoQbdkUduaP/CDyaX+oC68A5BM7nCJQ3GWgYt6Qkhpt
+        9tAX6PparWVOn6wGMQsW0epcBA==
+X-Google-Smtp-Source: AGHT+IFaTtE2r2aD+gOeeOLNCKtL4Sp+uvnRBvHv+FBQpBtDux414w82G/M3U4xGGNghpEkdiiLbMg==
+X-Received: by 2002:a05:600c:2108:b0:404:7480:d821 with SMTP id u8-20020a05600c210800b004047480d821mr5866400wml.37.1695656843248;
+        Mon, 25 Sep 2023 08:47:23 -0700 (PDT)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id d4-20020adffd84000000b0031f34a395e7sm12077536wrr.45.2023.09.25.08.47.18
+        by smtp.gmail.com with ESMTPSA id d4-20020adffd84000000b0031f34a395e7sm12077536wrr.45.2023.09.25.08.47.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Sep 2023 08:47:19 -0700 (PDT)
+        Mon, 25 Sep 2023 08:47:22 -0700 (PDT)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
         hverkuil@xs4all.nl, laurent.pinchart@ideasonboard.com,
@@ -58,9 +58,9 @@ To:     linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
         sakari.ailus@linux.intel.com, andrey.konovalov@linaro.org
 Cc:     linux-kernel@vger.kernel.org,
         Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Subject: [RESEND PATCH v6 08/17] media: qcom: camss: Assign the correct number of RDIs per VFE
-Date:   Mon, 25 Sep 2023 16:46:58 +0100
-Message-ID: <20230925154707.837542-9-bryan.odonoghue@linaro.org>
+Subject: [RESEND PATCH v6 11/17] media: qcom: camss: Allow clocks vfeN vfe_liteN or vfe_lite
+Date:   Mon, 25 Sep 2023 16:47:01 +0100
+Message-ID: <20230925154707.837542-12-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20230925154707.837542-1-bryan.odonoghue@linaro.org>
 References: <20230925154707.837542-1-bryan.odonoghue@linaro.org>
@@ -70,174 +70,80 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Each Video Front End - VFE - has a variable number of Raw Data Interfaces -
-RDIs associated with it.
+The number of Video Front End - VFE or Image Front End - IFE supported
+with new SoCs can vary both for the full and lite cases.
 
-The CAMSS code started from a naive implementation where a fixed define was
-used as a control in a for(){} loop iterating through RDIs.
+For example sdm845 has one vfe_lite and two vfe interfaces with the vfe
+clock called simply "vfe_lite" with no integer postfix. sc8280xp has four
+vfe and four vfe lite blocks.
 
-That model scales badly. An attempt was made with  VFE_LINE_NUM_GEN2 and
-VFE_LINE_NUM_GEN1 to differentiate between SoCs but, the problem with that
-is "gen1" and "gen2" have no meaning in the silicon. There is no fixed
-constraint in the silicon between VFE and RDI, it is entirely up to the SoC
-designers how many VFEs are populated and how many RDIs to associate with
-each VFE.
+At the moment we declare vfe_lite0 and vfe_lite1 for sm8250 but never set
+those clocks because we don't match the strings.
 
-As an example sdm845 has VFE version 175 and sm8250 VFE version 480.
-sdm845 has 2 VFEs with 4 RDIs and 1 VFE Lite with 4 RDIs.
-sm8250 has 2 VFEs with 3 RDIs and 2 VFE Lite with 4 RDIs.
+We need to support the following clock name formats
 
-Clearly then we need a more granular model to capture the necessary data.
+- vfeN
+- vfe_liteN
+- vfe_lite
 
-The defines have gone away to be replaced with per-SoC data but, we haven't
-populated the parameter data with the real values.
+with N being any reasonably sized integer.
 
-Let's call those values out now
-
-msm8916:
-1 x VFE
-3 x RDI per VFE (not 4)
-
-msm8996:
-2 x VFE
-3 x RDI per VFE (not 4)
-
-sdm660:
-2 x VFE
-3 x RDI per VFE (not 4)
-
-sdm845:
-2 x VFE
-4 x RDI per VFE (not 3)
-1 x VFE Lite
-4 x RDI per VFE Lite (not 3)
-
-sm8250:
-2 x VFE
-3 x RDI per VFE (not 4)
-2 x VFE Lite
-4 x RDI per VFE Lite
-
-This more complex and correct mapping was not possible prior to passing
-values via driver data. Now that we have that change in place we can
-correctly map VFEs to RDIs for each VFE.
+There are two sites in this code which need to do the same thing,
+constructing and matching strings with the pattern above, so encapsulate
+the logic in one function.
 
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/platform/qcom/camss/camss-vfe.h |  2 --
- drivers/media/platform/qcom/camss/camss.c     | 20 +++++++++----------
- 2 files changed, 10 insertions(+), 12 deletions(-)
+ drivers/media/platform/qcom/camss/camss-vfe.c | 22 ++++++++++++++-----
+ 1 file changed, 16 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe.h b/drivers/media/platform/qcom/camss/camss-vfe.h
-index b4bae9f65c68f..4783afa73a365 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe.h
-+++ b/drivers/media/platform/qcom/camss/camss-vfe.h
-@@ -52,9 +52,7 @@ enum vfe_line_id {
- 	VFE_LINE_RDI0 = 0,
- 	VFE_LINE_RDI1 = 1,
- 	VFE_LINE_RDI2 = 2,
--	VFE_LINE_NUM_GEN2 = 3,
- 	VFE_LINE_PIX = 3,
--	VFE_LINE_NUM_GEN1 = 4,
- 	VFE_LINE_NUM_MAX = 4
- };
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
+index db8f68819ded9..4db0d0a1c6a51 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe.c
+@@ -431,6 +431,20 @@ void vfe_isr_reset_ack(struct vfe_device *vfe)
+ 	complete(&vfe->reset_complete);
+ }
  
-diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
-index 12131d9ea7ca8..8e78dd8d5961e 100644
---- a/drivers/media/platform/qcom/camss/camss.c
-+++ b/drivers/media/platform/qcom/camss/camss.c
-@@ -128,7 +128,7 @@ static const struct camss_subdev_resources vfe_res_8x16[] = {
- 				{ 0 } },
- 		.reg = { "vfe0" },
- 		.interrupt = { "vfe0" },
--		.line_num = VFE_LINE_NUM_GEN1,
-+		.line_num = 3,
- 		.ops = &vfe_ops_4_1
- 	}
- };
-@@ -277,7 +277,7 @@ static const struct camss_subdev_resources vfe_res_8x96[] = {
- 				{ 0 } },
- 		.reg = { "vfe0" },
- 		.interrupt = { "vfe0" },
--		.line_num = VFE_LINE_NUM_GEN1,
-+		.line_num = 3,
- 		.ops = &vfe_ops_4_7
- 	},
++static int vfe_match_clock_names(struct vfe_device *vfe,
++				 struct camss_clock *clock)
++{
++	char vfe_name[7]; /* vfeXXX\0 */
++	char vfe_lite_name[12]; /* vfe_liteXXX\0 */
++
++	snprintf(vfe_name, sizeof(vfe_name), "vfe%d", vfe->id);
++	snprintf(vfe_lite_name, sizeof(vfe_lite_name), "vfe_lite%d", vfe->id);
++
++	return (!strcmp(clock->name, vfe_name) ||
++		!strcmp(clock->name, vfe_lite_name) ||
++		!strcmp(clock->name, "vfe_lite"));
++}
++
+ /*
+  * vfe_set_clock_rates - Calculate and set clock rates on VFE module
+  * @vfe: VFE device
+@@ -454,9 +468,7 @@ static int vfe_set_clock_rates(struct vfe_device *vfe)
+ 	for (i = 0; i < vfe->nclocks; i++) {
+ 		struct camss_clock *clock = &vfe->clock[i];
  
-@@ -297,7 +297,7 @@ static const struct camss_subdev_resources vfe_res_8x96[] = {
- 				{ 0 } },
- 		.reg = { "vfe1" },
- 		.interrupt = { "vfe1" },
--		.line_num = VFE_LINE_NUM_GEN1,
-+		.line_num = 3,
- 		.ops = &vfe_ops_4_7
- 	}
- };
-@@ -467,7 +467,7 @@ static const struct camss_subdev_resources vfe_res_660[] = {
- 				{ 0 } },
- 		.reg = { "vfe0" },
- 		.interrupt = { "vfe0" },
--		.line_num = VFE_LINE_NUM_GEN1,
-+		.line_num = 3,
- 		.ops = &vfe_ops_4_8
- 	},
+-		if (!strcmp(clock->name, "vfe0") ||
+-		    !strcmp(clock->name, "vfe1") ||
+-		    !strcmp(clock->name, "vfe_lite")) {
++		if (vfe_match_clock_names(vfe, clock)) {
+ 			u64 min_rate = 0;
+ 			long rate;
  
-@@ -490,7 +490,7 @@ static const struct camss_subdev_resources vfe_res_660[] = {
- 				{ 0 } },
- 		.reg = { "vfe1" },
- 		.interrupt = { "vfe1" },
--		.line_num = VFE_LINE_NUM_GEN1,
-+		.line_num = 3,
- 		.ops = &vfe_ops_4_8
- 	}
- };
-@@ -657,7 +657,7 @@ static const struct camss_subdev_resources vfe_res_845[] = {
- 				{ 384000000 } },
- 		.reg = { "vfe0" },
- 		.interrupt = { "vfe0" },
--		.line_num = VFE_LINE_NUM_GEN2,
-+		.line_num = 4,
- 		.ops = &vfe_ops_170
- 	},
+@@ -537,9 +549,7 @@ static int vfe_check_clock_rates(struct vfe_device *vfe)
+ 	for (i = 0; i < vfe->nclocks; i++) {
+ 		struct camss_clock *clock = &vfe->clock[i];
  
-@@ -679,7 +679,7 @@ static const struct camss_subdev_resources vfe_res_845[] = {
- 				{ 384000000 } },
- 		.reg = { "vfe1" },
- 		.interrupt = { "vfe1" },
--		.line_num = VFE_LINE_NUM_GEN2,
-+		.line_num = 4,
- 		.ops = &vfe_ops_170
- 	},
+-		if (!strcmp(clock->name, "vfe0") ||
+-		    !strcmp(clock->name, "vfe1") ||
+-		    !strcmp(clock->name, "vfe_lite")) {
++		if (vfe_match_clock_names(vfe, clock)) {
+ 			u64 min_rate = 0;
+ 			unsigned long rate;
  
-@@ -700,7 +700,7 @@ static const struct camss_subdev_resources vfe_res_845[] = {
- 				{ 384000000 } },
- 		.reg = { "vfe_lite" },
- 		.interrupt = { "vfe_lite" },
--		.line_num = VFE_LINE_NUM_GEN2,
-+		.line_num = 4,
- 		.ops = &vfe_ops_170
- 	}
- };
-@@ -839,7 +839,7 @@ static const struct camss_subdev_resources vfe_res_8250[] = {
- 				{ 0 } },
- 		.reg = { "vfe0" },
- 		.interrupt = { "vfe0" },
--		.line_num = 4,
-+		.line_num = 3,
- 		.ops = &vfe_ops_480
- 	},
- 	/* VFE1 */
-@@ -859,7 +859,7 @@ static const struct camss_subdev_resources vfe_res_8250[] = {
- 				{ 0 } },
- 		.reg = { "vfe1" },
- 		.interrupt = { "vfe1" },
--		.line_num = 4,
-+		.line_num = 3,
- 		.ops = &vfe_ops_480
- 	},
- 	/* VFE2 (lite) */
 -- 
 2.42.0
 
