@@ -2,56 +2,56 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B756CE7A81
-	for <linux-media@archiver.kernel.org>; Mon, 25 Sep 2023 08:10:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6108CE7A81
+	for <linux-media@archiver.kernel.org>; Mon, 25 Sep 2023 08:15:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232625AbjIYIKH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 25 Sep 2023 04:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32956 "EHLO
+        id S232623AbjIYIPZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 25 Sep 2023 04:15:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232617AbjIYIKG (ORCPT
+        with ESMTP id S232708AbjIYIOt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 25 Sep 2023 04:10:06 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6392CAF
-        for <linux-media@vger.kernel.org>; Mon, 25 Sep 2023 01:09:59 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-401187f8071so39769095e9.0
-        for <linux-media@vger.kernel.org>; Mon, 25 Sep 2023 01:09:59 -0700 (PDT)
+        Mon, 25 Sep 2023 04:14:49 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B9E1722
+        for <linux-media@vger.kernel.org>; Mon, 25 Sep 2023 01:14:30 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-502e7d66c1eso9245662e87.1
+        for <linux-media@vger.kernel.org>; Mon, 25 Sep 2023 01:14:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695629398; x=1696234198; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1695629668; x=1696234468; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=xdYilTekDb0Up2tp6VS+VmtWrxem1JJhXEmUroxYIuI=;
-        b=zIDVGTVSYnqNftLIZhi/ML5d1aOLeI/mTAK4YVLCEZXQ/KFBwqMag8NVnuw+qKcyIs
-         DGKDltByGVw2mazhFDWofFAC0l3gRMNi4/diZ7cZpjtTtYzwvRFVPqeNA2LRHR59DIFm
-         Y4R5THQUCz7TuCaMC/kNEIQIhM8p26Bg81WAye+KkfGxopj15x4Sp0tSVAmo3ydSJMuA
-         FZKyq5iiqomKWRwmaHN5RElAr3ZlgKepUbJ4TN8LfD+7hMxr2fJAJcIHukILTtDoTu0e
-         DQdW8HzRWkPbf52cHNjtAYbpsUUVRjzOhKgYCBaieGpoELvKhyISE7+J8fF8TGZ00S5f
-         n1NQ==
+        bh=XmkkdIiWaI/YAaRU5J/KUzVuKicLU90eMgMI8e6Tnko=;
+        b=nhZRMSyMNF8/lgfyA7Inheh4WZOrowOL4zlyL5sfeVTqS0fVpwZ4tvH8s/oRVgD6sk
+         2LVuVXZyC6FEM63pFlxGt0JxWOvTGJN0vBd2llhm5WZk8XQfj7ltyNnSbAoKxgENSfM7
+         gmjsYuFuIWmTlHtKmdoWE/ssYHF0uH+FL3+rJ+xZvI8p6S6RVXPgZQN/NFW7pvT3905b
+         uLH4UrzBHXlzNwFbxu5QElbA7VsOSV0Ax8Q+IXaRQF2Zy0WxczdOYXwu4MqzUBJcOOZ3
+         pb0dGUFQzcIP3FPRe+c1HtEkW1+BRqjGv76z8GH6vTU/5M/vkfrn13SshIxhxBwdfe55
+         /IIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695629398; x=1696234198;
+        d=1e100.net; s=20230601; t=1695629668; x=1696234468;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xdYilTekDb0Up2tp6VS+VmtWrxem1JJhXEmUroxYIuI=;
-        b=KAmibEvdFOGss0c+/hsmJl1ZDBdWVptiD483SAMnrIvldXE7ZK7XXamEDQMQgcWnVm
-         eDaUn+8bF4wzjaAbgK9AuWKIKe/7jl5AuTJnRlZYffI+cqZcsi+B/u4R/FnEAYLv4DuQ
-         slOeqqOaFsDxnGK5yvu394I7bMIXZugOEn9i52eYDUJN/daqJVt6K7++t/o3p2TFRqIQ
-         rbuIgkEvYWY4qdRjQo7IeA6B+RalwYgPjV+VEYzfs4I+RG7VOMugPNiuUIH0SDeSasJn
-         o2LmDmcg8PM/JBRvPce/+lQm3omY0S35IOq/z9pEN2KsOLG5NpTaG0ZYzF+AdiYLaF9D
-         +6bA==
-X-Gm-Message-State: AOJu0YxeI27X4m45wjiTkjgWNoeTY7b7fs6Arwqa5NZCJfIe+73eJQ81
-        5Requj54ZDzIFmbTHCZVhxQ7cQ==
-X-Google-Smtp-Source: AGHT+IFKP+P7ZaWW/RljNf2s0i02eoE+oQePNTo+bT2u2SP26Ig9V5Qsuo0sSv7q+AvDVOoqZctcAA==
-X-Received: by 2002:a1c:4b1a:0:b0:3fe:1fd9:bedf with SMTP id y26-20020a1c4b1a000000b003fe1fd9bedfmr4484843wma.11.1695629397856;
-        Mon, 25 Sep 2023 01:09:57 -0700 (PDT)
+        bh=XmkkdIiWaI/YAaRU5J/KUzVuKicLU90eMgMI8e6Tnko=;
+        b=tlZtN/d5Ema5ACV7bZdv6LPS3Pe6M02lZAPPaWfTo0BfGlZxpmTVNKkcrPznw/zsmh
+         Tdlpd+d7RGXcmXfUsWUrM3UH2wYYDFD0oMSpq5NdUdhqjXedqsY1fsyM7IqOWDyksG/m
+         +cVzoYUg6ukPpBw3a7RmzZkM27lDKrb+tEmkq9qd5eKrFNG+6LC09W4LdmNI0ypMho79
+         ExKub+zeywy4de61ZM0LdKBfPFCJpcwJ/txj1XC3dQW2RxOzb3tVPApsybP5b6uplo14
+         oDf6NhEdKgzW4w5ho3wnv1/eadzgNu2pluNboDlm2LkGEnvulERFlm0waZK4r77nDbHj
+         b9qA==
+X-Gm-Message-State: AOJu0Yz2NOG3/iMsqbK8ql2AZUtzT+NdpLDSpAsIdFm3np+lQj04FXJO
+        0/GIXoqeLKcEMAfi6clk6sQHSw==
+X-Google-Smtp-Source: AGHT+IGEItfAXWINNLkK36xJ5yrbcbZcYavS44jATevf1s091wDg13d4RfgdrjfvUFQ83S5pFl+NMA==
+X-Received: by 2002:a05:6512:250d:b0:4fb:90c6:c31a with SMTP id be13-20020a056512250d00b004fb90c6c31amr5718267lfb.14.1695629667376;
+        Mon, 25 Sep 2023 01:14:27 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.100])
-        by smtp.gmail.com with ESMTPSA id 5-20020a05600c26c500b004030e8ff964sm10516466wmv.34.2023.09.25.01.09.55
+        by smtp.gmail.com with ESMTPSA id 19-20020a05600c229300b00405953973c3sm784123wmf.6.2023.09.25.01.14.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Sep 2023 01:09:57 -0700 (PDT)
-Message-ID: <751a552e-5209-4d5e-9292-23339a06f8a9@linaro.org>
-Date:   Mon, 25 Sep 2023 10:09:55 +0200
+        Mon, 25 Sep 2023 01:14:26 -0700 (PDT)
+Message-ID: <10c50df3-9a99-4552-9b25-0844b87e28f5@linaro.org>
+Date:   Mon, 25 Sep 2023 10:14:24 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [EXT] Re: [PATCH v3 2/2] dt-bindings: media: imx-jpeg: Assign
@@ -81,6 +81,8 @@ References: <20230925074131.10133-1-ming.qian@nxp.com>
  <20230925074131.10133-2-ming.qian@nxp.com>
  <bbc8dd05-8589-44ec-87dd-f2d7b4368245@linaro.org>
  <AM6PR04MB63418AE18D3D0ED98CCC1A0FE7FCA@AM6PR04MB6341.eurprd04.prod.outlook.com>
+ <751a552e-5209-4d5e-9292-23339a06f8a9@linaro.org>
+ <AM6PR04MB63410BEA725DDBF1D1B7814FE7FCA@AM6PR04MB6341.eurprd04.prod.outlook.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -126,16 +128,16 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <AM6PR04MB63418AE18D3D0ED98CCC1A0FE7FCA@AM6PR04MB6341.eurprd04.prod.outlook.com>
+In-Reply-To: <AM6PR04MB63410BEA725DDBF1D1B7814FE7FCA@AM6PR04MB6341.eurprd04.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 25/09/2023 10:07, Ming Qian wrote:
+On 25/09/2023 10:13, Ming Qian wrote:
 >> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Sent: 2023年9月25日 16:02
+>> Sent: 2023年9月25日 16:10
 >> To: Ming Qian <ming.qian@nxp.com>; Mirela Rabulea (OSS)
 >> <mirela.rabulea@oss.nxp.com>; robh+dt@kernel.org; shawnguo@kernel.org
 >> Cc: krzysztof.kozlowski+dt@linaro.org; conor+dt@kernel.org;
@@ -145,32 +147,75 @@ On 25/09/2023 10:07, Ming Qian wrote:
 >> <tao.jiang_2@nxp.com>; dl-linux-imx <linux-imx@nxp.com>;
 >> devicetree@vger.kernel.org; linux-media@vger.kernel.org; linux-
 >> kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org
->> Subject: [EXT] Re: [PATCH v3 2/2] dt-bindings: media: imx-jpeg: Assign slot for
->> imx jpeg encoder/decoder
+>> Subject: Re: [EXT] Re: [PATCH v3 2/2] dt-bindings: media: imx-jpeg: Assign slot
+>> for imx jpeg encoder/decoder
 >>
 >> Caution: This is an external email. Please take care when clicking links or
 >> opening attachments. When in doubt, report the message using the 'Report
 >> this email' button
 >>
 >>
->> On 25/09/2023 09:41, Ming Qian wrote:
->>> There are total 4 slots available in the IP, and we only need to use
->>> one slot in one os, assign a single slot, configure interrupt and
->>> power domain only for 1 slot, not for the all 4 slots.
+>> On 25/09/2023 10:07, Ming Qian wrote:
+>>>> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>> Sent: 2023年9月25日 16:02
+>>>> To: Ming Qian <ming.qian@nxp.com>; Mirela Rabulea (OSS)
+>>>> <mirela.rabulea@oss.nxp.com>; robh+dt@kernel.org;
+>> shawnguo@kernel.org
+>>>> Cc: krzysztof.kozlowski+dt@linaro.org; conor+dt@kernel.org;
+>>>> mchehab@kernel.org; hverkuil-cisco@xs4all.nl; s.hauer@pengutronix.de;
+>>>> kernel@pengutronix.de; festevam@gmail.com; X.H. Bao
+>>>> <xiahong.bao@nxp.com>; Eagle Zhou <eagle.zhou@nxp.com>; Tao Jiang
+>>>> <tao.jiang_2@nxp.com>; dl-linux-imx <linux-imx@nxp.com>;
+>>>> devicetree@vger.kernel.org; linux-media@vger.kernel.org; linux-
+>>>> kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org
+>>>> Subject: [EXT] Re: [PATCH v3 2/2] dt-bindings: media: imx-jpeg:
+>>>> Assign slot for imx jpeg encoder/decoder
+>>>>
+>>>> Caution: This is an external email. Please take care when clicking
+>>>> links or opening attachments. When in doubt, report the message using
+>>>> the 'Report this email' button
+>>>>
+>>>>
+>>>> On 25/09/2023 09:41, Ming Qian wrote:
+>>>>> There are total 4 slots available in the IP, and we only need to use
+>>>>> one slot in one os, assign a single slot, configure interrupt and
+>>>>> power domain only for 1 slot, not for the all 4 slots.
+>>>>
+>>>> No changelog and I do not see much of improvements. Do not ignore the
+>>>> feedback but respond to it or fix the patch. Really, what happened here?
+>>>>
+>>>
+>>> Hi Krzysztof,
+>>>    What do you mean wrap commit message? Do you mean line wrapped at
+>> 75 columns?
+>>>
+>>>   - The body of the explanation, line wrapped at 75 columns, which will
+>>>     be copied to the permanent changelog to describe this patch.
 >>
->> No changelog and I do not see much of improvements. Do not ignore the
->> feedback but respond to it or fix the patch. Really, what happened here?
+>> I gave you clear link to the doc explaining this. What is unclear there?
 >>
+>> And you decide to ignore all the rest of the comments here as well?
+
+So this is still ignored? Can you respond to all my comments?
+
+>>
+>> Best regards,
+>> Krzysztof
 > 
-> Hi Krzysztof,
->    What do you mean wrap commit message? Do you mean line wrapped at 75 columns?
+> The link content is as below:
 > 
 >   - The body of the explanation, line wrapped at 75 columns, which will
 >     be copied to the permanent changelog to describe this patch.
+> 
+> I'm sorry that I didn’t get your point.
 
-I gave you clear link to the doc explaining this. What is unclear there?
-
-And you decide to ignore all the rest of the comments here as well?
+Wrap
+your
+commit
+according
+to
+coding
+style.
 
 Best regards,
 Krzysztof
