@@ -2,121 +2,93 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9538CCE7A8A
-	for <linux-media@archiver.kernel.org>; Sun, 24 Sep 2023 15:33:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57B27CE7A95
+	for <linux-media@archiver.kernel.org>; Mon, 25 Sep 2023 00:41:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbjIXPdh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 24 Sep 2023 11:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41430 "EHLO
+        id S230165AbjIYAl2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 24 Sep 2023 20:41:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbjIXPde (ORCPT
+        with ESMTP id S230435AbjIYAlP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 24 Sep 2023 11:33:34 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C297100
-        for <linux-media@vger.kernel.org>; Sun, 24 Sep 2023 08:33:27 -0700 (PDT)
+        Sun, 24 Sep 2023 20:41:15 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1679116
+        for <linux-media@vger.kernel.org>; Sun, 24 Sep 2023 17:41:05 -0700 (PDT)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 49E1D34B5;
-        Sun, 24 Sep 2023 17:31:43 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D78202CF;
+        Mon, 25 Sep 2023 02:39:21 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1695569503;
-        bh=/VYefFYo7Ei3LHFbpfgJo1YIP1TLHfv6OSt3SgNYank=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eP7eFcbxvKPYwVt/qjoQIbPm+7pO0lgDKVn7cHR28+XYAkD3OEXUKWR75MgCW4IPz
-         TfCOjGo4XTGiE0Pya/3MiW5HcXoo6EGfzTLKekh8Sf0aam6VWVtHLFICmTy/WjOrae
-         Bgc4iHuPJZRbjnazKP1f56/OOA7lOcaK8Tx3DzO0=
+        s=mail; t=1695602362;
+        bh=h9MwXR9aIweSLTl17OYz5+jTiUJjosYThz5TOWQ9bJM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ZMm2+PNBBmH5eRFXZbhoK12Z7+pwMxFmh6zCsGr1DqGfdF7gj0ikkFlu7eBUY8Wkv
+         5tSdd7Llm4WjdpjNXhLCoEOwx+cgC4oVVto+6Ci7NQV4+R/5hkr4CiHXo3CrpaDTco
+         9FJNT1Rp9HSUCiRMWIkw9T13xQVuKyIaKcilY1Wo=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
-Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: [PATCH v4 19/20] media: i2c: imx219: Name all subdev state variables 'state'
-Date:   Sun, 24 Sep 2023 18:33:08 +0300
-Message-ID: <20230924153309.12423-20-laurent.pinchart@ideasonboard.com>
+Cc:     Dafna Hirschfeld <dafna@fastmail.com>,
+        Paul Elder <paul.elder@ideasonboard.com>,
+        linux-rockchip@lists.infradead.org
+Subject: [PATCH v2 00/14] media: rkisp1: Various cleanups and fixes
+Date:   Mon, 25 Sep 2023 03:40:58 +0300
+Message-ID: <20230925004112.22797-1-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230924153309.12423-1-laurent.pinchart@ideasonboard.com>
-References: <20230924153309.12423-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Subdev state variables are named with a mix of 'state' and 'sd_state'
-through the driver. To improve consistency, name them all 'state'.
+Hello,
 
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
----
- drivers/media/i2c/imx219.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+This patch series performs various cleanups in the rkisp1 driver and
+fixes two issues.
 
-diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-index 2b88c5b8a7bf..358a6d77d88c 100644
---- a/drivers/media/i2c/imx219.c
-+++ b/drivers/media/i2c/imx219.c
-@@ -774,7 +774,7 @@ static void imx219_update_pad_format(struct imx219 *imx219,
- }
- 
- static int imx219_enum_mbus_code(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_state *sd_state,
-+				 struct v4l2_subdev_state *state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
- {
- 	struct imx219 *imx219 = to_imx219(sd);
-@@ -788,7 +788,7 @@ static int imx219_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int imx219_enum_frame_size(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_state *sd_state,
-+				  struct v4l2_subdev_state *state,
- 				  struct v4l2_subdev_frame_size_enum *fse)
- {
- 	struct imx219 *imx219 = to_imx219(sd);
-@@ -810,7 +810,7 @@ static int imx219_enum_frame_size(struct v4l2_subdev *sd,
- }
- 
- static int imx219_set_pad_format(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_state *sd_state,
-+				 struct v4l2_subdev_state *state,
- 				 struct v4l2_subdev_format *fmt)
- {
- 	struct imx219 *imx219 = to_imx219(sd);
-@@ -827,7 +827,7 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
- 
- 	imx219_update_pad_format(imx219, mode, &fmt->format, fmt->format.code);
- 
--	format = v4l2_subdev_get_pad_format(sd, sd_state, 0);
-+	format = v4l2_subdev_get_pad_format(sd, state, 0);
- 	*format = fmt->format;
- 
- 	/*
-@@ -837,7 +837,7 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
- 	bin_h = min(IMX219_PIXEL_ARRAY_WIDTH / format->width, 2U);
- 	bin_v = min(IMX219_PIXEL_ARRAY_HEIGHT / format->height, 2U);
- 
--	crop = v4l2_subdev_get_pad_crop(sd, sd_state, 0);
-+	crop = v4l2_subdev_get_pad_crop(sd, state, 0);
- 	crop->width = format->width * bin_h;
- 	crop->height = format->height * bin_v;
- 	crop->left = (IMX219_NATIVE_WIDTH - crop->width) / 2;
-@@ -872,12 +872,12 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
- }
- 
- static int imx219_get_selection(struct v4l2_subdev *sd,
--				struct v4l2_subdev_state *sd_state,
-+				struct v4l2_subdev_state *state,
- 				struct v4l2_subdev_selection *sel)
- {
- 	switch (sel->target) {
- 	case V4L2_SEL_TGT_CROP: {
--		sel->r = *v4l2_subdev_get_pad_crop(sd, sd_state, 0);
-+		sel->r = *v4l2_subdev_get_pad_crop(sd, state, 0);
- 		return 0;
- 	}
- 
+The series starts in 01/14 with an update to MAINTAINERS to add myself
+as a co-maintainer for the driver. I have authored most of the changes
+to the rkisp1 driver in the recent past and plan to keep improving the
+code base (including upstreaming i.MX8MP support), and I'd like to be
+CC'ed on patches.
+
+I have named the series v2 as it contains the second version of the
+conversion to the V4L2 subdev active state in patches 02/14 to 04/14.
+The remaining of the series is new. Patches 05/15 and 06/14 are two
+small cleanups, and patch 07/14 is the first fix, for the line stride
+calculation. Patches 08/14 to 13/14 continue with small cleanups, and
+patch 14/14 finally fixes the resizer configuration when upscaling
+vertically by a factor of 2.
+
+I have successfully tested this series on a RK339 (Rock Pi 4), as well
+as an i.MX8MP (Debix) with a few additional patches.
+
+Laurent Pinchart (14):
+  MAINTAINERS: Add co-maintainer for the rkisp1 driver
+  media: rkisp1: resizer: Use V4L2 subdev active state
+  media: rkisp1: isp: Use V4L2 subdev active state
+  media: rkisp1: csi: Use V4L2 subdev active state
+  media: rkisp1: Convert hex constants to lowercase
+  media: rkisp1: Constify rkisp1_v12_params_ops
+  media: rkisp1: Fix line stride calculation
+  media: rkisp1: Remove dual crop control register from config structure
+  media: rkisp1: Program RKISP1_CIF_MI_SP_Y_PIC_SIZE register
+  media: rkisp1: resizer: Constify argument and local variables
+  media: rkisp1: resizer: Use v4l2_area instead of v4l2_rect to store
+    size
+  media: rkisp1: resizer: Drop unneeded local variable
+  media: rkisp1: resizer: Improve debug message when configuring resizer
+  media: rkisp1: resizer: Fix resizer disable check when starting stream
+
+ MAINTAINERS                                   |   1 +
+ .../platform/rockchip/rkisp1/rkisp1-capture.c |  24 +-
+ .../platform/rockchip/rkisp1/rkisp1-common.h  |  18 -
+ .../platform/rockchip/rkisp1/rkisp1-csi.c     | 107 +--
+ .../platform/rockchip/rkisp1/rkisp1-isp.c     | 263 +++-----
+ .../platform/rockchip/rkisp1/rkisp1-params.c  |   4 +-
+ .../platform/rockchip/rkisp1/rkisp1-regs.h    | 618 +++++++++---------
+ .../platform/rockchip/rkisp1/rkisp1-resizer.c | 255 +++-----
+ 8 files changed, 564 insertions(+), 726 deletions(-)
+
 -- 
 Regards,
 
