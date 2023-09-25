@@ -2,177 +2,278 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88BD3CE7A94
-	for <linux-media@archiver.kernel.org>; Mon, 25 Sep 2023 14:56:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B6ECCE7A9A
+	for <linux-media@archiver.kernel.org>; Mon, 25 Sep 2023 15:40:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232443AbjIYO4o (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 25 Sep 2023 10:56:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58296 "EHLO
+        id S231298AbjIYPk3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 25 Sep 2023 11:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231502AbjIYO4n (ORCPT
+        with ESMTP id S229874AbjIYPk2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 25 Sep 2023 10:56:43 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0BA103;
-        Mon, 25 Sep 2023 07:56:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695653796; x=1727189796;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=a6827gPuavvfahrs3++OAZrS8oURq6/e0qMe/+jqp5A=;
-  b=K+v/lVGb9U45HYy3QV1s7VFqJvT1egSKpbnG6U3Yl9uCnhMw9hshu6KB
-   g/PfPs1ZiCV4MWPjR7r95tkCWe+OvnrN1Y5g3EqXh4kyuMiais5PoPhw4
-   tEubzsbgHFn46YD1tL5d0c+1Q0t+B4iimXtFfhdCpvhGArlkqM72Nqex+
-   o4zwPt1LfEAilsYLbF383uNM1pb9WOUtcjv6gg71UzaSwzzq8njRhVGGP
-   tHc9Oo/G1t+/IZmD/thWaajzfSBVNDRi2umWk0aiI4D8SA6Uw0+qDg7nE
-   z03wdPrMpfrSECvO1jJuoXw37O/cScN0MI62jB7L5AD1C7f9uETxi2zAA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="447761334"
-X-IronPort-AV: E=Sophos;i="6.03,175,1694761200"; 
-   d="scan'208";a="447761334"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2023 07:56:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="777671146"
-X-IronPort-AV: E=Sophos;i="6.03,175,1694761200"; 
-   d="scan'208";a="777671146"
-Received: from lkp-server02.sh.intel.com (HELO 32c80313467c) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 25 Sep 2023 07:56:25 -0700
-Received: from kbuild by 32c80313467c with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qkn0Y-0001cV-1f;
-        Mon, 25 Sep 2023 14:56:22 +0000
-Date:   Mon, 25 Sep 2023 22:55:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, George Sun <george.sun@mediatek.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>
-Subject: drivers/media/v4l2-core/v4l2-vp9.c:1834:1: warning: the frame size
- of 1420 bytes is larger than 1024 bytes
-Message-ID: <202309252201.HKvcjHQ6-lkp@intel.com>
+        Mon, 25 Sep 2023 11:40:28 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC43FF;
+        Mon, 25 Sep 2023 08:40:20 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 38PB8uT6014707;
+        Mon, 25 Sep 2023 17:39:35 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+        message-id:date:mime-version:subject:to:cc:references:from
+        :in-reply-to:content-type:content-transfer-encoding; s=
+        selector1; bh=mGHKtScuDGvlKtHxb7FEML0faIVvgVUaxKEFd7mNV8E=; b=4q
+        Kcoqc3zgo9sJUre04DyZDGbklDpC/KeHLYhQUqjGRISItW8tgxD1HfsY5C4dvmqU
+        ypND1/tw6xNpNdiaI9cj+0DWwB+AO0jLWS/wje1xIs8ahvEonwIRLgsKfwpyGxPj
+        WrbsnrDRuDGY9paZF0VD3ToFCcy5ZYDaUcatISItUInwnHoiND9VP6eDGTO9iYXo
+        ZEP5o7P/ZBL2FD+txkgb4ZEpwSXXmY28sPofNNkoXeBmhTKN4+cuSPwfop+Qz5FQ
+        7qyGBbMEzJI/xgZpubfLrOe/BKmIRB3aBHd5cxl6QkR5912kToqhArv0Ruzk8VDm
+        KERn0jfP42AQsJ6JQr2A==
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3t9qbwr14m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Sep 2023 17:39:35 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 16D6610005C;
+        Mon, 25 Sep 2023 17:39:15 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D8052245514;
+        Mon, 25 Sep 2023 17:39:15 +0200 (CEST)
+Received: from [10.201.20.32] (10.201.20.32) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 25 Sep
+ 2023 17:39:13 +0200
+Message-ID: <4eb771d5-1f22-c708-0390-0111e8d1a9a0@foss.st.com>
+Date:   Mon, 25 Sep 2023 17:39:13 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v3 00/11] Introduce STM32 Firewall framework
+Content-Language: en-US
+To:     <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <alexandre.torgue@foss.st.com>,
+        <vkoul@kernel.org>, <jic23@kernel.org>,
+        <olivier.moysan@foss.st.com>, <arnaud.pouliquen@foss.st.com>,
+        <mchehab@kernel.org>, <fabrice.gasnier@foss.st.com>,
+        <andi.shyti@kernel.org>, <ulf.hansson@linaro.org>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <hugues.fruchet@foss.st.com>, <lee@kernel.org>, <will@kernel.org>,
+        <catalin.marinas@arm.com>, <arnd@kernel.org>,
+        <richardcochran@gmail.com>, Frank Rowand <frowand.list@gmail.com>
+CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>
+References: <20230726083810.232100-1-gatien.chevallier@foss.st.com>
+From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
+In-Reply-To: <20230726083810.232100-1-gatien.chevallier@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.20.32]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-09-25_13,2023-09-25_01,2023-05-22_02
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Yunfei,
+Hello all,
 
-FYI, the error/warning still remains.
+Since the "feature-domains" bindings lacks precision (maybe some
+renaming for better clarity on its purpose), I will send v4 with a
+vendor binding so the generic one better discussed and enriched with
+other contributor examples.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6465e260f48790807eef06b583b38ca9789b6072
-commit: 5d418351ca8f17defa1170d968df161c35b810e3 media: mediatek: vcodec: support stateless VP9 decoding
-date:   1 year, 4 months ago
-config: csky-randconfig-r012-20220120 (https://download.01.org/0day-ci/archive/20230925/202309252201.HKvcjHQ6-lkp@intel.com/config)
-compiler: csky-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230925/202309252201.HKvcjHQ6-lkp@intel.com/reproduce)
+This will avoid mixing several patch set.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309252201.HKvcjHQ6-lkp@intel.com/
+Best regards,
+Gatien
 
-All warnings (new ones prefixed by >>):
-
-   drivers/media/v4l2-core/v4l2-vp9.c: In function 'v4l2_vp9_adapt_noncoef_probs':
->> drivers/media/v4l2-core/v4l2-vp9.c:1834:1: warning: the frame size of 1420 bytes is larger than 1024 bytes [-Wframe-larger-than=]
-    1834 | }
-         | ^
-
-
-vim +1834 drivers/media/v4l2-core/v4l2-vp9.c
-
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1757  
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1758  /* 8.4.4 Non coefficient probability adaptation process */
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1759  void v4l2_vp9_adapt_noncoef_probs(struct v4l2_vp9_frame_context *probs,
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1760  				  struct v4l2_vp9_frame_symbol_counts *counts,
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1761  				  u8 reference_mode, u8 interpolation_filter, u8 tx_mode,
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1762  				  u32 flags)
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1763  {
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1764  	unsigned int i, j;
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1765  
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1766  	for (i = 0; i < ARRAY_SIZE(probs->is_inter); i++)
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1767  		probs->is_inter[i] = adapt_prob(probs->is_inter[i], (*counts->intra_inter)[i]);
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1768  
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1769  	for (i = 0; i < ARRAY_SIZE(probs->comp_mode); i++)
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1770  		probs->comp_mode[i] = adapt_prob(probs->comp_mode[i], (*counts->comp)[i]);
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1771  
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1772  	for (i = 0; i < ARRAY_SIZE(probs->comp_ref); i++)
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1773  		probs->comp_ref[i] = adapt_prob(probs->comp_ref[i], (*counts->comp_ref)[i]);
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1774  
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1775  	if (reference_mode != V4L2_VP9_REFERENCE_MODE_COMPOUND_REFERENCE)
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1776  		for (i = 0; i < ARRAY_SIZE(probs->single_ref); i++)
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1777  			for (j = 0; j < ARRAY_SIZE(probs->single_ref[0]); j++)
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1778  				probs->single_ref[i][j] = adapt_prob(probs->single_ref[i][j],
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1779  								     (*counts->single_ref)[i][j]);
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1780  
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1781  	for (i = 0; i < ARRAY_SIZE(probs->inter_mode); i++)
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1782  		adapt_probs_variant_c(probs->inter_mode[i], (*counts->mv_mode)[i]);
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1783  
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1784  	for (i = 0; i < ARRAY_SIZE(probs->y_mode); i++)
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1785  		adapt_probs_variant_d(probs->y_mode[i], (*counts->y_mode)[i]);
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1786  
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1787  	for (i = 0; i < ARRAY_SIZE(probs->uv_mode); i++)
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1788  		adapt_probs_variant_d(probs->uv_mode[i], (*counts->uv_mode)[i]);
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1789  
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1790  	for (i = 0; i < ARRAY_SIZE(probs->partition); i++)
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1791  		adapt_probs_variant_e(probs->partition[i], (*counts->partition)[i]);
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1792  
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1793  	for (i = 0; i < ARRAY_SIZE(probs->skip); i++)
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1794  		probs->skip[i] = adapt_prob(probs->skip[i], (*counts->skip)[i]);
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1795  
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1796  	if (interpolation_filter == V4L2_VP9_INTERP_FILTER_SWITCHABLE)
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1797  		for (i = 0; i < ARRAY_SIZE(probs->interp_filter); i++)
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1798  			adapt_probs_variant_f(probs->interp_filter[i], (*counts->filter)[i]);
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1799  
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1800  	if (tx_mode == V4L2_VP9_TX_MODE_SELECT)
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1801  		for (i = 0; i < ARRAY_SIZE(probs->tx8); i++) {
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1802  			adapt_probs_variant_b(probs->tx8[i], (*counts->tx8p)[i]);
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1803  			adapt_probs_variant_f(probs->tx16[i], (*counts->tx16p)[i]);
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1804  			adapt_probs_variant_e(probs->tx32[i], (*counts->tx32p)[i]);
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1805  		}
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1806  
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1807  	adapt_probs_variant_e(probs->mv.joint, *counts->mv_joint);
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1808  
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1809  	for (i = 0; i < ARRAY_SIZE(probs->mv.sign); i++) {
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1810  		probs->mv.sign[i] = adapt_prob(probs->mv.sign[i], (*counts->sign)[i]);
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1811  
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1812  		adapt_probs_variant_g(probs->mv.classes[i], (*counts->classes)[i]);
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1813  
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1814  		probs->mv.class0_bit[i] = adapt_prob(probs->mv.class0_bit[i], (*counts->class0)[i]);
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1815  
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1816  		for (j = 0; j < ARRAY_SIZE(probs->mv.bits[0]); j++)
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1817  			probs->mv.bits[i][j] = adapt_prob(probs->mv.bits[i][j],
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1818  							  (*counts->bits)[i][j]);
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1819  
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1820  		for (j = 0; j < ARRAY_SIZE(probs->mv.class0_fr[0]); j++)
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1821  			adapt_probs_variant_e(probs->mv.class0_fr[i][j],
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1822  					      (*counts->class0_fp)[i][j]);
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1823  
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1824  		adapt_probs_variant_e(probs->mv.fr[i], (*counts->fp)[i]);
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1825  
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1826  		if (!(flags & V4L2_VP9_FRAME_FLAG_ALLOW_HIGH_PREC_MV))
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1827  			continue;
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1828  
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1829  		probs->mv.class0_hp[i] = adapt_prob(probs->mv.class0_hp[i],
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1830  						    (*counts->class0_hp)[i]);
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1831  
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1832  		probs->mv.hp[i] = adapt_prob(probs->mv.hp[i], (*counts->hp)[i]);
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1833  	}
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16 @1834  }
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1835  EXPORT_SYMBOL_GPL(v4l2_vp9_adapt_noncoef_probs);
-3e3b1fb0e5d95c Andrzej Pietrasiewicz 2021-11-16  1836  
-
-:::::: The code at line 1834 was first introduced by commit
-:::::: 3e3b1fb0e5d95c0cd7278717185ca3fb00f5d771 media: Add VP9 v4l2 library
-
-:::::: TO: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-:::::: CC: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On 7/26/23 10:37, Gatien Chevallier wrote:
+> Introduce STM32 Firewall framework for STM32MP1x and STM32MP2x
+> platforms. STM32MP1x(ETZPC) and STM32MP2x(RIFSC) Firewall controllers
+> register to the framework to offer firewall services such as access
+> granting.
+> 
+> This series of patches is a new approach on the previous STM32 system
+> bus, history is available here:
+> https://lore.kernel.org/lkml/20230127164040.1047583/
+> 
+> The need for such framework arises from the fact that there are now
+> multiple hardware firewalls implemented across multiple products.
+> Drivers are shared between different products, using the same code.
+> When it comes to firewalls, the purpose mostly stays the same: Protect
+> hardware resources. But the implementation differs, and there are
+> multiple types of firewalls: peripheral, memory, ...
+> 
+> Some hardware firewall controllers such as the RIFSC implemented on
+> STM32MP2x platforms may require to take ownership of a resource before
+> being able to use it, hence the requirement for firewall services to
+> take/release the ownership of such resources.
+> 
+> On the other hand, hardware firewall configurations are becoming
+> more and more complex. These mecanisms prevent platform crashes
+> or other firewall-related incoveniences by denying access to some
+> resources.
+> 
+> The stm32 firewall framework offers an API that is defined in
+> firewall controllers drivers to best fit the specificity of each
+> firewall.
+> 
+> For every peripherals protected by either the ETZPC or the RIFSC, the
+> firewall framework checks the firewall controlelr registers to see if
+> the peripheral's access is granted to the Linux kernel. If not, the
+> peripheral is configured as secure, the node is marked populated,
+> so that the driver is not probed for that device.
+> 
+> The firewall framework relies on the feature-domain-controller device
+> tree bindings: https://lore.kernel.org/lkml/0c0a82bb-18ae-d057-562b.
+> It is used by peripherals to reference a domain controller, in this
+> case a firewall feature domain. The bus uses the ID referenced by
+> the feature-domains property to know where to look in the firewall
+> to get the security configuration for the peripheral. This allows
+> a device tree description rather than a hardcoded peripheral table
+> in the bus driver.
+> 
+> The STM32 ETZPC device is responsible for filtering accesses based on
+> security level, or co-processor isolation for any resource connected
+> to it.
+> 
+> The RIFSC is responsible for filtering accesses based on Compartment
+> ID / security level / privilege level for any resource connected to
+> it.
+> 
+> STM32MP13/15/25 SoC device tree files are updated in this series to
+> implement this mecanism.
+> 
+> Changes in V2:
+> 
+> 	generic:
+> 		- Add fw_devlink dependency for "feature-domains"
+> 		  property.
+> 
+> 	bindings:
+> 		- Corrected YAMLS errors highlighted by Rob's robot
+> 		- Firewall controllers YAMLs no longer define the
+> 		  maxItems for the "feature-domains" property
+> 		- Renamed st,stm32-rifsc.yaml to
+> 		  st,stm32mp25-rifsc.yaml
+> 		- Fix examples in YAML files
+> 		- Change feature-domains maxItems to 2 in firewall
+> 		  consumer files as there should not be more than
+> 		  2 entries for now
+> 		- Declare "feature-domain-names" as an optional
+> 		  property for firewall controllers child nodes.
+> 		- Add missing "feature-domains" property declaration
+> 		  in bosch,m_can.yaml and st,stm32-cryp.yaml files
+> 
+> 	firewall framework:
+> 		- Support multiple entries for "feature-domains"
+> 		  property
+> 		- Better handle the device-tree parsing using
+> 		  phandle+args APIs
+> 		- Remove "resource firewall" type
+> 		- Add a field for the name of the firewall entry
+> 		- Fix licenses
+> 	
+> 	RIFSC:
+> 		- Add controller name
+> 		- Driver is now a module_platform_driver
+> 		- Fix license
+> 
+> 	ETZPC:
+> 		- Add controller name
+> 		- Driver is now a module_platform_driver
+> 		- Fix license
+> 
+> 	Device trees:
+> 		- Fix rifsc node name
+> 		- Move the "ranges" property under the
+> 		  "feature-domains" one
+> 
+> Changes in V3:
+> 
+> 	Change incorrect ordering for bindings commits leading
+> 	to an error while running
+> 	"make DT_CHECKER_FLAGS=-m dt_binding_check"
+> 
+> Oleksii Moisieiev (1):
+>    dt-bindings: Document common device controller bindings
+> 
+> Gatien Chevallier (10):
+>    dt-bindings: treewide: add feature-domains description
+>    dt-bindings: bus: document RIFSC
+>    dt-bindings: bus: document ETZPC
+>    firewall: introduce stm32_firewall framework
+>    of: property: fw_devlink: Add support for "feature-domains"
+>    bus: rifsc: introduce RIFSC firewall controller driver
+>    arm64: dts: st: add RIFSC as a domain controller for STM32MP25x boards
+>    bus: etzpc: introduce ETZPC firewall controller driver
+>    ARM: dts: stm32: add ETZPC as a system bus for STM32MP15x boards
+>    ARM: dts: stm32: add ETZPC as a system bus for STM32MP13x boards
+> 
+>   .../bindings/bus/st,stm32-etzpc.yaml          |   96 +
+>   .../bindings/bus/st,stm32mp25-rifsc.yaml      |  105 +
+>   .../bindings/crypto/st,stm32-cryp.yaml        |    4 +
+>   .../bindings/crypto/st,stm32-hash.yaml        |    4 +
+>   .../devicetree/bindings/dma/st,stm32-dma.yaml |    4 +
+>   .../bindings/dma/st,stm32-dmamux.yaml         |    4 +
+>   .../feature-domain-controller.yaml            |   84 +
+>   .../devicetree/bindings/i2c/st,stm32-i2c.yaml |    4 +
+>   .../bindings/iio/adc/st,stm32-adc.yaml        |    4 +
+>   .../bindings/iio/adc/st,stm32-dfsdm-adc.yaml  |    4 +
+>   .../bindings/iio/dac/st,stm32-dac.yaml        |    4 +
+>   .../bindings/media/cec/st,stm32-cec.yaml      |    4 +
+>   .../bindings/media/st,stm32-dcmi.yaml         |    4 +
+>   .../memory-controllers/st,stm32-fmc2-ebi.yaml |    4 +
+>   .../bindings/mfd/st,stm32-lptimer.yaml        |    4 +
+>   .../bindings/mfd/st,stm32-timers.yaml         |    5 +
+>   .../devicetree/bindings/mmc/arm,pl18x.yaml    |    4 +
+>   .../bindings/net/can/bosch,m_can.yaml         |    4 +
+>   .../devicetree/bindings/net/stm32-dwmac.yaml  |    4 +
+>   .../bindings/phy/phy-stm32-usbphyc.yaml       |    4 +
+>   .../bindings/regulator/st,stm32-vrefbuf.yaml  |    4 +
+>   .../devicetree/bindings/rng/st,stm32-rng.yaml |    4 +
+>   .../bindings/serial/st,stm32-uart.yaml        |    4 +
+>   .../bindings/sound/st,stm32-i2s.yaml          |    4 +
+>   .../bindings/sound/st,stm32-sai.yaml          |    4 +
+>   .../bindings/sound/st,stm32-spdifrx.yaml      |    4 +
+>   .../bindings/spi/st,stm32-qspi.yaml           |    4 +
+>   .../devicetree/bindings/spi/st,stm32-spi.yaml |    4 +
+>   .../devicetree/bindings/usb/dwc2.yaml         |    4 +
+>   MAINTAINERS                                   |    7 +
+>   arch/arm/boot/dts/st/stm32mp131.dtsi          | 1027 +++---
+>   arch/arm/boot/dts/st/stm32mp133.dtsi          |   51 +-
+>   arch/arm/boot/dts/st/stm32mp13xc.dtsi         |   19 +-
+>   arch/arm/boot/dts/st/stm32mp13xf.dtsi         |   19 +-
+>   arch/arm/boot/dts/st/stm32mp151.dtsi          | 2757 +++++++++--------
+>   arch/arm/boot/dts/st/stm32mp153.dtsi          |   52 +-
+>   arch/arm/boot/dts/st/stm32mp15xc.dtsi         |   19 +-
+>   arch/arm64/Kconfig.platforms                  |    1 +
+>   arch/arm64/boot/dts/st/stm32mp251.dtsi        |    7 +-
+>   drivers/bus/Kconfig                           |    9 +
+>   drivers/bus/Makefile                          |    1 +
+>   drivers/bus/stm32_etzpc.c                     |  141 +
+>   drivers/bus/stm32_firewall.c                  |  288 ++
+>   drivers/bus/stm32_firewall.h                  |   83 +
+>   drivers/bus/stm32_rifsc.c                     |  252 ++
+>   drivers/of/property.c                         |    2 +
+>   include/linux/bus/stm32_firewall_device.h     |  140 +
+>   47 files changed, 3346 insertions(+), 1919 deletions(-)
+>   create mode 100644 Documentation/devicetree/bindings/bus/st,stm32-etzpc.yaml
+>   create mode 100644 Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
+>   create mode 100644 Documentation/devicetree/bindings/feature-controllers/feature-domain-controller.yaml
+>   create mode 100644 drivers/bus/stm32_etzpc.c
+>   create mode 100644 drivers/bus/stm32_firewall.c
+>   create mode 100644 drivers/bus/stm32_firewall.h
+>   create mode 100644 drivers/bus/stm32_rifsc.c
+>   create mode 100644 include/linux/bus/stm32_firewall_device.h
+> 
