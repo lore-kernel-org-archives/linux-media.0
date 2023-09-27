@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B059E82CA6
-	for <linux-media@archiver.kernel.org>; Wed, 27 Sep 2023 15:36:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C83DE82CA5
+	for <linux-media@archiver.kernel.org>; Wed, 27 Sep 2023 15:36:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232752AbjI0Pgv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 27 Sep 2023 11:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49060 "EHLO
+        id S232836AbjI0Pgx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 27 Sep 2023 11:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232586AbjI0Pga (ORCPT
+        with ESMTP id S232655AbjI0Pg2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 27 Sep 2023 11:36:30 -0400
+        Wed, 27 Sep 2023 11:36:28 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938BECFC;
-        Wed, 27 Sep 2023 08:36:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B59AECE3;
+        Wed, 27 Sep 2023 08:36:22 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:672:46bd:3ec7:6cdf])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0B2806607360;
-        Wed, 27 Sep 2023 16:36:23 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id EF6316607331;
+        Wed, 27 Sep 2023 16:36:20 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1695828983;
-        bh=GZZRScc0G+g9MpmVo+b1q2mYVPFLCSqMx1Hk2ETt1Vc=;
+        s=mail; t=1695828981;
+        bh=ds3q8wqXSU9KVQQlLH/PuQAEX1eguF3zVlgf4I/w/H0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bWjb7HYHBLM15U1s5mFEW0FzSpprDpTIEwXDNYaxsfuLMjeY7U+fa9ot9x5sCRhoQ
-         pDZjFr1Nlf595yA3JaCbTP1w2QqIK+UM8TlIQyCqLTjrp7LeRKqrAxnnYALmMB4wHg
-         vW0sSnOB5VI0nWUNMWD2Ew3SPRfgjbS+AV4J1151x65NzDUWI9KR14Ywxy5pm3FqfS
-         qRrzr5+maBncFGkk7GMUU9TcxBWjHCBGyBEQ6s8kUfwjQYRmATL53vPkU9mVWtc71t
-         5nWeUMpUODYUzHDKCTHR6AtY0hQ007sdOMA8C3i6II4bUHcUNPN4NdaxRHWYa/08Pp
-         9EqX+luYh/RLQ==
+        b=XmS8fYA27pZoEZL5doxZqAghVjP0gftxnMGPisYulmq8+qaXZCxl5VywizfdJKpYh
+         rYGYb4wf8qqc1lBxVRmXchlpv9XV9nAOdiCz0xrfoCpqmNoZpudVJQXnEYge6gri2U
+         Bl7a4KZcGn+LdwbpR1n1Y/qvCmEaY2nTgI67O3KD09OhmIC3BHMmRmmlSi5DyIjo+7
+         C38pJSkfNYqxyYHVXCFArYmtRwqbg56SN7G6J49atPkA5a9iiKa2FYPbAq9DN4Jxwq
+         wIsr+ipB6y/3A8im7Iw8sF9dWz0pLrJh3hkuM28sZNslo+nNIotewVEJc/rv9YmqkR
+         nzbSvQbHeFbIA==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -43,9 +43,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v8 32/53] media: mediatek: vcodec: Stop direct calls to queue num_buffers field
-Date:   Wed, 27 Sep 2023 17:35:37 +0200
-Message-Id: <20230927153558.159278-33-benjamin.gaignard@collabora.com>
+Subject: [PATCH v8 28/53] media: pci: tw68: Stop direct calls to queue num_buffers field
+Date:   Wed, 27 Sep 2023 17:35:33 +0200
+Message-Id: <20230927153558.159278-29-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230927153558.159278-1-benjamin.gaignard@collabora.com>
 References: <20230927153558.159278-1-benjamin.gaignard@collabora.com>
@@ -56,25 +56,33 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 Use vb2_get_num_buffers() to avoid using queue num_buffer field directly.
+Remove tot_bufs < 2 test because min_buffers_needed is already set to 2.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/pci/tw68/tw68-video.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc.c b/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc.c
-index 04948d3eb011..8c580956b905 100644
---- a/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc.c
-+++ b/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc.c
-@@ -923,7 +923,7 @@ static int vb2ops_venc_start_streaming(struct vb2_queue *q, unsigned int count)
- 		mtk_v4l2_venc_err(ctx, "pm_runtime_put fail %d", pm_ret);
+diff --git a/drivers/media/pci/tw68/tw68-video.c b/drivers/media/pci/tw68/tw68-video.c
+index 773a18702d36..c0a8257b02ca 100644
+--- a/drivers/media/pci/tw68/tw68-video.c
++++ b/drivers/media/pci/tw68/tw68-video.c
+@@ -360,13 +360,11 @@ static int tw68_queue_setup(struct vb2_queue *q,
+ 			   unsigned int sizes[], struct device *alloc_devs[])
+ {
+ 	struct tw68_dev *dev = vb2_get_drv_priv(q);
+-	unsigned tot_bufs = q->num_buffers + *num_buffers;
++	unsigned tot_bufs = vb2_get_num_buffers(q) + *num_buffers;
+ 	unsigned size = (dev->fmt->depth * dev->width * dev->height) >> 3;
  
- err_start_stream:
--	for (i = 0; i < q->num_buffers; ++i) {
-+	for (i = 0; i < q->max_num_buffers; ++i) {
- 		struct vb2_buffer *buf = vb2_get_buffer(q, i);
- 
- 		/*
+-	if (tot_bufs < 2)
+-		tot_bufs = 2;
+ 	tot_bufs = tw68_buffer_count(size, tot_bufs);
+-	*num_buffers = tot_bufs - q->num_buffers;
++	*num_buffers = tot_bufs - vb2_get_num_buffers(q);
+ 	/*
+ 	 * We allow create_bufs, but only if the sizeimage is >= as the
+ 	 * current sizeimage. The tw68_buffer_count calculation becomes quite
 -- 
 2.39.2
 
