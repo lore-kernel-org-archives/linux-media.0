@@ -2,46 +2,46 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE254E80A9B
-	for <linux-media@archiver.kernel.org>; Wed, 27 Sep 2023 06:57:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD565E80A9D
+	for <linux-media@archiver.kernel.org>; Wed, 27 Sep 2023 06:57:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbjI0G55 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S229943AbjI0G55 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Wed, 27 Sep 2023 02:57:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56052 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbjI0G5x (ORCPT
+        with ESMTP id S229616AbjI0G5y (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 27 Sep 2023 02:57:53 -0400
+        Wed, 27 Sep 2023 02:57:54 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24490F9
-        for <linux-media@vger.kernel.org>; Tue, 26 Sep 2023 23:57:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1EB4F4
+        for <linux-media@vger.kernel.org>; Tue, 26 Sep 2023 23:57:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695797873; x=1727333873;
+  t=1695797872; x=1727333872;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=2rV5oZR1lD0N8kdUt1c+r+AazqaPEEAyA6KQ9dKEmOI=;
-  b=MKUdW5j04bFDNGUvDdi7e1TURWgCOicTR8IZt0EgU5JJnphPeoE0LlLj
-   Kucx6rnzWnbLGxq2ZAqZjY3ZzPTZjSrS33GjeN4fWHmuT7cw2tw1J5SHA
-   vlcucAGCCIoDYraljn/BwM04JI//X7Ra76p4SBMVJlpKnHdJg5B9z+MKg
-   tVpwdHPimKcpbiHwZgXwuyXPr0lDfynhbXuy0rFDWb1nL9c4PMveM8Os9
-   JRXTf8w/Ck1cnuzZ/00W5rtIc95twK323wr+FPutefusmH/Vgm5PUkDVK
-   dTEEB75YhDkVxr7aF9d97MZjKN92Dj3n0fj7sQ2A/MhwCQ8h8GvmEtA68
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="372083338"
+  bh=d7jw3b0DNN63LkqKQzz764RJSTdovn7U9rpsVTqOjSY=;
+  b=e3ybPG4lOfgpJ5tZ92kaUq4HZzBWkMqEfaJhPmhtqi+zJNQStzW8KT0s
+   w1jJA+bnFg0I45HEdPFIK7GmVzTGGZ+9xz/5FV81r1J9l0VTd6W6T7jqm
+   yNATamLEkwkAxRqdCJP+uIrMhbq86jj0cVnrWbm4dAxHBv7aI017IU69U
+   X7WKC/0cPYwCzkUzAoDa5NqoYqsVIgJ1I4QPA2vZ7KkzwLePZu68ieUVO
+   yHPrjYg6kWrNn9n5TKeWS43m9yASBOMk9y7hckjfpVVSYjEE5421n38V+
+   2wWH4dKYrTJukcQDjQnQtnNGKpZBVBaRqKh/LL5CMOJOT1Oz9B1CDv3nR
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="372083343"
 X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
-   d="scan'208";a="372083338"
+   d="scan'208";a="372083343"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
   by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 23:57:50 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="892489897"
+X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="892489899"
 X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
-   d="scan'208";a="892489897"
+   d="scan'208";a="892489899"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
   by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 23:56:41 -0700
 Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id 0E78E120A68;
-        Wed, 27 Sep 2023 09:41:28 +0300 (EEST)
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 008E5120BDC;
+        Wed, 27 Sep 2023 09:41:32 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com,
@@ -51,9 +51,9 @@ Cc:     laurent.pinchart@ideasonboard.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
         Rui Miguel Silva <rmfrfs@gmail.com>,
         Martin Kepplinger <martink@posteo.de>
-Subject: [PATCH v6 04/13] media: ccs: Correct error handling in ccs_register_subdev
-Date:   Wed, 27 Sep 2023 09:41:11 +0300
-Message-Id: <20230927064120.367561-5-sakari.ailus@linux.intel.com>
+Subject: [PATCH v6 07/13] media: ov2740: Enable runtime PM before registering the async subdev
+Date:   Wed, 27 Sep 2023 09:41:14 +0300
+Message-Id: <20230927064120.367561-8-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230927064120.367561-1-sakari.ailus@linux.intel.com>
 References: <20230927064120.367561-1-sakari.ailus@linux.intel.com>
@@ -63,49 +63,52 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-ccs_register_subdev() did not clean up the media entity in error case, do
-that now. Also switch to goto based error handling.
+Enable runtime PM before registering the async subdev as the driver UAPI
+may become accessible immediately after the registration. Runtime PM needs
+to be enabled by that time.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ drivers/media/i2c/ov2740.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 022e8712d48e..fb823c5c3dd3 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -2968,7 +2968,7 @@ static int ccs_register_subdev(struct ccs_sensor *sensor,
- 	rval = v4l2_device_register_subdev(sensor->src->sd.v4l2_dev, &ssd->sd);
- 	if (rval) {
- 		dev_err(&client->dev, "v4l2_device_register_subdev failed\n");
--		return rval;
-+		goto out_media_entity_cleanup;
+diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
+index 3a9700fbbe8c..6d5fb2789dc6 100644
+--- a/drivers/media/i2c/ov2740.c
++++ b/drivers/media/i2c/ov2740.c
+@@ -1130,6 +1130,12 @@ static int ov2740_probe(struct i2c_client *client)
+ 		goto probe_error_v4l2_ctrl_handler_free;
  	}
  
- 	rval = media_create_pad_link(&ssd->sd.entity, source_pad,
-@@ -2976,11 +2976,18 @@ static int ccs_register_subdev(struct ccs_sensor *sensor,
- 				     link_flags);
- 	if (rval) {
- 		dev_err(&client->dev, "media_create_pad_link failed\n");
--		v4l2_device_unregister_subdev(&ssd->sd);
--		return rval;
-+		goto out_v4l2_device_unregister_subdev;
- 	}
++	/* Set the device's state to active if it's in D0 state. */
++	if (full_power)
++		pm_runtime_set_active(&client->dev);
++	pm_runtime_enable(&client->dev);
++	pm_runtime_idle(&client->dev);
++
+ 	ret = v4l2_async_register_subdev_sensor(&ov2740->sd);
+ 	if (ret < 0) {
+ 		dev_err_probe(dev, ret, "failed to register V4L2 subdev\n");
+@@ -1140,16 +1146,12 @@ static int ov2740_probe(struct i2c_client *client)
+ 	if (ret)
+ 		dev_warn(&client->dev, "register nvmem failed, ret %d\n", ret);
  
+-	/* Set the device's state to active if it's in D0 state. */
+-	if (full_power)
+-		pm_runtime_set_active(&client->dev);
+-	pm_runtime_enable(&client->dev);
+-	pm_runtime_idle(&client->dev);
+-
  	return 0;
-+
-+out_v4l2_device_unregister_subdev:
-+	v4l2_device_unregister_subdev(&ssd->sd);
-+
-+out_media_entity_cleanup:
-+	media_entity_cleanup(&ssd->sd.entity);
-+
-+	return rval;
- }
  
- static void ccs_unregistered(struct v4l2_subdev *subdev)
+ probe_error_media_entity_cleanup:
+ 	media_entity_cleanup(&ov2740->sd.entity);
++	pm_runtime_disable(&client->dev);
++	pm_runtime_set_suspended(&client->dev);
+ 
+ probe_error_v4l2_ctrl_handler_free:
+ 	v4l2_ctrl_handler_free(ov2740->sd.ctrl_handler);
 -- 
 2.39.2
 
