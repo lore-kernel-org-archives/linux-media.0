@@ -2,675 +2,228 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70BACE80A9A
-	for <linux-media@archiver.kernel.org>; Wed, 27 Sep 2023 06:58:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6C63E80A9A
+	for <linux-media@archiver.kernel.org>; Wed, 27 Sep 2023 07:01:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbjI0G6B (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 27 Sep 2023 02:58:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56052 "EHLO
+        id S229910AbjI0HB7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 27 Sep 2023 03:01:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229958AbjI0G55 (ORCPT
+        with ESMTP id S229550AbjI0HB5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 27 Sep 2023 02:57:57 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DCD1EB
-        for <linux-media@vger.kernel.org>; Tue, 26 Sep 2023 23:57:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695797874; x=1727333874;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=FETpKFkkM+KayLygcLyv0BBulgIxlPFYb0rvvMhr2+I=;
-  b=WJJ8QIARsQ2IMED9GW6knNO9vHQuUqXrljJ5evZgT4X6UUN6xnykcSz6
-   e2Gp471eGLkQaaXD4sBaiCqJvBOWjDZmEpyJZYAYSLnaGNkhA/9SRl42W
-   GN5ues5XfymwOlAzYFwGq5hVI4mM1CU8SJEDRNzcvHfKVtONTwLJW7UyE
-   hY8J8e32ZdkDGMRMXI2YLnfpC9bpqjoFPr2n/SGuouzGDw+8mONLEYKjT
-   r0CBa28Fq5/bzOSNjMaSh4yEJPEW82ImglF9GV8g74bke4MLHrVGLuxnH
-   qJAvu2eUSbsF2xqYHDl8virmcUBDn9EHLsbjy3QkgaQdBNgfe7fOU1zYM
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="372083369"
-X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
-   d="scan'208";a="372083369"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 23:57:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="892489911"
-X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
-   d="scan'208";a="892489911"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 23:56:41 -0700
-Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id B17C0120B8C;
-        Wed, 27 Sep 2023 09:41:31 +0300 (EEST)
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Cc:     laurent.pinchart@ideasonboard.com,
-        Tianshu Qiu <tian.shu.qiu@intel.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Martin Kepplinger <martink@posteo.de>
-Subject: [PATCH v6 06/13] media: ccs: Use sub-device active state
-Date:   Wed, 27 Sep 2023 09:41:13 +0300
-Message-Id: <20230927064120.367561-7-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230927064120.367561-1-sakari.ailus@linux.intel.com>
-References: <20230927064120.367561-1-sakari.ailus@linux.intel.com>
+        Wed, 27 Sep 2023 03:01:57 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2117.outbound.protection.outlook.com [40.107.117.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12649F5;
+        Wed, 27 Sep 2023 00:01:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Q2eheI5z/5TlzBPxKV23fwToVVmwKuf984UXOI2CEeD4AX/3E/G6/bW6pdMj6jBnjJ8JWxjiF8T2zExPMfiPPCq6XYq0rIy++9WJWKH1kiFUdwY9BDnZvQboJ/014uaHfhprSkqwIm/VhlIZjtC2Wint9I6f/NXWSsJX2ZjRi2A+PRssEnFUqiHxQVpP24fWymB0hJWNy9X08u/6R4clrSIu3E4RYqOLrson1V2gLUzPq00BuGguUp1APVtJzOemojpGsqkkauPfnINdSQil2IbwT1qw2g4edd1LUrvV5z+d4+563Wenq/rAQXziHAw5GMS4giREgK3DVg91zpSKGQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KJ9NVHf/ougz4VXLX3UCA2kIjB6xlxZ3d2MJQpdzr9U=;
+ b=iTEW82jBTcfbVPxGX9Vq2D7CtiT+ym7uql5xQIIdUxck934cR+iCXJKgPR+Z+fZ6QzNFD+UIuVeShvI6fmltZwx9tkyV5eiU3UIunwBu0e6QevwEqj1uCbsP6EHZceQ6qze/hUfR0Z4++Gm/ItfWuZHYQP0hj1rAYj2n9ODWHNutYrq4g1YLr2CHSRvP+Q4g1q7lUjS2U5pYmT+0FEqQrAOF3dAIl6pn90RatWd553DnBxLq89uj0vun//UIE7E7jAv7vu4dVBLb+C5JVTzK+pIdej0qlnIDJ8BnL0XHnRogowOZdX+w0g7/KkbLfQRAKFXzuq/UZ6ew1A9W/IW9NQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amlogic.com; dmarc=pass action=none header.from=amlogic.com;
+ dkim=pass header.d=amlogic.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amlogic.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KJ9NVHf/ougz4VXLX3UCA2kIjB6xlxZ3d2MJQpdzr9U=;
+ b=p8FjgcZZmxHy2VvZKnVUpoov08u9nK6Lg20ieqbwwL/Z7cZ6sLG4vuv4834u1Hw6vr+RCTQEb3seVyLjJTGDddT9/ra6dx/vf3gNHYYWtbpZRR7+z8cUhs31WZGUtdREiSBc4TJmL/zrtezS+JlPvJl1ac7b6l1q2Ae7EakexCcGcPmWLz6w6mpY6Ey7qYJDugVVmhHhmBl8nMCZFH2nasB71w6IXbQ3RVeKh4tQiFW+XOImkRwB1AL0FaO8P51guXII+txpua3uXXfUcyxHWZxRd4apP8eAgMviet80DEvNlXpe5HlnWhziHGtZsS51FW6WoJYMbBNuEqRh9RPL0w==
+Received: from SEYPR03MB7046.apcprd03.prod.outlook.com (2603:1096:101:d0::15)
+ by TYZPR03MB5995.apcprd03.prod.outlook.com (2603:1096:400:12a::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.21; Wed, 27 Sep
+ 2023 07:01:05 +0000
+Received: from SEYPR03MB7046.apcprd03.prod.outlook.com
+ ([fe80::59de:bf6b:c22:4f8d]) by SEYPR03MB7046.apcprd03.prod.outlook.com
+ ([fe80::59de:bf6b:c22:4f8d%7]) with mapi id 15.20.6813.027; Wed, 27 Sep 2023
+ 07:01:02 +0000
+From:   Cancan Chang <Cancan.Chang@amlogic.com>
+To:     Oded Gabbay <ogabbay@kernel.org>
+CC:     Jagan Teki <jagan@edgeble.ai>,
+        linux-media <linux-media@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Dave Airlie <airlied@redhat.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Subject: =?utf-8?B?5Zue5aSNOiBrZXJuZWwub3JnIDYuNS40ICwgTlBVIGRyaXZlciwgLS1ub3Qg?=
+ =?utf-8?Q?support_(RFC)?=
+Thread-Topic: kernel.org 6.5.4 , NPU driver, --not support (RFC)
+Thread-Index: AQHZ7TUhgs72H8AZFkqdmOUY4AB+vbAmlr0AgABcLACABCyLj4AB9zwAgADn60g=
+Date:   Wed, 27 Sep 2023 07:01:02 +0000
+Message-ID: <SEYPR03MB70463AEED951A0E2C18481099AC2A@SEYPR03MB7046.apcprd03.prod.outlook.com>
+References: <SEYPR03MB704641091854162959578D7E9AFFA@SEYPR03MB7046.apcprd03.prod.outlook.com>
+ <CA+VMnFyhp9D8cjtvLVzdKGETouOuH=MKgjOu1pn00WDRB=5oUg@mail.gmail.com>
+ <CAFCwf12sUL5bcXhYKwRkMxLtSDtLfTK003oxkRDVmThx1ARV-A@mail.gmail.com>
+ <SEYPR03MB70462A385A52A317427E93B59AFCA@SEYPR03MB7046.apcprd03.prod.outlook.com>
+ <CAFCwf11hxBpg3T6MoVrL0GaOD_=xB+-dWeEtDH0cCyzyQ-q1tg@mail.gmail.com>
+In-Reply-To: <CAFCwf11hxBpg3T6MoVrL0GaOD_=xB+-dWeEtDH0cCyzyQ-q1tg@mail.gmail.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amlogic.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SEYPR03MB7046:EE_|TYZPR03MB5995:EE_
+x-ms-office365-filtering-correlation-id: 1db52e50-37cb-4854-39b5-08dbbf2782bd
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: JIlzzOxCTgGk59pV45MDTRa9ceXIggB8AGkGO6Tjh5BZM3H8Bi2RP4JjynhA4AwzrpeHAoSP4dfjkEp58ctKrO7WwHQWkFhFxuDBgRJSa/rCNb6iOzJiOEfKj6DVaFnYSVOEKMdpWVbCU/8yEwpZCCkAnC/H3Utn3O+w18AxmtR777Mu3muPDcpIMi6mt8JEDxsbr3r3r9xcu8NYqVYBagqad+OEJ3+Eva9GOW4BGhbM1z5NmEKdKv88oWZrdUwQWYgAx3+ac5YluaTtO1ClsnN6F1XMs1ZMD3uyTHT2Tv4S9DLbb3wGDjfKaeue1VVA7RDc9ktBt5w+dY2uTGxSeR4kfgQe1FvYwaA9t276pO8azFoa0ns/xhKyLtQSD5snrq42bwAbwuDHDikfAMkt+eHSfbGaDxnAd56sJZwdu7logLg0TE73rRyKr/dMkEhz1Kc1/n6HB5Mza9MKx6B9kLG/3X6Jf426xUo3EzF7J/OuPcZzstzqIF42jiQwMG52LTeAEFJa2y4lhwwGEDS6nbmZqxGDnUyHBe6eSG7+f0f8doe0XFqyeRWMKt+2mEKdUIs+C0IgTeuXjMYvHu0mJ9cTjwp4JiNBoUDE7IogAe6DpWILgfDyZF5IJsm5lJP7uu/89yYVfHEfeDdewNtuOw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEYPR03MB7046.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39850400004)(366004)(346002)(376002)(396003)(136003)(230922051799003)(451199024)(1800799009)(186009)(2906002)(4326008)(41300700001)(52536014)(66556008)(5660300002)(8936002)(66446008)(64756008)(6916009)(54906003)(66476007)(66946007)(316002)(76116006)(91956017)(966005)(478600001)(71200400001)(6506007)(7696005)(53546011)(9686003)(26005)(83380400001)(224303003)(38100700002)(122000001)(38070700005)(33656002)(86362001)(55016003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eFN3dTV3c20xa1g3U1drK2J3ZldYSnpnVFRPaXhSYXY1b1BpY09ieDA2Q0oz?=
+ =?utf-8?B?OS9XZmlhekxnZWYxdnJHZVJBQXhoRE5aMTRuZVRlSmpXRWE0U1poMDRQUmdL?=
+ =?utf-8?B?OG5ncktWdk5udVdWV2dDYzZHMkJ4VHZSV2hHT00xM3FReThLTXZ0VFVETzJv?=
+ =?utf-8?B?Rm9kM0N2dFlPUWh2V2dLS1lsZGJNNElhMTNrbmYwbEUyS0hmUThEYTVMN2xx?=
+ =?utf-8?B?K1pVM2FjT3lHZGxHSy80L3FqeUtUdFdvQ1dMWGhhSGFkM3QvcS9lMkdEamdM?=
+ =?utf-8?B?NC9LQnBwSm1MVGNXc0Iwb0RqYjFzbndRY2xRNVp4bS9vR0NXNmVObHBudDha?=
+ =?utf-8?B?V1pOSXg0bjJjMVA2S2Jrb2dSb1Q3ZGRkcUp0WWN1c21LY2ZqMks0NlhsRDZy?=
+ =?utf-8?B?eS95VlhDZURhdnl2bkZvS25QY0xuUE8zb3pOdkNtQnpuK1QxVTl3ZTFIUmFS?=
+ =?utf-8?B?YUtONGgrMzZGMW1HcE16dC9VU2svREhrQlUwYThVTjh3cjFtdis3YTdWUGlC?=
+ =?utf-8?B?aHhTaFord2tkczRFRGRZSDdaR1ZTL1Vnb1RjalkwRWxhSDdQWU1MVXlQNkp5?=
+ =?utf-8?B?RXpCYUxYQ0tmbUx2Y3IwSHl5MjFIU2d0K2Z3NUdDMUxiRlg3QzN6SXd0VFlZ?=
+ =?utf-8?B?NFJCdVFaU3RQNG9zL002ZC8vZXZ6UmRYTlpoT3g4dlJibzV6N3gvRWdUNWlD?=
+ =?utf-8?B?aWI1dlNGRityMDl4Yk1wcVduSktmOVI5QVZGVEpjM2VUVW4rSHFDRHFnRmw3?=
+ =?utf-8?B?Z0o5VXdKQUtwR1ZHTWJsSUFFZ0I3WGFzNTJoWG4zUDVraDF4V01YT0pEQnZG?=
+ =?utf-8?B?d3ArR1oxdlFRNXJPQ0xEYmZNRmIyUXh5VmxWbHB6WEptMElaZjVjQ2s2djVx?=
+ =?utf-8?B?OFFna1BoZEV3dmxrNjZzK2M5S1JPbXZ0MWhvR2NUSGJQSG5KQnFPRGRsMFYw?=
+ =?utf-8?B?RE0wT2dib3A5N3BjZWVPeWFEUWt1TTFIODg1UGozWThiMDhhbGY5YURJcXlp?=
+ =?utf-8?B?a0JYd3djU3NObTYzWEtZR3NRWmd1QlRGRStjV09HeE9hM0JTVDh0SzRpaHVB?=
+ =?utf-8?B?eWh5ZlFYRHhiV2ZWM2x0aHgxZy8wcGs3VkxiczZZcHdRNGlLQWVPbU5GQk52?=
+ =?utf-8?B?THc4MHJBRHo5R3dFL3dpeU9OQ3BaM2hiN3R4RStvYlBhRE16R2JjYmhVYlZx?=
+ =?utf-8?B?SzVINVF4aFZrZXErR0x1VnVuaTBKekJkb0M0eG1WSi9tZUFoQzR4R3loQzg3?=
+ =?utf-8?B?SXdqaFlGOWJWL0NXVWRZYmVqcHROOUN0RHJNMWZJdko0d051d2YxdnRMdFNs?=
+ =?utf-8?B?a2lHblBVaHdVMk1NMVY5QTdVRU9lcHR0MHhPdnJnKytKMnQ5WndqR3h3T1dR?=
+ =?utf-8?B?Qm5scWdMY28rdUltQXozMVBoTzB2YWN0RmJhSjJHalJWUnlmQ0VId0wyVTUw?=
+ =?utf-8?B?NVBPVU5iWWdjUkVZSnI4QlUrQ2k5VXVPaGNjUjJDYjA4Q2RIVzZ0ZGRFRkls?=
+ =?utf-8?B?dGQydndCb0QyU3dMRmFONHk3T3NWUGdRYVhTZUdnMG45S1dhOFYxVzFQU2Q1?=
+ =?utf-8?B?TFZCeXZwaDErVjRJd1RuOFdkT1dyelZVTTd2L1Y3cUM4RVcrc2hrVi84bi9U?=
+ =?utf-8?B?U0gwaElGWWRIaXJsbjFmYzZwd1VzOG9UMWtKT0VJaUxmSnN4V1Z6L3U1YzR5?=
+ =?utf-8?B?NWxCVUNrVjFzSzFDOUFUVzd3ZlgrUDBmUGJTQllNU01nb2hSWlp4UnE5eWRN?=
+ =?utf-8?B?UG8wU1N6VDlkODI1Zkx1VTdISUNpczFKZWc1empRYWFTaDFJbExXVEFvUWNI?=
+ =?utf-8?B?cEkzcEpCcm5xS1lkeTVuK0JxeEJDM29FbDd0THVlUnRYU0RoRXFNRUNvTi9E?=
+ =?utf-8?B?aHF1SStBR3dTK3RnY0RwcVhmSlpkenY0Y3BaWmdjcGtVVmtvdk9mTWtGR0Rn?=
+ =?utf-8?B?dTUzUVJzcWZLeDJpUjdzNGZHamc0R1lwN0lrQ1VsZDhrem1ZaW9zWXBKNnpQ?=
+ =?utf-8?B?eU96OGhVeUsxRWt5WjFjNU1aT0dJT01Ud3lYRnR0M0V6T0NWMVBna1M1UXU0?=
+ =?utf-8?B?aXdiOGpEWTdCbnhOd1dkeVd3MzNtYURLMmdNK3A2RnF3b1VOVFQ0WXljVnln?=
+ =?utf-8?Q?+8KGIP1mHfwwzw/Muh5DxLJ1S?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: amlogic.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SEYPR03MB7046.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1db52e50-37cb-4854-39b5-08dbbf2782bd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Sep 2023 07:01:02.1045
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 0df2add9-25ca-4b3a-acb4-c99ddf0b1114
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: MAxnu48/+kWR7bo61i9cT1YfWlsKhxBgR/G9RHP2FP+avIVb4qrKklvcLeehm+RLCVJQVC6VbeGgpImakWWfPgYxlRlHC32FvJ+wYieUdLs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR03MB5995
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Make use of sub-device active state. In most cases the effect on need for
-acquiring the mutex is non-existent as access to the driver's core data
-structure still needs to be serialised.
-
-This still removes a lot of code as the code paths for active and try
-state are the same in many cases.
-
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- drivers/media/i2c/ccs/ccs-core.c | 296 ++++++++++++-------------------
- drivers/media/i2c/ccs/ccs.h      |   4 +-
- 2 files changed, 114 insertions(+), 186 deletions(-)
-
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 9e8769603704..7c22c25be96b 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -508,9 +508,8 @@ static void __ccs_update_exposure_limits(struct ccs_sensor *sensor)
- 	struct v4l2_ctrl *ctrl = sensor->exposure;
- 	int max;
- 
--	max = sensor->pixel_array->crop[CCS_PA_PAD_SRC].height
--		+ sensor->vblank->val
--		- CCS_LIM(sensor, COARSE_INTEGRATION_TIME_MAX_MARGIN);
-+	max = sensor->pa_src.height + sensor->vblank->val -
-+		CCS_LIM(sensor, COARSE_INTEGRATION_TIME_MAX_MARGIN);
- 
- 	__v4l2_ctrl_modify_range(ctrl, ctrl->minimum, max, ctrl->step, max);
- }
-@@ -728,15 +727,12 @@ static int ccs_set_ctrl(struct v4l2_ctrl *ctrl)
- 		break;
- 	case V4L2_CID_VBLANK:
- 		rval = ccs_write(sensor, FRAME_LENGTH_LINES,
--				 sensor->pixel_array->crop[
--					 CCS_PA_PAD_SRC].height
--				 + ctrl->val);
-+				 sensor->pa_src.height + ctrl->val);
- 
- 		break;
- 	case V4L2_CID_HBLANK:
- 		rval = ccs_write(sensor, LINE_LENGTH_PCK,
--				 sensor->pixel_array->crop[CCS_PA_PAD_SRC].width
--				 + ctrl->val);
-+				 sensor->pa_src.width + ctrl->val);
- 
- 		break;
- 	case V4L2_CID_TEST_PATTERN:
-@@ -1214,15 +1210,13 @@ static void ccs_update_blanking(struct ccs_sensor *sensor)
- 
- 	min = max_t(int,
- 		    CCS_LIM(sensor, MIN_FRAME_BLANKING_LINES),
--		    min_fll - sensor->pixel_array->crop[CCS_PA_PAD_SRC].height);
--	max = max_fll -	sensor->pixel_array->crop[CCS_PA_PAD_SRC].height;
-+		    min_fll - sensor->pa_src.height);
-+	max = max_fll -	sensor->pa_src.height;
- 
- 	__v4l2_ctrl_modify_range(vblank, min, max, vblank->step, min);
- 
--	min = max_t(int,
--		    min_llp - sensor->pixel_array->crop[CCS_PA_PAD_SRC].width,
--		    min_lbp);
--	max = max_llp - sensor->pixel_array->crop[CCS_PA_PAD_SRC].width;
-+	min = max_t(int, min_llp - sensor->pa_src.width, min_lbp);
-+	max = max_llp - sensor->pa_src.width;
- 
- 	__v4l2_ctrl_modify_range(hblank, min, max, hblank->step, min);
- 
-@@ -1246,10 +1240,8 @@ static int ccs_pll_blanking_update(struct ccs_sensor *sensor)
- 
- 	dev_dbg(&client->dev, "real timeperframe\t100/%d\n",
- 		sensor->pll.pixel_rate_pixel_array /
--		((sensor->pixel_array->crop[CCS_PA_PAD_SRC].width
--		  + sensor->hblank->val) *
--		 (sensor->pixel_array->crop[CCS_PA_PAD_SRC].height
--		  + sensor->vblank->val) / 100));
-+		((sensor->pa_src.width + sensor->hblank->val) *
-+		 (sensor->pa_src.height + sensor->vblank->val) / 100));
- 
- 	return 0;
- }
-@@ -1756,28 +1748,22 @@ static int ccs_start_streaming(struct ccs_sensor *sensor)
- 		goto out;
- 
- 	/* Analog crop start coordinates */
--	rval = ccs_write(sensor, X_ADDR_START,
--			 sensor->pixel_array->crop[CCS_PA_PAD_SRC].left);
-+	rval = ccs_write(sensor, X_ADDR_START, sensor->pa_src.left);
- 	if (rval < 0)
- 		goto out;
- 
--	rval = ccs_write(sensor, Y_ADDR_START,
--			 sensor->pixel_array->crop[CCS_PA_PAD_SRC].top);
-+	rval = ccs_write(sensor, Y_ADDR_START, sensor->pa_src.top);
- 	if (rval < 0)
- 		goto out;
- 
- 	/* Analog crop end coordinates */
--	rval = ccs_write(
--		sensor, X_ADDR_END,
--		sensor->pixel_array->crop[CCS_PA_PAD_SRC].left
--		+ sensor->pixel_array->crop[CCS_PA_PAD_SRC].width - 1);
-+	rval = ccs_write(sensor, X_ADDR_END,
-+			 sensor->pa_src.left + sensor->pa_src.width - 1);
- 	if (rval < 0)
- 		goto out;
- 
--	rval = ccs_write(
--		sensor, Y_ADDR_END,
--		sensor->pixel_array->crop[CCS_PA_PAD_SRC].top
--		+ sensor->pixel_array->crop[CCS_PA_PAD_SRC].height - 1);
-+	rval = ccs_write(sensor, Y_ADDR_END,
-+			 sensor->pa_src.top + sensor->pa_src.height - 1);
- 	if (rval < 0)
- 		goto out;
- 
-@@ -1789,27 +1775,23 @@ static int ccs_start_streaming(struct ccs_sensor *sensor)
- 	/* Digital crop */
- 	if (CCS_LIM(sensor, DIGITAL_CROP_CAPABILITY)
- 	    == CCS_DIGITAL_CROP_CAPABILITY_INPUT_CROP) {
--		rval = ccs_write(
--			sensor, DIGITAL_CROP_X_OFFSET,
--			sensor->scaler->crop[CCS_PAD_SINK].left);
-+		rval = ccs_write(sensor, DIGITAL_CROP_X_OFFSET,
-+				 sensor->scaler_sink.left);
- 		if (rval < 0)
- 			goto out;
- 
--		rval = ccs_write(
--			sensor, DIGITAL_CROP_Y_OFFSET,
--			sensor->scaler->crop[CCS_PAD_SINK].top);
-+		rval = ccs_write(sensor, DIGITAL_CROP_Y_OFFSET,
-+				 sensor->scaler_sink.top);
- 		if (rval < 0)
- 			goto out;
- 
--		rval = ccs_write(
--			sensor, DIGITAL_CROP_IMAGE_WIDTH,
--			sensor->scaler->crop[CCS_PAD_SINK].width);
-+		rval = ccs_write(sensor, DIGITAL_CROP_IMAGE_WIDTH,
-+				 sensor->scaler_sink.width);
- 		if (rval < 0)
- 			goto out;
- 
--		rval = ccs_write(
--			sensor, DIGITAL_CROP_IMAGE_HEIGHT,
--			sensor->scaler->crop[CCS_PAD_SINK].height);
-+		rval = ccs_write(sensor, DIGITAL_CROP_IMAGE_HEIGHT,
-+				 sensor->scaler_sink.height);
- 		if (rval < 0)
- 			goto out;
- 	}
-@@ -1827,12 +1809,10 @@ static int ccs_start_streaming(struct ccs_sensor *sensor)
- 	}
- 
- 	/* Output size from sensor */
--	rval = ccs_write(sensor, X_OUTPUT_SIZE,
--			 sensor->src->crop[CCS_PAD_SRC].width);
-+	rval = ccs_write(sensor, X_OUTPUT_SIZE, sensor->src_src.width);
- 	if (rval < 0)
- 		goto out;
--	rval = ccs_write(sensor, Y_OUTPUT_SIZE,
--			 sensor->src->crop[CCS_PAD_SRC].height);
-+	rval = ccs_write(sensor, Y_OUTPUT_SIZE, sensor->src_src.height);
- 	if (rval < 0)
- 		goto out;
- 
-@@ -2053,24 +2033,8 @@ static int __ccs_get_format(struct v4l2_subdev *subdev,
- 			    struct v4l2_subdev_state *sd_state,
- 			    struct v4l2_subdev_format *fmt)
- {
--	struct ccs_subdev *ssd = to_ccs_subdev(subdev);
--
--	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		fmt->format = *v4l2_subdev_get_try_format(subdev, sd_state,
--							  fmt->pad);
--	} else {
--		struct v4l2_rect *r;
--
--		if (fmt->pad == ssd->source_pad)
--			r = &ssd->crop[ssd->source_pad];
--		else
--			r = &ssd->sink_fmt;
--
--		fmt->format.code = __ccs_get_mbus_code(subdev, fmt->pad);
--		fmt->format.width = r->width;
--		fmt->format.height = r->height;
--		fmt->format.field = V4L2_FIELD_NONE;
--	}
-+	fmt->format = *v4l2_subdev_get_pad_format(subdev, sd_state, fmt->pad);
-+	fmt->format.code = __ccs_get_mbus_code(subdev, fmt->pad);
- 
- 	return 0;
- }
-@@ -2092,28 +2056,18 @@ static int ccs_get_format(struct v4l2_subdev *subdev,
- static void ccs_get_crop_compose(struct v4l2_subdev *subdev,
- 				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_rect **crops,
--				 struct v4l2_rect **comps, int which)
-+				 struct v4l2_rect **comps)
- {
- 	struct ccs_subdev *ssd = to_ccs_subdev(subdev);
- 	unsigned int i;
- 
--	if (which == V4L2_SUBDEV_FORMAT_ACTIVE) {
--		if (crops)
--			for (i = 0; i < subdev->entity.num_pads; i++)
--				crops[i] = &ssd->crop[i];
--		if (comps)
--			*comps = &ssd->compose;
--	} else {
--		if (crops) {
--			for (i = 0; i < subdev->entity.num_pads; i++)
--				crops[i] = v4l2_subdev_get_try_crop(subdev,
--								    sd_state,
--								    i);
--		}
--		if (comps)
--			*comps = v4l2_subdev_get_try_compose(subdev, sd_state,
--							     CCS_PAD_SINK);
--	}
-+	if (crops)
-+		for (i = 0; i < subdev->entity.num_pads; i++)
-+			crops[i] =
-+				v4l2_subdev_get_pad_crop(subdev, sd_state, i);
-+	if (comps)
-+		*comps = v4l2_subdev_get_pad_compose(subdev, sd_state,
-+						     ssd->sink_pad);
- }
- 
- /* Changes require propagation only on sink pad. */
-@@ -2125,7 +2079,7 @@ static void ccs_propagate(struct v4l2_subdev *subdev,
- 	struct ccs_subdev *ssd = to_ccs_subdev(subdev);
- 	struct v4l2_rect *comp, *crops[CCS_PADS];
- 
--	ccs_get_crop_compose(subdev, sd_state, crops, &comp, which);
-+	ccs_get_crop_compose(subdev, sd_state, crops, &comp);
- 
- 	switch (target) {
- 	case V4L2_SEL_TGT_CROP:
-@@ -2136,6 +2090,7 @@ static void ccs_propagate(struct v4l2_subdev *subdev,
- 				sensor->scale_m = CCS_LIM(sensor, SCALER_N_MIN);
- 				sensor->scaling_mode =
- 					CCS_SCALING_MODE_NO_SCALING;
-+				sensor->scaler_sink = *comp;
- 			} else if (ssd == sensor->binner) {
- 				sensor->binning_horizontal = 1;
- 				sensor->binning_vertical = 1;
-@@ -2144,6 +2099,8 @@ static void ccs_propagate(struct v4l2_subdev *subdev,
- 		fallthrough;
- 	case V4L2_SEL_TGT_COMPOSE:
- 		*crops[CCS_PAD_SRC] = *comp;
-+		if (which == V4L2_SUBDEV_FORMAT_ACTIVE && ssd == sensor->src)
-+			sensor->src_src = *crops[CCS_PAD_SRC];
- 		break;
- 	default:
- 		WARN_ON_ONCE(1);
-@@ -2252,14 +2209,12 @@ static int ccs_set_format(struct v4l2_subdev *subdev,
- 		      CCS_LIM(sensor, MIN_Y_OUTPUT_SIZE),
- 		      CCS_LIM(sensor, MAX_Y_OUTPUT_SIZE));
- 
--	ccs_get_crop_compose(subdev, sd_state, crops, NULL, fmt->which);
-+	ccs_get_crop_compose(subdev, sd_state, crops, NULL);
- 
- 	crops[ssd->sink_pad]->left = 0;
- 	crops[ssd->sink_pad]->top = 0;
- 	crops[ssd->sink_pad]->width = fmt->format.width;
- 	crops[ssd->sink_pad]->height = fmt->format.height;
--	if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE)
--		ssd->sink_fmt = *crops[ssd->sink_pad];
- 	ccs_propagate(subdev, sd_state, fmt->which, V4L2_SEL_TGT_CROP);
- 
- 	mutex_unlock(&sensor->mutex);
-@@ -2482,7 +2437,7 @@ static int ccs_set_compose(struct v4l2_subdev *subdev,
- 	struct ccs_subdev *ssd = to_ccs_subdev(subdev);
- 	struct v4l2_rect *comp, *crops[CCS_PADS];
- 
--	ccs_get_crop_compose(subdev, sd_state, crops, &comp, sel->which);
-+	ccs_get_crop_compose(subdev, sd_state, crops, &comp);
- 
- 	sel->r.top = 0;
- 	sel->r.left = 0;
-@@ -2501,8 +2456,8 @@ static int ccs_set_compose(struct v4l2_subdev *subdev,
- 	return 0;
- }
- 
--static int __ccs_sel_supported(struct v4l2_subdev *subdev,
--			       struct v4l2_subdev_selection *sel)
-+static int ccs_sel_supported(struct v4l2_subdev *subdev,
-+			     struct v4l2_subdev_selection *sel)
- {
- 	struct ccs_sensor *sensor = to_ccs_sensor(subdev);
- 	struct ccs_subdev *ssd = to_ccs_subdev(subdev);
-@@ -2545,33 +2500,18 @@ static int ccs_set_crop(struct v4l2_subdev *subdev,
- {
- 	struct ccs_sensor *sensor = to_ccs_sensor(subdev);
- 	struct ccs_subdev *ssd = to_ccs_subdev(subdev);
--	struct v4l2_rect *src_size, *crops[CCS_PADS];
--	struct v4l2_rect _r;
-+	struct v4l2_rect src_size = { 0 }, *crops[CCS_PADS], *comp;
- 
--	ccs_get_crop_compose(subdev, sd_state, crops, NULL, sel->which);
-+	ccs_get_crop_compose(subdev, sd_state, crops, &comp);
- 
--	if (sel->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
--		if (sel->pad == ssd->sink_pad)
--			src_size = &ssd->sink_fmt;
--		else
--			src_size = &ssd->compose;
-+	if (sel->pad == ssd->sink_pad) {
-+		struct v4l2_mbus_framefmt *mfmt =
-+			v4l2_subdev_get_pad_format(subdev, sd_state, sel->pad);
-+
-+		src_size.width = mfmt->width;
-+		src_size.height = mfmt->height;
- 	} else {
--		if (sel->pad == ssd->sink_pad) {
--			_r.left = 0;
--			_r.top = 0;
--			_r.width = v4l2_subdev_get_try_format(subdev,
--							      sd_state,
--							      sel->pad)
--				->width;
--			_r.height = v4l2_subdev_get_try_format(subdev,
--							       sd_state,
--							       sel->pad)
--				->height;
--			src_size = &_r;
--		} else {
--			src_size = v4l2_subdev_get_try_compose(
--				subdev, sd_state, ssd->sink_pad);
--		}
-+		src_size = *comp;
- 	}
- 
- 	if (ssd == sensor->src && sel->pad == CCS_PAD_SRC) {
-@@ -2579,16 +2519,19 @@ static int ccs_set_crop(struct v4l2_subdev *subdev,
- 		sel->r.top = 0;
- 	}
- 
--	sel->r.width = min(sel->r.width, src_size->width);
--	sel->r.height = min(sel->r.height, src_size->height);
-+	sel->r.width = min(sel->r.width, src_size.width);
-+	sel->r.height = min(sel->r.height, src_size.height);
- 
--	sel->r.left = min_t(int, sel->r.left, src_size->width - sel->r.width);
--	sel->r.top = min_t(int, sel->r.top, src_size->height - sel->r.height);
-+	sel->r.left = min_t(int, sel->r.left, src_size.width - sel->r.width);
-+	sel->r.top = min_t(int, sel->r.top, src_size.height - sel->r.height);
- 
- 	*crops[sel->pad] = sel->r;
- 
- 	if (ssd != sensor->pixel_array && sel->pad == CCS_PAD_SINK)
- 		ccs_propagate(subdev, sd_state, sel->which, V4L2_SEL_TGT_CROP);
-+	else if (sel->which == V4L2_SUBDEV_FORMAT_ACTIVE &&
-+		 ssd == sensor->pixel_array)
-+		sensor->pa_src = sel->r;
- 
- 	return 0;
- }
-@@ -2601,44 +2544,36 @@ static void ccs_get_native_size(struct ccs_subdev *ssd, struct v4l2_rect *r)
- 	r->height = CCS_LIM(ssd->sensor, Y_ADDR_MAX) + 1;
- }
- 
--static int __ccs_get_selection(struct v4l2_subdev *subdev,
--			       struct v4l2_subdev_state *sd_state,
--			       struct v4l2_subdev_selection *sel)
-+static int ccs_get_selection(struct v4l2_subdev *subdev,
-+			     struct v4l2_subdev_state *sd_state,
-+			     struct v4l2_subdev_selection *sel)
- {
- 	struct ccs_sensor *sensor = to_ccs_sensor(subdev);
- 	struct ccs_subdev *ssd = to_ccs_subdev(subdev);
- 	struct v4l2_rect *comp, *crops[CCS_PADS];
--	struct v4l2_rect sink_fmt;
- 	int ret;
- 
--	ret = __ccs_sel_supported(subdev, sel);
-+	ret = ccs_sel_supported(subdev, sel);
- 	if (ret)
- 		return ret;
- 
--	ccs_get_crop_compose(subdev, sd_state, crops, &comp, sel->which);
--
--	if (sel->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
--		sink_fmt = ssd->sink_fmt;
--	} else {
--		struct v4l2_mbus_framefmt *fmt =
--			v4l2_subdev_get_try_format(subdev, sd_state,
--						   ssd->sink_pad);
--
--		sink_fmt.left = 0;
--		sink_fmt.top = 0;
--		sink_fmt.width = fmt->width;
--		sink_fmt.height = fmt->height;
--	}
-+	ccs_get_crop_compose(subdev, sd_state, crops, &comp);
- 
- 	switch (sel->target) {
- 	case V4L2_SEL_TGT_CROP_BOUNDS:
- 	case V4L2_SEL_TGT_NATIVE_SIZE:
--		if (ssd == sensor->pixel_array)
-+		if (ssd == sensor->pixel_array) {
- 			ccs_get_native_size(ssd, &sel->r);
--		else if (sel->pad == ssd->sink_pad)
--			sel->r = sink_fmt;
--		else
-+		} else if (sel->pad == ssd->sink_pad) {
-+			struct v4l2_mbus_framefmt *sink_fmt =
-+				v4l2_subdev_get_pad_format(subdev, sd_state,
-+							   ssd->sink_pad);
-+			sel->r.top = sel->r.left = 0;
-+			sel->r.width = sink_fmt->width;
-+			sel->r.height = sink_fmt->height;
-+		} else {
- 			sel->r = *comp;
-+		}
- 		break;
- 	case V4L2_SEL_TGT_CROP:
- 	case V4L2_SEL_TGT_COMPOSE_BOUNDS:
-@@ -2652,20 +2587,6 @@ static int __ccs_get_selection(struct v4l2_subdev *subdev,
- 	return 0;
- }
- 
--static int ccs_get_selection(struct v4l2_subdev *subdev,
--			     struct v4l2_subdev_state *sd_state,
--			     struct v4l2_subdev_selection *sel)
--{
--	struct ccs_sensor *sensor = to_ccs_sensor(subdev);
--	int rval;
--
--	mutex_lock(&sensor->mutex);
--	rval = __ccs_get_selection(subdev, sd_state, sel);
--	mutex_unlock(&sensor->mutex);
--
--	return rval;
--}
--
- static int ccs_set_selection(struct v4l2_subdev *subdev,
- 			     struct v4l2_subdev_state *sd_state,
- 			     struct v4l2_subdev_selection *sel)
-@@ -2673,7 +2594,7 @@ static int ccs_set_selection(struct v4l2_subdev *subdev,
- 	struct ccs_sensor *sensor = to_ccs_sensor(subdev);
- 	int ret;
- 
--	ret = __ccs_sel_supported(subdev, sel);
-+	ret = ccs_sel_supported(subdev, sel);
- 	if (ret)
- 		return ret;
- 
-@@ -2964,10 +2885,14 @@ static int ccs_register_subdev(struct ccs_sensor *sensor,
- 		return rval;
- 	}
- 
-+	rval = v4l2_subdev_init_finalize(&ssd->sd);
-+	if (rval)
-+		goto out_media_entity_cleanup;
-+
- 	rval = v4l2_device_register_subdev(sensor->src->sd.v4l2_dev, &ssd->sd);
- 	if (rval) {
- 		dev_err(&client->dev, "v4l2_device_register_subdev failed\n");
--		goto out_media_entity_cleanup;
-+		goto out_v4l2_subdev_cleanup;
- 	}
- 
- 	rval = media_create_pad_link(&ssd->sd.entity, source_pad,
-@@ -2983,6 +2908,9 @@ static int ccs_register_subdev(struct ccs_sensor *sensor,
- out_v4l2_device_unregister_subdev:
- 	v4l2_device_unregister_subdev(&ssd->sd);
- 
-+out_v4l2_subdev_cleanup:
-+	v4l2_subdev_cleanup(&ssd->sd);
-+
- out_media_entity_cleanup:
- 	media_entity_cleanup(&ssd->sd.entity);
- 
-@@ -3059,16 +2987,9 @@ static void ccs_create_subdev(struct ccs_sensor *sensor,
- 
- 	v4l2_i2c_subdev_set_name(&ssd->sd, client, sensor->minfo.name, name);
- 
--	ccs_get_native_size(ssd, &ssd->sink_fmt);
--
--	ssd->compose.width = ssd->sink_fmt.width;
--	ssd->compose.height = ssd->sink_fmt.height;
--	ssd->crop[ssd->source_pad] = ssd->compose;
- 	ssd->pads[ssd->source_pad].flags = MEDIA_PAD_FL_SOURCE;
--	if (ssd != sensor->pixel_array) {
--		ssd->crop[ssd->sink_pad] = ssd->compose;
-+	if (ssd != sensor->pixel_array)
- 		ssd->pads[ssd->sink_pad].flags = MEDIA_PAD_FL_SINK;
--	}
- 
- 	ssd->sd.entity.ops = &ccs_entity_ops;
- 
-@@ -3090,24 +3011,24 @@ static int ccs_init_cfg(struct v4l2_subdev *sd,
- 	mutex_lock(&sensor->mutex);
- 
- 	for (i = 0; i < ssd->npads; i++) {
--		struct v4l2_mbus_framefmt *try_fmt =
--			v4l2_subdev_get_try_format(sd, sd_state, i);
--		struct v4l2_rect *try_crop =
--			v4l2_subdev_get_try_crop(sd, sd_state, i);
--		struct v4l2_rect *try_comp;
-+		struct v4l2_mbus_framefmt *fmt =
-+			v4l2_subdev_get_pad_format(sd, sd_state, i);
-+		struct v4l2_rect *crop =
-+			v4l2_subdev_get_pad_crop(sd, sd_state, i);
-+		struct v4l2_rect *comp;
- 
--		ccs_get_native_size(ssd, try_crop);
-+		ccs_get_native_size(ssd, crop);
- 
--		try_fmt->width = try_crop->width;
--		try_fmt->height = try_crop->height;
--		try_fmt->code = sensor->internal_csi_format->code;
--		try_fmt->field = V4L2_FIELD_NONE;
-+		fmt->width = crop->width;
-+		fmt->height = crop->height;
-+		fmt->code = sensor->internal_csi_format->code;
-+		fmt->field = V4L2_FIELD_NONE;
- 
- 		if (ssd == sensor->pixel_array)
- 			continue;
- 
--		try_comp = v4l2_subdev_get_try_compose(sd, sd_state, i);
--		*try_comp = *try_crop;
-+		comp = v4l2_subdev_get_pad_compose(sd, sd_state, i);
-+		*comp = *crop;
- 	}
- 
- 	mutex_unlock(&sensor->mutex);
-@@ -3580,25 +3501,30 @@ static int ccs_probe(struct i2c_client *client)
- 		goto out_cleanup;
- 	}
- 
-+	rval = media_entity_pads_init(&sensor->src->sd.entity,
-+				      sensor->src->npads,
-+				      sensor->src->pads);
-+	if (rval < 0)
-+		goto out_cleanup;
-+
-+	rval = v4l2_subdev_init_finalize(&sensor->src->sd);
-+	if (rval)
-+		goto out_media_entity_cleanup;
-+
- 	mutex_lock(&sensor->mutex);
- 	rval = ccs_pll_blanking_update(sensor);
- 	mutex_unlock(&sensor->mutex);
- 	if (rval) {
- 		dev_err(&client->dev, "update mode failed\n");
--		goto out_cleanup;
-+		goto out_subdev_cleanup;
- 	}
- 
- 	sensor->streaming = false;
- 	sensor->dev_init_done = true;
- 
--	rval = media_entity_pads_init(&sensor->src->sd.entity, 2,
--				 sensor->src->pads);
--	if (rval < 0)
--		goto out_media_entity_cleanup;
--
- 	rval = ccs_write_msr_regs(sensor);
- 	if (rval)
--		goto out_media_entity_cleanup;
-+		goto out_subdev_cleanup;
- 
- 	pm_runtime_set_active(&client->dev);
- 	pm_runtime_get_noresume(&client->dev);
-@@ -3618,6 +3544,9 @@ static int ccs_probe(struct i2c_client *client)
- 	pm_runtime_put_noidle(&client->dev);
- 	pm_runtime_disable(&client->dev);
- 
-+out_subdev_cleanup:
-+	v4l2_subdev_cleanup(&sensor->src->sd);
-+
- out_media_entity_cleanup:
- 	media_entity_cleanup(&sensor->src->sd.entity);
- 
-@@ -3655,6 +3584,7 @@ static void ccs_remove(struct i2c_client *client)
- 
- 	for (i = 0; i < sensor->ssds_used; i++) {
- 		v4l2_device_unregister_subdev(&sensor->ssds[i].sd);
-+		v4l2_subdev_cleanup(subdev);
- 		media_entity_cleanup(&sensor->ssds[i].sd.entity);
- 	}
- 	ccs_cleanup(sensor);
-diff --git a/drivers/media/i2c/ccs/ccs.h b/drivers/media/i2c/ccs/ccs.h
-index a94c796cea48..9c3587b2fbe7 100644
---- a/drivers/media/i2c/ccs/ccs.h
-+++ b/drivers/media/i2c/ccs/ccs.h
-@@ -182,9 +182,6 @@ struct ccs_binning_subtype {
- struct ccs_subdev {
- 	struct v4l2_subdev sd;
- 	struct media_pad pads[CCS_PADS];
--	struct v4l2_rect sink_fmt;
--	struct v4l2_rect crop[CCS_PADS];
--	struct v4l2_rect compose; /* compose on sink */
- 	unsigned short sink_pad;
- 	unsigned short source_pad;
- 	int npads;
-@@ -220,6 +217,7 @@ struct ccs_sensor {
- 	u32 mbus_frame_fmts;
- 	const struct ccs_csi_data_format *csi_format;
- 	const struct ccs_csi_data_format *internal_csi_format;
-+	struct v4l2_rect pa_src, scaler_sink, src_src;
- 	u32 default_mbus_frame_fmts;
- 	int default_pixel_order;
- 	struct ccs_data_container sdata, mdata;
--- 
-2.39.2
-
+4oCcT3IgZG8geW91IGhhbmRsZSBvbmUgY21kIGF0IGEgdGltZSwgd2hlcmUgdGhlIHVzZXIgc2Vu
+ZHMgYSBjbWQgYnVmZmVyDQp0byB0aGUgZHJpdmVyIGFuZCB0aGUgZHJpdmVyIHRoZW4gc3VibWl0
+IGl0IGJ5IHdyaXRpbmcgdG8gYSBjb3VwbGUgb2YNCnJlZ2lzdGVycyBhbmQgcG9sbHMgb24gc29t
+ZSBzdGF0dXMgcmVnaXN0ZXIgdW50aWwgaXRzIGRvbmUsIG9yIHdhaXRzDQpmb3IgYW4gaW50ZXJy
+dXB0IHRvIG1hcmsgaXQgYXMgZG9uZSA/4oCdDQogIC0tLSB5ZXPvvIwgdXNlciBzZW5kcyBhIGNt
+ZCBidWZmZXIgdG8gZHJpdmVyLCBhbmQgZHJpdmVyIHRyaWdnZXJzIGhhcmR3YXJlIGJ5IHdyaXRp
+bmcgdG8gcmVnaXN0ZXIsDQogICAgICAgIGFuZCB0aGVuLCB3YWl0cyBmb3IgYW4gaW50ZXJydXB0
+IHRvIG1hcmsgaXQgIGFzIGRvbmUuDQoNCiAgICBNeSBjdXJyZW50IGRyaXZlciBpcyB2ZXJ5IGRp
+ZmZlcmVudCBmcm9tIGRybSwgc28gSSB3YW50IHRvIGtub3cgaWYgSSBoYXZlIHRvIHN3aXRjaCB0
+byBkcm3vvJ8NCiAgICBNYXliZSBJIGNhbiByZWZlciB0byAvZHJpdmVyL2FjY2VsL2hhYmFuYWxh
+YnMuDQoNCnRoYW5rcw0KDQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+DQrlj5Hku7bkuro6IE9kZWQgR2FiYmF5IDxvZ2FiYmF5QGtlcm5lbC5vcmc+DQrlj5HpgIHml7bp
+l7Q6IDIwMjPlubQ55pyIMjbml6UgMjA6NTQNCuaUtuS7tuS6ujogQ2FuY2FuIENoYW5nDQrmioTp
+gIE6IEphZ2FuIFRla2k7IGxpbnV4LW1lZGlhOyBsaW51eC1rZXJuZWw7IERhdmUgQWlybGllOyBE
+YW5pZWwgVmV0dGVyDQrkuLvpopg6IFJlOiBrZXJuZWwub3JnIDYuNS40ICwgTlBVIGRyaXZlciwg
+LS1ub3Qgc3VwcG9ydCAoUkZDKQ0KDQpbIEVYVEVSTkFMIEVNQUlMIF0NCg0KT24gTW9uLCBTZXAg
+MjUsIDIwMjMgYXQgMTI6MjnigK9QTSBDYW5jYW4gQ2hhbmcgPENhbmNhbi5DaGFuZ0BhbWxvZ2lj
+LmNvbT4gd3JvdGU6DQo+DQo+IFRoYW5rIHlvdSBmb3IgeW91ciByZXBseSBmcm9tIEphZ2FuICYg
+T2RlZC4NCj4NCj4gSXQgaXMgdmVyeSBhcHByb3ByaXRhdGUgZm9yIG15IGRyaXZlciB0byBiZSBw
+bGFjZWQgaW4gZHJpdmVyL2FjY2VsLg0KPg0KPiBNeSBhY2NlbGVyYXRvciBpcyBuYW1lZCBBRExB
+KEFtbG9naWMgRGVlcCBMZWFybmluZyBBY2NlbGVyYXRvcikuDQo+IEl0IGlzIGFuIElQIGluIFNP
+QyxtYWlubHkgdXNlZCBmb3IgbmV1cmFsIG5ldHdvcmsgbW9kZWxzIGFjY2VsZXJhdGlvbi4NCj4g
+SXQgd2lsbCBzcGxpdCBhbmQgY29tcGlsZSB0aGUgbmV1cmFsIG5ldHdvcmsgbW9kZWwgaW50byBh
+IHByaXZhdGUgZm9ybWF0IGNtZCBidWZmZXIsDQo+IGFuZCBzdWJtaXQgdGhpcyBjbWQgYnVmZmVy
+IHRvIEFETEEgaGFyZHdhcmUuIEl0IGlzIG5vdCBwcm9ncmFtbWFibGUgZGV2aWNlLg0KV2hhdCBl
+eGFjdGx5IGRvZXMgaXQgbWVhbiB0byAic3VibWl0IHRoaXMgY21kIGJ1ZmZlciB0byBBRExBIGhh
+cmR3YXJlIiA/DQoNCkRvZXMgeW91ciBoL3cgcHJvdmlkZXMgcXVldWVzIGZvciB0aGUgdXNlci9k
+cml2ZXIgdG8gcHV0IHRoZWlyDQp3b3JrbG9hZHMvY21kLWJ1ZnMgb24gdGhlbSA/IEFuZCBkb2Vz
+IGl0IHByb3ZpZGUgc29tZSBjb21wbGV0aW9uIHF1ZXVlDQp0byBub3RpZnkgd2hlbiB0aGUgd29y
+ayBpcyBjb21wbGV0ZWQ/DQoNCk9yIGRvIHlvdSBoYW5kbGUgb25lIGNtZCBhdCBhIHRpbWUsIHdo
+ZXJlIHRoZSB1c2VyIHNlbmRzIGEgY21kIGJ1ZmZlcg0KdG8gdGhlIGRyaXZlciBhbmQgdGhlIGRy
+aXZlciB0aGVuIHN1Ym1pdCBpdCBieSB3cml0aW5nIHRvIGEgY291cGxlIG9mDQpyZWdpc3RlcnMg
+YW5kIHBvbGxzIG9uIHNvbWUgc3RhdHVzIHJlZ2lzdGVyIHVudGlsIGl0cyBkb25lLCBvciB3YWl0
+cw0KZm9yIGFuIGludGVycnVwdCB0byBtYXJrIGl0IGFzIGRvbmUgPw0KDQo+DQo+IEFETEEgaW5j
+bHVkZXMgZm91ciBoYXJkd2FyZSBlbmdpbmVzOg0KPiBSUyBlbmdpbmVzICAgICAgICAgICAgIDog
+d29ya2luZyBmb3IgdGhlIHJlc2hhcGUgb3BlcmF0b3JzDQo+IE1BQyBlbmdpbmVzICAgICAgICAg
+OiB3b3JraW5nIGZvciB0aGUgY29udm9sdXRpb24gb3BlcmF0b3JzDQo+IERXIGVuZ2luZXMgICAg
+ICAgICAgIDogd29ya2luZyBmb3IgdGhlIHBsYW5lciAmIEVsZW1lbnR3aXNlIG9wZXJhdG9ycw0K
+PiBBY3RpdmF0aW9uIGVuZ2luZXMgOiB3b3JraW5nIGZvciBhY3RpdmF0aW9uIG9wZXJhdG9ycyhS
+ZUx1LHRhbmguLikNCj4NCj4gQnkgdGhlIHdheSwgbXkgSVAgaXMgbWFpbmx5IHVzZWQgZm9yIFNP
+QywgYW5kIHRoZSBjdXJyZW50IGRyaXZlciByZWdpc3RyYXRpb24gaXMgdGhyb3VnaCB0aGUgcGxh
+dGZvcm1fZHJpdmVyLA0KPiBpcyBpdCBuZWNlc3NhcnkgdG8gc3dpdGNoIHRvIGRybT8NClRoaXMg
+cHJvYmFibHkgZGVwZW5kcyBvbiB0aGUgYW5zd2VyIHRvIG15IHF1ZXN0aW9uIGFib3ZlLiBidHcs
+IHRoZXJlDQphcmUgZHJpdmVycyBpbiBkcm0gdGhhdCBoYW5kbGUgSVBzIHRoYXQgYXJlIHBhcnQg
+b2YgYW4gU09DLCBzbw0KcGxhdGZvcm1fZHJpdmVyIGlzIHN1cHBvcnRlZC4NCg0KT2RlZA0KDQo+
+DQo+IHRoYW5rcy4NCj4NCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+Xw0KPiDlj5Hku7bkuro6IE9kZWQgR2FiYmF5IDxvZ2FiYmF5QGtlcm5lbC5vcmc+DQo+IOWPkemA
+geaXtumXtDogMjAyM+W5tDnmnIgyMuaXpSAyMzowOA0KPiDmlLbku7bkuro6IEphZ2FuIFRla2kN
+Cj4g5oqE6YCBOiBDYW5jYW4gQ2hhbmc7IGxpbnV4LW1lZGlhOyBsaW51eC1rZXJuZWw7IERhdmUg
+QWlybGllOyBEYW5pZWwgVmV0dGVyDQo+IOS4u+mimDogUmU6IGtlcm5lbC5vcmcgNi41LjQgLCBO
+UFUgZHJpdmVyLCAtLW5vdCBzdXBwb3J0IChSRkMpDQo+DQo+IFvkvaDpgJrluLjkuI3kvJrmlLbl
+iLDmnaXoh6ogb2dhYmJheUBrZXJuZWwub3JnIOeahOeUteWtkOmCruS7tuOAguivt+iuv+mXriBo
+dHRwczovL2FrYS5tcy9MZWFybkFib3V0U2VuZGVySWRlbnRpZmljYXRpb27vvIzku6Xkuobop6Po
+v5nkuIDngrnkuLrku4DkuYjlvojph43opoFdDQo+DQo+IFsgRVhURVJOQUwgRU1BSUwgXQ0KPg0K
+PiBPbiBGcmksIFNlcCAyMiwgMjAyMyBhdCAxMjozOOKAr1BNIEphZ2FuIFRla2kgPGphZ2FuQGVk
+Z2VibGUuYWk+IHdyb3RlOg0KPiA+DQo+ID4gT24gRnJpLCAyMiBTZXB0IDIwMjMgYXQgMTU6MDQs
+IENhbmNhbiBDaGFuZyA8Q2FuY2FuLkNoYW5nQGFtbG9naWMuY29tPiB3cm90ZToNCj4gPiA+DQo+
+ID4gPiBEZWFyIE1lZGlhIE1haW50YWluZXJzOg0KPiA+ID4gICAgICBUaGFua3MgZm9yIHlvdXIg
+YXR0ZW50aW9uLiBCZWZvcmUgZGVzY3JpYmluZyBteSBwcm9ibGVt77yMbGV0IG1lIGludHJvZHVj
+ZSB0byB5b3Ugd2hhdCBJICBtZWFuIGJ5IE5QVS4NCj4gPiA+ICAgICAgTlBVIGlzIE5ldXJhbCBQ
+cm9jZXNzaW5nIFVuaXQsIEl0IGlzIGRlc2lnbmVkIGZvciBkZWVwIGxlYXJuaW5nIGFjY2VsZXJh
+dGlvbiwgSXQgaXMgYWxzbyBjYWxsZWQgVFBVLCBBUFUgLi4NCj4gPiA+DQo+ID4gPiAgICAgIFRo
+ZSByZWFsIHByb2JsZW1zOg0KPiA+ID4gICAgICAgV2hlbiBJIHdhcyBhYm91dCB0byB1cHN0cmVh
+bSBteSBOUFUgZHJpdmVyIGNvZGVzIHRvIGxpbnV4IG1haW5saW5lLCBpIG1lZXQgdHdvIHByb2Js
+ZW1zOg0KPiA+ID4gICAgICAgICAxLiAgQWNjb3JkaW5nIHRvIG15IHJlc2VhcmNoLCBUaGVyZSBp
+cyBubyBOUFUgbW9kdWxlIHBhdGggaW4gdGhlIGxpbnV4IChiYXNlIG9uIGxpbnV4IDYuNS40KSAs
+IEkgaGF2ZSBzZWFyY2hlZCBhbGwgbGludXggcHJvamVjdHMgYW5kIGZvdW5kIG5vIG9yZ2FuaXph
+dGlvbiBvciBjb21hbnkgdGhhdCBoYXMgc3VibWl0dGVkIE5QVSBjb2RlLiBJcyB0aGVyZSBhIHBh
+dGggcHJlcGFyZWQgZm9yIE5QVSBkcml2ZXIgY3VycmVudGx5Pw0KPiA+ID4gICAgICAgICAyLiAg
+IElmIHRoZXJlIGlzIG5vIE5QVSBkcml2ZXIgcGF0aCBjdXJyZW50bHksIEkgYW0gZ29pbmcgdG8g
+cHV0IG15IE5QVSBkcml2ZXIgY29kZSBpbiB0aGUgZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9hbWxv
+Z2ljLyDvu78sIGJlY2F1c2UgbXkgTlBVIGRyaXZlciBiZWxvbmdzIHRvIGFtbG9naWMuIGFuZCBh
+bWxvZ2ljIE5QVSBpcyBtYWlubHkgdXNlZCBmb3IgQUkgdmlzaW9uIGFwcGxpY2F0aW9ucy4gSXMg
+dGhpcyBwbGFuIHN1aXRhYmUgZm9yIHlvdT8NCj4gPg0KPiA+IElmIEknbSBjb3JyZWN0IGFib3V0
+IHRoZSBkaXNjdXNzaW9uIHdpdGggT2RlZCBHYWJieSBiZWZvcmUuIEkgdGhpbmsNCj4gPiB0aGUg
+ZHJpdmVycy9hY2NlbC8gaXMgcHJvcGVyIGZvciBBSSBBY2NlbGVyYXRvcnMgaW5jbHVkaW5nIE5Q
+VS4NCj4gPg0KPiA+ICsgT2RlZCBpbiBjYXNlIGhlIGNhbiBjb21tZW50Lg0KPiA+DQo+ID4gVGhh
+bmtzLA0KPiA+IEphZ2FuLg0KPiBUaGFua3MgSmFnYW4gZm9yIGFkZGluZyBtZSB0byB0aGlzIHRo
+cmVhZC4gQWRkaW5nIERhdmUgJiBEYW5pZWwgYXMgd2VsbC4NCj4NCj4gSW5kZWVkLCB0aGUgZHJp
+dmVycy9hY2NlbCBpcyB0aGUgcGxhY2UgZm9yIEFjY2VsZXJhdG9ycywgbWFpbmx5IGZvcg0KPiBB
+SS9EZWVwLUxlYXJuaW5nIGFjY2VsZXJhdG9ycy4NCj4gV2UgY3VycmVudGx5IGhhdmUgMyBkcml2
+ZXJzIHRoZXJlIGFscmVhZHkuDQo+DQo+IFRoZSBhY2NlbCBzdWJzeXN0ZW0gaXMgcGFydCBvZiB0
+aGUgbGFyZ2VyIGRybSBzdWJzeXN0ZW0uIEJhc2ljYWxseSwgdG8NCj4gZ2V0IGludG8gYWNjZWws
+IHlvdSBuZWVkIHRvIGludGVncmF0ZSB5b3VyIGRyaXZlciB3aXRoIHRoZSBkcm0gYXQgdGhlDQo+
+IGJhc2ljIGxldmVsIChyZWdpc3RlcmluZyBhIGRldmljZSwgaG9va2luZyB1cCB3aXRoIHRoZSBw
+cm9wZXINCj4gY2FsbGJhY2tzKS4gb2ZjIHRoZSBtb3JlIHlvdSB1c2UgY29kZSBmcm9tIGRybSwg
+dGhlIGJldHRlci4NCj4gWW91IGNhbiB0YWtlIGEgbG9vayBhdCB0aGUgZHJpdmVycyB1bmRlciBh
+Y2NlbCBmb3Igc29tZSBleGFtcGxlcyBvbg0KPiBob3cgdG8gZG8gdGhhdC4NCj4NCj4gQ291bGQg
+eW91IHBsZWFzZSBkZXNjcmliZSBpbiBhIGNvdXBsZSBvZiBzZW50ZW5jZXMgd2hhdCB5b3VyDQo+
+IGFjY2VsZXJhdG9yIGRvZXMsIHdoaWNoIGVuZ2luZXMgaXQgY29udGFpbnMsIGhvdyB5b3UgcHJv
+Z3JhbSBpdC4gaS5lLg0KPiBJcyBpdCBhIGZpeGVkLWZ1bmN0aW9uIGRldmljZSB3aGVyZSB5b3Ug
+d3JpdGUgdG8gYSBjb3VwbGUgb2YgcmVnaXN0ZXJzDQo+IHRvIGV4ZWN1dGUgd29ya2xvYWRzLCBv
+ciBpcyBpdCBhIGZ1bGx5IHByb2dyYW1tYWJsZSBkZXZpY2Ugd2hlcmUgeW91DQo+IGxvYWQgY29t
+cGlsZWQgY29kZSBpbnRvIGl0IChHUFUgc3R5bGUpID8NCj4NCj4gRm9yIGJldHRlciBiYWNrZ3Jv
+dW5kIG9uIHRoZSBhY2NlbCBzdWJzeXN0ZW0sIHBsZWFzZSByZWFkIHRoZSBmb2xsb3dpbmc6DQo+
+IGh0dHBzOi8vZG9jcy5rZXJuZWwub3JnL2FjY2VsL2ludHJvZHVjdGlvbi5odG1sDQo+IFRoaXMg
+aW50cm9kdWN0aW9uIGFsc28gY29udGFpbnMgbGlua3MgdG8gb3RoZXIgaW1wb3J0YW50IGVtYWls
+IHRocmVhZHMNCj4gYW5kIHRvIERhdmUgQWlybGllJ3MgQk9GIHN1bW1hcnkgaW4gTFBDMjAyMi4N
+Cj4NCj4gVGhhbmtzLA0KPiBPZGVkDQo=
