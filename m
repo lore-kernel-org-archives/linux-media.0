@@ -2,46 +2,46 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65E7BE80A9A
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DFD1EE80A9B
 	for <linux-media@archiver.kernel.org>; Wed, 27 Sep 2023 06:57:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbjI0G5u (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 27 Sep 2023 02:57:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55952 "EHLO
+        id S229906AbjI0G5v (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 27 Sep 2023 02:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjI0G5t (ORCPT
+        with ESMTP id S229616AbjI0G5u (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 27 Sep 2023 02:57:49 -0400
+        Wed, 27 Sep 2023 02:57:50 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DACEEB
-        for <linux-media@vger.kernel.org>; Tue, 26 Sep 2023 23:57:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9F9D6
+        for <linux-media@vger.kernel.org>; Tue, 26 Sep 2023 23:57:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695797867; x=1727333867;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=xuXgzLIhu0ZvQYNZ+0QhK6cLcRbnrYPyBe12LQZj3a0=;
-  b=aTcRjAf1JiIREHzmnVr7oGdeqZcynJDW9GII3EFGD9aTy03B44a70CoF
-   dxwKyMQzzJuH23uMH36XZbKTj+Np5CIpsOkGo9gV1OkknlKywAQm28VeI
-   mR0O6Y868EtjBHptYmbrrbcu4QjkPcuQkwZNnST882VIdd1jhRLyYW61z
-   dPW+lIAmeeeNcuo8i/5jnMSNzwyeESBx2MPKDVHLSdZ4M+EFvXkMs0vRX
-   qrp7sY8tYkoGHG7qHxhTAgBZ3MC7XpS3oCIyDQc+NyyeuHjzrdqqSu+PE
-   /zuxmwWp5Kc/ttwXhhFwocVy3oa3BFiWkwbdSo/C3gqFk9hwcO2ZS92aG
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="372083278"
+  t=1695797868; x=1727333868;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=iWg7aD3m+VLtkq7aocKk8jfRUoDlW0/hhZWCrc6j0lc=;
+  b=UxmPzg7CaXGnxu/GNP1AA5JC3n97TwThXTD6yk1eajUg2XE9BnkabYmm
+   vygooQi+XEd6YWAPGWrmS0NmuXFv0LlYRU2VzPs9+zf8FugNdLL+cLiZS
+   EK5OWdhF9sWCMeIATuLeMVdg1bpWRagIlOvxjwz0LfmPazHK8fxsxEzwR
+   dqcAmIdU8M7bbJj6hLE5mrHnzqM6UjHBkOCVOPAuPsq8BiVCw3yjKFgV3
+   ef/8TNEAILDvW1amJTMVQ5YJogS6qstrRWPVBlvHloEyTXvtVcfSxhdW+
+   1LX58XafzH24S1B5+4oaVwZtYkjDzhMYJNBd+VYcP+gqMNwAXeXjdWan4
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="372083289"
 X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
-   d="scan'208";a="372083278"
+   d="scan'208";a="372083289"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
   by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 23:57:46 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="892489852"
+X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="892489850"
 X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
-   d="scan'208";a="892489852"
+   d="scan'208";a="892489850"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
   by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 23:56:37 -0700
 Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id 6B319120ED1;
-        Wed, 27 Sep 2023 09:41:37 +0300 (EEST)
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 626381202BB;
+        Wed, 27 Sep 2023 09:41:22 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com,
@@ -51,111 +51,97 @@ Cc:     laurent.pinchart@ideasonboard.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
         Rui Miguel Silva <rmfrfs@gmail.com>,
         Martin Kepplinger <martink@posteo.de>
-Subject: [PATCH v6 10/13] media: v4l: subdev: Clear frame descriptor before get_frame_desc
-Date:   Wed, 27 Sep 2023 09:41:17 +0300
-Message-Id: <20230927064120.367561-11-sakari.ailus@linux.intel.com>
+Subject: [PATCH v6 00/13] Small fixes and cleanups (ov2740 and ccs)
+Date:   Wed, 27 Sep 2023 09:41:07 +0300
+Message-Id: <20230927064120.367561-1-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230927064120.367561-1-sakari.ailus@linux.intel.com>
-References: <20230927064120.367561-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Clear frame descriptor before calling transmitter's get_frame_desc() op.
-Also remove the corresponding memset() calls from drivers.
+Hi folks,
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
----
- drivers/media/i2c/ds90ub913.c              | 2 --
- drivers/media/i2c/ds90ub953.c              | 2 --
- drivers/media/i2c/ds90ub960.c              | 2 --
- drivers/media/platform/nxp/imx-mipi-csis.c | 2 --
- drivers/media/v4l2-core/v4l2-subdev.c      | 9 +++++++++
- 5 files changed, 9 insertions(+), 8 deletions(-)
+This small set contains fixes and cleanups, mainly for the ccs and ov2740
+drivers. I wrote these while working on the metadata set, but these could
+and should be merged earlier.
 
-diff --git a/drivers/media/i2c/ds90ub913.c b/drivers/media/i2c/ds90ub913.c
-index 4bfa3b3cf619..8e9ebed09f64 100644
---- a/drivers/media/i2c/ds90ub913.c
-+++ b/drivers/media/i2c/ds90ub913.c
-@@ -362,8 +362,6 @@ static int ub913_get_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
- 	if (ret)
- 		return ret;
- 
--	memset(fd, 0, sizeof(*fd));
--
- 	fd->type = V4L2_MBUS_FRAME_DESC_TYPE_PARALLEL;
- 
- 	state = v4l2_subdev_lock_and_get_active_state(sd);
-diff --git a/drivers/media/i2c/ds90ub953.c b/drivers/media/i2c/ds90ub953.c
-index dc394e22a42c..644022312833 100644
---- a/drivers/media/i2c/ds90ub953.c
-+++ b/drivers/media/i2c/ds90ub953.c
-@@ -499,8 +499,6 @@ static int ub953_get_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
- 	if (ret)
- 		return ret;
- 
--	memset(fd, 0, sizeof(*fd));
--
- 	fd->type = V4L2_MBUS_FRAME_DESC_TYPE_CSI2;
- 
- 	state = v4l2_subdev_lock_and_get_active_state(sd);
-diff --git a/drivers/media/i2c/ds90ub960.c b/drivers/media/i2c/ds90ub960.c
-index 8ba5750f5a23..b8f3e5ca03ef 100644
---- a/drivers/media/i2c/ds90ub960.c
-+++ b/drivers/media/i2c/ds90ub960.c
-@@ -2786,8 +2786,6 @@ static int ub960_get_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
- 	if (!ub960_pad_is_source(priv, pad))
- 		return -EINVAL;
- 
--	memset(fd, 0, sizeof(*fd));
--
- 	fd->type = V4L2_MBUS_FRAME_DESC_TYPE_CSI2;
- 
- 	state = v4l2_subdev_lock_and_get_active_state(&priv->sd);
-diff --git a/drivers/media/platform/nxp/imx-mipi-csis.c b/drivers/media/platform/nxp/imx-mipi-csis.c
-index 16f19a640130..aac9cffe503c 100644
---- a/drivers/media/platform/nxp/imx-mipi-csis.c
-+++ b/drivers/media/platform/nxp/imx-mipi-csis.c
-@@ -1114,8 +1114,6 @@ static int mipi_csis_get_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
- 	fd->type = V4L2_MBUS_FRAME_DESC_TYPE_PARALLEL;
- 	fd->num_entries = 1;
- 
--	memset(entry, 0, sizeof(*entry));
--
- 	entry->flags = 0;
- 	entry->pixelcode = csis_fmt->code;
- 	entry->bus.csi2.vc = 0;
-diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-index 32b7d9cd43e6..9cb04ace86ae 100644
---- a/drivers/media/v4l2-core/v4l2-subdev.c
-+++ b/drivers/media/v4l2-core/v4l2-subdev.c
-@@ -306,6 +306,14 @@ static int call_set_selection(struct v4l2_subdev *sd,
- 	       sd->ops->pad->set_selection(sd, state, sel);
- }
- 
-+static int call_get_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
-+			       struct v4l2_mbus_frame_desc *fd)
-+{
-+	memset(fd, 0, sizeof(*fd));
-+
-+	return sd->ops->pad->get_frame_desc(sd, pad, fd);
-+}
-+
- static inline int check_edid(struct v4l2_subdev *sd,
- 			     struct v4l2_subdev_edid *edid)
- {
-@@ -446,6 +454,7 @@ static const struct v4l2_subdev_pad_ops v4l2_subdev_call_pad_wrappers = {
- 	.set_edid		= call_set_edid,
- 	.dv_timings_cap		= call_dv_timings_cap,
- 	.enum_dv_timings	= call_enum_dv_timings,
-+	.get_frame_desc		= call_get_frame_desc,
- 	.get_mbus_config	= call_get_mbus_config,
- };
- 
+since v5:
+
+- Send right patches (was v3 + an additional patch)!
+
+since v4:
+
+- Fix CCS driver active state patch --- media entity was initialised too
+  late.
+
+- Rebase on Laurent's ov2740 cleanups.
+
+- Add a new patch for MIPI CSI-2 long packet types.
+
+since v3:
+
+- Don't print frame descriptor entry flags as strings but in a numeric
+  form.
+
+- Add a WARN_ON() for string truncation in printing the frame descriptor.
+
+- Use 0 flag in printing hexadecimal values in frame descriptor instead of
+  specifying precision.
+
+- Add curly braces around a loop (11th patch).
+
+since v2:
+
+- Wrap init_cfg callback long line.
+
+- Remove "pad_" from variable names in ccs_init_cfg.
+
+- Fix media_entity_pads_init() error handling bug (was introduced in the
+  last patch).
+
+- Print frame descriptor in less verbose way.
+
+since v1:
+
+- Add a comment on ov2740 active state patch on serialising sensor access.
+
+- Improved commit message of ov2740 patch enabling runtime PM earlier.
+
+- Added patches for printing and zeroing frame descriptor, (debug)
+  printing of frame descriptor, switching ccs to init_cfg and sub-device
+  state and checking pad flag validity.
+
+Sakari Ailus (13):
+  media: Documentation: Align numbered list, make it a proper ReST
+  media: ccs: Fix driver quirk struct documentation
+  media: ccs: Correctly initialise try compose rectangle
+  media: ccs: Correct error handling in ccs_register_subdev
+  media: ccs: Switch to init_cfg
+  media: ccs: Use sub-device active state
+  media: ov2740: Enable runtime PM before registering the async subdev
+  media: ov2740: Use sub-device active state
+  media: ov2740: Return -EPROBE_DEFER if no endpoint is found
+  media: v4l: subdev: Clear frame descriptor before get_frame_desc
+  media: v4l: subdev: Print debug information on frame descriptor
+  media: mc: Check pad flag validity
+  media: Add MIPI CSI-2 generic long packet type definition
+
+ .../userspace-api/media/v4l/dev-subdev.rst    |  49 ++-
+ drivers/media/i2c/ccs/ccs-core.c              | 320 +++++++-----------
+ drivers/media/i2c/ccs/ccs-quirk.h             |   4 +-
+ drivers/media/i2c/ccs/ccs.h                   |   4 +-
+ drivers/media/i2c/ds90ub913.c                 |   2 -
+ drivers/media/i2c/ds90ub953.c                 |   2 -
+ drivers/media/i2c/ds90ub960.c                 |   2 -
+ drivers/media/i2c/ov2740.c                    | 125 +++----
+ drivers/media/mc/mc-entity.c                  |  15 +-
+ drivers/media/platform/nxp/imx-mipi-csis.c    |   2 -
+ drivers/media/v4l2-core/v4l2-subdev.c         |  38 +++
+ include/media/mipi-csi2.h                     |   1 +
+ 12 files changed, 256 insertions(+), 308 deletions(-)
+
 -- 
 2.39.2
 
