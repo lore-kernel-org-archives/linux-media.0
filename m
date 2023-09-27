@@ -2,46 +2,46 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FC11E80A9A
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6B83E80A9E
 	for <linux-media@archiver.kernel.org>; Wed, 27 Sep 2023 06:57:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbjI0G5y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 27 Sep 2023 02:57:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56026 "EHLO
+        id S229668AbjI0G5z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 27 Sep 2023 02:57:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbjI0G5x (ORCPT
+        with ESMTP id S229910AbjI0G5x (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 27 Sep 2023 02:57:53 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4F1DD
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85C5A3
         for <linux-media@vger.kernel.org>; Tue, 26 Sep 2023 23:57:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1695797871; x=1727333871;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=KkACzm6rCRlzxaVRUFccKHvp1nDFcGBzYlanlUmyCVE=;
-  b=L5bHru2Q3s4DpIdlxVgIsMwwR2Oy7OFrdMH9hiKJN7PrSXKf+e6Q5aaK
-   01hH1VgHvxubsI8FB/St3APe4KjVuls9bT2SYIw8KJLjpHePJJeo9XGwU
-   7QeBBAtZ1WNsCE/x5AjAl7yQsRLTlwIJOZ7cjgoiDnwWHT0+RHpg32H78
-   022wsehoUwZWxsMtkhH6m66MRRvEOretLJiTJopbWUqZurfqI3ZjWqSet
-   bu3h93gSFxv+iOXZg5UyKw3UqxFpFyBWXHetOuHcLUYIDaGeXWdSDkABq
-   CPtF7DLOL68MpKquuhMUrnHB3hpnKmFbuQ583WYf1LuN1N6Yc/ngalgub
+  bh=/5qfMiNZKaKzPMA2ot2UgTS9i5w3pBhS0BNps/Obmak=;
+  b=Og7d5JQboopMyX8dLC4kWuNybE3pz+HENGWaRISvsy07NK5/CtqKTApm
+   +fta/yEbsxxYFC+ibOJN1+J/h+GhDIGSso3yJJPlTPSzAKsUARBDnKPdH
+   NdTuqzBgr2qxZ99UqIzUa4X0BWVyXEnDdMAEzHhNqHUpWm8ivqA9jPXT+
+   cQd7d28NY++j4grwP619yZU1aDMmkE+Pw+EyxP3X75UUZzprpm4K8b6ZF
+   Z91zu+dSd5KMrLKvyl0RZTLgN3QTAAqI91LzKytN2GIXsP/pH8gqNYHo8
+   2sRMP7rsQ+DLpO/olcUYmvRBP+xoOztzQdoU3TznUFWbisevKtop5yyKj
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="372083331"
+X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="372083356"
 X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
-   d="scan'208";a="372083331"
+   d="scan'208";a="372083356"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 23:57:50 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 23:57:51 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="892489895"
+X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="892489903"
 X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
-   d="scan'208";a="892489895"
+   d="scan'208";a="892489903"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
   by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 23:56:41 -0700
 Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id CA12C12061E;
-        Wed, 27 Sep 2023 09:41:23 +0300 (EEST)
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 3946B120F09;
+        Wed, 27 Sep 2023 09:41:39 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com,
@@ -51,9 +51,9 @@ Cc:     laurent.pinchart@ideasonboard.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
         Rui Miguel Silva <rmfrfs@gmail.com>,
         Martin Kepplinger <martink@posteo.de>
-Subject: [PATCH v6 01/13] media: Documentation: Align numbered list, make it a proper ReST
-Date:   Wed, 27 Sep 2023 09:41:08 +0300
-Message-Id: <20230927064120.367561-2-sakari.ailus@linux.intel.com>
+Subject: [PATCH v6 11/13] media: v4l: subdev: Print debug information on frame descriptor
+Date:   Wed, 27 Sep 2023 09:41:18 +0300
+Message-Id: <20230927064120.367561-12-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230927064120.367561-1-sakari.ailus@linux.intel.com>
 References: <20230927064120.367561-1-sakari.ailus@linux.intel.com>
@@ -63,94 +63,64 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Align lines for numbered list so that Sphinx produces an uniform output
-for all list entries. Also indent paragraphs of such list entries for
-consistency.
-
-Also use ReST numbered list syntax for the entries.
+Print debug level information on returned frame descriptors.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- .../userspace-api/media/v4l/dev-subdev.rst    | 49 +++++++++----------
- 1 file changed, 24 insertions(+), 25 deletions(-)
+ drivers/media/v4l2-core/v4l2-subdev.c | 31 ++++++++++++++++++++++++++-
+ 1 file changed, 30 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/dev-subdev.rst b/Documentation/userspace-api/media/v4l/dev-subdev.rst
-index a4f1df7093e8..43988516acdd 100644
---- a/Documentation/userspace-api/media/v4l/dev-subdev.rst
-+++ b/Documentation/userspace-api/media/v4l/dev-subdev.rst
-@@ -579,20 +579,19 @@ is started.
+diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+index 9cb04ace86ae..d295a4e87b66 100644
+--- a/drivers/media/v4l2-core/v4l2-subdev.c
++++ b/drivers/media/v4l2-core/v4l2-subdev.c
+@@ -15,6 +15,7 @@
+ #include <linux/module.h>
+ #include <linux/overflow.h>
+ #include <linux/slab.h>
++#include <linux/string.h>
+ #include <linux/types.h>
+ #include <linux/version.h>
+ #include <linux/videodev2.h>
+@@ -309,9 +310,37 @@ static int call_set_selection(struct v4l2_subdev *sd,
+ static int call_get_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
+ 			       struct v4l2_mbus_frame_desc *fd)
+ {
++	unsigned int i;
++	int ret;
++
+ 	memset(fd, 0, sizeof(*fd));
  
- There are three steps in configuring the streams:
+-	return sd->ops->pad->get_frame_desc(sd, pad, fd);
++	ret = sd->ops->pad->get_frame_desc(sd, pad, fd);
++	if (ret)
++		return ret;
++
++	dev_dbg(sd->dev, "Frame descriptor on pad %u, type %s\n", pad,
++		fd->type == V4L2_MBUS_FRAME_DESC_TYPE_PARALLEL ? "parallel" :
++		fd->type == V4L2_MBUS_FRAME_DESC_TYPE_CSI2 ? "CSI-2" :
++		"unknown");
++
++	for (i = 0; i < fd->num_entries; i++) {
++		struct v4l2_mbus_frame_desc_entry *entry = &fd->entry[i];
++		char buf[20] = "";
++
++		if (fd->type == V4L2_MBUS_FRAME_DESC_TYPE_CSI2)
++			WARN_ON(snprintf(buf, sizeof(buf),
++					 ", vc %u, dt 0x%02x",
++					 entry->bus.csi2.vc,
++					 entry->bus.csi2.dt) >= sizeof(buf));
++
++		dev_dbg(sd->dev,
++			"\tstream %u, code 0x%04x, length %u, flags 0x%04x%s\n",
++			entry->stream, entry->pixelcode, entry->length,
++			entry->flags, buf);
++	}
++
++	return 0;
+ }
  
--1) Set up links. Connect the pads between sub-devices using the :ref:`Media
--Controller API <media_controller>`
-+1. Set up links. Connect the pads between sub-devices using the
-+   :ref:`Media Controller API <media_controller>`
- 
--2) Streams. Streams are declared and their routing is configured by
--setting the routing table for the sub-device using
--:ref:`VIDIOC_SUBDEV_S_ROUTING <VIDIOC_SUBDEV_G_ROUTING>` ioctl. Note that
--setting the routing table will reset formats and selections in the
--sub-device to default values.
-+2. Streams. Streams are declared and their routing is configured by setting the
-+   routing table for the sub-device using :ref:`VIDIOC_SUBDEV_S_ROUTING
-+   <VIDIOC_SUBDEV_G_ROUTING>` ioctl. Note that setting the routing table will
-+   reset formats and selections in the sub-device to default values.
- 
--3) Configure formats and selections. Formats and selections of each stream
--are configured separately as documented for plain sub-devices in
--:ref:`format-propagation`. The stream ID is set to the same stream ID
--associated with either sink or source pads of routes configured using the
--:ref:`VIDIOC_SUBDEV_S_ROUTING <VIDIOC_SUBDEV_G_ROUTING>` ioctl.
-+3. Configure formats and selections. Formats and selections of each stream are
-+   configured separately as documented for plain sub-devices in
-+   :ref:`format-propagation`. The stream ID is set to the same stream ID
-+   associated with either sink or source pads of routes configured using the
-+   :ref:`VIDIOC_SUBDEV_S_ROUTING <VIDIOC_SUBDEV_G_ROUTING>` ioctl.
- 
- Multiplexed streams setup example
- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-@@ -618,11 +617,11 @@ modeled as V4L2 devices, exposed to userspace via /dev/videoX nodes.
- 
- To configure this pipeline, the userspace must take the following steps:
- 
--1) Set up media links between entities: connect the sensors to the bridge,
--bridge to the receiver, and the receiver to the DMA engines. This step does
--not differ from normal non-multiplexed media controller setup.
-+1. Set up media links between entities: connect the sensors to the bridge,
-+   bridge to the receiver, and the receiver to the DMA engines. This step does
-+   not differ from normal non-multiplexed media controller setup.
- 
--2) Configure routing
-+2. Configure routing
- 
- .. flat-table:: Bridge routing table
-     :header-rows:  1
-@@ -656,14 +655,14 @@ not differ from normal non-multiplexed media controller setup.
-       - V4L2_SUBDEV_ROUTE_FL_ACTIVE
-       - Pixel data stream from Sensor B
- 
--3) Configure formats and selections
-+3. Configure formats and selections
- 
--After configuring routing, the next step is configuring the formats and
--selections for the streams. This is similar to performing this step without
--streams, with just one exception: the ``stream`` field needs to be assigned
--to the value of the stream ID.
-+   After configuring routing, the next step is configuring the formats and
-+   selections for the streams. This is similar to performing this step without
-+   streams, with just one exception: the ``stream`` field needs to be assigned
-+   to the value of the stream ID.
- 
--A common way to accomplish this is to start from the sensors and propagate the
--configurations along the stream towards the receiver,
--using :ref:`VIDIOC_SUBDEV_S_FMT <VIDIOC_SUBDEV_G_FMT>` ioctls to configure each
--stream endpoint in each sub-device.
-+   A common way to accomplish this is to start from the sensors and propagate
-+   the configurations along the stream towards the receiver, using
-+   :ref:`VIDIOC_SUBDEV_S_FMT <VIDIOC_SUBDEV_G_FMT>` ioctls to configure each
-+   stream endpoint in each sub-device.
+ static inline int check_edid(struct v4l2_subdev *sd,
 -- 
 2.39.2
 
