@@ -2,46 +2,46 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AD5CE80A93
-	for <linux-media@archiver.kernel.org>; Wed, 27 Sep 2023 06:19:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AD69E80A95
+	for <linux-media@archiver.kernel.org>; Wed, 27 Sep 2023 06:19:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjI0GT1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 27 Sep 2023 02:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52728 "EHLO
+        id S230016AbjI0GTb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 27 Sep 2023 02:19:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbjI0GTI (ORCPT
+        with ESMTP id S229882AbjI0GTI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 27 Sep 2023 02:19:08 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C871180
-        for <linux-media@vger.kernel.org>; Tue, 26 Sep 2023 23:19:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0C7194
+        for <linux-media@vger.kernel.org>; Tue, 26 Sep 2023 23:19:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695795546; x=1727331546;
+  t=1695795547; x=1727331547;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=d7jw3b0DNN63LkqKQzz764RJSTdovn7U9rpsVTqOjSY=;
-  b=jYNDn76HvfJTrssVcK4jdVntajLC+YwmXjt5XMw/RAMklvw7x7izmo3X
-   8p7HZdxxh7qGROT01oem7+v6zsqCnurfNsi47QNx96Up9M0w/hJvqkQCY
-   weq4C6TQW4bpRgrK0Vcp3tkSBucobk0CjC1wNEYmHazThS96V+T9WIAj9
-   iCm2be/WXCu1METV9hneV7Rpmru7pjPeoxNZqIZl8PmDQpdZtLquFE47C
-   27hZqhYgZiC89NYBGfO9JjVpcb4a5+KS6fkYLOsXoBhBKhLWoD4ubElJo
-   uA3Q4tgE6eVhuDwsH/7gPKGjKDycxW7NKIc+0J6PUt5P5p4sBL3thG+ir
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="381641152"
+  bh=84btf6YxV+F5wtOY+4HXZDNLyU7cW9nmlQhBFlQlCnA=;
+  b=LlbYlZz88Q3aciKHc42AkLOt/xuoJ1ub/LjyJspNpLJhmzh2BmDSglJF
+   g2OGlKJ+K6b5rkKba8fifGZ/ZIlOyGPLjRhRW19tFGunWlk+lvdmfGFJz
+   WyPNw7SnVD5OTCGaDepRyPNy1RgdDykI90l4nyuVHCnJdEFx1EAD/xTUW
+   pViNU5C+9zVe2m/QpYr3PRCPXVKgl3V08Lk6/eYqB59AV0T2JHNz+IgsK
+   WxCZ0J0WDmJOV/JvYpFuWKHCsnRRQSc5DwfgzpwPi6YB6icrcp2ny9uZ8
+   i0y7jZo+JlOT/KQyltbd5/qRZyQFJ0OlM4QV6rjB4OVs84/prYdjTG2m9
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="381641164"
 X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
-   d="scan'208";a="381641152"
+   d="scan'208";a="381641164"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 23:18:45 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 23:18:48 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="742598597"
+X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="742598605"
 X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
-   d="scan'208";a="742598597"
+   d="scan'208";a="742598605"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 23:18:43 -0700
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 23:18:46 -0700
 Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id 590E212061E;
-        Wed, 27 Sep 2023 09:18:40 +0300 (EEST)
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id EC7611209F7;
+        Wed, 27 Sep 2023 09:18:42 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com,
@@ -51,9 +51,9 @@ Cc:     laurent.pinchart@ideasonboard.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
         Rui Miguel Silva <rmfrfs@gmail.com>,
         Martin Kepplinger <martink@posteo.de>
-Subject: [PATCH v5 07/13] media: ov2740: Enable runtime PM before registering the async subdev
-Date:   Wed, 27 Sep 2023 09:18:23 +0300
-Message-Id: <20230927061829.366107-8-sakari.ailus@linux.intel.com>
+Subject: [PATCH v5 09/13] media: ov2740: Return -EPROBE_DEFER if no endpoint is found
+Date:   Wed, 27 Sep 2023 09:18:25 +0300
+Message-Id: <20230927061829.366107-10-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230927061829.366107-1-sakari.ailus@linux.intel.com>
 References: <20230927061829.366107-1-sakari.ailus@linux.intel.com>
@@ -63,52 +63,28 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Enable runtime PM before registering the async subdev as the driver UAPI
-may become accessible immediately after the registration. Runtime PM needs
-to be enabled by that time.
+With ipu bridge, endpoints may only be created when ipu bridge has
+initialised. This may happen after the sensor driver has first probed.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/i2c/ov2740.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ drivers/media/i2c/ov2740.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
-index 3a9700fbbe8c..6d5fb2789dc6 100644
+index d83ac31efd9c..24e468485fbf 100644
 --- a/drivers/media/i2c/ov2740.c
 +++ b/drivers/media/i2c/ov2740.c
-@@ -1130,6 +1130,12 @@ static int ov2740_probe(struct i2c_client *client)
- 		goto probe_error_v4l2_ctrl_handler_free;
- 	}
+@@ -931,7 +931,7 @@ static int ov2740_check_hwcfg(struct device *dev)
  
-+	/* Set the device's state to active if it's in D0 state. */
-+	if (full_power)
-+		pm_runtime_set_active(&client->dev);
-+	pm_runtime_enable(&client->dev);
-+	pm_runtime_idle(&client->dev);
-+
- 	ret = v4l2_async_register_subdev_sensor(&ov2740->sd);
- 	if (ret < 0) {
- 		dev_err_probe(dev, ret, "failed to register V4L2 subdev\n");
-@@ -1140,16 +1146,12 @@ static int ov2740_probe(struct i2c_client *client)
- 	if (ret)
- 		dev_warn(&client->dev, "register nvmem failed, ret %d\n", ret);
+ 	ep = fwnode_graph_get_next_endpoint(fwnode, NULL);
+ 	if (!ep)
+-		return -ENXIO;
++		return -EPROBE_DEFER;
  
--	/* Set the device's state to active if it's in D0 state. */
--	if (full_power)
--		pm_runtime_set_active(&client->dev);
--	pm_runtime_enable(&client->dev);
--	pm_runtime_idle(&client->dev);
--
- 	return 0;
- 
- probe_error_media_entity_cleanup:
- 	media_entity_cleanup(&ov2740->sd.entity);
-+	pm_runtime_disable(&client->dev);
-+	pm_runtime_set_suspended(&client->dev);
- 
- probe_error_v4l2_ctrl_handler_free:
- 	v4l2_ctrl_handler_free(ov2740->sd.ctrl_handler);
+ 	ret = v4l2_fwnode_endpoint_alloc_parse(ep, &bus_cfg);
+ 	fwnode_handle_put(ep);
 -- 
 2.39.2
 
