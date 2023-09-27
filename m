@@ -2,108 +2,178 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CAF51E810C1
-	for <linux-media@archiver.kernel.org>; Wed, 27 Sep 2023 10:41:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10C10E810C2
+	for <linux-media@archiver.kernel.org>; Wed, 27 Sep 2023 10:51:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjI0Kls (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 27 Sep 2023 06:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38178 "EHLO
+        id S230432AbjI0Kvk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 27 Sep 2023 06:51:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjI0Klr (ORCPT
+        with ESMTP id S229648AbjI0Kvj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 27 Sep 2023 06:41:47 -0400
-X-Greylist: delayed 61 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 27 Sep 2023 03:41:46 PDT
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C5A139;
-        Wed, 27 Sep 2023 03:41:45 -0700 (PDT)
+        Wed, 27 Sep 2023 06:51:39 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838C4F3
+        for <linux-media@vger.kernel.org>; Wed, 27 Sep 2023 03:51:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695811306; x=1727347306;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FJ0IYu3pUocOEwzdSIbSElmwbN5DTKpi1QShGYs7pSo=;
-  b=dwflQPAtVpZpv5CcCV5FDNgTTY0OJclwhgh0DvW6F1QA6zyw7vQvyi5w
-   aE5zGBr8f3LrAvz5HGoOnSIAOrDFUEQjBQCJ6xLpDzYCgcZxfey3kIPxj
-   9QkAnLHKLO+vp/ac7vLvJ342a2b+pWNFgzQR/uHUSj+UIsvogOK29r6fs
-   fdCpj3M1jz63Sn93q6s32M4yaUty8PIw5/me5o1wUv6x6GdZVqUaDvMvS
-   JF0ZX/Dnc+4O8OkFje3s1xyaFSdl+ZWsf7UL5XWl4GQBZaNRC3M6KZl5I
-   Ygsn7XoMG8DuQ+Syb9c5XdZzk002KKXKyw4w8E1nnPgoSRbGYLDBT8S7v
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="390852"
+  t=1695811897; x=1727347897;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=RUF0Wm+0BWLlLxX8/UFqM61vKZggwDBH0MBc+UWZmFQ=;
+  b=Qw/Ll9JFhrN2lioqgS+110hEj1b3e14t0AIft1aD/hYuQFf+Z5T55GT+
+   Bqs6CalD7HzFbLksbFnlf03TES4t8t/KCcj6VYdbyfbMUYwx/rcRr4EvS
+   WBgAKydgu4idxNGvH7pDAWLj8eBnoqzIq8NdaLXqpnnxJF1KFuOaRA3ri
+   dOQrVTka3+kP5WVis0Nx3N6lHiupk75iVq1niZ7X65aj1LjxSTUfQq0Qu
+   6uJiFnWG9RcZd9N1M1Pdjls/yfbaMH3/72VJKc9a9HtyhVpVvC6pXWKjC
+   7LRgZlNbVvVeD3idvySuUGQGDZ2MLsz5UShTDZDwKxzBJ2eB4GPa12Qc5
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="362046634"
 X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
-   d="scan'208";a="390852"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 03:40:44 -0700
+   d="scan'208";a="362046634"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 03:51:36 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="864783523"
+X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="725760403"
 X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
-   d="scan'208";a="864783523"
+   d="scan'208";a="725760403"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 03:40:42 -0700
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id F3C0211F94F;
-        Wed, 27 Sep 2023 13:40:38 +0300 (EEST)
-Date:   Wed, 27 Sep 2023 10:40:38 +0000
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 03:51:35 -0700
+Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 5538B1209F6;
+        Wed, 27 Sep 2023 13:51:32 +0300 (EEST)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
+        (envelope-from <sakari.ailus@linux.intel.com>)
+        id 1qlS8Y-002xfG-0T;
+        Wed, 27 Sep 2023 13:51:22 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Wentong Wu <wentong.wu@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: pci: intel: ivsc: select V4L2_FWNODE
-Message-ID: <ZRQGpg/jX25Wgm8z@kekkonen.localdomain>
-References: <20230927072127.2529885-1-arnd@kernel.org>
+To:     linux-media@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@kernel.org>, Bingbu Cao <bingbu.cao@intel.com>,
+        Daniel Scally <dan.scally@ideasonboard.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: [PATCH 1/1] media: ipu-bridge: Fix Kconfig dependencies
+Date:   Wed, 27 Sep 2023 13:51:12 +0300
+Message-Id: <20230927105112.705998-1-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230927072127.2529885-1-arnd@kernel.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Arnd,
+The current Kconfig symbol dependencies allow having the following Kconfig
+symbol values
 
-On Wed, Sep 27, 2023 at 09:21:19AM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Some missing select statements were already added back, but I ran into
-> another one that is missing:
-> 
-> ERROR: modpost: "v4l2_fwnode_endpoint_free" [drivers/media/pci/intel/ivsc/ivsc-csi.ko] undefined!
-> ERROR: modpost: "v4l2_fwnode_endpoint_alloc_parse" [drivers/media/pci/intel/ivsc/ivsc-csi.ko] undefined!
-> ERROR: modpost: "v4l2_fwnode_endpoint_parse" [drivers/media/pci/intel/ivsc/ivsc-csi.ko] undefined!
-> 
-> Fixes: 29006e196a566 ("media: pci: intel: ivsc: Add CSI submodule")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/media/pci/intel/ivsc/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/media/pci/intel/ivsc/Kconfig b/drivers/media/pci/intel/ivsc/Kconfig
-> index 0acea4678fc0d..6a2995b02d274 100644
-> --- a/drivers/media/pci/intel/ivsc/Kconfig
-> +++ b/drivers/media/pci/intel/ivsc/Kconfig
-> @@ -7,6 +7,7 @@ config INTEL_VSC
->  	select MEDIA_CONTROLLER
->  	select VIDEO_V4L2_SUBDEV_API
->  	select V4L2_ASYNC
-> +	select V4L2_FWNODE
+	CONFIG_IPU_BRIDGE=m
+	CONFIG_VIDEO_IPU3_CIO2=y
+	CONFIG_CIO2_BRIDGE=n
 
-Thanks for the fix.
+This does not work as the IPU bridge API is conditional to
+IS_ENABLED(CONFIG_IPU_BRIDGE). Fix this by changing the dependencies so
+that CONFIG_IPU_BRIDGE can be separately selected.
 
-V4L2_FWNODE already implies V4L2_ASYNC so V4L2_ASYNC can be removed. I
-somehow thought this only needed V4L2_ASYNC but that indeed is not the
-case.
+The CONFIG_CIO2_BRIDGE symbol becomes redundant as a result and is
+removed.
 
-I'll just drop the line selecting V4L2_ASYNC above if that's fine.
+Fixes: 2545a2c02ba1 ("media: ipu3-cio2: allow ipu_bridge to be a module again")
+Suggested-by: Arnd Bergmann <arnd@kernel.org>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ drivers/media/pci/intel/Kconfig       | 20 ++++++++++++++------
+ drivers/media/pci/intel/ipu3/Kconfig  | 21 +--------------------
+ drivers/staging/media/atomisp/Kconfig |  2 +-
+ 3 files changed, 16 insertions(+), 27 deletions(-)
 
->  	help
->  	  This adds support for Intel Visual Sensing Controller (IVSC).
->  
-
+diff --git a/drivers/media/pci/intel/Kconfig b/drivers/media/pci/intel/Kconfig
+index e113902fa806..ee4684159d3d 100644
+--- a/drivers/media/pci/intel/Kconfig
++++ b/drivers/media/pci/intel/Kconfig
+@@ -1,11 +1,19 @@
+ # SPDX-License-Identifier: GPL-2.0-only
++
++source "drivers/media/pci/intel/ipu3/Kconfig"
++source "drivers/media/pci/intel/ivsc/Kconfig"
++
+ config IPU_BRIDGE
+-	tristate
++	tristate "Intel IPU Bridge"
+ 	depends on I2C && ACPI
+ 	help
+-	  This is a helper module for the IPU bridge, which can be
+-	  used by ipu3 and other drivers. In order to handle module
+-	  dependencies, this is selected by each driver that needs it.
++	  The IPU bridge is a helper library for Intel IPU drivers to
++	  function on systems shipped with Windows.
+ 
+-source "drivers/media/pci/intel/ipu3/Kconfig"
+-source "drivers/media/pci/intel/ivsc/Kconfig"
++	  Currently used by the ipu3-cio2 and atomisp drivers.
++
++	  Supported systems include:
++
++	  - Microsoft Surface models (except Surface Pro 3)
++	  - The Lenovo Miix line (for example the 510, 520, 710 and 720)
++	  - Dell 7285
+diff --git a/drivers/media/pci/intel/ipu3/Kconfig b/drivers/media/pci/intel/ipu3/Kconfig
+index 0951545eab21..c0a250daa927 100644
+--- a/drivers/media/pci/intel/ipu3/Kconfig
++++ b/drivers/media/pci/intel/ipu3/Kconfig
+@@ -2,13 +2,13 @@
+ config VIDEO_IPU3_CIO2
+ 	tristate "Intel ipu3-cio2 driver"
+ 	depends on VIDEO_DEV && PCI
++	depends on IPU_BRIDGE || !IPU_BRIDGE
+ 	depends on ACPI || COMPILE_TEST
+ 	depends on X86
+ 	select MEDIA_CONTROLLER
+ 	select VIDEO_V4L2_SUBDEV_API
+ 	select V4L2_FWNODE
+ 	select VIDEOBUF2_DMA_SG
+-	select IPU_BRIDGE if CIO2_BRIDGE
+ 
+ 	help
+ 	  This is the Intel IPU3 CIO2 CSI-2 receiver unit, found in Intel
+@@ -18,22 +18,3 @@ config VIDEO_IPU3_CIO2
+ 	  Say Y or M here if you have a Skylake/Kaby Lake SoC with MIPI CSI-2
+ 	  connected camera.
+ 	  The module will be called ipu3-cio2.
+-
+-config CIO2_BRIDGE
+-	bool "IPU3 CIO2 Sensors Bridge"
+-	depends on VIDEO_IPU3_CIO2 && ACPI
+-	depends on I2C
+-	help
+-	  This extension provides an API for the ipu3-cio2 driver to create
+-	  connections to cameras that are hidden in the SSDB buffer in ACPI.
+-	  It can be used to enable support for cameras in detachable / hybrid
+-	  devices that ship with Windows.
+-
+-	  Say Y here if your device is a detachable / hybrid laptop that comes
+-	  with Windows installed by the OEM, for example:
+-
+-		- Microsoft Surface models (except Surface Pro 3)
+-		- The Lenovo Miix line (for example the 510, 520, 710 and 720)
+-		- Dell 7285
+-
+-	  If in doubt, say N here.
+diff --git a/drivers/staging/media/atomisp/Kconfig b/drivers/staging/media/atomisp/Kconfig
+index 5d8917160d41..75c985da75b5 100644
+--- a/drivers/staging/media/atomisp/Kconfig
++++ b/drivers/staging/media/atomisp/Kconfig
+@@ -12,12 +12,12 @@ menuconfig INTEL_ATOMISP
+ config VIDEO_ATOMISP
+ 	tristate "Intel Atom Image Signal Processor Driver"
+ 	depends on VIDEO_DEV && INTEL_ATOMISP
++	depends on IPU_BRIDGE
+ 	depends on MEDIA_PCI_SUPPORT
+ 	depends on PMIC_OPREGION
+ 	depends on I2C
+ 	select V4L2_FWNODE
+ 	select IOSF_MBI
+-	select IPU_BRIDGE
+ 	select VIDEOBUF2_VMALLOC
+ 	select VIDEO_V4L2_SUBDEV_API
+ 	help
 -- 
-Regards,
+2.39.2
 
-Sakari Ailus
