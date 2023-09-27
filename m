@@ -2,44 +2,54 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5295CE82CAA
-	for <linux-media@archiver.kernel.org>; Wed, 27 Sep 2023 16:02:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69965E82CB0
+	for <linux-media@archiver.kernel.org>; Wed, 27 Sep 2023 16:07:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232196AbjI0QCZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 27 Sep 2023 12:02:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56802 "EHLO
+        id S231576AbjI0QHh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 27 Sep 2023 12:07:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231758AbjI0QCV (ORCPT
+        with ESMTP id S231752AbjI0QHf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 27 Sep 2023 12:02:21 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF5D19AF
-        for <linux-media@vger.kernel.org>; Wed, 27 Sep 2023 08:39:18 -0700 (PDT)
-Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:672:46bd:3ec7:6cdf])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 74BA86607033;
-        Wed, 27 Sep 2023 16:39:11 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1695829151;
-        bh=Y2gbG+boVVeeKfICziMDXKerkrooR8u3fnUjSelh5ps=;
-        h=From:To:Cc:Subject:Date:From;
-        b=HTLRqfIdn2ys3ZUrq525oQ1uQ/oeui/ivJybg7vJzGNA+ZO2N1YRIZ5ngR/v4qllO
-         g7ksZWLlXCi9qnfHSkXB0sIXxVqLflkz0X1UjWlzKvjg9XJKe21kwLBHWohny0Q87y
-         6bvB8mLqOxTH96O4qltjSrdI5WVVKc1MUwnExs7v92YR/ChXPEtTE36ZtmHrVIB6Gy
-         fFr8EGM3YlT/3r9wUPXPbvbTNd6aezVKlLamrgFHXDqQx/tAn4v5vDPWCvjVZDeiko
-         7sPliROJB8qqzsM3aNAxivmmk3463R3Asz3qV5fWW47IsN5S5tsz/9IXHEkdAIde4v
-         92XKBfg3jwp4A==
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To:     hverkuil-cisco@xs4all.nl, mchehab@kernel.org,
-        nicolas.dufresne@collabora.com
-Cc:     linux-media@vger.kernel.org, kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v2 1/2] v4l2-compliance: Test queue maximum buffers allocation
-Date:   Wed, 27 Sep 2023 17:39:06 +0200
-Message-Id: <20230927153907.159496-1-benjamin.gaignard@collabora.com>
+        Wed, 27 Sep 2023 12:07:35 -0400
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 27 Sep 2023 09:07:33 PDT
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A7AEB
+        for <linux-media@vger.kernel.org>; Wed, 27 Sep 2023 09:07:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695830853; x=1727366853;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=v9hVh/N/PK1QIuBFVgck+UMPuDpRb2z8maLdn2itugY=;
+  b=b8QevpCU1KTD7mhvl6jm/qVybZphaatIAxrittYLhJ9Vs8jk7H1NvEZx
+   hRNVVY5gvbqigPQJJZtdOkZc8+Zc9jGpXMLB4NBfdZ6+HnT+Qq+PyxlVy
+   gIr1DK0zLdAV46/EwIYvibJxvM7LwXRYZbW6uZNPLBJ0rz/6ss5Lb8j6p
+   5ghkqQ+UnmFgxRz8c7SX8BVQzvm2yLDHBkgGywPbMrhuJoJJxU6O643/X
+   gvQYPa7iMUKsC8pgLKbSNlDpZQqJylyo7GwlBFnwyhzOjhhwV3MGORgMN
+   5UlSp6e4Bt0gaaHxQki90VspZSwuLuQDMBk+oW9TXAve/6q0ndfkgbs5R
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10846"; a="3397253"
+X-IronPort-AV: E=Sophos;i="6.03,181,1694761200"; 
+   d="scan'208";a="3397253"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 09:06:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10846"; a="778586148"
+X-IronPort-AV: E=Sophos;i="6.03,181,1694761200"; 
+   d="scan'208";a="778586148"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 09:06:28 -0700
+Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 92BFE11F967;
+        Wed, 27 Sep 2023 19:06:24 +0300 (EEST)
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 1/1] media: Documentation: Split camera sensor documentation
+Date:   Wed, 27 Sep 2023 19:06:23 +0300
+Message-Id: <20230927160623.399428-1-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -47,191 +57,335 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-If V4L2_BUF_CAP_SUPPORTS_SET_MAX_BUFS is set v4l2_create_buffers
-max_buffers field reports the maximum number of buffers supported
-by the queue.
-Add a test to allocate this maximum value and make sure that one
-more allocation is failing.
-Display the flag in v4l2-ctl.
+Split camera sensor documentation into user and kernel portions. This
+should make it easier for the user space developers to find the relevant
+documentation.
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Also add a list of exemplary drivers and add imx219 driver to it, besides
+those that were already mentioned.
+
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- include/linux/videodev2.h                   |  7 +++-
- utils/common/cv4l-helpers.h                 |  1 +
- utils/common/v4l-helpers.h                  |  5 +++
- utils/common/v4l2-info.cpp                  |  1 +
- utils/v4l2-compliance/v4l2-compliance.cpp   |  1 +
- utils/v4l2-compliance/v4l2-compliance.h     |  1 +
- utils/v4l2-compliance/v4l2-test-buffers.cpp | 39 ++++++++++++++++++++-
- 7 files changed, 53 insertions(+), 2 deletions(-)
+ .../driver-api/media/camera-sensor.rst        | 135 ++++++------------
+ .../media/drivers/camera-sensor.rst           | 104 ++++++++++++++
+ .../userspace-api/media/drivers/index.rst     |   1 +
+ .../userspace-api/media/v4l/control.rst       |   4 +
+ 4 files changed, 151 insertions(+), 93 deletions(-)
+ create mode 100644 Documentation/userspace-api/media/drivers/camera-sensor.rst
 
-diff --git a/include/linux/videodev2.h b/include/linux/videodev2.h
-index c19441a1..ac5d2980 100644
---- a/include/linux/videodev2.h
-+++ b/include/linux/videodev2.h
-@@ -986,6 +986,7 @@ struct v4l2_requestbuffers {
- #define V4L2_BUF_CAP_SUPPORTS_ORPHANED_BUFS		(1 << 4)
- #define V4L2_BUF_CAP_SUPPORTS_M2M_HOLD_CAPTURE_BUF	(1 << 5)
- #define V4L2_BUF_CAP_SUPPORTS_MMAP_CACHE_HINTS		(1 << 6)
-+#define V4L2_BUF_CAP_SUPPORTS_SET_MAX_BUFS		(1 << 7)
+diff --git a/Documentation/driver-api/media/camera-sensor.rst b/Documentation/driver-api/media/camera-sensor.rst
+index 2acc08142a1a..1f32a7e2d858 100644
+--- a/Documentation/driver-api/media/camera-sensor.rst
++++ b/Documentation/driver-api/media/camera-sensor.rst
+@@ -1,8 +1,14 @@
+ .. SPDX-License-Identifier: GPL-2.0
  
- /**
-  * struct v4l2_plane - plane info for multi-planar buffers
-@@ -2531,6 +2532,9 @@ struct v4l2_dbg_chip_info {
-  * @flags:	additional buffer management attributes (ignored unless the
-  *		queue has V4L2_BUF_CAP_SUPPORTS_MMAP_CACHE_HINTS capability
-  *		and configured for MMAP streaming I/O).
-+ * @max_buffers: if V4L2_BUF_CAP_SUPPORTS_SET_MAX_BUFS capability flag is set
-+ *		 this field indicate the maximum possible number of buffers
-+ *		 for this queue.
-  * @reserved:	future extensions
-  */
- struct v4l2_create_buffers {
-@@ -2540,7 +2544,8 @@ struct v4l2_create_buffers {
- 	struct v4l2_format	format;
- 	__u32			capabilities;
- 	__u32			flags;
--	__u32			reserved[6];
-+	__u32			max_buffers;
-+	__u32			reserved[5];
- };
++.. _media_writing_camera_sensor_drivers:
++
+ Writing camera sensor drivers
+ =============================
  
- /*
-diff --git a/utils/common/cv4l-helpers.h b/utils/common/cv4l-helpers.h
-index 91a04146..5a515a13 100644
---- a/utils/common/cv4l-helpers.h
-+++ b/utils/common/cv4l-helpers.h
-@@ -743,6 +743,7 @@ public:
- 	unsigned g_type() const { return v4l_queue_g_type(this); }
- 	unsigned g_memory() const { return v4l_queue_g_memory(this); }
- 	unsigned g_buffers() const { return v4l_queue_g_buffers(this); }
-+	unsigned g_max_buffers() const { return v4l_queue_g_max_buffers(this); }
- 	unsigned g_num_planes() const { return v4l_queue_g_num_planes(this); }
- 	unsigned g_capabilities() const { return v4l_queue_g_capabilities(this); }
- 	unsigned g_length(unsigned plane) const { return v4l_queue_g_length(this, plane); }
-diff --git a/utils/common/v4l-helpers.h b/utils/common/v4l-helpers.h
-index f8e96d58..5853f753 100644
---- a/utils/common/v4l-helpers.h
-+++ b/utils/common/v4l-helpers.h
-@@ -1429,6 +1429,7 @@ struct v4l_queue {
- 	unsigned mappings;
- 	unsigned num_planes;
- 	unsigned capabilities;
-+	unsigned max_buffers;
++This document covers the in-kernel APIs only. For the best practices on
++userspace API implementation in camera sensor drivers, please see
++:ref:`media_using_camera_sensor_drivers`.
++
+ CSI-2 and parallel (BT.601 and BT.656) busses
+ ---------------------------------------------
  
- 	__u32 lengths[VIDEO_MAX_PLANES];
- 	__u32 mem_offsets[VIDEO_MAX_FRAME][VIDEO_MAX_PLANES];
-@@ -1453,6 +1454,7 @@ static inline void v4l_queue_init(struct v4l_queue *q,
- static inline unsigned v4l_queue_g_type(const struct v4l_queue *q) { return q->type; }
- static inline unsigned v4l_queue_g_memory(const struct v4l_queue *q) { return q->memory; }
- static inline unsigned v4l_queue_g_buffers(const struct v4l_queue *q) { return q->buffers; }
-+static inline unsigned v4l_queue_g_max_buffers(const struct v4l_queue *q) { return q->max_buffers; }
- static inline unsigned v4l_queue_g_mappings(const struct v4l_queue *q) { return q->mappings; }
- static inline unsigned v4l_queue_g_num_planes(const struct v4l_queue *q) { return q->num_planes; }
- static inline unsigned v4l_queue_g_capabilities(const struct v4l_queue *q) { return q->capabilities; }
-@@ -1587,6 +1589,9 @@ static inline int v4l_queue_create_bufs(struct v4l_fd *f,
- 	if (ret)
- 		return ret;
- 	q->capabilities = createbufs.capabilities;
-+	q->max_buffers = 32;
-+	if (q->capabilities & V4L2_BUF_CAP_SUPPORTS_SET_MAX_BUFS)
-+		q->max_buffers = createbufs.max_buffers;
- 	q->buffers += createbufs.count;
- 	return v4l_queue_querybufs(f, q, q->buffers - createbufs.count);
- }
-diff --git a/utils/common/v4l2-info.cpp b/utils/common/v4l2-info.cpp
-index 4f8c2aa7..7adfedfc 100644
---- a/utils/common/v4l2-info.cpp
-+++ b/utils/common/v4l2-info.cpp
-@@ -206,6 +206,7 @@ static constexpr flag_def bufcap_def[] = {
- 	{ V4L2_BUF_CAP_SUPPORTS_ORPHANED_BUFS, "orphaned-bufs" },
- 	{ V4L2_BUF_CAP_SUPPORTS_M2M_HOLD_CAPTURE_BUF, "m2m-hold-capture-buf" },
- 	{ V4L2_BUF_CAP_SUPPORTS_MMAP_CACHE_HINTS, "mmap-cache-hints" },
-+	{ V4L2_BUF_CAP_SUPPORTS_SET_MAX_BUFS, "set-max-bufs" },
- 	{ 0, nullptr }
- };
+@@ -34,7 +40,8 @@ Devicetree
  
-diff --git a/utils/v4l2-compliance/v4l2-compliance.cpp b/utils/v4l2-compliance/v4l2-compliance.cpp
-index f62016e5..56190448 100644
---- a/utils/v4l2-compliance/v4l2-compliance.cpp
-+++ b/utils/v4l2-compliance/v4l2-compliance.cpp
-@@ -1448,6 +1448,7 @@ void testNode(struct node &node, struct node &node_m2m_cap, struct node &expbuf_
+ The preferred way to achieve this is using ``assigned-clocks``,
+ ``assigned-clock-parents`` and ``assigned-clock-rates`` properties. See the
+-`clock device tree bindings <https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/clock/clock.yaml>`_
++`clock device tree bindings
++<https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/clock/clock.yaml>`_
+ for more information. The driver then gets the frequency using
+ ``clk_get_rate()``.
  
- 		printf("Buffer ioctls%s:\n", suffix);
- 		printf("\ttest VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: %s\n", ok(testReqBufs(&node)));
-+		printf("\ttest CREATE_BUFS maximum buffers: %s\n", ok(testCreateBufsMax(&node)));
- 		// Reopen after each streaming test to reset the streaming state
- 		// in case of any errors in the preceeding test.
- 		node.reopen();
-diff --git a/utils/v4l2-compliance/v4l2-compliance.h b/utils/v4l2-compliance/v4l2-compliance.h
-index 7caf254b..4886e4c8 100644
---- a/utils/v4l2-compliance/v4l2-compliance.h
-+++ b/utils/v4l2-compliance/v4l2-compliance.h
-@@ -383,6 +383,7 @@ int testReqBufs(struct node *node);
- int testReadWrite(struct node *node);
- int testExpBuf(struct node *node);
- int testBlockingWait(struct node *node);
-+int testCreateBufsMax(struct node *node);
+@@ -85,9 +92,7 @@ PM instead. If you feel you need to begin calling ``.s_power()`` from an ISP or
+ a bridge driver, instead add runtime PM support to the sensor driver you are
+ using and drop its ``.s_power()`` handler.
  
- // 32-bit architecture, 32/64-bit time_t tests
- int testTime32_64(struct node *node);
-diff --git a/utils/v4l2-compliance/v4l2-test-buffers.cpp b/utils/v4l2-compliance/v4l2-test-buffers.cpp
-index 6d592c9b..b595d1d1 100644
---- a/utils/v4l2-compliance/v4l2-test-buffers.cpp
-+++ b/utils/v4l2-compliance/v4l2-test-buffers.cpp
-@@ -634,7 +634,6 @@ int testReqBufs(struct node *node)
- 			fail_on_test(testQueryBuf(node, i, q.g_buffers()));
- 			node->valid_memorytype |= 1 << V4L2_MEMORY_DMABUF;
- 		}
+-See examples of runtime PM handling in e.g. ``drivers/media/i2c/ov8856.c`` and
+-``drivers/media/i2c/ccs/ccs-core.c``. The two drivers work in both ACPI and DT
+-based systems.
++Please also see :ref:`examples <media-camera-sensor-examples>`.
+ 
+ Control framework
+ ~~~~~~~~~~~~~~~~~
+@@ -104,99 +109,43 @@ The function returns a non-zero value if it succeeded getting the power count or
+ runtime PM was disabled, in either of which cases the driver may proceed to
+ access the device.
+ 
+-Frame size
+-----------
 -
- 		/*
- 		 * It should be possible to set the same std, timings or
- 		 * native size even after reqbufs was called.
-@@ -761,6 +760,44 @@ int testReqBufs(struct node *node)
- 	return 0;
- }
+-There are two distinct ways to configure the frame size produced by camera
+-sensors.
+-
+-Freely configurable camera sensor drivers
+-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-
+-Freely configurable camera sensor drivers expose the device's internal
+-processing pipeline as one or more sub-devices with different cropping and
+-scaling configurations. The output size of the device is the result of a series
+-of cropping and scaling operations from the device's pixel array's size.
+-
+-An example of such a driver is the CCS driver (see ``drivers/media/i2c/ccs``).
+-
+-Register list based drivers
+-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-
+-Register list based drivers generally, instead of able to configure the device
+-they control based on user requests, are limited to a number of preset
+-configurations that combine a number of different parameters that on hardware
+-level are independent. How a driver picks such configuration is based on the
+-format set on a source pad at the end of the device's internal pipeline.
+-
+-Most sensor drivers are implemented this way, see e.g.
+-``drivers/media/i2c/imx319.c`` for an example.
+-
+-Frame interval configuration
+-----------------------------
+-
+-There are two different methods for obtaining possibilities for different frame
+-intervals as well as configuring the frame interval. Which one to implement
+-depends on the type of the device.
+-
+-Raw camera sensors
+-~~~~~~~~~~~~~~~~~~
+-
+-Instead of a high level parameter such as frame interval, the frame interval is
+-a result of the configuration of a number of camera sensor implementation
+-specific parameters. Luckily, these parameters tend to be the same for more or
+-less all modern raw camera sensors.
+-
+-The frame interval is calculated using the following equation::
+-
+-	frame interval = (analogue crop width + horizontal blanking) *
+-			 (analogue crop height + vertical blanking) / pixel rate
+-
+-The formula is bus independent and is applicable for raw timing parameters on
+-large variety of devices beyond camera sensors. Devices that have no analogue
+-crop, use the full source image size, i.e. pixel array size.
+-
+-Horizontal and vertical blanking are specified by ``V4L2_CID_HBLANK`` and
+-``V4L2_CID_VBLANK``, respectively. The unit of the ``V4L2_CID_HBLANK`` control
+-is pixels and the unit of the ``V4L2_CID_VBLANK`` is lines. The pixel rate in
+-the sensor's **pixel array** is specified by ``V4L2_CID_PIXEL_RATE`` in the same
+-sub-device. The unit of that control is pixels per second.
+-
+-Register list based drivers need to implement read-only sub-device nodes for the
+-purpose. Devices that are not register list based need these to configure the
+-device's internal processing pipeline.
+-
+-The first entity in the linear pipeline is the pixel array. The pixel array may
+-be followed by other entities that are there to allow configuring binning,
+-skipping, scaling or digital crop :ref:`v4l2-subdev-selections`.
+-
+-USB cameras etc. devices
+-~~~~~~~~~~~~~~~~~~~~~~~~
+-
+-USB video class hardware, as well as many cameras offering a similar higher
+-level interface natively, generally use the concept of frame interval (or frame
+-rate) on device level in firmware or hardware. This means lower level controls
+-implemented by raw cameras may not be used on uAPI (or even kAPI) to control the
+-frame interval on these devices.
+-
+ Rotation, orientation and flipping
+ ----------------------------------
  
-+int testCreateBufsMax(struct node *node)
-+{
-+	unsigned int i;
-+	int ret;
+-Some systems have the camera sensor mounted upside down compared to its natural
+-mounting rotation. In such cases, drivers shall expose the information to
+-userspace with the :ref:`V4L2_CID_CAMERA_SENSOR_ROTATION
+-<v4l2-camera-sensor-rotation>` control.
+-
+-Sensor drivers shall also report the sensor's mounting orientation with the
+-:ref:`V4L2_CID_CAMERA_SENSOR_ORIENTATION <v4l2-camera-sensor-orientation>`.
+-
+ Use ``v4l2_fwnode_device_parse()`` to obtain rotation and orientation
+ information from system firmware and ``v4l2_ctrl_new_fwnode_properties()`` to
+ register the appropriate controls.
+ 
+-Sensor drivers that have any vertical or horizontal flips embedded in the
+-register programming sequences shall initialize the V4L2_CID_HFLIP and
+-V4L2_CID_VFLIP controls with the values programmed by the register sequences.
+-The default values of these controls shall be 0 (disabled). Especially these
+-controls shall not be inverted, independently of the sensor's mounting
+-rotation.
++.. _media-camera-sensor-examples:
 +
-+	node->reopen();
++Example drivers
++---------------
 +
-+	cv4l_queue q(0, 0);
++Features implemented by sensor drivers vary, and depending on the set of
++supported features and other qualities, particular sensor drivers better serve
++the purpose of an example. The following drivers are known to be good examples:
 +
-+	for (i = 1; i <= V4L2_BUF_TYPE_LAST; i++) {
-+		if (!(node->valid_buftypes & (1 << i)))
-+			continue;
++.. flat-table:: Example sensor drivers
++    :header-rows: 0
++    :widths:      1 1 1 2
 +
-+		q.init(i, V4L2_MEMORY_USERPTR);
-+		ret = q.create_bufs(node, 1);
-+		if (!ret && (q.g_capabilities() & V4L2_BUF_CAP_SUPPORTS_SET_MAX_BUFS)) {
-+			fail_on_test(q.create_bufs(node, q.g_max_buffers() - q.g_buffers()));
-+			fail_on_test(q.create_bufs(node, 1) != ENOBUFS);
-+		}
++    * - Driver name
++      - File(s)
++      - Driver type
++      - Example topic
++    * - CCS
++      - ``drivers/media/i2c/ccs/``
++      - Freely configurable
++      - Power management (ACPI and DT), UAPI
++    * - imx219
++      - ``drivers/media/i2c/imx219.c``
++      - Register list based
++      - Power management (DT), UAPI, mode selection
++    * - imx319
++      - ``drivers/media/i2c/imx319.c``
++      - Register list based
++      - Power management (ACPI and DT)
++    * - ov8865
++      - ``drivers/media/i2c/ov8865.c``
++      - Register list based
++      - Power management (ACPI and DT)
+diff --git a/Documentation/userspace-api/media/drivers/camera-sensor.rst b/Documentation/userspace-api/media/drivers/camera-sensor.rst
+new file mode 100644
+index 000000000000..919a50e8b9d9
+--- /dev/null
++++ b/Documentation/userspace-api/media/drivers/camera-sensor.rst
+@@ -0,0 +1,104 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
-+		q.init(i, V4L2_MEMORY_MMAP);
-+		ret = q.create_bufs(node, 1);
-+		if (!ret && (q.g_capabilities() & V4L2_BUF_CAP_SUPPORTS_SET_MAX_BUFS)) {
-+			fail_on_test(q.create_bufs(node, q.g_max_buffers() - q.g_buffers()));
-+			fail_on_test(q.create_bufs(node, 1) != ENOBUFS);
-+		}
++.. _media_using_camera_sensor_drivers:
 +
-+		q.init(i, V4L2_MEMORY_DMABUF);
-+		ret = q.create_bufs(node, 1);
-+		if (!ret && (q.g_capabilities() & V4L2_BUF_CAP_SUPPORTS_SET_MAX_BUFS)) {
-+			fail_on_test(q.create_bufs(node, q.g_max_buffers() - q.g_buffers()));
-+			fail_on_test(q.create_bufs(node, 1) != ENOBUFS);
-+		}
-+	}
++Using camera sensor drivers
++===========================
 +
-+	return 0;
-+}
++This section describes common practices for how the V4L2 sub-device interface is
++used to control the camera sensor drivers.
 +
- int testExpBuf(struct node *node)
- {
- 	bool have_expbuf = false;
++You may also find :ref:`media_writing_camera_sensor_drivers` useful.
++
++Frame size
++----------
++
++There are two distinct ways to configure the frame size produced by camera
++sensors.
++
++Freely configurable camera sensor drivers
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++Freely configurable camera sensor drivers expose the device's internal
++processing pipeline as one or more sub-devices with different cropping and
++scaling configurations. The output size of the device is the result of a series
++of cropping and scaling operations from the device's pixel array's size.
++
++An example of such a driver is the CCS driver.
++
++Register list based drivers
++~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++Register list based drivers generally, instead of able to configure the device
++they control based on user requests, are limited to a number of preset
++configurations that combine a number of different parameters that on hardware
++level are independent. How a driver picks such configuration is based on the
++format set on a source pad at the end of the device's internal pipeline.
++
++Most sensor drivers are implemented this way.
++
++Frame interval configuration
++----------------------------
++
++There are two different methods for obtaining possibilities for different frame
++intervals as well as configuring the frame interval. Which one to implement
++depends on the type of the device.
++
++Raw camera sensors
++~~~~~~~~~~~~~~~~~~
++
++Instead of a high level parameter such as frame interval, the frame interval is
++a result of the configuration of a number of camera sensor implementation
++specific parameters. Luckily, these parameters tend to be the same for more or
++less all modern raw camera sensors.
++
++The frame interval is calculated using the following equation::
++
++	frame interval = (analogue crop width + horizontal blanking) *
++			 (analogue crop height + vertical blanking) / pixel rate
++
++The formula is bus independent and is applicable for raw timing parameters on
++large variety of devices beyond camera sensors. Devices that have no analogue
++crop, use the full source image size, i.e. pixel array size.
++
++Horizontal and vertical blanking are specified by ``V4L2_CID_HBLANK`` and
++``V4L2_CID_VBLANK``, respectively. The unit of the ``V4L2_CID_HBLANK`` control
++is pixels and the unit of the ``V4L2_CID_VBLANK`` is lines. The pixel rate in
++the sensor's **pixel array** is specified by ``V4L2_CID_PIXEL_RATE`` in the same
++sub-device. The unit of that control is pixels per second.
++
++Register list based drivers need to implement read-only sub-device nodes for the
++purpose. Devices that are not register list based need these to configure the
++device's internal processing pipeline.
++
++The first entity in the linear pipeline is the pixel array. The pixel array may
++be followed by other entities that are there to allow configuring binning,
++skipping, scaling or digital crop, see :ref:`VIDIOC_SUBDEV_G_SELECTION
++<VIDIOC_SUBDEV_G_SELECTION>`.
++
++USB cameras etc. devices
++~~~~~~~~~~~~~~~~~~~~~~~~
++
++USB video class hardware, as well as many cameras offering a similar higher
++level interface natively, generally use the concept of frame interval (or frame
++rate) on device level in firmware or hardware. This means lower level controls
++implemented by raw cameras may not be used on uAPI (or even kAPI) to control the
++frame interval on these devices.
++
++Rotation, orientation and flipping
++----------------------------------
++
++Some systems have the camera sensor mounted upside down compared to its natural
++mounting rotation. In such cases, drivers shall expose the information to
++userspace with the :ref:`V4L2_CID_CAMERA_SENSOR_ROTATION
++<v4l2-camera-sensor-rotation>` control.
++
++Sensor drivers shall also report the sensor's mounting orientation with the
++:ref:`V4L2_CID_CAMERA_SENSOR_ORIENTATION <v4l2-camera-sensor-orientation>`.
++
++Sensor drivers that have any vertical or horizontal flips embedded in the
++register programming sequences shall initialize the :ref:`V4L2_CID_HFLIP
++<v4l2-cid-hflip>` and :ref:`V4L2_CID_VFLIP <v4l2-cid-vflip>` controls with the
++values programmed by the register sequences. The default values of these
++controls shall be 0 (disabled). Especially these controls shall not be inverted,
++independently of the sensor's mounting rotation.
+diff --git a/Documentation/userspace-api/media/drivers/index.rst b/Documentation/userspace-api/media/drivers/index.rst
+index 783f92f01a4c..1726f8ec86fa 100644
+--- a/Documentation/userspace-api/media/drivers/index.rst
++++ b/Documentation/userspace-api/media/drivers/index.rst
+@@ -32,6 +32,7 @@ For more details see the file COPYING in the source distribution of Linux.
+ 	:numbered:
+ 
+ 	aspeed-video
++	camera-sensor
+ 	ccs
+ 	cx2341x-uapi
+ 	dw100
+diff --git a/Documentation/userspace-api/media/v4l/control.rst b/Documentation/userspace-api/media/v4l/control.rst
+index 4463fce694b0..57893814a1e5 100644
+--- a/Documentation/userspace-api/media/v4l/control.rst
++++ b/Documentation/userspace-api/media/v4l/control.rst
+@@ -143,9 +143,13 @@ Control IDs
+     recognise the difference between digital and analogue gain use
+     controls ``V4L2_CID_DIGITAL_GAIN`` and ``V4L2_CID_ANALOGUE_GAIN``.
+ 
++.. _v4l2-cid-hflip:
++
+ ``V4L2_CID_HFLIP`` ``(boolean)``
+     Mirror the picture horizontally.
+ 
++.. _v4l2-cid-vflip:
++
+ ``V4L2_CID_VFLIP`` ``(boolean)``
+     Mirror the picture vertically.
+ 
 -- 
 2.39.2
 
