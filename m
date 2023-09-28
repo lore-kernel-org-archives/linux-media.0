@@ -2,908 +2,247 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67AECCE7B11
-	for <linux-media@archiver.kernel.org>; Thu, 28 Sep 2023 09:38:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E9B0CE7B11
+	for <linux-media@archiver.kernel.org>; Thu, 28 Sep 2023 09:42:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231934AbjI1JiO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 28 Sep 2023 05:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60368 "EHLO
+        id S231705AbjI1JmU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 28 Sep 2023 05:42:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231856AbjI1JiC (ORCPT
+        with ESMTP id S231781AbjI1JmO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 28 Sep 2023 05:38:02 -0400
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C907CCCC;
-        Thu, 28 Sep 2023 02:37:53 -0700 (PDT)
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 0A4F81A15C9;
-        Thu, 28 Sep 2023 11:37:52 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 9B48C1A059B;
-        Thu, 28 Sep 2023 11:37:51 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id A849A181D0C0;
-        Thu, 28 Sep 2023 17:37:49 +0800 (+08)
-From:   Shengjiu Wang <shengjiu.wang@nxp.com>
-To:     hverkuil@xs4all.nl, sakari.ailus@iki.fi, tfiga@chromium.org,
-        m.szyprowski@samsung.com, mchehab@kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shengjiu.wang@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
-        nicoleotsuka@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
-        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: [RFC PATCH v5 11/11] media: audm2m: add virtual driver for audio memory to memory
-Date:   Thu, 28 Sep 2023 17:00:19 +0800
-Message-Id: <1695891619-32393-12-git-send-email-shengjiu.wang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1695891619-32393-1-git-send-email-shengjiu.wang@nxp.com>
-References: <1695891619-32393-1-git-send-email-shengjiu.wang@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        Thu, 28 Sep 2023 05:42:14 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2049.outbound.protection.outlook.com [40.107.21.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2444719E;
+        Thu, 28 Sep 2023 02:42:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YaDSW6knZodXa79d+VAso/VtxRavZyYFpLIF8MpD5yaOQrREQkDxT6fY9HXWgevmdHv2crjqZmLYg0r2g25PW7ClYX8jWrEQKegHeVJtyr7Dgr+qKtRZ2ljGwGeMSazi6ZAAoBj9WMFbm+3N1r6y5I05ldqIrJmsUYoB7y/eYo03hy+f9hFn58Cof+IMzzuVeYHFbG6oXGnz/WItezj8W4XjhkCtYC7YsNtP2a6paF7jYHqxkGEHPhKc+7vEN3HX5aDemrKQwFHi0EKW7RLYTusirBHkz0FMaH3XY5AshYkT0SMIxLGLsEE/vUmgVND9iVh5pJkZ8+K3qAbUQqmMIA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SvxlaZR/bpEzvW6nuYvQvk6kR6hmXihWC9AmpvmX4OU=;
+ b=oCYpQCQwknpPIH2zj7ULbLqoCfVzQjslq6b52y6v6QMrPJDLWAdFGoW5XTHz4oA0EIdpPQhLQfCNDuVp6Ejui5yLocmSd8JBXIsX5zEszl2DOFUf1S6gAxdeMLTvcNZTua9OO9Ed1y6LOHa0ldTHKlXg8yCukV/CKbJ/+CZ1qn3q/vcfOyE4vjSoxZC0MJY0u2HF72qRsTve9fhfDLHiYhMW9ifGWHJkSGDM2DB7Odm2By/89GZVRllcUoWr3MAo4TbfH20DWYyB4lWiZKj+hFSOr+0twspVbvbf5xT+nZcnwxZeuEJPD4BtA8BOnjn2z1ly/AzgavYOsWWzEgGOkg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SvxlaZR/bpEzvW6nuYvQvk6kR6hmXihWC9AmpvmX4OU=;
+ b=QEzuPOnBwokcUSXMVIvnQteFTOlbsTqwJT+GowIO7454sJDXyMY9ReqsCc3AjFvcdJBvipW//jzujNblgTygOLddVBSWdf0Ui4k3OBIpC+fm22XvR1P04ogBv+Ws9prCnvHmt/jWhWS10hN7SoWCqvgx5CjLWfmLOpK82PqVhaM=
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
+ by DBBPR04MB7850.eurprd04.prod.outlook.com (2603:10a6:10:1e8::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.28; Thu, 28 Sep
+ 2023 09:42:08 +0000
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::71e6:21de:ecb2:560f]) by AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::71e6:21de:ecb2:560f%4]) with mapi id 15.20.6813.027; Thu, 28 Sep 2023
+ 09:42:07 +0000
+From:   Ming Qian <ming.qian@nxp.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "Mirela Rabulea (OSS)" <mirela.rabulea@oss.nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>
+CC:     "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "conor+dt@kernel.org" <conor+dt@kernel.org>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "X.H. Bao" <xiahong.bao@nxp.com>, Eagle Zhou <eagle.zhou@nxp.com>,
+        Tao Jiang <tao.jiang_2@nxp.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: RE: [EXT] Re: [PATCH v4 2/2] dt-bindings: media: imx-jpeg: Assign
+ slot for imx jpeg encoder/decoder
+Thread-Topic: [EXT] Re: [PATCH v4 2/2] dt-bindings: media: imx-jpeg: Assign
+ slot for imx jpeg encoder/decoder
+Thread-Index: AQHZ8GGrmZBLZQgREEat4sCPmu/sQrAuUiWAgAANvVCAAVJ5AIAAR0kg
+Date:   Thu, 28 Sep 2023 09:42:07 +0000
+Message-ID: <AM6PR04MB63412A27FDC244D1A8FB7CA0E7C1A@AM6PR04MB6341.eurprd04.prod.outlook.com>
+References: <20230926101000.13392-1-ming.qian@nxp.com>
+ <20230926101000.13392-2-ming.qian@nxp.com>
+ <2c351ca0-cee4-4c1b-956b-6134ad101a9a@linaro.org>
+ <AM6PR04MB63415CF2EDCF0AF33F778774E7C2A@AM6PR04MB6341.eurprd04.prod.outlook.com>
+ <45abc9ec-1f7a-469c-bc0f-2a065499b0b4@linaro.org>
+In-Reply-To: <45abc9ec-1f7a-469c-bc0f-2a065499b0b4@linaro.org>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AM6PR04MB6341:EE_|DBBPR04MB7850:EE_
+x-ms-office365-filtering-correlation-id: 88f7bdcc-9d4f-456d-bdc1-08dbc0072e63
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: fP/MC/jx9z9AB/QfdCiIncnRP2+mZrHdWzjnBYijsxQEggis6GvPvMubFiYOyfnSeGTymsiBaNGtm/5PpuQr4irqwc7fhGwRi+o0KXPjPwYBig/heqOhK/ykwX6k//JHhDzSomeUrvLlXKjm5gFi3kA7aQKvIjI+a3MAQeoYr9gU1gR+JBtlds29j6qML+e9QxBkH/KcOVDC02IRleAQyuPDbNFBsSXKJ223Fmhq9X9zNf5vtJa+f5L4ZgtXUzKnfUKHEQkvd8LJzdEJVYCLQiDslRXMIg4qQ47aHfT+gKggBnzTq2J4LjKAiJNrjLsemdPKYAGh2cDfEGcTkqXlFMD5VSE3yiY2BtjSe52hHEqnjpOplMcbNnORgyATgPtxZxitYSff50zAvzYByYBLYoxJcgehgbpWMSz+f9vhJY8BSKICa26SiRF7OJ732BzhnCD9O3x5snfP/yu5jEXtbVMZBzbWZlHfH51l/YuWyqkohHF7ybqX0pAxtXC90olQwHSlLvCv/j7DvuBKKUuK5YvfKKnb5SwRBcW46l8ynH1cxLLPue16qp/ZvNF+RVGVgtcDYrXWsT/8ocDJgOd/bgN+WuF0fBSqKBFwEyazIa8lieX7ODArOMEvOrR+ab2u
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(366004)(136003)(396003)(39860400002)(346002)(230922051799003)(451199024)(1800799009)(64100799003)(186009)(66946007)(76116006)(55016003)(8936002)(4326008)(52536014)(83380400001)(26005)(8676002)(110136005)(54906003)(316002)(64756008)(66556008)(41300700001)(9686003)(2906002)(71200400001)(44832011)(66476007)(66446008)(122000001)(5660300002)(478600001)(6506007)(53546011)(7696005)(7416002)(33656002)(38070700005)(38100700002)(86362001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bzk2TExUYmplRXRWR3prQzltZkVxUVI1RThWMlRlQ3ovSEtGVXRmYm5qazd5?=
+ =?utf-8?B?SjRnaGdqL01SYmlQSHR1WGNLTXZRampYTGVJbFM0cWFhd0U2bEJXNmtjeE11?=
+ =?utf-8?B?bXNJcWVGbVFnNVEyODg5bEFXcnAzNm5YK3dRakhRVDF2akkzQmJzZlZ2cUVs?=
+ =?utf-8?B?QW1QeTNSeXZLd0xLZnNHbG5qenpFNGpXUVEySEFGTXNOOXJwQ3VmQW5wRGxP?=
+ =?utf-8?B?U2ZvTDNXYXBxU2pGSXREMUZtZVRJUWJVM1RRcUVBc09uanZuY1Y5K0dmYXlZ?=
+ =?utf-8?B?Zk8yejVhUVp0eTlISGlsWk5VdjBVenY5aWY3R1FWZEp3WXJZbUI4aWhaUzlB?=
+ =?utf-8?B?R1FhQldETkZUb1VHQ2FJejhxUkRvTktUZGpBMElSbmR3Z3JqaFArc3BMRWdt?=
+ =?utf-8?B?L2lQU3RIUDhrWGY3YjFCVUFBcitLM1F4Mzk5bko3TXp2VkwyV2dlY21EVnJ3?=
+ =?utf-8?B?TUd1TXNyYU5NaUxJa3VVcjZvNjd4YVhsNHpMbEhqYisyZm1wUXBVR01RQ1pt?=
+ =?utf-8?B?akNwbU9jcFQyaDFqeHhxTDIrWGxNNTF6THVEVGxhdndxbTQwSks2Tm96WjhF?=
+ =?utf-8?B?d0F1VytxNTZrTnZsMXVjanlHUU5SYTE2MTlKRENQREpkWmdrc0pHZ09tdGJU?=
+ =?utf-8?B?MDcyUW5wbldybkdOajd4Q1RMYWNnRDFGSnVMTW9ENmJ1MWc0bkpsT0VPaXd4?=
+ =?utf-8?B?YkVCcFV0aUZnbHgyTU8wZjBOMXFEaUw0ZVFjbmkyR3RYeXdjbWZiYitzeEl5?=
+ =?utf-8?B?YVdEZDdnRDFXVko3Tm1zU3lQN1BTQ2xoY1BCY2NHYlpmNERBMHhrM3dJYzEv?=
+ =?utf-8?B?TE1jZVNZb01aRVF5MXBOY0NyQVdOZlBTS2htclJFeDdHSHFrWjZ1UXFRN290?=
+ =?utf-8?B?ckhIbWRKbVAxaWZvc1VVemRjcUlQSSs4b2h5ZytQY0U0aHB6QnpQZVJFcm0z?=
+ =?utf-8?B?WEM2elhDck1Mc25lSExtSGJYQ3ZLV2JFY2RyV2ZONTJKMzRjUHFxVUV2dUs0?=
+ =?utf-8?B?cExrUDNDMTVTWHhaUVZGSXhDaXk0bzdTWm4zc3Z2enFlRTRTa3NZOGxDUWh0?=
+ =?utf-8?B?NEt6dEJsSm5YMFRYSGF1ZGlrNElpRHppdSsxNjQxWitOVU95Y3FVOG1qMFQx?=
+ =?utf-8?B?VFAybTVyY3Nqa21xQVVSRis5dFhlN2MxTzducGI1V0ZwZ3c4ZUZvQzMyanVS?=
+ =?utf-8?B?SDBUNWh4ekhiTi9zb0ZEb1plMWtoZzNxS1JqL0xrSGpMNWlJc09qQXQrMFRa?=
+ =?utf-8?B?bjFCbVVZV041bWJMYmRtNHZRRW1rOVJIWWF0UDN4Y0dnTko3WHNLQnNITXZL?=
+ =?utf-8?B?L2xIYVR6eHZuZFJJSURNK3FCYk1YMFQ3Mkh4akZnWGJXbHNsTll3TDN4Rm8w?=
+ =?utf-8?B?NmhUNkNieW5mbkE0LzE0SGlPSVprSDY4bGk5TjVsaGt0bExGd09WZmNlRWN0?=
+ =?utf-8?B?enZ2cXFadnQ5RkhxNjFJa0RJVVNVV1cyTENYOUVTQmMvbU9NbHI3UURKWnZU?=
+ =?utf-8?B?U2d4bjY1OVpiR1d3NlVPT00rWjVJNDg2TmdML1p6ZlN3TFlCTEVXUWZMV3hq?=
+ =?utf-8?B?YVo0bThEWnIyWGxJK1ZvQjFLdlhCZ01aZ3Mvc2laeER5bkYybUJwUSsvS0Nn?=
+ =?utf-8?B?TlB2RjBPLzFKb1IrUnhPSHpiUTdLWHc1NFZMQUU5N2J6ZDhueklYMGxaUmtH?=
+ =?utf-8?B?dTZoTW5jTXROb2F1SjVIMjlPcE5MK3RSMHR5cUIrR0lpOTQvZDd6VVM0S2U3?=
+ =?utf-8?B?cWRwclJ5UnBQSmkveHMwSHQ2V3hKRklOWEVxZmR0aTRnL25GRnNqUld4YkE0?=
+ =?utf-8?B?aVloWDFQM05Xa09lNWpVby8vcFNwdXJtc3llMEJmRS9RekhLK0pPd21RNUpv?=
+ =?utf-8?B?STR6dkZ2c2lsVTk3NlQ4VXlUcGFNaUVQR0J0SkZwenc1SU5oby9meTh1Z1ZQ?=
+ =?utf-8?B?dVgvL3JIZXh2Nis3aEQxcUZYM290RnVRb1pWMFZVbzhESUFjdjB6NkMza2Qy?=
+ =?utf-8?B?ZjhROUpYQnZ2bjk1SjhjcHI1cWs0MXFobGovSjlIa0pSRERjY2xKVXhaTnJw?=
+ =?utf-8?B?TWhHQjhncnZ4eDZuNUs5TzJOWStZTVVSeDIrQUhCSGFVbTU5cXFwbGo1bG1O?=
+ =?utf-8?Q?1fCs=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 88f7bdcc-9d4f-456d-bdc1-08dbc0072e63
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Sep 2023 09:42:07.8187
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: gneD1hhQCT71pw34rxJcumcixzk4oQiEgXToGTgPcRWZZuVEIsq6whiVQ/3NQDsKKVoADH1PFn78hEDqdALsrg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7850
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Audio memory to memory virtual driver use video memory to memory
-virtual driver vim2m.c as example. The main difference is
-device type is VFL_TYPE_AUDIO and device cap type is V4L2_CAP_AUDIO_M2M.
-
-The device_run function is a dummy function, which is simply
-copy the data from input buffer to output buffer.
-
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
----
- drivers/media/test-drivers/Kconfig  |   9 +
- drivers/media/test-drivers/Makefile |   1 +
- drivers/media/test-drivers/audm2m.c | 808 ++++++++++++++++++++++++++++
- 3 files changed, 818 insertions(+)
- create mode 100644 drivers/media/test-drivers/audm2m.c
-
-diff --git a/drivers/media/test-drivers/Kconfig b/drivers/media/test-drivers/Kconfig
-index 459b433e9fae..be60d73cbf97 100644
---- a/drivers/media/test-drivers/Kconfig
-+++ b/drivers/media/test-drivers/Kconfig
-@@ -17,6 +17,15 @@ config VIDEO_VIM2M
- 	  This is a virtual test device for the memory-to-memory driver
- 	  framework.
- 
-+config VIDEO_AUDM2M
-+	tristate "Virtual Memory-to-Memory Driver For Audio"
-+	depends on VIDEO_DEV
-+	select VIDEOBUF2_VMALLOC
-+	select V4L2_MEM2MEM_DEV
-+	help
-+	  This is a virtual audio test device for the memory-to-memory driver
-+	  framework.
-+
- source "drivers/media/test-drivers/vicodec/Kconfig"
- source "drivers/media/test-drivers/vimc/Kconfig"
- source "drivers/media/test-drivers/vivid/Kconfig"
-diff --git a/drivers/media/test-drivers/Makefile b/drivers/media/test-drivers/Makefile
-index 740714a4584d..b53ed7e6eaf1 100644
---- a/drivers/media/test-drivers/Makefile
-+++ b/drivers/media/test-drivers/Makefile
-@@ -10,6 +10,7 @@ obj-$(CONFIG_DVB_VIDTV) += vidtv/
- 
- obj-$(CONFIG_VIDEO_VICODEC) += vicodec/
- obj-$(CONFIG_VIDEO_VIM2M) += vim2m.o
-+obj-$(CONFIG_VIDEO_AUDM2M) += audm2m.o
- obj-$(CONFIG_VIDEO_VIMC) += vimc/
- obj-$(CONFIG_VIDEO_VIVID) += vivid/
- obj-$(CONFIG_VIDEO_VISL) += visl/
-diff --git a/drivers/media/test-drivers/audm2m.c b/drivers/media/test-drivers/audm2m.c
-new file mode 100644
-index 000000000000..566cfc48748b
---- /dev/null
-+++ b/drivers/media/test-drivers/audm2m.c
-@@ -0,0 +1,808 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * A virtual v4l2-mem2mem example for audio device.
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/delay.h>
-+#include <linux/fs.h>
-+#include <linux/sched.h>
-+#include <linux/slab.h>
-+
-+#include <linux/platform_device.h>
-+#include <media/v4l2-mem2mem.h>
-+#include <media/v4l2-device.h>
-+#include <media/v4l2-ioctl.h>
-+#include <media/v4l2-ctrls.h>
-+#include <media/v4l2-event.h>
-+#include <media/videobuf2-vmalloc.h>
-+#include <sound/dmaengine_pcm.h>
-+
-+MODULE_DESCRIPTION("Virtual device for audio mem2mem testing");
-+MODULE_LICENSE("GPL");
-+MODULE_VERSION("0.1");
-+MODULE_ALIAS("audio_mem2mem_testdev");
-+
-+static unsigned int debug;
-+module_param(debug, uint, 0644);
-+MODULE_PARM_DESC(debug, "debug level");
-+
-+/* Flags that indicate a format can be used for capture/output */
-+#define MEM2MEM_CAPTURE	BIT(0)
-+#define MEM2MEM_OUTPUT	BIT(1)
-+
-+#define MEM2MEM_NAME "audm2m"
-+
-+#define dprintk(dev, lvl, fmt, arg...) \
-+	v4l2_dbg(lvl, debug, &(dev)->v4l2_dev, "%s: " fmt, __func__, ## arg)
-+
-+#define SAMPLE_NUM 4096
-+
-+static void audm2m_dev_release(struct device *dev)
-+{}
-+
-+static struct platform_device audm2m_pdev = {
-+	.name		= MEM2MEM_NAME,
-+	.dev.release	= audm2m_dev_release,
-+};
-+
-+struct audm2m_fmt {
-+	u32	fourcc;
-+	snd_pcm_format_t     format;
-+	u32     types;
-+};
-+
-+static struct audm2m_fmt formats[] = {
-+	{
-+		.fourcc = V4L2_AUDIO_FMT_S8,
-+		.format = SNDRV_PCM_FORMAT_S8,
-+		.types  = MEM2MEM_CAPTURE | MEM2MEM_OUTPUT,
-+	},
-+	{
-+		.fourcc = V4L2_AUDIO_FMT_S16_LE,
-+		.format = SNDRV_PCM_FORMAT_S16_LE,
-+		.types  = MEM2MEM_CAPTURE | MEM2MEM_OUTPUT,
-+	},
-+	{
-+		.fourcc = V4L2_AUDIO_FMT_U16_LE,
-+		.format = SNDRV_PCM_FORMAT_U16_LE,
-+		.types  = MEM2MEM_CAPTURE | MEM2MEM_OUTPUT,
-+	},
-+	{
-+		.fourcc = V4L2_AUDIO_FMT_S24_LE,
-+		.format = SNDRV_PCM_FORMAT_S24_LE,
-+		.types  = MEM2MEM_CAPTURE | MEM2MEM_OUTPUT,
-+	},
-+	{
-+		.fourcc = V4L2_AUDIO_FMT_S24_3LE,
-+		.format = SNDRV_PCM_FORMAT_S24_3LE,
-+		.types  = MEM2MEM_CAPTURE | MEM2MEM_OUTPUT,
-+	},
-+	{
-+		.fourcc = V4L2_AUDIO_FMT_U24_LE,
-+		.format = SNDRV_PCM_FORMAT_U24_LE,
-+		.types  = MEM2MEM_CAPTURE | MEM2MEM_OUTPUT,
-+	},
-+	{
-+		.fourcc = V4L2_AUDIO_FMT_U24_3LE,
-+		.format = SNDRV_PCM_FORMAT_U24_3LE,
-+		.types  = MEM2MEM_CAPTURE | MEM2MEM_OUTPUT,
-+	},
-+	{
-+		.fourcc = V4L2_AUDIO_FMT_S32_LE,
-+		.format = SNDRV_PCM_FORMAT_S32_LE,
-+		.types  = MEM2MEM_CAPTURE | MEM2MEM_OUTPUT,
-+	},
-+	{
-+		.fourcc = V4L2_AUDIO_FMT_U32_LE,
-+		.format = SNDRV_PCM_FORMAT_U32_LE,
-+		.types  = MEM2MEM_CAPTURE | MEM2MEM_OUTPUT,
-+	},
-+	{
-+		.fourcc = V4L2_AUDIO_FMT_S20_3LE,
-+		.format = SNDRV_PCM_FORMAT_S20_3LE,
-+		.types  = MEM2MEM_CAPTURE | MEM2MEM_OUTPUT,
-+	},
-+	{
-+		.fourcc = V4L2_AUDIO_FMT_U20_3LE,
-+		.format = SNDRV_PCM_FORMAT_U20_3LE,
-+		.types  = MEM2MEM_CAPTURE | MEM2MEM_OUTPUT,
-+	},
-+};
-+
-+#define NUM_FORMATS ARRAY_SIZE(formats)
-+
-+/* Per-queue, driver-specific private data */
-+struct audm2m_q_data {
-+	unsigned int		rate;
-+	unsigned int		channels;
-+	unsigned int		buffersize;
-+	struct audm2m_fmt	*fmt;
-+};
-+
-+enum {
-+	V4L2_M2M_SRC = 0,
-+	V4L2_M2M_DST = 1,
-+};
-+
-+static struct audm2m_fmt *find_format(u32 fourcc)
-+{
-+	struct audm2m_fmt *fmt;
-+	unsigned int k;
-+
-+	for (k = 0; k < NUM_FORMATS; k++) {
-+		fmt = &formats[k];
-+		if (fmt->fourcc == fourcc)
-+			break;
-+	}
-+
-+	if (k == NUM_FORMATS)
-+		return NULL;
-+
-+	return &formats[k];
-+}
-+
-+struct audm2m_dev {
-+	struct v4l2_device	v4l2_dev;
-+	struct video_device	vfd;
-+
-+	atomic_t		num_inst;
-+	struct mutex		dev_mutex;
-+
-+	struct v4l2_m2m_dev	*m2m_dev;
-+};
-+
-+struct audm2m_ctx {
-+	struct v4l2_fh		fh;
-+	struct audm2m_dev	*dev;
-+
-+	struct mutex		vb_mutex;
-+
-+	/* Abort requested by m2m */
-+	int			aborting;
-+
-+	/* Source and destination queue data */
-+	struct audm2m_q_data   q_data[2];
-+};
-+
-+static inline struct audm2m_ctx *file2ctx(struct file *file)
-+{
-+	return container_of(file->private_data, struct audm2m_ctx, fh);
-+}
-+
-+static struct audm2m_q_data *get_q_data(struct audm2m_ctx *ctx,
-+					enum v4l2_buf_type type)
-+{
-+	switch (type) {
-+	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
-+		return &ctx->q_data[V4L2_M2M_SRC];
-+	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
-+		return &ctx->q_data[V4L2_M2M_DST];
-+	default:
-+		return NULL;
-+	}
-+}
-+
-+static const char *type_name(enum v4l2_buf_type type)
-+{
-+	switch (type) {
-+	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
-+		return "Output";
-+	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
-+		return "Capture";
-+	default:
-+		return "Invalid";
-+	}
-+}
-+
-+/*
-+ * mem2mem callbacks
-+ */
-+
-+/*
-+ * job_ready() - check whether an instance is ready to be scheduled to run
-+ */
-+static int job_ready(void *priv)
-+{
-+	struct audm2m_ctx *ctx = priv;
-+
-+	if (v4l2_m2m_num_src_bufs_ready(ctx->fh.m2m_ctx) < 1 ||
-+	    v4l2_m2m_num_dst_bufs_ready(ctx->fh.m2m_ctx) < 1) {
-+		dprintk(ctx->dev, 1, "Not enough buffers available\n");
-+		return 0;
-+	}
-+
-+	return 1;
-+}
-+
-+static void job_abort(void *priv)
-+{
-+	struct audm2m_ctx *ctx = priv;
-+
-+	/* Will cancel the transaction in the next interrupt handler */
-+	ctx->aborting = 1;
-+}
-+
-+/*
-+ * device_run() - prepares and starts the device
-+ */
-+static void device_run(void *priv)
-+{
-+	struct audm2m_ctx *ctx = priv;
-+	struct audm2m_dev *audm2m_dev;
-+	struct vb2_v4l2_buffer *src_buf, *dst_buf;
-+	struct audm2m_q_data *q_data_src, *q_data_dst;
-+	int src_size, dst_size;
-+
-+	audm2m_dev = ctx->dev;
-+
-+	q_data_src = get_q_data(ctx, V4L2_BUF_TYPE_AUDIO_OUTPUT);
-+	if (!q_data_src)
-+		return;
-+
-+	q_data_dst = get_q_data(ctx, V4L2_BUF_TYPE_AUDIO_CAPTURE);
-+	if (!q_data_dst)
-+		return;
-+
-+	src_buf = v4l2_m2m_next_src_buf(ctx->fh.m2m_ctx);
-+	dst_buf = v4l2_m2m_next_dst_buf(ctx->fh.m2m_ctx);
-+
-+	/* Process the conversion */
-+	src_size = vb2_get_plane_payload(&src_buf->vb2_buf, 0);
-+
-+	if (src_size > q_data_dst->buffersize)
-+		dst_size = q_data_dst->buffersize;
-+	else
-+		dst_size = src_size;
-+
-+	memcpy(vb2_plane_vaddr(&dst_buf->vb2_buf, 0),
-+	       vb2_plane_vaddr(&src_buf->vb2_buf, 0),
-+	       dst_size);
-+
-+	vb2_set_plane_payload(&dst_buf->vb2_buf, 0, dst_size);
-+
-+	src_buf = v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
-+	dst_buf = v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
-+
-+	v4l2_m2m_buf_done(src_buf, VB2_BUF_STATE_DONE);
-+	v4l2_m2m_buf_done(dst_buf, VB2_BUF_STATE_DONE);
-+	v4l2_m2m_job_finish(audm2m_dev->m2m_dev, ctx->fh.m2m_ctx);
-+}
-+
-+static int audm2m_querycap(struct file *file, void *priv,
-+			   struct v4l2_capability *cap)
-+{
-+	strscpy(cap->driver, MEM2MEM_NAME, sizeof(cap->driver));
-+	strscpy(cap->card, MEM2MEM_NAME, sizeof(cap->card));
-+	snprintf(cap->bus_info, sizeof(cap->bus_info),
-+		 "platform:%s", MEM2MEM_NAME);
-+
-+	return 0;
-+}
-+
-+static int enum_fmt(struct v4l2_fmtdesc *f, u32 type)
-+{
-+	int i, num;
-+	struct audm2m_fmt *fmt;
-+
-+	num = 0;
-+
-+	for (i = 0; i < NUM_FORMATS; ++i) {
-+		if (formats[i].types & type) {
-+			if (num == f->index)
-+				break;
-+			/*
-+			 * Correct type but haven't reached our index yet,
-+			 * just increment per-type index
-+			 */
-+			++num;
-+		}
-+	}
-+
-+	if (i < NUM_FORMATS) {
-+		/* Format found */
-+		fmt = &formats[i];
-+		f->pixelformat = fmt->fourcc;
-+		return 0;
-+	}
-+
-+	/* Format not found */
-+	return -EINVAL;
-+}
-+
-+static int audm2m_enum_fmt_audio_cap(struct file *file, void *priv,
-+				     struct v4l2_fmtdesc *f)
-+{
-+	return enum_fmt(f, MEM2MEM_CAPTURE);
-+}
-+
-+static int audm2m_enum_fmt_audio_out(struct file *file, void *priv,
-+				     struct v4l2_fmtdesc *f)
-+{
-+	return enum_fmt(f, MEM2MEM_OUTPUT);
-+}
-+
-+static int audm2m_g_fmt(struct audm2m_ctx *ctx, struct v4l2_format *f)
-+{
-+	struct vb2_queue *vq;
-+	struct audm2m_q_data *q_data;
-+
-+	vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, f->type);
-+	if (!vq)
-+		return -EINVAL;
-+
-+	q_data = get_q_data(ctx, f->type);
-+	if (!q_data)
-+		return -EINVAL;
-+
-+	f->fmt.audio.pixelformat = q_data->fmt->fourcc;
-+	f->fmt.audio.channels	= q_data->channels;
-+	f->fmt.audio.buffersize = q_data->buffersize;
-+
-+	return 0;
-+}
-+
-+static int audm2m_g_fmt_audio_out(struct file *file, void *priv,
-+				  struct v4l2_format *f)
-+{
-+	return audm2m_g_fmt(file2ctx(file), f);
-+}
-+
-+static int audm2m_g_fmt_audio_cap(struct file *file, void *priv,
-+				  struct v4l2_format *f)
-+{
-+	return audm2m_g_fmt(file2ctx(file), f);
-+}
-+
-+static int audm2m_try_fmt(struct v4l2_format *f, struct audm2m_fmt *fmt)
-+{
-+	if (f->fmt.audio.channels < 1)
-+		f->fmt.audio.channels = 1;
-+	else if (f->fmt.audio.channels > 8)
-+		f->fmt.audio.channels = 8;
-+
-+	f->fmt.audio.buffersize = f->fmt.audio.channels *
-+				  snd_pcm_format_physical_width(fmt->format) *
-+				  SAMPLE_NUM;
-+	return 0;
-+}
-+
-+static int audm2m_try_fmt_audio_cap(struct file *file, void *priv,
-+				    struct v4l2_format *f)
-+{
-+	struct audm2m_fmt *fmt;
-+	struct audm2m_ctx *ctx = file2ctx(file);
-+
-+	fmt = find_format(f->fmt.audio.pixelformat);
-+	if (!fmt) {
-+		f->fmt.audio.pixelformat = formats[0].fourcc;
-+		fmt = find_format(f->fmt.audio.pixelformat);
-+	}
-+
-+	if (!(fmt->types & MEM2MEM_CAPTURE)) {
-+		v4l2_err(&ctx->dev->v4l2_dev,
-+			 "Fourcc format (0x%08x) invalid.\n",
-+			 f->fmt.audio.pixelformat);
-+		return -EINVAL;
-+	}
-+
-+	return audm2m_try_fmt(f, fmt);
-+}
-+
-+static int audm2m_try_fmt_audio_out(struct file *file, void *priv,
-+				    struct v4l2_format *f)
-+{
-+	struct audm2m_fmt *fmt;
-+	struct audm2m_ctx *ctx = file2ctx(file);
-+
-+	fmt = find_format(f->fmt.audio.pixelformat);
-+	if (!fmt) {
-+		f->fmt.audio.pixelformat = formats[0].fourcc;
-+		fmt = find_format(f->fmt.audio.pixelformat);
-+	}
-+
-+	if (!(fmt->types & MEM2MEM_OUTPUT)) {
-+		v4l2_err(&ctx->dev->v4l2_dev,
-+			 "Fourcc format (0x%08x) invalid.\n",
-+			 f->fmt.audio.pixelformat);
-+		return -EINVAL;
-+	}
-+
-+	return audm2m_try_fmt(f, fmt);
-+}
-+
-+static int audm2m_s_fmt(struct audm2m_ctx *ctx, struct v4l2_format *f)
-+{
-+	struct audm2m_q_data *q_data;
-+	struct vb2_queue *vq;
-+
-+	vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, f->type);
-+	if (!vq)
-+		return -EINVAL;
-+
-+	q_data = get_q_data(ctx, f->type);
-+	if (!q_data)
-+		return -EINVAL;
-+
-+	if (vb2_is_busy(vq)) {
-+		v4l2_err(&ctx->dev->v4l2_dev, "%s queue busy\n", __func__);
-+		return -EBUSY;
-+	}
-+
-+	q_data->fmt	= find_format(f->fmt.audio.pixelformat);
-+	q_data->channels = f->fmt.audio.channels;
-+	q_data->buffersize = q_data->channels *
-+			     snd_pcm_format_physical_width(q_data->fmt->format) *
-+			     SAMPLE_NUM;
-+
-+	dprintk(ctx->dev, 1,
-+		"Format for type %s: %d/%d, fmt: %c%c%c%c\n",
-+		type_name(f->type), q_data->rate,
-+		q_data->channels,
-+		(q_data->fmt->fourcc & 0xff),
-+		(q_data->fmt->fourcc >>  8) & 0xff,
-+		(q_data->fmt->fourcc >> 16) & 0xff,
-+		(q_data->fmt->fourcc >> 24) & 0xff);
-+
-+	return 0;
-+}
-+
-+static int audm2m_s_fmt_audio_cap(struct file *file, void *priv,
-+				  struct v4l2_format *f)
-+{
-+	int ret;
-+
-+	ret = audm2m_try_fmt_audio_cap(file, priv, f);
-+	if (ret)
-+		return ret;
-+
-+	return audm2m_s_fmt(file2ctx(file), f);
-+}
-+
-+static int audm2m_s_fmt_audio_out(struct file *file, void *priv,
-+				  struct v4l2_format *f)
-+{
-+	int ret;
-+
-+	ret = audm2m_try_fmt_audio_out(file, priv, f);
-+	if (ret)
-+		return ret;
-+
-+	return audm2m_s_fmt(file2ctx(file), f);
-+}
-+
-+static const struct v4l2_ioctl_ops audm2m_ioctl_ops = {
-+	.vidioc_querycap		= audm2m_querycap,
-+
-+	.vidioc_enum_fmt_audio_cap	= audm2m_enum_fmt_audio_cap,
-+	.vidioc_g_fmt_audio_cap		= audm2m_g_fmt_audio_cap,
-+	.vidioc_try_fmt_audio_cap	= audm2m_try_fmt_audio_cap,
-+	.vidioc_s_fmt_audio_cap		= audm2m_s_fmt_audio_cap,
-+
-+	.vidioc_enum_fmt_audio_out	= audm2m_enum_fmt_audio_out,
-+	.vidioc_g_fmt_audio_out		= audm2m_g_fmt_audio_out,
-+	.vidioc_try_fmt_audio_out	= audm2m_try_fmt_audio_out,
-+	.vidioc_s_fmt_audio_out		= audm2m_s_fmt_audio_out,
-+
-+	.vidioc_reqbufs			= v4l2_m2m_ioctl_reqbufs,
-+	.vidioc_querybuf		= v4l2_m2m_ioctl_querybuf,
-+	.vidioc_qbuf			= v4l2_m2m_ioctl_qbuf,
-+	.vidioc_dqbuf			= v4l2_m2m_ioctl_dqbuf,
-+	.vidioc_prepare_buf		= v4l2_m2m_ioctl_prepare_buf,
-+	.vidioc_create_bufs		= v4l2_m2m_ioctl_create_bufs,
-+	.vidioc_expbuf			= v4l2_m2m_ioctl_expbuf,
-+
-+	.vidioc_streamon		= v4l2_m2m_ioctl_streamon,
-+	.vidioc_streamoff		= v4l2_m2m_ioctl_streamoff,
-+
-+	.vidioc_subscribe_event		= v4l2_ctrl_subscribe_event,
-+	.vidioc_unsubscribe_event	= v4l2_event_unsubscribe,
-+};
-+
-+/*
-+ * Queue operations
-+ */
-+static int audm2m_queue_setup(struct vb2_queue *vq,
-+			      unsigned int *nbuffers,
-+			      unsigned int *nplanes,
-+			      unsigned int sizes[],
-+			      struct device *alloc_devs[])
-+{
-+	struct audm2m_ctx *ctx = vb2_get_drv_priv(vq);
-+	struct audm2m_q_data *q_data;
-+
-+	q_data = get_q_data(ctx, vq->type);
-+	if (!q_data)
-+		return -EINVAL;
-+
-+	*nplanes = 1;
-+	sizes[0] = q_data->buffersize;
-+
-+	dprintk(ctx->dev, 1, "%s: get %d buffer(s) of size %d each.\n",
-+		type_name(vq->type), *nplanes, sizes[0]);
-+
-+	return 0;
-+}
-+
-+static void audm2m_buf_queue(struct vb2_buffer *vb)
-+{
-+	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
-+	struct audm2m_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
-+
-+	v4l2_m2m_buf_queue(ctx->fh.m2m_ctx, vbuf);
-+}
-+
-+static int audm2m_start_streaming(struct vb2_queue *q, unsigned int count)
-+{
-+	struct audm2m_ctx *ctx = vb2_get_drv_priv(q);
-+	struct audm2m_q_data *q_data = get_q_data(ctx, q->type);
-+
-+	if (!q_data)
-+		return -EINVAL;
-+
-+	if (V4L2_TYPE_IS_OUTPUT(q->type))
-+		ctx->aborting = 0;
-+
-+	return 0;
-+}
-+
-+static void audm2m_stop_streaming(struct vb2_queue *q)
-+{
-+	struct audm2m_ctx *ctx = vb2_get_drv_priv(q);
-+	struct vb2_v4l2_buffer *vbuf;
-+
-+	for (;;) {
-+		if (V4L2_TYPE_IS_OUTPUT(q->type))
-+			vbuf = v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
-+		else
-+			vbuf = v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
-+		if (!vbuf)
-+			return;
-+		v4l2_m2m_buf_done(vbuf, VB2_BUF_STATE_ERROR);
-+	}
-+}
-+
-+static const struct vb2_ops audm2m_qops = {
-+	.queue_setup	 = audm2m_queue_setup,
-+	.buf_queue	 = audm2m_buf_queue,
-+	.start_streaming = audm2m_start_streaming,
-+	.stop_streaming  = audm2m_stop_streaming,
-+	.wait_prepare	 = vb2_ops_wait_prepare,
-+	.wait_finish	 = vb2_ops_wait_finish,
-+};
-+
-+static int queue_init(void *priv, struct vb2_queue *src_vq,
-+		      struct vb2_queue *dst_vq)
-+{
-+	struct audm2m_ctx *ctx = priv;
-+	int ret;
-+
-+	src_vq->type = V4L2_BUF_TYPE_AUDIO_OUTPUT;
-+	src_vq->io_modes = VB2_MMAP | VB2_DMABUF;
-+	src_vq->drv_priv = ctx;
-+	src_vq->buf_struct_size = sizeof(struct v4l2_m2m_buffer);
-+	src_vq->ops = &audm2m_qops;
-+	src_vq->mem_ops = &vb2_vmalloc_memops;
-+	src_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
-+	src_vq->lock = &ctx->vb_mutex;
-+	src_vq->min_buffers_needed = 1;
-+
-+	ret = vb2_queue_init(src_vq);
-+	if (ret)
-+		return ret;
-+
-+	dst_vq->type = V4L2_BUF_TYPE_AUDIO_CAPTURE;
-+	dst_vq->io_modes = VB2_MMAP | VB2_DMABUF;
-+	dst_vq->drv_priv = ctx;
-+	dst_vq->buf_struct_size = sizeof(struct v4l2_m2m_buffer);
-+	dst_vq->ops = &audm2m_qops;
-+	dst_vq->mem_ops = &vb2_vmalloc_memops;
-+	dst_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
-+	dst_vq->lock = &ctx->vb_mutex;
-+	dst_vq->min_buffers_needed = 1;
-+
-+	return vb2_queue_init(dst_vq);
-+}
-+
-+/*
-+ * File operations
-+ */
-+static int audm2m_open(struct file *file)
-+{
-+	struct audm2m_dev *dev = video_drvdata(file);
-+	struct audm2m_ctx *ctx = NULL;
-+	int width;
-+	int rc = 0;
-+
-+	if (mutex_lock_interruptible(&dev->dev_mutex))
-+		return -ERESTARTSYS;
-+	ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
-+	if (!ctx) {
-+		rc = -ENOMEM;
-+		goto open_unlock;
-+	}
-+
-+	v4l2_fh_init(&ctx->fh, video_devdata(file));
-+	file->private_data = &ctx->fh;
-+	ctx->dev = dev;
-+
-+	ctx->q_data[V4L2_M2M_SRC].fmt = &formats[0];
-+	ctx->q_data[V4L2_M2M_SRC].rate = 8000;
-+	ctx->q_data[V4L2_M2M_SRC].channels = 2;
-+
-+	/* Fix to 4096 samples */
-+	width = snd_pcm_format_physical_width(formats[0].format);
-+	ctx->q_data[V4L2_M2M_SRC].buffersize = SAMPLE_NUM * 2 * width;
-+	ctx->q_data[V4L2_M2M_DST] = ctx->q_data[V4L2_M2M_SRC];
-+
-+	ctx->fh.m2m_ctx = v4l2_m2m_ctx_init(dev->m2m_dev, ctx, &queue_init);
-+
-+	mutex_init(&ctx->vb_mutex);
-+
-+	if (IS_ERR(ctx->fh.m2m_ctx)) {
-+		rc = PTR_ERR(ctx->fh.m2m_ctx);
-+
-+		v4l2_fh_exit(&ctx->fh);
-+		kfree(ctx);
-+		goto open_unlock;
-+	}
-+
-+	v4l2_fh_add(&ctx->fh);
-+	atomic_inc(&dev->num_inst);
-+
-+	dprintk(dev, 1, "Created instance: %p, m2m_ctx: %p\n",
-+		ctx, ctx->fh.m2m_ctx);
-+
-+open_unlock:
-+	mutex_unlock(&dev->dev_mutex);
-+	return rc;
-+}
-+
-+static int audm2m_release(struct file *file)
-+{
-+	struct audm2m_dev *dev = video_drvdata(file);
-+	struct audm2m_ctx *ctx = file2ctx(file);
-+
-+	dprintk(dev, 1, "Releasing instance %p\n", ctx);
-+
-+	v4l2_fh_del(&ctx->fh);
-+	v4l2_fh_exit(&ctx->fh);
-+	mutex_lock(&dev->dev_mutex);
-+	v4l2_m2m_ctx_release(ctx->fh.m2m_ctx);
-+	mutex_unlock(&dev->dev_mutex);
-+	kfree(ctx);
-+
-+	atomic_dec(&dev->num_inst);
-+
-+	return 0;
-+}
-+
-+static void audm2m_device_release(struct video_device *vdev)
-+{
-+	struct audm2m_dev *dev = container_of(vdev, struct audm2m_dev, vfd);
-+
-+	v4l2_device_unregister(&dev->v4l2_dev);
-+	v4l2_m2m_release(dev->m2m_dev);
-+
-+	kfree(dev);
-+}
-+
-+static const struct v4l2_file_operations audm2m_fops = {
-+	.owner		= THIS_MODULE,
-+	.open		= audm2m_open,
-+	.release	= audm2m_release,
-+	.poll		= v4l2_m2m_fop_poll,
-+	.unlocked_ioctl	= video_ioctl2,
-+	.mmap		= v4l2_m2m_fop_mmap,
-+};
-+
-+static const struct video_device audm2m_videodev = {
-+	.name		= MEM2MEM_NAME,
-+	.vfl_dir	= VFL_DIR_M2M,
-+	.fops		= &audm2m_fops,
-+	.ioctl_ops	= &audm2m_ioctl_ops,
-+	.minor		= -1,
-+	.release	= audm2m_device_release,
-+	.device_caps	= V4L2_CAP_AUDIO_M2M | V4L2_CAP_STREAMING,
-+};
-+
-+static const struct v4l2_m2m_ops m2m_ops = {
-+	.device_run	= device_run,
-+	.job_ready	= job_ready,
-+	.job_abort	= job_abort,
-+};
-+
-+static int audm2m_probe(struct platform_device *pdev)
-+{
-+	struct audm2m_dev *dev;
-+	struct video_device *vfd;
-+	int ret;
-+
-+	dev = kzalloc(sizeof(*dev), GFP_KERNEL);
-+	if (!dev)
-+		return -ENOMEM;
-+
-+	ret = v4l2_device_register(&pdev->dev, &dev->v4l2_dev);
-+	if (ret)
-+		goto error_free;
-+
-+	atomic_set(&dev->num_inst, 0);
-+	mutex_init(&dev->dev_mutex);
-+
-+	dev->vfd = audm2m_videodev;
-+	vfd = &dev->vfd;
-+	vfd->lock = &dev->dev_mutex;
-+	vfd->v4l2_dev = &dev->v4l2_dev;
-+
-+	video_set_drvdata(vfd, dev);
-+	v4l2_info(&dev->v4l2_dev,
-+		  "Device registered as /dev/v4l-audio%d\n", vfd->num);
-+
-+	platform_set_drvdata(pdev, dev);
-+
-+	dev->m2m_dev = v4l2_m2m_init(&m2m_ops);
-+	if (IS_ERR(dev->m2m_dev)) {
-+		v4l2_err(&dev->v4l2_dev, "Failed to init mem2mem device\n");
-+		ret = PTR_ERR(dev->m2m_dev);
-+		dev->m2m_dev = NULL;
-+		goto error_dev;
-+	}
-+
-+	ret = video_register_device(vfd, VFL_TYPE_AUDIO, 0);
-+	if (ret) {
-+		v4l2_err(&dev->v4l2_dev, "Failed to register video device\n");
-+		goto error_m2m;
-+	}
-+
-+	return 0;
-+
-+error_m2m:
-+	v4l2_m2m_release(dev->m2m_dev);
-+error_dev:
-+	v4l2_device_unregister(&dev->v4l2_dev);
-+error_free:
-+	kfree(dev);
-+
-+	return ret;
-+}
-+
-+static void audm2m_remove(struct platform_device *pdev)
-+{
-+	struct audm2m_dev *dev = platform_get_drvdata(pdev);
-+
-+	v4l2_info(&dev->v4l2_dev, "Removing " MEM2MEM_NAME);
-+
-+	video_unregister_device(&dev->vfd);
-+}
-+
-+static struct platform_driver audm2m_pdrv = {
-+	.probe		= audm2m_probe,
-+	.remove_new	= audm2m_remove,
-+	.driver		= {
-+		.name	= MEM2MEM_NAME,
-+	},
-+};
-+
-+static void __exit audm2m_exit(void)
-+{
-+	platform_driver_unregister(&audm2m_pdrv);
-+	platform_device_unregister(&audm2m_pdev);
-+}
-+
-+static int __init audm2m_init(void)
-+{
-+	int ret;
-+
-+	ret = platform_device_register(&audm2m_pdev);
-+	if (ret)
-+		return ret;
-+
-+	ret = platform_driver_register(&audm2m_pdrv);
-+	if (ret)
-+		platform_device_unregister(&audm2m_pdev);
-+
-+	return ret;
-+}
-+
-+module_init(audm2m_init);
-+module_exit(audm2m_exit);
--- 
-2.34.1
-
+PkZyb206IEtyenlzenRvZiBLb3psb3dza2kgPGtyenlzenRvZi5rb3psb3dza2lAbGluYXJvLm9y
+Zz4NCj5TZW50OiAyMDIz5bm0OeaciDI45pelIDEzOjA3DQo+VG86IE1pbmcgUWlhbiA8bWluZy5x
+aWFuQG54cC5jb20+OyBNaXJlbGEgUmFidWxlYSAoT1NTKQ0KPjxtaXJlbGEucmFidWxlYUBvc3Mu
+bnhwLmNvbT47IHJvYmgrZHRAa2VybmVsLm9yZzsgc2hhd25ndW9Aa2VybmVsLm9yZw0KPkNjOiBr
+cnp5c3p0b2Yua296bG93c2tpK2R0QGxpbmFyby5vcmc7IGNvbm9yK2R0QGtlcm5lbC5vcmc7DQo+
+bWNoZWhhYkBrZXJuZWwub3JnOyBodmVya3VpbC1jaXNjb0B4czRhbGwubmw7IHMuaGF1ZXJAcGVu
+Z3V0cm9uaXguZGU7DQo+a2VybmVsQHBlbmd1dHJvbml4LmRlOyBmZXN0ZXZhbUBnbWFpbC5jb207
+IFguSC4gQmFvDQo+PHhpYWhvbmcuYmFvQG54cC5jb20+OyBFYWdsZSBaaG91IDxlYWdsZS56aG91
+QG54cC5jb20+OyBUYW8gSmlhbmcNCj48dGFvLmppYW5nXzJAbnhwLmNvbT47IGRsLWxpbnV4LWlt
+eCA8bGludXgtaW14QG54cC5jb20+Ow0KPmRldmljZXRyZWVAdmdlci5rZXJuZWwub3JnOyBsaW51
+eC1tZWRpYUB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LQ0KPmtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7
+IGxpbnV4LWFybS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZw0KPlN1YmplY3Q6IFJlOiBbRVhU
+XSBSZTogW1BBVENIIHY0IDIvMl0gZHQtYmluZGluZ3M6IG1lZGlhOiBpbXgtanBlZzogQXNzaWdu
+IHNsb3QNCj5mb3IgaW14IGpwZWcgZW5jb2Rlci9kZWNvZGVyDQo+DQo+Q2F1dGlvbjogVGhpcyBp
+cyBhbiBleHRlcm5hbCBlbWFpbC4gUGxlYXNlIHRha2UgY2FyZSB3aGVuIGNsaWNraW5nIGxpbmtz
+IG9yDQo+b3BlbmluZyBhdHRhY2htZW50cy4gV2hlbiBpbiBkb3VidCwgcmVwb3J0IHRoZSBtZXNz
+YWdlIHVzaW5nIHRoZSAnUmVwb3J0DQo+dGhpcyBlbWFpbCcgYnV0dG9uDQo+DQo+DQo+T24gMjcv
+MDkvMjAyMyAxMToxMCwgTWluZyBRaWFuIHdyb3RlOg0KPj4+IEZyb206IEtyenlzenRvZiBLb3ps
+b3dza2kgPGtyenlzenRvZi5rb3psb3dza2lAbGluYXJvLm9yZz4NCj4+PiBTZW50OiAyMDIz5bm0
+OeaciDI35pelIDE2OjA2DQo+Pj4gVG86IE1pbmcgUWlhbiA8bWluZy5xaWFuQG54cC5jb20+OyBN
+aXJlbGEgUmFidWxlYSAoT1NTKQ0KPj4+IDxtaXJlbGEucmFidWxlYUBvc3MubnhwLmNvbT47IHJv
+YmgrZHRAa2VybmVsLm9yZzsNCj5zaGF3bmd1b0BrZXJuZWwub3JnDQo+Pj4gQ2M6IGtyenlzenRv
+Zi5rb3psb3dza2krZHRAbGluYXJvLm9yZzsgY29ub3IrZHRAa2VybmVsLm9yZzsNCj4+PiBtY2hl
+aGFiQGtlcm5lbC5vcmc7IGh2ZXJrdWlsLWNpc2NvQHhzNGFsbC5ubDsgcy5oYXVlckBwZW5ndXRy
+b25peC5kZTsNCj4+PiBrZXJuZWxAcGVuZ3V0cm9uaXguZGU7IGZlc3RldmFtQGdtYWlsLmNvbTsg
+WC5ILiBCYW8NCj4+PiA8eGlhaG9uZy5iYW9AbnhwLmNvbT47IEVhZ2xlIFpob3UgPGVhZ2xlLnpo
+b3VAbnhwLmNvbT47IFRhbyBKaWFuZw0KPj4+IDx0YW8uamlhbmdfMkBueHAuY29tPjsgZGwtbGlu
+dXgtaW14IDxsaW51eC1pbXhAbnhwLmNvbT47DQo+Pj4gZGV2aWNldHJlZUB2Z2VyLmtlcm5lbC5v
+cmc7IGxpbnV4LW1lZGlhQHZnZXIua2VybmVsLm9yZzsgbGludXgtDQo+Pj4ga2VybmVsQHZnZXIu
+a2VybmVsLm9yZzsgbGludXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQub3JnDQo+Pj4gU3Vi
+amVjdDogW0VYVF0gUmU6IFtQQVRDSCB2NCAyLzJdIGR0LWJpbmRpbmdzOiBtZWRpYTogaW14LWpw
+ZWc6DQo+Pj4gQXNzaWduIHNsb3QgZm9yIGlteCBqcGVnIGVuY29kZXIvZGVjb2Rlcg0KPj4+DQo+
+Pj4gQ2F1dGlvbjogVGhpcyBpcyBhbiBleHRlcm5hbCBlbWFpbC4gUGxlYXNlIHRha2UgY2FyZSB3
+aGVuIGNsaWNraW5nDQo+Pj4gbGlua3Mgb3Igb3BlbmluZyBhdHRhY2htZW50cy4gV2hlbiBpbiBk
+b3VidCwgcmVwb3J0IHRoZSBtZXNzYWdlIHVzaW5nDQo+Pj4gdGhlICdSZXBvcnQgdGhpcyBlbWFp
+bCcgYnV0dG9uDQo+Pj4NCj4+Pg0KPj4+IE9uIDI2LzA5LzIwMjMgMTI6MTAsIE1pbmcgUWlhbiB3
+cm90ZToNCj4+Pj4gVGhlcmUgYXJlIHRvdGFsIDQgc2xvdHMgYXZhaWxhYmxlIGluIHRoZSBJUCwg
+YW5kIHdlIG9ubHkgbmVlZCB0byB1c2UNCj4+Pj4gb25lIHNsb3QgaW4gb25lIG9zLCBhc3NpZ24g
+YSBzaW5nbGUgc2xvdCwgY29uZmlndXJlIGludGVycnVwdCBhbmQNCj4+Pj4gcG93ZXIgZG9tYWlu
+IG9ubHkgZm9yIDEgc2xvdCwgbm90IGZvciB0aGUgYWxsIDQgc2xvdHMuDQo+Pj4+DQo+Pj4+IFNp
+Z25lZC1vZmYtYnk6IE1pbmcgUWlhbiA8bWluZy5xaWFuQG54cC5jb20+DQo+Pj4+IC0tLQ0KPj4+
+PiB2NA0KPj4+PiAtIGltcHJvdmUgY29tbWl0IG1lc3NhZ2UNCj4+Pj4gLSBkb24ndCBtYWtlIGFu
+IEFCSSBicmVhaw0KPj4+PiB2Mw0KPj4+PiAtIGFkZCB2ZW5kZXIgcHJlZml4LCBjaGFuZ2UgcHJv
+cGVydHkgc2xvdCB0byBueHAsc2xvdA0KPj4+PiAtIGFkZCB0eXBlIGZvciBwcm9wZXJ0eSBzbG90
+DQo+Pj4+DQo+Pj4+ICAuLi4vYmluZGluZ3MvbWVkaWEvbnhwLGlteDgtanBlZy55YW1sICAgICAg
+ICAgfCA0NSArKysrKysrKystLS0tLS0tLS0tDQo+Pj4+ICAxIGZpbGUgY2hhbmdlZCwgMjEgaW5z
+ZXJ0aW9ucygrKSwgMjQgZGVsZXRpb25zKC0pDQo+Pj4+DQo+Pj4+IGRpZmYgLS1naXQNCj4+Pj4g
+YS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvbWVkaWEvbnhwLGlteDgtanBlZy55
+YW1sDQo+Pj4+IGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL21lZGlhL254cCxp
+bXg4LWpwZWcueWFtbA0KPj4+PiBpbmRleCAzZDlkMWRiMzcwNDAuLjRiY2ZjODE1Yzg5NCAxMDA2
+NDQNCj4+Pj4gLS0tIGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL21lZGlhL254
+cCxpbXg4LWpwZWcueWFtbA0KPj4+PiArKysgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmlu
+ZGluZ3MvbWVkaWEvbnhwLGlteDgtanBlZy55YW1sDQo+Pj4+IEBAIC0zMiwxOSArMzIsMjYgQEAg
+cHJvcGVydGllczoNCj4+Pj4gICAgICBtYXhJdGVtczogMQ0KPj4+Pg0KPj4+PiAgICBpbnRlcnJ1
+cHRzOg0KPj4+PiAtICAgIGRlc2NyaXB0aW9uOiB8DQo+Pj4+IC0gICAgICBUaGVyZSBhcmUgNCBz
+bG90cyBhdmFpbGFibGUgaW4gdGhlIElQLCB3aGljaCB0aGUgZHJpdmVyIG1heSB1c2UNCj4+Pj4g
+LSAgICAgIElmIGEgY2VydGFpbiBzbG90IGlzIHVzZWQsIGl0IHNob3VsZCBoYXZlIGFuIGFzc29j
+aWF0ZWQgaW50ZXJydXB0DQo+Pj4+IC0gICAgICBUaGUgaW50ZXJydXB0IHdpdGggaW5kZXggaSBp
+cyBhc3N1bWVkIHRvIGJlIGZvciBzbG90IGkNCj4+Pj4gLSAgICBtaW5JdGVtczogMSAgICAgICAg
+ICAgICAgICMgQXQgbGVhc3Qgb25lIHNsb3QgaXMgbmVlZGVkIGJ5IHRoZSBkcml2ZXINCj4+Pj4g
+LSAgICBtYXhJdGVtczogNCAgICAgICAgICAgICAgICMgVGhlIElQIGhhcyA0IHNsb3RzIGF2YWls
+YWJsZSBmb3IgdXNlDQo+Pj4+ICsgICAgZGVzY3JpcHRpb246DQo+Pj4+ICsgICAgICBJbnRlcnJ1
+cHQgbnVtYmVyIGZvciBzbG90DQo+Pj4+ICsgICAgbWF4SXRlbXM6IDENCj4+Pj4NCj4+Pj4gICAg
+cG93ZXItZG9tYWluczoNCj4+Pj4gICAgICBkZXNjcmlwdGlvbjoNCj4+Pj4gICAgICAgIExpc3Qg
+b2YgcGhhbmRsZSBhbmQgUE0gZG9tYWluIHNwZWNpZmllciBhcyBkb2N1bWVudGVkIGluDQo+Pj4+
+ICAgICAgICBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvcG93ZXIvcG93ZXJfZG9t
+YWluLnR4dA0KPj4+PiAtICAgIG1pbkl0ZW1zOiAyICAgICAgICAgICAgICAgIyBXcmFwcGVyIGFu
+ZCAxIHNsb3QNCj4+Pj4gLSAgICBtYXhJdGVtczogNSAgICAgICAgICAgICAgICMgV3JhcHBlciBh
+bmQgNCBzbG90cw0KPj4+PiArICAgIG1pbkl0ZW1zOiAxICAgICAgICAgICAgICAgIyBWUFVNSVgN
+Cj4+Pj4gKyAgICBtYXhJdGVtczogMiAgICAgICAgICAgICAgICMgV3JhcHBlciBhbmQgMSBzbG90
+DQo+Pj4+ICsNCj4+Pj4gKyAgbnhwLHNsb3Q6DQo+Pj4+ICsgICAgJHJlZjogL3NjaGVtYXMvdHlw
+ZXMueWFtbCMvZGVmaW5pdGlvbnMvdWludDMyDQo+Pj4+ICsgICAgZGVzY3JpcHRpb246DQo+Pj4+
+ICsgICAgICBJbnRlZ2VyIG51bWJlciBvZiBzbG90IGluZGV4IHVzZWQuIFRoZXJlIGFyZSA0IHNs
+b3RzIGF2YWlsYWJsZSBpbiB0aGUgSVAsDQo+Pj4+ICsgICAgICBhbmQgZHJpdmVyIGNhbiB1c2Ug
+YSBjZXJ0YWluIHNsb3QsIGl0IHNob3VsZCBoYXZlIGFuIGFzc29jaWF0ZWQNCj5pbnRlcnJ1cHQN
+Cj4+Pj4gKyAgICAgIGFuZCBwb3dlci1kb21haW4uIEluIHRoZW9yeSwgaXQgc3VwcG9ydHMgNCBv
+cyBvciB2bS4gSWYgbm90IHNwZWNpZmllZCwNCj4wDQo+Pj4+ICsgICAgICBpcyB1c2VkIGJ5IGRl
+ZmF1bHQuDQo+Pj4+ICsgICAgbWluaW11bTogMA0KPj4+PiArICAgIG1heGltdW06IDMNCj4+Pg0K
+Pj4+IE5BSywgeW91IHN0aWxsIGRpZCBub3QgYW5zd2VyIGNvbmNlcm5zIHdoeSB0aGlzIGlzIG5l
+ZWRlZCBhbmQganVzdGlmaWVkLg0KPj4+IEkga2VlcCBhc2tpbmcgYW5kIHlvdSBrZWVwIGlnbm9y
+aW5nLi4uDQo+Pj4NCj4+PiBCZXN0IHJlZ2FyZHMsDQo+Pj4gS3J6eXN6dG9mDQo+Pg0KPj4gSGkg
+S3J6eXN6dG9mLA0KPj4NCj4+PiBOb3RoaW5nIGV4cGxhaW5zIHdoYXQgaXMgYSBzbG90IGFuZCBu
+b3RoaW5nIGV4cGxhaW5zIHdoeSBkbyB5b3UgbmVlZCB0aGlzDQo+cHJvcGVydHkuDQo+Pg0KPj4g
+SSB0aG91Z2h0IEkgaGFkIGFuc3dlcmVkIHRoYXQgcXVlc3Rpb24sIGJ1dCBzZWVtcyB5b3UgZG9u
+J3QgYWdyZWUgd2l0aCB0aGF0DQo+ZXhwbGFuYXRpb24uDQo+PiBXb3VsZCB0aGUgZm9sbG93aW5n
+IGRlc2NyaXB0aW9uIGJlIGFueSBiZXR0ZXI/DQo+DQo+Tm8sIHlvdSBkaWRuJ3QuIEkgZG9uJ3Qg
+c2VlIGFueSBleHBsYW5hdGlvbiBpbiB0aGUgY29tbWl0IG1zZy4gWW91IGp1c3Qgc2F5DQo+eW91
+IGhhdmUgIjQgc2xvdHMiLg0KPg0KPkJlc3QgcmVnYXJkcywNCj5Lcnp5c3p0b2YNCg0KSGkgS3J6
+eXN6dG9mLA0KDQpJIGNoZWNrIHRoZSBvdXIgZG9jdW1lbnQgYWdhaW4sIGl0IGRvZXMgbm90IGdp
+dmUgYSBzdGFuZGFyZCBkZWZpbml0aW9uIHRvby4gSSdsbCBleHBsYWluIGl0IGFzIEkgdW5kZXJz
+dGFuZCBpdC4gVGhpcyBJUCBpbmNsdWRlcyBhIGpwZWcgd3JhcHBlciwgdGhlIHdyYXBwZXIgaXMg
+d29ya2luZyBvbiBkZXNjcmlwdG9yIGJhc2VkIG1hbm5lci4gSXQgc3VwcG9ydCB1cCB0byA0IHNs
+b3RzLCBlYWNoIHNsb3RzIGNhbiBoYXZlIGl0cyBvd24gY2hhaW5lZCBkZXNjcmlwdG9ycy4gVGhl
+IHB1cnBvc2UgaXMgdG8gc2hhcmUgdGhlIGpwZWcgZW5naW5lIGFjcm9zcyBtdWx0aXBsZSBWTVMg
+YW5kIG9zLCBJdCdzIGEgYml0IGxpa2Ugdm0gcGFydGl0aW9uaW5nLiBXZSBqdXN0IHdhbnQgdG8g
+YXNzaWduIDEgc2xvdCB0byBsaW51eCwgVGhlbiwgdGhlb3JldGljYWxseSwgaXQgY2FuIHN1cHBv
+cnQgdXAgdG8gMyBWTVMuDQpUaGUgc2xvdCBpbmRleCBpbmRpY2F0ZXMgd2hpY2ggc2xvdCB3ZSBj
+aG9vc2UsIGRyaXZlciB3aWxsIHVzZSB0aGUgc2xvdCBpbmRleCB0byBjb25maWd1cmUuIElmIG5v
+dCBzcGVjaWZpZWQsIDAgaXMgdXNlZCBieSBkZWZhdWx0Lg0KQ3VycmVudGx5IGRyaXZlciBvbmx5
+IHVzZSB0aGUgc2xvdCAwIGJ5IGRlZmF1bHQsIGJ1dCBpdCBlbmFibGUgdGhlIHBvd2VyLWRvbWFp
+biBhbmQgcmVxdWVzdCBpcnEgdG8gYWxsIHRoZSA0IHNsb3RzLiAgdGhlcmUgaGFzIGJlZW4gbm8g
+cmVhbCBuZWdhdGl2ZSBpbXBhY3QsIGFzIHdlIGhhdmUgbm8gcHJhY3RpY2FsIGFwcGxpY2F0aW9u
+IHRvIHVzZSBvdGhlciBzbG90cyB5ZXQuIEJ1dCBpdCBkb2VzIGNhdXNlIHRyb3VibGUgd2hlbiB3
+ZSB3YW50IHRvIHVzZSBhbm90aGVyIHNsb3QgaW4gYSB2bS4NCg0KQmVzdCByZWdhcmRzLA0KTWlu
+Zw0K
