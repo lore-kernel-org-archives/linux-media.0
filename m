@@ -2,28 +2,28 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC800CE7B15
-	for <linux-media@archiver.kernel.org>; Thu, 28 Sep 2023 09:37:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A78AECE7B11
+	for <linux-media@archiver.kernel.org>; Thu, 28 Sep 2023 09:37:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231726AbjI1Jhp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 28 Sep 2023 05:37:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51188 "EHLO
+        id S231749AbjI1Jhr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 28 Sep 2023 05:37:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231695AbjI1Jho (ORCPT
+        with ESMTP id S231571AbjI1Jho (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 28 Sep 2023 05:37:44 -0400
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE84126;
-        Thu, 28 Sep 2023 02:37:40 -0700 (PDT)
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 4FBD01A1C91;
-        Thu, 28 Sep 2023 11:37:39 +0200 (CEST)
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E82195;
+        Thu, 28 Sep 2023 02:37:43 -0700 (PDT)
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 16E4E201613;
+        Thu, 28 Sep 2023 11:37:42 +0200 (CEST)
 Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id E11671A1C89;
-        Thu, 28 Sep 2023 11:37:38 +0200 (CEST)
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id A67D8200221;
+        Thu, 28 Sep 2023 11:37:41 +0200 (CEST)
 Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 04642181D0C0;
-        Thu, 28 Sep 2023 17:37:36 +0800 (+08)
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id C3E1D181D0C0;
+        Thu, 28 Sep 2023 17:37:39 +0800 (+08)
 From:   Shengjiu Wang <shengjiu.wang@nxp.com>
 To:     hverkuil@xs4all.nl, sakari.ailus@iki.fi, tfiga@chromium.org,
         m.szyprowski@samsung.com, mchehab@kernel.org,
@@ -32,9 +32,9 @@ To:     hverkuil@xs4all.nl, sakari.ailus@iki.fi, tfiga@chromium.org,
         nicoleotsuka@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
         perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
         linuxppc-dev@lists.ozlabs.org
-Subject: [RFC PATCH v5 02/11] ASoC: fsl_easrc: define functions for memory to memory usage
-Date:   Thu, 28 Sep 2023 17:00:10 +0800
-Message-Id: <1695891619-32393-3-git-send-email-shengjiu.wang@nxp.com>
+Subject: [RFC PATCH v5 04/11] ASoC: fsl_asrc: register m2m platform device
+Date:   Thu, 28 Sep 2023 17:00:12 +0800
+Message-Id: <1695891619-32393-5-git-send-email-shengjiu.wang@nxp.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1695891619-32393-1-git-send-email-shengjiu.wang@nxp.com>
 References: <1695891619-32393-1-git-send-email-shengjiu.wang@nxp.com>
@@ -43,252 +43,109 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-ASRC can be used on memory to memory case, define several
-functions for m2m usage and export them as function pointer.
+Register m2m platform device, that user can
+use M2M feature.
+
+Defined platform data structure and platform
+driver name.
 
 Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
 ---
- sound/soc/fsl/fsl_easrc.c | 195 ++++++++++++++++++++++++++++++++++++++
- sound/soc/fsl/fsl_easrc.h |   6 ++
- 2 files changed, 201 insertions(+)
+ include/sound/fsl_asrc_common.h | 23 +++++++++++++++++++++++
+ sound/soc/fsl/fsl_asrc.c        | 18 ++++++++++++++++++
+ 2 files changed, 41 insertions(+)
 
-diff --git a/sound/soc/fsl/fsl_easrc.c b/sound/soc/fsl/fsl_easrc.c
-index ba62995c909a..50aee04e7915 100644
---- a/sound/soc/fsl/fsl_easrc.c
-+++ b/sound/soc/fsl/fsl_easrc.c
-@@ -1861,6 +1861,192 @@ static int fsl_easrc_get_fifo_addr(u8 dir, enum asrc_pair_index index)
- 	return REG_EASRC_FIFO(dir, index);
- }
- 
-+/* Get sample numbers in FIFO */
-+static unsigned int fsl_easrc_get_output_fifo_size(struct fsl_asrc_pair *pair)
-+{
-+	struct fsl_asrc *asrc = pair->asrc;
-+	enum asrc_pair_index index = pair->index;
-+	u32 val;
-+
-+	regmap_read(asrc->regmap, REG_EASRC_SFS(index), &val);
-+	val &= EASRC_SFS_NSGO_MASK;
-+
-+	return val >> EASRC_SFS_NSGO_SHIFT;
-+}
-+
-+static int fsl_easrc_m2m_start_part_one(struct fsl_asrc_pair *pair)
-+{
-+	struct fsl_easrc_ctx_priv *ctx_priv = pair->private;
-+	struct fsl_asrc *asrc = pair->asrc;
-+	struct device *dev = &asrc->pdev->dev;
-+	int ret;
-+
-+	ctx_priv->in_params.sample_rate = pair->rate[IN];
-+	ctx_priv->in_params.sample_format = pair->sample_format[IN];
-+	ctx_priv->out_params.sample_rate = pair->rate[OUT];
-+	ctx_priv->out_params.sample_format = pair->sample_format[OUT];
-+
-+	ctx_priv->in_params.fifo_wtmk = FSL_EASRC_INPUTFIFO_WML;
-+	ctx_priv->out_params.fifo_wtmk = FSL_EASRC_OUTPUTFIFO_WML;
-+	/* Fill the right half of the re-sampler with zeros */
-+	ctx_priv->rs_init_mode = 0x2;
-+	/* Zero fill the right half of the prefilter */
-+	ctx_priv->pf_init_mode = 0x2;
-+
-+	ret = fsl_easrc_set_ctx_format(pair,
-+				       &ctx_priv->in_params.sample_format,
-+				       &ctx_priv->out_params.sample_format);
-+	if (ret) {
-+		dev_err(dev, "failed to set context format: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = fsl_easrc_config_context(asrc, pair->index);
-+	if (ret) {
-+		dev_err(dev, "failed to config context %d\n", ret);
-+		return ret;
-+	}
-+
-+	ctx_priv->in_params.iterations = 1;
-+	ctx_priv->in_params.group_len = pair->channels;
-+	ctx_priv->in_params.access_len = pair->channels;
-+	ctx_priv->out_params.iterations = 1;
-+	ctx_priv->out_params.group_len = pair->channels;
-+	ctx_priv->out_params.access_len = pair->channels;
-+
-+	ret = fsl_easrc_set_ctx_organziation(pair);
-+	if (ret) {
-+		dev_err(dev, "failed to set fifo organization\n");
-+		return ret;
-+	}
-+
-+	/* The context start flag */
-+	ctx_priv->first_convert = 1;
-+	return 0;
-+}
-+
-+static int fsl_easrc_m2m_start_part_two(struct fsl_asrc_pair *pair)
-+{
-+	struct fsl_easrc_ctx_priv *ctx_priv = pair->private;
-+	/* start context once */
-+	if (ctx_priv->first_convert) {
-+		fsl_easrc_start_context(pair);
-+		ctx_priv->first_convert = 0;
-+	}
-+
-+	return 0;
-+}
-+
-+static int fsl_easrc_m2m_stop_part_two(struct fsl_asrc_pair *pair)
-+{
-+	struct fsl_easrc_ctx_priv *ctx_priv = pair->private;
-+	/* Stop pair/context */
-+	if (!ctx_priv->first_convert) {
-+		fsl_easrc_stop_context(pair);
-+		ctx_priv->first_convert = 1;
-+	}
-+
-+	return 0;
-+}
-+
-+/* calculate capture data length according to output data length and sample rate */
-+static int fsl_easrc_m2m_calc_out_len(struct fsl_asrc_pair *pair, int input_buffer_length)
-+{
-+	struct fsl_asrc *easrc = pair->asrc;
-+	struct fsl_easrc_priv *easrc_priv = easrc->private;
-+	struct fsl_easrc_ctx_priv *ctx_priv = pair->private;
-+	unsigned int in_rate = ctx_priv->in_params.norm_rate;
-+	unsigned int out_rate = ctx_priv->out_params.norm_rate;
-+	unsigned int channels = pair->channels;
-+	unsigned int in_samples, out_samples;
-+	unsigned int in_width, out_width;
-+	unsigned int out_length;
-+	unsigned int frac_bits;
-+	u64 val1, val2;
-+
-+	switch (easrc_priv->rs_num_taps) {
-+	case EASRC_RS_32_TAPS:
-+		/* integer bits = 5; */
-+		frac_bits = 39;
-+		break;
-+	case EASRC_RS_64_TAPS:
-+		/* integer bits = 6; */
-+		frac_bits = 38;
-+		break;
-+	case EASRC_RS_128_TAPS:
-+		/* integer bits = 7; */
-+		frac_bits = 37;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	val1 = (u64)in_rate << frac_bits;
-+	do_div(val1, out_rate);
-+	val1 = val1 + (ctx_priv->ratio_mod << (frac_bits - 31));
-+
-+	in_width = snd_pcm_format_physical_width(ctx_priv->in_params.sample_format) / 8;
-+	out_width = snd_pcm_format_physical_width(ctx_priv->out_params.sample_format) / 8;
-+
-+	ctx_priv->in_filled_len += input_buffer_length;
-+	if (ctx_priv->in_filled_len <= ctx_priv->in_filled_sample * in_width * channels) {
-+		out_length = 0;
-+	} else {
-+		in_samples = ctx_priv->in_filled_len / (in_width * channels) -
-+			     ctx_priv->in_filled_sample;
-+
-+		/* right shift 12 bit to make ratio in 32bit space */
-+		val2 = (u64)in_samples << (frac_bits - 12);
-+		val1 = val1 >> 12;
-+		do_div(val2, val1);
-+		out_samples = val2;
-+
-+		out_length = out_samples * out_width * channels;
-+		ctx_priv->in_filled_len = ctx_priv->in_filled_sample * in_width * channels;
-+	}
-+
-+	return out_length;
-+}
-+
-+static int fsl_easrc_m2m_get_maxburst(u8 dir, struct fsl_asrc_pair *pair)
-+{
-+	struct fsl_easrc_ctx_priv *ctx_priv = pair->private;
-+
-+	if (dir == IN)
-+		return ctx_priv->in_params.fifo_wtmk * pair->channels;
-+	else
-+		return ctx_priv->out_params.fifo_wtmk * pair->channels;
-+}
-+
-+static int fsl_easrc_m2m_pair_suspend(struct fsl_asrc_pair *pair)
-+{
-+	fsl_easrc_stop_context(pair);
-+
-+	return 0;
-+}
-+
-+static int fsl_easrc_m2m_pair_resume(struct fsl_asrc_pair *pair)
-+{
-+	struct fsl_easrc_ctx_priv *ctx_priv = pair->private;
-+
-+	ctx_priv->first_convert = 1;
-+	ctx_priv->in_filled_len = 0;
-+
-+	return 0;
-+}
-+
-+/* val is Q31 */
-+static int fsl_easrc_m2m_set_ratio_mod(struct fsl_asrc_pair *pair, int val)
-+{
-+	struct fsl_easrc_ctx_priv *ctx_priv = pair->private;
-+	struct fsl_asrc *easrc = pair->asrc;
-+
-+	ctx_priv->ratio_mod += val;
-+	regmap_write(easrc->regmap, REG_EASRC_RUC(pair->index), EASRC_RSUC_RS_RM(val));
-+
-+	return 0;
-+}
-+
- static const struct of_device_id fsl_easrc_dt_ids[] = {
- 	{ .compatible = "fsl,imx8mn-easrc",},
- 	{}
-@@ -1926,6 +2112,15 @@ static int fsl_easrc_probe(struct platform_device *pdev)
- 	easrc->release_pair = fsl_easrc_release_context;
- 	easrc->get_fifo_addr = fsl_easrc_get_fifo_addr;
- 	easrc->pair_priv_size = sizeof(struct fsl_easrc_ctx_priv);
-+	easrc->m2m_start_part_one = fsl_easrc_m2m_start_part_one;
-+	easrc->m2m_start_part_two = fsl_easrc_m2m_start_part_two;
-+	easrc->m2m_stop_part_two = fsl_easrc_m2m_stop_part_two;
-+	easrc->get_output_fifo_size = fsl_easrc_get_output_fifo_size;
-+	easrc->m2m_calc_out_len = fsl_easrc_m2m_calc_out_len;
-+	easrc->m2m_get_maxburst = fsl_easrc_m2m_get_maxburst;
-+	easrc->m2m_pair_suspend = fsl_easrc_m2m_pair_suspend;
-+	easrc->m2m_pair_resume = fsl_easrc_m2m_pair_resume;
-+	easrc->m2m_set_ratio_mod = fsl_easrc_m2m_set_ratio_mod;
- 
- 	easrc_priv->rs_num_taps = EASRC_RS_32_TAPS;
- 	easrc_priv->const_coeff = 0x3FF0000000000000;
-diff --git a/sound/soc/fsl/fsl_easrc.h b/sound/soc/fsl/fsl_easrc.h
-index 7c70dac52713..bee887c8b4f2 100644
---- a/sound/soc/fsl/fsl_easrc.h
-+++ b/sound/soc/fsl/fsl_easrc.h
-@@ -601,6 +601,9 @@ struct fsl_easrc_slot {
-  * @out_missed_sample: sample missed in output
-  * @st1_addexp: exponent added for stage1
-  * @st2_addexp: exponent added for stage2
-+ * @ratio_mod: update ratio
-+ * @first_convert: start of conversion
-+ * @in_filled_len: input filled length
-  */
- struct fsl_easrc_ctx_priv {
- 	struct fsl_easrc_io_params in_params;
-@@ -618,6 +621,9 @@ struct fsl_easrc_ctx_priv {
- 	int out_missed_sample;
- 	int st1_addexp;
- 	int st2_addexp;
-+	int ratio_mod;
-+	unsigned int first_convert;
-+	unsigned int in_filled_len;
+diff --git a/include/sound/fsl_asrc_common.h b/include/sound/fsl_asrc_common.h
+index 8a1ac88aedac..9a8209b698f2 100644
+--- a/include/sound/fsl_asrc_common.h
++++ b/include/sound/fsl_asrc_common.h
+@@ -69,6 +69,7 @@ struct fsl_asrc_pair {
+  * @dma_params_rx: DMA parameters for receive channel
+  * @dma_params_tx: DMA parameters for transmit channel
+  * @pdev: platform device pointer
++ * @m2m_pdev: m2m platform device pointer
+  * @regmap: regmap handler
+  * @paddr: physical address to the base address of registers
+  * @mem_clk: clock source to access register
+@@ -101,6 +102,7 @@ struct fsl_asrc {
+ 	struct snd_dmaengine_dai_dma_data dma_params_rx;
+ 	struct snd_dmaengine_dai_dma_data dma_params_tx;
+ 	struct platform_device *pdev;
++	struct platform_device *m2m_pdev;
+ 	struct regmap *regmap;
+ 	unsigned long paddr;
+ 	struct clk *mem_clk;
+@@ -137,6 +139,27 @@ struct fsl_asrc {
+ 	void *private;
  };
  
- /**
++/**
++ * struct fsl_asrc_m2m_pdata - platform data
++ * @asrc: pointer to struct fsl_asrc
++ * @fmt_in: input sample format
++ * @fmt_out: output sample format
++ * @chan_min: minimum channel number
++ * @chan_max: maximum channel number
++ * @rate_min: minimum rate
++ * @rate_max: maximum rete
++ */
++struct fsl_asrc_m2m_pdata {
++	struct fsl_asrc *asrc;
++	u64 fmt_in;
++	u64 fmt_out;
++	int chan_min;
++	int chan_max;
++	int rate_min;
++	int rate_max;
++};
++
++#define M2M_DRV_NAME "fsl_asrc_m2m"
+ #define DRV_NAME "fsl-asrc-dai"
+ extern struct snd_soc_component_driver fsl_asrc_component;
+ 
+diff --git a/sound/soc/fsl/fsl_asrc.c b/sound/soc/fsl/fsl_asrc.c
+index 47db476ac47a..a9837d5d9124 100644
+--- a/sound/soc/fsl/fsl_asrc.c
++++ b/sound/soc/fsl/fsl_asrc.c
+@@ -1179,6 +1179,7 @@ static int fsl_asrc_runtime_suspend(struct device *dev);
+ static int fsl_asrc_probe(struct platform_device *pdev)
+ {
+ 	struct device_node *np = pdev->dev.of_node;
++	struct fsl_asrc_m2m_pdata m2m_pdata;
+ 	struct fsl_asrc_priv *asrc_priv;
+ 	struct fsl_asrc *asrc;
+ 	struct resource *res;
+@@ -1360,6 +1361,18 @@ static int fsl_asrc_probe(struct platform_device *pdev)
+ 		goto err_pm_get_sync;
+ 	}
+ 
++	m2m_pdata.asrc = asrc;
++	m2m_pdata.fmt_in = FSL_ASRC_FORMATS;
++	m2m_pdata.fmt_out = FSL_ASRC_FORMATS | SNDRV_PCM_FMTBIT_S8;
++	m2m_pdata.rate_min = 5512;
++	m2m_pdata.rate_max = 192000;
++	m2m_pdata.chan_min = 1;
++	m2m_pdata.chan_max = 10;
++	asrc->m2m_pdev = platform_device_register_data(&pdev->dev,
++						       M2M_DRV_NAME,
++						       PLATFORM_DEVID_AUTO,
++						       &m2m_pdata,
++						       sizeof(m2m_pdata));
+ 	return 0;
+ 
+ err_pm_get_sync:
+@@ -1372,6 +1385,11 @@ static int fsl_asrc_probe(struct platform_device *pdev)
+ 
+ static void fsl_asrc_remove(struct platform_device *pdev)
+ {
++	struct fsl_asrc *asrc = dev_get_drvdata(&pdev->dev);
++
++	if (asrc->m2m_pdev && !IS_ERR(asrc->m2m_pdev))
++		platform_device_unregister(asrc->m2m_pdev);
++
+ 	pm_runtime_disable(&pdev->dev);
+ 	if (!pm_runtime_status_suspended(&pdev->dev))
+ 		fsl_asrc_runtime_suspend(&pdev->dev);
 -- 
 2.34.1
 
