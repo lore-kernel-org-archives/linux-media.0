@@ -2,92 +2,67 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1933E71D42
-	for <linux-media@archiver.kernel.org>; Fri, 29 Sep 2023 14:48:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E6A4E71D4A
+	for <linux-media@archiver.kernel.org>; Fri, 29 Sep 2023 15:18:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232878AbjI2OsQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 29 Sep 2023 10:48:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45974 "EHLO
+        id S233538AbjI2PSv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 29 Sep 2023 11:18:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjI2OsQ (ORCPT
+        with ESMTP id S233524AbjI2PSu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 29 Sep 2023 10:48:16 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BC3D6;
-        Fri, 29 Sep 2023 07:48:11 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-277317a0528so2226128a91.0;
-        Fri, 29 Sep 2023 07:48:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695998890; x=1696603690; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jTNBiy+b4zZysuJEIrJMG8P2EeJqZE35ctY7gIAWZ1Y=;
-        b=ZGeKVQ6e1IuXJaLabpOZkHWI/K2svBFA6wu0IBvVzVgI/vmX7QKEYcI8c4PeXsB+2d
-         E1143XeE2LX+s6vCR5wdQfBS972fo0edDDe6WeCkel9iHidR1b6UuyW3uNJ0o2iKL4uF
-         R/O9RgddE54usn37acMtNxjNXqpQQ7GtnMgwsDHr3qUVz6ilce9LUtTxu0ArtsaFxQFz
-         oGnEMlfwzfAW4LIkFogEHig81ZCCVkhm1TEVcqCTMzoL7vnX0A8DQ9vGToV7JSEIPdBD
-         KmGwv3ZH2zYxC6loLUMko1uu4g+tyVsQiX64HS/SKjlV2c1JZrqwu73//Y+HRJ/ekIJR
-         Fg/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695998890; x=1696603690;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jTNBiy+b4zZysuJEIrJMG8P2EeJqZE35ctY7gIAWZ1Y=;
-        b=mLAb7sgeM3r9voMpH6hb3+P/Hi2LNk1+AuQ5fkNaVqoIepnkDsDmZ3v8yKJ+dx18FI
-         pvcdJ2hYwrx9H4IIm6J79kl/BToxjMVagAokzn7D09OVAw6JGcC1TAgDtwc9rrZxF5Re
-         DircNRhD83elwTNRRLun04t1mdbaxoAVwhXPfSjzwhwLbpsANrvxJlVVybRToPfk1Yzo
-         K2ljGpWUoDrD/axb17lMmtKubFqy6J6jKSlVC/MzIiL8Jsg5WTD5sikZxLqXteahEJVX
-         YnvXfRUObiUtJBC1WFYvb8EwLwizdh3sztgq3Zdefh/BfyDKoCYXfav8M60fKSIGk+rq
-         KRJA==
-X-Gm-Message-State: AOJu0YzPUID0I38ovx9T90HL5Gl6/00n+GTbguujyYu3q8nuwMJ+cau0
-        2xUmGZE6raOykpa1hwOUwgFhen0jq25qHxIEYrQ=
-X-Google-Smtp-Source: AGHT+IGFn5H6xrqEtLWddJIAeFSuCK2EZTNeEwqJLHtNyWg12u4lkVPhWGh3BfBLLp37FVu6g0jzmt0YiRTGdmkuEGQ=
-X-Received: by 2002:a17:90a:4c81:b0:279:e6f:2e4b with SMTP id
- k1-20020a17090a4c8100b002790e6f2e4bmr4002662pjh.0.1695998890604; Fri, 29 Sep
- 2023 07:48:10 -0700 (PDT)
+        Fri, 29 Sep 2023 11:18:50 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B097F9;
+        Fri, 29 Sep 2023 08:18:47 -0700 (PDT)
+Received: from uno.localdomain (mob-5-90-203-152.net.vodafone.it [5.90.203.152])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 012F51257;
+        Fri, 29 Sep 2023 17:17:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1696000623;
+        bh=BjVknzxC/ZiIEtXYgSVsi4tl5XfVYSUxx4bGa3XroqM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=fnjgEHE7DyfaL6Bs1A/4CZhO4vlA5fFMbQtn0VRURMzrre929/GptQiQqhv8KRV32
+         Lkwuf/Y/k3MTJQcI25s6qytaZtLeqe6wMfgKDc0vFhfLFgfEQe705paEV6Ioba4JeE
+         0Tk/DrK3BW3+7mGvMP7RQ0X2RYOxgB7PazKToTdo=
+From:   Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Fabio Estevam <festevam@gmail.com>, martink@posteo.de
+Subject: [PATCH 1/7] media: bindings: hynix,hi846: Add video-interface-device properties
+Date:   Fri, 29 Sep 2023 17:18:19 +0200
+Message-ID: <20230929151825.6535-2-jacopo.mondi@ideasonboard.com>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20230929151825.6535-1-jacopo.mondi@ideasonboard.com>
+References: <20230929151825.6535-1-jacopo.mondi@ideasonboard.com>
 MIME-Version: 1.0
-References: <20230928121424.388019-1-festevam@gmail.com> <avoixz5pqixr366cqks672akniv7h7ewix4edoyikg23dv24fd@bquxelr53t7t>
- <20230928155446.GA568091-robh@kernel.org> <orsrzyiaykfoqb5uritwbz5bgovxn4wviijinzlim2cy3qffhp@5zuy5ffp7kmo>
- <aduoeroo7tyhvaeuq4mv4x7ndkrvkm62stwqtxscus5enf4sno@77a2d7asc3pw>
-In-Reply-To: <aduoeroo7tyhvaeuq4mv4x7ndkrvkm62stwqtxscus5enf4sno@77a2d7asc3pw>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Fri, 29 Sep 2023 11:47:58 -0300
-Message-ID: <CAOMZO5B-XVN6k=RU=xy9D31KVrVtOp8Zdq88mLMOj7C7fP3biQ@mail.gmail.com>
-Subject: Re: [PATCH v2] media: dt-bindings: hynix,hi846: Document orientation
- and rotation
-To:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Cc:     Rob Herring <robh@kernel.org>, mchehab@kernel.org,
-        sakari.ailus@linux.intel.com, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, martink@posteo.de,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        Fabio Estevam <festevam@denx.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jacopo,
+Allow properties from video-interface-device.yaml for the SK Hynix Hi-846
+sensor.
 
-On Fri, Sep 29, 2023 at 11:36=E2=80=AFAM Jacopo Mondi
-<jacopo.mondi@ideasonboard.com> wrote:
+All properties specified in video-interface-device.yaml schema are
+valid, so make them accepted by changing "additionalProperties: false"
+to "unevaluatedProperties: false" at the schema top-level.
 
-> Actually, if I'm going to s/additionalProperties/unevaluatedProperties/
-> in this bindings as well, am I wrong this patch is not needed anymore ?
+Add two properties from video-interface-device.yaml to the example
+to validate the new schema.
 
-You can discard this patch.
+Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+---
+ .../devicetree/bindings/media/i2c/hynix,hi846.yaml         | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Make sure that the schema warning below is gone:
-
-imx8mq-librem5-r3.dtb: camera@20: 'orientation', 'rotation' do not
-match any of the regexes: 'pinctrl-[0-9]+'
-from schema $id: http://devicetree.org/schemas/media/i2c/hynix,hi846.yaml#
-
-The diff below works for me:
-
+diff --git a/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml b/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
+index 1e2df8cf2937..60f19e1152b3 100644
 --- a/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
 +++ b/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
 @@ -14,6 +14,9 @@ description: |-
@@ -109,3 +84,15 @@ The diff below works for me:
 
  examples:
    - |
+@@ -109,6 +112,8 @@ examples:
+             vddio-supply = <&reg_camera_vddio>;
+             reset-gpios = <&gpio1 25 GPIO_ACTIVE_LOW>;
+             shutdown-gpios = <&gpio5 4 GPIO_ACTIVE_LOW>;
++            orientation = <0>;
++            rotation = <0>;
+
+             port {
+                 camera_out: endpoint {
+--
+2.42.0
+
