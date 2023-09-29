@@ -2,67 +2,64 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BBB1E743F8
-	for <linux-media@archiver.kernel.org>; Fri, 29 Sep 2023 08:38:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86924E743F9
+	for <linux-media@archiver.kernel.org>; Fri, 29 Sep 2023 08:41:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232875AbjI2Iim (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 29 Sep 2023 04:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43062 "EHLO
+        id S232757AbjI2Ilo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 29 Sep 2023 04:41:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232853AbjI2Iih (ORCPT
+        with ESMTP id S232740AbjI2Ilm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 29 Sep 2023 04:38:37 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE891AC
-        for <linux-media@vger.kernel.org>; Fri, 29 Sep 2023 01:38:33 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-99bf3f59905so1821477866b.3
-        for <linux-media@vger.kernel.org>; Fri, 29 Sep 2023 01:38:33 -0700 (PDT)
+        Fri, 29 Sep 2023 04:41:42 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2781AA
+        for <linux-media@vger.kernel.org>; Fri, 29 Sep 2023 01:41:39 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-40651a72807so16151185e9.1
+        for <linux-media@vger.kernel.org>; Fri, 29 Sep 2023 01:41:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1695976711; x=1696581511; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=91bzG0Gvztxq9AzwDAH8hNYEi4ko/cSP4Liv9cAEuIU=;
-        b=DdRblbFAPurXIUU3F+cpsJB31BK2VR2TiUJd5qijD2gkO6V2FAjVHMq6flca39GuDo
-         Voo3bojKdLA12UeP6IUTduNOylBAw2iMp8pvm/tLkRjQh5yUhcAUYsbV1Nl5y/Iyqmm+
-         3JY9IfjQWtMfaSQcJCGaPnUhdqiYYkNpkVIvXvPz8V/kP8+dgmmxWXMTp3Ywba9U56a7
-         hR4lJBnX+SsfiJZYmRaU2Hv3iZCfQEZgYnXW7B8nxYUHL3yMKu0tfOcqDJ/P5AIs9kCB
-         lVOvqStfxIJdwaWpft4ljxadtUSc1du876WdyQVh7Mbl5LrF7Oz/5KRVT/cGyq1QV4oV
-         Aqfw==
+        d=linaro.org; s=google; t=1695976898; x=1696581698; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=M1qa9MPXO3QkuATigdmsJ+7YJ61rWQy2j+JwMEZKO3Y=;
+        b=o6TPz/5CBu7SXr1j3rNH31VLcRQY8LPeiS8s2phtQWSG/TzyMAMNADW2e8yg7kyVTm
+         DD0U8k7Ts6v0fMxpI3qsJCYQsc5VYCoLy6/bKRrnAVqr9Aq3or4u8d34PcyifAbq7Cbb
+         R0hDRB0U8bdcmStxO7KmFSnZ76baZwaWHVeLwSav+6Vsk1Pi3xVUyCN1yo3Y/IQR+JBp
+         6BFgbrmEvmJlRqSHVFNia3IzqPSM41vhFar1WlRh01ChiG/BecC4/Eh74ow9sG8ahKzq
+         tGg6TV6TxBhTVnz5fdkKbxhI/ir7QUrlR9xPcHlD8f7i86f9VoJSL/QO1GRSmXF0qNTE
+         RWQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695976711; x=1696581511;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=91bzG0Gvztxq9AzwDAH8hNYEi4ko/cSP4Liv9cAEuIU=;
-        b=LA8UnZyoID0q8gi7YoTSPszwVR/aBuEzvqCwgW+w+4jtJvctyspTGebQws7XIasmFN
-         vPmK7m5dRi8wKKKbYkp8FHmOWoWOIWB+8IaVhVBflt4EElwhQ+NBKNvFMzrYMCkxzX6i
-         fb72b4g5demOxns3KgsXbgDhwo1QBq1WjifK/JDoBpI0hz1M0mJ2w+2/gJjkhKy4xWDG
-         8J/Iy6NaxfzcwitLOhI2XRg0errTKfFW/JRbe3dnL0FCX0Hm/H+ch94IL6WQU4Rs3PCx
-         x6H5Ar6CK/HCSqjnuKVkXLUN3NYPGqi5dNivGLflFqgvgWakAyJLg/pcbXO8w49XoV1/
-         XkQw==
-X-Gm-Message-State: AOJu0YzK7rT6XVpclyfOvqwKaOVeMvWHx55ANfq1NA1BiV4YRpJdsb7l
-        G0MQGJsXVLPusPAXPQHbYmUBOw==
-X-Google-Smtp-Source: AGHT+IHLsYBhakgorb9cz9xMHTZREOY3MKxX8RWfDk0MxVttJTRKtifVvOUBTcfVorek5kiIlkefrQ==
-X-Received: by 2002:a17:906:3402:b0:9a1:bb8f:17d0 with SMTP id c2-20020a170906340200b009a1bb8f17d0mr3167830ejb.30.1695976711532;
-        Fri, 29 Sep 2023 01:38:31 -0700 (PDT)
-Received: from otso.luca.vpn.lucaweiss.eu (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id qk8-20020a170906d9c800b009ad89697c86sm12208965ejb.144.2023.09.29.01.38.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Sep 2023 01:38:31 -0700 (PDT)
-From:   Luca Weiss <luca.weiss@fairphone.com>
-Subject: [PATCH 0/3] Enable venus on Fairphone 5 / non-ChromeOS sc7280
- venus support
-Date:   Fri, 29 Sep 2023 10:38:18 +0200
-Message-Id: <20230929-sc7280-venus-pas-v1-0-9c6738cf157a@fairphone.com>
+        d=1e100.net; s=20230601; t=1695976898; x=1696581698;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=M1qa9MPXO3QkuATigdmsJ+7YJ61rWQy2j+JwMEZKO3Y=;
+        b=fDoAI5ASkevjWye45ZP3CZDoUswx2ZT/Mi3y8sH3OYsPQ9e79ZP7ZUbi6Yyk5X1E+y
+         RLifzq9HX/8ixFyK9+9HN1ZHXUMKzrZGvgFEXQdxQ1W4nTANkpC/puGHc2HupWQSaMMr
+         gdBe/Hv8/6liKVpPaRWjOyOJc1FcsmfTmSHG5mmJjBFC8QckexmkwAcXNaAeV8u/dv/+
+         lsh1dG72rv3+eBkl6JuHLieRQ+LILPVFh19pdgB1+hmVlkvjQrNqKxOiqJpziOR4qpBB
+         MlI0S38q8iojxSwEOkkjoOo68k3tiphloLlo1ykAIzIeaj3cLOrBkQ3gMbNVx1Txh1oj
+         ovdA==
+X-Gm-Message-State: AOJu0Yy8J/SmHhgkdYEOHG2HwN3CrVs1ewyvSImkhzpZG4+btzXUAXNK
+        bSqRaSEBYXAp/WuAZiGt/JxDjg==
+X-Google-Smtp-Source: AGHT+IGoAq5YuKVMoGvdyZ7QMvGcwB5OFGA+8f2cwGQcecWyWkmY78FgzMH9ry9w/k10s4mUQpQonw==
+X-Received: by 2002:adf:ead1:0:b0:315:ad1a:5abc with SMTP id o17-20020adfead1000000b00315ad1a5abcmr3241388wrn.5.1695976898094;
+        Fri, 29 Sep 2023 01:41:38 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id z17-20020adfd0d1000000b00317a04131c5sm21032893wrh.57.2023.09.29.01.41.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Sep 2023 01:41:37 -0700 (PDT)
+Message-ID: <0523aa22-5a82-488a-b325-0cab6a4c95aa@linaro.org>
+Date:   Fri, 29 Sep 2023 09:41:36 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAPqMFmUC/x3MMQqAMAxA0atIZgM1pWq9ijgUjZqlSoMiSO9uc
- XzD/y8oJ2GFoXoh8S0qRyxo6grmPcSNUZZiIEPWePKoc0e9wZvjpXgGRQ6+tcaR65yFkp2JV3n
- +5Tjl/AHEswkEYgAAAA==
-To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] media: venus: core: Set up secure memory ranges for
+ SC7280
+Content-Language: en-US
+To:     Luca Weiss <luca.weiss@fairphone.com>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
         Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
@@ -73,35 +70,42 @@ To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
         Conor Dooley <conor+dt@kernel.org>
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Luca Weiss <luca.weiss@fairphone.com>
-X-Mailer: b4 0.12.3
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20230929-sc7280-venus-pas-v1-0-9c6738cf157a@fairphone.com>
+ <20230929-sc7280-venus-pas-v1-1-9c6738cf157a@fairphone.com>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <20230929-sc7280-venus-pas-v1-1-9c6738cf157a@fairphone.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Devices with Qualcomm firmware (compared to ChromeOS firmware) need some
-changes in the venus driver and dts layout so that venus can initialize.
-
-Do these changes, similar to sc7180.
-
-Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
----
-Luca Weiss (3):
-      media: venus: core: Set up secure memory ranges for SC7280
-      arm64: dts: qcom: sc7280: Move video-firmware to chrome-common
-      arm64: dts: qcom: qcm6490-fairphone-fp5: Enable venus node
-
- arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts | 5 +++++
- arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi | 8 ++++++++
- arch/arm64/boot/dts/qcom/sc7280.dtsi               | 6 ++----
- drivers/media/platform/qcom/venus/core.c           | 4 ++++
- 4 files changed, 19 insertions(+), 4 deletions(-)
----
-base-commit: df964ce9ef9fea10cf131bf6bad8658fde7956f6
-change-id: 20230929-sc7280-venus-pas-ea9630525753
-
-Best regards,
--- 
-Luca Weiss <luca.weiss@fairphone.com>
-
+On 29/09/2023 09:38, Luca Weiss wrote:
+> Not all SC7280 devices ship with ChromeOS firmware. Other devices need
+> PAS for image authentication. That requires the predefined virtual
+> address ranges to be passed via scm calls. Define them to enable Venus
+> on non-CrOS SC7280 devices.
+> 
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> ---
+>   drivers/media/platform/qcom/venus/core.c | 4 ++++
+>   1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
+> index 054b8e74ba4f..5c6baa0f4d45 100644
+> --- a/drivers/media/platform/qcom/venus/core.c
+> +++ b/drivers/media/platform/qcom/venus/core.c
+> @@ -881,6 +881,10 @@ static const struct venus_resources sc7280_res = {
+>   	.vmem_size = 0,
+>   	.vmem_addr = 0,
+>   	.dma_mask = 0xe0000000 - 1,
+> +	.cp_start = 0,
+> +	.cp_size = 0x25800000,
+> +	.cp_nonpixel_start = 0x1000000,
+> +	.cp_nonpixel_size = 0x24800000,
+>   	.fwname = "qcom/vpu-2.0/venus.mbn",
+>   };
+>   
+> 
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
