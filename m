@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B77EE71D50
-	for <linux-media@archiver.kernel.org>; Fri, 29 Sep 2023 15:18:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61609E71D4A
+	for <linux-media@archiver.kernel.org>; Fri, 29 Sep 2023 15:18:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233565AbjI2PSw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 29 Sep 2023 11:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42858 "EHLO
+        id S233575AbjI2PS4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 29 Sep 2023 11:18:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233552AbjI2PSw (ORCPT
+        with ESMTP id S233562AbjI2PSz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 29 Sep 2023 11:18:52 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71977DD;
-        Fri, 29 Sep 2023 08:18:50 -0700 (PDT)
+        Fri, 29 Sep 2023 11:18:55 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87453D6;
+        Fri, 29 Sep 2023 08:18:53 -0700 (PDT)
 Received: from uno.localdomain (mob-5-90-203-152.net.vodafone.it [5.90.203.152])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4EC00208C;
-        Fri, 29 Sep 2023 17:17:03 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 921BC3358;
+        Fri, 29 Sep 2023 17:17:06 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1696000624;
-        bh=aHh7Onb6E17lxgt1ybvhKJ4mmnRpYjWTEzrAMv8wWlk=;
+        s=mail; t=1696000629;
+        bh=RFtJSOjV6FtpQpxrkNDSyJnksxeXGW77+2EWI+5rKtM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OEvGh9UQ4wRBvypbARrqGknv9gfCLjajM2WlqIIvjgGc7rMEbAGCjVBpshZs9QQx4
-         lOX6hi6sMif2k2gZ/CnQz2HQYgq/ZtqxF6N8uXhVduOPycG/5ExwPNeLbJvSuN0oOu
-         ipp3YsKli/Chdg1GJ/IQdCnizkOEMsc4bgnpB7Ng=
+        b=ees+ngApHST90uZHupvsinvDi/1ewwF3Tzkhxvkh6kZEf3JD+RAScBXvZ5Ny7kmcC
+         nctx0HASfUSLJroqzt9jvSI+F6SWgkPEPCUIfoN4ZKeftd7lOGpFa+WhDG+97mvjNY
+         VH6QdqKgLQTZHOaGKSV1NPVagkSnmTxrbF8fkE+w=
 From:   Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org
 Cc:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
@@ -33,10 +33,11 @@ Cc:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
         Conor Dooley <conor+dt@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Fabio Estevam <festevam@gmail.com>, martink@posteo.de
-Subject: [PATCH 2/7] media: bindings: hynix,hi846: Restrict endpoint properties
-Date:   Fri, 29 Sep 2023 17:18:20 +0200
-Message-ID: <20230929151825.6535-3-jacopo.mondi@ideasonboard.com>
+        Fabio Estevam <festevam@gmail.com>, martink@posteo.de,
+        Mikhail Rudenko <mike.rudenko@gmail.com>
+Subject: [PATCH 4/7] media: bindings: ovti,ov4689: Fix handling of video-interface-device
+Date:   Fri, 29 Sep 2023 17:18:22 +0200
+Message-ID: <20230929151825.6535-5-jacopo.mondi@ideasonboard.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20230929151825.6535-1-jacopo.mondi@ideasonboard.com>
 References: <20230929151825.6535-1-jacopo.mondi@ideasonboard.com>
@@ -46,39 +47,43 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Only properties explicitly listed in the schema are accepted as
-endpoint properties.
+Fix handling of properties from video-interface-device.yaml for
+Omnivision OV4689.
 
-Make sure this is actually enforced by setting 'additionalProperties'
-to false and explicitly allow 'remote-endpoint' in the list of
-endpoint properties.
+All the properties described by video-interface-device.yaml are
+allowed for the image sensor, make them accepted by changing
+"additionalProperties: false" to "unevaluatedProperties: false" at the
+schema top-level.
 
 Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 ---
- Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ .../devicetree/bindings/media/i2c/ovti,ov4689.yaml          | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml b/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
-index 60f19e1152b3..f2ca86501d3c 100644
---- a/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
-@@ -58,7 +58,7 @@ properties:
-     properties:
-       endpoint:
-         $ref: /schemas/media/video-interfaces.yaml#
--        unevaluatedProperties: false
-+        additionalProperties: false
+diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml
+index 50579c947f3c..d96199031b66 100644
+--- a/Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml
++++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml
+@@ -52,10 +52,6 @@ properties:
+     description:
+       GPIO connected to the reset pin (active low)
 
-         properties:
-           data-lanes:
-@@ -73,6 +73,7 @@ properties:
-                   - const: 2
+-  orientation: true
+-
+-  rotation: true
+-
+   port:
+     $ref: /schemas/graph.yaml#/$defs/port-base
+     additionalProperties: false
+@@ -95,7 +91,7 @@ required:
+   - dvdd-supply
+   - port
 
-           link-frequencies: true
-+          remote-endpoint: true
+-additionalProperties: false
++unevaluatedProperties: false
 
-         required:
-           - data-lanes
+ examples:
+   - |
 --
 2.42.0
 
