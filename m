@@ -2,35 +2,35 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98468E748F6
-	for <linux-media@archiver.kernel.org>; Mon,  2 Oct 2023 12:06:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51C0CE748F7
+	for <linux-media@archiver.kernel.org>; Mon,  2 Oct 2023 12:06:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237005AbjJBMGt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 2 Oct 2023 08:06:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37402 "EHLO
+        id S237012AbjJBMGv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 2 Oct 2023 08:06:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236980AbjJBMGd (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Oct 2023 08:06:33 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A31D7;
-        Mon,  2 Oct 2023 05:06:29 -0700 (PDT)
+        with ESMTP id S237047AbjJBMGi (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Oct 2023 08:06:38 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10EAEB0;
+        Mon,  2 Oct 2023 05:06:35 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:9537:67ca:c85e:d0ae])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1C3EE6607312;
-        Mon,  2 Oct 2023 13:06:27 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 80A286607348;
+        Mon,  2 Oct 2023 13:06:33 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1696248387;
-        bh=xgQ59ci0u36Sg6Kfk6W/knjQu2QF8jMpnRAVGSPYz3E=;
+        s=mail; t=1696248393;
+        bh=gAzQ/SGzIm4inZNC+PXcs+p3IPzDsrNiBUGyKW1mkfg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D9+O2Q9IcArZLPYSj8D1PjKYeWodQoG3w8ILa1N26Kdifx90d7dEipYEEYsYwBnf9
-         Er93XrV7EeA1WueYmCkbnBYGCT3DeGRqcZpFReiqgHdPlf/6TDldsA1MW9k5ihh31h
-         +Oz9/ks+uXul/wu1ru3pLkqQUwIK6hjfFiJjCPlA99/qTRUmRQqa8KukYZBB3f4VJI
-         RvveZpNdgfd7CEOv4G3P6jubRw7jvnXGfbDX9ukVT7k6V/vFv+AZWGwlBbo/EeTkrU
-         FLQLYpLtprQziKxPY2Bmg1D7XT14okpMTeJnEdbVoKHWFwzfj550SZKxU0W+tPFV3h
-         ThrxOoflrb8Kw==
+        b=Ig+se78dEU6GozuCR3uCbrz4oe+nCxqgXF9Xh3EvjQuXCamgAdSEO2rlc9eP5GCnf
+         BP9Z7kMcXj8VUwptWjKAZhDVvfk3MUhjmLXgbMfsfF5vDG+gZK7MaN1tP1/L8GTCJf
+         fQ00wpKM0i/vWi4xie4YWHuGKyWBxs46rhmMJqRxtzFB0aK9tZDzaa+tM5+YCMPt3n
+         3rAx1MSTCsINMSlleS2thYrJdh3Gxt8JtR8VYMOmpKgCTSxZnpVkpM2udO29cqlcTQ
+         W2iRVfezObZod2gSaNtF0WzsHKHC8txNIEWrCdfAYksVAry0UeFvOyDXdTAa2eW6y0
+         JSNqjn99YYTfA==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -42,9 +42,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v9 05/53] media: mediatek: jpeg: Use vb2_get_buffer() instead of directly access to buffers array
-Date:   Mon,  2 Oct 2023 14:05:29 +0200
-Message-Id: <20231002120617.119602-6-benjamin.gaignard@collabora.com>
+Subject: [PATCH v9 17/53] media: verisilicon: Store chroma and motion vectors offset
+Date:   Mon,  2 Oct 2023 14:05:41 +0200
+Message-Id: <20231002120617.119602-18-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231002120617.119602-1-benjamin.gaignard@collabora.com>
 References: <20231002120617.119602-1-benjamin.gaignard@collabora.com>
@@ -54,37 +54,63 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use vb2_get_buffer() instead of directly access to vb2_buffer buffer array.
-This could allow to change the type bufs[] field of vb2_buffer structure if
-needed.
-After each call to vb2_get_buffer() we need to be sure that we get
-a valid pointer so check the return value of all of them.
+Store computed values of chroma and motion vectors offset because
+they depends on width and height values which change if the resolution
+change.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/media/platform/verisilicon/hantro.h            | 2 ++
+ drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c | 6 ++++--
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-index 7194f88edc0f..73a063b1569b 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-@@ -598,12 +598,11 @@ static int mtk_jpeg_qbuf(struct file *file, void *priv, struct v4l2_buffer *buf)
- 		goto end;
+diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/media/platform/verisilicon/hantro.h
+index 0948b04a9f8d..6f5eb975d0e3 100644
+--- a/drivers/media/platform/verisilicon/hantro.h
++++ b/drivers/media/platform/verisilicon/hantro.h
+@@ -328,6 +328,8 @@ struct hantro_vp9_decoded_buffer_info {
+ 	/* Info needed when the decoded frame serves as a reference frame. */
+ 	unsigned short width;
+ 	unsigned short height;
++	size_t chroma_offset;
++	size_t mv_offset;
+ 	u32 bit_depth : 4;
+ };
  
- 	vq = v4l2_m2m_get_vq(fh->m2m_ctx, buf->type);
--	if (buf->index >= vq->num_buffers) {
--		dev_err(ctx->jpeg->dev, "buffer index out of range\n");
-+	vb = vb2_get_buffer(vq, buf->index);
-+	if (!vb) {
-+		dev_err(ctx->jpeg->dev, "buffer not found\n");
- 		return -EINVAL;
- 	}
--
--	vb = vq->bufs[buf->index];
- 	jpeg_src_buf = mtk_jpeg_vb2_to_srcbuf(vb);
- 	jpeg_src_buf->bs_size = buf->m.planes[0].bytesused;
+diff --git a/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c b/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
+index 6fc4b555517f..6db1c32fce4d 100644
+--- a/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
++++ b/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
+@@ -158,9 +158,11 @@ static void config_output(struct hantro_ctx *ctx,
  
+ 	chroma_addr = luma_addr + chroma_offset(ctx, dec_params);
+ 	hantro_write_addr(ctx->dev, G2_OUT_CHROMA_ADDR, chroma_addr);
++	dst->vp9.chroma_offset = chroma_offset(ctx, dec_params);
+ 
+ 	mv_addr = luma_addr + mv_offset(ctx, dec_params);
+ 	hantro_write_addr(ctx->dev, G2_OUT_MV_ADDR, mv_addr);
++	dst->vp9.mv_offset = mv_offset(ctx, dec_params);
+ }
+ 
+ struct hantro_vp9_ref_reg {
+@@ -195,7 +197,7 @@ static void config_ref(struct hantro_ctx *ctx,
+ 	luma_addr = hantro_get_dec_buf_addr(ctx, &buf->base.vb.vb2_buf);
+ 	hantro_write_addr(ctx->dev, ref_reg->y_base, luma_addr);
+ 
+-	chroma_addr = luma_addr + chroma_offset(ctx, dec_params);
++	chroma_addr = luma_addr + buf->vp9.chroma_offset;
+ 	hantro_write_addr(ctx->dev, ref_reg->c_base, chroma_addr);
+ }
+ 
+@@ -238,7 +240,7 @@ static void config_ref_registers(struct hantro_ctx *ctx,
+ 	config_ref(ctx, dst, &ref_regs[2], dec_params, dec_params->alt_frame_ts);
+ 
+ 	mv_addr = hantro_get_dec_buf_addr(ctx, &mv_ref->base.vb.vb2_buf) +
+-		  mv_offset(ctx, dec_params);
++		  mv_ref->vp9.mv_offset;
+ 	hantro_write_addr(ctx->dev, G2_REF_MV_ADDR(0), mv_addr);
+ 
+ 	hantro_reg_write(ctx->dev, &vp9_last_sign_bias,
 -- 
 2.39.2
 
