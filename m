@@ -2,35 +2,35 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65F84E784BC
-	for <linux-media@archiver.kernel.org>; Mon,  2 Oct 2023 12:06:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0484E784B3
+	for <linux-media@archiver.kernel.org>; Mon,  2 Oct 2023 12:06:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236964AbjJBMGo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 2 Oct 2023 08:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37424 "EHLO
+        id S236987AbjJBMGs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 2 Oct 2023 08:06:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236984AbjJBMGd (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Oct 2023 08:06:33 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A3CD3;
-        Mon,  2 Oct 2023 05:06:29 -0700 (PDT)
+        with ESMTP id S237057AbjJBMGj (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Oct 2023 08:06:39 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA45D7;
+        Mon,  2 Oct 2023 05:06:36 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:9537:67ca:c85e:d0ae])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9CE336607314;
-        Mon,  2 Oct 2023 13:06:27 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2176C66071CC;
+        Mon,  2 Oct 2023 13:06:35 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1696248388;
-        bh=MAfzqnBElYsriZOe56F+JFfMksB0FEVAHWT7iRLKeFk=;
+        s=mail; t=1696248395;
+        bh=1dskbbkJ3zkcIpXG7ctqvahZ8PrAeLCG0dqn3ErBFLM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gQft/qs4HXHcaOnvsTV1VjfLtIR4x6frTn77MseWecOwzxMKmTVmft0lsnmGNa6On
-         2HHrXuVCR5s7Hz+C3s0duze8XZOStWWbxDTPaalTbQBpJs6j3dWDHIaGnD73gebmd7
-         3+rOKk6ULRfiOU5QMtOcVjjcQIPIXj3ll3GL095Dde5Ew0IhGFTXB9GBdZHsOJeOco
-         gV2pEqHk+/NWMDQclk3UM4QZu5U3iLMFDe6pBXtUXnKpd8ORJYhnh1iq8qPDBBzwrH
-         x/z6MLJINJYdc+eyeOfpDmgGIOMnc3kIv8torqzwf1Z6xa3WxZj7RAfye/0nZackJ4
-         /8O4PridKzwYw==
+        b=GArcyLDYSkfOg/bRKLRtfDV9Evg/+21CqpgAh6HhTBGfXQIGHHUuS/XCWsQnf/7i9
+         CSaGi7Jt1IK1NGij2mJXYpy281QKk8QUVguf0acAhCQQdzvUpAFbFEpk2qd68oMbI2
+         BKg3BmMVWXHJXJKRGE6jViuJ1u2Brp+QeeLc4TE5RksfLxqV8c7XBHa4gs/PBsZ2nM
+         tiE8AbIfCXlnFgAlotVblXispb6RehFvXjviSmLA3Jvfwnu23j74teo2SQPFWqHRg2
+         rwcQTJJ+et+PYC2ylLZF4sBFrpD0cfGk3RIDo57rRlzVCDm6MM7NmYTzSjufTd2yME
+         Q8KRX6Sh721yA==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -42,9 +42,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v9 06/53] media: mediatek: vdec: Remove useless loop
-Date:   Mon,  2 Oct 2023 14:05:30 +0200
-Message-Id: <20231002120617.119602-7-benjamin.gaignard@collabora.com>
+Subject: [PATCH v9 20/53] media: Remove duplicated index vs q->num_buffers check
+Date:   Mon,  2 Oct 2023 14:05:44 +0200
+Message-Id: <20231002120617.119602-21-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231002120617.119602-1-benjamin.gaignard@collabora.com>
 References: <20231002120617.119602-1-benjamin.gaignard@collabora.com>
@@ -54,33 +54,52 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Simplify code by removing useless loop by using video buffer index.
+vb2_get_buffer() already checks if the requested index is valid.
+Stop duplicating this kind of check everywhere.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- .../mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c   | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ drivers/media/common/videobuf2/videobuf2-v4l2.c | 13 -------------
+ 1 file changed, 13 deletions(-)
 
-diff --git a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c
-index e393e3e668f8..69d37b93bd35 100644
---- a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c
-@@ -1695,13 +1695,8 @@ static int vdec_vp9_slice_setup_core_buffer(struct vdec_vp9_slice_instance *inst
+diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+index 51b16cd14582..38eef0c5d18c 100644
+--- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
++++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+@@ -378,11 +378,6 @@ static int vb2_queue_or_prepare_buf(struct vb2_queue *q, struct media_device *md
  		return -EINVAL;
+ 	}
  
- 	/* update internal buffer's width/height */
--	for (i = 0; i < vq->num_buffers; i++) {
--		if (vb == vq->bufs[i]) {
--			instance->dpb[i].width = w;
--			instance->dpb[i].height = h;
--			break;
--		}
+-	if (b->index >= q->num_buffers) {
+-		dprintk(q, 1, "%s: buffer index out of range\n", opname);
+-		return -EINVAL;
 -	}
-+	instance->dpb[vb->index].width = w;
-+	instance->dpb[vb->index].height = h;
+-
+ 	vb = vb2_get_buffer(q, b->index);
+ 	if (!vb) {
+ 		dprintk(q, 1, "%s: buffer %u is NULL\n", opname,  b->index);
+@@ -833,10 +828,6 @@ int vb2_qbuf(struct vb2_queue *q, struct media_device *mdev,
+ 		return -EBUSY;
+ 	}
  
- 	/*
- 	 * get buffer's width/height from instance
+-	if (b->index >= q->num_buffers) {
+-		dprintk(q, 1, "buffer index out of range\n");
+-		return -EINVAL;
+-	}
+ 	vb = vb2_get_buffer(q, b->index);
+ 	if (!vb) {
+ 		dprintk(q, 1, "can't find the requested buffer %u\n", b->index);
+@@ -908,10 +899,6 @@ int vb2_expbuf(struct vb2_queue *q, struct v4l2_exportbuffer *eb)
+ {
+ 	struct vb2_buffer *vb;
+ 
+-	if (eb->index >= q->num_buffers) {
+-		dprintk(q, 1, "buffer index out of range\n");
+-		return -EINVAL;
+-	}
+ 	vb = vb2_get_buffer(q, eb->index);
+ 	if (!vb) {
+ 		dprintk(q, 1, "can't find the requested buffer %u\n", eb->index);
 -- 
 2.39.2
 
