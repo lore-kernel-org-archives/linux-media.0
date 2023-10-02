@@ -2,35 +2,35 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC455E784B5
-	for <linux-media@archiver.kernel.org>; Mon,  2 Oct 2023 12:07:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A794AE784B7
+	for <linux-media@archiver.kernel.org>; Mon,  2 Oct 2023 12:07:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237232AbjJBMH0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 2 Oct 2023 08:07:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39520 "EHLO
+        id S237247AbjJBMH1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 2 Oct 2023 08:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237044AbjJBMGw (ORCPT
+        with ESMTP id S237041AbjJBMGw (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Mon, 2 Oct 2023 08:06:52 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26E6E6;
-        Mon,  2 Oct 2023 05:06:43 -0700 (PDT)
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93AADDD;
+        Mon,  2 Oct 2023 05:06:42 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:9537:67ca:c85e:d0ae])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1DF3F660736C;
-        Mon,  2 Oct 2023 13:06:42 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 07ED66607365;
+        Mon,  2 Oct 2023 13:06:41 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1696248402;
-        bh=cXivZNqToe41YcZuXIOZnOz7dFiXtOZiRZUwxPYGOCA=;
+        s=mail; t=1696248401;
+        bh=vej0xyoaRLN25qHgld1P1pTyfPCEtxO7zlLcrG23sig=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aZw5h09m3XYRVNESmiQBVkoFnBHD4xeS9S3dqFa5KxfSdvYAorSED7uadoeiVicw/
-         2soD0VhinwpxWfIYpE1qm/66MMIs0kq/elaRLAGIT47Gpma12Migc/EOsUGnQvIH9M
-         iLCyy7l5xPIzaVeEO38o27mHI7JAaZlYax5Dd1tdRKtbTpDpseWnSyv36G0DX8glbZ
-         UvtMCgz3gxP6orbVLX+8lvM80REiIV3RaKwglpaN/vDLl2yt24f10xL8I+B5czsJvT
-         1zZYLy88PPcdXDeuLxxiTr3pFJ0fY3FWMOE45G6VShlV77xxBhcXdELXiuPlkR6tvd
-         JG6a7jnVLG+Jg==
+        b=Fw9jwe6mE5CMng6H9Uf2U9XYpAuDHCLAU1sWxhAa/o6/BiC+1UOpkHZoy1Jc+3byN
+         USGMQbIaYODd+zNTk3pBdf1PdEU9xVreP7/94ROrqnIfRcgjsw5tOg1weiHlQ0wTJ+
+         naAtlt5ncEOGk5XsWsRKo9z9ncOyuZtklz+mW/ZCV21Of/WHveskbSSNOso0mfEA2r
+         JIhXEZjXkfzJ1QWF6pQuLDy210Yn8fPoRWxIu+0nzX71UItYrYD+NY2I9I4w2Bhqvc
+         nS5+UYtgpsImrMgjMLzR+Lf7OnjCL1b8MQTXvTkAN9BPWqeoffIkTFfQFkarRyEXVE
+         6uZ1QTy2NBSgA==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -42,9 +42,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v9 33/53] media: nxp: Stop direct calls to queue num_buffers field
-Date:   Mon,  2 Oct 2023 14:05:57 +0200
-Message-Id: <20231002120617.119602-34-benjamin.gaignard@collabora.com>
+Subject: [PATCH v9 31/53] media: coda: Stop direct calls to queue num_buffers field
+Date:   Mon,  2 Oct 2023 14:05:55 +0200
+Message-Id: <20231002120617.119602-32-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231002120617.119602-1-benjamin.gaignard@collabora.com>
 References: <20231002120617.119602-1-benjamin.gaignard@collabora.com>
@@ -58,38 +58,21 @@ Use vb2_get_num_buffers() to avoid using queue num_buffer field directly.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- drivers/media/platform/nxp/imx7-media-csi.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/media/platform/chips-media/coda-common.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/nxp/imx7-media-csi.c b/drivers/media/platform/nxp/imx7-media-csi.c
-index 15049c6aab37..4c467fb82789 100644
---- a/drivers/media/platform/nxp/imx7-media-csi.c
-+++ b/drivers/media/platform/nxp/imx7-media-csi.c
-@@ -1245,6 +1245,7 @@ static int imx7_csi_video_queue_setup(struct vb2_queue *vq,
- 				      struct device *alloc_devs[])
- {
- 	struct imx7_csi *csi = vb2_get_drv_priv(vq);
-+	unsigned int q_num_bufs = vb2_get_num_buffers(vq);
- 	struct v4l2_pix_format *pix = &csi->vdev_fmt;
- 	unsigned int count = *nbuffers;
+diff --git a/drivers/media/platform/chips-media/coda-common.c b/drivers/media/platform/chips-media/coda-common.c
+index cc4892129aaf..f1d85758f6dd 100644
+--- a/drivers/media/platform/chips-media/coda-common.c
++++ b/drivers/media/platform/chips-media/coda-common.c
+@@ -794,7 +794,7 @@ static int coda_s_fmt(struct coda_ctx *ctx, struct v4l2_format *f,
  
-@@ -1254,14 +1255,14 @@ static int imx7_csi_video_queue_setup(struct vb2_queue *vq,
- 	if (*nplanes) {
- 		if (*nplanes != 1 || sizes[0] < pix->sizeimage)
- 			return -EINVAL;
--		count += vq->num_buffers;
-+		count += q_num_bufs;
+ 	if (vb2_is_busy(vq)) {
+ 		v4l2_err(&ctx->dev->v4l2_dev, "%s: %s queue busy: %d\n",
+-			 __func__, v4l2_type_names[f->type], vq->num_buffers);
++			 __func__, v4l2_type_names[f->type], vb2_get_num_buffers(vq));
+ 		return -EBUSY;
  	}
- 
- 	count = min_t(__u32, IMX7_CSI_VIDEO_MEM_LIMIT / pix->sizeimage, count);
- 
- 	if (*nplanes)
--		*nbuffers = (count < vq->num_buffers) ? 0 :
--			count - vq->num_buffers;
-+		*nbuffers = (count < q_num_bufs) ? 0 :
-+			count - q_num_bufs;
- 	else
- 		*nbuffers = count;
  
 -- 
 2.39.2
