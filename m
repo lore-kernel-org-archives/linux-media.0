@@ -2,35 +2,35 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84715E748FC
-	for <linux-media@archiver.kernel.org>; Mon,  2 Oct 2023 12:07:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50769E748FE
+	for <linux-media@archiver.kernel.org>; Mon,  2 Oct 2023 12:07:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237180AbjJBMHJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 2 Oct 2023 08:07:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39470 "EHLO
+        id S237183AbjJBMHK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 2 Oct 2023 08:07:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237020AbjJBMGv (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Oct 2023 08:06:51 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830D9D8;
-        Mon,  2 Oct 2023 05:06:41 -0700 (PDT)
+        with ESMTP id S236945AbjJBMGn (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Oct 2023 08:06:43 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A597B0;
+        Mon,  2 Oct 2023 05:06:40 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:9537:67ca:c85e:d0ae])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E6A57660735E;
-        Mon,  2 Oct 2023 13:06:39 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D95976607356;
+        Mon,  2 Oct 2023 13:06:38 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1696248400;
-        bh=fLRtME703ZZcICdPkAIYRy+HHmsEI0CB5+N7/vWII0U=;
+        s=mail; t=1696248399;
+        bh=ZWZu+iiWZeSR97TuxWAcPyCT2zWmqcsNlEZTasx6lQc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c03Ru1tYnGMpuFqjWI31KctbRJeleYz1GuYndnICw+Daiw3FIxZGlxwCDsEbjUJ1K
-         Ptdhz2+zKwmXgAWkiqJNqNZi5iwMcf/VY/ipG30ATm7B8C8m8ZycwGo9bQBkEW7dxl
-         pYdHV6sk4nWApiN5YR/lC4+yAMtAOujsu3Lt7oW994srKL4+Kwm1aLKRT2oO42tUa3
-         1ri8HXQhKTCIyt8lvRgTIfvKo+bcZdWjd3ikbpmbpKvVYAylveu9YYdVCdiAXOOxF2
-         /EzG3nDp+J1AaiSSnzElHO9JuEt+6IDhbi5PjXRwLU3dW5tO3MBvBrFe8L5ODpxIhW
-         TOP8WG4fyYBjQ==
+        b=jHuIY1C3xdaiIOcz8Gnf5aJox/kRb26KCOPiCbxf/EP7Q4CYPzisp52Z9WHgipQGK
+         1olsqWV1yrelchZO27XT5TZl8znK3yUVD1ZLGBuDsXGazsGSBKlLN1QNFjTgUYvmdl
+         EU0twmXBgV45JyyTtRYUOeX3nclSp6MAV+16D7L2DPC0cT6sfat/49+Khg38EPriEJ
+         58yE+KobUFleYnvREnM9aj9XS1ml0CBr1XpuaOQ1RRhpEm1Hbe3AMSGb5na0pn1/Kc
+         L2qJehzRfvjg6plJ5W9XGnM4oNagK60r1k7SG+ZQ0P6S2pne7VFZkUUvlx0joAqCCG
+         kUVB5ZLvMQU6w==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -42,9 +42,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v9 29/53] media: pci: tw686x: Set min_buffers_needed to 3
-Date:   Mon,  2 Oct 2023 14:05:53 +0200
-Message-Id: <20231002120617.119602-30-benjamin.gaignard@collabora.com>
+Subject: [PATCH v9 27/53] media: pci: netup_unidvb: Remove useless number of buffers check
+Date:   Mon,  2 Oct 2023 14:05:51 +0200
+Message-Id: <20231002120617.119602-28-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231002120617.119602-1-benjamin.gaignard@collabora.com>
 References: <20231002120617.119602-1-benjamin.gaignard@collabora.com>
@@ -54,46 +54,30 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-vb2 queue_setup checks for a minimum number of buffers so set
-min_buffers_needed to 3 and remove the useless check in
-tw686x_queue_setup().
+vb2 core tests this already so remove it.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- drivers/media/pci/tw686x/tw686x-video.c | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
+ drivers/media/pci/netup_unidvb/netup_unidvb_core.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/media/pci/tw686x/tw686x-video.c b/drivers/media/pci/tw686x/tw686x-video.c
-index 3ebf7a2c95f0..74cd864365aa 100644
---- a/drivers/media/pci/tw686x/tw686x-video.c
-+++ b/drivers/media/pci/tw686x/tw686x-video.c
-@@ -426,13 +426,6 @@ static int tw686x_queue_setup(struct vb2_queue *vq,
- 	unsigned int szimage =
- 		(vc->width * vc->height * vc->format->depth) >> 3;
+diff --git a/drivers/media/pci/netup_unidvb/netup_unidvb_core.c b/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
+index d85bfbb77a25..52de9b0af812 100644
+--- a/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
++++ b/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
+@@ -297,11 +297,9 @@ static int netup_unidvb_queue_setup(struct vb2_queue *vq,
+ 	dev_dbg(&dma->ndev->pci_dev->dev, "%s()\n", __func__);
  
--	/*
--	 * Let's request at least three buffers: two for the
--	 * DMA engine and one for userspace.
--	 */
--	if (vq->num_buffers + *nbuffers < 3)
--		*nbuffers = 3 - vq->num_buffers;
--
- 	if (*nplanes) {
- 		if (*nplanes != 1 || sizes[0] < szimage)
- 			return -EINVAL;
-@@ -1221,7 +1214,11 @@ int tw686x_video_init(struct tw686x_dev *dev)
- 		vc->vidq.ops = &tw686x_video_qops;
- 		vc->vidq.mem_ops = dev->dma_ops->mem_ops;
- 		vc->vidq.timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
--		vc->vidq.min_buffers_needed = 2;
-+		/*
-+		 * Let's request at least three buffers: two for the
-+		 * DMA engine and one for userspace.
-+		 */
-+		vc->vidq.min_buffers_needed = 3;
- 		vc->vidq.lock = &vc->vb_mutex;
- 		vc->vidq.gfp_flags = dev->dma_mode != TW686X_DMA_MODE_MEMCPY ?
- 				     GFP_DMA32 : 0;
+ 	*nplanes = 1;
+-	if (vq->num_buffers + *nbuffers < VIDEO_MAX_FRAME)
+-		*nbuffers = VIDEO_MAX_FRAME - vq->num_buffers;
+ 	sizes[0] = PAGE_ALIGN(NETUP_DMA_PACKETS_COUNT * 188);
+ 	dev_dbg(&dma->ndev->pci_dev->dev, "%s() nbuffers=%d sizes[0]=%d\n",
+-		__func__, *nbuffers, sizes[0]);
++		__func__, vb2_get_num_buffers(vq), sizes[0]);
+ 	return 0;
+ }
+ 
 -- 
 2.39.2
 
