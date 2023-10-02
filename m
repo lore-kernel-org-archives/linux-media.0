@@ -2,35 +2,35 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7072FE748F6
-	for <linux-media@archiver.kernel.org>; Mon,  2 Oct 2023 12:07:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B4FAE784BD
+	for <linux-media@archiver.kernel.org>; Mon,  2 Oct 2023 12:07:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237272AbjJBMH3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 2 Oct 2023 08:07:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52974 "EHLO
+        id S237132AbjJBMHc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 2 Oct 2023 08:07:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237120AbjJBMHA (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Oct 2023 08:07:00 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 983E9136;
-        Mon,  2 Oct 2023 05:06:48 -0700 (PDT)
+        with ESMTP id S237152AbjJBMHD (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Oct 2023 08:07:03 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE071AE;
+        Mon,  2 Oct 2023 05:06:50 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:9537:67ca:c85e:d0ae])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id F1EAA6607381;
-        Mon,  2 Oct 2023 13:06:46 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1D1DF660738B;
+        Mon,  2 Oct 2023 13:06:49 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1696248407;
-        bh=g+cKvL+57Ge4BbEO/J6pfXbFnIiiN4vCjyxapf5D6Zg=;
+        s=mail; t=1696248409;
+        bh=/cndzbQG0EfdVraDFE6iiWONWcwO1/xN2meedcRh5A0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eQHuKCA3Xp8gjVQseFQD8UEiSrYFCBmOghamozW4V7vqv8PW1+ELxXEyJjrLD7yPM
-         v4147Dxr1grPRsoWHy8CZ0aOWhsYs4ITpfKs1+c/Je/OfeV/t2bAY8QrodHwjsNS7G
-         wNAoL9efYHIFzSGRg0FCWD7DuzpBpvktlJhIBnKO21OHWtDaKd1+oXvJXAM+QcoPIv
-         hq1w9l1ziKj59L84bOKMzs2p+YlkxMgR5f3wXXP3mzl1Qfiovfm8AOD6N42wMTSDY6
-         oz6r616/uqrT5kF37Z+BZe+i40O9Xffq5pIB33cf+GPWlY+g6oET09/U+cVrE1NmEz
-         MxkN2ZxnguNdA==
+        b=OZIZlYiZZBJVXu8Pjtt7ACOpjp2e09ky4E+doqU+FZoBSFfKpaaSEEnMzBCvVKe0G
+         kcQBxMRwq5WboOadi3pNaVJkoFB3hYrYEqXQuj/Usz5LZmMumKq+BJ4BdehzrbQU6w
+         +wtE8ZXtN21IkRbesIipT6PpOuwhxGUN1ELcvYHmCWTrzqhxF2JaSvBvHAOuZWocCe
+         PT62SMp/vuNB1QGmmEYhvVxrJgCh5arMwkL4qz/08+QSEbSP1uz/qapw7PgVHNg3tQ
+         l9HBOgJ203mFYR9o7F8qevla+unEkgQG4j6bSYiYuLQzljzcaSH4bTceUlOVKiNMg8
+         qwR7V7meifDmw==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -42,9 +42,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v9 42/53] media: atomisp: Stop direct calls to queue num_buffers field
-Date:   Mon,  2 Oct 2023 14:06:06 +0200
-Message-Id: <20231002120617.119602-43-benjamin.gaignard@collabora.com>
+Subject: [PATCH v9 46/53] sample: v4l: Stop direct calls to queue num_buffers field
+Date:   Mon,  2 Oct 2023 14:06:10 +0200
+Message-Id: <20231002120617.119602-47-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231002120617.119602-1-benjamin.gaignard@collabora.com>
 References: <20231002120617.119602-1-benjamin.gaignard@collabora.com>
@@ -58,22 +58,32 @@ Use vb2_get_num_buffers() to avoid using queue num_buffer field directly.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- drivers/staging/media/atomisp/pci/atomisp_ioctl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ samples/v4l/v4l2-pci-skeleton.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-index 4b65c69fa60d..48f9745421a9 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-@@ -1030,7 +1030,7 @@ static int atomisp_qbuf_wrapper(struct file *file, void *fh, struct v4l2_buffer
- 	struct atomisp_device *isp = video_get_drvdata(vdev);
- 	struct atomisp_video_pipe *pipe = atomisp_to_video_pipe(vdev);
+diff --git a/samples/v4l/v4l2-pci-skeleton.c b/samples/v4l/v4l2-pci-skeleton.c
+index a61f94db18d9..a65aa9d1e9da 100644
+--- a/samples/v4l/v4l2-pci-skeleton.c
++++ b/samples/v4l/v4l2-pci-skeleton.c
+@@ -155,6 +155,7 @@ static int queue_setup(struct vb2_queue *vq,
+ 		       unsigned int sizes[], struct device *alloc_devs[])
+ {
+ 	struct skeleton *skel = vb2_get_drv_priv(vq);
++	unsigned int q_num_bufs = vb2_get_num_buffers(vq);
  
--	if (buf->index >= vdev->queue->num_buffers)
-+	if (buf->index >= vb2_get_num_buffers(vdev->queue))
- 		return -EINVAL;
+ 	skel->field = skel->format.field;
+ 	if (skel->field == V4L2_FIELD_ALTERNATE) {
+@@ -167,8 +168,8 @@ static int queue_setup(struct vb2_queue *vq,
+ 		skel->field = V4L2_FIELD_TOP;
+ 	}
  
- 	if (buf->reserved2 & ATOMISP_BUFFER_HAS_PER_FRAME_SETTING) {
+-	if (vq->num_buffers + *nbuffers < 3)
+-		*nbuffers = 3 - vq->num_buffers;
++	if (q_num_bufs + *nbuffers < 3)
++		*nbuffers = 3 - q_num_bufs;
+ 
+ 	if (*nplanes)
+ 		return sizes[0] < skel->format.sizeimage ? -EINVAL : 0;
 -- 
 2.39.2
 
