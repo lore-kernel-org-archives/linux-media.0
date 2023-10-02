@@ -2,329 +2,105 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7876CE74901
-	for <linux-media@archiver.kernel.org>; Mon,  2 Oct 2023 17:42:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA5DAE74911
+	for <linux-media@archiver.kernel.org>; Mon,  2 Oct 2023 19:07:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235501AbjJBRmy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 2 Oct 2023 13:42:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38224 "EHLO
+        id S229666AbjJBTHr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 2 Oct 2023 15:07:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232711AbjJBRmx (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Oct 2023 13:42:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB8399E
-        for <linux-media@vger.kernel.org>; Mon,  2 Oct 2023 10:42:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1696268523;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=e73cb9GAxrHKKm8uol5mHP14w75EOoHSyexqxYqy2n8=;
-        b=OQCGRqxQMr8FLOIdXpZKOe8cTAl4jflxByljKDE4dpdXASv+Yjj7iWyZcjZou5Zy9bOUry
-        nR4Mqz4I5/0xdnJBMWGuvVTOzb8hYbVi7ELZBzaB+RM+DRpjgrs5ACwjq8w+VdBBHmcZda
-        vYwP/7cpRYq+ITK+lJPqIc9ZeEidZ08=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-302-3nWV5e1sPtSYKSExYkTBXA-1; Mon, 02 Oct 2023 13:41:56 -0400
-X-MC-Unique: 3nWV5e1sPtSYKSExYkTBXA-1
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-9ae70250ef5so381509866b.0
-        for <linux-media@vger.kernel.org>; Mon, 02 Oct 2023 10:41:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696268515; x=1696873315;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e73cb9GAxrHKKm8uol5mHP14w75EOoHSyexqxYqy2n8=;
-        b=Uh/nCgKcz18F1MQbS3KGs5WYd+jMc1YrrRsmCUcLrcbDm5NzaF3ymsh8g7uDcNjPKD
-         VZuckSSY8GNyAR3DM4rQvaVOfUm6xtJ5TkhCocc/G1JtiJYSL55OD/OMA0se2RHheuGd
-         LVY3DlJmqmkrKYYj+FwBqaxAfSp4icxlNKZtnBw8mKILYNtZQ6HV4KJu6TiSl7zFXsGx
-         tSvZDD1uzbTpH2o+rADtLV9mi6tT583LoAkUIrN480O0PJQOCejXw1TGJ/I731TGhivR
-         IeMEVKzk8ECyqw1OQBHIVifz3AZMHjHDoWwYBHa03gwRo4HV9DTiO5k10624i4uhUO8/
-         A7xA==
-X-Gm-Message-State: AOJu0Yz+nWnyr48P7sgILOd7U5K810jjvMGk29DPJBLiERL+PePjTOEs
-        frnqnA+YJza6h+dH+3jUq5t2Fwxp0kEA55RWIqlB4YAE6sh3SgDKmDrgytHqsibACUF+EApgvB+
-        pmya7YPrqSOFjzI3DqQvXGuI=
-X-Received: by 2002:a17:907:75d4:b0:9ae:614e:4560 with SMTP id jl20-20020a17090775d400b009ae614e4560mr296411ejc.29.1696268515695;
-        Mon, 02 Oct 2023 10:41:55 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHalaDvE12EI3Zn+7MkJf0Xh7EB4gjqcjUravzQXRLCoCJ6CTKXPK9U8CWUMRvDlGy/RVy0Ug==
-X-Received: by 2002:a17:907:75d4:b0:9ae:614e:4560 with SMTP id jl20-20020a17090775d400b009ae614e4560mr296397ejc.29.1696268515288;
-        Mon, 02 Oct 2023 10:41:55 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id k3-20020a17090646c300b009ae57888718sm17305820ejs.207.2023.10.02.10.41.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Oct 2023 10:41:54 -0700 (PDT)
-Message-ID: <2cd7e607-88f0-d173-3423-5ef3f760bd19@redhat.com>
-Date:   Mon, 2 Oct 2023 19:41:54 +0200
+        with ESMTP id S229640AbjJBTHq (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Oct 2023 15:07:46 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA942B0
+        for <linux-media@vger.kernel.org>; Mon,  2 Oct 2023 12:07:43 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6605EC433C7;
+        Mon,  2 Oct 2023 19:07:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1696273663;
+        bh=I9Tt4zwAf/qSfaNTuq/WUXrhqDYPeTkzrgN+p8bA20U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fZyaxAe+UupcyNPeCdK1dbSd9uIxbcWZbN5QCX2HFmQ6OfLD4HgTTYyyKsfmwP1PC
+         rEZLyIuUy2bL4XxWt37Pxj4t5DY9FpvP81xZzTPU2UHIq4zNjEiRKMtujshSaW7ykl
+         gotONQe32HAgsP9VUCY02bYfdmQ/+3C9CjzEik/Z2OD4HF7HFNApYF6c2sz7vkmT3z
+         i2cPzBgc2FskIiy6tCXR4o/n3QEj2YIP2IcCc/5T045pXsXT0Lk3i+lyJHPfgOfLAy
+         0TzJsv937YYdOZFBZauf6FtvV1ZqZV8nNPhwbS+jBRHfUSf/5GH1xqG803RxjTMBn6
+         8/B226UFKaRxw==
+Received: (nullmailer pid 2365550 invoked by uid 1000);
+        Mon, 02 Oct 2023 19:07:41 -0000
+Date:   Mon, 2 Oct 2023 14:07:41 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Fabio Estevam <festevam@gmail.com>, martink@posteo.de,
+        Michael Riesch <michael.riesch@wolfvision.net>
+Subject: Re: [PATCH v3 7/7] media: dt-bindings: sony,imx415: Fix handling of
+ video-interface-device
+Message-ID: <20231002190741.GA2351787-robh@kernel.org>
+References: <20230930145951.23433-1-jacopo.mondi@ideasonboard.com>
+ <20230930145951.23433-8-jacopo.mondi@ideasonboard.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 00/15] Intel IPU6 and IPU6 input system drivers
-Content-Language: en-US, nl
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     "Cao, Bingbu" <bingbu.cao@intel.com>,
-        Claus Stovgaard <claus.stovgaard@gmail.com>,
-        Bingbu Cao <bingbu.cao@linux.intel.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
-        "ilpo.jarvinen@linux.intel.com" <ilpo.jarvinen@linux.intel.com>,
-        "tfiga@chromium.org" <tfiga@chromium.org>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "tomi.valkeinen@ideasonboard.com" <tomi.valkeinen@ideasonboard.com>,
-        "Qiu, Tian Shu" <tian.shu.qiu@intel.com>,
-        "Wang, Hongju" <hongju.wang@intel.com>
-References: <769ebe9f8eb88b2c07eae5910fc7d79c1ff888cb.camel@gmail.com>
- <5fb07c7d-390c-d7ae-c74b-8e03c75f636c@linux.intel.com>
- <0a381077-c07a-ed40-c53e-5e36177bd5f2@linux.intel.com>
- <907f992d4e333f090418f39ebd59bf8ac1fb5e3f.camel@gmail.com>
- <d451bbec67358373ca8495544cc0802233108a03.camel@gmail.com>
- <1d03c5f9-1813-40f0-f280-520e2da38e09@hansg.org>
- <1d46186b-24a6-3ae9-ccc1-0ada0f068313@redhat.com>
- <253b5ba6-d44d-4ee1-8c18-44159632d023@redhat.com>
- <DM8PR11MB565393F11EDB68BB5784661C99E9A@DM8PR11MB5653.namprd11.prod.outlook.com>
- <bc4a6204-6487-9403-243d-6f0a1b20e8ab@redhat.com>
- <20231002173841.GD10113@pendragon.ideasonboard.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20231002173841.GD10113@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230930145951.23433-8-jacopo.mondi@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+On Sat, Sep 30, 2023 at 04:59:51PM +0200, Jacopo Mondi wrote:
+> Fix handling of properties from video-interface-device.yaml for
+> Sony IMX415.
 
-On 10/2/23 19:38, Laurent Pinchart wrote:
-> On Mon, Oct 02, 2023 at 07:19:13PM +0200, Hans de Goede wrote:
->> Hi,
->>
->> On 9/4/23 05:13, Cao, Bingbu wrote:
->>> Hans,
->>>
->>> Thanks for your test and report.
->>>
->>> I have made some changes locally which will support the latest
->>> v4l2-async APIs, I will also add the fix for this issue and merge
->>> them in v3.
->>
->> I have been trying to make rawbayer capture with the mainline isys code
->> work in libcamera and I have hit several short comings in the ipu6-isys
->> code. I have attached 3 patches to fix various issues please integrate
->> these into the next version of this series.
+It wasn't really broken to be a fix. In any case,
+
+Reviewed-by: Rob Herring <robh@kernel.org>
+
 > 
-> They look good to me.
-
-Actually I just realized I forgot to commit + squash in a bug fix:
-
->> Talking about the next version of this series, I think it would be
->> good to post a new version soon ?
->>
+> All the properties described by video-interface-device.yaml are
+> allowed for the image sensor, make them accepted by changing
+> "additionalProperties: false" to "unevaluatedProperties: false" at the
+> schema top-level.
 > 
->> From 14f42fd3071a7aba8b83b98802ca3b413794296d Mon Sep 17 00:00:00 2001
->> From: Hans de Goede <hdegoede@redhat.com>
->> Date: Mon, 2 Oct 2023 16:37:11 +0200
->> Subject: [PATCH 1/3] media: intel/ipu6: Add mbus code filtering to isys
->>  /dev/video enum_fmt
->>
->> Add mbus code filtering to ipu6_isys_vidioc_enum_fmt().
->>
->> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
->> ---
->>  .../media/pci/intel/ipu6/ipu6-isys-video.c    | 29 +++++++++++++++----
->>  1 file changed, 23 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
->> index dc1605491352..20fd03f6f204 100644
->> --- a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
->> +++ b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
->> @@ -130,14 +130,31 @@ int ipu6_isys_vidioc_querycap(struct file *file, void *fh,
->>  int ipu6_isys_vidioc_enum_fmt(struct file *file, void *fh,
->>  			      struct v4l2_fmtdesc *f)
->>  {
->> -	if (f->index >= ARRAY_SIZE(ipu6_isys_pfmts))
->> -		return -EINVAL;
->> +	unsigned int i, found = 0;
->>  
->> -	f->flags = 0;
->> -	f->pixelformat = ipu6_isys_pfmts[f->index].pixelformat;
->> -	f->mbus_code = ipu6_isys_pfmts[f->index].code;
->> +	if (!f->mbus_code) {
->> +		if (f->index >= ARRAY_SIZE(ipu6_isys_pfmts))
->> +			return -EINVAL;
->>  
->> -	return 0;
->> +		f->flags = 0;
->> +		f->pixelformat = ipu6_isys_pfmts[f->index].pixelformat;
->> +		f->mbus_code = ipu6_isys_pfmts[f->index].code;
-
-There is a:
-		return 0;
-
-missing here.		
-
->> +	}
->> +
-
-Regards,
-
-Hans
-
-
-
->> +	for (i = 0; i < ARRAY_SIZE(ipu6_isys_pfmts); i++) {
->> +		if (f->mbus_code != ipu6_isys_pfmts[i].code)
->> +			continue;
->> +
->> +		if (f->index == found) {
->> +			f->flags = 0;
->> +			f->pixelformat = ipu6_isys_pfmts[i].pixelformat;
->> +			return 0;
->> +		}
->> +
->> +		found++;
->> +	}
->> +
->> +	return -EINVAL;
->>  }
->>  
->>  static int vidioc_g_fmt_vid_cap_mplane(struct file *file, void *fh,
->> -- 
->> 2.41.0
->>
+> Because all properties are now accepted, there is no need to explicitly
+> allow them in the schema.
 > 
->> From 8250d2c3fd1c2ab83debcca80b4947d3b9d410f7 Mon Sep 17 00:00:00 2001
->> From: Hans de Goede <hdegoede@redhat.com>
->> Date: Mon, 2 Oct 2023 17:02:06 +0200
->> Subject: [PATCH 2/3] media: intel/ipu6: Implement g_enum_framesizes for isys
->>  /dev/video# nodes
->>
->> Implement g_enum_framesizes for isys /dev/video# nodes.
->>
->> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
->> ---
->>  drivers/media/pci/intel/ipu6/ipu6-isys-video.c | 18 ++++++++++++++++++
->>  1 file changed, 18 insertions(+)
->>
->> diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
->> index 20fd03f6f204..ad74a19527b7 100644
->> --- a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
->> +++ b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
->> @@ -157,6 +157,23 @@ int ipu6_isys_vidioc_enum_fmt(struct file *file, void *fh,
->>  	return -EINVAL;
->>  }
->>  
->> +static int ipu6_isys_vidioc_g_enum_framesizes(struct file *file, void *fh,
->> +					      struct v4l2_frmsizeenum *fsize)
->> +{
->> +	if (fsize->index > 0)
->> +		return -EINVAL;
->> +
->> +	fsize->type = V4L2_FRMSIZE_TYPE_CONTINUOUS;
->> +	fsize->stepwise.min_width = IPU6_ISYS_MIN_WIDTH;
->> +	fsize->stepwise.max_width = IPU6_ISYS_MAX_WIDTH;
->> +	fsize->stepwise.min_height = IPU6_ISYS_MIN_HEIGHT;
->> +	fsize->stepwise.max_height = IPU6_ISYS_MAX_HEIGHT;
->> +	fsize->stepwise.step_width = 1;
->> +	fsize->stepwise.step_height = 1;
->> +
->> +	return 0;
->> +}
->> +
->>  static int vidioc_g_fmt_vid_cap_mplane(struct file *file, void *fh,
->>  				       struct v4l2_format *fmt)
->>  {
->> @@ -987,6 +1004,7 @@ int ipu6_isys_video_set_streaming(struct ipu6_isys_video *av, int state,
->>  static const struct v4l2_ioctl_ops ioctl_ops_mplane = {
->>  	.vidioc_querycap = ipu6_isys_vidioc_querycap,
->>  	.vidioc_enum_fmt_vid_cap = ipu6_isys_vidioc_enum_fmt,
->> +	.vidioc_enum_framesizes = ipu6_isys_vidioc_g_enum_framesizes,
->>  	.vidioc_g_fmt_vid_cap_mplane = vidioc_g_fmt_vid_cap_mplane,
->>  	.vidioc_s_fmt_vid_cap_mplane = vidioc_s_fmt_vid_cap_mplane,
->>  	.vidioc_try_fmt_vid_cap_mplane = vidioc_try_fmt_vid_cap_mplane,
->> -- 
->> 2.41.0
->>
+> Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+> ---
+>  .../devicetree/bindings/media/i2c/sony,imx415.yaml     | 10 +---------
+>  1 file changed, 1 insertion(+), 9 deletions(-)
 > 
->> From b5db94bbd147711885986c1f6e46f59fdca10d3c Mon Sep 17 00:00:00 2001
->> From: Hans de Goede <hdegoede@redhat.com>
->> Date: Mon, 2 Oct 2023 16:05:35 +0200
->> Subject: [PATCH 3/3] media: intel/ipu6: Set V4L2_CAP_IO_MC flag for isys
->>  /dev/video# nodes
->>
->> The IPU6 isys is a media-controller centric device which needs
->> the pipeline to be configured using the media controller API before use.
->>
->> Set the V4L2_CAP_IO_MC flag to reflect this.
->>
->> This also allows dropping of the enum_input() g_input() and s_input()
->> implementations, with V4L2_CAP_IO_MC set the v4l2-core will take care
->> of those.
->>
->> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
->> ---
->>  .../media/pci/intel/ipu6/ipu6-isys-video.c    | 29 ++-----------------
->>  1 file changed, 2 insertions(+), 27 deletions(-)
->>
->> diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
->> index ad74a19527b7..e6fc32603c3f 100644
->> --- a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
->> +++ b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
->> @@ -262,29 +262,6 @@ static int vidioc_try_fmt_vid_cap_mplane(struct file *file, void *fh,
->>  	return 0;
->>  }
->>  
->> -static int vidioc_enum_input(struct file *file, void *fh,
->> -			     struct v4l2_input *input)
->> -{
->> -	if (input->index > 0)
->> -		return -EINVAL;
->> -	strscpy(input->name, "camera", sizeof(input->name));
->> -	input->type = V4L2_INPUT_TYPE_CAMERA;
->> -
->> -	return 0;
->> -}
->> -
->> -static int vidioc_g_input(struct file *file, void *fh, unsigned int *input)
->> -{
->> -	*input = 0;
->> -
->> -	return 0;
->> -}
->> -
->> -static int vidioc_s_input(struct file *file, void *fh, unsigned int input)
->> -{
->> -	return input == 0 ? 0 : -EINVAL;
->> -}
->> -
->>  static int link_validate(struct media_link *link)
->>  {
->>  	struct ipu6_isys_video *av =
->> @@ -1017,9 +994,6 @@ static const struct v4l2_ioctl_ops ioctl_ops_mplane = {
->>  	.vidioc_streamon = vb2_ioctl_streamon,
->>  	.vidioc_streamoff = vb2_ioctl_streamoff,
->>  	.vidioc_expbuf = vb2_ioctl_expbuf,
->> -	.vidioc_enum_input = vidioc_enum_input,
->> -	.vidioc_g_input = vidioc_g_input,
->> -	.vidioc_s_input = vidioc_s_input,
->>  };
->>  
->>  static const struct media_entity_operations entity_ops = {
->> @@ -1217,7 +1191,8 @@ int ipu6_isys_video_init(struct ipu6_isys_video *av)
->>  
->>  	mutex_init(&av->mutex);
->>  	av->vdev.device_caps = V4L2_CAP_STREAMING |
->> -			       V4L2_CAP_VIDEO_CAPTURE_MPLANE;
->> +			       V4L2_CAP_VIDEO_CAPTURE_MPLANE |
->> +			       V4L2_CAP_IO_MC;
->>  	av->vdev.vfl_dir = VFL_DIR_RX;
->>  
->>  	ret = ipu6_isys_queue_init(&av->aq);
->> -- 
->> 2.41.0
->>
+> diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx415.yaml b/Documentation/devicetree/bindings/media/i2c/sony,imx415.yaml
+> index ffccf5f3c9e3..8ea3ddd251f6 100644
+> --- a/Documentation/devicetree/bindings/media/i2c/sony,imx415.yaml
+> +++ b/Documentation/devicetree/bindings/media/i2c/sony,imx415.yaml
+> @@ -44,14 +44,6 @@ properties:
+>      description: Sensor reset (XCLR) GPIO
+>      maxItems: 1
 > 
+> -  flash-leds: true
+> -
+> -  lens-focus: true
+> -
+> -  orientation: true
+> -
+> -  rotation: true
+> -
+>    port:
+>      $ref: /schemas/graph.yaml#/$defs/port-base
 > 
-
+> @@ -88,7 +80,7 @@ required:
+>    - ovdd-supply
+>    - port
+> 
+> -additionalProperties: false
+> +unevaluatedProperties: false
+> 
+>  examples:
+>    - |
+> --
+> 2.42.0
+> 
