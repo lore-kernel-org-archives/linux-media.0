@@ -2,35 +2,35 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8830EE784B7
-	for <linux-media@archiver.kernel.org>; Mon,  2 Oct 2023 12:06:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98468E748F6
+	for <linux-media@archiver.kernel.org>; Mon,  2 Oct 2023 12:06:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237001AbjJBMGt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S237005AbjJBMGt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 2 Oct 2023 08:06:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37422 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236983AbjJBMGd (ORCPT
+        with ESMTP id S236980AbjJBMGd (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Mon, 2 Oct 2023 08:06:33 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B30DC;
-        Mon,  2 Oct 2023 05:06:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A31D7;
+        Mon,  2 Oct 2023 05:06:29 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:9537:67ca:c85e:d0ae])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A8ECE660731E;
-        Mon,  2 Oct 2023 13:06:28 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1C3EE6607312;
+        Mon,  2 Oct 2023 13:06:27 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1696248389;
-        bh=Osy0YWOEVUvzSOYoJm+JBXSigMNkmpw77qpRTwkivks=;
+        s=mail; t=1696248387;
+        bh=xgQ59ci0u36Sg6Kfk6W/knjQu2QF8jMpnRAVGSPYz3E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NogZwj8nDLG1OjgXAWYcYVBXvlFevYzFlkL5BiVLUIlAexAoyAZpO6Gey8okj7Aa0
-         6e8g03i6vAi1Z8ZRTCa3CbHPQRvtuJmEI2/tvqrBwJyefOmgHK22Y0Auk2LVUi/Z0n
-         G17aMnxjcPxRO6P86fuDSGdBMmSFU5xvvybG44Xg92hhwTtJJYMUl422fLWyarDKvs
-         ZyIhEO8F3uil4FIVdkxWQ+yHR7T5f1uXdpuGmzj7PVafsjReTBQlyJb28T8Vf5pDbE
-         Q6YhP/+BleUtnWI3QLpl0alqghVxPMalnF8wOmgTLL/wcI0UfDCJdatKp35H8llcVX
-         7UbtXWokT0ebA==
+        b=D9+O2Q9IcArZLPYSj8D1PjKYeWodQoG3w8ILa1N26Kdifx90d7dEipYEEYsYwBnf9
+         Er93XrV7EeA1WueYmCkbnBYGCT3DeGRqcZpFReiqgHdPlf/6TDldsA1MW9k5ihh31h
+         +Oz9/ks+uXul/wu1ru3pLkqQUwIK6hjfFiJjCPlA99/qTRUmRQqa8KukYZBB3f4VJI
+         RvveZpNdgfd7CEOv4G3P6jubRw7jvnXGfbDX9ukVT7k6V/vFv+AZWGwlBbo/EeTkrU
+         FLQLYpLtprQziKxPY2Bmg1D7XT14okpMTeJnEdbVoKHWFwzfj550SZKxU0W+tPFV3h
+         ThrxOoflrb8Kw==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -42,9 +42,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v9 08/53] media: visl: Use vb2_get_buffer() instead of directly access to buffers array
-Date:   Mon,  2 Oct 2023 14:05:32 +0200
-Message-Id: <20231002120617.119602-9-benjamin.gaignard@collabora.com>
+Subject: [PATCH v9 05/53] media: mediatek: jpeg: Use vb2_get_buffer() instead of directly access to buffers array
+Date:   Mon,  2 Oct 2023 14:05:29 +0200
+Message-Id: <20231002120617.119602-6-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231002120617.119602-1-benjamin.gaignard@collabora.com>
 References: <20231002120617.119602-1-benjamin.gaignard@collabora.com>
@@ -62,62 +62,29 @@ a valid pointer so check the return value of all of them.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- drivers/media/test-drivers/visl/visl-dec.c | 28 ++++++++++++++++------
- 1 file changed, 21 insertions(+), 7 deletions(-)
+ drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/test-drivers/visl/visl-dec.c b/drivers/media/test-drivers/visl/visl-dec.c
-index 318d675e5668..ba20ea998d19 100644
---- a/drivers/media/test-drivers/visl/visl-dec.c
-+++ b/drivers/media/test-drivers/visl/visl-dec.c
-@@ -290,13 +290,20 @@ static void visl_tpg_fill(struct visl_ctx *ctx, struct visl_run *run)
- 	for (i = 0; i < out_q->num_buffers; i++) {
- 		char entry[] = "index: %u, state: %s, request_fd: %d, ";
- 		u32 old_len = len;
--		char *q_status = visl_get_vb2_state(out_q->bufs[i]->state);
-+		struct vb2_buffer *vb2;
-+		char *q_status;
-+
-+		vb2 = vb2_get_buffer(out_q, i);
-+		if (!vb2)
-+			continue;
-+
-+		q_status = visl_get_vb2_state(vb2->state);
+diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+index 7194f88edc0f..73a063b1569b 100644
+--- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
++++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+@@ -598,12 +598,11 @@ static int mtk_jpeg_qbuf(struct file *file, void *priv, struct v4l2_buffer *buf)
+ 		goto end;
  
- 		len += scnprintf(&buf[len], TPG_STR_BUF_SZ - len,
- 				 entry, i, q_status,
--				 to_vb2_v4l2_buffer(out_q->bufs[i])->request_fd);
-+				 to_vb2_v4l2_buffer(vb2)->request_fd);
+ 	vq = v4l2_m2m_get_vq(fh->m2m_ctx, buf->type);
+-	if (buf->index >= vq->num_buffers) {
+-		dev_err(ctx->jpeg->dev, "buffer index out of range\n");
++	vb = vb2_get_buffer(vq, buf->index);
++	if (!vb) {
++		dev_err(ctx->jpeg->dev, "buffer not found\n");
+ 		return -EINVAL;
+ 	}
+-
+-	vb = vq->bufs[buf->index];
+ 	jpeg_src_buf = mtk_jpeg_vb2_to_srcbuf(vb);
+ 	jpeg_src_buf->bs_size = buf->m.planes[0].bytesused;
  
--		len += visl_fill_bytesused(to_vb2_v4l2_buffer(out_q->bufs[i]),
-+		len += visl_fill_bytesused(to_vb2_v4l2_buffer(vb2),
- 					   &buf[len],
- 					   TPG_STR_BUF_SZ - len);
- 
-@@ -342,13 +349,20 @@ static void visl_tpg_fill(struct visl_ctx *ctx, struct visl_run *run)
- 	len = 0;
- 	for (i = 0; i < cap_q->num_buffers; i++) {
- 		u32 old_len = len;
--		char *q_status = visl_get_vb2_state(cap_q->bufs[i]->state);
-+		struct vb2_buffer *vb2;
-+		char *q_status;
-+
-+		vb2 = vb2_get_buffer(cap_q, i);
-+		if (!vb2)
-+			continue;
-+
-+		q_status = visl_get_vb2_state(vb2->state);
- 
- 		len += scnprintf(&buf[len], TPG_STR_BUF_SZ - len,
- 				 "index: %u, status: %s, timestamp: %llu, is_held: %d",
--				 cap_q->bufs[i]->index, q_status,
--				 cap_q->bufs[i]->timestamp,
--				 to_vb2_v4l2_buffer(cap_q->bufs[i])->is_held);
-+				 vb2->index, q_status,
-+				 vb2->timestamp,
-+				 to_vb2_v4l2_buffer(vb2)->is_held);
- 
- 		tpg_gen_text(&ctx->tpg, basep, line++ * line_height, 16, &buf[old_len]);
- 		frame_dprintk(ctx->dev, run->dst->sequence, "%s", &buf[old_len]);
 -- 
 2.39.2
 
