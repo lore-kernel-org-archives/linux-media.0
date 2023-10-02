@@ -2,101 +2,115 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6F2CE7849A
-	for <linux-media@archiver.kernel.org>; Mon,  2 Oct 2023 11:54:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6C6FE784B6
+	for <linux-media@archiver.kernel.org>; Mon,  2 Oct 2023 12:06:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236781AbjJBLyW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 2 Oct 2023 07:54:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57838 "EHLO
+        id S236910AbjJBMGm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 2 Oct 2023 08:06:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231338AbjJBLyW (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Oct 2023 07:54:22 -0400
-Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00AB3C6
-        for <linux-media@vger.kernel.org>; Mon,  2 Oct 2023 04:54:18 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (dkzdf0gkyyyyyyyyyyyyt-3.rev.dnainternet.fi [IPv6:2001:14ba:4506:4f15::1])
+        with ESMTP id S236957AbjJBMGb (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Oct 2023 08:06:31 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB5FD8;
+        Mon,  2 Oct 2023 05:06:28 -0700 (PDT)
+Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:9537:67ca:c85e:d0ae])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: sailus)
-        by meesny.iki.fi (Postfix) with ESMTPSA id 4RzfW826X7zydx;
-        Mon,  2 Oct 2023 14:54:12 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1696247653;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kfSC4/2zoxzdxEYFmAenp9rCsbvl+LCgdDxofqHFG+4=;
-        b=Mo/zxf2jH24igdWdAPtiJvlUMLJjTlbyL4ejHrs5VZWxNVK3K6rYomN0cil99I/X9kA7Xq
-        JGSqbav2Z80DVEm++3icNQtQzB+pUb7X9mEBL1z5ADUtgny1TagLd+rbeauNyz2LvUACSI
-        2iJ7C316OtyI0bOIq1D74a/GXZJFJZM=
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1696247653; a=rsa-sha256; cv=none;
-        b=eYWmSMaamUqXx6tdL1qcDhoxEf4e2tEoc7n3pAjw4mjXEZysQdFfqCr+YaZdFxJxYUvA1r
-        q2jmHdynT2OExEDJVjTFsrJ8sx0kT24kdY98i+XUjUOAso3LwhhbMNLjZu6sGKl3IBKeOd
-        ITXCsMNpXZXd4ug0DHxUJTLP+FxXknc=
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1696247653;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kfSC4/2zoxzdxEYFmAenp9rCsbvl+LCgdDxofqHFG+4=;
-        b=KtNgb49Oc36ytH4QSW3HGtu6W5G/OBT7pQsoojN9SBgIPk5dW3Y13wuH8Oa+cnvO+Bnjh2
-        wwbOn/aK8M86hUnPtq5tnUKvSnL3bwiPTnoJ5gsehCwc+BIAOLROlBoENF/He27BbCKVqg
-        mtcOEryP3VSQSk8arx+S/b/A9RPSDbE=
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id A3633634C93;
-        Mon,  2 Oct 2023 14:54:11 +0300 (EEST)
-Date:   Mon, 2 Oct 2023 11:54:11 +0000
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com,
-        Tianshu Qiu <tian.shu.qiu@intel.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Martin Kepplinger <martink@posteo.de>
-Subject: Re: [PATCH v7 00/19] Small fixes and cleanups (ov2740 and ccs)
-Message-ID: <ZRqvY008jyOlwJUZ@valkosipuli.retiisi.eu>
-References: <20231002105557.28972-1-sakari.ailus@linux.intel.com>
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8E75666072FB;
+        Mon,  2 Oct 2023 13:06:26 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1696248387;
+        bh=swS7yYiqBxggjIra2XX2pXDY4PPq3f683TK0rKa6DhQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=giuIe/fVSLygz4HErc6sFwbwJmDnvrm52UiCkx/M2fccRfO+Ne0i+/neDDX39GxNa
+         KfVc3COaAoRLhuBm+BIKJ4NznCR0J0M4IFn247wArNNfQMouLhriiuR4CwYdsVJEmy
+         T6sGr47TfKy/1+xLr38gwF7rvzU0NtGYvT5olCNNaO6QyoKEqXUziy/QI19UEriG0L
+         ELooCGI0b7wmeddY7d5sPc4c6SQ6RFr/Nw4WKaiHriBeRJCEw2msFICeRCaKNCELEK
+         mzK/yFia3472lzjIY7nkpfqvsSPFHVrKUFveTRI+Jj4WeNutHFdMvM/WOA0HItc3Zp
+         t/wxBw5fWS8kQ==
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
+        ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        kernel@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v9 04/53] media: amphion: Use vb2_get_buffer() instead of directly access to buffers array
+Date:   Mon,  2 Oct 2023 14:05:28 +0200
+Message-Id: <20231002120617.119602-5-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20231002120617.119602-1-benjamin.gaignard@collabora.com>
+References: <20231002120617.119602-1-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231002105557.28972-1-sakari.ailus@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Oct 02, 2023 at 01:55:38PM +0300, Sakari Ailus wrote:
-> Hi folks,
-> 
-> This small set contains fixes and cleanups, mainly for the ccs and ov2740
-> drivers. I wrote these while working on the metadata set, but these could
-> and should be merged earlier.
-> 
-> since v6:
-> 
-> - New patch: In scope of the CCS driver, revert the patch moving CCS to
->   use pm_runtime_get_and_resume().
-> 
-> - New patch: Drop s_stream re-entrancy in CCS driver.
-> 
-> - New patch: Rename ccs_create_subdev() as ccs_init_subdev.
-> 
-> - New patch: CCS driver rework: move sub-device initialisation earlier in
->   probe to address initialisation ordering issues later on in embedded
->   data support. This introduces minor changes to the patch adding
->   sub-device state support.
+Use vb2_get_buffer() instead of directly access to vb2_buffer buffer array.
+This could allow to change the type bufs[] field of vb2_buffer structure if
+needed.
+After each call to vb2_get_buffer() we need to be sure that we get
+a valid pointer so check the return value of all of them.
 
-In addition:
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+---
+ drivers/media/platform/amphion/vpu_dbg.c | 22 ++++++++++++++++++----
+ 1 file changed, 18 insertions(+), 4 deletions(-)
 
-- MIPI CSI-2 long packet DT macro change as suggested in review.
-
+diff --git a/drivers/media/platform/amphion/vpu_dbg.c b/drivers/media/platform/amphion/vpu_dbg.c
+index 982c2c777484..a462d6fe4ea9 100644
+--- a/drivers/media/platform/amphion/vpu_dbg.c
++++ b/drivers/media/platform/amphion/vpu_dbg.c
+@@ -140,11 +140,18 @@ static int vpu_dbg_instance(struct seq_file *s, void *data)
+ 
+ 	vq = v4l2_m2m_get_src_vq(inst->fh.m2m_ctx);
+ 	for (i = 0; i < vq->num_buffers; i++) {
+-		struct vb2_buffer *vb = vq->bufs[i];
+-		struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++		struct vb2_buffer *vb;
++		struct vb2_v4l2_buffer *vbuf;
++
++		vb = vb2_get_buffer(vq, i);
++		if (!vb)
++			continue;
+ 
+ 		if (vb->state == VB2_BUF_STATE_DEQUEUED)
+ 			continue;
++
++		vbuf = to_vb2_v4l2_buffer(vb);
++
+ 		num = scnprintf(str, sizeof(str),
+ 				"output [%2d] state = %10s, %8s\n",
+ 				i, vb2_stat_name[vb->state],
+@@ -155,11 +162,18 @@ static int vpu_dbg_instance(struct seq_file *s, void *data)
+ 
+ 	vq = v4l2_m2m_get_dst_vq(inst->fh.m2m_ctx);
+ 	for (i = 0; i < vq->num_buffers; i++) {
+-		struct vb2_buffer *vb = vq->bufs[i];
+-		struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++		struct vb2_buffer *vb;
++		struct vb2_v4l2_buffer *vbuf;
++
++		vb = vb2_get_buffer(vq, i);
++		if (!vb)
++			continue;
+ 
+ 		if (vb->state == VB2_BUF_STATE_DEQUEUED)
+ 			continue;
++
++		vbuf = to_vb2_v4l2_buffer(vb);
++
+ 		num = scnprintf(str, sizeof(str),
+ 				"capture[%2d] state = %10s, %8s\n",
+ 				i, vb2_stat_name[vb->state],
 -- 
-Sakari Ailus
+2.39.2
+
