@@ -2,144 +2,75 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C5D8E784B8
-	for <linux-media@archiver.kernel.org>; Mon,  2 Oct 2023 14:20:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1174E784B6
+	for <linux-media@archiver.kernel.org>; Mon,  2 Oct 2023 14:32:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237756AbjJBOUm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 2 Oct 2023 10:20:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38952 "EHLO
+        id S237790AbjJBOc5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 2 Oct 2023 10:32:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237740AbjJBOUh (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Oct 2023 10:20:37 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF27EA
-        for <linux-media@vger.kernel.org>; Mon,  2 Oct 2023 07:20:33 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-5344d996bedso15220161a12.3
-        for <linux-media@vger.kernel.org>; Mon, 02 Oct 2023 07:20:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1696256432; x=1696861232; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=W3IqRDQO3YMqUzu0c5SK0CfZMleyMRbL6H+Fh9GL8Gk=;
-        b=30g4eMrWlMyBhabHisXWqEIatsSjDwWwPdceCWbL8z0f+GQwKFnRdUNXrQSNrPEqGg
-         SK1+1BYenMY+AIEQnQpIw6jYLBaxOZ/VITRhXOxc+EQbV9mzHrc3ZBHAC8XX3v5wzdul
-         OISuWWMWnY4SKbOZhlaAaKzPlIa/9BWO8t0emwJlqVe0/8K+XU8YQ4ZR0pDQMPLiuEc7
-         qS4OfkMvlmj0kPdQUnorTU4HlWg/j/gLneP2fSg4ubTY222Jpn3YmZd/5XIWCDai+s0i
-         NiwZLyFVvJwgh/bo8r8ca1Z6mhaquRHT5mwnYCQwGbrijny5NIBuAKhCj2SGv4soqxFX
-         jV0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696256432; x=1696861232;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=W3IqRDQO3YMqUzu0c5SK0CfZMleyMRbL6H+Fh9GL8Gk=;
-        b=tpN6t9ZsPOPfLgd7o9yO9ayk3UW1WP8mVagO46/49PyapSnesfmgG3FAPaOjm3EAAA
-         P8rs0Dj6u/c+s4QpD3DsQ+W0cs3NAimj4pNcvDOiZ8L5pKkVf9qqHbJNGJDV1Egim4lh
-         0CP3jofX2aUrLpVMS4WVI3MmV+9Fi7zoAl2fCcUDHKStKnUjCVPhKSSxYfiqIX4T6EC7
-         sPfAsueeRZSyCYcPeFgCkMhz+esk5evFlcGalmu0/I+tbDFfq+8WMC2HWIaIVjHUnPHq
-         srS+WWB3vnxnVVIZOD7C++XUt+iuYCLF2juhlm4l0u62oIX0HWNmK9h6ZE8J2Q1PfNzu
-         KAww==
-X-Gm-Message-State: AOJu0Yz//Z6DetqnLUgHP+E3ZWivudh2wuAHqoAIwyP0LY1kDhFrC2AR
-        Zw/mhsXWVrGokeFEWgWKOwRHBA==
-X-Google-Smtp-Source: AGHT+IGOmdaZkFNtJWoBrZfjARmVpapUvSwzEv/rUm1T3TRWBoQTDESQR1ggJr7My1p3UmTBpg+BeQ==
-X-Received: by 2002:aa7:c584:0:b0:530:a226:1f25 with SMTP id g4-20020aa7c584000000b00530a2261f25mr9383353edq.17.1696256431920;
-        Mon, 02 Oct 2023 07:20:31 -0700 (PDT)
-Received: from otso.luca.vpn.lucaweiss.eu (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id w10-20020aa7dcca000000b005309eb7544fsm15583356edu.45.2023.10.02.07.20.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Oct 2023 07:20:31 -0700 (PDT)
-From:   Luca Weiss <luca.weiss@fairphone.com>
-Date:   Mon, 02 Oct 2023 16:20:30 +0200
-Subject: [PATCH v2 2/3] arm64: dts: qcom: sc7280: Move video-firmware to
- chrome-common
+        with ESMTP id S237774AbjJBOc4 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Oct 2023 10:32:56 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23889B4;
+        Mon,  2 Oct 2023 07:32:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=xn7mU0O8AywxfzFuGVmvml/wEV+n9HbyxBG52KH4Jls=; b=OK5OobfEO9IkO7vYm+2tBaPoOQ
+        I3+u7tkrIuhJWRf+G8nxoJ5B7rAN4dKUKvYQVJJAEIyMYOvRJ/VDsOepxi2ABVPnTQTJ+ZW943QGT
+        ArjBQExuTUJAaEuGIyz1s6DZOcLy4oiEwWa18YXy7W5F13d/y/4jF78IbBrpbbvg0LUHxuxV4w7fF
+        VtGCf1eQ1ilduhoKehjj/YtBJhcUJe5PG+mQ/nx9VINhzJ22B50vJ5Dtuitd9TTquUV5x0i8AlZ1f
+        wxqRgsbtAzZvuaBJjnY8r5zVF/yYW47Re9Ody/bBDl5qwYEfcQ4Dj2uJkLWfgXdWgyLAUfeNMHzSQ
+        buUqbQ9w==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qnJyX-009YFL-Pv; Mon, 02 Oct 2023 14:32:45 +0000
+Date:   Mon, 2 Oct 2023 15:32:45 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Oleksandr Natalenko <oleksandr@natalenko.name>
+Cc:     linux-kernel@vger.kernel.org, Bagas Sanjaya <bagasdotme@gmail.com>,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        dri-devel@lists.freedesktop.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
+Subject: Re: [REGRESSION] BUG: KFENCE: memory corruption in
+ drm_gem_put_pages+0x186/0x250
+Message-ID: <ZRrUjcWqtmzPV3Fs@casper.infradead.org>
+References: <13360591.uLZWGnKmhe@natalenko.name>
+ <2701570.mvXUDI8C0e@natalenko.name>
+ <ZRqeoiZ2ayrAR6AV@debian.me>
+ <2300189.ElGaqSPkdT@natalenko.name>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231002-sc7280-venus-pas-v2-2-bd2408891317@fairphone.com>
-References: <20231002-sc7280-venus-pas-v2-0-bd2408891317@fairphone.com>
-In-Reply-To: <20231002-sc7280-venus-pas-v2-0-bd2408891317@fairphone.com>
-To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        cros-qcom-dts-watchers@chromium.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Luca Weiss <luca.weiss@fairphone.com>
-X-Mailer: b4 0.12.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2300189.ElGaqSPkdT@natalenko.name>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-If the video-firmware node is present, the venus driver assumes we're on
-a system that doesn't use TZ for starting venus, like on ChromeOS
-devices.
+On Mon, Oct 02, 2023 at 01:02:52PM +0200, Oleksandr Natalenko wrote:
+> > > > > BUG: KFENCE: memory corruption in drm_gem_put_pages+0x186/0x250
+> > > > > 
+> > > > > Corrupted memory at 0x00000000e173a294 [ ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ] (in kfence-#108):
+> > > > >  drm_gem_put_pages+0x186/0x250
+> > > > >  drm_gem_shmem_put_pages_locked+0x43/0xc0
+> > > > >  drm_gem_shmem_object_vunmap+0x83/0xe0
+> > > > >  drm_gem_vunmap_unlocked+0x46/0xb0
+> > > > >  drm_fbdev_generic_helper_fb_dirty+0x1dc/0x310
+> > > > >  drm_fb_helper_damage_work+0x96/0x170
+> 
+> Matthew, before I start dancing around, do you think ^^ could have the same cause as 0b62af28f249b9c4036a05acfb053058dc02e2e2 which got fixed by 863a8eb3f27098b42772f668e3977ff4cae10b04?
 
-Move the video-firmware node to chrome-common.dtsi so we can use venus
-on a non-ChromeOS devices.
+Yes, entirely plausible.  I think you have two useful points to look at
+before delving into a full bisect -- 863a8e and the parent of 0b62af.
+If either of them work, I think you have no more work to do.
 
-At the same time also disable the venus node by default in the dtsi,
-like it's done on other SoCs.
-
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
----
- arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi | 8 ++++++++
- arch/arm64/boot/dts/qcom/sc7280.dtsi               | 6 ++----
- 2 files changed, 10 insertions(+), 4 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi b/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
-index 5d462ae14ba1..cd491e46666d 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
-@@ -104,6 +104,14 @@ &scm {
- 	dma-coherent;
- };
- 
-+&venus {
-+	status = "okay";
-+
-+	video-firmware {
-+		iommus = <&apps_smmu 0x21a2 0x0>;
-+	};
-+};
-+
- &watchdog {
- 	status = "okay";
- };
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 66f1eb83cca7..fa53f54d4675 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -3740,6 +3740,8 @@ venus: video-codec@aa00000 {
- 				 <&apps_smmu 0x2184 0x20>;
- 			memory-region = <&video_mem>;
- 
-+			status = "disabled";
-+
- 			video-decoder {
- 				compatible = "venus-decoder";
- 			};
-@@ -3748,10 +3750,6 @@ video-encoder {
- 				compatible = "venus-encoder";
- 			};
- 
--			video-firmware {
--				iommus = <&apps_smmu 0x21a2 0x0>;
--			};
--
- 			venus_opp_table: opp-table {
- 				compatible = "operating-points-v2";
- 
-
--- 
-2.42.0
 
