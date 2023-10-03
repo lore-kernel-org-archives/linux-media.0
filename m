@@ -2,35 +2,35 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66A15E7543E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0CD6E7543D
 	for <linux-media@archiver.kernel.org>; Tue,  3 Oct 2023 08:08:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239492AbjJCIIj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 3 Oct 2023 04:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43606 "EHLO
+        id S239737AbjJCIIk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 3 Oct 2023 04:08:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239584AbjJCIH6 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Oct 2023 04:07:58 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09161116;
-        Tue,  3 Oct 2023 01:07:38 -0700 (PDT)
+        with ESMTP id S239353AbjJCIIB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Oct 2023 04:08:01 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A8CCC4;
+        Tue,  3 Oct 2023 01:07:39 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:b6df:b784:6a0f:8451])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D67136607387;
-        Tue,  3 Oct 2023 09:07:36 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E1E0E660738A;
+        Tue,  3 Oct 2023 09:07:37 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1696320457;
-        bh=ph7BpDmTndhVgQkibEyHEMgMXbFU1u8TVxC65OSPSxg=;
+        s=mail; t=1696320458;
+        bh=xoGuB9BqmG5292CiK1lPMwRIslKTljuiyBog3GEPqdU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M44ioBZhEwt4ZQbAALO2XXtYqIDGCjGeVsmIoBks7uX9DDOhq8vUWkL5PGfjQVglZ
-         1+sPRHNS8dyXnQiakiWavVMU+UfU4V9x9Q5iFbyPHq1AXLmWM9PZQtfrIfdR6zz+H+
-         nzAjBiiAU3PJX2OitiWDAmvtVuxmuT47sLRz0CwXHRrPiYF+qu7NkdopQ0cVaymreP
-         7hd1ZJM4803LMbS3FvYju4wirdhfnaO4b//9sBjo5t8xECVF05/hHuWvS35dqb9Ivb
-         Alpu7hyS0WYUujk7vlDAP56gQBjz/GwtSOH4v0W/euDtaia/xsmOwtku4DFdm2Stbr
-         0cAoRIKo+NhmA==
+        b=M3epeRo7idthRIkC77R8NXH8vtYvFbZRowl2OSrBqZLi/rVfVG91spufAYXsEwrEw
+         54h9V3+diJdFyZ3n7vg9LgnHHFbE88LtTCGiBGPB9lrj/K8iP6FOrYuU5mW9n98Xie
+         Affli3/ItOCO9a5UPj13mOPlKAuMQSZmtCMvoW6smc6dfSZxTVx+jbVHeKLbEpWJV+
+         0lqgo4JW6LOrFt9+GFzLkTL6CM/ToS82cxAhpFFHIyfVwiZjwi5cAgx5Ublz/e+3zE
+         enEcuGdzFdQ7FmvduPuZ+oQo1gxv1hTAuFNiiKWOWqhJBPSr20HyLoIsReON589FCR
+         jdNTycXzJVSlA==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -42,9 +42,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v10 46/54] sample: v4l: Stop direct calls to queue num_buffers field
-Date:   Tue,  3 Oct 2023 10:06:55 +0200
-Message-Id: <20231003080704.43911-47-benjamin.gaignard@collabora.com>
+Subject: [PATCH v10 48/54] media: nuvoton: Stop direct calls to queue num_buffers field
+Date:   Tue,  3 Oct 2023 10:06:57 +0200
+Message-Id: <20231003080704.43911-49-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231003080704.43911-1-benjamin.gaignard@collabora.com>
 References: <20231003080704.43911-1-benjamin.gaignard@collabora.com>
@@ -58,32 +58,22 @@ Use vb2_get_num_buffers() to avoid using queue num_buffers field directly.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- samples/v4l/v4l2-pci-skeleton.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/media/platform/nuvoton/npcm-video.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/samples/v4l/v4l2-pci-skeleton.c b/samples/v4l/v4l2-pci-skeleton.c
-index a61f94db18d9..a65aa9d1e9da 100644
---- a/samples/v4l/v4l2-pci-skeleton.c
-+++ b/samples/v4l/v4l2-pci-skeleton.c
-@@ -155,6 +155,7 @@ static int queue_setup(struct vb2_queue *vq,
- 		       unsigned int sizes[], struct device *alloc_devs[])
- {
- 	struct skeleton *skel = vb2_get_drv_priv(vq);
-+	unsigned int q_num_bufs = vb2_get_num_buffers(vq);
+diff --git a/drivers/media/platform/nuvoton/npcm-video.c b/drivers/media/platform/nuvoton/npcm-video.c
+index ac8d73b794d3..29b3c55f5396 100644
+--- a/drivers/media/platform/nuvoton/npcm-video.c
++++ b/drivers/media/platform/nuvoton/npcm-video.c
+@@ -393,7 +393,7 @@ static void npcm_video_free_diff_table(struct npcm_video *video)
+ 	struct rect_list *tmp;
+ 	unsigned int i;
  
- 	skel->field = skel->format.field;
- 	if (skel->field == V4L2_FIELD_ALTERNATE) {
-@@ -167,8 +168,8 @@ static int queue_setup(struct vb2_queue *vq,
- 		skel->field = V4L2_FIELD_TOP;
- 	}
- 
--	if (vq->num_buffers + *nbuffers < 3)
--		*nbuffers = 3 - vq->num_buffers;
-+	if (q_num_bufs + *nbuffers < 3)
-+		*nbuffers = 3 - q_num_bufs;
- 
- 	if (*nplanes)
- 		return sizes[0] < skel->format.sizeimage ? -EINVAL : 0;
+-	for (i = 0; i < video->queue.num_buffers; i++) {
++	for (i = 0; i < vb2_get_num_buffers(&video->queue); i++) {
+ 		head = &video->list[i];
+ 		list_for_each_safe(pos, nx, head) {
+ 			tmp = list_entry(pos, struct rect_list, list);
 -- 
 2.39.2
 
