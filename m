@@ -2,35 +2,35 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CE23E75434
-	for <linux-media@archiver.kernel.org>; Tue,  3 Oct 2023 08:07:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B73C1E75436
+	for <linux-media@archiver.kernel.org>; Tue,  3 Oct 2023 08:07:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239559AbjJCIHs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 3 Oct 2023 04:07:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
+        id S239485AbjJCIHu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 3 Oct 2023 04:07:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239340AbjJCIH0 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Oct 2023 04:07:26 -0400
+        with ESMTP id S239446AbjJCIHg (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Oct 2023 04:07:36 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54280AF;
-        Tue,  3 Oct 2023 01:07:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AED3B3;
+        Tue,  3 Oct 2023 01:07:28 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:b6df:b784:6a0f:8451])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B6C1C660734B;
-        Tue,  3 Oct 2023 09:07:21 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DFD2F660735E;
+        Tue,  3 Oct 2023 09:07:26 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1696320442;
-        bh=gAzQ/SGzIm4inZNC+PXcs+p3IPzDsrNiBUGyKW1mkfg=;
+        s=mail; t=1696320447;
+        bh=ZWZu+iiWZeSR97TuxWAcPyCT2zWmqcsNlEZTasx6lQc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MkZcPdKxJNbSQMyuawxZq0pen7PzCIhOzMS19sWs/Zs+lyP0BnmOrsw65Jt+E8MuH
-         2VRtBuflK0zQGU+o8Ex+KDlwT2j3gKKFY2Y1xGyGmsScGXrqfbSHesl1jlX+A6xZxv
-         lMxTEGrXDWQRfEfP19Dvd+/8Ke1IKqEuNQ3Y3MaZ3KlZSMWqsLQdPAWXdx0ddKGT/y
-         YO4knrV070zJW3q7AVcIUuQuOtVhvq+H8H91oTaBjFm8+AnRCaE/NtTBqSRwH7O/pX
-         JdU7SD9CZeThFnpS68jl2hIov7HE75gaOk5CMLnRrAcODOthgfO21/qjyNGGBdjvJa
-         mDcXToMnEubIQ==
+        b=TM877k3dbdv5cZ3/+fzoBT0lguta5bDqCV9H8tQ8PNrG5rqShpGoZHosFKCqo+gR2
+         aNnRhEh910+mZEG615eL480UAWFDxh5mBICdi8AV1G2/xg53Q2C7SWF+7SmWfip1Mk
+         3q12j79ajrgx/XNulaWFbSKsJlmeAs34SBtQ7Rbz8u6zY48K68sA2uNRgIDumytrUa
+         vnN34JOqeZOMSddzFZGcz9Oiw3GCGautxBvRG3pHJoUiegtBBD/DDk1ds/db79eaMP
+         tF2MEa9LEcz3+IHiIXmLh++xqfhOqDLuGe9J63hN1PKcD6HAL8CG9SJd15m7vc4rRb
+         zFQtQW7z+30Zg==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -42,9 +42,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v10 17/54] media: verisilicon: Store chroma and motion vectors offset
-Date:   Tue,  3 Oct 2023 10:06:26 +0200
-Message-Id: <20231003080704.43911-18-benjamin.gaignard@collabora.com>
+Subject: [PATCH v10 27/54] media: pci: netup_unidvb: Remove useless number of buffers check
+Date:   Tue,  3 Oct 2023 10:06:36 +0200
+Message-Id: <20231003080704.43911-28-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231003080704.43911-1-benjamin.gaignard@collabora.com>
 References: <20231003080704.43911-1-benjamin.gaignard@collabora.com>
@@ -54,63 +54,30 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Store computed values of chroma and motion vectors offset because
-they depends on width and height values which change if the resolution
-change.
+vb2 core tests this already so remove it.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- drivers/media/platform/verisilicon/hantro.h            | 2 ++
- drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c | 6 ++++--
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ drivers/media/pci/netup_unidvb/netup_unidvb_core.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/media/platform/verisilicon/hantro.h
-index 0948b04a9f8d..6f5eb975d0e3 100644
---- a/drivers/media/platform/verisilicon/hantro.h
-+++ b/drivers/media/platform/verisilicon/hantro.h
-@@ -328,6 +328,8 @@ struct hantro_vp9_decoded_buffer_info {
- 	/* Info needed when the decoded frame serves as a reference frame. */
- 	unsigned short width;
- 	unsigned short height;
-+	size_t chroma_offset;
-+	size_t mv_offset;
- 	u32 bit_depth : 4;
- };
+diff --git a/drivers/media/pci/netup_unidvb/netup_unidvb_core.c b/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
+index d85bfbb77a25..52de9b0af812 100644
+--- a/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
++++ b/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
+@@ -297,11 +297,9 @@ static int netup_unidvb_queue_setup(struct vb2_queue *vq,
+ 	dev_dbg(&dma->ndev->pci_dev->dev, "%s()\n", __func__);
  
-diff --git a/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c b/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
-index 6fc4b555517f..6db1c32fce4d 100644
---- a/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
-+++ b/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
-@@ -158,9 +158,11 @@ static void config_output(struct hantro_ctx *ctx,
- 
- 	chroma_addr = luma_addr + chroma_offset(ctx, dec_params);
- 	hantro_write_addr(ctx->dev, G2_OUT_CHROMA_ADDR, chroma_addr);
-+	dst->vp9.chroma_offset = chroma_offset(ctx, dec_params);
- 
- 	mv_addr = luma_addr + mv_offset(ctx, dec_params);
- 	hantro_write_addr(ctx->dev, G2_OUT_MV_ADDR, mv_addr);
-+	dst->vp9.mv_offset = mv_offset(ctx, dec_params);
+ 	*nplanes = 1;
+-	if (vq->num_buffers + *nbuffers < VIDEO_MAX_FRAME)
+-		*nbuffers = VIDEO_MAX_FRAME - vq->num_buffers;
+ 	sizes[0] = PAGE_ALIGN(NETUP_DMA_PACKETS_COUNT * 188);
+ 	dev_dbg(&dma->ndev->pci_dev->dev, "%s() nbuffers=%d sizes[0]=%d\n",
+-		__func__, *nbuffers, sizes[0]);
++		__func__, vb2_get_num_buffers(vq), sizes[0]);
+ 	return 0;
  }
  
- struct hantro_vp9_ref_reg {
-@@ -195,7 +197,7 @@ static void config_ref(struct hantro_ctx *ctx,
- 	luma_addr = hantro_get_dec_buf_addr(ctx, &buf->base.vb.vb2_buf);
- 	hantro_write_addr(ctx->dev, ref_reg->y_base, luma_addr);
- 
--	chroma_addr = luma_addr + chroma_offset(ctx, dec_params);
-+	chroma_addr = luma_addr + buf->vp9.chroma_offset;
- 	hantro_write_addr(ctx->dev, ref_reg->c_base, chroma_addr);
- }
- 
-@@ -238,7 +240,7 @@ static void config_ref_registers(struct hantro_ctx *ctx,
- 	config_ref(ctx, dst, &ref_regs[2], dec_params, dec_params->alt_frame_ts);
- 
- 	mv_addr = hantro_get_dec_buf_addr(ctx, &mv_ref->base.vb.vb2_buf) +
--		  mv_offset(ctx, dec_params);
-+		  mv_ref->vp9.mv_offset;
- 	hantro_write_addr(ctx->dev, G2_REF_MV_ADDR(0), mv_addr);
- 
- 	hantro_reg_write(ctx->dev, &vp9_last_sign_bias,
 -- 
 2.39.2
 
