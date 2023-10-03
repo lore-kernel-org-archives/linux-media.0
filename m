@@ -2,35 +2,35 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DADA2E75435
-	for <linux-media@archiver.kernel.org>; Tue,  3 Oct 2023 08:07:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E21ECE75439
+	for <linux-media@archiver.kernel.org>; Tue,  3 Oct 2023 08:07:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239376AbjJCIHl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 3 Oct 2023 04:07:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50226 "EHLO
+        id S239379AbjJCIHn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 3 Oct 2023 04:07:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239316AbjJCIHY (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Oct 2023 04:07:24 -0400
+        with ESMTP id S239297AbjJCIHX (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Oct 2023 04:07:23 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C99FBF;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C136A1;
         Tue,  3 Oct 2023 01:07:20 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:b6df:b784:6a0f:8451])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7C58E660731D;
-        Tue,  3 Oct 2023 09:07:16 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 716F56607318;
+        Tue,  3 Oct 2023 09:07:15 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1696320436;
-        bh=dORnTzB2rXmsaHgnhN9KRI5xHQJEBU6mRdZelnGjotA=;
+        s=mail; t=1696320435;
+        bh=xgQ59ci0u36Sg6Kfk6W/knjQu2QF8jMpnRAVGSPYz3E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BSEfBTA5Hdnv9NBFBNyAyqI/purU07ob4LXwE+mG3TccYJznfRorGX1tFhGAHauhh
-         1ceA/+57ED7z/Tpm83Q6VvnzFnz/IDGRmKkWfYZhOAoi5pfUtPVUl/afKNe3xuEJO7
-         EDNcqDGJOqRmCFVEW2O0QH6XefoWgUiNcWmxxqWwtbevvt319kFacWuJiBTzYEC4xV
-         HxhGLgEqPg/CLdi+wFInEmKJ0hBBkMgI1lnm/l1vf+4aR8G5iK2mwuQ9C7RG9o+ElS
-         bRg4L061Wr88t0cmGLB6btO7jhhut0ePiKM+uG1vz9P4FQuVNtFC2FkqTD3cl7ea06
-         lMWQr3OVX3uqA==
+        b=MqR/337qaBaeM2xhBO323b7fASbEIQFNsiApNazHjton1vaqccRdDupCKmzcUXXHY
+         101y9VY4UxDD0kieue9DEHiAOY7JrerIONfrrlvFgVailtnPPiF1SGI+2v2ZvFpTH/
+         8i5XWifha+0WvS/W0yCcozLOu9rc4HCm21u+N2lKO0MFBTMSM+uEKe9v3+8h0vTwU9
+         YWwxiZDLvH8ONHPq/9/RSymA6dAVZTgT1esecZR/OqrYiPv/yuIHPVS/rAg0zyJJlh
+         1wcYJ/Bfz6Vyt+aLH0LtqRIAIuToGkgncwpz0WoZdFru62Btey30yp9DCtweBS2FwM
+         zeBHIYhKjZ46A==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -42,9 +42,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v10 07/54] media: sti: hva: Use vb2_get_buffer() instead of directly access to buffers array
-Date:   Tue,  3 Oct 2023 10:06:16 +0200
-Message-Id: <20231003080704.43911-8-benjamin.gaignard@collabora.com>
+Subject: [PATCH v10 05/54] media: mediatek: jpeg: Use vb2_get_buffer() instead of directly access to buffers array
+Date:   Tue,  3 Oct 2023 10:06:14 +0200
+Message-Id: <20231003080704.43911-6-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231003080704.43911-1-benjamin.gaignard@collabora.com>
 References: <20231003080704.43911-1-benjamin.gaignard@collabora.com>
@@ -55,37 +55,36 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 Use vb2_get_buffer() instead of directly access to vb2_buffer buffer array.
+This could allow to change the type bufs[] field of vb2_buffer structure if
+needed.
 After each call to vb2_get_buffer() we need to be sure that we get
 a valid pointer so check the return value of all of them.
-Remove index range test since it is done by vb2_get_buffer().
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- drivers/media/platform/st/sti/hva/hva-v4l2.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/st/sti/hva/hva-v4l2.c b/drivers/media/platform/st/sti/hva/hva-v4l2.c
-index 3a848ca32a0e..cfe83e9dc01b 100644
---- a/drivers/media/platform/st/sti/hva/hva-v4l2.c
-+++ b/drivers/media/platform/st/sti/hva/hva-v4l2.c
-@@ -569,14 +569,11 @@ static int hva_qbuf(struct file *file, void *priv, struct v4l2_buffer *buf)
- 		struct vb2_buffer *vb2_buf;
+diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+index 7194f88edc0f..73a063b1569b 100644
+--- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
++++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+@@ -598,12 +598,11 @@ static int mtk_jpeg_qbuf(struct file *file, void *priv, struct v4l2_buffer *buf)
+ 		goto end;
  
- 		vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, buf->type);
--
--		if (buf->index >= vq->num_buffers) {
--			dev_dbg(dev, "%s buffer index %d out of range (%d)\n",
--				ctx->name, buf->index, vq->num_buffers);
-+		vb2_buf = vb2_get_buffer(vq, buf->index);
-+		if (!vb2_buf) {
-+			dev_dbg(dev, "%s buffer index %d not found\n", ctx->name, buf->index);
- 			return -EINVAL;
- 		}
--
--		vb2_buf = vb2_get_buffer(vq, buf->index);
- 		stream = to_hva_stream(to_vb2_v4l2_buffer(vb2_buf));
- 		stream->bytesused = buf->bytesused;
+ 	vq = v4l2_m2m_get_vq(fh->m2m_ctx, buf->type);
+-	if (buf->index >= vq->num_buffers) {
+-		dev_err(ctx->jpeg->dev, "buffer index out of range\n");
++	vb = vb2_get_buffer(vq, buf->index);
++	if (!vb) {
++		dev_err(ctx->jpeg->dev, "buffer not found\n");
+ 		return -EINVAL;
  	}
+-
+-	vb = vq->bufs[buf->index];
+ 	jpeg_src_buf = mtk_jpeg_vb2_to_srcbuf(vb);
+ 	jpeg_src_buf->bs_size = buf->m.planes[0].bytesused;
+ 
 -- 
 2.39.2
 
