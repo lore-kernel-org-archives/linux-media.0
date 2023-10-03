@@ -2,35 +2,35 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0324BE75433
-	for <linux-media@archiver.kernel.org>; Tue,  3 Oct 2023 08:08:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4859CE7543C
+	for <linux-media@archiver.kernel.org>; Tue,  3 Oct 2023 08:08:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239253AbjJCIIO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 3 Oct 2023 04:08:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47044 "EHLO
+        id S239270AbjJCIIQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 3 Oct 2023 04:08:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239372AbjJCIH2 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Oct 2023 04:07:28 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C830AA3;
-        Tue,  3 Oct 2023 01:07:24 -0700 (PDT)
+        with ESMTP id S239493AbjJCIHi (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Oct 2023 04:07:38 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B33F1B6;
+        Tue,  3 Oct 2023 01:07:33 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:b6df:b784:6a0f:8451])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4A65B6607350;
-        Tue,  3 Oct 2023 09:07:23 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 948D66607376;
+        Tue,  3 Oct 2023 09:07:31 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1696320443;
-        bh=qLvZsJraHy1cyquUmJgnlrPrhNUiYIy8VUcF3+5BgA0=;
+        s=mail; t=1696320452;
+        bh=VdkA3cGwhU6mks7jszAxr2TxDs9YvsJ75Ji6rKZEsA0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VxqczClSQp5zz7dzFXnSeQ+VItyAdodAT1c1CFllI6/95XCVmC4urN90RiVgJhZ1x
-         fnPE+jcB09DnHsfl6c89eAPlfvuqkiS+54g3DnnkdKpRAbndQX0aS+7NnmBkDiWJm6
-         Ljo7953dHbAjD2agQy3ZHtPqqS5nMTlA2v33AhdIYBd9UxVTAjcBayyzQVKqPiBT3l
-         StP/H9mm320pKpNOrx2dGXfayyTtKWUqXw01OnrRXlo7KO+njY0DgXSEpIunOkGJ1n
-         gKGlSQQJEsELad66EEc9axVOUCkQZlE5LzMqU1/ohB0Lxpd3fUqVmVUZMrCpTP25W5
-         IqxED93tA5uxw==
+        b=Thk1R8gSBlf/qo9PXQ6My+Kj5qDw7mcgR/tG8cfnPR2LTsetF4K9UmYxhHB/AvjMH
+         jxvupwOnuUFCc8VxkZdSOiH2WCV2YJoKEcTy0xg3NTg15MA0y+s1wTbF7ZdS2t2gNH
+         7zFGQQ/tf8MeLc8oNNMZ29WJoYZohQ9/yR2a+81SNCg/L2CYwgaDt9KJ3GJ95E/sLr
+         t+4eUNeKWr2PX8AjL8gZ4NrX4bYfhBs3mwVVwPDWud63+EE3Tpm4hwu36Iy6kCsan6
+         baEbWdXy46LaO48uTCFUfvOlAnt6WlVFZFxz53pHRDy+go8stHCwR1dFJLz/6Ud6vT
+         mMRwWld6WozhQ==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -42,9 +42,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v10 20/54] media: Remove duplicated index vs q->num_buffers check
-Date:   Tue,  3 Oct 2023 10:06:29 +0200
-Message-Id: <20231003080704.43911-21-benjamin.gaignard@collabora.com>
+Subject: [PATCH v10 36/54] media: verisilicon: Stop direct calls to queue num_buffers field
+Date:   Tue,  3 Oct 2023 10:06:45 +0200
+Message-Id: <20231003080704.43911-37-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231003080704.43911-1-benjamin.gaignard@collabora.com>
 References: <20231003080704.43911-1-benjamin.gaignard@collabora.com>
@@ -54,52 +54,26 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-vb2_get_buffer() already checks if the requested index is valid.
-Stop duplicating this kind of check everywhere.
+Use vb2_get_num_buffers() to avoid using queue num_buffers field directly.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- drivers/media/common/videobuf2/videobuf2-v4l2.c | 13 -------------
- 1 file changed, 13 deletions(-)
+ drivers/media/platform/verisilicon/hantro_postproc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-index 42da0adc052a..cf881c8d8d4d 100644
---- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
-+++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-@@ -378,11 +378,6 @@ static int vb2_queue_or_prepare_buf(struct vb2_queue *q, struct media_device *md
- 		return -EINVAL;
- 	}
- 
--	if (b->index >= q->num_buffers) {
--		dprintk(q, 1, "%s: buffer index out of range\n", opname);
--		return -EINVAL;
--	}
--
- 	vb = vb2_get_buffer(q, b->index);
- 	if (!vb) {
- 		dprintk(q, 1, "%s: buffer %u is NULL\n", opname,  b->index);
-@@ -833,10 +828,6 @@ int vb2_qbuf(struct vb2_queue *q, struct media_device *mdev,
- 		return -EBUSY;
- 	}
- 
--	if (b->index >= q->num_buffers) {
--		dprintk(q, 1, "buffer index out of range\n");
--		return -EINVAL;
--	}
- 	vb = vb2_get_buffer(q, b->index);
- 	if (!vb) {
- 		dprintk(q, 1, "can't find the requested buffer %u\n", b->index);
-@@ -908,10 +899,6 @@ int vb2_expbuf(struct vb2_queue *q, struct v4l2_exportbuffer *eb)
+diff --git a/drivers/media/platform/verisilicon/hantro_postproc.c b/drivers/media/platform/verisilicon/hantro_postproc.c
+index 7aa45d0fd291..41e93176300b 100644
+--- a/drivers/media/platform/verisilicon/hantro_postproc.c
++++ b/drivers/media/platform/verisilicon/hantro_postproc.c
+@@ -250,7 +250,7 @@ int hantro_postproc_init(struct hantro_ctx *ctx)
  {
- 	struct vb2_buffer *vb;
+ 	struct v4l2_m2m_ctx *m2m_ctx = ctx->fh.m2m_ctx;
+ 	struct vb2_queue *cap_queue = &m2m_ctx->cap_q_ctx.q;
+-	unsigned int num_buffers = cap_queue->num_buffers;
++	unsigned int num_buffers = vb2_get_num_buffers(cap_queue);
+ 	unsigned int i;
+ 	int ret;
  
--	if (eb->index >= q->num_buffers) {
--		dprintk(q, 1, "buffer index out of range\n");
--		return -EINVAL;
--	}
- 	vb = vb2_get_buffer(q, eb->index);
- 	if (!vb) {
- 		dprintk(q, 1, "can't find the requested buffer %u\n", eb->index);
 -- 
 2.39.2
 
