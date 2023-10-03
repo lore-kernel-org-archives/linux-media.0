@@ -2,35 +2,35 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38F2DE75435
-	for <linux-media@archiver.kernel.org>; Tue,  3 Oct 2023 08:07:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE59DE7543E
+	for <linux-media@archiver.kernel.org>; Tue,  3 Oct 2023 08:07:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239265AbjJCIH4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 3 Oct 2023 04:07:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47072 "EHLO
+        id S239581AbjJCIH5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 3 Oct 2023 04:07:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239461AbjJCIHg (ORCPT
+        with ESMTP id S239452AbjJCIHg (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Tue, 3 Oct 2023 04:07:36 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070BB111;
-        Tue,  3 Oct 2023 01:07:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3EA6E4;
+        Tue,  3 Oct 2023 01:07:25 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:b6df:b784:6a0f:8451])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 740EF660731C;
-        Tue,  3 Oct 2023 09:07:28 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4D94A660731D;
+        Tue,  3 Oct 2023 09:07:24 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1696320448;
-        bh=e/xfKtsVji2TnuFJG4XtWU3Pf3eRSMy1R65/FhNyyWI=;
+        s=mail; t=1696320444;
+        bh=o2sVtoPPYvq8hM/qyihWIqN4hasDvFA4zhZmTyTxJEg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AqDc1rt9htd40mROtzfmBxcUyoXL3yt7PGxwKlNU5HKuKyZ2hoCk99rBpBZ11qgWp
-         Q+3y1f22lolc8nnICwmFtb6ExZDZ7RztK4TfYtq1o3XePzj+ftjtwL6KhAql+/lqHM
-         f5MCqr79kuPypDA1ZeaI5Ul1jmhdIY48gnpV1pCIcuYZBTRfVsHchXYIQVtrnyOx4x
-         hniExmmA+dK6kqe0xJxkNGY6TMFWVF3yNOvoSTGpUk2UKZTqNZklwK37pZlOSFYVP6
-         pvpXU8qJ5SCkC+2PdMm6BQpAnw+kV1N1JjBSb/ztNyzjR/Y3OmYekRD1Ei3O/O5JyD
-         NI7hRwY30a8uw==
+        b=cXQBHl28z3w576xIMzmVcsgwiZ8Au8MHBX+w26WURG2hh2RMCuZclgWUu+GoY88kK
+         6tVKH7eeY3PoZm8I4E69QVXgzAaeOatVL7yKS46h5QbtIfcQcyDMb75slc53UJvJCm
+         VxHx5xsay8SzhetvZdjE0XPT8Oezi1tDGoxd1EmJIbyRlpfykXVMcp3gHb1f3MR+Ef
+         luY3UQtIyJuEI8jyDsEe0wgn7Sehrsb6r2pnCVaDhzEbwLr5kRk0FJEITuf411pNWK
+         j3rY7339Eb9pMFn+PMYcAii+mKPMEXazpThFtkYPilBuMqj/6Ce1vQrbIARoCsbtOf
+         JeOkuvBmqG2wA==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -42,9 +42,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v10 30/54] media: amphion: Stop direct calls to queue num_buffers field
-Date:   Tue,  3 Oct 2023 10:06:39 +0200
-Message-Id: <20231003080704.43911-31-benjamin.gaignard@collabora.com>
+Subject: [PATCH v10 22/54] media: dvb-core: Do not initialize twice queue num_buffer field
+Date:   Tue,  3 Oct 2023 10:06:31 +0200
+Message-Id: <20231003080704.43911-23-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231003080704.43911-1-benjamin.gaignard@collabora.com>
 References: <20231003080704.43911-1-benjamin.gaignard@collabora.com>
@@ -54,76 +54,26 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use vb2_get_num_buffers() to avoid using queue num_buffers field directly.
+The above memset already zeroed all the ctx fields, it is useless
+to do it here again.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- drivers/media/platform/amphion/vpu_dbg.c  | 8 ++++----
- drivers/media/platform/amphion/vpu_v4l2.c | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ drivers/media/dvb-core/dvb_vb2.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/media/platform/amphion/vpu_dbg.c b/drivers/media/platform/amphion/vpu_dbg.c
-index a462d6fe4ea9..49d641f60cc9 100644
---- a/drivers/media/platform/amphion/vpu_dbg.c
-+++ b/drivers/media/platform/amphion/vpu_dbg.c
-@@ -87,7 +87,7 @@ static int vpu_dbg_instance(struct seq_file *s, void *data)
- 	num = scnprintf(str, sizeof(str),
- 			"output (%2d, %2d): fmt = %c%c%c%c %d x %d, %d;",
- 			vb2_is_streaming(vq),
--			vq->num_buffers,
-+			vb2_get_num_buffers(vq),
- 			inst->out_format.pixfmt,
- 			inst->out_format.pixfmt >> 8,
- 			inst->out_format.pixfmt >> 16,
-@@ -111,7 +111,7 @@ static int vpu_dbg_instance(struct seq_file *s, void *data)
- 	num = scnprintf(str, sizeof(str),
- 			"capture(%2d, %2d): fmt = %c%c%c%c %d x %d, %d;",
- 			vb2_is_streaming(vq),
--			vq->num_buffers,
-+			vb2_get_num_buffers(vq),
- 			inst->cap_format.pixfmt,
- 			inst->cap_format.pixfmt >> 8,
- 			inst->cap_format.pixfmt >> 16,
-@@ -139,7 +139,7 @@ static int vpu_dbg_instance(struct seq_file *s, void *data)
- 		return 0;
- 
- 	vq = v4l2_m2m_get_src_vq(inst->fh.m2m_ctx);
--	for (i = 0; i < vq->num_buffers; i++) {
-+	for (i = 0; i < vq->max_num_buffers; i++) {
- 		struct vb2_buffer *vb;
- 		struct vb2_v4l2_buffer *vbuf;
- 
-@@ -161,7 +161,7 @@ static int vpu_dbg_instance(struct seq_file *s, void *data)
- 	}
- 
- 	vq = v4l2_m2m_get_dst_vq(inst->fh.m2m_ctx);
--	for (i = 0; i < vq->num_buffers; i++) {
-+	for (i = 0; i < vq->max_num_buffers; i++) {
- 		struct vb2_buffer *vb;
- 		struct vb2_v4l2_buffer *vbuf;
- 
-diff --git a/drivers/media/platform/amphion/vpu_v4l2.c b/drivers/media/platform/amphion/vpu_v4l2.c
-index 0f6e4c666440..87afb4a18d5d 100644
---- a/drivers/media/platform/amphion/vpu_v4l2.c
-+++ b/drivers/media/platform/amphion/vpu_v4l2.c
-@@ -439,7 +439,7 @@ int vpu_get_num_buffers(struct vpu_inst *inst, u32 type)
- 	else
- 		q = v4l2_m2m_get_dst_vq(inst->fh.m2m_ctx);
- 
--	return q->num_buffers;
-+	return vb2_get_num_buffers(q);
- }
- 
- static void vpu_m2m_device_run(void *priv)
-@@ -587,7 +587,7 @@ static int vpu_vb2_start_streaming(struct vb2_queue *q, unsigned int count)
- 		  fmt->sizeimage[0], fmt->bytesperline[0],
- 		  fmt->sizeimage[1], fmt->bytesperline[1],
- 		  fmt->sizeimage[2], fmt->bytesperline[2],
--		  q->num_buffers);
-+		  vb2_get_num_buffers(q));
- 	vb2_clear_last_buffer_dequeued(q);
- 	ret = call_vop(inst, start, q->type);
- 	if (ret)
+diff --git a/drivers/media/dvb-core/dvb_vb2.c b/drivers/media/dvb-core/dvb_vb2.c
+index 3a966fdf814c..a731b755a0b9 100644
+--- a/drivers/media/dvb-core/dvb_vb2.c
++++ b/drivers/media/dvb-core/dvb_vb2.c
+@@ -177,7 +177,6 @@ int dvb_vb2_init(struct dvb_vb2_ctx *ctx, const char *name, int nonblocking)
+ 	q->ops = &dvb_vb2_qops;
+ 	q->mem_ops = &vb2_vmalloc_memops;
+ 	q->buf_ops = &dvb_vb2_buf_ops;
+-	q->num_buffers = 0;
+ 	ret = vb2_core_queue_init(q);
+ 	if (ret) {
+ 		ctx->state = DVB_VB2_STATE_NONE;
 -- 
 2.39.2
 
