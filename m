@@ -2,35 +2,35 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D57DE75434
-	for <linux-media@archiver.kernel.org>; Tue,  3 Oct 2023 08:07:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB8E3E7543B
+	for <linux-media@archiver.kernel.org>; Tue,  3 Oct 2023 08:07:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239413AbjJCIHv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 3 Oct 2023 04:07:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47146 "EHLO
+        id S239572AbjJCIHx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 3 Oct 2023 04:07:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239445AbjJCIHg (ORCPT
+        with ESMTP id S239456AbjJCIHg (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Tue, 3 Oct 2023 04:07:36 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A38102;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D24710A;
         Tue,  3 Oct 2023 01:07:28 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:b6df:b784:6a0f:8451])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5CFE66607358;
-        Tue,  3 Oct 2023 09:07:26 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6B0F66607362;
+        Tue,  3 Oct 2023 09:07:27 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1696320446;
-        bh=7OP/lnsbD5MzPZ4L/gceSmxIzda3Ng9eLtu0phjni7k=;
+        s=mail; t=1696320447;
+        bh=zysh0fIOtYpsYqIRMileMUIIdpZZkRuacJmXooFftR8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hZ2VfmGYVHi/dnTP+YqWFYiyKF3JtP4EZM4tG4D84XQVdyGz+cgYIZsE1JY20DuSI
-         qQCI8LF/CoieabGlir1fILZuOeGnF/GG+kns46Su80aBUEssGGpt+vN0aD28g/EfFB
-         GuNoQKW9+z2I0xh+u6R5bm/TarSvCKrYqMI5EC4UiJB/nLzr6zj3RBbtd+cG7f8rnt
-         guOexMSvOG+H1ikLvyQTChUPMf5XB7eBU82nqinxPs6sQCRd4K1iRyS1HBdBT2lPpb
-         y6fGFLvHl3+waddovE0q/RJjLLRDKl5Q/OGB2Qj8njCFo40uFVYbljvIJsQamJJM6G
-         6FbuG4MPBq/dg==
+        b=STmpSyYyHlwFkpXxLb/WqLEzqf//uE3Kj37tTlrx7Z3xznrZPmZ03hpIwzyIjou4d
+         uY1gEDUs3oocNkREoyJsbc9kRT4XwppQMvEXqqqC6irLDxFGquTN2TuO113X1zUKwH
+         2uFYQrNiV7wDFP0Qd+Q0skR0QEQg/FJ/hq27cU9bVYGX8y+TZqLmTcqGpbhckO4SW3
+         EsoXNfyIH9n4Cfb+koeQdOhNNN3GLCXgKX7vcIf6nPIyU9kzfw18Tjlt9cORjX3QbU
+         FEzwRxla4tW+52UTKK8eg+YRYkm7yKSov5+yezNgK8jwYKMWDIJEI+d/BH//JTk7FV
+         mS+eMOb0uBSng==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -42,9 +42,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v10 26/54] media: pci: dt3155: Remove useless check
-Date:   Tue,  3 Oct 2023 10:06:35 +0200
-Message-Id: <20231003080704.43911-27-benjamin.gaignard@collabora.com>
+Subject: [PATCH v10 28/54] media: pci: tw68: Stop direct calls to queue num_buffers field
+Date:   Tue,  3 Oct 2023 10:06:37 +0200
+Message-Id: <20231003080704.43911-29-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231003080704.43911-1-benjamin.gaignard@collabora.com>
 References: <20231003080704.43911-1-benjamin.gaignard@collabora.com>
@@ -54,27 +54,34 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-min_buffers_needed is already set to 2 so remove this useless
-check.
+Use vb2_get_num_buffers() to avoid using queue num_buffers field directly.
+Remove tot_bufs < 2 test because min_buffers_needed is already set to 2.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- drivers/media/pci/dt3155/dt3155.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/media/pci/tw68/tw68-video.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/pci/dt3155/dt3155.c b/drivers/media/pci/dt3155/dt3155.c
-index 548156b199cc..d09cde2f6ee4 100644
---- a/drivers/media/pci/dt3155/dt3155.c
-+++ b/drivers/media/pci/dt3155/dt3155.c
-@@ -128,8 +128,6 @@ dt3155_queue_setup(struct vb2_queue *vq,
- 	struct dt3155_priv *pd = vb2_get_drv_priv(vq);
- 	unsigned size = pd->width * pd->height;
+diff --git a/drivers/media/pci/tw68/tw68-video.c b/drivers/media/pci/tw68/tw68-video.c
+index 773a18702d36..c0a8257b02ca 100644
+--- a/drivers/media/pci/tw68/tw68-video.c
++++ b/drivers/media/pci/tw68/tw68-video.c
+@@ -360,13 +360,11 @@ static int tw68_queue_setup(struct vb2_queue *q,
+ 			   unsigned int sizes[], struct device *alloc_devs[])
+ {
+ 	struct tw68_dev *dev = vb2_get_drv_priv(q);
+-	unsigned tot_bufs = q->num_buffers + *num_buffers;
++	unsigned tot_bufs = vb2_get_num_buffers(q) + *num_buffers;
+ 	unsigned size = (dev->fmt->depth * dev->width * dev->height) >> 3;
  
--	if (vq->num_buffers + *nbuffers < 2)
--		*nbuffers = 2 - vq->num_buffers;
- 	if (*num_planes)
- 		return sizes[0] < size ? -EINVAL : 0;
- 	*num_planes = 1;
+-	if (tot_bufs < 2)
+-		tot_bufs = 2;
+ 	tot_bufs = tw68_buffer_count(size, tot_bufs);
+-	*num_buffers = tot_bufs - q->num_buffers;
++	*num_buffers = tot_bufs - vb2_get_num_buffers(q);
+ 	/*
+ 	 * We allow create_bufs, but only if the sizeimage is >= as the
+ 	 * current sizeimage. The tw68_buffer_count calculation becomes quite
 -- 
 2.39.2
 
