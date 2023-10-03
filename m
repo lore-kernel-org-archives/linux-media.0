@@ -2,35 +2,35 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FE87E75435
-	for <linux-media@archiver.kernel.org>; Tue,  3 Oct 2023 08:07:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7ED1DE75433
+	for <linux-media@archiver.kernel.org>; Tue,  3 Oct 2023 08:07:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239535AbjJCIHo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 3 Oct 2023 04:07:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50184 "EHLO
+        id S239441AbjJCIHq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 3 Oct 2023 04:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239296AbjJCIHX (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Oct 2023 04:07:23 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC22B7;
-        Tue,  3 Oct 2023 01:07:20 -0700 (PDT)
+        with ESMTP id S239339AbjJCIH0 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Oct 2023 04:07:26 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0687AC;
+        Tue,  3 Oct 2023 01:07:22 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:b6df:b784:6a0f:8451])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 04B03660731F;
-        Tue,  3 Oct 2023 09:07:17 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A37C66607347;
+        Tue,  3 Oct 2023 09:07:20 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1696320437;
-        bh=Osy0YWOEVUvzSOYoJm+JBXSigMNkmpw77qpRTwkivks=;
+        s=mail; t=1696320441;
+        bh=/rw+5kiG9NH9F1WJEwdp/d4z1jjMgH/1J5yw8ccESj4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EbF87OCFiLweOCAVwYBz906D2Uuqqjyo1DaU4a83x1EgCNBTYwy5gZz9qo/htsYON
-         W57dG31ES6IEu4tSZHfFb2XrTxlW38GP3G/vPqnFbMkXZPpOthCVmo4UcsY+HqevuC
-         dm4P7YGzMmwqEw8gqDlZ40AY8yKwG6QTTPTRNsVv2QcFmRoT2KrRTQWQNcNXkp2D0V
-         a95zAmahJKLdZppmq/5VCdP+DbCun9fGwTOaMkoGgQj/1MJHe60hkIUHSHsnZCHMBz
-         MgwUPaqqq5RY4WfMKuf6cT4xxrEF3bniL7aoLIFftCLx5OVDfk909v3YieueYFM85I
-         BkCd9Mdtfi+Sw==
+        b=ibOVzPFnCu7xS/9VbCrqUZQdqEyRNLCo9wX+6ddUTppdLjfpg5JKUxT6rr0aDAUr9
+         m9IYbLplc/jzC98cdRjFvKP5HNI9jV5ZJwKM3LkfLaM2iuZW8Mf3f95Xcz+6R+RkMU
+         Xu8735Q1UKCApDr4/vKGlv/cloc96s962UMgxTFXrNKsMorbwhnfAR34enCL35CP83
+         RyLa9tW1notemgbUD3pImo7hzkMvUboOTABmmVXg0IBMFnPrb60Fu41mJhYiTGfgkW
+         15luS1mU2lYcY8cs4fhg+/iuy7eW5O2c+yPlk8AzX5qq6VPwVqjfEF4pv4/AG6TZfp
+         AZ5/M1gpdzfEw==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -42,9 +42,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v10 08/54] media: visl: Use vb2_get_buffer() instead of directly access to buffers array
-Date:   Tue,  3 Oct 2023 10:06:17 +0200
-Message-Id: <20231003080704.43911-9-benjamin.gaignard@collabora.com>
+Subject: [PATCH v10 15/54] media: test-drivers: vicodec: Increase max supported capture queue buffers
+Date:   Tue,  3 Oct 2023 10:06:24 +0200
+Message-Id: <20231003080704.43911-16-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231003080704.43911-1-benjamin.gaignard@collabora.com>
 References: <20231003080704.43911-1-benjamin.gaignard@collabora.com>
@@ -54,70 +54,25 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use vb2_get_buffer() instead of directly access to vb2_buffer buffer array.
-This could allow to change the type bufs[] field of vb2_buffer structure if
-needed.
-After each call to vb2_get_buffer() we need to be sure that we get
-a valid pointer so check the return value of all of them.
+Allow to allocated up to 64 buffers on capture queue.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- drivers/media/test-drivers/visl/visl-dec.c | 28 ++++++++++++++++------
- 1 file changed, 21 insertions(+), 7 deletions(-)
+ drivers/media/test-drivers/vicodec/vicodec-core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/test-drivers/visl/visl-dec.c b/drivers/media/test-drivers/visl/visl-dec.c
-index 318d675e5668..ba20ea998d19 100644
---- a/drivers/media/test-drivers/visl/visl-dec.c
-+++ b/drivers/media/test-drivers/visl/visl-dec.c
-@@ -290,13 +290,20 @@ static void visl_tpg_fill(struct visl_ctx *ctx, struct visl_run *run)
- 	for (i = 0; i < out_q->num_buffers; i++) {
- 		char entry[] = "index: %u, state: %s, request_fd: %d, ";
- 		u32 old_len = len;
--		char *q_status = visl_get_vb2_state(out_q->bufs[i]->state);
-+		struct vb2_buffer *vb2;
-+		char *q_status;
-+
-+		vb2 = vb2_get_buffer(out_q, i);
-+		if (!vb2)
-+			continue;
-+
-+		q_status = visl_get_vb2_state(vb2->state);
- 
- 		len += scnprintf(&buf[len], TPG_STR_BUF_SZ - len,
- 				 entry, i, q_status,
--				 to_vb2_v4l2_buffer(out_q->bufs[i])->request_fd);
-+				 to_vb2_v4l2_buffer(vb2)->request_fd);
- 
--		len += visl_fill_bytesused(to_vb2_v4l2_buffer(out_q->bufs[i]),
-+		len += visl_fill_bytesused(to_vb2_v4l2_buffer(vb2),
- 					   &buf[len],
- 					   TPG_STR_BUF_SZ - len);
- 
-@@ -342,13 +349,20 @@ static void visl_tpg_fill(struct visl_ctx *ctx, struct visl_run *run)
- 	len = 0;
- 	for (i = 0; i < cap_q->num_buffers; i++) {
- 		u32 old_len = len;
--		char *q_status = visl_get_vb2_state(cap_q->bufs[i]->state);
-+		struct vb2_buffer *vb2;
-+		char *q_status;
-+
-+		vb2 = vb2_get_buffer(cap_q, i);
-+		if (!vb2)
-+			continue;
-+
-+		q_status = visl_get_vb2_state(vb2->state);
- 
- 		len += scnprintf(&buf[len], TPG_STR_BUF_SZ - len,
- 				 "index: %u, status: %s, timestamp: %llu, is_held: %d",
--				 cap_q->bufs[i]->index, q_status,
--				 cap_q->bufs[i]->timestamp,
--				 to_vb2_v4l2_buffer(cap_q->bufs[i])->is_held);
-+				 vb2->index, q_status,
-+				 vb2->timestamp,
-+				 to_vb2_v4l2_buffer(vb2)->is_held);
- 
- 		tpg_gen_text(&ctx->tpg, basep, line++ * line_height, 16, &buf[old_len]);
- 		frame_dprintk(ctx->dev, run->dst->sequence, "%s", &buf[old_len]);
+diff --git a/drivers/media/test-drivers/vicodec/vicodec-core.c b/drivers/media/test-drivers/vicodec/vicodec-core.c
+index 6f0e20df74e9..69cbe2c094e1 100644
+--- a/drivers/media/test-drivers/vicodec/vicodec-core.c
++++ b/drivers/media/test-drivers/vicodec/vicodec-core.c
+@@ -1718,6 +1718,7 @@ static int queue_init(void *priv, struct vb2_queue *src_vq,
+ 			V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE :
+ 			V4L2_BUF_TYPE_VIDEO_CAPTURE);
+ 	dst_vq->io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF;
++	dst_vq->max_num_buffers = 64;
+ 	dst_vq->drv_priv = ctx;
+ 	dst_vq->buf_struct_size = sizeof(struct v4l2_m2m_buffer);
+ 	dst_vq->ops = &vicodec_qops;
 -- 
 2.39.2
 
