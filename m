@@ -2,35 +2,35 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F87EE75434
-	for <linux-media@archiver.kernel.org>; Tue,  3 Oct 2023 08:08:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71CE5E75433
+	for <linux-media@archiver.kernel.org>; Tue,  3 Oct 2023 08:08:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239377AbjJCIIa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 3 Oct 2023 04:08:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47146 "EHLO
+        id S239719AbjJCIIb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 3 Oct 2023 04:08:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239498AbjJCIHi (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Oct 2023 04:07:38 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E9DC4;
-        Tue,  3 Oct 2023 01:07:34 -0700 (PDT)
+        with ESMTP id S239545AbjJCIHr (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Oct 2023 04:07:47 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3444BFF;
+        Tue,  3 Oct 2023 01:07:37 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:b6df:b784:6a0f:8451])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id AB12A660737A;
-        Tue,  3 Oct 2023 09:07:32 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4A6A4660735A;
+        Tue,  3 Oct 2023 09:07:35 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1696320453;
-        bh=ipUXv7UJIHHhxRMQZmIK4W+snIi8YRwkVW1/aAA+P6g=;
+        s=mail; t=1696320455;
+        bh=bradh2DjPo+ZZEdsMUYFEpcwZsisivarvW4Ps2cAzgo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FTp3Ij9qx3FklCKZlgKj2YKvWXUzApuFPn2mXDEOGcM7i2aNehDBbdmtAwN46GPVq
-         2NcNySXp+Upe6tPd4wr9XrrasEhX8F+U+uTFHMgfvbgLf6w0J+FHaI1EtC4JV68j+H
-         m8e05lR8IxKEgOxfu+XarKdGTopOlTLjqOJ3dnbv5JuMsS5JmVCKzMoEqWp1M5VTpT
-         DXeCdhpDLspnGEM76ID4+22BCKdGQ0UlxWWWod7XwzLmgIVJ5+Lxi352SjA2CUgh6p
-         ItthGS48tiKucRUGF8lgcpDvAQFDJbxXl56Rx5yzEs6DoH7EFCbcUkViD6wA844leC
-         v6JkzOMcMUH+g==
+        b=G0D2D57CrGK1Vq6Jq3MCmxNDB3FLxQo+v75pWD0P0s3SCtGQUQcxEk9usaKmnDiys
+         gSF2R3qROSVKa4G3IT6cdmCDuVcqzHumgPwCYUCZDXQ7v6IH4gyoPcJcxtNWZn8rTY
+         kEB5lY0+on/qdl8+1CvBWeyqYJsAxMbpSPfrit0OSoxgLWqhg2JMgEX4CVLDrb7ZQs
+         Y1ve9v38b4WmErZeO3BOjZS4TVBKvf2O83U4Cnve8g8CuuhRxXoqFmob4H5+tqtI/K
+         l7B/Bl+AOo13I56EKpTlbxs3hOLHHilPqu3OryGEEFKLOHQ2hHJdGAFsRv+Vegk9PA
+         ViiWuDk4JHlPA==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -42,9 +42,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v10 38/54] media: usb: airspy: Set min_buffers_needed to 8
-Date:   Tue,  3 Oct 2023 10:06:47 +0200
-Message-Id: <20231003080704.43911-39-benjamin.gaignard@collabora.com>
+Subject: [PATCH v10 43/54] media: imx: Stop direct calls to queue num_buffers field
+Date:   Tue,  3 Oct 2023 10:06:52 +0200
+Message-Id: <20231003080704.43911-44-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231003080704.43911-1-benjamin.gaignard@collabora.com>
 References: <20231003080704.43911-1-benjamin.gaignard@collabora.com>
@@ -54,45 +54,43 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-vb2 queue_setup checks for a minimum number of buffers so set
-min_buffers_needed to 8 and remove the useless check in
-airspy_queue_setup().
+Use vb2_get_num_buffers() to avoid using queue num_buffers field directly.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- drivers/media/usb/airspy/airspy.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ drivers/staging/media/imx/imx-media-capture.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/usb/airspy/airspy.c b/drivers/media/usb/airspy/airspy.c
-index 462eb8423506..56bc1b23d39b 100644
---- a/drivers/media/usb/airspy/airspy.c
-+++ b/drivers/media/usb/airspy/airspy.c
-@@ -483,15 +483,10 @@ static int airspy_queue_setup(struct vb2_queue *vq,
+diff --git a/drivers/staging/media/imx/imx-media-capture.c b/drivers/staging/media/imx/imx-media-capture.c
+index 4846078315ff..ce02199e7b1b 100644
+--- a/drivers/staging/media/imx/imx-media-capture.c
++++ b/drivers/staging/media/imx/imx-media-capture.c
+@@ -605,6 +605,7 @@ static int capture_queue_setup(struct vb2_queue *vq,
  {
- 	struct airspy *s = vb2_get_drv_priv(vq);
+ 	struct capture_priv *priv = vb2_get_drv_priv(vq);
+ 	struct v4l2_pix_format *pix = &priv->vdev.fmt;
++	unsigned int q_num_bufs = vb2_get_num_buffers(vq);
+ 	unsigned int count = *nbuffers;
  
--	dev_dbg(s->dev, "nbuffers=%d\n", *nbuffers);
--
--	/* Need at least 8 buffers */
--	if (vq->num_buffers + *nbuffers < 8)
--		*nbuffers = 8 - vq->num_buffers;
- 	*nplanes = 1;
- 	sizes[0] = PAGE_ALIGN(s->buffersize);
+ 	if (vq->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
+@@ -613,14 +614,14 @@ static int capture_queue_setup(struct vb2_queue *vq,
+ 	if (*nplanes) {
+ 		if (*nplanes != 1 || sizes[0] < pix->sizeimage)
+ 			return -EINVAL;
+-		count += vq->num_buffers;
++		count += q_num_bufs;
+ 	}
  
--	dev_dbg(s->dev, "nbuffers=%d sizes[0]=%d\n", *nbuffers, sizes[0]);
-+	dev_dbg(s->dev, "nbuffers=%d sizes[0]=%d\n", vb2_get_num_buffers(vq), sizes[0]);
- 	return 0;
- }
+ 	count = min_t(__u32, VID_MEM_LIMIT / pix->sizeimage, count);
  
-@@ -1011,6 +1006,8 @@ static int airspy_probe(struct usb_interface *intf,
- 	/* Init videobuf2 queue structure */
- 	s->vb_queue.type = V4L2_BUF_TYPE_SDR_CAPTURE;
- 	s->vb_queue.io_modes = VB2_MMAP | VB2_USERPTR | VB2_READ;
-+	/* Need at least 8 buffers */
-+	s->vb_queue.min_buffers_needed = 8;
- 	s->vb_queue.drv_priv = s;
- 	s->vb_queue.buf_struct_size = sizeof(struct airspy_frame_buf);
- 	s->vb_queue.ops = &airspy_vb2_ops;
+ 	if (*nplanes)
+-		*nbuffers = (count < vq->num_buffers) ? 0 :
+-			count - vq->num_buffers;
++		*nbuffers = (count < q_num_bufs) ? 0 :
++			count - q_num_bufs;
+ 	else
+ 		*nbuffers = count;
+ 
 -- 
 2.39.2
 
