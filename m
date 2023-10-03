@@ -2,35 +2,35 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFF3AE75436
-	for <linux-media@archiver.kernel.org>; Tue,  3 Oct 2023 08:08:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F35EE75434
+	for <linux-media@archiver.kernel.org>; Tue,  3 Oct 2023 08:08:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239659AbjJCIIR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 3 Oct 2023 04:08:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40748 "EHLO
+        id S239676AbjJCIIT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 3 Oct 2023 04:08:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239490AbjJCIHi (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Oct 2023 04:07:38 -0400
+        with ESMTP id S239317AbjJCIH1 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Oct 2023 04:07:27 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1EAD1B4;
-        Tue,  3 Oct 2023 01:07:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485FEBF;
+        Tue,  3 Oct 2023 01:07:24 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:b6df:b784:6a0f:8451])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 139D16607372;
-        Tue,  3 Oct 2023 09:07:31 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BEF0C6607314;
+        Tue,  3 Oct 2023 09:07:22 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1696320451;
-        bh=N6G4XfbycDnQUCOa7KuKCVKXaGxpGnmE1Di5qhpdnGM=;
+        s=mail; t=1696320443;
+        bh=WDraZOgWi0izES0K9FdWnGrtWWF6tf7zOBBP/EoWBNg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ous9vBJXl4Is8k+bDEceHHXnDJnaHLB7Oorw/14K8akp/zMks9AqOP3lRsd126Kt9
-         +EjWLKH/FSWgP1v18KVxw/UzaiqPXWG6kbv88zNYQYAEVq1cw2wEEIwWcRfgCh88qz
-         0A+b9vCH5C0fzq2ZqoqC08JOCQJnBbuA7ywbPPQQGub8YfO8qkRVX+LbCTH4+Hclyr
-         BqXIrPFwN9G8alXmaWZe52HupIqpPx7WgnsjaWFWRl92cX/pmM65fYxNwnCs9E9BVz
-         mXW/gQPptwYNpMIXqPP9ti0tjIEugxEyaaOhVhRbyXJDbDlzn4kBpioDuhAqipTwoW
-         06/bGG5815YrA==
+        b=AKIQaoUk2fGDLfp0rpz/XWAmOnlLOuct2tROky827WNyQ2qdU0p+WNIe2bNMaNcwW
+         /B0Q0IgLPbIz8cZuE1Z8pFh+n3/+6vuk5P+cBFmkPTjgVXXDlM7GE5FB+lhURkmtSx
+         cBmI1B9S8dC1u6vYJno9rXZxwuQfRDpmudYFKxUtpUQBws/x9YoAvtxHMHluxvRFaL
+         ZnfLn4KJEKDHH3Y8F9IBO6xsG9JKWbNMJHTC2YnfaCXOsE91+1V+w/SmEVm6DRaSTP
+         seibkyxkKQeEkL3dpSNusx8KUjJadKRt0D1afPZ0tjLpBs2Ni6pclLnh9aisk4Cpa0
+         GPauDQjLVd6YA==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -42,9 +42,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v10 35/54] media: ti: Use queue min_buffers_needed field to set the min number of buffers
-Date:   Tue,  3 Oct 2023 10:06:44 +0200
-Message-Id: <20231003080704.43911-36-benjamin.gaignard@collabora.com>
+Subject: [PATCH v10 19/54] media: verisilicon: vp9: Allow to change resolution while streaming
+Date:   Tue,  3 Oct 2023 10:06:28 +0200
+Message-Id: <20231003080704.43911-20-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231003080704.43911-1-benjamin.gaignard@collabora.com>
 References: <20231003080704.43911-1-benjamin.gaignard@collabora.com>
@@ -54,137 +54,64 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When queue min_buffers_needed field is correctly set vb2 queue_setup()
-does take care of it and we can remove the checks from drivers.
+Remove all checks that prohibit to set a new format while streaming.
+This allow to change dynamically the resolution if the pixel format
+remains the same.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- drivers/media/platform/ti/am437x/am437x-vpfe.c   | 7 ++-----
- drivers/media/platform/ti/cal/cal-video.c        | 5 +----
- drivers/media/platform/ti/davinci/vpif_capture.c | 5 +----
- drivers/media/platform/ti/davinci/vpif_display.c | 5 +----
- drivers/media/platform/ti/omap/omap_vout.c       | 5 +++--
- 5 files changed, 8 insertions(+), 19 deletions(-)
+ .../media/platform/verisilicon/hantro_v4l2.c  | 24 +++----------------
+ 1 file changed, 3 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/media/platform/ti/am437x/am437x-vpfe.c b/drivers/media/platform/ti/am437x/am437x-vpfe.c
-index 5fa2ea9025d9..80a74ee59bb9 100644
---- a/drivers/media/platform/ti/am437x/am437x-vpfe.c
-+++ b/drivers/media/platform/ti/am437x/am437x-vpfe.c
-@@ -1772,9 +1772,6 @@ static int vpfe_queue_setup(struct vb2_queue *vq,
- 	struct vpfe_device *vpfe = vb2_get_drv_priv(vq);
- 	unsigned size = vpfe->fmt.fmt.pix.sizeimage;
+diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
+index f0d8b165abcd..27a1e77cca38 100644
+--- a/drivers/media/platform/verisilicon/hantro_v4l2.c
++++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
+@@ -514,25 +514,14 @@ static int hantro_set_fmt_out(struct hantro_ctx *ctx,
+ 		return ret;
  
--	if (vq->num_buffers + *nbuffers < 3)
--		*nbuffers = 3 - vq->num_buffers;
+ 	if (!ctx->is_encoder) {
+-		struct vb2_queue *peer_vq;
 -
- 	if (*nplanes) {
- 		if (sizes[0] < size)
- 			return -EINVAL;
-@@ -1785,7 +1782,7 @@ static int vpfe_queue_setup(struct vb2_queue *vq,
- 	sizes[0] = size;
- 
- 	vpfe_dbg(1, vpfe,
--		"nbuffers=%d, size=%u\n", *nbuffers, sizes[0]);
-+		"nbuffers=%u, size=%u\n", vb2_get_num_buffers(vq), sizes[0]);
- 
- 	/* Calculate field offset */
- 	vpfe_calculate_offsets(vpfe);
-@@ -2233,7 +2230,7 @@ static int vpfe_probe_complete(struct vpfe_device *vpfe)
- 	q->buf_struct_size = sizeof(struct vpfe_cap_buffer);
- 	q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
- 	q->lock = &vpfe->lock;
--	q->min_buffers_needed = 1;
-+	q->min_buffers_needed = 3;
- 	q->dev = vpfe->pdev;
- 
- 	err = vb2_queue_init(q);
-diff --git a/drivers/media/platform/ti/cal/cal-video.c b/drivers/media/platform/ti/cal/cal-video.c
-index a8abcd0fee17..924465b37e5f 100644
---- a/drivers/media/platform/ti/cal/cal-video.c
-+++ b/drivers/media/platform/ti/cal/cal-video.c
-@@ -604,9 +604,6 @@ static int cal_queue_setup(struct vb2_queue *vq,
- 	struct cal_ctx *ctx = vb2_get_drv_priv(vq);
- 	unsigned int size = ctx->v_fmt.fmt.pix.sizeimage;
- 
--	if (vq->num_buffers + *nbuffers < 3)
--		*nbuffers = 3 - vq->num_buffers;
--
- 	if (*nplanes) {
- 		if (sizes[0] < size)
- 			return -EINVAL;
-@@ -616,7 +613,7 @@ static int cal_queue_setup(struct vb2_queue *vq,
- 	*nplanes = 1;
- 	sizes[0] = size;
- 
--	ctx_dbg(3, ctx, "nbuffers=%d, size=%d\n", *nbuffers, sizes[0]);
-+	ctx_dbg(3, ctx, "nbuffers=%d, size=%d\n", vb2_get_num_buffers(vq), sizes[0]);
- 
- 	return 0;
- }
-diff --git a/drivers/media/platform/ti/davinci/vpif_capture.c b/drivers/media/platform/ti/davinci/vpif_capture.c
-index 99fae8830c41..8a4cc62cf562 100644
---- a/drivers/media/platform/ti/davinci/vpif_capture.c
-+++ b/drivers/media/platform/ti/davinci/vpif_capture.c
-@@ -122,9 +122,6 @@ static int vpif_buffer_queue_setup(struct vb2_queue *vq,
- 		size = sizes[0];
- 	}
- 
--	if (vq->num_buffers + *nbuffers < 3)
--		*nbuffers = 3 - vq->num_buffers;
--
- 	*nplanes = 1;
- 	sizes[0] = size;
- 
-@@ -1428,7 +1425,7 @@ static int vpif_probe_complete(void)
- 		q->mem_ops = &vb2_dma_contig_memops;
- 		q->buf_struct_size = sizeof(struct vpif_cap_buffer);
- 		q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
--		q->min_buffers_needed = 1;
-+		q->min_buffers_needed = 3;
- 		q->lock = &common->lock;
- 		q->dev = vpif_dev;
- 
-diff --git a/drivers/media/platform/ti/davinci/vpif_display.c b/drivers/media/platform/ti/davinci/vpif_display.c
-index f8ec2991c667..6fc32314cf9c 100644
---- a/drivers/media/platform/ti/davinci/vpif_display.c
-+++ b/drivers/media/platform/ti/davinci/vpif_display.c
-@@ -122,9 +122,6 @@ static int vpif_buffer_queue_setup(struct vb2_queue *vq,
- 		size = sizes[0];
- 	}
- 
--	if (vq->num_buffers + *nbuffers < 3)
--		*nbuffers = 3 - vq->num_buffers;
--
- 	*nplanes = 1;
- 	sizes[0] = size;
- 
-@@ -1168,7 +1165,7 @@ static int vpif_probe_complete(void)
- 		q->mem_ops = &vb2_dma_contig_memops;
- 		q->buf_struct_size = sizeof(struct vpif_disp_buffer);
- 		q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
--		q->min_buffers_needed = 1;
-+		q->min_buffers_needed = 3;
- 		q->lock = &common->lock;
- 		q->dev = vpif_dev;
- 		err = vb2_queue_init(q);
-diff --git a/drivers/media/platform/ti/omap/omap_vout.c b/drivers/media/platform/ti/omap/omap_vout.c
-index 4143274089c3..72ce903717d3 100644
---- a/drivers/media/platform/ti/omap/omap_vout.c
-+++ b/drivers/media/platform/ti/omap/omap_vout.c
-@@ -944,10 +944,11 @@ static int omap_vout_vb2_queue_setup(struct vb2_queue *vq,
- 				     struct device *alloc_devs[])
+ 		/*
+ 		 * In order to support dynamic resolution change,
+ 		 * the decoder admits a resolution change, as long
+-		 * as the pixelformat remains. Can't be done if streaming.
+-		 */
+-		if (vb2_is_streaming(vq) || (vb2_is_busy(vq) &&
+-		    pix_mp->pixelformat != ctx->src_fmt.pixelformat))
+-			return -EBUSY;
+-		/*
+-		 * Since format change on the OUTPUT queue will reset
+-		 * the CAPTURE queue, we can't allow doing so
+-		 * when the CAPTURE queue has buffers allocated.
++		 * as the pixelformat remains.
+ 		 */
+-		peer_vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx,
+-					  V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
+-		if (vb2_is_busy(peer_vq))
++		if (vb2_is_streaming(vq) && pix_mp->pixelformat != ctx->src_fmt.pixelformat) {
+ 			return -EBUSY;
++		}
+ 	} else {
+ 		/*
+ 		 * The encoder doesn't admit a format change if
+@@ -577,15 +566,8 @@ static int hantro_set_fmt_out(struct hantro_ctx *ctx,
+ static int hantro_set_fmt_cap(struct hantro_ctx *ctx,
+ 			      struct v4l2_pix_format_mplane *pix_mp)
  {
- 	struct omap_vout_device *vout = vb2_get_drv_priv(vq);
-+	unsigned int q_num_bufs = vb2_get_num_buffers(vq);
- 	int size = vout->pix.sizeimage;
+-	struct vb2_queue *vq;
+ 	int ret;
  
--	if (is_rotation_enabled(vout) && vq->num_buffers + *nbufs > VRFB_NUM_BUFS) {
--		*nbufs = VRFB_NUM_BUFS - vq->num_buffers;
-+	if (is_rotation_enabled(vout) && q_num_bufs + *nbufs > VRFB_NUM_BUFS) {
-+		*nbufs = VRFB_NUM_BUFS - q_num_bufs;
- 		if (*nbufs == 0)
- 			return -EINVAL;
- 	}
+-	/* Change not allowed if queue is busy. */
+-	vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx,
+-			     V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
+-	if (vb2_is_busy(vq))
+-		return -EBUSY;
+-
+ 	if (ctx->is_encoder) {
+ 		struct vb2_queue *peer_vq;
+ 
 -- 
 2.39.2
 
