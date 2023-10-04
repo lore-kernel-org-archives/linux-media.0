@@ -2,45 +2,45 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF945E7B5E7
-	for <linux-media@archiver.kernel.org>; Wed,  4 Oct 2023 10:37:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BEC45E7B5E9
+	for <linux-media@archiver.kernel.org>; Wed,  4 Oct 2023 10:37:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233055AbjJDKh5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 4 Oct 2023 06:37:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35618 "EHLO
+        id S233166AbjJDKh6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 4 Oct 2023 06:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232713AbjJDKh5 (ORCPT
+        with ESMTP id S232879AbjJDKh5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Wed, 4 Oct 2023 06:37:57 -0400
-Received: from mx08-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A5DAC;
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515D4AF;
         Wed,  4 Oct 2023 03:37:53 -0700 (PDT)
-Received: from pps.filterd (m0369457.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 394A3871022388;
-        Wed, 4 Oct 2023 12:37:32 +0200
+Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 394AEoCZ026784;
+        Wed, 4 Oct 2023 12:37:30 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding:content-type; s=
-        selector1; bh=bgESotg1ucUNSxBe+XGbEGaW9PYWluU0WM6A0IsNEdg=; b=Dh
-        TkSwk68XxCzi7PobhB0rUzKN57p+5wFuuVF0eGrzAl9O2MONGD6dZYCoYDs5wHg0
-        g02IODDZYqmmzIMwzdD/LUdYcd1Rx5S00w/1i2kUXnSbYpCNAXOc2GlBmbdZ3HLm
-        ctRH8+ZVrSTB9jIY7eqtNFAbxmK524hwCTSXg5mjjrUWlVTMjqVg/wFqOZqLnN4C
-        W29G6ar14K9YQ36dHyE+pxSWg6/WUXDg5R7NXWmKqDv24dC84CKjjLo/b5C7W0zZ
-        Q3WHXdFqo9vnDxAVSYVOLryRCZJp69/bno1rSMpu9UHRGq95BeUmGOLBuHm6NaXR
-        Y29qCeTOVd8y6uLy5+wg==
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding:content-type; s=selector1; bh=CpI7neB
+        XhCSjFx6tMjeMOMf+DEVU5RTw/WINZZr8x8k=; b=FqfspHoPTMg+H9TBxgX/CzP
+        VNndxrfDVRa6vRMPU6nwgIXSd+U8PcGRsqkPZHK5dFOzoMmyflPjedA2mgruxcJZ
+        pYvUIj5V+k97SEde0mkLRy32PHpx+ZSBgsE5s0V5n2xcM4ncc0wXPYX96HY5Pp6i
+        sCp/JCVyyITge+04lBPa1sKNYuq2NJ3eK6xCcvnsl2ixgg5mcM+Rcbxbuse8T2Us
+        YaV94BKrXQn+AiOmPs1kdCnkIhbovL2GI6aeBKiaeldxJOeBY3akHUohKj5zx0so
+        e0EYyVN9DpdL1pBiPVJmljU6T8ePUo/J5a0/DJqSIKiNWzWNRDyc7fK84hrxuag=
+        =
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3texmj69fk-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3tew80p71d-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 Oct 2023 12:37:32 +0200 (MEST)
+        Wed, 04 Oct 2023 12:37:29 +0200 (MEST)
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id AC88B10005C;
-        Wed,  4 Oct 2023 12:37:31 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1C0B1100053;
+        Wed,  4 Oct 2023 12:37:28 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A12E2231510;
-        Wed,  4 Oct 2023 12:37:31 +0200 (CEST)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0CDEC231510;
+        Wed,  4 Oct 2023 12:37:28 +0200 (CEST)
 Received: from localhost (10.201.20.120) by SHFDAG1NODE1.st.com (10.75.129.69)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 4 Oct
- 2023 12:37:31 +0200
+ 2023 12:37:27 +0200
 From:   Hugues Fruchet <hugues.fruchet@foss.st.com>
 To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Philipp Zabel <p.zabel@pengutronix.de>,
@@ -68,12 +68,10 @@ To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
 CC:     Hugues Fruchet <hugues.fruchet@foss.st.com>,
         Marco Felsch <m.felsch@pengutronix.de>,
         Adam Ford <aford173@gmail.com>
-Subject: [RFC 4/6] media: hantro: add VP8 encode support for STM32MP25 VENC
-Date:   Wed, 4 Oct 2023 12:37:18 +0200
-Message-ID: <20231004103720.3540436-5-hugues.fruchet@foss.st.com>
+Subject: [RFC 0/6] VP8 H1 stateless encoding
+Date:   Wed, 4 Oct 2023 12:37:14 +0200
+Message-ID: <20231004103720.3540436-1-hugues.fruchet@foss.st.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231004103720.3540436-1-hugues.fruchet@foss.st.com>
-References: <20231004103720.3540436-1-hugues.fruchet@foss.st.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -87,60 +85,67 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add VP8 stateless support for STM32MP25 VENC video hardware encoder.
+Hi all,
 
-Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
----
- .../platform/verisilicon/stm32mp25_venc_hw.c  | 22 ++++++++++++++++++-
- 1 file changed, 21 insertions(+), 1 deletion(-)
+Here is an RFC to support VP8 encoding using Hantro H1 hardware
+of STM32MP25 SoCs (Verisilicon VC8000NanoE IP).
+This work is derived from work done to support Rockchip RK3399
+VPU2 in RFC [1] with a reshuffling of registers to match H1
+register set.
 
-diff --git a/drivers/media/platform/verisilicon/stm32mp25_venc_hw.c b/drivers/media/platform/verisilicon/stm32mp25_venc_hw.c
-index 0aac33afcadc..2176eccd1f79 100644
---- a/drivers/media/platform/verisilicon/stm32mp25_venc_hw.c
-+++ b/drivers/media/platform/verisilicon/stm32mp25_venc_hw.c
-@@ -87,6 +87,19 @@ static const struct hantro_fmt stm32mp25_venc_fmts[] = {
- 			.step_height = MB_DIM,
- 		},
- 	},
-+	{
-+		.fourcc = V4L2_PIX_FMT_VP8_FRAME,
-+		.codec_mode = HANTRO_MODE_VP8_ENC,
-+		.max_depth = 2,
-+		.frmsize = {
-+			.min_width = 96,
-+			.max_width = 4080,
-+			.step_width = MB_DIM,
-+			.min_height = 96,
-+			.max_height = 4080,
-+			.step_height = MB_DIM,
-+		},
-+	},
- };
- 
- static irqreturn_t stm32mp25_venc_irq(int irq, void *dev_id)
-@@ -120,6 +133,13 @@ static const struct hantro_codec_ops stm32mp25_venc_codec_ops[] = {
- 		.reset = stm32mp25_venc_reset,
- 		.done = hantro_h1_jpeg_enc_done,
- 	},
-+	[HANTRO_MODE_VP8_ENC] = {
-+		.run = hantro_h1_vp8_enc_run,
-+		.reset = stm32mp25_venc_reset,
-+		.init = hantro_vp8_enc_init,
-+		.done = hantro_h1_vp8_enc_done,
-+		.exit = hantro_vp8_enc_exit,
-+	},
- };
- 
- /*
-@@ -137,7 +157,7 @@ static const char * const stm32mp25_venc_clk_names[] = {
- const struct hantro_variant stm32mp25_venc_variant = {
- 	.enc_fmts = stm32mp25_venc_fmts,
- 	.num_enc_fmts = ARRAY_SIZE(stm32mp25_venc_fmts),
--	.codec = HANTRO_JPEG_ENCODER,
-+	.codec = HANTRO_JPEG_ENCODER | HANTRO_VP8_ENCODER,
- 	.codec_ops = stm32mp25_venc_codec_ops,
- 	.irqs = stm32mp25_venc_irqs,
- 	.num_irqs = ARRAY_SIZE(stm32mp25_venc_irqs),
+This has been tested on STM32MP257F-EV1 evaluation board using
+GStreamer userspace [2]:
+gst-launch-1.0 videotestsrc num-buffers=500 ! video/x-raw,width=640,height=480 \
+! v4l2slvp8enc ! queue ! matroskamux ! filesink location=test_vp8.mkv
+
+For the sake of simplicity I have embedded here the RFC [1] before the
+changes related to this exact RFC, all rebased on v6.6 + STM32MP25
+hardware codecs support [3].
+
+[1] https://lwn.net/ml/linux-media/20230309125651.23911-1-andrzej.p@collabora.com/
+[2] https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/3736
+[3] https://patchwork.kernel.org/project/linux-media/list/?series=789861
+
+Best regards,
+Hugues.
+
+
+Andrzej Pietrasiewicz (2):
+  media: uapi: Add VP8 stateless encoder controls
+  media: hantro: add VP8 encode support for Rockchip RK3399 VPU2
+
+Hugues Fruchet (4):
+  media: hantro: add h1 vp8 encode support
+  media: hantro: add VP8 encode support for STM32MP25 VENC
+  media: hantro: h1: NV12 single-plane support
+  media: hantro: add NV12 single-plane support for STM32MP25 VENC
+
+ drivers/media/platform/verisilicon/Makefile   |    3 +
+ drivers/media/platform/verisilicon/hantro.h   |   10 +
+ .../platform/verisilicon/hantro_boolenc.c     |   69 +
+ .../platform/verisilicon/hantro_boolenc.h     |   21 +
+ .../media/platform/verisilicon/hantro_drv.c   |   15 +-
+ .../platform/verisilicon/hantro_h1_jpeg_enc.c |   42 +-
+ .../platform/verisilicon/hantro_h1_regs.h     |   71 +-
+ .../platform/verisilicon/hantro_h1_vp8_enc.c  | 1589 +++++++++++++++++
+ .../media/platform/verisilicon/hantro_hw.h    |   93 +
+ .../media/platform/verisilicon/hantro_v4l2.c  |    5 +-
+ .../media/platform/verisilicon/hantro_vp8.c   |  118 ++
+ .../verisilicon/rockchip_vpu2_hw_vp8_enc.c    | 1574 ++++++++++++++++
+ .../platform/verisilicon/rockchip_vpu2_regs.h |    1 +
+ .../platform/verisilicon/rockchip_vpu_hw.c    |   23 +-
+ .../platform/verisilicon/stm32mp25_venc_hw.c  |   35 +-
+ drivers/media/v4l2-core/v4l2-ctrls-core.c     |   13 +
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c     |    5 +
+ include/media/v4l2-ctrls.h                    |    2 +
+ include/uapi/linux/v4l2-controls.h            |   91 +
+ include/uapi/linux/videodev2.h                |    3 +
+ 20 files changed, 3755 insertions(+), 28 deletions(-)
+ create mode 100644 drivers/media/platform/verisilicon/hantro_boolenc.c
+ create mode 100644 drivers/media/platform/verisilicon/hantro_boolenc.h
+ create mode 100644 drivers/media/platform/verisilicon/hantro_h1_vp8_enc.c
+ create mode 100644 drivers/media/platform/verisilicon/rockchip_vpu2_hw_vp8_enc.c
+
 -- 
 2.25.1
 
