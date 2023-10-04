@@ -2,138 +2,145 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD47DE7B5E2
-	for <linux-media@archiver.kernel.org>; Wed,  4 Oct 2023 09:44:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF945E7B5E7
+	for <linux-media@archiver.kernel.org>; Wed,  4 Oct 2023 10:37:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242069AbjJDJou (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 4 Oct 2023 05:44:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59800 "EHLO
+        id S233055AbjJDKh5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 4 Oct 2023 06:37:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242061AbjJDJot (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Oct 2023 05:44:49 -0400
-Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.186])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E81A7
-        for <linux-media@vger.kernel.org>; Wed,  4 Oct 2023 02:44:45 -0700 (PDT)
-X-KPN-MessageId: a55cff68-629a-11ee-90ec-00505699b430
-Received: from smtp.kpnmail.nl (unknown [10.31.155.6])
-        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-        id a55cff68-629a-11ee-90ec-00505699b430;
-        Wed, 04 Oct 2023 11:44:43 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=xs4all.nl; s=xs4all01;
-        h=content-type:from:to:subject:mime-version:date:message-id;
-        bh=tCQwTOg6EZKsFKGY5sd1RNw/73pN54y1SZSPjSAVn8I=;
-        b=oezxJrbr/5RfXfBOSjdu+s1GfCosGCieowWwfcVTt67mz3mzTTR3WUOofIOqSKwTT4K5V6WUWMAoj
-         fxh1fwxgjJhzcZ1ghcheqxJYTUCGcN5M4R3FM2SubhBoLTbxDS09hcQAeI5wJSYLMnx/EB54lchgZf
-         C939FWzE7DzKYZ4ugGnsqiFtDog6M+3pbe0eLx0F8YkVGz6S2OtNmqnHtbdEzigNSEMnYkglrAhmvE
-         lTxueqX2nmJDwJ+YD0xRKpwcdnAKgetdISnb3rB+kRIZKGKdIuLARCrEFl2XAjsa8R52MBgppU7G+f
-         5JDsh0AnLl4MsW8q1iTyZ4PTM0AoOFA==
-X-KPN-MID: 33|Xd2evYbjuV5WodjIv7ET3yz4MvAFrxM4WViBb/7fy555PjwH3usDI52Zuluo6ay
- 3rJ2RRQ/6dYUeDvlbVPs0GuS4n+709RhxBFgMG2R/WAY=
-X-KPN-VerifiedSender: Yes
-X-CMASSUN: 33|75fSE3b2QWEuqiHfLRtQWid1FHJBGvTZe3i6M7ZKEpfN0IpQSyDjQm98kiR87tU
- vQaL5h0k94vgbfICUJiqdPQ==
-X-Originating-IP: 173.38.220.46
-Received: from [10.47.77.214] (unknown [173.38.220.46])
-        by smtp.xs4all.nl (Halon) with ESMTPSA
-        id a4ba84e5-629a-11ee-9dc8-00505699772e;
-        Wed, 04 Oct 2023 11:44:43 +0200 (CEST)
-Message-ID: <3173f083-ae6c-4f57-be00-05203bf798a3@xs4all.nl>
-Date:   Wed, 4 Oct 2023 11:44:39 +0200
+        with ESMTP id S232713AbjJDKh5 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Oct 2023 06:37:57 -0400
+Received: from mx08-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A5DAC;
+        Wed,  4 Oct 2023 03:37:53 -0700 (PDT)
+Received: from pps.filterd (m0369457.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 394A3871022388;
+        Wed, 4 Oct 2023 12:37:32 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+        from:to:cc:subject:date:message-id:in-reply-to:references
+        :mime-version:content-transfer-encoding:content-type; s=
+        selector1; bh=bgESotg1ucUNSxBe+XGbEGaW9PYWluU0WM6A0IsNEdg=; b=Dh
+        TkSwk68XxCzi7PobhB0rUzKN57p+5wFuuVF0eGrzAl9O2MONGD6dZYCoYDs5wHg0
+        g02IODDZYqmmzIMwzdD/LUdYcd1Rx5S00w/1i2kUXnSbYpCNAXOc2GlBmbdZ3HLm
+        ctRH8+ZVrSTB9jIY7eqtNFAbxmK524hwCTSXg5mjjrUWlVTMjqVg/wFqOZqLnN4C
+        W29G6ar14K9YQ36dHyE+pxSWg6/WUXDg5R7NXWmKqDv24dC84CKjjLo/b5C7W0zZ
+        Q3WHXdFqo9vnDxAVSYVOLryRCZJp69/bno1rSMpu9UHRGq95BeUmGOLBuHm6NaXR
+        Y29qCeTOVd8y6uLy5+wg==
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3texmj69fk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 Oct 2023 12:37:32 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id AC88B10005C;
+        Wed,  4 Oct 2023 12:37:31 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A12E2231510;
+        Wed,  4 Oct 2023 12:37:31 +0200 (CEST)
+Received: from localhost (10.201.20.120) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 4 Oct
+ 2023 12:37:31 +0200
+From:   Hugues Fruchet <hugues.fruchet@foss.st.com>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        <linux-media@vger.kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-rockchip@lists.infradead.org>
+CC:     Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Adam Ford <aford173@gmail.com>
+Subject: [RFC 4/6] media: hantro: add VP8 encode support for STM32MP25 VENC
+Date:   Wed, 4 Oct 2023 12:37:18 +0200
+Message-ID: <20231004103720.3540436-5-hugues.fruchet@foss.st.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20231004103720.3540436-1-hugues.fruchet@foss.st.com>
+References: <20231004103720.3540436-1-hugues.fruchet@foss.st.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] v4l2-compliance: add EOPNOTSUPP for create_bufs
-To:     Deborah Brouwer <deborah.brouwer@collabora.com>
-Cc:     linux-media@vger.kernel.org, nicolas.dufresne@collabora.com,
-        sebastian.fricke@collabora.com, nas.chung@chipsnmedia.com,
-        jackson.lee@chipsnmedia.com
-References: <20231003224536.13199-1-deborah.brouwer@collabora.com>
-Content-Language: en-US
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20231003224536.13199-1-deborah.brouwer@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.201.20.120]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-04_02,2023-10-02_01,2023-05-22_02
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Deb,
+Add VP8 stateless support for STM32MP25 VENC video hardware encoder.
 
-On 10/4/23 00:45, Deborah Brouwer wrote:
-> If VIDIOC_CREATE_BUFS is supported on one queue but not the other, then
-> the driver should return EOPNOTSUPP for the unsupported queue only.
-> 
-> Signed-off-by: Deborah Brouwer <deborah.brouwer@collabora.com>
-> ---
-> On the wave5 driver, v4l2-compliance -d0 -v now shows:
-> <snip>
-> Buffer ioctls:
->         info: test buftype Video Capture Multiplanar
->         info: VIDIOC_CREATE_BUFS not supported for Video Capture Multiplanar
->         info: test buftype Video Output Multiplanar
->     test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
->     test VIDIOC_EXPBUF: OK
->         info: could not test the Request API, no suitable control found
->     test Requests: OK (Not Supported)
-> 
-> Total for wave5-dec device /dev/video0: 45, Succeeded: 45, Failed: 0, Warnings: 0
-> 
->  utils/v4l2-compliance/v4l2-compliance.h     | 1 +
->  utils/v4l2-compliance/v4l2-test-buffers.cpp | 8 ++++++++
->  2 files changed, 9 insertions(+)
-> 
-> diff --git a/utils/v4l2-compliance/v4l2-compliance.h b/utils/v4l2-compliance/v4l2-compliance.h
-> index 7caf254b..99c98916 100644
-> --- a/utils/v4l2-compliance/v4l2-compliance.h
-> +++ b/utils/v4l2-compliance/v4l2-compliance.h
-> @@ -165,6 +165,7 @@ struct base_node {
->  	bool supports_orphaned_bufs;
->  	// support for this was introduced in 5.9
->  	bool might_support_cache_hints;
-> +	bool create_bufs_on_one_queue_only;
+Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
+---
+ .../platform/verisilicon/stm32mp25_venc_hw.c  | 22 ++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
 
-No need to add this here.
+diff --git a/drivers/media/platform/verisilicon/stm32mp25_venc_hw.c b/drivers/media/platform/verisilicon/stm32mp25_venc_hw.c
+index 0aac33afcadc..2176eccd1f79 100644
+--- a/drivers/media/platform/verisilicon/stm32mp25_venc_hw.c
++++ b/drivers/media/platform/verisilicon/stm32mp25_venc_hw.c
+@@ -87,6 +87,19 @@ static const struct hantro_fmt stm32mp25_venc_fmts[] = {
+ 			.step_height = MB_DIM,
+ 		},
+ 	},
++	{
++		.fourcc = V4L2_PIX_FMT_VP8_FRAME,
++		.codec_mode = HANTRO_MODE_VP8_ENC,
++		.max_depth = 2,
++		.frmsize = {
++			.min_width = 96,
++			.max_width = 4080,
++			.step_width = MB_DIM,
++			.min_height = 96,
++			.max_height = 4080,
++			.step_height = MB_DIM,
++		},
++	},
+ };
+ 
+ static irqreturn_t stm32mp25_venc_irq(int irq, void *dev_id)
+@@ -120,6 +133,13 @@ static const struct hantro_codec_ops stm32mp25_venc_codec_ops[] = {
+ 		.reset = stm32mp25_venc_reset,
+ 		.done = hantro_h1_jpeg_enc_done,
+ 	},
++	[HANTRO_MODE_VP8_ENC] = {
++		.run = hantro_h1_vp8_enc_run,
++		.reset = stm32mp25_venc_reset,
++		.init = hantro_vp8_enc_init,
++		.done = hantro_h1_vp8_enc_done,
++		.exit = hantro_vp8_enc_exit,
++	},
+ };
+ 
+ /*
+@@ -137,7 +157,7 @@ static const char * const stm32mp25_venc_clk_names[] = {
+ const struct hantro_variant stm32mp25_venc_variant = {
+ 	.enc_fmts = stm32mp25_venc_fmts,
+ 	.num_enc_fmts = ARRAY_SIZE(stm32mp25_venc_fmts),
+-	.codec = HANTRO_JPEG_ENCODER,
++	.codec = HANTRO_JPEG_ENCODER | HANTRO_VP8_ENCODER,
+ 	.codec_ops = stm32mp25_venc_codec_ops,
+ 	.irqs = stm32mp25_venc_irqs,
+ 	.num_irqs = ARRAY_SIZE(stm32mp25_venc_irqs),
+-- 
+2.25.1
 
->  };
->  
->  struct node : public base_node, public cv4l_fd {
-> diff --git a/utils/v4l2-compliance/v4l2-test-buffers.cpp b/utils/v4l2-compliance/v4l2-test-buffers.cpp
-> index 6d592c9b..e709580b 100644
-> --- a/utils/v4l2-compliance/v4l2-test-buffers.cpp
-> +++ b/utils/v4l2-compliance/v4l2-test-buffers.cpp
-> @@ -693,6 +693,14 @@ int testReqBufs(struct node *node)
->  				warn("VIDIOC_CREATE_BUFS not supported\n");
->  				break;
->  			}
-> +			if (ret == EOPNOTSUPP) {
-> +				/* VIDIOC_CREATE_BUFS is supported on one queue but not the other. */
-> +				fail_on_test(node->create_bufs_on_one_queue_only);
-> +				node->create_bufs_on_one_queue_only = true;
-> +				info("VIDIOC_CREATE_BUFS not supported for %s\n",
-> +				     buftype2s(q.g_type()).c_str());
-> +				break;
-> +			}
-
-It is sufficient to have it as a local variable in this function.
-
->  
->  			memset(&crbufs, 0xff, sizeof(crbufs));
->  			node->g_fmt(crbufs.format, i);
-
-In any case, the logic needs to be improved a bit:
-
-keep track of the q.create_bufs(node, 0) return values: crbufs_enotty_cnt,
-crbufs_eopnotsupp_cnt and crbufs_ok_cnt (for any ohter return values).
-
-Fail if (crbufs_enotty_cnt && (crbufs_eopnotsupp_cnt + crbufs_ok_cnt), since
-if ENOTTY is returned once, it has to be returned always.
-
-Also fail if (crbufs_eopnotsupp_cnt && !crbufs_ok_cnt), since EOPNOTSUPP indicates
-that it is supported in some cases, but not others, so you need to see at least
-some successful calls.
-
-I think that is a better test, because that checks for ENOTTY abuse as well.
-
-Regards,
-
-	Hans
