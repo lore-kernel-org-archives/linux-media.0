@@ -2,45 +2,45 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0F7EE776F4
-	for <linux-media@archiver.kernel.org>; Wed,  4 Oct 2023 09:17:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7083DE776F4
+	for <linux-media@archiver.kernel.org>; Wed,  4 Oct 2023 09:17:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241993AbjJDJRW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 4 Oct 2023 05:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58768 "EHLO
+        id S241987AbjJDJRe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 4 Oct 2023 05:17:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242066AbjJDJRW (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Oct 2023 05:17:22 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DE4AB;
-        Wed,  4 Oct 2023 02:17:18 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3947jGvh008905;
-        Wed, 4 Oct 2023 11:17:03 +0200
+        with ESMTP id S242085AbjJDJRb (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Oct 2023 05:17:31 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA33DC;
+        Wed,  4 Oct 2023 02:17:27 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 3944WErR012638;
+        Wed, 4 Oct 2023 11:17:05 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
         :mime-version:content-transfer-encoding:content-type; s=
-        selector1; bh=ARYkfXru3c0brXdWWVkjAnyorxVN8gvB3OLYyG5N4N8=; b=CZ
-        euqvPcEK0ow88wWdacUx5TFkj8jX3DhX5PzOzDnjf0TsL62s+HM6fv3PyaMkBv2d
-        Xk/K6UJ6SKp3WV4x+787ahLEj9zmSD8FVT5454FoO2HhDUHOMt0apm2WHrl1GAwB
-        Y6xnV1U6krqMX1I5FTnKR/YdIljGHm08Use1EIa3nsym5Q4GYKbR+K1KnBaSGHQK
-        WvYxcEFw2H/y8epLa5Z50+fvJkl6ztndsF95EZhSTkptgvaW7eLNz8jQZyWHCmsU
-        jzbwYC1uyY9ocLelwglCjhV/zFrVh+mPuEfZwog00juTRmfMcURuGq9JutB8bWiY
-        j+tCKoXnOu8wgmq7IdHw==
+        selector1; bh=zPxEJTuK+kiMe3ysiXBDz8ownZu5ZyU8DDfCrL1/OG8=; b=S7
+        icmURj4QWaplVShDhVaxxQ2uDPz6RNSvoC+otwwTGqml9itSRn259wdynQLrGa8J
+        7vP/T5zo/pB8vSQgbmSHceUgNWAvhkonszlhi4U4kl0KIfpioCKaWHYxjoZyJvVA
+        IcgUBCQcUv/xw4Qp+cAsO9OEMt6/rzCNpfwSqSjOJYNUQ0vetSIDM404/Tq3tblA
+        WbtStsiAQ/j5UsYMRJR8cVNcUJ1hFjLW8X7JQc3IA14VDOZ0Q60z+FA5mjU3uIZ6
+        /DEMaYpUiKzfij8mcpVrGpfc5yg0qTUdfKvhX0vYNb2sGbAcG36dZ+anM9N+nwdv
+        3CkW9JSCE9+3S9wv6QUg==
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3te8t50c2g-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3te93g08jv-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 Oct 2023 11:17:03 +0200 (MEST)
+        Wed, 04 Oct 2023 11:17:05 +0200 (MEST)
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C95B8100053;
-        Wed,  4 Oct 2023 11:17:02 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4C607100053;
+        Wed,  4 Oct 2023 11:17:04 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C112622A6DD;
-        Wed,  4 Oct 2023 11:17:02 +0200 (CEST)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 4381022A6DA;
+        Wed,  4 Oct 2023 11:17:04 +0200 (CEST)
 Received: from localhost (10.201.20.120) by SHFDAG1NODE1.st.com (10.75.129.69)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 4 Oct
- 2023 11:17:02 +0200
+ 2023 11:17:04 +0200
 From:   Hugues Fruchet <hugues.fruchet@foss.st.com>
 To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Philipp Zabel <p.zabel@pengutronix.de>,
@@ -59,9 +59,9 @@ To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         <linux-rockchip@lists.infradead.org>
 CC:     Hugues Fruchet <hugues.fruchet@foss.st.com>,
         Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Subject: [PATCH 5/7] arm64: dts: st: add soc & rifsc structure to stm32mp255
-Date:   Wed, 4 Oct 2023 11:15:50 +0200
-Message-ID: <20231004091552.3531659-6-hugues.fruchet@foss.st.com>
+Subject: [PATCH 7/7] arm64: dts: st: add video encoder support to stm32mp255
+Date:   Wed, 4 Oct 2023 11:15:52 +0200
+Message-ID: <20231004091552.3531659-8-hugues.fruchet@foss.st.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20231004091552.3531659-1-hugues.fruchet@foss.st.com>
 References: <20231004091552.3531659-1-hugues.fruchet@foss.st.com>
@@ -78,25 +78,50 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add soc & rifsc structure to stm32mp255.
+Add VENC hardware video encoder support to STM32MP255.
 
 Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
 ---
- arch/arm64/boot/dts/st/stm32mp255.dtsi | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 6 ++++++
+ arch/arm64/boot/dts/st/stm32mp255.dtsi | 9 +++++++++
+ 2 files changed, 15 insertions(+)
 
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index 0ca421ede0ae..2aff746968f5 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -52,6 +52,12 @@ ck_icn_p_vdec: ck-icn-p-vdec {
+ 			compatible = "fixed-clock";
+ 			clock-frequency = <200000000>;
+ 		};
++
++		ck_icn_p_venc: ck-icn-p-venc {
++			#clock-cells = <0>;
++			compatible = "fixed-clock";
++			clock-frequency = <200000000>;
++		};
+ 	};
+ 
+ 	firmware {
 diff --git a/arch/arm64/boot/dts/st/stm32mp255.dtsi b/arch/arm64/boot/dts/st/stm32mp255.dtsi
-index e6fa596211f5..4f2b224fe077 100644
+index 105ef2d71c77..0035fbf5e17d 100644
 --- a/arch/arm64/boot/dts/st/stm32mp255.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp255.dtsi
-@@ -6,4 +6,8 @@
- #include "stm32mp253.dtsi"
- 
- / {
-+	soc@0 {
-+		rifsc: rifsc-bus@42080000 {
-+		};
-+	};
+@@ -16,6 +16,15 @@ vdec: vdec@480d0000 {
+ 				clocks = <&ck_icn_p_vdec>;
+ 				clock-names = "vdec-clk";
+ 			};
++
++			venc: venc@480e0000 {
++				compatible = "st,stm32mp25-venc";
++				reg = <0x480e0000 0x800>;
++				interrupt-names = "venc";
++				interrupts = <GIC_SPI 167 IRQ_TYPE_LEVEL_HIGH>;
++				clock-names = "venc-clk";
++				clocks = <&ck_icn_ls_mcu>;
++			};
+ 		};
+ 	};
  };
 -- 
 2.25.1
