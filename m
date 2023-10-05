@@ -2,105 +2,95 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62D94E92702
-	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 14:05:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4000BE92701
+	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 14:12:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbjJEOFT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Oct 2023 10:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39812 "EHLO
+        id S231326AbjJEOMl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Oct 2023 10:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjJEODr (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 10:03:47 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819762572C
-        for <linux-media@vger.kernel.org>; Thu,  5 Oct 2023 04:55:37 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-40537481094so7631845e9.0
-        for <linux-media@vger.kernel.org>; Thu, 05 Oct 2023 04:55:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696506936; x=1697111736; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RQdcaVujkFdj0wa7smLreLyTyUiwJXB1nTmSI2VVOLc=;
-        b=NqGFtfkMJKin2+i3yG7AkOUtLJC3segHwBvrg4oSTqSM20S/1okNhe0kgvGJU9fmvu
-         38GQ8uVPQi3uh3XgLJmBXxpq8qrzSiT4TC4QkX5CZjor+xVErvaeSLKQvauQsihctbB6
-         jxldZgy44Ueo+HMSkqmBARema1X1sNzrAgLesn057+AWLnXF9AgtVmOsXqmL5LMqaVqc
-         jXMfNR1IMtio9owB8QBRmfkff1iQqw9wS1wuAqSCxVTrzcl56ylFuW5pfwOSYCDMeEF1
-         EPYVEU1vwnwINNQsWjKWjdectueXs/aC42cCCLqni7kN4TxBNWljB6V/m/gTP2teQjt2
-         AGzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696506936; x=1697111736;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RQdcaVujkFdj0wa7smLreLyTyUiwJXB1nTmSI2VVOLc=;
-        b=q3CBScteut7GW24UN9AYFVN+0n47/P+KvS4/GZiKeM0S89p+6qIG/kTCaQGb0IoP/S
-         TYM+0h6KuZk+coaPaJZwtdMxQEpvtRBXtb/4Bi6rmXovnynu6sS19TOhvAG2u/yD+MX0
-         CzrFWdWSp3osajMtFLBaWMXD56xd8uWlmOtWFoBiXbdg3OsEper2zD10LtGBrgK23PfA
-         sKrXAh2f7D6AYgC/2w0p6cu+3Y2rZ4nP07Rm6LTJNxyg6Ile5gg73Oe3A73/uYQbAfcM
-         cPL7/znRKfkaOXrhwhRweGlQnmisG36hO6GckTZrXG/iQ20QhXk3qG9CjTu0MKmdP/dc
-         fnHg==
-X-Gm-Message-State: AOJu0YysYc+8xWgSsKnU3JTYpC9eih/rcMoGUQwE3z6J32MPIYOnKUn0
-        ntq6JNkrTMF9fbTOFEObOLb2gw==
-X-Google-Smtp-Source: AGHT+IFEbOl3ekk/K3E950SGKAPMaVFIo8CnYOp5aFhY6KBgCnBxNTv+coH9N4s4TWUgK1RS04IatQ==
-X-Received: by 2002:a1c:720c:0:b0:3fe:4cbc:c345 with SMTP id n12-20020a1c720c000000b003fe4cbcc345mr4775325wmc.41.1696506935975;
-        Thu, 05 Oct 2023 04:55:35 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id x2-20020a5d6502000000b00323293bd023sm1649067wru.6.2023.10.05.04.55.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Oct 2023 04:55:35 -0700 (PDT)
-Date:   Thu, 5 Oct 2023 14:55:32 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     milkfafa@gmail.com
-Cc:     linux-media@vger.kernel.org
-Subject: [bug report] media: nuvoton: Add driver for NPCM video capture and
- encoding engine
-Message-ID: <a89539bc-e4d9-466f-a9dc-1bf440e71cea@moroto.mountain>
+        with ESMTP id S229732AbjJEOK7 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 10:10:59 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9BC24E8F
+        for <linux-media@vger.kernel.org>; Thu,  5 Oct 2023 04:28:25 -0700 (PDT)
+Received: from [192.168.88.20] (91-157-153-81.elisa-laajakaista.fi [91.157.153.81])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CF6EE552;
+        Thu,  5 Oct 2023 13:26:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1696505197;
+        bh=Z4bMHRirZ1ZHmdWqutvtALlN2ehtveJtB78fXvV0p6w=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=sTP+Rlau0OHrVyWk9uw6j6XcI/KGF3Zq4XzaMzK0veVzMXXw/r/ycSTcBEoGmc4hS
+         ehV63Uz7yU7A+YPilm3SAXPxzKNq9R5fwQvbG0JeqIC7kpbMcetmQcgFr5b/JZgM1n
+         HLbeSUFxAXfxTMVnxZ078Zv9QjmTaguirn7hCfZA=
+Message-ID: <4b604381-49af-be89-65dd-d8898a3b6a00@ideasonboard.com>
+Date:   Thu, 5 Oct 2023 14:28:20 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v6 03/28] media: uapi: Document which mbus format fields
+ are valid for metadata
+Content-Language: en-US
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        bingbu.cao@intel.com, hongju.wang@intel.com, hverkuil@xs4all.nl,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Dmitry Perchanov <dmitry.perchanov@intel.com>,
+        "Ng, Khai Wen" <khai.wen.ng@intel.com>
+References: <20231003115237.76828-1-sakari.ailus@linux.intel.com>
+ <20231003115237.76828-4-sakari.ailus@linux.intel.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <20231003115237.76828-4-sakari.ailus@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello Marvin Lin,
+On 03/10/2023 14:52, Sakari Ailus wrote:
+> Now that metadata mbus formats have been added, it is necessary to define
+> which fields in struct v4l2_mbus_format are applicable to them (not many).
+> 
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> ---
+>   include/uapi/linux/v4l2-mediabus.h | 18 ++++++++++++------
+>   1 file changed, 12 insertions(+), 6 deletions(-)
+> 
+> diff --git a/include/uapi/linux/v4l2-mediabus.h b/include/uapi/linux/v4l2-mediabus.h
+> index 6b07b73473b5..3cadb3b58b85 100644
+> --- a/include/uapi/linux/v4l2-mediabus.h
+> +++ b/include/uapi/linux/v4l2-mediabus.h
+> @@ -19,12 +19,18 @@
+>    * @width:	image width
+>    * @height:	image height
+>    * @code:	data format code (from enum v4l2_mbus_pixelcode)
+> - * @field:	used interlacing type (from enum v4l2_field)
+> - * @colorspace:	colorspace of the data (from enum v4l2_colorspace)
+> - * @ycbcr_enc:	YCbCr encoding of the data (from enum v4l2_ycbcr_encoding)
+> - * @hsv_enc:	HSV encoding of the data (from enum v4l2_hsv_encoding)
+> - * @quantization: quantization of the data (from enum v4l2_quantization)
+> - * @xfer_func:  transfer function of the data (from enum v4l2_xfer_func)
+> + * @field:	used interlacing type (from enum v4l2_field), not applicable
+> + *		to metadata mbus codes
 
-The patch 70721089985c: "media: nuvoton: Add driver for NPCM video
-capture and encoding engine" from Sep 22, 2023 (linux-next), leads to
-the following Smatch static checker warning:
+This one does say "zero", like the others do. Is that on purpose? 
+Annoyingly V4L2_FIELD_NONE is 1, not 0, but perhaps zeroing this would 
+still be best?
 
-	drivers/media/platform/nuvoton/npcm-video.c:493 npcm_video_find_rect()
-	warn: sleeping in atomic context
+> + * @colorspace:	colorspace of the data (from enum v4l2_colorspace), zero on
+> + *		metadata mbus codes
+> + * @ycbcr_enc:	YCbCr encoding of the data (from enum v4l2_ycbcr_encoding), zero
+> + *		on metadata mbus codes
+> + * @hsv_enc:	HSV encoding of the data (from enum v4l2_hsv_encoding), zero on
+> + *		metadata mbus codes
+> + * @quantization: quantization of the data (from enum v4l2_quantization), zero
+> + *		on metadata mbus codes
+> + * @xfer_func:  transfer function of the data (from enum v4l2_xfer_func), zero
+> + *		on metadata mbus codes
+>    * @flags:	flags (V4L2_MBUS_FRAMEFMT_*)
+>    * @reserved:  reserved bytes that can be later used
+>    */
 
-drivers/media/platform/nuvoton/npcm-video.c
-    488 static int npcm_video_find_rect(struct npcm_video *video,
-    489                                 struct rect_list_info *info,
-    490                                 unsigned int offset)
-    491 {
-    492         if (offset < info->tile_perline) {
---> 493                 info->list = npcm_video_new_rect(video, offset, info->index);
-
-Does a sleeping allocation.
-
-    494                 if (!info->list) {
-    495                         dev_err(video->dev, "Failed to allocate rect_list\n");
-    496                         return -ENOMEM;
-    497                 }
-    498 
-    499                 npcm_video_merge_rect(video, info);
-    500         }
-    501         return 0;
-    502 }
-
-The problematic call tree is:
-
-npcm_video_irq() <- disables preempt
--> npcm_video_hextile()
-   -> npcm_video_get_diff_rect()
-      -> npcm_video_get_rect_list()
-         -> npcm_video_build_table()
-            -> npcm_video_find_rect()
-
-The npcm_video_irq() function holds spin_lock(&video->lock) and we can't
-sleep while holding a spinlock.
-
-regards,
-dan carpenter
