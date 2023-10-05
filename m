@@ -2,87 +2,115 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52A9AE92706
-	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 15:13:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE902E9270A
+	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 15:14:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjJEPMj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Oct 2023 11:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41786 "EHLO
+        id S229766AbjJEPOW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Oct 2023 11:14:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234389AbjJEPLa (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 11:11:30 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0F88E93;
-        Thu,  5 Oct 2023 07:42:31 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E053EC116B0;
-        Thu,  5 Oct 2023 08:46:13 +0000 (UTC)
-Message-ID: <ef1d5a63-6a83-46fc-b593-2d507a1ce097@xs4all.nl>
-Date:   Thu, 5 Oct 2023 10:46:12 +0200
+        with ESMTP id S232601AbjJEPNX (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 11:13:23 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9853D36BE
+        for <linux-media@vger.kernel.org>; Thu,  5 Oct 2023 07:36:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696516593; x=1728052593;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aeiuRNOpjP8OJc6Nuaaq251fzG/vuRu5modEpuhazgE=;
+  b=XAcjEtdEj3pe4qlJs9Aamc42zl8B1yJJlfTxBaKM3v+Vipb8r1vmwNex
+   ZeGxK69Vm0axX9Ivm2B0FdjxzJL6dofXbaquuoIVGmSieT8TwYYkGFYNC
+   s9X2PgAsfH4o5u78CqLe21UNuo3wWlOC+DkvE5cRv7Y+vmnp/fokhyvgP
+   d+TklBwE3v60qnJA2Ng++pgRba7vbzx0+1z4UjWTk/QbTFgkrT//f/acc
+   dcYAhrDDxW0fTy19bO/kpGTPmMkNHtYC/UYouHWP17dnLomhEpujEhGkV
+   CA/zQFmd1dEgbp/u7TJcYJdfDOdZai6+hEzQDouG7p0gg9QUtSqiLR2VD
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10854"; a="363796122"
+X-IronPort-AV: E=Sophos;i="6.03,203,1694761200"; 
+   d="scan'208";a="363796122"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 07:35:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10854"; a="817606438"
+X-IronPort-AV: E=Sophos;i="6.03,203,1694761200"; 
+   d="scan'208";a="817606438"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 07:35:12 -0700
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id DF3DA120AD7;
+        Thu,  5 Oct 2023 17:35:09 +0300 (EEST)
+Date:   Thu, 5 Oct 2023 14:35:09 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     linux-media@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        tomi.valkeinen@ideasonboard.com, bingbu.cao@intel.com,
+        hongju.wang@intel.com,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Dmitry Perchanov <dmitry.perchanov@intel.com>,
+        "Ng, Khai Wen" <khai.wen.ng@intel.com>
+Subject: Re: [PATCH v6 09/28] media: Documentation: Document embedded data
+ guidelines for camera sensors
+Message-ID: <ZR7JnbqC0trXOV6P@kekkonen.localdomain>
+References: <20231003115237.76828-1-sakari.ailus@linux.intel.com>
+ <20231003115237.76828-10-sakari.ailus@linux.intel.com>
+ <532dda7e-5632-4081-8ef0-89a89905e566@xs4all.nl>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] media: mediatek: vcodec: Fix encoder access NULL
- pointer
-Content-Language: en-US, nl
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-To:     Irui Wang <irui.wang@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        angelogioacchino.delregno@collabora.com,
-        nicolas.dufresne@collabora.com,
-        Yunfei Dong <yunfei.dong@mediatek.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Maoguang Meng <maoguang.meng@mediatek.com>
-References: <20230926101909.15030-1-irui.wang@mediatek.com>
- <36356e37-9abd-4dec-a716-9822b67bd0fa@xs4all.nl>
- <54962983-fa23-4ecc-9874-f59a1387cf70@xs4all.nl>
-In-Reply-To: <54962983-fa23-4ecc-9874-f59a1387cf70@xs4all.nl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <532dda7e-5632-4081-8ef0-89a89905e566@xs4all.nl>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 04/10/2023 08:54, Hans Verkuil wrote:
-> Ping! Is this a fix for 6.6 or not?
-> 
-> Regards,
-> 
-> 	Hans
-> 
-> On 02/10/2023 12:24, Hans Verkuil wrote:
->> On 26/09/2023 12:19, Irui Wang wrote:
->>> Need to set the private data with encoder device, or will access
->>> NULL pointer in encoder handler.
->>>
->>> Fixes: 1972e32431ed ("media: mediatek: vcodec: Fix possible invalid memory access for encoder")
->>>
->>> Signed-off-by: Irui Wang <irui.wang@mediatek.com>
->>> ---
->>>  drivers/media/platform/mediatek/vcodec/encoder/venc_vpu_if.c | 3 ++-
->>>  1 file changed, 2 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/media/platform/mediatek/vcodec/encoder/venc_vpu_if.c b/drivers/media/platform/mediatek/vcodec/encoder/venc_vpu_if.c
->>> index d299cc2962a5..ae6290d28f8e 100644
->>> --- a/drivers/media/platform/mediatek/vcodec/encoder/venc_vpu_if.c
->>> +++ b/drivers/media/platform/mediatek/vcodec/encoder/venc_vpu_if.c
->>> @@ -138,7 +138,8 @@ int vpu_enc_init(struct venc_vpu_inst *vpu)
->>>  	vpu->ctx->vpu_inst = vpu;
->>>  
->>>  	status = mtk_vcodec_fw_ipi_register(vpu->ctx->dev->fw_handler, vpu->id,
->>> -					    vpu_enc_ipi_handler, "venc", NULL);
->>> +					    vpu_enc_ipi_handler, "venc",
->>> +					    vpu->ctx->dev);
->>>  
->>>  	if (status) {
->>>  		mtk_venc_err(vpu->ctx, "vpu_ipi_register fail %d", status);
->>
->> Is this a fix that should go to 6.6?
+Hi Hans,
 
-This looks like a real bug, so I'll queue this up for 6.6.
+On Thu, Oct 05, 2023 at 12:14:05PM +0200, Hans Verkuil wrote:
+> On 03/10/2023 13:52, Sakari Ailus wrote:
+> > Document how embedded data support should be implemented for camera
+> > sensors, and when and how CCS embedded data format should be referenced.
+> > 
+> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > ---
+> >  .../media/drivers/camera-sensor.rst           | 28 +++++++++++++++++++
+> >  1 file changed, 28 insertions(+)
+> > 
+> > diff --git a/Documentation/userspace-api/media/drivers/camera-sensor.rst b/Documentation/userspace-api/media/drivers/camera-sensor.rst
+> > index 919a50e8b9d9..308f391c5ca1 100644
+> > --- a/Documentation/userspace-api/media/drivers/camera-sensor.rst
+> > +++ b/Documentation/userspace-api/media/drivers/camera-sensor.rst
+> > @@ -102,3 +102,31 @@ register programming sequences shall initialize the :ref:`V4L2_CID_HFLIP
+> >  values programmed by the register sequences. The default values of these
+> >  controls shall be 0 (disabled). Especially these controls shall not be inverted,
+> >  independently of the sensor's mounting rotation.
+> > +
+> > +Embedded data
+> > +-------------
+> > +
+> > +Many sensors, mostly raw sensors, support embedded data which is used to convey
+> > +the sensor configuration for the captured frame back to the host. While CSI-2 is
+> > +the most common bus used by such sensors, embedded data is not entirely limited
+> > +to CSI-2 bus due to e.g. bridge devices.
+> > +
+> > +Embedded data support should use an internal source pad and route to the
+> 
+> "internal source pad" -> "internal sink pad"?
+> 
+> > +external pad. If embedded data output can be disabled in hardware, it should be
+> 
+> "external pad" -> "external source pad"?
+> 
+> Or perhaps "a source pad of the entity"?
 
-Regards,
+The documentation discusses "internal source pads" that are in fact
+internal pads with the INTERNAL and SINK flags set. This is probably
+present in other patches, too. The terms are indeed confusing, I'll see if
+I could rephrase it.
 
-	Hans
+Of the two options, I prefer the former.
+
+-- 
+Sakari Ailus
