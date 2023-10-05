@@ -2,25 +2,26 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55F70E92706
-	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 15:02:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34D7EE92706
+	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 15:11:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbjJEPCS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Oct 2023 11:02:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42856 "EHLO
+        id S231175AbjJEPLD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Oct 2023 11:11:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231311AbjJEPAd (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 11:00:33 -0400
+        with ESMTP id S231441AbjJEPKG (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 11:10:06 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB3F16A9D
-        for <linux-media@vger.kernel.org>; Thu,  5 Oct 2023 07:37:31 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 858BBC4AF5E;
-        Thu,  5 Oct 2023 09:52:10 +0000 (UTC)
-Message-ID: <ee3b59fb-796c-4e38-bc19-575eab4872c1@xs4all.nl>
-Date:   Thu, 5 Oct 2023 11:52:08 +0200
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63B89EDE
+        for <linux-media@vger.kernel.org>; Thu,  5 Oct 2023 07:42:31 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CA83C32786;
+        Thu,  5 Oct 2023 11:05:19 +0000 (UTC)
+Message-ID: <b7cd29a5-c198-4b5b-a88c-ffac18777df8@xs4all.nl>
+Date:   Thu, 5 Oct 2023 13:05:17 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 01/28] media: mc: Add INTERNAL pad flag
+Subject: Re: [PATCH v6 17/28] media: v4l: subdev: Return routes set using
+ S_ROUTING
 Content-Language: en-US, nl
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         linux-media@vger.kernel.org
@@ -32,7 +33,7 @@ Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Dmitry Perchanov <dmitry.perchanov@intel.com>,
         "Ng, Khai Wen" <khai.wen.ng@intel.com>
 References: <20231003115237.76828-1-sakari.ailus@linux.intel.com>
- <20231003115237.76828-2-sakari.ailus@linux.intel.com>
+ <20231003120813.77726-8-sakari.ailus@linux.intel.com>
 From:   Hans Verkuil <hverkuil@xs4all.nl>
 Autocrypt: addr=hverkuil@xs4all.nl; keydata=
  xsFNBFQ84W0BEAC7EF1iL4s3tY8cRTVkJT/297h0Hz0ypA+ByVM4CdU9sN6ua/YoFlr9k0K4
@@ -77,137 +78,68 @@ Autocrypt: addr=hverkuil@xs4all.nl; keydata=
  gYmkrmv0duG1FStpY+IIQn1TOkuXrciTVfZY1cZD0aVxwlxXBnUNZZNslldvXFtndxR0SFat
  sflovhDxKyhFwXOP0Rv8H378/+14TaykknRBIKEc0+lcr+EMOSUR5eg4aURb8Gc3Uc7fgQ6q
  UssTXzHPyj1hAyDpfu8DzAwlh4kKFTodxSsKAjI45SLjadSc94/5Gy8645Y1KgBzBPTH7Q==
-In-Reply-To: <20231003115237.76828-2-sakari.ailus@linux.intel.com>
+In-Reply-To: <20231003120813.77726-8-sakari.ailus@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 03/10/2023 13:52, Sakari Ailus wrote:
-> Internal source pads will be used as routing endpoints in V4L2
-> [GS]_ROUTING IOCTLs, to indicate that the stream begins in the entity.
-> 
-> Also prevent creating links to pads that have been flagged as internal and
-> initialising source pads with internal flag set.
+On 03/10/2023 14:08, Sakari Ailus wrote:
+> Return the routes set using S_ROUTING back to the user. Also reflect this
+> in documentation.
 > 
 > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 > ---
->  Documentation/userspace-api/media/glossary.rst         |  6 ++++++
->  .../userspace-api/media/mediactl/media-types.rst       |  6 ++++++
->  drivers/media/mc/mc-entity.c                           | 10 ++++++++--
->  include/uapi/linux/media.h                             |  1 +
->  4 files changed, 21 insertions(+), 2 deletions(-)
+>  .../userspace-api/media/v4l/vidioc-subdev-g-routing.rst      | 5 +++--
+>  drivers/media/v4l2-core/v4l2-subdev.c                        | 5 ++++-
+>  2 files changed, 7 insertions(+), 3 deletions(-)
 > 
-> diff --git a/Documentation/userspace-api/media/glossary.rst b/Documentation/userspace-api/media/glossary.rst
-> index 96a360edbf3b..f7b99a4527c7 100644
-> --- a/Documentation/userspace-api/media/glossary.rst
-> +++ b/Documentation/userspace-api/media/glossary.rst
-> @@ -173,6 +173,12 @@ Glossary
->  	An integrated circuit that integrates all components of a computer
->  	or other electronic systems.
+> diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
+> index 9a9765ddc316..ced53ea5f23c 100644
+> --- a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
+> +++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
+> @@ -43,8 +43,9 @@ The routing configuration determines the flows of data inside an entity.
+>  Drivers report their current routing tables using the
+>  ``VIDIOC_SUBDEV_G_ROUTING`` ioctl and application may enable or disable routes
+>  with the ``VIDIOC_SUBDEV_S_ROUTING`` ioctl, by adding or removing routes and
+> -setting or clearing flags of the  ``flags`` field of a
+> -struct :c:type:`v4l2_subdev_route`.
+> +setting or clearing flags of the ``flags`` field of a struct
+> +:c:type:`v4l2_subdev_route`. Similarly to ``VIDIOC_SUBDEV_G_ROUTING``, also
+> +``VIDIOC_SUBDEV_S_ROUTING`` returns the routes back to the user.
 >  
-> +_media-glossary-stream:
-> +    Stream
-> +	A distinct flow of data (image data or metadata) over a media pipeline
-> +	from source to sink. A source may be e.g. an image sensor and a sink
-> +	e.g. a memory buffer.
-
-Hmm, I think this is a bit confusing. I think it would be better to replace
-"from source to sink" with "from the initial source to the final sink".
-
-The original text doesn't make it clear that there can be many hops in between.
-
-So also: "A source" -> "An initial source", and "a sink" -> "a final sink".
-
-Note that "media pipeline" isn't defined either. Should that be added?
-
-Finally, I think this should be a separate patch as it has nothing to do with
-adding the INTERNAL pad flag.
-
-> +
->      V4L2 API
->  	**V4L2 userspace API**
+>  All stream configurations are reset when ``VIDIOC_SUBDEV_S_ROUTING`` is
+>  called. This means that the userspace must reconfigure all streams after calling
+> diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+> index bd1e8205913c..9a34e13dfd96 100644
+> --- a/drivers/media/v4l2-core/v4l2-subdev.c
+> +++ b/drivers/media/v4l2-core/v4l2-subdev.c
+> @@ -935,9 +935,12 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
+>  		krouting.len_routes = routing->len_routes;
+>  		krouting.routes = routes;
 >  
-> diff --git a/Documentation/userspace-api/media/mediactl/media-types.rst b/Documentation/userspace-api/media/mediactl/media-types.rst
-> index 0ffeece1e0c8..28941da27790 100644
-> --- a/Documentation/userspace-api/media/mediactl/media-types.rst
-> +++ b/Documentation/userspace-api/media/mediactl/media-types.rst
-> @@ -361,6 +361,7 @@ Types and flags used to represent the media graph elements
->  .. _MEDIA-PAD-FL-SINK:
->  .. _MEDIA-PAD-FL-SOURCE:
->  .. _MEDIA-PAD-FL-MUST-CONNECT:
-> +.. _MEDIA-PAD-FL-INTERNAL:
->  
->  .. flat-table:: Media pad flags
->      :header-rows:  0
-> @@ -382,6 +383,11 @@ Types and flags used to represent the media graph elements
->  	  when this flag isn't set; the absence of the flag doesn't imply
->  	  there is none.
->  
-> +    *  -  ``MEDIA_PAD_FL_INTERNAL``
-> +       -  The internal flag indicates an internal pad that has no external
-> +	  connections. Such a pad shall not be connected with a link. The
-> +	  internal flag indicates that the :ref:``stream
-> +	  <media-glossary-stream>`` either starts or ends in the entity.
+> -		return v4l2_subdev_call(sd, pad, set_routing, state,
+> +		rval = v4l2_subdev_call(sd, pad, set_routing, state,
+>  					routing->which, &krouting);
+> +		if (rval < 0)
+> +			return rval;
+>  	}
+> +		fallthrough;
 
-This suggests that INTERNAL can be used for both sinks and sources, but...
+Admittedly, it is a bit hard to see from just this patch, but I think
+the actual code that VIDIOC_SUBDEV_S_ROUTING has to do here is just
+a very few lines from VIDIOC_SUBDEV_G_ROUTING. I think it is better
+to explicitly have them here, then doing a fallthrough.
 
->  
->  One and only one of ``MEDIA_PAD_FL_SINK`` and ``MEDIA_PAD_FL_SOURCE``
->  must be set for every pad.
-> diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
-> index 543a392f8635..f5f290781021 100644
-> --- a/drivers/media/mc/mc-entity.c
-> +++ b/drivers/media/mc/mc-entity.c
-> @@ -213,7 +213,9 @@ int media_entity_pads_init(struct media_entity *entity, u16 num_pads,
->  		iter->index = i++;
->  
->  		if (hweight32(iter->flags & (MEDIA_PAD_FL_SINK |
-> -					     MEDIA_PAD_FL_SOURCE)) != 1) {
-> +					     MEDIA_PAD_FL_SOURCE)) != 1 ||
-> +		    (iter->flags & MEDIA_PAD_FL_INTERNAL &&
-> +		     !(iter->flags & MEDIA_PAD_FL_SINK))) {
-
-...this appears to limit it to just sinks.
+Most of what is in VIDIOC_SUBDEV_G_ROUTING are just a bunch of checks
+that are already done in VIDIOC_SUBDEV_S_ROUTING.
 
 Regards,
 
 	Hans
 
->  			ret = -EINVAL;
->  			break;
->  		}
-> @@ -1075,7 +1077,8 @@ int media_get_pad_index(struct media_entity *entity, u32 pad_type,
 >  
->  	for (i = 0; i < entity->num_pads; i++) {
->  		if ((entity->pads[i].flags &
-> -		     (MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_SOURCE)) != pad_type)
-> +		     (MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_SOURCE |
-> +		      MEDIA_PAD_FL_INTERNAL)) != pad_type)
->  			continue;
->  
->  		if (entity->pads[i].sig_type == sig_type)
-> @@ -1100,6 +1103,9 @@ media_create_pad_link(struct media_entity *source, u16 source_pad,
->  		return -EINVAL;
->  	if (WARN_ON(!(sink->pads[sink_pad].flags & MEDIA_PAD_FL_SINK)))
->  		return -EINVAL;
-> +	if (WARN_ON(source->pads[source_pad].flags & MEDIA_PAD_FL_INTERNAL) ||
-> +	    WARN_ON(source->pads[sink_pad].flags & MEDIA_PAD_FL_INTERNAL))
-> +		return -EINVAL;
->  
->  	link = media_add_link(&source->links);
->  	if (link == NULL)
-> diff --git a/include/uapi/linux/media.h b/include/uapi/linux/media.h
-> index 1c80b1d6bbaf..80cfd12a43fc 100644
-> --- a/include/uapi/linux/media.h
-> +++ b/include/uapi/linux/media.h
-> @@ -208,6 +208,7 @@ struct media_entity_desc {
->  #define MEDIA_PAD_FL_SINK			(1U << 0)
->  #define MEDIA_PAD_FL_SOURCE			(1U << 1)
->  #define MEDIA_PAD_FL_MUST_CONNECT		(1U << 2)
-> +#define MEDIA_PAD_FL_INTERNAL			(1U << 3)
->  
->  struct media_pad_desc {
->  	__u32 entity;		/* entity ID */
+>  	case VIDIOC_SUBDEV_G_ROUTING: {
+>  		struct v4l2_subdev_routing *routing = arg;
 
