@@ -2,158 +2,198 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00164E9272F
-	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 14:43:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DBE4DE92721
+	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 14:43:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237198AbjJEOnI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Oct 2023 10:43:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36416 "EHLO
+        id S238607AbjJEOno (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Oct 2023 10:43:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236846AbjJEOhL (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 10:37:11 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6144788D;
-        Thu,  5 Oct 2023 07:02:59 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5A15C4166B;
-        Thu,  5 Oct 2023 08:04:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1696493052;
-        bh=bhrFsDpbzXSbshflQPJ73aE6VYGi2Pa16fWZ0LDK9cA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FBfUn83j17Q26OciLdhKLUQDfdTu7vc998nDCD56wiDoRzUXMkv7OgqEmf2h6uVbW
-         DZ7dxiWo1Dsgxjfn7ToPkm9PDfnS9FYaDtTJ8SNRri2Ox+RxFkgQqy/IM98hqfJjWT
-         KPWljbuB0/iLQSGu1vHCUENWxzuJEnAuVmbZqI2M=
-Date:   Thu, 5 Oct 2023 10:04:09 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Umang Jain <umang.jain@ideasonboard.com>
-Cc:     linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Adrien Thierry <athierry@redhat.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: Re: [PATCH v12 5/6] staging: bcm2835-camera: Register bcm2835-camera
- with vchiq_bus_type
-Message-ID: <2023100542-gluten-rally-5a96@gregkh>
-References: <20230923143200.268063-1-umang.jain@ideasonboard.com>
- <20230923143200.268063-6-umang.jain@ideasonboard.com>
+        with ESMTP id S238872AbjJEOlR (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 10:41:17 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD4E22E0F;
+        Thu,  5 Oct 2023 07:15:43 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 394NxwVc016445;
+        Thu, 5 Oct 2023 09:44:50 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+        message-id:date:mime-version:subject:to:cc:references:from
+        :in-reply-to:content-type:content-transfer-encoding; s=
+        selector1; bh=uPeJe/ujiHjKK9NWuZX2rXwLdsc4nIHY6JTK7vpJxH4=; b=pX
+        q0UHCc1ado2QV7WtnmdeB804HXe3FijBSoA9psMDkYnF0uIh0WKNYRPoWZIB+rsh
+        gReFnz5YcLFnD6seqZ1iaNsRJsypo6VayiyWgAw49j0rMEOz/lF7ws/vAag7QQYd
+        oT68cFTQ8EQPTpkb14dR3TU1g4bS9zRIwJYYUE1EFMJPI+pUDhIH88dUyHiSC2TZ
+        EJUsOHYuDlLMspH1Fx3gkPDTAWzvCcXJNwlmGf6n21I7hwX4CR+mMO3/djlZZ9ad
+        OC7oVV1Fujd0O48ZVoWOidNBEDF1cHl6v6l1y4F93HSueEETu7Uon+Oud4tChzC7
+        mJiJhrVj2VzEZI1GnBPg==
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3thj7e9ehw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 Oct 2023 09:44:50 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4D859100053;
+        Thu,  5 Oct 2023 09:44:49 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 406DD21ED32;
+        Thu,  5 Oct 2023 09:44:49 +0200 (CEST)
+Received: from [10.201.20.120] (10.201.20.120) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 5 Oct
+ 2023 09:44:48 +0200
+Message-ID: <866fd143-a290-63ec-103c-b49368d9dc03@foss.st.com>
+Date:   Thu, 5 Oct 2023 09:44:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230923143200.268063-6-umang.jain@ideasonboard.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH 3/7] dt-bindings: media: Document STM32MP25 VENC video
+ encoder
+Content-Language: en-US
+To:     Adam Ford <aford173@gmail.com>
+CC:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        <linux-media@vger.kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-rockchip@lists.infradead.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+References: <20231004091552.3531659-1-hugues.fruchet@foss.st.com>
+ <20231004091552.3531659-4-hugues.fruchet@foss.st.com>
+ <CAHCN7xKrriTPaRMJ-r86cSgFDUUP1At08imLBr_zEP0g3fga_g@mail.gmail.com>
+From:   Hugues FRUCHET <hugues.fruchet@foss.st.com>
+In-Reply-To: <CAHCN7xKrriTPaRMJ-r86cSgFDUUP1At08imLBr_zEP0g3fga_g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.201.20.120]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-05_04,2023-10-02_01,2023-05-22_02
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sat, Sep 23, 2023 at 08:01:59PM +0530, Umang Jain wrote:
-> Register the bcm2835-camera with the vchiq_bus_type instead of using
-> platform driver/device.
-> 
-> Since we moved away bcm2835-camera from platform driver/device,
-> we have to set the DMA mask explicitly. Set the DMA mask at probe
-> time.
-> 
-> Also the VCHIQ firmware doesn't support device enumeration, hence
-> one has to maintain a list of devices to be registered in the interface.
-> 
-> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
-> ---
->  .../bcm2835-camera/bcm2835-camera.c           | 21 ++++++++++---------
->  .../interface/vchiq_arm/vchiq_arm.c           | 11 +++++++---
->  2 files changed, 19 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-> index fcad5118f3e8..c873eace1437 100644
-> --- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-> +++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-> @@ -11,6 +11,7 @@
->   *          Luke Diamand @ Broadcom
->   */
->  
-> +#include <linux/dma-mapping.h>
->  #include <linux/errno.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
-> @@ -24,8 +25,8 @@
->  #include <media/v4l2-event.h>
->  #include <media/v4l2-common.h>
->  #include <linux/delay.h>
-> -#include <linux/platform_device.h>
->  
-> +#include "../interface/vchiq_arm/vchiq_bus.h"
->  #include "../vchiq-mmal/mmal-common.h"
->  #include "../vchiq-mmal/mmal-encodings.h"
->  #include "../vchiq-mmal/mmal-vchiq.h"
-> @@ -1841,7 +1842,7 @@ static struct v4l2_format default_v4l2_format = {
->  	.fmt.pix.sizeimage = 1024 * 768,
->  };
->  
-> -static int bcm2835_mmal_probe(struct platform_device *pdev)
-> +static int bcm2835_mmal_probe(struct vchiq_device *device)
->  {
->  	int ret;
->  	struct bcm2835_mmal_dev *dev;
-> @@ -1852,9 +1853,9 @@ static int bcm2835_mmal_probe(struct platform_device *pdev)
->  	unsigned int resolutions[MAX_BCM2835_CAMERAS][2];
->  	int i;
->  
-> -	ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
-> +	ret = dma_set_mask_and_coherent(&device->dev, DMA_BIT_MASK(32));
->  	if (ret) {
-> -		dev_err(&pdev->dev, "dma_set_mask_and_coherent failed: %d\n", ret);
-> +		dev_err(&device->dev, "dma_set_mask_and_coherent failed: %d\n", ret);
->  		return ret;
->  	}
->  
-> @@ -1902,7 +1903,7 @@ static int bcm2835_mmal_probe(struct platform_device *pdev)
->  						       &camera_instance);
->  		ret = v4l2_device_register(NULL, &dev->v4l2_dev);
->  		if (ret) {
-> -			dev_err(&pdev->dev, "%s: could not register V4L2 device: %d\n",
-> +			dev_err(&device->dev, "%s: could not register V4L2 device: %d\n",
->  				__func__, ret);
->  			goto free_dev;
->  		}
-> @@ -1982,7 +1983,7 @@ static int bcm2835_mmal_probe(struct platform_device *pdev)
->  	return ret;
->  }
->  
-> -static void bcm2835_mmal_remove(struct platform_device *pdev)
-> +static void bcm2835_mmal_remove(struct vchiq_device *device)
->  {
->  	int camera;
->  	struct vchiq_mmal_instance *instance = gdev[0]->instance;
-> @@ -1994,17 +1995,17 @@ static void bcm2835_mmal_remove(struct platform_device *pdev)
->  	vchiq_mmal_finalise(instance);
->  }
->  
-> -static struct platform_driver bcm2835_camera_driver = {
-> +static struct vchiq_driver bcm2835_camera_driver = {
->  	.probe		= bcm2835_mmal_probe,
-> -	.remove_new	= bcm2835_mmal_remove,
-> +	.remove		= bcm2835_mmal_remove,
->  	.driver		= {
->  		.name	= "bcm2835-camera",
->  	},
->  };
->  
-> -module_platform_driver(bcm2835_camera_driver)
-> +module_vchiq_driver(bcm2835_camera_driver)
->  
->  MODULE_DESCRIPTION("Broadcom 2835 MMAL video capture");
->  MODULE_AUTHOR("Vincent Sanders");
->  MODULE_LICENSE("GPL");
-> -MODULE_ALIAS("platform:bcm2835-camera");
-> +MODULE_ALIAS("bcm2835-camera");
+Hi Adam,
 
-Now that you are on your own bus, why do you need the MODULE_ALIAS()
-line at all?
+Thanks for review,
 
-thanks,
+On 10/5/23 01:41, Adam Ford wrote:
+> On Wed, Oct 4, 2023 at 4:16 AM Hugues Fruchet
+> <hugues.fruchet@foss.st.com> wrote:
+>>
+>> Add STM32MP25 VENC video encoder bindings.
+>>
+>> Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
+>> ---
+>>   .../bindings/media/st,stm32mp25-venc.yaml     | 56 +++++++++++++++++++
+>>   1 file changed, 56 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/media/st,stm32mp25-venc.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/media/st,stm32mp25-venc.yaml b/Documentation/devicetree/bindings/media/st,stm32mp25-venc.yaml
+>> new file mode 100644
+>> index 000000000000..c69e0a34f675
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/media/st,stm32mp25-venc.yaml
+>> @@ -0,0 +1,56 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/media/st,stm32mp25-venc.yaml#
+> 
+> Can this dt-binding be made more generic, like something like
+> hantro-h1 or VC8000NanoE?
+> 
+> I think there will be more boards that may incorporate the Hantro-H1
+> or a VC8000 in the future, because I don't think this IP is unique to
+> the STM32MP25.
 
-greg k-h
+This is already the case, check variants in hantro_drv.c.
+Several SoCs are sharing this IP but each IP slightly differs because of
+supported resolution, codec, preprocessing features, ...
+There are also some differences on how clock, interrupt, reset are 
+hardware mapped: shared or not by decoder and encoder for ex.
+
+> 
+> adam
+> 
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: STMicroelectronics STM32MP25 VENC video encoder
+>> +
+>> +maintainers:
+>> +  - Hugues Fruchet <hugues.fruchet@foss.st.com>
+>> +
+>> +description:
+>> +  The STMicroelectronics STM32MP25 SOCs embeds a VENC video hardware encoder
+>> +  peripheral based on Verisilicon VC8000NanoE IP (former Hantro H1).
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: st,stm32mp25-venc
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  interrupt-names:
+>> +    maxItems: 1
+>> +
+>> +  clocks:
+>> +    maxItems: 1
+>> +
+>> +  clock-names:
+>> +    maxItems: 1
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - interrupts
+>> +  - interrupt-names
+>> +  - clocks
+>> +  - clock-names
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>> +    venc: venc@580e0000 {
+>> +        compatible = "st,stm32mp25-venc";
+>> +        reg = <0x580e0000 0x800>;
+>> +        interrupts = <GIC_SPI 167 IRQ_TYPE_LEVEL_HIGH>;
+>> +        interrupt-names = "venc";
+> 
+> 
+> Is the interrupt-names needed if there is only one?
+> 
+
+Not really, could be dropped.
+
+>> +        clocks = <&ck_icn_p_venc>;
+>> +        clock-names = "venc-clk";
+> 
+> Same thing for the clock.  if there is only one clock, doe they need names?
+> 
+Not really, could be dropped.
+
+> adam
+>> +    };
+>> --
+>> 2.25.1
+>>
+
+BR,
+Hugues.
