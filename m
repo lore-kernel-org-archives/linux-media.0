@@ -2,92 +2,161 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 174A4E9270E
-	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 14:25:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62D2AE92702
+	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 14:30:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233029AbjJEOYz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Oct 2023 10:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52690 "EHLO
+        id S233009AbjJEO3j (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Oct 2023 10:29:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234210AbjJEOXL (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 10:23:11 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CEAA86B4;
-        Thu,  5 Oct 2023 01:21:06 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C3C9057E;
-        Thu,  5 Oct 2023 10:19:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1696493957;
-        bh=XF8bFPeMeK8tLS+nC9+H/kwvYZEjOXb1bIm95W1ITok=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cvJ7jATC8WTFhXws2jZNTYfs9H2Jh5bzmmxzztOcUHDZEL1OovJvjzLaVNWCkpFE7
-         /vgy9ZH7A/M0ikYU0ScpYGBbQx7FAezDh/qXAYtgeZjS1d6vKJ5w318VX0sa+tocE3
-         08BzJH8BoohVFGiPp+X9MuEHlJ6gI57dlVMdKaoU=
-Date:   Thu, 5 Oct 2023 11:21:11 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
-Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
-        dan.scally@ideasonboard.com, gregkh@linuxfoundation.org,
-        nicolas@ndufresne.ca, kernel@pengutronix.de
-Subject: Re: [PATCH v2 2/3] usb: gadget: uvc: cleanup request when not in
- correct state
-Message-ID: <20231005082111.GB13853@pendragon.ideasonboard.com>
-References: <20230911140530.2995138-1-m.grzeschik@pengutronix.de>
- <20230911140530.2995138-3-m.grzeschik@pengutronix.de>
+        with ESMTP id S233834AbjJEO1o (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 10:27:44 -0400
+Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E06B583D6;
+        Thu,  5 Oct 2023 00:56:24 -0700 (PDT)
+Received: from spock.localnet (unknown [94.142.239.106])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id A74A5152DF11;
+        Thu,  5 Oct 2023 09:56:17 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1696492577;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qLErRg+IY+M+tMiWfSLlVJCQY74BdF5SCkyderIHIa0=;
+        b=h7xrC5PkklBLzvH13lJaXipMzYLk7ODNLFPeypzjuPHUyCP+2NbcQ+lR7VinR5D68csHYC
+        ER5lSQNMZ1BujtcDRgS1EEmaOkSp5YuOTsVmySu1ONKkk1UjK2aNxkLw21T5v35ccRaPjP
+        ET8Ej0R8oBGTFKEcgEr9SS7Use/bjM4=
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     Matthew Wilcox <willy@infradead.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Linux Regressions <regressions@lists.linux.dev>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        linaro-mm-sig@lists.linaro.org, linux-mm@kvack.org,
+        Maxime Ripard <mripard@kernel.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-media@vger.kernel.org
+Subject: Re: [REGRESSION] BUG: KFENCE: memory corruption in
+ drm_gem_put_pages+0x186/0x250
+Date:   Thu, 05 Oct 2023 09:56:03 +0200
+Message-ID: <3254850.aeNJFYEL58@natalenko.name>
+In-Reply-To: <fed1cbf3-0926-4895-a8ba-d6fa9fd53dbe@suse.de>
+References: <13360591.uLZWGnKmhe@natalenko.name> <2160215.irdbgypaU6@natalenko.name>
+ <fed1cbf3-0926-4895-a8ba-d6fa9fd53dbe@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230911140530.2995138-3-m.grzeschik@pengutronix.de>
+Content-Type: multipart/signed; boundary="nextPart3261088.44csPzL39Z";
+ micalg="pgp-sha256"; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Michael,
+--nextPart3261088.44csPzL39Z
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"; protected-headers="v1"
+From: Oleksandr Natalenko <oleksandr@natalenko.name>
+Date: Thu, 05 Oct 2023 09:56:03 +0200
+Message-ID: <3254850.aeNJFYEL58@natalenko.name>
+In-Reply-To: <fed1cbf3-0926-4895-a8ba-d6fa9fd53dbe@suse.de>
+MIME-Version: 1.0
 
-Thank you for the patch.
+Hello.
 
-On Mon, Sep 11, 2023 at 04:05:29PM +0200, Michael Grzeschik wrote:
-> The uvc_video_enable function of the uvc-gadget driver is dequeing and
-> immediately deallocs all requests on its disable codepath. This is not
-> save since the dequeue function is async and does not ensure that the
-> requests are left unlinked in the controller driver.
-> 
-> By adding the ep_free_request into the completion path of the requests
-> we ensure that the request will be properly deallocated.
+On =C4=8Dtvrtek 5. =C5=99=C3=ADjna 2023 9:44:42 CEST Thomas Zimmermann wrot=
+e:
+> Hi
+>=20
+> Am 02.10.23 um 17:38 schrieb Oleksandr Natalenko:
+> > On pond=C4=9Bl=C3=AD 2. =C5=99=C3=ADjna 2023 16:32:45 CEST Matthew Wilc=
+ox wrote:
+> >> On Mon, Oct 02, 2023 at 01:02:52PM +0200, Oleksandr Natalenko wrote:
+> >>>>>>> BUG: KFENCE: memory corruption in drm_gem_put_pages+0x186/0x250
+> >>>>>>>
+> >>>>>>> Corrupted memory at 0x00000000e173a294 [ ! ! ! ! ! ! ! ! ! ! ! ! =
+! ! ! ! ] (in kfence-#108):
+> >>>>>>>   drm_gem_put_pages+0x186/0x250
+> >>>>>>>   drm_gem_shmem_put_pages_locked+0x43/0xc0
+> >>>>>>>   drm_gem_shmem_object_vunmap+0x83/0xe0
+> >>>>>>>   drm_gem_vunmap_unlocked+0x46/0xb0
+> >>>>>>>   drm_fbdev_generic_helper_fb_dirty+0x1dc/0x310
+> >>>>>>>   drm_fb_helper_damage_work+0x96/0x170
+> >>>
+> >>> Matthew, before I start dancing around, do you think ^^ could have th=
+e same cause as 0b62af28f249b9c4036a05acfb053058dc02e2e2 which got fixed by=
+ 863a8eb3f27098b42772f668e3977ff4cae10b04?
+> >>
+> >> Yes, entirely plausible.  I think you have two useful points to look at
+> >> before delving into a full bisect -- 863a8e and the parent of 0b62af.
+> >> If either of them work, I think you have no more work to do.
+> >=20
+> > OK, I've did this against v6.5.5:
+> >=20
+> > ```
+> > git log --oneline HEAD~3..
+> > 7c1e7695ca9b8 (HEAD -> test) Revert "mm: remove struct pagevec"
+> > 8f2ad53b6eac6 Revert "mm: remove check_move_unevictable_pages()"
+> > fa1e3c0b5453c Revert "drm: convert drm_gem_put_pages() to use a folio_b=
+atch"
+> > ```
+> >=20
+> > then rebooted the host multiple times, and the issue is not seen any mo=
+re.
+> >=20
+> > So I guess 3291e09a463870610b8227f32b16b19a587edf33 is the culprit.
+>=20
+> Ignore my other email. It's apparently been fixed already. Thanks!
 
-You're swapping one race condition for a different one. With this patch,
-request can now be double-freed.
+Has it? I think I was able to identify offending commit, but I'm not aware =
+of any fix to that.
 
-I'll reply to the long discussion on v1 to try and find a proper
-solution. As for 1/3, I think this got merged too soon :-(
+Thanks.
 
-> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-> ---
-> v1 == v2
-> 
->  drivers/usb/gadget/function/uvc_video.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-> index 4b68a3a9815d73..c48c904f500fff 100644
-> --- a/drivers/usb/gadget/function/uvc_video.c
-> +++ b/drivers/usb/gadget/function/uvc_video.c
-> @@ -256,6 +256,12 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
->  	struct uvc_device *uvc = video->uvc;
->  	unsigned long flags;
->  
-> +	if (uvc->state == UVC_STATE_CONNECTED) {
-> +		usb_ep_free_request(video->ep, ureq->req);
-> +		ureq->req = NULL;
-> +		return;
-> +	}
-> +
->  	switch (req->status) {
->  	case 0:
->  		break;
+> Best regards
+> Thomas
+>=20
+> >=20
+> > Thanks.
+> >=20
+>=20
+> --=20
+> Thomas Zimmermann
+> Graphics Driver Developer
+> SUSE Software Solutions Germany GmbH
+> Frankenstrasse 146, 90461 Nuernberg, Germany
+> GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
+> HRB 36809 (AG Nuernberg)
+>=20
 
--- 
-Regards,
 
-Laurent Pinchart
+=2D-=20
+Oleksandr Natalenko (post-factum)
+--nextPart3261088.44csPzL39Z
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEZUOOw5ESFLHZZtOKil/iNcg8M0sFAmUebBMACgkQil/iNcg8
+M0tJ/Q/9FPtmZXPGSlNkh2qFBHnyONCuzzj6LT+47+l6Fm7nsJgSnF74o/yV/pMh
+q7vpMK9rD5WvRyb5fgLxv+qfYz0t09dnOs5K+ZMjpLdeM5GMp78fFB1E/HOUAADx
+JjTDrWvykfLEDoTBnZedZjxZTaHeR8b0wLvh9f9tF4Z25jeYvy9zWFDueXX97rBo
+/VxH88ZCRlNwFstWH8qwa6W6DP2hiSb4osfYsftRib0xU3Gu1fNKrsWyw95VfeTd
+ReiHGad9mQ4Y1AN3Ff9NeoT6/rM/2rG7h6xSgvsVrt1MAw/iwW24bH1lKUe+5f1k
+fgR7nv6flGS4FF7zZ+deiI+dUaiyt1urG1zZh5U6VhzzW2VandPoTJHE+L1kT8WF
+kAEsYCwRV2v0lw0YL9JhIPhDgCOT7pLWsIXmZXUKnr7IcR7cGwBPMNYpgxgpYyj0
+YqujL4hPU64n46AHLaVlHBAsXO0CLgDqDJjgfbsiWe15XPnAkq0bm8QJRLBjTM0M
+7Z6yr0eiGA1cdZtu8wgwen7ZEH94Lq2aBPhHAhSjSqWLlGJunN/aNSi6u3dVGy4h
+ag1vpbsw2un3WU97sd3AjDunpUn01rk0GiyCWjraCbAyFAQKyVNgdonMGcV5wzX4
+fTHWSuLNytga3UcQ/hCYxldyK/iT/HkFV37Z/aKGJX752dw9KNA=
+=eWGs
+-----END PGP SIGNATURE-----
+
+--nextPart3261088.44csPzL39Z--
+
+
+
