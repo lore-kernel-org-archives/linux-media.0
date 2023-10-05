@@ -2,85 +2,144 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42570E92711
-	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 15:42:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA5F0E92715
+	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 15:42:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233532AbjJEPmY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Oct 2023 11:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58032 "EHLO
+        id S233658AbjJEPmZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Oct 2023 11:42:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234152AbjJEPmJ (ORCPT
+        with ESMTP id S234157AbjJEPmJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 11:42:09 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5991E4DF59
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8B669227
         for <linux-media@vger.kernel.org>; Thu,  5 Oct 2023 07:57:31 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26E4AC116B5;
-        Thu,  5 Oct 2023 08:58:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1696496311;
-        bh=4u7zMz1tChsNoGb+xXZPQ0U/1bfNLWD4sHDlcDoasXc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0im4Jip8wJzdQjGzdd3zWfjfUf6C2ZXsEbkgIgXiLqmcrcD7+kwzLSaT4y5l6SD18
-         jeF67XMQkEmEwo7ZvecO2p8u1mTyVYFgLk7QEghv+XCuQeS9WLhHub1ecqzmQYbqYR
-         zOUnPJ53FTWFE900s3P/tTSRwfWDtkRdEYm5EO3U=
-Date:   Thu, 5 Oct 2023 10:58:28 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
-        dan.scally@ideasonboard.com, nicolas@ndufresne.ca,
-        kernel@pengutronix.de
-Subject: Re: [PATCH v2 1/3] usb: gadget: uvc: stop pump thread on video
- disable
-Message-ID: <2023100507-sponsor-guise-d459@gregkh>
-References: <20230911140530.2995138-1-m.grzeschik@pengutronix.de>
- <20230911140530.2995138-2-m.grzeschik@pengutronix.de>
- <20231005081716.GA13853@pendragon.ideasonboard.com>
- <2023100557-crabbing-superhero-02f9@gregkh>
- <20231005084805.GB31450@pendragon.ideasonboard.com>
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6080C116D6;
+        Thu,  5 Oct 2023 10:10:31 +0000 (UTC)
+Message-ID: <9e73537d-b32d-4abe-8dc2-390dbd9e566a@xs4all.nl>
+Date:   Thu, 5 Oct 2023 12:10:29 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231005084805.GB31450@pendragon.ideasonboard.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 09/28] media: Documentation: Document embedded data
+ guidelines for camera sensors
+Content-Language: en-US, nl
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        tomi.valkeinen@ideasonboard.com, bingbu.cao@intel.com,
+        hongju.wang@intel.com,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Dmitry Perchanov <dmitry.perchanov@intel.com>,
+        "Ng, Khai Wen" <khai.wen.ng@intel.com>
+References: <20231003115237.76828-1-sakari.ailus@linux.intel.com>
+ <20231003115237.76828-10-sakari.ailus@linux.intel.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Autocrypt: addr=hverkuil@xs4all.nl; keydata=
+ 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
+In-Reply-To: <20231003115237.76828-10-sakari.ailus@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Oct 05, 2023 at 11:48:05AM +0300, Laurent Pinchart wrote:
-> On Thu, Oct 05, 2023 at 10:40:10AM +0200, Greg KH wrote:
-> > On Thu, Oct 05, 2023 at 11:17:16AM +0300, Laurent Pinchart wrote:
-> > > Hi Michael,
-> > > 
-> > > Thank you for the patch.
-> > > 
-> > > On Mon, Sep 11, 2023 at 04:05:28PM +0200, Michael Grzeschik wrote:
-> > > > Since the uvc-video gadget driver is using the v4l2 interface,
-> > > > the streamon and streamoff can be triggered at any times. To ensure
-> > > > that the pump worker will be closed as soon the userspace is
-> > > > calling streamoff we synchronize the state of the gadget ensuring
-> > > > the pump worker to bail out.
-> > > 
-> > > I'm sorry but I really dislike this. Not only does the patch fail to
-> > > ensure real synchronization, as the uvcg_video_pump() function still
-> > > runs asynchronously, it messes up the usage of the state field that now
-> > > tracks the state both from a host point of view (which it was doing so
-> > > far, updating the state based on callbacks from the UDC), and from a
-> > > gadget userspace point of view. This lacks clarity and is confusing.
-> > > Furthermore, the commit message doesn't even explain what issue is being
-> > > fixed here.
-> > > 
-> > > Greg, I think this series has been merged too soon :-(
-> > 
-> > Ok, I'll go revert them now, thanks for the review.
+On 03/10/2023 13:52, Sakari Ailus wrote:
+> Document how embedded data support should be implemented for camera
+> sensors, and when and how CCS embedded data format should be referenced.
 > 
-> Or we can wait a day for Michael to reply, in case this can quickly be
-> fixed on top for v6.7. I'm now reading on the loooon discussion from v1,
-> and reviewing the other pending patches that try to tackle the same
-> issue.
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> ---
+>  .../media/drivers/camera-sensor.rst           | 28 +++++++++++++++++++
+>  1 file changed, 28 insertions(+)
+> 
+> diff --git a/Documentation/userspace-api/media/drivers/camera-sensor.rst b/Documentation/userspace-api/media/drivers/camera-sensor.rst
+> index 919a50e8b9d9..308f391c5ca1 100644
+> --- a/Documentation/userspace-api/media/drivers/camera-sensor.rst
+> +++ b/Documentation/userspace-api/media/drivers/camera-sensor.rst
+> @@ -102,3 +102,31 @@ register programming sequences shall initialize the :ref:`V4L2_CID_HFLIP
+>  values programmed by the register sequences. The default values of these
+>  controls shall be 0 (disabled). Especially these controls shall not be inverted,
+>  independently of the sensor's mounting rotation.
+> +
+> +Embedded data
+> +-------------
+> +
+> +Many sensors, mostly raw sensors, support embedded data which is used to convey
+> +the sensor configuration for the captured frame back to the host. While CSI-2 is
+> +the most common bus used by such sensors, embedded data is not entirely limited
+> +to CSI-2 bus due to e.g. bridge devices.
 
-I'd rather take a patchset that everyone agrees with, reverting was easy
-and now done.
+I'm not quite sure what you mean with "embedded data is not entirely limited
+to CSI-2 bus due to e.g. bridge devices": do you just want to say: "embedded data
+can be available on other bus types as well."?
 
-thanks,
+> +
+> +Embedded data support should use an internal source pad and route to the
 
-greg k-h
+should or shall/must?
+
+Regards,
+
+	Hans
+
+> +external pad. If embedded data output can be disabled in hardware, it should be
+> +possible to disable the embedded data route via ``VIDIOC_SUBDEV_S_ROUTING``
+> +IOCTL.
+> +
+> +In general, changing the embedded data format from the driver-configured values
+> +is not supported. The height of the metadata is hardware specific and the width
+> +is that (or less of that) of the image width, as configured on the pixel data
+> +stream.
+> +
+> +CCS and non-CCS embedded data
+> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +Embedded data which is compliant with CCS definitions shall use ``CCS embedded
+> +data format <MEDIA-BUS-FMT-CCS-EMBEDDED>``. Device specific embedded data which
+> +is compliant up to MIPI CCS embedded data levels 1 or 2 only shall refer to CCS
+> +embedded data formats and document the level of conformance. The rest of the
+> +device specific embedded data format shall be documented in the context of the
+> +data format itself.
+
