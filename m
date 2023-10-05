@@ -2,76 +2,69 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29397E92731
-	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 19:47:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B26E6E93713
+	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 20:09:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231439AbjJETrF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Oct 2023 15:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45650 "EHLO
+        id S229644AbjJEUJG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Oct 2023 16:09:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbjJETrD (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 15:47:03 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B9EF0
-        for <linux-media@vger.kernel.org>; Thu,  5 Oct 2023 12:47:00 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9b98a699f45so241590466b.3
-        for <linux-media@vger.kernel.org>; Thu, 05 Oct 2023 12:47:00 -0700 (PDT)
+        with ESMTP id S229489AbjJEUJF (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 16:09:05 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72346E4
+        for <linux-media@vger.kernel.org>; Thu,  5 Oct 2023 13:09:03 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-9b974955474so257625066b.1
+        for <linux-media@vger.kernel.org>; Thu, 05 Oct 2023 13:09:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696535219; x=1697140019; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1696536542; x=1697141342; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=3Dt9k8PRGqt54iiTeBVK6B2nTooRkAx1cay9o3WY25Q=;
-        b=r2LrDtF7dg5/8ZRrSk1CaLoXN/QH7ce9ZZNFuOxitWNpYMGHlhyrS83xrFtZmN7XmD
-         iLfpxxg8h63SkCG/KICtJB5NINLEvakUZbaO751+wV3gSjKhQHmKzrnrmRsK41VS+fVa
-         zct12oSF/UeWqDvAiDTvPR7ZH/ScQuLgq/57QsBTpAXPVK9mEqSQSi0SNQGRvKhNdP33
-         eURZyQzKPf+1Ek9OVlWaFXUzu/HYBsCjnAnEU63mXcEsZhnFKKkEs128v1TmRF4xRHhF
-         o39aeSaJoY7BWChGwf4XKVqLASpRmW+DoysVNM5uDwHeXCJxdbNWDkcrQsLzh9k57YX/
-         lLkg==
+        bh=zB+mV+loa+IjFsnqD3i+tWsK9lbENMpsCap2Dmlw6Gg=;
+        b=uQrewXGH7UgtLILs4upcec0za83YjMHtD0w8dNE8bXQGQ+Wl+BCRArTmAi2qKauL3u
+         8NjEDnibR5MNAsAPQvzOTTqKrzNtA4H0qMVxlWq/sjr3FGOZzeGJFfmQcRVFZyDsRDgI
+         cxTjlS8QeVWWgx/jJHbNljn4kkkjDTG0Orky7c0xkub/deFcXsr3rKRChytBzn+Xwzjb
+         H2aun8cNFCFzhj8SSmnR31m/YkwFbAlgOL3pAzdfpD27mr0jWwrXjuudN/1XhVoLaD4p
+         i1nMs2580Hhb2KI0LaH1uadJOsOA9zU70Dtzgd/WNcqoB1l/PFEGMLMI7SC3t6PYNZox
+         ltqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696535219; x=1697140019;
+        d=1e100.net; s=20230601; t=1696536542; x=1697141342;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Dt9k8PRGqt54iiTeBVK6B2nTooRkAx1cay9o3WY25Q=;
-        b=WPZj0f5R+Fl/yANa5Wkq5Ru6siCiJNCGwIHPxoAo08nOn3h/VPC+RxluPjem044qSR
-         IQcIRTTCy5RK8Q76PNQWS3jQARKbonBqExthdWYABSvpk6wCqa1SKkGq3ZLuJPa9Odj/
-         I43s8RUl6znr69C9Kps7xjwrYc52CWtKQPVTo+js6ZZdD7kjNQekWM097Kf9knFotMYc
-         YbjZ5A6vD1teqya+ay7gFboCt3tHVXsxj7K9/p5ihs2jmoPBFek31L5a9w4kKlsEF4W/
-         pXx780xHefFfsJigiNfczqUAuzyNMXcqdr2njm2JFsnyPU2nSy21HZd1LV/6rf8jWQ2U
-         Mumw==
-X-Gm-Message-State: AOJu0YzRlRMq9x4ebhYtT+BlWV/MhaG/s1euWdqLyW9MngEw+buBuE10
-        86aoCHIhgV0DZjDR31Kpctzj4g==
-X-Google-Smtp-Source: AGHT+IExuH8kOzj/dTZpci/l66+zbVuI1Q4ansN6TEuNcT5VkMIxS+P4Zhp6GYS72DXTGfUPCsQq5A==
-X-Received: by 2002:a17:907:780d:b0:9b6:4df9:e5b5 with SMTP id la13-20020a170907780d00b009b64df9e5b5mr5792518ejc.61.1696535218928;
-        Thu, 05 Oct 2023 12:46:58 -0700 (PDT)
+        bh=zB+mV+loa+IjFsnqD3i+tWsK9lbENMpsCap2Dmlw6Gg=;
+        b=fyPr6+K52JLLAq/6ORIuLeZ98hcT2e0hOMsMTPvpS4OC3SudUQ1kIrMI7jahPtsO0x
+         fv6sJbux73emGJxk/pUg/uOAthwfqMeV8/RjYQDiV13NA/jfgiJKsOcN0X9SZKyP4Qes
+         J0GiJky87nrYKLOBWBrHjy7X8CYr8B2+SGzKbVTfgB63OvaUVmP4DEIKOgH1ocLSKbWv
+         b2PAylX7Of5SWWZQBB/EeM1BrezfWWGQzu+GZHRQCkHoeH0K+7NwmB88TVwOxA24c4Gd
+         GGWOfNw95JFLn2xYdi6yeF3Rk18BKagYDPPtamaAyaGuIlVZiP1VH7QTjTM1UNFlVTAe
+         0mNw==
+X-Gm-Message-State: AOJu0YzgBYuTPPeZgeDYm52T7dXUyV3zU63lXHyA8nHynVHipf/SyfK4
+        f9LYFXl9tW7mwczeeva6xe55dg==
+X-Google-Smtp-Source: AGHT+IG2KxKuD4R2zSJqWCajGGhFkMA91xza5FNxup7W6+zdFVp0fmYQeZjUFfroNg8FuNjnRDA9pg==
+X-Received: by 2002:a17:906:3156:b0:9b2:b71f:83be with SMTP id e22-20020a170906315600b009b2b71f83bemr5444688eje.1.1696536541806;
+        Thu, 05 Oct 2023 13:09:01 -0700 (PDT)
 Received: from [192.168.1.197] (5-157-101-10.dyn.eolo.it. [5.157.101.10])
-        by smtp.gmail.com with ESMTPSA id jw5-20020a170906e94500b009ae6a6451fdsm1651578ejb.35.2023.10.05.12.46.57
+        by smtp.gmail.com with ESMTPSA id i13-20020a056402054d00b005231e3d89efsm1549705edx.31.2023.10.05.13.09.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Oct 2023 12:46:58 -0700 (PDT)
-Message-ID: <86886ecb-dd39-49fb-a575-9e9bf303a8b1@linaro.org>
-Date:   Thu, 5 Oct 2023 21:46:57 +0200
+        Thu, 05 Oct 2023 13:09:01 -0700 (PDT)
+Message-ID: <90746214-d091-464f-a889-bc4353caa362@linaro.org>
+Date:   Thu, 5 Oct 2023 22:08:54 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/7] arm64: dts: st: add soc & rifsc structure to
- stm32mp255
+Subject: Re: [PATCH v2] dt-bindings: media: rockchip: Add resets property into
+ decoder node
 Content-Language: en-US
-To:     Hugues Fruchet <hugues.fruchet@foss.st.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Cc:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-References: <20231004091552.3531659-1-hugues.fruchet@foss.st.com>
- <20231004091552.3531659-6-hugues.fruchet@foss.st.com>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        heiko@sntech.de
+Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+References: <20231005161107.269303-1-benjamin.gaignard@collabora.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -117,36 +110,22 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231004091552.3531659-6-hugues.fruchet@foss.st.com>
+In-Reply-To: <20231005161107.269303-1-benjamin.gaignard@collabora.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 04/10/2023 11:15, Hugues Fruchet wrote:
-> Add soc & rifsc structure to stm32mp255.
+On 05/10/2023 18:11, Benjamin Gaignard wrote:
+> RK3588 AV1 decoder hardware block have resets lines and driver code
+> already suppport it.
+> Update yaml file to be aligned with this feature.
 > 
-> Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
-> ---
->  arch/arm64/boot/dts/st/stm32mp255.dtsi | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/st/stm32mp255.dtsi b/arch/arm64/boot/dts/st/stm32mp255.dtsi
-> index e6fa596211f5..4f2b224fe077 100644
-> --- a/arch/arm64/boot/dts/st/stm32mp255.dtsi
-> +++ b/arch/arm64/boot/dts/st/stm32mp255.dtsi
-> @@ -6,4 +6,8 @@
->  #include "stm32mp253.dtsi"
->  
->  / {
-> +	soc@0 {
-> +		rifsc: rifsc-bus@42080000 {
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 
 
-This change on its own makes little sense. We do not add empty
-placeholders...
-
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
