@@ -2,188 +2,137 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC68CE92702
-	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 14:17:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A31E2E92702
+	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 14:20:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233371AbjJEOQv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Oct 2023 10:16:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43614 "EHLO
+        id S233528AbjJEOUP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Oct 2023 10:20:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231830AbjJEOPD (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 10:15:03 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB697DA9;
-        Thu,  5 Oct 2023 00:44:45 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 587E71F8C1;
-        Thu,  5 Oct 2023 07:44:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1696491884; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-        bh=6Fiw1QxWqAmbnUUUEcuKx0CG3fBEsJS495hprxqjYac=;
-        b=xAOCwKzdRrM6ImgS0E70wSwEHxqJGNvgkx4MdGrA9CkgoYf5HayXu4l7mDt9wRSfB4XeCQ
-        RUZdMdwXr6vUNGX69TmatzjZeq8V1/DTKRpZ5FgePbIsy7D3pKMOXhcU7vHQalwoADV9qH
-        LuS8u6/8qbED3lvZ1cxYc8aWTMeK++k=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1696491884;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-        bh=6Fiw1QxWqAmbnUUUEcuKx0CG3fBEsJS495hprxqjYac=;
-        b=VUcRuG66ejbNj2wAGn4YE9vaLEmeZ3HJoA3RXBglmQ3wGkpGkgpOir3jBfaGYaeeGlGeiJ
-        vGZRk7lrcfZ+/DCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E6D8A139C2;
-        Thu,  5 Oct 2023 07:44:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id iXn5M2tpHmWbRAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 05 Oct 2023 07:44:43 +0000
-Message-ID: <fed1cbf3-0926-4895-a8ba-d6fa9fd53dbe@suse.de>
-Date:   Thu, 5 Oct 2023 09:44:42 +0200
+        with ESMTP id S232895AbjJEOSW (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 10:18:22 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC2826A75
+        for <linux-media@vger.kernel.org>; Thu,  5 Oct 2023 05:59:10 -0700 (PDT)
+Received: from [192.168.88.20] (91-157-153-81.elisa-laajakaista.fi [91.157.153.81])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B081B9C4;
+        Thu,  5 Oct 2023 14:57:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1696510642;
+        bh=PaHhXxFhItQu0J+sVv9DRCJ7mxoUOFIugGaQqOtypBs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mXTp7/e/p9K0DSFasa+hlOq+lD4NU7e7d8jxk2wIlICczG8tVKBPaR8Tnk0o6t2hh
+         UYnRvQ0TKOyYNVnx2mEtWxdy5DI5mG5a7VUfUjQith3kJIeyRbCY76FEt7YzBd5vJt
+         BcnIaodyhHo2wSFbtNgZY1Qz7yCSSniK3PoyFAqE=
+Message-ID: <f31d9f76-4156-c79b-0cbc-0c5450656312@ideasonboard.com>
+Date:   Thu, 5 Oct 2023 15:59:05 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [REGRESSION] BUG: KFENCE: memory corruption in
- drm_gem_put_pages+0x186/0x250
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v6 11/28] media: Documentation: Document S_ROUTING
+ behaviour
 Content-Language: en-US
-To:     Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     Linux Regressions <regressions@lists.linux.dev>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        linaro-mm-sig@lists.linaro.org, linux-mm@kvack.org,
-        Maxime Ripard <mripard@kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         linux-media@vger.kernel.org
-References: <13360591.uLZWGnKmhe@natalenko.name>
- <2300189.ElGaqSPkdT@natalenko.name> <ZRrUjcWqtmzPV3Fs@casper.infradead.org>
- <2160215.irdbgypaU6@natalenko.name>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-Autocrypt: addr=tzimmermann@suse.de; keydata=
- xsBNBFs50uABCADEHPidWt974CaxBVbrIBwqcq/WURinJ3+2WlIrKWspiP83vfZKaXhFYsdg
- XH47fDVbPPj+d6tQrw5lPQCyqjwrCPYnq3WlIBnGPJ4/jreTL6V+qfKRDlGLWFjZcsrPJGE0
- BeB5BbqP5erN1qylK9i3gPoQjXGhpBpQYwRrEyQyjuvk+Ev0K1Jc5tVDeJAuau3TGNgah4Yc
- hdHm3bkPjz9EErV85RwvImQ1dptvx6s7xzwXTgGAsaYZsL8WCwDaTuqFa1d1jjlaxg6+tZsB
- 9GluwvIhSezPgnEmimZDkGnZRRSFiGP8yjqTjjWuf0bSj5rUnTGiyLyRZRNGcXmu6hjlABEB
- AAHNJ1Rob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPsLAjgQTAQgAOAIb
- AwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftODH
- AAoJEGgNwR1TC3ojx1wH/0hKGWugiqDgLNXLRD/4TfHBEKmxIrmfu9Z5t7vwUKfwhFL6hqvo
- lXPJJKQpQ2z8+X2vZm/slsLn7J1yjrOsoJhKABDi+3QWWSGkaGwRJAdPVVyJMfJRNNNIKwVb
- U6B1BkX2XDKDGffF4TxlOpSQzdtNI/9gleOoUA8+jy8knnDYzjBNOZqLG2FuTdicBXblz0Mf
- vg41gd9kCwYXDnD91rJU8tzylXv03E75NCaTxTM+FBXPmsAVYQ4GYhhgFt8S2UWMoaaABLDe
- 7l5FdnLdDEcbmd8uLU2CaG4W2cLrUaI4jz2XbkcPQkqTQ3EB67hYkjiEE6Zy3ggOitiQGcqp
- j//OwE0EWznS4AEIAMYmP4M/V+T5RY5at/g7rUdNsLhWv1APYrh9RQefODYHrNRHUE9eosYb
- T6XMryR9hT8XlGOYRwKWwiQBoWSDiTMo/Xi29jUnn4BXfI2px2DTXwc22LKtLAgTRjP+qbU6
- 3Y0xnQN29UGDbYgyyK51DW3H0If2a3JNsheAAK+Xc9baj0LGIc8T9uiEWHBnCH+RdhgATnWW
- GKdDegUR5BkDfDg5O/FISymJBHx2Dyoklv5g4BzkgqTqwmaYzsl8UxZKvbaxq0zbehDda8lv
- hFXodNFMAgTLJlLuDYOGLK2AwbrS3Sp0AEbkpdJBb44qVlGm5bApZouHeJ/+n+7r12+lqdsA
- EQEAAcLAdgQYAQgAIAIbDBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftOH6AAoJEGgNwR1T
- C3ojVSkIALpAPkIJPQoURPb1VWjh34l0HlglmYHvZszJWTXYwavHR8+k6Baa6H7ufXNQtThR
- yIxJrQLW6rV5lm7TjhffEhxVCn37+cg0zZ3j7zIsSS0rx/aMwi6VhFJA5hfn3T0TtrijKP4A
- SAQO9xD1Zk9/61JWk8OysuIh7MXkl0fxbRKWE93XeQBhIJHQfnc+YBLprdnxR446Sh8Wn/2D
- Ya8cavuWf2zrB6cZurs048xe0UbSW5AOSo4V9M0jzYI4nZqTmPxYyXbm30Kvmz0rYVRaitYJ
- 4kyYYMhuULvrJDMjZRvaNe52tkKAvMevcGdt38H4KSVXAylqyQOW5zvPc4/sq9c=
-In-Reply-To: <2160215.irdbgypaU6@natalenko.name>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------72PmBn0Mbk7dBZYhSA00TrME"
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        bingbu.cao@intel.com, hongju.wang@intel.com, hverkuil@xs4all.nl,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Dmitry Perchanov <dmitry.perchanov@intel.com>,
+        "Ng, Khai Wen" <khai.wen.ng@intel.com>
+References: <20231003115237.76828-1-sakari.ailus@linux.intel.com>
+ <20231003120813.77726-2-sakari.ailus@linux.intel.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <20231003120813.77726-2-sakari.ailus@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------72PmBn0Mbk7dBZYhSA00TrME
-Content-Type: multipart/mixed; boundary="------------irKYM1Z83udZBdlPGECxWYUo";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Oleksandr Natalenko <oleksandr@natalenko.name>,
- Matthew Wilcox <willy@infradead.org>
-Cc: Linux Regressions <regressions@lists.linux.dev>,
- linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- linaro-mm-sig@lists.linaro.org, linux-mm@kvack.org,
- Maxime Ripard <mripard@kernel.org>, Bagas Sanjaya <bagasdotme@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Sumit Semwal <sumit.semwal@linaro.org>, linux-media@vger.kernel.org
-Message-ID: <fed1cbf3-0926-4895-a8ba-d6fa9fd53dbe@suse.de>
-Subject: Re: [REGRESSION] BUG: KFENCE: memory corruption in
- drm_gem_put_pages+0x186/0x250
-References: <13360591.uLZWGnKmhe@natalenko.name>
- <2300189.ElGaqSPkdT@natalenko.name> <ZRrUjcWqtmzPV3Fs@casper.infradead.org>
- <2160215.irdbgypaU6@natalenko.name>
-In-Reply-To: <2160215.irdbgypaU6@natalenko.name>
+On 03/10/2023 15:07, Sakari Ailus wrote:
+> Document S_ROUTING behaviour for different devices.
+> 
+> Generally in devices that produce streams the streams are static and some
 
---------------irKYM1Z83udZBdlPGECxWYUo
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+I'm not sure what "static" means here. "Generally in devices that 
+produce streams there is a fixed amount of streams..."?
 
-SGkNCg0KQW0gMDIuMTAuMjMgdW0gMTc6Mzggc2NocmllYiBPbGVrc2FuZHIgTmF0YWxlbmtv
-Og0KPiBPbiBwb25kxJtsw60gMi4gxZnDrWpuYSAyMDIzIDE2OjMyOjQ1IENFU1QgTWF0dGhl
-dyBXaWxjb3ggd3JvdGU6DQo+PiBPbiBNb24sIE9jdCAwMiwgMjAyMyBhdCAwMTowMjo1MlBN
-ICswMjAwLCBPbGVrc2FuZHIgTmF0YWxlbmtvIHdyb3RlOg0KPj4+Pj4+PiBCVUc6IEtGRU5D
-RTogbWVtb3J5IGNvcnJ1cHRpb24gaW4gZHJtX2dlbV9wdXRfcGFnZXMrMHgxODYvMHgyNTAN
-Cj4+Pj4+Pj4NCj4+Pj4+Pj4gQ29ycnVwdGVkIG1lbW9yeSBhdCAweDAwMDAwMDAwZTE3M2Ey
-OTQgWyAhICEgISAhICEgISAhICEgISAhICEgISAhICEgISAhIF0gKGluIGtmZW5jZS0jMTA4
-KToNCj4+Pj4+Pj4gICBkcm1fZ2VtX3B1dF9wYWdlcysweDE4Ni8weDI1MA0KPj4+Pj4+PiAg
-IGRybV9nZW1fc2htZW1fcHV0X3BhZ2VzX2xvY2tlZCsweDQzLzB4YzANCj4+Pj4+Pj4gICBk
-cm1fZ2VtX3NobWVtX29iamVjdF92dW5tYXArMHg4My8weGUwDQo+Pj4+Pj4+ICAgZHJtX2dl
-bV92dW5tYXBfdW5sb2NrZWQrMHg0Ni8weGIwDQo+Pj4+Pj4+ICAgZHJtX2ZiZGV2X2dlbmVy
-aWNfaGVscGVyX2ZiX2RpcnR5KzB4MWRjLzB4MzEwDQo+Pj4+Pj4+ICAgZHJtX2ZiX2hlbHBl
-cl9kYW1hZ2Vfd29yaysweDk2LzB4MTcwDQo+Pj4NCj4+PiBNYXR0aGV3LCBiZWZvcmUgSSBz
-dGFydCBkYW5jaW5nIGFyb3VuZCwgZG8geW91IHRoaW5rIF5eIGNvdWxkIGhhdmUgdGhlIHNh
-bWUgY2F1c2UgYXMgMGI2MmFmMjhmMjQ5YjljNDAzNmEwNWFjZmIwNTMwNThkYzAyZTJlMiB3
-aGljaCBnb3QgZml4ZWQgYnkgODYzYThlYjNmMjcwOThiNDI3NzJmNjY4ZTM5NzdmZjRjYWUx
-MGIwND8NCj4+DQo+PiBZZXMsIGVudGlyZWx5IHBsYXVzaWJsZS4gIEkgdGhpbmsgeW91IGhh
-dmUgdHdvIHVzZWZ1bCBwb2ludHMgdG8gbG9vayBhdA0KPj4gYmVmb3JlIGRlbHZpbmcgaW50
-byBhIGZ1bGwgYmlzZWN0IC0tIDg2M2E4ZSBhbmQgdGhlIHBhcmVudCBvZiAwYjYyYWYuDQo+
-PiBJZiBlaXRoZXIgb2YgdGhlbSB3b3JrLCBJIHRoaW5rIHlvdSBoYXZlIG5vIG1vcmUgd29y
-ayB0byBkby4NCj4gDQo+IE9LLCBJJ3ZlIGRpZCB0aGlzIGFnYWluc3QgdjYuNS41Og0KPiAN
-Cj4gYGBgDQo+IGdpdCBsb2cgLS1vbmVsaW5lIEhFQUR+My4uDQo+IDdjMWU3Njk1Y2E5Yjgg
-KEhFQUQgLT4gdGVzdCkgUmV2ZXJ0ICJtbTogcmVtb3ZlIHN0cnVjdCBwYWdldmVjIg0KPiA4
-ZjJhZDUzYjZlYWM2IFJldmVydCAibW06IHJlbW92ZSBjaGVja19tb3ZlX3VuZXZpY3RhYmxl
-X3BhZ2VzKCkiDQo+IGZhMWUzYzBiNTQ1M2MgUmV2ZXJ0ICJkcm06IGNvbnZlcnQgZHJtX2dl
-bV9wdXRfcGFnZXMoKSB0byB1c2UgYSBmb2xpb19iYXRjaCINCj4gYGBgDQo+IA0KPiB0aGVu
-IHJlYm9vdGVkIHRoZSBob3N0IG11bHRpcGxlIHRpbWVzLCBhbmQgdGhlIGlzc3VlIGlzIG5v
-dCBzZWVuIGFueSBtb3JlLg0KPiANCj4gU28gSSBndWVzcyAzMjkxZTA5YTQ2Mzg3MDYxMGI4
-MjI3ZjMyYjE2YjE5YTU4N2VkZjMzIGlzIHRoZSBjdWxwcml0Lg0KDQpJZ25vcmUgbXkgb3Ro
-ZXIgZW1haWwuIEl0J3MgYXBwYXJlbnRseSBiZWVuIGZpeGVkIGFscmVhZHkuIFRoYW5rcyEN
-Cg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiANCj4gVGhhbmtzLg0KPiANCg0KLS0gDQpU
-aG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0
-d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpGcmFua2Vuc3RyYXNzZSAxNDYsIDkwNDYx
-IE51ZXJuYmVyZywgR2VybWFueQ0KR0Y6IEl2byBUb3RldiwgQW5kcmV3IE15ZXJzLCBBbmRy
-ZXcgTWNEb25hbGQsIEJvdWRpZW4gTW9lcm1hbg0KSFJCIDM2ODA5IChBRyBOdWVybmJlcmcp
-DQo=
+> can be enabled and disabled, whereas in devices that just transport them
+> or write them to memory, more configurability is allowed. Document this.
+> 
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> ---
+>   .../userspace-api/media/v4l/dev-subdev.rst    | 21 +++++++++++++++++++
+>   1 file changed, 21 insertions(+)
+> 
+> diff --git a/Documentation/userspace-api/media/v4l/dev-subdev.rst b/Documentation/userspace-api/media/v4l/dev-subdev.rst
+> index fb73a95401c3..83993775237f 100644
+> --- a/Documentation/userspace-api/media/v4l/dev-subdev.rst
+> +++ b/Documentation/userspace-api/media/v4l/dev-subdev.rst
+> @@ -593,6 +593,27 @@ Any configurations of a stream within a pad, such as format or selections,
+>   are independent of similar configurations on other streams. This is
+>   subject to change in the future.
+>   
+> +Device types and routing setup
+> +^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> +
+> +Different kinds of sub-devices have differing behaviour for route inactivation,
 
---------------irKYM1Z83udZBdlPGECxWYUo--
+Would "activation" convey the same, but be a bit clearer?
 
---------------72PmBn0Mbk7dBZYhSA00TrME
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+> +depending on the hardware. Devices generating the streams may often allow
 
------BEGIN PGP SIGNATURE-----
+Maybe drop the "often".
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmUeaWsFAwAAAAAACgkQlh/E3EQov+C8
-IQ//f7UtB0BiFOP/urp8ifj2BA++IH7AahthXC/eA6+2pPwYjw/fe9YrnNsXHKZkmRoa+txpuWSO
-IqfBW945oex2UlDLbj1vlaZ4aGlPDxnRwcGbabDtsZ6G/tGVquNiLTSmetw/tigqXEIoH1w75zdS
-zUBPyCLzeyfjHEdEu6A/HbaP7jhr7+ueRJxx9r2EVyP4CEZ4RI4ZepOMf0DuANhXUZ1Cu0ut3KiU
-ncNevZo+WHor0sZq1bNWzJ9CUgNk0sqZux8KPnd5kOxzK3BiTivKoLJGOmjA3SeanTipgLEu+aK+
-Dyjm/v211t64CXuw0pAaGG0Ha/moJ9XSd/r9NiKFxfvs1tsV/+vFjiXZbInjzIj43YhNpywfMcGF
-MzV+hmEhMqugK0P/Holb1s5MQJbR6Bq8FE8lMeK3lxC3c0/71hcGyK/PwPJXLXinFmVIGw74Qg7E
-jVKHdCxgM1Q/gbPuaeX+o4xD+DbJlqYofv+XBMpOJtcPQ/OsdGGW1+S/fR33yNwJ11k3E/Nphji/
-Amv1gluY6iTqaHmIJfnsBAA+Z0Q6dgTKhue771qOyYu4uIoK6bFnv7yx9iXBe9khb3LOIIlselMZ
-CQoPI57RQr1N8QA3UZ3VYC4NqTRgNcXhAxNVLpwVlNrGjIm17nrbB/BlC0NlrBHLkNeRE7lck58Z
-rRo=
-=C3sp
------END PGP SIGNATURE-----
+> +enabling and disabling some of these or the configuration is fixed. If these
 
---------------72PmBn0Mbk7dBZYhSA00TrME--
+"some of these" -> "some of the routes".
+
+> +routes can be disabled, not declaring these routes (or declaring them without
+
+Here also, I think "the routes" is more readable than repeating "these 
+routes".
+
+> +``VIDIOC_SUBDEV_STREAM_FL_ACTIVE`` flag set) in ``VIDIOC_SUBDEV_S_ROUTING`` will
+
+Why is the flag sentence in parenthesis? Aren't both options of the same 
+value?
+
+> +disable the routes while the sub-device driver retain the streams and their
+
+What does this mean? That even if the user disables a route, the driver 
+must keep the configuration that was set earlier related to that route?
+
+> +configuration. The ``VIDIOC_SUBDEV_S_ROUTING`` will still return such routes
+> +back to the user in the routes array, with the ``V4L2_SUBDEV_STREAM_FL_ACTIVE``
+> +flag unset.
+
+So a generating device should always return all its routes with both 
+G_ROUTING and S_ROUTING, right? But with disabled routes not having 
+VIDIOC_SUBDEV_STREAM_FL_ACTIVE. The text doesn't mention G_ROUTING at all.
+
+> +Devices transporting the streams almost always have more configurability with
+> +respect to routing. Typically any route between the sub-device's sink and source
+> +pads is possible, and multiple routes (usually up to certain limited number) may
+> +be active simultaneously. For such devices, no routes are created by the driver
+> +and user-created routes are fully replaced when ``VIDIOC_SUBDEV_S_ROUTING`` is
+> +called on the sub-device. Such newly created routes have the device's default
+> +configuration for format and selection rectangles.
+> +
+
+I think this paragraph is ok. But could this whole section be 
+restructured a bit, as the previous paragraph gets quite confusing. Maybe:
+
+First paragraph to explain the two different kinds of devices, and 
+perhaps a mention that a route is considered disabled if either it does 
+not exist in the routing table or if VIDIOC_SUBDEV_STREAM_FL_ACTIVE is 
+not set.
+
+Then a paragraph for generating devices, and then a paragraph for 
+transporting devices.
+
+>   Configuring streams
+>   ^^^^^^^^^^^^^^^^^^^
+>   
+
