@@ -2,114 +2,222 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 150FCE92739
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E39FE92719
 	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 15:58:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238040AbjJEP6L (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Oct 2023 11:58:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35684 "EHLO
+        id S238078AbjJEP6O (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Oct 2023 11:58:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235462AbjJEP5H (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 11:57:07 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA49D68
-        for <linux-media@vger.kernel.org>; Thu,  5 Oct 2023 07:05:10 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 395Bswiw002759;
-        Thu, 5 Oct 2023 15:38:38 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding:content-type; s=
-        selector1; bh=fjq+jjfSImcfRAA7FzJY437jVyVi0XlHt5CTjFzYrtw=; b=ho
-        VIh7PUxONpr3zjZu8GPx7BhlUyUGVD0ptlu8813T6KWB6ryiutNDhq4wzC8iolpV
-        GOWm5vvKt74kk4qyHgt7qxj72QHAY33YR1BNuSzEEc9IvySv4iZj5GQDTrx5xbH9
-        l194XIe10ohCjv1AlWftK/9xj+em4bd+eRSbWBqhmWo1v7bGIXJp7oOJuIPgIxNW
-        0d/gxtvmW0yyvy0UUssOi5e2iVnPLpVh8Dw3WiCQ1lWO7h/CHexz+fxxXXOjWCPO
-        url5siOAj23iqJD6VT8jdYuJRIG2qcc7ItIoUxMxqeukiZnme1JInMcaYUFyGa1C
-        12F1feWmPS8BpXJKNxPg==
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3thvpjgdrx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Oct 2023 15:38:38 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 38DFF10005D;
-        Thu,  5 Oct 2023 15:38:36 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 301D722FA2D;
-        Thu,  5 Oct 2023 15:38:36 +0200 (CEST)
-Received: from localhost (10.201.20.120) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 5 Oct
- 2023 15:38:35 +0200
-From:   Hugues Fruchet <hugues.fruchet@foss.st.com>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        <linux-media@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-CC:     Hugues Fruchet <hugues.fruchet@foss.st.com>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Adam Ford <aford173@gmail.com>
-Subject: [RFC v2 6/6] media: hantro: add NV12 single-plane support for STM32MP25 VENC
-Date:   Thu, 5 Oct 2023 15:37:10 +0200
-Message-ID: <20231005133710.3589080-7-hugues.fruchet@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231005133710.3589080-1-hugues.fruchet@foss.st.com>
-References: <20231005133710.3589080-1-hugues.fruchet@foss.st.com>
+        with ESMTP id S234153AbjJEP4x (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 11:56:53 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E0F3C1D
+        for <linux-media@vger.kernel.org>; Thu,  5 Oct 2023 06:54:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696514065; x=1728050065;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jlPg1W8OitdNLSLGToNJchEH64RnB2dBG9TOtpPGv6c=;
+  b=atcbxwZdVHeMZBe6FDqpUxCSBedRCuL5lCExLiZD59inQAq1NQoKV5cs
+   Dbgovs5I+t71JTh/eWh9MS+8N19ngsvTWpktPKucTQ64+8sT7Ax9JUEID
+   RC3eXi5quUheskImvqKNoCGZNjSXyGZ6CYeNfeD+rtTF355wPNWf4ktaC
+   VEi084/50umoQ22ZZ9eZOl5zVa2+Dws5W9wuJRCynV9h2Ka02KB6Mr90c
+   ByA5SSG/sDil62KlFQd/BWa2iNYyIFL6X7xV4r3QStVVh69n8vAow5Afi
+   S2hYPjPXHgqCEydS7Hf9ghLDZSBCrnJbdXItIk3hoRs9+Ny5bdDjIIwfu
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="414429073"
+X-IronPort-AV: E=Sophos;i="6.03,202,1694761200"; 
+   d="scan'208";a="414429073"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 03:22:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="817526468"
+X-IronPort-AV: E=Sophos;i="6.03,202,1694761200"; 
+   d="scan'208";a="817526468"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 03:22:45 -0700
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id BCB1212035C;
+        Thu,  5 Oct 2023 13:22:42 +0300 (EEST)
+Date:   Thu, 5 Oct 2023 10:22:42 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     linux-media@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        tomi.valkeinen@ideasonboard.com, bingbu.cao@intel.com,
+        hongju.wang@intel.com,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Dmitry Perchanov <dmitry.perchanov@intel.com>,
+        "Ng, Khai Wen" <khai.wen.ng@intel.com>
+Subject: Re: [PATCH v6 01/28] media: mc: Add INTERNAL pad flag
+Message-ID: <ZR6Ocg+Nm+r1ldy+@kekkonen.localdomain>
+References: <20231003115237.76828-1-sakari.ailus@linux.intel.com>
+ <20231003115237.76828-2-sakari.ailus@linux.intel.com>
+ <ee3b59fb-796c-4e38-bc19-575eab4872c1@xs4all.nl>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.201.20.120]
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-05_08,2023-10-05_01,2023-05-22_02
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ee3b59fb-796c-4e38-bc19-575eab4872c1@xs4all.nl>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add support of encoding from NV12 single-plane frame.
+Hi Hans,
 
-Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
----
- .../media/platform/verisilicon/stm32mp25_venc_hw.c  | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+Thanks for the review!
 
-diff --git a/drivers/media/platform/verisilicon/stm32mp25_venc_hw.c b/drivers/media/platform/verisilicon/stm32mp25_venc_hw.c
-index 2176eccd1f79..d66f20bee9eb 100644
---- a/drivers/media/platform/verisilicon/stm32mp25_venc_hw.c
-+++ b/drivers/media/platform/verisilicon/stm32mp25_venc_hw.c
-@@ -21,6 +21,19 @@
-  */
- 
- static const struct hantro_fmt stm32mp25_venc_fmts[] = {
-+	{
-+		.fourcc = V4L2_PIX_FMT_NV12,
-+		.codec_mode = HANTRO_MODE_NONE,
-+		.enc_fmt = ROCKCHIP_VPU_ENC_FMT_YUV420SP,
-+		.frmsize = {
-+			.min_width = 96,
-+			.max_width = 8176,
-+			.step_width = MB_DIM,
-+			.min_height = 32,
-+			.max_height = 8176,
-+			.step_height = MB_DIM,
-+		},
-+	},
- 	{
- 		.fourcc = V4L2_PIX_FMT_YUV420M,
- 		.codec_mode = HANTRO_MODE_NONE,
+On Thu, Oct 05, 2023 at 11:52:08AM +0200, Hans Verkuil wrote:
+> On 03/10/2023 13:52, Sakari Ailus wrote:
+> > Internal source pads will be used as routing endpoints in V4L2
+> > [GS]_ROUTING IOCTLs, to indicate that the stream begins in the entity.
+> > 
+> > Also prevent creating links to pads that have been flagged as internal and
+> > initialising source pads with internal flag set.
+> > 
+> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > ---
+> >  Documentation/userspace-api/media/glossary.rst         |  6 ++++++
+> >  .../userspace-api/media/mediactl/media-types.rst       |  6 ++++++
+> >  drivers/media/mc/mc-entity.c                           | 10 ++++++++--
+> >  include/uapi/linux/media.h                             |  1 +
+> >  4 files changed, 21 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/Documentation/userspace-api/media/glossary.rst b/Documentation/userspace-api/media/glossary.rst
+> > index 96a360edbf3b..f7b99a4527c7 100644
+> > --- a/Documentation/userspace-api/media/glossary.rst
+> > +++ b/Documentation/userspace-api/media/glossary.rst
+> > @@ -173,6 +173,12 @@ Glossary
+> >  	An integrated circuit that integrates all components of a computer
+> >  	or other electronic systems.
+> >  
+> > +_media-glossary-stream:
+> > +    Stream
+> > +	A distinct flow of data (image data or metadata) over a media pipeline
+> > +	from source to sink. A source may be e.g. an image sensor and a sink
+> > +	e.g. a memory buffer.
+> 
+> Hmm, I think this is a bit confusing. I think it would be better to replace
+> "from source to sink" with "from the initial source to the final sink".
+
+Seems fine to me. I'll use that in v7.
+
+> 
+> The original text doesn't make it clear that there can be many hops in
+> between.
+> 
+> So also: "A source" -> "An initial source", and "a sink" -> "a final sink".
+> 
+> Note that "media pipeline" isn't defined either. Should that be added?
+
+I can add that, too...
+
+> 
+> Finally, I think this should be a separate patch as it has nothing to do with
+> adding the INTERNAL pad flag.
+
+I agree, will split in v7.
+
+> 
+> > +
+> >      V4L2 API
+> >  	**V4L2 userspace API**
+> >  
+> > diff --git a/Documentation/userspace-api/media/mediactl/media-types.rst b/Documentation/userspace-api/media/mediactl/media-types.rst
+> > index 0ffeece1e0c8..28941da27790 100644
+> > --- a/Documentation/userspace-api/media/mediactl/media-types.rst
+> > +++ b/Documentation/userspace-api/media/mediactl/media-types.rst
+> > @@ -361,6 +361,7 @@ Types and flags used to represent the media graph elements
+> >  .. _MEDIA-PAD-FL-SINK:
+> >  .. _MEDIA-PAD-FL-SOURCE:
+> >  .. _MEDIA-PAD-FL-MUST-CONNECT:
+> > +.. _MEDIA-PAD-FL-INTERNAL:
+> >  
+> >  .. flat-table:: Media pad flags
+> >      :header-rows:  0
+> > @@ -382,6 +383,11 @@ Types and flags used to represent the media graph elements
+> >  	  when this flag isn't set; the absence of the flag doesn't imply
+> >  	  there is none.
+> >  
+> > +    *  -  ``MEDIA_PAD_FL_INTERNAL``
+> > +       -  The internal flag indicates an internal pad that has no external
+> > +	  connections. Such a pad shall not be connected with a link. The
+> > +	  internal flag indicates that the :ref:``stream
+> > +	  <media-glossary-stream>`` either starts or ends in the entity.
+> 
+> This suggests that INTERNAL can be used for both sinks and sources, but...
+
+Right. The INTERNAL flag in UAPI shouldn't be limited to sources, but at
+the same time we don't have use for it in sinks. I'd prefer to leave this
+open in the future. We could of course say that explicitly.
+
+> 
+> >  
+> >  One and only one of ``MEDIA_PAD_FL_SINK`` and ``MEDIA_PAD_FL_SOURCE``
+> >  must be set for every pad.
+> > diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
+> > index 543a392f8635..f5f290781021 100644
+> > --- a/drivers/media/mc/mc-entity.c
+> > +++ b/drivers/media/mc/mc-entity.c
+> > @@ -213,7 +213,9 @@ int media_entity_pads_init(struct media_entity *entity, u16 num_pads,
+> >  		iter->index = i++;
+> >  
+> >  		if (hweight32(iter->flags & (MEDIA_PAD_FL_SINK |
+> > -					     MEDIA_PAD_FL_SOURCE)) != 1) {
+> > +					     MEDIA_PAD_FL_SOURCE)) != 1 ||
+> > +		    (iter->flags & MEDIA_PAD_FL_INTERNAL &&
+> > +		     !(iter->flags & MEDIA_PAD_FL_SINK))) {
+> 
+> ...this appears to limit it to just sinks.
+
+Yes, this is enforced so we won't get drivers that accidentally would use
+the INTERNAL flag on source pads.
+
+> 
+> Regards,
+> 
+> 	Hans
+> 
+> >  			ret = -EINVAL;
+> >  			break;
+> >  		}
+> > @@ -1075,7 +1077,8 @@ int media_get_pad_index(struct media_entity *entity, u32 pad_type,
+> >  
+> >  	for (i = 0; i < entity->num_pads; i++) {
+> >  		if ((entity->pads[i].flags &
+> > -		     (MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_SOURCE)) != pad_type)
+> > +		     (MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_SOURCE |
+> > +		      MEDIA_PAD_FL_INTERNAL)) != pad_type)
+> >  			continue;
+> >  
+> >  		if (entity->pads[i].sig_type == sig_type)
+> > @@ -1100,6 +1103,9 @@ media_create_pad_link(struct media_entity *source, u16 source_pad,
+> >  		return -EINVAL;
+> >  	if (WARN_ON(!(sink->pads[sink_pad].flags & MEDIA_PAD_FL_SINK)))
+> >  		return -EINVAL;
+> > +	if (WARN_ON(source->pads[source_pad].flags & MEDIA_PAD_FL_INTERNAL) ||
+> > +	    WARN_ON(source->pads[sink_pad].flags & MEDIA_PAD_FL_INTERNAL))
+> > +		return -EINVAL;
+> >  
+> >  	link = media_add_link(&source->links);
+> >  	if (link == NULL)
+> > diff --git a/include/uapi/linux/media.h b/include/uapi/linux/media.h
+> > index 1c80b1d6bbaf..80cfd12a43fc 100644
+> > --- a/include/uapi/linux/media.h
+> > +++ b/include/uapi/linux/media.h
+> > @@ -208,6 +208,7 @@ struct media_entity_desc {
+> >  #define MEDIA_PAD_FL_SINK			(1U << 0)
+> >  #define MEDIA_PAD_FL_SOURCE			(1U << 1)
+> >  #define MEDIA_PAD_FL_MUST_CONNECT		(1U << 2)
+> > +#define MEDIA_PAD_FL_INTERNAL			(1U << 3)
+> >  
+> >  struct media_pad_desc {
+> >  	__u32 entity;		/* entity ID */
+> 
+
 -- 
-2.25.1
+Regards,
 
+Sakari Ailus
