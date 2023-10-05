@@ -2,76 +2,84 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F02C6E92710
-	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 14:33:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CA1DE92702
+	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 14:34:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235182AbjJEOdY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Oct 2023 10:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40326 "EHLO
+        id S233574AbjJEOev (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Oct 2023 10:34:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235137AbjJEObc (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 10:31:32 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DB7822CAA;
-        Thu,  5 Oct 2023 03:49:17 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DDFC4660731C;
-        Thu,  5 Oct 2023 11:49:13 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1696502954;
-        bh=lFr30I+Cr7avNK4wzwGybpTkaEAtq/uM7VOwFYqZwUs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=K9wZ35FlCGgxB/NKW138gQiIJYWnO/3EuMst1hxKCbXMEHzVpGsaRfzYehABqODKK
-         9nf/PW+08IxV+ID1qM2N5A6tAlXn9ciXWA9/py4ikoRRwxcFyv70fQ04Fdv1rVIvLY
-         z4YwXjyPfUlajcNrgK9AmXm8Zma8fBA8mKZMkP/LwfE++uE4KbMXkmqYXzaDyFwOFr
-         B3ZiDYY6ZZrUIXdaNCj3khhqlltii5P3FfxM++96SZyummWHIu8V3uTYqB30hW4LZY
-         QLM1CRCluC4KeS8YHe7ve/gcKguhEg9AfU/0zXMFiQvgPEK9i0ssyhry4wZRm/fCqd
-         QzzY24bkIgOyg==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     mchehab@kernel.org
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, moudy.ho@mediatek.com,
-        hverkuil-cisco@xs4all.nl, sakari.ailus@linux.intel.com,
-        u.kleine-koenig@pengutronix.de, linqiheng@huawei.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com,
-        wenst@chromium.org
-Subject: [PATCH v2 0/2] MediaTek MDP3: use devicetree to retrieve SCP
-Date:   Thu,  5 Oct 2023 12:49:03 +0200
-Message-ID: <20231005104905.120544-1-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.42.0
+        with ESMTP id S234003AbjJEOcl (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 10:32:41 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E6E24EB9
+        for <linux-media@vger.kernel.org>; Thu,  5 Oct 2023 04:40:21 -0700 (PDT)
+Received: from [192.168.88.20] (91-157-153-81.elisa-laajakaista.fi [91.157.153.81])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 49E2C8C;
+        Thu,  5 Oct 2023 13:38:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1696505913;
+        bh=LUBwgmOnESqdb7XxTvJfVN+UyOXK+KnzgMC0susmxAw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=pBl2qEFmIGp5cjvM0VHOCQjG92qnEuhpEVA4kzhvnnUQfq+B6UI5Y3yXgcm+vs8ly
+         JQObakFIPV4gFB+NEpdq6s3xWX5fZfrdA2Az9q5Pf4FkB8ZO8vcj1kSG452ZB4E9O7
+         s9NK53v1GHpuMRJj0i9vYO5cIYO5zFNg0hUbJZws=
+Message-ID: <02386178-0ea4-ea8b-ae68-17ebe6aeaa6d@ideasonboard.com>
+Date:   Thu, 5 Oct 2023 14:40:16 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v6 08/28] media: Documentation: Additional streams
+ generally don't harm capture
+Content-Language: en-US
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        bingbu.cao@intel.com, hongju.wang@intel.com, hverkuil@xs4all.nl,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Dmitry Perchanov <dmitry.perchanov@intel.com>,
+        "Ng, Khai Wen" <khai.wen.ng@intel.com>
+References: <20231003115237.76828-1-sakari.ailus@linux.intel.com>
+ <20231003115237.76828-9-sakari.ailus@linux.intel.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <20231003115237.76828-9-sakari.ailus@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Changes in v2:
- - Rebased over media_stage master as of 05/10/2023
- - Reworked description of mediatek,scp property in bindings
-   - Dropped Conor's and Chen-Yu's R-b tags from bindings patch due
-     to the description rework.
+On 03/10/2023 14:52, Sakari Ailus wrote:
+> Having extra streams on the source end of the link that cannot be captured
+> by the sink sub-device generally are not an issue, at least not on CSI-2
+> bus. Still document that there may be hardware specific limitations. For
+> example on parallel bus this might not work on all cases.
+> 
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> ---
+>   Documentation/userspace-api/media/v4l/dev-subdev.rst | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/userspace-api/media/v4l/dev-subdev.rst b/Documentation/userspace-api/media/v4l/dev-subdev.rst
+> index f375b820ab68..a387e8a15b8d 100644
+> --- a/Documentation/userspace-api/media/v4l/dev-subdev.rst
+> +++ b/Documentation/userspace-api/media/v4l/dev-subdev.rst
+> @@ -529,9 +529,9 @@ the its sink pad and allows to route them individually to one of its source
+>   pads.
+>   
+>   Subdevice drivers that support multiplexed streams are compatible with
+> -non-multiplexed subdev drivers, but, of course, require a routing configuration
+> -where the link between those two types of drivers contains only a single
+> -stream.
+> +non-multiplexed subdev drivers. However, if the driver at the sink end of a link
+> +does not support streams, then only the stream 0 on source end may be
+> +captured. There may be additional hardware specific limitations.
+>   
+>   Understanding streams
+>   ^^^^^^^^^^^^^^^^^^^^^
 
-Especially now that Multi-Core SCP support has landed, it makes sense to
-retrieve the SCP handle by using the "mediatek,scp" property (as already
-done in MediaTek VCODEC), both to select one specific SCP core for MDP3
-and to avoid walking the parent node to find a SCP node.
+Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 
-AngeloGioacchino Del Regno (2):
-  media: dt-bindings: mediatek: Add phandle to mediatek,scp on MDP3 RDMA
-  media: platform: mtk-mdp3: Use devicetree phandle to retrieve SCP
-
- .../bindings/media/mediatek,mdp3-rdma.yaml       |  8 ++++++++
- .../media/platform/mediatek/mdp3/mtk-mdp3-core.c | 16 ++++++++++------
- 2 files changed, 18 insertions(+), 6 deletions(-)
-
--- 
-2.42.0
+  Tomi
 
