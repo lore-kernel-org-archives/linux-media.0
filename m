@@ -2,151 +2,128 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 851D0E772B2
-	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 16:05:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 834E2E9272A
+	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 16:14:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237564AbjJEQF3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Oct 2023 12:05:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
+        id S241059AbjJEQNe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Oct 2023 12:13:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237596AbjJEQEI (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 12:04:08 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E217533DC
-        for <linux-media@vger.kernel.org>; Thu,  5 Oct 2023 07:53:46 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 3959PGld025910;
-        Thu, 5 Oct 2023 15:37:32 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding:content-type; s=selector1; bh=WCUI4Zm
-        GxriT+Ga2/swGoeDwu7aaDGkwS0/rm9KN1Jg=; b=5/0r7HqXG/B8ahJhNoT0LH0
-        oEFVY/3+ZcCk0k1F7lb2Gc67t8PX4E0QgiqPf3drmZ1ALdhD/aUI+Q7qQtm9RDrF
-        ruItWC2D/GCWBcrASPfsnK2iG3mkHEipcdLC5EXt0tgL6/hn4gvUUPc8Gwx8QAUT
-        Svz1Ig8XGVM9ZltyJuOHu+/vcG3rnWg4U/lSZWy122nDK3ofSTVA0hRnZF8JViyd
-        Z1Xri+nQOt9zUs+lMoSHkWjVl05ko02Fji2GINS0EzarvWO9/uROu73dml5v4+2W
-        aKX0jkCRALpJUVZBN8p19Vf1eoaiDP8WAiEUFdm6ixv7t/8ciHEKypxnZ5LxKLg=
-        =
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3thtg7h2df-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Oct 2023 15:37:32 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2814110005C;
-        Thu,  5 Oct 2023 15:37:31 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 1BE63260278;
-        Thu,  5 Oct 2023 15:37:31 +0200 (CEST)
-Received: from localhost (10.201.20.120) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 5 Oct
- 2023 15:37:30 +0200
-From:   Hugues Fruchet <hugues.fruchet@foss.st.com>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        <linux-media@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-CC:     Hugues Fruchet <hugues.fruchet@foss.st.com>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Adam Ford <aford173@gmail.com>
-Subject: [RFC v2 0/6] VP8 H1 stateless encoding
-Date:   Thu, 5 Oct 2023 15:37:04 +0200
-Message-ID: <20231005133710.3589080-1-hugues.fruchet@foss.st.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S240983AbjJEQMV (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 12:12:21 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767AE86AC;
+        Thu,  5 Oct 2023 01:17:12 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1C2AA57E;
+        Thu,  5 Oct 2023 10:15:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1696493721;
+        bh=JCbSyjyhMKQuqISnzlfjMnXI+rKLP69iM7FKg2G6358=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RT/3WqNuQbT9N8Y+FbFAmfb3lEqddMvX5OTSd0QZD7kvRoaulQOF/9A6dVCpfDocU
+         0ygx9VlhbDu093b2Olwz40CuO/JKi67drQgtE3oMIm6CCD8h7ajfpKtjGQplnYitP3
+         J6kpEbPoNl+bg+oE/M8iOi74RLmK4kzBsje6/b6Q=
+Date:   Thu, 5 Oct 2023 11:17:16 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
+Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        dan.scally@ideasonboard.com, gregkh@linuxfoundation.org,
+        nicolas@ndufresne.ca, kernel@pengutronix.de
+Subject: Re: [PATCH v2 1/3] usb: gadget: uvc: stop pump thread on video
+ disable
+Message-ID: <20231005081716.GA13853@pendragon.ideasonboard.com>
+References: <20230911140530.2995138-1-m.grzeschik@pengutronix.de>
+ <20230911140530.2995138-2-m.grzeschik@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.201.20.120]
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-05_08,2023-10-05_01,2023-05-22_02
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230911140530.2995138-2-m.grzeschik@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi all,
+Hi Michael,
 
-Here is an RFC to support VP8 encoding using Hantro H1 hardware
-of STM32MP25 SoCs (Verisilicon VC8000NanoE IP).
-This work is derived from work done to support Rockchip RK3399
-VPU2 in RFC [1] with a reshuffling of registers to match H1
-register set.
+Thank you for the patch.
 
-This has been tested on STM32MP257F-EV1 evaluation board using
-GStreamer userspace [2]:
-gst-launch-1.0 videotestsrc num-buffers=500 ! video/x-raw,width=640,height=480 \
-! v4l2slvp8enc ! queue ! matroskamux ! filesink location=test_vp8.mkv
+On Mon, Sep 11, 2023 at 04:05:28PM +0200, Michael Grzeschik wrote:
+> Since the uvc-video gadget driver is using the v4l2 interface,
+> the streamon and streamoff can be triggered at any times. To ensure
+> that the pump worker will be closed as soon the userspace is
+> calling streamoff we synchronize the state of the gadget ensuring
+> the pump worker to bail out.
 
-For the sake of simplicity I have embedded here the RFC [1] before the
-changes related to this exact RFC, all rebased on v6.6 + STM32MP25
-hardware codecs support [3].
+I'm sorry but I really dislike this. Not only does the patch fail to
+ensure real synchronization, as the uvcg_video_pump() function still
+runs asynchronously, it messes up the usage of the state field that now
+tracks the state both from a host point of view (which it was doing so
+far, updating the state based on callbacks from the UDC), and from a
+gadget userspace point of view. This lacks clarity and is confusing.
+Furthermore, the commit message doesn't even explain what issue is being
+fixed here.
 
-[1] https://lwn.net/ml/linux-media/20230309125651.23911-1-andrzej.p@collabora.com/
-[2] https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/3736
-[3] https://patchwork.kernel.org/project/linux-media/list/?series=789861
+Greg, I think this series has been merged too soon :-(
 
-Best regards,
-Hugues.
+> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> ---
+> v1 -> v2: Fixed the missing uvc variable in uvcg_video_enable
+> 
+>  drivers/usb/gadget/function/uvc_video.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+> index 91af3b1ef0d412..4b68a3a9815d73 100644
+> --- a/drivers/usb/gadget/function/uvc_video.c
+> +++ b/drivers/usb/gadget/function/uvc_video.c
+> @@ -384,13 +384,14 @@ static void uvcg_video_pump(struct work_struct *work)
+>  	struct uvc_video_queue *queue = &video->queue;
+>  	/* video->max_payload_size is only set when using bulk transfer */
+>  	bool is_bulk = video->max_payload_size;
+> +	struct uvc_device *uvc = video->uvc;
+>  	struct usb_request *req = NULL;
+>  	struct uvc_buffer *buf;
+>  	unsigned long flags;
+>  	bool buf_done;
+>  	int ret;
+>  
+> -	while (video->ep->enabled) {
+> +	while (video->ep->enabled && uvc->state == UVC_STATE_STREAMING) {
+>  		/*
+>  		 * Retrieve the first available USB request, protected by the
+>  		 * request lock.
+> @@ -488,6 +489,7 @@ static void uvcg_video_pump(struct work_struct *work)
+>   */
+>  int uvcg_video_enable(struct uvc_video *video, int enable)
+>  {
+> +	struct uvc_device *uvc = video->uvc;
+>  	unsigned int i;
+>  	int ret;
+>  
+> @@ -498,6 +500,8 @@ int uvcg_video_enable(struct uvc_video *video, int enable)
+>  	}
+>  
+>  	if (!enable) {
+> +		uvc->state = UVC_STATE_CONNECTED;
+> +
+>  		cancel_work_sync(&video->pump);
+>  		uvcg_queue_cancel(&video->queue, 0);
+>  
+> @@ -523,6 +527,8 @@ int uvcg_video_enable(struct uvc_video *video, int enable)
+>  		video->encode = video->queue.use_sg ?
+>  			uvc_video_encode_isoc_sg : uvc_video_encode_isoc;
+>  
+> +	uvc->state = UVC_STATE_STREAMING;
+> +
 
-===========
-= history =
-===========
-version 2:
-  - Fix send-mail recipients
+You're now setting the state to UVC_STATE_STREAMING both here and in
+uvc_v4l2_streamon(). That's confusing.
 
-version 1:
-  - Initial submission
-
-
-Andrzej Pietrasiewicz (2):
-  media: uapi: Add VP8 stateless encoder controls
-  media: hantro: add VP8 encode support for Rockchip RK3399 VPU2
-
-Hugues Fruchet (4):
-  media: hantro: add h1 vp8 encode support
-  media: hantro: add VP8 encode support for STM32MP25 VENC
-  media: hantro: h1: NV12 single-plane support
-  media: hantro: add NV12 single-plane support for STM32MP25 VENC
-
- drivers/media/platform/verisilicon/Makefile   |    3 +
- drivers/media/platform/verisilicon/hantro.h   |   10 +
- .../platform/verisilicon/hantro_boolenc.c     |   69 +
- .../platform/verisilicon/hantro_boolenc.h     |   21 +
- .../media/platform/verisilicon/hantro_drv.c   |   15 +-
- .../platform/verisilicon/hantro_h1_jpeg_enc.c |   42 +-
- .../platform/verisilicon/hantro_h1_regs.h     |   71 +-
- .../platform/verisilicon/hantro_h1_vp8_enc.c  | 1589 +++++++++++++++++
- .../media/platform/verisilicon/hantro_hw.h    |   93 +
- .../media/platform/verisilicon/hantro_v4l2.c  |    5 +-
- .../media/platform/verisilicon/hantro_vp8.c   |  118 ++
- .../verisilicon/rockchip_vpu2_hw_vp8_enc.c    | 1574 ++++++++++++++++
- .../platform/verisilicon/rockchip_vpu2_regs.h |    1 +
- .../platform/verisilicon/rockchip_vpu_hw.c    |   23 +-
- .../platform/verisilicon/stm32mp25_venc_hw.c  |   35 +-
- drivers/media/v4l2-core/v4l2-ctrls-core.c     |   13 +
- drivers/media/v4l2-core/v4l2-ctrls-defs.c     |    5 +
- include/media/v4l2-ctrls.h                    |    2 +
- include/uapi/linux/v4l2-controls.h            |   91 +
- include/uapi/linux/videodev2.h                |    3 +
- 20 files changed, 3755 insertions(+), 28 deletions(-)
- create mode 100644 drivers/media/platform/verisilicon/hantro_boolenc.c
- create mode 100644 drivers/media/platform/verisilicon/hantro_boolenc.h
- create mode 100644 drivers/media/platform/verisilicon/hantro_h1_vp8_enc.c
- create mode 100644 drivers/media/platform/verisilicon/rockchip_vpu2_hw_vp8_enc.c
+>  	video->req_int_count = 0;
+>  
+>  	queue_work(video->async_wq, &video->pump);
 
 -- 
-2.25.1
+Regards,
 
+Laurent Pinchart
