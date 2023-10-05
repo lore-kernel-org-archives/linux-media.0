@@ -2,82 +2,105 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74AE5E92700
-	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 13:58:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62D94E92702
+	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 14:05:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232422AbjJEN6T (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Oct 2023 09:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46118 "EHLO
+        id S229649AbjJEOFT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Oct 2023 10:05:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbjJEN4S (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 09:56:18 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293649037;
-        Thu,  5 Oct 2023 01:47:58 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E161C57E;
-        Thu,  5 Oct 2023 10:46:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1696495570;
-        bh=yyZkL3J0cAG69HxOIHd2njTkV5Y3dqSsqRG6fdLy8wo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gaZQe4MFEjjJQ7qmyxmz2zo7ADttChrv79R8RaxrV4b1opqmiwoCk8i00TR+ZRgK7
-         ZDsIItpZ0sBpIGZa2e8d1EG7NTbEBEQ9f20EMZceotV6pEGzh5Yb8Z1vtH3sJfwmd7
-         zTJ6wjxMEfymcf3JPCnz51WuyonvLiYO17ThSAi4=
-Date:   Thu, 5 Oct 2023 11:48:05 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
-        dan.scally@ideasonboard.com, nicolas@ndufresne.ca,
-        kernel@pengutronix.de
-Subject: Re: [PATCH v2 1/3] usb: gadget: uvc: stop pump thread on video
- disable
-Message-ID: <20231005084805.GB31450@pendragon.ideasonboard.com>
-References: <20230911140530.2995138-1-m.grzeschik@pengutronix.de>
- <20230911140530.2995138-2-m.grzeschik@pengutronix.de>
- <20231005081716.GA13853@pendragon.ideasonboard.com>
- <2023100557-crabbing-superhero-02f9@gregkh>
+        with ESMTP id S230004AbjJEODr (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 10:03:47 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819762572C
+        for <linux-media@vger.kernel.org>; Thu,  5 Oct 2023 04:55:37 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-40537481094so7631845e9.0
+        for <linux-media@vger.kernel.org>; Thu, 05 Oct 2023 04:55:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1696506936; x=1697111736; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RQdcaVujkFdj0wa7smLreLyTyUiwJXB1nTmSI2VVOLc=;
+        b=NqGFtfkMJKin2+i3yG7AkOUtLJC3segHwBvrg4oSTqSM20S/1okNhe0kgvGJU9fmvu
+         38GQ8uVPQi3uh3XgLJmBXxpq8qrzSiT4TC4QkX5CZjor+xVErvaeSLKQvauQsihctbB6
+         jxldZgy44Ueo+HMSkqmBARema1X1sNzrAgLesn057+AWLnXF9AgtVmOsXqmL5LMqaVqc
+         jXMfNR1IMtio9owB8QBRmfkff1iQqw9wS1wuAqSCxVTrzcl56ylFuW5pfwOSYCDMeEF1
+         EPYVEU1vwnwINNQsWjKWjdectueXs/aC42cCCLqni7kN4TxBNWljB6V/m/gTP2teQjt2
+         AGzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696506936; x=1697111736;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RQdcaVujkFdj0wa7smLreLyTyUiwJXB1nTmSI2VVOLc=;
+        b=q3CBScteut7GW24UN9AYFVN+0n47/P+KvS4/GZiKeM0S89p+6qIG/kTCaQGb0IoP/S
+         TYM+0h6KuZk+coaPaJZwtdMxQEpvtRBXtb/4Bi6rmXovnynu6sS19TOhvAG2u/yD+MX0
+         CzrFWdWSp3osajMtFLBaWMXD56xd8uWlmOtWFoBiXbdg3OsEper2zD10LtGBrgK23PfA
+         sKrXAh2f7D6AYgC/2w0p6cu+3Y2rZ4nP07Rm6LTJNxyg6Ile5gg73Oe3A73/uYQbAfcM
+         cPL7/znRKfkaOXrhwhRweGlQnmisG36hO6GckTZrXG/iQ20QhXk3qG9CjTu0MKmdP/dc
+         fnHg==
+X-Gm-Message-State: AOJu0YysYc+8xWgSsKnU3JTYpC9eih/rcMoGUQwE3z6J32MPIYOnKUn0
+        ntq6JNkrTMF9fbTOFEObOLb2gw==
+X-Google-Smtp-Source: AGHT+IFEbOl3ekk/K3E950SGKAPMaVFIo8CnYOp5aFhY6KBgCnBxNTv+coH9N4s4TWUgK1RS04IatQ==
+X-Received: by 2002:a1c:720c:0:b0:3fe:4cbc:c345 with SMTP id n12-20020a1c720c000000b003fe4cbcc345mr4775325wmc.41.1696506935975;
+        Thu, 05 Oct 2023 04:55:35 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id x2-20020a5d6502000000b00323293bd023sm1649067wru.6.2023.10.05.04.55.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Oct 2023 04:55:35 -0700 (PDT)
+Date:   Thu, 5 Oct 2023 14:55:32 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     milkfafa@gmail.com
+Cc:     linux-media@vger.kernel.org
+Subject: [bug report] media: nuvoton: Add driver for NPCM video capture and
+ encoding engine
+Message-ID: <a89539bc-e4d9-466f-a9dc-1bf440e71cea@moroto.mountain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2023100557-crabbing-superhero-02f9@gregkh>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Oct 05, 2023 at 10:40:10AM +0200, Greg KH wrote:
-> On Thu, Oct 05, 2023 at 11:17:16AM +0300, Laurent Pinchart wrote:
-> > Hi Michael,
-> > 
-> > Thank you for the patch.
-> > 
-> > On Mon, Sep 11, 2023 at 04:05:28PM +0200, Michael Grzeschik wrote:
-> > > Since the uvc-video gadget driver is using the v4l2 interface,
-> > > the streamon and streamoff can be triggered at any times. To ensure
-> > > that the pump worker will be closed as soon the userspace is
-> > > calling streamoff we synchronize the state of the gadget ensuring
-> > > the pump worker to bail out.
-> > 
-> > I'm sorry but I really dislike this. Not only does the patch fail to
-> > ensure real synchronization, as the uvcg_video_pump() function still
-> > runs asynchronously, it messes up the usage of the state field that now
-> > tracks the state both from a host point of view (which it was doing so
-> > far, updating the state based on callbacks from the UDC), and from a
-> > gadget userspace point of view. This lacks clarity and is confusing.
-> > Furthermore, the commit message doesn't even explain what issue is being
-> > fixed here.
-> > 
-> > Greg, I think this series has been merged too soon :-(
-> 
-> Ok, I'll go revert them now, thanks for the review.
+Hello Marvin Lin,
 
-Or we can wait a day for Michael to reply, in case this can quickly be
-fixed on top for v6.7. I'm now reading on the loooon discussion from v1,
-and reviewing the other pending patches that try to tackle the same
-issue.
+The patch 70721089985c: "media: nuvoton: Add driver for NPCM video
+capture and encoding engine" from Sep 22, 2023 (linux-next), leads to
+the following Smatch static checker warning:
 
--- 
-Regards,
+	drivers/media/platform/nuvoton/npcm-video.c:493 npcm_video_find_rect()
+	warn: sleeping in atomic context
 
-Laurent Pinchart
+drivers/media/platform/nuvoton/npcm-video.c
+    488 static int npcm_video_find_rect(struct npcm_video *video,
+    489                                 struct rect_list_info *info,
+    490                                 unsigned int offset)
+    491 {
+    492         if (offset < info->tile_perline) {
+--> 493                 info->list = npcm_video_new_rect(video, offset, info->index);
+
+Does a sleeping allocation.
+
+    494                 if (!info->list) {
+    495                         dev_err(video->dev, "Failed to allocate rect_list\n");
+    496                         return -ENOMEM;
+    497                 }
+    498 
+    499                 npcm_video_merge_rect(video, info);
+    500         }
+    501         return 0;
+    502 }
+
+The problematic call tree is:
+
+npcm_video_irq() <- disables preempt
+-> npcm_video_hextile()
+   -> npcm_video_get_diff_rect()
+      -> npcm_video_get_rect_list()
+         -> npcm_video_build_table()
+            -> npcm_video_find_rect()
+
+The npcm_video_irq() function holds spin_lock(&video->lock) and we can't
+sleep while holding a spinlock.
+
+regards,
+dan carpenter
