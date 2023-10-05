@@ -2,131 +2,137 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F091E9270D
-	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 15:52:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 000C0E92737
+	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 15:58:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233917AbjJEPwD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Oct 2023 11:52:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49998 "EHLO
+        id S238071AbjJEP6N (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Oct 2023 11:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234240AbjJEPvD (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 11:51:03 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BACAB1178C
-        for <linux-media@vger.kernel.org>; Thu,  5 Oct 2023 07:13:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696515225; x=1728051225;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3zlmOD0sw/Q3fs75VOAF2Sj40kAxq/n97BhzVY9DKfA=;
-  b=bc8d1P8cZPxq9GCGU0DIhBLfR/Q5+AJhihFhlNLQeIjg7/NaOj9zY2VL
-   sm71mx0mrdnXgQUJhBYCoEp8lWRXfiEaKfY7CmG8IvCZrG6nFFFSIve3R
-   GI/F3mLPlJ1U8lU/4Whmag3VX6aXvWGzOF/ge0FMWo5Xj+7DXMiCVv5uS
-   wCi8l+uYWVfh+yZuLjZpshIb4IMLEr0XAyfLjjC0e1Ib+iWj7VVn4UauF
-   Mc7e0RihC86ri4XfPhCUsA3b9/CPTsKVZJ9V10/MBV5M/V4ZJX9USkLFC
-   5tAb3elQwlaXOE0UCEMopdwR+PF38RQEICjBurLE8gc+bYjwGJwdOWNLy
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10854"; a="387386937"
-X-IronPort-AV: E=Sophos;i="6.03,203,1694761200"; 
-   d="scan'208";a="387386937"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 07:13:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10854"; a="751785026"
-X-IronPort-AV: E=Sophos;i="6.03,203,1694761200"; 
-   d="scan'208";a="751785026"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 07:13:41 -0700
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id 75107120AD7;
-        Thu,  5 Oct 2023 17:13:38 +0300 (EEST)
-Date:   Thu, 5 Oct 2023 14:13:38 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        bingbu.cao@intel.com, hongju.wang@intel.com,
-        Andrey Konovalov <andrey.konovalov@linaro.org>,
-        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-        Dmitry Perchanov <dmitry.perchanov@intel.com>,
-        "Ng, Khai Wen" <khai.wen.ng@intel.com>
-Subject: Re: [PATCH v6 09/28] media: Documentation: Document embedded data
- guidelines for camera sensors
-Message-ID: <ZR7EkqaHanIHXhFd@kekkonen.localdomain>
-References: <20231003115237.76828-1-sakari.ailus@linux.intel.com>
- <20231003115237.76828-10-sakari.ailus@linux.intel.com>
- <9e73537d-b32d-4abe-8dc2-390dbd9e566a@xs4all.nl>
- <6c0ba156-535d-b618-0b02-685423cd3589@ideasonboard.com>
+        with ESMTP id S235312AbjJEP5D (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 11:57:03 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF7E11AD5
+        for <linux-media@vger.kernel.org>; Thu,  5 Oct 2023 06:58:36 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 395AZGOe025796;
+        Thu, 5 Oct 2023 15:37:35 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+        from:to:cc:subject:date:message-id:in-reply-to:references
+        :mime-version:content-transfer-encoding:content-type; s=
+        selector1; bh=bgESotg1ucUNSxBe+XGbEGaW9PYWluU0WM6A0IsNEdg=; b=uq
+        MnlkmQTce8tPsaEn1KwfINY1DSTItlcAoQi/PYzP5ozT0InASOzkSiTftTTutRgF
+        dwrTs/7mIb/a77WSzthL6clcTMDlEIOJGrkYK/7E0GR82+7zfytYeLvUuFIZP6Me
+        uB/ZELnsN0xT5Yl9XcgUSeoWvzQTOplWorqD99m3wkB8I/8KJJr5MiufoJRiE0hi
+        CjX1fSOeflyWGq7TfBGorvIPuRNeeH94jNyL9R2+X0XwnUilMwQL+TyJ0Ixn6RFr
+        1NYxxjQtcO3sc7yh9FICvdip4IGLZ+4Czv9nHjBEG9BDXWTA4mjVyjCgGRr73nRV
+        Z7+t9rMq2BJTMTGatONQ==
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3thuh40rg6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 Oct 2023 15:37:35 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 922D610005D;
+        Thu,  5 Oct 2023 15:37:34 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 88377260280;
+        Thu,  5 Oct 2023 15:37:34 +0200 (CEST)
+Received: from localhost (10.201.20.120) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 5 Oct
+ 2023 15:37:34 +0200
+From:   Hugues Fruchet <hugues.fruchet@foss.st.com>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        <linux-media@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+CC:     Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Adam Ford <aford173@gmail.com>
+Subject: [RFC v2 4/6] media: hantro: add VP8 encode support for STM32MP25 VENC
+Date:   Thu, 5 Oct 2023 15:37:08 +0200
+Message-ID: <20231005133710.3589080-5-hugues.fruchet@foss.st.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20231005133710.3589080-1-hugues.fruchet@foss.st.com>
+References: <20231005133710.3589080-1-hugues.fruchet@foss.st.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6c0ba156-535d-b618-0b02-685423cd3589@ideasonboard.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.201.20.120]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-05_08,2023-10-05_01,2023-05-22_02
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Moi,
+Add VP8 stateless support for STM32MP25 VENC video hardware encoder.
 
-On Thu, Oct 05, 2023 at 02:53:25PM +0300, Tomi Valkeinen wrote:
-> On 05/10/2023 13:10, Hans Verkuil wrote:
-> > On 03/10/2023 13:52, Sakari Ailus wrote:
-> > > Document how embedded data support should be implemented for camera
-> > > sensors, and when and how CCS embedded data format should be referenced.
-> > > 
-> > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > > ---
-> > >   .../media/drivers/camera-sensor.rst           | 28 +++++++++++++++++++
-> > >   1 file changed, 28 insertions(+)
-> > > 
-> > > diff --git a/Documentation/userspace-api/media/drivers/camera-sensor.rst b/Documentation/userspace-api/media/drivers/camera-sensor.rst
-> > > index 919a50e8b9d9..308f391c5ca1 100644
-> > > --- a/Documentation/userspace-api/media/drivers/camera-sensor.rst
-> > > +++ b/Documentation/userspace-api/media/drivers/camera-sensor.rst
-> > > @@ -102,3 +102,31 @@ register programming sequences shall initialize the :ref:`V4L2_CID_HFLIP
-> > >   values programmed by the register sequences. The default values of these
-> > >   controls shall be 0 (disabled). Especially these controls shall not be inverted,
-> > >   independently of the sensor's mounting rotation.
-> > > +
-> > > +Embedded data
-> > > +-------------
-> > > +
-> > > +Many sensors, mostly raw sensors, support embedded data which is used to convey
-> > > +the sensor configuration for the captured frame back to the host. While CSI-2 is
-> > > +the most common bus used by such sensors, embedded data is not entirely limited
-> > > +to CSI-2 bus due to e.g. bridge devices.
-> > 
-> > I'm not quite sure what you mean with "embedded data is not entirely limited
-> > to CSI-2 bus due to e.g. bridge devices": do you just want to say: "embedded data
-> > can be available on other bus types as well."?
-> 
-> Right, nothing CSI-2 specific here. I have a parallel sensor that sends
-> embedded data as the last (or was it first?) few lines of the frame.
-> 
-> Also, is this about sensors only, and more specifically, about generating
-> the embedded data? If yes, why mention bridge devices (and should the title
-> be "Embedded data generation" or such)? If not, is it about metadata in
-> general, in which case bridges come into play?
-> 
-> > > +
-> > > +Embedded data support should use an internal source pad and route to the
-> > 
-> > should or shall/must?
-> 
-> Is the above necessary? I don't see anything wrong with, say, having a
-> sensor represented with multiple subdevs, and one subdev is used for the
-> embedded data generation.
-> 
-> Basically, anything that can be represented with internal pads can also be
-> done with multiple subdevs, although I think you don't want to go the
-> multiple subdev route unless absolutely necessary.
+Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
+---
+ .../platform/verisilicon/stm32mp25_venc_hw.c  | 22 ++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
 
-True. This is trying to convey to the user space developers what's possible
-vs. suggesting driver developers what to do. I'd expect embedded data to
-use internal source pads, anything else will need to be separately
-agreed upon.
-
+diff --git a/drivers/media/platform/verisilicon/stm32mp25_venc_hw.c b/drivers/media/platform/verisilicon/stm32mp25_venc_hw.c
+index 0aac33afcadc..2176eccd1f79 100644
+--- a/drivers/media/platform/verisilicon/stm32mp25_venc_hw.c
++++ b/drivers/media/platform/verisilicon/stm32mp25_venc_hw.c
+@@ -87,6 +87,19 @@ static const struct hantro_fmt stm32mp25_venc_fmts[] = {
+ 			.step_height = MB_DIM,
+ 		},
+ 	},
++	{
++		.fourcc = V4L2_PIX_FMT_VP8_FRAME,
++		.codec_mode = HANTRO_MODE_VP8_ENC,
++		.max_depth = 2,
++		.frmsize = {
++			.min_width = 96,
++			.max_width = 4080,
++			.step_width = MB_DIM,
++			.min_height = 96,
++			.max_height = 4080,
++			.step_height = MB_DIM,
++		},
++	},
+ };
+ 
+ static irqreturn_t stm32mp25_venc_irq(int irq, void *dev_id)
+@@ -120,6 +133,13 @@ static const struct hantro_codec_ops stm32mp25_venc_codec_ops[] = {
+ 		.reset = stm32mp25_venc_reset,
+ 		.done = hantro_h1_jpeg_enc_done,
+ 	},
++	[HANTRO_MODE_VP8_ENC] = {
++		.run = hantro_h1_vp8_enc_run,
++		.reset = stm32mp25_venc_reset,
++		.init = hantro_vp8_enc_init,
++		.done = hantro_h1_vp8_enc_done,
++		.exit = hantro_vp8_enc_exit,
++	},
+ };
+ 
+ /*
+@@ -137,7 +157,7 @@ static const char * const stm32mp25_venc_clk_names[] = {
+ const struct hantro_variant stm32mp25_venc_variant = {
+ 	.enc_fmts = stm32mp25_venc_fmts,
+ 	.num_enc_fmts = ARRAY_SIZE(stm32mp25_venc_fmts),
+-	.codec = HANTRO_JPEG_ENCODER,
++	.codec = HANTRO_JPEG_ENCODER | HANTRO_VP8_ENCODER,
+ 	.codec_ops = stm32mp25_venc_codec_ops,
+ 	.irqs = stm32mp25_venc_irqs,
+ 	.num_irqs = ARRAY_SIZE(stm32mp25_venc_irqs),
 -- 
-Terveisin,
+2.25.1
 
-Sakari Ailus
