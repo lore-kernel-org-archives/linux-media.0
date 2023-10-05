@@ -2,96 +2,128 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 725A0E71D4F
-	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 16:16:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79316E9271B
+	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 16:18:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241024AbjJEQPq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Oct 2023 12:15:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45540 "EHLO
+        id S240894AbjJEQRe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Oct 2023 12:17:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241126AbjJEQNl (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 12:13:41 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3534026FD8;
-        Thu,  5 Oct 2023 06:05:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Mkk02uRjKGFB4e8aG+3kpHFTSQxewntkAdfkHaxdesI=; b=e8lzia3eWGjc2IATz+le3lrKVu
-        gOGiebot8NBca6IuY1/7+0Md+gtJwtDVfAHSbA0UWbreBJzbz2kT+hFv+RpLa6r5qqRoffNUXfRGU
-        VA7jnn8XW5RZTzKlM7OWo4x9vALqRV3miM8Zj4Wp1GxFCK1GDxu9CMi+opvVuCBcDMsxrXr1VD/GA
-        ISl5cGU9QCIbPRtkw/08b6pYXUxKIhk56rJaYx/OV4skaPAarzqcWN2klpsiXE8vITVUS0/02QcWn
-        rDUIB+fTSXu4BQliJpqS6UwH588iRi1GdKAdsFAPCdE/peTEyKFsQeCaJqVQf6gemqeoarlPqa0Hy
-        z8Nh6/3A==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qoO2h-009V8J-IJ; Thu, 05 Oct 2023 13:05:27 +0000
-Date:   Thu, 5 Oct 2023 14:05:27 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Oleksandr Natalenko <oleksandr@natalenko.name>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        linaro-mm-sig@lists.linaro.org, linux-mm@kvack.org,
-        Maxime Ripard <mripard@kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-media@vger.kernel.org
-Subject: Re: [REGRESSION] BUG: KFENCE: memory corruption in
- drm_gem_put_pages+0x186/0x250
-Message-ID: <ZR60lylMtLO6ZGp7@casper.infradead.org>
-References: <13360591.uLZWGnKmhe@natalenko.name>
- <3254850.aeNJFYEL58@natalenko.name>
- <ZR6p4MpDbQpZiUSZ@casper.infradead.org>
- <22037450.EfDdHjke4D@natalenko.name>
+        with ESMTP id S234625AbjJEQP7 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 12:15:59 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB96B10C
+        for <linux-media@vger.kernel.org>; Thu,  5 Oct 2023 07:17:31 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4411CC3277A;
+        Thu,  5 Oct 2023 10:37:43 +0000 (UTC)
+Message-ID: <794135ff-3e59-40c7-842d-4cb5336af6e2@xs4all.nl>
+Date:   Thu, 5 Oct 2023 12:37:41 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <22037450.EfDdHjke4D@natalenko.name>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 15/28] media: v4l: subdev: Copy argument back to user
+ also for S_ROUTING
+Content-Language: en-US, nl
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        tomi.valkeinen@ideasonboard.com, bingbu.cao@intel.com,
+        hongju.wang@intel.com,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Dmitry Perchanov <dmitry.perchanov@intel.com>,
+        "Ng, Khai Wen" <khai.wen.ng@intel.com>
+References: <20231003115237.76828-1-sakari.ailus@linux.intel.com>
+ <20231003120813.77726-6-sakari.ailus@linux.intel.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Autocrypt: addr=hverkuil@xs4all.nl; keydata=
+ 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
+In-Reply-To: <20231003120813.77726-6-sakari.ailus@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Oct 05, 2023 at 02:30:55PM +0200, Oleksandr Natalenko wrote:
-> No-no, sorry for possible confusion. Let me explain again:
+On 03/10/2023 14:08, Sakari Ailus wrote:
+> As the user needs to know what went wrong for S_ROUTING, copy array
+> arguments back to the user.
 > 
-> 1. we had an issue with i915, which was introduced by 0b62af28f249, and later was fixed by 863a8eb3f270
-> 2. now I've discovered another issue, which looks very similar to 1., but in a VM with Cirrus VGA, and it happens even while having 863a8eb3f270 applied
-> 3. I've tried reverting 3291e09a4638, after which I cannot reproduce the issue with Cirrus VGA, but clearly there was no fix for it discussed
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> ---
+>  drivers/media/v4l2-core/v4l2-ioctl.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> IOW, 863a8eb3f270 is the fix for 0b62af28f249, but not for 3291e09a4638. It looks like 3291e09a4638 requires a separate fix.
+> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+> index fb453b7d0c91..6921a72566df 100644
+> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+> @@ -3419,7 +3419,8 @@ video_usercopy(struct file *file, unsigned int orig_cmd, unsigned long arg,
+>  	 * in case of failure, but it is not defined here as part of the
+>  	 * 'v4l2_ioctls' array, insert an ad-hoc check to address that.
+>  	 */
+> -	if (err < 0 && !always_copy && cmd != VIDIOC_SUBDEV_G_ROUTING)
+> +	if (err < 0 && !always_copy && cmd != VIDIOC_SUBDEV_G_ROUTING &&
+> +	    cmd != VIDIOC_SUBDEV_S_ROUTING)
+>  		goto out;
+>  
+>  	if (has_array_args) {
 
-Thank you!  Sorry about the misunderstanding.  Try this:
+This is ugly.
 
-diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
-index 6129b89bb366..44a948b80ee1 100644
---- a/drivers/gpu/drm/drm_gem.c
-+++ b/drivers/gpu/drm/drm_gem.c
-@@ -540,7 +540,7 @@ struct page **drm_gem_get_pages(struct drm_gem_object *obj)
- 	struct page **pages;
- 	struct folio *folio;
- 	struct folio_batch fbatch;
--	int i, j, npages;
-+	long i, j, npages;
- 
- 	if (WARN_ON(!obj->filp))
- 		return ERR_PTR(-EINVAL);
-@@ -564,11 +564,13 @@ struct page **drm_gem_get_pages(struct drm_gem_object *obj)
- 
- 	i = 0;
- 	while (i < npages) {
-+		long nr;
- 		folio = shmem_read_folio_gfp(mapping, i,
- 				mapping_gfp_mask(mapping));
- 		if (IS_ERR(folio))
- 			goto fail;
--		for (j = 0; j < folio_nr_pages(folio); j++, i++)
-+		nr = min(npages - i, folio_nr_pages(folio));
-+		for (j = 0; j < nr; j++, i++)
- 			pages[i] = folio_file_page(folio, i);
- 
- 		/* Make sure shmem keeps __GFP_DMA32 allocated pages in the
+How about this:
 
+	if (cmd == VIDIOC_SUBDEV_G_ROUTING || cmd == VIDIOC_SUBDEV_S_ROUTING)
+		always_copy = true;
 
+	if (err < 0 && !always_copy)
+		goto out;
+
+The first 'if' can also be a 'switch', I have no preference.
+
+This cmd check can also be done earlier in the function, right after
+the call to video_get_user(). It might be a better place.
+
+Regards,
+
+	Hans
