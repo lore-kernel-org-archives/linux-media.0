@@ -2,177 +2,131 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71181E92718
-	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 15:51:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F091E9270D
+	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 15:52:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233541AbjJEPvy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Oct 2023 11:51:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43568 "EHLO
+        id S233917AbjJEPwD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Oct 2023 11:52:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233843AbjJEPu5 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 11:50:57 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471DB13C90
-        for <linux-media@vger.kernel.org>; Thu,  5 Oct 2023 07:11:21 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 395Bswhm002764;
-        Thu, 5 Oct 2023 15:38:38 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding:content-type; s=
-        selector1; bh=GR7/PkrCPiZ87Ql+mCFVzbYkH3KLy87NbQlZNSov48c=; b=QY
-        LsWBx6EgTOZDVYTetZOGYnd0aycQ4LiLjTiezvdnhtzE1UFt5a2PTN6hXUMfCjiT
-        rq6mImsNMqwjDtSiFAadY23rHIAyGMxre+4P4XREDW2yyMr5jFBU5y/SrFNr+VAJ
-        RyjW671+9n58o6aXuyZ1v7/Viy2SXDDkXlrM/TYUzS6ce70HFWJtlvqBKEZrc7q7
-        X3kYnwIh8EUMtZWKP4gXElq9ddHUTdqswDFzKnR5qgRo1MDGI7UYel7zW1Qjk0lp
-        SkhOJkKo8K11XgJ09U9D22nG4er8VXF0koA3/hfhO+U54N2enerYEcQM+xW6B97O
-        Ak6Lfr+xlgbFw19w441g==
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3thvpjgdrw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Oct 2023 15:38:37 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 6E0DA10005C;
-        Thu,  5 Oct 2023 15:38:35 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6408B260284;
-        Thu,  5 Oct 2023 15:38:35 +0200 (CEST)
-Received: from localhost (10.201.20.120) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 5 Oct
- 2023 15:38:35 +0200
-From:   Hugues Fruchet <hugues.fruchet@foss.st.com>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        <linux-media@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-CC:     Hugues Fruchet <hugues.fruchet@foss.st.com>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Adam Ford <aford173@gmail.com>
-Subject: [RFC v2 5/6] media: hantro: h1: NV12 single-plane support
-Date:   Thu, 5 Oct 2023 15:37:09 +0200
-Message-ID: <20231005133710.3589080-6-hugues.fruchet@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231005133710.3589080-1-hugues.fruchet@foss.st.com>
-References: <20231005133710.3589080-1-hugues.fruchet@foss.st.com>
+        with ESMTP id S234240AbjJEPvD (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 11:51:03 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BACAB1178C
+        for <linux-media@vger.kernel.org>; Thu,  5 Oct 2023 07:13:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696515225; x=1728051225;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3zlmOD0sw/Q3fs75VOAF2Sj40kAxq/n97BhzVY9DKfA=;
+  b=bc8d1P8cZPxq9GCGU0DIhBLfR/Q5+AJhihFhlNLQeIjg7/NaOj9zY2VL
+   sm71mx0mrdnXgQUJhBYCoEp8lWRXfiEaKfY7CmG8IvCZrG6nFFFSIve3R
+   GI/F3mLPlJ1U8lU/4Whmag3VX6aXvWGzOF/ge0FMWo5Xj+7DXMiCVv5uS
+   wCi8l+uYWVfh+yZuLjZpshIb4IMLEr0XAyfLjjC0e1Ib+iWj7VVn4UauF
+   Mc7e0RihC86ri4XfPhCUsA3b9/CPTsKVZJ9V10/MBV5M/V4ZJX9USkLFC
+   5tAb3elQwlaXOE0UCEMopdwR+PF38RQEICjBurLE8gc+bYjwGJwdOWNLy
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10854"; a="387386937"
+X-IronPort-AV: E=Sophos;i="6.03,203,1694761200"; 
+   d="scan'208";a="387386937"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 07:13:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10854"; a="751785026"
+X-IronPort-AV: E=Sophos;i="6.03,203,1694761200"; 
+   d="scan'208";a="751785026"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 07:13:41 -0700
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id 75107120AD7;
+        Thu,  5 Oct 2023 17:13:38 +0300 (EEST)
+Date:   Thu, 5 Oct 2023 14:13:38 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        bingbu.cao@intel.com, hongju.wang@intel.com,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Dmitry Perchanov <dmitry.perchanov@intel.com>,
+        "Ng, Khai Wen" <khai.wen.ng@intel.com>
+Subject: Re: [PATCH v6 09/28] media: Documentation: Document embedded data
+ guidelines for camera sensors
+Message-ID: <ZR7EkqaHanIHXhFd@kekkonen.localdomain>
+References: <20231003115237.76828-1-sakari.ailus@linux.intel.com>
+ <20231003115237.76828-10-sakari.ailus@linux.intel.com>
+ <9e73537d-b32d-4abe-8dc2-390dbd9e566a@xs4all.nl>
+ <6c0ba156-535d-b618-0b02-685423cd3589@ideasonboard.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.201.20.120]
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-05_08,2023-10-05_01,2023-05-22_02
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6c0ba156-535d-b618-0b02-685423cd3589@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add support of NV12 single-plane input frame.
+Moi,
 
-Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
----
- .../platform/verisilicon/hantro_h1_jpeg_enc.c | 42 +++++++++++--------
- .../platform/verisilicon/hantro_h1_vp8_enc.c  | 13 +++++-
- 2 files changed, 36 insertions(+), 19 deletions(-)
+On Thu, Oct 05, 2023 at 02:53:25PM +0300, Tomi Valkeinen wrote:
+> On 05/10/2023 13:10, Hans Verkuil wrote:
+> > On 03/10/2023 13:52, Sakari Ailus wrote:
+> > > Document how embedded data support should be implemented for camera
+> > > sensors, and when and how CCS embedded data format should be referenced.
+> > > 
+> > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > > ---
+> > >   .../media/drivers/camera-sensor.rst           | 28 +++++++++++++++++++
+> > >   1 file changed, 28 insertions(+)
+> > > 
+> > > diff --git a/Documentation/userspace-api/media/drivers/camera-sensor.rst b/Documentation/userspace-api/media/drivers/camera-sensor.rst
+> > > index 919a50e8b9d9..308f391c5ca1 100644
+> > > --- a/Documentation/userspace-api/media/drivers/camera-sensor.rst
+> > > +++ b/Documentation/userspace-api/media/drivers/camera-sensor.rst
+> > > @@ -102,3 +102,31 @@ register programming sequences shall initialize the :ref:`V4L2_CID_HFLIP
+> > >   values programmed by the register sequences. The default values of these
+> > >   controls shall be 0 (disabled). Especially these controls shall not be inverted,
+> > >   independently of the sensor's mounting rotation.
+> > > +
+> > > +Embedded data
+> > > +-------------
+> > > +
+> > > +Many sensors, mostly raw sensors, support embedded data which is used to convey
+> > > +the sensor configuration for the captured frame back to the host. While CSI-2 is
+> > > +the most common bus used by such sensors, embedded data is not entirely limited
+> > > +to CSI-2 bus due to e.g. bridge devices.
+> > 
+> > I'm not quite sure what you mean with "embedded data is not entirely limited
+> > to CSI-2 bus due to e.g. bridge devices": do you just want to say: "embedded data
+> > can be available on other bus types as well."?
+> 
+> Right, nothing CSI-2 specific here. I have a parallel sensor that sends
+> embedded data as the last (or was it first?) few lines of the frame.
+> 
+> Also, is this about sensors only, and more specifically, about generating
+> the embedded data? If yes, why mention bridge devices (and should the title
+> be "Embedded data generation" or such)? If not, is it about metadata in
+> general, in which case bridges come into play?
+> 
+> > > +
+> > > +Embedded data support should use an internal source pad and route to the
+> > 
+> > should or shall/must?
+> 
+> Is the above necessary? I don't see anything wrong with, say, having a
+> sensor represented with multiple subdevs, and one subdev is used for the
+> embedded data generation.
+> 
+> Basically, anything that can be represented with internal pads can also be
+> done with multiple subdevs, although I think you don't want to go the
+> multiple subdev route unless absolutely necessary.
 
-diff --git a/drivers/media/platform/verisilicon/hantro_h1_jpeg_enc.c b/drivers/media/platform/verisilicon/hantro_h1_jpeg_enc.c
-index 12d69503d6ba..9cba30945421 100644
---- a/drivers/media/platform/verisilicon/hantro_h1_jpeg_enc.c
-+++ b/drivers/media/platform/verisilicon/hantro_h1_jpeg_enc.c
-@@ -42,9 +42,13 @@ static void hantro_h1_jpeg_enc_set_buffers(struct hantro_dev *vpu,
- 					   struct vb2_buffer *src_buf,
- 					   struct vb2_buffer *dst_buf)
- {
-+	const u32 src_addr_regs[] = { H1_REG_ADDR_IN_PLANE_0,
-+				      H1_REG_ADDR_IN_PLANE_1,
-+				      H1_REG_ADDR_IN_PLANE_2 };
- 	struct v4l2_pix_format_mplane *pix_fmt = &ctx->src_fmt;
--	dma_addr_t src[3];
-+	size_t luma_size;
- 	u32 size_left;
-+	int i;
- 
- 	size_left = vb2_plane_size(dst_buf, 0) - ctx->vpu_dst_fmt->header_size;
- 	if (WARN_ON(vb2_plane_size(dst_buf, 0) < ctx->vpu_dst_fmt->header_size))
-@@ -57,23 +61,25 @@ static void hantro_h1_jpeg_enc_set_buffers(struct hantro_dev *vpu,
- 			   H1_REG_ADDR_OUTPUT_STREAM);
- 	vepu_write_relaxed(vpu, size_left, H1_REG_STR_BUF_LIMIT);
- 
--	if (pix_fmt->num_planes == 1) {
--		src[0] = vb2_dma_contig_plane_dma_addr(src_buf, 0);
--		/* single plane formats we supported are all interlaced */
--		vepu_write_relaxed(vpu, src[0], H1_REG_ADDR_IN_PLANE_0);
--	} else if (pix_fmt->num_planes == 2) {
--		src[0] = vb2_dma_contig_plane_dma_addr(src_buf, 0);
--		src[1] = vb2_dma_contig_plane_dma_addr(src_buf, 1);
--		vepu_write_relaxed(vpu, src[0], H1_REG_ADDR_IN_PLANE_0);
--		vepu_write_relaxed(vpu, src[1], H1_REG_ADDR_IN_PLANE_1);
--	} else {
--		src[0] = vb2_dma_contig_plane_dma_addr(src_buf, 0);
--		src[1] = vb2_dma_contig_plane_dma_addr(src_buf, 1);
--		src[2] = vb2_dma_contig_plane_dma_addr(src_buf, 2);
--		vepu_write_relaxed(vpu, src[0], H1_REG_ADDR_IN_PLANE_0);
--		vepu_write_relaxed(vpu, src[1], H1_REG_ADDR_IN_PLANE_1);
--		vepu_write_relaxed(vpu, src[2], H1_REG_ADDR_IN_PLANE_2);
--	}
-+	luma_size = hantro_rounded_luma_size(ctx->src_fmt.width,
-+					     ctx->src_fmt.height);
-+
-+	vepu_write_relaxed(vpu,
-+			   vb2_dma_contig_plane_dma_addr(src_buf, 0) +
-+			   src_buf->planes[0].data_offset,
-+			   src_addr_regs[0]);
-+	vepu_write_relaxed(vpu,
-+			   vb2_dma_contig_plane_dma_addr(src_buf, 0) +
-+			   src_buf->planes[0].data_offset +
-+			   luma_size,
-+			   src_addr_regs[1]);
-+
-+	for (i = 1; i < pix_fmt->num_planes; ++i)
-+		/* Multiplanes. */
-+		vepu_write_relaxed(vpu,
-+				   vb2_dma_contig_plane_dma_addr(src_buf, i) +
-+				   src_buf->planes[i].data_offset,
-+				   src_addr_regs[i]);
- }
- 
- static void
-diff --git a/drivers/media/platform/verisilicon/hantro_h1_vp8_enc.c b/drivers/media/platform/verisilicon/hantro_h1_vp8_enc.c
-index b7a635fb73b0..05aa0dd9c09c 100644
---- a/drivers/media/platform/verisilicon/hantro_h1_vp8_enc.c
-+++ b/drivers/media/platform/verisilicon/hantro_h1_vp8_enc.c
-@@ -1129,7 +1129,18 @@ hantro_h1_vp8_enc_set_buffers(struct hantro_dev *vpu, struct hantro_ctx *ctx, u3
- 			   H1_REG_ADDR_REC_CHROMA);
- 
- 	/* Source buffer. */
--	for (i = 0; i < src_fmt->num_planes; ++i)
-+	vepu_write_relaxed(vpu,
-+			   vb2_dma_contig_plane_dma_addr(&src_buf->vb2_buf, 0) +
-+			   src_buf->vb2_buf.planes[0].data_offset,
-+			   src_addr_regs[0]);
-+	vepu_write_relaxed(vpu,
-+			   vb2_dma_contig_plane_dma_addr(&src_buf->vb2_buf, 0) +
-+			   src_buf->vb2_buf.planes[0].data_offset +
-+			   luma_size,
-+			   src_addr_regs[1]);
-+
-+	for (i = 1; i < src_fmt->num_planes; ++i)
-+		/* Multiplanes. */
- 		vepu_write_relaxed(vpu,
- 				   vb2_dma_contig_plane_dma_addr(&src_buf->vb2_buf, i) +
- 				   src_buf->vb2_buf.planes[i].data_offset,
+True. This is trying to convey to the user space developers what's possible
+vs. suggesting driver developers what to do. I'd expect embedded data to
+use internal source pads, anything else will need to be separately
+agreed upon.
+
 -- 
-2.25.1
+Terveisin,
 
+Sakari Ailus
