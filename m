@@ -2,153 +2,188 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7123E9270A
-	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 14:15:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC68CE92702
+	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 14:17:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231329AbjJEOOm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Oct 2023 10:14:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59704 "EHLO
+        id S233371AbjJEOQv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Oct 2023 10:16:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232387AbjJEOMb (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 10:12:31 -0400
-Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACCD627B0B;
-        Thu,  5 Oct 2023 06:34:56 -0700 (PDT)
-Received: from spock.localnet (unknown [94.142.239.106])
+        with ESMTP id S231830AbjJEOPD (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 10:15:03 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB697DA9;
+        Thu,  5 Oct 2023 00:44:45 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by vulcan.natalenko.name (Postfix) with ESMTPSA id A4062152ED08;
-        Thu,  5 Oct 2023 15:34:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-        s=dkim-20170712; t=1696512891;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=G7OmVnDV4XM8M5IsSqI8Ix0o10uDr9wvy0myjlHH3sQ=;
-        b=havpDLvC8JWRtLhfFGMQj/UvPRh0H2e6jJMdt1Zz4hkVWvrV2SqusX3rt4TpbPHVlY9OAh
-        8ANmKHrpFZ4FGDEDT1mIdcmdLwWnsS66V2HQv44D0pdkjD+Iqc+i7OmshCMHTNSVrwekOE
-        shIQriGGfhLeu/kTmHZVG6NVUU7SE4A=
-From:   Oleksandr Natalenko <oleksandr@natalenko.name>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Linux Regressions <regressions@lists.linux.dev>,
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 587E71F8C1;
+        Thu,  5 Oct 2023 07:44:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1696491884; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+        bh=6Fiw1QxWqAmbnUUUEcuKx0CG3fBEsJS495hprxqjYac=;
+        b=xAOCwKzdRrM6ImgS0E70wSwEHxqJGNvgkx4MdGrA9CkgoYf5HayXu4l7mDt9wRSfB4XeCQ
+        RUZdMdwXr6vUNGX69TmatzjZeq8V1/DTKRpZ5FgePbIsy7D3pKMOXhcU7vHQalwoADV9qH
+        LuS8u6/8qbED3lvZ1cxYc8aWTMeK++k=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1696491884;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+        bh=6Fiw1QxWqAmbnUUUEcuKx0CG3fBEsJS495hprxqjYac=;
+        b=VUcRuG66ejbNj2wAGn4YE9vaLEmeZ3HJoA3RXBglmQ3wGkpGkgpOir3jBfaGYaeeGlGeiJ
+        vGZRk7lrcfZ+/DCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E6D8A139C2;
+        Thu,  5 Oct 2023 07:44:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id iXn5M2tpHmWbRAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 05 Oct 2023 07:44:43 +0000
+Message-ID: <fed1cbf3-0926-4895-a8ba-d6fa9fd53dbe@suse.de>
+Date:   Thu, 5 Oct 2023 09:44:42 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [REGRESSION] BUG: KFENCE: memory corruption in
+ drm_gem_put_pages+0x186/0x250
+Content-Language: en-US
+To:     Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     Linux Regressions <regressions@lists.linux.dev>,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
         linaro-mm-sig@lists.linaro.org, linux-mm@kvack.org,
         Maxime Ripard <mripard@kernel.org>,
         Bagas Sanjaya <bagasdotme@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Sumit Semwal <sumit.semwal@linaro.org>,
         linux-media@vger.kernel.org
-Subject: Re: [REGRESSION] BUG: KFENCE: memory corruption in
- drm_gem_put_pages+0x186/0x250
-Date:   Thu, 05 Oct 2023 15:34:41 +0200
-Message-ID: <9175204.CDJkKcVGEf@natalenko.name>
-In-Reply-To: <ZR60lylMtLO6ZGp7@casper.infradead.org>
-References: <13360591.uLZWGnKmhe@natalenko.name> <22037450.EfDdHjke4D@natalenko.name>
- <ZR60lylMtLO6ZGp7@casper.infradead.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart3187816.5fSG56mABF";
- micalg="pgp-sha256"; protocol="application/pgp-signature"
+References: <13360591.uLZWGnKmhe@natalenko.name>
+ <2300189.ElGaqSPkdT@natalenko.name> <ZRrUjcWqtmzPV3Fs@casper.infradead.org>
+ <2160215.irdbgypaU6@natalenko.name>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+Autocrypt: addr=tzimmermann@suse.de; keydata=
+ xsBNBFs50uABCADEHPidWt974CaxBVbrIBwqcq/WURinJ3+2WlIrKWspiP83vfZKaXhFYsdg
+ XH47fDVbPPj+d6tQrw5lPQCyqjwrCPYnq3WlIBnGPJ4/jreTL6V+qfKRDlGLWFjZcsrPJGE0
+ BeB5BbqP5erN1qylK9i3gPoQjXGhpBpQYwRrEyQyjuvk+Ev0K1Jc5tVDeJAuau3TGNgah4Yc
+ hdHm3bkPjz9EErV85RwvImQ1dptvx6s7xzwXTgGAsaYZsL8WCwDaTuqFa1d1jjlaxg6+tZsB
+ 9GluwvIhSezPgnEmimZDkGnZRRSFiGP8yjqTjjWuf0bSj5rUnTGiyLyRZRNGcXmu6hjlABEB
+ AAHNJ1Rob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPsLAjgQTAQgAOAIb
+ AwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftODH
+ AAoJEGgNwR1TC3ojx1wH/0hKGWugiqDgLNXLRD/4TfHBEKmxIrmfu9Z5t7vwUKfwhFL6hqvo
+ lXPJJKQpQ2z8+X2vZm/slsLn7J1yjrOsoJhKABDi+3QWWSGkaGwRJAdPVVyJMfJRNNNIKwVb
+ U6B1BkX2XDKDGffF4TxlOpSQzdtNI/9gleOoUA8+jy8knnDYzjBNOZqLG2FuTdicBXblz0Mf
+ vg41gd9kCwYXDnD91rJU8tzylXv03E75NCaTxTM+FBXPmsAVYQ4GYhhgFt8S2UWMoaaABLDe
+ 7l5FdnLdDEcbmd8uLU2CaG4W2cLrUaI4jz2XbkcPQkqTQ3EB67hYkjiEE6Zy3ggOitiQGcqp
+ j//OwE0EWznS4AEIAMYmP4M/V+T5RY5at/g7rUdNsLhWv1APYrh9RQefODYHrNRHUE9eosYb
+ T6XMryR9hT8XlGOYRwKWwiQBoWSDiTMo/Xi29jUnn4BXfI2px2DTXwc22LKtLAgTRjP+qbU6
+ 3Y0xnQN29UGDbYgyyK51DW3H0If2a3JNsheAAK+Xc9baj0LGIc8T9uiEWHBnCH+RdhgATnWW
+ GKdDegUR5BkDfDg5O/FISymJBHx2Dyoklv5g4BzkgqTqwmaYzsl8UxZKvbaxq0zbehDda8lv
+ hFXodNFMAgTLJlLuDYOGLK2AwbrS3Sp0AEbkpdJBb44qVlGm5bApZouHeJ/+n+7r12+lqdsA
+ EQEAAcLAdgQYAQgAIAIbDBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftOH6AAoJEGgNwR1T
+ C3ojVSkIALpAPkIJPQoURPb1VWjh34l0HlglmYHvZszJWTXYwavHR8+k6Baa6H7ufXNQtThR
+ yIxJrQLW6rV5lm7TjhffEhxVCn37+cg0zZ3j7zIsSS0rx/aMwi6VhFJA5hfn3T0TtrijKP4A
+ SAQO9xD1Zk9/61JWk8OysuIh7MXkl0fxbRKWE93XeQBhIJHQfnc+YBLprdnxR446Sh8Wn/2D
+ Ya8cavuWf2zrB6cZurs048xe0UbSW5AOSo4V9M0jzYI4nZqTmPxYyXbm30Kvmz0rYVRaitYJ
+ 4kyYYMhuULvrJDMjZRvaNe52tkKAvMevcGdt38H4KSVXAylqyQOW5zvPc4/sq9c=
+In-Reply-To: <2160215.irdbgypaU6@natalenko.name>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------72PmBn0Mbk7dBZYhSA00TrME"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
---nextPart3187816.5fSG56mABF
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"; protected-headers="v1"
-From: Oleksandr Natalenko <oleksandr@natalenko.name>
-To: Matthew Wilcox <willy@infradead.org>
-Date: Thu, 05 Oct 2023 15:34:41 +0200
-Message-ID: <9175204.CDJkKcVGEf@natalenko.name>
-In-Reply-To: <ZR60lylMtLO6ZGp7@casper.infradead.org>
-MIME-Version: 1.0
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------72PmBn0Mbk7dBZYhSA00TrME
+Content-Type: multipart/mixed; boundary="------------irKYM1Z83udZBdlPGECxWYUo";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Oleksandr Natalenko <oleksandr@natalenko.name>,
+ Matthew Wilcox <willy@infradead.org>
+Cc: Linux Regressions <regressions@lists.linux.dev>,
+ linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ linaro-mm-sig@lists.linaro.org, linux-mm@kvack.org,
+ Maxime Ripard <mripard@kernel.org>, Bagas Sanjaya <bagasdotme@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Sumit Semwal <sumit.semwal@linaro.org>, linux-media@vger.kernel.org
+Message-ID: <fed1cbf3-0926-4895-a8ba-d6fa9fd53dbe@suse.de>
+Subject: Re: [REGRESSION] BUG: KFENCE: memory corruption in
+ drm_gem_put_pages+0x186/0x250
+References: <13360591.uLZWGnKmhe@natalenko.name>
+ <2300189.ElGaqSPkdT@natalenko.name> <ZRrUjcWqtmzPV3Fs@casper.infradead.org>
+ <2160215.irdbgypaU6@natalenko.name>
+In-Reply-To: <2160215.irdbgypaU6@natalenko.name>
 
-On =C4=8Dtvrtek 5. =C5=99=C3=ADjna 2023 15:05:27 CEST Matthew Wilcox wrote:
-> On Thu, Oct 05, 2023 at 02:30:55PM +0200, Oleksandr Natalenko wrote:
-> > No-no, sorry for possible confusion. Let me explain again:
-> >=20
-> > 1. we had an issue with i915, which was introduced by 0b62af28f249, and=
- later was fixed by 863a8eb3f270
-> > 2. now I've discovered another issue, which looks very similar to 1., b=
-ut in a VM with Cirrus VGA, and it happens even while having 863a8eb3f270 a=
-pplied
-> > 3. I've tried reverting 3291e09a4638, after which I cannot reproduce th=
-e issue with Cirrus VGA, but clearly there was no fix for it discussed
-> >=20
-> > IOW, 863a8eb3f270 is the fix for 0b62af28f249, but not for 3291e09a4638=
-=2E It looks like 3291e09a4638 requires a separate fix.
->=20
-> Thank you!  Sorry about the misunderstanding.  Try this:
->=20
-> diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
-> index 6129b89bb366..44a948b80ee1 100644
-> --- a/drivers/gpu/drm/drm_gem.c
-> +++ b/drivers/gpu/drm/drm_gem.c
-> @@ -540,7 +540,7 @@ struct page **drm_gem_get_pages(struct drm_gem_object=
- *obj)
->  	struct page **pages;
->  	struct folio *folio;
->  	struct folio_batch fbatch;
-> -	int i, j, npages;
-> +	long i, j, npages;
-> =20
->  	if (WARN_ON(!obj->filp))
->  		return ERR_PTR(-EINVAL);
-> @@ -564,11 +564,13 @@ struct page **drm_gem_get_pages(struct drm_gem_obje=
-ct *obj)
-> =20
->  	i =3D 0;
->  	while (i < npages) {
-> +		long nr;
->  		folio =3D shmem_read_folio_gfp(mapping, i,
->  				mapping_gfp_mask(mapping));
->  		if (IS_ERR(folio))
->  			goto fail;
-> -		for (j =3D 0; j < folio_nr_pages(folio); j++, i++)
-> +		nr =3D min(npages - i, folio_nr_pages(folio));
-> +		for (j =3D 0; j < nr; j++, i++)
->  			pages[i] =3D folio_file_page(folio, i);
-> =20
->  		/* Make sure shmem keeps __GFP_DMA32 allocated pages in the
+--------------irKYM1Z83udZBdlPGECxWYUo
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-No issues after five reboots with this patch applied on top of v6.5.5.
+SGkNCg0KQW0gMDIuMTAuMjMgdW0gMTc6Mzggc2NocmllYiBPbGVrc2FuZHIgTmF0YWxlbmtv
+Og0KPiBPbiBwb25kxJtsw60gMi4gxZnDrWpuYSAyMDIzIDE2OjMyOjQ1IENFU1QgTWF0dGhl
+dyBXaWxjb3ggd3JvdGU6DQo+PiBPbiBNb24sIE9jdCAwMiwgMjAyMyBhdCAwMTowMjo1MlBN
+ICswMjAwLCBPbGVrc2FuZHIgTmF0YWxlbmtvIHdyb3RlOg0KPj4+Pj4+PiBCVUc6IEtGRU5D
+RTogbWVtb3J5IGNvcnJ1cHRpb24gaW4gZHJtX2dlbV9wdXRfcGFnZXMrMHgxODYvMHgyNTAN
+Cj4+Pj4+Pj4NCj4+Pj4+Pj4gQ29ycnVwdGVkIG1lbW9yeSBhdCAweDAwMDAwMDAwZTE3M2Ey
+OTQgWyAhICEgISAhICEgISAhICEgISAhICEgISAhICEgISAhIF0gKGluIGtmZW5jZS0jMTA4
+KToNCj4+Pj4+Pj4gICBkcm1fZ2VtX3B1dF9wYWdlcysweDE4Ni8weDI1MA0KPj4+Pj4+PiAg
+IGRybV9nZW1fc2htZW1fcHV0X3BhZ2VzX2xvY2tlZCsweDQzLzB4YzANCj4+Pj4+Pj4gICBk
+cm1fZ2VtX3NobWVtX29iamVjdF92dW5tYXArMHg4My8weGUwDQo+Pj4+Pj4+ICAgZHJtX2dl
+bV92dW5tYXBfdW5sb2NrZWQrMHg0Ni8weGIwDQo+Pj4+Pj4+ICAgZHJtX2ZiZGV2X2dlbmVy
+aWNfaGVscGVyX2ZiX2RpcnR5KzB4MWRjLzB4MzEwDQo+Pj4+Pj4+ICAgZHJtX2ZiX2hlbHBl
+cl9kYW1hZ2Vfd29yaysweDk2LzB4MTcwDQo+Pj4NCj4+PiBNYXR0aGV3LCBiZWZvcmUgSSBz
+dGFydCBkYW5jaW5nIGFyb3VuZCwgZG8geW91IHRoaW5rIF5eIGNvdWxkIGhhdmUgdGhlIHNh
+bWUgY2F1c2UgYXMgMGI2MmFmMjhmMjQ5YjljNDAzNmEwNWFjZmIwNTMwNThkYzAyZTJlMiB3
+aGljaCBnb3QgZml4ZWQgYnkgODYzYThlYjNmMjcwOThiNDI3NzJmNjY4ZTM5NzdmZjRjYWUx
+MGIwND8NCj4+DQo+PiBZZXMsIGVudGlyZWx5IHBsYXVzaWJsZS4gIEkgdGhpbmsgeW91IGhh
+dmUgdHdvIHVzZWZ1bCBwb2ludHMgdG8gbG9vayBhdA0KPj4gYmVmb3JlIGRlbHZpbmcgaW50
+byBhIGZ1bGwgYmlzZWN0IC0tIDg2M2E4ZSBhbmQgdGhlIHBhcmVudCBvZiAwYjYyYWYuDQo+
+PiBJZiBlaXRoZXIgb2YgdGhlbSB3b3JrLCBJIHRoaW5rIHlvdSBoYXZlIG5vIG1vcmUgd29y
+ayB0byBkby4NCj4gDQo+IE9LLCBJJ3ZlIGRpZCB0aGlzIGFnYWluc3QgdjYuNS41Og0KPiAN
+Cj4gYGBgDQo+IGdpdCBsb2cgLS1vbmVsaW5lIEhFQUR+My4uDQo+IDdjMWU3Njk1Y2E5Yjgg
+KEhFQUQgLT4gdGVzdCkgUmV2ZXJ0ICJtbTogcmVtb3ZlIHN0cnVjdCBwYWdldmVjIg0KPiA4
+ZjJhZDUzYjZlYWM2IFJldmVydCAibW06IHJlbW92ZSBjaGVja19tb3ZlX3VuZXZpY3RhYmxl
+X3BhZ2VzKCkiDQo+IGZhMWUzYzBiNTQ1M2MgUmV2ZXJ0ICJkcm06IGNvbnZlcnQgZHJtX2dl
+bV9wdXRfcGFnZXMoKSB0byB1c2UgYSBmb2xpb19iYXRjaCINCj4gYGBgDQo+IA0KPiB0aGVu
+IHJlYm9vdGVkIHRoZSBob3N0IG11bHRpcGxlIHRpbWVzLCBhbmQgdGhlIGlzc3VlIGlzIG5v
+dCBzZWVuIGFueSBtb3JlLg0KPiANCj4gU28gSSBndWVzcyAzMjkxZTA5YTQ2Mzg3MDYxMGI4
+MjI3ZjMyYjE2YjE5YTU4N2VkZjMzIGlzIHRoZSBjdWxwcml0Lg0KDQpJZ25vcmUgbXkgb3Ro
+ZXIgZW1haWwuIEl0J3MgYXBwYXJlbnRseSBiZWVuIGZpeGVkIGFscmVhZHkuIFRoYW5rcyEN
+Cg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiANCj4gVGhhbmtzLg0KPiANCg0KLS0gDQpU
+aG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0
+d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpGcmFua2Vuc3RyYXNzZSAxNDYsIDkwNDYx
+IE51ZXJuYmVyZywgR2VybWFueQ0KR0Y6IEl2byBUb3RldiwgQW5kcmV3IE15ZXJzLCBBbmRy
+ZXcgTWNEb25hbGQsIEJvdWRpZW4gTW9lcm1hbg0KSFJCIDM2ODA5IChBRyBOdWVybmJlcmcp
+DQo=
 
-Reported-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-Link: https://lore.kernel.org/lkml/13360591.uLZWGnKmhe@natalenko.name/
-=46ixes: 3291e09a4638 ("drm: convert drm_gem_put_pages() to use a folio_bat=
-ch")
-Cc: stable@vger.kernel.org # 6.5.x
+--------------irKYM1Z83udZBdlPGECxWYUo--
 
-Thank you!
-
-=2D-=20
-Oleksandr Natalenko (post-factum)
---nextPart3187816.5fSG56mABF
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
+--------------72PmBn0Mbk7dBZYhSA00TrME
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEZUOOw5ESFLHZZtOKil/iNcg8M0sFAmUeu3EACgkQil/iNcg8
-M0ukOxAAp/BVEyQy2PylnOYA9bNDAnOlxHaslswKSerCTxALAYhIo/Fs7a1/eOIf
-OosjDaawXSueUi47gxloa/ZdEi5RUtYZTBB8L2FK7QX9CdKwwHIWLfkMzW0AuIiY
-CVeP6MMsulrSD0Uu0IwaifAwP9G0AL9EE/a3dRbh29AJhqwmUmzHtxuqsJkg8/+e
-K3O7HedfPZg7bBHdyoNcpjDGdXQE/sZiCW8mSYJgM9kvoXEOsaB52TxGoiooF6Ti
-ETsLn2AQBabbt/XcTNMcLLf6hL56mmd7xA4LpGqkqftjTBVl9SjLKzrHu0fY4pMb
-eff23+Z1uRoHeEiSMpy75/JDN2emeYR5dsvpcFK/DcT4A3VLl9YyJ6iB9LBtLthk
-lMz1ftAOhBrULfLGMJQhub0PDxcRPuEgpwyu3IBqwuNAf9mlGH/SDMg/7Q7mX1Oe
-nVyhqhq9YHHe5ZgTkV8lTCMOPLwQAAIk2aRDmZQAhnhNtPpCaP6/FG6d9++y1hY/
-WglEFusswiz2sjm86xWHnvaX1TB7+eMf7yh8rhYjcVxR86QFDoGnVkdXFap6Hp7c
-uPQ/EoUocvVxfIqYBQlWf2Lrg4BGszBG1LDxie6bLQKoQWilFN3Z1CO/vWOfvfx+
-LJCyyZBPa6+M7ADFb1VLjQ/+sE9jimijlPcpm7degwY1X1+Ifck=
-=7qWv
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmUeaWsFAwAAAAAACgkQlh/E3EQov+C8
+IQ//f7UtB0BiFOP/urp8ifj2BA++IH7AahthXC/eA6+2pPwYjw/fe9YrnNsXHKZkmRoa+txpuWSO
+IqfBW945oex2UlDLbj1vlaZ4aGlPDxnRwcGbabDtsZ6G/tGVquNiLTSmetw/tigqXEIoH1w75zdS
+zUBPyCLzeyfjHEdEu6A/HbaP7jhr7+ueRJxx9r2EVyP4CEZ4RI4ZepOMf0DuANhXUZ1Cu0ut3KiU
+ncNevZo+WHor0sZq1bNWzJ9CUgNk0sqZux8KPnd5kOxzK3BiTivKoLJGOmjA3SeanTipgLEu+aK+
+Dyjm/v211t64CXuw0pAaGG0Ha/moJ9XSd/r9NiKFxfvs1tsV/+vFjiXZbInjzIj43YhNpywfMcGF
+MzV+hmEhMqugK0P/Holb1s5MQJbR6Bq8FE8lMeK3lxC3c0/71hcGyK/PwPJXLXinFmVIGw74Qg7E
+jVKHdCxgM1Q/gbPuaeX+o4xD+DbJlqYofv+XBMpOJtcPQ/OsdGGW1+S/fR33yNwJ11k3E/Nphji/
+Amv1gluY6iTqaHmIJfnsBAA+Z0Q6dgTKhue771qOyYu4uIoK6bFnv7yx9iXBe9khb3LOIIlselMZ
+CQoPI57RQr1N8QA3UZ3VYC4NqTRgNcXhAxNVLpwVlNrGjIm17nrbB/BlC0NlrBHLkNeRE7lck58Z
+rRo=
+=C3sp
 -----END PGP SIGNATURE-----
 
---nextPart3187816.5fSG56mABF--
-
-
-
+--------------72PmBn0Mbk7dBZYhSA00TrME--
