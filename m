@@ -2,26 +2,25 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB6EAE9270D
-	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 15:28:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7B77E92711
+	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 15:31:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbjJEP2b (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Oct 2023 11:28:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47206 "EHLO
+        id S233640AbjJEPbR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Oct 2023 11:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbjJEP16 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 11:27:58 -0400
+        with ESMTP id S232045AbjJEPai (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 11:30:38 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E157B6F6
-        for <linux-media@vger.kernel.org>; Thu,  5 Oct 2023 07:48:12 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84A9BC32787;
-        Thu,  5 Oct 2023 11:08:27 +0000 (UTC)
-Message-ID: <b036ba15-777f-4410-b5ee-7a659d145ab7@xs4all.nl>
-Date:   Thu, 5 Oct 2023 13:08:25 +0200
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D991FEDA
+        for <linux-media@vger.kernel.org>; Thu,  5 Oct 2023 07:48:11 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05810C116A7;
+        Thu,  5 Oct 2023 10:00:24 +0000 (UTC)
+Message-ID: <97cf7b3e-bb42-4e51-89d8-9fa6caaeddb1@xs4all.nl>
+Date:   Thu, 5 Oct 2023 12:00:23 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 18/28] media: uapi: Allow a larger number of routes
- than there's room for
+Subject: Re: [PATCH v6 05/28] media: v4l: Support line-based metadata capture
 Content-Language: en-US, nl
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         linux-media@vger.kernel.org
@@ -33,7 +32,7 @@ Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Dmitry Perchanov <dmitry.perchanov@intel.com>,
         "Ng, Khai Wen" <khai.wen.ng@intel.com>
 References: <20231003115237.76828-1-sakari.ailus@linux.intel.com>
- <20231003120813.77726-9-sakari.ailus@linux.intel.com>
+ <20231003115237.76828-6-sakari.ailus@linux.intel.com>
 From:   Hans Verkuil <hverkuil@xs4all.nl>
 Autocrypt: addr=hverkuil@xs4all.nl; keydata=
  xsFNBFQ84W0BEAC7EF1iL4s3tY8cRTVkJT/297h0Hz0ypA+ByVM4CdU9sN6ua/YoFlr9k0K4
@@ -78,68 +77,154 @@ Autocrypt: addr=hverkuil@xs4all.nl; keydata=
  gYmkrmv0duG1FStpY+IIQn1TOkuXrciTVfZY1cZD0aVxwlxXBnUNZZNslldvXFtndxR0SFat
  sflovhDxKyhFwXOP0Rv8H378/+14TaykknRBIKEc0+lcr+EMOSUR5eg4aURb8Gc3Uc7fgQ6q
  UssTXzHPyj1hAyDpfu8DzAwlh4kKFTodxSsKAjI45SLjadSc94/5Gy8645Y1KgBzBPTH7Q==
-In-Reply-To: <20231003120813.77726-9-sakari.ailus@linux.intel.com>
+In-Reply-To: <20231003115237.76828-6-sakari.ailus@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 03/10/2023 14:08, Sakari Ailus wrote:
-> On VIDIOC_SUBDEV_[GS]_ROUTING, only return as many routes back to the user
-> as there's room. Do not consider it an error if more routes existed.
-> Simply inform the user there are more routes.
+On 03/10/2023 13:52, Sakari Ailus wrote:
+> many camera sensors, among other devices, transmit embedded data and image
+> data for each CSI-2 frame. This embedded data typically contains register
+> configuration of the sensor that has been used to capture the image data
+> of the same frame.
+> 
+> The embedded data is received by the CSI-2 receiver and has the same
+> properties as the image data, including that it is line based: it has
+> width, height and bytesperline (stride).
+> 
+> Add these fields to struct v4l2_meta_format and document them.
+> 
+> Also add V4L2_FMT_FLAG_META_LINE_BASED to tell a given format is
+> line-based i.e. these fields of struct v4l2_meta_format are valid for it.
+> 
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> ---
+>  .../userspace-api/media/v4l/dev-meta.rst          | 15 +++++++++++++++
+>  .../userspace-api/media/v4l/vidioc-enum-fmt.rst   |  7 +++++++
+>  .../media/videodev2.h.rst.exceptions              |  1 +
+>  drivers/media/v4l2-core/v4l2-ioctl.c              |  5 +++--
+>  include/uapi/linux/videodev2.h                    | 10 ++++++++++
+>  5 files changed, 36 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/userspace-api/media/v4l/dev-meta.rst b/Documentation/userspace-api/media/v4l/dev-meta.rst
+> index 0e7e1ee1471a..4dfd79e0a705 100644
+> --- a/Documentation/userspace-api/media/v4l/dev-meta.rst
+> +++ b/Documentation/userspace-api/media/v4l/dev-meta.rst
+> @@ -65,3 +65,18 @@ to 0.
+>        - ``buffersize``
+>        - Maximum buffer size in bytes required for data. The value is set by the
+>          driver.
+> +    * - __u32
+> +      - ``width``
+> +      - Width of a line of metadata in Data units. Valid when
+> +	:c:type`v4l2_fmtdesc` flag ``V4L2_FMT_FLAG_META_LINE_BASED`` is set,
+> +	otherwise zero. See :c:func:`VIDIOC_ENUM_FMT`.
+> +    * - __u32
+> +      - ``height``
+> +      - Number of rows of metadata. Valid when :c:type`v4l2_fmtdesc` flag
+> +	``V4L2_FMT_FLAG_META_LINE_BASED`` is set, otherwise zero. See
+> +	:c:func:`VIDIOC_ENUM_FMT`.
+> +    * - __u32
+> +      - ``bytesperline``
+> +      - Offset in bytes between the beginning of two consecutive lines. Valid
+> +	when :c:type`v4l2_fmtdesc` flag ``V4L2_FMT_FLAG_META_LINE_BASED`` is
+> +	set, otherwise zero. See :c:func:`VIDIOC_ENUM_FMT`.
+> diff --git a/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst b/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
+> index 000c154b0f98..a79abf4428c8 100644
+> --- a/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
+> +++ b/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
+> @@ -227,6 +227,13 @@ the ``mbus_code`` field is handled differently:
+>  	The application can ask to configure the quantization of the capture
+>  	device when calling the :ref:`VIDIOC_S_FMT <VIDIOC_G_FMT>` ioctl with
+>  	:ref:`V4L2_PIX_FMT_FLAG_SET_CSC <v4l2-pix-fmt-flag-set-csc>` set.
+> +    * - ``V4L2_FMT_FLAG_META_LINE_BASED``
+> +      - 0x0200
+> +      - The metadata format is line-based. In this case the ``width``,
+> +	``height`` and ``bytesperline`` fields of :c:type:`v4l2_meta_format` are
+> +	valid. The buffer consists of ``height`` lines, each having ``width``
+> +	Data units of data and offset (in bytes) between the beginning of each
 
-I'm not convinced by this change. Can userspace do anything useful with only
-a partially filled routes array?
+offset -> the offset
 
-Just silently allowing bad data is asking for problems, IMHO.
+Would 'stride' be a better name for this? The v4l2_pix_format documentation for
+this field says: "Distance in bytes between the leftmost pixels in two adjacent lines."
+
+> +	two consecutive lines is ``bytesperline``.
+>  
+>  Return Value
+>  ============
+> diff --git a/Documentation/userspace-api/media/videodev2.h.rst.exceptions b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+> index 3e58aac4ef0b..bdc628e8c1d6 100644
+> --- a/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+> +++ b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+> @@ -215,6 +215,7 @@ replace define V4L2_FMT_FLAG_CSC_XFER_FUNC fmtdesc-flags
+>  replace define V4L2_FMT_FLAG_CSC_YCBCR_ENC fmtdesc-flags
+>  replace define V4L2_FMT_FLAG_CSC_HSV_ENC fmtdesc-flags
+>  replace define V4L2_FMT_FLAG_CSC_QUANTIZATION fmtdesc-flags
+> +replace define V4L2_FMT_FLAG_META_LINE_BASED fmtdesc-flags
+>  
+>  # V4L2 timecode types
+>  replace define V4L2_TC_TYPE_24FPS timecode-type
+> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+> index ce4b3929ff5f..fb453b7d0c91 100644
+> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+> @@ -343,8 +343,9 @@ static void v4l_print_format(const void *arg, bool write_only)
+>  	case V4L2_BUF_TYPE_META_OUTPUT:
+>  		meta = &p->fmt.meta;
+>  		pixelformat = meta->dataformat;
+> -		pr_cont(", dataformat=%p4cc, buffersize=%u\n",
+> -			&pixelformat, meta->buffersize);
+> +		pr_cont(", dataformat=%p4cc, buffersize=%u, width=%u, height=%u, bytesperline=%u\n",
+> +			&pixelformat, meta->buffersize, meta->width,
+> +			meta->height, meta->bytesperline);
+>  		break;
+>  	}
+>  }
+> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+> index 2b16b06ad278..7b0781a20dbe 100644
+> --- a/include/uapi/linux/videodev2.h
+> +++ b/include/uapi/linux/videodev2.h
+> @@ -877,6 +877,7 @@ struct v4l2_fmtdesc {
+>  #define V4L2_FMT_FLAG_CSC_YCBCR_ENC		0x0080
+>  #define V4L2_FMT_FLAG_CSC_HSV_ENC		V4L2_FMT_FLAG_CSC_YCBCR_ENC
+>  #define V4L2_FMT_FLAG_CSC_QUANTIZATION		0x0100
+> +#define V4L2_FMT_FLAG_META_LINE_BASED		0x0200
+>  
+>  	/* Frame Size and frame rate enumeration */
+>  /*
+> @@ -2420,10 +2421,19 @@ struct v4l2_sdr_format {
+>   * struct v4l2_meta_format - metadata format definition
+>   * @dataformat:		little endian four character code (fourcc)
+>   * @buffersize:		maximum size in bytes required for data
+> + * @width:		number of data units of data per line (valid for line
+
+I'd drop "of data".
+
+> + *			based formats only, see format documentation)
+> + * @height:		number of lines of data per buffer (valid for line based
+
+Ditto.
+
+> + *			formats only)
+> + * @bytesperline:	offset between the beginnings of two adjacent lines in
+> + *			bytes (valid for line based formats only)
+
+I would use 'distance' instead of 'offset'.
+
+>   */
+>  struct v4l2_meta_format {
+>  	__u32				dataformat;
+>  	__u32				buffersize;
+> +	__u32				width;
+> +	__u32				height;
+> +	__u32				bytesperline;
+>  } __attribute__ ((packed));
+>  
+>  /**
 
 Regards,
 
 	Hans
-
-> 
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
->  .../userspace-api/media/v4l/vidioc-subdev-g-routing.rst   | 4 ----
->  drivers/media/v4l2-core/v4l2-subdev.c                     | 8 ++------
->  2 files changed, 2 insertions(+), 10 deletions(-)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
-> index ced53ea5f23c..99d3c15fd759 100644
-> --- a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
-> +++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
-> @@ -145,10 +145,6 @@ On success 0 is returned, on error -1 and the ``errno`` variable is set
->  appropriately. The generic error codes are described at the
->  :ref:`Generic Error Codes <gen-errors>` chapter.
->  
-> -ENOSPC
-> -   The application provided ``num_routes`` is not big enough to contain
-> -   all the available routes the subdevice exposes.
-> -
->  EINVAL
->     The sink or source pad identifiers reference a non-existing pad, or reference
->     pads of different types (ie. the sink_pad identifiers refers to a source pad).
-> diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-> index 9a34e13dfd96..dd48e7e549fb 100644
-> --- a/drivers/media/v4l2-core/v4l2-subdev.c
-> +++ b/drivers/media/v4l2-core/v4l2-subdev.c
-> @@ -956,14 +956,10 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
->  
->  		krouting = &state->routing;
->  
-> -		if (routing->len_routes < krouting->num_routes) {
-> -			routing->num_routes = krouting->num_routes;
-> -			return -ENOSPC;
-> -		}
-> -
->  		memcpy((struct v4l2_subdev_route *)(uintptr_t)routing->routes,
->  		       krouting->routes,
-> -		       krouting->num_routes * sizeof(*krouting->routes));
-> +		       min(krouting->num_routes, routing->len_routes) *
-> +		       sizeof(*krouting->routes));
->  		routing->num_routes = krouting->num_routes;
->  
->  		return 0;
-
