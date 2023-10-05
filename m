@@ -2,159 +2,71 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86F72E92707
-	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 15:02:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45A27E92707
+	for <linux-media@archiver.kernel.org>; Thu,  5 Oct 2023 15:02:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232658AbjJEPBp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Oct 2023 11:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42202 "EHLO
+        id S230042AbjJEPCU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Oct 2023 11:02:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233778AbjJEPAb (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 11:00:31 -0400
+        with ESMTP id S233909AbjJEPAu (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Oct 2023 11:00:50 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96F616AA4;
-        Thu,  5 Oct 2023 07:37:31 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FBAFC32784;
-        Thu,  5 Oct 2023 10:59:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696503589;
-        bh=UBDFLeY+PPEBJKSf7kZcYghS/Q9ycdJpp2P0dOU7MX0=;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD19816A97
+        for <linux-media@vger.kernel.org>; Thu,  5 Oct 2023 07:37:31 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 901E2C116AD;
+        Thu,  5 Oct 2023 08:40:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1696495212;
+        bh=mwYaaJbWlAoopqVEUrMRNTuhiIF9DxtU8jT69JwJkzc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bHf+IaimHmjzXHj+umSI5gqnp+F5ATSlb291+Lg68bU6aTrVR2AOORQde80aTEtaj
-         DxbB+OjPUgEzFbqtjtWt8O+Q8m+28sjEc2VsvYAEWUN/0n6JNnT8Gmfw6H3cOy8ter
-         MFJkBgRiZSqwdEI8xdfvB64npda56x4HenxGybY7I3Sh/fPinivGTb92LMM8Hk3eUE
-         CVvK7Z3DgIosM8SU24Vz90u4w1esQa8sBKSEgzvheHNhQ6Q1LGaNcsccTBcb3cAZ8T
-         Aq9bP2eMUu4vzk+GAjF3lMmXaSw7w8/gfTkEq2o2FT2T1YvJyUZInuQ8fjVXUVlPeV
-         4cbNyH7WOsLYQ==
-Date:   Thu, 5 Oct 2023 11:59:42 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Hugues Fruchet <hugues.fruchet@foss.st.com>
-Cc:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Adam Ford <aford173@gmail.com>
-Subject: Re: [RFC 0/6] VP8 H1 stateless encoding
-Message-ID: <20231005-bleach-unknotted-9b11443959b1@spud>
-References: <20231004103720.3540436-1-hugues.fruchet@foss.st.com>
+        b=z8VVPNJzgmmhxQaQ6f2FwT4nIhXH1wTWASWD0bnxEc5r1uDnsWbi9tfLqgkvwIp9y
+         GxDNIJLkIuki8KJM6nBPy0cvtIkDZiYqNSKIIM4H+vYPR5C7Qbf1FYZS0mPC3VCgNG
+         xSjLYqyHhp3UK3By74Zf5YWH7ekeO82TTIbAxnww=
+Date:   Thu, 5 Oct 2023 10:40:10 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        dan.scally@ideasonboard.com, nicolas@ndufresne.ca,
+        kernel@pengutronix.de
+Subject: Re: [PATCH v2 1/3] usb: gadget: uvc: stop pump thread on video
+ disable
+Message-ID: <2023100557-crabbing-superhero-02f9@gregkh>
+References: <20230911140530.2995138-1-m.grzeschik@pengutronix.de>
+ <20230911140530.2995138-2-m.grzeschik@pengutronix.de>
+ <20231005081716.GA13853@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Ia4S0Q4OBDpOeXiU"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231004103720.3540436-1-hugues.fruchet@foss.st.com>
+In-Reply-To: <20231005081716.GA13853@pendragon.ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+On Thu, Oct 05, 2023 at 11:17:16AM +0300, Laurent Pinchart wrote:
+> Hi Michael,
+> 
+> Thank you for the patch.
+> 
+> On Mon, Sep 11, 2023 at 04:05:28PM +0200, Michael Grzeschik wrote:
+> > Since the uvc-video gadget driver is using the v4l2 interface,
+> > the streamon and streamoff can be triggered at any times. To ensure
+> > that the pump worker will be closed as soon the userspace is
+> > calling streamoff we synchronize the state of the gadget ensuring
+> > the pump worker to bail out.
+> 
+> I'm sorry but I really dislike this. Not only does the patch fail to
+> ensure real synchronization, as the uvcg_video_pump() function still
+> runs asynchronously, it messes up the usage of the state field that now
+> tracks the state both from a host point of view (which it was doing so
+> far, updating the state based on callbacks from the UDC), and from a
+> gadget userspace point of view. This lacks clarity and is confusing.
+> Furthermore, the commit message doesn't even explain what issue is being
+> fixed here.
+> 
+> Greg, I think this series has been merged too soon :-(
 
---Ia4S0Q4OBDpOeXiU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ok, I'll go revert them now, thanks for the review.
 
-On Wed, Oct 04, 2023 at 12:37:14PM +0200, Hugues Fruchet wrote:
-> Hi all,
->=20
-> Here is an RFC to support VP8 encoding using Hantro H1 hardware
-> of STM32MP25 SoCs (Verisilicon VC8000NanoE IP).
-> This work is derived from work done to support Rockchip RK3399
-> VPU2 in RFC [1] with a reshuffling of registers to match H1
-> register set.
->=20
-> This has been tested on STM32MP257F-EV1 evaluation board using
-> GStreamer userspace [2]:
-> gst-launch-1.0 videotestsrc num-buffers=3D500 ! video/x-raw,width=3D640,h=
-eight=3D480 \
-> ! v4l2slvp8enc ! queue ! matroskamux ! filesink location=3Dtest_vp8.mkv
->=20
-> For the sake of simplicity I have embedded here the RFC [1] before the
-> changes related to this exact RFC, all rebased on v6.6 + STM32MP25
-> hardware codecs support [3].
-
-I don't see any bindings etc here, what is it that you think I would
-care about looking at in this RFC series?
-
-Thanks,
-Conor.
-
->=20
-> [1] https://lwn.net/ml/linux-media/20230309125651.23911-1-andrzej.p@colla=
-bora.com/
-> [2] https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/3=
-736
-> [3] https://patchwork.kernel.org/project/linux-media/list/?series=3D789861
->=20
-> Best regards,
-> Hugues.
->=20
->=20
-> Andrzej Pietrasiewicz (2):
->   media: uapi: Add VP8 stateless encoder controls
->   media: hantro: add VP8 encode support for Rockchip RK3399 VPU2
->=20
-> Hugues Fruchet (4):
->   media: hantro: add h1 vp8 encode support
->   media: hantro: add VP8 encode support for STM32MP25 VENC
->   media: hantro: h1: NV12 single-plane support
->   media: hantro: add NV12 single-plane support for STM32MP25 VENC
->=20
->  drivers/media/platform/verisilicon/Makefile   |    3 +
->  drivers/media/platform/verisilicon/hantro.h   |   10 +
->  .../platform/verisilicon/hantro_boolenc.c     |   69 +
->  .../platform/verisilicon/hantro_boolenc.h     |   21 +
->  .../media/platform/verisilicon/hantro_drv.c   |   15 +-
->  .../platform/verisilicon/hantro_h1_jpeg_enc.c |   42 +-
->  .../platform/verisilicon/hantro_h1_regs.h     |   71 +-
->  .../platform/verisilicon/hantro_h1_vp8_enc.c  | 1589 +++++++++++++++++
->  .../media/platform/verisilicon/hantro_hw.h    |   93 +
->  .../media/platform/verisilicon/hantro_v4l2.c  |    5 +-
->  .../media/platform/verisilicon/hantro_vp8.c   |  118 ++
->  .../verisilicon/rockchip_vpu2_hw_vp8_enc.c    | 1574 ++++++++++++++++
->  .../platform/verisilicon/rockchip_vpu2_regs.h |    1 +
->  .../platform/verisilicon/rockchip_vpu_hw.c    |   23 +-
->  .../platform/verisilicon/stm32mp25_venc_hw.c  |   35 +-
->  drivers/media/v4l2-core/v4l2-ctrls-core.c     |   13 +
->  drivers/media/v4l2-core/v4l2-ctrls-defs.c     |    5 +
->  include/media/v4l2-ctrls.h                    |    2 +
->  include/uapi/linux/v4l2-controls.h            |   91 +
->  include/uapi/linux/videodev2.h                |    3 +
->  20 files changed, 3755 insertions(+), 28 deletions(-)
->  create mode 100644 drivers/media/platform/verisilicon/hantro_boolenc.c
->  create mode 100644 drivers/media/platform/verisilicon/hantro_boolenc.h
->  create mode 100644 drivers/media/platform/verisilicon/hantro_h1_vp8_enc.c
->  create mode 100644 drivers/media/platform/verisilicon/rockchip_vpu2_hw_v=
-p8_enc.c
->=20
-> --=20
-> 2.25.1
->=20
-
---Ia4S0Q4OBDpOeXiU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZR6XHgAKCRB4tDGHoIJi
-0sjvAP0ZC5KOCGnycz1ccSYrmARfxdHqtXmmmQJpUOyX3kDeCwD/Q0VKIfCKL28d
-bB3btsN54UkoHILpiUtId0zm3X7Q6gU=
-=90H2
------END PGP SIGNATURE-----
-
---Ia4S0Q4OBDpOeXiU--
+greg k-h
