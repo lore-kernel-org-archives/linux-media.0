@@ -2,30 +2,30 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9C9FE95A93
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75BA7E95A92
 	for <linux-media@archiver.kernel.org>; Sun,  8 Oct 2023 08:52:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344509AbjJHIwI convert rfc822-to-8bit (ORCPT
+        id S1344544AbjJHIwK convert rfc822-to-8bit (ORCPT
         <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 8 Oct 2023 04:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52884 "EHLO
+        Sun, 8 Oct 2023 04:52:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234296AbjJHIwG (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sun, 8 Oct 2023 04:52:06 -0400
+        with ESMTP id S1344534AbjJHIwJ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 8 Oct 2023 04:52:09 -0400
 Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A59CA;
-        Sun,  8 Oct 2023 01:52:04 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95332DB;
+        Sun,  8 Oct 2023 01:52:06 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 9A4AB24E296;
-        Sun,  8 Oct 2023 16:52:02 +0800 (CST)
-Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sun, 8 Oct
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 8637924E2C5;
+        Sun,  8 Oct 2023 16:52:03 +0800 (CST)
+Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sun, 8 Oct
  2023 16:52:00 +0800
 Received: from xiaofei.localdomain (180.164.60.184) by EXMBX073.cuchost.com
  (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sun, 8 Oct
- 2023 16:52:00 +0800
+ 2023 16:51:59 +0800
 From:   Jack Zhu <jack.zhu@starfivetech.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Robert Foss <rfoss@kernel.org>,
@@ -40,9 +40,9 @@ To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
 CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-staging@lists.linux.dev>,
         <jack.zhu@starfivetech.com>, <changhuang.liang@starfivetech.com>
-Subject: [PATCH v10 6/8] media: staging: media: starfive: camss: Add capture driver
-Date:   Sun, 8 Oct 2023 16:51:52 +0800
-Message-ID: <20231008085154.6757-7-jack.zhu@starfivetech.com>
+Subject: [PATCH v10 4/8] media: staging: media: starfive: camss: Add video driver
+Date:   Sun, 8 Oct 2023 16:51:50 +0800
+Message-ID: <20231008085154.6757-5-jack.zhu@starfivetech.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231008085154.6757-1-jack.zhu@starfivetech.com>
 References: <20231008085154.6757-1-jack.zhu@starfivetech.com>
@@ -57,753 +57,714 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add capture driver for StarFive Camera Subsystem. It contains two video
-devices: capture_yuv and capture_raw.
+Add video driver for StarFive Camera Subsystem.
 
 Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
 ---
- drivers/staging/media/starfive/camss/Makefile |   1 +
- .../staging/media/starfive/camss/stf-camss.h  |   2 +
- .../media/starfive/camss/stf-capture.c        | 603 ++++++++++++++++++
- .../media/starfive/camss/stf-capture.h        |  87 +++
- 4 files changed, 693 insertions(+)
- create mode 100644 drivers/staging/media/starfive/camss/stf-capture.c
- create mode 100644 drivers/staging/media/starfive/camss/stf-capture.h
+ drivers/staging/media/starfive/camss/Makefile |   3 +-
+ .../staging/media/starfive/camss/stf-video.c  | 572 ++++++++++++++++++
+ .../staging/media/starfive/camss/stf-video.h  | 100 +++
+ 3 files changed, 674 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/staging/media/starfive/camss/stf-video.c
+ create mode 100644 drivers/staging/media/starfive/camss/stf-video.h
 
 diff --git a/drivers/staging/media/starfive/camss/Makefile b/drivers/staging/media/starfive/camss/Makefile
-index 97e1522b21ae..005790202e7b 100644
+index 78211e30550f..7d320b9317c8 100644
 --- a/drivers/staging/media/starfive/camss/Makefile
 +++ b/drivers/staging/media/starfive/camss/Makefile
-@@ -5,6 +5,7 @@
+@@ -4,6 +4,7 @@
+ #
  
  starfive-camss-objs += \
- 		stf-camss.o \
-+		stf-capture.o \
- 		stf-isp.o \
- 		stf-isp-hw-ops.o \
- 		stf-video.o
-diff --git a/drivers/staging/media/starfive/camss/stf-camss.h b/drivers/staging/media/starfive/camss/stf-camss.h
-index c7b0a34cd29b..e2b0cfb437bd 100644
---- a/drivers/staging/media/starfive/camss/stf-camss.h
-+++ b/drivers/staging/media/starfive/camss/stf-camss.h
-@@ -19,6 +19,7 @@
- #include <media/v4l2-device.h>
+-		stf-camss.o
++		stf-camss.o \
++		stf-video.o
  
- #include "stf-isp.h"
-+#include "stf-capture.h"
- 
- enum stf_port_num {
- 	STF_PORT_DVP = 0,
-@@ -52,6 +53,7 @@ struct stfcamss {
- 	struct media_pipeline pipe;
- 	struct device *dev;
- 	struct stf_isp_dev isp_dev;
-+	struct stf_capture captures[STF_CAPTURE_NUM];
- 	struct v4l2_async_notifier notifier;
- 	void __iomem *syscon_base;
- 	void __iomem *isp_base;
-diff --git a/drivers/staging/media/starfive/camss/stf-capture.c b/drivers/staging/media/starfive/camss/stf-capture.c
+ obj-$(CONFIG_VIDEO_STARFIVE_CAMSS) += starfive-camss.o
+diff --git a/drivers/staging/media/starfive/camss/stf-video.c b/drivers/staging/media/starfive/camss/stf-video.c
 new file mode 100644
-index 000000000000..70c24b050a1b
+index 000000000000..0b305f21eb53
 --- /dev/null
-+++ b/drivers/staging/media/starfive/camss/stf-capture.c
-@@ -0,0 +1,603 @@
++++ b/drivers/staging/media/starfive/camss/stf-video.c
+@@ -0,0 +1,572 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * stf_capture.c
++ * stf_video.c
 + *
-+ * StarFive Camera Subsystem - capture device
++ * StarFive Camera Subsystem - V4L2 device node
 + *
 + * Copyright (C) 2021-2023 StarFive Technology Co., Ltd.
 + */
++
++#include <linux/pm_runtime.h>
++#include <media/v4l2-ctrls.h>
++#include <media/v4l2-event.h>
++#include <media/v4l2-mc.h>
++#include <media/videobuf2-dma-contig.h>
 +
 +#include "stf-camss.h"
++#include "stf-video.h"
 +
-+static const char * const stf_cap_names[] = {
-+	"capture_raw",
-+	"capture_yuv",
-+};
++/* -----------------------------------------------------------------------------
++ * Helper functions
++ */
 +
-+static const struct stfcamss_format_info stf_wr_fmts[] = {
-+	{
-+		.code = MEDIA_BUS_FMT_SRGGB10_1X10,
-+		.pixelformat = V4L2_PIX_FMT_SRGGB10,
-+		.planes = 1,
-+		.vsub = { 1 },
-+		.bpp = 10,
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_SGRBG10_1X10,
-+		.pixelformat = V4L2_PIX_FMT_SGRBG10,
-+		.planes = 1,
-+		.vsub = { 1 },
-+		.bpp = 10,
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_SGBRG10_1X10,
-+		.pixelformat = V4L2_PIX_FMT_SGBRG10,
-+		.planes = 1,
-+		.vsub = { 1 },
-+		.bpp = 10,
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_SBGGR10_1X10,
-+		.pixelformat = V4L2_PIX_FMT_SBGGR10,
-+		.planes = 1,
-+		.vsub = { 1 },
-+		.bpp = 10,
-+	},
-+};
-+
-+static const struct stfcamss_format_info stf_isp_fmts[] = {
-+	{
-+		.code = MEDIA_BUS_FMT_YUYV8_1_5X8,
-+		.pixelformat = V4L2_PIX_FMT_NV12,
-+		.planes = 2,
-+		.vsub = { 1, 2 },
-+		.bpp = 8,
-+	},
-+};
-+
-+static inline struct stf_capture *to_stf_capture(struct stfcamss_video *video)
++static inline struct stfcamss_buffer *
++to_stfcamss_buffer(struct vb2_v4l2_buffer *vbuf)
 +{
-+	return container_of(video, struct stf_capture, video);
++	return container_of(vbuf, struct stfcamss_buffer, vb);
 +}
 +
-+static void stf_set_raw_addr(struct stfcamss *stfcamss, dma_addr_t addr)
++static const struct stfcamss_format_info *
++video_g_fi_by_index(struct stfcamss_video *video, int index)
 +{
-+	stf_syscon_reg_write(stfcamss, VIN_START_ADDR_O, (long)addr);
-+	stf_syscon_reg_write(stfcamss, VIN_START_ADDR_N, (long)addr);
++	if (index >= video->nformats)
++		return NULL;
++
++	return &video->formats[index];
 +}
 +
-+static void stf_set_yuv_addr(struct stfcamss *stfcamss,
-+			     dma_addr_t y_addr, dma_addr_t uv_addr)
++static const struct stfcamss_format_info *
++video_g_fi_by_mcode(struct stfcamss_video *video, u32 mcode)
 +{
-+	stf_isp_reg_write(stfcamss, ISP_REG_Y_PLANE_START_ADDR, y_addr);
-+	stf_isp_reg_write(stfcamss, ISP_REG_UV_PLANE_START_ADDR, uv_addr);
-+}
-+
-+static void stf_init_addrs(struct stfcamss_video *video)
-+{
-+	struct stf_capture *cap = to_stf_capture(video);
-+	struct stf_v_buf *output = &cap->buffers;
-+	dma_addr_t addr0, addr1;
-+
-+	output->active_buf = 0;
-+
-+	if (!output->buf[0])
-+		return;
-+
-+	addr0 = output->buf[0]->addr[0];
-+	addr1 = output->buf[0]->addr[1];
-+
-+	if (cap->type == STF_CAPTURE_RAW)
-+		stf_set_raw_addr(video->stfcamss, addr0);
-+	else if (cap->type == STF_CAPTURE_YUV)
-+		stf_set_yuv_addr(video->stfcamss, addr0, addr1);
-+}
-+
-+static struct stfcamss_buffer *stf_buf_get_pending(struct stf_v_buf *output)
-+{
-+	struct stfcamss_buffer *buffer = NULL;
-+
-+	if (!list_empty(&output->pending_bufs)) {
-+		buffer = list_first_entry(&output->pending_bufs,
-+					  struct stfcamss_buffer,
-+					  queue);
-+		list_del(&buffer->queue);
-+	}
-+
-+	return buffer;
-+}
-+
-+static void stf_cap_s_cfg(struct stfcamss_video *video)
-+{
-+	struct stf_capture *cap = to_stf_capture(video);
-+	struct stf_v_buf *output = &cap->buffers;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&output->lock, flags);
-+
-+	output->state = STF_OUTPUT_IDLE;
-+	output->buf[0] = stf_buf_get_pending(output);
-+
-+	if (!output->buf[0] && output->buf[1]) {
-+		output->buf[0] = output->buf[1];
-+		output->buf[1] = NULL;
-+	}
-+
-+	if (output->buf[0])
-+		output->state = STF_OUTPUT_SINGLE;
-+
-+	output->sequence = 0;
-+	stf_init_addrs(video);
-+
-+	spin_unlock_irqrestore(&output->lock, flags);
-+}
-+
-+static int stf_cap_s_cleanup(struct stfcamss_video *video)
-+{
-+	struct stf_capture *cap = to_stf_capture(video);
-+	struct stf_v_buf *output = &cap->buffers;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&output->lock, flags);
-+
-+	output->state = STF_OUTPUT_OFF;
-+
-+	spin_unlock_irqrestore(&output->lock, flags);
-+
-+	return 0;
-+}
-+
-+static void stf_wr_data_en(struct stfcamss_video *video)
-+{
-+	struct stf_capture *cap = to_stf_capture(video);
-+	struct stfcamss *stfcamss = cap->video.stfcamss;
-+
-+	stf_syscon_reg_set_bit(stfcamss, VIN_CHANNEL_SEL_EN, U0_VIN_AXIWR0_EN);
-+}
-+
-+static void stf_wr_irq_enable(struct stfcamss_video *video)
-+{
-+	struct stf_capture *cap = to_stf_capture(video);
-+	struct stfcamss *stfcamss = cap->video.stfcamss;
-+
-+	stf_syscon_reg_clear_bit(stfcamss, VIN_INRT_PIX_CFG, U0_VIN_INTR_M);
-+}
-+
-+static void stf_wr_irq_disable(struct stfcamss_video *video)
-+{
-+	struct stf_capture *cap = to_stf_capture(video);
-+	struct stfcamss *stfcamss = cap->video.stfcamss;
-+
-+	stf_syscon_reg_set_bit(stfcamss, VIN_INRT_PIX_CFG, U0_VIN_INTR_CLEAN);
-+	stf_syscon_reg_clear_bit(stfcamss, VIN_INRT_PIX_CFG, U0_VIN_INTR_CLEAN);
-+	stf_syscon_reg_set_bit(stfcamss, VIN_INRT_PIX_CFG, U0_VIN_INTR_M);
-+}
-+
-+static void stf_channel_set(struct stfcamss_video *video)
-+{
-+	struct stf_capture *cap = to_stf_capture(video);
-+	struct stfcamss *stfcamss = cap->video.stfcamss;
-+	u32 val;
-+
-+	if (cap->type == STF_CAPTURE_RAW) {
-+		val = stf_syscon_reg_read(stfcamss, VIN_CHANNEL_SEL_EN);
-+		val &= ~U0_VIN_CHANNEL_SEL_MASK;
-+		val |= CHANNEL(0);
-+		stf_syscon_reg_write(stfcamss, VIN_CHANNEL_SEL_EN, val);
-+
-+		val = stf_syscon_reg_read(stfcamss, VIN_INRT_PIX_CFG);
-+		val &= ~U0_VIN_PIX_CT_MASK;
-+		val |= PIX_CT(1);
-+
-+		val &= ~U0_VIN_PIXEL_HEIGH_BIT_SEL_MAKS;
-+		val |= PIXEL_HEIGH_BIT_SEL(0);
-+
-+		val &= ~U0_VIN_PIX_CNT_END_MASK;
-+		val |= PIX_CNT_END(IMAGE_MAX_WIDTH / 4 - 1);
-+
-+		stf_syscon_reg_write(stfcamss, VIN_INRT_PIX_CFG, val);
-+	} else if (cap->type == STF_CAPTURE_YUV) {
-+		val = stf_syscon_reg_read(stfcamss, VIN_CFG_REG);
-+		val &= ~U0_VIN_MIPI_BYTE_EN_ISP0_MASK;
-+		val |= U0_VIN_MIPI_BYTE_EN_ISP0(0);
-+
-+		val &= ~U0_VIN_MIPI_CHANNEL_SEL0_MASK;
-+		val |= U0_VIN_MIPI_CHANNEL_SEL0(0);
-+
-+		val &= ~U0_VIN_PIX_NUM_MASK;
-+		val |= U0_VIN_PIX_NUM(0);
-+
-+		val &= ~U0_VIN_P_I_MIPI_HAEDER_EN0_MASK;
-+		val |= U0_VIN_P_I_MIPI_HAEDER_EN0(1);
-+
-+		stf_syscon_reg_write(stfcamss, VIN_CFG_REG, val);
-+	}
-+}
-+
-+static void stf_capture_start(struct stfcamss_video *video)
-+{
-+	struct stf_capture *cap = to_stf_capture(video);
-+
-+	stf_channel_set(video);
-+	if (cap->type == STF_CAPTURE_RAW) {
-+		stf_wr_irq_enable(video);
-+		stf_wr_data_en(video);
-+	}
-+
-+	stf_cap_s_cfg(video);
-+}
-+
-+static void stf_capture_stop(struct stfcamss_video *video)
-+{
-+	struct stf_capture *cap = to_stf_capture(video);
-+
-+	if (cap->type == STF_CAPTURE_RAW)
-+		stf_wr_irq_disable(video);
-+
-+	stf_cap_s_cleanup(video);
-+}
-+
-+static void stf_capture_init(struct stfcamss *stfcamss, struct stf_capture *cap)
-+{
-+	cap->buffers.state = STF_OUTPUT_OFF;
-+	cap->buffers.buf[0] = NULL;
-+	cap->buffers.buf[1] = NULL;
-+	cap->buffers.active_buf = 0;
-+	atomic_set(&cap->buffers.frame_skip, 4);
-+	INIT_LIST_HEAD(&cap->buffers.pending_bufs);
-+	INIT_LIST_HEAD(&cap->buffers.ready_bufs);
-+	spin_lock_init(&cap->buffers.lock);
-+
-+	cap->video.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-+	cap->video.stfcamss = stfcamss;
-+	cap->video.bpl_alignment = 16 * 8;
-+
-+	if (cap->type == STF_CAPTURE_RAW) {
-+		cap->video.formats = stf_wr_fmts;
-+		cap->video.nformats = ARRAY_SIZE(stf_wr_fmts);
-+		cap->video.bpl_alignment = 8;
-+	} else if (cap->type == STF_CAPTURE_YUV) {
-+		cap->video.formats = stf_isp_fmts;
-+		cap->video.nformats = ARRAY_SIZE(stf_isp_fmts);
-+		cap->video.bpl_alignment = 1;
-+	}
-+}
-+
-+static void stf_buf_add_ready(struct stf_v_buf *output,
-+			      struct stfcamss_buffer *buffer)
-+{
-+	INIT_LIST_HEAD(&buffer->queue);
-+	list_add_tail(&buffer->queue, &output->ready_bufs);
-+}
-+
-+static struct stfcamss_buffer *stf_buf_get_ready(struct stf_v_buf *output)
-+{
-+	struct stfcamss_buffer *buffer = NULL;
-+
-+	if (!list_empty(&output->ready_bufs)) {
-+		buffer = list_first_entry(&output->ready_bufs,
-+					  struct stfcamss_buffer,
-+					  queue);
-+		list_del(&buffer->queue);
-+	}
-+
-+	return buffer;
-+}
-+
-+static void stf_buf_add_pending(struct stf_v_buf *output,
-+				struct stfcamss_buffer *buffer)
-+{
-+	INIT_LIST_HEAD(&buffer->queue);
-+	list_add_tail(&buffer->queue, &output->pending_bufs);
-+}
-+
-+static void stf_buf_update_on_last(struct stf_v_buf *output)
-+{
-+	switch (output->state) {
-+	case STF_OUTPUT_CONTINUOUS:
-+		output->state = STF_OUTPUT_SINGLE;
-+		output->active_buf = !output->active_buf;
-+		break;
-+	case STF_OUTPUT_SINGLE:
-+		output->state = STF_OUTPUT_STOPPING;
-+		break;
-+	default:
-+		break;
-+	}
-+}
-+
-+static void stf_buf_update_on_next(struct stf_v_buf *output)
-+{
-+	switch (output->state) {
-+	case STF_OUTPUT_CONTINUOUS:
-+		output->active_buf = !output->active_buf;
-+		break;
-+	case STF_OUTPUT_SINGLE:
-+	default:
-+		break;
-+	}
-+}
-+
-+static void stf_buf_update_on_new(struct stfcamss_video *video,
-+				  struct stfcamss_buffer *new_buf)
-+{
-+	struct stf_capture *cap = to_stf_capture(video);
-+	struct stf_v_buf *output = &cap->buffers;
-+
-+	switch (output->state) {
-+	case STF_OUTPUT_SINGLE:
-+		stf_buf_add_pending(output, new_buf);
-+		break;
-+	case STF_OUTPUT_IDLE:
-+		if (!output->buf[0]) {
-+			output->buf[0] = new_buf;
-+			stf_init_addrs(video);
-+			output->state = STF_OUTPUT_SINGLE;
-+		} else {
-+			stf_buf_add_pending(output, new_buf);
-+		}
-+		break;
-+	case STF_OUTPUT_STOPPING:
-+		if (output->last_buffer) {
-+			output->buf[output->active_buf] = output->last_buffer;
-+			output->last_buffer = NULL;
-+		}
-+
-+		output->state = STF_OUTPUT_SINGLE;
-+		stf_buf_add_pending(output, new_buf);
-+		break;
-+	case STF_OUTPUT_CONTINUOUS:
-+	default:
-+		stf_buf_add_pending(output, new_buf);
-+		break;
-+	}
-+}
-+
-+static void stf_buf_flush(struct stf_v_buf *output, enum vb2_buffer_state state)
-+{
-+	struct stfcamss_buffer *buf;
-+	struct stfcamss_buffer *t;
-+
-+	list_for_each_entry_safe(buf, t, &output->pending_bufs, queue) {
-+		vb2_buffer_done(&buf->vb.vb2_buf, state);
-+		list_del(&buf->queue);
-+	}
-+	list_for_each_entry_safe(buf, t, &output->ready_bufs, queue) {
-+		vb2_buffer_done(&buf->vb.vb2_buf, state);
-+		list_del(&buf->queue);
-+	}
-+}
-+
-+static void stf_buf_done(struct stf_v_buf *output)
-+{
-+	struct stfcamss_buffer *ready_buf;
-+	u64 ts = ktime_get_ns();
-+	unsigned long flags;
-+
-+	if (output->state == STF_OUTPUT_OFF ||
-+	    output->state == STF_OUTPUT_RESERVED)
-+		return;
-+
-+	spin_lock_irqsave(&output->lock, flags);
-+
-+	while ((ready_buf = stf_buf_get_ready(output))) {
-+		ready_buf->vb.vb2_buf.timestamp = ts;
-+		ready_buf->vb.sequence = output->sequence++;
-+
-+		vb2_buffer_done(&ready_buf->vb.vb2_buf, VB2_BUF_STATE_DONE);
-+	}
-+
-+	spin_unlock_irqrestore(&output->lock, flags);
-+}
-+
-+static void stf_change_buffer(struct stf_v_buf *output)
-+{
-+	struct stf_capture *cap = container_of(output, struct stf_capture,
-+					       buffers);
-+	struct stfcamss *stfcamss = cap->video.stfcamss;
-+	struct stfcamss_buffer *ready_buf;
-+	dma_addr_t *new_addr;
-+	unsigned long flags;
-+	u32 active_index;
-+
-+	if (output->state == STF_OUTPUT_OFF ||
-+	    output->state == STF_OUTPUT_STOPPING ||
-+	    output->state == STF_OUTPUT_RESERVED ||
-+	    output->state == STF_OUTPUT_IDLE)
-+		return;
-+
-+	spin_lock_irqsave(&output->lock, flags);
-+
-+	active_index = output->active_buf;
-+
-+	ready_buf = output->buf[active_index];
-+	if (!ready_buf) {
-+		dev_dbg(stfcamss->dev, "missing ready buf %d %d.\n",
-+			active_index, output->state);
-+		active_index = !active_index;
-+		ready_buf = output->buf[active_index];
-+		if (!ready_buf) {
-+			dev_dbg(stfcamss->dev,
-+				"missing ready buf2 %d %d.\n",
-+				active_index, output->state);
-+			goto out_unlock;
-+		}
-+	}
-+
-+	/* Get next buffer */
-+	output->buf[active_index] = stf_buf_get_pending(output);
-+	if (!output->buf[active_index]) {
-+		new_addr = ready_buf->addr;
-+		stf_buf_update_on_last(output);
-+	} else {
-+		new_addr = output->buf[active_index]->addr;
-+		stf_buf_update_on_next(output);
-+	}
-+
-+	if (output->state == STF_OUTPUT_STOPPING) {
-+		output->last_buffer = ready_buf;
-+	} else {
-+		if (cap->type == STF_CAPTURE_RAW)
-+			stf_set_raw_addr(stfcamss, new_addr[0]);
-+		else if (cap->type == STF_CAPTURE_YUV)
-+			stf_set_yuv_addr(stfcamss, new_addr[0], new_addr[1]);
-+
-+		stf_buf_add_ready(output, ready_buf);
-+	}
-+
-+out_unlock:
-+	spin_unlock_irqrestore(&output->lock, flags);
-+}
-+
-+irqreturn_t stf_wr_irq_handler(int irq, void *priv)
-+{
-+	struct stfcamss *stfcamss = priv;
-+	struct stf_capture *cap = &stfcamss->captures[STF_CAPTURE_RAW];
-+
-+	if (atomic_dec_if_positive(&cap->buffers.frame_skip) < 0) {
-+		stf_change_buffer(&cap->buffers);
-+		stf_buf_done(&cap->buffers);
-+	}
-+
-+	stf_syscon_reg_set_bit(stfcamss, VIN_INRT_PIX_CFG, U0_VIN_INTR_CLEAN);
-+	stf_syscon_reg_clear_bit(stfcamss, VIN_INRT_PIX_CFG, U0_VIN_INTR_CLEAN);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+irqreturn_t stf_isp_irq_handler(int irq, void *priv)
-+{
-+	struct stfcamss *stfcamss = priv;
-+	struct stf_capture *cap = &stfcamss->captures[STF_CAPTURE_YUV];
-+	u32 status;
-+
-+	status = stf_isp_reg_read(stfcamss, ISP_REG_ISP_CTRL_0);
-+	if (status & ISPC_ISP) {
-+		if (status & ISPC_ENUO)
-+			stf_buf_done(&cap->buffers);
-+
-+		stf_isp_reg_write(stfcamss, ISP_REG_ISP_CTRL_0,
-+				  (status & ~ISPC_INT_ALL_MASK) |
-+				  ISPC_ISP | ISPC_CSI | ISPC_SC);
-+	}
-+
-+	return IRQ_HANDLED;
-+}
-+
-+irqreturn_t stf_line_irq_handler(int irq, void *priv)
-+{
-+	struct stfcamss *stfcamss = priv;
-+	struct stf_capture *cap = &stfcamss->captures[STF_CAPTURE_YUV];
-+	u32 status;
-+
-+	status = stf_isp_reg_read(stfcamss, ISP_REG_ISP_CTRL_0);
-+	if (status & ISPC_LINE) {
-+		if (atomic_dec_if_positive(&cap->buffers.frame_skip) < 0) {
-+			if ((status & ISPC_ENUO))
-+				stf_change_buffer(&cap->buffers);
-+		}
-+
-+		stf_isp_reg_set_bit(stfcamss, ISP_REG_CSIINTS,
-+				    CSI_INTS_MASK, CSI_INTS(0x3));
-+		stf_isp_reg_set_bit(stfcamss, ISP_REG_IESHD,
-+				    SHAD_UP_M | SHAD_UP_EN, 0x3);
-+
-+		stf_isp_reg_write(stfcamss, ISP_REG_ISP_CTRL_0,
-+				  (status & ~ISPC_INT_ALL_MASK) | ISPC_LINE);
-+	}
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int stf_queue_buffer(struct stfcamss_video *video,
-+			    struct stfcamss_buffer *buf)
-+{
-+	struct stf_capture *cap = to_stf_capture(video);
-+	struct stf_v_buf *v_bufs = &cap->buffers;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&v_bufs->lock, flags);
-+	stf_buf_update_on_new(video, buf);
-+	spin_unlock_irqrestore(&v_bufs->lock, flags);
-+
-+	return 0;
-+}
-+
-+static int stf_flush_buffers(struct stfcamss_video *video,
-+			     enum vb2_buffer_state state)
-+{
-+	struct stf_capture *cap = to_stf_capture(video);
-+	struct stf_v_buf *v_bufs = &cap->buffers;
-+	unsigned long flags;
 +	unsigned int i;
 +
-+	spin_lock_irqsave(&v_bufs->lock, flags);
-+
-+	stf_buf_flush(v_bufs, state);
-+
-+	for (i = 0; i < ARRAY_SIZE(v_bufs->buf); i++) {
-+		if (v_bufs->buf[i])
-+			vb2_buffer_done(&v_bufs->buf[i]->vb.vb2_buf, state);
-+
-+		v_bufs->buf[i] = NULL;
++	for (i = 0; i < video->nformats; i++) {
++		if (video->formats[i].code == mcode)
++			return &video->formats[i];
 +	}
 +
-+	if (v_bufs->last_buffer) {
-+		vb2_buffer_done(&v_bufs->last_buffer->vb.vb2_buf, state);
-+		v_bufs->last_buffer = NULL;
++	return NULL;
++}
++
++static const struct stfcamss_format_info *
++video_g_fi_by_pfmt(struct stfcamss_video *video, u32 pixelformat)
++{
++	unsigned int i;
++
++	for (i = 0; i < video->nformats; i++) {
++		if (video->formats[i].pixelformat == pixelformat)
++			return &video->formats[i];
 +	}
 +
-+	spin_unlock_irqrestore(&v_bufs->lock, flags);
++	return NULL;
++}
++
++static int __video_try_fmt(struct stfcamss_video *video, struct v4l2_format *f)
++{
++	struct v4l2_pix_format *pix = &f->fmt.pix;
++	const struct stfcamss_format_info *fi;
++	u32 width, height;
++	u32 bpl;
++	unsigned int i;
++
++	fi = video_g_fi_by_pfmt(video, pix->pixelformat);
++	if (!fi)
++		fi = &video->formats[0]; /* default format */
++
++	width = pix->width;
++	height = pix->height;
++
++	memset(pix, 0, sizeof(*pix));
++
++	pix->pixelformat = fi->pixelformat;
++	pix->width = clamp_t(u32, width, STFCAMSS_FRAME_MIN_WIDTH,
++			     STFCAMSS_FRAME_MAX_WIDTH);
++	pix->height = clamp_t(u32, height, STFCAMSS_FRAME_MIN_HEIGHT,
++			      STFCAMSS_FRAME_MAX_HEIGHT);
++	bpl = pix->width * fi->bpp / 8;
++	bpl = ALIGN(bpl, video->bpl_alignment);
++	pix->bytesperline = bpl;
++
++	for (i = 0; i < fi->planes; ++i)
++		pix->sizeimage += bpl * pix->height / fi->vsub[i];
++
++	pix->field = V4L2_FIELD_NONE;
++	pix->colorspace = V4L2_COLORSPACE_SRGB;
++	pix->flags = 0;
++	pix->ycbcr_enc =
++		V4L2_MAP_YCBCR_ENC_DEFAULT(pix->colorspace);
++	pix->quantization = V4L2_MAP_QUANTIZATION_DEFAULT(true,
++							  pix->colorspace,
++							  pix->ycbcr_enc);
++	pix->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(pix->colorspace);
++
 +	return 0;
 +}
 +
-+static const struct stfcamss_video_ops stf_capture_ops = {
-+	.queue_buffer = stf_queue_buffer,
-+	.flush_buffers = stf_flush_buffers,
-+	.start_streaming = stf_capture_start,
-+	.stop_streaming = stf_capture_stop,
-+};
-+
-+static void stf_capture_unregister_one(struct stf_capture *cap)
++static int stf_video_init_format(struct stfcamss_video *video)
 +{
-+	if (!video_is_registered(&cap->video.vdev))
-+		return;
++	int ret;
++	struct v4l2_format format = {
++		.type = video->type,
++		.fmt.pix = {
++			.width = 1920,
++			.height = 1080,
++			.pixelformat = V4L2_PIX_FMT_NV12,
++		},
++	};
 +
-+	media_entity_cleanup(&cap->video.vdev.entity);
-+	vb2_video_unregister_device(&cap->video.vdev);
++	ret = __video_try_fmt(video, &format);
++
++	if (ret < 0)
++		return ret;
++
++	video->active_fmt = format;
++
++	return 0;
 +}
 +
-+void stf_capture_unregister(struct stfcamss *stfcamss)
-+{
-+	struct stf_capture *cap_raw = &stfcamss->captures[STF_CAPTURE_RAW];
-+	struct stf_capture *cap_yuv = &stfcamss->captures[STF_CAPTURE_YUV];
++/* -----------------------------------------------------------------------------
++ * Video queue operations
++ */
 +
-+	stf_capture_unregister_one(cap_raw);
-+	stf_capture_unregister_one(cap_yuv);
++static int video_queue_setup(struct vb2_queue *q,
++			     unsigned int *num_buffers,
++			     unsigned int *num_planes,
++			     unsigned int sizes[],
++			     struct device *alloc_devs[])
++{
++	struct stfcamss_video *video = vb2_get_drv_priv(q);
++	const struct v4l2_pix_format *format = &video->active_fmt.fmt.pix;
++
++	if (*num_planes) {
++		if (*num_planes != 1)
++			return -EINVAL;
++
++		if (sizes[0] < format->sizeimage)
++			return -EINVAL;
++	} else {
++		*num_planes = 1;
++		sizes[0] = format->sizeimage;
++	}
++
++	if (!sizes[0]) {
++		dev_dbg(video->stfcamss->dev,
++			"%s: error size is zero.\n", __func__);
++		return -EINVAL;
++	}
++
++	dev_dbg(video->stfcamss->dev, "planes = %d, size = %d\n",
++		*num_planes, sizes[0]);
++
++	return 0;
 +}
 +
-+int stf_capture_register(struct stfcamss *stfcamss,
-+			 struct v4l2_device *v4l2_dev)
++static int video_buf_init(struct vb2_buffer *vb)
 +{
-+	unsigned int i;
++	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++	struct stfcamss_video *video = vb2_get_drv_priv(vb->vb2_queue);
++	struct stfcamss_buffer *buffer = to_stfcamss_buffer(vbuf);
++	const struct v4l2_pix_format *fmt = &video->active_fmt.fmt.pix;
++	dma_addr_t *paddr;
++
++	paddr = vb2_plane_cookie(vb, 0);
++	buffer->addr[0] = *paddr;
++
++	if (fmt->pixelformat == V4L2_PIX_FMT_NV12)
++		buffer->addr[1] =
++			buffer->addr[0] + fmt->bytesperline * fmt->height;
++
++	return 0;
++}
++
++static int video_buf_prepare(struct vb2_buffer *vb)
++{
++	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++	struct stfcamss_video *video = vb2_get_drv_priv(vb->vb2_queue);
++	const struct v4l2_pix_format *fmt = &video->active_fmt.fmt.pix;
++
++	if (fmt->sizeimage > vb2_plane_size(vb, 0)) {
++		dev_dbg(video->stfcamss->dev,
++			"sizeimage = %u, plane size = %u\n",
++			fmt->sizeimage, (unsigned int)vb2_plane_size(vb, 0));
++		return -EINVAL;
++	}
++	vb2_set_plane_payload(vb, 0, fmt->sizeimage);
++
++	vbuf->field = V4L2_FIELD_NONE;
++
++	return 0;
++}
++
++static void video_buf_queue(struct vb2_buffer *vb)
++{
++	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++	struct stfcamss_video *video = vb2_get_drv_priv(vb->vb2_queue);
++	struct stfcamss_buffer *buffer = to_stfcamss_buffer(vbuf);
++
++	video->ops->queue_buffer(video, buffer);
++}
++
++static int video_get_subdev_format(struct stfcamss_video *video,
++				   struct v4l2_subdev_format *fmt)
++{
++	struct v4l2_subdev *subdev;
++	struct media_pad *pad;
++	struct media_entity *entity;
 +	int ret;
 +
-+	for (i = 0; i < ARRAY_SIZE(stfcamss->captures); i++) {
-+		struct stf_capture *capture = &stfcamss->captures[i];
++	entity = &video->vdev.entity;
++	while (1) {
++		pad = &entity->pads[0];
++		if (!(pad->flags & MEDIA_PAD_FL_SINK))
++			break;
 +
-+		capture->type = i;
-+		capture->video.ops = &stf_capture_ops;
-+		stf_capture_init(stfcamss, capture);
++		pad = media_pad_remote_pad_first(pad);
++		if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
++			break;
 +
-+		ret = stf_video_register(&capture->video, v4l2_dev,
-+					 stf_cap_names[i]);
-+		if (ret < 0) {
-+			dev_err(stfcamss->dev,
-+				"Failed to register video node: %d\n", ret);
-+			stf_capture_unregister(stfcamss);
++		entity = pad->entity;
++		subdev = media_entity_to_v4l2_subdev(entity);
++
++		fmt->pad = pad->index;
++
++		ret = v4l2_subdev_call_state_active(subdev, pad, get_fmt, fmt);
++		if (ret < 0 && ret != -ENOIOCTLCMD)
 +			return ret;
-+		}
++		else if (!ret)
++			break;
 +	}
 +
 +	return 0;
 +}
-diff --git a/drivers/staging/media/starfive/camss/stf-capture.h b/drivers/staging/media/starfive/camss/stf-capture.h
++
++static int stf_video_check_format(struct stfcamss_video *video)
++{
++	struct v4l2_pix_format *pix = &video->active_fmt.fmt.pix;
++	const struct stfcamss_format_info *fi;
++	int ret;
++	struct v4l2_subdev_format sd_fmt = {
++		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
++	};
++
++	ret = video_get_subdev_format(video, &sd_fmt);
++	if (ret < 0)
++		return ret;
++
++	fi = video_g_fi_by_mcode(video, sd_fmt.format.code);
++	if (!fi)
++		return -EINVAL;
++
++	if (pix->pixelformat != fi->pixelformat ||
++	    pix->height != sd_fmt.format.height ||
++	    pix->width != sd_fmt.format.width ||
++	    pix->field != sd_fmt.format.field)
++		return -EPIPE;
++
++	return 0;
++}
++
++static int video_start_streaming(struct vb2_queue *q, unsigned int count)
++{
++	struct stfcamss_video *video = vb2_get_drv_priv(q);
++	struct video_device *vdev = &video->vdev;
++	int ret;
++
++	ret = video_device_pipeline_start(vdev, &video->stfcamss->pipe);
++	if (ret < 0) {
++		dev_err(video->stfcamss->dev,
++			"Failed to media_pipeline_start: %d\n", ret);
++		goto err_ret_buffers;
++	}
++
++	ret = pm_runtime_resume_and_get(video->stfcamss->dev);
++	if (ret < 0) {
++		dev_err(video->stfcamss->dev, "power up failed %d\n", ret);
++		goto err_pipeline_stop;
++	}
++
++	video->ops->start_streaming(video);
++
++	ret = v4l2_subdev_call(video->source_subdev, video, s_stream, true);
++	if (ret) {
++		dev_err(video->stfcamss->dev, "stream on failed\n");
++		goto err_pm_put;
++	}
++
++	return 0;
++
++err_pm_put:
++	pm_runtime_put(video->stfcamss->dev);
++err_pipeline_stop:
++	video_device_pipeline_stop(vdev);
++err_ret_buffers:
++	video->ops->flush_buffers(video, VB2_BUF_STATE_QUEUED);
++	return ret;
++}
++
++static void video_stop_streaming(struct vb2_queue *q)
++{
++	struct stfcamss_video *video = vb2_get_drv_priv(q);
++	struct video_device *vdev = &video->vdev;
++
++	video->ops->stop_streaming(video);
++
++	v4l2_subdev_call(video->source_subdev, video, s_stream, false);
++
++	pm_runtime_put(video->stfcamss->dev);
++
++	video_device_pipeline_stop(vdev);
++	video->ops->flush_buffers(video, VB2_BUF_STATE_ERROR);
++}
++
++static const struct vb2_ops stf_video_vb2_q_ops = {
++	.queue_setup     = video_queue_setup,
++	.wait_prepare    = vb2_ops_wait_prepare,
++	.wait_finish     = vb2_ops_wait_finish,
++	.buf_init        = video_buf_init,
++	.buf_prepare     = video_buf_prepare,
++	.buf_queue       = video_buf_queue,
++	.start_streaming = video_start_streaming,
++	.stop_streaming  = video_stop_streaming,
++};
++
++/* -----------------------------------------------------------------------------
++ * V4L2 ioctls
++ */
++
++static int video_querycap(struct file *file, void *fh,
++			  struct v4l2_capability *cap)
++{
++	strscpy(cap->driver, "starfive-camss", sizeof(cap->driver));
++	strscpy(cap->card, "Starfive Camera Subsystem", sizeof(cap->card));
++
++	return 0;
++}
++
++static int video_enum_fmt(struct file *file, void *fh, struct v4l2_fmtdesc *f)
++{
++	struct stfcamss_video *video = video_drvdata(file);
++	const struct stfcamss_format_info *fi;
++
++	if (f->index >= video->nformats)
++		return -EINVAL;
++
++	if (f->mbus_code) {
++		/* Each entry in formats[] table has unique mbus_code */
++		if (f->index > 0)
++			return -EINVAL;
++
++		fi = video_g_fi_by_mcode(video, f->mbus_code);
++	} else {
++		fi = video_g_fi_by_index(video, f->index);
++	}
++
++	if (!fi)
++		return -EINVAL;
++
++	f->pixelformat = fi->pixelformat;
++
++	return 0;
++}
++
++static int video_enum_framesizes(struct file *file, void *fh,
++				 struct v4l2_frmsizeenum *fsize)
++{
++	struct stfcamss_video *video = video_drvdata(file);
++	unsigned int i;
++
++	if (fsize->index)
++		return -EINVAL;
++
++	for (i = 0; i < video->nformats; i++) {
++		if (video->formats[i].pixelformat == fsize->pixel_format)
++			break;
++	}
++
++	if (i == video->nformats)
++		return -EINVAL;
++
++	fsize->type = V4L2_FRMSIZE_TYPE_CONTINUOUS;
++	fsize->stepwise.min_width = STFCAMSS_FRAME_MIN_WIDTH;
++	fsize->stepwise.max_width = STFCAMSS_FRAME_MAX_WIDTH;
++	fsize->stepwise.min_height = STFCAMSS_FRAME_MIN_HEIGHT;
++	fsize->stepwise.max_height = STFCAMSS_FRAME_MAX_HEIGHT;
++	fsize->stepwise.step_width = 1;
++	fsize->stepwise.step_height = 1;
++
++	return 0;
++}
++
++static int video_g_fmt(struct file *file, void *fh, struct v4l2_format *f)
++{
++	struct stfcamss_video *video = video_drvdata(file);
++
++	*f = video->active_fmt;
++
++	return 0;
++}
++
++static int video_s_fmt(struct file *file, void *fh, struct v4l2_format *f)
++{
++	struct stfcamss_video *video = video_drvdata(file);
++	int ret;
++
++	if (vb2_is_busy(&video->vb2_q))
++		return -EBUSY;
++
++	ret = __video_try_fmt(video, f);
++	if (ret < 0)
++		return ret;
++
++	video->active_fmt = *f;
++
++	return 0;
++}
++
++static int video_try_fmt(struct file *file, void *fh, struct v4l2_format *f)
++{
++	struct stfcamss_video *video = video_drvdata(file);
++
++	return __video_try_fmt(video, f);
++}
++
++static const struct v4l2_ioctl_ops stf_vid_ioctl_ops = {
++	.vidioc_querycap                = video_querycap,
++	.vidioc_enum_fmt_vid_cap        = video_enum_fmt,
++	.vidioc_enum_framesizes         = video_enum_framesizes,
++	.vidioc_g_fmt_vid_cap           = video_g_fmt,
++	.vidioc_s_fmt_vid_cap           = video_s_fmt,
++	.vidioc_try_fmt_vid_cap         = video_try_fmt,
++	.vidioc_reqbufs                 = vb2_ioctl_reqbufs,
++	.vidioc_querybuf                = vb2_ioctl_querybuf,
++	.vidioc_qbuf                    = vb2_ioctl_qbuf,
++	.vidioc_expbuf                  = vb2_ioctl_expbuf,
++	.vidioc_dqbuf                   = vb2_ioctl_dqbuf,
++	.vidioc_create_bufs             = vb2_ioctl_create_bufs,
++	.vidioc_prepare_buf             = vb2_ioctl_prepare_buf,
++	.vidioc_streamon                = vb2_ioctl_streamon,
++	.vidioc_streamoff               = vb2_ioctl_streamoff,
++};
++
++/* -----------------------------------------------------------------------------
++ * V4L2 file operations
++ */
++
++static const struct v4l2_file_operations stf_vid_fops = {
++	.owner          = THIS_MODULE,
++	.unlocked_ioctl = video_ioctl2,
++	.open           = v4l2_fh_open,
++	.release        = vb2_fop_release,
++	.poll           = vb2_fop_poll,
++	.mmap           = vb2_fop_mmap,
++	.read           = vb2_fop_read,
++};
++
++/* -----------------------------------------------------------------------------
++ * STFCAMSS video core
++ */
++
++static int stf_link_validate(struct media_link *link)
++{
++	struct video_device *vdev =
++		media_entity_to_video_device(link->sink->entity);
++	struct stfcamss_video *video = video_get_drvdata(vdev);
++	int ret;
++
++	ret = stf_video_check_format(video);
++
++	return ret;
++}
++
++static const struct media_entity_operations stf_media_ops = {
++	.link_validate = stf_link_validate,
++};
++
++static void stf_video_release(struct video_device *vdev)
++{
++	struct stfcamss_video *video = video_get_drvdata(vdev);
++
++	media_entity_cleanup(&vdev->entity);
++
++	mutex_destroy(&video->q_lock);
++	mutex_destroy(&video->lock);
++}
++
++int stf_video_register(struct stfcamss_video *video,
++		       struct v4l2_device *v4l2_dev, const char *name)
++{
++	struct video_device *vdev = &video->vdev;
++	struct vb2_queue *q;
++	struct media_pad *pad = &video->pad;
++	int ret;
++
++	mutex_init(&video->q_lock);
++	mutex_init(&video->lock);
++
++	q = &video->vb2_q;
++	q->drv_priv = video;
++	q->mem_ops = &vb2_dma_contig_memops;
++	q->ops = &stf_video_vb2_q_ops;
++	q->type = video->type;
++	q->io_modes = VB2_DMABUF | VB2_MMAP;
++	q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
++	q->buf_struct_size = sizeof(struct stfcamss_buffer);
++	q->dev = video->stfcamss->dev;
++	q->lock = &video->q_lock;
++	q->min_buffers_needed = STFCAMSS_MIN_BUFFERS;
++	ret = vb2_queue_init(q);
++	if (ret < 0) {
++		dev_err(video->stfcamss->dev,
++			"Failed to init vb2 queue: %d\n", ret);
++		goto err_mutex_destroy;
++	}
++
++	pad->flags = MEDIA_PAD_FL_SINK;
++	ret = media_entity_pads_init(&vdev->entity, 1, pad);
++	if (ret < 0) {
++		dev_err(video->stfcamss->dev,
++			"Failed to init video entity: %d\n", ret);
++		goto err_mutex_destroy;
++	}
++
++	ret = stf_video_init_format(video);
++	if (ret < 0) {
++		dev_err(video->stfcamss->dev,
++			"Failed to init format: %d\n", ret);
++		goto err_media_cleanup;
++	}
++
++	vdev->fops = &stf_vid_fops;
++	vdev->ioctl_ops = &stf_vid_ioctl_ops;
++	vdev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
++	vdev->entity.ops = &stf_media_ops;
++	vdev->vfl_dir = VFL_DIR_RX;
++	vdev->release = stf_video_release;
++	vdev->v4l2_dev = v4l2_dev;
++	vdev->queue = &video->vb2_q;
++	vdev->lock = &video->lock;
++	strscpy(vdev->name, name, sizeof(vdev->name));
++
++	video_set_drvdata(vdev, video);
++
++	ret = video_register_device(vdev, VFL_TYPE_VIDEO, -1);
++	if (ret < 0) {
++		dev_err(video->stfcamss->dev,
++			"Failed to register video device: %d\n", ret);
++		goto err_media_cleanup;
++	}
++
++	return 0;
++
++err_media_cleanup:
++	media_entity_cleanup(&vdev->entity);
++err_mutex_destroy:
++	mutex_destroy(&video->lock);
++	mutex_destroy(&video->q_lock);
++	return ret;
++}
++
++void stf_video_unregister(struct stfcamss_video *video)
++{
++	vb2_video_unregister_device(&video->vdev);
++}
+diff --git a/drivers/staging/media/starfive/camss/stf-video.h b/drivers/staging/media/starfive/camss/stf-video.h
 new file mode 100644
-index 000000000000..4a6c8f9b779b
+index 000000000000..8052b77e3ad8
 --- /dev/null
-+++ b/drivers/staging/media/starfive/camss/stf-capture.h
-@@ -0,0 +1,87 @@
++++ b/drivers/staging/media/starfive/camss/stf-video.h
+@@ -0,0 +1,100 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
-+ * stf_capture.h
++ * stf_video.h
 + *
-+ * Starfive Camera Subsystem driver
++ * StarFive Camera Subsystem - V4L2 device node
 + *
 + * Copyright (C) 2021-2023 StarFive Technology Co., Ltd.
 + */
 +
-+#ifndef STF_CAPTURE_H
-+#define STF_CAPTURE_H
++#ifndef STF_VIDEO_H
++#define STF_VIDEO_H
 +
-+#include "stf-video.h"
++#include <linux/list.h>
++#include <linux/mutex.h>
++#include <linux/videodev2.h>
++#include <media/v4l2-dev.h>
++#include <media/v4l2-fh.h>
++#include <media/v4l2-ioctl.h>
++#include <media/videobuf2-v4l2.h>
 +
-+#define VIN_CHANNEL_SEL_EN			0x14
-+#define VIN_START_ADDR_N			0x18
-+#define VIN_INRT_PIX_CFG			0x1c
-+#define VIN_START_ADDR_O			0x20
-+#define VIN_CFG_REG				0x24
++#define STFCAMSS_FRAME_MIN_WIDTH		64
++#define STFCAMSS_FRAME_MAX_WIDTH		1920
++#define STFCAMSS_FRAME_MIN_HEIGHT		64
++#define STFCAMSS_FRAME_MAX_HEIGHT		1080
++#define STFCAMSS_FRAME_WIDTH_ALIGN_8		8
++#define STFCAMSS_FRAME_WIDTH_ALIGN_128		128
++#define STFCAMSS_MIN_BUFFERS			2
 +
-+#define U0_VIN_CNFG_AXI_DVP_EN			BIT(2)
++#define STFCAMSS_MAX_ENTITY_NAME_LEN		27
 +
-+#define U0_VIN_CHANNEL_SEL_MASK			GENMASK(3, 0)
-+#define U0_VIN_AXIWR0_EN			BIT(4)
-+#define CHANNEL(x)				((x) << 0)
-+
-+#define U0_VIN_INTR_CLEAN			BIT(0)
-+#define U0_VIN_INTR_M				BIT(1)
-+#define U0_VIN_PIX_CNT_END_MASK			GENMASK(12, 2)
-+#define U0_VIN_PIX_CT_MASK			GENMASK(14, 13)
-+#define U0_VIN_PIXEL_HEIGH_BIT_SEL_MAKS		GENMASK(16, 15)
-+
-+#define PIX_CNT_END(x)				((x) << 2)
-+#define PIX_CT(x)				((x) << 13)
-+#define PIXEL_HEIGH_BIT_SEL(x)			((x) << 15)
-+
-+#define U0_VIN_CNFG_DVP_HS_POS			BIT(1)
-+#define U0_VIN_CNFG_DVP_SWAP_EN			BIT(2)
-+#define U0_VIN_CNFG_DVP_VS_POS			BIT(3)
-+#define U0_VIN_CNFG_GEN_EN_AXIRD		BIT(4)
-+#define U0_VIN_CNFG_ISP_DVP_EN0			BIT(5)
-+#define U0_VIN_MIPI_BYTE_EN_ISP0(n)		((n) << 6)
-+#define U0_VIN_MIPI_CHANNEL_SEL0(n)		((n) << 8)
-+#define U0_VIN_P_I_MIPI_HAEDER_EN0(n)		((n) << 12)
-+#define U0_VIN_PIX_NUM(n)			((n) << 13)
-+#define U0_VIN_MIPI_BYTE_EN_ISP0_MASK		GENMASK(7, 6)
-+#define U0_VIN_MIPI_CHANNEL_SEL0_MASK		GENMASK(11, 8)
-+#define U0_VIN_P_I_MIPI_HAEDER_EN0_MASK		BIT(12)
-+#define U0_VIN_PIX_NUM_MASK			GENMASK(16, 13)
-+
-+enum stf_v_state {
-+	STF_OUTPUT_OFF,
-+	STF_OUTPUT_RESERVED,
-+	STF_OUTPUT_SINGLE,
-+	STF_OUTPUT_CONTINUOUS,
-+	STF_OUTPUT_IDLE,
-+	STF_OUTPUT_STOPPING
++enum stf_v_line_id {
++	STF_V_LINE_WR = 0,
++	STF_V_LINE_ISP,
++	STF_V_LINE_MAX,
 +};
 +
-+struct stf_v_buf {
-+	int active_buf;
-+	struct stfcamss_buffer *buf[2];
-+	struct stfcamss_buffer *last_buffer;
-+	struct list_head pending_bufs;
-+	struct list_head ready_bufs;
-+	enum stf_v_state state;
-+	unsigned int sequence;
-+	/* protects the above member variables */
-+	spinlock_t lock;
-+	atomic_t frame_skip;
++enum stf_capture_type {
++	STF_CAPTURE_RAW = 0,
++	STF_CAPTURE_YUV,
++	STF_CAPTURE_NUM,
 +};
 +
-+struct stf_capture {
-+	struct stfcamss_video video;
-+	struct stf_v_buf buffers;
-+	enum stf_capture_type type;
++struct stfcamss_buffer {
++	struct vb2_v4l2_buffer vb;
++	dma_addr_t addr[2];
++	struct list_head queue;
 +};
 +
-+irqreturn_t stf_wr_irq_handler(int irq, void *priv);
-+irqreturn_t stf_isp_irq_handler(int irq, void *priv);
-+irqreturn_t stf_line_irq_handler(int irq, void *priv);
-+int stf_capture_register(struct stfcamss *stfcamss,
-+			 struct v4l2_device *v4l2_dev);
-+void stf_capture_unregister(struct stfcamss *stfcamss);
++struct fract {
++	u8 numerator;
++	u8 denominator;
++};
 +
-+#endif
++/*
++ * struct stfcamss_format_info - ISP media bus format information
++ * @code: V4L2 media bus format code
++ * @pixelformat: V4L2 pixel format FCC identifier
++ * @planes: Number of planes
++ * @vsub: Vertical subsampling (for each plane)
++ * @bpp: Bits per pixel when stored in memory (for each plane)
++ */
++struct stfcamss_format_info {
++	u32 code;
++	u32 pixelformat;
++	u8 planes;
++	u8 vsub[3];
++	u8 bpp;
++};
 +
++struct stfcamss_video {
++	struct stfcamss *stfcamss;
++	struct vb2_queue vb2_q;
++	struct video_device vdev;
++	struct media_pad pad;
++	struct v4l2_format active_fmt;
++	enum v4l2_buf_type type;
++	const struct stfcamss_video_ops *ops;
++	struct mutex lock;	 /* serialize device access */
++	struct mutex q_lock;	 /* protects the queue */
++	unsigned int bpl_alignment;
++	const struct stfcamss_format_info *formats;
++	unsigned int nformats;
++	struct v4l2_subdev *source_subdev;
++};
++
++struct stfcamss_video_ops {
++	int (*queue_buffer)(struct stfcamss_video *video,
++			    struct stfcamss_buffer *buf);
++	int (*flush_buffers)(struct stfcamss_video *video,
++			     enum vb2_buffer_state state);
++	void (*start_streaming)(struct stfcamss_video *video);
++	void (*stop_streaming)(struct stfcamss_video *video);
++};
++
++int stf_video_register(struct stfcamss_video *video,
++		       struct v4l2_device *v4l2_dev, const char *name);
++
++void stf_video_unregister(struct stfcamss_video *video);
++
++#endif /* STF_VIDEO_H */
 -- 
 2.34.1
 
