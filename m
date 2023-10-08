@@ -2,93 +2,277 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B53B7E95A8F
-	for <linux-media@archiver.kernel.org>; Sun,  8 Oct 2023 03:32:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF74EE95A67
+	for <linux-media@archiver.kernel.org>; Sun,  8 Oct 2023 08:52:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344342AbjJHDaw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 7 Oct 2023 23:30:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47040 "EHLO
+        id S234275AbjJHIwG convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 8 Oct 2023 04:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344300AbjJHDav (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 7 Oct 2023 23:30:51 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5586BBD;
-        Sat,  7 Oct 2023 20:30:50 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-564b6276941so2564434a12.3;
-        Sat, 07 Oct 2023 20:30:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696735850; x=1697340650; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Po8IwO3ZNX4Frjy8MjMqPcYZOoaeDikNFLkcWX7OJPI=;
-        b=aG6fKP51RMfTWAlgvxtKXhpBNXmpkCPIiuCMoxFA2hB3X8qijRIxng5ThY8bwaSgrI
-         m7fWe90kAv131Yli09x0WeiLkSLietgcPEnf6Pah8Wpt0Ru6mtvD7gCOE3LB4n+HF79A
-         fvaOwwPxZrVrOgqtrEHEmF+qppyGpdwQ1v+DjmeLLU2JNDLAifKxxRhAWnN7DqIT6N4K
-         kFw+W8sNxgLGNJ/LCdcaQHy5Fg/BEFAAUgyOfMCuoOuN0Mr08hZonJlvvcoZkWb1VOiM
-         M8t06f0zXWM3UUJvdJPTzyPxAASXbjmfAENkcI1MSEqbkw0p3eOMA7Kp7o5pwP3F3i+p
-         z3UQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696735850; x=1697340650;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Po8IwO3ZNX4Frjy8MjMqPcYZOoaeDikNFLkcWX7OJPI=;
-        b=PC1KClDuKo8gt1UqoAa0cxmkru30O2hltg65cR6fS2k3MGWfRn0ibBHpuFurJzoIww
-         uDqNmmKEmHZEG396T7tK2ttUAvp/otRpHTdKH35IVCnOtq316lB31jXrO3hgfw6CO2Om
-         9ZfQgFUGPoS4FQROHMAbLKpP4gku3RPTo2yVPFdM31bTExvFtOC0IUbU07I3sEjRcYsx
-         Xje+qcMiZpGIZAV5A6pgTwsd+MvYq2oHJXk+jTbe+FNDUk7Iw6lyhZHtJmpGURRQZKZo
-         KjXl9HMQ3QwMNQ/kOz5mMG0o5J8j4XeygKULi0wROIKTQ7icc/xz2aHFPQUwbTGvCjgr
-         mgew==
-X-Gm-Message-State: AOJu0YyxkB5SCvWAIHJ2odr93IR3r95ntMBVUm5GVBUmUyFt0D7WHLHW
-        xIWvjZvqY9Duv3yHi+iCxL2U3n9c6LZZBxNqJ8A=
-X-Google-Smtp-Source: AGHT+IHu0m1BG7YctYVYzTTaRMvMvVrKlnV6do4IhJbTtREHvtRDSndFewmonfv7LypGWBoeuyRfvI4GrwV0RDkFj1M=
-X-Received: by 2002:a05:6a20:6a1a:b0:154:fb34:5f09 with SMTP id
- p26-20020a056a206a1a00b00154fb345f09mr14826314pzk.15.1696735849741; Sat, 07
- Oct 2023 20:30:49 -0700 (PDT)
+        with ESMTP id S230441AbjJHIwF (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 8 Oct 2023 04:52:05 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625F5C5;
+        Sun,  8 Oct 2023 01:52:02 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 0D71324E24A;
+        Sun,  8 Oct 2023 16:51:59 +0800 (CST)
+Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sun, 8 Oct
+ 2023 16:51:58 +0800
+Received: from xiaofei.localdomain (180.164.60.184) by EXMBX073.cuchost.com
+ (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sun, 8 Oct
+ 2023 16:51:58 +0800
+From:   Jack Zhu <jack.zhu@starfivetech.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        <bryan.odonoghue@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-staging@lists.linux.dev>,
+        <jack.zhu@starfivetech.com>, <changhuang.liang@starfivetech.com>
+Subject: [PATCH v10 1/8] media: dt-bindings: Add JH7110 Camera Subsystem
+Date:   Sun, 8 Oct 2023 16:51:47 +0800
+Message-ID: <20231008085154.6757-2-jack.zhu@starfivetech.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231008085154.6757-1-jack.zhu@starfivetech.com>
+References: <20231008085154.6757-1-jack.zhu@starfivetech.com>
 MIME-Version: 1.0
-References: <1695891619-32393-1-git-send-email-shengjiu.wang@nxp.com>
- <1695891619-32393-2-git-send-email-shengjiu.wang@nxp.com> <7af54654-d4d5-498e-bd53-78ad54e6d818@sirena.org.uk>
-In-Reply-To: <7af54654-d4d5-498e-bd53-78ad54e6d818@sirena.org.uk>
-From:   Shengjiu Wang <shengjiu.wang@gmail.com>
-Date:   Sun, 8 Oct 2023 11:30:38 +0800
-Message-ID: <CAA+D8AOyDD9Wd0pHFW=jwY9FKqY0OA2UMmDRrB_UnSPN4FJSZA@mail.gmail.com>
-Subject: Re: [RFC PATCH v5 01/11] ASoC: fsl_asrc: define functions for memory
- to memory usage
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Shengjiu Wang <shengjiu.wang@nxp.com>, hverkuil@xs4all.nl,
-        sakari.ailus@iki.fi, tfiga@chromium.org, m.szyprowski@samsung.com,
-        mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xiubo.Lee@gmail.com,
-        festevam@gmail.com, nicoleotsuka@gmail.com, lgirdwood@gmail.com,
-        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
-        linuxppc-dev@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-Originating-IP: [180.164.60.184]
+X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX073.cuchost.com
+ (172.16.6.83)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi
+Add the bindings documentation for Starfive JH7110 Camera Subsystem
+which is used for handing image sensor data.
 
-On Mon, Oct 2, 2023 at 11:08=E2=80=AFPM Mark Brown <broonie@kernel.org> wro=
-te:
->
-> On Thu, Sep 28, 2023 at 05:00:09PM +0800, Shengjiu Wang wrote:
->
-> > m2m_start_part_one: first part of the start steps
-> > m2m_start_part_two: second part of the start steps
-> > m2m_stop_part_one: first part of stop steps
-> > m2m_stop_part_two: second part of stop steps, optional
->
-> The part_one/two naming isn't amazing here.  Looking at the rest of the
-> code it looks like this is a prepare/trigger type distinction where the
-> first part is configuring things prior to DMA setup and the second part
-> is actually starting the transfer.  Perhaps _config()/_start() instead?
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
+---
+ .../bindings/media/starfive,jh7110-camss.yaml | 180 ++++++++++++++++++
+ MAINTAINERS                                   |   7 +
+ 2 files changed, 187 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
 
-Ok, I will use m2m_prepare/m2m_unprepare to replace
-m2m_start_part_one/m2m_stop_part_one,  and use m2m_start/m2m_stop
-to replace  m2m_start_part_two/m2m_stop_part_two.
+diff --git a/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml b/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+new file mode 100644
+index 000000000000..c66586d90fa2
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+@@ -0,0 +1,180 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/starfive,jh7110-camss.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Starfive SoC CAMSS ISP
++
++maintainers:
++  - Jack Zhu <jack.zhu@starfivetech.com>
++  - Changhuang Liang <changhuang.liang@starfivetech.com>
++
++description:
++  The Starfive CAMSS ISP is a Camera interface for Starfive JH7110 SoC. It
++  consists of a VIN controller (Video In Controller, a top-level control unit)
++  and an ISP.
++
++properties:
++  compatible:
++    const: starfive,jh7110-camss
++
++  reg:
++    maxItems: 2
++
++  reg-names:
++    items:
++      - const: syscon
++      - const: isp
++
++  clocks:
++    maxItems: 7
++
++  clock-names:
++    items:
++      - const: apb_func
++      - const: wrapper_clk_c
++      - const: dvp_inv
++      - const: axiwr
++      - const: mipi_rx0_pxl
++      - const: ispcore_2x
++      - const: isp_axi
++
++  resets:
++    maxItems: 6
++
++  reset-names:
++    items:
++      - const: wrapper_p
++      - const: wrapper_c
++      - const: axird
++      - const: axiwr
++      - const: isp_top_n
++      - const: isp_top_axi
++
++  power-domains:
++    items:
++      - description: JH7110 ISP Power Domain Switch Controller.
++
++  interrupts:
++    maxItems: 4
++
++  ports:
++    $ref: /schemas/graph.yaml#/properties/ports
++
++    properties:
++      port@0:
++        $ref: /schemas/graph.yaml#/$defs/port-base
++        unevaluatedProperties: false
++        description: Input port for receiving DVP data.
++
++        properties:
++          endpoint:
++            $ref: video-interfaces.yaml#
++            unevaluatedProperties: false
++
++            properties:
++              bus-type:
++                enum: [5, 6]
++
++              bus-width:
++                enum: [8, 10, 12]
++
++              data-shift:
++                enum: [0, 2]
++                default: 0
++
++              hsync-active:
++                enum: [0, 1]
++                default: 1
++
++              vsync-active:
++                enum: [0, 1]
++                default: 1
++
++            required:
++              - bus-type
++              - bus-width
++
++      port@1:
++        $ref: /schemas/graph.yaml#/properties/port
++        description: Input port for receiving CSI data.
++
++    required:
++      - port@0
++      - port@1
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - clocks
++  - clock-names
++  - resets
++  - reset-names
++  - power-domains
++  - interrupts
++  - ports
++
++additionalProperties: false
++
++examples:
++  - |
++    isp@19840000 {
++        compatible = "starfive,jh7110-camss";
++        reg = <0x19840000 0x10000>,
++              <0x19870000 0x30000>;
++        reg-names = "syscon", "isp";
++        clocks = <&ispcrg 0>,
++                 <&ispcrg 13>,
++                 <&ispcrg 2>,
++                 <&ispcrg 12>,
++                 <&ispcrg 1>,
++                 <&syscrg 51>,
++                 <&syscrg 52>;
++        clock-names = "apb_func",
++                      "wrapper_clk_c",
++                      "dvp_inv",
++                      "axiwr",
++                      "mipi_rx0_pxl",
++                      "ispcore_2x",
++                      "isp_axi";
++        resets = <&ispcrg 0>,
++                 <&ispcrg 1>,
++                 <&ispcrg 10>,
++                 <&ispcrg 11>,
++                 <&syscrg 41>,
++                 <&syscrg 42>;
++        reset-names = "wrapper_p",
++                      "wrapper_c",
++                      "axird",
++                      "axiwr",
++                      "isp_top_n",
++                      "isp_top_axi";
++        power-domains = <&pwrc 5>;
++        interrupts = <92>, <87>, <88>, <90>;
++
++        ports {
++            #address-cells = <1>;
++            #size-cells = <0>;
++            port@0 {
++                reg = <0>;
++                vin_from_sc2235: endpoint {
++                    remote-endpoint = <&sc2235_to_vin>;
++                    bus-type = <5>;
++                    bus-width = <8>;
++                    data-shift = <2>;
++                    hsync-active = <1>;
++                    vsync-active = <0>;
++                    pclk-sample = <1>;
++                };
++            };
++
++            port@1 {
++                reg = <1>;
++                vin_from_csi2rx: endpoint {
++                    remote-endpoint = <&csi2rx_to_vin>;
++                };
++            };
++        };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 75af99eeda6e..774dcb5b70ca 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -20448,6 +20448,13 @@ M:	Ion Badulescu <ionut@badula.org>
+ S:	Odd Fixes
+ F:	drivers/net/ethernet/adaptec/starfire*
+ 
++STARFIVE CAMERA SUBSYSTEM DRIVER
++M:	Jack Zhu <jack.zhu@starfivetech.com>
++M:	Changhuang Liang <changhuang.liang@starfivetech.com>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
++
+ STARFIVE CRYPTO DRIVER
+ M:	Jia Jie Ho <jiajie.ho@starfivetech.com>
+ M:	William Qiu <william.qiu@starfivetech.com>
+-- 
+2.34.1
 
-Best regards
-Wang shengjiu
