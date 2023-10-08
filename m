@@ -2,30 +2,30 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2B0FE95A8F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC68EE95A82
 	for <linux-media@archiver.kernel.org>; Sun,  8 Oct 2023 08:52:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234294AbjJHIwG convert rfc822-to-8bit (ORCPT
+        id S1344459AbjJHIwH convert rfc822-to-8bit (ORCPT
         <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 8 Oct 2023 04:52:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51608 "EHLO
+        Sun, 8 Oct 2023 04:52:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234266AbjJHIwG (ORCPT
+        with ESMTP id S234282AbjJHIwG (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Sun, 8 Oct 2023 04:52:06 -0400
 Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FE4CF;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C7CD6;
         Sun,  8 Oct 2023 01:52:04 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id D1CD224E2A4;
-        Sun,  8 Oct 2023 16:52:02 +0800 (CST)
-Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sun, 8 Oct
- 2023 16:52:01 +0800
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 81ABE24E2BC;
+        Sun,  8 Oct 2023 16:52:03 +0800 (CST)
+Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sun, 8 Oct
+ 2023 16:51:59 +0800
 Received: from xiaofei.localdomain (180.164.60.184) by EXMBX073.cuchost.com
  (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sun, 8 Oct
- 2023 16:52:00 +0800
+ 2023 16:51:58 +0800
 From:   Jack Zhu <jack.zhu@starfivetech.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Robert Foss <rfoss@kernel.org>,
@@ -40,9 +40,9 @@ To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
 CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-staging@lists.linux.dev>,
         <jack.zhu@starfivetech.com>, <changhuang.liang@starfivetech.com>
-Subject: [PATCH v10 8/8] media: staging: media: starfive: camss: Register devices
-Date:   Sun, 8 Oct 2023 16:51:54 +0800
-Message-ID: <20231008085154.6757-9-jack.zhu@starfivetech.com>
+Subject: [PATCH v10 2/8] media: admin-guide: Add starfive_camss.rst for Starfive Camera Subsystem
+Date:   Sun, 8 Oct 2023 16:51:48 +0800
+Message-ID: <20231008085154.6757-3-jack.zhu@starfivetech.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231008085154.6757-1-jack.zhu@starfivetech.com>
 References: <20231008085154.6757-1-jack.zhu@starfivetech.com>
@@ -57,161 +57,139 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Register ISP sub-device and video devices for StarFive Camera
-Subsystem.
+Add starfive_camss.rst file that documents the Starfive Camera
+Subsystem driver which is used for handing image sensor data.
 
 Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
 ---
- .../staging/media/starfive/camss/stf-camss.c  | 97 ++++++++++++++++++-
- 1 file changed, 96 insertions(+), 1 deletion(-)
+ .../admin-guide/media/starfive_camss.rst      | 72 +++++++++++++++++++
+ .../media/starfive_camss_graph.dot            | 12 ++++
+ .../admin-guide/media/v4l-drivers.rst         |  1 +
+ MAINTAINERS                                   |  1 +
+ 4 files changed, 86 insertions(+)
+ create mode 100644 Documentation/admin-guide/media/starfive_camss.rst
+ create mode 100644 Documentation/admin-guide/media/starfive_camss_graph.dot
 
-diff --git a/drivers/staging/media/starfive/camss/stf-camss.c b/drivers/staging/media/starfive/camss/stf-camss.c
-index 373467322885..b2e0f5b3c910 100644
---- a/drivers/staging/media/starfive/camss/stf-camss.c
-+++ b/drivers/staging/media/starfive/camss/stf-camss.c
-@@ -123,6 +123,85 @@ static int stfcamss_of_parse_ports(struct stfcamss *stfcamss)
- 	return ret;
- }
- 
-+static int stfcamss_register_devs(struct stfcamss *stfcamss)
-+{
-+	struct stf_capture *cap_yuv = &stfcamss->captures[STF_CAPTURE_YUV];
-+	struct stf_isp_dev *isp_dev = &stfcamss->isp_dev;
-+	int ret;
+diff --git a/Documentation/admin-guide/media/starfive_camss.rst b/Documentation/admin-guide/media/starfive_camss.rst
+new file mode 100644
+index 000000000000..ca42e9447c47
+--- /dev/null
++++ b/Documentation/admin-guide/media/starfive_camss.rst
+@@ -0,0 +1,72 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
-+	ret = stf_isp_register(isp_dev, &stfcamss->v4l2_dev);
-+	if (ret < 0) {
-+		dev_err(stfcamss->dev,
-+			"failed to register stf isp%d entity: %d\n", 0, ret);
-+		return ret;
-+	}
++.. include:: <isonum.txt>
 +
-+	ret = stf_capture_register(stfcamss, &stfcamss->v4l2_dev);
-+	if (ret < 0) {
-+		dev_err(stfcamss->dev,
-+			"failed to register capture: %d\n", ret);
-+		goto err_isp_unregister;
-+	}
++================================
++Starfive Camera Subsystem driver
++================================
 +
-+	ret = media_create_pad_link(&isp_dev->subdev.entity, STF_ISP_PAD_SRC,
-+				    &cap_yuv->video.vdev.entity, 0, 0);
-+	if (ret)
-+		goto err_cap_unregister;
++Introduction
++------------
 +
-+	cap_yuv->video.source_subdev = &isp_dev->subdev;
++This file documents the driver for the Starfive Camera Subsystem found on
++Starfive JH7110 SoC. The driver is located under drivers/staging/media/starfive/
++camss.
 +
-+	return ret;
++The driver implements V4L2, Media controller and v4l2_subdev interfaces. Camera
++sensor using V4L2 subdev interface in the kernel is supported.
 +
-+err_cap_unregister:
-+	stf_capture_unregister(stfcamss);
-+err_isp_unregister:
-+	stf_isp_unregister(&stfcamss->isp_dev);
++The driver has been successfully used on the Gstreamer 1.18.5 with v4l2src
++plugin.
 +
-+	return ret;
++
++Starfive Camera Subsystem hardware
++----------------------------------
++
++The Starfive Camera Subsystem hardware consists of::
++
++                    |\         +---------------+      +-----------+
++  +----------+      |  \       |               |      |           |
++  |          |      |   |      |               |      |           |
++  |   MIPI   |----->|   |----->|      ISP      |----->|           |
++  |          |      |   |      |               |      |           |
++  +----------+      |   |      |               |      |  Memory   |
++                    |MUX|      +---------------+      | Interface |
++  +----------+      |   |                             |           |
++  |          |      |   |---------------------------->|           |
++  | Parallel |----->|   |                             |           |
++  |          |      |   |                             |           |
++  +----------+      |  /                              |           |
++                    |/                                +-----------+
++
++- MIPI: The MIPI interface, receiving data from a MIPI CSI-2 camera sensor.
++
++- Parallel: The parallel interface,  receiving data from a parallel sensor.
++
++- ISP: The ISP, processing raw Bayer data from an image sensor and producing
++  YUV frames.
++
++
++Topology
++--------
++
++The media controller pipeline graph is as follows:
++
++.. _starfive_camss_graph:
++
++.. kernel-figure:: starfive_camss_graph.dot
++    :alt:   starfive_camss_graph.dot
++    :align: center
++
++The driver has 2 video devices:
++
++- capture_raw: The capture device, capturing image data directly from a sensor.
++- capture_yuv: The capture device, capturing YUV frame data processed by the
++  ISP module
++
++The driver has 3 subdevices:
++
++- stf_isp: is responsible for all the isp operations, outputs YUV frames.
++- cdns_csi2rx: a CSI-2 bridge supporting up to 4 CSI lanes in input, and 4
++  different pixel streams in output.
++- imx219: an image sensor, image data is sent through MIPI CSI-2.
+diff --git a/Documentation/admin-guide/media/starfive_camss_graph.dot b/Documentation/admin-guide/media/starfive_camss_graph.dot
+new file mode 100644
+index 000000000000..8eff1f161ac7
+--- /dev/null
++++ b/Documentation/admin-guide/media/starfive_camss_graph.dot
+@@ -0,0 +1,12 @@
++digraph board {
++	rankdir=TB
++	n00000001 [label="{{<port0> 0} | stf_isp\n/dev/v4l-subdev0 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
++	n00000001:port1 -> n00000008 [style=dashed]
++	n00000004 [label="capture_raw\n/dev/video0", shape=box, style=filled, fillcolor=yellow]
++	n00000008 [label="capture_yuv\n/dev/video1", shape=box, style=filled, fillcolor=yellow]
++	n0000000e [label="{{<port0> 0} | cdns_csi2rx.19800000.csi-bridge\n | {<port1> 1 | <port2> 2 | <port3> 3 | <port4> 4}}", shape=Mrecord, style=filled, fillcolor=green]
++	n0000000e:port1 -> n00000001:port0 [style=dashed]
++	n0000000e:port1 -> n00000004 [style=dashed]
++	n00000018 [label="{{} | imx219 6-0010\n/dev/v4l-subdev1 | {<port0> 0}}", shape=Mrecord, style=filled, fillcolor=green]
++	n00000018:port0 -> n0000000e:port0 [style=bold]
 +}
-+
-+static void stfcamss_unregister_devs(struct stfcamss *stfcamss)
-+{
-+	stf_isp_unregister(&stfcamss->isp_dev);
-+	stf_capture_unregister(stfcamss);
-+}
-+
-+static int stfcamss_subdev_notifier_bound(struct v4l2_async_notifier *async,
-+					  struct v4l2_subdev *subdev,
-+					  struct v4l2_async_connection *asc)
-+{
-+	struct stfcamss *stfcamss =
-+		container_of(async, struct stfcamss, notifier);
-+	struct stfcamss_async_subdev *csd =
-+		container_of(asc, struct stfcamss_async_subdev, asd);
-+	enum stf_port_num port = csd->port;
-+	struct stf_isp_dev *isp_dev = &stfcamss->isp_dev;
-+	struct stf_capture *cap_raw = &stfcamss->captures[STF_CAPTURE_RAW];
-+	struct media_pad *pad;
-+	int ret;
-+
-+	if (port == STF_PORT_CSI2RX) {
-+		pad = &isp_dev->pads[STF_ISP_PAD_SINK];
-+	} else {
-+		dev_err(stfcamss->dev, "not support port %d\n", port);
-+		return -EPERM;
-+	}
-+
-+	ret = v4l2_create_fwnode_links_to_pad(subdev, pad, 0);
-+	if (ret)
-+		return ret;
-+
-+	ret = media_create_pad_link(&subdev->entity, 1,
-+				    &cap_raw->video.vdev.entity, 0, 0);
-+	if (ret)
-+		return ret;
-+
-+	isp_dev->source_subdev = subdev;
-+	cap_raw->video.source_subdev = subdev;
-+
-+	return 0;
-+}
-+
- static int stfcamss_subdev_notifier_complete(struct v4l2_async_notifier *ntf)
- {
- 	struct stfcamss *stfcamss =
-@@ -133,6 +212,7 @@ static int stfcamss_subdev_notifier_complete(struct v4l2_async_notifier *ntf)
+diff --git a/Documentation/admin-guide/media/v4l-drivers.rst b/Documentation/admin-guide/media/v4l-drivers.rst
+index 61283d67ceef..f4bb2605f07e 100644
+--- a/Documentation/admin-guide/media/v4l-drivers.rst
++++ b/Documentation/admin-guide/media/v4l-drivers.rst
+@@ -28,6 +28,7 @@ Video4Linux (V4L) driver-specific documentation
+ 	si470x
+ 	si4713
+ 	si476x
++	starfive_camss
+ 	vimc
+ 	visl
+ 	vivid
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 774dcb5b70ca..2680f7242a6d 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -20453,6 +20453,7 @@ M:	Jack Zhu <jack.zhu@starfivetech.com>
+ M:	Changhuang Liang <changhuang.liang@starfivetech.com>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
++F:	Documentation/admin-guide/media/starfive_camss.rst
+ F:	Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
  
- static const struct v4l2_async_notifier_operations
- stfcamss_subdev_notifier_ops = {
-+	.bound = stfcamss_subdev_notifier_bound,
- 	.complete = stfcamss_subdev_notifier_complete,
- };
- 
-@@ -217,6 +297,12 @@ static int stfcamss_probe(struct platform_device *pdev)
- 		goto err_cleanup_notifier;
- 	}
- 
-+	ret = stf_isp_init(stfcamss);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to init isp: %d\n", ret);
-+		goto err_cleanup_notifier;
-+	}
-+
- 	stfcamss_mc_init(pdev, stfcamss);
- 
- 	ret = v4l2_device_register(stfcamss->dev, &stfcamss->v4l2_dev);
-@@ -231,6 +317,12 @@ static int stfcamss_probe(struct platform_device *pdev)
- 		goto err_unregister_device;
- 	}
- 
-+	ret = stfcamss_register_devs(stfcamss);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to register subdevice: %d\n", ret);
-+		goto err_unregister_media_dev;
-+	}
-+
- 	pm_runtime_enable(dev);
- 
- 	stfcamss->notifier.ops = &stfcamss_subdev_notifier_ops;
-@@ -239,11 +331,13 @@ static int stfcamss_probe(struct platform_device *pdev)
- 		dev_err(dev, "Failed to register async subdev nodes: %d\n",
- 			ret);
- 		pm_runtime_disable(dev);
--		goto err_unregister_media_dev;
-+		goto err_unregister_subdevs;
- 	}
- 
- 	return 0;
- 
-+err_unregister_subdevs:
-+	stfcamss_unregister_devs(stfcamss);
- err_unregister_media_dev:
- 	media_device_unregister(&stfcamss->media_dev);
- err_unregister_device:
-@@ -265,6 +359,7 @@ static int stfcamss_remove(struct platform_device *pdev)
- {
- 	struct stfcamss *stfcamss = platform_get_drvdata(pdev);
- 
-+	stfcamss_unregister_devs(stfcamss);
- 	v4l2_device_unregister(&stfcamss->v4l2_dev);
- 	media_device_cleanup(&stfcamss->media_dev);
- 	v4l2_async_nf_cleanup(&stfcamss->notifier);
+ STARFIVE CRYPTO DRIVER
 -- 
 2.34.1
 
