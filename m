@@ -2,52 +2,52 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EEF2DE95A91
-	for <linux-media@archiver.kernel.org>; Mon,  9 Oct 2023 12:05:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF9D6E95A9A
+	for <linux-media@archiver.kernel.org>; Mon,  9 Oct 2023 12:05:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346452AbjJIMFh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 9 Oct 2023 08:05:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58476 "EHLO
+        id S1346444AbjJIMFi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 9 Oct 2023 08:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346445AbjJIMFf (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Oct 2023 08:05:35 -0400
+        with ESMTP id S1346449AbjJIMFh (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Oct 2023 08:05:37 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3208B4
-        for <linux-media@vger.kernel.org>; Mon,  9 Oct 2023 05:05:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBBA2AB
+        for <linux-media@vger.kernel.org>; Mon,  9 Oct 2023 05:05:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696853135; x=1728389135;
+  t=1696853136; x=1728389136;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=rr8eaXcYtci4MIUnxgJplu+CGOcDsdx0Ws3VZvKbuS8=;
-  b=nTmKhkDoug47uUo9ZUCw9t9CKTUnqAKEjweF/++EE13SRTyFNvY/Li3U
-   WHqcfXVpD6TlMY9OpYkVPurRaTU7Ppz+XtTjpABVDPValAY28NeR8Sd3S
-   WeRNhPQBCrKels57xMTwNMNzNZ93HVfEFJQkcr8UZbdSPHviiG4S3av0b
-   OnvUpLxJWyTIATzQqNwa0YnWr1NzpzIk5DSqiSE4bi2B9xnnW9XZHhW5Y
-   z9eEBdrmQQjv+/HVQ0p2KORzVmjxkT5nmO30jU7NU7X/tTzGQdJjA93y2
-   bsCPLcgM3RnM3QZeZB9171IC+WxTLYMURzLmXPmhc5ZRkJcQzMiNsyDbG
+  bh=z2/kj9VPKDSWf50h0Ub2vphEwmDcBMduOifQK2YlvZk=;
+  b=cX+fm7gnZSWN6WvHCx1NBRBaabD4ISIMfNxEeXj/eYjhWMFMkKP+K8qQ
+   fMuqfP+Ds4HV1q3zo0kGF1yRoAxDrDYzz9sarv4hYIPIXYU3LUfy437oT
+   hTIQN+J6B+xTCRAMW8eCj0opecN7VrbznJ01G2/ovSYy5UPdDJydfi3mt
+   0knFIdbQ/QJ6pNIxp9flN64xMzv3HgQyWFIIatzzixs7WckBsvIDgsmXU
+   PfZv8aSWYqIVKKfUIfbs+1Vu4HYxJFoxQlGr3pg1MANdjV8vk1VRA6+3W
+   DgSh2jLmuTtwWMiQhTXGKAOv1VWfwYPl1E9ZzGgjsa90xlhX2CLI7Nh+S
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10858"; a="2725500"
+X-IronPort-AV: E=McAfee;i="6600,9927,10858"; a="2725511"
 X-IronPort-AV: E=Sophos;i="6.03,210,1694761200"; 
-   d="scan'208";a="2725500"
+   d="scan'208";a="2725511"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2023 05:05:34 -0700
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2023 05:05:35 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10858"; a="869216196"
+X-IronPort-AV: E=McAfee;i="6600,9927,10858"; a="869216203"
 X-IronPort-AV: E=Sophos;i="6.03,210,1694761200"; 
-   d="scan'208";a="869216196"
+   d="scan'208";a="869216203"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2023 05:05:31 -0700
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2023 05:05:33 -0700
 Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id 62A1D11F9E8;
-        Mon,  9 Oct 2023 15:05:27 +0300 (EEST)
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 01CD11206C3;
+        Mon,  9 Oct 2023 15:05:29 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         tomi.valkeinen@ideasonboard.com
-Subject: [PATCH 1/4] media: v4l: subdev: Set sub-device active state earlier
-Date:   Mon,  9 Oct 2023 15:05:22 +0300
-Message-Id: <20231009120525.202957-2-sakari.ailus@linux.intel.com>
+Subject: [PATCH 4/4] media: ccs: Fix a (harmless) lockdep warning
+Date:   Mon,  9 Oct 2023 15:05:25 +0300
+Message-Id: <20231009120525.202957-5-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231009120525.202957-1-sakari.ailus@linux.intel.com>
 References: <20231009120525.202957-1-sakari.ailus@linux.intel.com>
@@ -57,85 +57,71 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Set sub-device active state earlier in order to have it available to the
-sub-device driver when driver's init_cfg operation is called.
+The v4l2_subdev_init_finalize() is a macro that creates an unique lockdep
+key and name. As the CCS driver initialises all three of its sub-devices
+using the same call site, this creates a lockdep warning. Address it.
 
+Fixes: 4b05b1baae3e ("media: ccs: Use sub-device active state")
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/v4l2-core/v4l2-subdev.c | 14 +++++++++-----
- include/media/v4l2-subdev.h           |  3 ++-
- 2 files changed, 11 insertions(+), 6 deletions(-)
+ drivers/media/i2c/ccs/ccs-core.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-index d295a4e87b66..cd590951c393 100644
---- a/drivers/media/v4l2-core/v4l2-subdev.c
-+++ b/drivers/media/v4l2-core/v4l2-subdev.c
-@@ -53,7 +53,7 @@ static int subdev_fh_init(struct v4l2_subdev_fh *fh, struct v4l2_subdev *sd)
- 	struct v4l2_subdev_state *state;
- 	static struct lock_class_key key;
+diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
+index 6589b0d84e06..2b3b712d60b5 100644
+--- a/drivers/media/i2c/ccs/ccs-core.c
++++ b/drivers/media/i2c/ccs/ccs-core.c
+@@ -2955,7 +2955,9 @@ static void ccs_cleanup(struct ccs_sensor *sensor)
  
--	state = __v4l2_subdev_state_alloc(sd, "fh->state->lock", &key);
-+	state = __v4l2_subdev_state_alloc(sd, "fh->state->lock", &key, false);
- 	if (IS_ERR(state))
- 		return PTR_ERR(state);
- 
-@@ -1426,7 +1426,7 @@ EXPORT_SYMBOL_GPL(v4l2_subdev_has_pad_interdep);
- 
- struct v4l2_subdev_state *
- __v4l2_subdev_state_alloc(struct v4l2_subdev *sd, const char *lock_name,
--			  struct lock_class_key *lock_key)
-+			  struct lock_class_key *lock_key, bool active)
+ static int ccs_init_subdev(struct ccs_sensor *sensor,
+ 			   struct ccs_subdev *ssd, const char *name,
+-			   unsigned short num_pads, u32 function)
++			   unsigned short num_pads, u32 function,
++			   const char *lock_name,
++			   struct lock_class_key *lock_key)
  {
- 	struct v4l2_subdev_state *state;
- 	int ret;
-@@ -1451,6 +1451,9 @@ __v4l2_subdev_state_alloc(struct v4l2_subdev *sd, const char *lock_name,
- 		}
+ 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
+ 	int rval;
+@@ -2993,7 +2995,7 @@ static int ccs_init_subdev(struct ccs_sensor *sensor,
+ 		return rval;
  	}
  
-+	if (active)
-+		sd->active_state = state;
-+
- 	/*
- 	 * There can be no race at this point, but we lock the state anyway to
- 	 * satisfy lockdep checks.
-@@ -1470,6 +1473,9 @@ __v4l2_subdev_state_alloc(struct v4l2_subdev *sd, const char *lock_name,
+-	rval = v4l2_subdev_init_finalize(&ssd->sd);
++	rval = __v4l2_subdev_init_finalize(&ssd->sd, lock_name, lock_key);
+ 	if (rval) {
+ 		media_entity_cleanup(&ssd->sd.entity);
+ 		return rval;
+@@ -3208,6 +3210,8 @@ static int ccs_firmware_name(struct i2c_client *client,
  
- 	kfree(state);
- 
-+	if (active)
-+		sd->active_state = NULL;
-+
- 	return ERR_PTR(ret);
- }
- EXPORT_SYMBOL_GPL(__v4l2_subdev_state_alloc);
-@@ -1493,12 +1499,10 @@ int __v4l2_subdev_init_finalize(struct v4l2_subdev *sd, const char *name,
+ static int ccs_probe(struct i2c_client *client)
  {
- 	struct v4l2_subdev_state *state;
++	static struct lock_class_key pixel_array_lock_key, binner_lock_key,
++		scaler_lock_key;
+ 	const struct ccs_device *ccsdev = device_get_match_data(&client->dev);
+ 	struct ccs_sensor *sensor;
+ 	const struct firmware *fw;
+@@ -3491,15 +3495,18 @@ static int ccs_probe(struct i2c_client *client)
+ 	}
  
--	state = __v4l2_subdev_state_alloc(sd, name, key);
-+	state = __v4l2_subdev_state_alloc(sd, name, key, true);
- 	if (IS_ERR(state))
- 		return PTR_ERR(state);
+ 	rval = ccs_init_subdev(sensor, sensor->scaler, " scaler", 2,
+-			       MEDIA_ENT_F_PROC_VIDEO_SCALER);
++			       MEDIA_ENT_F_PROC_VIDEO_SCALER,
++			       "ccs scaler mutex", &scaler_lock_key);
+ 	if (rval)
+ 		goto out_cleanup;
+ 	rval = ccs_init_subdev(sensor, sensor->binner, " binner", 2,
+-			       MEDIA_ENT_F_PROC_VIDEO_SCALER);
++			       MEDIA_ENT_F_PROC_VIDEO_SCALER,
++			       "ccs binner mutex", &binner_lock_key);
+ 	if (rval)
+ 		goto out_cleanup;
+ 	rval = ccs_init_subdev(sensor, sensor->pixel_array, " pixel_array", 1,
+-			       MEDIA_ENT_F_CAM_SENSOR);
++			       MEDIA_ENT_F_CAM_SENSOR, "ccs pixel array mutex",
++			       &pixel_array_lock_key);
+ 	if (rval)
+ 		goto out_cleanup;
  
--	sd->active_state = state;
--
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(__v4l2_subdev_init_finalize);
-diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-index c1f90c1223a7..ea05b70389b3 100644
---- a/include/media/v4l2-subdev.h
-+++ b/include/media/v4l2-subdev.h
-@@ -1346,7 +1346,8 @@ bool v4l2_subdev_has_pad_interdep(struct media_entity *entity,
-  */
- struct v4l2_subdev_state *__v4l2_subdev_state_alloc(struct v4l2_subdev *sd,
- 						    const char *lock_name,
--						    struct lock_class_key *key);
-+						    struct lock_class_key *key,
-+						    bool active);
- 
- /**
-  * __v4l2_subdev_state_free - free a v4l2_subdev_state
 -- 
 2.39.2
 
