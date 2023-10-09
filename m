@@ -2,178 +2,206 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E538E95A8E
-	for <linux-media@archiver.kernel.org>; Mon,  9 Oct 2023 13:11:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A0A1E95A91
+	for <linux-media@archiver.kernel.org>; Mon,  9 Oct 2023 13:19:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376918AbjJINLa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 9 Oct 2023 09:11:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54426 "EHLO
+        id S1346443AbjJINTx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 9 Oct 2023 09:19:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376915AbjJINLI (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Oct 2023 09:11:08 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938FD1AC;
-        Mon,  9 Oct 2023 06:10:31 -0700 (PDT)
-Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 399D7FAX012942;
-        Mon, 9 Oct 2023 15:10:12 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-        message-id:date:mime-version:subject:to:cc:references:from
-        :in-reply-to:content-type:content-transfer-encoding; s=
-        selector1; bh=dfLHM8Y/UzU7etH/A55fKiYTRZ0gEKXngehJqU3T/I4=; b=rl
-        PHqK7uLpGElo7aPc2ynDZjZdrdMI1PGlvuA8yPxnSS/0AZRuM/uMd/UPLm9rt0Wx
-        EuEeQZ1IK+8IUHZiBWhiThDPOHxnqGAGotdjN+QFeyq7marVITHx78VGcy2+SQIO
-        l/ikBrPFHjaDK0kyQnamiAaHyD4bfLSo9olcY+5GoQuCoKRwzUe5TVMZv4LgF9v3
-        5T3AFJr8yNHQbcBJmuK0xZJvw9QvdlKmxe84W50z+03p5gdtxiaAmiMvaIqH0cdt
-        jJ7oHazCg3ng0BHT5jP6ktR6fP5aMHlQEWjhU1K06PYcv8Q2GMElfefPD2b5MuH9
-        GSs96KProJ6rztMrpAYw==
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3tkhk3d8vw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Oct 2023 15:10:12 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 056C310005E;
-        Mon,  9 Oct 2023 15:10:12 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id F0E38245508;
-        Mon,  9 Oct 2023 15:10:11 +0200 (CEST)
-Received: from [10.201.20.120] (10.201.20.120) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 9 Oct
- 2023 15:10:11 +0200
-Message-ID: <b4367291-9e9e-dae3-3b56-c487e714683c@foss.st.com>
-Date:   Mon, 9 Oct 2023 15:10:10 +0200
+        with ESMTP id S1376430AbjJIMTD (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Oct 2023 08:19:03 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59B43C0D
+        for <linux-media@vger.kernel.org>; Mon,  9 Oct 2023 05:16:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696853783; x=1728389783;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=chf52JvMskAyiT5JertBn3ke3Uudh2MmXCMjYnSHyuY=;
+  b=cYx1GTEgJj+eAjiYNTJg81JYKbLmxjcWxfDqP9WazpK3VVgl1SmCRg+o
+   LddlrYvTQDGF6hWzORjtvHuejeZQC5DDZXpDXjRrlVf0pag69Z4y226np
+   X38M0UBKLXVr9KGlDeA5tOTgBv3TnyRVnEwPeBE/lgL/VYZW7SieQT0q5
+   tDhT7/Jji/x+AswuCQnVt4M4aV+LLp0b2VJ1/gTp/bCpFBJLd0gv6pDcX
+   /FuPOF34Dwc9T1ACSbA46+DoAvemQpvjxmkIGpXKAnCn5fYxtaG6HcoFE
+   juVlB1t2JF4s4m2LHubLlf1Z3xs1rlwpGG4BzjYSh5SqdBVusj8Gl76Jq
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10858"; a="448317268"
+X-IronPort-AV: E=Sophos;i="6.03,210,1694761200"; 
+   d="scan'208";a="448317268"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2023 05:16:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10858"; a="729653004"
+X-IronPort-AV: E=Sophos;i="6.03,210,1694761200"; 
+   d="scan'208";a="729653004"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2023 05:16:19 -0700
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 003E111F835;
+        Mon,  9 Oct 2023 15:16:16 +0300 (EEST)
+Date:   Mon, 9 Oct 2023 12:16:16 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        bingbu.cao@intel.com, hongju.wang@intel.com, hverkuil@xs4all.nl,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Dmitry Perchanov <dmitry.perchanov@intel.com>,
+        "Ng, Khai Wen" <khai.wen.ng@intel.com>, linux-media@vger.kernel.org
+Subject: Re: [PATCH v6 00/28] Generic line based metadata support, internal
+ pads
+Message-ID: <ZSPvENBUMEuwGprh@kekkonen.localdomain>
+References: <20231003115237.76828-1-sakari.ailus@linux.intel.com>
+ <95d77f2a-bfcf-fc80-7e1a-0f207217b358@ideasonboard.com>
+ <ZR58OGjjg8kehn0z@kekkonen.localdomain>
+ <25a0a013-50b7-9665-5509-06617cacdf9b@ideasonboard.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH 1/7] dt-bindings: media: Document STM32MP25 VDEC video
- decoder
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        <linux-media@vger.kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-rockchip@lists.infradead.org>
-CC:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-References: <20231004091552.3531659-1-hugues.fruchet@foss.st.com>
- <20231004091552.3531659-2-hugues.fruchet@foss.st.com>
- <d5dc9b70-00b5-4bda-8fe9-9438f19ecba6@linaro.org>
-From:   Hugues FRUCHET <hugues.fruchet@foss.st.com>
-In-Reply-To: <d5dc9b70-00b5-4bda-8fe9-9438f19ecba6@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.20.120]
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-09_11,2023-10-09_01,2023-05-22_02
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <25a0a013-50b7-9665-5509-06617cacdf9b@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Krzysztof,
+Moi,
 
-On 10/5/23 21:45, Krzysztof Kozlowski wrote:
-> On 04/10/2023 11:15, Hugues Fruchet wrote:
->> Add STM32MP25 VDEC video decoder bindings.
->>
->> Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
->> ---
->>   .../bindings/media/st,stm32mp25-vdec.yaml     | 56 +++++++++++++++++++
->>   1 file changed, 56 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/media/st,stm32mp25-vdec.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/media/st,stm32mp25-vdec.yaml b/Documentation/devicetree/bindings/media/st,stm32mp25-vdec.yaml
->> new file mode 100644
->> index 000000000000..cf41f704113f
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/media/st,stm32mp25-vdec.yaml
->> @@ -0,0 +1,56 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/media/st,stm32mp25-vdec.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: STMicroelectronics STM32MP25 VDEC video decoder
->> +
->> +maintainers:
->> +  - Hugues Fruchet <hugues.fruchet@foss.st.com>
->> +
->> +description:
->> +  The STMicroelectronics STM32MP25 SOCs embeds a VDEC video hardware decoder
->> +  peripheral based on Verisilicon VC8000NanoD IP (former Hantro G1).
->> +
->> +properties:
->> +  compatible:
->> +    const: st,stm32mp25-vdec
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +  interrupt-names:
->> +    maxItems: 1
+On Thu, Oct 05, 2023 at 02:17:07PM +0300, Tomi Valkeinen wrote:
+> On 05/10/2023 12:04, Sakari Ailus wrote:
+> > Hyvää huomenta!
+> > 
+> > On Thu, Oct 05, 2023 at 11:05:54AM +0300, Tomi Valkeinen wrote:
+> > > Hi!
+> > > 
+> > > Thanks for working on this. I think this series is very important.
+> > > 
+> > > On 03/10/2023 14:52, Sakari Ailus wrote:
+> > > > Hi folks,
+> > > > 
+> > > > Here are a few patches to add support generic, line based metadata as well
+> > > > as internal pads. While the amount of code is not very large, to the
+> > > > contrary it is quite small actually IMO, I presume what this is about and
+> > > > why it is being proposed requires some explaining.
+> > > > 
+> > > > Metadata mbus codes and formats have existed for some time in V4L2. They
+> > > > however have been only used by drivers that produce the data itself and
+> > > > effectively this metadata has always been statistics of some sort (at
+> > > > least when it comes to ISPs). What is different here is that we intend to
+> > > > add support for metadata originating from camera sensors.
+> > > > 
+> > > > Camera sensors produce different kinds of metadata, embedded data (usually
+> > > > register address--value pairs used to capture the frame, in a more or less
+> > > > sensor specific format), histograms (in a very sensor specific format),
+> > > > dark pixels etc. The number of these formats is probably going to be about
+> > > > as large as image data formats if not larger, as the image data formats
+> > > > are much better standardised but a smaller subset of them will be
+> > > > supported by V4L2, at least initially but possibly much more in the long
+> > > > run.
+> > > > 
+> > > > Having this many device specific formats would be a major problem for all
+> > > > the other drivers along that pipeline (not to mention the users of those
+> > > > drivers), including bridge (e.g. CSI-2 to parallel) but especially CSI-2
+> > > > receiver drivers that have DMA: the poor driver developer would not only
+> > > > need to know camera sensor specific formats but to choose the specific
+> > > > packing of that format suitable for the DMA used by the hardware. It is
+> > > > unlikely many of these would ever get tested while being present on the
+> > > > driver API. Also adding new sensors with new embedded data formats would
+> > > > involve updating all bridge and CSI-2 receiver drivers. I don't expect
+> > > > this to be a workable approach.
+> > > > 
+> > > > Instead what I'm proposing is to use specific metadata formats on the
+> > > > sensor devices only, on internal pads (more about those soon) of the
+> > > > sensors, only visible in the UAPI, and then generic mbus formats along the
+> > > 
+> > > What do you mean with "only visible in the UAPI"?
+> > 
+> > Other drivers won't bother with specific metadata formats: they are only
+> > present on the internal pads while external pads have generic formats.
+> > 
+> > > 
+> > > > pipeline and finally generic V4L2 metadata formats on the DMAs (specific
+> > > > to bit depth and packing). This would unsnarl the two, defining what data
+> > > > there is (specific mbus code) and how that is transported and packed
+> > > > (generic mbus codes and V4L2 formats).
+> > > > 
+> > > > The user space would be required to "know" the path of that data from the
+> > > > sensor's internal pad to the V4L2 video node. I do not see this as these
+> > > > devices require at least some knowledge of the pipeline, i.e. hardware at
+> > > > hand. Separating what the data means and how it is packed may even be
+> > > > beneficial: it allows separating code that interprets the data (sensor
+> > > > internal mbus code) from the code that accesses it (packing).
+> > > > 
+> > > > These formats are in practice line based, meaning that there may be
+> > > > padding at the end of the line, depending on the bus as well as the DMA.
+> > > > If non-line based formats are needed, it is always possible to set the
+> > > > "height" field to 1.
+> > > > 
+> > > > The internal (source) pads are an alternative to source routes [1]. The
+> > > > source routes were not universally liked and I do have to say I like
+> > > > re-using existing interface concepts (pads and everything you can do with
+> > > > pads, including access format, selections etc.) wherever it makes sense,
+> > > > instead of duplicating functionality.
+> > > > 
+> > > > Effectively internal source pads behave mostly just like sink pads, but
+> > > > they describe a flow of data that originates from a sub-device instead of
+> > > > arriving to a sub-device. The SUBDEV_S_ROUTING IOCTLs are used to enable
+> > > > and disable routes from internal source pads to sub-device's source pads.
+> > > > The subdev format IOCTLs are usable, too, so one can find which subdev
+> > > > format is available on given internal source pad.
+> > > 
+> > > I think the internal pads require a bit more praise, as they can be used for
+> > > other things too. E.g. the ds90ub953 FPD-Link serializer has a test pattern
+> > > generator, which can be modeled very nicely with internal pads. The internal
+> > > pad represents the TPG, and the user can use routing to choose if the output
+> > > of the device is sourced from the normal input or from the TPG. And one can
+> > > set the format on the TPG pad, thus configuring the TPG.
+> > 
+> > Well, yes, indeed.
+> > 
+> > Could you review especially the documentation patches to ensure we're
+> > aligned on this?
 > 
-> This must be specific or just drop (little use of names for one entry)
-I'll drop in v2.
+> Sure.
+> 
+> > > 
+> > > > This set depends on these patches:
+> > > > 
+> > > > <URL:https://lore.kernel.org/linux-media/20231002105557.28972-1-sakari.ailus@linux.intel.com/T/#t>
+> > > 
+> > > Hmm, it's a bit odd for a generic series to depend on a device specific
+> > > series. That makes backporting these more difficult. Why do these depend on
+> > > ov2740 and css patches?
+> > 
+> > Patchset-wise that is the dependency, individual patches may be backported
+> > without backporting _all_ driver patches in the previous set. However, if
+> > you need those drivers as well, then you'll need to backport these patches,
+> > too.
+> 
+> Ok. I don't like the structure of these serieses that much.
+> 
+> I haven't reviewed the patches yet, so maybe there are reasons for the
+> structure, but I'd rather have, in this order, preferably as separate
+> serieses:
+> 
+> - cleanups/fixes not directly related to ccs, embedded data or internal pads
+> - internal pads
+> - embedded data
+> - driver changes
+> 
+> That would help in backporting, but it'd also help with the reviews as the
+> series would be more concentrated on a single topic.
 
-> 
->> +
->> +  clocks:
->> +    maxItems: 1
->> +
->> +  clock-names:
->> +    maxItems: 1
-> 
-> Same problem.
-I'll drop in v2.
+It's also useful to use new APIs once they're added rather than (much)
+later in the set. This is one of the reasons why the patches are arranged as
+they are.
 
-> 
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - interrupts
->> +  - interrupt-names
->> +  - clocks
->> +  - clock-names
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
->> +    vdec: vdec@580d0000 {
-> 
-> Drop label. Node name: video-codec
-> (assuming this is video coder/decoder)
-> 
-> Node names should be generic. See also an explanation and list of
-> examples (not exhaustive) in DT specification:
-> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-I'll do in v2, thanks for pointing-out the "video-codec" generic name.
+I'll see if this could be taken better into account and if further cleanups
+could be merged earlier, I think there are at least a couple of such
+patches.
 
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
+-- 
+Regards,
 
-BR,
-Hugues.
+Sakari Ailus
