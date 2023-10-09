@@ -2,130 +2,123 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13F7CE95A8E
-	for <linux-media@archiver.kernel.org>; Mon,  9 Oct 2023 13:07:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 072A5E95A91
+	for <linux-media@archiver.kernel.org>; Mon,  9 Oct 2023 13:10:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376649AbjJINHA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 9 Oct 2023 09:07:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56076 "EHLO
+        id S1376747AbjJINKD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 9 Oct 2023 09:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376326AbjJING7 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Oct 2023 09:06:59 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6688C8F;
-        Mon,  9 Oct 2023 06:06:57 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39988KWV002751;
-        Mon, 9 Oct 2023 15:06:33 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-        message-id:date:mime-version:subject:to:cc:references:from
-        :in-reply-to:content-type:content-transfer-encoding; s=
-        selector1; bh=3PQ+2v2hmYuHs5jDOC8Az7oTSOTXepldPGCW+7kNOTA=; b=qj
-        KXN6ucPltGfUQkCxs5eJy7A75jo7dich1n9YVbSe4Eii8m5W4Nbhpj+Fn/qDpai5
-        Dbo9az6CTZcEyjF5vlr3tce4X4YgmKmg0OPJ9hnWqu9Z2OlOtebz6gtyJb2Z/J6t
-        xc9ps9L7MmTXwV+T0t0XHRjixFUwKPPfuOqxzONPy2uecd6OVygRbjgmxK3toVK+
-        nvZKlPFnhc10HgFuCJnCOVdHMdZCyGsQnj++QSIPoZ4XvfN80uhgRa/i7Ut6/+g+
-        mtnknabD4AxY0yNQeLZBNya+nocaQ9n4k+zR2xJwwxvDkZzK/04tESU95bPjf5a4
-        OiQr0lskndAPscCSkm3g==
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3tkhfdw9uw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Oct 2023 15:06:32 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5FA51100063;
-        Mon,  9 Oct 2023 15:06:30 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 52ABC23D411;
-        Mon,  9 Oct 2023 15:06:30 +0200 (CEST)
-Received: from [10.201.20.120] (10.201.20.120) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 9 Oct
- 2023 15:06:29 +0200
-Message-ID: <fb77b886-b557-b2af-a2f5-c0057a95b589@foss.st.com>
-Date:   Mon, 9 Oct 2023 15:06:28 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH 3/7] dt-bindings: media: Document STM32MP25 VENC video
- encoder
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, Adam Ford <aford173@gmail.com>
-CC:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        <linux-media@vger.kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
+        with ESMTP id S1376781AbjJINKB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Oct 2023 09:10:01 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B6793;
+        Mon,  9 Oct 2023 06:09:58 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 399D9hMt055512;
+        Mon, 9 Oct 2023 08:09:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1696856983;
+        bh=Lz2x3xIw/kJkOKbJx/niYJH/N0ewRr5xZQck2iUm7x0=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=B7zVxk8H83ezeoHAY3h34LXQOTdmhymSr2IzCbeW+R+Z4/CRGGnzJaA2zAiXTvizL
+         iHWwetwRcEKd5TsYNIMUCLBU+lzOER2+CZIpBncTSuKFPTJ/pNgiHmB5nFs9LtVRVB
+         Vvtzlunpa3y5b5kZXQmDM2k3OwvbWyuNWbNHjpQY=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 399D9hAD076964
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 9 Oct 2023 08:09:43 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 9
+ Oct 2023 08:09:43 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 9 Oct 2023 08:09:42 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 399D9gd0055488;
+        Mon, 9 Oct 2023 08:09:42 -0500
+From:   Jai Luthra <j-luthra@ti.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-rockchip@lists.infradead.org>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-References: <20231004091552.3531659-1-hugues.fruchet@foss.st.com>
- <20231004091552.3531659-4-hugues.fruchet@foss.st.com>
- <CAHCN7xKrriTPaRMJ-r86cSgFDUUP1At08imLBr_zEP0g3fga_g@mail.gmail.com>
- <20231006162703.GA4030032-robh@kernel.org>
-From:   Hugues FRUCHET <hugues.fruchet@foss.st.com>
-In-Reply-To: <20231006162703.GA4030032-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Benoit Parrot <bparrot@ti.com>,
+        Vaishnav Achath <vaishnav.a@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>, <nm@ti.com>,
+        <devarsht@ti.com>, <j-luthra@ti.com>, <a-bhatia1@ti.com>,
+        Martyn Welch <martyn.welch@collabora.com>,
+        Julien Massot <julien.massot@collabora.com>
+Subject: [PATCH v10 01/13] media: dt-bindings: Make sure items in data-lanes are unique
+Date:   Mon, 9 Oct 2023 18:39:27 +0530
+Message-ID: <20231009-upstream_csi-v10-1-330aaed24c5d@ti.com>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20231009-upstream_csi-v10-0-330aaed24c5d@ti.com>
+References: <20231009-upstream_csi-v10-0-330aaed24c5d@ti.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1388; i=j-luthra@ti.com;
+ h=from:subject:message-id; bh=OCxVyiBNv/iKEBoQi4+IK0XyQm++LE8DE/EIGdFNE6Q=;
+ b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBlI/slBKH+PkDCYAQAJv4U95j33kYS7kF8cIYg6
+ bVOJONCs3OJAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZSP7JQAKCRBD3pH5JJpx
+ RSe3EACMzIvgxPmloW2hDwypwO0Yexi5djPKJq0LRH/Zv+4tycwi3VmARg/n77w+HnFKOXlG0Vo
+ 6xEPIxMPrJazPQDEuw0y7UOfeIx0OGIxE5nH6ul4x4ZAiofrA5gjJtPPlJ7tC0Of7R49BtomHeS
+ V/sC1xqjEe7/j22AAmwmBwIYBDWR2425ahfK2lYgNHZ+PI69rQgXjgWouIBFrIiIrQGF5/9++fN
+ 3HVJJJSkwZ54WC+hZDWFistPIPWxtf1q8zyHg1wTRgl5tAmv5hQFUlGv22xEiCtQ1biiwP/77jw
+ gHBz7yv5/Y3hBS2QsCxhOY+P/TY4ddJruSJYGoODYxZxak89apPCx61iutEtNaEQ+NqOSiPw7iy
+ SL7a/VS70w//H/2pVy0kPuSsHkYMvqcB7R7cQc/vwuEPMK/5IW9AlKLbz1yeOuuI85Jdc7GQA1S
+ mUfsNdEl6kH5bsDfKX4M5fuFdStA8UQpTY8arTu6Or6+V4xN6tUcHzGwfrTdG7lmPCVU+jreSmO
+ 9me4lE9eIDyiq6YWo1IuugERZBkS0AB8vqHqB/jF/szrzCBzv37jQ3+AAcEEg8NCtF4LJcj967t
+ vFZ9WB8BhqIUJpCMrqhk5U98WI8PvUGU+Wa3+krJ4D9/Rl/54e/4HyGmoEEFFePLgUs/B0YaOGl
+ 6j+UBfcVteci6/g==
+X-Developer-Key: i=j-luthra@ti.com; a=openpgp; fpr=4DE0D818E5D575E8D45AAFC543DE91F9249A7145
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.201.20.120]
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-09_11,2023-10-09_01,2023-05-22_02
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Rob,
+From: Pratyush Yadav <p.yadav@ti.com>
 
-On 10/6/23 18:27, Rob Herring wrote:
-> On Wed, Oct 04, 2023 at 06:41:09PM -0500, Adam Ford wrote:
->> On Wed, Oct 4, 2023 at 4:16 AM Hugues Fruchet
->> <hugues.fruchet@foss.st.com> wrote:
->>>
->>> Add STM32MP25 VENC video encoder bindings.
->>>
->>> Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
->>> ---
->>>   .../bindings/media/st,stm32mp25-venc.yaml     | 56 +++++++++++++++++++
->>>   1 file changed, 56 insertions(+)
->>>   create mode 100644 Documentation/devicetree/bindings/media/st,stm32mp25-venc.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/media/st,stm32mp25-venc.yaml b/Documentation/devicetree/bindings/media/st,stm32mp25-venc.yaml
->>> new file mode 100644
->>> index 000000000000..c69e0a34f675
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/media/st,stm32mp25-venc.yaml
->>> @@ -0,0 +1,56 @@
->>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>> +
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/media/st,stm32mp25-venc.yaml#
->>
->> Can this dt-binding be made more generic, like something like
->> hantro-h1 or VC8000NanoE?
->>
->> I think there will be more boards that may incorporate the Hantro-H1
->> or a VC8000 in the future, because I don't think this IP is unique to
->> the STM32MP25.
-> 
-> Unless the underlying IP is well documented (i.e. public), then it's
-> kind of pointless. Everyone will just invent their own numbers and names
-> of clocks, resets, etc. unless someone can enforce not doing that.
+The data-lanes property maps the logical lane numbers to the physical
+lane numbers. The position of an entry is the logical lane number and
+its value is the physical lane number. Since one physical lane can only
+map to one logical lane, no number in the list should repeat. Add the
+uniqueItems constraint on the property to enforce this.
 
-Unfortunately the IP documentation is not public, there are no documents 
-provided publicly by Verisilicon for the time being.
+Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+Tested-by: Julien Massot <julien.massot@collabora.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Reviewed-by: Maxime Ripard <mripard@kernel.org>
+Acked-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Jai Luthra <j-luthra@ti.com>
+---
+ Documentation/devicetree/bindings/media/video-interfaces.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-> 
-> Rob
+diff --git a/Documentation/devicetree/bindings/media/video-interfaces.yaml b/Documentation/devicetree/bindings/media/video-interfaces.yaml
+index a211d49dc2ac..26e3e7d7c67b 100644
+--- a/Documentation/devicetree/bindings/media/video-interfaces.yaml
++++ b/Documentation/devicetree/bindings/media/video-interfaces.yaml
+@@ -160,6 +160,7 @@ properties:
+     $ref: /schemas/types.yaml#/definitions/uint32-array
+     minItems: 1
+     maxItems: 8
++    uniqueItems: true
+     items:
+       # Assume up to 9 physical lane indices
+       maximum: 8
 
-BR,
-Hugues
+-- 
+2.42.0
