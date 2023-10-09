@@ -2,43 +2,43 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 634AFE95A8E
-	for <linux-media@archiver.kernel.org>; Mon,  9 Oct 2023 13:10:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24F82E95A97
+	for <linux-media@archiver.kernel.org>; Mon,  9 Oct 2023 13:10:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376836AbjJINKQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 9 Oct 2023 09:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42196 "EHLO
+        id S1376850AbjJINKS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 9 Oct 2023 09:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376809AbjJINKL (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Oct 2023 09:10:11 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5835DB6;
-        Mon,  9 Oct 2023 06:10:08 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 399D9lqO067927;
-        Mon, 9 Oct 2023 08:09:47 -0500
+        with ESMTP id S1376806AbjJINKK (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Oct 2023 09:10:10 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCCA94;
+        Mon,  9 Oct 2023 06:10:06 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 399D9s5x035863;
+        Mon, 9 Oct 2023 08:09:54 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1696856987;
-        bh=CV36wgcU/HLXBVGVMd9iVHL8DT1YkN+Xfgsfa3xX9x8=;
+        s=ti-com-17Q1; t=1696856994;
+        bh=vtgYRdhRlk1YmzBEx3yb0mO0lU3pX1Lt5Kg7jv1XUqo=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=dgsaxSEcdcpN2PjibxRa5+3ngC9mQETVpIYjtI+VVe9/jWrIPo+Lr0OwWLOOmvRqX
-         EpDDo6fRYFV/QywxLGfk9wM0ONP4bs9ozsxAHcaJQdoc1QF95jZeg/u1JvJrEUh7pd
-         WNDeLdofh2jANhlHyx3gVuz0HGfcXPCa7N5Q8dAI=
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 399D9lq9071516
+        b=KhE8NnpkwZjv3z4LQITwymDZDqQlfBKXZE75SNdbh2c+BgGFYwFQLNXJTgXlbkL90
+         x4GDL4gtXxF1C62iVcQXu06A0Dw99Q95XY15ufuoZpfOpStJPSSwAZw0JCZ536D3Tv
+         fzrD8cakucoQx+V/+kWyZ651xAeKER4TLPA0QXEM=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 399D9sFW014548
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 9 Oct 2023 08:09:47 -0500
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 9 Oct 2023 08:09:54 -0500
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 9
- Oct 2023 08:09:47 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ Oct 2023 08:09:53 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 9 Oct 2023 08:09:47 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 399D9kYZ007220;
-        Mon, 9 Oct 2023 08:09:47 -0500
+ Frontend Transport; Mon, 9 Oct 2023 08:09:53 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 399D9rXu007359;
+        Mon, 9 Oct 2023 08:09:53 -0500
 From:   Jai Luthra <j-luthra@ti.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -59,28 +59,28 @@ CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <devarsht@ti.com>, <j-luthra@ti.com>, <a-bhatia1@ti.com>,
         Martyn Welch <martyn.welch@collabora.com>,
         Julien Massot <julien.massot@collabora.com>
-Subject: [PATCH v10 04/13] media: cadence: csi2rx: Cleanup media entity properly
-Date:   Mon, 9 Oct 2023 18:39:30 +0530
-Message-ID: <20231009-upstream_csi-v10-4-330aaed24c5d@ti.com>
+Subject: [PATCH v10 08/13] media: cadence: csi2rx: Set the STOP bit when stopping a stream
+Date:   Mon, 9 Oct 2023 18:39:34 +0530
+Message-ID: <20231009-upstream_csi-v10-8-330aaed24c5d@ti.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231009-upstream_csi-v10-0-330aaed24c5d@ti.com>
 References: <20231009-upstream_csi-v10-0-330aaed24c5d@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1450; i=j-luthra@ti.com;
- h=from:subject:message-id; bh=H/tqA+nD3NGE1eGbYGM3sFZkNgmvZBDs5F3fkDcglS8=;
- b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBlI/soM+r1Abx3POL55vGgtgNp8ipGOuaEErKcS
- St/el2ZgeeJAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZSP7KAAKCRBD3pH5JJpx
- RQiWD/0Vi/7XZI+N67WWGCQ2/h8GgvfJLjRiLzj0TTUoBt1A6QgXcZD7scqg31TGrTbrIHPAvx8
- rHnaz6ZKE/1p9BxitVGsgVuIxEsXlZSspJA3lsGiHOCvnxkiFkrLLO68iYqcjdAcr2tvfOjrZye
- HmZW25ueDRVmFpRlfqvP5JLvMHCX6h1QKncIO0ZileirmvVsKC1bbpFz7LdVGE1uOIiH2v5o/WK
- hupzvamqUp6f1c0+3QgaIUxetYw9hr39tQNh2svBCpgbtwHPxyYPYwE7l2woM92WaWjw3JVBm5/
- wcFMdAToIGgqCVIxXUouEUrxjPhkJxyfO3f55LoidBnEsV4yT8whrjNf2YFTpfiakk+zt0mT3cR
- JGQS4vRVUw3E0ss6l/PIk83iHRmSlcXj4k3xzTJ8t1s0wyA0Cjd3cbkXSaOTRibhAskP3h3iBNW
- VZUilDN62HRBEKDYfLLRm6C0tdSgzwjHKxD4D0vkl7QGqRH5QKCy38UW/n21cx9TR5k3qSrgjrp
- ZP57OQkacsQlqJsAXf/ebltO4mvPZyWJz35/HM6T43Ixjz90SNv0zR4GrsGcUsoxONRjScw0UeD
- e/I5eBEexLppIqhII1F0tm0JgvoarWnGiJN4Aw760Rfr6mhtc0BIfaRC9vD9uvvcVKTfL9hcMIn
- subRbnDwSZS9pvQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2528; i=j-luthra@ti.com;
+ h=from:subject:message-id; bh=yTXIIHZ7yHvfkBehaXvly8sQUzrqAsJQob6QxmW6ETc=;
+ b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBlI/sssGXfTN0tDNfaKfrem+MZS1CyNLez01/xX
+ 8FBJez74+GJAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZSP7LAAKCRBD3pH5JJpx
+ RdRUD/98bxH17x9qQpAtrD9RgbsXY0FDbGxBI52epF0LkkxtecvitpLpr0KAgiW13usR0JGIHNu
+ EICehuM9EwWJwElxkXdrfYR51fGXcJH3xU5oJM7cVg1GAiJrLmBzY4XxVmSE3r/rlxMmqpNlg/C
+ tjPRGw1iGkTKZi8s/x6F5uoiu/37PkL/XoO2st9z0aLsOw4KZcNOsbBmypp5rx6AnWHmfstWcrb
+ PmH2ja5f00Bjnl0FtoI6zwVDYbee/PWcM101KX4olF4xKspHU/hDHZ7rmQGi0UnUfq8tmZ3Qeur
+ gpZvAZzYJBw13phWDqhZEm0OI89qW8L8pEL71xeYi8/trGPdN1TRLghqS2T2ol9l0HdDlZbCIK6
+ gJt4LwRBSGW8k1Xb9TdcuH+QQ7CKudBQcp7GYV9O0HxGvOfQvcu8JdmtMtd64bas4wWzU79DCVh
+ BrvHeiXkt07ByBOYEVm2OSUOUkPyX5+bG/RhB2M6fjI2U4Ys7FjQObotwvLqSkwICygQCXyfI7Y
+ ZbsV65Ye00kWINAg3IXGz07sNLErUPOvedAW4DlbugPK2bzrDzBxrxFsvC0RalwtYyr78noWizk
+ W4uxQehxmSF3+qoQx5tD8ztWg4Jr3T8BFDHPihh9w0g3CUywcWpkFgwxZXZ0FcsNRIDdRDwDV+0
+ KH3YwIVWscwUnHQ==
 X-Developer-Key: i=j-luthra@ti.com; a=openpgp; fpr=4DE0D818E5D575E8D45AAFC543DE91F9249A7145
 Content-Transfer-Encoding: 8bit
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
@@ -90,10 +90,10 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Pratyush Yadav <p.yadav@ti.com>
 
-Call media_entity_cleanup() in probe error path and remove to make sure
-the media entity is cleaned up properly.
+The stream stop procedure says that the STOP bit should be set when the
+stream is to be stopped, and then the ready bit in stream status
+register polled to make sure the STOP operation is finished.
 
-Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 Tested-by: Julien Massot <julien.massot@collabora.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
@@ -101,29 +101,61 @@ Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Reviewed-by: Maxime Ripard <mripard@kernel.org>
 Signed-off-by: Jai Luthra <j-luthra@ti.com>
 ---
- drivers/media/platform/cadence/cdns-csi2rx.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/platform/cadence/cdns-csi2rx.c | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
-index 64e472ca3594..399b2f800dc4 100644
+index 913f84c341f4..230c627ef1f4 100644
 --- a/drivers/media/platform/cadence/cdns-csi2rx.c
 +++ b/drivers/media/platform/cadence/cdns-csi2rx.c
-@@ -547,6 +547,7 @@ static int csi2rx_probe(struct platform_device *pdev)
- err_cleanup:
- 	v4l2_async_nf_unregister(&csi2rx->notifier);
- 	v4l2_async_nf_cleanup(&csi2rx->notifier);
-+	media_entity_cleanup(&csi2rx->subdev.entity);
- err_free_priv:
- 	kfree(csi2rx);
- 	return ret;
-@@ -559,6 +560,7 @@ static void csi2rx_remove(struct platform_device *pdev)
- 	v4l2_async_nf_unregister(&csi2rx->notifier);
- 	v4l2_async_nf_cleanup(&csi2rx->notifier);
- 	v4l2_async_unregister_subdev(&csi2rx->subdev);
-+	media_entity_cleanup(&csi2rx->subdev.entity);
- 	kfree(csi2rx);
- }
+@@ -8,6 +8,7 @@
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+ #include <linux/io.h>
++#include <linux/iopoll.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_graph.h>
+@@ -41,8 +42,12 @@
  
+ #define CSI2RX_STREAM_CTRL_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x000)
+ #define CSI2RX_STREAM_CTRL_SOFT_RST			BIT(4)
++#define CSI2RX_STREAM_CTRL_STOP				BIT(1)
+ #define CSI2RX_STREAM_CTRL_START			BIT(0)
+ 
++#define CSI2RX_STREAM_STATUS_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x004)
++#define CSI2RX_STREAM_STATUS_RDY			BIT(31)
++
+ #define CSI2RX_STREAM_DATA_CFG_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x008)
+ #define CSI2RX_STREAM_DATA_CFG_EN_VC_SELECT		BIT(31)
+ #define CSI2RX_STREAM_DATA_CFG_VC_SELECT(n)		BIT((n) + 16)
+@@ -310,13 +315,25 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+ static void csi2rx_stop(struct csi2rx_priv *csi2rx)
+ {
+ 	unsigned int i;
++	u32 val;
++	int ret;
+ 
+ 	clk_prepare_enable(csi2rx->p_clk);
+ 	reset_control_assert(csi2rx->sys_rst);
+ 	clk_disable_unprepare(csi2rx->sys_clk);
+ 
+ 	for (i = 0; i < csi2rx->max_streams; i++) {
+-		writel(0, csi2rx->base + CSI2RX_STREAM_CTRL_REG(i));
++		writel(CSI2RX_STREAM_CTRL_STOP,
++		       csi2rx->base + CSI2RX_STREAM_CTRL_REG(i));
++
++		ret = readl_relaxed_poll_timeout(csi2rx->base +
++						 CSI2RX_STREAM_STATUS_REG(i),
++						 val,
++						 !(val & CSI2RX_STREAM_STATUS_RDY),
++						 10, 10000);
++		if (ret)
++			dev_warn(csi2rx->dev,
++				 "Failed to stop streaming on pad%u\n", i);
+ 
+ 		reset_control_assert(csi2rx->pixel_rst[i]);
+ 		clk_disable_unprepare(csi2rx->pixel_clk[i]);
 
 -- 
 2.42.0
