@@ -2,43 +2,43 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2EE4E95A9C
-	for <linux-media@archiver.kernel.org>; Mon,  9 Oct 2023 13:10:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18076E95A99
+	for <linux-media@archiver.kernel.org>; Mon,  9 Oct 2023 13:10:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376801AbjJINKJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 9 Oct 2023 09:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43640 "EHLO
+        id S1376818AbjJINKM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 9 Oct 2023 09:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376780AbjJINKE (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Oct 2023 09:10:04 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952FABA;
-        Mon,  9 Oct 2023 06:10:02 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 399D9iBd043923;
-        Mon, 9 Oct 2023 08:09:44 -0500
+        with ESMTP id S1376799AbjJINKI (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Oct 2023 09:10:08 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F16FD9E;
+        Mon,  9 Oct 2023 06:10:06 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 399D9qX3067951;
+        Mon, 9 Oct 2023 08:09:52 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1696856984;
-        bh=BgxjJaKkhypgGTDotppIbabHhDLsyOxiD/tKF7b/5FI=;
+        s=ti-com-17Q1; t=1696856992;
+        bh=s/9/WCV+Z+pRzQZL2aiY/uIoSmDyX8F6tP63wjbi9vE=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=ZqW54PP/AxS+p73SATwC9HUEgdTUUhWoBKhYUyzEjt12mijfuSVAdPB3iUNe6pIct
-         18E9IVDZ1EN3lek2sgg4TIT7sBAkRsWvXI7Yy7yeWXcddxfK2SMqQTktp7rVl7mSx7
-         qkO46RFBtOUdxPLsuSVCO+vBHuHZEJJW0SknWbbM=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 399D9i7R076972
+        b=scGwhFKwA5pRAGoHG0YS/WQI2YiJzxEzzS8I1uiRTi+nk3z6AqGnz5kxIWcQ3GiT5
+         K3v5Iw7x7zvwgkqopdysJFBqpBk/5QOJXQ9hkF9a5+00/aIE8jRV+8O48E7AK80X8e
+         6ffWv408jey835cSZcI0UNf7cE2wyJ0LuEiF1Nk8=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 399D9qDX021644
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 9 Oct 2023 08:09:44 -0500
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 9
- Oct 2023 08:09:44 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE112.ent.ti.com
+        Mon, 9 Oct 2023 08:09:52 -0500
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE112.ent.ti.com
  (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 9
+ Oct 2023 08:09:52 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 9 Oct 2023 08:09:44 -0500
+ Frontend Transport; Mon, 9 Oct 2023 08:09:52 -0500
 Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 399D9hPS117909;
-        Mon, 9 Oct 2023 08:09:44 -0500
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 399D9pe6118001;
+        Mon, 9 Oct 2023 08:09:52 -0500
 From:   Jai Luthra <j-luthra@ti.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -59,28 +59,28 @@ CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <devarsht@ti.com>, <j-luthra@ti.com>, <a-bhatia1@ti.com>,
         Martyn Welch <martyn.welch@collabora.com>,
         Julien Massot <julien.massot@collabora.com>
-Subject: [PATCH v10 02/13] media: dt-bindings: cadence-csi2rx: Add TI compatible string
-Date:   Mon, 9 Oct 2023 18:39:28 +0530
-Message-ID: <20231009-upstream_csi-v10-2-330aaed24c5d@ti.com>
+Subject: [PATCH v10 07/13] media: cadence: csi2rx: Soft reset the streams before starting capture
+Date:   Mon, 9 Oct 2023 18:39:33 +0530
+Message-ID: <20231009-upstream_csi-v10-7-330aaed24c5d@ti.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231009-upstream_csi-v10-0-330aaed24c5d@ti.com>
 References: <20231009-upstream_csi-v10-0-330aaed24c5d@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=970; i=j-luthra@ti.com;
- h=from:subject:message-id; bh=yrzgWB6pzGmHW+FN3ZDQrdA1db60oGi+PIM018sEEvc=;
- b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBlI/smnhGLhA7u9h02i3/0Kd8QycjSAZBnEvf7V
- PPfSv3v3s+JAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZSP7JgAKCRBD3pH5JJpx
- Rb5vD/9cHjnkUGH6ekQ9asA/a8pWobsNyak08z5s0JHR1M/dAGkWrqTvrQpK0o7tKRbPfUu/tkZ
- uZnCk1KMH+cy/K6kQXlJi6+QO8oFkdjsSPrXpo9/zXFpdwPKjzR4n+pPxHPxpAe5v7aGw/RMMlM
- M2RHMeejKY0UOwfFe8OSy3/GW/tqRKRz4KAfJwAJxA2QoOuBlXlxjovgpbGLCoZ8gPRM4SxAJDo
- BjRE6XHYo6PTdm6XL/YqXDuGUIUWZcDTeGZebV1To++Mr3BBdlPbnA80KGm+nW+3ps76XBqk38L
- hlAEMdgpGwVLh0Q7zSGUk2Ph2ghqM3LJnS096+sjjsTUIzAgcWCBBmmUhjc4c1l/HPYpMWBFOnU
- TZg31qnFf3tcX07pGKVl36xPPrX7iAcBINDpITyHjMiywVn4ZfOaoxzJ//99ZnAuNFqExcZ8vqv
- +UG4LdlaA3jWKr/LnTkcBkYVUOOjUTa91T5bRdOwk1b0pzN9IHyVvwpq1f+GdW+nttLhKCclJxv
- uIHmbEx7K5TZqlsABoALdPb2ymZhYdI90LY5YWSykFUb+oP8tx56I9fnnvqaDuvt1BSLJHU/Kca
- JPf5VXC+JJSq+mHTQMOWMUs4KHOswEiHPtDVLArh8jCz5vjfTHU2D+mVFFNQAvyFrJKFRfnRigj
- EhCIzy3U5aQEzTA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2047; i=j-luthra@ti.com;
+ h=from:subject:message-id; bh=zwQO/Y0U7j6zw1eN4GZhJJir4qCqq/uRF3NrJzvTBjY=;
+ b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBlI/srZujrV2s5oLEjLN6orJklsHOAgav/7loNc
+ tE/7oCCHfyJAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZSP7KwAKCRBD3pH5JJpx
+ Rf2UD/9bxjA5/hCvux1X58DeE8Cjm+ol7yNkLScPpPXlouX36Ilq1806L6u4BJOnftH7aZkk109
+ luUFhs69wvW6doNpfpIjQ4U/2OgaJsqbF2R3vH0Q4wIUo8kwq/AhYQsANiLwM34X4czTIahidtb
+ QlWYSBh1C97JXJSYfCLi9xhtNRZPGzfnMvuEYd6duj7N2ntnx7sOTjYOrm8N/kZGa2GQ2PFUZBj
+ WkmYEPry3p9jQpw7IIC8Ys6BOpsUmrjw7wP8xclGE9sbE6gOscYS4hmugbBOidIUOViBLAJiM4r
+ yEk7soEiFt9LTg/SNmgoW+PetF6vplyFr5bC5qxTZKljQCmVOumVyvaly0MLk3rMfoE2Q/jgoH3
+ oWTGYZx4b+OnYnz1R9HvbPD9hO59nlGIEkR77ZoZMHDv048jJ60apfKU8cmupLxP8o9E2hLrela
+ 03Jlax2vwgtEdcBdXAEAtIcznwyT7TEOiPp9zZmsLePBf8uBBokH10i1W3HVCl/yIhFueGcXmWR
+ oXzZV7YcNFbcg/VqQ5SF3eqfDaXNbDW0sRsqiRXuwFJiG3XjsengYrPHiHhpUnMnvyN1yyKocFw
+ YjCiNc4O5T+V1RQas7jJYAA/TSSZ3PVCWZAHVFiHQFQFy+Kbp4uHnBBQTGbPqnRJ8/6IrowoX8E
+ sNL9O4Hw4ctG5SA==
 X-Developer-Key: i=j-luthra@ti.com; a=openpgp; fpr=4DE0D818E5D575E8D45AAFC543DE91F9249A7145
 Content-Transfer-Encoding: 8bit
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
@@ -88,30 +88,60 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a SoC-specific compatible string for TI's integration of this IP in
-J7 and AM62 line of SoCs.
+From: Pratyush Yadav <p.yadav@ti.com>
 
+This resets the stream state machines and FIFOs, giving them a clean
+slate. On J721E if the streams are not reset before starting the
+capture, the captured frame gets wrapped around vertically on every run
+after the first.
+
+Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 Tested-by: Julien Massot <julien.massot@collabora.com>
-Reviewed-by: Maxime Ripard <mripard@kernel.org>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Maxime Ripard <mripard@kernel.org>
+Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Signed-off-by: Jai Luthra <j-luthra@ti.com>
 ---
- Documentation/devicetree/bindings/media/cdns,csi2rx.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/platform/cadence/cdns-csi2rx.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml b/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
-index 30a335b10762..2008a47c0580 100644
---- a/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
-+++ b/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
-@@ -18,6 +18,7 @@ properties:
-     items:
-       - enum:
-           - starfive,jh7110-csi2rx
-+          - ti,j721e-csi2rx
-       - const: cdns,csi2rx
+diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
+index 77e2413c345a..913f84c341f4 100644
+--- a/drivers/media/platform/cadence/cdns-csi2rx.c
++++ b/drivers/media/platform/cadence/cdns-csi2rx.c
+@@ -40,6 +40,7 @@
+ #define CSI2RX_STREAM_BASE(n)		(((n) + 1) * 0x100)
  
-   reg:
+ #define CSI2RX_STREAM_CTRL_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x000)
++#define CSI2RX_STREAM_CTRL_SOFT_RST			BIT(4)
+ #define CSI2RX_STREAM_CTRL_START			BIT(0)
+ 
+ #define CSI2RX_STREAM_DATA_CFG_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x008)
+@@ -134,12 +135,23 @@ struct csi2rx_priv *v4l2_subdev_to_csi2rx(struct v4l2_subdev *subdev)
+ 
+ static void csi2rx_reset(struct csi2rx_priv *csi2rx)
+ {
++	unsigned int i;
++
++	/* Reset module */
+ 	writel(CSI2RX_SOFT_RESET_PROTOCOL | CSI2RX_SOFT_RESET_FRONT,
+ 	       csi2rx->base + CSI2RX_SOFT_RESET_REG);
++	/* Reset individual streams. */
++	for (i = 0; i < csi2rx->max_streams; i++) {
++		writel(CSI2RX_STREAM_CTRL_SOFT_RST,
++		       csi2rx->base + CSI2RX_STREAM_CTRL_REG(i));
++	}
+ 
+-	udelay(10);
++	usleep_range(10, 20);
+ 
++	/* Clear resets */
+ 	writel(0, csi2rx->base + CSI2RX_SOFT_RESET_REG);
++	for (i = 0; i < csi2rx->max_streams; i++)
++		writel(0, csi2rx->base + CSI2RX_STREAM_CTRL_REG(i));
+ }
+ 
+ static int csi2rx_configure_ext_dphy(struct csi2rx_priv *csi2rx)
 
 -- 
 2.42.0
