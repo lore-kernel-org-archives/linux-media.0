@@ -2,101 +2,125 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90DCFCD80D9
-	for <linux-media@archiver.kernel.org>; Tue, 10 Oct 2023 13:52:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64027CD8CA2
+	for <linux-media@archiver.kernel.org>; Tue, 10 Oct 2023 15:03:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232878AbjJJNwu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Oct 2023 09:52:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52134 "EHLO
+        id S233242AbjJJPDm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Oct 2023 11:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232663AbjJJNwl (ORCPT
+        with ESMTP id S233089AbjJJPDl (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Oct 2023 09:52:41 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CEF726BA;
-        Tue, 10 Oct 2023 06:45:18 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-6969b391791so3880912b3a.3;
-        Tue, 10 Oct 2023 06:45:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696945517; x=1697550317; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8l2RdI3GFEPsUV4izDgB+ReS+fUuBzrkfgodsUfx59E=;
-        b=NEZaRF6XdarTyqq7WhTh6Ppmj3rHgDi3u42y0blJQvIp6q9r5inkGCvDUZGKAdwFxB
-         6b4Raag+FyX9wSDgjGX/gpnDxVvZxGxvBueAQMrgDm27a8LOV4m7xjIXU4WYxkXaSH5s
-         H7/v6ASKspCPgVc7aJcyBssNtzSgWby8Aj5TNoZjo259Hjx1JVig/QfRkOBJZEc9fw0I
-         t6E863ANh+LMGgPjbuu8xm8DOITRV7dpc1MZYLBFW0tMjwg92Tf2lkdnFM2MxhMoCfHT
-         3yh6lFnaVFD7A7v/QeCZKsnsmvmfRX4MqfgBpFhnxEGopoHmIEfHD/K/7wbcJBXpM8Wv
-         Vrmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696945517; x=1697550317;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:sender:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=8l2RdI3GFEPsUV4izDgB+ReS+fUuBzrkfgodsUfx59E=;
-        b=WUvauxw2JQxzwpexGR8MIo90ujj3+kQLnuhwShnyMUlgbevhd8me99v81Zwutg+ezZ
-         ZWigJp+Drmhk5hpdWGaP4TYrLqCYrzu/TnZcxn7rVdpTodJ8mdKeU5HPKLq7T75bCSpR
-         ms8s6NZW+EQqVkYsXFJDNLBLbZh9/oQJxOP0xWA7ySd7X/PHOuo6miIVpowbu6sWipdB
-         zEgUChUSv9BrkyRyBs6/LKvd3ZsZM/Svm49xsIeqp8A0DLyWdhB7s92+LqFTZDCL8Yze
-         jvlGQpzToZnGkbpMJGWr3saZnvWKFqqYnk0pFkw/bSONGRAUtbxAfaNasOK7v6jw5eyc
-         yoKg==
-X-Gm-Message-State: AOJu0YwZ6vjynDnCqesrGeZX8/4tGK/Wdl9COKH0H43vMuCTYAq2BXdk
-        ppXaW+4iJczjO47iCSHiHbA=
-X-Google-Smtp-Source: AGHT+IFXY9oUPaVxKEnn6g6JYYGtzSzrMoSdMofrv/KTOwLE9fLvIeTEWiBIFB3Tz8IdPnDmUMrc6Q==
-X-Received: by 2002:a05:6a20:2451:b0:14d:5580:8ff0 with SMTP id t17-20020a056a20245100b0014d55808ff0mr18099934pzc.25.1696945517276;
-        Tue, 10 Oct 2023 06:45:17 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j6-20020aa783c6000000b0068ffb8da107sm8231769pfn.212.2023.10.10.06.45.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Oct 2023 06:45:16 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 10 Oct 2023 06:45:15 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Lakshmi Yadlapati <lakshmiy@us.ibm.com>,
-        sumit.semwal@linaro.org, christian.koenig@amd.com,
-        jdelvare@suse.com, joel@jms.id.au, andrew@aj.id.au,
-        eajames@linux.ibm.com, ninad@linux.ibm.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v1 0/2] [PATCH] hwmon: (pmbus/max31785) Add minimum delay
- between bus accesses
-Message-ID: <1284830f-025e-4e25-8ed0-50a6cc00d223@roeck-us.net>
-References: <20231009211420.3454026-1-lakshmiy@us.ibm.com>
- <ZSUaDIfWmEn5edrE@shikoro>
+        Tue, 10 Oct 2023 11:03:41 -0400
+Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1B797
+        for <linux-media@vger.kernel.org>; Tue, 10 Oct 2023 08:03:40 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (2a00-1190-d1dd-0-c641-1eff-feae-163d.v6.cust.suomicom.net [IPv6:2a00:1190:d1dd:0:c641:1eff:feae:163d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by meesny.iki.fi (Postfix) with ESMTPSA id 4S4fKy5KgvzyWn;
+        Tue, 10 Oct 2023 18:03:31 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1696950215;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YjZsMgLqaEgl6Os7IquuIn+b+HjC5rJvGssknhdITSo=;
+        b=xC8jHtrxORBQ6RqlD/QAH+7lgWOvsk+FrHL+HiPaMYjewipRNxkqPNTlnea00VibbTCTvK
+        ugKuspeZy2GoHgAJ1osqmdpkJv+fSmOv8lx8ylaOU79CQSkpciRNInP5lwnzDem5LDe/Qx
+        t7Twt6XQHvlY5nAAEftzdsny+OR/f4I=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1696950215;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YjZsMgLqaEgl6Os7IquuIn+b+HjC5rJvGssknhdITSo=;
+        b=XznZbx4v9d9RD1Lrl8TFiMtwKFUgbzwPQHwIPTEIX/Dsg8D898QuUwy8LZQOQOc0zZNaTK
+        V+BXRtQ8XxHbX/3pgk3bjf+rmDtH7k80AwQMIwLjWeRwtjndTJNK31GT5u/kbugi6+ejKT
+        j2/oMuzYmqFs5wVnPoHq0vklDq7R95Q=
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1696950215; a=rsa-sha256; cv=none;
+        b=tAZe+0ikPjJ76qIdIjrg5wSx9Qh94VwXlHrI5xxvuhZ0biEyHDk8OvOD7i5W1XokZCF4Zs
+        OTvr0SuW9eeNz1iX1tZ5CngO14hi0q5zMYuEVFXq2XjhpI+//Em6i9b5EanbVC0fbof1od
+        wY6FsvSzdPnE71bD6u1DYn/RhNu74CM=
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id D3E18634CA9;
+        Tue, 10 Oct 2023 18:03:27 +0300 (EEST)
+Date:   Tue, 10 Oct 2023 15:03:27 +0000
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH 8/9] media: i2c: mt9m114: goto proper error path
+Message-ID: <ZSVnv3CPeJdyh+xY@valkosipuli.retiisi.eu>
+References: <cover.1696586632.git.hverkuil-cisco@xs4all.nl>
+ <6e2b3d5971905c1cf63184e7c3cd269c10151bb7.1696586632.git.hverkuil-cisco@xs4all.nl>
+ <20231006151826.GB5121@pendragon.ideasonboard.com>
+ <d625a11a-11a4-41c5-a7f7-fa651649957e@xs4all.nl>
+ <ZSUEXHDmYtstvMBV@valkosipuli.retiisi.eu>
+ <a84b9973-fe45-4125-9374-5d05072c9143@xs4all.nl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZSUaDIfWmEn5edrE@shikoro>
+In-Reply-To: <a84b9973-fe45-4125-9374-5d05072c9143@xs4all.nl>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Oct 10, 2023 at 11:31:56AM +0200, Wolfram Sang wrote:
-> Hi,
-> 
-> thanks for this series!
-> 
-> > Reference to Andrew's previous proposal:
-> > https://lore.kernel.org/all/20200914122811.3295678-1-andrew@aj.id.au/
-> 
-> I do totally agree with Guenter's comment[1], though. This just affects
-> a few drivers and this patch is way too intrusive for the I2C core. The
-> later suggested prepare_device() callback[2] sounds better to me. I
-> still haven't fully understood why this all cannot be handled in the
-> driver's probe. Could someone give me a small summary about that?
-> 
+Hi Hans,
 
-Lots of PMBus devices have the same problem, we have always handled
-it in PMBus drivers by implementing local wait code, and your references
-point that out. What other summary are you looking for ?
+On Tue, Oct 10, 2023 at 10:06:38AM +0200, Hans Verkuil wrote:
+> On 10/10/23 09:59, Sakari Ailus wrote:
+> > Hi Hans,
+> > 
+> > On Tue, Oct 10, 2023 at 09:24:10AM +0200, Hans Verkuil wrote:
+> >> Hi Laurent,
+> >>
+> >> On 06/10/2023 17:18, Laurent Pinchart wrote:
+> >>> Hi Hans,
+> >>>
+> >>> Thank you for the patch.
+> >>>
+> >>> On Fri, Oct 06, 2023 at 12:08:49PM +0200, Hans Verkuil wrote:
+> >>>> In two places the probe function returns instead of going
+> >>>> to the correct goto label.
+> >>>>
+> >>>> This fixes this smatch warning:
+> >>>>
+> >>>> drivers/media/i2c/mt9m114.c:2381 mt9m114_probe() warn: missing unwind goto?
+> >>>>
+> >>>> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+> >>>> CC: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> >>>
+> >>> I've already submitted
+> >>> https://lore.kernel.org/linux-media/20231003192043.27690-1-laurent.pinchart@ideasonboard.com
+> >>
+> >> Is it OK if I pick up your patch for this issue? I plan to pick up at least part
+> >> of this series tomorrow in order to cut down on the number of reported smatch
+> >> warnings.
+> > 
+> > I've got it in my tree and I intend to send a PR by tomorrow (there's an
+> > issue also in the CCS driver).
+> > 
+> 
+> OK, then I leave this to you, Sakari.
+> 
+> The two patches you reviewed (2/9 and 7/9), can I commit those or do you plan
+> to make those part of your PR? I don't care either way, as long as we don't
+> duplicate work...
 
-On a side note, if anyone plans to implement the prepare_device() callback,
-please make sure that it covers all requirements. It would be unfortunate
-if such a callback was implemented if that would still require per-driver
-code (besides the callback).
+You already have them as part of your set so please take them.
 
-Thanks,
-Guenter
+I think I've already reviewed them, too.
+
+-- 
+Regards,
+
+Sakari Ailus
