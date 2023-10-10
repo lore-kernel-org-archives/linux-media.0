@@ -2,104 +2,223 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9942CD68FC
-	for <linux-media@archiver.kernel.org>; Tue, 10 Oct 2023 08:06:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10110CD68FE
+	for <linux-media@archiver.kernel.org>; Tue, 10 Oct 2023 08:10:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234645AbjJJIGn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Oct 2023 04:06:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45886 "EHLO
+        id S234637AbjJJIK4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Oct 2023 04:10:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234638AbjJJIGl (ORCPT
+        with ESMTP id S234623AbjJJIKy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Oct 2023 04:06:41 -0400
-Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.183])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A4497
-        for <linux-media@vger.kernel.org>; Tue, 10 Oct 2023 01:06:40 -0700 (PDT)
-X-KPN-MessageId: efe4299f-6743-11ee-b94e-005056992ed3
-Received: from smtp.kpnmail.nl (unknown [10.31.155.5])
-        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-        id efe4299f-6743-11ee-b94e-005056992ed3;
-        Tue, 10 Oct 2023 10:06:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=xs4all.nl; s=xs4all01;
-        h=content-type:from:to:subject:mime-version:date:message-id;
-        bh=dC7shEaf+klqPzQxRw2RzTd1TbAhIGrK5h8hs9XbHbY=;
-        b=Sbm8Zc0InLYyHDoDKSbfPvn+VrNaDF7Qapxv11A73yR/6PfWF96Jaai+F/PyJhu07xloCL4IAkT8a
-         vsyjCWqwOaU58eoDV+sbWA3m9m0C4zyMktoV8M7HlcuXHFoNBWnGGuiS+fQpKWBoxpaX/7nPLMvoIu
-         OpAHGeupzKISkQ6ghsA+mOLwBduQ4L202ZYBl8P5WjbF+Edh2fX6nKHSyXynu2mg5PUT/vlIcwR6W4
-         GXTzcLGc3T8z8oPlzRdXy1FtGjljuD7+LZzooinRUsnaZ6LFZOHm1u0R4ZyUm5W+8zrLxNBc99Hou6
-         XG59rtfyr73y1uCS94ebAohk4iXuqSw==
-X-KPN-MID: 33|zSOhP8k0Zf8DPilwmVq8UwdyxaK5QcauoXLyto9lpF0ZmGseTxn0uUhlYtWAOqp
- JiJn5ZMabbBcmjTkW0tgJMAA6dk73SawDAEfSrP6VP7M=
-X-KPN-VerifiedSender: Yes
-X-CMASSUN: 33|QJ521JC/xzPbxc9Qh4e6SboRJW7d5TlI6pazq+y7c3jQHtLHLd9xhTIADxJn1dF
- a1j/B2AmrP56OpVIlSbWj6g==
-X-Originating-IP: 173.38.220.40
-Received: from [10.47.78.242] (unknown [173.38.220.40])
-        by smtp.xs4all.nl (Halon) with ESMTPSA
-        id f04e1012-6743-11ee-ac79-00505699b758;
-        Tue, 10 Oct 2023 10:06:38 +0200 (CEST)
-Message-ID: <a84b9973-fe45-4125-9374-5d05072c9143@xs4all.nl>
-Date:   Tue, 10 Oct 2023 10:06:38 +0200
+        Tue, 10 Oct 2023 04:10:54 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82508A9
+        for <linux-media@vger.kernel.org>; Tue, 10 Oct 2023 01:10:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696925452; x=1728461452;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tNin7GYTvIyuO2mxdsrdMPIrSxLpJkcUY8T9he1CYMQ=;
+  b=azoe4aYEcCWwjJGnMs7rPtH5zi/iRL5aixBTyimw3xsfP+MiYOeWb7hU
+   3F6mDb/w1EfxmlrPtQpgsW9gDWVVymuaAOAFyDxOrbtMPQUkVK6chs30b
+   x9yz415AcRooqMA346nFNv/aGmyue0vW0wwjAvklBbCm/FV3xrGhSV7aQ
+   92rmtCvlaRu/yNvenPyLSk29sAYvhsg/FYi9CBPwQDSUeaqK+bDFNKZJc
+   B0n8+wY/wBBvAYAnmUiX27Es7Bx5B0mkPaorhkqknjYibyHE1g6yK3E5K
+   9aHtM3N2ceYqs5uoSyoIomAkaE+KVvUN1NHvjQ5wb+fd7tAstnCAQFbPP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10858"; a="470602243"
+X-IronPort-AV: E=Sophos;i="6.03,212,1694761200"; 
+   d="scan'208";a="470602243"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2023 01:10:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10858"; a="788494041"
+X-IronPort-AV: E=Sophos;i="6.03,212,1694761200"; 
+   d="scan'208";a="788494041"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2023 01:10:50 -0700
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id 09CE71206D2;
+        Tue, 10 Oct 2023 11:10:48 +0300 (EEST)
+Date:   Tue, 10 Oct 2023 08:10:48 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: Re: [PATCH v2 0/4] V4L2 sub-device active state helper, CCS fixes
+Message-ID: <ZSUHCKhY2vlPsTpx@kekkonen.localdomain>
+References: <20231009220906.221303-1-sakari.ailus@linux.intel.com>
+ <d5cf6f37-c1d2-4b79-bf12-611fead262bc@ideasonboard.com>
+ <ZST7+X7jwjVxNtTF@kekkonen.localdomain>
+ <7dccde6c-e82f-4c63-bfbc-b0f1170e2796@ideasonboard.com>
+ <ZSUBTFd9Nz1k2W9K@kekkonen.localdomain>
+ <f6db5b5c-1a9f-4687-a615-5c1a169d31bf@ideasonboard.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 8/9] media: i2c: mt9m114: goto proper error path
-Content-Language: en-US
-To:     Sakari Ailus <sakari.ailus@iki.fi>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org
-References: <cover.1696586632.git.hverkuil-cisco@xs4all.nl>
- <6e2b3d5971905c1cf63184e7c3cd269c10151bb7.1696586632.git.hverkuil-cisco@xs4all.nl>
- <20231006151826.GB5121@pendragon.ideasonboard.com>
- <d625a11a-11a4-41c5-a7f7-fa651649957e@xs4all.nl>
- <ZSUEXHDmYtstvMBV@valkosipuli.retiisi.eu>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <ZSUEXHDmYtstvMBV@valkosipuli.retiisi.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f6db5b5c-1a9f-4687-a615-5c1a169d31bf@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 10/10/23 09:59, Sakari Ailus wrote:
-> Hi Hans,
-> 
-> On Tue, Oct 10, 2023 at 09:24:10AM +0200, Hans Verkuil wrote:
->> Hi Laurent,
->>
->> On 06/10/2023 17:18, Laurent Pinchart wrote:
->>> Hi Hans,
->>>
->>> Thank you for the patch.
->>>
->>> On Fri, Oct 06, 2023 at 12:08:49PM +0200, Hans Verkuil wrote:
->>>> In two places the probe function returns instead of going
->>>> to the correct goto label.
->>>>
->>>> This fixes this smatch warning:
->>>>
->>>> drivers/media/i2c/mt9m114.c:2381 mt9m114_probe() warn: missing unwind goto?
->>>>
->>>> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
->>>> CC: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->>>
->>> I've already submitted
->>> https://lore.kernel.org/linux-media/20231003192043.27690-1-laurent.pinchart@ideasonboard.com
->>
->> Is it OK if I pick up your patch for this issue? I plan to pick up at least part
->> of this series tomorrow in order to cut down on the number of reported smatch
->> warnings.
-> 
-> I've got it in my tree and I intend to send a PR by tomorrow (there's an
-> issue also in the CCS driver).
-> 
+Moi,
 
-OK, then I leave this to you, Sakari.
+On Tue, Oct 10, 2023 at 11:03:40AM +0300, Tomi Valkeinen wrote:
+> On 10/10/2023 10:46, Sakari Ailus wrote:
+> > Moi,
+> > 
+> > On Tue, Oct 10, 2023 at 10:40:05AM +0300, Tomi Valkeinen wrote:
+> > > On 10/10/2023 10:23, Sakari Ailus wrote:
+> > > > Moi,
+> > > > 
+> > > > On Tue, Oct 10, 2023 at 09:52:48AM +0300, Tomi Valkeinen wrote:
+> > > > > On 10/10/2023 01:09, Sakari Ailus wrote:
+> > > > > > Hi folks,
+> > > > > > 
+> > > > > > This set includes a helper for working with V4L2 sub-device active state as
+> > > > > > well as a fix for the CCS driver sub-device state patch.
+> > > > > > 
+> > > > > > since v1:
+> > > > > > 
+> > > > > > - There were other drivers using __v4l2_subdev_state_alloc(). Ouch. Change
+> > > > > >      those users as well. Note that this function should not be used in
+> > > > > >      drivers, hence API niceness is not a high priority.
+> > > > > > 
+> > > > > > Sakari Ailus (4):
+> > > > > >      media: v4l: subdev: Set sub-device active state earlier
+> > > > > >      media: v4l: subdev: Add a helper to tell if a sub-device state is
+> > > > > >        active
+> > > > > >      media: ccs: Rework initialising sub-device state
+> > > > > >      media: ccs: Fix a (harmless) lockdep warning
+> > > > > > 
+> > > > > >     drivers/media/i2c/ccs/ccs-core.c              | 64 ++++++++++++-------
+> > > > > >     .../platform/renesas/rcar-vin/rcar-v4l2.c     |  3 +-
+> > > > > >     .../media/platform/renesas/vsp1/vsp1_entity.c |  3 +-
+> > > > > >     drivers/media/v4l2-core/v4l2-subdev.c         | 14 ++--
+> > > > > >     drivers/staging/media/tegra-video/vi.c        |  2 +-
+> > > > > >     include/media/v4l2-subdev.h                   | 11 +++-
+> > > > > >     6 files changed, 66 insertions(+), 31 deletions(-)
+> > > > > > 
+> > > > > 
+> > > > > I'm not familiar with the CCS driver, and you don't explain much why you are
+> > > > > doing this, so it's a bit unclear to me. But I don't like it.
+> > > > > 
+> > > > > The idea with the subdev state was that the driver doesn't need to know
+> > > > > whether it's active-state or try-state. It should behave the same way in
+> > > > > both cases. This series goes against that.
+> > > > > 
+> > > > > Can you explain a bit what the issue is and what you are doing in this
+> > > > > series?
+> > > > 
+> > > > The driver maintains internal state and that needs to be updated when the
+> > > > configuration (including what's in sub-device state) changes. Generally the
+> > > > driver knows (as for the whence field) which state it's dealing with but
+> > > > that is not the case for init_cfg.
+> > > 
+> > > So you need to set the subdev state to sd->active_state earlier (in patch 1)
+> > > so that the driver can use v4l2_subdev_state_whence()? You don't really
+> > > explain that in the patch descriptions.
+> > > 
+> > > In other words, if init_cfg() were to get a whence-parameter, this wouldn't
+> > > be needed? (I don't want to do that, just trying to understand what's going
+> > > on).
+> > 
+> > Yes, that's correct.
+> 
+> Ok. So the driver keeps some private state separately from the subdev state,
+> and keeps track of only the active state details, and thus it needs to know
+> the whence in init_cfg so that it can fill in those details only when
+> dealing with active state.
 
-The two patches you reviewed (2/9 and 7/9), can I commit those or do you plan
-to make those part of your PR? I don't care either way, as long as we don't
-duplicate work...
+Precisely so.
 
+> 
+> > > > Alternatively I could split the internal workings of the driver into active
+> > > > and try states but I prefer to improve the framework and make the driver
+> > > > simpler.
+> > > 
+> > > I agree with the goal, but I don't think this is improving the framework.
+> > > 
+> > > If we decide that we need to know if a state is an active-state or a
+> > > try-state, I think it's better to add a whence-field into the state itself.
+> > > But I'd rather not.
+> > 
+> > In all other callbacks the whence is known but not in init_cfg.
+> 
+> Yes, those should be removed =).
+> 
+> Well, that may not work, but at least we should consider if a specific
+> callback should ever care about active/try, and if not, remove the whence.
+> 
+> > Comparing with sd->active_state does this pretty cleanly, without a need to
+> > change APIs.
+> > 
+> > > 
+> > > > Deducing the internal configuration solely based on sub-device state is not
+> > > > really feasible.
+> > > 
+> > > Am I correct in that what you really need is a way to sub-class the subdev
+> > > state, so that you can have all that internal state in the subdev state, and
+> > > thus all the code in the driver can work in "whence-agnostic" manner? That's
+> > > something we've been thinking about for a long time.
+> > 
+> > In the case of the CCS driver it's not necessary to store these parameters
+> > for try states: they are driver internal only.
+> 
+> That's fine, the sub-classed state can only have driver internal data (in
+> addition to the standard data).
+> 
+> I think a follow-up question here is: why do you need to keep track of state
+> that's only needed for active state? What is that state?
+
+Sensor register values effectively. These are programmed just before
+streaming starts. There's scaling factor, whether scaling is
+horizontal-only, both vertical and horizontal or if there's no scaling.
+Similarly for binning.
+
+> 
+> > > But the driver needs to be fixed now, not at some point in the future, of
+> > > course. If the sub-classing would solve the issue (i.e. we have a plan in
+> > > mind), I'd rather just hack this in the driver, instead of extending the
+> > > framework, which might easily lead to other drivers going the wrong way too.
+> > > 
+> > > How about a private flag, set before calling v4l2_subdev_init_finalize(),
+> > > and unset after the call. ccs_init_cfg() can look at that flag an if it's
+> > > set, it's initializing an active state.
+> > 
+> > I dislike using driver specific flags in generic APIs.
+> 
+> I meant in the driver private state. Add a field to the driver's private
+> data struct, and use that. Then it's wholly inside the driver, and needs
+> just a few lines of hack-code, easy to remove later.
+> 
+> > While trivial sensor drivers have no use for such functionality, I would be
+> > surprised if there would not be other similar cases.
+> 
+> Can you open this up a bit? Why do drivers need to know if an operation is
+> about active or try state?
+> 
+> Answering my own question:
+> 
+> In some cases it's implicit: when starting the streaming, it's always active
+> state. Similarly in, e.g., get_frame_desc.
+> 
+> Some operations might allow changing HW settings while streaming is enabled.
+> I guess set_fmt might allow changing some specific things even while
+> streaming is enabled. And if so, the callback needs to know if this is for
+> active state or not.
+> 
+> But why does a driver need to know the whence in init_cfg? With sub-classed
+> state, init_cfg should work fine for both active-state and try-state.
+
+See above.
+
+While init_cfg does not (obviously) enable binning or scaling, it still
+deals with the same configuration parameters.
+
+-- 
 Regards,
 
-	Hans
+Sakari Ailus
