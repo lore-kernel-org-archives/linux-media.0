@@ -2,39 +2,39 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DAF70CD68E4
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBB9ACD68E2
 	for <linux-media@archiver.kernel.org>; Tue, 10 Oct 2023 00:51:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379301AbjJJAvq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 9 Oct 2023 20:51:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44898 "EHLO
+        id S1379310AbjJJAvr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 9 Oct 2023 20:51:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379290AbjJJAvn (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Oct 2023 20:51:43 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7446FBA;
-        Mon,  9 Oct 2023 17:51:41 -0700 (PDT)
+        with ESMTP id S1379264AbjJJAvk (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Oct 2023 20:51:40 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8F0F1;
+        Mon,  9 Oct 2023 17:51:38 -0700 (PDT)
 Received: from Monstersaurus.local (aztw-30-b2-v4wan-166917-cust845.vm26.cable.virginm.net [82.37.23.78])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A485CF8B;
-        Tue, 10 Oct 2023 02:51:34 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9BC66F02;
+        Tue, 10 Oct 2023 02:51:33 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1696899094;
-        bh=6et6YB3ovJRquTK1bYYUx8i7eR+31xGOSlTSN1ZNHt8=;
+        s=mail; t=1696899093;
+        bh=tDl8dQbSLOdU2vIuvYIAxnS8VvsF93CmOO6YTQ/B+Dc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MJKZ4b/egWoZwPcbZ74ew/22iue5kNjfJxUObC2Q5S+dG5E/YbCVX3UVNNcYxi9to
-         T6kjzK9lzErtAvcdaK2nFuXyTW8CeaINU0hVd0n8R9cJ/KF8sh1uEIcoKtfp2kl3dg
-         A0UAhMAIOyLZBWN7LVB+OdfG3YfJnqTbQ7BXVxrs=
+        b=TZglu5jKFXXyGhPtduqeBPjPLLbK0aaT1Y0KEEdOR2A5CtTBVMnwRcMd0EsdhcGSi
+         3FhL3w8P7mday7fuDxW3BNgx6o1JxSJpbbivdvtk3/pC4lOJOZoVO/5MjOsTJF0oqC
+         /YbjlloL8jH3tesqoZpuRIo8kwAlT+96Ou00hphA=
 From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org
 Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
         "Paul J. Murphy" <paul.j.murphy@intel.com>,
         Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 5/5] media: i2c: imx335: Improve configuration error reporting
-Date:   Tue, 10 Oct 2023 01:51:26 +0100
-Message-Id: <20231010005126.3425444-6-kieran.bingham@ideasonboard.com>
+Subject: [PATCH 3/5] media: i2c: imx335: Implement get selection API
+Date:   Tue, 10 Oct 2023 01:51:24 +0100
+Message-Id: <20231010005126.3425444-4-kieran.bingham@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231010005126.3425444-1-kieran.bingham@ideasonboard.com>
 References: <20231010005126.3425444-1-kieran.bingham@ideasonboard.com>
@@ -44,43 +44,86 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The existing imx335_parse_hw_config function has two paths
-that can be taken without reporting to the user the reason
-for failing to accept the hardware configuration.
+Support reporting of the Sensor Native and Active pixel array areas
+through the Selection API.
 
-Extend the error reporting paths to identify failures when
-probing the device.
+The implementation reports a single target crop only for the mode that
+is presently exposed by the driver.
 
 Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
 ---
- drivers/media/i2c/imx335.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/media/i2c/imx335.c | 44 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
 diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
-index 1a34b2a43718..753e5c39e0fa 100644
+index bf12b9b69fce..026777eb362e 100644
 --- a/drivers/media/i2c/imx335.c
 +++ b/drivers/media/i2c/imx335.c
-@@ -864,8 +864,10 @@ static int imx335_parse_hw_config(struct imx335 *imx335)
- 	}
+@@ -55,6 +55,14 @@
+ #define IMX335_REG_MIN		0x00
+ #define IMX335_REG_MAX		0xfffff
  
- 	ep = fwnode_graph_get_next_endpoint(fwnode, NULL);
--	if (!ep)
-+	if (!ep) {
-+		dev_err(imx335->dev, "Failed to get next endpoint");
- 		return -ENXIO;
-+	}
- 
- 	ret = v4l2_fwnode_endpoint_alloc_parse(ep, &bus_cfg);
- 	fwnode_handle_put(ep);
-@@ -890,6 +892,8 @@ static int imx335_parse_hw_config(struct imx335 *imx335)
- 		if (bus_cfg.link_frequencies[i] == IMX335_LINK_FREQ)
- 			goto done_endpoint_free;
- 
-+	dev_err(imx335->dev, "no compatible link frequencies found");
++/* IMX335 native and active pixel array size. */
++#define IMX335_NATIVE_WIDTH		2616U
++#define IMX335_NATIVE_HEIGHT		1964U
++#define IMX335_PIXEL_ARRAY_LEFT		12U
++#define IMX335_PIXEL_ARRAY_TOP		12U
++#define IMX335_PIXEL_ARRAY_WIDTH	2592U
++#define IMX335_PIXEL_ARRAY_HEIGHT	1944U
 +
- 	ret = -EINVAL;
+ /**
+  * struct imx335_reg - imx335 sensor register
+  * @address: Register address
+@@ -651,6 +659,41 @@ static int imx335_init_pad_cfg(struct v4l2_subdev *sd,
+ 	return imx335_set_pad_format(sd, sd_state, &fmt);
+ }
  
- done_endpoint_free:
++/**
++ * imx335_get_selection() - Selection API
++ * @sd: pointer to imx335 V4L2 sub-device structure
++ * @sd_state: V4L2 sub-device configuration
++ * @sel: V4L2 selection info
++ *
++ * Return: 0 if successful, error code otherwise.
++ */
++static int imx335_get_selection(struct v4l2_subdev *sd,
++				struct v4l2_subdev_state *sd_state,
++				struct v4l2_subdev_selection *sel)
++{
++	switch (sel->target) {
++	case V4L2_SEL_TGT_NATIVE_SIZE:
++		sel->r.top = 0;
++		sel->r.left = 0;
++		sel->r.width = IMX335_NATIVE_WIDTH;
++		sel->r.height = IMX335_NATIVE_HEIGHT;
++
++		return 0;
++
++	case V4L2_SEL_TGT_CROP:
++	case V4L2_SEL_TGT_CROP_DEFAULT:
++	case V4L2_SEL_TGT_CROP_BOUNDS:
++		sel->r.top = IMX335_PIXEL_ARRAY_TOP;
++		sel->r.left = IMX335_PIXEL_ARRAY_LEFT;
++		sel->r.width = IMX335_PIXEL_ARRAY_WIDTH;
++		sel->r.height = IMX335_PIXEL_ARRAY_HEIGHT;
++
++		return 0;
++	}
++
++	return -EINVAL;
++}
++
+ /**
+  * imx335_start_streaming() - Start sensor stream
+  * @imx335: pointer to imx335 device
+@@ -864,6 +907,7 @@ static const struct v4l2_subdev_pad_ops imx335_pad_ops = {
+ 	.init_cfg = imx335_init_pad_cfg,
+ 	.enum_mbus_code = imx335_enum_mbus_code,
+ 	.enum_frame_size = imx335_enum_frame_size,
++	.get_selection = imx335_get_selection,
+ 	.get_fmt = imx335_get_pad_format,
+ 	.set_fmt = imx335_set_pad_format,
+ };
 -- 
 2.34.1
 
