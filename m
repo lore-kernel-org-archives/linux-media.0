@@ -2,41 +2,77 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2A1DCD68F9
-	for <linux-media@archiver.kernel.org>; Tue, 10 Oct 2023 07:58:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88EC2CD68FA
+	for <linux-media@archiver.kernel.org>; Tue, 10 Oct 2023 07:59:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442613AbjJJH6c (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Oct 2023 03:58:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60666 "EHLO
+        id S1442694AbjJJH7d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Oct 2023 03:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442642AbjJJH6b (ORCPT
+        with ESMTP id S1442686AbjJJH7c (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Oct 2023 03:58:31 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F89F9F
-        for <linux-media@vger.kernel.org>; Tue, 10 Oct 2023 00:58:29 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B3B593D6;
-        Tue, 10 Oct 2023 09:58:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1696924706;
-        bh=+UIYjJDGjnPkHIj7/7VSvlqqyHznhlME38vWGpoIEL4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G4UiYCX0wbyqde2SuMf5ns6jtZCea7LQI5ESzBBXwt7LfaiWXLS+a2DkMPDeZ32iX
-         eiV36Kj/9Gel7UyWw1F2ErFaoNFG8HGltx0J1eq3oMIZAzyBJZrTu0JVM6I40uKt/6
-         4EzObvhqU2OHwQnhIHmsQZy3r79Hysvj086Tfw8k=
-Date:   Tue, 10 Oct 2023 10:58:35 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+        Tue, 10 Oct 2023 03:59:32 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDCCEB8
+        for <linux-media@vger.kernel.org>; Tue, 10 Oct 2023 00:59:30 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (2a00-1190-d1dd-0-c641-1eff-feae-163d.v6.cust.suomicom.net [IPv6:2a00:1190:d1dd:0:c641:1eff:feae:163d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4S4Swc38Kdz49PxG;
+        Tue, 10 Oct 2023 10:59:25 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1696924768;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oSJ/xft0gdB2qRLTi49BdrNGWX4+A0i4B4aCSB16ZrA=;
+        b=bvdnGU0zfFdOCkneQ4axeob7AfG21tvWlgdmLSrQuzpDj9cVrR791NUcldtHj8t/msNuYa
+        TDgi1+2V4zuLpdyibo20kOgnKY0pFaW3FDK3EbjadHysmulMhbk23vrAIAqBjD9knTtmR/
+        N4JohsKToh6NTcPaHRsF7LzL6hfs2R9oyEAVnTlqKnhgXuiPhKboZnrGtF3ZJQMC3cHJmI
+        cih01rChQipl3bDemyLSOwAkhgSWerVfy9dgc6EEyUptDvnPtb5+VCqdXGf9Eb89p+ijRO
+        2Gg/IqF7kV8w3p9Oj0bDjksnKtsgj61XhMRRgmFYa7fptPSlZ4CxsAv3rTJuvg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1696924768;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oSJ/xft0gdB2qRLTi49BdrNGWX4+A0i4B4aCSB16ZrA=;
+        b=Hk95au9buDM+WQLiFtpsNaOknjvKDpcKNua8F8MJcVGGoAECJ6xR5K+nbPkBLkcDl4Zs1t
+        L0azhX/IznB0Qth6DswbDlFbDkIsjZhqaRVBfirGtA4CvBFNkXYsjz9jdJ8eCN59II027F
+        nlqOoxYFWcDTrK7WfM91ca3ZbNYn6nZauYEx7VqLlqWaGEP9J86Bp+9RNDxvlrf0DSN4Vd
+        3jHuoQ/GkyieGEI4L6uWuWsVpY5BV5wbRU4DWvAD0VHiBCrsvEFQ0roRNtI6RUdWtc189+
+        EIGNbzdGHikatodU5T3CyXYJkuZX6unS5TDnLAIi1luvqw8IwTWOfT6UCPyACg==
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1696924768; a=rsa-sha256;
+        cv=none;
+        b=LUd0J2ZcwN3otQamvwJK9Hn7PHTtkR1Zo5sfF2ZYP7TFFNrxNhvapoKCoOfU+x38jSQOn0
+        x9TRx2BSa1bwDYZF1Yuqh6B+f7AuVdF1pTroN81fiUBvwNJp8+WEJtqhBvF/cWFMGrgvc7
+        +JZgvso5Lq8J5OQO3lS8vV6YW2J5bZ0EJSpSkRUaKwisTg7vrtVlH4nRuCKvtv2xB4qscU
+        sDpxieYKb6NqCMiRyUM54rmUfJJX6oyER3W1m0s0UM9s1+zwBb2EEIXl5i0u/J1IrtbqlO
+        hxbaLyBxwCmD+tGFCMcDOKgU9tSPmg5gOjupQyJvkBJRC5llUbAoLmCmDiYkYA==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 55C03634CA9;
+        Tue, 10 Oct 2023 10:59:24 +0300 (EEST)
+Date:   Tue, 10 Oct 2023 07:59:24 +0000
+From:   Sakari Ailus <sakari.ailus@iki.fi>
 To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     linux-media@vger.kernel.org
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org
 Subject: Re: [PATCH 8/9] media: i2c: mt9m114: goto proper error path
-Message-ID: <20231010075835.GG9671@pendragon.ideasonboard.com>
+Message-ID: <ZSUEXHDmYtstvMBV@valkosipuli.retiisi.eu>
 References: <cover.1696586632.git.hverkuil-cisco@xs4all.nl>
  <6e2b3d5971905c1cf63184e7c3cd269c10151bb7.1696586632.git.hverkuil-cisco@xs4all.nl>
  <20231006151826.GB5121@pendragon.ideasonboard.com>
  <d625a11a-11a4-41c5-a7f7-fa651649957e@xs4all.nl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <d625a11a-11a4-41c5-a7f7-fa651649957e@xs4all.nl>
 Precedence: bulk
@@ -46,7 +82,13 @@ X-Mailing-List: linux-media@vger.kernel.org
 Hi Hans,
 
 On Tue, Oct 10, 2023 at 09:24:10AM +0200, Hans Verkuil wrote:
+> Hi Laurent,
+> 
 > On 06/10/2023 17:18, Laurent Pinchart wrote:
+> > Hi Hans,
+> > 
+> > Thank you for the patch.
+> > 
 > > On Fri, Oct 06, 2023 at 12:08:49PM +0200, Hans Verkuil wrote:
 > >> In two places the probe function returns instead of going
 > >> to the correct goto label.
@@ -65,38 +107,10 @@ On Tue, Oct 10, 2023 at 09:24:10AM +0200, Hans Verkuil wrote:
 > of this series tomorrow in order to cut down on the number of reported smatch
 > warnings.
 
-Fine with me. Please update the Fixes: line, as the commit ID has
-changed due to the recent rebase. And this is a good occasion to test
-your scripts and make sure they catch this :-)
-
-> >> ---
-> >>  drivers/media/i2c/mt9m114.c | 4 ++--
-> >>  1 file changed, 2 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/drivers/media/i2c/mt9m114.c b/drivers/media/i2c/mt9m114.c
-> >> index dae675e52390..ac19078ceda3 100644
-> >> --- a/drivers/media/i2c/mt9m114.c
-> >> +++ b/drivers/media/i2c/mt9m114.c
-> >> @@ -2367,7 +2367,7 @@ static int mt9m114_probe(struct i2c_client *client)
-> >>  
-> >>  	ret = mt9m114_clk_init(sensor);
-> >>  	if (ret)
-> >> -		return ret;
-> >> +		goto error_ep_free;
-> >>  
-> >>  	/*
-> >>  	 * Identify the sensor. The driver supports runtime PM, but needs to
-> >> @@ -2378,7 +2378,7 @@ static int mt9m114_probe(struct i2c_client *client)
-> >>  	ret = mt9m114_power_on(sensor);
-> >>  	if (ret < 0) {
-> >>  		dev_err_probe(dev, ret, "Could not power on the device\n");
-> >> -		return ret;
-> >> +		goto error_ep_free;
-> >>  	}
-> >>  
-> >>  	ret = mt9m114_identify(sensor);
+I've got it in my tree and I intend to send a PR by tomorrow (there's an
+issue also in the CCS driver).
 
 -- 
 Regards,
 
-Laurent Pinchart
+Sakari Ailus
