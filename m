@@ -2,128 +2,110 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CBB9ACD68E2
-	for <linux-media@archiver.kernel.org>; Tue, 10 Oct 2023 00:51:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D2A7CD68E2
+	for <linux-media@archiver.kernel.org>; Tue, 10 Oct 2023 01:45:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379310AbjJJAvr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 9 Oct 2023 20:51:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44886 "EHLO
+        id S1379372AbjJJBpt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 9 Oct 2023 21:45:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379264AbjJJAvk (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Oct 2023 20:51:40 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8F0F1;
-        Mon,  9 Oct 2023 17:51:38 -0700 (PDT)
-Received: from Monstersaurus.local (aztw-30-b2-v4wan-166917-cust845.vm26.cable.virginm.net [82.37.23.78])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9BC66F02;
-        Tue, 10 Oct 2023 02:51:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1696899093;
-        bh=tDl8dQbSLOdU2vIuvYIAxnS8VvsF93CmOO6YTQ/B+Dc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TZglu5jKFXXyGhPtduqeBPjPLLbK0aaT1Y0KEEdOR2A5CtTBVMnwRcMd0EsdhcGSi
-         3FhL3w8P7mday7fuDxW3BNgx6o1JxSJpbbivdvtk3/pC4lOJOZoVO/5MjOsTJF0oqC
-         /YbjlloL8jH3tesqoZpuRIo8kwAlT+96Ou00hphA=
-From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
-To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        "Paul J. Murphy" <paul.j.murphy@intel.com>,
-        Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 3/5] media: i2c: imx335: Implement get selection API
-Date:   Tue, 10 Oct 2023 01:51:24 +0100
-Message-Id: <20231010005126.3425444-4-kieran.bingham@ideasonboard.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231010005126.3425444-1-kieran.bingham@ideasonboard.com>
-References: <20231010005126.3425444-1-kieran.bingham@ideasonboard.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S1379327AbjJJBps (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Oct 2023 21:45:48 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 787ED8F
+        for <linux-media@vger.kernel.org>; Mon,  9 Oct 2023 18:45:46 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD258C433C8
+        for <linux-media@vger.kernel.org>; Tue, 10 Oct 2023 01:45:45 +0000 (UTC)
+Date:   Tue, 10 Oct 2023 03:45:43 +0200
+Message-ID: <c3906ca48ba2f9f8dcffb1829e236f8d.hverkuil@xs4all.nl>
+From:   "Hans Verkuil" <hverkuil-cisco@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: WARNINGS
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Support reporting of the Sensor Native and Active pixel array areas
-through the Selection API.
+This message is generated daily by a cron job that builds media_tree for
+the architectures in the list below.
 
-The implementation reports a single target crop only for the mode that
-is presently exposed by the driver.
+Results of the daily build of media_tree:
 
-Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
----
- drivers/media/i2c/imx335.c | 44 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+date:			Tue Oct 10 03:00:07 CEST 2023
+media-tree git repo:	git://linuxtv.org/hverkuil/media_tree.git
+media-tree git branch:	media_stage/master
+media-tree git hash:	a1766a4fd83befa0b34d932d532e7ebb7fab1fa7
+v4l-utils git hash:	99c4f6dd80613c7bd1fe02bd34492bbd4c999fea
+edid-decode git hash:	e59b8a2ffd690d6576639365a67e890d91ca443d
+gcc version:		i686-linux-gcc (GCC) 13.2.0
+ccache version:		ccache version 4.8.3
+smatch/sparse repo:     git://repo.or.cz/smatch.git
+smatch version:		v0.5.0-8471-g6f3cce86
+sparse version:		v0.5.0-8471-g6f3cce86
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 842db433707b21980cbfcc82837152be22752510
+host hardware:		x86_64
+host os:		6.5.0-1-amd64
 
-diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
-index bf12b9b69fce..026777eb362e 100644
---- a/drivers/media/i2c/imx335.c
-+++ b/drivers/media/i2c/imx335.c
-@@ -55,6 +55,14 @@
- #define IMX335_REG_MIN		0x00
- #define IMX335_REG_MAX		0xfffff
- 
-+/* IMX335 native and active pixel array size. */
-+#define IMX335_NATIVE_WIDTH		2616U
-+#define IMX335_NATIVE_HEIGHT		1964U
-+#define IMX335_PIXEL_ARRAY_LEFT		12U
-+#define IMX335_PIXEL_ARRAY_TOP		12U
-+#define IMX335_PIXEL_ARRAY_WIDTH	2592U
-+#define IMX335_PIXEL_ARRAY_HEIGHT	1944U
-+
- /**
-  * struct imx335_reg - imx335 sensor register
-  * @address: Register address
-@@ -651,6 +659,41 @@ static int imx335_init_pad_cfg(struct v4l2_subdev *sd,
- 	return imx335_set_pad_format(sd, sd_state, &fmt);
- }
- 
-+/**
-+ * imx335_get_selection() - Selection API
-+ * @sd: pointer to imx335 V4L2 sub-device structure
-+ * @sd_state: V4L2 sub-device configuration
-+ * @sel: V4L2 selection info
-+ *
-+ * Return: 0 if successful, error code otherwise.
-+ */
-+static int imx335_get_selection(struct v4l2_subdev *sd,
-+				struct v4l2_subdev_state *sd_state,
-+				struct v4l2_subdev_selection *sel)
-+{
-+	switch (sel->target) {
-+	case V4L2_SEL_TGT_NATIVE_SIZE:
-+		sel->r.top = 0;
-+		sel->r.left = 0;
-+		sel->r.width = IMX335_NATIVE_WIDTH;
-+		sel->r.height = IMX335_NATIVE_HEIGHT;
-+
-+		return 0;
-+
-+	case V4L2_SEL_TGT_CROP:
-+	case V4L2_SEL_TGT_CROP_DEFAULT:
-+	case V4L2_SEL_TGT_CROP_BOUNDS:
-+		sel->r.top = IMX335_PIXEL_ARRAY_TOP;
-+		sel->r.left = IMX335_PIXEL_ARRAY_LEFT;
-+		sel->r.width = IMX335_PIXEL_ARRAY_WIDTH;
-+		sel->r.height = IMX335_PIXEL_ARRAY_HEIGHT;
-+
-+		return 0;
-+	}
-+
-+	return -EINVAL;
-+}
-+
- /**
-  * imx335_start_streaming() - Start sensor stream
-  * @imx335: pointer to imx335 device
-@@ -864,6 +907,7 @@ static const struct v4l2_subdev_pad_ops imx335_pad_ops = {
- 	.init_cfg = imx335_init_pad_cfg,
- 	.enum_mbus_code = imx335_enum_mbus_code,
- 	.enum_frame_size = imx335_enum_frame_size,
-+	.get_selection = imx335_get_selection,
- 	.get_fmt = imx335_get_pad_format,
- 	.set_fmt = imx335_set_pad_format,
- };
--- 
-2.34.1
+linux-git-powerpc64: OK
+linux-git-arm: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+no-acpi.config: OK
+no-of.config: OK
+no-pm.config: OK
+no-pm-sleep.config: OK
+no-debug-fs.config: OK
+sparse: WARNINGS:
 
+drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
+
+smatch: WARNINGS:
+
+drivers/staging/media/atomisp/i2c/atomisp-gc0310.c:446 gc0310_s_stream() warn: missing error code 'ret'
+drivers/media/usb/dvb-usb-v2/af9035.c:467 af9035_i2c_master_xfer() warn: inconsistent returns '&d->i2c_mutex'.
+  Locked on  : 326,387
+  Unlocked on: 465,467
+drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
+drivers/media/i2c/adp1653.c:444 adp1653_of_init() warn: missing unwind goto?
+drivers/staging/media/atomisp/pci/atomisp_cmd.c:2779 atomisp_cp_dvs_6axis_config() warn: missing unwind goto?
+drivers/staging/media/atomisp/pci/atomisp_cmd.c:2878 atomisp_cp_morph_table() warn: missing unwind goto?
+drivers/media/pci/mgb4/mgb4_sysfs_out.c:118 video_source_store() warn: potential spectre issue 'mgbdev->vin' [r] (local cap)
+drivers/media/pci/mgb4/mgb4_sysfs_out.c:122 video_source_store() warn: possible spectre second half.  'loopin_new'
+drivers/media/i2c/mt9m114.c:2381 mt9m114_probe() warn: missing unwind goto?
+drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c:2792 mxc_jpeg_probe() warn: missing unwind goto?
+drivers/media/platform/qcom/venus/pm_helpers.c:873 vcodec_domains_get() warn: passing zero to 'PTR_ERR'
+drivers/media/i2c/tc358746.c:790 tc358746_set_fmt() error: 'fmt' dereferencing possible ERR_PTR()
+
+COMPILE_TEST: OK
+strcpy/strncpy/strlcpy: OK
+abi-compliance: ABI OK
+pahole: ABI OK
+utils: OK
+spec-git: OK
+kerneldoc: OK
+
+date:			Tue Oct 10 03:16:59 CEST 2023
+virtme: WARNINGS: Final Summary: 3080, Succeeded: 3080, Failed: 0, Warnings: 2
+virtme-32: WARNINGS: Final Summary: 3193, Succeeded: 3193, Failed: 0, Warnings: 5
+
+date:			Tue Oct 10 03:44:28 CEST 2023
+
+Detailed results are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Tuesday.log
+
+Detailed regression test results are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Tuesday-test-media.log
+https://hverkuil.home.xs4all.nl/logs/Tuesday-test-media-dmesg.log
+https://hverkuil.home.xs4all.nl/logs/Tuesday-test-media-32.log
+https://hverkuil.home.xs4all.nl/logs/Tuesday-test-media-32-dmesg.log
+
+Full logs are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Tuesday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+https://hverkuil.home.xs4all.nl/spec/index.html
