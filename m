@@ -2,125 +2,182 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64027CD8CA2
-	for <linux-media@archiver.kernel.org>; Tue, 10 Oct 2023 15:03:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2601CD8CA4
+	for <linux-media@archiver.kernel.org>; Tue, 10 Oct 2023 15:12:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233242AbjJJPDm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Oct 2023 11:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
+        id S232292AbjJJPM3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Oct 2023 11:12:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233089AbjJJPDl (ORCPT
+        with ESMTP id S230088AbjJJPM3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Oct 2023 11:03:41 -0400
-Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1B797
-        for <linux-media@vger.kernel.org>; Tue, 10 Oct 2023 08:03:40 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (2a00-1190-d1dd-0-c641-1eff-feae-163d.v6.cust.suomicom.net [IPv6:2a00:1190:d1dd:0:c641:1eff:feae:163d])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by meesny.iki.fi (Postfix) with ESMTPSA id 4S4fKy5KgvzyWn;
-        Tue, 10 Oct 2023 18:03:31 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1696950215;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YjZsMgLqaEgl6Os7IquuIn+b+HjC5rJvGssknhdITSo=;
-        b=xC8jHtrxORBQ6RqlD/QAH+7lgWOvsk+FrHL+HiPaMYjewipRNxkqPNTlnea00VibbTCTvK
-        ugKuspeZy2GoHgAJ1osqmdpkJv+fSmOv8lx8ylaOU79CQSkpciRNInP5lwnzDem5LDe/Qx
-        t7Twt6XQHvlY5nAAEftzdsny+OR/f4I=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1696950215;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YjZsMgLqaEgl6Os7IquuIn+b+HjC5rJvGssknhdITSo=;
-        b=XznZbx4v9d9RD1Lrl8TFiMtwKFUgbzwPQHwIPTEIX/Dsg8D898QuUwy8LZQOQOc0zZNaTK
-        V+BXRtQ8XxHbX/3pgk3bjf+rmDtH7k80AwQMIwLjWeRwtjndTJNK31GT5u/kbugi6+ejKT
-        j2/oMuzYmqFs5wVnPoHq0vklDq7R95Q=
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1696950215; a=rsa-sha256; cv=none;
-        b=tAZe+0ikPjJ76qIdIjrg5wSx9Qh94VwXlHrI5xxvuhZ0biEyHDk8OvOD7i5W1XokZCF4Zs
-        OTvr0SuW9eeNz1iX1tZ5CngO14hi0q5zMYuEVFXq2XjhpI+//Em6i9b5EanbVC0fbof1od
-        wY6FsvSzdPnE71bD6u1DYn/RhNu74CM=
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id D3E18634CA9;
-        Tue, 10 Oct 2023 18:03:27 +0300 (EEST)
-Date:   Tue, 10 Oct 2023 15:03:27 +0000
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH 8/9] media: i2c: mt9m114: goto proper error path
-Message-ID: <ZSVnv3CPeJdyh+xY@valkosipuli.retiisi.eu>
-References: <cover.1696586632.git.hverkuil-cisco@xs4all.nl>
- <6e2b3d5971905c1cf63184e7c3cd269c10151bb7.1696586632.git.hverkuil-cisco@xs4all.nl>
- <20231006151826.GB5121@pendragon.ideasonboard.com>
- <d625a11a-11a4-41c5-a7f7-fa651649957e@xs4all.nl>
- <ZSUEXHDmYtstvMBV@valkosipuli.retiisi.eu>
- <a84b9973-fe45-4125-9374-5d05072c9143@xs4all.nl>
+        Tue, 10 Oct 2023 11:12:29 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86F44AF;
+        Tue, 10 Oct 2023 08:12:27 -0700 (PDT)
+Received: from uno.lan (unknown [IPv6:2001:b07:5d2e:52c9:72c3:346:a663:c82d])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 91FBB512;
+        Tue, 10 Oct 2023 17:12:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1696950743;
+        bh=j7AI58mWWEpwII/C6iOxf4fih/h5Pw1XG1cO4kW3ucs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=jSejRz6j7FZtd6CDSS2eT48gutjz3YhPOakyhLIy0Khp4854rQDjfoE+rl8GhhUwE
+         lrn5iwkkEVIxytV1APop7mu9S++LMFFthTDzWnuJqhuWsy/ebWUT5SW2DgbqQ6l1sZ
+         DqF8mc9pV6cesHig8s7C0y/SGoHSlFIC13Ncu57U=
+From:   Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        linux-media@vger.kernel.org,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        devicetree@vger.kernel.org, Lee Jackson <lee.jackson@arducam.com>
+Subject: [PATCH 1/2] media: dt-bindings: Add OmniVision OV64A40
+Date:   Tue, 10 Oct 2023 17:12:07 +0200
+Message-ID: <20231010151208.29564-2-jacopo.mondi@ideasonboard.com>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20231010151208.29564-1-jacopo.mondi@ideasonboard.com>
+References: <20231010151208.29564-1-jacopo.mondi@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a84b9973-fe45-4125-9374-5d05072c9143@xs4all.nl>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans,
+Add bindings for OmniVision OV64A40.
 
-On Tue, Oct 10, 2023 at 10:06:38AM +0200, Hans Verkuil wrote:
-> On 10/10/23 09:59, Sakari Ailus wrote:
-> > Hi Hans,
-> > 
-> > On Tue, Oct 10, 2023 at 09:24:10AM +0200, Hans Verkuil wrote:
-> >> Hi Laurent,
-> >>
-> >> On 06/10/2023 17:18, Laurent Pinchart wrote:
-> >>> Hi Hans,
-> >>>
-> >>> Thank you for the patch.
-> >>>
-> >>> On Fri, Oct 06, 2023 at 12:08:49PM +0200, Hans Verkuil wrote:
-> >>>> In two places the probe function returns instead of going
-> >>>> to the correct goto label.
-> >>>>
-> >>>> This fixes this smatch warning:
-> >>>>
-> >>>> drivers/media/i2c/mt9m114.c:2381 mt9m114_probe() warn: missing unwind goto?
-> >>>>
-> >>>> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-> >>>> CC: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> >>>
-> >>> I've already submitted
-> >>> https://lore.kernel.org/linux-media/20231003192043.27690-1-laurent.pinchart@ideasonboard.com
-> >>
-> >> Is it OK if I pick up your patch for this issue? I plan to pick up at least part
-> >> of this series tomorrow in order to cut down on the number of reported smatch
-> >> warnings.
-> > 
-> > I've got it in my tree and I intend to send a PR by tomorrow (there's an
-> > issue also in the CCS driver).
-> > 
-> 
-> OK, then I leave this to you, Sakari.
-> 
-> The two patches you reviewed (2/9 and 7/9), can I commit those or do you plan
-> to make those part of your PR? I don't care either way, as long as we don't
-> duplicate work...
+Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Signed-off-by: Lee Jackson <lee.jackson@arducam.com>
+---
+ .../bindings/media/i2c/ovti,ov64a40.yaml      | 97 +++++++++++++++++++
+ MAINTAINERS                                   |  7 ++
+ 2 files changed, 104 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov64a40.yaml
 
-You already have them as part of your set so please take them.
+diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov64a40.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov64a40.yaml
+new file mode 100644
+index 000000000000..e6c9d540a2dd
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov64a40.yaml
+@@ -0,0 +1,97 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/i2c/ovti,ov64a40.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: OmniVision OV64A40 Image Sensor
++
++maintainers:
++  - Jacopo Mondi <jacopo.mondi@ideasonboard.com>
++
++allOf:
++  - $ref: /schemas/media/video-interface-devices.yaml#
++
++properties:
++  compatible:
++    const: ovti,ov64a40
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  avdd-supply:
++    description: Analog voltage supply, 2.8 volts
++
++  dvdd-supply:
++    description: Digital core voltage supply, 1.1 volts
++
++  dovdd-supply:
++    description: Digital I/O voltage supply, 1.8 volts
++
++  powerdown-gpios:
++    maxItems: 1
++
++  reset-gpios:
++    maxItems: 1
++
++  port:
++    $ref: /schemas/graph.yaml#/$defs/port-base
++    additionalProperties: false
++
++    properties:
++      endpoint:
++        $ref: /schemas/media/video-interfaces.yaml#
++        additionalProperties: false
++
++        properties:
++          bus-type:
++            enum:
++              - 1 # MIPI CSI-2 C-PHY
++              - 4 # MIPI CSI-2 D-PHY
++          data-lanes: true
++          link-frequencies: true
++          clock-noncontinuous: true
++          remote-endpoint: true
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - port
++
++unevaluatedProperties: false
++
++examples:
++  - |
++      #include <dt-bindings/gpio/gpio.h>
++
++      i2c {
++          #address-cells = <1>;
++          #size-cells = <0>;
++
++          camera@36 {
++              compatible = "ovti,ov64a40";
++              reg = <0x36>;
++              clocks = <&camera_clk>;
++              dovdd-supply = <&vgen4_reg>;
++              avdd-supply = <&vgen3_reg>;
++              dvdd-supply = <&vgen2_reg>;
++              powerdown-gpios = <&gpio1 9 GPIO_ACTIVE_HIGH>;
++              reset-gpios = <&gpio1 10 GPIO_ACTIVE_LOW>;
++              rotation = <180>;
++              orientation = <2>;
++
++              port {
++                  endpoint {
++                      remote-endpoint = <&mipi_csi2_in>;
++                      bus-type = <4>;
++                      data-lanes = <1 2 3 4>;
++                  };
++              };
++          };
++      };
++
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index b19995690904..df089d68b58c 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -15821,6 +15821,13 @@ S:	Maintained
+ T:	git git://linuxtv.org/media_tree.git
+ F:	drivers/media/i2c/ov5695.c
 
-I think I've already reviewed them, too.
++OMNIVISION OV64A40 SENSOR DRIVER
++M:	Jacopo Mondi <jacopo.mondi@ideasonboard.org>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++T:	git git://linuxtv.org/media_tree.git
++F:	Documentation/devicetree/bindings/media/i2c/ovti,ov64a40.yaml
++
+ OMNIVISION OV7670 SENSOR DRIVER
+ L:	linux-media@vger.kernel.org
+ S:	Orphan
+--
+2.42.0
 
--- 
-Regards,
-
-Sakari Ailus
