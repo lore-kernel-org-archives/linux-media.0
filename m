@@ -2,46 +2,46 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F407FCD690C
-	for <linux-media@archiver.kernel.org>; Tue, 10 Oct 2023 09:17:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AD9DCD6911
+	for <linux-media@archiver.kernel.org>; Tue, 10 Oct 2023 09:17:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbjJJJRU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Oct 2023 05:17:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58242 "EHLO
+        id S229919AbjJJJRW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Oct 2023 05:17:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjJJJRT (ORCPT
+        with ESMTP id S229679AbjJJJRT (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 10 Oct 2023 05:17:19 -0400
-Received: from mx08-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8888B9F;
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6A9A4;
         Tue, 10 Oct 2023 02:17:17 -0700 (PDT)
-Received: from pps.filterd (m0369457.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 39A7vU1R023759;
-        Tue, 10 Oct 2023 11:16:50 +0200
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39A8CLSL030787;
+        Tue, 10 Oct 2023 11:16:48 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
         :mime-version:content-transfer-encoding:content-type; s=
-        selector1; bh=nQ/JKD64BrKYpkSs5vabcoG9YjS37VBoaLyDwbg3SCI=; b=aR
-        lnjyaB8wzQoMnm/AYfHdGry5znn1DtiJWiyL/snWsR8Z7NkRKNUCuwZeCnWqKmi9
-        oMpfpHyeQ1O09QRJPJ9HJmxsp0NbTNr3ZTn2VaK1WgQzi+HxveIU1DmTyzzYiXG9
-        PCXcYwI9X5pPToaoqD7KlUuuV10GCUcSJBqcwxUioYkMnk3ok3DbGv2xFUAzq45s
-        MCew25MF3Z76Yt10H153dPPZ4rKOK41CMOP/CZvnHjbbTZXpR+PV4zmZF5X2X7tm
-        6kStxwY/86HDqxho7u6eXv/51mA2N0ylSWT2A+VhMsoKt1+IzLT59/24LSi4ne6q
-        ituYlh/dUHSoCbNfiDLw==
+        selector1; bh=LFAa4Jn4tiEfEImWcrbUI//FcIw/xnpf/WL80D9ScuQ=; b=fu
+        UOP3wTOpnnoj3auZA7Q7ZJO6nLqBnLclg3GtjTb0cpQsaAct+tpjpR5bJaKu2hH8
+        w54YxZBXYv2g8Ab62qHvVDhYfp0lGFAPUsoWYtGxiVQTxI6cXojYk4zfchRyxxYW
+        2p0YaAFHzts2gknBB0iwtd1sjZWTWDa00wyZDveO5asYtxxgUQXKDALjeoS0JnXB
+        PcObO3mnmLbdz3T17QhOiB0ajWL7Nh032oNqT3TSk1zvbI+QtLUgJzDdcahQ0BJ/
+        PFIIrqivWtEIRda+LLl5fQ2ngJ9cajZyG027sMqB9HIjZqlMcK6rTXdRHXpDLFk5
+        hnfQhERgBa9Fe4GlsKiA==
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3tkj9gs37m-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3tkhfe16c5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 Oct 2023 11:16:49 +0200 (MEST)
+        Tue, 10 Oct 2023 11:16:48 +0200 (MEST)
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5C29F100058;
-        Tue, 10 Oct 2023 11:16:49 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A451210005E;
+        Tue, 10 Oct 2023 11:16:47 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 51AF121BF63;
-        Tue, 10 Oct 2023 11:16:49 +0200 (CEST)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9B94121BF6A;
+        Tue, 10 Oct 2023 11:16:47 +0200 (CEST)
 Received: from localhost (10.201.20.120) by SHFDAG1NODE1.st.com (10.75.129.69)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 10 Oct
- 2023 11:16:49 +0200
+ 2023 11:16:47 +0200
 From:   Hugues Fruchet <hugues.fruchet@foss.st.com>
 To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Philipp Zabel <p.zabel@pengutronix.de>,
@@ -69,9 +69,9 @@ To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
 CC:     Hugues Fruchet <hugues.fruchet@foss.st.com>,
         Marco Felsch <m.felsch@pengutronix.de>,
         Adam Ford <aford173@gmail.com>
-Subject: [PATCH v2 3/5] media: hantro: add support for STM32MP25 VENC
-Date:   Tue, 10 Oct 2023 11:16:41 +0200
-Message-ID: <20231010091643.3666290-4-hugues.fruchet@foss.st.com>
+Subject: [PATCH v2 1/5] dt-bindings: media: Document STM32MP25 VDEC & VENC video codecs
+Date:   Tue, 10 Oct 2023 11:16:39 +0200
+Message-ID: <20231010091643.3666290-2-hugues.fruchet@foss.st.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20231010091643.3666290-1-hugues.fruchet@foss.st.com>
 References: <20231010091643.3666290-1-hugues.fruchet@foss.st.com>
@@ -82,213 +82,84 @@ X-Originating-IP: [10.201.20.120]
 X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
  (10.75.129.69)
 X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-10-10_04,2023-10-09_01,2023-05-22_02
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add support for STM32MP25 VENC video hardware encoder.
-JPEG encoding up to 8176x8176.
-VENC has its own reset/clock/irq.
+Add STM32MP25 VDEC video decoder & VENC video encoder bindings.
 
 Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
 ---
- drivers/media/platform/verisilicon/Makefile   |   3 +-
- .../media/platform/verisilicon/hantro_drv.c   |   1 +
- .../media/platform/verisilicon/hantro_hw.h    |   1 +
- .../platform/verisilicon/stm32mp25_venc_hw.c  | 147 ++++++++++++++++++
- 4 files changed, 151 insertions(+), 1 deletion(-)
- create mode 100644 drivers/media/platform/verisilicon/stm32mp25_venc_hw.c
+ .../media/st,stm32mp25-video-codec.yaml       | 58 +++++++++++++++++++
+ 1 file changed, 58 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/st,stm32mp25-video-codec.yaml
 
-diff --git a/drivers/media/platform/verisilicon/Makefile b/drivers/media/platform/verisilicon/Makefile
-index 5854e0f0dd32..3bf43fdbedc1 100644
---- a/drivers/media/platform/verisilicon/Makefile
-+++ b/drivers/media/platform/verisilicon/Makefile
-@@ -41,4 +41,5 @@ hantro-vpu-$(CONFIG_VIDEO_HANTRO_SUNXI) += \
- 		sunxi_vpu_hw.o
- 
- hantro-vpu-$(CONFIG_VIDEO_HANTRO_STM32MP25) += \
--		stm32mp25_vdec_hw.o
-+		stm32mp25_vdec_hw.o \
-+		stm32mp25_venc_hw.o
-diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
-index 8c6e0c66f0cd..3156aff50eb5 100644
---- a/drivers/media/platform/verisilicon/hantro_drv.c
-+++ b/drivers/media/platform/verisilicon/hantro_drv.c
-@@ -735,6 +735,7 @@ static const struct of_device_id of_hantro_match[] = {
- #endif
- #ifdef CONFIG_VIDEO_HANTRO_STM32MP25
- 	{ .compatible = "st,stm32mp25-vdec", .data = &stm32mp25_vdec_variant, },
-+	{ .compatible = "st,stm32mp25-venc", .data = &stm32mp25_venc_variant, },
- #endif
- 	{ /* sentinel */ }
- };
-diff --git a/drivers/media/platform/verisilicon/hantro_hw.h b/drivers/media/platform/verisilicon/hantro_hw.h
-index b7eccc1a96fc..70c72e9d11d5 100644
---- a/drivers/media/platform/verisilicon/hantro_hw.h
-+++ b/drivers/media/platform/verisilicon/hantro_hw.h
-@@ -407,6 +407,7 @@ extern const struct hantro_variant rk3588_vpu981_variant;
- extern const struct hantro_variant sama5d4_vdec_variant;
- extern const struct hantro_variant sunxi_vpu_variant;
- extern const struct hantro_variant stm32mp25_vdec_variant;
-+extern const struct hantro_variant stm32mp25_venc_variant;
- 
- extern const struct hantro_postproc_ops hantro_g1_postproc_ops;
- extern const struct hantro_postproc_ops hantro_g2_postproc_ops;
-diff --git a/drivers/media/platform/verisilicon/stm32mp25_venc_hw.c b/drivers/media/platform/verisilicon/stm32mp25_venc_hw.c
+diff --git a/Documentation/devicetree/bindings/media/st,stm32mp25-video-codec.yaml b/Documentation/devicetree/bindings/media/st,stm32mp25-video-codec.yaml
 new file mode 100644
-index 000000000000..0aac33afcadc
+index 000000000000..479566171568
 --- /dev/null
-+++ b/drivers/media/platform/verisilicon/stm32mp25_venc_hw.c
-@@ -0,0 +1,147 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * STM32MP25 VENC video encoder driver
-+ *
-+ * Copyright (C) STMicroelectronics SA 2022
-+ * Authors: Hugues Fruchet <hugues.fruchet@foss.st.com>
-+ *          for STMicroelectronics.
-+ *
-+ */
++++ b/Documentation/devicetree/bindings/media/st,stm32mp25-video-codec.yaml
+@@ -0,0 +1,58 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
 +
-+#include <linux/clk.h>
-+#include <linux/delay.h>
-+#include <linux/reset.h>
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/st,stm32mp25-video-codec.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+#include "hantro.h"
-+#include "hantro_jpeg.h"
-+#include "hantro_h1_regs.h"
++title: STMicroelectronics STM32MP25 VDEC video decoder & VENC video encoder
 +
-+/*
-+ * Supported formats.
-+ */
++maintainers:
++  - Hugues Fruchet <hugues.fruchet@foss.st.com>
 +
-+static const struct hantro_fmt stm32mp25_venc_fmts[] = {
-+	{
-+		.fourcc = V4L2_PIX_FMT_YUV420M,
-+		.codec_mode = HANTRO_MODE_NONE,
-+		.enc_fmt = ROCKCHIP_VPU_ENC_FMT_YUV420P,
-+		.frmsize = {
-+			.min_width = 96,
-+			.max_width = 8176,
-+			.step_width = MB_DIM,
-+			.min_height = 32,
-+			.max_height = 8176,
-+			.step_height = MB_DIM,
-+		},
-+	},
-+	{
-+		.fourcc = V4L2_PIX_FMT_NV12M,
-+		.codec_mode = HANTRO_MODE_NONE,
-+		.enc_fmt = ROCKCHIP_VPU_ENC_FMT_YUV420SP,
-+		.frmsize = {
-+			.min_width = 96,
-+			.max_width = 8176,
-+			.step_width = MB_DIM,
-+			.min_height = 32,
-+			.max_height = 8176,
-+			.step_height = MB_DIM,
-+		},
-+	},
-+	{
-+		.fourcc = V4L2_PIX_FMT_YUYV,
-+		.codec_mode = HANTRO_MODE_NONE,
-+		.enc_fmt = ROCKCHIP_VPU_ENC_FMT_YUYV422,
-+		.frmsize = {
-+			.min_width = 96,
-+			.max_width = 8176,
-+			.step_width = MB_DIM,
-+			.min_height = 32,
-+			.max_height = 8176,
-+			.step_height = MB_DIM,
-+		},
-+	},
-+	{
-+		.fourcc = V4L2_PIX_FMT_UYVY,
-+		.codec_mode = HANTRO_MODE_NONE,
-+		.enc_fmt = ROCKCHIP_VPU_ENC_FMT_UYVY422,
-+		.frmsize = {
-+			.min_width = 96,
-+			.max_width = 8176,
-+			.step_width = MB_DIM,
-+			.min_height = 32,
-+			.max_height = 8176,
-+			.step_height = MB_DIM,
-+		},
-+	},
-+	{
-+		.fourcc = V4L2_PIX_FMT_JPEG,
-+		.codec_mode = HANTRO_MODE_JPEG_ENC,
-+		.max_depth = 2,
-+		.header_size = JPEG_HEADER_SIZE,
-+		.frmsize = {
-+			.min_width = 96,
-+			.max_width = 8176,
-+			.step_width = MB_DIM,
-+			.min_height = 32,
-+			.max_height = 8176,
-+			.step_height = MB_DIM,
-+		},
-+	},
-+};
++description:
++  The STMicroelectronics STM32MP25 SOCs embeds a VDEC video hardware
++  decoder peripheral based on Verisilicon VC8000NanoD IP (former Hantro G1)
++  and a VENC video hardware encoder peripheral based on Verisilicon
++  VC8000NanoE IP (former Hantro H1).
 +
-+static irqreturn_t stm32mp25_venc_irq(int irq, void *dev_id)
-+{
-+	struct hantro_dev *vpu = dev_id;
-+	enum vb2_buffer_state state;
-+	u32 status;
++properties:
++  compatible:
++    items:
++      - enum:
++          - st,stm32mp25-vdec
++          - st,stm32mp25-venc
 +
-+	status = vepu_read(vpu, H1_REG_INTERRUPT);
-+	state = (status & H1_REG_INTERRUPT_FRAME_RDY) ?
-+		VB2_BUF_STATE_DONE : VB2_BUF_STATE_ERROR;
++  reg:
++    maxItems: 1
 +
-+	vepu_write(vpu, H1_REG_INTERRUPT_BIT, H1_REG_INTERRUPT);
++  interrupts:
++    maxItems: 1
 +
-+	hantro_irq_done(vpu, state);
++  clocks:
++    maxItems: 1
 +
-+	return IRQ_HANDLED;
-+}
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
 +
-+static void stm32mp25_venc_reset(struct hantro_ctx *ctx)
-+{
-+}
++additionalProperties: false
 +
-+/*
-+ * Supported codec ops.
-+ */
-+
-+static const struct hantro_codec_ops stm32mp25_venc_codec_ops[] = {
-+	[HANTRO_MODE_JPEG_ENC] = {
-+		.run = hantro_h1_jpeg_enc_run,
-+		.reset = stm32mp25_venc_reset,
-+		.done = hantro_h1_jpeg_enc_done,
-+	},
-+};
-+
-+/*
-+ * Variants.
-+ */
-+
-+static const struct hantro_irq stm32mp25_venc_irqs[] = {
-+	{ "venc", stm32mp25_venc_irq },
-+};
-+
-+static const char * const stm32mp25_venc_clk_names[] = {
-+	"venc-clk"
-+};
-+
-+const struct hantro_variant stm32mp25_venc_variant = {
-+	.enc_fmts = stm32mp25_venc_fmts,
-+	.num_enc_fmts = ARRAY_SIZE(stm32mp25_venc_fmts),
-+	.codec = HANTRO_JPEG_ENCODER,
-+	.codec_ops = stm32mp25_venc_codec_ops,
-+	.irqs = stm32mp25_venc_irqs,
-+	.num_irqs = ARRAY_SIZE(stm32mp25_venc_irqs),
-+	.clk_names = stm32mp25_venc_clk_names,
-+	.num_clocks = ARRAY_SIZE(stm32mp25_venc_clk_names)
-+};
-+
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    vdec: video-codec@580d0000 {
++        compatible = "st,stm32mp25-vdec";
++        reg = <0x580d0000 0x3c8>;
++        interrupts = <GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>;
++        clocks = <&ck_icn_p_vdec>;
++    };
++  - |
++    venc: video-codec@580e0000 {
++        compatible = "st,stm32mp25-venc";
++        reg = <0x580e0000 0x800>;
++        interrupts = <GIC_SPI 167 IRQ_TYPE_LEVEL_HIGH>;
++        clocks = <&ck_icn_p_venc>;
++    };
 -- 
 2.25.1
 
