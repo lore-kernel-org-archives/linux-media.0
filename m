@@ -2,99 +2,110 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78739CD80D0
-	for <linux-media@archiver.kernel.org>; Tue, 10 Oct 2023 13:35:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 978F1CD80D7
+	for <linux-media@archiver.kernel.org>; Tue, 10 Oct 2023 13:47:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232190AbjJJNfb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Oct 2023 09:35:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35388 "EHLO
+        id S232733AbjJJNri (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Oct 2023 09:47:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231897AbjJJNfa (ORCPT
+        with ESMTP id S232580AbjJJNr1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Oct 2023 09:35:30 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93DA4CC
-        for <linux-media@vger.kernel.org>; Tue, 10 Oct 2023 06:35:26 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C1B8A3D6;
-        Tue, 10 Oct 2023 15:35:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1696944921;
-        bh=uJi/Jy9Bl8nP9sI0N/MntCYtUXrJ09EOaQZeTKBDV30=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=foMzobtTqXs0D+elHHyiB00P4SbL3G13vuRJ/TNGftdV2Ef58t84lQPiWa1z3QWyA
-         Tm4w7QRi8d43MSiihMOAyaHOfHfAS2NX4Nv3czvenVNqTxOM6sDhHiu3pyBks0aYoi
-         Spvwt6jpmhbU0IbgVMBbUMZkle2pv9g+DmpIIQ/w=
-Date:   Tue, 10 Oct 2023 16:35:29 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, Dennis Bonke <admin@dennisbonke.com>
-Subject: Re: [PATCH] media: subdev: Don't report V4L2_SUBDEV_CAP_STREAMS when
- the streams API is disabled
-Message-ID: <20231010133529.GO5121@pendragon.ideasonboard.com>
-References: <20231010102458.111227-1-hdegoede@redhat.com>
+        Tue, 10 Oct 2023 09:47:27 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB58CD55
+        for <linux-media@vger.kernel.org>; Tue, 10 Oct 2023 06:47:24 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B62CC433C7
+        for <linux-media@vger.kernel.org>; Tue, 10 Oct 2023 13:47:23 +0000 (UTC)
+Message-ID: <658f107c-551e-49d8-aec9-54592a8690ef@xs4all.nl>
+Date:   Tue, 10 Oct 2023 15:47:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20231010102458.111227-1-hdegoede@redhat.com>
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [PATCH] media: cec: core: count low-drive, error and arb-lost
+ conditions
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans,
+Count how many Low Drive, Error and Arbitration Lost transmit
+status errors occurred, and expose that in debugfs.
 
-Thank you for the patch.
+Useful to debug HDMI cable issues.
 
-On Tue, Oct 10, 2023 at 12:24:58PM +0200, Hans de Goede wrote:
-> Since the stream API is still experimental it is currently locked away
-> behind the internal, default disabled, v4l2_subdev_enable_streams_api flag.
-> 
-> Advertising V4L2_SUBDEV_CAP_STREAMS when the streams API is disabled
-> confuses userspace. E.g. it causes the following libcamera error:
-> 
-> ERROR SimplePipeline simple.cpp:1497 Failed to reset routes for
->   /dev/v4l-subdev1: Inappropriate ioctl for device
-> 
-> Don't report V4L2_SUBDEV_CAP_STREAMS when the streams API is disabled
-> to avoid problems like this.
-> 
-> Reported-by: Dennis Bonke <admin@dennisbonke.com>
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+diff --git a/drivers/media/cec/core/cec-adap.c b/drivers/media/cec/core/cec-adap.c
+index 09ca83c23329..ab24fc043f60 100644
+--- a/drivers/media/cec/core/cec-adap.c
++++ b/drivers/media/cec/core/cec-adap.c
+@@ -511,7 +511,7 @@ int cec_thread_func(void *_adap)
+ 				pr_warn("cec-%s: transmit timed out\n", adap->name);
+ 			}
+ 			adap->transmit_in_progress = false;
+-			adap->tx_timeouts++;
++			adap->tx_timeout_cnt++;
+ 			goto unlock;
+ 		}
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+@@ -625,6 +625,10 @@ void cec_transmit_done_ts(struct cec_adapter *adap, u8 status,
+ 	msg->tx_low_drive_cnt += low_drive_cnt;
+ 	msg->tx_error_cnt += error_cnt;
 
-> ---
-> -Clearing the V4L2_SUBDEV_FL_STREAMS flag from sd.flags might seem
->  appealing as an alternative fix. But this causes various v4l2-core bits
->  to enter different code paths which confuses drivers which set
->  V4L2_SUBDEV_FL_STREAMS, so this is a bad idea.
-> -No Closes: for the Reported-by since this was reported by private email
-> ---
->  drivers/media/v4l2-core/v4l2-subdev.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-> index b92348ad61f6..31752c06d1f0 100644
-> --- a/drivers/media/v4l2-core/v4l2-subdev.c
-> +++ b/drivers/media/v4l2-core/v4l2-subdev.c
-> @@ -502,6 +502,13 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
->  				       V4L2_SUBDEV_CLIENT_CAP_STREAMS;
->  	int rval;
->  
-> +	/*
-> +	 * If the streams API is not enabled, remove V4L2_SUBDEV_CAP_STREAMS.
-> +	 * Remove this when the API is no longer experimental.
-> +	 */
-> +	if (!v4l2_subdev_enable_streams_api)
-> +		streams_subdev = false;
-> +
->  	switch (cmd) {
->  	case VIDIOC_SUBDEV_QUERYCAP: {
->  		struct v4l2_subdev_capability *cap = arg;
++	adap->tx_arb_lost_cnt += arb_lost_cnt;
++	adap->tx_low_drive_cnt += low_drive_cnt;
++	adap->tx_error_cnt += error_cnt;
++
+ 	/* Mark that we're done with this transmit */
+ 	adap->transmitting = NULL;
 
--- 
-Regards,
+@@ -2260,10 +2264,25 @@ int cec_adap_status(struct seq_file *file, void *priv)
+ 	if (adap->monitor_pin_cnt)
+ 		seq_printf(file, "file handles in Monitor Pin mode: %u\n",
+ 			   adap->monitor_pin_cnt);
+-	if (adap->tx_timeouts) {
+-		seq_printf(file, "transmit timeouts: %u\n",
+-			   adap->tx_timeouts);
+-		adap->tx_timeouts = 0;
++	if (adap->tx_timeout_cnt) {
++		seq_printf(file, "transmit timeout count: %u\n",
++			   adap->tx_timeout_cnt);
++		adap->tx_timeout_cnt = 0;
++	}
++	if (adap->tx_low_drive_cnt) {
++		seq_printf(file, "transmit low drive count: %u\n",
++			   adap->tx_low_drive_cnt);
++		adap->tx_low_drive_cnt = 0;
++	}
++	if (adap->tx_arb_lost_cnt) {
++		seq_printf(file, "transmit arbitration lost count: %u\n",
++			   adap->tx_arb_lost_cnt);
++		adap->tx_arb_lost_cnt = 0;
++	}
++	if (adap->tx_error_cnt) {
++		seq_printf(file, "transmit error count: %u\n",
++			   adap->tx_error_cnt);
++		adap->tx_error_cnt = 0;
+ 	}
+ 	data = adap->transmitting;
+ 	if (data)
+diff --git a/include/media/cec.h b/include/media/cec.h
+index 53e4b2eb2b26..2e5da283cc09 100644
+--- a/include/media/cec.h
++++ b/include/media/cec.h
+@@ -262,7 +262,10 @@ struct cec_adapter {
+ 	struct cec_log_addrs log_addrs;
+ 	struct cec_connector_info conn_info;
 
-Laurent Pinchart
+-	u32 tx_timeouts;
++	u32 tx_timeout_cnt;
++	u32 tx_low_drive_cnt;
++	u32 tx_error_cnt;
++	u32 tx_arb_lost_cnt;
+
+ #ifdef CONFIG_CEC_NOTIFIER
+ 	struct cec_notifier *notifier;
