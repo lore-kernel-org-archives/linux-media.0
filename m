@@ -2,127 +2,217 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89F5DCD80C0
-	for <linux-media@archiver.kernel.org>; Tue, 10 Oct 2023 12:32:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58F1BCD80C1
+	for <linux-media@archiver.kernel.org>; Tue, 10 Oct 2023 12:59:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231431AbjJJMc0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Oct 2023 08:32:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52098 "EHLO
+        id S232081AbjJJM7a (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Oct 2023 08:59:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230014AbjJJMcY (ORCPT
+        with ESMTP id S231400AbjJJM73 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Oct 2023 08:32:24 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C423F99
-        for <linux-media@vger.kernel.org>; Tue, 10 Oct 2023 05:32:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696941143; x=1728477143;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=gZoavsrYojGjkOrxSf3dIVrvBBfjnbfENQfgF1ViHfE=;
-  b=W3Jnoh0TgVfh7ZfJnzyotJ3DEOatHMqlrE6/Din8tH37bRKsWfIWJho8
-   f9vz0hWqqk5ZnFYm/m5HpdSez7CgONp8VxPKacA0N3sP/hHC1jRJERCHB
-   B4jKklQwhrxTVOApmSGcqtHwoqXE4Evaxd4voZBAqwIgeIceednJgDESe
-   bWX88eU6GARnoFu1W0dJY03rceEyCYsWFecz3nHH9BhdGSUc4xNbvtMuD
-   8IunUHZPdvESUx9K8OOWXBm5oC38YkLv5H8rmwkScy2cuzqFw6gkGVLO4
-   ogVOADsQIjdaxwlMCD/UUcoMvnsxC3kmVIRCMbmGYXCntZ9gSE9nhSjR1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10859"; a="2971094"
-X-IronPort-AV: E=Sophos;i="6.03,212,1694761200"; 
-   d="scan'208";a="2971094"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2023 05:32:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10859"; a="823761686"
-X-IronPort-AV: E=Sophos;i="6.03,212,1694761200"; 
-   d="scan'208";a="823761686"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2023 05:32:21 -0700
-Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id 4DF7011F9E8;
-        Tue, 10 Oct 2023 15:32:19 +0300 (EEST)
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        tomi.valkeinen@ideasonboard.com
-Subject: [PATCH v3 2/2] media: ccs: Fix a (harmless) lockdep warning
-Date:   Tue, 10 Oct 2023 15:32:05 +0300
-Message-Id: <20231010123205.250860-3-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231010123205.250860-1-sakari.ailus@linux.intel.com>
-References: <20231010123205.250860-1-sakari.ailus@linux.intel.com>
+        Tue, 10 Oct 2023 08:59:29 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ECFFA7;
+        Tue, 10 Oct 2023 05:59:27 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 39A8XFEj012493;
+        Tue, 10 Oct 2023 14:58:50 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+        from:to:cc:subject:date:message-id:in-reply-to:references
+        :mime-version:content-transfer-encoding:content-type; s=
+        selector1; bh=pRaHro0Cx77mAnyA1b4ha7ivIMmgkx+PPwasbOVpgNk=; b=aP
+        Uum6UMTy22Gms/T55cBpJ9KqYp8A+MW+OciqhTiewGdmquPbs/9Ivh/cdMnyRIIu
+        DHLv4VPW/rDIS7ZiwgQyJI5lVuokhEfqyLv31IEqcnTwCu/wOjNzogTsv0L4i+U1
+        r674LbOp8cFgIyBfCduoKPYWWwO4jRocfFoaGLwiyHhSpu8WHes5rn+FOqMrfuUG
+        AoUqkn2SCcOKDD3z7Y1m12l2iAE2Jbqu/kwFaUfDJnuviEqNiY0PbkWm2vnijhN/
+        90qv+85u1rts8bmdycNajbh5U/eeBZZGSzQkVoNwaD93xNVhHT2blj5lqB/5IeHa
+        /OPkSweYkqaCH48h3+mw==
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3tkhjga1xf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 Oct 2023 14:58:50 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E771210005A;
+        Tue, 10 Oct 2023 14:58:48 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D75DE231505;
+        Tue, 10 Oct 2023 14:58:48 +0200 (CEST)
+Received: from localhost (10.201.20.32) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 10 Oct
+ 2023 14:58:48 +0200
+From:   Gatien Chevallier <gatien.chevallier@foss.st.com>
+To:     <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <alexandre.torgue@foss.st.com>,
+        <vkoul@kernel.org>, <jic23@kernel.org>,
+        <olivier.moysan@foss.st.com>, <arnaud.pouliquen@foss.st.com>,
+        <mchehab@kernel.org>, <fabrice.gasnier@foss.st.com>,
+        <andi.shyti@kernel.org>, <ulf.hansson@linaro.org>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <hugues.fruchet@foss.st.com>, <lee@kernel.org>, <will@kernel.org>,
+        <catalin.marinas@arm.com>, <arnd@kernel.org>,
+        <richardcochran@gmail.com>, Frank Rowand <frowand.list@gmail.com>,
+        <peng.fan@oss.nxp.com>
+CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Oleksii Moisieiev <oleksii_moisieiev@epam.com>,
+        Gatien Chevallier <gatien.chevallier@foss.st.com>
+Subject: [PATCH v6 01/11] dt-bindings: document generic access controllers
+Date:   Tue, 10 Oct 2023 14:57:09 +0200
+Message-ID: <20231010125719.784627-2-gatien.chevallier@foss.st.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20231010125719.784627-1-gatien.chevallier@foss.st.com>
+References: <20231010125719.784627-1-gatien.chevallier@foss.st.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.201.20.32]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-10_08,2023-10-10_01,2023-05-22_02
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The v4l2_subdev_init_finalize() is a macro that creates an unique lockdep
-key and name. As the CCS driver initialises all three of its sub-devices
-using the same call site, this creates a lockdep warning. Address it.
+From: Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
 
-Fixes: 4b05b1baae3e ("media: ccs: Use sub-device active state")
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Introducing of the generic access controllers bindings for the
+access controller provider and consumer devices. Those bindings are
+intended to allow a better handling of accesses to resources in a
+hardware architecture supporting several compartments.
+
+This patch is based on [1]. It is integrated in this patchset as it
+provides a use-case for it.
+
+Diffs with [1]:
+	- Rename feature-domain* properties to access-control* to narrow
+	  down the scope of the binding
+	- YAML errors and typos corrected.
+	- Example updated
+	- Some rephrasing in the binding description
+
+[1]: https://lore.kernel.org/lkml/0c0a82bb-18ae-d057-562b
+
+Signed-off-by: Oleksii Moisieiev <oleksii_moisieiev@epam.com>
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 14e89ae98294..12e6f0a26fc8 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -2955,7 +2955,9 @@ static void ccs_cleanup(struct ccs_sensor *sensor)
- 
- static int ccs_init_subdev(struct ccs_sensor *sensor,
- 			   struct ccs_subdev *ssd, const char *name,
--			   unsigned short num_pads, u32 function)
-+			   unsigned short num_pads, u32 function,
-+			   const char *lock_name,
-+			   struct lock_class_key *lock_key)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
- 	int rval;
-@@ -2993,7 +2995,7 @@ static int ccs_init_subdev(struct ccs_sensor *sensor,
- 		return rval;
- 	}
- 
--	rval = v4l2_subdev_init_finalize(&ssd->sd);
-+	rval = __v4l2_subdev_init_finalize(&ssd->sd, lock_name, lock_key);
- 	if (rval) {
- 		media_entity_cleanup(&ssd->sd.entity);
- 		return rval;
-@@ -3206,6 +3208,8 @@ static int ccs_firmware_name(struct i2c_client *client,
- 
- static int ccs_probe(struct i2c_client *client)
- {
-+	static struct lock_class_key pixel_array_lock_key, binner_lock_key,
-+		scaler_lock_key;
- 	const struct ccs_device *ccsdev = device_get_match_data(&client->dev);
- 	struct ccs_sensor *sensor;
- 	const struct firmware *fw;
-@@ -3489,15 +3493,18 @@ static int ccs_probe(struct i2c_client *client)
- 	}
- 
- 	rval = ccs_init_subdev(sensor, sensor->scaler, " scaler", 2,
--			       MEDIA_ENT_F_PROC_VIDEO_SCALER);
-+			       MEDIA_ENT_F_PROC_VIDEO_SCALER,
-+			       "ccs scaler mutex", &scaler_lock_key);
- 	if (rval)
- 		goto out_cleanup;
- 	rval = ccs_init_subdev(sensor, sensor->binner, " binner", 2,
--			       MEDIA_ENT_F_PROC_VIDEO_SCALER);
-+			       MEDIA_ENT_F_PROC_VIDEO_SCALER,
-+			       "ccs binner mutex", &binner_lock_key);
- 	if (rval)
- 		goto out_cleanup;
- 	rval = ccs_init_subdev(sensor, sensor->pixel_array, " pixel_array", 1,
--			       MEDIA_ENT_F_CAM_SENSOR);
-+			       MEDIA_ENT_F_CAM_SENSOR, "ccs pixel array mutex",
-+			       &pixel_array_lock_key);
- 	if (rval)
- 		goto out_cleanup;
- 
+Changes in V6:
+	- Renamed access-controller to access-controllers
+	- Example updated
+	- Removal of access-control-provider property
+
+Changes in V5:
+	- Diffs with [1]
+	- Discarded the [IGNORE] tag as the patch is now part of the
+	  patchset
+
+ .../access-controllers.yaml                   | 84 +++++++++++++++++++
+ 1 file changed, 84 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/access-controllers/access-controllers.yaml
+
+diff --git a/Documentation/devicetree/bindings/access-controllers/access-controllers.yaml b/Documentation/devicetree/bindings/access-controllers/access-controllers.yaml
+new file mode 100644
+index 000000000000..99e2865f0e46
+--- /dev/null
++++ b/Documentation/devicetree/bindings/access-controllers/access-controllers.yaml
+@@ -0,0 +1,84 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/access-controllers/access-controllers.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Generic Domain Access Controllers
++
++maintainers:
++  - Oleksii Moisieiev <oleksii_moisieiev@epam.com>
++
++description: |+
++  Common access controllers properties
++
++  Access controllers are in charge of stating which of the hardware blocks under
++  their responsibility (their domain) can be accesssed by which compartment. A
++  compartment can be a cluster of CPUs (or coprocessors), a range of addresses
++  or a group of hardware blocks. An access controller's domain is the set of
++  resources covered by the access controller.
++
++  This device tree binding can be used to bind devices to their access
++  controller provided by access-controllers property. In this case, the device
++  is a consumer and the access controller is the provider.
++
++  An access controller can be represented by any node in the device tree and
++  can provide one or more configuration parameters, needed to control parameters
++  of the consumer device. A consumer node can refer to the provider by phandle
++  and a set of phandle arguments, specified by '#access-controller-cells'
++  property in the access controller node.
++
++  Access controllers are typically used to set/read the permissions of a
++  hardware block and grant access to it. Any of which depends on the access
++  controller. The capabilities of each access controller are defined by the
++  binding of the access controller device.
++
++  Each node can be a consumer for the several access controllers.
++
++# always select the core schema
++select: true
++
++properties:
++  "#access-controller-cells":
++    description:
++      Number of cells in an access-controllers specifier;
++      Can be any value as specified by device tree binding documentation
++      of a particular provider. The node is an access controller.
++
++  access-controller-names:
++    $ref: /schemas/types.yaml#/definitions/string-array
++    description:
++      A list of access-controllers names, sorted in the same order as
++      access-controllers entries. Consumer drivers will use
++      access-controller-names to match with existing access-controllers entries.
++
++  access-controllers:
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    description:
++      A list of access controller specifiers, as defined by the
++      bindings of the access-controllers provider.
++
++additionalProperties: true
++
++examples:
++  - |
++    clock_controller: access-controllers@50000 {
++        reg = <0x50000 0x400>;
++        #access-controller-cells = <2>;
++    };
++
++    bus_controller: bus@60000 {
++        reg = <0x60000 0x10000>;
++        #address-cells = <1>;
++        #size-cells = <1>;
++        ranges;
++        #access-controller-cells = <3>;
++
++        uart4: serial@60100 {
++            reg = <0x60100 0x400>;
++            clocks = <&clk_serial>;
++            access-controllers = <&clock_controller 1 2>,
++                                 <&bus_controller 1 3 5>;
++            access-controller-names = "clock", "bus";
++        };
++    };
 -- 
-2.39.2
+2.35.3
 
