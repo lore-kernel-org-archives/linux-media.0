@@ -2,152 +2,99 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3C04CD68F5
-	for <linux-media@archiver.kernel.org>; Tue, 10 Oct 2023 07:15:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BE6ECD68F5
+	for <linux-media@archiver.kernel.org>; Tue, 10 Oct 2023 07:20:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442406AbjJJHPO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Oct 2023 03:15:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54018 "EHLO
+        id S1442433AbjJJHUd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Oct 2023 03:20:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442392AbjJJHPM (ORCPT
+        with ESMTP id S1442406AbjJJHUb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Oct 2023 03:15:12 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 536BC9E
-        for <linux-media@vger.kernel.org>; Tue, 10 Oct 2023 00:15:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696922112; x=1728458112;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=SR0z5+k7f09X4oSIBT6JZPi+wmKyVNI03qo0ZaVho9s=;
-  b=QiZNuep8nl1SF7lGVSCUzvnBB1fe4N0ZzLQ2PcgjHv3gkCR4rY+FCWKK
-   t6wvOC7V69wu80iJb7XzAcGP99DcW0w1h72zB5cYi4VNE5W8Zw++r1Zhj
-   CVgcXwYvzgn3KZajGCP4ilVY5MiPoN/xu6l6d3cJ8qFOXkxJvnD80xsWq
-   Oq9mBT+3xGhrH5NpYz3i8eudGxobasBkyLTtIzETp6OIyzVuTRYnuOTHj
-   33A/gwOPC/ILSQeE5o1OqHLKdphfbqfjdvQMrLtWHd1q5ZuWVN9fNxko4
-   J5wzW1Vv3RhN3rxLyOjrZ57kTo1UMWT3b7+RdYqlUe6J0CRoOzw/rr62v
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10858"; a="2917020"
-X-IronPort-AV: E=Sophos;i="6.03,212,1694761200"; 
-   d="scan'208";a="2917020"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2023 00:15:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10858"; a="823672182"
-X-IronPort-AV: E=Sophos;i="6.03,212,1694761200"; 
-   d="scan'208";a="823672182"
-Received: from ipu5-build.bj.intel.com (HELO [10.238.232.146]) ([10.238.232.146])
-  by fmsmga004.fm.intel.com with ESMTP; 10 Oct 2023 00:15:08 -0700
-Subject: Re: [PATCH] media: intel/ipu6: Set V4L2_CAP_IO_MC flag for isys
- /dev/video# nodes
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-References: <20231002172306.111601-1-hdegoede@redhat.com>
- <ZSO07yIijONinNEw@kekkonen.localdomain>
-From:   Bingbu Cao <bingbu.cao@linux.intel.com>
-Message-ID: <c0550b3d-65dd-f0c7-4876-9d47ca618990@linux.intel.com>
-Date:   Tue, 10 Oct 2023 15:12:06 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Tue, 10 Oct 2023 03:20:31 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E4F9F
+        for <linux-media@vger.kernel.org>; Tue, 10 Oct 2023 00:20:30 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31196C433C7;
+        Tue, 10 Oct 2023 07:20:27 +0000 (UTC)
+Message-ID: <49e32b1d-fd2e-4fd0-bcfe-78ff57adb588@xs4all.nl>
+Date:   Tue, 10 Oct 2023 09:20:26 +0200
 MIME-Version: 1.0
-In-Reply-To: <ZSO07yIijONinNEw@kekkonen.localdomain>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v13 06/11] v4l2-ctrls: add support for
+ V4L2_CTRL_WHICH_MIN/MAX_VAL
+Content-Language: en-US, nl
+To:     Yunke Cao <yunkec@google.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Daniel Scally <dan.scally@ideasonboard.com>
+Cc:     Tomasz Figa <tfiga@chromium.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        linux-media@vger.kernel.org
+References: <20231010022136.1504015-1-yunkec@google.com>
+ <20231010022136.1504015-7-yunkec@google.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20231010022136.1504015-7-yunkec@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Hi Yunke,
 
+Just one remaining issue:
 
-On 10/9/23 4:08 PM, Sakari Ailus wrote:
-> Hi Hans,
-> 
-> On Mon, Oct 02, 2023 at 07:23:06PM +0200, Hans de Goede wrote:
->> The IPU6 isys is a media-controller centric device which needs
->> the pipeline to be configured using the media controller API before use.
->>
->> Set the V4L2_CAP_IO_MC flag to reflect this.
->>
->> This also allows dropping of the enum_input() g_input() and s_input()
->> implementations, with V4L2_CAP_IO_MC set the v4l2-core will take care
->> of those.
->>
->> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> 
-> Thanks.
-> 
-> Cc'd Bingbu. (Also bounced the patch to him.)
+On 10/10/2023 04:21, Yunke Cao wrote:
 
-Applied, thanks. :)
-> 
->> ---
->>  .../media/pci/intel/ipu6/ipu6-isys-video.c    | 29 ++-----------------
->>  1 file changed, 2 insertions(+), 27 deletions(-)
->>
->> diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
->> index ad74a19527b7..e6fc32603c3f 100644
->> --- a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
->> +++ b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
->> @@ -262,29 +262,6 @@ static int vidioc_try_fmt_vid_cap_mplane(struct file *file, void *fh,
->>  	return 0;
->>  }
->>  
->> -static int vidioc_enum_input(struct file *file, void *fh,
->> -			     struct v4l2_input *input)
->> -{
->> -	if (input->index > 0)
->> -		return -EINVAL;
->> -	strscpy(input->name, "camera", sizeof(input->name));
->> -	input->type = V4L2_INPUT_TYPE_CAMERA;
->> -
->> -	return 0;
->> -}
->> -
->> -static int vidioc_g_input(struct file *file, void *fh, unsigned int *input)
->> -{
->> -	*input = 0;
->> -
->> -	return 0;
->> -}
->> -
->> -static int vidioc_s_input(struct file *file, void *fh, unsigned int input)
->> -{
->> -	return input == 0 ? 0 : -EINVAL;
->> -}
->> -
->>  static int link_validate(struct media_link *link)
->>  {
->>  	struct ipu6_isys_video *av =
->> @@ -1017,9 +994,6 @@ static const struct v4l2_ioctl_ops ioctl_ops_mplane = {
->>  	.vidioc_streamon = vb2_ioctl_streamon,
->>  	.vidioc_streamoff = vb2_ioctl_streamoff,
->>  	.vidioc_expbuf = vb2_ioctl_expbuf,
->> -	.vidioc_enum_input = vidioc_enum_input,
->> -	.vidioc_g_input = vidioc_g_input,
->> -	.vidioc_s_input = vidioc_s_input,
->>  };
->>  
->>  static const struct media_entity_operations entity_ops = {
->> @@ -1217,7 +1191,8 @@ int ipu6_isys_video_init(struct ipu6_isys_video *av)
->>  
->>  	mutex_init(&av->mutex);
->>  	av->vdev.device_caps = V4L2_CAP_STREAMING |
->> -			       V4L2_CAP_VIDEO_CAPTURE_MPLANE;
->> +			       V4L2_CAP_VIDEO_CAPTURE_MPLANE |
->> +			       V4L2_CAP_IO_MC;
->>  	av->vdev.vfl_dir = VFL_DIR_RX;
->>  
->>  	ret = ipu6_isys_queue_init(&av->aq);
->> -- 
->> 2.41.0
->>
-> 
+<snip>
 
--- 
-Best regards,
-Bingbu Cao
+> @@ -723,17 +741,23 @@ struct v4l2_ctrl *v4l2_ctrl_new_std_menu_items(struct v4l2_ctrl_handler *hdl,
+>   * @ops:       The control ops.
+>   * @id:        The control ID.
+>   * @p_def:     The control's default value.
+> + * @p_min:     The control's minimum value.
+> + * @p_max:     The control's maximum value.
+>   *
+> - * Sames as v4l2_ctrl_new_std(), but with support to compound controls, thanks
+> - * to the @p_def field. Use v4l2_ctrl_ptr_create() to create @p_def from a
+> - * pointer. Use v4l2_ctrl_ptr_create(NULL) if the default value of the
+> - * compound control should be all zeroes.
+> + * Same as v4l2_ctrl_new_std(), but with support to compound controls, thanks
+> + * to the @p_def/min/max fields. Use v4l2_ctrl_ptr_create() to create
+> + * @p_def/min/max from a pointer. Use v4l2_ctrl_ptr_create(NULL) if the
+> + * default, minimum and maximum value of the compound control should be all
+> + * zeroes. Use v4l2_ctrl_ptr_create(NULL) if the min/max value of the compound
+> + * control is not defined, -ENODATA will be returned in this case.
+
+This still refers to ENODATA, but the text should be improved anyway, even
+the original wasn't very good. How about:
+
+ * Same as v4l2_ctrl_new_std(), but with support for compound controls.
+ * To fill in the @p_def, @p_min and @p_max fields, use v4l2_ctrl_ptr_create()
+ * to convert a pointer to a const union v4l2_ctrl_ptr.
+ * Use v4l2_ctrl_ptr_create(NULL) if you want the default, minimum or maximum
+ * value of the compound control to be all zeroes.
+ * If the compound control does not set the ``V4L2_CTRL_FLAG_HAS_WHICH_MIN_MAX``
+ * flag, then it does not has minimum and maximum values. In that case just use
+ * v4l2_ctrl_ptr_create(NULL) for the @p_min and @p_max arguments.
+
+>   *
+>   */
+>  struct v4l2_ctrl *v4l2_ctrl_new_std_compound(struct v4l2_ctrl_handler *hdl,
+>  					     const struct v4l2_ctrl_ops *ops,
+>  					     u32 id,
+> -					     const union v4l2_ctrl_ptr p_def);
+> +					     const union v4l2_ctrl_ptr p_def,
+> +					     const union v4l2_ctrl_ptr p_min,
+> +					     const union v4l2_ctrl_ptr p_max);
+>  
+>  /**
+>   * v4l2_ctrl_new_int_menu() - Create a new standard V4L2 integer menu control.
+
+Other than this the controls part of this series looks good to me.
+
+Regards,
+
+	Hans
+
