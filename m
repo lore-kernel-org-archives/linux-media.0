@@ -2,43 +2,43 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74944CDB47E
-	for <linux-media@archiver.kernel.org>; Thu, 12 Oct 2023 11:02:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22DDBCDB46E
+	for <linux-media@archiver.kernel.org>; Thu, 12 Oct 2023 11:02:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378006AbjJLLCb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Oct 2023 07:02:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42062 "EHLO
+        id S1347163AbjJLLCk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Oct 2023 07:02:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343649AbjJLLCa (ORCPT
+        with ESMTP id S1378036AbjJLLCd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 Oct 2023 07:02:30 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 788B191;
-        Thu, 12 Oct 2023 04:02:28 -0700 (PDT)
+        Thu, 12 Oct 2023 07:02:33 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A4C91;
+        Thu, 12 Oct 2023 04:02:32 -0700 (PDT)
 Received: from localhost (dynamic-002-247-255-251.2.247.pool.telefonica.de [2.247.255.251])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: sebastianfricke)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id AD7F36607346;
-        Thu, 12 Oct 2023 12:02:26 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 262F56607342;
+        Thu, 12 Oct 2023 12:02:31 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1697108547;
-        bh=w/t+w6u/U3/SZ6HLVnBYGZYlIolHNvHDKuIuLzH9UCw=;
+        s=mail; t=1697108551;
+        bh=gZD8FwPRmycZ5AwP7wqTItCK+pu51d1GjKx5r6xw4DU=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=df8FTbunD4FTinyxuAZxdLlgKcjWiVlxu9YmQISA9uqgNoXDGcOtkf4J0Qww59Tc8
-         9PZPh8wfTiGrJBn9DXgiwGIZoklGxTwulvrLWGsOj9+LTiym/KfPXCdIW8QP5wYwIR
-         tmONUUXqDzmRAz+TJweCiAfStu/DhRC1t+KdOV/9Qx7A9jCuAQbbDqbPg5H6KC8r8W
-         qAmFxFOwGYeqiYM/yTwoE6GOHkmoua+7Kasf0YSGlwjudvjK7F2BrqVZjSMDl/gG34
-         x9gxVtoVz/EmOxZPuNCVVUqjUpgPSreDK+W3/xazNh5V2FT36FRbm7JegWgnAR8UDy
-         kpAWReYfOBRqA==
+        b=QlVXQA/VADtK//yFCrY4S4jYyc8cPBxsyIZ7podteN1bH4OkNph6n7cPMdpufj74h
+         TeEMmj0Hn6mWM3jFcIUsA3nsP+xNy3mugsLmI0wuDbKJWEBra4tD1Ei/jq+oi8RQXc
+         vb9sW8snw2SxS/eoThKgb0U+vH9ab2SmG7W1GA/K19CqCkqnq2r6mEcQZlYdaFY7qU
+         lyorzqxzjt3LBIl/QlXFuO07mseoWfqFHChPHlOWXWruHDPhOBteWBQGm6+Dg+8q58
+         E69wzEZZAYbBtpkv9vp2ezcuJPxfkzLQiKcpezYBdTponeAHkTZe1IFryXw52pPKc2
+         h78VAp+wDNJGQ==
 From:   Sebastian Fricke <sebastian.fricke@collabora.com>
-Date:   Thu, 12 Oct 2023 13:00:59 +0200
-Subject: [PATCH v13 1/8] media: v4l2: Add ignore_cap_streaming flag
+Date:   Thu, 12 Oct 2023 13:01:00 +0200
+Subject: [PATCH v13 2/8] media: v4l2: Allow M2M job queuing w/o streaming CAP queue
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230929-wave5_v13_media_master-v13-1-5ac60ccbf2ce@collabora.com>
+Message-Id: <20230929-wave5_v13_media_master-v13-2-5ac60ccbf2ce@collabora.com>
 References: <20230929-wave5_v13_media_master-v13-0-5ac60ccbf2ce@collabora.com>
 In-Reply-To: <20230929-wave5_v13_media_master-v13-0-5ac60ccbf2ce@collabora.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -62,56 +62,48 @@ Cc:     linux-media@vger.kernel.org, Tomasz Figa <tfiga@chromium.org>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Darren Etheridge <detheridge@ti.com>
 X-Mailer: b4 0.11.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1697108536; l=1946;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1697108536; l=1378;
  i=sebastian.fricke@collabora.com; s=linux-media; h=from:subject:message-id;
- bh=w/t+w6u/U3/SZ6HLVnBYGZYlIolHNvHDKuIuLzH9UCw=;
- b=D16V6519WF+94iLyTvlYo1i/smkP78HVY7aLAnOuUvwA9KhjwGWYZfGuLdScNK8ajJMV1Zf2Cb6W
- mD2QZww+ANJpavyIihiNIaZX5f/YD1gkUYqpOJOVmYlO/u3AHTBF
+ bh=gZD8FwPRmycZ5AwP7wqTItCK+pu51d1GjKx5r6xw4DU=;
+ b=GSWYtrUVYuT1Pr7eKW2BjF17Vp02rE0VkumlNl3Sr/FOBnN6NinB5OalP/F6rXux/kLWAohpAjRY
+ 3zCiiLndDVg1pOQpMyC0tX5gh5ZWJRWeIyHbF2NdQH7QE8OFnMIf
 X-Developer-Key: i=sebastian.fricke@collabora.com; a=ed25519;
  pk=pYXedPwrTtErcj7ERYeo/IpTrpe4QbJuEzSB52fslBg=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a new flag to 'struct v4l2_m2m_ctx' to toggle whether a CAPTURE queue
-must be streaming in order to allow queuing OUTPUT jobs to the ready
-queue. Currently, both queues (CAPTURE & OUTPUT) must be streaming in
-order to add new jobs. This prevents firmware from analyzing the bitstream
-header which arrives on the OUTPUT queue and performing an analysis of the
-sequence to ensure that userspace prepares the CAPTURE queue correctly.
+Allow decoder drivers to set the ignore_cap_streaming flag to allow
+queuing jobs to the M2M ready queue and perform firmware sequence analysis
+with just a streaming OUTPUT queue and available bitstream data.
 
 Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
 Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 Signed-off-by: Deborah Brouwer <deborah.brouwer@collabora.com>
 ---
- include/media/v4l2-mem2mem.h | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/media/v4l2-core/v4l2-mem2mem.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/include/media/v4l2-mem2mem.h b/include/media/v4l2-mem2mem.h
-index d6c8eb2b5201..1288fe364fab 100644
---- a/include/media/v4l2-mem2mem.h
-+++ b/include/media/v4l2-mem2mem.h
-@@ -84,6 +84,12 @@ struct v4l2_m2m_queue_ctx {
-  * @last_src_buf: indicate the last source buffer for draining
-  * @next_buf_last: next capture queud buffer will be tagged as last
-  * @has_stopped: indicate the device has been stopped
-+ * @ignore_cap_streaming: If true, job_ready can be called even if the CAPTURE
-+ *			  queue is not streaming. This allows firmware to
-+ *			  analyze the bitstream header which arrives on the
-+ *			  OUTPUT queue. The driver must implement the job_ready
-+ *			  callback correctly to make sure that the requirements
-+ *			  for actual decoding are met.
-  * @m2m_dev: opaque pointer to the internal data to handle M2M context
-  * @cap_q_ctx: Capture (output to memory) queue context
-  * @out_q_ctx: Output (input from memory) queue context
-@@ -106,6 +112,7 @@ struct v4l2_m2m_ctx {
- 	struct vb2_v4l2_buffer		*last_src_buf;
- 	bool				next_buf_last;
- 	bool				has_stopped;
-+	bool				ignore_cap_streaming;
+diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
+index 0cc30397fbad..9e983176542b 100644
+--- a/drivers/media/v4l2-core/v4l2-mem2mem.c
++++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
+@@ -301,9 +301,12 @@ static void __v4l2_m2m_try_queue(struct v4l2_m2m_dev *m2m_dev,
  
- 	/* internal use only */
- 	struct v4l2_m2m_dev		*m2m_dev;
+ 	dprintk("Trying to schedule a job for m2m_ctx: %p\n", m2m_ctx);
+ 
+-	if (!m2m_ctx->out_q_ctx.q.streaming
+-	    || !m2m_ctx->cap_q_ctx.q.streaming) {
+-		dprintk("Streaming needs to be on for both queues\n");
++	if (!m2m_ctx->out_q_ctx.q.streaming ||
++	    (!m2m_ctx->cap_q_ctx.q.streaming && !m2m_ctx->ignore_cap_streaming)) {
++		if (!m2m_ctx->ignore_cap_streaming)
++			dprintk("Streaming needs to be on for both queues\n");
++		else
++			dprintk("Streaming needs to be on for the OUTPUT queue\n");
+ 		return;
+ 	}
+ 
 
 -- 
 2.25.1
