@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CCEA7CDB485
-	for <linux-media@archiver.kernel.org>; Thu, 12 Oct 2023 11:47:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40083C41513
+	for <linux-media@archiver.kernel.org>; Thu, 12 Oct 2023 11:48:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378358AbjJLLrx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Oct 2023 07:47:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55394 "EHLO
+        id S1378816AbjJLLr6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Oct 2023 07:47:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378811AbjJLLrT (ORCPT
+        with ESMTP id S1378868AbjJLLrU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 Oct 2023 07:47:19 -0400
+        Thu, 12 Oct 2023 07:47:20 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C28519E;
-        Thu, 12 Oct 2023 04:47:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D814CA;
+        Thu, 12 Oct 2023 04:47:10 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:7ae7:b86d:c19a:877e])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 04BCE660738E;
-        Thu, 12 Oct 2023 12:47:08 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 133B06607395;
+        Thu, 12 Oct 2023 12:47:09 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1697111228;
-        bh=Zne8+1+gt7T5bArgwI34aDgBwx9md9yjRlThQEon5Pk=;
+        s=mail; t=1697111229;
+        bh=mz6L3tQb5oP+x6Uw4FTrcS9pwtcQjO0juMIWxd3jOzM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Gf62AcjPOWvhMdRnJLmE7bGshcMQ4KNh+hthHIVDXid8l3MkgBetP/26Xjn2KSMtb
-         H8EIQSwmX8n+aIhWpFXtdiS3F+VD8K0qfKNtKDWURVfH22H2dLYAxvb+SWUBXxslQB
-         7fhI0AoGLYmOPsk2AfDcf2O9hPNloqPwd89JElrVskjwHUhCpOGFyyeJdn6VboNJhP
-         Ac99fN6a8lkBmEnmkgSvKIVnNUyJSXkvto5CExml7BtvuC4Nx1w5XdmzPPb7C8Qi3b
-         342KiEz+CMwVHJEKp5FmaLjASvSoTU+TKexyrkuS7nQqQLVOR5ZPbF8Gs3IfcZmZDz
-         wauoulmDnt5fw==
+        b=mdZn7AvtFYaWUfkn6a6ksQuZNdZm0VxQYMjyHDOc76jFdH6KIau3URG4gdjOhF/QC
+         jJHraV2V5P8MQRYx6ka3AujPNE4FgAlqXc5lCdfOMb1MX0U2LwLbZJIU6AwAT09ved
+         wAQL+3nNkMxAdr8piP4brX+imcIgA2R4lHpkmbuHz9lRb0NOY03N7/Eu0A7+qmsl7s
+         qxTezDnvuG+fGvuan0sVCDkMwnZBFyLWllL9vRD7/NQT7pn06LArJ+k5Ivgs9nM/vT
+         3bPrA8fV/mpAQATRhFSBdm3rm2uthCLu36I/ll+hjzcCOQVGFD8fds1aQYZC4iuDkf
+         p+IlctXtii1Yg==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -43,10 +43,10 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Antti Palosaari <crope@iki.fi>
-Subject: [PATCH v11 35/56] media: usb: hackrf: Set min_buffers_needed to 8
-Date:   Thu, 12 Oct 2023 13:46:21 +0200
-Message-Id: <20231012114642.19040-36-benjamin.gaignard@collabora.com>
+        Steve Longerbeam <slongerbeam@gmail.com>
+Subject: [PATCH v11 37/56] media: imx: Stop direct calls to queue num_buffers field
+Date:   Thu, 12 Oct 2023 13:46:23 +0200
+Message-Id: <20231012114642.19040-38-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231012114642.19040-1-benjamin.gaignard@collabora.com>
 References: <20231012114642.19040-1-benjamin.gaignard@collabora.com>
@@ -56,46 +56,45 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-vb2 queue_setup checks for a minimum number of buffers so set
-min_buffers_needed to 8 and remove the useless check in
-hackrf_queue_setup().
+Use vb2_get_num_buffers() to avoid using queue num_buffers field directly.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-CC: Antti Palosaari <crope@iki.fi>
+CC: Steve Longerbeam <slongerbeam@gmail.com>
+CC: Philipp Zabel <p.zabel@pengutronix.de>
 ---
- drivers/media/usb/hackrf/hackrf.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ drivers/staging/media/imx/imx-media-capture.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/usb/hackrf/hackrf.c b/drivers/media/usb/hackrf/hackrf.c
-index 3e535be2c520..2e856b20aa21 100644
---- a/drivers/media/usb/hackrf/hackrf.c
-+++ b/drivers/media/usb/hackrf/hackrf.c
-@@ -754,15 +754,10 @@ static int hackrf_queue_setup(struct vb2_queue *vq,
+diff --git a/drivers/staging/media/imx/imx-media-capture.c b/drivers/staging/media/imx/imx-media-capture.c
+index 4846078315ff..ce02199e7b1b 100644
+--- a/drivers/staging/media/imx/imx-media-capture.c
++++ b/drivers/staging/media/imx/imx-media-capture.c
+@@ -605,6 +605,7 @@ static int capture_queue_setup(struct vb2_queue *vq,
  {
- 	struct hackrf_dev *dev = vb2_get_drv_priv(vq);
+ 	struct capture_priv *priv = vb2_get_drv_priv(vq);
+ 	struct v4l2_pix_format *pix = &priv->vdev.fmt;
++	unsigned int q_num_bufs = vb2_get_num_buffers(vq);
+ 	unsigned int count = *nbuffers;
  
--	dev_dbg(dev->dev, "nbuffers=%d\n", *nbuffers);
--
--	/* Need at least 8 buffers */
--	if (vq->num_buffers + *nbuffers < 8)
--		*nbuffers = 8 - vq->num_buffers;
- 	*nplanes = 1;
- 	sizes[0] = PAGE_ALIGN(dev->buffersize);
+ 	if (vq->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
+@@ -613,14 +614,14 @@ static int capture_queue_setup(struct vb2_queue *vq,
+ 	if (*nplanes) {
+ 		if (*nplanes != 1 || sizes[0] < pix->sizeimage)
+ 			return -EINVAL;
+-		count += vq->num_buffers;
++		count += q_num_bufs;
+ 	}
  
--	dev_dbg(dev->dev, "nbuffers=%d sizes[0]=%d\n", *nbuffers, sizes[0]);
-+	dev_dbg(dev->dev, "nbuffers=%u sizes[0]=%d\n", vb2_get_num_buffers(vq), sizes[0]);
- 	return 0;
- }
+ 	count = min_t(__u32, VID_MEM_LIMIT / pix->sizeimage, count);
  
-@@ -1392,6 +1387,8 @@ static int hackrf_probe(struct usb_interface *intf,
- 	dev->rx_vb2_queue.type = V4L2_BUF_TYPE_SDR_CAPTURE;
- 	dev->rx_vb2_queue.io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF |
- 				     VB2_READ;
-+	/* Need at least 8 buffers */
-+	dev->rx_vb2_queue.min_buffers_needed = 8;
- 	dev->rx_vb2_queue.ops = &hackrf_vb2_ops;
- 	dev->rx_vb2_queue.mem_ops = &vb2_vmalloc_memops;
- 	dev->rx_vb2_queue.drv_priv = dev;
+ 	if (*nplanes)
+-		*nbuffers = (count < vq->num_buffers) ? 0 :
+-			count - vq->num_buffers;
++		*nbuffers = (count < q_num_bufs) ? 0 :
++			count - q_num_bufs;
+ 	else
+ 		*nbuffers = count;
+ 
 -- 
 2.39.2
 
