@@ -2,219 +2,123 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BAF8C41513
-	for <linux-media@archiver.kernel.org>; Thu, 12 Oct 2023 21:27:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 691DDCDB474
+	for <linux-media@archiver.kernel.org>; Thu, 12 Oct 2023 22:07:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442914AbjJLV1i (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Oct 2023 17:27:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56824 "EHLO
+        id S1442946AbjJLWHb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Oct 2023 18:07:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442824AbjJLV1h (ORCPT
+        with ESMTP id S234509AbjJLWHa (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 Oct 2023 17:27:37 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25988B7
-        for <linux-media@vger.kernel.org>; Thu, 12 Oct 2023 14:27:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697146056; x=1728682056;
-  h=date:from:to:cc:subject:message-id;
-  bh=EvbSzZF2vvA7z4vS1LrspRRq52YV/qI2OgJVhF6HNxI=;
-  b=QOBFepQZppPoQJc0u2iESeQYKtOb9ANOpNQWt5E7B5rnesk3J78KvUoa
-   DS3bOIXdiYxpZ5pTdrwXaS7Abwkx5xupSdrZ4E0Od6y3QiGT99VZVFPv5
-   W3RMi/fqSPY5oxksvwz4yTAUJQcb5fItiiHHSE/noBKyjKLztV9+EDTDT
-   7FkmqN3JrDIAaB0YDDkb5R5WdzW3l22BC0gQVobTWUAJIcp+088do7+ry
-   WGOny6lobbbD/6YPnGZq6H8MdyVJiPSa+utt3sbMFBjzp4o7ZzBd8oECr
-   J9JtEPURUlKO9YW7S0sHXjAn0JknxGngS2GobAKZCSzo0ewY77eC3U+9N
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="471280529"
-X-IronPort-AV: E=Sophos;i="6.03,219,1694761200"; 
-   d="scan'208";a="471280529"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2023 14:27:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="748059138"
-X-IronPort-AV: E=Sophos;i="6.03,219,1694761200"; 
-   d="scan'208";a="748059138"
-Received: from lkp-server02.sh.intel.com (HELO f64821696465) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 12 Oct 2023 14:27:29 -0700
-Received: from kbuild by f64821696465 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qr3DL-0003u5-1m;
-        Thu, 12 Oct 2023 21:27:27 +0000
-Date:   Fri, 13 Oct 2023 05:26:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-media@vger.kernel.org
-Subject: [sailus-media-tree:fixes] BUILD SUCCESS
- 1bc2cf4bef1215aa28519807dc1bcf1dce28dad8
-Message-ID: <202310130543.I8e6533m-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+        Thu, 12 Oct 2023 18:07:30 -0400
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7920DB8;
+        Thu, 12 Oct 2023 15:07:29 -0700 (PDT)
+Received: by mail-ot1-x330.google.com with SMTP id 46e09a7af769-6c620883559so973571a34.0;
+        Thu, 12 Oct 2023 15:07:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697148449; x=1697753249;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:dkim-signature:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=wj8bxxmMdfTdWcmOthiPcD4f/E2nZ5CmP0hi2ncm2JY=;
+        b=OUDizIfCWGGTGGK+SkCtg9S4aakkLJKtRkjJy320BMUuBYN42sqpVpwj0BXQrNVRVG
+         vt6oxwLwo5PxI9wUKA9+pAcropa0tfv2nK1TR98XqkM/scvnCAkXm4DZX6quKvfQfpAy
+         MujN1vH4K8DIEV6m7peF5J7S/bI1wsyDF3JmZdhWbhjCpGycIeb73DAafm/9zh4oA5N+
+         tisl5EJYIAdlDiHv470wxUOm3y4Nn8PEg42G4J9op2W+WOExlF9nK/ns0iX3AFLtEWEZ
+         t6e3y3QYtjOCTFAkcH/oa1SsImbdwsGtWw9O2UO5jTEVn+8AlyZLWBHiVz8/ha8oHkAU
+         dxog==
+X-Gm-Message-State: AOJu0YyQwOVjyk10JlCEkBJTHnTev4H6GB5k0SWpCzBpduWdwtMJb3dw
+        PRj0LgiaeHkhMr2uiPc2dbsRv9SyZiTm83tx
+X-Google-Smtp-Source: AGHT+IF3ETYErezb1wVlMe3A6ctvCLcDHQy9K6fJw58TEfcbRXqIVetzumpEtlejMblEpd2RKXJmDw==
+X-Received: by 2002:a05:6830:1087:b0:6c4:a42b:9cd8 with SMTP id y7-20020a056830108700b006c4a42b9cd8mr26584088oto.1.1697148448593;
+        Thu, 12 Oct 2023 15:07:28 -0700 (PDT)
+Received: from mail.marliere.net ([24.199.118.162])
+        by smtp.gmail.com with ESMTPSA id fe1-20020a056a002f0100b00690c52267easm12225670pfb.40.2023.10.12.15.07.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Oct 2023 15:07:27 -0700 (PDT)
+Date:   Thu, 12 Oct 2023 19:07:34 -0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
+        s=2023; t=1697148446;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wj8bxxmMdfTdWcmOthiPcD4f/E2nZ5CmP0hi2ncm2JY=;
+        b=shsa4lg5x46ZuiVFyR2F5z2If28ls8/ezrObv+/KyRopymSkYgc5T2S4DLHX3MHphMVs6Y
+        XwoC0v4KX5tFuzgzpTvD2c0m8RQEkfm2068zPF4y+nwkT/7ybxB+1KyV0Pve8TlM0slua6
+        VxWBvXSvXn1LwfHriB5sXx6OqTX+HI6EVHCTZ+OKZypr01BJj0LdnCd1NBAogI7ekNia1m
+        55o7NaPqoocNk9xxglYBfjmwdhxcTI8feFqegITpnsOqYzdVH5Zr0LwN3e53E1GJ1ESt4C
+        BBnBSugmC38WE3fhwzolY9kqDuXnwe9FPM5/5LuwFDmF9KoHG/fYWkkgM4bsbA==
+Authentication-Results: ORIGINATING;
+        auth=pass smtp.auth=ricardo@marliere.net smtp.mailfrom=ricardo@marliere.net
+From:   "Ricardo B. Marliere" <ricardo@marliere.net>
+To:     syzbot <syzbot+621409285c4156a009b3@syzkaller.appspotmail.com>
+Cc:     isely@pobox.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        mchehab@kernel.org, pvrusb2@isely.net,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [pvrusb2?] [usb?] KASAN: slab-use-after-free Read in
+ pvr2_context_set_notify
+Message-ID: <cwc32sg4vzz6akduyvze6tu2dkzpljtvpycuhz43t7lmbzbyvb@jgywtsrcvuzw>
+References: <000000000000a02a4205fff8eb92@google.com>
+ <gugiuvjgpoogf3k5cm4px4jwevg5torsu3d7afbbhvnrxho4zu@wkcxeb5sr5ez>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="g4hznxqvzwwzlnny"
+Content-Disposition: inline
+In-Reply-To: <gugiuvjgpoogf3k5cm4px4jwevg5torsu3d7afbbhvnrxho4zu@wkcxeb5sr5ez>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-tree/branch: git://linuxtv.org/sailus/media_tree.git fixes
-branch HEAD: 1bc2cf4bef1215aa28519807dc1bcf1dce28dad8  media: i2c: ov8858: Don't set fwnode in the driver
 
-elapsed time: 1899m
+--g4hznxqvzwwzlnny
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-configs tested: 148
-configs skipped: 2
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git ce9ecca0238b140b88f43859b211c9fdfd8e5b70
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+--g4hznxqvzwwzlnny
+Content-Type: text/x-diff; charset=us-ascii
+Content-Disposition: attachment;
+	filename="0001-media-pvrusb2-fix-use-after-free-on-context-disconne.patch"
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                      axs103_smp_defconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20231011   gcc  
-arc                   randconfig-001-20231012   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                         orion5x_defconfig   clang
-arm                   randconfig-001-20231012   gcc  
-arm                         wpcm450_defconfig   gcc  
-arm64                            allmodconfig   gcc  
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-i386         buildonly-randconfig-001-20231011   gcc  
-i386         buildonly-randconfig-001-20231012   gcc  
-i386         buildonly-randconfig-002-20231011   gcc  
-i386         buildonly-randconfig-002-20231012   gcc  
-i386         buildonly-randconfig-003-20231011   gcc  
-i386         buildonly-randconfig-003-20231012   gcc  
-i386         buildonly-randconfig-004-20231011   gcc  
-i386         buildonly-randconfig-004-20231012   gcc  
-i386         buildonly-randconfig-005-20231011   gcc  
-i386         buildonly-randconfig-005-20231012   gcc  
-i386         buildonly-randconfig-006-20231011   gcc  
-i386         buildonly-randconfig-006-20231012   gcc  
-i386                                defconfig   gcc  
-i386                  randconfig-001-20231012   gcc  
-i386                  randconfig-002-20231012   gcc  
-i386                  randconfig-003-20231012   gcc  
-i386                  randconfig-004-20231012   gcc  
-i386                  randconfig-005-20231012   gcc  
-i386                  randconfig-006-20231012   gcc  
-i386                  randconfig-011-20231012   gcc  
-i386                  randconfig-012-20231012   gcc  
-i386                  randconfig-013-20231012   gcc  
-i386                  randconfig-014-20231012   gcc  
-i386                  randconfig-015-20231012   gcc  
-i386                  randconfig-016-20231012   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20231011   gcc  
-loongarch             randconfig-001-20231012   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                      loongson3_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                         alldefconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   gcc  
-powerpc                      pcm030_defconfig   gcc  
-powerpc                     tqm8560_defconfig   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                 randconfig-001-20231011   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20231011   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                         apsh4a3a_defconfig   gcc  
-sh                                  defconfig   gcc  
-sh                ecovec24-romimage_defconfig   gcc  
-sh                        edosk7705_defconfig   gcc  
-sh                           se7750_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                 randconfig-001-20231012   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-001-20231012   gcc  
-x86_64       buildonly-randconfig-002-20231012   gcc  
-x86_64       buildonly-randconfig-003-20231012   gcc  
-x86_64       buildonly-randconfig-004-20231012   gcc  
-x86_64       buildonly-randconfig-005-20231012   gcc  
-x86_64       buildonly-randconfig-006-20231012   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                randconfig-001-20231011   gcc  
-x86_64                randconfig-002-20231011   gcc  
-x86_64                randconfig-003-20231011   gcc  
-x86_64                randconfig-004-20231011   gcc  
-x86_64                randconfig-005-20231011   gcc  
-x86_64                randconfig-006-20231011   gcc  
-x86_64                randconfig-011-20231012   gcc  
-x86_64                randconfig-012-20231012   gcc  
-x86_64                randconfig-013-20231012   gcc  
-x86_64                randconfig-014-20231012   gcc  
-x86_64                randconfig-015-20231012   gcc  
-x86_64                randconfig-016-20231012   gcc  
-x86_64                           rhel-8.3-bpf   gcc  
-x86_64                          rhel-8.3-func   gcc  
-x86_64                    rhel-8.3-kselftests   gcc  
-x86_64                         rhel-8.3-kunit   gcc  
-x86_64                           rhel-8.3-ltp   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                  cadence_csp_defconfig   gcc  
+From cf7c3b08f80c4cdb7dd08cb977f29d41efebcf79 Mon Sep 17 00:00:00 2001
+From: "Ricardo B. Marliere" <ricardo@marliere.net>
+Date: Thu, 12 Oct 2023 18:26:47 -0300
+Subject: [PATCH] media: pvrusb2: fix use after free on context disconnection
 
+Upon module load, a kthread is created targeting the
+pvr2_context_thread_func function, which may call pvr2_context_destroy
+and thus call kfree() on the context object. However, that might happen
+before the usb hub_event handler is able to notify the driver. This
+patch adds a sanity check before the invalid read reported by syzbot,
+within the context disconnection call stack.
+
+Fixes: e5be15c63804 ("V4L/DVB (7711): pvrusb2: Fix race on module unload")
+Reported-by: syzbot+621409285c4156a009b3@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/all/000000000000a02a4205fff8eb92@google.com/
+Signed-off-by: Ricardo B. Marliere <ricardo@marliere.net>
+---
+ drivers/media/usb/pvrusb2/pvrusb2-context.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/media/usb/pvrusb2/pvrusb2-context.c b/drivers/media/usb/pvrusb2/pvrusb2-context.c
+index 14170a5d72b3..1764674de98b 100644
+--- a/drivers/media/usb/pvrusb2/pvrusb2-context.c
++++ b/drivers/media/usb/pvrusb2/pvrusb2-context.c
+@@ -268,7 +268,8 @@ void pvr2_context_disconnect(struct pvr2_context *mp)
+ {
+ 	pvr2_hdw_disconnect(mp->hdw);
+ 	mp->disconnect_flag = !0;
+-	pvr2_context_notify(mp);
++	if (!pvr2_context_shutok())
++		pvr2_context_notify(mp);
+ }
+ 
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.42.0
+
+
+--g4hznxqvzwwzlnny--
