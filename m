@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CDD1CDB485
-	for <linux-media@archiver.kernel.org>; Thu, 12 Oct 2023 11:47:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2967CDB483
+	for <linux-media@archiver.kernel.org>; Thu, 12 Oct 2023 11:47:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378379AbjJLLr0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Oct 2023 07:47:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55378 "EHLO
+        id S1378899AbjJLLr1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Oct 2023 07:47:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378613AbjJLLrN (ORCPT
+        with ESMTP id S1378570AbjJLLrM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 Oct 2023 07:47:13 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1EC9DA;
-        Thu, 12 Oct 2023 04:47:04 -0700 (PDT)
+        Thu, 12 Oct 2023 07:47:12 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F37BF5;
+        Thu, 12 Oct 2023 04:47:02 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:7ae7:b86d:c19a:877e])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B3A04660734D;
-        Thu, 12 Oct 2023 12:47:02 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 159826607375;
+        Thu, 12 Oct 2023 12:47:01 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1697111223;
-        bh=zysh0fIOtYpsYqIRMileMUIIdpZZkRuacJmXooFftR8=;
+        s=mail; t=1697111221;
+        bh=RixrAQBOgKHoPu9fntvJtw2OX9PZEEsf/szxAuITdMY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LjSTgXHJlxgyZ+bvIf6sMbUqVS/2vBIxqlUtcMc0jxVNsA2FpOa+Ek9Ek0PJTHjUT
-         901g/0zx77kLJ9lQ+xak0DJ8TojxT/k8YoYuoUUmBEuQm7kq92MVUWdMC1BIwO/MdO
-         Kezi2LxtDCibe9m4J39eVUYQ228tscXbqmirgSvmALVKm3rX4KSiYKf3HHu0/uKUWr
-         SdzhvuD+0vpARnkQvPWoe1JDyk6cUpzrIKEDep8cMXLKv8SN0Mk7m1685XvNjRK1Tf
-         QRaoKH+VBZK+v20t2p8zaoyx7rXQzwdm2W6yv17zqA8B6VHOAGN9OdeFkDo6R8M6uw
-         OAjzhRNHy7jEQ==
+        b=OoqCZCxGG5mYLqH7BsWI3ks9lAvuN2A0vIWLC0g+B1qchAvXw3rEGBCIl/oue4HFM
+         cgeVXAHwqToHSGSY0lHLFv93r78jW99SwLlvH3ClkMT2sHvhEmBwlcodI7Ylun6Cr3
+         LQGRiWfYOqXOllevieIMsnB50EhzAmJt15tGHhNVxMNGtLujVUhM2ug8kBH7ddSq/M
+         evTYgma4Jv4k45A5+otebtqyjeTYRKBZWqyI08NJBhqakXAN+PGbrTzSX4574y5nB2
+         KBX09pSZyVmoZDyHKkotwbfmzhZF/a45AL7+RNTPqL9mDKHJgKtPDHk+9qllOzQg8R
+         YffczzznFjvUA==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -42,10 +42,11 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v11 25/56] media: pci: tw68: Stop direct calls to queue num_buffers field
-Date:   Thu, 12 Oct 2023 13:46:11 +0200
-Message-Id: <20231012114642.19040-26-benjamin.gaignard@collabora.com>
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Andy Walls <awalls@md.metrocast.net>
+Subject: [PATCH v11 22/56] media: pci: cx18: Set correct value to min_buffers_needed field
+Date:   Thu, 12 Oct 2023 13:46:08 +0200
+Message-Id: <20231012114642.19040-23-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231012114642.19040-1-benjamin.gaignard@collabora.com>
 References: <20231012114642.19040-1-benjamin.gaignard@collabora.com>
@@ -55,34 +56,46 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use vb2_get_num_buffers() to avoid using queue num_buffers field directly.
-Remove tot_bufs < 2 test because min_buffers_needed is already set to 2.
+Set queue min_buffers_needed field to 3 and remove the useless
+check.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+CC: Andy Walls <awalls@md.metrocast.net>
 ---
- drivers/media/pci/tw68/tw68-video.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/media/pci/cx18/cx18-streams.c | 13 +++++--------
+ 1 file changed, 5 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/pci/tw68/tw68-video.c b/drivers/media/pci/tw68/tw68-video.c
-index 773a18702d36..c0a8257b02ca 100644
---- a/drivers/media/pci/tw68/tw68-video.c
-+++ b/drivers/media/pci/tw68/tw68-video.c
-@@ -360,13 +360,11 @@ static int tw68_queue_setup(struct vb2_queue *q,
- 			   unsigned int sizes[], struct device *alloc_devs[])
- {
- 	struct tw68_dev *dev = vb2_get_drv_priv(q);
--	unsigned tot_bufs = q->num_buffers + *num_buffers;
-+	unsigned tot_bufs = vb2_get_num_buffers(q) + *num_buffers;
- 	unsigned size = (dev->fmt->depth * dev->width * dev->height) >> 3;
+diff --git a/drivers/media/pci/cx18/cx18-streams.c b/drivers/media/pci/cx18/cx18-streams.c
+index 597472754c4c..6ed2c9fb882c 100644
+--- a/drivers/media/pci/cx18/cx18-streams.c
++++ b/drivers/media/pci/cx18/cx18-streams.c
+@@ -117,13 +117,6 @@ static int cx18_queue_setup(struct vb2_queue *vq,
+ 	else
+ 		szimage = cx->cxhdl.height * 720 * 2;
  
--	if (tot_bufs < 2)
--		tot_bufs = 2;
- 	tot_bufs = tw68_buffer_count(size, tot_bufs);
--	*num_buffers = tot_bufs - q->num_buffers;
-+	*num_buffers = tot_bufs - vb2_get_num_buffers(q);
- 	/*
- 	 * We allow create_bufs, but only if the sizeimage is >= as the
- 	 * current sizeimage. The tw68_buffer_count calculation becomes quite
+-	/*
+-	 * Let's request at least three buffers: two for the
+-	 * DMA engine and one for userspace.
+-	 */
+-	if (vq->num_buffers + *nbuffers < 3)
+-		*nbuffers = 3 - vq->num_buffers;
+-
+ 	if (*nplanes) {
+ 		if (*nplanes != 1 || sizes[0] < szimage)
+ 			return -EINVAL;
+@@ -286,7 +279,11 @@ static int cx18_stream_init(struct cx18 *cx, int type)
+ 		s->vidq.ops = &cx18_vb2_qops;
+ 		s->vidq.mem_ops = &vb2_vmalloc_memops;
+ 		s->vidq.timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
+-		s->vidq.min_buffers_needed = 2;
++		/*
++		 * Let's request at least three buffers: two for the
++		 * DMA engine and one for userspace.
++		 */
++		s->vidq.min_buffers_needed = 3;
+ 		s->vidq.gfp_flags = GFP_DMA32;
+ 		s->vidq.dev = &cx->pci_dev->dev;
+ 		s->vidq.lock = &cx->serialize_lock;
 -- 
 2.39.2
 
