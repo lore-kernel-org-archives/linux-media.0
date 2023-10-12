@@ -2,153 +2,100 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1E7BC46CA1
-	for <linux-media@archiver.kernel.org>; Thu, 12 Oct 2023 08:41:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E20AACDB46E
+	for <linux-media@archiver.kernel.org>; Thu, 12 Oct 2023 08:43:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235600AbjJLIlS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Oct 2023 04:41:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
+        id S235482AbjJLIn7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Oct 2023 04:43:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235505AbjJLIk4 (ORCPT
+        with ESMTP id S235478AbjJLIns (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 Oct 2023 04:40:56 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30BCDBA;
-        Thu, 12 Oct 2023 01:40:52 -0700 (PDT)
-X-UUID: 08e3aa5868db11ee8051498923ad61e6-20231012
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=WeTi3Zz4I+hjOP+G95ZWq0hB1FdtJbUX3ItMJS2+pV4=;
-        b=Wc/G0j8xETRb5yf7OKqTWenoesz158EtoiZ483o7dtYgppDxdccp7Aloru7oRpfWoMWtke3pyOnh1TZFmIXA19MGsOp10Gwy0thq1RW2rV4iUP46K67fYhz6haEG7lPDFbYpAj9IW1gaFnrGlROGA8d2h0/WIqAUU+us5IxmjQo=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.32,REQID:a6a907f1-6be2-4d12-b412-4224cb1ed8d9,IP:0,U
-        RL:25,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:25
-X-CID-META: VersionHash:5f78ec9,CLOUDID:2145b5f0-9a6e-4c39-b73e-f2bc08ca3dc5,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:
-        NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
-X-UUID: 08e3aa5868db11ee8051498923ad61e6-20231012
-Received: from mtkmbs14n2.mediatek.inc [(172.21.101.76)] by mailgw02.mediatek.com
-        (envelope-from <moudy.ho@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 54146606; Thu, 12 Oct 2023 16:40:45 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Thu, 12 Oct 2023 16:40:43 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Thu, 12 Oct 2023 16:40:43 +0800
-From:   Moudy Ho <moudy.ho@mediatek.com>
-To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-CC:     <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Moudy Ho <moudy.ho@mediatek.com>
-Subject: [PATCH v7 10/16] dt-bindings: media: mediatek: mdp3: add component TDSHP for MT8195
-Date:   Thu, 12 Oct 2023 16:40:31 +0800
-Message-ID: <20231012084037.19376-11-moudy.ho@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20231012084037.19376-1-moudy.ho@mediatek.com>
-References: <20231012084037.19376-1-moudy.ho@mediatek.com>
+        Thu, 12 Oct 2023 04:43:48 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED7E10CC
+        for <linux-media@vger.kernel.org>; Thu, 12 Oct 2023 01:43:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697100185; x=1728636185;
+  h=from:to:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Vc15TVXd4L7zZpx7LIIykmFF37OBahAS99RFZ8xr0iQ=;
+  b=a8Z0Dpv8qF8iOJ9FXa64/oIBNTfOPBt3ZwH5jQ7aLCCzVtlbZYf7IYvn
+   znXi+nF9QOrugkgawcAKSbAMIZl+5gyaCj5GyBvYu2S1EP32hJyP0hqnQ
+   D77MN63ESxB7KcrC7TcXk2y+JFHw59obGgz1ubwD/KZcg9ZThELJduO8z
+   3livCSS3r9KrRi1EODMDLH/JcYDPYEBhckZhEnzoOM8z0k+ZbUjyGyW2H
+   D2Rqa3tQ08/R+88z8DFrTc5xQmxYCg3rc1iBRoY0JYpnLBuT/maD/hNX0
+   I14I9fYM7fc5Gt99Y9YhenXvkwc3tOwTxaUFCjWNvl70pyuUjXfXr8ZTw
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10860"; a="369931761"
+X-IronPort-AV: E=Sophos;i="6.03,218,1694761200"; 
+   d="scan'208";a="369931761"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2023 01:43:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10860"; a="1085577317"
+X-IronPort-AV: E=Sophos;i="6.03,218,1694761200"; 
+   d="scan'208";a="1085577317"
+Received: from icg-kernel3.bj.intel.com ([172.16.126.174])
+  by fmsmga005.fm.intel.com with ESMTP; 12 Oct 2023 01:43:02 -0700
+From:   bingbu.cao@intel.com
+To:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com,
+        sakari.ailus@linux.intel.com
+Subject: [PATCH] yavta: add support for 12-bit packed and 14-bit unpacked/packed bayer formats
+Date:   Thu, 12 Oct 2023 16:52:16 +0800
+Message-ID: <20231012085216.3346754-1-bingbu.cao@intel.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add the fundamental hardware configuration of component TDSHP,
-which is controlled by MDP3 on MT8195.
+From: Bingbu Cao <bingbu.cao@intel.com>
 
-Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+Add bayer formats:
+V4L2_PIX_FMT_SBGGR12P
+V4L2_PIX_FMT_SGBRG12P
+V4L2_PIX_FMT_SGRBG12P
+V4L2_PIX_FMT_SRGGB12P
+V4L2_PIX_FMT_SBGGR14
+V4L2_PIX_FMT_SGBRG14
+V4L2_PIX_FMT_SGRBG14
+V4L2_PIX_FMT_SRGGB14
+V4L2_PIX_FMT_SBGGR14P
+V4L2_PIX_FMT_SGBRG14P
+V4L2_PIX_FMT_SGRBG14P
+V4L2_PIX_FMT_SRGGB14P
+
+Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
 ---
- .../bindings/media/mediatek,mdp3-tdshp.yaml   | 61 +++++++++++++++++++
- 1 file changed, 61 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-tdshp.yaml
+ yavta.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-tdshp.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-tdshp.yaml
-new file mode 100644
-index 000000000000..92e1547e7c7f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-tdshp.yaml
-@@ -0,0 +1,61 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/mediatek,mdp3-tdshp.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MediaTek Media Data Path 3 TDSHP
-+
-+maintainers:
-+  - Matthias Brugger <matthias.bgg@gmail.com>
-+  - Moudy Ho <moudy.ho@mediatek.com>
-+
-+description:
-+  One of Media Data Path 3 (MDP3) components used to improve image
-+  sharpness and contrast.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - mediatek,mt8195-mdp3-tdshp
-+
-+  reg:
-+    maxItems: 1
-+
-+  mediatek,gce-client-reg:
-+    description:
-+      The register of display function block to be set by gce. There are 4 arguments,
-+      such as gce node, subsys id, offset and register size. The subsys id that is
-+      mapping to the register of display function blocks is defined in the gce header
-+      include/dt-bindings/gce/<chip>-gce.h of each chips.
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    items:
-+      items:
-+        - description: phandle of GCE
-+        - description: GCE subsys id
-+        - description: register offset
-+        - description: register size
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - mediatek,gce-client-reg
-+  - clocks
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/mt8195-clk.h>
-+    #include <dt-bindings/gce/mt8195-gce.h>
-+
-+    display@14007000 {
-+        compatible = "mediatek,mt8195-mdp3-tdshp";
-+        reg = <0x14007000 0x1000>;
-+        mediatek,gce-client-reg = <&gce1 SUBSYS_1400XXXX 0x7000 0x1000>;
-+        clocks = <&vppsys0 CLK_VPP0_MDP_TDSHP>;
-+    };
+diff --git a/yavta.c b/yavta.c
+index d5628632c1f8..7d10fa39f6f7 100644
+--- a/yavta.c
++++ b/yavta.c
+@@ -348,6 +348,18 @@ static struct v4l2_format_info {
+ 	{ "SGBRG12", V4L2_PIX_FMT_SGBRG12, 1 },
+ 	{ "SGRBG12", V4L2_PIX_FMT_SGRBG12, 1 },
+ 	{ "SRGGB12", V4L2_PIX_FMT_SRGGB12, 1 },
++	{ "SBGGR12P", V4L2_PIX_FMT_SBGGR12P, 1 },
++	{ "SGBRG12P", V4L2_PIX_FMT_SGBRG12P, 1 },
++	{ "SGRBG12P", V4L2_PIX_FMT_SGRBG12P, 1 },
++	{ "SRGGB12P", V4L2_PIX_FMT_SRGGB12P, 1 },
++	{ "SBGGR14", V4L2_PIX_FMT_SBGGR14, 1 },
++	{ "SGBRG14", V4L2_PIX_FMT_SGBRG14, 1 },
++	{ "SGRBG14", V4L2_PIX_FMT_SGRBG14, 1 },
++	{ "SRGGB14", V4L2_PIX_FMT_SRGGB14, 1 },
++	{ "SBGGR14P", V4L2_PIX_FMT_SBGGR14P, 1 },
++	{ "SGBRG14P", V4L2_PIX_FMT_SGBRG14P, 1 },
++	{ "SGRBG14P", V4L2_PIX_FMT_SGRBG14P, 1 },
++	{ "SRGGB14P", V4L2_PIX_FMT_SRGGB14P, 1 },
+ 	{ "SBGGR16", V4L2_PIX_FMT_SBGGR16, 1 },
+ 	{ "SGBRG16", V4L2_PIX_FMT_SGBRG16, 1 },
+ 	{ "SGRBG16", V4L2_PIX_FMT_SGRBG16, 1 },
 -- 
-2.18.0
+2.42.0
 
