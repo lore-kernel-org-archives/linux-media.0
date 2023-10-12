@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECC71CDB483
-	for <linux-media@archiver.kernel.org>; Thu, 12 Oct 2023 11:47:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD422CDB47E
+	for <linux-media@archiver.kernel.org>; Thu, 12 Oct 2023 11:47:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378609AbjJLLrR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Oct 2023 07:47:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55282 "EHLO
+        id S1378594AbjJLLrS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Oct 2023 07:47:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378548AbjJLLrL (ORCPT
+        with ESMTP id S1378597AbjJLLrM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 Oct 2023 07:47:11 -0400
+        Thu, 12 Oct 2023 07:47:12 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99BEDEA;
-        Thu, 12 Oct 2023 04:47:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B05F6103;
+        Thu, 12 Oct 2023 04:47:03 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:7ae7:b86d:c19a:877e])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0498A6607346;
-        Thu, 12 Oct 2023 12:47:00 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2B9EB660737C;
+        Thu, 12 Oct 2023 12:47:02 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1697111220;
-        bh=GJfXFDdnhGS92TEmv49OanHL2tR3kTI5Ce9MknjELEo=;
+        s=mail; t=1697111222;
+        bh=tcL10ushjZKOfejORLVlDBPX8x0SngzD2gGkivTGU0g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=US3th3hfJtwGDlltn2tiBSpDfxGx696Sr4C++b8Vp4MPXfcZqMEwbSfaaD3yrDLQn
-         ufgqhY8RxztnDKdXxSgt1e+ud+vbz5XIulKShZXOJVWfSt+fPETsPr69q6gCInhQhf
-         dX/yL89aJoMkPkL8lUhUst6kNCj0QPfLcZ1cxYsO8l/Sans2SmFtPXnH3MucvNnv8E
-         9vdQLAEzA5AXM8l5gOcs23ki6ZcRwA74IaJcscWjaVxYGPuIjxxSDHAcsJylgEooEl
-         vd0TArlTOjDYzSKUm9vo/1wuMvFUxbuejc44WJGvQh+zP8GiKnn02zLSoadhi0l3lX
-         nUjMPXE/xlg4Q==
+        b=ldW/Ogjn9kC7gijcctJUy/y/+tFA0G7iAnA/ttNi0MVF+0mW3uyktXU526npAf3Wd
+         B8jXbM6qUhwD4mEpacvh2dWg6MJNrsnW6dpB5ib3/1mvycY4+CBfekkt4EjWGKu5tT
+         LrMbdQ+L9Qviv1A8u8gVDalkbsHMBXdPyTD3EPT/+xxlJxg+Prl3SfhCCQNm7zSf9w
+         NOw3TH2uk3HtGi0/wwAHViVKX8HCyoCNJdUba0qgVOCyqpbCbVO3pdmOz72ATTysmj
+         yb3MqZbn66e2YrfsDGI4rkDivBXmmL8PVFzGf7/LwkbgCG97VWKM9OLI7HX0Y612ho
+         dGi7FgsOFNteg==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -43,10 +43,10 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Antti Palosaari <crope@iki.fi>
-Subject: [PATCH v11 20/56] media: dvb-frontends: rtl2832_srd: Use queue min_buffers_needed field
-Date:   Thu, 12 Oct 2023 13:46:06 +0200
-Message-Id: <20231012114642.19040-21-benjamin.gaignard@collabora.com>
+        Sergey Kozlov <serjk@netup.ru>, Abylay Ospan <aospan@netup.ru>
+Subject: [PATCH v11 24/56] media: pci: netup_unidvb: Remove useless number of buffers check
+Date:   Thu, 12 Oct 2023 13:46:10 +0200
+Message-Id: <20231012114642.19040-25-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231012114642.19040-1-benjamin.gaignard@collabora.com>
 References: <20231012114642.19040-1-benjamin.gaignard@collabora.com>
@@ -56,45 +56,32 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-queue_setup checks for a minimum number of buffers so use queue
-min_buffers_needed field and remove the check done in
-rtl2832_sdr_queue_setup().
+vb2 core tests this already so remove it.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-CC: Antti Palosaari <crope@iki.fi>
+CC: Sergey Kozlov <serjk@netup.ru>
+CC: Abylay Ospan <aospan@netup.ru>
 ---
- drivers/media/dvb-frontends/rtl2832_sdr.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ drivers/media/pci/netup_unidvb/netup_unidvb_core.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/media/dvb-frontends/rtl2832_sdr.c b/drivers/media/dvb-frontends/rtl2832_sdr.c
-index 02c619e51641..597b1548ed8b 100644
---- a/drivers/media/dvb-frontends/rtl2832_sdr.c
-+++ b/drivers/media/dvb-frontends/rtl2832_sdr.c
-@@ -440,14 +440,9 @@ static int rtl2832_sdr_queue_setup(struct vb2_queue *vq,
- 	struct rtl2832_sdr_dev *dev = vb2_get_drv_priv(vq);
- 	struct platform_device *pdev = dev->pdev;
+diff --git a/drivers/media/pci/netup_unidvb/netup_unidvb_core.c b/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
+index d85bfbb77a25..52de9b0af812 100644
+--- a/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
++++ b/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
+@@ -297,11 +297,9 @@ static int netup_unidvb_queue_setup(struct vb2_queue *vq,
+ 	dev_dbg(&dma->ndev->pci_dev->dev, "%s()\n", __func__);
  
--	dev_dbg(&pdev->dev, "nbuffers=%d\n", *nbuffers);
--
--	/* Need at least 8 buffers */
--	if (vq->num_buffers + *nbuffers < 8)
--		*nbuffers = 8 - vq->num_buffers;
  	*nplanes = 1;
- 	sizes[0] = PAGE_ALIGN(dev->buffersize);
--	dev_dbg(&pdev->dev, "nbuffers=%d sizes[0]=%d\n", *nbuffers, sizes[0]);
-+	dev_dbg(&pdev->dev, "nbuffers=%d sizes[0]=%d\n", vb2_get_num_buffers(vq), sizes[0]);
+-	if (vq->num_buffers + *nbuffers < VIDEO_MAX_FRAME)
+-		*nbuffers = VIDEO_MAX_FRAME - vq->num_buffers;
+ 	sizes[0] = PAGE_ALIGN(NETUP_DMA_PACKETS_COUNT * 188);
+ 	dev_dbg(&dma->ndev->pci_dev->dev, "%s() nbuffers=%d sizes[0]=%d\n",
+-		__func__, *nbuffers, sizes[0]);
++		__func__, vb2_get_num_buffers(vq), sizes[0]);
  	return 0;
  }
  
-@@ -1364,6 +1359,8 @@ static int rtl2832_sdr_probe(struct platform_device *pdev)
- 	dev->vb_queue.ops = &rtl2832_sdr_vb2_ops;
- 	dev->vb_queue.mem_ops = &vb2_vmalloc_memops;
- 	dev->vb_queue.timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
-+	/* Need at least 8 buffers */
-+	dev->vb_queue.min_buffers_needed = 8;
- 	ret = vb2_queue_init(&dev->vb_queue);
- 	if (ret) {
- 		dev_err(&pdev->dev, "Could not initialize vb2 queue\n");
 -- 
 2.39.2
 
