@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 245F2CDB47E
-	for <linux-media@archiver.kernel.org>; Thu, 12 Oct 2023 11:48:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED2A4C46CA1
+	for <linux-media@archiver.kernel.org>; Thu, 12 Oct 2023 11:48:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378679AbjJLLsY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Oct 2023 07:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49742 "EHLO
+        id S1378662AbjJLLsZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Oct 2023 07:48:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378970AbjJLLre (ORCPT
+        with ESMTP id S1378972AbjJLLre (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 12 Oct 2023 07:47:34 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C679DB;
-        Thu, 12 Oct 2023 04:47:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85996FD;
+        Thu, 12 Oct 2023 04:47:13 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:7ae7:b86d:c19a:877e])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id AE3C8660739A;
-        Thu, 12 Oct 2023 12:47:10 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C84C76607359;
+        Thu, 12 Oct 2023 12:47:11 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1697111231;
-        bh=ph7BpDmTndhVgQkibEyHEMgMXbFU1u8TVxC65OSPSxg=;
+        s=mail; t=1697111232;
+        bh=wcmCqoCWnm3znNuFzs/XictU3y+G/8bndqFUAwDdrfY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z4bQsHlwdarOoSvvE0kmFcZznJwFUJhIuX+KgZunxJkgDfXOPlDHVX44ksW3y/PI2
-         C4TXV6ACmIscGmOvecjSzPEufYgt1c8VGw/s2WirKIlFqriJQ7bzTQ5G8fGOJoBK9o
-         h2mLve2mjj6ddLPZVv+RdsNvkMnkAJPH3k6oEkIcG8t6v2HCLxDhiTTQs/i9l2CXRH
-         guf506zU5PWhuvJvMAxLFzykRNfboNOq5eLathYpb8LGwtXShfDfmkYocbKwBqE/3t
-         A8t1emGuE7C+0aWB0uFvTHpebv/iRK+6cy5YQqw2x3GYg7rcG0AsY8wMJhJMMZGqgJ
-         Gp49iEjaDVjIQ==
+        b=S+BZk8dfAmvxBWrALG+owBFsVHdcRGqSqKhhr4l8ZcJp1jy3j5/ZUKIYroVNVwzsn
+         z6kFVAryYiu2EaQruCBoWMD/SXFWFOe+UF7YIFFpYcOvXG/J+EVxYBDWqZa6s/SqaZ
+         5N1MiXSV2PftsdU2s4KSkEMyYl0duJe+XP1UPfAEbCpgMtaAyBjc6geM9EXLXv3cG8
+         ctfEu1WgQnSoqB1xwPGB38DJlzFQCDU+vqEjlp6ah4bmHnL/731BtJXW3ejCsSHJpe
+         ACerqsYA6wOyCobEUO9Bahwe20vDZRLw4BSojKNI3EeWt1ks1PWi2neOlITQ9FLDuV
+         3zSWibJQbL9kA==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -42,10 +42,11 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v11 40/56] sample: v4l: Stop direct calls to queue num_buffers field
-Date:   Thu, 12 Oct 2023 13:46:26 +0200
-Message-Id: <20231012114642.19040-41-benjamin.gaignard@collabora.com>
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Joseph Liu <kwliu@nuvoton.com>, Marvin Lin <kflin@nuvoton.com>
+Subject: [PATCH v11 42/56] media: nuvoton: Stop direct calls to queue num_buffers field
+Date:   Thu, 12 Oct 2023 13:46:28 +0200
+Message-Id: <20231012114642.19040-43-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231012114642.19040-1-benjamin.gaignard@collabora.com>
 References: <20231012114642.19040-1-benjamin.gaignard@collabora.com>
@@ -58,33 +59,25 @@ X-Mailing-List: linux-media@vger.kernel.org
 Use vb2_get_num_buffers() to avoid using queue num_buffers field directly.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+CC: Joseph Liu <kwliu@nuvoton.com>
+CC: Marvin Lin <kflin@nuvoton.com>
 ---
- samples/v4l/v4l2-pci-skeleton.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/media/platform/nuvoton/npcm-video.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/samples/v4l/v4l2-pci-skeleton.c b/samples/v4l/v4l2-pci-skeleton.c
-index a61f94db18d9..a65aa9d1e9da 100644
---- a/samples/v4l/v4l2-pci-skeleton.c
-+++ b/samples/v4l/v4l2-pci-skeleton.c
-@@ -155,6 +155,7 @@ static int queue_setup(struct vb2_queue *vq,
- 		       unsigned int sizes[], struct device *alloc_devs[])
- {
- 	struct skeleton *skel = vb2_get_drv_priv(vq);
-+	unsigned int q_num_bufs = vb2_get_num_buffers(vq);
+diff --git a/drivers/media/platform/nuvoton/npcm-video.c b/drivers/media/platform/nuvoton/npcm-video.c
+index b9e6782f59b4..f9b4e36a5175 100644
+--- a/drivers/media/platform/nuvoton/npcm-video.c
++++ b/drivers/media/platform/nuvoton/npcm-video.c
+@@ -393,7 +393,7 @@ static void npcm_video_free_diff_table(struct npcm_video *video)
+ 	struct rect_list *tmp;
+ 	unsigned int i;
  
- 	skel->field = skel->format.field;
- 	if (skel->field == V4L2_FIELD_ALTERNATE) {
-@@ -167,8 +168,8 @@ static int queue_setup(struct vb2_queue *vq,
- 		skel->field = V4L2_FIELD_TOP;
- 	}
- 
--	if (vq->num_buffers + *nbuffers < 3)
--		*nbuffers = 3 - vq->num_buffers;
-+	if (q_num_bufs + *nbuffers < 3)
-+		*nbuffers = 3 - q_num_bufs;
- 
- 	if (*nplanes)
- 		return sizes[0] < skel->format.sizeimage ? -EINVAL : 0;
+-	for (i = 0; i < video->queue.num_buffers; i++) {
++	for (i = 0; i < vb2_get_num_buffers(&video->queue); i++) {
+ 		head = &video->list[i];
+ 		list_for_each_safe(pos, nx, head) {
+ 			tmp = list_entry(pos, struct rect_list, list);
 -- 
 2.39.2
 
