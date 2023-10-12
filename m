@@ -2,101 +2,69 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C461DCDB474
-	for <linux-media@archiver.kernel.org>; Thu, 12 Oct 2023 22:18:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96F92CDB474
+	for <linux-media@archiver.kernel.org>; Thu, 12 Oct 2023 22:54:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442995AbjJLWST (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Oct 2023 18:18:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41574 "EHLO
+        id S1443052AbjJLWyb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Oct 2023 18:54:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442960AbjJLWST (ORCPT
+        with ESMTP id S1443035AbjJLWy3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 Oct 2023 18:18:19 -0400
-X-Greylist: delayed 999 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 12 Oct 2023 15:18:17 PDT
-Received: from stcim.de (stcim.de [IPv6:2a01:4f8:151:40c4::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B72BB8;
-        Thu, 12 Oct 2023 15:18:17 -0700 (PDT)
-Received: from stc by stcim with local (Exim 4.92)
-        (envelope-from <stc@stcim.de>)
-        id 1qr3kF-0007rM-Hb; Fri, 13 Oct 2023 00:01:27 +0200
-Date:   Fri, 13 Oct 2023 00:01:27 +0200
-From:   Stefan Lengfeld <stefan@lengfeld.xyz>
-To:     Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>
-Cc:     linux-media <linux-media@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>, linux-i2c@vger.kernel.org
-Subject: Re: Sony IMX290/462 image sensors I2C xfer peculiarity
-Message-ID: <20231012220127.GB27838@stcim.de>
-References: <m3y1gpw8ri.fsf@t19.piap.pl>
- <CAPY8ntASwh3AcRqE+2zF4Df=u+=wJ5K9icAeOrXTMJGDd1+caw@mail.gmail.com>
- <m3o7hfx3ob.fsf@t19.piap.pl>
- <m37cnuvmhn.fsf@t19.piap.pl>
- <m3o7h5tthf.fsf@t19.piap.pl>
- <m3jzrttrmz.fsf@t19.piap.pl>
- <20231011101553.we3r73xejvqdql5j@porty>
- <m3fs2htn7g.fsf@t19.piap.pl>
+        Thu, 12 Oct 2023 18:54:29 -0400
+Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com [209.85.167.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A920CC
+        for <linux-media@vger.kernel.org>; Thu, 12 Oct 2023 15:54:27 -0700 (PDT)
+Received: by mail-oi1-f198.google.com with SMTP id 5614622812f47-3af602b6512so2458423b6e.0
+        for <linux-media@vger.kernel.org>; Thu, 12 Oct 2023 15:54:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697151266; x=1697756066;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gb4GepxVdDqnOhbaVFfKyJNSNxiwxVpwbYv24b5W+rg=;
+        b=FO7tLfULnK72Kltf5AtWE3Y/OfA3BAXC3IctD5HV2TONPRSlTvp5jpm+MZ9gt0gj+I
+         32nPBbRLltUaK3ocAlTi1oIrde/hscCciJlRBpgRTdzeuguekAMpp5FD1CR2Txej5Kmg
+         PqabIeJhh7cvJoXY7O0Dzng71KfcNswvuW2D5Zw5CpKQP3ckaaCVf6HlmIPSsAqnbPx1
+         R/eRWQ07nsXu0H93YK9V8s21BPevGbMkJ4QaXrH463wgGtRmqTaL0YCFxdRtkaMRZqTO
+         1AGmOuB0m/T1aGWTzxNveTjBWJt2hiKTVvljQUsPnpQsJEA8GJbyBEMEy5JpMTcSdSCR
+         xl3A==
+X-Gm-Message-State: AOJu0YybnOmOZR/ygCWYR+Qh90RIpI/vZDi0PV/V7gAeZG3mgIygJLY4
+        Sw1jZjXX2RuikZcRsQFcBOv0Kh6ypg52SIoNMdKMDtljZeS0
+X-Google-Smtp-Source: AGHT+IFiFZCMZCnrYzOGO0I8ReDLC4j6yQVUiDVIELqVouH34B2TrIHyrLW5aeNBURvFTdw4IZu44eAbjHQFOC1ShPajiGKi6zhk
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <m3fs2htn7g.fsf@t19.piap.pl>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Received: by 2002:a05:6808:1916:b0:3ae:2024:837d with SMTP id
+ bf22-20020a056808191600b003ae2024837dmr13564961oib.8.1697151266486; Thu, 12
+ Oct 2023 15:54:26 -0700 (PDT)
+Date:   Thu, 12 Oct 2023 15:54:26 -0700
+In-Reply-To: <cwc32sg4vzz6akduyvze6tu2dkzpljtvpycuhz43t7lmbzbyvb@jgywtsrcvuzw>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005e814006078cd293@google.com>
+Subject: Re: [syzbot] [usb?] [pvrusb2?] KASAN: slab-use-after-free Read in pvr2_context_set_notify
+From:   syzbot <syzbot+621409285c4156a009b3@syzkaller.appspotmail.com>
+To:     isely@pobox.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        mchehab@kernel.org, pvrusb2@isely.net, ricardo@marliere.net,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Chris,
+Hello,
 
-> > My understand is that an ordinary I2C device would just use normal (and
-> > sleepable) I2C transfers while the device is in use.
-> 
-> You are spot-on here :-) Now I use IMX 290 and 462.
-> 
-> OTOH I wonder if such issues are limited to those sensors only.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Hmm, yes. I know no other I2C device that has these timeout issues. (*)
+Reported-and-tested-by: syzbot+621409285c4156a009b3@syzkaller.appspotmail.com
 
-> The problem is I use Sony IMX290 and IMX462 image sensors, and they have
-> an apparently hard-coded timeout of about 2^18 their master clock cycles
-> (= ca. 7 ms with my setup). After the timeout they simply disconnect
-> from the I2C bus. Of course, this isn't mentioned in the docs.
+Tested on:
 
-hmm. I have no idea about this sensor and your setup. So I can just give hints:
+commit:         ce9ecca0 Linux 6.6-rc2
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=10be5209680000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=59eae8406319284a
+dashboard link: https://syzkaller.appspot.com/bug?extid=621409285c4156a009b3
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=131dd84d680000
 
-This timeout seems strange. If this 7 ms timeout is required, it would mean
-that I2C masters require to fullfill real-time/deadline requirements.  For
-"small" I2C master in microcontrolles this seems ok-ish, but for general
-operating systems real-time requirements are hard.  The real-time patches for
-linux just landed recently and it still requires fine tuning the system for the
-required deadlines.
-
-Maybe you just hit a corner case or a bug, that can be avoid, in the I2C
-device.  Maybe check with the manufacturer directly?
-
-> Unfortunately, "normal" I2C accesses take frequently more than those
-> 7 ms (mostly due to scheduling when all CPU cores are in use).
-
-Yes, correctly. There are multiple cases in which I2C transactions to the same
-device can be preempted/delayed: A busy system, as you said, or when some other driver
-in the kernel accesses another I2C device on the same bus. This will lock the
-bus/I2C adapter for the duration of its transfer.
-
-Do you know the I2C repeated start feature [1]? This allows to batch together
-multiple I2C read/writes in a single transfer. And in the best case, this
-transfer is executed in one go without a delay in between. At least in the
-kernel it's guaranteed that no other driver can go in between with another
-transfer.
-
-Kind regards,
-Stefan
-
-[1]: https://www.i2c-bus.org/repeated-start-condition/
-
-(*) Fun answer: Actually external watchdogs have timeouts. But the timeout
-duration is in the range of seconds, not milliseconds. And timeout expiration
-is expected (in error cases ;-).
+Note: testing is done by a robot and is best-effort only.
