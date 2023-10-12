@@ -2,163 +2,166 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BDEFCDB482
-	for <linux-media@archiver.kernel.org>; Thu, 12 Oct 2023 12:13:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 948FCCDB46E
+	for <linux-media@archiver.kernel.org>; Thu, 12 Oct 2023 12:23:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378422AbjJLMNO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Oct 2023 08:13:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
+        id S1378198AbjJLMXu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Oct 2023 08:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347297AbjJLMNK (ORCPT
+        with ESMTP id S1343869AbjJLMXt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 Oct 2023 08:13:10 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24394D7D;
-        Thu, 12 Oct 2023 04:47:20 -0700 (PDT)
-Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:7ae7:b86d:c19a:877e])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1C23666073BA;
-        Thu, 12 Oct 2023 12:47:19 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1697111239;
-        bh=WlpSngD7A0Xes3T2AjXSHPISBbEOvphWL+prcr4Zf8E=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U0y3rfbaL4QH8KGfD0QLyY1iew+s/RNBKm6GFspghcCrENBXYTXg8xRyIfkir+UF2
-         BKBFLvcqpLoAGTH9nrnD9cRpe9RFUPJ7RxT/pJuD4ZTTom8ck9ThnLkzS9VhqvIAQI
-         haeWlBuz9OM9VpCukP3mpc8LnDJE6WKd9jRl/gF/U6beuuwwaWc7RoRQlQ16bdCxk6
-         nwUedjUjGBuunt274h/m7qex5BLoWLyQ0p133YDSDBI1J6D/cW6Q5xW8G0mQX64rAT
-         OGNo7pUc9Sq4/f//KT1riNexbNxssvif6g+VbhEAO3ZOkFbghKeHDTu+OhopR7xADC
-         0VwRkH4Wse9JA==
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
-        ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v11 56/56] media: test-drivers: Use helper for DELETE_BUFS ioctl
-Date:   Thu, 12 Oct 2023 13:46:42 +0200
-Message-Id: <20231012114642.19040-57-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231012114642.19040-1-benjamin.gaignard@collabora.com>
-References: <20231012114642.19040-1-benjamin.gaignard@collabora.com>
+        Thu, 12 Oct 2023 08:23:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CEE4B7
+        for <linux-media@vger.kernel.org>; Thu, 12 Oct 2023 05:23:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1697113380;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aYDuBmS6dJ7clLQo4ci/vZJcyZt1Gee23BbEWs4NHGk=;
+        b=h+7QtHE816s3nwjboNWdeHMNCJM9RAwsQiZ8FmPpIVIByg9TZJBwMzUNOM4E4VNJrQIDKa
+        nzArbZynZLFVBcPeM6gMBuF/2GM4OC8HMOMCGThHvc/u7wmXTOFo/D9AesRsCA8omAa9Gr
+        Ey10Icqoj6jW5C9DasR4NNI9ivNpq+8=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-329-GEVuaC2ZNF-iimNtan76VQ-1; Thu, 12 Oct 2023 08:22:49 -0400
+X-MC-Unique: GEVuaC2ZNF-iimNtan76VQ-1
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-9b98bbf130cso59986266b.2
+        for <linux-media@vger.kernel.org>; Thu, 12 Oct 2023 05:22:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697113368; x=1697718168;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aYDuBmS6dJ7clLQo4ci/vZJcyZt1Gee23BbEWs4NHGk=;
+        b=Q6SzG4IzS0hE2whRfUEsU8xHX529+2PLMu1XNA39SknYCX3CorgogeEvtEkKB4T7ly
+         yR3Yv/c7rk3ZaIFxbh8DTOK7X1daG2strTaUXP/llsWcCc/Ghnx/V669eRVDJGAcBR3N
+         Ce0cfqnVW4fzaLUo2X8x+o9YW9oqxD4eDGJMjFH4K/bwWkxp9uk/D67oZtJfHPl9xFBH
+         C3xq0LYnsuRHlQrSN2wFGQCrhbLUE8AidJNtkw5oQ7Zd/g2Un86Dt2GNLMMiV6Jhxixy
+         mRzP5C3V1Lqki8N2tIUJvvpNAc16X2CUQQ3RwOhMVZUv1g77WLRblx0Cs994xtN5mCLm
+         uHWw==
+X-Gm-Message-State: AOJu0YzLJ9txL3zt7GV71r4Ku3UOsloKi6sspKo5gNqL3xuCrR57Zj4k
+        hicisbioVGk2EIfwSrRMz8zQ/6ayvJTW5pxl6seJiYTlNIMcJt+g813lV2OFqniXmgFX9Hkkb7w
+        2wa7yAQvrOP/+K0PkbEoMA5U=
+X-Received: by 2002:a17:906:7484:b0:9b9:f980:8810 with SMTP id e4-20020a170906748400b009b9f9808810mr14864442ejl.34.1697113367988;
+        Thu, 12 Oct 2023 05:22:47 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEzEJaBOOZo+55cnnNNZwd/v4zyLlu4YXN7lBsNC6XaPyIDnnFGbMXPBrbDB9OsE7DPnQjMTg==
+X-Received: by 2002:a17:906:7484:b0:9b9:f980:8810 with SMTP id e4-20020a170906748400b009b9f9808810mr14864423ejl.34.1697113367673;
+        Thu, 12 Oct 2023 05:22:47 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id p26-20020a1709060dda00b0099bc08862b6sm11219830eji.171.2023.10.12.05.22.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Oct 2023 05:22:46 -0700 (PDT)
+Message-ID: <186830d2-dd18-7948-b2c5-bcda934ad3e8@redhat.com>
+Date:   Thu, 12 Oct 2023 14:22:45 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] platform/x86: int3472: Add handshake GPIO function
+Content-Language: en-US, nl
+To:     Hao Yao <hao.yao@intel.com>,
+        Dan Scally <dan.scally@ideasonboard.com>, djrscally@gmail.com,
+        Sakari Ailus <sakari.ailus@intel.com>
+Cc:     Bingbu Cao <bingbu.cao@intel.com>,
+        platform-driver-x86@vger.kernel.org, linux-media@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+References: <20231007021225.9240-1-hao.yao@intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20231007021225.9240-1-hao.yao@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Allow test drivers to use DELETE_BUFS by adding vb2_ioctl_delete_bufs() helper.
+Hi,
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
----
- drivers/media/test-drivers/vicodec/vicodec-core.c |  2 ++
- drivers/media/test-drivers/vimc/vimc-capture.c    |  2 ++
- drivers/media/test-drivers/visl/visl-video.c      |  2 ++
- drivers/media/test-drivers/vivid/vivid-core.c     | 13 ++++++++++---
- 4 files changed, 16 insertions(+), 3 deletions(-)
+On 10/7/23 04:12, Hao Yao wrote:
+> Handshake pin is used for Lattice MIPI aggregator to enable the
+> camera sensor. After pulled up, recommend to wail ~250ms to get
+> everything ready.
 
-diff --git a/drivers/media/test-drivers/vicodec/vicodec-core.c b/drivers/media/test-drivers/vicodec/vicodec-core.c
-index 69cbe2c094e1..f14a8fd506d0 100644
---- a/drivers/media/test-drivers/vicodec/vicodec-core.c
-+++ b/drivers/media/test-drivers/vicodec/vicodec-core.c
-@@ -1339,6 +1339,7 @@ static const struct v4l2_ioctl_ops vicodec_ioctl_ops = {
- 	.vidioc_prepare_buf	= v4l2_m2m_ioctl_prepare_buf,
- 	.vidioc_create_bufs	= v4l2_m2m_ioctl_create_bufs,
- 	.vidioc_expbuf		= v4l2_m2m_ioctl_expbuf,
-+	.vidioc_delete_bufs	= v4l2_m2m_ioctl_delete_bufs,
- 
- 	.vidioc_streamon	= v4l2_m2m_ioctl_streamon,
- 	.vidioc_streamoff	= v4l2_m2m_ioctl_streamoff,
-@@ -1725,6 +1726,7 @@ static int queue_init(void *priv, struct vb2_queue *src_vq,
- 	dst_vq->mem_ops = &vb2_vmalloc_memops;
- 	dst_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
- 	dst_vq->lock = src_vq->lock;
-+	dst_vq->supports_delete_bufs = true;
- 
- 	return vb2_queue_init(dst_vq);
- }
-diff --git a/drivers/media/test-drivers/vimc/vimc-capture.c b/drivers/media/test-drivers/vimc/vimc-capture.c
-index aa944270e716..fda7ea3a6cb6 100644
---- a/drivers/media/test-drivers/vimc/vimc-capture.c
-+++ b/drivers/media/test-drivers/vimc/vimc-capture.c
-@@ -221,6 +221,7 @@ static const struct v4l2_ioctl_ops vimc_capture_ioctl_ops = {
- 	.vidioc_expbuf = vb2_ioctl_expbuf,
- 	.vidioc_streamon = vb2_ioctl_streamon,
- 	.vidioc_streamoff = vb2_ioctl_streamoff,
-+	.vidioc_delete_bufs = vb2_ioctl_delete_bufs,
- };
- 
- static void vimc_capture_return_all_buffers(struct vimc_capture_device *vcapture,
-@@ -435,6 +436,7 @@ static struct vimc_ent_device *vimc_capture_add(struct vimc_device *vimc,
- 	q->min_buffers_needed = 2;
- 	q->lock = &vcapture->lock;
- 	q->dev = v4l2_dev->dev;
-+	q->supports_delete_bufs = true;
- 
- 	ret = vb2_queue_init(q);
- 	if (ret) {
-diff --git a/drivers/media/test-drivers/visl/visl-video.c b/drivers/media/test-drivers/visl/visl-video.c
-index 7cac6a6456eb..bd6c112f7846 100644
---- a/drivers/media/test-drivers/visl/visl-video.c
-+++ b/drivers/media/test-drivers/visl/visl-video.c
-@@ -521,6 +521,7 @@ const struct v4l2_ioctl_ops visl_ioctl_ops = {
- 	.vidioc_prepare_buf		= v4l2_m2m_ioctl_prepare_buf,
- 	.vidioc_create_bufs		= v4l2_m2m_ioctl_create_bufs,
- 	.vidioc_expbuf			= v4l2_m2m_ioctl_expbuf,
-+	.vidioc_delete_bufs		= v4l2_m2m_ioctl_delete_bufs,
- 
- 	.vidioc_streamon		= v4l2_m2m_ioctl_streamon,
- 	.vidioc_streamoff		= v4l2_m2m_ioctl_streamoff,
-@@ -728,6 +729,7 @@ int visl_queue_init(void *priv, struct vb2_queue *src_vq,
- 	dst_vq->mem_ops = &vb2_vmalloc_memops;
- 	dst_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
- 	dst_vq->lock = &ctx->vb_mutex;
-+	dst_vq->supports_delete_bufs = true;
- 
- 	return vb2_queue_init(dst_vq);
- }
-diff --git a/drivers/media/test-drivers/vivid/vivid-core.c b/drivers/media/test-drivers/vivid/vivid-core.c
-index b5656330578d..e139569a0e9c 100644
---- a/drivers/media/test-drivers/vivid/vivid-core.c
-+++ b/drivers/media/test-drivers/vivid/vivid-core.c
-@@ -769,6 +769,7 @@ static const struct v4l2_ioctl_ops vivid_ioctl_ops = {
- 	.vidioc_expbuf			= vb2_ioctl_expbuf,
- 	.vidioc_streamon		= vb2_ioctl_streamon,
- 	.vidioc_streamoff		= vb2_ioctl_streamoff,
-+	.vidioc_delete_bufs		= vb2_ioctl_delete_bufs,
- 
- 	.vidioc_enum_input		= vivid_enum_input,
- 	.vidioc_g_input			= vivid_g_input,
-@@ -876,12 +877,18 @@ static int vivid_create_queue(struct vivid_dev *dev,
- 	q->type = buf_type;
- 	q->io_modes = VB2_MMAP | VB2_DMABUF;
- 	q->io_modes |= V4L2_TYPE_IS_OUTPUT(buf_type) ?  VB2_WRITE : VB2_READ;
--	if (buf_type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
-+	if (buf_type == V4L2_BUF_TYPE_VIDEO_CAPTURE) {
- 		q->max_num_buffers = 64;
--	if (buf_type == V4L2_BUF_TYPE_SDR_CAPTURE)
-+		q->supports_delete_bufs = true;
-+	}
-+	if (buf_type == V4L2_BUF_TYPE_SDR_CAPTURE) {
- 		q->max_num_buffers = 1024;
--	if (buf_type == V4L2_BUF_TYPE_VBI_CAPTURE)
-+		q->supports_delete_bufs = true;
-+	}
-+	if (buf_type == V4L2_BUF_TYPE_VBI_CAPTURE) {
- 		q->max_num_buffers = 32768;
-+		q->supports_delete_bufs = true;
-+	}
- 
- 	if (allocators[dev->inst] != 1)
- 		q->io_modes |= VB2_USERPTR;
--- 
-2.39.2
+If this is a pin on the "Lattice MIPI aggregator" and
+not on the sensor itself then this really should be
+modeled as such and should not be registered as a GPIO
+consumed by the sensor since the actual sensor does not
+have a handshake pin at all.
+
+Also we really don't want to need to patch all involved
+sensor drivers to toggle a handshake pin, especially since
+the sensor itself does not physically have this pin.
+
+Can you explain a bit more:
+
+1. What the "Lattice MIPI aggregator" is 
+2. What its functions are, does this control reset + pwdn
+   GPIOs for the sensor? Voltages to the sensor? Clk
+   to the sensor ?
+3. How the aggregator is connected to both the main
+   CPU/SoC as well as how it is connected to the sensor ?
+   Some example diagram would be really helpful here.
+
+Then with this info in hand we can try to come up
+with a way how to model this.
+
+Assuming this controls the entire power-up sequence
+for the sensor then I think it could be modelled
+as a GPIO regulator. This also allows making the
+regulator core take care of the necessary delay
+between setting the GPIO and trying to talk to
+the sensor.
+
+Regards,
+
+Hans
+
+
+
+> 
+> Signed-off-by: Hao Yao <hao.yao@intel.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/platform/x86/intel/int3472/common.h   | 1 +
+>  drivers/platform/x86/intel/int3472/discrete.c | 5 +++++
+>  2 files changed, 6 insertions(+)
+> 
+> diff --git a/drivers/platform/x86/intel/int3472/common.h b/drivers/platform/x86/intel/int3472/common.h
+> index 655ae3ec0593..3ad4c72afb45 100644
+> --- a/drivers/platform/x86/intel/int3472/common.h
+> +++ b/drivers/platform/x86/intel/int3472/common.h
+> @@ -23,6 +23,7 @@
+>  #define INT3472_GPIO_TYPE_POWER_ENABLE				0x0b
+>  #define INT3472_GPIO_TYPE_CLK_ENABLE				0x0c
+>  #define INT3472_GPIO_TYPE_PRIVACY_LED				0x0d
+> +#define INT3472_GPIO_TYPE_HANDSHAKE				0x12
+>  
+>  #define INT3472_PDEV_MAX_NAME_LEN				23
+>  #define INT3472_MAX_SENSOR_GPIOS				3
+> diff --git a/drivers/platform/x86/intel/int3472/discrete.c b/drivers/platform/x86/intel/int3472/discrete.c
+> index b644ce65c990..4753161b4080 100644
+> --- a/drivers/platform/x86/intel/int3472/discrete.c
+> +++ b/drivers/platform/x86/intel/int3472/discrete.c
+> @@ -111,6 +111,10 @@ static void int3472_get_func_and_polarity(u8 type, const char **func, u32 *polar
+>  		*func = "power-enable";
+>  		*polarity = GPIO_ACTIVE_HIGH;
+>  		break;
+> +	case INT3472_GPIO_TYPE_HANDSHAKE:
+> +		*func = "handshake";
+> +		*polarity = GPIO_ACTIVE_HIGH;
+> +		break;
+>  	default:
+>  		*func = "unknown";
+>  		*polarity = GPIO_ACTIVE_HIGH;
+> @@ -201,6 +205,7 @@ static int skl_int3472_handle_gpio_resources(struct acpi_resource *ares,
+>  	switch (type) {
+>  	case INT3472_GPIO_TYPE_RESET:
+>  	case INT3472_GPIO_TYPE_POWERDOWN:
+> +	case INT3472_GPIO_TYPE_HANDSHAKE:
+>  		ret = skl_int3472_map_gpio_to_sensor(int3472, agpio, func, polarity);
+>  		if (ret)
+>  			err_msg = "Failed to map GPIO pin to sensor\n";
 
