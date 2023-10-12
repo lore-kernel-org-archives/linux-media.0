@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91124CDB482
-	for <linux-media@archiver.kernel.org>; Thu, 12 Oct 2023 11:47:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CC0AC46CA1
+	for <linux-media@archiver.kernel.org>; Thu, 12 Oct 2023 11:47:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378590AbjJLLrM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Oct 2023 07:47:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55272 "EHLO
+        id S1378696AbjJLLrO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Oct 2023 07:47:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378367AbjJLLq5 (ORCPT
+        with ESMTP id S1378398AbjJLLq7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 Oct 2023 07:46:57 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC45B7;
-        Thu, 12 Oct 2023 04:46:56 -0700 (PDT)
+        Thu, 12 Oct 2023 07:46:59 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D25DCC;
+        Thu, 12 Oct 2023 04:46:57 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:7ae7:b86d:c19a:877e])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8199B6607355;
-        Thu, 12 Oct 2023 12:46:54 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 99D886607359;
+        Thu, 12 Oct 2023 12:46:55 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1697111214;
-        bh=fUpiGVSgUDEJ7+9Xx6wCjlwiYUUChFkfdk0Qh3AitbU=;
+        s=mail; t=1697111216;
+        bh=LFTEg/R/Wor/QN2odw5Z+gHhYekb/C2BteTgt/nxpjI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZRiZjv/DeBap13OYizL3LhT/ze673fBiKlHtq+PvCJYQfuUOALJHLB3B5n47IrbM3
-         Lx4GyeyrfH5Pev4+MXFCr0vIePnxw7mKH9O4jCBh42IS8nRBs6He/m8wlFZHqu1fzJ
-         NMYHlL/vf0U8Vgsfzqjr0dDXKyYeF5HkX0/CPnZN9bwzxCd6eBe9iG5nTekVGtaRBD
-         xOEQkwKKC/2J03T7Fpj+w1U56p+VblzkMaM4cPcVUiMdr/n7xw41uzvoyPbXSxKUln
-         M98kVZ9dopqVHbslRwGWuKro2f4G7YEzBnbzfht0RcCTATCk/x4SnWereHK83JpFsJ
-         7IfkroYNQq7Sw==
+        b=YW55GPuiNAo1nw5erBfgCCEKO1clLvGNiedo9r43ueQ6UvP4U/glJh2RXx4j9HFXc
+         A8YqtaHCe53j68YuaVmPDgxDS9V/YBbGRDuCIB59vKMuHRABdjQzPnBhNuGVznZFRO
+         5buTjaiW5trxoTqgo6O2+6jLQG3NPgIas2KlC+TVpAxhH5QPJotUKwHX9UC/6s1ULN
+         9+UlEOfJ7/8QOxjcA5UqRS9/6pNLrJrSG5wnOsQK68z8fW6RyiQXTf/wXgkuQWc/g0
+         leTBSXi1j6a4JmymT+lNdj1dM1jnsT6LotrrSUf0BfdnxHNmTXrrMqBqStNM39WUbV
+         CI/NBJI/Sl/eA==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -43,10 +43,11 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Zhou Peng <eagle.zhou@nxp.com>
-Subject: [PATCH v11 10/56] media: amphion: Stop direct calls to queue num_buffers field
-Date:   Thu, 12 Oct 2023 13:45:56 +0200
-Message-Id: <20231012114642.19040-11-benjamin.gaignard@collabora.com>
+        Bin Liu <bin.liu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Subject: [PATCH v11 12/56] media: mediatek: vdec: Remove useless loop
+Date:   Thu, 12 Oct 2023 13:45:58 +0200
+Message-Id: <20231012114642.19040-13-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231012114642.19040-1-benjamin.gaignard@collabora.com>
 References: <20231012114642.19040-1-benjamin.gaignard@collabora.com>
@@ -56,78 +57,35 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use vb2_get_num_buffers() to avoid using queue num_buffers field directly.
+Simplify code by removing useless loop by using video buffer index.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-CC: Ming Qian <ming.qian@nxp.com>
-CC: Zhou Peng <eagle.zhou@nxp.com>
+CC: Bin Liu <bin.liu@mediatek.com>
+CC: Matthias Brugger <matthias.bgg@gmail.com>
 ---
- drivers/media/platform/amphion/vpu_dbg.c  | 8 ++++----
- drivers/media/platform/amphion/vpu_v4l2.c | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ .../mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c   | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/media/platform/amphion/vpu_dbg.c b/drivers/media/platform/amphion/vpu_dbg.c
-index a462d6fe4ea9..940e5bda5fa3 100644
---- a/drivers/media/platform/amphion/vpu_dbg.c
-+++ b/drivers/media/platform/amphion/vpu_dbg.c
-@@ -87,7 +87,7 @@ static int vpu_dbg_instance(struct seq_file *s, void *data)
- 	num = scnprintf(str, sizeof(str),
- 			"output (%2d, %2d): fmt = %c%c%c%c %d x %d, %d;",
- 			vb2_is_streaming(vq),
--			vq->num_buffers,
-+			vb2_get_num_buffers(vq),
- 			inst->out_format.pixfmt,
- 			inst->out_format.pixfmt >> 8,
- 			inst->out_format.pixfmt >> 16,
-@@ -111,7 +111,7 @@ static int vpu_dbg_instance(struct seq_file *s, void *data)
- 	num = scnprintf(str, sizeof(str),
- 			"capture(%2d, %2d): fmt = %c%c%c%c %d x %d, %d;",
- 			vb2_is_streaming(vq),
--			vq->num_buffers,
-+			vb2_get_num_buffers(vq),
- 			inst->cap_format.pixfmt,
- 			inst->cap_format.pixfmt >> 8,
- 			inst->cap_format.pixfmt >> 16,
-@@ -139,7 +139,7 @@ static int vpu_dbg_instance(struct seq_file *s, void *data)
- 		return 0;
+diff --git a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c
+index e393e3e668f8..69d37b93bd35 100644
+--- a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c
++++ b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c
+@@ -1695,13 +1695,8 @@ static int vdec_vp9_slice_setup_core_buffer(struct vdec_vp9_slice_instance *inst
+ 		return -EINVAL;
  
- 	vq = v4l2_m2m_get_src_vq(inst->fh.m2m_ctx);
+ 	/* update internal buffer's width/height */
 -	for (i = 0; i < vq->num_buffers; i++) {
-+	for (i = 0; i < vb2_get_num_buffers(vq); i++) {
- 		struct vb2_buffer *vb;
- 		struct vb2_v4l2_buffer *vbuf;
+-		if (vb == vq->bufs[i]) {
+-			instance->dpb[i].width = w;
+-			instance->dpb[i].height = h;
+-			break;
+-		}
+-	}
++	instance->dpb[vb->index].width = w;
++	instance->dpb[vb->index].height = h;
  
-@@ -161,7 +161,7 @@ static int vpu_dbg_instance(struct seq_file *s, void *data)
- 	}
- 
- 	vq = v4l2_m2m_get_dst_vq(inst->fh.m2m_ctx);
--	for (i = 0; i < vq->num_buffers; i++) {
-+	for (i = 0; i < vb2_get_num_buffers(vq); i++) {
- 		struct vb2_buffer *vb;
- 		struct vb2_v4l2_buffer *vbuf;
- 
-diff --git a/drivers/media/platform/amphion/vpu_v4l2.c b/drivers/media/platform/amphion/vpu_v4l2.c
-index 0f6e4c666440..87afb4a18d5d 100644
---- a/drivers/media/platform/amphion/vpu_v4l2.c
-+++ b/drivers/media/platform/amphion/vpu_v4l2.c
-@@ -439,7 +439,7 @@ int vpu_get_num_buffers(struct vpu_inst *inst, u32 type)
- 	else
- 		q = v4l2_m2m_get_dst_vq(inst->fh.m2m_ctx);
- 
--	return q->num_buffers;
-+	return vb2_get_num_buffers(q);
- }
- 
- static void vpu_m2m_device_run(void *priv)
-@@ -587,7 +587,7 @@ static int vpu_vb2_start_streaming(struct vb2_queue *q, unsigned int count)
- 		  fmt->sizeimage[0], fmt->bytesperline[0],
- 		  fmt->sizeimage[1], fmt->bytesperline[1],
- 		  fmt->sizeimage[2], fmt->bytesperline[2],
--		  q->num_buffers);
-+		  vb2_get_num_buffers(q));
- 	vb2_clear_last_buffer_dequeued(q);
- 	ret = call_vop(inst, start, q->type);
- 	if (ret)
+ 	/*
+ 	 * get buffer's width/height from instance
 -- 
 2.39.2
 
