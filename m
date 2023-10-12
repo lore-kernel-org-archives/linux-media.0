@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D664BCDB486
-	for <linux-media@archiver.kernel.org>; Thu, 12 Oct 2023 11:48:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91EFBCDB484
+	for <linux-media@archiver.kernel.org>; Thu, 12 Oct 2023 11:48:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378871AbjJLLsA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Oct 2023 07:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55330 "EHLO
+        id S1378808AbjJLLsB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Oct 2023 07:48:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378849AbjJLLrU (ORCPT
+        with ESMTP id S1378901AbjJLLr1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 Oct 2023 07:47:20 -0400
+        Thu, 12 Oct 2023 07:47:27 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9160F1A6;
-        Thu, 12 Oct 2023 04:47:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5A31B4;
+        Thu, 12 Oct 2023 04:47:11 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:7ae7:b86d:c19a:877e])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 86A5C660738F;
-        Thu, 12 Oct 2023 12:47:08 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9B8D46607396;
+        Thu, 12 Oct 2023 12:47:09 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1697111228;
-        bh=nwepyznt8z6pxABzkpFHR6clGV59kYVToyX8aj6cN+w=;
+        s=mail; t=1697111230;
+        bh=4MapzpufjNHuzajAFVNf3Saky5QdXUM7N6XKbxHUF6E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mN6W36WoEkjWrR30vYtboERgKPchBJyh+WD7O8aVg2uy/HCHqIyoh+sOf2TbXXvxV
-         EoBPi2859Pjn0XZK9IZE6QhBmT6jiRnpsfUnPPEFuZrrwpVXGAotRvmcfW1Gc9SXVJ
-         oBrU9XziAdJLDsG7AcE2xpmi41nBeHIRxm7r8rbbJTNImrGhs/nzsmO+I7u1j9Mr5r
-         xj7zcs6k2KrOy1FC0ikpSWXrKnr7+VX2VYmOYxYiHzy2W5/zZNj5C6khlQ2sqz/2Sz
-         CH1LKyFEVs64Q4oIxigN+qxllG2HtV+qwIeuB4Nm+zguIX8HEgUfe9QL1CHa4tWbE1
-         ew0PRHfGaxX0w==
+        b=Sh+tqfZvlHLp4RcvFAWI9TPHsUUEe9c1wixy4BO4yMO0hJozj9bOKsGSQXh+OnQiy
+         5CPc19t4mO5swR+xnWDjpmM32c6UBTZz6g//8saMQp2jo0TZj+I7oEw48/qMKt8FCA
+         pcKP9rxYxYnHHj9AMBjY9ZocwGS/unlkoipm31of+R3Q8+UGxzqL1Ghp69eU/rnaji
+         rA2tYjRUuLXSF1LwrdW1wUi1RWQ++arkhFytt58RWW4g68M4Js1ItAiRXJFs2JTR2R
+         KRKtQRfqgm2dxgfUiLRMWylUMPIw72uCrBgb9GmctInuNi03HsKZpDLP07Gh49YQ+W
+         W6UQ0TZ8ypBRg==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -42,10 +42,11 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v11 36/56] media: usb: usbtv: Set min_buffers_needed to 2
-Date:   Thu, 12 Oct 2023 13:46:22 +0200
-Message-Id: <20231012114642.19040-37-benjamin.gaignard@collabora.com>
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH v11 38/56] media: meson: vdec: Stop direct calls to queue num_buffers field
+Date:   Thu, 12 Oct 2023 13:46:24 +0200
+Message-Id: <20231012114642.19040-39-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231012114642.19040-1-benjamin.gaignard@collabora.com>
 References: <20231012114642.19040-1-benjamin.gaignard@collabora.com>
@@ -55,36 +56,48 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-vb2 queue_setup checks for a minimum number of buffers so set
-min_buffers_needed to 2 and remove the useless check in
-usbtv_queue_setup().
+Use vb2_get_num_buffers() to avoid using queue num_buffers field directly.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+CC: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- drivers/media/usb/usbtv/usbtv-video.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/staging/media/meson/vdec/vdec.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/usb/usbtv/usbtv-video.c b/drivers/media/usb/usbtv/usbtv-video.c
-index 1e30e05953dc..0e9e860be47f 100644
---- a/drivers/media/usb/usbtv/usbtv-video.c
-+++ b/drivers/media/usb/usbtv/usbtv-video.c
-@@ -727,8 +727,6 @@ static int usbtv_queue_setup(struct vb2_queue *vq,
- 	struct usbtv *usbtv = vb2_get_drv_priv(vq);
- 	unsigned size = USBTV_CHUNK * usbtv->n_chunks * 2 * sizeof(u32);
+diff --git a/drivers/staging/media/meson/vdec/vdec.c b/drivers/staging/media/meson/vdec/vdec.c
+index 219185aaa588..1e2369f104c8 100644
+--- a/drivers/staging/media/meson/vdec/vdec.c
++++ b/drivers/staging/media/meson/vdec/vdec.c
+@@ -167,22 +167,23 @@ static void process_num_buffers(struct vb2_queue *q,
+ 				bool is_reqbufs)
+ {
+ 	const struct amvdec_format *fmt_out = sess->fmt_out;
+-	unsigned int buffers_total = q->num_buffers + *num_buffers;
++	unsigned int q_num_bufs = vb2_get_num_buffers(q);
++	unsigned int buffers_total = q_num_bufs + *num_buffers;
+ 	u32 min_buf_capture = v4l2_ctrl_g_ctrl(sess->ctrl_min_buf_capture);
  
--	if (vq->num_buffers + *nbuffers < 2)
--		*nbuffers = 2 - vq->num_buffers;
- 	if (*nplanes)
- 		return sizes[0] < size ? -EINVAL : 0;
- 	*nplanes = 1;
-@@ -892,6 +890,7 @@ int usbtv_video_init(struct usbtv *usbtv)
- 	/* videobuf2 structure */
- 	usbtv->vb2q.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
- 	usbtv->vb2q.io_modes = VB2_MMAP | VB2_USERPTR | VB2_READ;
-+	usbtv->vb2q.min_buffers_needed = 2;
- 	usbtv->vb2q.drv_priv = usbtv;
- 	usbtv->vb2q.buf_struct_size = sizeof(struct usbtv_buf);
- 	usbtv->vb2q.ops = &usbtv_vb2_ops;
+-	if (q->num_buffers + *num_buffers < min_buf_capture)
+-		*num_buffers = min_buf_capture - q->num_buffers;
++	if (q_num_bufs + *num_buffers < min_buf_capture)
++		*num_buffers = min_buf_capture - q_num_bufs;
+ 	if (is_reqbufs && buffers_total < fmt_out->min_buffers)
+-		*num_buffers = fmt_out->min_buffers - q->num_buffers;
++		*num_buffers = fmt_out->min_buffers - q_num_bufs;
+ 	if (buffers_total > fmt_out->max_buffers)
+-		*num_buffers = fmt_out->max_buffers - q->num_buffers;
++		*num_buffers = fmt_out->max_buffers - q_num_bufs;
+ 
+ 	/* We need to program the complete CAPTURE buffer list
+ 	 * in registers during start_streaming, and the firmwares
+ 	 * are free to choose any of them to write frames to. As such,
+ 	 * we need all of them to be queued into the driver
+ 	 */
+-	sess->num_dst_bufs = q->num_buffers + *num_buffers;
++	sess->num_dst_bufs = q_num_bufs + *num_buffers;
+ 	q->min_buffers_needed = max(fmt_out->min_buffers, sess->num_dst_bufs);
+ }
+ 
 -- 
 2.39.2
 
