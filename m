@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A824CDB46E
-	for <linux-media@archiver.kernel.org>; Thu, 12 Oct 2023 11:47:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 976F4CDB483
+	for <linux-media@archiver.kernel.org>; Thu, 12 Oct 2023 11:47:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378533AbjJLLr3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Oct 2023 07:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49618 "EHLO
+        id S1378453AbjJLLrc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Oct 2023 07:47:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378557AbjJLLrL (ORCPT
+        with ESMTP id S1378478AbjJLLrC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 Oct 2023 07:47:11 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15545F1;
-        Thu, 12 Oct 2023 04:47:02 -0700 (PDT)
+        Thu, 12 Oct 2023 07:47:02 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C80E6;
+        Thu, 12 Oct 2023 04:47:01 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:7ae7:b86d:c19a:877e])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 87F366607371;
-        Thu, 12 Oct 2023 12:47:00 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 75DBE6607358;
+        Thu, 12 Oct 2023 12:46:59 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1697111220;
-        bh=Jt1mNMm36fegL/wBY23liBF0ngeSMzYwFlorrhK5AKs=;
+        s=mail; t=1697111219;
+        bh=o2sVtoPPYvq8hM/qyihWIqN4hasDvFA4zhZmTyTxJEg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ikpsd6wm0YYrF8nGwJim6Sv46Xxi4+ScsUHZDGZGFg11Xq2SIcNnZJuk8JxZjYeis
-         1dDxmHOF/e9SWZ2vztz3EwGYkBzKS253R+V/+GwZ2hWFFsD93tg2yIctLbvp0BeXcv
-         BGYfejgSuF20/iraRJ/0RSvSu5UBlJHtf0zjg5kyeA7bTHO1piM1KbtvRCpHMaT+qV
-         CQQcxvHf/hi49UYNaT/ndwxI53687YmNz08aGpUbvHR1txfHCs8KfZQvXSofhTjT5E
-         uR9MpIn01HNnQiYlZ9l9CkBIdPtUDlyqK5CShCdD4Mzgiz/BXMOwaUjYClBjruaA8A
-         r0IVcbFWDbhlg==
+        b=T6c2WzuJOXCb7OrdeYtPepo+zhAeAHO7DQmDBSK27YLwAgt5567H3AuSCWnFDkmDB
+         TWlA9tD0YKldYAFQ9s8W6zPZjlPYIGGIefPVnQCU1WYI4cR0U1C+FYSx+dxF4YY/Mp
+         GBOHYgNGmEjgqwSYio7cVGKr6/uTEl6FfjUGEdkALNl+QfKuF3FuUnwJve3mOLXW0a
+         Cg1dfBPwkLl3sYA3P6BftijFalxP/zcH3HCoxambTKLt+cHpb4NhfpwbBMCYVt4I6X
+         vSVCksD3GdV3pWJEgjhxSr50uuBcgNLxRRz9/dq2Pa1JvEQrqOlLrEAX4OAdUwAf1n
+         x+EQ+wHbkG5bw==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -42,11 +42,10 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Matt Ranostay <matt.ranostay@konsulko.com>
-Subject: [PATCH v11 21/56] media: video-i2c: Set min_buffers_needed to 2
-Date:   Thu, 12 Oct 2023 13:46:07 +0200
-Message-Id: <20231012114642.19040-22-benjamin.gaignard@collabora.com>
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v11 19/56] media: dvb-core: Do not initialize twice queue num_buffer field
+Date:   Thu, 12 Oct 2023 13:46:05 +0200
+Message-Id: <20231012114642.19040-20-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231012114642.19040-1-benjamin.gaignard@collabora.com>
 References: <20231012114642.19040-1-benjamin.gaignard@collabora.com>
@@ -56,39 +55,26 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-vb2 queue_setup checks for a minimum number of buffers so set
-min_buffers_needed to 2 and remove the useless check in video-i2c
-queue_setup().
+The above memset already zeroed all the ctx fields, it is useless
+to do it here again.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-CC: Matt Ranostay <matt.ranostay@konsulko.com>
 ---
- drivers/media/i2c/video-i2c.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/media/dvb-core/dvb_vb2.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/media/i2c/video-i2c.c b/drivers/media/i2c/video-i2c.c
-index 178bd06cc2ed..0a38b9614764 100644
---- a/drivers/media/i2c/video-i2c.c
-+++ b/drivers/media/i2c/video-i2c.c
-@@ -406,9 +406,6 @@ static int queue_setup(struct vb2_queue *vq,
- 	struct video_i2c_data *data = vb2_get_drv_priv(vq);
- 	unsigned int size = data->chip->buffer_size;
- 
--	if (vq->num_buffers + *nbuffers < 2)
--		*nbuffers = 2;
--
- 	if (*nplanes)
- 		return sizes[0] < size ? -EINVAL : 0;
- 
-@@ -794,7 +791,7 @@ static int video_i2c_probe(struct i2c_client *client)
- 	queue->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
- 	queue->drv_priv = data;
- 	queue->buf_struct_size = sizeof(struct video_i2c_buffer);
--	queue->min_buffers_needed = 1;
-+	queue->min_buffers_needed = 2;
- 	queue->ops = &video_i2c_video_qops;
- 	queue->mem_ops = &vb2_vmalloc_memops;
- 
+diff --git a/drivers/media/dvb-core/dvb_vb2.c b/drivers/media/dvb-core/dvb_vb2.c
+index 3a966fdf814c..a731b755a0b9 100644
+--- a/drivers/media/dvb-core/dvb_vb2.c
++++ b/drivers/media/dvb-core/dvb_vb2.c
+@@ -177,7 +177,6 @@ int dvb_vb2_init(struct dvb_vb2_ctx *ctx, const char *name, int nonblocking)
+ 	q->ops = &dvb_vb2_qops;
+ 	q->mem_ops = &vb2_vmalloc_memops;
+ 	q->buf_ops = &dvb_vb2_buf_ops;
+-	q->num_buffers = 0;
+ 	ret = vb2_core_queue_init(q);
+ 	if (ret) {
+ 		ctx->state = DVB_VB2_STATE_NONE;
 -- 
 2.39.2
 
