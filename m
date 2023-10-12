@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27ECACDB483
-	for <linux-media@archiver.kernel.org>; Thu, 12 Oct 2023 11:49:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9CFCCDB47E
+	for <linux-media@archiver.kernel.org>; Thu, 12 Oct 2023 11:49:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379051AbjJLLtL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Oct 2023 07:49:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59648 "EHLO
+        id S1347193AbjJLLtN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Oct 2023 07:49:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235694AbjJLLrw (ORCPT
+        with ESMTP id S1378865AbjJLLrx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 Oct 2023 07:47:52 -0400
+        Thu, 12 Oct 2023 07:47:53 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7F2D54;
-        Thu, 12 Oct 2023 04:47:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4814D63;
+        Thu, 12 Oct 2023 04:47:18 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:7ae7:b86d:c19a:877e])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7D11C6607360;
-        Thu, 12 Oct 2023 12:47:15 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 05C2066073B3;
+        Thu, 12 Oct 2023 12:47:17 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1697111235;
-        bh=rwdI4N/UpNcGmk6GGlucekYnkxJHQ/tXy5HmEK+3+oI=;
+        s=mail; t=1697111237;
+        bh=kEJbLQU/NWfSXI9ifPCtTAsM2xXQaDo8JrJIN+UqWGg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UlrrzfQ0zMY+v1yBY3VcVbIjwc+FWuiuhtxkw+YEZB2jGkJOmT3MAj+7rG39BNWxH
-         Vq86VSYZqCm1Uoxivg7YRvVuut4vCfyWfwwsId0y11/ZYR9gqiS0neAPNJh0o+BaWR
-         6vl9BWtk/XxU8d9gZIWG4Ey/LElVkL1R6KpRrHmw2NJskKiKcrMZfdDnuWqM27yW06
-         hUjEMocUkIrCUszZXQelYNAsth3Ev5nolLP9XuHfe5DHAqPsnEv1VbBRL7qc5iky83
-         eBE++dB7xmgvsd55mPfw3ALrUJFqswWi49gce63oeHCZG+Lh+KhU7jL+SLLpjGwhco
-         CI84EkUVoR/nA==
+        b=KdEIiVzs7WcM6jKxcsMd28hY9EBCXnvofp/+PFHNz7M2IBfEES0NAZag8RsnGBYSM
+         jJ3x2TAY2JEgQrhieeCrGG2ZMv/gjfb2hmfi0qTEPosL1W1oidTNfnEY1CdziGxAta
+         BJoDjFzYQzeXBMPAdHKbRI/hq1eHZuSlmhOSP3bZObHwKPsc5q32YfAcq9rwv435GI
+         wL9tcowCXE6PMOzFcToK7Okj0gejNU2yBG5YWTFo7xZZP42BDzE9nNoDmnktiTSB6n
+         6p+xakIWFK9T76jerUBiyGnh/fzbvpTxhSFIAXaOA+LYBLKShBSW3ahVO/1ndCUF13
+         qVQTeuk5kdmag==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -43,9 +43,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v11 49/56] media: verisilicon: g2: Use common helpers to compute chroma and mv offsets
-Date:   Thu, 12 Oct 2023 13:46:35 +0200
-Message-Id: <20231012114642.19040-50-benjamin.gaignard@collabora.com>
+Subject: [PATCH v11 52/56] media: core: Add bitmap manage bufs array entries
+Date:   Thu, 12 Oct 2023 13:46:38 +0200
+Message-Id: <20231012114642.19040-53-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231012114642.19040-1-benjamin.gaignard@collabora.com>
 References: <20231012114642.19040-1-benjamin.gaignard@collabora.com>
@@ -55,159 +55,201 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-HEVC and VP9 are running on the same hardware and share the same
-chroma and motion vectors offset constraint.
-Create common helpers functions for these computation.
-Source and destination buffer height may not be the same because
-alignment constraint are different so use destination height to
-compute chroma offset because we target this buffer as hardware
-output.
-To be able to use the helpers in both VP9 HEVC code remove dec_params
-and use context->bit_depth instead.
+Add a bitmap field to know which of bufs array entries are
+used or not.
+Remove no more used num_buffers field from queue structure.
+Use bitmap_find_next_zero_area() to find the first possible
+range when creating new buffers to fill the gaps.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-CC: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-CC: Philipp Zabel <p.zabel@pengutronix.de>
 ---
- .../media/platform/verisilicon/hantro_g2.c    | 14 ++++++++++
- .../platform/verisilicon/hantro_g2_hevc_dec.c | 18 ++-----------
- .../platform/verisilicon/hantro_g2_vp9_dec.c  | 26 +++----------------
- .../media/platform/verisilicon/hantro_hw.h    |  3 +++
- 4 files changed, 23 insertions(+), 38 deletions(-)
+ .../media/common/videobuf2/videobuf2-core.c   | 42 +++++++++++++++----
+ include/media/videobuf2-core.h                | 19 ++++++---
+ 2 files changed, 47 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/media/platform/verisilicon/hantro_g2.c b/drivers/media/platform/verisilicon/hantro_g2.c
-index ee5f14c5f8f2..b880a6849d58 100644
---- a/drivers/media/platform/verisilicon/hantro_g2.c
-+++ b/drivers/media/platform/verisilicon/hantro_g2.c
-@@ -8,6 +8,8 @@
- #include "hantro_hw.h"
- #include "hantro_g2_regs.h"
- 
-+#define G2_ALIGN	16
-+
- void hantro_g2_check_idle(struct hantro_dev *vpu)
+diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
+index b666b7d09807..29d46c5be705 100644
+--- a/drivers/media/common/videobuf2/videobuf2-core.c
++++ b/drivers/media/common/videobuf2/videobuf2-core.c
+@@ -416,11 +416,12 @@ static void init_buffer_cache_hints(struct vb2_queue *q, struct vb2_buffer *vb)
+  */
+ static void vb2_queue_add_buffer(struct vb2_queue *q, struct vb2_buffer *vb, unsigned int index)
  {
- 	int i;
-@@ -42,3 +44,15 @@ irqreturn_t hantro_g2_irq(int irq, void *dev_id)
+-	WARN_ON(index >= q->max_num_buffers || q->bufs[index]);
++	WARN_ON(index >= q->max_num_buffers || test_bit(index, q->bufs_bitmap));
  
- 	return IRQ_HANDLED;
+ 	q->bufs[index] = vb;
+ 	vb->index = index;
+ 	vb->vb2_queue = q;
++	set_bit(index, q->bufs_bitmap);
  }
-+
-+size_t hantro_g2_chroma_offset(struct hantro_ctx *ctx)
-+{
-+	return ctx->dst_fmt.width * ctx->dst_fmt.height * ctx->bit_depth / 8;
-+}
-+
-+size_t hantro_g2_motion_vectors_offset(struct hantro_ctx *ctx)
-+{
-+	size_t cr_offset = hantro_g2_chroma_offset(ctx);
-+
-+	return ALIGN((cr_offset * 3) / 2, G2_ALIGN);
-+}
-diff --git a/drivers/media/platform/verisilicon/hantro_g2_hevc_dec.c b/drivers/media/platform/verisilicon/hantro_g2_hevc_dec.c
-index a9d4ac84a8d8..d3f8c33eb16c 100644
---- a/drivers/media/platform/verisilicon/hantro_g2_hevc_dec.c
-+++ b/drivers/media/platform/verisilicon/hantro_g2_hevc_dec.c
-@@ -8,20 +8,6 @@
- #include "hantro_hw.h"
- #include "hantro_g2_regs.h"
  
--#define G2_ALIGN	16
--
--static size_t hantro_hevc_chroma_offset(struct hantro_ctx *ctx)
--{
--	return ctx->dst_fmt.width * ctx->dst_fmt.height * ctx->bit_depth / 8;
--}
--
--static size_t hantro_hevc_motion_vectors_offset(struct hantro_ctx *ctx)
--{
--	size_t cr_offset = hantro_hevc_chroma_offset(ctx);
--
--	return ALIGN((cr_offset * 3) / 2, G2_ALIGN);
--}
--
- static void prepare_tile_info_buffer(struct hantro_ctx *ctx)
+ /**
+@@ -429,8 +430,7 @@ static void vb2_queue_add_buffer(struct vb2_queue *q, struct vb2_buffer *vb, uns
+  */
+ static void vb2_queue_remove_buffer(struct vb2_buffer *vb)
  {
- 	struct hantro_dev *vpu = ctx->dev;
-@@ -384,8 +370,8 @@ static int set_ref(struct hantro_ctx *ctx)
- 	struct hantro_dev *vpu = ctx->dev;
- 	struct vb2_v4l2_buffer *vb2_dst;
- 	struct hantro_decoded_buffer *dst;
--	size_t cr_offset = hantro_hevc_chroma_offset(ctx);
--	size_t mv_offset = hantro_hevc_motion_vectors_offset(ctx);
-+	size_t cr_offset = hantro_g2_chroma_offset(ctx);
-+	size_t mv_offset = hantro_g2_motion_vectors_offset(ctx);
- 	u32 max_ref_frames;
- 	u16 dpb_longterm_e;
- 	static const struct hantro_reg cur_poc[] = {
-diff --git a/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c b/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
-index 6db1c32fce4d..342e543dee4c 100644
---- a/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
-+++ b/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
-@@ -16,8 +16,6 @@
- #include "hantro_vp9.h"
- #include "hantro_g2_regs.h"
- 
--#define G2_ALIGN 16
--
- enum hantro_ref_frames {
- 	INTRA_FRAME = 0,
- 	LAST_FRAME = 1,
-@@ -90,22 +88,6 @@ static int start_prepare_run(struct hantro_ctx *ctx, const struct v4l2_ctrl_vp9_
- 	return 0;
+-	if (vb->vb2_queue->num_buffers)
+-		vb->vb2_queue->num_buffers--;
++	clear_bit(vb->index, vb->vb2_queue->bufs_bitmap);
+ 	vb->vb2_queue->bufs[vb->index] = NULL;
+ 	vb->vb2_queue = NULL;
  }
+@@ -452,11 +452,12 @@ static int __vb2_queue_alloc(struct vb2_queue *q, enum vb2_memory memory,
+ 	unsigned long index;
+ 	int ret;
  
--static size_t chroma_offset(const struct hantro_ctx *ctx,
--			    const struct v4l2_ctrl_vp9_frame *dec_params)
--{
--	int bytes_per_pixel = dec_params->bit_depth == 8 ? 1 : 2;
--
--	return ctx->src_fmt.width * ctx->src_fmt.height * bytes_per_pixel;
--}
--
--static size_t mv_offset(const struct hantro_ctx *ctx,
--			const struct v4l2_ctrl_vp9_frame *dec_params)
--{
--	size_t cr_offset = chroma_offset(ctx, dec_params);
--
--	return ALIGN((cr_offset * 3) / 2, G2_ALIGN);
--}
--
- static struct hantro_decoded_buffer *
- get_ref_buf(struct hantro_ctx *ctx, struct vb2_v4l2_buffer *dst, u64 timestamp)
- {
-@@ -156,13 +138,13 @@ static void config_output(struct hantro_ctx *ctx,
- 	luma_addr = hantro_get_dec_buf_addr(ctx, &dst->base.vb.vb2_buf);
- 	hantro_write_addr(ctx->dev, G2_OUT_LUMA_ADDR, luma_addr);
+-	/* Ensure that the number of already queue + num_buffers is below q->max_num_buffers */
++	/* Ensure that vb2_get_num_buffers(q) + num_buffers is no more than q->max_num_buffers */
+ 	num_buffers = min_t(unsigned int, num_buffers,
+ 			    q->max_num_buffers - vb2_get_num_buffers(q));
  
--	chroma_addr = luma_addr + chroma_offset(ctx, dec_params);
-+	chroma_addr = luma_addr + hantro_g2_chroma_offset(ctx);
- 	hantro_write_addr(ctx->dev, G2_OUT_CHROMA_ADDR, chroma_addr);
--	dst->vp9.chroma_offset = chroma_offset(ctx, dec_params);
-+	dst->vp9.chroma_offset = hantro_g2_chroma_offset(ctx);
+-	index = vb2_get_num_buffers(q);
++	index = bitmap_find_next_zero_area(q->bufs_bitmap, q->max_num_buffers,
++					   0, num_buffers, 0);
  
--	mv_addr = luma_addr + mv_offset(ctx, dec_params);
-+	mv_addr = luma_addr + hantro_g2_motion_vectors_offset(ctx);
- 	hantro_write_addr(ctx->dev, G2_OUT_MV_ADDR, mv_addr);
--	dst->vp9.mv_offset = mv_offset(ctx, dec_params);
-+	dst->vp9.mv_offset = hantro_g2_motion_vectors_offset(ctx);
- }
+ 	*first_index = index;
  
- struct hantro_vp9_ref_reg {
-diff --git a/drivers/media/platform/verisilicon/hantro_hw.h b/drivers/media/platform/verisilicon/hantro_hw.h
-index 292a76ef643e..9aec8a79acdc 100644
---- a/drivers/media/platform/verisilicon/hantro_hw.h
-+++ b/drivers/media/platform/verisilicon/hantro_hw.h
-@@ -521,6 +521,9 @@ hantro_av1_mv_size(unsigned int width, unsigned int height)
- 	return ALIGN(num_sbs * 384, 16) * 2 + 512;
- }
- 
-+size_t hantro_g2_chroma_offset(struct hantro_ctx *ctx);
-+size_t hantro_g2_motion_vectors_offset(struct hantro_ctx *ctx);
+@@ -878,6 +879,14 @@ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
+ 		q->bufs = kcalloc(q->max_num_buffers, sizeof(*q->bufs), GFP_KERNEL);
+ 	if (!q->bufs)
+ 		ret = -ENOMEM;
 +
- int hantro_g1_mpeg2_dec_run(struct hantro_ctx *ctx);
- int rockchip_vpu2_mpeg2_dec_run(struct hantro_ctx *ctx);
- void hantro_mpeg2_dec_copy_qtable(u8 *qtable,
++	if (!q->bufs_bitmap)
++		q->bufs_bitmap = bitmap_zalloc(q->max_num_buffers, GFP_KERNEL);
++	if (!q->bufs_bitmap) {
++		ret = -ENOMEM;
++		kfree(q->bufs);
++		q->bufs = NULL;
++	}
+ 	q->memory = memory;
+ 	mutex_unlock(&q->mmap_lock);
+ 	if (ret)
+@@ -947,7 +956,6 @@ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
+ 	}
+ 
+ 	mutex_lock(&q->mmap_lock);
+-	q->num_buffers = allocated_buffers;
+ 
+ 	if (ret < 0) {
+ 		/*
+@@ -974,6 +982,10 @@ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
+ 	mutex_lock(&q->mmap_lock);
+ 	q->memory = VB2_MEMORY_UNKNOWN;
+ 	mutex_unlock(&q->mmap_lock);
++	kfree(q->bufs);
++	q->bufs = NULL;
++	bitmap_free(q->bufs_bitmap);
++	q->bufs_bitmap = NULL;
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(vb2_core_reqbufs);
+@@ -1010,9 +1022,19 @@ int vb2_core_create_bufs(struct vb2_queue *q, enum vb2_memory memory,
+ 		q->memory = memory;
+ 		if (!q->bufs)
+ 			q->bufs = kcalloc(q->max_num_buffers, sizeof(*q->bufs), GFP_KERNEL);
+-		if (!q->bufs)
++		if (!q->bufs) {
+ 			ret = -ENOMEM;
++			goto unlock;
++		}
++		if (!q->bufs_bitmap)
++			q->bufs_bitmap = bitmap_zalloc(q->max_num_buffers, GFP_KERNEL);
++		if (!q->bufs_bitmap) {
++			ret = -ENOMEM;
++			kfree(q->bufs);
++			q->bufs = NULL;
++		}
+ 		mutex_unlock(&q->mmap_lock);
++unlock:
+ 		if (ret)
+ 			return ret;
+ 		q->waiting_for_buffers = !q->is_output;
+@@ -1074,7 +1096,6 @@ int vb2_core_create_bufs(struct vb2_queue *q, enum vb2_memory memory,
+ 	}
+ 
+ 	mutex_lock(&q->mmap_lock);
+-	q->num_buffers += allocated_buffers;
+ 
+ 	if (ret < 0) {
+ 		/*
+@@ -2551,6 +2572,9 @@ void vb2_core_queue_release(struct vb2_queue *q)
+ 	__vb2_queue_free(q, q->max_num_buffers);
+ 	kfree(q->bufs);
+ 	q->bufs = NULL;
++	bitmap_free(q->bufs_bitmap);
++	q->bufs_bitmap = NULL;
++
+ 	mutex_unlock(&q->mmap_lock);
+ }
+ EXPORT_SYMBOL_GPL(vb2_core_queue_release);
+@@ -2905,7 +2929,7 @@ static size_t __vb2_perform_fileio(struct vb2_queue *q, char __user *data, size_
+ 	 * Check if we need to dequeue the buffer.
+ 	 */
+ 	index = fileio->cur_index;
+-	if (index >= q->num_buffers) {
++	if (!test_bit(index, q->bufs_bitmap)) {
+ 		struct vb2_buffer *b;
+ 
+ 		/*
+diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
+index a3a051276972..288477075a0e 100644
+--- a/include/media/videobuf2-core.h
++++ b/include/media/videobuf2-core.h
+@@ -346,7 +346,7 @@ struct vb2_buffer {
+  *			describes the requested number of planes and sizes\[\]
+  *			contains the requested plane sizes. In this case
+  *			\*num_buffers are being allocated additionally to
+- *			q->num_buffers. If either \*num_planes or the requested
++ *			queue buffers. If either \*num_planes or the requested
+  *			sizes are invalid callback must return %-EINVAL.
+  * @wait_prepare:	release any locks taken while calling vb2 functions;
+  *			it is called before an ioctl needs to wait for a new
+@@ -557,7 +557,7 @@ struct vb2_buf_ops {
+  * @memory:	current memory type used
+  * @dma_dir:	DMA mapping direction.
+  * @bufs:	videobuf2 buffer structures
+- * @num_buffers: number of allocated/used buffers
++ * @bufs_bitmap: bitmap to manage bufs entries.
+  * @max_num_buffers: upper limit of number of allocated/used buffers
+  * @queued_list: list of buffers currently queued from userspace
+  * @queued_count: number of buffers queued and ready for streaming.
+@@ -621,7 +621,7 @@ struct vb2_queue {
+ 	unsigned int			memory;
+ 	enum dma_data_direction		dma_dir;
+ 	struct vb2_buffer		**bufs;
+-	unsigned int			num_buffers;
++	unsigned long			*bufs_bitmap;
+ 	unsigned int			max_num_buffers;
+ 
+ 	struct list_head		queued_list;
+@@ -1150,7 +1150,10 @@ static inline bool vb2_fileio_is_active(struct vb2_queue *q)
+  */
+ static inline unsigned int vb2_get_num_buffers(struct vb2_queue *q)
+ {
+-	return q->num_buffers;
++	if (!q->bufs_bitmap)
++		return 0;
++
++	return bitmap_weight(q->bufs_bitmap, q->max_num_buffers);
+ }
+ 
+ /**
+@@ -1253,7 +1256,13 @@ static inline void vb2_clear_last_buffer_dequeued(struct vb2_queue *q)
+ static inline struct vb2_buffer *vb2_get_buffer(struct vb2_queue *q,
+ 						unsigned int index)
+ {
+-	if (index < q->num_buffers)
++	if (!q->bufs_bitmap)
++		return NULL;
++
++	if (index >= q->max_num_buffers)
++		return NULL;
++
++	if (test_bit(index, q->bufs_bitmap))
+ 		return q->bufs[index];
+ 	return NULL;
+ }
 -- 
 2.39.2
 
