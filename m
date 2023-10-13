@@ -2,54 +2,54 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B05EACDB482
-	for <linux-media@archiver.kernel.org>; Fri, 13 Oct 2023 10:44:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33914C41513
+	for <linux-media@archiver.kernel.org>; Fri, 13 Oct 2023 10:44:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbjJMKo5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 Oct 2023 06:44:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50638 "EHLO
+        id S229903AbjJMKo6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 Oct 2023 06:44:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230426AbjJMKos (ORCPT
+        with ESMTP id S231189AbjJMKol (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Oct 2023 06:44:48 -0400
+        Fri, 13 Oct 2023 06:44:41 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796BFDA
-        for <linux-media@vger.kernel.org>; Fri, 13 Oct 2023 03:44:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C3F186
+        for <linux-media@vger.kernel.org>; Fri, 13 Oct 2023 03:44:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697193887; x=1728729887;
+  t=1697193874; x=1728729874;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=T1izdaQj2Y+QhB7PhvL7wDTpafbyJMRtECgJrRST4Dg=;
-  b=jOaBk/WawUH1gbiM2IgwgATSnF5YB9EFk28evn7dV3Mp2XBLYGkKVQSc
-   e/UZaqezooUgWO8if+anVzaHgmluXMS3zKpd/bzFevR6NvH4X4Y7l0rVH
-   WIQ1SyWCmLQdUfDh2/AbwBKcRkwfXG+ho6fH7XkIJfzGZpJw6KiTOYXJI
-   hcB8i22Du/uxBJA/j5hFgRZLv/KU8s6iB+ps2tdjhjhKkBHx7HDYxg/kq
-   51wkEEk6yrd7OHXNs7XUTwAqsnnHiR8OcajtjXxZpZ0KRauMSRO4a9kVy
-   +sv/iq3edQXBg2mi0OjgdBOTTwB/Dw8hPwSJgBlV4zp6t5N5XAukc1uGV
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="388004029"
+  bh=eGJyFS7yCJdXl+dWkZsOAgAeoYvgHGD/GNIxrgE37lY=;
+  b=QsnI5ueZRUyurd3g1J4+btz1tqt4UkFwZeJaRJk2Aww+kYa1RFMNcB2N
+   rCUYEAG80vy5kiS8SUqwyARQS29AaJlq8UenSvlA8TOt3fRFSH6ckFFL0
+   jYpXVl+/kyc279eaVXeON+vu0leU7faFLi5rqTENsSiJEN69qWV37tZhV
+   6q/anqNzf8Y9guPfjiSmy5Hg/8d7udSdEIRJj2ct53VgeO3rm9Gdrkkbt
+   phf5tueAnvr4ii/yCp8n3Rxq/S56154GAgc1QI8rSoYEB8hqo2S9UnLqI
+   GBjpEpGOnOelkay+9boNW/g8jtV49GMlz5Fqi/ckr0VUsa8ll2M/lLrBZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="388004020"
 X-IronPort-AV: E=Sophos;i="6.03,221,1694761200"; 
-   d="scan'208";a="388004029"
+   d="scan'208";a="388004020"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2023 03:44:40 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2023 03:44:33 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="825016450"
+X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="825016441"
 X-IronPort-AV: E=Sophos;i="6.03,221,1694761200"; 
-   d="scan'208";a="825016450"
+   d="scan'208";a="825016441"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2023 03:44:38 -0700
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2023 03:44:31 -0700
 Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id DFB89120A2E;
-        Fri, 13 Oct 2023 13:44:35 +0300 (EEST)
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id C6C66120AB3;
+        Fri, 13 Oct 2023 13:44:28 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, laurent.pinchart@ideasonboard.com,
         tomi.valkeinen@ideasonboard.com, jacopo.mondi@ideasonboard.com,
         bingbu.cao@intel.com, hongju.wang@intel.com
-Subject: [PATCH 6/6] media: v4l: subdev: Remove stream-unaware sub-device state access
-Date:   Fri, 13 Oct 2023 13:44:24 +0300
-Message-Id: <20231013104424.404768-7-sakari.ailus@linux.intel.com>
+Subject: [PATCH 4/6] media: v4l: subdev: v4l2_subdev_get_format always returns format now
+Date:   Fri, 13 Oct 2023 13:44:22 +0300
+Message-Id: <20231013104424.404768-5-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231013104424.404768-1-sakari.ailus@linux.intel.com>
 References: <20231013104424.404768-1-sakari.ailus@linux.intel.com>
@@ -59,102 +59,34 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Remove stream-unaware sub-device state access functions and macros. These
-are no longer used.
+Now that v4l2_subdev_get_format() always returns format, don't call
+alternative v4l2_subdev_get_pad_format() anymore.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- include/media/v4l2-subdev.h | 77 -------------------------------------
- 1 file changed, 77 deletions(-)
+ drivers/media/v4l2-core/v4l2-subdev.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-index 90c46bf6e00c..b3ff1a9c8fa1 100644
---- a/include/media/v4l2-subdev.h
-+++ b/include/media/v4l2-subdev.h
-@@ -1144,83 +1144,6 @@ struct v4l2_subdev_fh {
- #define to_v4l2_subdev_fh(fh)	\
- 	container_of(fh, struct v4l2_subdev_fh, vfh)
+diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+index a522cd8096cf..153e9b1958d6 100644
+--- a/drivers/media/v4l2-core/v4l2-subdev.c
++++ b/drivers/media/v4l2-core/v4l2-subdev.c
+@@ -1580,14 +1580,7 @@ int v4l2_subdev_get_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_state *state,
+ {
+ 	struct v4l2_mbus_framefmt *fmt;
  
--#if defined(CONFIG_VIDEO_V4L2_SUBDEV_API)
+-	if (sd->flags & V4L2_SUBDEV_FL_STREAMS)
+-		fmt = v4l2_subdev_get_format(state, format->pad,
+-					     format->stream);
+-	else if (format->pad < sd->entity.num_pads && format->stream == 0)
+-		fmt = v4l2_subdev_get_pad_format(sd, state, format->pad);
+-	else
+-		fmt = NULL;
 -
--/**
-- * v4l2_subdev_get_pad_format - ancillary routine to call
-- *	&struct v4l2_subdev_pad_config->try_fmt
-- *
-- * @sd: pointer to &struct v4l2_subdev
-- * @state: pointer to &struct v4l2_subdev_state
-- * @pad: index of the pad in the &struct v4l2_subdev_state->pads array
-- */
--static inline struct v4l2_mbus_framefmt *
--v4l2_subdev_get_pad_format(struct v4l2_subdev *sd,
--			   struct v4l2_subdev_state *state,
--			   unsigned int pad)
--{
--	if (WARN_ON(!state))
--		return NULL;
--	if (WARN_ON(pad >= sd->entity.num_pads))
--		pad = 0;
--	return &state->pads[pad].try_fmt;
--}
--
--/**
-- * v4l2_subdev_get_pad_crop - ancillary routine to call
-- *	&struct v4l2_subdev_pad_config->try_crop
-- *
-- * @sd: pointer to &struct v4l2_subdev
-- * @state: pointer to &struct v4l2_subdev_state.
-- * @pad: index of the pad in the &struct v4l2_subdev_state->pads array.
-- */
--static inline struct v4l2_rect *
--v4l2_subdev_get_pad_crop(struct v4l2_subdev *sd,
--			 struct v4l2_subdev_state *state,
--			 unsigned int pad)
--{
--	if (WARN_ON(!state))
--		return NULL;
--	if (WARN_ON(pad >= sd->entity.num_pads))
--		pad = 0;
--	return &state->pads[pad].try_crop;
--}
--
--/**
-- * v4l2_subdev_get_pad_compose - ancillary routine to call
-- *	&struct v4l2_subdev_pad_config->try_compose
-- *
-- * @sd: pointer to &struct v4l2_subdev
-- * @state: pointer to &struct v4l2_subdev_state.
-- * @pad: index of the pad in the &struct v4l2_subdev_state->pads array.
-- */
--static inline struct v4l2_rect *
--v4l2_subdev_get_pad_compose(struct v4l2_subdev *sd,
--			    struct v4l2_subdev_state *state,
--			    unsigned int pad)
--{
--	if (WARN_ON(!state))
--		return NULL;
--	if (WARN_ON(pad >= sd->entity.num_pads))
--		pad = 0;
--	return &state->pads[pad].try_compose;
--}
--
--/*
-- * Temprary helpers until uses of v4l2_subdev_get_try_* functions have been
-- * renamed
-- */
--#define v4l2_subdev_get_try_format(sd, state, pad) \
--	v4l2_subdev_get_format(state, pad, 0)
--
--#define v4l2_subdev_get_try_crop(sd, state, pad) \
--	v4l2_subdev_get_crop(state, pad, 0)
--
--#define v4l2_subdev_get_try_compose(sd, state, pad) \
--	v4l2_subdev_get_compose(state, pad, 0)
--
--#endif /* CONFIG_VIDEO_V4L2_SUBDEV_API */
--
- extern const struct v4l2_file_operations v4l2_subdev_fops;
++	fmt = v4l2_subdev_get_format(state, format->pad, format->stream);
+ 	if (!fmt)
+ 		return -EINVAL;
  
- /**
 -- 
 2.39.2
 
