@@ -2,114 +2,161 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64BF5CDB47E
-	for <linux-media@archiver.kernel.org>; Fri, 13 Oct 2023 09:01:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75834CDB47E
+	for <linux-media@archiver.kernel.org>; Fri, 13 Oct 2023 09:09:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231224AbjJMJBO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 Oct 2023 05:01:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40926 "EHLO
+        id S230491AbjJMJJJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 Oct 2023 05:09:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231161AbjJMJAz (ORCPT
+        with ESMTP id S230441AbjJMJJD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Oct 2023 05:00:55 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E2CDD;
-        Fri, 13 Oct 2023 01:59:53 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 39D8wGJH117330;
-        Fri, 13 Oct 2023 03:58:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1697187496;
-        bh=tehlWY3R24oF54ia6UG9+oUYnETy85IMYdCvcWzzTW0=;
-        h=From:Date:Subject:To:CC;
-        b=pRnLrWc6bjwvBrzI8arqWOc/pcSHuh2GmsmQOBRbYG6j+VEaIixuR2i+DhsslqlXM
-         labfjvkki62ezCZDX8VdySDyH1N7an106pcdprJZc7CTrvB5Ljni7cO2wCK0W/K6mP
-         q24v50tj1KeT+vJlAFSqWsp7Yp1PZ46EWHja0pkk=
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 39D8wGwo023824
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 13 Oct 2023 03:58:16 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 13
- Oct 2023 03:58:15 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 13 Oct 2023 03:58:15 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 39D8wER5002982;
-        Fri, 13 Oct 2023 03:58:15 -0500
-From:   Jai Luthra <j-luthra@ti.com>
-Date:   Fri, 13 Oct 2023 14:27:56 +0530
-Subject: [PATCH] media: MAINTAINERS: Fix path for J721E CSI2RX bindings
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20231013-maintainers_path-v1-1-e28bdcc96ef2@ti.com>
-X-B4-Tracking: v=1; b=H4sIAJMGKWUC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI2NDA0Nj3dzEzLwSIE4tKo4vSCzJ0DUzNTBJS7VINTcyN1QCaisoSk3LrAA
- bGR1bWwsAQvNEqWIAAAA=
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Vaishnav Achath <vaishnav.a@ti.com>,
-        kernel test robot <lkp@intel.com>,
-        Jai Luthra <j-luthra@ti.com>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1078; i=j-luthra@ti.com;
- h=from:subject:message-id; bh=KgHMFv8L5FhhkDgA8/HKnFLM8B9gboEiWFOgX9lHIMs=;
- b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBlKQalhkdw+e3RgkbryduCLVoaaeuELy/9RioYJ
- jJNXdZHJ7SJAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZSkGpQAKCRBD3pH5JJpx
- RZvGD/9b77iap/O0Rhwj7HKjl/uBb00qwEX3PCZZ/bsBDs8bkKzm/2nsfIQdA/Ud4FdCvuPkLrK
- mv6/28PdaWpLZH0BmsPVRuSbmydYWzBTeTNeV/BPMgTVkDNXkHPB6zDdcmaf7Yooi2eIMxfD078
- va4j1uVLtmTKercbo+tN2S89i+ZJ7Zr5sgKJtTDUnTOeHtXzzXd5t5mR66CcxevPIBTYjyabdaK
- zljyJazf6sEokQOzsGDrUzfaHootCoVh1exGy4XaHdBzUL+g/ZG72roRWZ3MrQxUSvzn0fnKI1s
- 14jCfmioTLMP2nWSqtBME6kliXGvHA0TXfJlTNqiu4QRxMJUaiARaOaLXkAeVYs7CkEW96Lt4Jy
- WOv1CUnMqUBpc0aqL46CTqDSnpFOrtPkhKBfAxE0lN47OiFFTVgss7I803XoZB8ae6oTyuIeaZm
- MiXTzaS77T7NPYmkYnj6MPUwZV1XwaCc++yGOGb1kJZCCDdfF7Ov3FXMgmxKgldAyXNVqhS/sAr
- uAfCeAukZmjadwD/YtWwKRXegBOBYaNj+C4CKB7Necty6ZOLixa8Dg8V3ol0mP5x2OXDq7s92rD
- HFxmWRQEAu4Z5ChwgkZyxz4sU1qxo/wy9Vd4xxKku+md3IuropcBw5MkCn2dkqXnsFkS0t5ScYL
- ri9ScWHo6mkd8kA==
-X-Developer-Key: i=j-luthra@ti.com; a=openpgp;
- fpr=4DE0D818E5D575E8D45AAFC543DE91F9249A7145
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+        Fri, 13 Oct 2023 05:09:03 -0400
+Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D4DCE;
+        Fri, 13 Oct 2023 02:09:00 -0700 (PDT)
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 57DF51A19EE;
+        Fri, 13 Oct 2023 11:08:59 +0200 (CEST)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id F0E601A1558;
+        Fri, 13 Oct 2023 11:08:58 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 060431802200;
+        Fri, 13 Oct 2023 17:08:56 +0800 (+08)
+From:   Shengjiu Wang <shengjiu.wang@nxp.com>
+To:     hverkuil@xs4all.nl, sakari.ailus@iki.fi, tfiga@chromium.org,
+        m.szyprowski@samsung.com, mchehab@kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shengjiu.wang@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
+        nicoleotsuka@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
+        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        linuxppc-dev@lists.ozlabs.org
+Subject: [RFC PATCH v6 00/11] Add audio support in v4l2 framework
+Date:   Fri, 13 Oct 2023 16:30:54 +0800
+Message-Id: <1697185865-27528-1-git-send-email-shengjiu.wang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fix the path of the devicetree bindings. The path was changed during
-review but MAINTAINERS file was not updated.
+Audio signal processing also has the requirement for memory to
+memory similar as Video.
 
-Fixes: b4a3d877dc92 ("media: ti: Add CSI2RX support for J721E")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202310130411.c66pTXjG-lkp@intel.com/
-Signed-off-by: Jai Luthra <j-luthra@ti.com>
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This asrc memory to memory (memory ->asrc->memory) case is a non
+real time use case.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 3b47e0b56859..f3e6dbbbbccb 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -21599,7 +21599,7 @@ TI J721E CSI2RX DRIVER
- M:	Jai Luthra <j-luthra@ti.com>
- L:	linux-media@vger.kernel.org
- S:	Maintained
--F:	Documentation/devicetree/bindings/media/ti,j721e-csi2rx.yaml
-+F:	Documentation/devicetree/bindings/media/ti,j721e-csi2rx-shim.yaml
- F:	drivers/media/platform/ti/j721e-csi2rx/
- 
- TI KEYSTONE MULTICORE NAVIGATOR DRIVERS
+User fills the input buffer to the asrc module, after conversion, then asrc
+sends back the output buffer to user. So it is not a traditional ALSA playback
+and capture case.
 
----
-base-commit: 51b74c09ac8c5862007fc2bf0d465529d06dd446
-change-id: 20231013-maintainers_path-6504fe8e7271
+It is a specific use case,  there is no reference in current kernel.
+v4l2 memory to memory is the closed implementation,  v4l2 current
+support video, image, radio, tuner, touch devices, so it is not
+complicated to add support for this specific audio case.
 
-Best regards,
+Because we had implemented the "memory -> asrc ->i2s device-> codec"
+use case in ALSA.  Now the "memory->asrc->memory" needs
+to reuse the code in asrc driver, so the first 3 patches is for refining
+the code to make it can be shared by the "memory->asrc->memory"
+driver.
+
+The main change is in the v4l2 side, A /dev/vl4-audioX will be created,
+user applications only use the ioctl of v4l2 framework.
+
+Other change is to add memory to memory support for two kinds of i.MX ASRC
+module.
+
+changes in v6:
+- use m2m_prepare/m2m_unprepare/m2m_start/m2m_stop to replace
+  m2m_start_part_one/m2m_stop_part_one, m2m_start_part_two/m2m_stop_part_two.
+- change V4L2_CTRL_TYPE_ASRC_RATE to V4L2_CTRL_TYPE_FIXED_POINT
+- fix warning by kernel test rebot
+- remove some unused format V4L2_AUDIO_FMT_XX
+- Get SNDRV_PCM_FORMAT from V4L2_AUDIO_FMT in driver.
+- rename audm2m to viaudm2m.
+
+changes in v5:
+- remove V4L2_AUDIO_FMT_LPCM
+- define audio pixel format like V4L2_AUDIO_FMT_S8...
+- remove rate and format in struct v4l2_audio_format.
+- Add V4L2_CID_ASRC_SOURCE_RATE and V4L2_CID_ASRC_DEST_RATE controls
+- updata document accordingly.
+
+changes in v4:
+- update document style
+- separate V4L2_AUDIO_FMT_LPCM and V4L2_CAP_AUDIO_M2M in separate commit
+
+changes in v3:
+- Modify documents for adding audio m2m support
+- Add audio virtual m2m driver
+- Defined V4L2_AUDIO_FMT_LPCM format type for audio.
+- Defined V4L2_CAP_AUDIO_M2M capability type for audio m2m case.
+- with modification in v4l-utils, pass v4l2-compliance test.
+
+changes in v2:
+- decouple the implementation in v4l2 and ALSA
+- implement the memory to memory driver as a platfrom driver
+  and move it to driver/media
+- move fsl_asrc_common.h to include/sound folder
+
+Shengjiu Wang (11):
+  ASoC: fsl_asrc: define functions for memory to memory usage
+  ASoC: fsl_easrc: define functions for memory to memory usage
+  ASoC: fsl_asrc: move fsl_asrc_common.h to include/sound
+  ASoC: fsl_asrc: register m2m platform device
+  ASoC: fsl_easrc: register m2m platform device
+  media: uapi: Add V4L2_CAP_AUDIO_M2M capability flag
+  media: v4l2: Add audio capture and output support
+  media: uapi: define audio sample format fourcc type
+  media: uapi: Add audio rate controls support
+  media: imx-asrc: Add memory to memory driver
+  media: viaudm2m: add virtual driver for audio memory to memory
+
+ .../userspace-api/media/v4l/buffer.rst        |    6 +
+ .../userspace-api/media/v4l/common.rst        |    1 +
+ .../media/v4l/dev-audio-mem2mem.rst           |   71 +
+ .../userspace-api/media/v4l/devices.rst       |    1 +
+ .../media/v4l/ext-ctrls-fixed-point.rst       |   36 +
+ .../userspace-api/media/v4l/pixfmt-audio.rst  |  202 +++
+ .../userspace-api/media/v4l/pixfmt.rst        |    1 +
+ .../media/v4l/vidioc-enum-fmt.rst             |    2 +
+ .../media/v4l/vidioc-g-ext-ctrls.rst          |    4 +
+ .../userspace-api/media/v4l/vidioc-g-fmt.rst  |    4 +
+ .../media/v4l/vidioc-querycap.rst             |    3 +
+ .../media/v4l/vidioc-queryctrl.rst            |    7 +
+ .../media/videodev2.h.rst.exceptions          |    4 +
+ .../media/common/videobuf2/videobuf2-v4l2.c   |    4 +
+ drivers/media/platform/nxp/Kconfig            |   12 +
+ drivers/media/platform/nxp/Makefile           |    1 +
+ drivers/media/platform/nxp/imx-asrc.c         | 1248 +++++++++++++++++
+ drivers/media/test-drivers/Kconfig            |    9 +
+ drivers/media/test-drivers/Makefile           |    1 +
+ drivers/media/test-drivers/viaudm2m.c         |  707 ++++++++++
+ drivers/media/v4l2-core/v4l2-ctrls-core.c     |    5 +
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c     |    4 +
+ drivers/media/v4l2-core/v4l2-dev.c            |   17 +
+ drivers/media/v4l2-core/v4l2-ioctl.c          |   89 ++
+ include/media/v4l2-ctrls.h                    |    2 +
+ include/media/v4l2-dev.h                      |    2 +
+ include/media/v4l2-ioctl.h                    |   34 +
+ .../fsl => include/sound}/fsl_asrc_common.h   |   60 +
+ include/uapi/linux/v4l2-controls.h            |   13 +
+ include/uapi/linux/videodev2.h                |   69 +
+ sound/soc/fsl/fsl_asrc.c                      |  144 ++
+ sound/soc/fsl/fsl_asrc.h                      |    4 +-
+ sound/soc/fsl/fsl_asrc_dma.c                  |    2 +-
+ sound/soc/fsl/fsl_easrc.c                     |  212 +++
+ sound/soc/fsl/fsl_easrc.h                     |    6 +-
+ 35 files changed, 2984 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/userspace-api/media/v4l/dev-audio-mem2mem.rst
+ create mode 100644 Documentation/userspace-api/media/v4l/ext-ctrls-fixed-point.rst
+ create mode 100644 Documentation/userspace-api/media/v4l/pixfmt-audio.rst
+ create mode 100644 drivers/media/platform/nxp/imx-asrc.c
+ create mode 100644 drivers/media/test-drivers/viaudm2m.c
+ rename {sound/soc/fsl => include/sound}/fsl_asrc_common.h (60%)
+
 -- 
-Jai Luthra <j-luthra@ti.com>
+2.34.1
 
