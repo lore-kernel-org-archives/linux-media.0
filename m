@@ -2,30 +2,31 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B841CDB486
-	for <linux-media@archiver.kernel.org>; Fri, 13 Oct 2023 11:01:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9219FCDB47E
+	for <linux-media@archiver.kernel.org>; Fri, 13 Oct 2023 11:01:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbjJMLBT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S230088AbjJMLBT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Fri, 13 Oct 2023 07:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49894 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbjJMLBQ (ORCPT
+        with ESMTP id S229988AbjJMLBR (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Oct 2023 07:01:16 -0400
+        Fri, 13 Oct 2023 07:01:17 -0400
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1293BF
-        for <linux-media@vger.kernel.org>; Fri, 13 Oct 2023 04:01:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D62FB7
+        for <linux-media@vger.kernel.org>; Fri, 13 Oct 2023 04:01:16 -0700 (PDT)
 Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
         by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <m.tretter@pengutronix.de>)
-        id 1qrFuU-0006xJ-8e; Fri, 13 Oct 2023 13:00:50 +0200
+        id 1qrFuU-0006xJ-GA; Fri, 13 Oct 2023 13:00:50 +0200
 From:   Michael Tretter <m.tretter@pengutronix.de>
-Date:   Fri, 13 Oct 2023 13:00:27 +0200
-Subject: [PATCH v2 06/13] media: rockchip: rga: set dma mask to 32 bits
+Date:   Fri, 13 Oct 2023 13:00:31 +0200
+Subject: [PATCH v2 10/13] media: rockchip: rga: use macros for testing
+ buffer type
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230914-rockchip-rga-multiplanar-v2-6-bbfa6abf8bbf@pengutronix.de>
+Message-Id: <20230914-rockchip-rga-multiplanar-v2-10-bbfa6abf8bbf@pengutronix.de>
 References: <20230914-rockchip-rga-multiplanar-v2-0-bbfa6abf8bbf@pengutronix.de>
 In-Reply-To: <20230914-rockchip-rga-multiplanar-v2-0-bbfa6abf8bbf@pengutronix.de>
 To:     Jacob Chen <jacob-chen@iotwrt.com>,
@@ -49,54 +50,84 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The RGA DMA descriptor list contains only 32-bit addresses. Set the
-dma_mask to only allocate memory that is addressable by the descriptors.
-
-This prevents errors when preparing vb2 buffers that were allocated by
-the RGA.
+Use the provided V4L2_TYPE_IS_{OUTPUT,CAPTURE} macros to check if the
+buffer or queue is OUTPUT or CAPTURE. The macros work also work for the
+_MPLANE buffer and queue types and make it easier to switch to the
+multi-planar API.
 
 Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
 ---
-Changes in v2:
-- Add mask for DMA coherent
-- Set gfp_flags to DMA32
+Changes in v2: None
 ---
- drivers/media/platform/rockchip/rga/rga.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/media/platform/rockchip/rga/rga.c | 21 +++++++++------------
+ 1 file changed, 9 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/media/platform/rockchip/rga/rga.c b/drivers/media/platform/rockchip/rga/rga.c
-index f18fccc7b204..ea566c11734a 100644
+index f5d0d87cce22..91be87e01dab 100644
 --- a/drivers/media/platform/rockchip/rga/rga.c
 +++ b/drivers/media/platform/rockchip/rga/rga.c
-@@ -98,6 +98,7 @@ queue_init(void *priv, struct vb2_queue *src_vq, struct vb2_queue *dst_vq)
- 	src_vq->drv_priv = ctx;
- 	src_vq->ops = &rga_qops;
- 	src_vq->mem_ops = &vb2_dma_sg_memops;
-+	dst_vq->gfp_flags = __GFP_DMA32;
- 	src_vq->buf_struct_size = sizeof(struct rga_vb_buffer);
- 	src_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
- 	src_vq->lock = &ctx->rga->mutex;
-@@ -112,6 +113,7 @@ queue_init(void *priv, struct vb2_queue *src_vq, struct vb2_queue *dst_vq)
- 	dst_vq->drv_priv = ctx;
- 	dst_vq->ops = &rga_qops;
- 	dst_vq->mem_ops = &vb2_dma_sg_memops;
-+	dst_vq->gfp_flags = __GFP_DMA32;
- 	dst_vq->buf_struct_size = sizeof(struct rga_vb_buffer);
- 	dst_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
- 	dst_vq->lock = &ctx->rga->mutex;
-@@ -824,6 +826,12 @@ static int rga_probe(struct platform_device *pdev)
- 		goto err_put_clk;
- 	}
+@@ -344,14 +344,11 @@ static struct rga_frame def_frame = {
  
-+	ret = dma_set_mask_and_coherent(rga->dev, DMA_BIT_MASK(32));
-+	if (ret) {
-+		dev_err(rga->dev, "32-bit DMA not supported");
-+		goto err_put_clk;
-+	}
-+
- 	ret = v4l2_device_register(&pdev->dev, &rga->v4l2_dev);
- 	if (ret)
- 		goto err_put_clk;
+ struct rga_frame *rga_get_frame(struct rga_ctx *ctx, enum v4l2_buf_type type)
+ {
+-	switch (type) {
+-	case V4L2_BUF_TYPE_VIDEO_OUTPUT:
++	if (V4L2_TYPE_IS_OUTPUT(type))
+ 		return &ctx->in;
+-	case V4L2_BUF_TYPE_VIDEO_CAPTURE:
++	if (V4L2_TYPE_IS_CAPTURE(type))
+ 		return &ctx->out;
+-	default:
+-		return ERR_PTR(-EINVAL);
+-	}
++	return ERR_PTR(-EINVAL);
+ }
+ 
+ static int rga_open(struct file *file)
+@@ -559,21 +556,21 @@ static int vidioc_g_selection(struct file *file, void *prv,
+ 	switch (s->target) {
+ 	case V4L2_SEL_TGT_COMPOSE_DEFAULT:
+ 	case V4L2_SEL_TGT_COMPOSE_BOUNDS:
+-		if (s->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
++		if (!V4L2_TYPE_IS_CAPTURE(s->type))
+ 			return -EINVAL;
+ 		break;
+ 	case V4L2_SEL_TGT_CROP_DEFAULT:
+ 	case V4L2_SEL_TGT_CROP_BOUNDS:
+-		if (s->type != V4L2_BUF_TYPE_VIDEO_OUTPUT)
++		if (!V4L2_TYPE_IS_OUTPUT(s->type))
+ 			return -EINVAL;
+ 		break;
+ 	case V4L2_SEL_TGT_COMPOSE:
+-		if (s->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
++		if (!V4L2_TYPE_IS_CAPTURE(s->type))
+ 			return -EINVAL;
+ 		use_frame = true;
+ 		break;
+ 	case V4L2_SEL_TGT_CROP:
+-		if (s->type != V4L2_BUF_TYPE_VIDEO_OUTPUT)
++		if (!V4L2_TYPE_IS_OUTPUT(s->type))
+ 			return -EINVAL;
+ 		use_frame = true;
+ 		break;
+@@ -611,7 +608,7 @@ static int vidioc_s_selection(struct file *file, void *prv,
+ 		 * COMPOSE target is only valid for capture buffer type, return
+ 		 * error for output buffer type
+ 		 */
+-		if (s->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
++		if (!V4L2_TYPE_IS_CAPTURE(s->type))
+ 			return -EINVAL;
+ 		break;
+ 	case V4L2_SEL_TGT_CROP:
+@@ -619,7 +616,7 @@ static int vidioc_s_selection(struct file *file, void *prv,
+ 		 * CROP target is only valid for output buffer type, return
+ 		 * error for capture buffer type
+ 		 */
+-		if (s->type != V4L2_BUF_TYPE_VIDEO_OUTPUT)
++		if (!V4L2_TYPE_IS_OUTPUT(s->type))
+ 			return -EINVAL;
+ 		break;
+ 	/*
 
 -- 
 2.39.2
