@@ -2,88 +2,95 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F18DACDB482
-	for <linux-media@archiver.kernel.org>; Fri, 13 Oct 2023 11:17:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A391BCDB47E
+	for <linux-media@archiver.kernel.org>; Fri, 13 Oct 2023 11:19:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbjJMLRt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 Oct 2023 07:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44412 "EHLO
+        id S230118AbjJMLTo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 Oct 2023 07:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbjJMLRs (ORCPT
+        with ESMTP id S229921AbjJMLTn (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Oct 2023 07:17:48 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7129EBD
-        for <linux-media@vger.kernel.org>; Fri, 13 Oct 2023 04:17:47 -0700 (PDT)
+        Fri, 13 Oct 2023 07:19:43 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A994491
+        for <linux-media@vger.kernel.org>; Fri, 13 Oct 2023 04:19:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697195867; x=1728731867;
+  t=1697195981; x=1728731981;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ESUx6+EtVdq8CbDdTrgj39waQvLm7m0JQGPeMUsDofo=;
-  b=FEM0UiwZnC2oW/2irxewWwr61AOAJ30h4yWUso9PAgbC6s8cwiOnTpyT
-   PqY4c2kSah2cKBv8Amv5M5l2L6uXlIEFzAo+vhRL60gZUqMDL7PeH284w
-   LDZHlaQLmR4wbtWUzd5UuJ4B0P39UFhN/YPXTRX5I6i+WbrVnFsuaTRG/
-   BMJLU9qXaOBjX/dLyaqY9e3uiK3hfgXaLdUKfq+wt8st5I3Bvf5HklLST
-   3qopc9kUwFfiZyLAnBFPp0tk0ZrGlgEXUbFhrzNE9pLhtZPNL9EzuBa4q
-   F6+sxoU5Nz55Ve0YlTz9SXUNbPfFoCSCFwNjXvKNVYZCNqhN2gUINiMtY
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="471393738"
+  bh=Uo25tM81b/nAXgj6NO0WlRud+nGTDSXTD1EQgeyPhSg=;
+  b=MJG1sBZw3D7WrJEkMklkZDuU2RZQ7A1jcjRYvxdOxAJ/NF3Qxdi8vYaU
+   fhAUGRrjeiRB/fJ/CYEy6iumEvs0ZmC7pILAjyWdfqYSOgw5e+pONr0nx
+   VRHu41naaVld75+UqHlTmlrAFCUyHz4+ROiB2JGiWPsmXAMWF3Fy16QYi
+   n7tQoBqkTQxCTBSFgrLei7lqV6QUuAuZqqXhUBKnnsPMkjXUNH8dzOtTQ
+   pdFTZxClG+Ft/B4FBvUVESd4K5F9FLyjmTg3Sq7dujbf9hbVR9pc+pV4a
+   OX/p2eO92HcgWi8YZgGIAUj2j5uGty3F5hK89GsygNF542UPRMLzB6aFt
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="382386876"
 X-IronPort-AV: E=Sophos;i="6.03,222,1694761200"; 
-   d="scan'208";a="471393738"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2023 04:17:47 -0700
+   d="scan'208";a="382386876"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2023 04:19:41 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="928390013"
+X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="1001912066"
 X-IronPort-AV: E=Sophos;i="6.03,222,1694761200"; 
-   d="scan'208";a="928390013"
+   d="scan'208";a="1001912066"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2023 04:17:43 -0700
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2023 04:19:39 -0700
 Received: from kekkonen.localdomain (localhost [127.0.0.1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id B2927120AB3;
-        Fri, 13 Oct 2023 14:17:40 +0300 (EEST)
-Date:   Fri, 13 Oct 2023 11:17:40 +0000
+        by kekkonen.fi.intel.com (Postfix) with SMTP id 86EEB120A2E;
+        Fri, 13 Oct 2023 14:09:36 +0300 (EEST)
+Date:   Fri, 13 Oct 2023 11:09:36 +0000
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc:     linux-media@vger.kernel.org, hverkuil@xs4all.nl,
         tomi.valkeinen@ideasonboard.com, jacopo.mondi@ideasonboard.com,
         bingbu.cao@intel.com, hongju.wang@intel.com
-Subject: Re: [PATCH 1/6] media: v4l: subdev: Store the number of pads in
- sub-device state
-Message-ID: <ZSknVGSWjNG2qwTa@kekkonen.localdomain>
+Subject: Re: [PATCH 3/6] media: v4l: subdev: Rename sub-device state
+ information access functions
+Message-ID: <ZSklcH8FrlCoIMqa@kekkonen.localdomain>
 References: <20231013104424.404768-1-sakari.ailus@linux.intel.com>
- <20231013104424.404768-2-sakari.ailus@linux.intel.com>
- <20231013105749.GA11101@pendragon.ideasonboard.com>
- <ZSkkoG7vjzMUXeOI@kekkonen.localdomain>
- <20231013111507.GE11101@pendragon.ideasonboard.com>
+ <20231013104424.404768-4-sakari.ailus@linux.intel.com>
+ <20231013110439.GB11101@pendragon.ideasonboard.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231013111507.GE11101@pendragon.ideasonboard.com>
+In-Reply-To: <20231013110439.GB11101@pendragon.ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Oct 13, 2023 at 02:15:07PM +0300, Laurent Pinchart wrote:
-> On Fri, Oct 13, 2023 at 11:06:08AM +0000, Sakari Ailus wrote:
-> > On Fri, Oct 13, 2023 at 01:57:49PM +0300, Laurent Pinchart wrote:
-> > > On Fri, Oct 13, 2023 at 01:44:19PM +0300, Sakari Ailus wrote:
-> > > > Store the number of pads in the sub-device state. This will be needed to
-> > > > validate pad when retrieving information for non-stream-aware users.
-> > > 
-> > > I'd rather store a pointer to the subdev. You can get the number of pads
-> > > from there.
-> > 
-> > The value is initialised after the array is allocated so this won't change.
-> > 
-> > I don't have a strong opinion either way. It's still more efficient to
-> > store just the value.
-> 
-> Slightly so, but I don't think it will matter in practice. I believe
-> we'll have more needs to access the subdev from the state in the future,
-> which is why I'd rather store the pointer already.
+Hi Laurent,
 
-Fair enough, I'll make it a sub-device pointer.
+On Fri, Oct 13, 2023 at 02:04:39PM +0300, Laurent Pinchart wrote:
+> Hi Sakari,
+> 
+> Thank you for the patch.
+> 
+> On Fri, Oct 13, 2023 at 01:44:21PM +0300, Sakari Ailus wrote:
+> > Rename the sub-devices state information access functions, removing
+> > "_state" and "_stream" from them. This makes them shorter and so more
+> > convenient to use. No other functions will be needed to access this
+> > information.
+> 
+> The new names are too generic, and thus confusing. For instance,
+> v4l2_subdev_get_format() is way too close to v4l2_subdev_get_fmt(). I'm
+> fine dropping "_stream", but I would like to keep "_state".
+> 
+
+My intention was actually to rename v4l2_subdev_get_fmt() later on: it's
+used in an ops struct, almost uniquely, so its name can be longer without
+it being a nuisance. I can include this in the same set.
+
+The reason for using a shorter names such as v4l2_subdev_get_format() is
+that they're nicer to use in the code. The function names we've added
+recently are often exceedingly long. There's hardly room for confusion in
+this case either: these functions will remain as the only interface to
+access information in sub-device state.
 
 -- 
+Regards,
+
 Sakari Ailus
