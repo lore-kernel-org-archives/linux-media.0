@@ -2,93 +2,95 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A391BCDB47E
-	for <linux-media@archiver.kernel.org>; Fri, 13 Oct 2023 11:19:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 588CECDB483
+	for <linux-media@archiver.kernel.org>; Fri, 13 Oct 2023 11:19:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbjJMLTo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 Oct 2023 07:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44136 "EHLO
+        id S230134AbjJMLTp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 Oct 2023 07:19:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbjJMLTn (ORCPT
+        with ESMTP id S230014AbjJMLTo (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Oct 2023 07:19:43 -0400
+        Fri, 13 Oct 2023 07:19:44 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A994491
-        for <linux-media@vger.kernel.org>; Fri, 13 Oct 2023 04:19:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7139B7
+        for <linux-media@vger.kernel.org>; Fri, 13 Oct 2023 04:19:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697195981; x=1728731981;
+  t=1697195982; x=1728731982;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Uo25tM81b/nAXgj6NO0WlRud+nGTDSXTD1EQgeyPhSg=;
-  b=MJG1sBZw3D7WrJEkMklkZDuU2RZQ7A1jcjRYvxdOxAJ/NF3Qxdi8vYaU
-   fhAUGRrjeiRB/fJ/CYEy6iumEvs0ZmC7pILAjyWdfqYSOgw5e+pONr0nx
-   VRHu41naaVld75+UqHlTmlrAFCUyHz4+ROiB2JGiWPsmXAMWF3Fy16QYi
-   n7tQoBqkTQxCTBSFgrLei7lqV6QUuAuZqqXhUBKnnsPMkjXUNH8dzOtTQ
-   pdFTZxClG+Ft/B4FBvUVESd4K5F9FLyjmTg3Sq7dujbf9hbVR9pc+pV4a
-   OX/p2eO92HcgWi8YZgGIAUj2j5uGty3F5hK89GsygNF542UPRMLzB6aFt
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="382386876"
+  bh=6xzh19EmKbi2ni2xP2TDCqeapVWPg8r/YSmvinZ015U=;
+  b=SzroJrkejqGrFa1j0E4MjjkeFxI0GlLAK+CXAJFV7gRAkcspY2sbOfx2
+   HfWVpqyRM2iKCgSpmqMHNpQ/2I9KNSpRqZHhAnngjVT2w6/qFRMrJ2WmM
+   gWzOBjJOZjZYx+LYoVdVCby2hRVn6COS+M9gqmX4EyU8COOXYDcxBmvfl
+   OkFqy1Ethc38Cx19ZMJKxvYO/yGva12sZYVx8xi4HIEmmQhgYIsPfACQG
+   VOcbSvLOUWIWUaTEVmMkqf9JW7dIXInIzHc1wDLkviwOHR1T3nlRqgBDU
+   SLMimdoJfBj0bhIMZn9XBq3Ei1ete5WWSgA9hZk+69J+uLLMIqEqN9WyI
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="382386879"
 X-IronPort-AV: E=Sophos;i="6.03,222,1694761200"; 
-   d="scan'208";a="382386876"
+   d="scan'208";a="382386879"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
   by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2023 04:19:41 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="1001912066"
+X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="1001912070"
 X-IronPort-AV: E=Sophos;i="6.03,222,1694761200"; 
-   d="scan'208";a="1001912066"
+   d="scan'208";a="1001912070"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
   by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2023 04:19:39 -0700
 Received: from kekkonen.localdomain (localhost [127.0.0.1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id 86EEB120A2E;
-        Fri, 13 Oct 2023 14:09:36 +0300 (EEST)
-Date:   Fri, 13 Oct 2023 11:09:36 +0000
+        by kekkonen.fi.intel.com (Postfix) with SMTP id 0DBB9120A75;
+        Fri, 13 Oct 2023 14:13:00 +0300 (EEST)
+Date:   Fri, 13 Oct 2023 11:13:00 +0000
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc:     linux-media@vger.kernel.org, hverkuil@xs4all.nl,
         tomi.valkeinen@ideasonboard.com, jacopo.mondi@ideasonboard.com,
         bingbu.cao@intel.com, hongju.wang@intel.com
-Subject: Re: [PATCH 3/6] media: v4l: subdev: Rename sub-device state
- information access functions
-Message-ID: <ZSklcH8FrlCoIMqa@kekkonen.localdomain>
+Subject: Re: [PATCH 2/6] media: v4l: subdev: Also return pads array
+ information on stream functions
+Message-ID: <ZSkmPJdxlxeSzYeZ@kekkonen.localdomain>
 References: <20231013104424.404768-1-sakari.ailus@linux.intel.com>
- <20231013104424.404768-4-sakari.ailus@linux.intel.com>
- <20231013110439.GB11101@pendragon.ideasonboard.com>
+ <20231013104424.404768-3-sakari.ailus@linux.intel.com>
+ <20231013110741.GD11101@pendragon.ideasonboard.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231013110439.GB11101@pendragon.ideasonboard.com>
+In-Reply-To: <20231013110741.GD11101@pendragon.ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 Hi Laurent,
 
-On Fri, Oct 13, 2023 at 02:04:39PM +0300, Laurent Pinchart wrote:
+On Fri, Oct 13, 2023 at 02:07:41PM +0300, Laurent Pinchart wrote:
 > Hi Sakari,
 > 
 > Thank you for the patch.
 > 
-> On Fri, Oct 13, 2023 at 01:44:21PM +0300, Sakari Ailus wrote:
-> > Rename the sub-devices state information access functions, removing
-> > "_state" and "_stream" from them. This makes them shorter and so more
-> > convenient to use. No other functions will be needed to access this
-> > information.
+> On Fri, Oct 13, 2023 at 01:44:20PM +0300, Sakari Ailus wrote:
+> > There are two sets of functions that return information from sub-device
+> > state, one for stream-unaware users and another for stream-aware users.
+> > Add support for stream-aware functions to return format, crop and compose
+> > information from pad-based array that are functionally equivalent to the
+> > old, stream-unaware ones.
+> > 
+> > Also check state is non-NULL, in order to guard against old drivers
+> > potentially calling this with NULL state for active formats or selection
+> > rectangles.
 > 
-> The new names are too generic, and thus confusing. For instance,
-> v4l2_subdev_get_format() is way too close to v4l2_subdev_get_fmt(). I'm
-> fine dropping "_stream", but I would like to keep "_state".
-> 
+> I'm not too keen on this I'm afraid :-( I think it gets confusing for
+> drivers that are not stream-aware to have to call a function that takes
+> a stream number. I don't see a problem with keeping two different sets
+> of functions, one for stream-aware drivers, and one for other drivers.
 
-My intention was actually to rename v4l2_subdev_get_fmt() later on: it's
-used in an ops struct, almost uniquely, so its name can be longer without
-it being a nuisance. I can include this in the same set.
+This becomes a nuisance in drivers such as CCS that work with sub-devices
+some of which have streams and others which don't. I don't see why we
+should have two sets of functions to access the same information, even
+though it's stored differently.
 
-The reason for using a shorter names such as v4l2_subdev_get_format() is
-that they're nicer to use in the code. The function names we've added
-recently are often exceedingly long. There's hardly room for confusion in
-this case either: these functions will remain as the only interface to
-access information in sub-device state.
+I can add a wrapper using C11 _Generic to make the stream number go away.
 
 -- 
 Regards,
