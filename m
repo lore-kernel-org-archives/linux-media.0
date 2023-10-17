@@ -2,116 +2,109 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C054ECDB483
-	for <linux-media@archiver.kernel.org>; Tue, 17 Oct 2023 10:54:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB88DCDB474
+	for <linux-media@archiver.kernel.org>; Tue, 17 Oct 2023 10:56:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343489AbjJQKyg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 17 Oct 2023 06:54:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57700 "EHLO
+        id S234886AbjJQK4q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 17 Oct 2023 06:56:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343757AbjJQKy3 (ORCPT
+        with ESMTP id S234958AbjJQK4i (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 17 Oct 2023 06:54:29 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845A1F5
-        for <linux-media@vger.kernel.org>; Tue, 17 Oct 2023 03:54:27 -0700 (PDT)
+        Tue, 17 Oct 2023 06:56:38 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8699103
+        for <linux-media@vger.kernel.org>; Tue, 17 Oct 2023 03:56:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697540067; x=1729076067;
+  t=1697540196; x=1729076196;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=UOEcj39cZGrl7bSsx0TerIC5fl86aTzJT1zhyxdC7A8=;
-  b=ZKKaHQMp/bxLcBtGz15fvBvPhN2OqTPS5nRNCZXvS6IEJJ9wwHMBBlhQ
-   sVr7bMZwKHY5N7ArIFh0jMZa6jIVgsiMkfzwBWqt+QvqQF115f8420VmL
-   8Nl6U7av1rXaf/1sVP3z9/Z6cx91TViItBox93caMnqIeAadDX+Krx3/D
-   +y62frgqMf8YDtlRNBAUVhfMnl2x98O5k3kb6aQ99VyDtv9SZaDnlBQwg
-   pjuhPzhQv6L64S7vp6Lz/DCKZL7i5rcB2k6GNCsFsASvL6YFmiJWfp/HP
-   fSSBeNMuYbrTt74Y6KqeEnqQM0AQ+e4+SpFzh6SWwwczi0g7eLRwEeYZN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="449973955"
+  bh=V+X8j3kqqLqtPKZsqpQhkXHk1cwZIcuLa6KxnFzPVj8=;
+  b=h4o+D9kaoBjM54GQQh2syFO9/HSyOcggpDxH1zbMNrp4Jo1mwaUhlauE
+   xJ4Yn6hn+bS9Vwmn+LoA/na4dH/p6g8Mpsw5Qf2390ckt9sb5IE/QQkca
+   oe7tr+hvM2R/gcpVEfU6ALWPiQq85lXr7gPzc2Z9uLoIfv3a0TYEsRYs5
+   DefemK1N0/sjRcGXPaXhpktEoCuwZKXkCvKARkrwioeUk8KpeAU7NdZA9
+   zJfACSMD8gPIpWFcB/aRJFlaP8HdL38jOLotmyzL2AV+2Cm0Z+lzMMoKH
+   dI1ujzilb5ev7LTIUUtEA2Qma3wECy2905fv8MlU9DcUHRduSL7KXNkC2
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="452231795"
 X-IronPort-AV: E=Sophos;i="6.03,231,1694761200"; 
-   d="scan'208";a="449973955"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2023 03:54:27 -0700
+   d="scan'208";a="452231795"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2023 03:56:35 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="929749728"
+X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="821936558"
 X-IronPort-AV: E=Sophos;i="6.03,231,1694761200"; 
-   d="scan'208";a="929749728"
+   d="scan'208";a="821936558"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2023 03:54:25 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2023 03:56:34 -0700
 Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id E55FC1207CA;
-        Tue, 17 Oct 2023 13:54:21 +0300 (EEST)
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 3CC7E12072F;
+        Tue, 17 Oct 2023 13:56:31 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com, jacopo.mondi@ideasonboard.com,
         dave.stevenson@raspberrypi.com, kieran.bingham@ideasonboard.com
-Subject: [PATCH 3/3] media: Documentation: LP-11 and LP-111 are states, not modes
-Date:   Tue, 17 Oct 2023 13:54:19 +0300
-Message-Id: <20231017105419.557486-4-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 1/3] media: Documentation: Document how link frequencies can be chosen
+Date:   Tue, 17 Oct 2023 13:56:28 +0300
+Message-Id: <20231017105630.558089-2-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231017105419.557486-1-sakari.ailus@linux.intel.com>
-References: <20231017105419.557486-1-sakari.ailus@linux.intel.com>
+In-Reply-To: <20231017105630.558089-1-sakari.ailus@linux.intel.com>
+References: <20231017105630.558089-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-LP-11 and LP-111 are CSI-2 bus states, not modes. Fix this.
+Document how link frequencies can be selected for the link-frequencies
+property.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- Documentation/driver-api/media/tx-rx.rst | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ Documentation/driver-api/media/camera-sensor.rst   | 14 ++++++++++++++
+ .../userspace-api/media/drivers/camera-sensor.rst  |  2 ++
+ 2 files changed, 16 insertions(+)
 
-diff --git a/Documentation/driver-api/media/tx-rx.rst b/Documentation/driver-api/media/tx-rx.rst
-index 7e115e3c4735..bc1b94cffdd9 100644
---- a/Documentation/driver-api/media/tx-rx.rst
-+++ b/Documentation/driver-api/media/tx-rx.rst
-@@ -89,13 +89,13 @@ where
- 	pixel rate on the camera sensor's pixel array which is indicated by the
- 	:ref:`V4L2_CID_PIXEL_RATE <v4l2-cid-pixel-rate>` control.
+diff --git a/Documentation/driver-api/media/camera-sensor.rst b/Documentation/driver-api/media/camera-sensor.rst
+index 6456145f96ed..0de5c86cbd1f 100644
+--- a/Documentation/driver-api/media/camera-sensor.rst
++++ b/Documentation/driver-api/media/camera-sensor.rst
+@@ -29,6 +29,20 @@ used in the system. Using another frequency may cause harmful effects
+ elsewhere. Therefore only the pre-determined frequencies are configurable by the
+ user.
  
--LP-11 and LP-111 modes
--^^^^^^^^^^^^^^^^^^^^^^
-+LP-11 and LP-111 states
-+^^^^^^^^^^^^^^^^^^^^^^^
++On choosing link frequencies
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++Choosing link frequencies for a board is generally a part of the hardware design
++process as one needs to ensure an EMC-safe frequency the sensor supports with
++the given external clock frequency exists. On development systems this may be
++less than an immediate concern, so more or less anything that sensor and the
++rest of the applicable hardware supports can be used.
++
++If the sensor's PLL tree is not documented and all that is available are
++register lists, even knowing the frequency a driver uses may be difficult. This
++could still be :ref:`calculated from the number of lanes, sensor's output image
++size, blanking values and frame rate <media_camera_raw_frame_interval>`.
++
+ ACPI
+ ~~~~
  
--As part of transitioning to high speed mode, a CSI-2 transmitter typically
-+As part of transitioning to high speed state, a CSI-2 transmitter typically
- briefly sets the bus to LP-11 or LP-111 state, depending on the PHY. This period
- may be as short as 100 µs, during which the receiver observes this state and
--proceeds its own part of high speed mode transition.
-+proceeds its own part of high speed state transition.
+diff --git a/Documentation/userspace-api/media/drivers/camera-sensor.rst b/Documentation/userspace-api/media/drivers/camera-sensor.rst
+index 919a50e8b9d9..e0596b85e7ec 100644
+--- a/Documentation/userspace-api/media/drivers/camera-sensor.rst
++++ b/Documentation/userspace-api/media/drivers/camera-sensor.rst
+@@ -44,6 +44,8 @@ There are two different methods for obtaining possibilities for different frame
+ intervals as well as configuring the frame interval. Which one to implement
+ depends on the type of the device.
  
- Most receivers are capable of autonomously handling this once the software has
- configured them to do so, but there are receivers which require software
-@@ -104,7 +104,7 @@ in software, especially when there is no interrupt telling something is
- happening.
++.. _media_camera_raw_frame_interval:
++
+ Raw camera sensors
+ ~~~~~~~~~~~~~~~~~~
  
- One way to address this is to configure the transmitter side explicitly to LP-11
--or LP-111 mode, which requires support from the transmitter hardware. This is
-+or LP-111 state, which requires support from the transmitter hardware. This is
- not universally available. Many devices return to this state once streaming is
- stopped while the state after power-on is LP-00 or LP-000.
- 
-@@ -115,11 +115,11 @@ transitioning to streaming state, but not yet start streaming. Similarly, the
- to call ``.post_streamoff()`` for each successful call of ``.pre_streamon()``.
- 
- In the context of CSI-2, the ``.pre_streamon()`` callback is used to transition
--the transmitter to the LP-11 or LP-111 mode. This also requires powering on the
-+the transmitter to the LP-11 or LP-111 state. This also requires powering on the
- device, so this should be only done when it is needed.
- 
--Receiver drivers that do not need explicit LP-11 or LP-111 mode setup are waived
--from calling the two callbacks.
-+Receiver drivers that do not need explicit LP-11 or LP-111 state setup are
-+waived from calling the two callbacks.
- 
- Stopping the transmitter
- ^^^^^^^^^^^^^^^^^^^^^^^^
 -- 
 2.39.2
 
