@@ -2,82 +2,164 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E15CFCDB474
-	for <linux-media@archiver.kernel.org>; Tue, 17 Oct 2023 20:05:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C97EBCDB474
+	for <linux-media@archiver.kernel.org>; Tue, 17 Oct 2023 20:15:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343689AbjJQUFc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 17 Oct 2023 16:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58932 "EHLO
+        id S235196AbjJQUPl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 17 Oct 2023 16:15:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235133AbjJQUFO (ORCPT
+        with ESMTP id S235132AbjJQUPf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 17 Oct 2023 16:05:14 -0400
-Received: from pb-smtp1.pobox.com (pb-smtp1.pobox.com [64.147.108.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 635381FF3;
-        Tue, 17 Oct 2023 13:02:48 -0700 (PDT)
-Received: from pb-smtp1.pobox.com (unknown [127.0.0.1])
-        by pb-smtp1.pobox.com (Postfix) with ESMTP id 31BAA1B836D;
-        Tue, 17 Oct 2023 16:02:46 -0400 (EDT)
-        (envelope-from ihor.matushchak@foobox.net)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=pobox.com; h=from:to:cc
-        :subject:date:message-id:in-reply-to:references:mime-version
-        :content-type:content-transfer-encoding; s=sasl; bh=6GcGXTgpZ+yE
-        9Awpf0mhf0gPRO2d2AKCVMIkXY0Dv40=; b=stXLzBvumJLPKOoNUvnIrYXUVrG1
-        p2+KfsiZHotkwolQHtzVp1HLPCmDAful07VB+Ie0gEcbmVkU4HDmeb+S2uSwcNX4
-        8hSweQDNKIsaZ8kAnpUheL1PgdVfifGn/xmfsah62luJ+YrXrK2v+2p4IAZNQTn4
-        4/1y8lrg1T1bKKc=
-Received: from pb-smtp1.nyi.icgroup.com (unknown [127.0.0.1])
-        by pb-smtp1.pobox.com (Postfix) with ESMTP id 28F1E1B836C;
-        Tue, 17 Oct 2023 16:02:46 -0400 (EDT)
-        (envelope-from ihor.matushchak@foobox.net)
-Received: from raspberrypi.telekom.ip (unknown [84.115.221.168])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by pb-smtp1.pobox.com (Postfix) with ESMTPSA id 9EACD1B836B;
-        Tue, 17 Oct 2023 16:02:44 -0400 (EDT)
-        (envelope-from ihor.matushchak@foobox.net)
-From:   ihor.matushchak@foobox.net
-To:     niklas.soderlund@ragnatech.se
-Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, ihor.matushchak@foobox.net
-Subject: [PATCH] media: staging: max96712: Fix device name in description
-Date:   Tue, 17 Oct 2023 21:02:39 +0100
-Message-Id: <11a00300c76df12c13adabfc71111607619a49f9.1697572799.git.ihor.matushchak@foobox.net>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <ZS7doO43ijXhBqkm@oden.dyn.berto.se>
-References: <ZS7doO43ijXhBqkm@oden.dyn.berto.se>
+        Tue, 17 Oct 2023 16:15:35 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0712B49ED
+        for <linux-media@vger.kernel.org>; Tue, 17 Oct 2023 13:05:58 -0700 (PDT)
+Received: from umang.jainideasonboard.com (unknown [103.251.226.39])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B5F92327;
+        Tue, 17 Oct 2023 22:05:18 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1697573121;
+        bh=iQUiruD5/axO9qzXMiXGdAfCw49ZKlu1tk/e62H4f3k=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=TSYk0vj48Sn4OYrjoN9r/1ZfhlvDn0HJE/8xxSvZ6QAdBMJI0pcwsMYl8DCCBJLVx
+         pPElnuG4Sa510MCPUJxOMspnFff/08g61JxVUuxsdea9HP5vfhP0qF7/CBQBfcuCib
+         Ryr3Gdtr3R9tyu6twnnCaQUeZ2skWdh7rqLmkh3Y=
+From:   Umang Jain <umang.jain@ideasonboard.com>
+To:     linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org, linux-media@vger.kernel.org
+Cc:     Stefan Wahren <stefan.wahren@i2se.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dan Carpenter <error27@gmail.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Umang Jain <umang.jain@ideasonboard.com>
+Subject: [PATCH 1/3] staging: vc04_services: Support module autoloading using MODULE_DEVICE_TABLE
+Date:   Wed, 18 Oct 2023 01:35:09 +0530
+Message-Id: <20231017200511.678223-2-umang.jain@ideasonboard.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20231017200511.678223-1-umang.jain@ideasonboard.com>
+References: <20231017200511.678223-1-umang.jain@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Pobox-Relay-ID: 23644576-6D28-11EE-A7EF-78DCEB2EC81B-19565117!pb-smtp1.pobox.com
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Ihor Matushchak <ihor.matushchak@foobox.net>
+VC04 has now a independent bus vchiq_bus to register its devices.
+However, the module auto-loading for bcm2835-audio and bcm2835-camera
+currently happens through MODULE_ALIAS() macro specified explicitly.
 
-Fix the device model name in driver description,
-which appears to be a copy-paste error.
+The correct way to auto-load a module, is when the alias is picked
+out from MODULE_DEVICE_TABLE(). In order to get there, we need to
+introduce  vchiq_device_id and add relevant entries in file2alias.c
+infrastructure so that aliases can be generated. This patch targets
+adding vchiq_bus_device_id and do_vchiq_bus_entry, in order to
+generate those alias using the /script/mod/file2alias.c.
 
-Signed-off-by: Ihor Matushchak <ihor.matushchak@foobox.net>
+Going forward the MODULE_ALIAS() from bcm2835-camera and bcm2835-audio
+will be dropped, in favour of MODULE_DEVICE_TABLE being used there.
+
+The alias format for vchiq_bus devices will be "vchiq_bus:<dev_name>".
+Adjust the vchiq_bus_uevent() to reflect that.
+
+Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
 ---
- drivers/staging/media/max96712/max96712.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../vc04_services/interface/vchiq_arm/vchiq_bus.c        | 2 +-
+ .../vc04_services/interface/vchiq_arm/vchiq_bus.h        | 3 +++
+ include/linux/mod_devicetable.h                          | 4 ++++
+ scripts/mod/devicetable-offsets.c                        | 3 +++
+ scripts/mod/file2alias.c                                 | 9 +++++++++
+ 5 files changed, 20 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/max96712/max96712.c b/drivers/staging/=
-media/max96712/max96712.c
-index c44145284aa1..ea67bcf69c9d 100644
---- a/drivers/staging/media/max96712/max96712.c
-+++ b/drivers/staging/media/max96712/max96712.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * Maxim MAX9286 Quad GMSL2 Deserializer Driver
-+ * Maxim MAX96712 Quad GMSL2 Deserializer Driver
-  *
-  * Copyright (C) 2021 Renesas Electronics Corporation
-  * Copyright (C) 2021 Niklas S=C3=B6derlund
---=20
-2.30.2
+diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_bus.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_bus.c
+index 0076d091b9b2..5930eb6a86cd 100644
+--- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_bus.c
++++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_bus.c
+@@ -26,7 +26,7 @@ static int vchiq_bus_uevent(const struct device *dev, struct kobj_uevent_env *en
+ {
+ 	const struct vchiq_device *device = container_of_const(dev, struct vchiq_device, dev);
+ 
+-	return add_uevent_var(env, "MODALIAS=%s", dev_name(&device->dev));
++	return add_uevent_var(env, "MODALIAS=vchiq_bus:%s", dev_name(&device->dev));
+ }
+ 
+ static int vchiq_bus_probe(struct device *dev)
+diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_bus.h b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_bus.h
+index 7eaaf9a91cda..6e1fbee4b078 100644
+--- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_bus.h
++++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_bus.h
+@@ -7,6 +7,7 @@
+ #define _VCHIQ_DEVICE_H
+ 
+ #include <linux/device.h>
++#include <linux/mod_devicetable.h>
+ 
+ struct vchiq_device {
+ 	struct device dev;
+@@ -18,6 +19,8 @@ struct vchiq_driver {
+ 	int		(*resume)(struct vchiq_device *device);
+ 	int		(*suspend)(struct vchiq_device *device,
+ 				   pm_message_t state);
++
++	const struct vchiq_bus_device_id *id_table;
+ 	struct device_driver driver;
+ };
+ 
+diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_devicetable.h
+index b0678b093cb2..f01e175f7f3d 100644
+--- a/include/linux/mod_devicetable.h
++++ b/include/linux/mod_devicetable.h
+@@ -946,4 +946,8 @@ struct cdx_device_id {
+ 	__u32 override_only;
+ };
+ 
++struct vchiq_bus_device_id {
++	char name[32];
++};
++
+ #endif /* LINUX_MOD_DEVICETABLE_H */
+diff --git a/scripts/mod/devicetable-offsets.c b/scripts/mod/devicetable-offsets.c
+index abe65f8968dd..c9a02d2c4f9e 100644
+--- a/scripts/mod/devicetable-offsets.c
++++ b/scripts/mod/devicetable-offsets.c
+@@ -267,5 +267,8 @@ int main(void)
+ 	DEVID_FIELD(cdx_device_id, device);
+ 	DEVID_FIELD(cdx_device_id, override_only);
+ 
++	DEVID(vchiq_bus_device_id);
++	DEVID_FIELD(vchiq_bus_device_id, name);
++
+ 	return 0;
+ }
+diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
+index 38120f932b0d..6908dc70b649 100644
+--- a/scripts/mod/file2alias.c
++++ b/scripts/mod/file2alias.c
+@@ -1478,6 +1478,14 @@ static int do_cdx_entry(const char *filename, void *symval,
+ 	return 1;
+ }
+ 
++static int do_vchiq_bus_entry(const char *filename, void *symval, char *alias)
++{
++	DEF_FIELD_ADDR(symval, vchiq_bus_device_id, name);
++	sprintf(alias, "vchiq_bus:%s", *name);
++
++	return 1;
++}
++
+ /* Does namelen bytes of name exactly match the symbol? */
+ static bool sym_is(const char *name, unsigned namelen, const char *symbol)
+ {
+@@ -1558,6 +1566,7 @@ static const struct devtable devtable[] = {
+ 	{"dfl", SIZE_dfl_device_id, do_dfl_entry},
+ 	{"ishtp", SIZE_ishtp_device_id, do_ishtp_entry},
+ 	{"cdx", SIZE_cdx_device_id, do_cdx_entry},
++	{"vchiq_bus", SIZE_vchiq_bus_device_id, do_vchiq_bus_entry},
+ };
+ 
+ /* Create MODULE_ALIAS() statements.
+-- 
+2.40.1
 
