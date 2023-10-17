@@ -2,78 +2,101 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BEF40CDB483
-	for <linux-media@archiver.kernel.org>; Tue, 17 Oct 2023 10:56:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13F83CDB482
+	for <linux-media@archiver.kernel.org>; Tue, 17 Oct 2023 10:56:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233570AbjJQK4r (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 17 Oct 2023 06:56:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44860 "EHLO
+        id S234899AbjJQK4t (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 17 Oct 2023 06:56:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234952AbjJQK4h (ORCPT
+        with ESMTP id S234961AbjJQK4j (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 17 Oct 2023 06:56:37 -0400
+        Tue, 17 Oct 2023 06:56:39 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1EC4102
-        for <linux-media@vger.kernel.org>; Tue, 17 Oct 2023 03:56:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03420109
+        for <linux-media@vger.kernel.org>; Tue, 17 Oct 2023 03:56:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697540195; x=1729076195;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=drxQ/bAZav7vgUA58B9pPFoUZqZzOcHp8fzC9o/qQUw=;
-  b=dMBVU7J6T7VPjFWjN6E6GtV2VqHMtOehlztU0uF5ulPygJ6leYVtNgV9
-   aw/uQ2LxCgsVPcRT1O41qbelLuU3YzR83UXMD06Juir+sup1w7A8V6w1C
-   J+uKNc5pEylOsszkiHOZQrZCba7zdgtq0gCdKrHUHT0/UtJxNRPEjLGY/
-   uaib2XsyXsOBBJ1SA0lvXazUIDwNdmAFR294mwjF3BX62dRIGgrVDdl4A
-   sAqdgJGb9Am43HioxlqxQaFToXYEWE/p67gORDwAeUjTymerf1fVCwZBE
-   yw8RrnFXmbuqFbJIzYC/gOddFw1XjjYTPBpXFmViTaymI+t6ZAUzMNjrJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="452231791"
+  t=1697540196; x=1729076196;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=KK+/ngxS1QlO1CIYeGaHUFVbor7X7a5HzfPlewRZSPo=;
+  b=LAgtO1iqWUd0rpIES3nHYiImXgQj9hkJkOz4YOsqYZ+GZEzo12lIXKpl
+   Y482kEvXS1ptW2Sks9BpaqbEBVdMa230O/VY/WalDTstqmMBcyzt3VLdz
+   drMm25iBqXZ4iK+vRNN2CQ1gbKA/KhCZBfC5qkcDUpX9wkKYbgumq8k91
+   PDYNjDyewJOap7hp5fj7EWv5mPYmcITppoZ061UhyG/CGqUXDGtMvyUHk
+   Yi9CLi+nazmS4/AtqljRmQuRWp9nkzuHc726VCFwuXVOc1ycwfGz1xoNZ
+   YFVdUihc10WhzninpOFSFAnEgaMolyiQyg+GJMdNg8FptomoF6Fa5NiFI
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="452231799"
 X-IronPort-AV: E=Sophos;i="6.03,231,1694761200"; 
-   d="scan'208";a="452231791"
+   d="scan'208";a="452231799"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2023 03:56:35 -0700
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2023 03:56:36 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="821936555"
+X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="821936559"
 X-IronPort-AV: E=Sophos;i="6.03,231,1694761200"; 
-   d="scan'208";a="821936555"
+   d="scan'208";a="821936559"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2023 03:56:33 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2023 03:56:34 -0700
 Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id 7A9ED11F89D;
-        Tue, 17 Oct 2023 13:56:30 +0300 (EEST)
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id E90201207A3;
+        Tue, 17 Oct 2023 13:56:31 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com, jacopo.mondi@ideasonboard.com,
         dave.stevenson@raspberrypi.com, kieran.bingham@ideasonboard.com
-Subject: [PATCH v2 0/3] Document link-frequencies better, small fixes
-Date:   Tue, 17 Oct 2023 13:56:27 +0300
-Message-Id: <20231017105630.558089-1-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 2/3] media: Documentation: BT.601 is not a bus
+Date:   Tue, 17 Oct 2023 13:56:29 +0300
+Message-Id: <20231017105630.558089-3-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20231017105630.558089-1-sakari.ailus@linux.intel.com>
+References: <20231017105630.558089-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi folks,
+BT.601 is not actually a bus specification, leaving parallel bus without a
+specification to refer to. Fix this.
 
-Here are a few small documentation improvements.
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ Documentation/driver-api/media/camera-sensor.rst | 4 ++--
+ Documentation/driver-api/media/tx-rx.rst         | 3 +--
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-since v1:
-
-- Fix reference.
-
-Sakari Ailus (3):
-  media: Documentation: Document how link frequencies can be chosen
-  media: Documentation: BT.601 is not a bus
-  media: Documentation: LP-11 and LP-111 are states, not modes
-
- .../driver-api/media/camera-sensor.rst        | 18 ++++++++++++++++--
- Documentation/driver-api/media/tx-rx.rst      | 19 +++++++++----------
- .../media/drivers/camera-sensor.rst           |  2 ++
- 3 files changed, 27 insertions(+), 12 deletions(-)
-
+diff --git a/Documentation/driver-api/media/camera-sensor.rst b/Documentation/driver-api/media/camera-sensor.rst
+index 0de5c86cbd1f..19f2feeecc91 100644
+--- a/Documentation/driver-api/media/camera-sensor.rst
++++ b/Documentation/driver-api/media/camera-sensor.rst
+@@ -9,8 +9,8 @@ This document covers the in-kernel APIs only. For the best practices on
+ userspace API implementation in camera sensor drivers, please see
+ :ref:`media_using_camera_sensor_drivers`.
+ 
+-CSI-2 and parallel (BT.601 and BT.656) busses
+----------------------------------------------
++CSI-2 and parallel and BT.656 buses
++-----------------------------------
+ 
+ Please see :ref:`transmitter-receiver`.
+ 
+diff --git a/Documentation/driver-api/media/tx-rx.rst b/Documentation/driver-api/media/tx-rx.rst
+index e1e9258dd862..7e115e3c4735 100644
+--- a/Documentation/driver-api/media/tx-rx.rst
++++ b/Documentation/driver-api/media/tx-rx.rst
+@@ -25,9 +25,8 @@ the host SoC. It is defined by the `MIPI alliance`_.
+ Parallel
+ ^^^^^^^^
+ 
+-`BT.601`_ and `BT.656`_ are the most common parallel busses.
++The parallel bus and its `BT.656`_ variant are the most common parallel busses.
+ 
+-.. _`BT.601`: https://en.wikipedia.org/wiki/Rec._601
+ .. _`BT.656`: https://en.wikipedia.org/wiki/ITU-R_BT.656
+ 
+ Transmitter drivers
 -- 
 2.39.2
 
