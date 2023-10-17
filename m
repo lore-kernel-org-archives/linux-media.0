@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0DC9CDB48F
-	for <linux-media@archiver.kernel.org>; Tue, 17 Oct 2023 14:48:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76854CDB489
+	for <linux-media@archiver.kernel.org>; Tue, 17 Oct 2023 14:48:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344183AbjJQOsR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 17 Oct 2023 10:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37922 "EHLO
+        id S1344176AbjJQOsQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 17 Oct 2023 10:48:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344133AbjJQOsN (ORCPT
+        with ESMTP id S1344135AbjJQOsL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 17 Oct 2023 10:48:13 -0400
+        Tue, 17 Oct 2023 10:48:11 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2DFFE;
-        Tue, 17 Oct 2023 07:48:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AECCFA;
+        Tue, 17 Oct 2023 07:48:09 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:7205:da49:a7e8:59f8])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5B843660733E;
-        Tue, 17 Oct 2023 15:48:09 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BFC0B660732A;
+        Tue, 17 Oct 2023 15:48:07 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1697554089;
-        bh=LFTEg/R/Wor/QN2odw5Z+gHhYekb/C2BteTgt/nxpjI=;
+        s=mail; t=1697554088;
+        bh=FY7GH0xZdlXO2pRrzaejblo22FLeSWf56n9mo0hrqhY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DgsH3ZJ4f5IyIzuSEcdSYCr66VGVOQsNXrnyeT9ZjVyTiUo6F1Xkn82zQEKyjUNrr
-         jhk6RcYrLuEQS5pzJqQlmxpqBr1maHgvsd/3NVIWcZPvwQrGg7wA9jx7xQ6PkMEkFl
-         6reEtyp3DFY72Uilr2n/2Ah9ZnAxEmSiFIyBjjViMqTyxwxmQGTgo4Lbr3g5bfNR+y
-         vg6+OpLdDQXYtGS9SUZYp8HGUdxcxhhN0q9RuRnGEcCqHfRA/IjJpN312CgkbWXrEJ
-         0J3pjworS9RgOJyHo1eNdKy8h4TcChdce43sn9SVoCg/4qwET6/eGGuSJgaD0iQWDl
-         oAqgkna8o3uPQ==
+        b=bZUc9Y7SvA5unAnAFhBLlfrD4b/UsnNPqJre51LLMtkk9b/SNUAaiyng2Ih4MEAvt
+         JeqtJQgI2gtWTu7Z2z3xZnSgJWyQO4gUEq16nJ7V+xGXNajj/3+bHBuvjTWP0brwwN
+         gEvaL61W0iVQUWiuq7FC/KNzGQYZ+y+Gfc7LLo/9UHA7rMAoKGAlZNsPJK0glD0pkV
+         5OsZNuhKhU4FmPVKnTZ9SdSTABXjqGTOm5LGwA7w1LUwi6c8p29yFzi5CkcNwaptER
+         RoifIh0vhWNCaS44PD/7tHKuTPv1hsMzncC3GA6NPoBtv72DdIYQkQUS95qxW4ogFn
+         jKg/b3zaMoJpA==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -43,11 +43,10 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Bin Liu <bin.liu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Subject: [PATCH v12 12/56] media: mediatek: vdec: Remove useless loop
-Date:   Tue, 17 Oct 2023 16:47:12 +0200
-Message-Id: <20231017144756.34719-13-benjamin.gaignard@collabora.com>
+        Zhou Peng <eagle.zhou@nxp.com>
+Subject: [PATCH v12 09/56] media: amphion: Use vb2_get_buffer() instead of directly access to buffers array
+Date:   Tue, 17 Oct 2023 16:47:09 +0200
+Message-Id: <20231017144756.34719-10-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231017144756.34719-1-benjamin.gaignard@collabora.com>
 References: <20231017144756.34719-1-benjamin.gaignard@collabora.com>
@@ -57,35 +56,64 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Simplify code by removing useless loop by using video buffer index.
+Use vb2_get_buffer() instead of direct access to the vb2_queue bufs array.
+This allows us to change the type of the bufs in the future.
+After each call to vb2_get_buffer() we need to be sure that we get
+a valid pointer so check the return value of all of them.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-CC: Bin Liu <bin.liu@mediatek.com>
-CC: Matthias Brugger <matthias.bgg@gmail.com>
+CC: Ming Qian <ming.qian@nxp.com>
+CC: Zhou Peng <eagle.zhou@nxp.com>
 ---
- .../mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c   | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ drivers/media/platform/amphion/vpu_dbg.c | 22 ++++++++++++++++++----
+ 1 file changed, 18 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c
-index e393e3e668f8..69d37b93bd35 100644
---- a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c
-@@ -1695,13 +1695,8 @@ static int vdec_vp9_slice_setup_core_buffer(struct vdec_vp9_slice_instance *inst
- 		return -EINVAL;
+diff --git a/drivers/media/platform/amphion/vpu_dbg.c b/drivers/media/platform/amphion/vpu_dbg.c
+index 982c2c777484..a462d6fe4ea9 100644
+--- a/drivers/media/platform/amphion/vpu_dbg.c
++++ b/drivers/media/platform/amphion/vpu_dbg.c
+@@ -140,11 +140,18 @@ static int vpu_dbg_instance(struct seq_file *s, void *data)
  
- 	/* update internal buffer's width/height */
--	for (i = 0; i < vq->num_buffers; i++) {
--		if (vb == vq->bufs[i]) {
--			instance->dpb[i].width = w;
--			instance->dpb[i].height = h;
--			break;
--		}
--	}
-+	instance->dpb[vb->index].width = w;
-+	instance->dpb[vb->index].height = h;
+ 	vq = v4l2_m2m_get_src_vq(inst->fh.m2m_ctx);
+ 	for (i = 0; i < vq->num_buffers; i++) {
+-		struct vb2_buffer *vb = vq->bufs[i];
+-		struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++		struct vb2_buffer *vb;
++		struct vb2_v4l2_buffer *vbuf;
++
++		vb = vb2_get_buffer(vq, i);
++		if (!vb)
++			continue;
  
- 	/*
- 	 * get buffer's width/height from instance
+ 		if (vb->state == VB2_BUF_STATE_DEQUEUED)
+ 			continue;
++
++		vbuf = to_vb2_v4l2_buffer(vb);
++
+ 		num = scnprintf(str, sizeof(str),
+ 				"output [%2d] state = %10s, %8s\n",
+ 				i, vb2_stat_name[vb->state],
+@@ -155,11 +162,18 @@ static int vpu_dbg_instance(struct seq_file *s, void *data)
+ 
+ 	vq = v4l2_m2m_get_dst_vq(inst->fh.m2m_ctx);
+ 	for (i = 0; i < vq->num_buffers; i++) {
+-		struct vb2_buffer *vb = vq->bufs[i];
+-		struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++		struct vb2_buffer *vb;
++		struct vb2_v4l2_buffer *vbuf;
++
++		vb = vb2_get_buffer(vq, i);
++		if (!vb)
++			continue;
+ 
+ 		if (vb->state == VB2_BUF_STATE_DEQUEUED)
+ 			continue;
++
++		vbuf = to_vb2_v4l2_buffer(vb);
++
+ 		num = scnprintf(str, sizeof(str),
+ 				"capture[%2d] state = %10s, %8s\n",
+ 				i, vb2_stat_name[vb->state],
 -- 
 2.39.2
 
