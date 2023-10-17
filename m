@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32EEAC41513
-	for <linux-media@archiver.kernel.org>; Tue, 17 Oct 2023 14:48:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C351CDB484
+	for <linux-media@archiver.kernel.org>; Tue, 17 Oct 2023 14:48:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344379AbjJQOsr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 17 Oct 2023 10:48:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43604 "EHLO
+        id S1344098AbjJQOst (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 17 Oct 2023 10:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344242AbjJQOs0 (ORCPT
+        with ESMTP id S1344288AbjJQOs3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 17 Oct 2023 10:48:26 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881C912A;
-        Tue, 17 Oct 2023 07:48:18 -0700 (PDT)
+        Tue, 17 Oct 2023 10:48:29 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FD519E;
+        Tue, 17 Oct 2023 07:48:23 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:7205:da49:a7e8:59f8])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id ED4AE6607314;
-        Tue, 17 Oct 2023 15:48:16 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3CBB06607391;
+        Tue, 17 Oct 2023 15:48:21 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1697554097;
-        bh=ChpcYCv3I3brbs3IQllzHDZkqVSelhB0M6hpuaYYPs0=;
+        s=mail; t=1697554101;
+        bh=cNX0Uc/focM3lrX3oS9L9Q1ymhjMXLItiK8qS21I4NE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JK66MekYPCGQJ+2GE5ce8BxsaIsxjT1GPeFyYe/52NRw1tWy67xjxKspeMyUVLap8
-         T91qerw+IcVbcxhR9y9E4gVjgpPyWPI0mwt9HqIYaSBuj4diCWWuWaKlz+9OtyDST+
-         Jdm+Le/veYxI9XS2fL5oG+/McilR/T2huCpVlcrhf7V4mePe+uo+exVmc7kkBZhTNR
-         96aQMp2TCIwyHd4PhKMS1ubQcTkLUzVxbPQuDsGXX5HNlrDZrWvAVJLq6/8cmtyu27
-         rUTvRdJukYxbWa0D1qXS9M2iEwinTkTYxg1+yloC6aymrooudfMistEnZyOe2S2Q8c
-         +FoMr4hYj8tCw==
+        b=BCx+zH6n0Y75JloFAelQE+A6IWUdf52gtEuL3Lj8VXzDeSyU1BVmR7tpgPt+RgGC6
+         oQ/xrN6we7eq49q6nSXC7MK4GUrsU1zV3eWIl8a9yzmB+1wtKOSCONjY7CVZcwsnDo
+         BWfP/mb9mtUodjN1AMPQ9sFKpM6fVSMXGZhl160mDI9R/qNe/toFbDQDxgcJxo33hF
+         nkRhLnp/fQyT2JQ7VmGZMXEh9UVfOuF7npz6IlMXAu2JcyCW25LhM/DwR+2+7S6Og3
+         ZLhZOctgTEgWl1+xGDCsl1uRiD7OpjZpyhMi62WnO32Xow4ZdQPD9SrGisS8IVq1jA
+         uZa2rToIp6VXQ==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -42,11 +42,10 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Matt Ranostay <matt.ranostay@konsulko.com>
-Subject: [PATCH v12 26/56] media: i2c: video-i2c: Stop direct calls to queue num_buffers field
-Date:   Tue, 17 Oct 2023 16:47:26 +0200
-Message-Id: <20231017144756.34719-27-benjamin.gaignard@collabora.com>
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v12 34/56] sample: v4l: Stop direct calls to queue num_buffers field
+Date:   Tue, 17 Oct 2023 16:47:34 +0200
+Message-Id: <20231017144756.34719-35-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231017144756.34719-1-benjamin.gaignard@collabora.com>
 References: <20231017144756.34719-1-benjamin.gaignard@collabora.com>
@@ -61,28 +60,33 @@ This allows us to change how the number of buffers is computed in the
 futur.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-CC: Matt Ranostay <matt.ranostay@konsulko.com>
 ---
- drivers/media/i2c/video-i2c.c | 5 +++--
+ samples/v4l/v4l2-pci-skeleton.c | 5 +++--
  1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/i2c/video-i2c.c b/drivers/media/i2c/video-i2c.c
-index 178bd06cc2ed..ebf2ac98a068 100644
---- a/drivers/media/i2c/video-i2c.c
-+++ b/drivers/media/i2c/video-i2c.c
-@@ -405,9 +405,10 @@ static int queue_setup(struct vb2_queue *vq,
+diff --git a/samples/v4l/v4l2-pci-skeleton.c b/samples/v4l/v4l2-pci-skeleton.c
+index a61f94db18d9..a65aa9d1e9da 100644
+--- a/samples/v4l/v4l2-pci-skeleton.c
++++ b/samples/v4l/v4l2-pci-skeleton.c
+@@ -155,6 +155,7 @@ static int queue_setup(struct vb2_queue *vq,
+ 		       unsigned int sizes[], struct device *alloc_devs[])
  {
- 	struct video_i2c_data *data = vb2_get_drv_priv(vq);
- 	unsigned int size = data->chip->buffer_size;
+ 	struct skeleton *skel = vb2_get_drv_priv(vq);
 +	unsigned int q_num_bufs = vb2_get_num_buffers(vq);
  
--	if (vq->num_buffers + *nbuffers < 2)
--		*nbuffers = 2;
-+	if (q_num_bufs + *nbuffers < 2)
-+		*nbuffers = 2 - q_num_bufs;
+ 	skel->field = skel->format.field;
+ 	if (skel->field == V4L2_FIELD_ALTERNATE) {
+@@ -167,8 +168,8 @@ static int queue_setup(struct vb2_queue *vq,
+ 		skel->field = V4L2_FIELD_TOP;
+ 	}
+ 
+-	if (vq->num_buffers + *nbuffers < 3)
+-		*nbuffers = 3 - vq->num_buffers;
++	if (q_num_bufs + *nbuffers < 3)
++		*nbuffers = 3 - q_num_bufs;
  
  	if (*nplanes)
- 		return sizes[0] < size ? -EINVAL : 0;
+ 		return sizes[0] < skel->format.sizeimage ? -EINVAL : 0;
 -- 
 2.39.2
 
