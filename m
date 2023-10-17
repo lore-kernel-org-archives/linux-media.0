@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA0CCCDB489
-	for <linux-media@archiver.kernel.org>; Tue, 17 Oct 2023 14:49:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 606D0C3DA40
+	for <linux-media@archiver.kernel.org>; Tue, 17 Oct 2023 14:49:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344268AbjJQOtP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 17 Oct 2023 10:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53412 "EHLO
+        id S1344350AbjJQOtR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 17 Oct 2023 10:49:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344198AbjJQOsW (ORCPT
+        with ESMTP id S1344204AbjJQOsa (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 17 Oct 2023 10:48:22 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADFA1F0;
-        Tue, 17 Oct 2023 07:48:13 -0700 (PDT)
+        Tue, 17 Oct 2023 10:48:30 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953181A2;
+        Tue, 17 Oct 2023 07:48:23 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:7205:da49:a7e8:59f8])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 164906607359;
-        Tue, 17 Oct 2023 15:48:12 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BE18C6607395;
+        Tue, 17 Oct 2023 15:48:21 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1697554092;
-        bh=vK+TMJznRBSWjc0ShVXFJZhaWsv2b7OPcb28GLqTu0o=;
+        s=mail; t=1697554102;
+        bh=wcRkEIBX+FA3i2SS+U6BlI+rlNLiV6MPRs3pxSvNJvM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QqaQsRK+UlCvxbpWzbSKC+l2JRvjkT5F0JSdWyi/7YsfBn/CJQVoMOpW9CynbdPif
-         sqjrsNj0NDFRdfpHlKdilRyt1j1dwa478TNZJbdZFa7+U6QMEfhCNv/BkOWo/A8G98
-         S0RRA/1TRwH0+kespELs+jCeNQQCyEUPgETWP+yzZ5VsWXM/trD7XsHbNORqpWaUhB
-         fr15V0QPMcTaFlpSfe+PocHDX3mV80CbrjeTxaWVgh/+sNlG0T/dzQA99db9e9MstM
-         4JMYo8bxoKF6FMvDSramPE9BQoMLCe6hDlsgcZzNBBaQ7KgfPgxk77xSWlaW+Yt0dY
-         RkS3dQnqWBuJQ==
+        b=MENgQd8tUkxq1MPUTpyT2wE948rQ72tRlZZa/gYrGciID1ldXZHClNiJlkhnm2Fu+
+         7sExJByQ39h7mfhav3Xj/bxDNsk9LOCwwELNQCWX+eWdgYSD9XpplIxFLYwdvPNaki
+         U0nfE1gglEOl16HoHxyeXDIxy+eFToGUGF52G9Hxz5u62aNpBWAPGJHTZ3laJa1zOs
+         i2KrM8vRC8dk3UhS/GL7MtrJeA3fFnhWtYlmpafotFV01lS+7IdxTatrGWfxnaEmiJ
+         z0vjgHqB6F6LS9FtxYlf/btpFMVz6cjxe3LxqSv4d6nMvvOGeBY59Pu2O12vpjTmmD
+         tVKQ+dzcx3Msw==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -43,11 +43,11 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: [PATCH v12 17/56] media: atomisp: Stop direct calls to queue num_buffers field
-Date:   Tue, 17 Oct 2023 16:47:17 +0200
-Message-Id: <20231017144756.34719-18-benjamin.gaignard@collabora.com>
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Maxime Ripard <mripard@kernel.org>
+Subject: [PATCH v12 35/56] media: cedrus: Stop direct calls to queue num_buffers field
+Date:   Tue, 17 Oct 2023 16:47:35 +0200
+Message-Id: <20231017144756.34719-36-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231017144756.34719-1-benjamin.gaignard@collabora.com>
 References: <20231017144756.34719-1-benjamin.gaignard@collabora.com>
@@ -57,30 +57,59 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use vb2_get_num_buffers() to avoid using queue num_buffers field directly.
+Use vb2_get_num_buffers() and queue max_num_buffers field
+to avoid using queue num_buffer field directly.
 This allows us to change how the number of buffers is computed in the
 futur.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-CC: Sakari Ailus <sakari.ailus@linux.intel.com>
+Acked-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+CC: Maxime Ripard <mripard@kernel.org>
 ---
- drivers/staging/media/atomisp/pci/atomisp_ioctl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/staging/media/sunxi/cedrus/cedrus_h264.c | 9 +++++++--
+ drivers/staging/media/sunxi/cedrus/cedrus_h265.c | 9 +++++++--
+ 2 files changed, 14 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-index a8a964b2f1a8..09c0091b920f 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-@@ -1028,7 +1028,7 @@ static int atomisp_qbuf_wrapper(struct file *file, void *fh, struct v4l2_buffer
- 	struct atomisp_device *isp = video_get_drvdata(vdev);
- 	struct atomisp_video_pipe *pipe = atomisp_to_video_pipe(vdev);
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
+index dfb401df138a..3e2843ef6cce 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
+@@ -653,8 +653,13 @@ static void cedrus_h264_stop(struct cedrus_ctx *ctx)
  
--	if (buf->index >= vdev->queue->num_buffers)
-+	if (buf->index >= vb2_get_num_buffers(vdev->queue))
- 		return -EINVAL;
+ 	vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE);
  
- 	if (buf->reserved2 & ATOMISP_BUFFER_HAS_PER_FRAME_SETTING) {
+-	for (i = 0; i < vq->num_buffers; i++) {
+-		buf = vb2_to_cedrus_buffer(vb2_get_buffer(vq, i));
++	for (i = 0; i < vb2_get_num_buffers(vq); i++) {
++		struct vb2_buffer *vb = vb2_get_buffer(vq, i);
++
++		if (!vb)
++			continue;
++
++		buf = vb2_to_cedrus_buffer(vb);
+ 
+ 		if (buf->codec.h264.mv_col_buf_size > 0) {
+ 			dma_free_attrs(dev->dev,
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+index fc9297232456..52e94c8f2f01 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+@@ -869,8 +869,13 @@ static void cedrus_h265_stop(struct cedrus_ctx *ctx)
+ 
+ 	vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE);
+ 
+-	for (i = 0; i < vq->num_buffers; i++) {
+-		buf = vb2_to_cedrus_buffer(vb2_get_buffer(vq, i));
++	for (i = 0; i < vb2_get_num_buffers(vq); i++) {
++		struct vb2_buffer *vb = vb2_get_buffer(vq, i);
++
++		if (!vb)
++			continue;
++
++		buf = vb2_to_cedrus_buffer(vb);
+ 
+ 		if (buf->codec.h265.mv_col_buf_size > 0) {
+ 			dma_free_attrs(dev->dev,
 -- 
 2.39.2
 
