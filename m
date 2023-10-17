@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A1B8C46CA1
-	for <linux-media@archiver.kernel.org>; Tue, 17 Oct 2023 14:48:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFC7BCDB485
+	for <linux-media@archiver.kernel.org>; Tue, 17 Oct 2023 14:48:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344262AbjJQOsh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 17 Oct 2023 10:48:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53550 "EHLO
+        id S1344225AbjJQOsi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 17 Oct 2023 10:48:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344256AbjJQOs1 (ORCPT
+        with ESMTP id S1344273AbjJQOs3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 17 Oct 2023 10:48:27 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 547A613E;
-        Tue, 17 Oct 2023 07:48:20 -0700 (PDT)
+        Tue, 17 Oct 2023 10:48:29 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D66F5;
+        Tue, 17 Oct 2023 07:48:22 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:7205:da49:a7e8:59f8])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 925756607386;
-        Tue, 17 Oct 2023 15:48:18 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A7CFA6607390;
+        Tue, 17 Oct 2023 15:48:20 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1697554099;
-        bh=PQluilUkTzJ5XN4aSJbX9XFKUEuAkcxeq4tDfnsahqk=;
+        s=mail; t=1697554101;
+        bh=YIO5Utop1dEZJgaFYl9UZxqPRCBrM01G+R+w/VTVKWc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OaIFjyLrzgMX2Ng8NvgRFZVGhiJbo5zfRlic5VmGLzhUwwXgjC0TCRxuQnP34J/6d
-         oF9f6g7aLZZIpFCkWDoQNlpsIH07iHkWsxeQ7I76xvaBIAjBhEw03rU/ZljKFBARPX
-         kmtaOiUS2It47MQpi41HsU4b6SRdIEMQDa/6F5uYRCrYgQF7+RGqgYSCZXt98ISOyM
-         jK38QhCfJzNxziYjeSfP1VY15jgETdNM7ld6WMP3i7i/HD15GqzrnRgG7FBkqSsVOI
-         grNKqANQtwjfdk/wPVQb8bbvhswA4ifXrwuBOj7IcWtbB96N+Lr98hzIhhptc/2kis
-         EBM1ONtC0Kl7g==
+        b=JodZ1W+/1MbqIt8px5SfY/zz/ceq0+/YYscrHj0APiDCMrIIpxHNFklpHOTW0458G
+         ZcC6T6CQVZy1oAnY6RZggWDiv+GlOQ0v3/X9cVNW3n6YS4FU5KQJamq1Fd0Oa0AOBL
+         j9ryhOM/2jfwsZJIlpjQtFeP2dLk5/AcH9ocYtuSBTINvgaHZSmJicwY/dnzDzwPrH
+         +AMDJTfzr4jFDwscMLRdS5oYcSWdHPqFz0oZCP95IHsRHn6G07+tuELOip+AqnuKct
+         lnAwQRNQoWl1INUFxQJxpF8CLiQy7bveQEZpqWzLFJYd4FRriAJlmVYctcWIXlRRzG
+         RBcIHzBUChBvg==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -42,10 +42,12 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v12 29/56] media: verisilicon: Stop direct calls to queue num_buffers field
-Date:   Tue, 17 Oct 2023 16:47:29 +0200
-Message-Id: <20231017144756.34719-30-benjamin.gaignard@collabora.com>
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Henrik Rydberg <rydberg@bitmath.org>
+Subject: [PATCH v12 33/56] touchscreen: sur40: Stop direct calls to queue num_buffers field
+Date:   Tue, 17 Oct 2023 16:47:33 +0200
+Message-Id: <20231017144756.34719-34-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231017144756.34719-1-benjamin.gaignard@collabora.com>
 References: <20231017144756.34719-1-benjamin.gaignard@collabora.com>
@@ -60,24 +62,29 @@ This allows us to change how the number of buffers is computed in the
 futur.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-CC: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+CC: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+CC: Henrik Rydberg <rydberg@bitmath.org>
 ---
- drivers/media/platform/verisilicon/hantro_postproc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/input/touchscreen/sur40.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/verisilicon/hantro_postproc.c b/drivers/media/platform/verisilicon/hantro_postproc.c
-index 64d6fb852ae9..8f8f17e671ce 100644
---- a/drivers/media/platform/verisilicon/hantro_postproc.c
-+++ b/drivers/media/platform/verisilicon/hantro_postproc.c
-@@ -195,7 +195,7 @@ int hantro_postproc_alloc(struct hantro_ctx *ctx)
- 	struct hantro_dev *vpu = ctx->dev;
- 	struct v4l2_m2m_ctx *m2m_ctx = ctx->fh.m2m_ctx;
- 	struct vb2_queue *cap_queue = &m2m_ctx->cap_q_ctx.q;
--	unsigned int num_buffers = cap_queue->num_buffers;
-+	unsigned int num_buffers = vb2_get_num_buffers(cap_queue);
- 	struct v4l2_pix_format_mplane pix_mp;
- 	const struct hantro_fmt *fmt;
- 	unsigned int i, buf_size;
+diff --git a/drivers/input/touchscreen/sur40.c b/drivers/input/touchscreen/sur40.c
+index 8ddb3f7d307a..e7d2a52169a0 100644
+--- a/drivers/input/touchscreen/sur40.c
++++ b/drivers/input/touchscreen/sur40.c
+@@ -847,9 +847,10 @@ static int sur40_queue_setup(struct vb2_queue *q,
+ 		       unsigned int sizes[], struct device *alloc_devs[])
+ {
+ 	struct sur40_state *sur40 = vb2_get_drv_priv(q);
++	unsigned int q_num_bufs = vb2_get_num_buffers(q);
+ 
+-	if (q->num_buffers + *nbuffers < 3)
+-		*nbuffers = 3 - q->num_buffers;
++	if (q_num_bufs + *nbuffers < 3)
++		*nbuffers = 3 - q_num_bufs;
+ 
+ 	if (*nplanes)
+ 		return sizes[0] < sur40->pix_fmt.sizeimage ? -EINVAL : 0;
 -- 
 2.39.2
 
