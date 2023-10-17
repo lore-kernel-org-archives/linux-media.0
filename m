@@ -2,117 +2,88 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8AEBCDB474
-	for <linux-media@archiver.kernel.org>; Tue, 17 Oct 2023 15:24:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 760B4CDB484
+	for <linux-media@archiver.kernel.org>; Tue, 17 Oct 2023 15:43:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344302AbjJQPYN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 17 Oct 2023 11:24:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40224 "EHLO
+        id S1344027AbjJQPn4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 17 Oct 2023 11:43:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344297AbjJQPYN (ORCPT
+        with ESMTP id S1344318AbjJQOsb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 17 Oct 2023 11:24:13 -0400
-X-Greylist: delayed 901 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 17 Oct 2023 08:24:11 PDT
-Received: from mickerik.phytec.de (mickerik.phytec.de [91.26.50.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0545E9F
-        for <linux-media@vger.kernel.org>; Tue, 17 Oct 2023 08:24:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; d=phytec.de; s=a4; c=relaxed/simple;
-        q=dns/txt; i=@phytec.de; t=1697555346; x=1700147346;
-        h=From:Sender:Reply-To:Subject:Date:Message-ID:To:CC:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=1Gf/M/iGtEmEG3F62v05ZfJnAgvQarfAIuf/TMC9xC8=;
-        b=bl+FmcIM+PnLwV4iiYe4qObjfu+iHGsAQVCXad05nxlsLv/ame4azPTqJGwtUNPu
-        CPLFmbN/5HC2yQBe7DMr01oW68VkAxN2oB/n2Y2hSarPVIi0Qlza8WJ/jBn5hHnH
-        yJ4icdWVHUrv+TXKj8Xpypn23E8PIi/P0/xZhgPeFBI=;
-X-AuditID: ac14000a-6e25770000001e37-9f-652ea392c463
-Received: from berlix.phytec.de (Unknown_Domain [172.25.0.12])
-        (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client did not present a certificate)
-        by mickerik.phytec.de (PHYTEC Mail Gateway) with SMTP id D0.53.07735.293AE256; Tue, 17 Oct 2023 17:09:06 +0200 (CEST)
-Received: from augenblix2.phytec.de (172.25.0.11) by Berlix.phytec.de
- (172.25.0.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.6; Tue, 17 Oct
- 2023 17:09:05 +0200
-From:   =?UTF-8?q?Stefan=20Riedm=C3=BCller?= <s.riedmueller@phytec.de>
-To:     Rui Miguel Silva <rmfrfs@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Martin Kepplinger <martink@posteo.de>
-CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Purism Kernel Team <kernel@puri.sm>,
-        "Pengutronix Kernel Team" <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        <linux-media@vger.kernel.org>, <upstream@phytec.de>
-Subject: [PATCH] media: imx: imx7-media-csi: Sync frames to start of frame for MIPI
-Date:   Tue, 17 Oct 2023 17:08:54 +0200
-Message-ID: <20231017150854.270003-1-s.riedmueller@phytec.de>
-X-Mailer: git-send-email 2.25.1
+        Tue, 17 Oct 2023 10:48:31 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C5A1AD;
+        Tue, 17 Oct 2023 07:48:24 -0700 (PDT)
+Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:7205:da49:a7e8:59f8])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id CC2E86607367;
+        Tue, 17 Oct 2023 15:48:22 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1697554103;
+        bh=4+G+ZvYPKr/Dnh+XVk1Qk/BAjD/ZzHkZphjgv/jA4CU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=AD/Pl8C5XYpEYERlgScQlBCeYSobkd5BQbAx7O/zBNm9vOOVh4ql2NVYhazOis4fi
+         oofj0PqV/hBXs/rhcY3TugHdtx5VlDxdTYTcnsWBwhduTmp/xLyboinAYgrSv9CGdQ
+         6hWThQ6Ow3+K2kp6LL2yYe8sb42RTDMHcVnO07AB8f11XiMx3lQszkv/d0MyN7tuwv
+         D9TVanqFRnZcw4iWCzRW9gyKqXfikhbyXzYOetatzq5V28fQkA/Oxiq8qTgT1MJY9k
+         yUUtk9BTqrUm+hbZYSk7+2iTxNNytrXOtLo4NOTlU/olasrzFvtQ+MKOJe8CQIsxT0
+         0LDvVwkLCCg/Q==
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
+        ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        kernel@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Subject: [PATCH v12 37/56] media: renesas: Stop direct calls to queue num_buffers field
+Date:   Tue, 17 Oct 2023 16:47:37 +0200
+Message-Id: <20231017144756.34719-38-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20231017144756.34719-1-benjamin.gaignard@collabora.com>
+References: <20231017144756.34719-1-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.25.0.11]
-X-ClientProxiedBy: Florix.phytec.de (172.25.0.13) To Berlix.phytec.de
- (172.25.0.12)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrNLMWRmVeSWpSXmKPExsWyRpKBR3fSYr1Ug7UreSweXvW3WDV1J4vF
-        /LYZLBadE5ewW3T9Wsls0bNhK6vFtRUTWS2WbfrDZNG44D2Lxd/tm1gsXmwRd+D22DnrLrvH
-        7I6ZrB6bVnWyeWx8t4PJo/+vgcevw6Iej3bcYvT4vEkugCOKyyYlNSezLLVI3y6BK6N51yrm
-        gvU8Fb+XbGFrYJzN1cXIySEhYCLx7stk9i5GLg4hgSVMEmc3r2WDcB4zSsztb2MCqWITcJE4
-        9/cOM0hCRKCNUaLhwHoWEIdZ4DKTxOZpq4FaODiEBYIlmnfagjSwCKhKLHn0iBHE5hWwleg8
-        cJ8RYp28xMxL39kh4oISJ2c+YQGxmQU0JVq3/2aHsOUlmrfOZgaxhQRUJBpObmSG6Z127jWU
-        HSpxZNNqpgmMArOQjJqFZNQsJKMWMDKvYhTKzUzOTi3KzNYryKgsSU3WS0ndxAiKEBEGrh2M
-        fXM8DjEycTAeYpTgYFYS4U0P1kkV4k1JrKxKLcqPLyrNSS0+xCjNwaIkznu/hylRSCA9sSQ1
-        OzW1ILUIJsvEwSnVwGi1y+gx691jwrdOfFdZHMQjelT1w9+T4U/4jtTZ8Jv6JK1R1pvMt0zm
-        r+arirpHfkqe7yckfbpQNbWu5ZKvncV7oV/3ohKZ1ETCKpdzfqrLK3p8fccJwc709rPyIh5W
-        kooeG7hcTQ8oMd311Wq4e2TfMmExJ96Qtv/fue73FM5dm254ts7KTYmlOCPRUIu5qDgRAJxd
-        4HN+AgAA
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The default behavior for a base address change is to do it automatically
-after a DMA completion. This can lead to the situation, were one
-corrupted frame, with less lines than configured, results in all
-following frames being corrupted as well, due to a missing
-re-synchronization to the beginning of the next frame.
+Use vb2_get_num_buffers() to avoid using queue num_buffers field directly.
+This allows us to change how the number of buffers is computed in the
+futur.
 
-Fix this by configuring the base address switch to be synced with the
-start of frame event.
-
-Currently this is already implemented for the parallel interface. To
-have it with MIPI as well, simply configure it unconditionally.
-
-Tested on i.MX 8MM.
-
-Signed-off-by: Stefan Riedmüller <s.riedmueller@phytec.de>
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+CC: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 ---
- drivers/media/platform/nxp/imx7-media-csi.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/media/platform/renesas/rcar_drif.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/nxp/imx7-media-csi.c b/drivers/media/platform/nxp/imx7-media-csi.c
-index 15049c6aab37..0c9e3f01e96d 100644
---- a/drivers/media/platform/nxp/imx7-media-csi.c
-+++ b/drivers/media/platform/nxp/imx7-media-csi.c
-@@ -529,13 +529,13 @@ static void imx7_csi_configure(struct imx7_csi *csi,
- 		stride = out_pix->width;
- 	}
+diff --git a/drivers/media/platform/renesas/rcar_drif.c b/drivers/media/platform/renesas/rcar_drif.c
+index 292c5bf9e50c..f21d05054341 100644
+--- a/drivers/media/platform/renesas/rcar_drif.c
++++ b/drivers/media/platform/renesas/rcar_drif.c
+@@ -424,10 +424,11 @@ static int rcar_drif_queue_setup(struct vb2_queue *vq,
+ 			unsigned int sizes[], struct device *alloc_devs[])
+ {
+ 	struct rcar_drif_sdr *sdr = vb2_get_drv_priv(vq);
++	unsigned int q_num_bufs = vb2_get_num_buffers(vq);
  
-+	cr18 |= BIT_BASEADDR_SWITCH_EN | BIT_BASEADDR_SWITCH_SEL |
-+		BIT_BASEADDR_CHG_ERR_EN;
-+
- 	if (!csi->is_csi2) {
- 		cr1 = BIT_SOF_POL | BIT_REDGE | BIT_GCLK_MODE | BIT_HSYNC_POL
- 		    | BIT_FCC | BIT_MCLKDIV(1) | BIT_MCLKEN;
+ 	/* Need at least 16 buffers */
+-	if (vq->num_buffers + *num_buffers < 16)
+-		*num_buffers = 16 - vq->num_buffers;
++	if (q_num_bufs + *num_buffers < 16)
++		*num_buffers = 16 - q_num_bufs;
  
--		cr18 |= BIT_BASEADDR_SWITCH_EN | BIT_BASEADDR_SWITCH_SEL |
--			BIT_BASEADDR_CHG_ERR_EN;
--
- 		if (out_pix->pixelformat == V4L2_PIX_FMT_UYVY ||
- 		    out_pix->pixelformat == V4L2_PIX_FMT_YUYV)
- 			width *= 2;
+ 	*num_planes = 1;
+ 	sizes[0] = PAGE_ALIGN(sdr->fmt->buffersize);
 -- 
-2.25.1
+2.39.2
 
