@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C351CDB484
-	for <linux-media@archiver.kernel.org>; Tue, 17 Oct 2023 14:48:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC275CDB482
+	for <linux-media@archiver.kernel.org>; Tue, 17 Oct 2023 14:49:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344098AbjJQOst (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 17 Oct 2023 10:48:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53506 "EHLO
+        id S1344384AbjJQOsv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 17 Oct 2023 10:48:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344288AbjJQOs3 (ORCPT
+        with ESMTP id S1344235AbjJQOsZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 17 Oct 2023 10:48:29 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FD519E;
-        Tue, 17 Oct 2023 07:48:23 -0700 (PDT)
+        Tue, 17 Oct 2023 10:48:25 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39F7123;
+        Tue, 17 Oct 2023 07:48:17 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:7205:da49:a7e8:59f8])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3CBB06607391;
-        Tue, 17 Oct 2023 15:48:21 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DB73D6607378;
+        Tue, 17 Oct 2023 15:48:15 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1697554101;
-        bh=cNX0Uc/focM3lrX3oS9L9Q1ymhjMXLItiK8qS21I4NE=;
+        s=mail; t=1697554096;
+        bh=OzWNoh3dVGH1f8/6CPeX6RasP+WQ7RCZ45t3ra50rec=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BCx+zH6n0Y75JloFAelQE+A6IWUdf52gtEuL3Lj8VXzDeSyU1BVmR7tpgPt+RgGC6
-         oQ/xrN6we7eq49q6nSXC7MK4GUrsU1zV3eWIl8a9yzmB+1wtKOSCONjY7CVZcwsnDo
-         BWfP/mb9mtUodjN1AMPQ9sFKpM6fVSMXGZhl160mDI9R/qNe/toFbDQDxgcJxo33hF
-         nkRhLnp/fQyT2JQ7VmGZMXEh9UVfOuF7npz6IlMXAu2JcyCW25LhM/DwR+2+7S6Og3
-         ZLhZOctgTEgWl1+xGDCsl1uRiD7OpjZpyhMi62WnO32Xow4ZdQPD9SrGisS8IVq1jA
-         uZa2rToIp6VXQ==
+        b=CbZ4BxZyJPWCt/KTG9tG1OzCWe7n1bOCwR9S8+MGfNP8QJ0rnyNRtQDDgiwQfMhN6
+         enug84zFwMuguWWj/VUzqtW7XN1e7sXIyUxW9x5rj9Bh7RG4xcK39EZhQ4Dq9OKsLY
+         Pf/snQeWHL91jp3A38vZM9CTmZ+FnSDEx92QjxJcs259okcQDzzWt49oLi+i3ZTRaV
+         Wy8KGOplX6y1GBFPAR3yRn/PyifHu7mAYpmEnfNTWY33cvNNKXoSUrrYATLKONWE4J
+         SlW6ST86oDUmNpkcksi7cKl+wS2TvKpnbl6HIAjmY89DB3YjQ+wRoVk6t6b3bNgQ17
+         rP0/Fruk1msHQ==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -42,10 +42,11 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v12 34/56] sample: v4l: Stop direct calls to queue num_buffers field
-Date:   Tue, 17 Oct 2023 16:47:34 +0200
-Message-Id: <20231017144756.34719-35-benjamin.gaignard@collabora.com>
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Sergey Kozlov <serjk@netup.ru>, Abylay Ospan <aospan@netup.ru>
+Subject: [PATCH v12 24/56] media: pci: netup_unidvb: Stop direct calls to queue num_buffers field
+Date:   Tue, 17 Oct 2023 16:47:24 +0200
+Message-Id: <20231017144756.34719-25-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231017144756.34719-1-benjamin.gaignard@collabora.com>
 References: <20231017144756.34719-1-benjamin.gaignard@collabora.com>
@@ -60,33 +61,32 @@ This allows us to change how the number of buffers is computed in the
 futur.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+CC: Sergey Kozlov <serjk@netup.ru>
+CC: Abylay Ospan <aospan@netup.ru>
 ---
- samples/v4l/v4l2-pci-skeleton.c | 5 +++--
+ drivers/media/pci/netup_unidvb/netup_unidvb_core.c | 5 +++--
  1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/samples/v4l/v4l2-pci-skeleton.c b/samples/v4l/v4l2-pci-skeleton.c
-index a61f94db18d9..a65aa9d1e9da 100644
---- a/samples/v4l/v4l2-pci-skeleton.c
-+++ b/samples/v4l/v4l2-pci-skeleton.c
-@@ -155,6 +155,7 @@ static int queue_setup(struct vb2_queue *vq,
- 		       unsigned int sizes[], struct device *alloc_devs[])
+diff --git a/drivers/media/pci/netup_unidvb/netup_unidvb_core.c b/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
+index d85bfbb77a25..557985ba25db 100644
+--- a/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
++++ b/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
+@@ -293,12 +293,13 @@ static int netup_unidvb_queue_setup(struct vb2_queue *vq,
+ 				    struct device *alloc_devs[])
  {
- 	struct skeleton *skel = vb2_get_drv_priv(vq);
+ 	struct netup_dma *dma = vb2_get_drv_priv(vq);
 +	unsigned int q_num_bufs = vb2_get_num_buffers(vq);
  
- 	skel->field = skel->format.field;
- 	if (skel->field == V4L2_FIELD_ALTERNATE) {
-@@ -167,8 +168,8 @@ static int queue_setup(struct vb2_queue *vq,
- 		skel->field = V4L2_FIELD_TOP;
- 	}
+ 	dev_dbg(&dma->ndev->pci_dev->dev, "%s()\n", __func__);
  
--	if (vq->num_buffers + *nbuffers < 3)
--		*nbuffers = 3 - vq->num_buffers;
-+	if (q_num_bufs + *nbuffers < 3)
-+		*nbuffers = 3 - q_num_bufs;
- 
- 	if (*nplanes)
- 		return sizes[0] < skel->format.sizeimage ? -EINVAL : 0;
+ 	*nplanes = 1;
+-	if (vq->num_buffers + *nbuffers < VIDEO_MAX_FRAME)
+-		*nbuffers = VIDEO_MAX_FRAME - vq->num_buffers;
++	if (q_num_bufs + *nbuffers < VIDEO_MAX_FRAME)
++		*nbuffers = VIDEO_MAX_FRAME - q_num_bufs;
+ 	sizes[0] = PAGE_ALIGN(NETUP_DMA_PACKETS_COUNT * 188);
+ 	dev_dbg(&dma->ndev->pci_dev->dev, "%s() nbuffers=%d sizes[0]=%d\n",
+ 		__func__, *nbuffers, sizes[0]);
 -- 
 2.39.2
 
