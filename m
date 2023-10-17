@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B455CDB489
-	for <linux-media@archiver.kernel.org>; Tue, 17 Oct 2023 14:49:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42120CDB48E
+	for <linux-media@archiver.kernel.org>; Tue, 17 Oct 2023 14:49:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344486AbjJQOtU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 17 Oct 2023 10:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43730 "EHLO
+        id S1344495AbjJQOtX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 17 Oct 2023 10:49:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344189AbjJQOsc (ORCPT
+        with ESMTP id S1344338AbjJQOse (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 17 Oct 2023 10:48:32 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9531AE;
-        Tue, 17 Oct 2023 07:48:25 -0700 (PDT)
+        Tue, 17 Oct 2023 10:48:34 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981C21BD;
+        Tue, 17 Oct 2023 07:48:26 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:7205:da49:a7e8:59f8])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5BFB3660739B;
-        Tue, 17 Oct 2023 15:48:23 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 695EC66073A1;
+        Tue, 17 Oct 2023 15:48:24 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1697554103;
-        bh=z7YDqk4tWamJ4DKV8ZTZ6XN03Fns6vdB406SFzaRocU=;
+        s=mail; t=1697554104;
+        bh=8GZLJACA624oAq56RLro241MiteSnnQX+iq1uP+mVUw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QQUU+tSsZJizWx3OD1aRCzJSkQl1q11rGHn5ipH2rQiqax8HJEHI8OMYLJoKvwaq4
-         n1M7rdC+SaP4ZXjcoBN6sTv7bhydNZ2ywGtLtQojn9/j2RXhoXJRPF7FZ/XO5wYS1c
-         MT4dSxPdNQJ5KgoMhaqh6CHCfkBE+YhaWrMOFwvMTlc/sc7sXHq8ar3kdua++w/zci
-         amwmQHznK4alX7tMp0na9BBY5nK+ZSjPZv32Ub268xMmMqtUnZBZq3X0xb9uhAublF
-         Pt9B2NpAz+DKNUVit0VHmzY9t3QiMf0KmXKgVwYcMIqFpSjxnyq5ZS3i2uIPXOWO1G
-         i5kKfBE6tUYLw==
+        b=a4g5amf3IqcMkd1LgNlsmjGOxWNOdppPYUTNsI5tgw+eidSHg5IejyW8NFBeZLaCS
+         o6wGiqYnnXoJJgySGgBp/lhjERCVXCJQv4ejR6YKnDG5Unc93S4psmBE1hI+FwSSkG
+         axcusg8C35kLc4k45KphdqhMJZkIQI8IwcGHtetj4t7ZbT453GsdFxO/uPfoYKSO0f
+         o0+0NcnBeFjD64co6TI0GWnJXCWTAOYsODbDcvdc6Py1beIhOn57bNbVFP5Z/nCJS8
+         sW4v6KTst5Fcq7D/dlK7KWODkBF7v4S850R1AvGVXWqTVz98xVMoIyBSdFITHOwUus
+         PnfHpIL+ff+Zg==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -42,11 +42,10 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Subject: [PATCH v12 38/56] media: ti: Stop direct calls to queue num_buffers field
-Date:   Tue, 17 Oct 2023 16:47:38 +0200
-Message-Id: <20231017144756.34719-39-benjamin.gaignard@collabora.com>
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v12 40/56] media: usb: cx231xx: Stop direct calls to queue num_buffers field
+Date:   Tue, 17 Oct 2023 16:47:40 +0200
+Message-Id: <20231017144756.34719-41-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231017144756.34719-1-benjamin.gaignard@collabora.com>
 References: <20231017144756.34719-1-benjamin.gaignard@collabora.com>
@@ -61,113 +60,50 @@ This allows us to change how the number of buffers is computed in the
 futur.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-CC: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
 ---
- drivers/media/platform/ti/am437x/am437x-vpfe.c   | 5 +++--
- drivers/media/platform/ti/cal/cal-video.c        | 5 +++--
- drivers/media/platform/ti/davinci/vpif_capture.c | 5 +++--
- drivers/media/platform/ti/davinci/vpif_display.c | 5 +++--
- drivers/media/platform/ti/omap/omap_vout.c       | 5 +++--
- 5 files changed, 15 insertions(+), 10 deletions(-)
+ drivers/media/usb/cx231xx/cx231xx-417.c   | 5 +++--
+ drivers/media/usb/cx231xx/cx231xx-video.c | 5 +++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/ti/am437x/am437x-vpfe.c b/drivers/media/platform/ti/am437x/am437x-vpfe.c
-index 5fa2ea9025d9..f18acf9286a2 100644
---- a/drivers/media/platform/ti/am437x/am437x-vpfe.c
-+++ b/drivers/media/platform/ti/am437x/am437x-vpfe.c
-@@ -1771,9 +1771,10 @@ static int vpfe_queue_setup(struct vb2_queue *vq,
+diff --git a/drivers/media/usb/cx231xx/cx231xx-417.c b/drivers/media/usb/cx231xx/cx231xx-417.c
+index fe4410a5e128..45973fe690b2 100644
+--- a/drivers/media/usb/cx231xx/cx231xx-417.c
++++ b/drivers/media/usb/cx231xx/cx231xx-417.c
+@@ -1218,12 +1218,13 @@ static int queue_setup(struct vb2_queue *vq,
  {
- 	struct vpfe_device *vpfe = vb2_get_drv_priv(vq);
- 	unsigned size = vpfe->fmt.fmt.pix.sizeimage;
+ 	struct cx231xx *dev = vb2_get_drv_priv(vq);
+ 	unsigned int size = mpeglinesize * mpeglines;
 +	unsigned int q_num_bufs = vb2_get_num_buffers(vq);
  
--	if (vq->num_buffers + *nbuffers < 3)
--		*nbuffers = 3 - vq->num_buffers;
-+	if (q_num_bufs + *nbuffers < 3)
-+		*nbuffers = 3 - q_num_bufs;
+ 	dev->ts1.ts_packet_size  = mpeglinesize;
+ 	dev->ts1.ts_packet_count = mpeglines;
  
- 	if (*nplanes) {
- 		if (sizes[0] < size)
-diff --git a/drivers/media/platform/ti/cal/cal-video.c b/drivers/media/platform/ti/cal/cal-video.c
-index a8abcd0fee17..94e67c057a20 100644
---- a/drivers/media/platform/ti/cal/cal-video.c
-+++ b/drivers/media/platform/ti/cal/cal-video.c
-@@ -603,9 +603,10 @@ static int cal_queue_setup(struct vb2_queue *vq,
+-	if (vq->num_buffers + *nbuffers < CX231XX_MIN_BUF)
+-		*nbuffers = CX231XX_MIN_BUF - vq->num_buffers;
++	if (q_num_bufs + *nbuffers < CX231XX_MIN_BUF)
++		*nbuffers = CX231XX_MIN_BUF - q_num_bufs;
+ 
+ 	if (*nplanes)
+ 		return sizes[0] < size ? -EINVAL : 0;
+diff --git a/drivers/media/usb/cx231xx/cx231xx-video.c b/drivers/media/usb/cx231xx/cx231xx-video.c
+index e23b8ccd79d4..c8eb4222319d 100644
+--- a/drivers/media/usb/cx231xx/cx231xx-video.c
++++ b/drivers/media/usb/cx231xx/cx231xx-video.c
+@@ -714,11 +714,12 @@ static int queue_setup(struct vb2_queue *vq,
+ 		       unsigned int sizes[], struct device *alloc_devs[])
  {
- 	struct cal_ctx *ctx = vb2_get_drv_priv(vq);
- 	unsigned int size = ctx->v_fmt.fmt.pix.sizeimage;
+ 	struct cx231xx *dev = vb2_get_drv_priv(vq);
 +	unsigned int q_num_bufs = vb2_get_num_buffers(vq);
  
--	if (vq->num_buffers + *nbuffers < 3)
--		*nbuffers = 3 - vq->num_buffers;
-+	if (q_num_bufs + *nbuffers < 3)
-+		*nbuffers = 3 - q_num_bufs;
+ 	dev->size = (dev->width * dev->height * dev->format->depth + 7) >> 3;
  
- 	if (*nplanes) {
- 		if (sizes[0] < size)
-diff --git a/drivers/media/platform/ti/davinci/vpif_capture.c b/drivers/media/platform/ti/davinci/vpif_capture.c
-index 99fae8830c41..fc42b4bc37e6 100644
---- a/drivers/media/platform/ti/davinci/vpif_capture.c
-+++ b/drivers/media/platform/ti/davinci/vpif_capture.c
-@@ -113,6 +113,7 @@ static int vpif_buffer_queue_setup(struct vb2_queue *vq,
- 	struct channel_obj *ch = vb2_get_drv_priv(vq);
- 	struct common_obj *common = &ch->common[VPIF_VIDEO_INDEX];
- 	unsigned size = common->fmt.fmt.pix.sizeimage;
-+	unsigned int q_num_bufs = vb2_get_num_buffers(vq);
+-	if (vq->num_buffers + *nbuffers < CX231XX_MIN_BUF)
+-		*nbuffers = CX231XX_MIN_BUF - vq->num_buffers;
++	if (q_num_bufs + *nbuffers < CX231XX_MIN_BUF)
++		*nbuffers = CX231XX_MIN_BUF - q_num_bufs;
  
- 	vpif_dbg(2, debug, "vpif_buffer_setup\n");
- 
-@@ -122,8 +123,8 @@ static int vpif_buffer_queue_setup(struct vb2_queue *vq,
- 		size = sizes[0];
- 	}
- 
--	if (vq->num_buffers + *nbuffers < 3)
--		*nbuffers = 3 - vq->num_buffers;
-+	if (q_num_bufs + *nbuffers < 3)
-+		*nbuffers = 3 - q_num_bufs;
- 
- 	*nplanes = 1;
- 	sizes[0] = size;
-diff --git a/drivers/media/platform/ti/davinci/vpif_display.c b/drivers/media/platform/ti/davinci/vpif_display.c
-index f8ec2991c667..9dbab1003c1d 100644
---- a/drivers/media/platform/ti/davinci/vpif_display.c
-+++ b/drivers/media/platform/ti/davinci/vpif_display.c
-@@ -115,6 +115,7 @@ static int vpif_buffer_queue_setup(struct vb2_queue *vq,
- 	struct channel_obj *ch = vb2_get_drv_priv(vq);
- 	struct common_obj *common = &ch->common[VPIF_VIDEO_INDEX];
- 	unsigned size = common->fmt.fmt.pix.sizeimage;
-+	unsigned int q_num_bufs = vb2_get_num_buffers(vq);
- 
- 	if (*nplanes) {
- 		if (sizes[0] < size)
-@@ -122,8 +123,8 @@ static int vpif_buffer_queue_setup(struct vb2_queue *vq,
- 		size = sizes[0];
- 	}
- 
--	if (vq->num_buffers + *nbuffers < 3)
--		*nbuffers = 3 - vq->num_buffers;
-+	if (q_num_bufs + *nbuffers < 3)
-+		*nbuffers = 3 - q_num_bufs;
- 
- 	*nplanes = 1;
- 	sizes[0] = size;
-diff --git a/drivers/media/platform/ti/omap/omap_vout.c b/drivers/media/platform/ti/omap/omap_vout.c
-index 4143274089c3..72ce903717d3 100644
---- a/drivers/media/platform/ti/omap/omap_vout.c
-+++ b/drivers/media/platform/ti/omap/omap_vout.c
-@@ -944,10 +944,11 @@ static int omap_vout_vb2_queue_setup(struct vb2_queue *vq,
- 				     struct device *alloc_devs[])
- {
- 	struct omap_vout_device *vout = vb2_get_drv_priv(vq);
-+	unsigned int q_num_bufs = vb2_get_num_buffers(vq);
- 	int size = vout->pix.sizeimage;
- 
--	if (is_rotation_enabled(vout) && vq->num_buffers + *nbufs > VRFB_NUM_BUFS) {
--		*nbufs = VRFB_NUM_BUFS - vq->num_buffers;
-+	if (is_rotation_enabled(vout) && q_num_bufs + *nbufs > VRFB_NUM_BUFS) {
-+		*nbufs = VRFB_NUM_BUFS - q_num_bufs;
- 		if (*nbufs == 0)
- 			return -EINVAL;
- 	}
+ 	if (*nplanes)
+ 		return sizes[0] < dev->size ? -EINVAL : 0;
 -- 
 2.39.2
 
