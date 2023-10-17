@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B172CDB474
-	for <linux-media@archiver.kernel.org>; Tue, 17 Oct 2023 14:49:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC87BCDB484
+	for <linux-media@archiver.kernel.org>; Tue, 17 Oct 2023 14:49:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344542AbjJQOtj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 17 Oct 2023 10:49:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43852 "EHLO
+        id S1344418AbjJQOtv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 17 Oct 2023 10:49:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344395AbjJQOs5 (ORCPT
+        with ESMTP id S1344421AbjJQOs6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 17 Oct 2023 10:48:57 -0400
+        Tue, 17 Oct 2023 10:48:58 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD59AFE;
-        Tue, 17 Oct 2023 07:48:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E2FD5A;
+        Tue, 17 Oct 2023 07:48:30 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:7205:da49:a7e8:59f8])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8452466073B3;
-        Tue, 17 Oct 2023 15:48:27 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9169B66073BA;
+        Tue, 17 Oct 2023 15:48:28 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1697554107;
-        bh=/rw+5kiG9NH9F1WJEwdp/d4z1jjMgH/1J5yw8ccESj4=;
+        s=mail; t=1697554109;
+        bh=deJM8nlQ4g4jiYxn4KEycstS3ftyfWcamvuNgnfVl08=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dgXTIvML1XCHPsMyLLFJaNaPubgYc/6j05R0MXF0QSjosnQFfB/NYpwecL6+6D8fY
-         YygRGoIjvpC4Vp3EW/73ELHP9+TyhihZ26QSl/i04BaqiwhDtfMrIH9bvrVKno7gNA
-         LhSQCEq8Zm7pB3XCf6paP73Mwl2lVfICqBfq6Locndf/bo7lGA58jbyCpiKP2NrhJ8
-         bGgpRFIUgBl4cVRxlZ5fQ6QoJFcIrOX22Y89wcOidAytgAcv4ig73pVy0E046u9+R+
-         aT84/aipGzYtO9eBWZnmdSyZHZHiKiTH22fGyooqFV2crD24E0AUWI8+xMJAsywZUF
-         EOWK1KxcgauOg==
+        b=PBFKrFF+nN51eSSFF+Xf4oC06zGnG/a9oFCxdJMzAjqUwEMuWf5L/1UJc+awVuUdn
+         GHyb797d1pWl+A1tg4MevxQqogXIk4eC7riWIJJ2PpvZNe2iUjAWclKo7/CvZ4Jnbj
+         SIkC/6+SY10J6lThE9hotjR4zHdMK3aYrLSf0/V0VQcvlRbKNBo6EeOiuCtl8cLDSL
+         66GgbPpnyoBxNB++oUcAEZClK8OpM4Sa0EzCf9Dkg/Bz5H3dWYJc78ynsK24mA1P7e
+         OL738HUPV2NqKv/+0oTViaZSJwCi+8SVGSB5LbO74jS3yRXRgRS5qurTundmvoejVE
+         XKHH4IrwzQqsw==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -43,9 +43,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v12 46/56] media: test-drivers: vicodec: Increase max supported capture queue buffers
-Date:   Tue, 17 Oct 2023 16:47:46 +0200
-Message-Id: <20231017144756.34719-47-benjamin.gaignard@collabora.com>
+Subject: [PATCH v12 48/56] media: verisilicon: Store chroma and motion vectors offset
+Date:   Tue, 17 Oct 2023 16:47:48 +0200
+Message-Id: <20231017144756.34719-49-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231017144756.34719-1-benjamin.gaignard@collabora.com>
 References: <20231017144756.34719-1-benjamin.gaignard@collabora.com>
@@ -55,25 +55,65 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Allow to allocated up to 64 buffers on capture queue.
+Store computed values of chroma and motion vectors offset because
+they depends on width and height values which change if the resolution
+change.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+CC: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+CC: Philipp Zabel <p.zabel@pengutronix.de>
 ---
- drivers/media/test-drivers/vicodec/vicodec-core.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/platform/verisilicon/hantro.h            | 2 ++
+ drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c | 6 ++++--
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/test-drivers/vicodec/vicodec-core.c b/drivers/media/test-drivers/vicodec/vicodec-core.c
-index 6f0e20df74e9..69cbe2c094e1 100644
---- a/drivers/media/test-drivers/vicodec/vicodec-core.c
-+++ b/drivers/media/test-drivers/vicodec/vicodec-core.c
-@@ -1718,6 +1718,7 @@ static int queue_init(void *priv, struct vb2_queue *src_vq,
- 			V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE :
- 			V4L2_BUF_TYPE_VIDEO_CAPTURE);
- 	dst_vq->io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF;
-+	dst_vq->max_num_buffers = 64;
- 	dst_vq->drv_priv = ctx;
- 	dst_vq->buf_struct_size = sizeof(struct v4l2_m2m_buffer);
- 	dst_vq->ops = &vicodec_qops;
+diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/media/platform/verisilicon/hantro.h
+index 0948b04a9f8d..6f5eb975d0e3 100644
+--- a/drivers/media/platform/verisilicon/hantro.h
++++ b/drivers/media/platform/verisilicon/hantro.h
+@@ -328,6 +328,8 @@ struct hantro_vp9_decoded_buffer_info {
+ 	/* Info needed when the decoded frame serves as a reference frame. */
+ 	unsigned short width;
+ 	unsigned short height;
++	size_t chroma_offset;
++	size_t mv_offset;
+ 	u32 bit_depth : 4;
+ };
+ 
+diff --git a/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c b/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
+index 6fc4b555517f..6db1c32fce4d 100644
+--- a/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
++++ b/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
+@@ -158,9 +158,11 @@ static void config_output(struct hantro_ctx *ctx,
+ 
+ 	chroma_addr = luma_addr + chroma_offset(ctx, dec_params);
+ 	hantro_write_addr(ctx->dev, G2_OUT_CHROMA_ADDR, chroma_addr);
++	dst->vp9.chroma_offset = chroma_offset(ctx, dec_params);
+ 
+ 	mv_addr = luma_addr + mv_offset(ctx, dec_params);
+ 	hantro_write_addr(ctx->dev, G2_OUT_MV_ADDR, mv_addr);
++	dst->vp9.mv_offset = mv_offset(ctx, dec_params);
+ }
+ 
+ struct hantro_vp9_ref_reg {
+@@ -195,7 +197,7 @@ static void config_ref(struct hantro_ctx *ctx,
+ 	luma_addr = hantro_get_dec_buf_addr(ctx, &buf->base.vb.vb2_buf);
+ 	hantro_write_addr(ctx->dev, ref_reg->y_base, luma_addr);
+ 
+-	chroma_addr = luma_addr + chroma_offset(ctx, dec_params);
++	chroma_addr = luma_addr + buf->vp9.chroma_offset;
+ 	hantro_write_addr(ctx->dev, ref_reg->c_base, chroma_addr);
+ }
+ 
+@@ -238,7 +240,7 @@ static void config_ref_registers(struct hantro_ctx *ctx,
+ 	config_ref(ctx, dst, &ref_regs[2], dec_params, dec_params->alt_frame_ts);
+ 
+ 	mv_addr = hantro_get_dec_buf_addr(ctx, &mv_ref->base.vb.vb2_buf) +
+-		  mv_offset(ctx, dec_params);
++		  mv_ref->vp9.mv_offset;
+ 	hantro_write_addr(ctx->dev, G2_REF_MV_ADDR(0), mv_addr);
+ 
+ 	hantro_reg_write(ctx->dev, &vp9_last_sign_bias,
 -- 
 2.39.2
 
