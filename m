@@ -2,157 +2,110 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0D70CDB483
-	for <linux-media@archiver.kernel.org>; Tue, 17 Oct 2023 08:55:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D210BCDB483
+	for <linux-media@archiver.kernel.org>; Tue, 17 Oct 2023 09:18:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234751AbjJQIzK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 17 Oct 2023 04:55:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45658 "EHLO
+        id S1343514AbjJQJSG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 17 Oct 2023 05:18:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232134AbjJQIzK (ORCPT
+        with ESMTP id S1343505AbjJQJSE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 17 Oct 2023 04:55:10 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A168E;
-        Tue, 17 Oct 2023 01:55:06 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 59F8C60012;
-        Tue, 17 Oct 2023 08:54:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1697532905;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7iqwM5opDjnD+ixELUSySOVNyUQv89SINtLl3/UxmFE=;
-        b=YLPmSv2BCtXDB0ajUoTbluwBFmwofXadtU+GsY+4Sr2bStC/+57qJWEqHQxugCysJoJknP
-        /xES24Lgh/2iCrJ6gc7yDMdmhyFcxsPClA+nGs1zBJbYjmdnMazWn/GFZ5Ij1hd1/iYEOE
-        rnGM6Lou0DwZIc0pn6ZJD1neN06P0aE0s9hFnJ2NWCTv4jEGZeXwQLDI8oLcKrCQmu51Es
-        7Jaiw6FtcmzGD+tpz84+I5MJUp7c7og8dHm3VZNJP0PnF+sH4k76GF8Z+2YN+Oz/ROwvGD
-        z2Tzp5Q1gVXIAkN0JI1fQPn1a/bIY4ituL/pt69IiaEMm5cR9NQcbCEJEEXjLA==
-Date:   Tue, 17 Oct 2023 10:54:58 +0200
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
-        ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        kernel@collabora.com, Maxime Ripard <mripard@kernel.org>
-Subject: Re: [PATCH v11 41/56] media: cedrus: Stop direct calls to queue
- num_buffers field
-Message-ID: <ZS5L4l2PzQgpJXua@aptenodytes>
-References: <20231012114642.19040-1-benjamin.gaignard@collabora.com>
- <20231012114642.19040-42-benjamin.gaignard@collabora.com>
+        Tue, 17 Oct 2023 05:18:04 -0400
+Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3657AB0;
+        Tue, 17 Oct 2023 02:18:03 -0700 (PDT)
+Received: by gofer.mess.org (Postfix, from userid 501)
+        id 0702A10006C; Tue, 17 Oct 2023 10:18:01 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
+        t=1697534281; bh=8akW38+dHJiNzaVosK2VDBMXY+aQwIKCMX5dwfZwrbc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=A72IfsrI97efGXtj0+FFunSB+8e7ArNClNs5HiN6ixzgq5LcP/yXlYha0yog7cX/O
+         cm9vCiGwTBbVmNOLncD1CYiBG9XRkcsvg11GJIhXSp0rO32tBw1RpSgEqD6TKQk1tx
+         QrbIorIXbOB6ewUnjJ0beNdV0Ux9AHjw5GThLwoQ4L3XL67WTDkvR+V2dxu7WqGvDn
+         b2fjN6+LPny9itnhQjJrA1lYN75K0fL+Ws2hrDWI3IaB9Bk94NS1TGOyJ0TpJ184fu
+         WlF1Fa9BbOGrDkoRIeBsLrzzcY2JHDie0xLE0ky9WE/Y4HKDJ6OipQnSCMDvOQMnOZ
+         AeR3uPdTY0DwQ==
+Received: from bigcore.mess.org (unknown [IPv6:2a02:8011:d000:212:ca7f:54ff:fe51:14d6])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by gofer.mess.org (Postfix) with ESMTPSA id D8A2110006C;
+        Tue, 17 Oct 2023 10:17:59 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
+        t=1697534279; bh=8akW38+dHJiNzaVosK2VDBMXY+aQwIKCMX5dwfZwrbc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Yu3UhiYgHHIJ8S89sHmnZY6BAho5v5RNJf32ZGEbic393Gsy3DdchSJaDkcSLhR3V
+         Z7VcLIBRGcRBo2/4EUOBFkitDa47b557/H87JE8zEKQHuUtGtOqfqcxjP6RawtN6lx
+         +GewHRqQaUsnX0OXjGTaweYdzqnjTp4AqQwWD8gVGCGCnn6JDXCCfKxKpb5VuwBFAr
+         NOAjk0wMn4Yray3oPwt9bEL0Bq6spLBS7VUIruf9ZG6sT/TTjlJgZxmRf5BI8CknVK
+         G3MBks1cbbu/3SXCfnj8+e6pFWjN/sJHzp8NggTHyfhV+vUn1B4PFgmfehpOculvOA
+         pDVlbwlKc15pg==
+From:   Sean Young <sean@mess.org>
+To:     linux-media@vger.kernel.org, linux-pwm@vger.kernel.org,
+        Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Sean Young <sean@mess.org>
+Subject: [PATCH v3 0/3] Improve pwm-ir-tx precision
+Date:   Tue, 17 Oct 2023 10:17:36 +0100
+Message-ID: <cover.1697534024.git.sean@mess.org>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="5XMse7FBKsXwfxlj"
-Content-Disposition: inline
-In-Reply-To: <20231012114642.19040-42-benjamin.gaignard@collabora.com>
-X-GND-Sasl: paul.kocialkowski@bootlin.com
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+The pwm-ir-tx driver has to turn the pwm signal on and off, and suffers
+from delays as this is done in process context. Make this work in atomic
+context.
 
---5XMse7FBKsXwfxlj
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+changes:
 
-Hi Benjamin,
+v3:
+ - Renamed pwm_apply_state() to pwm_apply_cansleep()
+ - Moved pwm atomic to struct pwm_chip
+ - Fixed pwm docs
+ - Other minor code review comments
 
-On Thu 12 Oct 23, 13:46, Benjamin Gaignard wrote:
-> Use vb2_get_num_buffers() and queue max_num_buffers field
-> to avoid using queue num_buffer field directly.
+v2:
+ - Simplified the pwm ir tx based on Ivaylo Dimitrov suggestions
+ - Renamed pwm_can_sleep() to pwm_is_atomic
+ - Fix sleeping issue in pwm-bcm2835 (clk_get_rate() can sleep)
+ - use non_block_start() in pwm to check atomic-ness
 
-Thanks for the patch, this is indeed a nice cleanup and safer usage.
-Maybe the commit message needs to reflect why this change is welcome,
-not just what is being changed.
+Sean Young (3):
+  pwm: make it possible to apply pwm changes in atomic context
+  pwm: bcm2835: allow pwm driver to be used in atomic context
+  media: pwm-ir-tx: trigger edges from hrtimer interrupt context
 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> CC: Maxime Ripard <mripard@kernel.org>
-> CC: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> ---
->  drivers/staging/media/sunxi/cedrus/cedrus_h264.c | 8 ++++++--
->  drivers/staging/media/sunxi/cedrus/cedrus_h265.c | 9 +++++++--
->  2 files changed, 13 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c b/drivers/s=
-taging/media/sunxi/cedrus/cedrus_h264.c
-> index dfb401df138a..95e490532a87 100644
-> --- a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-> +++ b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-> @@ -653,8 +653,12 @@ static void cedrus_h264_stop(struct cedrus_ctx *ctx)
-> =20
->  	vq =3D v4l2_m2m_get_vq(ctx->fh.m2m_ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE);
-> =20
-> -	for (i =3D 0; i < vq->num_buffers; i++) {
-> -		buf =3D vb2_to_cedrus_buffer(vb2_get_buffer(vq, i));
-> +	for (i =3D 0; i < vb2_get_num_buffers(vq); i++) {
-> +		struct vb2_buffer *vb =3D vb2_get_buffer(vq, i);
-> +
-> +		if (!vb)
-> +			continue;
+ Documentation/driver-api/pwm.rst              | 16 +++-
+ .../gpu/drm/i915/display/intel_backlight.c    |  6 +-
+ drivers/gpu/drm/solomon/ssd130x.c             |  2 +-
+ drivers/hwmon/pwm-fan.c                       |  8 +-
+ drivers/input/misc/da7280.c                   |  4 +-
+ drivers/input/misc/pwm-beeper.c               |  4 +-
+ drivers/input/misc/pwm-vibra.c                |  8 +-
+ drivers/leds/leds-pwm.c                       |  2 +-
+ drivers/leds/rgb/leds-pwm-multicolor.c        |  4 +-
+ drivers/media/rc/pwm-ir-tx.c                  | 83 +++++++++++++++++--
+ drivers/platform/x86/lenovo-yogabook.c        |  2 +-
+ drivers/pwm/core.c                            | 75 +++++++++++++----
+ drivers/pwm/pwm-bcm2835.c                     | 30 ++++---
+ drivers/pwm/pwm-renesas-tpu.c                 |  1 -
+ drivers/pwm/pwm-twl-led.c                     |  2 +-
+ drivers/pwm/pwm-vt8500.c                      |  2 +-
+ drivers/pwm/sysfs.c                           | 10 +--
+ drivers/regulator/pwm-regulator.c             |  4 +-
+ drivers/video/backlight/lm3630a_bl.c          |  2 +-
+ drivers/video/backlight/lp855x_bl.c           |  2 +-
+ drivers/video/backlight/pwm_bl.c              |  6 +-
+ drivers/video/fbdev/ssd1307fb.c               |  2 +-
+ include/linux/pwm.h                           | 57 +++++++++----
+ 23 files changed, 243 insertions(+), 89 deletions(-)
 
-Please add a newline here to be consistent with the other block being chang=
-ed.
+-- 
+2.42.0
 
-With this change and the commit log reworked, you can consider this:
-Acked-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-
-Thanks!
-
-Paul
-
-> +		buf =3D vb2_to_cedrus_buffer(vb);
-> =20
->  		if (buf->codec.h264.mv_col_buf_size > 0) {
->  			dma_free_attrs(dev->dev,
-> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c b/drivers/s=
-taging/media/sunxi/cedrus/cedrus_h265.c
-> index fc9297232456..52e94c8f2f01 100644
-> --- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-> +++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-> @@ -869,8 +869,13 @@ static void cedrus_h265_stop(struct cedrus_ctx *ctx)
-> =20
->  	vq =3D v4l2_m2m_get_vq(ctx->fh.m2m_ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE);
-> =20
-> -	for (i =3D 0; i < vq->num_buffers; i++) {
-> -		buf =3D vb2_to_cedrus_buffer(vb2_get_buffer(vq, i));
-> +	for (i =3D 0; i < vb2_get_num_buffers(vq); i++) {
-> +		struct vb2_buffer *vb =3D vb2_get_buffer(vq, i);
-> +
-> +		if (!vb)
-> +			continue;
-> +
-> +		buf =3D vb2_to_cedrus_buffer(vb);
-> =20
->  		if (buf->codec.h265.mv_col_buf_size > 0) {
->  			dma_free_attrs(dev->dev,
-> --=20
-> 2.39.2
->=20
-
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---5XMse7FBKsXwfxlj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmUuS+IACgkQ3cLmz3+f
-v9GV5wf/TYcN6gfAAjC5SFlkLJBI/nxR5YwIXXCHBgPuQD+SDdeQNLb/OK6/EjCw
-N8zdNrQdsMqz+Hm6oO5qJqU/MLD8+HLPgnFNSA/+tK7uynPhFwNaJ29bDaONj9KA
-kPiJruAS/e5SXFfEdhWnHxSz+OQWvqrOBAZj/WV/OVvm/Azl9oXg67oLddms1HV7
-5Gv7y0H2u60hmsjfTptTA1MwOKjZfKDpyuSr2iENNAiJTP1H6zjnY3f7aB5JjlP5
-kWrZG+P/x6WrrX62qyWdHVq366vg9bNyLrkDyxMxz/tcjShPcfyQQ7cU/15IKpGi
-uLOnI40+m0H1qMX4rElL2jp59ZfMLQ==
-=Xf+i
------END PGP SIGNATURE-----
-
---5XMse7FBKsXwfxlj--
