@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 453C2CDB482
-	for <linux-media@archiver.kernel.org>; Tue, 17 Oct 2023 20:16:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49A1CCDB474
+	for <linux-media@archiver.kernel.org>; Tue, 17 Oct 2023 20:16:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234859AbjJQUQ1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 17 Oct 2023 16:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33120 "EHLO
+        id S235204AbjJQUQx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 17 Oct 2023 16:16:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235200AbjJQUQL (ORCPT
+        with ESMTP id S235205AbjJQUQl (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 17 Oct 2023 16:16:11 -0400
+        Tue, 17 Oct 2023 16:16:41 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376364EE6
-        for <linux-media@vger.kernel.org>; Tue, 17 Oct 2023 13:06:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDC449E3
+        for <linux-media@vger.kernel.org>; Tue, 17 Oct 2023 13:05:56 -0700 (PDT)
 Received: from umang.jainideasonboard.com (unknown [103.251.226.39])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 96A26896;
-        Tue, 17 Oct 2023 22:05:24 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7281B291;
+        Tue, 17 Oct 2023 22:05:15 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1697573126;
-        bh=nd7rHyBKUfldOwcG/wXZdy58DTZYnnBemMWna4eYMUU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JYm8Xo90ibGFok6hP+jW8+PRHKU9pPiZwYXhW56pCAgVyGRGM9J5Ql6ak1lFYXajr
-         6ZFCfoBUyUDApFT5VprrMstRaxEdKJRil3NOTzbrAyNAt5c/D0ba1etcsK9iK287A2
-         e1JyB5brKSMiW3MAy+k5d972sSw14HL16VpNDm1U=
+        s=mail; t=1697573118;
+        bh=fSTwgeBv4Z3p87X/FYECfDVA2ALKAroeIFkV1pa1/fk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=lKXbdFFyAt5QbanJcsYoeihxc4u3NgUBVpdleZF1zaqsDrRLUj08VufyD7kEf3gTP
+         Is2ssPPEPHQc2XYrbyl0aSr89/aNii3rUKWo5MC4cYxiHyaqaycGNwYeF3wr6KuTtO
+         9Y6DpW829fNGjuweNoFecp1MJf08YQ+ridGMkZ/s=
 From:   Umang Jain <umang.jain@ideasonboard.com>
 To:     linux-staging@lists.linux.dev,
         linux-arm-kernel@lists.infradead.org,
@@ -35,51 +35,46 @@ Cc:     Stefan Wahren <stefan.wahren@i2se.com>,
         Kieran Bingham <kieran.bingham@ideasonboard.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Umang Jain <umang.jain@ideasonboard.com>
-Subject: [PATCH 3/3] staging: vc04_services: bcm2835-camera: Drop MODULE_ALIAS
-Date:   Wed, 18 Oct 2023 01:35:11 +0530
-Message-Id: <20231017200511.678223-4-umang.jain@ideasonboard.com>
+Subject: [PATCH 0/3] vc04_services: Tweak module autoloading support
+Date:   Wed, 18 Oct 2023 01:35:08 +0530
+Message-Id: <20231017200511.678223-1-umang.jain@ideasonboard.com>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20231017200511.678223-1-umang.jain@ideasonboard.com>
-References: <20231017200511.678223-1-umang.jain@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Drop MODULE_ALIAS in favour of MODULE_DEVICE_TABLE as the module
-alias should be picked from there.
+As explained by Greg KH in [1], we should not be using MODULE_ALIAS
+to auto load modules within VC04. Drop that, in favour of
+MODULE_DEVICE_TABLE. This series addresses the suggestion.
 
-Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
----
- .../staging/vc04_services/bcm2835-camera/bcm2835-camera.c  | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+Patch 1/3 adds vchiq_bus_device_id and supporting entries in 
+script/mod/file2alias.c
 
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-index c873eace1437..3c18376003ff 100644
---- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-+++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-@@ -1995,9 +1995,15 @@ static void bcm2835_mmal_remove(struct vchiq_device *device)
- 	vchiq_mmal_finalise(instance);
- }
- 
-+static const struct vchiq_bus_device_id id_table[] = {
-+	{ .name = "bcm2835-camera" }
-+};
-+MODULE_DEVICE_TABLE(vchiq_bus, id_table);
-+
- static struct vchiq_driver bcm2835_camera_driver = {
- 	.probe		= bcm2835_mmal_probe,
- 	.remove		= bcm2835_mmal_remove,
-+	.id_table	= id_table,
- 	.driver		= {
- 		.name	= "bcm2835-camera",
- 	},
-@@ -2008,4 +2014,3 @@ module_vchiq_driver(bcm2835_camera_driver)
- MODULE_DESCRIPTION("Broadcom 2835 MMAL video capture");
- MODULE_AUTHOR("Vincent Sanders");
- MODULE_LICENSE("GPL");
--MODULE_ALIAS("bcm2835-camera");
+Patch 2/3 drops MODULE_ALIAS from bcm2835-audio in favour
+of MODULE_DEVICE_TABLE.
+
+Patch 3/3 drops MODULE_ALIAS from bcm2835-camera in favour
+of MODULE_DEVICE_TABLE.
+
+[1]:  https://lore.kernel.org/linux-media/2023100955-stunt-equate-c6fa@gregkh/
+
+Umang Jain (3):
+  staging: vc04_services: Support module autoloading using
+    MODULE_DEVICE_TABLE
+  staging: vc04_services: bcm2835-audio: Drop MODULE_ALIAS
+  staging: vc04_services: bcm2835-camera: Drop MODULE_ALIAS
+
+ drivers/staging/vc04_services/bcm2835-audio/bcm2835.c    | 7 ++++++-
+ .../vc04_services/bcm2835-camera/bcm2835-camera.c        | 7 ++++++-
+ .../vc04_services/interface/vchiq_arm/vchiq_bus.c        | 2 +-
+ .../vc04_services/interface/vchiq_arm/vchiq_bus.h        | 3 +++
+ include/linux/mod_devicetable.h                          | 4 ++++
+ scripts/mod/devicetable-offsets.c                        | 3 +++
+ scripts/mod/file2alias.c                                 | 9 +++++++++
+ 7 files changed, 32 insertions(+), 3 deletions(-)
+
 -- 
 2.40.1
 
