@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E163ECDB483
-	for <linux-media@archiver.kernel.org>; Thu, 19 Oct 2023 12:53:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39B1BCDB465
+	for <linux-media@archiver.kernel.org>; Thu, 19 Oct 2023 12:53:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345967AbjJSMx0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Oct 2023 08:53:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47032 "EHLO
+        id S1345795AbjJSMx2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Oct 2023 08:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345854AbjJSMwt (ORCPT
+        with ESMTP id S1345846AbjJSMwt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 19 Oct 2023 08:52:49 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9776918B;
-        Thu, 19 Oct 2023 05:52:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551D61A6;
+        Thu, 19 Oct 2023 05:52:46 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:ccea:1fb5:34eb:239b])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C130E6607353;
-        Thu, 19 Oct 2023 13:52:45 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AE8B2660736D;
+        Thu, 19 Oct 2023 13:52:44 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1697719966;
-        bh=DdlxkRuWKO9j/krVAsdkWz62fUG/5l8klfwhgZtW1d4=;
+        s=mail; t=1697719965;
+        bh=+To6mEq3JeR7oNn+VfFQcxDH9wOCwdTHlvSi0qsAVuk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HSmwO+lQblPR8KDUbpqa2qygt/1zm3WgO1xef1xo2yYTUsW967sElVKGpKbn5g5x1
-         oXfYaO1Mk9497DNfiSIuXmBMbS+PcZx6Gynsr/EpzUC+eteAavgeT1tfiKeIrhITJI
-         3CUdvGb0cn6btxoeVELLs4j/LldSSq+/CAn2/wwVT3oWLgwsC1TH+aiIBvjmC3qd/u
-         1zfRXU/jFUXbmX2vms3TwjYXjSiIK+LMkILHmTtNJM7OpFfmutaNmZ1WyWURzNNl6K
-         c1lniwJ/O2u3pSU9F3vkK7pPMT1JzZ+bKTg8JKu88u1vP3XxiS3nB0yxRxHj/TjzdT
-         KJDhreR4wo/lA==
+        b=AHBDaI5BM8oK3di/U+Y7WiExMD7eXnrE2S3OEKUs2oFkYTdi8wURGr5eK+L4Azq0W
+         aKfJCwJL4mrFCYzxtBn+ZlfSWLiNYvPXNALXLQajp2uQnFBCV+Hj61/+Sr9QNRp40u
+         X2nNsEAPREP3maPP2FCjIdIeguaL376dJda2Wibxhww8mm0rYieYPySolnrav9aI/+
+         lnXZl1OeDKp73ge0Cf1UHCSdEWUI6xyo8YASxF9klDDGaZ4/EFQ3CxCdOBzapCSBF5
+         3kMwoHZ6/f7MOlY3vc9RnUdX+Cm+BnLbQNzzAl4IxWIDuq2M3ukF9VIFVHuUtpWd/j
+         F7mfH6C5AfpUA==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -43,9 +43,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v13 29/56] media: verisilicon: Stop direct calls to queue num_buffers field
-Date:   Thu, 19 Oct 2023 14:51:55 +0200
-Message-Id: <20231019125222.21370-30-benjamin.gaignard@collabora.com>
+Subject: [PATCH v13 27/56] media: coda: Stop direct calls to queue num_buffers field
+Date:   Thu, 19 Oct 2023 14:51:53 +0200
+Message-Id: <20231019125222.21370-28-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231019125222.21370-1-benjamin.gaignard@collabora.com>
 References: <20231019125222.21370-1-benjamin.gaignard@collabora.com>
@@ -60,24 +60,24 @@ This allows us to change how the number of buffers is computed in the
 future.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-CC: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+CC: Philipp Zabel <p.zabel@pengutronix.de>
 ---
- drivers/media/platform/verisilicon/hantro_postproc.c | 2 +-
+ drivers/media/platform/chips-media/coda-common.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/verisilicon/hantro_postproc.c b/drivers/media/platform/verisilicon/hantro_postproc.c
-index 64d6fb852ae9..8f8f17e671ce 100644
---- a/drivers/media/platform/verisilicon/hantro_postproc.c
-+++ b/drivers/media/platform/verisilicon/hantro_postproc.c
-@@ -195,7 +195,7 @@ int hantro_postproc_alloc(struct hantro_ctx *ctx)
- 	struct hantro_dev *vpu = ctx->dev;
- 	struct v4l2_m2m_ctx *m2m_ctx = ctx->fh.m2m_ctx;
- 	struct vb2_queue *cap_queue = &m2m_ctx->cap_q_ctx.q;
--	unsigned int num_buffers = cap_queue->num_buffers;
-+	unsigned int num_buffers = vb2_get_num_buffers(cap_queue);
- 	struct v4l2_pix_format_mplane pix_mp;
- 	const struct hantro_fmt *fmt;
- 	unsigned int i, buf_size;
+diff --git a/drivers/media/platform/chips-media/coda-common.c b/drivers/media/platform/chips-media/coda-common.c
+index cc4892129aaf..f1d85758f6dd 100644
+--- a/drivers/media/platform/chips-media/coda-common.c
++++ b/drivers/media/platform/chips-media/coda-common.c
+@@ -794,7 +794,7 @@ static int coda_s_fmt(struct coda_ctx *ctx, struct v4l2_format *f,
+ 
+ 	if (vb2_is_busy(vq)) {
+ 		v4l2_err(&ctx->dev->v4l2_dev, "%s: %s queue busy: %d\n",
+-			 __func__, v4l2_type_names[f->type], vq->num_buffers);
++			 __func__, v4l2_type_names[f->type], vb2_get_num_buffers(vq));
+ 		return -EBUSY;
+ 	}
+ 
 -- 
 2.39.2
 
