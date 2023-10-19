@@ -2,97 +2,157 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A6C8CDB483
-	for <linux-media@archiver.kernel.org>; Thu, 19 Oct 2023 12:22:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 321ACCDB465
+	for <linux-media@archiver.kernel.org>; Thu, 19 Oct 2023 12:52:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345491AbjJSMWg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Oct 2023 08:22:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47626 "EHLO
+        id S1345593AbjJSMwf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Oct 2023 08:52:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345454AbjJSMWf (ORCPT
+        with ESMTP id S1345374AbjJSMwe (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 Oct 2023 08:22:35 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3213AA3
-        for <linux-media@vger.kernel.org>; Thu, 19 Oct 2023 05:22:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697718154; x=1729254154;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bDqGl5qLkLsF1yDqEFuj6KMhoNzv/FEem+VOVAiuEQU=;
-  b=JQA5TXv9E158QiEJl3YcMgZ+Sj85AZrZ3zp5Bo3IfVPjWWvLTv7wQGrR
-   7N4BVZnXeHRqn4RZyaaCbUsZohotVF1qV+81dQP3fJ7sJI8OOgIWjSLiv
-   MYkBSw8N4JO5lYL187Bz8Rl9egMHpN0RKYZDnnNZTT19vSeuZmttpL1G9
-   VINCkdqd6GshWg7qhZ1L5Zm0Gx1MHZcmiqyGEtIsFtnrHi6MfWpSmNfHY
-   2F3D4sOyGasqChqmUYNm6jOuxpMJbMAEWUQqPzCFQUIETJWnEryg05YyM
-   neAkX106DNT9A9N80krDa4zWSadrmuEiKi6D325KbPrRMWDowBDLE+hbI
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10867"; a="450455040"
-X-IronPort-AV: E=Sophos;i="6.03,237,1694761200"; 
-   d="scan'208";a="450455040"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2023 05:22:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10867"; a="706831066"
-X-IronPort-AV: E=Sophos;i="6.03,237,1694761200"; 
-   d="scan'208";a="706831066"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2023 05:22:30 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC2)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qtS2l-00000006rIY-1dJi;
-        Thu, 19 Oct 2023 15:22:27 +0300
-Date:   Thu, 19 Oct 2023 15:22:27 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bingbu Cao <bingbu.cao@linux.intel.com>
-Cc:     Andreas Helbech Kleist <andreaskleist@gmail.com>,
-        bingbu.cao@intel.com, linux-media@vger.kernel.org,
-        sakari.ailus@linux.intel.com, laurent.pinchart@ideasonboard.com,
-        ilpo.jarvinen@linux.intel.com, tfiga@chromium.org,
-        senozhatsky@chromium.org, hdegoede@redhat.com,
-        tomi.valkeinen@ideasonboard.com, tian.shu.qiu@intel.com,
-        hongju.wang@intel.com
-Subject: Re: [PATCH 10/15] media: intel/ipu6: add input system driver
-Message-ID: <ZTEfg8+sNGf0KU+a@smile.fi.intel.com>
-References: <20230727071558.1148653-1-bingbu.cao@intel.com>
- <20230727071558.1148653-11-bingbu.cao@intel.com>
- <1ce2242844b3e1348d7343b84b15dd87e0f66e6a.camel@gmail.com>
- <ea3cc241-4074-2b53-359f-360ca45a7b1f@linux.intel.com>
+        Thu, 19 Oct 2023 08:52:34 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4636106;
+        Thu, 19 Oct 2023 05:52:32 -0700 (PDT)
+Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:ccea:1fb5:34eb:239b])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 248FF660732E;
+        Thu, 19 Oct 2023 13:52:31 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1697719951;
+        bh=cMzVFA9/TUVo9VWr/5JcyqG4OOKgwWqTUUieq9IONwI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Ox5lQuLLysKewwxPRZbQsn/epHlYzy4PIi+wApDlBwGmeMRMjVO0DCzBRKwT/pNTE
+         dFUyZHj7QVU51rzcfgGPYEoSDv7xxD7cHMpzOAZNEccLgG7aERRCR7XjG/XAMZEx5t
+         x8EKEXHiINd46X0O66ExvFmciPDrGMydvwrx7/GD0E8folAbE3Sa/kLqqLhUwG1Sxg
+         +4chB4EZf1OpBGwmcqhDuuZINPxaPIq/55KsLNVP72l5g/Nhz9rJoRCFNXvKQtaJSc
+         xiW+Bt69y+XufPHlVlc1G2IlEu2V828w2OQVWqabEnYk758n8jSqMtTQDmOXilI2B9
+         fEPHA9VEaP6BQ==
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
+        ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        kernel@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v13 01/56] media: videobuf2: Rename offset parameter
+Date:   Thu, 19 Oct 2023 14:51:27 +0200
+Message-Id: <20231019125222.21370-2-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20231019125222.21370-1-benjamin.gaignard@collabora.com>
+References: <20231019125222.21370-1-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ea3cc241-4074-2b53-359f-360ca45a7b1f@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Oct 19, 2023 at 04:28:16PM +0800, Bingbu Cao wrote:
-> On 10/3/23 6:13 PM, Andreas Helbech Kleist wrote:
-> > On Thu, 2023-07-27 at 15:15 +0800, bingbu.cao@intel.com wrote:
+Rename 'off' parameter to 'offset' to clarify the code.
 
-...
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+---
+ .../media/common/videobuf2/videobuf2-core.c   | 26 +++++++++----------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
 
-> >> +static const struct pci_device_id isys_pci_tbl[] = {
-> >> +       { PCI_VDEVICE(INTEL, IPU6_PCI_ID) },
-> >> +       { PCI_VDEVICE(INTEL, IPU6SE_PCI_ID) },
-> >> +       { PCI_VDEVICE(INTEL, IPU6EP_ADL_P_PCI_ID) },
-> >> +       { PCI_VDEVICE(INTEL, IPU6EP_ADL_N_PCI_ID) },
-> >> +       { PCI_VDEVICE(INTEL, IPU6EP_RPL_P_PCI_ID) },
-> >> +       { PCI_VDEVICE(INTEL, IPU6EP_MTL_PCI_ID) },
-> >> +       { }
-> >> +};
-> > 
-> > Unused
-> 
-> Have you tried that whether isys driver can be auto-loaded w/o
-> this pci id table? It cannot on my side.
-
-But where is the respective MODULE_DEVICE_TABLE()?
-
+diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
+index 27aee92f3eea..a5e57affeb30 100644
+--- a/drivers/media/common/videobuf2/videobuf2-core.c
++++ b/drivers/media/common/videobuf2/videobuf2-core.c
+@@ -356,23 +356,23 @@ static void __setup_offsets(struct vb2_buffer *vb)
+ {
+ 	struct vb2_queue *q = vb->vb2_queue;
+ 	unsigned int plane;
+-	unsigned long off = 0;
++	unsigned long offset = 0;
+ 
+ 	if (vb->index) {
+ 		struct vb2_buffer *prev = q->bufs[vb->index - 1];
+ 		struct vb2_plane *p = &prev->planes[prev->num_planes - 1];
+ 
+-		off = PAGE_ALIGN(p->m.offset + p->length);
++		offset = PAGE_ALIGN(p->m.offset + p->length);
+ 	}
+ 
+ 	for (plane = 0; plane < vb->num_planes; ++plane) {
+-		vb->planes[plane].m.offset = off;
++		vb->planes[plane].m.offset = offset;
+ 
+ 		dprintk(q, 3, "buffer %d, plane %d offset 0x%08lx\n",
+-				vb->index, plane, off);
++				vb->index, plane, offset);
+ 
+-		off += vb->planes[plane].length;
+-		off = PAGE_ALIGN(off);
++		offset += vb->planes[plane].length;
++		offset = PAGE_ALIGN(offset);
+ 	}
+ }
+ 
+@@ -2185,9 +2185,9 @@ int vb2_core_streamoff(struct vb2_queue *q, unsigned int type)
+ EXPORT_SYMBOL_GPL(vb2_core_streamoff);
+ 
+ /*
+- * __find_plane_by_offset() - find plane associated with the given offset off
++ * __find_plane_by_offset() - find plane associated with the given offset
+  */
+-static int __find_plane_by_offset(struct vb2_queue *q, unsigned long off,
++static int __find_plane_by_offset(struct vb2_queue *q, unsigned long offset,
+ 			unsigned int *_buffer, unsigned int *_plane)
+ {
+ 	struct vb2_buffer *vb;
+@@ -2218,7 +2218,7 @@ static int __find_plane_by_offset(struct vb2_queue *q, unsigned long off,
+ 		vb = q->bufs[buffer];
+ 
+ 		for (plane = 0; plane < vb->num_planes; ++plane) {
+-			if (vb->planes[plane].m.offset == off) {
++			if (vb->planes[plane].m.offset == offset) {
+ 				*_buffer = buffer;
+ 				*_plane = plane;
+ 				return 0;
+@@ -2304,7 +2304,7 @@ EXPORT_SYMBOL_GPL(vb2_core_expbuf);
+ 
+ int vb2_mmap(struct vb2_queue *q, struct vm_area_struct *vma)
+ {
+-	unsigned long off = vma->vm_pgoff << PAGE_SHIFT;
++	unsigned long offset = vma->vm_pgoff << PAGE_SHIFT;
+ 	struct vb2_buffer *vb;
+ 	unsigned int buffer = 0, plane = 0;
+ 	int ret;
+@@ -2335,7 +2335,7 @@ int vb2_mmap(struct vb2_queue *q, struct vm_area_struct *vma)
+ 	 * Find the plane corresponding to the offset passed by userspace. This
+ 	 * will return an error if not MEMORY_MMAP or file I/O is in progress.
+ 	 */
+-	ret = __find_plane_by_offset(q, off, &buffer, &plane);
++	ret = __find_plane_by_offset(q, offset, &buffer, &plane);
+ 	if (ret)
+ 		goto unlock;
+ 
+@@ -2380,7 +2380,7 @@ unsigned long vb2_get_unmapped_area(struct vb2_queue *q,
+ 				    unsigned long pgoff,
+ 				    unsigned long flags)
+ {
+-	unsigned long off = pgoff << PAGE_SHIFT;
++	unsigned long offset = pgoff << PAGE_SHIFT;
+ 	struct vb2_buffer *vb;
+ 	unsigned int buffer, plane;
+ 	void *vaddr;
+@@ -2392,7 +2392,7 @@ unsigned long vb2_get_unmapped_area(struct vb2_queue *q,
+ 	 * Find the plane corresponding to the offset passed by userspace. This
+ 	 * will return an error if not MEMORY_MMAP or file I/O is in progress.
+ 	 */
+-	ret = __find_plane_by_offset(q, off, &buffer, &plane);
++	ret = __find_plane_by_offset(q, offset, &buffer, &plane);
+ 	if (ret)
+ 		goto unlock;
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.39.2
 
