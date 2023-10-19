@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85596CDB484
-	for <linux-media@archiver.kernel.org>; Thu, 19 Oct 2023 12:55:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12D26CDB48B
+	for <linux-media@archiver.kernel.org>; Thu, 19 Oct 2023 12:55:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346194AbjJSMzO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Oct 2023 08:55:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47106 "EHLO
+        id S1346196AbjJSMzQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Oct 2023 08:55:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346082AbjJSMyB (ORCPT
+        with ESMTP id S1346083AbjJSMyB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 19 Oct 2023 08:54:01 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA1F10D9;
-        Thu, 19 Oct 2023 05:52:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2233F10EB;
+        Thu, 19 Oct 2023 05:52:58 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:ccea:1fb5:34eb:239b])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8CC4A6607391;
-        Thu, 19 Oct 2023 13:52:55 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0E1096607397;
+        Thu, 19 Oct 2023 13:52:57 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1697719975;
-        bh=deJM8nlQ4g4jiYxn4KEycstS3ftyfWcamvuNgnfVl08=;
+        s=mail; t=1697719977;
+        bh=MnEpAX6paYYqEEhaTQi4aP3SQzg49BXA5RiIYY/VWXg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EvrffUoI01RYdJHzNLCguXEBGGj4pP9Fs4geT4/zcN8soO2bSsRNBkBLMXQV3O+CC
-         RKouck8D1ABQnz5NzZIpgEXB6Xyb/ungbtPKKX32k/WckSKJCx+bsgXq7fLnnI+WfA
-         31okyDUoFQxkktDZe79AjpcRED/Jl5qkeNgF1H2sqCYlC86F4TGvX8vMISmES2+Fxa
-         hV5jQC3y95PHPDc0ijgPIDTRGEL8NUMsOAYgOWYh8wPUBat6Zia2+TtJjEje3rGTPf
-         Gnx9ItM/M1Wk2CicDuRPRcVGkVPlZ2HkZoeHhieqEg6mHX82nTzg94QsVmE8q37tdb
-         6y7voaflsj6wg==
+        b=nmZ/okqU0DGfibsynmYKnGC/WK4Qm85BL6KXRB6RpN6BTnGVJSRTyCAcURs3k87uK
+         f5YKa551uxSxuzNWoD/gc9RiLpzHcHhBsuS74pURwluo6TsF232xgfCt9SobIWRmLR
+         LVJChj1PG1VIAsBptJMVyY3YT5OD9f3HAj0zhJAcrXK/NtgZTxserl7M8uHo9neZ8q
+         lcFPF0xl0kjUsUFOF7gQWbk8rP/pkfJLI6WfPTtZsH2mL4K7SGyjAQYV8yQQmugCni
+         fYH30INWKz9+YUzOXWlLGgy9UloQaL3ZTSyVVzMP9qgqPhr52fQV26z6ewt4Sb0qnm
+         UG7G8nogMTyQw==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -43,9 +43,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v13 48/56] media: verisilicon: Store chroma and motion vectors offset
-Date:   Thu, 19 Oct 2023 14:52:14 +0200
-Message-Id: <20231019125222.21370-49-benjamin.gaignard@collabora.com>
+Subject: [PATCH v13 51/56] media: core: Rework how create_buf index returned value is computed
+Date:   Thu, 19 Oct 2023 14:52:17 +0200
+Message-Id: <20231019125222.21370-52-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231019125222.21370-1-benjamin.gaignard@collabora.com>
 References: <20231019125222.21370-1-benjamin.gaignard@collabora.com>
@@ -55,65 +55,162 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Store computed values of chroma and motion vectors offset because
-they depends on width and height values which change if the resolution
-change.
+When DELETE_BUFS will be introduced holes could created in bufs array.
+To be able to reuse these unused indices reworking how create->index
+is set is mandatory.
+Let __vb2_queue_alloc() decide which first index is correct and
+forward this to the caller.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-CC: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-CC: Philipp Zabel <p.zabel@pengutronix.de>
 ---
- drivers/media/platform/verisilicon/hantro.h            | 2 ++
- drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c | 6 ++++--
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ .../media/common/videobuf2/videobuf2-core.c   | 22 ++++++++++++-------
+ .../media/common/videobuf2/videobuf2-v4l2.c   | 20 +++++++++++------
+ include/media/videobuf2-core.h                |  5 ++++-
+ 3 files changed, 31 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/media/platform/verisilicon/hantro.h
-index 0948b04a9f8d..6f5eb975d0e3 100644
---- a/drivers/media/platform/verisilicon/hantro.h
-+++ b/drivers/media/platform/verisilicon/hantro.h
-@@ -328,6 +328,8 @@ struct hantro_vp9_decoded_buffer_info {
- 	/* Info needed when the decoded frame serves as a reference frame. */
- 	unsigned short width;
- 	unsigned short height;
-+	size_t chroma_offset;
-+	size_t mv_offset;
- 	u32 bit_depth : 4;
- };
+diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
+index 72ef7179d80a..2c8cf479a962 100644
+--- a/drivers/media/common/videobuf2/videobuf2-core.c
++++ b/drivers/media/common/videobuf2/videobuf2-core.c
+@@ -442,16 +442,21 @@ static void vb2_queue_remove_buffer(struct vb2_buffer *vb)
+  */
+ static int __vb2_queue_alloc(struct vb2_queue *q, enum vb2_memory memory,
+ 			     unsigned int num_buffers, unsigned int num_planes,
+-			     const unsigned plane_sizes[VB2_MAX_PLANES])
++			     const unsigned plane_sizes[VB2_MAX_PLANES],
++			     unsigned int *first_index)
+ {
+-	unsigned int q_num_buffers = vb2_get_num_buffers(q);
+ 	unsigned int buffer, plane;
+ 	struct vb2_buffer *vb;
++	unsigned long index;
+ 	int ret;
  
-diff --git a/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c b/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
-index 6fc4b555517f..6db1c32fce4d 100644
---- a/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
-+++ b/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
-@@ -158,9 +158,11 @@ static void config_output(struct hantro_ctx *ctx,
+ 	/* Ensure that the number of already queue + num_buffers is below q->max_num_buffers */
+ 	num_buffers = min_t(unsigned int, num_buffers,
+-			    q->max_num_buffers - q_num_buffers);
++			    q->max_num_buffers - vb2_get_num_buffers(q));
++
++	index = vb2_get_num_buffers(q);
++
++	*first_index = index;
  
- 	chroma_addr = luma_addr + chroma_offset(ctx, dec_params);
- 	hantro_write_addr(ctx->dev, G2_OUT_CHROMA_ADDR, chroma_addr);
-+	dst->vp9.chroma_offset = chroma_offset(ctx, dec_params);
+ 	for (buffer = 0; buffer < num_buffers; ++buffer) {
+ 		/* Allocate vb2 buffer structures */
+@@ -471,7 +476,7 @@ static int __vb2_queue_alloc(struct vb2_queue *q, enum vb2_memory memory,
+ 			vb->planes[plane].min_length = plane_sizes[plane];
+ 		}
  
- 	mv_addr = luma_addr + mv_offset(ctx, dec_params);
- 	hantro_write_addr(ctx->dev, G2_OUT_MV_ADDR, mv_addr);
-+	dst->vp9.mv_offset = mv_offset(ctx, dec_params);
+-		vb2_queue_add_buffer(q, vb, q_num_buffers + buffer);
++		vb2_queue_add_buffer(q, vb, index++);
+ 		call_void_bufop(q, init_buffer, vb);
+ 
+ 		/* Allocate video buffer memory for the MMAP type */
+@@ -812,7 +817,7 @@ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
+ 	unsigned int q_num_bufs = vb2_get_num_buffers(q);
+ 	unsigned plane_sizes[VB2_MAX_PLANES] = { };
+ 	bool non_coherent_mem = flags & V4L2_MEMORY_FLAG_NON_COHERENT;
+-	unsigned int i;
++	unsigned int i, first_index;
+ 	int ret = 0;
+ 
+ 	if (q->streaming) {
+@@ -898,7 +903,7 @@ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
+ 
+ 	/* Finally, allocate buffers and video memory */
+ 	allocated_buffers =
+-		__vb2_queue_alloc(q, memory, num_buffers, num_planes, plane_sizes);
++		__vb2_queue_alloc(q, memory, num_buffers, num_planes, plane_sizes, &first_index);
+ 	if (allocated_buffers == 0) {
+ 		dprintk(q, 1, "memory allocation failed\n");
+ 		ret = -ENOMEM;
+@@ -972,7 +977,8 @@ EXPORT_SYMBOL_GPL(vb2_core_reqbufs);
+ int vb2_core_create_bufs(struct vb2_queue *q, enum vb2_memory memory,
+ 			 unsigned int flags, unsigned int *count,
+ 			 unsigned int requested_planes,
+-			 const unsigned int requested_sizes[])
++			 const unsigned int requested_sizes[],
++			 unsigned int *first_index)
+ {
+ 	unsigned int num_planes = 0, num_buffers, allocated_buffers;
+ 	unsigned plane_sizes[VB2_MAX_PLANES] = { };
+@@ -1034,7 +1040,7 @@ int vb2_core_create_bufs(struct vb2_queue *q, enum vb2_memory memory,
+ 
+ 	/* Finally, allocate buffers and video memory */
+ 	allocated_buffers = __vb2_queue_alloc(q, memory, num_buffers,
+-				num_planes, plane_sizes);
++				num_planes, plane_sizes, first_index);
+ 	if (allocated_buffers == 0) {
+ 		dprintk(q, 1, "memory allocation failed\n");
+ 		ret = -ENOMEM;
+diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+index bdfc3a253c65..56daf3b5b2ba 100644
+--- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
++++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+@@ -805,11 +805,16 @@ int vb2_create_bufs(struct vb2_queue *q, struct v4l2_create_buffers *create)
+ 	for (i = 0; i < requested_planes; i++)
+ 		if (requested_sizes[i] == 0)
+ 			return -EINVAL;
+-	return ret ? ret : vb2_core_create_bufs(q, create->memory,
+-						create->flags,
+-						&create->count,
+-						requested_planes,
+-						requested_sizes);
++	if (ret)
++		return ret;
++
++	ret = vb2_core_create_bufs(q, create->memory,
++				   create->flags,
++				   &create->count,
++				   requested_planes,
++				   requested_sizes,
++				   &create->index);
++	return ret;
  }
+ EXPORT_SYMBOL_GPL(vb2_create_bufs);
  
- struct hantro_vp9_ref_reg {
-@@ -195,7 +197,7 @@ static void config_ref(struct hantro_ctx *ctx,
- 	luma_addr = hantro_get_dec_buf_addr(ctx, &buf->base.vb.vb2_buf);
- 	hantro_write_addr(ctx->dev, ref_reg->y_base, luma_addr);
+@@ -1037,15 +1042,16 @@ int vb2_ioctl_create_bufs(struct file *file, void *priv,
+ 	int res = vb2_verify_memory_type(vdev->queue, p->memory,
+ 			p->format.type);
  
--	chroma_addr = luma_addr + chroma_offset(ctx, dec_params);
-+	chroma_addr = luma_addr + buf->vp9.chroma_offset;
- 	hantro_write_addr(ctx->dev, ref_reg->c_base, chroma_addr);
- }
+-	p->index = vdev->queue->num_buffers;
+ 	fill_buf_caps(vdev->queue, &p->capabilities);
+ 	validate_memory_flags(vdev->queue, p->memory, &p->flags);
+ 	/*
+ 	 * If count == 0, then just check if memory and type are valid.
+ 	 * Any -EBUSY result from vb2_verify_memory_type can be mapped to 0.
+ 	 */
+-	if (p->count == 0)
++	if (p->count == 0) {
++		p->index = vb2_get_num_buffers(vdev->queue);
+ 		return res != -EBUSY ? res : 0;
++	}
+ 	if (res)
+ 		return res;
+ 	if (vb2_queue_is_busy(vdev->queue, file))
+diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
+index e77a397195f2..6986ff4b77cd 100644
+--- a/include/media/videobuf2-core.h
++++ b/include/media/videobuf2-core.h
+@@ -803,6 +803,8 @@ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
+  * @count: requested buffer count.
+  * @requested_planes: number of planes requested.
+  * @requested_sizes: array with the size of the planes.
++ * @first_index: index of the first created buffer, all allocated buffers have
++ *		 indices in the range [first..first+count]
+  *
+  * Videobuf2 core helper to implement VIDIOC_CREATE_BUFS() operation. It is
+  * called internally by VB2 by an API-specific handler, like
+@@ -819,7 +821,8 @@ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
+ int vb2_core_create_bufs(struct vb2_queue *q, enum vb2_memory memory,
+ 			 unsigned int flags, unsigned int *count,
+ 			 unsigned int requested_planes,
+-			 const unsigned int requested_sizes[]);
++			 const unsigned int requested_sizes[],
++			 unsigned int *first_index);
  
-@@ -238,7 +240,7 @@ static void config_ref_registers(struct hantro_ctx *ctx,
- 	config_ref(ctx, dst, &ref_regs[2], dec_params, dec_params->alt_frame_ts);
- 
- 	mv_addr = hantro_get_dec_buf_addr(ctx, &mv_ref->base.vb.vb2_buf) +
--		  mv_offset(ctx, dec_params);
-+		  mv_ref->vp9.mv_offset;
- 	hantro_write_addr(ctx->dev, G2_REF_MV_ADDR(0), mv_addr);
- 
- 	hantro_reg_write(ctx->dev, &vp9_last_sign_bias,
+ /**
+  * vb2_core_prepare_buf() - Pass ownership of a buffer from userspace
 -- 
 2.39.2
 
