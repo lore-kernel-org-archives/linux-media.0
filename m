@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24304CDB485
-	for <linux-media@archiver.kernel.org>; Thu, 19 Oct 2023 12:54:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7BFECDB484
+	for <linux-media@archiver.kernel.org>; Thu, 19 Oct 2023 12:54:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345873AbjJSMyQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Oct 2023 08:54:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47106 "EHLO
+        id S235299AbjJSMyb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Oct 2023 08:54:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345940AbjJSMxR (ORCPT
+        with ESMTP id S1345613AbjJSMxm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 Oct 2023 08:53:17 -0400
+        Thu, 19 Oct 2023 08:53:42 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B69C5D4F;
-        Thu, 19 Oct 2023 05:52:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBE2D6C;
+        Thu, 19 Oct 2023 05:52:54 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:ccea:1fb5:34eb:239b])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E7F206607334;
-        Thu, 19 Oct 2023 13:52:49 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 018E66607384;
+        Thu, 19 Oct 2023 13:52:51 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1697719970;
-        bh=I24/t0ZqSyeKvdZtsSJpVc7QnzmONAbV5k9WYLKmpuU=;
+        s=mail; t=1697719972;
+        bh=nxe8x/V/1l6XolEQlUJAmFRKBPmiBgQL0drOV0CYbaw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IGQZ0uEQO3rs1XmURBUPRvA8nKSH1kdVUbI7Fn1LiGDupmgB1HYcYEpwrmhpvYHO8
-         UIbFbDr6MvkbhsNvpvqjGhOcA5paO6TVc+tnHjMOX9OrdO1YmIM9d/5IMPznEVYRjL
-         4fy+dBFLlCXNtARymxvhg0+cZgraUgyoqB/Vkt1x2/hIGLRPGgsnmFoYnMxdZCF1/l
-         3w4CVUQlSbAGjjANefzNmGWuPDPFeU4E7R/8EEt5RF3PLZv//XVI66Xdrm95YIdMNu
-         RQiY97kfN+9ZvGU0sGWQkyBp8csYadlaECbKqyJjlLo8efmLH8335ICvO8i4o2d9nX
-         l6DWtTUE2Pxwg==
+        b=NdK5aBWyfabr1RW/jjBwqQTxhdaELhBbiycWFPsGous3728mTSqIx/Kh+QUSaKSzV
+         IyFmLQgPHSLU5DUGq6znakUf8WkESd4TLCYVayhHMTgSd6eI0zEGsmlo1SehDgHZ1z
+         XFIg/8WQ6cXLjCdowQS+Q/2UcHAkbLUgu65RRGnvDdmOua2wuAv7pLH5c4Jfz+iMcH
+         2ZJfLecKts54kV81qruNRYiH6bGUasmwQXZs5rZt6lFxvlThx6usG5W3gwgCkpxNt8
+         vdbtaUtHiQnVpAk+PUjQs/uAFikNmL0Xx73nofVT7JaNel8Bj5DwQ82Vme1sbXjC/G
+         TldwfP1mlOVVw==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -43,10 +43,10 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Subject: [PATCH v13 37/56] media: renesas: Stop direct calls to queue num_buffers field
-Date:   Thu, 19 Oct 2023 14:52:03 +0200
-Message-Id: <20231019125222.21370-38-benjamin.gaignard@collabora.com>
+        Antti Palosaari <crope@iki.fi>
+Subject: [PATCH v13 41/56] media: usb: hackrf: Stop direct calls to queue num_buffers field
+Date:   Thu, 19 Oct 2023 14:52:07 +0200
+Message-Id: <20231019125222.21370-42-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231019125222.21370-1-benjamin.gaignard@collabora.com>
 References: <20231019125222.21370-1-benjamin.gaignard@collabora.com>
@@ -61,29 +61,31 @@ This allows us to change how the number of buffers is computed in the
 future.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-CC: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+CC: Antti Palosaari <crope@iki.fi>
 ---
- drivers/media/platform/renesas/rcar_drif.c | 5 +++--
+ drivers/media/usb/hackrf/hackrf.c | 5 +++--
  1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/renesas/rcar_drif.c b/drivers/media/platform/renesas/rcar_drif.c
-index 292c5bf9e50c..f21d05054341 100644
---- a/drivers/media/platform/renesas/rcar_drif.c
-+++ b/drivers/media/platform/renesas/rcar_drif.c
-@@ -424,10 +424,11 @@ static int rcar_drif_queue_setup(struct vb2_queue *vq,
- 			unsigned int sizes[], struct device *alloc_devs[])
+diff --git a/drivers/media/usb/hackrf/hackrf.c b/drivers/media/usb/hackrf/hackrf.c
+index 3e535be2c520..9c0ecd5f056c 100644
+--- a/drivers/media/usb/hackrf/hackrf.c
++++ b/drivers/media/usb/hackrf/hackrf.c
+@@ -753,12 +753,13 @@ static int hackrf_queue_setup(struct vb2_queue *vq,
+ 		unsigned int *nplanes, unsigned int sizes[], struct device *alloc_devs[])
  {
- 	struct rcar_drif_sdr *sdr = vb2_get_drv_priv(vq);
+ 	struct hackrf_dev *dev = vb2_get_drv_priv(vq);
 +	unsigned int q_num_bufs = vb2_get_num_buffers(vq);
  
- 	/* Need at least 16 buffers */
--	if (vq->num_buffers + *num_buffers < 16)
--		*num_buffers = 16 - vq->num_buffers;
-+	if (q_num_bufs + *num_buffers < 16)
-+		*num_buffers = 16 - q_num_bufs;
+ 	dev_dbg(dev->dev, "nbuffers=%d\n", *nbuffers);
  
- 	*num_planes = 1;
- 	sizes[0] = PAGE_ALIGN(sdr->fmt->buffersize);
+ 	/* Need at least 8 buffers */
+-	if (vq->num_buffers + *nbuffers < 8)
+-		*nbuffers = 8 - vq->num_buffers;
++	if (q_num_bufs + *nbuffers < 8)
++		*nbuffers = 8 - q_num_bufs;
+ 	*nplanes = 1;
+ 	sizes[0] = PAGE_ALIGN(dev->buffersize);
+ 
 -- 
 2.39.2
 
