@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47329CDB482
-	for <linux-media@archiver.kernel.org>; Thu, 19 Oct 2023 12:54:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 441C6CDB482
+	for <linux-media@archiver.kernel.org>; Thu, 19 Oct 2023 12:54:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346136AbjJSMyl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Oct 2023 08:54:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54676 "EHLO
+        id S1346006AbjJSMyn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Oct 2023 08:54:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346042AbjJSMx5 (ORCPT
+        with ESMTP id S1346008AbjJSMxw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 Oct 2023 08:53:57 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30779D7C;
-        Thu, 19 Oct 2023 05:52:55 -0700 (PDT)
+        Thu, 19 Oct 2023 08:53:52 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B82410C3;
+        Thu, 19 Oct 2023 05:52:56 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:ccea:1fb5:34eb:239b])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 84302660738B;
-        Thu, 19 Oct 2023 13:52:53 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 79C176607383;
+        Thu, 19 Oct 2023 13:52:51 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1697719973;
-        bh=XSDQo9OCo2ZP1hI11u5UCcW4nwnvTW2khdQbpXxmYvM=;
+        s=mail; t=1697719971;
+        bh=ctJwIFCoy8onwGJKVxQ8/AgSsQL3q8AbAm0x7jyK8jw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l4mBQmNUu+zfstY6x5b+83LTIR3bVCAJKgd8WpNg/++NwUE3PYhJhD/c4ailVCV+p
-         hFIdZI8GIBzT745cAwzuT9d3vJj7gkYSdra3gyvquJ6g34h4oJW+/mY1qUzUookojH
-         zG1cMQqca9um1l2E0xBFc7Fyj4VK0jqcGt3E5NSFfUZaaOgbVMbliK2ThidmGRY+bj
-         ee9jaDct9riM2Xb5PcW2XrqMVnPzv7HCUMpTtDS8AnyHfD2fTSYtvgrLOUzUY7piGs
-         kiN6jV0zI9T0eXjbLe5shzRi+sqZ+/GPQYG5Aipv8l7RfpMZKfvw0AjwfY6BvgD8N9
-         S5O3BgDWV3FxA==
+        b=WgFF4qP6A1m1kW1mP90ZYzARSYhFCfcujQeYQFu7kypYHKTsoy08F7Bxud5fkvgcP
+         X9VJkpyYHrMvH0pHNsF1Pv5wixUw3e5QK8T6qLZ1ME1Oa2lvAkHTGqgEnpTFEspAsj
+         FhaKKeGrDFVq1YPbyEtGKJm99Yf0/TpVBbWez9oqWxMqmCVB89GPndujnT6DVymkNE
+         ZNn3jGhLtrS7r6PIjka19CUqeuI906YZBE/UzB+fvK9Ab+vokgv1W0+mWmRf7y43CN
+         5VQK09wEvEi/J+sm4a0W+EOCqzmWkJrD2An+V0x9uQLykETwZBtFG6AHAuyRdf49UM
+         Vn9wZlA68NXTQ==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -43,9 +43,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v13 44/56] media: core: Report the maximum possible number of buffers for the queue
-Date:   Thu, 19 Oct 2023 14:52:10 +0200
-Message-Id: <20231019125222.21370-45-benjamin.gaignard@collabora.com>
+Subject: [PATCH v13 40/56] media: usb: cx231xx: Stop direct calls to queue num_buffers field
+Date:   Thu, 19 Oct 2023 14:52:06 +0200
+Message-Id: <20231019125222.21370-41-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231019125222.21370-1-benjamin.gaignard@collabora.com>
 References: <20231019125222.21370-1-benjamin.gaignard@collabora.com>
@@ -55,113 +55,55 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use one of the struct v4l2_create_buffers reserved bytes to report
-the maximum possible number of buffers for the queue.
-V4l2 framework set V4L2_BUF_CAP_SUPPORTS_SET_MAX_BUFS flags in queue
-capabilities so userland can know when the field is valid.
+Use vb2_get_num_buffers() to avoid using queue num_buffers field directly.
+This allows us to change how the number of buffers is computed in the
+future.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- .../userspace-api/media/v4l/vidioc-create-bufs.rst        | 8 ++++++--
- Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst  | 1 +
- drivers/media/common/videobuf2/videobuf2-v4l2.c           | 2 ++
- drivers/media/v4l2-core/v4l2-ioctl.c                      | 4 ++--
- include/uapi/linux/videodev2.h                            | 7 ++++++-
- 5 files changed, 17 insertions(+), 5 deletions(-)
+ drivers/media/usb/cx231xx/cx231xx-417.c   | 5 +++--
+ drivers/media/usb/cx231xx/cx231xx-video.c | 5 +++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-create-bufs.rst b/Documentation/userspace-api/media/v4l/vidioc-create-bufs.rst
-index a048a9f6b7b6..49232c9006c2 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-create-bufs.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-create-bufs.rst
-@@ -116,9 +116,13 @@ than the number requested.
-       - ``flags``
-       - Specifies additional buffer management attributes.
- 	See :ref:`memory-flags`.
--
-     * - __u32
--      - ``reserved``\ [6]
-+      - ``max_num_buffers``
-+      - If the V4L2_BUF_CAP_SUPPORTS_MAX_NUM_BUFFERS capability flag is set
-+        this field indicates the maximum possible number of buffers
-+        for this queue.
-+    * - __u32
-+      - ``reserved``\ [5]
-       - A place holder for future extensions. Drivers and applications
- 	must set the array to zero.
- 
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst b/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst
-index 099fa6695167..0b3a41a45d05 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst
-@@ -120,6 +120,7 @@ aborting or finishing any DMA in progress, an implicit
- .. _V4L2-BUF-CAP-SUPPORTS-ORPHANED-BUFS:
- .. _V4L2-BUF-CAP-SUPPORTS-M2M-HOLD-CAPTURE-BUF:
- .. _V4L2-BUF-CAP-SUPPORTS-MMAP-CACHE-HINTS:
-+.. _V4L2-BUF-CAP-SUPPORTS-MAX-NUM-BUFFERS:
- 
- .. raw:: latex
- 
-diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-index f3cf4b235c1f..bdfc3a253c65 100644
---- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
-+++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-@@ -762,6 +762,8 @@ int vb2_create_bufs(struct vb2_queue *q, struct v4l2_create_buffers *create)
- 	fill_buf_caps(q, &create->capabilities);
- 	validate_memory_flags(q, create->memory, &create->flags);
- 	create->index = vb2_get_num_buffers(q);
-+	create->max_num_buffers = q->max_num_buffers;
-+	create->capabilities |= V4L2_BUF_CAP_SUPPORTS_MAX_NUM_BUFFERS;
- 	if (create->count == 0)
- 		return ret != -EBUSY ? ret : 0;
- 
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index 9b1de54ce379..628b013ca0c4 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -483,9 +483,9 @@ static void v4l_print_create_buffers(const void *arg, bool write_only)
+diff --git a/drivers/media/usb/cx231xx/cx231xx-417.c b/drivers/media/usb/cx231xx/cx231xx-417.c
+index fe4410a5e128..45973fe690b2 100644
+--- a/drivers/media/usb/cx231xx/cx231xx-417.c
++++ b/drivers/media/usb/cx231xx/cx231xx-417.c
+@@ -1218,12 +1218,13 @@ static int queue_setup(struct vb2_queue *vq,
  {
- 	const struct v4l2_create_buffers *p = arg;
+ 	struct cx231xx *dev = vb2_get_drv_priv(vq);
+ 	unsigned int size = mpeglinesize * mpeglines;
++	unsigned int q_num_bufs = vb2_get_num_buffers(vq);
  
--	pr_cont("index=%d, count=%d, memory=%s, capabilities=0x%08x, ",
-+	pr_cont("index=%d, count=%d, memory=%s, capabilities=0x%08x, max buffers=%u",
- 		p->index, p->count, prt_names(p->memory, v4l2_memory_names),
--		p->capabilities);
-+		p->capabilities, p->max_num_buffers);
- 	v4l_print_format(&p->format, write_only);
- }
+ 	dev->ts1.ts_packet_size  = mpeglinesize;
+ 	dev->ts1.ts_packet_count = mpeglines;
  
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index c3d4e490ce7c..13ddb5abf584 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -1035,6 +1035,7 @@ struct v4l2_requestbuffers {
- #define V4L2_BUF_CAP_SUPPORTS_ORPHANED_BUFS		(1 << 4)
- #define V4L2_BUF_CAP_SUPPORTS_M2M_HOLD_CAPTURE_BUF	(1 << 5)
- #define V4L2_BUF_CAP_SUPPORTS_MMAP_CACHE_HINTS		(1 << 6)
-+#define V4L2_BUF_CAP_SUPPORTS_MAX_NUM_BUFFERS		(1 << 7)
+-	if (vq->num_buffers + *nbuffers < CX231XX_MIN_BUF)
+-		*nbuffers = CX231XX_MIN_BUF - vq->num_buffers;
++	if (q_num_bufs + *nbuffers < CX231XX_MIN_BUF)
++		*nbuffers = CX231XX_MIN_BUF - q_num_bufs;
  
- /**
-  * struct v4l2_plane - plane info for multi-planar buffers
-@@ -2605,6 +2606,9 @@ struct v4l2_dbg_chip_info {
-  * @flags:	additional buffer management attributes (ignored unless the
-  *		queue has V4L2_BUF_CAP_SUPPORTS_MMAP_CACHE_HINTS capability
-  *		and configured for MMAP streaming I/O).
-+ * @max_num_buffers: if V4L2_BUF_CAP_SUPPORTS_MAX_NUM_BUFFERS capability flag is set
-+ *		this field indicate the maximum possible number of buffers
-+ *		for this queue.
-  * @reserved:	future extensions
-  */
- struct v4l2_create_buffers {
-@@ -2614,7 +2618,8 @@ struct v4l2_create_buffers {
- 	struct v4l2_format	format;
- 	__u32			capabilities;
- 	__u32			flags;
--	__u32			reserved[6];
-+	__u32			max_num_buffers;
-+	__u32			reserved[5];
- };
+ 	if (*nplanes)
+ 		return sizes[0] < size ? -EINVAL : 0;
+diff --git a/drivers/media/usb/cx231xx/cx231xx-video.c b/drivers/media/usb/cx231xx/cx231xx-video.c
+index e23b8ccd79d4..c8eb4222319d 100644
+--- a/drivers/media/usb/cx231xx/cx231xx-video.c
++++ b/drivers/media/usb/cx231xx/cx231xx-video.c
+@@ -714,11 +714,12 @@ static int queue_setup(struct vb2_queue *vq,
+ 		       unsigned int sizes[], struct device *alloc_devs[])
+ {
+ 	struct cx231xx *dev = vb2_get_drv_priv(vq);
++	unsigned int q_num_bufs = vb2_get_num_buffers(vq);
  
- /*
+ 	dev->size = (dev->width * dev->height * dev->format->depth + 7) >> 3;
+ 
+-	if (vq->num_buffers + *nbuffers < CX231XX_MIN_BUF)
+-		*nbuffers = CX231XX_MIN_BUF - vq->num_buffers;
++	if (q_num_bufs + *nbuffers < CX231XX_MIN_BUF)
++		*nbuffers = CX231XX_MIN_BUF - q_num_bufs;
+ 
+ 	if (*nplanes)
+ 		return sizes[0] < dev->size ? -EINVAL : 0;
 -- 
 2.39.2
 
