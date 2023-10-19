@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 441C6CDB482
-	for <linux-media@archiver.kernel.org>; Thu, 19 Oct 2023 12:54:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF851CDB465
+	for <linux-media@archiver.kernel.org>; Thu, 19 Oct 2023 12:54:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346006AbjJSMyn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Oct 2023 08:54:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59118 "EHLO
+        id S1346068AbjJSMyw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Oct 2023 08:54:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346008AbjJSMxw (ORCPT
+        with ESMTP id S1346069AbjJSMyA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 Oct 2023 08:53:52 -0400
+        Thu, 19 Oct 2023 08:54:00 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B82410C3;
-        Thu, 19 Oct 2023 05:52:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E2710E2;
+        Thu, 19 Oct 2023 05:52:57 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:ccea:1fb5:34eb:239b])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 79C176607383;
-        Thu, 19 Oct 2023 13:52:51 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 86370660738D;
+        Thu, 19 Oct 2023 13:52:54 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1697719971;
-        bh=ctJwIFCoy8onwGJKVxQ8/AgSsQL3q8AbAm0x7jyK8jw=;
+        s=mail; t=1697719974;
+        bh=/rw+5kiG9NH9F1WJEwdp/d4z1jjMgH/1J5yw8ccESj4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WgFF4qP6A1m1kW1mP90ZYzARSYhFCfcujQeYQFu7kypYHKTsoy08F7Bxud5fkvgcP
-         X9VJkpyYHrMvH0pHNsF1Pv5wixUw3e5QK8T6qLZ1ME1Oa2lvAkHTGqgEnpTFEspAsj
-         FhaKKeGrDFVq1YPbyEtGKJm99Yf0/TpVBbWez9oqWxMqmCVB89GPndujnT6DVymkNE
-         ZNn3jGhLtrS7r6PIjka19CUqeuI906YZBE/UzB+fvK9Ab+vokgv1W0+mWmRf7y43CN
-         5VQK09wEvEi/J+sm4a0W+EOCqzmWkJrD2An+V0x9uQLykETwZBtFG6AHAuyRdf49UM
-         Vn9wZlA68NXTQ==
+        b=mIR2tZXl8DmrL/2bk+DGVUYWluO9TTzxDFzzsmbrHtctGCWmNklellAYVGoQCkOnK
+         yAknNJCWhuZZxH1YViOjD8NMqB01ZMzBZz/Qm/xZzCluovUY3iQN240dL/ETnH1XbY
+         I41PIJ0t2gX1EbdTsIr3KAjIx1DA6226/8w7shEAc19BkWo5JRQ/bWCYQ6hL+iZog6
+         hMDvE1L7x5LhfPFMy3QL3KbhRxQOJ0az1tv2FG4zYaO9d1wCGJH1D7HnyX5sH8Cqtu
+         dkIguE2D/ilQXuZ+DqjAjkpldgVzw9zHM9VN1ofmdsugr9Y72RJxZI5XhQKUzFXCu8
+         j2yocHxQSBY2w==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -43,9 +43,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v13 40/56] media: usb: cx231xx: Stop direct calls to queue num_buffers field
-Date:   Thu, 19 Oct 2023 14:52:06 +0200
-Message-Id: <20231019125222.21370-41-benjamin.gaignard@collabora.com>
+Subject: [PATCH v13 46/56] media: test-drivers: vicodec: Increase max supported capture queue buffers
+Date:   Thu, 19 Oct 2023 14:52:12 +0200
+Message-Id: <20231019125222.21370-47-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231019125222.21370-1-benjamin.gaignard@collabora.com>
 References: <20231019125222.21370-1-benjamin.gaignard@collabora.com>
@@ -55,55 +55,25 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use vb2_get_num_buffers() to avoid using queue num_buffers field directly.
-This allows us to change how the number of buffers is computed in the
-future.
+Allow to allocated up to 64 buffers on capture queue.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- drivers/media/usb/cx231xx/cx231xx-417.c   | 5 +++--
- drivers/media/usb/cx231xx/cx231xx-video.c | 5 +++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ drivers/media/test-drivers/vicodec/vicodec-core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/usb/cx231xx/cx231xx-417.c b/drivers/media/usb/cx231xx/cx231xx-417.c
-index fe4410a5e128..45973fe690b2 100644
---- a/drivers/media/usb/cx231xx/cx231xx-417.c
-+++ b/drivers/media/usb/cx231xx/cx231xx-417.c
-@@ -1218,12 +1218,13 @@ static int queue_setup(struct vb2_queue *vq,
- {
- 	struct cx231xx *dev = vb2_get_drv_priv(vq);
- 	unsigned int size = mpeglinesize * mpeglines;
-+	unsigned int q_num_bufs = vb2_get_num_buffers(vq);
- 
- 	dev->ts1.ts_packet_size  = mpeglinesize;
- 	dev->ts1.ts_packet_count = mpeglines;
- 
--	if (vq->num_buffers + *nbuffers < CX231XX_MIN_BUF)
--		*nbuffers = CX231XX_MIN_BUF - vq->num_buffers;
-+	if (q_num_bufs + *nbuffers < CX231XX_MIN_BUF)
-+		*nbuffers = CX231XX_MIN_BUF - q_num_bufs;
- 
- 	if (*nplanes)
- 		return sizes[0] < size ? -EINVAL : 0;
-diff --git a/drivers/media/usb/cx231xx/cx231xx-video.c b/drivers/media/usb/cx231xx/cx231xx-video.c
-index e23b8ccd79d4..c8eb4222319d 100644
---- a/drivers/media/usb/cx231xx/cx231xx-video.c
-+++ b/drivers/media/usb/cx231xx/cx231xx-video.c
-@@ -714,11 +714,12 @@ static int queue_setup(struct vb2_queue *vq,
- 		       unsigned int sizes[], struct device *alloc_devs[])
- {
- 	struct cx231xx *dev = vb2_get_drv_priv(vq);
-+	unsigned int q_num_bufs = vb2_get_num_buffers(vq);
- 
- 	dev->size = (dev->width * dev->height * dev->format->depth + 7) >> 3;
- 
--	if (vq->num_buffers + *nbuffers < CX231XX_MIN_BUF)
--		*nbuffers = CX231XX_MIN_BUF - vq->num_buffers;
-+	if (q_num_bufs + *nbuffers < CX231XX_MIN_BUF)
-+		*nbuffers = CX231XX_MIN_BUF - q_num_bufs;
- 
- 	if (*nplanes)
- 		return sizes[0] < dev->size ? -EINVAL : 0;
+diff --git a/drivers/media/test-drivers/vicodec/vicodec-core.c b/drivers/media/test-drivers/vicodec/vicodec-core.c
+index 6f0e20df74e9..69cbe2c094e1 100644
+--- a/drivers/media/test-drivers/vicodec/vicodec-core.c
++++ b/drivers/media/test-drivers/vicodec/vicodec-core.c
+@@ -1718,6 +1718,7 @@ static int queue_init(void *priv, struct vb2_queue *src_vq,
+ 			V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE :
+ 			V4L2_BUF_TYPE_VIDEO_CAPTURE);
+ 	dst_vq->io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF;
++	dst_vq->max_num_buffers = 64;
+ 	dst_vq->drv_priv = ctx;
+ 	dst_vq->buf_struct_size = sizeof(struct v4l2_m2m_buffer);
+ 	dst_vq->ops = &vicodec_qops;
 -- 
 2.39.2
 
