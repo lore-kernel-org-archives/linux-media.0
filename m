@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 123F9CDB486
-	for <linux-media@archiver.kernel.org>; Thu, 19 Oct 2023 12:52:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68D24CDB487
+	for <linux-media@archiver.kernel.org>; Thu, 19 Oct 2023 12:52:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345798AbjJSMwq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Oct 2023 08:52:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50124 "EHLO
+        id S1345823AbjJSMwr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Oct 2023 08:52:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345735AbjJSMwi (ORCPT
+        with ESMTP id S1345728AbjJSMwi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 19 Oct 2023 08:52:38 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFB8119;
-        Thu, 19 Oct 2023 05:52:37 -0700 (PDT)
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47A7112;
+        Thu, 19 Oct 2023 05:52:35 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:ccea:1fb5:34eb:239b])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B3E2B6607345;
-        Thu, 19 Oct 2023 13:52:35 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 30B06660733F;
+        Thu, 19 Oct 2023 13:52:34 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1697719956;
-        bh=PuFoOUa6JL13sN6HuBrtSIThFlotKKJZbkNL+kdatwI=;
+        s=mail; t=1697719954;
+        bh=lM3wXK65Q+RBpyeYExb53Y3bnLmIcGL+rErhrVO2B80=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kTPkF2AQznyVYC8DaPRrFbF0ogUdZ1fQlt8GomTaaDRXpNDUcTUfevb96D5sZ/SAZ
-         Yq+ZxuGcoZ+ftzW5buE7C719XceaEvpP3G/f5QEfsuvJgrUaItpChLGFuG5nsmNnGD
-         auE1UFWhSI/bG9t3h5zRFfz6/Uim1byTGgq8kJcDNn4rNMXi+fn5vC2ubWymywUpcC
-         Jwg0Gn2cYj5g9UL1zOUtCPP0saBhtmzCHj8BHV5Xx47KyjR2mWhkXReoM0uR9SOAib
-         g9y5A5KzCgvrICbHPhQ4VxhtKrlNX4Dx7ezB/0d9Zmwd581ux94GdN19KzhmKYHBHU
-         cYx1aCiYOj1cA==
+        b=FVNQYpwdc8DuSqvFyyhSDk4fL8gSr6zFuuBoaMyQuyI8raxmb86EuMNyJyYiaASMO
+         w0xlmdpID1lTgcgb2q8P5/fMHUzPRnHWRoVKp4wUn3J3jJIL4lLIXi92nqfgKTgHzG
+         T6euM+j9iaNxZWt2XKA9GNEP33kwhnVlalGfFBiLMGSUx07i05FkfC51+w1QDLMM2d
+         68ngutdxllUtGK9SCJ/nOTblUnwOj0oVsbTzpJKUZ3AJAaQqjoJcTXbja1KTv5Av49
+         7W9VgqnH9p89g3TPNngbgzsRW1imM+gM+bUiTimEUyKFVeDfbWwE9OxSW9FGcReLM6
+         v+v4Oqqe8KLFw==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -42,11 +42,10 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Zhou Peng <eagle.zhou@nxp.com>
-Subject: [PATCH v13 10/56] media: amphion: Stop direct calls to queue num_buffers field
-Date:   Thu, 19 Oct 2023 14:51:36 +0200
-Message-Id: <20231019125222.21370-11-benjamin.gaignard@collabora.com>
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v13 07/56] media: videobuf2: Add helper to get queue number of buffers
+Date:   Thu, 19 Oct 2023 14:51:33 +0200
+Message-Id: <20231019125222.21370-8-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231019125222.21370-1-benjamin.gaignard@collabora.com>
 References: <20231019125222.21370-1-benjamin.gaignard@collabora.com>
@@ -56,80 +55,48 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use vb2_get_num_buffers() to avoid using queue num_buffers field directly.
-This allows us to change how the number of buffers is computed in the
-future.
+In the future a side effect of introducing DELETE_BUFS ioctl is
+the create of 'holes' (i.e. unused buffers) in bufs arrays.
+To know which entries of the bufs arrays are used a bitmap will
+be added in struct vb2_queue. That will also mean that the number
+of buffers will be computed given the number of bit set in this bitmap.
+To smoothly allow this evolution all drives must stop using
+directly num_buffers field from struct vb2_queue.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-CC: Ming Qian <ming.qian@nxp.com>
-CC: Zhou Peng <eagle.zhou@nxp.com>
 ---
- drivers/media/platform/amphion/vpu_dbg.c  | 8 ++++----
- drivers/media/platform/amphion/vpu_v4l2.c | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ include/media/videobuf2-core.h | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/amphion/vpu_dbg.c b/drivers/media/platform/amphion/vpu_dbg.c
-index a462d6fe4ea9..940e5bda5fa3 100644
---- a/drivers/media/platform/amphion/vpu_dbg.c
-+++ b/drivers/media/platform/amphion/vpu_dbg.c
-@@ -87,7 +87,7 @@ static int vpu_dbg_instance(struct seq_file *s, void *data)
- 	num = scnprintf(str, sizeof(str),
- 			"output (%2d, %2d): fmt = %c%c%c%c %d x %d, %d;",
- 			vb2_is_streaming(vq),
--			vq->num_buffers,
-+			vb2_get_num_buffers(vq),
- 			inst->out_format.pixfmt,
- 			inst->out_format.pixfmt >> 8,
- 			inst->out_format.pixfmt >> 16,
-@@ -111,7 +111,7 @@ static int vpu_dbg_instance(struct seq_file *s, void *data)
- 	num = scnprintf(str, sizeof(str),
- 			"capture(%2d, %2d): fmt = %c%c%c%c %d x %d, %d;",
- 			vb2_is_streaming(vq),
--			vq->num_buffers,
-+			vb2_get_num_buffers(vq),
- 			inst->cap_format.pixfmt,
- 			inst->cap_format.pixfmt >> 8,
- 			inst->cap_format.pixfmt >> 16,
-@@ -139,7 +139,7 @@ static int vpu_dbg_instance(struct seq_file *s, void *data)
- 		return 0;
- 
- 	vq = v4l2_m2m_get_src_vq(inst->fh.m2m_ctx);
--	for (i = 0; i < vq->num_buffers; i++) {
-+	for (i = 0; i < vb2_get_num_buffers(vq); i++) {
- 		struct vb2_buffer *vb;
- 		struct vb2_v4l2_buffer *vbuf;
- 
-@@ -161,7 +161,7 @@ static int vpu_dbg_instance(struct seq_file *s, void *data)
- 	}
- 
- 	vq = v4l2_m2m_get_dst_vq(inst->fh.m2m_ctx);
--	for (i = 0; i < vq->num_buffers; i++) {
-+	for (i = 0; i < vb2_get_num_buffers(vq); i++) {
- 		struct vb2_buffer *vb;
- 		struct vb2_v4l2_buffer *vbuf;
- 
-diff --git a/drivers/media/platform/amphion/vpu_v4l2.c b/drivers/media/platform/amphion/vpu_v4l2.c
-index 0f6e4c666440..87afb4a18d5d 100644
---- a/drivers/media/platform/amphion/vpu_v4l2.c
-+++ b/drivers/media/platform/amphion/vpu_v4l2.c
-@@ -439,7 +439,7 @@ int vpu_get_num_buffers(struct vpu_inst *inst, u32 type)
- 	else
- 		q = v4l2_m2m_get_dst_vq(inst->fh.m2m_ctx);
- 
--	return q->num_buffers;
-+	return vb2_get_num_buffers(q);
+diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
+index cd3ff1cd759d..8f9d9e4af5b1 100644
+--- a/include/media/videobuf2-core.h
++++ b/include/media/videobuf2-core.h
+@@ -1139,6 +1139,15 @@ static inline bool vb2_fileio_is_active(struct vb2_queue *q)
+ 	return q->fileio;
  }
  
- static void vpu_m2m_device_run(void *priv)
-@@ -587,7 +587,7 @@ static int vpu_vb2_start_streaming(struct vb2_queue *q, unsigned int count)
- 		  fmt->sizeimage[0], fmt->bytesperline[0],
- 		  fmt->sizeimage[1], fmt->bytesperline[1],
- 		  fmt->sizeimage[2], fmt->bytesperline[2],
--		  q->num_buffers);
-+		  vb2_get_num_buffers(q));
- 	vb2_clear_last_buffer_dequeued(q);
- 	ret = call_vop(inst, start, q->type);
- 	if (ret)
++/**
++ * vb2_get_num_buffers() - get the number of buffer in a queue
++ * @q:		pointer to &struct vb2_queue with videobuf2 queue.
++ */
++static inline unsigned int vb2_get_num_buffers(struct vb2_queue *q)
++{
++	return q->num_buffers;
++}
++
+ /**
+  * vb2_is_busy() - return busy status of the queue.
+  * @q:		pointer to &struct vb2_queue with videobuf2 queue.
+@@ -1147,7 +1156,7 @@ static inline bool vb2_fileio_is_active(struct vb2_queue *q)
+  */
+ static inline bool vb2_is_busy(struct vb2_queue *q)
+ {
+-	return (q->num_buffers > 0);
++	return vb2_get_num_buffers(q) > 0;
+ }
+ 
+ /**
 -- 
 2.39.2
 
