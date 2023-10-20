@@ -2,87 +2,98 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A2F6C004C0
-	for <linux-media@archiver.kernel.org>; Thu, 19 Oct 2023 22:24:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8533C001DF
+	for <linux-media@archiver.kernel.org>; Fri, 20 Oct 2023 01:44:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235542AbjJSWYj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Oct 2023 18:24:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56756 "EHLO
+        id S1346816AbjJTBo4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Oct 2023 21:44:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231238AbjJSWYi (ORCPT
+        with ESMTP id S1346809AbjJTBoz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 Oct 2023 18:24:38 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85CF115
-        for <linux-media@vger.kernel.org>; Thu, 19 Oct 2023 15:24:31 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5C3BB10A;
-        Fri, 20 Oct 2023 00:24:15 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1697754255;
-        bh=vaWj0kMSqseaBTcldUWldrvr7bo9q3M16DQPb1Xfz1M=;
-        h=From:To:Cc:Subject:Date:From;
-        b=gCXDMgvSoZszVzxwMK+SAK+QPBtus2zhYNMWRM+Tv9xZnf90U+vPiYeW4n0biM0v/
-         2CSmgPEfr2LzUiQ46D0zHpdmVsDrPSTUNXk1zr1C7tVT7RswRBMakf7LrjL3usMGM0
-         shoRJ15orC/YBpeGlsacwZJxd4rX9vriA7qUxtrY=
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+        Thu, 19 Oct 2023 21:44:55 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BAE8124
+        for <linux-media@vger.kernel.org>; Thu, 19 Oct 2023 18:44:49 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 956B0C433C7
+        for <linux-media@vger.kernel.org>; Fri, 20 Oct 2023 01:44:48 +0000 (UTC)
+Date:   Fri, 20 Oct 2023 03:44:45 +0200
+Message-ID: <b0fc57ca414ac1613ea363814e838159.hverkuil@xs4all.nl>
+From:   "Hans Verkuil" <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Cc:     Karel Janda <karel1@tutanota.com>,
-        Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH] media: uvcvideo: Pick first best alternate setting insteed of last
-Date:   Fri, 20 Oct 2023 01:24:30 +0300
-Message-ID: <20231019222430.17043-1-laurent.pinchart@ideasonboard.com>
-X-Mailer: git-send-email 2.41.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: cron job: media_tree daily build: WARNINGS
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When selecting an alternate setting, the driver loops over all available
-alternate settings to find the one with the lowest bandwidth high enough
-for the selected format and resolution. While all alternate settings
-should have different packet sizes, some buggy devices report multiple
-alternate settings with the same size. The driver happens to pick the
-last one in this case.
+This message is generated daily by a cron job that builds media_tree for
+the architectures in the list below.
 
-In theory this should work fine, but in real life we have device bugs.
-The Ali Corp. Newmine Camera (0402:8841) exposes four alternate
-settings with the same packet size. The first three seem to work fine,
-while selecting the last one results in lots of transmission errors.
+Results of the daily build of media_tree:
 
-Switch to using the first best alternate setting when multiple are
-present. This should be safe (last famous words), as sniffing USB
-traffic with the faulty device shows that Windows 10 picks the first
-alternate setting, and devices are typically tested on Windows.
+date:			Fri Oct 20 03:00:09 CEST 2023
+media-tree git repo:	git://linuxtv.org/hverkuil/media_tree.git
+media-tree git branch:	media_stage/master
+media-tree git hash:	48016737a9af47328dd321df4dd3479ed5e2041d
+v4l-utils git hash:	088dbd7c3c9f58be30f090ba9d245a7678dd8a9d
+edid-decode git hash:	5920bf2a756b2f748c49ff6a08b9f421026473c5
+gcc version:		i686-linux-gcc (GCC) 13.2.0
+ccache version:		ccache version 4.8.3
+smatch/sparse repo:     git://repo.or.cz/smatch.git
+smatch version:		v0.5.0-8490-g8b29de04
+sparse version:		v0.5.0-8490-g8b29de04
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 4ea9496484e974bb46354c0bc783832182128194
+host hardware:		x86_64
+host os:		6.1.55-cobaltpc1
 
-Reported-by: Karel Janda <karel1@tutanota.com>
-Closes: https://lore.kernel.org/linux-media/Nh6D0WI--3-9@tutanota.com/
-Suggested-by: Karel Janda <karel1@tutanota.com>
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
-Karel, could you please test this patch ? Please also let me know if you
-are fine having your name recorded in the kernel git history with the
-Reported-by and Suggested-by tags above. If not, I will drop them.
----
- drivers/media/usb/uvc/uvc_video.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+linux-git-powerpc64: OK
+linux-git-arm: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+no-acpi.config: OK
+no-of.config: OK
+no-pm.config: OK
+no-pm-sleep.config: OK
+no-debug-fs.config: OK
+sparse: WARNINGS:
 
-diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-index 28dde08ec6c5..7cbf4692bd87 100644
---- a/drivers/media/usb/uvc/uvc_video.c
-+++ b/drivers/media/usb/uvc/uvc_video.c
-@@ -1954,7 +1954,7 @@ static int uvc_video_start_transfer(struct uvc_streaming *stream,
- 
- 			/* Check if the bandwidth is high enough. */
- 			psize = uvc_endpoint_max_bpi(stream->dev->udev, ep);
--			if (psize >= bandwidth && psize <= best_psize) {
-+			if (psize >= bandwidth && psize < best_psize) {
- 				altsetting = alts->desc.bAlternateSetting;
- 				best_psize = psize;
- 				best_ep = ep;
--- 
-Regards,
+drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
 
-Laurent Pinchart
+smatch: WARNINGS:
 
+drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
+
+COMPILE_TEST: OK
+strcpy/strncpy/strlcpy: OK
+abi-compliance: ABI OK
+pahole: ABI OK
+utils: OK
+spec-git: OK
+kerneldoc: OK
+
+date:			Fri Oct 20 03:15:59 CEST 2023
+virtme-64: WARNINGS: Final Summary: 3080, Succeeded: 3080, Failed: 0, Warnings: 4
+virtme-32: WARNINGS: Final Summary: 3193, Succeeded: 3193, Failed: 0, Warnings: 4
+
+date:			Fri Oct 20 03:43:37 CEST 2023
+
+Detailed results are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Friday.log
+
+Detailed regression test results are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Friday-test-media-64.log
+https://hverkuil.home.xs4all.nl/logs/Friday-test-media-64-dmesg.log
+https://hverkuil.home.xs4all.nl/logs/Friday-test-media-32.log
+https://hverkuil.home.xs4all.nl/logs/Friday-test-media-32-dmesg.log
+
+Full logs are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Friday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+https://hverkuil.home.xs4all.nl/spec/index.html
