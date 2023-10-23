@@ -2,45 +2,45 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5808C25B48
-	for <linux-media@archiver.kernel.org>; Mon, 23 Oct 2023 18:59:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFEEFC25B49
+	for <linux-media@archiver.kernel.org>; Mon, 23 Oct 2023 19:00:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229462AbjJWS77 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 23 Oct 2023 14:59:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56014 "EHLO
+        id S231480AbjJWTAA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 23 Oct 2023 15:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231222AbjJWS7z (ORCPT
+        with ESMTP id S230374AbjJWS75 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 23 Oct 2023 14:59:55 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E59B110;
-        Mon, 23 Oct 2023 11:59:54 -0700 (PDT)
+        Mon, 23 Oct 2023 14:59:57 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C576D68;
+        Mon, 23 Oct 2023 11:59:55 -0700 (PDT)
 Received: from arisu.mtl.collabora.ca (mtl.collabora.ca [66.171.169.34])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: detlev)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id F289366071EF;
-        Mon, 23 Oct 2023 19:59:51 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A1CED66072AE;
+        Mon, 23 Oct 2023 19:59:53 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1698087592;
-        bh=1kYYBVVZKlPmwQg0v2fZqPSvNTFy7yF+ri1uhcr4paQ=;
+        s=mail; t=1698087594;
+        bh=mp7PyZ9vAaUjeaw4jeF18DYXuzZrzrZrcZ2nFtR0WBE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cWgRGnDwnr9wDW8Ok2OdHR5TTS6eRV580VatM6gq1t88ShZCxLOHfs5fWSUaAYJCh
-         8cdW6wfW8JuXxtNKQFJlmx0X0zPrRZhv2yAukJDZLdyEx2eJBwRj3rZjX2DeLwwPuv
-         fipVzVCvER+XX3g0W1V7WdT5NegPO1Tv2m6D6+Qhe2rAQt7ZIipOc2xe877WkqK9oW
-         ZGQyoVopLsR2zfpEw9XI8BuEjtVwLC7TMiUGTRKb0D0z/pIThSo5a1ydKhZs0XwQ90
-         qCFFNf19BKPuK33r+VvE41tq703k77vo9gIzNPQhU3MW+EvxfLhX0K+NiY6aVDne25
-         lKgm0TfBI3VaA==
+        b=OzUlubulWrTJ6ypilllWJ7PmMBaqM34nB/uJHxJSicO162mhOgKZvMhNAGuUXn0ka
+         ll701p2w1nL9LcthUT8LXDEwJFgd78KRH4jmayCLDPhzHlykA+yUoW3WDt3cyuFyYT
+         eMVENCiWEitdGdD1ezy9GkoJ7aIAvF/I8YKqc3r1fxM66zOvg6U5A+/s13KKA400hZ
+         +WNP/zUimJT4Llm8VxbQWFlsX5RVjAhLBjKklTPkkUDYAxvkuHJrFVDhu5v/5T7SQq
+         0Vry0568AL+bWRJcItyA40nppHTR0kRmzmHBMABV6cnj6sCsTg0xEgKP8/l/vpICag
+         gQMGH2t9ofsfg==
 From:   Detlev Casanova <detlev.casanova@collabora.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-media@vger.kernel.org,
         Daniel Almeida <daniel.almeida@collabora.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Detlev Casanova <detlev.casanova@collabora.com>
-Subject: [PATCH 1/5] media: visl: Fix params permissions/defaults mismatch
-Date:   Mon, 23 Oct 2023 14:58:21 -0400
-Message-ID: <20231023185850.67082-2-detlev.casanova@collabora.com>
+Subject: [PATCH 3/5] doc: visl: Document stable_output parameter
+Date:   Mon, 23 Oct 2023 14:58:23 -0400
+Message-ID: <20231023185850.67082-4-detlev.casanova@collabora.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231023185850.67082-1-detlev.casanova@collabora.com>
 References: <20231023185850.67082-1-detlev.casanova@collabora.com>
@@ -50,27 +50,25 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-`false` was used as the keep_bitstream_buffers parameter permissions.
-This looks more like a default value for the parameter, so change it to
-0 to avoid confusion.
-
 Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
 ---
- drivers/media/test-drivers/visl/visl-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/admin-guide/media/visl.rst | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/media/test-drivers/visl/visl-core.c b/drivers/media/test-drivers/visl/visl-core.c
-index 9970dc739ca5..df6515530fbf 100644
---- a/drivers/media/test-drivers/visl/visl-core.c
-+++ b/drivers/media/test-drivers/visl/visl-core.c
-@@ -74,7 +74,7 @@ MODULE_PARM_DESC(visl_dprintk_nframes,
- 		 " the number of frames to trace with dprintk");
+diff --git a/Documentation/admin-guide/media/visl.rst b/Documentation/admin-guide/media/visl.rst
+index 7d2dc78341c9..5b26fd943571 100644
+--- a/Documentation/admin-guide/media/visl.rst
++++ b/Documentation/admin-guide/media/visl.rst
+@@ -49,6 +49,10 @@ Module parameters
+   visl_dprintk_frame_start, visl_dprintk_nframes, but controls the dumping of
+   buffer data through debugfs instead.
  
- bool keep_bitstream_buffers;
--module_param(keep_bitstream_buffers, bool, false);
-+module_param(keep_bitstream_buffers, bool, 0);
- MODULE_PARM_DESC(keep_bitstream_buffers,
- 		 " keep bitstream buffers in debugfs after streaming is stopped");
++- stable_output: Limit the information written on each output frame to make
++  sure that, for a given input, the output frames are always exactly the same.
++  This is useful for automated tests to check that output frames are correct.
++
+ What is the default use case for this driver?
+ ---------------------------------------------
  
 -- 
 2.41.0
