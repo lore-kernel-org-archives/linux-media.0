@@ -2,43 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 015C8C001E0
-	for <linux-media@archiver.kernel.org>; Mon, 23 Oct 2023 08:57:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1562CDB474
+	for <linux-media@archiver.kernel.org>; Mon, 23 Oct 2023 08:57:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232725AbjJWI5G (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 23 Oct 2023 04:57:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41910 "EHLO
+        id S232773AbjJWI5H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 23 Oct 2023 04:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232382AbjJWI47 (ORCPT
+        with ESMTP id S232588AbjJWI5B (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 23 Oct 2023 04:56:59 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5008E97;
-        Mon, 23 Oct 2023 01:56:53 -0700 (PDT)
+        Mon, 23 Oct 2023 04:57:01 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33A0D7B;
+        Mon, 23 Oct 2023 01:56:58 -0700 (PDT)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3892C66072A2;
-        Mon, 23 Oct 2023 09:56:51 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B23A166072BA;
+        Mon, 23 Oct 2023 09:56:56 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1698051412;
-        bh=73sRuZmQxbkYgI/4r83wPGCzqiWrtHLQxHIubnREqm8=;
+        s=mail; t=1698051417;
+        bh=m5sOlf88JxQVdhvZ4QyqxnIoJAF349n07cMPgYm2oSY=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=dscdZZ28NlD6H5TrE75QjE3qRh6WLg5frlDnZ1IIVqqlmzJQu/zyODtqo/UF6joMo
-         TXaYk5oMG2rCdVFzR/VnXNs8JF7/pm9lmQqwN5ldwGXeoKzwjjbHbPX97+r8H9RVen
-         YFBwEoGYy+eTxmwGTIH3ktT6xlCigtgkAKREAqkAIyFeTY/YIeyIMOAIWvd8XUjisK
-         0i5GpgQQc/LqeOOIiYTAZ1iBsXj98NcIxo9wBQrIbjd34+Whmj0MvBCiXQXmRzfECP
-         S+XSWWo/c0rsVNzgA5q9xhl0SoQzoktSln7pnoy3+tI0QZsH5P/ELiNp6lCNnUZfkH
-         sj4vp8KkCd6NA==
-Message-ID: <18af4161-ce36-4254-a617-3f29ccb84c07@collabora.com>
-Date:   Mon, 23 Oct 2023 10:56:48 +0200
+        b=kGGO//Drvr8wOzvYw4iefUlX/JbppAwnndURbwQDEKL6wFewruL+35PX7SB/b20Kd
+         eSWHTjp4t08IP7eQDATPHI0XYHk6/+2S6KN4ksgh0x2UCiFn8xG6UbCDRfG1u2vSRp
+         PLzvpGFXhJjRaxYEcZDc+qvo9ZVD0bGLJtcvjLOfprCd8AYy8rnKs2W6W/nvNvvbKg
+         4YQkcpa9wdtQQiPBcKmJPWFnELltzU/jz7JFgrp0Ds9xjPM/YI1Fn4tZcei6MwK0WC
+         hMy9EjrvKleLulJQ3qsbAJr36Vle6zzOtBXgD1X9YWr2Dt0Dc9sjqEvnRG6eabsOKD
+         07tOtBJznwovg==
+Message-ID: <cf2de621-5853-4647-a4fa-f9e92d601ad0@collabora.com>
+Date:   Mon, 23 Oct 2023 10:56:56 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2,6/7] media: mediatek: vcodec: Set the supported vp9
+Subject: Re: [PATCH v2,2/7] media: mediatek: vcodec: Set the supported h264
  level for each platform
-Content-Language: en-US
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Sebastian Fricke <sebastian.fricke@collabora.com>,
         =?UTF-8?Q?N=C3=ADcolas_F_=2E_R_=2E_A_=2E_Prado?= 
@@ -57,10 +56,11 @@ Cc:     Chen-Yu Tsai <wenst@chromium.org>,
         linux-mediatek@lists.infradead.org,
         Project_Global_Chrome_Upstream_Group@mediatek.com
 References: <20231023030640.16393-1-yunfei.dong@mediatek.com>
- <20231023030640.16393-7-yunfei.dong@mediatek.com>
+ <20231023030640.16393-3-yunfei.dong@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20231023030640.16393-7-yunfei.dong@mediatek.com>
+Content-Language: en-US
+In-Reply-To: <20231023030640.16393-3-yunfei.dong@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -68,10 +68,10 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 Il 23/10/23 05:06, Yunfei Dong ha scritto:
-> Set the maximum VP9 codec level for each platform.
+> Set the maximum H264 codec level for each platform.
 > The various mediatek platforms support different levels for decoding, the
-> level of the codec limits among others the maximum resolution, bit rate,
-> frame rate and compression rate for the decoder.
+> level of the codec limits among others the maximum resolution, bit rate
+> and frame rate for the decoder.
 > 
 > Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 > Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
