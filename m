@@ -2,109 +2,164 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DB37C001E0
-	for <linux-media@archiver.kernel.org>; Mon, 23 Oct 2023 14:57:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E13DC001E0
+	for <linux-media@archiver.kernel.org>; Mon, 23 Oct 2023 14:58:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230509AbjJWO5y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 23 Oct 2023 10:57:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43882 "EHLO
+        id S233529AbjJWO61 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 23 Oct 2023 10:58:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231308AbjJWO0T (ORCPT
+        with ESMTP id S233057AbjJWO6F (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 23 Oct 2023 10:26:19 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06612102
-        for <linux-media@vger.kernel.org>; Mon, 23 Oct 2023 07:26:17 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-408382da7f0so27923235e9.0
-        for <linux-media@vger.kernel.org>; Mon, 23 Oct 2023 07:26:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698071175; x=1698675975; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ibdm669iv9OJcE/KkdIFiBrAQ0+k5qbSY1Q4FYfsL4s=;
-        b=fCMzxp5Fse15xzLkg6RG3CAvdg6fbORtUTOBfpmgLuiL/xYcr1q5xhb2RHFJed57sW
-         Ly0O3x0X0p0deKvPqDyeeC3V7VSifTRSE2aSFtD6Q2UEQOBqDaxPMc8b4TXZvcEneX0c
-         bX5R7xn7YpW9Lz8PygRkVOQkOCVuWXXE1WKkxlfw/fpXRc6S/YpjY9fsuIZVn/+sxqlm
-         5v0EW0ajBcnXOy5OK6fUUiJac+zRDgvj9fVrTtf+OtVpeDO0zs9E5riOz+Fr7Bg5Sh1i
-         9FGJuh+4Md/ucOHmefPXAJAUeQ50Lt/LfdirrfWbmTrqt1QIWMmB1BR2h/fzmNsT33Ob
-         q50Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698071175; x=1698675975;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ibdm669iv9OJcE/KkdIFiBrAQ0+k5qbSY1Q4FYfsL4s=;
-        b=Ge9tbixKQLHYcbTFcYmP2iV+R492prfPyjxFb7cOlhrbftdRLVJiqUslGA3NZ5PfBF
-         Xw7It4QJShetwG2V14zf2sz6VuQSNAsU6qSk6xKxqZyOONHjqknmZCdEVSAPnJGov/QI
-         +vQ7ip+CpDFuY08lSyMUSgoLq3aMB6v+AgPmBt6Gk4y8Q8rjtf0eQ5eCopv1y9ni8kwQ
-         Nzw9RYoxqd6XKsuIx0PrWx954e9j9gltPtRF5ntcns5EIQLJcm8ksbAI66w/FPLIm8cf
-         inCrXav4CGzZud1JIQkd0EEdGRX2cuH23TVfxyAtGAfNpUSPja4FR12UAWWjs5n3aG4V
-         rZdw==
-X-Gm-Message-State: AOJu0YwRm26NTp593iJVO4/Z0UQqQzTZuCfN++zM+3q5cScDNAGD8OYC
-        Yijvr8BnM0tDAr8Ynr6Qy3iJjA==
-X-Google-Smtp-Source: AGHT+IETpcAooUqMOCjkLve2ojvd0kVcymHo1QQx78Fc+2Tm7dO7RE2+Z3X3F4g6UdNhGVSJC4hmDQ==
-X-Received: by 2002:a05:600c:5493:b0:406:5463:3f51 with SMTP id iv19-20020a05600c549300b0040654633f51mr7197630wmb.25.1698071175401;
-        Mon, 23 Oct 2023 07:26:15 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id 1-20020a05600c228100b0040596352951sm14091003wmf.5.2023.10.23.07.26.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Oct 2023 07:26:15 -0700 (PDT)
-Date:   Mon, 23 Oct 2023 17:26:11 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Jonathan Bergh <bergh.jonathan@gmail.com>
-Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org, error27@gmail.com,
-        linux-staging@lists.linux.dev, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/5] staging: media: av7110: Fix various whitespace
- checkpatch errors
-Message-ID: <b301c9a1-7536-46c5-878e-7cd79e3a4742@kadam.mountain>
-References: <20231020232332.55024-1-bergh.jonathan@gmail.com>
- <20231020232332.55024-3-bergh.jonathan@gmail.com>
+        Mon, 23 Oct 2023 10:58:05 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C59E83
+        for <linux-media@vger.kernel.org>; Mon, 23 Oct 2023 07:58:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698073083; x=1729609083;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4ECOjPwldP7iThnvfBzEmk3Ar22fcucKFXp0PfnRKKw=;
+  b=P8GNdhexh4xwvxsVy4TIlFTQwGyOQMdN5SlQPxaHYofOnyLPd7ZUupNE
+   AwdNrcszlWFJ6sdNn3p00jZgv5TKGNNfs1JozIOofMOtfGl8JqCyB9wAn
+   hoxJkMWsM2/+KM4nJPLMcNAusNddvxmQV3TQgadU7cW+U+ygH3aWXQusE
+   IPdRV7RtoUxRSLLdUblB9BNqRRijFg8ArS0WDbL8ZEZALHWkSdVwKBXPa
+   p08uDtS5kq0t7qIwZ/oZyxiJ+Zop00ITfl4UokjbTXNvik70i+l1zr97t
+   mA91icSEhF06njkZDmNf6tTumLCqwkPhNv3qmL+pHjXpOlBNb1PIJ2tdQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="417989504"
+X-IronPort-AV: E=Sophos;i="6.03,244,1694761200"; 
+   d="scan'208";a="417989504"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2023 07:57:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="707978084"
+X-IronPort-AV: E=Sophos;i="6.03,244,1694761200"; 
+   d="scan'208";a="707978084"
+Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 23 Oct 2023 07:57:57 -0700
+Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1quwNO-00070R-2F;
+        Mon, 23 Oct 2023 14:57:54 +0000
+Date:   Mon, 23 Oct 2023 22:57:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, hverkuil@xs4all.nl,
+        laurent.pinchart@ideasonboard.com, tomi.valkeinen@ideasonboard.com,
+        jacopo.mondi@ideasonboard.com, bingbu.cao@intel.com,
+        hongju.wang@intel.com
+Subject: Re: [PATCH v2 1/6] media: v4l: subdev: Also return pads array
+ information on stream functions
+Message-ID: <202310232249.oyXxfG4x-lkp@intel.com>
+References: <20231023123308.782592-2-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231020232332.55024-3-bergh.jonathan@gmail.com>
+In-Reply-To: <20231023123308.782592-2-sakari.ailus@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sat, Oct 21, 2023 at 01:23:29AM +0200, Jonathan Bergh wrote:
-> Fixed the following checkpatch errors relating to whitespaces:
->  * extra whitespace after '~' symbol
->  * remove whitespace before/after parentheses for switch statement and
->    function parameters as well as after switch keyword
->  * ensure whitespace before '{' braces
->  * remove whitespace between function name and '(' parentheses
->  * ensure whitespace after ',' commas in parameter lists
-> 
-> Signed-off-by: Jonathan Bergh <bergh.jonathan@gmail.com>
-> ---
->  drivers/staging/media/av7110/av7110_av.c | 28 ++++++++++++------------
->  1 file changed, 14 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/staging/media/av7110/av7110_av.c b/drivers/staging/media/av7110/av7110_av.c
-> index af3845406626..482dfc548b16 100644
-> --- a/drivers/staging/media/av7110/av7110_av.c
-> +++ b/drivers/staging/media/av7110/av7110_av.c
-> @@ -241,8 +241,8 @@ int av7110_pes_play(void *dest, struct dvb_ringbuffer *buf, int dlen)
->  		sync |= DVB_RINGBUFFER_PEEK(buf, 2) << 8;
->  		sync |= DVB_RINGBUFFER_PEEK(buf, 3);
->  
-> -		if (((sync &~ 0x0f) == 0x000001e0) ||
-> -		    ((sync &~ 0x1f) == 0x000001c0) ||
-> +		if (((sync &~0x0f) == 0x000001e0) ||
-> +		    ((sync &~0x1f) == 0x000001c0) ||
+Hi Sakari,
 
-These should be:
+kernel test robot noticed the following build errors:
 
-	if (((sync & ~0x0f) == 0x000001e0) ||
-	    ((sync & ~0x1f) == 0x000001c0) ||
+[auto build test ERROR on media-tree/master]
+[also build test ERROR on rockchip/for-next sailus-media-tree/streams linus/master v6.6-rc7 next-20231023]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Sakari-Ailus/media-v4l-subdev-Also-return-pads-array-information-on-stream-functions/20231023-203626
+base:   git://linuxtv.org/media_tree.git master
+patch link:    https://lore.kernel.org/r/20231023123308.782592-2-sakari.ailus%40linux.intel.com
+patch subject: [PATCH v2 1/6] media: v4l: subdev: Also return pads array information on stream functions
+config: csky-randconfig-002-20231023 (https://download.01.org/0day-ci/archive/20231023/202310232249.oyXxfG4x-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231023/202310232249.oyXxfG4x-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310232249.oyXxfG4x-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/csky/include/asm/bug.h:18,
+                    from include/linux/bug.h:5,
+                    from include/linux/thread_info.h:13,
+                    from include/asm-generic/current.h:6,
+                    from ./arch/csky/include/generated/asm/current.h:1,
+                    from include/linux/sched.h:12,
+                    from include/linux/ratelimit.h:6,
+                    from include/linux/dev_printk.h:16,
+                    from include/linux/device.h:15,
+                    from include/linux/leds.h:12,
+                    from drivers/media/v4l2-core/v4l2-subdev.c:13:
+   drivers/media/v4l2-core/v4l2-subdev.c: In function 'v4l2_subdev_state_get_stream_format':
+>> drivers/media/v4l2-core/v4l2-subdev.c:1692:41: error: 'struct v4l2_subdev_state' has no member named 'sd'
+    1692 |                 if (WARN_ON(pad >= state->sd->entity.num_pads))
+         |                                         ^~
+   include/asm-generic/bug.h:123:32: note: in definition of macro 'WARN_ON'
+     123 |         int __ret_warn_on = !!(condition);                              \
+         |                                ^~~~~~~~~
+   drivers/media/v4l2-core/v4l2-subdev.c: In function 'v4l2_subdev_state_get_stream_crop':
+   drivers/media/v4l2-core/v4l2-subdev.c:1726:41: error: 'struct v4l2_subdev_state' has no member named 'sd'
+    1726 |                 if (WARN_ON(pad >= state->sd->entity.num_pads))
+         |                                         ^~
+   include/asm-generic/bug.h:123:32: note: in definition of macro 'WARN_ON'
+     123 |         int __ret_warn_on = !!(condition);                              \
+         |                                ^~~~~~~~~
+   drivers/media/v4l2-core/v4l2-subdev.c: In function 'v4l2_subdev_state_get_stream_compose':
+   drivers/media/v4l2-core/v4l2-subdev.c:1760:41: error: 'struct v4l2_subdev_state' has no member named 'sd'
+    1760 |                 if (WARN_ON(pad >= state->sd->entity.num_pads))
+         |                                         ^~
+   include/asm-generic/bug.h:123:32: note: in definition of macro 'WARN_ON'
+     123 |         int __ret_warn_on = !!(condition);                              \
+         |                                ^~~~~~~~~
 
 
->  		    (sync == 0x000001bd))
->  			break;
->  		printk("resync\n");
+vim +1692 drivers/media/v4l2-core/v4l2-subdev.c
 
-regards,
-dan carpenter
+  1677	
+  1678	struct v4l2_mbus_framefmt *
+  1679	v4l2_subdev_state_get_stream_format(struct v4l2_subdev_state *state,
+  1680					    unsigned int pad, u32 stream)
+  1681	{
+  1682		struct v4l2_subdev_stream_configs *stream_configs;
+  1683		unsigned int i;
+  1684	
+  1685		if (WARN_ON(!state))
+  1686			return NULL;
+  1687	
+  1688		if (state->pads) {
+  1689			if (stream)
+  1690				return NULL;
+  1691	
+> 1692			if (WARN_ON(pad >= state->sd->entity.num_pads))
+  1693				pad = 0;
+  1694	
+  1695			return &state->pads[pad].try_fmt;
+  1696		}
+  1697	
+  1698		lockdep_assert_held(state->lock);
+  1699	
+  1700		stream_configs = &state->stream_configs;
+  1701	
+  1702		for (i = 0; i < stream_configs->num_configs; ++i) {
+  1703			if (stream_configs->configs[i].pad == pad &&
+  1704			    stream_configs->configs[i].stream == stream)
+  1705				return &stream_configs->configs[i].fmt;
+  1706		}
+  1707	
+  1708		return NULL;
+  1709	}
+  1710	EXPORT_SYMBOL_GPL(v4l2_subdev_state_get_stream_format);
+  1711	
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
