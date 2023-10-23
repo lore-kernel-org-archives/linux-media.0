@@ -2,141 +2,125 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 08F84C25B47
-	for <linux-media@archiver.kernel.org>; Mon, 23 Oct 2023 21:40:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 088EEC25B45
+	for <linux-media@archiver.kernel.org>; Mon, 23 Oct 2023 21:50:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233317AbjJWVkU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 23 Oct 2023 17:40:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42998 "EHLO
+        id S231292AbjJWVum (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 23 Oct 2023 17:50:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232165AbjJWVkS (ORCPT
+        with ESMTP id S231352AbjJWVuk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 23 Oct 2023 17:40:18 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C880D7C
-        for <linux-media@vger.kernel.org>; Mon, 23 Oct 2023 14:40:16 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3DFAA1ABC;
-        Mon, 23 Oct 2023 23:40:03 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1698097203;
-        bh=Ciux3kDGpBB3tcyTaVisSwawHx/Bvxdk81oTW8Ezo0E=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XNU/6FjiiZIOdIJ3e7Cff3SqBM333a3jRsgMnrc2ZB3TZYGKK2t0Xn+DglnYktJaN
-         SZqr6+INYj9XmXfZqjuW5cPI9288WzLwUrQhzL0Fw9Sp87nlXaJoqMvvWU2EHfFck7
-         lgBEgVDw9q7un9a3pOOo1t3MD6uJ5wSxGsTTievM=
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     linux-media@vger.kernel.org
-Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 7/7] media: v4l2-subdev: Rename pad config 'try_*' fields
-Date:   Tue, 24 Oct 2023 00:40:11 +0300
-Message-ID: <20231023214011.17730-8-laurent.pinchart@ideasonboard.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20231023214011.17730-1-laurent.pinchart@ideasonboard.com>
-References: <20231023214011.17730-1-laurent.pinchart@ideasonboard.com>
+        Mon, 23 Oct 2023 17:50:40 -0400
+X-Greylist: delayed 65 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 23 Oct 2023 14:50:38 PDT
+Received: from smtprelay01.ispgateway.de (smtprelay01.ispgateway.de [80.67.18.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08548DE
+        for <linux-media@vger.kernel.org>; Mon, 23 Oct 2023 14:50:37 -0700 (PDT)
+Received: from [92.206.139.21] (helo=note-book.lan)
+        by smtprelay01.ispgateway.de with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.96.1)
+        (envelope-from <git@apitzsch.eu>)
+        id 1qv2ng-0004Kz-1Y;
+        Mon, 23 Oct 2023 23:49:28 +0200
+From:   =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
+Date:   Mon, 23 Oct 2023 23:47:50 +0200
+Subject: [PATCH 1/4] media: i2c: imx214: Explain some magic numbers
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+Message-Id: <20231023-imx214-v1-1-b33f1bbd1fcf@apitzsch.eu>
+References: <20231023-imx214-v1-0-b33f1bbd1fcf@apitzsch.eu>
+In-Reply-To: <20231023-imx214-v1-0-b33f1bbd1fcf@apitzsch.eu>
+To:     Ricardo Ribalda <ribalda@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
+X-Mailer: b4 0.12.3
+X-Df-Sender: YW5kcmVAYXBpdHpzY2guZXU=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The try_fmt, try_crop and try_compose fields of the
-v4l2_subdev_pad_config structure are misnamed (for historical reason) as
-they also store data for the subdev active configuration. Rename them to
-format, crop and compose respectively and update the accessor helpers.
+Code refinement, no functional changes.
 
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: André Apitzsch <git@apitzsch.eu>
 ---
- include/media/v4l2-subdev.h | 33 +++++++++++++++------------------
- 1 file changed, 15 insertions(+), 18 deletions(-)
+ drivers/media/i2c/imx214.c | 24 +++++++++++++++++++-----
+ 1 file changed, 19 insertions(+), 5 deletions(-)
 
-diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-index c1f90c1223a7..bb1aad264756 100644
---- a/include/media/v4l2-subdev.h
-+++ b/include/media/v4l2-subdev.h
-@@ -688,21 +688,18 @@ struct v4l2_subdev_ir_ops {
- /**
-  * struct v4l2_subdev_pad_config - Used for storing subdev pad information.
-  *
-- * @try_fmt: &struct v4l2_mbus_framefmt
-- * @try_crop: &struct v4l2_rect to be used for crop
-- * @try_compose: &struct v4l2_rect to be used for compose
-+ * @format: &struct v4l2_mbus_framefmt
-+ * @crop: &struct v4l2_rect to be used for crop
-+ * @compose: &struct v4l2_rect to be used for compose
-  *
-  * This structure only needs to be passed to the pad op if the 'which' field
-  * of the main argument is set to %V4L2_SUBDEV_FORMAT_TRY. For
-  * %V4L2_SUBDEV_FORMAT_ACTIVE it is safe to pass %NULL.
-- *
-- * Note: This struct is also used in active state, and the 'try' prefix is
-- * historical and to be removed.
-  */
- struct v4l2_subdev_pad_config {
--	struct v4l2_mbus_framefmt try_fmt;
--	struct v4l2_rect try_crop;
--	struct v4l2_rect try_compose;
-+	struct v4l2_mbus_framefmt format;
-+	struct v4l2_rect crop;
-+	struct v4l2_rect compose;
- };
+diff --git a/drivers/media/i2c/imx214.c b/drivers/media/i2c/imx214.c
+index 4f77ea02cc27..9218c149d4c8 100644
+--- a/drivers/media/i2c/imx214.c
++++ b/drivers/media/i2c/imx214.c
+@@ -19,12 +19,23 @@
+ #include <media/v4l2-fwnode.h>
+ #include <media/v4l2-subdev.h>
  
- /**
-@@ -1145,8 +1142,8 @@ struct v4l2_subdev_fh {
- #if defined(CONFIG_VIDEO_V4L2_SUBDEV_API)
++#define IMX214_REG_MODE_SELECT		0x0100
++#define IMX214_MODE_STANDBY		0x00
++#define IMX214_MODE_STREAMING		0x01
++
+ #define IMX214_DEFAULT_CLK_FREQ	24000000
+ #define IMX214_DEFAULT_LINK_FREQ 480000000
+ #define IMX214_DEFAULT_PIXEL_RATE ((IMX214_DEFAULT_LINK_FREQ * 8LL) / 10)
+ #define IMX214_FPS 30
+ #define IMX214_MBUS_CODE MEDIA_BUS_FMT_SRGGB10_1X10
  
- /**
-- * v4l2_subdev_get_pad_format - ancillary routine to call
-- *	&struct v4l2_subdev_pad_config->try_fmt
-+ * v4l2_subdev_get_pad_format - ancillary routine to get
-+ *	&struct v4l2_subdev_pad_config->format
-  *
-  * @sd: pointer to &struct v4l2_subdev
-  * @state: pointer to &struct v4l2_subdev_state
-@@ -1161,12 +1158,12 @@ v4l2_subdev_get_pad_format(struct v4l2_subdev *sd,
- 		return NULL;
- 	if (WARN_ON(pad >= sd->entity.num_pads))
- 		pad = 0;
--	return &state->pads[pad].try_fmt;
-+	return &state->pads[pad].format;
- }
++/* Exposure control */
++#define IMX214_REG_EXPOSURE		0x0202
++#define IMX214_EXPOSURE_MIN		0
++#define IMX214_EXPOSURE_MAX		3184
++#define IMX214_EXPOSURE_STEP		1
++#define IMX214_EXPOSURE_DEFAULT		0x0c70
++
+ static const char * const imx214_supply_name[] = {
+ 	"vdda",
+ 	"vddd",
+@@ -665,7 +676,7 @@ static int imx214_set_ctrl(struct v4l2_ctrl *ctrl)
+ 	case V4L2_CID_EXPOSURE:
+ 		vals[1] = ctrl->val;
+ 		vals[0] = ctrl->val >> 8;
+-		ret = regmap_bulk_write(imx214->regmap, 0x202, vals, 2);
++		ret = regmap_bulk_write(imx214->regmap, IMX214_REG_EXPOSURE, vals, 2);
+ 		if (ret < 0)
+ 			dev_err(imx214->dev, "Error %d\n", ret);
+ 		ret = 0;
+@@ -743,7 +754,7 @@ static int imx214_start_streaming(struct imx214 *imx214)
+ 		dev_err(imx214->dev, "could not sync v4l2 controls\n");
+ 		goto error;
+ 	}
+-	ret = regmap_write(imx214->regmap, 0x100, 1);
++	ret = regmap_write(imx214->regmap, IMX214_REG_MODE_SELECT, IMX214_MODE_STREAMING);
+ 	if (ret < 0) {
+ 		dev_err(imx214->dev, "could not sent start table %d\n", ret);
+ 		goto error;
+@@ -761,7 +772,7 @@ static int imx214_stop_streaming(struct imx214 *imx214)
+ {
+ 	int ret;
  
- /**
-- * v4l2_subdev_get_pad_crop - ancillary routine to call
-- *	&struct v4l2_subdev_pad_config->try_crop
-+ * v4l2_subdev_get_pad_crop - ancillary routine to get
-+ *	&struct v4l2_subdev_pad_config->crop
-  *
-  * @sd: pointer to &struct v4l2_subdev
-  * @state: pointer to &struct v4l2_subdev_state.
-@@ -1181,12 +1178,12 @@ v4l2_subdev_get_pad_crop(struct v4l2_subdev *sd,
- 		return NULL;
- 	if (WARN_ON(pad >= sd->entity.num_pads))
- 		pad = 0;
--	return &state->pads[pad].try_crop;
-+	return &state->pads[pad].crop;
- }
+-	ret = regmap_write(imx214->regmap, 0x100, 0);
++	ret = regmap_write(imx214->regmap, IMX214_REG_MODE_SELECT, IMX214_MODE_STANDBY);
+ 	if (ret < 0)
+ 		dev_err(imx214->dev, "could not sent stop table %d\n",	ret);
  
- /**
-- * v4l2_subdev_get_pad_compose - ancillary routine to call
-- *	&struct v4l2_subdev_pad_config->try_compose
-+ * v4l2_subdev_get_pad_compose - ancillary routine to get
-+ *	&struct v4l2_subdev_pad_config->compose
-  *
-  * @sd: pointer to &struct v4l2_subdev
-  * @state: pointer to &struct v4l2_subdev_state.
-@@ -1201,7 +1198,7 @@ v4l2_subdev_get_pad_compose(struct v4l2_subdev *sd,
- 		return NULL;
- 	if (WARN_ON(pad >= sd->entity.num_pads))
- 		pad = 0;
--	return &state->pads[pad].try_compose;
-+	return &state->pads[pad].compose;
- }
+@@ -991,9 +1002,12 @@ static int imx214_probe(struct i2c_client *client)
+ 	 *
+ 	 * Yours sincerely, Ricardo.
+ 	 */
+-	imx214->exposure = v4l2_ctrl_new_std(&imx214->ctrls, &imx214_ctrl_ops,
++	imx214->exposure = v4l2_ctrl_new_std(ctrl_hdlr, &imx214_ctrl_ops,
+ 					     V4L2_CID_EXPOSURE,
+-					     0, 3184, 1, 0x0c70);
++					     IMX214_EXPOSURE_MIN,
++					     IMX214_EXPOSURE_MAX,
++					     IMX214_EXPOSURE_STEP,
++					     IMX214_EXPOSURE_DEFAULT);
  
- /*
+ 	imx214->unit_size = v4l2_ctrl_new_std_compound(&imx214->ctrls,
+ 				NULL,
+
 -- 
-Regards,
-
-Laurent Pinchart
+2.42.0
 
