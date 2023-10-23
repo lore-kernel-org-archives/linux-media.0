@@ -2,38 +2,38 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9D9FC25B47
-	for <linux-media@archiver.kernel.org>; Mon, 23 Oct 2023 21:40:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C2E6C25B48
+	for <linux-media@archiver.kernel.org>; Mon, 23 Oct 2023 21:40:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231381AbjJWVkM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 23 Oct 2023 17:40:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33920 "EHLO
+        id S231292AbjJWVkO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 23 Oct 2023 17:40:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbjJWVkK (ORCPT
+        with ESMTP id S229853AbjJWVkN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 23 Oct 2023 17:40:10 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC33DE
-        for <linux-media@vger.kernel.org>; Mon, 23 Oct 2023 14:40:07 -0700 (PDT)
+        Mon, 23 Oct 2023 17:40:13 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5C6FD
+        for <linux-media@vger.kernel.org>; Mon, 23 Oct 2023 14:40:11 -0700 (PDT)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4EB99E45;
-        Mon, 23 Oct 2023 23:39:55 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 07CA3118C;
+        Mon, 23 Oct 2023 23:39:57 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1698097195;
-        bh=3rhQcxJE8AZTk/QM6/JWLfAIHy/OTRnLgnzOXHb1Hs8=;
+        s=mail; t=1698097198;
+        bh=ePvhFkmrMuiJ/MlB7Lxi9MAm8P3OyiXvK+u8+9WOW2Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ch+rnTfnUVtCg8fordmdkiXrM/GaFCdSXPnOHSSCLPCZ71gjvdrZj+3PvP6KHfHt0
-         KeNivLUYJnLNRd8z03GfvyF3UrxUIXGAYtS+Y2ptPbXMXoiispEZ+pUf5fjot46yHn
-         cDX9R0v/OfrQ4DJTyHMElof0MX8R13Zrz/oIgJB0=
+        b=J2WORY5Sy163cagBNboXDoBgVzq6lK1eAt2PJdAOyUtOfCHFu9KFeD4P8Gr1LuEpx
+         4jn3YlpOlOwXqX9bVXRA69/QYPBlcwCIbs/RIyrYDiAWaPybrwUweTYbjC3u2fOUGV
+         njfq3NE/mOFXnEbOPo3dPjv/nvj1I43r1t/6LM0I=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Eugen Hristev <eugen.hristev@collabora.com>,
         Nicolas Ferre <nicolas.ferre@microchip.com>
-Subject: [PATCH 1/7] media: atmel-isi: Use accessors for pad config 'try_*' fields
-Date:   Tue, 24 Oct 2023 00:40:05 +0300
-Message-ID: <20231023214011.17730-2-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH 3/7] media: atmel-isc: Use accessors for pad config 'try_*' fields
+Date:   Tue, 24 Oct 2023 00:40:07 +0300
+Message-ID: <20231023214011.17730-4-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231023214011.17730-1-laurent.pinchart@ideasonboard.com>
 References: <20231023214011.17730-1-laurent.pinchart@ideasonboard.com>
@@ -50,36 +50,30 @@ v4l2_subdev_get_pad_compose() helpers.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/platform/atmel/atmel-isi.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ .../staging/media/deprecated/atmel/atmel-isc-base.c    | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/atmel/atmel-isi.c b/drivers/media/platform/atmel/atmel-isi.c
-index 4046212d48b4..bb83117bab2e 100644
---- a/drivers/media/platform/atmel/atmel-isi.c
-+++ b/drivers/media/platform/atmel/atmel-isi.c
-@@ -559,11 +559,13 @@ static const struct isi_format *find_format_by_fourcc(struct atmel_isi *isi,
- static void isi_try_fse(struct atmel_isi *isi, const struct isi_format *isi_fmt,
+diff --git a/drivers/staging/media/deprecated/atmel/atmel-isc-base.c b/drivers/staging/media/deprecated/atmel/atmel-isc-base.c
+index 8e26663cecb6..b63eea8f4fc0 100644
+--- a/drivers/staging/media/deprecated/atmel/atmel-isc-base.c
++++ b/drivers/staging/media/deprecated/atmel/atmel-isc-base.c
+@@ -820,6 +820,8 @@ static int isc_try_configure_pipeline(struct isc_device *isc)
+ static void isc_try_fse(struct isc_device *isc,
  			struct v4l2_subdev_state *sd_state)
  {
--	int ret;
 +	struct v4l2_rect *try_crop =
-+		v4l2_subdev_get_pad_crop(isi->entity.subdev, sd_state, 0);
++		v4l2_subdev_get_pad_crop(isc->current_subdev->sd, sd_state, 0);
  	struct v4l2_subdev_frame_size_enum fse = {
- 		.code = isi_fmt->mbus_code,
  		.which = V4L2_SUBDEV_FORMAT_TRY,
  	};
-+	int ret;
- 
- 	ret = v4l2_subdev_call(isi->entity.subdev, pad, enum_frame_size,
- 			       sd_state, &fse);
-@@ -572,11 +574,11 @@ static void isi_try_fse(struct atmel_isi *isi, const struct isi_format *isi_fmt,
- 	 * just use the maximum ISI can receive.
+@@ -841,11 +843,11 @@ static void isc_try_fse(struct isc_device *isc,
+ 	 * just use the maximum ISC can receive.
  	 */
  	if (ret) {
--		sd_state->pads->try_crop.width = MAX_SUPPORT_WIDTH;
--		sd_state->pads->try_crop.height = MAX_SUPPORT_HEIGHT;
-+		try_crop->width = MAX_SUPPORT_WIDTH;
-+		try_crop->height = MAX_SUPPORT_HEIGHT;
+-		sd_state->pads->try_crop.width = isc->max_width;
+-		sd_state->pads->try_crop.height = isc->max_height;
++		try_crop->width = isc->max_width;
++		try_crop->height = isc->max_height;
  	} else {
 -		sd_state->pads->try_crop.width = fse.max_width;
 -		sd_state->pads->try_crop.height = fse.max_height;
