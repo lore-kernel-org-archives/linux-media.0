@@ -2,145 +2,78 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77A1CC001E0
-	for <linux-media@archiver.kernel.org>; Mon, 23 Oct 2023 14:58:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A5BFC004C0
+	for <linux-media@archiver.kernel.org>; Mon, 23 Oct 2023 15:34:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233589AbjJWO6d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 23 Oct 2023 10:58:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60046 "EHLO
+        id S229570AbjJWPeF convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 23 Oct 2023 11:34:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233387AbjJWO6K (ORCPT
+        with ESMTP id S229448AbjJWPeE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 23 Oct 2023 10:58:10 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6E110CE
-        for <linux-media@vger.kernel.org>; Mon, 23 Oct 2023 07:58:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698073086; x=1729609086;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GpHT7dwhiaAIVi8GEzhv627UCbAEOtNA77azwhuFGes=;
-  b=NXB74zWnpg1XC4q6jRTQ0vOFq8XYJm6x+qdVaA23DmXTq8UGH8jun30u
-   WIsFmcOeIz+EdabptAhieYOXQicStCjj91qJH6IK3COZjuM46IG9X+vNe
-   ZuOyEOVmIEN7mTn96yVC1X9WrB8aiNYOubFqOBp3GiSrq9aDraMZgUzu1
-   xNYwT8knUuTCSVWnBWSSxMbOvMahxiuC7GmnFSJ1uhEUBI2XlEY/7FrHJ
-   zvwNLbbbI6JGxObGjQXkKhyqpT5odaGiaB9tlqHlo8usqbYjcLz0NTzzT
-   cOtZGAobJ/ditzNDtM899cAw4evrfNHkE3njJwXQq5gVW6nIV4b9py0VN
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="417989509"
-X-IronPort-AV: E=Sophos;i="6.03,244,1694761200"; 
-   d="scan'208";a="417989509"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2023 07:58:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="707978086"
-X-IronPort-AV: E=Sophos;i="6.03,244,1694761200"; 
-   d="scan'208";a="707978086"
-Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 23 Oct 2023 07:57:57 -0700
-Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1quwNO-00070P-26;
-        Mon, 23 Oct 2023 14:57:54 +0000
-Date:   Mon, 23 Oct 2023 22:56:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, hverkuil@xs4all.nl,
-        laurent.pinchart@ideasonboard.com, tomi.valkeinen@ideasonboard.com,
-        jacopo.mondi@ideasonboard.com, bingbu.cao@intel.com,
-        hongju.wang@intel.com
-Subject: Re: [PATCH v2 5/6] media: v4l: subdev: Switch to stream-aware state
- functions
-Message-ID: <202310232249.qOLKJuzq-lkp@intel.com>
-References: <20231023123308.782592-6-sakari.ailus@linux.intel.com>
+        Mon, 23 Oct 2023 11:34:04 -0400
+X-Greylist: delayed 537 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 23 Oct 2023 08:34:02 PDT
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5F1DE
+        for <linux-media@vger.kernel.org>; Mon, 23 Oct 2023 08:34:02 -0700 (PDT)
+Received: from omf06.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay08.hostedemail.com (Postfix) with ESMTP id 4292C14017E;
+        Mon, 23 Oct 2023 15:25:03 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf06.hostedemail.com (Postfix) with ESMTPA id 76D6220016;
+        Mon, 23 Oct 2023 15:25:00 +0000 (UTC)
+Message-ID: <15f45bbde3f4289b012db7adb8166cf0d45e4fec.camel@perches.com>
+Subject: Re: [PATCH 2/5] staging: media: av7110: Fix various whitespace
+ checkpatch errors
+From:   Joe Perches <joe@perches.com>
+To:     Dan Carpenter <dan.carpenter@linaro.org>,
+        Jonathan Bergh <bergh.jonathan@gmail.com>
+Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org, error27@gmail.com,
+        linux-staging@lists.linux.dev, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 23 Oct 2023 08:24:58 -0700
+In-Reply-To: <b301c9a1-7536-46c5-878e-7cd79e3a4742@kadam.mountain>
+References: <20231020232332.55024-1-bergh.jonathan@gmail.com>
+         <20231020232332.55024-3-bergh.jonathan@gmail.com>
+         <b301c9a1-7536-46c5-878e-7cd79e3a4742@kadam.mountain>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231023123308.782592-6-sakari.ailus@linux.intel.com>
+X-Rspamd-Server: rspamout03
+X-Rspamd-Queue-Id: 76D6220016
+X-Stat-Signature: uso4t8asunecfddpd7xeyg65ftr14cyg
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+VkWPLyvgXZZWw+/cT5gjzEt416nU2p+8=
+X-HE-Tag: 1698074700-308232
+X-HE-Meta: U2FsdGVkX19fOFgBMW+1i6LvtS8bVOiijCHMn6WgWz8Hz2LBWy2SGm/KH4KlWZY5Tjj9fn5jVr9T7rjtmAXNl0J+d4kYioCx7/gyh/4mJ3+vUGI6Z/3y4W/7bFnTs3LRuhJvaYLvefim2tJalYxzyUSf1mg+Qgn1lGyGQOOlOiMuXDXC17h9ZHbB5/C1Kz0vysWKzUPnbpbbzlyYQdYbaXYZ/SJsyqjQi6ZCbx0b6+NMxUTeBuKL+RBdYdGRhYNAW9a6+v6i+6Ju2Mi4Od0m7Jsc6VIW/PKE8v/yEXmtTqY3p0eVBunu7/Ty6sGwxNLQ2MoCpl1eP+JZT7UkWD9gv4rAKocc6Y6M
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sakari,
+On Mon, 2023-10-23 at 17:26 +0300, Dan Carpenter wrote:
+> On Sat, Oct 21, 2023 at 01:23:29AM +0200, Jonathan Bergh wrote:
+[]
+> > diff --git a/drivers/staging/media/av7110/av7110_av.c b/drivers/staging/media/av7110/av7110_av.c
+[]
+> > @@ -241,8 +241,8 @@ int av7110_pes_play(void *dest, struct dvb_ringbuffer *buf, int dlen)
+> >  		sync |= DVB_RINGBUFFER_PEEK(buf, 2) << 8;
+> >  		sync |= DVB_RINGBUFFER_PEEK(buf, 3);
+> >  
+> > -		if (((sync &~ 0x0f) == 0x000001e0) ||
+> > -		    ((sync &~ 0x1f) == 0x000001c0) ||
+> > +		if (((sync &~0x0f) == 0x000001e0) ||
+> > +		    ((sync &~0x1f) == 0x000001c0) ||
+> 
+> These should be:
+> 
+> 	if (((sync & ~0x0f) == 0x000001e0) ||
+> 	    ((sync & ~0x1f) == 0x000001c0) ||
 
-kernel test robot noticed the following build warnings:
+Generally, I believe it would be better to avoid '& ~constant'
+and use the positive form instead
 
-[auto build test WARNING on media-tree/master]
-[also build test WARNING on next-20231023]
-[cannot apply to rockchip/for-next sailus-media-tree/streams linus/master v6.6-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Sakari-Ailus/media-v4l-subdev-Also-return-pads-array-information-on-stream-functions/20231023-203626
-base:   git://linuxtv.org/media_tree.git master
-patch link:    https://lore.kernel.org/r/20231023123308.782592-6-sakari.ailus%40linux.intel.com
-patch subject: [PATCH v2 5/6] media: v4l: subdev: Switch to stream-aware state functions
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20231023/202310232249.qOLKJuzq-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231023/202310232249.qOLKJuzq-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310232249.qOLKJuzq-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/media/i2c/imx319.c: In function 'imx319_do_get_pad_format':
->> drivers/media/i2c/imx319.c:2004:29: warning: unused variable 'sd' [-Wunused-variable]
-    2004 |         struct v4l2_subdev *sd = &imx319->sd;
-         |                             ^~
---
-   drivers/media/i2c/imx355.c: In function 'imx355_do_get_pad_format':
->> drivers/media/i2c/imx355.c:1302:29: warning: unused variable 'sd' [-Wunused-variable]
-    1302 |         struct v4l2_subdev *sd = &imx355->sd;
-         |                             ^~
---
-   drivers/media/i2c/ov08x40.c: In function 'ov08x40_do_get_pad_format':
->> drivers/media/i2c/ov08x40.c:2777:29: warning: unused variable 'sd' [-Wunused-variable]
-    2777 |         struct v4l2_subdev *sd = &ov08x->sd;
-         |                             ^~
---
-   drivers/media/i2c/ov13858.c: In function 'ov13858_do_get_pad_format':
->> drivers/media/i2c/ov13858.c:1319:29: warning: unused variable 'sd' [-Wunused-variable]
-    1319 |         struct v4l2_subdev *sd = &ov13858->sd;
-         |                             ^~
---
-   drivers/media/i2c/ov13b10.c: In function 'ov13b10_do_get_pad_format':
->> drivers/media/i2c/ov13b10.c:1004:29: warning: unused variable 'sd' [-Wunused-variable]
-    1004 |         struct v4l2_subdev *sd = &ov13b->sd;
-         |                             ^~
---
-   drivers/media/i2c/s5c73m3/s5c73m3-core.c: In function 's5c73m3_oif_try_format':
->> drivers/media/i2c/s5c73m3/s5c73m3-core.c:822:29: warning: unused variable 'sd' [-Wunused-variable]
-     822 |         struct v4l2_subdev *sd = &state->sensor_sd;
-         |                             ^~
+	if ((sync & 0xfffffff0) == 0x000001e0) ||
+	    (sync & 0xffffffe0) == 0x000001c0)
 
 
-vim +/sd +2004 drivers/media/i2c/imx319.c
-
-8a89dc62f28c48 Bingbu Cao     2018-09-25  1998  
-8a89dc62f28c48 Bingbu Cao     2018-09-25  1999  static int imx319_do_get_pad_format(struct imx319 *imx319,
-0d346d2a6f54f0 Tomi Valkeinen 2021-06-10  2000  				    struct v4l2_subdev_state *sd_state,
-8a89dc62f28c48 Bingbu Cao     2018-09-25  2001  				    struct v4l2_subdev_format *fmt)
-8a89dc62f28c48 Bingbu Cao     2018-09-25  2002  {
-8a89dc62f28c48 Bingbu Cao     2018-09-25  2003  	struct v4l2_mbus_framefmt *framefmt;
-8a89dc62f28c48 Bingbu Cao     2018-09-25 @2004  	struct v4l2_subdev *sd = &imx319->sd;
-8a89dc62f28c48 Bingbu Cao     2018-09-25  2005  
-8a89dc62f28c48 Bingbu Cao     2018-09-25  2006  	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
-e3851498f6c205 Sakari Ailus   2023-10-23  2007  		framefmt = v4l2_subdev_state_get_format(sd_state, fmt->pad);
-8a89dc62f28c48 Bingbu Cao     2018-09-25  2008  		fmt->format = *framefmt;
-8a89dc62f28c48 Bingbu Cao     2018-09-25  2009  	} else {
-8a89dc62f28c48 Bingbu Cao     2018-09-25  2010  		imx319_update_pad_format(imx319, imx319->cur_mode, fmt);
-8a89dc62f28c48 Bingbu Cao     2018-09-25  2011  	}
-8a89dc62f28c48 Bingbu Cao     2018-09-25  2012  
-8a89dc62f28c48 Bingbu Cao     2018-09-25  2013  	return 0;
-8a89dc62f28c48 Bingbu Cao     2018-09-25  2014  }
-8a89dc62f28c48 Bingbu Cao     2018-09-25  2015  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
