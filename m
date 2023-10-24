@@ -2,43 +2,43 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0394C00A8F
-	for <linux-media@archiver.kernel.org>; Tue, 24 Oct 2023 11:20:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D1349C07545
+	for <linux-media@archiver.kernel.org>; Tue, 24 Oct 2023 11:20:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229829AbjJXLUL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Oct 2023 07:20:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54296 "EHLO
+        id S230343AbjJXLUS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 24 Oct 2023 07:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjJXLUK (ORCPT
+        with ESMTP id S230093AbjJXLUS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 Oct 2023 07:20:10 -0400
+        Tue, 24 Oct 2023 07:20:18 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F053EFE
-        for <linux-media@vger.kernel.org>; Tue, 24 Oct 2023 04:20:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E82E109
+        for <linux-media@vger.kernel.org>; Tue, 24 Oct 2023 04:20:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698146408; x=1729682408;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=BNwS3Cdjfo3FOMWUugS63ru6ODG5ofOfRnOg/Bq0X8Y=;
-  b=ZE4E4y+eYFkZyD7TEQTnyM4K8hu8VfZbCIwU/Dx4VunXpbkKKGcgLJ6G
-   m4ARaPcVVPY+OR1ZQ1XLO4gziTd0Da3/u3jXcy+uezNxeyxUh9F1dfeQG
-   63iqw8ZA8Ru+AXj2LrQzQE5gMXGaZncR5YClgBeXKt5rY5ykKwLJ/IF0l
-   wmnhzb+Qs0GuUy7NkgVoiJ7as1ccfdmta6kSwxWYS6hi1pK+C16FQC7XV
-   WD17b8WwePYIoSFNyy3naTfVScoROgMrNt10tP8g5yuS3tX0BT3ift9Og
-   Au7H/FyVyMRzQPrAP8yMxupmQ6MPdcY1O0lSGk4YD2nUMJEal8tkpnKq/
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="473258665"
+  t=1698146416; x=1729682416;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Ge3oYny9s8+NqTCETKetopgx0iAqMSYemYu+CHW5Q5s=;
+  b=fdVq5PYQM8z6orTI5jpzS977Jej6Ho9lY350Py8r18qJ8+87hPYxwXO+
+   CDbh29rk4ERJr32rTkEWfY3WuNnATSFX+gUndE03HQTbT5SKEcBg4Vj1c
+   SgqWHwJOlHOf91CkxLT0lGHqeTSqifcZPORec01m6WZPvwxO5p6mA/ueU
+   UbXoiwY3mLGocrOmhPYTpS53PJNwJyzn0r+UhVhdsKdRnU2VFjuKjhON3
+   g6OGKCNOvBwLA1HxNuyb5sTNoqCQ08hHQ969vqNSpEc2Y/Uyo2yVSDOOy
+   TNEBc9KqByZfId/se9H3X2Zl6kEJBYz8OUcFd4JfDJqKLrXWtTVOAUlUi
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="473258681"
 X-IronPort-AV: E=Sophos;i="6.03,247,1694761200"; 
-   d="scan'208";a="473258665"
+   d="scan'208";a="473258681"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 04:20:07 -0700
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 04:20:15 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="762069803"
+X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="762069838"
 X-IronPort-AV: E=Sophos;i="6.03,247,1694761200"; 
-   d="scan'208";a="762069803"
+   d="scan'208";a="762069838"
 Received: from icg-kernel3.bj.intel.com ([172.16.126.174])
-  by fmsmga007.fm.intel.com with ESMTP; 24 Oct 2023 04:20:03 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 24 Oct 2023 04:20:11 -0700
 From:   bingbu.cao@intel.com
 To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         laurent.pinchart@ideasonboard.com
@@ -48,10 +48,12 @@ Cc:     andriy.shevchenko@linux.intel.com, hdegoede@redhat.com,
         senozhatsky@chromium.org, tomi.valkeinen@ideasonboard.com,
         bingbu.cao@intel.com, bingbu.cao@linux.intel.com,
         tian.shu.qiu@intel.com, hongju.wang@intel.com
-Subject: [PATCH v2 00/15] Intel IPU6 and IPU6 input system drivers
-Date:   Tue, 24 Oct 2023 19:29:09 +0800
-Message-ID: <20231024112924.3934228-1-bingbu.cao@intel.com>
+Subject: [PATCH v2 02/15] media: intel/ipu6: add IPU auxiliary devices
+Date:   Tue, 24 Oct 2023 19:29:11 +0800
+Message-ID: <20231024112924.3934228-3-bingbu.cao@intel.com>
 X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20231024112924.3934228-1-bingbu.cao@intel.com>
+References: <20231024112924.3934228-1-bingbu.cao@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -60,135 +62,260 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Bingbu Cao <bingbu.cao@intel.com>
 
-This patch series adds a driver for Intel IPU6 input system.
-IPU6 is the sixth generation of Imaging Processing Unit, it is a PCI
-device which can be found in some Intel Client Platforms. User can use
-IPU6 to capture images from MIPI camera sensors.
+Even the IPU input system and processing system are in a single PCI
+device, each system has its own power sequence, the processing system
+power up depends on the input system power up.
 
-IPU6 has its own firmware which exposes ABIs to driver, and communicates
-with CSE to do firmware authentication. IPU6 has its MMU hardware, so
-the driver sets up a page table to allow IPU6 DMA to access the system
-memory.
+Besides, input system and processing system have their own MMU
+hardware for IPU DMA address mapping.
 
-IPU6 input system driver uses MC and V4L2 sub-device APIs besides V4L2.
+Register the IS/PS devices on auxiliary bus and attach power domain
+to implement the power sequence dependency.
+
+Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
 ---
-
-v1 -> v2:
-  - Add support with latest v4l2 async API
-  - Add support for latest bridge and Intel ivsc driver
-  - Fix lots of coding style issues not covered by checkpatch.pl
-  - Fix several bugs
-  - Fix several code issues found by Sparse and cppcheck
-
-RFC -> v1:
-  - Add multiplexed streams support
-  - Use auxiliary bus to register IPU6 devices
-  - Add IPU6 hardware and driver overview documentation
-  - Updata IPU6 admin-guide documentation
-  - Update number of source pads and video nodes to support
-    multiplexed streams
-
-Bingbu Cao (15):
-  media: intel/ipu6: add Intel IPU6 PCI device driver
-  media: intel/ipu6: add IPU auxiliary devices
-  media: intel/ipu6: add IPU6 buttress interface driver
-  media: intel/ipu6: CPD parsing for get firmware components
-  media: intel/ipu6: add IPU6 DMA mapping API and MMU table
-  media: intel/ipu6: add syscom interfaces between firmware and driver
-  media: intel/ipu6: input system ABI between firmware and driver
-  media: intel/ipu6: add IPU6 CSI2 receiver v4l2 sub-device
-  media: intel/ipu6: add the CSI2 DPHY implementation
-  media: intel/ipu6: add input system driver
-  media: intel/ipu6: input system video capture nodes
-  media: add Kconfig and Makefile for IPU6
-  MAINTAINERS: add maintainers for Intel IPU6 input system driver
-  Documentation: add Intel IPU6 ISYS driver admin-guide doc
-  Documentation: add documentation of Intel IPU6 driver and hardware
-    overview
-
- Documentation/admin-guide/media/ipu6-isys.rst |  159 ++
- .../admin-guide/media/ipu6_isys_graph.svg     |  338 +++++
- .../admin-guide/media/ipu6_isys_multi.svg     | 1124 ++++++++++++++
- .../admin-guide/media/v4l-drivers.rst         |    1 +
- .../driver-api/media/drivers/index.rst        |    1 +
- .../driver-api/media/drivers/ipu6.rst         |  205 +++
- MAINTAINERS                                   |   10 +
- drivers/media/pci/intel/Kconfig               |    1 +
- drivers/media/pci/intel/Makefile              |    1 +
- drivers/media/pci/intel/ipu6/Kconfig          |   17 +
- drivers/media/pci/intel/ipu6/Makefile         |   23 +
- drivers/media/pci/intel/ipu6/ipu6-bus.c       |  157 ++
- drivers/media/pci/intel/ipu6/ipu6-bus.h       |   50 +
- drivers/media/pci/intel/ipu6/ipu6-buttress.c  |  900 +++++++++++
- drivers/media/pci/intel/ipu6/ipu6-buttress.h  |  107 ++
- drivers/media/pci/intel/ipu6/ipu6-cpd.c       |  355 +++++
- drivers/media/pci/intel/ipu6/ipu6-cpd.h       |  104 ++
- drivers/media/pci/intel/ipu6/ipu6-dma.c       |  491 ++++++
- drivers/media/pci/intel/ipu6/ipu6-dma.h       |   20 +
- drivers/media/pci/intel/ipu6/ipu6-fw-com.c    |  411 +++++
- drivers/media/pci/intel/ipu6/ipu6-fw-com.h    |   47 +
- drivers/media/pci/intel/ipu6/ipu6-fw-isys.c   |  484 ++++++
- drivers/media/pci/intel/ipu6/ipu6-fw-isys.h   |  570 +++++++
- drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c |  654 ++++++++
- drivers/media/pci/intel/ipu6/ipu6-isys-csi2.h |   81 +
- .../media/pci/intel/ipu6/ipu6-isys-dwc-phy.c  |  533 +++++++
- .../media/pci/intel/ipu6/ipu6-isys-jsl-phy.c  |  237 +++
- .../media/pci/intel/ipu6/ipu6-isys-mcd-phy.c  |  712 +++++++++
- .../media/pci/intel/ipu6/ipu6-isys-queue.c    |  846 +++++++++++
- .../media/pci/intel/ipu6/ipu6-isys-queue.h    |   94 ++
- .../media/pci/intel/ipu6/ipu6-isys-subdev.c   |  379 +++++
- .../media/pci/intel/ipu6/ipu6-isys-subdev.h   |   58 +
- .../media/pci/intel/ipu6/ipu6-isys-video.c    | 1239 +++++++++++++++
- .../media/pci/intel/ipu6/ipu6-isys-video.h    |  129 ++
- drivers/media/pci/intel/ipu6/ipu6-isys.c      | 1345 +++++++++++++++++
- drivers/media/pci/intel/ipu6/ipu6-isys.h      |  201 +++
- drivers/media/pci/intel/ipu6/ipu6-mmu.c       |  828 ++++++++++
- drivers/media/pci/intel/ipu6/ipu6-mmu.h       |   67 +
- .../intel/ipu6/ipu6-platform-buttress-regs.h  |  230 +++
- .../intel/ipu6/ipu6-platform-isys-csi2-reg.h  |  187 +++
- .../media/pci/intel/ipu6/ipu6-platform-regs.h |  179 +++
- drivers/media/pci/intel/ipu6/ipu6.c           |  955 ++++++++++++
- drivers/media/pci/intel/ipu6/ipu6.h           |  352 +++++
- 43 files changed, 14882 insertions(+)
- create mode 100644 Documentation/admin-guide/media/ipu6-isys.rst
- create mode 100644 Documentation/admin-guide/media/ipu6_isys_graph.svg
- create mode 100644 Documentation/admin-guide/media/ipu6_isys_multi.svg
- create mode 100644 Documentation/driver-api/media/drivers/ipu6.rst
- create mode 100644 drivers/media/pci/intel/ipu6/Kconfig
- create mode 100644 drivers/media/pci/intel/ipu6/Makefile
+ drivers/media/pci/intel/ipu6/ipu6-bus.c | 157 ++++++++++++++++++++++++
+ drivers/media/pci/intel/ipu6/ipu6-bus.h |  50 ++++++++
+ drivers/media/pci/intel/ipu6/ipu6.c     |   5 +-
+ 3 files changed, 211 insertions(+), 1 deletion(-)
  create mode 100644 drivers/media/pci/intel/ipu6/ipu6-bus.c
  create mode 100644 drivers/media/pci/intel/ipu6/ipu6-bus.h
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-buttress.c
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-buttress.h
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-cpd.c
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-cpd.h
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-dma.c
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-dma.h
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-fw-com.c
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-fw-com.h
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-fw-isys.c
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-fw-isys.h
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-isys-csi2.h
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-isys-dwc-phy.c
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-isys-jsl-phy.c
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-isys-mcd-phy.c
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-isys-queue.c
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-isys-queue.h
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-isys-subdev.h
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-isys-video.c
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-isys-video.h
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-isys.c
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-isys.h
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-mmu.c
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-mmu.h
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-platform-buttress-regs.h
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-platform-isys-csi2-reg.h
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-platform-regs.h
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6.c
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6.h
 
+diff --git a/drivers/media/pci/intel/ipu6/ipu6-bus.c b/drivers/media/pci/intel/ipu6/ipu6-bus.c
+new file mode 100644
+index 000000000000..eabeda5ee4c9
+--- /dev/null
++++ b/drivers/media/pci/intel/ipu6/ipu6-bus.c
+@@ -0,0 +1,157 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2013 - 2023 Intel Corporation
++ */
++
++#include <linux/pci.h>
++#include <linux/pm_domain.h>
++#include <linux/pm_runtime.h>
++
++#include "ipu6.h"
++#include "ipu6-bus.h"
++#include "ipu6-dma.h"
++
++static int bus_pm_runtime_suspend(struct device *dev)
++{
++	struct ipu6_bus_device *adev = to_ipu6_bus_device(dev);
++	int ret;
++
++	ret = pm_generic_runtime_suspend(dev);
++	if (ret)
++		return ret;
++
++	ret = ipu6_buttress_power(dev, adev->ctrl, false);
++	if (!ret)
++		return 0;
++
++	dev_err(dev, "power down failed!\n");
++
++	/* Powering down failed, attempt to resume device now */
++	ret = pm_generic_runtime_resume(dev);
++	if (!ret)
++		return -EBUSY;
++
++	return -EIO;
++}
++
++static int bus_pm_runtime_resume(struct device *dev)
++{
++	struct ipu6_bus_device *adev = to_ipu6_bus_device(dev);
++	int ret;
++
++	ret = ipu6_buttress_power(dev, adev->ctrl, true);
++	if (ret)
++		return ret;
++
++	ret = pm_generic_runtime_resume(dev);
++	if (ret)
++		goto out_err;
++
++	return 0;
++
++out_err:
++	ipu6_buttress_power(dev, adev->ctrl, false);
++
++	return -EBUSY;
++}
++
++static struct dev_pm_domain ipu6_bus_pm_domain = {
++	.ops = {
++		.runtime_suspend = bus_pm_runtime_suspend,
++		.runtime_resume = bus_pm_runtime_resume,
++	},
++};
++
++static DEFINE_MUTEX(ipu6_bus_mutex);
++
++static void ipu6_bus_release(struct device *dev)
++{
++	struct ipu6_bus_device *adev = to_ipu6_bus_device(dev);
++
++	kfree(adev->pdata);
++	kfree(adev);
++}
++
++struct ipu6_bus_device *
++ipu6_bus_initialize_device(struct pci_dev *pdev, struct device *parent,
++			   void *pdata, struct ipu6_buttress_ctrl *ctrl,
++			   char *name)
++{
++	struct auxiliary_device *auxdev;
++	struct ipu6_bus_device *adev;
++	struct ipu6_device *isp = pci_get_drvdata(pdev);
++	int ret;
++
++	adev = kzalloc(sizeof(*adev), GFP_KERNEL);
++	if (!adev)
++		return ERR_PTR(-ENOMEM);
++
++	adev->dma_mask = DMA_BIT_MASK(isp->secure_mode ? IPU6_MMU_ADDR_BITS :
++				      IPU6_MMU_ADDR_BITS_NON_SECURE);
++	adev->isp = isp;
++	adev->ctrl = ctrl;
++	adev->pdata = pdata;
++	auxdev = &adev->auxdev;
++	auxdev->name = name;
++	auxdev->id = (pci_domain_nr(pdev->bus) << 16) |
++		      PCI_DEVID(pdev->bus->number, pdev->devfn);
++
++	auxdev->dev.parent = parent;
++	auxdev->dev.release = ipu6_bus_release;
++	auxdev->dev.dma_ops = &ipu6_dma_ops;
++	auxdev->dev.dma_mask = &adev->dma_mask;
++	auxdev->dev.dma_parms = pdev->dev.dma_parms;
++	auxdev->dev.coherent_dma_mask = adev->dma_mask;
++
++	ret = auxiliary_device_init(auxdev);
++	if (ret < 0) {
++		dev_err(&isp->pdev->dev, "auxiliary device init failed (%d)\n",
++			ret);
++		kfree(adev);
++		return ERR_PTR(ret);
++	}
++
++	dev_pm_domain_set(&auxdev->dev, &ipu6_bus_pm_domain);
++
++	pm_runtime_forbid(&adev->auxdev.dev);
++	pm_runtime_enable(&adev->auxdev.dev);
++
++	return adev;
++}
++
++int ipu6_bus_add_device(struct ipu6_bus_device *adev)
++{
++	struct auxiliary_device *auxdev = &adev->auxdev;
++	int ret;
++
++	ret = auxiliary_device_add(auxdev);
++	if (ret) {
++		auxiliary_device_uninit(auxdev);
++		return ret;
++	}
++
++	mutex_lock(&ipu6_bus_mutex);
++	list_add(&adev->list, &adev->isp->devices);
++	mutex_unlock(&ipu6_bus_mutex);
++
++	pm_runtime_allow(&auxdev->dev);
++
++	return 0;
++}
++
++void ipu6_bus_del_devices(struct pci_dev *pdev)
++{
++	struct ipu6_device *isp = pci_get_drvdata(pdev);
++	struct ipu6_bus_device *adev, *save;
++
++	mutex_lock(&ipu6_bus_mutex);
++
++	list_for_each_entry_safe(adev, save, &isp->devices, list) {
++		pm_runtime_disable(&adev->auxdev.dev);
++		list_del(&adev->list);
++		auxiliary_device_delete(&adev->auxdev);
++		auxiliary_device_uninit(&adev->auxdev);
++	}
++
++	mutex_unlock(&ipu6_bus_mutex);
++}
+diff --git a/drivers/media/pci/intel/ipu6/ipu6-bus.h b/drivers/media/pci/intel/ipu6/ipu6-bus.h
+new file mode 100644
+index 000000000000..fa8bd73c3976
+--- /dev/null
++++ b/drivers/media/pci/intel/ipu6/ipu6-bus.h
+@@ -0,0 +1,50 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/* Copyright (C) 2013 - 2023 Intel Corporation */
++
++#ifndef IPU6_BUS_H
++#define IPU6_BUS_H
++
++#include <linux/auxiliary_bus.h>
++#include <linux/pci.h>
++
++#define IPU6_BUS_NAME	IPU6_NAME "-bus"
++
++struct ipu6_buttress_ctrl;
++
++struct ipu6_bus_device {
++	struct auxiliary_device auxdev;
++	struct auxiliary_driver *auxdrv;
++	const struct ipu6_auxdrv_data *auxdrv_data;
++	struct list_head list;
++	void *pdata;
++	struct ipu6_mmu *mmu;
++	struct ipu6_device *isp;
++	struct ipu6_buttress_ctrl *ctrl;
++	u64 dma_mask;
++	const struct firmware *fw;
++	struct sg_table fw_sgt;
++	u64 *pkg_dir;
++	dma_addr_t pkg_dir_dma_addr;
++	unsigned int pkg_dir_size;
++};
++
++struct ipu6_auxdrv_data {
++	irqreturn_t (*isr)(struct ipu6_bus_device *adev);
++	irqreturn_t (*isr_threaded)(struct ipu6_bus_device *adev);
++	bool wake_isr_thread;
++};
++
++#define to_ipu6_bus_device(_dev) container_of(to_auxiliary_dev(_dev), \
++					      struct ipu6_bus_device, auxdev)
++#define auxdev_to_adev(_auxdev) container_of(_auxdev, \
++					     struct ipu6_bus_device, auxdev)
++#define ipu6_bus_get_drvdata(adev) dev_get_drvdata(&(adev)->auxdev.dev)
++
++struct ipu6_bus_device *
++ipu6_bus_initialize_device(struct pci_dev *pdev, struct device *parent,
++			   void *pdata, struct ipu6_buttress_ctrl *ctrl,
++			   char *name);
++int ipu6_bus_add_device(struct ipu6_bus_device *adev);
++void ipu6_bus_del_devices(struct pci_dev *pdev);
++
++#endif
+diff --git a/drivers/media/pci/intel/ipu6/ipu6.c b/drivers/media/pci/intel/ipu6/ipu6.c
+index 84960a283daf..b652662fa72e 100644
+--- a/drivers/media/pci/intel/ipu6/ipu6.c
++++ b/drivers/media/pci/intel/ipu6/ipu6.c
+@@ -666,7 +666,10 @@ static int ipu6_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 		return dev_err_probe(&pdev->dev, ret,
+ 				     "Failed to set DMA mask\n");
+ 
+-	dma_set_max_seg_size(&pdev->dev, UINT_MAX);
++	ret = dma_set_max_seg_size(&pdev->dev, UINT_MAX);
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret,
++				     "Failed to set max_seg_size\n");
+ 
+ 	ret = ipu6_pci_config_setup(pdev, isp->hw_ver);
+ 	if (ret)
 -- 
 2.42.0
 
