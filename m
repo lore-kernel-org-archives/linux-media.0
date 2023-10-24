@@ -2,311 +2,280 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7072FC25B6B
-	for <linux-media@archiver.kernel.org>; Tue, 24 Oct 2023 01:07:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B385DC00A8F
+	for <linux-media@archiver.kernel.org>; Tue, 24 Oct 2023 01:43:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231152AbjJXBHx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 23 Oct 2023 21:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39538 "EHLO
+        id S231402AbjJXBnl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 23 Oct 2023 21:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231824AbjJXAvf (ORCPT
+        with ESMTP id S230373AbjJXBnk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 23 Oct 2023 20:51:35 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F319910E
-        for <linux-media@vger.kernel.org>; Mon, 23 Oct 2023 17:51:32 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 744B7128D;
-        Tue, 24 Oct 2023 02:51:17 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1698108677;
-        bh=To/N0JtBBDNKSyDB9ylDmIGcJHGess6jPoj9ixGYWCw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J1qZa/FkKjVmP6QLor2A4ycvKO9HU+cByn5Hw/eNeZ9y2ITZpMGJZHWrQouvE96hP
-         sJShbTtVmrZE198AHFA2NTD9XpFnCtj4oh71McJEEnkzcsevAeknNOPnGOA1qlnegV
-         1OZC9siIWVZFAjoENhFWOkDQej/7kARH772EmVVM=
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     linux-media@vger.kernel.org
-Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Hans de Goede <hansg@kernel.org>
-Subject: [RFC PATCH v1 4/4] media: i2c: thp7312: Store frame interval in subdev state
-Date:   Tue, 24 Oct 2023 03:51:30 +0300
-Message-ID: <20231024005130.28026-5-laurent.pinchart@ideasonboard.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20231024005130.28026-1-laurent.pinchart@ideasonboard.com>
-References: <20231024005130.28026-1-laurent.pinchart@ideasonboard.com>
+        Mon, 23 Oct 2023 21:43:40 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95870D7D
+        for <linux-media@vger.kernel.org>; Mon, 23 Oct 2023 18:43:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698111817; x=1729647817;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+a8x9//eDnTZ0uv/y2OFEgBp4LBdVfbA8+3cn1ODI/c=;
+  b=Dj8tJZmYlpJXMvbge2AdAWMPCJGLb6OPYIpqLi6+lP0tqiCHaiR0A1nf
+   zvQCZq52RWtXwIkS92R7e9OSi6IBozcLWkFDJ7kpAmlg1jBntp8vBncug
+   8vkW5e2BM0K0gPY71ul5EYT54FgXm6FuUetekbrq4DApuUkn7JcIf7ZeW
+   SJHRb/GPbA9h7fhWNYKO/ft/+vtOD1sdJ0yHEl7jJvGovmcyv815iq6Eb
+   F5W5vWbEowG8+oNyoN6KE1UuIVNuUrnprZr0HGp3rXO56aq3bgat0FSDE
+   akZ3IEthS4yoeg4Fw9cq3v/39YbN5u5uJSezxPJtxCBCRXsX/pNnfIHag
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="418090194"
+X-IronPort-AV: E=Sophos;i="6.03,246,1694761200"; 
+   d="scan'208";a="418090194"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2023 18:43:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="881962239"
+X-IronPort-AV: E=Sophos;i="6.03,246,1694761200"; 
+   d="scan'208";a="881962239"
+Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 23 Oct 2023 18:43:34 -0700
+Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qv6SB-0007SX-2s;
+        Tue, 24 Oct 2023 01:43:31 +0000
+Date:   Tue, 24 Oct 2023 09:43:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, hverkuil@xs4all.nl,
+        laurent.pinchart@ideasonboard.com, tomi.valkeinen@ideasonboard.com,
+        jacopo.mondi@ideasonboard.com, bingbu.cao@intel.com,
+        hongju.wang@intel.com
+Subject: Re: [PATCH v2 4/6] media: v4l: subdev: Make stream argument optional
+ in state access functions
+Message-ID: <202310240911.7Doj3ImH-lkp@intel.com>
+References: <20231023123308.782592-5-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231023123308.782592-5-sakari.ailus@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use the newly added storage for frame interval in the subdev state to
-simplify the driver.
+Hi Sakari,
 
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
- drivers/media/i2c/thp7312.c | 145 ++++++++++++++++++++----------------
- 1 file changed, 79 insertions(+), 66 deletions(-)
+kernel test robot noticed the following build errors:
 
-diff --git a/drivers/media/i2c/thp7312.c b/drivers/media/i2c/thp7312.c
-index c5b1b6321633..28f869f69d02 100644
---- a/drivers/media/i2c/thp7312.c
-+++ b/drivers/media/i2c/thp7312.c
-@@ -278,10 +278,6 @@ struct thp7312_device {
- 
- 	struct v4l2_ctrl_handler ctrl_handler;
- 
--	/* These are protected by v4l2 active state */
--	const struct thp7312_mode_info *current_mode;
--	const struct thp7312_frame_rate *current_rate;
--
- 	struct {
- 		struct v4l2_ctrl *focus_auto;
- 		struct v4l2_ctrl *focus_absolute;
-@@ -329,6 +325,47 @@ static inline struct thp7312_device *to_thp7312_dev(struct v4l2_subdev *sd)
- 	return container_of(sd, struct thp7312_device, sd);
- }
- 
-+static const struct thp7312_mode_info *
-+thp7312_find_mode(unsigned int width, unsigned int height, bool nearest)
-+{
-+	const struct thp7312_mode_info *mode;
-+
-+	mode = v4l2_find_nearest_size(thp7312_mode_info_data,
-+				      ARRAY_SIZE(thp7312_mode_info_data),
-+				      width, height, width, height);
-+
-+	if (!nearest && (mode->width != width || mode->height != height))
-+		return NULL;
-+
-+	return mode;
-+}
-+
-+static const struct thp7312_frame_rate *
-+thp7312_find_rate(const struct thp7312_mode_info *mode, unsigned int fps,
-+		  bool nearest)
-+{
-+	const struct thp7312_frame_rate *best_rate = NULL;
-+	const struct thp7312_frame_rate *rate;
-+	unsigned int best_delta = UINT_MAX;
-+
-+	if (!mode)
-+		return NULL;
-+
-+	for (rate = mode->rates; rate->fps && best_delta; ++rate) {
-+		unsigned int delta = abs(rate->fps - fps);
-+
-+		if (delta <= best_delta) {
-+			best_delta = delta;
-+			best_rate = rate;
-+		}
-+	}
-+
-+	if (!nearest && best_delta)
-+		return NULL;
-+
-+	return best_rate;
-+}
-+
- /* -----------------------------------------------------------------------------
-  * Device Access & Configuration
-  */
-@@ -475,17 +512,30 @@ static int thp7312_set_framefmt(struct thp7312_device *thp7312,
- static int thp7312_init_mode(struct thp7312_device *thp7312,
- 			     struct v4l2_subdev_state *sd_state)
- {
-+	const struct thp7312_mode_info *mode;
-+	const struct thp7312_frame_rate *rate;
- 	struct v4l2_mbus_framefmt *fmt;
-+	struct v4l2_fract *interval;
- 	int ret;
- 
-+	/*
-+	 * TODO: The mode and rate should be cached in the subdev state, once
-+	 * support for extending states will be available.
-+	 */
- 	fmt = v4l2_subdev_get_pad_format(&thp7312->sd, sd_state, 0);
-+	interval = v4l2_subdev_get_pad_interval(&thp7312->sd, sd_state, 0);
-+
-+	mode = thp7312_find_mode(fmt->width, fmt->height, false);
-+	rate = thp7312_find_rate(mode, interval->denominator, false);
-+
-+	if (WARN_ON(!mode || !rate))
-+		return -EINVAL;
- 
- 	ret = thp7312_set_framefmt(thp7312, fmt);
- 	if (ret)
- 		return ret;
- 
--	return thp7312_change_mode(thp7312, thp7312->current_mode,
--				   thp7312->current_rate);
-+	return thp7312_change_mode(thp7312, mode, rate);
- }
- 
- static int thp7312_stream_enable(struct thp7312_device *thp7312, int enable)
-@@ -703,21 +753,6 @@ static bool thp7312_find_bus_code(u32 code)
- 	return false;
- }
- 
--static const struct thp7312_mode_info *
--thp7312_find_mode(unsigned int width, unsigned int height, bool nearest)
--{
--	const struct thp7312_mode_info *mode;
--
--	mode = v4l2_find_nearest_size(thp7312_mode_info_data,
--				      ARRAY_SIZE(thp7312_mode_info_data),
--				      width, height, width, height);
--
--	if (!nearest && (mode->width != width || mode->height != height))
--		return NULL;
--
--	return mode;
--}
--
- static int thp7312_enum_mbus_code(struct v4l2_subdev *sd,
- 				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_mbus_code_enum *code)
-@@ -781,6 +816,7 @@ static int thp7312_set_fmt(struct v4l2_subdev *sd,
- 	struct thp7312_device *thp7312 = to_thp7312_dev(sd);
- 	struct v4l2_mbus_framefmt *mbus_fmt = &format->format;
- 	struct v4l2_mbus_framefmt *fmt;
-+	struct v4l2_fract *interval;
- 	const struct thp7312_mode_info *mode;
- 
- 	if (!thp7312_find_bus_code(mbus_fmt->code))
-@@ -800,37 +836,22 @@ static int thp7312_set_fmt(struct v4l2_subdev *sd,
- 
- 	*mbus_fmt = *fmt;
- 
--	if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
--		thp7312->current_mode = mode;
--		thp7312->current_rate = &mode->rates[0];
--	}
-+	interval = v4l2_subdev_get_pad_interval(sd, sd_state, 0);
-+	interval->numerator = 1;
-+	interval->denominator = mode->rates[0].fps;
- 
- 	return 0;
- }
- 
--static int thp7312_g_frame_interval(struct v4l2_subdev *sd,
--				    struct v4l2_subdev_frame_interval *fi)
--{
--	struct thp7312_device *thp7312 = to_thp7312_dev(sd);
--	struct v4l2_subdev_state *sd_state;
--
--	sd_state = v4l2_subdev_lock_and_get_active_state(sd);
--	fi->interval.numerator = 1;
--	fi->interval.denominator = thp7312->current_rate->fps;
--	v4l2_subdev_unlock_state(sd_state);
--
--	return 0;
--}
--
--static int thp7312_s_frame_interval(struct v4l2_subdev *sd,
--				    struct v4l2_subdev_frame_interval *fi)
-+static int thp7312_set_frame_interval(struct v4l2_subdev *sd,
-+				      struct v4l2_subdev_state *sd_state,
-+				      struct v4l2_subdev_frame_interval *fi)
- {
- 	struct thp7312_device *thp7312 = to_thp7312_dev(sd);
- 	const struct thp7312_mode_info *mode;
--	const struct thp7312_frame_rate *best_rate = NULL;
- 	const struct thp7312_frame_rate *rate;
--	struct v4l2_subdev_state *sd_state;
--	unsigned int best_delta = UINT_MAX;
-+	const struct v4l2_mbus_framefmt *fmt;
-+	struct v4l2_fract *interval;
- 	unsigned int fps;
- 
- 	/* Avoid divisions by 0, pick the highest frame if the interval is 0. */
-@@ -838,25 +859,15 @@ static int thp7312_s_frame_interval(struct v4l2_subdev *sd,
- 	    ? DIV_ROUND_CLOSEST(fi->interval.denominator, fi->interval.numerator)
- 	    : UINT_MAX;
- 
--	sd_state = v4l2_subdev_lock_and_get_active_state(sd);
-+	fmt = v4l2_subdev_get_pad_format(&thp7312->sd, sd_state, 0);
-+	mode = thp7312_find_mode(fmt->width, fmt->height, false);
-+	rate = thp7312_find_rate(mode, fps, true);
- 
--	mode = thp7312->current_mode;
-+	interval = v4l2_subdev_get_pad_interval(sd, sd_state, 0);
-+	interval->numerator = 1;
-+	interval->denominator = rate->fps;
- 
--	for (rate = mode->rates; rate->fps && best_delta; ++rate) {
--		unsigned int delta = abs(rate->fps - fps);
--
--		if (delta <= best_delta) {
--			best_delta = delta;
--			best_rate = rate;
--		}
--	}
--
--	thp7312->current_rate = best_rate;
--
--	v4l2_subdev_unlock_state(sd_state);
--
--	fi->interval.numerator = 1;
--	fi->interval.denominator = best_rate->fps;
-+	fi->interval = *interval;
- 
- 	return 0;
- }
-@@ -911,8 +922,10 @@ static int thp7312_init_cfg(struct v4l2_subdev *sd,
- {
- 	const struct thp7312_mode_info *default_mode = &thp7312_mode_info_data[0];
- 	struct v4l2_mbus_framefmt *fmt;
-+	struct v4l2_fract *interval;
- 
- 	fmt = v4l2_subdev_get_pad_format(sd, sd_state, 0);
-+	interval = v4l2_subdev_get_pad_interval(sd, sd_state, 0);
- 
- 	/*
- 	 * default init sequence initialize thp7312 to
-@@ -927,6 +940,9 @@ static int thp7312_init_cfg(struct v4l2_subdev *sd,
- 	fmt->height = default_mode->height;
- 	fmt->field = V4L2_FIELD_NONE;
- 
-+	interval->numerator = 1;
-+	interval->denominator = default_mode->rates[0].fps;
-+
- 	return 0;
- }
- 
-@@ -937,8 +953,6 @@ static const struct v4l2_subdev_core_ops thp7312_core_ops = {
- };
- 
- static const struct v4l2_subdev_video_ops thp7312_video_ops = {
--	.g_frame_interval = thp7312_g_frame_interval,
--	.s_frame_interval = thp7312_s_frame_interval,
- 	.s_stream = thp7312_s_stream,
- };
- 
-@@ -947,6 +961,8 @@ static const struct v4l2_subdev_pad_ops thp7312_pad_ops = {
- 	.init_cfg = thp7312_init_cfg,
- 	.get_fmt = v4l2_subdev_get_fmt,
- 	.set_fmt = thp7312_set_fmt,
-+	.get_frame_interval = v4l2_subdev_get_frame_interval,
-+	.set_frame_interval = thp7312_set_frame_interval,
- 	.enum_frame_size = thp7312_enum_frame_size,
- 	.enum_frame_interval = thp7312_enum_frame_interval,
- };
-@@ -2234,9 +2250,6 @@ static int thp7312_probe(struct i2c_client *client)
- 	if (thp7312->boot_mode == THP7312_BOOT_MODE_2WIRE_SLAVE)
- 		return thp7312_register_flash_mode(thp7312);
- 
--	thp7312->current_mode = &thp7312_mode_info_data[0];
--	thp7312->current_rate = &thp7312->current_mode->rates[0];
--
- 	ret = thp7312_init_sensors(thp7312);
- 	if (ret < 0)
- 		return ret;
+[auto build test ERROR on media-tree/master]
+[also build test ERROR on rockchip/for-next linus/master v6.6-rc7 next-20231023]
+[cannot apply to sailus-media-tree/streams]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Sakari-Ailus/media-v4l-subdev-Also-return-pads-array-information-on-stream-functions/20231023-203626
+base:   git://linuxtv.org/media_tree.git master
+patch link:    https://lore.kernel.org/r/20231023123308.782592-5-sakari.ailus%40linux.intel.com
+patch subject: [PATCH v2 4/6] media: v4l: subdev: Make stream argument optional in state access functions
+config: i386-buildonly-randconfig-001-20231024 (https://download.01.org/0day-ci/archive/20231024/202310240911.7Doj3ImH-lkp@intel.com/config)
+compiler: gcc-7 (Ubuntu 7.5.0-6ubuntu2) 7.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231024/202310240911.7Doj3ImH-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310240911.7Doj3ImH-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from include/media/v4l2-device.h:13:0,
+                    from drivers/media/v4l2-core/v4l2-subdev.c:24:
+   drivers/media/v4l2-core/v4l2-subdev.c: In function 'check_state':
+>> include/media/v4l2-subdev.h:1555:9: error: implicit declaration of function '__v4l2_subdev_state_get_format___VA_OPT__'; did you mean '__v4l2_subdev_state_get_format_'? [-Werror=implicit-function-declaration]
+            __v4l2_subdev_state_get_format_ ## __VA_OPT__(stream) \
+            ^
+   drivers/media/v4l2-core/v4l2-subdev.c:180:8: note: in expansion of macro 'v4l2_subdev_state_get_format'
+      if (!v4l2_subdev_state_get_format(state, pad, stream))
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> include/media/v4l2-subdev.h:1556:21: error: expected ')' before '__VA_OPT__'
+            (state, pad __VA_OPT__(,) __VA_ARGS__)
+                        ^
+   drivers/media/v4l2-core/v4l2-subdev.c:180:8: note: in expansion of macro 'v4l2_subdev_state_get_format'
+      if (!v4l2_subdev_state_get_format(state, pad, stream))
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> include/media/v4l2-subdev.h:1555:9: error: called object is not a function or function pointer
+            __v4l2_subdev_state_get_format_ ## __VA_OPT__(stream) \
+            ^
+   drivers/media/v4l2-core/v4l2-subdev.c:180:8: note: in expansion of macro 'v4l2_subdev_state_get_format'
+      if (!v4l2_subdev_state_get_format(state, pad, stream))
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/v4l2-core/v4l2-subdev.c: In function 'v4l2_subdev_get_fmt':
+>> include/media/v4l2-subdev.h:1555:55: error: 'stream' undeclared (first use in this function); did you mean 'strim'?
+            __v4l2_subdev_state_get_format_ ## __VA_OPT__(stream) \
+                                                          ^
+   drivers/media/v4l2-core/v4l2-subdev.c:1581:8: note: in expansion of macro 'v4l2_subdev_state_get_format'
+     fmt = v4l2_subdev_state_get_format(state, format->pad, format->stream);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/media/v4l2-subdev.h:1555:55: note: each undeclared identifier is reported only once for each function it appears in
+            __v4l2_subdev_state_get_format_ ## __VA_OPT__(stream) \
+                                                          ^
+   drivers/media/v4l2-core/v4l2-subdev.c:1581:8: note: in expansion of macro 'v4l2_subdev_state_get_format'
+     fmt = v4l2_subdev_state_get_format(state, format->pad, format->stream);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> include/media/v4l2-subdev.h:1556:21: error: expected ')' before '__VA_OPT__'
+            (state, pad __VA_OPT__(,) __VA_ARGS__)
+                        ^
+   drivers/media/v4l2-core/v4l2-subdev.c:1581:8: note: in expansion of macro 'v4l2_subdev_state_get_format'
+     fmt = v4l2_subdev_state_get_format(state, format->pad, format->stream);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from arch/x86/include/asm/bug.h:87:0,
+                    from include/linux/bug.h:5,
+                    from include/linux/jump_label.h:256,
+                    from include/linux/static_key.h:1,
+                    from arch/x86/include/asm/nospec-branch.h:6,
+                    from arch/x86/include/asm/irqflags.h:9,
+                    from include/linux/irqflags.h:17,
+                    from include/linux/rcupdate.h:26,
+                    from include/linux/rculist.h:11,
+                    from include/linux/pid.h:5,
+                    from include/linux/sched.h:14,
+                    from include/linux/ratelimit.h:6,
+                    from include/linux/dev_printk.h:16,
+                    from include/linux/device.h:15,
+                    from include/linux/leds.h:12,
+                    from drivers/media/v4l2-core/v4l2-subdev.c:13:
+   drivers/media/v4l2-core/v4l2-subdev.c: In function '__v4l2_subdev_state_get_format':
+   drivers/media/v4l2-core/v4l2-subdev.c:1685:27: error: 'struct v4l2_subdev_state' has no member named 'sd'
+      if (WARN_ON(pad >= state->sd->entity.num_pads))
+                              ^
+   include/asm-generic/bug.h:168:25: note: in definition of macro 'WARN_ON'
+     int __ret_warn_on = !!(condition);    \
+                            ^~~~~~~~~
+   drivers/media/v4l2-core/v4l2-subdev.c: In function '__v4l2_subdev_state_get_crop':
+   drivers/media/v4l2-core/v4l2-subdev.c:1719:27: error: 'struct v4l2_subdev_state' has no member named 'sd'
+      if (WARN_ON(pad >= state->sd->entity.num_pads))
+                              ^
+   include/asm-generic/bug.h:168:25: note: in definition of macro 'WARN_ON'
+     int __ret_warn_on = !!(condition);    \
+                            ^~~~~~~~~
+   drivers/media/v4l2-core/v4l2-subdev.c: In function '__v4l2_subdev_state_get_compose':
+   drivers/media/v4l2-core/v4l2-subdev.c:1753:27: error: 'struct v4l2_subdev_state' has no member named 'sd'
+      if (WARN_ON(pad >= state->sd->entity.num_pads))
+                              ^
+   include/asm-generic/bug.h:168:25: note: in definition of macro 'WARN_ON'
+     int __ret_warn_on = !!(condition);    \
+                            ^~~~~~~~~
+   In file included from include/media/v4l2-device.h:13:0,
+                    from drivers/media/v4l2-core/v4l2-subdev.c:24:
+   drivers/media/v4l2-core/v4l2-subdev.c: In function 'v4l2_subdev_state_get_opposite_stream_format':
+>> include/media/v4l2-subdev.h:1556:21: error: expected ')' before '__VA_OPT__'
+            (state, pad __VA_OPT__(,) __VA_ARGS__)
+                        ^
+   drivers/media/v4l2-core/v4l2-subdev.c:1817:9: note: in expansion of macro 'v4l2_subdev_state_get_format'
+     return v4l2_subdev_state_get_format(state, other_pad, other_stream);
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> include/media/v4l2-subdev.h:1555:9: error: called object is not a function or function pointer
+            __v4l2_subdev_state_get_format_ ## __VA_OPT__(stream) \
+            ^
+   drivers/media/v4l2-core/v4l2-subdev.c:1817:9: note: in expansion of macro 'v4l2_subdev_state_get_format'
+     return v4l2_subdev_state_get_format(state, other_pad, other_stream);
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/media/v4l2-core/v4l2-subdev.c:1818:1: error: control reaches end of non-void function [-Werror=return-type]
+    }
+    ^
+   cc1: some warnings being treated as errors
+
+
+vim +1555 include/media/v4l2-subdev.h
+
+  1479	
+  1480	/**
+  1481	 * v4l2_subdev_get_fmt() - Fill format based on state
+  1482	 * @sd: subdevice
+  1483	 * @state: subdevice state
+  1484	 * @format: pointer to &struct v4l2_subdev_format
+  1485	 *
+  1486	 * Fill @format->format field based on the information in the @format struct.
+  1487	 *
+  1488	 * This function can be used by the subdev drivers which support active state to
+  1489	 * implement v4l2_subdev_pad_ops.get_fmt if the subdev driver does not need to
+  1490	 * do anything special in their get_fmt op.
+  1491	 *
+  1492	 * Returns 0 on success, error value otherwise.
+  1493	 */
+  1494	int v4l2_subdev_get_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_state *state,
+  1495				struct v4l2_subdev_format *format);
+  1496	
+  1497	/**
+  1498	 * v4l2_subdev_set_routing() - Set given routing to subdev state
+  1499	 * @sd: The subdevice
+  1500	 * @state: The subdevice state
+  1501	 * @routing: Routing that will be copied to subdev state
+  1502	 *
+  1503	 * This will release old routing table (if any) from the state, allocate
+  1504	 * enough space for the given routing, and copy the routing.
+  1505	 *
+  1506	 * This can be used from the subdev driver's set_routing op, after validating
+  1507	 * the routing.
+  1508	 */
+  1509	int v4l2_subdev_set_routing(struct v4l2_subdev *sd,
+  1510				    struct v4l2_subdev_state *state,
+  1511				    const struct v4l2_subdev_krouting *routing);
+  1512	
+  1513	struct v4l2_subdev_route *
+  1514	__v4l2_subdev_next_active_route(const struct v4l2_subdev_krouting *routing,
+  1515					struct v4l2_subdev_route *route);
+  1516	
+  1517	/**
+  1518	 * for_each_active_route - iterate on all active routes of a routing table
+  1519	 * @routing: The routing table
+  1520	 * @route: The route iterator
+  1521	 */
+  1522	#define for_each_active_route(routing, route) \
+  1523		for ((route) = NULL;                  \
+  1524		     ((route) = __v4l2_subdev_next_active_route((routing), (route)));)
+  1525	
+  1526	/**
+  1527	 * v4l2_subdev_set_routing_with_fmt() - Set given routing and format to subdev
+  1528	 *					state
+  1529	 * @sd: The subdevice
+  1530	 * @state: The subdevice state
+  1531	 * @routing: Routing that will be copied to subdev state
+  1532	 * @fmt: Format used to initialize all the streams
+  1533	 *
+  1534	 * This is the same as v4l2_subdev_set_routing, but additionally initializes
+  1535	 * all the streams using the given format.
+  1536	 */
+  1537	int v4l2_subdev_set_routing_with_fmt(struct v4l2_subdev *sd,
+  1538					     struct v4l2_subdev_state *state,
+  1539					     const struct v4l2_subdev_krouting *routing,
+  1540					     const struct v4l2_mbus_framefmt *fmt);
+  1541	
+  1542	/**
+  1543	 * v4l2_subdev_state_get_format() - Get pointer to a stream format
+  1544	 * @state: subdevice state
+  1545	 * @pad: pad id
+  1546	 * @stream: stream id (optional argument)
+  1547	 *
+  1548	 * This returns a pointer to &struct v4l2_mbus_framefmt for the given pad +
+  1549	 * stream in the subdev state.
+  1550	 *
+  1551	 * For stream-unaware drivers the format for the corresponding pad is returned.
+  1552	 * If the pad does not exist, NULL is returned.
+  1553	 */
+  1554	#define v4l2_subdev_state_get_format(state, pad, ...)         \
+> 1555	        __v4l2_subdev_state_get_format_ ## __VA_OPT__(stream) \
+> 1556	        (state, pad __VA_OPT__(,) __VA_ARGS__)
+  1557	#define __v4l2_subdev_state_get_format_(state, pad)     \
+  1558	        __v4l2_subdev_state_get_format(state, pad, 0)
+  1559	#define __v4l2_subdev_state_get_format_stream(state, pad, stream)	\
+  1560	        __v4l2_subdev_state_get_format(state, pad, stream)
+  1561	struct v4l2_mbus_framefmt *
+  1562	__v4l2_subdev_state_get_format(struct v4l2_subdev_state *state,
+  1563				       unsigned int pad, u32 stream);
+  1564	
+
 -- 
-Regards,
-
-Laurent Pinchart
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
