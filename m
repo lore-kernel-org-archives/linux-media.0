@@ -2,43 +2,43 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA44FC00A8F
-	for <linux-media@archiver.kernel.org>; Tue, 24 Oct 2023 11:20:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B1E9C07545
+	for <linux-media@archiver.kernel.org>; Tue, 24 Oct 2023 11:20:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbjJXLU3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Oct 2023 07:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50740 "EHLO
+        id S231150AbjJXLUi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 24 Oct 2023 07:20:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbjJXLU1 (ORCPT
+        with ESMTP id S231176AbjJXLUh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 Oct 2023 07:20:27 -0400
+        Tue, 24 Oct 2023 07:20:37 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A375212C
-        for <linux-media@vger.kernel.org>; Tue, 24 Oct 2023 04:20:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C4DD7E
+        for <linux-media@vger.kernel.org>; Tue, 24 Oct 2023 04:20:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698146424; x=1729682424;
+  t=1698146432; x=1729682432;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=0B2nhj0b4rQvCanHkD3WOrR4Vn85VCtVKD0AiUJWeLU=;
-  b=Xh/BsBUydmAyV+K2L/hwMwWN5YRRyMvEIx++OqbZKh/23HBXGhod/P1D
-   0nEHRIKiRz1OrW63pS22QfzbLBcEB7RHCv1WYwyt3Wat331HT0+golHvz
-   MzoMpeKz7CUWobflTqEQ+onSpG2YNlNA7UHB4ozeuJpvYzkZpGFUaO3jj
-   5tJrUn+/+LtcXwzM5uXIcwFlCIoBYFVZk6BOeIaTqaLmBc1BlYChm76ex
-   X2Sjsc4R+4stS8FHjpbD2FE781usQ0DMhlPIOeXNZBFopIC1+8aiLrMZM
-   tFhlpwzm2H2NV8SIVQoMX+cD3FfJ8+2eaA4uq11PliweNRGqWYqeaGoFY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="473258701"
+  bh=bbMS9uF21553CTT3PRkSilhlPZF1jlDvAJdofX8EvCQ=;
+  b=eTindB/fKi9rHvJrmKs9n9lRQwwcenqQR7QpjIk5znjZZ5x248VSBuD3
+   0bo00DiwV59PcI07Juw3UJhmF8t9FAhK0OA/XofFWwg3l4R7949BDMNAS
+   dlsiMpJyf/ZnIyjP4BTE+iLNPWJvzi1nzhEcI7E4DT9TyOnu2urPkAEAQ
+   OdMwhlDAB/98vfy6558Ux6rPf6kHgsvpy8y1nvhbXLK+z7spFkdc9a07T
+   aY+5Cj8ccx/NRnIpweLcjzXfmH/b2BA404WskxKcPEcGUC5jlTzES/cI/
+   OCAeNwcL+vi955Gj4aH16KDvyWjqK9BFJ11Lernaoac3BnMYkIneb6Dng
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="473258730"
 X-IronPort-AV: E=Sophos;i="6.03,247,1694761200"; 
-   d="scan'208";a="473258701"
+   d="scan'208";a="473258730"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 04:20:23 -0700
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 04:20:31 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="762069854"
+X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="762069870"
 X-IronPort-AV: E=Sophos;i="6.03,247,1694761200"; 
-   d="scan'208";a="762069854"
+   d="scan'208";a="762069870"
 Received: from icg-kernel3.bj.intel.com ([172.16.126.174])
-  by fmsmga007.fm.intel.com with ESMTP; 24 Oct 2023 04:20:19 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 24 Oct 2023 04:20:28 -0700
 From:   bingbu.cao@intel.com
 To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         laurent.pinchart@ideasonboard.com
@@ -48,9 +48,9 @@ Cc:     andriy.shevchenko@linux.intel.com, hdegoede@redhat.com,
         senozhatsky@chromium.org, tomi.valkeinen@ideasonboard.com,
         bingbu.cao@intel.com, bingbu.cao@linux.intel.com,
         tian.shu.qiu@intel.com, hongju.wang@intel.com
-Subject: [PATCH v2 04/15] media: intel/ipu6: CPD parsing for get firmware components
-Date:   Tue, 24 Oct 2023 19:29:13 +0800
-Message-ID: <20231024112924.3934228-5-bingbu.cao@intel.com>
+Subject: [PATCH v2 06/15] media: intel/ipu6: add syscom interfaces between firmware and driver
+Date:   Tue, 24 Oct 2023 19:29:15 +0800
+Message-ID: <20231024112924.3934228-7-bingbu.cao@intel.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231024112924.3934228-1-bingbu.cao@intel.com>
 References: <20231024112924.3934228-1-bingbu.cao@intel.com>
@@ -62,491 +62,492 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Bingbu Cao <bingbu.cao@intel.com>
 
-For IPU6, firmware is generated and released as signed
-Code Partition Directory (CPD) format file, which is aligned with
-the SPI flash code partition definition. CPD format include CPD
-header, manifest, metadata and module data. Driver can parse them
-according to the CPD layout to acquire each component.
+Syscom is an inter-process(or) communication mechanism between an IPU
+and host. Syscom uses message queues for message exchange between IPU
+and host. Each message queue has its consumer and producer, host queue
+messages to firmware as the producer and then firmware to dequeue the
+messages as consumer and vice versa. IPU and host use shared registers
+or memory to reside the read and write indices which are updated by
+consumer and producer.
 
 Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
 ---
- drivers/media/pci/intel/ipu6/ipu6-cpd.c | 355 ++++++++++++++++++++++++
- drivers/media/pci/intel/ipu6/ipu6-cpd.h | 104 +++++++
- 2 files changed, 459 insertions(+)
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-cpd.c
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-cpd.h
+ drivers/media/pci/intel/ipu6/ipu6-fw-com.c | 411 +++++++++++++++++++++
+ drivers/media/pci/intel/ipu6/ipu6-fw-com.h |  47 +++
+ 2 files changed, 458 insertions(+)
+ create mode 100644 drivers/media/pci/intel/ipu6/ipu6-fw-com.c
+ create mode 100644 drivers/media/pci/intel/ipu6/ipu6-fw-com.h
 
-diff --git a/drivers/media/pci/intel/ipu6/ipu6-cpd.c b/drivers/media/pci/intel/ipu6/ipu6-cpd.c
+diff --git a/drivers/media/pci/intel/ipu6/ipu6-fw-com.c b/drivers/media/pci/intel/ipu6/ipu6-fw-com.c
 new file mode 100644
-index 000000000000..7dc78a624095
+index 000000000000..a162cc657234
 --- /dev/null
-+++ b/drivers/media/pci/intel/ipu6/ipu6-cpd.c
-@@ -0,0 +1,355 @@
++++ b/drivers/media/pci/intel/ipu6/ipu6-fw-com.c
+@@ -0,0 +1,411 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Copyright (C) 2013 - 2023 Intel Corporation
 + */
 +
-+#include <linux/bitfield.h>
-+
 +#include "ipu6.h"
 +#include "ipu6-bus.h"
-+#include "ipu6-cpd.h"
++#include "ipu6-fw-com.h"
 +
-+/* 15 entries + header*/
-+#define MAX_PKG_DIR_ENT_CNT		16
-+/* 2 qword per entry/header */
-+#define PKG_DIR_ENT_LEN			2
-+/* PKG_DIR size in bytes */
-+#define PKG_DIR_SIZE			((MAX_PKG_DIR_ENT_CNT) *	\
-+					 (PKG_DIR_ENT_LEN) * sizeof(u64))
-+/* _IUPKDR_ */
-+#define PKG_DIR_HDR_MARK		0x5f4955504b44525fULL
-+
-+/* $CPD */
-+#define CPD_HDR_MARK			0x44504324
-+
-+#define MAX_MANIFEST_SIZE		(SZ_2K * sizeof(u32))
-+#define MAX_METADATA_SIZE		SZ_64K
-+
-+#define MAX_COMPONENT_ID		127
-+#define MAX_COMPONENT_VERSION		0xffff
-+
-+#define MANIFEST_IDX	0
-+#define METADATA_IDX	1
-+#define MODULEDATA_IDX	2
 +/*
-+ * PKG_DIR Entry (type == id)
-+ * 63:56        55      54:48   47:32   31:24   23:0
-+ * Rsvd         Rsvd    Type    Version Rsvd    Size
++ * FWCOM layer is a shared resource between FW and driver. It consist
++ * of token queues to both send and receive directions. Queue is simply
++ * an array of structures with read and write indexes to the queue.
++ * There are 1...n queues to both directions. Queues locates in
++ * system RAM and are mapped to ISP MMU so that both CPU and ISP can
++ * see the same buffer. Indexes are located in ISP DMEM so that FW code
++ * can poll those with very low latency and cost. CPU access to indexes is
++ * more costly but that happens only at message sending time and
++ * interrupt triggered message handling. CPU doesn't need to poll indexes.
++ * wr_reg / rd_reg are offsets to those dmem location. They are not
++ * the indexes itself.
 + */
-+#define PKG_DIR_SIZE_MASK	GENMASK(23, 0)
-+#define PKG_DIR_VERSION_MASK	GENMASK(47, 32)
-+#define PKG_DIR_TYPE_MASK	GENMASK(54, 48)
 +
-+static inline const struct ipu6_cpd_ent *ipu6_cpd_get_entry(const void *cpd,
-+							    u8 idx)
++/* Shared structure between driver and FW - do not modify */
++struct ipu6_fw_sys_queue {
++	u64 host_address;
++	u32 vied_address;
++	u32 size;
++	u32 token_size;
++	u32 wr_reg;	/* reg number in subsystem's regmem */
++	u32 rd_reg;
++	u32 _align;
++} __packed;
++
++struct ipu6_fw_sys_queue_res {
++	u64 host_address;
++	u32 vied_address;
++	u32 reg;
++} __packed;
++
++enum syscom_state {
++	/* Program load or explicit host setting should init to this */
++	SYSCOM_STATE_UNINIT = 0x57A7E000,
++	/* SP Syscom sets this when it is ready for use */
++	SYSCOM_STATE_READY = 0x57A7E001,
++	/* SP Syscom sets this when no more syscom accesses will happen */
++	SYSCOM_STATE_INACTIVE = 0x57A7E002
++};
++
++enum syscom_cmd {
++	/* Program load or explicit host setting should init to this */
++	SYSCOM_COMMAND_UNINIT = 0x57A7F000,
++	/* Host Syscom requests syscom to become inactive */
++	SYSCOM_COMMAND_INACTIVE = 0x57A7F001
++};
++
++/* firmware config: data that sent from the host to SP via DDR */
++/* Cell copies data into a context */
++
++struct ipu6_fw_syscom_config {
++	u32 firmware_address;
++
++	u32 num_input_queues;
++	u32 num_output_queues;
++
++	/* ISP pointers to an array of ipu6_fw_sys_queue structures */
++	u32 input_queue;
++	u32 output_queue;
++
++	/* ISYS / PSYS private data */
++	u32 specific_addr;
++	u32 specific_size;
++};
++
++struct ipu6_fw_com_context {
++	struct ipu6_bus_device *adev;
++	void __iomem *dmem_addr;
++	int (*cell_ready)(struct ipu6_bus_device *adev);
++	void (*cell_start)(struct ipu6_bus_device *adev);
++
++	void *dma_buffer;
++	dma_addr_t dma_addr;
++	unsigned int dma_size;
++	unsigned long attrs;
++
++	struct ipu6_fw_sys_queue *input_queue;	/* array of host to SP queues */
++	struct ipu6_fw_sys_queue *output_queue;	/* array of SP to host */
++
++	u32 config_vied_addr;
++
++	unsigned int buttress_boot_offset;
++	void __iomem *base_addr;
++};
++
++#define FW_COM_WR_REG 0
++#define FW_COM_RD_REG 4
++
++#define REGMEM_OFFSET 0
++#define TUNIT_MAGIC_PATTERN 0x5a5a5a5a
++
++enum regmem_id {
++	/* pass pkg_dir address to SPC in non-secure mode */
++	PKG_DIR_ADDR_REG = 0,
++	/* Tunit CFG blob for secure - provided by host.*/
++	TUNIT_CFG_DWR_REG = 1,
++	/* syscom commands - modified by the host */
++	SYSCOM_COMMAND_REG = 2,
++	/* Store interrupt status - updated by SP */
++	SYSCOM_IRQ_REG = 3,
++	/* first syscom queue pointer register */
++	SYSCOM_QPR_BASE_REG = 4
++};
++
++enum message_direction {
++	DIR_RECV = 0,
++	DIR_SEND
++};
++
++#define BUTTRESS_FW_BOOT_PARAMS_0 0x4000
++#define BUTTRESS_FW_BOOT_PARAM_REG(base, offset, id)			\
++	((base) + BUTTRESS_FW_BOOT_PARAMS_0 + ((offset) + (id)) * 4)
++
++enum buttress_syscom_id {
++	/* pass syscom configuration to SPC */
++	SYSCOM_CONFIG_ID		= 0,
++	/* syscom state - modified by SP */
++	SYSCOM_STATE_ID			= 1,
++	/* syscom vtl0 addr mask */
++	SYSCOM_VTL0_ADDR_MASK_ID	= 2,
++	SYSCOM_ID_MAX
++};
++
++static void ipu6_sys_queue_init(struct ipu6_fw_sys_queue *q, unsigned int size,
++				unsigned int token_size,
++				struct ipu6_fw_sys_queue_res *res)
 +{
-+	const struct ipu6_cpd_hdr *cpd_hdr = cpd;
-+	const struct ipu6_cpd_ent *ent;
++	unsigned int buf_size = (size + 1) * token_size;
 +
-+	ent = (const struct ipu6_cpd_ent *)((const u8 *)cpd + cpd_hdr->hdr_len);
-+	return ent + idx;
++	q->size = size + 1;
++	q->token_size = token_size;
++
++	/* acquire the shared buffer space */
++	q->host_address = res->host_address;
++	res->host_address += buf_size;
++	q->vied_address = res->vied_address;
++	res->vied_address += buf_size;
++
++	/* acquire the shared read and writer pointers */
++	q->wr_reg = res->reg;
++	res->reg++;
++	q->rd_reg = res->reg;
++	res->reg++;
 +}
 +
-+#define ipu6_cpd_get_manifest(cpd) ipu6_cpd_get_entry(cpd, MANIFEST_IDX)
-+#define ipu6_cpd_get_metadata(cpd) ipu6_cpd_get_entry(cpd, METADATA_IDX)
-+#define ipu6_cpd_get_moduledata(cpd) ipu6_cpd_get_entry(cpd, MODULEDATA_IDX)
-+
-+static const struct ipu6_cpd_metadata_cmpnt_hdr *
-+ipu6_cpd_metadata_get_cmpnt(struct ipu6_device *isp, const void *metadata,
-+			    unsigned int metadata_size, u8 idx)
++void *ipu6_fw_com_prepare(struct ipu6_fw_com_cfg *cfg,
++			  struct ipu6_bus_device *adev, void __iomem *base)
 +{
-+	size_t extn_size = sizeof(struct ipu6_cpd_metadata_extn);
-+	size_t cmpnt_count = metadata_size - extn_size;
-+
-+	cmpnt_count = div_u64(cmpnt_count, isp->cpd_metadata_cmpnt_size);
-+
-+	if (idx > MAX_COMPONENT_ID || idx >= cmpnt_count) {
-+		dev_err(&isp->pdev->dev, "Component index out of range (%d)\n",
-+			idx);
-+		return ERR_PTR(-EINVAL);
-+	}
-+
-+	return metadata + extn_size + idx * isp->cpd_metadata_cmpnt_size;
-+}
-+
-+static u32 ipu6_cpd_metadata_cmpnt_version(struct ipu6_device *isp,
-+					   const void *metadata,
-+					   unsigned int metadata_size, u8 idx)
-+{
-+	const struct ipu6_cpd_metadata_cmpnt_hdr *cmpnt;
-+
-+	cmpnt = ipu6_cpd_metadata_get_cmpnt(isp, metadata, metadata_size, idx);
-+	if (IS_ERR(cmpnt))
-+		return PTR_ERR(cmpnt);
-+
-+	return cmpnt->ver;
-+}
-+
-+static int ipu6_cpd_metadata_get_cmpnt_id(struct ipu6_device *isp,
-+					  const void *metadata,
-+					  unsigned int metadata_size, u8 idx)
-+{
-+	const struct ipu6_cpd_metadata_cmpnt_hdr *cmpnt;
-+
-+	cmpnt = ipu6_cpd_metadata_get_cmpnt(isp, metadata, metadata_size, idx);
-+	if (IS_ERR(cmpnt))
-+		return PTR_ERR(cmpnt);
-+
-+	return cmpnt->id;
-+}
-+
-+static int ipu6_cpd_parse_module_data(struct ipu6_device *isp,
-+				      const void *module_data,
-+				      unsigned int module_data_size,
-+				      dma_addr_t dma_addr_module_data,
-+				      u64 *pkg_dir, const void *metadata,
-+				      unsigned int metadata_size)
-+{
-+	const struct ipu6_cpd_module_data_hdr *module_data_hdr;
-+	const struct ipu6_cpd_hdr *dir_hdr;
-+	const struct ipu6_cpd_ent *dir_ent;
-+	unsigned int i;
-+	u8 len;
-+
-+	if (!module_data)
-+		return -EINVAL;
-+
-+	module_data_hdr = module_data;
-+	dir_hdr = module_data + module_data_hdr->hdr_len;
-+	len = dir_hdr->hdr_len;
-+	dir_ent = (const struct ipu6_cpd_ent *)(((u8 *)dir_hdr) + len);
-+
-+	pkg_dir[0] = PKG_DIR_HDR_MARK;
-+	/* pkg_dir entry count = component count + pkg_dir header */
-+	pkg_dir[1] = dir_hdr->ent_cnt + 1;
-+
-+	for (i = 0; i < dir_hdr->ent_cnt; i++, dir_ent++) {
-+		u64 *p = &pkg_dir[PKG_DIR_ENT_LEN *  (1 + i)];
-+		int ver, id;
-+
-+		*p++ = dma_addr_module_data + dir_ent->offset;
-+		id = ipu6_cpd_metadata_get_cmpnt_id(isp, metadata,
-+						    metadata_size, i);
-+		if (id < 0 || id > MAX_COMPONENT_ID) {
-+			dev_err(&isp->pdev->dev, "Invalid CPD component id\n");
-+			return -EINVAL;
-+		}
-+
-+		ver = ipu6_cpd_metadata_cmpnt_version(isp, metadata,
-+						      metadata_size, i);
-+		if (ver < 0 || ver > MAX_COMPONENT_VERSION) {
-+			dev_err(&isp->pdev->dev,
-+				"Invalid CPD component version\n");
-+			return -EINVAL;
-+		}
-+
-+		*p = FIELD_PREP(PKG_DIR_SIZE_MASK, dir_ent->len) |
-+			FIELD_PREP(PKG_DIR_TYPE_MASK, id) |
-+			FIELD_PREP(PKG_DIR_VERSION_MASK, ver);
-+	}
-+
-+	return 0;
-+}
-+
-+int ipu6_cpd_create_pkg_dir(struct ipu6_bus_device *adev, const void *src)
-+{
-+	dma_addr_t dma_addr_src = sg_dma_address(adev->fw_sgt.sgl);
-+	const struct ipu6_cpd_ent *ent, *man_ent, *met_ent;
++	size_t conf_size, inq_size, outq_size, specific_size;
++	struct ipu6_fw_syscom_config *config_host_addr;
++	unsigned int sizeinput = 0, sizeoutput = 0;
++	struct ipu6_fw_sys_queue_res res;
++	struct ipu6_fw_com_context *ctx;
 +	struct device *dev = &adev->auxdev.dev;
-+	struct ipu6_device *isp = adev->isp;
-+	unsigned int man_sz, met_sz;
-+	void *pkg_dir_pos;
-+	int ret;
++	size_t sizeall, offset;
++	unsigned long attrs = 0;
++	void *specific_host_addr;
++	unsigned int i;
 +
-+	man_ent = ipu6_cpd_get_manifest(src);
-+	man_sz = man_ent->len;
++	if (!cfg || !cfg->cell_start || !cfg->cell_ready)
++		return NULL;
 +
-+	met_ent = ipu6_cpd_get_metadata(src);
-+	met_sz = met_ent->len;
-+
-+	adev->pkg_dir_size = PKG_DIR_SIZE + man_sz + met_sz;
-+	adev->pkg_dir = dma_alloc_attrs(dev, adev->pkg_dir_size,
-+					&adev->pkg_dir_dma_addr, GFP_KERNEL, 0);
-+	if (!adev->pkg_dir)
-+		return -ENOMEM;
++	ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
++	if (!ctx)
++		return NULL;
++	ctx->dmem_addr = base + cfg->dmem_addr + REGMEM_OFFSET;
++	ctx->adev = adev;
++	ctx->cell_start = cfg->cell_start;
++	ctx->cell_ready = cfg->cell_ready;
++	ctx->buttress_boot_offset = cfg->buttress_boot_offset;
++	ctx->base_addr  = base;
 +
 +	/*
-+	 * pkg_dir entry/header:
-+	 * qword | 63:56 | 55   | 54:48 | 47:32 | 31:24 | 23:0
-+	 * N         Address/Offset/"_IUPKDR_"
-+	 * N + 1 | rsvd  | rsvd | type  | ver   | rsvd  | size
-+	 *
-+	 * We can ignore other fields that size in N + 1 qword as they
-+	 * are 0 anyway. Just setting size for now.
++	 * Allocate DMA mapped memory. Allocate one big chunk.
 +	 */
++	/* Base cfg for FW */
++	conf_size = roundup(sizeof(struct ipu6_fw_syscom_config), 8);
++	/* Descriptions of the queues */
++	inq_size = size_mul(cfg->num_input_queues,
++			    sizeof(struct ipu6_fw_sys_queue));
++	outq_size = size_mul(cfg->num_output_queues,
++			     sizeof(struct ipu6_fw_sys_queue));
++	/* FW specific information structure */
++	specific_size = roundup(cfg->specific_size, 8);
 +
-+	ent = ipu6_cpd_get_moduledata(src);
++	sizeall = conf_size + inq_size + outq_size + specific_size;
 +
-+	ret = ipu6_cpd_parse_module_data(isp, src + ent->offset,
-+					 ent->len, dma_addr_src + ent->offset,
-+					 adev->pkg_dir, src + met_ent->offset,
-+					 met_ent->len);
-+	if (ret) {
-+		dev_err(&isp->pdev->dev, "Failed to parse module data\n");
-+		dma_free_attrs(dev, adev->pkg_dir_size,
-+			       adev->pkg_dir, adev->pkg_dir_dma_addr, 0);
-+		return ret;
++	for (i = 0; i < cfg->num_input_queues; i++)
++		sizeinput += size_mul(cfg->input[i].queue_size + 1,
++				      cfg->input[i].token_size);
++
++	for (i = 0; i < cfg->num_output_queues; i++)
++		sizeoutput += size_mul(cfg->output[i].queue_size + 1,
++				       cfg->output[i].token_size);
++
++	sizeall += sizeinput + sizeoutput;
++
++	ctx->dma_buffer = dma_alloc_attrs(dev, sizeall, &ctx->dma_addr,
++					  GFP_KERNEL, attrs);
++	ctx->attrs = attrs;
++	if (!ctx->dma_buffer) {
++		dev_err(dev, "failed to allocate dma memory\n");
++		kfree(ctx);
++		return NULL;
 +	}
 +
-+	/* Copy manifest after pkg_dir */
-+	pkg_dir_pos = adev->pkg_dir + PKG_DIR_ENT_LEN * MAX_PKG_DIR_ENT_CNT;
-+	memcpy(pkg_dir_pos, src + man_ent->offset, man_sz);
++	ctx->dma_size = sizeall;
 +
-+	/* Copy metadata after manifest */
-+	pkg_dir_pos += man_sz;
-+	memcpy(pkg_dir_pos, src + met_ent->offset, met_sz);
++	config_host_addr = ctx->dma_buffer;
++	ctx->config_vied_addr = ctx->dma_addr;
 +
-+	dma_sync_single_range_for_device(dev, adev->pkg_dir_dma_addr,
-+					 0, adev->pkg_dir_size, DMA_TO_DEVICE);
++	offset = conf_size;
++	ctx->input_queue = ctx->dma_buffer + offset;
++	config_host_addr->input_queue = ctx->dma_addr + offset;
++	config_host_addr->num_input_queues = cfg->num_input_queues;
++
++	offset += inq_size;
++	ctx->output_queue = ctx->dma_buffer + offset;
++	config_host_addr->output_queue = ctx->dma_addr + offset;
++	config_host_addr->num_output_queues = cfg->num_output_queues;
++
++	/* copy firmware specific data */
++	offset += outq_size;
++	specific_host_addr = ctx->dma_buffer + offset;
++	config_host_addr->specific_addr = ctx->dma_addr + offset;
++	config_host_addr->specific_size = cfg->specific_size;
++	if (cfg->specific_addr && cfg->specific_size)
++		memcpy(specific_host_addr, cfg->specific_addr,
++		       cfg->specific_size);
++
++	/* initialize input queues */
++	offset += specific_size;
++	res.reg = SYSCOM_QPR_BASE_REG;
++	res.host_address = (u64)(ctx->dma_buffer + offset);
++	res.vied_address = ctx->dma_addr + offset;
++	for (i = 0; i < cfg->num_input_queues; i++)
++		ipu6_sys_queue_init(ctx->input_queue + i,
++				    cfg->input[i].queue_size,
++				    cfg->input[i].token_size, &res);
++
++	/* initialize output queues */
++	offset += sizeinput;
++	res.host_address = (u64)(ctx->dma_buffer + offset);
++	res.vied_address = ctx->dma_addr + offset;
++	for (i = 0; i < cfg->num_output_queues; i++) {
++		ipu6_sys_queue_init(ctx->output_queue + i,
++				    cfg->output[i].queue_size,
++				    cfg->output[i].token_size, &res);
++	}
++
++	return ctx;
++}
++EXPORT_SYMBOL_NS_GPL(ipu6_fw_com_prepare, INTEL_IPU6);
++
++int ipu6_fw_com_open(struct ipu6_fw_com_context *ctx)
++{
++	/* write magic pattern to disable the tunit trace */
++	writel(TUNIT_MAGIC_PATTERN, ctx->dmem_addr + TUNIT_CFG_DWR_REG * 4);
++	/* Check if SP is in valid state */
++	if (!ctx->cell_ready(ctx->adev))
++		return -EIO;
++
++	/* store syscom uninitialized command */
++	writel(SYSCOM_COMMAND_UNINIT, ctx->dmem_addr + SYSCOM_COMMAND_REG * 4);
++
++	/* store syscom uninitialized state */
++	writel(SYSCOM_STATE_UNINIT,
++	       BUTTRESS_FW_BOOT_PARAM_REG(ctx->base_addr,
++					  ctx->buttress_boot_offset,
++					  SYSCOM_STATE_ID));
++
++	/* store firmware configuration address */
++	writel(ctx->config_vied_addr,
++	       BUTTRESS_FW_BOOT_PARAM_REG(ctx->base_addr,
++					  ctx->buttress_boot_offset,
++					  SYSCOM_CONFIG_ID));
++	ctx->cell_start(ctx->adev);
 +
 +	return 0;
 +}
-+EXPORT_SYMBOL_NS_GPL(ipu6_cpd_create_pkg_dir, INTEL_IPU6);
++EXPORT_SYMBOL_NS_GPL(ipu6_fw_com_open, INTEL_IPU6);
 +
-+void ipu6_cpd_free_pkg_dir(struct ipu6_bus_device *adev)
++int ipu6_fw_com_close(struct ipu6_fw_com_context *ctx)
 +{
-+	dma_free_attrs(&adev->auxdev.dev, adev->pkg_dir_size, adev->pkg_dir,
-+		       adev->pkg_dir_dma_addr, 0);
-+}
-+EXPORT_SYMBOL_NS_GPL(ipu6_cpd_free_pkg_dir, INTEL_IPU6);
++	int state;
 +
-+static int ipu6_cpd_validate_cpd(struct ipu6_device *isp, const void *cpd,
-+				 unsigned long cpd_size,
-+				 unsigned long data_size)
-+{
-+	const struct ipu6_cpd_hdr *cpd_hdr = cpd;
-+	const struct ipu6_cpd_ent *ent;
-+	unsigned int i;
-+	u8 len;
++	state = readl(BUTTRESS_FW_BOOT_PARAM_REG(ctx->base_addr,
++						 ctx->buttress_boot_offset,
++						 SYSCOM_STATE_ID));
++	if (state != SYSCOM_STATE_READY)
++		return -EBUSY;
 +
-+	len = cpd_hdr->hdr_len;
-+
-+	/* Ensure cpd hdr is within moduledata */
-+	if (cpd_size < len) {
-+		dev_err(&isp->pdev->dev, "Invalid CPD moduledata size\n");
-+		return -EINVAL;
-+	}
-+
-+	/* Sanity check for CPD header */
-+	if ((cpd_size - len) / sizeof(*ent) < cpd_hdr->ent_cnt) {
-+		dev_err(&isp->pdev->dev, "Invalid CPD header\n");
-+		return -EINVAL;
-+	}
-+
-+	/* Ensure that all entries are within moduledata */
-+	ent = (const struct ipu6_cpd_ent *)(((const u8 *)cpd_hdr) + len);
-+	for (i = 0; i < cpd_hdr->ent_cnt; i++, ent++) {
-+		if (data_size < ent->offset ||
-+		    data_size - ent->offset < ent->len) {
-+			dev_err(&isp->pdev->dev, "Invalid CPD entry (%d)\n", i);
-+			return -EINVAL;
-+		}
-+	}
++	/* set close request flag */
++	writel(SYSCOM_COMMAND_INACTIVE, ctx->dmem_addr +
++	       SYSCOM_COMMAND_REG * 4);
 +
 +	return 0;
 +}
++EXPORT_SYMBOL_NS_GPL(ipu6_fw_com_close, INTEL_IPU6);
 +
-+static int ipu6_cpd_validate_moduledata(struct ipu6_device *isp,
-+					const void *moduledata,
-+					u32 moduledata_size)
++int ipu6_fw_com_release(struct ipu6_fw_com_context *ctx, unsigned int force)
 +{
-+	const struct ipu6_cpd_module_data_hdr *mod_hdr = moduledata;
-+	int ret;
++	/* check if release is forced, an verify cell state if it is not */
++	if (!force && !ctx->cell_ready(ctx->adev))
++		return -EBUSY;
 +
-+	/* Ensure moduledata hdr is within moduledata */
-+	if (moduledata_size < sizeof(*mod_hdr) ||
-+	    moduledata_size < mod_hdr->hdr_len) {
-+		dev_err(&isp->pdev->dev, "Invalid CPD moduledata size\n");
-+		return -EINVAL;
-+	}
-+
-+	dev_info(&isp->pdev->dev, "FW version: %x\n", mod_hdr->fw_pkg_date);
-+	ret = ipu6_cpd_validate_cpd(isp, moduledata + mod_hdr->hdr_len,
-+				    moduledata_size - mod_hdr->hdr_len,
-+				    moduledata_size);
-+	if (ret) {
-+		dev_err(&isp->pdev->dev, "Invalid CPD in moduledata\n");
-+		return ret;
-+	}
-+
++	dma_free_attrs(&ctx->adev->auxdev.dev, ctx->dma_size,
++		       ctx->dma_buffer, ctx->dma_addr, ctx->attrs);
++	kfree(ctx);
 +	return 0;
 +}
++EXPORT_SYMBOL_NS_GPL(ipu6_fw_com_release, INTEL_IPU6);
 +
-+static int ipu6_cpd_validate_metadata(struct ipu6_device *isp,
-+				      const void *metadata, u32 meta_size)
++bool ipu6_fw_com_ready(struct ipu6_fw_com_context *ctx)
 +{
-+	const struct ipu6_cpd_metadata_extn *extn = metadata;
++	int state;
 +
-+	/* Sanity check for metadata size */
-+	if (meta_size < sizeof(*extn) || meta_size > MAX_METADATA_SIZE) {
-+		dev_err(&isp->pdev->dev, "Invalid CPD metadata\n");
-+		return -EINVAL;
-+	}
++	state = readl(BUTTRESS_FW_BOOT_PARAM_REG(ctx->base_addr,
++						 ctx->buttress_boot_offset,
++						 SYSCOM_STATE_ID));
 +
-+	/* Validate extension and image types */
-+	if (extn->extn_type != IPU6_CPD_METADATA_EXTN_TYPE_IUNIT ||
-+	    extn->img_type != IPU6_CPD_METADATA_IMAGE_TYPE_MAIN_FIRMWARE) {
-+		dev_err(&isp->pdev->dev,
-+			"Invalid CPD metadata descriptor img_type (%d)\n",
-+			extn->img_type);
-+		return -EINVAL;
-+	}
-+
-+	/* Validate metadata size multiple of metadata components */
-+	if ((meta_size - sizeof(*extn)) % isp->cpd_metadata_cmpnt_size) {
-+		dev_err(&isp->pdev->dev, "Invalid CPD metadata size\n");
-+		return -EINVAL;
-+	}
-+
-+	return 0;
++	return state == SYSCOM_STATE_READY;
 +}
++EXPORT_SYMBOL_NS_GPL(ipu6_fw_com_ready, INTEL_IPU6);
 +
-+int ipu6_cpd_validate_cpd_file(struct ipu6_device *isp, const void *cpd_file,
-+			       unsigned long cpd_file_size)
++void *ipu6_send_get_token(struct ipu6_fw_com_context *ctx, int q_nbr)
 +{
-+	const struct ipu6_cpd_hdr *hdr = cpd_file;
-+	const struct ipu6_cpd_ent *ent;
-+	int ret;
++	struct ipu6_fw_sys_queue *q = &ctx->input_queue[q_nbr];
++	void __iomem *q_dmem = ctx->dmem_addr + q->wr_reg * 4;
++	unsigned int wr, rd;
++	unsigned int packets;
++	unsigned int index;
 +
-+	ret = ipu6_cpd_validate_cpd(isp, cpd_file, cpd_file_size,
-+				    cpd_file_size);
-+	if (ret) {
-+		dev_err(&isp->pdev->dev, "Invalid CPD in file\n");
-+		return ret;
-+	}
++	wr = readl(q_dmem + FW_COM_WR_REG);
++	rd = readl(q_dmem + FW_COM_RD_REG);
 +
-+	/* Check for CPD file marker */
-+	if (hdr->hdr_mark != CPD_HDR_MARK) {
-+		dev_err(&isp->pdev->dev, "Invalid CPD header\n");
-+		return -EINVAL;
-+	}
++	if (WARN_ON_ONCE(wr >= q->size || rd >= q->size))
++		return NULL;
 +
-+	/* Sanity check for manifest size */
-+	ent = ipu6_cpd_get_manifest(cpd_file);
-+	if (ent->len > MAX_MANIFEST_SIZE) {
-+		dev_err(&isp->pdev->dev, "Invalid CPD manifest size\n");
-+		return -EINVAL;
-+	}
++	if (wr < rd)
++		packets = rd - wr - 1;
++	else
++		packets = q->size - (wr - rd + 1);
 +
-+	/* Validate metadata */
-+	ent = ipu6_cpd_get_metadata(cpd_file);
-+	ret = ipu6_cpd_validate_metadata(isp, cpd_file + ent->offset, ent->len);
-+	if (ret) {
-+		dev_err(&isp->pdev->dev, "Invalid CPD metadata\n");
-+		return ret;
-+	}
++	if (!packets)
++		return NULL;
 +
-+	/* Validate moduledata */
-+	ent = ipu6_cpd_get_moduledata(cpd_file);
-+	ret = ipu6_cpd_validate_moduledata(isp, cpd_file + ent->offset,
-+					   ent->len);
-+	if (ret)
-+		dev_err(&isp->pdev->dev, "Invalid CPD moduledata\n");
++	index = readl(q_dmem + FW_COM_WR_REG);
 +
-+	return ret;
++	return (void *)(q->host_address + index * q->token_size);
 +}
-diff --git a/drivers/media/pci/intel/ipu6/ipu6-cpd.h b/drivers/media/pci/intel/ipu6/ipu6-cpd.h
++EXPORT_SYMBOL_NS_GPL(ipu6_send_get_token, INTEL_IPU6);
++
++void ipu6_send_put_token(struct ipu6_fw_com_context *ctx, int q_nbr)
++{
++	struct ipu6_fw_sys_queue *q = &ctx->input_queue[q_nbr];
++	void __iomem *q_dmem = ctx->dmem_addr + q->wr_reg * 4;
++	unsigned int wr = readl(q_dmem + FW_COM_WR_REG) + 1;
++
++	if (wr >= q->size)
++		wr = 0;
++
++	writel(wr, q_dmem + FW_COM_WR_REG);
++}
++EXPORT_SYMBOL_NS_GPL(ipu6_send_put_token, INTEL_IPU6);
++
++void *ipu6_recv_get_token(struct ipu6_fw_com_context *ctx, int q_nbr)
++{
++	struct ipu6_fw_sys_queue *q = &ctx->output_queue[q_nbr];
++	void __iomem *q_dmem = ctx->dmem_addr + q->wr_reg * 4;
++	unsigned int wr, rd;
++	unsigned int packets;
++
++	wr = readl(q_dmem + FW_COM_WR_REG);
++	rd = readl(q_dmem + FW_COM_RD_REG);
++
++	if (WARN_ON_ONCE(wr >= q->size || rd >= q->size))
++		return NULL;
++
++	if (wr < rd)
++		wr += q->size;
++
++	packets = wr - rd;
++	if (!packets)
++		return NULL;
++
++	return (void *)(q->host_address + rd * q->token_size);
++}
++EXPORT_SYMBOL_NS_GPL(ipu6_recv_get_token, INTEL_IPU6);
++
++void ipu6_recv_put_token(struct ipu6_fw_com_context *ctx, int q_nbr)
++{
++	struct ipu6_fw_sys_queue *q = &ctx->output_queue[q_nbr];
++	void __iomem *q_dmem = ctx->dmem_addr + q->wr_reg * 4;
++	unsigned int rd = readl(q_dmem + FW_COM_RD_REG) + 1;
++
++	if (rd >= q->size)
++		rd = 0;
++
++	writel(rd, q_dmem + FW_COM_RD_REG);
++}
++EXPORT_SYMBOL_NS_GPL(ipu6_recv_put_token, INTEL_IPU6);
+diff --git a/drivers/media/pci/intel/ipu6/ipu6-fw-com.h b/drivers/media/pci/intel/ipu6/ipu6-fw-com.h
 new file mode 100644
-index 000000000000..0b606b5b3336
+index 000000000000..660c406b3ac9
 --- /dev/null
-+++ b/drivers/media/pci/intel/ipu6/ipu6-cpd.h
-@@ -0,0 +1,104 @@
++++ b/drivers/media/pci/intel/ipu6/ipu6-fw-com.h
+@@ -0,0 +1,47 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
-+/* Copyright (C) 2015 - 2023 Intel Corporation */
++/* Copyright (C) 2013 - 2023 Intel Corporation */
 +
-+#ifndef IPU6_CPD_H
-+#define IPU6_CPD_H
++#ifndef IPU6_FW_COM_H
++#define IPU6_FW_COM_H
 +
-+#include "ipu6-bus.h"
++struct ipu6_fw_com_context;
++struct ipu6_bus_device;
 +
-+#define IPU6_CPD_SIZE_OF_FW_ARCH_VERSION	7
-+#define IPU6_CPD_SIZE_OF_SYSTEM_VERSION		11
-+#define IPU6_CPD_SIZE_OF_COMPONENT_NAME		12
++struct ipu6_fw_syscom_queue_config {
++	unsigned int queue_size;	/* tokens per queue */
++	unsigned int token_size;	/* bytes per token */
++};
 +
-+#define IPU6_CPD_METADATA_EXTN_TYPE_IUNIT	0x10
++#define SYSCOM_BUTTRESS_FW_PARAMS_ISYS_OFFSET	0
 +
-+#define IPU6_CPD_METADATA_IMAGE_TYPE_RESERVED		0
-+#define IPU6_CPD_METADATA_IMAGE_TYPE_BOOTLOADER		1
-+#define IPU6_CPD_METADATA_IMAGE_TYPE_MAIN_FIRMWARE	2
++struct ipu6_fw_com_cfg {
++	unsigned int num_input_queues;
++	unsigned int num_output_queues;
++	struct ipu6_fw_syscom_queue_config *input;
++	struct ipu6_fw_syscom_queue_config *output;
 +
-+#define IPU6_CPD_PKG_DIR_PSYS_SERVER_IDX	0
-+#define IPU6_CPD_PKG_DIR_ISYS_SERVER_IDX	1
++	unsigned int dmem_addr;
 +
-+#define IPU6_CPD_PKG_DIR_CLIENT_PG_TYPE		3
++	/* firmware-specific configuration data */
++	void *specific_addr;
++	unsigned int specific_size;
++	int (*cell_ready)(struct ipu6_bus_device *adev);
++	void (*cell_start)(struct ipu6_bus_device *adev);
 +
-+#define IPU6_CPD_METADATA_HASH_KEY_SIZE		48
-+#define IPU6SE_CPD_METADATA_HASH_KEY_SIZE	32
++	unsigned int buttress_boot_offset;
++};
 +
-+struct ipu6_cpd_module_data_hdr {
-+	u32 hdr_len;
-+	u32 endian;
-+	u32 fw_pkg_date;
-+	u32 hive_sdk_date;
-+	u32 compiler_date;
-+	u32 target_platform_type;
-+	u8 sys_ver[IPU6_CPD_SIZE_OF_SYSTEM_VERSION];
-+	u8 fw_arch_ver[IPU6_CPD_SIZE_OF_FW_ARCH_VERSION];
-+	u8 rsvd[2];
-+} __packed;
++void *ipu6_fw_com_prepare(struct ipu6_fw_com_cfg *cfg,
++			  struct ipu6_bus_device *adev, void __iomem *base);
 +
-+/*
-+ * ipu6_cpd_hdr structure updated as the chksum and
-+ * sub_partition_name is unused on host side
-+ * CSE layout version 1.6 for IPU6SE (hdr_len = 0x10)
-+ * CSE layout version 1.7 for IPU6 (hdr_len = 0x14)
-+ */
-+struct ipu6_cpd_hdr {
-+	u32 hdr_mark;
-+	u32 ent_cnt;
-+	u8 hdr_ver;
-+	u8 ent_ver;
-+	u8 hdr_len;
-+} __packed;
++int ipu6_fw_com_open(struct ipu6_fw_com_context *ctx);
++bool ipu6_fw_com_ready(struct ipu6_fw_com_context *ctx);
++int ipu6_fw_com_close(struct ipu6_fw_com_context *ctx);
++int ipu6_fw_com_release(struct ipu6_fw_com_context *ctx, unsigned int force);
 +
-+struct ipu6_cpd_ent {
-+	u8 name[IPU6_CPD_SIZE_OF_COMPONENT_NAME];
-+	u32 offset;
-+	u32 len;
-+	u8 rsvd[4];
-+} __packed;
++void *ipu6_recv_get_token(struct ipu6_fw_com_context *ctx, int q_nbr);
++void ipu6_recv_put_token(struct ipu6_fw_com_context *ctx, int q_nbr);
++void *ipu6_send_get_token(struct ipu6_fw_com_context *ctx, int q_nbr);
++void ipu6_send_put_token(struct ipu6_fw_com_context *ctx, int q_nbr);
 +
-+struct ipu6_cpd_metadata_cmpnt_hdr {
-+	u32 id;
-+	u32 size;
-+	u32 ver;
-+} __packed;
-+
-+struct ipu6_cpd_metadata_cmpnt {
-+	struct ipu6_cpd_metadata_cmpnt_hdr hdr;
-+	u8 sha2_hash[IPU6_CPD_METADATA_HASH_KEY_SIZE];
-+	u32 entry_point;
-+	u32 icache_base_offs;
-+	u8 attrs[16];
-+} __packed;
-+
-+struct ipu6se_cpd_metadata_cmpnt {
-+	struct ipu6_cpd_metadata_cmpnt_hdr hdr;
-+	u8 sha2_hash[IPU6SE_CPD_METADATA_HASH_KEY_SIZE];
-+	u32 entry_point;
-+	u32 icache_base_offs;
-+	u8 attrs[16];
-+} __packed;
-+
-+struct ipu6_cpd_metadata_extn {
-+	u32 extn_type;
-+	u32 len;
-+	u32 img_type;
-+	u8 rsvd[16];
-+} __packed;
-+
-+struct ipu6_cpd_client_pkg_hdr {
-+	u32 prog_list_offs;
-+	u32 prog_list_size;
-+	u32 prog_desc_offs;
-+	u32 prog_desc_size;
-+	u32 pg_manifest_offs;
-+	u32 pg_manifest_size;
-+	u32 prog_bin_offs;
-+	u32 prog_bin_size;
-+} __packed;
-+
-+int ipu6_cpd_create_pkg_dir(struct ipu6_bus_device *adev, const void *src);
-+void ipu6_cpd_free_pkg_dir(struct ipu6_bus_device *adev);
-+int ipu6_cpd_validate_cpd_file(struct ipu6_device *isp, const void *cpd_file,
-+			       unsigned long cpd_file_size);
-+#endif /* IPU6_CPD_H */
++#endif
 -- 
 2.42.0
 
