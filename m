@@ -2,33 +2,33 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58828C25B6C
-	for <linux-media@archiver.kernel.org>; Tue, 24 Oct 2023 01:04:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54723C25B6E
+	for <linux-media@archiver.kernel.org>; Tue, 24 Oct 2023 01:04:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231854AbjJXBEI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S231886AbjJXBEI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 23 Oct 2023 21:04:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50656 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231500AbjJXBEF (ORCPT
+        with ESMTP id S231523AbjJXBEF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 23 Oct 2023 21:04:05 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15BC8E8;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DACEE;
         Mon, 23 Oct 2023 18:04:03 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66050C433CA;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B423C433CC;
         Tue, 24 Oct 2023 01:04:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1698109442;
-        bh=z5zD73CuDLZzR3kACF7pI8WVgaRXLYeaHoxvXa90vx4=;
+        bh=So2KlXhUCikU8X/BCxDXuE+mxqgiy0lZILYQ1AcKJwI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T3pXl0foZ1CKiRgvmsO9n0qohBQbTW64EBG3sAJDTAAIfOdDzaPWavetHwis5SBlU
-         Let6/U27DKsUJVGc5t5GYnOFvZBUaDFm+/wkzlMokHQAXzaB4/RO/E4U6k1C7b+Bcl
-         kFIzkQJGCQV4sHDBO52kiQWdKK1r3erIimjsr9LCvNQrYCU2DoB1K7KjBPDYmN7hIG
-         zQecdt4IBCuGBHvIGBD0F181DUGvSBN4vdIflruyt7Q8CnzBpQfCmzQle2nxhZBc/N
-         SYDCBa8y3fQ1gSP193K1hP4U8Uo152AsZAURuJXgEC+kZ/WBvdmMvqeeTHPFsz5ZcB
-         jg87dYCRA/cEw==
+        b=eijedFgUlWc5TZaHc3Dt6uhcA9LAK4wzsPN1l7EqGtp2BB1q2FD0rI4/goioLtUTB
+         jSfjL9ToLgeh4jH/znKsIUuo5RDYYsGwX7UnANDgg+6JGsEbWdodce6QaBPXR18Y1e
+         AX44nw4+oBJYSb0cybkZ5oanmBh2jBIUIMNRs8Zy3f8dpJoTY/1HwLuiAVNCU6TjZ9
+         xzwMfDSaQBTAm7jvYtDRQA7zPqilVSD/pXCJdjLslAMs9hpHcQ4v++oo8rU2ps9nBK
+         DkwGBZKPC7V4elnsNdUBjt3SNIpNnE8WcZ/lRgw7mBCIonbLIHQzHGFo77jTCYGVjC
+         OcEhFk77YwWLg==
 Received: by mercury (Postfix, from userid 1000)
-        id A96951060516; Tue, 24 Oct 2023 03:03:59 +0200 (CEST)
+        id B05AD106057D; Tue, 24 Oct 2023 03:03:59 +0200 (CEST)
 From:   Sebastian Reichel <sre@kernel.org>
 To:     Sebastian Reichel <sre@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -39,9 +39,9 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Conor Dooley <conor+dt@kernel.org>,
         linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/4] dt-bindings: vendor-prefixes: add GalaxyCore
-Date:   Tue, 24 Oct 2023 02:59:50 +0200
-Message-ID: <20231024010355.1877523-2-sre@kernel.org>
+Subject: [PATCH v2 3/4] media: MAINTAINERS: Add GalaxyCore in camera sensor section
+Date:   Tue, 24 Oct 2023 02:59:52 +0200
+Message-ID: <20231024010355.1877523-4-sre@kernel.org>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231024010355.1877523-1-sre@kernel.org>
 References: <20231024010355.1877523-1-sre@kernel.org>
@@ -51,30 +51,26 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-GalaxyCore Shanghai Limited Corporation manufacturers
-CMOS Image Sensor and Display Driver IC.
+"gc" prefixed i2c media drivers are most likely GalaxyCore camera
+sensor drivers, so add it to the list.
 
 Signed-off-by: Sebastian Reichel <sre@kernel.org>
 ---
-Just included for completion, I expect this to be merged:
-https://lore.kernel.org/all/20231011175735.1824782-2-alain.volmat@foss.st.com/
----
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 573578db9509..8cb49a2e4afa 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -494,6 +494,8 @@ patternProperties:
-     description: Fujitsu Ltd.
-   "^fxtec,.*":
-     description: FX Technology Ltd.
-+  "^galaxycore,.*":
-+    description: GalaxyCore Shanghai Limited Corporation
-   "^gardena,.*":
-     description: GARDENA GmbH
-   "^gateworks,.*":
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 2894f0777537..5f64cd42ff37 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -22553,6 +22553,7 @@ S:	Maintained
+ F:	Documentation/driver-api/media/camera-sensor.rst
+ F:	Documentation/driver-api/media/tx-rx.rst
+ F:	drivers/media/i2c/ar*
++F:	drivers/media/i2c/gc*
+ F:	drivers/media/i2c/hi*
+ F:	drivers/media/i2c/imx*
+ F:	drivers/media/i2c/mt*
 -- 
 2.42.0
 
