@@ -2,44 +2,44 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5445C25B47
-	for <linux-media@archiver.kernel.org>; Tue, 24 Oct 2023 08:38:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE8F4C25B48
+	for <linux-media@archiver.kernel.org>; Tue, 24 Oct 2023 08:38:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232982AbjJXIiG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Oct 2023 04:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36262 "EHLO
+        id S233813AbjJXIiH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 24 Oct 2023 04:38:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233936AbjJXIhv (ORCPT
+        with ESMTP id S233983AbjJXIh4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 Oct 2023 04:37:51 -0400
+        Tue, 24 Oct 2023 04:37:56 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E90910F4;
-        Tue, 24 Oct 2023 01:37:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C4E10C0;
+        Tue, 24 Oct 2023 01:37:54 -0700 (PDT)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 354DC66072F6;
-        Tue, 24 Oct 2023 09:37:46 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4D30766072F1;
+        Tue, 24 Oct 2023 09:37:52 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1698136667;
-        bh=OXWBJI8/0kuWCWSXzhyCCeuu9STJjBJew+90jgeB8X4=;
+        s=mail; t=1698136673;
+        bh=zP6vOilkZ0sm+tw53oGfhBi7YFiKClwvxIzUr5yGLpI=;
         h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-        b=OGJO3GgETEk/ycZzbWNpU1U+oaj6LykXxpi2st2VCGO/eoz4X/z9I2H/Q8WSe9O2A
-         ND33IMXmMoCyNOTlbcvfVgSFosGXdqSmO5S2bJOm9QBdckE05TxRPgqudMt5cKUEc9
-         aD6yRms2261d4sPMjJeDgujNJyNO5ciuTEyhJl1T5mGd+RWKLN77wMdvRILoCHAi0A
-         wxYlwhkNBrbbjo8c7voaWm7f28zgIXSWrHn+SkmMYxiuZtLS+VexCvJqqtHNdREE9y
-         Wnz/CvjQrhbyIejGo65mUWCqv0A/sSMLVpCAHtRkFimCBPIX8447u7ty4X9vBPmVGN
-         n05yD2ajcv6jQ==
-Message-ID: <fa495623-1b63-4b94-84b8-c5cf0b9ba0ae@collabora.com>
-Date:   Tue, 24 Oct 2023 10:37:44 +0200
+        b=LGQgRQS/VTjZqKg/j9fomOFt2RWMhGEpZj0kzuxJI55ULzIweIUjZP5mnTXgqDeZX
+         Ej/PRdJpmMO3gkPKa6lcfdmKxDHBGwpXvSW+482Kd5mNonPFPeXMq/sT+/+tz8C8YN
+         /AsrD2dDo08jvpbXFgBIUGsa5P8OqbmnLVC5SpqAS7E+s9imGhmIlYS2ve205xKoK1
+         ICMBBSUe4Bk31NVDn0LBa6/jMlBu8LZGHTNAxodVafW2gRHiIfzGHDJVFbiLVUzXO1
+         0wkLr8OpBYK6Fe9FisOI2qsEgdmCFfPIjnw/xmI69sV3QmKVCa7x/yKZHlMAJxOkQH
+         eU46ccydvDnMA==
+Message-ID: <f7fa1c3c-8233-40ab-858a-fdf8a2117a04@collabora.com>
+Date:   Tue, 24 Oct 2023 10:37:52 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH v2 03/11] drm/mediatek: Add secure buffer control flow to
- mtk_drm_gem
+Subject: Re: [PATCH v2 02/11] drm/mediatek/uapi: Add
+ DRM_MTK_GEM_CREATED_ENCRYPTTED flag
 To:     "Jason-JH.Lin" <jason-jh.lin@mediatek.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -58,9 +58,9 @@ Cc:     Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
         Project_Global_Chrome_Upstream_Group@mediatek.com,
         Jeffrey Kardatzke <jkardatzke@google.com>
 References: <20231023044549.21412-1-jason-jh.lin@mediatek.com>
- <20231023044549.21412-4-jason-jh.lin@mediatek.com>
+ <20231023044549.21412-3-jason-jh.lin@mediatek.com>
 Content-Language: en-US
-In-Reply-To: <20231023044549.21412-4-jason-jh.lin@mediatek.com>
+In-Reply-To: <20231023044549.21412-3-jason-jh.lin@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -68,166 +68,27 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 Il 23/10/23 06:45, Jason-JH.Lin ha scritto:
-> Add secure buffer control flow to mtk_drm_gem.
+> Add DRM_MTK_GEM_CREATED_ENCRYPTTED flag to allocate a secure buffer
+> to support secure video path feature.
 > 
-> When user space takes DRM_MTK_GEM_CREATE_ENCRYPTED flag and size
-> to create a mtk_drm_gem object, mtk_drm_gem will find a matched size
-> dma buffer from secure dma-heap and bind it to mtk_drm_gem object.
-> 
+
+You have a typo in both the commit description and the title. Please fix.
+
 > Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
 > ---
->   drivers/gpu/drm/mediatek/mtk_drm_gem.c | 84 +++++++++++++++++++++++++-
->   drivers/gpu/drm/mediatek/mtk_drm_gem.h |  4 ++
->   2 files changed, 87 insertions(+), 1 deletion(-)
+>   include/uapi/drm/mediatek_drm.h | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_gem.c b/drivers/gpu/drm/mediatek/mtk_drm_gem.c
-> index bcce723f257d..2064ccd7dde0 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_drm_gem.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_drm_gem.c
-> @@ -4,6 +4,8 @@
->    */
+> diff --git a/include/uapi/drm/mediatek_drm.h b/include/uapi/drm/mediatek_drm.h
+> index c050de320a84..93f25e0c21d7 100644
+> --- a/include/uapi/drm/mediatek_drm.h
+> +++ b/include/uapi/drm/mediatek_drm.h
+> @@ -48,6 +48,7 @@ struct drm_mtk_gem_map_off {
 >   
->   #include <linux/dma-buf.h>
-> +#include <linux/dma-heap.h>
-> +#include <uapi/linux/dma-heap.h>
->   #include <drm/mediatek_drm.h>
+>   #define DRM_MTK_GEM_CREATE		0x00
+>   #define DRM_MTK_GEM_MAP_OFFSET		0x01
+> +#define DRM_MTK_GEM_CREATE_ENCRYPTED	0x02
 >   
->   #include <drm/drm.h>
-> @@ -55,6 +57,80 @@ static struct mtk_drm_gem_obj *mtk_drm_gem_init(struct drm_device *dev,
->   	return mtk_gem_obj;
->   }
->   
-> +struct mtk_drm_gem_obj *mtk_drm_gem_create_from_heap(struct drm_device *dev,
-> +						     const char *heap, size_t size)
-> +{
-> +	struct mtk_drm_private *priv = dev->dev_private;
-> +	struct mtk_drm_gem_obj *mtk_gem;
-> +	struct drm_gem_object *obj;
-> +	struct dma_heap *dma_heap;
-> +	struct dma_buf *dma_buf;
-> +	struct dma_buf_attachment *attach;
-> +	struct sg_table *sgt;
-> +	struct iosys_map map = {};
-> +	int ret;
-> +
-> +	mtk_gem = mtk_drm_gem_init(dev, size);
-> +	if (IS_ERR(mtk_gem))
-> +		return ERR_CAST(mtk_gem);
-> +
-> +	obj = &mtk_gem->base;
-> +
-> +	dma_heap = dma_heap_find(heap);
-> +	if (!dma_heap) {
-> +		DRM_ERROR("heap find fail\n");
-> +		goto err_gem_free;
-> +	}
-> +	dma_buf = dma_heap_buffer_alloc(dma_heap, size,
-> +					O_RDWR | O_CLOEXEC, DMA_HEAP_VALID_HEAP_FLAGS);
-> +	if (IS_ERR(dma_buf)) {
-> +		DRM_ERROR("buffer alloc fail\n");
-> +		dma_heap_put(dma_heap);
-> +		goto err_gem_free;
-> +	}
-> +	dma_heap_put(dma_heap);
-> +
-> +	attach = dma_buf_attach(dma_buf, priv->dma_dev);
-> +	if (IS_ERR(attach)) {
-> +		DRM_ERROR("attach fail, return\n");
-> +		dma_buf_put(dma_buf);
-> +		goto err_gem_free;
-> +	}
-
-blank line here please
-
-> +	sgt = dma_buf_map_attachment(attach, DMA_BIDIRECTIONAL);
-> +	if (IS_ERR(sgt)) {
-> +		DRM_ERROR("map failed, detach and return\n");
-> +		dma_buf_detach(dma_buf, attach);
-> +		dma_buf_put(dma_buf);
-> +		goto err_gem_free;
-> +	}
-> +	obj->import_attach = attach;
-> +	mtk_gem->dma_addr = sg_dma_address(sgt->sgl);
-> +	mtk_gem->sg = sgt;
-> +	mtk_gem->size = dma_buf->size;
-> +
-> +	if (!strcmp(heap, "mtk_svp") || !strcmp(heap, "mtk_svp_cma")) {
-> +		/* secure buffer can not be mapped */
-> +		mtk_gem->sec = true;
-> +	} else {
-> +		ret = dma_buf_vmap(dma_buf, &map);
-> +		mtk_gem->kvaddr = map.vaddr;
-> +		if (ret) {
-> +			DRM_ERROR("map failed, ret=%d\n", ret);
-> +			dma_buf_unmap_attachment(attach, sgt, DMA_BIDIRECTIONAL);
-> +			dma_buf_detach(dma_buf, attach);
-> +			dma_buf_put(dma_buf);
-> +			mtk_gem->kvaddr = NULL;
-> +		}
-> +	}
-> +
-> +	return mtk_gem;
-> +
-> +err_gem_free:
-> +	drm_gem_object_release(obj);
-> +	kfree(mtk_gem);
-> +	return ERR_PTR(-ENOMEM);
-> +}
-> +
->   struct mtk_drm_gem_obj *mtk_drm_gem_create(struct drm_device *dev,
->   					   size_t size, bool alloc_kmap)
->   {
-> @@ -218,7 +294,9 @@ struct drm_gem_object *mtk_gem_prime_import_sg_table(struct drm_device *dev,
->   	if (IS_ERR(mtk_gem))
->   		return ERR_CAST(mtk_gem);
->   
-> +	mtk_gem->sec = !sg_page(sg->sgl);
->   	mtk_gem->dma_addr = sg_dma_address(sg->sgl);
-> +	mtk_gem->size = attach->dmabuf->size;
->   	mtk_gem->sg = sg;
->   
->   	return &mtk_gem->base;
-> @@ -290,7 +368,11 @@ int mtk_gem_create_ioctl(struct drm_device *dev, void *data,
->   	struct drm_mtk_gem_create *args = data;
->   	int ret;
->   
-> -	mtk_gem = mtk_drm_gem_create(dev, args->size, false);
-> +	if (args->flags & DRM_MTK_GEM_CREATE_ENCRYPTED)
-> +		mtk_gem = mtk_drm_gem_create_from_heap(dev, "mtk_svp_cma", args->size);
-> +	else
-> +		mtk_gem = mtk_drm_gem_create(dev, args->size, false);
-> +
->   	if (IS_ERR(mtk_gem))
->   		return PTR_ERR(mtk_gem);
->   
-> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_gem.h b/drivers/gpu/drm/mediatek/mtk_drm_gem.h
-> index 90f3d2916ec5..ed4d23e252e9 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_drm_gem.h
-> +++ b/drivers/gpu/drm/mediatek/mtk_drm_gem.h
-> @@ -27,9 +27,11 @@ struct mtk_drm_gem_obj {
->   	void			*cookie;
->   	void			*kvaddr;
->   	dma_addr_t		dma_addr;
-> +	size_t			size;
->   	unsigned long		dma_attrs;
->   	struct sg_table		*sg;
->   	struct page		**pages;
-> +	bool			sec;
-
-`sec` may be ambiguous. You can call that `secure` or `is_secure_buf`.
-
->   };
->   
->   #define to_mtk_gem_obj(x)	container_of(x, struct mtk_drm_gem_obj, base)
-> @@ -37,6 +39,8 @@ struct mtk_drm_gem_obj {
->   void mtk_drm_gem_free_object(struct drm_gem_object *gem);
->   struct mtk_drm_gem_obj *mtk_drm_gem_create(struct drm_device *dev, size_t size,
->   					   bool alloc_kmap);
-> +struct mtk_drm_gem_obj *mtk_drm_gem_create_from_heap(struct drm_device *dev,
-> +						     const char *heap, size_t size);
->   int mtk_drm_gem_dumb_create(struct drm_file *file_priv, struct drm_device *dev,
->   			    struct drm_mode_create_dumb *args);
->   struct sg_table *mtk_gem_prime_get_sg_table(struct drm_gem_object *obj);
-
-
+>   #define DRM_IOCTL_MTK_GEM_CREATE	DRM_IOWR(DRM_COMMAND_BASE + \
+>   		DRM_MTK_GEM_CREATE, struct drm_mtk_gem_create)
 
