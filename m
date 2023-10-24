@@ -2,76 +2,83 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9022FC25B6C
-	for <linux-media@archiver.kernel.org>; Tue, 24 Oct 2023 19:10:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16246C07545
+	for <linux-media@archiver.kernel.org>; Tue, 24 Oct 2023 21:11:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344268AbjJXTKe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Oct 2023 15:10:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39466 "EHLO
+        id S1344302AbjJXVLn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 24 Oct 2023 17:11:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344250AbjJXTKb (ORCPT
+        with ESMTP id S1344160AbjJXVLn (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 Oct 2023 15:10:31 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4630293;
-        Tue, 24 Oct 2023 12:10:25 -0700 (PDT)
-Received: from arisu.hitronhub.home (unknown [23.233.251.139])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: detlev)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 69EE66607326;
-        Tue, 24 Oct 2023 20:10:23 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1698174624;
-        bh=ik2lJ68nmMdHse/0Pbl+ym8554daPlCABLkgBBaT6pg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BAytmgOax273LxN5RaxTJMxPjBYDB523K3SXGGVOmBqz7bvx06OarJbHdzD9stAh2
-         OOO2XC4snhYG9igas+cjt1T1cmCsMEUry6zWUGJ/AKne4sy4Rp3d0SshIwxZnuHZhA
-         qEkpO+Ge4OOhOeBW9kvl3LoZA4yLow830pA11CFkcz1nibv6wCgBYWTgEq+/vw/Jii
-         yIrG54sGxX7X/hVUvjveW/6r5c8ye+GvqGGWKEQkeR9VMTSQMz5u+i9e7QmBrSBECp
-         qn9334NEf+qJOBN2ogTGJObxmxnt5ObtHhg0qFYoM6CEjll8lqGOzn4dP1jcrDX1/G
-         pFDukigOXdiEw==
-From:   Detlev Casanova <detlev.casanova@collabora.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-media@vger.kernel.org,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Detlev Casanova <detlev.casanova@collabora.com>
-Subject: [PATCH v2 5/5] doc: visl: Document codec_variability parameter
-Date:   Tue, 24 Oct 2023 15:09:50 -0400
-Message-ID: <20231024191027.305622-6-detlev.casanova@collabora.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20231024191027.305622-1-detlev.casanova@collabora.com>
-References: <20231024191027.305622-1-detlev.casanova@collabora.com>
+        Tue, 24 Oct 2023 17:11:43 -0400
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com [209.85.161.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404A110D4
+        for <linux-media@vger.kernel.org>; Tue, 24 Oct 2023 14:11:40 -0700 (PDT)
+Received: by mail-oo1-f69.google.com with SMTP id 006d021491bc7-581e2c9197bso6870265eaf.3
+        for <linux-media@vger.kernel.org>; Tue, 24 Oct 2023 14:11:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698181899; x=1698786699;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DZWvcvFWT3P94ESec92OyEYUrt6Ss1wkXtTKq4rDYxM=;
+        b=GvLCzSsgapIBghDPZom6Bsxa/AcMaJI0guvg8UAbsftkbO5lrFCXqv/46eLD8vtH6y
+         ayWo4JqaHGg9LLJbWr/Yl1+A4E9WXRzZW9WVxnRoPDEML+zHlxiP8pzzZ48jOVbKRCBk
+         jxJ+l7cbfBzIDeHH7HXF4cn0npAkbW/9oGIeJkWjZjs0j625zBAYhF1ZJjej5PQGoCHs
+         cPsQrXPrA1ZNLDeKZbjviO1vVcoXg72BkFXc1pVqR1+Kv4ehiSP8ZPVayHWmPsMUu5uz
+         NaQDEHdq8wdPoQap7NkRZNXazzzyCz7kfleVlRNdl3LjWOHzjlsRL5p291du1WRYIPGC
+         tS+Q==
+X-Gm-Message-State: AOJu0YzoqfQyg7BVb1maM+gNSH22WL5fWkg6aQT0q9sl+S4NXtkxoDfp
+        B3Hq3HPaxC/vtgLo7eZY1Xw6FXfTIKOiAJ7+wYV1t5UbByc9
+X-Google-Smtp-Source: AGHT+IFIGdjAGzKoTrnYimPKPHmDG1kjuJTZCw+8fwLQZBt4HO+eQF/KgxqQt+0nli6xsdzu/gL97sZ4XmiD0ErEiKHID+MmReGv
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a4a:350f:0:b0:581:def4:738d with SMTP id
+ l15-20020a4a350f000000b00581def4738dmr3989735ooa.0.1698181899638; Tue, 24 Oct
+ 2023 14:11:39 -0700 (PDT)
+Date:   Tue, 24 Oct 2023 14:11:39 -0700
+In-Reply-To: <0000000000003ee3610599d20096@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e45f1006087cc8ea@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in __media_entity_remove_links
+From:   syzbot <syzbot+0b0095300dfeb8a83dc8@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, laurent.pinchart@ideasonboard.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, mchehab@kernel.org, nogikh@google.com,
+        sakari.ailus@linux.intel.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
-Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+This bug is marked as fixed by commit:
+media: uvcvideo: Avoid cyclic entity chains due to malformed USB descriptors
+
+But I can't find it in the tested trees[1] for more than 90 days.
+Is it a correct commit? Please update it by replying:
+
+#syz fix: exact-commit-title
+
+Until then the bug is still considered open and new crashes with
+the same signature are ignored.
+
+Kernel: Linux
+Dashboard link: https://syzkaller.appspot.com/bug?extid=0b0095300dfeb8a83dc8
+
 ---
- Documentation/admin-guide/media/visl.rst | 5 +++++
- 1 file changed, 5 insertions(+)
+[1] I expect the commit to be present in:
 
-diff --git a/Documentation/admin-guide/media/visl.rst b/Documentation/admin-guide/media/visl.rst
-index 5b26fd943571..56d2e9ab72cc 100644
---- a/Documentation/admin-guide/media/visl.rst
-+++ b/Documentation/admin-guide/media/visl.rst
-@@ -53,6 +53,11 @@ Module parameters
-   sure that, for a given input, the output frames are always exactly the same.
-   This is useful for automated tests to check that output frames are correct.
- 
-+- codec_variability: Add codec specific variability in the ouput frames. It
-+  adds a text line on the ouptut frames containing parameters that is specific
-+  to the format of the input stream to ensure that different inputs do not give
-+  the same output.
-+
- What is the default use case for this driver?
- ---------------------------------------------
- 
--- 
-2.41.0
+1. for-kernelci branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
 
+2. master branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
+
+3. master branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
+
+4. main branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
+
+The full list of 9 trees can be found at
+https://syzkaller.appspot.com/upstream/repos
