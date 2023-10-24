@@ -2,33 +2,33 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E269C00A8F
-	for <linux-media@archiver.kernel.org>; Tue, 24 Oct 2023 01:04:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BDCC3C25B6B
+	for <linux-media@archiver.kernel.org>; Tue, 24 Oct 2023 01:04:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231666AbjJXBEF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 23 Oct 2023 21:04:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50652 "EHLO
+        id S231741AbjJXBEG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 23 Oct 2023 21:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjJXBEE (ORCPT
+        with ESMTP id S230366AbjJXBEE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 23 Oct 2023 21:04:04 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E561DDA;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E557BCC;
         Mon, 23 Oct 2023 18:04:02 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F56AC433C9;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CF3AC433C8;
         Tue, 24 Oct 2023 01:04:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1698109442;
-        bh=iSkrQebPrNfhGLZEYWj4p51adyMkES+9wtC8UUFPKTU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nmT9U0vHp/SuI9GnBbyw4ih7dm2x5iMqC8cijgCn02G5v0RNRJvvFf+FcFHj2dsT/
-         AJLrLe+r4CA2BBzDjQVsL1b6HoYhRlL/4AcUqyiQJQbrYGNamFLNNnSG+Q6oVyEaaC
-         uIpBZm36nOUsqZT5BtHz2NoeKmmXmityd6rOD5IBLV6+A4DB2xfOI3fmg1ebV7V9rP
-         Z4fBmnOAsgUzhY/OILxMWVwoKVkNN/yrrVmEUrjyNb4prdsqx4vM3j1cn8sevkt+ZN
-         Y6rgNbLMHy1AS442sCmzn0nHy1ZV7ocSy1zvMXuTKvvHDeh/TRMZr2/dU03NaNQWig
-         nmxdaA7PPVHSA==
+        bh=ZfPl6t59R5Ac+1BPcyB7uDtR1zx5eWUVL7UjAPeXsdc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kZxQaMYk0knUAkNwR6rQa2TX+jDYR9tP10iiMOXXkE1xNvuSpyA7wwa1E/oi+PKZ5
+         biIpjYew17CALK8u414fhlFf7I/7YeMwgpQZI1mebSWd6/vlffYW1H1ozPMqcLHGZy
+         K/vFHRwcpftJWC0N+tA8T9W7Hxb8IMVLbHdsScNnbGHsy6XRT4ASf+wjTKMOWr5fhn
+         8t2T3K63Kq2AHZBWYTwq4NxxLwJ2jIMNcIrunOyoKkAbtD1koQmbu0BWy8bCFD0zMR
+         9rAUBCuHkhoMTZO/bu5EenaOeAU/fVcaZouLIg1hZoQhHtF3FHHp+sUvCrCdzntwSX
+         9FBT2MhQVsuDQ==
 Received: by mercury (Postfix, from userid 1000)
-        id AD5F9106057C; Tue, 24 Oct 2023 03:03:59 +0200 (CEST)
+        id A76C2106052D; Tue, 24 Oct 2023 03:03:59 +0200 (CEST)
 From:   Sebastian Reichel <sre@kernel.org>
 To:     Sebastian Reichel <sre@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -39,140 +39,71 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Conor Dooley <conor+dt@kernel.org>,
         linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/4] media: dt-bindings: gc0308: add binding
-Date:   Tue, 24 Oct 2023 02:59:51 +0200
-Message-ID: <20231024010355.1877523-3-sre@kernel.org>
+Subject: [PATCH v2 0/4] GC0308 Camera Sensor
+Date:   Tue, 24 Oct 2023 02:59:49 +0200
+Message-ID: <20231024010355.1877523-1-sre@kernel.org>
 X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231024010355.1877523-1-sre@kernel.org>
-References: <20231024010355.1877523-1-sre@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add DT binding for GalaxyCore GC0308 camera sensor.
+Hi,
 
-Signed-off-by: Sebastian Reichel <sre@kernel.org>
----
- .../bindings/media/i2c/galaxycore,gc0308.yaml | 108 ++++++++++++++++++
- 1 file changed, 108 insertions(+)
+I did the following tests done by me on an i.MX6ULL based system [0]:
+
+ * v4l2-compliance -u /dev/v4l-subdev1
+   - v4l2-compliance 1.24.1, 32 bits, 32-bit time_t
+     (from Debian testing)
+   - Total for device /dev/v4l-subdev1: 44, Succeeded: 44
+ * Using gstreamer + v4l2-ctl
+   - Tried 640x480, 320x240, 160x120 YUYV8_2X8 formats
+   - Tested effect of all exposed user controls
+ * checkpatch does not report any driver issues
+ * dt_binding_check does not report anything
+
+[0] https://embedded-recipes.org/2023/schedule/running-foss-thermal-camera/
+
+Changes since PATCHv1:
+ * https://lore.kernel.org/all/20231023002547.1754190-1-sre@kernel.org/
+ * Update binding: i2c0 -> i2c
+ * Update binding: make GC0309 use GC0308 as fallback compatible
+ * Add regulator handling in power_on/power_off
+ * Fix alignment of regmap_multi_reg_write arguments
+ * Fix useless extra return
+ * Do not check for pad in gc0308_enum_frame_size()
+ * Drop get_mbus_config implementation
+ * Use V4L2_CID_AUTO_EXPOSURE_BIAS instead of V4L2_CID_EXPOSURE
+ * Drop gc0308_get_format in favour of v4l2_subdev_get_fmt
+ * Replace open-coded v4l2_find_nearest_size() logic
+ * check clock rate instead of setting it
+ * use fwnode_graph_get_endpoint_by_id()
+ * power off device when probe errors out after power on
+ * replace mutex with sub-device state
+ * add Galaxycore to generic camera sensors section in MAINTAINERS
+ * add GC0308 entry in MAINTAINERS
+
+Greetings,
+
+-- Sebastian
+
+Sebastian Reichel (4):
+  dt-bindings: vendor-prefixes: add GalaxyCore
+  media: dt-bindings: gc0308: add binding
+  media: MAINTAINERS: Add GalaxyCore in camera sensor section
+  media: i2c: gc0308: new driver
+
+ .../bindings/media/i2c/galaxycore,gc0308.yaml |  108 ++
+ .../devicetree/bindings/vendor-prefixes.yaml  |    2 +
+ MAINTAINERS                                   |    8 +
+ drivers/media/i2c/Kconfig                     |   14 +
+ drivers/media/i2c/Makefile                    |    1 +
+ drivers/media/i2c/gc0308.c                    | 1418 +++++++++++++++++
+ 6 files changed, 1551 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/media/i2c/galaxycore,gc0308.yaml
+ create mode 100644 drivers/media/i2c/gc0308.c
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/galaxycore,gc0308.yaml b/Documentation/devicetree/bindings/media/i2c/galaxycore,gc0308.yaml
-new file mode 100644
-index 000000000000..f81e7daed67b
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/galaxycore,gc0308.yaml
-@@ -0,0 +1,108 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/i2c/galaxycore,gc0308.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Galaxycore GC0308 and GC0309 Image Sensors
-+
-+maintainers:
-+  - Sebastian Reichel <sre@kernel.org>
-+
-+description: |
-+  The GalaxyCore GC0308 (1/6.5") and GC0309 (1/9") are 640x480 VGA sensors
-+  programmable through an I2C interface and connected via parallel bus.
-+  They include an ISP capable of auto exposure and auto white balance.
-+
-+allOf:
-+  - $ref: ../video-interface-devices.yaml#
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - const: galaxycore,gc0308
-+      - items:
-+          - const: galaxycore,gc0309
-+          - const: galaxycore,gc0308
-+
-+  reg:
-+    const: 0x21
-+
-+  clocks:
-+    description: Reference to the xclk clock.
-+    maxItems: 1
-+
-+  reset-gpios:
-+    description: GPIO descriptor for the reset pin.
-+    maxItems: 1
-+
-+  powerdown-gpios:
-+    description: GPIO descriptor for the powerdown pin.
-+    maxItems: 1
-+
-+  vdd28-supply:
-+    description: 2.8V supply
-+
-+  port:
-+    $ref: /schemas/graph.yaml#/$defs/port-base
-+    description: |
-+      Video output port.
-+
-+    properties:
-+      endpoint:
-+        $ref: /schemas/media/video-interfaces.yaml#
-+        unevaluatedProperties: false
-+
-+        properties:
-+          bus-width: true
-+          data-shift: true
-+          hsync-active: true
-+          vsync-active: true
-+          data-active: true
-+          pclk-sample: true
-+
-+        required:
-+          - bus-width
-+
-+    additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - powerdown-gpios
-+  - port
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        camera-sensor@21 {
-+            compatible = "galaxycore,gc0308";
-+            reg = <0x21>;
-+            clocks = <&camera_clk>;
-+            powerdown-gpios = <&gpio1 5 GPIO_ACTIVE_HIGH>;
-+            reset-gpios = <&gpio1 6 GPIO_ACTIVE_LOW>;
-+            vdd28-supply = <&vdd28>;
-+
-+            port {
-+                gc0308_ep: endpoint {
-+                    remote-endpoint = <&parallel_from_gc0308>;
-+                    bus-width = <8>;
-+                    data-shift = <2>; /* lines 9:2 are used */
-+                    hsync-active = <1>; /* active high */
-+                    vsync-active = <1>; /* active high */
-+                    data-active = <1>; /* active high */
-+                    pclk-sample = <1>; /* sample on rising edge */
-+                };
-+            };
-+        };
-+    };
-+
-+...
 -- 
 2.42.0
 
