@@ -2,31 +2,31 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99041C25B6D
-	for <linux-media@archiver.kernel.org>; Wed, 25 Oct 2023 03:14:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09468C25B6E
+	for <linux-media@archiver.kernel.org>; Wed, 25 Oct 2023 03:14:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232537AbjJYDOr convert rfc822-to-8bit (ORCPT
+        id S232558AbjJYDOt convert rfc822-to-8bit (ORCPT
         <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Oct 2023 23:14:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49562 "EHLO
+        Tue, 24 Oct 2023 23:14:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232397AbjJYDOi (ORCPT
+        with ESMTP id S232419AbjJYDOi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 24 Oct 2023 23:14:38 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84772137;
-        Tue, 24 Oct 2023 20:14:32 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D3A13A;
+        Tue, 24 Oct 2023 20:14:33 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id DDB3324E025;
-        Wed, 25 Oct 2023 11:14:24 +0800 (CST)
-Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 25 Oct
- 2023 11:14:24 +0800
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id CDAB724E2C2;
+        Wed, 25 Oct 2023 11:14:26 +0800 (CST)
+Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 25 Oct
+ 2023 11:14:26 +0800
 Received: from xiaofei.localdomain (180.164.60.184) by EXMBX073.cuchost.com
  (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 25 Oct
- 2023 11:14:24 +0800
+ 2023 11:14:25 +0800
 From:   Jack Zhu <jack.zhu@starfivetech.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Robert Foss <rfoss@kernel.org>,
@@ -41,10 +41,12 @@ To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
 CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-staging@lists.linux.dev>,
         <jack.zhu@starfivetech.com>, <changhuang.liang@starfivetech.com>
-Subject: [PATCH v11 0/9] Add StarFive Camera Subsystem driver
-Date:   Wed, 25 Oct 2023 11:14:13 +0800
-Message-ID: <20231025031422.3695-1-jack.zhu@starfivetech.com>
+Subject: [PATCH v11 5/9] media: staging: media: starfive: camss: Add ISP driver
+Date:   Wed, 25 Oct 2023 11:14:18 +0800
+Message-ID: <20231025031422.3695-6-jack.zhu@starfivetech.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231025031422.3695-1-jack.zhu@starfivetech.com>
+References: <20231025031422.3695-1-jack.zhu@starfivetech.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [180.164.60.184]
@@ -56,1166 +58,1327 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
-
-This series is the v11 series that attempts to support the Camera Subsystem
-found on StarFive JH7110 SoC.
-
-This series is based on top of the master branch of media_stage repository,
-which is tested with a v4l2-compliance compiled from the git repo
-(git://linuxtv.org/v4l-utils.git).
-
-The following are the media graph for the device and the v4l2-compliance
-output.
-
-===========================================================================
-[the media graph]:
-
-digraph board {
-	rankdir=TB
-	n00000001 [label="{{<port0> 0} | stf_isp\n/dev/v4l-subdev0 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
-	n00000001:port1 -> n00000008 [style=dashed]
-	n00000004 [label="capture_raw\n/dev/video0", shape=box, style=filled, fillcolor=yellow]
-	n00000008 [label="capture_yuv\n/dev/video1", shape=box, style=filled, fillcolor=yellow]
-	n0000000e [label="{{<port0> 0} | cdns_csi2rx.19800000.csi-bridge\n/dev/v4l-subdev1 | {<port1> 1 | <port2> 2 | <port3> 3 | <port4> 4}}", shape=Mrecord, style=filled, fillcolor=green]
-	n0000000e:port1 -> n00000001:port0 [style=dashed]
-	n0000000e:port1 -> n00000004 [style=dashed]
-	n00000018 [label="{{} | imx219 6-0010\n/dev/v4l-subdev2 | {<port0> 0}}", shape=Mrecord, style=filled, fillcolor=green]
-	n00000018:port0 -> n0000000e:port0 [style=bold]
-}
-
-[the device topology]:
-
-Media controller API version 6.6.0
-
-Media device information
-------------------------
-driver          starfive-camss
-model           Starfive Camera Subsystem
-serial          
-bus info        platform:19840000.camss
-hw revision     0x0
-driver version  6.6.0
-
-Device topology
-- entity 1: stf_isp (2 pads, 2 links, 0 routes)
-            type V4L2 subdev subtype Unknown flags 0
-            device node name /dev/v4l-subdev0
-	pad0: Sink
-		[stream:0 fmt:SRGGB10_1X10/1920x1080 field:none colorspace:srgb
-		 crop.bounds:(0,0)/1920x1080
-		 crop:(0,0)/1920x1080]
-		<- "cdns_csi2rx.19800000.csi-bridge":1 []
-	pad1: Source
-		[stream:0 fmt:YUYV8_1_5X8/1920x1080 field:none colorspace:srgb
-		 crop.bounds:(0,0)/1920x1080
-		 crop:(0,0)/1920x1080]
-		-> "capture_yuv":0 []
-
-- entity 4: capture_raw (1 pad, 1 link)
-            type Node subtype V4L flags 0
-            device node name /dev/video0
-	pad0: Sink
-		<- "cdns_csi2rx.19800000.csi-bridge":1 []
-
-- entity 8: capture_yuv (1 pad, 1 link)
-            type Node subtype V4L flags 0
-            device node name /dev/video1
-	pad0: Sink
-		<- "stf_isp":1 []
-
-- entity 14: cdns_csi2rx.19800000.csi-bridge (5 pads, 3 links, 0 routes)
-             type V4L2 subdev subtype Unknown flags 0
-             device node name /dev/v4l-subdev1
-	pad0: Sink
-		[stream:0 fmt:UYVY8_1X16/640x480 field:none colorspace:srgb xfer:srgb ycbcr:601 quantization:lim-range]
-		<- "imx219 6-0010":0 [ENABLED,IMMUTABLE]
-	pad1: Source
-		[stream:0 fmt:UYVY8_1X16/640x480 field:none colorspace:srgb xfer:srgb ycbcr:601 quantization:lim-range]
-		-> "stf_isp":0 []
-		-> "capture_raw":0 []
-	pad2: Source
-		[stream:0 fmt:UYVY8_1X16/640x480 field:none colorspace:srgb xfer:srgb ycbcr:601 quantization:lim-range]
-	pad3: Source
-		[stream:0 fmt:UYVY8_1X16/640x480 field:none colorspace:srgb xfer:srgb ycbcr:601 quantization:lim-range]
-	pad4: Source
-		[stream:0 fmt:UYVY8_1X16/640x480 field:none colorspace:srgb xfer:srgb ycbcr:601 quantization:lim-range]
-
-- entity 24: imx219 6-0010 (1 pad, 1 link, 0 routes)
-             type V4L2 subdev subtype Sensor flags 0
-             device node name /dev/v4l-subdev2
-	pad0: Source
-		[stream:0 fmt:SRGGB10_1X10/3280x2464 field:none colorspace:raw xfer:none ycbcr:601 quantization:full-range
-		 crop.bounds:(8,8)/3280x2464
-		 crop:(8,8)/3280x2464]
-		-> "cdns_csi2rx.19800000.csi-bridge":0 [ENABLED,IMMUTABLE]
-
-===========================================================================
-[the v4l2-compliance output]:
-
-------------
-Test part 1:
-
-v4l2-compliance 1.25.0, 64 bits, 64-bit time_t
-
-Compliance test for starfive-camss device /dev/video1:
-
-Driver Info:
-	Driver name      : starfive-camss
-	Card type        : Starfive Camera Subsystem
-	Bus info         : platform:19840000.camss
-	Driver version   : 6.6.0
-	Capabilities     : 0x84200001
-		Video Capture
-		Streaming
-		Extended Pix Format
-		Device Capabilities
-	Device Caps      : 0x04200001
-		Video Capture
-		Streaming
-		Extended Pix Format
-Media Driver Info:
-	Driver name      : starfive-camss
-	Model            : Starfive Camera Subsystem
-	Serial           : 
-	Bus info         : platform:19840000.camss
-	Media version    : 6.6.0
-	Hardware revision: 0x00000000 (0)
-	Driver version   : 6.6.0
-Interface Info:
-	ID               : 0x0300000a
-	Type             : V4L Video
-Entity Info:
-	ID               : 0x00000008 (8)
-	Name             : capture_yuv
-	Function         : V4L2 I/O
-	Pad 0x01000009   : 0: Sink
-	  Link 0x0200000c: from remote pad 0x1000003 of entity 'stf_isp' (Image Signal Processor): Data, Enabled
-
-Required ioctls:
-	test MC information (see 'Media Driver Info' above): OK
-	test VIDIOC_QUERYCAP: OK
-	test invalid ioctls: OK
-
-Allow for multiple opens:
-	test second /dev/video1 open: OK
-	test VIDIOC_QUERYCAP: OK
-	test VIDIOC_G/S_PRIORITY: OK
-	test for unlimited opens: OK
-
-Debug ioctls:
-	test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
-	test VIDIOC_LOG_STATUS: OK (Not Supported)
-
-Input ioctls:
-	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
-	test VIDIOC_ENUMAUDIO: OK (Not Supported)
-	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDIO: OK (Not Supported)
-	Inputs: 0 Audio Inputs: 0 Tuners: 0
-
-Output ioctls:
-	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
-	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
-	Outputs: 0 Audio Outputs: 0 Modulators: 0
-
-Input/Output configuration ioctls:
-	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
-	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
-	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
-	test VIDIOC_G/S_EDID: OK (Not Supported)
-
-Control ioctls:
-	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK (Not Supported)
-	test VIDIOC_QUERYCTRL: OK (Not Supported)
-	test VIDIOC_G/S_CTRL: OK (Not Supported)
-	test VIDIOC_G/S/TRY_EXT_CTRLS: OK (Not Supported)
-	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK (Not Supported)
-	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
-	Standard Controls: 0 Private Controls: 0
-
-Format ioctls:
-	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
-	test VIDIOC_G/S_PARM: OK (Not Supported)
-	test VIDIOC_G_FBUF: OK (Not Supported)
-	test VIDIOC_G_FMT: OK
-	test VIDIOC_TRY_FMT: OK
-	test VIDIOC_S_FMT: OK
-	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
-	test Cropping: OK (Not Supported)
-	test Composing: OK (Not Supported)
-	test Scaling: OK
-
-Codec ioctls:
-	test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
-	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
-	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
-
-Buffer ioctls:
-	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
-	test VIDIOC_EXPBUF: OK
-	test Requests: OK (Not Supported)
-
-Test input 0:
-
-Streaming ioctls:
-	test read/write: OK (Not Supported)
-	test blocking wait: OK
-
-	Video Capture: Frame #000
-	Video Capture: Frame #001
-	Video Capture: Frame #002
-	Video Capture: Frame #003
-	Video Capture: Frame #004
-	Video Capture: Frame #005
-	Video Capture: Frame #006
-	Video Capture: Frame #007
-	Video Capture: Frame #008
-	Video Capture: Frame #009
-	Video Capture: Frame #010
-	Video Capture: Frame #011
-	Video Capture: Frame #012
-	Video Capture: Frame #013
-	Video Capture: Frame #014
-	Video Capture: Frame #015
-	Video Capture: Frame #016
-	Video Capture: Frame #017
-	Video Capture: Frame #018
-	Video Capture: Frame #019
-	Video Capture: Frame #020
-	Video Capture: Frame #021
-	Video Capture: Frame #022
-	Video Capture: Frame #023
-	Video Capture: Frame #024
-	Video Capture: Frame #025
-	Video Capture: Frame #026
-	Video Capture: Frame #027
-	Video Capture: Frame #028
-	Video Capture: Frame #029
-	Video Capture: Frame #030
-	Video Capture: Frame #031
-	Video Capture: Frame #032
-	Video Capture: Frame #033
-	Video Capture: Frame #034
-	Video Capture: Frame #035
-	Video Capture: Frame #036
-	Video Capture: Frame #037
-	Video Capture: Frame #038
-	Video Capture: Frame #039
-	Video Capture: Frame #040
-	Video Capture: Frame #041
-	Video Capture: Frame #042
-	Video Capture: Frame #043
-	Video Capture: Frame #044
-	Video Capture: Frame #045
-	Video Capture: Frame #046
-	Video Capture: Frame #047
-	Video Capture: Frame #048
-	Video Capture: Frame #049
-	Video Capture: Frame #050
-	Video Capture: Frame #051
-	Video Capture: Frame #052
-	Video Capture: Frame #053
-	Video Capture: Frame #054
-	Video Capture: Frame #055
-	Video Capture: Frame #056
-	Video Capture: Frame #057
-	Video Capture: Frame #058
-	Video Capture: Frame #059
-	                                                  
-	test MMAP (no poll): OK
-
-	Video Capture: Frame #000 (select)
-	Video Capture: Frame #001 (select)
-	Video Capture: Frame #002 (select)
-	Video Capture: Frame #003 (select)
-	Video Capture: Frame #004 (select)
-	Video Capture: Frame #005 (select)
-	Video Capture: Frame #006 (select)
-	Video Capture: Frame #007 (select)
-	Video Capture: Frame #008 (select)
-	Video Capture: Frame #009 (select)
-	Video Capture: Frame #010 (select)
-	Video Capture: Frame #011 (select)
-	Video Capture: Frame #012 (select)
-	Video Capture: Frame #013 (select)
-	Video Capture: Frame #014 (select)
-	Video Capture: Frame #015 (select)
-	Video Capture: Frame #016 (select)
-	Video Capture: Frame #017 (select)
-	Video Capture: Frame #018 (select)
-	Video Capture: Frame #019 (select)
-	Video Capture: Frame #020 (select)
-	Video Capture: Frame #021 (select)
-	Video Capture: Frame #022 (select)
-	Video Capture: Frame #023 (select)
-	Video Capture: Frame #024 (select)
-	Video Capture: Frame #025 (select)
-	Video Capture: Frame #026 (select)
-	Video Capture: Frame #027 (select)
-	Video Capture: Frame #028 (select)
-	Video Capture: Frame #029 (select)
-	Video Capture: Frame #030 (select)
-	Video Capture: Frame #031 (select)
-	Video Capture: Frame #032 (select)
-	Video Capture: Frame #033 (select)
-	Video Capture: Frame #034 (select)
-	Video Capture: Frame #035 (select)
-	Video Capture: Frame #036 (select)
-	Video Capture: Frame #037 (select)
-	Video Capture: Frame #038 (select)
-	Video Capture: Frame #039 (select)
-	Video Capture: Frame #040 (select)
-	Video Capture: Frame #041 (select)
-	Video Capture: Frame #042 (select)
-	Video Capture: Frame #043 (select)
-	Video Capture: Frame #044 (select)
-	Video Capture: Frame #045 (select)
-	Video Capture: Frame #046 (select)
-	Video Capture: Frame #047 (select)
-	Video Capture: Frame #048 (select)
-	Video Capture: Frame #049 (select)
-	Video Capture: Frame #050 (select)
-	Video Capture: Frame #051 (select)
-	Video Capture: Frame #052 (select)
-	Video Capture: Frame #053 (select)
-	Video Capture: Frame #054 (select)
-	Video Capture: Frame #055 (select)
-	Video Capture: Frame #056 (select)
-	Video Capture: Frame #057 (select)
-	Video Capture: Frame #058 (select)
-	Video Capture: Frame #059 (select)
-	                                                  
-	test MMAP (select): OK
-
-	Video Capture: Frame #000 (epoll)
-	Video Capture: Frame #001 (epoll)
-	Video Capture: Frame #002 (epoll)
-	Video Capture: Frame #003 (epoll)
-	Video Capture: Frame #004 (epoll)
-	Video Capture: Frame #005 (epoll)
-	Video Capture: Frame #006 (epoll)
-	Video Capture: Frame #007 (epoll)
-	Video Capture: Frame #008 (epoll)
-	Video Capture: Frame #009 (epoll)
-	Video Capture: Frame #010 (epoll)
-	Video Capture: Frame #011 (epoll)
-	Video Capture: Frame #012 (epoll)
-	Video Capture: Frame #013 (epoll)
-	Video Capture: Frame #014 (epoll)
-	Video Capture: Frame #015 (epoll)
-	Video Capture: Frame #016 (epoll)
-	Video Capture: Frame #017 (epoll)
-	Video Capture: Frame #018 (epoll)
-	Video Capture: Frame #019 (epoll)
-	Video Capture: Frame #020 (epoll)
-	Video Capture: Frame #021 (epoll)
-	Video Capture: Frame #022 (epoll)
-	Video Capture: Frame #023 (epoll)
-	Video Capture: Frame #024 (epoll)
-	Video Capture: Frame #025 (epoll)
-	Video Capture: Frame #026 (epoll)
-	Video Capture: Frame #027 (epoll)
-	Video Capture: Frame #028 (epoll)
-	Video Capture: Frame #029 (epoll)
-	Video Capture: Frame #030 (epoll)
-	Video Capture: Frame #031 (epoll)
-	Video Capture: Frame #032 (epoll)
-	Video Capture: Frame #033 (epoll)
-	Video Capture: Frame #034 (epoll)
-	Video Capture: Frame #035 (epoll)
-	Video Capture: Frame #036 (epoll)
-	Video Capture: Frame #037 (epoll)
-	Video Capture: Frame #038 (epoll)
-	Video Capture: Frame #039 (epoll)
-	Video Capture: Frame #040 (epoll)
-	Video Capture: Frame #041 (epoll)
-	Video Capture: Frame #042 (epoll)
-	Video Capture: Frame #043 (epoll)
-	Video Capture: Frame #044 (epoll)
-	Video Capture: Frame #045 (epoll)
-	Video Capture: Frame #046 (epoll)
-	Video Capture: Frame #047 (epoll)
-	Video Capture: Frame #048 (epoll)
-	Video Capture: Frame #049 (epoll)
-	Video Capture: Frame #050 (epoll)
-	Video Capture: Frame #051 (epoll)
-	Video Capture: Frame #052 (epoll)
-	Video Capture: Frame #053 (epoll)
-	Video Capture: Frame #054 (epoll)
-	Video Capture: Frame #055 (epoll)
-	Video Capture: Frame #056 (epoll)
-	Video Capture: Frame #057 (epoll)
-	Video Capture: Frame #058 (epoll)
-	Video Capture: Frame #059 (epoll)
-	                                                  
-	test MMAP (epoll): OK
-	test USERPTR (no poll): OK (Not Supported)
-	test USERPTR (select): OK (Not Supported)
-	test DMABUF: Cannot test, specify --expbuf-device
-
-Total for starfive-camss device /dev/video1: 53, Succeeded: 53, Failed: 0, Warnings: 0
-
-------------
-Please note that it has 2 warnings from imx219, which is not a submission
-for this series.
-
-Test part 2:
-
-v4l2-compliance 1.25.0, 64 bits, 64-bit time_t
-
-Compliance test for starfive-camss device /dev/media0:
-
-Media Driver Info:
-	Driver name      : starfive-camss
-	Model            : Starfive Camera Subsystem
-	Serial           : 
-	Bus info         : platform:19840000.camss
-	Media version    : 6.6.0
-	Hardware revision: 0x00000000 (0)
-	Driver version   : 6.6.0
-
-Required ioctls:
-	test MEDIA_IOC_DEVICE_INFO: OK
-	test invalid ioctls: OK
-
-Allow for multiple opens:
-	test second /dev/media0 open: OK
-	test MEDIA_IOC_DEVICE_INFO: OK
-	test for unlimited opens: OK
-
-Media Controller ioctls:
-	test MEDIA_IOC_G_TOPOLOGY: OK
-	Entities: 5 Interfaces: 5 Pads: 10 Links: 9
-	test MEDIA_IOC_ENUM_ENTITIES/LINKS: OK
-	test MEDIA_IOC_SETUP_LINK: OK
-
-Total for starfive-camss device /dev/media0: 8, Succeeded: 8, Failed: 0, Warnings: 0
---------------------------------------------------------------------------------
-Compliance test for starfive-camss device /dev/video0:
-
-Driver Info:
-	Driver name      : starfive-camss
-	Card type        : Starfive Camera Subsystem
-	Bus info         : platform:19840000.camss
-	Driver version   : 6.6.0
-	Capabilities     : 0x84200001
-		Video Capture
-		Streaming
-		Extended Pix Format
-		Device Capabilities
-	Device Caps      : 0x04200001
-		Video Capture
-		Streaming
-		Extended Pix Format
-Media Driver Info:
-	Driver name      : starfive-camss
-	Model            : Starfive Camera Subsystem
-	Serial           : 
-	Bus info         : platform:19840000.camss
-	Media version    : 6.6.0
-	Hardware revision: 0x00000000 (0)
-	Driver version   : 6.6.0
-Interface Info:
-	ID               : 0x03000006
-	Type             : V4L Video
-Entity Info:
-	ID               : 0x00000004 (4)
-	Name             : capture_raw
-	Function         : V4L2 I/O
-	Pad 0x01000005   : 0: Sink
-	  Link 0x02000016: from remote pad 0x1000010 of entity 'cdns_csi2rx.19800000.csi-bridge' (Video Interface Bridge): Data
-
-Required ioctls:
-	test MC information (see 'Media Driver Info' above): OK
-	test VIDIOC_QUERYCAP: OK
-	test invalid ioctls: OK
-
-Allow for multiple opens:
-	test second /dev/video0 open: OK
-	test VIDIOC_QUERYCAP: OK
-	test VIDIOC_G/S_PRIORITY: OK
-	test for unlimited opens: OK
-
-Debug ioctls:
-	test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
-	test VIDIOC_LOG_STATUS: OK (Not Supported)
-
-Input ioctls:
-	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
-	test VIDIOC_ENUMAUDIO: OK (Not Supported)
-	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDIO: OK (Not Supported)
-	Inputs: 0 Audio Inputs: 0 Tuners: 0
-
-Output ioctls:
-	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
-	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
-	Outputs: 0 Audio Outputs: 0 Modulators: 0
-
-Input/Output configuration ioctls:
-	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
-	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
-	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
-	test VIDIOC_G/S_EDID: OK (Not Supported)
-
-Control ioctls:
-	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK (Not Supported)
-	test VIDIOC_QUERYCTRL: OK (Not Supported)
-	test VIDIOC_G/S_CTRL: OK (Not Supported)
-	test VIDIOC_G/S/TRY_EXT_CTRLS: OK (Not Supported)
-	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK (Not Supported)
-	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
-	Standard Controls: 0 Private Controls: 0
-
-Format ioctls:
-	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
-	test VIDIOC_G/S_PARM: OK (Not Supported)
-	test VIDIOC_G_FBUF: OK (Not Supported)
-	test VIDIOC_G_FMT: OK
-	test VIDIOC_TRY_FMT: OK
-	test VIDIOC_S_FMT: OK
-	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
-	test Cropping: OK (Not Supported)
-	test Composing: OK (Not Supported)
-	test Scaling: OK
-
-Codec ioctls:
-	test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
-	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
-	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
-
-Buffer ioctls:
-	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
-	test VIDIOC_EXPBUF: OK
-	test Requests: OK (Not Supported)
-
-Total for starfive-camss device /dev/video0: 46, Succeeded: 46, Failed: 0, Warnings: 0
---------------------------------------------------------------------------------
-Compliance test for starfive-camss device /dev/video1:
-
-Driver Info:
-	Driver name      : starfive-camss
-	Card type        : Starfive Camera Subsystem
-	Bus info         : platform:19840000.camss
-	Driver version   : 6.6.0
-	Capabilities     : 0x84200001
-		Video Capture
-		Streaming
-		Extended Pix Format
-		Device Capabilities
-	Device Caps      : 0x04200001
-		Video Capture
-		Streaming
-		Extended Pix Format
-Media Driver Info:
-	Driver name      : starfive-camss
-	Model            : Starfive Camera Subsystem
-	Serial           : 
-	Bus info         : platform:19840000.camss
-	Media version    : 6.6.0
-	Hardware revision: 0x00000000 (0)
-	Driver version   : 6.6.0
-Interface Info:
-	ID               : 0x0300000a
-	Type             : V4L Video
-Entity Info:
-	ID               : 0x00000008 (8)
-	Name             : capture_yuv
-	Function         : V4L2 I/O
-	Pad 0x01000009   : 0: Sink
-	  Link 0x0200000c: from remote pad 0x1000003 of entity 'stf_isp' (Image Signal Processor): Data
-
-Required ioctls:
-	test MC information (see 'Media Driver Info' above): OK
-	test VIDIOC_QUERYCAP: OK
-	test invalid ioctls: OK
-
-Allow for multiple opens:
-	test second /dev/video1 open: OK
-	test VIDIOC_QUERYCAP: OK
-	test VIDIOC_G/S_PRIORITY: OK
-	test for unlimited opens: OK
-
-Debug ioctls:
-	test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
-	test VIDIOC_LOG_STATUS: OK (Not Supported)
-
-Input ioctls:
-	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
-	test VIDIOC_ENUMAUDIO: OK (Not Supported)
-	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDIO: OK (Not Supported)
-	Inputs: 0 Audio Inputs: 0 Tuners: 0
-
-Output ioctls:
-	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
-	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
-	Outputs: 0 Audio Outputs: 0 Modulators: 0
-
-Input/Output configuration ioctls:
-	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
-	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
-	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
-	test VIDIOC_G/S_EDID: OK (Not Supported)
-
-Control ioctls:
-	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK (Not Supported)
-	test VIDIOC_QUERYCTRL: OK (Not Supported)
-	test VIDIOC_G/S_CTRL: OK (Not Supported)
-	test VIDIOC_G/S/TRY_EXT_CTRLS: OK (Not Supported)
-	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK (Not Supported)
-	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
-	Standard Controls: 0 Private Controls: 0
-
-Format ioctls:
-	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
-	test VIDIOC_G/S_PARM: OK (Not Supported)
-	test VIDIOC_G_FBUF: OK (Not Supported)
-	test VIDIOC_G_FMT: OK
-	test VIDIOC_TRY_FMT: OK
-	test VIDIOC_S_FMT: OK
-	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
-	test Cropping: OK (Not Supported)
-	test Composing: OK (Not Supported)
-	test Scaling: OK
-
-Codec ioctls:
-	test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
-	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
-	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
-
-Buffer ioctls:
-	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
-	test VIDIOC_EXPBUF: OK
-	test Requests: OK (Not Supported)
-
-Total for starfive-camss device /dev/video1: 46, Succeeded: 46, Failed: 0, Warnings: 0
---------------------------------------------------------------------------------
-Compliance test for starfive-camss device /dev/v4l-subdev0:
-
-Driver Info:
-	Driver version   : 6.6.0
-	Capabilities     : 0x00000000
-Media Driver Info:
-	Driver name      : starfive-camss
-	Model            : Starfive Camera Subsystem
-	Serial           : 
-	Bus info         : platform:19840000.camss
-	Media version    : 6.6.0
-	Hardware revision: 0x00000000 (0)
-	Driver version   : 6.6.0
-Interface Info:
-	ID               : 0x0300001c
-	Type             : V4L Sub-Device
-Entity Info:
-	ID               : 0x00000001 (1)
-	Name             : stf_isp
-	Function         : Image Signal Processor
-	Pad 0x01000002   : 0: Sink
-	  Link 0x02000014: from remote pad 0x1000010 of entity 'cdns_csi2rx.19800000.csi-bridge' (Video Interface Bridge): Data
-	Pad 0x01000003   : 1: Source
-	  Link 0x0200000c: to remote pad 0x1000009 of entity 'capture_yuv' (V4L2 I/O): Data
-
-Required ioctls:
-	test MC information (see 'Media Driver Info' above): OK
-	test VIDIOC_SUDBEV_QUERYCAP: OK
-	test invalid ioctls: OK
-
-Allow for multiple opens:
-	test second /dev/v4l-subdev0 open: OK
-	test VIDIOC_SUBDEV_QUERYCAP: OK
-	test for unlimited opens: OK
-
-Debug ioctls:
-	test VIDIOC_LOG_STATUS: OK (Not Supported)
-
-Input ioctls:
-	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
-	test VIDIOC_ENUMAUDIO: OK (Not Supported)
-	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDIO: OK (Not Supported)
-	Inputs: 0 Audio Inputs: 0 Tuners: 0
-
-Output ioctls:
-	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
-	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
-	Outputs: 0 Audio Outputs: 0 Modulators: 0
-
-Input/Output configuration ioctls:
-	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
-	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
-	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
-	test VIDIOC_G/S_EDID: OK (Not Supported)
-
-Sub-Device ioctls (Sink Pad 0):
-	Try Stream 0
-	test Try VIDIOC_SUBDEV_ENUM_MBUS_CODE/FRAME_SIZE/FRAME_INTERVAL: OK
-	test Try VIDIOC_SUBDEV_G/S_FMT: OK
-	test Try VIDIOC_SUBDEV_G/S_SELECTION/CROP: OK
-	Active Stream 0
-	test Active VIDIOC_SUBDEV_ENUM_MBUS_CODE/FRAME_SIZE/FRAME_INTERVAL: OK
-	test Active VIDIOC_SUBDEV_G/S_FMT: OK
-	test Active VIDIOC_SUBDEV_G/S_SELECTION/CROP: OK
-	test VIDIOC_SUBDEV_G/S_FRAME_INTERVAL: OK (Not Supported)
-
-Sub-Device ioctls (Source Pad 1):
-	Try Stream 0
-	test Try VIDIOC_SUBDEV_ENUM_MBUS_CODE/FRAME_SIZE/FRAME_INTERVAL: OK
-	test Try VIDIOC_SUBDEV_G/S_FMT: OK
-	test Try VIDIOC_SUBDEV_G/S_SELECTION/CROP: OK
-	Active Stream 0
-	test Active VIDIOC_SUBDEV_ENUM_MBUS_CODE/FRAME_SIZE/FRAME_INTERVAL: OK
-	test Active VIDIOC_SUBDEV_G/S_FMT: OK
-	test Active VIDIOC_SUBDEV_G/S_SELECTION/CROP: OK
-	test VIDIOC_SUBDEV_G/S_FRAME_INTERVAL: OK (Not Supported)
-
-Control ioctls:
-	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK (Not Supported)
-	test VIDIOC_QUERYCTRL: OK (Not Supported)
-	test VIDIOC_G/S_CTRL: OK (Not Supported)
-	test VIDIOC_G/S/TRY_EXT_CTRLS: OK (Not Supported)
-	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK (Not Supported)
-	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
-	Standard Controls: 0 Private Controls: 0
-
-Format ioctls:
-	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK (Not Supported)
-	test VIDIOC_G/S_PARM: OK (Not Supported)
-	test VIDIOC_G_FBUF: OK (Not Supported)
-	test VIDIOC_G_FMT: OK (Not Supported)
-	test VIDIOC_TRY_FMT: OK (Not Supported)
-	test VIDIOC_S_FMT: OK (Not Supported)
-	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
-	test Cropping: OK (Not Supported)
-	test Composing: OK (Not Supported)
-	test Scaling: OK (Not Supported)
-
-Codec ioctls:
-	test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
-	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
-	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
-
-Buffer ioctls:
-	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK (Not Supported)
-	test VIDIOC_EXPBUF: OK (Not Supported)
-	test Requests: OK (Not Supported)
-
-Total for starfive-camss device /dev/v4l-subdev0: 58, Succeeded: 58, Failed: 0, Warnings: 0
---------------------------------------------------------------------------------
-Compliance test for starfive-camss device /dev/v4l-subdev1:
-
-Driver Info:
-	Driver version   : 6.6.0
-	Capabilities     : 0x00000000
-Media Driver Info:
-	Driver name      : starfive-camss
-	Model            : Starfive Camera Subsystem
-	Serial           : 
-	Bus info         : platform:19840000.camss
-	Media version    : 6.6.0
-	Hardware revision: 0x00000000 (0)
-	Driver version   : 6.6.0
-Interface Info:
-	ID               : 0x0300001e
-	Type             : V4L Sub-Device
-Entity Info:
-	ID               : 0x0000000e (14)
-	Name             : cdns_csi2rx.19800000.csi-bridge
-	Function         : Video Interface Bridge
-	Pad 0x0100000f   : 0: Sink
-	  Link 0x0200001a: from remote pad 0x1000019 of entity 'imx219 6-0010' (Camera Sensor): Data, Enabled, Immutable
-	Pad 0x01000010   : 1: Source
-	  Link 0x02000014: to remote pad 0x1000002 of entity 'stf_isp' (Image Signal Processor): Data
-	  Link 0x02000016: to remote pad 0x1000005 of entity 'capture_raw' (V4L2 I/O): Data
-	Pad 0x01000011   : 2: Source
-	Pad 0x01000012   : 3: Source
-	Pad 0x01000013   : 4: Source
-
-Required ioctls:
-	test MC information (see 'Media Driver Info' above): OK
-	test VIDIOC_SUDBEV_QUERYCAP: OK
-	test invalid ioctls: OK
-
-Allow for multiple opens:
-	test second /dev/v4l-subdev1 open: OK
-	test VIDIOC_SUBDEV_QUERYCAP: OK
-	test for unlimited opens: OK
-
-Debug ioctls:
-	test VIDIOC_LOG_STATUS: OK (Not Supported)
-
-Input ioctls:
-	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
-	test VIDIOC_ENUMAUDIO: OK (Not Supported)
-	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDIO: OK (Not Supported)
-	Inputs: 0 Audio Inputs: 0 Tuners: 0
-
-Output ioctls:
-	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
-	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
-	Outputs: 0 Audio Outputs: 0 Modulators: 0
-
-Input/Output configuration ioctls:
-	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
-	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
-	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
-	test VIDIOC_G/S_EDID: OK (Not Supported)
-
-Sub-Device ioctls (Sink Pad 0):
-	Try Stream 0
-	test Try VIDIOC_SUBDEV_ENUM_MBUS_CODE/FRAME_SIZE/FRAME_INTERVAL: OK (Not Supported)
-	test Try VIDIOC_SUBDEV_G/S_FMT: OK
-	test Try VIDIOC_SUBDEV_G/S_SELECTION/CROP: OK (Not Supported)
-	Active Stream 0
-	test Active VIDIOC_SUBDEV_ENUM_MBUS_CODE/FRAME_SIZE/FRAME_INTERVAL: OK (Not Supported)
-	test Active VIDIOC_SUBDEV_G/S_FMT: OK
-	test Active VIDIOC_SUBDEV_G/S_SELECTION/CROP: OK (Not Supported)
-	test VIDIOC_SUBDEV_G/S_FRAME_INTERVAL: OK (Not Supported)
-
-Sub-Device ioctls (Source Pad 1):
-	Try Stream 0
-	test Try VIDIOC_SUBDEV_ENUM_MBUS_CODE/FRAME_SIZE/FRAME_INTERVAL: OK (Not Supported)
-	test Try VIDIOC_SUBDEV_G/S_FMT: OK
-	test Try VIDIOC_SUBDEV_G/S_SELECTION/CROP: OK (Not Supported)
-	Active Stream 0
-	test Active VIDIOC_SUBDEV_ENUM_MBUS_CODE/FRAME_SIZE/FRAME_INTERVAL: OK (Not Supported)
-	test Active VIDIOC_SUBDEV_G/S_FMT: OK
-	test Active VIDIOC_SUBDEV_G/S_SELECTION/CROP: OK (Not Supported)
-	test VIDIOC_SUBDEV_G/S_FRAME_INTERVAL: OK (Not Supported)
-
-Sub-Device ioctls (Source Pad 2):
-	Try Stream 0
-	test Try VIDIOC_SUBDEV_ENUM_MBUS_CODE/FRAME_SIZE/FRAME_INTERVAL: OK (Not Supported)
-	test Try VIDIOC_SUBDEV_G/S_FMT: OK
-	test Try VIDIOC_SUBDEV_G/S_SELECTION/CROP: OK (Not Supported)
-	Active Stream 0
-	test Active VIDIOC_SUBDEV_ENUM_MBUS_CODE/FRAME_SIZE/FRAME_INTERVAL: OK (Not Supported)
-	test Active VIDIOC_SUBDEV_G/S_FMT: OK
-	test Active VIDIOC_SUBDEV_G/S_SELECTION/CROP: OK (Not Supported)
-	test VIDIOC_SUBDEV_G/S_FRAME_INTERVAL: OK (Not Supported)
-
-Sub-Device ioctls (Source Pad 3):
-	Try Stream 0
-	test Try VIDIOC_SUBDEV_ENUM_MBUS_CODE/FRAME_SIZE/FRAME_INTERVAL: OK (Not Supported)
-	test Try VIDIOC_SUBDEV_G/S_FMT: OK
-	test Try VIDIOC_SUBDEV_G/S_SELECTION/CROP: OK (Not Supported)
-	Active Stream 0
-	test Active VIDIOC_SUBDEV_ENUM_MBUS_CODE/FRAME_SIZE/FRAME_INTERVAL: OK (Not Supported)
-	test Active VIDIOC_SUBDEV_G/S_FMT: OK
-	test Active VIDIOC_SUBDEV_G/S_SELECTION/CROP: OK (Not Supported)
-	test VIDIOC_SUBDEV_G/S_FRAME_INTERVAL: OK (Not Supported)
-
-Sub-Device ioctls (Source Pad 4):
-	Try Stream 0
-	test Try VIDIOC_SUBDEV_ENUM_MBUS_CODE/FRAME_SIZE/FRAME_INTERVAL: OK (Not Supported)
-	test Try VIDIOC_SUBDEV_G/S_FMT: OK
-	test Try VIDIOC_SUBDEV_G/S_SELECTION/CROP: OK (Not Supported)
-	Active Stream 0
-	test Active VIDIOC_SUBDEV_ENUM_MBUS_CODE/FRAME_SIZE/FRAME_INTERVAL: OK (Not Supported)
-	test Active VIDIOC_SUBDEV_G/S_FMT: OK
-	test Active VIDIOC_SUBDEV_G/S_SELECTION/CROP: OK (Not Supported)
-	test VIDIOC_SUBDEV_G/S_FRAME_INTERVAL: OK (Not Supported)
-
-Control ioctls:
-	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK (Not Supported)
-	test VIDIOC_QUERYCTRL: OK (Not Supported)
-	test VIDIOC_G/S_CTRL: OK (Not Supported)
-	test VIDIOC_G/S/TRY_EXT_CTRLS: OK (Not Supported)
-	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK (Not Supported)
-	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
-	Standard Controls: 0 Private Controls: 0
-
-Format ioctls:
-	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK (Not Supported)
-	test VIDIOC_G/S_PARM: OK (Not Supported)
-	test VIDIOC_G_FBUF: OK (Not Supported)
-	test VIDIOC_G_FMT: OK (Not Supported)
-	test VIDIOC_TRY_FMT: OK (Not Supported)
-	test VIDIOC_S_FMT: OK (Not Supported)
-	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
-	test Cropping: OK (Not Supported)
-	test Composing: OK (Not Supported)
-	test Scaling: OK (Not Supported)
-
-Codec ioctls:
-	test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
-	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
-	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
-
-Buffer ioctls:
-	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK (Not Supported)
-	test VIDIOC_EXPBUF: OK (Not Supported)
-	test Requests: OK (Not Supported)
-
-Total for starfive-camss device /dev/v4l-subdev1: 79, Succeeded: 79, Failed: 0, Warnings: 0
---------------------------------------------------------------------------------
-Compliance test for starfive-camss device /dev/v4l-subdev2:
-
-Driver Info:
-	Driver version   : 6.6.0
-	Capabilities     : 0x00000000
-Media Driver Info:
-	Driver name      : starfive-camss
-	Model            : Starfive Camera Subsystem
-	Serial           : 
-	Bus info         : platform:19840000.camss
-	Media version    : 6.6.0
-	Hardware revision: 0x00000000 (0)
-	Driver version   : 6.6.0
-Interface Info:
-	ID               : 0x03000020
-	Type             : V4L Sub-Device
-Entity Info:
-	ID               : 0x00000018 (24)
-	Name             : imx219 6-0010
-	Function         : Camera Sensor
-	Pad 0x01000019   : 0: Source
-	  Link 0x0200001a: to remote pad 0x100000f of entity 'cdns_csi2rx.19800000.csi-bridge' (Video Interface Bridge): Data, Enabled, Immutable
-
-Required ioctls:
-	test MC information (see 'Media Driver Info' above): OK
-	test VIDIOC_SUDBEV_QUERYCAP: OK
-	test invalid ioctls: OK
-
-Allow for multiple opens:
-	test second /dev/v4l-subdev2 open: OK
-	test VIDIOC_SUBDEV_QUERYCAP: OK
-	test for unlimited opens: OK
-
-Debug ioctls:
-	test VIDIOC_LOG_STATUS: OK (Not Supported)
-
-Input ioctls:
-	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
-	test VIDIOC_ENUMAUDIO: OK (Not Supported)
-	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDIO: OK (Not Supported)
-	Inputs: 0 Audio Inputs: 0 Tuners: 0
-
-Output ioctls:
-	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
-	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
-	Outputs: 0 Audio Outputs: 0 Modulators: 0
-
-Input/Output configuration ioctls:
-	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
-	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
-	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
-	test VIDIOC_G/S_EDID: OK (Not Supported)
-
-Sub-Device ioctls (Source Pad 0):
-	Try Stream 0
-	test Try VIDIOC_SUBDEV_ENUM_MBUS_CODE/FRAME_SIZE/FRAME_INTERVAL: OK
-	test Try VIDIOC_SUBDEV_G/S_FMT: OK
-		warn: ../utils/v4l2-compliance/v4l2-test-subdevs.cpp(541): VIDIOC_SUBDEV_G_SELECTION is supported for target 0 but not VIDIOC_SUBDEV_S_SELECTION
-	test Try VIDIOC_SUBDEV_G/S_SELECTION/CROP: OK
-	Active Stream 0
-	test Active VIDIOC_SUBDEV_ENUM_MBUS_CODE/FRAME_SIZE/FRAME_INTERVAL: OK
-	test Active VIDIOC_SUBDEV_G/S_FMT: OK
-		warn: ../utils/v4l2-compliance/v4l2-test-subdevs.cpp(541): VIDIOC_SUBDEV_G_SELECTION is supported for target 0 but not VIDIOC_SUBDEV_S_SELECTION
-	test Active VIDIOC_SUBDEV_G/S_SELECTION/CROP: OK
-	test VIDIOC_SUBDEV_G/S_FRAME_INTERVAL: OK (Not Supported)
-
-Control ioctls:
-	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
-	test VIDIOC_QUERYCTRL: OK
-	test VIDIOC_G/S_CTRL: OK
-	test VIDIOC_G/S/TRY_EXT_CTRLS: OK
-	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
-	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
-	Standard Controls: 20 Private Controls: 0
-
-Format ioctls:
-	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK (Not Supported)
-	test VIDIOC_G/S_PARM: OK (Not Supported)
-	test VIDIOC_G_FBUF: OK (Not Supported)
-	test VIDIOC_G_FMT: OK (Not Supported)
-	test VIDIOC_TRY_FMT: OK (Not Supported)
-	test VIDIOC_S_FMT: OK (Not Supported)
-	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
-	test Cropping: OK (Not Supported)
-	test Composing: OK (Not Supported)
-	test Scaling: OK (Not Supported)
-
-Codec ioctls:
-	test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
-	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
-	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
-
-Buffer ioctls:
-	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK (Not Supported)
-	test VIDIOC_EXPBUF: OK (Not Supported)
-	test Requests: OK (Not Supported)
-
-Total for starfive-camss device /dev/v4l-subdev2: 51, Succeeded: 51, Failed: 0, Warnings: 2
-
-Grand Total for starfive-camss device /dev/media0: 288, Succeeded: 288, Failed: 0, Warnings: 2
-
-===========================================================================
-Changes in v11:
-- Tested the driver with a v4l2-compliance compiled from the git repo
-  (git://linuxtv.org/v4l-utils.git).
-- Rebased on top of the master branch of media_stage repository.
-- Fixed a smatch warning.
-
-v10 link: https://lore.kernel.org/all/20231008085154.6757-1-jack.zhu@starfivetech.com/
-
-Changes in v10:
-- Tested the driver with a v4l2-compliance compiled from the git repo
-  (git://linuxtv.org/v4l-utils.git).
-- Rebased on top of the master branch of media_stage repository.
-
-v9 link: https://lore.kernel.org/all/20230914031607.34877-1-jack.zhu@starfivetech.com/
-
-Changes in v9:
-- Rebased on top of the master branch of media_stage repository.
-- Renamed file name.
-- Added of_node_put(node) in the error handling path of
-  stfcamss_of_parse_ports().
-
-v8 link: https://lore.kernel.org/all/20230824080109.89613-1-jack.zhu@starfivetech.com/
-
-Changes in v8:
-- Rebased on v6.5-rc7.
-- Dropped VIN subdev.
-- Created two new video devices: capture_raw and capture_yuv, to replace
-  the previous video devices.
-- Dropped VB2_READ io methods.
-- Recursively called .s_stream() on subdevs.
-
-v7 link: https://lore.kernel.org/all/20230619112838.19797-1-jack.zhu@starfivetech.com/
-
-Changes in v7:
-- HAS_DMA is used instead of DMA_CMA in Kconfig.
-- Dropped some non-essential member variables.
-- Used v4l2_async_nf_add_fwnode_remote() to simplify the relevant code.
-- Modified some Local variable types in the function.
-- Used v4l2_create_fwnode_links_to_pad() to simplify the relevant code.
-- Added error handling for clk_prepare_enable().
-- Simplified stfcamss_format_info struct and modified the relevant code.
-- Dropped enum_input, g_input and s_input.
-- Unified v4l2_ioctl_ops struct.
-- Used v4l2_fh_open()/vb2_fop_release to replace deprecated APIs.
-- Added a camss directory under the starfive directory and modified the
-  patch title.
-
-v6 link: https://lore.kernel.org/all/20230525083202.67933-1-jack.zhu@starfivetech.com/
-
-Changes in v6:
-- Added 'bus-type' in bindings example.
-- Corrected spelling errors.
-- As reviewed by Bryan, used 'nclks' and 'nrsts' variables.
-- Added lccf config for ISP.
-
-v5 link: https://lore.kernel.org/all/20230512102844.51084-1-jack.zhu@starfivetech.com/
-
-Changes in v5:
-- Rebased on v6.4-rc1.
-- Added new patch.
-- Modified ISP driver.
-
-v4 link: https://lore.kernel.org/all/20230413035541.62129-1-jack.zhu@starfivetech.com/
-
-Previous cover letter from v4:
-
-This patch series adds support for the StarFive Camera Subsystem
-found on StarFive JH7110 SoC.
-
-The driver implements V4L2, Media controller and V4L2 subdev interfaces.
-Camera sensor using V4L2 subdev interface in the kernel is supported.
-
-The driver is tested on VisionFive V2 board with IMX219 camera sensor.
-GStreamer 1.18.5 with v4l2src plugin is supported.
-
-Previous version link, missing v1 version:
-
-  v3: https://lore.kernel.org/all/20230331121826.96973-1-jack.zhu@starfivetech.com/
-  v2: https://lore.kernel.org/all/20230310120553.60586-1-jack.zhu@starfivetech.com/
-
-Jack Zhu (9):
-  media: dt-bindings: Add JH7110 Camera Subsystem
-  media: admin-guide: Add starfive_camss.rst for Starfive Camera
-    Subsystem
-  media: staging: media: starfive: camss: Add core driver
-  media: staging: media: starfive: camss: Add video driver
-  media: staging: media: starfive: camss: Add ISP driver
-  media: staging: media: starfive: camss: Add capture driver
-  media: staging: media: starfive: camss: Add interrupt handling
-  media: staging: media: starfive: camss: Register devices
-  media: staging: media: starfive: camss: Add TODO file
-
- .../admin-guide/media/starfive_camss.rst      |  72 +++
- .../media/starfive_camss_graph.dot            |  12 +
- .../admin-guide/media/v4l-drivers.rst         |   1 +
- .../bindings/media/starfive,jh7110-camss.yaml | 180 ++++++
- MAINTAINERS                                   |   9 +
- drivers/staging/media/Kconfig                 |   2 +
- drivers/staging/media/Makefile                |   1 +
- drivers/staging/media/starfive/Kconfig        |   5 +
- drivers/staging/media/starfive/Makefile       |   2 +
- drivers/staging/media/starfive/camss/Kconfig  |  17 +
- drivers/staging/media/starfive/camss/Makefile |  13 +
- drivers/staging/media/starfive/camss/TODO.txt |   4 +
- .../staging/media/starfive/camss/stf-camss.c  | 436 +++++++++++++
- .../staging/media/starfive/camss/stf-camss.h  | 134 ++++
- .../media/starfive/camss/stf-capture.c        | 603 ++++++++++++++++++
- .../media/starfive/camss/stf-capture.h        |  87 +++
- .../media/starfive/camss/stf-isp-hw-ops.c     | 445 +++++++++++++
- .../staging/media/starfive/camss/stf-isp.c    | 382 +++++++++++
- .../staging/media/starfive/camss/stf-isp.h    | 428 +++++++++++++
- .../staging/media/starfive/camss/stf-video.c  | 572 +++++++++++++++++
- .../staging/media/starfive/camss/stf-video.h  | 100 +++
- 21 files changed, 3505 insertions(+)
- create mode 100644 Documentation/admin-guide/media/starfive_camss.rst
- create mode 100644 Documentation/admin-guide/media/starfive_camss_graph.dot
- create mode 100644 Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
- create mode 100644 drivers/staging/media/starfive/Kconfig
- create mode 100644 drivers/staging/media/starfive/Makefile
- create mode 100644 drivers/staging/media/starfive/camss/Kconfig
- create mode 100644 drivers/staging/media/starfive/camss/Makefile
- create mode 100644 drivers/staging/media/starfive/camss/TODO.txt
- create mode 100644 drivers/staging/media/starfive/camss/stf-camss.c
- create mode 100644 drivers/staging/media/starfive/camss/stf-camss.h
- create mode 100644 drivers/staging/media/starfive/camss/stf-capture.c
- create mode 100644 drivers/staging/media/starfive/camss/stf-capture.h
+Add ISP driver for StarFive Camera Subsystem.
+
+Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
+---
+ drivers/staging/media/starfive/camss/Makefile |   2 +
+ .../staging/media/starfive/camss/stf-camss.h  |   3 +
+ .../media/starfive/camss/stf-isp-hw-ops.c     | 445 ++++++++++++++++++
+ .../staging/media/starfive/camss/stf-isp.c    | 382 +++++++++++++++
+ .../staging/media/starfive/camss/stf-isp.h    | 428 +++++++++++++++++
+ 5 files changed, 1260 insertions(+)
  create mode 100644 drivers/staging/media/starfive/camss/stf-isp-hw-ops.c
  create mode 100644 drivers/staging/media/starfive/camss/stf-isp.c
  create mode 100644 drivers/staging/media/starfive/camss/stf-isp.h
- create mode 100644 drivers/staging/media/starfive/camss/stf-video.c
- create mode 100644 drivers/staging/media/starfive/camss/stf-video.h
 
+diff --git a/drivers/staging/media/starfive/camss/Makefile b/drivers/staging/media/starfive/camss/Makefile
+index 7d320b9317c8..97e1522b21ae 100644
+--- a/drivers/staging/media/starfive/camss/Makefile
++++ b/drivers/staging/media/starfive/camss/Makefile
+@@ -5,6 +5,8 @@
+ 
+ starfive-camss-objs += \
+ 		stf-camss.o \
++		stf-isp.o \
++		stf-isp-hw-ops.o \
+ 		stf-video.o
+ 
+ obj-$(CONFIG_VIDEO_STARFIVE_CAMSS) += starfive-camss.o
+diff --git a/drivers/staging/media/starfive/camss/stf-camss.h b/drivers/staging/media/starfive/camss/stf-camss.h
+index 47d715122155..c7b0a34cd29b 100644
+--- a/drivers/staging/media/starfive/camss/stf-camss.h
++++ b/drivers/staging/media/starfive/camss/stf-camss.h
+@@ -18,6 +18,8 @@
+ #include <media/v4l2-async.h>
+ #include <media/v4l2-device.h>
+ 
++#include "stf-isp.h"
++
+ enum stf_port_num {
+ 	STF_PORT_DVP = 0,
+ 	STF_PORT_CSI2RX
+@@ -49,6 +51,7 @@ struct stfcamss {
+ 	struct media_device media_dev;
+ 	struct media_pipeline pipe;
+ 	struct device *dev;
++	struct stf_isp_dev isp_dev;
+ 	struct v4l2_async_notifier notifier;
+ 	void __iomem *syscon_base;
+ 	void __iomem *isp_base;
+diff --git a/drivers/staging/media/starfive/camss/stf-isp-hw-ops.c b/drivers/staging/media/starfive/camss/stf-isp-hw-ops.c
+new file mode 100644
+index 000000000000..c34631ff9422
+--- /dev/null
++++ b/drivers/staging/media/starfive/camss/stf-isp-hw-ops.c
+@@ -0,0 +1,445 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * stf_isp_hw_ops.c
++ *
++ * Register interface file for StarFive ISP driver
++ *
++ * Copyright (C) 2021-2023 StarFive Technology Co., Ltd.
++ *
++ */
++
++#include "stf-camss.h"
++
++static void stf_isp_config_obc(struct stfcamss *stfcamss)
++{
++	u32 reg_val, reg_add;
++
++	stf_isp_reg_write(stfcamss, ISP_REG_OBC_CFG, OBC_W_H(11) | OBC_W_W(11));
++
++	reg_val = GAIN_D_POINT(0x40) | GAIN_C_POINT(0x40) |
++		  GAIN_B_POINT(0x40) | GAIN_A_POINT(0x40);
++	for (reg_add = ISP_REG_OBCG_CFG_0; reg_add <= ISP_REG_OBCG_CFG_3;) {
++		stf_isp_reg_write(stfcamss, reg_add, reg_val);
++		reg_add += 4;
++	}
++
++	reg_val = OFFSET_D_POINT(0) | OFFSET_C_POINT(0) |
++		  OFFSET_B_POINT(0) | OFFSET_A_POINT(0);
++	for (reg_add = ISP_REG_OBCO_CFG_0; reg_add <= ISP_REG_OBCO_CFG_3;) {
++		stf_isp_reg_write(stfcamss, reg_add, reg_val);
++		reg_add += 4;
++	}
++}
++
++static void stf_isp_config_oecf(struct stfcamss *stfcamss)
++{
++	u32 reg_add, par_val;
++	u16 par_h, par_l;
++
++	par_h = 0x10; par_l = 0;
++	par_val = OCEF_PAR_H(par_h) | OCEF_PAR_L(par_l);
++	for (reg_add = ISP_REG_OECF_X0_CFG0; reg_add <= ISP_REG_OECF_Y3_CFG0;) {
++		stf_isp_reg_write(stfcamss, reg_add, par_val);
++		reg_add += 0x20;
++	}
++
++	par_h = 0x40; par_l = 0x20;
++	par_val = OCEF_PAR_H(par_h) | OCEF_PAR_L(par_l);
++	for (reg_add = ISP_REG_OECF_X0_CFG1; reg_add <= ISP_REG_OECF_Y3_CFG1;) {
++		stf_isp_reg_write(stfcamss, reg_add, par_val);
++		reg_add += 0x20;
++	}
++
++	par_h = 0x80; par_l = 0x60;
++	par_val = OCEF_PAR_H(par_h) | OCEF_PAR_L(par_l);
++	for (reg_add = ISP_REG_OECF_X0_CFG2; reg_add <= ISP_REG_OECF_Y3_CFG2;) {
++		stf_isp_reg_write(stfcamss, reg_add, par_val);
++		reg_add += 0x20;
++	}
++
++	par_h = 0xc0; par_l = 0xa0;
++	par_val = OCEF_PAR_H(par_h) | OCEF_PAR_L(par_l);
++	for (reg_add = ISP_REG_OECF_X0_CFG3; reg_add <= ISP_REG_OECF_Y3_CFG3;) {
++		stf_isp_reg_write(stfcamss, reg_add, par_val);
++		reg_add += 0x20;
++	}
++
++	par_h = 0x100; par_l = 0xe0;
++	par_val = OCEF_PAR_H(par_h) | OCEF_PAR_L(par_l);
++	for (reg_add = ISP_REG_OECF_X0_CFG4; reg_add <= ISP_REG_OECF_Y3_CFG4;) {
++		stf_isp_reg_write(stfcamss, reg_add, par_val);
++		reg_add += 0x20;
++	}
++
++	par_h = 0x200; par_l = 0x180;
++	par_val = OCEF_PAR_H(par_h) | OCEF_PAR_L(par_l);
++	for (reg_add = ISP_REG_OECF_X0_CFG5; reg_add <= ISP_REG_OECF_Y3_CFG5;) {
++		stf_isp_reg_write(stfcamss, reg_add, par_val);
++		reg_add += 0x20;
++	}
++
++	par_h = 0x300; par_l = 0x280;
++	par_val = OCEF_PAR_H(par_h) | OCEF_PAR_L(par_l);
++	for (reg_add = ISP_REG_OECF_X0_CFG6; reg_add <= ISP_REG_OECF_Y3_CFG6;) {
++		stf_isp_reg_write(stfcamss, reg_add, par_val);
++		reg_add += 0x20;
++	}
++
++	par_h = 0x3fe; par_l = 0x380;
++	par_val = OCEF_PAR_H(par_h) | OCEF_PAR_L(par_l);
++	for (reg_add = ISP_REG_OECF_X0_CFG7; reg_add <= ISP_REG_OECF_Y3_CFG7;) {
++		stf_isp_reg_write(stfcamss, reg_add, par_val);
++		reg_add += 0x20;
++	}
++
++	par_h = 0x80; par_l = 0x80;
++	par_val = OCEF_PAR_H(par_h) | OCEF_PAR_L(par_l);
++	for (reg_add = ISP_REG_OECF_S0_CFG0; reg_add <= ISP_REG_OECF_S3_CFG7;) {
++		stf_isp_reg_write(stfcamss, reg_add, par_val);
++		reg_add += 4;
++	}
++}
++
++static void stf_isp_config_lccf(struct stfcamss *stfcamss)
++{
++	u32 reg_add;
++
++	stf_isp_reg_write(stfcamss, ISP_REG_LCCF_CFG_0,
++			  Y_DISTANCE(0x21C) | X_DISTANCE(0x3C0));
++	stf_isp_reg_write(stfcamss, ISP_REG_LCCF_CFG_1, LCCF_MAX_DIS(0xb));
++
++	for (reg_add = ISP_REG_LCCF_CFG_2; reg_add <= ISP_REG_LCCF_CFG_5;) {
++		stf_isp_reg_write(stfcamss, reg_add,
++				  LCCF_F2_PAR(0x0) | LCCF_F1_PAR(0x0));
++		reg_add += 4;
++	}
++}
++
++static void stf_isp_config_awb(struct stfcamss *stfcamss)
++{
++	u32 reg_val, reg_add;
++	u16 symbol_h, symbol_l;
++
++	symbol_h = 0x0; symbol_l = 0x0;
++	reg_val = AWB_X_SYMBOL_H(symbol_h) | AWB_X_SYMBOL_L(symbol_l);
++
++	for (reg_add = ISP_REG_AWB_X0_CFG_0; reg_add <= ISP_REG_AWB_X3_CFG_1;) {
++		stf_isp_reg_write(stfcamss, reg_add, reg_val);
++		reg_add += 4;
++	}
++
++	symbol_h = 0x0, symbol_l = 0x0;
++	reg_val = AWB_Y_SYMBOL_H(symbol_h) | AWB_Y_SYMBOL_L(symbol_l);
++
++	for (reg_add = ISP_REG_AWB_Y0_CFG_0; reg_add <= ISP_REG_AWB_Y3_CFG_1;) {
++		stf_isp_reg_write(stfcamss, reg_add, reg_val);
++		reg_add += 4;
++	}
++
++	symbol_h = 0x80, symbol_l = 0x80;
++	reg_val = AWB_S_SYMBOL_H(symbol_h) | AWB_S_SYMBOL_L(symbol_l);
++
++	for (reg_add = ISP_REG_AWB_S0_CFG_0; reg_add <= ISP_REG_AWB_S3_CFG_1;) {
++		stf_isp_reg_write(stfcamss, reg_add, reg_val);
++		reg_add += 4;
++	}
++}
++
++static void stf_isp_config_grgb(struct stfcamss *stfcamss)
++{
++	stf_isp_reg_write(stfcamss, ISP_REG_ICTC,
++			  GF_MODE(1) | MAXGT(0x140) | MINGT(0x40));
++	stf_isp_reg_write(stfcamss, ISP_REG_IDBC, BADGT(0x200) | BADXT(0x200));
++}
++
++static void stf_isp_config_cfa(struct stfcamss *stfcamss)
++{
++	stf_isp_reg_write(stfcamss, ISP_REG_RAW_FORMAT_CFG,
++			  SMY13(0) | SMY12(1) | SMY11(0) | SMY10(1) | SMY3(2) |
++			  SMY2(3) | SMY1(2) | SMY0(3));
++	stf_isp_reg_write(stfcamss, ISP_REG_ICFAM, CROSS_COV(3) | HV_W(2));
++}
++
++static void stf_isp_config_ccm(struct stfcamss *stfcamss)
++{
++	u32 reg_add;
++
++	stf_isp_reg_write(stfcamss, ISP_REG_ICAMD_0, DNRM_F(6) | CCM_M_DAT(0));
++
++	for (reg_add = ISP_REG_ICAMD_12; reg_add <= ISP_REG_ICAMD_20;) {
++		stf_isp_reg_write(stfcamss, reg_add, CCM_M_DAT(0x80));
++		reg_add += 0x10;
++	}
++
++	stf_isp_reg_write(stfcamss, ISP_REG_ICAMD_24, CCM_M_DAT(0x700));
++	stf_isp_reg_write(stfcamss, ISP_REG_ICAMD_25, CCM_M_DAT(0x200));
++}
++
++static void stf_isp_config_gamma(struct stfcamss *stfcamss)
++{
++	u32 reg_val, reg_add;
++	u16 gamma_slope_v, gamma_v;
++
++	gamma_slope_v = 0x2400; gamma_v = 0x0;
++	reg_val = GAMMA_S_VAL(gamma_slope_v) | GAMMA_VAL(gamma_v);
++	stf_isp_reg_write(stfcamss, ISP_REG_GAMMA_VAL0, reg_val);
++
++	gamma_slope_v = 0x800; gamma_v = 0x20;
++	for (reg_add = ISP_REG_GAMMA_VAL1; reg_add <= ISP_REG_GAMMA_VAL7;) {
++		reg_val = GAMMA_S_VAL(gamma_slope_v) | GAMMA_VAL(gamma_v);
++		stf_isp_reg_write(stfcamss, reg_add, reg_val);
++		reg_add += 4;
++		gamma_v += 0x20;
++	}
++
++	gamma_v = 0x100;
++	for (reg_add = ISP_REG_GAMMA_VAL8; reg_add <= ISP_REG_GAMMA_VAL13;) {
++		reg_val = GAMMA_S_VAL(gamma_slope_v) | GAMMA_VAL(gamma_v);
++		stf_isp_reg_write(stfcamss, reg_add, reg_val);
++		reg_add += 4;
++		gamma_v += 0x80;
++	}
++
++	gamma_v = 0x3fe;
++	reg_val = GAMMA_S_VAL(gamma_slope_v) | GAMMA_VAL(gamma_v);
++	stf_isp_reg_write(stfcamss, ISP_REG_GAMMA_VAL14, reg_val);
++}
++
++static void stf_isp_config_r2y(struct stfcamss *stfcamss)
++{
++	stf_isp_reg_write(stfcamss, ISP_REG_R2Y_0, 0x4C);
++	stf_isp_reg_write(stfcamss, ISP_REG_R2Y_1, 0x97);
++	stf_isp_reg_write(stfcamss, ISP_REG_R2Y_2, 0x1d);
++	stf_isp_reg_write(stfcamss, ISP_REG_R2Y_3, 0x1d5);
++	stf_isp_reg_write(stfcamss, ISP_REG_R2Y_4, 0x1ac);
++	stf_isp_reg_write(stfcamss, ISP_REG_R2Y_5, 0x80);
++	stf_isp_reg_write(stfcamss, ISP_REG_R2Y_6, 0x80);
++	stf_isp_reg_write(stfcamss, ISP_REG_R2Y_7, 0x194);
++	stf_isp_reg_write(stfcamss, ISP_REG_R2Y_8, 0x1ec);
++}
++
++static void stf_isp_config_y_curve(struct stfcamss *stfcamss)
++{
++	u32 reg_add;
++	u16 y_curve;
++
++	y_curve = 0x0;
++	for (reg_add = ISP_REG_YCURVE_0; reg_add <= ISP_REG_YCURVE_63;) {
++		stf_isp_reg_write(stfcamss, reg_add, y_curve);
++		reg_add += 4;
++		y_curve += 0x10;
++	}
++}
++
++static void stf_isp_config_sharpen(struct stfcamss *sc)
++{
++	u32 reg_add;
++
++	stf_isp_reg_write(sc, ISP_REG_SHARPEN0, S_DELTA(0x7) | S_WEIGHT(0xf));
++	stf_isp_reg_write(sc, ISP_REG_SHARPEN1, S_DELTA(0x18) | S_WEIGHT(0xf));
++	stf_isp_reg_write(sc, ISP_REG_SHARPEN2, S_DELTA(0x80) | S_WEIGHT(0xf));
++	stf_isp_reg_write(sc, ISP_REG_SHARPEN3, S_DELTA(0x100) | S_WEIGHT(0xf));
++	stf_isp_reg_write(sc, ISP_REG_SHARPEN4, S_DELTA(0x10) | S_WEIGHT(0xf));
++	stf_isp_reg_write(sc, ISP_REG_SHARPEN5, S_DELTA(0x60) | S_WEIGHT(0xf));
++	stf_isp_reg_write(sc, ISP_REG_SHARPEN6, S_DELTA(0x100) | S_WEIGHT(0xf));
++	stf_isp_reg_write(sc, ISP_REG_SHARPEN7, S_DELTA(0x190) | S_WEIGHT(0xf));
++	stf_isp_reg_write(sc, ISP_REG_SHARPEN8, S_DELTA(0x0) | S_WEIGHT(0xf));
++
++	for (reg_add = ISP_REG_SHARPEN9; reg_add <= ISP_REG_SHARPEN14;) {
++		stf_isp_reg_write(sc, reg_add, S_WEIGHT(0xf));
++		reg_add += 4;
++	}
++
++	for (reg_add = ISP_REG_SHARPEN_FS0; reg_add <= ISP_REG_SHARPEN_FS5;) {
++		stf_isp_reg_write(sc, reg_add, S_FACTOR(0x10) | S_SLOPE(0x0));
++		reg_add += 4;
++	}
++
++	stf_isp_reg_write(sc, ISP_REG_SHARPEN_WN,
++			  PDIRF(0x8) | NDIRF(0x8) | WSUM(0xd7c));
++	stf_isp_reg_write(sc, ISP_REG_IUVS1, UVDIFF2(0xC0) | UVDIFF1(0x40));
++	stf_isp_reg_write(sc, ISP_REG_IUVS2, UVF(0xff) | UVSLOPE(0x0));
++	stf_isp_reg_write(sc, ISP_REG_IUVCKS1,
++			  UVCKDIFF2(0xa0) | UVCKDIFF1(0x40));
++}
++
++static void stf_isp_config_dnyuv(struct stfcamss *stfcamss)
++{
++	u32 reg_val;
++
++	reg_val = YUVSW5(7) | YUVSW4(7) | YUVSW3(7) | YUVSW2(7) |
++		  YUVSW1(7) | YUVSW0(7);
++	stf_isp_reg_write(stfcamss, ISP_REG_DNYUV_YSWR0, reg_val);
++	stf_isp_reg_write(stfcamss, ISP_REG_DNYUV_CSWR0, reg_val);
++
++	reg_val = YUVSW3(7) | YUVSW2(7) | YUVSW1(7) | YUVSW0(7);
++	stf_isp_reg_write(stfcamss, ISP_REG_DNYUV_YSWR1, reg_val);
++	stf_isp_reg_write(stfcamss, ISP_REG_DNYUV_CSWR1, reg_val);
++
++	reg_val = CURVE_D_H(0x60) | CURVE_D_L(0x40);
++	stf_isp_reg_write(stfcamss, ISP_REG_DNYUV_YDR0, reg_val);
++	stf_isp_reg_write(stfcamss, ISP_REG_DNYUV_CDR0, reg_val);
++
++	reg_val = CURVE_D_H(0xd8) | CURVE_D_L(0x90);
++	stf_isp_reg_write(stfcamss, ISP_REG_DNYUV_YDR1, reg_val);
++	stf_isp_reg_write(stfcamss, ISP_REG_DNYUV_CDR1, reg_val);
++
++	reg_val = CURVE_D_H(0x1e6) | CURVE_D_L(0x144);
++	stf_isp_reg_write(stfcamss, ISP_REG_DNYUV_YDR2, reg_val);
++	stf_isp_reg_write(stfcamss, ISP_REG_DNYUV_CDR2, reg_val);
++}
++
++static void stf_isp_config_sat(struct stfcamss *stfcamss)
++{
++	stf_isp_reg_write(stfcamss, ISP_REG_CS_GAIN, CMAD(0x0) | CMAB(0x100));
++	stf_isp_reg_write(stfcamss, ISP_REG_CS_THRESHOLD, CMD(0x1f) | CMB(0x1));
++	stf_isp_reg_write(stfcamss, ISP_REG_CS_OFFSET, VOFF(0x0) | UOFF(0x0));
++	stf_isp_reg_write(stfcamss, ISP_REG_CS_HUE_F, SIN(0x0) | COS(0x100));
++	stf_isp_reg_write(stfcamss, ISP_REG_CS_SCALE, 0x8);
++	stf_isp_reg_write(stfcamss, ISP_REG_YADJ0, YOIR(0x401) | YIMIN(0x1));
++	stf_isp_reg_write(stfcamss, ISP_REG_YADJ1, YOMAX(0x3ff) | YOMIN(0x1));
++}
++
++int stf_isp_reset(struct stf_isp_dev *isp_dev)
++{
++	stf_isp_reg_set_bit(isp_dev->stfcamss, ISP_REG_ISP_CTRL_0,
++			    ISPC_RST_MASK, ISPC_RST);
++	stf_isp_reg_set_bit(isp_dev->stfcamss, ISP_REG_ISP_CTRL_0,
++			    ISPC_RST_MASK, 0);
++
++	return 0;
++}
++
++void stf_isp_init_cfg(struct stf_isp_dev *isp_dev)
++{
++	stf_isp_reg_write(isp_dev->stfcamss, ISP_REG_DC_CFG_1, DC_AXI_ID(0x0));
++	stf_isp_reg_write(isp_dev->stfcamss, ISP_REG_DEC_CFG,
++			  DEC_V_KEEP(0x0) |
++			  DEC_V_PERIOD(0x0) |
++			  DEC_H_KEEP(0x0) |
++			  DEC_H_PERIOD(0x0));
++
++	stf_isp_config_obc(isp_dev->stfcamss);
++	stf_isp_config_oecf(isp_dev->stfcamss);
++	stf_isp_config_lccf(isp_dev->stfcamss);
++	stf_isp_config_awb(isp_dev->stfcamss);
++	stf_isp_config_grgb(isp_dev->stfcamss);
++	stf_isp_config_cfa(isp_dev->stfcamss);
++	stf_isp_config_ccm(isp_dev->stfcamss);
++	stf_isp_config_gamma(isp_dev->stfcamss);
++	stf_isp_config_r2y(isp_dev->stfcamss);
++	stf_isp_config_y_curve(isp_dev->stfcamss);
++	stf_isp_config_sharpen(isp_dev->stfcamss);
++	stf_isp_config_dnyuv(isp_dev->stfcamss);
++	stf_isp_config_sat(isp_dev->stfcamss);
++
++	stf_isp_reg_write(isp_dev->stfcamss, ISP_REG_CSI_MODULE_CFG,
++			  CSI_DUMP_EN | CSI_SC_EN | CSI_AWB_EN |
++			  CSI_LCCF_EN | CSI_OECF_EN | CSI_OBC_EN | CSI_DEC_EN);
++	stf_isp_reg_write(isp_dev->stfcamss, ISP_REG_ISP_CTRL_1,
++			  CTRL_SAT(1) | CTRL_DBC | CTRL_CTC | CTRL_YHIST |
++			  CTRL_YCURVE | CTRL_BIYUV | CTRL_SCE | CTRL_EE |
++			  CTRL_CCE | CTRL_RGE | CTRL_CME | CTRL_AE | CTRL_CE);
++}
++
++static void stf_isp_config_crop(struct stfcamss *stfcamss,
++				struct v4l2_rect *crop)
++{
++	u32 bpp = stfcamss->isp_dev.current_fmt->bpp;
++	u32 val;
++
++	val = VSTART_CAP(crop->top) | HSTART_CAP(crop->left);
++	stf_isp_reg_write(stfcamss, ISP_REG_PIC_CAPTURE_START_CFG, val);
++
++	val = VEND_CAP(crop->height + crop->top - 1) |
++	      HEND_CAP(crop->width + crop->left - 1);
++	stf_isp_reg_write(stfcamss, ISP_REG_PIC_CAPTURE_END_CFG, val);
++
++	val = H_ACT_CAP(crop->height) | W_ACT_CAP(crop->width);
++	stf_isp_reg_write(stfcamss, ISP_REG_PIPELINE_XY_SIZE, val);
++
++	val = ALIGN(crop->width * bpp / 8, STFCAMSS_FRAME_WIDTH_ALIGN_8);
++	stf_isp_reg_write(stfcamss, ISP_REG_STRIDE, val);
++}
++
++static void stf_isp_config_raw_fmt(struct stfcamss *stfcamss, u32 mcode)
++{
++	u32 val, val1;
++
++	switch (mcode) {
++	case MEDIA_BUS_FMT_SRGGB10_1X10:
++	case MEDIA_BUS_FMT_SRGGB8_1X8:
++		/* 3 2 3 2 1 0 1 0 B Gb B Gb Gr R Gr R */
++		val = SMY13(3) | SMY12(2) | SMY11(3) | SMY10(2) |
++		      SMY3(1) | SMY2(0) | SMY1(1) | SMY0(0);
++		val1 = CTRL_SAT(0x0);
++		break;
++	case MEDIA_BUS_FMT_SGRBG10_1X10:
++	case MEDIA_BUS_FMT_SGRBG8_1X8:
++		/* 2 3 2 3 0 1 0 1, Gb B Gb B R Gr R Gr */
++		val = SMY13(2) | SMY12(3) | SMY11(2) | SMY10(3) |
++		      SMY3(0) | SMY2(1) | SMY1(0) | SMY0(1);
++		val1 = CTRL_SAT(0x2);
++		break;
++	case MEDIA_BUS_FMT_SGBRG10_1X10:
++	case MEDIA_BUS_FMT_SGBRG8_1X8:
++		/* 1 0 1 0 3 2 3 2, Gr R Gr R B Gb B Gb */
++		val = SMY13(1) | SMY12(0) | SMY11(1) | SMY10(0) |
++		      SMY3(3) | SMY2(2) | SMY1(3) | SMY0(2);
++		val1 = CTRL_SAT(0x3);
++		break;
++	case MEDIA_BUS_FMT_SBGGR10_1X10:
++	case MEDIA_BUS_FMT_SBGGR8_1X8:
++		/* 0 1 0 1 2 3 2 3 R Gr R Gr Gb B Gb B */
++		val = SMY13(0) | SMY12(1) | SMY11(0) | SMY10(1) |
++		      SMY3(2) | SMY2(3) | SMY1(2) | SMY0(3);
++		val1 = CTRL_SAT(0x1);
++		break;
++	default:
++		val = SMY13(0) | SMY12(1) | SMY11(0) | SMY10(1) |
++		      SMY3(2) | SMY2(3) | SMY1(2) | SMY0(3);
++		val1 = CTRL_SAT(0x1);
++		break;
++	}
++	stf_isp_reg_write(stfcamss, ISP_REG_RAW_FORMAT_CFG, val);
++	stf_isp_reg_set_bit(stfcamss, ISP_REG_ISP_CTRL_1, CTRL_SAT_MASK, val1);
++}
++
++void stf_isp_settings(struct stf_isp_dev *isp_dev,
++		      struct v4l2_rect *crop, u32 mcode)
++{
++	struct stfcamss *stfcamss = isp_dev->stfcamss;
++
++	stf_isp_config_crop(stfcamss, crop);
++	stf_isp_config_raw_fmt(stfcamss, mcode);
++
++	stf_isp_reg_set_bit(stfcamss, ISP_REG_DUMP_CFG_1,
++			    DUMP_BURST_LEN_MASK | DUMP_SD_MASK,
++			    DUMP_BURST_LEN(3));
++
++	stf_isp_reg_write(stfcamss, ISP_REG_ITIIWSR,
++			  ITI_HSIZE(IMAGE_MAX_HEIGH) |
++			  ITI_WSIZE(IMAGE_MAX_WIDTH));
++	stf_isp_reg_write(stfcamss, ISP_REG_ITIDWLSR, 0x960);
++	stf_isp_reg_write(stfcamss, ISP_REG_ITIDRLSR, 0x960);
++	stf_isp_reg_write(stfcamss, ISP_REG_SENSOR, IMAGER_SEL(1));
++}
++
++void stf_isp_stream_set(struct stf_isp_dev *isp_dev)
++{
++	struct stfcamss *stfcamss = isp_dev->stfcamss;
++
++	stf_isp_reg_write_delay(stfcamss, ISP_REG_ISP_CTRL_0,
++				ISPC_ENUO | ISPC_ENLS | ISPC_RST, 10);
++	stf_isp_reg_write_delay(stfcamss, ISP_REG_ISP_CTRL_0,
++				ISPC_ENUO | ISPC_ENLS, 10);
++	stf_isp_reg_write(stfcamss, ISP_REG_IESHD, SHAD_UP_M);
++	stf_isp_reg_write_delay(stfcamss, ISP_REG_ISP_CTRL_0,
++				ISPC_ENUO | ISPC_ENLS | ISPC_EN, 10);
++	stf_isp_reg_write_delay(stfcamss, ISP_REG_CSIINTS,
++				CSI_INTS(1) | CSI_SHA_M(4), 10);
++	stf_isp_reg_write_delay(stfcamss, ISP_REG_CSIINTS,
++				CSI_INTS(2) | CSI_SHA_M(4), 10);
++	stf_isp_reg_write_delay(stfcamss, ISP_REG_CSI_INPUT_EN_AND_STATUS,
++				CSI_EN_S, 10);
++}
+diff --git a/drivers/staging/media/starfive/camss/stf-isp.c b/drivers/staging/media/starfive/camss/stf-isp.c
+new file mode 100644
+index 000000000000..4205671214b2
+--- /dev/null
++++ b/drivers/staging/media/starfive/camss/stf-isp.c
+@@ -0,0 +1,382 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * stf_isp.c
++ *
++ * StarFive Camera Subsystem - ISP Module
++ *
++ * Copyright (C) 2021-2023 StarFive Technology Co., Ltd.
++ */
++#include <media/v4l2-rect.h>
++
++#include "stf-camss.h"
++
++#define SINK_FORMATS_INDEX	0
++#define SOURCE_FORMATS_INDEX	1
++
++static int isp_set_selection(struct v4l2_subdev *sd,
++			     struct v4l2_subdev_state *state,
++			     struct v4l2_subdev_selection *sel);
++
++static const struct stf_isp_format isp_formats_sink[] = {
++	{ MEDIA_BUS_FMT_SRGGB10_1X10, 10 },
++	{ MEDIA_BUS_FMT_SGRBG10_1X10, 10 },
++	{ MEDIA_BUS_FMT_SGBRG10_1X10, 10 },
++	{ MEDIA_BUS_FMT_SBGGR10_1X10, 10 },
++};
++
++static const struct stf_isp_format isp_formats_source[] = {
++	{ MEDIA_BUS_FMT_YUYV8_1_5X8, 8 },
++};
++
++static const struct stf_isp_format_table isp_formats_st7110[] = {
++	{ isp_formats_sink, ARRAY_SIZE(isp_formats_sink) },
++	{ isp_formats_source, ARRAY_SIZE(isp_formats_source) },
++};
++
++static const struct stf_isp_format *
++stf_g_fmt_by_mcode(const struct stf_isp_format_table *fmt_table, u32 mcode)
++{
++	unsigned int i;
++
++	for (i = 0; i < fmt_table->nfmts; i++) {
++		if (fmt_table->fmts[i].code == mcode)
++			return &fmt_table->fmts[i];
++	}
++
++	return NULL;
++}
++
++int stf_isp_init(struct stfcamss *stfcamss)
++{
++	struct stf_isp_dev *isp_dev = &stfcamss->isp_dev;
++
++	isp_dev->stfcamss = stfcamss;
++	isp_dev->formats = isp_formats_st7110;
++	isp_dev->nformats = ARRAY_SIZE(isp_formats_st7110);
++	isp_dev->current_fmt = &isp_formats_source[0];
++
++	return 0;
++}
++
++static int isp_set_stream(struct v4l2_subdev *sd, int enable)
++{
++	struct stf_isp_dev *isp_dev = v4l2_get_subdevdata(sd);
++	struct v4l2_subdev_state *sd_state;
++	struct v4l2_mbus_framefmt *fmt;
++	struct v4l2_rect *crop;
++
++	sd_state = v4l2_subdev_lock_and_get_active_state(sd);
++	fmt = v4l2_subdev_get_pad_format(sd, sd_state, STF_ISP_PAD_SINK);
++	crop = v4l2_subdev_get_pad_crop(sd, sd_state, STF_ISP_PAD_SRC);
++
++	if (enable) {
++		stf_isp_reset(isp_dev);
++		stf_isp_init_cfg(isp_dev);
++		stf_isp_settings(isp_dev, crop, fmt->code);
++		stf_isp_stream_set(isp_dev);
++	}
++
++	v4l2_subdev_call(isp_dev->source_subdev, video, s_stream, enable);
++
++	v4l2_subdev_unlock_state(sd_state);
++	return 0;
++}
++
++static void isp_try_format(struct stf_isp_dev *isp_dev,
++			   struct v4l2_subdev_state *state,
++			   unsigned int pad,
++			   struct v4l2_mbus_framefmt *fmt)
++{
++	const struct stf_isp_format_table *formats;
++
++	if (pad >= STF_ISP_PAD_MAX) {
++		fmt->colorspace = V4L2_COLORSPACE_SRGB;
++		return;
++	}
++
++	if (pad == STF_ISP_PAD_SINK)
++		formats = &isp_dev->formats[SINK_FORMATS_INDEX];
++	else if (pad == STF_ISP_PAD_SRC)
++		formats = &isp_dev->formats[SOURCE_FORMATS_INDEX];
++
++	fmt->width = clamp_t(u32, fmt->width, STFCAMSS_FRAME_MIN_WIDTH,
++			     STFCAMSS_FRAME_MAX_WIDTH);
++	fmt->height = clamp_t(u32, fmt->height, STFCAMSS_FRAME_MIN_HEIGHT,
++			      STFCAMSS_FRAME_MAX_HEIGHT);
++	fmt->height &= ~0x1;
++	fmt->field = V4L2_FIELD_NONE;
++	fmt->colorspace = V4L2_COLORSPACE_SRGB;
++	fmt->flags = 0;
++
++	if (!stf_g_fmt_by_mcode(formats, fmt->code))
++		fmt->code = formats->fmts[0].code;
++}
++
++static int isp_enum_mbus_code(struct v4l2_subdev *sd,
++			      struct v4l2_subdev_state *state,
++			      struct v4l2_subdev_mbus_code_enum *code)
++{
++	struct stf_isp_dev *isp_dev = v4l2_get_subdevdata(sd);
++	const struct stf_isp_format_table *formats;
++
++	if (code->pad == STF_ISP_PAD_SINK) {
++		if (code->index > ARRAY_SIZE(isp_formats_sink))
++			return -EINVAL;
++
++		formats = &isp_dev->formats[SINK_FORMATS_INDEX];
++		code->code = formats->fmts[code->index].code;
++	} else {
++		struct v4l2_mbus_framefmt *sink_fmt;
++
++		if (code->index > ARRAY_SIZE(isp_formats_source))
++			return -EINVAL;
++
++		sink_fmt = v4l2_subdev_get_pad_format(sd, state,
++						      STF_ISP_PAD_SRC);
++
++		code->code = sink_fmt->code;
++		if (!code->code)
++			return -EINVAL;
++	}
++	code->flags = 0;
++
++	return 0;
++}
++
++static int isp_set_format(struct v4l2_subdev *sd,
++			  struct v4l2_subdev_state *state,
++			  struct v4l2_subdev_format *fmt)
++{
++	struct stf_isp_dev *isp_dev = v4l2_get_subdevdata(sd);
++	struct v4l2_mbus_framefmt *format;
++
++	format = v4l2_subdev_get_pad_format(sd, state, fmt->pad);
++	if (!format)
++		return -EINVAL;
++
++	isp_try_format(isp_dev, state, fmt->pad, &fmt->format);
++	*format = fmt->format;
++
++	isp_dev->current_fmt = stf_g_fmt_by_mcode(&isp_dev->formats[fmt->pad],
++						  fmt->format.code);
++
++	/* Propagate to in crop */
++	if (fmt->pad == STF_ISP_PAD_SINK) {
++		struct v4l2_subdev_selection sel = { 0 };
++
++		/* Reset sink pad compose selection */
++		sel.which = fmt->which;
++		sel.pad = STF_ISP_PAD_SINK;
++		sel.target = V4L2_SEL_TGT_CROP;
++		sel.r.width = fmt->format.width;
++		sel.r.height = fmt->format.height;
++		isp_set_selection(sd, state, &sel);
++	}
++
++	return 0;
++}
++
++static const struct v4l2_rect stf_frame_min_crop = {
++	.width = STFCAMSS_FRAME_MIN_WIDTH,
++	.height = STFCAMSS_FRAME_MIN_HEIGHT,
++	.top = 0,
++	.left = 0,
++};
++
++static void isp_try_crop(struct stf_isp_dev *isp_dev,
++			 struct v4l2_subdev_state *state,
++			 struct v4l2_rect *crop)
++{
++	struct v4l2_mbus_framefmt *fmt =
++		v4l2_subdev_get_pad_format(&isp_dev->subdev, state,
++					   STF_ISP_PAD_SINK);
++
++	const struct v4l2_rect bounds = {
++		.width = fmt->width,
++		.height = fmt->height,
++		.left = 0,
++		.top = 0,
++	};
++
++	v4l2_rect_set_min_size(crop, &stf_frame_min_crop);
++	v4l2_rect_map_inside(crop, &bounds);
++}
++
++static int isp_get_selection(struct v4l2_subdev *sd,
++			     struct v4l2_subdev_state *state,
++			     struct v4l2_subdev_selection *sel)
++{
++	struct v4l2_subdev_format fmt = { 0 };
++	struct v4l2_rect *rect;
++
++	switch (sel->target) {
++	case V4L2_SEL_TGT_CROP_BOUNDS:
++		if (sel->pad == STF_ISP_PAD_SINK) {
++			fmt.format = *v4l2_subdev_get_pad_format(sd, state,
++								 sel->pad);
++			sel->r.left = 0;
++			sel->r.top = 0;
++			sel->r.width = fmt.format.width;
++			sel->r.height = fmt.format.height;
++		} else if (sel->pad == STF_ISP_PAD_SRC) {
++			rect = v4l2_subdev_get_pad_crop(sd, state, sel->pad);
++			sel->r = *rect;
++		}
++		break;
++
++	case V4L2_SEL_TGT_CROP:
++		rect = v4l2_subdev_get_pad_crop(sd, state, sel->pad);
++		if (!rect)
++			return -EINVAL;
++
++		sel->r = *rect;
++		break;
++
++	default:
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int isp_set_selection(struct v4l2_subdev *sd,
++			     struct v4l2_subdev_state *state,
++			     struct v4l2_subdev_selection *sel)
++{
++	struct stf_isp_dev *isp_dev = v4l2_get_subdevdata(sd);
++	struct v4l2_rect *rect;
++
++	if (sel->target != V4L2_SEL_TGT_CROP)
++		return -EINVAL;
++
++	if (sel->target == V4L2_SEL_TGT_CROP &&
++	    sel->pad == STF_ISP_PAD_SINK) {
++		struct v4l2_subdev_selection crop = { 0 };
++
++		rect = v4l2_subdev_get_pad_crop(sd, state, sel->pad);
++		if (!rect)
++			return -EINVAL;
++
++		isp_try_crop(isp_dev, state, &sel->r);
++		*rect = sel->r;
++
++		/* Reset source crop selection */
++		crop.which = sel->which;
++		crop.pad = STF_ISP_PAD_SRC;
++		crop.target = V4L2_SEL_TGT_CROP;
++		crop.r = *rect;
++		isp_set_selection(sd, state, &crop);
++	} else if (sel->target == V4L2_SEL_TGT_CROP &&
++		   sel->pad == STF_ISP_PAD_SRC) {
++		struct v4l2_subdev_format fmt = { 0 };
++
++		rect = v4l2_subdev_get_pad_crop(sd, state, sel->pad);
++		if (!rect)
++			return -EINVAL;
++
++		isp_try_crop(isp_dev, state, &sel->r);
++		*rect = sel->r;
++
++		/* Reset source pad format width and height */
++		fmt.which = sel->which;
++		fmt.pad = STF_ISP_PAD_SRC;
++		fmt.format.width = rect->width;
++		fmt.format.height = rect->height;
++		isp_set_format(sd, state, &fmt);
++	}
++
++	dev_dbg(isp_dev->stfcamss->dev, "pad: %d sel(%d,%d)/%dx%d\n",
++		sel->pad, sel->r.left, sel->r.top, sel->r.width, sel->r.height);
++
++	return 0;
++}
++
++static int isp_init_formats(struct v4l2_subdev *sd,
++			    struct v4l2_subdev_state *sd_state)
++{
++	struct v4l2_subdev_format format = {
++		.pad = STF_ISP_PAD_SINK,
++		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
++		.format = {
++			.code = MEDIA_BUS_FMT_SRGGB10_1X10,
++			.width = 1920,
++			.height = 1080
++		}
++	};
++
++	return isp_set_format(sd, sd_state, &format);
++}
++
++static const struct v4l2_subdev_video_ops isp_video_ops = {
++	.s_stream = isp_set_stream,
++};
++
++static const struct v4l2_subdev_pad_ops isp_pad_ops = {
++	.init_cfg = isp_init_formats,
++	.enum_mbus_code = isp_enum_mbus_code,
++	.get_fmt = v4l2_subdev_get_fmt,
++	.set_fmt = isp_set_format,
++	.get_selection = isp_get_selection,
++	.set_selection = isp_set_selection,
++};
++
++static const struct v4l2_subdev_ops isp_v4l2_ops = {
++	.video = &isp_video_ops,
++	.pad = &isp_pad_ops,
++};
++
++static const struct media_entity_operations isp_media_ops = {
++	.link_validate = v4l2_subdev_link_validate,
++};
++
++int stf_isp_register(struct stf_isp_dev *isp_dev, struct v4l2_device *v4l2_dev)
++{
++	struct v4l2_subdev *sd = &isp_dev->subdev;
++	struct media_pad *pads = isp_dev->pads;
++	int ret;
++
++	v4l2_subdev_init(sd, &isp_v4l2_ops);
++	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
++	snprintf(sd->name, ARRAY_SIZE(sd->name), "stf_isp");
++	v4l2_set_subdevdata(sd, isp_dev);
++
++	pads[STF_ISP_PAD_SINK].flags = MEDIA_PAD_FL_SINK;
++	pads[STF_ISP_PAD_SRC].flags = MEDIA_PAD_FL_SOURCE;
++
++	sd->entity.function = MEDIA_ENT_F_PROC_VIDEO_ISP;
++	sd->entity.ops = &isp_media_ops;
++	ret = media_entity_pads_init(&sd->entity, STF_ISP_PAD_MAX, pads);
++	if (ret) {
++		dev_err(isp_dev->stfcamss->dev,
++			"Failed to init media entity: %d\n", ret);
++		return ret;
++	}
++
++	ret = v4l2_subdev_init_finalize(sd);
++	if (ret)
++		goto err_entity_cleanup;
++
++	ret = v4l2_device_register_subdev(v4l2_dev, sd);
++	if (ret) {
++		dev_err(isp_dev->stfcamss->dev,
++			"Failed to register subdev: %d\n", ret);
++		goto err_subdev_cleanup;
++	}
++
++	return 0;
++
++err_subdev_cleanup:
++	v4l2_subdev_cleanup(sd);
++err_entity_cleanup:
++	media_entity_cleanup(&sd->entity);
++	return ret;
++}
++
++int stf_isp_unregister(struct stf_isp_dev *isp_dev)
++{
++	v4l2_device_unregister_subdev(&isp_dev->subdev);
++	v4l2_subdev_cleanup(&isp_dev->subdev);
++	media_entity_cleanup(&isp_dev->subdev.entity);
++
++	return 0;
++}
+diff --git a/drivers/staging/media/starfive/camss/stf-isp.h b/drivers/staging/media/starfive/camss/stf-isp.h
+new file mode 100644
+index 000000000000..955cbb048363
+--- /dev/null
++++ b/drivers/staging/media/starfive/camss/stf-isp.h
+@@ -0,0 +1,428 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * stf_isp.h
++ *
++ * StarFive Camera Subsystem - ISP Module
++ *
++ * Copyright (C) 2021-2023 StarFive Technology Co., Ltd.
++ */
++
++#ifndef STF_ISP_H
++#define STF_ISP_H
++
++#include <media/v4l2-subdev.h>
++
++#include "stf-video.h"
++
++#define ISP_RAW_DATA_BITS			12
++#define SCALER_RATIO_MAX			1
++#define STF_ISP_REG_OFFSET_MAX			0x0fff
++#define STF_ISP_REG_DELAY_MAX			100
++
++/* isp registers */
++#define ISP_REG_CSI_INPUT_EN_AND_STATUS		0x000
++#define CSI_SCD_ERR				BIT(6)
++#define CSI_ITU656_ERR				BIT(4)
++#define CSI_ITU656_F				BIT(3)
++#define CSI_SCD_DONE				BIT(2)
++#define CSI_BUSY_S				BIT(1)
++#define CSI_EN_S				BIT(0)
++
++#define ISP_REG_CSIINTS				0x008
++#define CSI_INTS(n)				((n) << 16)
++#define CSI_SHA_M(n)				((n) << 0)
++#define CSI_INTS_MASK				GENMASK(17, 16)
++
++#define ISP_REG_CSI_MODULE_CFG			0x010
++#define CSI_DUMP_EN				BIT(19)
++#define CSI_VS_EN				BIT(18)
++#define CSI_SC_EN				BIT(17)
++#define CSI_OBA_EN				BIT(16)
++#define CSI_AWB_EN				BIT(7)
++#define CSI_LCCF_EN				BIT(6)
++#define CSI_OECFHM_EN				BIT(5)
++#define CSI_OECF_EN				BIT(4)
++#define CSI_LCBQ_EN				BIT(3)
++#define CSI_OBC_EN				BIT(2)
++#define CSI_DEC_EN				BIT(1)
++#define CSI_DC_EN				BIT(0)
++
++#define ISP_REG_SENSOR				0x014
++#define DVP_SYNC_POL(n)				((n) << 2)
++#define ITU656_EN(n)				((n) << 1)
++#define IMAGER_SEL(n)				((n) << 0)
++
++#define ISP_REG_RAW_FORMAT_CFG			0x018
++#define SMY13(n)				((n) << 14)
++#define SMY12(n)				((n) << 12)
++#define SMY11(n)				((n) << 10)
++#define SMY10(n)				((n) << 8)
++#define SMY3(n)					((n) << 6)
++#define SMY2(n)					((n) << 4)
++#define SMY1(n)					((n) << 2)
++#define SMY0(n)					((n) << 0)
++
++#define ISP_REG_PIC_CAPTURE_START_CFG		0x01c
++#define VSTART_CAP(n)				((n) << 16)
++#define HSTART_CAP(n)				((n) << 0)
++
++#define ISP_REG_PIC_CAPTURE_END_CFG		0x020
++#define VEND_CAP(n)				((n) << 16)
++#define HEND_CAP(n)				((n) << 0)
++
++#define ISP_REG_DUMP_CFG_0			0x024
++#define ISP_REG_DUMP_CFG_1			0x028
++#define DUMP_ID(n)				((n) << 24)
++#define DUMP_SHT(n)				((n) << 20)
++#define DUMP_BURST_LEN(n)			((n) << 16)
++#define DUMP_SD(n)				((n) << 0)
++#define DUMP_BURST_LEN_MASK			GENMASK(17, 16)
++#define DUMP_SD_MASK				GENMASK(15, 0)
++
++#define ISP_REG_DEC_CFG				0x030
++#define DEC_V_KEEP(n)				((n) << 24)
++#define DEC_V_PERIOD(n)				((n) << 16)
++#define DEC_H_KEEP(n)				((n) << 8)
++#define DEC_H_PERIOD(n)				((n) << 0)
++
++#define ISP_REG_OBC_CFG				0x034
++#define OBC_W_H(y)				((y) << 4)
++#define OBC_W_W(x)				((x) << 0)
++
++#define ISP_REG_DC_CFG_1			0x044
++#define DC_AXI_ID(n)				((n) << 0)
++
++#define ISP_REG_LCCF_CFG_0			0x050
++#define Y_DISTANCE(y)				((y) << 16)
++#define X_DISTANCE(x)				((x) << 0)
++
++#define ISP_REG_LCCF_CFG_1			0x058
++#define LCCF_MAX_DIS(n)				((n) << 0)
++
++#define ISP_REG_LCBQ_CFG_0			0x074
++#define H_LCBQ(y)				((y) << 12)
++#define W_LCBQ(x)				((x) << 8)
++
++#define ISP_REG_LCBQ_CFG_1			0x07c
++#define Y_COOR(y)				((y) << 16)
++#define X_COOR(x)				((x) << 0)
++
++#define ISP_REG_LCCF_CFG_2			0x0e0
++#define ISP_REG_LCCF_CFG_3			0x0e4
++#define ISP_REG_LCCF_CFG_4			0x0e8
++#define ISP_REG_LCCF_CFG_5			0x0ec
++#define LCCF_F2_PAR(n)				((n) << 16)
++#define LCCF_F1_PAR(n)				((n) << 0)
++
++#define ISP_REG_OECF_X0_CFG0			0x100
++#define ISP_REG_OECF_X0_CFG1			0x104
++#define ISP_REG_OECF_X0_CFG2			0x108
++#define ISP_REG_OECF_X0_CFG3			0x10c
++#define ISP_REG_OECF_X0_CFG4			0x110
++#define ISP_REG_OECF_X0_CFG5			0x114
++#define ISP_REG_OECF_X0_CFG6			0x118
++#define ISP_REG_OECF_X0_CFG7			0x11c
++
++#define ISP_REG_OECF_Y3_CFG0			0x1e0
++#define ISP_REG_OECF_Y3_CFG1			0x1e4
++#define ISP_REG_OECF_Y3_CFG2			0x1e8
++#define ISP_REG_OECF_Y3_CFG3			0x1ec
++#define ISP_REG_OECF_Y3_CFG4			0x1f0
++#define ISP_REG_OECF_Y3_CFG5			0x1f4
++#define ISP_REG_OECF_Y3_CFG6			0x1f8
++#define ISP_REG_OECF_Y3_CFG7			0x1fc
++
++#define ISP_REG_OECF_S0_CFG0			0x200
++#define ISP_REG_OECF_S3_CFG7			0x27c
++#define OCEF_PAR_H(n)				((n) << 16)
++#define OCEF_PAR_L(n)				((n) << 0)
++
++#define ISP_REG_AWB_X0_CFG_0			0x280
++#define ISP_REG_AWB_X0_CFG_1			0x284
++#define ISP_REG_AWB_X1_CFG_0			0x288
++#define ISP_REG_AWB_X1_CFG_1			0x28c
++#define ISP_REG_AWB_X2_CFG_0			0x290
++#define ISP_REG_AWB_X2_CFG_1			0x294
++#define ISP_REG_AWB_X3_CFG_0			0x298
++#define ISP_REG_AWB_X3_CFG_1			0x29c
++#define AWB_X_SYMBOL_H(n)			((n) << 16)
++#define AWB_X_SYMBOL_L(n)			((n) << 0)
++
++#define ISP_REG_AWB_Y0_CFG_0			0x2a0
++#define ISP_REG_AWB_Y0_CFG_1			0x2a4
++#define ISP_REG_AWB_Y1_CFG_0			0x2a8
++#define ISP_REG_AWB_Y1_CFG_1			0x2ac
++#define ISP_REG_AWB_Y2_CFG_0			0x2b0
++#define ISP_REG_AWB_Y2_CFG_1			0x2b4
++#define ISP_REG_AWB_Y3_CFG_0			0x2b8
++#define ISP_REG_AWB_Y3_CFG_1			0x2bc
++#define AWB_Y_SYMBOL_H(n)			((n) << 16)
++#define AWB_Y_SYMBOL_L(n)			((n) << 0)
++
++#define ISP_REG_AWB_S0_CFG_0			0x2c0
++#define ISP_REG_AWB_S0_CFG_1			0x2c4
++#define ISP_REG_AWB_S1_CFG_0			0x2c8
++#define ISP_REG_AWB_S1_CFG_1			0x2cc
++#define ISP_REG_AWB_S2_CFG_0			0x2d0
++#define ISP_REG_AWB_S2_CFG_1			0x2d4
++#define ISP_REG_AWB_S3_CFG_0			0x2d8
++#define ISP_REG_AWB_S3_CFG_1			0x2dc
++#define AWB_S_SYMBOL_H(n)			((n) << 16)
++#define AWB_S_SYMBOL_L(n)			((n) << 0)
++
++#define ISP_REG_OBCG_CFG_0			0x2e0
++#define ISP_REG_OBCG_CFG_1			0x2e4
++#define ISP_REG_OBCG_CFG_2			0x2e8
++#define ISP_REG_OBCG_CFG_3			0x2ec
++#define ISP_REG_OBCO_CFG_0			0x2f0
++#define ISP_REG_OBCO_CFG_1			0x2f4
++#define ISP_REG_OBCO_CFG_2			0x2f8
++#define ISP_REG_OBCO_CFG_3			0x2fc
++#define GAIN_D_POINT(x)				((x) << 24)
++#define GAIN_C_POINT(x)				((x) << 16)
++#define GAIN_B_POINT(x)				((x) << 8)
++#define GAIN_A_POINT(x)				((x) << 0)
++#define OFFSET_D_POINT(x)			((x) << 24)
++#define OFFSET_C_POINT(x)			((x) << 16)
++#define OFFSET_B_POINT(x)			((x) << 8)
++#define OFFSET_A_POINT(x)			((x) << 0)
++
++#define ISP_REG_ISP_CTRL_0			0xa00
++#define ISPC_LINE				BIT(27)
++#define ISPC_SC					BIT(26)
++#define ISPC_CSI				BIT(25)
++#define ISPC_ISP				BIT(24)
++#define ISPC_ENUO				BIT(20)
++#define ISPC_ENLS				BIT(17)
++#define ISPC_ENSS1				BIT(12)
++#define ISPC_ENSS0				BIT(11)
++#define ISPC_RST				BIT(1)
++#define ISPC_EN					BIT(0)
++#define ISPC_RST_MASK				BIT(1)
++#define ISPC_INT_ALL_MASK			GENMASK(27, 24)
++
++#define ISP_REG_ISP_CTRL_1			0xa08
++#define CTRL_SAT(n)				((n) << 28)
++#define CTRL_DBC				BIT(22)
++#define CTRL_CTC				BIT(21)
++#define CTRL_YHIST				BIT(20)
++#define CTRL_YCURVE				BIT(19)
++#define CTRL_CTM				BIT(18)
++#define CTRL_BIYUV				BIT(17)
++#define CTRL_SCE				BIT(8)
++#define CTRL_EE					BIT(7)
++#define CTRL_CCE				BIT(5)
++#define CTRL_RGE				BIT(4)
++#define CTRL_CME				BIT(3)
++#define CTRL_AE					BIT(2)
++#define CTRL_CE					BIT(1)
++#define CTRL_SAT_MASK				GENMASK(31, 28)
++
++#define ISP_REG_PIPELINE_XY_SIZE		0xa0c
++#define H_ACT_CAP(n)				((n) << 16)
++#define W_ACT_CAP(n)				((n) << 0)
++
++#define ISP_REG_ICTC				0xa10
++#define GF_MODE(n)				((n) << 30)
++#define MAXGT(n)				((n) << 16)
++#define MINGT(n)				((n) << 0)
++
++#define ISP_REG_IDBC				0xa14
++#define BADGT(n)				((n) << 16)
++#define BADXT(n)				((n) << 0)
++
++#define ISP_REG_ICFAM				0xa1c
++#define CROSS_COV(n)				((n) << 4)
++#define HV_W(n)					((n) << 0)
++
++#define ISP_REG_CS_GAIN				0xa30
++#define CMAD(n)					((n) << 16)
++#define CMAB(n)					((n) << 0)
++
++#define ISP_REG_CS_THRESHOLD			0xa34
++#define CMD(n)					((n) << 16)
++#define CMB(n)					((n) << 0)
++
++#define ISP_REG_CS_OFFSET			0xa38
++#define VOFF(n)					((n) << 16)
++#define UOFF(n)					((n) << 0)
++
++#define ISP_REG_CS_HUE_F			0xa3c
++#define SIN(n)					((n) << 16)
++#define COS(n)					((n) << 0)
++
++#define ISP_REG_CS_SCALE			0xa40
++
++#define ISP_REG_IESHD				0xa50
++#define SHAD_UP_M				BIT(1)
++#define SHAD_UP_EN				BIT(0)
++
++#define ISP_REG_YADJ0				0xa54
++#define YOIR(n)					((n) << 16)
++#define YIMIN(n)				((n) << 0)
++
++#define ISP_REG_YADJ1				0xa58
++#define YOMAX(n)				((n) << 16)
++#define YOMIN(n)				((n) << 0)
++
++#define ISP_REG_Y_PLANE_START_ADDR		0xa80
++#define ISP_REG_UV_PLANE_START_ADDR		0xa84
++#define ISP_REG_STRIDE				0xa88
++
++#define ISP_REG_ITIIWSR				0xb20
++#define ITI_HSIZE(n)				((n) << 16)
++#define ITI_WSIZE(n)				((n) << 0)
++
++#define ISP_REG_ITIDWLSR			0xb24
++#define ISP_REG_ITIPDFR				0xb38
++#define ISP_REG_ITIDRLSR			0xb3C
++
++#define ISP_REG_DNYUV_YSWR0			0xc00
++#define ISP_REG_DNYUV_YSWR1			0xc04
++#define ISP_REG_DNYUV_CSWR0			0xc08
++#define ISP_REG_DNYUV_CSWR1			0xc0c
++#define YUVSW5(n)				((n) << 20)
++#define YUVSW4(n)				((n) << 16)
++#define YUVSW3(n)				((n) << 12)
++#define YUVSW2(n)				((n) << 8)
++#define YUVSW1(n)				((n) << 4)
++#define YUVSW0(n)				((n) << 0)
++
++#define ISP_REG_DNYUV_YDR0			0xc10
++#define ISP_REG_DNYUV_YDR1			0xc14
++#define ISP_REG_DNYUV_YDR2			0xc18
++#define ISP_REG_DNYUV_CDR0			0xc1c
++#define ISP_REG_DNYUV_CDR1			0xc20
++#define ISP_REG_DNYUV_CDR2			0xc24
++#define CURVE_D_H(n)				((n) << 16)
++#define CURVE_D_L(n)				((n) << 0)
++
++#define ISP_REG_ICAMD_0				0xc40
++#define ISP_REG_ICAMD_12			0xc70
++#define ISP_REG_ICAMD_20			0xc90
++#define ISP_REG_ICAMD_24			0xca0
++#define ISP_REG_ICAMD_25			0xca4
++#define DNRM_F(n)				((n) << 16)
++#define CCM_M_DAT(n)				((n) << 0)
++
++#define ISP_REG_GAMMA_VAL0			0xe00
++#define ISP_REG_GAMMA_VAL1			0xe04
++#define ISP_REG_GAMMA_VAL2			0xe08
++#define ISP_REG_GAMMA_VAL3			0xe0c
++#define ISP_REG_GAMMA_VAL4			0xe10
++#define ISP_REG_GAMMA_VAL5			0xe14
++#define ISP_REG_GAMMA_VAL6			0xe18
++#define ISP_REG_GAMMA_VAL7			0xe1c
++#define ISP_REG_GAMMA_VAL8			0xe20
++#define ISP_REG_GAMMA_VAL9			0xe24
++#define ISP_REG_GAMMA_VAL10			0xe28
++#define ISP_REG_GAMMA_VAL11			0xe2c
++#define ISP_REG_GAMMA_VAL12			0xe30
++#define ISP_REG_GAMMA_VAL13			0xe34
++#define ISP_REG_GAMMA_VAL14			0xe38
++#define GAMMA_S_VAL(n)				((n) << 16)
++#define GAMMA_VAL(n)				((n) << 0)
++
++#define ISP_REG_R2Y_0				0xe40
++#define ISP_REG_R2Y_1				0xe44
++#define ISP_REG_R2Y_2				0xe48
++#define ISP_REG_R2Y_3				0xe4c
++#define ISP_REG_R2Y_4				0xe50
++#define ISP_REG_R2Y_5				0xe54
++#define ISP_REG_R2Y_6				0xe58
++#define ISP_REG_R2Y_7				0xe5c
++#define ISP_REG_R2Y_8				0xe60
++
++#define ISP_REG_SHARPEN0			0xe80
++#define ISP_REG_SHARPEN1			0xe84
++#define ISP_REG_SHARPEN2			0xe88
++#define ISP_REG_SHARPEN3			0xe8c
++#define ISP_REG_SHARPEN4			0xe90
++#define ISP_REG_SHARPEN5			0xe94
++#define ISP_REG_SHARPEN6			0xe98
++#define ISP_REG_SHARPEN7			0xe9c
++#define ISP_REG_SHARPEN8			0xea0
++#define ISP_REG_SHARPEN9			0xea4
++#define ISP_REG_SHARPEN10			0xea8
++#define ISP_REG_SHARPEN11			0xeac
++#define ISP_REG_SHARPEN12			0xeb0
++#define ISP_REG_SHARPEN13			0xeb4
++#define ISP_REG_SHARPEN14			0xeb8
++#define S_DELTA(n)				((n) << 16)
++#define S_WEIGHT(n)				((n) << 8)
++
++#define ISP_REG_SHARPEN_FS0			0xebc
++#define ISP_REG_SHARPEN_FS1			0xec0
++#define ISP_REG_SHARPEN_FS2			0xec4
++#define ISP_REG_SHARPEN_FS3			0xec8
++#define ISP_REG_SHARPEN_FS4			0xecc
++#define ISP_REG_SHARPEN_FS5			0xed0
++#define S_FACTOR(n)				((n) << 24)
++#define S_SLOPE(n)				((n) << 0)
++
++#define ISP_REG_SHARPEN_WN			0xed4
++#define PDIRF(n)				((n) << 28)
++#define NDIRF(n)				((n) << 24)
++#define WSUM(n)					((n) << 0)
++
++#define ISP_REG_IUVS1				0xed8
++#define UVDIFF2(n)				((n) << 16)
++#define UVDIFF1(n)				((n) << 0)
++
++#define ISP_REG_IUVS2				0xedc
++#define UVF(n)					((n) << 24)
++#define UVSLOPE(n)				((n) << 0)
++
++#define ISP_REG_IUVCKS1				0xee0
++#define UVCKDIFF2(n)				((n) << 16)
++#define UVCKDIFF1(n)				((n) << 0)
++
++#define ISP_REG_IUVCKS2				0xee4
++
++#define ISP_REG_ISHRPET				0xee8
++#define TH(n)					((n) << 8)
++#define EN(n)					((n) << 0)
++
++#define ISP_REG_YCURVE_0			0xf00
++#define ISP_REG_YCURVE_63			0xffc
++
++#define IMAGE_MAX_WIDTH				1920
++#define IMAGE_MAX_HEIGH				1080
++
++/* pad id for media framework */
++enum stf_isp_pad_id {
++	STF_ISP_PAD_SINK = 0,
++	STF_ISP_PAD_SRC,
++	STF_ISP_PAD_MAX
++};
++
++struct stf_isp_format {
++	u32 code;
++	u8 bpp;
++};
++
++struct stf_isp_format_table {
++	const struct stf_isp_format *fmts;
++	int nfmts;
++};
++
++struct stf_isp_dev {
++	struct stfcamss *stfcamss;
++	struct v4l2_subdev subdev;
++	struct media_pad pads[STF_ISP_PAD_MAX];
++	const struct stf_isp_format_table *formats;
++	unsigned int nformats;
++	struct v4l2_subdev *source_subdev;
++	const struct stf_isp_format *current_fmt;
++};
++
++int stf_isp_reset(struct stf_isp_dev *isp_dev);
++void stf_isp_init_cfg(struct stf_isp_dev *isp_dev);
++void stf_isp_settings(struct stf_isp_dev *isp_dev,
++		      struct v4l2_rect *crop, u32 mcode);
++void stf_isp_stream_set(struct stf_isp_dev *isp_dev);
++int stf_isp_init(struct stfcamss *stfcamss);
++int stf_isp_register(struct stf_isp_dev *isp_dev, struct v4l2_device *v4l2_dev);
++int stf_isp_unregister(struct stf_isp_dev *isp_dev);
++
++#endif /* STF_ISP_H */
 -- 
 2.34.1
 
