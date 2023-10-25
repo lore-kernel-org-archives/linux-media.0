@@ -2,31 +2,31 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75D96C07545
-	for <linux-media@archiver.kernel.org>; Wed, 25 Oct 2023 03:14:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05CD6C25B6D
+	for <linux-media@archiver.kernel.org>; Wed, 25 Oct 2023 03:14:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232323AbjJYDOg convert rfc822-to-8bit (ORCPT
+        id S232431AbjJYDOj convert rfc822-to-8bit (ORCPT
         <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Oct 2023 23:14:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47006 "EHLO
+        Tue, 24 Oct 2023 23:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231732AbjJYDOe (ORCPT
+        with ESMTP id S229544AbjJYDOe (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 24 Oct 2023 23:14:34 -0400
 Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2652D130;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F5912A;
         Tue, 24 Oct 2023 20:14:29 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 7690424E2E0;
-        Wed, 25 Oct 2023 11:14:27 +0800 (CST)
-Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 25 Oct
- 2023 11:14:26 +0800
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 7A36D24E294;
+        Wed, 25 Oct 2023 11:14:25 +0800 (CST)
+Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 25 Oct
+ 2023 11:14:25 +0800
 Received: from xiaofei.localdomain (180.164.60.184) by EXMBX073.cuchost.com
  (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 25 Oct
- 2023 11:14:26 +0800
+ 2023 11:14:24 +0800
 From:   Jack Zhu <jack.zhu@starfivetech.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Robert Foss <rfoss@kernel.org>,
@@ -41,9 +41,9 @@ To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
 CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-staging@lists.linux.dev>,
         <jack.zhu@starfivetech.com>, <changhuang.liang@starfivetech.com>
-Subject: [PATCH v11 6/9] media: staging: media: starfive: camss: Add capture driver
-Date:   Wed, 25 Oct 2023 11:14:19 +0800
-Message-ID: <20231025031422.3695-7-jack.zhu@starfivetech.com>
+Subject: [PATCH v11 2/9] media: admin-guide: Add starfive_camss.rst for Starfive Camera Subsystem
+Date:   Wed, 25 Oct 2023 11:14:15 +0800
+Message-ID: <20231025031422.3695-3-jack.zhu@starfivetech.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231025031422.3695-1-jack.zhu@starfivetech.com>
 References: <20231025031422.3695-1-jack.zhu@starfivetech.com>
@@ -58,753 +58,139 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add capture driver for StarFive Camera Subsystem. It contains two video
-devices: capture_yuv and capture_raw.
+Add starfive_camss.rst file that documents the Starfive Camera
+Subsystem driver which is used for handing image sensor data.
 
 Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
 ---
- drivers/staging/media/starfive/camss/Makefile |   1 +
- .../staging/media/starfive/camss/stf-camss.h  |   2 +
- .../media/starfive/camss/stf-capture.c        | 603 ++++++++++++++++++
- .../media/starfive/camss/stf-capture.h        |  87 +++
- 4 files changed, 693 insertions(+)
- create mode 100644 drivers/staging/media/starfive/camss/stf-capture.c
- create mode 100644 drivers/staging/media/starfive/camss/stf-capture.h
+ .../admin-guide/media/starfive_camss.rst      | 72 +++++++++++++++++++
+ .../media/starfive_camss_graph.dot            | 12 ++++
+ .../admin-guide/media/v4l-drivers.rst         |  1 +
+ MAINTAINERS                                   |  1 +
+ 4 files changed, 86 insertions(+)
+ create mode 100644 Documentation/admin-guide/media/starfive_camss.rst
+ create mode 100644 Documentation/admin-guide/media/starfive_camss_graph.dot
 
-diff --git a/drivers/staging/media/starfive/camss/Makefile b/drivers/staging/media/starfive/camss/Makefile
-index 97e1522b21ae..005790202e7b 100644
---- a/drivers/staging/media/starfive/camss/Makefile
-+++ b/drivers/staging/media/starfive/camss/Makefile
-@@ -5,6 +5,7 @@
- 
- starfive-camss-objs += \
- 		stf-camss.o \
-+		stf-capture.o \
- 		stf-isp.o \
- 		stf-isp-hw-ops.o \
- 		stf-video.o
-diff --git a/drivers/staging/media/starfive/camss/stf-camss.h b/drivers/staging/media/starfive/camss/stf-camss.h
-index c7b0a34cd29b..e2b0cfb437bd 100644
---- a/drivers/staging/media/starfive/camss/stf-camss.h
-+++ b/drivers/staging/media/starfive/camss/stf-camss.h
-@@ -19,6 +19,7 @@
- #include <media/v4l2-device.h>
- 
- #include "stf-isp.h"
-+#include "stf-capture.h"
- 
- enum stf_port_num {
- 	STF_PORT_DVP = 0,
-@@ -52,6 +53,7 @@ struct stfcamss {
- 	struct media_pipeline pipe;
- 	struct device *dev;
- 	struct stf_isp_dev isp_dev;
-+	struct stf_capture captures[STF_CAPTURE_NUM];
- 	struct v4l2_async_notifier notifier;
- 	void __iomem *syscon_base;
- 	void __iomem *isp_base;
-diff --git a/drivers/staging/media/starfive/camss/stf-capture.c b/drivers/staging/media/starfive/camss/stf-capture.c
+diff --git a/Documentation/admin-guide/media/starfive_camss.rst b/Documentation/admin-guide/media/starfive_camss.rst
 new file mode 100644
-index 000000000000..70c24b050a1b
+index 000000000000..ca42e9447c47
 --- /dev/null
-+++ b/drivers/staging/media/starfive/camss/stf-capture.c
-@@ -0,0 +1,603 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * stf_capture.c
-+ *
-+ * StarFive Camera Subsystem - capture device
-+ *
-+ * Copyright (C) 2021-2023 StarFive Technology Co., Ltd.
-+ */
++++ b/Documentation/admin-guide/media/starfive_camss.rst
+@@ -0,0 +1,72 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
-+#include "stf-camss.h"
++.. include:: <isonum.txt>
 +
-+static const char * const stf_cap_names[] = {
-+	"capture_raw",
-+	"capture_yuv",
-+};
++================================
++Starfive Camera Subsystem driver
++================================
 +
-+static const struct stfcamss_format_info stf_wr_fmts[] = {
-+	{
-+		.code = MEDIA_BUS_FMT_SRGGB10_1X10,
-+		.pixelformat = V4L2_PIX_FMT_SRGGB10,
-+		.planes = 1,
-+		.vsub = { 1 },
-+		.bpp = 10,
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_SGRBG10_1X10,
-+		.pixelformat = V4L2_PIX_FMT_SGRBG10,
-+		.planes = 1,
-+		.vsub = { 1 },
-+		.bpp = 10,
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_SGBRG10_1X10,
-+		.pixelformat = V4L2_PIX_FMT_SGBRG10,
-+		.planes = 1,
-+		.vsub = { 1 },
-+		.bpp = 10,
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_SBGGR10_1X10,
-+		.pixelformat = V4L2_PIX_FMT_SBGGR10,
-+		.planes = 1,
-+		.vsub = { 1 },
-+		.bpp = 10,
-+	},
-+};
++Introduction
++------------
 +
-+static const struct stfcamss_format_info stf_isp_fmts[] = {
-+	{
-+		.code = MEDIA_BUS_FMT_YUYV8_1_5X8,
-+		.pixelformat = V4L2_PIX_FMT_NV12,
-+		.planes = 2,
-+		.vsub = { 1, 2 },
-+		.bpp = 8,
-+	},
-+};
++This file documents the driver for the Starfive Camera Subsystem found on
++Starfive JH7110 SoC. The driver is located under drivers/staging/media/starfive/
++camss.
 +
-+static inline struct stf_capture *to_stf_capture(struct stfcamss_video *video)
-+{
-+	return container_of(video, struct stf_capture, video);
-+}
++The driver implements V4L2, Media controller and v4l2_subdev interfaces. Camera
++sensor using V4L2 subdev interface in the kernel is supported.
 +
-+static void stf_set_raw_addr(struct stfcamss *stfcamss, dma_addr_t addr)
-+{
-+	stf_syscon_reg_write(stfcamss, VIN_START_ADDR_O, (long)addr);
-+	stf_syscon_reg_write(stfcamss, VIN_START_ADDR_N, (long)addr);
-+}
++The driver has been successfully used on the Gstreamer 1.18.5 with v4l2src
++plugin.
 +
-+static void stf_set_yuv_addr(struct stfcamss *stfcamss,
-+			     dma_addr_t y_addr, dma_addr_t uv_addr)
-+{
-+	stf_isp_reg_write(stfcamss, ISP_REG_Y_PLANE_START_ADDR, y_addr);
-+	stf_isp_reg_write(stfcamss, ISP_REG_UV_PLANE_START_ADDR, uv_addr);
-+}
 +
-+static void stf_init_addrs(struct stfcamss_video *video)
-+{
-+	struct stf_capture *cap = to_stf_capture(video);
-+	struct stf_v_buf *output = &cap->buffers;
-+	dma_addr_t addr0, addr1;
++Starfive Camera Subsystem hardware
++----------------------------------
 +
-+	output->active_buf = 0;
++The Starfive Camera Subsystem hardware consists of::
 +
-+	if (!output->buf[0])
-+		return;
++                    |\         +---------------+      +-----------+
++  +----------+      |  \       |               |      |           |
++  |          |      |   |      |               |      |           |
++  |   MIPI   |----->|   |----->|      ISP      |----->|           |
++  |          |      |   |      |               |      |           |
++  +----------+      |   |      |               |      |  Memory   |
++                    |MUX|      +---------------+      | Interface |
++  +----------+      |   |                             |           |
++  |          |      |   |---------------------------->|           |
++  | Parallel |----->|   |                             |           |
++  |          |      |   |                             |           |
++  +----------+      |  /                              |           |
++                    |/                                +-----------+
 +
-+	addr0 = output->buf[0]->addr[0];
-+	addr1 = output->buf[0]->addr[1];
++- MIPI: The MIPI interface, receiving data from a MIPI CSI-2 camera sensor.
 +
-+	if (cap->type == STF_CAPTURE_RAW)
-+		stf_set_raw_addr(video->stfcamss, addr0);
-+	else if (cap->type == STF_CAPTURE_YUV)
-+		stf_set_yuv_addr(video->stfcamss, addr0, addr1);
-+}
++- Parallel: The parallel interface,  receiving data from a parallel sensor.
 +
-+static struct stfcamss_buffer *stf_buf_get_pending(struct stf_v_buf *output)
-+{
-+	struct stfcamss_buffer *buffer = NULL;
++- ISP: The ISP, processing raw Bayer data from an image sensor and producing
++  YUV frames.
 +
-+	if (!list_empty(&output->pending_bufs)) {
-+		buffer = list_first_entry(&output->pending_bufs,
-+					  struct stfcamss_buffer,
-+					  queue);
-+		list_del(&buffer->queue);
-+	}
 +
-+	return buffer;
-+}
++Topology
++--------
 +
-+static void stf_cap_s_cfg(struct stfcamss_video *video)
-+{
-+	struct stf_capture *cap = to_stf_capture(video);
-+	struct stf_v_buf *output = &cap->buffers;
-+	unsigned long flags;
++The media controller pipeline graph is as follows:
 +
-+	spin_lock_irqsave(&output->lock, flags);
++.. _starfive_camss_graph:
 +
-+	output->state = STF_OUTPUT_IDLE;
-+	output->buf[0] = stf_buf_get_pending(output);
++.. kernel-figure:: starfive_camss_graph.dot
++    :alt:   starfive_camss_graph.dot
++    :align: center
 +
-+	if (!output->buf[0] && output->buf[1]) {
-+		output->buf[0] = output->buf[1];
-+		output->buf[1] = NULL;
-+	}
++The driver has 2 video devices:
 +
-+	if (output->buf[0])
-+		output->state = STF_OUTPUT_SINGLE;
++- capture_raw: The capture device, capturing image data directly from a sensor.
++- capture_yuv: The capture device, capturing YUV frame data processed by the
++  ISP module
 +
-+	output->sequence = 0;
-+	stf_init_addrs(video);
++The driver has 3 subdevices:
 +
-+	spin_unlock_irqrestore(&output->lock, flags);
-+}
-+
-+static int stf_cap_s_cleanup(struct stfcamss_video *video)
-+{
-+	struct stf_capture *cap = to_stf_capture(video);
-+	struct stf_v_buf *output = &cap->buffers;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&output->lock, flags);
-+
-+	output->state = STF_OUTPUT_OFF;
-+
-+	spin_unlock_irqrestore(&output->lock, flags);
-+
-+	return 0;
-+}
-+
-+static void stf_wr_data_en(struct stfcamss_video *video)
-+{
-+	struct stf_capture *cap = to_stf_capture(video);
-+	struct stfcamss *stfcamss = cap->video.stfcamss;
-+
-+	stf_syscon_reg_set_bit(stfcamss, VIN_CHANNEL_SEL_EN, U0_VIN_AXIWR0_EN);
-+}
-+
-+static void stf_wr_irq_enable(struct stfcamss_video *video)
-+{
-+	struct stf_capture *cap = to_stf_capture(video);
-+	struct stfcamss *stfcamss = cap->video.stfcamss;
-+
-+	stf_syscon_reg_clear_bit(stfcamss, VIN_INRT_PIX_CFG, U0_VIN_INTR_M);
-+}
-+
-+static void stf_wr_irq_disable(struct stfcamss_video *video)
-+{
-+	struct stf_capture *cap = to_stf_capture(video);
-+	struct stfcamss *stfcamss = cap->video.stfcamss;
-+
-+	stf_syscon_reg_set_bit(stfcamss, VIN_INRT_PIX_CFG, U0_VIN_INTR_CLEAN);
-+	stf_syscon_reg_clear_bit(stfcamss, VIN_INRT_PIX_CFG, U0_VIN_INTR_CLEAN);
-+	stf_syscon_reg_set_bit(stfcamss, VIN_INRT_PIX_CFG, U0_VIN_INTR_M);
-+}
-+
-+static void stf_channel_set(struct stfcamss_video *video)
-+{
-+	struct stf_capture *cap = to_stf_capture(video);
-+	struct stfcamss *stfcamss = cap->video.stfcamss;
-+	u32 val;
-+
-+	if (cap->type == STF_CAPTURE_RAW) {
-+		val = stf_syscon_reg_read(stfcamss, VIN_CHANNEL_SEL_EN);
-+		val &= ~U0_VIN_CHANNEL_SEL_MASK;
-+		val |= CHANNEL(0);
-+		stf_syscon_reg_write(stfcamss, VIN_CHANNEL_SEL_EN, val);
-+
-+		val = stf_syscon_reg_read(stfcamss, VIN_INRT_PIX_CFG);
-+		val &= ~U0_VIN_PIX_CT_MASK;
-+		val |= PIX_CT(1);
-+
-+		val &= ~U0_VIN_PIXEL_HEIGH_BIT_SEL_MAKS;
-+		val |= PIXEL_HEIGH_BIT_SEL(0);
-+
-+		val &= ~U0_VIN_PIX_CNT_END_MASK;
-+		val |= PIX_CNT_END(IMAGE_MAX_WIDTH / 4 - 1);
-+
-+		stf_syscon_reg_write(stfcamss, VIN_INRT_PIX_CFG, val);
-+	} else if (cap->type == STF_CAPTURE_YUV) {
-+		val = stf_syscon_reg_read(stfcamss, VIN_CFG_REG);
-+		val &= ~U0_VIN_MIPI_BYTE_EN_ISP0_MASK;
-+		val |= U0_VIN_MIPI_BYTE_EN_ISP0(0);
-+
-+		val &= ~U0_VIN_MIPI_CHANNEL_SEL0_MASK;
-+		val |= U0_VIN_MIPI_CHANNEL_SEL0(0);
-+
-+		val &= ~U0_VIN_PIX_NUM_MASK;
-+		val |= U0_VIN_PIX_NUM(0);
-+
-+		val &= ~U0_VIN_P_I_MIPI_HAEDER_EN0_MASK;
-+		val |= U0_VIN_P_I_MIPI_HAEDER_EN0(1);
-+
-+		stf_syscon_reg_write(stfcamss, VIN_CFG_REG, val);
-+	}
-+}
-+
-+static void stf_capture_start(struct stfcamss_video *video)
-+{
-+	struct stf_capture *cap = to_stf_capture(video);
-+
-+	stf_channel_set(video);
-+	if (cap->type == STF_CAPTURE_RAW) {
-+		stf_wr_irq_enable(video);
-+		stf_wr_data_en(video);
-+	}
-+
-+	stf_cap_s_cfg(video);
-+}
-+
-+static void stf_capture_stop(struct stfcamss_video *video)
-+{
-+	struct stf_capture *cap = to_stf_capture(video);
-+
-+	if (cap->type == STF_CAPTURE_RAW)
-+		stf_wr_irq_disable(video);
-+
-+	stf_cap_s_cleanup(video);
-+}
-+
-+static void stf_capture_init(struct stfcamss *stfcamss, struct stf_capture *cap)
-+{
-+	cap->buffers.state = STF_OUTPUT_OFF;
-+	cap->buffers.buf[0] = NULL;
-+	cap->buffers.buf[1] = NULL;
-+	cap->buffers.active_buf = 0;
-+	atomic_set(&cap->buffers.frame_skip, 4);
-+	INIT_LIST_HEAD(&cap->buffers.pending_bufs);
-+	INIT_LIST_HEAD(&cap->buffers.ready_bufs);
-+	spin_lock_init(&cap->buffers.lock);
-+
-+	cap->video.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-+	cap->video.stfcamss = stfcamss;
-+	cap->video.bpl_alignment = 16 * 8;
-+
-+	if (cap->type == STF_CAPTURE_RAW) {
-+		cap->video.formats = stf_wr_fmts;
-+		cap->video.nformats = ARRAY_SIZE(stf_wr_fmts);
-+		cap->video.bpl_alignment = 8;
-+	} else if (cap->type == STF_CAPTURE_YUV) {
-+		cap->video.formats = stf_isp_fmts;
-+		cap->video.nformats = ARRAY_SIZE(stf_isp_fmts);
-+		cap->video.bpl_alignment = 1;
-+	}
-+}
-+
-+static void stf_buf_add_ready(struct stf_v_buf *output,
-+			      struct stfcamss_buffer *buffer)
-+{
-+	INIT_LIST_HEAD(&buffer->queue);
-+	list_add_tail(&buffer->queue, &output->ready_bufs);
-+}
-+
-+static struct stfcamss_buffer *stf_buf_get_ready(struct stf_v_buf *output)
-+{
-+	struct stfcamss_buffer *buffer = NULL;
-+
-+	if (!list_empty(&output->ready_bufs)) {
-+		buffer = list_first_entry(&output->ready_bufs,
-+					  struct stfcamss_buffer,
-+					  queue);
-+		list_del(&buffer->queue);
-+	}
-+
-+	return buffer;
-+}
-+
-+static void stf_buf_add_pending(struct stf_v_buf *output,
-+				struct stfcamss_buffer *buffer)
-+{
-+	INIT_LIST_HEAD(&buffer->queue);
-+	list_add_tail(&buffer->queue, &output->pending_bufs);
-+}
-+
-+static void stf_buf_update_on_last(struct stf_v_buf *output)
-+{
-+	switch (output->state) {
-+	case STF_OUTPUT_CONTINUOUS:
-+		output->state = STF_OUTPUT_SINGLE;
-+		output->active_buf = !output->active_buf;
-+		break;
-+	case STF_OUTPUT_SINGLE:
-+		output->state = STF_OUTPUT_STOPPING;
-+		break;
-+	default:
-+		break;
-+	}
-+}
-+
-+static void stf_buf_update_on_next(struct stf_v_buf *output)
-+{
-+	switch (output->state) {
-+	case STF_OUTPUT_CONTINUOUS:
-+		output->active_buf = !output->active_buf;
-+		break;
-+	case STF_OUTPUT_SINGLE:
-+	default:
-+		break;
-+	}
-+}
-+
-+static void stf_buf_update_on_new(struct stfcamss_video *video,
-+				  struct stfcamss_buffer *new_buf)
-+{
-+	struct stf_capture *cap = to_stf_capture(video);
-+	struct stf_v_buf *output = &cap->buffers;
-+
-+	switch (output->state) {
-+	case STF_OUTPUT_SINGLE:
-+		stf_buf_add_pending(output, new_buf);
-+		break;
-+	case STF_OUTPUT_IDLE:
-+		if (!output->buf[0]) {
-+			output->buf[0] = new_buf;
-+			stf_init_addrs(video);
-+			output->state = STF_OUTPUT_SINGLE;
-+		} else {
-+			stf_buf_add_pending(output, new_buf);
-+		}
-+		break;
-+	case STF_OUTPUT_STOPPING:
-+		if (output->last_buffer) {
-+			output->buf[output->active_buf] = output->last_buffer;
-+			output->last_buffer = NULL;
-+		}
-+
-+		output->state = STF_OUTPUT_SINGLE;
-+		stf_buf_add_pending(output, new_buf);
-+		break;
-+	case STF_OUTPUT_CONTINUOUS:
-+	default:
-+		stf_buf_add_pending(output, new_buf);
-+		break;
-+	}
-+}
-+
-+static void stf_buf_flush(struct stf_v_buf *output, enum vb2_buffer_state state)
-+{
-+	struct stfcamss_buffer *buf;
-+	struct stfcamss_buffer *t;
-+
-+	list_for_each_entry_safe(buf, t, &output->pending_bufs, queue) {
-+		vb2_buffer_done(&buf->vb.vb2_buf, state);
-+		list_del(&buf->queue);
-+	}
-+	list_for_each_entry_safe(buf, t, &output->ready_bufs, queue) {
-+		vb2_buffer_done(&buf->vb.vb2_buf, state);
-+		list_del(&buf->queue);
-+	}
-+}
-+
-+static void stf_buf_done(struct stf_v_buf *output)
-+{
-+	struct stfcamss_buffer *ready_buf;
-+	u64 ts = ktime_get_ns();
-+	unsigned long flags;
-+
-+	if (output->state == STF_OUTPUT_OFF ||
-+	    output->state == STF_OUTPUT_RESERVED)
-+		return;
-+
-+	spin_lock_irqsave(&output->lock, flags);
-+
-+	while ((ready_buf = stf_buf_get_ready(output))) {
-+		ready_buf->vb.vb2_buf.timestamp = ts;
-+		ready_buf->vb.sequence = output->sequence++;
-+
-+		vb2_buffer_done(&ready_buf->vb.vb2_buf, VB2_BUF_STATE_DONE);
-+	}
-+
-+	spin_unlock_irqrestore(&output->lock, flags);
-+}
-+
-+static void stf_change_buffer(struct stf_v_buf *output)
-+{
-+	struct stf_capture *cap = container_of(output, struct stf_capture,
-+					       buffers);
-+	struct stfcamss *stfcamss = cap->video.stfcamss;
-+	struct stfcamss_buffer *ready_buf;
-+	dma_addr_t *new_addr;
-+	unsigned long flags;
-+	u32 active_index;
-+
-+	if (output->state == STF_OUTPUT_OFF ||
-+	    output->state == STF_OUTPUT_STOPPING ||
-+	    output->state == STF_OUTPUT_RESERVED ||
-+	    output->state == STF_OUTPUT_IDLE)
-+		return;
-+
-+	spin_lock_irqsave(&output->lock, flags);
-+
-+	active_index = output->active_buf;
-+
-+	ready_buf = output->buf[active_index];
-+	if (!ready_buf) {
-+		dev_dbg(stfcamss->dev, "missing ready buf %d %d.\n",
-+			active_index, output->state);
-+		active_index = !active_index;
-+		ready_buf = output->buf[active_index];
-+		if (!ready_buf) {
-+			dev_dbg(stfcamss->dev,
-+				"missing ready buf2 %d %d.\n",
-+				active_index, output->state);
-+			goto out_unlock;
-+		}
-+	}
-+
-+	/* Get next buffer */
-+	output->buf[active_index] = stf_buf_get_pending(output);
-+	if (!output->buf[active_index]) {
-+		new_addr = ready_buf->addr;
-+		stf_buf_update_on_last(output);
-+	} else {
-+		new_addr = output->buf[active_index]->addr;
-+		stf_buf_update_on_next(output);
-+	}
-+
-+	if (output->state == STF_OUTPUT_STOPPING) {
-+		output->last_buffer = ready_buf;
-+	} else {
-+		if (cap->type == STF_CAPTURE_RAW)
-+			stf_set_raw_addr(stfcamss, new_addr[0]);
-+		else if (cap->type == STF_CAPTURE_YUV)
-+			stf_set_yuv_addr(stfcamss, new_addr[0], new_addr[1]);
-+
-+		stf_buf_add_ready(output, ready_buf);
-+	}
-+
-+out_unlock:
-+	spin_unlock_irqrestore(&output->lock, flags);
-+}
-+
-+irqreturn_t stf_wr_irq_handler(int irq, void *priv)
-+{
-+	struct stfcamss *stfcamss = priv;
-+	struct stf_capture *cap = &stfcamss->captures[STF_CAPTURE_RAW];
-+
-+	if (atomic_dec_if_positive(&cap->buffers.frame_skip) < 0) {
-+		stf_change_buffer(&cap->buffers);
-+		stf_buf_done(&cap->buffers);
-+	}
-+
-+	stf_syscon_reg_set_bit(stfcamss, VIN_INRT_PIX_CFG, U0_VIN_INTR_CLEAN);
-+	stf_syscon_reg_clear_bit(stfcamss, VIN_INRT_PIX_CFG, U0_VIN_INTR_CLEAN);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+irqreturn_t stf_isp_irq_handler(int irq, void *priv)
-+{
-+	struct stfcamss *stfcamss = priv;
-+	struct stf_capture *cap = &stfcamss->captures[STF_CAPTURE_YUV];
-+	u32 status;
-+
-+	status = stf_isp_reg_read(stfcamss, ISP_REG_ISP_CTRL_0);
-+	if (status & ISPC_ISP) {
-+		if (status & ISPC_ENUO)
-+			stf_buf_done(&cap->buffers);
-+
-+		stf_isp_reg_write(stfcamss, ISP_REG_ISP_CTRL_0,
-+				  (status & ~ISPC_INT_ALL_MASK) |
-+				  ISPC_ISP | ISPC_CSI | ISPC_SC);
-+	}
-+
-+	return IRQ_HANDLED;
-+}
-+
-+irqreturn_t stf_line_irq_handler(int irq, void *priv)
-+{
-+	struct stfcamss *stfcamss = priv;
-+	struct stf_capture *cap = &stfcamss->captures[STF_CAPTURE_YUV];
-+	u32 status;
-+
-+	status = stf_isp_reg_read(stfcamss, ISP_REG_ISP_CTRL_0);
-+	if (status & ISPC_LINE) {
-+		if (atomic_dec_if_positive(&cap->buffers.frame_skip) < 0) {
-+			if ((status & ISPC_ENUO))
-+				stf_change_buffer(&cap->buffers);
-+		}
-+
-+		stf_isp_reg_set_bit(stfcamss, ISP_REG_CSIINTS,
-+				    CSI_INTS_MASK, CSI_INTS(0x3));
-+		stf_isp_reg_set_bit(stfcamss, ISP_REG_IESHD,
-+				    SHAD_UP_M | SHAD_UP_EN, 0x3);
-+
-+		stf_isp_reg_write(stfcamss, ISP_REG_ISP_CTRL_0,
-+				  (status & ~ISPC_INT_ALL_MASK) | ISPC_LINE);
-+	}
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int stf_queue_buffer(struct stfcamss_video *video,
-+			    struct stfcamss_buffer *buf)
-+{
-+	struct stf_capture *cap = to_stf_capture(video);
-+	struct stf_v_buf *v_bufs = &cap->buffers;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&v_bufs->lock, flags);
-+	stf_buf_update_on_new(video, buf);
-+	spin_unlock_irqrestore(&v_bufs->lock, flags);
-+
-+	return 0;
-+}
-+
-+static int stf_flush_buffers(struct stfcamss_video *video,
-+			     enum vb2_buffer_state state)
-+{
-+	struct stf_capture *cap = to_stf_capture(video);
-+	struct stf_v_buf *v_bufs = &cap->buffers;
-+	unsigned long flags;
-+	unsigned int i;
-+
-+	spin_lock_irqsave(&v_bufs->lock, flags);
-+
-+	stf_buf_flush(v_bufs, state);
-+
-+	for (i = 0; i < ARRAY_SIZE(v_bufs->buf); i++) {
-+		if (v_bufs->buf[i])
-+			vb2_buffer_done(&v_bufs->buf[i]->vb.vb2_buf, state);
-+
-+		v_bufs->buf[i] = NULL;
-+	}
-+
-+	if (v_bufs->last_buffer) {
-+		vb2_buffer_done(&v_bufs->last_buffer->vb.vb2_buf, state);
-+		v_bufs->last_buffer = NULL;
-+	}
-+
-+	spin_unlock_irqrestore(&v_bufs->lock, flags);
-+	return 0;
-+}
-+
-+static const struct stfcamss_video_ops stf_capture_ops = {
-+	.queue_buffer = stf_queue_buffer,
-+	.flush_buffers = stf_flush_buffers,
-+	.start_streaming = stf_capture_start,
-+	.stop_streaming = stf_capture_stop,
-+};
-+
-+static void stf_capture_unregister_one(struct stf_capture *cap)
-+{
-+	if (!video_is_registered(&cap->video.vdev))
-+		return;
-+
-+	media_entity_cleanup(&cap->video.vdev.entity);
-+	vb2_video_unregister_device(&cap->video.vdev);
-+}
-+
-+void stf_capture_unregister(struct stfcamss *stfcamss)
-+{
-+	struct stf_capture *cap_raw = &stfcamss->captures[STF_CAPTURE_RAW];
-+	struct stf_capture *cap_yuv = &stfcamss->captures[STF_CAPTURE_YUV];
-+
-+	stf_capture_unregister_one(cap_raw);
-+	stf_capture_unregister_one(cap_yuv);
-+}
-+
-+int stf_capture_register(struct stfcamss *stfcamss,
-+			 struct v4l2_device *v4l2_dev)
-+{
-+	unsigned int i;
-+	int ret;
-+
-+	for (i = 0; i < ARRAY_SIZE(stfcamss->captures); i++) {
-+		struct stf_capture *capture = &stfcamss->captures[i];
-+
-+		capture->type = i;
-+		capture->video.ops = &stf_capture_ops;
-+		stf_capture_init(stfcamss, capture);
-+
-+		ret = stf_video_register(&capture->video, v4l2_dev,
-+					 stf_cap_names[i]);
-+		if (ret < 0) {
-+			dev_err(stfcamss->dev,
-+				"Failed to register video node: %d\n", ret);
-+			stf_capture_unregister(stfcamss);
-+			return ret;
-+		}
-+	}
-+
-+	return 0;
-+}
-diff --git a/drivers/staging/media/starfive/camss/stf-capture.h b/drivers/staging/media/starfive/camss/stf-capture.h
++- stf_isp: is responsible for all the isp operations, outputs YUV frames.
++- cdns_csi2rx: a CSI-2 bridge supporting up to 4 CSI lanes in input, and 4
++  different pixel streams in output.
++- imx219: an image sensor, image data is sent through MIPI CSI-2.
+diff --git a/Documentation/admin-guide/media/starfive_camss_graph.dot b/Documentation/admin-guide/media/starfive_camss_graph.dot
 new file mode 100644
-index 000000000000..4a6c8f9b779b
+index 000000000000..8eff1f161ac7
 --- /dev/null
-+++ b/drivers/staging/media/starfive/camss/stf-capture.h
-@@ -0,0 +1,87 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * stf_capture.h
-+ *
-+ * Starfive Camera Subsystem driver
-+ *
-+ * Copyright (C) 2021-2023 StarFive Technology Co., Ltd.
-+ */
-+
-+#ifndef STF_CAPTURE_H
-+#define STF_CAPTURE_H
-+
-+#include "stf-video.h"
-+
-+#define VIN_CHANNEL_SEL_EN			0x14
-+#define VIN_START_ADDR_N			0x18
-+#define VIN_INRT_PIX_CFG			0x1c
-+#define VIN_START_ADDR_O			0x20
-+#define VIN_CFG_REG				0x24
-+
-+#define U0_VIN_CNFG_AXI_DVP_EN			BIT(2)
-+
-+#define U0_VIN_CHANNEL_SEL_MASK			GENMASK(3, 0)
-+#define U0_VIN_AXIWR0_EN			BIT(4)
-+#define CHANNEL(x)				((x) << 0)
-+
-+#define U0_VIN_INTR_CLEAN			BIT(0)
-+#define U0_VIN_INTR_M				BIT(1)
-+#define U0_VIN_PIX_CNT_END_MASK			GENMASK(12, 2)
-+#define U0_VIN_PIX_CT_MASK			GENMASK(14, 13)
-+#define U0_VIN_PIXEL_HEIGH_BIT_SEL_MAKS		GENMASK(16, 15)
-+
-+#define PIX_CNT_END(x)				((x) << 2)
-+#define PIX_CT(x)				((x) << 13)
-+#define PIXEL_HEIGH_BIT_SEL(x)			((x) << 15)
-+
-+#define U0_VIN_CNFG_DVP_HS_POS			BIT(1)
-+#define U0_VIN_CNFG_DVP_SWAP_EN			BIT(2)
-+#define U0_VIN_CNFG_DVP_VS_POS			BIT(3)
-+#define U0_VIN_CNFG_GEN_EN_AXIRD		BIT(4)
-+#define U0_VIN_CNFG_ISP_DVP_EN0			BIT(5)
-+#define U0_VIN_MIPI_BYTE_EN_ISP0(n)		((n) << 6)
-+#define U0_VIN_MIPI_CHANNEL_SEL0(n)		((n) << 8)
-+#define U0_VIN_P_I_MIPI_HAEDER_EN0(n)		((n) << 12)
-+#define U0_VIN_PIX_NUM(n)			((n) << 13)
-+#define U0_VIN_MIPI_BYTE_EN_ISP0_MASK		GENMASK(7, 6)
-+#define U0_VIN_MIPI_CHANNEL_SEL0_MASK		GENMASK(11, 8)
-+#define U0_VIN_P_I_MIPI_HAEDER_EN0_MASK		BIT(12)
-+#define U0_VIN_PIX_NUM_MASK			GENMASK(16, 13)
-+
-+enum stf_v_state {
-+	STF_OUTPUT_OFF,
-+	STF_OUTPUT_RESERVED,
-+	STF_OUTPUT_SINGLE,
-+	STF_OUTPUT_CONTINUOUS,
-+	STF_OUTPUT_IDLE,
-+	STF_OUTPUT_STOPPING
-+};
-+
-+struct stf_v_buf {
-+	int active_buf;
-+	struct stfcamss_buffer *buf[2];
-+	struct stfcamss_buffer *last_buffer;
-+	struct list_head pending_bufs;
-+	struct list_head ready_bufs;
-+	enum stf_v_state state;
-+	unsigned int sequence;
-+	/* protects the above member variables */
-+	spinlock_t lock;
-+	atomic_t frame_skip;
-+};
-+
-+struct stf_capture {
-+	struct stfcamss_video video;
-+	struct stf_v_buf buffers;
-+	enum stf_capture_type type;
-+};
-+
-+irqreturn_t stf_wr_irq_handler(int irq, void *priv);
-+irqreturn_t stf_isp_irq_handler(int irq, void *priv);
-+irqreturn_t stf_line_irq_handler(int irq, void *priv);
-+int stf_capture_register(struct stfcamss *stfcamss,
-+			 struct v4l2_device *v4l2_dev);
-+void stf_capture_unregister(struct stfcamss *stfcamss);
-+
-+#endif
-+
++++ b/Documentation/admin-guide/media/starfive_camss_graph.dot
+@@ -0,0 +1,12 @@
++digraph board {
++	rankdir=TB
++	n00000001 [label="{{<port0> 0} | stf_isp\n/dev/v4l-subdev0 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
++	n00000001:port1 -> n00000008 [style=dashed]
++	n00000004 [label="capture_raw\n/dev/video0", shape=box, style=filled, fillcolor=yellow]
++	n00000008 [label="capture_yuv\n/dev/video1", shape=box, style=filled, fillcolor=yellow]
++	n0000000e [label="{{<port0> 0} | cdns_csi2rx.19800000.csi-bridge\n | {<port1> 1 | <port2> 2 | <port3> 3 | <port4> 4}}", shape=Mrecord, style=filled, fillcolor=green]
++	n0000000e:port1 -> n00000001:port0 [style=dashed]
++	n0000000e:port1 -> n00000004 [style=dashed]
++	n00000018 [label="{{} | imx219 6-0010\n/dev/v4l-subdev1 | {<port0> 0}}", shape=Mrecord, style=filled, fillcolor=green]
++	n00000018:port0 -> n0000000e:port0 [style=bold]
++}
+diff --git a/Documentation/admin-guide/media/v4l-drivers.rst b/Documentation/admin-guide/media/v4l-drivers.rst
+index 61283d67ceef..f4bb2605f07e 100644
+--- a/Documentation/admin-guide/media/v4l-drivers.rst
++++ b/Documentation/admin-guide/media/v4l-drivers.rst
+@@ -28,6 +28,7 @@ Video4Linux (V4L) driver-specific documentation
+ 	si470x
+ 	si4713
+ 	si476x
++	starfive_camss
+ 	vimc
+ 	visl
+ 	vivid
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 502fc82c2796..8e27950db95e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -20454,6 +20454,7 @@ M:	Jack Zhu <jack.zhu@starfivetech.com>
+ M:	Changhuang Liang <changhuang.liang@starfivetech.com>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
++F:	Documentation/admin-guide/media/starfive_camss.rst
+ F:	Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+ 
+ STARFIVE CRYPTO DRIVER
 -- 
 2.34.1
 
