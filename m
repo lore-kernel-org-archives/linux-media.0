@@ -2,108 +2,167 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F7EDC25B6B
-	for <linux-media@archiver.kernel.org>; Wed, 25 Oct 2023 09:15:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A297FC0032E
+	for <linux-media@archiver.kernel.org>; Wed, 25 Oct 2023 09:16:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234097AbjJYJPp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 25 Oct 2023 05:15:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36834 "EHLO
+        id S233979AbjJYJQe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 25 Oct 2023 05:16:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233117AbjJYJPm (ORCPT
+        with ESMTP id S233306AbjJYJQc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 25 Oct 2023 05:15:42 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B53185
-        for <linux-media@vger.kernel.org>; Wed, 25 Oct 2023 02:15:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698225340; x=1729761340;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=9RFx89lYmr9whnW4eRTZwYa9zAk6hBBRxt2OTY7KJNY=;
-  b=XoV1Fbggaapg+vsDLT1G3GaoLhYO+P1/bLc0SSn1Zg7cgnEhCoB5l9+O
-   jLIelHkviaPKf1of59kutgxRmAqQerskGzb6rGfJXlIV1AHPWoxyvUZXs
-   bL5i+Kn2Q35c9Y88C6lde5dFJz06+om3oovbQ7mHdMLTBzaBnkPOC3Jv4
-   0qg5ufcy7mGBn1irT0lALUGLboDQ8e8kPlTtbnoM2jPwxBd9f0fK/XBaj
-   2StwAMsJeBVNtXE2zisnj+Hm3iw163NgFahA23dRlt7PIu5oWgspZn+SA
-   FWvoS0ZmKcnkXo3SsUfLwxs0diSwLSftSOXct4DJOxPiFh94U+/DfrPxn
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="384480074"
-X-IronPort-AV: E=Sophos;i="6.03,250,1694761200"; 
-   d="scan'208";a="384480074"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2023 02:15:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="788063656"
-X-IronPort-AV: E=Sophos;i="6.03,250,1694761200"; 
-   d="scan'208";a="788063656"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2023 02:15:37 -0700
-Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id E49D411FAF5;
-        Wed, 25 Oct 2023 12:15:33 +0300 (EEST)
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Cc:     laurent.pinchart@ideasonboard.com, jacopo.mondi@ideasonboard.com,
-        dave.stevenson@raspberrypi.com, kieran.bingham@ideasonboard.com
-Subject: [PATCH v3 1/2] media: Documentation: BT.601 is not a bus
-Date:   Wed, 25 Oct 2023 12:15:30 +0300
-Message-Id: <20231025091531.893366-2-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231025091531.893366-1-sakari.ailus@linux.intel.com>
-References: <20231025091531.893366-1-sakari.ailus@linux.intel.com>
+        Wed, 25 Oct 2023 05:16:32 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 339C0138
+        for <linux-media@vger.kernel.org>; Wed, 25 Oct 2023 02:16:29 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-507bd64814fso7844496e87.1
+        for <linux-media@vger.kernel.org>; Wed, 25 Oct 2023 02:16:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1698225387; x=1698830187; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dkMR9DQLmnzg6433Y9KFCsuvQ/1vijrskslyV3CpRuE=;
+        b=BLuo5e5CEEY8wwbz/iLRU+pNGSFKB/S0asMak4tjFBdUXtY+VTkPm80BvFv6OBSTD8
+         WJ0qWvYSst9aNZBxf43unaQRejS0eLyf1Emtb8SqSd0uqPGV3k7WihOvzvRtTKhylnWm
+         bZ0FT3SpZwtnfxQCD5LuazeTLERFKgj2vwuh4+BOQBDXLySK5ajwcS4LPIl9eIHCYGgy
+         +Q+myG7S9Jc1P0DAuMvsTYwYud7lqJlYzDlW9RNh/jQXVnVqbIf4eIFVItpiDuLdil00
+         HJ8TotaipLWg9Vd1O6OG22rMgvrfKHQ1Th97mltOgQ7AotYHeN3Obo3Bjih2w9cIdzfF
+         RSJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698225387; x=1698830187;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dkMR9DQLmnzg6433Y9KFCsuvQ/1vijrskslyV3CpRuE=;
+        b=tgEEMV7rqip3GqWoSBlnZrSvepxNBTLMjwEDDwDQRIaXm35Yxk5R9fxw3yAsmc5Fa7
+         30AP5VMO4dniJoRhP47/M31oHUnhOfSiD9jzYi7wb8SStLgFkN+hEQBYLGNDGycT7cc4
+         Y1uIXX5gGu5PPopGJNNiOSvZbyx67/86QTLJSSqXi7Ra/7nC+wTbrei6DvCjbHtGUUjP
+         sZbnNg8OGUo9YS1I8Q/OssFp0c/ApcYz2wVEDmm4NslKOtwJTdq601ppvdoMWueGrF94
+         nmMGDE9AGd/gmcC37wWqut0D7hSfglvhtH1Anl5GpngImPiq768inoXY23lLUg7a/ItH
+         37Sw==
+X-Gm-Message-State: AOJu0YybhgsLu3Lqgxn+UPgGHHNTHTiTSPIzytuOAprx4oY2ZxCWKUzZ
+        gRJf4zIR+xc8F2WSzECVREdkWw==
+X-Google-Smtp-Source: AGHT+IG+8hlU7/gyP30B0hMc3Hc3WZ6IDoa8IyFLNr20MywZzm4fh/W9cr4rBR49QkVDcHfsLDEgzw==
+X-Received: by 2002:a05:6512:314e:b0:507:9702:c11d with SMTP id s14-20020a056512314e00b005079702c11dmr9065901lfi.64.1698225387369;
+        Wed, 25 Oct 2023 02:16:27 -0700 (PDT)
+Received: from [172.30.204.57] (UNUSED.212-182-62-129.lubman.net.pl. [212.182.62.129])
+        by smtp.gmail.com with ESMTPSA id m5-20020a056512114500b00507d1cc0458sm2470539lfg.51.2023.10.25.02.16.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Oct 2023 02:16:27 -0700 (PDT)
+Message-ID: <75c4a105-b925-4d6a-8c42-38f3ab32a7ca@linaro.org>
+Date:   Wed, 25 Oct 2023 11:16:25 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/4] media: qcom: camss: Convert to per-VFE pointer for
+ power-domain linkages
+Content-Language: en-US
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        hverkuil-cisco@xs4all.nl, laurent.pinchart@ideasonboard.com,
+        rfoss@kernel.org, todor.too@gmail.com, agross@kernel.org,
+        andersson@kernel.org, mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20231024224255.754779-1-bryan.odonoghue@linaro.org>
+ <20231024224255.754779-2-bryan.odonoghue@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20231024224255.754779-2-bryan.odonoghue@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-BT.601 is not actually a bus specification, leaving parallel bus without a
-specification to refer to. Fix this.
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- Documentation/driver-api/media/camera-sensor.rst | 4 ++--
- Documentation/driver-api/media/tx-rx.rst         | 9 +++++----
- 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/driver-api/media/camera-sensor.rst b/Documentation/driver-api/media/camera-sensor.rst
-index 0de5c86cbd1f..4b5cbb20357f 100644
---- a/Documentation/driver-api/media/camera-sensor.rst
-+++ b/Documentation/driver-api/media/camera-sensor.rst
-@@ -9,8 +9,8 @@ This document covers the in-kernel APIs only. For the best practices on
- userspace API implementation in camera sensor drivers, please see
- :ref:`media_using_camera_sensor_drivers`.
- 
--CSI-2 and parallel (BT.601 and BT.656) busses
-----------------------------------------------
-+CSI-2, parallel and BT.656 buses
-+--------------------------------
- 
- Please see :ref:`transmitter-receiver`.
- 
-diff --git a/Documentation/driver-api/media/tx-rx.rst b/Documentation/driver-api/media/tx-rx.rst
-index e1e9258dd862..b86088cc614e 100644
---- a/Documentation/driver-api/media/tx-rx.rst
-+++ b/Documentation/driver-api/media/tx-rx.rst
-@@ -22,12 +22,13 @@ the host SoC. It is defined by the `MIPI alliance`_.
- 
- .. _`MIPI alliance`: https://www.mipi.org/
- 
--Parallel
--^^^^^^^^
-+Parallel and BT.656
-+^^^^^^^^^^^^^^^^^^^
- 
--`BT.601`_ and `BT.656`_ are the most common parallel busses.
-+Besides CSI-2, the `parallel`_ and `BT.656`_ buses are the two other bus types
-+used commonly by camera sensors. Many camera sensors support both bus types.
- 
--.. _`BT.601`: https://en.wikipedia.org/wiki/Rec._601
-+.. _`parallel`: https://en.wikipedia.org/wiki/Parallel_communication
- .. _`BT.656`: https://en.wikipedia.org/wiki/ITU-R_BT.656
- 
- Transmitter drivers
--- 
-2.39.2
+On 10/25/23 00:42, Bryan O'Donoghue wrote:
+> Right now we use the top-level camss structure to provide pointers via
+> VFE id index back to genpd linkages.
+> 
+> In effect this hard-codes VFE indexes to power-domain indexes in the
+> dtsi and mandates a very particular ordering of power domains in the
+> dtsi, which bears no relationship to a real hardware dependency.
+> 
+> As a first step to rationalising the VFE power-domain code and breaking
+> the magic indexing in dtsi use per-VFE pointers to genpd linkages.
+> 
+> The top-level index in msm_vfe_subdev_init is still used to attain the
+> initial so no functional or logical change arises from this change.
+> 
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> ---
+[...]
 
+> @@ -653,11 +653,11 @@ static int vfe_pm_domain_on(struct vfe_device *vfe)
+>   	if (id >= camss->res->vfe_num)
+>   		return 0;
+>   
+> -	camss->genpd_link[id] = device_link_add(camss->dev, camss->genpd[id],
+> -						DL_FLAG_STATELESS |
+> -						DL_FLAG_PM_RUNTIME |
+> -						DL_FLAG_RPM_ACTIVE);
+Good opportunity to inilne vfe->id and get rid of a local var!
+
+> -	if (!camss->genpd_link[id])
+> +	vfe->genpd_link = device_link_add(camss->dev, vfe->genpd,
+> +					  DL_FLAG_STATELESS |
+> +					  DL_FLAG_PM_RUNTIME |
+> +					  DL_FLAG_RPM_ACTIVE);
+> +	if (!vfe->genpd_link)
+>   		return -EINVAL;
+>   
+[...]
+
+>   /*
+> @@ -1128,10 +1124,10 @@ static int vfe_pm_domain_on(struct vfe_device *vfe)
+>   	struct camss *camss = vfe->camss;
+>   	enum vfe_line_id id = vfe->id;
+>   
+> -	camss->genpd_link[id] = device_link_add(camss->dev, camss->genpd[id], DL_FLAG_STATELESS |
+> -						DL_FLAG_PM_RUNTIME | DL_FLAG_RPM_ACTIVE);
+> +	vfe->genpd_link = device_link_add(camss->dev, vfe->genpd, DL_FLAG_STATELESS |
+> +					  DL_FLAG_PM_RUNTIME | DL_FLAG_RPM_ACTIVE);
+>   
+> -	if (!camss->genpd_link[id]) {
+> +	if (!vfe->genpd_link) {
+>   		dev_err(vfe->camss->dev, "Failed to add VFE#%d to power domain\n", id);
+>   		return -EINVAL;
+And here
+
+[...]
+
+> @@ -1113,10 +1111,10 @@ static int vfe_pm_domain_on(struct vfe_device *vfe)
+>   	struct camss *camss = vfe->camss;
+>   	enum vfe_line_id id = vfe->id;
+>   
+> -	camss->genpd_link[id] = device_link_add(camss->dev, camss->genpd[id], DL_FLAG_STATELESS |
+> -						DL_FLAG_PM_RUNTIME | DL_FLAG_RPM_ACTIVE);
+> +	vfe->genpd_link = device_link_add(camss->dev, vfe->genpd, DL_FLAG_STATELESS |
+> +					  DL_FLAG_PM_RUNTIME | DL_FLAG_RPM_ACTIVE);
+>   
+> -	if (!camss->genpd_link[id]) {
+> +	if (!vfe->genpd_link) {
+>   		dev_err(vfe->camss->dev, "Failed to add VFE#%d to power domain\n", id);
+>   		return -EINVAL;
+And here
+
+[...]
+>   
+>   /*
+> @@ -478,11 +478,11 @@ static int vfe_pm_domain_on(struct vfe_device *vfe)
+>   	if (id >= camss->res->vfe_num)
+>   		return 0;
+>   
+> -	camss->genpd_link[id] = device_link_add(camss->dev, camss->genpd[id],
+> -						DL_FLAG_STATELESS |
+> -						DL_FLAG_PM_RUNTIME |
+> -						DL_FLAG_RPM_ACTIVE);
+> -	if (!camss->genpd_link[id])
+> +	vfe->genpd_link = device_link_add(camss->dev, vfe->genpd,
+> +					  DL_FLAG_STATELESS |
+> +					  DL_FLAG_PM_RUNTIME |
+> +					  DL_FLAG_RPM_ACTIVE);
+And here
+
+
+Konrad
