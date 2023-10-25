@@ -2,193 +2,193 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F3B6C25B47
-	for <linux-media@archiver.kernel.org>; Wed, 25 Oct 2023 10:33:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B493CC25B6B
+	for <linux-media@archiver.kernel.org>; Wed, 25 Oct 2023 10:34:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234576AbjJYKdw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 25 Oct 2023 06:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36136 "EHLO
+        id S1343573AbjJYKeQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 25 Oct 2023 06:34:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233435AbjJYKdv (ORCPT
+        with ESMTP id S234782AbjJYKeO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 25 Oct 2023 06:33:51 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79712128;
-        Wed, 25 Oct 2023 03:33:46 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 32D1FE0005;
-        Wed, 25 Oct 2023 10:33:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1698230025;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HVHJ26usSDJ1RI4KvMEc2gmIMKMl++Lw968y4l7GNow=;
-        b=XBqQ0grrMSCEPJRxjdoIWMwJbKyi5yyFoX0mT1x1f1VVEvpXtQGKkNrCW5eSRRdoNn7iDD
-        fAEaLWGrgXCf79W9DWv1ow8bKiwH7ySguOzgfZiUjHglJ6avdbCyHEg4DMnN3HZkxqnwBe
-        ilUllW0KqxlyfWpwRbxryAMGqg3DFgzvLznsPk1sWWaau1OWB8MrAAxww8Bsrotx3NmQsy
-        3vKv+5PILprQbXhs8AY4NILZDX6A14IWHEOdHA1TSCTEoASVSb1ECr90kVeDYx3YY1rkSN
-        QPOuRVt98FOig536zSZBAhCfBnG5lQgI8+MS0nifTXIoX026hiP5BpJPGOxnkQ==
-Date:   Wed, 25 Oct 2023 12:33:42 +0200
-From:   Mehdi Djait <mehdi.djait@bootlin.com>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     Michael Riesch <michael.riesch@wolfvision.net>, mchehab@kernel.org,
-        heiko@sntech.de, hverkuil-cisco@xs4all.nl,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        conor+dt@kernel.org, ezequiel@vanguardiasur.com.ar,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        alexandre.belloni@bootlin.com, maxime.chevallier@bootlin.com
-Subject: Re: [PATCH v8 0/3] media: rockchip: Add a driver for Rockchip's
- camera interface
-Message-ID: <ZTjvBgxtMh1YZbYm@pc-70.home>
-References: <cover.1697446303.git.mehdi.djait@bootlin.com>
- <ZTFMR7PlcQXpeoQO@aptenodytes>
- <11cccad3-e665-41dc-89c2-5ddc22b1e2fe@wolfvision.net>
- <ZTjVOAPnXEj9LgOE@aptenodytes>
- <5438a194-7349-4a20-84d0-efe88b7ab396@wolfvision.net>
- <ZTjl0xJMTqZfO2Xf@aptenodytes>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZTjl0xJMTqZfO2Xf@aptenodytes>
-X-GND-Sasl: mehdi.djait@bootlin.com
+        Wed, 25 Oct 2023 06:34:14 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D8013D
+        for <linux-media@vger.kernel.org>; Wed, 25 Oct 2023 03:34:09 -0700 (PDT)
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20231025103405epoutp01fbad79f0c51c11d11e5174e825f33934~RUzqqF2QM0043400434epoutp011
+        for <linux-media@vger.kernel.org>; Wed, 25 Oct 2023 10:34:05 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20231025103405epoutp01fbad79f0c51c11d11e5174e825f33934~RUzqqF2QM0043400434epoutp011
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1698230045;
+        bh=isyn7njcauSMu4EFZHDTZ5HQHHyMnOVu6FNtfgDxVc0=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=c9FhagVC9Nja1b/Hk3x8maBSYJE6yhsrZaZhOedrRmhHOq7RLuTTAAbII6535tz9/
+         b7/iDtRu52GBpCRNuWIepW7pQ7cQ7yyVUqiWJZ3AphocyptuEi5XR6MGLs/O+tsSjb
+         XD+UaeSNFcFIOPWl9TxYfX2UWJC3Zi3h/XROv/Ic=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+        20231025103405epcas5p2c7aa207c3e8c55c6b1d47430b531f378~RUzqDzDU02457324573epcas5p2P;
+        Wed, 25 Oct 2023 10:34:05 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.180]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4SFlf31lHjz4x9Pp; Wed, 25 Oct
+        2023 10:34:03 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        AB.A5.09672.B1FE8356; Wed, 25 Oct 2023 19:34:03 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+        20231025102230epcas5p1558641a18fbf4f841c82b0ef4cf5a91f~RUpirJkwp1496314963epcas5p1e;
+        Wed, 25 Oct 2023 10:22:30 +0000 (GMT)
+Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20231025102230epsmtrp257980e7d3f915d1d750b9e5f88adfbee~RUpiqFDCW0922409224epsmtrp2w;
+        Wed, 25 Oct 2023 10:22:30 +0000 (GMT)
+X-AuditID: b6c32a4b-60bfd700000025c8-1d-6538ef1b3dad
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        CA.30.18939.56CE8356; Wed, 25 Oct 2023 19:22:30 +0900 (KST)
+Received: from cheetah.sa.corp.samsungelectronics.net (unknown
+        [107.109.115.53]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20231025102226epsmtip12b72bdd7f9d22a564ba4d422e7b9beba~RUpfjjcKV0054300543epsmtip13;
+        Wed, 25 Oct 2023 10:22:26 +0000 (GMT)
+From:   Aakarsh Jain <aakarsh.jain@samsung.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        krzysztof.kozlowski+dt@linaro.org, dillon.minfei@gmail.com,
+        david.plowman@raspberrypi.com, mark.rutland@arm.com,
+        robh+dt@kernel.org, conor+dt@kernel.org,
+        linux-samsung-soc@vger.kernel.org, andi@etezian.org,
+        gost.dev@samsung.com, alim.akhtar@samsung.com,
+        aswani.reddy@samsung.com, pankaj.dubey@samsung.com,
+        ajaykumar.rs@samsung.com, aakarsh.jain@samsung.com
+Subject: [Patch v4 00/11] Add MFC V12 support
+Date:   Wed, 25 Oct 2023 15:52:05 +0530
+Message-Id: <20231025102216.50480-1-aakarsh.jain@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA0WTf1BUVRTHu++9ffsAn/MCpAuE4hZMMC3s5u52MSDHH/kMZyJrJLGkDd6w
+        DMvutm/BwrG0QkQUsSlHaAEDyQQEWkVYgYB1HYkCUUBicAFZMYgGHZCgwGrXBfvvc875fuec
+        e+69FO7ZSPpRKRoDp9co1SLSnbh0JeQFsf99xEnu5BBorKFAgFrvtxFopPgSicrmf8PQcNkM
+        gSwX6oSoqrkLQ2evtQpQibVLgOrbRgk00GrG0I0CG4Hyxu/gyGS/JUA9l40kOlpbJ0Cnrv+I
+        ofNWmxCV99/A0HemRQyV1j0Uoqxmq3CDD1tVXAXY/jPTOGsutAnZsqYJjDVV5JDs7VtNJHvh
+        zKds1tW/CTbvYgVgZ0yr2Y7ZGWGsR3xqpIpTJnH6QE6TqE1K0SRHiWLeStiUIFdIpGJpBHpZ
+        FKhRpnFRos3bY8WvpagdxxUFZijV6Y5UrJLnReHRkXptuoELVGl5Q5SI0yWpdTJdGK9M49M1
+        yWEazrBeKpG8JHcI309VHT0xQOq6/T5qXGgjDgCjzxHgRkFGBv+qvi50sifTCGD9ed0R4O7g
+        aQD/qbKCJ0FH6a/CZUflydMCV8EMYM+3NtIVZGFwyvK5o0JRJCOGnfVqp8GbOQig/bDBqcGZ
+        Phzeq5/DnAUvh2Y2pww4mWCCoLXmX9LJNBMFv8wewVzd1sDK2lbcaYaMlYItk38ujbEZHu8Z
+        xl3sBX+/dnEp7wdnpppJFydCe+nEkkYNa5q+Ilz8KmztNRLOQXEmBNZcDnelA+DXHdWP++LM
+        Snhs4e7SDDRsKF7mYGi8PS9w8bPwSmU5cDEL+4aagWuP78G5+QfCfBBQ+H+H0wBUAF9Ox6cl
+        c7xct07D7X1yUYnaNBN4/IpDYxrA6MiDMAvAKGABkMJF3vSu7YjzpJOUH2dyem2CPl3N8RYg
+        d+zsBO63KlHr+AYaQ4JUFiGRKRQKWcQ6hVT0DD2ZVZTkySQrDVwqx+k4/bIPo9z8DmBD4yNm
+        zrpv7p01gj/S6C0/UT7amLeDh86+TudvkPl+Er2xhTQ8HWJKF7jhwb03S7wmR+kde7vF+54K
+        GbO9seMzd0NmgEdBiXogVO6mzvxwxVopFZ5bZO081LVN3LX/F1te5bzx4OLGHx7tjgzSGHzw
+        WVtu9R5rb7t8rOH7UvfdjYOl/X2qllp7BreiZiudklOW/VwE3HpoUfaNrftUe6zpFX44oVPi
+        bV8bd29w/wfTX7T506v9J5rH1ebofC9Zd3m574sPd930mcsNKjx3+M3jm+bi4+nehZ3zK6c8
+        7hLv2n4uLlLFFawfzOcfBZ8ras/QCY3PW+hjHjuzV5ntDXtGrsaJCF6llIbiel75H260lsFO
+        BAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrMLMWRmVeSWpSXmKPExsWy7bCSnG7aG4tUgzvNjBZPd8xktTjw/iCL
+        xYN529gsFv94zmRxf/FnFotDm7eyW6zZe47JYvnxA6wW84+cY7XYfvARi8XNAzuZLC7OvMti
+        0ffiIbPFpsfXWC0u75rDZtGzYSurxYzz+5gs1h65y26x9PpFJotlm/4wWSza+oXdonXvEXYH
+        MY8189Ywelxf8onZY+esu+wei/e8ZPLYtKqTzePOtT1sHpuX1Hu0Hv3F4tG3ZRWjx+dNch6n
+        vn5mD+CO4rJJSc3JLEst0rdL4MromXiTreCCVMXu3wdZGhjniHUxcnJICJhIrJ62gLWLkYtD
+        SGA7o8T2txcYIRIyEv/bjrFD2MISK/89Z4coamaSaLs1A6iIg4NNQFfi7PYckLiIQCujxPWV
+        nUwgDcwCr5klXn9NAbGFgWq+di4GG8oioCpxZP1/NhCbV8BWYlL7AyaIBfISqzccYJ7AyLOA
+        kWEVo2hqQXFuem5ygaFecWJucWleul5yfu4mRnA8aAXtYFy2/q/eIUYmDsZDjBIczEoivJE+
+        FqlCvCmJlVWpRfnxRaU5qcWHGKU5WJTEeZVzOlOEBNITS1KzU1MLUotgskwcnFINTNU1P+9d
+        vnA/89oVz39nkneUPsv5YWt+eOnjE7YrupSa+y3nsbU3FX+czM45b+pNo1nTGDrzV/TYepbw
+        V8uHs154VTyBn+f7/SWqb2aapNoa9E3mEZW64yHEfeDuEmfTk+7pz99Fy0iZfQzOPpsq47G/
+        9bOa/pGJB9STVbYfbXJb8JpXJi19xt8sYU5HZ18XQ5EzRfainpfqY47O8b205X3/u7fxxtcu
+        NfAUMO8suf6jofm9b4r604NnrH5c5f12cHfypveqdyekBJYwr1rJ8TpiVR17YXp1ZHufHcdG
+        e95DemeDLT9oyUfqzMvcwLI65s7F2Y43zqdK1s5cGfKXS2OViGcUV7SvRwy7/AVeJZbijERD
+        Leai4kQA/ysaWfYCAAA=
+X-CMS-MailID: 20231025102230epcas5p1558641a18fbf4f841c82b0ef4cf5a91f
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20231025102230epcas5p1558641a18fbf4f841c82b0ef4cf5a91f
+References: <CGME20231025102230epcas5p1558641a18fbf4f841c82b0ef4cf5a91f@epcas5p1.samsung.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Paul, Hi Michael
+This patch series adds MFC v12 support. MFC v12 is used in Tesla FSD SoC.
 
-On Wed, Oct 25, 2023 at 11:54:27AM +0200, Paul Kocialkowski wrote:
-> Michael,
-> 
-> On Wed 25 Oct 23, 11:17, Michael Riesch wrote:
-> > Hi Paul,
-> > 
-> > On 10/25/23 10:43, Paul Kocialkowski wrote:
-> > > [...]
-> > >>> Here is the detail of my research on the concerned chips. The + at the beginning
-> > >>> of the line indicate support in Rockchip's 4.4 tree:
-> > >>>
-> > >>> - RK3566/RK3568 (2020): CIF pins + VICAP terminology
-> > >>> + RK1808 (2019): CIF pins + VIP registers + VIP_MIPI registers
-> > >>> + PX30 (2017): VIP pins + VIP registers
-> > >>> + RK3328 (2017): CIF pins + VIP terminology
-> > >>> - RK3326 (2017): CIF pins + VIP terminology
-> > >>> - RK3399 (2016): CIF pins
-> > >>> - RK3368 (2015): CIF pins
-> > >>> - PX2 (2014-11): CIF pins + CIF registers
-> > >>> + RK3126/RK3128 (2014-10): CIF pins + registers
-> > >>> + RK3288 (2014-05): CIF pins + VIP terminology
-> > >>> - RK3026 (2013): CIF pins + CIF registers
-> > >>> - RK3168/RK3188/PX3 (2012): CIF pins + CIF registers
-> > >>> - RK3066 (2012): CIF pins + CIF registers
-> > >>>
-> > >>> Note that there are a few variations over time (added/removed registers), but
-> > >>> the offsets of crucial registers are always the same, so we can safely
-> > >>> assume this is the same unit in different generations.
-> > >>>
-> > >>> Since the RK3066 is the first model starting the RK30 lineup I think we can
-> > >>> safely use that for the "base" compatible to be used for e.g. the bindings
-> > >>> document, instead of px30 which is just one of the many SoCs that use this unit.
-> > >>
-> > >> Once the name of the driver is defined and adjusted in v9, I can try to
-> > >> give the series a shot on my RK3568 board. First attempts to do so
+This adds support for following:
 
-This sounds good!
+-Add support for YV12 and I420 format (3-plane)
+-Add support for Rate Control, UHD and DMABUF for encoder
+-Add support for DPB buffers allocation based on MFC requirement
 
-> > >> basing on Maxime's v5 showed that with a few modifications the DVP
-> > >> feature works fine. In a subsequent step, we could discuss the inclusion
-> > >> of the MIPI CSI-2 things in order to keep the driver sufficiently general.
-> > > 
-> > > Nice! I guess there will be a need to introduce a variant structure associated
-> > > to each compatible to express the differences betweens these different
-> > > generations.
-> > 
-> > Indeed. If Mehdi and you suggest something, I'd be happy to review.
-> 
-> Well the be honest the scope of work on our side is really centered on PX30
-> and merging this first version.
-> 
-> > Otherwise, I'll try to come up with something reasonable. IMHO it would
-> > make sense (as a first step) to have the clocks and the resets in this
-> > structure, as well as a sub-structure that describes the DVP. The latter
-> > consists of registers mainly, but maybe supported input/output formats
-> > and other things should go in there as well. Also, downstream code has a
-> > significant number of
-> >     if (some condition including chip_id) A; else B;
-> > things that we should probably get rid of with this variant structure.
-> 
-> Indeed I think we want to try avoid that. Another common option is to define
-> capability flags to represent differences between generations in a more
-> practical and clean way than explicitly checking chip ids or so.
-> 
-> > As next step, a sub-structure for MIPI CSI-2 could be defined. RK356X
-> > will have one of those, RK3588 will feature even six of them. So we
-> > should add a const array to the variant structure.
-> > 
-> > > Note that we will also probably need to convert the driver over to a MC-centric
-> > > approach, but this is of course outside of the scope of this series.
-> > 
-> > That would absolutely make sense. What is missing, though? (I was
-> > wondering that the driver calls media_device_(un)register but no
-> > /dev/mediaX device pops up.)
-> 
-> Switching from video node-centric to MC-centric is more of a semantic change.
-> In the first case we expect that subdevs are configured by the video device
-> driver and userspace is not expected to change anything in the media topology
-> or to configure media entities explicitly.
-> 
-> In the latter case it's the opposite : the driver should never try to push
-> configuration to a subdev and should instead validate that the current
-> configuration makes sense.
-> 
-> Still, I believe should be a media device registered and visible to userspace.
-> Mehdi could you take a look at this? Do you see a media device in `media-ctl -p`
-> and /dev/mediaX?
+Changes since v3:
+-Removed vp9 codec support for now and just keeping MFC v12 base
+patches with necessary hardware controls, decoder, encoder and
+structural changes. Also covers luma dbp, chroma dpb and mv sizes
+for each codec as per the UM for MFCv12, along with appropriate
+alignment.
+v3 link: https://patchwork.kernel.org/project/linux-media/cover/20221011122516.32135-1-aakarsh.jain@samsung.com/
 
-Yes I do have a media device
+Changes since v2:
+-Addressed review comments by Rob Herring.
+This was regarding the errors found by Rob bot in yaml file. File
+'samsung,s5p-mfc.yaml' is already converted into json schema and is
+merged.
 
-media-ctl -p
-Media device information
-------------------------
-driver          rockchip-cif
-model           rk_cif
-serial          
-bus info        platform:ff490000.video-capture
-hw revision     0x0
-driver version  6.6.0
+-Addressed review comments by Krzysztof Kozlowski.
+This was regarding depricated properties mentioned in s5p-mfc.txt file.
+Review comment was addressed and 'samsung,s5p-mfc.yaml' is already
+merged now.
 
-Device topology
-- entity 1: rockchip_cif (1 pad, 1 link)
-            type Node subtype V4L flags 0
-            device node name /dev/video0
-        pad0: Sink
-                <- "tw9900 2-0044":0 [ENABLED]
+-Addressed review comments by Andi Shyti.
+This was regarding addition of 'MFC_V10PLUS_BITS' macro in
+'s5p_mfc_common.h file. 
+v2 link: https://patchwork.kernel.org/project/linux-media/cover/20220907064715.55778-1-smitha.t@samsung.com/
 
-- entity 5: tw9900 2-0044 (1 pad, 1 link)
-            type V4L2 subdev subtype Unknown flags 0
-            device node name /dev/v4l-subdev0
-        pad0: Source
-                [fmt:UYVY8_2X8/720x480 field:none colorspace:smpte170m xfer:709 ycbcr:601]
-                -> "rockchip_cif":0 [ENABLED]
+Changes since v1:
+-Addressed review comments by Krzysztof Kozlowski.
+Separated bug fixes patches, resent again with fix tag
+and those are merged now.
+-Added SoC based compatible string.
 
-> 
-> Cheers,
-> 
-> Paul
-> 
-> > Best regards,
-> > Michael
-> > 
-> > > 
-> > > Cheers,
-> > > 
-> > > Paul
-> > > 
-> > >> @Mehdi: If you could Cc: me when you send out v9 it'd be much appreciated.
+-Addressed review comments by Andrzej Hajda
+Assigned width64 and height32 variable with ALIGN(ctx->img_..) 
+used in the code in 's5p_mfc_opr_v6.c' file.
+v1 link: https://patchwork.kernel.org/project/linux-media/patch/20220517125548.14746-2-smitha.t@samsung.com/
 
-Of course I will :)
+Aakarsh Jain (11):
+  dt-bindings: media: s5p-mfc: Add mfcv12 variant
+  media: s5p-mfc: Rename IS_MFCV10 macro
+  media: s5p-mfc: Add initial support for MFCv12
+  media: s5p-mfc: Add YV12 and I420 multiplanar format support
+  media: s5p-mfc: Add support for rate controls in MFCv12
+  media: s5p-mfc: Add support for UHD encoding.
+  media: s5p-mfc: Add support for DMABUF for encoder
+  media: s5p-mfc: Set context for valid case before calling try_run
+  media: s5p-mfc: Load firmware for each run in MFCv12.
+  media: s5p-mfc: DPB Count Independent of VIDIOC_REQBUF
+  arm64: dts: fsd: Add MFC related DT enteries
 
---
-Kind Regards
-Mehdi Djait
+ .../bindings/media/samsung,s5p-mfc.yaml       |  16 +
+ arch/arm64/boot/dts/tesla/fsd.dtsi            |  21 ++
+ .../platform/samsung/s5p-mfc/regs-mfc-v12.h   |  52 +++
+ .../platform/samsung/s5p-mfc/regs-mfc-v7.h    |   1 +
+ .../platform/samsung/s5p-mfc/regs-mfc-v8.h    |   3 +
+ .../media/platform/samsung/s5p-mfc/s5p_mfc.c  |  36 +-
+ .../platform/samsung/s5p-mfc/s5p_mfc_common.h |  29 +-
+ .../platform/samsung/s5p-mfc/s5p_mfc_ctrl.c   |   9 +-
+ .../platform/samsung/s5p-mfc/s5p_mfc_dec.c    |  51 ++-
+ .../platform/samsung/s5p-mfc/s5p_mfc_enc.c    | 138 +++++---
+ .../platform/samsung/s5p-mfc/s5p_mfc_opr.h    |  14 +-
+ .../platform/samsung/s5p-mfc/s5p_mfc_opr_v5.c |  12 +-
+ .../platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c | 312 +++++++++++++++---
+ .../platform/samsung/s5p-mfc/s5p_mfc_opr_v6.h |   7 +-
+ 14 files changed, 574 insertions(+), 127 deletions(-)
+ create mode 100644 drivers/media/platform/samsung/s5p-mfc/regs-mfc-v12.h
+
+-- 
+2.17.1
+
