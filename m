@@ -2,84 +2,109 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80EA9C25B47
-	for <linux-media@archiver.kernel.org>; Wed, 25 Oct 2023 09:15:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B5A0C0032E
+	for <linux-media@archiver.kernel.org>; Wed, 25 Oct 2023 09:15:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234006AbjJYJPm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 25 Oct 2023 05:15:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36802 "EHLO
+        id S234190AbjJYJPo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 25 Oct 2023 05:15:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233907AbjJYJPl (ORCPT
+        with ESMTP id S233987AbjJYJPm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 25 Oct 2023 05:15:41 -0400
+        Wed, 25 Oct 2023 05:15:42 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC529138
-        for <linux-media@vger.kernel.org>; Wed, 25 Oct 2023 02:15:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B04186
+        for <linux-media@vger.kernel.org>; Wed, 25 Oct 2023 02:15:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698225338; x=1729761338;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=wykcehr329CJ+WO6jECF08o0mpd856zxWyvPKio6N2M=;
-  b=HW2iIrCpumCMGE0Afda6ZX3E7iUTRg1vV9W3bF6dGW9GUWfHoAC0PhHR
-   kg243VsGvUZZvPmU7iqU34tEb2XMp+hD0ZfkQpqq8HUFWtco0L7bKro0p
-   X/spRjqcBV50PPTqgfkKq48QX/nRcjPyzLNXOM6xCOqlZxsvAA70ODbRs
-   VisL6AlwcJjnQzB56p79AaAN5fQlI7TZYIMxMdJVWTuZiuIBad57CHvdV
-   v/7be45ZHRNThEdkAstKShFny382N3VDEhztAqYG2K7ciadgPHjZgI4/2
-   /mrXWpErOkwT/EMIFS8RLDj48EQkIGy8Z51Dt3Iyvhna3NfEOq6XBQXiA
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="384480072"
+  t=1698225340; x=1729761340;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ZfptIkWvw/lv5ltmBXraIklzRS5CubmuSS03XM+fzbE=;
+  b=nKWfyquI7OMfrovEM5itxNagOSJaSPN9tPSUBDcMBJLgjnYIsVq3yfKe
+   L5ukp7OvuRHoYIfPVVAti4Q9mxW1Sv9jxHX5gZFdh47StNXrFr2+EsaBE
+   TJHwQpF8IaIxENUgR/HwpfV8gGvuK7SR6sw91uI9g0pUKVTS64urelI5U
+   Mv+TzdgrjmXmJk9TJXiMKPeGK8xyYnu/YFwImNiaSlW7mtCYEU4A8VOQp
+   E71UbQO3+iadyINA9MdmW8YY5TkcVcC8Ig9XJwpMQzNCfgbHGKKAr0CCV
+   PsQ7WVZVb8XZejB04rRhfNy8TdHP6kNrnnCDu6XlWJkcIcG9r46uptPxh
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="384480080"
 X-IronPort-AV: E=Sophos;i="6.03,250,1694761200"; 
-   d="scan'208";a="384480072"
+   d="scan'208";a="384480080"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2023 02:15:38 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2023 02:15:39 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="788063655"
+X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="788063657"
 X-IronPort-AV: E=Sophos;i="6.03,250,1694761200"; 
-   d="scan'208";a="788063655"
+   d="scan'208";a="788063657"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2023 02:15:36 -0700
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2023 02:15:37 -0700
 Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id 2CDB311F89D;
-        Wed, 25 Oct 2023 12:15:33 +0300 (EEST)
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id B0169120AB3;
+        Wed, 25 Oct 2023 12:15:34 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com, jacopo.mondi@ideasonboard.com,
         dave.stevenson@raspberrypi.com, kieran.bingham@ideasonboard.com
-Subject: [PATCH v3 0/2] Parallel and BT.656 documentation fixes
-Date:   Wed, 25 Oct 2023 12:15:29 +0300
-Message-Id: <20231025091531.893366-1-sakari.ailus@linux.intel.com>
+Subject: [PATCH v3 2/2] media: Documentation: LP-11 and LP-111 are states, not modes
+Date:   Wed, 25 Oct 2023 12:15:31 +0300
+Message-Id: <20231025091531.893366-3-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20231025091531.893366-1-sakari.ailus@linux.intel.com>
+References: <20231025091531.893366-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi folks,
+LP-11 and LP-111 are CSI-2 bus states, not modes. Fix this.
 
-Here are a few small documentation improvements.
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ Documentation/driver-api/media/tx-rx.rst | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-since v2:
-
-- Better separate parallel and BT.656 buses in documentation.
-
-- Drop the link-frequencies patch from this set.
-
-- Don't call "high speed" mode a state.
-
-since v1:
-
-- Fix reference.
-
-Sakari Ailus (2):
-  media: Documentation: BT.601 is not a bus
-  media: Documentation: LP-11 and LP-111 are states, not modes
-
- .../driver-api/media/camera-sensor.rst        |  4 ++--
- Documentation/driver-api/media/tx-rx.rst      | 21 ++++++++++---------
- 2 files changed, 13 insertions(+), 12 deletions(-)
-
+diff --git a/Documentation/driver-api/media/tx-rx.rst b/Documentation/driver-api/media/tx-rx.rst
+index b86088cc614e..9af9fa7d5197 100644
+--- a/Documentation/driver-api/media/tx-rx.rst
++++ b/Documentation/driver-api/media/tx-rx.rst
+@@ -91,8 +91,8 @@ where
+ 	pixel rate on the camera sensor's pixel array which is indicated by the
+ 	:ref:`V4L2_CID_PIXEL_RATE <v4l2-cid-pixel-rate>` control.
+ 
+-LP-11 and LP-111 modes
+-^^^^^^^^^^^^^^^^^^^^^^
++LP-11 and LP-111 states
++^^^^^^^^^^^^^^^^^^^^^^^
+ 
+ As part of transitioning to high speed mode, a CSI-2 transmitter typically
+ briefly sets the bus to LP-11 or LP-111 state, depending on the PHY. This period
+@@ -106,7 +106,7 @@ in software, especially when there is no interrupt telling something is
+ happening.
+ 
+ One way to address this is to configure the transmitter side explicitly to LP-11
+-or LP-111 mode, which requires support from the transmitter hardware. This is
++or LP-111 state, which requires support from the transmitter hardware. This is
+ not universally available. Many devices return to this state once streaming is
+ stopped while the state after power-on is LP-00 or LP-000.
+ 
+@@ -117,11 +117,11 @@ transitioning to streaming state, but not yet start streaming. Similarly, the
+ to call ``.post_streamoff()`` for each successful call of ``.pre_streamon()``.
+ 
+ In the context of CSI-2, the ``.pre_streamon()`` callback is used to transition
+-the transmitter to the LP-11 or LP-111 mode. This also requires powering on the
++the transmitter to the LP-11 or LP-111 state. This also requires powering on the
+ device, so this should be only done when it is needed.
+ 
+-Receiver drivers that do not need explicit LP-11 or LP-111 mode setup are waived
+-from calling the two callbacks.
++Receiver drivers that do not need explicit LP-11 or LP-111 state setup are
++waived from calling the two callbacks.
+ 
+ Stopping the transmitter
+ ^^^^^^^^^^^^^^^^^^^^^^^^
 -- 
 2.39.2
 
