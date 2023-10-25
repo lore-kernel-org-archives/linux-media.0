@@ -2,94 +2,155 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2EF7C25B6E
-	for <linux-media@archiver.kernel.org>; Wed, 25 Oct 2023 10:40:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D93DC0032E
+	for <linux-media@archiver.kernel.org>; Wed, 25 Oct 2023 10:40:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343657AbjJYKkX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 25 Oct 2023 06:40:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
+        id S1343694AbjJYKkZ convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 25 Oct 2023 06:40:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234732AbjJYKkO (ORCPT
+        with ESMTP id S234676AbjJYKkO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 25 Oct 2023 06:40:14 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C6910E2
-        for <linux-media@vger.kernel.org>; Wed, 25 Oct 2023 03:40:08 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-5079f6efd64so7658301e87.2
-        for <linux-media@vger.kernel.org>; Wed, 25 Oct 2023 03:40:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698230407; x=1698835207; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=c6Z1p4kKtgAXkbhWcm2d+hA00mC2LWkNVOmS2pvrIIs=;
-        b=OiE+5DpllivC1t3kS6P/G9QplJqPWhgDbwtjnMg5RtU0YL++rttT2d25WEuba0H2dz
-         qSqphjuNoWC3dwpY73z5iXARaaXbO9+twD2+Hl7nyfunjxrBF5T2v8Z3lu39MNJH38FK
-         XhFUwZFdl+F4zw/12QLc7cHXjzYFk+QmJI2A32rBcF0HrQxz8L1cF/cxD7ZcKGKPyaP/
-         7NC5xcwje0Q82YgxURxn7NUBT7DkrEndRLtZiPjkVLhSllbpM1NRMG25q7DSM1zP2dap
-         6D+j9wYfx+AzMExiX29m4UgmxM+1Rwg6EkPmQzc6tbnpaYfvye7yxiGwXjh/daE72kgr
-         b2Jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698230407; x=1698835207;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c6Z1p4kKtgAXkbhWcm2d+hA00mC2LWkNVOmS2pvrIIs=;
-        b=qX57KZXW78JmtUfpjU9FDRlZhi0nsQqie3ZlFYL1ku8m1StTExKAABt2NcmJX7SbP3
-         1QejEx3iLOJywcUPp8gpSu3i7H+P3i1jH6jrTMLjv8FsaQQ2wwYhgWwi9l8foY7Ni7BR
-         JOLhbF7tj9e3G8IIVkKEWbApxMcA++QYSECu9nQPLlOcqjLAOWigO365tqFHbtRCD4CO
-         17Mdz96AunpqAJJMp23CmnQBO7fYuEfYViqhKpOasB7fUZAr0q5ZsE+6x9f1lMSapbNl
-         uFLtBBCasov2UJOQrlhIAqftCLffUZT/z3jGytfJEcf+zs7ci/OPzAwiULMhQL3YGTLp
-         uZHg==
-X-Gm-Message-State: AOJu0YyC+SV/sp/WNBExQGoEXSOukf1nMInXQBPoQIMSf0L7wyDHXa7v
-        A39MwNaw74aNUoVRV9jVju/i3Q==
-X-Google-Smtp-Source: AGHT+IFVRmNXMEbNQPkppWpMfxB5GZ00/ir8cT0Q4jJSneFXioGp9uwFQafN49hR/A7039iEqUXmKg==
-X-Received: by 2002:ac2:58e7:0:b0:500:b53f:fbc2 with SMTP id v7-20020ac258e7000000b00500b53ffbc2mr10374360lfo.26.1698230406696;
-        Wed, 25 Oct 2023 03:40:06 -0700 (PDT)
-Received: from [192.168.100.102] ([37.228.218.3])
-        by smtp.gmail.com with ESMTPSA id f7-20020adff587000000b0031fb91f23e9sm11788220wro.43.2023.10.25.03.40.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Oct 2023 03:40:05 -0700 (PDT)
-Message-ID: <fdd775e5-1e43-4f65-b444-da6b83e3df5b@linaro.org>
-Date:   Wed, 25 Oct 2023 11:40:04 +0100
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD93610C9;
+        Wed, 25 Oct 2023 03:40:07 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 9330F83D4;
+        Wed, 25 Oct 2023 18:39:59 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 25 Oct
+ 2023 18:39:59 +0800
+Received: from xiaofei.localdomain (180.164.60.184) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 25 Oct
+ 2023 18:39:59 +0800
+From:   Keith Zhao <keith.zhao@starfivetech.com>
+To:     <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <linux-media@vger.kernel.org>, <linaro-mm-sig@lists.linaro.org>
+CC:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Emil Renner Berthing" <kernel@esmil.dk>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        <christian.koenig@amd.com>, Bjorn Andersson <andersson@kernel.org>,
+        "Heiko Stuebner" <heiko@sntech.de>,
+        Shawn Guo <shawnguo@kernel.org>, Jagan Teki <jagan@edgeble.ai>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Keith Zhao <keith.zhao@starfivetech.com>,
+        Jack Zhu <jack.zhu@starfivetech.com>,
+        Shengyang Chen <shengyang.chen@starfivetech.com>,
+        Changhuang Liang <changhuang.liang@starfivetech.com>
+Subject: [PATCH v2 3/6] drm/fourcc: Add drm/vs tiled modifiers
+Date:   Wed, 25 Oct 2023 18:39:54 +0800
+Message-ID: <20231025103957.3776-4-keith.zhao@starfivetech.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231025103957.3776-1-keith.zhao@starfivetech.com>
+References: <20231025103957.3776-1-keith.zhao@starfivetech.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/4] media: qcom: camss: Use common VFE
- pm_domain_on/pm_domain_off where applicable
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>, hverkuil-cisco@xs4all.nl,
-        laurent.pinchart@ideasonboard.com, rfoss@kernel.org,
-        todor.too@gmail.com, agross@kernel.org, andersson@kernel.org,
-        mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20231024224255.754779-1-bryan.odonoghue@linaro.org>
- <20231024224255.754779-3-bryan.odonoghue@linaro.org>
- <d0d30b6b-3664-4531-a71f-6faec3330d2c@linaro.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <d0d30b6b-3664-4531-a71f-6faec3330d2c@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [180.164.60.184]
+X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 25/10/2023 10:18, Konrad Dybcio wrote:
->> educe the pattern down to a common callback. VFE 4.1 is a special case
->> which to me also indicates that it is worthwhile maintaining an 
->> indirection
->> for the vfe_pm_domain_{on|off} for now.
-> Are there issues when powering it off like all the others?
+For each modifier, add the corresponding description
 
-4.1 doesn't have a VFE power-domain just a top level controller PD, 
-however I think a blank callback is neater than
-
-if (vfe->pm_domain_on) {
-     vfe->pd_domain_on();
-}
-
-its just vfe->pm_domain_on(); at the cost of 1 or 2 instructions for 
-indirection.
-
+Signed-off-by: Keith Zhao <keith.zhao@starfivetech.com>
 ---
-bod
+ include/uapi/drm/drm_fourcc.h | 57 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
+
+diff --git a/include/uapi/drm/drm_fourcc.h b/include/uapi/drm/drm_fourcc.h
+index 8db7fd3f7..a580a848c 100644
+--- a/include/uapi/drm/drm_fourcc.h
++++ b/include/uapi/drm/drm_fourcc.h
+@@ -419,6 +419,7 @@ extern "C" {
+ #define DRM_FORMAT_MOD_VENDOR_ARM     0x08
+ #define DRM_FORMAT_MOD_VENDOR_ALLWINNER 0x09
+ #define DRM_FORMAT_MOD_VENDOR_AMLOGIC 0x0a
++#define DRM_FORMAT_MOD_VENDOR_VERISILICON 0x0b
+ 
+ /* add more to the end as needed */
+ 
+@@ -1562,6 +1563,62 @@ drm_fourcc_canonicalize_nvidia_format_mod(__u64 modifier)
+ #define AMD_FMT_MOD_CLEAR(field) \
+ 	(~((__u64)AMD_FMT_MOD_##field##_MASK << AMD_FMT_MOD_##field##_SHIFT))
+ 
++#define DRM_FORMAT_MOD_VERISILICON_TYPE_NORMAL					0x00
++#define DRM_FORMAT_MOD_VERISILICON_TYPE_MASK					((__u64)0x3 << 54)
++
++#define fourcc_mod_vs_code(type, val) \
++	fourcc_mod_code(VERISILICON, ((((__u64)type) << 54) | (val)))
++
++#define DRM_FORMAT_MOD_VERISILICON_NORM_MODE_MASK				0x1F
++
++/*
++ * An x-major 8x8 super tile consists of 64 8x8 sub-tiles in total.
++ * Each 8x8 sub-tile consists of four standard tiles .
++ * standard tiles (see Vivante 4x4 tiling layout)
++ */
++#define DRM_FORMAT_MOD_VERISILICON_SUPER_TILED_XMAJOR_8X8		0x02
++
++/*
++ * A y-major 8x8 super tile consists of 64 8x8 sub-tiles in total.
++ * Each 8x8 sub-tile consists of four standard tiles .
++ * standard tiles (see Vivante 4x4 tiling layout)
++ */
++#define DRM_FORMAT_MOD_VERISILICON_SUPER_TILED_YMAJOR_8X8		0x03
++
++/*
++ * An 8x8 tile consists of four standard tiles
++ * that are organized in Z-order.
++ * standard tiles (see Vivante 4x4 tiling layout)
++ */
++#define DRM_FORMAT_MOD_VERISILICON_TILE_8X8						0x04
++
++/*
++ * An 8x4 tile consists of two standard tiles
++ * that are organized in Z-order.
++ * standard tiles (see Vivante 4x4 tiling layout)
++ */
++#define DRM_FORMAT_MOD_VERISILICON_TILE_8X4						0x07
++
++/*
++ * An x-major 8x4 super tile consists of 128 8x4 sub-tiles in total.
++ * Each 8x4 sub-tile consists of two standard tiles.
++ * two standard tiles also same with DRM_FORMAT_MOD_VS_TILE_8X4
++ * standard tiles (see Vivante 4x4 tiling layout)
++ */
++#define DRM_FORMAT_MOD_VERISILICON_SUPER_TILED_XMAJOR_8X4		0x0B
++
++/*
++ * A y-major 4x8 super tile consists of 128 4x8 sub-tiles in total.
++ * Each 4x8 sub-tile consists of two standard tiles.
++ * two standard tiles also same with DRM_FORMAT_MOD_VS_TILE_8X4
++ * standard tiles (see Vivante 4x4 tiling layout)
++ */
++#define DRM_FORMAT_MOD_VERISILICON_SUPER_TILED_YMAJOR_4X8    0x0C
++
++#define fourcc_mod_vs_norm_code(tile) \
++	fourcc_mod_vs_code(DRM_FORMAT_MOD_VERISILICON_TYPE_NORMAL, \
++				(tile))
++
+ #if defined(__cplusplus)
+ }
+ #endif
+-- 
+2.34.1
+
