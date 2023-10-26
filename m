@@ -2,32 +2,32 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40D99C25B48
-	for <linux-media@archiver.kernel.org>; Thu, 26 Oct 2023 10:18:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62D52C25B6F
+	for <linux-media@archiver.kernel.org>; Thu, 26 Oct 2023 10:18:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbjJZKSk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 26 Oct 2023 06:18:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38848 "EHLO
+        id S230418AbjJZKSm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 26 Oct 2023 06:18:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbjJZKSg (ORCPT
+        with ESMTP id S229680AbjJZKSg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 26 Oct 2023 06:18:36 -0400
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75F41A5
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74EB1A2
         for <linux-media@vger.kernel.org>; Thu, 26 Oct 2023 03:18:33 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1qvxRc-0002oI-MQ; Thu, 26 Oct 2023 12:18:28 +0200
+        id 1qvxRc-0002ne-A9; Thu, 26 Oct 2023 12:18:28 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1qvxRc-004O20-8x; Thu, 26 Oct 2023 12:18:28 +0200
+        id 1qvxRb-004O1r-MA; Thu, 26 Oct 2023 12:18:27 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1qvxRb-006XU6-Vn; Thu, 26 Oct 2023 12:18:27 +0200
+        id 1qvxRb-006XTv-CZ; Thu, 26 Oct 2023 12:18:27 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Sean Young <sean@mess.org>,
@@ -38,15 +38,13 @@ Cc:     Jerome Brunet <jbrunet@baylibre.com>,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
         linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-amlogic@lists.infradead.org, kernel@pengutronix.de
-Subject: [PATCH 3/3] media: meson-ir-tx: Drop usage of platform_driver_probe()
-Date:   Thu, 26 Oct 2023 12:18:20 +0200
-Message-ID: <20231026101816.2460464-8-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 0/3] media: meson-ir-tx: Some cleanups and simplifications and a bug report
+Date:   Thu, 26 Oct 2023 12:18:17 +0200
+Message-ID: <20231026101816.2460464-5-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231026101816.2460464-5-u.kleine-koenig@pengutronix.de>
-References: <20231026101816.2460464-5-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1933; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=vc0rJ8a46VVSlA0HFx7Dn4WOCC0eWWSYg5tIiKkiq4M=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlOjzsCB78wx1ZkNeeTKhvksKu4eVjXNuc4O1qP eCAsxs+oACJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZTo87AAKCRCPgPtYfRL+ Tp58CACHg1uU+5cM/jq9rx7aO0xIbGNXGC/vIpXdtfz8Wx22dfmnQex6v/mAR3r+IGhX5qbP60E G1yZwI8RlMSg2UjLJydp7ct02Gmf6063fpykCZehxH+aMRrJXQ7KiqqA1A2Y4BiX25SCyTfMabA IyFaw8nXz5X7UNF/YXfxPNCIcyeVTtk2oxU+doQ7CPa0FT+/PMec5ZL7jMI2IduUlFqFNPfMAXt zWQVV5cAcrg0IIa4WZPKWedxr6zGp/9oA+VzwOj8FHRIA18VLx+GCY5GK/oKt8C84XRDT3akcHC YB7ZSWebXRVJ5X1o8dlZOvXygWBMNHLR3wd4Z72dfiVgk3+R
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1494; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=9f95QupmDD1wCm7me2TiK83K9AHR9two7YFf8SXT3Lk=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlOjzppXk2Qm28MOi8I8DIbnpCyB0ZQI6nNu1X6 En+p/8ahWyJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZTo86QAKCRCPgPtYfRL+ TgbDCACp6GwotsK5vjw8THZ109ikr4W8XvR9oyGGiiwISHzYpCWo+fg6QYTUw5jS9tCsTgMVPW9 LVWFj1dBvnEfSclJpBv1x1/uVkhn/B7aCHChSghEXTSDrDIvbr27pc4Eseeqm3T4qn+x8Qx1uha icJv0cBWx4Mj7TmFmif+Q2kTiMD0yQNFVSFjOxlSMUmfIHtr9yCsbWKs3mzn0pMhAJ+meRog9Ji Kdv8shj4rIW0wlaaRArqfmofgKsq9LqKElPtUhKeyKYhA4GEPSAPZ/meSKQtxpK5vB6u6JEZyCI 09E3Bi2/StZTqxx7MV4KOPTP9IoxmpfPTe1uj3Gyo6gPsvtT
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -57,55 +55,44 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The benefit of platform_driver_probe() here is only that the probe
-function can be discarded after the driver is loaded. For an ARCH=arm
-allmodconfig that's 952 bytes, for an allnoconfig + IR_MESON_TX=y it's
-only 452 bytes. The downside is that the driver isn't dynamically
-bindable and unbindable.
+Hello,
 
-There are considerations to drop platform_driver_probe() as a concept
-that isn't relevant any more today. It comes with an added complexity
-that makes many users hold it wrong. (E.g. this driver didn't benefit
-as much as it could as of v6.6-rc1 as meson_irtx_remove() could have
-been marked with __exit.)
+while looking around for drivers still using platform_driver_probe() I
+found the meson-ir-tx driver. While looking at it I identified a few
+patch opportunities.
 
-The advantages are not that relevant any more today, so convert this
-driver to an ordinary platform driver.
+I think the driver might be used to trigger a use after free problem
+that is caused by the ir core. With my current understanding the
+following is possible:
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/media/rc/meson-ir-tx.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+	1) open the ir device and keep it open
+	2) unbind the meson-ir-tx device
+	3) trigger calling .tx_ir = meson_irtx_transmit using the opened
+	   device using write()
 
-diff --git a/drivers/media/rc/meson-ir-tx.c b/drivers/media/rc/meson-ir-tx.c
-index bd85361d561f..fded2c256f2a 100644
---- a/drivers/media/rc/meson-ir-tx.c
-+++ b/drivers/media/rc/meson-ir-tx.c
-@@ -305,7 +305,7 @@ static int meson_irtx_mod_clock_probe(struct meson_irtx *ir,
- 	return 0;
- }
- 
--static int __init meson_irtx_probe(struct platform_device *pdev)
-+static int meson_irtx_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct meson_irtx *ir;
-@@ -375,13 +375,13 @@ static const struct of_device_id meson_irtx_dt_match[] = {
- MODULE_DEVICE_TABLE(of, meson_irtx_dt_match);
- 
- static struct platform_driver meson_irtx_pd = {
-+	.probe = meson_irtx_probe,
- 	.driver = {
- 		.name = DRIVER_NAME,
- 		.of_match_table = meson_irtx_dt_match,
- 	},
- };
--
--module_platform_driver_probe(meson_irtx_pd, meson_irtx_probe);
-+module_platform_driver(meson_irtx_pd);
- 
- MODULE_DESCRIPTION("Meson IR TX driver");
- MODULE_AUTHOR("Viktor Prutyanov <viktor.prutyanov@phystech.edu>");
+2) can be done using sysfs or (maybe) by module unloading. The result is
+that the memory pointed to by ir is freed and the register mapping goes
+away. Even meson_irtx_transmit() might disappear then. Calling
+meson_irtx_transmit() then yields all kind of fun.
+
+I didn't debug in detail so I might miss something. To fix that you have
+to make sure that the callbacks don't get called any more once the rc
+device is unregistered (and track that information in memory that
+doesn't go away with the parent device's remove callback completing).
+
+Best regards
+Uwe
+
+Uwe Kleine-König (3):
+  media: meson-ir-tx: Convert to use devm_rc_register_device()
+  media: meson-ir-tx: Simplify and improve using dev_err_probe()
+  media: meson-ir-tx: Drop usage of platform_driver_probe()
+
+ drivers/media/rc/meson-ir-tx.c | 34 ++++++++++------------------------
+ 1 file changed, 10 insertions(+), 24 deletions(-)
+
+
+base-commit: 0bb80ecc33a8fb5a682236443c1e740d5c917d1d
 -- 
 2.42.0
 
