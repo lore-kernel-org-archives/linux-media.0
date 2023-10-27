@@ -2,40 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04853C25B67
-	for <linux-media@archiver.kernel.org>; Fri, 27 Oct 2023 09:58:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E35FC25B6E
+	for <linux-media@archiver.kernel.org>; Fri, 27 Oct 2023 09:58:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345670AbjJ0J64 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 27 Oct 2023 05:58:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43968 "EHLO
+        id S1345673AbjJ0J65 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 27 Oct 2023 05:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345668AbjJ0J6x (ORCPT
+        with ESMTP id S1345663AbjJ0J6z (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 27 Oct 2023 05:58:53 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2539B194
-        for <linux-media@vger.kernel.org>; Fri, 27 Oct 2023 02:58:50 -0700 (PDT)
+        Fri, 27 Oct 2023 05:58:55 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAAC0194
+        for <linux-media@vger.kernel.org>; Fri, 27 Oct 2023 02:58:53 -0700 (PDT)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8C470BBB;
-        Fri, 27 Oct 2023 11:58:35 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1B5B5DD9;
+        Fri, 27 Oct 2023 11:58:38 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1698400715;
-        bh=GGld0t4f1ouhhU35cu9gYzwXhTDp1EyxGEbQj4B4Pr4=;
+        s=mail; t=1698400718;
+        bh=rWymIpTLqHnLkbHd0t4YKdOskniyBVwy6JPjIpy1guo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sboHYmtB5r55oZy2HuQoYVIwBctfE7gen9J15XtpyIiBo8aQPZXcCnh9MrCshGI2d
-         A2So0gstZGuPoG2DrLth9vxpqA4bPwP06MohiQgrETpApWQh5p8NJtlmcE+lP0Dbx2
-         6xDRjt5v7eGCBHLowucpDdeLd1cTuJM1xmxengK0=
+        b=J1IoxtIYt4H8gAbKOE7kOn7Ioj00WrNdO2sPcTIHxdK66ryKJI0pGFGoJuwXu25J9
+         a523HEvtb7Noo1O/UIQpqa3/6R3FVBhwo4pPkZp6nBsBB6WS7y/amyjXViyA8pLSuH
+         bf3OtjJz3eE/R5FlUFH8vRL01YrYCArm99kSUve0=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Yong Zhi <yong.zhi@intel.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Dan Scally <djrscally@gmail.com>,
-        Tianshu Qiu <tian.shu.qiu@intel.com>
-Subject: [PATCH v1 1/9] media: ipu3-cio2: Drop comment blocks for subdev op handlers
-Date:   Fri, 27 Oct 2023 12:58:45 +0300
-Message-ID: <20231027095853.29057-2-laurent.pinchart@ideasonboard.com>
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH v1 3/9] media: v4l2-subdev: Fix references to pad config
+Date:   Fri, 27 Oct 2023 12:58:47 +0300
+Message-ID: <20231027095853.29057-4-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231027095853.29057-1-laurent.pinchart@ideasonboard.com>
 References: <20231027095853.29057-1-laurent.pinchart@ideasonboard.com>
@@ -45,49 +41,44 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The V4L2 subdev .get_fmt() and .set_fmt() pad operation handlers have a
-short documentation block that merely duplicates information from the
-V4L2 subdev API documentation. They offer no value, and are prone to
-bit-rotting as shown by the @cfg parameter documentation being outdated.
-Drop them.
+V4L2 subdev operations have moved from operating on a
+v4l2_subdev_pad_config to a v4l2_subdev_state a long time ago. Fix the
+few remaining incorrect references to pad config in the documentation.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/pci/intel/ipu3/ipu3-cio2.c | 14 --------------
- 1 file changed, 14 deletions(-)
+ Documentation/driver-api/media/v4l2-subdev.rst | 4 ++--
+ include/media/v4l2-subdev.h                    | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-index dce4b0e1f6e9..5d3b0ffd3d08 100644
---- a/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-+++ b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-@@ -1215,13 +1215,6 @@ static int cio2_subdev_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- 	return 0;
- }
+diff --git a/Documentation/driver-api/media/v4l2-subdev.rst b/Documentation/driver-api/media/v4l2-subdev.rst
+index e56b50b3f203..a62e4aff31be 100644
+--- a/Documentation/driver-api/media/v4l2-subdev.rst
++++ b/Documentation/driver-api/media/v4l2-subdev.rst
+@@ -562,8 +562,8 @@ device configuration. This is often implemented as e.g. an array of struct
+ v4l2_mbus_framefmt, one entry for each pad, and similarly for crop and compose
+ rectangles.
  
--/*
-- * cio2_subdev_get_fmt - Handle get format by pads subdev method
-- * @sd : pointer to v4l2 subdev structure
-- * @cfg: V4L2 subdev pad config
-- * @fmt: pointer to v4l2 subdev format structure
-- * return -EINVAL or zero on success
-- */
- static int cio2_subdev_get_fmt(struct v4l2_subdev *sd,
- 			       struct v4l2_subdev_state *sd_state,
- 			       struct v4l2_subdev_format *fmt)
-@@ -1241,13 +1234,6 @@ static int cio2_subdev_get_fmt(struct v4l2_subdev *sd,
- 	return 0;
- }
+-In addition to the active configuration, each subdev file handle has an array of
+-struct v4l2_subdev_pad_config, managed by the V4L2 core, which contains the try
++In addition to the active configuration, each subdev file handle has a struct
++v4l2_subdev_state, managed by the V4L2 core, which contains the try
+ configuration.
  
--/*
-- * cio2_subdev_set_fmt - Handle set format by pads subdev method
-- * @sd : pointer to v4l2 subdev structure
-- * @cfg: V4L2 subdev pad config
-- * @fmt: pointer to v4l2 subdev format structure
-- * return -EINVAL or zero on success
-- */
- static int cio2_subdev_set_fmt(struct v4l2_subdev *sd,
- 			       struct v4l2_subdev_state *sd_state,
- 			       struct v4l2_subdev_format *fmt)
+ To simplify the subdev drivers the V4L2 subdev API now optionally supports a
+diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+index b471e68aa5e7..741dc1485768 100644
+--- a/include/media/v4l2-subdev.h
++++ b/include/media/v4l2-subdev.h
+@@ -771,7 +771,7 @@ struct v4l2_subdev_state {
+ /**
+  * struct v4l2_subdev_pad_ops - v4l2-subdev pad level operations
+  *
+- * @init_cfg: initialize the pad config to default values
++ * @init_cfg: initialize the subdev state to default values
+  * @enum_mbus_code: callback for VIDIOC_SUBDEV_ENUM_MBUS_CODE() ioctl handler
+  *		    code.
+  * @enum_frame_size: callback for VIDIOC_SUBDEV_ENUM_FRAME_SIZE() ioctl handler
 -- 
 Regards,
 
