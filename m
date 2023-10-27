@@ -2,117 +2,83 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE129C25B67
-	for <linux-media@archiver.kernel.org>; Fri, 27 Oct 2023 09:17:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3CC6C25B47
+	for <linux-media@archiver.kernel.org>; Fri, 27 Oct 2023 09:17:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345585AbjJ0JRC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 27 Oct 2023 05:17:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33870 "EHLO
+        id S1345352AbjJ0JRw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 27 Oct 2023 05:17:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345577AbjJ0JQ7 (ORCPT
+        with ESMTP id S230502AbjJ0JRv (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 27 Oct 2023 05:16:59 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE9D191
-        for <linux-media@vger.kernel.org>; Fri, 27 Oct 2023 02:16:56 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6065B1BAE;
-        Fri, 27 Oct 2023 11:16:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1698398202;
-        bh=tG3coUZ+KBLC2FdA/3YDGfZCWKWiPDFygwazqAv4jCU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wArX6NBtM8yltYdXFLaemvkLzUj/a968kTrHcyH268acmlkWcSnqgy6jcpxfRnqmg
-         i4wggro11svZMrMVC3YwZDuBLhIYyWnHsrnm3E+21CdI8R+VvAVtwglFg7VWaA/cqx
-         TEiOWKy7ERKyVVuV1DGd58tnjfFYlaE1iHc8kmjA=
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     linux-media@vger.kernel.org
-Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH v2 9/9] media: v4l2-subdev: Rename pad config 'try_*' fields
-Date:   Fri, 27 Oct 2023 12:16:49 +0300
-Message-ID: <20231027091649.10553-10-laurent.pinchart@ideasonboard.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20231027091649.10553-1-laurent.pinchart@ideasonboard.com>
-References: <20231027091649.10553-1-laurent.pinchart@ideasonboard.com>
+        Fri, 27 Oct 2023 05:17:51 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD04993;
+        Fri, 27 Oct 2023 02:17:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=ZYvJW
+        f+GN8rYbJBn1IFT3mrdYzrKe6A0aYWfjBjhd6E=; b=ckiM1oDvdwLrdawG2pc3M
+        j9aLlD88UlfOYVRWSjhZpCCSWen0Y/Gdi/4cuyznANpvX3tHCIdQLdQ3zAlfQvHf
+        ghzCLUPbQ7RZ4CkqeS41XbVAsM1Cz39zbLSc4k7BHTcDhNw3xhDYb2irI2texiHq
+        OLQrhy/Jjs+krEm/NqNhQA=
+Received: from leanderwang-LC4.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g4-2 (Coremail) with SMTP id _____wDXnzDefztlgV6KBg--.4819S2;
+        Fri, 27 Oct 2023 17:16:15 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     dmitry.osipenko@collabora.com
+Cc:     Kyrie.Wu@mediatek.com, bin.liu@mediatek.com, mchehab@kernel.org,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, Irui.Wang@mediatek.com,
+        security@kernel.org, hackerzheng666@gmail.com,
+        1395428693sheep@gmail.com, alex000young@gmail.com,
+        amergnat@baylibre.com, wenst@chromium.org,
+        Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH 0/2] media: mtk-jpeg: Remove cancel worker in mtk_jpeg_remove to avoid the crash of multi-core JPEG devices
+Date:   Fri, 27 Oct 2023 17:16:12 +0800
+Message-Id: <20231027091612.38896-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wDXnzDefztlgV6KBg--.4819S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Zw4rtF48tF1UJF4fZr4xWFg_yoW8JF4Dpr
+        WfK348CrWUWF4qgw4DJa47ZFyrGwnaya40gr47uwn2q393XFsrt34jya4FqFWxZF9FkFW3
+        tF1FvryfWF4jvFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zR1rWrUUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXRAWU1WBq4ptKAAAs4
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The try_fmt, try_crop and try_compose fields of the
-v4l2_subdev_pad_config structure are misnamed (for historical reason) as
-they also store data for the subdev active configuration. Rename them to
-format, crop and compose respectively and update the accessor helpers.
+This patch reverts commit c677d7ae8314
+("media: mtk-jpeg: Fix use after free bug due to uncanceled work").
+The job_timeout_work is initialized only for
+the single-core JPEG device so it will cause the crash for multi-core
+JPEG devices.
 
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Fix it by removing the cancel_delayed_work_sync function.
+
+Fixes: c677d7ae8314 ("media: mtk-jpeg: Fix use after free bug due to uncanceled work")
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 ---
- drivers/media/v4l2-core/v4l2-subdev.c |  6 +++---
- include/media/v4l2-subdev.h           | 15 ++++++---------
- 2 files changed, 9 insertions(+), 12 deletions(-)
+ drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-index fa0a5b2933f6..2357d608194c 100644
---- a/drivers/media/v4l2-core/v4l2-subdev.c
-+++ b/drivers/media/v4l2-core/v4l2-subdev.c
-@@ -1694,7 +1694,7 @@ __v4l2_subdev_state_get_format_stream(struct v4l2_subdev_state *state,
- 		if (WARN_ON(pad >= state->sd->entity.num_pads))
- 			return NULL;
+diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+index 7194f88edc0f..60425c99a2b8 100644
+--- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
++++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+@@ -1403,7 +1403,6 @@ static void mtk_jpeg_remove(struct platform_device *pdev)
+ {
+ 	struct mtk_jpeg_dev *jpeg = platform_get_drvdata(pdev);
  
--		return &state->pads[pad].try_fmt;
-+		return &state->pads[pad].format;
- 	}
- 
- 	lockdep_assert_held(state->lock);
-@@ -1728,7 +1728,7 @@ __v4l2_subdev_state_get_crop_stream(struct v4l2_subdev_state *state,
- 		if (WARN_ON(pad >= state->sd->entity.num_pads))
- 			return NULL;
- 
--		return &state->pads[pad].try_crop;
-+		return &state->pads[pad].crop;
- 	}
- 
- 	lockdep_assert_held(state->lock);
-@@ -1762,7 +1762,7 @@ __v4l2_subdev_state_get_compose_stream(struct v4l2_subdev_state *state,
- 		if (WARN_ON(pad >= state->sd->entity.num_pads))
- 			return NULL;
- 
--		return &state->pads[pad].try_compose;
-+		return &state->pads[pad].compose;
- 	}
- 
- 	lockdep_assert_held(state->lock);
-diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-index 72131c943e06..b471e68aa5e7 100644
---- a/include/media/v4l2-subdev.h
-+++ b/include/media/v4l2-subdev.h
-@@ -688,17 +688,14 @@ struct v4l2_subdev_ir_ops {
- /**
-  * struct v4l2_subdev_pad_config - Used for storing subdev pad information.
-  *
-- * @try_fmt: &struct v4l2_mbus_framefmt
-- * @try_crop: &struct v4l2_rect to be used for crop
-- * @try_compose: &struct v4l2_rect to be used for compose
-- *
-- * Note: This struct is also used in active state, and the 'try' prefix is
-- * historical and to be removed.
-+ * @format: &struct v4l2_mbus_framefmt
-+ * @crop: &struct v4l2_rect to be used for crop
-+ * @compose: &struct v4l2_rect to be used for compose
-  */
- struct v4l2_subdev_pad_config {
--	struct v4l2_mbus_framefmt try_fmt;
--	struct v4l2_rect try_crop;
--	struct v4l2_rect try_compose;
-+	struct v4l2_mbus_framefmt format;
-+	struct v4l2_rect crop;
-+	struct v4l2_rect compose;
- };
- 
- /**
+-	cancel_delayed_work_sync(&jpeg->job_timeout_work);
+ 	pm_runtime_disable(&pdev->dev);
+ 	video_unregister_device(jpeg->vdev);
+ 	v4l2_m2m_release(jpeg->m2m_dev);
 -- 
-Regards,
-
-Laurent Pinchart
+2.25.1
 
