@@ -2,44 +2,44 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 288F9C25B47
-	for <linux-media@archiver.kernel.org>; Fri, 27 Oct 2023 08:47:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94A62C25B6E
+	for <linux-media@archiver.kernel.org>; Fri, 27 Oct 2023 08:47:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345553AbjJ0Irq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 27 Oct 2023 04:47:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52826 "EHLO
+        id S1345558AbjJ0Irs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 27 Oct 2023 04:47:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345518AbjJ0Iro (ORCPT
+        with ESMTP id S1345406AbjJ0Irp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 27 Oct 2023 04:47:44 -0400
+        Fri, 27 Oct 2023 04:47:45 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2BFDC4
-        for <linux-media@vger.kernel.org>; Fri, 27 Oct 2023 01:47:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD6E1BE
+        for <linux-media@vger.kernel.org>; Fri, 27 Oct 2023 01:47:42 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:dbc0:3460:d466:3213])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A9020660732A;
-        Fri, 27 Oct 2023 09:47:40 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 45B9E6607335;
+        Fri, 27 Oct 2023 09:47:41 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1698396460;
-        bh=EE3BYsg52PRCivh6VHXIAzqf0SUul9JArpZgJ6HqtVU=;
+        s=mail; t=1698396461;
+        bh=JUI6Pwf+nusN9d5H1K+f90YSRzjfogTpTJOW1hqNQi8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z3OhOGNZycfo0LnRcyZ3WAQ0Wn2NnOPDMa5E8K/PRthPlK5ZiZwzPyh5CprtSBOAv
-         Tgx8cak+1ZfYuL8KJf3OY4WRT7KSKWQQJ8ex3OiJlZ4+1CzWhHp0tVWw44Pffv6a3G
-         w0DfWfzdYeLAxdbSVK+Om1fWb8VVQAKoxceZRP2VVwUaXuj3yaqe64ziXgWe6lxhl5
-         /ltmvpvnEAtN9Qfu/oY5+9eYEYit4uJBMkGzTMX/xsW897ldhQjpLwlle92xUv+DMe
-         xvQQYK80MpY1crpQ8fG7TQ6yRaVTbQsKsV+QYtL6oDOxGqIN8tk6Ls0ojFBib4jc6P
-         uakt1WAcTo66Q==
+        b=bk2v0H0HmMauPBo7JfXUjNaiNffwuBCm1j0MtK8nAQii08HHJzVHKqIDLyQEQIU6z
+         bSGZliqNVo7/DINA7ceQ5VnWKF9bkrv4lnTTWZW6sd9Of7SpGIFs5fwWQO6WD7PjlV
+         4VJmj6LsB5Z1nP+afDuWO+3Pe3vlCt8eP5Sx+iNIQeoBwZyT3xqWAlVI6mWpbOJbYP
+         BfG6INW+4PXlENZSv9MHzc2Rf3DbwQZ3hAeuovz1kTsiE4hZU3gPvLY2E+eO1byOm4
+         0q2KF6dZrOka2OHF8ENS5OWvzZ/4aMcUbdbFGenSNUvS4p9KCWQMZyCZbTP3IzV09m
+         diMPV4WNFPQ6Q==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com,
         mchehab@kernel.org
 Cc:     linux-media@vger.kernel.org, kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v4 2/4] v4l2-compliance: Test queue maximum buffers allocation
-Date:   Fri, 27 Oct 2023 10:47:30 +0200
-Message-Id: <20231027084732.17528-3-benjamin.gaignard@collabora.com>
+Subject: [PATCH v4 4/4] v4l2-compliance: Add a test for DELETE_BUFS ioctl
+Date:   Fri, 27 Oct 2023 10:47:32 +0200
+Message-Id: <20231027084732.17528-5-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231027084732.17528-1-benjamin.gaignard@collabora.com>
 References: <20231027084732.17528-1-benjamin.gaignard@collabora.com>
@@ -49,161 +49,189 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-If  V4L2_BUF_CAP_SUPPORTS_MAX_NUM_BUFFERS is set v4l2_create_buffers
-'max_num_buffers' field reports the maximum number of buffers supported
-by the queue.
-Add a test to allocate this maximum value and make sure that one
-more allocation is failing.
-Display the flag in v4l2-ctl.
+Add new test for DELETE_BUFS ioctl.
+It create buffers and check if they could be removed from queue.
+It also check that removing non existing buffer or a queued
+buffer failed.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- utils/common/cv4l-helpers.h                 |  1 +
- utils/common/v4l-helpers.h                  |  5 +++
- utils/common/v4l2-info.cpp                  |  1 +
+ utils/common/cv4l-helpers.h                 |  4 +
+ utils/common/v4l-helpers.h                  | 17 ++++
  utils/v4l2-compliance/v4l2-compliance.cpp   |  1 +
  utils/v4l2-compliance/v4l2-compliance.h     |  1 +
- utils/v4l2-compliance/v4l2-test-buffers.cpp | 42 ++++++++++++++++++++-
- 6 files changed, 50 insertions(+), 1 deletion(-)
+ utils/v4l2-compliance/v4l2-test-buffers.cpp | 91 +++++++++++++++++++++
+ 5 files changed, 114 insertions(+)
 
 diff --git a/utils/common/cv4l-helpers.h b/utils/common/cv4l-helpers.h
-index 91a04146..5a515a13 100644
+index 5a515a13..10800ed2 100644
 --- a/utils/common/cv4l-helpers.h
 +++ b/utils/common/cv4l-helpers.h
-@@ -743,6 +743,7 @@ public:
- 	unsigned g_type() const { return v4l_queue_g_type(this); }
- 	unsigned g_memory() const { return v4l_queue_g_memory(this); }
- 	unsigned g_buffers() const { return v4l_queue_g_buffers(this); }
-+	unsigned g_max_buffers() const { return v4l_queue_g_max_buffers(this); }
- 	unsigned g_num_planes() const { return v4l_queue_g_num_planes(this); }
- 	unsigned g_capabilities() const { return v4l_queue_g_capabilities(this); }
- 	unsigned g_length(unsigned plane) const { return v4l_queue_g_length(this, plane); }
+@@ -760,6 +760,10 @@ public:
+ 	{
+ 		return v4l_queue_reqbufs(fd->g_v4l_fd(), this, count, flags);
+ 	}
++	int delete_bufs(cv4l_fd *fd, unsigned index = 0, unsigned count = 0)
++	{
++		return v4l_queue_delete_bufs(fd->g_v4l_fd(), this, index, count);
++	}
+ 	bool has_create_bufs(cv4l_fd *fd) const
+ 	{
+ 		return v4l_queue_has_create_bufs(fd->g_v4l_fd(), this);
 diff --git a/utils/common/v4l-helpers.h b/utils/common/v4l-helpers.h
-index f8e96d58..550ec377 100644
+index 550ec377..81857b29 100644
 --- a/utils/common/v4l-helpers.h
 +++ b/utils/common/v4l-helpers.h
-@@ -1429,6 +1429,7 @@ struct v4l_queue {
- 	unsigned mappings;
- 	unsigned num_planes;
- 	unsigned capabilities;
-+	unsigned max_buffers;
- 
- 	__u32 lengths[VIDEO_MAX_PLANES];
- 	__u32 mem_offsets[VIDEO_MAX_FRAME][VIDEO_MAX_PLANES];
-@@ -1453,6 +1454,7 @@ static inline void v4l_queue_init(struct v4l_queue *q,
- static inline unsigned v4l_queue_g_type(const struct v4l_queue *q) { return q->type; }
- static inline unsigned v4l_queue_g_memory(const struct v4l_queue *q) { return q->memory; }
- static inline unsigned v4l_queue_g_buffers(const struct v4l_queue *q) { return q->buffers; }
-+static inline unsigned v4l_queue_g_max_buffers(const struct v4l_queue *q) { return q->max_buffers; }
- static inline unsigned v4l_queue_g_mappings(const struct v4l_queue *q) { return q->mappings; }
- static inline unsigned v4l_queue_g_num_planes(const struct v4l_queue *q) { return q->num_planes; }
- static inline unsigned v4l_queue_g_capabilities(const struct v4l_queue *q) { return q->capabilities; }
-@@ -1587,6 +1589,9 @@ static inline int v4l_queue_create_bufs(struct v4l_fd *f,
- 	if (ret)
- 		return ret;
- 	q->capabilities = createbufs.capabilities;
-+	q->max_buffers = 32;
-+	if (q->capabilities & V4L2_BUF_CAP_SUPPORTS_MAX_NUM_BUFFERS)
-+		q->max_buffers = createbufs.max_num_buffers;
- 	q->buffers += createbufs.count;
- 	return v4l_queue_querybufs(f, q, q->buffers - createbufs.count);
+@@ -1510,6 +1510,23 @@ static inline void *v4l_queue_g_dataptr(const struct v4l_queue *q, unsigned inde
+ 	return v4l_queue_g_mmapping(q, index, plane);
  }
-diff --git a/utils/common/v4l2-info.cpp b/utils/common/v4l2-info.cpp
-index 4f8c2aa7..b11f2b77 100644
---- a/utils/common/v4l2-info.cpp
-+++ b/utils/common/v4l2-info.cpp
-@@ -206,6 +206,7 @@ static constexpr flag_def bufcap_def[] = {
- 	{ V4L2_BUF_CAP_SUPPORTS_ORPHANED_BUFS, "orphaned-bufs" },
- 	{ V4L2_BUF_CAP_SUPPORTS_M2M_HOLD_CAPTURE_BUF, "m2m-hold-capture-buf" },
- 	{ V4L2_BUF_CAP_SUPPORTS_MMAP_CACHE_HINTS, "mmap-cache-hints" },
-+	{ V4L2_BUF_CAP_SUPPORTS_MAX_NUM_BUFFERS, "set-max-num-bufs" },
- 	{ 0, nullptr }
- };
  
++static inline int v4l_queue_delete_bufs(struct v4l_fd *f, struct v4l_queue *q, unsigned index, unsigned count)
++{
++	struct v4l2_delete_buffers deletebufs;
++	int ret;
++
++	memset(&deletebufs, 0, sizeof(deletebufs));
++	deletebufs.type = q->type;
++	deletebufs.index = index;
++	deletebufs.count = count;
++
++	ret = v4l_ioctl(f, VIDIOC_DELETE_BUFS, &deletebufs);
++	if (!ret)
++		q->buffers -= deletebufs.count;
++
++	return ret;
++}
++
+ static inline int v4l_queue_querybufs(struct v4l_fd *f, struct v4l_queue *q, unsigned from)
+ {
+ 	unsigned b, p;
 diff --git a/utils/v4l2-compliance/v4l2-compliance.cpp b/utils/v4l2-compliance/v4l2-compliance.cpp
-index ac6a8f80..a165ef5a 100644
+index a165ef5a..c1e519ea 100644
 --- a/utils/v4l2-compliance/v4l2-compliance.cpp
 +++ b/utils/v4l2-compliance/v4l2-compliance.cpp
-@@ -1453,6 +1453,7 @@ void testNode(struct node &node, struct node &node_m2m_cap, struct node &expbuf_
- 
+@@ -1454,6 +1454,7 @@ void testNode(struct node &node, struct node &node_m2m_cap, struct node &expbuf_
  		printf("Buffer ioctls%s:\n", suffix);
  		printf("\ttest VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: %s\n", ok(testReqBufs(&node)));
-+		printf("\ttest CREATE_BUFS maximum buffers: %s\n", ok(testCreateBufsMax(&node)));
+ 		printf("\ttest CREATE_BUFS maximum buffers: %s\n", ok(testCreateBufsMax(&node)));
++		printf("\ttest VIDIOC_DELETE_BUFS: %s\n", ok(testDeleteBufs(&node)));
  		// Reopen after each streaming test to reset the streaming state
  		// in case of any errors in the preceeding test.
  		node.reopen();
 diff --git a/utils/v4l2-compliance/v4l2-compliance.h b/utils/v4l2-compliance/v4l2-compliance.h
-index 7e3860c8..4f9aa17e 100644
+index 4f9aa17e..9ec07494 100644
 --- a/utils/v4l2-compliance/v4l2-compliance.h
 +++ b/utils/v4l2-compliance/v4l2-compliance.h
-@@ -383,6 +383,7 @@ int testReqBufs(struct node *node);
- int testReadWrite(struct node *node);
+@@ -384,6 +384,7 @@ int testReadWrite(struct node *node);
  int testExpBuf(struct node *node);
  int testBlockingWait(struct node *node);
-+int testCreateBufsMax(struct node *node);
+ int testCreateBufsMax(struct node *node);
++int testDeleteBufs(struct node *node);
  
  // 32-bit architecture, 32/64-bit time_t tests
  int testTime32_64(struct node *node);
 diff --git a/utils/v4l2-compliance/v4l2-test-buffers.cpp b/utils/v4l2-compliance/v4l2-test-buffers.cpp
-index 6d592c9b..02ea498f 100644
+index 02ea498f..54fb66d9 100644
 --- a/utils/v4l2-compliance/v4l2-test-buffers.cpp
 +++ b/utils/v4l2-compliance/v4l2-test-buffers.cpp
-@@ -634,7 +634,6 @@ int testReqBufs(struct node *node)
- 			fail_on_test(testQueryBuf(node, i, q.g_buffers()));
- 			node->valid_memorytype |= 1 << V4L2_MEMORY_DMABUF;
- 		}
--
- 		/*
- 		 * It should be possible to set the same std, timings or
- 		 * native size even after reqbufs was called.
-@@ -761,6 +760,47 @@ int testReqBufs(struct node *node)
+@@ -529,6 +529,97 @@ static int testCanSetSameTimings(struct node *node)
  	return 0;
  }
  
-+int testCreateBufsMax(struct node *node)
++int testDeleteBufs(struct node *node)
 +{
-+	unsigned int i;
 +	int ret;
++	unsigned i;
 +
 +	node->reopen();
 +
-+	cv4l_queue q(0, 0);
-+
 +	for (i = 1; i <= V4L2_BUF_TYPE_LAST; i++) {
++		struct v4l2_delete_buffers delbufs = { };
++
 +		if (!(node->valid_buftypes & (1 << i)))
 +			continue;
 +
-+		q.init(i, V4L2_MEMORY_USERPTR);
-+		ret = q.create_bufs(node, 1);
-+		if (!ret && (q.g_capabilities() & V4L2_BUF_CAP_SUPPORTS_MAX_NUM_BUFFERS)) {
-+			fail_on_test(q.create_bufs(node, q.g_max_buffers() - q.g_buffers()));
-+			ret = q.create_bufs(node, 1);
-+			fail_on_test(ret != ENOBUFS && (q.g_max_buffers() == q.g_buffers()));
-+		}
++		cv4l_queue q(i, V4L2_MEMORY_MMAP);
++
++		if (testSetupVbi(node, i))
++			continue;
 +
 +		q.init(i, V4L2_MEMORY_MMAP);
-+		ret = q.create_bufs(node, 1);
-+		if (!ret && (q.g_capabilities() & V4L2_BUF_CAP_SUPPORTS_MAX_NUM_BUFFERS)) {
-+			fail_on_test(q.create_bufs(node, q.g_max_buffers() - q.g_buffers()));
-+			ret = q.create_bufs(node, 1);
-+			fail_on_test(ret != ENOBUFS && (q.g_max_buffers() == q.g_buffers()));
-+		}
++		ret = q.create_bufs(node, 0);
++		fail_on_test_val(ret && ret != EINVAL, ret);
++		if (!(q.g_capabilities() & V4L2_BUF_CAP_SUPPORTS_DELETE_BUFS))
++			continue;
 +
-+		q.init(i, V4L2_MEMORY_DMABUF);
-+		ret = q.create_bufs(node, 1);
-+		if (!ret && (q.g_capabilities() & V4L2_BUF_CAP_SUPPORTS_MAX_NUM_BUFFERS)) {
-+			fail_on_test(q.create_bufs(node, q.g_max_buffers() - q.g_buffers()));
-+			ret = q.create_bufs(node, 1);
-+			fail_on_test(ret != ENOBUFS && (q.g_max_buffers() == q.g_buffers()));
++		memset(&delbufs, 0xff, sizeof(delbufs));
++		delbufs.index = 0;
++		delbufs.count = 0;
++		delbufs.type = q.g_type();
++		fail_on_test(doioctl(node, VIDIOC_DELETE_BUFS, &delbufs));
++        	fail_on_test(check_0(delbufs.reserved, sizeof(delbufs.reserved)));
++
++		if (!ret) {
++			unsigned buffers;
++			buffer buf(q);
++
++			/* Create only 1 buffer */
++			fail_on_test(q.create_bufs(node, 1));
++			buffers = q.g_buffers();
++			fail_on_test(buffers == 0);
++			/* Delete buffer index 1 must fail */
++			fail_on_test(q.delete_bufs(node, 1, buffers) != EINVAL);
++			/* Delete buffer index 0 is valid */
++			fail_on_test(q.delete_bufs(node, 0, buffers));
++			/* Delete buffer index 0 again must fail */
++			fail_on_test(q.delete_bufs(node, 0, 1) != EINVAL);
++			/* Create 3 buffers indexes 0 to 2 */
++			fail_on_test(q.create_bufs(node, 3));
++			/* Delete them one by one */
++			fail_on_test(q.delete_bufs(node, 2, 1));
++			fail_on_test(q.delete_bufs(node, 0, 1));
++			fail_on_test(q.delete_bufs(node, 1, 1));
++			/* Delete buffer index 0 again must fail */
++			fail_on_test(q.delete_bufs(node, 0, 1) != EINVAL);
++
++			/* Create 5 buffers indexes 0 to 4*/
++			fail_on_test(q.create_bufs(node, 5));
++			/* Delete buffers index 1 and 2 */
++			fail_on_test(q.delete_bufs(node, 1, 2));
++			/* Add 3 more buffers should be indexes 5 to 7*/
++			fail_on_test(q.create_bufs(node, 3));
++			/* Query buffers: 
++			 * 1 and 2 have been deleted they must fail 
++			 * 5 to 7 must exist*/
++			fail_on_test(buf.querybuf(node, 1) != EINVAL);
++			fail_on_test(buf.querybuf(node, 2) != EINVAL);
++			fail_on_test(buf.querybuf(node, 5));
++			fail_on_test(buf.querybuf(node, 6));
++			fail_on_test(buf.querybuf(node, 7));
++			/* Delete existing buffer index 7 with bad type must fail */
++			memset(&delbufs, 0xff, sizeof(delbufs));
++			delbufs.index = 7;
++			delbufs.count = 1;
++			delbufs.type = 0;
++			fail_on_test(doioctl(node, VIDIOC_DELETE_BUFS, &delbufs) != EINVAL);
++
++			/* Delete crossing max allowed buffers boundary must fail */
++			fail_on_test(q.delete_bufs(node, q.g_max_buffers() - 2, 8) != EINVAL);
++		
++			/* Delete overflow must fail */
++			fail_on_test(q.delete_bufs(node, 3, 0xfffffff) != EINVAL);
++
++			/* Create 2 buffers, that must fill the hole */
++			fail_on_test(q.create_bufs(node, 2));
++			/* Remove all buffers */
++			fail_on_test(q.delete_bufs(node, 0, 8));
 +		}
 +	}
 +
 +	return 0;
 +}
 +
- int testExpBuf(struct node *node)
+ int testReqBufs(struct node *node)
  {
- 	bool have_expbuf = false;
+ 	struct v4l2_create_buffers crbufs = { };
 -- 
 2.39.2
 
