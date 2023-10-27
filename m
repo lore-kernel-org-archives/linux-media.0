@@ -2,39 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 955BEC25B47
-	for <linux-media@archiver.kernel.org>; Fri, 27 Oct 2023 09:58:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5098AC25B6E
+	for <linux-media@archiver.kernel.org>; Fri, 27 Oct 2023 09:59:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345675AbjJ0J67 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 27 Oct 2023 05:58:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47992 "EHLO
+        id S1345688AbjJ0J7D (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 27 Oct 2023 05:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345663AbjJ0J66 (ORCPT
+        with ESMTP id S1345679AbjJ0J7B (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 27 Oct 2023 05:58:58 -0400
+        Fri, 27 Oct 2023 05:59:01 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5569D
-        for <linux-media@vger.kernel.org>; Fri, 27 Oct 2023 02:58:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E329D
+        for <linux-media@vger.kernel.org>; Fri, 27 Oct 2023 02:58:58 -0700 (PDT)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5FBF8EF2;
-        Fri, 27 Oct 2023 11:58:39 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 576BCBBB;
+        Fri, 27 Oct 2023 11:58:42 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1698400719;
-        bh=nq1Rj5q7KBs/lUttGTDrfyVjmASXK6xBMmTq7vf4Yn0=;
+        s=mail; t=1698400722;
+        bh=LyyuF0L5dxbGMzpLszO8KQtqbk5trvmDCL07RX19uRU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fk9WfV464adohaxrLTOcThhe29eEQhDm3XznTVTelhPGQY1dKAiitj3tda7rgniGb
-         +0iqq81nGs+yy5U6b6QTJjY1F0hV+u8VvLZ9xoHrhxct857UzY8hGSyQMRyisKOqow
-         cDPnCh2PC3BcKhLFXP3RB4IB9cH2TNNrCsTgOMhQ=
+        b=IbCKaJHdC/Jd6pNc+1F3IHMn0aq9j7BTpffBzxkgiy4Z+A/18X+WMihICCw3avh0E
+         a/39wUtu5iM9p6BG4mfLKeVImVFWAf0E6VaUDBMecrOgm2IKnslGcddFkW71+zeVRR
+         6mJgMuHTzU4c+j9JX0imtONF5jrMvSmr8VU77HIc=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
-Subject: [PATCH v1 4/9] media: qcom: camss: Fix references to pad config
-Date:   Fri, 27 Oct 2023 12:58:48 +0300
-Message-ID: <20231027095853.29057-5-laurent.pinchart@ideasonboard.com>
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH v1 6/9] media: ti: omap3isp: Fix references to pad config
+Date:   Fri, 27 Oct 2023 12:58:50 +0300
+Message-ID: <20231027095853.29057-7-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231027095853.29057-1-laurent.pinchart@ideasonboard.com>
 References: <20231027095853.29057-1-laurent.pinchart@ideasonboard.com>
@@ -50,298 +47,285 @@ remaining incorrect references to pad config in comments.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- .../media/platform/qcom/camss/camss-csid.c    | 12 +++++-----
- .../media/platform/qcom/camss/camss-csiphy.c  | 12 +++++-----
- .../media/platform/qcom/camss/camss-ispif.c   | 12 +++++-----
- drivers/media/platform/qcom/camss/camss-vfe.c | 24 +++++++++----------
- 4 files changed, 30 insertions(+), 30 deletions(-)
+ drivers/media/platform/ti/omap3isp/ispccdc.c    | 12 ++++++------
+ drivers/media/platform/ti/omap3isp/ispccp2.c    | 10 +++++-----
+ drivers/media/platform/ti/omap3isp/ispcsi2.c    |  6 +++---
+ drivers/media/platform/ti/omap3isp/isppreview.c | 12 ++++++------
+ drivers/media/platform/ti/omap3isp/ispresizer.c | 16 ++++++++--------
+ 5 files changed, 28 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
-index 07fbdba354dc..bbe253f7571f 100644
---- a/drivers/media/platform/qcom/camss/camss-csid.c
-+++ b/drivers/media/platform/qcom/camss/camss-csid.c
-@@ -263,7 +263,7 @@ static int csid_set_stream(struct v4l2_subdev *sd, int enable)
+diff --git a/drivers/media/platform/ti/omap3isp/ispccdc.c b/drivers/media/platform/ti/omap3isp/ispccdc.c
+index 7f46d0cdde6e..dd375c4e180d 100644
+--- a/drivers/media/platform/ti/omap3isp/ispccdc.c
++++ b/drivers/media/platform/ti/omap3isp/ispccdc.c
+@@ -1968,7 +1968,7 @@ __ccdc_get_crop(struct isp_ccdc_device *ccdc,
  /*
-  * __csid_get_format - Get pointer to format structure
-  * @csid: CSID device
-- * @cfg: V4L2 subdev pad configuration
+  * ccdc_try_format - Try video format on a pad
+  * @ccdc: ISP CCDC device
+- * @cfg : V4L2 subdev pad configuration
 + * @sd_state: V4L2 subdev state
-  * @pad: pad from which format is requested
-  * @which: TRY or ACTIVE format
-  *
-@@ -284,7 +284,7 @@ __csid_get_format(struct csid_device *csid,
+  * @pad: Pad number
+  * @fmt: Format
+  */
+@@ -2126,7 +2126,7 @@ static void ccdc_try_crop(struct isp_ccdc_device *ccdc,
  /*
-  * csid_try_format - Handle try format by pad subdev method
-  * @csid: CSID device
-- * @cfg: V4L2 subdev pad configuration
+  * ccdc_enum_mbus_code - Handle pixel format enumeration
+  * @sd     : pointer to v4l2 subdev structure
+- * @cfg : V4L2 subdev pad configuration
 + * @sd_state: V4L2 subdev state
-  * @pad: pad on which format is requested
-  * @fmt: pointer to v4l2 format structure
-  * @which: wanted subdev format
-@@ -352,7 +352,7 @@ static void csid_try_format(struct csid_device *csid,
- /*
-  * csid_enum_mbus_code - Handle pixel format enumeration
-  * @sd: CSID V4L2 subdevice
-- * @cfg: V4L2 subdev pad configuration
-+ * @sd_state: V4L2 subdev state
-  * @code: pointer to v4l2_subdev_mbus_code_enum structure
+  * @code   : pointer to v4l2_subdev_mbus_code_enum structure
   * return -EINVAL or zero on success
   */
-@@ -393,7 +393,7 @@ static int csid_enum_mbus_code(struct v4l2_subdev *sd,
+@@ -2229,7 +2229,7 @@ static int ccdc_enum_frame_size(struct v4l2_subdev *sd,
  /*
-  * csid_enum_frame_size - Handle frame size enumeration
-  * @sd: CSID V4L2 subdevice
+  * ccdc_get_selection - Retrieve a selection rectangle on a pad
+  * @sd: ISP CCDC V4L2 subdevice
 - * @cfg: V4L2 subdev pad configuration
 + * @sd_state: V4L2 subdev state
-  * @fse: pointer to v4l2_subdev_frame_size_enum structure
+  * @sel: Selection rectangle
+  *
+  * The only supported rectangles are the crop rectangles on the output formatter
+@@ -2273,7 +2273,7 @@ static int ccdc_get_selection(struct v4l2_subdev *sd,
+ /*
+  * ccdc_set_selection - Set a selection rectangle on a pad
+  * @sd: ISP CCDC V4L2 subdevice
+- * @cfg: V4L2 subdev pad configuration
++ * @sd_state: V4L2 subdev state
+  * @sel: Selection rectangle
+  *
+  * The only supported rectangle is the actual crop rectangle on the output
+@@ -2321,7 +2321,7 @@ static int ccdc_set_selection(struct v4l2_subdev *sd,
+ /*
+  * ccdc_get_format - Retrieve the video format on a pad
+  * @sd : ISP CCDC V4L2 subdevice
+- * @cfg: V4L2 subdev pad configuration
++ * @sd_state: V4L2 subdev state
+  * @fmt: Format
+  *
+  * Return 0 on success or -EINVAL if the pad is invalid or doesn't correspond
+@@ -2345,7 +2345,7 @@ static int ccdc_get_format(struct v4l2_subdev *sd,
+ /*
+  * ccdc_set_format - Set the video format on a pad
+  * @sd : ISP CCDC V4L2 subdevice
+- * @cfg: V4L2 subdev pad configuration
++ * @sd_state: V4L2 subdev state
+  * @fmt: Format
+  *
+  * Return 0 on success or -EINVAL if the pad is invalid or doesn't correspond
+diff --git a/drivers/media/platform/ti/omap3isp/ispccp2.c b/drivers/media/platform/ti/omap3isp/ispccp2.c
+index 0517d410b22c..1204ee221c9e 100644
+--- a/drivers/media/platform/ti/omap3isp/ispccp2.c
++++ b/drivers/media/platform/ti/omap3isp/ispccp2.c
+@@ -614,7 +614,7 @@ static const unsigned int ccp2_fmts[] = {
+ /*
+  * __ccp2_get_format - helper function for getting ccp2 format
+  * @ccp2  : Pointer to ISP CCP2 device
+- * @cfg: V4L2 subdev pad configuration
++ * @sd_state: V4L2 subdev state
+  * @pad   : pad number
+  * @which : wanted subdev format
+  * return format structure or NULL on error
+@@ -633,7 +633,7 @@ __ccp2_get_format(struct isp_ccp2_device *ccp2,
+ /*
+  * ccp2_try_format - Handle try format by pad subdev method
+  * @ccp2  : Pointer to ISP CCP2 device
+- * @cfg: V4L2 subdev pad configuration
++ * @sd_state: V4L2 subdev state
+  * @pad   : pad num
+  * @fmt   : pointer to v4l2 mbus format structure
+  * @which : wanted subdev format
+@@ -688,7 +688,7 @@ static void ccp2_try_format(struct isp_ccp2_device *ccp2,
+ /*
+  * ccp2_enum_mbus_code - Handle pixel format enumeration
+  * @sd     : pointer to v4l2 subdev structure
+- * @cfg: V4L2 subdev pad configuration
++ * @sd_state: V4L2 subdev state
+  * @code   : pointer to v4l2_subdev_mbus_code_enum structure
   * return -EINVAL or zero on success
   */
-@@ -430,7 +430,7 @@ static int csid_enum_frame_size(struct v4l2_subdev *sd,
+@@ -749,7 +749,7 @@ static int ccp2_enum_frame_size(struct v4l2_subdev *sd,
  /*
-  * csid_get_format - Handle get format by pads subdev method
-  * @sd: CSID V4L2 subdevice
+  * ccp2_get_format - Handle get format by pads subdev method
+  * @sd    : pointer to v4l2 subdev structure
 - * @cfg: V4L2 subdev pad configuration
 + * @sd_state: V4L2 subdev state
-  * @fmt: pointer to v4l2 subdev format structure
-  *
-  * Return -EINVAL or zero on success
-@@ -454,7 +454,7 @@ static int csid_get_format(struct v4l2_subdev *sd,
- /*
-  * csid_set_format - Handle set format by pads subdev method
-  * @sd: CSID V4L2 subdevice
-- * @cfg: V4L2 subdev pad configuration
-+ * @sd_state: V4L2 subdev state
-  * @fmt: pointer to v4l2 subdev format structure
-  *
-  * Return -EINVAL or zero on success
-diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.c b/drivers/media/platform/qcom/camss/camss-csiphy.c
-index 169b2cd6f644..264c99efeae8 100644
---- a/drivers/media/platform/qcom/camss/camss-csiphy.c
-+++ b/drivers/media/platform/qcom/camss/camss-csiphy.c
-@@ -312,7 +312,7 @@ static int csiphy_set_stream(struct v4l2_subdev *sd, int enable)
- /*
-  * __csiphy_get_format - Get pointer to format structure
-  * @csiphy: CSIPHY device
-- * @cfg: V4L2 subdev pad configuration
-+ * @sd_state: V4L2 subdev state
-  * @pad: pad from which format is requested
-  * @which: TRY or ACTIVE format
-  *
-@@ -333,7 +333,7 @@ __csiphy_get_format(struct csiphy_device *csiphy,
- /*
-  * csiphy_try_format - Handle try format by pad subdev method
-  * @csiphy: CSIPHY device
-- * @cfg: V4L2 subdev pad configuration
-+ * @sd_state: V4L2 subdev state
-  * @pad: pad on which format is requested
-  * @fmt: pointer to v4l2 format structure
-  * @which: wanted subdev format
-@@ -380,7 +380,7 @@ static void csiphy_try_format(struct csiphy_device *csiphy,
- /*
-  * csiphy_enum_mbus_code - Handle pixel format enumeration
-  * @sd: CSIPHY V4L2 subdevice
-- * @cfg: V4L2 subdev pad configuration
-+ * @sd_state: V4L2 subdev state
-  * @code: pointer to v4l2_subdev_mbus_code_enum structure
+  * @fmt   : pointer to v4l2 subdev format structure
   * return -EINVAL or zero on success
   */
-@@ -413,7 +413,7 @@ static int csiphy_enum_mbus_code(struct v4l2_subdev *sd,
+@@ -771,7 +771,7 @@ static int ccp2_get_format(struct v4l2_subdev *sd,
  /*
-  * csiphy_enum_frame_size - Handle frame size enumeration
-  * @sd: CSIPHY V4L2 subdevice
+  * ccp2_set_format - Handle set format by pads subdev method
+  * @sd    : pointer to v4l2 subdev structure
 - * @cfg: V4L2 subdev pad configuration
 + * @sd_state: V4L2 subdev state
-  * @fse: pointer to v4l2_subdev_frame_size_enum structure
+  * @fmt   : pointer to v4l2 subdev format structure
+  * returns zero
+  */
+diff --git a/drivers/media/platform/ti/omap3isp/ispcsi2.c b/drivers/media/platform/ti/omap3isp/ispcsi2.c
+index 21270fc4e623..ae574e1b6528 100644
+--- a/drivers/media/platform/ti/omap3isp/ispcsi2.c
++++ b/drivers/media/platform/ti/omap3isp/ispcsi2.c
+@@ -893,7 +893,7 @@ csi2_try_format(struct isp_csi2_device *csi2,
+ /*
+  * csi2_enum_mbus_code - Handle pixel format enumeration
+  * @sd     : pointer to v4l2 subdev structure
+- * @cfg: V4L2 subdev pad configuration
++ * @sd_state: V4L2 subdev state
+  * @code   : pointer to v4l2_subdev_mbus_code_enum structure
   * return -EINVAL or zero on success
   */
-@@ -450,7 +450,7 @@ static int csiphy_enum_frame_size(struct v4l2_subdev *sd,
+@@ -967,7 +967,7 @@ static int csi2_enum_frame_size(struct v4l2_subdev *sd,
  /*
-  * csiphy_get_format - Handle get format by pads subdev method
-  * @sd: CSIPHY V4L2 subdevice
+  * csi2_get_format - Handle get format by pads subdev method
+  * @sd : pointer to v4l2 subdev structure
 - * @cfg: V4L2 subdev pad configuration
 + * @sd_state: V4L2 subdev state
   * @fmt: pointer to v4l2 subdev format structure
-  *
-  * Return -EINVAL or zero on success
-@@ -474,7 +474,7 @@ static int csiphy_get_format(struct v4l2_subdev *sd,
- /*
-  * csiphy_set_format - Handle set format by pads subdev method
-  * @sd: CSIPHY V4L2 subdevice
-- * @cfg: V4L2 subdev pad configuration
-+ * @sd_state: V4L2 subdev state
-  * @fmt: pointer to v4l2 subdev format structure
-  *
-  * Return -EINVAL or zero on success
-diff --git a/drivers/media/platform/qcom/camss/camss-ispif.c b/drivers/media/platform/qcom/camss/camss-ispif.c
-index 6f763b5ac8c8..d5efcfbec8c3 100644
---- a/drivers/media/platform/qcom/camss/camss-ispif.c
-+++ b/drivers/media/platform/qcom/camss/camss-ispif.c
-@@ -866,7 +866,7 @@ static int ispif_set_stream(struct v4l2_subdev *sd, int enable)
- /*
-  * __ispif_get_format - Get pointer to format structure
-  * @ispif: ISPIF line
-- * @cfg: V4L2 subdev pad configuration
-+ * @sd_state: V4L2 subdev state
-  * @pad: pad from which format is requested
-  * @which: TRY or ACTIVE format
-  *
-@@ -887,7 +887,7 @@ __ispif_get_format(struct ispif_line *line,
- /*
-  * ispif_try_format - Handle try format by pad subdev method
-  * @ispif: ISPIF line
-- * @cfg: V4L2 subdev pad configuration
-+ * @sd_state: V4L2 subdev state
-  * @pad: pad on which format is requested
-  * @fmt: pointer to v4l2 format structure
-  * @which: wanted subdev format
-@@ -935,7 +935,7 @@ static void ispif_try_format(struct ispif_line *line,
- /*
-  * ispif_enum_mbus_code - Handle pixel format enumeration
-  * @sd: ISPIF V4L2 subdevice
-- * @cfg: V4L2 subdev pad configuration
-+ * @sd_state: V4L2 subdev state
-  * @code: pointer to v4l2_subdev_mbus_code_enum structure
   * return -EINVAL or zero on success
   */
-@@ -968,7 +968,7 @@ static int ispif_enum_mbus_code(struct v4l2_subdev *sd,
+@@ -989,7 +989,7 @@ static int csi2_get_format(struct v4l2_subdev *sd,
  /*
-  * ispif_enum_frame_size - Handle frame size enumeration
-  * @sd: ISPIF V4L2 subdevice
+  * csi2_set_format - Handle set format by pads subdev method
+  * @sd : pointer to v4l2 subdev structure
 - * @cfg: V4L2 subdev pad configuration
 + * @sd_state: V4L2 subdev state
-  * @fse: pointer to v4l2_subdev_frame_size_enum structure
+  * @fmt: pointer to v4l2 subdev format structure
   * return -EINVAL or zero on success
   */
-@@ -1005,7 +1005,7 @@ static int ispif_enum_frame_size(struct v4l2_subdev *sd,
+diff --git a/drivers/media/platform/ti/omap3isp/isppreview.c b/drivers/media/platform/ti/omap3isp/isppreview.c
+index fe550021d930..e383a57654de 100644
+--- a/drivers/media/platform/ti/omap3isp/isppreview.c
++++ b/drivers/media/platform/ti/omap3isp/isppreview.c
+@@ -1722,7 +1722,7 @@ static const unsigned int preview_output_fmts[] = {
  /*
-  * ispif_get_format - Handle get format by pads subdev method
-  * @sd: ISPIF V4L2 subdevice
+  * preview_try_format - Validate a format
+  * @prev: ISP preview engine
 - * @cfg: V4L2 subdev pad configuration
 + * @sd_state: V4L2 subdev state
-  * @fmt: pointer to v4l2 subdev format structure
-  *
-  * Return -EINVAL or zero on success
-@@ -1029,7 +1029,7 @@ static int ispif_get_format(struct v4l2_subdev *sd,
+  * @pad: pad number
+  * @fmt: format to be validated
+  * @which: try/active format selector
+@@ -1861,7 +1861,7 @@ static void preview_try_crop(struct isp_prev_device *prev,
  /*
-  * ispif_set_format - Handle set format by pads subdev method
-  * @sd: ISPIF V4L2 subdevice
+  * preview_enum_mbus_code - Handle pixel format enumeration
+  * @sd     : pointer to v4l2 subdev structure
 - * @cfg: V4L2 subdev pad configuration
 + * @sd_state: V4L2 subdev state
-  * @fmt: pointer to v4l2 subdev format structure
-  *
-  * Return -EINVAL or zero on success
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
-index daa4f5477f72..74fe577a84aa 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe.c
-@@ -815,7 +815,7 @@ static int vfe_set_stream(struct v4l2_subdev *sd, int enable)
- /*
-  * __vfe_get_format - Get pointer to format structure
-  * @line: VFE line
-- * @cfg: V4L2 subdev pad configuration
-+ * @sd_state: V4L2 subdev state
-  * @pad: pad from which format is requested
-  * @which: TRY or ACTIVE format
-  *
-@@ -836,7 +836,7 @@ __vfe_get_format(struct vfe_line *line,
- /*
-  * __vfe_get_compose - Get pointer to compose selection structure
-  * @line: VFE line
-- * @cfg: V4L2 subdev pad configuration
-+ * @sd_state: V4L2 subdev state
-  * @which: TRY or ACTIVE format
-  *
-  * Return pointer to TRY or ACTIVE compose rectangle structure
-@@ -856,7 +856,7 @@ __vfe_get_compose(struct vfe_line *line,
- /*
-  * __vfe_get_crop - Get pointer to crop selection structure
-  * @line: VFE line
-- * @cfg: V4L2 subdev pad configuration
-+ * @sd_state: V4L2 subdev state
-  * @which: TRY or ACTIVE format
-  *
-  * Return pointer to TRY or ACTIVE crop rectangle structure
-@@ -875,7 +875,7 @@ __vfe_get_crop(struct vfe_line *line,
- /*
-  * vfe_try_format - Handle try format by pad subdev method
-  * @line: VFE line
-- * @cfg: V4L2 subdev pad configuration
-+ * @sd_state: V4L2 subdev state
-  * @pad: pad on which format is requested
-  * @fmt: pointer to v4l2 format structure
-  * @which: wanted subdev format
-@@ -936,7 +936,7 @@ static void vfe_try_format(struct vfe_line *line,
- /*
-  * vfe_try_compose - Handle try compose selection by pad subdev method
-  * @line: VFE line
-- * @cfg: V4L2 subdev pad configuration
-+ * @sd_state: V4L2 subdev state
-  * @rect: pointer to v4l2 rect structure
-  * @which: wanted subdev format
-  */
-@@ -975,7 +975,7 @@ static void vfe_try_compose(struct vfe_line *line,
- /*
-  * vfe_try_crop - Handle try crop selection by pad subdev method
-  * @line: VFE line
-- * @cfg: V4L2 subdev pad configuration
-+ * @sd_state: V4L2 subdev state
-  * @rect: pointer to v4l2 rect structure
-  * @which: wanted subdev format
-  */
-@@ -1018,7 +1018,7 @@ static void vfe_try_crop(struct vfe_line *line,
- /*
-  * vfe_enum_mbus_code - Handle pixel format enumeration
-  * @sd: VFE V4L2 subdevice
-- * @cfg: V4L2 subdev pad configuration
-+ * @sd_state: V4L2 subdev state
-  * @code: pointer to v4l2_subdev_mbus_code_enum structure
-  *
+  * @code   : pointer to v4l2_subdev_mbus_code_enum structure
   * return -EINVAL or zero on success
-@@ -1052,7 +1052,7 @@ static int vfe_enum_mbus_code(struct v4l2_subdev *sd,
+  */
+@@ -1922,7 +1922,7 @@ static int preview_enum_frame_size(struct v4l2_subdev *sd,
  /*
-  * vfe_enum_frame_size - Handle frame size enumeration
-  * @sd: VFE V4L2 subdevice
+  * preview_get_selection - Retrieve a selection rectangle on a pad
+  * @sd: ISP preview V4L2 subdevice
 - * @cfg: V4L2 subdev pad configuration
 + * @sd_state: V4L2 subdev state
-  * @fse: pointer to v4l2_subdev_frame_size_enum structure
+  * @sel: Selection rectangle
   *
-  * Return -EINVAL or zero on success
-@@ -1090,7 +1090,7 @@ static int vfe_enum_frame_size(struct v4l2_subdev *sd,
+  * The only supported rectangles are the crop rectangles on the sink pad.
+@@ -1965,7 +1965,7 @@ static int preview_get_selection(struct v4l2_subdev *sd,
  /*
-  * vfe_get_format - Handle get format by pads subdev method
-  * @sd: VFE V4L2 subdevice
+  * preview_set_selection - Set a selection rectangle on a pad
+  * @sd: ISP preview V4L2 subdevice
+- * @cfg: V4L2 subdev pad configuration
++ * @sd_state: V4L2 subdev state
+  * @sel: Selection rectangle
+  *
+  * The only supported rectangle is the actual crop rectangle on the sink pad.
+@@ -2013,7 +2013,7 @@ static int preview_set_selection(struct v4l2_subdev *sd,
+ /*
+  * preview_get_format - Handle get format by pads subdev method
+  * @sd : pointer to v4l2 subdev structure
 - * @cfg: V4L2 subdev pad configuration
 + * @sd_state: V4L2 subdev state
   * @fmt: pointer to v4l2 subdev format structure
-  *
-  * Return -EINVAL or zero on success
-@@ -1118,7 +1118,7 @@ static int vfe_set_selection(struct v4l2_subdev *sd,
+  * return -EINVAL or zero on success
+  */
+@@ -2035,7 +2035,7 @@ static int preview_get_format(struct v4l2_subdev *sd,
  /*
-  * vfe_set_format - Handle set format by pads subdev method
-  * @sd: VFE V4L2 subdevice
+  * preview_set_format - Handle set format by pads subdev method
+  * @sd : pointer to v4l2 subdev structure
 - * @cfg: V4L2 subdev pad configuration
 + * @sd_state: V4L2 subdev state
   * @fmt: pointer to v4l2 subdev format structure
-  *
-  * Return -EINVAL or zero on success
-@@ -1169,7 +1169,7 @@ static int vfe_set_format(struct v4l2_subdev *sd,
- /*
-  * vfe_get_selection - Handle get selection by pads subdev method
-  * @sd: VFE V4L2 subdevice
+  * return -EINVAL or zero on success
+  */
+diff --git a/drivers/media/platform/ti/omap3isp/ispresizer.c b/drivers/media/platform/ti/omap3isp/ispresizer.c
+index bbcb27508fab..87d821b02e5c 100644
+--- a/drivers/media/platform/ti/omap3isp/ispresizer.c
++++ b/drivers/media/platform/ti/omap3isp/ispresizer.c
+@@ -109,7 +109,7 @@ static const struct isprsz_coef filter_coefs = {
+  * __resizer_get_format - helper function for getting resizer format
+  * @res   : pointer to resizer private structure
+  * @pad   : pad number
 - * @cfg: V4L2 subdev pad configuration
 + * @sd_state: V4L2 subdev state
-  * @sel: pointer to v4l2 subdev selection structure
-  *
-  * Return -EINVAL or zero on success
-@@ -1239,7 +1239,7 @@ static int vfe_get_selection(struct v4l2_subdev *sd,
+  * @which : wanted subdev format
+  * return zero
+  */
+@@ -127,7 +127,7 @@ __resizer_get_format(struct isp_res_device *res,
  /*
-  * vfe_set_selection - Handle set selection by pads subdev method
-  * @sd: VFE V4L2 subdevice
+  * __resizer_get_crop - helper function for getting resizer crop rectangle
+  * @res   : pointer to resizer private structure
 - * @cfg: V4L2 subdev pad configuration
 + * @sd_state: V4L2 subdev state
-  * @sel: pointer to v4l2 subdev selection structure
+  * @which : wanted subdev crop rectangle
+  */
+ static struct v4l2_rect *
+@@ -1214,7 +1214,7 @@ static void resizer_try_crop(const struct v4l2_mbus_framefmt *sink,
+ /*
+  * resizer_get_selection - Retrieve a selection rectangle on a pad
+  * @sd: ISP resizer V4L2 subdevice
+- * @cfg: V4L2 subdev pad configuration
++ * @sd_state: V4L2 subdev state
+  * @sel: Selection rectangle
   *
-  * Return -EINVAL or zero on success
+  * The only supported rectangles are the crop rectangles on the sink pad.
+@@ -1264,7 +1264,7 @@ static int resizer_get_selection(struct v4l2_subdev *sd,
+ /*
+  * resizer_set_selection - Set a selection rectangle on a pad
+  * @sd: ISP resizer V4L2 subdevice
+- * @cfg: V4L2 subdev pad configuration
++ * @sd_state: V4L2 subdev state
+  * @sel: Selection rectangle
+  *
+  * The only supported rectangle is the actual crop rectangle on the sink pad.
+@@ -1368,7 +1368,7 @@ static unsigned int resizer_max_in_width(struct isp_res_device *res)
+ /*
+  * resizer_try_format - Handle try format by pad subdev method
+  * @res   : ISP resizer device
+- * @cfg: V4L2 subdev pad configuration
++ * @sd_state: V4L2 subdev state
+  * @pad   : pad num
+  * @fmt   : pointer to v4l2 format structure
+  * @which : wanted subdev format
+@@ -1412,7 +1412,7 @@ static void resizer_try_format(struct isp_res_device *res,
+ /*
+  * resizer_enum_mbus_code - Handle pixel format enumeration
+  * @sd     : pointer to v4l2 subdev structure
+- * @cfg: V4L2 subdev pad configuration
++ * @sd_state: V4L2 subdev state
+  * @code   : pointer to v4l2_subdev_mbus_code_enum structure
+  * return -EINVAL or zero on success
+  */
+@@ -1473,7 +1473,7 @@ static int resizer_enum_frame_size(struct v4l2_subdev *sd,
+ /*
+  * resizer_get_format - Handle get format by pads subdev method
+  * @sd    : pointer to v4l2 subdev structure
+- * @cfg: V4L2 subdev pad configuration
++ * @sd_state: V4L2 subdev state
+  * @fmt   : pointer to v4l2 subdev format structure
+  * return -EINVAL or zero on success
+  */
+@@ -1495,7 +1495,7 @@ static int resizer_get_format(struct v4l2_subdev *sd,
+ /*
+  * resizer_set_format - Handle set format by pads subdev method
+  * @sd    : pointer to v4l2 subdev structure
+- * @cfg: V4L2 subdev pad configuration
++ * @sd_state: V4L2 subdev state
+  * @fmt   : pointer to v4l2 subdev format structure
+  * return -EINVAL or zero on success
+  */
 -- 
 Regards,
 
