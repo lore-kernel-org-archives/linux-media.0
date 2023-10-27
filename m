@@ -2,97 +2,167 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B160C25B6E
-	for <linux-media@archiver.kernel.org>; Fri, 27 Oct 2023 09:20:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 976F7C25B67
+	for <linux-media@archiver.kernel.org>; Fri, 27 Oct 2023 09:21:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235142AbjJ0JUD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 27 Oct 2023 05:20:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38022 "EHLO
+        id S1345352AbjJ0JVR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 27 Oct 2023 05:21:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345577AbjJ0JT7 (ORCPT
+        with ESMTP id S229503AbjJ0JVP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 27 Oct 2023 05:19:59 -0400
-Received: from m15.mail.163.com (m15.mail.163.com [45.254.50.219])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CE9CA11F;
-        Fri, 27 Oct 2023 02:19:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=x7fiv
-        BQJq72nSMKux0IKJcpLOEh/ZK4DVTpIIvCRjkA=; b=OWIxMHlnmEetMmBrF5wNU
-        iet7mM3/6axuVHUu3jZFNsHOXrsp3S/VMOPP91EA/7OGOW1vfuOg4lGzPHZ8O033
-        /rHAIxiNMDBr4lwpT8LaVY3j2FeWV8laEfkO7c4V97x9T1h0WgNl0B3v2P0kty8b
-        vk6rDiF5DKyGBqGlQOlDYI=
-Received: from leanderwang-LC4.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g0-0 (Coremail) with SMTP id _____wBnD_ZrgDtlHuRqBg--.47942S2;
-        Fri, 27 Oct 2023 17:18:35 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     dmitry.osipenko@collabora.com
-Cc:     Kyrie.Wu@mediatek.com, bin.liu@mediatek.com, mchehab@kernel.org,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, Irui.Wang@mediatek.com,
-        security@kernel.org, hackerzheng666@gmail.com,
-        1395428693sheep@gmail.com, alex000young@gmail.com,
-        amergnat@baylibre.com, wenst@chromium.org,
-        Zheng Wang <zyytlz.wz@163.com>, stable@vger.kernel.org
-Subject: [PATCH 2/2] media: mtk-jpeg: Fix timeout schedule error in mtk_jpegdec_worker.
-Date:   Fri, 27 Oct 2023 17:18:32 +0800
-Message-Id: <20231027091832.39082-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 27 Oct 2023 05:21:15 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C13FC0
+        for <linux-media@vger.kernel.org>; Fri, 27 Oct 2023 02:21:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698398473; x=1729934473;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5udXrmEZGq83GdIwZMqwkdMm58RFzCxmWE3e1RZI5vY=;
+  b=JurCoA60eyX7E4lzG2h+zbBS5kKXrfeXisA0Jltb4MNa9RpKr8SX9GE8
+   E0FTIQyyfvxfKLJnkW5Xa+AjKnSNKFNcadmUM+B5CQqxRy3vrblFOcj+B
+   1QwVLoX/kwmSh21DA67K2mL1C/MlGefFJguNBUZnn3qgYNIe55KrFrq5b
+   o/3VUDppH0IM5Gk4mbI2L9/4DZ1qxYJJovdrQ5fWR9bRVZDbiVCA1e4Qa
+   Cmhmz3ngXI+pBCGYxXTcCPYc1RNKXZB0PJax5mA6jz7VW9wFGLSWeCb3e
+   Q4lj6mCVCuVjlCubZ8GNeNP0+p/c7DYMDPkpqg3Ai/QBvdBQ6l2oYgks3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10875"; a="384948653"
+X-IronPort-AV: E=Sophos;i="6.03,255,1694761200"; 
+   d="scan'208";a="384948653"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2023 02:21:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10875"; a="933016739"
+X-IronPort-AV: E=Sophos;i="6.03,255,1694761200"; 
+   d="scan'208";a="933016739"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2023 02:21:10 -0700
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id D3E2111F82E;
+        Fri, 27 Oct 2023 12:21:07 +0300 (EEST)
+Date:   Fri, 27 Oct 2023 09:21:07 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, hverkuil@xs4all.nl,
+        tomi.valkeinen@ideasonboard.com, jacopo.mondi@ideasonboard.com,
+        bingbu.cao@intel.com, hongju.wang@intel.com,
+        Alain Volmat <alain.volmat@foss.st.com>
+Subject: Re: [PATCH v4 5/9] media: v4l: subdev: Make stream argument optional
+ in state access functions
+Message-ID: <ZTuBA6OGiycK9J4y@kekkonen.localdomain>
+References: <20231026070329.948847-1-sakari.ailus@linux.intel.com>
+ <20231026070329.948847-6-sakari.ailus@linux.intel.com>
+ <20231026134904.GC26306@pendragon.ideasonboard.com>
+ <ZTt9ifIH8uYf2fYF@kekkonen.localdomain>
+ <20231027091013.GA9881@pendragon.ideasonboard.com>
+ <ZTt-7tMQQVGGVGTi@kekkonen.localdomain>
+ <20231027091427.GA10143@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wBnD_ZrgDtlHuRqBg--.47942S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Ar15uF1rKrW5Gr4xtw4Dtwb_yoW8Cw1kpF
-        Z3K3yqkrW5Wrs8tF4UA3W7ZFy5G3s0gr47WF43Wws3J343XF47tryjya4xtFWIyFy2ka4F
-        vF4vg34xJFsFyFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziiIDxUUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXA4WU1Xl75dK2QAAsM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231027091427.GA10143@pendragon.ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In mtk_jpegdec_worker, if error occurs in mtk_jpeg_set_dec_dst, it
-will start the timeout worker and invoke v4l2_m2m_job_finish at
-the same time. This will break the logic of design for there should
-be only one function to call v4l2_m2m_job_finish. But now the timeout
-handler and mtk_jpegdec_worker will both invoke it.
+On Fri, Oct 27, 2023 at 12:14:27PM +0300, Laurent Pinchart wrote:
+> On Fri, Oct 27, 2023 at 09:12:14AM +0000, Sakari Ailus wrote:
+> > On Fri, Oct 27, 2023 at 12:10:13PM +0300, Laurent Pinchart wrote:
+> > > > > > +/*
+> > > > > > + * Wrap v4l2_subdev_state_get_format(), allowing the function to be called with
+> > > > > > + * two or three arguments. The purpose of the __v4l2_subdev_state_get_format()
+> > > > > > + * macro below is to come up with the name of the function or macro to call,
+> > > > > > + * using the last two arguments (_stream and _pad). The selected function or
+> > > > > > + * macro is then called using the arguments specified by the caller. A similar
+> > > > > > + * arrangement is used for v4l2_subdev_state_crop() and
+> > > > > > + * v4l2_subdev_state_compose() below.
+> > > > > > + */
+> > > > > > +#define v4l2_subdev_state_get_format(...)				\
+> > > > > > +	__v4l2_subdev_state_get_format(__VA_ARGS__,			\
+> > > > > > +				       _stream, _pad)(__VA_ARGS__)
+> > > > > > +#define __v4l2_subdev_state_get_format(_1, _2, _3, ARG, ...)	\
+> > > > > 
+> > > > > How about renaming this macro to __v4l2_subdev_state_get_format_name ...
+> > > > > 
+> > > > > > +	__v4l2_subdev_state_get_format ## ARG
+> > > > > > +#define __v4l2_subdev_state_get_format_pad(state, pad)		\
+> > > > > > +	__v4l2_subdev_state_get_format_stream(state, pad, 0)
+> > > > > >  struct v4l2_mbus_framefmt *
+> > > > > > -v4l2_subdev_state_get_format(struct v4l2_subdev_state *state, unsigned int pad,
+> > > > > > -			     u32 stream);
+> > > > > > +__v4l2_subdev_state_get_format_stream(struct v4l2_subdev_state *state,
+> > > > > > +				      unsigned int pad, u32 stream);
+> > > > > 
+> > > > > ... and this function to __v4l2_subdev_state_get_format() ? That way the
+> > > > > macro used by drivers and the backend function will have the same name,
+> > > > > with a __ prefix for the function. I think it would be a bit cleaner.
+> > > > > Same below.
+> > > > > 
+> > > > > But now that I've written that, I realize you would need an additional
+> > > > > __v4l2_subdev_state_get_format_stream() macro. I'll let you decide if
+> > > > > you think that's cleaner or not.
+> > > > > 
+> > > > > 
+> > > > > You could also take it one step forward, and avoid three copies of the
+> > > > > same name selection macro:
+> > > > > 
+> > > > > #define __v4l2_subdev_state_get_macro(name, _1, _2, _3, ARG, ...)	\
+> > > > > 	__v4l2_subdev_state_get_ ## name ## ARG
+> > > > > 
+> > > > > #define v4l2_subdev_state_get_format(...)				\
+> > > > > 	__v4l2_subdev_state_get_macro(format, __VA_ARGS__,		\
+> > > > > 				      _stream, _pad)(__VA_ARGS__)
+> > > > 
+> > > > This seems like a good idea. How about calling it
+> > > > __v4l2_subdev_state_gen_call()? It better describes what it does I think.
+> > > 
+> > > Works for me. It's internal anyway.
+> > > 
+> > > > > #define __v4l2_subdev_state_get_format_pad(state, pad)			\
+> > > > > 	__v4l2_subdev_state_get_format(state, pad, 0)
+> > > > > #define __v4l2_subdev_state_get_format_stream(state, pad, stream)	\
+> > > > > 	__v4l2_subdev_state_get_format(state, pad, stream)
+> > > > 
+> > > > This one isn't needed.
+> > > 
+> > > You could indeed drop it if you remove the _stream argument to the
+> > > __v4l2_subdev_state_get_macro() macro above. I thought it would be nice
+> > > to keep it though, to make it more explicit, but I don't mind much.
+> > 
+> > This is certainly up to interpretation but I generally prefer fewer
+> > wrappers. :-)
+> 
+> Up to you.
+> 
+> > We can also make the function __v4l2_subdev_state_get_format() by just
+> > removing "_stream" from the macro call --- empty arguments are allowed.
+> 
+> Yes, that's what I meant.
 
-Fix it by start the worker only if mtk_jpeg_set_dec_dst successfully
-finished.
+Great, I meant the same thing! ;-)
 
-Fixes: da4ede4b7fd6 ("media: mtk-jpeg: move data/code inside CONFIG_OF blocks")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc: stable@vger.kernel.org
----
- drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+The result becomes thus:
 
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-index 7194f88edc0f..d099a9b67930 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-@@ -1750,9 +1750,6 @@ static void mtk_jpegdec_worker(struct work_struct *work)
- 	v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
- 	v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
- 
--	schedule_delayed_work(&comp_jpeg[hw_id]->job_timeout_work,
--			      msecs_to_jiffies(MTK_JPEG_HW_TIMEOUT_MSEC));
--
- 	mtk_jpeg_set_dec_src(ctx, &src_buf->vb2_buf, &bs);
- 	if (mtk_jpeg_set_dec_dst(ctx,
- 				 &jpeg_src_buf->dec_param,
-@@ -1762,6 +1759,9 @@ static void mtk_jpegdec_worker(struct work_struct *work)
- 		goto setdst_end;
- 	}
- 
-+	schedule_delayed_work(&comp_jpeg[hw_id]->job_timeout_work,
-+			      msecs_to_jiffies(MTK_JPEG_HW_TIMEOUT_MSEC));
-+
- 	spin_lock_irqsave(&comp_jpeg[hw_id]->hw_lock, flags);
- 	ctx->total_frame_num++;
- 	mtk_jpeg_dec_reset(comp_jpeg[hw_id]->reg_base);
+/*
+ * A macro to generate the macro or function name for sub-devices state access
+ * wrapper macros below.
+ */
+#define __v4l2_subdev_state_gen_call(NAME, _1, _2, _3, ARG, ...)	\
+	__v4l2_subdev_state_get_ ## NAME ## ARG
+
+...
+
+#define v4l2_subdev_state_get_format(...)				\
+	__v4l2_subdev_state_gen_call(format, __VA_ARGS__, , _pad)(__VA_ARGS__)
+#define __v4l2_subdev_state_get_format_pad(state, pad)		\
+	__v4l2_subdev_state_get_format(state, pad, 0)
+struct v4l2_mbus_framefmt *
+__v4l2_subdev_state_get_format(struct v4l2_subdev_state *state,
+			       unsigned int pad, u32 stream);
+
+Etc. I quite like it actually, compared how it was in the beginning.
+
 -- 
-2.25.1
-
+Sakari Ailus
