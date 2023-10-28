@@ -2,77 +2,106 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4569C25B47
-	for <linux-media@archiver.kernel.org>; Fri, 27 Oct 2023 21:30:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA38AC25B70
+	for <linux-media@archiver.kernel.org>; Sat, 28 Oct 2023 01:45:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346552AbjJ0VaB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 27 Oct 2023 17:30:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48424 "EHLO
+        id S229943AbjJ1Bpt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 27 Oct 2023 21:45:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232330AbjJ0VaA (ORCPT
+        with ESMTP id S229471AbjJ1Bps (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 27 Oct 2023 17:30:00 -0400
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBAD0B0;
-        Fri, 27 Oct 2023 14:29:58 -0700 (PDT)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-1e9c9d181d6so1574394fac.0;
-        Fri, 27 Oct 2023 14:29:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698442198; x=1699046998;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kNGJKvEldoT9PmYXR0BTbSqlmq0sSRwAAORJfa42T8Q=;
-        b=LVNKf/LKBZ+l4UiE1atmI9AZ8nPUl1jRjDfiIk/t+L3nzSNDGt2MSEiDwKU5LnWbxJ
-         MoF0DcXXlbUs1oHUEyG+gLnU1w3nemRbqXk8v4iNpOg7I4u2l81ELtryXAPaur5+WFIA
-         pHHTW5+/JXhmPIwD60Y3f1ccUKitLtcbx8D4XK44beIbljdFLyuvpRbVxTskmmgBRwH/
-         PSZuAc3VGPrMbg0uKKboQIsD+vdhPInmd0ukMzgJrI+MK0exJt6AVYPeGHCv0bEacxak
-         RQSOtBPSoifGf6EG98aQhOKE8uCvIDYPLAHjWPfmxzzZD1P6IXSmOSrHUiNnhxTrYB5Q
-         kINQ==
-X-Gm-Message-State: AOJu0Yy5bT2JEt90IJm+e+9hIsU4HEybQNZx+f3TEqywzwHIjJe91QDY
-        +mqQyhn+yzHzbvxcvzoNvA==
-X-Google-Smtp-Source: AGHT+IGuKz3y2T4ah9nZVE2uj6UueeplwSlnm5Su8lnIY0Azaoq7IaEILJphqDhnUBYiQtTwQFuTGA==
-X-Received: by 2002:a05:6870:1712:b0:1e9:8a35:863a with SMTP id h18-20020a056870171200b001e98a35863amr5036395oae.20.1698442198089;
-        Fri, 27 Oct 2023 14:29:58 -0700 (PDT)
-Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n40-20020a056870822800b001dd5857e243sm460947oae.14.2023.10.27.14.29.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Oct 2023 14:29:56 -0700 (PDT)
-Received: (nullmailer pid 3404725 invoked by uid 1000);
-        Fri, 27 Oct 2023 21:29:55 -0000
-Date:   Fri, 27 Oct 2023 16:29:55 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-        devicetree@vger.kernel.org, linux-media@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/4] dt-bindings: vendor-prefixes: add GalaxyCore
-Message-ID: <169844219487.3404665.10937682775716979340.robh@kernel.org>
-References: <20231027011417.2174658-1-sre@kernel.org>
- <20231027011417.2174658-2-sre@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231027011417.2174658-2-sre@kernel.org>
+        Fri, 27 Oct 2023 21:45:48 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2D8C9
+        for <linux-media@vger.kernel.org>; Fri, 27 Oct 2023 18:45:46 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD754C433C7
+        for <linux-media@vger.kernel.org>; Sat, 28 Oct 2023 01:45:45 +0000 (UTC)
+Date:   Sat, 28 Oct 2023 03:45:43 +0200
+Message-ID: <662b6f1cd819514bcd3c971e3333ab67.hverkuil@xs4all.nl>
+From:   "Hans Verkuil" <hverkuil-cisco@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: WARNINGS
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+This message is generated daily by a cron job that builds media_tree for
+the architectures in the list below.
 
-On Fri, 27 Oct 2023 03:12:01 +0200, Sebastian Reichel wrote:
-> GalaxyCore Shanghai Limited Corporation manufacturers
-> CMOS Image Sensor and Display Driver IC.
-> 
-> Signed-off-by: Sebastian Reichel <sre@kernel.org>
-> ---
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+Results of the daily build of media_tree:
 
-Acked-by: Rob Herring <robh@kernel.org>
+date:			Sat Oct 28 03:00:08 CEST 2023
+media-tree git repo:	git://linuxtv.org/hverkuil/media_tree.git
+media-tree git branch:	media_stage/master
+media-tree git hash:	3e238417254bfdcc23fe207780b59cbb08656762
+v4l-utils git hash:	3d6682746de535d1f7aa71b43a30af40d52a539c
+edid-decode git hash:	bd071f17eeb7e156bbe146781eafb6a8cb1ad410
+gcc version:		i686-linux-gcc (GCC) 13.2.0
+ccache version:		ccache version 4.8.3
+smatch/sparse repo:     git://repo.or.cz/smatch.git
+smatch version:		v0.5.0-8494-gc4f4869a
+sparse version:		v0.5.0-8494-gc4f4869a
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 4ea9496484e974bb46354c0bc783832182128194
+host hardware:		x86_64
+host os:		6.1.55-cobaltpc1
 
+linux-git-powerpc64: OK
+linux-git-arm: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+no-acpi.config: OK
+no-of.config: OK
+no-pm.config: OK
+no-pm-sleep.config: OK
+no-debug-fs.config: OK
+sparse: WARNINGS:
+
+drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
+
+smatch: WARNINGS:
+
+drivers/media/i2c/adv7180.c:1514 adv7180_probe() warn: 'client->irq' from request_threaded_irq() not released on lines: 1514.
+drivers/staging/media/meson/vdec/vdec_1.c:239 vdec_1_start() warn: 'core->vdec_1_clk' from clk_prepare_enable() not released on lines: 239.
+drivers/staging/media/meson/vdec/vdec_hevc.c:227 vdec_hevc_start() warn: 'core->vdec_hevc_clk' from clk_prepare_enable() not released on lines: 227.
+drivers/staging/media/meson/vdec/vdec_hevc.c:227 vdec_hevc_start() warn: 'core->vdec_hevcf_clk' from clk_prepare_enable() not released on lines: 227.
+drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
+drivers/media/platform/st/sti/hva/hva-hw.c:412 hva_hw_probe() warn: 'hva->clk' from clk_prepare() not released on lines: 412.
+drivers/media/pci/saa7134/saa7134-alsa.c:1186 alsa_card_saa7134_create() warn: 'dev->pci->irq' from request_irq() not released on lines: 1186.
+drivers/media/pci/solo6x10/solo6x10-core.c:631 solo_pci_probe() warn: 'pdev->irq' from request_irq() not released on lines: 631.
+drivers/media/pci/solo6x10/solo6x10-core.c:631 solo_pci_probe() warn: 'pdev' from pci_request_regions() not released on lines: 631.
+
+COMPILE_TEST: OK
+strcpy/strncpy/strlcpy: OK
+abi-compliance: ABI OK
+pahole: ABI OK
+utils: OK
+spec-git: OK
+kerneldoc: OK
+
+date:			Sat Oct 28 03:15:58 CEST 2023
+virtme-64: WARNINGS: Final Summary: 3218, Succeeded: 3218, Failed: 0, Warnings: 2
+virtme-32: WARNINGS: Final Summary: 3342, Succeeded: 3342, Failed: 0, Warnings: 4
+
+date:			Sat Oct 28 03:44:33 CEST 2023
+
+Detailed results are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Saturday.log
+
+Detailed regression test results are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Saturday-test-media-64.log
+https://hverkuil.home.xs4all.nl/logs/Saturday-test-media-64-dmesg.log
+https://hverkuil.home.xs4all.nl/logs/Saturday-test-media-32.log
+https://hverkuil.home.xs4all.nl/logs/Saturday-test-media-32-dmesg.log
+
+Full logs are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Saturday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+https://hverkuil.home.xs4all.nl/spec/index.html
