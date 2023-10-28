@@ -2,35 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72AE7C25B67
-	for <linux-media@archiver.kernel.org>; Sat, 28 Oct 2023 07:18:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A59A6C0032E
+	for <linux-media@archiver.kernel.org>; Sat, 28 Oct 2023 07:18:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjJ1HSt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 28 Oct 2023 03:18:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60616 "EHLO
+        id S229627AbjJ1HSv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 28 Oct 2023 03:18:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjJ1HSs (ORCPT
+        with ESMTP id S229479AbjJ1HSs (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sat, 28 Oct 2023 03:18:48 -0400
 Received: from smtprelay08.ispgateway.de (smtprelay08.ispgateway.de [134.119.228.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684DDE3;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6855310A;
         Sat, 28 Oct 2023 00:18:45 -0700 (PDT)
 Received: from [92.206.139.21] (helo=note-book.lan)
         by smtprelay08.ispgateway.de with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.96.1)
         (envelope-from <git@apitzsch.eu>)
-        id 1qwdal-0002T7-0I;
-        Sat, 28 Oct 2023 09:18:43 +0200
+        id 1qwdak-0002T7-0E;
+        Sat, 28 Oct 2023 09:18:42 +0200
 From:   =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
-Date:   Sat, 28 Oct 2023 09:17:46 +0200
-Subject: [PATCH v2 3/5] media: i2c: imx214: Read orientation and rotation
- from system firmware
+Subject: [PATCH v2 0/5] media: i2c: imx214: Extend with sensor size and
+ firmware information
+Date:   Sat, 28 Oct 2023 09:17:43 +0200
+Message-Id: <20231028-imx214-v2-0-69a8fb730d6e@apitzsch.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20231028-imx214-v2-3-69a8fb730d6e@apitzsch.eu>
-References: <20231028-imx214-v2-0-69a8fb730d6e@apitzsch.eu>
-In-Reply-To: <20231028-imx214-v2-0-69a8fb730d6e@apitzsch.eu>
+X-B4-Tracking: v=1; b=H4sIAJe1PGUC/2WMQQ6CMBBFr0JmbU2nJYa48h6GBS0zdhYCabFBS
+ e9uZeviL97Py9shURRKcG12iJQlyTxVMKcGfBimBykZK4PRxmKdkudmsFWXzre2I8dOe6jyEol
+ lO0L3vnKQtM7xfXQz/t6/REallbOW0bkR2fNtWGT9JB/O9IK+lPIF+ypPDp4AAAA=
 To:     Ricardo Ribalda <ribalda@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -46,49 +47,35 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Obtain rotation and orientation information from system firmware and
-register the appropriate controls. While at it, update number of
-pre-allocated control slots.
+Add the effective and active sensor sizes and add functionality to read
+rotation and orientation from device trees.
 
-Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Reviewed-by: Ricardo Ribalda <ribalda@chromium.org>
 Signed-off-by: André Apitzsch <git@apitzsch.eu>
 ---
- drivers/media/i2c/imx214.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+Changes in v2:
+- Use integer representation for default exposure (Kieran)
+- Replace dev_err_probe() by dev_err()
+- Increase number of pre-allocated control slots (Jacopo)
+- Fix typo in commit message (Jacopo)
+- Add r-b tags
+- Add patch to fix ctrls init error handling
+- Link to v1: https://lore.kernel.org/r/20231023-imx214-v1-0-b33f1bbd1fcf@apitzsch.eu
 
-diff --git a/drivers/media/i2c/imx214.c b/drivers/media/i2c/imx214.c
-index 4181127dba12..574878e8c97d 100644
---- a/drivers/media/i2c/imx214.c
-+++ b/drivers/media/i2c/imx214.c
-@@ -704,11 +704,16 @@ static int imx214_ctrls_init(struct imx214 *imx214)
- 		.width = 1120,
- 		.height = 1120,
- 	};
-+	struct v4l2_fwnode_device_properties props;
- 	struct v4l2_ctrl_handler *ctrl_hdlr;
- 	int ret;
- 
-+	ret = v4l2_fwnode_device_parse(imx214->dev, &props);
-+	if (ret < 0)
-+		return ret;
-+
- 	ctrl_hdlr = &imx214->ctrls;
--	ret = v4l2_ctrl_handler_init(&imx214->ctrls, 3);
-+	ret = v4l2_ctrl_handler_init(&imx214->ctrls, 6);
- 	if (ret)
- 		return ret;
- 
-@@ -746,6 +751,8 @@ static int imx214_ctrls_init(struct imx214 *imx214)
- 				V4L2_CID_UNIT_CELL_SIZE,
- 				v4l2_ctrl_ptr_create((void *)&unit_size));
- 
-+	v4l2_ctrl_new_fwnode_properties(ctrl_hdlr, &imx214_ctrl_ops, &props);
-+
- 	ret = ctrl_hdlr->error;
- 	if (ret) {
- 		v4l2_ctrl_handler_free(ctrl_hdlr);
+---
+André Apitzsch (5):
+      media: i2c: imx214: Explain some magic numbers
+      media: i2c: imx214: Move controls init to separate function
+      media: i2c: imx214: Read orientation and rotation from system firmware
+      media: i2c: imx214: Add sensor's pixel matrix size
+      media: i2c: imx214: Fix cleanup after controls initialization error
 
+ drivers/media/i2c/imx214.c | 175 +++++++++++++++++++++++++++++++--------------
+ 1 file changed, 120 insertions(+), 55 deletions(-)
+---
+base-commit: 66f1e1ea3548378ff6387b1ce0b40955d54e86aa
+change-id: 20231023-imx214-68c438ebfb0c
+
+Best regards,
 -- 
-2.42.0
+André Apitzsch <git@apitzsch.eu>
 
