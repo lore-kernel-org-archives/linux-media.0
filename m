@@ -2,36 +2,35 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A59A6C0032E
-	for <linux-media@archiver.kernel.org>; Sat, 28 Oct 2023 07:18:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C740C27C48
+	for <linux-media@archiver.kernel.org>; Sat, 28 Oct 2023 07:18:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229627AbjJ1HSv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 28 Oct 2023 03:18:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60620 "EHLO
+        id S229706AbjJ1HSy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 28 Oct 2023 03:18:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjJ1HSs (ORCPT
+        with ESMTP id S229539AbjJ1HSt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 28 Oct 2023 03:18:48 -0400
-Received: from smtprelay08.ispgateway.de (smtprelay08.ispgateway.de [134.119.228.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6855310A;
-        Sat, 28 Oct 2023 00:18:45 -0700 (PDT)
+        Sat, 28 Oct 2023 03:18:49 -0400
+Received: from smtprelay08.ispgateway.de (smtprelay08.ispgateway.de [134.119.228.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5F4121;
+        Sat, 28 Oct 2023 00:18:46 -0700 (PDT)
 Received: from [92.206.139.21] (helo=note-book.lan)
         by smtprelay08.ispgateway.de with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.96.1)
         (envelope-from <git@apitzsch.eu>)
-        id 1qwdak-0002T7-0E;
-        Sat, 28 Oct 2023 09:18:42 +0200
+        id 1qwdal-0002T7-2T;
+        Sat, 28 Oct 2023 09:18:43 +0200
 From:   =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
-Subject: [PATCH v2 0/5] media: i2c: imx214: Extend with sensor size and
- firmware information
-Date:   Sat, 28 Oct 2023 09:17:43 +0200
-Message-Id: <20231028-imx214-v2-0-69a8fb730d6e@apitzsch.eu>
+Date:   Sat, 28 Oct 2023 09:17:48 +0200
+Subject: [PATCH v2 5/5] media: i2c: imx214: Fix cleanup after controls
+ initialization error
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAJe1PGUC/2WMQQ6CMBBFr0JmbU2nJYa48h6GBS0zdhYCabFBS
- e9uZeviL97Py9shURRKcG12iJQlyTxVMKcGfBimBykZK4PRxmKdkudmsFWXzre2I8dOe6jyEol
- lO0L3vnKQtM7xfXQz/t6/REallbOW0bkR2fNtWGT9JB/O9IK+lPIF+ypPDp4AAAA=
+Message-Id: <20231028-imx214-v2-5-69a8fb730d6e@apitzsch.eu>
+References: <20231028-imx214-v2-0-69a8fb730d6e@apitzsch.eu>
+In-Reply-To: <20231028-imx214-v2-0-69a8fb730d6e@apitzsch.eu>
 To:     Ricardo Ribalda <ribalda@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -39,43 +38,44 @@ Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
         Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht,
-        =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>,
-        Ricardo Ribalda <ribalda@chromium.org>
+        =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
 X-Mailer: b4 0.12.3
 X-Df-Sender: YW5kcmVAYXBpdHpzY2guZXU=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add the effective and active sensor sizes and add functionality to read
-rotation and orientation from device trees.
+If the controls are initialized incorrectly, don't destroy the mutex not
+initialized yet and don't free controls as that is handled in
+imx214_ctrls_init().
 
 Signed-off-by: André Apitzsch <git@apitzsch.eu>
 ---
-Changes in v2:
-- Use integer representation for default exposure (Kieran)
-- Replace dev_err_probe() by dev_err()
-- Increase number of pre-allocated control slots (Jacopo)
-- Fix typo in commit message (Jacopo)
-- Add r-b tags
-- Add patch to fix ctrls init error handling
-- Link to v1: https://lore.kernel.org/r/20231023-imx214-v1-0-b33f1bbd1fcf@apitzsch.eu
+ drivers/media/i2c/imx214.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
----
-André Apitzsch (5):
-      media: i2c: imx214: Explain some magic numbers
-      media: i2c: imx214: Move controls init to separate function
-      media: i2c: imx214: Read orientation and rotation from system firmware
-      media: i2c: imx214: Add sensor's pixel matrix size
-      media: i2c: imx214: Fix cleanup after controls initialization error
+diff --git a/drivers/media/i2c/imx214.c b/drivers/media/i2c/imx214.c
+index e0d9624a9d3f..0aba28d6dc2f 100644
+--- a/drivers/media/i2c/imx214.c
++++ b/drivers/media/i2c/imx214.c
+@@ -1069,7 +1069,7 @@ static int imx214_probe(struct i2c_client *client)
+ 
+ 	ret = imx214_ctrls_init(imx214);
+ 	if (ret < 0)
+-		goto free_ctrl;
++		goto error_power_off;
+ 
+ 	mutex_init(&imx214->mutex);
+ 	imx214->ctrls.lock = &imx214->mutex;
+@@ -1100,6 +1100,7 @@ static int imx214_probe(struct i2c_client *client)
+ free_ctrl:
+ 	mutex_destroy(&imx214->mutex);
+ 	v4l2_ctrl_handler_free(&imx214->ctrls);
++error_power_off:
+ 	pm_runtime_disable(imx214->dev);
+ 
+ 	return ret;
 
- drivers/media/i2c/imx214.c | 175 +++++++++++++++++++++++++++++++--------------
- 1 file changed, 120 insertions(+), 55 deletions(-)
----
-base-commit: 66f1e1ea3548378ff6387b1ce0b40955d54e86aa
-change-id: 20231023-imx214-68c438ebfb0c
-
-Best regards,
 -- 
-André Apitzsch <git@apitzsch.eu>
+2.42.0
 
