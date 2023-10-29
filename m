@@ -2,32 +2,31 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE3EBC4332F
-	for <linux-media@archiver.kernel.org>; Sun, 29 Oct 2023 18:46:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3507EC00142
+	for <linux-media@archiver.kernel.org>; Sun, 29 Oct 2023 18:46:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbjJ2SqK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 29 Oct 2023 14:46:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38998 "EHLO
+        id S230422AbjJ2SqM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 29 Oct 2023 14:46:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230411AbjJ2SqA (ORCPT
+        with ESMTP id S230424AbjJ2SqB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 29 Oct 2023 14:46:00 -0400
+        Sun, 29 Oct 2023 14:46:01 -0400
 Received: from smtp.forwardemail.net (smtp.forwardemail.net [149.28.215.223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE03C5;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7DDF1;
         Sun, 29 Oct 2023 11:45:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kwiboo.se;
  h=Content-Transfer-Encoding: MIME-Version: References: In-Reply-To:
  Message-ID: Date: Subject: Cc: To: From; q=dns/txt; s=fe-e1b5cab7be;
- t=1698605142; bh=CDI7CU66wEs270/rnVxpiW23n/7qKyJzphHa0D78l20=;
- b=MwHhazQcJbCZWxHN3Dq+D/NALM9dhM8cOWgiysWhVZYfTh8arisAjxDc+XkWrCZ9uBNPHd/PE
- ylT6YMCinGthBAM4pOtp20nVHxJcBERP2haw+AGx08QZXtIVcVpW7zy1QR0RnQFqo+mmIjq3WqY
- du8CevgaGkUCwP3SM5x0Jg4Zmv3u3wiCAbsV5xLkT+NQTZbfwA861F+maZAEHAB15uHDt907mQh
- gPgUSGZr7O/+C7+r5pfxomNJYCIKP99vr4TqI5dfoKgAbWZT2zOPsy/R2EOPyIeUVjsviz5nyRW
- h0sGCY+ziYMqlcGPUJsCOgrWhzcVMH+2jBDYC7iokgcA==
+ t=1698605142; bh=GLeira6JsbrPL9tYw80Zzy+DWNdo12BGwPQhuQmaiLk=;
+ b=bbbxilvKbLuotp6IPtr1icHU/cRmf7U7Zs3mtJnyVSxXf9T4mZX96mzR2dkEsaSnq/p0vfkD+
+ +a9X+PCk5lZ9dNLc1hJVGKTGNi0yCVxCDUnYCDV/lYbK03uw4fvadnpGAgELt6XX6zoUUSOSt0d
+ ziQ+tI6FH6ddoGgJYX3vxOEhQq/H6XWKFEqxVhj7ZO7S7l8YMmQNtqy5RM27tzeiTnrlkbnTFN5
+ MvXCdVIMaNennhOWgxbiJ86QKhfxRtV424Wt79NI8WHAnu2Henj6gEwIL/QTjwMJd50A8Wpb0/P
+ Y0cG6w/5h6ENZbnc78l7Cjo7sWcDzgG0TdQrvyZULrjQ==
 From:   Jonas Karlman <jonas@kwiboo.se>
 To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+        Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Alex Bee <knaerzche@gmail.com>,
         Nicolas Dufresne <nicolas.dufresne@collabora.com>,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>,
@@ -36,9 +35,9 @@ Cc:     Alex Bee <knaerzche@gmail.com>,
         linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Jonas Karlman <jonas@kwiboo.se>
-Subject: [PATCH v3 10/10] media: rkvdec: h264: Support High 10 and 4:2:2 profiles
-Date:   Sun, 29 Oct 2023 18:34:17 +0000
-Message-ID: <20231029183427.1781554-11-jonas@kwiboo.se>
+Subject: [PATCH v3 02/10] media: v4l2: Add NV15 and NV20 pixel formats
+Date:   Sun, 29 Oct 2023 18:34:09 +0000
+Message-ID: <20231029183427.1781554-3-jonas@kwiboo.se>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231029183427.1781554-1-jonas@kwiboo.se>
 References: <20231029183427.1781554-1-jonas@kwiboo.se>
@@ -50,170 +49,242 @@ X-Complaints-To: abuse@forwardemail.net
 X-ForwardEmail-Version: 0.4.40
 X-ForwardEmail-Sender: rfc822; jonas@kwiboo.se, smtp.forwardemail.net,
  149.28.215.223
-X-ForwardEmail-ID: 653ea5df8fe0ffca230b0f8a
+X-ForwardEmail-ID: 653ea5c18fe0ffca230b0f22
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add support and enable decoding of H264 High 10 and 4:2:2 profiles.
+Add NV15 and NV20 pixel formats used by the Rockchip Video Decoder for
+10-bit buffers.
 
-Decoded CAPTURE buffer width is aligned to 64 pixels to accommodate HW
-requirement of 10-bit format buffers.
+NV15 and NV20 is 10-bit 4:2:0/4:2:2 semi-planar YUV formats similar to
+NV12 and NV16, using 10-bit components with no padding between each
+component. Instead, a group of 4 luminance/chrominance samples are
+stored over 5 bytes in little endian order:
 
-The get_fmt_opaque and valid_fmt ops is implemented to select a CAPTURE
-format suited for the provided SPS control.
+YYYY = UVUV = 4 * 10 bits = 40 bits = 5 bytes
+
+The '15' and '20' suffix refers to the optimum effective bits per pixel
+which is achieved when the total number of luminance samples is a
+multiple of 8 for NV15 and 4 for NV20.
 
 Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
 ---
 v3:
-- Add get_fmt_opaque ops, the expected pixelformat is used as opaque
-- Add new valid_fmt ops that validate pixelformat matches opaque
-- Update H264_PROFILE control max value
+- Use bpp and bpp_div instead of the misuse of block_w/block_h
+- Update documentation, expand to use full 4x4 sample image
 
- drivers/staging/media/rkvdec/rkvdec-h264.c | 45 +++++++++++++++++-----
- drivers/staging/media/rkvdec/rkvdec.c      | 21 ++++++----
- 2 files changed, 50 insertions(+), 16 deletions(-)
+ .../media/v4l/pixfmt-yuv-planar.rst           | 128 ++++++++++++++++++
+ drivers/media/v4l2-core/v4l2-common.c         |   2 +
+ drivers/media/v4l2-core/v4l2-ioctl.c          |   2 +
+ include/uapi/linux/videodev2.h                |   2 +
+ 4 files changed, 134 insertions(+)
 
-diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
-index 815d5359ddd5..f773a3f5ecb7 100644
---- a/drivers/staging/media/rkvdec/rkvdec-h264.c
-+++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
-@@ -1027,24 +1027,49 @@ static int rkvdec_h264_adjust_fmt(struct rkvdec_ctx *ctx,
- 	return 0;
- }
+diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+index 1840224faa41..4366cdcb970e 100644
+--- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
++++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+@@ -79,6 +79,13 @@ All components are stored with the same number of bits per component.
+       - Cr, Cb
+       - Yes
+       - Linear
++    * - V4L2_PIX_FMT_NV15
++      - 'NV15'
++      - 10
++      - 4:2:0
++      - Cb, Cr
++      - Yes
++      - Linear
+     * - V4L2_PIX_FMT_NV12M
+       - 'NM12'
+       - 8
+@@ -158,6 +165,13 @@ All components are stored with the same number of bits per component.
+       - Cr, Cb
+       - Yes
+       - Linear
++    * - V4L2_PIX_FMT_NV20
++      - 'NV20'
++      - 10
++      - 4:2:2
++      - Cb, Cr
++      - Yes
++      - Linear
+     * - V4L2_PIX_FMT_NV16M
+       - 'NM16'
+       - 8
+@@ -288,6 +302,57 @@ of the luma plane.
+       - Cr\ :sub:`11`
  
-+static u32 rkvdec_h264_get_fmt_opaque(struct rkvdec_ctx *ctx, struct v4l2_ctrl *ctrl)
-+{
-+	const struct v4l2_ctrl_h264_sps *sps = ctrl->p_new.p_h264_sps;
+ 
++.. _V4L2-PIX-FMT-NV15:
 +
-+	if (ctrl->id != V4L2_CID_STATELESS_H264_SPS)
-+		return 0;
++NV15
++----
 +
-+	if (sps->bit_depth_luma_minus8 == 0) {
-+		if (sps->chroma_format_idc == 2)
-+			return V4L2_PIX_FMT_NV16;
-+		else
-+			return V4L2_PIX_FMT_NV12;
-+	} else if (sps->bit_depth_luma_minus8 == 2) {
-+		if (sps->chroma_format_idc == 2)
-+			return V4L2_PIX_FMT_NV20;
-+		else
-+			return V4L2_PIX_FMT_NV15;
-+	}
++Semi-planar 10-bit YUV 4:2:0 format similar to NV12, using 10-bit components
++with no padding between each component. A group of 4 components are stored over
++5 bytes in little endian order.
 +
-+	return 0;
-+}
++.. flat-table:: Sample 4x4 NV15 Image (1 byte per cell)
++    :header-rows:  0
++    :stub-columns: 0
 +
-+static bool rkvdec_h264_valid_fmt(struct rkvdec_ctx *ctx, u32 fourcc, u32 opaque)
-+{
-+	if (!opaque)
-+		return true;
++    * - start + 0:
++      - Y'\ :sub:`00[7:0]`
++      - Y'\ :sub:`01[5:0]`\ Y'\ :sub:`00[9:8]`
++      - Y'\ :sub:`02[3:0]`\ Y'\ :sub:`01[9:6]`
++      - Y'\ :sub:`03[1:0]`\ Y'\ :sub:`02[9:4]`
++      - Y'\ :sub:`03[9:2]`
++    * - start + 5:
++      - Y'\ :sub:`10[7:0]`
++      - Y'\ :sub:`11[5:0]`\ Y'\ :sub:`10[9:8]`
++      - Y'\ :sub:`12[3:0]`\ Y'\ :sub:`11[9:6]`
++      - Y'\ :sub:`13[1:0]`\ Y'\ :sub:`12[9:4]`
++      - Y'\ :sub:`13[9:2]`
++    * - start + 10:
++      - Y'\ :sub:`20[7:0]`
++      - Y'\ :sub:`21[5:0]`\ Y'\ :sub:`20[9:8]`
++      - Y'\ :sub:`22[3:0]`\ Y'\ :sub:`21[9:6]`
++      - Y'\ :sub:`23[1:0]`\ Y'\ :sub:`22[9:4]`
++      - Y'\ :sub:`23[9:2]`
++    * - start + 15:
++      - Y'\ :sub:`30[7:0]`
++      - Y'\ :sub:`31[5:0]`\ Y'\ :sub:`30[9:8]`
++      - Y'\ :sub:`32[3:0]`\ Y'\ :sub:`31[9:6]`
++      - Y'\ :sub:`33[1:0]`\ Y'\ :sub:`32[9:4]`
++      - Y'\ :sub:`33[9:2]`
++    * - start + 20:
++      - Cb\ :sub:`00[7:0]`
++      - Cr\ :sub:`00[5:0]`\ Cb\ :sub:`00[9:8]`
++      - Cb\ :sub:`01[3:0]`\ Cr\ :sub:`00[9:6]`
++      - Cr\ :sub:`01[1:0]`\ Cb\ :sub:`01[9:4]`
++      - Cr\ :sub:`01[9:2]`
++    * - start + 25:
++      - Cb\ :sub:`10[7:0]`
++      - Cr\ :sub:`10[5:0]`\ Cb\ :sub:`10[9:8]`
++      - Cb\ :sub:`11[3:0]`\ Cr\ :sub:`10[9:6]`
++      - Cr\ :sub:`11[1:0]`\ Cb\ :sub:`11[9:4]`
++      - Cr\ :sub:`11[9:2]`
 +
-+	return fourcc == opaque;
-+}
 +
- static int rkvdec_h264_validate_sps(struct rkvdec_ctx *ctx,
- 				    const struct v4l2_ctrl_h264_sps *sps)
- {
- 	unsigned int width, height;
+ .. _V4L2-PIX-FMT-NV12MT:
+ .. _V4L2-PIX-FMT-NV12MT-16X16:
+ .. _V4L2-PIX-FMT-NV12-4L4:
+@@ -500,6 +565,69 @@ number of lines as the luma plane.
+       - Cr\ :sub:`32`
  
--	/*
--	 * TODO: The hardware supports 10-bit and 4:2:2 profiles,
--	 * but it's currently broken in the driver.
--	 * Reject them for now, until it's fixed.
--	 */
--	if (sps->chroma_format_idc > 1)
--		/* Only 4:0:0 and 4:2:0 are supported */
-+	if (sps->chroma_format_idc > 2)
-+		/* Only 4:0:0, 4:2:0 and 4:2:2 are supported */
- 		return -EINVAL;
- 	if (sps->bit_depth_luma_minus8 != sps->bit_depth_chroma_minus8)
- 		/* Luma and chroma bit depth mismatch */
- 		return -EINVAL;
--	if (sps->bit_depth_luma_minus8 != 0)
--		/* Only 8-bit is supported */
-+	if (sps->bit_depth_luma_minus8 != 0 && sps->bit_depth_luma_minus8 != 2)
-+		/* Only 8-bit and 10-bit is supported */
- 		return -EINVAL;
  
- 	width = (sps->pic_width_in_mbs_minus1 + 1) * 16;
-@@ -1171,6 +1196,8 @@ static int rkvdec_h264_try_ctrl(struct rkvdec_ctx *ctx, struct v4l2_ctrl *ctrl)
- 
- const struct rkvdec_coded_fmt_ops rkvdec_h264_fmt_ops = {
- 	.adjust_fmt = rkvdec_h264_adjust_fmt,
-+	.get_fmt_opaque = rkvdec_h264_get_fmt_opaque,
-+	.valid_fmt = rkvdec_h264_valid_fmt,
- 	.start = rkvdec_h264_start,
- 	.stop = rkvdec_h264_stop,
- 	.run = rkvdec_h264_run,
-diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
-index 5c7e1b91e908..fce5cba343a3 100644
---- a/drivers/staging/media/rkvdec/rkvdec.c
-+++ b/drivers/staging/media/rkvdec/rkvdec.c
-@@ -50,7 +50,7 @@ static void rkvdec_fill_decoded_pixfmt(struct rkvdec_ctx *ctx,
- 				       struct v4l2_pix_format_mplane *pix_mp)
- {
- 	v4l2_fill_pixfmt_mp(pix_mp, pix_mp->pixelformat,
--			    pix_mp->width, pix_mp->height);
-+			    ALIGN(pix_mp->width, 64), pix_mp->height);
- 	pix_mp->plane_fmt[0].sizeimage += 128 *
- 		DIV_ROUND_UP(pix_mp->width, 16) *
- 		DIV_ROUND_UP(pix_mp->height, 16);
-@@ -169,7 +169,7 @@ static const struct rkvdec_ctrl_desc rkvdec_h264_ctrl_descs[] = {
- 	{
- 		.cfg.id = V4L2_CID_MPEG_VIDEO_H264_PROFILE,
- 		.cfg.min = V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE,
--		.cfg.max = V4L2_MPEG_VIDEO_H264_PROFILE_HIGH,
-+		.cfg.max = V4L2_MPEG_VIDEO_H264_PROFILE_HIGH_422,
- 		.cfg.menu_skip_mask =
- 			BIT(V4L2_MPEG_VIDEO_H264_PROFILE_EXTENDED),
- 		.cfg.def = V4L2_MPEG_VIDEO_H264_PROFILE_MAIN,
-@@ -186,8 +186,11 @@ static const struct rkvdec_ctrls rkvdec_h264_ctrls = {
- 	.num_ctrls = ARRAY_SIZE(rkvdec_h264_ctrl_descs),
- };
- 
--static const u32 rkvdec_h264_vp9_decoded_fmts[] = {
-+static const u32 rkvdec_h264_decoded_fmts[] = {
- 	V4L2_PIX_FMT_NV12,
-+	V4L2_PIX_FMT_NV15,
-+	V4L2_PIX_FMT_NV16,
-+	V4L2_PIX_FMT_NV20,
- };
- 
- static const struct rkvdec_ctrl_desc rkvdec_vp9_ctrl_descs[] = {
-@@ -210,6 +213,10 @@ static const struct rkvdec_ctrls rkvdec_vp9_ctrls = {
- 	.num_ctrls = ARRAY_SIZE(rkvdec_vp9_ctrl_descs),
- };
- 
-+static const u32 rkvdec_vp9_decoded_fmts[] = {
-+	V4L2_PIX_FMT_NV12,
-+};
++.. _V4L2-PIX-FMT-NV20:
 +
- static const struct rkvdec_coded_fmt_desc rkvdec_coded_fmts[] = {
- 	{
- 		.fourcc = V4L2_PIX_FMT_H264_SLICE,
-@@ -223,8 +230,8 @@ static const struct rkvdec_coded_fmt_desc rkvdec_coded_fmts[] = {
- 		},
- 		.ctrls = &rkvdec_h264_ctrls,
- 		.ops = &rkvdec_h264_fmt_ops,
--		.num_decoded_fmts = ARRAY_SIZE(rkvdec_h264_vp9_decoded_fmts),
--		.decoded_fmts = rkvdec_h264_vp9_decoded_fmts,
-+		.num_decoded_fmts = ARRAY_SIZE(rkvdec_h264_decoded_fmts),
-+		.decoded_fmts = rkvdec_h264_decoded_fmts,
- 		.subsystem_flags = VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF,
- 	},
- 	{
-@@ -239,8 +246,8 @@ static const struct rkvdec_coded_fmt_desc rkvdec_coded_fmts[] = {
- 		},
- 		.ctrls = &rkvdec_vp9_ctrls,
- 		.ops = &rkvdec_vp9_fmt_ops,
--		.num_decoded_fmts = ARRAY_SIZE(rkvdec_h264_vp9_decoded_fmts),
--		.decoded_fmts = rkvdec_h264_vp9_decoded_fmts,
-+		.num_decoded_fmts = ARRAY_SIZE(rkvdec_vp9_decoded_fmts),
-+		.decoded_fmts = rkvdec_vp9_decoded_fmts,
- 	}
- };
++NV20
++----
++
++Semi-planar 10-bit YUV 4:2:2 format similar to NV16, using 10-bit components
++with no padding between each component. A group of 4 components are stored over
++5 bytes in little endian order.
++
++.. flat-table:: Sample 4x4 NV20 Image (1 byte per cell)
++    :header-rows:  0
++    :stub-columns: 0
++
++    * - start + 0:
++      - Y'\ :sub:`00[7:0]`
++      - Y'\ :sub:`01[5:0]`\ Y'\ :sub:`00[9:8]`
++      - Y'\ :sub:`02[3:0]`\ Y'\ :sub:`01[9:6]`
++      - Y'\ :sub:`03[1:0]`\ Y'\ :sub:`02[9:4]`
++      - Y'\ :sub:`03[9:2]`
++    * - start + 5:
++      - Y'\ :sub:`10[7:0]`
++      - Y'\ :sub:`11[5:0]`\ Y'\ :sub:`10[9:8]`
++      - Y'\ :sub:`12[3:0]`\ Y'\ :sub:`11[9:6]`
++      - Y'\ :sub:`13[1:0]`\ Y'\ :sub:`12[9:4]`
++      - Y'\ :sub:`13[9:2]`
++    * - start + 10:
++      - Y'\ :sub:`20[7:0]`
++      - Y'\ :sub:`21[5:0]`\ Y'\ :sub:`20[9:8]`
++      - Y'\ :sub:`22[3:0]`\ Y'\ :sub:`21[9:6]`
++      - Y'\ :sub:`23[1:0]`\ Y'\ :sub:`22[9:4]`
++      - Y'\ :sub:`23[9:2]`
++    * - start + 15:
++      - Y'\ :sub:`30[7:0]`
++      - Y'\ :sub:`31[5:0]`\ Y'\ :sub:`30[9:8]`
++      - Y'\ :sub:`32[3:0]`\ Y'\ :sub:`31[9:6]`
++      - Y'\ :sub:`33[1:0]`\ Y'\ :sub:`32[9:4]`
++      - Y'\ :sub:`33[9:2]`
++    * - start + 20:
++      - Cb\ :sub:`00[7:0]`
++      - Cr\ :sub:`00[5:0]`\ Cb\ :sub:`00[9:8]`
++      - Cb\ :sub:`01[3:0]`\ Cr\ :sub:`00[9:6]`
++      - Cr\ :sub:`01[1:0]`\ Cb\ :sub:`01[9:4]`
++      - Cr\ :sub:`01[9:2]`
++    * - start + 25:
++      - Cb\ :sub:`10[7:0]`
++      - Cr\ :sub:`10[5:0]`\ Cb\ :sub:`10[9:8]`
++      - Cb\ :sub:`11[3:0]`\ Cr\ :sub:`10[9:6]`
++      - Cr\ :sub:`11[1:0]`\ Cb\ :sub:`11[9:4]`
++      - Cr\ :sub:`11[9:2]`
++    * - start + 30:
++      - Cb\ :sub:`20[7:0]`
++      - Cr\ :sub:`20[5:0]`\ Cb\ :sub:`20[9:8]`
++      - Cb\ :sub:`21[3:0]`\ Cr\ :sub:`20[9:6]`
++      - Cr\ :sub:`21[1:0]`\ Cb\ :sub:`21[9:4]`
++      - Cr\ :sub:`21[9:2]`
++    * - start + 35:
++      - Cb\ :sub:`30[7:0]`
++      - Cr\ :sub:`30[5:0]`\ Cb\ :sub:`30[9:8]`
++      - Cb\ :sub:`31[3:0]`\ Cr\ :sub:`30[9:6]`
++      - Cr\ :sub:`31[1:0]`\ Cb\ :sub:`31[9:4]`
++      - Cr\ :sub:`31[9:2]`
++
++
+ .. _V4L2-PIX-FMT-NV24:
+ .. _V4L2-PIX-FMT-NV42:
  
+diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
+index 834b426da8b1..c65ffab5800a 100644
+--- a/drivers/media/v4l2-core/v4l2-common.c
++++ b/drivers/media/v4l2-core/v4l2-common.c
+@@ -270,8 +270,10 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
+ 		/* YUV planar formats */
+ 		{ .format = V4L2_PIX_FMT_NV12,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 2, .vdiv = 2 },
+ 		{ .format = V4L2_PIX_FMT_NV21,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 2, .vdiv = 2 },
++		{ .format = V4L2_PIX_FMT_NV15,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 5, 10, 0, 0 }, .bpp_div = { 4, 4, 1, 1 }, .hdiv = 2, .vdiv = 2 },
+ 		{ .format = V4L2_PIX_FMT_NV16,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 2, .vdiv = 1 },
+ 		{ .format = V4L2_PIX_FMT_NV61,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 2, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_NV20,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 5, 10, 0, 0 }, .bpp_div = { 4, 4, 1, 1 }, .hdiv = 2, .vdiv = 1 },
+ 		{ .format = V4L2_PIX_FMT_NV24,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
+ 		{ .format = V4L2_PIX_FMT_NV42,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
+ 		{ .format = V4L2_PIX_FMT_P010,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 2, 2, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 2, .vdiv = 1 },
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index 9b1de54ce379..937434e5f2c1 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -1347,8 +1347,10 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+ 	case V4L2_PIX_FMT_YUV48_12:	descr = "12-bit YUV 4:4:4 Packed"; break;
+ 	case V4L2_PIX_FMT_NV12:		descr = "Y/UV 4:2:0"; break;
+ 	case V4L2_PIX_FMT_NV21:		descr = "Y/VU 4:2:0"; break;
++	case V4L2_PIX_FMT_NV15:		descr = "10-bit Y/UV 4:2:0 (Packed)"; break;
+ 	case V4L2_PIX_FMT_NV16:		descr = "Y/UV 4:2:2"; break;
+ 	case V4L2_PIX_FMT_NV61:		descr = "Y/VU 4:2:2"; break;
++	case V4L2_PIX_FMT_NV20:		descr = "10-bit Y/UV 4:2:2 (Packed)"; break;
+ 	case V4L2_PIX_FMT_NV24:		descr = "Y/UV 4:4:4"; break;
+ 	case V4L2_PIX_FMT_NV42:		descr = "Y/VU 4:4:4"; break;
+ 	case V4L2_PIX_FMT_P010:		descr = "10-bit Y/UV 4:2:0"; break;
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index c3d4e490ce7c..617340c43e40 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -638,8 +638,10 @@ struct v4l2_pix_format {
+ /* two planes -- one Y, one Cr + Cb interleaved  */
+ #define V4L2_PIX_FMT_NV12    v4l2_fourcc('N', 'V', '1', '2') /* 12  Y/CbCr 4:2:0  */
+ #define V4L2_PIX_FMT_NV21    v4l2_fourcc('N', 'V', '2', '1') /* 12  Y/CrCb 4:2:0  */
++#define V4L2_PIX_FMT_NV15    v4l2_fourcc('N', 'V', '1', '5') /* 15  Y/CbCr 4:2:0 10-bit packed */
+ #define V4L2_PIX_FMT_NV16    v4l2_fourcc('N', 'V', '1', '6') /* 16  Y/CbCr 4:2:2  */
+ #define V4L2_PIX_FMT_NV61    v4l2_fourcc('N', 'V', '6', '1') /* 16  Y/CrCb 4:2:2  */
++#define V4L2_PIX_FMT_NV20    v4l2_fourcc('N', 'V', '2', '0') /* 20  Y/CbCr 4:2:2 10-bit packed */
+ #define V4L2_PIX_FMT_NV24    v4l2_fourcc('N', 'V', '2', '4') /* 24  Y/CbCr 4:4:4  */
+ #define V4L2_PIX_FMT_NV42    v4l2_fourcc('N', 'V', '4', '2') /* 24  Y/CrCb 4:4:4  */
+ #define V4L2_PIX_FMT_P010    v4l2_fourcc('P', '0', '1', '0') /* 24  Y/CbCr 4:2:0 10-bit per component */
 -- 
 2.42.0
 
