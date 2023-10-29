@@ -2,33 +2,34 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EA76C4332F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0BDEC4167D
 	for <linux-media@archiver.kernel.org>; Sun, 29 Oct 2023 12:49:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbjJ2MtU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 29 Oct 2023 08:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37578 "EHLO
+        id S230077AbjJ2MtV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 29 Oct 2023 08:49:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbjJ2MtT (ORCPT
+        with ESMTP id S229482AbjJ2MtT (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sun, 29 Oct 2023 08:49:19 -0400
 Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC85FC
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFADCF9
         for <linux-media@vger.kernel.org>; Sun, 29 Oct 2023 05:49:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=s31663417; t=1698583737; x=1699188537; i=wahrenst@gmx.net;
-        bh=kTr212Lg0Df4P2OkP/wn1JqHpovW6pFvMio/bpAXQSk=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=oS+Xcqt86UPqRnjm6B2jXvL8j1o0W2NgEmp/QOJJ7xXqrylmTKZ9jklY21stEFVO
-         g24hh6Alu/yjUOIQWcINsf4KjUkTuvgrOdoaS/efHdDrrkGAGESPtWfg8sDkRVw+3
-         haiZeZ8XcTJgN26r5ejogIbcvYQJLglMDA7zm3i2p3D/zgUPb0GFLhxHH+mPJ+uN1
-         IoA4URWw2aBpomcDO6/g1XKQVklNiGCivVdCj5iwesyGjed4/2di7tyZ4usE124HB
-         mh1rx1KLFayqHmGF2IwBf+pBVREro8TJxwHb3MNnSJaWiqAEvZxY66nLG9fadsUKK
-         DJS89T5WQjusKf3VnQ==
+        s=s31663417; t=1698583738; x=1699188538; i=wahrenst@gmx.net;
+        bh=lb1OtERw+AGwlwx7wh86H5dO1K1o6Yr1Q3BtzK1SjYA=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:
+         References;
+        b=quRCaAux/teG2h9PIkiC6DlvwNUhmHQGuFG/EY4hEkVmESzL1HZwyI5ABEunIGhG
+         yyQ5Emk1TryAwNCbak0nJVHOVo20H3TlXVBa52qy/mvzy6TCH5hgJsVmecKFBrDvG
+         ucDhCszVIZ+nwxS/LaBLzXEvp0tdS+rwaJDP1lHLDoNLYK3oDIcfx1/wW/8xXgz21
+         QD2eIa6zN9f8W4VmTYloJyY8fIFsURQWYK3fE2jM58PR6h9Ggli3cSpqdG390nYPC
+         lywBjzoh28GK9g8ZsZMim2Lhekeix0iW0t7bREq/omrFTHa83keo2kLwTd3fohrjF
+         9nt4R79tZn2g+gYg+A==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from stefanw-SCHENKER ([37.4.248.43]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MYNNy-1r0sqh05go-00VQKr; Sun, 29
- Oct 2023 13:48:57 +0100
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MzQkK-1rjX0T3w8G-00vRTr; Sun, 29
+ Oct 2023 13:48:58 +0100
 From:   Stefan Wahren <wahrenst@gmx.net>
 To:     Umang Jain <umang.jain@ideasonboard.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -41,64 +42,93 @@ Cc:     Florian Fainelli <florian.fainelli@broadcom.com>,
         linux-staging@lists.linux.dev,
         linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
         Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH V2 0/3] staging: vchiq_arm: move state dump to debugfs
-Date:   Sun, 29 Oct 2023 13:48:34 +0100
-Message-Id: <20231029124837.119832-1-wahrenst@gmx.net>
+Subject: [PATCH V2 2/3] staging: vchiq_core: Shorten bulk TX/RX pending dump
+Date:   Sun, 29 Oct 2023 13:48:36 +0100
+Message-Id: <20231029124837.119832-3-wahrenst@gmx.net>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231029124837.119832-1-wahrenst@gmx.net>
+References: <20231029124837.119832-1-wahrenst@gmx.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:9fDo3xOsm6/9cqGspy8ReIQfJkucNemt3xpnd3uUYxUYeM8qQ4M
- rsNcDVqkiHO1AIvG3jtkUJnEIZZtZsw1u9Xf3l3gJsCfEcyqm6thoSulMiFZZkLtX8b5xm7
- s3wOgMkFLudmAubbiy829N/6YoSf0BJ2iTvsycJW0PZZafcBBvrOglnmgHiA3cf3jiJw/pY
- pXhneSKqA91GSIUskoLAA==
-UI-OutboundReport: notjunk:1;M01:P0:wyO8vth6O3A=;g/XvHHTO9tXjOtBygqck3IL92nu
- 3TlNXQj2e0vdTBv1TNlmvu8RKqh/HIOHeC1oKeCQo0JDJqsULqEy88972+UIa8Q6pNRwgcqEr
- HufqW4tGv+PtzOAGsSN80Wd4amcYM04bJUC50pOnPvr6NfrDBn1qrFJpJPGvf0g4x/IVU6fzl
- Z9sbeYLVnQKfwgMz3uKMuYUcHD7Tilm19q2rOEO9e4BeJS6LZJOGDJwPrryEQNmZ+4CxfhE71
- 0Mn+Yd4YVPEpvAizfCKiVuDWlVU/lITb6DaYJD8wHmicWHvM4fvp86XTJwFM0Azj1kUU9Cx0s
- 7+3I+sjDASUXUMI6Ou26MuQWvGxmksN/tZ34pYI41Aj4Tc5uSfI4SWyjto4ZVluNiNa6rWknI
- GOuP1iQVCAHeTHD178DPxOGEFzaaNMasqlxppkh925ax/rmvzYIsaviH5bzBJzPFVoWXIHFut
- geLOu5XgOqFdYibz0aG1/TGUGygIxXggn8f6/SUIpPJEO9OmGNdRWMxcJJ66XK5WaEQD2z791
- o+0bNC09Z4/hHt3YvGdrJnQpZDtnknwtA0Q7UraAjhNSZM1ObtZhJ0d7bc4wfyXipnp5Ff6O5
- 60S/GsJR4jDmOH+nNIrCUVdWSXDXbzo3Qg1ZDzcBZAWnwPMXy88I+AXXO1QzzX6v3cGpjXtr5
- BPmDOnru4Hgl1YHU7/Vo5XwDdrATqCjn+CYHwI/6SJtplN+7KUjMHpf/lHHoeCsZglsE6PK64
- TFmZrmhdd6WjCu1FRAht/Ca8zI1XjlywaQYK94aSM+11Jsoa/FPqFYoGog9vctWHSX3lgbP9d
- V3YDCjP+mDBqBNrY5MKOj+9a9299/x77WIVA+QvX89Y9zJt5iBatwtSHh/kPodxkAiy3p6TPJ
- Bf7xEK+dSJ+jTx2rSaxkbRRD4yRChbuVpZwxAdhOPrV8EajB/PGWsqgoEKc94mhZEuck+XiJy
- efjTpw==
+X-Provags-ID: V03:K1:sfOpDu0Vm9zeCyrISDNRl3qwamKKktE9YklDU+o8o0uWp7XJUtN
+ 9cBHveRTGEbrmjXluEtc0YdA+IZ4GXwurQyMCSCo9NeXETMqdMB4qc1eNX7SWaGz0usN2TB
+ X1xVfS/Zz61A00hVsvY121Mbs68ezwSaAjuIfMASj2zqAEwFkYjtCH6Pm0/W5Ny/wDN/IsA
+ HVsIdSi5QPM13P3upXaOQ==
+UI-OutboundReport: notjunk:1;M01:P0:ukpQllaRuds=;YCk7Z0kGW8eP24jKoxzAzkeSMdu
+ srQ7Cl4zB90xC21kUr1hsMT7bZRT9RMEHDXUvXWFzEtwTqQVJYah6KuOpmj3uLhqPcP6fBKyw
+ 4EVDFwg6XbWfWBTZ14jtptsam/aETVAVcVZAcia6cpTUfsc2kPkLGbfcEUWdfpnJcGCpbcbn0
+ or75iMo/Jn2NWDRXVJ6nPxyewoW+WeALugZdCuK9eQSwuJSx/TlOTVvrsrnNhLlrnsi5424z5
+ I+/91NpEJA5reEAw7XlcLoYRQ/6b5mHN8g5ZcXPUNcNNEw49CPzKVXqS80Rm4POWyr2ELqI5D
+ DDirZZdKn8/hokpBjRoYcYt6G4VPHmiDp/t94P4nc3hJOETyXnB2v1Uy3Zrso9FQWnXkdtXLA
+ M/C1o66QX/AMqdHPGoEf27DcbdvRoPrmbekyPWoZwffVhKZTEgnXS6lhlmj5/pli5GaVvsDXJ
+ I1a3X+n7s9hC+2PVE0RB3uqclPmRXalO/EWHCSEHzWym6ejqGzwnO00I76fSejYJOw9ISN8Sa
+ /QLjg0HwOE5FDIAp7BuIMdtzOxt0khlMbs1I4OCHxav+bSpyiPqBTtpv503k32PcCDJZsXsyR
+ DCSqoOVDVL31EAyeh9U+W2Z+VCCptfAYf8Hyda/dlrvERHLDaQdZBH+Ob8ZdcZKd2O9LYK1Fu
+ eY/zn463UXpHAg8kJEvXLVEFIBaXldWLpBXKzQIgwXcI9FH1+oR+QFO3POZpqHnhCd/nhwRBm
+ u8fgbIXa6/g7xyZN2yTN9fmEdfGbH1LncGAyNeDG9Lfz3sHLMG13Cz4YWOu+OB7J/gcitDtJ7
+ GB7xScB/fHTW/M7HVOZnOCHKlG+VUcgDSCQegoU3O9ZbvX9kqoGEHM0nOkj3TX2TwXz4/z5Wn
+ iEuxk4brKjetSnvqS2TiHH2WqMfBeb3dYx6BXajsPqCbYHbwfjWmI+mcQ99BZpS6SCPuLP2UH
+ K3l8Gfj6XxgmYtsWb9aNVMwgRxg=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+The calculation for the bulk TX/RX pending is complex and
+reaches 99 chars per line. So move the size determination
+below the pending calculation and get the rid of the
+ternary operator.
 
-since recent discussion raised the question about the future of debugfs
-for vchiq [1], i want to submit this cleanup patch series as part of the
-discussion and a small Halloween present ;-)
+Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+=2D--
+ .../interface/vchiq_arm/vchiq_core.c          | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
 
-Best regards
+diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.=
+c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c
+index 94073f92651a..36c742a2f3b2 100644
+=2D-- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c
++++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c
+@@ -3447,7 +3447,7 @@ vchiq_dump_service_state(void *dump_context, struct =
+vchiq_service *service)
+ 		struct vchiq_service_quota *quota =3D
+ 			&service->state->service_quotas[service->localport];
+ 		int fourcc =3D service->base.fourcc;
+-		int tx_pending, rx_pending;
++		int tx_pending, rx_pending, tx_size =3D 0, rx_size =3D 0;
 
-Changes in V2:
-- rebase on top of current staging-next
-- address suggestion from Laurent Pinchart in patch 1
-- fix checkpatch issue (too long line) in patch 2
+ 		if (service->remoteport !=3D VCHIQ_PORT_FREE) {
+ 			int len2 =3D scnprintf(remoteport, sizeof(remoteport),
+@@ -3472,18 +3472,23 @@ vchiq_dump_service_state(void *dump_context, struc=
+t vchiq_service *service)
 
-[1] - https://lore.kernel.org/lkml/7ea529c2-3da6-47df-9b09-28d4ab36c4ef@ka=
-dam.mountain/T/
+ 		tx_pending =3D service->bulk_tx.local_insert -
+ 			service->bulk_tx.remote_insert;
++		if (tx_pending) {
++			unsigned int i =3D BULK_INDEX(service->bulk_tx.remove);
++
++			tx_size =3D service->bulk_tx.bulks[i].size;
++		}
 
-Stefan Wahren (3):
-  staging: vchiq_core: Make vchiq_dump_service_state static
-  staging: vchiq_core: Shorten bulk TX/RX pending dump
-  staging: vchiq_arm: move state dump to debugfs
+ 		rx_pending =3D service->bulk_rx.local_insert -
+ 			service->bulk_rx.remote_insert;
++		if (rx_pending) {
++			unsigned int i =3D BULK_INDEX(service->bulk_rx.remove);
++
++			rx_size =3D service->bulk_rx.bulks[i].size;
++		}
 
- .../interface/vchiq_arm/vchiq_arm.c           |  94 ++----
- .../interface/vchiq_arm/vchiq_arm.h           |   7 -
- .../interface/vchiq_arm/vchiq_core.c          | 274 +++++++-----------
- .../interface/vchiq_arm/vchiq_core.h          |  16 +-
- .../interface/vchiq_arm/vchiq_debugfs.c       |  10 +
- .../interface/vchiq_arm/vchiq_dev.c           |  21 --
- 6 files changed, 137 insertions(+), 285 deletions(-)
+ 		len =3D scnprintf(buf, sizeof(buf),
+ 				"  Bulk: tx_pending=3D%d (size %d), rx_pending=3D%d (size %d)",
+-				tx_pending,
+-				tx_pending ?
+-				service->bulk_tx.bulks[BULK_INDEX(service->bulk_tx.remove)].size :
+-				0, rx_pending, rx_pending ?
+-				service->bulk_rx.bulks[BULK_INDEX(service->bulk_rx.remove)].size :
+-				0);
++				tx_pending, tx_size, rx_pending, rx_size);
 
+ 		if (VCHIQ_ENABLE_STATS) {
+ 			err =3D vchiq_dump(dump_context, buf, len + 1);
 =2D-
 2.34.1
 
