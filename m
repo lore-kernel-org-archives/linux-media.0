@@ -2,28 +2,28 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8C6FC00142
-	for <linux-media@archiver.kernel.org>; Sun, 29 Oct 2023 18:46:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6747EC4167B
+	for <linux-media@archiver.kernel.org>; Sun, 29 Oct 2023 18:46:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230470AbjJ2SqD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 29 Oct 2023 14:46:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58182 "EHLO
+        id S230407AbjJ2SqF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 29 Oct 2023 14:46:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230289AbjJ2Spy (ORCPT
+        with ESMTP id S230391AbjJ2Spy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sun, 29 Oct 2023 14:45:54 -0400
 Received: from smtp.forwardemail.net (smtp.forwardemail.net [149.28.215.223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C2BF9;
-        Sun, 29 Oct 2023 11:45:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8FC9EE;
+        Sun, 29 Oct 2023 11:45:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kwiboo.se;
  h=Content-Transfer-Encoding: MIME-Version: References: In-Reply-To:
  Message-ID: Date: Subject: Cc: To: From; q=dns/txt; s=fe-e1b5cab7be;
- t=1698605142; bh=UMyPdcE6zeOq+5y1/omox7ixHdl35HYxXzyXW/wl23I=;
- b=lE3nli2oYpMorwQo+LsSbQHSSDPujm7p/vNaHj71imDFPnRp4hJkOYFOdU5M1kq674n3xxfFz
- qWeso4OPawlpbmDuV9yV3caMVQF+9j1vgVJViFMcLso25cnjcjGrgoM9CLTcYcMo3Ejzo2vHKmE
- mXsBmG3qhvY87dWcQyBsIEAZqXlhPYbsxK0W2+0Qkq3gc2GSkfqMcyaytvsqVbJj7pCVDjrW5ef
- rq07aOGI9zWyYOEQYcEpqcQ04L6R7SGStbhKLxYEJBGopWRUoLSn2YBYk4Rehjuu/+vKp2KSwVQ
- 5jkzhGs89+FrwXQn32eXyTTZ/0jlFHhsxwqx1q6zLd3g==
+ t=1698605142; bh=TjALA8+JUykYZHDpAwjPY9nVwije8ffpqMNBtSLkpsI=;
+ b=0ly+YWDLBVm51SnIOA/FhxAjf8NTj4SjSIRf0TAlXphOi14vMZD9mbGRjLrPz5mjdhvPnCC8y
+ ApDpG4yi7/ZLQZxlIpwQjnPML5Z4yk8n/0aNN/C9d82x3bBRQWB7EKDTrEQcZVQ28RNerqLJT1+
+ 9XsVMS1ULbLMXjSbGHu8rVOEt1S1YtkQ8+nbgP5XC0wg5mO8332iypBWioUDHFVs2YYl1Zu456j
+ PHTZhG5okEgRmbJ4g7/yff0desRMURdSeI/oC+mZlO/TGdFytYLt/2Pc+JMcCbyML6a4I2odEtc
+ xht2Vms1I9Sf3rdhEd6DlL2zqyNIygEqufE6eZIMuhVg==
 From:   Jonas Karlman <jonas@kwiboo.se>
 To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -36,9 +36,9 @@ Cc:     Alex Bee <knaerzche@gmail.com>,
         linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Jonas Karlman <jonas@kwiboo.se>
-Subject: [PATCH v3 05/10] media: rkvdec: h264: Remove SPS validation at streaming start
-Date:   Sun, 29 Oct 2023 18:34:12 +0000
-Message-ID: <20231029183427.1781554-6-jonas@kwiboo.se>
+Subject: [PATCH v3 03/10] media: rkvdec: h264: Use bytesperline and buffer height as virstride
+Date:   Sun, 29 Oct 2023 18:34:10 +0000
+Message-ID: <20231029183427.1781554-4-jonas@kwiboo.se>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231029183427.1781554-1-jonas@kwiboo.se>
 References: <20231029183427.1781554-1-jonas@kwiboo.se>
@@ -50,69 +50,63 @@ X-Complaints-To: abuse@forwardemail.net
 X-ForwardEmail-Version: 0.4.40
 X-ForwardEmail-Sender: rfc822; jonas@kwiboo.se, smtp.forwardemail.net,
  149.28.215.223
-X-ForwardEmail-ID: 653ea5cc8fe0ffca230b0f49
+X-ForwardEmail-ID: 653ea5c58fe0ffca230b0f2f
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-SPS parameters is validated in try_ctrl() ops so there is no need to
-re-validate when streaming starts.
+Use bytesperline and buffer height to calculate the strides configured.
 
-Remove the unnecessary call to validate sps at streaming start.
+This does not really change anything other than ensuring the
+bytesperline that is signaled to userspace matches what is configured
+in HW.
 
-Suggested-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
 ---
 v3:
-- New patch
+- Remove unnecessary yuv_virstride +=
 
- drivers/staging/media/rkvdec/rkvdec-h264.c | 19 ++-----------------
- 1 file changed, 2 insertions(+), 17 deletions(-)
+ drivers/staging/media/rkvdec/rkvdec-h264.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
-index 8bce8902b8dd..815d5359ddd5 100644
+index 4fc167b42cf0..7a1e76d423df 100644
 --- a/drivers/staging/media/rkvdec/rkvdec-h264.c
 +++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
-@@ -1070,17 +1070,6 @@ static int rkvdec_h264_start(struct rkvdec_ctx *ctx)
- 	struct rkvdec_dev *rkvdec = ctx->dev;
- 	struct rkvdec_h264_priv_tbl *priv_tbl;
- 	struct rkvdec_h264_ctx *h264_ctx;
--	struct v4l2_ctrl *ctrl;
--	int ret;
--
--	ctrl = v4l2_ctrl_find(&ctx->ctrl_hdl,
--			      V4L2_CID_STATELESS_H264_SPS);
--	if (!ctrl)
--		return -EINVAL;
--
--	ret = rkvdec_h264_validate_sps(ctx, ctrl->p_new.p_h264_sps);
--	if (ret)
--		return ret;
+@@ -896,9 +896,9 @@ static void config_registers(struct rkvdec_ctx *ctx,
+ 	dma_addr_t rlc_addr;
+ 	dma_addr_t refer_addr;
+ 	u32 rlc_len;
+-	u32 hor_virstride = 0;
+-	u32 ver_virstride = 0;
+-	u32 y_virstride = 0;
++	u32 hor_virstride;
++	u32 ver_virstride;
++	u32 y_virstride;
+ 	u32 yuv_virstride = 0;
+ 	u32 offset;
+ 	dma_addr_t dst_addr;
+@@ -909,16 +909,16 @@ static void config_registers(struct rkvdec_ctx *ctx,
  
- 	h264_ctx = kzalloc(sizeof(*h264_ctx), GFP_KERNEL);
- 	if (!h264_ctx)
-@@ -1089,8 +1078,8 @@ static int rkvdec_h264_start(struct rkvdec_ctx *ctx)
- 	priv_tbl = dma_alloc_coherent(rkvdec->dev, sizeof(*priv_tbl),
- 				      &h264_ctx->priv_tbl.dma, GFP_KERNEL);
- 	if (!priv_tbl) {
--		ret = -ENOMEM;
--		goto err_free_ctx;
-+		kfree(h264_ctx);
-+		return -ENOMEM;
- 	}
+ 	f = &ctx->decoded_fmt;
+ 	dst_fmt = &f->fmt.pix_mp;
+-	hor_virstride = (sps->bit_depth_luma_minus8 + 8) * dst_fmt->width / 8;
+-	ver_virstride = round_up(dst_fmt->height, 16);
++	hor_virstride = dst_fmt->plane_fmt[0].bytesperline;
++	ver_virstride = dst_fmt->height;
+ 	y_virstride = hor_virstride * ver_virstride;
  
- 	h264_ctx->priv_tbl.size = sizeof(*priv_tbl);
-@@ -1100,10 +1089,6 @@ static int rkvdec_h264_start(struct rkvdec_ctx *ctx)
+ 	if (sps->chroma_format_idc == 0)
+ 		yuv_virstride = y_virstride;
+ 	else if (sps->chroma_format_idc == 1)
+-		yuv_virstride += y_virstride + y_virstride / 2;
++		yuv_virstride = y_virstride + y_virstride / 2;
+ 	else if (sps->chroma_format_idc == 2)
+-		yuv_virstride += 2 * y_virstride;
++		yuv_virstride = 2 * y_virstride;
  
- 	ctx->priv = h264_ctx;
- 	return 0;
--
--err_free_ctx:
--	kfree(h264_ctx);
--	return ret;
- }
- 
- static void rkvdec_h264_stop(struct rkvdec_ctx *ctx)
+ 	reg = RKVDEC_Y_HOR_VIRSTRIDE(hor_virstride / 16) |
+ 	      RKVDEC_UV_HOR_VIRSTRIDE(hor_virstride / 16) |
 -- 
 2.42.0
 
