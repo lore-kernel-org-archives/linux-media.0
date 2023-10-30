@@ -2,89 +2,198 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A352C4167D
-	for <linux-media@archiver.kernel.org>; Mon, 30 Oct 2023 19:26:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B9F7C4332F
+	for <linux-media@archiver.kernel.org>; Mon, 30 Oct 2023 19:32:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231247AbjJ3T06 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 Oct 2023 15:26:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53240 "EHLO
+        id S229775AbjJ3Tcn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 Oct 2023 15:32:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbjJ3T04 (ORCPT
+        with ESMTP id S229510AbjJ3Tcm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 Oct 2023 15:26:56 -0400
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDE1E4;
-        Mon, 30 Oct 2023 12:26:54 -0700 (PDT)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-1e9c42fc0c9so2103436fac.1;
-        Mon, 30 Oct 2023 12:26:54 -0700 (PDT)
+        Mon, 30 Oct 2023 15:32:42 -0400
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8283AC9;
+        Mon, 30 Oct 2023 12:32:40 -0700 (PDT)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-5a92782615dso48496947b3.2;
+        Mon, 30 Oct 2023 12:32:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698694013; x=1699298813;
+        d=1e100.net; s=20230601; t=1698694359; x=1699299159;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iMNn8gw95Mi9aB89F2PItspCe/uKw0JKgKBsspi+cN0=;
-        b=H3hYl9/5AEmeDUWeqUCd4Aji/6RvVBo1bPiikl/cDWVI5gF5hseDW99QdecsIwpN39
-         Vg3ZcixOnbZxBFOmngZdlAyTg5cuswLQdIe/qnJeYe2/bJm6GlDNCCtWaHQVQrVBtm12
-         7wsy3UEc6L0/mPsXR+6snAv+rtyO404qoqkKMAkCDSz32qXkNFfgSB2XVZZeHpoGweah
-         Hp8FRot0M5AgBl5LmPzJzHkNwL/VCuGxxmX6XgS93F4ls3rjOdD4aqNnljiR7Gt29NXk
-         UQ/NquTd5nDA27/rs7n49CVX4U6ijusoDxoU+lB362mGgLwLoKY9OQK/xcI+xG1jr8K0
-         R3Gg==
-X-Gm-Message-State: AOJu0Yzq5WBv4AovSkQGKcDOARbQYNjAsAg117Y58g2EvhCv+Sz9pmGq
-        7iBlR2b6BFHz2Aby9bseIA==
-X-Google-Smtp-Source: AGHT+IFqVwsmxx+ch82fJSmqPqoTwRaa9+WOEzKyddP42zM17GUxUkOuZQ+88pjFz/wQkY8Sp+ZVPw==
-X-Received: by 2002:a05:6870:d8c8:b0:1ea:ce71:dd13 with SMTP id of8-20020a056870d8c800b001eace71dd13mr10661464oac.28.1698694013252;
-        Mon, 30 Oct 2023 12:26:53 -0700 (PDT)
+        bh=1pByH2StVHoqPD6IH6IBloBGUwp09k45GfAx3mFKKEk=;
+        b=rL8zZ6GphI4C+0FnU/jFnqzcrRaYPVU82NESFdqIU4+p77qiNQhS7HHXgCSqC+DmlI
+         7qRUbZZwsSQc6ubWvHw1Ml0mN5ivvEeTi5F7gGexZxVWSW4wu6iVjYMM+NDjzSd6db0B
+         G9hnd16SiiKGFgvhnG3xsS0bbGGBFzwIMxKOryey7vH/hW84OMklO5u2Yu0tHnQGSJw7
+         O5cvSMoFq726g/VCWevDSK/CKcmpz/gtMuMDLxzOkdOYZUWR1/k+Vxq+z8zF2KV2/FDm
+         9zxgMRs9tJjfQVMHrZ6sYpWd5OkpPc9p/w9cBARgi1CpoD35gspFrhhrQZMSBe1STxGX
+         Qs3Q==
+X-Gm-Message-State: AOJu0YxP3V4gld8V0tI9dTJrQuqtdIyeruKnPfw99maDzIHbmfuF/MLV
+        2VquonG1rPeCrxvcKIJHLw==
+X-Google-Smtp-Source: AGHT+IHK3wChZcWT3XRLoyn0yhbfVBF3GMz9Z0DMZB75PXL08vwUDIKlwJthVuKSpdwIy0fvpvHBbw==
+X-Received: by 2002:a25:6605:0:b0:da3:743d:ea3e with SMTP id a5-20020a256605000000b00da3743dea3emr125254ybc.21.1698694359538;
+        Mon, 30 Oct 2023 12:32:39 -0700 (PDT)
 Received: from herring.priv ([2607:fb91:e6c7:c3eb:a6fd:69b4:aba3:6929])
-        by smtp.gmail.com with ESMTPSA id bh9-20020a056871948900b001cc9bc7b569sm1702946oac.27.2023.10.30.12.26.50
+        by smtp.gmail.com with ESMTPSA id e131-20020a256989000000b00d9ab95777ecsm45311ybc.49.2023.10.30.12.32.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Oct 2023 12:26:52 -0700 (PDT)
-Received: (nullmailer pid 1994506 invoked by uid 1000);
-        Mon, 30 Oct 2023 19:26:50 -0000
-Date:   Mon, 30 Oct 2023 14:26:50 -0500
+        Mon, 30 Oct 2023 12:32:38 -0700 (PDT)
+Received: (nullmailer pid 2046098 invoked by uid 1000);
+        Mon, 30 Oct 2023 19:32:36 -0000
+Date:   Mon, 30 Oct 2023 14:32:36 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Moudy Ho <moudy.ho@mediatek.com>
-Cc:     David Airlie <airlied@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-mediatek@lists.infradead.org,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v8 16/16] dt-bindings: display: mediatek: padding: add
- compatible for MT8195
-Message-ID: <169869400953.1994265.3434527810955780048.robh@kernel.org>
-References: <20231030100022.9262-1-moudy.ho@mediatek.com>
- <20231030100022.9262-17-moudy.ho@mediatek.com>
+To:     Mehdi Djait <mehdi.djait@bootlin.com>
+Cc:     mchehab@kernel.org, heiko@sntech.de, hverkuil-cisco@xs4all.nl,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
+        alexandre.belloni@bootlin.com, maxime.chevallier@bootlin.com,
+        paul.kocialkowski@bootlin.com, michael.riesch@wolfvision.net
+Subject: Re: [PATCH v9 1/3] media: dt-bindings: media: add bindings for
+ Rockchip CIF
+Message-ID: <20231030193236.GA1995060-robh@kernel.org>
+References: <cover.1698666612.git.mehdi.djait@bootlin.com>
+ <5f83d60031320c4c7b0f0727604903f50ee49058.1698666612.git.mehdi.djait@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231030100022.9262-17-moudy.ho@mediatek.com>
+In-Reply-To: <5f83d60031320c4c7b0f0727604903f50ee49058.1698666612.git.mehdi.djait@bootlin.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-
-On Mon, 30 Oct 2023 18:00:22 +0800, Moudy Ho wrote:
-> Add a compatible string for the PADDING block in MediaTek MT8195 that
-> is controlled by MDP3.
+On Mon, Oct 30, 2023 at 01:25:12PM +0100, Mehdi Djait wrote:
+> Add a documentation for the Rockchip Camera Interface
+> binding.
 > 
-> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+> Signed-off-by: Mehdi Djait <mehdi.djait@bootlin.com>
 > ---
->  .../bindings/display/mediatek/mediatek,padding.yaml           | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> v8=>v9:
+> dropped the "Reviewed-by: Rob Herring <robh@kernel.org>"
+> because of the following changes:
+> - changed the compatible to rk3066-cif: rk3066 is the earliest Rockchip SoC
+>   that uses cif and it is the first model starting the RK30 lineup.
+
+Is px30 compatible with rk3066? It's not clear because you didn't add 
+rk3066 support. If not compatible, then add rk3066 when you have a user. 
+If it is compatible, then you should have a fallback for px30.
+
+> - adjusted the description
+> - changed the node name to video-capture
 > 
+> 
+>  .../bindings/media/rockchip,rk3066-cif.yaml   | 96 +++++++++++++++++++
+>  1 file changed, 96 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/rockchip,rk3066-cif.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/rockchip,rk3066-cif.yaml b/Documentation/devicetree/bindings/media/rockchip,rk3066-cif.yaml
+> new file mode 100644
+> index 000000000000..be69e474ed26
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/rockchip,rk3066-cif.yaml
+> @@ -0,0 +1,96 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/rockchip,rk3066-cif.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Rockchip CIF Camera Interface
+> +
+> +maintainers:
+> +  - Mehdi Djait <mehdi.djait@bootlin.com>
+> +
+> +description: |
 
-Acked-by: Rob Herring <robh@kernel.org>
+Don't need '|'
 
+> +  CIF is a camera interface present on some rockchip SoCs. It
+> +  receives the data from Camera sensor or CCIR656 encoder and
+> +  transfers it into system main memory by AXI bus.
+
+Wrap lines at 80.
+
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - rockchip,rk3066-cif
+> +      - rockchip,px30-vip
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: ACLK
+> +      - description: HCLK
+> +      - description: PCLK
+> +
+> +  clock-names:
+> +    items:
+> +      - const: aclk
+> +      - const: hclk
+> +      - const: pclk
+> +
+> +  resets:
+> +    items:
+> +      - description: AXI
+> +      - description: AHB
+> +      - description: PCLK IN
+> +
+> +  reset-names:
+> +    items:
+> +      - const: axi
+> +      - const: ahb
+> +      - const: pclkin
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  port:
+> +    $ref: /schemas/graph.yaml#/properties/port
+> +    description: A connection to a sensor or decoder
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - port
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/px30-cru.h>
+> +    #include <dt-bindings/power/px30-power.h>
+> +
+> +    parent {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        video-capture@ff490000 {
+> +            compatible = "rockchip,px30-vip";
+> +            reg = <0x0 0xff490000 0x0 0x200>;
+> +            interrupts = <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
+> +            clocks = <&cru ACLK_CIF>, <&cru HCLK_CIF>, <&cru PCLK_CIF>;
+> +            clock-names = "aclk", "hclk", "pclk";
+> +            resets = <&cru SRST_CIF_A>, <&cru SRST_CIF_H>, <&cru SRST_CIF_PCLKIN>;
+> +            reset-names = "axi", "ahb", "pclkin";
+> +            power-domains = <&power PX30_PD_VI>;
+> +
+> +            port {
+> +                endpoint {
+> +                    remote-endpoint = <&tw9900_out>;
+> +                };
+> +            };
+> +        };
+> +    };
+> +...
+> -- 
+> 2.41.0
+> 
