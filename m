@@ -2,129 +2,327 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8579C4332F
-	for <linux-media@archiver.kernel.org>; Mon, 30 Oct 2023 08:07:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35C2EC4332F
+	for <linux-media@archiver.kernel.org>; Mon, 30 Oct 2023 08:09:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232174AbjJ3IHT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 Oct 2023 04:07:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50602 "EHLO
+        id S231963AbjJ3IJq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 Oct 2023 04:09:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232191AbjJ3IHR (ORCPT
+        with ESMTP id S231944AbjJ3IJq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 Oct 2023 04:07:17 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59920E1
-        for <linux-media@vger.kernel.org>; Mon, 30 Oct 2023 01:07:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698653234; x=1730189234;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=R6EgUX9MLkLtUMjsUFUlQtwJYKRJ2HJage590k9wq9Q=;
-  b=IBTjAJj9qcQiNNBZWKhG8Sxl3H1K2uEOYmgxu5LZZjPFCEhuFz2Vbpka
-   +ObcOeOY0J8D4KnvAGECAN5JBm6YDaTOwFAzZl4I4PwbT4f8QCnTyQRPh
-   ygpIqKtjFamN7gCXuXfsoTyAy5wkR+ZAAAS3zStma7xfS2CtRqd76de+Y
-   rVYtnojva8kn5qrrgqUrnE6PcaosbaFtpkzh/Pn0bXK7H7spCtpbIbr5q
-   3QEy2afzqktUC9f7aV9yzPHG7k8GHv/u5R3hi4x1/7D3fvx/0GFfhZQ5y
-   WvVjbFav5Ao7krzLhWBanuMzR0hVE084IY0d9VGt1i6gA8L48gCYEmV7E
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10878"; a="6663819"
-X-IronPort-AV: E=Sophos;i="6.03,263,1694761200"; 
-   d="scan'208";a="6663819"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2023 01:07:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10878"; a="710031781"
-X-IronPort-AV: E=Sophos;i="6.03,263,1694761200"; 
-   d="scan'208";a="710031781"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2023 01:07:06 -0700
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id 6C56011F82E;
-        Mon, 30 Oct 2023 09:57:13 +0200 (EET)
-Date:   Mon, 30 Oct 2023 07:57:13 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        linux-media@vger.kernel.org, bingbu.cao@intel.com,
-        hongju.wang@intel.com,
-        Andrey Konovalov <andrey.konovalov@linaro.org>,
-        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-        Dmitry Perchanov <dmitry.perchanov@intel.com>,
-        "Ng, Khai Wen" <khai.wen.ng@intel.com>
-Subject: Re: [PATCH v6 18/28] media: uapi: Allow a larger number of routes
- than there's room for
-Message-ID: <ZT9h2cNZAJNaCVrk@kekkonen.localdomain>
-References: <20231003115237.76828-1-sakari.ailus@linux.intel.com>
- <20231003120813.77726-9-sakari.ailus@linux.intel.com>
- <811d8344-192f-4fb6-8da6-b0c8b93165b8@ideasonboard.com>
- <20231025210726.GA16151@pendragon.ideasonboard.com>
- <adaadd6e-c163-4c3a-b851-b2de184b5b5e@xs4all.nl>
+        Mon, 30 Oct 2023 04:09:46 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522E3A2;
+        Mon, 30 Oct 2023 01:09:43 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (185-9-10-242.cust.suomicom.net [185.9.10.242])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4SJmC85Yftz49Q2C;
+        Mon, 30 Oct 2023 10:09:37 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1698653381;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wdLbmNkZHwC81DUonhNviILxZ3gL1acKOh4/pnU2af4=;
+        b=mLcmwhtlZFvqDtPgCJML1UNiOlHCZx0EhKnXCYIl/pRM0YG5ybM5fsJ/jaNS5OkEKINBsr
+        lTu0XEdaIKLNmgDI8kFPwienoe9dTJ7QMpihx69DZE96yWZbzRFkvNFEVwKgeQHKpQ75SH
+        9HY6kqoC2Q05x8G1/FwB5hDabYrT2VZXs9EfJjr/l3t5BT1MuEz6XcGj7ednSQ+jvcz+H2
+        BVrHaaraDldrRGzqfL47dUlvIAP0kGhALY5MWvBszibGzEhLs4Y9/eZblfSdcedaAd0wfy
+        Yeg79mmM0S+UQbhasfey92aLSt6VKgGdRbymCzzR2g++Xs9YTMDY1FX7PT9RsQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1698653381;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wdLbmNkZHwC81DUonhNviILxZ3gL1acKOh4/pnU2af4=;
+        b=mfE8md0tLwQywuGjZHhpgYXVGDvOITPhwNC3B+CFRYXUNlTDMZ2FQyqvhcj5wTRwbtYMrw
+        je1+o5sl1S+84JSy90ILw+qR9wyLivPvN1ACshnnQdbluDzAfmek//eHRQRf5D9MoaVMcJ
+        xrDPIum5s/Uwk6S8TPzmApUkW3g2o1PTt99/nKg8J02hzE4KDeNjRF8Yt4T7Z6iJQBUCxO
+        MXWtGjdp403+C2GO4VLhRqHq7ipKTbuO79kumKOrV3jF6y9nTIrn8kijzwM01S3XEeGzYw
+        kEzateNIF2/WLk3WENC5zy3tPjHwUIaCkt3pRWxuPz14qaKzYQHA7EOga4aYBA==
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1698653381; a=rsa-sha256;
+        cv=none;
+        b=suDw42o0yYrTxqgkbFhvrZVZ/Si5OZPQ9cIRSay7Yus7SoGwh47jscQzcZjbM2SUVoOE4D
+        KAbbBgOiVNVGEyEyKubogsQdepALsi1GHORI/a49RzN1dX4NYdbDtMYe3YAk6WdHfwnL2P
+        lA9DbVorfMHtFflVmfJk9a31g11olWx6zZkiAidQL3PFfxUzsphoaX/fS4tUdFF15GLudI
+        eWYzybuctscSDveaSLMX0+qdNElHhONgAEBrqYrDNNLSNn0sRvr+MXroXIj7HtbtjpQhCz
+        64yDqX4GfPA9hAQ8F7s2YUJpEG45p1ZNLdc6UBIgDa3k971RQ08TvAQ1OJSmpA==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 975F9634C93;
+        Mon, 30 Oct 2023 10:09:36 +0200 (EET)
+Date:   Mon, 30 Oct 2023 08:09:36 +0000
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org,
+        Paul Elder <paul.elder@ideasonboard.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Julien Stephan <jstephan@baylibre.com>,
+        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v4 3/3] media: i2c: Add driver for THine THP7312
+Message-ID: <ZT9kwC3abUKR9fgQ@valkosipuli.retiisi.eu>
+References: <20231017132103.9914-1-laurent.pinchart@ideasonboard.com>
+ <20231017132103.9914-4-laurent.pinchart@ideasonboard.com>
+ <ZTutbU1XG_jKZbIp@valkosipuli.retiisi.eu>
+ <20231027124529.GA19539@pendragon.ideasonboard.com>
+ <ZTvOIQSmpytUisUD@valkosipuli.retiisi.eu>
+ <20231028151858.GB20465@pendragon.ideasonboard.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <adaadd6e-c163-4c3a-b851-b2de184b5b5e@xs4all.nl>
+In-Reply-To: <20231028151858.GB20465@pendragon.ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans,
+Hi Laurent,
 
-On Fri, Oct 27, 2023 at 03:13:55PM +0200, Hans Verkuil wrote:
-> On 25/10/2023 23:07, Laurent Pinchart wrote:
-> > On Mon, Oct 09, 2023 at 01:56:21PM +0300, Tomi Valkeinen wrote:
-> >> On 03/10/2023 15:08, Sakari Ailus wrote:
-> >>> On VIDIOC_SUBDEV_[GS]_ROUTING, only return as many routes back to the user
-> >>> as there's room. Do not consider it an error if more routes existed.
-> >>> Simply inform the user there are more routes.
-> >>
-> >> Inform how? And I agree with Hans here. How about return ENOSPC, but the 
-> >> kernel fills in num_routes to tell the userspace how many there actually 
-> >> are?
+On Sat, Oct 28, 2023 at 06:18:58PM +0300, Laurent Pinchart wrote:
+> On Fri, Oct 27, 2023 at 02:50:09PM +0000, Sakari Ailus wrote:
+> > Hi Laurent,
 > > 
-> > For VIDIOC_SUBDEV_G_ROUTING I have no objection. For
-> > VIDIOC_SUBDEV_S_ROUTING, however, I would prefer the ioctl to succeed if
-> > the routes can be applied but there's not enough space to return them
-> > all to the application. The application may not have an interest in
-> > getting the applied routes back.
+> > On Fri, Oct 27, 2023 at 03:45:29PM +0300, Laurent Pinchart wrote:
+> > 
+> > ...
+> > 
+> > > > > +#include <linux/clk.h>
+> > > > > +#include <linux/delay.h>
+> > > > > +#include <linux/device.h>
+> > > > > +#include <linux/firmware.h>
+> > > > > +#include <linux/gpio/consumer.h>
+> > > > > +#include <linux/i2c.h>
+> > > > > +#include <linux/init.h>
+> > > > > +#include <linux/iopoll.h>
+> > > > > +#include <linux/kernel.h>
+> > > > > +#include <linux/module.h>
+> > > > > +#include <linux/mtd/spi-nor.h>
+> > > > > +#include <linux/of_device.h>
+> > > > > +#include <linux/pm_runtime.h>
+> > > > > +#include <linux/regulator/consumer.h>
+> > > > > +#include <linux/slab.h>
+> > > > > +#include <linux/thp7312.h>
+> > > > 
+> > > > uapi/linux/thp7321.h ?
+> > > 
+> > > Is that needed ?
+> > 
+> > It's a UAPI header. Wouldn't it be reasonable to include it that way
+> > (instead of relying on searching include/uapi as well)?
 > 
-> For S_ROUTING, do we still want to update num_routes in that case? Even
-> though we return 0 since we could actually set the routes.
+> There are some occurences of '#include <uapi/' in drivers/ (I counted
+> 338), but why is that better ?
 
-num_routes should be updated in this case, otherwise the caller won't know
-there are more routes. The caller can then decide what to do about it, to
-get the routes using G_ROUTING for instance: the length of the routing
-table is now known.
-
-> 
-> I think it depends a bit on the naming of these fields in v7.
-
-I recall there was a comment on the naming now, possibly from you, but I
-can't find the comments at the moment. :-I I'm open to renaming them but I
-don't think the current naming is bad either.
+I'd presume that at some point the -Iinclude/uapi will be cleaned up and
+then the only option remains to include it from there directly. Why not to
+do it already now?
 
 > 
-> How likely is it that an application would run into this anyway? I suspect a
-> typical app will get the routes first, then modify it.
+> > > > > +	struct {
+> > > > > +		struct v4l2_ctrl *noise_reduction_auto;
+> > > > > +		struct v4l2_ctrl *noise_reduction_absolute;
+> > > > > +	};
+> > > > > +
+> > > > > +	const char *fw_name;
+> > > > > +	u8 *fw_data;
+> > > > > +	size_t fw_size;
+> > > > > +
+> > > > > +	u8 fw_major_version;
+> > > > > +	u8 fw_minor_version;
+> > > > > +
+> > > > > +	/* Lock to protect fw_cancel */
+> > > > > +	struct mutex fw_lock;
+> > > > > +	struct fw_upload *fwl;
+> > > > > +	bool fw_cancel;
+> > > > 
+> > > > Arranging this right after fw_* would save some memory.
+> > > 
+> > > After what ? I assume you mean fw_*_version ? It would, but it would
+> > > feel a bit out of place. I'll see what I can do.
+> > 
+> > Yes. There doesn't seem to be any firm ordering here either. Up to you.
+> > 
+> > ...
+> > 
+> > > > > +	val = ((conv_lanes[3] & 0x03) << 6) |
+> > > > > +	      ((conv_lanes[2] & 0x03) << 4) |
+> > > > > +	      ((conv_lanes[1] & 0x03) << 2) |
+> > > > > +	       (conv_lanes[0] & 0x03);
+> > > > 
+> > > > You could construct val in the loop and drop conv_lanes altogether.
+> > > > 
+> > > > I.e.
+> > > > 
+> > > > 		val |= (i & 0x03) << ((lanes[i] - 1) * 2);
+> > > > 
+> > > > And assign val to 0 in declaration.
+> > > 
+> > > I think I'll compute it at probe time and cache it instead.
+> > 
+> > If you don't need anything else in the endpoint, you could move it out of
+> > the device context struct.
+> 
+> That's what I've now done, yes.
+> 
+> > > > > +	for (rate = mode->rates; rate->fps; ++rate, --index) {
+> > > > > +		if (!index) {
+> > > > > +			fie->interval.numerator = 1;
+> > > > > +			fie->interval.denominator = rate->fps;
+> > > > 
+> > > > Maybe a newline here?
+> > > 
+> > > If that makes you happy :-)
+> > 
+> > Newlines are great (when they are at the right places)!
+> > 
+> > > > > +	case V4L2_CID_THP7312_NOISE_REDUCTION_AUTO:
+> > > > > +	case V4L2_CID_THP7312_NOISE_REDUCTION_ABSOLUTE:
+> > > > > +		/* Ignore the manually set value if auto has been set */
+> > > > > +		value = thp7312->noise_reduction_auto->val
+> > > > > +		      ? 0 : 0x80 | (thp7312->noise_reduction_absolute->val & 0x7f);
+> > > > 
+> > > > "?" should be on the preceding line.
+> > > 
+> > > Isn't that a matter of coding style preference ?
+> > 
+> > Yes, indeed, and I recall GNU coding style is shunned upon here. :-)
+> > 
+> > > > > +
+> > > > > +		cci_write(thp7312->regmap, THP7312_REG_NOISE_REDUCTION, value,
+> > > > > +			  &ret);
+> > > > > +		break;
+> > > > > +
+> > > > > +	case V4L2_CID_AUTO_WHITE_BALANCE:
+> > > > > +		value = ctrl->val ? THP7312_WB_MODE_AUTO : THP7312_WB_MODE_MANUAL;
+> > > > 
+> > > > I'd do this in the call, up to you.
+> > > 
+> > > Only if you allow lines longer than 80 columns ;-)
+> > 
+> > I don't think you need longer lines for that, do you?
+> > 
+> > > > > +
+> > > > > +		cci_write(thp7312->regmap, THP7312_REG_WB_MODE, value, &ret);
+> > > > > +		break;
+> > > > > +
+> > 
+> > ...
+> > 
+> > > > > +static enum fw_upload_err thp7312_fw_write_to_flash(struct thp7312_device *thp7312,
+> > > > > +						    u32 dest, u32 write_size)
+> > > > > +{
+> > > > > +	u8 command[sizeof(thp7312_cmd_write_ram_to_flash) + 6];
+> > > > > +	static const u32 cmd_size = sizeof(thp7312_cmd_write_ram_to_flash);
+> > > > > +	u64 val;
+> > > > > +	int ret;
+> > > > > +
+> > > > > +	memcpy(command, thp7312_cmd_write_ram_to_flash, cmd_size);
+> > > > > +
+> > > > > +	command[cmd_size] = (dest & 0xff0000) >> 16;
+> > > > > +	command[cmd_size + 1] = (dest & 0x00ff00) >> 8;
+> > > > > +	command[cmd_size + 2] = (dest & 0x0000ff);
+> > > > > +	command[cmd_size + 3] = ((write_size - 1) & 0xff0000) >> 16;
+> > > > > +	command[cmd_size + 4] = ((write_size - 1) & 0x00ff00) >> 8;
+> > > > > +	command[cmd_size + 5] = ((write_size - 1) & 0x0000ff);
+> > > > > +
+> > > > > +	ret = thp7312_write_buf(thp7312, command, sizeof(command));
+> > > > > +	if (ret < 0)
+> > > > > +		return FW_UPLOAD_ERR_RW_ERROR;
+> > > > > +
+> > > > > +	usleep_range(8000000, 8100000);
+> > > > 
+> > > > I guess there's time to make some tea here?
+> > > 
+> > > For a flash infusion, gong fu style, probably.
+> > > 
+> > > We don't have much documentation about the exact values of the delays
+> > > that are needed, and why :-(
+> > 
+> > I have even less documentation (none) on this device. Is polling an option,
+> > as you're reading a register to verify the operation was successful?
+> 
+> I'll try to ask and get more information. As firmware update is an
+> uncommon and not time-sensitive operation, I'd rather be cautious here
+> and not over-optimize.
 
-Laurent can probably comment on this from libcamera perspective, but I
-presume that most users of routes are somehow specific to the device. I
-would expect source sub-devices that produce the streams are typical places
-where you may have dependencies between streams, but they do exist
-elsewhere (but there are very few cases).
+If this is only done in order to *upgrade* the firmware, it's certainly not
+a concern IMO.
 
 > 
-> It's worth giving this a try, but it depends a bit on how easy it is to
-> document it. If you need to jump through hoops to try to explain it to an
-> end user, then perhaps this is overly complicated.
+> > > > > +
+> > > > > +	ret = cci_read(thp7312->regmap, THP7312_REG_FW_VERIFY_RESULT, &val,
+> > > > > +		       NULL);
+> > > > > +	if (ret < 0)
+> > > > > +		return FW_UPLOAD_ERR_RW_ERROR;
+> > > > > +
+> > > > > +	return val ?  FW_UPLOAD_ERR_HW_ERROR : FW_UPLOAD_ERR_NONE;
+> > > > > +}
+> > 
+> > ...
+> > 
+> > > > > +	/*
+> > > > > +	 * Register a device for the sensor, to support usage of the regulator
+> > > > > +	 * API.
+> > > > > +	 */
+> > > > > +	sensor->dev = kzalloc(sizeof(*sensor->dev), GFP_KERNEL);
+> > > > > +	if (!sensor->dev)
+> > > > > +		return -ENOMEM;
+> > > > > +
+> > > > > +	sensor->dev->parent = dev;
+> > > > > +	sensor->dev->of_node = of_node_get(sensor->of_node);
+> > > > 
+> > > > This device could well find its way to a non-OF system. Could you use the
+> > > > fwnode property API instead?
+> > > 
+> > > I'm pretty sure there will be problems if someone was using this driver
+> > > on an ACPI-based system, so trying to pretend it's supported without
+> > > being able to test it may not be the best use of development time. I'll
+> > > try, but if I hit any issue, I'll keep using the OF-specific functions
+> > > in the next version.
+> > 
+> > I'd suggest to use OF functions if there's no corresponding fwnode function
+> > available. The intention is they cover the same scope, so it is likely
+> > something that's missing will be added sooner or later.
+> 
+> I understand, but if the conversion is not complete, it's not very
+> valuable. I have no objection against using the fwnode API in the
+> driver, but I'll let someone else handle it when and if needed.
 
-The documentation is changed in patch "media: v4l: subdev: Add len_routes
-field to struct v4l2_subdev_routing", two patches prior to this. The
-changes are split across several patches in order to avoid fewer difficult
-to review patches.
+If you leave it using OF-only API now in a driver that is not bound to OF
+in any way, someone moving it to fwnode later may not be able to test it on
+OF, increasing the likelihood something breaks. So use fwnode API where you
+can now, and we'll address that one call later on.
 
-I'll change the prefix of this patch to "v4l: subdev:" as well.
+> 
+> > > > > +	/* Retrieve the sensor index from the reg property. */
+> > > > > +	ret = of_property_read_u32(node, "reg", &reg);
+> > > > > +	if (ret < 0) {
+> > > > > +		dev_err(dev, "'reg' property missing in sensor node\n");
+> > > > 
+> > > > Shouldn't you assume it's zero instead?
+> > > 
+> > > The property is mandatory.
+> > 
+> > You could also make it optional as that appears to be the general practice.
+> > Up to you.
+> 
+> I think it's easier to keep it mandatory.
+
+Ack.
 
 -- 
 Regards,
