@@ -2,77 +2,81 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB71DC4332F
-	for <linux-media@archiver.kernel.org>; Mon, 30 Oct 2023 19:34:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B549C4167D
+	for <linux-media@archiver.kernel.org>; Mon, 30 Oct 2023 19:34:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbjJ3TeB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 Oct 2023 15:34:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37486 "EHLO
+        id S231368AbjJ3TeF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 Oct 2023 15:34:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjJ3TeA (ORCPT
+        with ESMTP id S229510AbjJ3TeD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 Oct 2023 15:34:00 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56439A9;
-        Mon, 30 Oct 2023 12:33:58 -0700 (PDT)
+        Mon, 30 Oct 2023 15:34:03 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F96CC;
+        Mon, 30 Oct 2023 12:34:00 -0700 (PDT)
 Received: from arisu.hitronhub.home (unknown [23.233.251.139])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: detlev)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2979C6607392;
-        Mon, 30 Oct 2023 19:33:56 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6DFDD6607394;
+        Mon, 30 Oct 2023 19:33:58 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1698694437;
-        bh=ahnTelEXG01rwNePCrXmDyqjE42txSlbUhezqbVf4V4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=SRumtA5+ByCMxAbR76CSZDkpKxbtWKyrwhaEI7ZR2MwnrWIhOBj2PdRofJJCmgB+a
-         Q2ikBWlbHdMeCHshtPb7WQmrUx8EpsdL51+Idv4eCPVuYdVCHow9Tjukr7WPlW4veu
-         axffcbfrZlnQn1+bxFEC+km+pZgHQe0YfahtqNQHytAlY4n9+ixBwloJtCgY28BWaR
-         8JHrAgdOBngOxQVd0d1J4TzziZ4ta2SQVwtuRgDrkwXzJTvAXELOFlsSAWvb7N7qh1
-         5+4uxNpqPWdBWk3Rhz/3R9H2S8IrIPfODVn6wOKMEA8NJJT6w4xrvzFmtrelJ8eTlM
-         9RvCStuJvXRXw==
+        s=mail; t=1698694439;
+        bh=+KcBfZwgXPJhqinSYs4xXnlKFE8JG3Ctt44QFVgA2pU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=HM3bxqghEy6IGnMvXXpTAOKZha2wgv1BmNNVSXVpLQBt8uGoL+jEGbgwVgHJZTPBp
+         0vCW0OqoAkaRcz7RN/eOTMuYWxa89XIQ1ic9fRrxUXBWmsreSjLiT8T0+hFz1CpG5q
+         YC/H9xwgdKUwyn53z85gLAw4/B+ovRI1IneUqGUFgt8wnq1TIGcvqbvp9/fYXOnuDn
+         t0LdvzyAdRtlpPteddFwxrQkrqJczEjTGqk5FiEU+LCvI4rORT+VRk1t6hZyBVcS8C
+         sTBykmw/3zUhOvfiGqH6PPZjPVLPUFg8ST5a79z4UbqxrP+QHqpVvuuMVCLWaVXUV/
+         eALr3dtvsc0yg==
 From:   Detlev Casanova <detlev.casanova@collabora.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-media@vger.kernel.org,
         Daniel Almeida <daniel.almeida@collabora.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Detlev Casanova <detlev.casanova@collabora.com>
-Subject: [PATCH 0/2] visl: Add support for AV1
-Date:   Mon, 30 Oct 2023 15:27:54 -0400
-Message-ID: <20231030193406.70126-1-detlev.casanova@collabora.com>
+Subject: [PATCH 2/2] doc: visl: Add AV1 support
+Date:   Mon, 30 Oct 2023 15:27:56 -0400
+Message-ID: <20231030193406.70126-3-detlev.casanova@collabora.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20231030193406.70126-1-detlev.casanova@collabora.com>
+References: <20231030193406.70126-1-detlev.casanova@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-AV1 support is missing in the visl test driver.
-Add it and adapt documentation.
+Add AV1 information in visl documentation.
 
-The traces are missing some fields, basically:
-- multi-dimensional arrays
-- arrays of flags
-- enums
-which don't have a __print_* macro.
+Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+---
+ Documentation/admin-guide/media/visl.rst | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Detlev Casanova (2):
-  visl: Add AV1 support
-  doc: visl: Add AV1 support
-
- Documentation/admin-guide/media/visl.rst      |   2 +
- drivers/media/test-drivers/visl/visl-core.c   |  21 ++
- drivers/media/test-drivers/visl/visl-dec.c    |  70 +++-
- drivers/media/test-drivers/visl/visl-dec.h    |   8 +
- .../media/test-drivers/visl/visl-trace-av1.h  | 314 ++++++++++++++++++
- .../test-drivers/visl/visl-trace-points.c     |   1 +
- drivers/media/test-drivers/visl/visl-video.c  |  18 +
- drivers/media/test-drivers/visl/visl-video.h  |   1 +
- drivers/media/test-drivers/visl/visl.h        |   1 +
- 9 files changed, 435 insertions(+), 1 deletion(-)
- create mode 100644 drivers/media/test-drivers/visl/visl-trace-av1.h
-
+diff --git a/Documentation/admin-guide/media/visl.rst b/Documentation/admin-guide/media/visl.rst
+index 7d2dc78341c9..64229857c17c 100644
+--- a/Documentation/admin-guide/media/visl.rst
++++ b/Documentation/admin-guide/media/visl.rst
+@@ -71,6 +71,7 @@ The following codecs are supported:
+ - VP9
+ - H.264
+ - HEVC
++- AV1
+ 
+ visl trace events
+ -----------------
+@@ -79,6 +80,7 @@ The trace events are defined on a per-codec basis, e.g.:
+ .. code-block:: bash
+ 
+         $ ls /sys/kernel/debug/tracing/events/ | grep visl
++        visl_av1_controls
+         visl_fwht_controls
+         visl_h264_controls
+         visl_hevc_controls
 -- 
 2.41.0
 
