@@ -2,46 +2,46 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60C58C4167B
-	for <linux-media@archiver.kernel.org>; Mon, 30 Oct 2023 10:01:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B07FC0018A
+	for <linux-media@archiver.kernel.org>; Mon, 30 Oct 2023 10:01:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232785AbjJ3KBg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 Oct 2023 06:01:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50248 "EHLO
+        id S232733AbjJ3KBi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 Oct 2023 06:01:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232769AbjJ3KAx (ORCPT
+        with ESMTP id S232787AbjJ3KAy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 Oct 2023 06:00:53 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5D71FDF;
+        Mon, 30 Oct 2023 06:00:54 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C539C1FDD;
         Mon, 30 Oct 2023 03:00:29 -0700 (PDT)
-X-UUID: 2673b62e770b11eea33bb35ae8d461a2-20231030
+X-UUID: 253c775a770b11ee8051498923ad61e6-20231030
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=sTdqgndZioahB36TamwdXkWsk/lwWHQXh9oJU7H/fNE=;
-        b=RNb6WbonhbtJkUf+vLEAs0VC1UQNszjBaXI1xNLP5Kaj+dvBQd0ZhhYaXuSp9NLeeV921+84xB1Wq+Xwh5MPJzZPEKqUPEZfvHoEUI9eWyAcYfiZuxCj9O/i+SWKQOBzDLvVLq2QxPKWLHOn1mO8EsMiRe7iJHVi7+I1pDsxVEQ=;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=8GpvIEiwWhU8RKlvdim92pWyaS3wh8/dC+4hYXwQf3Y=;
+        b=udU1KS88YQyMBdmHjfm5W35NYVfnHSTlxAdXJKoqjZYd1iLSJfK7IHub3uDHvZuwWKRRe0GlUGV1jh6HSqp5bZAEy4r6/iJ7s7GYsjyMQbyynREfbKgn6xi8fAkKzdAqLix87x2iuhtHU0QIv11WNDcgvNbvGw/6NQeQe9CcIxU=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.32,REQID:50bff099-cfc1-4d1a-8381-bd70ea10c55c,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:5f78ec9,CLOUDID:e3390e72-1bd3-4f48-b671-ada88705968c,B
+X-CID-O-INFO: VERSION:1.1.32,REQID:d9732958-ab1c-48fa-9220-f122eaf51eca,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:-5
+X-CID-META: VersionHash:5f78ec9,CLOUDID:e409effb-4a48-46e2-b946-12f04f20af8c,B
         ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,
+        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,
         DKR:0,DKP:0,BRR:0,BRE:0
 X-CID-BVR: 0,NGT
 X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 2673b62e770b11eea33bb35ae8d461a2-20231030
-Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw01.mediatek.com
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
+X-UUID: 253c775a770b11ee8051498923ad61e6-20231030
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
         (envelope-from <moudy.ho@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1766105998; Mon, 30 Oct 2023 18:00:26 +0800
+        with ESMTP id 796969128; Mon, 30 Oct 2023 18:00:24 +0800
 Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 30 Oct 2023 18:00:25 +0800
+ 15.2.1118.26; Mon, 30 Oct 2023 18:00:23 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Mon, 30 Oct 2023 18:00:25 +0800
+ 15.2.1118.26 via Frontend Transport; Mon, 30 Oct 2023 18:00:23 +0800
 From:   Moudy Ho <moudy.ho@mediatek.com>
 To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         Philipp Zabel <p.zabel@pengutronix.de>,
@@ -63,53 +63,116 @@ CC:     <dri-devel@lists.freedesktop.org>,
         <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         "Moudy Ho" <moudy.ho@mediatek.com>
-Subject: [PATCH v8 16/16] dt-bindings: display: mediatek: padding: add compatible for MT8195
-Date:   Mon, 30 Oct 2023 18:00:22 +0800
-Message-ID: <20231030100022.9262-17-moudy.ho@mediatek.com>
+Subject: [PATCH v8 00/16] introduce more MDP3 components in MT8195
+Date:   Mon, 30 Oct 2023 18:00:06 +0800
+Message-ID: <20231030100022.9262-1-moudy.ho@mediatek.com>
 X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20231030100022.9262-1-moudy.ho@mediatek.com>
-References: <20231030100022.9262-1-moudy.ho@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-AS-Result: No-10--1.396600-8.000000
-X-TMASE-MatchedRID: tiRXYRqWr+smeoNhEXvE7APZZctd3P4Bw8djaG0FrZsCsxyhR8y7CcWF
-        IdIOy0D44vM1YF6AJbZhyT3WNjppUtAtbEEX0MxBxEHRux+uk8ifEzJ5hPndGUWfnWTctzBf+OB
-        ug60jVLXJBEI9NAtDYW2HFo0yIP2iw8b/NMMrngvXDpEFsZAfSZZpMVRjqqOQsSC3YENW09G2mp
-        J7z7tekHmVKZusLp922v9OjYWA2uMMswg45VMfPadst5iAforfVlxr1FJij9s=
+X-TM-AS-Result: No-10--8.909000-8.000000
+X-TMASE-MatchedRID: EhRRFMJzlGHNwJnbTIxiVZ1U1lojafr/KFFZAe4nyZ5ZLD9SNJ9sEj5R
+        eTebdoC/Wbe4BkYia1jA5ntiOI3uVsvTk9bUe4riYwaJXrf2IXSUi9wB9gmcStzOQo7mTgA+BgU
+        z7G4QtepyZ31c4wqcRNA3oGNsECK+XTMLnxLtxim1PiMh4ZF39QGZ/+APXW9kXCmcAC8DBrMxaH
+        TqWa9z/Ev0kiPhd5nbsdZTJ6++iZVrP7RcOmU0Fp4CIKY/Hg3Am4n49vyf9XENX1NatttCayq2r
+        l3dzGQ17x8qjHDOOyPTKUhTZZIwZ1NtZM/cICz9HA4OxVIZNIi0P0OUmtxVRg==
 X-TM-AS-User-Approved-Sender: No
 X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--1.396600-8.000000
+X-TMASE-Result: 10--8.909000-8.000000
 X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-SNTS-SMTP: 97323CFA7FE59B36D41D87ED604BB08D57D30C3A2D2979CFDBFAA5FDCD476C4E2000:8
+X-TM-SNTS-SMTP: B21737E40C354B8B69A2DEAE31A4F9153334F63ED173CEFF1F4B9531B8BD21662000:8
 X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a compatible string for the PADDING block in MediaTek MT8195 that
-is controlled by MDP3.
+Changes since v7:
+- Rebase on linux-next.
+- Dependent dtsi files:
+  https://patchwork.kernel.org/project/linux-mediatek/list/?series=797543
+- Depends on:
+  Message ID = 20231024130048.14749-9-shawn.sung@mediatek.com
+- Correct the bindings of the four components: FG, TCC, TDSHP and HDR.
+  The names of the first three are expanded in the title, and
+  the descriptions of all four have been enhanced.
 
-Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
----
- .../bindings/display/mediatek/mediatek,padding.yaml           | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Changes since v6:
+- Rebase on v6.6-rc5.
+- Dependent dtsi files:
+  https://patchwork.kernel.org/project/linux-mediatek/list/?series=792079
+- Depends on:
+  Message ID = 20231006073831.10402-5-shawn.sung@mediatek.com
+- Discard splitting RDMA's common properties and instead use 'allOf' to
+  isolate different platform features.
+- Revise the incorrect properties in FG, HDR, STITCH, TCC and TDAP bindings.
+- Adding SoC-specific compatible string to components, like WROT and RSZ,
+  that are inherited from MT8183.
+- Fixed typos in TCC patch and enhancing its hardware description.
 
-diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,padding.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,padding.yaml
-index db24801ebc48..19858d826808 100644
---- a/Documentation/devicetree/bindings/display/mediatek/mediatek,padding.yaml
-+++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,padding.yaml
-@@ -20,7 +20,9 @@ description:
- 
- properties:
-   compatible:
--    const: mediatek,mt8188-padding
-+    enum:
-+      - mediatek,mt8188-padding
-+      - mediatek,mt8195-mdp3-padding
- 
-   reg:
-     maxItems: 1
+Changes since v5:
+- Rebase on v6.6-rc2.
+- Dependent dtsi files:
+  https://patchwork.kernel.org/project/linux-mediatek/list/?series=786511
+- Depends on:
+  Message ID = 20230911074233.31556-5-shawn.sung@mediatek.com
+- Split out common propertis for RDMA.
+- Split each component into independent patches.
+
+Changes since v4:
+- Rebase on v6.6-rc1
+- Organize identical hardware components into their respective files.
+
+Hi,
+
+The purpose of this patch is to separate the MDP3-related bindings from
+the original mailing list mentioned below:
+https://lore.kernel.org/all/20230208092209.19472-1-moudy.ho@mediatek.com/
+Those binding files describe additional components that
+are present in the mt8195.
+
+Moudy Ho (16):
+  dt-bindings: media: mediatek: mdp3: correct RDMA and WROT node with
+    generic names
+  dt-bindings: media: mediatek: mdp3: merge the indentical RDMA under
+    display
+  dt-bindings: media: mediatek: mdp3: add config for MT8195 RDMA
+  dt-bindings: media: mediatek: mdp3: add compatible for MT8195 RSZ
+  dt-bindings: media: mediatek: mdp3: add compatible for MT8195 WROT
+  dt-bindings: media: mediatek: mdp3: add component FG for MT8195
+  dt-bindings: media: mediatek: mdp3: add component HDR for MT8195
+  dt-bindings: media: mediatek: mdp3: add component STITCH for MT8195
+  dt-bindings: media: mediatek: mdp3: add component TCC for MT8195
+  dt-bindings: media: mediatek: mdp3: add component TDSHP for MT8195
+  dt-bindings: display: mediatek: aal: add compatible for MT8195
+  dt-bindings: display: mediatek: color: add compatible for MT8195
+  dt-bindings: display: mediatek: merge: add compatible for MT8195
+  dt-bindings: display: mediatek: ovl: add compatible for MT8195
+  dt-bindings: display: mediatek: split: add compatible for MT8195
+  dt-bindings: display: mediatek: padding: add compatible for MT8195
+
+ .../display/mediatek/mediatek,aal.yaml        |   1 +
+ .../display/mediatek/mediatek,color.yaml      |   1 +
+ .../display/mediatek/mediatek,mdp-rdma.yaml   |  88 --------------
+ .../display/mediatek/mediatek,merge.yaml      |   1 +
+ .../display/mediatek/mediatek,ovl.yaml        |   1 +
+ .../display/mediatek/mediatek,padding.yaml    |   4 +-
+ .../display/mediatek/mediatek,split.yaml      |  27 +++++
+ .../bindings/media/mediatek,mdp3-fg.yaml      |  61 ++++++++++
+ .../bindings/media/mediatek,mdp3-hdr.yaml     |  61 ++++++++++
+ .../bindings/media/mediatek,mdp3-rdma.yaml    | 108 ++++++++++++++----
+ .../bindings/media/mediatek,mdp3-rsz.yaml     |   6 +-
+ .../bindings/media/mediatek,mdp3-stitch.yaml  |  61 ++++++++++
+ .../bindings/media/mediatek,mdp3-tcc.yaml     |  62 ++++++++++
+ .../bindings/media/mediatek,mdp3-tdshp.yaml   |  61 ++++++++++
+ .../bindings/media/mediatek,mdp3-wrot.yaml    |  29 +++--
+ 15 files changed, 450 insertions(+), 122 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-rdma.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-fg.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-hdr.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-stitch.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-tcc.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-tdshp.yaml
+
 -- 
 2.18.0
 
