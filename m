@@ -2,119 +2,126 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0A41C4332F
-	for <linux-media@archiver.kernel.org>; Tue, 31 Oct 2023 07:32:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8B41C4332F
+	for <linux-media@archiver.kernel.org>; Tue, 31 Oct 2023 07:34:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343705AbjJaHcz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 31 Oct 2023 03:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50062 "EHLO
+        id S1343702AbjJaHe0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 31 Oct 2023 03:34:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343679AbjJaHcy (ORCPT
+        with ESMTP id S233628AbjJaHeZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 31 Oct 2023 03:32:54 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8BF16DB;
-        Tue, 31 Oct 2023 00:32:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Mn+LM
-        vMphVLhG3rmeD4sGc/rl3mIEcUGZbCfQih6dB0=; b=inoHGQEWq45H7OWt9vxdL
-        gcEu5WHlChE2gTYy/LCfyYSTURKT8BhJqux+5873ahRiKlH+ka0xkMxVQM8meOM6
-        Viizx/mgLGPzBXgT4l2vkBRbBx6JTOPxMTNa6hYgqFO7Qtfq9CDL7SCnmCF1Rw1F
-        zfOZ6cIjYF4IQ8ZBNA6S1o=
-Received: from leanderwang-LC4.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g3-3 (Coremail) with SMTP id _____wBn3ojfqUBlwMj4AQ--.51864S4;
-        Tue, 31 Oct 2023 15:16:50 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     dmitry.osipenko@collabora.com
-Cc:     Kyrie.Wu@mediatek.com, bin.liu@mediatek.com, mchehab@kernel.org,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, Irui.Wang@mediatek.com,
-        security@kernel.org, hackerzheng666@gmail.com,
-        1395428693sheep@gmail.com, alex000young@gmail.com,
-        amergnat@baylibre.com, wenst@chromium.org,
-        Zheng Wang <zyytlz.wz@163.com>, stable@vger.kernel.org
-Subject: [PATCH v2 2/3] media: mtk-jpeg: Fix use after free bug due to error path handling in mtk_jpeg_dec_device_run
-Date:   Tue, 31 Oct 2023 15:16:43 +0800
-Message-Id: <20231031071644.20086-3-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231031071644.20086-1-zyytlz.wz@163.com>
-References: <20231031071644.20086-1-zyytlz.wz@163.com>
+        Tue, 31 Oct 2023 03:34:25 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDBF9C0;
+        Tue, 31 Oct 2023 00:34:22 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-9d23be183c6so392953866b.0;
+        Tue, 31 Oct 2023 00:34:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698737661; x=1699342461; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4R7qfxkAUts+GNkbc9ZQgh8+ApqKGaySjT2ogtTRziw=;
+        b=Bls5EoWYJIGLtedlJSboGHI8zDgSzONz48UZWXBatJzWyhPbsuauaibA013sEXahhU
+         SNBifGpI9tzOgoQWZwEmO5a2Fhkf1E/OwNoreznzHGS3glMdKSp4wOlOjBS7g/LMvZSW
+         SjPRaxrXDsOy9l1IrPGeRf1F2oETPZtGqTlZwm1j8xVvNZotoE33jCZKnE8qNx5Ft4Rk
+         mRtCJsy8HxOVSllz4QP2LBoJ4VmYCY1BsFzqBTuSHzeSgBNeiBAQakhhqZNuJKJLlOpM
+         MkhHXyp/s7VLprESgb13KYoJ44xyZwlwqplbRpIy6GwX0FtCmAlL0sxRHYZtNSNExx6K
+         C4fQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698737661; x=1699342461;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4R7qfxkAUts+GNkbc9ZQgh8+ApqKGaySjT2ogtTRziw=;
+        b=FPM6NrxXEo9/wqYGVVzgCPjl4f64O76oLkaaXDdtuqZaqHAm2+rKbV0TRq0GLj76jP
+         I+np+IoTEaUj2Y0tsxYznhmQBbbMNaXF/IoSdZf/CyyOAI7L6O0rw09QIXiZhAv52hdt
+         5YuPp4WRqHasnMMP6yzsxhYdoaSf59/FUjdqICvBgO2R7qwRo1HyRYN4D6PFwxAJA5ue
+         4lks+l7iuChyNig2tPsBSW1sqecP2ucU7qMuvQaryPcgpKRX6I2gddno0c4Uejy5nrE2
+         7d65TiTVUooGKWMR43dT/3mXP8RtJWamdPrxYmK92HdiayAfCgYvFdoNZ8dI2W9CLesp
+         wRRw==
+X-Gm-Message-State: AOJu0Yzi1SPHTEMH5ItuWTzx83W8S5Uxh43iVABfugyfCkh1QEabIZTQ
+        Ud5cdvOqXFWIIam/5xCl/WQ=
+X-Google-Smtp-Source: AGHT+IHcmKrf2PleLqmWF2EUy9U0uM+ZXcdlG/AOqH6ipFhsij000srtN7dxEq4ic96whomyci7H1A==
+X-Received: by 2002:a17:907:9621:b0:9c7:5651:9018 with SMTP id gb33-20020a170907962100b009c756519018mr10213943ejc.68.1698737660988;
+        Tue, 31 Oct 2023 00:34:20 -0700 (PDT)
+Received: from tom-HP-ZBook-Fury-15-G7-Mobile-Workstation.station (net-188-217-59-109.cust.vodafonedsl.it. [188.217.59.109])
+        by smtp.gmail.com with ESMTPSA id jj13-20020a170907984d00b009d51f9d54edsm486845ejc.126.2023.10.31.00.34.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Oct 2023 00:34:20 -0700 (PDT)
+From:   Tommaso Merciai <tomm.merciai@gmail.com>
+Cc:     laurent.pinchart@ideasonboard.com, martin.hecht@avnet.eu,
+        michael.roeder@avnet.eu, linuxfancy@googlegroups.com,
+        mhecht73@gmail.com, sakari.ailus@linux.intel.com,
+        Tommaso Merciai <tomm.merciai@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Gerald Loacker <gerald.loacker@wolfvision.net>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH v11 0/3] media: i2c: Add support for alvium camera
+Date:   Tue, 31 Oct 2023 08:34:11 +0100
+Message-Id: <20231031073417.556053-1-tomm.merciai@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wBn3ojfqUBlwMj4AQ--.51864S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW7uF1rGr1fJr1kJFW3KF43GFg_yoW8KF48pr
-        Zagw4DCFWUGrs0gr48Aa4UZF1rC398tF12gr4S9wn3Z343XFs7Jry0ya4IqFWIyr9rCa4r
-        Zr1F9a4xJr4DZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRLYFZUUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbBdgQaU2Dkptft2gAAs5
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In mtk_jpeg_probe, &jpeg->job_timeout_work is bound with
-mtk_jpeg_job_timeout_work.
+Hi all,
 
-In mtk_jpeg_dec_device_run, if error happens in
-mtk_jpeg_set_dec_dst, it will finally start the worker while
-mark the job as finished by invoking v4l2_m2m_job_finish.
+This series add support for Allied Vision Alvium camera.
+The Alvium camera is shipped with sensor + isp in the same housing.
+The camera can be equipped with one out of various sensor and abstract
+the user from this. Camera is connected via MIPI CSI-2.
 
-There are two methods to trigger the bug. If we remove the
-module, it which will call mtk_jpeg_remove to make cleanup.
-The possible sequence is as follows, which will cause a
-use-after-free bug.
+Driver use latest V4L2_CCI_I2C API.
 
-CPU0                  CPU1
-mtk_jpeg_dec_...    |
-  start worker	    |
-                    |mtk_jpeg_job_timeout_work
-mtk_jpeg_remove     |
-  v4l2_m2m_release  |
-    kfree(m2m_dev); |
-                    |
-                    | v4l2_m2m_get_curr_priv
-                    |   m2m_dev->curr_ctx //use
+https://www.alliedvision.com/en/products/embedded-vision-solutions/
 
-If we close the file descriptor, which will call mtk_jpeg_release,
-it will have a similar sequence.
+Tested the following alvium models:
+ - alvium 1500 C-500c
+ - alvium 1800 C-2050c
+ - alvium 1800 C-1240c
+ - alvium 1800 C-040c
+ - alvium 1800 C-052c
+ - alvium 1800 C-240m
 
-Fix this bug by starting timeout worker only if started jpegdec worker
-successfully. Then v4l2_m2m_job_finish will only be called in
-either mtk_jpeg_job_timeout_work or mtk_jpeg_dec_device_run.
-Fixes: b2f0d2724ba4 ("[media] vcodec: mediatek: Add Mediatek JPEG Decoder Driver")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc: stable@vger.kernel.org
----
-v2:
-- put the patches into a single series suggested by Dmitry
----
- drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Note:
+ - Driver is rebased on top of [1], commit [2].
 
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-index 60425c99a2b8..a39acde2724a 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-@@ -1021,13 +1021,13 @@ static void mtk_jpeg_dec_device_run(void *priv)
- 	if (ret < 0)
- 		goto dec_end;
- 
--	schedule_delayed_work(&jpeg->job_timeout_work,
--			      msecs_to_jiffies(MTK_JPEG_HW_TIMEOUT_MSEC));
--
- 	mtk_jpeg_set_dec_src(ctx, &src_buf->vb2_buf, &bs);
- 	if (mtk_jpeg_set_dec_dst(ctx, &jpeg_src_buf->dec_param, &dst_buf->vb2_buf, &fb))
- 		goto dec_end;
- 
-+	schedule_delayed_work(&jpeg->job_timeout_work,
-+			      msecs_to_jiffies(MTK_JPEG_HW_TIMEOUT_MSEC));
-+
- 	spin_lock_irqsave(&jpeg->hw_lock, flags);
- 	mtk_jpeg_dec_reset(jpeg->reg_base);
- 	mtk_jpeg_dec_set_config(jpeg->reg_base,
+Thanks & Regards,
+Tommaso
+
+ - [1] https://git.linuxtv.org/sailus/media_tree.git/log/
+ - [2] media: Documentation: LP-11 and LP-111 are states, not modes (c9a1b0b583db)
+
+Tommaso Merciai (3):
+  dt-bindings: vendor-prefixes: Add prefix alliedvision
+  media: dt-bindings: alvium: add document YAML binding
+  media: i2c: Add support for alvium camera
+
+ .../media/i2c/alliedvision,alvium-csi2.yaml   |   81 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |    2 +
+ MAINTAINERS                                   |    9 +
+ drivers/media/i2c/Kconfig                     |   10 +
+ drivers/media/i2c/Makefile                    |    1 +
+ drivers/media/i2c/alvium-csi2.c               | 2630 +++++++++++++++++
+ drivers/media/i2c/alvium-csi2.h               |  488 +++
+ 7 files changed, 3221 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/alliedvision,alvium-csi2.yaml
+ create mode 100644 drivers/media/i2c/alvium-csi2.c
+ create mode 100644 drivers/media/i2c/alvium-csi2.h
+
 -- 
-2.25.1
+2.34.1
 
