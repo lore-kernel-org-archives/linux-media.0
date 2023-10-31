@@ -2,196 +2,303 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2993FC4332F
-	for <linux-media@archiver.kernel.org>; Tue, 31 Oct 2023 09:55:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42AFBC4332F
+	for <linux-media@archiver.kernel.org>; Tue, 31 Oct 2023 10:14:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233245AbjJaJz0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 31 Oct 2023 05:55:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47576 "EHLO
+        id S236140AbjJaKOO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 31 Oct 2023 06:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbjJaJzZ (ORCPT
+        with ESMTP id S229823AbjJaKON (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 31 Oct 2023 05:55:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5424583
-        for <linux-media@vger.kernel.org>; Tue, 31 Oct 2023 02:54:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1698746076;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jee9+MISFVou7ihsYybK0NoiswXAd2Q2fTZE8U7jIkw=;
-        b=SPGgxBAXKm++ET8NXbzSzNjT/syMiaAmcAC3a1hlUpmpVdtQ4ecHgz9O/5P/OueaDoQDi+
-        tFDCDe6gBZ8PjncL7bidYWE2UCGBqeTeAjy2caL6O2/jqKe2q+eOWnrGTmEsZTPKoOJlXx
-        e3CGLHjRyR5oWsPIwxDXhL0WalfRgSg=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-2-mG4Xa_8bMh-pELBqw-Bm_g-1; Tue, 31 Oct 2023 05:53:19 -0400
-X-MC-Unique: mG4Xa_8bMh-pELBqw-Bm_g-1
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-9c983b42c3bso717831566b.1
-        for <linux-media@vger.kernel.org>; Tue, 31 Oct 2023 02:53:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698745998; x=1699350798;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jee9+MISFVou7ihsYybK0NoiswXAd2Q2fTZE8U7jIkw=;
-        b=ReXIZTJujRdWNgOnDWYMFpko0g0aF2JbdB85eCk9Gi4TE7wHTR5myQFdRMQHR0SiAk
-         HiqUJRUyqeJD4OtSvybdByBDT5G4TJFQBRNdIUkGhSFy8CWj14irDt8lmaT0Xdl5qpos
-         ZM3Zxla0anuAhf9xsTFxZys0o7C88cV33NUIGXfomsvfkvwRNZZZmwaSXf7BaU94GVY1
-         IUd9+BW1olibd3JP3jZFp+KBcEt8ym4mPY+GTino6mNcYt2ByOk3xtI3eys11/SloVb6
-         UEAAI/SYdcMVa1XbZTWiOGsUUHmVJWdbmO0cs7S2dZhG5+uAgK26JVaWMCvA1woF6Rto
-         OtQg==
-X-Gm-Message-State: AOJu0Yy/5DTepQ/YMdvRvHn0unXK6aowdju4PJ7swrgPfWS3GftSUP+e
-        yr+/GkrgibIOrxa2P502mFfmQODbu+j3ln0FYyUh8IhQZnOky4BYX9i+QOHHszXUo42m/G/Ncmn
-        lV/jX035PQRp3w/dj1WiupKwVFXaOkITCOOXHEFAitHavAhgBQuWqK9rHSkbfGkdGPqkoyQKBVL
-        zkFC91B1w=
-X-Received: by 2002:a17:906:c14d:b0:9a9:f0e6:904e with SMTP id dp13-20020a170906c14d00b009a9f0e6904emr1970955ejc.16.1698745998205;
-        Tue, 31 Oct 2023 02:53:18 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGog2vgMsxQFbHvYxRGC9QKJNRZvzX/anyxk/T7Q8hocQXins1oR6dBYSWwrCME/Q5ruOenoA==
-X-Received: by 2002:a17:906:c14d:b0:9a9:f0e6:904e with SMTP id dp13-20020a170906c14d00b009a9f0e6904emr1970943ejc.16.1698745997815;
-        Tue, 31 Oct 2023 02:53:17 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id gz22-20020a170906f2d600b0099cd008c1a4sm678223ejb.136.2023.10.31.02.53.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Oct 2023 02:53:17 -0700 (PDT)
-Message-ID: <962d6d0c-2263-fe59-011c-09068a6a4cef@redhat.com>
-Date:   Tue, 31 Oct 2023 10:53:16 +0100
+        Tue, 31 Oct 2023 06:14:13 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28D2C1;
+        Tue, 31 Oct 2023 03:14:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698747250; x=1730283250;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=f0hEAVEiqXdezJM2XS/++HMElquqKONtRQZRVnkTLTM=;
+  b=G98PbUC+tlBwFIee0E+ZW2q3n1If5Y9OdROCUAVFNVRXO6J/Olu3p2KE
+   HobbQqpn+ZTnNWTZSzskYyllmFjT2g0EmCYLX3QiYfkkKCzYDaoevdfOk
+   Wgc9Lq0pve+9+iDxGu2ZWHfyevTEHEzVaMj1eTRrcXNdhhLbqHdUT16QW
+   ANXo8RTyYNBTb7vSGUKHVd9J/Mj1ll6ZpyzADkHxroL2p9kwVAa5K/TGj
+   f/twxDBNwKcVlM50z4k/HJMWS4LXtPvJCTtAeaCdJUJg/MUlogg+GhtT+
+   kQD+PpnR+m4BVZQ38vgIYgcnoY5wu0Z+Wi12HgiKaM1Gk1QGsKdd1Jack
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10879"; a="385447560"
+X-IronPort-AV: E=Sophos;i="6.03,265,1694761200"; 
+   d="scan'208";a="385447560"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2023 03:14:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10879"; a="934064633"
+X-IronPort-AV: E=Sophos;i="6.03,265,1694761200"; 
+   d="scan'208";a="934064633"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2023 03:14:04 -0700
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id 1561F11F894;
+        Tue, 31 Oct 2023 12:14:02 +0200 (EET)
+Date:   Tue, 31 Oct 2023 10:14:02 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Tommaso Merciai <tomm.merciai@gmail.com>, martin.hecht@avnet.eu,
+        michael.roeder@avnet.eu, mhecht73@gmail.com,
+        linuxfancy@googlegroups.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Gerald Loacker <gerald.loacker@wolfvision.net>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH v10 3/3] media: i2c: Add support for alvium camera
+Message-ID: <ZUDTaq9-j1HmqiEp@kekkonen.localdomain>
+References: <20231020141354.2500602-1-tomm.merciai@gmail.com>
+ <20231020141354.2500602-4-tomm.merciai@gmail.com>
+ <ZTpnHdpTgRNll3TC@kekkonen.localdomain>
+ <ZT+hEg7WqkQBnLV5@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+ <ZUAxoy2cRR6Rm9ig@kekkonen.localdomain>
+ <20231030233809.GD12764@pendragon.ideasonboard.com>
+ <ZUCf_74Z0igCiJ_-@kekkonen.localdomain>
+ <20231031085347.GH12764@pendragon.ideasonboard.com>
+ <ZUDDuoNO5AGjyJLh@kekkonen.localdomain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-From:   Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [RFC] regmap_range_cfg usage with v4l2-cci
-To:     linux-media@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
-        "kieran.bingham@ideasonboard.com" <kieran.bingham@ideasonboard.com>,
-        Alain Volmat <alain.volmat@foss.st.com>
-References: <20231030173637.GA2977515@gnbcxd0016.gnb.st.com>
-Content-Language: en-US, nl
-In-Reply-To: <20231030173637.GA2977515@gnbcxd0016.gnb.st.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZUDDuoNO5AGjyJLh@kekkonen.localdomain>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-<resend with Alain added to the To: for some reason reply-to-all did not add Alain>
+Hi Laurent,
 
-Hi Alain,
-
-On 10/30/23 18:36, Alain Volmat wrote:
-> Hi,
+On Tue, Oct 31, 2023 at 09:07:06AM +0000, Sakari Ailus wrote:
+> On Tue, Oct 31, 2023 at 10:53:47AM +0200, Laurent Pinchart wrote:
+> > On Tue, Oct 31, 2023 at 06:34:39AM +0000, Sakari Ailus wrote:
+> > > On Tue, Oct 31, 2023 at 01:38:09AM +0200, Laurent Pinchart wrote:
+> > > > On Mon, Oct 30, 2023 at 10:43:47PM +0000, Sakari Ailus wrote:
+> > > > > On Mon, Oct 30, 2023 at 01:26:58PM +0100, Tommaso Merciai wrote:
+> > > > > 
+> > > > > ...
+> > > > > 
+> > > > > > > > +static int alvium_get_host_supp_csi_lanes(struct alvium_dev *alvium)
+> > > > > > > > +{
+> > > > > > > > +	u64 val;
+> > > > > > > > +	int ret = 0;
+> > > > > > > > +
+> > > > > > > > +	alvium_read(alvium, REG_BCRM_CSI2_LANE_COUNT_RW, &val, &ret);
+> > > > > > > 
+> > > > > > > Missing error checking before the use of the value. The same pattern
+> > > > > > > remains prevalent throughout the driver.
+> > > > > > > 
+> > > > > > > I think it'd be easier if you didn't use a temporary variable for reading,
+> > > > > > > but instead had a register width specific access function. You could even
+> > > > > > > introduce a helper macro to read this information as I suggested in an
+> > > > > > > earlier review.
+> > > > > > 
+> > > > > > oks.
+> > > > > > We are moving to use the following macros:
+> > > > > > 
+> > > > > > #define alvium_read_check(alvium, reg, value) \
+> > > > > > { \
+> > > > > > 	int ret = alvium_read(alvium, reg, value, NULL); \
+> > > > > > 	if (ret) \
+> > > > > > 		return ret; \
+> > > > > > }
+> > > > > > 
+> > > > > 
+> > > > > You could do something like (entirely untested):
+> > > > > 
+> > > > > #define ALVIUM_DECLARE_READ(sign, bits) \
+> > > > > 	static int
+> > > > > 	alvium_read_ ## sign ## bits(struct alvium_dev *alvium, u32 reg, \
+> > > > > 				     sign ## bits *val, int *err) \
+> > > > > 	{ \
+> > > > > 		u64 val64; \
+> > > > > 		int ret; \
+> > > > > 			\
+> > > > > 		if (err && *err < 0) \
+> > > > > 			return *err; \
+> > > > > 			\
+> > > > > 		alvium_read(alvium, reg, &val64, &ret); \
+> > > > > 		if (ret < 0) { \
+> > > > > 			if (err) \
+> > > > > 				*err = ret; \
+> > > > > 			return ret; \
+> > > > > 		}	\
+> > > > > 			\
+> > > > > 		*val = val64; \
+> > > > > 			\
+> > > > > 		return 0; \
+> > > > > 	}
+> > > > > 
+> > > > > ALVIUM_DECLARE_READ(u, 32);
+> > > > > 
+> > > > > And then, e.g. instead of (and failing to check ret):
+> > > > > 
+> > > > > 	u64 val;
+> > > > > 
+> > > > > 	alvium_read(alvium, REG_BCRM_CONTRAST_VALUE_RW, &val, &ret);
+> > > > > 	alvium->dft_contrast = val;
+> > > > > 
+> > > > > you'd have a single call:
+> > > > > 
+> > > > > 	alvium_read_u32(alvium, REG_BCRM_CONTRAST_VALUE_RW,
+> > > > > 		        &alvium->dft_contrast, &ret);
+> > > > > 
+> > > > > And so on.
+> > > > > 
+> > > > > You can drop sign if you don't need signed reads but some of the struct
+> > > > > fields you're writing something appear to be signed.
+> > > > > 
+> > > > > It'd be good to check the register size matches with the size of *val, too.
+> > > > > Maybe something like:
+> > > > > 
+> > > > > WARN_ON((CCI_REG ## bits(0) && CCI_REG_WIDTH_MASK) >> CCI_REG_WIDTH_SHIFT
+> > > > > 	!= sizeof(sign ## bits));
+> > > > 
+> > > > I think this could actually be automated, and implemented in v4l2-cci.
+> > > > Something like the following:
+> > > > 
+> > > > diff --git a/drivers/media/v4l2-core/v4l2-cci.c b/drivers/media/v4l2-core/v4l2-cci.c
+> > > > index bc2dbec019b0..27f1eaa7777d 100644
+> > > > --- a/drivers/media/v4l2-core/v4l2-cci.c
+> > > > +++ b/drivers/media/v4l2-core/v4l2-cci.c
+> > > > @@ -16,7 +16,7 @@
+> > > > 
+> > > >  #include <media/v4l2-cci.h>
+> > > > 
+> > > > -int cci_read(struct regmap *map, u32 reg, u64 *val, int *err)
+> > > > +int __cci_read(struct regmap *map, u32 reg, void *val, int *err)
+> > > >  {
+> > > >  	unsigned int len;
+> > > >  	u8 buf[8];
+> > > > @@ -37,19 +37,19 @@ int cci_read(struct regmap *map, u32 reg, u64 *val, int *err)
+> > > > 
+> > > >  	switch (len) {
+> > > >  	case 1:
+> > > > -		*val = buf[0];
+> > > > +		*(u8 *)val = buf[0];
+> > > >  		break;
+> > > >  	case 2:
+> > > > -		*val = get_unaligned_be16(buf);
+> > > > +		*(u16 *)val = get_unaligned_be16(buf);
+> > > >  		break;
+> > > >  	case 3:
+> > > > -		*val = get_unaligned_be24(buf);
+> > > > +		*(u32 *)val = get_unaligned_be24(buf);
+> > > >  		break;
+> > > >  	case 4:
+> > > > -		*val = get_unaligned_be32(buf);
+> > > > +		*(u32 *)val = get_unaligned_be32(buf);
+> > > >  		break;
+> > > >  	case 8:
+> > > > -		*val = get_unaligned_be64(buf);
+> > > > +		*(u64 *)val = get_unaligned_be64(buf);
+> > > >  		break;
+> > > >  	default:
+> > > >  		dev_err(regmap_get_device(map), "Error invalid reg-width %u for reg 0x%04x\n",
+> > > > @@ -64,7 +64,7 @@ int cci_read(struct regmap *map, u32 reg, u64 *val, int *err)
+> > > > 
+> > > >  	return ret;
+> > > >  }
+> > > > -EXPORT_SYMBOL_GPL(cci_read);
+> > > > +EXPORT_SYMBOL_GPL(__cci_read);
+> > > > 
+> > > >  int cci_write(struct regmap *map, u32 reg, u64 val, int *err)
+> > > >  {
+> > > > @@ -119,7 +119,7 @@ int cci_update_bits(struct regmap *map, u32 reg, u64 mask, u64 val, int *err)
+> > > >  	u64 readval;
+> > > >  	int ret;
+> > > > 
+> > > > -	ret = cci_read(map, reg, &readval, err);
+> > > > +	ret = __cci_read(map, reg, &readval, err);
+> > > >  	if (ret)
+> > > >  		return ret;
+> > > > 
+> > > > diff --git a/include/media/v4l2-cci.h b/include/media/v4l2-cci.h
+> > > > index 0f6803e4b17e..31223ce8d741 100644
+> > > > --- a/include/media/v4l2-cci.h
+> > > > +++ b/include/media/v4l2-cci.h
+> > > > @@ -7,6 +7,9 @@
+> > > >  #ifndef _V4L2_CCI_H
+> > > >  #define _V4L2_CCI_H
+> > > > 
+> > > > +#include <linux/bitfield.h>
+> > > > +#include <linux/build_bug.h>
+> > > > +#include <linux/log2.h>
+> > > >  #include <linux/types.h>
+> > > > 
+> > > >  struct i2c_client;
+> > > > @@ -39,6 +42,8 @@ struct cci_reg_sequence {
+> > > >  #define CCI_REG32(x)			((4 << CCI_REG_WIDTH_SHIFT) | (x))
+> > > >  #define CCI_REG64(x)			((8 << CCI_REG_WIDTH_SHIFT) | (x))
+> > > > 
+> > > > +int __cci_read(struct regmap *map, u32 reg, void *val, int *err);
+> > > > +
+> > > >  /**
+> > > >   * cci_read() - Read a value from a single CCI register
+> > > >   *
+> > > > @@ -48,9 +53,17 @@ struct cci_reg_sequence {
+> > > >   * @err: Optional pointer to store errors, if a previous error is set
+> > > >   *       then the read will be skipped
+> > > >   *
+> > > > + * The type of the @val pointer must match the size of the register being read.
+> > > > + * Mismatches will result in compile-time errors.
+> > > > + *
+> > > >   * Return: %0 on success or a negative error code on failure.
+> > > >   */
+> > > > -int cci_read(struct regmap *map, u32 reg, u64 *val, int *err);
+> > > > +#define cci_read(map, reg, val, err) ({					\
+> > > > +	u32 __reg = (reg);						\
+> > > > +	u32 __size = FIELD_GET(CCI_REG_WIDTH_MASK, __reg);		\
+> > > > +	BUILD_BUG_ON(sizeof(*(val)) != roundup_pow_of_two(__size));	\
+> > > > +	__cci_read(map, __reg, (void *)(val), err);			\
+> > > > +})
+> > > > 
+> > > >  /**
+> > > >   * cci_write() - Write a value to a single CCI register
+> > > > 
+> > > > The change to cci_update_bits() is obviously wrong, I've hacked that to
+> > > > compile-test the rest with the drivers using cci_read(), and I get nice
+> > > > build-time errors due to usage of the wrong type :-)
+> > > > 
+> > > > Is this something that would be considered ? Bonus points to anyone who
+> > > > would fix cci_update_bits() :-)
+> > > 
+> > > I like the idea of moving this to v4l2-cci.
+> > > 
+> > > I'd prefer _Generic() based solution as we'd have exact types there instead
+> > > of just size. E.g. with the above code, reading a value to a long variable
+> > > would work on some archs but fail on others.
+> > 
+> > Doesn't _Generic() treat compatible types identically ?
 > 
-> Goal of this email is to get first comments prior to posting a patch.
+> Ah, it does, indeed. So that doesn't solve the long problem.
 > 
-> Could we consider enhancements within the v4l2-cci in order to also
-> allow regmap_range_cfg usage for paged register access ?
-
-Yes definitely.
-
-Extending v4l2-cci for other use cases was already briefly discussed
-between Kieran (Cc-ed) and me:
-
-The CCI part of the MIPI CSI spec says that multi-byte registers are
-always in big endian format, but some of the Sony IMX sensors actually
-use little-endian format for multi-byte registers.
-
-The main reason why we need v4l2-cci and cannot use regmap directly is
-because of the variable register width in CCI, where as regmap only
-supports a single width. v4l2 cci uses 8 bits width in the underlying
-regmap-config and then takes care of multy-byte registers by e.g.
-reading multiple bytes and calling e.g. get_unaligned_be16() on
-the read bytes.
-
-For the IMX scenario the plan is to add the notion of v4l2-cci
-flags by adding this to include/media/v4l2-cci.h :
-
-struct v4l2_cci {
-	struct regmap *map;
-	long flags;
-}
-
-And then change the prototype for devm_cci_regmap_init_i2c() to:
-
-struct v4l2_cci *devm_cci_regmap_init_i2c(struct i2c_client *client,
-                                          int reg_addr_bits, long flags);
-
-And have devm_cci_regmap_init_i2c():
-1. devm_kmalloc() a struct v4l2_cci
-2. store the regmap there
-3. copy over flags from the function argument
-
-Combined with modifying all the other functions to take
-"struct v4l2_cci *cci" as first argument instead of
-"struct regmap *map".
-
-This change will require all existing sensor drivers using
-v4l2-cci to be converted for the "struct regmap *map" ->
-"struct v4l2_cci *cci" change, this all needs to be done
-in one single commit adding the new struct + flags argument
-to avoid breaking the compilation.
-
-Then once we have this a second patch can add:
-
-/* devm_cci_regmap_init_i2c() flags argument defines */
-#define V4L2_CCI_DATA_LE	BIT(0)
-
-to include/media/v4l2-cci.h and make v4l2-cci.h honor
-this flag solving the IMX scenario.
-
-We need to make this change sooner rather then later,
-while we only still have a few sensor drivers using
-v4l2-cci.
-
-So back to your question yes extensions are welcome
-and we already have one planned. If we are going to do
-more extensions though, then I really would want to see
-the little-endian data plan get implemented first, having
-our own struct v4l2_cci should help with future extensions
-were we can then just add more fields to it if necessary.
-
-I'm sorry about asking you to implement this first before
-being able to solve your own problem, but this should be
-relatively KISS to implement and I can test the patches
-for you for at least some of the sensor drivers.
-
-> At least two drivers currently being upstream and using v4l2-cci infrastructure
-> could benefit from regmap_range_cfg.
-> The GC0308 driver is partially using v4l2-cci and partially regmap (in order to use
-> regmap_range_cfg) and the GC2145 driver is using v4l2-cci but doing paging manually.
+> I guess the code will be more compact with just void *, on the expense of
+> (some) type checking.
 > 
-> The function devm_cci_regmap_init_i2c is already taking as parameter one argument
-> reg_addr_bits to be used in the regmap_config structure.  We could also add
-> regmap_range_cfg pointer and size arguments to the function or
-> alternatively add another init function with more arguments ?
+> I'm fine with either.
 
-I think adding a devm_cci_regmap_init_i2c_ex() would make sense here, this
-could already be done when adding the flags argument, giving only
-devm_cci_regmap_init_i2c_ex() the flags argument. For just the flags argument
-having a _ex seems overkill but if we are going to add regmap_range_cfg pointer
-and size arguments too then I think an _ex makes sense.
+You can't check the variable size matches the register width by using a
+void pointer. That'd be a source for possibly difficult to debug problems:
+passing a pointer to u8 variable while reading a 64-bit register overwrites
+seven bytes on the stack outside the variable itself.
 
-And then in v4l2-cci.c only have the _ex and have a static inline helper
-in v4l2-cci-h defining the non _ex version ?
+Let's use _Generic().
 
-Note this devm_cci_regmap_init_i2c_ex() variant is just an idea /
-suggestion I'm open to discussion about that.
-
-To be clear if you plan to implement the devm_cci_regmap_init_i2c_ex()
-variant, then this should be done in the first patch adding the:
-
-struct v4l2_cci {
-	struct regmap *map;
-	long flags;
-};
-
-bits, so that we don't have to add an extra 0 argument for the flags to
-all the existing callers of devm_cci_regmap_init_i2c() in that patch.
-
-And then a future IMX driver conversion can use the _ex variant.
-
+-- 
 Regards,
 
-Hans
-
+Sakari Ailus
