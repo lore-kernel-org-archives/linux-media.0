@@ -2,104 +2,136 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4516AC00142
-	for <linux-media@archiver.kernel.org>; Tue, 31 Oct 2023 18:15:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84DD6C4332F
+	for <linux-media@archiver.kernel.org>; Tue, 31 Oct 2023 21:49:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236578AbjJaSPx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 31 Oct 2023 14:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55114 "EHLO
+        id S1346397AbjJaVtw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 31 Oct 2023 17:49:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346360AbjJaQdJ (ORCPT
+        with ESMTP id S1344036AbjJaVtt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 31 Oct 2023 12:33:09 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99A0170A;
-        Tue, 31 Oct 2023 09:32:06 -0700 (PDT)
-Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:c562:2ef4:80c0:92f])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 412F466073CE;
-        Tue, 31 Oct 2023 16:32:04 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1698769924;
-        bh=YJA2RlY3um15cd7mOHDvbbcCRQ1eLCd2aFKgKqMHmxc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SIELL1TwSFMjgnGqZRTIHKJoUddzjjYuppvaqHS33rEgno1Phgu2lmg+F4OsaSISm
-         stnv4OXC3KfCgQvg2MSl0Cv6n4skiiHP4qizoOAS4gfQbPbSc5dKK/jMP2pp2l3EAP
-         acj7n/uNSyzWg0lK3HU0AX34Q5XCgpH6YLl9vX4MyvclsK3kPuvRbYwRglEVQVNH1Q
-         sMcgIJZVMSC3bve39VezsYnxofajsT1JywPd3YX98Snrom5yyWebt9qK/Hwu/wsqnh
-         /pZnRO4piDOqkSbFk9dZtyiNyXUvf/fVpMYXkGYNmDn6mg84qAzKQUeOf08sgU93wQ
-         mz0PsDLV/ys3w==
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
-        ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [PATCH v14 32/56] media: meson: vdec: Stop direct calls to queue num_buffers field
-Date:   Tue, 31 Oct 2023 17:30:40 +0100
-Message-Id: <20231031163104.112469-33-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231031163104.112469-1-benjamin.gaignard@collabora.com>
-References: <20231031163104.112469-1-benjamin.gaignard@collabora.com>
+        Tue, 31 Oct 2023 17:49:49 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDE8FE;
+        Tue, 31 Oct 2023 14:49:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698788986; x=1730324986;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=600Nvh60124lsqCSvHFqzYzSMSzi4J7+aWhMqXLTTIM=;
+  b=C7jcHXbjXdZ4dp8esjDLBHLevhdh19Kn+cwqUKt3DuBs73fDDC3XVmnw
+   XZ866IiTAyVtDvXlXkVlu+Ss+D/z9YR5WuJM76dOvvRn6wmgEFQkqZpD1
+   4DuobhUNpJFlhjRsL5jz2lzd7IFVKE3wvTXlD2JClw/3cA1O1kc+SVPhG
+   I/7u1fd2OpxWaheqmJ0IaQwtfBEProHSFFTL0WXu7SMipqYmVUFg4AEH+
+   LHOtno9rpFZ8xu9Gx4DKXLxjBQ6DIJZkglZzZ/+7hN1jfVZdQsF7HgYVB
+   VhaoK23e2n7IhGplBvMTGCWfZHBDhgcFCF/T0YiwVrGbVBXFL8OyaVbdD
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10880"; a="454850526"
+X-IronPort-AV: E=Sophos;i="6.03,266,1694761200"; 
+   d="scan'208";a="454850526"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2023 14:49:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10880"; a="760748094"
+X-IronPort-AV: E=Sophos;i="6.03,266,1694761200"; 
+   d="scan'208";a="760748094"
+Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 31 Oct 2023 14:49:42 -0700
+Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qxwcG-0000PI-0V;
+        Tue, 31 Oct 2023 21:49:40 +0000
+Date:   Wed, 1 Nov 2023 05:49:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-acpi@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-media@vger.kernel.org,
+        Paul Elder <paul.elder@ideasonboard.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Julien Stephan <jstephan@baylibre.com>,
+        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 1/1] device property: Add fwnode_name_eq()
+Message-ID: <202311010542.1tRHV0in-lkp@intel.com>
+References: <20231031135306.1106640-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231031135306.1106640-1-sakari.ailus@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use vb2_get_num_buffers() to avoid using queue num_buffers field directly.
-This allows us to change how the number of buffers is computed in the
-future.
+Hi Sakari,
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-CC: Neil Armstrong <neil.armstrong@linaro.org>
----
- drivers/staging/media/meson/vdec/vdec.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+kernel test robot noticed the following build warnings:
 
-diff --git a/drivers/staging/media/meson/vdec/vdec.c b/drivers/staging/media/meson/vdec/vdec.c
-index 219185aaa588..1e2369f104c8 100644
---- a/drivers/staging/media/meson/vdec/vdec.c
-+++ b/drivers/staging/media/meson/vdec/vdec.c
-@@ -167,22 +167,23 @@ static void process_num_buffers(struct vb2_queue *q,
- 				bool is_reqbufs)
- {
- 	const struct amvdec_format *fmt_out = sess->fmt_out;
--	unsigned int buffers_total = q->num_buffers + *num_buffers;
-+	unsigned int q_num_bufs = vb2_get_num_buffers(q);
-+	unsigned int buffers_total = q_num_bufs + *num_buffers;
- 	u32 min_buf_capture = v4l2_ctrl_g_ctrl(sess->ctrl_min_buf_capture);
- 
--	if (q->num_buffers + *num_buffers < min_buf_capture)
--		*num_buffers = min_buf_capture - q->num_buffers;
-+	if (q_num_bufs + *num_buffers < min_buf_capture)
-+		*num_buffers = min_buf_capture - q_num_bufs;
- 	if (is_reqbufs && buffers_total < fmt_out->min_buffers)
--		*num_buffers = fmt_out->min_buffers - q->num_buffers;
-+		*num_buffers = fmt_out->min_buffers - q_num_bufs;
- 	if (buffers_total > fmt_out->max_buffers)
--		*num_buffers = fmt_out->max_buffers - q->num_buffers;
-+		*num_buffers = fmt_out->max_buffers - q_num_bufs;
- 
- 	/* We need to program the complete CAPTURE buffer list
- 	 * in registers during start_streaming, and the firmwares
- 	 * are free to choose any of them to write frames to. As such,
- 	 * we need all of them to be queued into the driver
- 	 */
--	sess->num_dst_bufs = q->num_buffers + *num_buffers;
-+	sess->num_dst_bufs = q_num_bufs + *num_buffers;
- 	q->min_buffers_needed = max(fmt_out->min_buffers, sess->num_dst_bufs);
- }
- 
+[auto build test WARNING on driver-core/driver-core-testing]
+[also build test WARNING on driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.6 next-20231031]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Sakari-Ailus/device-property-Add-fwnode_name_eq/20231031-224454
+base:   driver-core/driver-core-testing
+patch link:    https://lore.kernel.org/r/20231031135306.1106640-1-sakari.ailus%40linux.intel.com
+patch subject: [PATCH 1/1] device property: Add fwnode_name_eq()
+config: sh-allnoconfig (https://download.01.org/0day-ci/archive/20231101/202311010542.1tRHV0in-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231101/202311010542.1tRHV0in-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311010542.1tRHV0in-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/base/property.c:611: warning: Function parameter or member 'fwnode' not described in 'fwnode_name_eq'
+
+
+vim +611 drivers/base/property.c
+
+   596	
+   597	/**
+   598	 * fwnode_name_eq - Return true if node name is equal
+   599	 * @fwnode The firmware node
+   600	 * @name: The name to which to compare the node name
+   601	 *
+   602	 * Compare the name provided as an argument to the name of the node, stopping
+   603	 * the comparison to either '\0' or '@' character, whichever comes first. This
+   604	 * function is generally used for comparing node names while ignoring the
+   605	 * possible unit address of the node.
+   606	 *
+   607	 * Return: true if the node name matches with the name provided in the @name
+   608	 * argument, false otherwise.
+   609	 */
+   610	bool fwnode_name_eq(const struct fwnode_handle *fwnode, const char *name)
+ > 611	{
+   612		const char *node_name;
+   613		unsigned int len;
+   614	
+   615		node_name = fwnode_get_name(fwnode);
+   616		if (!node_name)
+   617			return false;
+   618	
+   619		len = strchrnul(node_name, '@') - node_name;
+   620	
+   621		return strlen(name) == len && !strncmp(node_name, name, len);
+   622	}
+   623	EXPORT_SYMBOL_GPL(fwnode_name_eq);
+   624	
+
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
