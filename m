@@ -2,88 +2,103 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A4EDC4332F
-	for <linux-media@archiver.kernel.org>; Tue, 31 Oct 2023 16:34:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40CB3C00142
+	for <linux-media@archiver.kernel.org>; Tue, 31 Oct 2023 16:34:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346488AbjJaQem (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 31 Oct 2023 12:34:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55212 "EHLO
+        id S1346555AbjJaQeo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 31 Oct 2023 12:34:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346643AbjJaQeA (ORCPT
+        with ESMTP id S1346687AbjJaQeF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 31 Oct 2023 12:34:00 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2AA11A3;
-        Tue, 31 Oct 2023 09:32:24 -0700 (PDT)
-Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:c562:2ef4:80c0:92f])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E364466073B1;
-        Tue, 31 Oct 2023 16:32:21 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1698769942;
-        bh=I24/t0ZqSyeKvdZtsSJpVc7QnzmONAbV5k9WYLKmpuU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AP4OBUFvnP886Z6HaoFYtgB0CHHMDFL/TLsU3QaEg9ADHUWMN526rTnUSD4ToZPOv
-         Wx18D/gHbJMVRXMfnA2cRU/Qp8bwGVejYrflKSfkj8xoHN88vzq1OsTf0pRwmww81s
-         3aqBTrBM6jVkcKL2Fmpi98AWuwgQnSzwu6UqZ/ra/A6GoUzM7cylEi+NwzkgtrUkV6
-         hhqbTr3sKml6e0CeA2ZyfRpbgWAKP4QU7IWrOpUfiN2GjG0e6DuIP+lEGY0s6rlxpa
-         vDZAhsh0zQKrKmBU/AD7QoTMn7oq5STRYM8/J2s6fQxbE9IcAJZvANgAWtKHCKi97b
-         MxZYQcMh7fm9g==
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
-        ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Subject: [PATCH v14 37/56] media: renesas: Stop direct calls to queue num_buffers field
-Date:   Tue, 31 Oct 2023 17:30:45 +0100
-Message-Id: <20231031163104.112469-38-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231031163104.112469-1-benjamin.gaignard@collabora.com>
-References: <20231031163104.112469-1-benjamin.gaignard@collabora.com>
+        Tue, 31 Oct 2023 12:34:05 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796BB1BCF;
+        Tue, 31 Oct 2023 09:32:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698769946; x=1730305946;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SAVUUSy6kEq+VaAk+hGdPRfOn1rye2cEo6cJ7P/cJ4A=;
+  b=GPMB20yuZylvzt4o/x+pzUgHbVNn8NySAwxBhoUgJxev10vH678C/bSJ
+   1XsJIVBbyu9EZNvub8kIWOxJi/iJGKDUXgFB5qtJU3dyKC2o4F5bj0uAa
+   qFgyP/mSvheVBnQbOyhuSUEGDLGEQ7uFCJFOkCCFHw3fDBFtQMC18g43Y
+   UXaJQ+18S/+f/5xmv/1v7cnlqeDhumbk0PQhUWw9mMHX5OSmFC9iF6GIs
+   vPxghSIcmbolfLh7eCJzSTqIvYKo1XK2nXyEe555YLuBMMzkwk1vRqcS1
+   cyNOiJLFjMt94UbiuZ0L55ltiJA5ioJPZ0CI04XcxW23E/r+RxlhkS1y7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10880"; a="1172522"
+X-IronPort-AV: E=Sophos;i="6.03,265,1694761200"; 
+   d="scan'208";a="1172522"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2023 09:32:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10880"; a="851293283"
+X-IronPort-AV: E=Sophos;i="6.03,265,1694761200"; 
+   d="scan'208";a="851293283"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by FMSMGA003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2023 09:32:21 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC3)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qxrf8-0000000ACil-13uQ;
+        Tue, 31 Oct 2023 18:32:18 +0200
+Date:   Tue, 31 Oct 2023 18:32:17 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-acpi@vger.kernel.org, linux-media@vger.kernel.org,
+        Paul Elder <paul.elder@ideasonboard.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Julien Stephan <jstephan@baylibre.com>,
+        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 1/1] device property: Add fwnode_name_eq()
+Message-ID: <ZUEsEQQTTlXmOHPt@smile.fi.intel.com>
+References: <20231031135306.1106640-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231031135306.1106640-1-sakari.ailus@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use vb2_get_num_buffers() to avoid using queue num_buffers field directly.
-This allows us to change how the number of buffers is computed in the
-future.
+On Tue, Oct 31, 2023 at 03:53:06PM +0200, Sakari Ailus wrote:
+> Add fwnode_name_eq() to implement the functionality of of_node_name_eq()
+> on fwnode property API. The same convention of ending the comparison at
+> '@' (besides '\0') is applied on also both ACPI and swnode. The function
+> is intended for comparing unit address-less node names on DT and firmware
+> or swnodes compliant with DT bindings.
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-CC: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
----
- drivers/media/platform/renesas/rcar_drif.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Some comments below.
 
-diff --git a/drivers/media/platform/renesas/rcar_drif.c b/drivers/media/platform/renesas/rcar_drif.c
-index 292c5bf9e50c..f21d05054341 100644
---- a/drivers/media/platform/renesas/rcar_drif.c
-+++ b/drivers/media/platform/renesas/rcar_drif.c
-@@ -424,10 +424,11 @@ static int rcar_drif_queue_setup(struct vb2_queue *vq,
- 			unsigned int sizes[], struct device *alloc_devs[])
- {
- 	struct rcar_drif_sdr *sdr = vb2_get_drv_priv(vq);
-+	unsigned int q_num_bufs = vb2_get_num_buffers(vq);
- 
- 	/* Need at least 16 buffers */
--	if (vq->num_buffers + *num_buffers < 16)
--		*num_buffers = 16 - vq->num_buffers;
-+	if (q_num_bufs + *num_buffers < 16)
-+		*num_buffers = 16 - q_num_bufs;
- 
- 	*num_planes = 1;
- 	sizes[0] = PAGE_ALIGN(sdr->fmt->buffersize);
+...
+
+> Would you be able to use this to replace of_node_name_eq()?
+
+Can you point out to the use case? Maybe it can be rewritten using existing
+APIs?
+
+...
+
+> +	len = strchrnul(node_name, '@') - node_name;
+
+> +	return strlen(name) == len && !strncmp(node_name, name, len);
+
+Seems like this is reimplementation of str_has_prefix().
+
+	len = strchrnul(node_name, '@') - node_name;
+	return str_has_prefix(node_name, name) == len;
+
 -- 
-2.39.2
+With Best Regards,
+Andy Shevchenko
+
 
