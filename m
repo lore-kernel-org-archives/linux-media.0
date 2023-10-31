@@ -2,39 +2,39 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95575C04A68
-	for <linux-media@archiver.kernel.org>; Tue, 31 Oct 2023 16:52:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F174AC4167B
+	for <linux-media@archiver.kernel.org>; Tue, 31 Oct 2023 16:52:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346878AbjJaQwj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 31 Oct 2023 12:52:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44390 "EHLO
+        id S1346890AbjJaQwl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 31 Oct 2023 12:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346859AbjJaQwR (ORCPT
+        with ESMTP id S1346966AbjJaQwH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 31 Oct 2023 12:52:17 -0400
+        Tue, 31 Oct 2023 12:52:07 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42ECFF5;
-        Tue, 31 Oct 2023 09:49:49 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 845DEC43391;
-        Tue, 31 Oct 2023 16:49:48 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DDE196;
+        Tue, 31 Oct 2023 09:49:32 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA2CAC433C7;
+        Tue, 31 Oct 2023 16:49:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698770988;
-        bh=sK2tTZgQCVdrA7dGNcfvvdSbrmQiwQvQZKEMFhNEDU4=;
+        s=k20201202; t=1698770972;
+        bh=612NFeh5NOImp0JEmAQppe78uklCbIwDoN+fmJSIsz0=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=SFc4okHiulElFNpkj0mbT+K4wq6TmsBAhXf82R/Si5ldO9/RYjbPSGj6HWlVNFifB
-         odAowEiU8hLo/HnTZS8vcZQwup8h0BbG0qzZvd4mmOkXzgJzN7fV79GgB5qD5uk3rt
-         L99RxhDc8YKJleQ1QAOAbqswZaTM0Iim/1swpeQ5/3Vp2yCKmK5ZRBHo5FYwVBVaRG
-         KP27I8GHhiTgqEUV6mxqAHMdnV2SD9IFbbdp8HNwqWXwjMJtdfl6B8DJDyGRlP0kKI
-         MrB6v4MhAwc4EWb7zIA5EpSXPXRDFysF9VAhRnQzp7tZ73XH4aEoRRBFl5rL1lCA4M
-         LL1XFwlLWqOZQ==
+        b=cKkuMFsG/jPrVSnqKxx/+QycPtSciIo1JerUB0LH3rYHMUjw//Je1+3ShNeuTUkd+
+         +iFvY+BHj5Ap/Lic23WjNHBQk3EBt6MupGw/R3i/gtKnZmjFXy8GITkikTPBD4e+VF
+         TeU3YQUf0wCEwBsJzuIHFyM7uLdtNblE+kbiJypvpYWTZAsWC9fU+TCwFDzrTqZwD2
+         VcdyVpmTjdBSkaiNYPr/u0iLGURg8/BHauMmPYMWcnAEKrfvd8xlyOUk5o3rTCwlWz
+         NflXZwblZq00uXjf8hN8i0UKARtKRKV/JSOXtpqIMwYBiIBdqat5zQw4jsoVICi4L/
+         YRQBb4DAtW78g==
 From:   Maxime Ripard <mripard@kernel.org>
-Date:   Tue, 31 Oct 2023 17:48:39 +0100
-Subject: [PATCH RFC v3 26/37] drm/rockchip: inno_hdmi: Remove useless
- coeff_csc matrix
+Date:   Tue, 31 Oct 2023 17:48:33 +0100
+Subject: [PATCH RFC v3 20/37] drm/rockchip: inno_hdmi: Remove unneeded has
+ audio flag
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20231031-kms-hdmi-connector-state-v3-26-328b0fae43a7@kernel.org>
+Message-Id: <20231031-kms-hdmi-connector-state-v3-20-328b0fae43a7@kernel.org>
 References: <20231031-kms-hdmi-connector-state-v3-0-328b0fae43a7@kernel.org>
 In-Reply-To: <20231031-kms-hdmi-connector-state-v3-0-328b0fae43a7@kernel.org>
 To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
@@ -53,106 +53,46 @@ Cc:     Hans Verkuil <hverkuil@xs4all.nl>, dri-devel@lists.freedesktop.org,
         linux-rockchip@lists.infradead.org, linux-sunxi@lists.linux.dev,
         Maxime Ripard <mripard@kernel.org>
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2860; i=mripard@kernel.org;
- h=from:subject:message-id; bh=sK2tTZgQCVdrA7dGNcfvvdSbrmQiwQvQZKEMFhNEDU4=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDKmO+vcXJZxYEWVYaKqrctpZJPnFEf4FZwvXnEj8pL/mx
- mTNibvOdJSyMIhxMciKKbLECJsviTs163UnG988mDmsTCBDGLg4BWAiotMZGfrOuff+L5x6gk9j
- qrhqi6BaQGL2XjcJzb1b9nPKf1t65hcjw5WpnQ4L3W7e3Fy0p0ODvdV/f+CtdfMeKSQWKa56sEB
- /BS8A
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1051; i=mripard@kernel.org;
+ h=from:subject:message-id; bh=612NFeh5NOImp0JEmAQppe78uklCbIwDoN+fmJSIsz0=;
+ b=owGbwMvMwCX2+D1vfrpE4FHG02pJDKmO+vcOttf4VVV/Vn21KkPd1KQ05M9Ka6fWSN1Ph0tFr
+ p2tN77SUcrCIMbFICumyBIjbL4k7tSs151sfPNg5rAygQxh4OIUgIlwZDH84ZP4+UVtzqYNK1Pr
+ xd46n7U1aDu8sHR3sYhb05vC5/wi7IwMt/wlu5/X3MuTsVC3/P3k6G9+XvWgJrUyBdcLObo1L+6
+ zAQA=
 X-Developer-Key: i=mripard@kernel.org; a=openpgp;
  fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The coeff_csc matrix isn't used anymore, let's remove it.
+The sink_has_audio flag is not used anywhere in the driver so let's get
+rid of it. It's redundant with drm_display_info.has_audio anyway.
 
 Signed-off-by: Maxime Ripard <mripard@kernel.org>
 ---
- drivers/gpu/drm/rockchip/inno_hdmi.c | 70 ------------------------------------
- 1 file changed, 70 deletions(-)
+ drivers/gpu/drm/rockchip/inno_hdmi.c | 2 --
+ 1 file changed, 2 deletions(-)
 
 diff --git a/drivers/gpu/drm/rockchip/inno_hdmi.c b/drivers/gpu/drm/rockchip/inno_hdmi.c
-index 35f44e556fcf..e4fe02b79a98 100644
+index 294f0d442c0c..3908dc09d85f 100644
 --- a/drivers/gpu/drm/rockchip/inno_hdmi.c
 +++ b/drivers/gpu/drm/rockchip/inno_hdmi.c
-@@ -64,76 +64,6 @@ static struct inno_hdmi *connector_to_inno_hdmi(struct drm_connector *connector)
- 	return container_of(connector, struct inno_hdmi, connector);
- }
+@@ -28,7 +28,6 @@
+ #include "inno_hdmi.h"
  
--static const char coeff_csc[][24] = {
--	/*
--	 * YUV2RGB:601 SD mode(Y[16:235], UV[16:240], RGB[0:255]):
--	 *   R = 1.164*Y + 1.596*V - 204
--	 *   G = 1.164*Y - 0.391*U - 0.813*V + 154
--	 *   B = 1.164*Y + 2.018*U - 258
--	 */
--	{
--		0x04, 0xa7, 0x00, 0x00, 0x06, 0x62, 0x02, 0xcc,
--		0x04, 0xa7, 0x11, 0x90, 0x13, 0x40, 0x00, 0x9a,
--		0x04, 0xa7, 0x08, 0x12, 0x00, 0x00, 0x03, 0x02
--	},
--	/*
--	 * YUV2RGB:601 SD mode(YUV[0:255],RGB[0:255]):
--	 *   R = Y + 1.402*V - 248
--	 *   G = Y - 0.344*U - 0.714*V + 135
--	 *   B = Y + 1.772*U - 227
--	 */
--	{
--		0x04, 0x00, 0x00, 0x00, 0x05, 0x9b, 0x02, 0xf8,
--		0x04, 0x00, 0x11, 0x60, 0x12, 0xdb, 0x00, 0x87,
--		0x04, 0x00, 0x07, 0x16, 0x00, 0x00, 0x02, 0xe3
--	},
--	/*
--	 * YUV2RGB:709 HD mode(Y[16:235],UV[16:240],RGB[0:255]):
--	 *   R = 1.164*Y + 1.793*V - 248
--	 *   G = 1.164*Y - 0.213*U - 0.534*V + 77
--	 *   B = 1.164*Y + 2.115*U - 289
--	 */
--	{
--		0x04, 0xa7, 0x00, 0x00, 0x07, 0x2c, 0x02, 0xf8,
--		0x04, 0xa7, 0x10, 0xda, 0x12, 0x22, 0x00, 0x4d,
--		0x04, 0xa7, 0x08, 0x74, 0x00, 0x00, 0x03, 0x21
--	},
--
--	/*
--	 * RGB2YUV:601 SD mode:
--	 *   Cb = -0.291G - 0.148R + 0.439B + 128
--	 *   Y  = 0.504G  + 0.257R + 0.098B + 16
--	 *   Cr = -0.368G + 0.439R - 0.071B + 128
--	 */
--	{
--		0x11, 0x5f, 0x01, 0x82, 0x10, 0x23, 0x00, 0x80,
--		0x02, 0x1c, 0x00, 0xa1, 0x00, 0x36, 0x00, 0x1e,
--		0x11, 0x29, 0x10, 0x59, 0x01, 0x82, 0x00, 0x80
--	},
--	/*
--	 * RGB2YUV:709 HD mode:
--	 *   Cb = - 0.338G - 0.101R + 0.439B + 128
--	 *   Y  = 0.614G   + 0.183R + 0.062B + 16
--	 *   Cr = - 0.399G + 0.439R - 0.040B + 128
--	 */
--	{
--		0x11, 0x98, 0x01, 0xc1, 0x10, 0x28, 0x00, 0x80,
--		0x02, 0x74, 0x00, 0xbb, 0x00, 0x3f, 0x00, 0x10,
--		0x11, 0x5a, 0x10, 0x67, 0x01, 0xc1, 0x00, 0x80
--	},
--	/*
--	 * RGB[0:255]2RGB[16:235]:
--	 *   R' = R x (235-16)/255 + 16;
--	 *   G' = G x (235-16)/255 + 16;
--	 *   B' = B x (235-16)/255 + 16;
--	 */
--	{
--		0x00, 0x00, 0x03, 0x6F, 0x00, 0x00, 0x00, 0x10,
--		0x03, 0x6F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10,
--		0x00, 0x00, 0x00, 0x00, 0x03, 0x6F, 0x00, 0x10
--	},
--};
--
- static inline u8 hdmi_readb(struct inno_hdmi *hdmi, u16 offset)
- {
- 	return readl_relaxed(hdmi->regs + (offset) * 0x04);
+ struct hdmi_data_info {
+-	bool sink_has_audio;
+ 	unsigned int enc_in_format;
+ 	unsigned int enc_out_format;
+ 	unsigned int colorimetry;
+@@ -554,7 +553,6 @@ static int inno_hdmi_connector_get_modes(struct drm_connector *connector)
+ 
+ 	edid = drm_get_edid(connector, hdmi->ddc);
+ 	if (edid) {
+-		hdmi->hdmi_data.sink_has_audio = drm_detect_monitor_audio(edid);
+ 		drm_connector_update_edid_property(connector, edid);
+ 		ret = drm_add_edid_modes(connector, edid);
+ 		kfree(edid);
 
 -- 
 2.41.0
