@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AAB59C4167D
-	for <linux-media@archiver.kernel.org>; Tue, 31 Oct 2023 16:35:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 955A8C4167D
+	for <linux-media@archiver.kernel.org>; Tue, 31 Oct 2023 16:36:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346562AbjJaQfb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 31 Oct 2023 12:35:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55070 "EHLO
+        id S1346759AbjJaQgF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 31 Oct 2023 12:36:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346578AbjJaQep (ORCPT
+        with ESMTP id S1346465AbjJaQfR (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 31 Oct 2023 12:34:45 -0400
+        Tue, 31 Oct 2023 12:35:17 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4408268A;
-        Tue, 31 Oct 2023 09:32:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 884CB273D;
+        Tue, 31 Oct 2023 09:33:05 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:c562:2ef4:80c0:92f])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E07F766073AE;
-        Tue, 31 Oct 2023 16:32:47 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 26ECE66073B1;
+        Tue, 31 Oct 2023 16:32:59 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1698769968;
-        bh=deJM8nlQ4g4jiYxn4KEycstS3ftyfWcamvuNgnfVl08=;
+        s=mail; t=1698769979;
+        bh=u0Q5LhMlMmzDnDRMmnfWjZ04KVEnwRGQKtzWOZE3C0U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E6HoUQx7s3zVxyNnV1e60Ff5TnXbsdNzcBE8l4v0fMjjeaXDUIsBpeDaZgAQOd5yl
-         lMTT7CQbxafUn0Om8ceDrN6c/z6vsUNM0GROXPkKX0SIKKsXLYqC/NkPRWObPcE5oa
-         Q4ok3Vy4fa0cpewdkkjPGB0g0At4HTJQ01ktbx0l3c9V7ykUDu+FLSGeUrxAlzjK1q
-         wLsGXR6BThyFLi3/ffd3cENSlINOdHPd9hSaXLdzqECPmpDxP5M8G4O7IYOP8BbC8i
-         dHURvJ6oE1YGWCBa06BSiJuIQeOGbJYOVuoZf+HMZKhFx7Mcyi51z9FEsawvi+HFEx
-         menpberQ4M0+Q==
+        b=Poiq2kzln74bnDAx3ieYa/kvmTuFytUYsAIUejvjZn5hNq5gnIelT8rYu3msMfMoy
+         TK1MgTlzPqkx5hEW7ott9zLkxBVFpZ2ptTG49g1fsbDcibAV2xb9ScStJbwQ5zBhMA
+         gW8QadWjVuLkt00FFJC119CZ8hFbjhB//nBlf4HPiF260AN2F1UYXQ+0vzotEb34Hw
+         tsCMUfzvKvTZDuxHLfes9/SLVUNIiuoootVFDc09ZtqkpeUfvUJppdMhWNBsA4GD8j
+         hPsHv1MBqsoN6H+DFhaxCO5RRF+nNfxbYhB2JNA45YzidkFgwYEU1dzelz2MGcCWnT
+         R4YxhtYldJSUg==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -43,9 +43,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v14 48/56] media: verisilicon: Store chroma and motion vectors offset
-Date:   Tue, 31 Oct 2023 17:30:56 +0100
-Message-Id: <20231031163104.112469-49-benjamin.gaignard@collabora.com>
+Subject: [PATCH v14 53/56] media: core: Free range of buffers
+Date:   Tue, 31 Oct 2023 17:31:01 +0100
+Message-Id: <20231031163104.112469-54-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231031163104.112469-1-benjamin.gaignard@collabora.com>
 References: <20231031163104.112469-1-benjamin.gaignard@collabora.com>
@@ -55,65 +55,199 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Store computed values of chroma and motion vectors offset because
-they depends on width and height values which change if the resolution
-change.
+Improve __vb2_queue_free() and __vb2_free_mem() to free
+range of buffers and not only the last few buffers.
+Intoduce starting index to be flexible on range and change the loops
+according to this parameters.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-CC: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-CC: Philipp Zabel <p.zabel@pengutronix.de>
 ---
- drivers/media/platform/verisilicon/hantro.h            | 2 ++
- drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c | 6 ++++--
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ .../media/common/videobuf2/videobuf2-core.c   | 59 +++++++++----------
+ 1 file changed, 28 insertions(+), 31 deletions(-)
 
-diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/media/platform/verisilicon/hantro.h
-index 0948b04a9f8d..6f5eb975d0e3 100644
---- a/drivers/media/platform/verisilicon/hantro.h
-+++ b/drivers/media/platform/verisilicon/hantro.h
-@@ -328,6 +328,8 @@ struct hantro_vp9_decoded_buffer_info {
- 	/* Info needed when the decoded frame serves as a reference frame. */
- 	unsigned short width;
- 	unsigned short height;
-+	size_t chroma_offset;
-+	size_t mv_offset;
- 	u32 bit_depth : 4;
- };
+diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
+index 6e88406fcae9..010a8bca0240 100644
+--- a/drivers/media/common/videobuf2/videobuf2-core.c
++++ b/drivers/media/common/videobuf2/videobuf2-core.c
+@@ -519,15 +519,13 @@ static int __vb2_queue_alloc(struct vb2_queue *q, enum vb2_memory memory,
+ /*
+  * __vb2_free_mem() - release all video buffer memory for a given queue
+  */
+-static void __vb2_free_mem(struct vb2_queue *q, unsigned int buffers)
++static void __vb2_free_mem(struct vb2_queue *q, unsigned int start, unsigned int count)
+ {
+-	unsigned int buffer;
++	unsigned int i;
+ 	struct vb2_buffer *vb;
+-	unsigned int q_num_buffers = vb2_get_num_buffers(q);
  
-diff --git a/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c b/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
-index 6fc4b555517f..6db1c32fce4d 100644
---- a/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
-+++ b/drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c
-@@ -158,9 +158,11 @@ static void config_output(struct hantro_ctx *ctx,
+-	for (buffer = q_num_buffers - buffers; buffer < q_num_buffers;
+-	     ++buffer) {
+-		vb = vb2_get_buffer(q, buffer);
++	for (i = start; i < q->max_num_buffers && i < start + count; i++) {
++		vb = vb2_get_buffer(q, i);
+ 		if (!vb)
+ 			continue;
  
- 	chroma_addr = luma_addr + chroma_offset(ctx, dec_params);
- 	hantro_write_addr(ctx->dev, G2_OUT_CHROMA_ADDR, chroma_addr);
-+	dst->vp9.chroma_offset = chroma_offset(ctx, dec_params);
- 
- 	mv_addr = luma_addr + mv_offset(ctx, dec_params);
- 	hantro_write_addr(ctx->dev, G2_OUT_MV_ADDR, mv_addr);
-+	dst->vp9.mv_offset = mv_offset(ctx, dec_params);
+@@ -542,35 +540,35 @@ static void __vb2_free_mem(struct vb2_queue *q, unsigned int buffers)
  }
  
- struct hantro_vp9_ref_reg {
-@@ -195,7 +197,7 @@ static void config_ref(struct hantro_ctx *ctx,
- 	luma_addr = hantro_get_dec_buf_addr(ctx, &buf->base.vb.vb2_buf);
- 	hantro_write_addr(ctx->dev, ref_reg->y_base, luma_addr);
+ /*
+- * __vb2_queue_free() - free buffers at the end of the queue - video memory and
++ * __vb2_queue_free() - free count buffers from start index of the queue - video memory and
+  * related information, if no buffers are left return the queue to an
+  * uninitialized state. Might be called even if the queue has already been freed.
+  */
+-static void __vb2_queue_free(struct vb2_queue *q, unsigned int buffers)
++static void __vb2_queue_free(struct vb2_queue *q, unsigned int start, unsigned int count)
+ {
+-	unsigned int buffer;
+-	unsigned int q_num_buffers = vb2_get_num_buffers(q);
++	unsigned int i;
  
--	chroma_addr = luma_addr + chroma_offset(ctx, dec_params);
-+	chroma_addr = luma_addr + buf->vp9.chroma_offset;
- 	hantro_write_addr(ctx->dev, ref_reg->c_base, chroma_addr);
- }
+ 	lockdep_assert_held(&q->mmap_lock);
  
-@@ -238,7 +240,7 @@ static void config_ref_registers(struct hantro_ctx *ctx,
- 	config_ref(ctx, dst, &ref_regs[2], dec_params, dec_params->alt_frame_ts);
+ 	/* Call driver-provided cleanup function for each buffer, if provided */
+-	for (buffer = q_num_buffers - buffers; buffer < q_num_buffers;
+-	     ++buffer) {
+-		struct vb2_buffer *vb = vb2_get_buffer(q, buffer);
++	for (i = start; i < q->max_num_buffers && i < start + count; i++) {
++		struct vb2_buffer *vb = vb2_get_buffer(q, i);
  
- 	mv_addr = hantro_get_dec_buf_addr(ctx, &mv_ref->base.vb.vb2_buf) +
--		  mv_offset(ctx, dec_params);
-+		  mv_ref->vp9.mv_offset;
- 	hantro_write_addr(ctx->dev, G2_REF_MV_ADDR(0), mv_addr);
+-		if (vb && vb->planes[0].mem_priv)
++		if (!vb)
++			continue;
++		if (vb->planes[0].mem_priv)
+ 			call_void_vb_qop(vb, buf_cleanup, vb);
+ 	}
  
- 	hantro_reg_write(ctx->dev, &vp9_last_sign_bias,
+ 	/* Release video buffer memory */
+-	__vb2_free_mem(q, buffers);
++	__vb2_free_mem(q, start, count);
+ 
+ #ifdef CONFIG_VIDEO_ADV_DEBUG
+ 	/*
+ 	 * Check that all the calls were balanced during the life-time of this
+ 	 * queue. If not then dump the counters to the kernel log.
+ 	 */
+-	if (q_num_buffers) {
++	if (vb2_get_num_buffers(q)) {
+ 		bool unbalanced = q->cnt_start_streaming != q->cnt_stop_streaming ||
+ 				  q->cnt_prepare_streaming != q->cnt_unprepare_streaming ||
+ 				  q->cnt_wait_prepare != q->cnt_wait_finish;
+@@ -596,8 +594,8 @@ static void __vb2_queue_free(struct vb2_queue *q, unsigned int buffers)
+ 		q->cnt_stop_streaming = 0;
+ 		q->cnt_unprepare_streaming = 0;
+ 	}
+-	for (buffer = 0; buffer < vb2_get_num_buffers(q); buffer++) {
+-		struct vb2_buffer *vb = vb2_get_buffer(q, buffer);
++	for (i = start; i < q->max_num_buffers && i < start + count; i++) {
++		struct vb2_buffer *vb = vb2_get_buffer(q, i);
+ 		bool unbalanced;
+ 
+ 		if (!vb)
+@@ -614,7 +612,7 @@ static void __vb2_queue_free(struct vb2_queue *q, unsigned int buffers)
+ 
+ 		if (unbalanced) {
+ 			pr_info("unbalanced counters for queue %p, buffer %d:\n",
+-				q, buffer);
++				q, i);
+ 			if (vb->cnt_buf_init != vb->cnt_buf_cleanup)
+ 				pr_info("     buf_init: %u buf_cleanup: %u\n",
+ 					vb->cnt_buf_init, vb->cnt_buf_cleanup);
+@@ -648,9 +646,8 @@ static void __vb2_queue_free(struct vb2_queue *q, unsigned int buffers)
+ #endif
+ 
+ 	/* Free vb2 buffers */
+-	for (buffer = q_num_buffers - buffers; buffer < q_num_buffers;
+-	     ++buffer) {
+-		struct vb2_buffer *vb = vb2_get_buffer(q, buffer);
++	for (i = start; i < q->max_num_buffers && i < start + count; i++) {
++		struct vb2_buffer *vb = vb2_get_buffer(q, i);
+ 
+ 		if (!vb)
+ 			continue;
+@@ -690,7 +687,7 @@ EXPORT_SYMBOL(vb2_buffer_in_use);
+ static bool __buffers_in_use(struct vb2_queue *q)
+ {
+ 	unsigned int buffer;
+-	for (buffer = 0; buffer < vb2_get_num_buffers(q); ++buffer) {
++	for (buffer = 0; buffer < q->max_num_buffers; ++buffer) {
+ 		struct vb2_buffer *vb = vb2_get_buffer(q, buffer);
+ 
+ 		if (!vb)
+@@ -850,7 +847,7 @@ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
+ 		 * queued without ever calling STREAMON.
+ 		 */
+ 		__vb2_queue_cancel(q);
+-		__vb2_queue_free(q, q_num_bufs);
++		__vb2_queue_free(q, 0, q->max_num_buffers);
+ 		mutex_unlock(&q->mmap_lock);
+ 
+ 		/*
+@@ -960,7 +957,7 @@ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
+ 		 * from already queued buffers and it will reset q->memory to
+ 		 * VB2_MEMORY_UNKNOWN.
+ 		 */
+-		__vb2_queue_free(q, allocated_buffers);
++		__vb2_queue_free(q, first_index, allocated_buffers);
+ 		mutex_unlock(&q->mmap_lock);
+ 		return ret;
+ 	}
+@@ -1000,7 +997,7 @@ int vb2_core_create_bufs(struct vb2_queue *q, enum vb2_memory memory,
+ 	bool no_previous_buffers = !q_num_bufs;
+ 	int ret = 0;
+ 
+-	if (q->num_buffers == q->max_num_buffers) {
++	if (q_num_bufs == q->max_num_buffers) {
+ 		dprintk(q, 1, "maximum number of buffers already allocated\n");
+ 		return -ENOBUFS;
+ 	}
+@@ -1100,7 +1097,7 @@ int vb2_core_create_bufs(struct vb2_queue *q, enum vb2_memory memory,
+ 		 * from already queued buffers and it will reset q->memory to
+ 		 * VB2_MEMORY_UNKNOWN.
+ 		 */
+-		__vb2_queue_free(q, allocated_buffers);
++		__vb2_queue_free(q, *first_index, allocated_buffers);
+ 		mutex_unlock(&q->mmap_lock);
+ 		return -ENOMEM;
+ 	}
+@@ -1714,7 +1711,7 @@ static int vb2_start_streaming(struct vb2_queue *q)
+ 		 * Forcefully reclaim buffers if the driver did not
+ 		 * correctly return them to vb2.
+ 		 */
+-		for (i = 0; i < vb2_get_num_buffers(q); ++i) {
++		for (i = 0; i < q->max_num_buffers; ++i) {
+ 			vb = vb2_get_buffer(q, i);
+ 
+ 			if (!vb)
+@@ -2120,7 +2117,7 @@ static void __vb2_queue_cancel(struct vb2_queue *q)
+ 	 * to vb2 in stop_streaming().
+ 	 */
+ 	if (WARN_ON(atomic_read(&q->owned_by_drv_count))) {
+-		for (i = 0; i < vb2_get_num_buffers(q); i++) {
++		for (i = 0; i < q->max_num_buffers; i++) {
+ 			struct vb2_buffer *vb = vb2_get_buffer(q, i);
+ 
+ 			if (!vb)
+@@ -2164,7 +2161,7 @@ static void __vb2_queue_cancel(struct vb2_queue *q)
+ 	 * call to __fill_user_buffer() after buf_finish(). That order can't
+ 	 * be changed, so we can't move the buf_finish() to __vb2_dqbuf().
+ 	 */
+-	for (i = 0; i < vb2_get_num_buffers(q); i++) {
++	for (i = 0; i < q->max_num_buffers; i++) {
+ 		struct vb2_buffer *vb;
+ 		struct media_request *req;
+ 
+@@ -2568,7 +2565,7 @@ void vb2_core_queue_release(struct vb2_queue *q)
+ 	__vb2_cleanup_fileio(q);
+ 	__vb2_queue_cancel(q);
+ 	mutex_lock(&q->mmap_lock);
+-	__vb2_queue_free(q, q->max_num_buffers);
++	__vb2_queue_free(q, 0, q->max_num_buffers);
+ 	kfree(q->bufs);
+ 	q->bufs = NULL;
+ 	bitmap_free(q->bufs_bitmap);
 -- 
 2.39.2
 
