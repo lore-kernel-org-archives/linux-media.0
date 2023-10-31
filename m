@@ -2,28 +2,28 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B006C4332F
-	for <linux-media@archiver.kernel.org>; Tue, 31 Oct 2023 07:26:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0A41C4332F
+	for <linux-media@archiver.kernel.org>; Tue, 31 Oct 2023 07:32:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343745AbjJaH00 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 31 Oct 2023 03:26:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47132 "EHLO
+        id S1343705AbjJaHcz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 31 Oct 2023 03:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343727AbjJaHZk (ORCPT
+        with ESMTP id S1343679AbjJaHcy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 31 Oct 2023 03:25:40 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 426CCD60;
-        Tue, 31 Oct 2023 00:25:20 -0700 (PDT)
+        Tue, 31 Oct 2023 03:32:54 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8BF16DB;
+        Tue, 31 Oct 2023 00:32:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=6VOEl
-        ouc2GMG6bSXp2UcAdff2CtTi6AX9Q0p7itVxKA=; b=WG4Cre4Y/Li5+aK5AjRyL
-        WDcSVH1YiU4mV3pZynqe4UabigmV14+Y7UT0HUqcecC0crF5VJ7lFdJCTC4VYXPR
-        uWs/GYyQrV9NUgZpKX0lMJ7sAK4eTUyUBQPMmLZuuJLfXh9ncEatxRAuZ/ach8JQ
-        Fb1YyIUX9n7ItmcDK2JyMc=
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Mn+LM
+        vMphVLhG3rmeD4sGc/rl3mIEcUGZbCfQih6dB0=; b=inoHGQEWq45H7OWt9vxdL
+        gcEu5WHlChE2gTYy/LCfyYSTURKT8BhJqux+5873ahRiKlH+ka0xkMxVQM8meOM6
+        Viizx/mgLGPzBXgT4l2vkBRbBx6JTOPxMTNa6hYgqFO7Qtfq9CDL7SCnmCF1Rw1F
+        zfOZ6cIjYF4IQ8ZBNA6S1o=
 Received: from leanderwang-LC4.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g5-0 (Coremail) with SMTP id _____wDXP+6wq0Blv5KVAQ--.8863S2;
-        Tue, 31 Oct 2023 15:24:32 +0800 (CST)
+        by zwqz-smtp-mta-g3-3 (Coremail) with SMTP id _____wBn3ojfqUBlwMj4AQ--.51864S4;
+        Tue, 31 Oct 2023 15:16:50 +0800 (CST)
 From:   Zheng Wang <zyytlz.wz@163.com>
 To:     dmitry.osipenko@collabora.com
 Cc:     Kyrie.Wu@mediatek.com, bin.liu@mediatek.com, mchehab@kernel.org,
@@ -34,55 +34,87 @@ Cc:     Kyrie.Wu@mediatek.com, bin.liu@mediatek.com, mchehab@kernel.org,
         security@kernel.org, hackerzheng666@gmail.com,
         1395428693sheep@gmail.com, alex000young@gmail.com,
         amergnat@baylibre.com, wenst@chromium.org,
-        Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH v2 0/3] Fix use-after-free bug in mtk_jpeg_dec_device_run and fix schedule error in mtk_jpegdec_worker
-Date:   Tue, 31 Oct 2023 15:24:26 +0800
-Message-Id: <20231031072429.21448-1-zyytlz.wz@163.com>
+        Zheng Wang <zyytlz.wz@163.com>, stable@vger.kernel.org
+Subject: [PATCH v2 2/3] media: mtk-jpeg: Fix use after free bug due to error path handling in mtk_jpeg_dec_device_run
+Date:   Tue, 31 Oct 2023 15:16:43 +0800
+Message-Id: <20231031071644.20086-3-zyytlz.wz@163.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20231031071644.20086-1-zyytlz.wz@163.com>
+References: <20231031071644.20086-1-zyytlz.wz@163.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wDXP+6wq0Blv5KVAQ--.8863S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7Jw4xJry8Zw1DWryDtw4DCFg_yoWkArX_WF
-        9Y9wn7uw18G3srJF4ayFy5ZrW8GFy7KF45GFZ8KFs5JFy5XFZIqF1vyrZ3uan3Wa12vF43
-        Gr4FqF4UXw1j9jkaLaAFLSUrUUUU8b8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xR_X_-PUUUUU==
+X-CM-TRANSID: _____wBn3ojfqUBlwMj4AQ--.51864S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW7uF1rGr1fJr1kJFW3KF43GFg_yoW8KF48pr
+        Zagw4DCFWUGrs0gr48Aa4UZF1rC398tF12gr4S9wn3Z343XFs7Jry0ya4IqFWIyr9rCa4r
+        Zr1F9a4xJr4DZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRLYFZUUUUU=
 X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXQUaU1WBq7ljYgAAsW
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbBdgQaU2Dkptft2gAAs5
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+In mtk_jpeg_probe, &jpeg->job_timeout_work is bound with
+mtk_jpeg_job_timeout_work.
 
-This v2 series fixes the use-after-free bug in mtk_jpeg_dec_device_run.
-It inclues reverting the incomplete fix before and make the right fix.
-Also,it fixes the error of timeout-worker-schedule in multiple-core
-devices.
+In mtk_jpeg_dec_device_run, if error happens in
+mtk_jpeg_set_dec_dst, it will finally start the worker while
+mark the job as finished by invoking v4l2_m2m_job_finish.
 
-1. Remove cancel worker in mtk_jpeg_remove for the worker is only
-registered in single-core device but we try to cacnel it in both
-single-core and multiple-core devices.
+There are two methods to trigger the bug. If we remove the
+module, it which will call mtk_jpeg_remove to make cleanup.
+The possible sequence is as follows, which will cause a
+use-after-free bug.
 
-2. Fix use-after-free bug by delay the schedule_delayed_work only if
-mtk_jpeg_set_dec_dst runs successfully.
+CPU0                  CPU1
+mtk_jpeg_dec_...    |
+  start worker	    |
+                    |mtk_jpeg_job_timeout_work
+mtk_jpeg_remove     |
+  v4l2_m2m_release  |
+    kfree(m2m_dev); |
+                    |
+                    | v4l2_m2m_get_curr_priv
+                    |   m2m_dev->curr_ctx //use
 
-3. Delay the schedule_delayed_work in mtk_jpegdec_worker as it has same
-code logic in mtk_jpeg_dec_device_run.
+If we close the file descriptor, which will call mtk_jpeg_release,
+it will have a similar sequence.
 
-version 2 changes
+Fix this bug by starting timeout worker only if started jpegdec worker
+successfully. Then v4l2_m2m_job_finish will only be called in
+either mtk_jpeg_job_timeout_work or mtk_jpeg_dec_device_run.
+Fixes: b2f0d2724ba4 ("[media] vcodec: mediatek: Add Mediatek JPEG Decoder Driver")
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc: stable@vger.kernel.org
+---
+v2:
+- put the patches into a single series suggested by Dmitry
+---
+ drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
--put the patches into on series suggested by Dmitry
-
-Zheng Wang (3):
-  media: mtk-jpeg: Remove cancel worker in mtk_jpeg_remove to avoid the
-    crash of multi-core JPEG devices
-  media: mtk-jpeg: Fix use after free bug due to error path handling
-    in mtk_jpeg_dec_device_run
-  media: mtk-jpeg: Fix timeout schedule error in mtk_jpegdec_worker.
-
- .../media/platform/mediatek/jpeg/mtk_jpeg_core.c    | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
-
+diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+index 60425c99a2b8..a39acde2724a 100644
+--- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
++++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+@@ -1021,13 +1021,13 @@ static void mtk_jpeg_dec_device_run(void *priv)
+ 	if (ret < 0)
+ 		goto dec_end;
+ 
+-	schedule_delayed_work(&jpeg->job_timeout_work,
+-			      msecs_to_jiffies(MTK_JPEG_HW_TIMEOUT_MSEC));
+-
+ 	mtk_jpeg_set_dec_src(ctx, &src_buf->vb2_buf, &bs);
+ 	if (mtk_jpeg_set_dec_dst(ctx, &jpeg_src_buf->dec_param, &dst_buf->vb2_buf, &fb))
+ 		goto dec_end;
+ 
++	schedule_delayed_work(&jpeg->job_timeout_work,
++			      msecs_to_jiffies(MTK_JPEG_HW_TIMEOUT_MSEC));
++
+ 	spin_lock_irqsave(&jpeg->hw_lock, flags);
+ 	mtk_jpeg_dec_reset(jpeg->reg_base);
+ 	mtk_jpeg_dec_set_config(jpeg->reg_base,
 -- 
 2.25.1
 
