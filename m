@@ -2,35 +2,44 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E2BFC4332F
-	for <linux-media@archiver.kernel.org>; Tue, 31 Oct 2023 09:33:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52BC8C4332F
+	for <linux-media@archiver.kernel.org>; Tue, 31 Oct 2023 09:47:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343932AbjJaJeA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 31 Oct 2023 05:34:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53832 "EHLO
+        id S230251AbjJaJrD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 31 Oct 2023 05:47:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343909AbjJaJd7 (ORCPT
+        with ESMTP id S229656AbjJaJrB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 31 Oct 2023 05:33:59 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83550B7;
-        Tue, 31 Oct 2023 02:33:56 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3656CFF811;
-        Tue, 31 Oct 2023 09:33:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1698744835;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=m47EAzqConAoJeh9KR/8kdD9Cq9u7uQy035dBZUpv0w=;
-        b=IebiPiW3z5rimh+Cw3MRE44T90St+6GCGnlsEWuv9nDu7j9N1Jk1vLk/rKm4ZwbrMPI+oa
-        3HZEGlx9OkxMQQ6x+xH023VJ+B2ZqoXlXvR2sciWSgQ+Lpb796IKuQFnM4V3V0TUZy/OEW
-        hg9PGSb5agMVpNh/iCSU+Nkx2TbpMmD3tJnVl2NercKUOcxCZPPgDKK+vILI97ZxDOdNPg
-        fCA1nByp3nD2azf32qBrczImLlfa5pSqFD1510jVbpayaYS/h3EuvwQxSaYkEBPo/N1OT/
-        hJ81V9BmxU7EifbWYs8RF7ApeNi7pL1jTuXC3IcX0BlNawvjQZGjRFkZ5y8j8A==
-Date:   Tue, 31 Oct 2023 10:33:52 +0100
-From:   Mehdi Djait <mehdi.djait@bootlin.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+        Tue, 31 Oct 2023 05:47:01 -0400
+Received: from smtp.smtpout.orange.fr (smtp-22.smtpout.orange.fr [80.12.242.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CAA7DE
+        for <linux-media@vger.kernel.org>; Tue, 31 Oct 2023 02:46:57 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id xlKmq2Nre68frxlKnqKvCp; Tue, 31 Oct 2023 10:46:54 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1698745614;
+        bh=zSJ2fHyj4ub3HQ+xTvg2C+89BzyjfVFV9HNzabEf0Ow=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=pItzdUQ1tmeLPjEvh9MNVJD8b0CkSTjpqFevmmeUzr30hh8dnRYaJY4mjDCPLYLG0
+         wB2Hj8zoRvx96zrr5HdERAcjlChmfOSDKzYnofh3BIls0h8ocW/EYgqHMWyS/+v3Iu
+         vunddG/NBhfTpkB64eWkI2rK6HNnPaQboOhJ5/gvoO82lJZ6FWwZ9EyzT3IkFml/JW
+         riuMjV0hukAld3YpQAuCvmMKKWTen3KQQQHJ3gWeE8LwbvzKrbn9fn6T/yIcJM955/
+         eMXN14wiaAZZ2Xr08ZTqXuT09NbrcdS3TadbLHctg82XTRV+lX8Go1DKh+pUxE3uwP
+         /33clZvCJMJfw==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Tue, 31 Oct 2023 10:46:54 +0100
+X-ME-IP: 86.243.2.178
+Message-ID: <79231ec3-8da1-4c73-8f5b-efa445e6c35d@wanadoo.fr>
+Date:   Tue, 31 Oct 2023 10:46:52 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 2/3] media: rockchip: Add a driver for Rockchip's
+ camera interface
+Content-Language: fr, en-GB
+To:     Mehdi Djait <mehdi.djait@bootlin.com>
 Cc:     mchehab@kernel.org, heiko@sntech.de, hverkuil-cisco@xs4all.nl,
         krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
         conor+dt@kernel.org, linux-media@vger.kernel.org,
@@ -38,62 +47,71 @@ Cc:     mchehab@kernel.org, heiko@sntech.de, hverkuil-cisco@xs4all.nl,
         thomas.petazzoni@bootlin.com, alexandre.belloni@bootlin.com,
         maxime.chevallier@bootlin.com, paul.kocialkowski@bootlin.com,
         michael.riesch@wolfvision.net
-Subject: Re: [PATCH v9 2/3] media: rockchip: Add a driver for Rockchip's
- camera interface
-Message-ID: <ZUDKAB+zQYS9aLpB@pc-70.home>
 References: <cover.1698666612.git.mehdi.djait@bootlin.com>
  <f7367726eb077d43446c83591ecbf9acbc77ef5f.1698666612.git.mehdi.djait@bootlin.com>
  <ad346052-ec62-4d68-903e-fccd7ad989bd@wanadoo.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ad346052-ec62-4d68-903e-fccd7ad989bd@wanadoo.fr>
-X-GND-Sasl: mehdi.djait@bootlin.com
+ <ZUDKAB+zQYS9aLpB@pc-70.home>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <ZUDKAB+zQYS9aLpB@pc-70.home>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello Christophe,
-
-On Mon, Oct 30, 2023 at 01:47:17PM +0100, Christophe JAILLET wrote:
-> > +	/* Create & register platform subdev. */
-> > +	ret = cif_register_stream_vdev(cif_dev);
-> > +	if (ret < 0)
-> > +		goto err_unreg_media_dev;
-> > +
-> > +	ret = cif_subdev_notifier(cif_dev);
-> > +	if (ret < 0) {
-> > +		v4l2_err(&cif_dev->v4l2_dev,
-> > +			 "Failed to register subdev notifier(%d)\n", ret);
-> > +		cif_unregister_stream_vdev(cif_dev);
-> > +		goto err_unreg_media_dev;
+Le 31/10/2023 à 10:33, Mehdi Djait a écrit :
+> Hello Christophe,
 > 
-> Should there be another label with cif_unregister_stream_vdev(cif_dev); if
-> an error occurs here?
+> On Mon, Oct 30, 2023 at 01:47:17PM +0100, Christophe JAILLET wrote:
+>>> +	/* Create & register platform subdev. */
+>>> +	ret = cif_register_stream_vdev(cif_dev);
+>>> +	if (ret < 0)
+>>> +		goto err_unreg_media_dev;
+>>> +
+>>> +	ret = cif_subdev_notifier(cif_dev);
+>>> +	if (ret < 0) {
+>>> +		v4l2_err(&cif_dev->v4l2_dev,
+>>> +			 "Failed to register subdev notifier(%d)\n", ret);
+>>> +		cif_unregister_stream_vdev(cif_dev);
+>>> +		goto err_unreg_media_dev;
+>>
+>> Should there be another label with cif_unregister_stream_vdev(cif_dev); if
+>> an error occurs here?
+>>
+>> CJ
 > 
-> CJ
+> cif_subdev_notifier() is the last function call in the probe with error
+> handling. So it will undo the last successful register:
+> cif_register_stream_vdev and use the goto to unregister the rest.
 
-cif_subdev_notifier() is the last function call in the probe with error
-handling. So it will undo the last successful register:
-cif_register_stream_vdev and use the goto to unregister the rest.
+Ah, I didn't see the cif_unregister_stream_vdev() call here.
+Sorry for the noise.
 
-I can add a label err_unreg_stream_vdev but it will be only used in the
-error handling of cif_subdev_notifier() and I don't see the benefit.
+> 
+> I can add a label err_unreg_stream_vdev but it will be only used in the
+> error handling of cif_subdev_notifier() and I don't see the benefit.
 
---
-Kind Regards
-Mehdi Djait
+The main benefit is to be more consistent in the way the error path is 
+written, and to be more future proof.
 
-> > +	}
-> > +
-> > +	cif_set_default_format(cif_dev);
-> > +	pm_runtime_enable(&pdev->dev);
-> > +
-> > +	return 0;
-> > +
-> > +err_unreg_media_dev:
-> > +	media_device_unregister(&cif_dev->media_dev);
-> > +err_unreg_v4l2_dev:
-> > +	v4l2_device_unregister(&cif_dev->v4l2_dev);
-> > +	return ret;
-> > +}
+CJ
+> 
+> --
+> Kind Regards
+> Mehdi Djait
+> 
+>>> +	}
+>>> +
+>>> +	cif_set_default_format(cif_dev);
+>>> +	pm_runtime_enable(&pdev->dev);
+>>> +
+>>> +	return 0;
+>>> +
+>>> +err_unreg_media_dev:
+>>> +	media_device_unregister(&cif_dev->media_dev);
+>>> +err_unreg_v4l2_dev:
+>>> +	v4l2_device_unregister(&cif_dev->v4l2_dev);
+>>> +	return ret;
+>>> +}
+> 
+
