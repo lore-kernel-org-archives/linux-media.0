@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89F6AC41535
-	for <linux-media@archiver.kernel.org>; Tue, 31 Oct 2023 16:33:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1960BC00142
+	for <linux-media@archiver.kernel.org>; Tue, 31 Oct 2023 16:34:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346321AbjJaQds (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 31 Oct 2023 12:33:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55056 "EHLO
+        id S1345314AbjJaQeI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 31 Oct 2023 12:34:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346083AbjJaQdB (ORCPT
+        with ESMTP id S1346430AbjJaQdU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 31 Oct 2023 12:33:01 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0982A1707;
-        Tue, 31 Oct 2023 09:32:04 -0700 (PDT)
+        Tue, 31 Oct 2023 12:33:20 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48BC91722;
+        Tue, 31 Oct 2023 09:32:10 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:c562:2ef4:80c0:92f])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6E9BF66073CD;
-        Tue, 31 Oct 2023 16:32:02 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D37BE66073D2;
+        Tue, 31 Oct 2023 16:32:06 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1698769922;
-        bh=5BKm2pXhsA2CwROeeB4gGq1coubFRjY0WIZn0P61OpQ=;
+        s=mail; t=1698769927;
+        bh=qQNeAhJBC9caR9+SHO5bRaHlsjRbtaBcnQ4MqubG9oU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IywCB4dBTA9zDzRW3J7elinUB07Jf8JcOY3gAOI2Kpa20M/7Bgj+Gd7/S/vM0ctkj
-         Tfe0lwLdPNOnt0haXoYXXaNKnaoJXtNAw/EwDz3R/FRc+Z591yD0U5/hj4KPWQaEBs
-         F+LRYrrK4cK4oyLhEPrwMm4FmCHBCF10zR1Bnk8MexyPR/L12JyeTLNRSENXqaecKD
-         Fbofk700kX37LhAgHO7Fh4aZSpukej5JKzjyI/N7IoJcr3bAz+w70ReiA19AfOgpHC
-         SmQzcN/RGWCpcMeFB9B+9Fu/I7bGIQT04b6Rf9jZBq+EvwXMMDQeHbnvoLzqoOf+J0
-         bmeJ+U0Ndd/Pw==
+        b=KGDwsSyex4h//bF3xFiL7LsGvZnB2p5AQvTDn/EOKZq5TV+PEafSVzMB8vvMM5HMK
+         I5Q09T4zvnj5Y6eMgh3Q1rDi7sDv6ManTDoQtW9hk1c9eh5gShBR+evkATdPYaHHsk
+         aWFftRCqYabB+M+sino4qs3ojBc6b+x4jsScac/vXnVxOpq9SXBKC/0xQXe/6JN7xP
+         1WBKYkKWyRcTRg3lDpNv92DbjcZsmQiAZVpUDVZ6F2xbaF3UPuNCKi1Wb7TyxAM2ms
+         aLZ1vEHUZxRwOKX2fbqX7S+6kcvLIdfGyJq+3DdhQ0LfpB9JOaz9xT9+I2jLEMOvVK
+         ktKuPL3T6vPUg==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -43,10 +43,10 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>
-Subject: [PATCH v14 31/56] media: imx: Stop direct calls to queue num_buffers field
-Date:   Tue, 31 Oct 2023 17:30:39 +0100
-Message-Id: <20231031163104.112469-32-benjamin.gaignard@collabora.com>
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: [PATCH v14 33/56] touchscreen: sur40: Stop direct calls to queue num_buffers field
+Date:   Tue, 31 Oct 2023 17:30:41 +0100
+Message-Id: <20231031163104.112469-34-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231031163104.112469-1-benjamin.gaignard@collabora.com>
 References: <20231031163104.112469-1-benjamin.gaignard@collabora.com>
@@ -61,42 +61,28 @@ This allows us to change how the number of buffers is computed in the
 future.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-CC: Steve Longerbeam <slongerbeam@gmail.com>
-CC: Philipp Zabel <p.zabel@pengutronix.de>
+Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 ---
- drivers/staging/media/imx/imx-media-capture.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/input/touchscreen/sur40.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/media/imx/imx-media-capture.c b/drivers/staging/media/imx/imx-media-capture.c
-index 4846078315ff..ce02199e7b1b 100644
---- a/drivers/staging/media/imx/imx-media-capture.c
-+++ b/drivers/staging/media/imx/imx-media-capture.c
-@@ -605,6 +605,7 @@ static int capture_queue_setup(struct vb2_queue *vq,
+diff --git a/drivers/input/touchscreen/sur40.c b/drivers/input/touchscreen/sur40.c
+index 8ddb3f7d307a..e7d2a52169a0 100644
+--- a/drivers/input/touchscreen/sur40.c
++++ b/drivers/input/touchscreen/sur40.c
+@@ -847,9 +847,10 @@ static int sur40_queue_setup(struct vb2_queue *q,
+ 		       unsigned int sizes[], struct device *alloc_devs[])
  {
- 	struct capture_priv *priv = vb2_get_drv_priv(vq);
- 	struct v4l2_pix_format *pix = &priv->vdev.fmt;
-+	unsigned int q_num_bufs = vb2_get_num_buffers(vq);
- 	unsigned int count = *nbuffers;
+ 	struct sur40_state *sur40 = vb2_get_drv_priv(q);
++	unsigned int q_num_bufs = vb2_get_num_buffers(q);
  
- 	if (vq->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
-@@ -613,14 +614,14 @@ static int capture_queue_setup(struct vb2_queue *vq,
- 	if (*nplanes) {
- 		if (*nplanes != 1 || sizes[0] < pix->sizeimage)
- 			return -EINVAL;
--		count += vq->num_buffers;
-+		count += q_num_bufs;
- 	}
- 
- 	count = min_t(__u32, VID_MEM_LIMIT / pix->sizeimage, count);
+-	if (q->num_buffers + *nbuffers < 3)
+-		*nbuffers = 3 - q->num_buffers;
++	if (q_num_bufs + *nbuffers < 3)
++		*nbuffers = 3 - q_num_bufs;
  
  	if (*nplanes)
--		*nbuffers = (count < vq->num_buffers) ? 0 :
--			count - vq->num_buffers;
-+		*nbuffers = (count < q_num_bufs) ? 0 :
-+			count - q_num_bufs;
- 	else
- 		*nbuffers = count;
- 
+ 		return sizes[0] < sur40->pix_fmt.sizeimage ? -EINVAL : 0;
 -- 
 2.39.2
 
