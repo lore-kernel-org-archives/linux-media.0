@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32C4FC4167B
-	for <linux-media@archiver.kernel.org>; Tue, 31 Oct 2023 16:36:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9B29C4167B
+	for <linux-media@archiver.kernel.org>; Tue, 31 Oct 2023 16:37:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346563AbjJaQgl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 31 Oct 2023 12:36:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55214 "EHLO
+        id S1346059AbjJaQhF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 31 Oct 2023 12:37:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346391AbjJaQgC (ORCPT
+        with ESMTP id S1346340AbjJaQgj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 31 Oct 2023 12:36:02 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C4ED68;
-        Tue, 31 Oct 2023 09:33:09 -0700 (PDT)
+        Tue, 31 Oct 2023 12:36:39 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177612112;
+        Tue, 31 Oct 2023 09:32:41 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:c562:2ef4:80c0:92f])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E405E66073BB;
-        Tue, 31 Oct 2023 16:33:03 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 50A8466073AC;
+        Tue, 31 Oct 2023 16:32:38 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1698769984;
-        bh=LkM/7EVzkzeCersLJmzLfirkGugiivs+DlFzZEGNCYQ=;
+        s=mail; t=1698769958;
+        bh=wZnMlp/3DAJg8uDJmHyonSDSh7KwQ0YTK0bDzRgQQJI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JL2uibUrAQu398GSlcc3SU0iP6nm+1nxrKnHbRj7k+h3Fo/h1NcDicsQjQzDA/u07
-         ZLAZvTTRAnmtMnWKiS8afCksIbG5IiSjGHJsnJS29ZvyskllI5mXsu/ef+QE95Ckl5
-         HeOxSD96lsPnaz3crILM0rUM1zh2K1GyrtS0NEse2uBAslyRbuoltxvmd0txkZ4paq
-         g2eO3LgAcvHJfuSt2ZDoj/6hWSi5kIwaJm43oCn2vMaSxr4Yb08EOg4ZIMWur20tIZ
-         I5mKTspQDcLNxwHb0Al+OZVsjIvRy08ja48b/foB8bnZJKJnCjW/y5O6TfPTIhYec+
-         anbYJxP+dfqGg==
+        b=mg1SMl+/3wCPzfHNmZ6LUkq08deI2TMXngOjODCEAWOpJXhAtqSZtRt5vchgs4R6a
+         Fa0lL5YylbIQe3i3Zvg9q66FtTCPrzUo9r9z0x31SwDo/yE5fMZJdfz61Jkx1pvdg0
+         gDps2md3P12ThWQRWkJWjo+tr5nYMgH30lZnYau9Q5bUtbhU5a3q7xVSPYGS2y7Ew+
+         G9/7Lg5dZfUR1NoN69p/okJ2VWiUcayDfVPHODtzCq4eaPO8F5cXwZ87r7WRRrKvW+
+         C9XSoyJ8MMF/g6KP8wlrpwvzGv6t1VCspkKqNmmiCe1//AH7IsjD/8GZHf3e9O/iFO
+         wyVNXftBrbsrA==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -43,9 +43,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v14 55/56] media: v4l2: Add mem2mem helpers for DELETE_BUFS ioctl
-Date:   Tue, 31 Oct 2023 17:31:03 +0100
-Message-Id: <20231031163104.112469-56-benjamin.gaignard@collabora.com>
+Subject: [PATCH v14 44/56] media: core: Report the maximum possible number of buffers for the queue
+Date:   Tue, 31 Oct 2023 17:30:52 +0100
+Message-Id: <20231031163104.112469-45-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231031163104.112469-1-benjamin.gaignard@collabora.com>
 References: <20231031163104.112469-1-benjamin.gaignard@collabora.com>
@@ -55,129 +55,156 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Create v4l2-mem2mem helpers for VIDIOC_DELETE_BUFS ioctl.
+Use one of the struct v4l2_create_buffers reserved bytes to report
+the maximum possible number of buffers for the queue.
+V4l2 framework set V4L2_BUF_CAP_SUPPORTS_MAX_NUM_BUFFERS flags in queue
+capabilities so userland can know when the field is valid.
+Does the same change in v4l2_create_buffers32 structure.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- .../media/platform/verisilicon/hantro_drv.c   |  1 +
- .../media/platform/verisilicon/hantro_v4l2.c  |  1 +
- drivers/media/test-drivers/vim2m.c            |  2 ++
- drivers/media/v4l2-core/v4l2-mem2mem.c        | 20 +++++++++++++++++++
- include/media/v4l2-mem2mem.h                  | 12 +++++++++++
- 5 files changed, 36 insertions(+)
+ .../userspace-api/media/v4l/vidioc-create-bufs.rst       | 8 ++++++--
+ Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst | 1 +
+ drivers/media/common/videobuf2/videobuf2-v4l2.c          | 2 ++
+ drivers/media/v4l2-core/v4l2-compat-ioctl32.c            | 9 ++++++++-
+ drivers/media/v4l2-core/v4l2-ioctl.c                     | 4 ++--
+ include/uapi/linux/videodev2.h                           | 7 ++++++-
+ 6 files changed, 25 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
-index 7f5b82eb6649..c8fed313c36f 100644
---- a/drivers/media/platform/verisilicon/hantro_drv.c
-+++ b/drivers/media/platform/verisilicon/hantro_drv.c
-@@ -248,6 +248,7 @@ queue_init(void *priv, struct vb2_queue *src_vq, struct vb2_queue *dst_vq)
- 	dst_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
- 	dst_vq->lock = &ctx->dev->vpu_mutex;
- 	dst_vq->dev = ctx->dev->v4l2_dev.dev;
-+	src_vq->supports_delete_bufs = true;
+diff --git a/Documentation/userspace-api/media/v4l/vidioc-create-bufs.rst b/Documentation/userspace-api/media/v4l/vidioc-create-bufs.rst
+index a048a9f6b7b6..49232c9006c2 100644
+--- a/Documentation/userspace-api/media/v4l/vidioc-create-bufs.rst
++++ b/Documentation/userspace-api/media/v4l/vidioc-create-bufs.rst
+@@ -116,9 +116,13 @@ than the number requested.
+       - ``flags``
+       - Specifies additional buffer management attributes.
+ 	See :ref:`memory-flags`.
+-
+     * - __u32
+-      - ``reserved``\ [6]
++      - ``max_num_buffers``
++      - If the V4L2_BUF_CAP_SUPPORTS_MAX_NUM_BUFFERS capability flag is set
++        this field indicates the maximum possible number of buffers
++        for this queue.
++    * - __u32
++      - ``reserved``\ [5]
+       - A place holder for future extensions. Drivers and applications
+ 	must set the array to zero.
  
- 	return vb2_queue_init(dst_vq);
+diff --git a/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst b/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst
+index 099fa6695167..0b3a41a45d05 100644
+--- a/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst
++++ b/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst
+@@ -120,6 +120,7 @@ aborting or finishing any DMA in progress, an implicit
+ .. _V4L2-BUF-CAP-SUPPORTS-ORPHANED-BUFS:
+ .. _V4L2-BUF-CAP-SUPPORTS-M2M-HOLD-CAPTURE-BUF:
+ .. _V4L2-BUF-CAP-SUPPORTS-MMAP-CACHE-HINTS:
++.. _V4L2-BUF-CAP-SUPPORTS-MAX-NUM-BUFFERS:
+ 
+ .. raw:: latex
+ 
+diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+index f3cf4b235c1f..bdfc3a253c65 100644
+--- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
++++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+@@ -762,6 +762,8 @@ int vb2_create_bufs(struct vb2_queue *q, struct v4l2_create_buffers *create)
+ 	fill_buf_caps(q, &create->capabilities);
+ 	validate_memory_flags(q, create->memory, &create->flags);
+ 	create->index = vb2_get_num_buffers(q);
++	create->max_num_buffers = q->max_num_buffers;
++	create->capabilities |= V4L2_BUF_CAP_SUPPORTS_MAX_NUM_BUFFERS;
+ 	if (create->count == 0)
+ 		return ret != -EBUSY ? ret : 0;
+ 
+diff --git a/drivers/media/v4l2-core/v4l2-compat-ioctl32.c b/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
+index f3bed37859a2..5aac5cf780b3 100644
+--- a/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
++++ b/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
+@@ -116,6 +116,9 @@ struct v4l2_format32 {
+  * @flags:	additional buffer management attributes (ignored unless the
+  *		queue has V4L2_BUF_CAP_SUPPORTS_MMAP_CACHE_HINTS capability and
+  *		configured for MMAP streaming I/O).
++ * @max_num_buffers: if V4L2_BUF_CAP_SUPPORTS_MAX_NUM_BUFFERS capability flag is set
++ *		this field indicate the maximum possible number of buffers
++ *		for this queue.
+  * @reserved:	future extensions
+  */
+ struct v4l2_create_buffers32 {
+@@ -125,7 +128,8 @@ struct v4l2_create_buffers32 {
+ 	struct v4l2_format32	format;
+ 	__u32			capabilities;
+ 	__u32			flags;
+-	__u32			reserved[6];
++	__u32			max_num_buffers;
++	__u32			reserved[5];
+ };
+ 
+ static int get_v4l2_format32(struct v4l2_format *p64,
+@@ -175,6 +179,8 @@ static int get_v4l2_create32(struct v4l2_create_buffers *p64,
+ 		return -EFAULT;
+ 	if (copy_from_user(&p64->flags, &p32->flags, sizeof(p32->flags)))
+ 		return -EFAULT;
++	if (copy_from_user(&p64->max_num_buffers, &p32->max_num_buffers, sizeof(p32->max_num_buffers)))
++		return -EFAULT;
+ 	return get_v4l2_format32(&p64->format, &p32->format);
  }
-diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
-index 27a1e77cca38..0fd1c2fc78c8 100644
---- a/drivers/media/platform/verisilicon/hantro_v4l2.c
-+++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
-@@ -756,6 +756,7 @@ const struct v4l2_ioctl_ops hantro_ioctl_ops = {
- 	.vidioc_dqbuf = v4l2_m2m_ioctl_dqbuf,
- 	.vidioc_prepare_buf = v4l2_m2m_ioctl_prepare_buf,
- 	.vidioc_create_bufs = v4l2_m2m_ioctl_create_bufs,
-+	.vidioc_delete_bufs = v4l2_m2m_ioctl_delete_bufs,
- 	.vidioc_expbuf = v4l2_m2m_ioctl_expbuf,
  
- 	.vidioc_subscribe_event = v4l2_ctrl_subscribe_event,
-diff --git a/drivers/media/test-drivers/vim2m.c b/drivers/media/test-drivers/vim2m.c
-index 3e3b424b4860..17213ce42059 100644
---- a/drivers/media/test-drivers/vim2m.c
-+++ b/drivers/media/test-drivers/vim2m.c
-@@ -960,6 +960,7 @@ static const struct v4l2_ioctl_ops vim2m_ioctl_ops = {
- 	.vidioc_dqbuf		= v4l2_m2m_ioctl_dqbuf,
- 	.vidioc_prepare_buf	= v4l2_m2m_ioctl_prepare_buf,
- 	.vidioc_create_bufs	= v4l2_m2m_ioctl_create_bufs,
-+	.vidioc_delete_bufs	= v4l2_m2m_ioctl_delete_bufs,
- 	.vidioc_expbuf		= v4l2_m2m_ioctl_expbuf,
- 
- 	.vidioc_streamon	= v4l2_m2m_ioctl_streamon,
-@@ -1133,6 +1134,7 @@ static int queue_init(void *priv, struct vb2_queue *src_vq,
- 	dst_vq->mem_ops = &vb2_vmalloc_memops;
- 	dst_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
- 	dst_vq->lock = &ctx->vb_mutex;
-+	dst_vq->supports_delete_bufs = true;
- 
- 	return vb2_queue_init(dst_vq);
- }
-diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
-index 0cc30397fbad..d1d59943680f 100644
---- a/drivers/media/v4l2-core/v4l2-mem2mem.c
-+++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
-@@ -831,6 +831,17 @@ int v4l2_m2m_prepare_buf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
- }
- EXPORT_SYMBOL_GPL(v4l2_m2m_prepare_buf);
- 
-+int v4l2_m2m_delete_bufs(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
-+			 struct v4l2_delete_buffers *d)
-+{
-+	struct vb2_queue *vq;
-+
-+	vq = v4l2_m2m_get_vq(m2m_ctx, d->type);
-+
-+	return vb2_delete_bufs(vq, d);
-+}
-+EXPORT_SYMBOL_GPL(v4l2_m2m_delete_bufs);
-+
- int v4l2_m2m_create_bufs(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
- 			 struct v4l2_create_buffers *create)
+@@ -221,6 +227,7 @@ static int put_v4l2_create32(struct v4l2_create_buffers *p64,
+ 			 offsetof(struct v4l2_create_buffers32, format)) ||
+ 	    put_user(p64->capabilities, &p32->capabilities) ||
+ 	    put_user(p64->flags, &p32->flags) ||
++	    put_user(p64->max_num_buffers, &p32->max_num_buffers) ||
+ 	    copy_to_user(p32->reserved, p64->reserved, sizeof(p64->reserved)))
+ 		return -EFAULT;
+ 	return put_v4l2_format32(&p64->format, &p32->format);
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index 9b1de54ce379..4d90424cbfc4 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -483,9 +483,9 @@ static void v4l_print_create_buffers(const void *arg, bool write_only)
  {
-@@ -1377,6 +1388,15 @@ int v4l2_m2m_ioctl_create_bufs(struct file *file, void *priv,
+ 	const struct v4l2_create_buffers *p = arg;
+ 
+-	pr_cont("index=%d, count=%d, memory=%s, capabilities=0x%08x, ",
++	pr_cont("index=%d, count=%d, memory=%s, capabilities=0x%08x, max num buffers=%u",
+ 		p->index, p->count, prt_names(p->memory, v4l2_memory_names),
+-		p->capabilities);
++		p->capabilities, p->max_num_buffers);
+ 	v4l_print_format(&p->format, write_only);
  }
- EXPORT_SYMBOL_GPL(v4l2_m2m_ioctl_create_bufs);
  
-+int v4l2_m2m_ioctl_delete_bufs(struct file *file, void *priv,
-+			       struct v4l2_delete_buffers *d)
-+{
-+	struct v4l2_fh *fh = file->private_data;
-+
-+	return v4l2_m2m_delete_bufs(file, fh->m2m_ctx, d);
-+}
-+EXPORT_SYMBOL_GPL(v4l2_m2m_ioctl_delete_bufs);
-+
- int v4l2_m2m_ioctl_querybuf(struct file *file, void *priv,
- 				struct v4l2_buffer *buf)
- {
-diff --git a/include/media/v4l2-mem2mem.h b/include/media/v4l2-mem2mem.h
-index d6c8eb2b5201..161f85c42dc8 100644
---- a/include/media/v4l2-mem2mem.h
-+++ b/include/media/v4l2-mem2mem.h
-@@ -381,6 +381,16 @@ int v4l2_m2m_dqbuf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
- int v4l2_m2m_prepare_buf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
- 			 struct v4l2_buffer *buf);
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index c3d4e490ce7c..13ddb5abf584 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -1035,6 +1035,7 @@ struct v4l2_requestbuffers {
+ #define V4L2_BUF_CAP_SUPPORTS_ORPHANED_BUFS		(1 << 4)
+ #define V4L2_BUF_CAP_SUPPORTS_M2M_HOLD_CAPTURE_BUF	(1 << 5)
+ #define V4L2_BUF_CAP_SUPPORTS_MMAP_CACHE_HINTS		(1 << 6)
++#define V4L2_BUF_CAP_SUPPORTS_MAX_NUM_BUFFERS		(1 << 7)
  
-+/**
-+ * v4l2_m2m_delete_bufs() - delete buffers from the queue
-+ *
-+ * @file: pointer to struct &file
-+ * @m2m_ctx: m2m context assigned to the instance given by struct &v4l2_m2m_ctx
-+ * @d: pointer to struct &v4l2_delete_buffers
-+ */
-+int v4l2_m2m_delete_bufs(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
-+			 struct v4l2_delete_buffers *d);
-+
  /**
-  * v4l2_m2m_create_bufs() - create a source or destination buffer, depending
-  * on the type
-@@ -860,6 +870,8 @@ int v4l2_m2m_ioctl_reqbufs(struct file *file, void *priv,
- 				struct v4l2_requestbuffers *rb);
- int v4l2_m2m_ioctl_create_bufs(struct file *file, void *fh,
- 				struct v4l2_create_buffers *create);
-+int v4l2_m2m_ioctl_delete_bufs(struct file *file, void *priv,
-+			       struct v4l2_delete_buffers *d);
- int v4l2_m2m_ioctl_querybuf(struct file *file, void *fh,
- 				struct v4l2_buffer *buf);
- int v4l2_m2m_ioctl_expbuf(struct file *file, void *fh,
+  * struct v4l2_plane - plane info for multi-planar buffers
+@@ -2605,6 +2606,9 @@ struct v4l2_dbg_chip_info {
+  * @flags:	additional buffer management attributes (ignored unless the
+  *		queue has V4L2_BUF_CAP_SUPPORTS_MMAP_CACHE_HINTS capability
+  *		and configured for MMAP streaming I/O).
++ * @max_num_buffers: if V4L2_BUF_CAP_SUPPORTS_MAX_NUM_BUFFERS capability flag is set
++ *		this field indicate the maximum possible number of buffers
++ *		for this queue.
+  * @reserved:	future extensions
+  */
+ struct v4l2_create_buffers {
+@@ -2614,7 +2618,8 @@ struct v4l2_create_buffers {
+ 	struct v4l2_format	format;
+ 	__u32			capabilities;
+ 	__u32			flags;
+-	__u32			reserved[6];
++	__u32			max_num_buffers;
++	__u32			reserved[5];
+ };
+ 
+ /*
 -- 
 2.39.2
 
