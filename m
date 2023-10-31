@@ -2,209 +2,106 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9B29C4167B
-	for <linux-media@archiver.kernel.org>; Tue, 31 Oct 2023 16:37:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15F9DC4332F
+	for <linux-media@archiver.kernel.org>; Tue, 31 Oct 2023 16:44:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346059AbjJaQhF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 31 Oct 2023 12:37:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55112 "EHLO
+        id S1345887AbjJaQnw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 31 Oct 2023 12:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346340AbjJaQgj (ORCPT
+        with ESMTP id S1345735AbjJaQns (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 31 Oct 2023 12:36:39 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177612112;
-        Tue, 31 Oct 2023 09:32:41 -0700 (PDT)
-Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:c562:2ef4:80c0:92f])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 50A8466073AC;
-        Tue, 31 Oct 2023 16:32:38 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1698769958;
-        bh=wZnMlp/3DAJg8uDJmHyonSDSh7KwQ0YTK0bDzRgQQJI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mg1SMl+/3wCPzfHNmZ6LUkq08deI2TMXngOjODCEAWOpJXhAtqSZtRt5vchgs4R6a
-         Fa0lL5YylbIQe3i3Zvg9q66FtTCPrzUo9r9z0x31SwDo/yE5fMZJdfz61Jkx1pvdg0
-         gDps2md3P12ThWQRWkJWjo+tr5nYMgH30lZnYau9Q5bUtbhU5a3q7xVSPYGS2y7Ew+
-         G9/7Lg5dZfUR1NoN69p/okJ2VWiUcayDfVPHODtzCq4eaPO8F5cXwZ87r7WRRrKvW+
-         C9XSoyJ8MMF/g6KP8wlrpwvzGv6t1VCspkKqNmmiCe1//AH7IsjD/8GZHf3e9O/iFO
-         wyVNXftBrbsrA==
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
-        ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v14 44/56] media: core: Report the maximum possible number of buffers for the queue
-Date:   Tue, 31 Oct 2023 17:30:52 +0100
-Message-Id: <20231031163104.112469-45-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231031163104.112469-1-benjamin.gaignard@collabora.com>
-References: <20231031163104.112469-1-benjamin.gaignard@collabora.com>
+        Tue, 31 Oct 2023 12:43:48 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7805212A;
+        Tue, 31 Oct 2023 09:43:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698770627; x=1730306627;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7B5NIFZnAMgt5AVmwDkbgyLx7q+R9dV1QKWlaH93HYc=;
+  b=eAJ/jKB3XxYX2GBdebnsIOuNISAeSsDvxOlerbvdbZpCHRHR5H9DHk98
+   nDC54MYcyBa4HAg8i6smZKei6j977mua+PjuzQ3x2XDK5SM7eG476oDwk
+   HZiyvMvIjsGVkfX/sw6N1uKR77KkNF44bSKBaJPEWT/Bzq4iKmhcctZJO
+   k+7A5mVVyzRn0iAJWi2VCmSq92XhDWD3kaGDC9ts0QpuZvXdh0iMLVDXf
+   GIwi13uVEJhgv6hwhcMFxOR6oaiCXh34FLuPo3Fj4je0/Q5fUsv1dpEXP
+   41Kl/qTaewsOz3N3V9qtx0hcneGoGmidcgpvtziyllZO0krEcQlfkFwKS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10880"; a="6950412"
+X-IronPort-AV: E=Sophos;i="6.03,265,1694761200"; 
+   d="scan'208";a="6950412"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2023 09:43:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10880"; a="1092068287"
+X-IronPort-AV: E=Sophos;i="6.03,265,1694761200"; 
+   d="scan'208";a="1092068287"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2023 09:43:42 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC3)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qxrq6-0000000ACtG-3U8G;
+        Tue, 31 Oct 2023 18:43:38 +0200
+Date:   Tue, 31 Oct 2023 18:43:38 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Sakari Ailus <sakari.ailus@iki.fi>, linux-media@vger.kernel.org,
+        Paul Elder <paul.elder@ideasonboard.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Julien Stephan <jstephan@baylibre.com>,
+        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v4 3/3] media: i2c: Add driver for THine THP7312
+Message-ID: <ZUEuuqLv7p0nB9a-@smile.fi.intel.com>
+References: <20231017132103.9914-4-laurent.pinchart@ideasonboard.com>
+ <ZTutbU1XG_jKZbIp@valkosipuli.retiisi.eu>
+ <20231027124529.GA19539@pendragon.ideasonboard.com>
+ <ZTvOIQSmpytUisUD@valkosipuli.retiisi.eu>
+ <20231028151858.GB20465@pendragon.ideasonboard.com>
+ <ZT9kwC3abUKR9fgQ@valkosipuli.retiisi.eu>
+ <20231030104241.GJ12144@pendragon.ideasonboard.com>
+ <ZUDatMX10WK0bdid@valkosipuli.retiisi.eu>
+ <ZUEEBXfjTPqnnL9b@smile.fi.intel.com>
+ <20231031142459.GB14322@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231031142459.GB14322@pendragon.ideasonboard.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use one of the struct v4l2_create_buffers reserved bytes to report
-the maximum possible number of buffers for the queue.
-V4l2 framework set V4L2_BUF_CAP_SUPPORTS_MAX_NUM_BUFFERS flags in queue
-capabilities so userland can know when the field is valid.
-Does the same change in v4l2_create_buffers32 structure.
+On Tue, Oct 31, 2023 at 04:24:59PM +0200, Laurent Pinchart wrote:
+> On Tue, Oct 31, 2023 at 03:41:25PM +0200, Andy Shevchenko wrote:
+> > On Tue, Oct 31, 2023 at 10:45:32AM +0000, Sakari Ailus wrote:
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
----
- .../userspace-api/media/v4l/vidioc-create-bufs.rst       | 8 ++++++--
- Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst | 1 +
- drivers/media/common/videobuf2/videobuf2-v4l2.c          | 2 ++
- drivers/media/v4l2-core/v4l2-compat-ioctl32.c            | 9 ++++++++-
- drivers/media/v4l2-core/v4l2-ioctl.c                     | 4 ++--
- include/uapi/linux/videodev2.h                           | 7 ++++++-
- 6 files changed, 25 insertions(+), 6 deletions(-)
+...
 
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-create-bufs.rst b/Documentation/userspace-api/media/v4l/vidioc-create-bufs.rst
-index a048a9f6b7b6..49232c9006c2 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-create-bufs.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-create-bufs.rst
-@@ -116,9 +116,13 @@ than the number requested.
-       - ``flags``
-       - Specifies additional buffer management attributes.
- 	See :ref:`memory-flags`.
--
-     * - __u32
--      - ``reserved``\ [6]
-+      - ``max_num_buffers``
-+      - If the V4L2_BUF_CAP_SUPPORTS_MAX_NUM_BUFFERS capability flag is set
-+        this field indicates the maximum possible number of buffers
-+        for this queue.
-+    * - __u32
-+      - ``reserved``\ [5]
-       - A place holder for future extensions. Drivers and applications
- 	must set the array to zero.
- 
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst b/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst
-index 099fa6695167..0b3a41a45d05 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst
-@@ -120,6 +120,7 @@ aborting or finishing any DMA in progress, an implicit
- .. _V4L2-BUF-CAP-SUPPORTS-ORPHANED-BUFS:
- .. _V4L2-BUF-CAP-SUPPORTS-M2M-HOLD-CAPTURE-BUF:
- .. _V4L2-BUF-CAP-SUPPORTS-MMAP-CACHE-HINTS:
-+.. _V4L2-BUF-CAP-SUPPORTS-MAX-NUM-BUFFERS:
- 
- .. raw:: latex
- 
-diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-index f3cf4b235c1f..bdfc3a253c65 100644
---- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
-+++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-@@ -762,6 +762,8 @@ int vb2_create_bufs(struct vb2_queue *q, struct v4l2_create_buffers *create)
- 	fill_buf_caps(q, &create->capabilities);
- 	validate_memory_flags(q, create->memory, &create->flags);
- 	create->index = vb2_get_num_buffers(q);
-+	create->max_num_buffers = q->max_num_buffers;
-+	create->capabilities |= V4L2_BUF_CAP_SUPPORTS_MAX_NUM_BUFFERS;
- 	if (create->count == 0)
- 		return ret != -EBUSY ? ret : 0;
- 
-diff --git a/drivers/media/v4l2-core/v4l2-compat-ioctl32.c b/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
-index f3bed37859a2..5aac5cf780b3 100644
---- a/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
-+++ b/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
-@@ -116,6 +116,9 @@ struct v4l2_format32 {
-  * @flags:	additional buffer management attributes (ignored unless the
-  *		queue has V4L2_BUF_CAP_SUPPORTS_MMAP_CACHE_HINTS capability and
-  *		configured for MMAP streaming I/O).
-+ * @max_num_buffers: if V4L2_BUF_CAP_SUPPORTS_MAX_NUM_BUFFERS capability flag is set
-+ *		this field indicate the maximum possible number of buffers
-+ *		for this queue.
-  * @reserved:	future extensions
-  */
- struct v4l2_create_buffers32 {
-@@ -125,7 +128,8 @@ struct v4l2_create_buffers32 {
- 	struct v4l2_format32	format;
- 	__u32			capabilities;
- 	__u32			flags;
--	__u32			reserved[6];
-+	__u32			max_num_buffers;
-+	__u32			reserved[5];
- };
- 
- static int get_v4l2_format32(struct v4l2_format *p64,
-@@ -175,6 +179,8 @@ static int get_v4l2_create32(struct v4l2_create_buffers *p64,
- 		return -EFAULT;
- 	if (copy_from_user(&p64->flags, &p32->flags, sizeof(p32->flags)))
- 		return -EFAULT;
-+	if (copy_from_user(&p64->max_num_buffers, &p32->max_num_buffers, sizeof(p32->max_num_buffers)))
-+		return -EFAULT;
- 	return get_v4l2_format32(&p64->format, &p32->format);
- }
- 
-@@ -221,6 +227,7 @@ static int put_v4l2_create32(struct v4l2_create_buffers *p64,
- 			 offsetof(struct v4l2_create_buffers32, format)) ||
- 	    put_user(p64->capabilities, &p32->capabilities) ||
- 	    put_user(p64->flags, &p32->flags) ||
-+	    put_user(p64->max_num_buffers, &p32->max_num_buffers) ||
- 	    copy_to_user(p32->reserved, p64->reserved, sizeof(p64->reserved)))
- 		return -EFAULT;
- 	return put_v4l2_format32(&p64->format, &p32->format);
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index 9b1de54ce379..4d90424cbfc4 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -483,9 +483,9 @@ static void v4l_print_create_buffers(const void *arg, bool write_only)
- {
- 	const struct v4l2_create_buffers *p = arg;
- 
--	pr_cont("index=%d, count=%d, memory=%s, capabilities=0x%08x, ",
-+	pr_cont("index=%d, count=%d, memory=%s, capabilities=0x%08x, max num buffers=%u",
- 		p->index, p->count, prt_names(p->memory, v4l2_memory_names),
--		p->capabilities);
-+		p->capabilities, p->max_num_buffers);
- 	v4l_print_format(&p->format, write_only);
- }
- 
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index c3d4e490ce7c..13ddb5abf584 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -1035,6 +1035,7 @@ struct v4l2_requestbuffers {
- #define V4L2_BUF_CAP_SUPPORTS_ORPHANED_BUFS		(1 << 4)
- #define V4L2_BUF_CAP_SUPPORTS_M2M_HOLD_CAPTURE_BUF	(1 << 5)
- #define V4L2_BUF_CAP_SUPPORTS_MMAP_CACHE_HINTS		(1 << 6)
-+#define V4L2_BUF_CAP_SUPPORTS_MAX_NUM_BUFFERS		(1 << 7)
- 
- /**
-  * struct v4l2_plane - plane info for multi-planar buffers
-@@ -2605,6 +2606,9 @@ struct v4l2_dbg_chip_info {
-  * @flags:	additional buffer management attributes (ignored unless the
-  *		queue has V4L2_BUF_CAP_SUPPORTS_MMAP_CACHE_HINTS capability
-  *		and configured for MMAP streaming I/O).
-+ * @max_num_buffers: if V4L2_BUF_CAP_SUPPORTS_MAX_NUM_BUFFERS capability flag is set
-+ *		this field indicate the maximum possible number of buffers
-+ *		for this queue.
-  * @reserved:	future extensions
-  */
- struct v4l2_create_buffers {
-@@ -2614,7 +2618,8 @@ struct v4l2_create_buffers {
- 	struct v4l2_format	format;
- 	__u32			capabilities;
- 	__u32			flags;
--	__u32			reserved[6];
-+	__u32			max_num_buffers;
-+	__u32			reserved[5];
- };
- 
- /*
+> > I agree with Sakari. Let's reduce the scope of ACPI/OF/etc-specific functions
+> > in the drivers. There are really little that have no generic counterparts.
+> > And most of the usages are special cases.
+> 
+> Sakar has submitted a patch to add one missing fwnode function.
+
+I have reviewed it already :-)
+
+> If it gets accepted, I'll try it out and see if I can convert this driver.
+
+I'm sure we can make this happen, but let's see...
+
+> I will still not do a partial conversion if I hit any other blocker.
+
+If any other issues, don't hesitate to report!
+
 -- 
-2.39.2
+With Best Regards,
+Andy Shevchenko
+
 
