@@ -2,245 +2,94 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF24CC4332F
-	for <linux-media@archiver.kernel.org>; Tue, 31 Oct 2023 09:52:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CCF5C4332F
+	for <linux-media@archiver.kernel.org>; Tue, 31 Oct 2023 09:54:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235310AbjJaJwj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 31 Oct 2023 05:52:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54106 "EHLO
+        id S233730AbjJaJyo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 31 Oct 2023 05:54:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236105AbjJaJwS (ORCPT
+        with ESMTP id S235267AbjJaJy0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 31 Oct 2023 05:52:18 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BBF1726;
-        Tue, 31 Oct 2023 02:51:10 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 51809C0004;
-        Tue, 31 Oct 2023 09:51:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1698745869;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FyjN8eHbYq37HQVccSWii8dO2ARTjErlZVWYsMFISx8=;
-        b=UtvrJ5VFR7enY6TYyRjZ+MC0kyvTzg9fiJ/FQXHvebe44qetk8VZpyeKLIS/CmYSFqBV42
-        mlFk/T5iDxapn4GaP9azgvw0de4clF/YQIBWztx3Yvr5A9FvaR7e6/9Qa39JsRtgdPYHrp
-        7aGYE/zJcE1bkILvJti4atBxNWuLU8Z4Z6RGfPDYrUH9VYNwGyORZwvHjgiZQUHmFAPLmn
-        dJ7GgZ1nQV1VdbLL7w1J5wE4ZLDw47n6Av8x4aDv9gR+ZHA1ZXc0Krnjb+HX353Q9tw1vv
-        uN1fTIwYIrRyzbIN+bf2glV6SypYzE1iZKGtneHHlooBxZgo26bjLSvVxs0fMA==
-Date:   Tue, 31 Oct 2023 10:51:07 +0100
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Mehdi Djait <mehdi.djait@bootlin.com>, mchehab@kernel.org,
-        heiko@sntech.de, hverkuil-cisco@xs4all.nl,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        alexandre.belloni@bootlin.com, maxime.chevallier@bootlin.com,
-        michael.riesch@wolfvision.net
-Subject: Re: [PATCH v9 1/3] media: dt-bindings: media: add bindings for
- Rockchip CIF
-Message-ID: <ZUDOCywnEqJSuQMM@aptenodytes>
-References: <cover.1698666612.git.mehdi.djait@bootlin.com>
- <5f83d60031320c4c7b0f0727604903f50ee49058.1698666612.git.mehdi.djait@bootlin.com>
- <20231030193236.GA1995060-robh@kernel.org>
+        Tue, 31 Oct 2023 05:54:26 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34B0D47
+        for <linux-media@vger.kernel.org>; Tue, 31 Oct 2023 02:53:38 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-32f78d949daso2358659f8f.1
+        for <linux-media@vger.kernel.org>; Tue, 31 Oct 2023 02:53:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1698746017; x=1699350817; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UzcHgJeME8SmvLN454BJ2f75d3TFJlrQAlY/l2HK+Us=;
+        b=mEYiSDYFll1/nWffzhgULhJcenS803yMEQI5RBGRsP+WAXVo72YLCmCYQjrFRkHHbG
+         abGpv9KrYZJQ9t+eFBDK86P21ss9bz/L8oE0Rx1Aw/fLuhAL62eglI/KFmRC+9nwpkTw
+         roGnQ7LxYAw1b1QxZYzyJTMQt/RMGRVzTIH3V986zAoioQ0QldYCMLVFFSrnnyBVPg2q
+         tluwMOohAGp3tb0fc8sEQnfjgX6HZabza6X2Kf+TOytGKgY2jO6oJ9ebjD2Q++4wqmrr
+         HdBIY92VYCkSx6w7AnFhMqdjMZMGbED6ONJu2KOfs4RQhpmR2trj9aj7HwPIh9u446pK
+         getQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698746017; x=1699350817;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UzcHgJeME8SmvLN454BJ2f75d3TFJlrQAlY/l2HK+Us=;
+        b=Ky4cKFCUmeQ1XpeEd3acq4kZLRPsjs99Q6LSoymFqb+jkET6bYbf8aFUun016GQx5m
+         CqsFo6NkJ12ky/UpzmaGGuGix2ofgiih2sxRreOfNyvQWx1fKQ/OtXSFVMkpiIneJmNS
+         GrzVN4pD+EbT7DR9BAJ+gV2jjkXtQ69Oz00geutr/9+LWolgbJnS7yuyJ2XyjZYIM8s+
+         JSy5oW9gVlKnhAJod98yw0zqgtUGVg0IMEd79ekKJtop/6YJ95N/wdXZi5OSNmOvpL04
+         8ubrC7ExJttjsmH0BwfDBnEMJgOVYnrzR6ERmzCe3bIMzDB/SGOhPHJPMeOohBwkCWKz
+         4C8A==
+X-Gm-Message-State: AOJu0YwLtknj0zYp2o3LzvgufLC48beLVrS+xwEQaN5qIIboo6lsCjFX
+        xkly8Nfo077JImXNhti77ZHT/A==
+X-Google-Smtp-Source: AGHT+IGQ3EbnVgYbgH2NgwfDvLm3+nygpGdf5Agqt6r2SrYPqkaggyRBMRzQlA+p82ssNtqPOj1Idw==
+X-Received: by 2002:a5d:670c:0:b0:32d:8431:341e with SMTP id o12-20020a5d670c000000b0032d8431341emr7738143wru.62.1698746016957;
+        Tue, 31 Oct 2023 02:53:36 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id e13-20020a5d594d000000b00327bf4f2f14sm1073304wri.88.2023.10.31.02.53.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Oct 2023 02:53:36 -0700 (PDT)
+Date:   Tue, 31 Oct 2023 12:53:33 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Lin Ma <linma@zju.edu.cn>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Hyunwoo Kim <imv4bel@gmail.com>, linux-media@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH] media: dvbdev: drop refcount on error path in
+ dvb_device_open()
+Message-ID: <47a1e8bd-accf-4afb-85aa-c9a746561902@moroto.mountain>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="7fCeMisMgRBZQnBb"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231030193236.GA1995060-robh@kernel.org>
-X-GND-Sasl: paul.kocialkowski@bootlin.com
+X-Mailer: git-send-email haha only kidding
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+If call to file->f_op->open() fails, then call dvb_device_put(dvbdev).
 
---7fCeMisMgRBZQnBb
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixes: 0fc044b2b5e2 ("media: dvbdev: adopts refcnt to avoid UAF")
+Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+---
+ drivers/media/dvb-core/dvbdev.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Hi Rob,
+diff --git a/drivers/media/dvb-core/dvbdev.c b/drivers/media/dvb-core/dvbdev.c
+index 305bb21d843c..49f0eb7d0b9d 100644
+--- a/drivers/media/dvb-core/dvbdev.c
++++ b/drivers/media/dvb-core/dvbdev.c
+@@ -104,6 +104,8 @@ static int dvb_device_open(struct inode *inode, struct file *file)
+ 			err = file->f_op->open(inode, file);
+ 		up_read(&minor_rwsem);
+ 		mutex_unlock(&dvbdev_mutex);
++		if (err)
++			dvb_device_put(dvbdev);
+ 		return err;
+ 	}
+ fail:
+-- 
+2.42.0
 
-On Mon 30 Oct 23, 14:32, Rob Herring wrote:
-> On Mon, Oct 30, 2023 at 01:25:12PM +0100, Mehdi Djait wrote:
-> > Add a documentation for the Rockchip Camera Interface
-> > binding.
-> >=20
-> > Signed-off-by: Mehdi Djait <mehdi.djait@bootlin.com>
-> > ---
-> > v8=3D>v9:
-> > dropped the "Reviewed-by: Rob Herring <robh@kernel.org>"
-> > because of the following changes:
-> > - changed the compatible to rk3066-cif: rk3066 is the earliest Rockchip=
- SoC
-> >   that uses cif and it is the first model starting the RK30 lineup.
->=20
-> Is px30 compatible with rk3066? It's not clear because you didn't add=20
-> rk3066 support. If not compatible, then add rk3066 when you have a user.=
-=20
-> If it is compatible, then you should have a fallback for px30.
-
-Just to clarify here: we haven't checked that rk3066 uses the exact same
-programming model as px30 (so there should be no fallback compatible), but =
-it
-is definitely the same unit (in a different version).
-
-Since the yaml binding document will apply to all generations of the unit,
-the name of the file should be the first generation (rk3066) instead of the
-px30 which is just one of the many iterations of the unit.
-
-It would be both confusing and irrelevant to pick px30 just because it happ=
-ens
-to be the first generation supported in the Linux driver (and described in
-the binding).
-
-Cheers,
-
-Paul
-
-> > - adjusted the description
-> > - changed the node name to video-capture
-> >=20
-> >=20
-> >  .../bindings/media/rockchip,rk3066-cif.yaml   | 96 +++++++++++++++++++
-> >  1 file changed, 96 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/media/rockchip,rk=
-3066-cif.yaml
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/media/rockchip,rk3066-ci=
-f.yaml b/Documentation/devicetree/bindings/media/rockchip,rk3066-cif.yaml
-> > new file mode 100644
-> > index 000000000000..be69e474ed26
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/media/rockchip,rk3066-cif.yaml
-> > @@ -0,0 +1,96 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/media/rockchip,rk3066-cif.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Rockchip CIF Camera Interface
-> > +
-> > +maintainers:
-> > +  - Mehdi Djait <mehdi.djait@bootlin.com>
-> > +
-> > +description: |
->=20
-> Don't need '|'
->=20
-> > +  CIF is a camera interface present on some rockchip SoCs. It
-> > +  receives the data from Camera sensor or CCIR656 encoder and
-> > +  transfers it into system main memory by AXI bus.
->=20
-> Wrap lines at 80.
->=20
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - rockchip,rk3066-cif
-> > +      - rockchip,px30-vip
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    items:
-> > +      - description: ACLK
-> > +      - description: HCLK
-> > +      - description: PCLK
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: aclk
-> > +      - const: hclk
-> > +      - const: pclk
-> > +
-> > +  resets:
-> > +    items:
-> > +      - description: AXI
-> > +      - description: AHB
-> > +      - description: PCLK IN
-> > +
-> > +  reset-names:
-> > +    items:
-> > +      - const: axi
-> > +      - const: ahb
-> > +      - const: pclkin
-> > +
-> > +  power-domains:
-> > +    maxItems: 1
-> > +
-> > +  port:
-> > +    $ref: /schemas/graph.yaml#/properties/port
-> > +    description: A connection to a sensor or decoder
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - interrupts
-> > +  - clocks
-> > +  - port
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +    #include <dt-bindings/clock/px30-cru.h>
-> > +    #include <dt-bindings/power/px30-power.h>
-> > +
-> > +    parent {
-> > +        #address-cells =3D <2>;
-> > +        #size-cells =3D <2>;
-> > +
-> > +        video-capture@ff490000 {
-> > +            compatible =3D "rockchip,px30-vip";
-> > +            reg =3D <0x0 0xff490000 0x0 0x200>;
-> > +            interrupts =3D <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
-> > +            clocks =3D <&cru ACLK_CIF>, <&cru HCLK_CIF>, <&cru PCLK_CI=
-F>;
-> > +            clock-names =3D "aclk", "hclk", "pclk";
-> > +            resets =3D <&cru SRST_CIF_A>, <&cru SRST_CIF_H>, <&cru SRS=
-T_CIF_PCLKIN>;
-> > +            reset-names =3D "axi", "ahb", "pclkin";
-> > +            power-domains =3D <&power PX30_PD_VI>;
-> > +
-> > +            port {
-> > +                endpoint {
-> > +                    remote-endpoint =3D <&tw9900_out>;
-> > +                };
-> > +            };
-> > +        };
-> > +    };
-> > +...
-> > --=20
-> > 2.41.0
-> >=20
-
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---7fCeMisMgRBZQnBb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmVAzgsACgkQ3cLmz3+f
-v9Hb1Qf9Eze/ep5/BwUEK3IGBy/qFAEjGRoZuXbOHllYr2mnjDO4odYjMWzn7Av+
-ZZR3u2CX3YthbJ2Ebrq8ONpweEkIfLTgPD+PE9PsACFsEcOi8oJBQDtO7FxNbVQJ
-ztVpqG0kB1cENdFHfj7Q6dI7t9fZXu483YnOTo7gL4ULTd09+Yter3eHoan5jZOB
-tqMn3kTUv+0Yn5HpQnhubgN42NQpUIVqtdvjuITo/WWIg3ApnW7cexGkiMBRyiwW
-Z96qKuEaHPkFuy3QyV3QgSzTuEOKQZG3A0Abhzvp1GG5p4mHZTocKK/EqYYCZi8U
-uN5gs8kAB+u/3LhjwhTgodNISl61Ww==
-=s9Kd
------END PGP SIGNATURE-----
-
---7fCeMisMgRBZQnBb--
