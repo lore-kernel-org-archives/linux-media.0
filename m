@@ -2,193 +2,142 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C95BC0018C
-	for <linux-media@archiver.kernel.org>; Wed,  1 Nov 2023 10:55:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FF47C4332F
+	for <linux-media@archiver.kernel.org>; Wed,  1 Nov 2023 11:02:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234811AbjKAKz5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 1 Nov 2023 06:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36494 "EHLO
+        id S233281AbjKALCn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 1 Nov 2023 07:02:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233467AbjKAKzg (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Nov 2023 06:55:36 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E76C110
-        for <linux-media@vger.kernel.org>; Wed,  1 Nov 2023 03:55:30 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-32dbbf3c782so410031f8f.1
-        for <linux-media@vger.kernel.org>; Wed, 01 Nov 2023 03:55:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698836128; x=1699440928; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Tv2R/vFkv5aw1eD9VUmJogdPL3QNVlhIxcpLogPWtuI=;
-        b=hJ6AUxL3rDPnxeV5To2ClhRPDOTkhpuYNfQY9EY0cV3sIasdFcCtlnDgiF7xD9fWrI
-         tomu9Y8UkPGRl5uRDzQMscE8zPo0G+MktW5ielPlLeoN0TMSGPiPoY7cKGpjytXGzjWF
-         0hsrkY/UZiSucVsrOoAfLknkKu/CJvNU4z7xJ1p79VEm1LSOlfLPiVQwaz4GEBrzNlNL
-         upcnCcdTzIb8eioOyRBMdmt4T4KFevOE3ZgH46/+tXSxH4pCBnwpfXnaB4VqpPRX1uGk
-         xI2z/v8aAvanTs+Cs+19XYd3TovHYdEqRkG1PXJI65/lCPJY7ECz5MklhlhH2mXA2gm9
-         0c2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698836128; x=1699440928;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Tv2R/vFkv5aw1eD9VUmJogdPL3QNVlhIxcpLogPWtuI=;
-        b=VowyTFvPiBXxRcEe/PB4694cn9KKS88DSSm4KbzaEnGQBLdEJwi+c6S4TdskwPsDbq
-         vZeN/pw43mEx6E6j77XfO6FecXdSLTtWDFI++TcesTQMu6chKYJmD/P2kgnxWrX8E0eJ
-         20JSrwvj7t3FXWGqBGukl7XTFmQs0o+SzAt5471V7Uh00gQshMqzw9tYkN47sCeCy2SQ
-         NGqt9P0gKv5nI1zak8F/q1F0lm7GNhr2p2mb0zZb+tvlcDSVNZdFJ/bqkeRcaTfa0YAn
-         Yqr5gw9hSNyQyfpaNRh7qx+owT3ZhU3qmq89Ma8O6zzbIHw9fByX7ldouPaIyc1TqvZD
-         OGoQ==
-X-Gm-Message-State: AOJu0YxSEQQPdt2bE7XGKimnkyGiNueq4KCRyjSpAK8wIT2myt36nWZo
-        14YN7jdhxFVSIewjufuzQEE9Uw==
-X-Google-Smtp-Source: AGHT+IHnjLgTLiFStrcS6i1t2P65Kpb20s5fRHwbOmiZm6Mwj/MKNH2Lq646EHjDXicAYgx2p4c0MQ==
-X-Received: by 2002:a5d:5847:0:b0:32f:7a22:8b42 with SMTP id i7-20020a5d5847000000b0032f7a228b42mr2576503wrf.23.1698836128599;
-        Wed, 01 Nov 2023 03:55:28 -0700 (PDT)
-Received: from [127.0.0.1] ([37.228.218.3])
-        by smtp.gmail.com with ESMTPSA id z2-20020a5d6542000000b0032d09f7a713sm3830948wrv.18.2023.11.01.03.55.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Nov 2023 03:55:28 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Date:   Wed, 01 Nov 2023 10:54:35 +0000
-Subject: [PATCH v3 5/5] media: qcom: camss: Add support for named
- power-domains
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231101-b4-camss-named-power-domains-v3-5-bbdf5f22462a@linaro.org>
-References: <20231101-b4-camss-named-power-domains-v3-0-bbdf5f22462a@linaro.org>
-In-Reply-To: <20231101-b4-camss-named-power-domains-v3-0-bbdf5f22462a@linaro.org>
-To:     hverkuil-cisco@xs4all.nl, laurent.pinchart@ideasonboard.com,
-        Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        with ESMTP id S229731AbjKALCm (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Nov 2023 07:02:42 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780AF10C;
+        Wed,  1 Nov 2023 04:02:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698836556; x=1730372556;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=he45rIbXb42Sm6DXp2Al9jchDSVbh17ZLLy0apFcu2Y=;
+  b=bZoSreyFq9M3BXtdA6HZMDH/moW+Oq9iuGEuPBsC/Mrv91GfNAAnxSwq
+   an3Zg/BnW72eM/cfbSYD2y3qIGYQQAzO3JCle+r+Ro7V8ZCTicwgZZofs
+   GMhroMrwvf7UBKqwg2IVSbEcc+kn++yD0AjebmS6eIpfudiE5ewk3PEPr
+   OGfvPxGFQPSu/UoLbtXope36YB5e/vaYGYQQfkJJ82H5O7Kh0HesLfRa/
+   rG2kcoaRVQhxMWCC0g9U0ebKq7qq3NpfMD143rqvBTFm34JzZj7P6LJJn
+   ffKTcCfJGd247untzd0EjRcUA3r1vTjyTcLMay73II8vsgdfw/U+13JBE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10880"; a="368684077"
+X-IronPort-AV: E=Sophos;i="6.03,268,1694761200"; 
+   d="scan'208";a="368684077"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2023 04:02:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10880"; a="760903972"
+X-IronPort-AV: E=Sophos;i="6.03,268,1694761200"; 
+   d="scan'208";a="760903972"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2023 04:02:33 -0700
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id 3888F1207A3;
+        Wed,  1 Nov 2023 12:53:40 +0200 (EET)
+Date:   Wed, 1 Nov 2023 10:53:40 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        matti.lehtimaki@gmail.com
-Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Mailer: b4 0.13-dev-26615
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] Revert "media: imx290: Convert to new CCI register
+ access helpers"
+Message-ID: <ZUIuNDTJAN_fz3q6@kekkonen.localdomain>
+References: <20231101100900.224567-1-alexander.stein@ew.tq-group.com>
+ <ZUIpEJmmdGTFdx09@kekkonen.localdomain>
+ <c097e11b-8cec-1b04-141a-c8713bf56461@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c097e11b-8cec-1b04-141a-c8713bf56461@redhat.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Right now we use fixed indexes to assign power-domains, with a
-requirement for the TOP GDSC to come last in the list.
+Hi Hans,
 
-Adding support for named power-domains means the declaration in the dtsi
-can come in any order.
+On Wed, Nov 01, 2023 at 11:41:36AM +0100, Hans de Goede wrote:
+> Hi,
+> 
+> On 11/1/23 11:31, Sakari Ailus wrote:
+> > Hi Alexander,
+> > 
+> > On Wed, Nov 01, 2023 at 11:09:00AM +0100, Alexander Stein wrote:
+> >> cci_write() unconditionally writes multi-byte data in big-endian format.
+> >> But IMX290 and IMX327 use little-endian format for multi-byte registers.
+> >> Revert the CCI usage until little-endian is supported by CCI register
+> >> access helpers.
+> >> This reverts commit af73323b97702e53b0a336972aaf23e7dd92c850.
+> >>
+> >> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> >> ---
+> >> The difference is subtile, but imx290_write() uses put_unaligned_le24(),
+> >> while cci_write() uses put_unaligned_be24().
+> >>
+> >> I assume this should go into stable as well. How to deal with that?
+> >> Shall a revert get the fixes tag as well?
+> > 
+> > I'd very much prefer addressing this in v4l2-cci instead. It should also be
+> > a much smaller patch (or patches).
+> 
+> I was under the impression the v4l2-cci conversion was already
+> reverted because this breakage has been known for a while now.
+> 
+> Anyways, if someone wants to fix this directly this has been
+> discussed in this thread:
+> 
+> https://lore.kernel.org/linux-media/20231030173637.GA2977515@gnbcxd0016.gnb.st.com/
+> 
+> and the consensus is that the best way to fix this is to
+> add CCI_REG16_LE(x) CCI_REG24_LE(x), etc. macros to
+> mirror the existing CCI_REG16(x), etc. macros.
+> 
+> The _LE macros would then look something like this:
+> 
+> #define CCI_REG_LE		BIT(20)
+> 
+> #define CCI_REG16_LE(x)                (CCI_REG_LE | (2 << CCI_REG_WIDTH_SHIFT) | (x))
+> 
+> etc.
+> 
+> And then the get_unaligned_beXX() and put_unaligned_beXX()
+> calls in drivers/media/v4l2-core/v4l2-cci.c would need
+> to be made conditional on a check for the CCI_REG_LE flag
+> and if that flag is set use the _le_ versions of those
+> functions instead.
+> 
+> The reason to go this way instead of a global LE flag
+> somewhere is that some sensors have mixed endianness
+> for different registers, so encoding this in the
+> register-address high bits is the best solution.
 
-After this change we continue to support the old indexing - if a SoC
-resource declaration or the in-use dtb doesn't declare power-domain names
-we fall back to the default legacy indexing.
+Seems good to me.
 
-From this point on though new SoC additions should contain named
-power-domains, eventually we will drop support for legacy indexing.
-
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- drivers/media/platform/qcom/camss/camss-vfe.c | 24 +++++++++++++++++++++++-
- drivers/media/platform/qcom/camss/camss.c     | 26 +++++++++++++++++++++-----
- drivers/media/platform/qcom/camss/camss.h     |  2 ++
- 3 files changed, 46 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
-index defff24f07ce3..123e5ead7602d 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe.c
-@@ -1382,7 +1382,29 @@ int msm_vfe_subdev_init(struct camss *camss, struct vfe_device *vfe,
- 	if (!res->line_num)
- 		return -EINVAL;
- 
--	if (res->has_pd) {
-+	/* Power domain */
-+
-+	if (res->pd_name) {
-+		vfe->genpd = dev_pm_domain_attach_by_name(camss->dev,
-+							  res->pd_name);
-+		if (IS_ERR(vfe->genpd)) {
-+			ret = PTR_ERR(vfe->genpd);
-+			return ret;
-+		}
-+	}
-+
-+	if (!vfe->genpd && res->has_pd) {
-+		/*
-+		 * Legacy magic index.
-+		 * Requires
-+		 * power-domain = <VFE_X>,
-+		 *                <VFE_Y>,
-+		 *                <TITAN_TOP>
-+		 * id must correspondng to the index of the VFE which must
-+		 * come before the TOP GDSC. VFE Lite has no individually
-+		 * collapasible domain which is why id < vfe_num is a valid
-+		 * check.
-+		 */
- 		vfe->genpd = dev_pm_domain_attach_by_id(camss->dev, id);
- 		if (IS_ERR(vfe->genpd)) {
- 			ret = PTR_ERR(vfe->genpd);
-diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
-index 415164bf00402..83c0c28a8c953 100644
---- a/drivers/media/platform/qcom/camss/camss.c
-+++ b/drivers/media/platform/qcom/camss/camss.c
-@@ -1514,12 +1514,28 @@ static int camss_configure_pd(struct camss *camss)
- 		return 0;
- 
- 	/*
--	 * VFE power domains are in the beginning of the list, and while all
--	 * power domains should be attached, only if TITAN_TOP power domain is
--	 * found in the list, it should be linked over here.
-+	 * If a power-domain name is defined try to use it.
-+	 * It is possible we are running a new kernel with an old dtb so
-+	 * fallback to indexes even if a pd_name is defined but not found.
- 	 */
--	camss->genpd = dev_pm_domain_attach_by_id(camss->dev, camss->genpd_num - 1);
--	if (IS_ERR(camss->genpd)) {
-+	if (camss->res->pd_name) {
-+		camss->genpd = dev_pm_domain_attach_by_name(camss->dev,
-+							    camss->res->pd_name);
-+		if (IS_ERR(camss->genpd)) {
-+			ret = PTR_ERR(camss->genpd);
-+			goto fail_pm;
-+		}
-+	}
-+
-+	if (!camss->genpd) {
-+		/*
-+		 * Legacy magic index. TITAN_TOP GDSC must be the last
-+		 * item in the power-domain list.
-+		 */
-+		camss->genpd = dev_pm_domain_attach_by_id(camss->dev,
-+							  camss->genpd_num - 1);
-+	}
-+	if (IS_ERR_OR_NULL(camss->genpd)) {
- 		ret = PTR_ERR(camss->genpd);
- 		goto fail_pm;
- 	}
-diff --git a/drivers/media/platform/qcom/camss/camss.h b/drivers/media/platform/qcom/camss/camss.h
-index 1ba824a2cb76c..cd8186fe1797b 100644
---- a/drivers/media/platform/qcom/camss/camss.h
-+++ b/drivers/media/platform/qcom/camss/camss.h
-@@ -48,6 +48,7 @@ struct camss_subdev_resources {
- 	u32 clock_rate[CAMSS_RES_MAX][CAMSS_RES_MAX];
- 	char *reg[CAMSS_RES_MAX];
- 	char *interrupt[CAMSS_RES_MAX];
-+	char *pd_name;
- 	u8 line_num;
- 	bool has_pd;
- 	const void *ops;
-@@ -84,6 +85,7 @@ enum icc_count {
- 
- struct camss_resources {
- 	enum camss_version version;
-+	const char *pd_name;
- 	const struct camss_subdev_resources *csiphy_res;
- 	const struct camss_subdev_resources *csid_res;
- 	const struct camss_subdev_resources *ispif_res;
+> 
+> Alexander, perhaps you can prepare 2 patches:
+> 
+> 1. Adding the discussed CCI_REGXX_LE(x) macros to v4l2-cci
+> described above.
+> 
+> 2. Patch the imx290 code to use the _LE versions for the
+> registers which are 2 or more bytes wide.
+> 
+> ?
+> 
+> Note I know that Alain (added to the Cc) from the thread
+> linked above is also looking into implementing 1. 
 
 -- 
-2.42.0
+Regards,
 
+Sakari Ailus
