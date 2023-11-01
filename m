@@ -2,49 +2,40 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE357C4167D
-	for <linux-media@archiver.kernel.org>; Wed,  1 Nov 2023 13:14:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 686EDC4167D
+	for <linux-media@archiver.kernel.org>; Wed,  1 Nov 2023 13:14:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343837AbjKANOI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 1 Nov 2023 09:14:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54122 "EHLO
+        id S1344026AbjKANOP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 1 Nov 2023 09:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343683AbjKANOH (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Nov 2023 09:14:07 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFD5FC;
-        Wed,  1 Nov 2023 06:14:02 -0700 (PDT)
+        with ESMTP id S1343851AbjKANON (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Nov 2023 09:14:13 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2FFF4;
+        Wed,  1 Nov 2023 06:14:07 -0700 (PDT)
 Received: from Monstersaurus.local (aztw-30-b2-v4wan-166917-cust845.vm26.cable.virginm.net [82.37.23.78])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DDC3F7F8;
-        Wed,  1 Nov 2023 14:13:42 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1AF14E52;
+        Wed,  1 Nov 2023 14:13:44 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1698844423;
-        bh=cZjHwAeBlPG60bYP7kLvS643hd8tohS5INB855qXSOY=;
+        s=mail; t=1698844424;
+        bh=cqUYU2q4hDhZpxo1Fi1Ix4DPuhuP0paFGsY1V5zSNXY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iuPZJIC2P5vfgkyVLQVN6zRrnO9o48Sx7sShtOjkgCw0GToCJNHspu1SQAZ9mDqFp
-         3CzxLchTIfGECPf5zWgx5rIr9RahuIxsf3InMUTm/reHGEWuHUUK9Nnbz28ybV5uQN
-         Vzyl5+niRWqPyxAluz3F2Qjjjr6wVnzZ9klqqz7o=
+        b=HSM+abDc4nh4X1w6CkN20KztnDROtn/zTk28cdU2ACq5iJhBOF9BDE5xnWJpaCI6O
+         7cbMhav8/xZw6XUmxLt7GHeMCjSTRjKbWIf4o6RASH/JEdejrN9Avjj3UZRkGqmE+w
+         f38jTHAVGLWJDqUqEpiB9qmZEB/YEJe1JlPhljdE=
 From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
 To:     devicetree@vger.kernel.org, linux-media@vger.kernel.org
 Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
         Umang Jain <umang.jain@ideasonboard.com>,
-        Marco Felsch <m.felsch@pengutronix.de>,
         "Paul J. Murphy" <paul.j.murphy@intel.com>,
         Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/FREESCALE IMX
-        / MXC ARM ARCHITECTURE), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 1/6] media: dt-bindings: media: imx335: Add supply bindings
-Date:   Wed,  1 Nov 2023 13:13:49 +0000
-Message-Id: <20231101131354.2333498-2-kieran.bingham@ideasonboard.com>
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2 3/6] media: i2c: imx335: Improve configuration error reporting
+Date:   Wed,  1 Nov 2023 13:13:51 +0000
+Message-Id: <20231101131354.2333498-4-kieran.bingham@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231101131354.2333498-1-kieran.bingham@ideasonboard.com>
 References: <20231101131354.2333498-1-kieran.bingham@ideasonboard.com>
@@ -54,52 +45,50 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add the bindings for the supply references used on the IMX335.
+The existing imx335_parse_hw_config function has two paths
+that can be taken without reporting to the user the reason
+for failing to accept the hardware configuration.
+
+Extend the error reporting paths to identify failures when
+probing the device.
 
 Reviewed-by: Umang Jain <umang.jain@ideasonboard.com>
-Reviewed-by: Marco Felsch <m.felsch@pengutronix.de>
 Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
 
 ---
 v2:
- - Remove the supplies from required properties to prevent ABI breakage.
+ - Fix line endings
 
 Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
 ---
- .../devicetree/bindings/media/i2c/sony,imx335.yaml  | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ drivers/media/i2c/imx335.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx335.yaml b/Documentation/devicetree/bindings/media/i2c/sony,imx335.yaml
-index a167dcdb3a32..106c36ee966d 100644
---- a/Documentation/devicetree/bindings/media/i2c/sony,imx335.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/sony,imx335.yaml
-@@ -32,6 +32,15 @@ properties:
-     description: Clock frequency from 6 to 27 MHz, 37.125MHz, 74.25MHz
-     maxItems: 1
+diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
+index cbabef968e21..31c612c6bdd8 100644
+--- a/drivers/media/i2c/imx335.c
++++ b/drivers/media/i2c/imx335.c
+@@ -795,8 +795,10 @@ static int imx335_parse_hw_config(struct imx335 *imx335)
+ 	}
  
-+  avdd-supply:
-+    description: Analog power supply (2.9V)
-+
-+  ovdd-supply:
-+    description: Interface power supply (1.8V)
-+
-+  dvdd-supply:
-+    description: Digital power supply (1.2V)
-+
-   reset-gpios:
-     description: Reference to the GPIO connected to the XCLR pin, if any.
-     maxItems: 1
-@@ -79,6 +88,10 @@ examples:
-             assigned-clock-parents = <&imx335_clk_parent>;
-             assigned-clock-rates = <24000000>;
+ 	ep = fwnode_graph_get_next_endpoint(fwnode, NULL);
+-	if (!ep)
++	if (!ep) {
++		dev_err(imx335->dev, "Failed to get next endpoint\n");
+ 		return -ENXIO;
++	}
  
-+            avdd-supply = <&camera_vdda_2v9>;
-+            ovdd-supply = <&camera_vddo_1v8>;
-+            dvdd-supply = <&camera_vddd_1v2>;
+ 	ret = v4l2_fwnode_endpoint_alloc_parse(ep, &bus_cfg);
+ 	fwnode_handle_put(ep);
+@@ -821,6 +823,8 @@ static int imx335_parse_hw_config(struct imx335 *imx335)
+ 		if (bus_cfg.link_frequencies[i] == IMX335_LINK_FREQ)
+ 			goto done_endpoint_free;
+ 
++	dev_err(imx335->dev, "no compatible link frequencies found\n");
 +
-             port {
-                 imx335: endpoint {
-                     remote-endpoint = <&cam>;
+ 	ret = -EINVAL;
+ 
+ done_endpoint_free:
 -- 
 2.34.1
 
