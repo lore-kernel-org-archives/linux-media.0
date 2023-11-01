@@ -2,155 +2,97 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3962C001DD
-	for <linux-media@archiver.kernel.org>; Wed,  1 Nov 2023 09:04:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD0A3C4332F
+	for <linux-media@archiver.kernel.org>; Wed,  1 Nov 2023 09:42:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234432AbjKAJEu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 1 Nov 2023 05:04:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36500 "EHLO
+        id S232235AbjKAJmu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 1 Nov 2023 05:42:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233257AbjKAJEe (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Nov 2023 05:04:34 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD1511D
-        for <linux-media@vger.kernel.org>; Wed,  1 Nov 2023 02:04:26 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9d2c54482fbso542930466b.2
-        for <linux-media@vger.kernel.org>; Wed, 01 Nov 2023 02:04:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698829465; x=1699434265; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wy1RT/8l0KHF5wsFu6GhibgFreZIXSZSGpoMQMm9nKQ=;
-        b=KqiPf3MKfoqZ7kc+yN5OIXBb2QyaOjsUv5r0X0Z5KVP//hHHS3g1IAgP0CP5jD+rHc
-         6w6DW70S1gc1bPYd9V526AE8OAOo11MvoZ+iQTYI0KrvPY5nlOwnSr4/ddO43Reri+O5
-         /jBwzPfisXtN1GxAQZ155cHPnBnAMddb6BPong/fJofVtEIlghhCKC5ONz3ZQCzrjomG
-         MCdZ3dVgHJugAHjdvO98uhIRFmv5QPjNcu/8eO9cY30hP1Nx67GVjzlIeZNTVSgZDVnc
-         X9F3r9c1jy9JfrPc9qeu7wLhemqAI6gO7Vqcunt6N2LnJhDXao+qXVSsoWZ6x2zPCsmW
-         iTkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698829465; x=1699434265;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wy1RT/8l0KHF5wsFu6GhibgFreZIXSZSGpoMQMm9nKQ=;
-        b=Ol/usVfTHQv0vD+haZAgSo+LKv1Vz2pI6PMznckggVYlA3uCejmWqjEa+etH9o+PFl
-         T4VJ52wGrVQloIv6pxpQlU/jypP7fY5sVgjIucHuFm5+HK9nwovO3vzMyb7PMEm/5fsr
-         exqX3s/4JznUjwdj1h1gtC28BlJ6gLTz1TFLDXatSo48T7sDpCjkmidDPyeA/W9qka+p
-         DGydr9wU1ibwoneMwmt0cN0HrXg1yGTfyRnn+duw2yqypDxQygoMVhGjhcJLxeFwxNO3
-         o6prvGulfUr5uqgblLjPbgoyXOPls5dXOdLE5zXVJJOYZXseEWd2HZYUZIWIb6mnVH9w
-         gceg==
-X-Gm-Message-State: AOJu0YyIGgNk9VaDUNMNd6QHuIF6+Rx/upBAghjUZwM/EkvcEe33EmGC
-        7Fn3dTHP8lFnThfAeTYIZL5zGA==
-X-Google-Smtp-Source: AGHT+IF0uQ6L63mtTK6fvz1bIka3oLMpIDS//D4L4ujaEmxmgdeLqCOWEMLFLMvYXy05/lYBAL/xdw==
-X-Received: by 2002:a17:907:26c4:b0:9d4:771b:69b4 with SMTP id bp4-20020a17090726c400b009d4771b69b4mr1343872ejc.44.1698829465256;
-        Wed, 01 Nov 2023 02:04:25 -0700 (PDT)
-Received: from [127.0.1.1] ([86.122.213.220])
-        by smtp.gmail.com with ESMTPSA id l25-20020a170906a41900b0099cd1c0cb21sm2152781ejz.129.2023.11.01.02.04.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Nov 2023 02:04:24 -0700 (PDT)
-From:   Abel Vesa <abel.vesa@linaro.org>
-Date:   Wed, 01 Nov 2023 11:04:08 +0200
-Subject: [PATCH RESEND v3 2/5] PM: domains: Add the domain HW-managed mode
- to the summary
+        with ESMTP id S232209AbjKAJms (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Nov 2023 05:42:48 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13B310C
+        for <linux-media@vger.kernel.org>; Wed,  1 Nov 2023 02:42:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698831765; x=1730367765;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=yR9gN0EVIGUzb8o2gxd10R4+RWlnyDrs4Ww0/4zLLwc=;
+  b=iVdbqBrgAuBa4Q3y0xI0VYCn5Ud8rQLzkualMQZyx6A9vJeVN48TE5Li
+   4IKRshqvOKaUACJFpv42d/pWKfAiwBkltOO8CdjjM1L/ep/DrEbIGNG56
+   f2eoMHqw+uouWWzNM9Jp061aBI4qUbPztgOymoxpw7Iwf8biIPL9ngazh
+   SjphDU3Idgc5e0NyaCyP0C3lF5StCaaNABi16E9Egg6l5gRT2f9/8a9dB
+   POK+/OxTQlRDy+VsVEJIaRzE1W8c4Z4K+9CacCfgi+UT7Ck9CwwMSvqbQ
+   tFfTSoRspLdoY/ouZRVXHv/j2e6D0TAVx3+an6KhkywrXqhZTL/Cy3Zmy
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10880"; a="368676331"
+X-IronPort-AV: E=Sophos;i="6.03,267,1694761200"; 
+   d="scan'208";a="368676331"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2023 02:42:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10880"; a="764522928"
+X-IronPort-AV: E=Sophos;i="6.03,267,1694761200"; 
+   d="scan'208";a="764522928"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2023 02:42:44 -0700
+Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id ACBF0120797;
+        Wed,  1 Nov 2023 11:42:41 +0200 (EET)
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     "Cao, Bingbu" <bingbu.cao@linux.intel.com>
+Subject: [PATCH 1/1] media: imx319: Enable runtime PM before registering async sub-device
+Date:   Wed,  1 Nov 2023 11:42:41 +0200
+Message-Id: <20231101094241.1149656-1-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231101-gdsc-hwctrl-v3-2-0740ae6b2b04@linaro.org>
-References: <20231101-gdsc-hwctrl-v3-0-0740ae6b2b04@linaro.org>
-In-Reply-To: <20231101-gdsc-hwctrl-v3-0-0740ae6b2b04@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Taniya Das <tdas@qti.qualcomm.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-media@vger.kernel.org,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2157; i=abel.vesa@linaro.org;
- h=from:subject:message-id; bh=mHCbi3fcCtSdQT1eVVDhxrqekocNkt9Tq7L+ASfI19c=;
- b=owEBbQKS/ZANAwAKARtfRMkAlRVWAcsmYgBlQhSOhLKXMJSo21lGzR3ysdpejTLKwJBoQxkYh
- MH83w6uWJ2JAjMEAAEKAB0WIQRO8+4RTnqPKsqn0bgbX0TJAJUVVgUCZUIUjgAKCRAbX0TJAJUV
- Vo2aD/9YiFkZJAlAo90gqui3KRk45JLMQKlpflWTNJZdCvZRVYf+wotXkWcS8jRWqYg7BIcdi7e
- 2mY9aRzvMNSMdcCD6Tc4LEFFzusUyBWLDuo+R6i7eKK5//FdPYVo8aArCKXRPN/JSXxNNiZcE2m
- I7e1wNExM8MvNjWbrIf1bDeFV2xegv3IIpNXUplfttlxRyO0AKpsZ0Vrae9Rfnna7vQb0wBnc1k
- 1SpTMwYJD/2I8/qsEC9A6AuE/7OjfoFmqZSmovl7IcpSKon03Xm9/cK2F1+mKdAWpdFCM9pJSZh
- 51Enr+10aABCccaH6jI+MC/02CosSvTJcOhHt/5A0wgf7al3gVubTf0G82MM8JAjfLsCwhiO3pb
- x7DPW19h67/tuh9A2KOS9NaN+1ozEpGzB2dfEJxWyUpL6JLNTSOHGsUCP5NBWUI6LuV4UhhaO5K
- M/mADvROhxudpOLxFCQaMZt6ZIHwlYGxaKwdB+14TMkAN/vvlXLw1EJvSRQljAsGFp1UCm5lJJ1
- MxM4LfgooUIXcdh/muKWmqXViGAVyA1Q8TX99Rsw/y7tnsiEht+wvWThIYT6I8AB0WWWL7L9bza
- Snsrp8DkgULIWOspS+coIBw1P7wg/kKQ3jScDlPDXqbGW8HLWwNvYddd7iqvyx+DJAYEQvugZhP
- DG22z09XDbhQOrw==
-X-Developer-Key: i=abel.vesa@linaro.org; a=openpgp;
- fpr=6AFF162D57F4223A8770EF5AF7BF214136F41FAE
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Now that genpd supports dynamically switching the control for an
-attached device between hardware- and software-mode,  let's add this
-information to the genpd summary in debugfs.
+As the sensor may be accessible right after its async sub-device is
+registered, enable runtime PM before doing so.
 
-Suggested-by: Taniya Das <quic_tdas@quicinc.com>
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/base/power/domain.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ drivers/media/i2c/imx319.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index 3fb1a234c7f2..7044271ec93b 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -3181,6 +3181,15 @@ static void rtpm_status_str(struct seq_file *s, struct device *dev)
- 	seq_printf(s, "%-25s  ", p);
- }
- 
-+static void mode_status_str(struct seq_file *s, struct device *dev)
-+{
-+	struct generic_pm_domain_data *gpd_data;
-+
-+	gpd_data = to_gpd_data(dev->power.subsys_data->domain_data);
-+
-+	seq_printf(s, "%20s", gpd_data->hw_mode ? "HW" : "SW");
-+}
-+
- static void perf_status_str(struct seq_file *s, struct device *dev)
- {
- 	struct generic_pm_domain_data *gpd_data;
-@@ -3239,6 +3248,7 @@ static int genpd_summary_one(struct seq_file *s,
- 		seq_printf(s, "\n    %-50s  ", kobj_path);
- 		rtpm_status_str(s, pm_data->dev);
- 		perf_status_str(s, pm_data->dev);
-+		mode_status_str(s, pm_data->dev);
- 		kfree(kobj_path);
+diff --git a/drivers/media/i2c/imx319.c b/drivers/media/i2c/imx319.c
+index 5378f607f340..f8bce161318d 100644
+--- a/drivers/media/i2c/imx319.c
++++ b/drivers/media/i2c/imx319.c
+@@ -2464,19 +2464,21 @@ static int imx319_probe(struct i2c_client *client)
+ 		goto error_handler_free;
  	}
  
-@@ -3255,8 +3265,9 @@ static int summary_show(struct seq_file *s, void *data)
- 	int ret = 0;
+-	ret = v4l2_async_register_subdev_sensor(&imx319->sd);
+-	if (ret < 0)
+-		goto error_media_entity;
+-
+ 	/* Set the device's state to active if it's in D0 state. */
+ 	if (full_power)
+ 		pm_runtime_set_active(&client->dev);
+ 	pm_runtime_enable(&client->dev);
+ 	pm_runtime_idle(&client->dev);
  
- 	seq_puts(s, "domain                          status          children                           performance\n");
--	seq_puts(s, "    /device                                             runtime status\n");
--	seq_puts(s, "----------------------------------------------------------------------------------------------\n");
-+	seq_puts(s, "    /device                                             runtime status                           managed by\n");
-+	seq_puts(s, "------------------------------------------------------------------------------------------------------------\n");
++	ret = v4l2_async_register_subdev_sensor(&imx319->sd);
++	if (ret < 0)
++		goto error_media_entity_pm;
 +
+ 	return 0;
  
- 	ret = mutex_lock_interruptible(&gpd_list_lock);
- 	if (ret)
-
+-error_media_entity:
++error_media_entity_pm:
++	pm_runtime_disable(&client->dev);
++	pm_runtime_set_suspended(&client->dev);
+ 	media_entity_cleanup(&imx319->sd.entity);
+ 
+ error_handler_free:
 -- 
-2.34.1
+2.39.2
 
