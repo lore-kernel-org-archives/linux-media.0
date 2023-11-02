@@ -2,205 +2,296 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F31DEC4332F
-	for <linux-media@archiver.kernel.org>; Thu,  2 Nov 2023 08:02:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A76B2C4167D
+	for <linux-media@archiver.kernel.org>; Thu,  2 Nov 2023 08:17:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234386AbjKBICu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 2 Nov 2023 04:02:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35548 "EHLO
+        id S234918AbjKBIRx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 2 Nov 2023 04:17:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbjKBICu (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Nov 2023 04:02:50 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F26102
-        for <linux-media@vger.kernel.org>; Thu,  2 Nov 2023 01:02:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698912164; x=1730448164;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cL4+hAdKzfyfkVXNbBnbnUSFI1WL7ApH2O0zryK+K6M=;
-  b=Pr1PynWhJgSgi9tXNolnCuI1dL8ERVmQIrsL+VWN2+DAPj3W0QV/Prad
-   /UVOdhVI9KEoSIwvvwov4YS9W+Qp4srsaHo4cyJjZ5WoQV/JovW8jGF4x
-   OieIYSWhxtjksqxo/qgqCHUCMxtuVmtEXnt0eyAGkH9u+8X4Anki5flQ5
-   AV/vuzoGNzEVsmMXiqffn7WelpunEjWa1woMt0sNb3/nJRV4Jv5SdNgLc
-   GBmzEU9J4T07bVm6mKx5ErKHjiuiJ31ZkK7GmAuEVycZ+xKdO+bvSfBjX
-   8LGSzFNiO+WcP2Bmd0dKUi++71Ou6mlNXBcY2UFdVXB0NZIUtQOzo1jOD
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10881"; a="455137826"
-X-IronPort-AV: E=Sophos;i="6.03,270,1694761200"; 
-   d="scan'208";a="455137826"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2023 01:02:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10881"; a="737671208"
-X-IronPort-AV: E=Sophos;i="6.03,270,1694761200"; 
-   d="scan'208";a="737671208"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2023 01:02:35 -0700
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id 3B83E11F9E8;
-        Thu,  2 Nov 2023 09:54:34 +0200 (EET)
-Date:   Thu, 2 Nov 2023 07:54:34 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org,
-        "Cao, Bingbu" <bingbu.cao@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Daniel Scally <dan.scally@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andy Shevchenko <andy@kernel.org>, Kate Hsuan <hpa@redhat.com>,
-        hverkuil@xs4all.nl
-Subject: Re: [PATCH 1/1] media: Documentation: Initialisation finishes before
- subdev registration
-Message-ID: <ZUNVusvlOm1M3gE3@kekkonen.localdomain>
-References: <20231101080546.1145527-1-sakari.ailus@linux.intel.com>
- <20231101125350.GL12764@pendragon.ideasonboard.com>
- <ZUJTITOHBtM80kyL@kekkonen.localdomain>
- <20231101134506.GP12764@pendragon.ideasonboard.com>
- <ZUJb4JXALy9WhDcW@kekkonen.localdomain>
- <20231101153635.GA12764@pendragon.ideasonboard.com>
+        with ESMTP id S234727AbjKBIRw (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Nov 2023 04:17:52 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB1C132;
+        Thu,  2 Nov 2023 01:17:48 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AD4BC433C8;
+        Thu,  2 Nov 2023 08:17:45 +0000 (UTC)
+Message-ID: <75bc90a5-85c3-4cac-9bf9-a868d1d052bd@xs4all.nl>
+Date:   Thu, 2 Nov 2023 09:17:43 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231101153635.GA12764@pendragon.ideasonboard.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v14 43/56] media: videobuf2: Be more flexible on the
+ number of queue stored buffers
+Content-Language: en-US, nl
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
+        ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        nicolas.dufresne@collabora.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        kernel@collabora.com
+References: <20231031163104.112469-1-benjamin.gaignard@collabora.com>
+ <20231031163104.112469-44-benjamin.gaignard@collabora.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20231031163104.112469-44-benjamin.gaignard@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Nov 01, 2023 at 05:36:35PM +0200, Laurent Pinchart wrote:
-> On Wed, Nov 01, 2023 at 02:08:32PM +0000, Sakari Ailus wrote:
-> > On Wed, Nov 01, 2023 at 03:45:06PM +0200, Laurent Pinchart wrote:
-> > > On Wed, Nov 01, 2023 at 01:31:13PM +0000, Sakari Ailus wrote:
-> > > > On Wed, Nov 01, 2023 at 02:53:50PM +0200, Laurent Pinchart wrote:
-> > > > > On Wed, Nov 01, 2023 at 10:05:46AM +0200, Sakari Ailus wrote:
-> > > > > > Document that sub-device initialisation needs to complete before the async
-> > > > > > sub-device is registered as there is no further driver action needed
-> > > > > > before the sensor becomes accessible via the UAPI.
-> > > > > > 
-> > > > > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > > > > > ---
-> > > > > >  Documentation/driver-api/media/camera-sensor.rst | 3 ++-
-> > > > > >  Documentation/driver-api/media/v4l2-subdev.rst   | 4 ++++
-> > > > > >  2 files changed, 6 insertions(+), 1 deletion(-)
-> > > > > > 
-> > > > > > diff --git a/Documentation/driver-api/media/camera-sensor.rst b/Documentation/driver-api/media/camera-sensor.rst
-> > > > > > index 6456145f96ed..c675ce77c4d6 100644
-> > > > > > --- a/Documentation/driver-api/media/camera-sensor.rst
-> > > > > > +++ b/Documentation/driver-api/media/camera-sensor.rst
-> > > > > > @@ -60,7 +60,8 @@ management over the pipeline.
-> > > > > >  Camera sensor drivers are responsible for controlling the power state of the
-> > > > > >  device they otherwise control as well. They shall use runtime PM to manage
-> > > > > >  power states. Runtime PM shall be enabled at probe time and disabled at remove
-> > > > > > -time. Drivers should enable runtime PM autosuspend.
-> > > > > > +time. Drivers should enable runtime PM autosuspend. Note that runtime PM has to
-> > > > > > +be enabled before registering the sensor's async sub-device.
-> > > > > 
-> > > > > I wouldn't single out runtime PM initialization here, and neither would
-> > > > > I talk about registration, as that's not in scope for this file. I think
-> > > > > it would be better to instead reference v4l2-subdev.rst at the beginning
-> > > > > of this file. Something generic like stating that camera sensor must be
-> > > > > implemented as subdevs, and comply with the generic rules for subdevs,
-> > > > > as explaiend in v4l2-subdev.rst.
-> > > > 
-> > > > I added this text here as this appears to be a very common problem in
-> > > > sensor drivers. Tost likely the reason is that some drivers have had this
-> > > > issue and it has gotten copied elsewhere.
-> > > 
-> > > Yes, I think there's lots of cargo cult there. Documentation is good,
-> > > fixing drivers so that the next person to copy code will copy good code
-> > > is better, but the best solution is to move most of the problem to
-> > > helper functions provided by the core.
-> > 
-> > I wouldn't call it "cargo cult" if a sensor driver needs to deal with
-> > multiple unrelated matters.
-> 
-> I meant that most sensor drivers are written by copying code from other
-> drivers without understanding what that code does exactly, and why.
+Hi Benjamin,
 
-That certainly does happen, too...
+After a lot of testing yesterday I discovered that this patch introduces a
+bug. After this bug, running the test-media script will result in a lot of
+unbalanced counters messages:
 
-> 
-> > Of course it's possible to have helper
-> > functions performing multiple unrelated things but at some point it is easy
-> > to notice some drivers need things to be done differently. Admittedly, most
-> > of such differences are due to historical reasons, not something you want
-> > in new drivers anymore.
-> 
-> It's time to relegate historical code to the git history :-)
-> 
-> > > I still prefer linking to v4l2-subdev.rst. Duplicating documentation in
-> > > multiple places increases the chances it will get stale.
-> > 
-> > I'm fine with dropping this part of the patch. Although what is being said
-> > there is very unlikely to change in the foreseeable future.
-> 
-> Would you add a link to v4l2-subdev.rst at the top of the file ? It can
-> be done in a separate patch.
+[Wed Nov  1 16:40:48 2023] videobuf2_common: unbalanced counters for queue ffff888115a07f00, buffer 11:
+[Wed Nov  1 16:40:48 2023] videobuf2_common:      buf_init: 1 buf_cleanup: 0
+[Wed Nov  1 16:40:48 2023] videobuf2_common:      alloc: 1 put: 0
+[Wed Nov  1 16:40:48 2023] videobuf2_common:      get_dmabuf: 0 num_users: 0
 
-I'll add that in v2.
+Apparently buf_init is called, but not buf_cleanup.
 
-> 
-> > > > > >  The runtime PM handlers shall handle clocks, regulators, GPIOs, and other
-> > > > > >  system resources required to power the sensor up and down. For drivers that
-> > > > > > diff --git a/Documentation/driver-api/media/v4l2-subdev.rst b/Documentation/driver-api/media/v4l2-subdev.rst
-> > > > > > index e56b50b3f203..b22d1b075fd6 100644
-> > > > > > --- a/Documentation/driver-api/media/v4l2-subdev.rst
-> > > > > > +++ b/Documentation/driver-api/media/v4l2-subdev.rst
-> > > > > > @@ -195,6 +195,10 @@ performed using the :c:func:`v4l2_async_unregister_subdev` call. Subdevices
-> > > > > >  registered this way are stored in a global list of subdevices, ready to be
-> > > > > >  picked up by bridge drivers.
-> > > > > >  
-> > > > > > +Note that all sensor initialisation has to complete before registering the async
-> > > > > > +sub-device, including enabling runtime PM. This is because the sensor becomes
-> > > > > > +accessible via the UAPI without further action by the sensor driver.
-> > > > > 
-> > > > > It's not just the UAPI, but also in-kernel users.
-> > > > > 
-> > > > > The passive form is heavier and thus harder to read. Maybe something
-> > > > > like the following ? Feel free to rework it.
-> > > > > 
-> > > > > ----
-> > > > > Drivers must complete all initialization of the sensor before registering the
-> > > > > async sub-device. This includes enabling runtime PM. This is because the sensor
-> > > > > becomes accessible and may be used as soon as it gets registered.
-> > > > 
-> > > > s/used/accessed/ maybe? Or remove "and maybe used"?
-> > > 
-> > > I'm fine with that.
-> > > 
-> > > > > ----
-> > > > > 
-> > > > > Also, wouldn't this be better placed in the "Registering asynchronous
-> > > > > sub-devices" section ? This isn't specific to sensors.
-> > > > 
-> > > > Ah, yes, I meant sub-devices there. This actually applies to all
-> > > > of UAPI, in general, but it's the async sub-device drivers that tend to
-> > > > have the problem as people tend to think it's "just" registering the async
-> > > > sub-device but in fact the related sub-device may be immediately registered
-> > > > as well.
-> > > 
-> > > Note there are two sections, one about subdev registration, one about
-> > > camera sensor registration. You've added the text to the latter.
-> > 
-> > The section I added the text to does not mention camera sensors separately,
-> > the section title is "Registering asynchronous sub-devices".
-> 
-> My bad, I was looking at the wrong location. Replacing the reference to
-> sensor with subdev should be good enough then.
+I also get loads of kmemleak reports:
 
-Good that we agree. :-)
+unreferenced object 0xffff88800eae6800 (size 2048):
+  comm "v4l2-compliance", pid 652, jiffies 4294937190 (age 149.650s)
+  hex dump (first 32 bytes):
+    e0 52 18 0c 81 88 ff ff 00 00 00 00 02 00 00 00  .R..............
+    01 00 00 00 01 00 00 00 20 2f d3 f3 3e 00 00 00  ........ /..>...
+  backtrace:
+    [<ffffffffacbdb08b>] __kmalloc+0x4b/0x150
+    [<ffffffffc01df77a>] __vb2_queue_alloc+0x11a/0xca0 [videobuf2_common]
+    [<ffffffffc01e74f5>] vb2_core_reqbufs+0x735/0xfd0 [videobuf2_common]
+    [<ffffffffc046ca71>] v4l2_m2m_ioctl_reqbufs+0xc1/0x1b0 [v4l2_mem2mem]
+    [<ffffffffc0231520>] __video_do_ioctl+0x8d0/0xc20 [videodev]
+    [<ffffffffc0232bcc>] video_usercopy+0x48c/0xd00 [videodev]
+    [<ffffffffc021e2ff>] v4l2_ioctl+0x17f/0x1f0 [videodev]
+    [<ffffffffacd758ce>] __do_compat_sys_ioctl+0x13e/0x1d0
+    [<ffffffffae7df992>] __do_fast_syscall_32+0x62/0xe0
+    [<ffffffffae7dfb4f>] do_fast_syscall_32+0x2f/0x70
+    [<ffffffffaea012ed>] entry_SYSCALL_compat_after_hwframe+0x45/0x4d
 
-I'll use this as the original sentence, after replacing sensor with
-sub-device, made an unintended difference between the sub-device and teh
-async sub-device:
+Very likely the same issue.
 
-Drivers must complete all initialization of the sub-device before
-registering it using :c:func:`v4l2_async_register_subdev`, including
-enabling runtime PM. This is because the sub-device becomes accessible
-as soon as it gets registered.
+Unfortunately, the build script does not yet check for issues like this,
+you have to manually inspect the test-media logs (found in the logs directory
+after the run). It's on my TODO list.
 
--- 
 Regards,
 
-Sakari Ailus
+	Hans
+
+On 31/10/2023 17:30, Benjamin Gaignard wrote:
+> Add 'max_num_buffers' field in vb2_queue struct to let drivers decide
+> how many buffers could be stored in a queue.
+> This require 'bufs' array to be allocated at queue init time and freed
+> when releasing the queue.
+> By default VB2_MAX_FRAME remains the limit.
+> 
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+> ---
+>  .../media/common/videobuf2/videobuf2-core.c   | 41 +++++++++++++++----
+>  .../media/common/videobuf2/videobuf2-v4l2.c   |  6 +--
+>  include/media/videobuf2-core.h                | 10 ++++-
+>  3 files changed, 44 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
+> index c5c5ae4d213d..72ef7179d80a 100644
+> --- a/drivers/media/common/videobuf2/videobuf2-core.c
+> +++ b/drivers/media/common/videobuf2/videobuf2-core.c
+> @@ -416,7 +416,7 @@ static void init_buffer_cache_hints(struct vb2_queue *q, struct vb2_buffer *vb)
+>   */
+>  static void vb2_queue_add_buffer(struct vb2_queue *q, struct vb2_buffer *vb, unsigned int index)
+>  {
+> -	WARN_ON(index >= VB2_MAX_FRAME || q->bufs[index]);
+> +	WARN_ON(index >= q->max_num_buffers || q->bufs[index]);
+>  
+>  	q->bufs[index] = vb;
+>  	vb->index = index;
+> @@ -449,9 +449,9 @@ static int __vb2_queue_alloc(struct vb2_queue *q, enum vb2_memory memory,
+>  	struct vb2_buffer *vb;
+>  	int ret;
+>  
+> -	/* Ensure that q->num_buffers+num_buffers is below VB2_MAX_FRAME */
+> +	/* Ensure that the number of already queue + num_buffers is below q->max_num_buffers */
+>  	num_buffers = min_t(unsigned int, num_buffers,
+> -			    VB2_MAX_FRAME - q_num_buffers);
+> +			    q->max_num_buffers - q_num_buffers);
+>  
+>  	for (buffer = 0; buffer < num_buffers; ++buffer) {
+>  		/* Allocate vb2 buffer structures */
+> @@ -813,7 +813,7 @@ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
+>  	unsigned plane_sizes[VB2_MAX_PLANES] = { };
+>  	bool non_coherent_mem = flags & V4L2_MEMORY_FLAG_NON_COHERENT;
+>  	unsigned int i;
+> -	int ret;
+> +	int ret = 0;
+>  
+>  	if (q->streaming) {
+>  		dprintk(q, 1, "streaming active\n");
+> @@ -857,17 +857,22 @@ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
+>  	/*
+>  	 * Make sure the requested values and current defaults are sane.
+>  	 */
+> -	WARN_ON(q->min_buffers_needed > VB2_MAX_FRAME);
+>  	num_buffers = max_t(unsigned int, *count, q->min_buffers_needed);
+> -	num_buffers = min_t(unsigned int, num_buffers, VB2_MAX_FRAME);
+> +	num_buffers = min_t(unsigned int, num_buffers, q->max_num_buffers);
+>  	memset(q->alloc_devs, 0, sizeof(q->alloc_devs));
+>  	/*
+>  	 * Set this now to ensure that drivers see the correct q->memory value
+>  	 * in the queue_setup op.
+>  	 */
+>  	mutex_lock(&q->mmap_lock);
+> +	if (!q->bufs)
+> +		q->bufs = kcalloc(q->max_num_buffers, sizeof(*q->bufs), GFP_KERNEL);
+> +	if (!q->bufs)
+> +		ret = -ENOMEM;
+>  	q->memory = memory;
+>  	mutex_unlock(&q->mmap_lock);
+> +	if (ret)
+> +		return ret;
+>  	set_queue_coherency(q, non_coherent_mem);
+>  
+>  	/*
+> @@ -976,7 +981,7 @@ int vb2_core_create_bufs(struct vb2_queue *q, enum vb2_memory memory,
+>  	bool no_previous_buffers = !q_num_bufs;
+>  	int ret = 0;
+>  
+> -	if (q_num_bufs == VB2_MAX_FRAME) {
+> +	if (q->num_buffers == q->max_num_buffers) {
+>  		dprintk(q, 1, "maximum number of buffers already allocated\n");
+>  		return -ENOBUFS;
+>  	}
+> @@ -993,7 +998,13 @@ int vb2_core_create_bufs(struct vb2_queue *q, enum vb2_memory memory,
+>  		 */
+>  		mutex_lock(&q->mmap_lock);
+>  		q->memory = memory;
+> +		if (!q->bufs)
+> +			q->bufs = kcalloc(q->max_num_buffers, sizeof(*q->bufs), GFP_KERNEL);
+> +		if (!q->bufs)
+> +			ret = -ENOMEM;
+>  		mutex_unlock(&q->mmap_lock);
+> +		if (ret)
+> +			return ret;
+>  		q->waiting_for_buffers = !q->is_output;
+>  		set_queue_coherency(q, non_coherent_mem);
+>  	} else {
+> @@ -1005,7 +1016,7 @@ int vb2_core_create_bufs(struct vb2_queue *q, enum vb2_memory memory,
+>  			return -EINVAL;
+>  	}
+>  
+> -	num_buffers = min(*count, VB2_MAX_FRAME - q_num_bufs);
+> +	num_buffers = min(*count, q->max_num_buffers - q_num_bufs);
+>  
+>  	if (requested_planes && requested_sizes) {
+>  		num_planes = requested_planes;
+> @@ -2465,6 +2476,12 @@ int vb2_core_queue_init(struct vb2_queue *q)
+>  	/*
+>  	 * Sanity check
+>  	 */
+> +	if (!q->max_num_buffers)
+> +		q->max_num_buffers = VB2_MAX_FRAME;
+> +
+> +	/* The maximum is limited by offset cookie encoding pattern */
+> +	q->max_num_buffers = min_t(unsigned int, q->max_num_buffers, MAX_BUFFER_INDEX);
+> +
+>  	if (WARN_ON(!q)			  ||
+>  	    WARN_ON(!q->ops)		  ||
+>  	    WARN_ON(!q->mem_ops)	  ||
+> @@ -2474,6 +2491,10 @@ int vb2_core_queue_init(struct vb2_queue *q)
+>  	    WARN_ON(!q->ops->buf_queue))
+>  		return -EINVAL;
+>  
+> +	if (WARN_ON(q->max_num_buffers > MAX_BUFFER_INDEX) ||
+> +	    WARN_ON(q->min_buffers_needed > q->max_num_buffers))
+> +		return -EINVAL;
+> +
+>  	if (WARN_ON(q->requires_requests && !q->supports_requests))
+>  		return -EINVAL;
+>  
+> @@ -2519,7 +2540,9 @@ void vb2_core_queue_release(struct vb2_queue *q)
+>  	__vb2_cleanup_fileio(q);
+>  	__vb2_queue_cancel(q);
+>  	mutex_lock(&q->mmap_lock);
+> -	__vb2_queue_free(q, vb2_get_num_buffers(q));
+> +	__vb2_queue_free(q, q->max_num_buffers);
+> +	kfree(q->bufs);
+> +	q->bufs = NULL;
+>  	q->num_buffers = 0;
+>  	mutex_unlock(&q->mmap_lock);
+>  }
+> diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+> index 7d798fb15c0b..f3cf4b235c1f 100644
+> --- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
+> +++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+> @@ -627,7 +627,7 @@ struct vb2_buffer *vb2_find_buffer(struct vb2_queue *q, u64 timestamp)
+>  	 * This loop doesn't scale if there is a really large number of buffers.
+>  	 * Maybe something more efficient will be needed in this case.
+>  	 */
+> -	for (i = 0; i < vb2_get_num_buffers(q); i++) {
+> +	for (i = 0; i < q->max_num_buffers; i++) {
+>  		vb2 = vb2_get_buffer(q, i);
+>  
+>  		if (!vb2)
+> @@ -1142,7 +1142,7 @@ int _vb2_fop_release(struct file *file, struct mutex *lock)
+>  
+>  	if (lock)
+>  		mutex_lock(lock);
+> -	if (file->private_data == vdev->queue->owner) {
+> +	if (!vdev->queue->owner || file->private_data == vdev->queue->owner) {
+>  		vb2_queue_release(vdev->queue);
+>  		vdev->queue->owner = NULL;
+>  	}
+> @@ -1270,7 +1270,7 @@ void vb2_video_unregister_device(struct video_device *vdev)
+>  	 */
+>  	get_device(&vdev->dev);
+>  	video_unregister_device(vdev);
+> -	if (vdev->queue && vdev->queue->owner) {
+> +	if (vdev->queue) {
+>  		struct mutex *lock = vdev->queue->lock ?
+>  			vdev->queue->lock : vdev->lock;
+>  
+> diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
+> index 8f9d9e4af5b1..e77a397195f2 100644
+> --- a/include/media/videobuf2-core.h
+> +++ b/include/media/videobuf2-core.h
+> @@ -558,6 +558,7 @@ struct vb2_buf_ops {
+>   * @dma_dir:	DMA mapping direction.
+>   * @bufs:	videobuf2 buffer structures
+>   * @num_buffers: number of allocated/used buffers
+> + * @max_num_buffers: upper limit of number of allocated/used buffers
+>   * @queued_list: list of buffers currently queued from userspace
+>   * @queued_count: number of buffers queued and ready for streaming.
+>   * @owned_by_drv_count: number of buffers owned by the driver
+> @@ -619,8 +620,9 @@ struct vb2_queue {
+>  	struct mutex			mmap_lock;
+>  	unsigned int			memory;
+>  	enum dma_data_direction		dma_dir;
+> -	struct vb2_buffer		*bufs[VB2_MAX_FRAME];
+> +	struct vb2_buffer		**bufs;
+>  	unsigned int			num_buffers;
+> +	unsigned int			max_num_buffers;
+>  
+>  	struct list_head		queued_list;
+>  	unsigned int			queued_count;
+> @@ -1248,6 +1250,12 @@ static inline void vb2_clear_last_buffer_dequeued(struct vb2_queue *q)
+>  static inline struct vb2_buffer *vb2_get_buffer(struct vb2_queue *q,
+>  						unsigned int index)
+>  {
+> +	if (!q->bufs)
+> +		return NULL;
+> +
+> +	if (index >= q->max_num_buffers)
+> +		return NULL;
+> +
+>  	if (index < q->num_buffers)
+>  		return q->bufs[index];
+>  	return NULL;
+
