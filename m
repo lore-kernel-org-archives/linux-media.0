@@ -2,61 +2,61 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E00DC0018A
-	for <linux-media@archiver.kernel.org>; Fri,  3 Nov 2023 12:29:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE444C001DB
+	for <linux-media@archiver.kernel.org>; Fri,  3 Nov 2023 12:29:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376757AbjKCM3Y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 Nov 2023 08:29:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45774 "EHLO
+        id S1376553AbjKCM33 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Nov 2023 08:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376571AbjKCM3U (ORCPT
+        with ESMTP id S1376639AbjKCM3U (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Fri, 3 Nov 2023 08:29:20 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66ADD4C
-        for <linux-media@vger.kernel.org>; Fri,  3 Nov 2023 05:29:08 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-40837ebba42so12967635e9.0
-        for <linux-media@vger.kernel.org>; Fri, 03 Nov 2023 05:29:08 -0700 (PDT)
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AFE8D5C
+        for <linux-media@vger.kernel.org>; Fri,  3 Nov 2023 05:29:11 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2c594196344so27068211fa.3
+        for <linux-media@vger.kernel.org>; Fri, 03 Nov 2023 05:29:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699014547; x=1699619347; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1699014550; x=1699619350; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=md6OhgYeiqhW8v0ZSLxkHkjOlO44qdIptAA7zD8mXLI=;
-        b=WFMvMzv/rrLiWMFY+y/J+drJSVY7+l7AQkEhF4g4yHCHVcQNbIUymwfq5dsnkKpWs2
-         8SGMxSEzyN1aSR8Vp7c7db2GXkpwbRn1iRSTlEqC0h+0bKNyULIzuEpCVU2dLyMkoIHW
-         rG7aU4CxKuDv2EtnOIGIPm+TKfvazapZ44byCbrrRM1Fe1rGiqD1a8YMkuSRLaqY1lwq
-         ogEv7LWBoRb7S/Qj+TrxwpYhZJPqmUqadNk8yfYK2i57CJUf+O+Znz3okaJnZFUeNQre
-         rZxwGtH/X7epioKVCa/ExVfqFoi9pyUkRTWYTp3l/nzpli/AigUJa1wdifR04YWvX9b5
-         96Fg==
+        bh=A5e6ystGbmI0nEkqiwKt50qKqvjyJaFKyap2sSy1xpA=;
+        b=qJu9DniQ8gCLQXeGzU4agasudpouNHUZUUvgSAvAlrjjEbXk0vF8VOnigIRhsybhyu
+         p6WMScll49ut2x8jM94GlpIEJRtdlyI0KsozOCy5kqO86UfyNpIrjqD3PJ8XW4Fk4tk6
+         p/Q6H16EErLDtSfMb4JgUtXr6dIU1KR52ah5LxVjFilxmAxHt0YvPdATPZwKqgvOczYr
+         jQVSYucUCJ9zjqz/uff9qHMQBQi9GiUz4glhJo6bCJ0bfxDkNZiRpgjwybUWszz4Xq+3
+         607pjPNepdpjULGWPp0sKy9Y0Zhm26Ouk1VaA5TtA0Zp9gVpMJI+H6NPi7lHdeFCQoG2
+         hZaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699014547; x=1699619347;
+        d=1e100.net; s=20230601; t=1699014550; x=1699619350;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=md6OhgYeiqhW8v0ZSLxkHkjOlO44qdIptAA7zD8mXLI=;
-        b=ZGDhuJsGBGB2EszAUx+ZxbEwN44Y7Oe2uE2Sw1yCpFfjR2KSZV7RjJManauwpavN/+
-         41P3ubeS7AANv3imVWGDJxiNWBiLO1opxma+59w5zOmqxjALfpYAMLwUO6cvkKvO2B+c
-         eSqyFHDy7OaqWQOQTNQhWVc9OuOXHXJRUvcpD1K+FgiK0Fudo9OFq1PQiyiry/neIBQY
-         Lpndl6ZbeDVcIZRJbGnsXXWhPMawe9KCb9YI5mOYV8wa1qmoANLYs49sf3pdSbQziNne
-         k6x9DWBfl9rITbKUH6iApdIH74I/nOTfDo2LGdLRdeNofaHgGt9b0DZP/9+00BOomkG0
-         IvBA==
-X-Gm-Message-State: AOJu0YzR869By2sOS9gzO9CGU+WRikYn0+OG+1lDHwwX5wXcc6vt7TQT
-        Vk8uR4bRC/5+IEOJliZcd5LNVw==
-X-Google-Smtp-Source: AGHT+IF8W4JPi04xenzBvy9qy59h+hoWM+8JppoAbmeROMLCKzMN73KeMi7yiAw0OkQ3wr6vhGHr9g==
-X-Received: by 2002:a05:600c:350c:b0:409:6e0e:e95c with SMTP id h12-20020a05600c350c00b004096e0ee95cmr2099114wmq.21.1699014547402;
-        Fri, 03 Nov 2023 05:29:07 -0700 (PDT)
+        bh=A5e6ystGbmI0nEkqiwKt50qKqvjyJaFKyap2sSy1xpA=;
+        b=Ejh8pn7NEY6FfLRVL1Npr04MYoghWndwktLeUSyf6bHRw+bpEXkCkdqsMGfXfM2TPr
+         4fCroI69RSUmYIj+CO+h73+EKDASsO3syBNOfEiVN42SPiZz/b6sOnNzfwOU2/1sVy6r
+         7PNfBOeYTrz+EvH60glxJ10RRwyhGiTgw6G/JZZJeBb331vYVlDjrB0SrHST+L5ixQ+F
+         yjGD667zhKKdf6izl46LTJMCT0/SyYB7TtTYq6XcOgQmvwzxCGLVFFHSdreQiBkiexj7
+         gCh0MJ9g/1gAluc9qMkyCmjzFPx+dyLrsJw0SXDRqWoB7PU1XkxlG009Hi/GiyyZ07KQ
+         dlNQ==
+X-Gm-Message-State: AOJu0YwOiulLSoKsKlq75Wvkf4IEx3tWBoAt8jiF7mfZvwDBGCTLy/q+
+        srxADLoEBNteH4WLxs6q4lQR2A==
+X-Google-Smtp-Source: AGHT+IFSyzh5KwJXI4OKuLt+dl2RkcJyWFKztY+vd/mINRRKQ+5WKzfLaB1CZgR2/nY/F0Q+0hxo+A==
+X-Received: by 2002:a2e:97d1:0:b0:2c5:2eaa:5397 with SMTP id m17-20020a2e97d1000000b002c52eaa5397mr15816719ljj.11.1699014549852;
+        Fri, 03 Nov 2023 05:29:09 -0700 (PDT)
 Received: from [127.0.0.1] ([37.228.218.3])
-        by smtp.gmail.com with ESMTPSA id ay8-20020a05600c1e0800b0040772138bb7sm2402918wmb.2.2023.11.03.05.29.06
+        by smtp.gmail.com with ESMTPSA id ay8-20020a05600c1e0800b0040772138bb7sm2402918wmb.2.2023.11.03.05.29.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Nov 2023 05:29:06 -0700 (PDT)
+        Fri, 03 Nov 2023 05:29:09 -0700 (PDT)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Date:   Fri, 03 Nov 2023 12:29:02 +0000
-Subject: [PATCH v4 5/7] media: qcom: camss: Add support for named
- power-domains
+Date:   Fri, 03 Nov 2023 12:29:04 +0000
+Subject: [PATCH v4 7/7] media: qcom: camss: Flag CSID-lites to support more
+ CSIDs
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20231103-b4-camss-named-power-domains-v4-5-33a905359dbc@linaro.org>
+Message-Id: <20231103-b4-camss-named-power-domains-v4-7-33a905359dbc@linaro.org>
 References: <20231103-b4-camss-named-power-domains-v4-0-33a905359dbc@linaro.org>
 In-Reply-To: <20231103-b4-camss-named-power-domains-v4-0-33a905359dbc@linaro.org>
 To:     hverkuil-cisco@xs4all.nl, laurent.pinchart@ideasonboard.com,
@@ -75,120 +75,162 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Right now we use fixed indexes to assign power-domains, with a
-requirement for the TOP GDSC to come last in the list.
+From: Matti Lehtimäki <matti.lehtimaki@gmail.com>
 
-Adding support for named power-domains means the declaration in the dtsi
-can come in any order.
+Some platforms such as SC7280 have 3 CSIDs and 2 CSID-lites but current
+code has hardcoded 2 as the maximum number of CSIDs. Remove the hardcoded
+maximum number of VFEs to handle all possible combinations of CSIDs and
+CSID-lites.
 
-After this change we continue to support the old indexing - if a SoC
-resource declaration or the in-use dtb doesn't declare power-domain names
-we fall back to the default legacy indexing.
-
-From this point on though new SoC additions should contain named
-power-domains, eventually we will drop support for legacy indexing.
-
-Tested-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
+Signed-off-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- drivers/media/platform/qcom/camss/camss-vfe.c | 24 +++++++++++++++++++++++-
- drivers/media/platform/qcom/camss/camss.c     | 26 +++++++++++++++++++++-----
- drivers/media/platform/qcom/camss/camss.h     |  2 ++
- 3 files changed, 46 insertions(+), 6 deletions(-)
+ .../media/platform/qcom/camss/camss-csid-gen2.c    | 31 +++++++++++-----------
+ drivers/media/platform/qcom/camss/camss-csid.c     |  5 ++++
+ drivers/media/platform/qcom/camss/camss-csid.h     |  7 +++++
+ drivers/media/platform/qcom/camss/camss.c          |  3 +++
+ 4 files changed, 30 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
-index defff24f07ce3..123e5ead7602d 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe.c
-@@ -1382,7 +1382,29 @@ int msm_vfe_subdev_init(struct camss *camss, struct vfe_device *vfe,
- 	if (!res->line_num)
- 		return -EINVAL;
+diff --git a/drivers/media/platform/qcom/camss/camss-csid-gen2.c b/drivers/media/platform/qcom/camss/camss-csid-gen2.c
+index 05ff5fa8095a8..b11de4797ccae 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid-gen2.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-gen2.c
+@@ -21,7 +21,6 @@
+  * interface support. As a result of that it has an
+  * alternate register layout.
+  */
+-#define IS_LITE		(csid->id >= 2 ? 1 : 0)
  
--	if (res->has_pd) {
-+	/* Power domain */
+ #define CSID_HW_VERSION		0x0
+ #define		HW_VERSION_STEPPING	0
+@@ -35,13 +34,13 @@
+ #define	CSID_CSI2_RX_IRQ_MASK	0x24
+ #define CSID_CSI2_RX_IRQ_CLEAR	0x28
+ 
+-#define CSID_CSI2_RDIN_IRQ_STATUS(rdi)		((IS_LITE ? 0x30 : 0x40) \
++#define CSID_CSI2_RDIN_IRQ_STATUS(rdi)		((csid_is_lite(csid) ? 0x30 : 0x40) \
+ 						 + 0x10 * (rdi))
+-#define CSID_CSI2_RDIN_IRQ_MASK(rdi)		((IS_LITE ? 0x34 : 0x44) \
++#define CSID_CSI2_RDIN_IRQ_MASK(rdi)		((csid_is_lite(csid) ? 0x34 : 0x44) \
+ 						 + 0x10 * (rdi))
+-#define CSID_CSI2_RDIN_IRQ_CLEAR(rdi)		((IS_LITE ? 0x38 : 0x48) \
++#define CSID_CSI2_RDIN_IRQ_CLEAR(rdi)		((csid_is_lite(csid) ? 0x38 : 0x48) \
+ 						 + 0x10 * (rdi))
+-#define CSID_CSI2_RDIN_IRQ_SET(rdi)		((IS_LITE ? 0x3C : 0x4C) \
++#define CSID_CSI2_RDIN_IRQ_SET(rdi)		((csid_is_lite(csid) ? 0x3C : 0x4C) \
+ 						 + 0x10 * (rdi))
+ 
+ #define CSID_TOP_IRQ_STATUS	0x70
+@@ -73,7 +72,7 @@
+ #define			CGC_MODE_DYNAMIC_GATING		0
+ #define			CGC_MODE_ALWAYS_ON		1
+ 
+-#define CSID_RDI_CFG0(rdi)			((IS_LITE ? 0x200 : 0x300) \
++#define CSID_RDI_CFG0(rdi)			((csid_is_lite(csid) ? 0x200 : 0x300) \
+ 						 + 0x100 * (rdi))
+ #define		RDI_CFG0_BYTE_CNTR_EN		0
+ #define		RDI_CFG0_FORMAT_MEASURE_EN	1
+@@ -98,32 +97,32 @@
+ #define		RDI_CFG0_PACKING_FORMAT		30
+ #define		RDI_CFG0_ENABLE			31
+ 
+-#define CSID_RDI_CFG1(rdi)			((IS_LITE ? 0x204 : 0x304)\
++#define CSID_RDI_CFG1(rdi)			((csid_is_lite(csid) ? 0x204 : 0x304)\
+ 						+ 0x100 * (rdi))
+ #define		RDI_CFG1_TIMESTAMP_STB_SEL	0
+ 
+-#define CSID_RDI_CTRL(rdi)			((IS_LITE ? 0x208 : 0x308)\
++#define CSID_RDI_CTRL(rdi)			((csid_is_lite(csid) ? 0x208 : 0x308)\
+ 						+ 0x100 * (rdi))
+ #define		RDI_CTRL_HALT_CMD		0
+ #define			HALT_CMD_HALT_AT_FRAME_BOUNDARY		0
+ #define			HALT_CMD_RESUME_AT_FRAME_BOUNDARY	1
+ #define		RDI_CTRL_HALT_MODE		2
+ 
+-#define CSID_RDI_FRM_DROP_PATTERN(rdi)			((IS_LITE ? 0x20C : 0x30C)\
++#define CSID_RDI_FRM_DROP_PATTERN(rdi)			((csid_is_lite(csid) ? 0x20C : 0x30C)\
+ 							+ 0x100 * (rdi))
+-#define CSID_RDI_FRM_DROP_PERIOD(rdi)			((IS_LITE ? 0x210 : 0x310)\
++#define CSID_RDI_FRM_DROP_PERIOD(rdi)			((csid_is_lite(csid) ? 0x210 : 0x310)\
+ 							+ 0x100 * (rdi))
+-#define CSID_RDI_IRQ_SUBSAMPLE_PATTERN(rdi)		((IS_LITE ? 0x214 : 0x314)\
++#define CSID_RDI_IRQ_SUBSAMPLE_PATTERN(rdi)		((csid_is_lite(csid) ? 0x214 : 0x314)\
+ 							+ 0x100 * (rdi))
+-#define CSID_RDI_IRQ_SUBSAMPLE_PERIOD(rdi)		((IS_LITE ? 0x218 : 0x318)\
++#define CSID_RDI_IRQ_SUBSAMPLE_PERIOD(rdi)		((csid_is_lite(csid) ? 0x218 : 0x318)\
+ 							+ 0x100 * (rdi))
+-#define CSID_RDI_RPP_PIX_DROP_PATTERN(rdi)		((IS_LITE ? 0x224 : 0x324)\
++#define CSID_RDI_RPP_PIX_DROP_PATTERN(rdi)		((csid_is_lite(csid) ? 0x224 : 0x324)\
+ 							+ 0x100 * (rdi))
+-#define CSID_RDI_RPP_PIX_DROP_PERIOD(rdi)		((IS_LITE ? 0x228 : 0x328)\
++#define CSID_RDI_RPP_PIX_DROP_PERIOD(rdi)		((csid_is_lite(csid) ? 0x228 : 0x328)\
+ 							+ 0x100 * (rdi))
+-#define CSID_RDI_RPP_LINE_DROP_PATTERN(rdi)		((IS_LITE ? 0x22C : 0x32C)\
++#define CSID_RDI_RPP_LINE_DROP_PATTERN(rdi)		((csid_is_lite(csid) ? 0x22C : 0x32C)\
+ 							+ 0x100 * (rdi))
+-#define CSID_RDI_RPP_LINE_DROP_PERIOD(rdi)		((IS_LITE ? 0x230 : 0x330)\
++#define CSID_RDI_RPP_LINE_DROP_PERIOD(rdi)		((csid_is_lite(csid) ? 0x230 : 0x330)\
+ 							+ 0x100 * (rdi))
+ 
+ #define CSID_TPG_CTRL		0x600
+diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
+index 95873f988f7e2..d393618ed54cb 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid.c
++++ b/drivers/media/platform/qcom/camss/camss-csid.c
+@@ -897,3 +897,8 @@ void msm_csid_unregister_entity(struct csid_device *csid)
+ 	media_entity_cleanup(&csid->subdev.entity);
+ 	v4l2_ctrl_handler_free(&csid->ctrls);
+ }
 +
-+	if (res->pd_name) {
-+		vfe->genpd = dev_pm_domain_attach_by_name(camss->dev,
-+							  res->pd_name);
-+		if (IS_ERR(vfe->genpd)) {
-+			ret = PTR_ERR(vfe->genpd);
-+			return ret;
-+		}
-+	}
-+
-+	if (!vfe->genpd && res->has_pd) {
-+		/*
-+		 * Legacy magic index.
-+		 * Requires
-+		 * power-domain = <VFE_X>,
-+		 *                <VFE_Y>,
-+		 *                <TITAN_TOP>
-+		 * id must correspondng to the index of the VFE which must
-+		 * come before the TOP GDSC. VFE Lite has no individually
-+		 * collapasible domain which is why id < vfe_num is a valid
-+		 * check.
-+		 */
- 		vfe->genpd = dev_pm_domain_attach_by_id(camss->dev, id);
- 		if (IS_ERR(vfe->genpd)) {
- 			ret = PTR_ERR(vfe->genpd);
++inline bool csid_is_lite(struct csid_device *csid)
++{
++	return csid->camss->res->csid_res[csid->id].is_lite;
++}
+diff --git a/drivers/media/platform/qcom/camss/camss-csid.h b/drivers/media/platform/qcom/camss/camss-csid.h
+index 30d94eb2eb041..fddccb69da13a 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid.h
++++ b/drivers/media/platform/qcom/camss/camss-csid.h
+@@ -215,5 +215,12 @@ extern const struct csid_hw_ops csid_ops_4_1;
+ extern const struct csid_hw_ops csid_ops_4_7;
+ extern const struct csid_hw_ops csid_ops_gen2;
+ 
++/*
++ * csid_is_lite - Check if CSID is CSID lite.
++ * @csid: CSID Device
++ *
++ * Return whether CSID is CSID lite
++ */
++bool csid_is_lite(struct csid_device *csid);
+ 
+ #endif /* QC_MSM_CAMSS_CSID_H */
 diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
-index f10a47f1aee7d..d565260fee0d6 100644
+index f5226eb8bf4fc..51ad12f1d9d7d 100644
 --- a/drivers/media/platform/qcom/camss/camss.c
 +++ b/drivers/media/platform/qcom/camss/camss.c
-@@ -1523,12 +1523,28 @@ static int camss_configure_pd(struct camss *camss)
- 		return 0;
- 
- 	/*
--	 * VFE power domains are in the beginning of the list, and while all
--	 * power domains should be attached, only if TITAN_TOP power domain is
--	 * found in the list, it should be linked over here.
-+	 * If a power-domain name is defined try to use it.
-+	 * It is possible we are running a new kernel with an old dtb so
-+	 * fallback to indexes even if a pd_name is defined but not found.
- 	 */
--	camss->genpd = dev_pm_domain_attach_by_id(camss->dev, camss->genpd_num - 1);
--	if (IS_ERR(camss->genpd)) {
-+	if (camss->res->pd_name) {
-+		camss->genpd = dev_pm_domain_attach_by_name(camss->dev,
-+							    camss->res->pd_name);
-+		if (IS_ERR(camss->genpd)) {
-+			ret = PTR_ERR(camss->genpd);
-+			goto fail_pm;
-+		}
-+	}
-+
-+	if (!camss->genpd) {
-+		/*
-+		 * Legacy magic index. TITAN_TOP GDSC must be the last
-+		 * item in the power-domain list.
-+		 */
-+		camss->genpd = dev_pm_domain_attach_by_id(camss->dev,
-+							  camss->genpd_num - 1);
-+	}
-+	if (IS_ERR_OR_NULL(camss->genpd)) {
- 		ret = PTR_ERR(camss->genpd);
- 		goto fail_pm;
+@@ -638,6 +638,7 @@ static const struct camss_subdev_resources csid_res_845[] = {
+ 				{ 384000000 } },
+ 		.reg = { "csid2" },
+ 		.interrupt = { "csid2" },
++		.is_lite = true,
+ 		.ops = &csid_ops_gen2
  	}
-diff --git a/drivers/media/platform/qcom/camss/camss.h b/drivers/media/platform/qcom/camss/camss.h
-index 1ba824a2cb76c..cd8186fe1797b 100644
---- a/drivers/media/platform/qcom/camss/camss.h
-+++ b/drivers/media/platform/qcom/camss/camss.h
-@@ -48,6 +48,7 @@ struct camss_subdev_resources {
- 	u32 clock_rate[CAMSS_RES_MAX][CAMSS_RES_MAX];
- 	char *reg[CAMSS_RES_MAX];
- 	char *interrupt[CAMSS_RES_MAX];
-+	char *pd_name;
- 	u8 line_num;
- 	bool has_pd;
- 	const void *ops;
-@@ -84,6 +85,7 @@ enum icc_count {
- 
- struct camss_resources {
- 	enum camss_version version;
-+	const char *pd_name;
- 	const struct camss_subdev_resources *csiphy_res;
- 	const struct camss_subdev_resources *csid_res;
- 	const struct camss_subdev_resources *ispif_res;
+ };
+@@ -812,6 +813,7 @@ static const struct camss_subdev_resources csid_res_8250[] = {
+ 				{ 0 } },
+ 		.reg = { "csid2" },
+ 		.interrupt = { "csid2" },
++		.is_lite = true,
+ 		.ops = &csid_ops_gen2
+ 	},
+ 	/* CSID3 */
+@@ -824,6 +826,7 @@ static const struct camss_subdev_resources csid_res_8250[] = {
+ 				{ 0 } },
+ 		.reg = { "csid3" },
+ 		.interrupt = { "csid3" },
++		.is_lite = true,
+ 		.ops = &csid_ops_gen2
+ 	}
+ };
 
 -- 
 2.42.0
