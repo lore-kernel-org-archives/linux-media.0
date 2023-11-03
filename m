@@ -2,63 +2,62 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6A8DC4167B
-	for <linux-media@archiver.kernel.org>; Fri,  3 Nov 2023 16:25:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63513C0018C
+	for <linux-media@archiver.kernel.org>; Fri,  3 Nov 2023 16:25:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234319AbjKCQZO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 Nov 2023 12:25:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57662 "EHLO
+        id S229845AbjKCQZX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Nov 2023 12:25:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbjKCQZN (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Nov 2023 12:25:13 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 365B9194
-        for <linux-media@vger.kernel.org>; Fri,  3 Nov 2023 09:25:07 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-407da05f05aso16189375e9.3
-        for <linux-media@vger.kernel.org>; Fri, 03 Nov 2023 09:25:07 -0700 (PDT)
+        with ESMTP id S1344957AbjKCQZU (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Nov 2023 12:25:20 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A055D5C
+        for <linux-media@vger.kernel.org>; Fri,  3 Nov 2023 09:25:14 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-32fb190bf9bso1047458f8f.1
+        for <linux-media@vger.kernel.org>; Fri, 03 Nov 2023 09:25:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699028705; x=1699633505; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=cKP6IQc+TaLeXk9YRQCHSXv1g3/KaIhaK69CBx/ySdI=;
-        b=KradHAIUi/4Tj8bPYgHODtMi5kbsxmWoS9BRIOTQ4bEgAsjxLjdOfglZZJ3wRhrMMa
-         hYZchDSE7i6wqQQfEhvI5ScHYuso4/UIU/rwYq+Zn9/PpQUMmFnkYonVcJmggGAXcCHs
-         U6nRkhujfV1XlrEi/jLEGiZaSeuEHgpQw4Q6LYvzJ3URYzO2chdecRYThsbqyUfg6O+D
-         Oav9wL1xdKTjdcSBS4MLLcuDSbRUGq29xvJ8JoEgfa/AjEUGERXu7x89E91d6BmOvVhZ
-         4S+aA+Yud43Ug/JkT2/QzaE/y2ujZckjm14DLkwsRst9NyOnGrXJ3VRYNv95JQDLOKhq
-         se7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699028705; x=1699633505;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=linaro.org; s=google; t=1699028712; x=1699633512; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=cKP6IQc+TaLeXk9YRQCHSXv1g3/KaIhaK69CBx/ySdI=;
-        b=Nuiu8U7f8U7edch4g6gRFQK7btbXi557Rl5kEpJjA74p3kToFiJW5FgGE1i8cJTDmk
-         ytAyL8hpT7xnFMjR6TqMsd1ho+HGD09M2+wSrV1j17gi5dKABF4IpWAeMD+n5WR0J7iI
-         DtOB0kfylvNVKGnUoQRhlD0M5b9zPYsyQufRz9dz8ks6sZs9wvQ0Ch/eEWeBhCJj751s
-         1ns0S8waO6k5rHNMWGH6gwKUauKF/75j89XFOP2q8mgXXRu61GSmpqpU2SreaPwsEEft
-         eDE7j5M9CyS+kYSZ+BXZV1p89AcOyPXz27umoO9CtFJkIDvLfUWJLlFkA1BSlBf0mZTc
-         O5BA==
-X-Gm-Message-State: AOJu0YzY9Of/UkyXJiO+hDrYZ8HH/IZhaZNeqH/NdgpOdjaLnXJeFfom
-        ILjbx3h5Y+rs7veTycgwdX5Ifg==
-X-Google-Smtp-Source: AGHT+IF66A6v5KxZN37QG9HZoMChuewXwE8Gs3r4G3ydzoegkfy2MJnAj5hC7kI7XfapQnX8KqCbvw==
-X-Received: by 2002:a05:6000:1209:b0:32d:9d3a:d8c0 with SMTP id e9-20020a056000120900b0032d9d3ad8c0mr15950748wrx.60.1699028705602;
-        Fri, 03 Nov 2023 09:25:05 -0700 (PDT)
+        bh=tOdiUJmEPnovv7huGull2/1/i6yjUoXYCLLeBsJfSRM=;
+        b=cFfx+7SWLyIO1QqkN1FApx+y2a1sik54ZBp6cGASEpb/neIJygAv3h3YZI03ZaZQqb
+         GJmwTXKfFon/8Uw7MEkjPtCAy0jac+SdDhaBQh57/pZklFzrYXwWcSK1AvOudmH3LgrL
+         wg/z8/Zsg+GAY1E9x8mkJkpxj0J9VzgMZ+TGsstNEu+L0HwuTUf+/1SvnkiDOf7++Du4
+         dr+d4gODu72d9fNTWK4pNictr4N3ONk80tb6ZBI120BVAgmE6rJ05fowaqJZsDW/Of7G
+         oTt4QKAcS+ScVm5oyDwIpBS4M+oNmqFMdvnfRJeTG+niBenWwrIdvjVrmW4jW1VDnHHW
+         lfWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699028712; x=1699633512;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tOdiUJmEPnovv7huGull2/1/i6yjUoXYCLLeBsJfSRM=;
+        b=ZFnNKJdDYNUd2f6+U75NGkWlVUWY131HmbaqELh05nNYUIqAHNmirsCUR/nuMgE7aV
+         Kg3L+1czqq084VGBCVjamVIzrJZjuTiWQA/U61/MJFUuEcXWsSIWGIcerJwr7uqpPIJJ
+         7q5tixqpTxMul9aSVs3iRJwvMSd9KdKuLFN7yJiZCAcueT3lzVtJm/+7cf52Mq1lKbv7
+         b1BWcNE/EyxDdvKscmC0V14oXYBdJeguep27Ppx96mBoWuoBRiFys4O49q7OXLxaGZB7
+         8f57r/3gcgLxfHCRWIhlsbXlt3sKv6PJlg5xlvrHtgQl7p+FAtffMAgpvlZcVXM+FRvd
+         93+Q==
+X-Gm-Message-State: AOJu0YyKfa8yfPRWpTc8sWuzUDZi6oDOOW4WMcVWGz6mx4Wgb2r4E9Dl
+        701JbDvVqxSsKIDtQ0IfCKon7w==
+X-Google-Smtp-Source: AGHT+IHSPNzGuqKWjSFaxA3F61SM9d4bGUWTjpcF9eu1E2BAEv7peIUb7g5Qtia+2ZCrs9KWtfoWiQ==
+X-Received: by 2002:a5d:6547:0:b0:32f:8391:b294 with SMTP id z7-20020a5d6547000000b0032f8391b294mr3081297wrv.31.1699028712435;
+        Fri, 03 Nov 2023 09:25:12 -0700 (PDT)
 Received: from [127.0.0.1] ([37.228.218.3])
-        by smtp.gmail.com with ESMTPSA id x13-20020a5d650d000000b003142e438e8csm2219972wru.26.2023.11.03.09.25.04
+        by smtp.gmail.com with ESMTPSA id x13-20020a5d650d000000b003142e438e8csm2219972wru.26.2023.11.03.09.25.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Nov 2023 09:25:05 -0700 (PDT)
+        Fri, 03 Nov 2023 09:25:11 -0700 (PDT)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Subject: [PATCH v2 0/6] media: qcom: camss: Add sc8280xp support
-Date:   Fri, 03 Nov 2023 16:25:03 +0000
-Message-Id: <20231103-b4-camss-sc8280xp-v2-0-b7af4d253a20@linaro.org>
+Date:   Fri, 03 Nov 2023 16:25:08 +0000
+Subject: [PATCH v2 5/6] media: qcom: camss: Add sc8280xp support
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAN8eRWUC/22NQQrCMBBFr1Jm7UgmFmlceQ/poomTdkCbkpFSK
- b27seDO5Xvw319BOQsrXKoVMs+iksYC9lBBGLqxZ5R7YbDGnogMoa8xdE9V1NDYxiwTGibviL0
- lH6HspsxRlr15awsPoq+U3/vFTF/7q9k/tZnQoHPuHGsffBPr60PGLqdjyj2027Z9AI0tMEKzA
- AAA
+Message-Id: <20231103-b4-camss-sc8280xp-v2-5-b7af4d253a20@linaro.org>
+References: <20231103-b4-camss-sc8280xp-v2-0-b7af4d253a20@linaro.org>
+In-Reply-To: <20231103-b4-camss-sc8280xp-v2-0-b7af4d253a20@linaro.org>
 To:     hverkuil-cisco@xs4all.nl, laurent.pinchart@ideasonboard.com,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -72,97 +71,157 @@ To:     hverkuil-cisco@xs4all.nl, laurent.pinchart@ideasonboard.com,
         matti.lehtimaki@gmail.com, quic_grosikop@quicinc.com
 Cc:     linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 X-Mailer: b4 0.13-dev-26615
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-V2:
-- Rebase to capture is_lite flag from named power-domain series
-- Amends commit log of final patch to give more detail on rename - Konrad
-- Opted not to change switch() statements with returns. - bod/Konrad
-
-Requires CAMCC for sc8280xp which applies to qcom/clk-for-6.7:
-https://lore.kernel.org/linux-arm-msm/20231026105345.3376-1-bryan.odonoghue@linaro.org/
-b4 shazam 20231026105345.3376-1-bryan.odonoghue@linaro.org
-
-Requires the named power-domain patches which apply to media-tree/*:
-https://lore.kernel.org/linux-arm-msm/20231103-b4-camss-named-power-domains-v4-0-33a905359dbc@linaro.org/
-b4 shazam e700133b-58f7-4a4d-8e5c-0d04441b789b@linaro.org
-
-Link to v1:
-https://lore.kernel.org/r/20231102-b4-camss-sc8280xp-v1-0-9996f4bcb8f4@linaro.org
-
-b4 base:
-https://git.codelinaro.org/bryan.odonoghue/kernel/-/tree/b4/camss-sc8280xp-v2
-
-V1:
-sc8280xp is the SoC found in the Lenovo X13s. This series adds support to
-bring up the CSIPHY, CSID, VFE/RDI interfaces.
-
-A number of precursor patches make this series smaller overall than
-previous series.
-
-sc8280xp provides
-
-- 4 x VFE, 4 RDI per VFE
-- 4 x VFE Lite, 4 RDI per VFE
-- 4 x CSID
-- 4 x CSID Lite
-- 4 x CSI PHY
-
-I've taken the yaml from a dtsi series and included it here since 1) I sent
-the yaml to the wrong person and 2) it already has RB from Krzysztof.
-
-Requires CAMCC for sc8280xp which applies to qcom/clk-for-6.7:
-https://lore.kernel.org/linux-arm-msm/20231026105345.3376-1-bryan.odonoghue@linaro.org/
-b4 shazam 20231026105345.3376-1-bryan.odonoghue@linaro.org
-
-Requires the named power-domain patches which apply to media-tree/* :
-https://lore.kernel.org/linux-arm-msm/20231101-b4-camss-named-power-domains-v3-5-bbdf5f22462a@linaro.org/
-b4 shazam 20231101-b4-camss-named-power-domains-v3-5-bbdf5f22462a@linaro.org
-
-To use the camera on x13s with say Google Hangouts or Microsoft Teams you
-will need to
-
-1. Run Firefox
-2. Update about:config to enable pipewire
-3. Use this WIP version of libcamera
-   https://gitlab.freedesktop.org/camera/libcamera-softisp
-
-A working bootable tree can be found here:
-Link: https://git.codelinaro.org/bryan.odonoghue/kernel/-/tree/lenovo-x13s-linux-6.5.y
-
-b4 base:
-https://git.codelinaro.org/bryan.odonoghue/kernel/-/tree/b4/camss-sc8280xp
+Add in functional logic throughout the code to support the sc8280xp.
 
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
-Bryan O'Donoghue (6):
-      media: dt-bindings: media: camss: Add qcom,sc8280xp-camss binding
-      media: qcom: camss: Add CAMSS_SC8280XP enum
-      media: qcom: camss: csiphy-3ph: Add Gen2 v1.1 two-phase MIPI CSI-2 DPHY init
-      media: qcom: camss: Add sc8280xp resource details
-      media: qcom: camss: Add sc8280xp support
-      media: qcom: camss: vfe-17x: Rename camss-vfe-170 to camss-vfe-17x
+ .../platform/qcom/camss/camss-csiphy-3ph-1-0.c     | 23 +++++++++++++++++---
+ drivers/media/platform/qcom/camss/camss-csiphy.c   |  1 +
+ drivers/media/platform/qcom/camss/camss-vfe.c      | 25 +++++++++++++++++-----
+ drivers/media/platform/qcom/camss/camss-video.c    |  1 +
+ 4 files changed, 42 insertions(+), 8 deletions(-)
 
- .../bindings/media/qcom,sc8280xp-camss.yaml        | 581 +++++++++++++++++++++
- drivers/media/platform/qcom/camss/Makefile         |   2 +-
- .../platform/qcom/camss/camss-csiphy-3ph-1-0.c     | 108 +++-
- drivers/media/platform/qcom/camss/camss-csiphy.c   |   1 +
- .../camss/{camss-vfe-170.c => camss-vfe-17x.c}     |   0
- drivers/media/platform/qcom/camss/camss-vfe.c      |  25 +-
- drivers/media/platform/qcom/camss/camss-video.c    |   1 +
- drivers/media/platform/qcom/camss/camss.c          | 383 ++++++++++++++
- drivers/media/platform/qcom/camss/camss.h          |   1 +
- 9 files changed, 1093 insertions(+), 9 deletions(-)
----
-base-commit: 89e965e1a58f58cd359472b14c0cc25587bcf264
-change-id: 20231101-b4-camss-sc8280xp-0e1b91eb21bf
+diff --git a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+index 2eb3531ffd00b..2810d0fa06c13 100644
+--- a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
++++ b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+@@ -513,6 +513,10 @@ static void csiphy_gen2_config_lanes(struct csiphy_device *csiphy,
+ 		r = &lane_regs_sm8250[0][0];
+ 		array_size = ARRAY_SIZE(lane_regs_sm8250[0]);
+ 		break;
++	case CAMSS_8280XP:
++		r = &lane_regs_sc8280xp[0][0];
++		array_size = ARRAY_SIZE(lane_regs_sc8280xp[0]);
++		break;
+ 	default:
+ 		WARN(1, "unknown cspi version\n");
+ 		return;
+@@ -548,13 +552,26 @@ static u8 csiphy_get_lane_mask(struct csiphy_lanes_cfg *lane_cfg)
+ 	return lane_mask;
+ }
+ 
++static bool csiphy_is_gen2(u32 version)
++{
++	bool ret = false;
++
++	switch (version) {
++	case CAMSS_845:
++	case CAMSS_8250:
++	case CAMSS_8280XP:
++		ret = true;
++		break;
++	}
++
++	return ret;
++}
++
+ static void csiphy_lanes_enable(struct csiphy_device *csiphy,
+ 				struct csiphy_config *cfg,
+ 				s64 link_freq, u8 lane_mask)
+ {
+ 	struct csiphy_lanes_cfg *c = &cfg->csi2->lane_cfg;
+-	bool is_gen2 = (csiphy->camss->res->version == CAMSS_845 ||
+-			csiphy->camss->res->version == CAMSS_8250);
+ 	u8 settle_cnt;
+ 	u8 val;
+ 	int i;
+@@ -576,7 +593,7 @@ static void csiphy_lanes_enable(struct csiphy_device *csiphy,
+ 	val = 0x00;
+ 	writel_relaxed(val, csiphy->base + CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(0));
+ 
+-	if (is_gen2)
++	if (csiphy_is_gen2(csiphy->camss->res->version))
+ 		csiphy_gen2_config_lanes(csiphy, settle_cnt);
+ 	else
+ 		csiphy_gen1_config_lanes(csiphy, cfg, settle_cnt);
+diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.c b/drivers/media/platform/qcom/camss/camss-csiphy.c
+index edd573606a6ae..8241acf789865 100644
+--- a/drivers/media/platform/qcom/camss/camss-csiphy.c
++++ b/drivers/media/platform/qcom/camss/camss-csiphy.c
+@@ -579,6 +579,7 @@ int msm_csiphy_subdev_init(struct camss *camss,
+ 		break;
+ 	case CAMSS_845:
+ 	case CAMSS_8250:
++	case CAMSS_8280XP:
+ 		csiphy->formats = csiphy_formats_sdm845;
+ 		csiphy->nformats = ARRAY_SIZE(csiphy_formats_sdm845);
+ 		break;
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
+index 50929c3cbb831..28cf63af1ec08 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe.c
+@@ -225,6 +225,7 @@ static u32 vfe_src_pad_code(struct vfe_line *line, u32 sink_code,
+ 	case CAMSS_660:
+ 	case CAMSS_845:
+ 	case CAMSS_8250:
++	case CAMSS_8280XP:
+ 		switch (sink_code) {
+ 		case MEDIA_BUS_FMT_YUYV8_1X16:
+ 		{
+@@ -1522,6 +1523,7 @@ int msm_vfe_subdev_init(struct camss *camss, struct vfe_device *vfe,
+ 			break;
+ 		case CAMSS_845:
+ 		case CAMSS_8250:
++		case CAMSS_8280XP:
+ 			l->formats = formats_rdi_845;
+ 			l->nformats = ARRAY_SIZE(formats_rdi_845);
+ 			break;
+@@ -1600,6 +1602,23 @@ static const struct media_entity_operations vfe_media_ops = {
+ 	.link_validate = v4l2_subdev_link_validate,
+ };
+ 
++static int vfe_bpl_align(struct vfe_device *vfe)
++{
++	int ret = 8;
++
++	switch (vfe->camss->res->version) {
++	case CAMSS_845:
++	case CAMSS_8250:
++	case CAMSS_8280XP:
++		ret = 16;
++		break;
++	default:
++		break;
++	}
++
++	return ret;
++}
++
+ /*
+  * msm_vfe_register_entities - Register subdev node for VFE module
+  * @vfe: VFE device
+@@ -1666,11 +1685,7 @@ int msm_vfe_register_entities(struct vfe_device *vfe,
+ 		}
+ 
+ 		video_out->ops = &vfe->video_ops;
+-		if (vfe->camss->res->version == CAMSS_845 ||
+-		    vfe->camss->res->version == CAMSS_8250)
+-			video_out->bpl_alignment = 16;
+-		else
+-			video_out->bpl_alignment = 8;
++		video_out->bpl_alignment = vfe_bpl_align(vfe);
+ 		video_out->line_based = 0;
+ 		if (i == VFE_LINE_PIX) {
+ 			video_out->bpl_alignment = 16;
+diff --git a/drivers/media/platform/qcom/camss/camss-video.c b/drivers/media/platform/qcom/camss/camss-video.c
+index a89da5ef47109..54cd82f741154 100644
+--- a/drivers/media/platform/qcom/camss/camss-video.c
++++ b/drivers/media/platform/qcom/camss/camss-video.c
+@@ -1028,6 +1028,7 @@ int msm_video_register(struct camss_video *video, struct v4l2_device *v4l2_dev,
+ 		break;
+ 	case CAMSS_845:
+ 	case CAMSS_8250:
++	case CAMSS_8280XP:
+ 		video->formats = formats_rdi_845;
+ 		video->nformats = ARRAY_SIZE(formats_rdi_845);
+ 		break;
 
-Best regards,
 -- 
-Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+2.42.0
 
