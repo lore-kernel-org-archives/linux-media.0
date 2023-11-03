@@ -2,60 +2,61 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0EE3C4167D
-	for <linux-media@archiver.kernel.org>; Fri,  3 Nov 2023 16:25:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F356C001DD
+	for <linux-media@archiver.kernel.org>; Fri,  3 Nov 2023 16:25:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345411AbjKCQZb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 Nov 2023 12:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37042 "EHLO
+        id S1345638AbjKCQZd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Nov 2023 12:25:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345319AbjKCQZW (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Nov 2023 12:25:22 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE06D59
-        for <linux-media@vger.kernel.org>; Fri,  3 Nov 2023 09:25:12 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-32f7bd27c2aso1516240f8f.2
-        for <linux-media@vger.kernel.org>; Fri, 03 Nov 2023 09:25:12 -0700 (PDT)
+        with ESMTP id S1345068AbjKCQZY (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Nov 2023 12:25:24 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C63D60
+        for <linux-media@vger.kernel.org>; Fri,  3 Nov 2023 09:25:15 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-40837ebba42so14611215e9.0
+        for <linux-media@vger.kernel.org>; Fri, 03 Nov 2023 09:25:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699028711; x=1699633511; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1699028714; x=1699633514; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xVhfvAV1sseHeHoQosCAQU0IdhydZ3F9lmBGCI45fqM=;
-        b=NEzEOWh0XUHNPM+lt067qjQrWh2d0djpfXjWhrBad0O1zJG88ZTmvUy/R+TqbR/FPP
-         XZjN8oAN30Pncqqak+Rh12e5ZRxRNRAn5/F6HssJ3JmCKT8SLVpDtV9aovFfbtNcmLop
-         bNTkOEQXNvRR1Ntm65j6WTiH0qeHtAcLAAHlK9b0qiWSkgyvX7bpKwHRCTevRtkNnhVi
-         X7h2bif00S28gK16xYI4T6w77FWucdQRjzk9O0pUSjjmy0cA3ALr1V0NMreNGncuRVul
-         +l7w2l08tqrS62Ut6xeEx1o9eOK1xrg3W02outdqXnXQ0hfZU0KrgtxkzH+g34xb3waG
-         F+QQ==
+        bh=6nsxT65QcBic5QpwyMNIvqdwRkRC1mARnt5d+1mQIn0=;
+        b=koVvCQPrLrSGuPV2Ef2SpA7bmvgvl9CfCUItewz0iPUS1oYk7dhEGRJWgr/CAI2U6A
+         73UjMJe1UihIkDtxBLftzgyjouoln5+llsVYOKnI0TozcvzA0HKUmV28SpNPW7ZrTmYw
+         gBuzG0DW72L5F2nXPoRkF2qGrYwVx1nWncr2gSFenc/N1pxwASbLdStNkhT3N2/8m9Q2
+         Pj+mY/OUzU1H5npSj7yG1rVipjIiy5joGykJj60grpnH06g9FC2rQed+PhrArDXyKaHC
+         xtw9y3o8AsU+hbCEriX7nzqb5djmlq1bEPHtt3aIrj6hCPSqlq+PH5lOVx+lYlSRl9OF
+         J3pA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699028711; x=1699633511;
+        d=1e100.net; s=20230601; t=1699028714; x=1699633514;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xVhfvAV1sseHeHoQosCAQU0IdhydZ3F9lmBGCI45fqM=;
-        b=kKvzBcvpq4qKsomKDhkK1b+bn0Tos3d+lbRivavaG7SMDw2g6mGsINgf0r4xHQKcF7
-         wlBf+rhYlNqhY4FPAj1ZNlQqvhqifKY3xq/hYdMhcmvDosMg/8jqRYmsBM8z9FiqNCJP
-         hh8/A7UP360wraR9qUZ2MqyQ5ARNe6pYK+PUvHQYq/ib0t4IEnkx/sI1sNH6hEM08B2z
-         ESPOoonmbF//gD4tA2WWGRm7ox5P6uPz7WDVyHhFIdlc13psosxmQ+cGu9LdMPZn4HhZ
-         gRgVtQfhhZZU0QL64Z2B7II1YovNEnM6JG/CqgnV+o+qEFMc6uEn5qjw9wD1ZnWXmixN
-         8G2w==
-X-Gm-Message-State: AOJu0Yy4Bk+bnUH0MdmJVQ0ESa1kdv/BRNdNLUSWYf/7cXmvEXHIGc8Y
-        y2juA41z9oSMJF5sl2k4BC+WWQ==
-X-Google-Smtp-Source: AGHT+IH+pWIJ4osRggP1NRUKcHyJ5kedN1gjO7wa1bdm3llXEeX4ktGLZUKdl1y3lCu6UtW+MjeZFw==
-X-Received: by 2002:a05:6000:154d:b0:32f:7ff9:b753 with SMTP id 13-20020a056000154d00b0032f7ff9b753mr16010965wry.62.1699028711070;
-        Fri, 03 Nov 2023 09:25:11 -0700 (PDT)
+        bh=6nsxT65QcBic5QpwyMNIvqdwRkRC1mARnt5d+1mQIn0=;
+        b=pxU+DO1fPeGhCu9p4oojXWGcByZ4BLeI+BEWGUtpmDt0P4TJOBYvHeexY7wPviknhD
+         j/8Q4f8btdSlNoI0dTad+l9YCkfdACzAxs3itc+NC2ykobbTzZ/QumWwQXeBV8MZ2YxD
+         eCtVjoi1Pc7Zc+hZ9kkO+MYPjN95l41uX+pF1jIhqOFBK2kkE4VXNqpWhjF2RGURhgyl
+         1gVIuLPTgTI2YrMMnpAt4z6MAoqENq/10jM4QD4wi1+i6dJL65CtnZSONkI25xck4gb2
+         AV9/jjR1JyuF5E1Z60ug0qDTopNxrwGLsFdLPAXt7ZPPgtEvX1K8GnGaawBrsYALrHnF
+         5zMQ==
+X-Gm-Message-State: AOJu0YzWANL1axqbnQz9+IExCCetZL0rDUtPmkm1MqLwQ8aM7rHKlUHq
+        KZzKmzg/qak6tHg94Rtx67qBvg==
+X-Google-Smtp-Source: AGHT+IGo6lDoKqnaJdwkbAtYZA2R5l0+C8lHC4nqttrgc+u3GPlzNrionP9TVCm5xbBfEUWI/Wpucw==
+X-Received: by 2002:a05:6000:18a5:b0:32f:86e7:9beb with SMTP id b5-20020a05600018a500b0032f86e79bebmr16538359wri.14.1699028713819;
+        Fri, 03 Nov 2023 09:25:13 -0700 (PDT)
 Received: from [127.0.0.1] ([37.228.218.3])
-        by smtp.gmail.com with ESMTPSA id x13-20020a5d650d000000b003142e438e8csm2219972wru.26.2023.11.03.09.25.09
+        by smtp.gmail.com with ESMTPSA id x13-20020a5d650d000000b003142e438e8csm2219972wru.26.2023.11.03.09.25.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Nov 2023 09:25:10 -0700 (PDT)
+        Fri, 03 Nov 2023 09:25:13 -0700 (PDT)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Date:   Fri, 03 Nov 2023 16:25:07 +0000
-Subject: [PATCH v2 4/6] media: qcom: camss: Add sc8280xp resource details
+Date:   Fri, 03 Nov 2023 16:25:09 +0000
+Subject: [PATCH v2 6/6] media: qcom: camss: vfe-17x: Rename camss-vfe-170
+ to camss-vfe-17x
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20231103-b4-camss-sc8280xp-v2-4-b7af4d253a20@linaro.org>
+Message-Id: <20231103-b4-camss-sc8280xp-v2-6-b7af4d253a20@linaro.org>
 References: <20231103-b4-camss-sc8280xp-v2-0-b7af4d253a20@linaro.org>
 In-Reply-To: <20231103-b4-camss-sc8280xp-v2-0-b7af4d253a20@linaro.org>
 To:     hverkuil-cisco@xs4all.nl, laurent.pinchart@ideasonboard.com,
@@ -77,427 +78,35 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This commit describes the hardware layout for the sc8280xp for the
-following hardware blocks:
+vfe-170 and vfe-175 can be supported in the same file with some minimal
+indirection to differentiate between the silicon versions.
 
-- 4 x VFE, 4 RDI per VFE
-- 4 x VFE Lite, 4 RDI per VFE
-- 4 x CSID
-- 4 x CSID Lite
-- 4 x CSI PHY
+sdm845 uses vfe-170, sc8280xp uses vfe-175-200. Lets rename the file to
+capture its wider scope than vfe-170 only.
 
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- drivers/media/platform/qcom/camss/camss.c | 383 ++++++++++++++++++++++++++++++
- 1 file changed, 383 insertions(+)
+ drivers/media/platform/qcom/camss/Makefile                             | 2 +-
+ drivers/media/platform/qcom/camss/{camss-vfe-170.c => camss-vfe-17x.c} | 0
+ 2 files changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
-index 8778fdc1ee342..51619842f3925 100644
---- a/drivers/media/platform/qcom/camss/camss.c
-+++ b/drivers/media/platform/qcom/camss/camss.c
-@@ -941,6 +941,374 @@ static const struct resources_icc icc_res_sm8250[] = {
- 	},
- };
- 
-+static const struct camss_subdev_resources csiphy_res_sc8280xp[] = {
-+	/* CSIPHY0 */
-+	{
-+		.regulators = {},
-+		.clock = { "csiphy0", "csiphy0_timer" },
-+		.clock_rate = { { 400000000 },
-+				{ 300000000 } },
-+		.reg = { "csiphy0" },
-+		.interrupt = { "csiphy0" },
-+		.ops = &csiphy_ops_3ph_1_0
-+	},
-+	/* CSIPHY1 */
-+	{
-+		.regulators = {},
-+		.clock = { "csiphy1", "csiphy1_timer" },
-+		.clock_rate = { { 400000000 },
-+				{ 300000000 } },
-+		.reg = { "csiphy1" },
-+		.interrupt = { "csiphy1" },
-+		.ops = &csiphy_ops_3ph_1_0
-+	},
-+	/* CSIPHY2 */
-+	{
-+		.regulators = {},
-+		.clock = { "csiphy2", "csiphy2_timer" },
-+		.clock_rate = { { 400000000 },
-+				{ 300000000 } },
-+		.reg = { "csiphy2" },
-+		.interrupt = { "csiphy2" },
-+		.ops = &csiphy_ops_3ph_1_0
-+	},
-+	/* CSIPHY3 */
-+	{
-+		.regulators = {},
-+		.clock = { "csiphy3", "csiphy3_timer" },
-+		.clock_rate = { { 400000000 },
-+				{ 300000000 } },
-+		.reg = { "csiphy3" },
-+		.interrupt = { "csiphy3" },
-+		.ops = &csiphy_ops_3ph_1_0
-+	},
-+};
-+
-+static const struct camss_subdev_resources csid_res_sc8280xp[] = {
-+	/* CSID0 */
-+	{
-+		.regulators = { "vdda-phy", "vdda-pll" },
-+		.clock = { "vfe0_csid_src", "vfe0_csid", "cphy_rx_src",
-+			   "vfe0_cphy_rx", "vfe0_src", "vfe0", "vfe0_axi" },
-+		.clock_rate = { { 400000000, 400000000, 480000000, 600000000, 600000000, 600000000 },
-+				{ 0 },
-+				{ 0 },
-+				{ 0 },
-+				{ 0 },
-+				{ 0 },
-+				{ 0 } },
-+		.reg = { "csid0" },
-+		.interrupt = { "csid0" },
-+		.ops = &csid_ops_gen2
-+	},
-+	/* CSID1 */
-+	{
-+		.regulators = { "vdda-phy", "vdda-pll" },
-+		.clock = { "vfe1_csid_src", "vfe1_csid", "cphy_rx_src",
-+			   "vfe1_cphy_rx", "vfe1_src", "vfe1", "vfe1_axi" },
-+		.clock_rate = { { 400000000, 400000000, 480000000, 600000000, 600000000, 600000000 },
-+				{ 0 },
-+				{ 0 },
-+				{ 0 },
-+				{ 0 },
-+				{ 0 },
-+				{ 0 } },
-+		.reg = { "csid1" },
-+		.interrupt = { "csid1" },
-+		.ops = &csid_ops_gen2
-+	},
-+	/* CSID2 */
-+	{
-+		.regulators = { "vdda-phy", "vdda-pll" },
-+		.clock = { "vfe2_csid_src", "vfe2_csid", "cphy_rx_src",
-+			   "vfe2_cphy_rx", "vfe2_src", "vfe2", "vfe2_axi" },
-+		.clock_rate = { { 400000000, 400000000, 480000000, 600000000, 600000000, 600000000 },
-+				{ 0 },
-+				{ 0 },
-+				{ 0 },
-+				{ 0 },
-+				{ 0 },
-+				{ 0 } },
-+		.reg = { "csid2" },
-+		.interrupt = { "csid2" },
-+		.ops = &csid_ops_gen2
-+	},
-+	/* CSID3 */
-+	{
-+		.regulators = { "vdda-phy", "vdda-pll" },
-+		.clock = { "vfe3_csid_src", "vfe3_csid", "cphy_rx_src",
-+			   "vfe3_cphy_rx", "vfe3_src", "vfe3", "vfe3_axi" },
-+		.clock_rate = { { 400000000, 400000000, 480000000, 600000000, 600000000, 600000000 },
-+				{ 0 },
-+				{ 0 },
-+				{ 0 },
-+				{ 0 },
-+				{ 0 },
-+				{ 0 } },
-+		.reg = { "csid3" },
-+		.interrupt = { "csid3" },
-+		.ops = &csid_ops_gen2
-+	},
-+	/* CSID_LITE0 */
-+	{
-+		.regulators = { "vdda-phy", "vdda-pll" },
-+		.clock = { "vfe_lite0_csid_src",  "vfe_lite0_csid",
-+			   "cphy_rx_src", "vfe_lite0_cphy_rx", "vfe_lite0_src",
-+			   "vfe_lite0" },
-+		.clock_rate = { { 400000000, 400000000, 480000000, 600000000, 600000000, 600000000 },
-+				{ 0 },
-+				{ 0 },
-+				{ 0 },
-+				{ 0 },
-+				{ 0 }, },
-+		.reg = { "csid0_lite" },
-+		.interrupt = { "csid0_lite" },
-+		.is_lite = true,
-+		.ops = &csid_ops_gen2
-+	},
-+	/* CSID_LITE1 */
-+	{
-+		.regulators = { "vdda-phy", "vdda-pll" },
-+		.clock = { "vfe_lite1_csid_src",  "vfe_lite1_csid",
-+			   "cphy_rx_src", "vfe_lite1_cphy_rx", "vfe_lite1_src",
-+			   "vfe_lite1" },
-+		.clock_rate = { { 400000000, 400000000, 480000000, 600000000, 600000000, 600000000 },
-+				{ 0 },
-+				{ 0 },
-+				{ 0 },
-+				{ 0 },
-+				{ 0 }, },
-+		.reg = { "csid1_lite" },
-+		.interrupt = { "csid1_lite" },
-+		.is_lite = true,
-+		.ops = &csid_ops_gen2
-+	},
-+	/* CSID_LITE2 */
-+	{
-+		.regulators = { "vdda-phy", "vdda-pll" },
-+		.clock = { "vfe_lite2_csid_src",  "vfe_lite2_csid",
-+			   "cphy_rx_src", "vfe_lite2_cphy_rx", "vfe_lite2_src",
-+			   "vfe_lite2" },
-+		.clock_rate = { { 400000000, 400000000, 480000000, 600000000, 600000000, 600000000 },
-+				{ 0 },
-+				{ 0 },
-+				{ 0 },
-+				{ 0 },
-+				{ 0 }, },
-+		.reg = { "csid2_lite" },
-+		.interrupt = { "csid2_lite" },
-+		.is_lite = true,
-+		.ops = &csid_ops_gen2
-+	},
-+	/* CSID_LITE3 */
-+	{
-+		.regulators = { "vdda-phy", "vdda-pll" },
-+		.clock = { "vfe_lite3_csid_src",  "vfe_lite3_csid",
-+			   "cphy_rx_src", "vfe_lite3_cphy_rx", "vfe_lite3_src",
-+			   "vfe_lite3" },
-+		.clock_rate = { { 400000000, 400000000, 480000000, 600000000, 600000000, 600000000 },
-+				{ 0 },
-+				{ 0 },
-+				{ 0 },
-+				{ 0 },
-+				{ 0 }, },
-+		.reg = { "csid3_lite" },
-+		.interrupt = { "csid3_lite" },
-+		.is_lite = true,
-+		.ops = &csid_ops_gen2
-+	}
-+};
-+
-+static const struct camss_subdev_resources vfe_res_sc8280xp[] = {
-+	/* IFE0 */
-+	{
-+		.regulators = {},
-+		.clock = { "gcc_axi_hf", "gcc_axi_sf", "slow_ahb_src",
-+			   "cpas_ahb", "camnoc_axi", "camnoc_axi_src",
-+			   "vfe0_src", "vfe0", "vfe0_axi" },
-+		.clock_rate = { { 0 },
-+				{ 0 },
-+				{ 19200000, 80000000, 80000000, 80000000, 80000000},
-+				{ 80000000 },
-+				{ 0 },
-+				{ 19200000, 150000000, 266666667, 320000000, 400000000, 480000000 },
-+				{ 0 },
-+				{ 400000000, 558000000, 637000000, 760000000 },
-+				{ 0 }, },
-+		.reg = { "vfe0" },
-+		.interrupt = { "vfe0" },
-+		.pd_name = "ife0",
-+		.line_num = 4,
-+		.ops = &vfe_ops_170
-+	},
-+	/* IFE1 */
-+	{
-+		.regulators = {},
-+		.clock = { "gcc_axi_hf", "gcc_axi_sf", "slow_ahb_src",
-+			   "cpas_ahb", "camnoc_axi", "camnoc_axi_src",
-+			   "vfe1_src", "vfe1", "vfe1_axi" },
-+		.clock_rate = { { 0 },
-+				{ 0 },
-+				{ 19200000, 80000000, 80000000, 80000000, 80000000},
-+				{ 80000000 },
-+				{ 0 },
-+				{ 19200000, 150000000, 266666667, 320000000, 400000000, 480000000 },
-+				{ 0 },
-+				{ 400000000, 558000000, 637000000, 760000000 },
-+				{ 0 }, },
-+		.reg = { "vfe1" },
-+		.interrupt = { "vfe1" },
-+		.pd_name = "ife1",
-+		.line_num = 4,
-+		.ops = &vfe_ops_170
-+	},
-+	/* IFE2 */
-+	{
-+		.regulators = {},
-+		.clock = { "gcc_axi_hf", "gcc_axi_sf", "slow_ahb_src",
-+			   "cpas_ahb", "camnoc_axi", "camnoc_axi_src",
-+			   "vfe2_src", "vfe2", "vfe2_axi" },
-+		.clock_rate = { { 0 },
-+				{ 0 },
-+				{ 19200000, 80000000, 80000000, 80000000, 80000000},
-+				{ 80000000 },
-+				{ 0 },
-+				{ 19200000, 150000000, 266666667, 320000000, 400000000, 480000000 },
-+				{ 0 },
-+				{ 400000000, 558000000, 637000000, 760000000 },
-+				{ 0 }, },
-+		.reg = { "vfe2" },
-+		.interrupt = { "vfe2" },
-+		.pd_name = "ife2",
-+		.line_num = 4,
-+		.ops = &vfe_ops_170
-+	},
-+	/* VFE3 */
-+	{
-+		.regulators = {},
-+		.clock = { "gcc_axi_hf", "gcc_axi_sf", "slow_ahb_src",
-+			   "cpas_ahb", "camnoc_axi", "camnoc_axi_src",
-+			   "vfe3_src", "vfe3", "vfe3_axi" },
-+		.clock_rate = { { 0 },
-+				{ 0 },
-+				{ 19200000, 80000000, 80000000, 80000000, 80000000},
-+				{ 80000000 },
-+				{ 0 },
-+				{ 19200000, 150000000, 266666667, 320000000, 400000000, 480000000 },
-+				{ 0 },
-+				{ 400000000, 558000000, 637000000, 760000000 },
-+				{ 0 }, },
-+		.reg = { "vfe3" },
-+		.interrupt = { "vfe3" },
-+		.pd_name = "ife3",
-+		.line_num = 4,
-+		.ops = &vfe_ops_170
-+	},
-+	/* IFE_LITE_0 */
-+	{
-+		.regulators = {},
-+		.clock = { "gcc_axi_hf", "gcc_axi_sf", "slow_ahb_src",
-+			   "cpas_ahb", "camnoc_axi", "camnoc_axi_src",
-+			   "vfe_lite0_src", "vfe_lite0" },
-+		.clock_rate = { { 0 },
-+				{ 0 },
-+				{ 19200000, 80000000, 80000000, 80000000, 80000000},
-+				{ 80000000 },
-+				{ 0 },
-+				{ 19200000, 150000000, 266666667, 320000000, 400000000, 480000000 },
-+				{ 0 },
-+				{ 320000000, 400000000, 480000000, 600000000 }, },
-+		.reg = { "vfe_lite0" },
-+		.interrupt = { "vfe_lite0" },
-+		.is_lite = true,
-+		.line_num = 4,
-+		.ops = &vfe_ops_170
-+	},
-+	/* IFE_LITE_1 */
-+	{
-+		.regulators = {},
-+		.clock = { "gcc_axi_hf", "gcc_axi_sf", "slow_ahb_src",
-+			   "cpas_ahb", "camnoc_axi", "camnoc_axi_src",
-+			   "vfe_lite1_src", "vfe_lite1" },
-+		.clock_rate = { { 0 },
-+				{ 0 },
-+				{ 19200000, 80000000, 80000000, 80000000, 80000000},
-+				{ 80000000 },
-+				{ 0 },
-+				{ 19200000, 150000000, 266666667, 320000000, 400000000, 480000000 },
-+				{ 0 },
-+				{ 320000000, 400000000, 480000000, 600000000 }, },
-+		.reg = { "vfe_lite1" },
-+		.interrupt = { "vfe_lite1" },
-+		.is_lite = true,
-+		.line_num = 4,
-+		.ops = &vfe_ops_170
-+	},
-+	/* IFE_LITE_2 */
-+	{
-+		.regulators = {},
-+		.clock = { "gcc_axi_hf", "gcc_axi_sf", "slow_ahb_src",
-+			   "cpas_ahb", "camnoc_axi", "camnoc_axi_src",
-+			   "vfe_lite2_src", "vfe_lite2" },
-+		.clock_rate = { { 0 },
-+				{ 0 },
-+				{ 19200000, 80000000, 80000000, 80000000, 80000000},
-+				{ 80000000 },
-+				{ 0 },
-+				{ 19200000, 150000000, 266666667, 320000000, 400000000, 480000000 },
-+				{ 0 },
-+				{ 320000000, 400000000, 480000000, 600000000, }, },
-+		.reg = { "vfe_lite2" },
-+		.interrupt = { "vfe_lite2" },
-+		.is_lite = true,
-+		.line_num = 4,
-+		.ops = &vfe_ops_170
-+	},
-+	/* VFE_LITE_3 */
-+	{
-+		.regulators = {},
-+		.clock = { "gcc_axi_hf", "gcc_axi_sf", "slow_ahb_src",
-+			   "cpas_ahb", "camnoc_axi", "camnoc_axi_src",
-+			   "vfe_lite3_src", "vfe_lite3" },
-+		.clock_rate = { { 0 },
-+				{ 0 },
-+				{ 19200000, 80000000, 80000000, 80000000, 80000000},
-+				{ 80000000 },
-+				{ 0 },
-+				{ 19200000, 150000000, 266666667, 320000000, 400000000, 480000000 },
-+				{ 0 },
-+				{ 320000000, 400000000, 480000000, 600000000 }, },
-+		.reg = { "vfe_lite3" },
-+		.interrupt = { "vfe_lite3" },
-+		.is_lite = true,
-+		.line_num = 4,
-+		.ops = &vfe_ops_170
-+	},
-+};
-+
-+static const struct resources_icc icc_res_sc8280xp[] = {
-+	{
-+		.name = "cam_ahb",
-+		.icc_bw_tbl.avg = 150000,
-+		.icc_bw_tbl.peak = 300000,
-+	},
-+	{
-+		.name = "cam_hf_mnoc",
-+		.icc_bw_tbl.avg = 2097152,
-+		.icc_bw_tbl.peak = 2097152,
-+	},
-+	{
-+		.name = "cam_sf_mnoc",
-+		.icc_bw_tbl.avg = 2097152,
-+		.icc_bw_tbl.peak = 2097152,
-+	},
-+	{
-+		.name = "cam_sf_icp_mnoc",
-+		.icc_bw_tbl.avg = 2097152,
-+		.icc_bw_tbl.peak = 2097152,
-+	},
-+};
-+
- /*
-  * camss_add_clock_margin - Add margin to clock frequency rate
-  * @rate: Clock frequency rate
-@@ -1824,12 +2192,27 @@ static const struct camss_resources sm8250_resources = {
- 	.vfe_num = ARRAY_SIZE(vfe_res_8250),
- };
- 
-+static const struct camss_resources sc8280xp_resources = {
-+	.version = CAMSS_8280XP,
-+	.pd_name = "top",
-+	.csiphy_res = csiphy_res_sc8280xp,
-+	.csid_res = csid_res_sc8280xp,
-+	.ispif_res = NULL,
-+	.vfe_res = vfe_res_sc8280xp,
-+	.icc_res = icc_res_sc8280xp,
-+	.icc_path_num = ARRAY_SIZE(icc_res_sc8280xp),
-+	.csiphy_num = ARRAY_SIZE(csiphy_res_sc8280xp),
-+	.csid_num = ARRAY_SIZE(csid_res_sc8280xp),
-+	.vfe_num = ARRAY_SIZE(vfe_res_sc8280xp),
-+};
-+
- static const struct of_device_id camss_dt_match[] = {
- 	{ .compatible = "qcom,msm8916-camss", .data = &msm8916_resources },
- 	{ .compatible = "qcom,msm8996-camss", .data = &msm8996_resources },
- 	{ .compatible = "qcom,sdm660-camss", .data = &sdm660_resources },
- 	{ .compatible = "qcom,sdm845-camss", .data = &sdm845_resources },
- 	{ .compatible = "qcom,sm8250-camss", .data = &sm8250_resources },
-+	{ .compatible = "qcom,sc8280xp-camss", .data = &sc8280xp_resources },
- 	{ }
- };
- 
+diff --git a/drivers/media/platform/qcom/camss/Makefile b/drivers/media/platform/qcom/camss/Makefile
+index 4e22223589739..0d4389ab312d1 100644
+--- a/drivers/media/platform/qcom/camss/Makefile
++++ b/drivers/media/platform/qcom/camss/Makefile
+@@ -14,7 +14,7 @@ qcom-camss-objs += \
+ 		camss-vfe-4-1.o \
+ 		camss-vfe-4-7.o \
+ 		camss-vfe-4-8.o \
+-		camss-vfe-170.o \
++		camss-vfe-17x.o \
+ 		camss-vfe-480.o \
+ 		camss-vfe-gen1.o \
+ 		camss-vfe.o \
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-170.c b/drivers/media/platform/qcom/camss/camss-vfe-17x.c
+similarity index 100%
+rename from drivers/media/platform/qcom/camss/camss-vfe-170.c
+rename to drivers/media/platform/qcom/camss/camss-vfe-17x.c
 
 -- 
 2.42.0
