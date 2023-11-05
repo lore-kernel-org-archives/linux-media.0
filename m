@@ -2,158 +2,135 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9C69C4332F
-	for <linux-media@archiver.kernel.org>; Sun,  5 Nov 2023 16:56:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F558C4332F
+	for <linux-media@archiver.kernel.org>; Sun,  5 Nov 2023 16:59:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230438AbjKEQ41 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 5 Nov 2023 11:56:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40098 "EHLO
+        id S229485AbjKEQ7r (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 5 Nov 2023 11:59:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230256AbjKEQ4Q (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sun, 5 Nov 2023 11:56:16 -0500
-Received: from smtp.forwardemail.net (smtp.forwardemail.net [149.28.215.223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1192910C8;
-        Sun,  5 Nov 2023 08:56:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kwiboo.se;
- h=Content-Transfer-Encoding: MIME-Version: References: In-Reply-To:
- Message-ID: Date: Subject: Cc: To: From; q=dns/txt; s=fe-e1b5cab7be;
- t=1699203367; bh=lpnBJaNiSOXF2fbVkARa+33opskrlpRAhdbPZ7vR6lI=;
- b=VM49k8elFZ6RRgB1nf7LwO33PFuV3oU0yPReic/VjHWVuJIWjF1BAAqQeJ/kSNr4WviBYt7wc
- yoAzmSrMaXchniGD9+P+AClnI10zGhD6Ms5PVd5D3+60btZDafhrPK3z58o1orIkwbQorItpCN7
- C9SwGc78iqWSqt00jt/1LXXtxIPZmJidD6Hl8dszXb/mSxHFCy02zpZeMCQSZ1t0WPI2jokH9c8
- SI4a8ajRdYOEWjyKSv9R54v8NGjE99w9sBKIJDgTSNbokoEgRzO2xFaBXHTHmM3jEMIvJDFRn04
- LvpAtA46NwI+N4+6y/C2XtBij8WOvmhPWH3EmiP1bMHQ==
-From:   Jonas Karlman <jonas@kwiboo.se>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     Alex Bee <knaerzche@gmail.com>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Sebastian Fricke <sebastian.fricke@collabora.com>,
-        Christopher Obbard <chris.obbard@collabora.com>,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Jonas Karlman <jonas@kwiboo.se>
-Subject: [PATCH v4 10/11] media: rkvdec: Add get_image_fmt ops
-Date:   Sun,  5 Nov 2023 16:55:09 +0000
-Message-ID: <20231105165521.3592037-11-jonas@kwiboo.se>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231105165521.3592037-1-jonas@kwiboo.se>
-References: <20231105165521.3592037-1-jonas@kwiboo.se>
+        with ESMTP id S229445AbjKEQ7q (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 5 Nov 2023 11:59:46 -0500
+Received: from mx.kolabnow.com (mx.kolabnow.com [212.103.80.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF0CBB
+        for <linux-media@vger.kernel.org>; Sun,  5 Nov 2023 08:59:42 -0800 (PST)
+Received: from localhost (unknown [127.0.0.1])
+        by mx.kolabnow.com (Postfix) with ESMTP id 6F9AB20B366C;
+        Sun,  5 Nov 2023 17:59:39 +0100 (CET)
+Authentication-Results: ext-mx-out011.mykolab.com (amavis);
+ dkim=pass (4096-bit key) reason="pass (just generated, assumed good)"
+ header.d=kolabnow.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kolabnow.com; h=
+        in-reply-to:from:from:content-language:references:subject
+        :subject:mime-version:date:date:message-id:content-type
+        :content-type:received:received:received; s=dkim20160331; t=
+        1699203578; x=1701017979; bh=arjyPIgNxx0nasQ6UODKkdKU4iKWTHG+nES
+        yiIG/rgg=; b=MYOyHX9nXYaEbZS3Mhgni/5hcoN+/ARGDPCcnH4w8xeiQ1yWXtS
+        YCtK5FKkmvIUWUidVVLZ0jKxSV8TuYcWiYSW8her0L4RyQfeY+tCIKC3oWaiBMRT
+        uC2b4QUyJg1bxcO/SsLjItqA+qWn3hzGrRtafpgv974YswQc2tj3F7tN5DOfM7Jr
+        N6H6eHmMURNzwoP0QhODQ2jiOUXbtE5VGRPRNSxU5Fz3HcH56T5sE+Tu3XVZl7Y8
+        XZVxXC01CkZmhC/n/PsL4QPmvEbyWvtKRsHm0Ce8eEebiPSzIkLnxuh2DKyeF5Ya
+        8n0vuqvE7wdO7VI9HzOLyMMvbJ2qJ9U4gYEq/1Ro7Chk6WhlS0+CWcvGizNd/9ks
+        ydocv+2y+F30ec6rzlZgEpzK9Zd0f9QZICiqMGWM30zewIbCe7rAlwM87lkGSS/N
+        JWM4oQjPS7/3rr2RHuDJHszbW6B43jp490mv8Fbrf+tfi3Qn6C8nv+9KlEoK/QE6
+        0sJoni8EsjF7ppQVMCOmloMsXb/p2xgh3fTaHTffR/Fyk3vLj8MuwVAUUlHS3At5
+        bTba/0GOh8rfMHb18+WyNVMWjSV1fJ821qOjaz8atK+WtX21/YcAHtZAXg1O5Wu1
+        rDX4OsLWgwqceXagDQqz2BuruHVYpAM/i9UKPRj5SnUHcL1lwlVtGnd8=
+X-Virus-Scanned: amavis at mykolab.com
+Received: from mx.kolabnow.com ([127.0.0.1])
+ by localhost (ext-mx-out011.mykolab.com [127.0.0.1]) (amavis, port 10024)
+ with ESMTP id 9gBCiK67NWjl; Sun,  5 Nov 2023 17:59:38 +0100 (CET)
+Received: from int-mx009.mykolab.com (unknown [10.9.13.9])
+        by mx.kolabnow.com (Postfix) with ESMTPS id 6DC4A20B2751;
+        Sun,  5 Nov 2023 17:59:35 +0100 (CET)
+Received: from ext-subm010.mykolab.com (unknown [10.9.6.10])
+        by int-mx009.mykolab.com (Postfix) with ESMTPS id AA49720C7686;
+        Sun,  5 Nov 2023 17:59:32 +0100 (CET)
+Content-Type: multipart/mixed; boundary="------------D0OE10wapxTR2FrTa5Jt7WiD"
+Message-ID: <855f69b8-dc33-225a-ebd3-134467d55cf1@hansg.org>
+Date:   Sun, 5 Nov 2023 17:59:31 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Report-Abuse-To: abuse@forwardemail.net
-X-Report-Abuse: abuse@forwardemail.net
-X-Complaints-To: abuse@forwardemail.net
-X-ForwardEmail-Version: 0.4.40
-X-ForwardEmail-Sender: rfc822; jonas@kwiboo.se, smtp.forwardemail.net,
- 149.28.215.223
-X-ForwardEmail-ID: 6547c92642ad2f8d1524695c
+Subject: Re: [PATCH v2 11/15] media: intel/ipu6: input system video capture
+ nodes
+To:     bingbu.cao@intel.com, linux-media@vger.kernel.org,
+        sakari.ailus@linux.intel.com, laurent.pinchart@ideasonboard.com
+Cc:     andriy.shevchenko@linux.intel.com, hdegoede@redhat.com,
+        ilpo.jarvinen@linux.intel.com, andreaskleist@gmail.com,
+        claus.stovgaard@gmail.com, tfiga@chromium.org,
+        senozhatsky@chromium.org, tomi.valkeinen@ideasonboard.com,
+        bingbu.cao@linux.intel.com, tian.shu.qiu@intel.com,
+        hongju.wang@intel.com
+References: <20231024112924.3934228-1-bingbu.cao@intel.com>
+ <20231024112924.3934228-12-bingbu.cao@intel.com>
+Content-Language: en-US, nl
+From:   Hans de Goede <hans@hansg.org>
+In-Reply-To: <20231024112924.3934228-12-bingbu.cao@intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add support for a get_image_fmt() ops that return the required image
-format.
+This is a multi-part message in MIME format.
+--------------D0OE10wapxTR2FrTa5Jt7WiD
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The CAPTURE format is reset when required image format changes and the
-buffer queue is not busy.
+Hi Bingbu,
 
-Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
----
-v4:
-- Change fmt_opaque into an image format
-- Split patch into two
+On 10/24/23 13:29, bingbu.cao@intel.com wrote:
+> From: Bingbu Cao <bingbu.cao@intel.com>
+> 
+> Register v4l2 video device and setup the vb2 queue to
+> support basic video capture. Video streaming callback
+> will trigger the input system driver to construct a
+> input system stream configuration for firmware based on
+> data type and stream ID and then queue buffers to firmware
+> to do capture.
+> 
+> Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
 
-v3:
-- New patch
+While testing this new version I found a small issue in the enum_fmt implementation caused by the mbus_code filtering support I suggested.
 
- drivers/staging/media/rkvdec/rkvdec.c | 49 +++++++++++++++++++++++++--
- drivers/staging/media/rkvdec/rkvdec.h |  2 ++
- 2 files changed, 49 insertions(+), 2 deletions(-)
+Attached is a single-line patch which fixes this, can you please fold this into the next version ?
 
-diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
-index 5949d59d4cf9..225aa1f0ac48 100644
---- a/drivers/staging/media/rkvdec/rkvdec.c
-+++ b/drivers/staging/media/rkvdec/rkvdec.c
-@@ -108,15 +108,60 @@ static int rkvdec_try_ctrl(struct v4l2_ctrl *ctrl)
- {
- 	struct rkvdec_ctx *ctx = container_of(ctrl->handler, struct rkvdec_ctx, ctrl_hdl);
- 	const struct rkvdec_coded_fmt_desc *desc = ctx->coded_fmt_desc;
-+	struct v4l2_pix_format_mplane *pix_mp = &ctx->decoded_fmt.fmt.pix_mp;
-+	enum rkvdec_image_fmt image_fmt;
-+	struct vb2_queue *vq;
-+	int ret;
-+
-+	if (desc->ops->try_ctrl) {
-+		ret = desc->ops->try_ctrl(ctx, ctrl);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	if (!desc->ops->get_image_fmt)
-+		return 0;
- 
--	if (desc->ops->try_ctrl)
--		return desc->ops->try_ctrl(ctx, ctrl);
-+	image_fmt = desc->ops->get_image_fmt(ctx, ctrl);
-+	if (ctx->image_fmt == image_fmt)
-+		return 0;
-+
-+	if (rkvdec_is_valid_fmt(ctx, pix_mp->pixelformat, image_fmt))
-+		return 0;
-+
-+	/* format change not allowed when queue is busy */
-+	vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx,
-+			     V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
-+	if (vb2_is_busy(vq))
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+static int rkvdec_s_ctrl(struct v4l2_ctrl *ctrl)
-+{
-+	struct rkvdec_ctx *ctx = container_of(ctrl->handler, struct rkvdec_ctx, ctrl_hdl);
-+	const struct rkvdec_coded_fmt_desc *desc = ctx->coded_fmt_desc;
-+	struct v4l2_pix_format_mplane *pix_mp = &ctx->decoded_fmt.fmt.pix_mp;
-+	enum rkvdec_image_fmt image_fmt;
-+
-+	if (!desc->ops->get_image_fmt)
-+		return 0;
-+
-+	image_fmt = desc->ops->get_image_fmt(ctx, ctrl);
-+	if (ctx->image_fmt == image_fmt)
-+		return 0;
-+
-+	ctx->image_fmt = image_fmt;
-+	if (!rkvdec_is_valid_fmt(ctx, pix_mp->pixelformat, ctx->image_fmt))
-+		rkvdec_reset_decoded_fmt(ctx);
- 
- 	return 0;
- }
- 
- static const struct v4l2_ctrl_ops rkvdec_ctrl_ops = {
- 	.try_ctrl = rkvdec_try_ctrl,
-+	.s_ctrl = rkvdec_s_ctrl,
- };
- 
- static const struct rkvdec_ctrl_desc rkvdec_h264_ctrl_descs[] = {
-diff --git a/drivers/staging/media/rkvdec/rkvdec.h b/drivers/staging/media/rkvdec/rkvdec.h
-index 6f8cf50c5d99..e466a2753ccf 100644
---- a/drivers/staging/media/rkvdec/rkvdec.h
-+++ b/drivers/staging/media/rkvdec/rkvdec.h
-@@ -73,6 +73,8 @@ struct rkvdec_coded_fmt_ops {
- 		     struct vb2_v4l2_buffer *dst_buf,
- 		     enum vb2_buffer_state result);
- 	int (*try_ctrl)(struct rkvdec_ctx *ctx, struct v4l2_ctrl *ctrl);
-+	enum rkvdec_image_fmt (*get_image_fmt)(struct rkvdec_ctx *ctx,
-+					       struct v4l2_ctrl *ctrl);
- };
- 
- enum rkvdec_image_fmt {
--- 
-2.42.0
+Regards,
 
+Hans
+
+--------------D0OE10wapxTR2FrTa5Jt7WiD
+Content-Type: text/x-patch; charset=UTF-8;
+ name="0001-media-ipu6-isys-video-Do-not-set-mbus_code-from-vidi.patch"
+Content-Disposition: attachment;
+ filename*0="0001-media-ipu6-isys-video-Do-not-set-mbus_code-from-vidi.pa";
+ filename*1="tch"
+Content-Transfer-Encoding: base64
+
+RnJvbSA0YzNiMTQ0NWY1MWU4MTIzYWMzZmIzZmJmNzZiMmM0MjlhMWM3N2ZhIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBIYW5zIGRlIEdvZWRlIDxoZGVnb2VkZUByZWRoYXQu
+Y29tPgpEYXRlOiBTdW4sIDUgTm92IDIwMjMgMTc6NDY6NTIgKzAxMDAKU3ViamVjdDogW1BB
+VENIXSBtZWRpYTogaXB1Ni1pc3lzLXZpZGVvOiBEbyBub3Qgc2V0IG1idXNfY29kZSBmcm9t
+CiB2aWRpb2NfZW51bV9mbXRfdmlkX2NhcAoKV2hlbiBlbnVtZXJhdGluZyB1c2Vyc3BhY2Ug
+d2lsbCBjYWxsIHZpZGlvY19lbnVtX2ZtdF92aWRfY2FwIHJlcGVhdGVkbHkKd2l0aCBoaWdo
+ZXIgdjRsMl9mbXRkZXNjLmluZGV4IHZhbHVlcyB1bnRpbCBpdCByZXR1cm5zIC1FSU5WQUwg
+dG8KaW5kaWNhdGUgYWxsIGZvcm1hdHMgaGF2ZSBiZWVuIGVudW1lcmF0ZWQuCgpTb21lIHVz
+ZXJzcGFjZSBjb2RlIHN1Y2ggYXMgZS5nLiB2NGwyLWN0bCBvbmx5IGZpbGxzIHRoZSB2NGwy
+X2ZtdGRlc2MKc3RydWN0IG9uY2UgYW5kIHRoZW4gb25seSBpbmNyZWFzZXMgdjRsMl9mbXRk
+ZXNjLmluZGV4IGZvciBzdWJzZXF1ZW50CmNhbGxzLgoKU2V0dGluZyB2NGwyX2ZtdGRlc2Mu
+bWJ1c19jb2RlIHdoZW4gaXQgd2FzIDAgY2hhbmdlcyBzdWJzZXF1ZW50CnZpZGlvY19lbnVt
+X2ZtdF92aWRfY2FwIGZyb20gdW5maWx0ZXJlZCBtb2RlIHRvIG1idXMtY29kZSBmaWx0ZXJl
+ZCBtb2RlCmJyZWFraW5nIHVuZmlsdGVyZWQgZW51bWVyYXRpb24uCgpEbyBub3Qgc2V0IHY0
+bDJfZm10ZGVzYy5tYnVzX2NvZGUgaW4gdW5maWx0ZXJlZCBtb2RlIHRvIGZpeCB0aGlzLgoK
+U2lnbmVkLW9mZi1ieTogSGFucyBkZSBHb2VkZSA8aGRlZ29lZGVAcmVkaGF0LmNvbT4KLS0t
+CiBkcml2ZXJzL21lZGlhL3BjaS9pbnRlbC9pcHU2L2lwdTYtaXN5cy12aWRlby5jIHwgMSAt
+CiAxIGZpbGUgY2hhbmdlZCwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL2RyaXZlcnMv
+bWVkaWEvcGNpL2ludGVsL2lwdTYvaXB1Ni1pc3lzLXZpZGVvLmMgYi9kcml2ZXJzL21lZGlh
+L3BjaS9pbnRlbC9pcHU2L2lwdTYtaXN5cy12aWRlby5jCmluZGV4IGY4MTkzNGEzMDFiNC4u
+ZTczYTQ2ZWI3ZmQzIDEwMDY0NAotLS0gYS9kcml2ZXJzL21lZGlhL3BjaS9pbnRlbC9pcHU2
+L2lwdTYtaXN5cy12aWRlby5jCisrKyBiL2RyaXZlcnMvbWVkaWEvcGNpL2ludGVsL2lwdTYv
+aXB1Ni1pc3lzLXZpZGVvLmMKQEAgLTEyOSw3ICsxMjksNiBAQCBpbnQgaXB1Nl9pc3lzX3Zp
+ZGlvY19lbnVtX2ZtdChzdHJ1Y3QgZmlsZSAqZmlsZSwgdm9pZCAqZmgsCiAJaWYgKCFmLT5t
+YnVzX2NvZGUpIHsKIAkJZi0+ZmxhZ3MgPSAwOwogCQlmLT5waXhlbGZvcm1hdCA9IGlwdTZf
+aXN5c19wZm10c1tmLT5pbmRleF0ucGl4ZWxmb3JtYXQ7Ci0JCWYtPm1idXNfY29kZSA9IGlw
+dTZfaXN5c19wZm10c1tmLT5pbmRleF0uY29kZTsKIAkJcmV0dXJuIDA7CiAJfQogCi0tIAoy
+LjQxLjAKCg==
+
+--------------D0OE10wapxTR2FrTa5Jt7WiD--
