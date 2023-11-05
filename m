@@ -2,27 +2,27 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1266C4332F
-	for <linux-media@archiver.kernel.org>; Sun,  5 Nov 2023 16:55:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE389C4332F
+	for <linux-media@archiver.kernel.org>; Sun,  5 Nov 2023 16:55:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbjKEQzl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 5 Nov 2023 11:55:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55938 "EHLO
+        id S229689AbjKEQzp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 5 Nov 2023 11:55:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjKEQzk (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sun, 5 Nov 2023 11:55:40 -0500
+        with ESMTP id S229445AbjKEQzm (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 5 Nov 2023 11:55:42 -0500
 Received: from smtp.forwardemail.net (smtp.forwardemail.net [149.28.215.223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5FEE83;
-        Sun,  5 Nov 2023 08:55:35 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C1083;
+        Sun,  5 Nov 2023 08:55:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kwiboo.se;
- h=Content-Transfer-Encoding: MIME-Version: Message-ID: Date: Subject: Cc:
- To: From; q=dns/txt; s=fe-e1b5cab7be; t=1699203327;
- bh=gpEWyFLpFVQA/Y7FAcamWOkPAGDRoHusQHT6WoMBcvI=;
- b=K0OH+eJxuk0CnFzeiViuoctJ7h50ZC066xjRckTpJRZnM/oC/4dvBdhNAWZI7fjkfQDHnPvuz
- sugfkZzS1jJgb9iFSYJgJvRzqFTw/UDEmvH9Xaa+vg8/YtjuZNoQeeBr5KNdIGfXEMa2GFKFdyH
- 5UNc0EM8JL/HAEG0Abjj7JudHNAqAYOViJrxPFGiJpMpjCdzukShWBLzhORwN0pqU7u2AP9PbLN
- 9wMy86L2PDL71vlFLOMaTUvoat8S8lCrmZ8s/3r0NnTsSvvkIoIW7CpqigEIq+Tus8059ev81AE
- Cv72ZOB6ZYNsv/1lqQwD3ZbyyDQWTixsefj76wGEr07g==
+ h=Content-Transfer-Encoding: MIME-Version: References: In-Reply-To:
+ Message-ID: Date: Subject: Cc: To: From; q=dns/txt; s=fe-e1b5cab7be;
+ t=1699203336; bh=VBY0FHZGIpUm3P9r+IeT6rGp7Go4Kcp8zODviR0ogjA=;
+ b=BKDG4dDc9E/ZgiRG/Ru2++h4WwhGmSBs+ypZlLeawtW/RGt/AaLCHiGqdm+rglxe3LuoobCDP
+ Z1McdMSA8+pGaOGUjrkNcejfcOiStGk2dyup5CL6o2cffFmwXiddU2IHSGyIsuPiKQMdW9vg06V
+ +Am3LQs7O/C62i61U99NwL+/OQLIrYdmIa4qIfN0Q2jD0pzCSQNUQqT9Km6MaKtalT6vgB5uBkz
+ dUUFyzSfjUIGLYrDsn7Krz0TAMgW3h1o+DmNrU9ADxowdsgtpe/KXGyoNvgNzmZVjUl1yPHmV2N
+ tXo2xLb10U5ZdhnEMg9J5mdqQWl3Z0x8mVyzpn4DbH8g==
 From:   Jonas Karlman <jonas@kwiboo.se>
 To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -35,10 +35,12 @@ Cc:     Alex Bee <knaerzche@gmail.com>,
         linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Jonas Karlman <jonas@kwiboo.se>
-Subject: [PATCH v4 00/11] media: rkvdec: Add H.264 High 10 and 4:2:2 profile support
-Date:   Sun,  5 Nov 2023 16:54:59 +0000
-Message-ID: <20231105165521.3592037-1-jonas@kwiboo.se>
+Subject: [PATCH v4 02/11] media: v4l2: Add NV15 and NV20 pixel formats
+Date:   Sun,  5 Nov 2023 16:55:01 +0000
+Message-ID: <20231105165521.3592037-3-jonas@kwiboo.se>
 X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20231105165521.3592037-1-jonas@kwiboo.se>
+References: <20231105165521.3592037-1-jonas@kwiboo.se>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Report-Abuse-To: abuse@forwardemail.net
@@ -47,112 +49,245 @@ X-Complaints-To: abuse@forwardemail.net
 X-ForwardEmail-Version: 0.4.40
 X-ForwardEmail-Sender: rfc822; jonas@kwiboo.se, smtp.forwardemail.net,
  149.28.215.223
-X-ForwardEmail-ID: 6547c8ff42ad2f8d152468da
+X-ForwardEmail-ID: 6547c90742ad2f8d152468f4
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This is a revival of a 3 year old series [1] now that NV15/NV20/NV30 support
-for display driver have landed in mainline tree.
+Add NV15 and NV20 pixel formats used by the Rockchip Video Decoder for
+10-bit buffers.
 
-This series adds H.264 High 10 and 4:2:2 profile support to the Rockchip
-Video Decoder driver.
+NV15 and NV20 is 10-bit 4:2:0/4:2:2 semi-planar YUV formats similar to
+NV12 and NV16, using 10-bit components with no padding between each
+component. Instead, a group of 4 luminance/chrominance samples are
+stored over 5 bytes in little endian order:
 
-Patch 1 adds helpers for calculating plane bytesperline and sizeimage.
-Patch 2 adds two new pixelformats for semi-planer 10-bit 4:2:0/4:2:2 YUV.
+YYYY = UVUV = 4 * 10 bits = 40 bits = 5 bytes
 
-Patch 3 change to use bytesperline and buffer height to configure strides.
-Patch 4 change to use values from SPS/PPS control to configure the HW.
-Patch 5 remove an unnecessary call to validate sps at streaming start.
+The '15' and '20' suffix refers to the optimum effective bits per pixel
+which is achieved when the total number of luminance samples is a
+multiple of 8 for NV15 and 4 for NV20.
 
-Patch 6-10 refactor code to support filtering of CAPUTRE formats based
-on the image format returned from a get_image_fmt ops.
+Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
+---
+v4:
+- No change
 
-Patch 11 adds final bits to support H.264 High 10 and 4:2:2 profiles.
+v3:
+- Use bpp and bpp_div instead of the misuse of block_w/block_h
+- Update documentation, expand to use full 4x4 sample image
 
-Tested on a ROCK Pi 4 (RK3399) and Rock64 (RK3328):
-
-  v4l2-compliance 1.24.1, 64 bits, 64-bit time_t
-  ...
-  Total for rkvdec device /dev/video1: 46, Succeeded: 46, Failed: 0, Warnings: 0
-
-  Running test suite JVT-FR-EXT with decoder FFmpeg-H.264-V4L2-request
-  ...
-  Ran 65/69 tests successfully
-
-  Running test suite JVT-AVC_V1 with decoder FFmpeg-H.264-V4L2-request
-  ...
-  Ran 127/135 tests successfully
-
-Before this series:
-
-  Running test suite JVT-FR-EXT with decoder FFmpeg-H.264-V4L2-request
-  ...
-  Ran 44/69 tests successfully
-
-Changes in v4:
-- Fix failed v4l2-compliance tests related to CAPTURE queue
-- Rework CAPTURE format filter anv validate to use an image format
-- Run fluster test suite JVT-FR-EXT [4] and JVT-AVC_V1 [5]
-Link to v3: https://lore.kernel.org/linux-media/20231029183427.1781554-1-jonas@kwiboo.se/
-
-Changes in v3:
-- Drop merged patches
-- Use bpp and bpp_div instead of prior misuse of block_w/block_h
-- New patch to use values from SPS/PPS control to configure the HW
-- New patch to remove an unnecessary call to validate sps at streaming start
-- Reworked pixel format validation
-Link to v2: https://lore.kernel.org/linux-media/20200706215430.22859-1-jonas@kwiboo.se/
-
-Changes in v2:
-- Collect r-b tags
-- SPS pic width and height in mbs validation moved to rkvdec_try_ctrl
-- New patch to not override output buffer sizeimage
-- Reworked pixel format validation
-- Only align decoded buffer instead of changing frmsize step_width
-Link to v1: https://lore.kernel.org/linux-media/20200701215616.30874-1-jonas@kwiboo.se/
-
-Following commits adds support for NV15/NV20/NV30 to VOP driver:
-728c15b4b5f3 ("drm/fourcc: Add NV20 and NV30 YUV formats")
-d4b384228562 ("drm/rockchip: vop: Add NV15, NV20 and NV30 support")
-
-To fully runtime test this series you may need above drm commits and ffmpeg
-patches from [2], this series and drm patches is also available at [3].
-
-[1] https://lore.kernel.org/linux-media/20200706215430.22859-1-jonas@kwiboo.se/
-[2] https://github.com/Kwiboo/FFmpeg/commits/v4l2-request-n6.1-dev/
-[3] https://github.com/Kwiboo/linux-rockchip/commits/linuxtv-rkvdec-high-10-v4/
-[4] https://gist.github.com/Kwiboo/f4ac15576b2c72887ae2bc5d58b5c865
-[5] https://gist.github.com/Kwiboo/459a1c8f1dcb56e45dc7a7a29cc28adf
-
-Regards,
-Jonas
-
-Alex Bee (1):
-  media: rkvdec: h264: Don't hardcode SPS/PPS parameters
-
-Jonas Karlman (10):
-  media: v4l2-common: Add helpers to calculate bytesperline and
-    sizeimage
-  media: v4l2: Add NV15 and NV20 pixel formats
-  media: rkvdec: h264: Use bytesperline and buffer height as virstride
-  media: rkvdec: h264: Remove SPS validation at streaming start
-  media: rkvdec: Extract rkvdec_fill_decoded_pixfmt into helper
-  media: rkvdec: Move rkvdec_reset_decoded_fmt helper
-  media: rkvdec: Extract decoded format enumeration into helper
-  media: rkvdec: Add image format concept
-  media: rkvdec: Add get_image_fmt ops
-  media: rkvdec: h264: Support High 10 and 4:2:2 profiles
-
- .../media/v4l/pixfmt-yuv-planar.rst           | 128 +++++++++++
- drivers/media/v4l2-core/v4l2-common.c         |  80 +++----
+ .../media/v4l/pixfmt-yuv-planar.rst           | 128 ++++++++++++++++++
+ drivers/media/v4l2-core/v4l2-common.c         |   2 +
  drivers/media/v4l2-core/v4l2-ioctl.c          |   2 +
- drivers/staging/media/rkvdec/rkvdec-h264.c    |  83 +++----
- drivers/staging/media/rkvdec/rkvdec.c         | 217 +++++++++++++-----
- drivers/staging/media/rkvdec/rkvdec.h         |  18 +-
  include/uapi/linux/videodev2.h                |   2 +
- 7 files changed, 396 insertions(+), 134 deletions(-)
+ 4 files changed, 134 insertions(+)
 
+diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+index 1840224faa41..4366cdcb970e 100644
+--- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
++++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+@@ -79,6 +79,13 @@ All components are stored with the same number of bits per component.
+       - Cr, Cb
+       - Yes
+       - Linear
++    * - V4L2_PIX_FMT_NV15
++      - 'NV15'
++      - 10
++      - 4:2:0
++      - Cb, Cr
++      - Yes
++      - Linear
+     * - V4L2_PIX_FMT_NV12M
+       - 'NM12'
+       - 8
+@@ -158,6 +165,13 @@ All components are stored with the same number of bits per component.
+       - Cr, Cb
+       - Yes
+       - Linear
++    * - V4L2_PIX_FMT_NV20
++      - 'NV20'
++      - 10
++      - 4:2:2
++      - Cb, Cr
++      - Yes
++      - Linear
+     * - V4L2_PIX_FMT_NV16M
+       - 'NM16'
+       - 8
+@@ -288,6 +302,57 @@ of the luma plane.
+       - Cr\ :sub:`11`
+ 
+ 
++.. _V4L2-PIX-FMT-NV15:
++
++NV15
++----
++
++Semi-planar 10-bit YUV 4:2:0 format similar to NV12, using 10-bit components
++with no padding between each component. A group of 4 components are stored over
++5 bytes in little endian order.
++
++.. flat-table:: Sample 4x4 NV15 Image (1 byte per cell)
++    :header-rows:  0
++    :stub-columns: 0
++
++    * - start + 0:
++      - Y'\ :sub:`00[7:0]`
++      - Y'\ :sub:`01[5:0]`\ Y'\ :sub:`00[9:8]`
++      - Y'\ :sub:`02[3:0]`\ Y'\ :sub:`01[9:6]`
++      - Y'\ :sub:`03[1:0]`\ Y'\ :sub:`02[9:4]`
++      - Y'\ :sub:`03[9:2]`
++    * - start + 5:
++      - Y'\ :sub:`10[7:0]`
++      - Y'\ :sub:`11[5:0]`\ Y'\ :sub:`10[9:8]`
++      - Y'\ :sub:`12[3:0]`\ Y'\ :sub:`11[9:6]`
++      - Y'\ :sub:`13[1:0]`\ Y'\ :sub:`12[9:4]`
++      - Y'\ :sub:`13[9:2]`
++    * - start + 10:
++      - Y'\ :sub:`20[7:0]`
++      - Y'\ :sub:`21[5:0]`\ Y'\ :sub:`20[9:8]`
++      - Y'\ :sub:`22[3:0]`\ Y'\ :sub:`21[9:6]`
++      - Y'\ :sub:`23[1:0]`\ Y'\ :sub:`22[9:4]`
++      - Y'\ :sub:`23[9:2]`
++    * - start + 15:
++      - Y'\ :sub:`30[7:0]`
++      - Y'\ :sub:`31[5:0]`\ Y'\ :sub:`30[9:8]`
++      - Y'\ :sub:`32[3:0]`\ Y'\ :sub:`31[9:6]`
++      - Y'\ :sub:`33[1:0]`\ Y'\ :sub:`32[9:4]`
++      - Y'\ :sub:`33[9:2]`
++    * - start + 20:
++      - Cb\ :sub:`00[7:0]`
++      - Cr\ :sub:`00[5:0]`\ Cb\ :sub:`00[9:8]`
++      - Cb\ :sub:`01[3:0]`\ Cr\ :sub:`00[9:6]`
++      - Cr\ :sub:`01[1:0]`\ Cb\ :sub:`01[9:4]`
++      - Cr\ :sub:`01[9:2]`
++    * - start + 25:
++      - Cb\ :sub:`10[7:0]`
++      - Cr\ :sub:`10[5:0]`\ Cb\ :sub:`10[9:8]`
++      - Cb\ :sub:`11[3:0]`\ Cr\ :sub:`10[9:6]`
++      - Cr\ :sub:`11[1:0]`\ Cb\ :sub:`11[9:4]`
++      - Cr\ :sub:`11[9:2]`
++
++
+ .. _V4L2-PIX-FMT-NV12MT:
+ .. _V4L2-PIX-FMT-NV12MT-16X16:
+ .. _V4L2-PIX-FMT-NV12-4L4:
+@@ -500,6 +565,69 @@ number of lines as the luma plane.
+       - Cr\ :sub:`32`
+ 
+ 
++.. _V4L2-PIX-FMT-NV20:
++
++NV20
++----
++
++Semi-planar 10-bit YUV 4:2:2 format similar to NV16, using 10-bit components
++with no padding between each component. A group of 4 components are stored over
++5 bytes in little endian order.
++
++.. flat-table:: Sample 4x4 NV20 Image (1 byte per cell)
++    :header-rows:  0
++    :stub-columns: 0
++
++    * - start + 0:
++      - Y'\ :sub:`00[7:0]`
++      - Y'\ :sub:`01[5:0]`\ Y'\ :sub:`00[9:8]`
++      - Y'\ :sub:`02[3:0]`\ Y'\ :sub:`01[9:6]`
++      - Y'\ :sub:`03[1:0]`\ Y'\ :sub:`02[9:4]`
++      - Y'\ :sub:`03[9:2]`
++    * - start + 5:
++      - Y'\ :sub:`10[7:0]`
++      - Y'\ :sub:`11[5:0]`\ Y'\ :sub:`10[9:8]`
++      - Y'\ :sub:`12[3:0]`\ Y'\ :sub:`11[9:6]`
++      - Y'\ :sub:`13[1:0]`\ Y'\ :sub:`12[9:4]`
++      - Y'\ :sub:`13[9:2]`
++    * - start + 10:
++      - Y'\ :sub:`20[7:0]`
++      - Y'\ :sub:`21[5:0]`\ Y'\ :sub:`20[9:8]`
++      - Y'\ :sub:`22[3:0]`\ Y'\ :sub:`21[9:6]`
++      - Y'\ :sub:`23[1:0]`\ Y'\ :sub:`22[9:4]`
++      - Y'\ :sub:`23[9:2]`
++    * - start + 15:
++      - Y'\ :sub:`30[7:0]`
++      - Y'\ :sub:`31[5:0]`\ Y'\ :sub:`30[9:8]`
++      - Y'\ :sub:`32[3:0]`\ Y'\ :sub:`31[9:6]`
++      - Y'\ :sub:`33[1:0]`\ Y'\ :sub:`32[9:4]`
++      - Y'\ :sub:`33[9:2]`
++    * - start + 20:
++      - Cb\ :sub:`00[7:0]`
++      - Cr\ :sub:`00[5:0]`\ Cb\ :sub:`00[9:8]`
++      - Cb\ :sub:`01[3:0]`\ Cr\ :sub:`00[9:6]`
++      - Cr\ :sub:`01[1:0]`\ Cb\ :sub:`01[9:4]`
++      - Cr\ :sub:`01[9:2]`
++    * - start + 25:
++      - Cb\ :sub:`10[7:0]`
++      - Cr\ :sub:`10[5:0]`\ Cb\ :sub:`10[9:8]`
++      - Cb\ :sub:`11[3:0]`\ Cr\ :sub:`10[9:6]`
++      - Cr\ :sub:`11[1:0]`\ Cb\ :sub:`11[9:4]`
++      - Cr\ :sub:`11[9:2]`
++    * - start + 30:
++      - Cb\ :sub:`20[7:0]`
++      - Cr\ :sub:`20[5:0]`\ Cb\ :sub:`20[9:8]`
++      - Cb\ :sub:`21[3:0]`\ Cr\ :sub:`20[9:6]`
++      - Cr\ :sub:`21[1:0]`\ Cb\ :sub:`21[9:4]`
++      - Cr\ :sub:`21[9:2]`
++    * - start + 35:
++      - Cb\ :sub:`30[7:0]`
++      - Cr\ :sub:`30[5:0]`\ Cb\ :sub:`30[9:8]`
++      - Cb\ :sub:`31[3:0]`\ Cr\ :sub:`30[9:6]`
++      - Cr\ :sub:`31[1:0]`\ Cb\ :sub:`31[9:4]`
++      - Cr\ :sub:`31[9:2]`
++
++
+ .. _V4L2-PIX-FMT-NV24:
+ .. _V4L2-PIX-FMT-NV42:
+ 
+diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
+index 834b426da8b1..c65ffab5800a 100644
+--- a/drivers/media/v4l2-core/v4l2-common.c
++++ b/drivers/media/v4l2-core/v4l2-common.c
+@@ -270,8 +270,10 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
+ 		/* YUV planar formats */
+ 		{ .format = V4L2_PIX_FMT_NV12,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 2, .vdiv = 2 },
+ 		{ .format = V4L2_PIX_FMT_NV21,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 2, .vdiv = 2 },
++		{ .format = V4L2_PIX_FMT_NV15,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 5, 10, 0, 0 }, .bpp_div = { 4, 4, 1, 1 }, .hdiv = 2, .vdiv = 2 },
+ 		{ .format = V4L2_PIX_FMT_NV16,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 2, .vdiv = 1 },
+ 		{ .format = V4L2_PIX_FMT_NV61,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 2, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_NV20,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 5, 10, 0, 0 }, .bpp_div = { 4, 4, 1, 1 }, .hdiv = 2, .vdiv = 1 },
+ 		{ .format = V4L2_PIX_FMT_NV24,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
+ 		{ .format = V4L2_PIX_FMT_NV42,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
+ 		{ .format = V4L2_PIX_FMT_P010,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 2, 2, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 2, .vdiv = 1 },
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index 9b1de54ce379..937434e5f2c1 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -1347,8 +1347,10 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+ 	case V4L2_PIX_FMT_YUV48_12:	descr = "12-bit YUV 4:4:4 Packed"; break;
+ 	case V4L2_PIX_FMT_NV12:		descr = "Y/UV 4:2:0"; break;
+ 	case V4L2_PIX_FMT_NV21:		descr = "Y/VU 4:2:0"; break;
++	case V4L2_PIX_FMT_NV15:		descr = "10-bit Y/UV 4:2:0 (Packed)"; break;
+ 	case V4L2_PIX_FMT_NV16:		descr = "Y/UV 4:2:2"; break;
+ 	case V4L2_PIX_FMT_NV61:		descr = "Y/VU 4:2:2"; break;
++	case V4L2_PIX_FMT_NV20:		descr = "10-bit Y/UV 4:2:2 (Packed)"; break;
+ 	case V4L2_PIX_FMT_NV24:		descr = "Y/UV 4:4:4"; break;
+ 	case V4L2_PIX_FMT_NV42:		descr = "Y/VU 4:4:4"; break;
+ 	case V4L2_PIX_FMT_P010:		descr = "10-bit Y/UV 4:2:0"; break;
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index c3d4e490ce7c..617340c43e40 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -638,8 +638,10 @@ struct v4l2_pix_format {
+ /* two planes -- one Y, one Cr + Cb interleaved  */
+ #define V4L2_PIX_FMT_NV12    v4l2_fourcc('N', 'V', '1', '2') /* 12  Y/CbCr 4:2:0  */
+ #define V4L2_PIX_FMT_NV21    v4l2_fourcc('N', 'V', '2', '1') /* 12  Y/CrCb 4:2:0  */
++#define V4L2_PIX_FMT_NV15    v4l2_fourcc('N', 'V', '1', '5') /* 15  Y/CbCr 4:2:0 10-bit packed */
+ #define V4L2_PIX_FMT_NV16    v4l2_fourcc('N', 'V', '1', '6') /* 16  Y/CbCr 4:2:2  */
+ #define V4L2_PIX_FMT_NV61    v4l2_fourcc('N', 'V', '6', '1') /* 16  Y/CrCb 4:2:2  */
++#define V4L2_PIX_FMT_NV20    v4l2_fourcc('N', 'V', '2', '0') /* 20  Y/CbCr 4:2:2 10-bit packed */
+ #define V4L2_PIX_FMT_NV24    v4l2_fourcc('N', 'V', '2', '4') /* 24  Y/CbCr 4:4:4  */
+ #define V4L2_PIX_FMT_NV42    v4l2_fourcc('N', 'V', '4', '2') /* 24  Y/CrCb 4:4:4  */
+ #define V4L2_PIX_FMT_P010    v4l2_fourcc('P', '0', '1', '0') /* 24  Y/CbCr 4:2:0 10-bit per component */
 -- 
 2.42.0
 
