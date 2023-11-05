@@ -2,31 +2,32 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0738DC4332F
-	for <linux-media@archiver.kernel.org>; Sun,  5 Nov 2023 23:36:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B35FC4332F
+	for <linux-media@archiver.kernel.org>; Sun,  5 Nov 2023 23:37:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbjKEXgs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 5 Nov 2023 18:36:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36850 "EHLO
+        id S230009AbjKEXhE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 5 Nov 2023 18:37:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjKEXgs (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sun, 5 Nov 2023 18:36:48 -0500
+        with ESMTP id S229485AbjKEXhE (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 5 Nov 2023 18:37:04 -0500
 Received: from smtp.forwardemail.net (smtp.forwardemail.net [149.28.215.223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB699BE;
-        Sun,  5 Nov 2023 15:36:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D77100;
+        Sun,  5 Nov 2023 15:37:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kwiboo.se;
- h=Content-Transfer-Encoding: MIME-Version: Message-ID: Date: Subject: Cc:
- To: From; q=dns/txt; s=fe-e1b5cab7be; t=1699227398;
- bh=KYZWsqQ58F74SNXGzCDG6oHgc2JUvYanuGDg+aUTAPk=;
- b=l4EeyDHkSIbDTQ/c3MhDVHW9FJW09jN18RSqBKkGQ22H/zasMBzLBhSBLz4zkqMxdvo2oorO2
- FvfnV5yFsY2GM5jPKBYftbtNAhGkHsLJsHVwyqdlL5cXPr5uvsZ1wVpMe90Y9D3khZax3dHjaG0
- 0AAdGQvPJPS14M/YzWOyiRNempp5EIKC8q9JlroOfJ304QDkwAQBKQO3yxEaPsxIfnV0Zu7DbH4
- QHdNMt09HW2C8PEBB9cYJvOPNItW+glHzw14fxje5fYatpyPYM3fOWVgYr2LU1HUjIYwFMFX29N
- 38IqhWa4IHHGZzI0raV/bfWXMWUF8EW/TtJjRxK9SmDw==
+ h=Content-Transfer-Encoding: MIME-Version: References: In-Reply-To:
+ Message-ID: Date: Subject: Cc: To: From; q=dns/txt; s=fe-e1b5cab7be;
+ t=1699227416; bh=BC/o7NVv2ms3W3hOMNL4HECxSEB8gFpPZJJfV/rOs8U=;
+ b=bloL5d0DNLnha3nWmU1yoFjnmv5z11FLbbMWD9G1BQP3kZM03tNHAFRTZuSJoiJcvxoubA6Sx
+ vToHA/SxM/wwG8VifFzaVGDaMULX1KDQSgkAX1MyfGyzQN4DsS8+zmY7v9xT3X+QLsLAeTkRFdY
+ qUPY3pG9N1AQf/hT3f6M1bxh8I6ubevy8CKkQ1D681Ad3eYDMGvYMvyYTk7Q4lqG2o4s+4D9sTI
+ uoMpfiNXa0+eHUDqxvJGHqNnZkjuwOykrwzMiIemnIzNXVV+fDW45h+agKDeQnsfRjMC4hg93gq
+ pYUMzcbNkXsRfyKhfIEj5CuLMCMKsR3reM/j9oB5kiqQ==
 From:   Jonas Karlman <jonas@kwiboo.se>
 To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc:     Alex Bee <knaerzche@gmail.com>,
         Nicolas Dufresne <nicolas.dufresne@collabora.com>,
         Sebastian Fricke <sebastian.fricke@collabora.com>,
@@ -35,10 +36,12 @@ Cc:     Alex Bee <knaerzche@gmail.com>,
         linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Jonas Karlman <jonas@kwiboo.se>
-Subject: [PATCH 0/9] media: rkvdec: Add HEVC backend
-Date:   Sun,  5 Nov 2023 23:36:07 +0000
-Message-ID: <20231105233630.3927502-1-jonas@kwiboo.se>
+Subject: [PATCH 2/9] media: rkvdec: Add variants support
+Date:   Sun,  5 Nov 2023 23:36:09 +0000
+Message-ID: <20231105233630.3927502-3-jonas@kwiboo.se>
 X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20231105233630.3927502-1-jonas@kwiboo.se>
+References: <20231105233630.3927502-1-jonas@kwiboo.se>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Report-Abuse-To: abuse@forwardemail.net
@@ -47,112 +50,146 @@ X-Complaints-To: abuse@forwardemail.net
 X-ForwardEmail-Version: 0.4.40
 X-ForwardEmail-Sender: rfc822; jonas@kwiboo.se, smtp.forwardemail.net,
  149.28.215.223
-X-ForwardEmail-ID: 654827061b004d4cddbe0c4c
+X-ForwardEmail-ID: 654827131b004d4cddbe0c66
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series add a HEVC backend to the Rockchip Video Decoder driver.
+From: Alex Bee <knaerzche@gmail.com>
 
-A version of this HEVC backend has been in use by the LibreELEC distro
-for the past 3+ years [1]. It was initially created based on a copy of
-the H264 backend, unstable HEVC uAPI controls and a cabac table + scaling
-matrix functions shamelessly copied 1:1 from the Rockchip mpp library.
+Different versions of the Rockchip VDEC IP exists and one way they can
+differ is what decoding formats are supported.
 
-It has since then been extended to use the stable HEVC uAPI controls and
-improved opon e.g. to include support for rk3288 and fix decoding issues
-by Alex Bee and Nicolas Dufresne.
+Add a variant implementation in order to support flagging different
+capabilities.
 
-The version submitted in this series is based on the code currently used
-by the LibreELEC distro, excluding hard/soft reset, and with cabac table
-and scaling matrix functions picked from Sebastian Fricke prior series
-to add a HEVC backend [2].
+Signed-off-by: Alex Bee <knaerzche@gmail.com>
+Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
+---
+ drivers/staging/media/rkvdec/rkvdec.c | 21 ++++++++++++++++++++-
+ drivers/staging/media/rkvdec/rkvdec.h | 10 ++++++++++
+ 2 files changed, 30 insertions(+), 1 deletion(-)
 
-Big thanks to Alex Bee, Nicolas Dufresne and Sebastian Fricke for making
-this series possible!
-
-Patch 1 add the new HEVC backend.
-Patch 2-3 add variants support to the driver.
-Patch 4 add support for a rk3288 variant.
-Patch 5 add a rk3328 variant to work around hw quirks.
-Patch 6-7 add device tree node for rk3288.
-Patch 8-9 extend vdec node reg size to include cache/perf registers.
-
-This was tested on a ROCK Pi 4 (RK3399) and Rock64 (RK3328):
-
-  v4l2-compliance 1.24.1, 64 bits, 64-bit time_t
-  ...
-  Total for rkvdec device /dev/video1: 46, Succeeded: 46, Failed: 0, Warnings: 0
-
-  Running test suite JCT-VC-HEVC_V1 with decoder FFmpeg-H.265-V4L2-request
-  ...
-  Ran 135/147 tests successfully
-
-  Running test suite JCT-VC-MV-HEVC with decoder FFmpeg-H.265-V4L2-request
-  ...
-  Ran 9/9 tests successfully
-
-And on a TinkerBoard (RK3288):
-
-  v4l2-compliance 1.24.1, 32 bits, 32-bit time_t
-  ...
-  Total for rkvdec device /dev/video3: 47, Succeeded: 47, Failed: 0, Warnings: 0
-
-  Running test suite JCT-VC-HEVC_V1 with decoder FFmpeg-H.265-V4L2-request
-  ...
-  Ran 137/147 tests successfully
-
-  Running test suite JCT-VC-MV-HEVC with decoder FFmpeg-H.265-V4L2-request
-  ...
-  Ran 9/9 tests successfully
-
-This series depend on the following series:
-- media: rkvdec: Add H.264 High 10 and 4:2:2 profile support [3]
-
-To fully runtime test this series you need above series and ffmpeg
-patches from [4], this series and its depends is also available at [5].
-
-Full summary of fluster run can be found at [6].
-
-[1] https://github.com/LibreELEC/LibreELEC.tv/blob/master/projects/Rockchip/patches/linux/default/linux-2000-v4l2-wip-rkvdec-hevc.patch
-[2] https://lore.kernel.org/linux-media/20230101-patch-series-v2-6-2-rc1-v2-0-fa1897efac14@collabora.com/
-[3] https://lore.kernel.org/linux-media/20231105165521.3592037-1-jonas@kwiboo.se/
-[4] https://github.com/Kwiboo/FFmpeg/commits/v4l2-request-n6.1-dev/
-[5] https://github.com/Kwiboo/linux-rockchip/commits/linuxtv-rkvdec-hevc-v1/
-[6] https://gist.github.com/Kwiboo/4c0ed87774dede44ce6838451a1ec93d
-
-Regards,
-Jonas
-
-Alex Bee (5):
-  media: rkvdec: Add variants support
-  media: rkvdec: Add RK3288 variant
-  media: rkvdec: Disable QoS for HEVC and VP9 on RK3328
-  ARM: dts: rockchip: Add vdec node for RK3288
-  arm64: dts: rockchip: Expand reg size of vdec node for RK3399
-
-Jonas Karlman (4):
-  media: rkvdec: Add HEVC backend
-  media: rkvdec: Implement capability filtering
-  media: dt-bindings: rockchip,vdec: Add RK3288 compatible
-  arm64: dts: rockchip: Expand reg size of vdec node for RK3328
-
- .../bindings/media/rockchip,vdec.yaml         |    4 +-
- arch/arm/boot/dts/rockchip/rk3288.dtsi        |   17 +-
- arch/arm64/boot/dts/rockchip/rk3328.dtsi      |    2 +-
- arch/arm64/boot/dts/rockchip/rk3399.dtsi      |    6 +-
- drivers/staging/media/rkvdec/Makefile         |    2 +-
- drivers/staging/media/rkvdec/TODO             |    7 -
- .../staging/media/rkvdec/rkvdec-hevc-data.c   | 1848 +++++++++++++++++
- drivers/staging/media/rkvdec/rkvdec-hevc.c    |  823 ++++++++
- drivers/staging/media/rkvdec/rkvdec-regs.h    |    3 +
- drivers/staging/media/rkvdec/rkvdec-vp9.c     |   10 +
- drivers/staging/media/rkvdec/rkvdec.c         |  180 +-
- drivers/staging/media/rkvdec/rkvdec.h         |   15 +
- 12 files changed, 2886 insertions(+), 31 deletions(-)
- create mode 100644 drivers/staging/media/rkvdec/rkvdec-hevc-data.c
- create mode 100644 drivers/staging/media/rkvdec/rkvdec-hevc.c
-
+diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
+index eec68a7a1c95..dc1f75dd1c4f 100644
+--- a/drivers/staging/media/rkvdec/rkvdec.c
++++ b/drivers/staging/media/rkvdec/rkvdec.c
+@@ -13,6 +13,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
++#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm.h>
+ #include <linux/pm_runtime.h>
+@@ -332,6 +333,7 @@ static const struct rkvdec_coded_fmt_desc rkvdec_coded_fmts[] = {
+ 		.ops = &rkvdec_hevc_fmt_ops,
+ 		.num_decoded_fmts = ARRAY_SIZE(rkvdec_hevc_decoded_fmts),
+ 		.decoded_fmts = rkvdec_hevc_decoded_fmts,
++		.capability = RKVDEC_CAPABILITY_HEVC,
+ 	},
+ 	{
+ 		.fourcc = V4L2_PIX_FMT_H264_SLICE,
+@@ -348,6 +350,7 @@ static const struct rkvdec_coded_fmt_desc rkvdec_coded_fmts[] = {
+ 		.num_decoded_fmts = ARRAY_SIZE(rkvdec_h264_decoded_fmts),
+ 		.decoded_fmts = rkvdec_h264_decoded_fmts,
+ 		.subsystem_flags = VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF,
++		.capability = RKVDEC_CAPABILITY_H264,
+ 	},
+ 	{
+ 		.fourcc = V4L2_PIX_FMT_VP9_FRAME,
+@@ -363,6 +366,7 @@ static const struct rkvdec_coded_fmt_desc rkvdec_coded_fmts[] = {
+ 		.ops = &rkvdec_vp9_fmt_ops,
+ 		.num_decoded_fmts = ARRAY_SIZE(rkvdec_vp9_decoded_fmts),
+ 		.decoded_fmts = rkvdec_vp9_decoded_fmts,
++		.capability = RKVDEC_CAPABILITY_VP9,
+ 	}
+ };
+ 
+@@ -1167,8 +1171,17 @@ static void rkvdec_watchdog_func(struct work_struct *work)
+ 	}
+ }
+ 
++static const struct rkvdec_variant rk3399_rkvdec_variant = {
++	.capabilities = RKVDEC_CAPABILITY_HEVC |
++			RKVDEC_CAPABILITY_H264 |
++			RKVDEC_CAPABILITY_VP9,
++};
++
+ static const struct of_device_id of_rkvdec_match[] = {
+-	{ .compatible = "rockchip,rk3399-vdec" },
++	{
++		.compatible = "rockchip,rk3399-vdec",
++		.data = &rk3399_rkvdec_variant,
++	},
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, of_rkvdec_match);
+@@ -1179,16 +1192,22 @@ static const char * const rkvdec_clk_names[] = {
+ 
+ static int rkvdec_probe(struct platform_device *pdev)
+ {
++	const struct rkvdec_variant *variant;
+ 	struct rkvdec_dev *rkvdec;
+ 	unsigned int i;
+ 	int ret, irq;
+ 
++	variant = of_device_get_match_data(&pdev->dev);
++	if (!variant)
++		return -EINVAL;
++
+ 	rkvdec = devm_kzalloc(&pdev->dev, sizeof(*rkvdec), GFP_KERNEL);
+ 	if (!rkvdec)
+ 		return -ENOMEM;
+ 
+ 	platform_set_drvdata(pdev, rkvdec);
+ 	rkvdec->dev = &pdev->dev;
++	rkvdec->capabilities = variant->capabilities;
+ 	mutex_init(&rkvdec->vdev_lock);
+ 	INIT_DELAYED_WORK(&rkvdec->watchdog_work, rkvdec_watchdog_func);
+ 
+diff --git a/drivers/staging/media/rkvdec/rkvdec.h b/drivers/staging/media/rkvdec/rkvdec.h
+index 2f3bda1df5f0..14ce26a6c618 100644
+--- a/drivers/staging/media/rkvdec/rkvdec.h
++++ b/drivers/staging/media/rkvdec/rkvdec.h
+@@ -22,6 +22,10 @@
+ #include <media/videobuf2-core.h>
+ #include <media/videobuf2-dma-contig.h>
+ 
++#define RKVDEC_CAPABILITY_HEVC		BIT(0)
++#define RKVDEC_CAPABILITY_H264		BIT(1)
++#define RKVDEC_CAPABILITY_VP9		BIT(2)
++
+ struct rkvdec_ctx;
+ 
+ struct rkvdec_ctrl_desc {
+@@ -63,6 +67,10 @@ vb2_to_rkvdec_decoded_buf(struct vb2_buffer *buf)
+ 			    base.vb.vb2_buf);
+ }
+ 
++struct rkvdec_variant {
++	unsigned int capabilities;
++};
++
+ struct rkvdec_coded_fmt_ops {
+ 	int (*adjust_fmt)(struct rkvdec_ctx *ctx,
+ 			  struct v4l2_format *f);
+@@ -98,6 +106,7 @@ struct rkvdec_coded_fmt_desc {
+ 	unsigned int num_decoded_fmts;
+ 	const struct rkvdec_decoded_fmt_desc *decoded_fmts;
+ 	u32 subsystem_flags;
++	unsigned int capability;
+ };
+ 
+ struct rkvdec_dev {
+@@ -110,6 +119,7 @@ struct rkvdec_dev {
+ 	void __iomem *regs;
+ 	struct mutex vdev_lock; /* serializes ioctls */
+ 	struct delayed_work watchdog_work;
++	unsigned int capabilities;
+ };
+ 
+ struct rkvdec_ctx {
 -- 
 2.42.0
 
