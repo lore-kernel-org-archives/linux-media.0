@@ -2,31 +2,32 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF360C4332F
-	for <linux-media@archiver.kernel.org>; Sun,  5 Nov 2023 17:05:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8AB8C4332F
+	for <linux-media@archiver.kernel.org>; Sun,  5 Nov 2023 17:06:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbjKERFn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 5 Nov 2023 12:05:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36374 "EHLO
+        id S229599AbjKERGf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 5 Nov 2023 12:06:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjKERFn (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sun, 5 Nov 2023 12:05:43 -0500
+        with ESMTP id S229448AbjKERGe (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 5 Nov 2023 12:06:34 -0500
 Received: from smtp.forwardemail.net (smtp.forwardemail.net [149.28.215.223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174C497;
-        Sun,  5 Nov 2023 09:05:40 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86726CC;
+        Sun,  5 Nov 2023 09:06:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kwiboo.se;
  h=Content-Transfer-Encoding: MIME-Version: References: In-Reply-To:
  Message-ID: Date: Subject: Cc: To: From; q=dns/txt; s=fe-e1b5cab7be;
- t=1699203938; bh=7TvJ7hJu85Rv+IB9dyvciIwrrP9mf2NII64BLyqL6pI=;
- b=c6ljQ0zc5Ummv/9BSWkxu9BtNA/+DCE2lXoUKtp9N4iUnWtyAwwNjkL2Bir0OIk0oyAfDbVaO
- DydCMQZT7Xw9thbnRaxqGjl9JxlsfsM1MFfeiApOYBFCYpWvEFdZ4LCAo4KuhyYKaAjXPajcxa1
- AsKteI80bM0J+jDIkZ7JW3WhVsayK8EFvvkRzG0/p/ioaVcDJH00SNkaTSgGVra9Qlb7VK43LKJ
- Z2R+RvTtBArmGOPuOJqasDeCAWCp2U+FQW2KsF0hP4s1QWjBTWvMK5kOCuJ/mJ8TiS1Fj0VP/DY
- 7T4m6ZNaWP0ja3sMROTPADMdc+dBmfooxn74yBsZw0xQ==
+ t=1699203989; bh=DHrB2MDEvgLvMGiiGW4ysBRF9ISWcTsdFhQXpZT8qmk=;
+ b=qmG2UqLYMHESXsPdAlgbWWmznBQ+5Rc/W8EIDO0qSi+1yFUmMT+7+LjPru6aNwNGUsKKRYzb/
+ EY6npsho/gelDfv/bMhMUH5ndDkQCcOqZCToPdUe0PMb38XzUz5XHCLQMEYwMYTtgLjz4KhCRUu
+ g2nf26aFjz09K1jtw4iXOLCLAUYi36nTcDGJD9A13XdIsr8M7IWP/XQB+e7g+eWEKqsgD4JOqzH
+ Nab8uOYS4hQZIMT/Ova8vLF2KuzcAjAK6OQVaDE3MvKT7EjLO0Ole1+rQ98P5NmDGs12WosfF9m
+ 4StMPGZuIZleIWK657/cEYge1ZXLPL+xPAI2af7/C2uQ==
 From:   Jonas Karlman <jonas@kwiboo.se>
 To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc:     Alex Bee <knaerzche@gmail.com>,
         Nicolas Dufresne <nicolas.dufresne@collabora.com>,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>,
@@ -35,9 +36,9 @@ Cc:     Alex Bee <knaerzche@gmail.com>,
         linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Jonas Karlman <jonas@kwiboo.se>
-Subject: [PATCH v4 01/11] media: v4l2-common: Add helpers to calculate bytesperline and sizeimage
-Date:   Sun,  5 Nov 2023 16:55:00 +0000
-Message-ID: <20231105165521.3592037-2-jonas@kwiboo.se>
+Subject: [PATCH v4 07/11] media: rkvdec: Move rkvdec_reset_decoded_fmt helper
+Date:   Sun,  5 Nov 2023 16:55:06 +0000
+Message-ID: <20231105165521.3592037-8-jonas@kwiboo.se>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231105165521.3592037-1-jonas@kwiboo.se>
 References: <20231105165521.3592037-1-jonas@kwiboo.se>
@@ -49,14 +50,13 @@ X-Complaints-To: abuse@forwardemail.net
 X-ForwardEmail-Version: 0.4.40
 X-ForwardEmail-Sender: rfc822; jonas@kwiboo.se, smtp.forwardemail.net,
  149.28.215.223
-X-ForwardEmail-ID: 6547c90342ad2f8d152468e7
+X-ForwardEmail-ID: 6547c91a42ad2f8d15246935
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add helper functions to calculate plane bytesperline and sizeimage,
-these new helpers consider bpp div, block width and height when
-calculating plane bytesperline and sizeimage.
+Move rkvdec_reset_decoded_fmt() and the called rkvdec_reset_fmt() helper
+functions in preparation for adding a new caller in an upcoming patch.
 
 Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
 ---
@@ -64,122 +64,82 @@ v4:
 - No change
 
 v3:
-- Consider bpp_div in calculation
+- New patch
 
- drivers/media/v4l2-core/v4l2-common.c | 78 +++++++++++++--------------
- 1 file changed, 39 insertions(+), 39 deletions(-)
+ drivers/staging/media/rkvdec/rkvdec.c | 46 +++++++++++++--------------
+ 1 file changed, 23 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
-index 3a4b15a98e02..834b426da8b1 100644
---- a/drivers/media/v4l2-core/v4l2-common.c
-+++ b/drivers/media/v4l2-core/v4l2-common.c
-@@ -350,6 +350,34 @@ static inline unsigned int v4l2_format_block_height(const struct v4l2_format_inf
- 	return info->block_h[plane];
+diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
+index 0570c790ad08..7a79840470e1 100644
+--- a/drivers/staging/media/rkvdec/rkvdec.c
++++ b/drivers/staging/media/rkvdec/rkvdec.c
+@@ -37,6 +37,29 @@ static void rkvdec_fill_decoded_pixfmt(struct rkvdec_ctx *ctx,
+ 		DIV_ROUND_UP(pix_mp->height, 16);
  }
  
-+static inline unsigned int v4l2_format_plane_width(const struct v4l2_format_info *info, int plane,
-+						   unsigned int width)
++static void rkvdec_reset_fmt(struct rkvdec_ctx *ctx, struct v4l2_format *f,
++			     u32 fourcc)
 +{
-+	unsigned int hdiv = plane ? info->hdiv : 1;
-+	unsigned int aligned_width =
-+		ALIGN(width, v4l2_format_block_width(info, plane));
-+
-+	return DIV_ROUND_UP(aligned_width, hdiv) *
-+	       info->bpp[plane] / info->bpp_div[plane];
++	memset(f, 0, sizeof(*f));
++	f->fmt.pix_mp.pixelformat = fourcc;
++	f->fmt.pix_mp.field = V4L2_FIELD_NONE;
++	f->fmt.pix_mp.colorspace = V4L2_COLORSPACE_REC709;
++	f->fmt.pix_mp.ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
++	f->fmt.pix_mp.quantization = V4L2_QUANTIZATION_DEFAULT;
++	f->fmt.pix_mp.xfer_func = V4L2_XFER_FUNC_DEFAULT;
 +}
 +
-+static inline unsigned int v4l2_format_plane_height(const struct v4l2_format_info *info, int plane,
-+						    unsigned int height)
++static void rkvdec_reset_decoded_fmt(struct rkvdec_ctx *ctx)
 +{
-+	unsigned int vdiv = plane ? info->vdiv : 1;
-+	unsigned int aligned_height =
-+		ALIGN(height, v4l2_format_block_height(info, plane));
++	struct v4l2_format *f = &ctx->decoded_fmt;
 +
-+	return DIV_ROUND_UP(aligned_height, vdiv);
++	rkvdec_reset_fmt(ctx, f, ctx->coded_fmt_desc->decoded_fmts[0]);
++	f->type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
++	f->fmt.pix_mp.width = ctx->coded_fmt.fmt.pix_mp.width;
++	f->fmt.pix_mp.height = ctx->coded_fmt.fmt.pix_mp.height;
++	rkvdec_fill_decoded_pixfmt(ctx, &f->fmt.pix_mp);
 +}
 +
-+static inline unsigned int v4l2_format_plane_size(const struct v4l2_format_info *info, int plane,
-+						  unsigned int width, unsigned int height)
-+{
-+	return v4l2_format_plane_width(info, plane, width) *
-+	       v4l2_format_plane_height(info, plane, height);
-+}
-+
- void v4l2_apply_frmsize_constraints(u32 *width, u32 *height,
- 				    const struct v4l2_frmsize_stepwise *frmsize)
+ static int rkvdec_try_ctrl(struct v4l2_ctrl *ctrl)
  {
-@@ -385,37 +413,19 @@ int v4l2_fill_pixfmt_mp(struct v4l2_pix_format_mplane *pixfmt,
- 
- 	if (info->mem_planes == 1) {
- 		plane = &pixfmt->plane_fmt[0];
--		plane->bytesperline = ALIGN(width, v4l2_format_block_width(info, 0)) * info->bpp[0] / info->bpp_div[0];
-+		plane->bytesperline = v4l2_format_plane_width(info, 0, width);
- 		plane->sizeimage = 0;
- 
--		for (i = 0; i < info->comp_planes; i++) {
--			unsigned int hdiv = (i == 0) ? 1 : info->hdiv;
--			unsigned int vdiv = (i == 0) ? 1 : info->vdiv;
--			unsigned int aligned_width;
--			unsigned int aligned_height;
--
--			aligned_width = ALIGN(width, v4l2_format_block_width(info, i));
--			aligned_height = ALIGN(height, v4l2_format_block_height(info, i));
--
--			plane->sizeimage += info->bpp[i] *
--				DIV_ROUND_UP(aligned_width, hdiv) *
--				DIV_ROUND_UP(aligned_height, vdiv) / info->bpp_div[i];
--		}
-+		for (i = 0; i < info->comp_planes; i++)
-+			plane->sizeimage +=
-+				v4l2_format_plane_size(info, i, width, height);
- 	} else {
- 		for (i = 0; i < info->comp_planes; i++) {
--			unsigned int hdiv = (i == 0) ? 1 : info->hdiv;
--			unsigned int vdiv = (i == 0) ? 1 : info->vdiv;
--			unsigned int aligned_width;
--			unsigned int aligned_height;
--
--			aligned_width = ALIGN(width, v4l2_format_block_width(info, i));
--			aligned_height = ALIGN(height, v4l2_format_block_height(info, i));
--
- 			plane = &pixfmt->plane_fmt[i];
- 			plane->bytesperline =
--				info->bpp[i] * DIV_ROUND_UP(aligned_width, hdiv) / info->bpp_div[i];
--			plane->sizeimage =
--				plane->bytesperline * DIV_ROUND_UP(aligned_height, vdiv);
-+				v4l2_format_plane_width(info, i, width);
-+			plane->sizeimage = plane->bytesperline *
-+				v4l2_format_plane_height(info, i, height);
- 		}
- 	}
- 	return 0;
-@@ -439,22 +449,12 @@ int v4l2_fill_pixfmt(struct v4l2_pix_format *pixfmt, u32 pixelformat,
- 	pixfmt->width = width;
- 	pixfmt->height = height;
- 	pixfmt->pixelformat = pixelformat;
--	pixfmt->bytesperline = ALIGN(width, v4l2_format_block_width(info, 0)) * info->bpp[0] / info->bpp_div[0];
-+	pixfmt->bytesperline = v4l2_format_plane_width(info, 0, width);
- 	pixfmt->sizeimage = 0;
- 
--	for (i = 0; i < info->comp_planes; i++) {
--		unsigned int hdiv = (i == 0) ? 1 : info->hdiv;
--		unsigned int vdiv = (i == 0) ? 1 : info->vdiv;
--		unsigned int aligned_width;
--		unsigned int aligned_height;
--
--		aligned_width = ALIGN(width, v4l2_format_block_width(info, i));
--		aligned_height = ALIGN(height, v4l2_format_block_height(info, i));
--
--		pixfmt->sizeimage += info->bpp[i] *
--			DIV_ROUND_UP(aligned_width, hdiv) *
--			DIV_ROUND_UP(aligned_height, vdiv) / info->bpp_div[i];
--	}
-+	for (i = 0; i < info->comp_planes; i++)
-+		pixfmt->sizeimage +=
-+			v4l2_format_plane_size(info, i, width, height);
- 	return 0;
+ 	struct rkvdec_ctx *ctx = container_of(ctrl->handler, struct rkvdec_ctx, ctrl_hdl);
+@@ -169,18 +192,6 @@ rkvdec_find_coded_fmt_desc(u32 fourcc)
+ 	return NULL;
  }
- EXPORT_SYMBOL_GPL(v4l2_fill_pixfmt);
+ 
+-static void rkvdec_reset_fmt(struct rkvdec_ctx *ctx, struct v4l2_format *f,
+-			     u32 fourcc)
+-{
+-	memset(f, 0, sizeof(*f));
+-	f->fmt.pix_mp.pixelformat = fourcc;
+-	f->fmt.pix_mp.field = V4L2_FIELD_NONE;
+-	f->fmt.pix_mp.colorspace = V4L2_COLORSPACE_REC709;
+-	f->fmt.pix_mp.ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
+-	f->fmt.pix_mp.quantization = V4L2_QUANTIZATION_DEFAULT;
+-	f->fmt.pix_mp.xfer_func = V4L2_XFER_FUNC_DEFAULT;
+-}
+-
+ static void rkvdec_reset_coded_fmt(struct rkvdec_ctx *ctx)
+ {
+ 	struct v4l2_format *f = &ctx->coded_fmt;
+@@ -196,17 +207,6 @@ static void rkvdec_reset_coded_fmt(struct rkvdec_ctx *ctx)
+ 		ctx->coded_fmt_desc->ops->adjust_fmt(ctx, f);
+ }
+ 
+-static void rkvdec_reset_decoded_fmt(struct rkvdec_ctx *ctx)
+-{
+-	struct v4l2_format *f = &ctx->decoded_fmt;
+-
+-	rkvdec_reset_fmt(ctx, f, ctx->coded_fmt_desc->decoded_fmts[0]);
+-	f->type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
+-	f->fmt.pix_mp.width = ctx->coded_fmt.fmt.pix_mp.width;
+-	f->fmt.pix_mp.height = ctx->coded_fmt.fmt.pix_mp.height;
+-	rkvdec_fill_decoded_pixfmt(ctx, &f->fmt.pix_mp);
+-}
+-
+ static int rkvdec_enum_framesizes(struct file *file, void *priv,
+ 				  struct v4l2_frmsizeenum *fsize)
+ {
 -- 
 2.42.0
 
