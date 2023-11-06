@@ -2,154 +2,117 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B512EC4167D
-	for <linux-media@archiver.kernel.org>; Mon,  6 Nov 2023 14:44:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 947F8C4167B
+	for <linux-media@archiver.kernel.org>; Mon,  6 Nov 2023 14:49:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230514AbjKFOox (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 6 Nov 2023 09:44:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48994 "EHLO
+        id S231805AbjKFOtG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 6 Nov 2023 09:49:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231794AbjKFOos (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Nov 2023 09:44:48 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202B5BB;
-        Mon,  6 Nov 2023 06:44:46 -0800 (PST)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ED10C433C9;
-        Mon,  6 Nov 2023 14:44:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1699281885;
-        bh=7L3lZ+M6F/MppCLKLJ3iMRw+h1ZtHpfsvkLcJii+LsA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IjUNNP4Gt06LniIuHdfYaXlzq3i4Mb37385CLH7PiVnaf2MlUqv+G6hRGDzHdKoz+
-         3yg6gp2iA0AFuSRNn7q8XfR7NmNdW/QdgR0a5nuJIlsG8NMxHBKwUfKIZAudcsf3kb
-         Phvbgfu25RYjdyIO0n9+MTPoVRiorHVNHmBax6VRf/xevRbD8jbaN0BVMpsd9uB24z
-         GHHcG5Aic/vRwhRKGO5V8r/w6fQGW/H8tThg5HmEbU3y6gJXeHyuyk6OpW3UjZqOPx
-         +bHa05Lpel4pt+oBEc8YJ+XFxEqUWFaxmTty2qkUhjb83HSh6MPYjA7S4XMgqmrFiC
-         +zaoNzXbBLahQ==
-Date:   Mon, 6 Nov 2023 15:44:43 +0100
-From:   Maxime Ripard <mripard@kernel.org>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sandy Huang <hjc@rock-chips.com>,
-        Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH RFC v3 12/37] drm/connector: hdmi: Create Infoframe
- DebugFS entries
-Message-ID: <fks4th6oyzpvq2hljbpt4kac5yph6lgsevslpcxrukqcxynugu@nje5bxbqxi26>
-References: <20231031-kms-hdmi-connector-state-v3-0-328b0fae43a7@kernel.org>
- <20231031-kms-hdmi-connector-state-v3-12-328b0fae43a7@kernel.org>
- <806f2ad3-c80b-41e5-9388-f1af7bace8e3@xs4all.nl>
+        with ESMTP id S229705AbjKFOtF (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Nov 2023 09:49:05 -0500
+Received: from m15.mail.163.com (m15.mail.163.com [45.254.50.220])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8BA37B6;
+        Mon,  6 Nov 2023 06:49:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Mn+LM
+        vMphVLhG3rmeD4sGc/rl3mIEcUGZbCfQih6dB0=; b=QbRgIzfncyvm29xEQRCsf
+        s9y9BGRM9GSawz/gOF6YOeat//QqI6nuffkL22AtZO7U2xXL6Eih9rkATqjR1PWl
+        pEAitLtyJ3GYDBHnDBZC2RzODczZUUsL8iCEUsTcTetxOm5IeaTR/DvYMI3cjEgL
+        WFlXqpEzLvFsPX6gVhWijg=
+Received: from leanderwang-LC4.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g2-2 (Coremail) with SMTP id _____wAXH5Gu_Ehl9FmbBw--.1952S4;
+        Mon, 06 Nov 2023 22:48:21 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     dmitry.osipenko@collabora.com
+Cc:     Kyrie.Wu@mediatek.com, bin.liu@mediatek.com, mchehab@kernel.org,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, Irui.Wang@mediatek.com,
+        security@kernel.org, hackerzheng666@gmail.com,
+        amergnat@baylibre.com, wenst@chromium.org, stable@vger.kernel.org,
+        Zheng Wang <zyytlz.wz@163.com>
+Subject: [RESEND PATCH v2 2/3] media: mtk-jpeg: Fix use after free bug due to error path handling in mtk_jpeg_dec_device_run
+Date:   Mon,  6 Nov 2023 22:48:10 +0800
+Message-Id: <20231106144811.868127-3-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20231106144811.868127-1-zyytlz.wz@163.com>
+References: <20231106144811.868127-1-zyytlz.wz@163.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iqczjmp6rdkak4lg"
-Content-Disposition: inline
-In-Reply-To: <806f2ad3-c80b-41e5-9388-f1af7bace8e3@xs4all.nl>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wAXH5Gu_Ehl9FmbBw--.1952S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW7uF1rGr1fJr1kJFW3KF43GFg_yoW8KF48pr
+        Zagw4DCFWUGrs0gr48Aa4UZF1rC398tF12gr4S9wn3Z343XFs7Jry0ya4IqFWIyr9rCa4r
+        Zr1F9a4xJr4DZFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zR7DGOUUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbBzhggU2I0bOKhvAAAsg
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+In mtk_jpeg_probe, &jpeg->job_timeout_work is bound with
+mtk_jpeg_job_timeout_work.
 
---iqczjmp6rdkak4lg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In mtk_jpeg_dec_device_run, if error happens in
+mtk_jpeg_set_dec_dst, it will finally start the worker while
+mark the job as finished by invoking v4l2_m2m_job_finish.
 
-Hi Hans,
+There are two methods to trigger the bug. If we remove the
+module, it which will call mtk_jpeg_remove to make cleanup.
+The possible sequence is as follows, which will cause a
+use-after-free bug.
 
-On Fri, Nov 03, 2023 at 10:05:18AM +0100, Hans Verkuil wrote:
-> Hi Maxime,
->=20
-> Thank you for posting v3, this time it runs fine on my RPi 4, thank you f=
-or
-> fixing that.
->=20
-> I'll start working on a conformity checker for this.
+CPU0                  CPU1
+mtk_jpeg_dec_...    |
+  start worker	    |
+                    |mtk_jpeg_job_timeout_work
+mtk_jpeg_remove     |
+  v4l2_m2m_release  |
+    kfree(m2m_dev); |
+                    |
+                    | v4l2_m2m_get_curr_priv
+                    |   m2m_dev->curr_ctx //use
 
-Awesome :)
+If we close the file descriptor, which will call mtk_jpeg_release,
+it will have a similar sequence.
 
-> > +static int create_hdmi_infoframe_files(struct drm_connector *connector,
-> > +				       struct dentry *parent)
-> > +{
-> > +	int ret;
-> > +
-> > +	ret =3D CREATE_HDMI_INFOFRAME_FILE(connector, parent, audio);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ret =3D CREATE_HDMI_INFOFRAME_FILE(connector, parent, avi);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ret =3D CREATE_HDMI_INFOFRAME_FILE(connector, parent, drm);
->=20
-> Hmm, I had to look into the code to figure out that 'drm' stands for
-> Dynamic Range and Mastering InfoFrame. While entirely correct, it is
-> also very confusing in the context of the 'drm' subsystem.
->=20
-> I am not quite certain what the best approach is here.
->=20
-> Internally in the drm code it is talking about 'hdr' or 'hdr metadata',
-> but that's a bit confusing as well since there is also an HDR Dynamic
-> Metadata Extended InfoFrame defined in CTA-861, even though support for
-> that is not (yet) implemented in drm.
->=20
-> At minimum there should be a comment in the code explaining what drm
-> stands for in this context.
->=20
-> One option to consider is renaming this file to hdr_drm, thus indicating
-> that this is HDR related.
+Fix this bug by starting timeout worker only if started jpegdec worker
+successfully. Then v4l2_m2m_job_finish will only be called in
+either mtk_jpeg_job_timeout_work or mtk_jpeg_dec_device_run.
+Fixes: b2f0d2724ba4 ("[media] vcodec: mediatek: Add Mediatek JPEG Decoder Driver")
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc: stable@vger.kernel.org
+---
+v2:
+- put the patches into a single series suggested by Dmitry
+---
+ drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-I ended up doing both, thanks for the suggestion
+diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+index 60425c99a2b8..a39acde2724a 100644
+--- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
++++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+@@ -1021,13 +1021,13 @@ static void mtk_jpeg_dec_device_run(void *priv)
+ 	if (ret < 0)
+ 		goto dec_end;
+ 
+-	schedule_delayed_work(&jpeg->job_timeout_work,
+-			      msecs_to_jiffies(MTK_JPEG_HW_TIMEOUT_MSEC));
+-
+ 	mtk_jpeg_set_dec_src(ctx, &src_buf->vb2_buf, &bs);
+ 	if (mtk_jpeg_set_dec_dst(ctx, &jpeg_src_buf->dec_param, &dst_buf->vb2_buf, &fb))
+ 		goto dec_end;
+ 
++	schedule_delayed_work(&jpeg->job_timeout_work,
++			      msecs_to_jiffies(MTK_JPEG_HW_TIMEOUT_MSEC));
++
+ 	spin_lock_irqsave(&jpeg->hw_lock, flags);
+ 	mtk_jpeg_dec_reset(jpeg->reg_base);
+ 	mtk_jpeg_dec_set_config(jpeg->reg_base,
+-- 
+2.25.1
 
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ret =3D CREATE_HDMI_INFOFRAME_FILE(connector, parent, spd);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ret =3D CREATE_HDMI_INFOFRAME_FILE(connector, parent, vendor);
->=20
-> There may be multiple vendor specific InfoFrames in the future, so how
-> would that be handled? Perhaps add a comment here that currently only one
-> vendor specific InfoFrame is supported, but suggest how to handle multiple
-> VSIFs in the future.
->=20
-> What would actually be nice (although probably not that easy to fix) is if
-> the name of the file would be "vendor-XXXXXX' where 'XXXXXX' is the IEEE =
-OUI
-> number.
-
-I guess it's not entirely clear to me what that would look like. In
-order for the framework to create the debugfs files, we would need some
-enumeration mechanism (probably through a callback?), and then the
-driver would generate the entire content of that file.
-
-Which makes me question whether the framework should be initialised at
-all? Maybe the simpler would be to just have drivers maintain their own
-debugfs files and storing the content in their own, private, structure.
-
-Maxime
-
---iqczjmp6rdkak4lg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZUj72wAKCRDj7w1vZxhR
-xfojAP95jr0AZ4P/3Y/Vc2+1qdxUbHRPfB06V4FUfB1vOsUxEQD+IT5SF4zDLWqj
-FlE+HCqFEp49j6+Zd9e2tvMQ73psaAw=
-=G/8d
------END PGP SIGNATURE-----
-
---iqczjmp6rdkak4lg--
