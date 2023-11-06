@@ -2,45 +2,45 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61782C4167D
-	for <linux-media@archiver.kernel.org>; Mon,  6 Nov 2023 12:04:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3E4EC4332F
+	for <linux-media@archiver.kernel.org>; Mon,  6 Nov 2023 12:04:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231593AbjKFMEo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 6 Nov 2023 07:04:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41902 "EHLO
+        id S231630AbjKFMEq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 6 Nov 2023 07:04:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231552AbjKFMEi (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Nov 2023 07:04:38 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 038F5FA;
-        Mon,  6 Nov 2023 04:04:34 -0800 (PST)
-X-UUID: a32277287c9c11eea33bb35ae8d461a2-20231106
+        with ESMTP id S231583AbjKFMEl (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Nov 2023 07:04:41 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D3492;
+        Mon,  6 Nov 2023 04:04:37 -0800 (PST)
+X-UUID: a556456a7c9c11ee8051498923ad61e6-20231106
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=H1hzDIVX/uYFlZAzRgT3yZuD5V71PO6DoLhIHHVMUSc=;
-        b=ijohy3niSJqp0SCjVCC2M92MXFrSltXjf/HllXvAxHRT849cCnMT59bcE4+U6Kn2jqXZLwPXUfq4zDB7rahxmGjRGqqqbC9tnpQZqTnzyrk3trbSS+HDt0Vnhq07zaFAaEkGzK0BP5oC+v5gOMwtJC0OxRF9FpdfsbuMzFXJvOg=;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=t55MQIgMEx4p4MEJHDKfM0Ly5GklrK5skqp8MOiYDJY=;
+        b=KAcISj6NkZxWTYNFWs5zqjTQBGubxgh4xDRd6ZzvgEe+NWQ0ZRtejrDvj6Qjwpcw3WmjUKUZCxyCy7/aw/GNATw+5xSFvaSYf4fszzfosTPfV4jFm1EkokrpXLu9EVHcNP3j0ulJBuuw2hOMWgSj4uHaBU7q4Y7ZpCple9vopBY=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.33,REQID:3b9cefca-cf2f-4757-aae4-b6d1afb0e7c8,IP:0,U
+X-CID-O-INFO: VERSION:1.1.33,REQID:6730440c-6fca-4396-92c6-fca25ef2fa98,IP:0,U
         RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
         release,TS:0
-X-CID-META: VersionHash:364b77b,CLOUDID:87b7bc5f-c89d-4129-91cb-8ebfae4653fc,B
+X-CID-META: VersionHash:364b77b,CLOUDID:b4b7bc5f-c89d-4129-91cb-8ebfae4653fc,B
         ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
         RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,
         DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: a32277287c9c11eea33bb35ae8d461a2-20231106
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
+X-UUID: a556456a7c9c11ee8051498923ad61e6-20231106
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 313314417; Mon, 06 Nov 2023 20:04:28 +0800
+        with ESMTP id 1556283080; Mon, 06 Nov 2023 20:04:32 +0800
 Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
  mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 6 Nov 2023 20:04:27 +0800
+ 15.2.1118.26; Mon, 6 Nov 2023 20:04:31 +0800
 Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
  mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Mon, 6 Nov 2023 20:04:26 +0800
+ 15.2.1118.26 via Frontend Transport; Mon, 6 Nov 2023 20:04:30 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Jeffrey Kardatzke <jkardatzke@google.com>,
         "T . J . Mercier" <tjmercier@google.com>,
@@ -65,9 +65,9 @@ CC:     Chen-Yu Tsai <wenst@chromium.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v2,02/21] v4l2: handle secure memory flags in queue setup
-Date:   Mon, 6 Nov 2023 20:04:04 +0800
-Message-ID: <20231106120423.23364-3-yunfei.dong@mediatek.com>
+Subject: [PATCH v2,05/21] dma-buf: heaps: Deduplicate docs and adopt common format
+Date:   Mon, 6 Nov 2023 20:04:07 +0800
+Message-ID: <20231106120423.23364-6-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20231106120423.23364-1-yunfei.dong@mediatek.com>
 References: <20231106120423.23364-1-yunfei.dong@mediatek.com>
@@ -79,187 +79,149 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Jeffrey Kardatzke <jkardatzke@google.com>
+From: "T.J. Mercier" <tjmercier@google.com>
 
-Validates the secure memory flags when setting up a queue and ensures
-the queue has the proper capability.
+The docs for dma_heap_get_name were incorrect, and since they were
+duplicated in the header they were wrong there too.
 
-Signed-off-by: Jeffrey Kardatzke <jkardatzke@google.com>
+The docs formatting was inconsistent so I tried to make it more
+consistent across functions since I'm already in here doing cleanup.
+
+Remove multiple unused includes and alphabetize.
+
+Signed-off-by: T.J. Mercier <tjmercier@google.com>
+Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+[Yong: Just add a comment for "priv" to mute build warning]
 Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 ---
- .../media/common/videobuf2/videobuf2-core.c   | 25 ++++++++++++++
- .../media/common/videobuf2/videobuf2-v4l2.c   | 33 ++++++++++++-------
- 2 files changed, 47 insertions(+), 11 deletions(-)
+ drivers/dma-buf/dma-heap.c | 27 +++++++++++++++------------
+ include/linux/dma-heap.h   | 21 +--------------------
+ 2 files changed, 16 insertions(+), 32 deletions(-)
 
-diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
-index 27aee92f3eea..7ee68f5533ba 100644
---- a/drivers/media/common/videobuf2/videobuf2-core.c
-+++ b/drivers/media/common/videobuf2/videobuf2-core.c
-@@ -744,12 +744,22 @@ static bool verify_coherency_flags(struct vb2_queue *q, bool non_coherent_mem)
- 	return true;
- }
+diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.c
+index 84ae708fafe7..22f6c193db0d 100644
+--- a/drivers/dma-buf/dma-heap.c
++++ b/drivers/dma-buf/dma-heap.c
+@@ -7,17 +7,15 @@
+  */
  
-+static bool verify_secure_mem_flags(struct vb2_queue *q, bool secure_mem)
-+{
-+	if (secure_mem != q->secure_mem) {
-+		dprintk(q, 1, "secure memory model mismatch\n");
-+		return false;
-+	}
-+	return true;
-+}
-+
- int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
- 		     unsigned int flags, unsigned int *count)
+ #include <linux/cdev.h>
+-#include <linux/debugfs.h>
+ #include <linux/device.h>
+ #include <linux/dma-buf.h>
++#include <linux/dma-heap.h>
+ #include <linux/err.h>
+-#include <linux/xarray.h>
+ #include <linux/list.h>
+-#include <linux/slab.h>
+ #include <linux/nospec.h>
+-#include <linux/uaccess.h>
+ #include <linux/syscalls.h>
+-#include <linux/dma-heap.h>
++#include <linux/uaccess.h>
++#include <linux/xarray.h>
+ #include <uapi/linux/dma-heap.h>
+ 
+ #define DEVNAME "dma_heap"
+@@ -28,9 +26,10 @@
+  * struct dma_heap - represents a dmabuf heap in the system
+  * @name:		used for debugging/device-node name
+  * @ops:		ops struct for this heap
+- * @heap_devt		heap device node
+- * @list		list head connecting to list of heaps
+- * @heap_cdev		heap char device
++ * @priv:		private data for this heap
++ * @heap_devt:		heap device node
++ * @list:		list head connecting to list of heaps
++ * @heap_cdev:		heap char device
+  *
+  * Represents a heap of memory from which buffers can be made.
+  */
+@@ -193,11 +192,11 @@ static const struct file_operations dma_heap_fops = {
+ };
+ 
+ /**
+- * dma_heap_get_drvdata() - get per-subdriver data for the heap
++ * dma_heap_get_drvdata - get per-heap driver data
+  * @heap: DMA-Heap to retrieve private data for
+  *
+  * Returns:
+- * The per-subdriver data for the heap.
++ * The per-heap data for the heap.
+  */
+ void *dma_heap_get_drvdata(struct dma_heap *heap)
  {
- 	unsigned int num_buffers, allocated_buffers, num_planes = 0;
- 	unsigned plane_sizes[VB2_MAX_PLANES] = { };
- 	bool non_coherent_mem = flags & V4L2_MEMORY_FLAG_NON_COHERENT;
-+	bool secure_mem = flags & V4L2_MEMORY_FLAG_SECURE;
- 	unsigned int i;
- 	int ret;
- 
-@@ -766,6 +776,8 @@ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
- 	if (*count == 0 || q->num_buffers != 0 ||
- 	    (q->memory != VB2_MEMORY_UNKNOWN && q->memory != memory) ||
- 	    !verify_coherency_flags(q, non_coherent_mem)) {
-+		bool no_previous_buffers = !q->num_buffers;
-+
- 		/*
- 		 * We already have buffers allocated, so first check if they
- 		 * are not in use and can be freed.
-@@ -784,6 +796,14 @@ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
- 		__vb2_queue_free(q, q->num_buffers);
- 		mutex_unlock(&q->mmap_lock);
- 
-+		/*
-+		 * Do not allow switching secure buffer mode.
-+		 */
-+		if (!no_previous_buffers &&
-+		    !verify_secure_mem_flags(q, secure_mem)) {
-+			return -EINVAL;
-+		}
-+
- 		/*
- 		 * In case of REQBUFS(0) return immediately without calling
- 		 * driver's queue_setup() callback and allocating resources.
-@@ -807,6 +827,7 @@ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
- 	q->memory = memory;
- 	mutex_unlock(&q->mmap_lock);
- 	set_queue_coherency(q, non_coherent_mem);
-+	q->secure_mem = secure_mem;
- 
- 	/*
- 	 * Ask the driver how many buffers and planes per buffer it requires.
-@@ -910,6 +931,7 @@ int vb2_core_create_bufs(struct vb2_queue *q, enum vb2_memory memory,
- 	unsigned int num_planes = 0, num_buffers, allocated_buffers;
- 	unsigned plane_sizes[VB2_MAX_PLANES] = { };
- 	bool non_coherent_mem = flags & V4L2_MEMORY_FLAG_NON_COHERENT;
-+	bool secure_mem = flags & V4L2_MEMORY_FLAG_SECURE;
- 	bool no_previous_buffers = !q->num_buffers;
- 	int ret;
- 
-@@ -933,6 +955,7 @@ int vb2_core_create_bufs(struct vb2_queue *q, enum vb2_memory memory,
- 		mutex_unlock(&q->mmap_lock);
- 		q->waiting_for_buffers = !q->is_output;
- 		set_queue_coherency(q, non_coherent_mem);
-+		q->secure_mem = secure_mem;
- 	} else {
- 		if (q->memory != memory) {
- 			dprintk(q, 1, "memory model mismatch\n");
-@@ -940,6 +963,8 @@ int vb2_core_create_bufs(struct vb2_queue *q, enum vb2_memory memory,
- 		}
- 		if (!verify_coherency_flags(q, non_coherent_mem))
- 			return -EINVAL;
-+		if (!verify_secure_mem_flags(q, secure_mem))
-+			return -EINVAL;
- 	}
- 
- 	num_buffers = min(*count, VB2_MAX_FRAME - q->num_buffers);
-diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-index c7a54d82a55e..966ce74e26b3 100644
---- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
-+++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-@@ -685,26 +685,33 @@ static void fill_buf_caps(struct vb2_queue *q, u32 *caps)
- 		*caps |= V4L2_BUF_CAP_SUPPORTS_M2M_HOLD_CAPTURE_BUF;
- 	if (q->allow_cache_hints && q->io_modes & VB2_MMAP)
- 		*caps |= V4L2_BUF_CAP_SUPPORTS_MMAP_CACHE_HINTS;
-+	if (q->allow_secure_mem && q->io_modes & VB2_DMABUF)
-+		*caps |= V4L2_BUF_CAP_SUPPORTS_SECURE_MEM;
- #ifdef CONFIG_MEDIA_CONTROLLER_REQUEST_API
- 	if (q->supports_requests)
- 		*caps |= V4L2_BUF_CAP_SUPPORTS_REQUESTS;
- #endif
+@@ -205,8 +204,8 @@ void *dma_heap_get_drvdata(struct dma_heap *heap)
  }
  
--static void validate_memory_flags(struct vb2_queue *q,
-+static bool validate_memory_flags(struct vb2_queue *q,
- 				  int memory,
- 				  u32 *flags)
+ /**
+- * dma_heap_get_name() - get heap name
+- * @heap: DMA-Heap to retrieve private data for
++ * dma_heap_get_name - get heap name
++ * @heap: DMA-Heap to retrieve the name of
+  *
+  * Returns:
+  * The char* for the heap name.
+@@ -216,6 +215,10 @@ const char *dma_heap_get_name(struct dma_heap *heap)
+ 	return heap->name;
+ }
+ 
++/**
++ * dma_heap_add - adds a heap to dmabuf heaps
++ * @exp_info: information needed to register this heap
++ */
+ struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info)
  {
-+	if (*flags & V4L2_MEMORY_FLAG_SECURE &&
-+	    (!q->allow_secure_mem || memory != V4L2_MEMORY_DMABUF)) {
-+		return false;
-+	}
- 	if (!q->allow_cache_hints || memory != V4L2_MEMORY_MMAP) {
- 		/*
--		 * This needs to clear V4L2_MEMORY_FLAG_NON_COHERENT only,
--		 * but in order to avoid bugs we zero out all bits.
-+		 * This needs to clear V4L2_MEMORY_FLAG_NON_COHERENT only.
- 		 */
--		*flags = 0;
--	} else {
--		/* Clear all unknown flags. */
--		*flags &= V4L2_MEMORY_FLAG_NON_COHERENT;
-+		*flags &= ~V4L2_MEMORY_FLAG_NON_COHERENT;
- 	}
-+
-+	/* Clear all unknown flags. */
-+	*flags &= V4L2_MEMORY_FLAG_NON_COHERENT | V4L2_MEMORY_FLAG_SECURE;
-+
-+	return true;
- }
+ 	struct dma_heap *heap, *h, *err_ret;
+diff --git a/include/linux/dma-heap.h b/include/linux/dma-heap.h
+index 0c05561cad6e..fbe86ec889a8 100644
+--- a/include/linux/dma-heap.h
++++ b/include/linux/dma-heap.h
+@@ -9,14 +9,13 @@
+ #ifndef _DMA_HEAPS_H
+ #define _DMA_HEAPS_H
  
- int vb2_reqbufs(struct vb2_queue *q, struct v4l2_requestbuffers *req)
-@@ -713,7 +720,8 @@ int vb2_reqbufs(struct vb2_queue *q, struct v4l2_requestbuffers *req)
- 	u32 flags = req->flags;
+-#include <linux/cdev.h>
+ #include <linux/types.h>
  
- 	fill_buf_caps(q, &req->capabilities);
--	validate_memory_flags(q, req->memory, &flags);
-+	if (!validate_memory_flags(q, req->memory, &flags))
-+		return -EINVAL;
- 	req->flags = flags;
- 	return ret ? ret : vb2_core_reqbufs(q, req->memory,
- 					    req->flags, &req->count);
-@@ -748,7 +756,8 @@ int vb2_create_bufs(struct vb2_queue *q, struct v4l2_create_buffers *create)
- 	unsigned i;
+ struct dma_heap;
  
- 	fill_buf_caps(q, &create->capabilities);
--	validate_memory_flags(q, create->memory, &create->flags);
-+	if (!validate_memory_flags(q, create->memory, &create->flags))
-+		return -EINVAL;
- 	create->index = q->num_buffers;
- 	if (create->count == 0)
- 		return ret != -EBUSY ? ret : 0;
-@@ -986,7 +995,8 @@ int vb2_ioctl_reqbufs(struct file *file, void *priv,
- 	u32 flags = p->flags;
+ /**
+  * struct dma_heap_ops - ops to operate on a given heap
+- * @allocate:		allocate dmabuf and return struct dma_buf ptr
++ * @allocate:	allocate dmabuf and return struct dma_buf ptr
+  *
+  * allocate returns dmabuf on success, ERR_PTR(-errno) on error.
+  */
+@@ -41,28 +40,10 @@ struct dma_heap_export_info {
+ 	void *priv;
+ };
  
- 	fill_buf_caps(vdev->queue, &p->capabilities);
--	validate_memory_flags(vdev->queue, p->memory, &flags);
-+	if (!validate_memory_flags(vdev->queue, p->memory, &flags))
-+		return -EINVAL;
- 	p->flags = flags;
- 	if (res)
- 		return res;
-@@ -1010,7 +1020,8 @@ int vb2_ioctl_create_bufs(struct file *file, void *priv,
+-/**
+- * dma_heap_get_drvdata() - get per-heap driver data
+- * @heap: DMA-Heap to retrieve private data for
+- *
+- * Returns:
+- * The per-heap data for the heap.
+- */
+ void *dma_heap_get_drvdata(struct dma_heap *heap);
  
- 	p->index = vdev->queue->num_buffers;
- 	fill_buf_caps(vdev->queue, &p->capabilities);
--	validate_memory_flags(vdev->queue, p->memory, &p->flags);
-+	if (!validate_memory_flags(vdev->queue, p->memory, &p->flags))
-+		return -EINVAL;
- 	/*
- 	 * If count == 0, then just check if memory and type are valid.
- 	 * Any -EBUSY result from vb2_verify_memory_type can be mapped to 0.
+-/**
+- * dma_heap_get_name() - get heap name
+- * @heap: DMA-Heap to retrieve private data for
+- *
+- * Returns:
+- * The char* for the heap name.
+- */
+ const char *dma_heap_get_name(struct dma_heap *heap);
+ 
+-/**
+- * dma_heap_add - adds a heap to dmabuf heaps
+- * @exp_info:		information needed to register this heap
+- */
+ struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info);
+ 
+ #endif /* _DMA_HEAPS_H */
 -- 
 2.18.0
 
