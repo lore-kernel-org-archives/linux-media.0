@@ -2,123 +2,138 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C25FDC4332F
-	for <linux-media@archiver.kernel.org>; Tue,  7 Nov 2023 21:51:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00AB1C4167B
+	for <linux-media@archiver.kernel.org>; Tue,  7 Nov 2023 21:57:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235315AbjKGVv2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 7 Nov 2023 16:51:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42516 "EHLO
+        id S231844AbjKGV5I (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 7 Nov 2023 16:57:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235308AbjKGVvX (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 7 Nov 2023 16:51:23 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D454610D0;
-        Tue,  7 Nov 2023 13:51:20 -0800 (PST)
-Received: from [100.84.166.245] (cola.collaboradmins.com [195.201.22.229])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: nicolas)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A5AB16607401;
-        Tue,  7 Nov 2023 21:45:44 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1699393546;
-        bh=DtbLU0wHZ0G0WvnrPIsVpEezzlIwBSG/DKHMXei+PGE=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=eDdNhy3HAVeIpimFOnx++8cKWFrOm9CuaBvSj80xx0LAPNSeKgT/18S86QDq7bwTn
-         jcPzgBoWwClqBB9s+zxh/h+i65DmZ4gbTJ6z7L7lj/tuUj94neeSVP8S+ux5ME3ibF
-         t8yRibvqDJWn0lW/6bK332c/k2jn/1Sf5T9du8SRCFebsQJ079BZ0T/xhS+FmBw8Go
-         nzQzy4Z6rNbrvVeHkdLlQ3Bp91G2Wu6cPp8H0l05uTJtaWT7YVlY97W7431ebm2RGn
-         BsZqZ7rfx1MkSLmbNCLECiO1UMhQEMllZ9mGhQ+ss+3JsFSHms4HDu46Wb5sDrqBhN
-         NlffeoLIyPGMA==
-Message-ID: <ebbecd2d2ecda8b3d94939a6408ef6dad6c6e6fe.camel@collabora.com>
-Subject: Re: [PATCH v4 03/11] media: rkvdec: h264: Use bytesperline and
- buffer height as virstride
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Jonas Karlman <jonas@kwiboo.se>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Alex Bee <knaerzche@gmail.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Sebastian Fricke <sebastian.fricke@collabora.com>,
-        Christopher Obbard <chris.obbard@collabora.com>,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Date:   Tue, 07 Nov 2023 16:45:33 -0500
-In-Reply-To: <20231105165521.3592037-4-jonas@kwiboo.se>
-References: <20231105165521.3592037-1-jonas@kwiboo.se>
-         <20231105165521.3592037-4-jonas@kwiboo.se>
+        with ESMTP id S229650AbjKGV5H (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 7 Nov 2023 16:57:07 -0500
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE9210D0
+        for <linux-media@vger.kernel.org>; Tue,  7 Nov 2023 13:57:05 -0800 (PST)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-5be6d6c04bfso606777b3.3
+        for <linux-media@vger.kernel.org>; Tue, 07 Nov 2023 13:57:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1699394224; x=1699999024; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=za6M8Y2d+jQ3Qt9gKNkmeDGWA71k/TCax11+8YIBTGE=;
+        b=CUOVXhdcdM/DQfztHuawAMT/L1AEUiCtEV2qbEKvyBblelqOQ7FpmGm4sHhCGxAeoe
+         oP6P8k57YbO7+F6hhZ9vXMM1mS9jEDh2/SYP5nAb97NkFWkbTi0GFdUJ6BS1oILnmWwz
+         EExeVBxBu+WYAg8g4urdIcThxuVtP8FW3wM2u/KF9qnt3ZF2cVhWAo0dKZQbc7OT1Jm+
+         LWMiyXp1A56lWxWQR6gk9WhQ+nb3FNLTJE6AkD2heKaNp4fKArs0VzfO+rsRA6umIfHM
+         6si0lUZgbIAm/xkJsDPmfyna+uGmHUF6GYOmFTZSHHd49uT2FjkNkK+GvtqSz2pLZakA
+         8r/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699394224; x=1699999024;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=za6M8Y2d+jQ3Qt9gKNkmeDGWA71k/TCax11+8YIBTGE=;
+        b=dBaatz745R7UnK4K2am64hFdlmgURA+ltcofIAD63y3qV79+PE3eJzWXjvTGfaeF58
+         Sm7qrzTkD5cG+7hW7sndQKZDDsioNnjlxvN5BPd5yKLzvnuvqN2yBa8jeClZCykSasJf
+         6972w2AWvdS3Td12QXjAbCesbqaUJi1h6hjOAq4LtoB2y/riMu/2KyYuMPivJOhsWnPM
+         UqrUUjlyj90d7ene3X353Jo/WRJ6qaSbQSDsY8jQt+zHD4v2NrI5M1taLuKSFybquRHc
+         uo7QuNWm76YvAVZITlSTl92GNPzJzSm8KktsSNi3a7Gn2BA58n9kKOGz58Mf1Rbtcoay
+         zN4Q==
+X-Gm-Message-State: AOJu0Yw7qzUaV2UCue64EJxVb0sWC8U74HJiukxjunDLPrq24nfpXWry
+        MSC7N35nfwPTKuqiSiJ0Kkp33LTnEFcuEgRTfhB5Cw==
+X-Google-Smtp-Source: AGHT+IF/bsw99ICNUinQH8HJWUTE/TqZCFPYGxxxKhtjJLazoPWjgkibzNnUub2UFOZbJnwmVInaoZNQXuN3J7zXnD4=
+X-Received: by 2002:a05:690c:15:b0:5b3:3eb5:6624 with SMTP id
+ bc21-20020a05690c001500b005b33eb56624mr13539795ywb.46.1699394224143; Tue, 07
+ Nov 2023 13:57:04 -0800 (PST)
+MIME-Version: 1.0
+References: <20231106024413.2801438-1-almasrymina@google.com>
+ <20231106024413.2801438-8-almasrymina@google.com> <4a0e9d53-324d-e19b-2a30-ba86f9e5569e@huawei.com>
+In-Reply-To: <4a0e9d53-324d-e19b-2a30-ba86f9e5569e@huawei.com>
+From:   Mina Almasry <almasrymina@google.com>
+Date:   Tue, 7 Nov 2023 13:56:51 -0800
+Message-ID: <CAHS8izNbw7vAGo2euQGA+TF9CgQ8zwrDqTVGsOSxh22_uo0R1w@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 07/12] page-pool: device memory support
+To:     Yunsheng Lin <linyunsheng@huawei.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Ahern <dsahern@kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Jeroen de Borst <jeroendb@google.com>,
+        Praveen Kaligineedi <pkaligineedi@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
-MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Le dimanche 05 novembre 2023 =C3=A0 16:55 +0000, Jonas Karlman a =C3=A9crit=
-=C2=A0:
-> Use bytesperline and buffer height to calculate the strides configured.
->=20
-> This does not really change anything other than ensuring the
-> bytesperline that is signaled to userspace matches what is configured
-> in HW.
->=20
-> Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
+On Tue, Nov 7, 2023 at 12:00=E2=80=AFAM Yunsheng Lin <linyunsheng@huawei.co=
+m> wrote:
+>
+> On 2023/11/6 10:44, Mina Almasry wrote:
+> > Overload the LSB of struct page* to indicate that it's a page_pool_iov.
+> >
+> > Refactor mm calls on struct page* into helpers, and add page_pool_iov
+> > handling on those helpers. Modify callers of these mm APIs with calls t=
+o
+> > these helpers instead.
+> >
+> > In areas where struct page* is dereferenced, add a check for special
+> > handling of page_pool_iov.
+> >
+> > Signed-off-by: Mina Almasry <almasrymina@google.com>
+> >
+> > ---
+> >  include/net/page_pool/helpers.h | 74 ++++++++++++++++++++++++++++++++-
+> >  net/core/page_pool.c            | 63 ++++++++++++++++++++--------
+> >  2 files changed, 118 insertions(+), 19 deletions(-)
+> >
+> > diff --git a/include/net/page_pool/helpers.h b/include/net/page_pool/he=
+lpers.h
+> > index b93243c2a640..08f1a2cc70d2 100644
+> > --- a/include/net/page_pool/helpers.h
+> > +++ b/include/net/page_pool/helpers.h
+> > @@ -151,6 +151,64 @@ static inline struct page_pool_iov *page_to_page_p=
+ool_iov(struct page *page)
+> >       return NULL;
+> >  }
+> >
+> > +static inline int page_pool_page_ref_count(struct page *page)
+> > +{
+> > +     if (page_is_page_pool_iov(page))
+> > +             return page_pool_iov_refcount(page_to_page_pool_iov(page)=
+);
+>
+> We have added a lot of 'if' for the devmem case, it would be better to
+> make it more generic so that we can have more unified metadata handling
+> for normal page and devmem. If we add another memory type here, do we
+> need another 'if' here?
 
-Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Maybe, not sure. I'm guessing new memory types will either be pages or
+iovs, so maybe no new if statements needed.
 
-> ---
-> v4:
-> - No change
->=20
-> v3:
-> - Remove unnecessary yuv_virstride +=3D
->=20
->  drivers/staging/media/rkvdec/rkvdec-h264.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
->=20
-> diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging=
-/media/rkvdec/rkvdec-h264.c
-> index 4fc167b42cf0..7a1e76d423df 100644
-> --- a/drivers/staging/media/rkvdec/rkvdec-h264.c
-> +++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
-> @@ -896,9 +896,9 @@ static void config_registers(struct rkvdec_ctx *ctx,
->  	dma_addr_t rlc_addr;
->  	dma_addr_t refer_addr;
->  	u32 rlc_len;
-> -	u32 hor_virstride =3D 0;
-> -	u32 ver_virstride =3D 0;
-> -	u32 y_virstride =3D 0;
-> +	u32 hor_virstride;
-> +	u32 ver_virstride;
-> +	u32 y_virstride;
->  	u32 yuv_virstride =3D 0;
->  	u32 offset;
->  	dma_addr_t dst_addr;
-> @@ -909,16 +909,16 @@ static void config_registers(struct rkvdec_ctx *ctx=
-,
-> =20
->  	f =3D &ctx->decoded_fmt;
->  	dst_fmt =3D &f->fmt.pix_mp;
-> -	hor_virstride =3D (sps->bit_depth_luma_minus8 + 8) * dst_fmt->width / 8=
-;
-> -	ver_virstride =3D round_up(dst_fmt->height, 16);
-> +	hor_virstride =3D dst_fmt->plane_fmt[0].bytesperline;
-> +	ver_virstride =3D dst_fmt->height;
->  	y_virstride =3D hor_virstride * ver_virstride;
-> =20
->  	if (sps->chroma_format_idc =3D=3D 0)
->  		yuv_virstride =3D y_virstride;
->  	else if (sps->chroma_format_idc =3D=3D 1)
-> -		yuv_virstride +=3D y_virstride + y_virstride / 2;
-> +		yuv_virstride =3D y_virstride + y_virstride / 2;
->  	else if (sps->chroma_format_idc =3D=3D 2)
-> -		yuv_virstride +=3D 2 * y_virstride;
-> +		yuv_virstride =3D 2 * y_virstride;
-> =20
->  	reg =3D RKVDEC_Y_HOR_VIRSTRIDE(hor_virstride / 16) |
->  	      RKVDEC_UV_HOR_VIRSTRIDE(hor_virstride / 16) |
+> That is part of the reason I suggested using a more unified metadata for
+> all the types of memory chunks used by page_pool.
 
+I think your suggestion was to use struct pages for devmem. That was
+thoroughly considered and intensely argued about in the initial
+conversations regarding devmem and the initial RFC, and from the
+conclusions there it's extremely clear to me that devmem struct pages
+are categorically a no-go.
+
+--
+Thanks,
+Mina
