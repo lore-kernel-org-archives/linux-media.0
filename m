@@ -2,248 +2,120 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BDC77C4332F
-	for <linux-media@archiver.kernel.org>; Tue,  7 Nov 2023 11:58:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49659C4167B
+	for <linux-media@archiver.kernel.org>; Tue,  7 Nov 2023 12:37:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234209AbjKGKnw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 7 Nov 2023 05:43:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41378 "EHLO
+        id S235170AbjKGMhR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 7 Nov 2023 07:37:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234204AbjKGKnt (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 7 Nov 2023 05:43:49 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD993D76
-        for <linux-media@vger.kernel.org>; Tue,  7 Nov 2023 02:43:45 -0800 (PST)
-Received: from benjamin-XPS-13-9310.. (cola.collaboradmins.com [195.201.22.229])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 409EB66074C2;
-        Tue,  7 Nov 2023 10:43:44 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1699353824;
-        bh=vJS6CheIw4lpIW8WM/Y+JlEqq2Ssrul/PpguC2ApP0g=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bl2JcS9cuMs/aMHTF8hgWJ72xETKwFFbm7uAX6BOiAnpKT+ESmh1jTcNxuIBKmITI
-         nmc7BmlZQiQ0DWakphCFqySLjm3+rK1dEwSF7TkFM01vCIUeZ+B7K7eHTrPv5RtpJs
-         WF5S7a9aIyerM+R0zzdPZM5jWiA6UsEQpkXsX8G9MEMdfolKy3syWG+oq/DBTVUv+L
-         oSaqNOi/mQ1OxLILkMFVe7TsIHGHyqq9N8i/zI1/jDHubAlIya7WDjsYD7eiTFMxLn
-         uZSknFlq+b+K8uQBXGu6TL/C8tuF/44wh/ThijYyeW4yy/Cg3kDQHJrwm2O0PC8IrU
-         XqhAjkvLUTBcg==
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To:     hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com,
-        mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v6 4/4] v4l2-compliance: Add a test for DELETE_BUFS ioctl
-Date:   Tue,  7 Nov 2023 11:41:32 +0100
-Message-Id: <20231107104132.445705-5-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231107104132.445705-1-benjamin.gaignard@collabora.com>
-References: <20231107104132.445705-1-benjamin.gaignard@collabora.com>
+        with ESMTP id S235171AbjKGMgs (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 7 Nov 2023 07:36:48 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4684C5BAD
+        for <linux-media@vger.kernel.org>; Tue,  7 Nov 2023 04:25:46 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 069D5552;
+        Tue,  7 Nov 2023 13:25:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1699359923;
+        bh=jcEWqfOeV8+ogOj2rs2As4h11O9RryzOvTBfInHJDhk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=b+KuxKt/0I9FuUxSVd5VyUrLs8NSGpizBBIu0yihLyQmwVAAFcFTnIPVhFYAV2Gdt
+         1I6rJlzA0TFsFVICV2cC/2mp6Q3BjJOgfXygQTTsW0HOTjh2RrEV+hPvv75T1OuN7E
+         EPL7gvNCgEqOpm2/rlTSIP726xOvrtPxmfwcMHDs=
+Date:   Tue, 7 Nov 2023 14:25:51 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Umang Jain <umang.jain@ideasonboard.com>
+Cc:     linux-staging@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dan Carpenter <error27@gmail.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>
+Subject: Re: [PATCH 5/9] staging: vc04_services: Do not pass NULL to
+ vchiq_log_error()
+Message-ID: <20231107122551.GA3051@pendragon.ideasonboard.com>
+References: <20231107095156.365492-1-umang.jain@ideasonboard.com>
+ <20231107095156.365492-6-umang.jain@ideasonboard.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20231107095156.365492-6-umang.jain@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add new test for DELETE_BUFS ioctl.
-It create buffers and check if they could be removed from queue.
-It also check that removing non existing buffer or a queued
-buffer failed.
+Hi Umang,
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
----
- utils/common/cv4l-helpers.h                 |  4 +
- utils/common/v4l-helpers.h                  | 17 ++++
- utils/common/v4l2-info.cpp                  |  1 +
- utils/v4l2-compliance/v4l2-compliance.cpp   |  1 +
- utils/v4l2-compliance/v4l2-compliance.h     |  1 +
- utils/v4l2-compliance/v4l2-test-buffers.cpp | 91 +++++++++++++++++++++
- 6 files changed, 115 insertions(+)
+Thank you for the patch.
 
-diff --git a/utils/common/cv4l-helpers.h b/utils/common/cv4l-helpers.h
-index 199aca36..5fe23cc6 100644
---- a/utils/common/cv4l-helpers.h
-+++ b/utils/common/cv4l-helpers.h
-@@ -760,6 +760,10 @@ public:
- 	{
- 		return v4l_queue_reqbufs(fd->g_v4l_fd(), this, count, flags);
- 	}
-+	int delete_bufs(cv4l_fd *fd, unsigned index = 0, unsigned count = 0)
-+	{
-+		return v4l_queue_delete_bufs(fd->g_v4l_fd(), this, index, count);
-+	}
- 	bool has_create_bufs(cv4l_fd *fd) const
- 	{
- 		return v4l_queue_has_create_bufs(fd->g_v4l_fd(), this);
-diff --git a/utils/common/v4l-helpers.h b/utils/common/v4l-helpers.h
-index cf0e92df..dca11e2d 100644
---- a/utils/common/v4l-helpers.h
-+++ b/utils/common/v4l-helpers.h
-@@ -1510,6 +1510,23 @@ static inline void *v4l_queue_g_dataptr(const struct v4l_queue *q, unsigned inde
- 	return v4l_queue_g_mmapping(q, index, plane);
- }
- 
-+static inline int v4l_queue_delete_bufs(struct v4l_fd *f, struct v4l_queue *q, unsigned index, unsigned count)
-+{
-+	struct v4l2_delete_buffers deletebufs;
-+	int ret;
-+
-+	memset(&deletebufs, 0, sizeof(deletebufs));
-+	deletebufs.type = q->type;
-+	deletebufs.index = index;
-+	deletebufs.count = count;
-+
-+	ret = v4l_ioctl(f, VIDIOC_DELETE_BUFS, &deletebufs);
-+	if (!ret)
-+		q->buffers -= deletebufs.count;
-+
-+	return ret;
-+}
-+
- static inline int v4l_queue_querybufs(struct v4l_fd *f, struct v4l_queue *q, unsigned from)
- {
- 	unsigned b, p;
-diff --git a/utils/common/v4l2-info.cpp b/utils/common/v4l2-info.cpp
-index 5fc92005..9ff107d9 100644
---- a/utils/common/v4l2-info.cpp
-+++ b/utils/common/v4l2-info.cpp
-@@ -207,6 +207,7 @@ static constexpr flag_def bufcap_def[] = {
- 	{ V4L2_BUF_CAP_SUPPORTS_M2M_HOLD_CAPTURE_BUF, "m2m-hold-capture-buf" },
- 	{ V4L2_BUF_CAP_SUPPORTS_MMAP_CACHE_HINTS, "mmap-cache-hints" },
- 	{ V4L2_BUF_CAP_SUPPORTS_MAX_NUM_BUFFERS, "set-max-num-buffers" },
-+	{ V4L2_BUF_CAP_SUPPORTS_DELETE_BUFS, "delete-bufs" },
- 	{ 0, nullptr }
- };
- 
-diff --git a/utils/v4l2-compliance/v4l2-compliance.cpp b/utils/v4l2-compliance/v4l2-compliance.cpp
-index a165ef5a..c1e519ea 100644
---- a/utils/v4l2-compliance/v4l2-compliance.cpp
-+++ b/utils/v4l2-compliance/v4l2-compliance.cpp
-@@ -1454,6 +1454,7 @@ void testNode(struct node &node, struct node &node_m2m_cap, struct node &expbuf_
- 		printf("Buffer ioctls%s:\n", suffix);
- 		printf("\ttest VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: %s\n", ok(testReqBufs(&node)));
- 		printf("\ttest CREATE_BUFS maximum buffers: %s\n", ok(testCreateBufsMax(&node)));
-+		printf("\ttest VIDIOC_DELETE_BUFS: %s\n", ok(testDeleteBufs(&node)));
- 		// Reopen after each streaming test to reset the streaming state
- 		// in case of any errors in the preceeding test.
- 		node.reopen();
-diff --git a/utils/v4l2-compliance/v4l2-compliance.h b/utils/v4l2-compliance/v4l2-compliance.h
-index 4f9aa17e..9ec07494 100644
---- a/utils/v4l2-compliance/v4l2-compliance.h
-+++ b/utils/v4l2-compliance/v4l2-compliance.h
-@@ -384,6 +384,7 @@ int testReadWrite(struct node *node);
- int testExpBuf(struct node *node);
- int testBlockingWait(struct node *node);
- int testCreateBufsMax(struct node *node);
-+int testDeleteBufs(struct node *node);
- 
- // 32-bit architecture, 32/64-bit time_t tests
- int testTime32_64(struct node *node);
-diff --git a/utils/v4l2-compliance/v4l2-test-buffers.cpp b/utils/v4l2-compliance/v4l2-test-buffers.cpp
-index 922b99b5..5a2fa309 100644
---- a/utils/v4l2-compliance/v4l2-test-buffers.cpp
-+++ b/utils/v4l2-compliance/v4l2-test-buffers.cpp
-@@ -529,6 +529,97 @@ static int testCanSetSameTimings(struct node *node)
- 	return 0;
- }
- 
-+int testDeleteBufs(struct node *node)
-+{
-+	int ret;
-+	unsigned i;
-+
-+	node->reopen();
-+
-+	for (i = 1; i <= V4L2_BUF_TYPE_LAST; i++) {
-+		struct v4l2_delete_buffers delbufs = { };
-+
-+		if (!(node->valid_buftypes & (1 << i)))
-+			continue;
-+
-+		cv4l_queue q(i, V4L2_MEMORY_MMAP);
-+
-+		if (testSetupVbi(node, i))
-+			continue;
-+
-+		q.init(i, V4L2_MEMORY_MMAP);
-+		ret = q.create_bufs(node, 0);
-+		fail_on_test_val(ret && ret != EINVAL, ret);
-+		if (!(q.g_capabilities() & V4L2_BUF_CAP_SUPPORTS_DELETE_BUFS))
-+			continue;
-+
-+		memset(&delbufs, 0xff, sizeof(delbufs));
-+		delbufs.index = 0;
-+		delbufs.count = 0;
-+		delbufs.type = q.g_type();
-+		fail_on_test(doioctl(node, VIDIOC_DELETE_BUFS, &delbufs));
-+		fail_on_test(check_0(delbufs.reserved, sizeof(delbufs.reserved)));
-+
-+		if (!ret) {
-+			unsigned buffers;
-+			buffer buf(q);
-+
-+			/* Create only 1 buffer */
-+			fail_on_test(q.create_bufs(node, 1));
-+			buffers = q.g_buffers();
-+			fail_on_test(buffers == 0);
-+			/* Delete buffer index 1 must fail */
-+			fail_on_test(q.delete_bufs(node, 1, buffers) != EINVAL);
-+			/* Delete buffer index 0 is valid */
-+			fail_on_test(q.delete_bufs(node, 0, buffers));
-+			/* Delete buffer index 0 again must fail */
-+			fail_on_test(q.delete_bufs(node, 0, 1) != EINVAL);
-+			/* Create 3 buffers indexes 0 to 2 */
-+			fail_on_test(q.create_bufs(node, 3));
-+			/* Delete them one by one */
-+			fail_on_test(q.delete_bufs(node, 2, 1));
-+			fail_on_test(q.delete_bufs(node, 0, 1));
-+			fail_on_test(q.delete_bufs(node, 1, 1));
-+			/* Delete buffer index 0 again must fail */
-+			fail_on_test(q.delete_bufs(node, 0, 1) != EINVAL);
-+
-+			/* Create 5 buffers indexes 0 to 4*/
-+			fail_on_test(q.create_bufs(node, 5));
-+			/* Delete buffers index 1 and 2 */
-+			fail_on_test(q.delete_bufs(node, 1, 2));
-+			/* Add 3 more buffers should be indexes 5 to 7*/
-+			fail_on_test(q.create_bufs(node, 3));
-+			/* Query buffers:
-+			 * 1 and 2 have been deleted they must fail
-+			 * 5 to 7 must exist*/
-+			fail_on_test(buf.querybuf(node, 1) != EINVAL);
-+			fail_on_test(buf.querybuf(node, 2) != EINVAL);
-+			fail_on_test(buf.querybuf(node, 5));
-+			fail_on_test(buf.querybuf(node, 6));
-+			fail_on_test(buf.querybuf(node, 7));
-+			/* Delete existing buffer index 7 with bad type must fail */
-+			memset(&delbufs, 0xff, sizeof(delbufs));
-+			delbufs.index = 7;
-+			delbufs.count = 1;
-+			delbufs.type = 0;
-+			fail_on_test(doioctl(node, VIDIOC_DELETE_BUFS, &delbufs) != EINVAL);
-+
-+			/* Delete crossing max allowed buffers boundary must fail */
-+			fail_on_test(q.delete_bufs(node, q.g_max_num_buffers() - 2, 8) != EINVAL);
-+
-+			/* Delete overflow must fail */
-+			fail_on_test(q.delete_bufs(node, 3, 0xfffffff) != EINVAL);
-+
-+			/* Create 2 buffers, that must fill the hole */
-+			fail_on_test(q.create_bufs(node, 2));
-+			/* Remove all buffers */
-+			fail_on_test(q.delete_bufs(node, 0, 8));
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- int testReqBufs(struct node *node)
- {
- 	struct v4l2_create_buffers crbufs = { };
+On Tue, Nov 07, 2023 at 04:51:52AM -0500, Umang Jain wrote:
+> vchiq_add_connected_callback() logs using vchiq_log_error() macro,
+> but passes NULL instead of a struct device pointer. Fix it.
+> 
+> vchiq_add_connected_callback() is not used anywhere in the vc04_services
+> as of now. It will be used when we add new drivers(VC shared memory and
+> bcm2835-isp), hence it kept as it is for now.
+> 
+> Fixes: 1d8915cf8899 ("staging: vc04: Convert vchiq_log_error() to use dynamic debug")
+> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+> ---
+>  .../vc04_services/interface/vchiq_arm/vchiq_connected.c       | 4 ++--
+>  .../vc04_services/interface/vchiq_arm/vchiq_connected.h       | 4 +++-
+>  2 files changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_connected.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_connected.c
+> index b3928bd8c9c6..21f9fa1a1713 100644
+> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_connected.c
+> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_connected.c
+> @@ -27,7 +27,7 @@ static void connected_init(void)
+>   * be made immediately, otherwise it will be deferred until
+>   * vchiq_call_connected_callbacks is called.
+>   */
+> -void vchiq_add_connected_callback(void (*callback)(void))
+> +void vchiq_add_connected_callback(struct vchiq_device *device, void (*callback)(void))
+
+You're changing the prototype of the function, but the patch doesn't
+update any user. If the function is unused, it looks like you can drop
+it instead. Looking at the rest of the vchiq_connected.c file, I think
+you can actually drop the whole file.
+
+>  {
+>  	connected_init();
+>  
+> @@ -39,7 +39,7 @@ void vchiq_add_connected_callback(void (*callback)(void))
+>  		callback();
+>  	} else {
+>  		if (g_num_deferred_callbacks >= MAX_CALLBACKS) {
+> -			vchiq_log_error(NULL, VCHIQ_CORE,
+> +			vchiq_log_error(&device->dev, VCHIQ_CORE,
+>  					"There already %d callback registered - please increase MAX_CALLBACKS",
+>  					g_num_deferred_callbacks);
+>  		} else {
+> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_connected.h b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_connected.h
+> index 4caf5e30099d..e4ed56446f8a 100644
+> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_connected.h
+> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_connected.h
+> @@ -1,10 +1,12 @@
+>  /* SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause */
+>  /* Copyright (c) 2010-2012 Broadcom. All rights reserved. */
+>  
+> +#include "vchiq_bus.h"
+> +
+>  #ifndef VCHIQ_CONNECTED_H
+>  #define VCHIQ_CONNECTED_H
+>  
+> -void vchiq_add_connected_callback(void (*callback)(void));
+> +void vchiq_add_connected_callback(struct vchiq_device *device, void (*callback)(void));
+>  void vchiq_call_connected_callbacks(void);
+>  
+>  #endif /* VCHIQ_CONNECTED_H */
+
 -- 
-2.39.2
+Regards,
 
+Laurent Pinchart
