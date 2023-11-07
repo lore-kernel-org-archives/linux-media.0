@@ -2,102 +2,210 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2238C4332F
-	for <linux-media@archiver.kernel.org>; Tue,  7 Nov 2023 10:43:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6755EC4332F
+	for <linux-media@archiver.kernel.org>; Tue,  7 Nov 2023 10:59:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234202AbjKGKnv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 7 Nov 2023 05:43:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47700 "EHLO
+        id S234397AbjKGK7p (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 7 Nov 2023 05:59:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234203AbjKGKns (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 7 Nov 2023 05:43:48 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445F611A
-        for <linux-media@vger.kernel.org>; Tue,  7 Nov 2023 02:43:45 -0800 (PST)
-Received: from benjamin-XPS-13-9310.. (cola.collaboradmins.com [195.201.22.229])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id ACEED6607447;
-        Tue,  7 Nov 2023 10:43:43 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1699353824;
-        bh=c7sHDpUD8KDZ/igbZBf8X/yhmzecELmuq/1rc3G8Zsk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J/L0P81p+8WSes9IpkuCkupiPa6jmAzti9MJtNMJOZgi+Uft/XXw+DPU/V6csiS/I
-         6scaRyYaGCymZgziFsHFqj6tH1rBIkkw/fd3LyI743ub0a5r7/GoGwh7B+KFm4cCnr
-         0rFhHMkABXvFdt8rSTs1zME4axvXm5cC+08MetC5AtOWATj9zInZdBzea8q4PcLgcU
-         TR4T5+IUM/P3nNyitz2aLdxOfgtnnV3xX5U0E8y6mVk+9+AV4nBGTQ9jfPQS7uk6oU
-         zc/ftkP7k5Ai4gX9Hp3nbQXuFu6LqvCvmYo9RNDqljCChRLrePiXw9IQ7zxKlOe3J/
-         rNG68zWoqio7g==
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To:     hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com,
-        mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v6 3/4] v4l2-utils: Add VIDIOC_DELETE_BUFS ioctl
-Date:   Tue,  7 Nov 2023 11:41:31 +0100
-Message-Id: <20231107104132.445705-4-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231107104132.445705-1-benjamin.gaignard@collabora.com>
-References: <20231107104132.445705-1-benjamin.gaignard@collabora.com>
+        with ESMTP id S234315AbjKGK7Y (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 7 Nov 2023 05:59:24 -0500
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B25101
+        for <linux-media@vger.kernel.org>; Tue,  7 Nov 2023 02:58:14 -0800 (PST)
+Received: by mail-qk1-x734.google.com with SMTP id af79cd13be357-778a6c440faso288895285a.3
+        for <linux-media@vger.kernel.org>; Tue, 07 Nov 2023 02:58:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1699354694; x=1699959494; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LvWgzBGbnNIgZ9ZBCni1UwPMLFAWW2SsB1tYdhJN5so=;
+        b=VrBi7JcEtm0Ive0egqghlUv8XP0U3pCfxD20f+PE99RyWIf9AF8Q165x4F6Mz3UVmw
+         +JlZeXpvvLj8kUsopQt1MMHvUziWsF932Y657pjvJ4LrNMn+WKh+jIYXuoXLiArtua9P
+         EI0IzwobIPcjp5feNxloB6U4ShtC/SwP4GmKg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699354694; x=1699959494;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LvWgzBGbnNIgZ9ZBCni1UwPMLFAWW2SsB1tYdhJN5so=;
+        b=oCYNsmHGUXv3XR09ypRMuJRnz6HjTAyAV9/HIqHBuGObxyLzXRhhsSXsMw/p/fpaQm
+         0C0qFfkVeEa30v+o7GHnylUKuvERQ787Y+V0YzuwzCDx1xQnopaojPy2c6NfXxgEqrLx
+         LkT0IRxLET6xyXVyEn9E8m4i1ZyNTvWKmGantjTRrvPZ2NrqpNri36QSukT9j91B4sWL
+         ryVi8jqWsk4lduG06uyDxwi8WDpgAi9o6AzQzJBH0NKjVLQBpKOPfCkgkFOihgcw/3bQ
+         tiRzqcYe/1HVCkej/C1ZiumUV64f0L046wJntph/YcKCWa4FKuxj6qrUhovLvmOYoE3g
+         eHWg==
+X-Gm-Message-State: AOJu0Yz0T82tsWhdjzIk5bMczW/E2adIEzLCNap9//OZLd7HKtZqE3CO
+        tfCjA9Qu2yD14nNzZVfkYTSRMN95IjHl2tjVfae8XA==
+X-Google-Smtp-Source: AGHT+IE+e2EYR1YijN+0McJmLbOyzC+LPY9TIFrRZ7s7Hiw9kKgZhbcrz+6L8g5HZNJCvgHCtoKvig==
+X-Received: by 2002:a05:620a:170e:b0:779:fb0e:ba96 with SMTP id az14-20020a05620a170e00b00779fb0eba96mr32918724qkb.3.1699354693688;
+        Tue, 07 Nov 2023 02:58:13 -0800 (PST)
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com. [209.85.219.43])
+        by smtp.gmail.com with ESMTPSA id g1-20020a05620a40c100b007757eddae8bsm4062083qko.62.2023.11.07.02.58.12
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Nov 2023 02:58:13 -0800 (PST)
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-6711dd6595fso31049286d6.3
+        for <linux-media@vger.kernel.org>; Tue, 07 Nov 2023 02:58:12 -0800 (PST)
+X-Received: by 2002:ad4:5ec6:0:b0:66d:4fdb:5e36 with SMTP id
+ jm6-20020ad45ec6000000b0066d4fdb5e36mr30469112qvb.36.1699354692205; Tue, 07
+ Nov 2023 02:58:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20231106-uvc-event-v2-1-7d8e36f0df16@chromium.org>
+ <ZUjIlq0cxSv9Cut0@valkosipuli.retiisi.eu> <CAN_q1f_HV7Etb9i2c2_c6Trm2hAJUyd068UskJfMvT=OyiKXpA@mail.gmail.com>
+ <ZUnpE1Wfe2dImqU0@valkosipuli.retiisi.eu>
+In-Reply-To: <ZUnpE1Wfe2dImqU0@valkosipuli.retiisi.eu>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Tue, 7 Nov 2023 11:58:00 +0100
+X-Gmail-Original-Message-ID: <CANiDSCs9VX8DC7uC97CiGtmbWAuXa3a50Owth9ep78sWc5PgvQ@mail.gmail.com>
+Message-ID: <CANiDSCs9VX8DC7uC97CiGtmbWAuXa3a50Owth9ep78sWc5PgvQ@mail.gmail.com>
+Subject: Re: [PATCH v2] media: uvcvideo: Implement V4L2_EVENT_FRAME_SYNC
+To:     Sakari Ailus <sakari.ailus@iki.fi>,
+        Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Esker Wong <esker@chromium.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tomasz Figa <tfiga@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add VIDIOC_DELETE_BUFS ioctl and it associated structure.
-Define V4L2_BUF_CAP_SUPPORTS_DELETE_BUFS to signal that queue support
-feature.
+Hi Sakari
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
----
- include/linux/videodev2.h | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+On Tue, 7 Nov 2023 at 08:37, Sakari Ailus <sakari.ailus@iki.fi> wrote:
+>
+> Hi Esker,
+>
+> On Tue, Nov 07, 2023 at 01:06:20PM +0800, Esker Wong wrote:
+> > [send again in text mode]
+> > Hi Sakari,
+> >
+> > Sequence number is important to us. We need it to measure the latency
+> > from this event to the time we display the frame.
+>
+> I think we could also add the sequence number to V4L2_EVENT_VSYNC.
+>
+> Cc Hans.
+I think you forgot to add him :)
 
-diff --git a/include/linux/videodev2.h b/include/linux/videodev2.h
-index e7312cfb..25690223 100644
---- a/include/linux/videodev2.h
-+++ b/include/linux/videodev2.h
-@@ -992,6 +992,7 @@ struct v4l2_requestbuffers {
- #define V4L2_BUF_CAP_SUPPORTS_M2M_HOLD_CAPTURE_BUF	(1 << 5)
- #define V4L2_BUF_CAP_SUPPORTS_MMAP_CACHE_HINTS		(1 << 6)
- #define V4L2_BUF_CAP_SUPPORTS_MAX_NUM_BUFFERS		(1 << 7)
-+#define V4L2_BUF_CAP_SUPPORTS_DELETE_BUFS		(1 << 8)
- 
- /**
-  * struct v4l2_plane - plane info for multi-planar buffers
-@@ -2562,6 +2563,20 @@ struct v4l2_create_buffers {
- 	__u32			reserved[5];
- };
- 
-+/**
-+ * struct v4l2_delete_buffers - VIDIOC_DELETE_BUFS argument
-+ * @index:	the first buffer to be deleted
-+ * @count:	number of buffers to delete
-+ * @type:	enum v4l2_buf_type
-+ * @reserved:	future extensions
-+ */
-+struct v4l2_delete_buffers {
-+	__u32			index;
-+	__u32			count;
-+	__u32			type;
-+	__u32			reserved[13];
-+};
-+
- /*
-  *	I O C T L   C O D E S   F O R   V I D E O   D E V I C E S
-  *
-@@ -2661,6 +2676,7 @@ struct v4l2_create_buffers {
- #define VIDIOC_DBG_G_CHIP_INFO  _IOWR('V', 102, struct v4l2_dbg_chip_info)
- 
- #define VIDIOC_QUERY_EXT_CTRL	_IOWR('V', 103, struct v4l2_query_ext_ctrl)
-+#define VIDIOC_DELETE_BUFS	_IOWR('V', 104, struct v4l2_delete_buffers)
- 
- /* Reminder: when adding new ioctls please add support for them to
-    drivers/media/v4l2-core/v4l2-compat-ioctl32.c as well! */
--- 
-2.39.2
+@Hans
 
+What do you prefer?
+
+- Use V4L2_EVENT_FRAME_SYNC because we trigger it as soon as the
+driver knows about the frame
+- Use V4L2_EVENT_VSYNC, but extending it to support the frame sequence
+- Use a new EVENT
+
+Thanks!
+
+
+>
+> > On Mon, Nov 6, 2023 at 7:06=E2=80=AFPM Sakari Ailus <sakari.ailus@iki.f=
+i> wrote:
+> > >
+> > > Hi Ricardo,
+> > >
+> > > On Mon, Nov 06, 2023 at 10:52:27AM +0000, Ricardo Ribalda wrote:
+> > > > Add support for the frame_sync event, so user-space can become awar=
+e
+> > > > earlier of new frames.
+> > > >
+> > > > Suggested-by: Esker Wong <esker@chromium.org>
+> > > > Tested-by: Esker Wong <esker@chromium.org>
+> > > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> > > > ---
+> > > > We have measured a latency of around 30msecs between frame sync
+> > > > and dqbuf.
+> > > > ---
+> > > > Changes in v2:
+> > > > - Suggested by Laurent. Split sequence++ and event init.
+> > > > - Link to v1: https://lore.kernel.org/r/20231020-uvc-event-v1-1-3ba=
+a0e9f6952@chromium.org
+> > > > ---
+> > > >  drivers/media/usb/uvc/uvc_v4l2.c  | 2 ++
+> > > >  drivers/media/usb/uvc/uvc_video.c | 7 +++++++
+> > > >  2 files changed, 9 insertions(+)
+> > > >
+> > > > diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/u=
+vc/uvc_v4l2.c
+> > > > index f4988f03640a..9f3fb5fd2375 100644
+> > > > --- a/drivers/media/usb/uvc/uvc_v4l2.c
+> > > > +++ b/drivers/media/usb/uvc/uvc_v4l2.c
+> > > > @@ -1352,6 +1352,8 @@ static int uvc_ioctl_subscribe_event(struct v=
+4l2_fh *fh,
+> > > >       switch (sub->type) {
+> > > >       case V4L2_EVENT_CTRL:
+> > > >               return v4l2_event_subscribe(fh, sub, 0, &uvc_ctrl_sub=
+_ev_ops);
+> > > > +     case V4L2_EVENT_FRAME_SYNC:
+> > > > +             return v4l2_event_subscribe(fh, sub, 0, NULL);
+> > > >       default:
+> > > >               return -EINVAL;
+> > > >       }
+> > > > diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/=
+uvc/uvc_video.c
+> > > > index 28dde08ec6c5..4f3a510ca4fe 100644
+> > > > --- a/drivers/media/usb/uvc/uvc_video.c
+> > > > +++ b/drivers/media/usb/uvc/uvc_video.c
+> > > > @@ -1073,9 +1073,16 @@ static int uvc_video_decode_start(struct uvc=
+_streaming *stream,
+> > > >        * that discontinuous sequence numbers always indicate lost f=
+rames.
+> > > >        */
+> > > >       if (stream->last_fid !=3D fid) {
+> > > > +             struct v4l2_event event =3D {
+> > > > +                     .type =3D V4L2_EVENT_FRAME_SYNC,
+> > > > +             };
+> > > > +
+> > > >               stream->sequence++;
+> > > >               if (stream->sequence)
+> > > >                       uvc_video_stats_update(stream);
+> > > > +
+> > > > +             event.u.frame_sync.frame_sequence =3D stream->sequenc=
+e,
+> > > > +             v4l2_event_queue(&stream->vdev, &event);
+> > >
+> > > uvc_video_decode_start() is called when the reception of the entire f=
+rame
+> > > has been completed. However, the documentation for V4L2_EVENT_FRAME_S=
+YNC
+> > > says that the event is "Triggered immediately when the reception of a=
+ frame
+> > > has begun.". The functionality here doesn't seem to fit to this patch=
+.
+> > >
+> > > Wouldn't V4L2_EVENT_VSYNC be a better fit, even if we don't really ha=
+ve a
+> > > concept of vertical sync in the case of USB? That event doesn't have =
+the
+> > > sequence though but I guess it's not an issue at least if your case.
+> > >
+> > > Another technically correct option could be to create a new event for=
+ this
+> > > but I'm not sure it's worth it.
+> > >
+> > > >       }
+> > > >
+> > > >       uvc_video_clock_decode(stream, buf, data, len);
+> > > >
+> > >
+> > > --
+> > > Regards,
+> > >
+> > > Sakari Ailus
+>
+> --
+> Regards,
+>
+> Sakari Ailus
+
+
+
+--=20
+Ricardo Ribalda
