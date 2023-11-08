@@ -2,31 +2,32 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F6DCC4332F
-	for <linux-media@archiver.kernel.org>; Wed,  8 Nov 2023 13:27:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D08FCC4332F
+	for <linux-media@archiver.kernel.org>; Wed,  8 Nov 2023 13:27:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234621AbjKHN1V (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 8 Nov 2023 08:27:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42506 "EHLO
+        id S1344641AbjKHN1Z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Nov 2023 08:27:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjKHN1U (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Nov 2023 08:27:20 -0500
+        with ESMTP id S229675AbjKHN1X (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Nov 2023 08:27:23 -0500
 Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630A71BEB;
-        Wed,  8 Nov 2023 05:27:18 -0800 (PST)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 303EEC000C;
-        Wed,  8 Nov 2023 13:27:16 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 208D81BFC;
+        Wed,  8 Nov 2023 05:27:20 -0800 (PST)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 45AFEC0002;
+        Wed,  8 Nov 2023 13:27:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1699450037;
+        t=1699450039;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=cQ6kgASMd3MviVZ9Li9dMd2dQGMlEHneHIL8ufkos2s=;
-        b=Z8sp93SQxpWmSWVVZANDZjNgDJHG/dfSMcyNSgazLbN1ZDcI9Ny5VuJ/V1vYv6Jto7KeRS
-        Uavf31ISwIlE06SiAlo1KSZQPc6eikUPyn1aX0jZ1KevKEXdwQWXkuWzwbJUBjpE2+x8qQ
-        ED20jPY2BtkJM3l1knxS67mLhG5WZfquY+QySAGlhhKDd+tOCAuCTxPzvL7XgDIpn46CZh
-        XbMucd6ZrIXA03gmVeaG5oGEmLvnjB5IumiV2zd8jD8pYdSbUDAOEMWnXsxlDWH0HAJ9mW
-        9fI5RJ1/41OvQjVCnpbNE9Ref2pPXPYTYpFIJgJIeJ+Yi4LQHHqwleGh7CSNbA==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JIjYBAmnoy1dHJ8r112X89k/GpZVZZ5hj35H3qqtBeE=;
+        b=jsaCzaab2Hx7pl5cQvF7Iz6doK54GzjvHj4bAIzUQ3lOP3YZZQCjbw89UyN6eUi3M4MPgR
+        8YD6DOYTUZroHmynDy2xmYqeIZdeTe6MA0Mz/kWKxDkuWQMyU5Ayh8k74PSroE0ijCD592
+        67xjojUj6uQ/Bf2kR190CV/8B3oVaUa5uMNPpzGNvVsUWUqLsErZKtGUuoXAXTk5lRaUog
+        Jrlh7zHtdrXdO+gXfKGl1dSTQYTo7H2q9R9eDaTtEH4o3z2xDk+pZW6YOVA5p20AL+bbYz
+        UBneY/zuoYUeZ5ba8gBlMtxNzCTpVXFvLtfLIQGdy3E9bXPFGfQFkIIr7E3evQ==
 From:   Mehdi Djait <mehdi.djait@bootlin.com>
 To:     mchehab@kernel.org, heiko@sntech.de, hverkuil-cisco@xs4all.nl,
         laurent.pinchart@ideasonboard.com,
@@ -37,10 +38,12 @@ Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         alexandre.belloni@bootlin.com, maxime.chevallier@bootlin.com,
         paul.kocialkowski@bootlin.com,
         Mehdi Djait <mehdi.djait@bootlin.com>
-Subject: [PATCH v8 0/3] media: i2c: Introduce driver for the TW9900 video decoder
-Date:   Wed,  8 Nov 2023 14:27:11 +0100
-Message-ID: <cover.1699449537.git.mehdi.djait@bootlin.com>
+Subject: [PATCH v8 2/3] media: dt-bindings: media: i2c: Add bindings for TW9900
+Date:   Wed,  8 Nov 2023 14:27:13 +0100
+Message-ID: <0af5607f13b95e1312a1e8df516c8f3d6d0b20f0.1699449537.git.mehdi.djait@bootlin.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <cover.1699449537.git.mehdi.djait@bootlin.com>
+References: <cover.1699449537.git.mehdi.djait@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-GND-Sasl: mehdi.djait@bootlin.com
@@ -48,62 +51,189 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello everyone,
+The Techwell TW9900 is a video decoder supporting multiple input
+standards such as PAL and NTSC and has a parallel BT.656 output
+interface.
 
-V8 of the series adding support for the Techwell TW9900 multi standard decoder.
-It's a pretty simple decoder compared to the TW9910, since it doesn't have a 
-built-in scaler/crop engine.
+It's designed to be low-power, posesses some features such as a
+programmable comb-filter, and automatic input standard detection
 
-The v6 is based on the fifth iteration of the series introducing the
-tw9900 driver: sent 01 Apr 2021 [1]
-
-v7 => v8:
+Signed-off-by: Mehdi Djait <mehdi.djait@bootlin.com>
+---
+V7->V8: 
 - fixed the number of analog input ports: it is just one.
 - added endpoints of the analog input port
 - added vdd-supply to the required in the dt-binding documentation
-- added back pm_runtime
-- added a mutex to Serialize access to hardware and current mode configuration
-- split get_fmt and set_fmt callbacks 
-- removed the tw9900_cancel_autodetect()
 
-v6 => v7:
-- added powerdown-gpios and input ports to dt-bindings
-- added #include <linux/bitfield.h> to fix a Warning from the kernel
-  robot
-- removed a dev_info and replaced a dev_err by dev_err_probe
+V6->V7: 
+- added powerdown-gpios and input ports
+- used 4 spaces for example identation
 
-v5 => v6:
-- dropped .skip_top and .field in the supported_modes
-- added error handling for the i2c writes/reads
-- added the colorimetry information to fill_fmt
-- removed pm_runtime
-- added the g_input_status callback
-- dropped SECAM
-- dropped the non-standard PAL/NTSC variants
+V5->V6: 
+- This commit had a "Reviewed-by: Rob Herring <robh@kernel.org>" Tag but
+  decided not to collect it because the last Iteration was more than 2
+  years ago
+- removed SECAM from the mentioned standards
+- changed maintainer
 
-Any feedback is appreciated,
+V4->V5: 
+- renamed the file to match the compatible string, and referenced
+  the graph.yaml schema
 
-Mehdi Djait
+V3->V4: 
+- add the missing reset-gpios node to the binding
 
-media_tree, base-commit: 94e27fbeca27d8c772fc2bc807730aaee5886055
+V2->V3: 
+- fix the example not compiling due to a typo in the reset-gpios
+  node.
 
-[1] https://lore.kernel.org/linux-media/20210401070802.1685823-1-maxime.chevallier@bootlin.com/
-
-Mehdi Djait (3):
-  dt-bindings: vendor-prefixes: Add techwell vendor prefix
-  media: dt-bindings: media: i2c: Add bindings for TW9900
-  media: i2c: Introduce a driver for the Techwell TW9900 decoder
-
- .../bindings/media/i2c/techwell,tw9900.yaml   | 137 ++++
- .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
- MAINTAINERS                                   |   6 +
- drivers/media/i2c/Kconfig                     |  12 +
- drivers/media/i2c/Makefile                    |   1 +
- drivers/media/i2c/tw9900.c                    | 771 ++++++++++++++++++
- 6 files changed, 929 insertions(+)
+ .../bindings/media/i2c/techwell,tw9900.yaml   | 137 ++++++++++++++++++
+ 1 file changed, 137 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/media/i2c/techwell,tw9900.yaml
- create mode 100644 drivers/media/i2c/tw9900.c
 
+diff --git a/Documentation/devicetree/bindings/media/i2c/techwell,tw9900.yaml b/Documentation/devicetree/bindings/media/i2c/techwell,tw9900.yaml
+new file mode 100644
+index 000000000000..e37317f81072
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/techwell,tw9900.yaml
+@@ -0,0 +1,137 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/i2c/techwell,tw9900.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Techwell TW9900 NTSC/PAL video decoder
++
++maintainers:
++  - Mehdi Djait <mehdi.djait@bootlin.com>
++
++description:
++  The tw9900 is a multi-standard video decoder, supporting NTSC, PAL standards
++  with auto-detection features.
++
++properties:
++  compatible:
++    const: techwell,tw9900
++
++  reg:
++    maxItems: 1
++
++  vdd-supply:
++    description: VDD power supply
++
++  reset-gpios:
++    description: GPIO descriptor for the RESET input pin
++    maxItems: 1
++
++  powerdown-gpios:
++    description: GPIO descriptor for the POWERDOWN input pin
++    maxItems: 1
++
++  ports:
++    $ref: /schemas/graph.yaml#/properties/ports
++
++    properties:
++      port@0:
++        $ref: /schemas/graph.yaml#/$defs/port-base
++        description: Analog input port
++
++        properties:
++          endpoint@0:
++            $ref: /schemas/graph.yaml#/properties/endpoint
++            description: CVBS over MUX0
++
++          endpoint@1:
++            $ref: /schemas/graph.yaml#/properties/endpoint
++            description: CVBS over MUX1
++
++          endpoint@2:
++            $ref: /schemas/graph.yaml#/properties/endpoint
++            description: Chroma over CIN0 and Y over MUX0
++
++          endpoint@3:
++            $ref: /schemas/graph.yaml#/properties/endpoint
++            description: Chroma over CIN0 and Y over MUX1
++
++        oneOf:
++          - required:
++              - endpoint@0
++          - required:
++              - endpoint@1
++          - required:
++              - endpoint@2
++          - required:
++              - endpoint@3
++
++      port@1:
++        $ref: /schemas/graph.yaml#/properties/port
++        description: Video port for the decoder output.
++
++
++    required:
++      - port@0
++      - port@1
++
++required:
++  - compatible
++  - ports
++  - reg
++  - vdd-supply
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/display/sdtv-standards.h>
++    #include <dt-bindings/gpio/gpio.h>
++
++    composite_connector {
++        compatible = "composite-video-connector";
++        label = "tv";
++        sdtv-standards = <(SDTV_STD_PAL | SDTV_STD_NTSC)>;
++
++        port {
++            composite_to_tw9900: endpoint {
++                remote-endpoint = <&tw9900_to_composite>;
++            };
++        };
++    };
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        video-decoder@44 {
++            compatible = "techwell,tw9900";
++            reg = <0x44>;
++
++            vdd-supply = <&tw9900_supply>;
++            reset-gpios = <&gpio2 5 GPIO_ACTIVE_LOW>;
++
++            ports {
++                #address-cells = <1>;
++                #size-cells = <0>;
++
++                port@0 {
++                    #address-cells = <1>;
++                    #size-cells = <0>;
++
++                    reg = <0>;
++                    tw9900_to_composite: endpoint@0 {
++                        reg = <0>;
++                        remote-endpoint = <&composite_to_tw9900>;
++                    };
++                };
++
++                port@1 {
++                    reg = <1>;
++                    endpoint {
++                        remote-endpoint = <&cif_in>;
++                    };
++                };
++            };
++        };
++    };
 -- 
 2.41.0
 
