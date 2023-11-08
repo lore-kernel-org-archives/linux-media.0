@@ -2,201 +2,139 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A37EFC4167D
-	for <linux-media@archiver.kernel.org>; Wed,  8 Nov 2023 10:57:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D1194C4332F
+	for <linux-media@archiver.kernel.org>; Wed,  8 Nov 2023 11:25:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235609AbjKHK5B (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 8 Nov 2023 05:57:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
+        id S235615AbjKHLZq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Nov 2023 06:25:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235663AbjKHK4a (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Nov 2023 05:56:30 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5A019A5;
-        Wed,  8 Nov 2023 02:56:16 -0800 (PST)
-Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4SQMSz45TJzfb2h;
-        Wed,  8 Nov 2023 18:56:03 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Wed, 8 Nov
- 2023 18:56:12 +0800
-Subject: Re: [RFC PATCH v3 07/12] page-pool: device memory support
-To:     Mina Almasry <almasrymina@google.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arch@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linaro-mm-sig@lists.linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Ahern <dsahern@kernel.org>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Jeroen de Borst <jeroendb@google.com>,
-        Praveen Kaligineedi <pkaligineedi@google.com>
-References: <20231106024413.2801438-1-almasrymina@google.com>
- <20231106024413.2801438-8-almasrymina@google.com>
- <4a0e9d53-324d-e19b-2a30-ba86f9e5569e@huawei.com>
- <CAHS8izNbw7vAGo2euQGA+TF9CgQ8zwrDqTVGsOSxh22_uo0R1w@mail.gmail.com>
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <d4309392-711a-75b0-7bf0-9e7de8fd527e@huawei.com>
-Date:   Wed, 8 Nov 2023 18:56:11 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        with ESMTP id S229924AbjKHLZa (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Nov 2023 06:25:30 -0500
+Received: from mx.kolabnow.com (mx.kolabnow.com [212.103.80.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9F22113
+        for <linux-media@vger.kernel.org>; Wed,  8 Nov 2023 03:25:27 -0800 (PST)
+Received: from localhost (unknown [127.0.0.1])
+        by mx.kolabnow.com (Postfix) with ESMTP id 25575300D3C4;
+        Wed,  8 Nov 2023 12:25:25 +0100 (CET)
+Authentication-Results: ext-mx-out013.mykolab.com (amavis);
+ dkim=pass (4096-bit key) reason="pass (just generated, assumed good)"
+ header.d=kolabnow.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kolabnow.com; h=
+        content-transfer-encoding:content-type:content-type:in-reply-to
+        :from:from:references:content-language:subject:subject
+        :mime-version:date:date:message-id:received:received:received;
+         s=dkim20160331; t=1699442723; x=1701257124; bh=iYVP3iGJUli2QBmz
+        SBHuVh05aEMlOSC+X7mAKrTWqlw=; b=GxBAsnDxqMiIfJotFHqHy2l01CmzsUtK
+        w6WoQY2Irk3jsQkUl1GvPIkj3JHi+J9lMH6HItKnAz5HmdMmnJH5WODKXHV/USaU
+        6I9pgvX/KMuXkwrmDoMU0r0RH3suU/0AyJt5YwL3P0w7PVj/vRIvb00GKuupq3c0
+        0crPyxGKwn2oRLsFlRYfnWnA1XJPawyOE61JGahsCXmswhS0XnX1f7+se5F+O9Px
+        l8nrjBB6UkdZ99S4m2hMcu7q4feD0aj0NtmGLk5e73yugUA4gh2giwMBwGrJ62f/
+        IQcbZHdyWqO3AiMziXljzJv/H+w4U4rSz6ms/+y65ZX0+7d6KXtH6PoV01z1H3Ym
+        fBAZ/pc0msDroii0Ctd6iyf4VSHw4SPVyOwWekd0OWXCXD/G7Y2oc5gcxrMRAeA5
+        Y4QRWObsnYKIqzMNrRout0WgQ3mcg1TjG8BTMLMbej5LV+LcH3GI+YotLp6b/GMW
+        cenieyjY6w+bRH6NP6odgrc9D7XkChwlY2TyaUiJkRB+LL0YLml1/31Ht6R67Ynh
+        YwQD5ZorTXD0jYKE3aM3IABzvZlVMUqc4ORyiX8a6v1swKd+52yx0woIhM5VXdQi
+        4oYtmdvwOI+lXz6AVQKSgEUBt9+gaKIV34xM2CS9LtQLCXsXHEXJpcYQIj4Ur81R
+        sUWSPFNJWO0=
+X-Virus-Scanned: amavis at mykolab.com
+Received: from mx.kolabnow.com ([127.0.0.1])
+ by localhost (ext-mx-out013.mykolab.com [127.0.0.1]) (amavis, port 10024)
+ with ESMTP id dny97K6r-Voa; Wed,  8 Nov 2023 12:25:23 +0100 (CET)
+Received: from int-mx011.mykolab.com (unknown [10.9.13.11])
+        by mx.kolabnow.com (Postfix) with ESMTPS id 77899300D36F;
+        Wed,  8 Nov 2023 12:25:21 +0100 (CET)
+Received: from ext-subm010.mykolab.com (unknown [10.9.6.10])
+        by int-mx011.mykolab.com (Postfix) with ESMTPS id E365E30C01E2;
+        Wed,  8 Nov 2023 12:25:20 +0100 (CET)
+Message-ID: <a3184b70-e0b3-4227-94af-2412fd565724@hansg.org>
+Date:   Wed, 8 Nov 2023 12:25:19 +0100
 MIME-Version: 1.0
-In-Reply-To: <CAHS8izNbw7vAGo2euQGA+TF9CgQ8zwrDqTVGsOSxh22_uo0R1w@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
+Subject: Re: [PATCH v2 01/15] media: intel/ipu6: add Intel IPU6 PCI device
+ driver
+Content-Language: en-US, nl
+To:     bingbu.cao@intel.com, linux-media@vger.kernel.org,
+        sakari.ailus@linux.intel.com, laurent.pinchart@ideasonboard.com
+Cc:     andriy.shevchenko@linux.intel.com, hdegoede@redhat.com,
+        ilpo.jarvinen@linux.intel.com, andreaskleist@gmail.com,
+        claus.stovgaard@gmail.com, tfiga@chromium.org,
+        senozhatsky@chromium.org, tomi.valkeinen@ideasonboard.com,
+        bingbu.cao@linux.intel.com, tian.shu.qiu@intel.com,
+        hongju.wang@intel.com
+References: <20231024112924.3934228-1-bingbu.cao@intel.com>
+ <20231024112924.3934228-2-bingbu.cao@intel.com>
+From:   Hans de Goede <hans@hansg.org>
+In-Reply-To: <20231024112924.3934228-2-bingbu.cao@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 2023/11/8 5:56, Mina Almasry wrote:
-> On Tue, Nov 7, 2023 at 12:00 AM Yunsheng Lin <linyunsheng@huawei.com> wrote:
->>
->> On 2023/11/6 10:44, Mina Almasry wrote:
->>> Overload the LSB of struct page* to indicate that it's a page_pool_iov.
->>>
->>> Refactor mm calls on struct page* into helpers, and add page_pool_iov
->>> handling on those helpers. Modify callers of these mm APIs with calls to
->>> these helpers instead.
->>>
->>> In areas where struct page* is dereferenced, add a check for special
->>> handling of page_pool_iov.
->>>
->>> Signed-off-by: Mina Almasry <almasrymina@google.com>
->>>
->>> ---
->>>  include/net/page_pool/helpers.h | 74 ++++++++++++++++++++++++++++++++-
->>>  net/core/page_pool.c            | 63 ++++++++++++++++++++--------
->>>  2 files changed, 118 insertions(+), 19 deletions(-)
->>>
->>> diff --git a/include/net/page_pool/helpers.h b/include/net/page_pool/helpers.h
->>> index b93243c2a640..08f1a2cc70d2 100644
->>> --- a/include/net/page_pool/helpers.h
->>> +++ b/include/net/page_pool/helpers.h
->>> @@ -151,6 +151,64 @@ static inline struct page_pool_iov *page_to_page_pool_iov(struct page *page)
->>>       return NULL;
->>>  }
->>>
->>> +static inline int page_pool_page_ref_count(struct page *page)
->>> +{
->>> +     if (page_is_page_pool_iov(page))
->>> +             return page_pool_iov_refcount(page_to_page_pool_iov(page));
->>
->> We have added a lot of 'if' for the devmem case, it would be better to
->> make it more generic so that we can have more unified metadata handling
->> for normal page and devmem. If we add another memory type here, do we
->> need another 'if' here?
+Hi,
+
+On 10/24/23 13:29, bingbu.cao@intel.com wrote:
+> From: Bingbu Cao <bingbu.cao@intel.com>
 > 
-> Maybe, not sure. I'm guessing new memory types will either be pages or
-> iovs, so maybe no new if statements needed.
+> Intel Image Processing Unit 6th Gen includes input and processing systems
+> but the hardware presents itself as a single PCI device in system.
 > 
->> That is part of the reason I suggested using a more unified metadata for
->> all the types of memory chunks used by page_pool.
+> IPU6 PCI device driver basically does PCI configurations and load
+> the firmware binary, initialises IPU virtual bus, and sets up platform
+> specific variants to support multiple IPU6 devices in single device
+> driver.
 > 
-> I think your suggestion was to use struct pages for devmem. That was
-> thoroughly considered and intensely argued about in the initial
-> conversations regarding devmem and the initial RFC, and from the
-> conclusions there it's extremely clear to me that devmem struct pages
-> are categorically a no-go.
+> Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
+> Reported-by: Hans de Goede <hdegoede@redhat.com>
+> Suggested-by: Andreas Helbech Kleist <andreaskleist@gmail.com>
+> ---
+>  .../media/pci/intel/ipu6/ipu6-platform-regs.h | 179 ++++
+>  drivers/media/pci/intel/ipu6/ipu6.c           | 952 ++++++++++++++++++
+>  drivers/media/pci/intel/ipu6/ipu6.h           | 352 +++++++
+>  3 files changed, 1483 insertions(+)
+>  create mode 100644 drivers/media/pci/intel/ipu6/ipu6-platform-regs.h
+>  create mode 100644 drivers/media/pci/intel/ipu6/ipu6.c
+>  create mode 100644 drivers/media/pci/intel/ipu6/ipu6.h
 
-Not exactly, I was wondering if adding a more abstract structure specificly
-for page pool makes any sense, and each mem type can add its own specific
-fields, net stack only see and handle the common fields so that it does not
-care about specific mem type, and each provider only see the and handle the
-specific fields belonging to it most of the time.
+<snip>
 
-Ideally something like beleow:
+> diff --git a/drivers/media/pci/intel/ipu6/ipu6.c b/drivers/media/pci/intel/ipu6/ipu6.c
+> new file mode 100644
+> index 000000000000..84960a283daf
+> --- /dev/null
+> +++ b/drivers/media/pci/intel/ipu6/ipu6.c
+> @@ -0,0 +1,952 @@
 
-struct netmem {
-	/* common fields */
-	refcount_t refcount;
-	struct page_pool *pp;
-	......
+<snip>
 
-	union {
-		struct devmem{
-			struct dmabuf_genpool_chunk_owner *owner;
-		};
+> +static int ipu6_pci_config_setup(struct pci_dev *dev, u8 hw_ver)
+> +{
+> +	int ret;
+> +
+> +	/* disable IPU6 PCI ATS on mtl ES2 */
+> +	if (is_ipu6ep_mtl(hw_ver) && boot_cpu_data.x86_stepping == 0x2 &&
+> +	    pci_ats_supported(dev))
+> +		pci_disable_ats(dev);
+> +
+> +	/* No PCI msi capability for IPU6EP */
+> +	if (is_ipu6ep(hw_ver) || is_ipu6ep_mtl(hw_ver)) {
+> +		/* likely do nothing as msi not enabled by default */
+> +		pci_disable_msi(dev);
+> +		return 0;
+> +	}
+> +
+> +	ret = pci_alloc_irq_vectors(dev, 1, 1, PCI_IRQ_MSI);
 
-		struct other_mem{
-			...
-			...
-		};
-	};
-};
+This does not work on TGL systems (and is not reached on ADL and RPL).
 
-But untill we completely decouple the 'struct page' from the net stack,
-the above seems undoable in the near term.
-But we might be able to do something as folio is doing now, mm subsystem
-is still seeing 'struct folio/page', but other subsystem like slab is using
-'struct slab', and there is still some common fields shared between
-'struct folio' and 'struct slab'.
+The out of tree driver instead uses:
 
-As the netmem patchset, is devmem able to reuse the below 'struct netmem'
-and rename it to 'struct page_pool_iov'? So that 'struct page' for normal
-memory and 'struct page_pool_iov' for devmem share the common fields used
-by page pool and net stack? And we might be able to reuse the 'flags',
-'_pp_mapping_pad' and '_mapcount' for specific mem provider, which is enough
-for the devmem only requiring a single pointer to point to it's
-owner?
+        ret = pci_enable_msi(dev);
 
-https://lkml.kernel.org/netdev/20230105214631.3939268-2-willy@infradead.org/
+and that does work correctly on TGL.
 
-+/**
-+ * struct netmem - A memory allocation from a &struct page_pool.
-+ * @flags: The same as the page flags.  Do not use directly.
-+ * @pp_magic: Magic value to avoid recycling non page_pool allocated pages.
-+ * @pp: The page pool this netmem was allocated from.
-+ * @dma_addr: Call netmem_get_dma_addr() to read this value.
-+ * @dma_addr_upper: Might need to be 64-bit on 32-bit architectures.
-+ * @pp_frag_count: For frag page support, not supported in 32-bit
-+ *   architectures with 64-bit DMA.
-+ * @_mapcount: Do not access this member directly.
-+ * @_refcount: Do not access this member directly.  Read it using
-+ *   netmem_ref_count() and manipulate it with netmem_get() and netmem_put().
-+ *
-+ * This struct overlays struct page for now.  Do not modify without a
-+ * good understanding of the issues.
-+ */
-+struct netmem {
-+	unsigned long flags;
-+	unsigned long pp_magic;
-+	struct page_pool *pp;
-+	/* private: no need to document this padding */
-+	unsigned long _pp_mapping_pad;	/* aliases with folio->mapping */
-+	/* public: */
-+	unsigned long dma_addr;
-+	union {
-+		unsigned long dma_addr_upper;
-+		atomic_long_t pp_frag_count;
-+	};
-+	atomic_t _mapcount;
-+	atomic_t _refcount;
-+};
+Regards,
 
-If we do that, it seems we might be able to allow net stack and page pool to see
-the metadata for devmem chunk as 'struct page', and may be able to aovid most of
-the 'if' checking in net stack and page pool?
+Hans
 
-> 
-> --
-> Thanks,
-> Mina
-> 
-> .
-> 
+
