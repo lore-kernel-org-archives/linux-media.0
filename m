@@ -2,142 +2,105 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15EC0C41535
-	for <linux-media@archiver.kernel.org>; Thu,  9 Nov 2023 11:10:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13277C4332F
+	for <linux-media@archiver.kernel.org>; Thu,  9 Nov 2023 11:12:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233789AbjKILKc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Nov 2023 06:10:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38936 "EHLO
+        id S232749AbjKILMf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 Nov 2023 06:12:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233651AbjKILKa (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 9 Nov 2023 06:10:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3C76272C
-        for <linux-media@vger.kernel.org>; Thu,  9 Nov 2023 03:09:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1699528183;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ezu0iXe5WM3zfDfpiwhiAtccNmWTLMMx0akG9lcRF/g=;
-        b=CjyTf0bPtHLHNbCf/Zc/P5nwyWCg9EJN7rTfDtuTIsESPnGzL1TLk3Uxe7i4S8C5s8qPqO
-        FY4BqMBJTMAMJmOEFb84kEVlp7H97WGguv/j+gmAOKmvGIoT2K3xGuYGH8iXkU7sanhJnr
-        gu1/QsT1NWIeoqJ5Dww1Zte7JaFY/7c=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-318-o0OdKhw-NluPAVcxdiMlrA-1; Thu, 09 Nov 2023 06:09:42 -0500
-X-MC-Unique: o0OdKhw-NluPAVcxdiMlrA-1
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-41cbafdb4b6so2245581cf.0
-        for <linux-media@vger.kernel.org>; Thu, 09 Nov 2023 03:09:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699528182; x=1700132982;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ezu0iXe5WM3zfDfpiwhiAtccNmWTLMMx0akG9lcRF/g=;
-        b=OKFNsyJ88D28fM7d5OR9MsGUqE160OYmDQbicvPwii44HHQmr4nnMQddl22rhiNfac
-         bayLs7n2no3gce9fx/cUOSqosHlWfSdyy1EG7kggj8JpV5ErINdaQrlKbzG9DLHPsUAm
-         7XpBo6EQRRlk1zwagunuvHGA3653QSV+Sj6HG5myeFaahgy0z1o9pc45TSzmajaPNyGf
-         A1vDKZtQJAklK/UWEtHQG+T2dAo32kgNg/AGZCzxlq/buIG9Tj9pO/osEE6w1L3xtXzs
-         zAMlzAxU89rCn/tHdqYfYiuK5gN/rrOTgQCiNLiSPii6V8j33Sn9xU916FZhe1u1D9QO
-         TqRw==
-X-Gm-Message-State: AOJu0YxFXTaoMzsEtmr9Mvln7FnT4SEeN4/KXzjrA/iACR8urSFQ9l2d
-        j6IIxfv9Qj/vbCF7dlpweGUnJ2DZCiqt/QaV+3+wiv4AeKfXTNwbLQY4pn0SvFqAy7hfK+tRnym
-        otS+SjJ79wU2xMVK+2zXuNik=
-X-Received: by 2002:a05:622a:2b46:b0:41c:d433:6c86 with SMTP id hb6-20020a05622a2b4600b0041cd4336c86mr5854584qtb.4.1699528182027;
-        Thu, 09 Nov 2023 03:09:42 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEEczlBkEToxT5HA1bWloT/vSc9WPJn4E7V19w/sRlEABI2nrBuMePu+oCzKYFBd5r1xDIeGg==
-X-Received: by 2002:a05:622a:2b46:b0:41c:d433:6c86 with SMTP id hb6-20020a05622a2b4600b0041cd4336c86mr5854566qtb.4.1699528181732;
-        Thu, 09 Nov 2023 03:09:41 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-228-197.dyn.eolo.it. [146.241.228.197])
-        by smtp.gmail.com with ESMTPSA id n5-20020ac86745000000b0041977932fc6sm1828045qtp.18.2023.11.09.03.09.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Nov 2023 03:09:41 -0800 (PST)
-Message-ID: <fdf6b2e9c5a734b1a03336f7d5bcfd06bdef47c5.camel@redhat.com>
-Subject: Re: [RFC PATCH v3 02/12] net: page_pool: create hooks for custom
- page providers
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Ahern <dsahern@kernel.org>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Jeroen de Borst <jeroendb@google.com>,
-        Praveen Kaligineedi <pkaligineedi@google.com>
-Date:   Thu, 09 Nov 2023 12:09:37 +0100
-In-Reply-To: <20231106024413.2801438-3-almasrymina@google.com>
-References: <20231106024413.2801438-1-almasrymina@google.com>
-         <20231106024413.2801438-3-almasrymina@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        with ESMTP id S231703AbjKILMe (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 9 Nov 2023 06:12:34 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58CD2D5E;
+        Thu,  9 Nov 2023 03:12:31 -0800 (PST)
+Received: from [100.116.125.19] (cola.collaboradmins.com [195.201.22.229])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: andrzej.p)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 39CA8660741E;
+        Thu,  9 Nov 2023 11:12:29 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1699528350;
+        bh=kjznN3RZO4AREL4Gg9y4Yf3GgjVsJaN4QypN6NO9UfM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kJpNuahcdwBQR70WBWuPjvdfDbzzSvYEhaMNLUDTys2nMOx5sE6RUaiTiDu4ux6b0
+         vxNe3EsE0h17in/Rv4NeesbTIU7W6j4bzBz4qTeqF1auLHvpVum48UK+4yCV1M82Y4
+         BGCJO2me9W1YHyYpU1oCMOZ08elF9L2uZPDgghMk8/z0xe6ts4nAz3bgVHu21Ba/lr
+         A3Sj1MhjunmP3xsRnOKoIyzjXny4T7jd0N2ZQvFApOXNhCqeK8c6cIQF434RFYX5S7
+         1DsDF5m/7BJB51VSUeBJ7UseMl1uDU7SFNeiFo3VB/mJM8dH/BSI3FbOgBY1b3r179
+         2RxaEXOZL4z3A==
+Message-ID: <31a67704-373a-407e-88c7-e079c7260e82@collabora.com>
+Date:   Thu, 9 Nov 2023 12:12:26 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v14 31/56] media: imx: Stop direct calls to queue
+ num_buffers field
+Content-Language: en-US
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
+        ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        kernel@collabora.com, Steve Longerbeam <slongerbeam@gmail.com>
+References: <20231031163104.112469-1-benjamin.gaignard@collabora.com>
+ <20231031163104.112469-32-benjamin.gaignard@collabora.com>
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+In-Reply-To: <20231031163104.112469-32-benjamin.gaignard@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sun, 2023-11-05 at 18:44 -0800, Mina Almasry wrote:
-> diff --git a/include/net/page_pool/types.h b/include/net/page_pool/types.=
-h
-> index 6fc5134095ed..d4bea053bb7e 100644
-> --- a/include/net/page_pool/types.h
-> +++ b/include/net/page_pool/types.h
-> @@ -60,6 +60,8 @@ struct page_pool_params {
->  	int		nid;
->  	struct device	*dev;
->  	struct napi_struct *napi;
-> +	u8		memory_provider;
-> +	void            *mp_priv;
+W dniu 31.10.2023 o 17:30, Benjamin Gaignard pisze:
+> Use vb2_get_num_buffers() to avoid using queue num_buffers field directly.
+> This allows us to change how the number of buffers is computed in the
+> future.
+> 
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 
-Minor nit: swapping the above 2 fields should make the struct smaller.
+Reviewed-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 
->  	enum dma_data_direction dma_dir;
->  	unsigned int	max_len;
->  	unsigned int	offset;
-> @@ -118,6 +120,19 @@ struct page_pool_stats {
->  };
->  #endif
-> =20
-> +struct mem_provider;
-> +
-> +enum pp_memory_provider_type {
-> +	__PP_MP_NONE, /* Use system allocator directly */
-> +};
-> +
-> +struct pp_memory_provider_ops {
-> +	int (*init)(struct page_pool *pool);
-> +	void (*destroy)(struct page_pool *pool);
-> +	struct page *(*alloc_pages)(struct page_pool *pool, gfp_t gfp);
-> +	bool (*release_page)(struct page_pool *pool, struct page *page);
-> +};
-> +
->  struct page_pool {
->  	struct page_pool_params p;
-> =20
-> @@ -165,6 +180,9 @@ struct page_pool {
->  	 */
->  	struct ptr_ring ring;
-> =20
-> +	const struct pp_memory_provider_ops *mp_ops;
-> +	void *mp_priv;
-
-Why the mp_ops are not part of page_pool_params? why mp_priv is
-duplicated here?
-
-Cheers,
-
-Paolo
+> CC: Steve Longerbeam <slongerbeam@gmail.com>
+> CC: Philipp Zabel <p.zabel@pengutronix.de>
+> ---
+>   drivers/staging/media/imx/imx-media-capture.c | 7 ++++---
+>   1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/staging/media/imx/imx-media-capture.c b/drivers/staging/media/imx/imx-media-capture.c
+> index 4846078315ff..ce02199e7b1b 100644
+> --- a/drivers/staging/media/imx/imx-media-capture.c
+> +++ b/drivers/staging/media/imx/imx-media-capture.c
+> @@ -605,6 +605,7 @@ static int capture_queue_setup(struct vb2_queue *vq,
+>   {
+>   	struct capture_priv *priv = vb2_get_drv_priv(vq);
+>   	struct v4l2_pix_format *pix = &priv->vdev.fmt;
+> +	unsigned int q_num_bufs = vb2_get_num_buffers(vq);
+>   	unsigned int count = *nbuffers;
+>   
+>   	if (vq->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
+> @@ -613,14 +614,14 @@ static int capture_queue_setup(struct vb2_queue *vq,
+>   	if (*nplanes) {
+>   		if (*nplanes != 1 || sizes[0] < pix->sizeimage)
+>   			return -EINVAL;
+> -		count += vq->num_buffers;
+> +		count += q_num_bufs;
+>   	}
+>   
+>   	count = min_t(__u32, VID_MEM_LIMIT / pix->sizeimage, count);
+>   
+>   	if (*nplanes)
+> -		*nbuffers = (count < vq->num_buffers) ? 0 :
+> -			count - vq->num_buffers;
+> +		*nbuffers = (count < q_num_bufs) ? 0 :
+> +			count - q_num_bufs;
+>   	else
+>   		*nbuffers = count;
+>   
 
