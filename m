@@ -2,107 +2,89 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F7EDC4167B
-	for <linux-media@archiver.kernel.org>; Thu,  9 Nov 2023 09:15:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F037EC4332F
+	for <linux-media@archiver.kernel.org>; Thu,  9 Nov 2023 09:21:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234156AbjKIJPg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Nov 2023 04:15:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36606 "EHLO
+        id S234269AbjKIJV4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 Nov 2023 04:21:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234238AbjKIJPd (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 9 Nov 2023 04:15:33 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C934270C
-        for <linux-media@vger.kernel.org>; Thu,  9 Nov 2023 01:14:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1699521283;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rlxAh75JGCxuVSjk/DiobkLepAxu5g+JZPGhaCfgbCo=;
-        b=g8SWf5T5KQhsMCNRpnKP337QbtoffTbXYNZ2hm897463pyLRVGy0vGnrokcH1/cgbk+RwW
-        QcOVpdrHsnyg7Z2lWcOOMdFZROTsV9RTFxNAz7HSBb32vZ7ti7Nj96H4iM+49GaoltZXZG
-        g2wSY5UgZcugITOr6chcsGGXrN7gf7A=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-661-kWpUaPIBMaWWiLwdgKHr2g-1; Thu, 09 Nov 2023 04:14:41 -0500
-X-MC-Unique: kWpUaPIBMaWWiLwdgKHr2g-1
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-9bfbc393c43so15947666b.1
-        for <linux-media@vger.kernel.org>; Thu, 09 Nov 2023 01:14:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699521280; x=1700126080;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rlxAh75JGCxuVSjk/DiobkLepAxu5g+JZPGhaCfgbCo=;
-        b=LZlMc50dqIpypRuKTQ8hrxNq9RzGT26ZTRBKgEwMqTBvOPHkjhLnTBhrtgJ40HkHK8
-         /aODSstxQS9l2UBrEs5FYBuhraJlH224WmDjJaZO6ALI1782MiZvH/WskobiL0/xHxCH
-         r98G6OZJsGZBnqrREzUgpJWsdDcvLwtLqlMWH/0RaqzIlH9cQyB+p/LJnPtB+3idDuqY
-         jgFp+7rgz4gJTHPcUSgg7n1aUVfZTdAU1byR1cWt2WTjrtf3zQt//LqOCwg4LphLwZeL
-         hdjNlTVrfasyPAuDI/K/FuC+AmKYAxG8cAAfOyuggRaa2125SAOJGWVPM0Ziqz/cWK6D
-         0ROA==
-X-Gm-Message-State: AOJu0YxmQ0iFE6yluRx+LC7s+wIitCBj8Z0CzWbzj/HrfYr3jvotiOFN
-        6NFCBb3uAlIVNhXFD34M8N5xqgbDb4Ij8yIqfOv+Z5Wu/vRE0fMUDXPNpHZH4Lv0lebpbr2kdR9
-        wDkWEjpgj1eMvCZZ9ilDC00Y=
-X-Received: by 2002:a17:906:e84:b0:9e3:a1a9:3db3 with SMTP id p4-20020a1709060e8400b009e3a1a93db3mr3052494ejf.0.1699521280336;
-        Thu, 09 Nov 2023 01:14:40 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFrN7rWZV1LJySiH/LlJHce45p7c2N1o4c7lFbPUX87ekT7bdY/faJ0o5ksbIAqMgIYGTojqQ==
-X-Received: by 2002:a17:906:e84:b0:9e3:a1a9:3db3 with SMTP id p4-20020a1709060e8400b009e3a1a93db3mr3052473ejf.0.1699521280043;
-        Thu, 09 Nov 2023 01:14:40 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-228-197.dyn.eolo.it. [146.241.228.197])
-        by smtp.gmail.com with ESMTPSA id dv16-20020a170906b81000b009a1c05bd672sm2252071ejb.127.2023.11.09.01.14.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Nov 2023 01:14:39 -0800 (PST)
-Message-ID: <adde2b31fdd9e7bb4a09f0073580b840bea0bab1.camel@redhat.com>
-Subject: Re: [RFC PATCH v3 08/12] net: support non paged skb frags
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Ahern <dsahern@kernel.org>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Jeroen de Borst <jeroendb@google.com>,
-        Praveen Kaligineedi <pkaligineedi@google.com>
-Date:   Thu, 09 Nov 2023 10:14:37 +0100
-In-Reply-To: <20231106024413.2801438-9-almasrymina@google.com>
-References: <20231106024413.2801438-1-almasrymina@google.com>
-         <20231106024413.2801438-9-almasrymina@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        with ESMTP id S229629AbjKIJVz (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 9 Nov 2023 04:21:55 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA612590;
+        Thu,  9 Nov 2023 01:21:53 -0800 (PST)
+Received: from [100.116.125.19] (cola.collaboradmins.com [195.201.22.229])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: andrzej.p)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 09BF76607410;
+        Thu,  9 Nov 2023 09:21:50 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1699521712;
+        bh=f8JXp5DFigmWZNSo/1/xIIcN/xL2hsK0xHFmM9ZToL0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=GhASGxhw40oITC1953wmOIZmXueh8mIWI9sy6ITxawXx67Jiz7uuD3m3plQGR3GFS
+         +mKwqeGFgJrCX8RMLO919BPvowQy4hSLxkXaIm6936+JP9oyW2S5tlDXWw/L88jNQK
+         g9Te4OtfxIx5Tek0ycpNfoJkR4YE4pXWTanCUigOuyE09hKEgZ+s7w3efbXOwfwGGc
+         ZV0VsLNy2f7kP0z8DRpX07zRPjLug6VKyUkqCwmZInQe+H6wrdzkcbMaOhbsl549iF
+         eX4oZzV6YbVIt6HLkUf0+OcsfKSscbztj7pSjrVs3/D266AeoVEMLaGuvWab6LMxXh
+         FPFtvJ9TBQ5Tw==
+Message-ID: <7972851a-9a78-426a-b864-4de8411cd15a@collabora.com>
+Date:   Thu, 9 Nov 2023 10:21:48 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v14 13/56] media: mediatek: vcodec: Stop direct calls to
+ queue num_buffers field
+Content-Language: en-US
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
+        ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        kernel@collabora.com, Bin Liu <bin.liu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+References: <20231031163104.112469-1-benjamin.gaignard@collabora.com>
+ <20231031163104.112469-14-benjamin.gaignard@collabora.com>
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+In-Reply-To: <20231031163104.112469-14-benjamin.gaignard@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sun, 2023-11-05 at 18:44 -0800, Mina Almasry wrote:
-[...]
-> @@ -3421,7 +3446,7 @@ static inline struct page *skb_frag_page(const skb_=
-frag_t *frag)
->   */
->  static inline void __skb_frag_ref(skb_frag_t *frag)
->  {
-> -	get_page(skb_frag_page(frag));
-> +	page_pool_page_get_many(frag->bv_page, 1);
+W dniu 31.10.2023 o 17:30, Benjamin Gaignard pisze:
+> Use vb2_get_num_buffers() to avoid using queue num_buffers field directly.
+> This allows us to change how the number of buffers is computed in the
+> future.
+> 
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 
-I guess the above needs #ifdef CONFIG_PAGE_POOL guards and explicit
-skb_frag_is_page_pool_iov() check ?
+Reviewed-by: Andrzej Pietrasiewicz <anrdzej.p@collabora.com>
 
-
-Cheers,
-
-Paolo
+> CC: Bin Liu <bin.liu@mediatek.com>
+> CC: Matthias Brugger <matthias.bgg@gmail.com>
+> ---
+>   drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc.c b/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc.c
+> index eb381fa6e7d1..181884e798fd 100644
+> --- a/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc.c
+> +++ b/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc.c
+> @@ -912,7 +912,7 @@ static int vb2ops_venc_start_streaming(struct vb2_queue *q, unsigned int count)
+>   	return 0;
+>   
+>   err_start_stream:
+> -	for (i = 0; i < q->num_buffers; ++i) {
+> +	for (i = 0; i < vb2_get_num_buffers(q); ++i) {
+>   		struct vb2_buffer *buf = vb2_get_buffer(q, i);
+>   
+>   		/*
 
