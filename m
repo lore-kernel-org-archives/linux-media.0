@@ -2,245 +2,241 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCA53C4332F
-	for <linux-media@archiver.kernel.org>; Thu,  9 Nov 2023 16:29:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45929C4332F
+	for <linux-media@archiver.kernel.org>; Thu,  9 Nov 2023 16:32:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234579AbjKIQ3y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Nov 2023 11:29:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57576 "EHLO
+        id S232003AbjKIQcY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 Nov 2023 11:32:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjKIQ3x (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 9 Nov 2023 11:29:53 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F8235AA;
-        Thu,  9 Nov 2023 08:29:50 -0800 (PST)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7ED0940007;
-        Thu,  9 Nov 2023 16:29:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1699547388;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tm0cylrAcXnm7eKQqx0GuLW4XzLpyFuEodiMDdb36zQ=;
-        b=bjE0gXRqPUI+3iKxTnJ/SrbxJ3XAuLErHSXzEMhr63ULaCQmtsa856MdkklxROQZiTCx/A
-        lGm25zja9uZE7Tb2grdBfeSHULqztzES3qLih4oNCyqcYzwRunOY+dV1ek5nG2ftobLMSM
-        NV00MPsAgqAuXWz+IlL3Vig+kmE3JmJ49GVhNK8WJqiBjmIy2y6DztgLnqifmgFqc444lf
-        pcPVt/DKFNDEys+KEZ/4gIMJ0Y7wyMLuBLLytTIN3YABD00xpg3ywuk8PbWWSexmi3Vbg5
-        qnQxqm1kH7hFYOV0ICVUE+G7xFGmh2jxxk4H8Vrtih0LIW/vfGwQ4icnknGW0w==
-Date:   Thu, 9 Nov 2023 17:29:44 +0100
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
+        with ESMTP id S234596AbjKIQcW (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 9 Nov 2023 11:32:22 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5E435AE;
+        Thu,  9 Nov 2023 08:32:20 -0800 (PST)
+Received: from benjamin-XPS-13-9310.. (cola.collaboradmins.com [195.201.22.229])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id ECE18660741B;
+        Thu,  9 Nov 2023 16:32:17 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1699547538;
+        bh=TPrCbj6Inb8rFGmnB6mkzuCShYo+LUrSGNT8c06m1eE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=bkBH/tfHka8oIzWfVHaVRyT0i9s98/4l9q2Bc1a5cVEkRR5iOlj1QzoJvB3XPQyDJ
+         bLbsByS/ZTK643z+InbAUVREHnjZLgw7tWS/n1f00K+8zEJ7aPfMLBXZtULDc51Eg7
+         5pm16f2Eex/US2C//VHk9qY34d21vS1MMmEX7El5VRADSVArmxcY+EiUu2Yzwk6JrB
+         3bKGCLHIMCvMKawfZrTfzXZweycwtN725ElXRtwK5uvpsnIqfVN17jKBzREX2p33zA
+         x/k7pGi+2dZKIAqn9I+xIeOqSlBXsz6TxAsQyWqF7rrTwH6XcxGdV7PPAoMqztzUix
+         ZRs80/jlfjZMg==
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
         p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        kernel@collabora.com, Maxime Ripard <mripard@kernel.org>
-Subject: Re: [PATCH v14 35/56] media: cedrus: Stop direct calls to queue
- num_buffers field
-Message-ID: <ZU0I-C32UFjnUKH3@aptenodytes>
-References: <20231031163104.112469-1-benjamin.gaignard@collabora.com>
- <20231031163104.112469-36-benjamin.gaignard@collabora.com>
- <083e43d9-452a-4b11-b7f1-f75992bc795e@collabora.com>
- <ZUzpSXDbO60uGr0t@aptenodytes>
- <618d5b67-ba46-4c33-ae7f-990f4b522ba8@collabora.com>
- <22f2aee0-aea7-465d-b7f3-b1add1bf7bd7@collabora.com>
+        kernel@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v15 00/56] Add DELETE_BUF ioctl
+Date:   Thu,  9 Nov 2023 17:29:12 +0100
+Message-Id: <20231109163008.179152-1-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="VMLU1zaFnAru3tBV"
-Content-Disposition: inline
-In-Reply-To: <22f2aee0-aea7-465d-b7f3-b1add1bf7bd7@collabora.com>
-X-GND-Sasl: paul.kocialkowski@bootlin.com
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Unlike when resolution change on keyframes, dynamic resolution change
+on inter frames doesn't allow to do a stream off/on sequence because
+it is need to keep all previous references alive to decode inter frames.
+This constraint have two main problems:
+- more memory consumption.
+- more buffers in use.
+To solve these issue this series introduce DELETE_BUFS ioctl and remove
+the 32 buffers limit per queue.
 
---VMLU1zaFnAru3tBV
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+VP9 conformance tests using fluster give a score of 210/305.
+The 23 of the 24 resize inter tests (vp90-2-21-resize_inter_* files) are ok
+but require to use postprocessor.
 
-Hi,
+Kernel branch is available here:
+https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/commits/remove_vb2_queue_limit_v15
 
-On Thu 09 Nov 23, 16:54, Benjamin Gaignard wrote:
->=20
-> Le 09/11/2023 =C3=A0 16:48, Andrzej Pietrasiewicz a =C3=A9crit=C2=A0:
-> > Hi Paul,
-> >=20
-> > W dniu 9.11.2023 o=C2=A015:14, Paul Kocialkowski pisze:
-> > > Hi Andrzej,
-> > >=20
-> > > On Thu 09 Nov 23, 12:27, Andrzej Pietrasiewicz wrote:
-> > > > Hi Paul,
-> > > >=20
-> > > > W dniu 31.10.2023 o=C2=A017:30, Benjamin Gaignard pisze:
-> > > > > Use vb2_get_num_buffers() to avoid using queue num_buffers
-> > > > > field directly.
-> > > > > This allows us to change how the number of buffers is computed in=
- the
-> > > > > future.
-> > > > >=20
-> > > > > Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> > > > > Acked-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> > > >=20
-> > > > Given you've alaredy A-b, would you be ok with adding this sentence:
-> > > >=20
-> > > > "While at it, check the return value of vb2_get_buffer()."
-> > > >=20
-> > > > to the commit message body?
-> > >=20
-> > > Not only do I agree, but because this is done in a function
-> > > returning void,
-> > > you could even:
-> > >=20
-> > > if (WARN_ON(!vb))
-> > > =C2=A0=C2=A0=C2=A0=C2=A0continue;
-> > >=20
-> > > so that it doesn't go completely unnoticed.
-> > >=20
-> > > What do you think?
-> > >=20
-> >=20
-> > I'd ask Benjamin.
-> >=20
-> > But my take on the direction of changes is that ultimately
-> > there will be "holes" in the array of allocated buffers (hence the
-> > bitmap to track which slots are used and which are not). In other words,
-> > getting a NULL sometimes will be an expected situation, and a WARN() wi=
-ll
-> > not be appropriate for an expected situation.
-> >=20
-> > @Benjamin?
->=20
-> That should never happens unless you add delete buffers capability to the=
- driver
-> and in this case it is normal to have holes.
-> Other drivers do not use WARN_ON() so I will not do it for this one.
+GStreamer branch to use DELETE_BUF ioctl and testing dynamic resolution
+change is here:
+https://gitlab.freedesktop.org/benjamin.gaignard1/gstreamer/-/commits/VP9_drc
 
-Yeah I also don't expect that buffers can just disappear on us before
-introducing the delete buffers capability.
+changes in version 15:
+- Check that PLANE_INDEX_BITS value match with VIDEO_MAX_PLANES.
+- Add a check on vb->vb2_queue in vb2_queue_add_buffer()
+- Fix the remarks done by Hans, Thomasz and Andrzej. Thanks for the time
+  they spend (again) on the review.
 
-But okay it's fine with me to not use WARN_ON.
+changes in version 14:
+- Add max_num_buffers fields in v4l2_create_buffers32 structure and copy
+  it from/to user data.
+- Fix patch 44 commit header.
+- Fix v4l_print_create_buffers() log.
 
-Cheers,
+changes in version 13:
+- Fix typo and wording in commits messages.
+- Only apply V4L2_BUF_CAP_SUPPORTS_SET_MAX_BUFS on createbufs ioctl
+- Fix queue setup test in test-drivers
 
-Paul
+changes in version 12:
+- Change flag name to V4L2_BUF_CAP_SUPPORTS_SET_MAX_BUFS.
+- Rework some commits message.
+- Change vb2_queue_or_prepare_buf() prototype.
+- Rework patches where 'min_buffers_needed' was badly used.
+Benjamin Gaignard (56):
+  media: videobuf2: Rename offset parameter
+  media: videobuf2: Rework offset 'cookie' encoding pattern
+  media: videobuf2: Stop spamming kernel log with all queue counter
+  media: videobuf2: Use vb2_buffer instead of index
+  media: videobuf2: Access vb2_queue bufs array through helper functions
+  media: videobuf2: Remove duplicated index vs q->num_buffers check
+  media: videobuf2: Add helper to get queue number of buffers
+  media: videobuf2: Use vb2_get_num_buffers() helper
+  media: amphion: Use vb2_get_buffer() instead of directly access to
+    buffers array
+  media: amphion: Stop direct calls to queue num_buffers field
+  media: mediatek: jpeg: Use vb2_get_buffer() instead of directly access
+    to buffers array
+  media: mediatek: vdec: Remove useless loop
+  media: mediatek: vcodec: Stop direct calls to queue num_buffers field
+  media: sti: hva: Remove useless check
+  media: visl: Use vb2_get_buffer() instead of directly access to
+    buffers array
+  media: atomisp: Use vb2_get_buffer() instead of directly access to
+    buffers array
+  media: atomisp: Stop direct calls to queue num_buffers field
+  media: dvb-core: Use vb2_get_buffer() instead of directly access to
+    buffers array
+  media: dvb-core: Do not initialize twice queue num_buffer field
+  media: dvb-frontends: rtl2832: Stop direct calls to queue num_buffers
+    field
+  media: pci: dt3155: Remove useless check
+  media: pci: tw686x: Stop direct calls to queue num_buffers field
+  media: pci: cx18: Stop direct calls to queue num_buffers field
+  media: pci: netup_unidvb: Stop direct calls to queue num_buffers field
+  media: pci: tw68: Stop direct calls to queue num_buffers field
+  media: i2c: video-i2c: Stop direct calls to queue num_buffers field
+  media: coda: Stop direct calls to queue num_buffers field
+  media: nxp: Stop direct calls to queue num_buffers field
+  media: verisilicon: Stop direct calls to queue num_buffers field
+  media: test-drivers: Stop direct calls to queue num_buffers field
+  media: imx: Stop direct calls to queue num_buffers field
+  media: meson: vdec: Stop direct calls to queue num_buffers field
+  touchscreen: sur40: Stop direct calls to queue num_buffers field
+  sample: v4l: Stop direct calls to queue num_buffers field
+  media: cedrus: Stop direct calls to queue num_buffers field
+  media: nuvoton: Stop direct calls to queue num_buffers field
+  media: renesas: Stop direct calls to queue num_buffers field
+  media: ti: Stop direct calls to queue num_buffers field
+  media: usb: airspy: Stop direct calls to queue num_buffers field
+  media: usb: cx231xx: Stop direct calls to queue num_buffers field
+  media: usb: hackrf: Stop direct calls to queue num_buffers field
+  media: usb: usbtv: Stop direct calls to queue num_buffers field
+  media videobuf2: Be more flexible on the number of queue stored
+    buffers
+  media: core: Report the maximum possible number of buffers for the
+    queue
+  media: test-drivers: vivid: Increase max supported buffers for capture
+    queues
+  media: test-drivers: vicodec: Increase max supported capture queue
+    buffers
+  media: verisilicon: Refactor postprocessor to store more buffers
+  media: verisilicon: Store chroma and motion vectors offset
+  media: verisilicon: g2: Use common helpers to compute chroma and mv
+    offsets
+  media: verisilicon: vp9: Allow to change resolution while streaming
+  media: core: Rework how create_buf index returned value is computed
+  media: core: Add bitmap manage bufs array entries
+  media: core: Free range of buffers
+  media: v4l2: Add DELETE_BUFS ioctl
+  media: v4l2: Add mem2mem helpers for DELETE_BUFS ioctl
+  media: test-drivers: Use helper for DELETE_BUFS ioctl
 
-> Regards,
-> Benjamin
->=20
-> >=20
-> > Regards,
-> >=20
-> > Andrzej
-> >=20
-> > > Cheers,
-> > >=20
-> > > Paul
-> > >=20
-> > > > @Benjamin:
-> > > >=20
-> > > > With this change, you can add my
-> > > >=20
-> > > > Reviewed-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-> > > >=20
-> > > > > CC: Maxime Ripard <mripard@kernel.org>
-> > > > > ---
-> > > > > =C2=A0=C2=A0 drivers/staging/media/sunxi/cedrus/cedrus_h264.c | 9=
- +++++++--
-> > > > > =C2=A0=C2=A0 drivers/staging/media/sunxi/cedrus/cedrus_h265.c | 9=
- +++++++--
-> > > > > =C2=A0=C2=A0 2 files changed, 14 insertions(+), 4 deletions(-)
-> > > > >=20
-> > > > > diff --git
-> > > > > a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-> > > > > b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-> > > > > index dfb401df138a..3e2843ef6cce 100644
-> > > > > --- a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-> > > > > +++ b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-> > > > > @@ -653,8 +653,13 @@ static void cedrus_h264_stop(struct
-> > > > > cedrus_ctx *ctx)
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vq =3D v4l2_m2m_get_vq(ctx->=
-fh.m2m_ctx,
-> > > > > V4L2_BUF_TYPE_VIDEO_CAPTURE);
-> > > > > -=C2=A0=C2=A0=C2=A0 for (i =3D 0; i < vq->num_buffers; i++) {
-> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 buf =3D vb2_to_cedrus=
-_buffer(vb2_get_buffer(vq, i));
-> > > > > +=C2=A0=C2=A0=C2=A0 for (i =3D 0; i < vb2_get_num_buffers(vq); i+=
-+) {
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct vb2_buffer *vb=
- =3D vb2_get_buffer(vq, i);
-> > > > > +
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!vb)
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 continue;
-> > > > > +
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 buf =3D vb2_to_cedrus=
-_buffer(vb);
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (=
-buf->codec.h264.mv_col_buf_size > 0) {
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 dma_free_attrs(dev->dev,
-> > > > > diff --git
-> > > > > a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-> > > > > b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-> > > > > index fc9297232456..52e94c8f2f01 100644
-> > > > > --- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-> > > > > +++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-> > > > > @@ -869,8 +869,13 @@ static void cedrus_h265_stop(struct
-> > > > > cedrus_ctx *ctx)
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vq =3D v4l2_m2m_get_vq(ctx->=
-fh.m2m_ctx,
-> > > > > V4L2_BUF_TYPE_VIDEO_CAPTURE);
-> > > > > -=C2=A0=C2=A0=C2=A0 for (i =3D 0; i < vq->num_buffers; i++) {
-> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 buf =3D vb2_to_cedrus=
-_buffer(vb2_get_buffer(vq, i));
-> > > > > +=C2=A0=C2=A0=C2=A0 for (i =3D 0; i < vb2_get_num_buffers(vq); i+=
-+) {
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct vb2_buffer *vb=
- =3D vb2_get_buffer(vq, i);
-> > > > > +
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!vb)
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 continue;
-> > > > > +
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 buf =3D vb2_to_cedrus=
-_buffer(vb);
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (=
-buf->codec.h265.mv_col_buf_size > 0) {
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 dma_free_attrs(dev->dev,
-> > > >=20
-> > >=20
-> > >=20
-> > > _______________________________________________
-> > > Kernel mailing list -- kernel@mailman.collabora.com
-> > > To unsubscribe send an email to kernel-leave@mailman.collabora.com
-> >=20
+ .../userspace-api/media/v4l/user-func.rst     |   1 +
+ .../media/v4l/vidioc-create-bufs.rst          |   8 +-
+ .../media/v4l/vidioc-delete-bufs.rst          |  80 +++
+ .../media/v4l/vidioc-reqbufs.rst              |   2 +
+ drivers/input/touchscreen/sur40.c             |   5 +-
+ .../media/common/videobuf2/videobuf2-core.c   | 592 +++++++++++-------
+ .../media/common/videobuf2/videobuf2-v4l2.c   | 125 ++--
+ drivers/media/dvb-core/dvb_vb2.c              |  19 +-
+ drivers/media/dvb-frontends/rtl2832_sdr.c     |   5 +-
+ drivers/media/i2c/video-i2c.c                 |   5 +-
+ drivers/media/pci/cx18/cx18-streams.c         |   5 +-
+ drivers/media/pci/dt3155/dt3155.c             |   2 -
+ .../pci/netup_unidvb/netup_unidvb_core.c      |   5 +-
+ drivers/media/pci/tw68/tw68-video.c           |   5 +-
+ drivers/media/pci/tw686x/tw686x-video.c       |   5 +-
+ drivers/media/platform/amphion/vpu_dbg.c      |  30 +-
+ drivers/media/platform/amphion/vpu_v4l2.c     |   4 +-
+ .../media/platform/chips-media/coda-common.c  |   2 +-
+ .../platform/mediatek/jpeg/mtk_jpeg_core.c    |   7 +-
+ .../vcodec/decoder/vdec/vdec_vp9_req_lat_if.c |   9 +-
+ .../mediatek/vcodec/encoder/mtk_vcodec_enc.c  |   2 +-
+ drivers/media/platform/nuvoton/npcm-video.c   |   2 +-
+ drivers/media/platform/nxp/imx7-media-csi.c   |   7 +-
+ drivers/media/platform/renesas/rcar_drif.c    |   5 +-
+ drivers/media/platform/st/sti/hva/hva-v4l2.c  |   9 +-
+ .../media/platform/ti/am437x/am437x-vpfe.c    |   5 +-
+ drivers/media/platform/ti/cal/cal-video.c     |   5 +-
+ .../media/platform/ti/davinci/vpif_capture.c  |   5 +-
+ .../media/platform/ti/davinci/vpif_display.c  |   5 +-
+ drivers/media/platform/ti/omap/omap_vout.c    |   5 +-
+ drivers/media/platform/verisilicon/hantro.h   |   9 +-
+ .../media/platform/verisilicon/hantro_drv.c   |   5 +-
+ .../media/platform/verisilicon/hantro_g2.c    |  14 +
+ .../platform/verisilicon/hantro_g2_hevc_dec.c |  18 +-
+ .../platform/verisilicon/hantro_g2_vp9_dec.c  |  28 +-
+ .../media/platform/verisilicon/hantro_hw.h    |   7 +-
+ .../platform/verisilicon/hantro_postproc.c    |  93 ++-
+ .../media/platform/verisilicon/hantro_v4l2.c  |  27 +-
+ .../media/test-drivers/vicodec/vicodec-core.c |   3 +
+ drivers/media/test-drivers/vim2m.c            |   2 +
+ .../media/test-drivers/vimc/vimc-capture.c    |   2 +
+ drivers/media/test-drivers/visl/visl-dec.c    |  32 +-
+ drivers/media/test-drivers/visl/visl-video.c  |   2 +
+ drivers/media/test-drivers/vivid/vivid-core.c |  21 +
+ .../media/test-drivers/vivid/vivid-meta-cap.c |   3 -
+ .../media/test-drivers/vivid/vivid-meta-out.c |   5 +-
+ .../test-drivers/vivid/vivid-touch-cap.c      |   5 +-
+ .../media/test-drivers/vivid/vivid-vbi-cap.c  |   3 -
+ .../media/test-drivers/vivid/vivid-vbi-out.c  |   3 -
+ .../media/test-drivers/vivid/vivid-vid-cap.c  |   3 -
+ .../media/test-drivers/vivid/vivid-vid-out.c  |   5 +-
+ drivers/media/usb/airspy/airspy.c             |   5 +-
+ drivers/media/usb/cx231xx/cx231xx-417.c       |   5 +-
+ drivers/media/usb/cx231xx/cx231xx-video.c     |   5 +-
+ drivers/media/usb/hackrf/hackrf.c             |   5 +-
+ drivers/media/usb/usbtv/usbtv-video.c         |   5 +-
+ drivers/media/v4l2-core/v4l2-compat-ioctl32.c |  10 +-
+ drivers/media/v4l2-core/v4l2-dev.c            |   1 +
+ drivers/media/v4l2-core/v4l2-ioctl.c          |  23 +-
+ drivers/media/v4l2-core/v4l2-mem2mem.c        |  20 +
+ .../staging/media/atomisp/pci/atomisp_ioctl.c |   4 +-
+ drivers/staging/media/imx/imx-media-capture.c |   7 +-
+ drivers/staging/media/meson/vdec/vdec.c       |  13 +-
+ .../staging/media/sunxi/cedrus/cedrus_h264.c  |   9 +-
+ .../staging/media/sunxi/cedrus/cedrus_h265.c  |   9 +-
+ include/media/v4l2-ioctl.h                    |   4 +
+ include/media/v4l2-mem2mem.h                  |  12 +
+ include/media/videobuf2-core.h                |  69 +-
+ include/media/videobuf2-v4l2.h                |  13 +
+ include/uapi/linux/videodev2.h                |  24 +-
+ samples/v4l/v4l2-pci-skeleton.c               |   5 +-
+ 71 files changed, 1020 insertions(+), 484 deletions(-)
+ create mode 100644 Documentation/userspace-api/media/v4l/vidioc-delete-bufs.rst
 
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
+-- 
+2.39.2
 
---VMLU1zaFnAru3tBV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmVNCPgACgkQ3cLmz3+f
-v9G2FAf+JwNjULMzQx6CKeSkePWWPspnd6zwQv1uSrppPM2oi2YoXgd7uMsJyImP
-OOfrkPpY4m0jOp7e2t4oKOvKrDcc9tXTv7UbzPQ3S/RvCQ3pJ9MIRNAFOrM/x4kL
-uG2rhiHl/wdw+czGOSb4tip1HXjn04nfyZb6U9YCXNNbvRyJQ4ocwcfyCTvmELja
-+bJMussPvxY8c9GhxzodzFow8BoauqdutKO89bJs1DH9iKWTTe7IClz2Ypp5yY5m
-c1C4SQomlS8sa92uwYG1S/v5174Ufs3hqwr5I0CPMm3rlaGyO+ykwKu3TnnR7Fif
-05epwjlNlSg1Mg+HmVYihbArAlJ0UQ==
-=dkuV
------END PGP SIGNATURE-----
-
---VMLU1zaFnAru3tBV--
