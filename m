@@ -2,133 +2,245 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0032C4167B
-	for <linux-media@archiver.kernel.org>; Thu,  9 Nov 2023 16:07:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCA53C4332F
+	for <linux-media@archiver.kernel.org>; Thu,  9 Nov 2023 16:29:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234597AbjKIQHW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Nov 2023 11:07:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47064 "EHLO
+        id S234579AbjKIQ3y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 Nov 2023 11:29:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234482AbjKIQHV (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 9 Nov 2023 11:07:21 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EFB9325A;
-        Thu,  9 Nov 2023 08:07:19 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-32da4ffd7e5so666291f8f.0;
-        Thu, 09 Nov 2023 08:07:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699546038; x=1700150838; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bLnVRYPlFfc13GAjjN2Xsp7jGpHoZsbxAdnsHea6XjM=;
-        b=S1PdBEEbQjC//UPEJlQzyAeUAkuHeKKJJ9YxSwGJsBWIinlJkTs+futdHjvOEVf1FC
-         i1Lq84/hnwkn4XeC5I0BBN/0oIHI5af7Fi3x6itpWXj6tG56p2o+2ARGn2y3UatsLXoM
-         2BRCpof7VunFpfVP3P0nRrTARM2YsPO0VE0dPjXa8wqDzjKgoixES1wF4kmsqRx0ezw9
-         h3fikdiuHtuXCTH3ejazBRyAvX0r13K29IX5G5vNdpNq2cBxgpRFb+JkL0Tem9jL0+K7
-         pAhZsBr6i3kJ2w4D3MLLjQvI1ypeSrlzcBEEphirMcF7RjNd0iiclyA2FqT68ZsCnMv5
-         hM3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699546038; x=1700150838;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bLnVRYPlFfc13GAjjN2Xsp7jGpHoZsbxAdnsHea6XjM=;
-        b=R/MbwkS/v8iIbH06fbpsFkDdZD9+AYldSwwIVdg6X9PNPW5NkpenkDc9jDsYzVHhTT
-         J7VrGwVPZB1LflTmKfBY70EhNcRqlMD+LA/5rW2XJg0SdxntYLDp1NQWRunqbhaJU1xL
-         R/nOoJEzR6nzeRqBGN8bC1Qmhe4pReIQ4u/3QvTL83ZSyyHXzyc1nsSFDuwXSgRTlGQ5
-         AEwJ/V44dN0PXF/XYwUkQOkK0XgXxazJi4TwIMlWcGFERrmzfY9SWsBHzBRfbMqkQzfv
-         4Sz63UHyC5/kfLXFw0DSlEyRgW4+jh2nSoqU/uXcTN16mJVwgTt1V7mIz/OjCDpj+naD
-         /Osw==
-X-Gm-Message-State: AOJu0YwiZkdiOR1l2yn/EgV10xBCIJqDIqkgH4smPRNFKS8MUyVbibSC
-        xeGsTXVc6tTg8V3ClCJS6Yk=
-X-Google-Smtp-Source: AGHT+IGVRroWe9+M86SBSGyIl3Qj9MvOmsO9RPSIFo66Ff8BWlVF0jn+QQTFhXSBQi9W892f6tI7Bg==
-X-Received: by 2002:a05:6000:1888:b0:32f:87e8:707d with SMTP id a8-20020a056000188800b0032f87e8707dmr7113717wri.5.1699546037464;
-        Thu, 09 Nov 2023 08:07:17 -0800 (PST)
-Received: from [192.168.1.122] (cpc159313-cmbg20-2-0-cust161.5-4.cable.virginm.net. [82.0.78.162])
-        by smtp.gmail.com with ESMTPSA id t10-20020a5d42ca000000b0032f7fab0712sm7577069wrr.52.2023.11.09.08.07.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Nov 2023 08:07:17 -0800 (PST)
-Subject: Re: [RFC PATCH v3 10/12] tcp: RX path for devmem TCP
-To:     Mina Almasry <almasrymina@google.com>,
-        David Ahern <dsahern@kernel.org>
-Cc:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Jeroen de Borst <jeroendb@google.com>,
-        Praveen Kaligineedi <pkaligineedi@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Kaiyuan Zhang <kaiyuanz@google.com>
-References: <20231106024413.2801438-1-almasrymina@google.com>
- <20231106024413.2801438-11-almasrymina@google.com>
- <ZUk0FGuJ28s1d9OX@google.com>
- <CAHS8izNFv7r6vqYR_TYqcCuDO61F+nnNMhsSu=DrYWSr3sVgrA@mail.gmail.com>
- <CAF=yD-+MFpO5Hdqn+Q9X54SBpgcBeJvKTRD53X2oM4s8uVqnAQ@mail.gmail.com>
- <ZUlp8XutSAScKs_0@google.com>
- <CAF=yD-JZ88j+44MYgX-=oYJngz4Z0zw6Y0V3nHXisZJtNu7q6A@mail.gmail.com>
- <CAKH8qBueYgpxQTvTwngOs6RNjy9yvLF92s1p5nFrobw_UprNMQ@mail.gmail.com>
- <93eb6a2b-a991-40ca-8f26-f520c986729a@kernel.org>
- <CAF=yD-Ln4v8orUne8E7D2_eHu39PWPCrMR3Qtuh312pCu=erng@mail.gmail.com>
- <CAHS8izOU06ceKyc5oVZhdCKJqmeRdcRyJBFpjGe=u2yh=V52dQ@mail.gmail.com>
- <7ce2d027-1e02-4a63-afb7-7304fbfbdf90@kernel.org>
- <CAHS8izM_qrEs37F=kPzT_kmqCBV_wSiTf72PtHfJYxks9R9--Q@mail.gmail.com>
-From:   Edward Cree <ecree.xilinx@gmail.com>
-Message-ID: <6f853286-e463-b684-cc1e-405119528697@gmail.com>
-Date:   Thu, 9 Nov 2023 16:07:15 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        with ESMTP id S229770AbjKIQ3x (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 9 Nov 2023 11:29:53 -0500
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F8235AA;
+        Thu,  9 Nov 2023 08:29:50 -0800 (PST)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7ED0940007;
+        Thu,  9 Nov 2023 16:29:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1699547388;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tm0cylrAcXnm7eKQqx0GuLW4XzLpyFuEodiMDdb36zQ=;
+        b=bjE0gXRqPUI+3iKxTnJ/SrbxJ3XAuLErHSXzEMhr63ULaCQmtsa856MdkklxROQZiTCx/A
+        lGm25zja9uZE7Tb2grdBfeSHULqztzES3qLih4oNCyqcYzwRunOY+dV1ek5nG2ftobLMSM
+        NV00MPsAgqAuXWz+IlL3Vig+kmE3JmJ49GVhNK8WJqiBjmIy2y6DztgLnqifmgFqc444lf
+        pcPVt/DKFNDEys+KEZ/4gIMJ0Y7wyMLuBLLytTIN3YABD00xpg3ywuk8PbWWSexmi3Vbg5
+        qnQxqm1kH7hFYOV0ICVUE+G7xFGmh2jxxk4H8Vrtih0LIW/vfGwQ4icnknGW0w==
+Date:   Thu, 9 Nov 2023 17:29:44 +0100
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
+        ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        kernel@collabora.com, Maxime Ripard <mripard@kernel.org>
+Subject: Re: [PATCH v14 35/56] media: cedrus: Stop direct calls to queue
+ num_buffers field
+Message-ID: <ZU0I-C32UFjnUKH3@aptenodytes>
+References: <20231031163104.112469-1-benjamin.gaignard@collabora.com>
+ <20231031163104.112469-36-benjamin.gaignard@collabora.com>
+ <083e43d9-452a-4b11-b7f1-f75992bc795e@collabora.com>
+ <ZUzpSXDbO60uGr0t@aptenodytes>
+ <618d5b67-ba46-4c33-ae7f-990f4b522ba8@collabora.com>
+ <22f2aee0-aea7-465d-b7f3-b1add1bf7bd7@collabora.com>
 MIME-Version: 1.0
-In-Reply-To: <CAHS8izM_qrEs37F=kPzT_kmqCBV_wSiTf72PtHfJYxks9R9--Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="VMLU1zaFnAru3tBV"
+Content-Disposition: inline
+In-Reply-To: <22f2aee0-aea7-465d-b7f3-b1add1bf7bd7@collabora.com>
+X-GND-Sasl: paul.kocialkowski@bootlin.com
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 09/11/2023 02:39, Mina Almasry wrote:
-> On Wed, Nov 8, 2023 at 7:36 AM Edward Cree <ecree.xilinx@gmail.com> wrote:
->>  If not then surely the way to return a memory area
->>  in an io_uring idiom is just to post a new read sqe ('RX descriptor')
->>  pointing into it, rather than explicitly returning it with setsockopt.
-> 
-> We're interested in using this with regular TCP sockets, not
-> necessarily io_uring.
-Fair.  I just wanted to push against the suggestion upthread that "oh,
- since io_uring supports setsockopt() we can just ignore it and it'll
- all magically work later" (paraphrased).
-If you can keep the "allocate buffers out of a devmem region" and "post
- RX descriptors built on those buffers" APIs separate (inside the
- kernel; obviously both triggered by a single call to the setsockopt()
- uAPI) that'll likely make things simpler for the io_uring interface I
- describe, which will only want the latter.
 
--ed
+--VMLU1zaFnAru3tBV
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-PS: Here's a crazy idea that I haven't thought through at all: what if
- you allow device memory to be mmap()ed into process address space
- (obviously with none of r/w/x because it's unreachable), so that your
- various uAPIs can just operate on pointers (e.g. the setsockopt
- becomes the madvise it's named after; recvmsg just uses or populates
- the iovec rather than needing a cmsg).  Then if future devices have
- their memory CXL accessible that can potentially be enabled with no
- change to the uAPI (userland just starts being able to access the
- region without faulting).
-And you can maybe add a semantic flag to recvmsg saying "if you don't
- use all the buffers in my iovec, keep hold of the rest of them for
- future incoming traffic, and if I post new buffers with my next
- recvmsg, add those to the tail of the RXQ rather than replacing the
- ones you've got".  That way you can still have the "userland
- directly fills the RX ring" behaviour even with TCP sockets.
+Hi,
+
+On Thu 09 Nov 23, 16:54, Benjamin Gaignard wrote:
+>=20
+> Le 09/11/2023 =C3=A0 16:48, Andrzej Pietrasiewicz a =C3=A9crit=C2=A0:
+> > Hi Paul,
+> >=20
+> > W dniu 9.11.2023 o=C2=A015:14, Paul Kocialkowski pisze:
+> > > Hi Andrzej,
+> > >=20
+> > > On Thu 09 Nov 23, 12:27, Andrzej Pietrasiewicz wrote:
+> > > > Hi Paul,
+> > > >=20
+> > > > W dniu 31.10.2023 o=C2=A017:30, Benjamin Gaignard pisze:
+> > > > > Use vb2_get_num_buffers() to avoid using queue num_buffers
+> > > > > field directly.
+> > > > > This allows us to change how the number of buffers is computed in=
+ the
+> > > > > future.
+> > > > >=20
+> > > > > Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> > > > > Acked-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > > >=20
+> > > > Given you've alaredy A-b, would you be ok with adding this sentence:
+> > > >=20
+> > > > "While at it, check the return value of vb2_get_buffer()."
+> > > >=20
+> > > > to the commit message body?
+> > >=20
+> > > Not only do I agree, but because this is done in a function
+> > > returning void,
+> > > you could even:
+> > >=20
+> > > if (WARN_ON(!vb))
+> > > =C2=A0=C2=A0=C2=A0=C2=A0continue;
+> > >=20
+> > > so that it doesn't go completely unnoticed.
+> > >=20
+> > > What do you think?
+> > >=20
+> >=20
+> > I'd ask Benjamin.
+> >=20
+> > But my take on the direction of changes is that ultimately
+> > there will be "holes" in the array of allocated buffers (hence the
+> > bitmap to track which slots are used and which are not). In other words,
+> > getting a NULL sometimes will be an expected situation, and a WARN() wi=
+ll
+> > not be appropriate for an expected situation.
+> >=20
+> > @Benjamin?
+>=20
+> That should never happens unless you add delete buffers capability to the=
+ driver
+> and in this case it is normal to have holes.
+> Other drivers do not use WARN_ON() so I will not do it for this one.
+
+Yeah I also don't expect that buffers can just disappear on us before
+introducing the delete buffers capability.
+
+But okay it's fine with me to not use WARN_ON.
+
+Cheers,
+
+Paul
+
+> Regards,
+> Benjamin
+>=20
+> >=20
+> > Regards,
+> >=20
+> > Andrzej
+> >=20
+> > > Cheers,
+> > >=20
+> > > Paul
+> > >=20
+> > > > @Benjamin:
+> > > >=20
+> > > > With this change, you can add my
+> > > >=20
+> > > > Reviewed-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+> > > >=20
+> > > > > CC: Maxime Ripard <mripard@kernel.org>
+> > > > > ---
+> > > > > =C2=A0=C2=A0 drivers/staging/media/sunxi/cedrus/cedrus_h264.c | 9=
+ +++++++--
+> > > > > =C2=A0=C2=A0 drivers/staging/media/sunxi/cedrus/cedrus_h265.c | 9=
+ +++++++--
+> > > > > =C2=A0=C2=A0 2 files changed, 14 insertions(+), 4 deletions(-)
+> > > > >=20
+> > > > > diff --git
+> > > > > a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
+> > > > > b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
+> > > > > index dfb401df138a..3e2843ef6cce 100644
+> > > > > --- a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
+> > > > > +++ b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
+> > > > > @@ -653,8 +653,13 @@ static void cedrus_h264_stop(struct
+> > > > > cedrus_ctx *ctx)
+> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vq =3D v4l2_m2m_get_vq(ctx->=
+fh.m2m_ctx,
+> > > > > V4L2_BUF_TYPE_VIDEO_CAPTURE);
+> > > > > -=C2=A0=C2=A0=C2=A0 for (i =3D 0; i < vq->num_buffers; i++) {
+> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 buf =3D vb2_to_cedrus=
+_buffer(vb2_get_buffer(vq, i));
+> > > > > +=C2=A0=C2=A0=C2=A0 for (i =3D 0; i < vb2_get_num_buffers(vq); i+=
++) {
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct vb2_buffer *vb=
+ =3D vb2_get_buffer(vq, i);
+> > > > > +
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!vb)
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 continue;
+> > > > > +
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 buf =3D vb2_to_cedrus=
+_buffer(vb);
+> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (=
+buf->codec.h264.mv_col_buf_size > 0) {
+> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 dma_free_attrs(dev->dev,
+> > > > > diff --git
+> > > > > a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+> > > > > b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+> > > > > index fc9297232456..52e94c8f2f01 100644
+> > > > > --- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+> > > > > +++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+> > > > > @@ -869,8 +869,13 @@ static void cedrus_h265_stop(struct
+> > > > > cedrus_ctx *ctx)
+> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vq =3D v4l2_m2m_get_vq(ctx->=
+fh.m2m_ctx,
+> > > > > V4L2_BUF_TYPE_VIDEO_CAPTURE);
+> > > > > -=C2=A0=C2=A0=C2=A0 for (i =3D 0; i < vq->num_buffers; i++) {
+> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 buf =3D vb2_to_cedrus=
+_buffer(vb2_get_buffer(vq, i));
+> > > > > +=C2=A0=C2=A0=C2=A0 for (i =3D 0; i < vb2_get_num_buffers(vq); i+=
++) {
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct vb2_buffer *vb=
+ =3D vb2_get_buffer(vq, i);
+> > > > > +
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!vb)
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 continue;
+> > > > > +
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 buf =3D vb2_to_cedrus=
+_buffer(vb);
+> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (=
+buf->codec.h265.mv_col_buf_size > 0) {
+> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 dma_free_attrs(dev->dev,
+> > > >=20
+> > >=20
+> > >=20
+> > > _______________________________________________
+> > > Kernel mailing list -- kernel@mailman.collabora.com
+> > > To unsubscribe send an email to kernel-leave@mailman.collabora.com
+> >=20
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--VMLU1zaFnAru3tBV
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmVNCPgACgkQ3cLmz3+f
+v9G2FAf+JwNjULMzQx6CKeSkePWWPspnd6zwQv1uSrppPM2oi2YoXgd7uMsJyImP
+OOfrkPpY4m0jOp7e2t4oKOvKrDcc9tXTv7UbzPQ3S/RvCQ3pJ9MIRNAFOrM/x4kL
+uG2rhiHl/wdw+czGOSb4tip1HXjn04nfyZb6U9YCXNNbvRyJQ4ocwcfyCTvmELja
++bJMussPvxY8c9GhxzodzFow8BoauqdutKO89bJs1DH9iKWTTe7IClz2Ypp5yY5m
+c1C4SQomlS8sa92uwYG1S/v5174Ufs3hqwr5I0CPMm3rlaGyO+ykwKu3TnnR7Fif
+05epwjlNlSg1Mg+HmVYihbArAlJ0UQ==
+=dkuV
+-----END PGP SIGNATURE-----
+
+--VMLU1zaFnAru3tBV--
