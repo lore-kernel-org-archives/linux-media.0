@@ -2,194 +2,235 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BCD6BC4167B
-	for <linux-media@archiver.kernel.org>; Thu,  9 Nov 2023 11:06:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52CAFC4332F
+	for <linux-media@archiver.kernel.org>; Thu,  9 Nov 2023 11:10:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232359AbjKILGg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Nov 2023 06:06:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47934 "EHLO
+        id S232411AbjKILK3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 Nov 2023 06:10:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231270AbjKILGf (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 9 Nov 2023 06:06:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5A1F271F
-        for <linux-media@vger.kernel.org>; Thu,  9 Nov 2023 03:05:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1699527946;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AtRUDPzty4xk6G3YrueIs/2p0T2ePc3PiZweAufe498=;
-        b=OS361Xut6gEBwI75pkHK1P6BpZbEaeTNv1/Ogh97N9vzFF5xKsJZ6nsEjoXEx3MO0YeOGh
-        PWq/xBNT1V+Ph7tmez+pYsmB+cuoGHj9jS3YdbxQzC3tOn+J9rwiO8qShzQHCx3wmYeAV7
-        Rt4O0a/rq/k+iYg+8vfGBGuZdtoN+uQ=
-Received: from mail-yb1-f197.google.com (mail-yb1-f197.google.com
- [209.85.219.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-10-iP6-0LJiM-qyuoeXfDO52w-1; Thu, 09 Nov 2023 06:05:45 -0500
-X-MC-Unique: iP6-0LJiM-qyuoeXfDO52w-1
-Received: by mail-yb1-f197.google.com with SMTP id 3f1490d57ef6-d9cb24d0d2eso155630276.0
-        for <linux-media@vger.kernel.org>; Thu, 09 Nov 2023 03:05:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699527944; x=1700132744;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AtRUDPzty4xk6G3YrueIs/2p0T2ePc3PiZweAufe498=;
-        b=e9hsTA9C1Fe6uXiaxtHZDBM07ntwiDCqER2jVPxaFbokdaju26rcTKWyf1SmWQlx5E
-         RK3P6hz5FhZWiGKMbXsyDbFeyS/GvT/+a7YZuUxItLzgxFR9P6BnmT1x8YB+B+umNttw
-         L1TTFASZS4247dOcr9aXwHqAD0Dx5xH9KiRRY4WnwbXsrybjv6T0UOt6CcpnUCoHE3Sl
-         AmB9/9z8O8QMBnp1N7YPd5nnJ/fl3z+9qA/JEZPXtqreYcLGincsRSq6t/L9v82rYdzI
-         sHB7JpI11c9rdwp0FZINr+ZnhNtnvJdG067R5lJQNykzrE86b2WFDoJUy8cisokvpzpg
-         pawg==
-X-Gm-Message-State: AOJu0YzBqLZ7fiiakECA/RZXVCiQIUuXzwxHs3MutkCunL0NFdYfjP4x
-        /x6nGswBlczIQS4ojQpBmTwCa4McAJD4q5s5I5vhIs78HY8ngv8FaiLJRcYygWIAMpZGM/rF3eb
-        6aS2pIWXRF8g3dTSKHa9NHYQ=
-X-Received: by 2002:a25:9346:0:b0:dae:e380:3afa with SMTP id g6-20020a259346000000b00daee3803afamr1116257ybo.2.1699527944398;
-        Thu, 09 Nov 2023 03:05:44 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHOFSam8Y2WZfjs6lyrCBJqDmNWulDFM0w0FKUbNkESWMi4P7ZtSYxs4i3pcukjOXBjSX6POg==
-X-Received: by 2002:a25:9346:0:b0:dae:e380:3afa with SMTP id g6-20020a259346000000b00daee3803afamr1116194ybo.2.1699527942695;
-        Thu, 09 Nov 2023 03:05:42 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-228-197.dyn.eolo.it. [146.241.228.197])
-        by smtp.gmail.com with ESMTPSA id g23-20020ac870d7000000b004181e5a724csm1813782qtp.88.2023.11.09.03.05.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Nov 2023 03:05:42 -0800 (PST)
-Message-ID: <3a1b5412bee202affc6a7cc74cd939e182b9a18e.camel@redhat.com>
-Subject: Re: [RFC PATCH v3 10/12] tcp: RX path for devmem TCP
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>
-Cc:     Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Jeroen de Borst <jeroendb@google.com>,
-        Praveen Kaligineedi <pkaligineedi@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Kaiyuan Zhang <kaiyuanz@google.com>
-Date:   Thu, 09 Nov 2023 12:05:37 +0100
-In-Reply-To: <CAF=yD-JZ88j+44MYgX-=oYJngz4Z0zw6Y0V3nHXisZJtNu7q6A@mail.gmail.com>
-References: <20231106024413.2801438-1-almasrymina@google.com>
-         <20231106024413.2801438-11-almasrymina@google.com>
-         <ZUk0FGuJ28s1d9OX@google.com>
-         <CAHS8izNFv7r6vqYR_TYqcCuDO61F+nnNMhsSu=DrYWSr3sVgrA@mail.gmail.com>
-         <CAF=yD-+MFpO5Hdqn+Q9X54SBpgcBeJvKTRD53X2oM4s8uVqnAQ@mail.gmail.com>
-         <ZUlp8XutSAScKs_0@google.com>
-         <CAF=yD-JZ88j+44MYgX-=oYJngz4Z0zw6Y0V3nHXisZJtNu7q6A@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        with ESMTP id S231270AbjKILK2 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 9 Nov 2023 06:10:28 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70250271F;
+        Thu,  9 Nov 2023 03:10:26 -0800 (PST)
+Received: from [100.116.125.19] (cola.collaboradmins.com [195.201.22.229])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: andrzej.p)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5DBC066073ED;
+        Thu,  9 Nov 2023 11:10:23 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1699528224;
+        bh=bWD04K/fqE7NHkAwkYWwh+Wb6UO3uT2z0NoApGEOIG0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=fCaON4fHgKa+Bg04QqrgU+9SEwPb47ek73QwFkmjFsljFIxYcV5RyFlkyBK1DCkjr
+         H03lBkFZ9FooxxqbootX2Guirmd365Pt9JfvbmAh0oZVLbHzS6nxtLCF9rHBK48FiO
+         SQtMrBaY4bQoFO0B55HSRwlqRaSBRA/1lvCeI/7rGrNFaE703GpqLj1fJMJ2LHKhFH
+         SHGSaVOx1E2YmVmoUZj7TI2G/CvWbL/qPdiNPGGqCKgDa9YfYgMl5m/se21LnGYYJS
+         3/MGFT8NQoSkYM9i2kMICpeivrGfP0+WtSZ3ba2NqMSveNkQwAp/AdOTBahYunQGoJ
+         VxFuWiZybjkNQ==
+Message-ID: <05bfb164-cf25-4523-b2d6-40617f91803e@collabora.com>
+Date:   Thu, 9 Nov 2023 12:10:20 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v14 30/56] media: test-drivers: Stop direct calls to queue
+ num_buffers field
+Content-Language: en-US
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
+        ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        kernel@collabora.com, Daniel Almeida <daniel.almeida@collabora.com>
+References: <20231031163104.112469-1-benjamin.gaignard@collabora.com>
+ <20231031163104.112469-31-benjamin.gaignard@collabora.com>
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+In-Reply-To: <20231031163104.112469-31-benjamin.gaignard@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, 2023-11-06 at 14:55 -0800, Willem de Bruijn wrote:
-> On Mon, Nov 6, 2023 at 2:34=E2=80=AFPM Stanislav Fomichev <sdf@google.com=
-> wrote:
-> >=20
-> > On 11/06, Willem de Bruijn wrote:
-> > > > > IMHO, we need a better UAPI to receive the tokens and give them b=
-ack to
-> > > > > the kernel. CMSG + setsockopt(SO_DEVMEM_DONTNEED) get the job don=
-e,
-> > > > > but look dated and hacky :-(
-> > > > >=20
-> > > > > We should either do some kind of user/kernel shared memory queue =
-to
-> > > > > receive/return the tokens (similar to what Jonathan was doing in =
-his
-> > > > > proposal?)
-> > > >=20
-> > > > I'll take a look at Jonathan's proposal, sorry, I'm not immediately
-> > > > familiar but I wanted to respond :-) But is the suggestion here to
-> > > > build a new kernel-user communication channel primitive for the
-> > > > purpose of passing the information in the devmem cmsg? IMHO that se=
-ems
-> > > > like an overkill. Why add 100-200 lines of code to the kernel to ad=
-d
-> > > > something that can already be done with existing primitives? I don'=
-t
-> > > > see anything concretely wrong with cmsg & setsockopt approach, and =
-if
-> > > > we switch to something I'd prefer to switch to an existing primitiv=
-e
-> > > > for simplicity?
-> > > >=20
-> > > > The only other existing primitive to pass data outside of the linea=
-r
-> > > > buffer is the MSG_ERRQUEUE that is used for zerocopy. Is that
-> > > > preferred? Any other suggestions or existing primitives I'm not awa=
-re
-> > > > of?
-> > > >=20
-> > > > > or bite the bullet and switch to io_uring.
-> > > > >=20
-> > > >=20
-> > > > IMO io_uring & socket support are orthogonal, and one doesn't precl=
-ude
-> > > > the other. As you know we like to use sockets and I believe there a=
-re
-> > > > issues with io_uring adoption at Google that I'm not familiar with
-> > > > (and could be wrong). I'm interested in exploring io_uring support =
-as
-> > > > a follow up but I think David Wei will be interested in io_uring
-> > > > support as well anyway.
-> > >=20
-> > > I also disagree that we need to replace a standard socket interface
-> > > with something "faster", in quotes.
-> > >=20
-> > > This interface is not the bottleneck to the target workload.
-> > >=20
-> > > Replacing the synchronous sockets interface with something more
-> > > performant for workloads where it is, is an orthogonal challenge.
-> > > However we do that, I think that traditional sockets should continue
-> > > to be supported.
-> > >=20
-> > > The feature may already even work with io_uring, as both recvmsg with
-> > > cmsg and setsockopt have io_uring support now.
-> >=20
-> > I'm not really concerned with faster. I would prefer something cleaner =
-:-)
-> >=20
-> > Or maybe we should just have it documented. With some kind of path
-> > towards beautiful world where we can create dynamic queues..
->=20
-> I suppose we just disagree on the elegance of the API.
->=20
-> The concise notification API returns tokens as a range for
-> compression, encoding as two 32-bit unsigned integers start + length.
-> It allows for even further batching by returning multiple such ranges
-> in a single call.
->=20
-> This is analogous to the MSG_ZEROCOPY notification mechanism from
-> kernel to user.
->=20
-> The synchronous socket syscall interface can be replaced by something
-> asynchronous like io_uring. This already works today? Whatever
-> asynchronous ring-based API would be selected, io_uring or otherwise,
-> I think the concise notification encoding would remain as is.
->=20
-> Since this is an operation on a socket, I find a setsockopt the
-> fitting interface.
+Hi Benjamin,
 
-FWIW, I think sockopt +cmsg is the right API. It would deserve some
-explicit addition to the documentation, both in the kernel and in the
-man-pages.
+W dniu 31.10.2023 o 17:30, Benjamin Gaignard pisze:
+> Use vb2_get_num_buffers() to avoid using queue num_buffers field directly.
+> This allows us to change how the number of buffers is computed in the
+> future.
+> If 'min_buffers_needed' is set remove useless checks in queue setup
+> functions.
+> 
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> CC: Daniel Almeida <daniel.almeida@collabora.com>
+> ---
+>   drivers/media/test-drivers/visl/visl-dec.c         | 4 ++--
+>   drivers/media/test-drivers/vivid/vivid-meta-cap.c  | 3 ---
+>   drivers/media/test-drivers/vivid/vivid-meta-out.c  | 5 +++--
+>   drivers/media/test-drivers/vivid/vivid-touch-cap.c | 5 +++--
+>   drivers/media/test-drivers/vivid/vivid-vbi-cap.c   | 3 ---
+>   drivers/media/test-drivers/vivid/vivid-vbi-out.c   | 3 ---
+>   drivers/media/test-drivers/vivid/vivid-vid-cap.c   | 3 ---
+>   drivers/media/test-drivers/vivid/vivid-vid-out.c   | 5 +----
+>   8 files changed, 9 insertions(+), 22 deletions(-)
+> 
+> diff --git a/drivers/media/test-drivers/visl/visl-dec.c b/drivers/media/test-drivers/visl/visl-dec.c
+> index ba20ea998d19..4672dc5e52bb 100644
+> --- a/drivers/media/test-drivers/visl/visl-dec.c
+> +++ b/drivers/media/test-drivers/visl/visl-dec.c
+> @@ -287,7 +287,7 @@ static void visl_tpg_fill(struct visl_ctx *ctx, struct visl_run *run)
+>   	frame_dprintk(ctx->dev, run->dst->sequence, "%s\n", buf);
+>   
+>   	len = 0;
+> -	for (i = 0; i < out_q->num_buffers; i++) {
+> +	for (i = 0; i < vb2_get_num_buffers(out_q); i++) {
+>   		char entry[] = "index: %u, state: %s, request_fd: %d, ";
+>   		u32 old_len = len;
+>   		struct vb2_buffer *vb2;
+> @@ -347,7 +347,7 @@ static void visl_tpg_fill(struct visl_ctx *ctx, struct visl_run *run)
+>   	frame_dprintk(ctx->dev, run->dst->sequence, "%s\n", buf);
+>   
+>   	len = 0;
+> -	for (i = 0; i < cap_q->num_buffers; i++) {
+> +	for (i = 0; i < vb2_get_num_buffers(cap_q); i++) {
+>   		u32 old_len = len;
+>   		struct vb2_buffer *vb2;
+>   		char *q_status;
+> diff --git a/drivers/media/test-drivers/vivid/vivid-meta-cap.c b/drivers/media/test-drivers/vivid/vivid-meta-cap.c
+> index 780f96860a6d..0a718d037e59 100644
+> --- a/drivers/media/test-drivers/vivid/vivid-meta-cap.c
+> +++ b/drivers/media/test-drivers/vivid/vivid-meta-cap.c
+> @@ -30,9 +30,6 @@ static int meta_cap_queue_setup(struct vb2_queue *vq, unsigned int *nbuffers,
+>   		sizes[0] = size;
+>   	}
+>   
+> -	if (vq->num_buffers + *nbuffers < 2)
+> -		*nbuffers = 2 - vq->num_buffers;
+> -
+>   	*nplanes = 1;
+>   	return 0;
+>   }
+> diff --git a/drivers/media/test-drivers/vivid/vivid-meta-out.c b/drivers/media/test-drivers/vivid/vivid-meta-out.c
+> index 95835b52b58f..4a569a6e58be 100644
+> --- a/drivers/media/test-drivers/vivid/vivid-meta-out.c
+> +++ b/drivers/media/test-drivers/vivid/vivid-meta-out.c
+> @@ -18,6 +18,7 @@ static int meta_out_queue_setup(struct vb2_queue *vq, unsigned int *nbuffers,
+>   				struct device *alloc_devs[])
+>   {
+>   	struct vivid_dev *dev = vb2_get_drv_priv(vq);
+> +	unsigned int q_num_bufs = vb2_get_num_buffers(vq);
+>   	unsigned int size =  sizeof(struct vivid_meta_out_buf);
+>   
+>   	if (!vivid_is_webcam(dev))
+> @@ -30,8 +31,8 @@ static int meta_out_queue_setup(struct vb2_queue *vq, unsigned int *nbuffers,
+>   		sizes[0] = size;
+>   	}
+>   
+> -	if (vq->num_buffers + *nbuffers < 2)
+> -		*nbuffers = 2 - vq->num_buffers;
+> +	if (q_num_bufs + *nbuffers < 2)
+> +		*nbuffers = 2 - q_num_bufs;
+>   
+>   	*nplanes = 1;
+>   	return 0;
+> diff --git a/drivers/media/test-drivers/vivid/vivid-touch-cap.c b/drivers/media/test-drivers/vivid/vivid-touch-cap.c
+> index c7f6e23df51e..4b3c6ea0afde 100644
+> --- a/drivers/media/test-drivers/vivid/vivid-touch-cap.c
+> +++ b/drivers/media/test-drivers/vivid/vivid-touch-cap.c
+> @@ -13,6 +13,7 @@ static int touch_cap_queue_setup(struct vb2_queue *vq, unsigned int *nbuffers,
+>   				 struct device *alloc_devs[])
+>   {
+>   	struct vivid_dev *dev = vb2_get_drv_priv(vq);
+> +	unsigned int q_num_bufs = vb2_get_num_buffers(vq);
+>   	struct v4l2_pix_format *f = &dev->tch_format;
+>   	unsigned int size = f->sizeimage;
+>   
+> @@ -23,8 +24,8 @@ static int touch_cap_queue_setup(struct vb2_queue *vq, unsigned int *nbuffers,
+>   		sizes[0] = size;
+>   	}
+>   
+> -	if (vq->num_buffers + *nbuffers < 2)
+> -		*nbuffers = 2 - vq->num_buffers;
+> +	if (q_num_bufs + *nbuffers < 2)
+> +		*nbuffers = 2 - q_num_bufs;
+>   
+>   	*nplanes = 1;
+>   	return 0;
+> diff --git a/drivers/media/test-drivers/vivid/vivid-vbi-cap.c b/drivers/media/test-drivers/vivid/vivid-vbi-cap.c
+> index b65b02eeeb97..3840b3a664ac 100644
+> --- a/drivers/media/test-drivers/vivid/vivid-vbi-cap.c
+> +++ b/drivers/media/test-drivers/vivid/vivid-vbi-cap.c
+> @@ -134,9 +134,6 @@ static int vbi_cap_queue_setup(struct vb2_queue *vq,
+>   
+>   	sizes[0] = size;
+>   
+> -	if (vq->num_buffers + *nbuffers < 2)
+> -		*nbuffers = 2 - vq->num_buffers;
+> -
+>   	*nplanes = 1;
+>   	return 0;
+>   }
+> diff --git a/drivers/media/test-drivers/vivid/vivid-vbi-out.c b/drivers/media/test-drivers/vivid/vivid-vbi-out.c
+> index cd56476902a2..434a10676417 100644
+> --- a/drivers/media/test-drivers/vivid/vivid-vbi-out.c
+> +++ b/drivers/media/test-drivers/vivid/vivid-vbi-out.c
+> @@ -30,9 +30,6 @@ static int vbi_out_queue_setup(struct vb2_queue *vq,
+>   
+>   	sizes[0] = size;
+>   
+> -	if (vq->num_buffers + *nbuffers < 2)
+> -		*nbuffers = 2 - vq->num_buffers;
+> -
+>   	*nplanes = 1;
+>   	return 0;
+>   }
+> diff --git a/drivers/media/test-drivers/vivid/vivid-vid-cap.c b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
+> index 3a06df35a2d7..2804975fe278 100644
+> --- a/drivers/media/test-drivers/vivid/vivid-vid-cap.c
+> +++ b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
+> @@ -117,9 +117,6 @@ static int vid_cap_queue_setup(struct vb2_queue *vq,
+>   					dev->fmt_cap->data_offset[p];
+>   	}
+>   
+> -	if (vq->num_buffers + *nbuffers < 2)
+> -		*nbuffers = 2 - vq->num_buffers;
+> -
+>   	*nplanes = buffers;
+>   
+>   	dprintk(dev, 1, "%s: count=%d\n", __func__, *nbuffers);
+> diff --git a/drivers/media/test-drivers/vivid/vivid-vid-out.c b/drivers/media/test-drivers/vivid/vivid-vid-out.c
+> index 184a6df2c29f..24c6dc896255 100644
+> --- a/drivers/media/test-drivers/vivid/vivid-vid-out.c
+> +++ b/drivers/media/test-drivers/vivid/vivid-vid-out.c
+> @@ -73,12 +73,9 @@ static int vid_out_queue_setup(struct vb2_queue *vq,
+>   				       vfmt->data_offset[p] : size;
+>   	}
+>   
+> -	if (vq->num_buffers + *nbuffers < 2)
+> -		*nbuffers = 2 - vq->num_buffers;
+> -
+>   	*nplanes = planes;
+>   
+> -	dprintk(dev, 1, "%s: count=%d\n", __func__, *nbuffers);
+> +	dprintk(dev, 1, "%s: count=%u\n", __func__, vb2_get_num_buffers(vq));
 
-Cheers,
+I assume it can be guaranteed that *nbuffers equals vb2_get_num_buffers(vq),
+because  q->min_buffers_needed is set for this queue?
 
-Paolo
+Can you make it consistent with vid_cap_queue_setup() either by removing this
+change to dprintk() or introducing a similar one in vid_cap_queue_setup()?
+
+Regards,
+
+Andrzej
+
+>   	for (p = 0; p < planes; p++)
+>   		dprintk(dev, 1, "%s: size[%u]=%u\n", __func__, p, sizes[p]);
+>   	return 0;
 
