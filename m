@@ -2,35 +2,35 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09B25C04E85
-	for <linux-media@archiver.kernel.org>; Thu,  9 Nov 2023 16:38:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DA3DC04E85
+	for <linux-media@archiver.kernel.org>; Thu,  9 Nov 2023 16:38:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344700AbjKIQic (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Nov 2023 11:38:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49988 "EHLO
+        id S1344796AbjKIQig (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 Nov 2023 11:38:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344438AbjKIQiM (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 9 Nov 2023 11:38:12 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD7D3874;
-        Thu,  9 Nov 2023 08:37:58 -0800 (PST)
+        with ESMTP id S1344717AbjKIQiO (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 9 Nov 2023 11:38:14 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83003AB5;
+        Thu,  9 Nov 2023 08:38:01 -0800 (PST)
 Received: from benjamin-XPS-13-9310.. (cola.collaboradmins.com [195.201.22.229])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C6D3F66076A5;
-        Thu,  9 Nov 2023 16:37:55 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B06E9660740E;
+        Thu,  9 Nov 2023 16:37:59 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1699547876;
-        bh=ioad4eznaxnOj9zTodU1qDxSmo+Iro3wnE43clfkbec=;
+        s=mail; t=1699547880;
+        bh=U1yXDNk7EDltAc7ujIBPx5Id4Pnzi9DFGv3btwrQ75o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=afCqqPbLxw1RmnTEI7Fk0EfHjqj338bem/6+TU25259xJwuqVjyxqZQ4EaKxXCmID
-         rQoo2GtCmYbWU54VXPyAhiyehc7DC8TxGdS1PQTmLV6WFw1kolM8BYDYwVj3oGvG8O
-         Dt2Hf2K7ObMY7B3OBUp/l/NRdl5lJGk63yLzdR2jbWtoF/bJ6evmJEYvu4QrDQOIV1
-         rRBQhs3QcAXGFLr+ypZF3Z0EQ41g+YZ7cUmSoH7UeoBi0/+6r1I8hX8rR1o4GwIkdb
-         yuW6GX62sHjocz4AbcA/wBnMicUfk1p4C/kExkRUk5Dd8j9GEsd5CZgIREl3GyIIvY
-         AV7Hr1ztTSUtQ==
+        b=kGCyS5dgMfwq/IjrQdpOVgWr+gd+odSozOhTYVbDwedj0NpvjWG4FUf//X7mDizGd
+         M2+CBjRZSX4W/R7VMo9uyovrEBukbxev5N9r7ovZgqdIgLLqaLysQG5BkPfLBB+vRT
+         l2TEa5xJFvDdfnqeGrV6N6Zh/3fMC640uoD0tvl/MTy4fzNNiVjeM7uQGuYmJ7L42B
+         mY/fOyWDFSPWKkNwe1tgkCgmtNFj6mzOKCVdhyXEISt0OttFouoy38arcuh4smHWy9
+         zC/LHfhjMkVvag7IC3pf3HiEK2Iq+vRQEGwwpHbNKqRjrpG39ehHKfSWiO1WkT0v7D
+         a/RqPi5No2H4g==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -42,11 +42,10 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Sergey Kozlov <serjk@netup.ru>, Abylay Ospan <aospan@netup.ru>
-Subject: [PATCH v15 24/56] media: pci: netup_unidvb: Stop direct calls to queue num_buffers field
-Date:   Thu,  9 Nov 2023 17:34:40 +0100
-Message-Id: <20231109163512.179524-25-benjamin.gaignard@collabora.com>
+        Matt Ranostay <matt.ranostay@konsulko.com>
+Subject: [PATCH v15 26/56] media: i2c: video-i2c: Stop direct calls to queue num_buffers field
+Date:   Thu,  9 Nov 2023 17:34:42 +0100
+Message-Id: <20231109163512.179524-27-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231109163512.179524-14-benjamin.gaignard@collabora.com>
 References: <20231109163512.179524-14-benjamin.gaignard@collabora.com>
@@ -59,35 +58,31 @@ X-Mailing-List: linux-media@vger.kernel.org
 Use vb2_get_num_buffers() to avoid using queue num_buffers field directly.
 This allows us to change how the number of buffers is computed in the
 future.
+Fix the number of buffers computation at the same time.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Reviewed-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-CC: Sergey Kozlov <serjk@netup.ru>
-CC: Abylay Ospan <aospan@netup.ru>
+CC: Matt Ranostay <matt.ranostay@konsulko.com>
 ---
- drivers/media/pci/netup_unidvb/netup_unidvb_core.c | 5 +++--
+ drivers/media/i2c/video-i2c.c | 5 +++--
  1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/pci/netup_unidvb/netup_unidvb_core.c b/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
-index d85bfbb77a25..557985ba25db 100644
---- a/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
-+++ b/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
-@@ -293,12 +293,13 @@ static int netup_unidvb_queue_setup(struct vb2_queue *vq,
- 				    struct device *alloc_devs[])
+diff --git a/drivers/media/i2c/video-i2c.c b/drivers/media/i2c/video-i2c.c
+index 178bd06cc2ed..ebf2ac98a068 100644
+--- a/drivers/media/i2c/video-i2c.c
++++ b/drivers/media/i2c/video-i2c.c
+@@ -405,9 +405,10 @@ static int queue_setup(struct vb2_queue *vq,
  {
- 	struct netup_dma *dma = vb2_get_drv_priv(vq);
+ 	struct video_i2c_data *data = vb2_get_drv_priv(vq);
+ 	unsigned int size = data->chip->buffer_size;
 +	unsigned int q_num_bufs = vb2_get_num_buffers(vq);
  
- 	dev_dbg(&dma->ndev->pci_dev->dev, "%s()\n", __func__);
+-	if (vq->num_buffers + *nbuffers < 2)
+-		*nbuffers = 2;
++	if (q_num_bufs + *nbuffers < 2)
++		*nbuffers = 2 - q_num_bufs;
  
- 	*nplanes = 1;
--	if (vq->num_buffers + *nbuffers < VIDEO_MAX_FRAME)
--		*nbuffers = VIDEO_MAX_FRAME - vq->num_buffers;
-+	if (q_num_bufs + *nbuffers < VIDEO_MAX_FRAME)
-+		*nbuffers = VIDEO_MAX_FRAME - q_num_bufs;
- 	sizes[0] = PAGE_ALIGN(NETUP_DMA_PACKETS_COUNT * 188);
- 	dev_dbg(&dma->ndev->pci_dev->dev, "%s() nbuffers=%d sizes[0]=%d\n",
- 		__func__, *nbuffers, sizes[0]);
+ 	if (*nplanes)
+ 		return sizes[0] < size ? -EINVAL : 0;
 -- 
 2.39.2
 
