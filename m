@@ -1,119 +1,130 @@
-Return-Path: <linux-media+bounces-21-linux-media=archiver.kernel.org@vger.kernel.org>
+Return-Path: <linux-media+bounces-22-linux-media=archiver.kernel.org@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A81BAC04A95
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:48:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBF8FC4332F
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:48:15 +0000 (UTC)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F2FECB21392
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:48:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 91BAB281855
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:48:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 733223B78B;
-	Fri, 10 Nov 2023 17:46:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ABF23B285;
+	Fri, 10 Nov 2023 17:46:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MGZNWtA/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KOilA3vQ"
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB3383AC23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB3CF3AC24
 	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 17:46:41 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550FA2E5D5
-	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 03:17:51 -0800 (PST)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528AB250A6
+	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 01:47:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699615071; x=1731151071;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2/kJhVEJkbisT+xjYVitPpQBRx2iZ2glzyHll88ROlc=;
-  b=MGZNWtA/6qKm7oG7dTFXgYTiFJ1Tc0k9oD/OKt/Fh3skNUIqoywn7tTg
-   1CXDBEb+G/OcnS/zpC+bYt1PPS+cb7KG4VtPcssClpcMCGs9soomotE3C
-   LPlw2x/o/+EScAbkhNdqVmDqFbhtZIGRMnjqYiK62dIWEsc1yvenuDsBs
-   A9Ppg4jMZZr08vLdL/2Uym13McfHIknNwvEgErxOI5ab4lqLS5A8ZRQkY
-   O0Hn+xC/81SAT1G+vVqUlDqbxXD8sOy1rmbgFJuPVA5S+5thn9WZvx2pS
-   QgauMwP8Yewxr8IkdKHjOWhRbfcNw9Yi3SRuO5hTw0oWFqhqktcPx3W/W
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10889"; a="387333461"
+  t=1699609634; x=1731145634;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=QJWnER7Q+8D+Bl7nUb5VB3orb5Qiwr8fqqGoImREF58=;
+  b=KOilA3vQx8oKaoNVCkNTXjcxsWI6y9qgXP0tIgRtxhN54PQkEliB0/S1
+   2oc1gLlYXr7MpTnqwai8ljibc/YHA2e9GPjhyYGdqD1Ym7oZOnJ8ndPDV
+   W/QQUmUbLjhZpBn1VS/v+InFixvQgaLyyZc7VASvNkXjUwhcA7q7rp+pz
+   jy3/SF4K+orp3BlX75M7MeZCd1pa+4MbcKnV1M9ExVBr924cfG3CKwwFl
+   lSfYETOozYua1/dVT60q6jVmAs+4EEkfdtlYfFaXNTsdSnXEfbPejMx07
+   emfCNOoAhyWtDsnVEoT8ayoFEs22O58Wofmv1B+IPg+Qt61DXxMldCSRk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10889"; a="421253798"
 X-IronPort-AV: E=Sophos;i="6.03,291,1694761200"; 
-   d="scan'208";a="387333461"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2023 03:17:50 -0800
+   d="scan'208";a="421253798"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2023 01:47:14 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10889"; a="792839367"
+X-IronPort-AV: E=McAfee;i="6600,9927,10889"; a="740114817"
 X-IronPort-AV: E=Sophos;i="6.03,291,1694761200"; 
-   d="scan'208";a="792839367"
+   d="scan'208";a="740114817"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2023 03:17:49 -0800
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-	by kekkonen.fi.intel.com (Postfix) with SMTP id 8CA7611F7D1;
-	Fri, 10 Nov 2023 13:17:46 +0200 (EET)
-Date: Fri, 10 Nov 2023 11:17:46 +0000
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2023 01:47:12 -0800
+Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 76DBB120788;
+	Fri, 10 Nov 2023 11:47:09 +0200 (EET)
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com
-Subject: Re: [PATCH 3/6] media: v4l: cci: Add macros to obtain register width
-Message-ID: <ZU4RWhxbJyG-2lR2@kekkonen.localdomain>
+To: linux-media@vger.kernel.org
+Cc: laurent.pinchart@ideasonboard.com,
+	hdegoede@redhat.com
+Subject: [PATCH 5/6] media: ccs: Better separate CCS static data access
+Date: Fri, 10 Nov 2023 11:47:04 +0200
+Message-Id: <20231110094705.1367083-6-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20231110094705.1367083-1-sakari.ailus@linux.intel.com>
 References: <20231110094705.1367083-1-sakari.ailus@linux.intel.com>
- <20231110094705.1367083-4-sakari.ailus@linux.intel.com>
- <553265e2-a57a-4f70-9254-f140348ed1e8@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <553265e2-a57a-4f70-9254-f140348ed1e8@redhat.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Hans,
+Separate CCS static data read-only register access in ccs-reg-access.c.
 
-Thank you for the review.
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ drivers/media/i2c/ccs/ccs-reg-access.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-On Fri, Nov 10, 2023 at 12:14:10PM +0100, Hans de Goede wrote:
-> Hi,
-> 
-> On 11/10/23 10:47, Sakari Ailus wrote:
-> > Add CCI_REG_WIDTH() macro to obtain register width in bits and similarly,
-> > CCI_REG_WIDTH_BYTES() to obtain it in bytes.
-> > 
-> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > ---
-> >  include/media/v4l2-cci.h | 3 +++
-> >  1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/include/media/v4l2-cci.h b/include/media/v4l2-cci.h
-> > index b4ce0a46092c..80eaa7fdc606 100644
-> > --- a/include/media/v4l2-cci.h
-> > +++ b/include/media/v4l2-cci.h
-> > @@ -40,6 +40,9 @@ struct cci_reg_sequence {
-> >  #define CCI_REG_FLAG_PRIVATE_END	31U
-> >  #define CCI_REG_PRIVATE_MASK		GENMASK(CCI_REG_FLAG_PRIVATE_END, CCI_REG_FLAG_PRIVATE_START)
-> >  
-> > +#define CCI_REG_WIDTH_BYTES(x)		(((x) & CCI_REG_WIDTH_MASK) >> CCI_REG_WIDTH_SHIFT)
-> 
-> Please use FIELD_GET like v4l2-cci.c does:
-> 
-> #define CCI_REG_WIDTH_BYTES(x)		FIELD_GET(CCI_REG_WIDTH_MASK, (x))
-> 
-> With that fixed:
-> 
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-> 
-> As for the patch 4 - 6, those are interesting patches but
-> I'm afraid I don't have time to review them.
-
-No worries, I mainly included them to have a user for the newly added
-features.
-
-I'll send v2 with FIELD_GET().
-
+diff --git a/drivers/media/i2c/ccs/ccs-reg-access.c b/drivers/media/i2c/ccs/ccs-reg-access.c
+index 25993445f4fe..652d705a2ef5 100644
+--- a/drivers/media/i2c/ccs/ccs-reg-access.c
++++ b/drivers/media/i2c/ccs/ccs-reg-access.c
+@@ -197,8 +197,8 @@ static int __ccs_read_addr(struct ccs_sensor *sensor, u32 reg, u32 *val,
+ 	return 0;
+ }
+ 
+-static int __ccs_read_data(struct ccs_reg *regs, size_t num_regs,
+-			   u32 reg, u32 *val)
++static int __ccs_static_read_only(struct ccs_reg *regs, size_t num_regs,
++				  u32 reg, u32 *val)
+ {
+ 	unsigned int width = ccs_reg_width(reg);
+ 	size_t i;
+@@ -235,16 +235,16 @@ static int __ccs_read_data(struct ccs_reg *regs, size_t num_regs,
+ 	return -ENOENT;
+ }
+ 
+-static int ccs_read_data(struct ccs_sensor *sensor, u32 reg, u32 *val)
++static int ccs_static_read_only(struct ccs_sensor *sensor, u32 reg, u32 *val)
+ {
+-	if (!__ccs_read_data(sensor->sdata.sensor_read_only_regs,
+-			     sensor->sdata.num_sensor_read_only_regs,
+-			     reg, val))
++	if (!__ccs_static_read_only(sensor->sdata.sensor_read_only_regs,
++				    sensor->sdata.num_sensor_read_only_regs,
++				    reg, val))
+ 		return 0;
+ 
+-	return __ccs_read_data(sensor->mdata.module_read_only_regs,
+-			       sensor->mdata.num_module_read_only_regs,
+-			       reg, val);
++	return __ccs_static_read_only(sensor->mdata.module_read_only_regs,
++				      sensor->mdata.num_module_read_only_regs,
++				      reg, val);
+ }
+ 
+ static int ccs_read_addr_raw(struct ccs_sensor *sensor, u32 reg, u32 *val,
+@@ -253,7 +253,7 @@ static int ccs_read_addr_raw(struct ccs_sensor *sensor, u32 reg, u32 *val,
+ 	int rval;
+ 
+ 	if (data) {
+-		rval = ccs_read_data(sensor, reg, val);
++		rval = ccs_static_read_only(sensor, reg, val);
+ 		if (!rval)
+ 			return 0;
+ 	}
 -- 
-Regards,
+2.39.2
 
-Sakari Ailus
 
