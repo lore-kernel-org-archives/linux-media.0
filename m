@@ -1,679 +1,607 @@
-Return-Path: <linux-media+bounces-18-linux-media=archiver.kernel.org@vger.kernel.org>
+Return-Path: <linux-media+bounces-19-linux-media=archiver.kernel.org@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88BEDC4332F
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:47:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 987AEC4332F
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:48:03 +0000 (UTC)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D05C9B21833
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:47:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DFE9AB21812
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:48:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 331E73B29C;
-	Fri, 10 Nov 2023 17:46:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 600DD3B2B0;
+	Fri, 10 Nov 2023 17:46:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="PiENxODd"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="NbgDNubk"
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F02032C6C
-	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 17:46:34 +0000 (UTC)
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3783A23F
-	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 07:21:10 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id CF8F9673;
-	Fri, 10 Nov 2023 16:20:45 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1699629646;
-	bh=GRKTN1kuaiS6m/LmbczQDzm1SGKrNIn1QyuwigSbjQY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PiENxODd1+IKBQVyYuiU4yuZ55hQZw8m8zYujWXxaghltafwFbIuuWsRnRxupSBiS
-	 ttyIgvLsdrqfNATpgln58ScTpBL55AMttjoQ1T3YAP6kbwPpUZKo6TUKdq6oGmOJ2V
-	 603im/XZ9+Yqj8EgDwRYuzP35rLrYnzqtMMx8s6s=
-Date: Fri, 10 Nov 2023 17:21:15 +0200
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: linux-media@vger.kernel.org, hdegoede@redhat.com
-Subject: Re: [PATCH 6/6] media: ccs: Use V4L2 CCI for accessing sensor
- registers
-Message-ID: <20231110152115.GF21167@pendragon.ideasonboard.com>
-References: <20231110094705.1367083-1-sakari.ailus@linux.intel.com>
- <20231110094705.1367083-7-sakari.ailus@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A0163987B
+	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 17:46:37 +0000 (UTC)
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4732BA5D3
+	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 00:58:31 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-54553e4888bso2671840a12.2
+        for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 00:58:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1699606708; x=1700211508; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m94eBI6bYBpkxdqoKn9i809EPBzgPCcT6b/n5iRJ8W0=;
+        b=NbgDNubklbUhKTlZTSU5jfQDvopmG4wvcgu3JhsNPEiZPror6C42deUTWztLZ7glOE
+         rLmJdxhA5n96N31Ju9I6DEa7PwvhGP4nAfgijOLQ104+5uETRJuSwaAHNpno1LevSoZi
+         BAFQKteWlFE4d4mxrUCA9bYmWu/cSaTPVDjOE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699606708; x=1700211508;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=m94eBI6bYBpkxdqoKn9i809EPBzgPCcT6b/n5iRJ8W0=;
+        b=NliCxNIey1MCmugibQwLhegI/T/3w3c2+TfIo1Z4mz5/U9eCDkxUKusIWcxsDWw0i2
+         h05q1ZokiicOCMcdocy2OEx4jyDK7wIwwEU/sh0VOIWWjycdcw4H+oNznl3aTRZ7O9y1
+         /8g8Qoa6ccCamON0zeXhvqxK9YuMhIZDW/EKzUg3ns+06cztCMpEchSwsQUqu79vyvBL
+         Vq9cT4K0V633n/iHTUQE9YkTk2yQK5qui6bkuZt9TOBhU97ZCjPzw8nFVPDoTvYMdWOH
+         mtKx4+dTlaE6LxMQefmM2QvJ0rz/ifPaRAgEeE5TQNhdC/BL5gjTO+o8eeuA8oqgnpKl
+         lzYg==
+X-Gm-Message-State: AOJu0YyX2ilFiCb6gXFhccQWla9roUwYb5b8ofwizi+9hmdeB6Qdcpi9
+	cltC488I6dQDU12Mw4ecN/Flj60GfctdjfQVHeG4tz+E
+X-Google-Smtp-Source: AGHT+IF2950HbuEl/YCWJhaLCNSXY4OQ8LLum7IgC71BwO4SRi66yulhbDQoHpjsckvApTiPYJgK+Q==
+X-Received: by 2002:a50:8ad4:0:b0:543:caf5:46d4 with SMTP id k20-20020a508ad4000000b00543caf546d4mr6026563edk.37.1699606708197;
+        Fri, 10 Nov 2023 00:58:28 -0800 (PST)
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
+        by smtp.gmail.com with ESMTPSA id t30-20020a50d71e000000b005407ac82f4csm870362edi.97.2023.11.10.00.58.27
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Nov 2023 00:58:27 -0800 (PST)
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-32f737deedfso1058387f8f.3
+        for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 00:58:27 -0800 (PST)
+X-Received: by 2002:a5d:6c63:0:b0:32d:9fdc:a136 with SMTP id
+ r3-20020a5d6c63000000b0032d9fdca136mr5837194wrz.11.1699606707000; Fri, 10 Nov
+ 2023 00:58:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20231110094705.1367083-7-sakari.ailus@linux.intel.com>
+References: <20231031163104.112469-1-benjamin.gaignard@collabora.com>
+ <20231031163104.112469-55-benjamin.gaignard@collabora.com>
+ <20231109093045.ucitckitlgjj3kyw@chromium.org> <18ee19cc-e97b-4a5a-af7d-1e1bf7c91bc0@collabora.com>
+In-Reply-To: <18ee19cc-e97b-4a5a-af7d-1e1bf7c91bc0@collabora.com>
+From: Tomasz Figa <tfiga@chromium.org>
+Date: Fri, 10 Nov 2023 17:58:06 +0900
+X-Gmail-Original-Message-ID: <CAAFQd5CSNbOsefMca-CXCSWrXy+3TqVRMZsUanJqJ7Mp4AK-2g@mail.gmail.com>
+Message-ID: <CAAFQd5CSNbOsefMca-CXCSWrXy+3TqVRMZsUanJqJ7Mp4AK-2g@mail.gmail.com>
+Subject: Re: [PATCH v14 54/56] media: v4l2: Add DELETE_BUFS ioctl
+To: Benjamin Gaignard <benjamin.gaignard@collabora.com>, Hans Verkuil <hverkuil@xs4all.nl>
+Cc: mchehab@kernel.org, m.szyprowski@samsung.com, ming.qian@nxp.com, 
+	ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de, 
+	gregkh@linuxfoundation.org, hverkuil-cisco@xs4all.nl, 
+	nicolas.dufresne@collabora.com, linux-media@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
+	linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev, 
+	kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Sakari,
+On Thu, Nov 9, 2023 at 7:10=E2=80=AFPM Benjamin Gaignard
+<benjamin.gaignard@collabora.com> wrote:
+>
+>
+> Le 09/11/2023 =C3=A0 10:30, Tomasz Figa a =C3=A9crit :
+> > On Tue, Oct 31, 2023 at 05:31:02PM +0100, Benjamin Gaignard wrote:
+> >> VIDIOC_DELETE_BUFS ioctl allows to delete buffers from a queue.
+> >> The number of buffers to delete in given by count field of
+> >> struct v4l2_delete_buffers and the range start at the index
+> >> specified in the same structure.
+> >>
+> >> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> >> ---
+> >>   .../userspace-api/media/v4l/user-func.rst     |  1 +
+> >>   .../media/v4l/vidioc-delete-bufs.rst          | 80 +++++++++++++++++=
+++
+> >>   .../media/v4l/vidioc-reqbufs.rst              |  1 +
+> >>   .../media/common/videobuf2/videobuf2-core.c   | 30 +++++++
+> >>   .../media/common/videobuf2/videobuf2-v4l2.c   | 20 +++++
+> >>   drivers/media/v4l2-core/v4l2-dev.c            |  1 +
+> >>   drivers/media/v4l2-core/v4l2-ioctl.c          | 17 ++++
+> >>   include/media/v4l2-ioctl.h                    |  4 +
+> >>   include/media/videobuf2-core.h                | 12 +++
+> >>   include/media/videobuf2-v4l2.h                | 13 +++
+> >>   include/uapi/linux/videodev2.h                | 17 ++++
+> >>   11 files changed, 196 insertions(+)
+> >>   create mode 100644 Documentation/userspace-api/media/v4l/vidioc-dele=
+te-bufs.rst
+> >>
+> >> diff --git a/Documentation/userspace-api/media/v4l/user-func.rst b/Doc=
+umentation/userspace-api/media/v4l/user-func.rst
+> >> index 15ff0bf7bbe6..3fd567695477 100644
+> >> --- a/Documentation/userspace-api/media/v4l/user-func.rst
+> >> +++ b/Documentation/userspace-api/media/v4l/user-func.rst
+> >> @@ -17,6 +17,7 @@ Function Reference
+> >>       vidioc-dbg-g-chip-info
+> >>       vidioc-dbg-g-register
+> >>       vidioc-decoder-cmd
+> >> +    vidioc-delete-bufs
+> >>       vidioc-dqevent
+> >>       vidioc-dv-timings-cap
+> >>       vidioc-encoder-cmd
+> >> diff --git a/Documentation/userspace-api/media/v4l/vidioc-delete-bufs.=
+rst b/Documentation/userspace-api/media/v4l/vidioc-delete-bufs.rst
+> >> new file mode 100644
+> >> index 000000000000..4791df1395d6
+> >> --- /dev/null
+> >> +++ b/Documentation/userspace-api/media/v4l/vidioc-delete-bufs.rst
+> >> @@ -0,0 +1,80 @@
+> >> +.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+> >> +.. c:namespace:: V4L
+> >> +
+> >> +.. _VIDIOC_DELETE_BUFS:
+> >> +
+> >> +************************
+> >> +ioctl VIDIOC_DELETE_BUFS
+> >> +************************
+> >> +
+> >> +Name
+> >> +=3D=3D=3D=3D
+> >> +
+> >> +VIDIOC_DELETE_BUFS - Deletes buffers from a queue
+> >> +Drivers using this feature must expose the ``V4L2_BUF_CAP_SUPPORTS_DE=
+LETE_BUFS``
+> >> +capability on the queue :c:func:`VIDIOC_REQBUFS` or :c:func:`VIDIOC_C=
+REATE_BUFS`
+> >> +are invoked.
+> >> +
+> >> +Synopsis
+> >> +=3D=3D=3D=3D=3D=3D=3D=3D
+> >> +
+> >> +.. c:macro:: VIDIOC_DELETE_BUFs
+> >> +
+> >> +``int ioctl(int fd, VIDIOC_DELETE_BUFs, struct v4l2_delete_buffers *a=
+rgp)``
+> >> +
+> >> +Arguments
+> >> +=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >> +
+> >> +``fd``
+> >> +    File descriptor returned by :c:func:`open()`.
+> >> +
+> >> +``argp``
+> >> +    Pointer to struct :c:type:`v4l2_delete_buffers`.
+> >> +
+> >> +Description
+> >> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >> +
+> >> +Applications can optionally call the :ref:`VIDIOC_DELETE_BUFS` ioctl =
+to
+> >> +delete buffers from a queue.
+> >> +
+> >> +.. c:type:: v4l2_delete_buffers
+> >> +
+> >> +.. tabularcolumns:: |p{4.4cm}|p{4.4cm}|p{8.5cm}|
+> >> +
+> >> +.. flat-table:: struct v4l2_delete_buffers
+> >> +    :header-rows:  0
+> >> +    :stub-columns: 0
+> >> +    :widths:       1 1 2
+> >> +
+> >> +    * - __u32
+> >> +      - ``index``
+> >> +      - The starting buffer index to delete.
+> >> +    * - __u32
+> >> +      - ``count``
+> >> +      - The number of buffers to be deleted with indices 'index' unti=
+l 'index + count - 1'.
+> >> +        All buffers in this range must be valid and in DEQUEUED state=
+.
+> > I wonder if this wouldn't be an inconvenience for the userspace. Would
+> > there be anything wrong with allowing ranges with holes?
+> > (Agreed about the DEQUEUED part of course.)
+>
+> For me a range as to be valid but the matter of taste.
+>
 
-Thank you for the patch.
+@Hans Verkuil do you have an opinion?
+I could imagine that applications may want to just delete multiple
+disjoint ranges in one ioctl, which wouldn't be possible if we
+prohibit holes in the ranges.
 
-On Fri, Nov 10, 2023 at 11:47:05AM +0200, Sakari Ailus wrote:
-> Use V4L2 CCI for accessing device's registers. The 8-bit compatibility
-> read option is removed but this is supported by regmap through other
-> means.
-> 
-> Also the CCS register definitions are re-generated with V4L2 CCI
-> definitions. The older SMIA++ register definitions have been manually
-> converted.
+> >
+> >> +        In error case errno is set to ``EINVAL`` error code and index=
+ returns the index of
+> >> +        the invalid buffer.
+> >> +        If count and index are set to 0 :ref:`VIDIOC_DELETE_BUFS` wil=
+l return 0.
+> > Hmm, do we care about index if count is zero?
+>
+> No we don't I will change that.
+>
+> >
+> >> +    * - __u32
+> >> +      - ``type``
+> >> +      - Type of the stream or buffers, this is the same as the struct
+> >> +    :c:type:`v4l2_format` ``type`` field. See
+> >> +    :c:type:`v4l2_buf_type` for valid values.
+> >> +    * - __u32
+> >> +      - ``reserved``\ [13]
+> >> +      - A place holder for future extensions. Drivers and application=
+s
+> >> +    must set the array to zero.
+> >> +
+> >> +Return Value
+> >> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >> +
+> >> +On success 0 is returned, on error -1 and the ``errno`` variable is s=
+et
+> >> +appropriately. The generic error codes are described at the
+> >> +:ref:`Generic Error Codes <gen-errors>` chapter.
+> >> +
+> >> +EBUSY
+> >> +    File I/O is in progress.
+> >> +
+> >> +EINVAL
+> >> +    The buffer ``index`` doesn't exist in the queue.
+> >> diff --git a/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst =
+b/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst
+> >> index 0b3a41a45d05..14d4a49c2945 100644
+> >> --- a/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst
+> >> +++ b/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst
+> >> @@ -121,6 +121,7 @@ aborting or finishing any DMA in progress, an impl=
+icit
+> >>   .. _V4L2-BUF-CAP-SUPPORTS-M2M-HOLD-CAPTURE-BUF:
+> >>   .. _V4L2-BUF-CAP-SUPPORTS-MMAP-CACHE-HINTS:
+> >>   .. _V4L2-BUF-CAP-SUPPORTS-MAX-NUM-BUFFERS:
+> >> +.. _V4L2-BUF-CAP-SUPPORTS-DELETE-BUFS:
+> >>
+> >>   .. raw:: latex
+> >>
+> >> diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers=
+/media/common/videobuf2/videobuf2-core.c
+> >> index 010a8bca0240..7068930a0ba6 100644
+> >> --- a/drivers/media/common/videobuf2/videobuf2-core.c
+> >> +++ b/drivers/media/common/videobuf2/videobuf2-core.c
+> >> @@ -1665,6 +1665,36 @@ int vb2_core_prepare_buf(struct vb2_queue *q, s=
+truct vb2_buffer *vb, void *pb)
+> >>   }
+> >>   EXPORT_SYMBOL_GPL(vb2_core_prepare_buf);
+> >>
+> >> +int vb2_core_delete_bufs(struct vb2_queue *q, unsigned int start, uns=
+igned int count)
+> >> +{
+> >> +    unsigned int i, ret =3D 0;
+> >> +
+> >> +    if (start =3D=3D 0 && count =3D=3D 0)
+> > I guess related to the earlier comment, but why do we care about start
+> > being zero?
+> >
+> >> +            return 0;
+> >> +
+> >> +    mutex_lock(&q->mmap_lock);
+> >> +
+> >> +    for (i =3D start; i < start + count && i < q->max_num_buffers; i+=
++) {
+> >> +            struct vb2_buffer *vb =3D vb2_get_buffer(q, i);
+> >> +
+> >> +            if (!vb) {
+> >> +                    ret =3D -EINVAL;
+> >> +                    goto unlock;
+> >> +            }
+> >> +            if (vb->state !=3D VB2_BUF_STATE_DEQUEUED) {
+> >> +                    ret =3D -EINVAL;
+> >> +                    goto unlock;
+> >> +            }
+> >> +    }
+> >> +    __vb2_queue_free(q, start, count);
+> >> +    dprintk(q, 2, "buffers deleted\n");
+> >> +
+> >> +unlock:
+> >> +    mutex_unlock(&q->mmap_lock);
+> >> +    return ret;
+> >> +}
+> >> +EXPORT_SYMBOL_GPL(vb2_core_delete_bufs);
+> >> +
+> >>   /*
+> >>    * vb2_start_streaming() - Attempt to start streaming.
+> >>    * @q:             videobuf2 queue
+> >> diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers=
+/media/common/videobuf2/videobuf2-v4l2.c
+> >> index 56daf3b5b2ba..f003618efbc1 100644
+> >> --- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
+> >> +++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+> >> @@ -694,6 +694,8 @@ static void fill_buf_caps(struct vb2_queue *q, u32=
+ *caps)
+> >>      if (q->supports_requests)
+> >>              *caps |=3D V4L2_BUF_CAP_SUPPORTS_REQUESTS;
+> >>   #endif
+> >> +    if (q->supports_delete_bufs)
+> >> +            *caps |=3D V4L2_BUF_CAP_SUPPORTS_DELETE_BUFS;
+> >>   }
+> >>
+> >>   static void validate_memory_flags(struct vb2_queue *q,
+> >> @@ -751,6 +753,12 @@ int vb2_prepare_buf(struct vb2_queue *q, struct m=
+edia_device *mdev,
+> >>   }
+> >>   EXPORT_SYMBOL_GPL(vb2_prepare_buf);
+> >>
+> >> +int vb2_delete_bufs(struct vb2_queue *q, struct v4l2_delete_buffers *=
+d)
+> >> +{
+> >> +    return vb2_core_delete_bufs(q, d->index, d->count);
+> >> +}
+> >> +EXPORT_SYMBOL_GPL(vb2_delete_bufs);
+> >> +
+> >>   int vb2_create_bufs(struct vb2_queue *q, struct v4l2_create_buffers =
+*create)
+> >>   {
+> >>      unsigned requested_planes =3D 1;
+> >> @@ -1012,6 +1020,18 @@ EXPORT_SYMBOL_GPL(vb2_poll);
+> >>
+> >>   /* vb2 ioctl helpers */
+> >>
+> >> +int vb2_ioctl_delete_bufs(struct file *file, void *priv,
+> >> +                      struct v4l2_delete_buffers *p)
+> >> +{
+> >> +    struct video_device *vdev =3D video_devdata(file);
+> >> +
+> >> +    if (vb2_queue_is_busy(vdev->queue, file))
+> >> +            return -EBUSY;
+> >> +
+> >> +    return vb2_delete_bufs(vdev->queue, p);
+> >> +}
+> >> +EXPORT_SYMBOL_GPL(vb2_ioctl_delete_bufs);
+> >> +
+> >>   int vb2_ioctl_reqbufs(struct file *file, void *priv,
+> >>                        struct v4l2_requestbuffers *p)
+> >>   {
+> >> diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-c=
+ore/v4l2-dev.c
+> >> index f81279492682..215654fd6581 100644
+> >> --- a/drivers/media/v4l2-core/v4l2-dev.c
+> >> +++ b/drivers/media/v4l2-core/v4l2-dev.c
+> >> @@ -720,6 +720,7 @@ static void determine_valid_ioctls(struct video_de=
+vice *vdev)
+> >>              SET_VALID_IOCTL(ops, VIDIOC_PREPARE_BUF, vidioc_prepare_b=
+uf);
+> >>              SET_VALID_IOCTL(ops, VIDIOC_STREAMON, vidioc_streamon);
+> >>              SET_VALID_IOCTL(ops, VIDIOC_STREAMOFF, vidioc_streamoff);
+> >> +            SET_VALID_IOCTL(ops, VIDIOC_DELETE_BUFS, vidioc_delete_bu=
+fs);
+> >>      }
+> >>
+> >>      if (is_vid || is_vbi || is_meta) {
+> >> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2=
+-core/v4l2-ioctl.c
+> >> index 4d90424cbfc4..e9dcf439f9f3 100644
+> >> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+> >> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+> >> @@ -489,6 +489,13 @@ static void v4l_print_create_buffers(const void *=
+arg, bool write_only)
+> >>      v4l_print_format(&p->format, write_only);
+> >>   }
+> >>
+> >> +static void v4l_print_delete_buffers(const void *arg, bool write_only=
+)
+> >> +{
+> >> +    const struct v4l2_delete_buffers *p =3D arg;
+> >> +
+> >> +    pr_cont("index=3D%u, count=3D%u\n", p->index, p->count);
+> >> +}
+> >> +
+> >>   static void v4l_print_streamparm(const void *arg, bool write_only)
+> >>   {
+> >>      const struct v4l2_streamparm *p =3D arg;
+> >> @@ -2161,6 +2168,15 @@ static int v4l_prepare_buf(const struct v4l2_io=
+ctl_ops *ops,
+> >>      return ret ? ret : ops->vidioc_prepare_buf(file, fh, b);
+> >>   }
+> >>
+> >> +static int v4l_delete_bufs(const struct v4l2_ioctl_ops *ops,
+> >> +                       struct file *file, void *fh, void *arg)
+> >> +{
+> >> +    struct v4l2_delete_buffers *delete =3D arg;
+> >> +    int ret =3D check_fmt(file, delete->type);
+> > Should we also have
+> >
+> >       memset_after(delete, 0, type);
+> >
+> > here similar to how other ioctl handlers clear the reserved fields?
+>
+> I will add it.
+>
+> >
+> >> +
+> >> +    return ret ? ret : ops->vidioc_delete_bufs(file, fh, delete);
+> >> +}
+> >> +
+> >>   static int v4l_g_parm(const struct v4l2_ioctl_ops *ops,
+> >>                              struct file *file, void *fh, void *arg)
+> >>   {
+> >> @@ -2910,6 +2926,7 @@ static const struct v4l2_ioctl_info v4l2_ioctls[=
+] =3D {
+> >>      IOCTL_INFO(VIDIOC_ENUM_FREQ_BANDS, v4l_enum_freq_bands, v4l_print=
+_freq_band, 0),
+> >>      IOCTL_INFO(VIDIOC_DBG_G_CHIP_INFO, v4l_dbg_g_chip_info, v4l_print=
+_dbg_chip_info, INFO_FL_CLEAR(v4l2_dbg_chip_info, match)),
+> >>      IOCTL_INFO(VIDIOC_QUERY_EXT_CTRL, v4l_query_ext_ctrl, v4l_print_q=
+uery_ext_ctrl, INFO_FL_CTRL | INFO_FL_CLEAR(v4l2_query_ext_ctrl, id)),
+> >> +    IOCTL_INFO(VIDIOC_DELETE_BUFS, v4l_delete_bufs, v4l_print_delete_=
+buffers, INFO_FL_PRIO | INFO_FL_QUEUE | INFO_FL_CLEAR(v4l2_delete_buffers, =
+type)),
+> >>   };
+> >>   #define V4L2_IOCTLS ARRAY_SIZE(v4l2_ioctls)
+> >>
+> >> diff --git a/include/media/v4l2-ioctl.h b/include/media/v4l2-ioctl.h
+> >> index edb733f21604..55afbde54211 100644
+> >> --- a/include/media/v4l2-ioctl.h
+> >> +++ b/include/media/v4l2-ioctl.h
+> >> @@ -163,6 +163,8 @@ struct v4l2_fh;
+> >>    * :ref:`VIDIOC_CREATE_BUFS <vidioc_create_bufs>` ioctl
+> >>    * @vidioc_prepare_buf: pointer to the function that implements
+> >>    * :ref:`VIDIOC_PREPARE_BUF <vidioc_prepare_buf>` ioctl
+> >> + * @vidioc_delete_bufs: pointer to the function that implements
+> >> + *  :ref:`VIDIOC_DELETE_BUFS <vidioc_delete_bufs>` ioctl
+> >>    * @vidioc_overlay: pointer to the function that implements
+> >>    * :ref:`VIDIOC_OVERLAY <vidioc_overlay>` ioctl
+> >>    * @vidioc_g_fbuf: pointer to the function that implements
+> >> @@ -422,6 +424,8 @@ struct v4l2_ioctl_ops {
+> >>                                struct v4l2_create_buffers *b);
+> >>      int (*vidioc_prepare_buf)(struct file *file, void *fh,
+> >>                                struct v4l2_buffer *b);
+> >> +    int (*vidioc_delete_bufs)(struct file *file, void *fh,
+> >> +                              struct v4l2_delete_buffers *d);
+> >>
+> >>      int (*vidioc_overlay)(struct file *file, void *fh, unsigned int i=
+);
+> >>      int (*vidioc_g_fbuf)(struct file *file, void *fh,
+> >> diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-=
+core.h
+> >> index 288477075a0e..db3bd986624e 100644
+> >> --- a/include/media/videobuf2-core.h
+> >> +++ b/include/media/videobuf2-core.h
+> >> @@ -507,6 +507,7 @@ struct vb2_buf_ops {
+> >>    * @supports_requests: this queue supports the Request API.
+> >>    * @requires_requests: this queue requires the Request API. If this =
+is set to 1,
+> >>    *         then supports_requests must be set to 1 as well.
+> >> + * @supports_delete_bufs: this queue supports DELETE_BUFS ioctl.
+> >>    * @uses_qbuf:     qbuf was used directly for this queue. Set to 1 t=
+he first
+> >>    *         time this is called. Set to 0 when the queue is canceled.
+> >>    *         If this is 1, then you cannot queue buffers from a reques=
+t.
+> >> @@ -595,6 +596,7 @@ struct vb2_queue {
+> >>      unsigned int               quirk_poll_must_check_waiting_for_buff=
+ers:1;
+> >>      unsigned int                    supports_requests:1;
+> >>      unsigned int                    requires_requests:1;
+> >> +    unsigned int                    supports_delete_bufs:1;
+> >>      unsigned int                    uses_qbuf:1;
+> >>      unsigned int                    uses_requests:1;
+> >>      unsigned int                    allow_cache_hints:1;
+> >> @@ -846,6 +848,16 @@ int vb2_core_create_bufs(struct vb2_queue *q, enu=
+m vb2_memory memory,
+> >>    */
+> >>   int vb2_core_prepare_buf(struct vb2_queue *q, struct vb2_buffer *vb,=
+ void *pb);
+> >>
+> >> +/**
+> >> + * vb2_core_delete_bufs() -
+> >> + * @q:              pointer to &struct vb2_queue with videobuf2 queue=
+.
+> >> + * @start:  first index of the range of buffers to delete.
+> >> + * @count:  number of buffers to delete.
+> >> + *
+> >> + *  Return: returns zero on success; an error code otherwise.
+> >> + */
+> >> +int vb2_core_delete_bufs(struct vb2_queue *q, unsigned int start, uns=
+igned int count);
+> >> +
+> >>   /**
+> >>    * vb2_core_qbuf() - Queue a buffer from userspace
+> >>    *
+> >> diff --git a/include/media/videobuf2-v4l2.h b/include/media/videobuf2-=
+v4l2.h
+> >> index 5a845887850b..79cea8459f52 100644
+> >> --- a/include/media/videobuf2-v4l2.h
+> >> +++ b/include/media/videobuf2-v4l2.h
+> >> @@ -118,6 +118,17 @@ int vb2_create_bufs(struct vb2_queue *q, struct v=
+4l2_create_buffers *create);
+> >>    */
+> >>   int vb2_prepare_buf(struct vb2_queue *q, struct media_device *mdev,
+> >>                  struct v4l2_buffer *b);
+> >> +/**
+> >> + * vb2_delete_bufs() - Delete buffers from the queue
+> >> + *
+> >> + * @q:              pointer to &struct vb2_queue with videobuf2 queue=
+.
+> >> + * @d:              delete parameter, passed from userspace to
+> >> + *          &v4l2_ioctl_ops->vidioc_delete_bufs handler in driver
+> >> + *
+> >> + * The return values from this function are intended to be directly r=
+eturned
+> >> + * from &v4l2_ioctl_ops->vidioc_delete_bufs handler in driver.
+> >> + */
+> >> +int vb2_delete_bufs(struct vb2_queue *q, struct v4l2_delete_buffers *=
+d);
+> >>
+> >>   /**
+> >>    * vb2_qbuf() - Queue a buffer from userspace
+> >> @@ -334,6 +345,8 @@ int vb2_ioctl_streamon(struct file *file, void *pr=
+iv, enum v4l2_buf_type i);
+> >>   int vb2_ioctl_streamoff(struct file *file, void *priv, enum v4l2_buf=
+_type i);
+> >>   int vb2_ioctl_expbuf(struct file *file, void *priv,
+> >>      struct v4l2_exportbuffer *p);
+> >> +int vb2_ioctl_delete_bufs(struct file *file, void *priv,
+> >> +                      struct v4l2_delete_buffers *p);
+> >>
+> >>   /* struct v4l2_file_operations helpers */
+> >>
+> >> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/video=
+dev2.h
+> >> index 13ddb5abf584..96e105149906 100644
+> >> --- a/include/uapi/linux/videodev2.h
+> >> +++ b/include/uapi/linux/videodev2.h
+> >> @@ -1036,6 +1036,7 @@ struct v4l2_requestbuffers {
+> >>   #define V4L2_BUF_CAP_SUPPORTS_M2M_HOLD_CAPTURE_BUF (1 << 5)
+> >>   #define V4L2_BUF_CAP_SUPPORTS_MMAP_CACHE_HINTS             (1 << 6)
+> >>   #define V4L2_BUF_CAP_SUPPORTS_MAX_NUM_BUFFERS              (1 << 7)
+> >> +#define V4L2_BUF_CAP_SUPPORTS_DELETE_BUFS           (1 << 8)
+> >>
+> >>   /**
+> >>    * struct v4l2_plane - plane info for multi-planar buffers
+> >> @@ -2622,6 +2623,20 @@ struct v4l2_create_buffers {
+> >>      __u32                   reserved[5];
+> >>   };
+> >>
+> >> +/**
+> >> + * struct v4l2_delete_buffers - VIDIOC_DELETE_BUFS argument
+> >> + * @index:  the first buffer to be deleted
+> >> + * @count:  number of buffers to delete
+> >> + * @type:   enum v4l2_buf_type
+> >> + * @reserved:       future extensions
+> >> + */
+> >> +struct v4l2_delete_buffers {
+> >> +    __u32                   index;
+> >> +    __u32                   count;
+> >> +    __u32                   type;
+> >> +    __u32                   reserved[13];
+> >> +};
+> >> +
+> >>   /*
+> >>    * I O C T L   C O D E S   F O R   V I D E O   D E V I C E S
+> >>    *
+> >> @@ -2721,6 +2736,8 @@ struct v4l2_create_buffers {
+> >>   #define VIDIOC_DBG_G_CHIP_INFO  _IOWR('V', 102, struct v4l2_dbg_chip=
+_info)
+> >>
+> >>   #define VIDIOC_QUERY_EXT_CTRL      _IOWR('V', 103, struct v4l2_query=
+_ext_ctrl)
+> >> +#define VIDIOC_DELETE_BUFS  _IOWR('V', 104, struct v4l2_delete_buffer=
+s)
+> >> +
+> >>
+> >>   /* Reminder: when adding new ioctls please add support for them to
+> >>      drivers/media/v4l2-core/v4l2-compat-ioctl32.c as well! */
+> > Do we also need to add support for the new ioctl in there?
+>
+> It only use _u32, is aligned on cache boundary and doesn't use pointer.
+> For me 32 and 64 bits structures are identical so it doesn't need to be c=
+onvert.
+> Maybe I'm wrong when testing it with pahole ?
 
-Unrelated to this series, could ccs-regs.h be generated as part of the
-kernel build process ?
+Ah, right. I double checked the compat code and indeed if an ioctl is
+not listed there, it will just use the default copy_from_user, so we
+should be good.
 
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
->  drivers/media/i2c/ccs/ccs-core.c        |  80 +-
->  drivers/media/i2c/ccs/ccs-reg-access.c  | 191 +----
->  drivers/media/i2c/ccs/ccs-regs.h        | 904 +++++++++++-----------
->  drivers/media/i2c/ccs/ccs.h             |   2 +
->  drivers/media/i2c/ccs/smiapp-reg-defs.h | 948 ++++++++++++------------
->  5 files changed, 988 insertions(+), 1137 deletions(-)
-> 
-> diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-> index d210b6c87db4..471bb30ab298 100644
-> --- a/drivers/media/i2c/ccs/ccs-core.c
-> +++ b/drivers/media/i2c/ccs/ccs-core.c
-> @@ -25,8 +25,9 @@
->  #include <linux/slab.h>
->  #include <linux/smiapp.h>
->  #include <linux/v4l2-mediabus.h>
-> -#include <media/v4l2-fwnode.h>
-> +#include <media/v4l2-cci.h>
->  #include <media/v4l2-device.h>
-> +#include <media/v4l2-fwnode.h>
+Maybe one day we should update that comment to explain how to check if
+it's necessary to add a compat handler.
 
-As you're also sorting includes, mediabus goes last.
-
->  #include <uapi/linux/ccs.h>
->  
->  #include "ccs.h"
-> @@ -98,7 +99,7 @@ static int ccs_limit_ptr(struct ccs_sensor *sensor, unsigned int limit,
->  	linfo = &ccs_limits[ccs_limit_offsets[limit].info];
->  
->  	if (WARN_ON(!sensor->ccs_limits) ||
-> -	    WARN_ON(offset + ccs_reg_width(linfo->reg) >
-> +	    WARN_ON(offset + CCI_REG_WIDTH_BYTES(linfo->reg) >
->  		    ccs_limit_offsets[limit + 1].lim))
->  		return -EINVAL;
->  
-> @@ -124,7 +125,7 @@ void ccs_replace_limit(struct ccs_sensor *sensor,
->  	dev_dbg(&client->dev, "quirk: 0x%8.8x \"%s\" %u = %u, 0x%x\n",
->  		linfo->reg, linfo->name, offset, val, val);
->  
-> -	ccs_assign_limit(ptr, ccs_reg_width(linfo->reg), val);
-> +	ccs_assign_limit(ptr, CCI_REG_WIDTH_BYTES(linfo->reg), val);
->  }
->  
->  u32 ccs_get_limit(struct ccs_sensor *sensor, unsigned int limit,
-> @@ -138,7 +139,7 @@ u32 ccs_get_limit(struct ccs_sensor *sensor, unsigned int limit,
->  	if (ret)
->  		return 0;
->  
-> -	switch (ccs_reg_width(ccs_limits[ccs_limit_offsets[limit].info].reg)) {
-> +	switch (CCI_REG_WIDTH_BYTES(ccs_limits[ccs_limit_offsets[limit].info].reg)) {
->  	case sizeof(u8):
->  		val = *(u8 *)ptr;
->  		break;
-> @@ -176,7 +177,7 @@ static int ccs_read_all_limits(struct ccs_sensor *sensor)
->  
->  	for (i = 0, l = 0, ptr = alloc; ccs_limits[i].size; i++) {
->  		u32 reg = ccs_limits[i].reg;
-> -		unsigned int width = ccs_reg_width(reg);
-> +		unsigned int width = CCI_REG_WIDTH_BYTES(reg);
->  		unsigned int j;
->  
->  		if (l == CCS_L_LAST) {
-> @@ -2725,66 +2726,54 @@ static int ccs_identify_module(struct ccs_sensor *sensor)
->  	rval = ccs_read(sensor, MODULE_MANUFACTURER_ID,
->  			&minfo->mipi_manufacturer_id);
->  	if (!rval && !minfo->mipi_manufacturer_id)
-> -		rval = ccs_read_addr_8only(sensor,
-> -					   SMIAPP_REG_U8_MANUFACTURER_ID,
-> -					   &minfo->smia_manufacturer_id);
-> +		rval = ccs_read_addr(sensor, SMIAPP_REG_U8_MANUFACTURER_ID,
-> +				     &minfo->smia_manufacturer_id);
->  	if (!rval)
-> -		rval = ccs_read_addr_8only(sensor, CCS_R_MODULE_MODEL_ID,
-> -					   &minfo->model_id);
-> +		rval = ccs_read(sensor, MODULE_MODEL_ID, &minfo->model_id);
->  	if (!rval)
-> -		rval = ccs_read_addr_8only(sensor,
-> -					   CCS_R_MODULE_REVISION_NUMBER_MAJOR,
-> -					   &rev);
-> +		rval = ccs_read(sensor, MODULE_REVISION_NUMBER_MAJOR, &rev);
->  	if (!rval) {
-> -		rval = ccs_read_addr_8only(sensor,
-> -					   CCS_R_MODULE_REVISION_NUMBER_MINOR,
-> -					   &minfo->revision_number);
-> +		rval = ccs_read(sensor, MODULE_REVISION_NUMBER_MINOR,
-> +				&minfo->revision_number);
->  		minfo->revision_number |= rev << 8;
->  	}
->  	if (!rval)
-> -		rval = ccs_read_addr_8only(sensor, CCS_R_MODULE_DATE_YEAR,
-> -					   &minfo->module_year);
-> +		rval = ccs_read(sensor, MODULE_DATE_YEAR, &minfo->module_year);
->  	if (!rval)
-> -		rval = ccs_read_addr_8only(sensor, CCS_R_MODULE_DATE_MONTH,
-> -					   &minfo->module_month);
-> +		rval = ccs_read(sensor, MODULE_DATE_MONTH,
-> +				&minfo->module_month);
->  	if (!rval)
-> -		rval = ccs_read_addr_8only(sensor, CCS_R_MODULE_DATE_DAY,
-> -					   &minfo->module_day);
-> +		rval = ccs_read(sensor, MODULE_DATE_DAY, &minfo->module_day);
->  
->  	/* Sensor info */
->  	if (!rval)
->  		rval = ccs_read(sensor, SENSOR_MANUFACTURER_ID,
->  				&minfo->sensor_mipi_manufacturer_id);
->  	if (!rval && !minfo->sensor_mipi_manufacturer_id)
-> -		rval = ccs_read_addr_8only(sensor,
-> -					   CCS_R_SENSOR_MANUFACTURER_ID,
-> -					   &minfo->sensor_smia_manufacturer_id);
-> +		rval = ccs_read(sensor, SENSOR_MANUFACTURER_ID,
-> +				&minfo->sensor_smia_manufacturer_id);
->  	if (!rval)
-> -		rval = ccs_read_addr_8only(sensor,
-> -					   CCS_R_SENSOR_MODEL_ID,
-> -					   &minfo->sensor_model_id);
-> +		rval = ccs_read(sensor, SENSOR_MODEL_ID,
-> +				&minfo->sensor_model_id);
->  	if (!rval)
-> -		rval = ccs_read_addr_8only(sensor,
-> -					   CCS_R_SENSOR_REVISION_NUMBER,
-> -					   &minfo->sensor_revision_number);
-> +		rval = ccs_read(sensor, SENSOR_REVISION_NUMBER,
-> +				&minfo->sensor_revision_number);
->  	if (!rval && !minfo->sensor_revision_number)
-> -		rval = ccs_read_addr_8only(sensor,
-> -					   CCS_R_SENSOR_REVISION_NUMBER_16,
-> -					   &minfo->sensor_revision_number);
-> +		rval = ccs_read(sensor, SENSOR_REVISION_NUMBER_16,
-> +				&minfo->sensor_revision_number);
->  	if (!rval)
-> -		rval = ccs_read_addr_8only(sensor,
-> -					   CCS_R_SENSOR_FIRMWARE_VERSION,
-> -					   &minfo->sensor_firmware_version);
-> +		rval = ccs_read(sensor, SENSOR_FIRMWARE_VERSION,
-> +				&minfo->sensor_firmware_version);
->  
->  	/* SMIA */
->  	if (!rval)
->  		rval = ccs_read(sensor, MIPI_CCS_VERSION, &minfo->ccs_version);
->  	if (!rval && !minfo->ccs_version)
-> -		rval = ccs_read_addr_8only(sensor, SMIAPP_REG_U8_SMIA_VERSION,
-> -					   &minfo->smia_version);
-> +		rval = ccs_read_addr(sensor, SMIAPP_REG_U8_SMIA_VERSION,
-> +				     &minfo->smia_version);
->  	if (!rval && !minfo->ccs_version)
-> -		rval = ccs_read_addr_8only(sensor, SMIAPP_REG_U8_SMIAPP_VERSION,
-> -					   &minfo->smiapp_version);
-> +		rval = ccs_read_addr(sensor, SMIAPP_REG_U8_SMIAPP_VERSION,
-> +				     &minfo->smiapp_version);
->  
->  	if (rval) {
->  		dev_err(&client->dev, "sensor detection failed\n");
-> @@ -3318,6 +3307,13 @@ static int ccs_probe(struct i2c_client *client)
->  	if (IS_ERR(sensor->xshutdown))
->  		return PTR_ERR(sensor->xshutdown);
->  
-> +	sensor->regmap = devm_cci_regmap_init_i2c(client, 16);
-> +	if (IS_ERR(sensor->regmap)) {
-> +		dev_err(&client->dev, "can't initialise CCI (%ld)\n",
-> +			PTR_ERR(sensor->regmap));
-> +		return PTR_ERR(sensor->regmap);
-> +	}
-> +
->  	rval = ccs_power_on(&client->dev);
->  	if (rval < 0)
->  		return rval;
-> @@ -3653,7 +3649,7 @@ static int ccs_module_init(void)
->  			ccs_limit_offsets[l + 1].lim =
->  				ALIGN(ccs_limit_offsets[l].lim +
->  				      ccs_limits[i].size,
-> -				      ccs_reg_width(ccs_limits[i + 1].reg));
-> +				      max(CCI_REG_WIDTH_BYTES(ccs_limits[i + 1].reg), 1UL));
-
-What's the reason for the max() here ?
-
->  			ccs_limit_offsets[l].info = i;
->  			l++;
->  		} else {
-> diff --git a/drivers/media/i2c/ccs/ccs-reg-access.c b/drivers/media/i2c/ccs/ccs-reg-access.c
-> index 652d705a2ef5..81d3e2db38f1 100644
-> --- a/drivers/media/i2c/ccs/ccs-reg-access.c
-> +++ b/drivers/media/i2c/ccs/ccs-reg-access.c
-> @@ -62,87 +62,6 @@ static u32 float_to_u32_mul_1000000(struct i2c_client *client, u32 phloat)
->  }
->  
->  
-> -/*
-> - * Read a 8/16/32-bit i2c register.  The value is returned in 'val'.
-> - * Returns zero if successful, or non-zero otherwise.
-> - */
-> -static int ____ccs_read_addr(struct ccs_sensor *sensor, u16 reg, u16 len,
-> -			     u32 *val)
-> -{
-> -	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
-> -	struct i2c_msg msg;
-> -	unsigned char data_buf[sizeof(u32)] = { 0 };
-> -	unsigned char offset_buf[sizeof(u16)];
-> -	int r;
-> -
-> -	if (len > sizeof(data_buf))
-> -		return -EINVAL;
-> -
-> -	msg.addr = client->addr;
-> -	msg.flags = 0;
-> -	msg.len = sizeof(offset_buf);
-> -	msg.buf = offset_buf;
-> -	put_unaligned_be16(reg, offset_buf);
-> -
-> -	r = i2c_transfer(client->adapter, &msg, 1);
-> -	if (r != 1) {
-> -		if (r >= 0)
-> -			r = -EBUSY;
-> -		goto err;
-> -	}
-> -
-> -	msg.len = len;
-> -	msg.flags = I2C_M_RD;
-> -	msg.buf = &data_buf[sizeof(data_buf) - len];
-> -
-> -	r = i2c_transfer(client->adapter, &msg, 1);
-> -	if (r != 1) {
-> -		if (r >= 0)
-> -			r = -EBUSY;
-> -		goto err;
-> -	}
-> -
-> -	*val = get_unaligned_be32(data_buf);
-> -
-> -	return 0;
-> -
-> -err:
-> -	dev_err(&client->dev, "read from offset 0x%x error %d\n", reg, r);
-> -
-> -	return r;
-> -}
-> -
-> -/* Read a register using 8-bit access only. */
-> -static int ____ccs_read_addr_8only(struct ccs_sensor *sensor, u16 reg,
-> -				   u16 len, u32 *val)
-> -{
-> -	unsigned int i;
-> -	int rval;
-> -
-> -	*val = 0;
-> -
-> -	for (i = 0; i < len; i++) {
-> -		u32 val8;
-> -
-> -		rval = ____ccs_read_addr(sensor, reg + i, 1, &val8);
-> -		if (rval < 0)
-> -			return rval;
-> -		*val |= val8 << ((len - i - 1) << 3);
-> -	}
-> -
-> -	return 0;
-> -}
-> -
-> -unsigned int ccs_reg_width(u32 reg)
-> -{
-> -	if (reg & CCS_FL_16BIT)
-> -		return sizeof(u16);
-> -	if (reg & CCS_FL_32BIT)
-> -		return sizeof(u32);
-> -
-> -	return sizeof(u8);
-> -}
-> -
->  static u32 ireal32_to_u32_mul_1000000(struct i2c_client *client, u32 val)
->  {
->  	if (val >> 10 > U32_MAX / 15625) {
-> @@ -178,21 +97,14 @@ u32 ccs_reg_conv(struct ccs_sensor *sensor, u32 reg, u32 val)
->  static int __ccs_read_addr(struct ccs_sensor *sensor, u32 reg, u32 *val,
->  			   bool only8, bool conv)
->  {
-> -	unsigned int len = ccs_reg_width(reg);
-> +	u64 __val;
->  	int rval;
->  
-> -	if (!only8)
-> -		rval = ____ccs_read_addr(sensor, CCS_REG_ADDR(reg), len, val);
-> -	else
-> -		rval = ____ccs_read_addr_8only(sensor, CCS_REG_ADDR(reg), len,
-> -					       val);
-> +	rval = cci_read(sensor->regmap, reg, &__val, NULL);
->  	if (rval < 0)
->  		return rval;
->  
-> -	if (!conv)
-> -		return 0;
-> -
-> -	*val = ccs_reg_conv(sensor, reg, *val);
-> +	*val = conv ? ccs_reg_conv(sensor, reg, __val) : __val;
->  
->  	return 0;
->  }
-> @@ -200,7 +112,7 @@ static int __ccs_read_addr(struct ccs_sensor *sensor, u32 reg, u32 *val,
->  static int __ccs_static_read_only(struct ccs_reg *regs, size_t num_regs,
->  				  u32 reg, u32 *val)
->  {
-> -	unsigned int width = ccs_reg_width(reg);
-> +	unsigned int width = CCI_REG_WIDTH_BYTES(reg);
->  	size_t i;
->  
->  	for (i = 0; i < num_regs; i++, regs++) {
-> @@ -291,71 +203,13 @@ int ccs_read_addr_noconv(struct ccs_sensor *sensor, u32 reg, u32 *val)
->  	return ccs_read_addr_raw(sensor, reg, val, false, true, false, true);
->  }
->  
-> -static int ccs_write_retry(struct i2c_client *client, struct i2c_msg *msg)
-> -{
-> -	unsigned int retries;
-> -	int r;
-> -
-> -	for (retries = 0; retries < 10; retries++) {
-> -		/*
-> -		 * Due to unknown reason sensor stops responding. This
-> -		 * loop is a temporaty solution until the root cause
-> -		 * is found.
-> -		 */
-> -		r = i2c_transfer(client->adapter, msg, 1);
-> -		if (r != 1) {
-> -			usleep_range(1000, 2000);
-> -			continue;
-> -		}
-> -
-> -		if (retries)
-> -			dev_err(&client->dev,
-> -				"sensor i2c stall encountered. retries: %d\n",
-> -				retries);
-> -		return 0;
-> -	}
-> -
-> -	return r;
-> -}
-> -
-> -int ccs_write_addr_no_quirk(struct ccs_sensor *sensor, u32 reg, u32 val)
-> -{
-> -	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
-> -	struct i2c_msg msg;
-> -	unsigned char data[6];
-> -	unsigned int len = ccs_reg_width(reg);
-> -	int r;
-> -
-> -	if (len > sizeof(data) - 2)
-> -		return -EINVAL;
-> -
-> -	msg.addr = client->addr;
-> -	msg.flags = 0; /* Write */
-> -	msg.len = 2 + len;
-> -	msg.buf = data;
-> -
-> -	put_unaligned_be16(CCS_REG_ADDR(reg), data);
-> -	put_unaligned_be32(val << (8 * (sizeof(val) - len)), data + 2);
-> -
-> -	dev_dbg(&client->dev, "writing reg 0x%4.4x value 0x%*.*x (%u)\n",
-> -		CCS_REG_ADDR(reg), ccs_reg_width(reg) << 1,
-> -		ccs_reg_width(reg) << 1, val, val);
-> -
-> -	r = ccs_write_retry(client, &msg);
-> -	if (r)
-> -		dev_err(&client->dev,
-> -			"wrote 0x%x to offset 0x%x error %d\n", val,
-> -			CCS_REG_ADDR(reg), r);
-> -
-> -	return r;
-> -}
-> -
->  /*
->   * Write to a 8/16-bit register.
->   * Returns zero if successful, or non-zero otherwise.
->   */
->  int ccs_write_addr(struct ccs_sensor *sensor, u32 reg, u32 val)
->  {
-> +	unsigned int retries = 10;
-
-This is really not nice, but unrelated to this patch.
-
->  	int rval;
->  
->  	rval = ccs_call_quirk(sensor, reg_access, true, &reg, &val);
-> @@ -364,7 +218,12 @@ int ccs_write_addr(struct ccs_sensor *sensor, u32 reg, u32 val)
->  	if (rval < 0)
->  		return rval;
-
-Here you test rval < 0, but below cci_write() will consider any positive
-value as an error too. There may not be an actual bug if the function
-call above doesn't return positive values, but it's error-prone
-nonetheless.
-
->  
-> -	return ccs_write_addr_no_quirk(sensor, reg, val);
-> +	do {
-> +		if (cci_write(sensor->regmap, reg, val, &rval))
-> +			fsleep(1000);
-> +	} while (rval && --retries);
-> +
-> +	return rval;
->  }
->  
->  #define MAX_WRITE_LEN	32U
-> @@ -373,40 +232,36 @@ int ccs_write_data_regs(struct ccs_sensor *sensor, struct ccs_reg *regs,
->  			size_t num_regs)
->  {
->  	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
-> -	unsigned char buf[2 + MAX_WRITE_LEN];
-> -	struct i2c_msg msg = {
-> -		.addr = client->addr,
-> -		.buf = buf,
-> -	};
->  	size_t i;
->  
->  	for (i = 0; i < num_regs; i++, regs++) {
->  		unsigned char *regdata = regs->value;
->  		unsigned int j;
-> +		int len;
->  
-> -		for (j = 0; j < regs->len;
-> -		     j += msg.len - 2, regdata += msg.len - 2) {
-> +		for (j = 0; j < regs->len; j += len, regdata += len) {
->  			char printbuf[(MAX_WRITE_LEN << 1) +
->  				      1 /* \0 */] = { 0 };
-> +			unsigned int retries = 10;
->  			int rval;
->  
-> -			msg.len = min(regs->len - j, MAX_WRITE_LEN);
-> +			len = min(regs->len - j, MAX_WRITE_LEN);
->  
-> -			bin2hex(printbuf, regdata, msg.len);
-> +			bin2hex(printbuf, regdata, len);
->  			dev_dbg(&client->dev,
->  				"writing msr reg 0x%4.4x value 0x%s\n",
->  				regs->addr + j, printbuf);
->  
-> -			put_unaligned_be16(regs->addr + j, buf);
-> -			memcpy(buf + 2, regdata, msg.len);
-> -
-> -			msg.len += 2;
-> -
-> -			rval = ccs_write_retry(client, &msg);
-> +			do {
-> +				rval = regmap_bulk_write(sensor->regmap,
-> +							 regs->addr + j, regdata, len);
-
-I'm surprised by the line length ;-)
-
-> +				if (rval)
-> +					fsleep(1000);
-> +			} while (rval && --retries);
-
-A blank line would be nice.
-
->  			if (rval) {
->  				dev_err(&client->dev,
->  					"error writing %u octets to address 0x%4.4x\n",
-> -					msg.len, regs->addr + j);
-> +					len, regs->addr + j);
->  				return rval;
->  			}
->  		}
-> diff --git a/drivers/media/i2c/ccs/ccs-regs.h b/drivers/media/i2c/ccs/ccs-regs.h
-> index 6ce84c5ecf20..45f933cbe478 100644
-> --- a/drivers/media/i2c/ccs/ccs-regs.h
-> +++ b/drivers/media/i2c/ccs/ccs-regs.h
-> @@ -10,59 +10,57 @@
->  
->  #include <linux/bits.h>
->  
-> -#define CCS_FL_BASE		16
-> -#define CCS_FL_16BIT		BIT(CCS_FL_BASE)
-> -#define CCS_FL_32BIT		BIT(CCS_FL_BASE + 1)
-> -#define CCS_FL_FLOAT_IREAL	BIT(CCS_FL_BASE + 2)
-> -#define CCS_FL_IREAL		BIT(CCS_FL_BASE + 3)
-> -#define CCS_R_ADDR(r)		((r) & 0xffff)
-> +#include <media/v4l2-cci.h>
->  
-> -#define CCS_R_MODULE_MODEL_ID					(0x0000 | CCS_FL_16BIT)
-> -#define CCS_R_MODULE_REVISION_NUMBER_MAJOR			0x0002
-> -#define CCS_R_FRAME_COUNT					0x0005
-> -#define CCS_R_PIXEL_ORDER					0x0006
-> +#define CCS_FL_BASE		CCI_REG_FLAG_PRIVATE_START
-
-Unless CCS_FL_BASE is used in the driver, I would drop it and use
-CCI_REG_FLAG_PRIVATE_START in the two macros below. Up to you.
-
-> +#define CCS_FL_FLOAT_IREAL	BIT(CCS_FL_BASE)
-> +#define CCS_FL_IREAL		BIT(CCS_FL_BASE + 1)
-> +#define CCS_R_MODULE_MODEL_ID					CCI_REG16(0x0000)
-> +#define CCS_R_MODULE_REVISION_NUMBER_MAJOR			CCI_REG8(0x0002)
-> +#define CCS_R_FRAME_COUNT					CCI_REG8(0x0005)
-> +#define CCS_R_PIXEL_ORDER					CCI_REG8(0x0006)
->  #define CCS_PIXEL_ORDER_GRBG					0U
->  #define CCS_PIXEL_ORDER_RGGB					1U
->  #define CCS_PIXEL_ORDER_BGGR					2U
->  #define CCS_PIXEL_ORDER_GBRG					3U
-> -#define CCS_R_MIPI_CCS_VERSION					0x0007
-> +#define CCS_R_MIPI_CCS_VERSION					CCI_REG8(0x0007)
->  #define CCS_MIPI_CCS_VERSION_V1_0				0x10
->  #define CCS_MIPI_CCS_VERSION_V1_1				0x11
->  #define CCS_MIPI_CCS_VERSION_MAJOR_SHIFT			4U
->  #define CCS_MIPI_CCS_VERSION_MAJOR_MASK				0xf0
->  #define CCS_MIPI_CCS_VERSION_MINOR_SHIFT			0U
->  #define CCS_MIPI_CCS_VERSION_MINOR_MASK				0xf
-> -#define CCS_R_DATA_PEDESTAL					(0x0008 | CCS_FL_16BIT)
-> -#define CCS_R_MODULE_MANUFACTURER_ID				(0x000e | CCS_FL_16BIT)
-> -#define CCS_R_MODULE_REVISION_NUMBER_MINOR			0x0010
-> -#define CCS_R_MODULE_DATE_YEAR					0x0012
-> -#define CCS_R_MODULE_DATE_MONTH					0x0013
-> -#define CCS_R_MODULE_DATE_DAY					0x0014
-> -#define CCS_R_MODULE_DATE_PHASE					0x0015
-> +#define CCS_R_DATA_PEDESTAL					CCI_REG16(0x0008)
-> +#define CCS_R_MODULE_MANUFACTURER_ID				CCI_REG16(0x000e)
-> +#define CCS_R_MODULE_REVISION_NUMBER_MINOR			CCI_REG8(0x0010)
-> +#define CCS_R_MODULE_DATE_YEAR					CCI_REG8(0x0012)
-> +#define CCS_R_MODULE_DATE_MONTH					CCI_REG8(0x0013)
-> +#define CCS_R_MODULE_DATE_DAY					CCI_REG8(0x0014)
-> +#define CCS_R_MODULE_DATE_PHASE					CCI_REG8(0x0015)
->  #define CCS_MODULE_DATE_PHASE_SHIFT				0U
->  #define CCS_MODULE_DATE_PHASE_MASK				0x7
->  #define CCS_MODULE_DATE_PHASE_TS				0U
->  #define CCS_MODULE_DATE_PHASE_ES				1U
->  #define CCS_MODULE_DATE_PHASE_CS				2U
->  #define CCS_MODULE_DATE_PHASE_MP				3U
-> -#define CCS_R_SENSOR_MODEL_ID					(0x0016 | CCS_FL_16BIT)
-> -#define CCS_R_SENSOR_REVISION_NUMBER				0x0018
-> -#define CCS_R_SENSOR_FIRMWARE_VERSION				0x001a
-> -#define CCS_R_SERIAL_NUMBER					(0x001c | CCS_FL_32BIT)
-> -#define CCS_R_SENSOR_MANUFACTURER_ID				(0x0020 | CCS_FL_16BIT)
-> -#define CCS_R_SENSOR_REVISION_NUMBER_16				(0x0022 | CCS_FL_16BIT)
-> -#define CCS_R_FRAME_FORMAT_MODEL_TYPE				0x0040
-> +#define CCS_R_SENSOR_MODEL_ID					CCI_REG16(0x0016)
-> +#define CCS_R_SENSOR_REVISION_NUMBER				CCI_REG8(0x0018)
-> +#define CCS_R_SENSOR_FIRMWARE_VERSION				CCI_REG8(0x001a)
-> +#define CCS_R_SERIAL_NUMBER					CCI_REG32(0x001c)
-> +#define CCS_R_SENSOR_MANUFACTURER_ID				CCI_REG16(0x0020)
-> +#define CCS_R_SENSOR_REVISION_NUMBER_16				CCI_REG16(0x0022)
-> +#define CCS_R_FRAME_FORMAT_MODEL_TYPE				CCI_REG8(0x0040)
->  #define CCS_FRAME_FORMAT_MODEL_TYPE_2_BYTE			1U
->  #define CCS_FRAME_FORMAT_MODEL_TYPE_4_BYTE			2U
-> -#define CCS_R_FRAME_FORMAT_MODEL_SUBTYPE			0x0041
-> +#define CCS_R_FRAME_FORMAT_MODEL_SUBTYPE			CCI_REG8(0x0041)
->  #define CCS_FRAME_FORMAT_MODEL_SUBTYPE_ROWS_SHIFT		0U
->  #define CCS_FRAME_FORMAT_MODEL_SUBTYPE_ROWS_MASK		0xf
->  #define CCS_FRAME_FORMAT_MODEL_SUBTYPE_COLUMNS_SHIFT		4U
->  #define CCS_FRAME_FORMAT_MODEL_SUBTYPE_COLUMNS_MASK		0xf0
-> -#define CCS_R_FRAME_FORMAT_DESCRIPTOR(n)			((0x0042 | CCS_FL_16BIT) + (n) * 2)
-> +#define CCS_R_FRAME_FORMAT_DESCRIPTOR(n)			(CCI_REG16(0x0042) + (n) * 2)
-
-This assumes that the address is encoded in the LSBs. I think it would
-be better to write
-
-#define CCS_R_FRAME_FORMAT_DESCRIPTOR(n)			CCI_REG16(0x0042 + (n) * 2)
-
->  #define CCS_LIM_FRAME_FORMAT_DESCRIPTOR_MIN_N			0U
->  #define CCS_LIM_FRAME_FORMAT_DESCRIPTOR_MAX_N			14U
-> -#define CCS_R_FRAME_FORMAT_DESCRIPTOR_4(n)			((0x0060 | CCS_FL_32BIT) + (n) * 4)
-> +#define CCS_R_FRAME_FORMAT_DESCRIPTOR_4(n)			(CCI_REG32(0x0060) + (n) * 4)
->  #define CCS_FRAME_FORMAT_DESCRIPTOR_PIXELS_SHIFT		0U
->  #define CCS_FRAME_FORMAT_DESCRIPTOR_PIXELS_MASK			0xfff
->  #define CCS_FRAME_FORMAT_DESCRIPTOR_PCODE_SHIFT			12U
-
-[snip]
-
-> diff --git a/drivers/media/i2c/ccs/ccs.h b/drivers/media/i2c/ccs/ccs.h
-> index 2c013d96adcc..096573845a10 100644
-> --- a/drivers/media/i2c/ccs/ccs.h
-> +++ b/drivers/media/i2c/ccs/ccs.h
-> @@ -13,6 +13,7 @@
->  #define __CCS_H__
->  
->  #include <linux/mutex.h>
-> +#include <linux/regmap.h>
->  #include <media/v4l2-ctrls.h>
->  #include <media/v4l2-subdev.h>
->  
-> @@ -211,6 +212,7 @@ struct ccs_sensor {
->  	struct clk *ext_clk;
->  	struct gpio_desc *xshutdown;
->  	struct gpio_desc *reset;
-> +	struct regmap *regmap;
->  	void *ccs_limits;
->  	u8 nbinning_subtypes;
->  	struct ccs_binning_subtype binning_subtypes[CCS_LIM_BINNING_SUB_TYPE_MAX_N + 1];
-> diff --git a/drivers/media/i2c/ccs/smiapp-reg-defs.h b/drivers/media/i2c/ccs/smiapp-reg-defs.h
-> index 177e3e51207a..72b1af2a9824 100644
-> --- a/drivers/media/i2c/ccs/smiapp-reg-defs.h
-> +++ b/drivers/media/i2c/ccs/smiapp-reg-defs.h
-> @@ -13,480 +13,480 @@
->  #define __SMIAPP_REG_DEFS_H__
-
-Shouldn't you include v4l2-cci.h ?
-
->  
->  /* Register addresses */
-
-I haven't reviewed the manual changes here.
-
-[snip]
->  
->  /* Register bit definitions */
->  #define SMIAPP_IMAGE_ORIENTATION_HFLIP			BIT(0)
-
--- 
-Regards,
-
-Laurent Pinchart
+Best regards,
+Tomasz
 
