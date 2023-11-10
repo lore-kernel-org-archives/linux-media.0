@@ -1,47 +1,47 @@
-Return-Path: <linux-media+bounces-59-linux-media=archiver.kernel.org@vger.kernel.org>
+Return-Path: <linux-media+bounces-60-linux-media=archiver.kernel.org@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E319EC05021
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:50:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4151EC4332F
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:50:52 +0000 (UTC)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A3684281442
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:50:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE9951C20F5D
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:50:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 049B63E49A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A5483E49C;
 	Fri, 10 Nov 2023 17:47:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="JP9zH1q6"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="BTiiBoZ1"
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25D173D981
-	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 17:47:08 +0000 (UTC)
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83A23B301
-	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 07:39:34 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ED0C3D990
+	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 17:47:09 +0000 (UTC)
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA64739CC7
+	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 06:46:16 -0800 (PST)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 91F94673;
-	Fri, 10 Nov 2023 16:39:10 +0100 (CET)
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id BD54C49E;
+	Fri, 10 Nov 2023 15:45:52 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1699630750;
-	bh=8C7XgHEUFf4dRrlSGW4sZaJl/L8uIaeBTM3s+R9jRkg=;
+	s=mail; t=1699627553;
+	bh=VRSE9UU7VYZ8UrK6+lJC0pP8vGr3IK0vmR+d96eLP3g=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JP9zH1q6HSwPB+KVMdRhTII/eiX2fxueH7RDkR92Bezv727eMCvIJJO0g50a8G+ol
-	 ZXEIeWc33GF4pacWmssNhppCwffgq5f1wGCeCBer2s//91NmTr3bdlbT/t19eNf5ob
-	 60MkZnnOQvfnx81OvJHshZ5zRVcmRfJBmK7jY+aQ=
-Date: Fri, 10 Nov 2023 17:39:40 +0200
+	b=BTiiBoZ1Vdt48+ihp1EPTKR1YeVbLUVxoILVJnYLm8dK90jQyH91QfwkD2Dk97sZq
+	 j27XZzOtq/S+n9qcZPM5HE9ank7g4fXBOkWSvI4hlIBjH5gHj1Lw3jKWQM/ZKZUg/y
+	 uPbMUb4H3BW2LHXMOhzbKjY602qt/DWhMgU5BoEc=
+Date: Fri, 10 Nov 2023 16:46:22 +0200
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: linux-media@vger.kernel.org, tomi.valkeinen@ideasonboard.com
-Subject: Re: [PATCH 1/1] media: v4l: subdev: Always compile sub-device state
- access functions
-Message-ID: <20231110153940.GA7466@pendragon.ideasonboard.com>
-References: <20231110101049.890577-1-sakari.ailus@linux.intel.com>
+Cc: linux-media@vger.kernel.org, hdegoede@redhat.com
+Subject: Re: [PATCH 5/6] media: ccs: Better separate CCS static data access
+Message-ID: <20231110144622.GD21167@pendragon.ideasonboard.com>
+References: <20231110094705.1367083-1-sakari.ailus@linux.intel.com>
+ <20231110094705.1367083-6-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -50,393 +50,71 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20231110101049.890577-1-sakari.ailus@linux.intel.com>
+In-Reply-To: <20231110094705.1367083-6-sakari.ailus@linux.intel.com>
 
 Hi Sakari,
 
 Thank you for the patch.
 
-On Fri, Nov 10, 2023 at 12:10:49PM +0200, Sakari Ailus wrote:
-> Compile sub-device state information access functions
-> v4l2_subdev_state_get_{format,crop,compose} unconditionally as they are
-> now also used by plain V4L2 drivers.
+On Fri, Nov 10, 2023 at 11:47:04AM +0200, Sakari Ailus wrote:
+> Separate CCS static data read-only register access in ccs-reg-access.c.
 
-What do you mean by "plain" V4L2 drivers here ?
+Please explain why. I don't have enough information to review this
+patch.
 
 > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 > ---
->  drivers/media/v4l2-core/v4l2-subdev.c | 204 +++++++++++++-------------
->  include/media/v4l2-subdev.h           | 128 ++++++++--------
->  2 files changed, 166 insertions(+), 166 deletions(-)
+>  drivers/media/i2c/ccs/ccs-reg-access.c | 20 ++++++++++----------
+>  1 file changed, 10 insertions(+), 10 deletions(-)
 > 
-> diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-> index 57ef4fce1186..efb39172b20f 100644
-> --- a/drivers/media/v4l2-core/v4l2-subdev.c
-> +++ b/drivers/media/v4l2-core/v4l2-subdev.c
-> @@ -1524,6 +1524,108 @@ void v4l2_subdev_cleanup(struct v4l2_subdev *sd)
->  }
->  EXPORT_SYMBOL_GPL(v4l2_subdev_cleanup);
->  
-> +struct v4l2_mbus_framefmt *
-> +__v4l2_subdev_state_get_format(struct v4l2_subdev_state *state,
-> +			       unsigned int pad, u32 stream)
-> +{
-> +	struct v4l2_subdev_stream_configs *stream_configs;
-> +	unsigned int i;
-> +
-> +	if (WARN_ON_ONCE(!state))
-> +		return NULL;
-> +
-> +	if (state->pads) {
-> +		if (stream)
-> +			return NULL;
-> +
-> +		if (pad >= state->sd->entity.num_pads)
-> +			return NULL;
-> +
-> +		return &state->pads[pad].format;
-> +	}
-> +
-> +	lockdep_assert_held(state->lock);
-> +
-> +	stream_configs = &state->stream_configs;
-> +
-> +	for (i = 0; i < stream_configs->num_configs; ++i) {
-> +		if (stream_configs->configs[i].pad == pad &&
-> +		    stream_configs->configs[i].stream == stream)
-> +			return &stream_configs->configs[i].fmt;
-> +	}
-> +
-> +	return NULL;
-> +}
-> +EXPORT_SYMBOL_GPL(__v4l2_subdev_state_get_format);
-> +
-> +struct v4l2_rect *
-> +__v4l2_subdev_state_get_crop(struct v4l2_subdev_state *state, unsigned int pad,
-> +			     u32 stream)
-> +{
-> +	struct v4l2_subdev_stream_configs *stream_configs;
-> +	unsigned int i;
-> +
-> +	if (WARN_ON_ONCE(!state))
-> +		return NULL;
-> +
-> +	if (state->pads) {
-> +		if (stream)
-> +			return NULL;
-> +
-> +		if (pad >= state->sd->entity.num_pads)
-> +			return NULL;
-> +
-> +		return &state->pads[pad].crop;
-> +	}
-> +
-> +	lockdep_assert_held(state->lock);
-> +
-> +	stream_configs = &state->stream_configs;
-> +
-> +	for (i = 0; i < stream_configs->num_configs; ++i) {
-> +		if (stream_configs->configs[i].pad == pad &&
-> +		    stream_configs->configs[i].stream == stream)
-> +			return &stream_configs->configs[i].crop;
-> +	}
-> +
-> +	return NULL;
-> +}
-> +EXPORT_SYMBOL_GPL(__v4l2_subdev_state_get_crop);
-> +
-> +struct v4l2_rect *
-> +__v4l2_subdev_state_get_compose(struct v4l2_subdev_state *state,
-> +				unsigned int pad, u32 stream)
-> +{
-> +	struct v4l2_subdev_stream_configs *stream_configs;
-> +	unsigned int i;
-> +
-> +	if (WARN_ON_ONCE(!state))
-> +		return NULL;
-> +
-> +	if (state->pads) {
-> +		if (stream)
-> +			return NULL;
-> +
-> +		if (pad >= state->sd->entity.num_pads)
-> +			return NULL;
-> +
-> +		return &state->pads[pad].compose;
-> +	}
-> +
-> +	lockdep_assert_held(state->lock);
-> +
-> +	stream_configs = &state->stream_configs;
-> +
-> +	for (i = 0; i < stream_configs->num_configs; ++i) {
-> +		if (stream_configs->configs[i].pad == pad &&
-> +		    stream_configs->configs[i].stream == stream)
-> +			return &stream_configs->configs[i].compose;
-> +	}
-> +
-> +	return NULL;
-> +}
-> +EXPORT_SYMBOL_GPL(__v4l2_subdev_state_get_compose);
-> +
->  #if defined(CONFIG_VIDEO_V4L2_SUBDEV_API)
->  
->  static int
-> @@ -1670,108 +1772,6 @@ int v4l2_subdev_set_routing_with_fmt(struct v4l2_subdev *sd,
->  }
->  EXPORT_SYMBOL_GPL(v4l2_subdev_set_routing_with_fmt);
->  
-> -struct v4l2_mbus_framefmt *
-> -__v4l2_subdev_state_get_format(struct v4l2_subdev_state *state,
-> -			       unsigned int pad, u32 stream)
-> -{
-> -	struct v4l2_subdev_stream_configs *stream_configs;
-> -	unsigned int i;
-> -
-> -	if (WARN_ON_ONCE(!state))
-> -		return NULL;
-> -
-> -	if (state->pads) {
-> -		if (stream)
-> -			return NULL;
-> -
-> -		if (pad >= state->sd->entity.num_pads)
-> -			return NULL;
-> -
-> -		return &state->pads[pad].format;
-> -	}
-> -
-> -	lockdep_assert_held(state->lock);
-> -
-> -	stream_configs = &state->stream_configs;
-> -
-> -	for (i = 0; i < stream_configs->num_configs; ++i) {
-> -		if (stream_configs->configs[i].pad == pad &&
-> -		    stream_configs->configs[i].stream == stream)
-> -			return &stream_configs->configs[i].fmt;
-> -	}
-> -
-> -	return NULL;
-> -}
-> -EXPORT_SYMBOL_GPL(__v4l2_subdev_state_get_format);
-> -
-> -struct v4l2_rect *
-> -__v4l2_subdev_state_get_crop(struct v4l2_subdev_state *state, unsigned int pad,
-> -			     u32 stream)
-> -{
-> -	struct v4l2_subdev_stream_configs *stream_configs;
-> -	unsigned int i;
-> -
-> -	if (WARN_ON_ONCE(!state))
-> -		return NULL;
-> -
-> -	if (state->pads) {
-> -		if (stream)
-> -			return NULL;
-> -
-> -		if (pad >= state->sd->entity.num_pads)
-> -			return NULL;
-> -
-> -		return &state->pads[pad].crop;
-> -	}
-> -
-> -	lockdep_assert_held(state->lock);
-> -
-> -	stream_configs = &state->stream_configs;
-> -
-> -	for (i = 0; i < stream_configs->num_configs; ++i) {
-> -		if (stream_configs->configs[i].pad == pad &&
-> -		    stream_configs->configs[i].stream == stream)
-> -			return &stream_configs->configs[i].crop;
-> -	}
-> -
-> -	return NULL;
-> -}
-> -EXPORT_SYMBOL_GPL(__v4l2_subdev_state_get_crop);
-> -
-> -struct v4l2_rect *
-> -__v4l2_subdev_state_get_compose(struct v4l2_subdev_state *state,
-> -				unsigned int pad, u32 stream)
-> -{
-> -	struct v4l2_subdev_stream_configs *stream_configs;
-> -	unsigned int i;
-> -
-> -	if (WARN_ON_ONCE(!state))
-> -		return NULL;
-> -
-> -	if (state->pads) {
-> -		if (stream)
-> -			return NULL;
-> -
-> -		if (pad >= state->sd->entity.num_pads)
-> -			return NULL;
-> -
-> -		return &state->pads[pad].compose;
-> -	}
-> -
-> -	lockdep_assert_held(state->lock);
-> -
-> -	stream_configs = &state->stream_configs;
-> -
-> -	for (i = 0; i < stream_configs->num_configs; ++i) {
-> -		if (stream_configs->configs[i].pad == pad &&
-> -		    stream_configs->configs[i].stream == stream)
-> -			return &stream_configs->configs[i].compose;
-> -	}
-> -
-> -	return NULL;
-> -}
-> -EXPORT_SYMBOL_GPL(__v4l2_subdev_state_get_compose);
-> -
->  int v4l2_subdev_routing_find_opposite_end(const struct v4l2_subdev_krouting *routing,
->  					  u32 pad, u32 stream, u32 *other_pad,
->  					  u32 *other_stream)
-> diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-> index b1bad946d813..33c8e5c93a3d 100644
-> --- a/include/media/v4l2-subdev.h
-> +++ b/include/media/v4l2-subdev.h
-> @@ -1393,70 +1393,6 @@ v4l2_subdev_lock_and_get_active_state(struct v4l2_subdev *sd)
->  	return sd->active_state;
+> diff --git a/drivers/media/i2c/ccs/ccs-reg-access.c b/drivers/media/i2c/ccs/ccs-reg-access.c
+> index 25993445f4fe..652d705a2ef5 100644
+> --- a/drivers/media/i2c/ccs/ccs-reg-access.c
+> +++ b/drivers/media/i2c/ccs/ccs-reg-access.c
+> @@ -197,8 +197,8 @@ static int __ccs_read_addr(struct ccs_sensor *sensor, u32 reg, u32 *val,
+>  	return 0;
 >  }
 >  
-> -#if defined(CONFIG_VIDEO_V4L2_SUBDEV_API)
-> -
-> -/**
-> - * v4l2_subdev_get_fmt() - Fill format based on state
-> - * @sd: subdevice
-> - * @state: subdevice state
-> - * @format: pointer to &struct v4l2_subdev_format
-> - *
-> - * Fill @format->format field based on the information in the @format struct.
-> - *
-> - * This function can be used by the subdev drivers which support active state to
-> - * implement v4l2_subdev_pad_ops.get_fmt if the subdev driver does not need to
-> - * do anything special in their get_fmt op.
-> - *
-> - * Returns 0 on success, error value otherwise.
-> - */
-> -int v4l2_subdev_get_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_state *state,
-> -			struct v4l2_subdev_format *format);
-> -
-> -/**
-> - * v4l2_subdev_set_routing() - Set given routing to subdev state
-> - * @sd: The subdevice
-> - * @state: The subdevice state
-> - * @routing: Routing that will be copied to subdev state
-> - *
-> - * This will release old routing table (if any) from the state, allocate
-> - * enough space for the given routing, and copy the routing.
-> - *
-> - * This can be used from the subdev driver's set_routing op, after validating
-> - * the routing.
-> - */
-> -int v4l2_subdev_set_routing(struct v4l2_subdev *sd,
-> -			    struct v4l2_subdev_state *state,
-> -			    const struct v4l2_subdev_krouting *routing);
-> -
-> -struct v4l2_subdev_route *
-> -__v4l2_subdev_next_active_route(const struct v4l2_subdev_krouting *routing,
-> -				struct v4l2_subdev_route *route);
-> -
-> -/**
-> - * for_each_active_route - iterate on all active routes of a routing table
-> - * @routing: The routing table
-> - * @route: The route iterator
-> - */
-> -#define for_each_active_route(routing, route) \
-> -	for ((route) = NULL;                  \
-> -	     ((route) = __v4l2_subdev_next_active_route((routing), (route)));)
-> -
-> -/**
-> - * v4l2_subdev_set_routing_with_fmt() - Set given routing and format to subdev
-> - *					state
-> - * @sd: The subdevice
-> - * @state: The subdevice state
-> - * @routing: Routing that will be copied to subdev state
-> - * @fmt: Format used to initialize all the streams
-> - *
-> - * This is the same as v4l2_subdev_set_routing, but additionally initializes
-> - * all the streams using the given format.
-> - */
-> -int v4l2_subdev_set_routing_with_fmt(struct v4l2_subdev *sd,
-> -				     struct v4l2_subdev_state *state,
-> -				     const struct v4l2_subdev_krouting *routing,
-> -				     const struct v4l2_mbus_framefmt *fmt);
-> -
->  /*
->   * A macro to generate the macro or function name for sub-devices state access
->   * wrapper macros below.
-> @@ -1533,6 +1469,70 @@ struct v4l2_rect *
->  __v4l2_subdev_state_get_compose(struct v4l2_subdev_state *state,
->  				unsigned int pad, u32 stream);
+> -static int __ccs_read_data(struct ccs_reg *regs, size_t num_regs,
+> -			   u32 reg, u32 *val)
+> +static int __ccs_static_read_only(struct ccs_reg *regs, size_t num_regs,
+> +				  u32 reg, u32 *val)
+>  {
+>  	unsigned int width = ccs_reg_width(reg);
+>  	size_t i;
+> @@ -235,16 +235,16 @@ static int __ccs_read_data(struct ccs_reg *regs, size_t num_regs,
+>  	return -ENOENT;
+>  }
 >  
-> +#if defined(CONFIG_VIDEO_V4L2_SUBDEV_API)
-> +
-> +/**
-> + * v4l2_subdev_get_fmt() - Fill format based on state
-> + * @sd: subdevice
-> + * @state: subdevice state
-> + * @format: pointer to &struct v4l2_subdev_format
-> + *
-> + * Fill @format->format field based on the information in the @format struct.
-> + *
-> + * This function can be used by the subdev drivers which support active state to
-> + * implement v4l2_subdev_pad_ops.get_fmt if the subdev driver does not need to
-> + * do anything special in their get_fmt op.
-> + *
-> + * Returns 0 on success, error value otherwise.
-> + */
-> +int v4l2_subdev_get_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_state *state,
-> +			struct v4l2_subdev_format *format);
-> +
-> +/**
-> + * v4l2_subdev_set_routing() - Set given routing to subdev state
-> + * @sd: The subdevice
-> + * @state: The subdevice state
-> + * @routing: Routing that will be copied to subdev state
-> + *
-> + * This will release old routing table (if any) from the state, allocate
-> + * enough space for the given routing, and copy the routing.
-> + *
-> + * This can be used from the subdev driver's set_routing op, after validating
-> + * the routing.
-> + */
-> +int v4l2_subdev_set_routing(struct v4l2_subdev *sd,
-> +			    struct v4l2_subdev_state *state,
-> +			    const struct v4l2_subdev_krouting *routing);
-> +
-> +struct v4l2_subdev_route *
-> +__v4l2_subdev_next_active_route(const struct v4l2_subdev_krouting *routing,
-> +				struct v4l2_subdev_route *route);
-> +
-> +/**
-> + * for_each_active_route - iterate on all active routes of a routing table
-> + * @routing: The routing table
-> + * @route: The route iterator
-> + */
-> +#define for_each_active_route(routing, route) \
-> +	for ((route) = NULL;                  \
-> +	     ((route) = __v4l2_subdev_next_active_route((routing), (route)));)
-> +
-> +/**
-> + * v4l2_subdev_set_routing_with_fmt() - Set given routing and format to subdev
-> + *					state
-> + * @sd: The subdevice
-> + * @state: The subdevice state
-> + * @routing: Routing that will be copied to subdev state
-> + * @fmt: Format used to initialize all the streams
-> + *
-> + * This is the same as v4l2_subdev_set_routing, but additionally initializes
-> + * all the streams using the given format.
-> + */
-> +int v4l2_subdev_set_routing_with_fmt(struct v4l2_subdev *sd,
-> +				     struct v4l2_subdev_state *state,
-> +				     const struct v4l2_subdev_krouting *routing,
-> +				     const struct v4l2_mbus_framefmt *fmt);
-> +
->  /**
->   * v4l2_subdev_routing_find_opposite_end() - Find the opposite stream
->   * @routing: routing used to find the opposite side
+> -static int ccs_read_data(struct ccs_sensor *sensor, u32 reg, u32 *val)
+> +static int ccs_static_read_only(struct ccs_sensor *sensor, u32 reg, u32 *val)
+>  {
+> -	if (!__ccs_read_data(sensor->sdata.sensor_read_only_regs,
+> -			     sensor->sdata.num_sensor_read_only_regs,
+> -			     reg, val))
+> +	if (!__ccs_static_read_only(sensor->sdata.sensor_read_only_regs,
+> +				    sensor->sdata.num_sensor_read_only_regs,
+> +				    reg, val))
+>  		return 0;
+>  
+> -	return __ccs_read_data(sensor->mdata.module_read_only_regs,
+> -			       sensor->mdata.num_module_read_only_regs,
+> -			       reg, val);
+> +	return __ccs_static_read_only(sensor->mdata.module_read_only_regs,
+> +				      sensor->mdata.num_module_read_only_regs,
+> +				      reg, val);
+>  }
+>  
+>  static int ccs_read_addr_raw(struct ccs_sensor *sensor, u32 reg, u32 *val,
+> @@ -253,7 +253,7 @@ static int ccs_read_addr_raw(struct ccs_sensor *sensor, u32 reg, u32 *val,
+>  	int rval;
+>  
+>  	if (data) {
+> -		rval = ccs_read_data(sensor, reg, val);
+> +		rval = ccs_static_read_only(sensor, reg, val);
+>  		if (!rval)
+>  			return 0;
+>  	}
 
 -- 
 Regards,
