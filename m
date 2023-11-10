@@ -1,122 +1,125 @@
-Return-Path: <linux-media+bounces-7-linux-media=archiver.kernel.org@vger.kernel.org>
+Return-Path: <linux-media+bounces-8-linux-media=archiver.kernel.org@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E14FC4167D
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:47:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23FA3C4332F
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:47:23 +0000 (UTC)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9AAB2815D1
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:47:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D3C56281641
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:47:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BB183A278;
-	Fri, 10 Nov 2023 17:46:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C3813AC03;
+	Fri, 10 Nov 2023 17:46:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="FDbLf3FG"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Kf3FKP18"
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BCC538DD4
-	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 17:46:32 +0000 (UTC)
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66CA228B0D
-	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 02:23:38 -0800 (PST)
-Received: by mail-qk1-x72b.google.com with SMTP id af79cd13be357-77896da2118so121652685a.1
-        for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 02:23:38 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FC6938F95
+	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 17:46:33 +0000 (UTC)
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D30824A
+	for <linux-media@vger.kernel.org>; Thu,  9 Nov 2023 22:58:21 -0800 (PST)
+Received: by mail-qv1-xf35.google.com with SMTP id 6a1803df08f44-66d0f945893so14859026d6.1
+        for <linux-media@vger.kernel.org>; Thu, 09 Nov 2023 22:58:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1699611817; x=1700216617; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5QkwWxIGEOurCFKWXSk9BruqjsYwly8P0Gesk2pyj0w=;
-        b=FDbLf3FGnVdR5E/WsV1HMu8xWevptE7QKJlGsykZ09rn3SvTaxJxv1ffFcU5F/guAs
-         uAi5Ixgkj6pHoIQs6XoI/XqFm0MwEQfa8HtgFu1Dl/xq+XYln3+uyd7FkUUu9cgqCNvZ
-         PktFJcgDzFg7Ac+ICAaNYHKt7wJbIM5UzwHvA=
+        d=google.com; s=20230601; t=1699599500; x=1700204300; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eHJDdNWZZ4tIwkHZEN1gC9OcT0HCJr1RVppBH6tmUws=;
+        b=Kf3FKP18Bm0Yb7Xx4LgvPTtwficvBa29fHkd1dnD386Ec+Y62XbDQcXWhYzOxV9zte
+         +VTEFUqaMHD35K1HZNbFBxPLqryOo/BI4YQGh4iKs42mdOsrf3KRve6NGV8StGgiFn6r
+         sns8S8ioBsvBYZyH2Fx0CSs27gMH1sAZD9hYYoVE7ztjpBdfJnX2I3m4eXuGOih62XA5
+         qmaQ4lNnCYEG2+tVOFupddghY8LGh5tFcuk42cfHqqoS4MyPf8KwDtcVvh+LfhIqPp9Q
+         glWScSAy5mihFhac2Yd4zMhfrFXSCjcfGmyoGdFkT1qbFubTErKfdBBswdgY+/P7lEae
+         9iag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699611817; x=1700216617;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5QkwWxIGEOurCFKWXSk9BruqjsYwly8P0Gesk2pyj0w=;
-        b=F8crktQHeMrAhB/gCiDV88fRoZP7Q4s8ehvX7G31RKzF3mf3vnYzgJ9Qlboy6/ooIB
-         iNf34GcqquOAygLE6i54fC/7EwAYNGDda/vxgcRwfmNic1bjunkooibA+Z7+IIfjplIP
-         QqKuFuAJ1pir7fLSXlvrVvOZM5v+iXzdmMABrG/yoHa3auor8jpOip/bmsAYYxxNjY9t
-         BwEsgw0fvGUJKLbm1UTBU+MvbifjxKvo2ZsSMkZmbVgke6VF1iWFRk5xzZrcFVxuvMAE
-         8eh98Fo7GCXSErDPq/r6kQ65bHdhCFbrgzJaO8ZluW7jG50EgWZv0q+BUUMOab75TdP9
-         ZmJA==
-X-Gm-Message-State: AOJu0YxbNgj8x9FnIkL5o05KAXwsAi02gOnfH395qLptmt9+Wtaz5ojb
-	8Kct9Z6H2hF3aAUZB5FJS/yo0JPxbNKKYaG3STFLwQ==
-X-Google-Smtp-Source: AGHT+IGQ9U8RWouyGc/Gq9CBEN00/JgF8M7tx+rKxdF9hnBEl/NPClBKjJqf5nwZ8XI9E7NwwJcrqg==
-X-Received: by 2002:a05:620a:3945:b0:775:446b:85fa with SMTP id qs5-20020a05620a394500b00775446b85famr2255135qkn.3.1699611816963;
-        Fri, 10 Nov 2023 02:23:36 -0800 (PST)
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com. [209.85.219.45])
-        by smtp.gmail.com with ESMTPSA id pb6-20020a05620a838600b0076f12fcb0easm605092qkn.2.2023.11.10.02.23.36
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Nov 2023 02:23:36 -0800 (PST)
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-6779fe2b7c6so4055046d6.0
-        for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 02:23:36 -0800 (PST)
-X-Received: by 2002:a05:6214:2a4b:b0:66d:1f29:3ea8 with SMTP id
- jf11-20020a0562142a4b00b0066d1f293ea8mr8383989qvb.57.1699611815808; Fri, 10
- Nov 2023 02:23:35 -0800 (PST)
+        d=1e100.net; s=20230601; t=1699599500; x=1700204300;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eHJDdNWZZ4tIwkHZEN1gC9OcT0HCJr1RVppBH6tmUws=;
+        b=rKltsnuUqI/BhHJhxV+4+8uPkwOsg7fLi5rsAxuLI5xO8AqLZLEeoXPrkqZD4WkmMF
+         Ue0uGHp/79h0cDlS84WxeQ6Lu1mEIXMobXlBdoen/5sj9yNoBbLa48JDltTbIRZCLFXk
+         W5OPZOTaSSmUL4d9c4FCbZz7A+hyQuIpUr6G40mjFOkWL1Edh+tzQdIyBMHe0mm+rid/
+         kznge9+9F5/GhVPQBT1iEqWgLiFB+GzaLdp8FS/bct6rKFJk81hqq4eo8BohZ8tY9KuU
+         bm30EtdW8tDZcIh26mzv82LavysAFphzQkPmnDqeUijp0sx1yUWbrygy6NgD/4tdJsZ7
+         7dQg==
+X-Gm-Message-State: AOJu0Yzyp5uTKWz0LKAyshoQJUZ4ROZY3QS5g1X4v8cLQXjFxTX0Od8B
+	4T3uHs49SqEaT/8+Jkx0pJB+8a6X4eMGaJa90Fsh1zXHh1A1HEGWouA=
+X-Google-Smtp-Source: AGHT+IHV8+0MFbC/VQpqHkvElGy/RL/z/ISeA+lbF9gB7A+2xFrkzHZehvrtNrke+02jjGbQaJXjvKRk/eDFLYB8QzU=
+X-Received: by 2002:a05:6102:3d8b:b0:44d:38d6:5cb8 with SMTP id
+ h11-20020a0561023d8b00b0044d38d65cb8mr631035vsv.10.1699589171185; Thu, 09 Nov
+ 2023 20:06:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20220920-resend-hwtimestamp-v7-0-cf1d78bb8821@chromium.org>
- <CANiDSCtC2zOKtopkuuqJYqi6+FQ1Kav6LfMH5gGhKrnDeG7GYw@mail.gmail.com> <CANiDSCteBUraA0UrLM-cU_GqDSWcWERJNV_xhsi3LNQZNvX5dA@mail.gmail.com>
-In-Reply-To: <CANiDSCteBUraA0UrLM-cU_GqDSWcWERJNV_xhsi3LNQZNvX5dA@mail.gmail.com>
-From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Fri, 10 Nov 2023 11:23:24 +0100
-X-Gmail-Original-Message-ID: <CANiDSCu9Ca_rxhu=KJb6q2=UPcUjXu8VchLNHTjquCj5qf7rTw@mail.gmail.com>
-Message-ID: <CANiDSCu9Ca_rxhu=KJb6q2=UPcUjXu8VchLNHTjquCj5qf7rTw@mail.gmail.com>
-Subject: Re: [PATCH v7 0/6] uvcvideo: Fixes for hw timestamping
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Hans Verkuil <hverkuil@xs4all.nl>, 
-	Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	Sergey Senozhatsky <senozhatsky@chromium.org>, "hn.chen" <hn.chen@sunplusit.com>
+References: <20231106024413.2801438-1-almasrymina@google.com>
+ <20231106024413.2801438-9-almasrymina@google.com> <adde2b31fdd9e7bb4a09f0073580b840bea0bab1.camel@redhat.com>
+In-Reply-To: <adde2b31fdd9e7bb4a09f0073580b840bea0bab1.camel@redhat.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Thu, 9 Nov 2023 20:06:00 -0800
+Message-ID: <CAHS8izMrJVb0ESjFhqUWuxdZ8W5HDmg=yRj1J1sTeGoQjDcJog@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 08/12] net: support non paged skb frags
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linaro-mm-sig@lists.linaro.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, 
+	Arnd Bergmann <arnd@arndb.de>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Shakeel Butt <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi
+On Thu, Nov 9, 2023 at 1:15=E2=80=AFAM Paolo Abeni <pabeni@redhat.com> wrot=
+e:
+>
+> On Sun, 2023-11-05 at 18:44 -0800, Mina Almasry wrote:
+> [...]
+> > @@ -3421,7 +3446,7 @@ static inline struct page *skb_frag_page(const sk=
+b_frag_t *frag)
+> >   */
+> >  static inline void __skb_frag_ref(skb_frag_t *frag)
+> >  {
+> > -     get_page(skb_frag_page(frag));
+> > +     page_pool_page_get_many(frag->bv_page, 1);
+>
+> I guess the above needs #ifdef CONFIG_PAGE_POOL guards and explicit
+> skb_frag_is_page_pool_iov() check ?
+>
 
-Another friendly bi-monthly ping on this ...
+It doesn't actually. page_pool_page_* helpers are compiled in
+regardless of CONFIG_PAGE_POOL, and handle both page_pool_iov* & page*
+just fine (the checking happens inside the function).
 
-Regards!
+You may yell at me that it's too confusing... I somewhat agree, but
+I'm unsure of what is a better name or location for the helpers. The
+helpers handle (page_pool_iov* || page*) gracefully, so they seem to
+belong in the page pool for me, but it is indeed surprising/confusing
+that these helpers are available even if !CONFIG_PAGE_POOL.
 
-On Mon, 4 Sept 2023 at 13:55, Ricardo Ribalda <ribalda@chromium.org> wrote:
 >
-> Hi Again
+> Cheers,
 >
-> This has been waiting from March, and it has been already been
->
-> Reviewed-by: Sergey
-> and
-> Tested-by: Sunplus
->
-> Is there something that I can do to help merging this patchset?
->
-> Thanks!
->
-> On Tue, 15 Aug 2023 at 13:26, Ricardo Ribalda <ribalda@chromium.org> wrote:
-> >
-> > Hi Laurent
-> >
-> > Could you give a look to this patchset?
-> >
-> > Thanks!
+> Paolo
 >
 >
->
-> --
-> Ricardo Ribalda
 
 
-
--- 
-Ricardo Ribalda
+--=20
+Thanks,
+Mina
 
