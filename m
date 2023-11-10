@@ -1,120 +1,165 @@
-Return-Path: <linux-media+bounces-55-linux-media=archiver.kernel.org@vger.kernel.org>
+Return-Path: <linux-media+bounces-56-linux-media=archiver.kernel.org@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAAB4C4167D
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:50:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6640C4332F
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:50:41 +0000 (UTC)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88600280DE6
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:50:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3BE49B22809
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:50:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C0B93E484;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C78F23E48A;
 	Fri, 10 Nov 2023 17:47:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="mIP+a2PT"
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A091E3D989
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 680EE3D986
 	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 17:47:08 +0000 (UTC)
-Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19D1728A;
-	Thu,  9 Nov 2023 22:28:00 -0800 (PST)
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 8295F201C42;
-	Fri, 10 Nov 2023 07:27:59 +0100 (CET)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 48FA8201C4C;
-	Fri, 10 Nov 2023 07:27:59 +0100 (CET)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 2E244183AD46;
-	Fri, 10 Nov 2023 14:27:57 +0800 (+08)
-From: Shengjiu Wang <shengjiu.wang@nxp.com>
-To: hverkuil@xs4all.nl,
-	sakari.ailus@iki.fi,
-	tfiga@chromium.org,
-	m.szyprowski@samsung.com,
-	mchehab@kernel.org,
-	linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	shengjiu.wang@gmail.com,
-	Xiubo.Lee@gmail.com,
-	festevam@gmail.com,
-	nicoleotsuka@gmail.com,
-	lgirdwood@gmail.com,
-	broonie@kernel.org,
-	perex@perex.cz,
-	tiwai@suse.com,
-	alsa-devel@alsa-project.org,
-	linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v9 05/15] ASoC: fsl_easrc: register m2m platform device
-Date: Fri, 10 Nov 2023 13:47:59 +0800
-Message-Id: <1699595289-25773-6-git-send-email-shengjiu.wang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1699595289-25773-1-git-send-email-shengjiu.wang@nxp.com>
-References: <1699595289-25773-1-git-send-email-shengjiu.wang@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A7A9EEA;
+	Fri, 10 Nov 2023 00:33:37 -0800 (PST)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id ECCC7FF816;
+	Fri, 10 Nov 2023 08:33:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1699605215;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gB43CUZmJbt1uK77TzguVku9sEfalDL3rG9/cdJIn2s=;
+	b=mIP+a2PTDV/8iO84GywCAxWKSOAkV4Tz75EPrMTwnlyaXLCJYGq6wwTCzMfE0De3jpru4+
+	SDdBoEdhZf0y3H5qhE55wxVmj7oT15D8MklPT8f9UQ38BFsbnaGPRxKPCEH23WKxIGZ6j7
+	kAWx1QrpPFF6FUaJoSTTFYLSN/k8t9PIAKgaWdojBX4U16/csE2Qa3OiKPWjqa4G7eASbV
+	QBaYcnJAnwNnruhSAuDzfiIdt/oB0Co4QCZyk0xCw7E5+ZLbilbNQ02liNpfVoFCCdw2xI
+	BCVs6rvkT4viovqOK7Kcq6HS0wTYqpNCzWlXC44PBNL6VrfRfdZxgOsMy4JkqQ==
+Date: Fri, 10 Nov 2023 09:33:31 +0100
+From: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Cc: linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+	Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sebastian Fricke <sebastian.fricke@collabora.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 3/4] media: verisilicon: Hook the (TRY_)DECODER_CMD
+ stateless ioctls
+Message-ID: <ZU3q2y_QA6Pznvtf@aptenodytes>
+References: <20231109201640.340556-1-paul.kocialkowski@bootlin.com>
+ <20231109201640.340556-3-paul.kocialkowski@bootlin.com>
+ <fd9ca918dcbc892169b9f0dae7d0de537f4035ed.camel@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="3MXm4gGfTLjHj6aB"
+Content-Disposition: inline
+In-Reply-To: <fd9ca918dcbc892169b9f0dae7d0de537f4035ed.camel@collabora.com>
+X-GND-Sasl: paul.kocialkowski@bootlin.com
 
-Register m2m platform device,that user can
-use M2M feature.
 
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
-Acked-by: Mark Brown <broonie@kernel.org>
----
- sound/soc/fsl/fsl_easrc.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+--3MXm4gGfTLjHj6aB
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/sound/soc/fsl/fsl_easrc.c b/sound/soc/fsl/fsl_easrc.c
-index 0b9f3df8efc2..07e7475db7f3 100644
---- a/sound/soc/fsl/fsl_easrc.c
-+++ b/sound/soc/fsl/fsl_easrc.c
-@@ -2075,6 +2075,7 @@ MODULE_DEVICE_TABLE(of, fsl_easrc_dt_ids);
- static int fsl_easrc_probe(struct platform_device *pdev)
- {
- 	struct fsl_easrc_priv *easrc_priv;
-+	struct fsl_asrc_m2m_pdata m2m_pdata;
- 	struct device *dev = &pdev->dev;
- 	struct fsl_asrc *easrc;
- 	struct resource *res;
-@@ -2190,11 +2191,29 @@ static int fsl_easrc_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
-+	m2m_pdata.asrc = easrc;
-+	m2m_pdata.fmt_in = FSL_EASRC_FORMATS;
-+	m2m_pdata.fmt_out = FSL_EASRC_FORMATS | SNDRV_PCM_FMTBIT_IEC958_SUBFRAME_LE;
-+	m2m_pdata.rate_min = 8000;
-+	m2m_pdata.rate_max = 768000;
-+	m2m_pdata.chan_min = 1;
-+	m2m_pdata.chan_max = 32;
-+	easrc->m2m_pdev = platform_device_register_data(&pdev->dev,
-+							M2M_DRV_NAME,
-+							PLATFORM_DEVID_AUTO,
-+							&m2m_pdata,
-+							sizeof(m2m_pdata));
-+
- 	return 0;
- }
- 
- static void fsl_easrc_remove(struct platform_device *pdev)
- {
-+	struct fsl_asrc *easrc = dev_get_drvdata(&pdev->dev);
-+
-+	if (easrc->m2m_pdev && !IS_ERR(easrc->m2m_pdev))
-+		platform_device_unregister(easrc->m2m_pdev);
-+
- 	pm_runtime_disable(&pdev->dev);
- }
- 
--- 
-2.34.1
+Hi Nicolas,
 
+On Thu 09 Nov 23, 16:38, Nicolas Dufresne wrote:
+> Le jeudi 09 novembre 2023 =C3=A0 21:16 +0100, Paul Kocialkowski a =C3=A9c=
+rit=C2=A0:
+> > The (TRY_)DECODER_CMD ioctls are used to support flushing when holding =
+capture
+> > buffers is supported. This is the case of this driver but the ioctls we=
+re never
+> > hooked to the ioctl ops.
+> >=20
+> > Add them to correctly support flushing.
+>=20
+> While this CMD looks useful on paper, we have had no use for it in any
+> open source user space. So with this in mind, shall we really enable it
+> ? How can we be sure that its actually working as intended ?
+
+Well I think it's part of the spec that it needs to be supportd.
+
+I must admit I have never used it in a real use case either, but it can be =
+fixed
+later (without changing the uAPI) if the implementation turns out to be
+malfunctioning.
+
+Cheers,
+
+Paul
+
+> > Fixes: 340ce50f75a6 ("media: hantro: Enable HOLD_CAPTURE_BUF for H.264")
+> > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > ---
+> >  drivers/media/platform/verisilicon/hantro_drv.c  | 2 ++
+> >  drivers/media/platform/verisilicon/hantro_v4l2.c | 3 +++
+> >  2 files changed, 5 insertions(+)
+> >=20
+> > diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/=
+media/platform/verisilicon/hantro_drv.c
+> > index a9fa05ac56a9..3a2a0f28cbfe 100644
+> > --- a/drivers/media/platform/verisilicon/hantro_drv.c
+> > +++ b/drivers/media/platform/verisilicon/hantro_drv.c
+> > @@ -905,6 +905,8 @@ static int hantro_add_func(struct hantro_dev *vpu, =
+unsigned int funcid)
+> > =20
+> >  	if (funcid =3D=3D MEDIA_ENT_F_PROC_VIDEO_ENCODER) {
+> >  		vpu->encoder =3D func;
+> > +		v4l2_disable_ioctl(vfd, VIDIOC_TRY_DECODER_CMD);
+> > +		v4l2_disable_ioctl(vfd, VIDIOC_DECODER_CMD);
+> >  	} else {
+> >  		vpu->decoder =3D func;
+> >  		v4l2_disable_ioctl(vfd, VIDIOC_TRY_ENCODER_CMD);
+> > diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers=
+/media/platform/verisilicon/hantro_v4l2.c
+> > index b3ae037a50f6..db145519fc5d 100644
+> > --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
+> > +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
+> > @@ -785,6 +785,9 @@ const struct v4l2_ioctl_ops hantro_ioctl_ops =3D {
+> >  	.vidioc_g_selection =3D vidioc_g_selection,
+> >  	.vidioc_s_selection =3D vidioc_s_selection,
+> > =20
+> > +	.vidioc_decoder_cmd =3D v4l2_m2m_ioctl_stateless_decoder_cmd,
+> > +	.vidioc_try_decoder_cmd =3D v4l2_m2m_ioctl_stateless_try_decoder_cmd,
+> > +
+> >  	.vidioc_try_encoder_cmd =3D v4l2_m2m_ioctl_try_encoder_cmd,
+> >  	.vidioc_encoder_cmd =3D vidioc_encoder_cmd,
+> >  };
+>=20
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--3MXm4gGfTLjHj6aB
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmVN6tsACgkQ3cLmz3+f
+v9GVsgf8DMLAlPBim8kfNcpPsxElmqMySid66bm7l6rB8E0DGEkIhTw6taMy9Ymh
+5auzxmmd70FN07tX+OIUj6Pmal3Cj89meSTs51d08lSFQYJfhoQYbEQW1dt1sV+F
+T5CUni7z0F0oiWcCYDAwYcWoeB2FvUdzONn5eI++jJCwr4JQjnc1N1QoAFnhCjUe
+sx0VbiGR0kzbzAkMzn58RsignlPo4ogTCdUhabzlsc89nKWHxKdQZFlRvgqWC2Zy
+A1oHds2fjTEtUklvB9f8QwEaTTXqS1QtocDVXsCKe3Y6ye0atsjNCLpnPRNmP2ZP
+qbC23m0lvg48Zm78iBtBZK5KTgZD2A==
+=st8d
+-----END PGP SIGNATURE-----
+
+--3MXm4gGfTLjHj6aB--
 
