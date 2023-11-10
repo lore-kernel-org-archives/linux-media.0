@@ -1,587 +1,276 @@
-Return-Path: <linux-media+bounces-29-linux-media=archiver.kernel.org@vger.kernel.org>
+Return-Path: <linux-media+bounces-31-linux-media=archiver.kernel.org@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E2CAC4167D
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:48:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DE7CC4332F
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:48:48 +0000 (UTC)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C4AA1C20E9B
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:48:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6BB781C20EAF
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:48:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 339553C084;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABD873B2AB;
 	Fri, 10 Nov 2023 17:46:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="O5qOOfkb"
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB20C3AC21
-	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 17:46:41 +0000 (UTC)
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D177293;
-	Thu,  9 Nov 2023 22:28:04 -0800 (PST)
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 08BCB1A1C99;
-	Fri, 10 Nov 2023 07:28:03 +0100 (CET)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id A3D351A0C63;
-	Fri, 10 Nov 2023 07:28:02 +0100 (CET)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id AFA45183AD51;
-	Fri, 10 Nov 2023 14:28:00 +0800 (+08)
-From: Shengjiu Wang <shengjiu.wang@nxp.com>
-To: hverkuil@xs4all.nl,
-	sakari.ailus@iki.fi,
-	tfiga@chromium.org,
-	m.szyprowski@samsung.com,
-	mchehab@kernel.org,
-	linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	shengjiu.wang@gmail.com,
-	Xiubo.Lee@gmail.com,
-	festevam@gmail.com,
-	nicoleotsuka@gmail.com,
-	lgirdwood@gmail.com,
-	broonie@kernel.org,
-	perex@perex.cz,
-	tiwai@suse.com,
-	alsa-devel@alsa-project.org,
-	linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v9 07/15] media: v4l2: Add audio capture and output support
-Date: Fri, 10 Nov 2023 13:48:01 +0800
-Message-Id: <1699595289-25773-8-git-send-email-shengjiu.wang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1699595289-25773-1-git-send-email-shengjiu.wang@nxp.com>
-References: <1699595289-25773-1-git-send-email-shengjiu.wang@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A8CA38DCD
+	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 17:46:46 +0000 (UTC)
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF542B78C;
+	Fri, 10 Nov 2023 03:03:56 -0800 (PST)
+Received: from [100.116.125.19] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: andrzej.p)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id EC78B66073EB;
+	Fri, 10 Nov 2023 11:03:53 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1699614235;
+	bh=IlFF4hLVYQMy+8z6m7boQ1emEGxM3/fBp3D4sqFY4lo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=O5qOOfkbHwk1EQ79MoiHJUqkRlyLWF59KLiv1aw0WWhGJJ1igR1uGZtohHN0HL8fB
+	 EniGr8zsuLvPLB61+ZBiWTyoufc/iPdUzGCivPmO0wJQg2zbOSaWOxrH/gW78Rk3Zj
+	 e5xDfDQlYjYjwv7HFdNkzibpmDNwpytUEdRm0k2SaoeqmkgwSU0yg3rGvD7Z7YRoVT
+	 hWUmU1Q4jRrs0nZPeKgVlvBEXYF5XmUJIGWz1icdoLxp0zWngiwA/cASOsdqWlEdY7
+	 ZSCVe2KuerHlMq1X7IDv2CHnyq5W5Nqwb/9Br4x6doJqrNs0OlXEyJ54IQSUf2hOqh
+	 3rGPJxP7piJMg==
+Message-ID: <ca386f5c-34b2-4515-99ea-975b009b6628@collabora.com>
+Date: Fri, 10 Nov 2023 12:03:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v15 30/56] media: test-drivers: Stop direct calls to queue
+ num_buffers field
+To: Benjamin Gaignard <benjamin.gaignard@collabora.com>, mchehab@kernel.org,
+ tfiga@chromium.org, m.szyprowski@samsung.com, ming.qian@nxp.com,
+ ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+ gregkh@linuxfoundation.org, hverkuil-cisco@xs4all.nl,
+ nicolas.dufresne@collabora.com
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ linux-arm-msm@vger.kernel.org, linux-rockchip@lists.infradead.org,
+ linux-staging@lists.linux.dev, kernel@collabora.com,
+ Daniel Almeida <daniel.almeida@collabora.com>
+References: <20231109163512.179524-14-benjamin.gaignard@collabora.com>
+ <20231109163512.179524-31-benjamin.gaignard@collabora.com>
+ <0b79bb25-2e44-4a6d-b306-76477a2c8a08@collabora.com>
+ <84f22803-bd25-4985-a17c-b38bd738b487@collabora.com>
+Content-Language: en-US
+From: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+In-Reply-To: <84f22803-bd25-4985-a17c-b38bd738b487@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Audio signal processing has the requirement for memory to
-memory similar as Video.
+Hi Benjamin,
 
-This patch is to add this support in v4l2 framework, defined
-new buffer type V4L2_BUF_TYPE_AUDIO_CAPTURE and
-V4L2_BUF_TYPE_AUDIO_OUTPUT, defined new format v4l2_audio_format
-for audio case usage.
+W dniu 10.11.2023 o 10:55, Benjamin Gaignard pisze:
+> 
+> Le 10/11/2023 à 10:35, Andrzej Pietrasiewicz a écrit :
+>> Hi Benjamin,
+>>
+>> W dniu 9.11.2023 o 17:34, Benjamin Gaignard pisze:
+>>> Use vb2_get_num_buffers() to avoid using queue num_buffers field directly.
+>>> This allows us to change how the number of buffers is computed in the
+>>> future.
+>>> If 'min_buffers_needed' is set remove useless checks in queue setup
+>>> functions.
+>>>
+>>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+>>> CC: Daniel Almeida <daniel.almeida@collabora.com>
+>>> ---
+>>>   drivers/media/test-drivers/visl/visl-dec.c         | 4 ++--
+>>>   drivers/media/test-drivers/vivid/vivid-meta-cap.c  | 3 ---
+>>>   drivers/media/test-drivers/vivid/vivid-meta-out.c  | 5 +++--
+>>>   drivers/media/test-drivers/vivid/vivid-touch-cap.c | 5 +++--
+>>>   drivers/media/test-drivers/vivid/vivid-vbi-cap.c   | 3 ---
+>>>   drivers/media/test-drivers/vivid/vivid-vbi-out.c   | 3 ---
+>>>   drivers/media/test-drivers/vivid/vivid-vid-cap.c   | 3 ---
+>>>   drivers/media/test-drivers/vivid/vivid-vid-out.c   | 5 +----
+>>>   8 files changed, 9 insertions(+), 22 deletions(-)
+>>>
+>>> diff --git a/drivers/media/test-drivers/visl/visl-dec.c 
+>>> b/drivers/media/test-drivers/visl/visl-dec.c
+>>> index ba20ea998d19..4672dc5e52bb 100644
+>>> --- a/drivers/media/test-drivers/visl/visl-dec.c
+>>> +++ b/drivers/media/test-drivers/visl/visl-dec.c
+>>> @@ -287,7 +287,7 @@ static void visl_tpg_fill(struct visl_ctx *ctx, struct 
+>>> visl_run *run)
+>>>       frame_dprintk(ctx->dev, run->dst->sequence, "%s\n", buf);
+>>>         len = 0;
+>>> -    for (i = 0; i < out_q->num_buffers; i++) {
+>>> +    for (i = 0; i < vb2_get_num_buffers(out_q); i++) {
+>>>           char entry[] = "index: %u, state: %s, request_fd: %d, ";
+>>>           u32 old_len = len;
+>>>           struct vb2_buffer *vb2;
+>>> @@ -347,7 +347,7 @@ static void visl_tpg_fill(struct visl_ctx *ctx, struct 
+>>> visl_run *run)
+>>>       frame_dprintk(ctx->dev, run->dst->sequence, "%s\n", buf);
+>>>         len = 0;
+>>> -    for (i = 0; i < cap_q->num_buffers; i++) {
+>>> +    for (i = 0; i < vb2_get_num_buffers(cap_q); i++) {
+>>>           u32 old_len = len;
+>>>           struct vb2_buffer *vb2;
+>>>           char *q_status;
+>>> diff --git a/drivers/media/test-drivers/vivid/vivid-meta-cap.c 
+>>> b/drivers/media/test-drivers/vivid/vivid-meta-cap.c
+>>> index 780f96860a6d..0a718d037e59 100644
+>>> --- a/drivers/media/test-drivers/vivid/vivid-meta-cap.c
+>>> +++ b/drivers/media/test-drivers/vivid/vivid-meta-cap.c
+>>> @@ -30,9 +30,6 @@ static int meta_cap_queue_setup(struct vb2_queue *vq, 
+>>> unsigned int *nbuffers,
+>>>           sizes[0] = size;
+>>>       }
+>>>   -    if (vq->num_buffers + *nbuffers < 2)
+>>> -        *nbuffers = 2 - vq->num_buffers;
+>>> -
+>>>       *nplanes = 1;
+>>>       return 0;
+>>>   }
+>>> diff --git a/drivers/media/test-drivers/vivid/vivid-meta-out.c 
+>>> b/drivers/media/test-drivers/vivid/vivid-meta-out.c
+>>> index 95835b52b58f..4a569a6e58be 100644
+>>> --- a/drivers/media/test-drivers/vivid/vivid-meta-out.c
+>>> +++ b/drivers/media/test-drivers/vivid/vivid-meta-out.c
+>>> @@ -18,6 +18,7 @@ static int meta_out_queue_setup(struct vb2_queue *vq, 
+>>> unsigned int *nbuffers,
+>>>                   struct device *alloc_devs[])
+>>>   {
+>>>       struct vivid_dev *dev = vb2_get_drv_priv(vq);
+>>> +    unsigned int q_num_bufs = vb2_get_num_buffers(vq);
+>>>       unsigned int size =  sizeof(struct vivid_meta_out_buf);
+>>>         if (!vivid_is_webcam(dev))
+>>> @@ -30,8 +31,8 @@ static int meta_out_queue_setup(struct vb2_queue *vq, 
+>>> unsigned int *nbuffers,
+>>>           sizes[0] = size;
+>>>       }
+>>>   -    if (vq->num_buffers + *nbuffers < 2)
+>>> -        *nbuffers = 2 - vq->num_buffers;
+>>> +    if (q_num_bufs + *nbuffers < 2)
+>>> +        *nbuffers = 2 - q_num_bufs;
+>>>         *nplanes = 1;
+>>>       return 0;
+>>> diff --git a/drivers/media/test-drivers/vivid/vivid-touch-cap.c 
+>>> b/drivers/media/test-drivers/vivid/vivid-touch-cap.c
+>>> index c7f6e23df51e..4b3c6ea0afde 100644
+>>> --- a/drivers/media/test-drivers/vivid/vivid-touch-cap.c
+>>> +++ b/drivers/media/test-drivers/vivid/vivid-touch-cap.c
+>>> @@ -13,6 +13,7 @@ static int touch_cap_queue_setup(struct vb2_queue *vq, 
+>>> unsigned int *nbuffers,
+>>>                    struct device *alloc_devs[])
+>>>   {
+>>>       struct vivid_dev *dev = vb2_get_drv_priv(vq);
+>>> +    unsigned int q_num_bufs = vb2_get_num_buffers(vq);
+>>>       struct v4l2_pix_format *f = &dev->tch_format;
+>>>       unsigned int size = f->sizeimage;
+>>>   @@ -23,8 +24,8 @@ static int touch_cap_queue_setup(struct vb2_queue *vq, 
+>>> unsigned int *nbuffers,
+>>>           sizes[0] = size;
+>>>       }
+>>>   -    if (vq->num_buffers + *nbuffers < 2)
+>>> -        *nbuffers = 2 - vq->num_buffers;
+>>> +    if (q_num_bufs + *nbuffers < 2)
+>>> +        *nbuffers = 2 - q_num_bufs;
+>>>         *nplanes = 1;
+>>>       return 0;
+>>> diff --git a/drivers/media/test-drivers/vivid/vivid-vbi-cap.c 
+>>> b/drivers/media/test-drivers/vivid/vivid-vbi-cap.c
+>>> index b65b02eeeb97..3840b3a664ac 100644
+>>> --- a/drivers/media/test-drivers/vivid/vivid-vbi-cap.c
+>>> +++ b/drivers/media/test-drivers/vivid/vivid-vbi-cap.c
+>>> @@ -134,9 +134,6 @@ static int vbi_cap_queue_setup(struct vb2_queue *vq,
+>>>         sizes[0] = size;
+>>>   -    if (vq->num_buffers + *nbuffers < 2)
+>>> -        *nbuffers = 2 - vq->num_buffers;
+>>> -
+>>>       *nplanes = 1;
+>>>       return 0;
+>>>   }
+>>> diff --git a/drivers/media/test-drivers/vivid/vivid-vbi-out.c 
+>>> b/drivers/media/test-drivers/vivid/vivid-vbi-out.c
+>>> index cd56476902a2..434a10676417 100644
+>>> --- a/drivers/media/test-drivers/vivid/vivid-vbi-out.c
+>>> +++ b/drivers/media/test-drivers/vivid/vivid-vbi-out.c
+>>> @@ -30,9 +30,6 @@ static int vbi_out_queue_setup(struct vb2_queue *vq,
+>>>         sizes[0] = size;
+>>>   -    if (vq->num_buffers + *nbuffers < 2)
+>>> -        *nbuffers = 2 - vq->num_buffers;
+>>> -
+>>>       *nplanes = 1;
+>>>       return 0;
+>>>   }
+>>> diff --git a/drivers/media/test-drivers/vivid/vivid-vid-cap.c 
+>>> b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
+>>> index 3a06df35a2d7..2804975fe278 100644
+>>> --- a/drivers/media/test-drivers/vivid/vivid-vid-cap.c
+>>> +++ b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
+>>> @@ -117,9 +117,6 @@ static int vid_cap_queue_setup(struct vb2_queue *vq,
+>>>                       dev->fmt_cap->data_offset[p];
+>>>       }
+>>>   -    if (vq->num_buffers + *nbuffers < 2)
+>>> -        *nbuffers = 2 - vq->num_buffers;
+>>> -
+>>>       *nplanes = buffers;
+>>>         dprintk(dev, 1, "%s: count=%d\n", __func__, *nbuffers);
+>>
+>> here the format specifier for "*nbuffers" is "%d"...
+>>
+>>> diff --git a/drivers/media/test-drivers/vivid/vivid-vid-out.c 
+>>> b/drivers/media/test-drivers/vivid/vivid-vid-out.c
+>>> index 184a6df2c29f..1653b2988f7e 100644
+>>> --- a/drivers/media/test-drivers/vivid/vivid-vid-out.c
+>>> +++ b/drivers/media/test-drivers/vivid/vivid-vid-out.c
+>>> @@ -73,12 +73,9 @@ static int vid_out_queue_setup(struct vb2_queue *vq,
+>>>                          vfmt->data_offset[p] : size;
+>>>       }
+>>>   -    if (vq->num_buffers + *nbuffers < 2)
+>>> -        *nbuffers = 2 - vq->num_buffers;
+>>> -
+>>>       *nplanes = planes;
+>>>   -    dprintk(dev, 1, "%s: count=%d\n", __func__, *nbuffers);
+>>> +    dprintk(dev, 1, "%s: count=%u\n", __func__, *nbuffers);
+>>
+>> ... but here you change it to "%u". Is there a reason for these two to be
+>> different? I didn't notice it in the previous version but now it stands out
+>> clearly. Probably you changed to %u because of the type returned by
+>> vb2_get_num_buffers(). And, actually, *nbuffers _is_ unsigned, too.
+> 
+> Like you said *nbuffers is unsigned so %u sound for me.
+> The goal of this patch was to avoid vq->num_buffers usage not to clean up all the
+> file.
+> That could be done in other patch since there is lot to do here.
+> 
 
-The created audio device is named "/dev/v4l-audioX".
+Arguably, if the purpose of this patch is to avoid using vq->num_buffers,
+the line we're discussing could be left unpatched, which minimizes the diffstat.
 
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
----
- .../userspace-api/media/v4l/buffer.rst        |  6 ++
- .../media/v4l/dev-audio-mem2mem.rst           | 71 +++++++++++++++++++
- .../userspace-api/media/v4l/devices.rst       |  1 +
- .../media/v4l/vidioc-enum-fmt.rst             |  2 +
- .../userspace-api/media/v4l/vidioc-g-fmt.rst  |  4 ++
- .../media/videodev2.h.rst.exceptions          |  2 +
- .../media/common/videobuf2/videobuf2-v4l2.c   |  4 ++
- drivers/media/v4l2-core/v4l2-dev.c            | 17 +++++
- drivers/media/v4l2-core/v4l2-ioctl.c          | 53 ++++++++++++++
- include/media/v4l2-dev.h                      |  2 +
- include/media/v4l2-ioctl.h                    | 34 +++++++++
- include/uapi/linux/videodev2.h                | 17 +++++
- 12 files changed, 213 insertions(+)
- create mode 100644 Documentation/userspace-api/media/v4l/dev-audio-mem2mem.rst
+Otherwise, you _are_ changing vid_cap_queue_setup() anyway.
 
-diff --git a/Documentation/userspace-api/media/v4l/buffer.rst b/Documentation/userspace-api/media/v4l/buffer.rst
-index 52bbee81c080..a3754ca6f0d6 100644
---- a/Documentation/userspace-api/media/v4l/buffer.rst
-+++ b/Documentation/userspace-api/media/v4l/buffer.rst
-@@ -438,6 +438,12 @@ enum v4l2_buf_type
-     * - ``V4L2_BUF_TYPE_META_OUTPUT``
-       - 14
-       - Buffer for metadata output, see :ref:`metadata`.
-+    * - ``V4L2_BUF_TYPE_AUDIO_CAPTURE``
-+      - 15
-+      - Buffer for audio capture, see :ref:`audio`.
-+    * - ``V4L2_BUF_TYPE_AUDIO_OUTPUT``
-+      - 16
-+      - Buffer for audio output, see :ref:`audio`.
- 
- 
- .. _buffer-flags:
-diff --git a/Documentation/userspace-api/media/v4l/dev-audio-mem2mem.rst b/Documentation/userspace-api/media/v4l/dev-audio-mem2mem.rst
-new file mode 100644
-index 000000000000..68faecfe3a02
---- /dev/null
-+++ b/Documentation/userspace-api/media/v4l/dev-audio-mem2mem.rst
-@@ -0,0 +1,71 @@
-+.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
-+
-+.. _audiomem2mem:
-+
-+********************************
-+Audio Memory-To-Memory Interface
-+********************************
-+
-+An audio memory-to-memory device can compress, decompress, transform, or
-+otherwise convert audio data from one format into another format, in memory.
-+Such memory-to-memory devices set the ``V4L2_CAP_AUDIO_M2M`` capability.
-+Examples of memory-to-memory devices are audio codecs, audio preprocessing,
-+audio postprocessing.
-+
-+A memory-to-memory audio node supports both output (sending audio frames from
-+memory to the hardware) and capture (receiving the processed audio frames
-+from the hardware into memory) stream I/O. An application will have to
-+setup the stream I/O for both sides and finally call
-+:ref:`VIDIOC_STREAMON <VIDIOC_STREAMON>` for both capture and output to
-+start the hardware.
-+
-+Memory-to-memory devices function as a shared resource: you can
-+open the audio node multiple times, each application setting up their
-+own properties that are local to the file handle, and each can use
-+it independently from the others. The driver will arbitrate access to
-+the hardware and reprogram it whenever another file handler gets access.
-+
-+Audio memory-to-memory devices are accessed through character device
-+special files named ``/dev/v4l-audio``
-+
-+Querying Capabilities
-+=====================
-+
-+Device nodes supporting the audio memory-to-memory interface set the
-+``V4L2_CAP_AUDIO_M2M`` flag in the ``device_caps`` field of the
-+:c:type:`v4l2_capability` structure returned by the :c:func:`VIDIOC_QUERYCAP`
-+ioctl.
-+
-+Data Format Negotiation
-+=======================
-+
-+The audio device uses the :ref:`format` ioctls to select the capture format.
-+The audio buffer content format is bound to that selected format. In addition
-+to the basic :ref:`format` ioctls, the :c:func:`VIDIOC_ENUM_FMT` ioctl must be
-+supported as well.
-+
-+To use the :ref:`format` ioctls applications set the ``type`` field of the
-+:c:type:`v4l2_format` structure to ``V4L2_BUF_TYPE_AUDIO_CAPTURE`` or to
-+``V4L2_BUF_TYPE_AUDIO_OUTPUT``. Both drivers and applications must set the
-+remainder of the :c:type:`v4l2_format` structure to 0.
-+
-+.. c:type:: v4l2_audio_format
-+
-+.. tabularcolumns:: |p{1.4cm}|p{2.4cm}|p{13.5cm}|
-+
-+.. flat-table:: struct v4l2_audio_format
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 1 2
-+
-+    * - __u32
-+      - ``pixelformat``
-+      - The sample format, set by the application. see :ref:`pixfmt-audio`
-+    * - __u32
-+      - ``channels``
-+      - The channel number, set by the application. channel number range is
-+        [1, 32].
-+    * - __u32
-+      - ``buffersize``
-+      - Maximum buffer size in bytes required for data. The value is set by the
-+        driver.
-diff --git a/Documentation/userspace-api/media/v4l/devices.rst b/Documentation/userspace-api/media/v4l/devices.rst
-index 8bfbad65a9d4..758bd90f1c26 100644
---- a/Documentation/userspace-api/media/v4l/devices.rst
-+++ b/Documentation/userspace-api/media/v4l/devices.rst
-@@ -24,3 +24,4 @@ Interfaces
-     dev-event
-     dev-subdev
-     dev-meta
-+    dev-audio-mem2mem
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst b/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
-index 000c154b0f98..42deb07f4ff4 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
-@@ -96,6 +96,8 @@ the ``mbus_code`` field is handled differently:
- 	``V4L2_BUF_TYPE_VIDEO_OVERLAY``,
- 	``V4L2_BUF_TYPE_SDR_CAPTURE``,
- 	``V4L2_BUF_TYPE_SDR_OUTPUT``,
-+	``V4L2_BUF_TYPE_AUDIO_CAPTURE``,
-+	``V4L2_BUF_TYPE_AUDIO_OUTPUT``,
- 	``V4L2_BUF_TYPE_META_CAPTURE`` and
- 	``V4L2_BUF_TYPE_META_OUTPUT``.
- 	See :c:type:`v4l2_buf_type`.
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-g-fmt.rst b/Documentation/userspace-api/media/v4l/vidioc-g-fmt.rst
-index 675c385e5aca..528fd9df41aa 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-g-fmt.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-g-fmt.rst
-@@ -130,6 +130,10 @@ The format as returned by :ref:`VIDIOC_TRY_FMT <VIDIOC_G_FMT>` must be identical
-       - ``meta``
-       - Definition of a metadata format, see :ref:`meta-formats`, used by
- 	metadata capture devices.
-+    * - struct :c:type:`v4l2_audio_format`
-+      - ``audio``
-+      - Definition of a audio data format, see :ref:`audiomem2mem`, used by
-+        audio memory-to-memory devices
-     * - __u8
-       - ``raw_data``\ [200]
-       - Place holder for future extensions.
-diff --git a/Documentation/userspace-api/media/videodev2.h.rst.exceptions b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-index da6d0b8e4c2c..e61152bb80d1 100644
---- a/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-+++ b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-@@ -29,6 +29,8 @@ replace symbol V4L2_FIELD_SEQ_TB :c:type:`v4l2_field`
- replace symbol V4L2_FIELD_TOP :c:type:`v4l2_field`
- 
- # Documented enum v4l2_buf_type
-+replace symbol V4L2_BUF_TYPE_AUDIO_CAPTURE :c:type:`v4l2_buf_type`
-+replace symbol V4L2_BUF_TYPE_AUDIO_OUTPUT :c:type:`v4l2_buf_type`
- replace symbol V4L2_BUF_TYPE_META_CAPTURE :c:type:`v4l2_buf_type`
- replace symbol V4L2_BUF_TYPE_META_OUTPUT :c:type:`v4l2_buf_type`
- replace symbol V4L2_BUF_TYPE_SDR_CAPTURE :c:type:`v4l2_buf_type`
-diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-index c7a54d82a55e..12f2be2773a2 100644
---- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
-+++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-@@ -785,6 +785,10 @@ int vb2_create_bufs(struct vb2_queue *q, struct v4l2_create_buffers *create)
- 	case V4L2_BUF_TYPE_META_OUTPUT:
- 		requested_sizes[0] = f->fmt.meta.buffersize;
- 		break;
-+	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
-+	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
-+		requested_sizes[0] = f->fmt.audio.buffersize;
-+		break;
- 	default:
- 		return -EINVAL;
- 	}
-diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
-index f81279492682..b92c760b611a 100644
---- a/drivers/media/v4l2-core/v4l2-dev.c
-+++ b/drivers/media/v4l2-core/v4l2-dev.c
-@@ -553,6 +553,7 @@ static void determine_valid_ioctls(struct video_device *vdev)
- 	bool is_tch = vdev->vfl_type == VFL_TYPE_TOUCH;
- 	bool is_meta = vdev->vfl_type == VFL_TYPE_VIDEO &&
- 		       (vdev->device_caps & meta_caps);
-+	bool is_audio = vdev->vfl_type == VFL_TYPE_AUDIO;
- 	bool is_rx = vdev->vfl_dir != VFL_DIR_TX;
- 	bool is_tx = vdev->vfl_dir != VFL_DIR_RX;
- 	bool is_io_mc = vdev->device_caps & V4L2_CAP_IO_MC;
-@@ -664,6 +665,19 @@ static void determine_valid_ioctls(struct video_device *vdev)
- 		SET_VALID_IOCTL(ops, VIDIOC_S_FMT, vidioc_s_fmt_meta_out);
- 		SET_VALID_IOCTL(ops, VIDIOC_TRY_FMT, vidioc_try_fmt_meta_out);
- 	}
-+	if (is_audio && is_rx) {
-+		/* audio capture specific ioctls */
-+		SET_VALID_IOCTL(ops, VIDIOC_ENUM_FMT, vidioc_enum_fmt_audio_cap);
-+		SET_VALID_IOCTL(ops, VIDIOC_G_FMT, vidioc_g_fmt_audio_cap);
-+		SET_VALID_IOCTL(ops, VIDIOC_S_FMT, vidioc_s_fmt_audio_cap);
-+		SET_VALID_IOCTL(ops, VIDIOC_TRY_FMT, vidioc_try_fmt_audio_cap);
-+	} else if (is_audio && is_tx) {
-+		/* audio output specific ioctls */
-+		SET_VALID_IOCTL(ops, VIDIOC_ENUM_FMT, vidioc_enum_fmt_audio_out);
-+		SET_VALID_IOCTL(ops, VIDIOC_G_FMT, vidioc_g_fmt_audio_out);
-+		SET_VALID_IOCTL(ops, VIDIOC_S_FMT, vidioc_s_fmt_audio_out);
-+		SET_VALID_IOCTL(ops, VIDIOC_TRY_FMT, vidioc_try_fmt_audio_out);
-+	}
- 	if (is_vbi) {
- 		/* vbi specific ioctls */
- 		if ((is_rx && (ops->vidioc_g_fmt_vbi_cap ||
-@@ -927,6 +941,9 @@ int __video_register_device(struct video_device *vdev,
- 	case VFL_TYPE_TOUCH:
- 		name_base = "v4l-touch";
- 		break;
-+	case VFL_TYPE_AUDIO:
-+		name_base = "v4l-audio";
-+		break;
- 	default:
- 		pr_err("%s called with unknown type: %d\n",
- 		       __func__, type);
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index 9b1de54ce379..1bb03794922a 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -188,6 +188,8 @@ const char *v4l2_type_names[] = {
- 	[V4L2_BUF_TYPE_SDR_OUTPUT]         = "sdr-out",
- 	[V4L2_BUF_TYPE_META_CAPTURE]       = "meta-cap",
- 	[V4L2_BUF_TYPE_META_OUTPUT]	   = "meta-out",
-+	[V4L2_BUF_TYPE_AUDIO_CAPTURE]      = "audio-cap",
-+	[V4L2_BUF_TYPE_AUDIO_OUTPUT]	   = "audio-out",
- };
- EXPORT_SYMBOL(v4l2_type_names);
- 
-@@ -276,6 +278,7 @@ static void v4l_print_format(const void *arg, bool write_only)
- 	const struct v4l2_sliced_vbi_format *sliced;
- 	const struct v4l2_window *win;
- 	const struct v4l2_meta_format *meta;
-+	const struct v4l2_audio_format *audio;
- 	u32 pixelformat;
- 	u32 planes;
- 	unsigned i;
-@@ -346,6 +349,13 @@ static void v4l_print_format(const void *arg, bool write_only)
- 		pr_cont(", dataformat=%p4cc, buffersize=%u\n",
- 			&pixelformat, meta->buffersize);
- 		break;
-+	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
-+	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
-+		audio = &p->fmt.audio;
-+		pixelformat = audio->audioformat;
-+		pr_cont(", format=%p4cc, channels=%u, buffersize=%u\n",
-+			&pixelformat, audio->channels, audio->buffersize);
-+		break;
- 	}
- }
- 
-@@ -927,6 +937,7 @@ static int check_fmt(struct file *file, enum v4l2_buf_type type)
- 	bool is_tch = vfd->vfl_type == VFL_TYPE_TOUCH;
- 	bool is_meta = vfd->vfl_type == VFL_TYPE_VIDEO &&
- 		       (vfd->device_caps & meta_caps);
-+	bool is_audio = vfd->vfl_type == VFL_TYPE_AUDIO;
- 	bool is_rx = vfd->vfl_dir != VFL_DIR_TX;
- 	bool is_tx = vfd->vfl_dir != VFL_DIR_RX;
- 
-@@ -992,6 +1003,14 @@ static int check_fmt(struct file *file, enum v4l2_buf_type type)
- 		if (is_meta && is_tx && ops->vidioc_g_fmt_meta_out)
- 			return 0;
- 		break;
-+	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
-+		if (is_audio && is_rx && ops->vidioc_g_fmt_audio_cap)
-+			return 0;
-+		break;
-+	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
-+		if (is_audio && is_tx && ops->vidioc_g_fmt_audio_out)
-+			return 0;
-+		break;
- 	default:
- 		break;
- 	}
-@@ -1597,6 +1616,16 @@ static int v4l_enum_fmt(const struct v4l2_ioctl_ops *ops,
- 			break;
- 		ret = ops->vidioc_enum_fmt_meta_out(file, fh, arg);
- 		break;
-+	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
-+		if (unlikely(!ops->vidioc_enum_fmt_audio_cap))
-+			break;
-+		ret = ops->vidioc_enum_fmt_audio_cap(file, fh, arg);
-+		break;
-+	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
-+		if (unlikely(!ops->vidioc_enum_fmt_audio_out))
-+			break;
-+		ret = ops->vidioc_enum_fmt_audio_out(file, fh, arg);
-+		break;
- 	}
- 	if (ret == 0)
- 		v4l_fill_fmtdesc(p);
-@@ -1673,6 +1702,10 @@ static int v4l_g_fmt(const struct v4l2_ioctl_ops *ops,
- 		return ops->vidioc_g_fmt_meta_cap(file, fh, arg);
- 	case V4L2_BUF_TYPE_META_OUTPUT:
- 		return ops->vidioc_g_fmt_meta_out(file, fh, arg);
-+	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
-+		return ops->vidioc_g_fmt_audio_cap(file, fh, arg);
-+	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
-+		return ops->vidioc_g_fmt_audio_out(file, fh, arg);
- 	}
- 	return -EINVAL;
- }
-@@ -1784,6 +1817,16 @@ static int v4l_s_fmt(const struct v4l2_ioctl_ops *ops,
- 			break;
- 		memset_after(p, 0, fmt.meta);
- 		return ops->vidioc_s_fmt_meta_out(file, fh, arg);
-+	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
-+		if (unlikely(!ops->vidioc_s_fmt_audio_cap))
-+			break;
-+		memset_after(p, 0, fmt.audio);
-+		return ops->vidioc_s_fmt_audio_cap(file, fh, arg);
-+	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
-+		if (unlikely(!ops->vidioc_s_fmt_audio_out))
-+			break;
-+		memset_after(p, 0, fmt.audio);
-+		return ops->vidioc_s_fmt_audio_out(file, fh, arg);
- 	}
- 	return -EINVAL;
- }
-@@ -1892,6 +1935,16 @@ static int v4l_try_fmt(const struct v4l2_ioctl_ops *ops,
- 			break;
- 		memset_after(p, 0, fmt.meta);
- 		return ops->vidioc_try_fmt_meta_out(file, fh, arg);
-+	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
-+		if (unlikely(!ops->vidioc_try_fmt_audio_cap))
-+			break;
-+		memset_after(p, 0, fmt.audio);
-+		return ops->vidioc_try_fmt_audio_cap(file, fh, arg);
-+	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
-+		if (unlikely(!ops->vidioc_try_fmt_audio_out))
-+			break;
-+		memset_after(p, 0, fmt.audio);
-+		return ops->vidioc_try_fmt_audio_out(file, fh, arg);
- 	}
- 	return -EINVAL;
- }
-diff --git a/include/media/v4l2-dev.h b/include/media/v4l2-dev.h
-index d82dfdbf6e58..82b63f82d43f 100644
---- a/include/media/v4l2-dev.h
-+++ b/include/media/v4l2-dev.h
-@@ -30,6 +30,7 @@
-  * @VFL_TYPE_SUBDEV:	for V4L2 subdevices
-  * @VFL_TYPE_SDR:	for Software Defined Radio tuners
-  * @VFL_TYPE_TOUCH:	for touch sensors
-+ * @VFL_TYPE_AUDIO:	for audio memory-to-memory devices
-  * @VFL_TYPE_MAX:	number of VFL types, must always be last in the enum
-  */
- enum vfl_devnode_type {
-@@ -39,6 +40,7 @@ enum vfl_devnode_type {
- 	VFL_TYPE_SUBDEV,
- 	VFL_TYPE_SDR,
- 	VFL_TYPE_TOUCH,
-+	VFL_TYPE_AUDIO,
- 	VFL_TYPE_MAX /* Shall be the last one */
- };
- 
-diff --git a/include/media/v4l2-ioctl.h b/include/media/v4l2-ioctl.h
-index edb733f21604..f840cf740ce1 100644
---- a/include/media/v4l2-ioctl.h
-+++ b/include/media/v4l2-ioctl.h
-@@ -45,6 +45,12 @@ struct v4l2_fh;
-  * @vidioc_enum_fmt_meta_out: pointer to the function that implements
-  *	:ref:`VIDIOC_ENUM_FMT <vidioc_enum_fmt>` ioctl logic
-  *	for metadata output
-+ * @vidioc_enum_fmt_audio_cap: pointer to the function that implements
-+ *	:ref:`VIDIOC_ENUM_FMT <vidioc_enum_fmt>` ioctl logic
-+ *	for audio capture
-+ * @vidioc_enum_fmt_audio_out: pointer to the function that implements
-+ *	:ref:`VIDIOC_ENUM_FMT <vidioc_enum_fmt>` ioctl logic
-+ *	for audio output
-  * @vidioc_g_fmt_vid_cap: pointer to the function that implements
-  *	:ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for video capture
-  *	in single plane mode
-@@ -79,6 +85,10 @@ struct v4l2_fh;
-  *	:ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for metadata capture
-  * @vidioc_g_fmt_meta_out: pointer to the function that implements
-  *	:ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for metadata output
-+ * @vidioc_g_fmt_audio_cap: pointer to the function that implements
-+ *	:ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for audio capture
-+ * @vidioc_g_fmt_audio_out: pointer to the function that implements
-+ *	:ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for audio output
-  * @vidioc_s_fmt_vid_cap: pointer to the function that implements
-  *	:ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for video capture
-  *	in single plane mode
-@@ -113,6 +123,10 @@ struct v4l2_fh;
-  *	:ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for metadata capture
-  * @vidioc_s_fmt_meta_out: pointer to the function that implements
-  *	:ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for metadata output
-+ * @vidioc_s_fmt_audio_cap: pointer to the function that implements
-+ *	:ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for audio capture
-+ * @vidioc_s_fmt_audio_out: pointer to the function that implements
-+ *	:ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for audio output
-  * @vidioc_try_fmt_vid_cap: pointer to the function that implements
-  *	:ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for video capture
-  *	in single plane mode
-@@ -149,6 +163,10 @@ struct v4l2_fh;
-  *	:ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for metadata capture
-  * @vidioc_try_fmt_meta_out: pointer to the function that implements
-  *	:ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for metadata output
-+ * @vidioc_try_fmt_audio_cap: pointer to the function that implements
-+ *	:ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for audio capture
-+ * @vidioc_try_fmt_audio_out: pointer to the function that implements
-+ *	:ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for audio output
-  * @vidioc_reqbufs: pointer to the function that implements
-  *	:ref:`VIDIOC_REQBUFS <vidioc_reqbufs>` ioctl
-  * @vidioc_querybuf: pointer to the function that implements
-@@ -315,6 +333,10 @@ struct v4l2_ioctl_ops {
- 					struct v4l2_fmtdesc *f);
- 	int (*vidioc_enum_fmt_meta_out)(struct file *file, void *fh,
- 					struct v4l2_fmtdesc *f);
-+	int (*vidioc_enum_fmt_audio_cap)(struct file *file, void *fh,
-+					 struct v4l2_fmtdesc *f);
-+	int (*vidioc_enum_fmt_audio_out)(struct file *file, void *fh,
-+					 struct v4l2_fmtdesc *f);
- 
- 	/* VIDIOC_G_FMT handlers */
- 	int (*vidioc_g_fmt_vid_cap)(struct file *file, void *fh,
-@@ -345,6 +367,10 @@ struct v4l2_ioctl_ops {
- 				     struct v4l2_format *f);
- 	int (*vidioc_g_fmt_meta_out)(struct file *file, void *fh,
- 				     struct v4l2_format *f);
-+	int (*vidioc_g_fmt_audio_cap)(struct file *file, void *fh,
-+				      struct v4l2_format *f);
-+	int (*vidioc_g_fmt_audio_out)(struct file *file, void *fh,
-+				      struct v4l2_format *f);
- 
- 	/* VIDIOC_S_FMT handlers */
- 	int (*vidioc_s_fmt_vid_cap)(struct file *file, void *fh,
-@@ -375,6 +401,10 @@ struct v4l2_ioctl_ops {
- 				     struct v4l2_format *f);
- 	int (*vidioc_s_fmt_meta_out)(struct file *file, void *fh,
- 				     struct v4l2_format *f);
-+	int (*vidioc_s_fmt_audio_cap)(struct file *file, void *fh,
-+				      struct v4l2_format *f);
-+	int (*vidioc_s_fmt_audio_out)(struct file *file, void *fh,
-+				      struct v4l2_format *f);
- 
- 	/* VIDIOC_TRY_FMT handlers */
- 	int (*vidioc_try_fmt_vid_cap)(struct file *file, void *fh,
-@@ -405,6 +435,10 @@ struct v4l2_ioctl_ops {
- 				       struct v4l2_format *f);
- 	int (*vidioc_try_fmt_meta_out)(struct file *file, void *fh,
- 				       struct v4l2_format *f);
-+	int (*vidioc_try_fmt_audio_cap)(struct file *file, void *fh,
-+					struct v4l2_format *f);
-+	int (*vidioc_try_fmt_audio_out)(struct file *file, void *fh,
-+					struct v4l2_format *f);
- 
- 	/* Buffer handlers */
- 	int (*vidioc_reqbufs)(struct file *file, void *fh,
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 5053f66c501a..1e06ac73b6fa 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -153,6 +153,8 @@ enum v4l2_buf_type {
- 	V4L2_BUF_TYPE_SDR_OUTPUT           = 12,
- 	V4L2_BUF_TYPE_META_CAPTURE         = 13,
- 	V4L2_BUF_TYPE_META_OUTPUT	   = 14,
-+	V4L2_BUF_TYPE_AUDIO_CAPTURE        = 15,
-+	V4L2_BUF_TYPE_AUDIO_OUTPUT         = 16,
- 	/* Deprecated, do not use */
- 	V4L2_BUF_TYPE_PRIVATE              = 0x80,
- };
-@@ -169,6 +171,7 @@ enum v4l2_buf_type {
- 	 || (type) == V4L2_BUF_TYPE_VBI_OUTPUT			\
- 	 || (type) == V4L2_BUF_TYPE_SLICED_VBI_OUTPUT		\
- 	 || (type) == V4L2_BUF_TYPE_SDR_OUTPUT			\
-+	 || (type) == V4L2_BUF_TYPE_AUDIO_OUTPUT		\
- 	 || (type) == V4L2_BUF_TYPE_META_OUTPUT)
- 
- #define V4L2_TYPE_IS_CAPTURE(type) (!V4L2_TYPE_IS_OUTPUT(type))
-@@ -2419,6 +2422,18 @@ struct v4l2_meta_format {
- 	__u32				buffersize;
- } __attribute__ ((packed));
- 
-+/**
-+ * struct v4l2_audio_format - audio data format definition
-+ * @audioformat:	little endian four character code (fourcc)
-+ * @channels:		channel numbers
-+ * @buffersize:		maximum size in bytes required for data
-+ */
-+struct v4l2_audio_format {
-+	__u32				audioformat;
-+	__u32				channels;
-+	__u32				buffersize;
-+} __attribute__ ((packed));
-+
- /**
-  * struct v4l2_format - stream data format
-  * @type:	enum v4l2_buf_type; type of the data stream
-@@ -2427,6 +2442,7 @@ struct v4l2_meta_format {
-  * @win:	definition of an overlaid image
-  * @vbi:	raw VBI capture or output parameters
-  * @sliced:	sliced VBI capture or output parameters
-+ * @audio:	definition of an audio format
-  * @raw_data:	placeholder for future extensions and custom formats
-  * @fmt:	union of @pix, @pix_mp, @win, @vbi, @sliced, @sdr, @meta
-  *		and @raw_data
-@@ -2441,6 +2457,7 @@ struct v4l2_format {
- 		struct v4l2_sliced_vbi_format	sliced;  /* V4L2_BUF_TYPE_SLICED_VBI_CAPTURE */
- 		struct v4l2_sdr_format		sdr;     /* V4L2_BUF_TYPE_SDR_CAPTURE */
- 		struct v4l2_meta_format		meta;    /* V4L2_BUF_TYPE_META_CAPTURE */
-+		struct v4l2_audio_format	audio;   /* V4L2_BUF_TYPE_AUDIO_CAPTURE */
- 		__u8	raw_data[200];                   /* user-defined */
- 	} fmt;
- };
--- 
-2.34.1
+Regards,
+
+Andrzej
+
+> Regards,
+> Benjamin
+> 
+>>
+>> Regards,
+>>
+>> Andrzej
+>>
+>>>       for (p = 0; p < planes; p++)
+>>>           dprintk(dev, 1, "%s: size[%u]=%u\n", __func__, p, sizes[p]);
+>>>       return 0;
+>>
 
 
