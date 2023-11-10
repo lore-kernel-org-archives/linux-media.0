@@ -1,242 +1,587 @@
-Return-Path: <linux-media+bounces-30-linux-media=archiver.kernel.org@vger.kernel.org>
+Return-Path: <linux-media+bounces-29-linux-media=archiver.kernel.org@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10F79C4332F
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E2CAC4167D
 	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:48:45 +0000 (UTC)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE5492819E8
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C4AA1C20E9B
 	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:48:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6356C3C088;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 339553C084;
 	Fri, 10 Nov 2023 17:46:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="jDuAgLMb"
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37FE3AC3C
-	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 17:46:42 +0000 (UTC)
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7C99EEC;
-	Fri, 10 Nov 2023 00:33:18 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AA7gBBN011899;
-	Fri, 10 Nov 2023 08:33:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=0g31E2AhP85G9hfjyKxjq/sbrz0JScFMKaVi/mJsAwo=;
- b=jDuAgLMb6c32yAx6FjS3JGSfRmlrNRsKOoCfcnRQwC0xryPBhmI3ezbjJuBTBQ3FsqJx
- YFz00HKaP7FqQRGQ9x+Dc7mCvG9mdick2sYXrBrG1XPvwsAbegGfICSTmHXdcLB4E40i
- /vDandvS1lusgMEsUZFRkFInmlIPV7u/gQK9GPpiFQj/kuzfZCbCVo8xno+9OJ4Dq2/j
- L0bX/MoZVKvzXC67CGlPXHesrM5MKUUwszLdyy+NKO7ccN4jlC/ap3Y6zgZ5Sh+rxJMG
- ndS8YjqUSynipDsCgN3wIcfM7MA1dEY7AJ9PvD34+rTprS8US6LVGD7pedmxXvAsdmEq Ww== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3u93tq9pes-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 10 Nov 2023 08:33:10 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3AA8XA7e016922
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 10 Nov 2023 08:33:10 GMT
-Received: from [10.217.216.47] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Fri, 10 Nov
- 2023 00:33:01 -0800
-Message-ID: <5b3315fe-f59b-cdf3-b980-a5a68bceb6a9@quicinc.com>
-Date: Fri, 10 Nov 2023 14:02:58 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB20C3AC21
+	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 17:46:41 +0000 (UTC)
+Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D177293;
+	Thu,  9 Nov 2023 22:28:04 -0800 (PST)
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 08BCB1A1C99;
+	Fri, 10 Nov 2023 07:28:03 +0100 (CET)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id A3D351A0C63;
+	Fri, 10 Nov 2023 07:28:02 +0100 (CET)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id AFA45183AD51;
+	Fri, 10 Nov 2023 14:28:00 +0800 (+08)
+From: Shengjiu Wang <shengjiu.wang@nxp.com>
+To: hverkuil@xs4all.nl,
+	sakari.ailus@iki.fi,
+	tfiga@chromium.org,
+	m.szyprowski@samsung.com,
+	mchehab@kernel.org,
+	linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	shengjiu.wang@gmail.com,
+	Xiubo.Lee@gmail.com,
+	festevam@gmail.com,
+	nicoleotsuka@gmail.com,
+	lgirdwood@gmail.com,
+	broonie@kernel.org,
+	perex@perex.cz,
+	tiwai@suse.com,
+	alsa-devel@alsa-project.org,
+	linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v9 07/15] media: v4l2: Add audio capture and output support
+Date: Fri, 10 Nov 2023 13:48:01 +0800
+Message-Id: <1699595289-25773-8-git-send-email-shengjiu.wang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1699595289-25773-1-git-send-email-shengjiu.wang@nxp.com>
+References: <1699595289-25773-1-git-send-email-shengjiu.wang@nxp.com>
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH RESEND v3 3/5] clk: qcom: gdsc: Add set and get hwmode
- callbacks to switch GDSC mode
-Content-Language: en-US
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abel Vesa
-	<abel.vesa@linaro.org>
-CC: "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman
-	<khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>, Pavel Machek
-	<pavel@ucw.cz>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Andy
- Gross" <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        Stephen Boyd
-	<sboyd@kernel.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash
- Garodia <quic_vgarodia@quicinc.com>,
-        Bryan O'Donoghue
-	<bryan.odonoghue@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Taniya Das <tdas@qti.qualcomm.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-media@vger.kernel.org>
-References: <20231101-gdsc-hwctrl-v3-0-0740ae6b2b04@linaro.org>
- <20231101-gdsc-hwctrl-v3-3-0740ae6b2b04@linaro.org>
- <CAA8EJpqTafxkXfAZXdTCat1VphvHUTTWe1TUjbpMvqta1Jf+Cw@mail.gmail.com>
-From: Jagadeesh Kona <quic_jkona@quicinc.com>
-In-Reply-To: <CAA8EJpqTafxkXfAZXdTCat1VphvHUTTWe1TUjbpMvqta1Jf+Cw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 0yWIBZBRQecYYPSMJiHBmWTOIVmjEPrP
-X-Proofpoint-ORIG-GUID: 0yWIBZBRQecYYPSMJiHBmWTOIVmjEPrP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-10_04,2023-11-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
- suspectscore=0 clxscore=1015 priorityscore=1501 mlxlogscore=999
- spamscore=0 phishscore=0 impostorscore=0 bulkscore=0 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2311100071
 
+Audio signal processing has the requirement for memory to
+memory similar as Video.
 
+This patch is to add this support in v4l2 framework, defined
+new buffer type V4L2_BUF_TYPE_AUDIO_CAPTURE and
+V4L2_BUF_TYPE_AUDIO_OUTPUT, defined new format v4l2_audio_format
+for audio case usage.
 
-On 11/2/2023 2:58 AM, Dmitry Baryshkov wrote:
-> On Wed, 1 Nov 2023 at 11:06, Abel Vesa <abel.vesa@linaro.org> wrote:
->>
->> From: Jagadeesh Kona <quic_jkona@quicinc.com>
->>
->> Add support for set and get hwmode callbacks to switch the GDSC between
->> SW and HW modes. Currently, the GDSC is moved to HW control mode
->> using HW_CTRL flag and if this flag is present, GDSC is moved to HW
->> mode as part of GDSC enable itself. The intention is to keep the
->> HW_CTRL flag functionality as is, since many older chipsets still use
->> this flag.
->>
->> Introduce a new HW_CTRL_TRIGGER flag to switch the GDSC back and forth
->> between HW/SW modes dynamically at runtime. If HW_CTRL_TRIGGER flag is
->> present, register set_hwmode_dev callback to switch the GDSC mode which
->> can be invoked from consumer drivers using dev_pm_genpd_set_hwmode
->> function. Unlike HW_CTRL flag, HW_CTRL_TRIGGER won't move the GDSC to HW
->> control mode as part of GDSC enable itself, GDSC will be moved to HW
->> control mode only when consumer driver explicity calls
->> dev_pm_genpd_set_hwmode to switch to HW mode. Also add the
->> dev_pm_genpd_get_hwmode to allow the consumers to read the actual
->> HW/SW mode from hardware.
-> 
-> Can we add two new flags:
-> - HW_CTRL_TRIGGER
-> - DEFAULT_HW_TRIGGER
-> 
-> And then define HW_CTRL as HW_CTRL_TRIGGER | DEFAULT_HW_TRIGGER ?
-> 
-> This way older platforms will keep existing behaviour, but can
-> gradually migrate to the new callbacks?
-> 
+The created audio device is named "/dev/v4l-audioX".
 
-Thanks Dmitry for your review,
+Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+---
+ .../userspace-api/media/v4l/buffer.rst        |  6 ++
+ .../media/v4l/dev-audio-mem2mem.rst           | 71 +++++++++++++++++++
+ .../userspace-api/media/v4l/devices.rst       |  1 +
+ .../media/v4l/vidioc-enum-fmt.rst             |  2 +
+ .../userspace-api/media/v4l/vidioc-g-fmt.rst  |  4 ++
+ .../media/videodev2.h.rst.exceptions          |  2 +
+ .../media/common/videobuf2/videobuf2-v4l2.c   |  4 ++
+ drivers/media/v4l2-core/v4l2-dev.c            | 17 +++++
+ drivers/media/v4l2-core/v4l2-ioctl.c          | 53 ++++++++++++++
+ include/media/v4l2-dev.h                      |  2 +
+ include/media/v4l2-ioctl.h                    | 34 +++++++++
+ include/uapi/linux/videodev2.h                | 17 +++++
+ 12 files changed, 213 insertions(+)
+ create mode 100644 Documentation/userspace-api/media/v4l/dev-audio-mem2mem.rst
 
-The current usecases we have for GDSC's are either use the existing 
-HW_CTRL flag to switch the GDSC to HW mode in gdsc_enable() and back to 
-SW mode in gdsc_disable(). The second usecase is don't switch GDSC mode 
-in gdsc_enable() & gdsc_disable() at all, and switch the GDSC mode only 
-in new callbacks when consumers explicitly request it using 
-dev_pm_genpd_set_hwmode(), this can be achieved using the new 
-HW_CTRL_TRIGGER flag.
+diff --git a/Documentation/userspace-api/media/v4l/buffer.rst b/Documentation/userspace-api/media/v4l/buffer.rst
+index 52bbee81c080..a3754ca6f0d6 100644
+--- a/Documentation/userspace-api/media/v4l/buffer.rst
++++ b/Documentation/userspace-api/media/v4l/buffer.rst
+@@ -438,6 +438,12 @@ enum v4l2_buf_type
+     * - ``V4L2_BUF_TYPE_META_OUTPUT``
+       - 14
+       - Buffer for metadata output, see :ref:`metadata`.
++    * - ``V4L2_BUF_TYPE_AUDIO_CAPTURE``
++      - 15
++      - Buffer for audio capture, see :ref:`audio`.
++    * - ``V4L2_BUF_TYPE_AUDIO_OUTPUT``
++      - 16
++      - Buffer for audio output, see :ref:`audio`.
+ 
+ 
+ .. _buffer-flags:
+diff --git a/Documentation/userspace-api/media/v4l/dev-audio-mem2mem.rst b/Documentation/userspace-api/media/v4l/dev-audio-mem2mem.rst
+new file mode 100644
+index 000000000000..68faecfe3a02
+--- /dev/null
++++ b/Documentation/userspace-api/media/v4l/dev-audio-mem2mem.rst
+@@ -0,0 +1,71 @@
++.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
++
++.. _audiomem2mem:
++
++********************************
++Audio Memory-To-Memory Interface
++********************************
++
++An audio memory-to-memory device can compress, decompress, transform, or
++otherwise convert audio data from one format into another format, in memory.
++Such memory-to-memory devices set the ``V4L2_CAP_AUDIO_M2M`` capability.
++Examples of memory-to-memory devices are audio codecs, audio preprocessing,
++audio postprocessing.
++
++A memory-to-memory audio node supports both output (sending audio frames from
++memory to the hardware) and capture (receiving the processed audio frames
++from the hardware into memory) stream I/O. An application will have to
++setup the stream I/O for both sides and finally call
++:ref:`VIDIOC_STREAMON <VIDIOC_STREAMON>` for both capture and output to
++start the hardware.
++
++Memory-to-memory devices function as a shared resource: you can
++open the audio node multiple times, each application setting up their
++own properties that are local to the file handle, and each can use
++it independently from the others. The driver will arbitrate access to
++the hardware and reprogram it whenever another file handler gets access.
++
++Audio memory-to-memory devices are accessed through character device
++special files named ``/dev/v4l-audio``
++
++Querying Capabilities
++=====================
++
++Device nodes supporting the audio memory-to-memory interface set the
++``V4L2_CAP_AUDIO_M2M`` flag in the ``device_caps`` field of the
++:c:type:`v4l2_capability` structure returned by the :c:func:`VIDIOC_QUERYCAP`
++ioctl.
++
++Data Format Negotiation
++=======================
++
++The audio device uses the :ref:`format` ioctls to select the capture format.
++The audio buffer content format is bound to that selected format. In addition
++to the basic :ref:`format` ioctls, the :c:func:`VIDIOC_ENUM_FMT` ioctl must be
++supported as well.
++
++To use the :ref:`format` ioctls applications set the ``type`` field of the
++:c:type:`v4l2_format` structure to ``V4L2_BUF_TYPE_AUDIO_CAPTURE`` or to
++``V4L2_BUF_TYPE_AUDIO_OUTPUT``. Both drivers and applications must set the
++remainder of the :c:type:`v4l2_format` structure to 0.
++
++.. c:type:: v4l2_audio_format
++
++.. tabularcolumns:: |p{1.4cm}|p{2.4cm}|p{13.5cm}|
++
++.. flat-table:: struct v4l2_audio_format
++    :header-rows:  0
++    :stub-columns: 0
++    :widths:       1 1 2
++
++    * - __u32
++      - ``pixelformat``
++      - The sample format, set by the application. see :ref:`pixfmt-audio`
++    * - __u32
++      - ``channels``
++      - The channel number, set by the application. channel number range is
++        [1, 32].
++    * - __u32
++      - ``buffersize``
++      - Maximum buffer size in bytes required for data. The value is set by the
++        driver.
+diff --git a/Documentation/userspace-api/media/v4l/devices.rst b/Documentation/userspace-api/media/v4l/devices.rst
+index 8bfbad65a9d4..758bd90f1c26 100644
+--- a/Documentation/userspace-api/media/v4l/devices.rst
++++ b/Documentation/userspace-api/media/v4l/devices.rst
+@@ -24,3 +24,4 @@ Interfaces
+     dev-event
+     dev-subdev
+     dev-meta
++    dev-audio-mem2mem
+diff --git a/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst b/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
+index 000c154b0f98..42deb07f4ff4 100644
+--- a/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
++++ b/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
+@@ -96,6 +96,8 @@ the ``mbus_code`` field is handled differently:
+ 	``V4L2_BUF_TYPE_VIDEO_OVERLAY``,
+ 	``V4L2_BUF_TYPE_SDR_CAPTURE``,
+ 	``V4L2_BUF_TYPE_SDR_OUTPUT``,
++	``V4L2_BUF_TYPE_AUDIO_CAPTURE``,
++	``V4L2_BUF_TYPE_AUDIO_OUTPUT``,
+ 	``V4L2_BUF_TYPE_META_CAPTURE`` and
+ 	``V4L2_BUF_TYPE_META_OUTPUT``.
+ 	See :c:type:`v4l2_buf_type`.
+diff --git a/Documentation/userspace-api/media/v4l/vidioc-g-fmt.rst b/Documentation/userspace-api/media/v4l/vidioc-g-fmt.rst
+index 675c385e5aca..528fd9df41aa 100644
+--- a/Documentation/userspace-api/media/v4l/vidioc-g-fmt.rst
++++ b/Documentation/userspace-api/media/v4l/vidioc-g-fmt.rst
+@@ -130,6 +130,10 @@ The format as returned by :ref:`VIDIOC_TRY_FMT <VIDIOC_G_FMT>` must be identical
+       - ``meta``
+       - Definition of a metadata format, see :ref:`meta-formats`, used by
+ 	metadata capture devices.
++    * - struct :c:type:`v4l2_audio_format`
++      - ``audio``
++      - Definition of a audio data format, see :ref:`audiomem2mem`, used by
++        audio memory-to-memory devices
+     * - __u8
+       - ``raw_data``\ [200]
+       - Place holder for future extensions.
+diff --git a/Documentation/userspace-api/media/videodev2.h.rst.exceptions b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+index da6d0b8e4c2c..e61152bb80d1 100644
+--- a/Documentation/userspace-api/media/videodev2.h.rst.exceptions
++++ b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+@@ -29,6 +29,8 @@ replace symbol V4L2_FIELD_SEQ_TB :c:type:`v4l2_field`
+ replace symbol V4L2_FIELD_TOP :c:type:`v4l2_field`
+ 
+ # Documented enum v4l2_buf_type
++replace symbol V4L2_BUF_TYPE_AUDIO_CAPTURE :c:type:`v4l2_buf_type`
++replace symbol V4L2_BUF_TYPE_AUDIO_OUTPUT :c:type:`v4l2_buf_type`
+ replace symbol V4L2_BUF_TYPE_META_CAPTURE :c:type:`v4l2_buf_type`
+ replace symbol V4L2_BUF_TYPE_META_OUTPUT :c:type:`v4l2_buf_type`
+ replace symbol V4L2_BUF_TYPE_SDR_CAPTURE :c:type:`v4l2_buf_type`
+diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+index c7a54d82a55e..12f2be2773a2 100644
+--- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
++++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+@@ -785,6 +785,10 @@ int vb2_create_bufs(struct vb2_queue *q, struct v4l2_create_buffers *create)
+ 	case V4L2_BUF_TYPE_META_OUTPUT:
+ 		requested_sizes[0] = f->fmt.meta.buffersize;
+ 		break;
++	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
++	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
++		requested_sizes[0] = f->fmt.audio.buffersize;
++		break;
+ 	default:
+ 		return -EINVAL;
+ 	}
+diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
+index f81279492682..b92c760b611a 100644
+--- a/drivers/media/v4l2-core/v4l2-dev.c
++++ b/drivers/media/v4l2-core/v4l2-dev.c
+@@ -553,6 +553,7 @@ static void determine_valid_ioctls(struct video_device *vdev)
+ 	bool is_tch = vdev->vfl_type == VFL_TYPE_TOUCH;
+ 	bool is_meta = vdev->vfl_type == VFL_TYPE_VIDEO &&
+ 		       (vdev->device_caps & meta_caps);
++	bool is_audio = vdev->vfl_type == VFL_TYPE_AUDIO;
+ 	bool is_rx = vdev->vfl_dir != VFL_DIR_TX;
+ 	bool is_tx = vdev->vfl_dir != VFL_DIR_RX;
+ 	bool is_io_mc = vdev->device_caps & V4L2_CAP_IO_MC;
+@@ -664,6 +665,19 @@ static void determine_valid_ioctls(struct video_device *vdev)
+ 		SET_VALID_IOCTL(ops, VIDIOC_S_FMT, vidioc_s_fmt_meta_out);
+ 		SET_VALID_IOCTL(ops, VIDIOC_TRY_FMT, vidioc_try_fmt_meta_out);
+ 	}
++	if (is_audio && is_rx) {
++		/* audio capture specific ioctls */
++		SET_VALID_IOCTL(ops, VIDIOC_ENUM_FMT, vidioc_enum_fmt_audio_cap);
++		SET_VALID_IOCTL(ops, VIDIOC_G_FMT, vidioc_g_fmt_audio_cap);
++		SET_VALID_IOCTL(ops, VIDIOC_S_FMT, vidioc_s_fmt_audio_cap);
++		SET_VALID_IOCTL(ops, VIDIOC_TRY_FMT, vidioc_try_fmt_audio_cap);
++	} else if (is_audio && is_tx) {
++		/* audio output specific ioctls */
++		SET_VALID_IOCTL(ops, VIDIOC_ENUM_FMT, vidioc_enum_fmt_audio_out);
++		SET_VALID_IOCTL(ops, VIDIOC_G_FMT, vidioc_g_fmt_audio_out);
++		SET_VALID_IOCTL(ops, VIDIOC_S_FMT, vidioc_s_fmt_audio_out);
++		SET_VALID_IOCTL(ops, VIDIOC_TRY_FMT, vidioc_try_fmt_audio_out);
++	}
+ 	if (is_vbi) {
+ 		/* vbi specific ioctls */
+ 		if ((is_rx && (ops->vidioc_g_fmt_vbi_cap ||
+@@ -927,6 +941,9 @@ int __video_register_device(struct video_device *vdev,
+ 	case VFL_TYPE_TOUCH:
+ 		name_base = "v4l-touch";
+ 		break;
++	case VFL_TYPE_AUDIO:
++		name_base = "v4l-audio";
++		break;
+ 	default:
+ 		pr_err("%s called with unknown type: %d\n",
+ 		       __func__, type);
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index 9b1de54ce379..1bb03794922a 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -188,6 +188,8 @@ const char *v4l2_type_names[] = {
+ 	[V4L2_BUF_TYPE_SDR_OUTPUT]         = "sdr-out",
+ 	[V4L2_BUF_TYPE_META_CAPTURE]       = "meta-cap",
+ 	[V4L2_BUF_TYPE_META_OUTPUT]	   = "meta-out",
++	[V4L2_BUF_TYPE_AUDIO_CAPTURE]      = "audio-cap",
++	[V4L2_BUF_TYPE_AUDIO_OUTPUT]	   = "audio-out",
+ };
+ EXPORT_SYMBOL(v4l2_type_names);
+ 
+@@ -276,6 +278,7 @@ static void v4l_print_format(const void *arg, bool write_only)
+ 	const struct v4l2_sliced_vbi_format *sliced;
+ 	const struct v4l2_window *win;
+ 	const struct v4l2_meta_format *meta;
++	const struct v4l2_audio_format *audio;
+ 	u32 pixelformat;
+ 	u32 planes;
+ 	unsigned i;
+@@ -346,6 +349,13 @@ static void v4l_print_format(const void *arg, bool write_only)
+ 		pr_cont(", dataformat=%p4cc, buffersize=%u\n",
+ 			&pixelformat, meta->buffersize);
+ 		break;
++	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
++	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
++		audio = &p->fmt.audio;
++		pixelformat = audio->audioformat;
++		pr_cont(", format=%p4cc, channels=%u, buffersize=%u\n",
++			&pixelformat, audio->channels, audio->buffersize);
++		break;
+ 	}
+ }
+ 
+@@ -927,6 +937,7 @@ static int check_fmt(struct file *file, enum v4l2_buf_type type)
+ 	bool is_tch = vfd->vfl_type == VFL_TYPE_TOUCH;
+ 	bool is_meta = vfd->vfl_type == VFL_TYPE_VIDEO &&
+ 		       (vfd->device_caps & meta_caps);
++	bool is_audio = vfd->vfl_type == VFL_TYPE_AUDIO;
+ 	bool is_rx = vfd->vfl_dir != VFL_DIR_TX;
+ 	bool is_tx = vfd->vfl_dir != VFL_DIR_RX;
+ 
+@@ -992,6 +1003,14 @@ static int check_fmt(struct file *file, enum v4l2_buf_type type)
+ 		if (is_meta && is_tx && ops->vidioc_g_fmt_meta_out)
+ 			return 0;
+ 		break;
++	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
++		if (is_audio && is_rx && ops->vidioc_g_fmt_audio_cap)
++			return 0;
++		break;
++	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
++		if (is_audio && is_tx && ops->vidioc_g_fmt_audio_out)
++			return 0;
++		break;
+ 	default:
+ 		break;
+ 	}
+@@ -1597,6 +1616,16 @@ static int v4l_enum_fmt(const struct v4l2_ioctl_ops *ops,
+ 			break;
+ 		ret = ops->vidioc_enum_fmt_meta_out(file, fh, arg);
+ 		break;
++	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
++		if (unlikely(!ops->vidioc_enum_fmt_audio_cap))
++			break;
++		ret = ops->vidioc_enum_fmt_audio_cap(file, fh, arg);
++		break;
++	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
++		if (unlikely(!ops->vidioc_enum_fmt_audio_out))
++			break;
++		ret = ops->vidioc_enum_fmt_audio_out(file, fh, arg);
++		break;
+ 	}
+ 	if (ret == 0)
+ 		v4l_fill_fmtdesc(p);
+@@ -1673,6 +1702,10 @@ static int v4l_g_fmt(const struct v4l2_ioctl_ops *ops,
+ 		return ops->vidioc_g_fmt_meta_cap(file, fh, arg);
+ 	case V4L2_BUF_TYPE_META_OUTPUT:
+ 		return ops->vidioc_g_fmt_meta_out(file, fh, arg);
++	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
++		return ops->vidioc_g_fmt_audio_cap(file, fh, arg);
++	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
++		return ops->vidioc_g_fmt_audio_out(file, fh, arg);
+ 	}
+ 	return -EINVAL;
+ }
+@@ -1784,6 +1817,16 @@ static int v4l_s_fmt(const struct v4l2_ioctl_ops *ops,
+ 			break;
+ 		memset_after(p, 0, fmt.meta);
+ 		return ops->vidioc_s_fmt_meta_out(file, fh, arg);
++	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
++		if (unlikely(!ops->vidioc_s_fmt_audio_cap))
++			break;
++		memset_after(p, 0, fmt.audio);
++		return ops->vidioc_s_fmt_audio_cap(file, fh, arg);
++	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
++		if (unlikely(!ops->vidioc_s_fmt_audio_out))
++			break;
++		memset_after(p, 0, fmt.audio);
++		return ops->vidioc_s_fmt_audio_out(file, fh, arg);
+ 	}
+ 	return -EINVAL;
+ }
+@@ -1892,6 +1935,16 @@ static int v4l_try_fmt(const struct v4l2_ioctl_ops *ops,
+ 			break;
+ 		memset_after(p, 0, fmt.meta);
+ 		return ops->vidioc_try_fmt_meta_out(file, fh, arg);
++	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
++		if (unlikely(!ops->vidioc_try_fmt_audio_cap))
++			break;
++		memset_after(p, 0, fmt.audio);
++		return ops->vidioc_try_fmt_audio_cap(file, fh, arg);
++	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
++		if (unlikely(!ops->vidioc_try_fmt_audio_out))
++			break;
++		memset_after(p, 0, fmt.audio);
++		return ops->vidioc_try_fmt_audio_out(file, fh, arg);
+ 	}
+ 	return -EINVAL;
+ }
+diff --git a/include/media/v4l2-dev.h b/include/media/v4l2-dev.h
+index d82dfdbf6e58..82b63f82d43f 100644
+--- a/include/media/v4l2-dev.h
++++ b/include/media/v4l2-dev.h
+@@ -30,6 +30,7 @@
+  * @VFL_TYPE_SUBDEV:	for V4L2 subdevices
+  * @VFL_TYPE_SDR:	for Software Defined Radio tuners
+  * @VFL_TYPE_TOUCH:	for touch sensors
++ * @VFL_TYPE_AUDIO:	for audio memory-to-memory devices
+  * @VFL_TYPE_MAX:	number of VFL types, must always be last in the enum
+  */
+ enum vfl_devnode_type {
+@@ -39,6 +40,7 @@ enum vfl_devnode_type {
+ 	VFL_TYPE_SUBDEV,
+ 	VFL_TYPE_SDR,
+ 	VFL_TYPE_TOUCH,
++	VFL_TYPE_AUDIO,
+ 	VFL_TYPE_MAX /* Shall be the last one */
+ };
+ 
+diff --git a/include/media/v4l2-ioctl.h b/include/media/v4l2-ioctl.h
+index edb733f21604..f840cf740ce1 100644
+--- a/include/media/v4l2-ioctl.h
++++ b/include/media/v4l2-ioctl.h
+@@ -45,6 +45,12 @@ struct v4l2_fh;
+  * @vidioc_enum_fmt_meta_out: pointer to the function that implements
+  *	:ref:`VIDIOC_ENUM_FMT <vidioc_enum_fmt>` ioctl logic
+  *	for metadata output
++ * @vidioc_enum_fmt_audio_cap: pointer to the function that implements
++ *	:ref:`VIDIOC_ENUM_FMT <vidioc_enum_fmt>` ioctl logic
++ *	for audio capture
++ * @vidioc_enum_fmt_audio_out: pointer to the function that implements
++ *	:ref:`VIDIOC_ENUM_FMT <vidioc_enum_fmt>` ioctl logic
++ *	for audio output
+  * @vidioc_g_fmt_vid_cap: pointer to the function that implements
+  *	:ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for video capture
+  *	in single plane mode
+@@ -79,6 +85,10 @@ struct v4l2_fh;
+  *	:ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for metadata capture
+  * @vidioc_g_fmt_meta_out: pointer to the function that implements
+  *	:ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for metadata output
++ * @vidioc_g_fmt_audio_cap: pointer to the function that implements
++ *	:ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for audio capture
++ * @vidioc_g_fmt_audio_out: pointer to the function that implements
++ *	:ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for audio output
+  * @vidioc_s_fmt_vid_cap: pointer to the function that implements
+  *	:ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for video capture
+  *	in single plane mode
+@@ -113,6 +123,10 @@ struct v4l2_fh;
+  *	:ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for metadata capture
+  * @vidioc_s_fmt_meta_out: pointer to the function that implements
+  *	:ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for metadata output
++ * @vidioc_s_fmt_audio_cap: pointer to the function that implements
++ *	:ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for audio capture
++ * @vidioc_s_fmt_audio_out: pointer to the function that implements
++ *	:ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for audio output
+  * @vidioc_try_fmt_vid_cap: pointer to the function that implements
+  *	:ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for video capture
+  *	in single plane mode
+@@ -149,6 +163,10 @@ struct v4l2_fh;
+  *	:ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for metadata capture
+  * @vidioc_try_fmt_meta_out: pointer to the function that implements
+  *	:ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for metadata output
++ * @vidioc_try_fmt_audio_cap: pointer to the function that implements
++ *	:ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for audio capture
++ * @vidioc_try_fmt_audio_out: pointer to the function that implements
++ *	:ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for audio output
+  * @vidioc_reqbufs: pointer to the function that implements
+  *	:ref:`VIDIOC_REQBUFS <vidioc_reqbufs>` ioctl
+  * @vidioc_querybuf: pointer to the function that implements
+@@ -315,6 +333,10 @@ struct v4l2_ioctl_ops {
+ 					struct v4l2_fmtdesc *f);
+ 	int (*vidioc_enum_fmt_meta_out)(struct file *file, void *fh,
+ 					struct v4l2_fmtdesc *f);
++	int (*vidioc_enum_fmt_audio_cap)(struct file *file, void *fh,
++					 struct v4l2_fmtdesc *f);
++	int (*vidioc_enum_fmt_audio_out)(struct file *file, void *fh,
++					 struct v4l2_fmtdesc *f);
+ 
+ 	/* VIDIOC_G_FMT handlers */
+ 	int (*vidioc_g_fmt_vid_cap)(struct file *file, void *fh,
+@@ -345,6 +367,10 @@ struct v4l2_ioctl_ops {
+ 				     struct v4l2_format *f);
+ 	int (*vidioc_g_fmt_meta_out)(struct file *file, void *fh,
+ 				     struct v4l2_format *f);
++	int (*vidioc_g_fmt_audio_cap)(struct file *file, void *fh,
++				      struct v4l2_format *f);
++	int (*vidioc_g_fmt_audio_out)(struct file *file, void *fh,
++				      struct v4l2_format *f);
+ 
+ 	/* VIDIOC_S_FMT handlers */
+ 	int (*vidioc_s_fmt_vid_cap)(struct file *file, void *fh,
+@@ -375,6 +401,10 @@ struct v4l2_ioctl_ops {
+ 				     struct v4l2_format *f);
+ 	int (*vidioc_s_fmt_meta_out)(struct file *file, void *fh,
+ 				     struct v4l2_format *f);
++	int (*vidioc_s_fmt_audio_cap)(struct file *file, void *fh,
++				      struct v4l2_format *f);
++	int (*vidioc_s_fmt_audio_out)(struct file *file, void *fh,
++				      struct v4l2_format *f);
+ 
+ 	/* VIDIOC_TRY_FMT handlers */
+ 	int (*vidioc_try_fmt_vid_cap)(struct file *file, void *fh,
+@@ -405,6 +435,10 @@ struct v4l2_ioctl_ops {
+ 				       struct v4l2_format *f);
+ 	int (*vidioc_try_fmt_meta_out)(struct file *file, void *fh,
+ 				       struct v4l2_format *f);
++	int (*vidioc_try_fmt_audio_cap)(struct file *file, void *fh,
++					struct v4l2_format *f);
++	int (*vidioc_try_fmt_audio_out)(struct file *file, void *fh,
++					struct v4l2_format *f);
+ 
+ 	/* Buffer handlers */
+ 	int (*vidioc_reqbufs)(struct file *file, void *fh,
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index 5053f66c501a..1e06ac73b6fa 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -153,6 +153,8 @@ enum v4l2_buf_type {
+ 	V4L2_BUF_TYPE_SDR_OUTPUT           = 12,
+ 	V4L2_BUF_TYPE_META_CAPTURE         = 13,
+ 	V4L2_BUF_TYPE_META_OUTPUT	   = 14,
++	V4L2_BUF_TYPE_AUDIO_CAPTURE        = 15,
++	V4L2_BUF_TYPE_AUDIO_OUTPUT         = 16,
+ 	/* Deprecated, do not use */
+ 	V4L2_BUF_TYPE_PRIVATE              = 0x80,
+ };
+@@ -169,6 +171,7 @@ enum v4l2_buf_type {
+ 	 || (type) == V4L2_BUF_TYPE_VBI_OUTPUT			\
+ 	 || (type) == V4L2_BUF_TYPE_SLICED_VBI_OUTPUT		\
+ 	 || (type) == V4L2_BUF_TYPE_SDR_OUTPUT			\
++	 || (type) == V4L2_BUF_TYPE_AUDIO_OUTPUT		\
+ 	 || (type) == V4L2_BUF_TYPE_META_OUTPUT)
+ 
+ #define V4L2_TYPE_IS_CAPTURE(type) (!V4L2_TYPE_IS_OUTPUT(type))
+@@ -2419,6 +2422,18 @@ struct v4l2_meta_format {
+ 	__u32				buffersize;
+ } __attribute__ ((packed));
+ 
++/**
++ * struct v4l2_audio_format - audio data format definition
++ * @audioformat:	little endian four character code (fourcc)
++ * @channels:		channel numbers
++ * @buffersize:		maximum size in bytes required for data
++ */
++struct v4l2_audio_format {
++	__u32				audioformat;
++	__u32				channels;
++	__u32				buffersize;
++} __attribute__ ((packed));
++
+ /**
+  * struct v4l2_format - stream data format
+  * @type:	enum v4l2_buf_type; type of the data stream
+@@ -2427,6 +2442,7 @@ struct v4l2_meta_format {
+  * @win:	definition of an overlaid image
+  * @vbi:	raw VBI capture or output parameters
+  * @sliced:	sliced VBI capture or output parameters
++ * @audio:	definition of an audio format
+  * @raw_data:	placeholder for future extensions and custom formats
+  * @fmt:	union of @pix, @pix_mp, @win, @vbi, @sliced, @sdr, @meta
+  *		and @raw_data
+@@ -2441,6 +2457,7 @@ struct v4l2_format {
+ 		struct v4l2_sliced_vbi_format	sliced;  /* V4L2_BUF_TYPE_SLICED_VBI_CAPTURE */
+ 		struct v4l2_sdr_format		sdr;     /* V4L2_BUF_TYPE_SDR_CAPTURE */
+ 		struct v4l2_meta_format		meta;    /* V4L2_BUF_TYPE_META_CAPTURE */
++		struct v4l2_audio_format	audio;   /* V4L2_BUF_TYPE_AUDIO_CAPTURE */
+ 		__u8	raw_data[200];                   /* user-defined */
+ 	} fmt;
+ };
+-- 
+2.34.1
 
-By defining HW_CTRL as HW_CTRL_TRIGGER | DEFAULT_HW_TRIGGER, it switches 
-the GDSC mode both in enable & disable callbacks and in new callbacks as 
-well. But we currently don't have any usecase that requires this behaviour.
-
-Thanks,
-Jagadeesh
-
->>
->> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
->> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
->> ---
->>   drivers/clk/qcom/gdsc.c | 32 ++++++++++++++++++++++++++++++++
->>   drivers/clk/qcom/gdsc.h |  1 +
->>   2 files changed, 33 insertions(+)
->>
->> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
->> index 5358e28122ab..c763524cd5da 100644
->> --- a/drivers/clk/qcom/gdsc.c
->> +++ b/drivers/clk/qcom/gdsc.c
->> @@ -363,6 +363,34 @@ static int gdsc_disable(struct generic_pm_domain *domain)
->>          return 0;
->>   }
->>
->> +static int gdsc_set_hwmode(struct generic_pm_domain *domain, struct device *dev, bool mode)
->> +{
->> +       struct gdsc *sc = domain_to_gdsc(domain);
->> +
->> +       if (sc->rsupply && !regulator_is_enabled(sc->rsupply)) {
->> +               pr_err("Cannot set mode while parent is disabled\n");
->> +               return -EIO;
->> +       }
->> +
->> +       return gdsc_hwctrl(sc, mode);
->> +}
->> +
->> +static bool gdsc_get_hwmode(struct generic_pm_domain *domain, struct device *dev)
->> +{
->> +       struct gdsc *sc = domain_to_gdsc(domain);
->> +       u32 val;
->> +       int ret;
->> +
->> +       ret = regmap_read(sc->regmap, sc->gdscr, &val);
->> +       if (ret)
->> +               return ret;
->> +
->> +       if (val & HW_CONTROL_MASK)
->> +               return true;
->> +
->> +       return false;
->> +}
->> +
->>   static int gdsc_init(struct gdsc *sc)
->>   {
->>          u32 mask, val;
->> @@ -451,6 +479,10 @@ static int gdsc_init(struct gdsc *sc)
->>                  sc->pd.power_off = gdsc_disable;
->>          if (!sc->pd.power_on)
->>                  sc->pd.power_on = gdsc_enable;
->> +       if (sc->flags & HW_CTRL_TRIGGER) {
->> +               sc->pd.set_hwmode_dev = gdsc_set_hwmode;
->> +               sc->pd.get_hwmode_dev = gdsc_get_hwmode;
->> +       }
->>
->>          ret = pm_genpd_init(&sc->pd, NULL, !on);
->>          if (ret)
->> diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
->> index 803512688336..1e2779b823d1 100644
->> --- a/drivers/clk/qcom/gdsc.h
->> +++ b/drivers/clk/qcom/gdsc.h
->> @@ -67,6 +67,7 @@ struct gdsc {
->>   #define ALWAYS_ON      BIT(6)
->>   #define RETAIN_FF_ENABLE       BIT(7)
->>   #define NO_RET_PERIPH  BIT(8)
->> +#define HW_CTRL_TRIGGER        BIT(9)
->>          struct reset_controller_dev     *rcdev;
->>          unsigned int                    *resets;
->>          unsigned int                    reset_count;
->>
->> --
->> 2.34.1
->>
-> 
-> 
 
