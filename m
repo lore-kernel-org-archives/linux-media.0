@@ -1,208 +1,108 @@
-Return-Path: <linux-media+bounces-10-linux-media=archiver.kernel.org@vger.kernel.org>
+Return-Path: <linux-media+bounces-12-linux-media=archiver.kernel.org@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10525C4167B
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:47:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40B03C4167D
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:47:32 +0000 (UTC)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7FA631C20D27
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:47:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 054D7281485
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:47:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BEC63AC0F;
-	Fri, 10 Nov 2023 17:46:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 850C6358B4;
+	Fri, 10 Nov 2023 17:46:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="OOswyY12"
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B271938DE7
-	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 17:46:32 +0000 (UTC)
-Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EEE7283;
-	Thu,  9 Nov 2023 22:27:53 -0800 (PST)
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id A11B3200AF3;
-	Fri, 10 Nov 2023 07:27:51 +0100 (CET)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 3CCE1201C4A;
-	Fri, 10 Nov 2023 07:27:51 +0100 (CET)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 7AE6D183AD44;
-	Fri, 10 Nov 2023 14:27:49 +0800 (+08)
-From: Shengjiu Wang <shengjiu.wang@nxp.com>
-To: hverkuil@xs4all.nl,
-	sakari.ailus@iki.fi,
-	tfiga@chromium.org,
-	m.szyprowski@samsung.com,
-	mchehab@kernel.org,
-	linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	shengjiu.wang@gmail.com,
-	Xiubo.Lee@gmail.com,
-	festevam@gmail.com,
-	nicoleotsuka@gmail.com,
-	lgirdwood@gmail.com,
-	broonie@kernel.org,
-	perex@perex.cz,
-	tiwai@suse.com,
-	alsa-devel@alsa-project.org,
-	linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v9 00/15] Add audio support in v4l2 framework
-Date: Fri, 10 Nov 2023 13:47:54 +0800
-Message-Id: <1699595289-25773-1-git-send-email-shengjiu.wang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-X-Virus-Scanned: ClamAV using ClamSMTP
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE0D138FA3
+	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 17:46:33 +0000 (UTC)
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACBE53977B
+	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 06:44:39 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 91D4549E;
+	Fri, 10 Nov 2023 15:44:15 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1699627455;
+	bh=6pXXqK67gvPVu6FLyPdFz2/7vjQPU3wwIhLpiTO8ZkI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OOswyY12iL3EivfltYccPJDU7gHI1TEpRe5QSw21Lt4Yfs74TD5f/Pi/RS65iFJGM
+	 k4mqOLDIMmdnkF6lo+2FXpd0AYi5RXof9yjDsDBAXvo4Zf/hqMtbHNsvDWmAsMMs9v
+	 LcY8rxsRzVc0pNNL1C6cJVINaz3Gwo6sCHbjiaco=
+Date: Fri, 10 Nov 2023 16:44:45 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Hans de Goede <hdegoede@redhat.com>, linux-media@vger.kernel.org
+Subject: Re: [PATCH 3/6] media: v4l: cci: Add macros to obtain register width
+Message-ID: <20231110144445.GC21167@pendragon.ideasonboard.com>
+References: <20231110094705.1367083-1-sakari.ailus@linux.intel.com>
+ <20231110094705.1367083-4-sakari.ailus@linux.intel.com>
+ <553265e2-a57a-4f70-9254-f140348ed1e8@redhat.com>
+ <ZU4RWhxbJyG-2lR2@kekkonen.localdomain>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZU4RWhxbJyG-2lR2@kekkonen.localdomain>
 
-Audio signal processing also has the requirement for memory to
-memory similar as Video.
+On Fri, Nov 10, 2023 at 11:17:46AM +0000, Sakari Ailus wrote:
+> Hi Hans,
+> 
+> Thank you for the review.
+> 
+> On Fri, Nov 10, 2023 at 12:14:10PM +0100, Hans de Goede wrote:
+> > Hi,
+> > 
+> > On 11/10/23 10:47, Sakari Ailus wrote:
+> > > Add CCI_REG_WIDTH() macro to obtain register width in bits and similarly,
+> > > CCI_REG_WIDTH_BYTES() to obtain it in bytes.
+> > > 
+> > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > > ---
+> > >  include/media/v4l2-cci.h | 3 +++
+> > >  1 file changed, 3 insertions(+)
+> > > 
+> > > diff --git a/include/media/v4l2-cci.h b/include/media/v4l2-cci.h
+> > > index b4ce0a46092c..80eaa7fdc606 100644
+> > > --- a/include/media/v4l2-cci.h
+> > > +++ b/include/media/v4l2-cci.h
+> > > @@ -40,6 +40,9 @@ struct cci_reg_sequence {
+> > >  #define CCI_REG_FLAG_PRIVATE_END	31U
+> > >  #define CCI_REG_PRIVATE_MASK		GENMASK(CCI_REG_FLAG_PRIVATE_END, CCI_REG_FLAG_PRIVATE_START)
+> > >  
+> > > +#define CCI_REG_WIDTH_BYTES(x)		(((x) & CCI_REG_WIDTH_MASK) >> CCI_REG_WIDTH_SHIFT)
+> > 
+> > Please use FIELD_GET like v4l2-cci.c does:
+> > 
+> > #define CCI_REG_WIDTH_BYTES(x)		FIELD_GET(CCI_REG_WIDTH_MASK, (x))
+> > 
+> > With that fixed:
+> > 
+> > Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> > 
+> > As for the patch 4 - 6, those are interesting patches but
+> > I'm afraid I don't have time to review them.
+> 
+> No worries, I mainly included them to have a user for the newly added
+> features.
+> 
+> I'll send v2 with FIELD_GET().
 
-This asrc memory to memory (memory ->asrc->memory) case is a non
-real time use case.
+With FIELD_GET(),
 
-User fills the input buffer to the asrc module, after conversion, then asrc
-sends back the output buffer to user. So it is not a traditional ALSA playback
-and capture case.
-
-It is a specific use case,  there is no reference in current kernel.
-v4l2 memory to memory is the closed implementation,  v4l2 current
-support video, image, radio, tuner, touch devices, so it is not
-complicated to add support for this specific audio case.
-
-Because we had implemented the "memory -> asrc ->i2s device-> codec"
-use case in ALSA.  Now the "memory->asrc->memory" needs
-to reuse the code in asrc driver, so the first 3 patches is for refining
-the code to make it can be shared by the "memory->asrc->memory"
-driver.
-
-The main change is in the v4l2 side, A /dev/vl4-audioX will be created,
-user applications only use the ioctl of v4l2 framework.
-
-Other change is to add memory to memory support for two kinds of i.MX ASRC
-module.
-
-changes in v9:
-- add MEDIA_ENT_F_PROC_AUDIO_RESAMPLER.
-- add MEDIA_INTF_T_V4L_AUDIO
-- add media controller support
-- refine the vim2m-audio to support 8k<->16k conversion.
-
-changes in v8:
-- refine V4L2_CAP_AUDIO_M2M to be 0x00000008
-- update doc for FIXED_POINT
-- address comments for imx-asrc
-
-changes in v7:
-- add acked-by from Mark
-- separate commit for fixed point, m2m audio class, audio rate controls
-- use INTEGER_MENU for rate,  FIXED_POINT for rate offset
-- remove used fmts
-- address other comments for Hans
-
-changes in v6:
-- use m2m_prepare/m2m_unprepare/m2m_start/m2m_stop to replace
-  m2m_start_part_one/m2m_stop_part_one, m2m_start_part_two/m2m_stop_part_two.
-- change V4L2_CTRL_TYPE_ASRC_RATE to V4L2_CTRL_TYPE_FIXED_POINT
-- fix warning by kernel test rebot
-- remove some unused format V4L2_AUDIO_FMT_XX
-- Get SNDRV_PCM_FORMAT from V4L2_AUDIO_FMT in driver.
-- rename audm2m to viaudm2m.
-
-changes in v5:
-- remove V4L2_AUDIO_FMT_LPCM
-- define audio pixel format like V4L2_AUDIO_FMT_S8...
-- remove rate and format in struct v4l2_audio_format.
-- Add V4L2_CID_ASRC_SOURCE_RATE and V4L2_CID_ASRC_DEST_RATE controls
-- updata document accordingly.
-
-changes in v4:
-- update document style
-- separate V4L2_AUDIO_FMT_LPCM and V4L2_CAP_AUDIO_M2M in separate commit
-
-changes in v3:
-- Modify documents for adding audio m2m support
-- Add audio virtual m2m driver
-- Defined V4L2_AUDIO_FMT_LPCM format type for audio.
-- Defined V4L2_CAP_AUDIO_M2M capability type for audio m2m case.
-- with modification in v4l-utils, pass v4l2-compliance test.
-
-changes in v2:
-- decouple the implementation in v4l2 and ALSA
-- implement the memory to memory driver as a platfrom driver
-  and move it to driver/media
-- move fsl_asrc_common.h to include/sound folder
-
-Shengjiu Wang (15):
-  ASoC: fsl_asrc: define functions for memory to memory usage
-  ASoC: fsl_easrc: define functions for memory to memory usage
-  ASoC: fsl_asrc: move fsl_asrc_common.h to include/sound
-  ASoC: fsl_asrc: register m2m platform device
-  ASoC: fsl_easrc: register m2m platform device
-  media: uapi: Add V4L2_CAP_AUDIO_M2M capability flag
-  media: v4l2: Add audio capture and output support
-  media: uapi: Define audio sample format fourcc type
-  media: uapi: Add V4L2_CTRL_CLASS_M2M_AUDIO
-  media: uapi: Add V4L2_CTRL_TYPE_FIXED_POINT
-  media: uapi: Add audio rate controls support
-  media: uapi: Declare interface types for Audio
-  media: uapi: Add an entity type for audio resampler
-  media: imx-asrc: Add memory to memory driver
-  media: vim2m-audio: add virtual driver for audio memory to memory
-
- .../media/mediactl/media-types.rst            |    9 +
- .../userspace-api/media/v4l/buffer.rst        |    6 +
- .../userspace-api/media/v4l/common.rst        |    1 +
- .../media/v4l/dev-audio-mem2mem.rst           |   71 +
- .../userspace-api/media/v4l/devices.rst       |    1 +
- .../media/v4l/ext-ctrls-audio-m2m.rst         |   41 +
- .../userspace-api/media/v4l/pixfmt-audio.rst  |   87 ++
- .../userspace-api/media/v4l/pixfmt.rst        |    1 +
- .../media/v4l/vidioc-enum-fmt.rst             |    2 +
- .../media/v4l/vidioc-g-ext-ctrls.rst          |   17 +-
- .../userspace-api/media/v4l/vidioc-g-fmt.rst  |    4 +
- .../media/v4l/vidioc-querycap.rst             |    3 +
- .../media/v4l/vidioc-queryctrl.rst            |    9 +-
- .../media/videodev2.h.rst.exceptions          |    4 +
- .../media/common/videobuf2/videobuf2-v4l2.c   |    4 +
- drivers/media/platform/nxp/Kconfig            |   14 +
- drivers/media/platform/nxp/Makefile           |    1 +
- drivers/media/platform/nxp/imx-asrc.c         | 1235 +++++++++++++++++
- drivers/media/test-drivers/Kconfig            |   11 +
- drivers/media/test-drivers/Makefile           |    1 +
- drivers/media/test-drivers/vim2m-audio.c      |  799 +++++++++++
- drivers/media/v4l2-core/v4l2-ctrls-api.c      |    5 +-
- drivers/media/v4l2-core/v4l2-ctrls-core.c     |    2 +
- drivers/media/v4l2-core/v4l2-ctrls-defs.c     |   16 +
- drivers/media/v4l2-core/v4l2-dev.c            |   21 +
- drivers/media/v4l2-core/v4l2-ioctl.c          |   66 +
- drivers/media/v4l2-core/v4l2-mem2mem.c        |   13 +-
- include/media/v4l2-dev.h                      |    2 +
- include/media/v4l2-ioctl.h                    |   34 +
- .../fsl => include/sound}/fsl_asrc_common.h   |   60 +
- include/uapi/linux/media.h                    |    2 +
- include/uapi/linux/v4l2-controls.h            |    9 +
- include/uapi/linux/videodev2.h                |   42 +
- sound/soc/fsl/fsl_asrc.c                      |  144 ++
- sound/soc/fsl/fsl_asrc.h                      |    4 +-
- sound/soc/fsl/fsl_asrc_dma.c                  |    2 +-
- sound/soc/fsl/fsl_easrc.c                     |  233 ++++
- sound/soc/fsl/fsl_easrc.h                     |    6 +-
- 38 files changed, 2967 insertions(+), 15 deletions(-)
- create mode 100644 Documentation/userspace-api/media/v4l/dev-audio-mem2mem.rst
- create mode 100644 Documentation/userspace-api/media/v4l/ext-ctrls-audio-m2m.rst
- create mode 100644 Documentation/userspace-api/media/v4l/pixfmt-audio.rst
- create mode 100644 drivers/media/platform/nxp/imx-asrc.c
- create mode 100644 drivers/media/test-drivers/vim2m-audio.c
- rename {sound/soc/fsl => include/sound}/fsl_asrc_common.h (60%)
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
 -- 
-2.34.1
+Regards,
 
+Laurent Pinchart
 
