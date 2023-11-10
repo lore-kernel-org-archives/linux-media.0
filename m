@@ -1,115 +1,106 @@
-Return-Path: <linux-media-owner@vger.kernel.org>
+Return-Path: <linux-media+bounces-1-linux-media=archiver.kernel.org@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61671C41535
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:45:54 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345965AbjKJRpy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 10 Nov 2023 12:45:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34508 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234640AbjKJRoz (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 10 Nov 2023 12:44:55 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012942D4CD
-        for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 03:11:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1699614708;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NSD4YejZNM223Dn/jWm53q9blxJnPoPOmqWjxFzmcE0=;
-        b=alura4WT0OVLRE4vNlmszSLQ1Tv76Q5IPuTEfyqXUHfspKzm28xSLoIreUJ59Irr4MlZgf
-        LBb0d45uYPW+qJ04gfES13/SO3q8h/TsAM6QKIrbNEZVs+giW0Jk7LAhYUELCy/8Ql78BI
-        3d9jhDEfQrGUAcKoaK3/nDUIQ1LqSvE=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-173-xxEMYSdFM2ilUCxt8fNgjg-1; Fri, 10 Nov 2023 06:11:47 -0500
-X-MC-Unique: xxEMYSdFM2ilUCxt8fNgjg-1
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-9e31708ad72so161780866b.3
-        for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 03:11:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699614706; x=1700219506;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NSD4YejZNM223Dn/jWm53q9blxJnPoPOmqWjxFzmcE0=;
-        b=vqxxB3s5KkThkyLdjdtZEcyDEZj4wVHswhfoE8spC3uD6h1OJx6FfJJRYR0Lb4NYjg
-         ftsNmrAZ0FZwcdTOS0nZ9LiphsL9kWrJluUkXf1T1qPyUBqvkt2WM7FwOvXXHcSck2XL
-         4LYCYlRE79dTPSuTopuj1HhXbCor3/PP9G7g7D0EciWG7FcmMFv1GMbF01Pb7HUkTaPH
-         xskPuJMYyT1IUdLXCiDJuYPfFO/O+rgVoH4St2BA91n6udngIiJt4eHWqgbwUxsgMKQ/
-         gdU0TZ+iJg6nvM4iSQAAy6ULGh8DvWqlSFdgQPO1ca3g2RwBVda8MfnfgHET4d9pszV2
-         k1ew==
-X-Gm-Message-State: AOJu0YzyAjTDtr2v1K7BXOFgYqyunxVyzSp4XwHJiD3nfokMy8W+cUzR
-        j+Ud74720B6P76n+75rYKPQi1ERxp03GuGly+0ZN6qz0BufhXqt4AxMA/VYAIzg7VUiNPaA9kyH
-        +dku9O2zK2WEDg1do6PBUcw0=
-X-Received: by 2002:a17:907:c13:b0:9b2:b149:b81a with SMTP id ga19-20020a1709070c1300b009b2b149b81amr7192542ejc.64.1699614706459;
-        Fri, 10 Nov 2023 03:11:46 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEnnS/sFmxbRfaKctUwF05b1bA9iUBe83OOWZLqNlF+5yK8Fd3zeJeF2MK2CWGYW9OCnsVn/g==
-X-Received: by 2002:a17:907:c13:b0:9b2:b149:b81a with SMTP id ga19-20020a1709070c1300b009b2b149b81amr7192529ejc.64.1699614706255;
-        Fri, 10 Nov 2023 03:11:46 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id fj17-20020a1709069c9100b009e6391123b6sm615053ejc.50.2023.11.10.03.11.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Nov 2023 03:11:45 -0800 (PST)
-Message-ID: <1f313240-8b27-46c3-90d6-013ae64eb359@redhat.com>
-Date:   Fri, 10 Nov 2023 12:11:45 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/6] media: v4l: cci: Add driver-private bit definitions
-Content-Language: en-US, nl
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org
-Cc:     laurent.pinchart@ideasonboard.com
-References: <20231110094705.1367083-1-sakari.ailus@linux.intel.com>
- <20231110094705.1367083-3-sakari.ailus@linux.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20231110094705.1367083-3-sakari.ailus@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAD83C4167D
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:46:43 +0000 (UTC)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 33AA6B20F15
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:46:42 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 563283717F;
+	Fri, 10 Nov 2023 17:46:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1FB82231E
+	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 17:46:27 +0000 (UTC)
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD617299;
+	Thu,  9 Nov 2023 22:28:13 -0800 (PST)
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id BA724200B18;
+	Fri, 10 Nov 2023 07:28:11 +0100 (CET)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 81860201C40;
+	Fri, 10 Nov 2023 07:28:11 +0100 (CET)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 8BEC4180327D;
+	Fri, 10 Nov 2023 14:28:09 +0800 (+08)
+From: Shengjiu Wang <shengjiu.wang@nxp.com>
+To: hverkuil@xs4all.nl,
+	sakari.ailus@iki.fi,
+	tfiga@chromium.org,
+	m.szyprowski@samsung.com,
+	mchehab@kernel.org,
+	linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	shengjiu.wang@gmail.com,
+	Xiubo.Lee@gmail.com,
+	festevam@gmail.com,
+	nicoleotsuka@gmail.com,
+	lgirdwood@gmail.com,
+	broonie@kernel.org,
+	perex@perex.cz,
+	tiwai@suse.com,
+	alsa-devel@alsa-project.org,
+	linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v9 13/15] media: uapi: Add an entity type for audio resampler
+Date: Fri, 10 Nov 2023 13:48:07 +0800
+Message-Id: <1699595289-25773-14-git-send-email-shengjiu.wang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1699595289-25773-1-git-send-email-shengjiu.wang@nxp.com>
+References: <1699595289-25773-1-git-send-email-shengjiu.wang@nxp.com>
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
-List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
+List-Id: <linux-media.vger.kernel.org>
+List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 
-Hi,
+Add and document a media entity type for audio resampler.
+It is MEDIA_ENT_F_PROC_AUDIO_RESAMPLER.
 
-On 11/10/23 10:47, Sakari Ailus wrote:
-> Provide a few bits for drivers to store private information on register
-> definitions.
-> 
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
->  include/media/v4l2-cci.h | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/include/media/v4l2-cci.h b/include/media/v4l2-cci.h
-> index f2c2962e936b..b4ce0a46092c 100644
-> --- a/include/media/v4l2-cci.h
-> +++ b/include/media/v4l2-cci.h
-> @@ -33,6 +33,12 @@ struct cci_reg_sequence {
->  #define CCI_REG_ADDR_MASK		GENMASK(15, 0)
->  #define CCI_REG_WIDTH_SHIFT		16
->  #define CCI_REG_WIDTH_MASK		GENMASK(19, 16)
-> +/*
-> + * Private CCI register flags, for the use of drivers.
-> + */
-> +#define CCI_REG_FLAG_PRIVATE_START	28U
-> +#define CCI_REG_FLAG_PRIVATE_END	31U
-> +#define CCI_REG_PRIVATE_MASK		GENMASK(CCI_REG_FLAG_PRIVATE_END, CCI_REG_FLAG_PRIVATE_START)
->  
->  #define CCI_REG8(x)			((1 << CCI_REG_WIDTH_SHIFT) | (x))
->  #define CCI_REG16(x)			((2 << CCI_REG_WIDTH_SHIFT) | (x))
+Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+---
+ Documentation/userspace-api/media/mediactl/media-types.rst | 5 +++++
+ include/uapi/linux/media.h                                 | 1 +
+ 2 files changed, 6 insertions(+)
 
-Thanks, patch looks good to me:
-
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-Regards,
-
-Hans
+diff --git a/Documentation/userspace-api/media/mediactl/media-types.rst b/Documentation/userspace-api/media/mediactl/media-types.rst
+index 3f0bcb18a5ca..2977d8723f11 100644
+--- a/Documentation/userspace-api/media/mediactl/media-types.rst
++++ b/Documentation/userspace-api/media/mediactl/media-types.rst
+@@ -208,6 +208,11 @@ Types and flags used to represent the media graph elements
+ 	  combination of custom V4L2 controls and IOCTLs, and parameters
+ 	  supplied in a metadata buffer.
+ 
++    *  -  ``MEDIA_ENT_F_PROC_AUDIO_RESAMPLER``
++       -  An Audio Resampler device. An entity capable of
++	  resampling a audio stream from one sample rate to another sample
++	  rate. Must have one sink pad and at least one source pad.
++
+     *  -  ``MEDIA_ENT_F_VID_MUX``
+        - Video multiplexer. An entity capable of multiplexing must have at
+          least two sink pads and one source pad, and must pass the video
+diff --git a/include/uapi/linux/media.h b/include/uapi/linux/media.h
+index 9ff6dec7393a..a8266eaa8042 100644
+--- a/include/uapi/linux/media.h
++++ b/include/uapi/linux/media.h
+@@ -125,6 +125,7 @@ struct media_device_info {
+ #define MEDIA_ENT_F_PROC_VIDEO_ENCODER		(MEDIA_ENT_F_BASE + 0x4007)
+ #define MEDIA_ENT_F_PROC_VIDEO_DECODER		(MEDIA_ENT_F_BASE + 0x4008)
+ #define MEDIA_ENT_F_PROC_VIDEO_ISP		(MEDIA_ENT_F_BASE + 0x4009)
++#define MEDIA_ENT_F_PROC_AUDIO_RESAMPLER	(MEDIA_ENT_F_BASE + 0x400a)
+ 
+ /*
+  * Switch and bridge entity functions
+-- 
+2.34.1
 
 
