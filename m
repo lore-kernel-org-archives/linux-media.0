@@ -1,130 +1,125 @@
-Return-Path: <linux-media+bounces-22-linux-media=archiver.kernel.org@vger.kernel.org>
+Return-Path: <linux-media+bounces-23-linux-media=archiver.kernel.org@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBF8FC4332F
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:48:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2526C4332F
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:48:18 +0000 (UTC)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 91BAB281855
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:48:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8AEFC2818F6
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:48:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ABF23B285;
-	Fri, 10 Nov 2023 17:46:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KOilA3vQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 219BC3B79E;
+	Fri, 10 Nov 2023 17:46:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB3CF3AC24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB44A3AC25
 	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 17:46:41 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528AB250A6
-	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 01:47:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699609634; x=1731145634;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=QJWnER7Q+8D+Bl7nUb5VB3orb5Qiwr8fqqGoImREF58=;
-  b=KOilA3vQx8oKaoNVCkNTXjcxsWI6y9qgXP0tIgRtxhN54PQkEliB0/S1
-   2oc1gLlYXr7MpTnqwai8ljibc/YHA2e9GPjhyYGdqD1Ym7oZOnJ8ndPDV
-   W/QQUmUbLjhZpBn1VS/v+InFixvQgaLyyZc7VASvNkXjUwhcA7q7rp+pz
-   jy3/SF4K+orp3BlX75M7MeZCd1pa+4MbcKnV1M9ExVBr924cfG3CKwwFl
-   lSfYETOozYua1/dVT60q6jVmAs+4EEkfdtlYfFaXNTsdSnXEfbPejMx07
-   emfCNOoAhyWtDsnVEoT8ayoFEs22O58Wofmv1B+IPg+Qt61DXxMldCSRk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10889"; a="421253798"
-X-IronPort-AV: E=Sophos;i="6.03,291,1694761200"; 
-   d="scan'208";a="421253798"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2023 01:47:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10889"; a="740114817"
-X-IronPort-AV: E=Sophos;i="6.03,291,1694761200"; 
-   d="scan'208";a="740114817"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2023 01:47:12 -0800
-Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 76DBB120788;
-	Fri, 10 Nov 2023 11:47:09 +0200 (EET)
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: linux-media@vger.kernel.org
-Cc: laurent.pinchart@ideasonboard.com,
-	hdegoede@redhat.com
-Subject: [PATCH 5/6] media: ccs: Better separate CCS static data access
-Date: Fri, 10 Nov 2023 11:47:04 +0200
-Message-Id: <20231110094705.1367083-6-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231110094705.1367083-1-sakari.ailus@linux.intel.com>
-References: <20231110094705.1367083-1-sakari.ailus@linux.intel.com>
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5526D7286;
+	Thu,  9 Nov 2023 22:27:57 -0800 (PST)
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id E8641201C4B;
+	Fri, 10 Nov 2023 07:27:55 +0100 (CET)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id B9728201C4E;
+	Fri, 10 Nov 2023 07:27:55 +0100 (CET)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 19BAB183AD25;
+	Fri, 10 Nov 2023 14:27:54 +0800 (+08)
+From: Shengjiu Wang <shengjiu.wang@nxp.com>
+To: hverkuil@xs4all.nl,
+	sakari.ailus@iki.fi,
+	tfiga@chromium.org,
+	m.szyprowski@samsung.com,
+	mchehab@kernel.org,
+	linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	shengjiu.wang@gmail.com,
+	Xiubo.Lee@gmail.com,
+	festevam@gmail.com,
+	nicoleotsuka@gmail.com,
+	lgirdwood@gmail.com,
+	broonie@kernel.org,
+	perex@perex.cz,
+	tiwai@suse.com,
+	alsa-devel@alsa-project.org,
+	linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v9 03/15] ASoC: fsl_asrc: move fsl_asrc_common.h to include/sound
+Date: Fri, 10 Nov 2023 13:47:57 +0800
+Message-Id: <1699595289-25773-4-git-send-email-shengjiu.wang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1699595289-25773-1-git-send-email-shengjiu.wang@nxp.com>
+References: <1699595289-25773-1-git-send-email-shengjiu.wang@nxp.com>
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Separate CCS static data read-only register access in ccs-reg-access.c.
+Move fsl_asrc_common.h to include/sound that it can be
+included from other drivers.
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+Acked-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/media/i2c/ccs/ccs-reg-access.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ {sound/soc/fsl => include/sound}/fsl_asrc_common.h | 0
+ sound/soc/fsl/fsl_asrc.h                           | 2 +-
+ sound/soc/fsl/fsl_asrc_dma.c                       | 2 +-
+ sound/soc/fsl/fsl_easrc.h                          | 2 +-
+ 4 files changed, 3 insertions(+), 3 deletions(-)
+ rename {sound/soc/fsl => include/sound}/fsl_asrc_common.h (100%)
 
-diff --git a/drivers/media/i2c/ccs/ccs-reg-access.c b/drivers/media/i2c/ccs/ccs-reg-access.c
-index 25993445f4fe..652d705a2ef5 100644
---- a/drivers/media/i2c/ccs/ccs-reg-access.c
-+++ b/drivers/media/i2c/ccs/ccs-reg-access.c
-@@ -197,8 +197,8 @@ static int __ccs_read_addr(struct ccs_sensor *sensor, u32 reg, u32 *val,
- 	return 0;
- }
+diff --git a/sound/soc/fsl/fsl_asrc_common.h b/include/sound/fsl_asrc_common.h
+similarity index 100%
+rename from sound/soc/fsl/fsl_asrc_common.h
+rename to include/sound/fsl_asrc_common.h
+diff --git a/sound/soc/fsl/fsl_asrc.h b/sound/soc/fsl/fsl_asrc.h
+index 1c492eb237f5..66544624de7b 100644
+--- a/sound/soc/fsl/fsl_asrc.h
++++ b/sound/soc/fsl/fsl_asrc.h
+@@ -10,7 +10,7 @@
+ #ifndef _FSL_ASRC_H
+ #define _FSL_ASRC_H
  
--static int __ccs_read_data(struct ccs_reg *regs, size_t num_regs,
--			   u32 reg, u32 *val)
-+static int __ccs_static_read_only(struct ccs_reg *regs, size_t num_regs,
-+				  u32 reg, u32 *val)
- {
- 	unsigned int width = ccs_reg_width(reg);
- 	size_t i;
-@@ -235,16 +235,16 @@ static int __ccs_read_data(struct ccs_reg *regs, size_t num_regs,
- 	return -ENOENT;
- }
+-#include  "fsl_asrc_common.h"
++#include  <sound/fsl_asrc_common.h>
  
--static int ccs_read_data(struct ccs_sensor *sensor, u32 reg, u32 *val)
-+static int ccs_static_read_only(struct ccs_sensor *sensor, u32 reg, u32 *val)
- {
--	if (!__ccs_read_data(sensor->sdata.sensor_read_only_regs,
--			     sensor->sdata.num_sensor_read_only_regs,
--			     reg, val))
-+	if (!__ccs_static_read_only(sensor->sdata.sensor_read_only_regs,
-+				    sensor->sdata.num_sensor_read_only_regs,
-+				    reg, val))
- 		return 0;
+ #define ASRC_M2M_INPUTFIFO_WML		0x4
+ #define ASRC_M2M_OUTPUTFIFO_WML		0x2
+diff --git a/sound/soc/fsl/fsl_asrc_dma.c b/sound/soc/fsl/fsl_asrc_dma.c
+index f501f47242fb..f067bf1ecea7 100644
+--- a/sound/soc/fsl/fsl_asrc_dma.c
++++ b/sound/soc/fsl/fsl_asrc_dma.c
+@@ -12,7 +12,7 @@
+ #include <sound/dmaengine_pcm.h>
+ #include <sound/pcm_params.h>
  
--	return __ccs_read_data(sensor->mdata.module_read_only_regs,
--			       sensor->mdata.num_module_read_only_regs,
--			       reg, val);
-+	return __ccs_static_read_only(sensor->mdata.module_read_only_regs,
-+				      sensor->mdata.num_module_read_only_regs,
-+				      reg, val);
- }
+-#include "fsl_asrc_common.h"
++#include <sound/fsl_asrc_common.h>
  
- static int ccs_read_addr_raw(struct ccs_sensor *sensor, u32 reg, u32 *val,
-@@ -253,7 +253,7 @@ static int ccs_read_addr_raw(struct ccs_sensor *sensor, u32 reg, u32 *val,
- 	int rval;
+ #define FSL_ASRC_DMABUF_SIZE	(256 * 1024)
  
- 	if (data) {
--		rval = ccs_read_data(sensor, reg, val);
-+		rval = ccs_static_read_only(sensor, reg, val);
- 		if (!rval)
- 			return 0;
- 	}
+diff --git a/sound/soc/fsl/fsl_easrc.h b/sound/soc/fsl/fsl_easrc.h
+index c9f770862662..a24e540876a4 100644
+--- a/sound/soc/fsl/fsl_easrc.h
++++ b/sound/soc/fsl/fsl_easrc.h
+@@ -9,7 +9,7 @@
+ #include <sound/asound.h>
+ #include <linux/dma/imx-dma.h>
+ 
+-#include "fsl_asrc_common.h"
++#include <sound/fsl_asrc_common.h>
+ 
+ /* EASRC Register Map */
+ 
 -- 
-2.39.2
+2.34.1
 
 
