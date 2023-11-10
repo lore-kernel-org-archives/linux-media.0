@@ -1,266 +1,192 @@
-Return-Path: <linux-media+bounces-2-linux-media=archiver.kernel.org@vger.kernel.org>
+Return-Path: <linux-media+bounces-3-linux-media=archiver.kernel.org@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EEACC4167B
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:46:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4437C4332F
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:46:50 +0000 (UTC)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1046A281372
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:46:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1F411B20DF0
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:46:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 020FF374FF;
-	Fri, 10 Nov 2023 17:46:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91A2138DCC;
+	Fri, 10 Nov 2023 17:46:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="FwrtrwUR"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="tiqoqms4"
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E338F20B37
-	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 17:46:27 +0000 (UTC)
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF5C900D;
-	Fri, 10 Nov 2023 00:32:32 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AA7exJO018675;
-	Fri, 10 Nov 2023 08:32:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=25mtvY+NTGW9DCzRWztwAgArQMlHdGCwKfpiRg2qsK0=;
- b=FwrtrwUR95NVAjgV+k2R1coe7//+z1by3KpeZ2ar/C6mL+a9qpqXnnmGLkicsvdpWo+i
- 57SpGz7kl52hKEbeMj4N83SaeKDiq0OmblPkAFaO8JHRqIvnx0IIg3PY6djISSgVvr9Q
- VJk+gcBi21KmJCdnZOYDGNcBWe9hj8653HA3JskDbSagkHTO6i3BRY41mIM830f38us4
- NdkP0xozw92ZmEgZmGtWMIiTTedesHjZj8JTPfEL+CRpglbiLrZ7WdpUadQfc/TF74N7
- YK7zcD1ECARn2y7bhBDNIm7fH3ffZsDrJBdY3HMPI4CXBJx1b4q/Zu9FjuxupNIeyf+M fw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3u8y39aevj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 10 Nov 2023 08:32:21 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3AA8WKhs016764
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 10 Nov 2023 08:32:20 GMT
-Received: from [10.217.216.47] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Fri, 10 Nov
- 2023 00:32:13 -0800
-Message-ID: <d716fbbe-b681-af41-bfe7-85448cc47c7c@quicinc.com>
-Date: Fri, 10 Nov 2023 14:02:10 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F7C420B14
+	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 17:46:28 +0000 (UTC)
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADA32812C
+	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 02:21:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+	s=s31663417; t=1699611702; x=1700216502; i=wahrenst@gmx.net;
+	bh=pDxBNkCtCkZS6G8VVFGb2hFThM0VDkxh3OXp+guyeQE=;
+	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
+	 In-Reply-To;
+	b=tiqoqms45cjSluer2tQFyKyGah+gnuoEPmDjvpd063Wyg6etaqmsZAIftb4MrujM
+	 QMFslV7rIqGV26EzDrQmfYk1OSiNHOM8tQvNjjAt0Qd4ny0rWgM6FwGmpNGTn+es6
+	 PE2Vm71ac3ZmP4UTou8HI1OebkNiybmQBFeOInOXT3EAeWi6KDZ6X3nIVFoUKDdqT
+	 nxc4xbhkHTWrO50NAqH3xTekoYJLETEd1iA39SKNaiyWCb3KEvU91q2YzFKMIIl3V
+	 /jKNBz9m1kHAgl1AcswqRMZnML/ByOrPoA8Y6bajNXUIQ6B5xvisYZ+bd+6llRR0+
+	 g/8PSvGnxScf/FSsXw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.1.129] ([37.4.248.43]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MryXN-1rn9e71rzZ-00nxZL; Fri, 10
+ Nov 2023 11:21:42 +0100
+Message-ID: <a122dc9a-724d-4f57-b0c2-0b6676a4ea83@gmx.net>
+Date: Fri, 10 Nov 2023 11:21:41 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH RESEND v3 4/5] clk: qcom: Use HW_CTRL_TRIGGER flag to
- switch video GDSC to HW mode
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 5/9] staging: vc04_services: Do not pass NULL to
+ vchiq_log_error()
+To: Umang Jain <umang.jain@ideasonboard.com>,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: linux-staging@lists.linux.dev, linux-rpi-kernel@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Dan Carpenter <error27@gmail.com>,
+ Kieran Bingham <kieran.bingham@ideasonboard.com>,
+ Phil Elwell <phil@raspberrypi.com>,
+ Dave Stevenson <dave.stevenson@raspberrypi.com>
+References: <20231107095156.365492-1-umang.jain@ideasonboard.com>
+ <20231107095156.365492-6-umang.jain@ideasonboard.com>
+ <20231107122551.GA3051@pendragon.ideasonboard.com>
+ <20231107123627.GB3051@pendragon.ideasonboard.com>
 Content-Language: en-US
-To: Bjorn Andersson <andersson@kernel.org>, Abel Vesa <abel.vesa@linaro.org>
-CC: "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman
-	<khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>, Pavel Machek
-	<pavel@ucw.cz>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio
-	<konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Stanimir Varbanov
-	<stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Mauro Carvalho Chehab
-	<mchehab@kernel.org>,
-        Taniya Das <tdas@qti.qualcomm.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-media@vger.kernel.org>
-References: <20231101-gdsc-hwctrl-v3-0-0740ae6b2b04@linaro.org>
- <20231101-gdsc-hwctrl-v3-4-0740ae6b2b04@linaro.org>
- <v4dnsawo7s74spccrsvjwmal73tqfq4aptiny25tyyp6ungxha@jlbywvcssqtl>
-From: Jagadeesh Kona <quic_jkona@quicinc.com>
-In-Reply-To: <v4dnsawo7s74spccrsvjwmal73tqfq4aptiny25tyyp6ungxha@jlbywvcssqtl>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: uP73AjW-MR_JJ8huakF3mrlf6qgG7jJS
-X-Proofpoint-ORIG-GUID: uP73AjW-MR_JJ8huakF3mrlf6qgG7jJS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-10_04,2023-11-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- impostorscore=0 clxscore=1015 spamscore=0 phishscore=0 malwarescore=0
- lowpriorityscore=0 mlxscore=0 priorityscore=1501 adultscore=0
- mlxlogscore=947 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2311060000 definitions=main-2311100071
+From: Stefan Wahren <wahrenst@gmx.net>
+In-Reply-To: <20231107123627.GB3051@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:yeYVJSxIyCHzHks/8URM3J2LlpTNzRU1rKdr9itN57hIV5jnkfb
+ tRHeL1geL+ZByl9Q5dvug6Lcf6IcCzFGX/odVAy5VdXhlnUoNh6iOtbAwg2HKSwpvXJ92WV
+ 8FEO8AOeGekSXEuqSJ06Eux6LQsEIYZtAmb2jwz+y1mtimbSEfqropPDv+EuFAPaCK3f24V
+ OpeUb7JHPj4HarQ/C0mSg==
+UI-OutboundReport: notjunk:1;M01:P0:YYWisDYw8xM=;hpFPDn/U9t8bI9F/lSJsdl6yvku
+ +flBFMDOajNqb0nd8swkU9rFelaywO5q+o1NMxfgjrUlzfobLBKbVW9dBDS4IYZ6G3kHKKRfI
+ bIwwwSajMn5L39yW8N51rhz5J76tzdEif/luJsA5xtqwyTY079YNawaHQPs9D80Nify95uAPo
+ 6niYudsKSpCxvHqYKNO22dbZqMPzj0lNXEqt1YSMFe9AtLlDn5M07OfjMphpP6PeXfx9hVMXU
+ P40i5DO9aZitN65PcdkI7yqtfSiwZ9V0UiZvPZuvwU0U2u+oDndarAD/cAzGmqcY2PYn7G/bW
+ wMeC7WgrYr14Zs/prv5PUMqTPz+hH1hF8mCIgry4Px3D4ucAX2NeuCkoy0/RmLs2ij1SAtIfQ
+ 9BMUlgkKWRkGSiQkg4K3ozEVsIhpTEzSZq9zhRWwIYinIFnkDReaeFD3BsN7KqjY34U+Y0yW9
+ 6iT50KeTIxJY+AweQbUKJEktHpygNtKJ2N6zRFLhC+MgwkjNgNgASLA8tro9dwCW5ReGFHbTT
+ ANm40bO3sQXSMTf3JYMeP/Foez85PT8pW6FzS2vdIGGvUzKuJ3qBycbxF2bat4lqbfrS2A9c9
+ sS4Ho8sbnyXs2R05OepZRZZxMoYmTcWhbWnZaRKvRkTAgd+nIBs9IJ6V7uuPpnTrClZufw3UU
+ 2N9JLtqMIDFqzWMV8OmBa9TftcT4yxekQR8EyTDRutnZY56MFVUVJ6qPvXU0juWfK+dwxUmFN
+ bOJyeQt1PDECthW67xUCVJs1IGK+Dv8vusJxlS4S2D7kSwnq+WPNk+fCcIMF6UvLDZov4ifGl
+ 6oQxPoqeweOcYgPHBA4nOV3xKujptcWbMTt/Xn++RBiM1VfXnzqWt93gCzZfZrZpFEWyjwgOJ
+ hZmRYyNQa1iH6Or4+x+D5CDxZvJfIIh9uMVYdwiGP/mWjmZLtMxdiATzJw/o0XvusYQ9wrxTw
+ zbtIHQ==
 
+Hi Umang,
 
-
-On 11/4/2023 1:45 AM, Bjorn Andersson wrote:
-> On Wed, Nov 01, 2023 at 11:04:10AM +0200, Abel Vesa wrote:
->> From: Jagadeesh Kona <quic_jkona@quicinc.com>
+Am 07.11.23 um 13:36 schrieb Laurent Pinchart:
+> On Tue, Nov 07, 2023 at 02:25:52PM +0200, Laurent Pinchart wrote:
+>> On Tue, Nov 07, 2023 at 04:51:52AM -0500, Umang Jain wrote:
+>>> vchiq_add_connected_callback() logs using vchiq_log_error() macro,
+>>> but passes NULL instead of a struct device pointer. Fix it.
+>>>
+>>> vchiq_add_connected_callback() is not used anywhere in the vc04_servic=
+es
+>>> as of now. It will be used when we add new drivers(VC shared memory an=
+d
+>>> bcm2835-isp), hence it kept as it is for now.
+>>>
+>>> Fixes: 1d8915cf8899 ("staging: vc04: Convert vchiq_log_error() to use =
+dynamic debug")
+>>> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+>>> ---
+>>>   .../vc04_services/interface/vchiq_arm/vchiq_connected.c       | 4 ++=
+=2D-
+>>>   .../vc04_services/interface/vchiq_arm/vchiq_connected.h       | 4 ++=
++-
+>>>   2 files changed, 5 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_c=
+onnected.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_conne=
+cted.c
+>>> index b3928bd8c9c6..21f9fa1a1713 100644
+>>> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_connecte=
+d.c
+>>> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_connecte=
+d.c
+>>> @@ -27,7 +27,7 @@ static void connected_init(void)
+>>>    * be made immediately, otherwise it will be deferred until
+>>>    * vchiq_call_connected_callbacks is called.
+>>>    */
+>>> -void vchiq_add_connected_callback(void (*callback)(void))
+>>> +void vchiq_add_connected_callback(struct vchiq_device *device, void (=
+*callback)(void))
 >>
->> The current HW_CTRL flag switches the video GDSC to HW control mode as
->> part of GDSC enable itself, instead of that use HW_CTRL_TRIGGER flag to
->> give consumer drivers more control and switch the GDSC mode as and when
->> required.
->>
->> HW_CTRL_TRIGGER flag allows consumer drivers to switch the video GDSC to
->> HW/SW control modes at runtime using dev_pm_genpd_set_hwmode API.
->>
-> 
-> This states what the code currently does, and what the new code will do.
-> But I don't find that it adequately describes _why_ this is done.
-> 
-> 
-> In the current implementation, the hardware is might collapse the GDSC
-> anytime between gdsc_enable() and gdsc_disable(). By giving "drivers
-> more control" the time spent in this state is reduced to some fraction
-> of that span, which to me implies higher power consumption.
-> 
-> Under the assumption that we don't want to consume more power without
-> reason, I'm forced to guess that there might be some scenarios that we
-> want this feature to keep the GDSC non-collapsed against the indication
-> of the hardware - to avoid some instability somewhere, perhaps?
-> 
+>> You're changing the prototype of the function, but the patch doesn't
+>> update any user. If the function is unused, it looks like you can drop
+>> it instead. Looking at the rest of the vchiq_connected.c file, I think
+>> you can actually drop the whole file.
+>
+> Except that the vc-sm-cma driver will use it. I'm curious though, that
+> driver will have no way to acquire a pointer to a vchiq_device, so I
+> don't see how this will be usable. pr_err() may be a better pick here.
 
-Thanks Bjorn for your review. Sure, will update commit text with details 
-in next series.
+in case there is currently no user, but vc-sm-cma will be then i'm
+convinced that moving this driver into staging before vchiq is out is a
+good idea.
 
-Normally, consumers will enable the GDSC and then the required clocks. 
-If GDSC is moved to HW mode in gdsc_enable() itself, the subsequent 
-clocks enablement that are dependent on GDSC might fail since GDSC could 
-be turned off by HW. The consumers can still switch the GDSC to HW mode 
-with new API right after the clocks are enabled and the control will be 
-taken back to SW mode just before disabling the GDSC, so even with the 
-newer implementation, HW can collapse the GDSC anytime for most of the 
-duration between gdsc_enable() and gdsc_disable(). This API adds more 
-flexibility for consumer drivers to control the GDSC mode as per their
-requirements.
+AFAIK your main goal is to get bcm2835-isp into mainline, so it would be
+faster to have it in staging, so everyone could fix the style issues.
 
-Thanks,
-Jagadeesh
+My initial concern about importing new drivers was that after moving it
+into staging nobody wants to finish the job. But currently i've a good
+feeling that vchiq is on a good way.
 
-> Regards,
-> Bjorn
-> 
->> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
->> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
->> ---
->>   drivers/clk/qcom/videocc-sc7180.c | 2 +-
->>   drivers/clk/qcom/videocc-sc7280.c | 2 +-
->>   drivers/clk/qcom/videocc-sdm845.c | 4 ++--
->>   drivers/clk/qcom/videocc-sm8250.c | 4 ++--
->>   drivers/clk/qcom/videocc-sm8550.c | 4 ++--
->>   5 files changed, 8 insertions(+), 8 deletions(-)
->>
->> diff --git a/drivers/clk/qcom/videocc-sc7180.c b/drivers/clk/qcom/videocc-sc7180.c
->> index 5b9b54f616b8..51439f7ba70c 100644
->> --- a/drivers/clk/qcom/videocc-sc7180.c
->> +++ b/drivers/clk/qcom/videocc-sc7180.c
->> @@ -166,7 +166,7 @@ static struct gdsc vcodec0_gdsc = {
->>   	.pd = {
->>   		.name = "vcodec0_gdsc",
->>   	},
->> -	.flags = HW_CTRL,
->> +	.flags = HW_CTRL_TRIGGER,
->>   	.pwrsts = PWRSTS_OFF_ON,
->>   };
->>   
->> diff --git a/drivers/clk/qcom/videocc-sc7280.c b/drivers/clk/qcom/videocc-sc7280.c
->> index 615695d82319..3d07b1e95986 100644
->> --- a/drivers/clk/qcom/videocc-sc7280.c
->> +++ b/drivers/clk/qcom/videocc-sc7280.c
->> @@ -236,7 +236,7 @@ static struct gdsc mvs0_gdsc = {
->>   		.name = "mvs0_gdsc",
->>   	},
->>   	.pwrsts = PWRSTS_OFF_ON,
->> -	.flags = HW_CTRL | RETAIN_FF_ENABLE,
->> +	.flags = HW_CTRL_TRIGGER | RETAIN_FF_ENABLE,
->>   };
->>   
->>   static struct gdsc mvsc_gdsc = {
->> diff --git a/drivers/clk/qcom/videocc-sdm845.c b/drivers/clk/qcom/videocc-sdm845.c
->> index c77a4dd5d39c..dad011c48973 100644
->> --- a/drivers/clk/qcom/videocc-sdm845.c
->> +++ b/drivers/clk/qcom/videocc-sdm845.c
->> @@ -260,7 +260,7 @@ static struct gdsc vcodec0_gdsc = {
->>   	},
->>   	.cxcs = (unsigned int []){ 0x890, 0x930 },
->>   	.cxc_count = 2,
->> -	.flags = HW_CTRL | POLL_CFG_GDSCR,
->> +	.flags = HW_CTRL_TRIGGER | POLL_CFG_GDSCR,
->>   	.pwrsts = PWRSTS_OFF_ON,
->>   };
->>   
->> @@ -271,7 +271,7 @@ static struct gdsc vcodec1_gdsc = {
->>   	},
->>   	.cxcs = (unsigned int []){ 0x8d0, 0x950 },
->>   	.cxc_count = 2,
->> -	.flags = HW_CTRL | POLL_CFG_GDSCR,
->> +	.flags = HW_CTRL_TRIGGER | POLL_CFG_GDSCR,
->>   	.pwrsts = PWRSTS_OFF_ON,
->>   };
->>   
->> diff --git a/drivers/clk/qcom/videocc-sm8250.c b/drivers/clk/qcom/videocc-sm8250.c
->> index ad46c4014a40..c1b73d852f1c 100644
->> --- a/drivers/clk/qcom/videocc-sm8250.c
->> +++ b/drivers/clk/qcom/videocc-sm8250.c
->> @@ -293,7 +293,7 @@ static struct gdsc mvs0_gdsc = {
->>   	.pd = {
->>   		.name = "mvs0_gdsc",
->>   	},
->> -	.flags = HW_CTRL,
->> +	.flags = HW_CTRL_TRIGGER,
->>   	.pwrsts = PWRSTS_OFF_ON,
->>   };
->>   
->> @@ -302,7 +302,7 @@ static struct gdsc mvs1_gdsc = {
->>   	.pd = {
->>   		.name = "mvs1_gdsc",
->>   	},
->> -	.flags = HW_CTRL,
->> +	.flags = HW_CTRL_TRIGGER,
->>   	.pwrsts = PWRSTS_OFF_ON,
->>   };
->>   
->> diff --git a/drivers/clk/qcom/videocc-sm8550.c b/drivers/clk/qcom/videocc-sm8550.c
->> index f3c9dfaee968..404c6600edae 100644
->> --- a/drivers/clk/qcom/videocc-sm8550.c
->> +++ b/drivers/clk/qcom/videocc-sm8550.c
->> @@ -322,7 +322,7 @@ static struct gdsc video_cc_mvs0_gdsc = {
->>   	},
->>   	.pwrsts = PWRSTS_OFF_ON,
->>   	.parent = &video_cc_mvs0c_gdsc.pd,
->> -	.flags = POLL_CFG_GDSCR | RETAIN_FF_ENABLE | HW_CTRL,
->> +	.flags = POLL_CFG_GDSCR | RETAIN_FF_ENABLE | HW_CTRL_TRIGGER,
->>   };
->>   
->>   static struct gdsc video_cc_mvs1c_gdsc = {
->> @@ -347,7 +347,7 @@ static struct gdsc video_cc_mvs1_gdsc = {
->>   	},
->>   	.pwrsts = PWRSTS_OFF_ON,
->>   	.parent = &video_cc_mvs1c_gdsc.pd,
->> -	.flags = POLL_CFG_GDSCR | RETAIN_FF_ENABLE | HW_CTRL,
->> +	.flags = POLL_CFG_GDSCR | RETAIN_FF_ENABLE | HW_CTRL_TRIGGER,
->>   };
->>   
->>   static struct clk_regmap *video_cc_sm8550_clocks[] = {
->>
->> -- 
->> 2.34.1
->>
+Best regards
+
+>
+>>>   {
+>>>   	connected_init();
+>>>
+>>> @@ -39,7 +39,7 @@ void vchiq_add_connected_callback(void (*callback)(v=
+oid))
+>>>   		callback();
+>>>   	} else {
+>>>   		if (g_num_deferred_callbacks >=3D MAX_CALLBACKS) {
+>>> -			vchiq_log_error(NULL, VCHIQ_CORE,
+>>> +			vchiq_log_error(&device->dev, VCHIQ_CORE,
+>>>   					"There already %d callback registered - please increase MAX_CAL=
+LBACKS",
+>>>   					g_num_deferred_callbacks);
+>>>   		} else {
+>>> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_c=
+onnected.h b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_conne=
+cted.h
+>>> index 4caf5e30099d..e4ed56446f8a 100644
+>>> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_connecte=
+d.h
+>>> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_connecte=
+d.h
+>>> @@ -1,10 +1,12 @@
+>>>   /* SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause */
+>>>   /* Copyright (c) 2010-2012 Broadcom. All rights reserved. */
+>>>
+>>> +#include "vchiq_bus.h"
+>>> +
+>>>   #ifndef VCHIQ_CONNECTED_H
+>>>   #define VCHIQ_CONNECTED_H
+>>>
+>>> -void vchiq_add_connected_callback(void (*callback)(void));
+>>> +void vchiq_add_connected_callback(struct vchiq_device *device, void (=
+*callback)(void));
+>>>   void vchiq_call_connected_callbacks(void);
+>>>
+>>>   #endif /* VCHIQ_CONNECTED_H */
+>
 
