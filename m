@@ -1,48 +1,72 @@
-Return-Path: <linux-media+bounces-31-linux-media=archiver.kernel.org@vger.kernel.org>
+Return-Path: <linux-media+bounces-33-linux-media=archiver.kernel.org@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DE7CC4332F
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:48:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B78EBC04A95
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:48:56 +0000 (UTC)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6BB781C20EAF
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:48:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 12F691C20E78
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:48:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABD873B2AB;
-	Fri, 10 Nov 2023 17:46:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F37013C683;
+	Fri, 10 Nov 2023 17:46:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="O5qOOfkb"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CMMAjOQF"
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A8CA38DCD
-	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 17:46:46 +0000 (UTC)
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF542B78C;
-	Fri, 10 Nov 2023 03:03:56 -0800 (PST)
-Received: from [100.116.125.19] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: andrzej.p)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id EC78B66073EB;
-	Fri, 10 Nov 2023 11:03:53 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1699614235;
-	bh=IlFF4hLVYQMy+8z6m7boQ1emEGxM3/fBp3D4sqFY4lo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=O5qOOfkbHwk1EQ79MoiHJUqkRlyLWF59KLiv1aw0WWhGJJ1igR1uGZtohHN0HL8fB
-	 EniGr8zsuLvPLB61+ZBiWTyoufc/iPdUzGCivPmO0wJQg2zbOSaWOxrH/gW78Rk3Zj
-	 e5xDfDQlYjYjwv7HFdNkzibpmDNwpytUEdRm0k2SaoeqmkgwSU0yg3rGvD7Z7YRoVT
-	 hWUmU1Q4jRrs0nZPeKgVlvBEXYF5XmUJIGWz1icdoLxp0zWngiwA/cASOsdqWlEdY7
-	 ZSCVe2KuerHlMq1X7IDv2CHnyq5W5Nqwb/9Br4x6doJqrNs0OlXEyJ54IQSUf2hOqh
-	 3rGPJxP7piJMg==
-Message-ID: <ca386f5c-34b2-4515-99ea-975b009b6628@collabora.com>
-Date: Fri, 10 Nov 2023 12:03:50 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB0453B781
+	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 17:46:47 +0000 (UTC)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC3D39CF6
+	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 06:52:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1699627952;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=69bK8ICNlQqDn7y6QJPQpitjK4ofoQn/7TVJxrBJwyY=;
+	b=CMMAjOQFGswz35GaaU1tyLLEGkVl2vlVUu5k4ZSUUxT+fvFhC1r9dCF1ej/XHpGMx64f+L
+	59PC863XxqNamnlMB5yN68+KQ50yzgqIr0NRcGnQtZmz+DKm//yJnedZ4hNw3HKZBtQ55L
+	MBLcXP8m6veI8TCDkWHe8OAbptdpgNU=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-678-6GYY8t45P_OpUaPhJUgS1A-1; Fri, 10 Nov 2023 09:52:31 -0500
+X-MC-Unique: 6GYY8t45P_OpUaPhJUgS1A-1
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-9e644d94d85so75889866b.0
+        for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 06:52:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699627950; x=1700232750;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=69bK8ICNlQqDn7y6QJPQpitjK4ofoQn/7TVJxrBJwyY=;
+        b=pY8GoPUkFcS7KPqMS8KULl8mYjo+Hz+HMDcujvcbCA3y4kj8LA99H3Z3AN+o7VGvW1
+         F6sKiNgl6e4yTjwWue35sE9JlmmhkkQlGlYSwUEio1CYyTU7em6NAK4j+rQv9H4kyX1l
+         NDSghfS98CVWLhL1HN6OeZY6DMPqgLrVrDraDFve70T73LG6vDCuG4UcHwzjpLzq2VnH
+         zhmueKaa9JejwlvaaY0KvrpCIMEVKNQs19ZXBLepVWheJTF9QfFVnlbXUI1WJcmE7sTS
+         pLZiqz48YRwtUhSAMlw53CUerANSbNjE/6zQEvW/fKx9XvCQ5E4hv5kp/6WfW0/Bx0TE
+         2I2Q==
+X-Gm-Message-State: AOJu0Yxlne6+qs5wLcSlcrh345wSVQ4OijqFUW1RJCURSdNY5GJlm0s6
+	ZjsiKUX5U4pYoC1B7YqPJ1C9v1LwH6XkxLn3D1qNFJ4oSx+8eoYWxF38fYwBIRRWtv/mKeyyHFE
+	trU6TpYD5UacaiSaoXiaEKwQymZCHKYA=
+X-Received: by 2002:a17:907:9809:b0:9dd:b919:79bf with SMTP id ji9-20020a170907980900b009ddb91979bfmr3002929ejc.36.1699627950059;
+        Fri, 10 Nov 2023 06:52:30 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGCubCi4MqoXJhavAw7qmhMP83mZyTdV0TzuvZj099cMtEgSRNcB4NfnsMZ1ZDvAGnq1Npycw==
+X-Received: by 2002:a17:907:9809:b0:9dd:b919:79bf with SMTP id ji9-20020a170907980900b009ddb91979bfmr3002915ejc.36.1699627949794;
+        Fri, 10 Nov 2023 06:52:29 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id gf23-20020a170906e21700b009920a690cd9sm4026043ejb.59.2023.11.10.06.52.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Nov 2023 06:52:29 -0800 (PST)
+Message-ID: <17ef8a66-4463-44e4-9f2c-6313f91421dd@redhat.com>
+Date: Fri, 10 Nov 2023 15:52:28 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -50,227 +74,87 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v15 30/56] media: test-drivers: Stop direct calls to queue
- num_buffers field
-To: Benjamin Gaignard <benjamin.gaignard@collabora.com>, mchehab@kernel.org,
- tfiga@chromium.org, m.szyprowski@samsung.com, ming.qian@nxp.com,
- ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
- gregkh@linuxfoundation.org, hverkuil-cisco@xs4all.nl,
- nicolas.dufresne@collabora.com
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-arm-msm@vger.kernel.org, linux-rockchip@lists.infradead.org,
- linux-staging@lists.linux.dev, kernel@collabora.com,
- Daniel Almeida <daniel.almeida@collabora.com>
-References: <20231109163512.179524-14-benjamin.gaignard@collabora.com>
- <20231109163512.179524-31-benjamin.gaignard@collabora.com>
- <0b79bb25-2e44-4a6d-b306-76477a2c8a08@collabora.com>
- <84f22803-bd25-4985-a17c-b38bd738b487@collabora.com>
-Content-Language: en-US
-From: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-In-Reply-To: <84f22803-bd25-4985-a17c-b38bd738b487@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 3/6] media: v4l: cci: Add macros to obtain register width
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: linux-media@vger.kernel.org
+References: <20231110094705.1367083-1-sakari.ailus@linux.intel.com>
+ <20231110094705.1367083-4-sakari.ailus@linux.intel.com>
+ <553265e2-a57a-4f70-9254-f140348ed1e8@redhat.com>
+ <ZU4RWhxbJyG-2lR2@kekkonen.localdomain>
+ <20231110144445.GC21167@pendragon.ideasonboard.com>
+ <20231110144924.GE21167@pendragon.ideasonboard.com>
+Content-Language: en-US, nl
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20231110144924.GE21167@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Benjamin,
+Hi,
 
-W dniu 10.11.2023 o 10:55, Benjamin Gaignard pisze:
-> 
-> Le 10/11/2023 à 10:35, Andrzej Pietrasiewicz a écrit :
->> Hi Benjamin,
->>
->> W dniu 9.11.2023 o 17:34, Benjamin Gaignard pisze:
->>> Use vb2_get_num_buffers() to avoid using queue num_buffers field directly.
->>> This allows us to change how the number of buffers is computed in the
->>> future.
->>> If 'min_buffers_needed' is set remove useless checks in queue setup
->>> functions.
+On 11/10/23 15:49, Laurent Pinchart wrote:
+> On Fri, Nov 10, 2023 at 04:44:46PM +0200, Laurent Pinchart wrote:
+>> On Fri, Nov 10, 2023 at 11:17:46AM +0000, Sakari Ailus wrote:
+>>> On Fri, Nov 10, 2023 at 12:14:10PM +0100, Hans de Goede wrote:
+>>>> On 11/10/23 10:47, Sakari Ailus wrote:
+>>>>> Add CCI_REG_WIDTH() macro to obtain register width in bits and similarly,
+>>>>> CCI_REG_WIDTH_BYTES() to obtain it in bytes.
+>>>>>
+>>>>> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+>>>>> ---
+>>>>>  include/media/v4l2-cci.h | 3 +++
+>>>>>  1 file changed, 3 insertions(+)
+>>>>>
+>>>>> diff --git a/include/media/v4l2-cci.h b/include/media/v4l2-cci.h
+>>>>> index b4ce0a46092c..80eaa7fdc606 100644
+>>>>> --- a/include/media/v4l2-cci.h
+>>>>> +++ b/include/media/v4l2-cci.h
+>>>>> @@ -40,6 +40,9 @@ struct cci_reg_sequence {
+>>>>>  #define CCI_REG_FLAG_PRIVATE_END	31U
+>>>>>  #define CCI_REG_PRIVATE_MASK		GENMASK(CCI_REG_FLAG_PRIVATE_END, CCI_REG_FLAG_PRIVATE_START)
+>>>>>  
+>>>>> +#define CCI_REG_WIDTH_BYTES(x)		(((x) & CCI_REG_WIDTH_MASK) >> CCI_REG_WIDTH_SHIFT)
+>>>>
+>>>> Please use FIELD_GET like v4l2-cci.c does:
+>>>>
+>>>> #define CCI_REG_WIDTH_BYTES(x)		FIELD_GET(CCI_REG_WIDTH_MASK, (x))
+>>>>
+>>>> With that fixed:
+>>>>
+>>>> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+>>>>
+>>>> As for the patch 4 - 6, those are interesting patches but
+>>>> I'm afraid I don't have time to review them.
 >>>
->>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->>> CC: Daniel Almeida <daniel.almeida@collabora.com>
->>> ---
->>>   drivers/media/test-drivers/visl/visl-dec.c         | 4 ++--
->>>   drivers/media/test-drivers/vivid/vivid-meta-cap.c  | 3 ---
->>>   drivers/media/test-drivers/vivid/vivid-meta-out.c  | 5 +++--
->>>   drivers/media/test-drivers/vivid/vivid-touch-cap.c | 5 +++--
->>>   drivers/media/test-drivers/vivid/vivid-vbi-cap.c   | 3 ---
->>>   drivers/media/test-drivers/vivid/vivid-vbi-out.c   | 3 ---
->>>   drivers/media/test-drivers/vivid/vivid-vid-cap.c   | 3 ---
->>>   drivers/media/test-drivers/vivid/vivid-vid-out.c   | 5 +----
->>>   8 files changed, 9 insertions(+), 22 deletions(-)
+>>> No worries, I mainly included them to have a user for the newly added
+>>> features.
 >>>
->>> diff --git a/drivers/media/test-drivers/visl/visl-dec.c 
->>> b/drivers/media/test-drivers/visl/visl-dec.c
->>> index ba20ea998d19..4672dc5e52bb 100644
->>> --- a/drivers/media/test-drivers/visl/visl-dec.c
->>> +++ b/drivers/media/test-drivers/visl/visl-dec.c
->>> @@ -287,7 +287,7 @@ static void visl_tpg_fill(struct visl_ctx *ctx, struct 
->>> visl_run *run)
->>>       frame_dprintk(ctx->dev, run->dst->sequence, "%s\n", buf);
->>>         len = 0;
->>> -    for (i = 0; i < out_q->num_buffers; i++) {
->>> +    for (i = 0; i < vb2_get_num_buffers(out_q); i++) {
->>>           char entry[] = "index: %u, state: %s, request_fd: %d, ";
->>>           u32 old_len = len;
->>>           struct vb2_buffer *vb2;
->>> @@ -347,7 +347,7 @@ static void visl_tpg_fill(struct visl_ctx *ctx, struct 
->>> visl_run *run)
->>>       frame_dprintk(ctx->dev, run->dst->sequence, "%s\n", buf);
->>>         len = 0;
->>> -    for (i = 0; i < cap_q->num_buffers; i++) {
->>> +    for (i = 0; i < vb2_get_num_buffers(cap_q); i++) {
->>>           u32 old_len = len;
->>>           struct vb2_buffer *vb2;
->>>           char *q_status;
->>> diff --git a/drivers/media/test-drivers/vivid/vivid-meta-cap.c 
->>> b/drivers/media/test-drivers/vivid/vivid-meta-cap.c
->>> index 780f96860a6d..0a718d037e59 100644
->>> --- a/drivers/media/test-drivers/vivid/vivid-meta-cap.c
->>> +++ b/drivers/media/test-drivers/vivid/vivid-meta-cap.c
->>> @@ -30,9 +30,6 @@ static int meta_cap_queue_setup(struct vb2_queue *vq, 
->>> unsigned int *nbuffers,
->>>           sizes[0] = size;
->>>       }
->>>   -    if (vq->num_buffers + *nbuffers < 2)
->>> -        *nbuffers = 2 - vq->num_buffers;
->>> -
->>>       *nplanes = 1;
->>>       return 0;
->>>   }
->>> diff --git a/drivers/media/test-drivers/vivid/vivid-meta-out.c 
->>> b/drivers/media/test-drivers/vivid/vivid-meta-out.c
->>> index 95835b52b58f..4a569a6e58be 100644
->>> --- a/drivers/media/test-drivers/vivid/vivid-meta-out.c
->>> +++ b/drivers/media/test-drivers/vivid/vivid-meta-out.c
->>> @@ -18,6 +18,7 @@ static int meta_out_queue_setup(struct vb2_queue *vq, 
->>> unsigned int *nbuffers,
->>>                   struct device *alloc_devs[])
->>>   {
->>>       struct vivid_dev *dev = vb2_get_drv_priv(vq);
->>> +    unsigned int q_num_bufs = vb2_get_num_buffers(vq);
->>>       unsigned int size =  sizeof(struct vivid_meta_out_buf);
->>>         if (!vivid_is_webcam(dev))
->>> @@ -30,8 +31,8 @@ static int meta_out_queue_setup(struct vb2_queue *vq, 
->>> unsigned int *nbuffers,
->>>           sizes[0] = size;
->>>       }
->>>   -    if (vq->num_buffers + *nbuffers < 2)
->>> -        *nbuffers = 2 - vq->num_buffers;
->>> +    if (q_num_bufs + *nbuffers < 2)
->>> +        *nbuffers = 2 - q_num_bufs;
->>>         *nplanes = 1;
->>>       return 0;
->>> diff --git a/drivers/media/test-drivers/vivid/vivid-touch-cap.c 
->>> b/drivers/media/test-drivers/vivid/vivid-touch-cap.c
->>> index c7f6e23df51e..4b3c6ea0afde 100644
->>> --- a/drivers/media/test-drivers/vivid/vivid-touch-cap.c
->>> +++ b/drivers/media/test-drivers/vivid/vivid-touch-cap.c
->>> @@ -13,6 +13,7 @@ static int touch_cap_queue_setup(struct vb2_queue *vq, 
->>> unsigned int *nbuffers,
->>>                    struct device *alloc_devs[])
->>>   {
->>>       struct vivid_dev *dev = vb2_get_drv_priv(vq);
->>> +    unsigned int q_num_bufs = vb2_get_num_buffers(vq);
->>>       struct v4l2_pix_format *f = &dev->tch_format;
->>>       unsigned int size = f->sizeimage;
->>>   @@ -23,8 +24,8 @@ static int touch_cap_queue_setup(struct vb2_queue *vq, 
->>> unsigned int *nbuffers,
->>>           sizes[0] = size;
->>>       }
->>>   -    if (vq->num_buffers + *nbuffers < 2)
->>> -        *nbuffers = 2 - vq->num_buffers;
->>> +    if (q_num_bufs + *nbuffers < 2)
->>> +        *nbuffers = 2 - q_num_bufs;
->>>         *nplanes = 1;
->>>       return 0;
->>> diff --git a/drivers/media/test-drivers/vivid/vivid-vbi-cap.c 
->>> b/drivers/media/test-drivers/vivid/vivid-vbi-cap.c
->>> index b65b02eeeb97..3840b3a664ac 100644
->>> --- a/drivers/media/test-drivers/vivid/vivid-vbi-cap.c
->>> +++ b/drivers/media/test-drivers/vivid/vivid-vbi-cap.c
->>> @@ -134,9 +134,6 @@ static int vbi_cap_queue_setup(struct vb2_queue *vq,
->>>         sizes[0] = size;
->>>   -    if (vq->num_buffers + *nbuffers < 2)
->>> -        *nbuffers = 2 - vq->num_buffers;
->>> -
->>>       *nplanes = 1;
->>>       return 0;
->>>   }
->>> diff --git a/drivers/media/test-drivers/vivid/vivid-vbi-out.c 
->>> b/drivers/media/test-drivers/vivid/vivid-vbi-out.c
->>> index cd56476902a2..434a10676417 100644
->>> --- a/drivers/media/test-drivers/vivid/vivid-vbi-out.c
->>> +++ b/drivers/media/test-drivers/vivid/vivid-vbi-out.c
->>> @@ -30,9 +30,6 @@ static int vbi_out_queue_setup(struct vb2_queue *vq,
->>>         sizes[0] = size;
->>>   -    if (vq->num_buffers + *nbuffers < 2)
->>> -        *nbuffers = 2 - vq->num_buffers;
->>> -
->>>       *nplanes = 1;
->>>       return 0;
->>>   }
->>> diff --git a/drivers/media/test-drivers/vivid/vivid-vid-cap.c 
->>> b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
->>> index 3a06df35a2d7..2804975fe278 100644
->>> --- a/drivers/media/test-drivers/vivid/vivid-vid-cap.c
->>> +++ b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
->>> @@ -117,9 +117,6 @@ static int vid_cap_queue_setup(struct vb2_queue *vq,
->>>                       dev->fmt_cap->data_offset[p];
->>>       }
->>>   -    if (vq->num_buffers + *nbuffers < 2)
->>> -        *nbuffers = 2 - vq->num_buffers;
->>> -
->>>       *nplanes = buffers;
->>>         dprintk(dev, 1, "%s: count=%d\n", __func__, *nbuffers);
+>>> I'll send v2 with FIELD_GET().
 >>
->> here the format specifier for "*nbuffers" is "%d"...
+>> With FIELD_GET(),
 >>
->>> diff --git a/drivers/media/test-drivers/vivid/vivid-vid-out.c 
->>> b/drivers/media/test-drivers/vivid/vivid-vid-out.c
->>> index 184a6df2c29f..1653b2988f7e 100644
->>> --- a/drivers/media/test-drivers/vivid/vivid-vid-out.c
->>> +++ b/drivers/media/test-drivers/vivid/vivid-vid-out.c
->>> @@ -73,12 +73,9 @@ static int vid_out_queue_setup(struct vb2_queue *vq,
->>>                          vfmt->data_offset[p] : size;
->>>       }
->>>   -    if (vq->num_buffers + *nbuffers < 2)
->>> -        *nbuffers = 2 - vq->num_buffers;
->>> -
->>>       *nplanes = planes;
->>>   -    dprintk(dev, 1, "%s: count=%d\n", __func__, *nbuffers);
->>> +    dprintk(dev, 1, "%s: count=%u\n", __func__, *nbuffers);
->>
->> ... but here you change it to "%u". Is there a reason for these two to be
->> different? I didn't notice it in the previous version but now it stands out
->> clearly. Probably you changed to %u because of the type returned by
->> vb2_get_num_buffers(). And, actually, *nbuffers _is_ unsigned, too.
+>> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 > 
-> Like you said *nbuffers is unsigned so %u sound for me.
-> The goal of this patch was to avoid vq->num_buffers usage not to clean up all the
-> file.
-> That could be done in other patch since there is lot to do here.
-> 
+> Actually, how about using the new macro in v4l2-cci.c ?
 
-Arguably, if the purpose of this patch is to avoid using vq->num_buffers,
-the line we're discussing could be left unpatched, which minimizes the diffstat.
+I considered this too, but atm there are 2 FIELD_GET calls directly
+after one another, e.g. :
 
-Otherwise, you _are_ changing vid_cap_queue_setup() anyway.
+        len = FIELD_GET(CCI_REG_WIDTH_MASK, reg);
+        reg = FIELD_GET(CCI_REG_ADDR_MASK, reg);
+
+Using the macro would make this look like this:
+
+        len = CCI_REG_WIDTH_BYTES(reg);
+        reg = FIELD_GET(CCI_REG_ADDR_MASK, reg);
+
+Which IMHO just make this harder to read. Now if we also add a CCI_REG_ADDR macro
+and use both, then using the macros would be fine ...
 
 Regards,
 
-Andrzej
+Hans
 
-> Regards,
-> Benjamin
-> 
->>
->> Regards,
->>
->> Andrzej
->>
->>>       for (p = 0; p < planes; p++)
->>>           dprintk(dev, 1, "%s: size[%u]=%u\n", __func__, p, sizes[p]);
->>>       return 0;
->>
+
 
 
