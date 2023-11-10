@@ -1,109 +1,242 @@
-Return-Path: <linux-media+bounces-28-linux-media=archiver.kernel.org@vger.kernel.org>
+Return-Path: <linux-media+bounces-30-linux-media=archiver.kernel.org@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0D17C4332F
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:48:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10F79C4332F
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:48:45 +0000 (UTC)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F2D12813AE
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:48:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE5492819E8
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:48:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78F773C079;
-	Fri, 10 Nov 2023 17:46:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6356C3C088;
+	Fri, 10 Nov 2023 17:46:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="QQOWpE7g"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="jDuAgLMb"
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83B903B297
-	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 17:46:44 +0000 (UTC)
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F89E887F;
-	Fri, 10 Nov 2023 01:24:22 -0800 (PST)
-Received: from [100.116.125.19] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: andrzej.p)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id D05AD66073D3;
-	Fri, 10 Nov 2023 09:24:19 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1699608260;
-	bh=28TPHHA9Iel9THKWFs6QPU/6HNkFryi8SVAuj58Nqhc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=QQOWpE7gIbxb1eJj9TsBokiPp9dEbYBqhq9+G9cWRilgRPrpk7MU02BYltetkXSk/
-	 5BBflBVkUunL9iALpYBxuao1sPI0Q0aS7A0aSPgxS3KNLTAY3f9q5HtWtekNxdlxCs
-	 b4lmWmO8/xeay6hrctKOJk0Qv8XfGGXooG5le9Z+9I3CrQLYy74zgbELoURGK0G//+
-	 iqC05s4VtTHUOGJNffRiYcrzcVzRWRVKhJwofs7otFKZfQZ1z4NpEOH7yOH5sU9xgT
-	 48U8RLJYNt70Rz2PYT97PxMuKcO62szxM11D+7mQTbZzq2j11OxJg4LrzXKj92tSZW
-	 6OUcHPZhSbbjw==
-Message-ID: <8e7629ca-eb6c-41d4-af3e-9938397a08c0@collabora.com>
-Date: Fri, 10 Nov 2023 10:24:16 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37FE3AC3C
+	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 17:46:42 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7C99EEC;
+	Fri, 10 Nov 2023 00:33:18 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AA7gBBN011899;
+	Fri, 10 Nov 2023 08:33:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=0g31E2AhP85G9hfjyKxjq/sbrz0JScFMKaVi/mJsAwo=;
+ b=jDuAgLMb6c32yAx6FjS3JGSfRmlrNRsKOoCfcnRQwC0xryPBhmI3ezbjJuBTBQ3FsqJx
+ YFz00HKaP7FqQRGQ9x+Dc7mCvG9mdick2sYXrBrG1XPvwsAbegGfICSTmHXdcLB4E40i
+ /vDandvS1lusgMEsUZFRkFInmlIPV7u/gQK9GPpiFQj/kuzfZCbCVo8xno+9OJ4Dq2/j
+ L0bX/MoZVKvzXC67CGlPXHesrM5MKUUwszLdyy+NKO7ccN4jlC/ap3Y6zgZ5Sh+rxJMG
+ ndS8YjqUSynipDsCgN3wIcfM7MA1dEY7AJ9PvD34+rTprS8US6LVGD7pedmxXvAsdmEq Ww== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3u93tq9pes-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 10 Nov 2023 08:33:10 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3AA8XA7e016922
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 10 Nov 2023 08:33:10 GMT
+Received: from [10.217.216.47] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Fri, 10 Nov
+ 2023 00:33:01 -0800
+Message-ID: <5b3315fe-f59b-cdf3-b980-a5a68bceb6a9@quicinc.com>
+Date: Fri, 10 Nov 2023 14:02:58 +0530
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v15 14/56] media: sti: hva: Remove useless check
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH RESEND v3 3/5] clk: qcom: gdsc: Add set and get hwmode
+ callbacks to switch GDSC mode
 Content-Language: en-US
-To: Benjamin Gaignard <benjamin.gaignard@collabora.com>, mchehab@kernel.org,
- tfiga@chromium.org, m.szyprowski@samsung.com, ming.qian@nxp.com,
- ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
- gregkh@linuxfoundation.org, hverkuil-cisco@xs4all.nl,
- nicolas.dufresne@collabora.com
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-arm-msm@vger.kernel.org, linux-rockchip@lists.infradead.org,
- linux-staging@lists.linux.dev, kernel@collabora.com,
- Jean-Christophe Trotin <jean-christophe.trotin@foss.st.com>
-References: <20231109163512.179524-14-benjamin.gaignard@collabora.com>
- <20231109163512.179524-15-benjamin.gaignard@collabora.com>
-From: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-In-Reply-To: <20231109163512.179524-15-benjamin.gaignard@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abel Vesa
+	<abel.vesa@linaro.org>
+CC: "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman
+	<khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>, Pavel Machek
+	<pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Andy
+ Gross" <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        Stephen Boyd
+	<sboyd@kernel.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash
+ Garodia <quic_vgarodia@quicinc.com>,
+        Bryan O'Donoghue
+	<bryan.odonoghue@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Taniya Das <tdas@qti.qualcomm.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-media@vger.kernel.org>
+References: <20231101-gdsc-hwctrl-v3-0-0740ae6b2b04@linaro.org>
+ <20231101-gdsc-hwctrl-v3-3-0740ae6b2b04@linaro.org>
+ <CAA8EJpqTafxkXfAZXdTCat1VphvHUTTWe1TUjbpMvqta1Jf+Cw@mail.gmail.com>
+From: Jagadeesh Kona <quic_jkona@quicinc.com>
+In-Reply-To: <CAA8EJpqTafxkXfAZXdTCat1VphvHUTTWe1TUjbpMvqta1Jf+Cw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 0yWIBZBRQecYYPSMJiHBmWTOIVmjEPrP
+X-Proofpoint-ORIG-GUID: 0yWIBZBRQecYYPSMJiHBmWTOIVmjEPrP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-10_04,2023-11-09_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
+ suspectscore=0 clxscore=1015 priorityscore=1501 mlxlogscore=999
+ spamscore=0 phishscore=0 impostorscore=0 bulkscore=0 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311060000 definitions=main-2311100071
 
-W dniu 9.11.2023 o 17:34, Benjamin Gaignard pisze:
-> Remove index range test since it is done by vb2_get_buffer().
-> vb2_get_buffer() can return a NULL pointer so we need the return
-> value.
+
+
+On 11/2/2023 2:58 AM, Dmitry Baryshkov wrote:
+> On Wed, 1 Nov 2023 at 11:06, Abel Vesa <abel.vesa@linaro.org> wrote:
+>>
+>> From: Jagadeesh Kona <quic_jkona@quicinc.com>
+>>
+>> Add support for set and get hwmode callbacks to switch the GDSC between
+>> SW and HW modes. Currently, the GDSC is moved to HW control mode
+>> using HW_CTRL flag and if this flag is present, GDSC is moved to HW
+>> mode as part of GDSC enable itself. The intention is to keep the
+>> HW_CTRL flag functionality as is, since many older chipsets still use
+>> this flag.
+>>
+>> Introduce a new HW_CTRL_TRIGGER flag to switch the GDSC back and forth
+>> between HW/SW modes dynamically at runtime. If HW_CTRL_TRIGGER flag is
+>> present, register set_hwmode_dev callback to switch the GDSC mode which
+>> can be invoked from consumer drivers using dev_pm_genpd_set_hwmode
+>> function. Unlike HW_CTRL flag, HW_CTRL_TRIGGER won't move the GDSC to HW
+>> control mode as part of GDSC enable itself, GDSC will be moved to HW
+>> control mode only when consumer driver explicity calls
+>> dev_pm_genpd_set_hwmode to switch to HW mode. Also add the
+>> dev_pm_genpd_get_hwmode to allow the consumers to read the actual
+>> HW/SW mode from hardware.
 > 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-
-Reviewed-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-
-> CC: Jean-Christophe Trotin <jean-christophe.trotin@foss.st.com>
-> ---
->   drivers/media/platform/st/sti/hva/hva-v4l2.c | 9 +++------
->   1 file changed, 3 insertions(+), 6 deletions(-)
+> Can we add two new flags:
+> - HW_CTRL_TRIGGER
+> - DEFAULT_HW_TRIGGER
 > 
-> diff --git a/drivers/media/platform/st/sti/hva/hva-v4l2.c b/drivers/media/platform/st/sti/hva/hva-v4l2.c
-> index 3a848ca32a0e..cfe83e9dc01b 100644
-> --- a/drivers/media/platform/st/sti/hva/hva-v4l2.c
-> +++ b/drivers/media/platform/st/sti/hva/hva-v4l2.c
-> @@ -569,14 +569,11 @@ static int hva_qbuf(struct file *file, void *priv, struct v4l2_buffer *buf)
->   		struct vb2_buffer *vb2_buf;
->   
->   		vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, buf->type);
-> -
-> -		if (buf->index >= vq->num_buffers) {
-> -			dev_dbg(dev, "%s buffer index %d out of range (%d)\n",
-> -				ctx->name, buf->index, vq->num_buffers);
-> +		vb2_buf = vb2_get_buffer(vq, buf->index);
-> +		if (!vb2_buf) {
-> +			dev_dbg(dev, "%s buffer index %d not found\n", ctx->name, buf->index);
->   			return -EINVAL;
->   		}
-> -
-> -		vb2_buf = vb2_get_buffer(vq, buf->index);
->   		stream = to_hva_stream(to_vb2_v4l2_buffer(vb2_buf));
->   		stream->bytesused = buf->bytesused;
->   	}
+> And then define HW_CTRL as HW_CTRL_TRIGGER | DEFAULT_HW_TRIGGER ?
+> 
+> This way older platforms will keep existing behaviour, but can
+> gradually migrate to the new callbacks?
+> 
 
+Thanks Dmitry for your review,
+
+The current usecases we have for GDSC's are either use the existing 
+HW_CTRL flag to switch the GDSC to HW mode in gdsc_enable() and back to 
+SW mode in gdsc_disable(). The second usecase is don't switch GDSC mode 
+in gdsc_enable() & gdsc_disable() at all, and switch the GDSC mode only 
+in new callbacks when consumers explicitly request it using 
+dev_pm_genpd_set_hwmode(), this can be achieved using the new 
+HW_CTRL_TRIGGER flag.
+
+By defining HW_CTRL as HW_CTRL_TRIGGER | DEFAULT_HW_TRIGGER, it switches 
+the GDSC mode both in enable & disable callbacks and in new callbacks as 
+well. But we currently don't have any usecase that requires this behaviour.
+
+Thanks,
+Jagadeesh
+
+>>
+>> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
+>> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+>> ---
+>>   drivers/clk/qcom/gdsc.c | 32 ++++++++++++++++++++++++++++++++
+>>   drivers/clk/qcom/gdsc.h |  1 +
+>>   2 files changed, 33 insertions(+)
+>>
+>> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
+>> index 5358e28122ab..c763524cd5da 100644
+>> --- a/drivers/clk/qcom/gdsc.c
+>> +++ b/drivers/clk/qcom/gdsc.c
+>> @@ -363,6 +363,34 @@ static int gdsc_disable(struct generic_pm_domain *domain)
+>>          return 0;
+>>   }
+>>
+>> +static int gdsc_set_hwmode(struct generic_pm_domain *domain, struct device *dev, bool mode)
+>> +{
+>> +       struct gdsc *sc = domain_to_gdsc(domain);
+>> +
+>> +       if (sc->rsupply && !regulator_is_enabled(sc->rsupply)) {
+>> +               pr_err("Cannot set mode while parent is disabled\n");
+>> +               return -EIO;
+>> +       }
+>> +
+>> +       return gdsc_hwctrl(sc, mode);
+>> +}
+>> +
+>> +static bool gdsc_get_hwmode(struct generic_pm_domain *domain, struct device *dev)
+>> +{
+>> +       struct gdsc *sc = domain_to_gdsc(domain);
+>> +       u32 val;
+>> +       int ret;
+>> +
+>> +       ret = regmap_read(sc->regmap, sc->gdscr, &val);
+>> +       if (ret)
+>> +               return ret;
+>> +
+>> +       if (val & HW_CONTROL_MASK)
+>> +               return true;
+>> +
+>> +       return false;
+>> +}
+>> +
+>>   static int gdsc_init(struct gdsc *sc)
+>>   {
+>>          u32 mask, val;
+>> @@ -451,6 +479,10 @@ static int gdsc_init(struct gdsc *sc)
+>>                  sc->pd.power_off = gdsc_disable;
+>>          if (!sc->pd.power_on)
+>>                  sc->pd.power_on = gdsc_enable;
+>> +       if (sc->flags & HW_CTRL_TRIGGER) {
+>> +               sc->pd.set_hwmode_dev = gdsc_set_hwmode;
+>> +               sc->pd.get_hwmode_dev = gdsc_get_hwmode;
+>> +       }
+>>
+>>          ret = pm_genpd_init(&sc->pd, NULL, !on);
+>>          if (ret)
+>> diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
+>> index 803512688336..1e2779b823d1 100644
+>> --- a/drivers/clk/qcom/gdsc.h
+>> +++ b/drivers/clk/qcom/gdsc.h
+>> @@ -67,6 +67,7 @@ struct gdsc {
+>>   #define ALWAYS_ON      BIT(6)
+>>   #define RETAIN_FF_ENABLE       BIT(7)
+>>   #define NO_RET_PERIPH  BIT(8)
+>> +#define HW_CTRL_TRIGGER        BIT(9)
+>>          struct reset_controller_dev     *rcdev;
+>>          unsigned int                    *resets;
+>>          unsigned int                    reset_count;
+>>
+>> --
+>> 2.34.1
+>>
+> 
+> 
 
