@@ -1,232 +1,218 @@
-Return-Path: <linux-media+bounces-13-linux-media=archiver.kernel.org@vger.kernel.org>
+Return-Path: <linux-media+bounces-11-linux-media=archiver.kernel.org@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FD71C4332F
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B51BC4167D
 	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:47:35 +0000 (UTC)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DC72628161B
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:47:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A8C59B215CE
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:47:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1C733AC27;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D082374C2;
 	Fri, 10 Nov 2023 17:46:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="TpGQt+V1"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="fyqg58Eo"
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB33538F9F
-	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 17:46:33 +0000 (UTC)
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319C83B306
-	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 07:40:56 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1ED43673;
-	Fri, 10 Nov 2023 16:40:32 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1699630832;
-	bh=qhG25pJyJMIZD3xWDD7RJsofQ1G1gsZakBU5FSUsQQM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TpGQt+V1OJFBHZMZJG2bVzPnfOFJspYYMFzSXkK+B7YojhtCdbSe1fFK8lfomsYQg
-	 QSb6e6CojtkTWzB9/H8H70An0fgl7OmuOK5Icg2hctZUw7aSywkAYdZdjFtzkluNoy
-	 1+MdRBzwrXzrfwzQQOKbm8d+CPLJGJXStl+ozyoM=
-Date: Fri, 10 Nov 2023 17:41:01 +0200
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc: Linux Media Mailing List <linux-media@vger.kernel.org>,
-	Nicolas Dufresne <nicolas@ndufresne.ca>,
-	Sebastian Fricke <sebastian.fricke@collabora.com>
-Subject: Re: [PATCH] media: drop CONFIG_MEDIA_CONTROLLER_REQUEST_API
-Message-ID: <20231110154101.GB7466@pendragon.ideasonboard.com>
-References: <35ee2d37-949a-4878-b27b-b8431f685efb@xs4all.nl>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDECA38DE9
+	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 17:46:32 +0000 (UTC)
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DEFA29506;
+	Fri, 10 Nov 2023 02:32:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+	s=s31663417; t=1699612349; x=1700217149; i=wahrenst@gmx.net;
+	bh=VYUzFbtyLV0OMmDyZppluwpgFsQNDPwwwtizFu1yQGo=;
+	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
+	 In-Reply-To;
+	b=fyqg58EofYlVvDHn84ZHH/jKJUR5U3PBJpB0a4V1rMEbYquFoswA+JWyFS7LnUHv
+	 mzc0RkN+0wdJ2EI+DCCzmYiUwRR7tzIbeQJcCTd9DcRJo8kfrMReOmYTa6sE5U5wv
+	 jp5A6n0rnpw4sfB+K94bIRTbVWyRkrFFXtB3qfqkMAio/j4NgvW44oQ8sgl9STpwC
+	 6HSVxhrbdsftwsTxNd/PkvlHzaGiWZ3CwTzhk8mc/5DRFtzkslOikPzje7YOsVdDO
+	 B3/Nnu1mCtCjxnQ8OpRZZPW9mRhEYZmYnh1VaXLU2n6sVT5usbIFV3Z4rG/0YqGSt
+	 2nAUNYYNLc6P2lPSzA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.1.129] ([37.4.248.43]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MfpOT-1rdEf741BB-00gDAP; Fri, 10
+ Nov 2023 11:32:29 +0100
+Message-ID: <aec3897e-3ff6-4256-aaef-0cc1d5e7822a@gmx.net>
+Date: Fri, 10 Nov 2023 11:32:27 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <35ee2d37-949a-4878-b27b-b8431f685efb@xs4all.nl>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 00/15] staging: vc04_services: bcm2835-isp support
+Content-Language: en-US
+To: Umang Jain <umang.jain@ideasonboard.com>, linux-media@vger.kernel.org,
+ kernel-list@raspberrypi.com, linux-kernel@vger.kernel.org,
+ linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-staging@lists.linux.dev
+Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
+ Kieran Bingham <kieran.bingham@ideasonboard.com>,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ "Ricardo B . Marliere" <ricardo@marliere.net>,
+ Dan Carpenter <error27@gmail.com>
+References: <20231109210309.638594-1-umang.jain@ideasonboard.com>
+From: Stefan Wahren <wahrenst@gmx.net>
+In-Reply-To: <20231109210309.638594-1-umang.jain@ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:IzaixV3E2I0i5t1/yCRO/F7ZOx4f22jelDHFErmexGp2So76fLm
+ qGchW9n6Y7n4VcfVnzYZ9Q76G0it4uyBXRiskwszPHlafupQec5SaTifLZ6JM53IqXtUcm0
+ mlvsfupldha0QGm1xUGTlXvyY1jADADgDEhorj2kJAbsRe4fNDEuk15Z0zyZS6dZdnjxgNr
+ QMOsoDKCibG7m8582HQJg==
+UI-OutboundReport: notjunk:1;M01:P0:KPsVdoqBSyc=;OYScNlUkAb5HvB19yahEro5NCPV
+ KB4eXrPpk4Z6dou+rwTFoRLcU2ADdro155R9RjTQBfPGTIrQ2kpGdX0tHWU/h3VSrUox/VAnD
+ 82jg4CDk/ayNCc6gFyrcFATqn1eZc6nzVqlBX0ZfAXyXf3+x7pCzSUU7Kzm+wnKVXg9AG7Oeo
+ T7DMjZDilgPdJZ2jm6IZ302jyddUM99iyGGE2JO1XsLYzKai1OHXl8LKOgWaNFpurUJL1OUXu
+ qKXfmz+3guGevKD5Vu+6AM6s92j9CVA58qLEnd/lwU57JZ4DRLMTwG9T60f/XVaJsb+ew2JeY
+ 5w0ru73KJD8G7Q3zZ/kaLeLWb7t5Eftej3g0VY7hsyGmRfWELi5QZKxCExGAuI/QFcdrek/q7
+ Em1pG5mZQQC8Cgn7Yv/EUe82cWyqAZ1e23cG3YVvW/KnWMhZbUbqTSKEdznAtAKDuO+XKmlYH
+ Y+uWQ4B6txSNY97EGJ0ssLII92NV+ajVM+PdIBQuwxKuHMtshD0hsRXd3SblIjwCqEfJA2e1I
+ +MjBE7xhBAZClh3P+s+grJXjXO5vL12a3PUMQr7CvY5ob6dt4Y2mdWviB9Cxd3WkAFByBwxIv
+ Y0ANgej9laXnoE/bF0y0/3NgzTzmgLvkjyI7ccdnRNH8U1EsI/YRdN2UD3wQnRAMZ/UIzweUJ
+ 0bCm9APHG9JxhN8J4IQJIzOh1A3juTUQ0CA9HxtvyJCPe/6yAdWa7fliQq+d9kKzpZLO6qVrN
+ 5cNl9dEwr6HUVqVsYNIIivkDUKN9lrJ1jyDK87NXps86/1H3LWR6eC2IhcNkjo4TbjtInQUC6
+ VBr7XStA3fe4qWAi/SwMg2FUfAztUdE4Ri8GIC8vmZd+3yZjvIJlT0YYAm2IYDlU9XMvTlSPH
+ wiBh5r3aSaLe19C39tgUxEY/DmJmIeJ8mUD6IdbOcfCe7fZpZDXozFsnmM2axkKKREunLSNJv
+ QHpTEA==
 
-On Fri, Nov 10, 2023 at 09:53:00AM +0100, Hans Verkuil wrote:
-> This config option was added during the development of the Request API
-> to make it easy to disable it.
-> 
-> The Request API is now stable so it is time to drop this option altogether.
+Hi Umang,
 
-Less config options is a good idea.
+Am 09.11.23 um 22:02 schrieb Umang Jain:
+> This series aims to upport bcm2835-isp from the RPi kernel.
+> It is developed on top of staging-next which comprises many
+> VC04 changes for it's de-staging. Hence, the merge of this
+> driver is targeted when VC04 is de-staged completely (which I
+> have been pushing), but it can be helped getting reviewed meanwhile.
+> Hence, the reason for posting the series.
+>
+> Patch (01-02)/15  adds a new driver named vc-sm-cma to handle memory sha=
+ring
+> with the VC4 VPU.
+>
+> Patch 03/15 adds a small extension to videobuf2 to allow exporting as a
+> dma_buf instead of a file-descriptor.
+>
+> Patch (04-05)/15 adds a couple of improvements/support for
+> bcm2835-isp(event callback and zero-copy) to vchiq-mmal.
+>
+> Patch (06-10)/15 adds the core bcm2835-isp driver along with headers
+> and format defintions. 09/15 is a standalone patch which can be merged
+> independently I believe.
+>
+> Patch (11-12)/15 deals with the colorspace support.
+>
+> Patch 13/15 allows multiple instances of the ISP.
+>
+> Patch 14/15 adds a admin-guide document on bcm2835-isp.
+>
+> Patch 15/15 deals with driver registeration.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+since this is V2, i couldn't find a changelog? The first one was one
+year ago, so it's very hard to remember. In such a case a link to the
+last version is also helpful.
 
-> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-> ---
-> diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-> index c7a54d82a55e..9295ded50bc3 100644
-> --- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
-> +++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-> @@ -685,10 +685,8 @@ static void fill_buf_caps(struct vb2_queue *q, u32 *caps)
->  		*caps |= V4L2_BUF_CAP_SUPPORTS_M2M_HOLD_CAPTURE_BUF;
->  	if (q->allow_cache_hints && q->io_modes & VB2_MMAP)
->  		*caps |= V4L2_BUF_CAP_SUPPORTS_MMAP_CACHE_HINTS;
-> -#ifdef CONFIG_MEDIA_CONTROLLER_REQUEST_API
->  	if (q->supports_requests)
->  		*caps |= V4L2_BUF_CAP_SUPPORTS_REQUESTS;
-> -#endif
->  }
-> 
->  static void validate_memory_flags(struct vb2_queue *q,
-> diff --git a/drivers/media/mc/Kconfig b/drivers/media/mc/Kconfig
-> index 375b09612981..c82b07d2ef36 100644
-> --- a/drivers/media/mc/Kconfig
-> +++ b/drivers/media/mc/Kconfig
-> @@ -11,10 +11,3 @@ config MEDIA_CONTROLLER_DVB
->  	  Enable the media controller API support for DVB.
-> 
->  	  This is currently experimental.
-> -
-> -config MEDIA_CONTROLLER_REQUEST_API
-> -	bool
-> -	depends on MEDIA_CONTROLLER
-> -	help
-> -	  This option enables the Request API for the Media controller and V4L2
-> -	  interfaces. It is currently needed by a few stateless codec drivers.
-> diff --git a/drivers/media/mc/mc-device.c b/drivers/media/mc/mc-device.c
-> index 8cee956e38d4..c0dd4ae57227 100644
-> --- a/drivers/media/mc/mc-device.c
-> +++ b/drivers/media/mc/mc-device.c
-> @@ -372,16 +372,12 @@ static long media_device_get_topology(struct media_device *mdev, void *arg)
-> 
->  static long media_device_request_alloc(struct media_device *mdev, void *arg)
->  {
-> -#ifdef CONFIG_MEDIA_CONTROLLER_REQUEST_API
->  	int *alloc_fd = arg;
-> 
->  	if (!mdev->ops || !mdev->ops->req_validate || !mdev->ops->req_queue)
->  		return -ENOTTY;
-> 
->  	return media_request_alloc(mdev, alloc_fd);
-> -#else
-> -	return -ENOTTY;
-> -#endif
->  }
-> 
->  static long copy_arg_from_user(void *karg, void __user *uarg, unsigned int cmd)
-> diff --git a/drivers/media/platform/mediatek/vcodec/Kconfig b/drivers/media/platform/mediatek/vcodec/Kconfig
-> index 74b00eb1bc97..bc8292232530 100644
-> --- a/drivers/media/platform/mediatek/vcodec/Kconfig
-> +++ b/drivers/media/platform/mediatek/vcodec/Kconfig
-> @@ -24,7 +24,6 @@ config VIDEO_MEDIATEK_VCODEC
->  	select V4L2_H264
->  	select V4L2_VP9
->  	select MEDIA_CONTROLLER
-> -	select MEDIA_CONTROLLER_REQUEST_API
->  	help
->  	  Mediatek video codec driver provides HW capability to
->  	  encode and decode in a range of video formats on MT8173
-> diff --git a/drivers/media/platform/nvidia/tegra-vde/Kconfig b/drivers/media/platform/nvidia/tegra-vde/Kconfig
-> index f7454823bbbb..2fe13f39c95b 100644
-> --- a/drivers/media/platform/nvidia/tegra-vde/Kconfig
-> +++ b/drivers/media/platform/nvidia/tegra-vde/Kconfig
-> @@ -6,7 +6,6 @@ config VIDEO_TEGRA_VDE
->  	select DMA_SHARED_BUFFER
->  	select IOMMU_IOVA
->  	select MEDIA_CONTROLLER
-> -	select MEDIA_CONTROLLER_REQUEST_API
->  	select SRAM
->  	select VIDEOBUF2_DMA_CONTIG
->  	select VIDEOBUF2_DMA_SG
-> diff --git a/drivers/media/platform/verisilicon/Kconfig b/drivers/media/platform/verisilicon/Kconfig
-> index e65b836b9d78..24b927d8f182 100644
-> --- a/drivers/media/platform/verisilicon/Kconfig
-> +++ b/drivers/media/platform/verisilicon/Kconfig
-> @@ -8,7 +8,6 @@ config VIDEO_HANTRO
->  	depends on V4L_MEM2MEM_DRIVERS
->  	depends on VIDEO_DEV
->  	select MEDIA_CONTROLLER
-> -	select MEDIA_CONTROLLER_REQUEST_API
->  	select VIDEOBUF2_DMA_CONTIG
->  	select VIDEOBUF2_VMALLOC
->  	select V4L2_MEM2MEM_DEV
-> diff --git a/drivers/media/test-drivers/Kconfig b/drivers/media/test-drivers/Kconfig
-> index 459b433e9fae..5a5379524bde 100644
-> --- a/drivers/media/test-drivers/Kconfig
-> +++ b/drivers/media/test-drivers/Kconfig
-> @@ -12,7 +12,6 @@ config VIDEO_VIM2M
->  	select VIDEOBUF2_VMALLOC
->  	select V4L2_MEM2MEM_DEV
->  	select MEDIA_CONTROLLER
-> -	select MEDIA_CONTROLLER_REQUEST_API
->  	help
->  	  This is a virtual test device for the memory-to-memory driver
->  	  framework.
-> diff --git a/drivers/media/test-drivers/vicodec/Kconfig b/drivers/media/test-drivers/vicodec/Kconfig
-> index a7a828eec2a4..4ea0689c3abe 100644
-> --- a/drivers/media/test-drivers/vicodec/Kconfig
-> +++ b/drivers/media/test-drivers/vicodec/Kconfig
-> @@ -5,7 +5,6 @@ config VIDEO_VICODEC
->  	select VIDEOBUF2_VMALLOC
->  	select V4L2_MEM2MEM_DEV
->  	select MEDIA_CONTROLLER
-> -	select MEDIA_CONTROLLER_REQUEST_API
->  	help
->  	  Driver for a Virtual Codec
-> 
-> diff --git a/drivers/media/test-drivers/visl/Kconfig b/drivers/media/test-drivers/visl/Kconfig
-> index 7508b904f196..37be9f267224 100644
-> --- a/drivers/media/test-drivers/visl/Kconfig
-> +++ b/drivers/media/test-drivers/visl/Kconfig
-> @@ -7,7 +7,6 @@ config VIDEO_VISL
->  	select VIDEOBUF2_VMALLOC
->  	select V4L2_MEM2MEM_DEV
->  	select MEDIA_CONTROLLER
-> -	select MEDIA_CONTROLLER_REQUEST_API
->  	select VIDEO_V4L2_TPG
->  	help
-> 
-> diff --git a/drivers/media/test-drivers/vivid/Kconfig b/drivers/media/test-drivers/vivid/Kconfig
-> index 5b08a5ad291e..ec2e71d76965 100644
-> --- a/drivers/media/test-drivers/vivid/Kconfig
-> +++ b/drivers/media/test-drivers/vivid/Kconfig
-> @@ -10,7 +10,6 @@ config VIDEO_VIVID
->  	select VIDEOBUF2_DMA_CONTIG
->  	select VIDEO_V4L2_TPG
->  	select MEDIA_CONTROLLER
-> -	select MEDIA_CONTROLLER_REQUEST_API
->  	help
->  	  Enables a virtual video driver. This driver emulates a webcam,
->  	  TV, S-Video and HDMI capture hardware, including VBI support for
-> diff --git a/drivers/staging/media/rkvdec/Kconfig b/drivers/staging/media/rkvdec/Kconfig
-> index e963d60cc6ad..5f3bdd848a2c 100644
-> --- a/drivers/staging/media/rkvdec/Kconfig
-> +++ b/drivers/staging/media/rkvdec/Kconfig
-> @@ -4,7 +4,6 @@ config VIDEO_ROCKCHIP_VDEC
->  	depends on ARCH_ROCKCHIP || COMPILE_TEST
->  	depends on VIDEO_DEV
->  	select MEDIA_CONTROLLER
-> -	select MEDIA_CONTROLLER_REQUEST_API
->  	select VIDEOBUF2_DMA_CONTIG
->  	select VIDEOBUF2_VMALLOC
->  	select V4L2_MEM2MEM_DEV
-> diff --git a/drivers/staging/media/sunxi/cedrus/Kconfig b/drivers/staging/media/sunxi/cedrus/Kconfig
-> index 621944f9907a..cb07a343c9c2 100644
-> --- a/drivers/staging/media/sunxi/cedrus/Kconfig
-> +++ b/drivers/staging/media/sunxi/cedrus/Kconfig
-> @@ -6,7 +6,6 @@ config VIDEO_SUNXI_CEDRUS
->  	depends on HAS_DMA
->  	depends on OF
->  	select MEDIA_CONTROLLER
-> -	select MEDIA_CONTROLLER_REQUEST_API
->  	select SUNXI_SRAM
->  	select VIDEOBUF2_DMA_CONTIG
->  	select V4L2_MEM2MEM_DEV
+Recently i saw you have a Github account. For such a complex series it's
+also very helpful to provide a link to a working test branch with this
+series applied. It's not a must, but appreciated.
 
--- 
-Regards,
+Best regards
 
-Laurent Pinchart
+>
+> Dave Stevenson (6):
+>    staging: vc04_services: Add new vc-sm-cma driver
+>    media: videobuf2: Allow exporting of a struct dmabuf
+>    staging: mmal-vchiq: Add support for event callbacks
+>    staging: mmal-vchiq: Use vc-sm-cma to support zero copy
+>    staging: mmal_vchiq: Add image formats to be used by bcm2835-isp
+>    uapi: bcm2835-isp: Add bcm2835-isp uapi header file
+>
+> David Plowman (2):
+>    vc04_services: bcm2835-isp: Allow formats with different colour space=
+s
+>    vc04_services: bcm2835-isp: Permit all sRGB colour spaces on ISP
+>      outputs
+>
+> Naushir Patuck (4):
+>    media: uapi: v4l2-core: Add ISP statistics output V4L2 fourcc type
+>    staging: vc04_services: bcm2835-isp: Add a more complex ISP processin=
+g
+>      component
+>    staging: vc04_services: bcm2835_isp: Allow multiple users
+>    docs: admin-guide: media: bcm2835-isp: Add documentation for
+>      bcm2835-isp
+>
+> Umang Jain (3):
+>    staging: vc04_services: vchiq_arm: Register vcsm-cma driver
+>    staging: vc04_services: Add helpers for vchiq driver data
+>    staging: vc04_services: vchiq: Register bcm2835-isp
+>
+>   .../admin-guide/media/bcm2835-isp.rst         |  127 ++
+>   .../userspace-api/media/drivers/index.rst     |    1 +
+>   .../userspace-api/media/v4l/meta-formats.rst  |    1 +
+>   .../v4l/pixfmt-meta-bcm2835-isp-stats.rst     |   32 +
+>   MAINTAINERS                                   |    9 +
+>   .../media/common/videobuf2/videobuf2-core.c   |   36 +-
+>   drivers/media/v4l2-core/v4l2-ioctl.c          |    1 +
+>   drivers/staging/vc04_services/Kconfig         |    4 +
+>   drivers/staging/vc04_services/Makefile        |    3 +-
+>   .../staging/vc04_services/bcm2835-isp/Kconfig |   14 +
+>   .../vc04_services/bcm2835-isp/Makefile        |    4 +
+>   .../bcm2835-isp/bcm2835-isp-ctrls.h           |   72 +
+>   .../bcm2835-isp/bcm2835-isp-fmts.h            |  559 +++++
+>   .../bcm2835-isp/bcm2835-v4l2-isp.c            | 1822 +++++++++++++++++
+>   .../interface/vchiq_arm/vchiq_arm.c           |    6 +
+>   .../interface/vchiq_arm/vchiq_bus.h           |   10 +
+>   .../staging/vc04_services/vc-sm-cma/Kconfig   |   10 +
+>   .../staging/vc04_services/vc-sm-cma/Makefile  |    4 +
+>   .../staging/vc04_services/vc-sm-cma/vc_sm.c   |  817 ++++++++
+>   .../staging/vc04_services/vc-sm-cma/vc_sm.h   |   54 +
+>   .../vc04_services/vc-sm-cma/vc_sm_cma_vchi.c  |  507 +++++
+>   .../vc04_services/vc-sm-cma/vc_sm_cma_vchi.h  |   63 +
+>   .../vc04_services/vc-sm-cma/vc_sm_defs.h      |  187 ++
+>   .../vc04_services/vc-sm-cma/vc_sm_knl.h       |   28 +
+>   .../staging/vc04_services/vchiq-mmal/Kconfig  |    1 +
+>   .../vc04_services/vchiq-mmal/mmal-common.h    |    5 +
+>   .../vc04_services/vchiq-mmal/mmal-encodings.h |   66 +
+>   .../vc04_services/vchiq-mmal/mmal-msg.h       |   35 +
+>   .../vchiq-mmal/mmal-parameters.h              |  165 +-
+>   .../vc04_services/vchiq-mmal/mmal-vchiq.c     |  253 ++-
+>   .../vc04_services/vchiq-mmal/mmal-vchiq.h     |    5 +
+>   include/media/videobuf2-core.h                |   15 +
+>   include/uapi/linux/bcm2835-isp.h              |  347 ++++
+>   include/uapi/linux/v4l2-controls.h            |    5 +
+>   include/uapi/linux/videodev2.h                |    1 +
+>   35 files changed, 5235 insertions(+), 34 deletions(-)
+>   create mode 100644 Documentation/admin-guide/media/bcm2835-isp.rst
+>   create mode 100644 Documentation/userspace-api/media/v4l/pixfmt-meta-b=
+cm2835-isp-stats.rst
+>   create mode 100644 drivers/staging/vc04_services/bcm2835-isp/Kconfig
+>   create mode 100644 drivers/staging/vc04_services/bcm2835-isp/Makefile
+>   create mode 100644 drivers/staging/vc04_services/bcm2835-isp/bcm2835-i=
+sp-ctrls.h
+>   create mode 100644 drivers/staging/vc04_services/bcm2835-isp/bcm2835-i=
+sp-fmts.h
+>   create mode 100644 drivers/staging/vc04_services/bcm2835-isp/bcm2835-v=
+4l2-isp.c
+>   create mode 100644 drivers/staging/vc04_services/vc-sm-cma/Kconfig
+>   create mode 100644 drivers/staging/vc04_services/vc-sm-cma/Makefile
+>   create mode 100644 drivers/staging/vc04_services/vc-sm-cma/vc_sm.c
+>   create mode 100644 drivers/staging/vc04_services/vc-sm-cma/vc_sm.h
+>   create mode 100644 drivers/staging/vc04_services/vc-sm-cma/vc_sm_cma_v=
+chi.c
+>   create mode 100644 drivers/staging/vc04_services/vc-sm-cma/vc_sm_cma_v=
+chi.h
+>   create mode 100644 drivers/staging/vc04_services/vc-sm-cma/vc_sm_defs.=
+h
+>   create mode 100644 drivers/staging/vc04_services/vc-sm-cma/vc_sm_knl.h
+>   create mode 100644 include/uapi/linux/bcm2835-isp.h
+>
 
