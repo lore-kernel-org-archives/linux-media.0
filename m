@@ -1,106 +1,442 @@
-Return-Path: <linux-media+bounces-5-linux-media=archiver.kernel.org@vger.kernel.org>
+Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B86BC04A95
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:46:59 +0000 (UTC)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 12F0B2814B1
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:46:59 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 681BC39867;
-	Fri, 10 Nov 2023 17:46:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="mOD4VV5X"
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82D262FE2F
-	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 17:46:29 +0000 (UTC)
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8672B7C8;
-	Fri, 10 Nov 2023 01:25:34 -0800 (PST)
-Received: from [100.116.125.19] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: andrzej.p)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 13A0F66073D3;
-	Fri, 10 Nov 2023 09:25:32 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1699608333;
-	bh=n3+n4ksLRFYR42r5lq33koWRbtaxd52htHZoJWv8Q2c=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=mOD4VV5XkUr+52siDkPiIOaMx3IS3FOP/uD/XzskUk9EQBcQ5ReyAB2vNY+Dt52Ed
-	 fVRkhuhHFSlJf5wGMZpBtOMVTXkftf18t0vYFYBuQasAjWad71XARhpmz6ghjaRwUA
-	 ifI2jPLDFhheIv2D2IUHNNzfCYYzMKVlz2Jk+jjuf0Pw82JjbvrggCk3F50xfZg782
-	 R9m83Ernj1bylVxDMyqT6TDZKsU9nifIDCOdHsDPfIqwn4NSCyHMIDOB21YpJuKtDn
-	 QSK/n2BYzQdLt5B6N5+IR2WA7dO0crqUpW97Fs8SAhZnABE+zSle1oi0erDWOeBClK
-	 g0dSUGCaQIbug==
-Message-ID: <78109ad6-afbc-46eb-ba25-b4fc35c59c3c@collabora.com>
-Date: Fri, 10 Nov 2023 10:25:31 +0100
-Precedence: bulk
-X-Mailing-List: linux-media@vger.kernel.org
-List-Id: <linux-media.vger.kernel.org>
-List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05ED1C04A95
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:47:05 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S1344819AbjKJRrF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 10 Nov 2023 12:47:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46412 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235273AbjKJRqF (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 10 Nov 2023 12:46:05 -0500
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103CA27059
+        for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 02:11:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1699611076; x=1731147076;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=1envzB6of0JuCIzNYwZEfwIsvSnlRVpw0J3YwgfNxIw=;
+  b=BEjKj+609wgtSZjLLu3bSR2vnIrwXZCkGCyeMUfQPcwanqjNa9KeDbiv
+   IPxnnzjgZClEjGQelEz+HCyP7SAmzCxSst5KbPrv0inwOPsmeV6Kh+v8S
+   vF+KnRJmjamssBJn0CWx6e8ouDd1LLcCV67QYkH5FFrazwWCdHLPynoLo
+   JQ903zZDwAMWx9v+pIwXznP7BGHUVuuY2Njezu7YLo0rSOP4mguHZ/tLN
+   nuwc5zF5nS5WwJQALg7cQUhlvPBhTfcVUFGN6WYOof0AVBmXBH+JSzEC3
+   8N+Y3Wo6Rs/WYm8HtfGDV9JtgKftpwkRo/ZwCIln9X+tbzqaRrlng7+gT
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10889"; a="375204766"
+X-IronPort-AV: E=Sophos;i="6.03,291,1694761200"; 
+   d="scan'208";a="375204766"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2023 02:11:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10889"; a="713606600"
+X-IronPort-AV: E=Sophos;i="6.03,291,1694761200"; 
+   d="scan'208";a="713606600"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2023 02:11:14 -0800
+Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 62E9E11F7D1;
+        Fri, 10 Nov 2023 12:11:11 +0200 (EET)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
+        (envelope-from <sakari.ailus@linux.intel.com>)
+        id 1r1OTb-003jgL-0Z;
+        Fri, 10 Nov 2023 12:10:59 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     laurent.pinchart@ideasonboard.com, tomi.valkeinen@ideasonboard.com
+Subject: [PATCH 1/1] media: v4l: subdev: Always compile sub-device state access functions
+Date:   Fri, 10 Nov 2023 12:10:49 +0200
+Message-Id: <20231110101049.890577-1-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v15 19/56] media: dvb-core: Do not initialize twice queue
- num_buffer field
-Content-Language: en-US
-To: Benjamin Gaignard <benjamin.gaignard@collabora.com>, mchehab@kernel.org,
- tfiga@chromium.org, m.szyprowski@samsung.com, ming.qian@nxp.com,
- ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
- gregkh@linuxfoundation.org, hverkuil-cisco@xs4all.nl,
- nicolas.dufresne@collabora.com
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-arm-msm@vger.kernel.org, linux-rockchip@lists.infradead.org,
- linux-staging@lists.linux.dev, kernel@collabora.com
-References: <20231109163512.179524-14-benjamin.gaignard@collabora.com>
- <20231109163512.179524-20-benjamin.gaignard@collabora.com>
-From: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-In-Reply-To: <20231109163512.179524-20-benjamin.gaignard@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Precedence: bulk
+List-ID: <linux-media.vger.kernel.org>
+X-Mailing-List: linux-media@vger.kernel.org
 
-W dniu 9.11.2023 o 17:34, Benjamin Gaignard pisze:
-> The above memset already zeroed all the ctx fields, it is useless
-> to do it here again.
-> 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Compile sub-device state information access functions
+v4l2_subdev_state_get_{format,crop,compose} unconditionally as they are
+now also used by plain V4L2 drivers.
 
-Reviewed-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ drivers/media/v4l2-core/v4l2-subdev.c | 204 +++++++++++++-------------
+ include/media/v4l2-subdev.h           | 128 ++++++++--------
+ 2 files changed, 166 insertions(+), 166 deletions(-)
 
-> ---
->   drivers/media/dvb-core/dvb_vb2.c | 3 ---
->   1 file changed, 3 deletions(-)
-> 
-> diff --git a/drivers/media/dvb-core/dvb_vb2.c b/drivers/media/dvb-core/dvb_vb2.c
-> index 3a966fdf814c..167ff82a6fed 100644
-> --- a/drivers/media/dvb-core/dvb_vb2.c
-> +++ b/drivers/media/dvb-core/dvb_vb2.c
-> @@ -167,8 +167,6 @@ int dvb_vb2_init(struct dvb_vb2_ctx *ctx, const char *name, int nonblocking)
->   
->   	memset(ctx, 0, sizeof(struct dvb_vb2_ctx));
->   	q->type = DVB_BUF_TYPE_CAPTURE;
-> -	/**capture type*/
-> -	q->is_output = 0;
->   	/**only mmap is supported currently*/
->   	q->io_modes = VB2_MMAP;
->   	q->drv_priv = ctx;
-> @@ -177,7 +175,6 @@ int dvb_vb2_init(struct dvb_vb2_ctx *ctx, const char *name, int nonblocking)
->   	q->ops = &dvb_vb2_qops;
->   	q->mem_ops = &vb2_vmalloc_memops;
->   	q->buf_ops = &dvb_vb2_buf_ops;
-> -	q->num_buffers = 0;
->   	ret = vb2_core_queue_init(q);
->   	if (ret) {
->   		ctx->state = DVB_VB2_STATE_NONE;
-
+diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+index 57ef4fce1186..efb39172b20f 100644
+--- a/drivers/media/v4l2-core/v4l2-subdev.c
++++ b/drivers/media/v4l2-core/v4l2-subdev.c
+@@ -1524,6 +1524,108 @@ void v4l2_subdev_cleanup(struct v4l2_subdev *sd)
+ }
+ EXPORT_SYMBOL_GPL(v4l2_subdev_cleanup);
+ 
++struct v4l2_mbus_framefmt *
++__v4l2_subdev_state_get_format(struct v4l2_subdev_state *state,
++			       unsigned int pad, u32 stream)
++{
++	struct v4l2_subdev_stream_configs *stream_configs;
++	unsigned int i;
++
++	if (WARN_ON_ONCE(!state))
++		return NULL;
++
++	if (state->pads) {
++		if (stream)
++			return NULL;
++
++		if (pad >= state->sd->entity.num_pads)
++			return NULL;
++
++		return &state->pads[pad].format;
++	}
++
++	lockdep_assert_held(state->lock);
++
++	stream_configs = &state->stream_configs;
++
++	for (i = 0; i < stream_configs->num_configs; ++i) {
++		if (stream_configs->configs[i].pad == pad &&
++		    stream_configs->configs[i].stream == stream)
++			return &stream_configs->configs[i].fmt;
++	}
++
++	return NULL;
++}
++EXPORT_SYMBOL_GPL(__v4l2_subdev_state_get_format);
++
++struct v4l2_rect *
++__v4l2_subdev_state_get_crop(struct v4l2_subdev_state *state, unsigned int pad,
++			     u32 stream)
++{
++	struct v4l2_subdev_stream_configs *stream_configs;
++	unsigned int i;
++
++	if (WARN_ON_ONCE(!state))
++		return NULL;
++
++	if (state->pads) {
++		if (stream)
++			return NULL;
++
++		if (pad >= state->sd->entity.num_pads)
++			return NULL;
++
++		return &state->pads[pad].crop;
++	}
++
++	lockdep_assert_held(state->lock);
++
++	stream_configs = &state->stream_configs;
++
++	for (i = 0; i < stream_configs->num_configs; ++i) {
++		if (stream_configs->configs[i].pad == pad &&
++		    stream_configs->configs[i].stream == stream)
++			return &stream_configs->configs[i].crop;
++	}
++
++	return NULL;
++}
++EXPORT_SYMBOL_GPL(__v4l2_subdev_state_get_crop);
++
++struct v4l2_rect *
++__v4l2_subdev_state_get_compose(struct v4l2_subdev_state *state,
++				unsigned int pad, u32 stream)
++{
++	struct v4l2_subdev_stream_configs *stream_configs;
++	unsigned int i;
++
++	if (WARN_ON_ONCE(!state))
++		return NULL;
++
++	if (state->pads) {
++		if (stream)
++			return NULL;
++
++		if (pad >= state->sd->entity.num_pads)
++			return NULL;
++
++		return &state->pads[pad].compose;
++	}
++
++	lockdep_assert_held(state->lock);
++
++	stream_configs = &state->stream_configs;
++
++	for (i = 0; i < stream_configs->num_configs; ++i) {
++		if (stream_configs->configs[i].pad == pad &&
++		    stream_configs->configs[i].stream == stream)
++			return &stream_configs->configs[i].compose;
++	}
++
++	return NULL;
++}
++EXPORT_SYMBOL_GPL(__v4l2_subdev_state_get_compose);
++
+ #if defined(CONFIG_VIDEO_V4L2_SUBDEV_API)
+ 
+ static int
+@@ -1670,108 +1772,6 @@ int v4l2_subdev_set_routing_with_fmt(struct v4l2_subdev *sd,
+ }
+ EXPORT_SYMBOL_GPL(v4l2_subdev_set_routing_with_fmt);
+ 
+-struct v4l2_mbus_framefmt *
+-__v4l2_subdev_state_get_format(struct v4l2_subdev_state *state,
+-			       unsigned int pad, u32 stream)
+-{
+-	struct v4l2_subdev_stream_configs *stream_configs;
+-	unsigned int i;
+-
+-	if (WARN_ON_ONCE(!state))
+-		return NULL;
+-
+-	if (state->pads) {
+-		if (stream)
+-			return NULL;
+-
+-		if (pad >= state->sd->entity.num_pads)
+-			return NULL;
+-
+-		return &state->pads[pad].format;
+-	}
+-
+-	lockdep_assert_held(state->lock);
+-
+-	stream_configs = &state->stream_configs;
+-
+-	for (i = 0; i < stream_configs->num_configs; ++i) {
+-		if (stream_configs->configs[i].pad == pad &&
+-		    stream_configs->configs[i].stream == stream)
+-			return &stream_configs->configs[i].fmt;
+-	}
+-
+-	return NULL;
+-}
+-EXPORT_SYMBOL_GPL(__v4l2_subdev_state_get_format);
+-
+-struct v4l2_rect *
+-__v4l2_subdev_state_get_crop(struct v4l2_subdev_state *state, unsigned int pad,
+-			     u32 stream)
+-{
+-	struct v4l2_subdev_stream_configs *stream_configs;
+-	unsigned int i;
+-
+-	if (WARN_ON_ONCE(!state))
+-		return NULL;
+-
+-	if (state->pads) {
+-		if (stream)
+-			return NULL;
+-
+-		if (pad >= state->sd->entity.num_pads)
+-			return NULL;
+-
+-		return &state->pads[pad].crop;
+-	}
+-
+-	lockdep_assert_held(state->lock);
+-
+-	stream_configs = &state->stream_configs;
+-
+-	for (i = 0; i < stream_configs->num_configs; ++i) {
+-		if (stream_configs->configs[i].pad == pad &&
+-		    stream_configs->configs[i].stream == stream)
+-			return &stream_configs->configs[i].crop;
+-	}
+-
+-	return NULL;
+-}
+-EXPORT_SYMBOL_GPL(__v4l2_subdev_state_get_crop);
+-
+-struct v4l2_rect *
+-__v4l2_subdev_state_get_compose(struct v4l2_subdev_state *state,
+-				unsigned int pad, u32 stream)
+-{
+-	struct v4l2_subdev_stream_configs *stream_configs;
+-	unsigned int i;
+-
+-	if (WARN_ON_ONCE(!state))
+-		return NULL;
+-
+-	if (state->pads) {
+-		if (stream)
+-			return NULL;
+-
+-		if (pad >= state->sd->entity.num_pads)
+-			return NULL;
+-
+-		return &state->pads[pad].compose;
+-	}
+-
+-	lockdep_assert_held(state->lock);
+-
+-	stream_configs = &state->stream_configs;
+-
+-	for (i = 0; i < stream_configs->num_configs; ++i) {
+-		if (stream_configs->configs[i].pad == pad &&
+-		    stream_configs->configs[i].stream == stream)
+-			return &stream_configs->configs[i].compose;
+-	}
+-
+-	return NULL;
+-}
+-EXPORT_SYMBOL_GPL(__v4l2_subdev_state_get_compose);
+-
+ int v4l2_subdev_routing_find_opposite_end(const struct v4l2_subdev_krouting *routing,
+ 					  u32 pad, u32 stream, u32 *other_pad,
+ 					  u32 *other_stream)
+diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+index b1bad946d813..33c8e5c93a3d 100644
+--- a/include/media/v4l2-subdev.h
++++ b/include/media/v4l2-subdev.h
+@@ -1393,70 +1393,6 @@ v4l2_subdev_lock_and_get_active_state(struct v4l2_subdev *sd)
+ 	return sd->active_state;
+ }
+ 
+-#if defined(CONFIG_VIDEO_V4L2_SUBDEV_API)
+-
+-/**
+- * v4l2_subdev_get_fmt() - Fill format based on state
+- * @sd: subdevice
+- * @state: subdevice state
+- * @format: pointer to &struct v4l2_subdev_format
+- *
+- * Fill @format->format field based on the information in the @format struct.
+- *
+- * This function can be used by the subdev drivers which support active state to
+- * implement v4l2_subdev_pad_ops.get_fmt if the subdev driver does not need to
+- * do anything special in their get_fmt op.
+- *
+- * Returns 0 on success, error value otherwise.
+- */
+-int v4l2_subdev_get_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_state *state,
+-			struct v4l2_subdev_format *format);
+-
+-/**
+- * v4l2_subdev_set_routing() - Set given routing to subdev state
+- * @sd: The subdevice
+- * @state: The subdevice state
+- * @routing: Routing that will be copied to subdev state
+- *
+- * This will release old routing table (if any) from the state, allocate
+- * enough space for the given routing, and copy the routing.
+- *
+- * This can be used from the subdev driver's set_routing op, after validating
+- * the routing.
+- */
+-int v4l2_subdev_set_routing(struct v4l2_subdev *sd,
+-			    struct v4l2_subdev_state *state,
+-			    const struct v4l2_subdev_krouting *routing);
+-
+-struct v4l2_subdev_route *
+-__v4l2_subdev_next_active_route(const struct v4l2_subdev_krouting *routing,
+-				struct v4l2_subdev_route *route);
+-
+-/**
+- * for_each_active_route - iterate on all active routes of a routing table
+- * @routing: The routing table
+- * @route: The route iterator
+- */
+-#define for_each_active_route(routing, route) \
+-	for ((route) = NULL;                  \
+-	     ((route) = __v4l2_subdev_next_active_route((routing), (route)));)
+-
+-/**
+- * v4l2_subdev_set_routing_with_fmt() - Set given routing and format to subdev
+- *					state
+- * @sd: The subdevice
+- * @state: The subdevice state
+- * @routing: Routing that will be copied to subdev state
+- * @fmt: Format used to initialize all the streams
+- *
+- * This is the same as v4l2_subdev_set_routing, but additionally initializes
+- * all the streams using the given format.
+- */
+-int v4l2_subdev_set_routing_with_fmt(struct v4l2_subdev *sd,
+-				     struct v4l2_subdev_state *state,
+-				     const struct v4l2_subdev_krouting *routing,
+-				     const struct v4l2_mbus_framefmt *fmt);
+-
+ /*
+  * A macro to generate the macro or function name for sub-devices state access
+  * wrapper macros below.
+@@ -1533,6 +1469,70 @@ struct v4l2_rect *
+ __v4l2_subdev_state_get_compose(struct v4l2_subdev_state *state,
+ 				unsigned int pad, u32 stream);
+ 
++#if defined(CONFIG_VIDEO_V4L2_SUBDEV_API)
++
++/**
++ * v4l2_subdev_get_fmt() - Fill format based on state
++ * @sd: subdevice
++ * @state: subdevice state
++ * @format: pointer to &struct v4l2_subdev_format
++ *
++ * Fill @format->format field based on the information in the @format struct.
++ *
++ * This function can be used by the subdev drivers which support active state to
++ * implement v4l2_subdev_pad_ops.get_fmt if the subdev driver does not need to
++ * do anything special in their get_fmt op.
++ *
++ * Returns 0 on success, error value otherwise.
++ */
++int v4l2_subdev_get_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_state *state,
++			struct v4l2_subdev_format *format);
++
++/**
++ * v4l2_subdev_set_routing() - Set given routing to subdev state
++ * @sd: The subdevice
++ * @state: The subdevice state
++ * @routing: Routing that will be copied to subdev state
++ *
++ * This will release old routing table (if any) from the state, allocate
++ * enough space for the given routing, and copy the routing.
++ *
++ * This can be used from the subdev driver's set_routing op, after validating
++ * the routing.
++ */
++int v4l2_subdev_set_routing(struct v4l2_subdev *sd,
++			    struct v4l2_subdev_state *state,
++			    const struct v4l2_subdev_krouting *routing);
++
++struct v4l2_subdev_route *
++__v4l2_subdev_next_active_route(const struct v4l2_subdev_krouting *routing,
++				struct v4l2_subdev_route *route);
++
++/**
++ * for_each_active_route - iterate on all active routes of a routing table
++ * @routing: The routing table
++ * @route: The route iterator
++ */
++#define for_each_active_route(routing, route) \
++	for ((route) = NULL;                  \
++	     ((route) = __v4l2_subdev_next_active_route((routing), (route)));)
++
++/**
++ * v4l2_subdev_set_routing_with_fmt() - Set given routing and format to subdev
++ *					state
++ * @sd: The subdevice
++ * @state: The subdevice state
++ * @routing: Routing that will be copied to subdev state
++ * @fmt: Format used to initialize all the streams
++ *
++ * This is the same as v4l2_subdev_set_routing, but additionally initializes
++ * all the streams using the given format.
++ */
++int v4l2_subdev_set_routing_with_fmt(struct v4l2_subdev *sd,
++				     struct v4l2_subdev_state *state,
++				     const struct v4l2_subdev_krouting *routing,
++				     const struct v4l2_mbus_framefmt *fmt);
++
+ /**
+  * v4l2_subdev_routing_find_opposite_end() - Find the opposite stream
+  * @routing: routing used to find the opposite side
+-- 
+2.39.2
 
