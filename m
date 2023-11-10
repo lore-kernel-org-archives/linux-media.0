@@ -1,234 +1,208 @@
-Return-Path: <linux-media+bounces-9-linux-media=archiver.kernel.org@vger.kernel.org>
+Return-Path: <linux-media+bounces-10-linux-media=archiver.kernel.org@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99B48C4167D
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:47:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10525C4167B
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:47:27 +0000 (UTC)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E1D45B210E1
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:47:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7FA631C20D27
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:47:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3998E3AC05;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BEC63AC0F;
 	Fri, 10 Nov 2023 17:46:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wYXDWjn7"
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B61D20B37
-	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 17:46:31 +0000 (UTC)
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2041D25087
-	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 01:45:44 -0800 (PST)
-Received: by mail-vs1-xe30.google.com with SMTP id ada2fe7eead31-45dad6ece90so848459137.0
-        for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 01:45:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1699609543; x=1700214343; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7pUm/c3POcD26li8+Wke26dcOs+wqv0EJOUWvylNJQo=;
-        b=wYXDWjn7U63zYTzMWT2KkWW3kr8rgGqbDhEyIZZ5Ty4YEcIia9r48p4Dy+2CpAYXB7
-         l+/H/1gWi2YA6I13l4MSSKx7OpCK5aBvOUdy0a9KsF4UTae49Np2UUrswYYXoUhqrnE0
-         8gKbE3zhta89j3NLl92qaHlyyjmWh3+4kPnJ4Jf3RS193wHSWKQBQ/G16Y3PzcFsfQI5
-         iqrYZX93Jvm3B6Sz81vD44uR6HsFywTXRgUS0r/Sfl/Gy7aI9zXhn9gMnm8BCNGtm8+z
-         u45Qgm4wKz9o197av3qEsTzpCIB3+N9cwR5YFs8wn4E3nYRLdvwK8NNSjkTy+9MREi5z
-         E93w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699609543; x=1700214343;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7pUm/c3POcD26li8+Wke26dcOs+wqv0EJOUWvylNJQo=;
-        b=ISr0rYcFpPHMi7bmWga6zaHiAC3ZTEVO6dmSscV77Kq9omloXE0MU5ktcW45HPrbO5
-         2IqLsksJyE0dKae7b3pZZIe6e7YxzPzSdXTVN/oMlvOlQGDYxAmSDP2r3Wd/mI6T22ue
-         825FwNwqmtG9TjoKwFGTBsc4xgaLaabLanU1UWFRGfxEEWOftqEHXMYh+5lc54TEU4ay
-         yt4CcfvLtfulaXW34kfdTShe7ASx03AAmn3FOAKMGyOnRQAnqhjrdWP/9bF0K1Z3YGVM
-         B9uHshfXnaCDbQ05PhaNhO1oCFqIhukByESDRTJQzZEUzSUX5oMXK9js/IZQdM/sg1mG
-         9caQ==
-X-Gm-Message-State: AOJu0Yyg7AyIMj84UQCs2Z8GrDCjQLrmBlErwflB4RMcjopj+5ZUpe6R
-	UXGoRyPtzzks3kp24rIuWIVP58P1Z0i9bwT8g9NimtN+BDck3hN9siK2pg==
-X-Google-Smtp-Source: AGHT+IGwONXBFBpAhD15bfaIVPNRmPgG1R+yrVeei2EXlwNf647dy9292PLH34LJT3G6STTIfr9u5/CLo0iSwGhMU3o=
-X-Received: by 2002:a67:c381:0:b0:45d:a4a6:6fae with SMTP id
- s1-20020a67c381000000b0045da4a66faemr6419953vsj.30.1699609542944; Fri, 10 Nov
- 2023 01:45:42 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B271938DE7
+	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 17:46:32 +0000 (UTC)
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EEE7283;
+	Thu,  9 Nov 2023 22:27:53 -0800 (PST)
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id A11B3200AF3;
+	Fri, 10 Nov 2023 07:27:51 +0100 (CET)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 3CCE1201C4A;
+	Fri, 10 Nov 2023 07:27:51 +0100 (CET)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 7AE6D183AD44;
+	Fri, 10 Nov 2023 14:27:49 +0800 (+08)
+From: Shengjiu Wang <shengjiu.wang@nxp.com>
+To: hverkuil@xs4all.nl,
+	sakari.ailus@iki.fi,
+	tfiga@chromium.org,
+	m.szyprowski@samsung.com,
+	mchehab@kernel.org,
+	linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	shengjiu.wang@gmail.com,
+	Xiubo.Lee@gmail.com,
+	festevam@gmail.com,
+	nicoleotsuka@gmail.com,
+	lgirdwood@gmail.com,
+	broonie@kernel.org,
+	perex@perex.cz,
+	tiwai@suse.com,
+	alsa-devel@alsa-project.org,
+	linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v9 00/15] Add audio support in v4l2 framework
+Date: Fri, 10 Nov 2023 13:47:54 +0800
+Message-Id: <1699595289-25773-1-git-send-email-shengjiu.wang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20231106024413.2801438-1-almasrymina@google.com>
- <20231106024413.2801438-5-almasrymina@google.com> <076fa6505f3e1c79cc8acdf9903809fad6c2fd31.camel@redhat.com>
- <CAHS8izOGSE-PJ1uShkH_Mr6kUoC1EjM_9P1J=_TO6nLFP9K53Q@mail.gmail.com> <aec0f586-c3b9-8da8-6a39-f313105267f8@huawei.com>
-In-Reply-To: <aec0f586-c3b9-8da8-6a39-f313105267f8@huawei.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Fri, 10 Nov 2023 01:45:29 -0800
-Message-ID: <CAHS8izP64Q3cP5vJ5ESQH9Y3fkSn8RCS+T84orKhK5=pzdJCLA@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 04/12] netdev: support binding dma-buf to netdevice
-To: Yunsheng Lin <linyunsheng@huawei.com>
-Cc: Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	linaro-mm-sig@lists.linaro.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, 
-	Arnd Bergmann <arnd@arndb.de>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Shakeel Butt <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Kaiyuan Zhang <kaiyuanz@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 9, 2023 at 11:38=E2=80=AFPM Yunsheng Lin <linyunsheng@huawei.co=
-m> wrote:
->
-> On 2023/11/10 10:59, Mina Almasry wrote:
-> > On Thu, Nov 9, 2023 at 12:30=E2=80=AFAM Paolo Abeni <pabeni@redhat.com>=
- wrote:
-> >>
-> >> I'm trying to wrap my head around the whole infra... the above line is
-> >> confusing. Why do you increment dma_addr? it will be re-initialized in
-> >> the next iteration.
-> >>
-> >
-> > That is just a mistake, sorry. Will remove this increment.
->
-> You seems to be combining comments in different thread and replying in
-> one thread, I am not sure that is a good practice and I almost missed the
-> reply below as I don't seem to be cc'ed.
->
+Audio signal processing also has the requirement for memory to
+memory similar as Video.
 
-Sorry about that.
+This asrc memory to memory (memory ->asrc->memory) case is a non
+real time use case.
 
-> >
-> > On Thu, Nov 9, 2023 at 1:29=E2=80=AFAM Yunsheng Lin <linyunsheng@huawei=
-.com> wrote:> >>>
-> >>>>> gen_pool_destroy BUG_ON() if it's not empty at the time of destroyi=
-ng.
-> >>>>> Technically that should never happen, because
-> >>>>> __netdev_devmem_binding_free() should only be called when the refco=
-unt
-> >>>>> hits 0, so all the chunks have been freed back to the gen_pool. But=
-,
-> >>>>> just in case, I don't want to crash the server just because I'm
-> >>>>> leaking a chunk... this is a bit of defensive programming that is
-> >>>>> typically frowned upon, but the behavior of gen_pool is so severe I
-> >>>>> think the WARN() + check is warranted here.
-> >>>>
-> >>>> It seems it is pretty normal for the above to happen nowadays becaus=
-e of
-> >>>> retransmits timeouts, NAPI defer schemes mentioned below:
-> >>>>
-> >>>> https://lkml.kernel.org/netdev/168269854650.2191653.8465259808498269=
-815.stgit@firesoul/
-> >>>>
-> >>>> And currently page pool core handles that by using a workqueue.
-> >>>
-> >>> Forgive me but I'm not understanding the concern here.
-> >>>
-> >>> __netdev_devmem_binding_free() is called when binding->ref hits 0.
-> >>>
-> >>> binding->ref is incremented when an iov slice of the dma-buf is
-> >>> allocated, and decremented when an iov is freed. So,
-> >>> __netdev_devmem_binding_free() can't really be called unless all the
-> >>> iovs have been freed, and gen_pool_size() =3D=3D gen_pool_avail(),
-> >>> regardless of what's happening on the page_pool side of things, right=
-?
-> >>
-> >> I seems to misunderstand it. In that case, it seems to be about
-> >> defensive programming like other checking.
-> >>
-> >> By looking at it more closely, it seems napi_frag_unref() call
-> >> page_pool_page_put_many() directly=EF=BC=8C which means devmem seems t=
-o
-> >> be bypassing the napi_safe optimization.
-> >>
-> >> Can napi_frag_unref() reuse napi_pp_put_page() in order to reuse
-> >> the napi_safe optimization?
-> >>
-> >
-> > I think it already does. page_pool_page_put_many() is only called if
-> > !recycle or !napi_pp_put_page(). In that case
-> > page_pool_page_put_many() is just a replacement for put_page(),
-> > because this 'page' may be an iov.
->
-> Is there a reason why not calling napi_pp_put_page() for devmem too
-> instead of calling page_pool_page_put_many()? mem provider has a
-> 'release_page' ops, calling page_pool_page_put_many() directly here
-> seems to be bypassing the 'release_page' ops, which means devmem is
-> bypassing most of the main features of page pool.
->
+User fills the input buffer to the asrc module, after conversion, then asrc
+sends back the output buffer to user. So it is not a traditional ALSA playback
+and capture case.
 
-I think we're still calling napi_pp_put_page() as normal:
+It is a specific use case,  there is no reference in current kernel.
+v4l2 memory to memory is the closed implementation,  v4l2 current
+support video, image, radio, tuner, touch devices, so it is not
+complicated to add support for this specific audio case.
 
- /**
-@@ -3441,13 +3466,13 @@ bool napi_pp_put_page(struct page *page, bool
-napi_safe);
- static inline void
- napi_frag_unref(skb_frag_t *frag, bool recycle, bool napi_safe)
- {
--       struct page *page =3D skb_frag_page(frag);
--
- #ifdef CONFIG_PAGE_POOL
--       if (recycle && napi_pp_put_page(page, napi_safe))
-+       if (recycle && napi_pp_put_page(frag->bv_page, napi_safe))
-                return;
-+       page_pool_page_put_many(frag->bv_page, 1);
-+#else
-+       put_page(skb_frag_page(frag));
- #endif
--       put_page(page);
- }
+Because we had implemented the "memory -> asrc ->i2s device-> codec"
+use case in ALSA.  Now the "memory->asrc->memory" needs
+to reuse the code in asrc driver, so the first 3 patches is for refining
+the code to make it can be shared by the "memory->asrc->memory"
+driver.
 
-The code change here is to replace put_page() with
-page_pool_page_put_many(), only, because bv_page may be a
-page_pool_iov, so we need to use page_pool_page_put_many() which
-handles page_pool_iov correcly. I did not change whether or not
-napi_pp_put_page() is called. It's still called if recycle=3D=3Dtrue.
+The main change is in the v4l2 side, A /dev/vl4-audioX will be created,
+user applications only use the ioctl of v4l2 framework.
 
-> As far as I can tell, the main features of page pool:
-> 1. Allow lockless allocation and freeing in pool->alloc cache by
->    utilizing NAPI non-concurrent context.
-> 2. Allow concurrent allocation and freeing in pool->ring cache by
->    utilizing ptr_ring.
-> 3. Allow dma map/unmap and cache sync optimization.
-> 4. Allow detailed stats logging and tracing.
-> 5. Allow some bulk allocation and freeing.
-> 6. support both skb packet and xdp frame.
->
-> I am wondering what is the main features that devmem is utilizing
-> by intergrating into page pool?
->
-> It seems the driver can just call netdev_alloc_devmem() and
-> napi_frag_unref() can call netdev_free_devmem() directly without
-> intergrating into page pool and it should just works too?
->
-> Maybe we should consider creating a new thin layer, in order to
-> demux to page pool, devmem or other mem type if my suggestion does
-> not work out too?
->
+Other change is to add memory to memory support for two kinds of i.MX ASRC
+module.
 
-I went through this discussion with Jesper on RFC v2 in this thread:
+changes in v9:
+- add MEDIA_ENT_F_PROC_AUDIO_RESAMPLER.
+- add MEDIA_INTF_T_V4L_AUDIO
+- add media controller support
+- refine the vim2m-audio to support 8k<->16k conversion.
 
-https://lore.kernel.org/netdev/CAHS8izOVJGJH5WF68OsRWFKJid1_huzzUK+hpKbLcL4=
-pSOD1Jw@mail.gmail.com/T/#ma9285d53735d82cc315717db67a1796477c89d86
+changes in v8:
+- refine V4L2_CAP_AUDIO_M2M to be 0x00000008
+- update doc for FIXED_POINT
+- address comments for imx-asrc
 
-which culminates with that email where he seems on board with the
-change from a performance POV, and seems on board with hiding the
-memory type implementation from the drivers. That thread fully goes
-over the tradeoffs of integrating over the page pool or creating new
-ones. Integrating with the page pool abstracts most of the devmem
-implementation (and other memory types) from the driver. It reuses
-page pool features like page recycling for example.
+changes in v7:
+- add acked-by from Mark
+- separate commit for fixed point, m2m audio class, audio rate controls
+- use INTEGER_MENU for rate,  FIXED_POINT for rate offset
+- remove used fmts
+- address other comments for Hans
 
---=20
-Thanks,
-Mina
+changes in v6:
+- use m2m_prepare/m2m_unprepare/m2m_start/m2m_stop to replace
+  m2m_start_part_one/m2m_stop_part_one, m2m_start_part_two/m2m_stop_part_two.
+- change V4L2_CTRL_TYPE_ASRC_RATE to V4L2_CTRL_TYPE_FIXED_POINT
+- fix warning by kernel test rebot
+- remove some unused format V4L2_AUDIO_FMT_XX
+- Get SNDRV_PCM_FORMAT from V4L2_AUDIO_FMT in driver.
+- rename audm2m to viaudm2m.
+
+changes in v5:
+- remove V4L2_AUDIO_FMT_LPCM
+- define audio pixel format like V4L2_AUDIO_FMT_S8...
+- remove rate and format in struct v4l2_audio_format.
+- Add V4L2_CID_ASRC_SOURCE_RATE and V4L2_CID_ASRC_DEST_RATE controls
+- updata document accordingly.
+
+changes in v4:
+- update document style
+- separate V4L2_AUDIO_FMT_LPCM and V4L2_CAP_AUDIO_M2M in separate commit
+
+changes in v3:
+- Modify documents for adding audio m2m support
+- Add audio virtual m2m driver
+- Defined V4L2_AUDIO_FMT_LPCM format type for audio.
+- Defined V4L2_CAP_AUDIO_M2M capability type for audio m2m case.
+- with modification in v4l-utils, pass v4l2-compliance test.
+
+changes in v2:
+- decouple the implementation in v4l2 and ALSA
+- implement the memory to memory driver as a platfrom driver
+  and move it to driver/media
+- move fsl_asrc_common.h to include/sound folder
+
+Shengjiu Wang (15):
+  ASoC: fsl_asrc: define functions for memory to memory usage
+  ASoC: fsl_easrc: define functions for memory to memory usage
+  ASoC: fsl_asrc: move fsl_asrc_common.h to include/sound
+  ASoC: fsl_asrc: register m2m platform device
+  ASoC: fsl_easrc: register m2m platform device
+  media: uapi: Add V4L2_CAP_AUDIO_M2M capability flag
+  media: v4l2: Add audio capture and output support
+  media: uapi: Define audio sample format fourcc type
+  media: uapi: Add V4L2_CTRL_CLASS_M2M_AUDIO
+  media: uapi: Add V4L2_CTRL_TYPE_FIXED_POINT
+  media: uapi: Add audio rate controls support
+  media: uapi: Declare interface types for Audio
+  media: uapi: Add an entity type for audio resampler
+  media: imx-asrc: Add memory to memory driver
+  media: vim2m-audio: add virtual driver for audio memory to memory
+
+ .../media/mediactl/media-types.rst            |    9 +
+ .../userspace-api/media/v4l/buffer.rst        |    6 +
+ .../userspace-api/media/v4l/common.rst        |    1 +
+ .../media/v4l/dev-audio-mem2mem.rst           |   71 +
+ .../userspace-api/media/v4l/devices.rst       |    1 +
+ .../media/v4l/ext-ctrls-audio-m2m.rst         |   41 +
+ .../userspace-api/media/v4l/pixfmt-audio.rst  |   87 ++
+ .../userspace-api/media/v4l/pixfmt.rst        |    1 +
+ .../media/v4l/vidioc-enum-fmt.rst             |    2 +
+ .../media/v4l/vidioc-g-ext-ctrls.rst          |   17 +-
+ .../userspace-api/media/v4l/vidioc-g-fmt.rst  |    4 +
+ .../media/v4l/vidioc-querycap.rst             |    3 +
+ .../media/v4l/vidioc-queryctrl.rst            |    9 +-
+ .../media/videodev2.h.rst.exceptions          |    4 +
+ .../media/common/videobuf2/videobuf2-v4l2.c   |    4 +
+ drivers/media/platform/nxp/Kconfig            |   14 +
+ drivers/media/platform/nxp/Makefile           |    1 +
+ drivers/media/platform/nxp/imx-asrc.c         | 1235 +++++++++++++++++
+ drivers/media/test-drivers/Kconfig            |   11 +
+ drivers/media/test-drivers/Makefile           |    1 +
+ drivers/media/test-drivers/vim2m-audio.c      |  799 +++++++++++
+ drivers/media/v4l2-core/v4l2-ctrls-api.c      |    5 +-
+ drivers/media/v4l2-core/v4l2-ctrls-core.c     |    2 +
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c     |   16 +
+ drivers/media/v4l2-core/v4l2-dev.c            |   21 +
+ drivers/media/v4l2-core/v4l2-ioctl.c          |   66 +
+ drivers/media/v4l2-core/v4l2-mem2mem.c        |   13 +-
+ include/media/v4l2-dev.h                      |    2 +
+ include/media/v4l2-ioctl.h                    |   34 +
+ .../fsl => include/sound}/fsl_asrc_common.h   |   60 +
+ include/uapi/linux/media.h                    |    2 +
+ include/uapi/linux/v4l2-controls.h            |    9 +
+ include/uapi/linux/videodev2.h                |   42 +
+ sound/soc/fsl/fsl_asrc.c                      |  144 ++
+ sound/soc/fsl/fsl_asrc.h                      |    4 +-
+ sound/soc/fsl/fsl_asrc_dma.c                  |    2 +-
+ sound/soc/fsl/fsl_easrc.c                     |  233 ++++
+ sound/soc/fsl/fsl_easrc.h                     |    6 +-
+ 38 files changed, 2967 insertions(+), 15 deletions(-)
+ create mode 100644 Documentation/userspace-api/media/v4l/dev-audio-mem2mem.rst
+ create mode 100644 Documentation/userspace-api/media/v4l/ext-ctrls-audio-m2m.rst
+ create mode 100644 Documentation/userspace-api/media/v4l/pixfmt-audio.rst
+ create mode 100644 drivers/media/platform/nxp/imx-asrc.c
+ create mode 100644 drivers/media/test-drivers/vim2m-audio.c
+ rename {sound/soc/fsl => include/sound}/fsl_asrc_common.h (60%)
+
+-- 
+2.34.1
+
 
