@@ -1,249 +1,244 @@
-Return-Path: <linux-media+bounces-44-linux-media=archiver.kernel.org@vger.kernel.org>
+Return-Path: <linux-media+bounces-45-linux-media=archiver.kernel.org@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AC1BC05021
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:49:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0202CC4167D
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:49:51 +0000 (UTC)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DC222B20FD6
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:49:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5592DB21875
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:49:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEA933D963;
-	Fri, 10 Nov 2023 17:47:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 402363D96D;
+	Fri, 10 Nov 2023 17:47:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=wolfvision.net header.i=@wolfvision.net header.b="ZWULn38U"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ahpsUV+y"
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E30C3C697
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5305F3C695
 	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 17:46:56 +0000 (UTC)
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2040.outbound.protection.outlook.com [40.107.6.40])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EEF738EBE;
-	Fri, 10 Nov 2023 06:33:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e+a6Wl9c+E/jFLIGtq74Zaz6gYNACvh9MIRRmX93SZFdI5iHaFmSd3M57QEUFkuUdcsJNjvyqOAYqKtEwaY57lung11PjBbQP6PSTkpUv1KnyPxE/DcqJJ2P+C+PJY0euYn86voInmXpzsMY9VgAgOMsR0wQcgzrA/4ZVmUOhbIfe7/yt17k5xABFTHC5+FyD2J4p5Mh6Kr9UJ8f9D9lboAB594K8Kj0hukAsN/cd05JnRZQuPPFtLqRuGfepshU/cuwK8/Q3MBIUq3UrMrjQCZuZxn5i/sp91Yifo7SjJi+6k3eFfQeF2+M3FxiyF0pYdLxdYmOY8KwgzF7p2bA+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/5mm/cfLURsvfIFkDBAOFR9a83Dvniqyx6o7xS2f+t8=;
- b=ezwL/AQeLHQRJN3Tu3aRF4oC4PeHyxGfg14Ctg3x7DRGbYR8y58rEHrSO6JZwTyLCoSEMT2IvA/zhJOaRpIEURwZQbNfskIAuZrA6mKGE9PLoctESpSHoQCryL9yI0YWL7KU9qbELDSUc1wGJzEUmuZW7Acn21rNU03KVmZOqVfE4JjR/zcnkV8XfMe31cHpUptNMIajAWNACzfRnFWSEMLue4cHIEDwdXsvsp77k0X6lUGTotBzCskMjhVLYApciJ7pNbOVlWsuBWwG1Si5eKSBIvqA3mkF7x3UmzrqKkTA7+Dq5SHWZc22G0DyDbc5eIKeZX2lIw0n7wjqA6k/JA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wolfvision.net; dmarc=pass action=none
- header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/5mm/cfLURsvfIFkDBAOFR9a83Dvniqyx6o7xS2f+t8=;
- b=ZWULn38UOT/7SHGuJ7mO86CnoaQeLfHvuX8IgZAmrYNCVTWx5N+SwUqLJ2edpvRFfctqw0A3YRfSPSUZsYxofSI1nG8MMDnGhR90uBB1qhysuHjEjweasgI/BZt/+eol0iRDgKlrtGzDJErcDHNGA7FAf9XFO9V4DnYU6aSAZ+E=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wolfvision.net;
-Received: from DU0PR08MB9155.eurprd08.prod.outlook.com (2603:10a6:10:416::5)
- by DU5PR08MB10677.eurprd08.prod.outlook.com (2603:10a6:10:529::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.28; Fri, 10 Nov
- 2023 14:33:37 +0000
-Received: from DU0PR08MB9155.eurprd08.prod.outlook.com
- ([fe80::79a1:5ad6:b221:ad]) by DU0PR08MB9155.eurprd08.prod.outlook.com
- ([fe80::79a1:5ad6:b221:ad%4]) with mapi id 15.20.6977.019; Fri, 10 Nov 2023
- 14:33:37 +0000
-Message-ID: <4f9bc04b-81af-49ee-9818-d4cd281504e7@wolfvision.net>
-Date: Fri, 10 Nov 2023 15:33:34 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 2/3] media: rockchip: Add a driver for Rockchip's
- camera interface
-Content-Language: en-US
-To: Mehdi Djait <mehdi.djait@bootlin.com>, mchehab@kernel.org,
- heiko@sntech.de, hverkuil-cisco@xs4all.nl,
- krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org, conor+dt@kernel.org
-Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
- alexandre.belloni@bootlin.com, maxime.chevallier@bootlin.com,
- paul.kocialkowski@bootlin.com
-References: <cover.1699460637.git.mehdi.djait@bootlin.com>
- <bcc0b84f4a6a8cf4c007cfe25025060b22627408.1699460637.git.mehdi.djait@bootlin.com>
-From: Michael Riesch <michael.riesch@wolfvision.net>
-Organization: WolfVision GmbH
-In-Reply-To: <bcc0b84f4a6a8cf4c007cfe25025060b22627408.1699460637.git.mehdi.djait@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: VI1PR0902CA0048.eurprd09.prod.outlook.com
- (2603:10a6:802:1::37) To DU0PR08MB9155.eurprd08.prod.outlook.com
- (2603:10a6:10:416::5)
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B252B7B3
+	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 03:09:33 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-4083ac51d8aso14249745e9.2
+        for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 03:09:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1699614572; x=1700219372; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=x0pADGJn0q6Hogb4HKG0TCZ/m/pzEDmxFAPr5TzrN0s=;
+        b=ahpsUV+yGii1Mbzz7EZoH8qUfw9v5o9HCaRHCh6WEiJo9vwPSK2lTyaS5m/JcqhpGh
+         rTVOF5KH3VSjlnmHVlbkRfOS1Izv1RE8yWlQvs2STdy57hdIVChigV9D4HgNG8REGOQs
+         kSaPffZXY2MUs6HDamSyk8E/zuAQM6/UIzYPvThWYIZEd7auc9Cg3BPtImZx0czGA75f
+         H1ea4Cr5PJauE+fveHVdZ/J7f+3xKoAQ9ZzcLH2+uPoOPWjnMc7/Ij+Dl8XNd3x3Fy1f
+         xBLjcqEsL07MsXUF+WreXAEe0fNQphUzpq9yQoDJD3buFmjO0sQLpcMFv9Q2E9Ijw2io
+         u9Jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699614572; x=1700219372;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=x0pADGJn0q6Hogb4HKG0TCZ/m/pzEDmxFAPr5TzrN0s=;
+        b=fpxdSlV8C3M6cPhZHizLRxmBDN0ESibfpvJunv+cuM9btphBSZZnIWaWZMgvrB0FnP
+         8Kafomaug/ZguwYIhUW3ZqN4LZB5gLPpoLBBCrxhIQJyurqJ3t/kYa1ziCgjYmI3CiPC
+         6ou46dNHqNMwq5/oCrUUARCquw6rq9NWarKNeBKC1sHHMS8DDzkoTz3YNgXEmTKWejm6
+         385La41xQIf/GlAabhAtf2vx4Hw3Do2gW1wvI1t1J2lhIPeiKznh+a3fwpZHznYhduQa
+         3oPVX0dM0gWa24peype870QBQ7MciXHi/A+HfqOnRSpJFep4yIF3UDpg+I2WT+EU/HKH
+         ui/Q==
+X-Gm-Message-State: AOJu0YwGJDkFYZl3JXLqnl+wfo17oDZEG6rBBXWgSFYbEZxoOe5Ac7Af
+	qoq8ZGF5k7R2bhneU1m+snhmEg==
+X-Google-Smtp-Source: AGHT+IGmC5Ai27yr496WtLN9GxMx8T4pEXQsdGZQKhCHPdnlNxA6SGjI5+iIDeSrR3auzeZjl5v3UA==
+X-Received: by 2002:a05:600c:a44:b0:40a:3e41:a258 with SMTP id c4-20020a05600c0a4400b0040a3e41a258mr4066695wmq.17.1699614571963;
+        Fri, 10 Nov 2023 03:09:31 -0800 (PST)
+Received: from [192.168.100.102] ([37.228.218.3])
+        by smtp.gmail.com with ESMTPSA id jg25-20020a05600ca01900b00405718cbeadsm794518wmb.1.2023.11.10.03.09.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Nov 2023 03:09:31 -0800 (PST)
+Message-ID: <6d083c38-8807-47ad-8a05-37e89731de4f@linaro.org>
+Date: Fri, 10 Nov 2023 11:09:29 +0000
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR08MB9155:EE_|DU5PR08MB10677:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7eb6612e-5357-4261-0d0c-08dbe1fa06a1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	3/ZG1zEKa/EvrnaTVvKVjzx8LUCQED/iWVIeyRc/AdsHQ+dEYBjG7BEV+jh13xBITsFAMBWRdcaN5W4UQ4ysNW+Rx9b/iQMfUCSn+Ju7/jmivLgnxRvOHE+iZBs/NEK5wKeK1lmCJRQ24NQptSecGcTrk7nBjB0v3YfTOnekQ62/PiSRSXxQv/nP/6twK6+nu9WRlzisuME7pGq6Srfn4BRv+DDogbV8Bo8cSbGb8l5PfYIv3iYTd7MP/MVw2rCbH7fmiegJGwNFuFRaiLvs6YH8jixCAZLTWb9P2PJvixwelbednDtIBZ7buQ0fMHgxOkArS/bieUWMdNHEixrtxFCxChGxDMXiO5tyTouvHGivz7NdkunoMBZY3h45lhS1dapqc73zx8QTxPs2hbACM/zRryL0WTlBy+HT4gXb90CHM3F3xpxJuWkeCsMHcXNHjHtA/fE7qC7vRSt34axkExvYzxSt7MDCBae06wOOnZZzIkRxOvHmD0RlGOG05MSCZLI0taQW6wwTiVsO5IUhoUXX1JubbRFvNlT9JBGxEyXD6RPwgiU3lYwVilkG+B1Mp5teiMHRwg65SUhtonAjiCvDppktQmYlEmHNGNAWEsS+BQ5tOz41Eb2r8UJ1QL1dv+xIYBeHUYO16hJo6HBWRw==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9155.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(346002)(39850400004)(366004)(396003)(136003)(230922051799003)(1800799009)(64100799003)(451199024)(186009)(26005)(2616005)(83380400001)(66946007)(6666004)(6506007)(36916002)(478600001)(66556008)(53546011)(6512007)(31696002)(2906002)(8676002)(4326008)(36756003)(8936002)(41300700001)(5660300002)(38100700002)(7416002)(86362001)(44832011)(66476007)(316002)(6486002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?TTh1VW1sc3FuRy83VlNETkNmT1RNZDBJQU93QnYzVVcvY3M3K1duZ0dIbklo?=
- =?utf-8?B?TERleXNleUdxQnd5Y0Q1azV0MHRQUzFuaFhjWDhQeXpnQUREeS9udHVwQ0hv?=
- =?utf-8?B?ajRLOEprMC83MlF0bDNWbGt0OWRuRE5Fcmx5YlZ5TzdiU2dFdWFlanBNV29y?=
- =?utf-8?B?N0d2Rldhb1BwR3ArRTdVOEMvakZONno4L0dRUmhHZUFESWh4dWtUTlRyU2pq?=
- =?utf-8?B?bnJJZmI1R0thTEVUSnFLcWdnUGdUQ0MwbHZGcksyUGkxUzRLZXdHNmtTZmZM?=
- =?utf-8?B?dXFXMXRrNDdXQ3pyNS9BY0pRWkpkK3pQL3l0RCtkRWlXQXZDbjZVSGhVUDFL?=
- =?utf-8?B?OElDVlBwZDFjTDMzR3hGVFR4ZGQ3TlhQRlRvc2t3RE9VdVhUdFVVZC9hMHFF?=
- =?utf-8?B?L3JicmFlczhZY2s5NjlNbi9yZkt3U2kzWGUxbndwZnpTTlNoQVZBYllWSmpM?=
- =?utf-8?B?ZC9HalJvSDh0SFdTNS9LT0R3SU1JTlFsQ0pOVWV3NmFjRUt4LytsN2wvRmVR?=
- =?utf-8?B?YnNxU1NWZTVoekVWUGNWNFNob0ZDS2dxOGdHeVhjU2U1YVB2bllualAxUll1?=
- =?utf-8?B?Szg2ZC9lb3BYYUdEcHVPRCtnUXRDUzhmS2Rva1lhTm1rZ1BrS1kwQzRhVHZT?=
- =?utf-8?B?QWlHT29ZOTVRMGZCUkRLYjZlN0JuemNFWTJYQzlXNFRXY0tiRGtSR04zY1hV?=
- =?utf-8?B?NHN5MnRoOVZLTkk4YUQraURzZHIzR00rbU1Zb1hENU1WQ1Vxa3d4aGszNXg2?=
- =?utf-8?B?c0NWNzRMT0JnVHJMRGovVnNLZnQvTFdqcGt4clZ3TXROK3JRU29BN2ZlUHd3?=
- =?utf-8?B?UGVpSnk4U0FOWFJ3ZDhxY2cvT0RJSWlFU0c5LytQTDQ0Mi82UUxlWkRFMzFJ?=
- =?utf-8?B?L29zWndrKzIzK1NBaDg2ZUpreFJBekRscUhMUEhkYVgzZDNUYzJ6NHY0K01m?=
- =?utf-8?B?dzFuM1IxQU9IU3ArTTdsMEt1ck9tQUdadG9JOUUwTXA4NElFMHVQdDBhcmpm?=
- =?utf-8?B?WTUwV0lLRElQUjNYcU14RFNKY2d6TXgxQnFZb2l4eUxhVVYwUjRCRGZzTnl2?=
- =?utf-8?B?NHIvN3ZTOWlHanljZHZYdTQzVXdCVTJVL0hnUVIySmIrb1J0MlQ1QzlNb1JF?=
- =?utf-8?B?WTRaUzFOa0plMzV4bFlMU1oxVHMxajlWUU9mUU5yZXdzdW9vQlhzRDMxWXJq?=
- =?utf-8?B?WHMzckVLdVJsWkNKZ2NDT09yN04zV3FiUE80U0FzRlZBSjdKUFU0NzBscURU?=
- =?utf-8?B?S3IzMFNYeHhwQ1FuUGRKSnEwc2tHSk5UbFpGTGpGVVM2VWtVd3Q5MVdLdTU5?=
- =?utf-8?B?Sk0wQ2tZbVE4VXpsdThBTldOcWFGWjdRUEthMDdBQmN0L2hIYWYzQVFzbTRk?=
- =?utf-8?B?c213UGw4b2x3UjJDWmlCS0IzQ2dJbEFlcEx4ZFJFV0N2Mk9ieG44UXdrOUky?=
- =?utf-8?B?M3BCWUlqMGRJUEJ6UXkva3ZDTU01NmFDUEVYYVlYZGNCYnVsV3o1Y0liT1Ex?=
- =?utf-8?B?ZDZNNnVLM1hXdHc1eHlYSmpPK095UFl1Qm5Ga1hsc1dENDg0UW1iWkNLWmhX?=
- =?utf-8?B?b3JkTkVEUG56YVJ2anNhWTZEczMrdzl6L0hoRFpPYkpWQjU1V2pHclo4QlBq?=
- =?utf-8?B?WVE1MGJJSVU3SGFyazJTeTEydjNFTDJUNlN3TyswRTJYaktUbzJ6b2hNMkZr?=
- =?utf-8?B?Y3RHSzFLclpoRUMvM0ZSSFowK3NQeFRRMlR2UXFJNkZ2bWdYSWthWnkzNGFT?=
- =?utf-8?B?V1dCbGdicXlLbjdNeklDdzVtRk9KQ0NmVmVuOHdTUjgwczNFNmdGMi93RHcy?=
- =?utf-8?B?LzlTNzBWQnBrNjBuYzVmR3pTN2IxUHZMZVlmczFGbXJMT2VHZjVDamJ4cDZv?=
- =?utf-8?B?dGQ0MzE2aHlicmh4MlpFQkd1OUJSdEErRitGN0x5OGRlWjJpcktReVNhQkNE?=
- =?utf-8?B?cDJaVTUyeHUvMm9BVDFvQVJKM1ROM3hFMjNhaHlpN3FtMjhRNlhyN1dld3Bh?=
- =?utf-8?B?YW95NVZMMDNoL2phc2daRmN4M080YURWYkRyRXFadUp2RndHTEhNTGttOHRk?=
- =?utf-8?B?MFREZEZOY2lnRlp4WUN4b0gzMitwbk5XZlFDL3pSZDFNSm0walNHajllZ2I4?=
- =?utf-8?B?YWdHTnk3V2lrOUFiV1hjcHZTUVF1UWd1MUI1bnprYTRJSVdaZXVRNlN4bkha?=
- =?utf-8?B?ckE9PQ==?=
-X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7eb6612e-5357-4261-0d0c-08dbe1fa06a1
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9155.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Nov 2023 14:33:37.3953
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sXPprwWSmNOEixHr23wPCEire6VXPn8ZHyaet6ZsQn2tNpiuOhKDtZUrHdQ0j7jhpfZVAldzyqRad7NUsi/tBsOMUmwlR8H4R2EEu9uo07E=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU5PR08MB10677
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RESEND v3 4/5] clk: qcom: Use HW_CTRL_TRIGGER flag to
+ switch video GDSC to HW mode
+Content-Language: en-US
+To: Jagadeesh Kona <quic_jkona@quicinc.com>, Abel Vesa
+ <abel.vesa@linaro.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Kevin Hilman <khilman@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Bjorn Andersson <andersson@kernel.org>, Andy Gross <agross@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+ Vikash Garodia <quic_vgarodia@quicinc.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Taniya Das <tdas@qti.qualcomm.com>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-media@vger.kernel.org
+References: <20231101-gdsc-hwctrl-v3-0-0740ae6b2b04@linaro.org>
+ <20231101-gdsc-hwctrl-v3-4-0740ae6b2b04@linaro.org>
+ <835a6add-81e9-42e4-abbe-91632aaa6bc9@linaro.org>
+ <dfc56206-6e8d-d932-6493-e74162855298@quicinc.com>
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <dfc56206-6e8d-d932-6493-e74162855298@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Mehdi,
+On 10/11/2023 08:29, Jagadeesh Kona wrote:
+> 
+> 
+> On 11/7/2023 6:35 PM, Bryan O'Donoghue wrote:
+>> On 01/11/2023 09:04, Abel Vesa wrote:
+>>> From: Jagadeesh Kona <quic_jkona@quicinc.com>
+>>>
+>>> The current HW_CTRL flag switches the video GDSC to HW control mode as
+>>> part of GDSC enable itself, instead of that use HW_CTRL_TRIGGER flag to
+>>> give consumer drivers more control and switch the GDSC mode as and when
+>>> required.
+>>>
+>>> HW_CTRL_TRIGGER flag allows consumer drivers to switch the video GDSC to
+>>> HW/SW control modes at runtime using dev_pm_genpd_set_hwmode API.
+>>>
+>>> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
+>>> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+>>> ---
+>>>   drivers/clk/qcom/videocc-sc7180.c | 2 +-
+>>>   drivers/clk/qcom/videocc-sc7280.c | 2 +-
+>>>   drivers/clk/qcom/videocc-sdm845.c | 4 ++--
+>>>   drivers/clk/qcom/videocc-sm8250.c | 4 ++--
+>>>   drivers/clk/qcom/videocc-sm8550.c | 4 ++--
+>>>   5 files changed, 8 insertions(+), 8 deletions(-)
+>>
+>> So.
+>>
+>> I'm assuming the rest of this series works however for sc8250 at least 
+>> this is a NAK, breaks venus on rb5.
+>>
+>> Reproduction:
+>>
+>> - Debian trixie rb5
+>> - Linux 6.6-rc3 + this patch
+>> - Attached defconfig
+>> - This file:
+>>    https://download.samplelib.com/mp4/sample-30s.mp4
+>> - This command:
+>>    ffplay -loglevel debug -code:video h264_v4l2m2m -i sample-30s.mp4
+>>
+>> Second play of file shows stuck gdsc as below
+>>
+>> I didn't try on rb3, I'd expect similar results. Does this work on 8550 ?
+>>
+>> [ 1601.581204] ------------[ cut here ]------------
+>> [ 1601.585983] mvs0_gdsc status stuck at 'off'
+>> [ 1601.586015] WARNING: CPU: 1 PID: 13372 at 
+>> drivers/clk/qcom/gdsc.c:178 gdsc_toggle_logic+0x16c/0x174
+>> [ 1601.599627] Modules linked in: nf_tables libcrc32c nfnetlink 
+>> snd_soc_hdmi_codec q6asm_dai q6routing q6afe_dai q6asm q6adm 
+>> q6afe_clocks snd_q6dsp_common q6afe q6core apr pdr_interface venus_enc 
+>> venus_dec qcom_camss videobuf2_dma_contig mcp251xfd imx412 
+>> videobuf2_dma_sg venus_core xhci_plat_hcd v4l2_fwnode fastrpc xhci_hcd 
+>> can_dev qrtr_smd lontium_lt9611uxc msm v4l2_async v4l2_mem2mem 
+>> qcom_spmi_adc_tm5 rtc_pm8xxx qcom_spmi_adc5 qcom_pon videobuf2_memops 
+>> crct10dif_ce qcom_spmi_temp_alarm videobuf2_v4l2 qcom_vadc_common 
+>> gpu_sched drm_dp_aux_bus videodev snd_soc_sm8250 drm_display_helper 
+>> snd_soc_qcom_sdw videobuf2_common snd_soc_qcom_common qrtr 
+>> i2c_qcom_cci soundwire_qcom mc i2c_qcom_geni spi_geni_qcom 
+>> phy_qcom_qmp_combo qcom_q6v5_pas qcom_rng soundwire_bus qcom_pil_info 
+>> snd_soc_lpass_va_macro qcom_q6v5 slimbus snd_soc_lpass_macro_common 
+>> qcom_sysmon snd_soc_lpass_wsa_macro display_connector qcom_common 
+>> socinfo qcom_glink_smem qmi_helpers drm_kms_helper mdt_loader qcom_wdt 
+>> icc_osm_l3 qnoc_sm8250 fuse drm backlight dm_mod
+>> [ 1601.599859]  ip_tables x_tables
+>> [ 1601.695314] CPU: 1 PID: 13372 Comm: video_decoder Not tainted 
+>> 6.6.0-rc3-00396-gdbc0d9fa7641-dirty #1
+>> [ 1601.704694] Hardware name: Qualcomm Technologies, Inc. Robotics RB5 
+>> (DT)
+>> [ 1601.711582] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS 
+>> BTYPE=--)
+>> [ 1601.718740] pc : gdsc_toggle_logic+0x16c/0x174
+>> [ 1601.723317] lr : gdsc_toggle_logic+0x16c/0x174
+>> [ 1601.727888] sp : ffff80008adab800
+>> [ 1601.731296] x29: ffff80008adab800 x28: ffffb661e8596210 x27: 
+>> ffffb661e855ad88
+>> [ 1601.738629] x26: 0000000000000000 x25: ffff100c0b5a0d28 x24: 
+>> ffffb6620fd92118
+>> [ 1601.745960] x23: ffffb6620fe1d3d8 x22: 0000000000000000 x21: 
+>> 0000000000000001
+>> [ 1601.753292] x20: 00000000ffffff92 x19: ffffb6620fd92118 x18: 
+>> ffffffffffc0d3e8
+>> [ 1601.760631] x17: 0000000000000000 x16: ffffb6620e269e14 x15: 
+>> 0000000000000028
+>> [ 1601.767973] x14: 0000000000000000 x13: ffff100d75c00000 x12: 
+>> 0000000000000894
+>> [ 1601.775304] x11: 00000000000002dc x10: ffff100d767044a0 x9 : 
+>> ffff100d75c00000
+>> [ 1601.782636] x8 : 00000000fffdffff x7 : ffff100d76700000 x6 : 
+>> 00000000000002dc
+>> [ 1601.789976] x5 : ffff100d7ef40d48 x4 : 40000000fffe02dc x3 : 
+>> ffff59ab6fa21000
+>> [ 1601.797306] x2 : 0000000000000000 x1 : 0000000000000000 x0 : 
+>> ffff100cdacdec80
+>> [ 1601.804638] Call trace:
+>> [ 1601.807161]  gdsc_toggle_logic+0x16c/0x174
+>> [ 1601.811383]  gdsc_enable+0x60/0x27c
+>> [ 1601.814982]  _genpd_power_on+0x94/0x184
+>> [ 1601.818931]  genpd_power_on+0xa8/0x16c
+>> [ 1601.822791]  genpd_runtime_resume+0xd4/0x2a4
+>> [ 1601.827184]  __rpm_callback+0x48/0x1dc
+>> [ 1601.831045]  rpm_callback+0x6c/0x78
+>> [ 1601.834638]  rpm_resume+0x45c/0x6c8
+>> [ 1601.838231]  __pm_runtime_resume+0x4c/0x90
+>> [ 1601.842443]  coreid_power_v4+0x378/0x58c [venus_core]
+>> [ 1601.847695]  vdec_start_streaming+0xc0/0x4e8 [venus_dec]
+>> [ 1601.853169]  vb2_start_streaming+0x68/0x15c [videobuf2_common]
+>> [ 1601.859199]  vb2_core_streamon+0xf8/0x1bc [videobuf2_common]
+>> [ 1601.865032]  vb2_streamon+0x18/0x64 [videobuf2_v4l2]
+>> [ 1601.870174]  v4l2_m2m_ioctl_streamon+0x38/0x98 [v4l2_mem2mem]
+>> [ 1601.876134]  v4l_streamon+0x24/0x30 [videodev]
+>> [ 1601.880759]  __video_do_ioctl+0x15c/0x3c0 [videodev]
+>> [ 1601.885905]  video_usercopy+0x1f0/0x658 [videodev]
+>> [ 1601.890868]  video_ioctl2+0x18/0x28 [videodev]
+>> [ 1601.895481]  v4l2_ioctl+0x40/0x60 [videodev]
+>> [ 1601.899911]  __arm64_sys_ioctl+0xac/0xf0
+>> [ 1601.903958]  invoke_syscall+0x48/0x114
+>> [ 1601.907829]  el0_svc_common.constprop.0+0x40/0xe0
+>> [ 1601.912672]  do_el0_svc+0x1c/0x28
+>> [ 1601.916085]  el0_svc+0x40/0xe8
+>> [ 1601.919243]  el0t_64_sync_handler+0x100/0x12c
+>> [ 1601.923730]  el0t_64_sync+0x190/0x194
+>> [ 1601.927505] ---[ end trace 0000000000000000 ]---
+>> [ 1608.121533] ------------[ cut here ]------------
+>>
+>> And just reverting the one patch - yields
+>>
+>> [  157.083287] qcom-venus aa00000.video-codec: Failed to switch 
+>> power-domain:1 to SW mode
+>> [  162.004630] qcom-venus aa00000.video-codec: Failed to switch 
+>> power-domain:1 to SW mode
+>>
+>> I'll leave the testing here. Please fix !
+>>
+> 
+> Thanks Bryan for reporting this, this could be happening since GDSC 
+> might be left in HW control mode during power off sequence, so the 
+> subsequent GDSC enable is failing since GDSC is still in HW mode. I am 
+> checking internally on this and will get back.
 
-Sorry, forgot one thing:
+Great,
 
-On 11/8/23 17:38, Mehdi Djait wrote:
-> [...]
-> diff --git a/drivers/media/platform/rockchip/cif/dev.c b/drivers/media/platform/rockchip/cif/dev.c
-> new file mode 100644
-> index 000000000000..f7d061a13577
-> --- /dev/null
-> +++ b/drivers/media/platform/rockchip/cif/dev.c
-> @@ -0,0 +1,289 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Rockchip CIF Camera Interface Driver
-> + *
-> + * Copyright (C) 2018 Rockchip Electronics Co., Ltd.
-> + * Copyright (C) 2020 Maxime Chevallier <maxime.chevallier@bootlin.com>
-> + * Copyright (C) 2023 Mehdi Djait <mehdi.djait@bootlin.com>
-> + */
-> +
-> +#include "linux/platform_device.h"
-> +#include <linux/clk.h>
-> +#include <linux/delay.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/of_graph.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/of_reserved_mem.h>
-> +#include <linux/reset.h>
-> +#include <linux/pm_runtime.h>
-> +#include <linux/pinctrl/consumer.h>
-> +#include <media/v4l2-fwnode.h>
-> +
-> +#include "dev.h"
-> +#include "regs.h"
-> +
-> +static int subdev_notifier_complete(struct v4l2_async_notifier *notifier)
-> +{
-> +	struct cif_device *cif_dev;
-> +	struct v4l2_subdev *sd;
-> +	int ret;
-> +
-> +	cif_dev = container_of(notifier, struct cif_device, notifier);
-> +	sd = cif_dev->remote.sd;
-> +
-> +	mutex_lock(&cif_dev->media_dev.graph_mutex);
-> +
-> +	ret = v4l2_device_register_subdev_nodes(&cif_dev->v4l2_dev);
-> +	if (ret < 0)
-> +		goto unlock;
-> +
-> +	ret = media_create_pad_link(&sd->entity, 0,
-> +				    &cif_dev->stream.vdev.entity, 0,
-> +				    MEDIA_LNK_FL_ENABLED);
-> +	if (ret)
-> +		dev_err(cif_dev->dev, "failed to create link");
-> +
-> +unlock:
-> +	mutex_unlock(&cif_dev->media_dev.graph_mutex);
-> +	return ret;
-> +}
-> +
-> +static int subdev_notifier_bound(struct v4l2_async_notifier *notifier,
-> +				 struct v4l2_subdev *subdev,
-> +				 struct v4l2_async_connection *asd)
-> +{
-> +	struct cif_device *cif_dev = container_of(notifier,
-> +						  struct cif_device, notifier);
-> +	int pad;
-> +
-> +	cif_dev->remote.sd = subdev;
-> +	pad = media_entity_get_fwnode_pad(&subdev->entity, subdev->fwnode,
-> +					  MEDIA_PAD_FL_SOURCE);
-> +	if (pad < 0)
-> +		return pad;
-> +
-> +	cif_dev->remote.pad = pad;
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct v4l2_async_notifier_operations subdev_notifier_ops = {
-> +	.bound = subdev_notifier_bound,
-> +	.complete = subdev_notifier_complete,
-> +};
-> +
-> +static int cif_subdev_notifier(struct cif_device *cif_dev)
-> +{
-> +	struct v4l2_async_notifier *ntf = &cif_dev->notifier;
-> +	struct device *dev = cif_dev->dev;
-> +	struct v4l2_async_connection *asd;
-> +	struct v4l2_fwnode_endpoint vep = {
-> +		.bus_type = V4L2_MBUS_PARALLEL,
+Please remember to check for rb3 / sdm845 too.
 
-This is surprising. I had to set this to V4L2_MBUS_UNKNOWN, otherwise
-v4l2_fwnode_endpoint_parse would yield -ENXIO, which indicates a bus
-type mismatch. Does this really work for your (BT.656, right?) setup?
+---
+bod
 
-I think we should get the bus type from the device tree, right?
-
-Thanks and best regards,
-Michael
-
-> [...]
 
