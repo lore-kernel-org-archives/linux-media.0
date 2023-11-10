@@ -1,559 +1,923 @@
-Return-Path: <linux-media+bounces-32-linux-media=archiver.kernel.org@vger.kernel.org>
+Return-Path: <linux-media+bounces-34-linux-media=archiver.kernel.org@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72726C4167B
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:48:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88E17C4332F
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:49:01 +0000 (UTC)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C6DC2B21DFE
-	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:48:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CFCB7B21E24
+	for <linux-media@archiver.kernel.org>; Fri, 10 Nov 2023 17:48:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8988438DDE;
-	Fri, 10 Nov 2023 17:46:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jeZGc+RX"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B8493C689;
+	Fri, 10 Nov 2023 17:46:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C53E3B2B8
-	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 17:46:46 +0000 (UTC)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ECD839770;
-	Fri, 10 Nov 2023 06:42:02 -0800 (PST)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8B73C433C7;
-	Fri, 10 Nov 2023 14:42:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699627322;
-	bh=r1u4S6czlGhgJr3DSHZB1Nz2Yr5vLHsBgbtwT8LGonA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jeZGc+RXq0whsJf3Tj83XQod+vt8TsuDXIyAKqe3UJhwW+HMN9jR42ZyDve31pWUc
-	 WCputicK5jjb5eFtCoY1mmmV8ATY+2xlHL+mvmBkxsPDTTiz3/Crlj4lM1qUElDhXj
-	 YcJT7LFrp/ZRScU54AypyrsDkcTM5gv2toTSvnYApspJgYWH1juzbSMUqYWtwmV+z3
-	 yL2vkSM1RxJYipYM0x682SNxwWh9T/ojfgeL96cELAzo7LH0ZZQXKyF0N2WhZ/53Hx
-	 QWz9BTxCQ3B1kiI/4NLeKW7vIBI04m4gPqTnVRqcCo+CbkGvQQfGEW5IDh1F0YP4hk
-	 rWa3ob4QSAl+A==
-Date: Fri, 10 Nov 2023 15:41:59 +0100
-From: Maxime Ripard <mripard@kernel.org>
-To: Marco Pagani <marpagan@redhat.com>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
-	Daniel Vetter <daniel@ffwll.ch>, Sumit Semwal <sumit.semwal@linaro.org>, 
-	Christian Koenig <christian.koenig@amd.com>, Javier Martinez Canillas <javierm@redhat.com>, 
-	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org, 
-	linaro-mm-sig@lists.linaro.org
-Subject: Re: [RFC PATCH v2] drm/test: add a test suite for GEM objects backed
- by shmem
-Message-ID: <dqpsjdpedvpbooffrn2nwg6hxr2bhdizwx27icwz2dx5bgsho4@id5drrg66e7h>
-References: <20231108134205.111478-1-marpagan@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB26A3AC22
+	for <linux-media@vger.kernel.org>; Fri, 10 Nov 2023 17:46:41 +0000 (UTC)
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58EAD729D;
+	Thu,  9 Nov 2023 22:28:16 -0800 (PST)
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id EA0F8201C42;
+	Fri, 10 Nov 2023 07:28:14 +0100 (CET)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 85362201C4A;
+	Fri, 10 Nov 2023 07:28:14 +0100 (CET)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 8FC1D183ACAD;
+	Fri, 10 Nov 2023 14:28:12 +0800 (+08)
+From: Shengjiu Wang <shengjiu.wang@nxp.com>
+To: hverkuil@xs4all.nl,
+	sakari.ailus@iki.fi,
+	tfiga@chromium.org,
+	m.szyprowski@samsung.com,
+	mchehab@kernel.org,
+	linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	shengjiu.wang@gmail.com,
+	Xiubo.Lee@gmail.com,
+	festevam@gmail.com,
+	nicoleotsuka@gmail.com,
+	lgirdwood@gmail.com,
+	broonie@kernel.org,
+	perex@perex.cz,
+	tiwai@suse.com,
+	alsa-devel@alsa-project.org,
+	linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v9 15/15] media: vim2m-audio: add virtual driver for audio memory to memory
+Date: Fri, 10 Nov 2023 13:48:09 +0800
+Message-Id: <1699595289-25773-16-git-send-email-shengjiu.wang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1699595289-25773-1-git-send-email-shengjiu.wang@nxp.com>
+References: <1699595289-25773-1-git-send-email-shengjiu.wang@nxp.com>
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="5f7kz7hlopnaynsr"
-Content-Disposition: inline
-In-Reply-To: <20231108134205.111478-1-marpagan@redhat.com>
 
+Audio memory to memory virtual driver use video memory to memory
+virtual driver vim2m.c as example. The main difference is
+device type is VFL_TYPE_AUDIO and device cap type is V4L2_CAP_AUDIO_M2M.
 
---5f7kz7hlopnaynsr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The device_run function is a dummy function, which is simply
+copy the data from input buffer to output buffer.
 
-On Wed, Nov 08, 2023 at 02:42:03PM +0100, Marco Pagani wrote:
-> This patch introduces an initial KUnit test suite for GEM objects
-> backed by shmem buffers.
->=20
-> Suggested-by: Javier Martinez Canillas <javierm@redhat.com>
-> Signed-off-by: Marco Pagani <marpagan@redhat.com>
->=20
-> v2:
-> - Improved description of test cases
-> - Cleaner error handling using KUnit actions
-> - Alphabetical order in Kconfig and Makefile
-> ---
->  drivers/gpu/drm/Kconfig                    |   9 +-
->  drivers/gpu/drm/tests/Makefile             |   5 +-
->  drivers/gpu/drm/tests/drm_gem_shmem_test.c | 381 +++++++++++++++++++++
->  3 files changed, 389 insertions(+), 6 deletions(-)
->  create mode 100644 drivers/gpu/drm/tests/drm_gem_shmem_test.c
->=20
-> diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
-> index 3eee8636f847..a2551c8c393a 100644
-> --- a/drivers/gpu/drm/Kconfig
-> +++ b/drivers/gpu/drm/Kconfig
-> @@ -76,14 +76,15 @@ config DRM_KUNIT_TEST
->  	tristate "KUnit tests for DRM" if !KUNIT_ALL_TESTS
->  	depends on DRM && KUNIT
->  	select PRIME_NUMBERS
-> +	select DRM_BUDDY
->  	select DRM_DISPLAY_DP_HELPER
->  	select DRM_DISPLAY_HELPER
-> -	select DRM_LIB_RANDOM
-> -	select DRM_KMS_HELPER
-> -	select DRM_BUDDY
-> +	select DRM_EXEC
->  	select DRM_EXPORT_FOR_TESTS if m
-> +	select DRM_GEM_SHMEM_HELPER
-> +	select DRM_KMS_HELPER
->  	select DRM_KUNIT_TEST_HELPERS
-> -	select DRM_EXEC
-> +	select DRM_LIB_RANDOM
->  	default KUNIT_ALL_TESTS
->  	help
->  	  This builds unit tests for DRM. This option is not useful for
-> diff --git a/drivers/gpu/drm/tests/Makefile b/drivers/gpu/drm/tests/Makef=
-ile
-> index ba7baa622675..d6183b3d7688 100644
-> --- a/drivers/gpu/drm/tests/Makefile
-> +++ b/drivers/gpu/drm/tests/Makefile
-> @@ -9,15 +9,16 @@ obj-$(CONFIG_DRM_KUNIT_TEST) +=3D \
->  	drm_connector_test.o \
->  	drm_damage_helper_test.o \
->  	drm_dp_mst_helper_test.o \
-> +	drm_exec_test.o \
->  	drm_format_helper_test.o \
->  	drm_format_test.o \
->  	drm_framebuffer_test.o \
-> +	drm_gem_shmem_test.o \
->  	drm_managed_test.o \
->  	drm_mm_test.o \
->  	drm_modes_test.o \
->  	drm_plane_helper_test.o \
->  	drm_probe_helper_test.o \
-> -	drm_rect_test.o	\
-> -	drm_exec_test.o
-> +	drm_rect_test.o
+Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+---
+ drivers/media/test-drivers/Kconfig       |  11 +
+ drivers/media/test-drivers/Makefile      |   1 +
+ drivers/media/test-drivers/vim2m-audio.c | 799 +++++++++++++++++++++++
+ 3 files changed, 811 insertions(+)
+ create mode 100644 drivers/media/test-drivers/vim2m-audio.c
 
-Thanks for reordering the tests and symbols, but they should part of a
-preliminary patch.
+diff --git a/drivers/media/test-drivers/Kconfig b/drivers/media/test-drivers/Kconfig
+index 459b433e9fae..55f8af6ee4e2 100644
+--- a/drivers/media/test-drivers/Kconfig
++++ b/drivers/media/test-drivers/Kconfig
+@@ -17,6 +17,17 @@ config VIDEO_VIM2M
+ 	  This is a virtual test device for the memory-to-memory driver
+ 	  framework.
+ 
++config VIDEO_VIM2M_AUDIO
++	tristate "Virtual Memory-to-Memory Driver For Audio"
++	depends on VIDEO_DEV
++	select VIDEOBUF2_VMALLOC
++	select V4L2_MEM2MEM_DEV
++	select MEDIA_CONTROLLER
++	select MEDIA_CONTROLLER_REQUEST_API
++	help
++	  This is a virtual audio test device for the memory-to-memory driver
++	  framework.
++
+ source "drivers/media/test-drivers/vicodec/Kconfig"
+ source "drivers/media/test-drivers/vimc/Kconfig"
+ source "drivers/media/test-drivers/vivid/Kconfig"
+diff --git a/drivers/media/test-drivers/Makefile b/drivers/media/test-drivers/Makefile
+index 740714a4584d..0c61c9ada3e1 100644
+--- a/drivers/media/test-drivers/Makefile
++++ b/drivers/media/test-drivers/Makefile
+@@ -10,6 +10,7 @@ obj-$(CONFIG_DVB_VIDTV) += vidtv/
+ 
+ obj-$(CONFIG_VIDEO_VICODEC) += vicodec/
+ obj-$(CONFIG_VIDEO_VIM2M) += vim2m.o
++obj-$(CONFIG_VIDEO_VIM2M_AUDIO) += vim2m-audio.o
+ obj-$(CONFIG_VIDEO_VIMC) += vimc/
+ obj-$(CONFIG_VIDEO_VIVID) += vivid/
+ obj-$(CONFIG_VIDEO_VISL) += visl/
+diff --git a/drivers/media/test-drivers/vim2m-audio.c b/drivers/media/test-drivers/vim2m-audio.c
+new file mode 100644
+index 000000000000..0124368fe0be
+--- /dev/null
++++ b/drivers/media/test-drivers/vim2m-audio.c
+@@ -0,0 +1,799 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * A virtual v4l2-mem2mem example for audio device.
++ */
++
++#include <linux/module.h>
++#include <linux/delay.h>
++#include <linux/fs.h>
++#include <linux/sched.h>
++#include <linux/slab.h>
++
++#include <linux/platform_device.h>
++#include <media/v4l2-mem2mem.h>
++#include <media/v4l2-device.h>
++#include <media/v4l2-ioctl.h>
++#include <media/v4l2-ctrls.h>
++#include <media/v4l2-event.h>
++#include <media/videobuf2-vmalloc.h>
++#include <sound/dmaengine_pcm.h>
++
++MODULE_DESCRIPTION("Virtual device for audio mem2mem testing");
++MODULE_LICENSE("GPL");
++
++static unsigned int debug;
++module_param(debug, uint, 0644);
++MODULE_PARM_DESC(debug, "debug level");
++
++#define MEM2MEM_NAME "vim2m-audio"
++
++#define dprintk(dev, lvl, fmt, arg...) \
++	v4l2_dbg(lvl, debug, &(dev)->v4l2_dev, "%s: " fmt, __func__, ## arg)
++
++#define SAMPLE_NUM 4096
++
++static void audm2m_dev_release(struct device *dev)
++{}
++
++static struct platform_device audm2m_pdev = {
++	.name		= MEM2MEM_NAME,
++	.dev.release	= audm2m_dev_release,
++};
++
++static u32 formats[] = {
++	V4L2_AUDIO_FMT_S16_LE,
++};
++
++#define NUM_FORMATS ARRAY_SIZE(formats)
++
++/* Per-queue, driver-specific private data */
++struct audm2m_q_data {
++	unsigned int		rate;
++	unsigned int		channels;
++	unsigned int		buffersize;
++	unsigned int		sequence;
++	u32			fourcc;
++};
++
++enum {
++	V4L2_M2M_SRC = 0,
++	V4L2_M2M_DST = 1,
++};
++
++static snd_pcm_format_t find_format(u32 fourcc)
++{
++	snd_pcm_format_t fmt;
++	unsigned int k;
++
++	for (k = 0; k < NUM_FORMATS; k++) {
++		if (formats[k] == fourcc)
++			break;
++	}
++
++	if (k == NUM_FORMATS)
++		return 0;
++
++	fmt = v4l2_fourcc_to_audfmt(formats[k]);
++
++	return fmt;
++}
++
++struct audm2m_dev {
++	struct v4l2_device	v4l2_dev;
++	struct video_device	vfd;
++
++	struct mutex		dev_mutex;
++
++	struct v4l2_m2m_dev	*m2m_dev;
++#ifdef CONFIG_MEDIA_CONTROLLER
++	struct media_device	mdev;
++#endif
++};
++
++struct audm2m_ctx {
++	struct v4l2_fh		fh;
++	struct v4l2_ctrl_handler	ctrl_handler;
++	struct audm2m_dev	*dev;
++
++	struct mutex		vb_mutex;
++
++	/* Source and destination queue data */
++	struct audm2m_q_data   q_data[2];
++};
++
++static inline struct audm2m_ctx *file2ctx(struct file *file)
++{
++	return container_of(file->private_data, struct audm2m_ctx, fh);
++}
++
++static struct audm2m_q_data *get_q_data(struct audm2m_ctx *ctx,
++					enum v4l2_buf_type type)
++{
++	if (type == V4L2_BUF_TYPE_AUDIO_OUTPUT)
++		return &ctx->q_data[V4L2_M2M_SRC];
++	return &ctx->q_data[V4L2_M2M_DST];
++}
++
++static const char *type_name(enum v4l2_buf_type type)
++{
++	if (type == V4L2_BUF_TYPE_AUDIO_OUTPUT)
++		return "Output";
++	return "Capture";
++}
++
++/*
++ * mem2mem callbacks
++ */
++
++/*
++ * device_run() - prepares and starts the device
++ */
++static void device_run(void *priv)
++{
++	struct audm2m_ctx *ctx = priv;
++	struct audm2m_dev *audm2m_dev;
++	struct vb2_v4l2_buffer *src_buf, *dst_buf;
++	struct audm2m_q_data *q_data_src, *q_data_dst;
++	int src_size, dst_size;
++	short *src_addr, *dst_addr;
++	int i;
++
++	audm2m_dev = ctx->dev;
++
++	q_data_src = get_q_data(ctx, V4L2_BUF_TYPE_AUDIO_OUTPUT);
++	if (!q_data_src)
++		return;
++
++	q_data_dst = get_q_data(ctx, V4L2_BUF_TYPE_AUDIO_CAPTURE);
++	if (!q_data_dst)
++		return;
++
++	src_buf = v4l2_m2m_next_src_buf(ctx->fh.m2m_ctx);
++	dst_buf = v4l2_m2m_next_dst_buf(ctx->fh.m2m_ctx);
++	src_buf->sequence = q_data_src->sequence++;
++	dst_buf->sequence = q_data_dst->sequence++;
++	v4l2_m2m_buf_copy_metadata(src_buf, dst_buf, false);
++
++	/* Process the conversion */
++	src_size = vb2_get_plane_payload(&src_buf->vb2_buf, 0);
++
++	src_addr = vb2_plane_vaddr(&src_buf->vb2_buf, 0);
++	dst_addr = vb2_plane_vaddr(&dst_buf->vb2_buf, 0);
++
++	if (q_data_src->rate == q_data_dst->rate) {
++		memcpy(dst_addr, src_addr, src_size);
++		dst_size = src_size;
++	} else if (q_data_src->rate == 2 * q_data_dst->rate) {
++		/* 8k to 16k */
++		for (i = 0; i < src_size / 2; i++) {
++			*dst_addr++ = *src_addr++;
++			src_addr++;
++		}
++
++		dst_size = src_size / 2;
++	} else if (q_data_src->rate * 2 == q_data_dst->rate) {
++		/* 16k to 8k */
++		for (i = 0; i < src_size / 2; i++) {
++			*dst_addr++ = *src_addr;
++			*dst_addr++ = *src_addr++;
++		}
++
++		dst_size = src_size * 2;
++	}
++
++	vb2_set_plane_payload(&dst_buf->vb2_buf, 0, dst_size);
++
++	src_buf = v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
++	dst_buf = v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
++
++	v4l2_m2m_buf_done(src_buf, VB2_BUF_STATE_DONE);
++	v4l2_m2m_buf_done(dst_buf, VB2_BUF_STATE_DONE);
++	v4l2_m2m_job_finish(audm2m_dev->m2m_dev, ctx->fh.m2m_ctx);
++}
++
++static int audm2m_querycap(struct file *file, void *priv,
++			   struct v4l2_capability *cap)
++{
++	strscpy(cap->driver, MEM2MEM_NAME, sizeof(cap->driver));
++	strscpy(cap->card, MEM2MEM_NAME, sizeof(cap->card));
++	snprintf(cap->bus_info, sizeof(cap->bus_info),
++		 "platform:%s", MEM2MEM_NAME);
++
++	return 0;
++}
++
++static int enum_fmt(struct v4l2_fmtdesc *f)
++{
++	int i, num;
++
++	num = 0;
++
++	for (i = 0; i < NUM_FORMATS; ++i) {
++		if (num == f->index)
++			break;
++		/*
++		 * Correct type but haven't reached our index yet,
++		 * just increment per-type index
++		 */
++		++num;
++	}
++
++	if (i < NUM_FORMATS) {
++		/* Format found */
++		f->pixelformat = formats[i];
++		return 0;
++	}
++
++	/* Format not found */
++	return -EINVAL;
++}
++
++static int audm2m_enum_fmt_audio_cap(struct file *file, void *priv,
++				     struct v4l2_fmtdesc *f)
++{
++	return enum_fmt(f);
++}
++
++static int audm2m_enum_fmt_audio_out(struct file *file, void *priv,
++				     struct v4l2_fmtdesc *f)
++{
++	return enum_fmt(f);
++}
++
++static int audm2m_g_fmt(struct audm2m_ctx *ctx, struct v4l2_format *f)
++{
++	struct vb2_queue *vq;
++	struct audm2m_q_data *q_data;
++
++	vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, f->type);
++	if (!vq)
++		return -EINVAL;
++
++	q_data = get_q_data(ctx, f->type);
++	if (!q_data)
++		return -EINVAL;
++
++	f->fmt.audio.audioformat = q_data->fourcc;
++	f->fmt.audio.channels	= q_data->channels;
++	f->fmt.audio.buffersize = q_data->buffersize;
++
++	return 0;
++}
++
++static int audm2m_g_fmt_audio_out(struct file *file, void *priv,
++				  struct v4l2_format *f)
++{
++	return audm2m_g_fmt(file2ctx(file), f);
++}
++
++static int audm2m_g_fmt_audio_cap(struct file *file, void *priv,
++				  struct v4l2_format *f)
++{
++	return audm2m_g_fmt(file2ctx(file), f);
++}
++
++static int audm2m_try_fmt(struct v4l2_format *f, snd_pcm_format_t fmt)
++{
++	f->fmt.audio.channels = 1;
++	f->fmt.audio.buffersize = f->fmt.audio.channels *
++				  snd_pcm_format_physical_width(fmt) *
++				  SAMPLE_NUM;
++	return 0;
++}
++
++static int audm2m_try_fmt_audio_cap(struct file *file, void *priv,
++				    struct v4l2_format *f)
++{
++	snd_pcm_format_t fmt;
++
++	fmt = find_format(f->fmt.audio.audioformat);
++	if (!fmt) {
++		f->fmt.audio.audioformat = formats[0];
++		fmt = find_format(f->fmt.audio.audioformat);
++	}
++
++	return audm2m_try_fmt(f, fmt);
++}
++
++static int audm2m_try_fmt_audio_out(struct file *file, void *priv,
++				    struct v4l2_format *f)
++{
++	snd_pcm_format_t fmt;
++
++	fmt = find_format(f->fmt.audio.audioformat);
++	if (!fmt) {
++		f->fmt.audio.audioformat = formats[0];
++		fmt = find_format(f->fmt.audio.audioformat);
++	}
++
++	return audm2m_try_fmt(f, fmt);
++}
++
++static int audm2m_s_fmt(struct audm2m_ctx *ctx, struct v4l2_format *f)
++{
++	struct audm2m_q_data *q_data;
++	struct vb2_queue *vq;
++	snd_pcm_format_t fmt;
++
++	vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, f->type);
++	if (!vq)
++		return -EINVAL;
++
++	q_data = get_q_data(ctx, f->type);
++	if (!q_data)
++		return -EINVAL;
++
++	if (vb2_is_busy(vq)) {
++		v4l2_err(&ctx->dev->v4l2_dev, "%s queue busy\n", __func__);
++		return -EBUSY;
++	}
++
++	q_data->fourcc	= f->fmt.audio.audioformat;
++	q_data->channels = f->fmt.audio.channels;
++
++	fmt = find_format(f->fmt.audio.audioformat);
++	q_data->buffersize = q_data->channels *
++			     snd_pcm_format_physical_width(fmt) *
++			     SAMPLE_NUM;
++
++	dprintk(ctx->dev, 1,
++		"Format for type %s: %d/%d, fmt: %c%c%c%c\n",
++		type_name(f->type), q_data->rate,
++		q_data->channels,
++		(q_data->fourcc & 0xff),
++		(q_data->fourcc >>  8) & 0xff,
++		(q_data->fourcc >> 16) & 0xff,
++		(q_data->fourcc >> 24) & 0xff);
++
++	return 0;
++}
++
++static int audm2m_s_fmt_audio_cap(struct file *file, void *priv,
++				  struct v4l2_format *f)
++{
++	int ret;
++
++	ret = audm2m_try_fmt_audio_cap(file, priv, f);
++	if (ret)
++		return ret;
++
++	return audm2m_s_fmt(file2ctx(file), f);
++}
++
++static int audm2m_s_fmt_audio_out(struct file *file, void *priv,
++				  struct v4l2_format *f)
++{
++	int ret;
++
++	ret = audm2m_try_fmt_audio_out(file, priv, f);
++	if (ret)
++		return ret;
++
++	return audm2m_s_fmt(file2ctx(file), f);
++}
++
++static const struct v4l2_ioctl_ops audm2m_ioctl_ops = {
++	.vidioc_querycap		= audm2m_querycap,
++
++	.vidioc_enum_fmt_audio_cap	= audm2m_enum_fmt_audio_cap,
++	.vidioc_g_fmt_audio_cap		= audm2m_g_fmt_audio_cap,
++	.vidioc_try_fmt_audio_cap	= audm2m_try_fmt_audio_cap,
++	.vidioc_s_fmt_audio_cap		= audm2m_s_fmt_audio_cap,
++
++	.vidioc_enum_fmt_audio_out	= audm2m_enum_fmt_audio_out,
++	.vidioc_g_fmt_audio_out		= audm2m_g_fmt_audio_out,
++	.vidioc_try_fmt_audio_out	= audm2m_try_fmt_audio_out,
++	.vidioc_s_fmt_audio_out		= audm2m_s_fmt_audio_out,
++
++	.vidioc_reqbufs			= v4l2_m2m_ioctl_reqbufs,
++	.vidioc_querybuf		= v4l2_m2m_ioctl_querybuf,
++	.vidioc_qbuf			= v4l2_m2m_ioctl_qbuf,
++	.vidioc_dqbuf			= v4l2_m2m_ioctl_dqbuf,
++	.vidioc_prepare_buf		= v4l2_m2m_ioctl_prepare_buf,
++	.vidioc_create_bufs		= v4l2_m2m_ioctl_create_bufs,
++	.vidioc_expbuf			= v4l2_m2m_ioctl_expbuf,
++
++	.vidioc_streamon		= v4l2_m2m_ioctl_streamon,
++	.vidioc_streamoff		= v4l2_m2m_ioctl_streamoff,
++
++	.vidioc_subscribe_event		= v4l2_ctrl_subscribe_event,
++	.vidioc_unsubscribe_event	= v4l2_event_unsubscribe,
++};
++
++/*
++ * Queue operations
++ */
++static int audm2m_queue_setup(struct vb2_queue *vq,
++			      unsigned int *nbuffers,
++			      unsigned int *nplanes,
++			      unsigned int sizes[],
++			      struct device *alloc_devs[])
++{
++	struct audm2m_ctx *ctx = vb2_get_drv_priv(vq);
++	struct audm2m_q_data *q_data;
++
++	q_data = get_q_data(ctx, vq->type);
++
++	if (*nplanes)
++		return sizes[0] < q_data->buffersize ? -EINVAL : 0;
++
++	*nplanes = 1;
++	sizes[0] = q_data->buffersize;
++
++	dprintk(ctx->dev, 1, "%s: get %d buffer(s) of size %d each.\n",
++		type_name(vq->type), *nplanes, sizes[0]);
++
++	return 0;
++}
++
++static void audm2m_buf_queue(struct vb2_buffer *vb)
++{
++	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++	struct audm2m_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
++
++	v4l2_m2m_buf_queue(ctx->fh.m2m_ctx, vbuf);
++}
++
++static int audm2m_start_streaming(struct vb2_queue *q, unsigned int count)
++{
++	struct audm2m_ctx *ctx = vb2_get_drv_priv(q);
++	struct audm2m_q_data *q_data = get_q_data(ctx, q->type);
++
++	q_data->sequence = 0;
++	return 0;
++}
++
++static void audm2m_stop_streaming(struct vb2_queue *q)
++{
++	struct audm2m_ctx *ctx = vb2_get_drv_priv(q);
++	struct vb2_v4l2_buffer *vbuf;
++
++	for (;;) {
++		if (V4L2_TYPE_IS_OUTPUT(q->type))
++			vbuf = v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
++		else
++			vbuf = v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
++		if (!vbuf)
++			return;
++		v4l2_m2m_buf_done(vbuf, VB2_BUF_STATE_ERROR);
++	}
++}
++
++static const struct vb2_ops audm2m_qops = {
++	.queue_setup	 = audm2m_queue_setup,
++	.buf_queue	 = audm2m_buf_queue,
++	.start_streaming = audm2m_start_streaming,
++	.stop_streaming  = audm2m_stop_streaming,
++	.wait_prepare	 = vb2_ops_wait_prepare,
++	.wait_finish	 = vb2_ops_wait_finish,
++};
++
++static int queue_init(void *priv, struct vb2_queue *src_vq,
++		      struct vb2_queue *dst_vq)
++{
++	struct audm2m_ctx *ctx = priv;
++	int ret;
++
++	src_vq->type = V4L2_BUF_TYPE_AUDIO_OUTPUT;
++	src_vq->io_modes = VB2_MMAP | VB2_DMABUF;
++	src_vq->drv_priv = ctx;
++	src_vq->buf_struct_size = sizeof(struct v4l2_m2m_buffer);
++	src_vq->ops = &audm2m_qops;
++	src_vq->mem_ops = &vb2_vmalloc_memops;
++	src_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
++	src_vq->lock = &ctx->vb_mutex;
++	src_vq->min_buffers_needed = 1;
++
++	ret = vb2_queue_init(src_vq);
++	if (ret)
++		return ret;
++
++	dst_vq->type = V4L2_BUF_TYPE_AUDIO_CAPTURE;
++	dst_vq->io_modes = VB2_MMAP | VB2_DMABUF;
++	dst_vq->drv_priv = ctx;
++	dst_vq->buf_struct_size = sizeof(struct v4l2_m2m_buffer);
++	dst_vq->ops = &audm2m_qops;
++	dst_vq->mem_ops = &vb2_vmalloc_memops;
++	dst_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
++	dst_vq->lock = &ctx->vb_mutex;
++	dst_vq->min_buffers_needed = 1;
++
++	return vb2_queue_init(dst_vq);
++}
++
++static const s64 audm2m_rates[] = {
++	8000, 16000,
++};
++
++static int audm2m_op_s_ctrl(struct v4l2_ctrl *ctrl)
++{
++	struct audm2m_ctx *ctx =
++		container_of(ctrl->handler, struct audm2m_ctx, ctrl_handler);
++	int ret = 0;
++
++	switch (ctrl->id) {
++	case V4L2_CID_M2M_AUDIO_SOURCE_RATE:
++		ctx->q_data[V4L2_M2M_SRC].rate = ctrl->qmenu_int[ctrl->val];
++		break;
++	case V4L2_CID_M2M_AUDIO_DEST_RATE:
++		ctx->q_data[V4L2_M2M_DST].rate = ctrl->qmenu_int[ctrl->val];
++		break;
++	default:
++		ret = -EINVAL;
++		break;
++	}
++
++	return ret;
++}
++
++static const struct v4l2_ctrl_ops audm2m_ctrl_ops = {
++	.s_ctrl = audm2m_op_s_ctrl,
++};
++
++/*
++ * File operations
++ */
++static int audm2m_open(struct file *file)
++{
++	struct audm2m_dev *dev = video_drvdata(file);
++	struct audm2m_ctx *ctx = NULL;
++	snd_pcm_format_t fmt;
++	int width;
++	int rc = 0;
++
++	if (mutex_lock_interruptible(&dev->dev_mutex))
++		return -ERESTARTSYS;
++	ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
++	if (!ctx) {
++		rc = -ENOMEM;
++		goto open_unlock;
++	}
++
++	v4l2_fh_init(&ctx->fh, video_devdata(file));
++	file->private_data = &ctx->fh;
++	ctx->dev = dev;
++
++	ctx->q_data[V4L2_M2M_SRC].fourcc = formats[0];
++	ctx->q_data[V4L2_M2M_SRC].rate = 8000;
++	ctx->q_data[V4L2_M2M_SRC].channels = 1;
++
++	/* Fix to 4096 samples */
++	fmt = find_format(formats[0]);
++	width = snd_pcm_format_physical_width(fmt);
++	ctx->q_data[V4L2_M2M_SRC].buffersize = SAMPLE_NUM * width;
++	ctx->q_data[V4L2_M2M_DST] = ctx->q_data[V4L2_M2M_SRC];
++
++	ctx->fh.m2m_ctx = v4l2_m2m_ctx_init(dev->m2m_dev, ctx, &queue_init);
++
++	mutex_init(&ctx->vb_mutex);
++
++	if (IS_ERR(ctx->fh.m2m_ctx)) {
++		rc = PTR_ERR(ctx->fh.m2m_ctx);
++
++		v4l2_fh_exit(&ctx->fh);
++		kfree(ctx);
++		goto open_unlock;
++	}
++
++	v4l2_fh_add(&ctx->fh);
++
++	dprintk(dev, 1, "Created instance: %p, m2m_ctx: %p\n",
++		ctx, ctx->fh.m2m_ctx);
++
++	v4l2_ctrl_handler_init(&ctx->ctrl_handler, 2);
++
++	v4l2_ctrl_new_int_menu(&ctx->ctrl_handler, &audm2m_ctrl_ops,
++			       V4L2_CID_M2M_AUDIO_SOURCE_RATE,
++			       ARRAY_SIZE(audm2m_rates) - 1, 0, audm2m_rates);
++	v4l2_ctrl_new_int_menu(&ctx->ctrl_handler, &audm2m_ctrl_ops,
++			       V4L2_CID_M2M_AUDIO_DEST_RATE,
++			       ARRAY_SIZE(audm2m_rates) - 1, 0, audm2m_rates);
++
++	if (ctx->ctrl_handler.error) {
++		rc = ctx->ctrl_handler.error;
++		v4l2_ctrl_handler_free(&ctx->ctrl_handler);
++		goto err_ctrl_handler;
++	}
++
++	ctx->fh.ctrl_handler = &ctx->ctrl_handler;
++
++	mutex_unlock(&dev->dev_mutex);
++
++	return 0;
++
++err_ctrl_handler:
++	v4l2_m2m_ctx_release(ctx->fh.m2m_ctx);
++open_unlock:
++	mutex_unlock(&dev->dev_mutex);
++	return rc;
++}
++
++static int audm2m_release(struct file *file)
++{
++	struct audm2m_dev *dev = video_drvdata(file);
++	struct audm2m_ctx *ctx = file2ctx(file);
++
++	dprintk(dev, 1, "Releasing instance %p\n", ctx);
++
++	v4l2_ctrl_handler_free(&ctx->ctrl_handler);
++	v4l2_fh_del(&ctx->fh);
++	v4l2_fh_exit(&ctx->fh);
++	mutex_lock(&dev->dev_mutex);
++	v4l2_m2m_ctx_release(ctx->fh.m2m_ctx);
++	mutex_unlock(&dev->dev_mutex);
++	kfree(ctx);
++
++	return 0;
++}
++
++static void audm2m_device_release(struct video_device *vdev)
++{
++	struct audm2m_dev *dev = container_of(vdev, struct audm2m_dev, vfd);
++
++	v4l2_device_unregister(&dev->v4l2_dev);
++	v4l2_m2m_release(dev->m2m_dev);
++
++#ifdef CONFIG_MEDIA_CONTROLLER
++	media_device_cleanup(&dev->mdev);
++#endif
++	kfree(dev);
++}
++
++static const struct v4l2_file_operations audm2m_fops = {
++	.owner		= THIS_MODULE,
++	.open		= audm2m_open,
++	.release	= audm2m_release,
++	.poll		= v4l2_m2m_fop_poll,
++	.unlocked_ioctl	= video_ioctl2,
++	.mmap		= v4l2_m2m_fop_mmap,
++};
++
++static const struct video_device audm2m_videodev = {
++	.name		= MEM2MEM_NAME,
++	.vfl_dir	= VFL_DIR_M2M,
++	.fops		= &audm2m_fops,
++	.ioctl_ops	= &audm2m_ioctl_ops,
++	.minor		= -1,
++	.release	= audm2m_device_release,
++	.device_caps	= V4L2_CAP_AUDIO_M2M | V4L2_CAP_STREAMING,
++};
++
++static const struct v4l2_m2m_ops m2m_ops = {
++	.device_run	= device_run,
++};
++
++static const struct media_device_ops audm2m_media_ops = {
++	.req_validate = vb2_request_validate,
++	.req_queue = v4l2_m2m_request_queue,
++};
++
++static int audm2m_probe(struct platform_device *pdev)
++{
++	struct audm2m_dev *dev;
++	struct video_device *vfd;
++	int ret;
++
++	dev = kzalloc(sizeof(*dev), GFP_KERNEL);
++	if (!dev)
++		return -ENOMEM;
++
++	ret = v4l2_device_register(&pdev->dev, &dev->v4l2_dev);
++	if (ret)
++		goto error_free;
++
++	mutex_init(&dev->dev_mutex);
++
++	dev->vfd = audm2m_videodev;
++	vfd = &dev->vfd;
++	vfd->lock = &dev->dev_mutex;
++	vfd->v4l2_dev = &dev->v4l2_dev;
++
++	video_set_drvdata(vfd, dev);
++	platform_set_drvdata(pdev, dev);
++
++	dev->m2m_dev = v4l2_m2m_init(&m2m_ops);
++	if (IS_ERR(dev->m2m_dev)) {
++		v4l2_err(&dev->v4l2_dev, "Failed to init mem2mem device\n");
++		ret = PTR_ERR(dev->m2m_dev);
++		dev->m2m_dev = NULL;
++		goto error_dev;
++	}
++
++#ifdef CONFIG_MEDIA_CONTROLLER
++	dev->mdev.dev = &pdev->dev;
++	strscpy(dev->mdev.model, MEM2MEM_NAME, sizeof(dev->mdev.model));
++	snprintf(dev->mdev.bus_info, sizeof(dev->mdev.bus_info),
++		 "platform:%s", MEM2MEM_NAME);
++	media_device_init(&dev->mdev);
++	dev->mdev.ops = &audm2m_media_ops;
++	dev->v4l2_dev.mdev = &dev->mdev;
++#endif
++
++	ret = video_register_device(vfd, VFL_TYPE_AUDIO, 0);
++	if (ret) {
++		v4l2_err(&dev->v4l2_dev, "Failed to register video device\n");
++		goto error_m2m;
++	}
++
++#ifdef CONFIG_MEDIA_CONTROLLER
++	ret = v4l2_m2m_register_media_controller(dev->m2m_dev, vfd,
++						 MEDIA_ENT_F_PROC_AUDIO_RESAMPLER);
++	if (ret) {
++		v4l2_err(&dev->v4l2_dev, "Failed to init mem2mem media controller\n");
++		goto error_v4l2;
++	}
++
++	ret = media_device_register(&dev->mdev);
++	if (ret) {
++		v4l2_err(&dev->v4l2_dev, "Failed to register mem2mem media device\n");
++		goto error_m2m_mc;
++	}
++#endif
++
++	v4l2_info(&dev->v4l2_dev,
++		  "Device registered as /dev/v4l-audio%d\n", vfd->num);
++
++	return 0;
++
++#ifdef CONFIG_MEDIA_CONTROLLER
++error_m2m_mc:
++	v4l2_m2m_unregister_media_controller(dev->m2m_dev);
++#endif
++error_v4l2:
++	video_unregister_device(&dev->vfd);
++	/* audm2m_device_release called by video_unregister_device to release various objects */
++	return ret;
++error_m2m:
++	v4l2_m2m_release(dev->m2m_dev);
++error_dev:
++	v4l2_device_unregister(&dev->v4l2_dev);
++error_free:
++	kfree(dev);
++
++	return ret;
++}
++
++static void audm2m_remove(struct platform_device *pdev)
++{
++	struct audm2m_dev *dev = platform_get_drvdata(pdev);
++
++	v4l2_info(&dev->v4l2_dev, "Removing " MEM2MEM_NAME);
++
++#ifdef CONFIG_MEDIA_CONTROLLER
++	media_device_unregister(&dev->mdev);
++	v4l2_m2m_unregister_media_controller(dev->m2m_dev);
++#endif
++	video_unregister_device(&dev->vfd);
++}
++
++static struct platform_driver audm2m_pdrv = {
++	.probe		= audm2m_probe,
++	.remove_new	= audm2m_remove,
++	.driver		= {
++		.name	= MEM2MEM_NAME,
++	},
++};
++
++static void __exit audm2m_exit(void)
++{
++	platform_driver_unregister(&audm2m_pdrv);
++	platform_device_unregister(&audm2m_pdev);
++}
++
++static int __init audm2m_init(void)
++{
++	int ret;
++
++	ret = platform_device_register(&audm2m_pdev);
++	if (ret)
++		return ret;
++
++	ret = platform_driver_register(&audm2m_pdrv);
++	if (ret)
++		platform_device_unregister(&audm2m_pdev);
++
++	return ret;
++}
++
++module_init(audm2m_init);
++module_exit(audm2m_exit);
+-- 
+2.34.1
 
->  CFLAGS_drm_mm_test.o :=3D $(DISABLE_STRUCTLEAK_PLUGIN)
-> diff --git a/drivers/gpu/drm/tests/drm_gem_shmem_test.c b/drivers/gpu/drm=
-/tests/drm_gem_shmem_test.c
-> new file mode 100644
-> index 000000000000..983380490673
-> --- /dev/null
-> +++ b/drivers/gpu/drm/tests/drm_gem_shmem_test.c
-> @@ -0,0 +1,381 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * KUnit test suite for GEM objects backed by shmem buffers
-> + *
-> + * Copyright (C) 2023 Red Hat, Inc.
-> + *
-> + * Author: Marco Pagani <marpagan@redhat.com>
-> + */
-> +
-> +#include <linux/dma-buf.h>
-> +#include <linux/iosys-map.h>
-> +#include <linux/sizes.h>
-> +
-> +#include <kunit/test.h>
-> +
-> +#include <drm/drm_device.h>
-> +#include <drm/drm_drv.h>
-> +#include <drm/drm_gem.h>
-> +#include <drm/drm_gem_shmem_helper.h>
-> +#include <drm/drm_kunit_helpers.h>
-> +
-> +#define TEST_SIZE		SZ_1M
-> +#define TEST_BYTE		0xae
-> +
-> +struct fake_dev {
-> +	struct drm_device drm_dev;
-> +	struct device *dev;
-
-AFAICS, you're not using the dev pointer anywhere. You could remove the
-fake_dev struct entirely and pass the drm_device pointer in test->priv
-
-> +};
-> +
-> +/*
-> + * Wrappers to avoid an explicit type casting when passing action
-> + * functions to kunit_add_action().
-> + */
-> +static void kfree_wrapper(void *p)
-> +{
-> +	kfree(p);
-> +}
-> +
-> +static void sg_free_table_wrapper(void *sgt)
-> +{
-> +	sg_free_table(sgt);
-> +}
-> +
-> +static void drm_gem_shmem_free_wrapper(void *shmem)
-> +{
-> +	drm_gem_shmem_free(shmem);
-> +}
-
-I think you need to explicitly cast the pointer (or do a temporary
-assignment to the proper type) to avoid a compiler warning.
-
-> +/*
-> + * Test creating a shmem GEM object backed by shmem buffer. The test
-> + * case succeeds if the GEM object is successfully allocated with the
-> + * shmem file node and object functions attributes set, and the size
-> + * attribute is equal to the correct size.
-> + */
-
-Thanks for all those comments, it's super helpful
-
-> +static void drm_gem_shmem_test_obj_create(struct kunit *test)
-> +{
-> +	struct fake_dev *fdev =3D test->priv;
-> +	struct drm_gem_shmem_object *shmem;
-> +
-> +	shmem =3D drm_gem_shmem_create(&fdev->drm_dev, TEST_SIZE);
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, shmem);
-> +	KUNIT_EXPECT_EQ(test, shmem->base.size, TEST_SIZE);
-> +	KUNIT_EXPECT_NOT_NULL(test, shmem->base.filp);
-> +	KUNIT_EXPECT_NOT_NULL(test, shmem->base.funcs);
-> +
-> +	drm_gem_shmem_free(shmem);
-> +}
-> +
-> +/*
-> + * Test creating a shmem GEM object from a scatter/gather table exported
-> + * via a DMA-BUF. The test case succeed if the GEM object is successfully
-> + * created with the shmem file node attribute equal to NULL and the sgt
-> + * attribute pointing to the scatter/gather table that has been imported.
-> + */
-> +static void drm_gem_shmem_test_obj_create_private(struct kunit *test)
-> +{
-> +	struct fake_dev *fdev =3D test->priv;
-> +	struct drm_gem_shmem_object *shmem;
-> +	struct drm_gem_object *gem_obj;
-> +	struct dma_buf buf_mock;
-> +	struct dma_buf_attachment attach_mock;
-> +	struct sg_table *sgt;
-> +	char *buf;
-> +	int ret;
-> +
-> +	/* Create a mock scatter/gather table */
-> +	buf =3D kunit_kzalloc(test, TEST_SIZE, GFP_KERNEL);
-> +	KUNIT_ASSERT_NOT_NULL(test, buf);
-> +
-> +	sgt =3D kzalloc(sizeof(*sgt), GFP_KERNEL);
-> +	KUNIT_ASSERT_NOT_NULL(test, sgt);
-> +
-> +	ret =3D kunit_add_action_or_reset(test, kfree_wrapper, sgt);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +	ret =3D sg_alloc_table(sgt, 1, GFP_KERNEL);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +	ret =3D kunit_add_action_or_reset(test, sg_free_table_wrapper, sgt);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +	sg_init_one(sgt->sgl, buf, TEST_SIZE);
-> +
-> +	/* Init a mock DMA-BUF */
-> +	buf_mock.size =3D TEST_SIZE;
-> +	attach_mock.dmabuf =3D &buf_mock;
-> +
-> +	gem_obj =3D drm_gem_shmem_prime_import_sg_table(&fdev->drm_dev, &attach=
-_mock, sgt);
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, gem_obj);
-> +	KUNIT_EXPECT_EQ(test, gem_obj->size, TEST_SIZE);
-> +	KUNIT_EXPECT_NULL(test, gem_obj->filp);
-> +	KUNIT_EXPECT_NOT_NULL(test, gem_obj->funcs);
-> +
-> +	/* The scatter/gather table will be freed by drm_gem_shmem_free */
-> +	kunit_remove_action(test, sg_free_table_wrapper, sgt);
-> +	kunit_remove_action(test, kfree_wrapper, sgt);
-> +
-> +	shmem =3D to_drm_gem_shmem_obj(gem_obj);
-> +	KUNIT_EXPECT_PTR_EQ(test, shmem->sgt, sgt);
-> +
-> +	drm_gem_shmem_free(shmem);
-> +}
-> +
-> +/*
-> + * Test pinning backing pages for a shmem GEM object. The test case
-> + * succeeds if a suitable number of backing pages are allocated, and
-> + * the pages table counter attribute is increased by one.
-> + */
-> +static void drm_gem_shmem_test_pin_pages(struct kunit *test)
-> +{
-> +	struct fake_dev *fdev =3D test->priv;
-> +	struct drm_gem_shmem_object *shmem;
-> +	int i, ret;
-> +
-> +	shmem =3D drm_gem_shmem_create(&fdev->drm_dev, TEST_SIZE);
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, shmem);
-> +	KUNIT_EXPECT_NULL(test, shmem->pages);
-> +	KUNIT_EXPECT_EQ(test, shmem->pages_use_count, 0);
-> +
-> +	ret =3D kunit_add_action_or_reset(test, drm_gem_shmem_free_wrapper, shm=
-em);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +	ret =3D drm_gem_shmem_pin(shmem);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +	KUNIT_ASSERT_NOT_NULL(test, shmem->pages);
-> +	KUNIT_EXPECT_EQ(test, shmem->pages_use_count, 1);
-> +
-> +	for (i =3D 0; i < (shmem->base.size >> PAGE_SHIFT); i++)
-> +		KUNIT_ASSERT_NOT_NULL(test, shmem->pages[i]);
-> +
-> +	drm_gem_shmem_unpin(shmem);
-> +	KUNIT_EXPECT_NULL(test, shmem->pages);
-> +	KUNIT_EXPECT_EQ(test, shmem->pages_use_count, 0);
-> +}
-> +
-> +/*
-> + * Test creating a virtual mapping for a shmem GEM object. The test
-> + * case succeeds if the backing memory is mapped and the reference
-> + * counter for virtual mapping is increased by one. Moreover, the test
-> + * case writes and then reads a test pattern over the mapped memory.
-> + */
-> +static void drm_gem_shmem_test_vmap(struct kunit *test)
-> +{
-> +	struct fake_dev *fdev =3D test->priv;
-> +	struct drm_gem_shmem_object *shmem;
-> +	struct iosys_map map;
-> +	int ret, i;
-> +
-> +	shmem =3D drm_gem_shmem_create(&fdev->drm_dev, TEST_SIZE);
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, shmem);
-> +	KUNIT_EXPECT_NULL(test, shmem->vaddr);
-> +	KUNIT_EXPECT_EQ(test, shmem->vmap_use_count, 0);
-> +
-> +	ret =3D kunit_add_action_or_reset(test, drm_gem_shmem_free_wrapper, shm=
-em);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +	ret =3D drm_gem_shmem_vmap(shmem, &map);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +	KUNIT_ASSERT_NOT_NULL(test, shmem->vaddr);
-> +	KUNIT_ASSERT_FALSE(test, iosys_map_is_null(&map));
-> +	KUNIT_EXPECT_EQ(test, shmem->vmap_use_count, 1);
-> +
-> +	iosys_map_memset(&map, 0, TEST_BYTE, TEST_SIZE);
-> +	for (i =3D 0; i < TEST_SIZE; i++)
-> +		KUNIT_EXPECT_EQ(test, iosys_map_rd(&map, i, u8), TEST_BYTE);
-> +
-> +	drm_gem_shmem_vunmap(shmem, &map);
-> +	KUNIT_EXPECT_NULL(test, shmem->vaddr);
-> +	KUNIT_EXPECT_EQ(test, shmem->vmap_use_count, 0);
-> +}
-> +
-> +/*
-> + * Test exporting a scatter/gather table of pinned pages suitable for
-> + * PRIME usage from a shmem GEM object. The test case succeeds if a
-> + * scatter/gather table large enough to accommodate the backing memory
-> + * is successfully exported.
-> + */
-> +static void drm_gem_shmem_test_get_pages_sgt(struct kunit *test)
-> +{
-> +	struct fake_dev *fdev =3D test->priv;
-> +	struct drm_gem_shmem_object *shmem;
-> +	struct sg_table *sgt;
-> +	struct scatterlist *sg;
-> +	unsigned int si, len =3D 0;
-> +	int ret;
-> +
-> +	shmem =3D drm_gem_shmem_create(&fdev->drm_dev, TEST_SIZE);
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, shmem);
-> +
-> +	ret =3D kunit_add_action_or_reset(test, drm_gem_shmem_free_wrapper, shm=
-em);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +	ret =3D drm_gem_shmem_pin(shmem);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +	sgt =3D drm_gem_shmem_get_sg_table(shmem);
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, sgt);
-> +	KUNIT_EXPECT_NULL(test, shmem->sgt);
-> +
-> +	ret =3D kunit_add_action_or_reset(test, sg_free_table_wrapper, sgt);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +	for_each_sgtable_sg(sgt, sg, si) {
-> +		KUNIT_EXPECT_NOT_NULL(test, sg);
-> +		len +=3D sg->length;
-> +	}
-> +
-> +	KUNIT_EXPECT_GE(test, len, TEST_SIZE);
-> +}
-> +
-> +/*
-> + * Test pinning pages and exporting a scatter/gather table suitable for
-> + * driver usage from a shmem GEM object. The test case succeeds if the
-> + * backing pages are pinned and a scatter/gather table large enough to
-> + * accommodate the backing memory is successfully exported.
-> + */
-> +static void drm_gem_shmem_test_get_sg_table(struct kunit *test)
-> +{
-> +	struct fake_dev *fdev =3D test->priv;
-> +	struct drm_gem_shmem_object *shmem;
-> +	struct sg_table *sgt;
-> +	struct scatterlist *sg;
-> +	unsigned int si, len, ret =3D 0;
-> +
-> +	shmem =3D drm_gem_shmem_create(&fdev->drm_dev, TEST_SIZE);
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, shmem);
-> +
-> +	ret =3D kunit_add_action_or_reset(test, drm_gem_shmem_free_wrapper, shm=
-em);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +	/* The scatter/gather table will be freed by drm_gem_shmem_free */
-> +	sgt =3D drm_gem_shmem_get_pages_sgt(shmem);
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, sgt);
-> +	KUNIT_ASSERT_NOT_NULL(test, shmem->pages);
-> +	KUNIT_EXPECT_EQ(test, shmem->pages_use_count, 1);
-> +	KUNIT_EXPECT_PTR_EQ(test, sgt, shmem->sgt);
-> +
-> +	for_each_sgtable_sg(sgt, sg, si) {
-> +		KUNIT_EXPECT_NOT_NULL(test, sg);
-> +		len +=3D sg->length;
-> +	}
-> +
-> +	KUNIT_EXPECT_GE(test, len, TEST_SIZE);
-> +}
-> +
-> +/*
-> + * Test updating the madvise state of a shmem GEM object. The test
-> + * case checks that the function for setting madv updates it only if
-> + * its current value is greater or equal than zero and returns false
-> + * if it has a negative value.
-> + */
-> +static void drm_gem_shmem_test_madvise(struct kunit *test)
-> +{
-> +	struct fake_dev *fdev =3D test->priv;
-> +	struct drm_gem_shmem_object *shmem;
-> +	int ret;
-> +
-> +	shmem =3D drm_gem_shmem_create(&fdev->drm_dev, TEST_SIZE);
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, shmem);
-> +	KUNIT_ASSERT_EQ(test, shmem->madv, 0);
-> +
-> +	ret =3D kunit_add_action_or_reset(test, drm_gem_shmem_free_wrapper, shm=
-em);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +	ret =3D drm_gem_shmem_madvise(shmem, 1);
-> +	KUNIT_EXPECT_TRUE(test, ret);
-> +	KUNIT_ASSERT_EQ(test, shmem->madv, 1);
-> +
-> +	/* Set madv to a negative value */
-> +	ret =3D drm_gem_shmem_madvise(shmem, -1);
-> +	KUNIT_EXPECT_FALSE(test, ret);
-> +	KUNIT_ASSERT_EQ(test, shmem->madv, -1);
-> +
-> +	/* Check that madv cannot be set back to a positive value */
-> +	ret =3D drm_gem_shmem_madvise(shmem, 0);
-> +	KUNIT_EXPECT_FALSE(test, ret);
-> +	KUNIT_ASSERT_EQ(test, shmem->madv, -1);
-> +}
-> +
-> +/*
-> + * Test purging a shmem GEM object. First, assert that a newly created
-> + * shmem GEM object is not purgeable. Then, set madvise to a positive
-> + * value and call drm_gem_shmem_get_pages_sgt() to pin and dma-map the
-> + * backing pages. Finally, assert that the shmem GEM object is now
-> + * purgeable and purge it.
-> + */
-> +static void drm_gem_shmem_test_purge(struct kunit *test)
-> +{
-> +	struct fake_dev *fdev =3D test->priv;
-> +	struct drm_gem_shmem_object *shmem;
-> +	struct sg_table *sgt;
-> +	int ret;
-> +
-> +	shmem =3D drm_gem_shmem_create(&fdev->drm_dev, TEST_SIZE);
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, shmem);
-> +
-> +	ret =3D kunit_add_action_or_reset(test, drm_gem_shmem_free_wrapper, shm=
-em);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +	ret =3D drm_gem_shmem_is_purgeable(shmem);
-> +	KUNIT_EXPECT_FALSE(test, ret);
-> +
-> +	ret =3D drm_gem_shmem_madvise(shmem, 1);
-> +	KUNIT_EXPECT_TRUE(test, ret);
-> +
-> +	/* The scatter/gather table will be freed by drm_gem_shmem_free */
-> +	sgt =3D drm_gem_shmem_get_pages_sgt(shmem);
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, sgt);
-> +
-> +	ret =3D drm_gem_shmem_is_purgeable(shmem);
-> +	KUNIT_EXPECT_TRUE(test, ret);
-> +
-> +	drm_gem_shmem_purge(shmem);
-> +	KUNIT_EXPECT_NULL(test, shmem->pages);
-> +	KUNIT_EXPECT_NULL(test, shmem->sgt);
-> +	KUNIT_EXPECT_EQ(test, shmem->madv, -1);
-> +}
-> +
-> +static int drm_gem_shmem_test_init(struct kunit *test)
-> +{
-> +	struct fake_dev *fdev;
-> +	struct device *dev;
-> +
-> +	/* Allocate a parent device */
-> +	dev =3D drm_kunit_helper_alloc_device(test);
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, dev);
-> +
-> +	/*
-> +	 * The DRM core will automatically initialize the GEM core and create
-> +	 * a DRM Memory Manager object which provides an address space pool
-> +	 * for GEM objects allocation.
-> +	 */
-> +	fdev =3D drm_kunit_helper_alloc_drm_device(test, dev, struct fake_dev,
-> +						 drm_dev, DRIVER_GEM);
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, fdev);
-> +
-> +	fdev->dev =3D dev;
-> +	test->priv =3D fdev;
-> +
-> +	return 0;
-> +}
-> +
-> +static struct kunit_case drm_gem_shmem_test_cases[] =3D {
-> +	KUNIT_CASE(drm_gem_shmem_test_obj_create),
-> +	KUNIT_CASE(drm_gem_shmem_test_obj_create_private),
-> +	KUNIT_CASE(drm_gem_shmem_test_pin_pages),
-> +	KUNIT_CASE(drm_gem_shmem_test_vmap),
-> +	KUNIT_CASE(drm_gem_shmem_test_get_pages_sgt),
-> +	KUNIT_CASE(drm_gem_shmem_test_get_sg_table),
-> +	KUNIT_CASE(drm_gem_shmem_test_madvise),
-> +	KUNIT_CASE(drm_gem_shmem_test_purge),
-> +	{}
-> +};
-> +
-> +static struct kunit_suite drm_gem_shmem_suite =3D {
-> +	.name =3D "drm_gem_shmem",
-> +	.init =3D drm_gem_shmem_test_init,
-> +	.test_cases =3D drm_gem_shmem_test_cases
-> +};
-> +
-> +kunit_test_suite(drm_gem_shmem_suite);
-
-Looks great otherwise, thanks!
-Maxime
-
---5f7kz7hlopnaynsr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZU5BNwAKCRDj7w1vZxhR
-xd8BAQCWQfZ2OUNNLGx+mO3N4bk72Lqzux9XJTMEhqQKbwFPJwD+J6F3JeK2aGcw
-HnOZStcGzpv8ESgnBrcVBVAhp0/Nrg0=
-=2My6
------END PGP SIGNATURE-----
-
---5f7kz7hlopnaynsr--
 
