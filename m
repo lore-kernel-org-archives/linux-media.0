@@ -1,43 +1,43 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 031B91A287
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 507E617729
 	for <linux-media@vger.kernel.org>; Sun, 12 Nov 2023 20:21:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cF9/gYRd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J/FHq3F1"
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F4D2116
-	for <linux-media@vger.kernel.org>; Sun, 12 Nov 2023 12:21:44 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED440210E
+	for <linux-media@vger.kernel.org>; Sun, 12 Nov 2023 12:21:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699820504; x=1731356504;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=W0dcxR0M6LW2i+Pn+4yQk3+B4tz/G/ceupSvGsJkzSA=;
-  b=cF9/gYRdDRomoX/TIdNuBhNGBBUkl5TkxcGJxIoF8JQuwyze7CZ195yc
-   R2LakUHPZ80XCnFS6Itx167jUc7xnr6TXTqQhM2qepFnle3dKxl3BDhzI
-   voDhoHu3KtyXTalyAhYiYMHss20NO3puqCY7czYTNR0fkzZlySicfihpX
-   p7qwwDpApclVyCL0MOc2W4bbezuIUko2OWNyJ9LmLat5CXLJ3kBgXySKN
-   9lz1cpnQvEhrOqfoCr3gCIOsHmO2kKOt/sAWoBwhTIpQu/wzrc4akxYz6
-   fvODhbICow/8gqZv7w0WyHeOPxRidH93rtTkAqsdSv2kEn0e6c4J6h9b4
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10892"; a="393217661"
+  t=1699820503; x=1731356503;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=w/dnXo3i0o+rv/lZbbr/wMfCblGKL1mYE4fPH10B3TI=;
+  b=J/FHq3F1oEk6O1vxSOCvQRvhOb5HVBbquLOtVqHcjRbOtH5wBBlAiEfm
+   8f4IIsf6uwKaS4/a0wYwQwds3nTpouxQWCJzFYKex0VJy6gTVKDYEi6EK
+   RhSF9vBFIh9wxr3E8GoCU/cQAXygaxZp+r13GVbeHGB21OoKoX0icx+W+
+   zZ+bVqBFYvMrwu8zEGVg9U58SEC3/qUfpQU9s/eaVJ0USYHM08LKu8XYw
+   gPIhlKPC6K7V/5st/tSajlJUts2fCwpRE6SM69eO8DzCy/xRN54Ig73Uz
+   JdjlHI7ZhLfXZJGoFN1mG/aH9mrSKsjiP9GvLYvt/rlNA1YTUB7uSw/51
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10892"; a="393217657"
 X-IronPort-AV: E=Sophos;i="6.03,298,1694761200"; 
-   d="scan'208";a="393217661"
+   d="scan'208";a="393217657"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
   by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2023 12:21:42 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10892"; a="764177675"
+X-IronPort-AV: E=McAfee;i="6600,9927,10892"; a="764177676"
 X-IronPort-AV: E=Sophos;i="6.03,298,1694761200"; 
-   d="scan'208";a="764177675"
+   d="scan'208";a="764177676"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
   by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2023 12:21:39 -0800
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 7E300120AE0;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 698AA11F89D;
 	Sun, 12 Nov 2023 21:57:13 +0200 (EET)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1r2GZl-0045dC-0Y;
+	id 1r2GZl-0045ck-04;
 	Sun, 12 Nov 2023 21:56:57 +0200
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
 To: linux-media@vger.kernel.org
@@ -48,12 +48,10 @@ Cc: hverkuil@xs4all.nl,
 	bingbu.cao@intel.com,
 	hongju.wang@intel.com,
 	Alain Volmat <alain.volmat@foss.st.com>
-Subject: [PATCH v8 6/9] media: v4l: subdev: Always compile sub-device state access functions
-Date: Sun, 12 Nov 2023 21:56:44 +0200
-Message-Id: <20231112195647.974904-7-sakari.ailus@linux.intel.com>
+Subject: [PATCH v8 0/9] Unify sub-device state access functions
+Date: Sun, 12 Nov 2023 21:56:38 +0200
+Message-Id: <20231112195647.974904-1-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231112195647.974904-1-sakari.ailus@linux.intel.com>
-References: <20231112195647.974904-1-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -62,432 +60,279 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Compile sub-device state information access functions
-v4l2_subdev_state_get_{format,crop,compose} unconditionally as they are
-now also used by plain V4L2 drivers.
+Hi folks,
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- drivers/media/v4l2-core/v4l2-subdev.c | 252 +++++++++++++-------------
- include/media/v4l2-subdev.h           | 128 ++++++-------
- 2 files changed, 190 insertions(+), 190 deletions(-)
+This set unifies historical and stream-aware sub-device state access
+functions into one set of functions called
+v4l2_subdev_state_get_{format,crop,compose}. No functional change is
+intended.
 
-diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-index 5298226b6a4d..eb57a2582124 100644
---- a/drivers/media/v4l2-core/v4l2-subdev.c
-+++ b/drivers/media/v4l2-core/v4l2-subdev.c
-@@ -1524,6 +1524,132 @@ void v4l2_subdev_cleanup(struct v4l2_subdev *sd)
- }
- EXPORT_SYMBOL_GPL(v4l2_subdev_cleanup);
- 
-+struct v4l2_mbus_framefmt *
-+__v4l2_subdev_state_get_format(struct v4l2_subdev_state *state,
-+			       unsigned int pad, u32 stream)
-+{
-+	struct v4l2_subdev_stream_configs *stream_configs;
-+	unsigned int i;
-+
-+	if (WARN_ON_ONCE(!state))
-+		return NULL;
-+
-+	if (state->pads) {
-+		if (stream)
-+			return NULL;
-+
-+		/*
-+		 * Set the pad to 0 on error as this is aligned with the
-+		 * behaviour of the pad state information access functions. The
-+		 * purpose of setting pad to 0 here is to avoid accessing memory
-+		 * outside the pads array, but still issuing warning of the
-+		 * invalid access while making the caller's error handling
-+		 * easier.
-+		 */
-+		if (WARN_ON_ONCE(pad >= state->sd->entity.num_pads))
-+			pad = 0;
-+
-+		return &state->pads[pad].format;
-+	}
-+
-+	lockdep_assert_held(state->lock);
-+
-+	stream_configs = &state->stream_configs;
-+
-+	for (i = 0; i < stream_configs->num_configs; ++i) {
-+		if (stream_configs->configs[i].pad == pad &&
-+		    stream_configs->configs[i].stream == stream)
-+			return &stream_configs->configs[i].fmt;
-+	}
-+
-+	return NULL;
-+}
-+EXPORT_SYMBOL_GPL(__v4l2_subdev_state_get_format);
-+
-+struct v4l2_rect *
-+__v4l2_subdev_state_get_crop(struct v4l2_subdev_state *state, unsigned int pad,
-+			     u32 stream)
-+{
-+	struct v4l2_subdev_stream_configs *stream_configs;
-+	unsigned int i;
-+
-+	if (WARN_ON_ONCE(!state))
-+		return NULL;
-+
-+	if (state->pads) {
-+		if (stream)
-+			return NULL;
-+
-+		/*
-+		 * Set the pad to 0 on error as this is aligned with the
-+		 * behaviour of the pad state information access functions. The
-+		 * purpose of setting pad to 0 here is to avoid accessing memory
-+		 * outside the pads array, but still issuing warning of the
-+		 * invalid access while making the caller's error handling
-+		 * easier.
-+		 */
-+		if (WARN_ON_ONCE(pad >= state->sd->entity.num_pads))
-+			pad = 0;
-+
-+		return &state->pads[pad].crop;
-+	}
-+
-+	lockdep_assert_held(state->lock);
-+
-+	stream_configs = &state->stream_configs;
-+
-+	for (i = 0; i < stream_configs->num_configs; ++i) {
-+		if (stream_configs->configs[i].pad == pad &&
-+		    stream_configs->configs[i].stream == stream)
-+			return &stream_configs->configs[i].crop;
-+	}
-+
-+	return NULL;
-+}
-+EXPORT_SYMBOL_GPL(__v4l2_subdev_state_get_crop);
-+
-+struct v4l2_rect *
-+__v4l2_subdev_state_get_compose(struct v4l2_subdev_state *state,
-+				unsigned int pad, u32 stream)
-+{
-+	struct v4l2_subdev_stream_configs *stream_configs;
-+	unsigned int i;
-+
-+	if (WARN_ON_ONCE(!state))
-+		return NULL;
-+
-+	if (state->pads) {
-+		if (stream)
-+			return NULL;
-+
-+		/*
-+		 * Set the pad to 0 on error as this is aligned with the
-+		 * behaviour of the pad state information access functions. The
-+		 * purpose of setting pad to 0 here is to avoid accessing memory
-+		 * outside the pads array, but still issuing warning of the
-+		 * invalid access while making the caller's error handling
-+		 * easier.
-+		 */
-+		if (WARN_ON_ONCE(pad >= state->sd->entity.num_pads))
-+			pad = 0;
-+
-+		return &state->pads[pad].compose;
-+	}
-+
-+	lockdep_assert_held(state->lock);
-+
-+	stream_configs = &state->stream_configs;
-+
-+	for (i = 0; i < stream_configs->num_configs; ++i) {
-+		if (stream_configs->configs[i].pad == pad &&
-+		    stream_configs->configs[i].stream == stream)
-+			return &stream_configs->configs[i].compose;
-+	}
-+
-+	return NULL;
-+}
-+EXPORT_SYMBOL_GPL(__v4l2_subdev_state_get_compose);
-+
- #if defined(CONFIG_VIDEO_V4L2_SUBDEV_API)
- 
- static int
-@@ -1670,132 +1796,6 @@ int v4l2_subdev_set_routing_with_fmt(struct v4l2_subdev *sd,
- }
- EXPORT_SYMBOL_GPL(v4l2_subdev_set_routing_with_fmt);
- 
--struct v4l2_mbus_framefmt *
--__v4l2_subdev_state_get_format(struct v4l2_subdev_state *state,
--			       unsigned int pad, u32 stream)
--{
--	struct v4l2_subdev_stream_configs *stream_configs;
--	unsigned int i;
--
--	if (WARN_ON_ONCE(!state))
--		return NULL;
--
--	if (state->pads) {
--		if (stream)
--			return NULL;
--
--		/*
--		 * Set the pad to 0 on error as this is aligned with the
--		 * behaviour of the pad state information access functions. The
--		 * purpose of setting pad to 0 here is to avoid accessing memory
--		 * outside the pads array, but still issuing warning of the
--		 * invalid access while making the caller's error handling
--		 * easier.
--		 */
--		if (WARN_ON_ONCE(pad >= state->sd->entity.num_pads))
--			pad = 0;
--
--		return &state->pads[pad].format;
--	}
--
--	lockdep_assert_held(state->lock);
--
--	stream_configs = &state->stream_configs;
--
--	for (i = 0; i < stream_configs->num_configs; ++i) {
--		if (stream_configs->configs[i].pad == pad &&
--		    stream_configs->configs[i].stream == stream)
--			return &stream_configs->configs[i].fmt;
--	}
--
--	return NULL;
--}
--EXPORT_SYMBOL_GPL(__v4l2_subdev_state_get_format);
--
--struct v4l2_rect *
--__v4l2_subdev_state_get_crop(struct v4l2_subdev_state *state, unsigned int pad,
--			     u32 stream)
--{
--	struct v4l2_subdev_stream_configs *stream_configs;
--	unsigned int i;
--
--	if (WARN_ON_ONCE(!state))
--		return NULL;
--
--	if (state->pads) {
--		if (stream)
--			return NULL;
--
--		/*
--		 * Set the pad to 0 on error as this is aligned with the
--		 * behaviour of the pad state information access functions. The
--		 * purpose of setting pad to 0 here is to avoid accessing memory
--		 * outside the pads array, but still issuing warning of the
--		 * invalid access while making the caller's error handling
--		 * easier.
--		 */
--		if (WARN_ON_ONCE(pad >= state->sd->entity.num_pads))
--			pad = 0;
--
--		return &state->pads[pad].crop;
--	}
--
--	lockdep_assert_held(state->lock);
--
--	stream_configs = &state->stream_configs;
--
--	for (i = 0; i < stream_configs->num_configs; ++i) {
--		if (stream_configs->configs[i].pad == pad &&
--		    stream_configs->configs[i].stream == stream)
--			return &stream_configs->configs[i].crop;
--	}
--
--	return NULL;
--}
--EXPORT_SYMBOL_GPL(__v4l2_subdev_state_get_crop);
--
--struct v4l2_rect *
--__v4l2_subdev_state_get_compose(struct v4l2_subdev_state *state,
--				unsigned int pad, u32 stream)
--{
--	struct v4l2_subdev_stream_configs *stream_configs;
--	unsigned int i;
--
--	if (WARN_ON_ONCE(!state))
--		return NULL;
--
--	if (state->pads) {
--		if (stream)
--			return NULL;
--
--		/*
--		 * Set the pad to 0 on error as this is aligned with the
--		 * behaviour of the pad state information access functions. The
--		 * purpose of setting pad to 0 here is to avoid accessing memory
--		 * outside the pads array, but still issuing warning of the
--		 * invalid access while making the caller's error handling
--		 * easier.
--		 */
--		if (WARN_ON_ONCE(pad >= state->sd->entity.num_pads))
--			pad = 0;
--
--		return &state->pads[pad].compose;
--	}
--
--	lockdep_assert_held(state->lock);
--
--	stream_configs = &state->stream_configs;
--
--	for (i = 0; i < stream_configs->num_configs; ++i) {
--		if (stream_configs->configs[i].pad == pad &&
--		    stream_configs->configs[i].stream == stream)
--			return &stream_configs->configs[i].compose;
--	}
--
--	return NULL;
--}
--EXPORT_SYMBOL_GPL(__v4l2_subdev_state_get_compose);
--
- int v4l2_subdev_routing_find_opposite_end(const struct v4l2_subdev_krouting *routing,
- 					  u32 pad, u32 stream, u32 *other_pad,
- 					  u32 *other_stream)
-diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-index 6b34a4afba77..a26cb1e454d2 100644
---- a/include/media/v4l2-subdev.h
-+++ b/include/media/v4l2-subdev.h
-@@ -1470,70 +1470,6 @@ v4l2_subdev_lock_and_get_active_state(struct v4l2_subdev *sd)
- 	return sd->active_state;
- }
- 
--#if defined(CONFIG_VIDEO_V4L2_SUBDEV_API)
--
--/**
-- * v4l2_subdev_get_fmt() - Fill format based on state
-- * @sd: subdevice
-- * @state: subdevice state
-- * @format: pointer to &struct v4l2_subdev_format
-- *
-- * Fill @format->format field based on the information in the @format struct.
-- *
-- * This function can be used by the subdev drivers which support active state to
-- * implement v4l2_subdev_pad_ops.get_fmt if the subdev driver does not need to
-- * do anything special in their get_fmt op.
-- *
-- * Returns 0 on success, error value otherwise.
-- */
--int v4l2_subdev_get_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_state *state,
--			struct v4l2_subdev_format *format);
--
--/**
-- * v4l2_subdev_set_routing() - Set given routing to subdev state
-- * @sd: The subdevice
-- * @state: The subdevice state
-- * @routing: Routing that will be copied to subdev state
-- *
-- * This will release old routing table (if any) from the state, allocate
-- * enough space for the given routing, and copy the routing.
-- *
-- * This can be used from the subdev driver's set_routing op, after validating
-- * the routing.
-- */
--int v4l2_subdev_set_routing(struct v4l2_subdev *sd,
--			    struct v4l2_subdev_state *state,
--			    const struct v4l2_subdev_krouting *routing);
--
--struct v4l2_subdev_route *
--__v4l2_subdev_next_active_route(const struct v4l2_subdev_krouting *routing,
--				struct v4l2_subdev_route *route);
--
--/**
-- * for_each_active_route - iterate on all active routes of a routing table
-- * @routing: The routing table
-- * @route: The route iterator
-- */
--#define for_each_active_route(routing, route) \
--	for ((route) = NULL;                  \
--	     ((route) = __v4l2_subdev_next_active_route((routing), (route)));)
--
--/**
-- * v4l2_subdev_set_routing_with_fmt() - Set given routing and format to subdev
-- *					state
-- * @sd: The subdevice
-- * @state: The subdevice state
-- * @routing: Routing that will be copied to subdev state
-- * @fmt: Format used to initialize all the streams
-- *
-- * This is the same as v4l2_subdev_set_routing, but additionally initializes
-- * all the streams using the given format.
-- */
--int v4l2_subdev_set_routing_with_fmt(struct v4l2_subdev *sd,
--				     struct v4l2_subdev_state *state,
--				     const struct v4l2_subdev_krouting *routing,
--				     const struct v4l2_mbus_framefmt *fmt);
--
- /*
-  * A macro to generate the macro or function name for sub-devices state access
-  * wrapper macros below.
-@@ -1610,6 +1546,70 @@ struct v4l2_rect *
- __v4l2_subdev_state_get_compose(struct v4l2_subdev_state *state,
- 				unsigned int pad, u32 stream);
- 
-+#if defined(CONFIG_VIDEO_V4L2_SUBDEV_API)
-+
-+/**
-+ * v4l2_subdev_get_fmt() - Fill format based on state
-+ * @sd: subdevice
-+ * @state: subdevice state
-+ * @format: pointer to &struct v4l2_subdev_format
-+ *
-+ * Fill @format->format field based on the information in the @format struct.
-+ *
-+ * This function can be used by the subdev drivers which support active state to
-+ * implement v4l2_subdev_pad_ops.get_fmt if the subdev driver does not need to
-+ * do anything special in their get_fmt op.
-+ *
-+ * Returns 0 on success, error value otherwise.
-+ */
-+int v4l2_subdev_get_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_state *state,
-+			struct v4l2_subdev_format *format);
-+
-+/**
-+ * v4l2_subdev_set_routing() - Set given routing to subdev state
-+ * @sd: The subdevice
-+ * @state: The subdevice state
-+ * @routing: Routing that will be copied to subdev state
-+ *
-+ * This will release old routing table (if any) from the state, allocate
-+ * enough space for the given routing, and copy the routing.
-+ *
-+ * This can be used from the subdev driver's set_routing op, after validating
-+ * the routing.
-+ */
-+int v4l2_subdev_set_routing(struct v4l2_subdev *sd,
-+			    struct v4l2_subdev_state *state,
-+			    const struct v4l2_subdev_krouting *routing);
-+
-+struct v4l2_subdev_route *
-+__v4l2_subdev_next_active_route(const struct v4l2_subdev_krouting *routing,
-+				struct v4l2_subdev_route *route);
-+
-+/**
-+ * for_each_active_route - iterate on all active routes of a routing table
-+ * @routing: The routing table
-+ * @route: The route iterator
-+ */
-+#define for_each_active_route(routing, route) \
-+	for ((route) = NULL;                  \
-+	     ((route) = __v4l2_subdev_next_active_route((routing), (route)));)
-+
-+/**
-+ * v4l2_subdev_set_routing_with_fmt() - Set given routing and format to subdev
-+ *					state
-+ * @sd: The subdevice
-+ * @state: The subdevice state
-+ * @routing: Routing that will be copied to subdev state
-+ * @fmt: Format used to initialize all the streams
-+ *
-+ * This is the same as v4l2_subdev_set_routing, but additionally initializes
-+ * all the streams using the given format.
-+ */
-+int v4l2_subdev_set_routing_with_fmt(struct v4l2_subdev *sd,
-+				     struct v4l2_subdev_state *state,
-+				     const struct v4l2_subdev_krouting *routing,
-+				     const struct v4l2_mbus_framefmt *fmt);
-+
- /**
-  * v4l2_subdev_routing_find_opposite_end() - Find the opposite stream
-  * @routing: routing used to find the opposite side
+This happened after Tomi suggested adding a num_pads field to struct
+v4l2_subdev_state.
+
+I'd like to merge these somewhat soon, assuming there's a rough consensus
+on them, as this is a fairly hot set, touching 136 files.
+
+Note: the big Coccinelle-generated patch likely won't make it to the list.
+You can find it here:
+<URL:https://pilvi.retiisi.eu/s/j3LjF7FmGAmadDL/download/v4-0006-media-v4l-subdev-Switch-to-stream-aware-state-fun.patch>.
+
+since v7:
+
+- Include one more patch, to move the sub-device state access functions
+  out a section conditional to sub-device UAPI. The patch has been rebased
+  before the driver changes.
+
+since v6:
+
+- More driver changes missing in v6.
+
+since v5:
+
+- Fix Coccinelle-added space (not tab) indenting in the big patch.
+
+since v4:
+
+- Rework macros for two/three argument state information access functions.
+  There's now a common function for generating the name while renames have
+  been done according to the discussion on the list.
+
+- Don't warn about incorrect pad or stream being set for pad information
+  access functions (dropped the last patch). The pad index is nowadays
+  validated by the caller and so resulting NULL is now a driver bug, in
+  other words we no longer need to prepare for driver not validating the
+  field (as this is now done by the framework).
+
+- There are no changes to the big patch i.e. it's the same as in v4.
+
+since v3:
+
+- Drop the patch asserting state mutex acquisition for stream-unaware
+  drivers.
+
+- Add a patch to warn about non-zero stream when access per-pad state
+  information.
+
+- Added a comment on why pad 0 information was returned on invalid pad.
+
+- Add a patch to return NULL from per-pad state information access
+  functions if pad is invalid. (The added comment is removed by this patch
+  as well.)
+
+- Use only __VA_ARGS__ to implement variable number of arguments for
+  subdev state information access functions. This should now work for all
+  supported GCC versions. Add a comment to explain the macro.
+
+- Rename the subdev state information access functions to include "state"
+  again, i.e. v4l2_subdev_state_get_{format,crop,compose}.
+
+- Try to avoid confusing git am by adding '> ' prefix for the manually
+  created diff.
+
+since v2:
+
+- Add back a missing patch (adding sub-device pointer to the state).
+
+- Address unused variable warnings in a few sensor drivers.
+
+- Address kernel-doc build warnings (see lkp bot mail to v2).
+
+- Add a patch to assert holding the state lock also for stream-unaware
+  users.
+
+- Elaborate manual changes in the commit message of the big
+  Coccinelle-generated patch.
+
+since v1:
+
+- Fix missing changes in ds90ub913, TI CAL and IMX drivers.
+
+- Rename state access functions as v4l2_subdev_state_get_*(), i.e. added
+  "state_" to the function names.
+
+- Instead of requiring stream-unaware users to specify the stream value,
+  provide a wrapper macro to produce that, using variadic args.
+
+- Put struct v4l2_subdev pointer to sub-device state (instead of num_pads
+  integer field).
+
+Sakari Ailus (9):
+  media: v4l: subdev: Store the sub-device in the sub-device state
+  media: v4l: subdev: Also return pads array information on stream
+    functions
+  media: v4l: subdev: Rename sub-device state information access
+    functions
+  media: v4l: subdev: v4l2_subdev_state_get_format always returns format
+    now
+  media: v4l: subdev: Make stream argument optional in state access
+    functions
+  media: v4l: subdev: Always compile sub-device state access functions
+  media: v4l: subdev: Switch to stream-aware state functions
+  media: v4l: subdev: Remove stream-unaware sub-device state access
+  media: v4l: subdev: Return NULL from pad access functions on error
+
+ drivers/media/i2c/adv7180.c                   |   4 +-
+ drivers/media/i2c/adv7183.c                   |   2 +-
+ drivers/media/i2c/adv748x/adv748x-afe.c       |   6 +-
+ drivers/media/i2c/adv748x/adv748x-csi2.c      |   2 +-
+ drivers/media/i2c/adv748x/adv748x-hdmi.c      |   6 +-
+ drivers/media/i2c/adv7511-v4l2.c              |   4 +-
+ drivers/media/i2c/adv7604.c                   |   4 +-
+ drivers/media/i2c/adv7842.c                   |   4 +-
+ drivers/media/i2c/ar0521.c                    |   5 +-
+ drivers/media/i2c/ccs/ccs-core.c              |  22 +-
+ drivers/media/i2c/ds90ub913.c                 |   3 +-
+ drivers/media/i2c/ds90ub953.c                 |   3 +-
+ drivers/media/i2c/ds90ub960.c                 |  12 +-
+ drivers/media/i2c/et8ek8/et8ek8_driver.c      |   3 +-
+ drivers/media/i2c/hi556.c                     |  13 +-
+ drivers/media/i2c/hi846.c                     |  11 +-
+ drivers/media/i2c/hi847.c                     |   9 +-
+ drivers/media/i2c/imx208.c                    |   9 +-
+ drivers/media/i2c/imx214.c                    |   4 +-
+ drivers/media/i2c/imx219.c                    |  12 +-
+ drivers/media/i2c/imx258.c                    |   9 +-
+ drivers/media/i2c/imx274.c                    |  12 +-
+ drivers/media/i2c/imx290.c                    |   8 +-
+ drivers/media/i2c/imx296.c                    |  18 +-
+ drivers/media/i2c/imx319.c                    |   7 +-
+ drivers/media/i2c/imx334.c                    |   4 +-
+ drivers/media/i2c/imx335.c                    |   4 +-
+ drivers/media/i2c/imx355.c                    |   7 +-
+ drivers/media/i2c/imx412.c                    |   4 +-
+ drivers/media/i2c/imx415.c                    |   6 +-
+ drivers/media/i2c/isl7998x.c                  |   6 +-
+ drivers/media/i2c/max9286.c                   |   4 +-
+ drivers/media/i2c/mt9m001.c                   |   6 +-
+ drivers/media/i2c/mt9m111.c                   |   6 +-
+ drivers/media/i2c/mt9m114.c                   |  58 ++---
+ drivers/media/i2c/mt9p031.c                   |   6 +-
+ drivers/media/i2c/mt9t112.c                   |   2 +-
+ drivers/media/i2c/mt9v011.c                   |   2 +-
+ drivers/media/i2c/mt9v032.c                   |  10 +-
+ drivers/media/i2c/mt9v111.c                   |   4 +-
+ drivers/media/i2c/og01a1b.c                   |  10 +-
+ drivers/media/i2c/ov01a10.c                   |   2 +-
+ drivers/media/i2c/ov02a10.c                   |   6 +-
+ drivers/media/i2c/ov08d10.c                   |   9 +-
+ drivers/media/i2c/ov08x40.c                   |   7 +-
+ drivers/media/i2c/ov13858.c                   |  10 +-
+ drivers/media/i2c/ov13b10.c                   |  10 +-
+ drivers/media/i2c/ov2640.c                    |   6 +-
+ drivers/media/i2c/ov2659.c                    |   6 +-
+ drivers/media/i2c/ov2680.c                    |  10 +-
+ drivers/media/i2c/ov2685.c                    |   4 +-
+ drivers/media/i2c/ov2740.c                    |   4 +-
+ drivers/media/i2c/ov4689.c                    |   2 +-
+ drivers/media/i2c/ov5640.c                    |   9 +-
+ drivers/media/i2c/ov5645.c                    |   4 +-
+ drivers/media/i2c/ov5647.c                    |  12 +-
+ drivers/media/i2c/ov5648.c                    |   6 +-
+ drivers/media/i2c/ov5670.c                    |  13 +-
+ drivers/media/i2c/ov5675.c                    |   9 +-
+ drivers/media/i2c/ov5693.c                    |   4 +-
+ drivers/media/i2c/ov5695.c                    |   8 +-
+ drivers/media/i2c/ov6650.c                    |  12 +-
+ drivers/media/i2c/ov7251.c                    |   4 +-
+ drivers/media/i2c/ov7670.c                    |   7 +-
+ drivers/media/i2c/ov772x.c                    |   2 +-
+ drivers/media/i2c/ov7740.c                    |   7 +-
+ drivers/media/i2c/ov8856.c                    |   9 +-
+ drivers/media/i2c/ov8858.c                    |   6 +-
+ drivers/media/i2c/ov8865.c                    |   8 +-
+ drivers/media/i2c/ov9282.c                    |   6 +-
+ drivers/media/i2c/ov9640.c                    |   2 +-
+ drivers/media/i2c/ov9650.c                    |   7 +-
+ drivers/media/i2c/ov9734.c                    |   9 +-
+ drivers/media/i2c/rj54n1cb0c.c                |   2 +-
+ drivers/media/i2c/s5c73m3/s5c73m3-core.c      |  37 ++--
+ drivers/media/i2c/s5k5baf.c                   |  35 ++-
+ drivers/media/i2c/s5k6a3.c                    |   8 +-
+ drivers/media/i2c/saa6752hs.c                 |   2 +-
+ drivers/media/i2c/st-mipid02.c                |  11 +-
+ drivers/media/i2c/st-vgxy61.c                 |   5 +-
+ drivers/media/i2c/tc358746.c                  |  12 +-
+ drivers/media/i2c/tda1997x.c                  |   6 +-
+ drivers/media/i2c/tvp5150.c                   |   2 +-
+ drivers/media/i2c/tw9910.c                    |   2 +-
+ drivers/media/pci/intel/ipu3/ipu3-cio2.c      |  10 +-
+ drivers/media/pci/intel/ivsc/mei_csi.c        |   4 +-
+ drivers/media/platform/atmel/atmel-isi.c      |   2 +-
+ drivers/media/platform/cadence/cdns-csi2rx.c  |   4 +-
+ drivers/media/platform/cadence/cdns-csi2tx.c  |   3 +-
+ .../platform/microchip/microchip-csi2dc.c     |  15 +-
+ .../platform/microchip/microchip-isc-base.c   |   2 +-
+ .../platform/microchip/microchip-isc-scaler.c |  16 +-
+ drivers/media/platform/nxp/imx-mipi-csis.c    |  10 +-
+ drivers/media/platform/nxp/imx7-media-csi.c   |  16 +-
+ .../platform/nxp/imx8-isi/imx8-isi-crossbar.c |  10 +-
+ .../platform/nxp/imx8-isi/imx8-isi-pipe.c     |  18 +-
+ .../platform/nxp/imx8-isi/imx8-isi-video.c    |   2 +-
+ drivers/media/platform/nxp/imx8mq-mipi-csi2.c |  13 +-
+ .../media/platform/qcom/camss/camss-csid.c    |   3 +-
+ .../media/platform/qcom/camss/camss-csiphy.c  |   3 +-
+ .../media/platform/qcom/camss/camss-ispif.c   |   3 +-
+ drivers/media/platform/qcom/camss/camss-vfe.c |  10 +-
+ drivers/media/platform/renesas/rcar-isp.c     |   4 +-
+ .../platform/renesas/rcar-vin/rcar-csi2.c     |   4 +-
+ .../platform/renesas/rzg2l-cru/rzg2l-csi2.c   |   6 +-
+ .../platform/renesas/rzg2l-cru/rzg2l-ip.c     |   6 +-
+ .../media/platform/renesas/vsp1/vsp1_brx.c    |   2 +-
+ .../media/platform/renesas/vsp1/vsp1_entity.c |   8 +-
+ .../media/platform/renesas/vsp1/vsp1_rwpf.c   |   3 +-
+ .../platform/rockchip/rkisp1/rkisp1-csi.c     |  16 +-
+ .../platform/rockchip/rkisp1/rkisp1-isp.c     | 103 ++++-----
+ .../platform/rockchip/rkisp1/rkisp1-resizer.c |  53 ++---
+ .../samsung/exynos4-is/fimc-capture.c         |  12 +-
+ .../platform/samsung/exynos4-is/fimc-isp.c    |  24 +--
+ .../platform/samsung/exynos4-is/fimc-lite.c   |  16 +-
+ .../platform/samsung/exynos4-is/mipi-csis.c   |   3 +-
+ .../samsung/s3c-camif/camif-capture.c         |   8 +-
+ .../platform/sunxi/sun4i-csi/sun4i_v4l2.c     |   8 +-
+ .../sunxi/sun6i-csi/sun6i_csi_bridge.c        |   8 +-
+ .../sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c   |   8 +-
+ .../sun8i_a83t_mipi_csi2.c                    |   8 +-
+ drivers/media/platform/ti/cal/cal-camerarx.c  |  18 +-
+ drivers/media/platform/ti/cal/cal-video.c     |   2 +-
+ drivers/media/platform/ti/omap3isp/ispccdc.c  |   7 +-
+ drivers/media/platform/ti/omap3isp/ispccp2.c  |   3 +-
+ drivers/media/platform/ti/omap3isp/ispcsi2.c  |   3 +-
+ .../media/platform/ti/omap3isp/isppreview.c   |   6 +-
+ .../media/platform/ti/omap3isp/ispresizer.c   |   5 +-
+ drivers/media/platform/video-mux.c            |  18 +-
+ .../media/platform/xilinx/xilinx-csi2rxss.c   |   5 +-
+ drivers/media/platform/xilinx/xilinx-tpg.c    |   9 +-
+ drivers/media/platform/xilinx/xilinx-vip.c    |   4 +-
+ .../media/test-drivers/vimc/vimc-debayer.c    |  10 +-
+ drivers/media/test-drivers/vimc/vimc-scaler.c |   9 +-
+ drivers/media/test-drivers/vimc/vimc-sensor.c |   6 +-
+ drivers/media/v4l2-core/v4l2-subdev.c         | 181 +++++++++-------
+ .../media/atomisp/i2c/atomisp-gc0310.c        |   2 +-
+ .../media/atomisp/i2c/atomisp-gc2235.c        |   2 +-
+ .../media/atomisp/i2c/atomisp-mt9m114.c       |   2 +-
+ .../media/atomisp/i2c/atomisp-ov2722.c        |   2 +-
+ .../staging/media/atomisp/pci/atomisp_csi2.c  |   3 +-
+ .../media/atomisp/pci/atomisp_subdev.c        |   6 +-
+ .../staging/media/atomisp/pci/atomisp_tpg.c   |   2 +-
+ .../media/deprecated/atmel/atmel-isc-base.c   |   2 +-
+ drivers/staging/media/imx/imx-ic-prp.c        |   4 +-
+ drivers/staging/media/imx/imx-ic-prpencvf.c   |   4 +-
+ drivers/staging/media/imx/imx-media-csi.c     |   8 +-
+ drivers/staging/media/imx/imx-media-utils.c   |   2 +-
+ drivers/staging/media/imx/imx-media-vdic.c    |   2 +-
+ drivers/staging/media/imx/imx6-mipi-csi2.c    |   2 +-
+ drivers/staging/media/ipu3/ipu3-v4l2.c        |  14 +-
+ drivers/staging/media/omap4iss/iss_csi2.c     |   3 +-
+ drivers/staging/media/omap4iss/iss_ipipe.c    |   3 +-
+ drivers/staging/media/omap4iss/iss_ipipeif.c  |   3 +-
+ drivers/staging/media/omap4iss/iss_resizer.c  |   3 +-
+ .../media/sunxi/sun6i-isp/sun6i_isp_proc.c    |   8 +-
+ drivers/staging/media/tegra-video/vi.c        |   2 +-
+ include/media/v4l2-subdev.h                   | 201 +++++++-----------
+ 158 files changed, 787 insertions(+), 896 deletions(-)
+
+
+base-commit: 9ba38e71469bb28419de54518b87a359205f48b2
 -- 
 2.39.2
 
