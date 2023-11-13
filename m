@@ -1,616 +1,357 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC7282136C
-	for <linux-media@vger.kernel.org>; Mon, 13 Nov 2023 15:41:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C984121362;
+	Mon, 13 Nov 2023 15:41:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="oUPvG0P2"
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1563171C;
-	Mon, 13 Nov 2023 07:41:15 -0800 (PST)
-Received: from arisu.mtl.collabora.ca (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: detlev)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 533AE6606EE0;
-	Mon, 13 Nov 2023 15:41:13 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1699890074;
-	bh=OLQUJpjMq8rAbcLPAG+eRAWn1NdoIxmgIdL/Vtg5mb4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=oUPvG0P2GqXNDlBiRuB63vBT63c+PyY9l6PegF0f+V1omNen/kO/aCd6DVmCisfzB
-	 uoThsHQmSq1/7H+f/8rPEddwcla2M0rORkfWI+4etcqDQtmLTpVwhcYkcKlx6CTTy7
-	 3zzS1aPDqeUnEKcHgnfHS9CJP2Fa4/TbjglEeGQXdyvijlGvR9idqVdWBYzP9A/XEG
-	 E2fWf+yplepoqKNY0CwNLQZlWRWYeCp/p9l6xQWjbgmD3gu/e5EiPje/qfs0h+hCp0
-	 6WkWWY9CCFQFpRoKvHzPxuyeBZp4QpydX0nIlRoDRwufgdl2/f6sY3R+/BGrm2LBiD
-	 hc5Pf6qif3CqQ==
-From: Detlev Casanova <detlev.casanova@collabora.com>
-To: linux-kernel@vger.kernel.org
-Cc: linux-media@vger.kernel.org,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Detlev Casanova <detlev.casanova@collabora.com>
-Subject: [PATCH v2 1/2] visl: Add AV1 support
-Date: Mon, 13 Nov 2023 10:39:58 -0500
-Message-ID: <20231113154109.114488-2-detlev.casanova@collabora.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20231113154109.114488-1-detlev.casanova@collabora.com>
-References: <20231113154109.114488-1-detlev.casanova@collabora.com>
+	dkim=pass (1024-bit key) header.d=wolfvision.net header.i=@wolfvision.net header.b="qXFVf8Ds"
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2050.outbound.protection.outlook.com [40.107.20.50])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173FA1980;
+	Mon, 13 Nov 2023 07:41:32 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VzUh3HVl6xnRZo6J6jBk6T4Vkijh/KTbFZl48oAkBmTdsz47755psnWQEQFhBth0402pAVFhQzLDxQ04CwRy+dpoHXR/2HEplvtz5S0rfFwr8YkuX+ClRM3ukvwCConSLDJ5Ni2p+nXFX2LvjcW67774SQi9aDXXtbdOQnXSCDXXUB4yLnaq9c7taF9CRQLP0lZEX18fhrjM04Iva5qU5vEZtdrL2kr/BGa4wjN6ixmhFa4GSb3+Qek0qplMxgXxmyGyp07gASR59ecTitfhx54Ymb+ywOI2VlnWOKgkdMR2VH9NSZlb3XSwaxXdJVxHq88dU4Rno1xoRMYCsxZp2w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3TsJvQ3ytsUCQ9Hqqn6fAgnrh/AA00w/SzjqpsUWhE0=;
+ b=Csa90tVVy33fxrJ9i2kXMuqloeRUG76sy1NyGSkW8WdxHr3Rm5Sps3WEca4MaCyLm3BB+1eG004nJXHFXcQPtkNahMbDSizfPhJO4WsIonbKWknNreo3OyKh583IGlSF0/q5mH+I8amTT75kBjpFirAZW4d4nq0s6afEl4uLH5qEkGUhGWq0ZGRmyi3sRoi5vgF9EidQNM1njvMKeLEA7x2HCLzpjZH//vido25+oAh0vobSV90+7UIo96la++j2SH7X24a7T++dMr4acdM12m6qLU/xJAgUtBWe8Mb1s3iiSQfBEKou9ElPNq+laHX0iUlzY16HRYmU4Ru2uHmZ+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wolfvision.net; dmarc=pass action=none
+ header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3TsJvQ3ytsUCQ9Hqqn6fAgnrh/AA00w/SzjqpsUWhE0=;
+ b=qXFVf8DsSKAcxK6zEnJZWm2j4IoW3cYafBXmVIHBzQb6Gby8UNHH1wP58Q8Yti4WHmAplhUPVDR6Bxwl6lvhoATxaRPYAq6Baw2KV9HTkxzoAP+S8eF9pj3fUsGatTtPlile0IvT36Mo1vZGbV75p+zFzQVu7yCK4HpcWrf6VVw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wolfvision.net;
+Received: from DU0PR08MB9155.eurprd08.prod.outlook.com (2603:10a6:10:416::5)
+ by AM8PR08MB6337.eurprd08.prod.outlook.com (2603:10a6:20b:355::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6977.29; Mon, 13 Nov
+ 2023 15:41:28 +0000
+Received: from DU0PR08MB9155.eurprd08.prod.outlook.com
+ ([fe80::79a1:5ad6:b221:ad]) by DU0PR08MB9155.eurprd08.prod.outlook.com
+ ([fe80::79a1:5ad6:b221:ad%4]) with mapi id 15.20.6977.028; Mon, 13 Nov 2023
+ 15:41:28 +0000
+Message-ID: <602afcc8-e6e6-4214-b5bc-1330f0e7a954@wolfvision.net>
+Date: Mon, 13 Nov 2023 16:41:26 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v10 2/3] media: rockchip: Add a driver for Rockchip's
+ camera interface
+Content-Language: en-US
+To: Mehdi Djait <mehdi.djait@bootlin.com>
+Cc: mchehab@kernel.org, heiko@sntech.de, hverkuil-cisco@xs4all.nl,
+ krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org, conor+dt@kernel.org,
+ linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
+ alexandre.belloni@bootlin.com, maxime.chevallier@bootlin.com,
+ paul.kocialkowski@bootlin.com
+References: <cover.1699460637.git.mehdi.djait@bootlin.com>
+ <bcc0b84f4a6a8cf4c007cfe25025060b22627408.1699460637.git.mehdi.djait@bootlin.com>
+ <f817728d-6377-4fff-b8e8-ac0c652e5c29@wolfvision.net>
+ <ZVIDPKIBLHHvgpE/@pc-70.home>
+From: Michael Riesch <michael.riesch@wolfvision.net>
+In-Reply-To: <ZVIDPKIBLHHvgpE/@pc-70.home>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: ZR0P278CA0020.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:1c::7) To DU0PR08MB9155.eurprd08.prod.outlook.com
+ (2603:10a6:10:416::5)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR08MB9155:EE_|AM8PR08MB6337:EE_
+X-MS-Office365-Filtering-Correlation-Id: c9e77338-125a-4958-b8b2-08dbe45f008c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	bH9bZ2cceQ44Qb1TvpZK7A8fOQPUG4yLp8w8e9l7sZ6JD4tbknwHq7i8A1K6EGChhlhKQedoOa3qjdDzlzvsS/uuL6tdfaqbpzw95Tkpwv8OFtNiJKDWm37nsCA2C3aHX6AbjslqPWxDXhu5BckdbTWgVfCR3FtkOLPAZ78WzpKc0qNsX3UL+lV7chllV9LfzDSHjYisjBNr3RrjhvhO0KMbUrA9bWfBS32x4+2fRZ7t3zMQB23alTIEZwcKcg3CcgdP6Kye3F1WLSQdnuWgpWgleKtszUAHiIAH7RCafEaNjcjeZwArZM9a2LY/iXndcK/ipz75ca6K2OSPN0hwqLd2ibu6u7sIjpF1AwVwfTEI6dixPfhv9ZsL4fAxTLUP4y9gBvPGDFTHPBnj+Tzmgo6vfdzUJ5QWZMLZLhtXWgh5xb+JOKKTcAOTDJ1+oJcv9jsEe7s1lkdYHiqdYKjWAOga6VORBYUDAGLzky4Qq8+YopWiqdBaiRix/6WZvHyIeQ6p6rs18tGV0NgL9ec4m58Br1LBoaPo8UoiwX4RspeRs75eFuWCVuOAJyiCQ4JHn09Tz7AarpEfKpkF64xOQZaqFKRu7fVGxymLt/q+4xtOpAD73NFcWU6LqTJzZVpNACT7MNzEUHdxACfm0wwXaw==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9155.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39850400004)(346002)(376002)(396003)(136003)(366004)(230922051799003)(186009)(451199024)(1800799009)(64100799003)(38100700002)(83380400001)(31696002)(86362001)(7416002)(5660300002)(2616005)(6512007)(6506007)(53546011)(31686004)(478600001)(6486002)(966005)(36756003)(66946007)(316002)(66476007)(6916009)(66556008)(8676002)(4326008)(8936002)(44832011)(2906002)(41300700001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?VXZweTIycXpMQmFldExVVUVnRG03dFJUMG9sbm15WjhaNnJyTkVoNEZ0Z3hp?=
+ =?utf-8?B?QVRPaDR3d2oyMWNCZTdVK3VXcjZEK0taemtuQVUzMTVabEpWOVN3M2w1Y3o0?=
+ =?utf-8?B?cUt5ZFN4VTZNT0F4dnBBVVo0ckhGcGNuT3pzMnVvSzdLTTVYS0ViSHZHNEtn?=
+ =?utf-8?B?b1l6NjlYditjSjZVWnFIeW9qQStRZWo0UFRFS2Y2dFJlY1NrNTZadVkxQVEy?=
+ =?utf-8?B?dnhDNHdpOEhyTkRKQmRyZ3VVcFI1MURIeWN0S2dKQm9qbUtFNmVXeXVpUHZi?=
+ =?utf-8?B?QjN6VjdVUWtPanVQR2JtYlY2N1JFL2h6VHZMUmpjdVJvR0pVSnZROGFEZUNT?=
+ =?utf-8?B?Z3h4cURRS0l1eEw5WHRjc3JmQm4zalBaVzNBR3VJdU9IaUNCMVV4ZTQyMGVt?=
+ =?utf-8?B?UGtycWxDZGlLdlpHMXlDd0d2YWJXeDBEZUFzOGJxRm16cXpMaGV4bDNiREV4?=
+ =?utf-8?B?TzkzNnFoMk5zSFVGbDJxckc3SWxrb1Y0OENub2RWWjZ0Qnk4TmJwRTZOYTJT?=
+ =?utf-8?B?UE5tVTdWNzdlMzE1VkxmN1dUd0NFVUxETXYrRFp2bXFlUXNkVi9xbWZIZU9x?=
+ =?utf-8?B?TiszYVRPTGRENTJsajVBVURESTZKVlFYeURGT0JnVmpEZFdlWTE2YzRiRDdu?=
+ =?utf-8?B?NjFVcnpoTVFuUzZubS9pbXJzV01UcnNmYmxEMll0Z2dSVTRDTCtDdnltUlV1?=
+ =?utf-8?B?anBTVDRBVFlUbDlGbXdsQnZrNDVVVHowWk9CcSszWGxwVFJpQklZQ0RZU3Nl?=
+ =?utf-8?B?Q0d3Wktob1gwd1hpQkI2RFhkamdSTWpOZFNMTCtkN3BrdkV4TGV3ZFR3aGl0?=
+ =?utf-8?B?dG45UFl3bmljMUpIQnZlaDViRTUvdUYxVWNWUzMxa0VubDdJVFU0OVFRYVpz?=
+ =?utf-8?B?dVFuN3NRL0xjNTI1U1ZXQ1MwRzFQbythQ0UwRTJoM0JLa0FDYzYxZi9iUnJh?=
+ =?utf-8?B?dHdtK2lJcDdQTFhpK3QrOW9WdWlzWXE0RFgyVTNMNlg5amd4cFB2dWFnT1FY?=
+ =?utf-8?B?TFEzV3EzZUEzMUVUQnpBUGJWS2MwVVc3MXY1ZFpxT0JzRk45YUtOR1VpYk5T?=
+ =?utf-8?B?bm1SMExDemJjSDVscUMvN2Q4OFphS2J1MXExU3FkeGk0WEVZVkRrNFptL0w5?=
+ =?utf-8?B?cnFoQTlxMitvc1dsMjVUV3hNSGZzekJ5WnRISlFaR3ZKaTgrZlBYYy9nekdx?=
+ =?utf-8?B?cDhha1Z1Q0lSMUIyUEdpUjB6M0VSLzV5a0xCVXo5SXgwQTRDYUNyMS9aU0Jr?=
+ =?utf-8?B?Z3FMTGZiTllaOVhjMVg3YUdoQStuSituZkcyYjBBSERwYkYvSW5LSlBvSkd6?=
+ =?utf-8?B?SGNqMUpJUUd1RkVHTWdsSzBic3lXZlh1QmE4dk9FRHBFdlFhTS81Q3hjWEsy?=
+ =?utf-8?B?SVA3WkhLNHhBSzFlWXFVU0JsZHZNaEovTlRMSFBPMytmaWE1NnFnQllnZEc4?=
+ =?utf-8?B?NnV2QWZRZE5iQmtlT3Jzbk8yUUFBV2ttaXlSVTg2c1pGZ1lLazUxQVo5cEI4?=
+ =?utf-8?B?YnZqUG1qcldYdC9GcjJGL1FvaWJMc3BUamczUTg2UWZCSEhjMjFwdFpIbEVJ?=
+ =?utf-8?B?Q2VXd2pzL3JsbkVDTkdXa3FzdGpXK05kcWlGaG9iSkcrRlA0Mm51bEF2a04x?=
+ =?utf-8?B?bS9IOXRUWHpaY0Q5VXNIOG5GakJCS3gya1BBYzVvUEpyTGhqS3hxdkhLMWhp?=
+ =?utf-8?B?VnpLdmdYUndrRFhZeFlUQVBqMTRrOWdqVlgva3ZFYXB5eG95ZVhlcG1SS05i?=
+ =?utf-8?B?RDdGSitPdGRFVFdaQmhBNm5uVjFPZjAya0dua1V4QUpuS3g2V3d2d1JPaDNu?=
+ =?utf-8?B?QkVxRlhoQWxWQmlXM2ViVDVXSVhydVRCVlJxZkp5YXZWaVBDcWNhZVBLZGk4?=
+ =?utf-8?B?anFSREpHLzBzeDU3VnRLUmsyZzlPc1Jic2UzSURKV1dTM0xMeUpvT2tNUStC?=
+ =?utf-8?B?MENtTk1ydXhmd05hem5KbGxTc0d5eWFybGtzaWl5cjhyZXJkYVYvakE2M0Jh?=
+ =?utf-8?B?ZCtiTStYV0ZwRFF2anp0NVozTlNXRGVPMnVvQnFsQlNPUVpUTWNIMjhEWTQ1?=
+ =?utf-8?B?UzgreUZzeHRvQlc2bjlSbnJ0VkpTV1pjQkloTHQ4QiswenMrRndrV3F5ZENs?=
+ =?utf-8?B?QXBHVWhZcjlDeXNSZStrUmkrWUNHTmhHRmp3QWZoMFUwTmt1dHBDWDlUU09V?=
+ =?utf-8?B?WFJ6dkpWbHZpR0orWExSdENyQ29QcmVObWZUd3RwclNVMVJsdExuL2VKYTBx?=
+ =?utf-8?Q?eVkp4egtGntQs9L3JfZfaRKNqFq+ElzlQJp79g1MdY=3D?=
+X-OriginatorOrg: wolfvision.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: c9e77338-125a-4958-b8b2-08dbe45f008c
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9155.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Nov 2023 15:41:28.6533
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ihjs1/lDyt3fhhy6einf1ArRFZcNUfo3Au15ZP+dD1SHf/a6B+2zS0p2Kh6ZbWMGhsiRfI4aiIQy2gAwQD4CaC7dpezn9qeoPuSqHgxSKrM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR08MB6337
 
-Let the visl test driver accept the AV1 pixel format.
+Hi Mehdi,
 
-Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
-Tested-by: Daniel Almeida <daniel.almeida@collabora.com>
-Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
----
- drivers/media/test-drivers/visl/visl-core.c   |  21 ++
- drivers/media/test-drivers/visl/visl-dec.c    |  70 +++-
- drivers/media/test-drivers/visl/visl-dec.h    |   8 +
- .../media/test-drivers/visl/visl-trace-av1.h  | 314 ++++++++++++++++++
- .../test-drivers/visl/visl-trace-points.c     |   1 +
- drivers/media/test-drivers/visl/visl-video.c  |  18 +
- drivers/media/test-drivers/visl/visl-video.h  |   1 +
- drivers/media/test-drivers/visl/visl.h        |   1 +
- 8 files changed, 433 insertions(+), 1 deletion(-)
- create mode 100644 drivers/media/test-drivers/visl/visl-trace-av1.h
+On 11/13/23 12:06, Mehdi Djait wrote:
+> Hi Michael,
+> 
+> On Fri, Nov 10, 2023 at 01:50:01PM +0100, Michael Riesch wrote:
+>> Hi Mehdi,
+>>
+>> Thanks for your patches.
+>>
+>> The good news first: with some hacks applied I was able to capture the
+>> video stream from a HDMI receiver chip via BT.1120 on a Rockchip RK3568.
+> 
+> this is really cool!
+> 
+>>
+>> As a next step, I'll clean up the hacky RK3568 support and submit them
+>> for review.
+>>
+>> Still, there are some issues that needs to be addressed. Please find my
+>> comments inline.
+>>
+>> On 11/8/23 17:38, Mehdi Djait wrote:
+>>> This introduces a V4L2 driver for the Rockchip CIF video capture controller.
+>>>
+>>> This controller supports multiple parallel interfaces, but for now only the
+>>> BT.656 interface could be tested, hence it's the only one that's supported
+>>> in the first version of this driver.
+>>>
+>>> This controller can be found on RK3066, PX30, RK1808, RK3128 and RK3288,
+>>> but for now it's only been tested on the PX30.
+>>>
+>>> CIF is implemented as a video node-centric driver.
+>>>
+>>> Most of this driver was written following the BSP driver from rockchip,
+>>> removing the parts that either didn't fit correctly the guidelines, or that
+>>> couldn't be tested.
+>>>
+>>> This basic version doesn't support cropping nor scaling and is only
+>>> designed with one SDTV video decoder being attached to it at any time.
+>>>
+>>> This version uses the "pingpong" mode of the controller, which is a
+>>> double-buffering mechanism.
+>>>
+>>> Signed-off-by: Mehdi Djait <mehdi.djait@bootlin.com>
+>>> +static const struct cif_input_fmt in_fmts[] = {
+>>> +	{
+>>> +		.mbus_code	= MEDIA_BUS_FMT_YUYV8_2X8,
+>>> +		.dvp_fmt_val	= CIF_FORMAT_YUV_INPUT_422 |
+>>> +				  CIF_FORMAT_YUV_INPUT_ORDER_YUYV,
+>>> +		.csi_fmt_val	= CIF_CSI_WRDDR_TYPE_YUV422,
+>>
+>> What is the point of this csi_fmt_val field? If the strategy is to kick
+>> everything out that is not explicitly required then this should be
+>> removed (and added at a later stage, if needed).
+>>
+> 
+> I can remove this but I don't really see the harm of keeping this.
+> It can even save some time for the person adding the support for CSI
+> later.
 
-diff --git a/drivers/media/test-drivers/visl/visl-core.c b/drivers/media/test-drivers/visl/visl-core.c
-index 9970dc739ca5..68dac896277b 100644
---- a/drivers/media/test-drivers/visl/visl-core.c
-+++ b/drivers/media/test-drivers/visl/visl-core.c
-@@ -211,6 +211,27 @@ const struct visl_ctrls visl_hevc_ctrls = {
- 	.num_ctrls = ARRAY_SIZE(visl_hevc_ctrl_descs),
- };
- 
-+static const struct visl_ctrl_desc visl_av1_ctrl_descs[] = {
-+	{
-+		.cfg.id = V4L2_CID_STATELESS_AV1_FRAME,
-+	},
-+	{
-+		.cfg.id = V4L2_CID_STATELESS_AV1_TILE_GROUP_ENTRY,
-+		.cfg.dims = { V4L2_AV1_MAX_TILE_COUNT },
-+	},
-+	{
-+		.cfg.id = V4L2_CID_STATELESS_AV1_SEQUENCE,
-+	},
-+	{
-+		.cfg.id = V4L2_CID_STATELESS_AV1_FILM_GRAIN,
-+	},
-+};
-+
-+const struct visl_ctrls visl_av1_ctrls = {
-+	.ctrls = visl_av1_ctrl_descs,
-+	.num_ctrls = ARRAY_SIZE(visl_av1_ctrl_descs),
-+};
-+
- struct v4l2_ctrl *visl_find_control(struct visl_ctx *ctx, u32 id)
- {
- 	struct v4l2_ctrl_handler *hdl = &ctx->hdl;
-diff --git a/drivers/media/test-drivers/visl/visl-dec.c b/drivers/media/test-drivers/visl/visl-dec.c
-index 318d675e5668..684feb6fde58 100644
---- a/drivers/media/test-drivers/visl/visl-dec.c
-+++ b/drivers/media/test-drivers/visl/visl-dec.c
-@@ -13,6 +13,7 @@
- #include "visl-trace-vp9.h"
- #include "visl-trace-h264.h"
- #include "visl-trace-hevc.h"
-+#include "visl-trace-av1.h"
- 
- #include <linux/delay.h>
- #include <linux/workqueue.h>
-@@ -152,6 +153,61 @@ static void visl_get_ref_frames(struct visl_ctx *ctx, u8 *buf,
- 
- 		break;
- 	}
-+
-+	case VISL_CODEC_AV1: {
-+		int idx_intra = run->av1.frame->ref_frame_idx[V4L2_AV1_REF_INTRA_FRAME];
-+		int idx_last = run->av1.frame->ref_frame_idx[V4L2_AV1_REF_LAST_FRAME];
-+		int idx_last2 = run->av1.frame->ref_frame_idx[V4L2_AV1_REF_LAST2_FRAME];
-+		int idx_last3 = run->av1.frame->ref_frame_idx[V4L2_AV1_REF_LAST3_FRAME];
-+		int idx_golden = run->av1.frame->ref_frame_idx[V4L2_AV1_REF_GOLDEN_FRAME];
-+		int idx_bwd = run->av1.frame->ref_frame_idx[V4L2_AV1_REF_BWDREF_FRAME];
-+		int idx_alt2 = run->av1.frame->ref_frame_idx[V4L2_AV1_REF_ALTREF2_FRAME];
-+		int idx_alt = run->av1.frame->ref_frame_idx[V4L2_AV1_REF_ALTREF_FRAME];
-+
-+		struct vb2_buffer *ref_intra =
-+			vb2_find_buffer(cap_q, run->av1.frame->reference_frame_ts[idx_intra]);
-+		struct vb2_buffer *ref_last =
-+			vb2_find_buffer(cap_q, run->av1.frame->reference_frame_ts[idx_last]);
-+		struct vb2_buffer *ref_last2 =
-+			vb2_find_buffer(cap_q, run->av1.frame->reference_frame_ts[idx_last2]);
-+		struct vb2_buffer *ref_last3 =
-+			vb2_find_buffer(cap_q, run->av1.frame->reference_frame_ts[idx_last3]);
-+		struct vb2_buffer *ref_golden =
-+			vb2_find_buffer(cap_q, run->av1.frame->reference_frame_ts[idx_golden]);
-+		struct vb2_buffer *ref_bwd =
-+			vb2_find_buffer(cap_q, run->av1.frame->reference_frame_ts[idx_bwd]);
-+		struct vb2_buffer *ref_alt2 =
-+			vb2_find_buffer(cap_q, run->av1.frame->reference_frame_ts[idx_alt2]);
-+		struct vb2_buffer *ref_alt =
-+			vb2_find_buffer(cap_q, run->av1.frame->reference_frame_ts[idx_alt]);
-+
-+		scnprintf(buf, buflen,
-+			  "ref_intra_ts: %llu, vb2_idx: %d\n"
-+			  "ref_last_ts: %llu, vb2_idx: %d\n"
-+			  "ref_last2_ts: %llu, vb2_idx: %d\n"
-+			  "ref_last3_ts: %llu, vb2_idx: %d\n"
-+			  "ref_golden_ts: %llu, vb2_idx: %d\n"
-+			  "ref_bwd_ts: %llu, vb2_idx: %d\n"
-+			  "ref_alt2_ts: %llu, vb2_idx: %d\n"
-+			  "ref_alt_ts: %llu, vb2_idx: %d\n",
-+			  run->av1.frame->reference_frame_ts[idx_intra],
-+			  ref_intra ? ref_intra->index : -1,
-+			  run->av1.frame->reference_frame_ts[idx_last],
-+			  ref_last ? ref_last->index : -1,
-+			  run->av1.frame->reference_frame_ts[idx_last2],
-+			  ref_last2 ? ref_last2->index : -1,
-+			  run->av1.frame->reference_frame_ts[idx_last3],
-+			  ref_last3 ? ref_last3->index : -1,
-+			  run->av1.frame->reference_frame_ts[idx_golden],
-+			  ref_golden ? ref_golden->index : -1,
-+			  run->av1.frame->reference_frame_ts[idx_bwd],
-+			  ref_bwd ? ref_bwd->index : -1,
-+			  run->av1.frame->reference_frame_ts[idx_alt2],
-+			  ref_alt2 ? ref_alt2->index : -1,
-+			  run->av1.frame->reference_frame_ts[idx_alt],
-+			  ref_alt ? ref_alt->index : -1);
-+		break;
-+	}
- 	}
- }
- 
-@@ -410,7 +466,13 @@ static void visl_trace_ctrls(struct visl_ctx *ctx, struct visl_run *run)
- 			trace_v4l2_hevc_dpb_entry(&run->hevc.dpram->dpb[i]);
- 
- 		trace_v4l2_hevc_pred_weight_table(&run->hevc.spram->pred_weight_table);
--	break;
-+		break;
-+	case VISL_CODEC_AV1:
-+		trace_v4l2_ctrl_av1_sequence(run->av1.seq);
-+		trace_v4l2_ctrl_av1_frame(run->av1.frame);
-+		trace_v4l2_ctrl_av1_film_grain(run->av1.grain);
-+		trace_v4l2_ctrl_av1_tile_group_entry(run->av1.tge);
-+		break;
- 	}
- }
- 
-@@ -469,6 +531,12 @@ void visl_device_run(void *priv)
- 		run.hevc.sm = visl_find_control_data(ctx, V4L2_CID_STATELESS_HEVC_SCALING_MATRIX);
- 		run.hevc.dpram = visl_find_control_data(ctx, V4L2_CID_STATELESS_HEVC_DECODE_PARAMS);
- 		break;
-+	case VISL_CODEC_AV1:
-+		run.av1.seq = visl_find_control_data(ctx, V4L2_CID_STATELESS_AV1_SEQUENCE);
-+		run.av1.frame = visl_find_control_data(ctx, V4L2_CID_STATELESS_AV1_FRAME);
-+		run.av1.tge = visl_find_control_data(ctx, V4L2_CID_STATELESS_AV1_TILE_GROUP_ENTRY);
-+		run.av1.grain = visl_find_control_data(ctx, V4L2_CID_STATELESS_AV1_FILM_GRAIN);
-+		break;
- 	}
- 
- 	frame_dprintk(ctx->dev, run.dst->sequence,
-diff --git a/drivers/media/test-drivers/visl/visl-dec.h b/drivers/media/test-drivers/visl/visl-dec.h
-index 4a706a9de02e..c2c2ef3a8798 100644
---- a/drivers/media/test-drivers/visl/visl-dec.h
-+++ b/drivers/media/test-drivers/visl/visl-dec.h
-@@ -45,6 +45,13 @@ struct visl_hevc_run {
- 	const struct v4l2_ctrl_hevc_decode_params *dpram;
- };
- 
-+struct visl_av1_run {
-+	const struct v4l2_ctrl_av1_sequence *seq;
-+	const struct v4l2_ctrl_av1_frame *frame;
-+	const struct v4l2_ctrl_av1_tile_group_entry *tge;
-+	const struct v4l2_ctrl_av1_film_grain *grain;
-+};
-+
- struct visl_run {
- 	struct vb2_v4l2_buffer	*src;
- 	struct vb2_v4l2_buffer	*dst;
-@@ -56,6 +63,7 @@ struct visl_run {
- 		struct visl_vp9_run	vp9;
- 		struct visl_h264_run	h264;
- 		struct visl_hevc_run	hevc;
-+		struct visl_av1_run	av1;
- 	};
- };
- 
-diff --git a/drivers/media/test-drivers/visl/visl-trace-av1.h b/drivers/media/test-drivers/visl/visl-trace-av1.h
-new file mode 100644
-index 000000000000..09f205de53df
---- /dev/null
-+++ b/drivers/media/test-drivers/visl/visl-trace-av1.h
-@@ -0,0 +1,314 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#if !defined(_VISL_TRACE_AV1_H_) || defined(TRACE_HEADER_MULTI_READ)
-+#define _VISL_TRACE_AV1_H_
-+
-+#include <linux/tracepoint.h>
-+#include "visl.h"
-+
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM visl_av1_controls
-+
-+DECLARE_EVENT_CLASS(v4l2_ctrl_av1_seq_tmpl,
-+	TP_PROTO(const struct v4l2_ctrl_av1_sequence *s),
-+	TP_ARGS(s),
-+	TP_STRUCT__entry(__field_struct(struct v4l2_ctrl_av1_sequence, s)),
-+	TP_fast_assign(__entry->s = *s;),
-+	TP_printk("\nflags %s\nseq_profile: %u\norder_hint_bits: %u\nbit_depth: %u\n"
-+		  "max_frame_width_minus_1: %u\nmax_frame_height_minus_1: %u\n",
-+		  __print_flags(__entry->s.flags, "|",
-+		  {V4L2_AV1_SEQUENCE_FLAG_STILL_PICTURE, "STILL_PICTURE"},
-+		  {V4L2_AV1_SEQUENCE_FLAG_USE_128X128_SUPERBLOCK, "USE_128X128_SUPERBLOCK"},
-+		  {V4L2_AV1_SEQUENCE_FLAG_ENABLE_FILTER_INTRA, "ENABLE_FILTER_INTRA"},
-+		  {V4L2_AV1_SEQUENCE_FLAG_ENABLE_INTRA_EDGE_FILTER, "ENABLE_INTRA_EDGE_FILTER"},
-+		  {V4L2_AV1_SEQUENCE_FLAG_ENABLE_INTERINTRA_COMPOUND, "ENABLE_INTERINTRA_COMPOUND"},
-+		  {V4L2_AV1_SEQUENCE_FLAG_ENABLE_MASKED_COMPOUND, "ENABLE_MASKED_COMPOUND"},
-+		  {V4L2_AV1_SEQUENCE_FLAG_ENABLE_WARPED_MOTION, "ENABLE_WARPED_MOTION"},
-+		  {V4L2_AV1_SEQUENCE_FLAG_ENABLE_DUAL_FILTER, "ENABLE_DUAL_FILTER"},
-+		  {V4L2_AV1_SEQUENCE_FLAG_ENABLE_ORDER_HINT, "ENABLE_ORDER_HINT"},
-+		  {V4L2_AV1_SEQUENCE_FLAG_ENABLE_JNT_COMP, "ENABLE_JNT_COMP"},
-+		  {V4L2_AV1_SEQUENCE_FLAG_ENABLE_REF_FRAME_MVS, "ENABLE_REF_FRAME_MVS"},
-+		  {V4L2_AV1_SEQUENCE_FLAG_ENABLE_SUPERRES, "ENABLE_SUPERRES"},
-+		  {V4L2_AV1_SEQUENCE_FLAG_ENABLE_CDEF, "ENABLE_CDEF"},
-+		  {V4L2_AV1_SEQUENCE_FLAG_ENABLE_RESTORATION, "ENABLE_RESTORATION"},
-+		  {V4L2_AV1_SEQUENCE_FLAG_MONO_CHROME, "MONO_CHROME"},
-+		  {V4L2_AV1_SEQUENCE_FLAG_COLOR_RANGE, "COLOR_RANGE"},
-+		  {V4L2_AV1_SEQUENCE_FLAG_SUBSAMPLING_X, "SUBSAMPLING_X"},
-+		  {V4L2_AV1_SEQUENCE_FLAG_SUBSAMPLING_Y, "SUBSAMPLING_Y"},
-+		  {V4L2_AV1_SEQUENCE_FLAG_FILM_GRAIN_PARAMS_PRESENT, "FILM_GRAIN_PARAMS_PRESENT"},
-+		  {V4L2_AV1_SEQUENCE_FLAG_SEPARATE_UV_DELTA_Q, "SEPARATE_UV_DELTA_Q"}),
-+		  __entry->s.seq_profile,
-+		  __entry->s.order_hint_bits,
-+		  __entry->s.bit_depth,
-+		  __entry->s.max_frame_width_minus_1,
-+		  __entry->s.max_frame_height_minus_1
-+	)
-+);
-+
-+DECLARE_EVENT_CLASS(v4l2_ctrl_av1_tge_tmpl,
-+	TP_PROTO(const struct v4l2_ctrl_av1_tile_group_entry *t),
-+	TP_ARGS(t),
-+	TP_STRUCT__entry(__field_struct(struct v4l2_ctrl_av1_tile_group_entry, t)),
-+	TP_fast_assign(__entry->t = *t;),
-+	TP_printk("\ntile_offset: %u\n tile_size: %u\n tile_row: %u\ntile_col: %u\n",
-+		  __entry->t.tile_offset,
-+		  __entry->t.tile_size,
-+		  __entry->t.tile_row,
-+		  __entry->t.tile_col
-+	)
-+);
-+
-+DECLARE_EVENT_CLASS(v4l2_ctrl_av1_frame_tmpl,
-+	TP_PROTO(const struct v4l2_ctrl_av1_frame *f),
-+	TP_ARGS(f),
-+	TP_STRUCT__entry(__field_struct(struct v4l2_ctrl_av1_frame, f)),
-+	TP_fast_assign(__entry->f = *f;),
-+	TP_printk("\ntile_info.flags: %s\ntile_info.context_update_tile_id: %u\n"
-+		  "tile_info.tile_cols: %u\ntile_info.tile_rows: %u\n"
-+		  "tile_info.mi_col_starts: %s\ntile_info.mi_row_starts: %s\n"
-+		  "tile_info.width_in_sbs_minus_1: %s\ntile_info.height_in_sbs_minus_1: %s\n"
-+		  "tile_info.tile_size_bytes: %u\nquantization.flags: %s\n"
-+		  "quantization.base_q_idx: %u\nquantization.delta_q_y_dc: %d\n"
-+		  "quantization.delta_q_u_dc: %d\nquantization.delta_q_u_ac: %d\n"
-+		  "quantization.delta_q_v_dc: %d\nquantization.delta_q_v_ac: %d\n"
-+		  "quantization.qm_y: %u\nquantization.qm_u: %u\nquantization.qm_v: %u\n"
-+		  "quantization.delta_q_res: %u\nsuperres_denom: %u\nsegmentation.flags: %s\n"
-+		  "segmentation.last_active_seg_id: %u\nsegmentation.feature_enabled:%s\n"
-+		  "loop_filter.flags: %s\nloop_filter.level: %s\nloop_filter.sharpness: %u\n"
-+		  "loop_filter.ref_deltas: %s\nloop_filter.mode_deltas: %s\n"
-+		  "loop_filter.delta_lf_res: %u\ncdef.damping_minus_3: %u\ncdef.bits: %u\n"
-+		  "cdef.y_pri_strength: %s\ncdef.y_sec_strength: %s\n"
-+		  "cdef.uv_pri_strength: %s\ncdef.uv_sec_strength:%s\nskip_mode_frame: %s\n"
-+		  "primary_ref_frame: %u\nloop_restoration.flags: %s\n"
-+		  "loop_restoration.lr_unit_shift: %u\nloop_restoration.lr_uv_shift: %u\n"
-+		  "loop_restoration.frame_restoration_type: %s\n"
-+		  "loop_restoration.loop_restoration_size: %s\nflags: %s\norder_hint: %u\n"
-+		  "upscaled_width: %u\nframe_width_minus_1: %u\nframe_height_minus_1: %u\n"
-+		  "render_width_minus_1: %u\nrender_height_minus_1: %u\ncurrent_frame_id: %u\n"
-+		  "buffer_removal_time: %s\norder_hints: %s\nreference_frame_ts: %s\n"
-+		  "ref_frame_idx: %s\nrefresh_frame_flags: %u\n",
-+		  __print_flags(__entry->f.tile_info.flags, "|",
-+		  {V4L2_AV1_TILE_INFO_FLAG_UNIFORM_TILE_SPACING, "UNIFORM_TILE_SPACING"}),
-+		  __entry->f.tile_info.context_update_tile_id,
-+		  __entry->f.tile_info.tile_cols,
-+		  __entry->f.tile_info.tile_rows,
-+		  __print_array(__entry->f.tile_info.mi_col_starts,
-+				ARRAY_SIZE(__entry->f.tile_info.mi_col_starts),
-+				sizeof(__entry->f.tile_info.mi_col_starts[0])),
-+		  __print_array(__entry->f.tile_info.mi_row_starts,
-+				ARRAY_SIZE(__entry->f.tile_info.mi_row_starts),
-+				sizeof(__entry->f.tile_info.mi_row_starts[0])),
-+		  __print_array(__entry->f.tile_info.width_in_sbs_minus_1,
-+				ARRAY_SIZE(__entry->f.tile_info.width_in_sbs_minus_1),
-+				sizeof(__entry->f.tile_info.width_in_sbs_minus_1[0])),
-+		  __print_array(__entry->f.tile_info.height_in_sbs_minus_1,
-+				ARRAY_SIZE(__entry->f.tile_info.height_in_sbs_minus_1),
-+				sizeof(__entry->f.tile_info.height_in_sbs_minus_1[0])),
-+		  __entry->f.tile_info.tile_size_bytes,
-+		  __print_flags(__entry->f.quantization.flags, "|",
-+		  {V4L2_AV1_QUANTIZATION_FLAG_DIFF_UV_DELTA, "DIFF_UV_DELTA"},
-+		  {V4L2_AV1_QUANTIZATION_FLAG_USING_QMATRIX, "USING_QMATRIX"},
-+		  {V4L2_AV1_QUANTIZATION_FLAG_DELTA_Q_PRESENT, "DELTA_Q_PRESENT"}),
-+		  __entry->f.quantization.base_q_idx,
-+		  __entry->f.quantization.delta_q_y_dc,
-+		  __entry->f.quantization.delta_q_u_dc,
-+		  __entry->f.quantization.delta_q_u_ac,
-+		  __entry->f.quantization.delta_q_v_dc,
-+		  __entry->f.quantization.delta_q_v_ac,
-+		  __entry->f.quantization.qm_y,
-+		  __entry->f.quantization.qm_u,
-+		  __entry->f.quantization.qm_v,
-+		  __entry->f.quantization.delta_q_res,
-+		  __entry->f.superres_denom,
-+		  __print_flags(__entry->f.segmentation.flags, "|",
-+		  {V4L2_AV1_SEGMENTATION_FLAG_ENABLED, "ENABLED"},
-+		  {V4L2_AV1_SEGMENTATION_FLAG_UPDATE_MAP, "UPDATE_MAP"},
-+		  {V4L2_AV1_SEGMENTATION_FLAG_TEMPORAL_UPDATE, "TEMPORAL_UPDATE"},
-+		  {V4L2_AV1_SEGMENTATION_FLAG_UPDATE_DATA, "UPDATE_DATA"},
-+		  {V4L2_AV1_SEGMENTATION_FLAG_SEG_ID_PRE_SKIP, "SEG_ID_PRE_SKIP"}),
-+		  __entry->f.segmentation.last_active_seg_id,
-+		  __print_array(__entry->f.segmentation.feature_enabled,
-+				ARRAY_SIZE(__entry->f.segmentation.feature_enabled),
-+				sizeof(__entry->f.segmentation.feature_enabled[0])),
-+		  __print_flags(__entry->f.loop_filter.flags, "|",
-+		  {V4L2_AV1_LOOP_FILTER_FLAG_DELTA_ENABLED, "DELTA_ENABLED"},
-+		  {V4L2_AV1_LOOP_FILTER_FLAG_DELTA_UPDATE, "DELTA_UPDATE"},
-+		  {V4L2_AV1_LOOP_FILTER_FLAG_DELTA_LF_PRESENT, "DELTA_LF_PRESENT"},
-+		  {V4L2_AV1_LOOP_FILTER_FLAG_DELTA_LF_MULTI, "DELTA_LF_MULTI"}),
-+		  __print_array(__entry->f.loop_filter.level,
-+				ARRAY_SIZE(__entry->f.loop_filter.level),
-+				sizeof(__entry->f.loop_filter.level[0])),
-+		  __entry->f.loop_filter.sharpness,
-+		  __print_array(__entry->f.loop_filter.ref_deltas,
-+				ARRAY_SIZE(__entry->f.loop_filter.ref_deltas),
-+				sizeof(__entry->f.loop_filter.ref_deltas[0])),
-+		  __print_array(__entry->f.loop_filter.mode_deltas,
-+				ARRAY_SIZE(__entry->f.loop_filter.mode_deltas),
-+				sizeof(__entry->f.loop_filter.mode_deltas[0])),
-+		  __entry->f.loop_filter.delta_lf_res,
-+		  __entry->f.cdef.damping_minus_3,
-+		  __entry->f.cdef.bits,
-+		  __print_array(__entry->f.cdef.y_pri_strength,
-+				ARRAY_SIZE(__entry->f.cdef.y_pri_strength),
-+				sizeof(__entry->f.cdef.y_pri_strength[0])),
-+		  __print_array(__entry->f.cdef.y_sec_strength,
-+				ARRAY_SIZE(__entry->f.cdef.y_sec_strength),
-+				sizeof(__entry->f.cdef.y_sec_strength[0])),
-+		  __print_array(__entry->f.cdef.uv_pri_strength,
-+				ARRAY_SIZE(__entry->f.cdef.uv_pri_strength),
-+				sizeof(__entry->f.cdef.uv_pri_strength[0])),
-+		  __print_array(__entry->f.cdef.uv_sec_strength,
-+				ARRAY_SIZE(__entry->f.cdef.uv_sec_strength),
-+				sizeof(__entry->f.cdef.uv_sec_strength[0])),
-+		  __print_array(__entry->f.skip_mode_frame,
-+				ARRAY_SIZE(__entry->f.skip_mode_frame),
-+				sizeof(__entry->f.skip_mode_frame[0])),
-+		  __entry->f.primary_ref_frame,
-+		  __print_flags(__entry->f.loop_restoration.flags, "|",
-+		  {V4L2_AV1_LOOP_RESTORATION_FLAG_USES_LR, "USES_LR"},
-+		  {V4L2_AV1_LOOP_RESTORATION_FLAG_USES_CHROMA_LR, "USES_CHROMA_LR"}),
-+		  __entry->f.loop_restoration.lr_unit_shift,
-+		  __entry->f.loop_restoration.lr_uv_shift,
-+		  __print_array(__entry->f.loop_restoration.frame_restoration_type,
-+				ARRAY_SIZE(__entry->f.loop_restoration.frame_restoration_type),
-+				sizeof(__entry->f.loop_restoration.frame_restoration_type[0])),
-+		  __print_array(__entry->f.loop_restoration.loop_restoration_size,
-+				ARRAY_SIZE(__entry->f.loop_restoration.loop_restoration_size),
-+				sizeof(__entry->f.loop_restoration.loop_restoration_size[0])),
-+		  __print_flags(__entry->f.flags, "|",
-+		  {V4L2_AV1_FRAME_FLAG_SHOW_FRAME, "SHOW_FRAME"},
-+		  {V4L2_AV1_FRAME_FLAG_SHOWABLE_FRAME, "SHOWABLE_FRAME"},
-+		  {V4L2_AV1_FRAME_FLAG_ERROR_RESILIENT_MODE, "ERROR_RESILIENT_MODE"},
-+		  {V4L2_AV1_FRAME_FLAG_DISABLE_CDF_UPDATE, "DISABLE_CDF_UPDATE"},
-+		  {V4L2_AV1_FRAME_FLAG_ALLOW_SCREEN_CONTENT_TOOLS, "ALLOW_SCREEN_CONTENT_TOOLS"},
-+		  {V4L2_AV1_FRAME_FLAG_FORCE_INTEGER_MV, "FORCE_INTEGER_MV"},
-+		  {V4L2_AV1_FRAME_FLAG_ALLOW_INTRABC, "ALLOW_INTRABC"},
-+		  {V4L2_AV1_FRAME_FLAG_USE_SUPERRES, "USE_SUPERRES"},
-+		  {V4L2_AV1_FRAME_FLAG_ALLOW_HIGH_PRECISION_MV, "ALLOW_HIGH_PRECISION_MV"},
-+		  {V4L2_AV1_FRAME_FLAG_IS_MOTION_MODE_SWITCHABLE, "IS_MOTION_MODE_SWITCHABLE"},
-+		  {V4L2_AV1_FRAME_FLAG_USE_REF_FRAME_MVS, "USE_REF_FRAME_MVS"},
-+		  {V4L2_AV1_FRAME_FLAG_DISABLE_FRAME_END_UPDATE_CDF,
-+		   "DISABLE_FRAME_END_UPDATE_CDF"},
-+		  {V4L2_AV1_FRAME_FLAG_ALLOW_WARPED_MOTION, "ALLOW_WARPED_MOTION"},
-+		  {V4L2_AV1_FRAME_FLAG_REFERENCE_SELECT, "REFERENCE_SELECT"},
-+		  {V4L2_AV1_FRAME_FLAG_REDUCED_TX_SET, "REDUCED_TX_SET"},
-+		  {V4L2_AV1_FRAME_FLAG_SKIP_MODE_ALLOWED, "SKIP_MODE_ALLOWED"},
-+		  {V4L2_AV1_FRAME_FLAG_SKIP_MODE_PRESENT, "SKIP_MODE_PRESENT"},
-+		  {V4L2_AV1_FRAME_FLAG_FRAME_SIZE_OVERRIDE, "FRAME_SIZE_OVERRIDE"},
-+		  {V4L2_AV1_FRAME_FLAG_BUFFER_REMOVAL_TIME_PRESENT, "BUFFER_REMOVAL_TIME_PRESENT"},
-+		  {V4L2_AV1_FRAME_FLAG_FRAME_REFS_SHORT_SIGNALING, "FRAME_REFS_SHORT_SIGNALING"}),
-+		  __entry->f.order_hint,
-+		  __entry->f.upscaled_width,
-+		  __entry->f.frame_width_minus_1,
-+		  __entry->f.frame_height_minus_1,
-+		  __entry->f.render_width_minus_1,
-+		  __entry->f.render_height_minus_1,
-+		  __entry->f.current_frame_id,
-+		  __print_array(__entry->f.buffer_removal_time,
-+				ARRAY_SIZE(__entry->f.buffer_removal_time),
-+				sizeof(__entry->f.buffer_removal_time[0])),
-+		  __print_array(__entry->f.order_hints,
-+				ARRAY_SIZE(__entry->f.order_hints),
-+				sizeof(__entry->f.order_hints[0])),
-+		  __print_array(__entry->f.reference_frame_ts,
-+				ARRAY_SIZE(__entry->f.reference_frame_ts),
-+				sizeof(__entry->f.reference_frame_ts[0])),
-+		  __print_array(__entry->f.ref_frame_idx,
-+				ARRAY_SIZE(__entry->f.ref_frame_idx),
-+				sizeof(__entry->f.ref_frame_idx[0])),
-+		  __entry->f.refresh_frame_flags
-+	)
-+);
-+
-+
-+DECLARE_EVENT_CLASS(v4l2_ctrl_av1_film_grain_tmpl,
-+	TP_PROTO(const struct v4l2_ctrl_av1_film_grain *f),
-+	TP_ARGS(f),
-+	TP_STRUCT__entry(__field_struct(struct v4l2_ctrl_av1_film_grain, f)),
-+	TP_fast_assign(__entry->f = *f;),
-+	TP_printk("\nflags %s\ncr_mult: %u\ngrain_seed: %u\n"
-+		  "film_grain_params_ref_idx: %u\nnum_y_points: %u\npoint_y_value: %s\n"
-+		  "point_y_scaling: %s\nnum_cb_points: %u\npoint_cb_value: %s\n"
-+		  "point_cb_scaling: %s\nnum_cr_points: %u\npoint_cr_value: %s\n"
-+		  "point_cr_scaling: %s\ngrain_scaling_minus_8: %u\nar_coeff_lag: %u\n"
-+		  "ar_coeffs_y_plus_128: %s\nar_coeffs_cb_plus_128: %s\n"
-+		  "ar_coeffs_cr_plus_128: %s\nar_coeff_shift_minus_6: %u\n"
-+		  "grain_scale_shift: %u\ncb_mult: %u\ncb_luma_mult: %u\ncr_luma_mult: %u\n"
-+		  "cb_offset: %u\ncr_offset: %u\n",
-+		  __print_flags(__entry->f.flags, "|",
-+		  {V4L2_AV1_FILM_GRAIN_FLAG_APPLY_GRAIN, "APPLY_GRAIN"},
-+		  {V4L2_AV1_FILM_GRAIN_FLAG_UPDATE_GRAIN, "UPDATE_GRAIN"},
-+		  {V4L2_AV1_FILM_GRAIN_FLAG_CHROMA_SCALING_FROM_LUMA, "CHROMA_SCALING_FROM_LUMA"},
-+		  {V4L2_AV1_FILM_GRAIN_FLAG_OVERLAP, "OVERLAP"},
-+		  {V4L2_AV1_FILM_GRAIN_FLAG_CLIP_TO_RESTRICTED_RANGE, "CLIP_TO_RESTRICTED_RANGE"}),
-+		  __entry->f.cr_mult,
-+		  __entry->f.grain_seed,
-+		  __entry->f.film_grain_params_ref_idx,
-+		  __entry->f.num_y_points,
-+		  __print_array(__entry->f.point_y_value,
-+				ARRAY_SIZE(__entry->f.point_y_value),
-+				sizeof(__entry->f.point_y_value[0])),
-+		  __print_array(__entry->f.point_y_scaling,
-+				ARRAY_SIZE(__entry->f.point_y_scaling),
-+				sizeof(__entry->f.point_y_scaling[0])),
-+		  __entry->f.num_cb_points,
-+		  __print_array(__entry->f.point_cb_value,
-+				ARRAY_SIZE(__entry->f.point_cb_value),
-+				sizeof(__entry->f.point_cb_value[0])),
-+		  __print_array(__entry->f.point_cb_scaling,
-+				ARRAY_SIZE(__entry->f.point_cb_scaling),
-+				sizeof(__entry->f.point_cb_scaling[0])),
-+		  __entry->f.num_cr_points,
-+		  __print_array(__entry->f.point_cr_value,
-+				ARRAY_SIZE(__entry->f.point_cr_value),
-+				sizeof(__entry->f.point_cr_value[0])),
-+		  __print_array(__entry->f.point_cr_scaling,
-+				ARRAY_SIZE(__entry->f.point_cr_scaling),
-+				sizeof(__entry->f.point_cr_scaling[0])),
-+		  __entry->f.grain_scaling_minus_8,
-+		  __entry->f.ar_coeff_lag,
-+		  __print_array(__entry->f.ar_coeffs_y_plus_128,
-+				ARRAY_SIZE(__entry->f.ar_coeffs_y_plus_128),
-+				sizeof(__entry->f.ar_coeffs_y_plus_128[0])),
-+		  __print_array(__entry->f.ar_coeffs_cb_plus_128,
-+				ARRAY_SIZE(__entry->f.ar_coeffs_cb_plus_128),
-+				sizeof(__entry->f.ar_coeffs_cb_plus_128[0])),
-+		  __print_array(__entry->f.ar_coeffs_cr_plus_128,
-+				ARRAY_SIZE(__entry->f.ar_coeffs_cr_plus_128),
-+				sizeof(__entry->f.ar_coeffs_cr_plus_128[0])),
-+		  __entry->f.ar_coeff_shift_minus_6,
-+		  __entry->f.grain_scale_shift,
-+		  __entry->f.cb_mult,
-+		  __entry->f.cb_luma_mult,
-+		  __entry->f.cr_luma_mult,
-+		  __entry->f.cb_offset,
-+		  __entry->f.cr_offset
-+	)
-+)
-+
-+DEFINE_EVENT(v4l2_ctrl_av1_seq_tmpl, v4l2_ctrl_av1_sequence,
-+	TP_PROTO(const struct v4l2_ctrl_av1_sequence *s),
-+	TP_ARGS(s)
-+);
-+
-+DEFINE_EVENT(v4l2_ctrl_av1_frame_tmpl, v4l2_ctrl_av1_frame,
-+	TP_PROTO(const struct v4l2_ctrl_av1_frame *f),
-+	TP_ARGS(f)
-+);
-+
-+DEFINE_EVENT(v4l2_ctrl_av1_tge_tmpl, v4l2_ctrl_av1_tile_group_entry,
-+	TP_PROTO(const struct v4l2_ctrl_av1_tile_group_entry *t),
-+	TP_ARGS(t)
-+);
-+
-+DEFINE_EVENT(v4l2_ctrl_av1_film_grain_tmpl, v4l2_ctrl_av1_film_grain,
-+	TP_PROTO(const struct v4l2_ctrl_av1_film_grain *f),
-+	TP_ARGS(f)
-+);
-+
-+#endif
-+
-+#undef TRACE_INCLUDE_PATH
-+#undef TRACE_INCLUDE_FILE
-+#define TRACE_INCLUDE_PATH ../../drivers/media/test-drivers/visl
-+#define TRACE_INCLUDE_FILE visl-trace-av1
-+#include <trace/define_trace.h>
-diff --git a/drivers/media/test-drivers/visl/visl-trace-points.c b/drivers/media/test-drivers/visl/visl-trace-points.c
-index f7b866534f1e..321ff732c682 100644
---- a/drivers/media/test-drivers/visl/visl-trace-points.c
-+++ b/drivers/media/test-drivers/visl/visl-trace-points.c
-@@ -8,3 +8,4 @@
- #include "visl-trace-vp9.h"
- #include "visl-trace-h264.h"
- #include "visl-trace-hevc.h"
-+#include "visl-trace-av1.h"
-diff --git a/drivers/media/test-drivers/visl/visl-video.c b/drivers/media/test-drivers/visl/visl-video.c
-index 7cac6a6456eb..82d9c259e878 100644
---- a/drivers/media/test-drivers/visl/visl-video.c
-+++ b/drivers/media/test-drivers/visl/visl-video.c
-@@ -40,6 +40,9 @@ static void visl_set_current_codec(struct visl_ctx *ctx)
- 	case V4L2_PIX_FMT_HEVC_SLICE:
- 		ctx->current_codec = VISL_CODEC_HEVC;
- 		break;
-+	case V4L2_PIX_FMT_AV1_FRAME:
-+		ctx->current_codec = VISL_CODEC_AV1;
-+		break;
- 	default:
- 		dprintk(ctx->dev, "Warning: unsupported fourcc: %d\n", fourcc);
- 		ctx->current_codec = VISL_CODEC_NONE;
-@@ -218,6 +221,21 @@ const struct visl_coded_format_desc visl_coded_fmts[] = {
- 		.num_decoded_fmts = ARRAY_SIZE(visl_decoded_fmts),
- 		.decoded_fmts = visl_decoded_fmts,
- 	},
-+	{
-+		.pixelformat = V4L2_PIX_FMT_AV1_FRAME,
-+		.frmsize = {
-+			.min_width = 64,
-+			.max_width = 4096,
-+			.step_width = 1,
-+			.min_height = 64,
-+			.max_height = 2304,
-+			.step_height = 1,
-+		},
-+		.ctrls = &visl_av1_ctrls,
-+		.num_decoded_fmts = ARRAY_SIZE(visl_decoded_fmts),
-+		.decoded_fmts = visl_decoded_fmts,
-+	},
-+
- };
- 
- const size_t num_coded_fmts = ARRAY_SIZE(visl_coded_fmts);
-diff --git a/drivers/media/test-drivers/visl/visl-video.h b/drivers/media/test-drivers/visl/visl-video.h
-index 27ad70a558db..92e274894c20 100644
---- a/drivers/media/test-drivers/visl/visl-video.h
-+++ b/drivers/media/test-drivers/visl/visl-video.h
-@@ -17,6 +17,7 @@ extern const struct visl_ctrls visl_vp8_ctrls;
- extern const struct visl_ctrls visl_vp9_ctrls;
- extern const struct visl_ctrls visl_h264_ctrls;
- extern const struct visl_ctrls visl_hevc_ctrls;
-+extern const struct visl_ctrls visl_av1_ctrls;
- 
- int visl_queue_init(void *priv, struct vb2_queue *src_vq,
- 		    struct vb2_queue *dst_vq);
-diff --git a/drivers/media/test-drivers/visl/visl.h b/drivers/media/test-drivers/visl/visl.h
-index 31639f2e593d..c593b1337f11 100644
---- a/drivers/media/test-drivers/visl/visl.h
-+++ b/drivers/media/test-drivers/visl/visl.h
-@@ -127,6 +127,7 @@ enum visl_codec {
- 	VISL_CODEC_VP9,
- 	VISL_CODEC_H264,
- 	VISL_CODEC_HEVC,
-+	VISL_CODEC_AV1,
- };
- 
- struct visl_blob {
--- 
-2.41.0
+IMHO removing it would be more consistent with your approach to kick
+everything out that is not explicitly needed. I also think that this
+approach is common practice.
 
+>>> +		.fmt_type	= CIF_FMT_TYPE_YUV,
+>>> +		.field		= V4L2_FIELD_NONE,
+>>> +	}, {
+>>> +		.mbus_code	= MEDIA_BUS_FMT_YUYV8_2X8,
+>>> +		.dvp_fmt_val	= CIF_FORMAT_YUV_INPUT_422 |
+>>> +				  CIF_FORMAT_YUV_INPUT_ORDER_YUYV,
+>>> +		.csi_fmt_val	= CIF_CSI_WRDDR_TYPE_YUV422,
+>>> +		.fmt_type	= CIF_FMT_TYPE_YUV,
+>>> +		.field		= V4L2_FIELD_INTERLACED,
+>>> +	}, {
+>>> +		.mbus_code	= MEDIA_BUS_FMT_YVYU8_2X8,
+>>> +		.dvp_fmt_val	= CIF_FORMAT_YUV_INPUT_422 |
+>>> +				  CIF_FORMAT_YUV_INPUT_ORDER_YVYU,
+>>> +		.csi_fmt_val	= CIF_CSI_WRDDR_TYPE_YUV422,
+>>> +		.fmt_type	= CIF_FMT_TYPE_YUV,
+>>> +		.field		= V4L2_FIELD_NONE,
+>>
+>> What is the difference between this entry (in_fmts[2]) and in_fmts[0]?
+>> Similarly, between in_fmts[1] and in_fmts[3]?
+>>
+> 
+> Between in_fmts[0] and in_fmts[2] is the order of Y U V components:
+> 0 -> YUYV
+> 2 -> YVYU
+> 
+> between in_fmts[1] and in_fmts[3]: the same thing:
+> 1 -> YUYV
+> 3 -> YVYU
+
+Of course. Apparently I was staring at the code for too long. Sorry for
+the noise.
+
+> [...]
+>>> +	input_mode = (remote_info->std == V4L2_STD_NTSC) ?
+>>> +		      CIF_FORMAT_INPUT_MODE_NTSC :
+>>> +		      CIF_FORMAT_INPUT_MODE_PAL;
+>>
+>> This seems to be an oversimplification. How can one use BT.656 here?
+> 
+> I don't quite understand the question. This is used to configure the
+> hardware, i.e., the INPUT_MODE of the format VIP_FOR
+> 
+> bits 4:2
+> 
+> INPUT_MODE Input mode:
+> 
+> 3'b000 : YUV
+> 3'b010 : PAL
+> 3'b011 : NTSC
+> 3'b100 : RAW
+> 3'b101 : JPEG
+> 3'b110 : MIPI
+> Other : invalid
+
+OK, for the RK3568 VICAP the table reads
+
+3'b000: BT601 YUV422
+3'b010: BT656 YUV422
+3'b100: BT601 RAW
+3'b101: SONY RAW
+3'b111: BT1120 YUV422
+others: Reserved
+
+The PX30 TRM states "Support CCIR656(PAL/NTSC) input" and I think
+CCIR-656 equals ITU-R BT.656.
+
+I think in the end the mbus format needs to be evaluated first. If it is
+BT.656 AND if the subdevice supports TV standards, the decision between
+PAL and NTSC can be made.
+
+>> (Aren't you using BT.656 as mbus format between your video decoder and
+>> the PX30 VIP?)
+> 
+> I look into this. I will probably need to add this.
+
+I think it would help if your device tree example in the YAML
+documentation contained the complete setup (vip + video decoder chip).
+
+>> You should not assume that the remote is capable of any TV standards
+>> (this statement holds for the driver in general).
+>>
+> 
+> But this is the support I am adding right now, for cif with a SDTV
+> decoder capable of TV standards. This statement will need to be 
+> changed when support for sensors is added. 
+> 
+>>> +	mbus_flags = remote_info->mbus.bus.parallel.flags;
+>>> +	href_pol = (mbus_flags & V4L2_MBUS_HSYNC_ACTIVE_HIGH) ?
+>>> +			0 : CIF_FORMAT_HSY_LOW_ACTIVE;
+>>> +	vsync_pol = (mbus_flags & V4L2_MBUS_VSYNC_ACTIVE_HIGH) ?
+>>> +			CIF_FORMAT_VSY_HIGH_ACTIVE : 0;
+>>> +
+>>> +	val = vsync_pol | href_pol | input_mode | stream->cif_fmt_out->fmt_val |
+>>> +	      stream->cif_fmt_in->dvp_fmt_val | xfer_mode | yc_swap;
+>>> +void cif_set_default_format(struct cif_device *cif_dev)
+>>> +{
+>>> +	struct cif_stream *stream = &cif_dev->stream;
+>>> +	struct v4l2_pix_format pix;
+>>> +
+>>> +	cif_dev->remote.std = V4L2_STD_NTSC;
+>>
+>> Not every subdevice supports TV standards. Is this really reasonable?
+>>
+> 
+> For the support I am adding right now it is reasonable but for future
+> support it needs to be changed.
+
+OK then I guess I'll need to change that in my first batch of changes :-)
+
+>>> +
+>>> +	pix.pixelformat = V4L2_PIX_FMT_NV12;
+>>> +	pix.width = CIF_DEFAULT_WIDTH;
+>>> +	pix.height = CIF_DEFAULT_HEIGHT;
+>>> +
+>>> +	cif_set_fmt(stream, &pix);
+>>> +}
+>>> +
+>>> +static int cif_enum_input(struct file *file, void *priv,
+>>> +			  struct v4l2_input *input)
+>>> +{
+>>> +	struct cif_stream *stream = video_drvdata(file);
+>>> +	struct v4l2_subdev *sd = stream->cifdev->remote.sd;
+>>> +	int ret;
+>>> +
+>>> +	if (input->index > 0)
+>>> +		return -EINVAL;
+>>> +
+>>> +	ret = v4l2_subdev_call(sd, video, g_input_status, &input->status);
+>>> +	if (ret)
+>>> +		return ret;
+>>> +
+>>> +	strscpy(input->name, "Camera", sizeof(input->name));
+>>> +	input->type = V4L2_INPUT_TYPE_CAMERA;
+>>
+>> Wait, we are a camera in any case? How does this fit together with your
+>> video decoder setup?
+>>
+> 
+> Yes the video decoder is attached to a camera.
+> 
+> From the kernel documentation:
+> https://docs.kernel.org/userspace-api/media/v4l/vidioc-enuminput.html?highlight=v4l2_input_type_camera
+> --------------------------------------------------------------------------------
+> V4L2_INPUT_TYPE_CAMERA
+> Any non-tuner video input, for example Composite Video, S-Video, HDMI, camera
+> sensor. The naming as _TYPE_CAMERA is historical, today we would have called it
+> _TYPE_VIDEO.
+> --------------------------------------------------------------------------------
+
+Huh, learned something. Thanks for the pointer!
+
+>>> +	input->std = stream->vdev.tvnorms;
+>>> +	input->capabilities = V4L2_IN_CAP_STD;
+>>
+>> Not every subdevice supports TV standards. Is this really reasonable?
+>>
+> 
+> see above answer.
+
+OK. I think I can submit a series that makes the driver more general
+based on your v11. Looking forward to that ;-)
+
+Thanks and best regards,
+Michael
