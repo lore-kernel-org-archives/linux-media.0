@@ -1,40 +1,42 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC5622136C
-	for <linux-media@vger.kernel.org>; Mon, 13 Nov 2023 15:41:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 032D4219F2
+	for <linux-media@vger.kernel.org>; Mon, 13 Nov 2023 15:41:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="LmQZNs6m"
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93949D67;
-	Mon, 13 Nov 2023 07:41:10 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Z1weaegh"
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B64172A;
+	Mon, 13 Nov 2023 07:41:17 -0800 (PST)
 Received: from arisu.mtl.collabora.ca (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: detlev)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 56BD96606EE0;
-	Mon, 13 Nov 2023 15:41:08 +0000 (GMT)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 398E66606F5E;
+	Mon, 13 Nov 2023 15:41:15 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1699890069;
-	bh=Ct0vREwCV/y48Ltfl5ZejvVpefPCrB296PF5Yd+AOXw=;
-	h=From:To:Cc:Subject:Date:From;
-	b=LmQZNs6mikEo7iX/OkglMpMY2mThLAIE2h0t3Rs5E+UGoFFU47Mar3EO2XQpHJefX
-	 xA7B31YUvVK7+rPy9lZEDCj0tXZc/8mLNDMYQqgAfnTlX4YLdS7cd1I6msPI5Xyp1h
-	 C+UaG3peq96JcMQ+iENs8Ljp9vGVqfXgrYIPJ4ij2C1j0iHdYA3yA7vbZNqmsL4nLO
-	 tylmt5keTMLWHWbbJgRgQKtOzQp+g8qvKGG1aWuP0mCSdvVIXQFX03enz8eV3aXeRX
-	 TkKRU39ITHU5OKYe3c3USBmcddQIvofYu7sm/Ccl5TdUV+3M5/2DcfIWsEP9hCx10F
-	 o05m8PugfoTGA==
+	s=mail; t=1699890076;
+	bh=Kpz4GbzKraVfywCJCP/gIgyjQGH1m53lANmGVN3Ca1k=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Z1weaeghfmY+NVJkA9VNXL4CfAxbT7HnnnxSm0tKoVxkI5OpG6mN99k83y2d7MXHL
+	 fkKKoFRy4BrNV20P0NGv95mgca6N0nyqdSJC8zg/LszT7ML78hAhHJ5MExAymCFXZt
+	 u8zVLNsHgrNQ/JBoDZdtVr26HO336A5/YBRlz1lCnrmskyhTfsSxNV0Qrbpq3Ra/Yt
+	 1ejVsP7Gq5Bl20kS67zFW5jCO9LyPIAREU3gmyeryGQNbhhigswKe8MRmlCtfgYGdJ
+	 XdhEwVJ8apVmhs6ky6l8oEV5JLQzzwO/+ZMcCXoc5WfbCXI9FZaGiqyqKi/+QwvykQ
+	 3NGd8qo99wN2g==
 From: Detlev Casanova <detlev.casanova@collabora.com>
 To: linux-kernel@vger.kernel.org
 Cc: linux-media@vger.kernel.org,
 	Daniel Almeida <daniel.almeida@collabora.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Detlev Casanova <detlev.casanova@collabora.com>
-Subject: [PATCH v2 0/2] visl: Add support for AV1
-Date: Mon, 13 Nov 2023 10:39:57 -0500
-Message-ID: <20231113154109.114488-1-detlev.casanova@collabora.com>
+Subject: [PATCH v2 2/2] doc: visl: Add AV1 support
+Date: Mon, 13 Nov 2023 10:39:59 -0500
+Message-ID: <20231113154109.114488-3-detlev.casanova@collabora.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20231113154109.114488-1-detlev.casanova@collabora.com>
+References: <20231113154109.114488-1-detlev.casanova@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -43,34 +45,34 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-AV1 support is missing in the visl test driver.
-Add it and adapt documentation.
+Add AV1 information in visl documentation.
 
-The traces are missing for some fields, basically:
-- multi-dimensional arrays
-- arrays of flags
-- enums
-which don't have a __print_* macro.
+Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
+Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+---
+ Documentation/admin-guide/media/visl.rst | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Changes since v1:
-- Rebased on media_tree/master
-
-Detlev Casanova (2):
-  visl: Add AV1 support
-  doc: visl: Add AV1 support
-
- Documentation/admin-guide/media/visl.rst      |   2 +
- drivers/media/test-drivers/visl/visl-core.c   |  21 ++
- drivers/media/test-drivers/visl/visl-dec.c    |  70 +++-
- drivers/media/test-drivers/visl/visl-dec.h    |   8 +
- .../media/test-drivers/visl/visl-trace-av1.h  | 314 ++++++++++++++++++
- .../test-drivers/visl/visl-trace-points.c     |   1 +
- drivers/media/test-drivers/visl/visl-video.c  |  18 +
- drivers/media/test-drivers/visl/visl-video.h  |   1 +
- drivers/media/test-drivers/visl/visl.h        |   1 +
- 9 files changed, 435 insertions(+), 1 deletion(-)
- create mode 100644 drivers/media/test-drivers/visl/visl-trace-av1.h
-
+diff --git a/Documentation/admin-guide/media/visl.rst b/Documentation/admin-guide/media/visl.rst
+index 4328c6c72d30..db1ef29438e1 100644
+--- a/Documentation/admin-guide/media/visl.rst
++++ b/Documentation/admin-guide/media/visl.rst
+@@ -71,6 +71,7 @@ The following codecs are supported:
+ - VP9
+ - H.264
+ - HEVC
++- AV1
+ 
+ visl trace events
+ -----------------
+@@ -79,6 +80,7 @@ The trace events are defined on a per-codec basis, e.g.:
+ .. code-block:: bash
+ 
+         $ ls /sys/kernel/tracing/events/ | grep visl
++        visl_av1_controls
+         visl_fwht_controls
+         visl_h264_controls
+         visl_hevc_controls
 -- 
 2.41.0
 
