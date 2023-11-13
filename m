@@ -1,1366 +1,610 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8708E18645
-	for <linux-media@vger.kernel.org>; Mon, 13 Nov 2023 09:19:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Sth1kfz9"
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0226810D2
-	for <linux-media@vger.kernel.org>; Mon, 13 Nov 2023 01:19:37 -0800 (PST)
-Received: from ideasonboard.com (93-61-96-190.ip145.fastwebnet.it [93.61.96.190])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id C459229A;
-	Mon, 13 Nov 2023 10:19:10 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1699867150;
-	bh=gohC99DqA9fTHIRbTTUZSN+gMAv+lOabNug3ixJ+KYs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Sth1kfz9ez022vWQBGELtRjjLNdSP6qLzXqIc0jUbaM5ATuvNcQrmDQ0NettxkW+I
-	 V41QG676EB7L/cHZUtm7OwxbO3AgggFNLNJ7mIq2F2cRhgnBXADAeuLgjdrEm+yGbb
-	 Og6lJgcMAvabZVl9HXKvdwnPi4B1T+Q5eonXnSCw=
-Date: Mon, 13 Nov 2023 10:19:32 +0100
-From: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Jacopo Mondi <jacopo.mondi@ideasonboard.com>, 
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, linux-media@vger.kernel.org, 
-	Kieran Bingham <kieran.bingham@ideasonboard.com>, Lee Jackson <lee.jackson@arducam.com>
-Subject: Re: [PATCH 2/2] media: i2c: Add driver for OmniVision OV64A40
-Message-ID: <uk3jwwpwthl7es6gdfkremjf4wil5w4b2kd6amajmeigywa55f@qxsz33z5t6q6>
-References: <20231010151208.29564-1-jacopo.mondi@ideasonboard.com>
- <20231010151208.29564-3-jacopo.mondi@ideasonboard.com>
- <ZVHciyhWSogA4ckc@kekkonen.localdomain>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A74131BDD8
+	for <linux-media@vger.kernel.org>; Mon, 13 Nov 2023 09:54:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D065C433CD;
+	Mon, 13 Nov 2023 09:54:46 +0000 (UTC)
+Message-ID: <83393cd4-13bb-4e94-98ce-26acfa514c34@xs4all.nl>
+Date: Mon, 13 Nov 2023 10:54:44 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZVHciyhWSogA4ckc@kekkonen.localdomain>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 07/15] media: v4l2: Add audio capture and output
+ support
+Content-Language: en-US, nl
+To: Shengjiu Wang <shengjiu.wang@nxp.com>, sakari.ailus@iki.fi,
+ tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
+ linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+ shengjiu.wang@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
+ nicoleotsuka@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
+ perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+ linuxppc-dev@lists.ozlabs.org
+References: <1699595289-25773-1-git-send-email-shengjiu.wang@nxp.com>
+ <1699595289-25773-8-git-send-email-shengjiu.wang@nxp.com>
+From: Hans Verkuil <hverkuil@xs4all.nl>
+Autocrypt: addr=hverkuil@xs4all.nl; keydata=
+ xsFNBFQ84W0BEAC7EF1iL4s3tY8cRTVkJT/297h0Hz0ypA+ByVM4CdU9sN6ua/YoFlr9k0K4
+ BFUlg7JzJoUuRbKxkYb8mmqOe722j7N3HO8+ofnio5cAP5W0WwDpM0kM84BeHU0aPSTsWiGR
+ yw55SOK2JBSq7hueotWLfJLobMWhQii0Zd83hGT9SIt9uHaHjgwmtTH7MSTIiaY6N14nw2Ud
+ C6Uykc1va0Wqqc2ov5ihgk/2k2SKa02ookQI3e79laOrbZl5BOXNKR9LguuOZdX4XYR3Zi6/
+ BsJ7pVCK9xkiVf8svlEl94IHb+sa1KrlgGv3fn5xgzDw8Z222TfFceDL/2EzUyTdWc4GaPMC
+ E/c1B4UOle6ZHg02+I8tZicjzj5+yffv1lB5A1btG+AmoZrgf0X2O1B96fqgHx8w9PIpVERN
+ YsmkfxvhfP3MO3oHh8UY1OLKdlKamMneCLk2up1Zlli347KMjHAVjBAiy8qOguKF9k7HOjif
+ JCLYTkggrRiEiE1xg4tblBNj8WGyKH+u/hwwwBqCd/Px2HvhAsJQ7DwuuB3vBAp845BJYUU3
+ 06kRihFqbO0vEt4QmcQDcbWINeZ2zX5TK7QQ91ldHdqJn6MhXulPKcM8tCkdD8YNXXKyKqNl
+ UVqXnarz8m2JCbHgjEkUlAJCNd6m3pfESLZwSWsLYL49R5yxIwARAQABzSFIYW5zIFZlcmt1
+ aWwgPGh2ZXJrdWlsQHhzNGFsbC5ubD7CwZUEEwECACgFAlQ84W0CGwMFCRLMAwAGCwkIBwMC
+ BhUIAgkKCwQWAgMBAh4BAheAACEJEL0tYUhmFDtMFiEEBSzee8IVBTtonxvKvS1hSGYUO0wT
+ 7w//frEmPBAwu3OdvAk9VDkH7X+7RcFpiuUcJxs3Xl6jpaA+SdwtZra6W1uMrs2RW8eXXiq/
+ 80HXJtYnal1Y8MKUBoUVhT/+5+KcMyfVQK3VFRHnNxCmC9HZV+qdyxAGwIscUd4hSlweuU6L
+ 6tI7Dls6NzKRSTFbbGNZCRgl8OrF01TBH+CZrcFIoDgpcJA5Pw84mxo+wd2BZjPA4TNyq1od
+ +slSRbDqFug1EqQaMVtUOdgaUgdlmjV0+GfBHoyCGedDE0knv+tRb8v5gNgv7M3hJO3Nrl+O
+ OJVoiW0G6OWVyq92NNCKJeDy8XCB1yHCKpBd4evO2bkJNV9xcgHtLrVqozqxZAiCRKN1elWF
+ 1fyG8KNquqItYedUr+wZZacqW+uzpVr9pZmUqpVCk9s92fzTzDZcGAxnyqkaO2QTgdhPJT2m
+ wpG2UwIKzzi13tmwakY7OAbXm76bGWVZCO3QTHVnNV8ku9wgeMc/ZGSLUT8hMDZlwEsW7u/D
+ qt+NlTKiOIQsSW7u7h3SFm7sMQo03X/taK9PJhS2BhhgnXg8mOa6U+yNaJy+eU0Lf5hEUiDC
+ vDOI5x++LD3pdrJVr/6ZB0Qg3/YzZ0dk+phQ+KlP6HyeO4LG662toMbFbeLcBjcC/ceEclII
+ 90QNEFSZKM6NVloM+NaZRYVO3ApxWkFu+1mrVTXOwU0EVDzhbQEQANzLiI6gHkIhBQKeQaYs
+ p2SSqF9c++9LOy5x6nbQ4s0X3oTKaMGfBZuiKkkU6NnHCSa0Az5ScRWLaRGu1PzjgcVwzl5O
+ sDawR1BtOG/XoPRNB2351PRp++W8TWo2viYYY0uJHKFHML+ku9q0P+NkdTzFGJLP+hn7x0RT
+ DMbhKTHO3H2xJz5TXNE9zTJuIfGAz3ShDpijvzYieY330BzZYfpgvCllDVM5E4XgfF4F/N90
+ wWKu50fMA01ufwu+99GEwTFVG2az5T9SXd7vfSgRSkzXy7hcnxj4IhOfM6Ts85/BjMeIpeqy
+ TDdsuetBgX9DMMWxMWl7BLeiMzMGrfkJ4tvlof0sVjurXibTibZyfyGR2ricg8iTbHyFaAzX
+ 2uFVoZaPxrp7udDfQ96sfz0hesF9Zi8d7NnNnMYbUmUtaS083L/l2EDKvCIkhSjd48XF+aO8
+ VhrCfbXWpGRaLcY/gxi2TXRYG9xCa7PINgz9SyO34sL6TeFPSZn4bPQV5O1j85Dj4jBecB1k
+ z2arzwlWWKMZUbR04HTeAuuvYvCKEMnfW3ABzdonh70QdqJbpQGfAF2p4/iCETKWuqefiOYn
+ pR8PqoQA1DYv3t7y9DIN5Jw/8Oj5wOeEybw6vTMB0rrnx+JaXvxeHSlFzHiD6il/ChDDkJ9J
+ /ejCHUQIl40wLSDRABEBAAHCwXwEGAECAA8FAlQ84W0CGwwFCRLMAwAAIQkQvS1hSGYUO0wW
+ IQQFLN57whUFO2ifG8q9LWFIZhQ7TA1WD/9yxJvQrpf6LcNrr8uMlQWCg2iz2q1LGt1Itkuu
+ KaavEF9nqHmoqhSfZeAIKAPn6xuYbGxXDrpN7dXCOH92fscLodZqZtK5FtbLvO572EPfxneY
+ UT7JzDc/5LT9cFFugTMOhq1BG62vUm/F6V91+unyp4dRlyryAeqEuISykhvjZCVHk/woaMZv
+ c1Dm4Uvkv0Ilelt3Pb9J7zhcx6sm5T7v16VceF96jG61bnJ2GFS+QZerZp3PY27XgtPxRxYj
+ AmFUeF486PHx/2Yi4u1rQpIpC5inPxIgR1+ZFvQrAV36SvLFfuMhyCAxV6WBlQc85ArOiQZB
+ Wm7L0repwr7zEJFEkdy8C81WRhMdPvHkAIh3RoY1SGcdB7rB3wCzfYkAuCBqaF7Zgfw8xkad
+ KEiQTexRbM1sc/I8ACpla3N26SfQwrfg6V7TIoweP0RwDrcf5PVvwSWsRQp2LxFCkwnCXOra
+ gYmkrmv0duG1FStpY+IIQn1TOkuXrciTVfZY1cZD0aVxwlxXBnUNZZNslldvXFtndxR0SFat
+ sflovhDxKyhFwXOP0Rv8H378/+14TaykknRBIKEc0+lcr+EMOSUR5eg4aURb8Gc3Uc7fgQ6q
+ UssTXzHPyj1hAyDpfu8DzAwlh4kKFTodxSsKAjI45SLjadSc94/5Gy8645Y1KgBzBPTH7Q==
+In-Reply-To: <1699595289-25773-8-git-send-email-shengjiu.wang@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Sakari,
+Hi Shengjiu,
 
-On Mon, Nov 13, 2023 at 08:21:31AM +0000, Sakari Ailus wrote:
-> Hi Jacopo,
->
-> On Tue, Oct 10, 2023 at 05:12:08PM +0200, Jacopo Mondi wrote:
-> > Add a driver for the OmniVision OV64A40 image sensor.
->
-> Why are there so many different drivers for Omnivision sensor?
->
+On 10/11/2023 06:48, Shengjiu Wang wrote:
+> Audio signal processing has the requirement for memory to
+> memory similar as Video.
+> 
+> This patch is to add this support in v4l2 framework, defined
+> new buffer type V4L2_BUF_TYPE_AUDIO_CAPTURE and
+> V4L2_BUF_TYPE_AUDIO_OUTPUT, defined new format v4l2_audio_format
+> for audio case usage.
+> 
+> The created audio device is named "/dev/v4l-audioX".
+> 
+> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+> ---
+>  .../userspace-api/media/v4l/buffer.rst        |  6 ++
+>  .../media/v4l/dev-audio-mem2mem.rst           | 71 +++++++++++++++++++
+>  .../userspace-api/media/v4l/devices.rst       |  1 +
+>  .../media/v4l/vidioc-enum-fmt.rst             |  2 +
+>  .../userspace-api/media/v4l/vidioc-g-fmt.rst  |  4 ++
+>  .../media/videodev2.h.rst.exceptions          |  2 +
+>  .../media/common/videobuf2/videobuf2-v4l2.c   |  4 ++
+>  drivers/media/v4l2-core/v4l2-dev.c            | 17 +++++
+>  drivers/media/v4l2-core/v4l2-ioctl.c          | 53 ++++++++++++++
+>  include/media/v4l2-dev.h                      |  2 +
+>  include/media/v4l2-ioctl.h                    | 34 +++++++++
+>  include/uapi/linux/videodev2.h                | 17 +++++
+>  12 files changed, 213 insertions(+)
+>  create mode 100644 Documentation/userspace-api/media/v4l/dev-audio-mem2mem.rst
 
-Why are there so many different sensors, I would say..
+While testing this patch series I discovered that you also need to patch
+drivers/media/v4l2-core/v4l2-compat-ioctl32.c so it knows about the new
+audio format.
 
-> >
-> > Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-> > Signed-off-by: Lee Jackson <lee.jackson@arducam.com>
-> > ---
-> >  MAINTAINERS                 |    1 +
-> >  drivers/media/i2c/Kconfig   |   10 +
-> >  drivers/media/i2c/Makefile  |    1 +
-> >  drivers/media/i2c/ov64a40.c | 3537 +++++++++++++++++++++++++++++++++++
-> >  4 files changed, 3549 insertions(+)
-> >  create mode 100644 drivers/media/i2c/ov64a40.c
-> >
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index df089d68b58c..fd4beddeeed8 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -15827,6 +15827,7 @@ L:	linux-media@vger.kernel.org
-> >  S:	Maintained
-> >  T:	git git://linuxtv.org/media_tree.git
-> >  F:	Documentation/devicetree/bindings/media/i2c/ovti,ov64a40.yaml
-> > +F:	drivers/media/i2c/ov64a40.c
-> >
-> >  OMNIVISION OV7670 SENSOR DRIVER
-> >  L:	linux-media@vger.kernel.org
-> > diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-> > index 74ff833ff48c..b49a2dbd3612 100644
-> > --- a/drivers/media/i2c/Kconfig
-> > +++ b/drivers/media/i2c/Kconfig
-> > @@ -444,6 +444,16 @@ config VIDEO_OV5695
-> >  	  To compile this driver as a module, choose M here: the
-> >  	  module will be called ov5695.
-> >
-> > +config VIDEO_OV64A40
-> > +	tristate "OmniVision OV64A40 sensor support"
-> > +	select V4L2_CCI_I2C
-> > +	help
-> > +	  This is a Video4Linux2 sensor driver for the OmniVision
-> > +	  OV64A40 camera.
-> > +
-> > +	  To compile this driver as a module, choose M here: the
-> > +	  module will be called ov64a40.
-> > +
-> >  config VIDEO_OV6650
-> >  	tristate "OmniVision OV6650 sensor support"
-> >  	help
-> > diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
-> > index 80b00d39b48f..be378ec73b4e 100644
-> > --- a/drivers/media/i2c/Makefile
-> > +++ b/drivers/media/i2c/Makefile
-> > @@ -91,6 +91,7 @@ obj-$(CONFIG_VIDEO_OV5670) += ov5670.o
-> >  obj-$(CONFIG_VIDEO_OV5675) += ov5675.o
-> >  obj-$(CONFIG_VIDEO_OV5693) += ov5693.o
-> >  obj-$(CONFIG_VIDEO_OV5695) += ov5695.o
-> > +obj-$(CONFIG_VIDEO_OV64A40) += ov64a40.o
-> >  obj-$(CONFIG_VIDEO_OV6650) += ov6650.o
-> >  obj-$(CONFIG_VIDEO_OV7251) += ov7251.o
-> >  obj-$(CONFIG_VIDEO_OV7640) += ov7640.o
-> > diff --git a/drivers/media/i2c/ov64a40.c b/drivers/media/i2c/ov64a40.c
-> > new file mode 100644
-> > index 000000000000..6370d38e7403
-> > --- /dev/null
-> > +++ b/drivers/media/i2c/ov64a40.c
-> > @@ -0,0 +1,3537 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * V4L2 sensor driver for OmniVision OV64A40
-> > + *
-> > + * Copyright (C) 2023 Ideas On Board Oy
-> > + * Copyright (C) 2023 Arducam
-> > + */
-> > +
-> > +#include <linux/clk.h>
-> > +#include <linux/delay.h>
-> > +#include <linux/gpio/consumer.h>
-> > +#include <linux/i2c.h>
-> > +#include <linux/mod_devicetable.h>
-> > +#include <linux/module.h>
-> > +#include <linux/pm_runtime.h>
-> > +#include <linux/regulator/consumer.h>
-> > +
-> > +#include <media/v4l2-cci.h>
-> > +#include <media/v4l2-ctrls.h>
-> > +#include <media/v4l2-device.h>
-> > +#include <media/v4l2-event.h>
-> > +#include <media/v4l2-fwnode.h>
-> > +#include <media/v4l2-mediabus.h>
-> > +#include <media/v4l2-subdev.h>
-> > +
-> > +#define OV64A40_XCLK_FREQ		24000000
-> > +
-> > +#define OV64A40_NATIVE_WIDTH		9286
-> > +#define OV64A40_NATIVE_HEIGHT		6976
-> > +#define OV64A40_PIXEL_ARRAY_TOP		16
-> > +#define OV64A40_PIXEL_ARRAY_LEFT	16
-> > +#define OV64A40_PIXEL_ARRAY_WIDTH	9248
-> > +#define OV64A40_PIXEL_ARRAY_HEIGHT	6944
-> > +
-> > +#define OV64A40_PIXEL_RATE		75000000
-> > +#define OV64A40_LINK_FREQ_DEF		456000000
-> > +
-> > +/* FIXME: validate vblank_min! */
-> > +#define OV64A40_VBLANK_MIN		128
-> > +#define OV64A40_VTS_MAX			0xffff
-> > +
-> > +#define OV64A40_REG_MEC_LONG_EXPO	CCI_REG24(0x3500)
-> > +#define OV64A40_EXPOSURE_MIN		16
-> > +#define OV64A40_EXPOSURE_MARGIN		32
-> > +
-> > +#define OV64A40_REG_MEC_LONG_GAIN_COARSE	CCI_REG8(0x3508)
-> > +#define OV64A40_REG_MEC_LONG_GAIN_FINE	CCI_REG8(0x3509)
-> > +#define OV64A40_ANA_GAIN_MIN		0
-> > +#define OV64A40_ANA_GAIN_MAX		0x3fff
-> > +#define OV64A40_ANA_GAIN_DEFAULT	0x80
-> > +
-> > +#define OV64A40_REG_TIMING_CTRL0	CCI_REG16(0x3800)
-> > +#define OV64A40_REG_TIMING_CTRL2	CCI_REG16(0x3802)
-> > +#define OV64A40_REG_TIMING_CTRL4	CCI_REG16(0x3804)
-> > +#define OV64A40_REG_TIMING_CTRL6	CCI_REG16(0x3806)
-> > +#define OV64A40_REG_TIMING_CTRL8	CCI_REG16(0x3808)
-> > +#define OV64A40_REG_TIMING_CTRLA	CCI_REG16(0x380a)
-> > +#define OV64A40_REG_TIMING_CTRLC	CCI_REG16(0x380c)
-> > +#define OV64A40_REG_TIMING_CTRLE	CCI_REG16(0x380e)
-> > +#define OV64A40_REG_TIMING_CTRL10	CCI_REG16(0x3810)
-> > +#define OV64A40_REG_TIMING_CTRL12	CCI_REG16(0x3812)
-> > +
-> > +/*
-> > + * Careful: a typo in the datasheet calls this register
-> > + * OV64A40_REG_TIMING_CTRL20.
-> > + */
-> > +#define OV64A40_REG_TIMING_CTRL14	CCI_REG8(0x3814)
-> > +#define OV64A40_REG_TIMING_CTRL15	CCI_REG8(0x3815)
-> > +#define OV64A40_ODD_INC_SHIFT		4
-> > +#define OV64A40_SKIPPING_CONFIG(_odd, _even) \
-> > +				(((_odd) << OV64A40_ODD_INC_SHIFT) | (_even))
-> > +
-> > +#define OV64A40_REG_TIMING_CTRL_20	CCI_REG8(0x3820)
-> > +#define OV64A40_TIMING_CTRL_20_VFLIP	BIT(2)
-> > +#define OV64A40_TIMING_CTRL_20_VBIN	BIT(1)
-> > +
-> > +#define OV64A40_REG_TIMING_CTRL_21	CCI_REG8(0x3821)
-> > +#define OV64A40_TIMING_CTRL_21_HBIN	BIT(4)
-> > +#define OV64A40_TIMING_CTRL_21_HFLIP	BIT(2)
-> > +#define OV64A40_TIMING_CTRL_21_DSPEED	BIT(0)
-> > +#define OV64A40_TIMING_CTRL_21_HBIN_CONF \
-> > +					(OV64A40_TIMING_CTRL_21_HBIN | \
-> > +					 OV64A40_TIMING_CTRL_21_DSPEED)
-> > +
-> > +#define OV64A40_REG_TIMINGS_VTS		CCI_REG16(0x380e)
-> > +
-> > +#define OV64A40_REG_CHIP_ID		CCI_REG24(0x300a)
-> > +#define OV64A40_CHIP_ID			0x566441
-> > +
-> > +#define OV64A40_REG_SMIA		CCI_REG8(0x0100)
-> > +#define OV64A40_REG_SMIA_STREAMING	BIT(0)
-> > +
-> > +static const s64 ov64a40_link_freq_menu[] = {
-> > +	OV64A40_LINK_FREQ_DEF,
-> > +};
-> > +
-> > +static const char * const ov64a40_supply_name[] = {
-> > +	/* Supplies can be enabled in any order */
-> > +	"avdd",		/* Analog (2.8V) supply */
-> > +	"dovdd",	/* Digital Core (1.8V) supply */
-> > +	"dvdd",		/* IF (1.1V) supply */
-> > +};
-> > +#define OV64A40_NUM_SUPPLIES ARRAY_SIZE(ov64a40_supply_name)
->
-> Please just use ARRAY_SIZE(...) where you need this.
->
-> > +
-> > +static const unsigned int ov64a40_mbus_codes[] = {
-> > +	MEDIA_BUS_FMT_SGBRG10_1X10,
-> > +	MEDIA_BUS_FMT_SRGGB10_1X10,
-> > +	MEDIA_BUS_FMT_SBGGR10_1X10,
-> > +	MEDIA_BUS_FMT_SGRBG10_1X10,
-> > +};
-> > +
-> > +static const struct cci_reg_sequence ov64a40_init[] = {
-> > +	{CCI_REG8(0x0103), 0x01}, {CCI_REG8(0x0301), 0x88},
->
-> 	{ spaces inside braces, please },
->
-[snip]
+Without that 32 bit apps will fail with a 64 bit kernel.
 
-> > +
-> > +struct ov64a40_reglist {
-> > +	unsigned int num_regs;
-> > +	const struct cci_reg_sequence *regvals;
-> > +};
-> > +
-> > +struct ov64a40_subsampling {
-> > +	unsigned int x_odd_inc;
-> > +	unsigned int x_even_inc;
-> > +	unsigned int y_odd_inc;
-> > +	unsigned int y_even_inc;
->
-> u16 or even u8 might suffice.
->
+Regards,
 
-yup
+	Hans
 
-> > +	bool vbin;
-> > +	bool hbin;
->
-> I recall bool is 32 bits on arm. Is it 64 bits on arm64? Just a note, I
-> don't have a great suggestion here. :-)
->
-> So only binning up to 2x2 is supported?
->
+> 
+> diff --git a/Documentation/userspace-api/media/v4l/buffer.rst b/Documentation/userspace-api/media/v4l/buffer.rst
+> index 52bbee81c080..a3754ca6f0d6 100644
+> --- a/Documentation/userspace-api/media/v4l/buffer.rst
+> +++ b/Documentation/userspace-api/media/v4l/buffer.rst
+> @@ -438,6 +438,12 @@ enum v4l2_buf_type
+>      * - ``V4L2_BUF_TYPE_META_OUTPUT``
+>        - 14
+>        - Buffer for metadata output, see :ref:`metadata`.
+> +    * - ``V4L2_BUF_TYPE_AUDIO_CAPTURE``
+> +      - 15
+> +      - Buffer for audio capture, see :ref:`audio`.
+> +    * - ``V4L2_BUF_TYPE_AUDIO_OUTPUT``
+> +      - 16
+> +      - Buffer for audio output, see :ref:`audio`.
+>  
+>  
+>  .. _buffer-flags:
+> diff --git a/Documentation/userspace-api/media/v4l/dev-audio-mem2mem.rst b/Documentation/userspace-api/media/v4l/dev-audio-mem2mem.rst
+> new file mode 100644
+> index 000000000000..68faecfe3a02
+> --- /dev/null
+> +++ b/Documentation/userspace-api/media/v4l/dev-audio-mem2mem.rst
+> @@ -0,0 +1,71 @@
+> +.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+> +
+> +.. _audiomem2mem:
+> +
+> +********************************
+> +Audio Memory-To-Memory Interface
+> +********************************
+> +
+> +An audio memory-to-memory device can compress, decompress, transform, or
+> +otherwise convert audio data from one format into another format, in memory.
+> +Such memory-to-memory devices set the ``V4L2_CAP_AUDIO_M2M`` capability.
+> +Examples of memory-to-memory devices are audio codecs, audio preprocessing,
+> +audio postprocessing.
+> +
+> +A memory-to-memory audio node supports both output (sending audio frames from
+> +memory to the hardware) and capture (receiving the processed audio frames
+> +from the hardware into memory) stream I/O. An application will have to
+> +setup the stream I/O for both sides and finally call
+> +:ref:`VIDIOC_STREAMON <VIDIOC_STREAMON>` for both capture and output to
+> +start the hardware.
+> +
+> +Memory-to-memory devices function as a shared resource: you can
+> +open the audio node multiple times, each application setting up their
+> +own properties that are local to the file handle, and each can use
+> +it independently from the others. The driver will arbitrate access to
+> +the hardware and reprogram it whenever another file handler gets access.
+> +
+> +Audio memory-to-memory devices are accessed through character device
+> +special files named ``/dev/v4l-audio``
+> +
+> +Querying Capabilities
+> +=====================
+> +
+> +Device nodes supporting the audio memory-to-memory interface set the
+> +``V4L2_CAP_AUDIO_M2M`` flag in the ``device_caps`` field of the
+> +:c:type:`v4l2_capability` structure returned by the :c:func:`VIDIOC_QUERYCAP`
+> +ioctl.
+> +
+> +Data Format Negotiation
+> +=======================
+> +
+> +The audio device uses the :ref:`format` ioctls to select the capture format.
+> +The audio buffer content format is bound to that selected format. In addition
+> +to the basic :ref:`format` ioctls, the :c:func:`VIDIOC_ENUM_FMT` ioctl must be
+> +supported as well.
+> +
+> +To use the :ref:`format` ioctls applications set the ``type`` field of the
+> +:c:type:`v4l2_format` structure to ``V4L2_BUF_TYPE_AUDIO_CAPTURE`` or to
+> +``V4L2_BUF_TYPE_AUDIO_OUTPUT``. Both drivers and applications must set the
+> +remainder of the :c:type:`v4l2_format` structure to 0.
+> +
+> +.. c:type:: v4l2_audio_format
+> +
+> +.. tabularcolumns:: |p{1.4cm}|p{2.4cm}|p{13.5cm}|
+> +
+> +.. flat-table:: struct v4l2_audio_format
+> +    :header-rows:  0
+> +    :stub-columns: 0
+> +    :widths:       1 1 2
+> +
+> +    * - __u32
+> +      - ``pixelformat``
+> +      - The sample format, set by the application. see :ref:`pixfmt-audio`
+> +    * - __u32
+> +      - ``channels``
+> +      - The channel number, set by the application. channel number range is
+> +        [1, 32].
+> +    * - __u32
+> +      - ``buffersize``
+> +      - Maximum buffer size in bytes required for data. The value is set by the
+> +        driver.
+> diff --git a/Documentation/userspace-api/media/v4l/devices.rst b/Documentation/userspace-api/media/v4l/devices.rst
+> index 8bfbad65a9d4..758bd90f1c26 100644
+> --- a/Documentation/userspace-api/media/v4l/devices.rst
+> +++ b/Documentation/userspace-api/media/v4l/devices.rst
+> @@ -24,3 +24,4 @@ Interfaces
+>      dev-event
+>      dev-subdev
+>      dev-meta
+> +    dev-audio-mem2mem
+> diff --git a/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst b/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
+> index 000c154b0f98..42deb07f4ff4 100644
+> --- a/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
+> +++ b/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
+> @@ -96,6 +96,8 @@ the ``mbus_code`` field is handled differently:
+>  	``V4L2_BUF_TYPE_VIDEO_OVERLAY``,
+>  	``V4L2_BUF_TYPE_SDR_CAPTURE``,
+>  	``V4L2_BUF_TYPE_SDR_OUTPUT``,
+> +	``V4L2_BUF_TYPE_AUDIO_CAPTURE``,
+> +	``V4L2_BUF_TYPE_AUDIO_OUTPUT``,
+>  	``V4L2_BUF_TYPE_META_CAPTURE`` and
+>  	``V4L2_BUF_TYPE_META_OUTPUT``.
+>  	See :c:type:`v4l2_buf_type`.
+> diff --git a/Documentation/userspace-api/media/v4l/vidioc-g-fmt.rst b/Documentation/userspace-api/media/v4l/vidioc-g-fmt.rst
+> index 675c385e5aca..528fd9df41aa 100644
+> --- a/Documentation/userspace-api/media/v4l/vidioc-g-fmt.rst
+> +++ b/Documentation/userspace-api/media/v4l/vidioc-g-fmt.rst
+> @@ -130,6 +130,10 @@ The format as returned by :ref:`VIDIOC_TRY_FMT <VIDIOC_G_FMT>` must be identical
+>        - ``meta``
+>        - Definition of a metadata format, see :ref:`meta-formats`, used by
+>  	metadata capture devices.
+> +    * - struct :c:type:`v4l2_audio_format`
+> +      - ``audio``
+> +      - Definition of a audio data format, see :ref:`audiomem2mem`, used by
+> +        audio memory-to-memory devices
+>      * - __u8
+>        - ``raw_data``\ [200]
+>        - Place holder for future extensions.
+> diff --git a/Documentation/userspace-api/media/videodev2.h.rst.exceptions b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+> index da6d0b8e4c2c..e61152bb80d1 100644
+> --- a/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+> +++ b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+> @@ -29,6 +29,8 @@ replace symbol V4L2_FIELD_SEQ_TB :c:type:`v4l2_field`
+>  replace symbol V4L2_FIELD_TOP :c:type:`v4l2_field`
+>  
+>  # Documented enum v4l2_buf_type
+> +replace symbol V4L2_BUF_TYPE_AUDIO_CAPTURE :c:type:`v4l2_buf_type`
+> +replace symbol V4L2_BUF_TYPE_AUDIO_OUTPUT :c:type:`v4l2_buf_type`
+>  replace symbol V4L2_BUF_TYPE_META_CAPTURE :c:type:`v4l2_buf_type`
+>  replace symbol V4L2_BUF_TYPE_META_OUTPUT :c:type:`v4l2_buf_type`
+>  replace symbol V4L2_BUF_TYPE_SDR_CAPTURE :c:type:`v4l2_buf_type`
+> diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+> index c7a54d82a55e..12f2be2773a2 100644
+> --- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
+> +++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+> @@ -785,6 +785,10 @@ int vb2_create_bufs(struct vb2_queue *q, struct v4l2_create_buffers *create)
+>  	case V4L2_BUF_TYPE_META_OUTPUT:
+>  		requested_sizes[0] = f->fmt.meta.buffersize;
+>  		break;
+> +	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
+> +	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
+> +		requested_sizes[0] = f->fmt.audio.buffersize;
+> +		break;
+>  	default:
+>  		return -EINVAL;
+>  	}
+> diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
+> index f81279492682..b92c760b611a 100644
+> --- a/drivers/media/v4l2-core/v4l2-dev.c
+> +++ b/drivers/media/v4l2-core/v4l2-dev.c
+> @@ -553,6 +553,7 @@ static void determine_valid_ioctls(struct video_device *vdev)
+>  	bool is_tch = vdev->vfl_type == VFL_TYPE_TOUCH;
+>  	bool is_meta = vdev->vfl_type == VFL_TYPE_VIDEO &&
+>  		       (vdev->device_caps & meta_caps);
+> +	bool is_audio = vdev->vfl_type == VFL_TYPE_AUDIO;
+>  	bool is_rx = vdev->vfl_dir != VFL_DIR_TX;
+>  	bool is_tx = vdev->vfl_dir != VFL_DIR_RX;
+>  	bool is_io_mc = vdev->device_caps & V4L2_CAP_IO_MC;
+> @@ -664,6 +665,19 @@ static void determine_valid_ioctls(struct video_device *vdev)
+>  		SET_VALID_IOCTL(ops, VIDIOC_S_FMT, vidioc_s_fmt_meta_out);
+>  		SET_VALID_IOCTL(ops, VIDIOC_TRY_FMT, vidioc_try_fmt_meta_out);
+>  	}
+> +	if (is_audio && is_rx) {
+> +		/* audio capture specific ioctls */
+> +		SET_VALID_IOCTL(ops, VIDIOC_ENUM_FMT, vidioc_enum_fmt_audio_cap);
+> +		SET_VALID_IOCTL(ops, VIDIOC_G_FMT, vidioc_g_fmt_audio_cap);
+> +		SET_VALID_IOCTL(ops, VIDIOC_S_FMT, vidioc_s_fmt_audio_cap);
+> +		SET_VALID_IOCTL(ops, VIDIOC_TRY_FMT, vidioc_try_fmt_audio_cap);
+> +	} else if (is_audio && is_tx) {
+> +		/* audio output specific ioctls */
+> +		SET_VALID_IOCTL(ops, VIDIOC_ENUM_FMT, vidioc_enum_fmt_audio_out);
+> +		SET_VALID_IOCTL(ops, VIDIOC_G_FMT, vidioc_g_fmt_audio_out);
+> +		SET_VALID_IOCTL(ops, VIDIOC_S_FMT, vidioc_s_fmt_audio_out);
+> +		SET_VALID_IOCTL(ops, VIDIOC_TRY_FMT, vidioc_try_fmt_audio_out);
+> +	}
+>  	if (is_vbi) {
+>  		/* vbi specific ioctls */
+>  		if ((is_rx && (ops->vidioc_g_fmt_vbi_cap ||
+> @@ -927,6 +941,9 @@ int __video_register_device(struct video_device *vdev,
+>  	case VFL_TYPE_TOUCH:
+>  		name_base = "v4l-touch";
+>  		break;
+> +	case VFL_TYPE_AUDIO:
+> +		name_base = "v4l-audio";
+> +		break;
+>  	default:
+>  		pr_err("%s called with unknown type: %d\n",
+>  		       __func__, type);
+> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+> index 9b1de54ce379..1bb03794922a 100644
+> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+> @@ -188,6 +188,8 @@ const char *v4l2_type_names[] = {
+>  	[V4L2_BUF_TYPE_SDR_OUTPUT]         = "sdr-out",
+>  	[V4L2_BUF_TYPE_META_CAPTURE]       = "meta-cap",
+>  	[V4L2_BUF_TYPE_META_OUTPUT]	   = "meta-out",
+> +	[V4L2_BUF_TYPE_AUDIO_CAPTURE]      = "audio-cap",
+> +	[V4L2_BUF_TYPE_AUDIO_OUTPUT]	   = "audio-out",
+>  };
+>  EXPORT_SYMBOL(v4l2_type_names);
+>  
+> @@ -276,6 +278,7 @@ static void v4l_print_format(const void *arg, bool write_only)
+>  	const struct v4l2_sliced_vbi_format *sliced;
+>  	const struct v4l2_window *win;
+>  	const struct v4l2_meta_format *meta;
+> +	const struct v4l2_audio_format *audio;
+>  	u32 pixelformat;
+>  	u32 planes;
+>  	unsigned i;
+> @@ -346,6 +349,13 @@ static void v4l_print_format(const void *arg, bool write_only)
+>  		pr_cont(", dataformat=%p4cc, buffersize=%u\n",
+>  			&pixelformat, meta->buffersize);
+>  		break;
+> +	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
+> +	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
+> +		audio = &p->fmt.audio;
+> +		pixelformat = audio->audioformat;
+> +		pr_cont(", format=%p4cc, channels=%u, buffersize=%u\n",
+> +			&pixelformat, audio->channels, audio->buffersize);
+> +		break;
+>  	}
+>  }
+>  
+> @@ -927,6 +937,7 @@ static int check_fmt(struct file *file, enum v4l2_buf_type type)
+>  	bool is_tch = vfd->vfl_type == VFL_TYPE_TOUCH;
+>  	bool is_meta = vfd->vfl_type == VFL_TYPE_VIDEO &&
+>  		       (vfd->device_caps & meta_caps);
+> +	bool is_audio = vfd->vfl_type == VFL_TYPE_AUDIO;
+>  	bool is_rx = vfd->vfl_dir != VFL_DIR_TX;
+>  	bool is_tx = vfd->vfl_dir != VFL_DIR_RX;
+>  
+> @@ -992,6 +1003,14 @@ static int check_fmt(struct file *file, enum v4l2_buf_type type)
+>  		if (is_meta && is_tx && ops->vidioc_g_fmt_meta_out)
+>  			return 0;
+>  		break;
+> +	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
+> +		if (is_audio && is_rx && ops->vidioc_g_fmt_audio_cap)
+> +			return 0;
+> +		break;
+> +	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
+> +		if (is_audio && is_tx && ops->vidioc_g_fmt_audio_out)
+> +			return 0;
+> +		break;
+>  	default:
+>  		break;
+>  	}
+> @@ -1597,6 +1616,16 @@ static int v4l_enum_fmt(const struct v4l2_ioctl_ops *ops,
+>  			break;
+>  		ret = ops->vidioc_enum_fmt_meta_out(file, fh, arg);
+>  		break;
+> +	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
+> +		if (unlikely(!ops->vidioc_enum_fmt_audio_cap))
+> +			break;
+> +		ret = ops->vidioc_enum_fmt_audio_cap(file, fh, arg);
+> +		break;
+> +	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
+> +		if (unlikely(!ops->vidioc_enum_fmt_audio_out))
+> +			break;
+> +		ret = ops->vidioc_enum_fmt_audio_out(file, fh, arg);
+> +		break;
+>  	}
+>  	if (ret == 0)
+>  		v4l_fill_fmtdesc(p);
+> @@ -1673,6 +1702,10 @@ static int v4l_g_fmt(const struct v4l2_ioctl_ops *ops,
+>  		return ops->vidioc_g_fmt_meta_cap(file, fh, arg);
+>  	case V4L2_BUF_TYPE_META_OUTPUT:
+>  		return ops->vidioc_g_fmt_meta_out(file, fh, arg);
+> +	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
+> +		return ops->vidioc_g_fmt_audio_cap(file, fh, arg);
+> +	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
+> +		return ops->vidioc_g_fmt_audio_out(file, fh, arg);
+>  	}
+>  	return -EINVAL;
+>  }
+> @@ -1784,6 +1817,16 @@ static int v4l_s_fmt(const struct v4l2_ioctl_ops *ops,
+>  			break;
+>  		memset_after(p, 0, fmt.meta);
+>  		return ops->vidioc_s_fmt_meta_out(file, fh, arg);
+> +	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
+> +		if (unlikely(!ops->vidioc_s_fmt_audio_cap))
+> +			break;
+> +		memset_after(p, 0, fmt.audio);
+> +		return ops->vidioc_s_fmt_audio_cap(file, fh, arg);
+> +	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
+> +		if (unlikely(!ops->vidioc_s_fmt_audio_out))
+> +			break;
+> +		memset_after(p, 0, fmt.audio);
+> +		return ops->vidioc_s_fmt_audio_out(file, fh, arg);
+>  	}
+>  	return -EINVAL;
+>  }
+> @@ -1892,6 +1935,16 @@ static int v4l_try_fmt(const struct v4l2_ioctl_ops *ops,
+>  			break;
+>  		memset_after(p, 0, fmt.meta);
+>  		return ops->vidioc_try_fmt_meta_out(file, fh, arg);
+> +	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
+> +		if (unlikely(!ops->vidioc_try_fmt_audio_cap))
+> +			break;
+> +		memset_after(p, 0, fmt.audio);
+> +		return ops->vidioc_try_fmt_audio_cap(file, fh, arg);
+> +	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
+> +		if (unlikely(!ops->vidioc_try_fmt_audio_out))
+> +			break;
+> +		memset_after(p, 0, fmt.audio);
+> +		return ops->vidioc_try_fmt_audio_out(file, fh, arg);
+>  	}
+>  	return -EINVAL;
+>  }
+> diff --git a/include/media/v4l2-dev.h b/include/media/v4l2-dev.h
+> index d82dfdbf6e58..82b63f82d43f 100644
+> --- a/include/media/v4l2-dev.h
+> +++ b/include/media/v4l2-dev.h
+> @@ -30,6 +30,7 @@
+>   * @VFL_TYPE_SUBDEV:	for V4L2 subdevices
+>   * @VFL_TYPE_SDR:	for Software Defined Radio tuners
+>   * @VFL_TYPE_TOUCH:	for touch sensors
+> + * @VFL_TYPE_AUDIO:	for audio memory-to-memory devices
+>   * @VFL_TYPE_MAX:	number of VFL types, must always be last in the enum
+>   */
+>  enum vfl_devnode_type {
+> @@ -39,6 +40,7 @@ enum vfl_devnode_type {
+>  	VFL_TYPE_SUBDEV,
+>  	VFL_TYPE_SDR,
+>  	VFL_TYPE_TOUCH,
+> +	VFL_TYPE_AUDIO,
+>  	VFL_TYPE_MAX /* Shall be the last one */
+>  };
+>  
+> diff --git a/include/media/v4l2-ioctl.h b/include/media/v4l2-ioctl.h
+> index edb733f21604..f840cf740ce1 100644
+> --- a/include/media/v4l2-ioctl.h
+> +++ b/include/media/v4l2-ioctl.h
+> @@ -45,6 +45,12 @@ struct v4l2_fh;
+>   * @vidioc_enum_fmt_meta_out: pointer to the function that implements
+>   *	:ref:`VIDIOC_ENUM_FMT <vidioc_enum_fmt>` ioctl logic
+>   *	for metadata output
+> + * @vidioc_enum_fmt_audio_cap: pointer to the function that implements
+> + *	:ref:`VIDIOC_ENUM_FMT <vidioc_enum_fmt>` ioctl logic
+> + *	for audio capture
+> + * @vidioc_enum_fmt_audio_out: pointer to the function that implements
+> + *	:ref:`VIDIOC_ENUM_FMT <vidioc_enum_fmt>` ioctl logic
+> + *	for audio output
+>   * @vidioc_g_fmt_vid_cap: pointer to the function that implements
+>   *	:ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for video capture
+>   *	in single plane mode
+> @@ -79,6 +85,10 @@ struct v4l2_fh;
+>   *	:ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for metadata capture
+>   * @vidioc_g_fmt_meta_out: pointer to the function that implements
+>   *	:ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for metadata output
+> + * @vidioc_g_fmt_audio_cap: pointer to the function that implements
+> + *	:ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for audio capture
+> + * @vidioc_g_fmt_audio_out: pointer to the function that implements
+> + *	:ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for audio output
+>   * @vidioc_s_fmt_vid_cap: pointer to the function that implements
+>   *	:ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for video capture
+>   *	in single plane mode
+> @@ -113,6 +123,10 @@ struct v4l2_fh;
+>   *	:ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for metadata capture
+>   * @vidioc_s_fmt_meta_out: pointer to the function that implements
+>   *	:ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for metadata output
+> + * @vidioc_s_fmt_audio_cap: pointer to the function that implements
+> + *	:ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for audio capture
+> + * @vidioc_s_fmt_audio_out: pointer to the function that implements
+> + *	:ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for audio output
+>   * @vidioc_try_fmt_vid_cap: pointer to the function that implements
+>   *	:ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for video capture
+>   *	in single plane mode
+> @@ -149,6 +163,10 @@ struct v4l2_fh;
+>   *	:ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for metadata capture
+>   * @vidioc_try_fmt_meta_out: pointer to the function that implements
+>   *	:ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for metadata output
+> + * @vidioc_try_fmt_audio_cap: pointer to the function that implements
+> + *	:ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for audio capture
+> + * @vidioc_try_fmt_audio_out: pointer to the function that implements
+> + *	:ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for audio output
+>   * @vidioc_reqbufs: pointer to the function that implements
+>   *	:ref:`VIDIOC_REQBUFS <vidioc_reqbufs>` ioctl
+>   * @vidioc_querybuf: pointer to the function that implements
+> @@ -315,6 +333,10 @@ struct v4l2_ioctl_ops {
+>  					struct v4l2_fmtdesc *f);
+>  	int (*vidioc_enum_fmt_meta_out)(struct file *file, void *fh,
+>  					struct v4l2_fmtdesc *f);
+> +	int (*vidioc_enum_fmt_audio_cap)(struct file *file, void *fh,
+> +					 struct v4l2_fmtdesc *f);
+> +	int (*vidioc_enum_fmt_audio_out)(struct file *file, void *fh,
+> +					 struct v4l2_fmtdesc *f);
+>  
+>  	/* VIDIOC_G_FMT handlers */
+>  	int (*vidioc_g_fmt_vid_cap)(struct file *file, void *fh,
+> @@ -345,6 +367,10 @@ struct v4l2_ioctl_ops {
+>  				     struct v4l2_format *f);
+>  	int (*vidioc_g_fmt_meta_out)(struct file *file, void *fh,
+>  				     struct v4l2_format *f);
+> +	int (*vidioc_g_fmt_audio_cap)(struct file *file, void *fh,
+> +				      struct v4l2_format *f);
+> +	int (*vidioc_g_fmt_audio_out)(struct file *file, void *fh,
+> +				      struct v4l2_format *f);
+>  
+>  	/* VIDIOC_S_FMT handlers */
+>  	int (*vidioc_s_fmt_vid_cap)(struct file *file, void *fh,
+> @@ -375,6 +401,10 @@ struct v4l2_ioctl_ops {
+>  				     struct v4l2_format *f);
+>  	int (*vidioc_s_fmt_meta_out)(struct file *file, void *fh,
+>  				     struct v4l2_format *f);
+> +	int (*vidioc_s_fmt_audio_cap)(struct file *file, void *fh,
+> +				      struct v4l2_format *f);
+> +	int (*vidioc_s_fmt_audio_out)(struct file *file, void *fh,
+> +				      struct v4l2_format *f);
+>  
+>  	/* VIDIOC_TRY_FMT handlers */
+>  	int (*vidioc_try_fmt_vid_cap)(struct file *file, void *fh,
+> @@ -405,6 +435,10 @@ struct v4l2_ioctl_ops {
+>  				       struct v4l2_format *f);
+>  	int (*vidioc_try_fmt_meta_out)(struct file *file, void *fh,
+>  				       struct v4l2_format *f);
+> +	int (*vidioc_try_fmt_audio_cap)(struct file *file, void *fh,
+> +					struct v4l2_format *f);
+> +	int (*vidioc_try_fmt_audio_out)(struct file *file, void *fh,
+> +					struct v4l2_format *f);
+>  
+>  	/* Buffer handlers */
+>  	int (*vidioc_reqbufs)(struct file *file, void *fh,
+> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+> index 5053f66c501a..1e06ac73b6fa 100644
+> --- a/include/uapi/linux/videodev2.h
+> +++ b/include/uapi/linux/videodev2.h
+> @@ -153,6 +153,8 @@ enum v4l2_buf_type {
+>  	V4L2_BUF_TYPE_SDR_OUTPUT           = 12,
+>  	V4L2_BUF_TYPE_META_CAPTURE         = 13,
+>  	V4L2_BUF_TYPE_META_OUTPUT	   = 14,
+> +	V4L2_BUF_TYPE_AUDIO_CAPTURE        = 15,
+> +	V4L2_BUF_TYPE_AUDIO_OUTPUT         = 16,
+>  	/* Deprecated, do not use */
+>  	V4L2_BUF_TYPE_PRIVATE              = 0x80,
+>  };
+> @@ -169,6 +171,7 @@ enum v4l2_buf_type {
+>  	 || (type) == V4L2_BUF_TYPE_VBI_OUTPUT			\
+>  	 || (type) == V4L2_BUF_TYPE_SLICED_VBI_OUTPUT		\
+>  	 || (type) == V4L2_BUF_TYPE_SDR_OUTPUT			\
+> +	 || (type) == V4L2_BUF_TYPE_AUDIO_OUTPUT		\
+>  	 || (type) == V4L2_BUF_TYPE_META_OUTPUT)
+>  
+>  #define V4L2_TYPE_IS_CAPTURE(type) (!V4L2_TYPE_IS_OUTPUT(type))
+> @@ -2419,6 +2422,18 @@ struct v4l2_meta_format {
+>  	__u32				buffersize;
+>  } __attribute__ ((packed));
+>  
+> +/**
+> + * struct v4l2_audio_format - audio data format definition
+> + * @audioformat:	little endian four character code (fourcc)
+> + * @channels:		channel numbers
+> + * @buffersize:		maximum size in bytes required for data
+> + */
+> +struct v4l2_audio_format {
+> +	__u32				audioformat;
+> +	__u32				channels;
+> +	__u32				buffersize;
+> +} __attribute__ ((packed));
+> +
+>  /**
+>   * struct v4l2_format - stream data format
+>   * @type:	enum v4l2_buf_type; type of the data stream
+> @@ -2427,6 +2442,7 @@ struct v4l2_meta_format {
+>   * @win:	definition of an overlaid image
+>   * @vbi:	raw VBI capture or output parameters
+>   * @sliced:	sliced VBI capture or output parameters
+> + * @audio:	definition of an audio format
+>   * @raw_data:	placeholder for future extensions and custom formats
+>   * @fmt:	union of @pix, @pix_mp, @win, @vbi, @sliced, @sdr, @meta
+>   *		and @raw_data
+> @@ -2441,6 +2457,7 @@ struct v4l2_format {
+>  		struct v4l2_sliced_vbi_format	sliced;  /* V4L2_BUF_TYPE_SLICED_VBI_CAPTURE */
+>  		struct v4l2_sdr_format		sdr;     /* V4L2_BUF_TYPE_SDR_CAPTURE */
+>  		struct v4l2_meta_format		meta;    /* V4L2_BUF_TYPE_META_CAPTURE */
+> +		struct v4l2_audio_format	audio;   /* V4L2_BUF_TYPE_AUDIO_CAPTURE */
+>  		__u8	raw_data[200];                   /* user-defined */
+>  	} fmt;
+>  };
 
-yes, further downscaling is obtained by skipping.
-
-The 0x3820 register has BIT(1) "vbin_vc" than enables binning, so the
-binning factor doesn't seem to be configurable. Of course there might
-be other bits/registers to control this, but I'm not aware of those
-
-> > +};
-> > +
-> > +static struct ov64a40_mode {
-> > +	unsigned int width;
-> > +	unsigned int height;
-> > +	unsigned int vts_def;
-> > +	unsigned int ppl;
-> > +	const struct ov64a40_reglist reglist;
-> > +	struct v4l2_rect analogue_crop;
-> > +	struct v4l2_rect digital_crop;
-> > +	struct ov64a40_subsampling subsampling;
-> > +} ov64a40_modes[] = {
-> > +	/* Full resolution */
-> > +	{
-> > +		.width = 9248,
-> > +		.height = 6944,
-> > +		.vts_def = 0x1ba0, /* 7072 */
-> > +		.ppl = 0xfe8, /* 4072 */
-> > +		.reglist = {
-> > +			.num_regs = ARRAY_SIZE(ov64a40_9248x6944),
-> > +			.regvals = ov64a40_9248x6944,
-> > +		},
-> > +		.analogue_crop = {
-> > +			.left = 0x0,
-> > +			.top = 0x0,
-> > +			.width = 0x243f, /* 9279 */
-> > +			.height = 0x1b3f, /* 6975 */
->
-> It's big, isn't it?
->
-
-Indeed!
-
-> > +		},
-> > +		.digital_crop = {
-> > +			.left = 0x11,
-> > +			.top = 0x10,
-> > +			.width = 9248,
-> > +			.height = 6944,
-> > +		},
-> > +		.subsampling = {
-> > +			.x_odd_inc = 0x1,
-> > +			.x_even_inc = 0x1,
-> > +			.y_odd_inc = 0x1,
-> > +			.y_even_inc = 0x1,
-> > +			.vbin = false,
-> > +			.hbin = false,
-> > +		},
-> > +	},
-> > +	/* 2x2 downscaled */
-> > +	{
-> > +		.width = 4624,
-> > +		.height = 3472,
-> > +		.vts_def = 0xdcd, /* 3533 */
-> > +		.ppl = 0x840, /* 2112 */
-> > +		.reglist = {
-> > +			.num_regs = ARRAY_SIZE(ov64a40_4624_3472),
-> > +			.regvals = ov64a40_4624_3472,
-> > +		},
-> > +		.analogue_crop = {
-> > +			.left = 0x0,
-> > +			.top = 0x0,
-> > +			.width = 0x243f, /* 9279 */
-> > +			.height = 0x1b3f, /* 6975 */
-> > +		},
-> > +		.digital_crop = {
-> > +			.left = 0x09,
-> > +			.top = 0x08,
-> > +			.width = 4624,
-> > +			.height = 3472,
-> > +		},
-> > +		.subsampling = {
-> > +			.x_odd_inc = 0x3,
-> > +			.x_even_inc = 0x1,
-> > +			.y_odd_inc = 0x1,
-> > +			.y_even_inc = 0x1,
-> > +			.vbin = true,
-> > +			.hbin = false,
-> > +		},
-> > +	},
-> > +	/* Analogue crop + 2x2 downscale + digital crop */
-> > +	{
-> > +		.width = 3840,
-> > +		.height = 2160,
-> > +		.vts_def = 0x8aa, /* 2218 */
-> > +		.ppl = 0x69a, /* 1690 */
-> > +		.reglist = {
-> > +			.num_regs = ARRAY_SIZE(ov64a40_3840x2160),
-> > +			.regvals = ov64a40_3840x2160,
-> > +		},
-> > +		.analogue_crop = {
-> > +			.left = 0x310, /* 784 */
-> > +			.top = 0x520, /* 1312 */
-> > +			.width = 0x212f, /* 8495 */
-> > +			.height = 0x161f, /* 5663 */
-> > +		},
-> > +		.digital_crop = {
-> > +			.left = 0x0f,
-> > +			.top = 0x0e,
-> > +			.width = 3840,
-> > +			.height = 2160,
-> > +		},
-> > +		.subsampling = {
-> > +			.x_odd_inc = 0x3,
-> > +			.x_even_inc = 0x1,
-> > +			.y_odd_inc = 0x1,
-> > +			.y_even_inc = 0x1,
-> > +			.vbin = true,
-> > +			.hbin = false,
-> > +		},
-> > +	},
-> > +	/* 4x4 downscaled */
-> > +	{
-> > +		.width = 2312,
-> > +		.height = 1736,
-> > +		.vts_def = 0x7ce, /* 1998 */
-> > +		.ppl = 0x4e0, /* 1248 */
-> > +		.reglist = {
-> > +			.num_regs = ARRAY_SIZE(ov64a40_2312_1736),
-> > +			.regvals = ov64a40_2312_1736,
-> > +		},
-> > +		.analogue_crop = {
-> > +			.left = 0x0,
-> > +			.top = 0x0,
-> > +			.width = 0x243f, /* 9279 */
-> > +			.height = 0x1b3f, /* 6975 */
-> > +		},
-> > +		.digital_crop = {
-> > +			.left = 0x05,
-> > +			.top = 0x04,
-> > +			.width = 2312,
-> > +			.height = 1736,
-> > +		},
-> > +		.subsampling = {
-> > +			.x_odd_inc = 0x3,
-> > +			.x_even_inc = 0x1,
-> > +			.y_odd_inc = 0x3,
-> > +			.y_even_inc = 0x1,
-> > +			.vbin = true,
-> > +			.hbin = true,
-> > +		},
-> > +	},
-> > +	/* Analogue crop + 4x4 downscale + digital crop */
-> > +	{
-> > +		.width = 1920,
-> > +		.height = 1080,
-> > +		.vts_def = 0x575, /* 1397 */
-> > +		.ppl = 0x370, /* 880 */
-> > +		.reglist = {
-> > +			.num_regs = ARRAY_SIZE(ov64a40_1920x1080),
-> > +			.regvals = ov64a40_1920x1080,
-> > +		},
-> > +		.analogue_crop = {
-> > +			.left = 0x310, /* 784 */
-> > +			.top = 0x520, /* 1312 */
-> > +			.width = 0x212f, /* 8495 */
-> > +			.height = 0x161f, /* 5663 */
-> > +		},
-> > +		.digital_crop = {
-> > +			.left = 0x07,
-> > +			.top = 0x06,
-> > +			.width = 1920,
-> > +			.height = 1080,
-> > +		},
-> > +		.subsampling = {
-> > +			.x_odd_inc = 0x3,
-> > +			.x_even_inc = 0x1,
-> > +			.y_odd_inc = 0x3,
-> > +			.y_even_inc = 0x1,
-> > +			.vbin = true,
-> > +			.hbin = true,
-> > +		},
-> > +	},
-> > +	/* Analogue crop + 4x4 downscale + digital crop */
-> > +	{
-> > +		.width = 1280,
-> > +		.height = 720,
-> > +		.vts_def = 0x3b6, /* 950 */
-> > +		.ppl = 0x290, /* 656 */
-> > +		.reglist = {
-> > +			.num_regs = ARRAY_SIZE(ov64a40_1280x720),
-> > +			.regvals = ov64a40_1280x720,
-> > +		},
-> > +		.analogue_crop = {
-> > +			.left = 0x800, /* 2048 */
-> > +			.top = 0x7f0, /* 2023 */
-> > +			.width = 0x1c37, /* 7725 */
-> > +			.height = 0x1357, /* 4953 */
-> > +		},
-> > +		.digital_crop = {
-> > +			.left = 0x07,
-> > +			.top = 0x06,
-> > +			.width = 1280,
-> > +			.height = 720,
-> > +		},
-> > +		.subsampling = {
-> > +			.x_odd_inc = 0x3,
-> > +			.x_even_inc = 0x1,
-> > +			.y_odd_inc = 0x3,
-> > +			.y_even_inc = 0x1,
-> > +			.vbin = true,
-> > +			.hbin = true,
-> > +		},
-> > +	},
-> > +};
-> > +
-> > +struct ov64a40 {
-> > +	struct device *dev;
-> > +
-> > +	struct v4l2_subdev sd;
-> > +	struct media_pad pad;
-> > +
-> > +	struct regmap *cci;
-> > +
-> > +	struct ov64a40_mode *mode;
-> > +
-> > +	struct clk *xclk;
-> > +
-> > +	struct gpio_desc *reset_gpio;
-> > +	struct regulator_bulk_data supplies[OV64A40_NUM_SUPPLIES];
-> > +
-> > +	struct v4l2_ctrl_handler ctrl_handler;
-> > +	struct v4l2_ctrl *exposure;
-> > +	struct v4l2_ctrl *vblank;
-> > +	struct v4l2_ctrl *hblank;
-> > +	struct v4l2_ctrl *vflip;
-> > +	struct v4l2_ctrl *hflip;
-> > +};
-> > +
-> > +static inline struct ov64a40 *sd_to_ov64a40(struct v4l2_subdev *sd)
-> > +{
-> > +	return container_of(sd, struct ov64a40, sd);
->
-> container_of_const(), please.
->
-
-ack
-
-> > +}
-> > +
-> > +static int ov64a40_program_geometry(struct ov64a40 *ov64a40)
-> > +{
-> > +	struct ov64a40_mode *mode = ov64a40->mode;
-> > +	struct v4l2_rect *anacrop = &mode->analogue_crop;
-> > +	struct v4l2_rect *digicrop = &mode->digital_crop;
-> > +	int ret = 0;
-> > +
-> > +	/* Analogue crop. */
-> > +	cci_write(ov64a40->cci, OV64A40_REG_TIMING_CTRL0,
-> > +		  anacrop->left, &ret);
->
-> You could assign ret here instead of in initialisation. Up to you. Same
-> elsewhere.
->
-> > +	cci_write(ov64a40->cci, OV64A40_REG_TIMING_CTRL2,
-> > +		  anacrop->top, &ret);
-> > +	cci_write(ov64a40->cci, OV64A40_REG_TIMING_CTRL4,
-> > +		  anacrop->width, &ret);
-> > +	cci_write(ov64a40->cci, OV64A40_REG_TIMING_CTRL6,
-> > +		  anacrop->height, &ret);
-> > +
-> > +	/* ISP windowing. */
-> > +	cci_write(ov64a40->cci, OV64A40_REG_TIMING_CTRL10,
-> > +		  digicrop->left, &ret);
-> > +	cci_write(ov64a40->cci, OV64A40_REG_TIMING_CTRL12,
-> > +		  digicrop->top, &ret);
-> > +	cci_write(ov64a40->cci, OV64A40_REG_TIMING_CTRL8,
-> > +		  digicrop->width, &ret);
-> > +	cci_write(ov64a40->cci, OV64A40_REG_TIMING_CTRLA,
-> > +		  digicrop->height, &ret);
-> > +
-> > +	/* Total timings. */
-> > +	cci_write(ov64a40->cci, OV64A40_REG_TIMING_CTRLC,
-> > +		  mode->ppl, &ret);
-> > +	cci_write(ov64a40->cci, OV64A40_REG_TIMING_CTRLE,
-> > +		  mode->vts_def, &ret);
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +static int ov64a40_program_subsampling(struct ov64a40 *ov64a40)
-> > +{
-> > +	struct ov64a40_subsampling *subsampling = &ov64a40->mode->subsampling;
-> > +	int ret = 0;
-> > +
-> > +	/* Skipping configuration */
-> > +	cci_write(ov64a40->cci, OV64A40_REG_TIMING_CTRL14,
-> > +		  OV64A40_SKIPPING_CONFIG(subsampling->x_odd_inc,
-> > +					  subsampling->x_even_inc), &ret);
-> > +	cci_write(ov64a40->cci, OV64A40_REG_TIMING_CTRL15,
-> > +		  OV64A40_SKIPPING_CONFIG(subsampling->y_odd_inc,
-> > +					  subsampling->y_even_inc), &ret);
-> > +
-> > +	/* Binning configuration */
-> > +	cci_update_bits(ov64a40->cci, OV64A40_REG_TIMING_CTRL_20,
-> > +			OV64A40_TIMING_CTRL_20_VBIN,
-> > +			subsampling->vbin ? OV64A40_TIMING_CTRL_20_VBIN : 0,
-> > +			&ret);
-> > +	cci_update_bits(ov64a40->cci, OV64A40_REG_TIMING_CTRL_21,
-> > +			OV64A40_TIMING_CTRL_21_HBIN_CONF,
-> > +			subsampling->hbin ?
-> > +			OV64A40_TIMING_CTRL_21_HBIN_CONF : 0, &ret);
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +static int ov64a40_start_streaming(struct ov64a40 *ov64a40,
-> > +				   struct v4l2_subdev_state *state)
-> > +{
-> > +	const struct ov64a40_reglist *reglist = &ov64a40->mode->reglist;
-> > +	unsigned long delay;
-> > +	int ret;
-> > +
-> > +	ret = pm_runtime_resume_and_get(ov64a40->dev);
->
-> You seem to be using autosuspend, but you still do not try to avoid writes
-> of presumably the same register values if the sensor was powered on. The
-> register writes usually take the most of the time there.
-
-I'm not sure I get this comment. Are you afraid of multiple calls to
-"start_streaming" being made ? Isn't it responsibility of the bridge
-driver to handle this correctly ?
-
-One thing for sure, I should grab a few controls (flips, link_freq)
-avoid them being written to HW while the sensor is streaming.
-
->
-> pm_runtime_get_sync() returns 1 if the sensor was already in active state.
->
-> I'm about to send a patchset related to this actually, I can cc you...
->
-> > +	if (ret < 0)
-> > +		return ret;
-> > +
-> > +	ret = cci_multi_reg_write(ov64a40->cci, ov64a40_init,
-> > +				  ARRAY_SIZE(ov64a40_init), NULL);
-> > +	if (ret)
-> > +		goto error_power_off;
-> > +
-> > +	ret = cci_multi_reg_write(ov64a40->cci, reglist->regvals,
-> > +				  reglist->num_regs, NULL);
-> > +	if (ret)
-> > +		goto error_power_off;
-> > +
-> > +	ret = ov64a40_program_geometry(ov64a40);
-> > +	if (ret)
-> > +		goto error_power_off;
-> > +
-> > +	ret = ov64a40_program_subsampling(ov64a40);
-> > +	if (ret)
-> > +		goto error_power_off;
-> > +
-> > +	ret =  __v4l2_ctrl_handler_setup(&ov64a40->ctrl_handler);
-> > +	if (ret)
-> > +		goto error_power_off;
-> > +
-> > +	ret = cci_write(ov64a40->cci, OV64A40_REG_SMIA,
-> > +			OV64A40_REG_SMIA_STREAMING, NULL);
-> > +	if (ret)
-> > +		goto error_power_off;
-> > +
-> > +	/* delay: max(4096 xclk pulses, 150usec) + exposure time */
-> > +	delay = DIV_ROUND_UP(4096, OV64A40_XCLK_FREQ / 1000 / 1000);
-> > +	delay = max(delay, 150ul);
-> > +	delay += DIV_ROUND_UP(ov64a40->mode->ppl * ov64a40->exposure->cur.val,
-> > +			      OV64A40_PIXEL_RATE / 1000 / 1000);
-> > +	fsleep(delay);
-> > +
-> > +	return 0;
-> > +
-> > +error_power_off:
-> > +	pm_runtime_mark_last_busy(ov64a40->dev);
-> > +	pm_runtime_put_autosuspend(ov64a40->dev);
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +static int ov64a40_stop_streaming(struct ov64a40 *ov64a40,
-> > +				  struct v4l2_subdev_state *state)
-> > +{
-> > +	cci_update_bits(ov64a40->cci, OV64A40_REG_SMIA, BIT(0), 0, NULL);
-> > +	pm_runtime_put(ov64a40->dev);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int ov64a40_set_stream(struct v4l2_subdev *sd, int enable)
-> > +{
-> > +	struct ov64a40 *ov64a40 = sd_to_ov64a40(sd);
-> > +	struct v4l2_subdev_state *state;
-> > +	int ret;
-> > +
-> > +	state = v4l2_subdev_lock_and_get_active_state(sd);
-> > +	if (enable)
-> > +		ret = ov64a40_start_streaming(ov64a40, state);
-> > +	else
-> > +		ret = ov64a40_stop_streaming(ov64a40, state);
-> > +	v4l2_subdev_unlock_state(state);
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +static const struct v4l2_subdev_video_ops ov64a40_video_ops = {
-> > +	.s_stream = ov64a40_set_stream,
-> > +};
-> > +
-> > +static u32 ov64a40_mbus_code(struct ov64a40 *ov64a40)
-> > +{
-> > +	unsigned int index = ov64a40->hflip->val << 1 | ov64a40->vflip->val;
-> > +
-> > +	return ov64a40_mbus_codes[index];
-> > +}
-> > +
-> > +static void ov64a40_update_pad_fmt(struct ov64a40 *ov64a40,
-> > +				   struct ov64a40_mode *mode,
-> > +				   struct v4l2_mbus_framefmt *fmt)
-> > +{
-> > +	fmt->code = ov64a40_mbus_code(ov64a40);
-> > +	fmt->width = mode->width;
-> > +	fmt->height = mode->height;
-> > +	fmt->field = V4L2_FIELD_NONE;
-> > +	fmt->colorspace = V4L2_COLORSPACE_RAW;
-> > +	fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
-> > +	fmt->xfer_func = V4L2_XFER_FUNC_NONE;
-> > +	fmt->ycbcr_enc = V4L2_YCBCR_ENC_601;
-> > +}
-> > +
-> > +static int ov64a40_init_cfg(struct v4l2_subdev *sd,
-> > +			    struct v4l2_subdev_state *state)
-> > +{
-> > +	struct ov64a40 *ov64a40 = sd_to_ov64a40(sd);
-> > +	struct v4l2_mbus_framefmt *format;
-> > +	struct v4l2_rect *crop;
-> > +
-> > +	format = v4l2_subdev_get_pad_format(sd, state, 0);
-> > +	ov64a40_update_pad_fmt(ov64a40, &ov64a40_modes[0], format);
-> > +
-> > +	crop = v4l2_subdev_get_pad_crop(sd, state, 0);
-> > +	crop->top = OV64A40_PIXEL_ARRAY_TOP;
-> > +	crop->left = OV64A40_PIXEL_ARRAY_LEFT;
-> > +	crop->width = OV64A40_PIXEL_ARRAY_WIDTH;
-> > +	crop->height = OV64A40_PIXEL_ARRAY_HEIGHT;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int ov64a40_enum_mbus_code(struct v4l2_subdev *sd,
-> > +				  struct v4l2_subdev_state *sd_state,
-> > +				  struct v4l2_subdev_mbus_code_enum *code)
-> > +{
-> > +	struct ov64a40 *ov64a40 = sd_to_ov64a40(sd);
-> > +
-> > +	if (code->index >= ARRAY_SIZE(ov64a40_mbus_codes) / 4)
-> > +		return -EINVAL;
->
-> How about returning -EINVAL if index is non-zero? The function won't work
-> correctly if you begin supporting more mbus codes so there's no reason to
-> suggest it does.
->
-
-Ack
-
-> > +
-> > +	code->code = ov64a40_mbus_code(ov64a40);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int ov64a40_enum_frame_size(struct v4l2_subdev *sd,
-> > +				   struct v4l2_subdev_state *sd_state,
-> > +				   struct v4l2_subdev_frame_size_enum *fse)
-> > +{
-> > +	struct ov64a40 *ov64a40 = sd_to_ov64a40(sd);
-> > +	struct ov64a40_mode *mode;
-> > +	u32 code;
-> > +
-> > +	if (fse->index >= ARRAY_SIZE(ov64a40_modes))
-> > +		return -EINVAL;
-> > +
-> > +	code = ov64a40_mbus_code(ov64a40);
-> > +	if (fse->code != code)
-> > +		return -EINVAL;
-> > +
-> > +	mode = &ov64a40_modes[fse->index];
-> > +	fse->min_width = fse->max_width = mode->width;
-> > +	fse->min_height = fse->max_height = mode->height;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int ov64a40_get_selection(struct v4l2_subdev *sd,
-> > +				 struct v4l2_subdev_state *sd_state,
-> > +				 struct v4l2_subdev_selection *sel)
-> > +{
-> > +	switch (sel->target) {
-> > +	case V4L2_SEL_TGT_CROP: {
-> > +		sel->r = *v4l2_subdev_get_pad_crop(sd, sd_state, 0);
-> > +		return 0;
-> > +	}
->
-> The braces are unnecessary here.
->
-> > +
-> > +	case V4L2_SEL_TGT_NATIVE_SIZE:
-> > +		sel->r.top = 0;
-> > +		sel->r.left = 0;
-> > +		sel->r.width = OV64A40_NATIVE_WIDTH;
-> > +		sel->r.height = OV64A40_NATIVE_HEIGHT;
-> > +
-> > +		return 0;
-> > +
-> > +	case V4L2_SEL_TGT_CROP_DEFAULT:
-> > +	case V4L2_SEL_TGT_CROP_BOUNDS:
-> > +		sel->r.top = OV64A40_PIXEL_ARRAY_TOP;
-> > +		sel->r.left = OV64A40_PIXEL_ARRAY_LEFT;
-> > +		sel->r.width = OV64A40_PIXEL_ARRAY_WIDTH;
-> > +		sel->r.height = OV64A40_PIXEL_ARRAY_HEIGHT;
-> > +
-> > +		return 0;
-> > +	}
-> > +
-> > +	return -EINVAL;
-> > +}
-> > +
-> > +static int ov64a40_set_pad_format(struct v4l2_subdev *sd,
-> > +				  struct v4l2_subdev_state *sd_state,
-> > +				  struct v4l2_subdev_format *fmt)
-> > +{
-> > +	struct ov64a40 *ov64a40 = sd_to_ov64a40(sd);
-> > +	struct v4l2_mbus_framefmt *format;
-> > +	struct ov64a40_mode *mode;
-> > +
-> > +	mode = v4l2_find_nearest_size(ov64a40_modes,
-> > +				      ARRAY_SIZE(ov64a40_modes),
-> > +				      width, height,
-> > +				      fmt->format.width, fmt->format.height);
-> > +
-> > +	ov64a40_update_pad_fmt(ov64a40, mode, &fmt->format);
-> > +
-> > +	format = v4l2_subdev_get_pad_format(sd, sd_state, 0);
->
-> Could you rebase this on my master branch? The function you'll need from
-> now on is called v4l2_subdev_state_get_format(). Similarly for crop and
-> compose.
->
-> > +	if (ov64a40->mode == mode && format->code == fmt->format.code)
-> > +		return 0;
-> > +
-> > +	if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
-> > +		int vblank_max, vblank_def;
-> > +		int hblank_val;
-> > +		int exp_max;
-> > +
-> > +		ov64a40->mode = mode;
-> > +		*v4l2_subdev_get_pad_crop(sd, sd_state, 0) = mode->analogue_crop;
-> > +
-> > +		/* Update control limits according to the new mode. */
-> > +		vblank_max = OV64A40_VTS_MAX - mode->height;
-> > +		vblank_def = mode->vts_def - mode->height;
-> > +		__v4l2_ctrl_modify_range(ov64a40->vblank,
-> > +					 OV64A40_VBLANK_MIN,
-> > +					 vblank_max, 1, vblank_def);
-> > +		__v4l2_ctrl_s_ctrl(ov64a40->vblank, vblank_def);
-> > +
-> > +		exp_max = mode->vts_def - OV64A40_EXPOSURE_MARGIN;
-> > +		__v4l2_ctrl_modify_range(ov64a40->exposure,
-> > +					 OV64A40_EXPOSURE_MIN, exp_max,
-> > +					 1, OV64A40_EXPOSURE_MIN);
-> > +
-> > +		/* FIXME: see comment in init_ctrl about ppl multiplier. */
-> > +		hblank_val = mode->ppl * 4 - mode->width;
-> > +		__v4l2_ctrl_modify_range(ov64a40->hblank,
-> > +					 hblank_val, hblank_val, 1, hblank_val);
-> > +	}
-> > +
-> > +	*format = fmt->format;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static const struct v4l2_subdev_pad_ops ov64a40_pad_ops = {
-> > +	.init_cfg = ov64a40_init_cfg,
-> > +	.enum_mbus_code = ov64a40_enum_mbus_code,
-> > +	.enum_frame_size = ov64a40_enum_frame_size,
-> > +	.get_fmt = v4l2_subdev_get_fmt,
-> > +	.set_fmt = ov64a40_set_pad_format,
-> > +	.get_selection = ov64a40_get_selection,
-> > +};
-> > +
-> > +static const struct v4l2_subdev_core_ops ov64a40_core_ops = {
-> > +	.subscribe_event = v4l2_ctrl_subdev_subscribe_event,
-> > +	.unsubscribe_event = v4l2_event_subdev_unsubscribe,
-> > +};
-> > +
-> > +static const struct v4l2_subdev_ops ov64a40_subdev_ops = {
-> > +	.core = &ov64a40_core_ops,
-> > +	.video = &ov64a40_video_ops,
-> > +	.pad = &ov64a40_pad_ops,
-> > +};
-> > +
-> > +static int ov64a40_power_on(struct device *dev)
-> > +{
-> > +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-> > +	struct ov64a40 *ov64a40 = sd_to_ov64a40(sd);
-> > +	int ret;
-> > +
-> > +	ret = clk_prepare_enable(ov64a40->xclk);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ret = regulator_bulk_enable(OV64A40_NUM_SUPPLIES, ov64a40->supplies);
-> > +	if (ret) {
-> > +		dev_err(dev, "Failed to enable regulators: %d\n", ret);
-> > +		return ret;
->
-> clk_disable_unprepare().
->
-
-Upsie
-
-> > +	}
-> > +
-> > +	gpiod_set_value_cansleep(ov64a40->reset_gpio, 0);
-> > +
-> > +	fsleep(5000);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int ov64a40_power_off(struct device *dev)
-> > +{
-> > +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-> > +	struct ov64a40 *ov64a40 = sd_to_ov64a40(sd);
-> > +
-> > +	gpiod_set_value_cansleep(ov64a40->reset_gpio, 1);
-> > +	regulator_bulk_disable(OV64A40_NUM_SUPPLIES, ov64a40->supplies);
-> > +	clk_disable_unprepare(ov64a40->xclk);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int ov64a40_set_anagain(struct v4l2_ctrl *ctrl)
-> > +{
-> > +	struct ov64a40 *ov64a40 = container_of(ctrl->handler, struct ov64a40,
-> > +					       ctrl_handler);
-> > +	int ret = 0;
-> > +
-> > +	/*
-> > +	 * COARSE GAIN[6:0] = ctrl->val >> 7
-> > +	 * FINE_GAIN[7:1] = (ctrl->val & 0x7f) << 1;
-> > +	 */
-> > +	cci_write(ov64a40->cci, OV64A40_REG_MEC_LONG_GAIN_COARSE,
-> > +		  ctrl->val >> 7, &ret);
-> > +	cci_write(ov64a40->cci, OV64A40_REG_MEC_LONG_GAIN_FINE,
-> > +		  (ctrl->val & 0x7f) << 1, &ret);
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +static int ov64a40_set_ctrl(struct v4l2_ctrl *ctrl)
-> > +{
-> > +	struct ov64a40 *ov64a40 = container_of(ctrl->handler, struct ov64a40,
-> > +					       ctrl_handler);
-> > +	int ret;
-> > +
-> > +	if (ctrl->id == V4L2_CID_VBLANK) {
-> > +		int exp_max = ov64a40->mode->height + ctrl->val
-> > +			    - OV64A40_EXPOSURE_MARGIN;
-> > +		int exp_val = min(ov64a40->exposure->cur.val, exp_max);
-> > +
-> > +		__v4l2_ctrl_modify_range(ov64a40->exposure,
-> > +					 ov64a40->exposure->minimum,
-> > +					 exp_max, 1, exp_val);
-> > +	}
-> > +
-> > +	if (pm_runtime_get_if_in_use(ov64a40->dev) == 0)
->
-> The function you should use here is actually called
-> pm_runtime_get_if_active(), but this change would better be postponed after
-> my patchset.
-
-  `int pm_runtime_get_if_in_use(struct device *dev);`
-    - return -EINVAL if 'power.disable_depth' is nonzero; otherwise, if the
-      runtime PM status is RPM_ACTIVE and the runtime PM usage counter is
-      nonzero, increment the counter and return 1; otherwise return 0 without
-      changing the counter
-
-  `int pm_runtime_get_if_active(struct device *dev, bool ign_usage_count);`
-    - return -EINVAL if 'power.disable_depth' is nonzero; otherwise, if the
-      runtime PM status is RPM_ACTIVE, and either ign_usage_count is true
-      or the device's usage_count is non-zero, increment the counter and
-      return 1; otherwise return 0 without changing the counter
-
-
-The only difference I see here is the additional 'ign_usage_count'
-which allows to forcefully resume the device by ignoring the usage
-counter ? Why would you forcefully resume the device here ? Don't we
-actually want the opposite and use this check to only access the HW if
-the device is powered already ?
-
->
-> > +		return 0;
-> > +
-> > +	switch (ctrl->id) {
-> > +	case V4L2_CID_EXPOSURE:
-> > +		ret = cci_write(ov64a40->cci, OV64A40_REG_MEC_LONG_EXPO,
-> > +				ctrl->val, NULL);
-> > +		break;
-> > +	case V4L2_CID_ANALOGUE_GAIN:
-> > +		ret = ov64a40_set_anagain(ctrl);
-> > +		break;
-> > +	case V4L2_CID_VBLANK:
-> > +		ret = cci_write(ov64a40->cci, OV64A40_REG_TIMINGS_VTS,
-> > +				ctrl->val + ov64a40->mode->height, NULL);
-> > +		break;
-> > +	case V4L2_CID_VFLIP:
-> > +		ret = cci_update_bits(ov64a40->cci, OV64A40_REG_TIMING_CTRL_20,
-> > +				      OV64A40_TIMING_CTRL_20_VFLIP,
-> > +				      ctrl->val << 2,
-> > +				      NULL);
-> > +		break;
-> > +	case V4L2_CID_HFLIP:
-> > +		ret = cci_update_bits(ov64a40->cci, OV64A40_REG_TIMING_CTRL_21,
-> > +				      OV64A40_TIMING_CTRL_21_HFLIP,
-> > +				      ctrl->val << 2,
-> > +				      NULL);
-> > +		break;
-> > +	default:
-> > +		dev_err(ov64a40->dev, "Unhandled control: %#x\n", ctrl->id);
-> > +		ret = -EINVAL;
-> > +		break;
-> > +	}
-> > +
-> > +	pm_runtime_put(ov64a40->dev);
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +static const struct v4l2_ctrl_ops ov64a40_ctrl_ops = {
-> > +	.s_ctrl = ov64a40_set_ctrl,
-> > +};
-> > +
-> > +static int ov64a40_init_controls(struct ov64a40 *ov64a40)
-> > +{
-> > +	struct v4l2_ctrl_handler *hdlr = &ov64a40->ctrl_handler;
-> > +	int exp_max, hblank_val, vblank_max, vblank_def;
-> > +	struct v4l2_fwnode_device_properties props;
-> > +	struct v4l2_ctrl *link_freq;
-> > +	int ret;
-> > +
-> > +	ret = v4l2_ctrl_handler_init(hdlr, 10);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	/*
-> > +	 * FIXME: When reporting HBLANK, we need to multiply PPL by 4 as the
-> > +	 * sensor has an internal multiplier. Multiply PIXEL_RATE by 4 to
-> > +	 * maintain a correct frame duration calculation.
-> > +	 */
-> > +	v4l2_ctrl_new_std(hdlr, &ov64a40_ctrl_ops, V4L2_CID_PIXEL_RATE,
-> > +			  OV64A40_PIXEL_RATE * 4, OV64A40_PIXEL_RATE * 4, 1,
-> > +			  OV64A40_PIXEL_RATE * 4);
-> > +
-> > +	link_freq = v4l2_ctrl_new_int_menu(hdlr, &ov64a40_ctrl_ops,
-> > +					   V4L2_CID_LINK_FREQ,
-> > +					   ARRAY_SIZE(ov64a40_link_freq_menu) - 1,
-> > +					   0, ov64a40_link_freq_menu);
-> > +	if (link_freq)
-> > +		link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-> > +
-> > +	exp_max = ov64a40->mode->vts_def - OV64A40_EXPOSURE_MARGIN;
-> > +	ov64a40->exposure = v4l2_ctrl_new_std(hdlr, &ov64a40_ctrl_ops,
-> > +					      V4L2_CID_EXPOSURE,
-> > +					      OV64A40_EXPOSURE_MIN, exp_max, 1,
-> > +					      OV64A40_EXPOSURE_MIN);
-> > +
-> > +	hblank_val = ov64a40->mode->ppl * 4 - ov64a40->mode->width;
-> > +	ov64a40->hblank = v4l2_ctrl_new_std(hdlr, &ov64a40_ctrl_ops,
-> > +					    V4L2_CID_HBLANK, hblank_val,
-> > +					    hblank_val, 1, hblank_val);
-> > +
-> > +	if (ov64a40->hblank)
-> > +		ov64a40->hblank->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-> > +
-> > +	vblank_def = ov64a40->mode->vts_def - ov64a40->mode->height;
-> > +	vblank_max = OV64A40_VTS_MAX - ov64a40->mode->height;
-> > +	ov64a40->vblank = v4l2_ctrl_new_std(hdlr, &ov64a40_ctrl_ops,
-> > +					    V4L2_CID_VBLANK, OV64A40_VBLANK_MIN,
-> > +					    vblank_max, 1, vblank_def);
-> > +
-> > +	v4l2_ctrl_new_std(hdlr, &ov64a40_ctrl_ops, V4L2_CID_ANALOGUE_GAIN,
-> > +			  OV64A40_ANA_GAIN_MIN, OV64A40_ANA_GAIN_MAX, 1,
-> > +			  OV64A40_ANA_GAIN_DEFAULT);
-> > +
-> > +	ov64a40->hflip = v4l2_ctrl_new_std(hdlr, &ov64a40_ctrl_ops,
-> > +					   V4L2_CID_HFLIP, 0, 1, 1, 1);
-> > +	if (ov64a40->hflip)
-> > +		ov64a40->hflip->flags |= V4L2_CTRL_FLAG_MODIFY_LAYOUT;
-> > +
-> > +	ov64a40->vflip = v4l2_ctrl_new_std(hdlr, &ov64a40_ctrl_ops,
-> > +					   V4L2_CID_VFLIP, 0, 1, 1, 0);
-> > +	if (ov64a40->vflip)
-> > +		ov64a40->vflip->flags |= V4L2_CTRL_FLAG_MODIFY_LAYOUT;
-> > +
-> > +	if (hdlr->error) {
-> > +		ret = hdlr->error;
-> > +		dev_err(ov64a40->dev, "control init failed: %d\n", ret);
-> > +		goto error_free_hdlr;
-> > +	}
-> > +
-> > +	ret = v4l2_fwnode_device_parse(ov64a40->dev, &props);
-> > +	if (ret)
-> > +		goto error_free_hdlr;
-> > +
-> > +	ret = v4l2_ctrl_new_fwnode_properties(hdlr, &ov64a40_ctrl_ops,
-> > +					      &props);
-> > +	if (ret)
-> > +		goto error_free_hdlr;
-> > +
-> > +	ov64a40->sd.ctrl_handler = hdlr;
-> > +
-> > +	return 0;
-> > +
-> > +error_free_hdlr:
-> > +	v4l2_ctrl_handler_free(hdlr);
-> > +	return ret;
-> > +}
-> > +
-> > +static int ov64a40_identify(struct ov64a40 *ov64a40)
-> > +{
-> > +	int ret;
-> > +	u64 id;
-> > +
-> > +	ret = cci_read(ov64a40->cci, OV64A40_REG_CHIP_ID, &id, NULL);
-> > +	if (ret) {
-> > +		dev_err(ov64a40->dev, "Failed to read chip id: %d\n", ret);
-> > +		return ret;
-> > +	}
-> > +
-> > +	if (id != OV64A40_CHIP_ID) {
-> > +		dev_err(ov64a40->dev, "chip id mismatch: %#llx\n", id);
-> > +		return -ENODEV;
-> > +	}
-> > +
-> > +	dev_dbg(ov64a40->dev, "OV64A40 chip identified: %#llx\n", id);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int ov64a40_parse_dt(struct ov64a40 *ov64a40)
-> > +{
-> > +	struct v4l2_fwnode_endpoint v4l2_fwnode = {
-> > +		.bus_type = V4L2_MBUS_CSI2_DPHY
-> > +	};
-> > +	struct fwnode_handle *endpoint;
-> > +	int ret = -EINVAL;
-> > +
-> > +	endpoint = fwnode_graph_get_next_endpoint(dev_fwnode(ov64a40->dev),
-> > +						  NULL);
-> > +	if (!endpoint) {
-> > +		dev_err(ov64a40->dev, "Failed to find endpoint\n");
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	if (v4l2_fwnode_endpoint_alloc_parse(endpoint, &v4l2_fwnode)) {
-> > +		dev_err(ov64a40->dev, "Failed to parse endpoint\n");
-> > +		goto error_put_fwnode;
-> > +	}
-> > +
-> > +	if (v4l2_fwnode.bus.mipi_csi2.num_data_lanes != 2) {
-> > +		dev_err(ov64a40->dev, "Unsupported number of data lanes: %u\n",
-> > +			v4l2_fwnode.bus.mipi_csi2.num_data_lanes);
-> > +		goto error_free_fwnode;
-> > +	}
-> > +
-> > +	if (v4l2_fwnode.nr_of_link_frequencies != 1 ||
->
-> This is a bit simplistic. You could at least check if one of the provided
-> frequencies is what you expect. Up to you though.
-
-Yes, in v2 I will have more ore additional frequency to support and I
-should rework this part and actually make sure that we restrict the
-allowed link_frequencies to the ones specified in dtbs.
->
-> > +	    v4l2_fwnode.link_frequencies[0] != OV64A40_LINK_FREQ_DEF) {
-> > +		dev_err(ov64a40->dev, "Link frequency not supported: %lld\n",
-> > +			v4l2_fwnode.link_frequencies[0]);
-> > +		goto error_free_fwnode;
-> > +	}
-> > +
-> > +	v4l2_fwnode_endpoint_free(&v4l2_fwnode);
-> > +
-> > +	/* Register the subdev on the endpoint, so don't put it yet. */
-> > +	ov64a40->sd.fwnode = endpoint;
->
-> You should no longer assign this explicitly unless you have some very
-> special needs.
->
-
-Yup!
-
-> > +
-> > +	return 0;
-> > +
-> > +error_free_fwnode:
-> > +	v4l2_fwnode_endpoint_free(&v4l2_fwnode);
-> > +error_put_fwnode:
-> > +	fwnode_handle_put(endpoint);
-> > +	return ret;
-> > +}
-> > +
-> > +static int ov64a40_get_regulators(struct ov64a40 *ov64a40)
-> > +{
-> > +	struct i2c_client *client = v4l2_get_subdevdata(&ov64a40->sd);
-> > +	unsigned int i;
-> > +
-> > +	for (i = 0; i < OV64A40_NUM_SUPPLIES; i++)
-> > +		ov64a40->supplies[i].supply = ov64a40_supply_name[i];
-> > +
-> > +	return devm_regulator_bulk_get(&client->dev, OV64A40_NUM_SUPPLIES,
-> > +				       ov64a40->supplies);
-> > +}
-> > +
-> > +static int ov64a40_probe(struct i2c_client *client)
-> > +{
-> > +	struct ov64a40 *ov64a40;
-> > +	u32 xclk_freq;
-> > +	int ret;
-> > +
-> > +	ov64a40 = devm_kzalloc(&client->dev, sizeof(*ov64a40), GFP_KERNEL);
-> > +	if (!ov64a40)
-> > +		return -ENOMEM;
-> > +
-> > +	ov64a40->dev = &client->dev;
-> > +	v4l2_i2c_subdev_init(&ov64a40->sd, client, &ov64a40_subdev_ops);
-> > +
-> > +	ov64a40->cci = devm_cci_regmap_init_i2c(client, 16);
-> > +	if (IS_ERR(ov64a40->cci)) {
-> > +		dev_err(&client->dev, "Failed to initialize CCI\n");
-> > +		return PTR_ERR(ov64a40->cci);
-> > +	}
-> > +
-> > +	ov64a40->xclk = devm_clk_get(&client->dev, NULL);
-> > +	if (!ov64a40->xclk)
-> > +		return dev_err_probe(&client->dev, PTR_ERR(ov64a40->xclk),
-> > +				     "Failed to get clock\n");
-> > +
-> > +	xclk_freq = clk_get_rate(ov64a40->xclk);
-> > +	if (xclk_freq != OV64A40_XCLK_FREQ) {
-> > +		dev_err(&client->dev, "Unsupported xclk frequency %u\n",
-> > +			xclk_freq);
-> > +		return -EINVAL;
->
-> Feel free to handle this not as an error. Up to you.
->
-
-Well, the driver won't work correctly if the clock is not running
-at the expected frequency..
-
-> > +	}
-> > +
-> > +	ret = ov64a40_get_regulators(ov64a40);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ov64a40->reset_gpio = devm_gpiod_get_optional(&client->dev, "reset",
-> > +						      GPIOD_OUT_LOW);
-> > +	if (IS_ERR(ov64a40->reset_gpio))
-> > +		return dev_err_probe(&client->dev, PTR_ERR(ov64a40->reset_gpio),
-> > +				     "Failed to get reset gpio\n");
-> > +
-> > +	ret = ov64a40_parse_dt(ov64a40);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ret = ov64a40_power_on(&client->dev);
-> > +	if (ret)
-> > +		goto error_put_fwnode;
-> > +
-> > +	ret = ov64a40_identify(ov64a40);
-> > +	if (ret)
-> > +		goto error_poweroff;
-> > +
-> > +	ov64a40->mode = &ov64a40_modes[0];
-> > +
-> > +	pm_runtime_set_active(&client->dev);
-> > +	pm_runtime_get_noresume(&client->dev);
-> > +	pm_runtime_enable(&client->dev);
-> > +	pm_runtime_set_autosuspend_delay(&client->dev, 1000);
-> > +	pm_runtime_use_autosuspend(&client->dev);
-> > +
-> > +	ret = ov64a40_init_controls(ov64a40);
-> > +	if (ret)
-> > +		goto error_poweroff;
-> > +
-> > +	/* Initialize subdev */
-> > +	ov64a40->sd.flags = V4L2_SUBDEV_FL_HAS_DEVNODE
-> > +			  | V4L2_SUBDEV_FL_HAS_EVENTS;
-> > +	ov64a40->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
-> > +
-> > +	ov64a40->pad.flags = MEDIA_PAD_FL_SOURCE;
-> > +	ret = media_entity_pads_init(&ov64a40->sd.entity, 1, &ov64a40->pad);
-> > +	if (ret) {
-> > +		dev_err(&client->dev, "failed to init entity pads: %d\n", ret);
-> > +		goto error_handler_free;
-> > +	}
-> > +
-> > +	ov64a40->sd.state_lock = ov64a40->ctrl_handler.lock;
-> > +	ret = v4l2_subdev_init_finalize(&ov64a40->sd);
-> > +	if (ret < 0) {
-> > +		dev_err(&client->dev, "subdev init error: %d\n", ret);
-> > +		goto error_media_entity;
-> > +	}
-> > +
-> > +	ret = v4l2_async_register_subdev_sensor(&ov64a40->sd);
-> > +	if (ret < 0) {
-> > +		dev_err(&client->dev,
-> > +			"failed to register sensor sub-device: %d\n", ret);
-> > +		goto error_subdev_cleanup;
-> > +	}
-> > +
-> > +	pm_runtime_mark_last_busy(&client->dev);
-> > +	pm_runtime_put_autosuspend(&client->dev);
-> > +
-> > +	return 0;
-> > +
-> > +error_subdev_cleanup:
-> > +	v4l2_subdev_cleanup(&ov64a40->sd);
-> > +error_media_entity:
-> > +	media_entity_cleanup(&ov64a40->sd.entity);
-> > +error_handler_free:
-> > +	v4l2_ctrl_handler_free(ov64a40->sd.ctrl_handler);
-> > +error_poweroff:
-> > +	ov64a40_power_off(&client->dev);
-> > +error_put_fwnode:
-> > +	fwnode_handle_put(ov64a40->sd.fwnode);
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +void ov64a40_remove(struct i2c_client *client)
-> > +{
-> > +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
-> > +	struct ov64a40 *ov64a40 = sd_to_ov64a40(sd);
-> > +
-> > +	v4l2_async_unregister_subdev(sd);
-> > +	fwnode_handle_put(ov64a40->sd.fwnode);
->
-> See my comment on assigning sd->fwnode.
->
-> > +	v4l2_subdev_cleanup(sd);
-> > +	media_entity_cleanup(&sd->entity);
-> > +	v4l2_ctrl_handler_free(sd->ctrl_handler);
-> > +
-> > +	pm_runtime_disable(&client->dev);
-> > +	if (!pm_runtime_status_suspended(&client->dev))
-> > +		ov64a40_power_off(&client->dev);
-> > +	pm_runtime_set_suspended(&client->dev);
->
-> This also needs to be done in probe error handling --- the status check is
-> unnecesary though.
->
-
-Ack
-
-> > +}
-> > +
-> > +static const struct of_device_id ov64a40_of_ids[] = {
-> > +	{ .compatible = "ovti,ov64a40" },
-> > +	{ /* sentinel */ }
-> > +};
-> > +MODULE_DEVICE_TABLE(of, ov64a40_of_ids);
-> > +
-> > +static const struct dev_pm_ops ov64a40_pm_ops = {
-> > +	SET_RUNTIME_PM_OPS(ov64a40_power_off, ov64a40_power_on, NULL)
-> > +};
-> > +
-> > +static struct i2c_driver ov64a40_i2c_driver = {
-> > +	.driver	= {
-> > +		.name = "ov64a40",
-> > +		.of_match_table	= ov64a40_of_ids,
-> > +		.pm = &ov64a40_pm_ops,
-> > +	},
-> > +	.probe	= ov64a40_probe,
-> > +	.remove	= ov64a40_remove,
-> > +};
-> > +
-> > +module_i2c_driver(ov64a40_i2c_driver);
-> > +
-> > +MODULE_AUTHOR("Jacopo Mondi <jacopo.mondi@ideasonboard.com>");
-> > +MODULE_DESCRIPTION("OmniVision OV64A40 sensor driver");
-> > +MODULE_LICENSE("GPL");
->
-> --
-> Kind regards,
->
-> Sakari Ailus
