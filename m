@@ -1,272 +1,222 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C374621347
-	for <linux-media@vger.kernel.org>; Mon, 13 Nov 2023 16:41:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DD5321359;
+	Mon, 13 Nov 2023 16:54:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fnwScq3M"
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2017D53
-	for <linux-media@vger.kernel.org>; Mon, 13 Nov 2023 08:41:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699893706; x=1731429706;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VF2nTUJUXFC0SU/LePNTVhWd7+zF6od9/vDdlGxsa9s=;
-  b=fnwScq3MeIkHG8+BV0d0IO5TW3JCNEY1rBBXrlKzQqAHPpV0i6Q6OdG2
-   EsvBG+pwZo0RmKRk+PimAhFoW1N3jTqzYIJOVikvJBmAvM8AVU0/HHev3
-   H2FA2BuRMaCHfOErlGVsXgds10gzx1t3cyzO29IhWLYksKLhiJT9TlF78
-   Tc63cIph49oD5HsDgqy4ZRFt2d8Bj4UStQPDTPgc6ZaFSnuEFakhwiQi3
-   maAUY/88lAV/nS0ssxTzGEV2LmbuGa8UQFnky+IKeICAIXkKvfwEsjzLU
-   dSXS9K2ZWREf3Gj5rOahlLagIfU36yGcZr/4kdTeVI3DoExMda9Iq93Yy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10893"; a="393329192"
-X-IronPort-AV: E=Sophos;i="6.03,299,1694761200"; 
-   d="scan'208";a="393329192"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2023 08:41:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10893"; a="881733254"
-X-IronPort-AV: E=Sophos;i="6.03,299,1694761200"; 
-   d="scan'208";a="881733254"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2023 08:41:41 -0800
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-	by kekkonen.fi.intel.com (Postfix) with SMTP id 9696D120BA7;
-	Mon, 13 Nov 2023 18:16:18 +0200 (EET)
-Date: Mon, 13 Nov 2023 16:16:18 +0000
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	linux-media@vger.kernel.org,
-	Kieran Bingham <kieran.bingham@ideasonboard.com>,
-	Lee Jackson <lee.jackson@arducam.com>
-Subject: Re: [PATCH 2/2] media: i2c: Add driver for OmniVision OV64A40
-Message-ID: <ZVJL0grMufajJ3Tm@kekkonen.localdomain>
-References: <20231010151208.29564-1-jacopo.mondi@ideasonboard.com>
- <20231010151208.29564-3-jacopo.mondi@ideasonboard.com>
- <ZVHciyhWSogA4ckc@kekkonen.localdomain>
- <uk3jwwpwthl7es6gdfkremjf4wil5w4b2kd6amajmeigywa55f@qxsz33z5t6q6>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="KS5AVR2L"
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE6010E0;
+	Mon, 13 Nov 2023 08:54:11 -0800 (PST)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5B1F2C000D;
+	Mon, 13 Nov 2023 16:54:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1699894450;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=51lY1jIgGkWGCtkDFu685j7ycEyBpmmPBxB/qCXnQdE=;
+	b=KS5AVR2L0bwXYfspT0LmpBJqYogWSdu9kyiEorhugKOjuRNTmFyJZw73KX81qNVWFvUBvB
+	0HaUerdHTv77zUNAr7LL2cJ9aeugUzu59PG2AxmJXCNspfxa1dcuWSNyIreTFGhJ31v7/E
+	8aRcAlHOVfeq0YQ6iknlSMd84pjtJa5ogn1nzKP4v1Lwv8Tuqomfz3bTRIQyiK2U7wW/An
+	DyYAjtI4DKJZQevmADcX1UouHuMu3zn758OtXvub0ReCVciuBeufHheIrwF6l71ZoTXrL5
+	oKfqyKlnG58waiz33bZHgd2me1bVMzjHGxmj3GUUm2+2KQdw+27xHV2zXGqv5w==
+Date: Mon, 13 Nov 2023 17:54:08 +0100
+From: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To: Conor Dooley <conor@kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Mehdi Djait <mehdi.djait@bootlin.com>, mchehab@kernel.org,
+	heiko@sntech.de, hverkuil-cisco@xs4all.nl,
+	krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+	conor+dt@kernel.org, linux-media@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	thomas.petazzoni@bootlin.com, alexandre.belloni@bootlin.com,
+	maxime.chevallier@bootlin.com, michael.riesch@wolfvision.net
+Subject: Re: [PATCH v10 1/3] media: dt-bindings: media: add bindings for
+ Rockchip CIF
+Message-ID: <ZVJUsDb1mPVtcjdX@aptenodytes>
+References: <cover.1699460637.git.mehdi.djait@bootlin.com>
+ <037bcabf97294d37b271537e4b11fb88cf9bb6f6.1699460637.git.mehdi.djait@bootlin.com>
+ <20231109-closable-superglue-5e7f39739cf1@spud>
+ <ZU0avuRRaITV4jws@aptenodytes>
+ <e5b1f0dd-0aab-4ce5-82ba-879a4d736e7e@linaro.org>
+ <ZU0f33clFwlsTw16@aptenodytes>
+ <20231110-appetizer-fame-2152806c7442@roley>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="SBtJWaByrnKsba6Z"
 Content-Disposition: inline
-In-Reply-To: <uk3jwwpwthl7es6gdfkremjf4wil5w4b2kd6amajmeigywa55f@qxsz33z5t6q6>
+In-Reply-To: <20231110-appetizer-fame-2152806c7442@roley>
+X-GND-Sasl: paul.kocialkowski@bootlin.com
 
-Hi Jacopo,
 
-On Mon, Nov 13, 2023 at 10:19:32AM +0100, Jacopo Mondi wrote:
+--SBtJWaByrnKsba6Z
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-...
+Hi Conor,
 
-> > > +	bool vbin;
-> > > +	bool hbin;
-> >
-> > I recall bool is 32 bits on arm. Is it 64 bits on arm64? Just a note, I
-> > don't have a great suggestion here. :-)
-> >
-> > So only binning up to 2x2 is supported?
-> >
-> 
-> yes, further downscaling is obtained by skipping.
-> 
-> The 0x3820 register has BIT(1) "vbin_vc" than enables binning, so the
-> binning factor doesn't seem to be configurable. Of course there might
-> be other bits/registers to control this, but I'm not aware of those
+On Fri 10 Nov 23, 18:23, Conor Dooley wrote:
+> On Thu, Nov 09, 2023 at 07:07:27PM +0100, Paul Kocialkowski wrote:
+> > On Thu 09 Nov 23, 18:53, Krzysztof Kozlowski wrote:
+> > > On 09/11/2023 18:45, Paul Kocialkowski wrote:
+> > > > On Thu 09 Nov 23, 17:24, Conor Dooley wrote:
+> > > >> On Wed, Nov 08, 2023 at 05:38:56PM +0100, Mehdi Djait wrote:
+> > > >>> Add a documentation for the Rockchip Camera Interface binding.
+> > > >>>
+> > > >>> the name of the file rk3066 is the first Rockchip SoC generation =
+that uses cif
+> > > >>> instead of the px30 which is just one of the many iterations of t=
+he unit.
+> > > >>
+> > > >> I think this is becoming ridiculous. You've now removed the compat=
+ible
+> > > >> for the rk3066 but kept it in the filename. I don't understand the
+> > > >> hangup about naming the file after the px30-vip, but naming it aft=
+er
+> > > >> something that is not documented here at all makes no sense to me.
+> > > >> Either document the rk3066 properly, or remove all mention of it I=
+MO.
+> > > >=20
+> > > > I think the opposite is ridiculous. We have spent some time investi=
+gating the
+> > > > history of this unit, to find out that RK3066 is the first occurenc=
+e where
+> > > > it exists. Since we want the binding to cover all generations of th=
+e same unit
+> > > > and give it a name that reflects this, rk3066 is the natural choice=
+ that comes
+> > > > to mind. As far as I understand, this is the normal thing to do to =
+name
+> > > > bindings: name after the earliest known occurence of the unit.
+> > > >=20
+> > > > What is the rationale behind naming the file after a generation of =
+the unit
+> > > > that happens to be the one introducing the binding? This is neither=
+ the first
+> > > > nor the last one to include this unit. The binding will be updated =
+later to
+> > > > cover other generations. Do we want to rename the file each time an=
+ a generation
+> > > > earlier than px30 is introduced? That sounds quite ridiculous too.
+> > > >=20
+> > > > We've done the research work to give it the most relevant name here.
+> > > > I'd expect some strong arguments not to use it. Can you ellaborate?
+> > >=20
+> > > If you do not have rk3066 documented here, it might be added to entir=
+ely
+> > > different file (for whatever reasons, including that binding would be
+> > > quite different than px30). Thus you would have rk3066 in
+> > > rockchip,rk3066-cif-added-later.yaml and px30 in rockchip,rk3066-cif.=
+yaml
+> >=20
+> > As far as I could see we generally manage to include support for differ=
+ent
+> > hardware setups in the same binding document using conditionals on the
+> > compatible, so this feels a bit far-fetched.
+> >=20
+> > Of course you're the maintainer and have significantly more experience =
+here
+> > so there might be a lot that I'm not seeing, but I'm not very convinced=
+ by this
+> > reasoning to be honest.
+> >=20
+> > > Just use the filename matching the compatible. That's what we always
+> > > ask. In every review.
+> >=20
+> > Yeah and we very often end up with naming that is less than optimal (to=
+ stay
+> > polite). I'm generally quite appalled by the overall lack of interest t=
+hat
+> > naming gets, as if it was something secondary. Naming is one of the most
+> > important and difficult things in our field of work and it needs to be
+> > considered with care.
+> >=20
+> > This is not just a problem with device-tree, it's a kernel-wide issue t=
+hat
+> > nobody seems to be interested in addressing. I'm quite unhappy to see t=
+hat when
+> > time is spent trying to improve the situation on one particular instanc=
+e, we are
+> > shown the door because it doesn't match what is generally done (and oft=
+en done
+> > wrong).
+> >=20
+> > This is definitely a rant. I really want to express this issue loud and=
+ clear
+> > and encourage everyone to consider it for what it is.
+>=20
+> Look chief, I do understand your frustration here, with the seemingly
+> arbitrary naming etc. I'm apologise if using the word "ridiculous" earlier
+> pissed you off.
 
-Ack.
+Sorry if my reply was a bit harsh too, it was of course nothing personal but
+I really felt like this issue was not being considered seriously.
 
-> > > +static int ov64a40_start_streaming(struct ov64a40 *ov64a40,
-> > > +				   struct v4l2_subdev_state *state)
-> > > +{
-> > > +	const struct ov64a40_reglist *reglist = &ov64a40->mode->reglist;
-> > > +	unsigned long delay;
-> > > +	int ret;
-> > > +
-> > > +	ret = pm_runtime_resume_and_get(ov64a40->dev);
-> >
-> > You seem to be using autosuspend, but you still do not try to avoid writes
-> > of presumably the same register values if the sensor was powered on. The
-> > register writes usually take the most of the time there.
-> 
-> I'm not sure I get this comment. Are you afraid of multiple calls to
-> "start_streaming" being made ? Isn't it responsibility of the bridge
-> driver to handle this correctly ?
+> I'm sure you can similarly understand why we don't want
+> to accept either having a compatible for the rk3066-cif in the file,
+> when you are not yet sure of the correct constraints, or given your
+> interest in naming,
 
-It is.
+Sure I understand that we don't want to introduce a compatible for which we
+don't have a clear idea of the resources/hardware constraints. I fully agree
+that there shouldn't be a fallback on a rk3066-cif for the px30.
 
-What I'm saying is that you're re-writing a lot of unchanged sensor
-configuration below even if the sensor has not been powered off in the
-meantime.
+> why calling it after something that it does not even
+> document is misleading.
 
-> 
-> One thing for sure, I should grab a few controls (flips, link_freq)
-> avoid them being written to HW while the sensor is streaming.
-> 
-> >
-> > pm_runtime_get_sync() returns 1 if the sensor was already in active state.
-> >
-> > I'm about to send a patchset related to this actually, I can cc you...
-> >
-> > > +	if (ret < 0)
-> > > +		return ret;
-> > > +
-> > > +	ret = cci_multi_reg_write(ov64a40->cci, ov64a40_init,
-> > > +				  ARRAY_SIZE(ov64a40_init), NULL);
-> > > +	if (ret)
-> > > +		goto error_power_off;
-> > > +
-> > > +	ret = cci_multi_reg_write(ov64a40->cci, reglist->regvals,
-> > > +				  reglist->num_regs, NULL);
-> > > +	if (ret)
-> > > +		goto error_power_off;
-> > > +
-> > > +	ret = ov64a40_program_geometry(ov64a40);
-> > > +	if (ret)
-> > > +		goto error_power_off;
-> > > +
-> > > +	ret = ov64a40_program_subsampling(ov64a40);
-> > > +	if (ret)
-> > > +		goto error_power_off;
-> > > +
-> > > +	ret =  __v4l2_ctrl_handler_setup(&ov64a40->ctrl_handler);
-> > > +	if (ret)
-> > > +		goto error_power_off;
-> > > +
-> > > +	ret = cci_write(ov64a40->cci, OV64A40_REG_SMIA,
-> > > +			OV64A40_REG_SMIA_STREAMING, NULL);
-> > > +	if (ret)
-> > > +		goto error_power_off;
-> > > +
-> > > +	/* delay: max(4096 xclk pulses, 150usec) + exposure time */
-> > > +	delay = DIV_ROUND_UP(4096, OV64A40_XCLK_FREQ / 1000 / 1000);
-> > > +	delay = max(delay, 150ul);
-> > > +	delay += DIV_ROUND_UP(ov64a40->mode->ppl * ov64a40->exposure->cur.val,
-> > > +			      OV64A40_PIXEL_RATE / 1000 / 1000);
-> > > +	fsleep(delay);
-> > > +
-> > > +	return 0;
-> > > +
-> > > +error_power_off:
-> > > +	pm_runtime_mark_last_busy(ov64a40->dev);
-> > > +	pm_runtime_put_autosuspend(ov64a40->dev);
-> > > +
-> > > +	return ret;
-> > > +}
+My opinion is that the two things are separate and that as long as we know
+it's the same unit, it should be fine to name the file after the first
+generation even if it is not yet described in the binding. I find that it's=
+ a
+bit unusual, yes, but I wouldn't go as far as calling it confusing.
 
-...
+The description text can clearly mention that the first occurrence of the u=
+nit
+is in the RK3066 and thus it will be clear why the file is named after it.
+Also people looking for binding documentation for the px30 vip will still e=
+asily
+find it with the usual git grep. So I don't really see any serious downside.
 
-> > > +static int ov64a40_set_ctrl(struct v4l2_ctrl *ctrl)
-> > > +{
-> > > +	struct ov64a40 *ov64a40 = container_of(ctrl->handler, struct ov64a40,
-> > > +					       ctrl_handler);
-> > > +	int ret;
-> > > +
-> > > +	if (ctrl->id == V4L2_CID_VBLANK) {
-> > > +		int exp_max = ov64a40->mode->height + ctrl->val
-> > > +			    - OV64A40_EXPOSURE_MARGIN;
-> > > +		int exp_val = min(ov64a40->exposure->cur.val, exp_max);
-> > > +
-> > > +		__v4l2_ctrl_modify_range(ov64a40->exposure,
-> > > +					 ov64a40->exposure->minimum,
-> > > +					 exp_max, 1, exp_val);
-> > > +	}
-> > > +
-> > > +	if (pm_runtime_get_if_in_use(ov64a40->dev) == 0)
-> >
-> > The function you should use here is actually called
-> > pm_runtime_get_if_active(), but this change would better be postponed after
-> > my patchset.
-> 
->   `int pm_runtime_get_if_in_use(struct device *dev);`
->     - return -EINVAL if 'power.disable_depth' is nonzero; otherwise, if the
->       runtime PM status is RPM_ACTIVE and the runtime PM usage counter is
->       nonzero, increment the counter and return 1; otherwise return 0 without
->       changing the counter
-> 
->   `int pm_runtime_get_if_active(struct device *dev, bool ign_usage_count);`
->     - return -EINVAL if 'power.disable_depth' is nonzero; otherwise, if the
->       runtime PM status is RPM_ACTIVE, and either ign_usage_count is true
->       or the device's usage_count is non-zero, increment the counter and
->       return 1; otherwise return 0 without changing the counter
-> 
-> 
-> The only difference I see here is the additional 'ign_usage_count'
-> which allows to forcefully resume the device by ignoring the usage
-> counter ? Why would you forcefully resume the device here ? Don't we
-> actually want the opposite and use this check to only access the HW if
-> the device is powered already ?
-> 
+> Ultimately, I don't care what the file ends up being called when there
+> are multiple devices documented in it. I'd ack a patch renaming to the
+> =C5=93riginal incarnation of the IP when the documentation for that IP is
+> added without a second thought.
 
-It ignores the usage_count before the call while incrementing it if the
-device was in active state. Although this change isn't useful if you
-continue to re-write the configuration to sensor's registers in streamon
-nevertheless.
+That would be agreeable to me if my proposal still ends up feeling unreason=
+able
+to you. But I might very well take you at your word since I ended up purcha=
+sing
+a RK3066 board in a moment of weakness last week.
 
-> >
-> > > +		return 0;
-> > > +
-> > > +	switch (ctrl->id) {
-> > > +	case V4L2_CID_EXPOSURE:
-> > > +		ret = cci_write(ov64a40->cci, OV64A40_REG_MEC_LONG_EXPO,
-> > > +				ctrl->val, NULL);
-> > > +		break;
-> > > +	case V4L2_CID_ANALOGUE_GAIN:
-> > > +		ret = ov64a40_set_anagain(ctrl);
-> > > +		break;
-> > > +	case V4L2_CID_VBLANK:
-> > > +		ret = cci_write(ov64a40->cci, OV64A40_REG_TIMINGS_VTS,
-> > > +				ctrl->val + ov64a40->mode->height, NULL);
-> > > +		break;
-> > > +	case V4L2_CID_VFLIP:
-> > > +		ret = cci_update_bits(ov64a40->cci, OV64A40_REG_TIMING_CTRL_20,
-> > > +				      OV64A40_TIMING_CTRL_20_VFLIP,
-> > > +				      ctrl->val << 2,
-> > > +				      NULL);
-> > > +		break;
-> > > +	case V4L2_CID_HFLIP:
-> > > +		ret = cci_update_bits(ov64a40->cci, OV64A40_REG_TIMING_CTRL_21,
-> > > +				      OV64A40_TIMING_CTRL_21_HFLIP,
-> > > +				      ctrl->val << 2,
-> > > +				      NULL);
-> > > +		break;
-> > > +	default:
-> > > +		dev_err(ov64a40->dev, "Unhandled control: %#x\n", ctrl->id);
-> > > +		ret = -EINVAL;
-> > > +		break;
-> > > +	}
-> > > +
-> > > +	pm_runtime_put(ov64a40->dev);
-> > > +
-> > > +	return ret;
-> > > +}
+Cheers,
 
-...
+Paul
 
-> > > +	xclk_freq = clk_get_rate(ov64a40->xclk);
-> > > +	if (xclk_freq != OV64A40_XCLK_FREQ) {
-> > > +		dev_err(&client->dev, "Unsupported xclk frequency %u\n",
-> > > +			xclk_freq);
-> > > +		return -EINVAL;
-> >
-> > Feel free to handle this not as an error. Up to you.
-> >
-> 
-> Well, the driver won't work correctly if the clock is not running
-> at the expected frequency..
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
 
-There is some number of systems where you can't get this exact frequency
-but typically something fairly close. The above check prevents the driver
-from working in that case.
+--SBtJWaByrnKsba6Z
+Content-Type: application/pgp-signature; name="signature.asc"
 
-As I wrote, this is up to you.
+-----BEGIN PGP SIGNATURE-----
 
--- 
-Regards,
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmVSVLAACgkQ3cLmz3+f
+v9G/yggAmq6aXtUBwrWlzJDVvbuhGjLAIE9UCOE/w3e69PC9J0HKH5rVwmys9TqP
+TfuSaaaQK0VThsU2t9zcnVgvnbn2E37hcZZ7KiM1mfJV3av173lsQWnP8EIEzMSJ
+Kktz1VqQDZIodjMCLrG5BE6InNU81p+UnnaMPSsKn6ezPujJgHDFwODai0v3dh69
+BnNrSVqL045Eb60aRtStcQ1AVEazFuwgvXQPV+zdo6f5JvYB4G4PvxRzTFJqCZDU
+Zgp8MrFAGYyq/tSDh69f0Ghm9kaxMRVpUe0UNzoVuNrM6gHdWjeb9yxevPDoIigH
+UxmJkMvvdE3UMBXQfUg1KZkzMNaBbQ==
+=J+G/
+-----END PGP SIGNATURE-----
 
-Sakari Ailus
+--SBtJWaByrnKsba6Z--
