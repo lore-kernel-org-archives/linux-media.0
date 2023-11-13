@@ -1,24 +1,24 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1682C3D963;
-	Mon, 13 Nov 2023 23:04:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BF103D963;
+	Mon, 13 Nov 2023 23:04:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UtHllQV2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A36E1C433B7;
-	Mon, 13 Nov 2023 23:04:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LbmSPI1T"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2347CC433C9;
+	Mon, 13 Nov 2023 23:04:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699916665;
-	bh=g9kp4dOAahcHHLMDbHOEBKbPO3MW2nPc6tdcUYzD1BI=;
+	s=k20201202; t=1699916667;
+	bh=zgSX9vFpMcVmLhIltMi1/nDB0fG5nWoN7nvBlrOL3Mk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=UtHllQV2DEGG4gjGNxlYk2yAdeOzMS6DMXjzETa1STBlZqnbux9m9yudu3ah2pYrt
-	 OJ1AFnPM0qGUjMYyDKrvpgrH7WLX8/wKWhhe+BVxN2HXJR5tqPwSmGqR7c9sFUW/OJ
-	 lhdjjr818o7ZOb/KG4mQ6pjGRa963YO2Lbc4rgbThBZ2HA9/MWj1hHT7seM8tyxUFk
-	 E+SbPnVy9049Q/SnxABVkRMnmZc1BedLE/P23kbvH6qOX0FBpeO3utCnzG/y+gkKL1
-	 Hy4zo9qJRvikvoUs5cqXun7v3D/R1/QHy3oF0zMLkzB6PaVt6UhpP/LtvzHPRHmuWE
-	 4KJOBr+ummFwg==
+	b=LbmSPI1TV4hBxHa2KF+uRqVs2yo10cDmJCzCLje51pQnkTzElZIZM8haLdDzME93C
+	 WWmwflRqfGZdXRNegu4QZw5f74WKJ6ac88cmJbRpQzKVg8NLlZmNB6OqpAEHxrCSrk
+	 /jPZwH8aNDSq9xs9xofZslzy25Q961wqKxtSd88rxoJ2WShNV0Z2/wyyn29/dWmW7V
+	 HbyuthL6pxPzN3JIuNewxKffGVTS6MeH2KLEWrOa2i0q0W5RSj06t46PJTj31Bh+iX
+	 lrwnoY/DMM9lysA6HCODWewyL2pXO/FIv8opY44rmG5ow8+4gjaq1pvQoSfft+X+x9
+	 UMpUFpFUXweJQ==
 Received: by mercury (Postfix, from userid 1000)
-	id 2DF41106323E; Tue, 14 Nov 2023 00:04:22 +0100 (CET)
+	id 335341063240; Tue, 14 Nov 2023 00:04:22 +0100 (CET)
 From: Sebastian Reichel <sre@kernel.org>
 To: Sebastian Reichel <sre@kernel.org>,
 	Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -31,9 +31,9 @@ Cc: Alain Volmat <alain.volmat@foss.st.com>,
 	linux-media@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 3/6] media: MAINTAINERS: Add GalaxyCore in camera sensor section
-Date: Mon, 13 Nov 2023 23:57:22 +0100
-Message-ID: <20231113230421.226808-4-sre@kernel.org>
+Subject: [PATCH v4 5/6] media: v4l: async: Drop useless list move operation
+Date: Mon, 13 Nov 2023 23:57:24 +0100
+Message-ID: <20231113230421.226808-6-sre@kernel.org>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231113230421.226808-1-sre@kernel.org>
 References: <20231113230421.226808-1-sre@kernel.org>
@@ -45,26 +45,30 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-"gc" prefixed i2c media drivers are most likely GalaxyCore camera
-sensor drivers, so add it to the list.
+v4l2_async_unbind_subdev_one(), which is called in the line
+following the list_move() operation contains list_move_tail()
+for the same entry and overrides anything list_move() did.
+Thus it can be removed.
 
 Signed-off-by: Sebastian Reichel <sre@kernel.org>
 ---
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/v4l2-core/v4l2-async.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 97f51d5ec1cf..c41fcf10e356 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -22792,6 +22792,7 @@ S:	Maintained
- F:	Documentation/driver-api/media/camera-sensor.rst
- F:	Documentation/driver-api/media/tx-rx.rst
- F:	drivers/media/i2c/ar*
-+F:	drivers/media/i2c/gc*
- F:	drivers/media/i2c/hi*
- F:	drivers/media/i2c/imx*
- F:	drivers/media/i2c/mt*
+diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
+index 8cfd593d293d..3ec323bd528b 100644
+--- a/drivers/media/v4l2-core/v4l2-async.c
++++ b/drivers/media/v4l2-core/v4l2-async.c
+@@ -876,9 +876,6 @@ void v4l2_async_unregister_subdev(struct v4l2_subdev *sd)
+ 	if (sd->asc_list.next) {
+ 		list_for_each_entry_safe(asc, asc_tmp, &sd->asc_list,
+ 					 asc_subdev_entry) {
+-			list_move(&asc->asc_entry,
+-				  &asc->notifier->waiting_list);
+-
+ 			v4l2_async_unbind_subdev_one(asc->notifier, asc);
+ 		}
+ 	}
 -- 
 2.42.0
 
