@@ -1,24 +1,24 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C0AC3C699;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 677603B78F;
 	Mon, 13 Nov 2023 23:04:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c56JiRjM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94A34C433C9;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LQsGB/JE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96DBBC433C7;
 	Mon, 13 Nov 2023 23:04:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1699916664;
-	bh=bxaBSP1U/utusvLGYRzx2FzDNa8xlVt597WQS3AhgYs=;
-	h=From:To:Cc:Subject:Date:From;
-	b=c56JiRjMiRmMiI3D1N8Lumkcgi1wLZc4rCM90D+ipPDWRI0dFbXDCVzUr0ZZGi1Iv
-	 U1EMPwaF5Rzdg90HV/V4IQhZWuguKDxtEy36usOelEYFwV6Jd+jKzSFJHEPDrEu8Di
-	 C0nGHATp276MGHah8y+/wH13cLZ33mBae3z6OYB/db3kjGrMluJk7pXakOrWecCmrc
-	 z1z6KUfto9vaRlxL4+cchxaZUyC7EDbocIKc58LzwHL+UY/TxV911UHAvP0n4rnYNB
-	 naB61vLLojdAe6xo+ZIq85/HHHgvyDzB272ApQqETClyaBTv92yKDM0RiMT0jmt82k
-	 54b5WRdPoiY8w==
+	bh=PtRFUSAAq48UomziqLaEJ6jUBMz1qgN3VFvFSPG959c=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=LQsGB/JEWouZgDVrFnuKdeYzo1Gx2/PmNRF4qV41wqSwUXoEqKa04vRPz5u5b+oUu
+	 Zu++Z4jlLOzlUdgIX7N5qLB+3pQkXQFoPp7H5EHYo28gGrETC2w8aBtxe5sxEwaZ4J
+	 KZVYaGkKR4jn4kdmtJuwv9odSCaqn6pPlTX4HgAOBUV2C+jU6+gim+3q5PCkwBxW95
+	 HcI/j1tBTF0XxkQ/V102K4T66l9GHs3Z76i1hcgVyAJVnR7LGM1gqsqOc59LF2AEco
+	 jaUqkNsdOENTk140215smcZmxWt6Sz170Jl2RBeuPC8+7pMI9MW60qEKkd+ka9kxSE
+	 A4oMO+B0B7w0Q==
 Received: by mercury (Postfix, from userid 1000)
-	id 25E1D1060A25; Tue, 14 Nov 2023 00:04:22 +0100 (CET)
+	id 30730106323F; Tue, 14 Nov 2023 00:04:22 +0100 (CET)
 From: Sebastian Reichel <sre@kernel.org>
 To: Sebastian Reichel <sre@kernel.org>,
 	Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -31,10 +31,12 @@ Cc: Alain Volmat <alain.volmat@foss.st.com>,
 	linux-media@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 0/6] GC0308 Camera Sensor
-Date: Mon, 13 Nov 2023 23:57:19 +0100
-Message-ID: <20231113230421.226808-1-sre@kernel.org>
+Subject: [PATCH v4 4/6] media: v4l: async: Fix duplicated list deletion
+Date: Mon, 13 Nov 2023 23:57:23 +0100
+Message-ID: <20231113230421.226808-5-sre@kernel.org>
 X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20231113230421.226808-1-sre@kernel.org>
+References: <20231113230421.226808-1-sre@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -43,105 +45,33 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+The list deletion call dropped here is already called from the
+helper function in the line before. Having a second list_del()
+call results in either a warning (with CONFIG_DEBUG_LIST=y):
 
-I did the following tests on an i.MX6ULL based system [0]:
+list_del corruption, c46c8198->next is LIST_POISON1 (00000100)
 
- * v4l2-compliance -u /dev/v4l-subdev1
-   - v4l2-compliance 1.24.1, 32 bits, 32-bit time_t
-     (from Debian testing)
-   - Total for device /dev/v4l-subdev1: 44, Succeeded: 44
- * Using gstreamer + v4l2-ctl
-   - Tried 640x480, 320x240, 160x120 YUYV8_2X8 formats
-   - Tested effect of all exposed user controls
- * checkpatch does not report any driver issues
- * dt_binding_check does not report anything
- * rebinding driver works
+If CONFIG_DEBUG_LIST is disabled the operation results in a
+kernel error due to NULL pointer dereference.
 
-[0] https://embedded-recipes.org/2023/schedule/running-foss-thermal-camera/
+Fixes: 28a1295795d8 ("media: v4l: async: Allow multiple connections between entities")
+Signed-off-by: Sebastian Reichel <sre@kernel.org>
+---
+ drivers/media/v4l2-core/v4l2-async.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Changes since PATCHv3:
- * https://lore.kernel.org/all/20231027011417.2174658-1-sre@kernel.org/
- * Rebased to v6.7-rc1
- * Replace gc0308_is_valid_format() with gc0308_get_format_idx(),
-   which can be reused in gc0308_set_format().
- * Remove the runtime PM get call in remove function
- * Move the runtime PM get call before the subdev register call in probe
- * Drop message about unsupported format code
- * Add Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
- * Merged binding patch with the one from Alain Volmat and add
-   Acked-by: Rob Herring <robh@kernel.org> and assign authorship
-   to him, since his patch arrived first on the ML
- * Added two patches to fix an issue with v4l2_async_unregister_subdev()
-   list handling
-
-Changes since PATCHv2:
- * https://lore.kernel.org/all/20231024010355.1877523-1-sre@kernel.org/
- * Simplify Kconfig dependencies
- * Do not store code/resolution; which is available from subdev state
- * Store register values for mode settings to avoid second lookup in
-   s_stream
- * Reduce power_on sleep times
- * remove debug dev_err() print, that I accidently added in v2
- * add missing format check in gc0308_enum_frame_size()
- * do not PM resume in gc0308_s_ctrl()
- * enable and use runtime PM autosuspend
- * add .init_cfg() PAD op
- * use CCI helper instead of raw regmap
- * cluster both flip controls
-   (that's not just a performance optimization, but fixes an issue,
-   that register update is slow, so fast sequential setting of VFLIP/HFLIP
-   override each other without this)
- * simplify gc0308_set_power_line_freq
- * free control handler on probe error
- * use first format by default
- * expose V4L2_CID_HBLANK, V4L2_CID_VBLANK, V4L2_CID_PIXEL_RATE
- * remove incorrect support for framerate and instead add a comment
-
-Changes since PATCHv1:
- * https://lore.kernel.org/all/20231023002547.1754190-1-sre@kernel.org/
- * Update binding: i2c0 -> i2c
- * Update binding: make GC0309 use GC0308 as fallback compatible
- * Add regulator handling in power_on/power_off
- * Fix alignment of regmap_multi_reg_write arguments
- * Fix useless extra return
- * Do not check for pad in gc0308_enum_frame_size()
- * Drop get_mbus_config implementation
- * Use V4L2_CID_AUTO_EXPOSURE_BIAS instead of V4L2_CID_EXPOSURE
- * Drop gc0308_get_format in favour of v4l2_subdev_get_fmt
- * Replace open-coded v4l2_find_nearest_size() logic
- * check clock rate instead of setting it
- * use fwnode_graph_get_endpoint_by_id()
- * power off device when probe errors out after power on
- * replace mutex with sub-device state
- * add Galaxycore to generic camera sensors section in MAINTAINERS
- * add GC0308 entry in MAINTAINERS
-
-Greetings,
-
--- Sebastian
-
-Alain Volmat (1):
-  dt-bindings: vendor-prefixes: add GalaxyCore
-
-Sebastian Reichel (5):
-  media: dt-bindings: gc0308: add binding
-  media: MAINTAINERS: Add GalaxyCore in camera sensor section
-  media: v4l: async: Fix duplicated list deletion
-  media: v4l: async: Drop useless list move operation
-  media: i2c: gc0308: new driver
-
- .../bindings/media/i2c/galaxycore,gc0308.yaml |  108 ++
- .../devicetree/bindings/vendor-prefixes.yaml  |    2 +
- MAINTAINERS                                   |    8 +
- drivers/media/i2c/Kconfig                     |   10 +
- drivers/media/i2c/Makefile                    |    1 +
- drivers/media/i2c/gc0308.c                    | 1436 +++++++++++++++++
- drivers/media/v4l2-core/v4l2-async.c          |    4 -
- 7 files changed, 1565 insertions(+), 4 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/galaxycore,gc0308.yaml
- create mode 100644 drivers/media/i2c/gc0308.c
-
+diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
+index 091e8cf4114b..8cfd593d293d 100644
+--- a/drivers/media/v4l2-core/v4l2-async.c
++++ b/drivers/media/v4l2-core/v4l2-async.c
+@@ -880,7 +880,6 @@ void v4l2_async_unregister_subdev(struct v4l2_subdev *sd)
+ 				  &asc->notifier->waiting_list);
+ 
+ 			v4l2_async_unbind_subdev_one(asc->notifier, asc);
+-			list_del(&asc->asc_subdev_entry);
+ 		}
+ 	}
+ 
 -- 
 2.42.0
 
