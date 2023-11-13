@@ -1,117 +1,98 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 005858BED;
-	Mon, 13 Nov 2023 07:08:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1C998F66
+	for <linux-media@vger.kernel.org>; Mon, 13 Nov 2023 07:08:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="ixpCrNEY"
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00D6C7;
-	Sun, 12 Nov 2023 23:08:41 -0800 (PST)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 3ACJWiUj021403;
-	Mon, 13 Nov 2023 08:08:26 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding:content-type; s=
-	selector1; bh=fE1n5RTIzcUozo7IYZhXqyrLMqCuRn0oukoD09IgbtQ=; b=ix
-	pCrNEYmcaXxERJtEXKTQv9X5Zlbb9otuZgwND63hmqV0mQ5Dr5l/kQqh6nWeBOPd
-	7L2/eFf5FbQ197QcS75N969fcTxANnn7iao1LNMziHEZxZYz5GaFGC8KQJajJlHG
-	HlzR8kADnDv94u6+06oqLaUanIt3IJuzCygugl58lWV2gWRndfkaXHiIWNQSpp3w
-	uTjXSyAcIotXumFshvfzy8k2B4ftVpDAn/5SBAYoOthKm20nOxu523YN7Kw8y/yB
-	g4ivzJXDiNCNuPl9NL2PXYnQfCtAlVTywlpqur4sCroYD/MhWdEiLLSnzMlcJfvy
-	SfNmPhrIAY6+7yIePoXw==
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3u9ywkwvf7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 13 Nov 2023 08:08:26 +0100 (CET)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A522A10005B;
-	Mon, 13 Nov 2023 08:08:25 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3E93B2092E9;
-	Mon, 13 Nov 2023 08:08:25 +0100 (CET)
-Received: from localhost (10.129.178.213) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 13 Nov
- 2023 08:08:25 +0100
-From: Alain Volmat <alain.volmat@foss.st.com>
-To: Hugues Fruchet <hugues.fruchet@foss.st.com>,
-        Alain Volmat
-	<alain.volmat@foss.st.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob
- Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue
-	<alexandre.torgue@foss.st.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Philipp
- Zabel <p.zabel@pengutronix.de>
-CC: Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart
-	<laurent.pinchart@ideasonboard.com>,
-        Dan Scally
-	<dan.scally@ideasonboard.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v6 4/5] ARM: dts: stm32: add dcmipp support to stm32mp135
-Date: Mon, 13 Nov 2023 08:05:23 +0100
-Message-ID: <20231113070532.71509-5-alain.volmat@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231113070532.71509-1-alain.volmat@foss.st.com>
-References: <20231113070532.71509-1-alain.volmat@foss.st.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RQX7wOTa"
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2BD10F5
+	for <linux-media@vger.kernel.org>; Sun, 12 Nov 2023 23:08:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1699859329; x=1731395329;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=R51STgbU6tBKwb5KSQxNWitCKBNdFqsBFTwqV4Ess3k=;
+  b=RQX7wOTa7Qg4VohjctEkLIoKoBENjQnj1HXxGpi7svRGKkr1qqwnw02B
+   DZKQTQoqWHg8owZk/qTw4i8L+FG2J+cII2QhRLVeDlVnPJU+xVlFHw++P
+   YGts7eQDT3BXX4Sa1oMGt7tTF5bnz4bTXnjHgIMJz6HcD+z7pb4AltdUL
+   Ng59jYaXK4KRBwXg1IuCBQAa6aNpa5sP0McwxYHxss/jdTwOS+XAeiXp6
+   yUaKrJgilQDA1Q3cDiBmZTX4uON7rjaryB19KSXHt5wthsXV5NZvsmimk
+   IfoyyRfZUOjWNCabS9ev2FWSUjvQlukChsIbrlgD3Q6sELy+PMumdrjsX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10892"; a="389254280"
+X-IronPort-AV: E=Sophos;i="6.03,298,1694761200"; 
+   d="scan'208";a="389254280"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2023 23:08:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10892"; a="834642424"
+X-IronPort-AV: E=Sophos;i="6.03,298,1694761200"; 
+   d="scan'208";a="834642424"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2023 23:08:48 -0800
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id 57CCF11F7D1;
+	Mon, 13 Nov 2023 09:08:45 +0200 (EET)
+Date: Mon, 13 Nov 2023 07:08:45 +0000
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: linux-media@vger.kernel.org, tomi.valkeinen@ideasonboard.com
+Subject: Re: [PATCH 1/1] media: v4l: subdev: Always compile sub-device state
+ access functions
+Message-ID: <ZVHLfcj89xOL9vCT@kekkonen.localdomain>
+References: <20231110101049.890577-1-sakari.ailus@linux.intel.com>
+ <20231110153940.GA7466@pendragon.ideasonboard.com>
+ <ZU6diJrv-iKvcE9B@kekkonen.localdomain>
+ <20231112012246.GA18216@pendragon.ideasonboard.com>
+ <ZVE2YRHqIP1ethLf@kekkonen.localdomain>
+ <20231113012315.GB18216@pendragon.ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.129.178.213]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-12_24,2023-11-09_01,2023-05-22_02
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231113012315.GB18216@pendragon.ideasonboard.com>
 
-From: Hugues Fruchet <hugues.fruchet@foss.st.com>
+On Mon, Nov 13, 2023 at 03:23:15AM +0200, Laurent Pinchart wrote:
+> On Sun, Nov 12, 2023 at 08:32:33PM +0000, Sakari Ailus wrote:
+> > On Sun, Nov 12, 2023 at 03:22:46AM +0200, Laurent Pinchart wrote:
+> > > On Fri, Nov 10, 2023 at 09:15:52PM +0000, Sakari Ailus wrote:
+> > > > On Fri, Nov 10, 2023 at 05:39:40PM +0200, Laurent Pinchart wrote:
+> > > > > On Fri, Nov 10, 2023 at 12:10:49PM +0200, Sakari Ailus wrote:
+> > > > > > Compile sub-device state information access functions
+> > > > > > v4l2_subdev_state_get_{format,crop,compose} unconditionally as they are
+> > > > > > now also used by plain V4L2 drivers.
+> > > > > 
+> > > > > What do you mean by "plain" V4L2 drivers here ?
+> > > > 
+> > > > Those that do not need MC: if you now disable MC in kernel configuration,
+> > > > these functions won't be available.
+> > > 
+> > > This covers subdev drivers (such as sensor drivers) too, not just host
+> > > drivers ? If so, shouldn't we also drop the dependency on
+> > > VIDEO_V4L2_SUBDEV_API from drivers/media/i2c/Kconfig ?
+> > 
+> > Good question.
+> > 
+> > There are still other functions that a number of drivers depend on which
+> > are only available when either MC or sub-device API are enabled.
+> > 
+> > Given that almost all receiver drivers today use MC, I don't think there
+> > would be much to be gained from enabling building e.g. sensor drivers
+> > without sub-device UAPI.
+> 
+> I would like to refocus VIDEO_V4L2_SUBDEV_API to cover the UAPI only.
+> Trying to be too clever with the Kconfig symbol doesn't help.
 
-Add dcmipp support to STM32MP135.
+I guess this has been the intention, with the inclusion of other functions
+and definitions that are only needed for sub-device UAPI. This poses some
+issues for drivers that can work in both cases but there aren't many of
+them. I'm fine with removing the latter.
 
-Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
-Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
- arch/arm/boot/dts/st/stm32mp135.dtsi | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/arch/arm/boot/dts/st/stm32mp135.dtsi b/arch/arm/boot/dts/st/stm32mp135.dtsi
-index abf2acd37b4e..68d32f9f5314 100644
---- a/arch/arm/boot/dts/st/stm32mp135.dtsi
-+++ b/arch/arm/boot/dts/st/stm32mp135.dtsi
-@@ -8,5 +8,16 @@
- 
- / {
- 	soc {
-+		dcmipp: dcmipp@5a000000 {
-+			compatible = "st,stm32mp13-dcmipp";
-+			reg = <0x5a000000 0x400>;
-+			interrupts = <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>;
-+			resets = <&rcc DCMIPP_R>;
-+			clocks = <&rcc DCMIPP_K>;
-+			status = "disabled";
-+
-+			port {
-+			};
-+		};
- 	};
- };
 -- 
-2.25.1
-
+Sakari Ailus
