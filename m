@@ -1,47 +1,47 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92C1B168A5
-	for <linux-media@vger.kernel.org>; Tue, 14 Nov 2023 09:25:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2EEB168C3
+	for <linux-media@vger.kernel.org>; Tue, 14 Nov 2023 09:25:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S1iVLVLC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NufK8xqD"
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6E4131
-	for <linux-media@vger.kernel.org>; Tue, 14 Nov 2023 01:25:17 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8B1134
+	for <linux-media@vger.kernel.org>; Tue, 14 Nov 2023 01:25:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699953917; x=1731489917;
+  t=1699953918; x=1731489918;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=cmVJ+UbAOe16svc00+rin358rFGDTrkdkKaEtYoodFA=;
-  b=S1iVLVLCwGN+ZKV6Hc1IEkJOcQgF8lwTx4U9/vMyoZZS0DLXHfB/CmBa
-   whybPFUiLuzvbM7WNXxjMdywC34O+3ncNu1UYVxK0Ol0iMuapqkxEZ84x
-   8WUSJpwmd9hX7LRaT1/Z0MY8a4ToL6HiSEQ2i+zFJB5iEt+W/V6ynsnaK
-   7O9jdFt9aB9BMXyy5ZiR+/onjAdYihrO6eCjJo2eCD0L5JHZs5BpA/AUB
-   txR2jDuiZf+/poPaP49dUCOI7iQwzRcdZnpFmmqDni+X/uvq7p1JeFe4J
-   SoNLRVbhGuRKjy1liYxwAU+fRQLzAuX/M3V1z9r4VdvjnQdANzW/9ULLs
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10893"; a="387781658"
+  bh=xycAisPFI+PHwHHMOTHkXIKypDQu2/iXZgctF8Ww9s8=;
+  b=NufK8xqDNzNeyQntBezxvMotfcVEbqRLrx3QDcdbZIXjXx0KHM4MK5Ac
+   /f/7yolA11pgtBC1VmDRns/e0eMBr93YVsP58YQwAOWJqrd9fsJXQO1zD
+   rJ+LoamhV0PF/2QJgCJUxGtpPXT2SnaNdDoUOf1wlJ/DjE/JHbbq66y/l
+   CYPsoxAP3dQHQvTMSqrCLKtzRggn1ubnELra3HZLONqQ/QKZSq0ML5uRy
+   qQiTsOWHkOHgGqX3Om78Je1IMmu7QYZaXkdlwJUmp2B8k90l7X1s+YINQ
+   rfZewYlda+OKL9OwKNFTCBe/glmNQqXQV7rx+dPJIhesqbmH4i6iDVRvs
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10893"; a="387781680"
 X-IronPort-AV: E=Sophos;i="6.03,301,1694761200"; 
-   d="scan'208";a="387781658"
+   d="scan'208";a="387781680"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2023 01:25:16 -0800
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2023 01:25:17 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10893"; a="938015855"
+X-IronPort-AV: E=McAfee;i="6600,9927,10893"; a="938015857"
 X-IronPort-AV: E=Sophos;i="6.03,301,1694761200"; 
-   d="scan'208";a="938015855"
+   d="scan'208";a="938015857"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2023 01:25:15 -0800
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2023 01:25:16 -0800
 Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 0B60311F894;
-	Tue, 14 Nov 2023 11:25:11 +0200 (EET)
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 4C56011F950;
+	Tue, 14 Nov 2023 11:25:13 +0200 (EET)
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
 To: linux-media@vger.kernel.org
 Cc: laurent.pinchart@ideasonboard.com,
 	hdegoede@redhat.com
-Subject: [PATCH v4 1/6] media: v4l: cci: Include linux/bits.h
-Date: Tue, 14 Nov 2023 11:25:05 +0200
-Message-Id: <20231114092510.1443545-2-sakari.ailus@linux.intel.com>
+Subject: [PATCH v4 3/6] media: v4l: cci: Add macros to obtain register width and address
+Date: Tue, 14 Nov 2023 11:25:07 +0200
+Message-Id: <20231114092510.1443545-4-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231114092510.1443545-1-sakari.ailus@linux.intel.com>
 References: <20231114092510.1443545-1-sakari.ailus@linux.intel.com>
@@ -53,27 +53,69 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-linux/bits.h is needed for GENMASK(). Include it.
+Add CCI_REG_WIDTH() macro to obtain register width in bits and similarly,
+CCI_REG_WIDTH_BYTES() to obtain it in bytes.
+
+Also add CCI_REG_ADDR() macro to obtain the address of a register.
+
+Use both macros in v4l2-cci.c, too.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- include/media/v4l2-cci.h | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/v4l2-core/v4l2-cci.c | 8 ++++----
+ include/media/v4l2-cci.h           | 5 +++++
+ 2 files changed, 9 insertions(+), 4 deletions(-)
 
+diff --git a/drivers/media/v4l2-core/v4l2-cci.c b/drivers/media/v4l2-core/v4l2-cci.c
+index bc2dbec019b0..3179160abde3 100644
+--- a/drivers/media/v4l2-core/v4l2-cci.c
++++ b/drivers/media/v4l2-core/v4l2-cci.c
+@@ -25,8 +25,8 @@ int cci_read(struct regmap *map, u32 reg, u64 *val, int *err)
+ 	if (err && *err)
+ 		return *err;
+ 
+-	len = FIELD_GET(CCI_REG_WIDTH_MASK, reg);
+-	reg = FIELD_GET(CCI_REG_ADDR_MASK, reg);
++	len = CCI_REG_WIDTH_BYTES(reg);
++	reg = CCI_REG_ADDR(reg);
+ 
+ 	ret = regmap_bulk_read(map, reg, buf, len);
+ 	if (ret) {
+@@ -75,8 +75,8 @@ int cci_write(struct regmap *map, u32 reg, u64 val, int *err)
+ 	if (err && *err)
+ 		return *err;
+ 
+-	len = FIELD_GET(CCI_REG_WIDTH_MASK, reg);
+-	reg = FIELD_GET(CCI_REG_ADDR_MASK, reg);
++	len = CCI_REG_WIDTH_BYTES(reg);
++	reg = CCI_REG_ADDR(reg);
+ 
+ 	switch (len) {
+ 	case 1:
 diff --git a/include/media/v4l2-cci.h b/include/media/v4l2-cci.h
-index 0f6803e4b17e..f2c2962e936b 100644
+index ee469f03e440..406772a4e32e 100644
 --- a/include/media/v4l2-cci.h
 +++ b/include/media/v4l2-cci.h
 @@ -7,6 +7,7 @@
  #ifndef _V4L2_CCI_H
  #define _V4L2_CCI_H
  
-+#include <linux/bits.h>
++#include <linux/bitfield.h>
+ #include <linux/bits.h>
  #include <linux/types.h>
  
- struct i2c_client;
+@@ -39,6 +40,10 @@ struct cci_reg_sequence {
+ #define CCI_REG_PRIVATE_SHIFT		28U
+ #define CCI_REG_PRIVATE_MASK		GENMASK(31U, CCI_REG_PRIVATE_SHIFT)
+ 
++#define CCI_REG_WIDTH_BYTES(x)		FIELD_GET(CCI_REG_WIDTH_MASK, x)
++#define CCI_REG_WIDTH(x)		(CCI_REG_WIDTH_BYTES(x) << 3)
++#define CCI_REG_ADDR(x)			FIELD_GET(CCI_REG_ADDR_MASK, x)
++
+ #define CCI_REG8(x)			((1 << CCI_REG_WIDTH_SHIFT) | (x))
+ #define CCI_REG16(x)			((2 << CCI_REG_WIDTH_SHIFT) | (x))
+ #define CCI_REG24(x)			((3 << CCI_REG_WIDTH_SHIFT) | (x))
 -- 
 2.39.2
 
