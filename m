@@ -1,80 +1,162 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F25E3D98E;
-	Mon, 13 Nov 2023 23:04:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45CE115AF0
+	for <linux-media@vger.kernel.org>; Tue, 14 Nov 2023 00:31:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mnScn8PS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E7E3C433CD;
-	Mon, 13 Nov 2023 23:04:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699916667;
-	bh=/TpGTUwxaehUdu0Xa2c9g+Ihph9wNk+OMb8HMuH20Hs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mnScn8PSevZ1lI7KkR77gTZSq1qTSaJpD+zZjLYk6dKBz/Y1UKi/+JyS0R9JmS7GH
-	 f21xPlXpmf2owJhZ9tz8QHDMS+e5om+ooU2rKIu+dWg//hkoNOIXBtriftIHR6rGH8
-	 tVdZcdX/wl/FvxnpC+rOXnnRBR/LfSjMDO9LF0DYpq9ZQ1YiW88ZPrMRk/oi+syD+K
-	 CvKzpeUZf5q2bS061G7QGftaGZJ4NK87uTBFTQGmXWFGDH5NSea6RfaiHoOvICpLRw
-	 aRwESMBxDEhdX2lg4/EGD61t96ANUDsk+pyr3hi65Ep7LshPp20FGzJ+Grrz/WLrE8
-	 XywJiBYCEwy8A==
-Received: by mercury (Postfix, from userid 1000)
-	id 279751060547; Tue, 14 Nov 2023 00:04:22 +0100 (CET)
-From: Sebastian Reichel <sre@kernel.org>
-To: Sebastian Reichel <sre@kernel.org>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Cc: Alain Volmat <alain.volmat@foss.st.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	linux-media@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Pavel Machek <pavel@ucw.cz>,
-	Rob Herring <robh@kernel.org>
-Subject: [PATCH v4 1/6] dt-bindings: vendor-prefixes: add GalaxyCore
-Date: Mon, 13 Nov 2023 23:57:20 +0100
-Message-ID: <20231113230421.226808-2-sre@kernel.org>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231113230421.226808-1-sre@kernel.org>
-References: <20231113230421.226808-1-sre@kernel.org>
+	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="EONGZhzA"
+Received: from mx.treblig.org (mx.treblig.org [IPv6:2a00:1098:5b::1])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092E1189;
+	Mon, 13 Nov 2023 16:31:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
+	; s=bytemarkmx; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID
+	:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID
+	:Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
+	Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
+	:List-Post:List-Owner:List-Archive;
+	bh=v9xA0beM+7Vnglcj1EKkfFapEd9IXYa0r9WQGN04kh4=; b=EONGZhzADUnkb9WzcyjZVvtRXg
+	i2yFyZph7cwMu4m/+bmW1fTAiq3bPtOPR8UiFxMsXiMKgX7f6prGn10MX52L1FBz6ox7gsXqhMFz9
+	YPyD2jQLANBL0pNp79228qpF25zR0+x4Pyh+dyA36EvfkQzqUmiMimI7EVF+8m6zMfZeHz2uhPcna
+	CmLfsLtUcLHlqz26IVexwd1gr5OOYyawSRgoeUaqLTP5glwHPOvZOYlQBhS5/3OUVvJRXS9TpBfeA
+	Nd6droK47JabU35uOTrvpJzFmgg5mIgJ+uWZHxvIzcHosOiAbvEomED8XeBiX1pfDKmVTO0R++Plc
+	xkr+P6hw==;
+Received: from dg by mx.treblig.org with local (Exim 4.96)
+	(envelope-from <dg@treblig.org>)
+	id 1r2hKv-008zNI-1c;
+	Tue, 14 Nov 2023 00:31:25 +0000
+Date: Tue, 14 Nov 2023 00:31:25 +0000
+From: "Dr. David Alan Gilbert" <dave@treblig.org>
+To: Hans Verkuil <hverkuil@xs4all.nl>
+Cc: a.j.buxton@gmail.com, mchehab@kernel.org, linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: Regression: v4l/bttv vbi vs iommu
+Message-ID: <ZVK_3UmvmOaCv1tc@gallifrey>
+References: <Y9qSwkLxeMpffZK/@gallifrey>
+ <d363902d-e465-8411-0c1e-58411b3a19b0@xs4all.nl>
+ <20230203063500.GA23520@lst.de>
+ <3a59ffba-a7fe-97b0-af76-7194f7b3896a@xs4all.nl>
+ <ZNjXKjCx3lH0s1m3@gallifrey>
+ <8a667bd9-6a2d-301c-ee11-23e9466b193a@xs4all.nl>
+ <ZU_cuavAminaVhuw@gallifrey>
+ <a1f8a9fa-50c6-44e2-9be8-2c0cc60c9906@xs4all.nl>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <a1f8a9fa-50c6-44e2-9be8-2c0cc60c9906@xs4all.nl>
+X-Chocolate: 70 percent or better cocoa solids preferably
+X-Operating-System: Linux/6.1.0-12-amd64 (x86_64)
+X-Uptime: 00:13:48 up 59 days,  3:12,  1 user,  load average: 0.00, 0.00, 0.00
+User-Agent: Mutt/2.2.12 (2023-09-09)
 
-From: Alain Volmat <alain.volmat@foss.st.com>
+* Hans Verkuil (hverkuil@xs4all.nl) wrote:
+> Hi Dave,
 
-GalaxyCore Shanghai Limited Corporation (https://www.gcoreinc.com)
-manufacturers CMOS Image Sensor and Display Driver IC.
+Hi Hans,
+  I've trimmed the iommu list off now, since we've got past them.
 
-Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Pavel Machek <pavel@ucw.cz>
-Acked-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Sebastian Reichel <sre@kernel.org>
----
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+> On 11/11/2023 20:57, Dr. David Alan Gilbert wrote:
+> > * Hans Verkuil (hverkuil@xs4all.nl) wrote:
+> >> On 13/08/2023 15:14, Dr. David Alan Gilbert wrote:
+> >>> * Hans Verkuil (hverkuil@xs4all.nl) wrote:
+> >>>> On 03/02/2023 07:35, Christoph Hellwig wrote:
+> >>>>> On Wed, Feb 01, 2023 at 09:48:46PM +0100, Hans Verkuil wrote:
+> >>>>>> In fact, the plan is to replace the old and deprecated videobuf framework by the vb2
+> >>>>>> framework in the bttv driver in the next 2-3 months or so. That will also automatically
+> >>>>>> solve this problem.
+> >>>>>
+> >>>>> It would be great to expedite removal of the old videbuf code given
+> >>>>> how many problems it has.
+> >>>>
+> >>>> We're working on it. A lot of old drivers in drivers/staging/media/deprecated will
+> >>>> be removed in 6.3, and that leaves the cx18, bttv and saa7146 drivers that still use
+> >>>> vb1.
+> >>>>
+> >>>> This week I posted patches converting cx18 to vb2 and someone else will work on the
+> >>>> bttv conversion. We thought we could remove saa7146 as well, but it turns out that
+> >>>> that is still very much in use (somewhat unexpectedly), so I plan to convert that
+> >>>> one this month (I hope).
+> >>>>
+> >>>> I aim for removing vb1 in kernel 6.4 or 6.5.
+> >>>
+> >>> Did this go in, I'm happy to give it a go if this is a world to test.
+> >>
+> >> I just merged it for 6.6.
+> > 
+> > Hi Hans,
+> >   Apologies in the delay, I've just got around to looking at 6.6
+> > for this.
+> >   I'd say it's looking pretty good, oops free so far.
+> > There are a couple of oddities, which I'm not sure are an issue or not:
+> > 
+> > a) Loss of 'seq' field.
+> >   The bttv used to include a sequence number in each vbi line;
+> > That now seems to be 0; I don't think it's a big loss, but it was
+> > used by some tools to see if they dropped frames, and it's confusing
+> > it into moaning about it.
+> 
+> Hmm, I knew about this, but I thought it was something that the driver did.
+> Instead, it turns out it was a videobuf 'feature' in videobuf_read_stream().
+> 
+> This would affect saa7146 and bttv, since both enabled that. None of the
+> other driver with VBI capabilities ever used that, AFAICT.
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 309b94c328c8..b3d751b42927 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -502,6 +502,8 @@ patternProperties:
-     description: Fujitsu Ltd.
-   "^fxtec,.*":
-     description: FX Technology Ltd.
-+  "^galaxycore,.*":
-+    description: GalaxyCore Inc.
-   "^gardena,.*":
-     description: GARDENA GmbH
-   "^gateway,.*":
+Yeh I can believe it; the code I'm using from Alistair (cc'd) checks it
+to see if you're losing any if on a bttv.
+
+> > b) Frame vs fields
+> > 
+> > I tend to run xawtv at the same time as dumping vbi; with xawtv grabbing
+> > frames, the vbi is showing it grabbing 50fps, if I drop xawtv to
+> > no-capture, the vbi is showing it at 25fps; I've not figured out yet if
+> > that's actually losing data or just reorganising it.
+> > (The reason for running xawtv is that it was found that the AGC on the
+> > bttv goes out if you've not got it running sometimes).
+> 
+> Odd.
+
+Alistair has a neat little test setup generating an image stream;
+what that seems to be showing for me is that if I run:
+
+   a) xawtv with 'capture' off in parallel with the VBI read, all is
+   good
+
+   b) xawtv with 'capture' to 'grab display' in parallel with the VBI
+   read, then the VBI read is getting 'extra' frames in it, where they
+   start out as being blank extra frames in between valid ones, but then
+   seem to contain an old frame at some point.
+
+   So there's something going on.
+
+> For both items it will have to wait until I have access again to my test
+> equipment in 2 weeks.
+
+No rush.
+
+Dave
+
+> Regards,
+> 
+> 	Hans
+> 
+> > 
+> > Anyway, thanks for fixing the rework that fixed the crash!
+> > 
+> > Dave
+> > 
+> > 
+> >>
+> >> Regards,
+> >>
+> >> 	Hans
+> >>
+> 
 -- 
-2.42.0
-
+ -----Open up your eyes, open up your mind, open up your code -------   
+/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
+\        dave @ treblig.org |                               | In Hex /
+ \ _________________________|_____ http://www.treblig.org   |_______/
