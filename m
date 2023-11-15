@@ -1,46 +1,47 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF3063BB44;
-	Wed, 15 Nov 2023 16:44:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="PNy1DYfC"
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A1611D;
-	Wed, 15 Nov 2023 08:44:12 -0800 (PST)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B40EA60006;
-	Wed, 15 Nov 2023 16:44:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1700066651;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=mnNKnxShDKBKR7oddzUJiYMgk7ZsuUJgQ9HbV/jIWzo=;
-	b=PNy1DYfCIEvygEiDckI0R3vTZpWCm5cZauVL38NsqNeXeg5Lq9LPhSNJd+FMh808Uh8dbe
-	hvEFHjvuTNC6wAaxoq2gIq0OYSFroR8n7dUpe/N9cGzUl4DsiIBI6JCHyG/mNEJSX9T1cd
-	HRppNhgzOZJ36jPgYesb+RlYW107fusuvXFRMbNf96JWlnR0LD98kER3Zk+0CNpU0Cbfxg
-	k7io9HikMFWyhpfilR4wAOQ29uwzI/KyXtQylsVEVJKoLWppKqu5BWz/aX0qHf3F8Snkx2
-	06O9hbtIS2IjgUPG7LEawJuXrcXwMcBAiZ/oq3BlH9S5AANlNmWYqxmHSnZd0A==
-From: Mehdi Djait <mehdi.djait@bootlin.com>
-To: krzysztof.kozlowski+dt@linaro.org,
-	robh+dt@kernel.org,
-	conor+dt@kernel.org
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cVoilLmq"
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F01B18B;
+	Wed, 15 Nov 2023 10:18:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700072332; x=1731608332;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=xqZXn0Yxfn3Sk9v5JbBgGwiaA3KD1uEzo/vK6o/D7T4=;
+  b=cVoilLmq9JtRoNN65FWqBi03qlDXixKbmsFd4kNT4BjXEGLscPtWCZ2a
+   E6HwFGiJUA6XraBHp6n5HgoeYkToJqXAwNJSBeR2bQNTM4N1mJwbHWLup
+   AVZJK2K7sOM2t/2WKLu2BRWsgjLOK9BAy+Sm8zvX1hsr37jZd5n3v2vjg
+   iHi7FozsekIQBbFz6kCzzOdW5RDlNFucGfDyVv+LFK4tnQM+4TpWwgdNR
+   5iQx/Ht/CNSxwAB9JZljTGkv4CFpqtSh/e6XmOLj00y6WNoZfeQYG2p3C
+   W7TxekjwZx8lW9Yxj1Lx1TBcLbWC4XfkLfSpd4XX0FB01ulzhg+oOuadh
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10895"; a="381321128"
+X-IronPort-AV: E=Sophos;i="6.03,305,1694761200"; 
+   d="scan'208";a="381321128"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2023 10:18:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10895"; a="831014657"
+X-IronPort-AV: E=Sophos;i="6.03,305,1694761200"; 
+   d="scan'208";a="831014657"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2023 10:18:45 -0800
+Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 5DA5411FC11;
+	Wed, 15 Nov 2023 20:18:42 +0200 (EET)
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: linux-acpi@vger.kernel.org
 Cc: linux-media@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	thomas.petazzoni@bootlin.com,
-	alexandre.belloni@bootlin.com,
-	paul.kocialkowski@bootlin.com,
-	dafna@fastmail.com,
-	laurent.pinchart@ideasonboard.com,
-	helen.koike@collabora.com,
-	heiko@sntech.de,
-	paul.elder@ideasonboard.com,
-	Mehdi Djait <mehdi.djait@bootlin.com>
-Subject: [PATCH] media: dt-bindings: media: rkisp1: Fix the port description for the parallel interface
-Date: Wed, 15 Nov 2023 17:44:07 +0100
-Message-ID: <20231115164407.99876-1-mehdi.djait@bootlin.com>
-X-Mailer: git-send-email 2.41.0
+	rafael@kernel.org,
+	jacopo.mondi@ideasonboard.com,
+	laurent.pinchart@ideasonboard.com
+Subject: [PATCH 2/6] pm: runtime: Add pm_runtime_put_mark_busy_autosusp() helper
+Date: Wed, 15 Nov 2023 20:18:36 +0200
+Message-Id: <20231115181840.1509046-3-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20231115181840.1509046-1-sakari.ailus@linux.intel.com>
+References: <20231115181840.1509046-1-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -48,43 +49,48 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-GND-Sasl: mehdi.djait@bootlin.com
 
-The bus-type belongs to the endpoint's properties and should therefore
-be moved.
+Add pm_runtime_put_mark_busy_autosusp() helper function for users that
+wish to set the last_busy timestamp to current time and put the
+usage_count of the device and set the autosuspend timer.
 
-Fixes: 6a0eaa25bf36 ("media: dt-bindings: media: rkisp1: Add port for parallel interface")
-Signed-off-by: Mehdi Djait <mehdi.djait@bootlin.com>
+Essentially calling pm_runtime_suspend_mark_busy_autosusp() equal to
+calling first pm_runtime_mark_last_busy() and then
+pm_runtime_put_autosuspend().
+
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- .../devicetree/bindings/media/rockchip-isp1.yaml      | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ include/linux/pm_runtime.h | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/rockchip-isp1.yaml b/Documentation/devicetree/bindings/media/rockchip-isp1.yaml
-index e466dff8286d..afcaa427d48b 100644
---- a/Documentation/devicetree/bindings/media/rockchip-isp1.yaml
-+++ b/Documentation/devicetree/bindings/media/rockchip-isp1.yaml
-@@ -90,15 +90,16 @@ properties:
-         description: connection point for input on the parallel interface
+diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
+index 810330bb802b..59871ab1532a 100644
+--- a/include/linux/pm_runtime.h
++++ b/include/linux/pm_runtime.h
+@@ -494,6 +494,23 @@ static inline int pm_runtime_put_autosuspend(struct device *dev)
+ 	    RPM_GET_PUT | RPM_ASYNC | RPM_AUTO);
+ }
  
-         properties:
--          bus-type:
--            enum: [5, 6]
--
-           endpoint:
-             $ref: video-interfaces.yaml#
-             unevaluatedProperties: false
- 
--        required:
--          - bus-type
-+            properties:
-+              bus-type:
-+                enum: [5, 6]
++/**
++ * pm_runtime_put_mark_busy_autosusp - Update the last access time of a device
++ *				       and drop device usage counter and queue
++ *				       autosuspend if 0.
++ * @dev: Target device.
++ *
++ * Update the last access time of @dev using pm_runtime_mark_last_busy(), then
++ * decrement the runtime PM usage counter of @dev and if it turns out to be
++ * equal to 0, queue up a work item for @dev like in pm_request_autosuspend().
++ */
++static inline int pm_runtime_put_mark_busy_autosusp(struct device *dev)
++{
++	pm_runtime_mark_last_busy(dev);
 +
-+            required:
-+              - bus-type
- 
-     anyOf:
-       - required:
++	return pm_runtime_autosuspend(dev);
++}
++
+ /**
+  * pm_runtime_put_sync - Drop device usage counter and run "idle check" if 0.
+  * @dev: Target device.
 -- 
-2.41.0
+2.39.2
 
