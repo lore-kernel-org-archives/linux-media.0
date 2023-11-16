@@ -1,25 +1,25 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="oPVwla9E"
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8DED4E;
-	Thu, 16 Nov 2023 07:48:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="dmvWKIAC"
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF21D5A;
+	Thu, 16 Nov 2023 07:48:31 -0800 (PST)
 Received: from localhost.localdomain (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: andrzej.p)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 22B5E6607351;
-	Thu, 16 Nov 2023 15:48:28 +0000 (GMT)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 3C4316607359;
+	Thu, 16 Nov 2023 15:48:29 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1700149709;
-	bh=BY0sbxpm5Rf/FVPVvUAfc6hpVbEdkpX0L7b1vxWfMEA=;
+	s=mail; t=1700149710;
+	bh=FWoRq71D+3CZWvgfQamGU6bN0kUnW+MQUhCIbwvri58=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=oPVwla9EfSUkl+veP0U8qGqhda2TGfetqap4Bmramto6x2j2n7SeKMnWUvuZsyg71
-	 vFN74GbG8QqbTHRo7s/Yww6Xewg3xlapQbFk9W6RhMFPRekZWPwE0enUCWQBPMMBnK
-	 h9Kl/V+QGhujIiJ+RoMZ3z9X1wuAkHyOf82S9SeiUHjIAtA/viI7yDY9BlLzqmtQ1j
-	 zg98jCindurfZRzNIzglm6FqFDLLWwAyL0c3L7t2gn0aRb5Zdw/FsY0fE1D1Brt0Wz
-	 u2d0NEfGBrXqEdnat7Ma4vhfILY+ACIVRvpD6ryHB82wUFxUNmtBgBlNj9HczHtfYE
-	 rNxqRgNkbaetA==
+	b=dmvWKIACvVm8j1f0ShhDkQUcTBQpus3oQZsJORrCeE0Zs22+DDxZtF123CnE5cdlo
+	 LNAbDrYcaX3lN76LF2kTVRecK7MfohVzK29uMcu/sGkh1cjm3beTb+QhQ65gRpyRoU
+	 vpGjAg1yyqacC6K4acERKOE9Z/K2PlMwNVjWxT7qD1ucqibzuZ/2YkNgus43Bw3VTf
+	 Y3rNiyomHPbD8jBLEJbe99QkHFerTrbozpkaMu8yzaK/9AKlqLcFllDflm8IzGjayn
+	 qOuP3b00Zp8E5sZm/im6xXR3kU6sDok8wz1JYCzBZNWT7vsUt8ZebTUtpVBIC5Iq1b
+	 2q6bAj/bppDVA==
 From: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 To: linux-media@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
@@ -38,9 +38,9 @@ Cc: Hugues Fruchet <hugues.fruchet@foss.st.com>,
 	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
 	Philipp Zabel <p.zabel@pengutronix.de>,
 	kernel@collabora.com
-Subject: [RFC 2/6] media: verisilicon: Correct a typo in H1_REG_MAD_CTRL_MAD_THRESHOLD
-Date: Thu, 16 Nov 2023 16:48:12 +0100
-Message-Id: <20231116154816.70959-3-andrzej.p@collabora.com>
+Subject: [RFC 3/6] media: verisilicon: Improve constant's name
+Date: Thu, 16 Nov 2023 16:48:13 +0100
+Message-Id: <20231116154816.70959-4-andrzej.p@collabora.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20231116154816.70959-1-andrzej.p@collabora.com>
 References: <20231116154816.70959-1-andrzej.p@collabora.com>
@@ -52,26 +52,40 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-It's a THRESHOLD and not a THREDHOLD.
+For VP8 BIT(18) of this register is for enabling the boolean encoder.
 
 Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 ---
- drivers/media/platform/verisilicon/hantro_h1_regs.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/verisilicon/hantro_h1_regs.h    | 2 +-
+ drivers/media/platform/verisilicon/hantro_h1_vp8_enc.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/platform/verisilicon/hantro_h1_regs.h b/drivers/media/platform/verisilicon/hantro_h1_regs.h
-index 57e89bb975ae..7752d1291c0e 100644
+index 7752d1291c0e..c1c66c934a24 100644
 --- a/drivers/media/platform/verisilicon/hantro_h1_regs.h
 +++ b/drivers/media/platform/verisilicon/hantro_h1_regs.h
-@@ -92,7 +92,7 @@
- #define H1_REG_STR_BUF_LIMIT				0x060
- #define H1_REG_MAD_CTRL					0x064
- #define    H1_REG_MAD_CTRL_QP_ADJUST(x)			((x) << 28)
--#define    H1_REG_MAD_CTRL_MAD_THREDHOLD(x)		((x) << 22)
-+#define    H1_REG_MAD_CTRL_MAD_THRESHOLD(x)		((x) << 22)
- #define    H1_REG_MAD_CTRL_QP_SUM_DIV2(x)		((x))
- #define H1_REG_ADDR_VP8_PROB_CNT			0x068
- #define H1_REG_QP_VAL					0x06c
+@@ -70,7 +70,7 @@
+ #define    H1_REG_ENC_CTRL2_DISABLE_QUARTER_PIXMV	BIT(22)
+ #define    H1_REG_ENC_CTRL2_TRANS8X8_MODE_EN		BIT(21)
+ #define    H1_REG_ENC_CTRL2_CABAC_INIT_IDC(x)		((x) << 19)
+-#define    H1_REG_ENC_CTRL2_ENTROPY_CODING_MODE		BIT(18)
++#define    H1_REG_ENC_CTRL2_VP8_BOOLENC_ENABLE		BIT(18)
+ #define    H1_REG_ENC_CTRL2_H264_INTER4X4_MODE		BIT(17)
+ #define    H1_REG_ENC_CTRL2_H264_STREAM_MODE		BIT(16)
+ #define    H1_REG_ENC_CTRL2_INTRA16X16_MODE(x)		((x))
+diff --git a/drivers/media/platform/verisilicon/hantro_h1_vp8_enc.c b/drivers/media/platform/verisilicon/hantro_h1_vp8_enc.c
+index 05aa0dd9c09c..08c5079fbfd0 100644
+--- a/drivers/media/platform/verisilicon/hantro_h1_vp8_enc.c
++++ b/drivers/media/platform/verisilicon/hantro_h1_vp8_enc.c
+@@ -1226,7 +1226,7 @@ static void hantro_h1_vp8_enc_set_params(struct hantro_dev *vpu, struct hantro_c
+ 	reg = 0;
+ 	if (mb_width * mb_height > MAX_MB_COUNT_TO_DISABLE_QUARTER_PIXEL_MV)
+ 		reg = H1_REG_ENC_CTRL2_DISABLE_QUARTER_PIXMV;
+-	reg |= H1_REG_ENC_CTRL2_ENTROPY_CODING_MODE;
++	reg |= H1_REG_ENC_CTRL2_VP8_BOOLENC_ENABLE;
+ 
+ 	inter_favor = 128 - ctx->vp8_enc.prob_intra;
+ 	if (inter_favor >= 0)
 -- 
 2.25.1
 
