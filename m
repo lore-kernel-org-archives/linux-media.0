@@ -1,248 +1,269 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PzthSJPi"
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689C8120
-	for <linux-media@vger.kernel.org>; Fri, 17 Nov 2023 03:06:27 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L8vKQ9TS"
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBBCD130;
+	Fri, 17 Nov 2023 03:14:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700219187; x=1731755187;
-  h=date:from:to:cc:subject:message-id;
-  bh=J5TogsItqeaFkWpRTNkrSwX2f3YZOoDXhXPh9318XYE=;
-  b=PzthSJPie/5FoRLWSxbbWE+QJiEFpx0QdRBcchJy7IaNPJy7p2eTnX4s
-   1hVByRFVrWO31olBlervR9q1yP4PQqlrQF+v+YEeQ4HAEUHPrSlHWRO7S
-   nXuQcRMOCs1SzwNHzjglyvdKhCCQ86XwcmLvnQRDVHe2CUyCGxIVJjdM/
-   /An8Jzbt6MuRYwkw+dV2zXw1oZrEQIlT0ERLAgXCYP1D3+zU+j+AeX/tL
-   NzxCpoF4R3hA8bqLb3HgiIOOlNmN7Z4elUepwaOSzD+uV8Pp5Ha9nqK1F
-   umU5VuL4ZQ8h6ZEGZlTHn4pOX3ajNNfNJSoBsPbA12fZDjx+HQAeKem9m
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10896"; a="390133719"
+  t=1700219680; x=1731755680;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=4ZIGnBR1FDtLcgY8YztjKUNudOuUOYsU/Ds/6gH0wn8=;
+  b=L8vKQ9TSDfcBjRSGokrTJ+izW5V/4mLi0dSRsqOQwJevHcssa0DSCPMc
+   /8oQx30sSQSQD1wN/zVlXjoKrc4uSTGx4sk0km1W5zMdY1kHS8tepkooG
+   5QUzAndlppxB7sxDHR9kRnDPNoGmq2Eu/wdsnsa9mQte7Da651H6aYGsS
+   PGLbU57uXMAY8deRbGiwH/fYwXKD6G7YBJON6IN5JKrMEOV8W4r2wrVR5
+   zcP1CaZnhoHkS6F6zJiONgd3owo33kJ9jw7J+Lr5hL7MdQ/wYfF5/OhrW
+   tNgCHMvWLiw9C7Odhpp1PJjOG9v7Z0JCTF5v485nJFDLEEuGWNQvbqnCp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10896"; a="9941628"
 X-IronPort-AV: E=Sophos;i="6.04,206,1695711600"; 
-   d="scan'208";a="390133719"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2023 03:06:27 -0800
+   d="scan'208";a="9941628"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2023 03:14:40 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10896"; a="794803626"
+X-IronPort-AV: E=McAfee;i="6600,9927,10896"; a="769201188"
 X-IronPort-AV: E=Sophos;i="6.04,206,1695711600"; 
-   d="scan'208";a="794803626"
-Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 17 Nov 2023 03:06:25 -0800
-Received: from kbuild by b8de5498638e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r3wg3-0002ef-0M;
-	Fri, 17 Nov 2023 11:06:23 +0000
-Date: Fri, 17 Nov 2023 19:05:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hans Verkuil <hverkuil@xs4all.nl>
-Cc: linux-media@vger.kernel.org
-Subject: [linuxtv-media-stage:master] BUILD SUCCESS
- 1865913dd590ca6d5e3207b15099a1210dd62f29
-Message-ID: <202311171932.DYq3IcWH-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+   d="scan'208";a="769201188"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2023 03:14:37 -0800
+Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 69F6C120E67;
+	Fri, 17 Nov 2023 13:14:34 +0200 (EET)
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: linux-acpi@vger.kernel.org
+Cc: linux-media@vger.kernel.org,
+	rafael@kernel.org,
+	jacopo.mondi@ideasonboard.com,
+	laurent.pinchart@ideasonboard.com
+Subject: [PATCH v2 1/7] pm: runtime: Simplify pm_runtime_get_if_active() usage
+Date: Fri, 17 Nov 2023 13:14:27 +0200
+Message-Id: <20231117111433.1561669-2-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20231117111433.1561669-1-sakari.ailus@linux.intel.com>
+References: <20231117111433.1561669-1-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree/branch: https://git.linuxtv.org/media_stage.git master
-branch HEAD: 1865913dd590ca6d5e3207b15099a1210dd62f29  media: meson-ir-tx: Drop usage of platform_driver_probe()
+The majority of the callers currently using pm_runtime_get_if_active()
+call it with ign_usage_count argument set to true. There's only one driver
+using this feature (and natually implementation of
+pm_runtime_get_if_in_use()).
 
-elapsed time: 1113m
+To make this function more practical to use, remove the ign_usage_count
+argument from the function. The main implementation is renamed as
+__pm_runtime_get_conditional().
 
-configs tested: 186
-configs skipped: 2
+This function is expected to gain a large number of users in the future
+--- camera sensor drivers using runtime autosuspend have a need to get the
+device's usage_count conditionally if it is enabled. Most of these
+currently use pm_runtime_get_if_in_use(), which is a bug.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20231117   gcc  
-arc                   randconfig-002-20231117   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                           h3600_defconfig   gcc  
-arm                        multi_v7_defconfig   gcc  
-arm                          pxa3xx_defconfig   gcc  
-arm                   randconfig-001-20231117   gcc  
-arm                   randconfig-002-20231117   gcc  
-arm                   randconfig-003-20231117   gcc  
-arm                   randconfig-004-20231117   gcc  
-arm                         vf610m4_defconfig   gcc  
-arm64                            allmodconfig   gcc  
-arm64                             allnoconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20231117   gcc  
-arm64                 randconfig-002-20231117   gcc  
-arm64                 randconfig-003-20231117   gcc  
-arm64                 randconfig-004-20231117   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20231117   gcc  
-csky                  randconfig-002-20231117   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20231117   gcc  
-i386         buildonly-randconfig-002-20231117   gcc  
-i386         buildonly-randconfig-003-20231117   gcc  
-i386         buildonly-randconfig-004-20231117   gcc  
-i386         buildonly-randconfig-005-20231117   gcc  
-i386         buildonly-randconfig-006-20231117   gcc  
-i386                                defconfig   gcc  
-i386                  randconfig-001-20231117   gcc  
-i386                  randconfig-002-20231117   gcc  
-i386                  randconfig-003-20231117   gcc  
-i386                  randconfig-004-20231117   gcc  
-i386                  randconfig-005-20231117   gcc  
-i386                  randconfig-006-20231117   gcc  
-i386                  randconfig-011-20231117   gcc  
-i386                  randconfig-012-20231117   gcc  
-i386                  randconfig-013-20231117   gcc  
-i386                  randconfig-014-20231117   gcc  
-i386                  randconfig-015-20231117   gcc  
-i386                  randconfig-016-20231117   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20231117   gcc  
-loongarch             randconfig-002-20231117   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                       bvme6000_defconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20231117   gcc  
-nios2                 randconfig-002-20231117   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-openrisc                       virt_defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                generic-64bit_defconfig   gcc  
-parisc                randconfig-001-20231117   gcc  
-parisc                randconfig-002-20231117   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   gcc  
-powerpc                     asp8347_defconfig   gcc  
-powerpc                      ep88xc_defconfig   gcc  
-powerpc                      pasemi_defconfig   gcc  
-powerpc               randconfig-001-20231117   gcc  
-powerpc               randconfig-002-20231117   gcc  
-powerpc               randconfig-003-20231117   gcc  
-powerpc64             randconfig-001-20231117   gcc  
-powerpc64             randconfig-002-20231117   gcc  
-powerpc64             randconfig-003-20231117   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                    nommu_k210_defconfig   gcc  
-riscv             nommu_k210_sdcard_defconfig   gcc  
-riscv                 randconfig-001-20231117   gcc  
-riscv                 randconfig-002-20231117   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20231117   gcc  
-s390                  randconfig-002-20231117   gcc  
-sh                               alldefconfig   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                          kfr2r09_defconfig   gcc  
-sh                    randconfig-001-20231117   gcc  
-sh                    randconfig-002-20231117   gcc  
-sh                          sdk7786_defconfig   gcc  
-sh                           se7712_defconfig   gcc  
-sh                        sh7763rdp_defconfig   gcc  
-sh                              ul2_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20231117   gcc  
-sparc64               randconfig-002-20231117   gcc  
-um                               allmodconfig   gcc  
-um                                allnoconfig   gcc  
-um                               allyesconfig   gcc  
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20231117   gcc  
-um                    randconfig-002-20231117   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-001-20231117   gcc  
-x86_64       buildonly-randconfig-002-20231117   gcc  
-x86_64       buildonly-randconfig-003-20231117   gcc  
-x86_64       buildonly-randconfig-004-20231117   gcc  
-x86_64       buildonly-randconfig-005-20231117   gcc  
-x86_64       buildonly-randconfig-006-20231117   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20231117   gcc  
-x86_64                randconfig-002-20231117   gcc  
-x86_64                randconfig-003-20231117   gcc  
-x86_64                randconfig-004-20231117   gcc  
-x86_64                randconfig-005-20231117   gcc  
-x86_64                randconfig-006-20231117   gcc  
-x86_64                randconfig-011-20231117   gcc  
-x86_64                randconfig-012-20231117   gcc  
-x86_64                randconfig-013-20231117   gcc  
-x86_64                randconfig-014-20231117   gcc  
-x86_64                randconfig-015-20231117   gcc  
-x86_64                randconfig-016-20231117   gcc  
-x86_64                randconfig-071-20231117   gcc  
-x86_64                randconfig-072-20231117   gcc  
-x86_64                randconfig-073-20231117   gcc  
-x86_64                randconfig-074-20231117   gcc  
-x86_64                randconfig-075-20231117   gcc  
-x86_64                randconfig-076-20231117   gcc  
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
-xtensa                randconfig-001-20231117   gcc  
-xtensa                randconfig-002-20231117   gcc  
+---
 
+since v1:
+
+- Fix __pm_runtime_get_if_conditional() un-CONFIG_PM implementation.
+---
+ Documentation/power/runtime_pm.rst      |  5 ++--
+ drivers/base/power/runtime.c            |  9 ++++---
+ drivers/gpu/drm/i915/intel_runtime_pm.c |  2 +-
+ drivers/media/i2c/ccs/ccs-core.c        |  2 +-
+ drivers/net/ipa/ipa_smp2p.c             |  2 +-
+ drivers/pci/pci.c                       |  2 +-
+ include/linux/pm_runtime.h              | 32 +++++++++++++++++++++----
+ sound/hda/hdac_device.c                 |  2 +-
+ 8 files changed, 40 insertions(+), 16 deletions(-)
+
+diff --git a/Documentation/power/runtime_pm.rst b/Documentation/power/runtime_pm.rst
+index 65b86e487afe..da99379071a4 100644
+--- a/Documentation/power/runtime_pm.rst
++++ b/Documentation/power/runtime_pm.rst
+@@ -396,10 +396,9 @@ drivers/base/power/runtime.c and include/linux/pm_runtime.h:
+       nonzero, increment the counter and return 1; otherwise return 0 without
+       changing the counter
+ 
+-  `int pm_runtime_get_if_active(struct device *dev, bool ign_usage_count);`
++  `int pm_runtime_get_if_active(struct device *dev);`
+     - return -EINVAL if 'power.disable_depth' is nonzero; otherwise, if the
+-      runtime PM status is RPM_ACTIVE, and either ign_usage_count is true
+-      or the device's usage_count is non-zero, increment the counter and
++      runtime PM status is RPM_ACTIVE, increment the counter and
+       return 1; otherwise return 0 without changing the counter
+ 
+   `void pm_runtime_put_noidle(struct device *dev);`
+diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+index 4545669cb973..8b56468eca9d 100644
+--- a/drivers/base/power/runtime.c
++++ b/drivers/base/power/runtime.c
+@@ -1175,7 +1175,7 @@ int __pm_runtime_resume(struct device *dev, int rpmflags)
+ EXPORT_SYMBOL_GPL(__pm_runtime_resume);
+ 
+ /**
+- * pm_runtime_get_if_active - Conditionally bump up device usage counter.
++ * __pm_runtime_get_conditional - Conditionally bump up device usage counter.
+  * @dev: Device to handle.
+  * @ign_usage_count: Whether or not to look at the current usage counter value.
+  *
+@@ -1195,8 +1195,11 @@ EXPORT_SYMBOL_GPL(__pm_runtime_resume);
+  *
+  * The caller is responsible for decrementing the runtime PM usage counter of
+  * @dev after this function has returned a positive value for it.
++ *
++ * This function is not intended to be called by drivers, use
++ * pm_runtime_get_if_active() or pm_runtime_get_if_in_use() instead.
+  */
+-int pm_runtime_get_if_active(struct device *dev, bool ign_usage_count)
++int __pm_runtime_get_conditional(struct device *dev, bool ign_usage_count)
+ {
+ 	unsigned long flags;
+ 	int retval;
+@@ -1217,7 +1220,7 @@ int pm_runtime_get_if_active(struct device *dev, bool ign_usage_count)
+ 
+ 	return retval;
+ }
+-EXPORT_SYMBOL_GPL(pm_runtime_get_if_active);
++EXPORT_SYMBOL_GPL(__pm_runtime_get_conditional);
+ 
+ /**
+  * __pm_runtime_set_status - Set runtime PM status of a device.
+diff --git a/drivers/gpu/drm/i915/intel_runtime_pm.c b/drivers/gpu/drm/i915/intel_runtime_pm.c
+index 6d8e5e5c0cba..b163efe80975 100644
+--- a/drivers/gpu/drm/i915/intel_runtime_pm.c
++++ b/drivers/gpu/drm/i915/intel_runtime_pm.c
+@@ -434,7 +434,7 @@ static intel_wakeref_t __intel_runtime_pm_get_if_active(struct intel_runtime_pm
+ 		 * function, since the power state is undefined. This applies
+ 		 * atm to the late/early system suspend/resume handlers.
+ 		 */
+-		if (pm_runtime_get_if_active(rpm->kdev, ignore_usecount) <= 0)
++		if (__pm_runtime_get_conditional(rpm->kdev, ignore_usecount) <= 0)
+ 			return 0;
+ 	}
+ 
+diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
+index 12e6f0a26fc8..45701a18c845 100644
+--- a/drivers/media/i2c/ccs/ccs-core.c
++++ b/drivers/media/i2c/ccs/ccs-core.c
+@@ -664,7 +664,7 @@ static int ccs_set_ctrl(struct v4l2_ctrl *ctrl)
+ 		break;
+ 	}
+ 
+-	pm_status = pm_runtime_get_if_active(&client->dev, true);
++	pm_status = pm_runtime_get_if_active(&client->dev);
+ 	if (!pm_status)
+ 		return 0;
+ 
+diff --git a/drivers/net/ipa/ipa_smp2p.c b/drivers/net/ipa/ipa_smp2p.c
+index 5620dc271fac..cbf3d4761ce3 100644
+--- a/drivers/net/ipa/ipa_smp2p.c
++++ b/drivers/net/ipa/ipa_smp2p.c
+@@ -92,7 +92,7 @@ static void ipa_smp2p_notify(struct ipa_smp2p *smp2p)
+ 		return;
+ 
+ 	dev = &smp2p->ipa->pdev->dev;
+-	smp2p->power_on = pm_runtime_get_if_active(dev, true) > 0;
++	smp2p->power_on = pm_runtime_get_if_active(dev) > 0;
+ 
+ 	/* Signal whether the IPA power is enabled */
+ 	mask = BIT(smp2p->enabled_bit);
+diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+index 59c01d68c6d5..d8d4abbc936f 100644
+--- a/drivers/pci/pci.c
++++ b/drivers/pci/pci.c
+@@ -2439,7 +2439,7 @@ static void pci_pme_list_scan(struct work_struct *work)
+ 			 * If the device is in a low power state it
+ 			 * should not be polled either.
+ 			 */
+-			pm_status = pm_runtime_get_if_active(dev, true);
++			pm_status = pm_runtime_get_if_active(dev);
+ 			if (!pm_status)
+ 				continue;
+ 
+diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
+index 7c9b35448563..13cd526634c1 100644
+--- a/include/linux/pm_runtime.h
++++ b/include/linux/pm_runtime.h
+@@ -72,7 +72,8 @@ extern int pm_runtime_force_resume(struct device *dev);
+ extern int __pm_runtime_idle(struct device *dev, int rpmflags);
+ extern int __pm_runtime_suspend(struct device *dev, int rpmflags);
+ extern int __pm_runtime_resume(struct device *dev, int rpmflags);
+-extern int pm_runtime_get_if_active(struct device *dev, bool ign_usage_count);
++extern int __pm_runtime_get_conditional(struct device *dev,
++					bool ign_usage_count);
+ extern int pm_schedule_suspend(struct device *dev, unsigned int delay);
+ extern int __pm_runtime_set_status(struct device *dev, unsigned int status);
+ extern int pm_runtime_barrier(struct device *dev);
+@@ -94,16 +95,33 @@ extern void pm_runtime_release_supplier(struct device_link *link);
+ 
+ extern int devm_pm_runtime_enable(struct device *dev);
+ 
++/**
++ * pm_runtime_get_if_active - Bump up runtime PM usage counter if the device is
++ *			      in active state
++ * @dev: Target device.
++ *
++ * Increment the runtime PM usage counter of @dev if its runtime PM status is
++ * %RPM_ACTIVE, in which case it returns 1. If the device is in a different
++ * state, 0 is returned. -EINVAL is returned if runtime PM is disabled for the
++ * device.
++ */
++static inline int pm_runtime_get_if_active(struct device *dev)
++{
++	return __pm_runtime_get_conditional(dev, true);
++}
++
+ /**
+  * pm_runtime_get_if_in_use - Conditionally bump up runtime PM usage counter.
+  * @dev: Target device.
+  *
+  * Increment the runtime PM usage counter of @dev if its runtime PM status is
+- * %RPM_ACTIVE and its runtime PM usage counter is greater than 0.
++ * %RPM_ACTIVE and its runtime PM usage counter is greater than 0, in which case
++ * it returns 1. If the device is in a different state or its usage_count is 0,
++ * 0 is returned. -EINVAL is returned if runtime PM is disabled for the device.
+  */
+ static inline int pm_runtime_get_if_in_use(struct device *dev)
+ {
+-	return pm_runtime_get_if_active(dev, false);
++	return __pm_runtime_get_conditional(dev, false);
+ }
+ 
+ /**
+@@ -275,8 +293,12 @@ static inline int pm_runtime_get_if_in_use(struct device *dev)
+ {
+ 	return -EINVAL;
+ }
+-static inline int pm_runtime_get_if_active(struct device *dev,
+-					   bool ign_usage_count)
++static inline int pm_runtime_get_if_active(struct device *dev)
++{
++	return -EINVAL;
++}
++static inline int __pm_runtime_get_conditional(struct device *dev,
++					       bool ign_usage_count)
+ {
+ 	return -EINVAL;
+ }
+diff --git a/sound/hda/hdac_device.c b/sound/hda/hdac_device.c
+index bbf7bcdb449a..0a9223c18d77 100644
+--- a/sound/hda/hdac_device.c
++++ b/sound/hda/hdac_device.c
+@@ -611,7 +611,7 @@ EXPORT_SYMBOL_GPL(snd_hdac_power_up_pm);
+ int snd_hdac_keep_power_up(struct hdac_device *codec)
+ {
+ 	if (!atomic_inc_not_zero(&codec->in_pm)) {
+-		int ret = pm_runtime_get_if_active(&codec->dev, true);
++		int ret = pm_runtime_get_if_active(&codec->dev);
+ 		if (!ret)
+ 			return -1;
+ 		if (ret < 0)
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.2
+
