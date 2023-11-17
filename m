@@ -1,38 +1,38 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JUL5nsYF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SL5WOt6W"
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E400C4
-	for <linux-media@vger.kernel.org>; Fri, 17 Nov 2023 02:12:20 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F253C5
+	for <linux-media@vger.kernel.org>; Fri, 17 Nov 2023 02:12:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700215940; x=1731751940;
+  t=1700215941; x=1731751941;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=27DrjwHuNqWWVJsYjcUMVNBMCodLFrXYhkqNhTzmSuU=;
-  b=JUL5nsYFkyjYNoZ/Z7ya1qLxCnPQBHPZgr+6sKBXC4hOYXL4q+l8/Vjo
-   gIpj1P1PG53t5HSBlU7TxptfgaGX7h+czVkTjvmwG3NIKd4cRc6E3S+we
-   mhfU8Wg3FqO3iId9wqsr+nx550OmCWqUkGTzxoBtT7mWg0dRIrmQp/GUJ
-   LQbmv+KTekZlvBrR/ebHwQC318qGeYV8P1KpqEfwIzirjsZzSoUuxuh+Q
-   Jzizri17UNyk4OVqobCHmFxIK9VAA/LBU/9JhklG2gewisXt3L8uF+3I4
-   p+rw/SB2492zJ0Ni9gSCtKMrizxCayXyXxkqODtbkV2OgkTvwyF/8Fucu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10896"; a="457771917"
+  bh=LkeDvVqZYe4Mrlq8PYgNiCbzx4s0xYzkJlXA3Jl3gjM=;
+  b=SL5WOt6WuwlL4duBEO58iLuTU6iIlT9NS07g4kOOMnmNYp1wkzhadNtI
+   kaZci10nzVSGGG64AHjzVFHygMAoeiuJZk250ePzkZ8jRHLkJFnnuM/EM
+   EjFZSDL9MXBHj0Bnfdj9VFq7JWTGyyKdF/A0ebfo4uIFsqlGOgSgLqbmd
+   83hy4jbLdCet4pC54F/xBGP0ePM6yS7CizvwhSa24N6U+u7UQ7AgIXZhS
+   wsStdiZVAdivzbhBcA/mtOmkcjnJH3rYTLdp8w6p0wT89W2f9nMWL0h6G
+   7ZWp+OsbQ/pdNlH4ykDPrO9ymoSyB2wxp9nxF0dahTftnjCoNSaDvrm07
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10896"; a="457771924"
 X-IronPort-AV: E=Sophos;i="6.04,206,1695711600"; 
-   d="scan'208";a="457771917"
+   d="scan'208";a="457771924"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
   by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2023 02:12:19 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10896"; a="715494795"
+X-IronPort-AV: E=McAfee;i="6600,9927,10896"; a="715494803"
 X-IronPort-AV: E=Sophos;i="6.04,206,1695711600"; 
-   d="scan'208";a="715494795"
+   d="scan'208";a="715494803"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
   by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2023 02:12:17 -0800
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 6477C120F2A;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 54F05120E67;
 	Fri, 17 Nov 2023 12:12:14 +0200 (EET)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1r3vpG-005cA4-0d;
+	id 1r3vpG-005c9p-0P;
 	Fri, 17 Nov 2023 12:11:50 +0200
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
 To: linux-media@vger.kernel.org
@@ -43,9 +43,9 @@ Cc: hverkuil@xs4all.nl,
 	bingbu.cao@intel.com,
 	hongju.wang@intel.com,
 	Alain Volmat <alain.volmat@foss.st.com>
-Subject: [PATCH v9 4/9] media: v4l: subdev: v4l2_subdev_state_get_format always returns format now
-Date: Fri, 17 Nov 2023 12:11:34 +0200
-Message-Id: <20231117101140.1338288-5-sakari.ailus@linux.intel.com>
+Subject: [PATCH v9 1/9] media: v4l: subdev: Store the sub-device in the sub-device state
+Date: Fri, 17 Nov 2023 12:11:31 +0200
+Message-Id: <20231117101140.1338288-2-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231117101140.1338288-1-sakari.ailus@linux.intel.com>
 References: <20231117101140.1338288-1-sakari.ailus@linux.intel.com>
@@ -57,36 +57,51 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Now that v4l2_subdev_state_get_format() always returns format, don't call
-alternative v4l2_subdev_get_pad_format() anymore.
+Store the sub-device in the sub-device state. This will be needed in e.g.
+validating pad number when retrieving information for non-stream-aware
+users. There are expected to be more needs for this in the future.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 ---
- drivers/media/v4l2-core/v4l2-subdev.c | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+ drivers/media/v4l2-core/v4l2-subdev.c | 2 ++
+ include/media/v4l2-subdev.h           | 2 ++
+ 2 files changed, 4 insertions(+)
 
 diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-index a6f480ef7881..9eef170934c5 100644
+index be86b906c985..cd3ff5b19d0c 100644
 --- a/drivers/media/v4l2-core/v4l2-subdev.c
 +++ b/drivers/media/v4l2-core/v4l2-subdev.c
-@@ -1587,14 +1587,7 @@ int v4l2_subdev_get_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_state *state,
- {
- 	struct v4l2_mbus_framefmt *fmt;
+@@ -1448,6 +1448,8 @@ __v4l2_subdev_state_alloc(struct v4l2_subdev *sd, const char *lock_name,
+ 	else
+ 		state->lock = &state->_lock;
  
--	if (sd->flags & V4L2_SUBDEV_FL_STREAMS)
--		fmt = v4l2_subdev_state_get_format(state, format->pad,
--						   format->stream);
--	else if (format->pad < sd->entity.num_pads && format->stream == 0)
--		fmt = v4l2_subdev_get_pad_format(sd, state, format->pad);
--	else
--		fmt = NULL;
--
-+	fmt = v4l2_subdev_state_get_format(state, format->pad, format->stream);
- 	if (!fmt)
- 		return -EINVAL;
- 
++	state->sd = sd;
++
+ 	/* Drivers that support streams do not need the legacy pad config */
+ 	if (!(sd->flags & V4L2_SUBDEV_FL_STREAMS) && sd->entity.num_pads) {
+ 		state->pads = kvcalloc(sd->entity.num_pads,
+diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+index 8a345b5fa39d..46296852cb5b 100644
+--- a/include/media/v4l2-subdev.h
++++ b/include/media/v4l2-subdev.h
+@@ -749,6 +749,7 @@ struct v4l2_subdev_krouting {
+  *
+  * @_lock: default for 'lock'
+  * @lock: mutex for the state. May be replaced by the user.
++ * @sd: the sub-device which the state is related to
+  * @pads: &struct v4l2_subdev_pad_config array
+  * @routing: routing table for the subdev
+  * @stream_configs: stream configurations (only for V4L2_SUBDEV_FL_STREAMS)
+@@ -761,6 +762,7 @@ struct v4l2_subdev_state {
+ 	/* lock for the struct v4l2_subdev_state fields */
+ 	struct mutex _lock;
+ 	struct mutex *lock;
++	struct v4l2_subdev *sd;
+ 	struct v4l2_subdev_pad_config *pads;
+ 	struct v4l2_subdev_krouting routing;
+ 	struct v4l2_subdev_stream_configs stream_configs;
 -- 
 2.39.2
 
