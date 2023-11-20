@@ -1,96 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10651CD
-	for <linux-media@vger.kernel.org>; Mon, 20 Nov 2023 13:23:38 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r5Bjr-0004El-AH; Mon, 20 Nov 2023 22:23:27 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r5Bjq-00AR9R-B5; Mon, 20 Nov 2023 22:23:26 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r5Bjq-004dnV-1t; Mon, 20 Nov 2023 22:23:26 +0100
-Date: Mon, 20 Nov 2023 22:23:25 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Sowjanya Komatineni <skomatineni@nvidia.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-tegra@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-staging@lists.linux.dev, kernel@pengutronix.de,
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X/E/EXn6"
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348DDC8;
+	Mon, 20 Nov 2023 15:41:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700523661; x=1732059661;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=feSvV0+cWNC4uBEcbTGoSvkz6BJZ9IxEyyejxLx6g5U=;
+  b=X/E/EXn6ytwwsm68rT5YFQE9HNEeA+Xy56ZrZgL2H7RL3aUmVP/d9YWj
+   jpzrFQ+smvXbUvvDQ09nZdho6mp2u4c/0hrcwu4OdyGxbgycG1T0H1EQx
+   7W79D1VRkV6LSIrEfI3TwILPXcN2zN1t4dMboFrluUy8u4XP/H+NGm2wL
+   GKAjcaE24XtpIPKHxf+NB6MfKez3b9YEFsN4MGKu0hyGwte98ImzbKcmF
+   rOI/gEcORdzUJ0OazmRgKYYwMOHPNyPjTNbYng43sADceq+jH+4O7F0RC
+   DcD4eIu3sJ7vI5xIl1wJBSl/YMPiJWOwSpIFTy/jD34/R7uJ6K+w+9slk
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="422830576"
+X-IronPort-AV: E=Sophos;i="6.04,214,1695711600"; 
+   d="scan'208";a="422830576"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 15:41:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.04,214,1695711600"; 
+   d="scan'208";a="7875005"
+Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 20 Nov 2023 15:41:00 -0800
+Received: from kbuild by b8de5498638e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r5Dsv-00074I-1T;
+	Mon, 20 Nov 2023 23:40:57 +0000
+Date: Tue, 21 Nov 2023 07:39:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sean Young <sean@mess.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	linux-media@vger.kernel.org
-Subject: Re: [PATCH] staging: media: tegra-video: Convert to platform remove
- callback returning void
-Message-ID: <20231120212325.4wbjoys6ez73gtfq@pengutronix.de>
-References: <20231026214739.2509271-2-u.kleine-koenig@pengutronix.de>
+Subject: drivers/media/rc/ttusbir.c:1: warning: no structured comments found
+Message-ID: <202311210746.QM5MR14D-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="mz5q3snxap7iktcd"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231026214739.2509271-2-u.kleine-koenig@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   98b1cc82c4affc16f5598d4fa14b1858671b2263
+commit: b9e1486e0e4b5e0fc0cde214ceecec8a5734f620 media: rc-core: do not depend on MEDIA_SUPPORT
+date:   6 years ago
+config: i386-randconfig-005-20231120 (https://download.01.org/0day-ci/archive/20231121/202311210746.QM5MR14D-lkp@intel.com/config)
+compiler: gcc-7 (Ubuntu 7.5.0-6ubuntu2) 7.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231121/202311210746.QM5MR14D-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311210746.QM5MR14D-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/media/rc/ttusbir.c:1: warning: no structured comments found
 
 
---mz5q3snxap7iktcd
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+vim +1 drivers/media/rc/ttusbir.c
 
-Hello,
+0938069fa08970 Sean Young 2012-08-13  @1  /*
+0938069fa08970 Sean Young 2012-08-13   2   * TechnoTrend USB IR Receiver
+0938069fa08970 Sean Young 2012-08-13   3   *
+0938069fa08970 Sean Young 2012-08-13   4   * Copyright (C) 2012 Sean Young <sean@mess.org>
+0938069fa08970 Sean Young 2012-08-13   5   *
+0938069fa08970 Sean Young 2012-08-13   6   * This program is free software; you can redistribute it and/or modify
+0938069fa08970 Sean Young 2012-08-13   7   * it under the terms of the GNU General Public License as published by
+0938069fa08970 Sean Young 2012-08-13   8   * the Free Software Foundation; either version 2 of the License, or
+0938069fa08970 Sean Young 2012-08-13   9   * (at your option) any later version.
+0938069fa08970 Sean Young 2012-08-13  10   *
+0938069fa08970 Sean Young 2012-08-13  11   * This program is distributed in the hope that it will be useful,
+0938069fa08970 Sean Young 2012-08-13  12   * but WITHOUT ANY WARRANTY; without even the implied warranty of
+0938069fa08970 Sean Young 2012-08-13  13   * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+0938069fa08970 Sean Young 2012-08-13  14   * GNU General Public License for more details.
+0938069fa08970 Sean Young 2012-08-13  15   */
+0938069fa08970 Sean Young 2012-08-13  16  
 
-On Thu, Oct 26, 2023 at 11:47:40PM +0200, Uwe Kleine-K=F6nig wrote:
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is ignored (apart
-> from emitting a warning) and this typically results in resource leaks.
->=20
-> To improve here there is a quest to make the remove callback return
-> void. In the first step of this quest all drivers are converted to
-> .remove_new(), which already returns void. Eventually after all drivers
-> are converted, .remove_new() will be renamed to .remove().
->=20
-> Trivially convert the three tegra-video drivers from always returning
-> zero in the remove callback to the void returning variant.
->=20
-> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+:::::: The code at line 1 was first introduced by commit
+:::::: 0938069fa08970f1c898970c1331a029efe9a1ce [media] rc: Add support for the TechnoTrend USB IR Receiver
 
-who feels responsible to pick up this patch?
+:::::: TO: Sean Young <sean@mess.org>
+:::::: CC: Mauro Carvalho Chehab <mchehab@redhat.com>
 
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---mz5q3snxap7iktcd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmVbzk0ACgkQj4D7WH0S
-/k7r5wf8CX9mMyqwzyJ6tpB5hPAG+N8GGNa/IoiYHFr08gcvADUL3t1smIjE85W1
-u3t4a2ZC1tv6u6xDjLAuiz8XPZONpPYaXuNBBHHJpM9jjt4yGB02vI+GhKDyRQ2n
-YoZdAc88NK6YgYT6AMynNTXI09N0GL5V0H1bZj4hNxQZIgbawhqi1dyOW4U7vWXz
-y/TXPuCjDBa9hnPDYHTx37S8ShwXyZ4MK3wiBMVIa4WftBxOJBWP47RPAaOQ8LNq
-aCdH8AcSRoY6/3jmemxjBGfjdtzUl0xYOb6XLD4LoPGLk24L/VKbQz1h5DPa1JAv
-Hc9dKbIEvkS4a0mvzjbw4sTkq1viCw==
-=21Dw
------END PGP SIGNATURE-----
-
---mz5q3snxap7iktcd--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
