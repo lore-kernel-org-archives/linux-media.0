@@ -1,103 +1,129 @@
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="C93DymPH"
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3744010F9
-	for <linux-media@vger.kernel.org>; Wed, 22 Nov 2023 01:55:30 -0800 (PST)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-5cbbe2cba33so14199537b3.1
-        for <linux-media@vger.kernel.org>; Wed, 22 Nov 2023 01:55:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1700646928; x=1701251728; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=R43NIo2R73VFGzF1JM47RjgeeYfm8PK9++R7O6siHDc=;
-        b=C93DymPHwAeqrJ61DqxMBceoZr5Dleo4gbsUe9uqNfgEncXtZ3nH0YmQ0nb4pVJYQc
-         wB1/Lb5ulr7noGMjYgC6+/e0/8IkOGI6Bk4aP5Va3en/kPGCaiWia4Ss11UgypNnyaqN
-         FyBeuTQMp5xIrv+86vzggkLPvLWZ9m+sJoZoM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700646928; x=1701251728;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=R43NIo2R73VFGzF1JM47RjgeeYfm8PK9++R7O6siHDc=;
-        b=iUwWXa93I04Tpe7zVlUSivpAt7ZCxA4JskbqhfYOmajnggGpjaEugNghNgmR+B5R3/
-         Xa0eLE4LT3RxpAjsWtpgKEJDt7z6yK2lPI06Pk9VdMenQs5iwqTXc64hFhtJrAmL8UnI
-         gBvc9wPiZKwEtaHyT1a2920B4bZmCflzhNM0Y9eaj4Xyb0Gkqa5tQIrvLUbh1mcWsX9c
-         NwZBYRvlcnO6HTWln+rj536BSB6nF8J80YyuXW3W6IY2Lo85rgOqYQbu7EWItT2w2Dan
-         VqH+1Giw4FINzszpn5zvz9lKpn8TsCBvmEQ510q4zkLO3MxzX+PtEOhj9lwxsQK+4sFS
-         KMLA==
-X-Gm-Message-State: AOJu0Yy9goO3+rAqUJHNOwQLQtyIbF2SahT0vE5WTBvx9ej4wEyWzN5C
-	E5VspKWX5ra50/tBfWrwrC6EKikf8VJRhPlfn6HWwg==
-X-Google-Smtp-Source: AGHT+IGcvfZgVgCvBJvWAWus6NY/kiiqBvI05+KMcYf5yy8j963Lwsx14ykezjC8W2FxFYqK37So2w==
-X-Received: by 2002:a0d:cc49:0:b0:5ca:8979:e65d with SMTP id o70-20020a0dcc49000000b005ca8979e65dmr1676595ywd.1.1700646928364;
-        Wed, 22 Nov 2023 01:55:28 -0800 (PST)
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com. [209.85.219.41])
-        by smtp.gmail.com with ESMTPSA id ne7-20020a056214424700b00679f2d55852sm781620qvb.3.2023.11.22.01.55.28
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Nov 2023 01:55:28 -0800 (PST)
-Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-66d0c777bf0so25832066d6.3
-        for <linux-media@vger.kernel.org>; Wed, 22 Nov 2023 01:55:28 -0800 (PST)
-X-Received: by 2002:a05:6214:27c9:b0:679:e48e:1ec1 with SMTP id
- ge9-20020a05621427c900b00679e48e1ec1mr1682833qvb.38.1700646927641; Wed, 22
- Nov 2023 01:55:27 -0800 (PST)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3342925547
+	for <linux-media@vger.kernel.org>; Wed, 22 Nov 2023 10:00:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10E0DC433C7;
+	Wed, 22 Nov 2023 10:00:20 +0000 (UTC)
+Message-ID: <3f075f19-fbe8-4bab-ba2c-296e43da030b@xs4all.nl>
+Date: Wed, 22 Nov 2023 11:00:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231121-guenter-mini-v3-0-d8a5eae2312b@chromium.org>
- <20231121-guenter-mini-v3-2-d8a5eae2312b@chromium.org> <20231122074742.GB1465745@google.com>
- <20231122080132.GA1526356@google.com>
-In-Reply-To: <20231122080132.GA1526356@google.com>
-From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Wed, 22 Nov 2023 10:55:16 +0100
-X-Gmail-Original-Message-ID: <CANiDSCuT6uK+qGJJus=s2DjsnvqxKg4ek9xbssOw5bpmQm_e-A@mail.gmail.com>
-Message-ID: <CANiDSCuT6uK+qGJJus=s2DjsnvqxKg4ek9xbssOw5bpmQm_e-A@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] media: uvcvideo: Do not halt the device after disconnect
-To: Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Tomasz Figa <tfiga@chromium.org>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
-	Alan Stern <stern@rowland.harvard.edu>, Hans Verkuil <hverkuil-cisco@xs4all.nl>, 
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Sean Paul <seanpaul@chromium.org>, Sakari Ailus <sakari.ailus@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [GIT PULL FOR 6.8] V4L2 subdev patches
+Content-Language: en-US, nl
+To: Sakari Ailus <sakari.ailus@iki.fi>, linux-media@vger.kernel.org
+References: <ZVdnpn9EpuY9phPg@valkosipuli.retiisi.eu>
+From: Hans Verkuil <hverkuil@xs4all.nl>
+Autocrypt: addr=hverkuil@xs4all.nl; keydata=
+ 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
+In-Reply-To: <ZVdnpn9EpuY9phPg@valkosipuli.retiisi.eu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Sergey
+On 17/11/2023 14:16, Sakari Ailus wrote:
+> Hi Mauro, Hans,
+> 
+> I've split the large PR into two smaller ones, this only contains
+> relatively unimportant fixes and cleanups mainly for the recenlty merged
+> IVSC driver, but also one for the CCS driver as well as an indentation fix
+> for the v4l2-subdev.h header.
+> 
+> Please pull.
+> 
+> 
+> The following changes since commit 1865913dd590ca6d5e3207b15099a1210dd62f29:
+> 
+>   media: meson-ir-tx: Drop usage of platform_driver_probe() (2023-11-16 13:56:48 +0100)
+> 
+> are available in the Git repository at:
+> 
+>   git://linuxtv.org/sailus/media_tree.git tags/for-6.8-3-signed
+> 
+> for you to fetch changes up to 27b4ca9ef301b2475d4a72d2a8c264ebe7f91482:
+> 
+>   media: ivsc: csi: Check number of lanes on source, too (2023-11-17 09:41:52 +0200)
+> 
+> ----------------------------------------------------------------
+> V4L2 patches for 6.8
+> 
+> ----------------------------------------------------------------
+> Laurent Pinchart (1):
+>       media: v4l2-subdev: Fix indentation in v4l2-subdev.h
 
-On Wed, 22 Nov 2023 at 09:01, Sergey Senozhatsky
-<senozhatsky@chromium.org> wrote:
->
-> On (23/11/22 16:47), Sergey Senozhatsky wrote:
-> > Can the following happen?
->
-> Consider the following case (when CPU1 experienced a delay, a preemption
-> or anything):
->
-> > CPU0                                            CPU1
-> >  uvc_disconnect()
-> >                                               uvc_video_stop_streaming()
-> >  usb_set_intfdata()
-> >  uvc_unregister_video()
-> >
-> >                                               if (!smp_load(&dev->disconnected))
-> >
-> >  smp_store_release(&dev->disconnected, true);
-> >
-> >  kref_put(&dev->ref, uvc_delete);
->
-> >                                                       uvc_video_halt()
->
-> That uvc_video_halt() cannot be legal, right?
+I am skipping this patch: it will clash with this fix for v6.7:
 
-This patch only takes care of calls to uvc_video_stop_streaming()
-after .disconnect.
+https://patchwork.linuxtv.org/project/linux-media/patch/b9b0c0c8-6ece-466a-99e4-d49797f69957@moroto.mountain/
 
-Guenter's patch from this series should take care of the concurrent
-calls. I will resend making it explicit.
+Once this is merged back into our tree it can be applied again.
 
-Thanks!
+Too bad this wasn't corrected in the v6.7 fix, that would have been
+nice.
 
+Regards,
 
--- 
-Ricardo Ribalda
+	Hans
+
+> 
+> Sakari Ailus (7):
+>       media: ccs: Ensure control handlers have been set up after probe
+>       media: ivsc: csi: Don't parse remote endpoints
+>       media: ivsc: csi: Clean up V4L2 async notifier on error
+>       media: ivsc: csi: Clean up notifier set-up
+>       media: ivsc: csi: Clean up parsing firmware and setting up async notifier
+>       media: ivsc: csi: Don't mask v4l2_fwnode_endpoint_parse return value
+>       media: ivsc: csi: Check number of lanes on source, too
+> 
+>  drivers/media/i2c/ccs/ccs-core.c       |  5 ++-
+>  drivers/media/i2c/ccs/ccs.h            |  1 +
+>  drivers/media/pci/intel/ivsc/mei_csi.c | 69 ++++++++++++++++++++++------------
+>  include/uapi/linux/v4l2-subdev.h       |  2 +-
+>  4 files changed, 50 insertions(+), 27 deletions(-)
+> 
+
