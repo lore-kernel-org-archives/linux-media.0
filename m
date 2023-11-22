@@ -1,29 +1,28 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="dghfjNqr"
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59DB1A4;
-	Tue, 21 Nov 2023 20:30:19 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Kh5o00t0"
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A54A10C;
+	Tue, 21 Nov 2023 20:30:22 -0800 (PST)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 44FCB128D;
-	Wed, 22 Nov 2023 05:29:40 +0100 (CET)
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id C91991515;
+	Wed, 22 Nov 2023 05:29:42 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1700627380;
-	bh=yS/Oux+pXiXLp0wWEGoSxpw7w1avThLNA2g6ZYdZ3Gs=;
+	s=mail; t=1700627383;
+	bh=w8Ei6RNmV9GVKFjz/Ai8WwW0Sonyvs/ejKszeuqmeho=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=dghfjNqroIn+oB5DlnwtZb5kOjhSacTXpRm8Sab4lIPDynde+VYCVwfL9SqjhbuGd
-	 ANhEWg9YYXS9DmyxdoZnYu4Hoa/2CVj2TGwSxXu6p6Ud9eLlvvOurak4x7SinGf6rM
-	 R9i9zFFo83hUo2XKCP1WxBMdzl4xdgFky35VtACM=
+	b=Kh5o00t0wkkU60W+SI3vsLUfWFyJTUhETTol6FENbOVRegxGcB9XmOUMnLvmiQSI2
+	 SlzwDhCAp5rFnKOD49Vjci/feTqJHMQRGfdImSJVsrdXBV4IzimR6z6DIWIKXBc34l
+	 KHLRcKcfQBJIGwWRiYu/kP1A5h+D/7U7Zash8HLs=
 From: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 To: linux-media@vger.kernel.org
 Cc: linux-renesas-soc@vger.kernel.org,
 	Sakari Ailus <sakari.ailus@iki.fi>,
 	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
 	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-	Kieran Bingham <kieran.bingham@ideasonboard.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [RFC PATCH v1 05/19] media: renesas: vsp1: Drop custom .get_fmt() handler for histogram
-Date: Wed, 22 Nov 2023 06:29:55 +0200
-Message-ID: <20231122043009.2741-6-laurent.pinchart+renesas@ideasonboard.com>
+	Kieran Bingham <kieran.bingham@ideasonboard.com>
+Subject: [RFC PATCH v1 07/19] media: renesas: vsp1: Simplify partition calculation
+Date: Wed, 22 Nov 2023 06:29:57 +0200
+Message-ID: <20231122043009.2741-8-laurent.pinchart+renesas@ideasonboard.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231122043009.2741-1-laurent.pinchart+renesas@ideasonboard.com>
 References: <20231122043009.2741-1-laurent.pinchart+renesas@ideasonboard.com>
@@ -35,75 +34,38 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+When calculation a partition in vsp1_pipeline_calculate_partition(),
+there is no need to handle the case where the whole image is covered by
+a single partition locally. In that case, the index and div_size
+parameters are 0 and format->width respectively, which makes the general
+code behave exactly as the special case. Drop the special case.
 
-The histogram module is the only one that has a custom .get_fmt()
-handler, to handle the special case of the output format being fixed.
-This can equally well be handled in the .set_fmt() handler instead.
-Beside avoiding special cases and using the same .get_fmt() handler in
-all modules, it ensures that the correct format is stored in the active
-state for the source pad, including when .set_fmt() is called from
-vsp1_entity_init_state(). Both are needed to later switch to the V4L2
-subdev active state API.
-
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 ---
- .../media/platform/renesas/vsp1/vsp1_histo.c  | 29 +++++++------------
- 1 file changed, 10 insertions(+), 19 deletions(-)
+ drivers/media/platform/renesas/vsp1/vsp1_pipe.c | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/drivers/media/platform/renesas/vsp1/vsp1_histo.c b/drivers/media/platform/renesas/vsp1/vsp1_histo.c
-index 576270cb3e63..a4076d82651e 100644
---- a/drivers/media/platform/renesas/vsp1/vsp1_histo.c
-+++ b/drivers/media/platform/renesas/vsp1/vsp1_histo.c
-@@ -356,30 +356,21 @@ static int histo_set_selection(struct v4l2_subdev *subdev,
- 	return ret;
- }
+diff --git a/drivers/media/platform/renesas/vsp1/vsp1_pipe.c b/drivers/media/platform/renesas/vsp1/vsp1_pipe.c
+index b90240b24b3a..ca6817f45dd2 100644
+--- a/drivers/media/platform/renesas/vsp1/vsp1_pipe.c
++++ b/drivers/media/platform/renesas/vsp1/vsp1_pipe.c
+@@ -495,16 +495,6 @@ void vsp1_pipeline_calculate_partition(struct vsp1_pipeline *pipe,
+ 	format = v4l2_subdev_state_get_format(pipe->output->entity.state,
+ 					      RWPF_PAD_SINK);
  
--static int histo_get_format(struct v4l2_subdev *subdev,
--			    struct v4l2_subdev_state *sd_state,
--			    struct v4l2_subdev_format *fmt)
--{
--	if (fmt->pad == HISTO_PAD_SOURCE) {
--		fmt->format.code = MEDIA_BUS_FMT_FIXED;
--		fmt->format.width = 0;
--		fmt->format.height = 0;
--		fmt->format.field = V4L2_FIELD_NONE;
--		fmt->format.colorspace = V4L2_COLORSPACE_RAW;
--		return 0;
+-	/* A single partition simply processes the output size in full. */
+-	if (pipe->partitions <= 1) {
+-		window.left = 0;
+-		window.width = format->width;
+-
+-		vsp1_pipeline_propagate_partition(pipe, partition, index,
+-						  &window);
+-		return;
 -	}
 -
--	return vsp1_subdev_get_pad_format(subdev, sd_state, fmt);
--}
--
- static int histo_set_format(struct v4l2_subdev *subdev,
- 			    struct v4l2_subdev_state *sd_state,
- 			    struct v4l2_subdev_format *fmt)
- {
- 	struct vsp1_histogram *histo = subdev_to_histo(subdev);
- 
--	if (fmt->pad != HISTO_PAD_SINK)
--		return histo_get_format(subdev, sd_state, fmt);
-+	if (fmt->pad == HISTO_PAD_SOURCE) {
-+		fmt->format.code = MEDIA_BUS_FMT_FIXED;
-+		fmt->format.width = 0;
-+		fmt->format.height = 0;
-+		fmt->format.field = V4L2_FIELD_NONE;
-+		fmt->format.colorspace = V4L2_COLORSPACE_RAW;
-+
-+		return 0;
-+	}
- 
- 	return vsp1_subdev_set_pad_format(subdev, sd_state, fmt,
- 					  histo->formats, histo->num_formats,
-@@ -390,7 +381,7 @@ static int histo_set_format(struct v4l2_subdev *subdev,
- static const struct v4l2_subdev_pad_ops histo_pad_ops = {
- 	.enum_mbus_code = histo_enum_mbus_code,
- 	.enum_frame_size = histo_enum_frame_size,
--	.get_fmt = histo_get_format,
-+	.get_fmt = vsp1_subdev_get_pad_format,
- 	.set_fmt = histo_set_format,
- 	.get_selection = histo_get_selection,
- 	.set_selection = histo_set_selection,
+ 	/* Initialise the partition with sane starting conditions. */
+ 	window.left = index * div_size;
+ 	window.width = div_size;
 -- 
 Regards,
 
