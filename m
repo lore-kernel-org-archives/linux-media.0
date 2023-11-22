@@ -1,18 +1,18 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="E+/79NUV"
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71515193;
-	Tue, 21 Nov 2023 20:30:34 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="ZTsb1EtJ"
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28740D45;
+	Tue, 21 Nov 2023 20:30:37 -0800 (PST)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 142FF1716;
-	Wed, 22 Nov 2023 05:29:53 +0100 (CET)
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id ACA64C85;
+	Wed, 22 Nov 2023 05:29:55 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1700627393;
-	bh=Buh6B7v7m6WMMheOju8idTRbqhem5vve85VBKjdM0fE=;
+	s=mail; t=1700627395;
+	bh=jfEFjSGcWkEwC6uMPBJVQbV6nlVimrRVyxDcHJOMmh8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=E+/79NUVt6fbeM10zZfkKQYi0ima6Vnq2d1DSfaW0CvwAAw41AQA88mzSQKyuJtSe
-	 qdjKu0G+Tv2qd0soYSRBFN9M+7GAJupRXQ7Cwsks/Z/JDesUJNYcKFCZImvtyUzyVW
-	 YUPZiFgeGN53CPFbUTwKzfDn9/EthNEMIqYVoCzw=
+	b=ZTsb1EtJvFCpi3A2evnzlZDadc8IL4HPByfrtmUSCjXsWi1H9fArIMGAgOU1vSvcw
+	 mzqe86R/EdsGqAHuKU9w/OYCoXo1JnIDpBR8EGlmf686e7t7XtlBE0RtRYG9YY0QEP
+	 XzCEZMm0PFwshLtvRChA8kPTwdOGohgHrg/DIcXs=
 From: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 To: linux-media@vger.kernel.org
 Cc: linux-renesas-soc@vger.kernel.org,
@@ -20,9 +20,9 @@ Cc: linux-renesas-soc@vger.kernel.org,
 	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
 	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
 	Kieran Bingham <kieran.bingham@ideasonboard.com>
-Subject: [RFC PATCH v1 15/19] media: renesas: vsp1: Name parameters to entity operations
-Date: Wed, 22 Nov 2023 06:30:05 +0200
-Message-ID: <20231122043009.2741-16-laurent.pinchart+renesas@ideasonboard.com>
+Subject: [RFC PATCH v1 17/19] media: renesas: vsp1: Initialize control handler after subdev
+Date: Wed, 22 Nov 2023 06:30:07 +0200
+Message-ID: <20231122043009.2741-18-laurent.pinchart+renesas@ideasonboard.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231122043009.2741-1-laurent.pinchart+renesas@ideasonboard.com>
 References: <20231122043009.2741-1-laurent.pinchart+renesas@ideasonboard.com>
@@ -34,65 +34,84 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-checkpatch.pl complains when function arguments are not named:
-
-WARNING: function definition argument 'struct vsp1_entity *' should also have an identifier name
-+       void (*configure_stream)(struct vsp1_entity *,
-
-In preparation for reworking some of the vsp1_entity_operations
-functions, fix the warnings for the existing ones.
+Some VSP modules initialize their control handler after initializing the
+subdev, while some initialize it before. This makes the code
+inconsistent and more error prone. Standardize on control initialization
+after initializing the subdev.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 ---
- .../media/platform/renesas/vsp1/vsp1_entity.h | 35 +++++++++++--------
- 1 file changed, 21 insertions(+), 14 deletions(-)
+ .../media/platform/renesas/vsp1/vsp1_hgo.c    | 20 +++++++++----------
+ .../media/platform/renesas/vsp1/vsp1_hgt.c    | 12 +++++------
+ 2 files changed, 16 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/media/platform/renesas/vsp1/vsp1_entity.h b/drivers/media/platform/renesas/vsp1/vsp1_entity.h
-index f67f60677644..42000d6e2530 100644
---- a/drivers/media/platform/renesas/vsp1/vsp1_entity.h
-+++ b/drivers/media/platform/renesas/vsp1/vsp1_entity.h
-@@ -77,20 +77,27 @@ struct vsp1_route {
-  *		configuration.
-  */
- struct vsp1_entity_operations {
--	void (*destroy)(struct vsp1_entity *);
--	void (*configure_stream)(struct vsp1_entity *, struct vsp1_pipeline *,
--				 struct vsp1_dl_list *, struct vsp1_dl_body *);
--	void (*configure_frame)(struct vsp1_entity *, struct vsp1_pipeline *,
--				struct vsp1_dl_list *, struct vsp1_dl_body *);
--	void (*configure_partition)(struct vsp1_entity *,
--				    struct vsp1_pipeline *,
--				    const struct vsp1_partition *,
--				    struct vsp1_dl_list *,
--				    struct vsp1_dl_body *);
--	unsigned int (*max_width)(struct vsp1_entity *, struct vsp1_pipeline *);
--	void (*partition)(struct vsp1_entity *, struct vsp1_pipeline *,
--			  struct vsp1_partition *, unsigned int,
--			  struct v4l2_rect *);
-+	void (*destroy)(struct vsp1_entity *entity);
-+	void (*configure_stream)(struct vsp1_entity *entity,
-+				 struct vsp1_pipeline *pipe,
-+				 struct vsp1_dl_list *dl,
-+				 struct vsp1_dl_body *dlb);
-+	void (*configure_frame)(struct vsp1_entity *entity,
-+				struct vsp1_pipeline *pipe,
-+				struct vsp1_dl_list *dl,
-+				struct vsp1_dl_body *dlb);
-+	void (*configure_partition)(struct vsp1_entity *entity,
-+				    struct vsp1_pipeline *pipe,
-+				    const struct vsp1_partition *partition,
-+				    struct vsp1_dl_list *dl,
-+				    struct vsp1_dl_body *dlb);
-+	unsigned int (*max_width)(struct vsp1_entity *entity,
-+				  struct vsp1_pipeline *pipe);
-+	void (*partition)(struct vsp1_entity *entity,
-+			  struct vsp1_pipeline *pipe,
-+			  struct vsp1_partition *partition,
-+			  unsigned int index,
-+			  struct v4l2_rect *window);
- };
+diff --git a/drivers/media/platform/renesas/vsp1/vsp1_hgo.c b/drivers/media/platform/renesas/vsp1/vsp1_hgo.c
+index 237dc4c7c5ed..21cffe6947a2 100644
+--- a/drivers/media/platform/renesas/vsp1/vsp1_hgo.c
++++ b/drivers/media/platform/renesas/vsp1/vsp1_hgo.c
+@@ -192,6 +192,16 @@ struct vsp1_hgo *vsp1_hgo_create(struct vsp1_device *vsp1)
+ 	if (hgo == NULL)
+ 		return ERR_PTR(-ENOMEM);
  
- struct vsp1_entity {
++	/* Initialize the video device and queue for statistics data. */
++	ret = vsp1_histogram_init(vsp1, &hgo->histo, VSP1_ENTITY_HGO, "hgo",
++				  &hgo_entity_ops, hgo_mbus_formats,
++				  ARRAY_SIZE(hgo_mbus_formats),
++				  HGO_DATA_SIZE, V4L2_META_FMT_VSP1_HGO);
++	if (ret < 0) {
++		vsp1_entity_destroy(&hgo->histo.entity);
++		return ERR_PTR(ret);
++	}
++
+ 	/* Initialize the control handler. */
+ 	v4l2_ctrl_handler_init(&hgo->ctrls.handler,
+ 			       vsp1->info->gen >= 3 ? 2 : 1);
+@@ -207,15 +217,5 @@ struct vsp1_hgo *vsp1_hgo_create(struct vsp1_device *vsp1)
+ 
+ 	hgo->histo.entity.subdev.ctrl_handler = &hgo->ctrls.handler;
+ 
+-	/* Initialize the video device and queue for statistics data. */
+-	ret = vsp1_histogram_init(vsp1, &hgo->histo, VSP1_ENTITY_HGO, "hgo",
+-				  &hgo_entity_ops, hgo_mbus_formats,
+-				  ARRAY_SIZE(hgo_mbus_formats),
+-				  HGO_DATA_SIZE, V4L2_META_FMT_VSP1_HGO);
+-	if (ret < 0) {
+-		vsp1_entity_destroy(&hgo->histo.entity);
+-		return ERR_PTR(ret);
+-	}
+-
+ 	return hgo;
+ }
+diff --git a/drivers/media/platform/renesas/vsp1/vsp1_hgt.c b/drivers/media/platform/renesas/vsp1/vsp1_hgt.c
+index b73eac676ef0..a447ed1c59c3 100644
+--- a/drivers/media/platform/renesas/vsp1/vsp1_hgt.c
++++ b/drivers/media/platform/renesas/vsp1/vsp1_hgt.c
+@@ -191,12 +191,6 @@ struct vsp1_hgt *vsp1_hgt_create(struct vsp1_device *vsp1)
+ 	if (hgt == NULL)
+ 		return ERR_PTR(-ENOMEM);
+ 
+-	/* Initialize the control handler. */
+-	v4l2_ctrl_handler_init(&hgt->ctrls, 1);
+-	v4l2_ctrl_new_custom(&hgt->ctrls, &hgt_hue_areas, NULL);
+-
+-	hgt->histo.entity.subdev.ctrl_handler = &hgt->ctrls;
+-
+ 	/* Initialize the video device and queue for statistics data. */
+ 	ret = vsp1_histogram_init(vsp1, &hgt->histo, VSP1_ENTITY_HGT, "hgt",
+ 				  &hgt_entity_ops, hgt_mbus_formats,
+@@ -207,6 +201,12 @@ struct vsp1_hgt *vsp1_hgt_create(struct vsp1_device *vsp1)
+ 		return ERR_PTR(ret);
+ 	}
+ 
++	/* Initialize the control handler. */
++	v4l2_ctrl_handler_init(&hgt->ctrls, 1);
++	v4l2_ctrl_new_custom(&hgt->ctrls, &hgt_hue_areas, NULL);
++
++	hgt->histo.entity.subdev.ctrl_handler = &hgt->ctrls;
++
+ 	v4l2_ctrl_handler_setup(&hgt->ctrls);
+ 
+ 	return hgt;
 -- 
 Regards,
 
