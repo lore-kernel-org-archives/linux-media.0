@@ -1,345 +1,90 @@
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EB3F3FE4E;
+	Thu, 23 Nov 2023 17:22:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TBn9Khm8"
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E804F10E3
-	for <linux-media@vger.kernel.org>; Thu, 23 Nov 2023 09:03:13 -0800 (PST)
-Received: by mail-lj1-x241.google.com with SMTP id 38308e7fff4ca-2c4fdf94666so13627291fa.2
-        for <linux-media@vger.kernel.org>; Thu, 23 Nov 2023 09:03:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700758992; x=1701363792; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K2oLvmaqR7ZQqKyuNCjR+v7IrIpMiJ4TCDxYGIq4gEE=;
-        b=TBn9Khm8f4nrPtKYFStaddYoqSnii4lcXwX5cCEMD5FzJzzL7Qu3G8WGHb7VsNpnrX
-         MQ/QzrBFCo5GUu5AujGpdS4XNUW3aOA5vD8QYrrJJlwCeDk+Fy6xNCQcloOSXXaNOOZF
-         oZzFejonGw9/ZLmSDVltIEAXUWjzJOy3Z1CbJWjKRrx7P6vTTzDyGFUEnoc0mXFX+Sek
-         FFE4r9S7P4OyO4Tnzo4Tz6jENLGI+mNl0UXw1HsoKpjiMmmNSJKQNgUhQ3//X6vhHqpf
-         Mwsd4mgBVKkhYmyVSz/tENa79PhENLD0Dc89TqdXXd/gqDVQiOiUC1XdTnevO6J/JbhG
-         T5uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700758992; x=1701363792;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=K2oLvmaqR7ZQqKyuNCjR+v7IrIpMiJ4TCDxYGIq4gEE=;
-        b=G955YFvmuRXDXGom/D2PjhyLteaS3GQOyegSHl6r9Hb7dQQ9o1l5EFkbayErFtCPhK
-         Kyii0tL28tICBDsUO/Isi+GKzrdu5gLAHz14Jn8oT6n+tzXl447T6hUJUZ8jeZNXwon0
-         fWd8pFN84zEp/yIR4VZUhoFgaRaidOcA8XWoXiCJNjNeGvXjmEjpuZ+iRVl6FkzXs+Wi
-         awzQM1r/VITnkvgumpiuFnqXuloMFtLyiL5LYJFZlWhHRZF3YIrvCQ4N4tCShaBOENBq
-         ztbV3HJCL/NXoj7bDDTZeanERUG7aPiS3upq97F9S8meeb3I6Riw9h2C2qKnArR6XKMF
-         idaQ==
-X-Gm-Message-State: AOJu0Yy+XH6TMg/k+ZCUOkg/HRXRpO5exhgJZEQ/W+RSLQWx1Q/Ln6Tj
-	F3yr8Z9KQBbxKmzdlfz5vgR16g==
-X-Google-Smtp-Source: AGHT+IHy6ITM2gT4J9dAV6hIznwg0fVt/iGVOaabCg0wAaw5kvQqwYS70GTKrZlF+bdDTLiJVOSxMQ==
-X-Received: by 2002:a2e:a4a8:0:b0:2c8:3b12:776d with SMTP id g8-20020a2ea4a8000000b002c83b12776dmr4457576ljm.6.1700758991451;
-        Thu, 23 Nov 2023 09:03:11 -0800 (PST)
-Received: from [127.0.0.1] ([37.228.218.3])
-        by smtp.gmail.com with ESMTPSA id f9-20020a0560001b0900b0032196c508e3sm2172585wrz.53.2023.11.23.09.03.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Nov 2023 09:03:10 -0800 (PST)
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Date: Thu, 23 Nov 2023 17:03:05 +0000
-Subject: [PATCH v6 6/8] media: qcom: camss: Flag VFE-lites to support more
- VFEs
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ZJbL2IbQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C207C433CA;
+	Thu, 23 Nov 2023 17:22:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1700760153;
+	bh=Uzgttd6rcXSVlPlqk1vUw05LAy6cR6LhDMD0kUveHm4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZJbL2IbQPsgwKH79xt11331R+43HtTZgGu/j3yZtJAtETb1YAQRA6lLf0sv1GqraX
+	 wRYmpHVL6ArfpVkpx+TWqKIeoD5F9b+14+BfVSLn/NnhtbApKeHN3oAhVrxbAY7eqx
+	 /GhVy5NwALzrST15kB0xggboNBazY+hENq/Drg+g=
+Date: Thu, 23 Nov 2023 13:53:42 +0000
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Umang Jain <umang.jain@ideasonboard.com>, linux-staging@lists.linux.dev,
+	linux-rpi-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+	Stefan Wahren <stefan.wahren@i2se.com>,
+	Dan Carpenter <error27@gmail.com>,
+	Kieran Bingham <kieran.bingham@ideasonboard.com>,
+	Phil Elwell <phil@raspberrypi.com>,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>
+Subject: Re: [PATCH 6/9] staging: vc04_services: Drop vchiq_log_error() in
+ favour of dev_dbg
+Message-ID: <2023112338-scrambler-utilize-a31d@gregkh>
+References: <20231107095156.365492-1-umang.jain@ideasonboard.com>
+ <20231107095156.365492-7-umang.jain@ideasonboard.com>
+ <2023112322-wife-aspect-135b@gregkh>
+ <20231123134941.GD16377@pendragon.ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20231123-b4-camss-named-power-domains-v6-6-3ec2fd9e8e36@linaro.org>
-References: <20231123-b4-camss-named-power-domains-v6-0-3ec2fd9e8e36@linaro.org>
-In-Reply-To: <20231123-b4-camss-named-power-domains-v6-0-3ec2fd9e8e36@linaro.org>
-To: hverkuil-cisco@xs4all.nl, laurent.pinchart@ideasonboard.com, 
- Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>, 
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
- Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konrad.dybcio@linaro.org>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, matti.lehtimaki@gmail.com, 
- quic_grosikop@quicinc.com
-Cc: linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
- linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-X-Mailer: b4 0.13-dev-26615
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231123134941.GD16377@pendragon.ideasonboard.com>
 
-From: Matti Lehtimäki <matti.lehtimaki@gmail.com>
+On Thu, Nov 23, 2023 at 03:49:41PM +0200, Laurent Pinchart wrote:
+> On Thu, Nov 23, 2023 at 01:02:45PM +0000, Greg Kroah-Hartman wrote:
+> > On Tue, Nov 07, 2023 at 04:51:53AM -0500, Umang Jain wrote:
+> > > Drop vchiq_log_error() macro which wraps dev_dbg(). Introduce the usage
+> > > of dev_dbg() directly.
+> > > 
+> > > Add a new enum vchiq_log_type and log_type() helper to faciliate the
+> > > type of logging in dev_dbg(). This will help to determine the type of
+> > > logging("error", "warning", "debug", "trace") to dynamic debug.
+> > > 
+> > > Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+> > > ---
+> > >  .../interface/vchiq_arm/vchiq_arm.c           |  54 ++++----
+> > >  .../interface/vchiq_arm/vchiq_connected.c     |   6 +-
+> > >  .../interface/vchiq_arm/vchiq_core.c          | 126 ++++++++++--------
+> > >  .../interface/vchiq_arm/vchiq_core.h          |  23 +++-
+> > >  .../interface/vchiq_arm/vchiq_dev.c           |  47 ++++---
+> > >  5 files changed, 143 insertions(+), 113 deletions(-)
+> > > 
+> > > diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+> > > index 9fb3e240d9de..2cb2a6503058 100644
+> > > --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+> > > +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+> > > @@ -696,8 +696,8 @@ int vchiq_initialise(struct vchiq_instance **instance_out)
+> > >  
+> > >  	instance = kzalloc(sizeof(*instance), GFP_KERNEL);
+> > >  	if (!instance) {
+> > > -		vchiq_log_error(state->dev, VCHIQ_CORE,
+> > > -				"%s: error allocating vchiq instance\n", __func__);
+> > > +		dev_dbg(state->dev, "%s: %s: %s: error allocating vchiq instance\n",
+> > > +			log_cat(VCHIQ_CORE), log_type(ERROR), __func__);
+> > 
+> > All dev_dbg() calls have __func__ in them automatically, you never need
+> > to duplicate it again as that's redundant :(
+> 
+> Oh ? I didn't know that, and can't find it in the code. I may be missing
+> something though. Are you referring to the +f flag for dynamic debug
+> entries ? It won't work if dynamic debug isn't enabled though, but maybe
+> we don't care about that ?
 
-Some platforms such as SC7280 have three VFEs and two VFE-lites. Current
-code has hard-coded two as the maximum number of VFEs. Remove the
-hard-coded maximum number of VFEs to handle all possible combinations of
-VFEs and VFE-lites.
+Yes, the "f" flag is what controls this, and if dynamic debug isn't
+enabled, you don't get any message here and we don't care about it :)
 
-Signed-off-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202311200405.h6G4L9oe-lkp@intel.com
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- drivers/media/platform/qcom/camss/camss-vfe-480.c | 33 +++++++++++------------
- drivers/media/platform/qcom/camss/camss-vfe.c     |  5 ++++
- drivers/media/platform/qcom/camss/camss-vfe.h     | 10 +++++++
- drivers/media/platform/qcom/camss/camss.c         | 26 +++++++++---------
- drivers/media/platform/qcom/camss/camss.h         |  3 +--
- 5 files changed, 44 insertions(+), 33 deletions(-)
+thanks,
 
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe-480.c b/drivers/media/platform/qcom/camss/camss-vfe-480.c
-index 4652e8b4cff58..dc2735476c823 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe-480.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe-480.c
-@@ -15,31 +15,28 @@
- #include "camss.h"
- #include "camss-vfe.h"
- 
--/* VFE 2/3 are lite and have a different register layout */
--#define IS_LITE		(vfe->id >= 2 ? 1 : 0)
--
- #define VFE_HW_VERSION			(0x00)
- 
--#define VFE_GLOBAL_RESET_CMD		(IS_LITE ? 0x0c : 0x1c)
--#define	    GLOBAL_RESET_HW_AND_REG	(IS_LITE ? BIT(1) : BIT(0))
-+#define VFE_GLOBAL_RESET_CMD		(vfe_is_lite(vfe) ? 0x0c : 0x1c)
-+#define	    GLOBAL_RESET_HW_AND_REG	(vfe_is_lite(vfe) ? BIT(1) : BIT(0))
- 
--#define VFE_REG_UPDATE_CMD		(IS_LITE ? 0x20 : 0x34)
-+#define VFE_REG_UPDATE_CMD		(vfe_is_lite(vfe) ? 0x20 : 0x34)
- static inline int reg_update_rdi(struct vfe_device *vfe, int n)
- {
--	return IS_LITE ? BIT(n) : BIT(1 + (n));
-+	return vfe_is_lite(vfe) ? BIT(n) : BIT(1 + (n));
- }
- 
- #define	    REG_UPDATE_RDI		reg_update_rdi
--#define VFE_IRQ_CMD			(IS_LITE ? 0x24 : 0x38)
-+#define VFE_IRQ_CMD			(vfe_is_lite(vfe) ? 0x24 : 0x38)
- #define     IRQ_CMD_GLOBAL_CLEAR	BIT(0)
- 
--#define VFE_IRQ_MASK(n)			((IS_LITE ? 0x28 : 0x3c) + (n) * 4)
--#define	    IRQ_MASK_0_RESET_ACK	(IS_LITE ? BIT(17) : BIT(0))
--#define	    IRQ_MASK_0_BUS_TOP_IRQ	(IS_LITE ? BIT(4) : BIT(7))
--#define VFE_IRQ_CLEAR(n)		((IS_LITE ? 0x34 : 0x48) + (n) * 4)
--#define VFE_IRQ_STATUS(n)		((IS_LITE ? 0x40 : 0x54) + (n) * 4)
-+#define VFE_IRQ_MASK(n)			((vfe_is_lite(vfe) ? 0x28 : 0x3c) + (n) * 4)
-+#define	    IRQ_MASK_0_RESET_ACK	(vfe_is_lite(vfe) ? BIT(17) : BIT(0))
-+#define	    IRQ_MASK_0_BUS_TOP_IRQ	(vfe_is_lite(vfe) ? BIT(4) : BIT(7))
-+#define VFE_IRQ_CLEAR(n)		((vfe_is_lite(vfe) ? 0x34 : 0x48) + (n) * 4)
-+#define VFE_IRQ_STATUS(n)		((vfe_is_lite(vfe) ? 0x40 : 0x54) + (n) * 4)
- 
--#define BUS_REG_BASE			(IS_LITE ? 0x1a00 : 0xaa00)
-+#define BUS_REG_BASE			(vfe_is_lite(vfe) ? 0x1a00 : 0xaa00)
- 
- #define VFE_BUS_WM_CGC_OVERRIDE		(BUS_REG_BASE + 0x08)
- #define		WM_CGC_OVERRIDE_ALL	(0x3FFFFFF)
-@@ -49,13 +46,13 @@ static inline int reg_update_rdi(struct vfe_device *vfe, int n)
- #define VFE_BUS_IRQ_MASK(n)		(BUS_REG_BASE + 0x18 + (n) * 4)
- static inline int bus_irq_mask_0_rdi_rup(struct vfe_device *vfe, int n)
- {
--	return IS_LITE ? BIT(n) : BIT(3 + (n));
-+	return vfe_is_lite(vfe) ? BIT(n) : BIT(3 + (n));
- }
- 
- #define     BUS_IRQ_MASK_0_RDI_RUP	bus_irq_mask_0_rdi_rup
- static inline int bus_irq_mask_0_comp_done(struct vfe_device *vfe, int n)
- {
--	return IS_LITE ? BIT(4 + (n)) : BIT(6 + (n));
-+	return vfe_is_lite(vfe) ? BIT(4 + (n)) : BIT(6 + (n));
- }
- 
- #define     BUS_IRQ_MASK_0_COMP_DONE	bus_irq_mask_0_comp_done
-@@ -90,8 +87,8 @@ static inline int bus_irq_mask_0_comp_done(struct vfe_device *vfe, int n)
- /* for titan 480, each bus client is hardcoded to a specific path
-  * and each bus client is part of a hardcoded "comp group"
-  */
--#define RDI_WM(n)			((IS_LITE ? 0 : 23) + (n))
--#define RDI_COMP_GROUP(n)		((IS_LITE ? 0 : 11) + (n))
-+#define RDI_WM(n)			((vfe_is_lite(vfe) ? 0 : 23) + (n))
-+#define RDI_COMP_GROUP(n)		((vfe_is_lite(vfe) ? 0 : 11) + (n))
- 
- #define MAX_VFE_OUTPUT_LINES	4
- 
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
-index 083d1445a6e25..b6ec0dc425b2d 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe.c
-@@ -1739,3 +1739,8 @@ void msm_vfe_unregister_entities(struct vfe_device *vfe)
- 		media_entity_cleanup(&sd->entity);
- 	}
- }
-+
-+bool vfe_is_lite(struct vfe_device *vfe)
-+{
-+	return vfe->camss->res->vfe_res[vfe->id].is_lite;
-+}
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe.h b/drivers/media/platform/qcom/camss/camss-vfe.h
-index cdbe59d8d437e..0572c9b08e112 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe.h
-+++ b/drivers/media/platform/qcom/camss/camss-vfe.h
-@@ -226,4 +226,14 @@ extern const struct vfe_hw_ops vfe_ops_480;
- int vfe_get(struct vfe_device *vfe);
- void vfe_put(struct vfe_device *vfe);
- 
-+/*
-+ * vfe_is_lite - Return if VFE is VFE lite.
-+ * @vfe: VFE Device
-+ *
-+ * Some VFE lites have a different register layout.
-+ *
-+ * Return whether VFE is VFE lite
-+ */
-+bool vfe_is_lite(struct vfe_device *vfe);
-+
- #endif /* QC_MSM_CAMSS_VFE_H */
-diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
-index f2d2317c38b5b..7c49654a12964 100644
---- a/drivers/media/platform/qcom/camss/camss.c
-+++ b/drivers/media/platform/qcom/camss/camss.c
-@@ -706,6 +706,7 @@ static const struct camss_subdev_resources vfe_res_845[] = {
- 				{ 384000000 } },
- 		.reg = { "vfe_lite" },
- 		.interrupt = { "vfe_lite" },
-+		.is_lite = true,
- 		.line_num = 4,
- 		.ops = &vfe_ops_170
- 	}
-@@ -886,6 +887,7 @@ static const struct camss_subdev_resources vfe_res_8250[] = {
- 				{ 0 } },
- 		.reg = { "vfe_lite0" },
- 		.interrupt = { "vfe_lite0" },
-+		.is_lite = true,
- 		.line_num = 4,
- 		.ops = &vfe_ops_480
- 	},
-@@ -905,6 +907,7 @@ static const struct camss_subdev_resources vfe_res_8250[] = {
- 				{ 0 } },
- 		.reg = { "vfe_lite1" },
- 		.interrupt = { "vfe_lite1" },
-+		.is_lite = true,
- 		.line_num = 4,
- 		.ops = &vfe_ops_480
- 	},
-@@ -1204,7 +1207,7 @@ static int camss_init_subdevices(struct camss *camss)
- 	}
- 
- 	/* note: SM8250 requires VFE to be initialized before CSID */
--	for (i = 0; i < camss->vfe_total_num; i++) {
-+	for (i = 0; i < camss->res->vfe_num; i++) {
- 		ret = msm_vfe_subdev_init(camss, &camss->vfe[i],
- 					  &res->vfe_res[i], i);
- 		if (ret < 0) {
-@@ -1276,7 +1279,7 @@ static int camss_register_entities(struct camss *camss)
- 		goto err_reg_ispif;
- 	}
- 
--	for (i = 0; i < camss->vfe_total_num; i++) {
-+	for (i = 0; i < camss->res->vfe_num; i++) {
- 		ret = msm_vfe_register_entities(&camss->vfe[i],
- 						&camss->v4l2_dev);
- 		if (ret < 0) {
-@@ -1348,7 +1351,7 @@ static int camss_register_entities(struct camss *camss)
- 				}
- 	} else {
- 		for (i = 0; i < camss->res->csid_num; i++)
--			for (k = 0; k < camss->vfe_total_num; k++)
-+			for (k = 0; k < camss->res->vfe_num; k++)
- 				for (j = 0; j < camss->vfe[k].line_num; j++) {
- 					struct v4l2_subdev *csid = &camss->csid[i].subdev;
- 					struct v4l2_subdev *vfe = &camss->vfe[k].line[j].subdev;
-@@ -1372,7 +1375,7 @@ static int camss_register_entities(struct camss *camss)
- 	return 0;
- 
- err_link:
--	i = camss->vfe_total_num;
-+	i = camss->res->vfe_num;
- err_reg_vfe:
- 	for (i--; i >= 0; i--)
- 		msm_vfe_unregister_entities(&camss->vfe[i]);
-@@ -1411,7 +1414,7 @@ static void camss_unregister_entities(struct camss *camss)
- 
- 	msm_ispif_unregister_entities(camss->ispif);
- 
--	for (i = 0; i < camss->vfe_total_num; i++)
-+	for (i = 0; i < camss->res->vfe_num; i++)
- 		msm_vfe_unregister_entities(&camss->vfe[i]);
- }
- 
-@@ -1509,7 +1512,7 @@ static int camss_configure_pd(struct camss *camss)
- 		return 0;
- 
- 	/* count the # of VFEs which have flagged power-domain */
--	for (vfepd_num = i = 0; i < camss->vfe_total_num; i++) {
-+	for (vfepd_num = i = 0; i < camss->res->vfe_num; i++) {
- 		if (res->vfe_res[i].has_pd)
- 			vfepd_num++;
- 	}
-@@ -1584,7 +1587,7 @@ static void camss_genpd_subdevice_cleanup(struct camss *camss)
- {
- 	int i;
- 
--	for (i = 0; i < camss->vfe_total_num; i++)
-+	for (i = 0; i < camss->res->vfe_num; i++)
- 		msm_vfe_genpd_cleanup(&camss->vfe[i]);
- }
- 
-@@ -1641,8 +1644,7 @@ static int camss_probe(struct platform_device *pdev)
- 			return -ENOMEM;
- 	}
- 
--	camss->vfe_total_num = camss->res->vfe_num + camss->res->vfe_lite_num;
--	camss->vfe = devm_kcalloc(dev, camss->vfe_total_num,
-+	camss->vfe = devm_kcalloc(dev, camss->res->vfe_num,
- 				  sizeof(*camss->vfe), GFP_KERNEL);
- 	if (!camss->vfe)
- 		return -ENOMEM;
-@@ -1800,8 +1802,7 @@ static const struct camss_resources sdm845_resources = {
- 	.vfe_res = vfe_res_845,
- 	.csiphy_num = ARRAY_SIZE(csiphy_res_845),
- 	.csid_num = ARRAY_SIZE(csid_res_845),
--	.vfe_num = 2,
--	.vfe_lite_num = 1,
-+	.vfe_num = ARRAY_SIZE(vfe_res_845),
- };
- 
- static const struct camss_resources sm8250_resources = {
-@@ -1813,8 +1814,7 @@ static const struct camss_resources sm8250_resources = {
- 	.icc_path_num = ARRAY_SIZE(icc_res_sm8250),
- 	.csiphy_num = ARRAY_SIZE(csiphy_res_8250),
- 	.csid_num = ARRAY_SIZE(csid_res_8250),
--	.vfe_num = 2,
--	.vfe_lite_num = 2,
-+	.vfe_num = ARRAY_SIZE(vfe_res_8250),
- };
- 
- static const struct of_device_id camss_dt_match[] = {
-diff --git a/drivers/media/platform/qcom/camss/camss.h b/drivers/media/platform/qcom/camss/camss.h
-index cd8186fe1797b..a0c2dcc779f05 100644
---- a/drivers/media/platform/qcom/camss/camss.h
-+++ b/drivers/media/platform/qcom/camss/camss.h
-@@ -51,6 +51,7 @@ struct camss_subdev_resources {
- 	char *pd_name;
- 	u8 line_num;
- 	bool has_pd;
-+	bool is_lite;
- 	const void *ops;
- };
- 
-@@ -95,7 +96,6 @@ struct camss_resources {
- 	const unsigned int csiphy_num;
- 	const unsigned int csid_num;
- 	const unsigned int vfe_num;
--	const unsigned int vfe_lite_num;
- };
- 
- struct camss {
-@@ -113,7 +113,6 @@ struct camss {
- 	struct device_link *genpd_link;
- 	struct icc_path *icc_path[ICC_SM8250_COUNT];
- 	const struct camss_resources *res;
--	unsigned int vfe_total_num;
- };
- 
- struct camss_camera_interface {
-
--- 
-2.42.0
-
+greg k-h
