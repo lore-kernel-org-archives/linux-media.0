@@ -1,103 +1,146 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FZkkrKaN"
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0DF1BF
-	for <linux-media@vger.kernel.org>; Wed, 22 Nov 2023 12:55:20 -0800 (PST)
-Received: by mail-wr1-x441.google.com with SMTP id ffacd0b85a97d-3316ad2bee5so83292f8f.1
-        for <linux-media@vger.kernel.org>; Wed, 22 Nov 2023 12:55:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700686519; x=1701291319; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2t59Fa6x9+OMKFeAiyu6I2ztOlailS3HduNbUQsClFM=;
-        b=FZkkrKaNeqV77kB6J8pxnhX4M4ex5iikAn9/V1Pw2CNdNGtFDyQwwd2am2jmMdSbI/
-         uzzR1NOlyhflTroaYvh+urXF7uWTp3VzO+trAF3eU1PfxFexQU6Ybqn5BGV1qkVD78U1
-         t7OIa1J9krn2HiYfMsbuD7Rz2CXPevTT9FVtZyaAraJi7FQD+OsU4tEFUwose/PS8FNI
-         3Qj1Mo8DeKpxzhYeP/XMHI+H7dOhHEInAWhPjvY9V6mod94PfehzT80CDbT5GPT+L9LX
-         9BE+e2puI2zD4LXzVcojDSluACz+xOzEzAHjWchaPvq1DKpanS57GqRLs3hnBoTiGdFy
-         ZSUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700686519; x=1701291319;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2t59Fa6x9+OMKFeAiyu6I2ztOlailS3HduNbUQsClFM=;
-        b=Asjab7UGee+k9GvFxxO8m40107ssNdi0OQvpTZwaZeJ9Gsjfbq29e/mR3No8qStpW1
-         nAJKh8v9nWbEixqkEPVLJZ+4kV2ApkAcrSg5qGgLeLj13FlriiynlE7vR9S4PgB/edx5
-         7098YXl5N2sJo0F3Fi+g6Fk/0jr3aRPuhcv4MGOAxHa3VZkl4yjldn33lcIydySFUYL6
-         ziZNtjP+7QH+Qhw9xHXmWXQKRg1/MMHozQ4P2tUHOqHkEYQcHYL8ibOQ84+Sra6xx1Je
-         PKQ3aYmI0rPb8y0V1Cl8Tj47Mx/GalbRgLle50Ot36qkW2lYlT00JOoZnHD3xtvMKVgU
-         3y1w==
-X-Gm-Message-State: AOJu0Yzby26jInO3y3RUmrh1/BJzltZRUnsHzXpUh5I+/gS69w6tAL3t
-	85nKByKg099Tp2NC98iXSYGrhw==
-X-Google-Smtp-Source: AGHT+IG60b8OCVUD+2XdNjhRQVYCCd4GUOo68JLOTT6dW/Q7BdGxbpywm+InojqevSZW4802hYEIfg==
-X-Received: by 2002:a5d:698f:0:b0:332:cae1:c610 with SMTP id g15-20020a5d698f000000b00332cae1c610mr1190003wru.23.1700686519116;
-        Wed, 22 Nov 2023 12:55:19 -0800 (PST)
-Received: from [192.168.100.102] ([37.228.218.3])
-        by smtp.gmail.com with ESMTPSA id n10-20020a5d6b8a000000b003258934a4bcsm306193wrx.42.2023.11.22.12.55.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Nov 2023 12:55:18 -0800 (PST)
-Message-ID: <339c3efd-8d2b-4b71-8dc1-cdc30ab7bb8a@linaro.org>
-Date: Wed, 22 Nov 2023 20:55:17 +0000
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bjP28GuP"
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8AED42;
+	Wed, 22 Nov 2023 17:55:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700704513; x=1732240513;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AZJ271P9oq4wW/F8qserHlPAU235ACCRwStgacxDnBY=;
+  b=bjP28GuP8q3C/8ocg3UkRVZ28DBeLO0ix0L8pbTG8MuyOyfXQN9JH+YA
+   AaYjk8JC4B5ntBv36TobMvjndouJtGFCa4QjVSa7/47qDfvHZw3WH7rT/
+   BqAMe2xliwxgHZBSFs5OQxngAodchByC5fajQpm5l96CT9H1bzA32qAiT
+   ib0f7w/tn6duTBpkTvHsLmoGpO+I3NmR1f/M0ENYCEHEprMONiT9wPfXx
+   +EEQL+dluRDrVbCkuKpIUeVf35aS26kc3+4nQRNY50J22VGalAttzu1G7
+   9wnxtH56Z7L3uwhZ+cKUyszisuNj4IQ8rNu9L6Ls9ZhXHmmWGbaBOI7NR
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="13737178"
+X-IronPort-AV: E=Sophos;i="6.04,220,1695711600"; 
+   d="scan'208";a="13737178"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2023 17:55:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="801909594"
+X-IronPort-AV: E=Sophos;i="6.04,220,1695711600"; 
+   d="scan'208";a="801909594"
+Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 22 Nov 2023 17:55:09 -0800
+Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r5yvr-00016F-0h;
+	Thu, 23 Nov 2023 01:55:07 +0000
+Date: Thu, 23 Nov 2023 09:54:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alain Volmat <alain.volmat@foss.st.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+	Kieran Bingham <kieran.bingham@ideasonboard.com>,
+	Pavel Machek <pavel@ucw.cz>,
+	Alain Volmat <alain.volmat@foss.st.com>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 3/3] media: i2c: gc2145: Galaxy Core GC2145 sensor
+ support
+Message-ID: <202311230621.ATIDPgtm-lkp@intel.com>
+References: <20231122075154.789431-4-alain.volmat@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 5/7] media: qcom: camss: Add support for named
- power-domains
-Content-Language: en-US
-To: Konrad Dybcio <konrad.dybcio@linaro.org>, hverkuil-cisco@xs4all.nl,
- laurent.pinchart@ideasonboard.com, Robert Foss <rfoss@kernel.org>,
- Todor Tomov <todor.too@gmail.com>, Andy Gross <agross@kernel.org>,
- Bjorn Andersson <andersson@kernel.org>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, matti.lehtimaki@gmail.com,
- quic_grosikop@quicinc.com
-Cc: linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20231118-b4-camss-named-power-domains-v5-0-55eb0f35a30a@linaro.org>
- <20231118-b4-camss-named-power-domains-v5-5-55eb0f35a30a@linaro.org>
- <6e66875a-5cb1-42bc-86e0-b69cf73981c0@linaro.org>
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <6e66875a-5cb1-42bc-86e0-b69cf73981c0@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231122075154.789431-4-alain.volmat@foss.st.com>
 
-On 22/11/2023 19:55, Konrad Dybcio wrote:
-> 
-> 
-> On 11/18/23 13:11, Bryan O'Donoghue wrote:
->> Right now we use fixed indexes to assign power-domains, with a
->> requirement for the TOP GDSC to come last in the list.
->>
->> Adding support for named power-domains means the declaration in the dtsi
->> can come in any order.
->>
->> After this change we continue to support the old indexing - if a SoC
->> resource declaration or the in-use dtb doesn't declare power-domain names
->> we fall back to the default legacy indexing.
->>
->>  From this point on though new SoC additions should contain named
->> power-domains, eventually we will drop support for legacy indexing.
->>
->> Tested-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
->> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
->> ---
-> So, this commit should be a NOP within this series?
-> 
-> res->pd_name isn't defined anywhere afaics
-> 
-> Konrad
+Hi Alain,
 
-This series is mergeable though the linux-media tree standalone, yes.
+kernel test robot noticed the following build errors:
 
-Once merged, the dtsi change given in the cover letter will be submitted.
+[auto build test ERROR on linuxtv-media-stage/master]
+[also build test ERROR on linus/master v6.7-rc2 next-20231122]
+[cannot apply to media-tree/master robh/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The sm8250 change is posted here : 
-https://git.codelinaro.org/bryan.odonoghue/kernel/-/tree/b4/b4-camss-named-power-domains-v5+sm8250
+url:    https://github.com/intel-lab-lkp/linux/commits/Alain-Volmat/dt-bindings-vendor-prefixes-Add-prefix-for-GalaxyCore-Inc/20231122-155443
+base:   https://git.linuxtv.org/media_stage.git master
+patch link:    https://lore.kernel.org/r/20231122075154.789431-4-alain.volmat%40foss.st.com
+patch subject: [PATCH v5 3/3] media: i2c: gc2145: Galaxy Core GC2145 sensor support
+config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20231123/202311230621.ATIDPgtm-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231123/202311230621.ATIDPgtm-lkp@intel.com/reproduce)
 
----
-bod
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311230621.ATIDPgtm-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/media/i2c/gc2145.c: In function 'gc2145_init_cfg':
+>> drivers/media/i2c/gc2145.c:664:18: error: implicit declaration of function 'v4l2_subdev_state_get_format'; did you mean 'v4l2_subdev_state_get_stream_format'? [-Werror=implicit-function-declaration]
+     664 |         format = v4l2_subdev_state_get_format(state, 0);
+         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                  v4l2_subdev_state_get_stream_format
+   drivers/media/i2c/gc2145.c:664:16: warning: assignment to 'struct v4l2_mbus_framefmt *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     664 |         format = v4l2_subdev_state_get_format(state, 0);
+         |                ^
+>> drivers/media/i2c/gc2145.c:669:16: error: implicit declaration of function 'v4l2_subdev_state_get_crop'; did you mean 'v4l2_subdev_state_get_stream_crop'? [-Werror=implicit-function-declaration]
+     669 |         crop = v4l2_subdev_state_get_crop(state, 0);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                v4l2_subdev_state_get_stream_crop
+   drivers/media/i2c/gc2145.c:669:14: warning: assignment to 'struct v4l2_rect *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     669 |         crop = v4l2_subdev_state_get_crop(state, 0);
+         |              ^
+   drivers/media/i2c/gc2145.c: In function 'gc2145_get_selection':
+   drivers/media/i2c/gc2145.c:681:26: error: invalid type argument of unary '*' (have 'int')
+     681 |                 sel->r = *v4l2_subdev_state_get_crop(sd_state, 0);
+         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/i2c/gc2145.c: In function 'gc2145_set_pad_format':
+   drivers/media/i2c/gc2145.c:758:18: warning: assignment to 'struct v4l2_mbus_framefmt *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     758 |         framefmt = v4l2_subdev_state_get_format(sd_state, fmt->pad);
+         |                  ^
+   drivers/media/i2c/gc2145.c:770:14: warning: assignment to 'struct v4l2_rect *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     770 |         crop = v4l2_subdev_state_get_crop(sd_state, fmt->pad);
+         |              ^
+   drivers/media/i2c/gc2145.c: In function 'gc2145_start_streaming':
+   drivers/media/i2c/gc2145.c:874:13: warning: assignment to 'struct v4l2_mbus_framefmt *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     874 |         fmt = v4l2_subdev_state_get_format(state, 0);
+         |             ^
+   cc1: some warnings being treated as errors
+
+
+vim +664 drivers/media/i2c/gc2145.c
+
+   655	
+   656	static int gc2145_init_cfg(struct v4l2_subdev *sd,
+   657				   struct v4l2_subdev_state *state)
+   658	{
+   659		struct gc2145 *gc2145 = to_gc2145(sd);
+   660		struct v4l2_mbus_framefmt *format;
+   661		struct v4l2_rect *crop;
+   662	
+   663		/* Initialize pad format */
+ > 664		format = v4l2_subdev_state_get_format(state, 0);
+   665		gc2145_update_pad_format(gc2145, &supported_modes[0], format,
+   666					 MEDIA_BUS_FMT_RGB565_1X16);
+   667	
+   668		/* Initialize crop rectangle. */
+ > 669		crop = v4l2_subdev_state_get_crop(state, 0);
+   670		*crop = supported_modes[0].crop;
+   671	
+   672		return 0;
+   673	}
+   674	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
