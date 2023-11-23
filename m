@@ -1,92 +1,174 @@
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B3CB0
-	for <linux-media@vger.kernel.org>; Thu, 23 Nov 2023 08:58:44 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r6D2J-0006H2-5h; Thu, 23 Nov 2023 17:58:43 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r6D2I-00B55v-NY; Thu, 23 Nov 2023 17:58:42 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r6D2I-006p3p-EP; Thu, 23 Nov 2023 17:58:42 +0100
-Date: Thu, 23 Nov 2023 17:58:42 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Sean Young <sean@mess.org>
-Cc: linux-media@vger.kernel.org, linux-pwm@vger.kernel.org,
-	Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
-	Thierry Reding <thierry.reding@gmail.com>
-Subject: Re: [PATCH v5 0/4] Improve pwm-ir-tx precision
-Message-ID: <20231123165842.ubmhifvtqd7g6jy6@pengutronix.de>
-References: <cover.1700323916.git.sean@mess.org>
- <ZV3BJ67_JCpTYEMl@gofer.mess.org>
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="U1NGys4j"
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8E5D54
+	for <linux-media@vger.kernel.org>; Thu, 23 Nov 2023 09:03:05 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-332ce50450dso702527f8f.1
+        for <linux-media@vger.kernel.org>; Thu, 23 Nov 2023 09:03:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1700758983; x=1701363783; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=X26+8wItEuS2j+BVlRHOHS9xadXwL+/+KykUmMySayM=;
+        b=U1NGys4jSXa478wAcCoNa4IIy5tjcOydyInU0h3s6KQ0M7pFJKxjmXq9X+ARqlPpy7
+         pSgr0V0ec0kVVflR5Sy7EODi1d2D+wuAWnqkY+cLd725bUjBZkK+K1LOANiPxHwVQyWS
+         0AJXXtd6x1aPjx//Pfo04CBOUWiFWTw9sjuFrPYcvCqqLFWmDbnmnCipYRWNyTum8EoY
+         rB1xYzPGChS56b0NVaU/hfkJt91yDfmCjmMAEkmZLsVgE1qZB2x8XWToNBkyOduGQrl7
+         fWYxmjfflN/+R1WvKeytRT5nnGyr67sxHEyuzO5lVWvn3hfbIOAzClTUSY3q1SzldH9l
+         JVfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700758983; x=1701363783;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=X26+8wItEuS2j+BVlRHOHS9xadXwL+/+KykUmMySayM=;
+        b=RBZ2kgBKm6linAjFrSoKxbb2P8KvTO3w3NFcXKSwpRl5lENChVRQ8+pfvlqmjQSQxH
+         ombDJoH17quiZhcMy4+tjrO1oPwEugP0zyTgU71vPtO4cb+eTnHTr7OgCzHIlL47LgWz
+         iuM4OwQEHptWxWdKurdLUSZmocMbGup296hkT6sHfi46a783j28GQ73s4jBqqEOVIpUz
+         LK6N6TQS5Y+5UOvu+K3cp9/zfpXUNLNxXfRo4t/HjGzEbgUFC+pP25Thjp9mLWAFSBqG
+         EWppR7cDd1U7OfwDKEYWAoHM/pVl+/0NNXUSXofl36YnWK7cDkqAKFgsWkZSPTlvhUiN
+         iOZA==
+X-Gm-Message-State: AOJu0Yy6pD7hQvj4O2GDNK2UmVziQ3K5rLRhSIwx5GPTFAgSYao+rEuZ
+	11TUSZ/bd2lfzB0ohVg0cyzgOw==
+X-Google-Smtp-Source: AGHT+IHtQTwXimrf79Wlg5jnvUDF/YuL90RVlWtpebD3jhmxWckb7X/7abp/KkIBDc8SOLJF86HENg==
+X-Received: by 2002:adf:ed09:0:b0:332:e7b9:b671 with SMTP id a9-20020adfed09000000b00332e7b9b671mr75060wro.14.1700758983681;
+        Thu, 23 Nov 2023 09:03:03 -0800 (PST)
+Received: from [127.0.0.1] ([37.228.218.3])
+        by smtp.gmail.com with ESMTPSA id f9-20020a0560001b0900b0032196c508e3sm2172585wrz.53.2023.11.23.09.03.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Nov 2023 09:03:03 -0800 (PST)
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Date: Thu, 23 Nov 2023 17:03:00 +0000
+Subject: [PATCH v6 1/8] media: qcom: camss: Flag which VFEs require a
+ power-domain
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="2lhq35gjz426k7cq"
-Content-Disposition: inline
-In-Reply-To: <ZV3BJ67_JCpTYEMl@gofer.mess.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20231123-b4-camss-named-power-domains-v6-1-3ec2fd9e8e36@linaro.org>
+References: <20231123-b4-camss-named-power-domains-v6-0-3ec2fd9e8e36@linaro.org>
+In-Reply-To: <20231123-b4-camss-named-power-domains-v6-0-3ec2fd9e8e36@linaro.org>
+To: hverkuil-cisco@xs4all.nl, laurent.pinchart@ideasonboard.com, 
+ Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>, 
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+ Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konrad.dybcio@linaro.org>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, matti.lehtimaki@gmail.com, 
+ quic_grosikop@quicinc.com
+Cc: linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+X-Mailer: b4 0.13-dev-26615
 
+At the moment we have some complex code for determining if a VFE requires a
+power-domain attachment. Particularly discordant in this scheme is the
+subtle reliance on VFE and VFE Lite declaration ordering in our resources.
 
---2lhq35gjz426k7cq
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+VFE id is used to determine if a VFE is lite or not and consequently if a
+VFE requires power-domain attachment. VFE Lite though is not a correct
+delineation between power-domain and non power-domain state since early
+SoCs have neither VFE Lite nor power-domains attached to VFEs.
 
-Hello,
+Introduce has_pd to the VFE resource structure to allow the CAMSS code to
+understand if it needs to try to attach a power-domain for a given VFE.
 
-On Wed, Nov 22, 2023 at 08:51:51AM +0000, Sean Young wrote:
-> On Sat, Nov 18, 2023 at 04:16:16PM +0000, Sean Young wrote:
-> > The pwm-ir-tx driver has to turn the pwm signal on and off, and suffers
-> > from delays as this is done in process context. Make this work in atomic
-> > context.
->=20
-> Hi Uwe,
->=20
-> Do you have any comments on this series?
->=20
-> I hope you don't dislike the pwm_apply_atomic()/pwm_apply_cansleep(), I am
-> not wedded to this name, it's just me reading the room and thinking that
-> would be the most acceptable to everyone - I may have misread this.
->=20
-> Thank you for any feedback
+As a side-effect from this we no longer need to care about VFE Lite or
+non-Lite or the id number associated with either and which order the
+VFE/VFE Lite was declared in.
 
-I didn't find much time to look into it. Skimming over it, I like it.
-I'll take a deeper look soon.
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Tested-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+---
+ drivers/media/platform/qcom/camss/camss.c | 8 ++++++++
+ drivers/media/platform/qcom/camss/camss.h | 1 +
+ 2 files changed, 9 insertions(+)
 
-Best regards
-Uwe
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+index 8e78dd8d5961e..ed01a3ac7a38e 100644
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -278,6 +278,7 @@ static const struct camss_subdev_resources vfe_res_8x96[] = {
+ 		.reg = { "vfe0" },
+ 		.interrupt = { "vfe0" },
+ 		.line_num = 3,
++		.has_pd = true,
+ 		.ops = &vfe_ops_4_7
+ 	},
+ 
+@@ -298,6 +299,7 @@ static const struct camss_subdev_resources vfe_res_8x96[] = {
+ 		.reg = { "vfe1" },
+ 		.interrupt = { "vfe1" },
+ 		.line_num = 3,
++		.has_pd = true,
+ 		.ops = &vfe_ops_4_7
+ 	}
+ };
+@@ -468,6 +470,7 @@ static const struct camss_subdev_resources vfe_res_660[] = {
+ 		.reg = { "vfe0" },
+ 		.interrupt = { "vfe0" },
+ 		.line_num = 3,
++		.has_pd = true,
+ 		.ops = &vfe_ops_4_8
+ 	},
+ 
+@@ -491,6 +494,7 @@ static const struct camss_subdev_resources vfe_res_660[] = {
+ 		.reg = { "vfe1" },
+ 		.interrupt = { "vfe1" },
+ 		.line_num = 3,
++		.has_pd = true,
+ 		.ops = &vfe_ops_4_8
+ 	}
+ };
+@@ -658,6 +662,7 @@ static const struct camss_subdev_resources vfe_res_845[] = {
+ 		.reg = { "vfe0" },
+ 		.interrupt = { "vfe0" },
+ 		.line_num = 4,
++		.has_pd = true,
+ 		.ops = &vfe_ops_170
+ 	},
+ 
+@@ -680,6 +685,7 @@ static const struct camss_subdev_resources vfe_res_845[] = {
+ 		.reg = { "vfe1" },
+ 		.interrupt = { "vfe1" },
+ 		.line_num = 4,
++		.has_pd = true,
+ 		.ops = &vfe_ops_170
+ 	},
+ 
+@@ -840,6 +846,7 @@ static const struct camss_subdev_resources vfe_res_8250[] = {
+ 		.reg = { "vfe0" },
+ 		.interrupt = { "vfe0" },
+ 		.line_num = 3,
++		.has_pd = true,
+ 		.ops = &vfe_ops_480
+ 	},
+ 	/* VFE1 */
+@@ -860,6 +867,7 @@ static const struct camss_subdev_resources vfe_res_8250[] = {
+ 		.reg = { "vfe1" },
+ 		.interrupt = { "vfe1" },
+ 		.line_num = 3,
++		.has_pd = true,
+ 		.ops = &vfe_ops_480
+ 	},
+ 	/* VFE2 (lite) */
+diff --git a/drivers/media/platform/qcom/camss/camss.h b/drivers/media/platform/qcom/camss/camss.h
+index 8acad7321c09d..b854cff1774d4 100644
+--- a/drivers/media/platform/qcom/camss/camss.h
++++ b/drivers/media/platform/qcom/camss/camss.h
+@@ -49,6 +49,7 @@ struct camss_subdev_resources {
+ 	char *reg[CAMSS_RES_MAX];
+ 	char *interrupt[CAMSS_RES_MAX];
+ 	u8 line_num;
++	bool has_pd;
+ 	const void *ops;
+ };
+ 
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+-- 
+2.42.0
 
---2lhq35gjz426k7cq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmVfhMEACgkQj4D7WH0S
-/k5VjQf/RXq2YwJVvkqbzmIbWkFY8/xy8v7UkG2WxHRig/EYkTRvU3jMLR5A2uU/
-B8me7fmfpocgDwGDcQjIQReckZs25ugows+NXe4xPyNwhS3OhTjOQ/yHOsrDr55Y
-OmMWF8ynfifLwS85okR7cittck6EYPF5wATXaNrBM53BWaaZKSWe2cuGeKTj0U0o
-dQAzySGhNEYzwwbmxqGpmLrNuG03AjLsjPw8w6zmydoGNkOYG0gNcel40mHrYCp1
-L305kwhc+r+S5eK8RykXKvgRes8zLx3tdhRAwK1cYAwWCVBrzk6TjFxpSYb2L6fy
-vM1kOKD/m2cpHYbWCzxo5hmlpKuQ7w==
-=YZwi
------END PGP SIGNATURE-----
-
---2lhq35gjz426k7cq--
