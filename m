@@ -1,93 +1,123 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D62F34C6E
-	for <linux-media@vger.kernel.org>; Fri, 24 Nov 2023 08:49:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DPkLbo7W"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B774C433CB;
-	Fri, 24 Nov 2023 08:49:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700815743;
-	bh=ts0KYH2uDH1q8ALGoS/p959d2Z3AhGWJPg58oHHCRiU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DPkLbo7WvA5ps/jIBO4P0QiKaOtmRQvI+hrI43BegqFBdXQ0euxanJoeOutDImOzZ
-	 26rKPC2WhMG2dFM6otNzxvJxKZ9ucdxy5MbV8I94wwaCOzlYMCBzEhYQ0xtznrkJi3
-	 brGuMwgvz6TTB5x50Ggg57G8n40J6dSlvfaEijB+Cv5ptnROBVXgy9l43PcGPp6zoV
-	 2NWARGz6wntemBdtMKqNV+Xt7OFKIwKE0R3whpBkYfuXrmqTAGyKkasar+T2QRsnbo
-	 RBDdftQw/wva2ea2uW42I821gm8uFZ7OIAHU7WkhUgCMzVwmBjIuYOiU1Xowyll51U
-	 rj+QjC1pXZLLw==
-Date: Fri, 24 Nov 2023 09:49:00 +0100
-From: Maxime Ripard <mripard@kernel.org>
-To: Marco Pagani <marpagan@redhat.com>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
-	Daniel Vetter <daniel@ffwll.ch>, Sumit Semwal <sumit.semwal@linaro.org>, 
-	Christian Koenig <christian.koenig@amd.com>, Javier Martinez Canillas <javierm@redhat.com>, 
-	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org, 
-	linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH v4] drm/test: add a test suite for GEM objects backed by
- shmem
-Message-ID: <dkh6t5cya7tw4wz5aqrgvnqqnyzzgvbyvezxexy6pyspju5qbd@cdl4vvs7kvnt>
-References: <20231123100147.212645-1-marpagan@redhat.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UI4txSvH"
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B969130;
+	Fri, 24 Nov 2023 01:30:16 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-548ce39b101so2286050a12.2;
+        Fri, 24 Nov 2023 01:30:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700818215; x=1701423015; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cTLi63yxvI2hAeNdVd7eWh+ex8w0Y3/NocaKGFnahv0=;
+        b=UI4txSvH000xyMnKX/M8OvWuTPF6OQlCwEOGh56gmdZwzZUMIo+/UXeduMWzUEhkTg
+         t2xGFlVXh4YmVDKq1wA5VOqVYwYneKw4rdlEGlUEcUtiB9ceRNeT1I7lY84aNk8lkbNq
+         RxaxFLtuSddqe+rO8eVTpI/7ujiTtLFQJ49ugLEpiG1NCpSVaj6dk42qERPjbCRpT4Va
+         FJPvwLBdAaP6BBP8ezLMgssCob2OSdTKDR8djxEVVDdEBkLHRqtYgXYfb0ot2BuaOxCR
+         lVwmtuyN6z+81nMpqhe0oudUZrgM5356KWC17XPDD15JGoRqN190w5uOoxbcI/PqpvdF
+         kR0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700818215; x=1701423015;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cTLi63yxvI2hAeNdVd7eWh+ex8w0Y3/NocaKGFnahv0=;
+        b=jxp56YKjXTZPpLpQ5EPts0O3A854TAuIBoSAxa1NI/sAFaIHLr4gGUV+fyzEoYbFEM
+         ygcM8nnGPpF2v/xBaExxbas/hBmkUcchW9XYgM2Cje/kUCT2NGT0pG+SAzeExww2CZ08
+         mA5KQszkzvpsuZf+FxXWItRUq2f/JkuJYhRDJI75mYN7mYmHbWXI2TAqJrggFhOuRe+h
+         1kn/DPZWxGTl3EDfGrp4Lb8CEcV2QCYLj4KtBU9f1AF8d3Y6ci+j5XUK/VjkVFodd5e8
+         6dcO5AvDwo8eBoz+BjptQe42sxzjZkuhl9TEWutf+UsMG5OhfW/QC2NrHoEgAYgpAMqg
+         ibzg==
+X-Gm-Message-State: AOJu0YzfiRavg4XBW5j+e3YE+E6DpTosoY7Fu45z1oL0HLpaxzYPy9p6
+	6fdj/m09wvNQoorqRvaFcH8=
+X-Google-Smtp-Source: AGHT+IGPti/ZJ8SMLxBE6yNQ/JfwqQ7RjyBC2eII7omRB0bJTYxSO1nP8qAue4ekyc4Zxt2dIgvtMQ==
+X-Received: by 2002:a17:906:74d1:b0:a02:9174:629f with SMTP id z17-20020a17090674d100b00a029174629fmr1412930ejl.55.1700818214341;
+        Fri, 24 Nov 2023 01:30:14 -0800 (PST)
+Received: from tom-HP-ZBook-Fury-15-G7-Mobile-Workstation.station (net-2-39-142-131.cust.vodafonedsl.it. [2.39.142.131])
+        by smtp.gmail.com with ESMTPSA id k9-20020a170906578900b009fee12d0dcdsm1856307ejq.15.2023.11.24.01.30.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Nov 2023 01:30:13 -0800 (PST)
+From: Tommaso Merciai <tomm.merciai@gmail.com>
+To: 
+Cc: laurent.pinchart@ideasonboard.com,
+	martin.hecht@avnet.eu,
+	michael.roeder@avnet.eu,
+	linuxfancy@googlegroups.com,
+	mhecht73@gmail.com,
+	sakari.ailus@linux.intel.com,
+	christophe.jaillet@wanadoo.fr,
+	Tommaso Merciai <tomm.merciai@gmail.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Gerald Loacker <gerald.loacker@wolfvision.net>,
+	Bingbu Cao <bingbu.cao@intel.com>,
+	Andy Shevchenko <andy.shevchenko@gmail.com>,
+	Daniel Scally <djrscally@gmail.com>,
+	Nicholas Roth <nicholas@rothemail.net>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org
+Subject: [PATCH v14 0/3] media: i2c: Add support for alvium camera
+Date: Fri, 24 Nov 2023 10:30:04 +0100
+Message-Id: <20231124093011.2095073-1-tomm.merciai@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="rtvjqun5bfrvozeq"
-Content-Disposition: inline
-In-Reply-To: <20231123100147.212645-1-marpagan@redhat.com>
+Content-Transfer-Encoding: 8bit
 
+Hi all,
 
---rtvjqun5bfrvozeq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This series add support for Allied Vision Alvium camera.
+The Alvium camera is shipped with sensor + isp in the same housing.
+The camera can be equipped with one out of various sensor and abstract
+the user from this. Camera is connected via MIPI CSI-2.
 
-Hi,
+Driver use latest V4L2_CCI_I2C API.
 
-On Thu, Nov 23, 2023 at 11:01:46AM +0100, Marco Pagani wrote:
-> +static int drm_gem_shmem_test_init(struct kunit *test)
-> +{
-> +	struct device *dev;
-> +	struct fake_dev {
-> +		struct drm_device drm_dev;
-> +	} *fdev;
-> +
+https://www.alliedvision.com/en/products/embedded-vision-solutions/
 
-[...]
+Tested the following alvium models:
+ - alvium 1500 C-500c
+ - alvium 1800 C-2050c
+ - alvium 1800 C-1240c
+ - alvium 1800 C-040c
+ - alvium 1800 C-052c
+ - alvium 1800 C-240m
 
-> +
-> +	/*
-> +	 * The DRM core will automatically initialize the GEM core and create
-> +	 * a DRM Memory Manager object which provides an address space pool
-> +	 * for GEM objects allocation.
-> +	 */
-> +	fdev = drm_kunit_helper_alloc_drm_device(test, dev, struct fake_dev,
-> +						 drm_dev, DRIVER_GEM);
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, fdev);
+Note:
+ - Driver is rebased on top of [1], commit [2].
 
-Sorry I missed it earlier, but you don't need the intermediate structure
-if you use
+Thanks & Regards,
+Tommaso
 
-struct drm_device *drm;
+ - [1] https://git.linuxtv.org/sailus/media_tree.git/log/
+ - [2] media: Documentation: Initialisation finishes before subdev registration (f7af8049dd07)
 
-drm = __drm_kunit_helper_alloc_drm_device(test, dev, sizeof(*drm), 0, DRIVER_GEM);
-KUNIT_ASSERT_NOT_ERR_OR_NULL(test, drm);
+Tommaso Merciai (3):
+  dt-bindings: vendor-prefixes: Add prefix alliedvision
+  media: dt-bindings: alvium: add document YAML binding
+  media: i2c: Add support for alvium camera
 
-Maxime
+ .../media/i2c/alliedvision,alvium-csi2.yaml   |   81 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |    2 +
+ MAINTAINERS                                   |    9 +
+ drivers/media/i2c/Kconfig                     |   10 +
+ drivers/media/i2c/Makefile                    |    1 +
+ drivers/media/i2c/alvium-csi2.c               | 2532 +++++++++++++++++
+ drivers/media/i2c/alvium-csi2.h               |  483 ++++
+ 7 files changed, 3118 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/alliedvision,alvium-csi2.yaml
+ create mode 100644 drivers/media/i2c/alvium-csi2.c
+ create mode 100644 drivers/media/i2c/alvium-csi2.h
 
---rtvjqun5bfrvozeq
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+2.34.1
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZWBjfAAKCRDj7w1vZxhR
-xXUQAP9od+klgBILfGLPVPTSdxphG1xUGLo3XXyblMPTgFMz7gEAxqV2NxcgWYJO
-vkBCPIX+LUVttVYWyhQvIJ3y+kFqogM=
-=eplg
------END PGP SIGNATURE-----
-
---rtvjqun5bfrvozeq--
