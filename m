@@ -1,32 +1,32 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Lr+hNGZ3"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RLChlKLq"
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3D4FD
-	for <linux-media@vger.kernel.org>; Sun, 26 Nov 2023 06:15:33 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4D093
+	for <linux-media@vger.kernel.org>; Sun, 26 Nov 2023 06:15:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1701008132;
+	s=mimecast20190719; t=1701008135;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=GtVI7RxWr8cKqPIQteNPkL1i5Vg7eWyjEHR0Xt5NBLs=;
-	b=Lr+hNGZ3g3adsbVazYfNfAnihrFSUJR9Z7vKu9HP/vJ62uZGcL9g8Rqf0LeUbIAMCTzVCX
-	FKT0VO6pKv1Aca6918Kf3i8CpRJD68dj/D14V8+pjlihMdUfzKuqNlmrj9YJ2U6vgsWcJE
-	W4V/rscRhLL9BNH6Du1+QzzXEcLa6Xo=
+	bh=RiNyucctcqnwWpn5JEuFXd/g8Z2Zv1DXZzykJQFJLvg=;
+	b=RLChlKLqZ/1UvHXhhLK4qAVc/7KkaFGdraVaYczsTOXXb6Zz8Ug8AnaZtlUmY77SWAgsdo
+	NFcOjljfVCdCjTeUdS/WiIln1kUYxxAeoc+eHyInSUPoGhPLZ/EfPtcuTMDuHqxeBAeago
+	7wx+j+ElESlLphD+1imsnJROC8155GU=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-645-L6mT30PgOYCxR26JbR1L7A-1; Sun, 26 Nov 2023 09:15:29 -0500
-X-MC-Unique: L6mT30PgOYCxR26JbR1L7A-1
+ us-mta-673-UU784M-UNguzOYPp33BD8g-1; Sun, 26 Nov 2023 09:15:31 -0500
+X-MC-Unique: UU784M-UNguzOYPp33BD8g-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1559F811E7B;
-	Sun, 26 Nov 2023 14:15:29 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6892F856F60;
+	Sun, 26 Nov 2023 14:15:31 +0000 (UTC)
 Received: from localhost.localdomain (unknown [10.39.192.41])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 1A67C2026D33;
-	Sun, 26 Nov 2023 14:15:28 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 722442026D33;
+	Sun, 26 Nov 2023 14:15:30 +0000 (UTC)
 From: Hans de Goede <hdegoede@redhat.com>
 To: Sakari Ailus <sakari.ailus@linux.intel.com>,
 	Tianshu Qiu <tian.shu.qiu@intel.com>,
@@ -35,9 +35,9 @@ Cc: Hans de Goede <hdegoede@redhat.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Kate Hsuan <hpa@redhat.com>,
 	linux-media@vger.kernel.org
-Subject: [PATCH v2 4/9] media: ov2740: Improve ov2740_check_hwcfg() error reporting
-Date: Sun, 26 Nov 2023 15:15:12 +0100
-Message-ID: <20231126141517.7534-5-hdegoede@redhat.com>
+Subject: [PATCH v2 6/9] media: ov2740: Check hwcfg after allocating the ov2740 struct
+Date: Sun, 26 Nov 2023 15:15:14 +0100
+Message-ID: <20231126141517.7534-7-hdegoede@redhat.com>
 In-Reply-To: <20231126141517.7534-1-hdegoede@redhat.com>
 References: <20231126141517.7534-1-hdegoede@redhat.com>
 Precedence: bulk
@@ -49,37 +49,50 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
 
-Make ov2740_check_hwcfg() report an error on failure in all error paths,
-so that it is always clear why the probe() failed.
+Alloc ov2740_data and set up the drvdata pointer before calling
+ov2740_check_hwcfg().
+
+This is a preparation patch to allow ov2740_check_hwcfg()
+to store some of the parsed data in the ov2740 struct.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/media/i2c/ov2740.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/media/i2c/ov2740.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
-index 832f24721dca..7e31aa2decd0 100644
+index 14a90dcf0199..3ee907bcebbf 100644
 --- a/drivers/media/i2c/ov2740.c
 +++ b/drivers/media/i2c/ov2740.c
-@@ -936,7 +936,8 @@ static int ov2740_check_hwcfg(struct device *dev)
+@@ -1091,14 +1091,16 @@ static int ov2740_probe(struct i2c_client *client)
+ 	bool full_power;
+ 	int ret;
  
- 	ret = fwnode_property_read_u32(fwnode, "clock-frequency", &mclk);
- 	if (ret)
--		return ret;
-+		return dev_err_probe(dev, ret,
-+				     "reading clock-frequency property\n");
+-	ret = ov2740_check_hwcfg(&client->dev);
+-	if (ret)
+-		return dev_err_probe(dev, ret, "failed to check HW configuration\n");
+-
+ 	ov2740 = devm_kzalloc(&client->dev, sizeof(*ov2740), GFP_KERNEL);
+ 	if (!ov2740)
+ 		return -ENOMEM;
  
- 	if (mclk != OV2740_MCLK)
- 		return dev_err_probe(dev, -EINVAL,
-@@ -946,7 +947,7 @@ static int ov2740_check_hwcfg(struct device *dev)
- 	ret = v4l2_fwnode_endpoint_alloc_parse(ep, &bus_cfg);
- 	fwnode_handle_put(ep);
- 	if (ret)
--		return ret;
-+		return dev_err_probe(dev, ret, "parsing endpoint failed\n");
++	v4l2_i2c_subdev_init(&ov2740->sd, client, &ov2740_subdev_ops);
++
++	ret = ov2740_check_hwcfg(dev);
++	if (ret)
++		return dev_err_probe(dev, ret, "failed to check HW configuration\n");
++
+ 	ov2740->reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
+ 	if (IS_ERR(ov2740->reset_gpio))
+ 		return dev_err_probe(dev, PTR_ERR(ov2740->reset_gpio),
+@@ -1109,7 +1111,6 @@ static int ov2740_probe(struct i2c_client *client)
+ 		return dev_err_probe(dev, PTR_ERR(ov2740->clk),
+ 				     "failed to get clock\n");
  
- 	if (bus_cfg.bus.mipi_csi2.num_data_lanes != OV2740_DATA_LANES) {
- 		ret = dev_err_probe(dev, -EINVAL,
+-	v4l2_i2c_subdev_init(&ov2740->sd, client, &ov2740_subdev_ops);
+ 	full_power = acpi_dev_state_d0(&client->dev);
+ 	if (full_power) {
+ 		/* ACPI does not always clear the reset GPIO / enable the clock */
 -- 
 2.41.0
 
