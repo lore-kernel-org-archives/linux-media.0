@@ -1,83 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 914D736AE7
-	for <linux-media@vger.kernel.org>; Mon, 27 Nov 2023 17:10:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EbLnZsQE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D66DAC433C7;
-	Mon, 27 Nov 2023 17:10:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701105019;
-	bh=4pNVkXsiUaBtYFLdxjUUYPf4B8uYbv15Pz+1txLQMn4=;
-	h=Date:From:To:Cc:Subject:From;
-	b=EbLnZsQE2pr2I9TdOPXxdV/+Tzcz4G3Y8yrmEiUyuSMyM3OH2HnOETakq8wXyxR2K
-	 mt32ZuiJWhHqnqhNpwFPEju9ePfsHb8Gbf+COIyK9vzRkw60ZVorsf8L7Jtn307weO
-	 G6oDahmMQidYS0UL3CJHWdfvIW3lJqDE6ajDVejyYNBXiKcLd2rBCD99bzmPPSOkKD
-	 Vos2bk/3BpJVARfWj/ftsE8lm8DvsAI74xYlu3geIugdRPSEd7PS4dr/hMDatITxoW
-	 3oC3smZZExjhnmRknEJx+xA3MG1Vy78F6GT1iHxp5BBE26P42v3MO3yPOc7UaC/Ob2
-	 31EB9Xz7TUWaA==
-Date: Mon, 27 Nov 2023 18:10:13 +0100
-From: Mauro Carvalho Chehab <mchehab@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Andrew Morton
- <akpm@linux-foundation.org>, Linux Media Mailing List
- <linux-media@vger.kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL for v6.7-rc3] media fixes
-Message-ID: <20231127181013.7fdc3484@coco.lan>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="rPYNvv8k"
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F60FD72;
+	Mon, 27 Nov 2023 09:10:28 -0800 (PST)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 3ARDZ5qk028462;
+	Mon, 27 Nov 2023 18:10:11 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	from:to:cc:subject:date:message-id:in-reply-to:references
+	:mime-version:content-transfer-encoding:content-type; s=
+	selector1; bh=fE1n5RTIzcUozo7IYZhXqyrLMqCuRn0oukoD09IgbtQ=; b=rP
+	YNvv8kO/rbTPin7DFY8ZqjoA520BmLcVUUjiL+sEiaH8NLdxKICz8S5SWp1p0ps6
+	WLFaqYQI3XHpU8uMtpML1Xm5072o/egUrBds9nCiebvAAEqdYEOWKNxG1dQzFqtg
+	9+EPZ8ZxfpZkPQDO+lMp2ev2P1IKdnyGldomhzOEnCeeUt1iUVyWIWKp0ZIGRA3U
+	qLNCwytSe/US2UxoOtu5qwUvMDK6IZqpYv5XHGU9wg6Tmew2+YLpQBX3J5TRfDj+
+	XkQ37/lg0pShjfq2P5FS3Plk0/2TzNlKhlTjdFVDOfTsQDPMti8jbBTFFcRqb5Mt
+	jfGcUNjuktICpQshgo7g==
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3uk951rq11-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 27 Nov 2023 18:10:11 +0100 (CET)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2D9AA10002A;
+	Mon, 27 Nov 2023 18:10:11 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2251124B8B3;
+	Mon, 27 Nov 2023 18:10:11 +0100 (CET)
+Received: from localhost (10.129.178.213) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 27 Nov
+ 2023 18:10:10 +0100
+From: Alain Volmat <alain.volmat@foss.st.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring
+	<robh+dt@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue
+	<alexandre.torgue@foss.st.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Philipp
+ Zabel <p.zabel@pengutronix.de>
+CC: Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart
+	<laurent.pinchart@ideasonboard.com>,
+        Dan Scally
+	<dan.scally@ideasonboard.com>,
+        Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v9 4/5] ARM: dts: stm32: add dcmipp support to stm32mp135
+Date: Mon, 27 Nov 2023 18:08:18 +0100
+Message-ID: <20231127170828.1426117-5-alain.volmat@foss.st.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20231127170828.1426117-1-alain.volmat@foss.st.com>
+References: <20231127170828.1426117-1-alain.volmat@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-27_15,2023-11-27_01,2023-05-22_02
 
-The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
+From: Hugues Fruchet <hugues.fruchet@foss.st.com>
 
-  Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
+Add dcmipp support to STM32MP135.
 
-are available in the Git repository at:
+Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ arch/arm/boot/dts/st/stm32mp135.dtsi | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/me=
-dia/v6.7-2
-
-for you to fetch changes up to 32138be394e5d32c095a413949e6ab4875b2aec0:
-
-  Merge tag 'media-renesas-fixes-20231113' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/pinchartl/linux.git (2023-11-16 14:28:44 +0100)
-
-----------------------------------------------------------------
-media fixes for v6.7-rc3
-
-----------------------------------------------------------------
-Arnd Bergmann (1):
-      media: pci: mgb4: add COMMON_CLK dependency
-
-Dan Carpenter (1):
-      media: v4l2-subdev: Fix a 64bit bug
-
-Hans Verkuil (1):
-      Merge tag 'media-renesas-fixes-20231113' of git://git.kernel.org/pub/=
-scm/linux/kernel/git/pinchartl/linux.git
-
-Laurent Pinchart (1):
-      media: vsp1: Remove unbalanced .s_stream(0) calls
-
-Martin T=C5=AFma (1):
-      media: mgb4: Added support for T200 card variant
-
- drivers/media/pci/mgb4/Kconfig                  |  1 +
- drivers/media/pci/mgb4/mgb4_core.c              | 20 ++++++++++++-----
- drivers/media/platform/renesas/vsp1/vsp1_pipe.c |  2 +-
- drivers/media/platform/renesas/vsp1/vsp1_rpf.c  | 10 +--------
- drivers/media/platform/renesas/vsp1/vsp1_rwpf.c |  8 +++++--
- drivers/media/platform/renesas/vsp1/vsp1_rwpf.h |  4 +++-
- drivers/media/platform/renesas/vsp1/vsp1_wpf.c  | 29 +++------------------=
-----
- include/uapi/linux/v4l2-subdev.h                |  2 +-
- 8 files changed, 31 insertions(+), 45 deletions(-)
+diff --git a/arch/arm/boot/dts/st/stm32mp135.dtsi b/arch/arm/boot/dts/st/stm32mp135.dtsi
+index abf2acd37b4e..68d32f9f5314 100644
+--- a/arch/arm/boot/dts/st/stm32mp135.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp135.dtsi
+@@ -8,5 +8,16 @@
+ 
+ / {
+ 	soc {
++		dcmipp: dcmipp@5a000000 {
++			compatible = "st,stm32mp13-dcmipp";
++			reg = <0x5a000000 0x400>;
++			interrupts = <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>;
++			resets = <&rcc DCMIPP_R>;
++			clocks = <&rcc DCMIPP_K>;
++			status = "disabled";
++
++			port {
++			};
++		};
+ 	};
+ };
+-- 
+2.25.1
 
