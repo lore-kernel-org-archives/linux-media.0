@@ -1,25 +1,25 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="EJ2rDmOH"
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB93D5B;
-	Mon, 27 Nov 2023 08:55:15 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="aK5Jnza1"
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1975610C3;
+	Mon, 27 Nov 2023 08:55:17 -0800 (PST)
 Received: from benjamin-XPS-13-9310.. (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: benjamin.gaignard)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 8AD836607323;
-	Mon, 27 Nov 2023 16:55:13 +0000 (GMT)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 1F6F46602F16;
+	Mon, 27 Nov 2023 16:55:15 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1701104114;
-	bh=q+PBOieh7TUOZfOTD/eax3kPGizf1naDWVCgdVzk/Rg=;
+	s=mail; t=1701104115;
+	bh=aaWCiqdk39sHKKb5QCMsk+ktnGuP0FZaTGK54tWrHxU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=EJ2rDmOHuYC+RuIZhYXo8DzC0Rkky/qSkpSFNsGMMVKLXohgncgJ1VcjJ74ikJGtf
-	 pY+o9OAvZ02fx9XYYChpfQcBnLpuhwM0fXK8/MYElMkedofzaOuGcYCgGIGgD9L3/t
-	 Qfqaciz57Axsq9LOu5/sBoxUQbbYMlFof/CVjj1OHKZnXjIhLO2lhxnpDDLE9KhY1q
-	 rCMIlMoSpiJy5nHB+B5Qpfv51KH3hA8Y28gS7RQFBGvGvtaHEvY8HKUFMR2m21KaLd
-	 qDYw4OTcBnjIUkRd6LlPfmV7RjT1KDoCeaKCHbUzFubxnZFKp5UK+/Ug0zAxL588t3
-	 o9asdDeXrRa9A==
+	b=aK5Jnza1wx5sBNowajBeB5DX02ljyxjC4c27B+SImhywaxDxh9iCWLMyGA6/UTFrH
+	 HBZ4/iQONttHOownb4AKM+IHPs/4xfuQxikg3zgIwYVlxg04TAra+pMkvVpzbKpNWR
+	 iqxH2MQ7+vOr67hiT9DknWQebgDsWq6NEk9vRDN4zSygZkXgQThE1ES8F32RI4TScb
+	 4NiwI1BHAodRWKJmi8XWytuFZ6QVBJUsYU64tamXX/goCVjX19CYKQGlXiav+HheR0
+	 MxlIiIo1fwqnPjis8aD9W9KSfAUC8QxT+f4twZUoucK4OU9AzD2xVEQCvwk62b4+8A
+	 b7e83ngdHNcvg==
 From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To: hverkuil@xs4all.nl,
 	mchehab@kernel.org,
@@ -31,10 +31,14 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-staging@lists.linux.dev,
 	kernel@collabora.com,
 	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-	Jean-Christophe Trotin <jean-christophe.trotin@foss.st.com>
-Subject: [PATCH 11/55] media: sti: hva: Stop abusing of min_buffers_needed field
-Date: Mon, 27 Nov 2023 17:54:10 +0100
-Message-Id: <20231127165454.166373-12-benjamin.gaignard@collabora.com>
+	Eddie James <eajames@linux.ibm.com>,
+	Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	openbmc@lists.ozlabs.org,
+	linux-aspeed@lists.ozlabs.org
+Subject: [PATCH 13/55] media: aspeed: Stop abusing of min_buffers_needed field
+Date: Mon, 27 Nov 2023 17:54:12 +0100
+Message-Id: <20231127165454.166373-14-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231127165454.166373-1-benjamin.gaignard@collabora.com>
 References: <20231127165454.166373-1-benjamin.gaignard@collabora.com>
@@ -48,38 +52,33 @@ Content-Transfer-Encoding: 8bit
 
 'min_buffers_needed' is suppose to be used to indicate the number
 of buffers needed by DMA engine to start streaming.
-hva driver doesn't use DMA engine and just want to specify
+aspeed doesn't use DMA engine and just want to specify
 the minimum number of buffers to allocate when calling VIDIOC_REQBUFS.
 That 'min_reqbufs_allocation' field purpose so use it.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-CC: Jean-Christophe Trotin <jean-christophe.trotin@foss.st.com>
+CC: Eddie James <eajames@linux.ibm.com> (maintainer:ASPEED VIDEO ENGINE DRIVER)
+CC: Joel Stanley <joel@jms.id.au> (supporter:ARM/ASPEED MACHINE SUPPORT)
+CC: Andrew Jeffery <andrew@codeconstruct.com.au> (reviewer:ARM/ASPEED MACHINE SUPPORT)
+CC: openbmc@lists.ozlabs.org (moderated list:ASPEED VIDEO ENGINE DRIVER)
+CC: linux-aspeed@lists.ozlabs.org (moderated list:ARM/ASPEED MACHINE SUPPORT)
 ---
- drivers/media/platform/st/sti/hva/hva-v4l2.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/platform/aspeed/aspeed-video.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/st/sti/hva/hva-v4l2.c b/drivers/media/platform/st/sti/hva/hva-v4l2.c
-index cfe83e9dc01b..d7bc25b0d69e 100644
---- a/drivers/media/platform/st/sti/hva/hva-v4l2.c
-+++ b/drivers/media/platform/st/sti/hva/hva-v4l2.c
-@@ -1142,7 +1142,7 @@ static int hva_queue_init(void *priv, struct vb2_queue *src_vq,
+diff --git a/drivers/media/platform/aspeed/aspeed-video.c b/drivers/media/platform/aspeed/aspeed-video.c
+index d08aa7f73d4f..c28b10808cda 100644
+--- a/drivers/media/platform/aspeed/aspeed-video.c
++++ b/drivers/media/platform/aspeed/aspeed-video.c
+@@ -2034,7 +2034,7 @@ static int aspeed_video_setup_video(struct aspeed_video *video)
+ 	vbq->drv_priv = video;
+ 	vbq->buf_struct_size = sizeof(struct aspeed_video_buffer);
+ 	vbq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
+-	vbq->min_buffers_needed = ASPEED_VIDEO_V4L2_MIN_BUF_REQ;
++	vbq->min_reqbufs_allocation = ASPEED_VIDEO_V4L2_MIN_BUF_REQ;
  
- 	src_vq->type = V4L2_BUF_TYPE_VIDEO_OUTPUT;
- 	src_vq->buf_struct_size = sizeof(struct hva_frame);
--	src_vq->min_buffers_needed = MIN_FRAMES;
-+	src_vq->min_reqbufs_allocation = MIN_FRAMES;
- 	src_vq->dev = ctx->hva_dev->dev;
- 
- 	ret = queue_init(ctx, src_vq);
-@@ -1151,7 +1151,7 @@ static int hva_queue_init(void *priv, struct vb2_queue *src_vq,
- 
- 	dst_vq->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
- 	dst_vq->buf_struct_size = sizeof(struct hva_stream);
--	dst_vq->min_buffers_needed = MIN_STREAMS;
-+	dst_vq->min_reqbufs_allocation = MIN_STREAMS;
- 	dst_vq->dev = ctx->hva_dev->dev;
- 
- 	return queue_init(ctx, dst_vq);
+ 	rc = vb2_queue_init(vbq);
+ 	if (rc) {
 -- 
 2.39.2
 
