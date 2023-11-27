@@ -1,25 +1,25 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="DJ8DWfOA"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="D7tOhGoZ"
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CEDA1A7;
-	Mon, 27 Nov 2023 08:55:08 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1688819B;
+	Mon, 27 Nov 2023 08:55:10 -0800 (PST)
 Received: from benjamin-XPS-13-9310.. (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: benjamin.gaignard)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 380146602F1C;
-	Mon, 27 Nov 2023 16:55:06 +0000 (GMT)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 6F1FE6607286;
+	Mon, 27 Nov 2023 16:55:08 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1701104106;
-	bh=hMnzJg8JCOvJEFop4t5B+/fXIKwF/ZeHN2PahVubUo0=;
+	s=mail; t=1701104109;
+	bh=cSCDQ8wlrHHxZIMdX6yERM4DP0+7F96unl/YfCpM+80=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=DJ8DWfOAk5ZVh/lWQNcvxt16s7JqWogG64T70sEsSIqXisXkPcvlUZAkjQ5VUJd4i
-	 g/Z5xBXkwIfF4RaswUK/Ms7ils5VoQA85dZ1nLrgLKDgnTRv8sWq7jlurIviWw4CAC
-	 x5O34NILjMdCFnuLMBU+AGZrEpyxoL6YB2j/6rQVfMNk9K4ai+6I75mvpYaTLzbh1m
-	 DnmQ2liuBcE6Uribks/5sdCzb+pB9bsL/WGU7nkR1RbKo+zex11ZFDAQtPI8W4NTxP
-	 ze2B8xXv7It9VlEdl0EvAr5+cSku9MDSL1tg1fU3jjIJIF+GxGs8tAxVDv0paCFzQe
-	 vAgIUsNUjvs3Q==
+	b=D7tOhGoZPJaPsvWVJ8Atsd6mk6513xTTrg+4o38gsdrIl/awNv66gZx6u/lM7Mor5
+	 oAj/uQLEdUP+btCuLOhWctSfo4Sgf3d3ylSPAPamYDjXGJYmxEiHmEKGI/5s66uG6C
+	 /ABdvLoH/nQunEo7/CoO0uArFNtKbtrPp4a0gRCYvXLeecADD5YVEE3VQ91CJ4Mnlo
+	 BX4UukdWNVV9zhGeqnuITExTYnjqBTnb7FuhrHLogkE/DTzdcd+P1zvysRrFq4UlrZ
+	 0wxqEn63/UXygAX7ShNebkQyb1AtQRkzF4gajpJVeK5p24u3aeZHOka7GFPWY412DV
+	 rUFsMOW1ruqLA==
 From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To: hverkuil@xs4all.nl,
 	mchehab@kernel.org,
@@ -30,12 +30,10 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org,
 	linux-staging@lists.linux.dev,
 	kernel@collabora.com,
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Kieran Bingham <kieran.bingham@ideasonboard.com>
-Subject: [PATCH 02/55] media: test-drivers: Stop abusing of min_buffers_needed field
-Date: Mon, 27 Nov 2023 17:54:01 +0100
-Message-Id: <20231127165454.166373-3-benjamin.gaignard@collabora.com>
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH 05/55] media: usb: gspca: Stop abusing of min_buffers_needed field
+Date: Mon, 27 Nov 2023 17:54:04 +0100
+Message-Id: <20231127165454.166373-6-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231127165454.166373-1-benjamin.gaignard@collabora.com>
 References: <20231127165454.166373-1-benjamin.gaignard@collabora.com>
@@ -49,54 +47,46 @@ Content-Transfer-Encoding: 8bit
 
 'min_buffers_needed' is suppose to be used to indicate the number
 of buffers needed by DMA engine to start streaming.
-Obvious test-drivers don't use DMA engine and just want to specify
+gspca driver doesn't use DMA engine and just want to specify
 the minimum number of buffers to allocate when calling VIDIOC_REQBUFS.
 That 'min_reqbufs_allocation' field purpose so use it.
-While at it rename function parameter.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-CC: Shuah Khan <skhan@linuxfoundation.org>
-CC: Kieran Bingham <kieran.bingham@ideasonboard.com>
 ---
- drivers/media/test-drivers/vimc/vimc-capture.c | 2 +-
- drivers/media/test-drivers/vivid/vivid-core.c  | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/media/usb/gspca/gspca.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/test-drivers/vimc/vimc-capture.c b/drivers/media/test-drivers/vimc/vimc-capture.c
-index aa944270e716..97693561f1e4 100644
---- a/drivers/media/test-drivers/vimc/vimc-capture.c
-+++ b/drivers/media/test-drivers/vimc/vimc-capture.c
-@@ -432,7 +432,7 @@ static struct vimc_ent_device *vimc_capture_add(struct vimc_device *vimc,
- 	q->mem_ops = vimc_allocator == VIMC_ALLOCATOR_DMA_CONTIG
- 		   ? &vb2_dma_contig_memops : &vb2_vmalloc_memops;
+diff --git a/drivers/media/usb/gspca/gspca.c b/drivers/media/usb/gspca/gspca.c
+index 770714c34295..7b701275f76d 100644
+--- a/drivers/media/usb/gspca/gspca.c
++++ b/drivers/media/usb/gspca/gspca.c
+@@ -1257,7 +1257,7 @@ static int vidioc_g_parm(struct file *filp, void *priv,
+ {
+ 	struct gspca_dev *gspca_dev = video_drvdata(filp);
+ 
+-	parm->parm.capture.readbuffers = gspca_dev->queue.min_buffers_needed;
++	parm->parm.capture.readbuffers = gspca_dev->queue.min_reqbufs_allocation;
+ 
+ 	if (!gspca_dev->sd_desc->get_streamparm)
+ 		return 0;
+@@ -1273,7 +1273,7 @@ static int vidioc_s_parm(struct file *filp, void *priv,
+ {
+ 	struct gspca_dev *gspca_dev = video_drvdata(filp);
+ 
+-	parm->parm.capture.readbuffers = gspca_dev->queue.min_buffers_needed;
++	parm->parm.capture.readbuffers = gspca_dev->queue.min_reqbufs_allocation;
+ 
+ 	if (!gspca_dev->sd_desc->set_streamparm) {
+ 		parm->parm.capture.capability = 0;
+@@ -1517,7 +1517,7 @@ int gspca_dev_probe2(struct usb_interface *intf,
+ 	q->ops = &gspca_qops;
+ 	q->mem_ops = &vb2_vmalloc_memops;
  	q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
 -	q->min_buffers_needed = 2;
 +	q->min_reqbufs_allocation = 2;
- 	q->lock = &vcapture->lock;
- 	q->dev = v4l2_dev->dev;
- 
-diff --git a/drivers/media/test-drivers/vivid/vivid-core.c b/drivers/media/test-drivers/vivid/vivid-core.c
-index 353f035fcd19..b4e888ac6016 100644
---- a/drivers/media/test-drivers/vivid/vivid-core.c
-+++ b/drivers/media/test-drivers/vivid/vivid-core.c
-@@ -861,7 +861,7 @@ static const struct media_device_ops vivid_media_ops = {
- static int vivid_create_queue(struct vivid_dev *dev,
- 			      struct vb2_queue *q,
- 			      u32 buf_type,
--			      unsigned int min_buffers_needed,
-+			      unsigned int min_reqbufs_allocation,
- 			      const struct vb2_ops *ops)
- {
- 	if (buf_type == V4L2_BUF_TYPE_VIDEO_CAPTURE && dev->multiplanar)
-@@ -898,7 +898,7 @@ static int vivid_create_queue(struct vivid_dev *dev,
- 	q->mem_ops = allocators[dev->inst] == 1 ? &vb2_dma_contig_memops :
- 						  &vb2_vmalloc_memops;
- 	q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
--	q->min_buffers_needed = supports_requests[dev->inst] ? 0 : min_buffers_needed;
-+	q->min_reqbufs_allocation = supports_requests[dev->inst] ? 0 : min_reqbufs_allocation;
- 	q->lock = &dev->mutex;
- 	q->dev = dev->v4l2_dev.dev;
- 	q->supports_requests = supports_requests[dev->inst];
+ 	q->lock = &gspca_dev->usb_lock;
+ 	ret = vb2_queue_init(q);
+ 	if (ret)
 -- 
 2.39.2
 
