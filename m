@@ -1,82 +1,148 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ct4hLl3j"
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7C318A;
-	Mon, 27 Nov 2023 02:43:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701081830; x=1732617830;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AH0RtqoF4KI3vHwA85rjVB2jP494O9yweQmmJkW6BU0=;
-  b=ct4hLl3j+JuPjJy7DrHOwAmMqarJ0YIH4BVytBupZ1a9+3fKEWdt8Y7A
-   sjnnlvPCTW/GFim+/1wY7ulw34ZQQCSe9z3a3ipY445oma6fHNc73ljSl
-   1HFNdcDzdEUWWAgcRYrHA13LAHsd+qSRvy4LX98nCpwvPvVyKKzzFm5G7
-   ka4DR8kqeb75qfcxQ5eWuggeVi+JY9ByQb8tXocqCrQl8qkaHMUyqnA4W
-   ReCmGITSh//PGHpgKhQ0TKHPsnYgpXQCKHGQMB7lySx0T88I0O4wgRjHT
-   G7PGMp2lUnUhqtHXqZZc1KsMGz3jam60Z4CN4D/uY2xed+eAYT3tA9DDb
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10906"; a="389825252"
-X-IronPort-AV: E=Sophos;i="6.04,230,1695711600"; 
-   d="scan'208";a="389825252"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2023 02:43:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10906"; a="838661037"
-X-IronPort-AV: E=Sophos;i="6.04,230,1695711600"; 
-   d="scan'208";a="838661037"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2023 02:43:46 -0800
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-	by kekkonen.fi.intel.com (Postfix) with SMTP id 77F4511FCD0;
-	Mon, 27 Nov 2023 12:33:15 +0200 (EET)
-Date: Mon, 27 Nov 2023 10:33:15 +0000
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Alain Volmat <alain.volmat@foss.st.com>
-Cc: Hugues Fruchet <hugues.fruchet@foss.st.com>,
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="LNixyqg9"
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BBFB8;
+	Mon, 27 Nov 2023 03:13:55 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5AB782B6;
+	Mon, 27 Nov 2023 12:13:18 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1701083598;
+	bh=Gm8Kz6NILXLvY3vZqwE4lOS8CXmGsgLFcYSluZC/vdQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=LNixyqg9clNXx2WfaTSSJzB7EViDbfYSurvsFPeIl0v9mIyPY1vUyXIgY+M0yCdc3
+	 MmEq8nh4s87XQ5YlJJVryjEjXz6zQKuvhOc+Z1h+I8gjrd2KI3tI/gqNZ2BZbj7QAz
+	 ORZ8QiYQtrCFlMP6v6zu6RbmucIu1SAYqb72n6Uk=
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: linux-media@vger.kernel.org
+Cc: Akinobu Mita <akinobu.mita@gmail.com>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Daniel Scally <djrscally@gmail.com>,
+	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+	Hans de Goede <hansg@kernel.org>,
+	Jacopo Mondi <jacopo+renesas@jmondi.org>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Leon Luo <leonl@leopardimaging.com>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Russell King <linux@armlinux.org.uk>,
+	=?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>,
+	Paul Elder <paul.elder@ideasonboard.com>,
+	Pavel Machek <pavel@ucw.cz>,
 	Philipp Zabel <p.zabel@pengutronix.de>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Dan Scally <dan.scally@ideasonboard.com>,
-	linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 0/5] Add support for DCMIPP camera interface of
- STMicroelectronics STM32 SoC series
-Message-ID: <ZWRwa2ImfkZMI8Xz@kekkonen.localdomain>
-References: <20231122073927.788810-1-alain.volmat@foss.st.com>
+	Ricardo Ribalda <ribalda@kernel.org>,
+	Rui Miguel Silva <rmfrfs@gmail.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Sowjanya Komatineni <skomatineni@nvidia.com>,
+	Steve Longerbeam <slongerbeam@gmail.com>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	linux-tegra@vger.kernel.org
+Subject: [PATCH v2 0/4] media: v4l2-subdev: Improve frame interval handling
+Date: Mon, 27 Nov 2023 13:13:55 +0200
+Message-ID: <20231127111359.30315-1-laurent.pinchart@ideasonboard.com>
+X-Mailer: git-send-email 2.41.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231122073927.788810-1-alain.volmat@foss.st.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Alain,
+Hello,
 
-On Wed, Nov 22, 2023 at 08:39:14AM +0100, Alain Volmat wrote:
-> This patchset introduces support for Digital Camera Memory Interface
-> Pixel Processor (DCMIPP) of STMicroelectronics STM32 SoC series.
-> 
-> This initial support implements a single capture pipe
-> allowing RGB565, YUV, Y, RAW8 and JPEG capture with
-> frame skipping, prescaling and cropping.
-> 
-> DCMIPP is exposed through 3 subdevices:
-> - dcmipp_dump_parallel: parallel interface handling
-> - dcmipp_dump_postproc: frame skipping, prescaling and cropping control
-> - dcmipp_dump_capture: video device capture node
+This patch series improves frame interval handling in the V4L2 subdev
+in-kernel and userspace APIs.
 
-The DTS changes will presumably be merged via a different tree, right?
+Frame interval are exposed to userspace on pads and streams, but the
+frame interval handling is currently implemented through a v4l2_subdev
+video operation, without involving the subdev state. This makes frame
+intervals a second class citizen compared to formats and selection
+rectangles.
 
+Patch 1/4 starts by addressing the first issue, namely the frame
+interval operations being video ops. This requires touching all the
+drivers using frame intervals.
+
+Patch 2/4 then adds a 'which' field to the subdev frame interval
+userspace API, allowing frame intervals to be tried the same way formats
+and selection rectangles can. Again, the same drivers need to be touched
+to preserve their current behaviour.
+
+Patch 3/4 adds support for storing the frame interval in the subdev
+state, alongside the formats and selection rectangles, with similar
+accessors and helper functions.
+
+Finally, patch 4/4 demonstrates how this is used in drivers, with the
+thp7312 driver serving as an example.
+
+The series is based on Sakari's latest master branch ([1]).
+
+Given the large number of drivers that this series touches, I would like
+to get it merged in v6.8 without too much delay to avoid rebasing.
+
+[1] https://git.linuxtv.org/sailus/media_tree.git/log/
+
+Laurent Pinchart (4):
+  media: v4l2-subdev: Turn .[gs]_frame_interval into pad operations
+  media: v4l2-subdev: Add which field to struct
+    v4l2_subdev_frame_interval
+  media: v4l2-subdev: Store frame interval in subdev state
+  media: i2c: thp7312: Store frame interval in subdev state
+
+ .../media/v4l/vidioc-subdev-g-client-cap.rst  |   5 +
+ .../v4l/vidioc-subdev-g-frame-interval.rst    |  17 +-
+ drivers/media/i2c/adv7180.c                   |  10 +-
+ drivers/media/i2c/et8ek8/et8ek8_driver.c      |  12 +-
+ drivers/media/i2c/imx214.c                    |  12 +-
+ drivers/media/i2c/imx274.c                    |  54 +++---
+ drivers/media/i2c/max9286.c                   |  20 ++-
+ drivers/media/i2c/mt9m111.c                   |  20 ++-
+ drivers/media/i2c/mt9m114.c                   |  20 ++-
+ drivers/media/i2c/mt9v011.c                   |  24 +--
+ drivers/media/i2c/mt9v111.c                   |  22 ++-
+ drivers/media/i2c/ov2680.c                    |  10 +-
+ drivers/media/i2c/ov5640.c                    |  22 ++-
+ drivers/media/i2c/ov5648.c                    |  62 +++----
+ drivers/media/i2c/ov5693.c                    |  10 +-
+ drivers/media/i2c/ov6650.c                    |  22 ++-
+ drivers/media/i2c/ov7251.c                    |  12 +-
+ drivers/media/i2c/ov7670.c                    |  22 +--
+ drivers/media/i2c/ov772x.c                    |  20 ++-
+ drivers/media/i2c/ov7740.c                    |  40 ++---
+ drivers/media/i2c/ov8865.c                    |  54 +++---
+ drivers/media/i2c/ov9650.c                    |  20 ++-
+ drivers/media/i2c/s5c73m3/s5c73m3-core.c      |  20 ++-
+ drivers/media/i2c/s5k5baf.c                   |  26 ++-
+ drivers/media/i2c/thp7312.c                   | 160 ++++++++++--------
+ drivers/media/i2c/tvp514x.c                   |  33 ++--
+ drivers/media/usb/em28xx/em28xx-video.c       |   6 +-
+ drivers/media/v4l2-core/v4l2-common.c         |   8 +-
+ drivers/media/v4l2-core/v4l2-subdev.c         | 128 ++++++++++----
+ .../media/atomisp/i2c/atomisp-gc0310.c        |  10 +-
+ .../media/atomisp/i2c/atomisp-gc2235.c        |  10 +-
+ .../media/atomisp/i2c/atomisp-mt9m114.c       |  10 +-
+ .../media/atomisp/i2c/atomisp-ov2722.c        |  10 +-
+ .../staging/media/atomisp/pci/atomisp_cmd.c   |   4 +-
+ .../staging/media/atomisp/pci/atomisp_ioctl.c |   4 +-
+ drivers/staging/media/imx/imx-ic-prp.c        |  20 ++-
+ drivers/staging/media/imx/imx-ic-prpencvf.c   |  20 ++-
+ drivers/staging/media/imx/imx-media-capture.c |   6 +-
+ drivers/staging/media/imx/imx-media-csi.c     |  20 ++-
+ drivers/staging/media/imx/imx-media-vdic.c    |  20 ++-
+ drivers/staging/media/tegra-video/csi.c       |  12 +-
+ include/media/v4l2-common.h                   |   4 +-
+ include/media/v4l2-subdev.h                   |  65 +++++--
+ include/uapi/linux/v4l2-subdev.h              |  13 +-
+ 44 files changed, 706 insertions(+), 413 deletions(-)
+
+
+base-commit: 543efaddeac0c7769c39d7aaa886e8b001acac76
 -- 
-Sakari Ailus
+Regards,
+
+Laurent Pinchart
+
