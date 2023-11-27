@@ -1,25 +1,25 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Q/wvnA4g"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Ci+CoOpm"
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C7E26B1;
-	Mon, 27 Nov 2023 08:55:40 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5950C2702;
+	Mon, 27 Nov 2023 08:55:41 -0800 (PST)
 Received: from benjamin-XPS-13-9310.. (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: benjamin.gaignard)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id C478E6607405;
-	Mon, 27 Nov 2023 16:55:38 +0000 (GMT)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 7586966073F5;
+	Mon, 27 Nov 2023 16:55:39 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1701104139;
-	bh=O6QoqjhfTjZ8fxwdlWAH4p8qUAwUTkwY0GJ5W4xynQg=;
+	s=mail; t=1701104140;
+	bh=h2KeYZ0zs78nj7d0vzmwSoQJ8cIKIqcfLHmNlVHLLY4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Q/wvnA4g8SOzv8+U7u+BimIdh8r0Q9ehMJ/zalV3OCNZ0eaUROvDxJLFCFy/iDvXx
-	 Aufoa9+saUnjG8XLitslPMAYIso9fXHIFqY9qXuEp6L3AU6nXoc8V8VVSqW+qGiJ7f
-	 AVuaudIEtx/IOqstj9+2TRxrs0edqDy8pC3Ie1Ex6AFoL0gpwGAVhypbUGGLMmpsXA
-	 f918axMhhez2P9p5jagX3maoc5/ojg/0wWafSFQBuG0YTAguWtP8LJ/iAagHnFmFTU
-	 KWVFZEVzJmWgJPa0ulOFGYGRz0Bw5PpWea7HVF5gobwiSSfP0p/4najE11F6WnBoN/
-	 1vRO9rY11s7WA==
+	b=Ci+CoOpm89HWTnsAVdvkdX99vxMpyqKLn94+lpKM7gMzxF+SPJS3WqYKv/mZU2TVq
+	 O9W4L0gGC4BRpAXaTknEUGyNPNEeI43f1YP8AppYo85mEwBLKtk2mwnUKL+9zifDo/
+	 SjANBlpRlZonOp6q1IvOws+sP+bv10Bq0kT353Sr61+DuCmfyTwleJuj6BYg1Kz/qE
+	 rIBIuASI0gi6/dOyaesXFMG5+U7XiucqF1LuAAQ7eSgvtlTxiuPd/wFaeVAb0mjfml
+	 n3RoOQDHBebGIYvnxa/q2uFwhwPMikEsdl9q++bhIt0fkQXvt585Qxz6aGckbZA8h1
+	 McmAdpU0W5BVw==
 From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To: hverkuil@xs4all.nl,
 	mchehab@kernel.org,
@@ -30,10 +30,11 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org,
 	linux-staging@lists.linux.dev,
 	kernel@collabora.com,
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH 43/55] media: pci: bt8xx: Use min_dma_buffers_needed field
-Date: Mon, 27 Nov 2023 17:54:42 +0100
-Message-Id: <20231127165454.166373-44-benjamin.gaignard@collabora.com>
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+	Andy Walls <awalls@md.metrocast.net>
+Subject: [PATCH 44/55] media: pci: cx18: Use min_dma_buffers_needed field
+Date: Mon, 27 Nov 2023 17:54:43 +0100
+Message-Id: <20231127165454.166373-45-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231127165454.166373-1-benjamin.gaignard@collabora.com>
 References: <20231127165454.166373-1-benjamin.gaignard@collabora.com>
@@ -45,29 +46,30 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-bt8xx driver use a dma engine and needs a minimum number of
+cx18 driver use a dma engine and needs a minimum number of
 buffers to be present before start streaming.
 That is 'min_dma_buffers_needed' purpose so use it instead
 of 'min_buffers_needed' field.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+CC: Andy Walls <awalls@md.metrocast.net>
 ---
- drivers/media/pci/bt8xx/bttv-driver.c | 2 +-
+ drivers/media/pci/cx18/cx18-streams.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
-index 09a193bb87df..8a3fb30e73f6 100644
---- a/drivers/media/pci/bt8xx/bttv-driver.c
-+++ b/drivers/media/pci/bt8xx/bttv-driver.c
-@@ -3094,7 +3094,7 @@ static int vdev_init(struct bttv *btv, struct video_device *vfd,
- 	q->gfp_flags = __GFP_DMA32;
- 	q->buf_struct_size = sizeof(struct bttv_buffer);
- 	q->lock = &btv->lock;
--	q->min_buffers_needed = 2;
-+	q->min_dma_buffers_needed = 2;
- 	q->dev = &btv->c.pci->dev;
- 	err = vb2_queue_init(q);
- 	if (err)
+diff --git a/drivers/media/pci/cx18/cx18-streams.c b/drivers/media/pci/cx18/cx18-streams.c
+index cfbc4a907802..1b66a70c6d6e 100644
+--- a/drivers/media/pci/cx18/cx18-streams.c
++++ b/drivers/media/pci/cx18/cx18-streams.c
+@@ -287,7 +287,7 @@ static int cx18_stream_init(struct cx18 *cx, int type)
+ 		s->vidq.ops = &cx18_vb2_qops;
+ 		s->vidq.mem_ops = &vb2_vmalloc_memops;
+ 		s->vidq.timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
+-		s->vidq.min_buffers_needed = 2;
++		s->vidq.min_dma_buffers_needed = 2;
+ 		s->vidq.gfp_flags = GFP_DMA32;
+ 		s->vidq.dev = &cx->pci_dev->dev;
+ 		s->vidq.lock = &cx->serialize_lock;
 -- 
 2.39.2
 
