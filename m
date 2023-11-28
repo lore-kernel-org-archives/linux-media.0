@@ -1,160 +1,115 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5FAD4C3A6;
-	Tue, 28 Nov 2023 10:24:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OPva/Wil"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3DF1C433C8;
-	Tue, 28 Nov 2023 10:24:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701167085;
-	bh=Cb7+GtJECRpbHHDENegVTVsqnU8i6YNms4Q3cRVoKVQ=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=OPva/WilChgoM+VSzLFIT5MFl6xqdhKFbFvFw4H0HLkeqbbA1YOhIBIKSA3AdDp2k
-	 u/jJCPLv+YHFVCmZhVx8jJXy4b2MN0AJMJHZfuM/JADMy7HrI4+uNCbdbwTYIgWOiy
-	 15BGlSBpS2ddKRfKehpENZ1GA+diVt/EiyFlgputDxmNq/H2JCicUfp401g06V/Bkq
-	 dqtcQUdMr2D191B+aq0lxBoYMSB1lT764wW5uJWZemfKNB9jY0h9Wlcv85GDP5Ric2
-	 FiahcIA9tY/NeMLUVSjL8djYO3sZwqyjzowfOMhFtviUg1dwn4yXNAVl9cSXRvkNLx
-	 s2LwP2UnqFvjQ==
-From: Maxime Ripard <mripard@kernel.org>
-Date: Tue, 28 Nov 2023 11:24:19 +0100
-Subject: [PATCH v4 08/45] drm/connector: hdmi: Create an HDMI sub-state
+	dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b="SzR9Fbng"
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF991BB
+	for <linux-media@vger.kernel.org>; Tue, 28 Nov 2023 02:24:41 -0800 (PST)
+Received: from hillosipuli.retiisi.eu (185-9-10-242.cust.suomicom.net [185.9.10.242])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sailus)
+	by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4SfdqV0kv4z49Q0d;
+	Tue, 28 Nov 2023 12:24:35 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+	t=1701167078;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=glT4xRKxbtiB77wTyn6TUTVJgSDpIPJElFi/h93EHSw=;
+	b=SzR9FbngoBXq6tUut+70qJTXUvSASrTA4EP369I7eqyGBoYquGDGN/JosgnAvc5OCPcv6F
+	xzrj6jYRidxZ/niNS1+gR4AtARVfuQAGMz2+ZzHKmnBH3hghn4DBRJ7CI9Zo/DJp5+E9eG
+	fZiC4gs+AQOxaIfc+0bG6Hw71atGTVWqHPhFuik/202l14gZ60ynx+qIAFXBEoISp/hOUB
+	95WJErgPIncex9U0crDujZ2UETVJsbArBe/Woae15WFCMqk6Z61LHCyXzZUk9erf9knpO+
+	/2sjbJzOe1yNCAb0sDIYaTwYCvCHW5P3/pk4pKcKQNATpGWk6KorCQmeoQg04g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+	s=lahtoruutu; t=1701167078;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=glT4xRKxbtiB77wTyn6TUTVJgSDpIPJElFi/h93EHSw=;
+	b=I6CbVijxxo3u3DOvBjiBvb43UyP7bwy7PTrBijqDf1asKjlvyOOu+MT590lTEXWxHk8AiJ
+	QFLAoYtW8w15ze4WSd+Uhr8bNcvDp0ImKu/aVsODRq7Ak6jnmcJte3T+HXR65JO2GJ34pZ
+	XO9vMwxyzTzyJu7WY96tn1tzGSWu3BY7tY1jWJpA4LFFXt2L0t04fEl9DQ3C5SweikOoSw
+	rkEE3aJc1VVddYUNfOyjuptJyvmx0Gjkz7sdAju7PkSllWtJDZe6Xw88arU7VJpk6iPnz2
+	qzqq1+TKgpHDYI7qjkYG2OW+615FP8mDYyS6jAFLLBEexIWao3fxZsGitwrmpA==
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1701167078; a=rsa-sha256;
+	cv=none;
+	b=h61gz2KcuiQNk6Pdj8D12cbA/Qy8/iqfcsF4ocKQp57DrU84QjyvkucYAE5WrCC3ZS3B0X
+	538+hJVi735D8Zzo+v9nvMBLXQe4cTRBz+49AsWbXWUAHsJjZULBHpR1t3tU670BKXIDkL
+	BKzsb/gkCs0UcyzNNaEgzxYJE+GIQtpdQNsBkzIdcBxvGetRSzn3Efv2eox7T4ziTD9CxS
+	JVpNzRsLTiaN4bo8RL+l06DwVytcpcQtV4EcAw9u/jyxr+iiJSKCjP/zxrdDCpRW6yCZya
+	bZtiqboblr3OCRrB97CsM1AcRrTdGI5v4skHoQD8ixEufNTh3brLGU2cC9OpMg==
+ARC-Authentication-Results: i=1;
+	ORIGINATING;
+	auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by hillosipuli.retiisi.eu (Postfix) with ESMTPS id CDB06634C93;
+	Tue, 28 Nov 2023 12:24:34 +0200 (EET)
+Date: Tue, 28 Nov 2023 10:24:34 +0000
+From: Sakari Ailus <sakari.ailus@iki.fi>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: linux-media@vger.kernel.org, Paul Elder <paul.elder@ideasonboard.com>,
+	Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: Re: [PATCH] media: i2c: thp7312: Fix missing unlock in return path
+Message-ID: <ZWW_4u6NzY2xAxCM@valkosipuli.retiisi.eu>
+References: <20231128102222.9795-1-laurent.pinchart@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231128-kms-hdmi-connector-state-v4-8-c7602158306e@kernel.org>
-References: <20231128-kms-hdmi-connector-state-v4-0-c7602158306e@kernel.org>
-In-Reply-To: <20231128-kms-hdmi-connector-state-v4-0-c7602158306e@kernel.org>
-To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
- Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>, 
- Jonathan Corbet <corbet@lwn.net>, Sandy Huang <hjc@rock-chips.com>, 
- =?utf-8?q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, 
- Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Samuel Holland <samuel@sholland.org>
-Cc: Hans Verkuil <hverkuil@xs4all.nl>, dri-devel@lists.freedesktop.org, 
- linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
- linux-rockchip@lists.infradead.org, linux-sunxi@lists.linux.dev, 
- Maxime Ripard <mripard@kernel.org>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4194; i=mripard@kernel.org;
- h=from:subject:message-id; bh=Cb7+GtJECRpbHHDENegVTVsqnU8i6YNms4Q3cRVoKVQ=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDKmp+y9qLeBzmdg/T0VqTcbm18xaQtO4zkxReCOh+TVSr
- sX5lM+qjlIWBjEuBlkxRZYYYfMlcadmve5k45sHM4eVCWQIAxenAEzk1GRGhn9cUzdq7Est65y0
- s/2p6btz3Dp3frluu7joV3xuq9Qa03iGf4p6O4K2sL4WUJ98KpNhttNXbqWdMrrbZvf7i7Tesl6
- RyQ8A
-X-Developer-Key: i=mripard@kernel.org; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231128102222.9795-1-laurent.pinchart@ideasonboard.com>
 
-The next features we will need to share across drivers will need to
-store some parameters for drivers to use, such as the selected output
-format.
+Hi Laurent,
 
-Let's create a new connector sub-state dedicated to HDMI controllers,
-that will eventually store everything we need.
+On Tue, Nov 28, 2023 at 12:22:22PM +0200, Laurent Pinchart wrote:
+> One of the return paths in the thp7312_fw_write() function failed to
+> release a lock. Fix it.
+> 
+> Fixes: 29adc7a89b52 ("media: i2c: Add driver for THine THP7312")
+> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> ---
+> Sakari, this patch fixes a bug in your master branch scheduled for v6.8.
+> Feel free to apply it on top or squash it with the commit that
+> introduced the bug based on what is the most convenient for you.
+> ---
+>  drivers/media/i2c/thp7312.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/thp7312.c b/drivers/media/i2c/thp7312.c
+> index 04b78c1f8090..3d46e428e0ac 100644
+> --- a/drivers/media/i2c/thp7312.c
+> +++ b/drivers/media/i2c/thp7312.c
+> @@ -1805,12 +1805,15 @@ static enum fw_upload_err thp7312_fw_write(struct fw_upload *fw_upload,
+>  	struct device *dev = thp7312->dev;
+>  	u16 header_size = size - THP7312_FW_RAM_SIZE;
+>  	enum fw_upload_err ret;
+> +	bool cancel;
+>  
+>  	mutex_lock(&thp7312->fw_lock);
+> -	if (thp7312->fw_cancel)
+> -		return FW_UPLOAD_ERR_CANCELED;
+> +	cancel = thp7312->fw_cancel;
+>  	mutex_unlock(&thp7312->fw_lock);
+>  
+> +	if (cancel)
+> +		return FW_UPLOAD_ERR_CANCELED;
+> +
+>  	ret = thp7312_flash_erase(thp7312);
+>  	if (ret != FW_UPLOAD_ERR_NONE)
+>  		return ret;
+> 
 
-Signed-off-by: Maxime Ripard <mripard@kernel.org>
----
- drivers/gpu/drm/drm_atomic_state_helper.c | 35 +++++++++++++++++++++++++++++++
- include/drm/drm_atomic_state_helper.h     |  4 ++++
- include/drm/drm_connector.h               |  7 +++++++
- 3 files changed, 46 insertions(+)
-
-diff --git a/drivers/gpu/drm/drm_atomic_state_helper.c b/drivers/gpu/drm/drm_atomic_state_helper.c
-index 784e63d70a42..29cb64e9cf28 100644
---- a/drivers/gpu/drm/drm_atomic_state_helper.c
-+++ b/drivers/gpu/drm/drm_atomic_state_helper.c
-@@ -556,6 +556,22 @@ void drm_atomic_helper_connector_tv_reset(struct drm_connector *connector)
- }
- EXPORT_SYMBOL(drm_atomic_helper_connector_tv_reset);
- 
-+/**
-+ * __drm_atomic_helper_connector_hdmi_reset() - Initializes all HDMI @drm_connector_state resources
-+ * @connector: DRM connector
-+ * @new_state: connector state to reset
-+ *
-+ * Initializes all HDMI resources from a @drm_connector_state without
-+ * actually allocating it. This is useful for HDMI drivers, in
-+ * combination with __drm_atomic_helper_connector_reset() or
-+ * drm_atomic_helper_connector_reset().
-+ */
-+void __drm_atomic_helper_connector_hdmi_reset(struct drm_connector *connector,
-+					      struct drm_connector_state *new_state)
-+{
-+}
-+EXPORT_SYMBOL(__drm_atomic_helper_connector_hdmi_reset);
-+
- /**
-  * drm_atomic_helper_connector_tv_check - Validate an analog TV connector state
-  * @connector: DRM Connector
-@@ -605,6 +621,25 @@ int drm_atomic_helper_connector_tv_check(struct drm_connector *connector,
- }
- EXPORT_SYMBOL(drm_atomic_helper_connector_tv_check);
- 
-+/**
-+ * drm_atomic_helper_connector_hdmi_check() - Helper to check HDMI connector atomic state
-+ * @connector: DRM Connector
-+ * @state: the DRM State object
-+ *
-+ * Provides a default connector state check handler for HDMI connectors.
-+ * Checks that a desired connector update is valid, and updates various
-+ * fields of derived state.
-+ *
-+ * RETURNS:
-+ * Zero on success, or an errno code otherwise.
-+ */
-+int drm_atomic_helper_connector_hdmi_check(struct drm_connector *connector,
-+					   struct drm_atomic_state *state)
-+{
-+	return 0;
-+}
-+EXPORT_SYMBOL(drm_atomic_helper_connector_hdmi_check);
-+
- /**
-  * __drm_atomic_helper_connector_duplicate_state - copy atomic connector state
-  * @connector: connector object
-diff --git a/include/drm/drm_atomic_state_helper.h b/include/drm/drm_atomic_state_helper.h
-index b9740edb2658..d59d2b3aef9a 100644
---- a/include/drm/drm_atomic_state_helper.h
-+++ b/include/drm/drm_atomic_state_helper.h
-@@ -71,7 +71,11 @@ void __drm_atomic_helper_connector_state_reset(struct drm_connector_state *conn_
- void __drm_atomic_helper_connector_reset(struct drm_connector *connector,
- 					 struct drm_connector_state *conn_state);
- void drm_atomic_helper_connector_reset(struct drm_connector *connector);
-+void __drm_atomic_helper_connector_hdmi_reset(struct drm_connector *connector,
-+					      struct drm_connector_state *new_state);
- void drm_atomic_helper_connector_tv_reset(struct drm_connector *connector);
-+int drm_atomic_helper_connector_hdmi_check(struct drm_connector *connector,
-+					   struct drm_atomic_state *state);
- int drm_atomic_helper_connector_tv_check(struct drm_connector *connector,
- 					 struct drm_atomic_state *state);
- void drm_atomic_helper_connector_tv_margins_reset(struct drm_connector *connector);
-diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
-index 4491c4c2fb6e..000a2a156619 100644
---- a/include/drm/drm_connector.h
-+++ b/include/drm/drm_connector.h
-@@ -1031,6 +1031,13 @@ struct drm_connector_state {
- 	 * DRM blob property for HDR output metadata
- 	 */
- 	struct drm_property_blob *hdr_output_metadata;
-+
-+	/**
-+	 * @hdmi: HDMI-related variable and properties. Filled by
-+	 * @drm_atomic_helper_connector_hdmi_check().
-+	 */
-+	struct {
-+	} hdmi;
- };
- 
- /**
+Thanks for the patch. I'm effectively forced to rebase the base and as I
+haven't sent a PR, I'll just squash this.
 
 -- 
-2.41.0
+Regards,
 
+Sakari Ailus
