@@ -1,31 +1,32 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aiaSxJ6F"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OgRvMXuj"
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3567019B
-	for <linux-media@vger.kernel.org>; Tue, 28 Nov 2023 02:00:59 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3340CD45
+	for <linux-media@vger.kernel.org>; Tue, 28 Nov 2023 02:01:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1701165658;
+	s=mimecast20190719; t=1701165660;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=kKEzWBQ+iX8vifh4JHHZmPL2RuqTHuFa9xV6LO2UezA=;
-	b=aiaSxJ6Fr+rulHjRpNEzLlqqKKEUKW4oZY2Egue7AlWz7h9/bezNvRTvEDNyJA+z4zcD6B
-	JqMJeaHRXeD1tKu/5Hmtsd1hmYG4YXEoIc+D2j3eXOjwarfhrNwm2neDLZfZiqBoqsdBNb
-	oWt5v++zANYiv/YG1O/LmLvIGWx0W4A=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-445-2bL1HJtLMmGuQoc-YDj2Hg-1; Tue, 28 Nov 2023 05:00:55 -0500
-X-MC-Unique: 2bL1HJtLMmGuQoc-YDj2Hg-1
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=b9gqnWcdjixT8WmdgbGnq10a7YNQqGVYoljol85NfXE=;
+	b=OgRvMXujH5zFNS4I6K1dPlNPpqKpofausVS2iMi2y7K83fk1Sk7tBqWjGrLFi972rVgCqc
+	uCBCixHAYKshhPHOhF236j1OHEfQWJaV5UvKMo2zQDRduRKzn2UjSg41KL389PFzi719NP
+	sLO/+t1rBov1asNMZgijCnM3L5zDeys=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-505-p171jBnjN8Wz-MRlB0eVYA-1; Tue,
+ 28 Nov 2023 05:00:58 -0500
+X-MC-Unique: p171jBnjN8Wz-MRlB0eVYA-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8BC33185A789;
-	Tue, 28 Nov 2023 10:00:54 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7FE5C1C0314C;
+	Tue, 28 Nov 2023 10:00:58 +0000 (UTC)
 Received: from localhost.localdomain (unknown [10.39.194.244])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 6099B20268D7;
-	Tue, 28 Nov 2023 10:00:53 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 58B3120268D7;
+	Tue, 28 Nov 2023 10:00:57 +0000 (UTC)
 From: Hans de Goede <hdegoede@redhat.com>
 To: Sakari Ailus <sakari.ailus@linux.intel.com>,
 	Tianshu Qiu <tian.shu.qiu@intel.com>,
@@ -34,9 +35,11 @@ Cc: Hans de Goede <hdegoede@redhat.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Kate Hsuan <hpa@redhat.com>,
 	linux-media@vger.kernel.org
-Subject: [PATCH v3 0/9] media: ov2740: reset GPIO, clk and 180 MHz link-frequency support
-Date: Tue, 28 Nov 2023 11:00:38 +0100
-Message-ID: <20231128100047.17529-1-hdegoede@redhat.com>
+Subject: [PATCH v3 3/9] media: ov2740: Move fwnode_graph_get_next_endpoint() call up
+Date: Tue, 28 Nov 2023 11:00:41 +0100
+Message-ID: <20231128100047.17529-4-hdegoede@redhat.com>
+In-Reply-To: <20231128100047.17529-1-hdegoede@redhat.com>
+References: <20231128100047.17529-1-hdegoede@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -46,44 +49,61 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
 
-Hi All,
+If the bridge has not yet setup the fwnode-graph then
+the fwnode_property_read_u32("clock-frequency") call will fail.
 
-Here is v3 of my patch series to allow the mainline ov2740 driver to be
-used on various Lenovo ThinkPad models using the IPU6 + ov2740 for their
-camera. This series has been tested on a Lenovo ThinkPad X1 yoga gen 8
-with both:
+Move the fwnode_graph_get_next_endpoint() call to above reading
+the clock-frequency.
 
-1. The out of tree IPU6 driver with Intel's proprietary userspace stack
-2. The pending mainline IPU6 CSI2 receiver patches using raw bayer capture
-   in combination with the WIP libcamera SoftISP code
-
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
 Changes in v3:
-- Add missing fwnode_handle_put() in error-exit-paths in patch 3/9
+- Add fwnode_handle_put() in error-exit-paths
+---
+ drivers/media/i2c/ov2740.c | 26 +++++++++++++++++---------
+ 1 file changed, 17 insertions(+), 9 deletions(-)
 
-Changes in v2:
-- Add patches 3-9 which add 180 MHz link-frequency support
-- Fix code in patch 2/9 to stay in 80 chars limit
-
-Regards,
-
-Hans
-
-
-Hans de Goede (9):
-  media: ov2740: Add support for reset GPIO
-  media: ov2740: Add support for external clock
-  media: ov2740: Move fwnode_graph_get_next_endpoint() call up
-  media: ov2740: Improve ov2740_check_hwcfg() error reporting
-  media: ov2740: Fix hts value
-  media: ov2740: Check hwcfg after allocating the ov2740 struct
-  media: ov2740: Add support for 180 MHz link frequency
-  media: ov2740: Add a sleep after resetting the sensor
-  media: ipu-bridge: Change ov2740 link-frequency to 180 MHz
-
- drivers/media/i2c/ov2740.c           | 387 +++++++++++++++++++++++----
- drivers/media/pci/intel/ipu-bridge.c |   2 +-
- 2 files changed, 334 insertions(+), 55 deletions(-)
-
+diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
+index 0396e40419ca..35b2f43bd3e5 100644
+--- a/drivers/media/i2c/ov2740.c
++++ b/drivers/media/i2c/ov2740.c
+@@ -926,19 +926,27 @@ static int ov2740_check_hwcfg(struct device *dev)
+ 	int ret;
+ 	unsigned int i, j;
+ 
+-	ret = fwnode_property_read_u32(fwnode, "clock-frequency", &mclk);
+-	if (ret)
+-		return ret;
+-
+-	if (mclk != OV2740_MCLK)
+-		return dev_err_probe(dev, -EINVAL,
+-				     "external clock %d is not supported\n",
+-				     mclk);
+-
++	/*
++	 * Sometimes the fwnode graph is initialized by the bridge driver,
++	 * wait for this.
++	 */
+ 	ep = fwnode_graph_get_next_endpoint(fwnode, NULL);
+ 	if (!ep)
+ 		return -EPROBE_DEFER;
+ 
++	ret = fwnode_property_read_u32(fwnode, "clock-frequency", &mclk);
++	if (ret) {
++		fwnode_handle_put(ep);
++		return ret;
++	}
++
++	if (mclk != OV2740_MCLK) {
++		fwnode_handle_put(ep);
++		return dev_err_probe(dev, -EINVAL,
++				     "external clock %d is not supported\n",
++				     mclk);
++	}
++
+ 	ret = v4l2_fwnode_endpoint_alloc_parse(ep, &bus_cfg);
+ 	fwnode_handle_put(ep);
+ 	if (ret)
 -- 
 2.41.0
 
