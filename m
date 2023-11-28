@@ -1,26 +1,26 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2194D4E638;
-	Tue, 28 Nov 2023 10:25:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BD884D5BF;
+	Tue, 28 Nov 2023 10:25:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rhNhqYW0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CDF2C433C9;
-	Tue, 28 Nov 2023 10:25:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UWmA0Mmu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AE06C433CB;
+	Tue, 28 Nov 2023 10:25:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701167128;
-	bh=O2ArSsFw7SF4g7FuBBWi6vHwa0go+wIZPFZlnlzeBPY=;
+	s=k20201202; t=1701167131;
+	bh=hjO1thsBtNWKgoDt95oSE/97xbheY9O5MXtc459uiLk=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=rhNhqYW08F4FzAD4keWd51QVik61u3OklgUf//4B4UrBmsOiixFAFHqRKoBRz9nu6
-	 7X2H9Lu0qWMw6kG8fFKCyxCiI2X3ncJLIEvcWVfoTvtqX3xcFFsRqmKjB8mwFmqo/G
-	 JZSydJ4rjSZ/CiJf6IXKaB1IFh6IAUIbnN9/kz8ZopE7N5AP+UAaFaT763aEYF2chL
-	 7xoy22TabrdRwj5cp3lxqhz0D6eFkxC3l2MbiAsWBDnhQrDMAO0ss5xA71nOPHfuzg
-	 wl242lbtXwaAiJY/mMUXKBN+OCVuU9iUveA+D11kGNjuSNFRKakCX6w8NUDQshq6B+
-	 SMvczfQvNtL6Q==
+	b=UWmA0Mmuz6Wg/wyPenWOGa0an7MePvKk1C+HVBwf1mo7DEDPuQUar0+fQZM7gUyQn
+	 XvPVrLXjx7hy0lqI8YvSAsoQhs1Wz+WiAuf4Dm4mNPLO1CvLCkXQC3vyN4i8j4nO0i
+	 IsEcaSnrtLs50/3AD1xWXacMbtoZX+7VAW8ZH/U4nVRhe9kuktIX0rgYzoeq+/XFJ4
+	 MpxHej5Z//e/NqTNUW0Si0fI8yn2JnyoDwCsuUX1Ix/m7axAvXTkeQ0cVlSX8rGu6z
+	 BaugWY5AWC/BZD6fN0HPm736+uHjivTtpPEDj+IW2Bhtcke985EgqM08xUv1QCM6fM
+	 tTI5A4619Ma7w==
 From: Maxime Ripard <mripard@kernel.org>
-Date: Tue, 28 Nov 2023 11:24:34 +0100
-Subject: [PATCH v4 23/45] drm/rockchip: inno_hdmi: Remove useless
- mode_fixup
+Date: Tue, 28 Nov 2023 11:24:35 +0100
+Subject: [PATCH v4 24/45] drm/rockchip: inno_hdmi: Remove useless copy of
+ drm_display_mode
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -29,7 +29,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20231128-kms-hdmi-connector-state-v4-23-c7602158306e@kernel.org>
+Message-Id: <20231128-kms-hdmi-connector-state-v4-24-c7602158306e@kernel.org>
 References: <20231128-kms-hdmi-connector-state-v4-0-c7602158306e@kernel.org>
 In-Reply-To: <20231128-kms-hdmi-connector-state-v4-0-c7602158306e@kernel.org>
 To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
@@ -45,49 +45,45 @@ Cc: Hans Verkuil <hverkuil@xs4all.nl>, dri-devel@lists.freedesktop.org,
  linux-rockchip@lists.infradead.org, linux-sunxi@lists.linux.dev, 
  Maxime Ripard <mripard@kernel.org>
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1301; i=mripard@kernel.org;
- h=from:subject:message-id; bh=O2ArSsFw7SF4g7FuBBWi6vHwa0go+wIZPFZlnlzeBPY=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDKmp+y+JL1Rp87p3vUtntqruhCf9P9+lfLpytUDi25I5e
- 5yEg5686ShlYRDjYpAVU2SJETZfEndq1utONr55MHNYmUCGMHBxCsBE+KYw/GbVjnt+L+WCKdMB
- RdeQKZWFl24etvqq907RIe5S3/2sF80M/4NkzBfpH3ooqKP2NmluplG1rb7U6pKs13tfKk1rTog
- v5QcA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1075; i=mripard@kernel.org;
+ h=from:subject:message-id; bh=hjO1thsBtNWKgoDt95oSE/97xbheY9O5MXtc459uiLk=;
+ b=owGbwMvMwCX2+D1vfrpE4FHG02pJDKmp+y8FxJirrWWpmXzGTm0VtzCfU8Hy1EbrWfUz/qV4T
+ tDaxXyto5SFQYyLQVZMkSVG2HxJ3KlZrzvZ+ObBzGFlAhnCwMUpABPZWMnI8DTu1cmX/X+/y+64
+ 1Zy/YVfXJeX9zdvMRERVZ7mmRVtZMDD890iaXucmJOcRtCHJZNGnWTWrIs+J39n3eJ3P5U1FCYE
+ 57AA=
 X-Developer-Key: i=mripard@kernel.org; a=openpgp;
  fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
 
-The mode_fixup implementation doesn't do anything, so we can simply
-remove it.
+The driver maintains a copy of the adjusted mode but doesn't use it
+anywhere. Remove it.
 
 Signed-off-by: Maxime Ripard <mripard@kernel.org>
 ---
- drivers/gpu/drm/rockchip/inno_hdmi.c | 8 --------
- 1 file changed, 8 deletions(-)
+ drivers/gpu/drm/rockchip/inno_hdmi.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
 diff --git a/drivers/gpu/drm/rockchip/inno_hdmi.c b/drivers/gpu/drm/rockchip/inno_hdmi.c
-index 6e5b922a121e..cc48cbf85f31 100644
+index cc48cbf85f31..4f5844fc115a 100644
 --- a/drivers/gpu/drm/rockchip/inno_hdmi.c
 +++ b/drivers/gpu/drm/rockchip/inno_hdmi.c
-@@ -517,13 +517,6 @@ static void inno_hdmi_encoder_disable(struct drm_encoder *encoder)
- 	inno_hdmi_set_pwr_mode(hdmi, LOWER_PWR);
+@@ -62,7 +62,6 @@ struct inno_hdmi {
+ 	unsigned int tmds_rate;
+ 
+ 	struct hdmi_data_info	hdmi_data;
+-	struct drm_display_mode previous_mode;
+ };
+ 
+ static struct inno_hdmi *encoder_to_inno_hdmi(struct drm_encoder *encoder)
+@@ -498,9 +497,6 @@ static void inno_hdmi_encoder_mode_set(struct drm_encoder *encoder,
+ 	struct inno_hdmi *hdmi = encoder_to_inno_hdmi(encoder);
+ 
+ 	inno_hdmi_setup(hdmi, adj_mode);
+-
+-	/* Store the display mode for plugin/DPMS poweron events */
+-	drm_mode_copy(&hdmi->previous_mode, adj_mode);
  }
  
--static bool inno_hdmi_encoder_mode_fixup(struct drm_encoder *encoder,
--					 const struct drm_display_mode *mode,
--					 struct drm_display_mode *adj_mode)
--{
--	return true;
--}
--
- static int
- inno_hdmi_encoder_atomic_check(struct drm_encoder *encoder,
- 			       struct drm_crtc_state *crtc_state,
-@@ -540,7 +533,6 @@ inno_hdmi_encoder_atomic_check(struct drm_encoder *encoder,
- static struct drm_encoder_helper_funcs inno_hdmi_encoder_helper_funcs = {
- 	.enable     = inno_hdmi_encoder_enable,
- 	.disable    = inno_hdmi_encoder_disable,
--	.mode_fixup = inno_hdmi_encoder_mode_fixup,
- 	.mode_set   = inno_hdmi_encoder_mode_set,
- 	.atomic_check = inno_hdmi_encoder_atomic_check,
- };
+ static void inno_hdmi_encoder_enable(struct drm_encoder *encoder)
 
 -- 
 2.41.0
